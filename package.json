@@ -24,7 +24,7 @@
     "@azure/storage-queue": "^12.24.0",
     "@dqbd/tiktoken": "^1.0.2",
     "@headlessui/react": "^2.0.3",
-    "@langchain/community": "^0.2.5",
+    "@langchain/community": "^0.3.3",
     "@langchain/core": "^0.2.8",
     "@langchain/openai": "^0.0.33",
     "@launchdarkly/node-server-sdk": "^9.7.0",
