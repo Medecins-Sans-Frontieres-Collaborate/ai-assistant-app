@@ -1,8 +1,0 @@
-{
-  "modelSelectionDialogue": "AI-modelselectie",
-  "temperatureDescription": "Hogere waarden zoals 0,8 maken de output creatiever, terwijl lagere waarden zoals 0,2 het meer gefocust en deterministisch maken.",
-  "sendFeedback": "Feedback verzenden",
-  "Save": "Opslaan",
-  "Settings": "Instellingen",
-  "Theme": "thema"
-}

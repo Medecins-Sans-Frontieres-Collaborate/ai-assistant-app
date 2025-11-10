@@ -1,0 +1,335 @@
+/* KaTeX CSS for math rendering */
+@import "katex/dist/katex.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Override prose max-width to prevent text wrapping in message bubbles */
+.prose.max-w-none,
+.prose.max-w-none > *,
+.prose.max-w-none p,
+.prose-invert.max-w-none,
+.prose-invert.max-w-none > *,
+.prose-invert.max-w-none p {
+  width: auto !important;
+  max-width: none !important;
+}
+
+/* Ensure prose code blocks don't overflow */
+.prose pre,
+.prose-invert pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Ensure prose tables are responsive */
+.prose table,
+.prose-invert table {
+  max-width: 100%;
+}
+
+/* Streamdown styles - @source directive requires Tailwind v4 */
+/* Uncomment when upgrading to Tailwind v4:
+@source "../node_modules/streamdown/dist/index.js";
+*/
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: #f2f2f2;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Custom scrollbar for dropdown */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #555;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+html,
+body {
+  background: #171717;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+/* Code block overflow handling for responsive layouts */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 720px) {
+  pre {
+    width: calc(100vw - 110px);
+  }
+}
+
+pre:has(div.codeblock) {
+  padding: 0;
+}
+
+select {
+  background: #171717;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  outline: none;
+  margin: 0 5px;
+}
+
+/* Citation styling - ensure citations are blue and hoverable even in prose */
+.prose sup.citation-number,
+.prose-invert sup.citation-number,
+.prose .citation-number,
+.prose-invert .citation-number {
+  color: #2563eb !important; /* blue-600 */
+  cursor: help !important;
+  text-decoration: none !important;
+  font-weight: normal !important;
+  position: relative;
+  user-select: none;
+}
+
+.dark .prose sup.citation-number,
+.dark .prose-invert sup.citation-number,
+.dark .prose .citation-number,
+.dark .prose-invert .citation-number {
+  color: #60a5fa !important; /* blue-400 */
+}
+
+.prose sup.citation-number:hover,
+.prose-invert sup.citation-number:hover,
+.prose .citation-number:hover,
+.prose-invert .citation-number:hover {
+  text-decoration: underline !important;
+}
+
+/* Markdown table improvements */
+.prose table,
+.prose-invert table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.prose th,
+.prose-invert th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  text-align: left;
+}
+
+.dark .prose th,
+.dark .prose-invert th {
+  background-color: #374151;
+}
+
+.prose td,
+.prose th,
+.prose-invert td,
+.prose-invert th {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .prose td,
+.dark .prose th,
+.dark .prose-invert td,
+.dark .prose-invert th {
+  border-color: #4b5563;
+}
+
+.prose tr:nth-child(even),
+.prose-invert tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.dark .prose tr:nth-child(even),
+.dark .prose-invert tr:nth-child(even) {
+  background-color: #1f2937;
+}
+
+/* Mobile table scrolling */
+@media (max-width: 768px) {
+  .prose table,
+  .prose-invert table {
+    font-size: 0.875rem;
+  }
+
+  .prose td,
+  .prose th,
+  .prose-invert td,
+  .prose-invert th {
+    padding: 0.5rem;
+  }
+}
+
+/* Breathing animation for streaming indicator */
+@keyframes breathing {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.animate-breathing {
+  animation: breathing 2s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fade-in-fast {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-fast {
+  animation: fade-in-fast 0.15s ease-out;
+}
+
+/* Modal slide in animation */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 0.2s ease-out;
+}
+
+/* Scale in animation */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.15s ease-out;
+}
+
+/* Dark mode improvements for prose */
+.dark .prose,
+.dark .prose-invert {
+  color: #e5e7eb;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6,
+.dark .prose-invert h1,
+.dark .prose-invert h2,
+.dark .prose-invert h3,
+.dark .prose-invert h4,
+.dark .prose-invert h5,
+.dark .prose-invert h6 {
+  color: #f3f4f6;
+}
+
+.dark .prose a,
+.dark .prose-invert a {
+  color: #60a5fa;
+}
+
+.dark .prose strong,
+.dark .prose b,
+.dark .prose-invert strong,
+.dark .prose-invert b {
+  color: #f3f4f6;
+}
+
+/* Removed custom code/pre styling - let Streamdown handle it with Shiki */
+
+.dark .prose blockquote,
+.dark .prose-invert blockquote {
+  border-left-color: #4b5563;
+  color: #d1d5db;
+}
+
+/* KaTeX dark mode support */
+.dark .katex {
+  color: #e5e7eb;
+}
+
+.dark .katex .mord,
+.dark .katex .mbin,
+.dark .katex .mrel,
+.dark .katex .mop {
+  color: #e5e7eb;
+}

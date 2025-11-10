@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoadingScreen > matches snapshot 1`] = `
+<div
+  class="flex h-full w-full items-center justify-center bg-white dark:bg-[#212121]"
+>
+  <div
+    class="h-8 w-8 rounded-full bg-gray-500 dark:bg-gray-400 animate-breathing"
+  />
+</div>
+`;

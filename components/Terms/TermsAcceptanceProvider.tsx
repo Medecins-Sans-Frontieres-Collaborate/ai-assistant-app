@@ -1,8 +1,9 @@
-import React, { FC, ReactNode, useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { checkUserTermsAcceptance } from '@/utils/app/termsAcceptance';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
+
+import { checkUserTermsAcceptance } from '@/lib/utils/app/user/termsAcceptance';
+
 import TermsAcceptanceModal from './TermsAcceptanceModal';
-import {isUSBased} from "@/utils/app/userAuth";
 
 /**
  * Props interface for the TermsAcceptanceProvider component.
@@ -14,7 +15,8 @@ interface TermsAcceptanceProviderProps {
 }
 
 /**
- * Provider component that manages the terms and conditions acceptance flow for non-US based users.
+ * Provider component that manages the terms and conditions acceptance flow for EU users.
+ * US-based users (region: 'US') are exempt from accepting terms.
  * Checks if the user has accepted the terms and shows a modal if they haven't.
  *
  * @component
@@ -22,7 +24,7 @@ interface TermsAcceptanceProviderProps {
  * @returns {ReactElement} The wrapped children with terms acceptance handling
  */
 export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
-  children
+  children,
 }) => {
   const { data: session, status } = useSession();
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
@@ -32,8 +34,11 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
     const checkTermsAcceptance = async () => {
       if (status === 'loading') return;
 
+      // Only show terms for authenticated EU users (not US-based)
       if (
-          status === 'authenticated' && session?.user && !isUSBased(session?.user?.mail ?? '')
+        status === 'authenticated' &&
+        session?.user &&
+        session.user.region !== 'US'
       ) {
         setCheckingTerms(true);
         try {

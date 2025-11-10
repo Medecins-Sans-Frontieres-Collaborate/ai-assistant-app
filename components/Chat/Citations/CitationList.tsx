@@ -140,35 +140,42 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
 
   return (
     <div
-      className={`my-2 w-full transition-opacity duration-500 ease-in-out ${
+      className={`mt-4 mb-3 w-full transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
     >
       <div
-        className="flex items-center cursor-pointer group rounded-md px-3 h-7 dark:bg-[#1f1f1f] bg-gray-100 transition-colors duration-300 hover:text-blue-500"
+        className="flex items-center cursor-pointer group rounded-lg px-3.5 py-2 dark:bg-[#1a1a1a] bg-gray-50/80 border border-gray-200/60 dark:border-gray-700/40 transition-all duration-200 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-gray-100/80 dark:hover:bg-[#222222]"
         onClick={toggleExpand}
       >
-        <div className="flex items-center">
-          <IconBlockquote size={19} className="inline-block mb-0.5" />
-          <div className="ml-1 w-6 h-6 flex items-center justify-center text-base">
-            {uniqueCitations.length}
+        <div className="flex items-center gap-2">
+          <IconBlockquote
+            size={18}
+            className="text-gray-600 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200"
+          />
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+              {uniqueCitations.length}
+            </span>
+            <span className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+              {uniqueCitations.length > 1 ? 'Sources' : 'Source'}
+            </span>
           </div>
-          {uniqueCitations.length > 1 ? (
-            <p className="text-base ml-1">Sources</p>
-          ) : (
-            <p className="text-base ml-1">Source</p>
-          )}
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto text-gray-500 dark:text-gray-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">
           {isExpanded ? (
-            <IconChevronUp size={20} />
+            <IconChevronUp size={18} />
           ) : (
-            <IconChevronDown size={20} />
+            <IconChevronDown size={18} />
           )}
         </div>
       </div>
 
-      {isExpanded && (
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          isExpanded ? 'max-h-[200px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
         <div
           ref={scrollContainerRef}
           className="flex w-full overflow-x-auto gap-4 no-scrollbar pt-5"
@@ -176,13 +183,16 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
           onMouseMove={handleReactMouseMove}
           onMouseLeave={handleReactMouseLeave}
         >
-          {uniqueCitations.map((citation) => (
-            <div key={citation.number} className="flex-shrink-0">
-              <CitationItem key={citation.number} citation={citation} />
+          {uniqueCitations.map((citation, index) => (
+            <div
+              key={citation.number || citation.url || index}
+              className="flex-shrink-0"
+            >
+              <CitationItem citation={citation} />
             </div>
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 };

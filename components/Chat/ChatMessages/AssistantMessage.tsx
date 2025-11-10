@@ -1,75 +1,89 @@
 import {
   IconCheck,
   IconCopy,
+  IconFileText,
   IconLoader2,
-  IconRobot,
-  IconSettings,
+  IconRefresh,
   IconVolume,
   IconVolumeOff,
 } from '@tabler/icons-react';
-import {
+import React, {
   FC,
   MouseEvent,
+  ReactNode,
   useEffect,
   useRef,
   useState,
 } from 'react';
 
-import { Conversation } from '@/types/chat';
+import { useTranslations } from 'next-intl';
+
+import { parseThinkingContent } from '@/lib/utils/app/stream/thinking';
+
+import { Conversation, Message } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
-import { useSmoothStreaming } from '@/hooks/useSmoothStreaming';
-import { useStreamingSettings } from '@/context/StreamingSettingsContext';
-
 import AudioPlayer from '@/components/Chat/AudioPlayer';
+import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { CitationList } from '@/components/Chat/Citations/CitationList';
-import { CitationMarkdown } from '@/components/Markdown/CitationMarkdown';
-import { CodeBlock } from '@/components/Markdown/CodeBlock';
-import { MemoizedReactMarkdown } from '@/components/Markdown/MemoizedReactMarkdown';
+import { CitationStreamdown } from '@/components/Markdown/CitationStreamdown';
+import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
-import rehypeMathjax from 'rehype-mathjax';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
+import { ApiError } from '@/client/services';
+import { useArtifactStore } from '@/client/stores/artifactStore';
+import type { MermaidConfig } from 'mermaid';
 
 interface AssistantMessageProps {
   content: string;
+  message?: Message;
   copyOnClick: (event: MouseEvent<any>) => void;
   messageIsStreaming: boolean;
   messageIndex: number;
-  selectedConversation: Conversation;
+  selectedConversation: Conversation | null;
   messageCopied: boolean;
+  onRegenerate?: () => void;
+  children?: ReactNode; // Allow custom content (images, files, etc.)
 }
 
 export const AssistantMessage: FC<AssistantMessageProps> = ({
   content,
+  message,
   copyOnClick,
   messageIsStreaming,
   messageIndex,
   selectedConversation,
   messageCopied,
+  onRegenerate,
+  children,
 }) => {
-  const [displayContent, setDisplayContent] = useState('');
+  const t = useTranslations();
+  const { openDocument } = useArtifactStore();
+  const [processedContent, setProcessedContent] = useState('');
   const [citations, setCitations] = useState<Citation[]>([]);
+  const [thinking, setThinking] = useState<string>('');
   const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
-  const [remarkPlugins, setRemarkPlugins] = useState<any[]>([remarkGfm]);
-  const [showStreamingSettings, setShowStreamingSettings] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
-  // Get streaming settings from context
-  const { settings, updateSettings } = useStreamingSettings();
+  // Detect dark mode
+  useEffect(() => {
+    const updateTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
 
-  const citationsProcessed = useRef(false);
-  const processingAttempts = useRef(0);
+    updateTheme();
 
-  // Use smooth streaming hook for animated text display
-  const smoothContent = useSmoothStreaming({
-    isStreaming: messageIsStreaming,
-    content: displayContent,
-    charsPerFrame: settings.charsPerFrame,
-    frameDelay: settings.frameDelay,
-    enabled: settings.smoothStreamingEnabled,
-  });
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Clean up resources when component unmounts
   useEffect(() => {
@@ -80,143 +94,102 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
     };
   }, [audioUrl]);
 
+  // Process content once per change - simplified logic
   useEffect(() => {
-    const processContent = () => {
-      let mainContent = content;
-      let citationsData: Citation[] = [];
-      let extractionMethod = 'none';
+    // Parse thinking content from the raw content
+    const { thinking: inlineThinking, content: contentWithoutThinking } =
+      parseThinkingContent(content);
 
-      // First check for the newer citation marker format
-      const citationMarker = content.indexOf('\n\n---CITATIONS_DATA---\n');
-      if (citationMarker !== -1) {
-        extractionMethod = 'marker';
-        mainContent = content.slice(0, citationMarker);
-        const jsonStr = content.slice(citationMarker + 22); // Length of marker
+    let mainContent = contentWithoutThinking;
+    let citationsData: Citation[] = [];
+    let metadataThinking = '';
+
+    // Priority 1: Citations from message object (already processed)
+    if (message?.citations && message.citations.length > 0) {
+      citationsData = message.citations;
+    }
+    // Priority 2: Parse metadata format (new approach)
+    else {
+      const metadataMatch = contentWithoutThinking.match(
+        /\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
+      );
+      if (metadataMatch) {
+        mainContent = contentWithoutThinking.replace(
+          /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
+          '',
+        );
 
         try {
-          const parsedData = JSON.parse(jsonStr);
+          const parsedData = JSON.parse(metadataMatch[1]);
           if (parsedData.citations) {
-            // Deduplicate citations by URL or title
-            const uniqueCitationsMap = new Map();
-            parsedData.citations.forEach((citation: Citation) => {
-              const key = citation.url || citation.title;
-              if (key && !uniqueCitationsMap.has(key)) {
-                uniqueCitationsMap.set(key, citation);
-              }
-            });
-            citationsData = Array.from(uniqueCitationsMap.values());
+            citationsData = deduplicateCitations(parsedData.citations);
+          }
+          if (parsedData.thinking) {
+            metadataThinking = parsedData.thinking;
           }
         } catch (error) {
-          console.error('Error parsing citations JSON with marker:', error);
+          // Silently ignore parsing errors during streaming
         }
       }
-      // Next try the legacy JSON detection at the end
-      else {
-        const jsonMatch = content.match(/(\{[\s\S]*\})$/);
-        if (jsonMatch) {
-          extractionMethod = 'regex';
-          const jsonStr = jsonMatch[1];
-          mainContent = content.slice(0, -jsonStr.length).trim();
+      // Priority 3: Legacy JSON at end (only when not streaming)
+      else if (!messageIsStreaming) {
+        const jsonMatch = contentWithoutThinking.match(/(\{[\s\S]*\})$/);
+        if (jsonMatch && isValidJSON(jsonMatch[1])) {
+          // Don't use .trim() - it removes newlines needed for markdown
+          mainContent = contentWithoutThinking.slice(0, -jsonMatch[1].length);
           try {
-            const parsedData = JSON.parse(jsonStr);
+            const parsedData = JSON.parse(jsonMatch[1].trim());
             if (parsedData.citations) {
-              // Deduplicate citations by URL or title
-              const uniqueCitationsMap = new Map();
-              parsedData.citations.forEach((citation: Citation) => {
-                const key = citation.url || citation.title;
-                if (key && !uniqueCitationsMap.has(key)) {
-                  uniqueCitationsMap.set(key, citation);
-                }
-              });
-              citationsData = Array.from(uniqueCitationsMap.values());
+              citationsData = deduplicateCitations(parsedData.citations);
             }
           } catch (error) {
-            console.error('Error parsing citations JSON:', error);
+            // Silently ignore parsing errors
           }
         }
       }
-
-      // Check for message-stored citations in the conversation
-      if (
-        citationsData.length === 0 &&
-        selectedConversation?.messages?.[messageIndex]?.citations &&
-        selectedConversation.messages[messageIndex].citations!.length > 0
-      ) {
-        extractionMethod = 'message-stored';
-
-        // Deduplicate citations by URL or title
-        const uniqueCitationsMap = new Map();
-        selectedConversation.messages[messageIndex].citations!.forEach(
-          (citation: Citation) => {
-            const key = citation.url || citation.title;
-            if (key && !uniqueCitationsMap.has(key)) {
-              uniqueCitationsMap.set(key, citation);
-            }
-          },
-        );
-        citationsData = Array.from(uniqueCitationsMap.values());
-      }
-
-      // Debug logging
-      console.debug(`[Message ${messageIndex}] Citation extraction:`, {
-        method: extractionMethod,
-        count: citationsData.length,
-        contentLength: content.length,
-        displayContentLength: mainContent.length,
-        processingAttempts: processingAttempts.current,
-        streamingActive: messageIsStreaming,
-      });
-
-      processingAttempts.current++;
-
-      setDisplayContent(mainContent);
-      if (mainContent.includes('```math')) {
-        setRemarkPlugins([remarkGfm, [remarkMath, { singleDollar: false }]]);
-      }
-      setCitations(citationsData);
-      citationsProcessed.current = true;
-    };
-
-    processContent();
-
-    // If we're streaming, reprocess when streaming stops to catch final citations
-    if (!messageIsStreaming && processingAttempts.current <= 2) {
-      const timer = setTimeout(processContent, 500);
-      return () => clearTimeout(timer);
     }
+
+    // Priority 4: Fallback to conversation-stored citations
+    if (
+      citationsData.length === 0 &&
+      selectedConversation?.messages?.[messageIndex]?.citations
+    ) {
+      citationsData = deduplicateCitations(
+        selectedConversation.messages[messageIndex].citations!,
+      );
+    }
+
+    // Determine final thinking content (priority: message > metadata > inline)
+    const finalThinking =
+      message?.thinking || metadataThinking || inlineThinking || '';
+
+    setProcessedContent(mainContent);
+    setThinking(finalThinking);
+    setCitations(citationsData);
   }, [
     content,
+    message,
     messageIsStreaming,
     messageIndex,
     selectedConversation?.messages,
   ]);
-
-  // Determine what to display - when streaming, use the raw content with citations stripped
-  // When not streaming, use the processed content
-  const displayContentWithoutCitations = messageIsStreaming
-    ? content.split(/(\{[\s\S]*\})$/)[0].split('\n\n---CITATIONS_DATA---\n')[0]
-    : displayContent;
-
-  // Use the smooth content for display when streaming and smooth streaming is enabled
-  const contentToDisplay = settings.smoothStreamingEnabled && messageIsStreaming
-    ? smoothContent
-    : displayContentWithoutCitations;
 
   const handleTTS = async () => {
     try {
       setIsGeneratingAudio(true);
       setLoadingMessage('Generating audio...');
 
-      const response = await fetch('/api/v2/tts', {
+      const response = await fetch('/api/chat/tts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: displayContentWithoutCitations }),
+        body: JSON.stringify({ text: processedContent }),
       });
 
       if (!response.ok) {
-        throw new Error('TTS conversion failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'TTS conversion failed');
       }
 
       setLoadingMessage('Processing audio...');
@@ -228,8 +201,12 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
     } catch (error) {
       console.error('Error in TTS:', error);
       setIsGeneratingAudio(false);
-      setLoadingMessage('Error generating audio. Please try again.');
-      setTimeout(() => setLoadingMessage(null), 3000); // Clear error message after 3 seconds
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Error generating audio. Please try again.';
+      setLoadingMessage(message);
+      setTimeout(() => setLoadingMessage(null), 3000);
     }
   };
 
@@ -241,307 +218,215 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
     }
   };
 
-  const StreamingIndicator = () => (
-    <span className="animate-pulse cursor-default inline-flex items-center ml-1 text-gray-500">
-      <IconLoader2 size={16} className="animate-spin mr-1" />
-    </span>
-  );
+  // Custom components for Streamdown
+  // Note: Streamdown handles code highlighting (Shiki), Mermaid, and math (KaTeX) built-in
+  const customMarkdownComponents = {};
 
-  // Custom components for markdown processing
-  const customMarkdownComponents = {
-    code({ node, inline, className, children, ...props }: {
-      node: any;
-      inline?: boolean;
-      className?: string;
-      children: React.ReactNode[];
-      [key: string]: any;
-    }) {
-      if (children.length) {
-        if (children[0] == '▍') {
-          return (
-            <span className="animate-pulse cursor-default mt-1">
-              ▍
-            </span>
-          );
+  // Mermaid configuration with dark mode support
+  const mermaidConfig: MermaidConfig = {
+    startOnLoad: false,
+    theme: isDarkMode ? 'dark' : 'default',
+    themeVariables: isDarkMode
+      ? {
+          // Dark mode colors - make everything visible on dark background
+          primaryColor: '#3b82f6',
+          primaryTextColor: '#e5e7eb',
+          primaryBorderColor: '#60a5fa',
+          lineColor: '#9ca3af',
+          secondaryColor: '#1e293b',
+          tertiaryColor: '#0f172a',
+          background: '#1f2937',
+          mainBkg: '#1f2937',
+          secondBkg: '#111827',
+          textColor: '#f3f4f6',
+          border1: '#4b5563',
+          border2: '#6b7280',
+          arrowheadColor: '#e5e7eb', // White arrows
+          fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+          fontSize: '14px',
+          // Sequence diagram specific
+          actorTextColor: '#f3f4f6',
+          actorLineColor: '#9ca3af',
+          signalColor: '#e5e7eb',
+          signalTextColor: '#f3f4f6',
+          labelBoxBkgColor: '#374151',
+          labelBoxBorderColor: '#6b7280',
+          labelTextColor: '#f3f4f6',
+          loopTextColor: '#f3f4f6',
+          activationBorderColor: '#60a5fa',
+          activationBkgColor: '#1e3a8a',
+          sequenceNumberColor: '#ffffff',
         }
-      }
-
-      const match = /language-(\w+)/.exec(className || '');
-
-      return !inline ? (
-        <CodeBlock
-          key={Math.random()}
-          language={(match && match[1]) || ''}
-          value={String(children).replace(/\n$/, '')}
-          {...props}
-        />
-      ) : (
-        <code className={className} {...props}>
-          {children}
-        </code>
-      );
-    },
-    table({ children }: { children: React.ReactNode }) {
-      return (
-        <div className="overflow-auto">
-          <table className="border-collapse border border-black px-3 py-1 dark:border-white">
-            {children}
-          </table>
-        </div>
-      );
-    },
-    th({ children }: { children: React.ReactNode }) {
-      return (
-        <th className="break-words border border-black bg-gray-500 px-3 py-1 text-white dark:border-white">
-          {children}
-        </th>
-      );
-    },
-    td({ children }: { children: React.ReactNode }) {
-      return (
-        <td className="break-words border border-black px-3 py-1 dark:border-white">
-          {children}
-        </td>
-      );
-    },
-    p({ children, ...props }: { children: React.ReactNode; [key: string]: any }) {
-      return (
-        <p {...props}>
-          {children}
-        </p>
-      );
-    }
+      : {
+          // Light mode colors
+          primaryColor: '#3b82f6',
+          fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+          fontSize: '14px',
+        },
+    logLevel: 'error', // Only log errors, don't crash
+    securityLevel: 'loose', // More lenient parsing
+    suppressErrorRendering: true, // Hide error messages from UI
   };
 
   return (
-    <div className="relative m-auto flex p-4 text-base md:max-w-2xl md:gap-6 md:py-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
-      <div className="min-w-[40px] text-right font-bold">
-        <IconRobot size={30} />
-      </div>
-
-      <div className="prose mt-[-2px] w-full dark:prose-invert">
+    <div className="relative flex px-4 py-3 text-base lg:px-0 w-full">
+      <div className="mt-[-2px] w-full">
         {loadingMessage && (
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 animate-pulse">
             {loadingMessage}
           </div>
         )}
 
-        <div className="flex flex-col">
-          <div className="flex-1 overflow-hidden">
-            {selectedConversation?.bot ? (
-              <>
-                <CitationMarkdown
-                  className="prose dark:prose-invert flex-1"
-                  conversation={selectedConversation}
-                  citations={citations}
-                  remarkPlugins={remarkPlugins}
-                  rehypePlugins={[rehypeMathjax]}
-                  components={customMarkdownComponents}
-                >
-                  {contentToDisplay}
-                </CitationMarkdown>
-                {/* Add streaming indicator at the end if content is streaming */}
-                {messageIsStreaming && contentToDisplay.length > 0 && (
-                  <StreamingIndicator />
-                )}
-              </>
-            ) : (
-              <>
-                <MemoizedReactMarkdown
-                  className="prose dark:prose-invert flex-1"
-                  remarkPlugins={remarkPlugins}
-                  rehypePlugins={[rehypeMathjax]}
-                  components={customMarkdownComponents}
-                >
-                  {contentToDisplay}
-                </MemoizedReactMarkdown>
-                {/* Add streaming indicator at the end if content is streaming */}
-                {messageIsStreaming && contentToDisplay.length > 0 && (
-                  <StreamingIndicator />
-                )}
-              </>
+        <div className="flex flex-col w-full">
+          {/* Thinking block - displayed before main content */}
+          {thinking && (
+            <ThinkingBlock
+              thinking={thinking}
+              isStreaming={messageIsStreaming && !processedContent}
+            />
+          )}
+
+          {/* Try Again button for failed messages */}
+          {message?.error && onRegenerate && (
+            <div className="mb-4">
+              <button
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium transition-colors"
+                onClick={onRegenerate}
+                aria-label={t('common.tryAgain')}
+              >
+                <IconRefresh size={18} />
+                Try Again
+              </button>
+            </div>
+          )}
+
+          <div className="flex-1 w-full">
+            {children || (
+              <div
+                className="prose dark:prose-invert max-w-none w-full"
+                style={{ maxWidth: 'none' }}
+              >
+                <StreamdownWithCodeButtons>
+                  <CitationStreamdown
+                    citations={citations}
+                    components={customMarkdownComponents}
+                    isAnimating={messageIsStreaming}
+                    controls={true}
+                    shikiTheme={['github-light', 'github-dark']}
+                    mermaidConfig={mermaidConfig}
+                  >
+                    {processedContent}
+                  </CitationStreamdown>
+                </StreamdownWithCodeButtons>
+              </div>
             )}
           </div>
 
-          {/* Fixed action buttons at the bottom of the message */}
-          <div className="flex justify-end items-center mt-3 sm:mt-4">
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-full p-1 flex items-center shadow-sm border border-gray-200 dark:border-gray-700 transition-all hover:shadow-md">
-              {/* Copy button */}
-              <div className="relative group">
-                <button
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
-                    messageCopied 
-                      ? 'bg-green-500 text-white dark:bg-green-600 scale-105'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105'
-                  }`}
-                  onClick={copyOnClick}
-                  aria-label={messageCopied ? "Copied" : "Copy message"}
-                >
-                  {messageCopied ? (
-                    <IconCheck size={18} />
-                  ) : (
-                    <IconCopy size={18} />
-                  )}
-                </button>
-                <span className="sr-only">
-                  {messageCopied ? "Copied!" : "Copy message"}
-                </span>
-              </div>
+          {/* Citations - shown after content but before action buttons */}
+          {citations.length > 0 && <CitationList citations={citations} />}
 
-              {/* Streaming Settings button */}
-              <div className="relative group ml-1">
+          {/* Action buttons at the bottom of the message - only show when not streaming */}
+          {!messageIsStreaming && (
+            <div className="flex items-center gap-2 mt-1">
+              {/* Copy button */}
+              <button
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                onClick={copyOnClick}
+                aria-label={messageCopied ? 'Copied' : 'Copy message'}
+              >
+                {messageCopied ? (
+                  <IconCheck size={18} />
+                ) : (
+                  <IconCopy size={18} />
+                )}
+              </button>
+
+              {/* Regenerate button */}
+              {onRegenerate && (
                 <button
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
-                    showStreamingSettings
-                      ? 'bg-blue-500 text-white dark:bg-blue-600 scale-105'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105'
-                  }`}
-                  onClick={() => setShowStreamingSettings(!showStreamingSettings)}
-                  aria-label="Text streaming settings"
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                  onClick={onRegenerate}
+                  aria-label={t('chat.regenerateResponse')}
                 >
-                  <IconSettings size={18} className={showStreamingSettings ? 'animate-spin-slow' : ''} />
+                  <IconRefresh size={18} />
                 </button>
-                <span className="sr-only">
-                  Streaming settings
-                </span>
-              </div>
+              )}
 
               {/* Listen button */}
-              <div className="relative group ml-1">
-                <button
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
-                    audioUrl
-                      ? 'bg-blue-500 text-white dark:bg-blue-600 scale-105'
-                      : isGeneratingAudio
-                        ? 'bg-gray-300 text-gray-500 dark:bg-gray-600 dark:text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105'
-                  }`}
-                  onClick={audioUrl ? handleCloseAudio : handleTTS}
-                  disabled={isGeneratingAudio || messageIsStreaming}
-                  aria-label={audioUrl ? "Stop audio" : isGeneratingAudio ? "Generating audio..." : "Listen"}
-                >
-                  {isGeneratingAudio ? (
-                    <IconLoader2 size={18} className="animate-spin" />
-                  ) : audioUrl ? (
-                    <IconVolumeOff size={18} className="animate-pulse" />
-                  ) : (
-                    <IconVolume size={18} />
-                  )}
-                </button>
-                <span className="sr-only">
-                  {audioUrl ? "Stop audio" : isGeneratingAudio ? "Generating audio..." : "Listen"}
-                </span>
-              </div>
-            </div>
-          </div>
+              <button
+                className={`transition-colors ${
+                  isGeneratingAudio
+                    ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
+                onClick={audioUrl ? handleCloseAudio : handleTTS}
+                disabled={isGeneratingAudio}
+                aria-label={
+                  audioUrl
+                    ? 'Stop audio'
+                    : isGeneratingAudio
+                      ? 'Generating audio...'
+                      : 'Listen'
+                }
+              >
+                {isGeneratingAudio ? (
+                  <IconLoader2 size={18} className="animate-spin" />
+                ) : audioUrl ? (
+                  <IconVolumeOff size={18} />
+                ) : (
+                  <IconVolume size={18} />
+                )}
+              </button>
 
-          {/* Streaming Settings Modal */}
-          {showStreamingSettings && (
-            <div className="mt-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm shadow-md border border-gray-200 dark:border-gray-700 transition-all">
-              <h4 className="font-medium mb-3 text-gray-700 dark:text-gray-300 flex items-center">
-                <IconSettings size={16} className="mr-2" />
-                Text Streaming Settings
-              </h4>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <label className="cursor-pointer text-gray-700 dark:text-gray-300 flex items-center">
-                    <span>Smooth streaming</span>
-                    <div className="relative inline-block w-10 h-5 ml-2">
-                      <input
-                        type="checkbox"
-                        className="opacity-0 w-0 h-0"
-                        checked={settings.smoothStreamingEnabled}
-                        onChange={(e) =>
-                          updateSettings({ smoothStreamingEnabled: e.target.checked })
-                        }
-                      />
-                      <span className={`absolute cursor-pointer inset-0 rounded-full transition-all duration-300 ${
-                        settings.smoothStreamingEnabled 
-                          ? 'bg-blue-500 dark:bg-blue-600' 
-                          : 'bg-gray-300 dark:bg-gray-600'
-                      }`}>
-                        <span className={`absolute w-4 h-4 bg-white rounded-full transition-transform duration-300 transform ${
-                          settings.smoothStreamingEnabled 
-                            ? 'translate-x-5' 
-                            : 'translate-x-0.5'
-                        } top-0.5 left-0`}></span>
-                      </span>
-                    </div>
-                  </label>
-                </div>
-
-                <div>
-                  <label className="block mb-2 text-gray-700 dark:text-gray-300 flex items-center">
-                    <span>Speed (characters per frame)</span>
-                    <span className="text-xs font-medium ml-2 px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded-full">
-                      {settings.charsPerFrame}
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    value={settings.charsPerFrame}
-                    onChange={(e) =>
-                      updateSettings({ charsPerFrame: parseInt(e.target.value) })
-                    }
-                    className={`w-full h-2 rounded-lg appearance-none cursor-pointer ${
-                      settings.smoothStreamingEnabled
-                        ? 'bg-gray-300 dark:bg-gray-600'
-                        : 'bg-gray-200 dark:bg-gray-700 opacity-50'
-                    }`}
-                    disabled={!settings.smoothStreamingEnabled}
-                  />
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex justify-between">
-                    <span>Slower</span>
-                    <span>Faster</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block mb-2 text-gray-700 dark:text-gray-300 flex items-center">
-                    <span>Delay between frames (ms)</span>
-                    <span className="text-xs font-medium ml-2 px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded-full">
-                      {settings.frameDelay}ms
-                    </span>
-                  </label>
-                  <input
-                    type="range"
-                    min="5"
-                    max="50"
-                    step="5"
-                    value={settings.frameDelay}
-                    onChange={(e) =>
-                      updateSettings({ frameDelay: parseInt(e.target.value) })
-                    }
-                    className={`w-full h-2 rounded-lg appearance-none cursor-pointer ${
-                      settings.smoothStreamingEnabled
-                        ? 'bg-gray-300 dark:bg-gray-600'
-                        : 'bg-gray-200 dark:bg-gray-700 opacity-50'
-                    }`}
-                    disabled={!settings.smoothStreamingEnabled}
-                  />
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex justify-between">
-                    <span>Faster</span>
-                    <span>Slower</span>
-                  </div>
-                </div>
-              </div>
+              {/* Open as document button */}
+              <button
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors"
+                onClick={() => {
+                  openDocument(
+                    processedContent,
+                    'md',
+                    'message.md',
+                    'document',
+                  );
+                }}
+                aria-label="Open as document"
+                title="Open as document"
+              >
+                <IconFileText size={18} />
+              </button>
             </div>
           )}
 
           {audioUrl && (
-              <AudioPlayer
-                  audioUrl={audioUrl}
-                  onClose={handleCloseAudio}
-              />
+            <AudioPlayer audioUrl={audioUrl} onClose={handleCloseAudio} />
           )}
         </div>
-
-        {citations.length > 0 && <CitationList citations={citations} />}
       </div>
     </div>
   );
 };
+
+// Helper function to deduplicate citations by URL or title
+function deduplicateCitations(citations: Citation[]): Citation[] {
+  const uniqueCitationsMap = new Map();
+  citations.forEach((citation: Citation) => {
+    const key = citation.url || citation.title;
+    if (key && !uniqueCitationsMap.has(key)) {
+      uniqueCitationsMap.set(key, citation);
+    }
+  });
+  return Array.from(uniqueCitationsMap.values());
+}
+
+// Helper function to validate JSON structure
+function isValidJSON(jsonStr: string): boolean {
+  const trimmed = jsonStr.trim();
+  if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
+    return false;
+  }
+  const openBraces = (trimmed.match(/{/g) || []).length;
+  const closeBraces = (trimmed.match(/}/g) || []).length;
+  return openBraces === closeBraces;
+}
 
 export default AssistantMessage;

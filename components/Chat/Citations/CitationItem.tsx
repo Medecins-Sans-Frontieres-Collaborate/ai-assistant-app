@@ -40,13 +40,18 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
             {citation.title}
           </div>
         </div>
-        {citation.date && (
+        {citation.date && citation.date.trim() !== '' && (
           <div className="text-[11px] text-gray-600 dark:text-gray-400 mb-6">
-            {citation.date}
+            {new Date(citation.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            })}
           </div>
         )}
         <div className="absolute bottom-0 left-0 right-0 dark:bg-[#1f1f1f] bg-gray-100 px-2 py-1 flex items-center dark:text-white text-gray-500 text-[11.5px] space-x-1">
           <div className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`https://www.google.com/s2/favicons?domain=${hostname}&size=16`}
               alt={`${hostname} favicon`}

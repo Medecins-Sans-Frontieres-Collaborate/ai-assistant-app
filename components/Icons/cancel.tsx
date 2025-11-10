@@ -1,4 +1,4 @@
-export function XIcon(props: any) {
+export function XIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}

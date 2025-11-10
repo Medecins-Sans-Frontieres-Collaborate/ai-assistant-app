@@ -2,121 +2,40 @@ import React, {
   Dispatch,
   MutableRefObject,
   SetStateAction,
-  useContext,
-  useEffect,
   useImperativeHandle,
   useRef,
 } from 'react';
-import toast from 'react-hot-toast';
-
-import { userAuthorizedForFileUploads } from '@/utils/app/userAuth';
 
 import {
   ChatInputSubmitTypes,
-  FileMessageContent,
+  FileFieldValue,
   FilePreview,
-  ImageMessageContent,
-  TextMessageContent,
+  ImageFieldValue,
 } from '@/types/chat';
 
-import HomeContext from '@/pages/api/home/home.context';
-
-import { onFileUpload } from '@/components/Chat/ChatInputEventHandlers/file-upload';
 import ImageIcon from '@/components/Icons/image';
 
-const onImageUpload = (
-  event: React.ChangeEvent<any>,
-  setFilePreviews: Dispatch<SetStateAction<FilePreview[]>>,
-  setSubmitType: Dispatch<SetStateAction<ChatInputSubmitTypes>>,
-  setFileFieldValue: Dispatch<
-    SetStateAction<
-      | FileMessageContent
-      | FileMessageContent[]
-      | ImageMessageContent
-      | ImageMessageContent[]
-      | null
-    >
-  >,
-) => {
-  event.preventDefault();
-  const file = event.target.files[0];
-
-  // User cancelled the file dialog, reset to 'text' submit type
-  if (!file) {
-    setSubmitType('text');
-    return;
-  } else {
-    setSubmitType('image');
-  }
-  if (file.size > 5242480) {
-    toast.error('Image upload must be <5mb');
-    return;
-  }
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = () => {
-    const base64String = reader.result as string;
-    fetch(
-      `/api/v2/file/upload?filename=${encodeURI(file.name)}&filetype=image`,
-      {
-        method: 'POST',
-        body: base64String,
-      },
-    ).then((page) => {
-      page.json().then((data) => {
-        const imageMessage: ImageMessageContent = {
-          type: 'image_url',
-          image_url: {
-            url: data.uri,
-            detail: 'auto',
-          },
-        };
-        // @ts-ignore
-        setFileFieldValue((prevFieldValue) => {
-          if (Array.isArray(prevFieldValue)) {
-            return [...prevFieldValue, imageMessage];
-          } else if (prevFieldValue) {
-            return [prevFieldValue, imageMessage];
-          } else {
-            return [imageMessage];
-          }
-        });
-      });
-    });
-  };
-
-  console.log(file);
-};
+import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
 
 const onImageUploadButtonClick = (
-  event: React.ChangeEvent<any>,
-  fileInputRef: MutableRefObject<any>,
+  event: React.MouseEvent<HTMLButtonElement>,
+  fileInputRef: MutableRefObject<HTMLInputElement | null>,
 ) => {
   event.preventDefault();
-  fileInputRef.current.click();
+  fileInputRef.current?.click();
 };
 
 export interface ChatInputImageProps {
   setFilePreviews: Dispatch<SetStateAction<FilePreview[]>>;
   setSubmitType: Dispatch<SetStateAction<ChatInputSubmitTypes>>;
   prompt: string;
-  setFileFieldValue: Dispatch<
-    SetStateAction<
-      | FileMessageContent
-      | FileMessageContent[]
-      | ImageMessageContent
-      | ImageMessageContent[]
-      | null
-    >
-  >;
+  setFileFieldValue: Dispatch<SetStateAction<FileFieldValue>>;
+  setImageFieldValue: Dispatch<SetStateAction<ImageFieldValue>>;
   setUploadProgress: Dispatch<SetStateAction<{ [p: string]: number }>>;
   setParentModalIsOpen: Dispatch<SetStateAction<boolean>>;
   simulateClick?: boolean;
   labelText?: string;
-  imageInputRef?: React.RefObject<{ openFilePicker: () => void }>;
+  imageInputRef?: React.RefObject<{ openFilePicker: () => void } | null>;
 }
 
 const ChatInputImage = ({
@@ -124,6 +43,7 @@ const ChatInputImage = ({
   prompt,
   setFilePreviews,
   setFileFieldValue,
+  setImageFieldValue,
   setUploadProgress,
   setParentModalIsOpen,
   labelText,
@@ -134,16 +54,10 @@ const ChatInputImage = ({
   useImperativeHandle(imageInputRef, () => ({
     openFilePicker: () => {
       fileInputRef.current?.click();
-    }
+    },
   }));
 
   const openModalButtonRef: MutableRefObject<any> = useRef(null);
-
-  const {
-    state: { user },
-    dispatch: homeDispatch,
-  } = useContext(HomeContext);
-  if (!userAuthorizedForFileUploads(user)) return null;
 
   return (
     <>
@@ -157,8 +71,7 @@ const ChatInputImage = ({
             setSubmitType,
             setFilePreviews,
             setFileFieldValue,
-            // @ts-ignore
-            setFileFieldValue,
+            setImageFieldValue,
             setUploadProgress,
           );
           setParentModalIsOpen(false);
@@ -166,9 +79,9 @@ const ChatInputImage = ({
         accept={'image/*'}
       />
       <button
-        style={{display: 'none' }}
+        style={{ display: 'none' }}
         onClick={(e) => {
-          onImageUploadButtonClick(e, imageInputRef as MutableRefObject<any>);
+          onImageUploadButtonClick(e, fileInputRef);
         }}
         ref={openModalButtonRef}
         className="flex items-center w-full text-right hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none"
@@ -184,5 +97,4 @@ const ChatInputImage = ({
   );
 };
 
-// @ts-ignore
 export default ChatInputImage;

@@ -1,10 +1,8 @@
-import { FC, useContext, useState } from 'react';
+import React, { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
-import { DEFAULT_TEMPERATURE } from '@/utils/app/const';
-
-import HomeContext from '@/pages/api/home/home.context';
+import { DEFAULT_TEMPERATURE } from '@/lib/utils/app/const';
 
 interface Props {
   temperature: number;
@@ -15,7 +13,7 @@ export const TemperatureSlider: FC<Props> = ({
   temperature,
   onChangeTemperature,
 }) => {
-  const { t } = useTranslation('chat');
+  const t = useTranslations();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseFloat(event.target.value);
     onChangeTemperature(newValue);
@@ -24,9 +22,7 @@ export const TemperatureSlider: FC<Props> = ({
   return (
     <div className="flex flex-col mt-5">
       <span className="text-[12px] text-black/50 dark:text-white/50 text-sm">
-        {t(
-          'temperatureDescription',
-        )}
+        {t('temperatureDescription')}
       </span>
       <span className="mt-2 mb-1 text-center text-neutral-900 dark:text-neutral-100">
         {temperature.toFixed(1)}

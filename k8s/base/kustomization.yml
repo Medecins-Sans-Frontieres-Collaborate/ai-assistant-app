@@ -1,6 +1,0 @@
-resources:
-  - deployment.yml
-  - hpa.yml
-  - vpa.yml
-  - ingress.yml
-  - service.yml

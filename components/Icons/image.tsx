@@ -1,7 +1,8 @@
-export default function ImageIcon(props: any) {
+import React from 'react';
+
+export default function ImageIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="18"
       height="18"
@@ -11,6 +12,7 @@ export default function ImageIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
       <circle cx="9" cy="9" r="2" />

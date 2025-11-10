@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SidebarButton > matches snapshot 1`] = `
+<button
+  class="flex w-full cursor-pointer select-none items-center gap-3 rounded-md py-3 px-3 text-[14px] leading-3 text-black dark:text-white transition-colors duration-200 hover:bg-gray-500/10"
+>
+  <div>
+    <svg
+      data-testid="test-icon"
+    >
+      Icon
+    </svg>
+  </div>
+  <span>
+    Snapshot Test
+  </span>
+</button>
+`;

@@ -1,8 +1,0 @@
-{
-  "modelSelectionDialogue": "Výběr modelu AI",
-  "sendFeedback": "Odeslat zpětnou vazbu",
-  "temperatureDescription": "Vyšší hodnoty jako 0,8 způsobí, že výsledek bude kreativnější, zatímco nižší hodnoty jako 0,2 ho učiní více zaměřeným a deterministickým.",
-  "Save": "Uložit",
-  "Settings": "Nastavení",
-  "Theme": "téma"
-}
