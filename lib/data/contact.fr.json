@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-01-20",
+  "contact": {
+    "submitRequest": {
+      "title": "Soumettre une Demande de Support",
+      "subtitle": "Obtenez de l'aide de notre équipe",
+      "description": "Besoin d'aide ou souhaitez fournir des commentaires? Cliquez ci-dessous pour ouvrir notre formulaire de support.",
+      "buttonText": "Ouvrir le Formulaire de Support"
+    },
+    "otherWays": {
+      "title": "Autres Moyens de Nous Joindre"
+    },
+    "emailSupport": {
+      "title": "Support par E-mail",
+      "description": "Envoyez-nous un e-mail pour des questions, des commentaires ou des problèmes techniques"
+    },
+    "additionalResources": {
+      "title": "Ressources Supplémentaires"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Portail AI Accelerator",
+      "description": "Documentation, mises à jour du projet et matériel de formation"
+    },
+    "githubRepository": {
+      "title": "Dépôt Open Source",
+      "description": "Voir le code, signaler des problèmes et contribuer sur GitHub"
+    }
+  }
+}
