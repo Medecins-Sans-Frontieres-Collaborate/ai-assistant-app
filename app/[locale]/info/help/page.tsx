@@ -1,10 +1,16 @@
 import { HelpPageClient } from './HelpPageClient';
 
 import { auth } from '@/auth';
+import contactEn from '@/lib/data/contact.en.json';
+import contactEs from '@/lib/data/contact.es.json';
+import contactFr from '@/lib/data/contact.fr.json';
 // Import FAQ translations statically at build time
 import faqEn from '@/lib/data/faq.en.json';
 import faqEs from '@/lib/data/faq.es.json';
 import faqFr from '@/lib/data/faq.fr.json';
+import privacyEn from '@/lib/data/privacyPolicy.en.json';
+import privacyEs from '@/lib/data/privacyPolicy.es.json';
+import privacyFr from '@/lib/data/privacyPolicy.fr.json';
 
 interface PageProps {
   params: Promise<{
@@ -20,6 +26,18 @@ const faqTranslations: Record<string, any> = {
   en: faqEn.faq || faqEn,
   fr: faqFr.faq || faqFr,
   es: faqEs.faq || faqEs,
+};
+
+const privacyTranslations: Record<string, any> = {
+  en: privacyEn.items || privacyEn,
+  fr: privacyFr.items || privacyFr,
+  es: privacyEs.items || privacyEs,
+};
+
+const contactTranslations: Record<string, any> = {
+  en: contactEn.contact || contactEn,
+  fr: contactFr.contact || contactFr,
+  es: contactEs.contact || contactEs,
 };
 
 export default async function HelpPage({ params }: PageProps) {
@@ -40,6 +58,8 @@ export default async function HelpPage({ params }: PageProps) {
       isUSUser={isUSUser}
       supportEmail={supportEmail}
       faqTranslations={faqTranslations}
+      privacyTranslations={privacyTranslations}
+      contactTranslations={contactTranslations}
       initialLocale={initialLocale}
       availableLocales={[...AVAILABLE_FAQ_LOCALES]}
     />
