@@ -1,0 +1,165 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "source": "MSF AI Assistant Terms of Use",
+  "items": [
+    {
+      "id": "privacy_001",
+      "type": "privacy_policy",
+      "category": "overview",
+      "question": "¿Qué es el Asistente de IA de MSF y cómo protege la privacidad?",
+      "answer": "El Asistente de IA de MSF es un chatbot de IA interno desarrollado para el personal de MSF. Utiliza los modelos de lenguaje grandes de Open AI de Microsoft Azure mientras mantiene todos los datos dentro de MSF, asegurando privacidad y control. Usar ai.msf.org es un entorno más seguro y protegido que usar otras herramientas de IA externas gratuitas, que ofrecen muy pocas garantías de privacidad.",
+      "keywords": [
+        "privacidad",
+        "protección de datos",
+        "interno",
+        "seguro",
+        "MSF",
+        "Azure",
+        "Asistente de IA",
+        "chatbot",
+        "datos dentro de MSF",
+        "garantías de privacidad",
+        "más seguro",
+        "herramientas externas"
+      ]
+    },
+    {
+      "id": "privacy_002",
+      "type": "privacy_policy",
+      "category": "data_storage",
+      "question": "¿Dónde se almacenan y procesan mis datos?",
+      "answer": "Todos los datos de conversación con el Asistente de IA de MSF se almacenan localmente en su propia computadora y se procesan dentro de los sistemas de MSF utilizando la infraestructura de Microsoft Azure. Su información de inicio de sesión será procesada por MSF según lo establecido en la política de privacidad de su entidad MSF. Los datos se mantienen dentro de MSF, asegurando privacidad y control.",
+      "keywords": [
+        "almacenamiento de datos",
+        "dónde se almacenan",
+        "local",
+        "computadora",
+        "sistemas MSF",
+        "Microsoft Azure",
+        "información de inicio de sesión",
+        "procesado por MSF",
+        "política de privacidad",
+        "dentro de MSF"
+      ]
+    },
+    {
+      "id": "privacy_003",
+      "type": "privacy_policy",
+      "category": "prohibited_data",
+      "question": "¿Qué datos NO debo ingresar en el Asistente de IA de MSF?",
+      "answer": "NO ingresará en ai.msf.org ninguna de la siguiente información:\n- Datos personales (nombres, números de teléfono, CV, testimonios; cualquier cosa que pueda identificar directa o indirectamente a un individuo -- esto incluye una combinación de datos que juntos pueden hacer posible identificar a un individuo)\n- Datos altamente sensibles (datos que pueden ser usados intencional o no intencionalmente para dañar a individuos, comunidades, MSF o su personal -- determinar la sensibilidad de los datos requiere incorporar análisis de contexto, por ejemplo, ubicaciones de proyectos sensibles o grupos en riesgo, incidentes de seguridad y otros detalles operacionales)",
+      "keywords": [
+        "datos prohibidos",
+        "datos personales",
+        "datos sensibles",
+        "nombres",
+        "números de teléfono",
+        "CV",
+        "testimonios",
+        "identificar individuo",
+        "daño",
+        "proyectos sensibles",
+        "incidentes de seguridad",
+        "detalles operacionales",
+        "qué no ingresar"
+      ]
+    },
+    {
+      "id": "privacy_004",
+      "type": "privacy_policy",
+      "category": "responsible_use",
+      "question": "¿Cuáles son las pautas de uso responsable para el Asistente de IA de MSF?",
+      "answer": "Usted acepta que usará ai.msf.org de manera responsable. Usted:\n- Lo usará de acuerdo con las políticas aplicables de TIC, IA y otras de sus entidades MSF\n- Siempre verificará los resultados en cuanto a precisión, inclusividad y sesgo\n- Verificará que los resultados no infrinjan los derechos de propiedad intelectual de terceros\n- Será transparente sobre su uso de IA y marcará los resultados como generados por IA",
+      "keywords": [
+        "uso responsable",
+        "pautas",
+        "políticas MSF",
+        "políticas TIC",
+        "políticas IA",
+        "verificar resultados",
+        "precisión",
+        "sesgo",
+        "propiedad intelectual",
+        "transparencia",
+        "generado por IA",
+        "marcar resultados"
+      ]
+    },
+    {
+      "id": "privacy_005",
+      "type": "privacy_policy",
+      "category": "prohibited_uses",
+      "question": "¿Cuáles son los usos prohibidos del Asistente de IA de MSF?",
+      "answer": "NO usará ai.msf.org para ninguno de los siguientes propósitos:\n- Atención médica (para proporcionar atención médica o responder preguntas relacionadas con la salud)\n- Vigilancia o monitoreo de pacientes de MSF o comunidades o cualquier otro individuo(s)\n- Decisiones relacionadas con el empleo (para asistir o reemplazar decisiones relacionadas con el empleo)\n- Toma de decisiones automatizada (para tomar decisiones que podrían ser perjudiciales para un individuo o comunidad)\n- Crear contenido de medios para comunicaciones externas sobre asuntos de interés público\n- Actividades ilegales o dañinas",
+      "keywords": [
+        "usos prohibidos",
+        "atención médica",
+        "vigilancia",
+        "monitoreo",
+        "decisiones de empleo",
+        "toma de decisiones automatizada",
+        "contenido de medios",
+        "comunicaciones externas",
+        "actividades ilegales",
+        "actividades dañinas",
+        "para qué no usar"
+      ]
+    },
+    {
+      "id": "privacy_006",
+      "type": "privacy_policy",
+      "category": "accuracy",
+      "question": "¿Qué tan precisos son los resultados del Asistente de IA de MSF?",
+      "answer": "Ai.msf.org usa tecnología experimental -- no garantiza que los resultados sean precisos. Además, la tecnología no ha sido entrenada usando datos representativos de los pacientes y comunidades de MSF. Los resultados de la IA pueden perpetuar sesgos, discriminación y estereotipos. Usted es responsable de verificar los resultados producidos.",
+      "keywords": [
+        "precisión",
+        "tecnología experimental",
+        "sin garantía",
+        "sesgo",
+        "discriminación",
+        "estereotipos",
+        "verificar resultados",
+        "responsable",
+        "pacientes MSF",
+        "comunidades",
+        "no entrenado"
+      ]
+    },
+    {
+      "id": "privacy_007",
+      "type": "privacy_policy",
+      "category": "support",
+      "question": "¿A quién debo contactar por inquietudes de privacidad o incidentes?",
+      "answer": "Si tiene alguna inquietud, desea notificar un incidente, por favor contacte: ai.team@amsterdam.msf.org. Para regiones específicas, también puede contactar a su DPO local (Oficial de Protección de Datos) o equipo responsable de TIC (Tecnología de la Información y Comunicación).",
+      "keywords": [
+        "inquietudes de privacidad",
+        "incidentes",
+        "contacto",
+        "ai.team@amsterdam.msf.org",
+        "DPO",
+        "Oficial de Protección de Datos",
+        "TIC",
+        "soporte",
+        "notificar incidente"
+      ]
+    },
+    {
+      "id": "privacy_008",
+      "type": "privacy_policy",
+      "category": "terms_updates",
+      "question": "¿Pueden modificarse los términos de uso?",
+      "answer": "Estos términos pueden ser modificados en cualquier momento por MSF -- le proporcionaremos un aviso si los cambiamos -- su uso continuo de ai.msf.org constituye la aceptación de cualquier cambio.",
+      "keywords": [
+        "términos de uso",
+        "modificado",
+        "cambios",
+        "aviso",
+        "uso continuo",
+        "aceptación",
+        "actualizaciones",
+        "MSF"
+      ]
+    }
+  ]
+}
