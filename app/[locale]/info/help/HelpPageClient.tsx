@@ -19,7 +19,6 @@ import { FaGithub } from 'react-icons/fa';
 import Image from 'next/image';
 
 import { EXTERNAL_LINKS } from '@/lib/constants/externalLinks';
-import privacyData from '@/lib/data/privacyPolicy.json';
 import { Link } from '@/lib/navigation';
 
 type SectionType = 'faq' | 'privacy' | 'contact' | null;
@@ -29,18 +28,55 @@ interface FAQItem {
   answer: string;
 }
 
+interface PrivacyItem {
+  id: string;
+  question: string;
+  answer: string;
+  [key: string]: any;
+}
+
+interface ContactTranslations {
+  submitRequest: {
+    title: string;
+    subtitle: string;
+    description: string;
+    buttonText: string;
+  };
+  otherWays: {
+    title: string;
+  };
+  emailSupport: {
+    title: string;
+    description: string;
+  };
+  additionalResources: {
+    title: string;
+  };
+  aiAcceleratorPortal: {
+    title: string;
+    description: string;
+  };
+  githubRepository: {
+    title: string;
+    description: string;
+  };
+}
+
 interface HelpPageClientProps {
   isUSUser: boolean;
   supportEmail: string;
   faqTranslations: Record<string, FAQItem[]>;
+  privacyTranslations: Record<string, PrivacyItem[]>;
+  contactTranslations: Record<string, ContactTranslations>;
   initialLocale: string;
   availableLocales: string[];
 }
 
 export function HelpPageClient({
-  isUSUser,
   supportEmail,
   faqTranslations,
+  privacyTranslations,
+  contactTranslations,
   initialLocale,
   availableLocales,
 }: HelpPageClientProps) {
@@ -53,7 +89,10 @@ export function HelpPageClient({
   const [currentLocale, setCurrentLocale] = useState<string>(initialLocale);
 
   const faqs = faqTranslations[currentLocale] || faqTranslations['en'] || [];
-  const privacyItems = privacyData.items;
+  const privacyItems =
+    privacyTranslations[currentLocale] || privacyTranslations['en'] || [];
+  const contactText =
+    contactTranslations[currentLocale] || contactTranslations['en'];
 
   // Debug log on mount
   useEffect(() => {
@@ -555,17 +594,16 @@ export function HelpPageClient({
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                          Submit a Support Request
+                          {contactText.submitRequest.title}
                         </h3>
                         <p className="text-purple-700 dark:text-purple-300 text-sm">
-                          Get help from our team
+                          {contactText.submitRequest.subtitle}
                         </p>
                       </div>
                     </div>
 
                     <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
-                      Need help or want to provide feedback? Click below to open
-                      our support form.
+                      {contactText.submitRequest.description}
                     </p>
 
                     <a
@@ -575,7 +613,7 @@ export function HelpPageClient({
                       className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white font-semibold text-sm rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
                     >
                       <IconExternalLink size={18} />
-                      Open Support Form
+                      {contactText.submitRequest.buttonText}
                     </a>
                   </div>
                 </div>
@@ -584,7 +622,7 @@ export function HelpPageClient({
                 <div>
                   <div className="flex items-center gap-2 mb-5">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      Other Ways to Reach Us
+                      {contactText.otherWays.title}
                     </h3>
                   </div>
 
@@ -603,11 +641,10 @@ export function HelpPageClient({
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-base font-bold text-gray-900 dark:text-white mb-1">
-                            Email Support
+                            {contactText.emailSupport.title}
                           </h4>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-1.5">
-                            Send us an email for questions, feedback, or
-                            technical issues
+                            {contactText.emailSupport.description}
                           </p>
                           <span className="inline-flex items-center gap-2 text-sm font-semibold text-purple-600 dark:text-purple-400">
                             {supportEmail}
@@ -623,7 +660,7 @@ export function HelpPageClient({
                 <div>
                   <div className="flex items-center gap-2 mb-5">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      Additional Resources
+                      {contactText.additionalResources.title}
                     </h3>
                   </div>
 
@@ -648,7 +685,7 @@ export function HelpPageClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="text-base font-bold text-gray-900 dark:text-white">
-                              AI Accelerator Portal
+                              {contactText.aiAcceleratorPortal.title}
                             </h4>
                             <IconExternalLink
                               size={16}
@@ -656,8 +693,7 @@ export function HelpPageClient({
                             />
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                            Documentation, project updates, and training
-                            materials
+                            {contactText.aiAcceleratorPortal.description}
                           </p>
                         </div>
                       </div>
@@ -680,7 +716,7 @@ export function HelpPageClient({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="text-base font-bold text-gray-900 dark:text-white">
-                              Open Source Repository
+                              {contactText.githubRepository.title}
                             </h4>
                             <IconExternalLink
                               size={16}
@@ -688,7 +724,7 @@ export function HelpPageClient({
                             />
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                            View code, report issues, and contribute on GitHub
+                            {contactText.githubRepository.description}
                           </p>
                         </div>
                       </div>
