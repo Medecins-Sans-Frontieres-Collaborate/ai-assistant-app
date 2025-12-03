@@ -10,6 +10,9 @@ import React, {
 import toast from 'react-hot-toast';
 
 import { useTranslation } from 'next-i18next';
+import useDocumentTranslation from '@/hooks/useDocumentTranslation';
+import documentService from '@/services/documentService';
+import HomeContext from '@/pages/api/home/home.context';
 
 import BetaBadge from '@/components/Beta/Badge';
 import Modal from '@/components/UI/Modal';
@@ -36,6 +39,18 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
   const [inputText, setInputText] = useState(defaultText ?? '');
   const [sourceLanguage, setSourceLanguage] = useState('');
   const [targetLanguage, setTargetLanguage] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const { state: homeState } = React.useContext(HomeContext);
+  const { user } = homeState || ({} as any);
+
+  const {
+    status: docFlowStatus,
+    document: uploadedDocument,
+    jobStatus,
+    upload: docUpload,
+    startTranslation: docStartTranslation,
+    download: docDownload,
+  } = useDocumentTranslation();
   const [translationType, setTranslationType] = useState('balanced');
   const [domainSpecific, setDomainSpecific] = useState('general');
   const [useFormalLanguage, setUseFormalLanguage] = useState(false);
@@ -133,8 +148,106 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
     setInputText('');
   };
 
+  const handleUploadAndTranslate = async () => {
+    if (!file) {
+      toast.error(t('translatorNoFileError') || 'No file selected');
+      return;
+    }
+    if (!targetLanguage) {
+      toast.error(t('translatorNoTargetLanguageError'));
+      return;
+    }
+
+    try {
+      // Upload via hook (wraps documentService)
+      const doc = await docUpload(file, file.name, { department: 'translation' });
+      toast.success(t('uploaderUploadSuccess') || 'Uploaded');
+
+      const userId = (user && ((user as any).id || (user as any).email)) || 'unknown';
+
+      await docStartTranslation(
+        {
+          document_id: doc.id,
+          user_id: userId,
+          source_lang: sourceLanguage || undefined,
+          target_lang: targetLanguage,
+        },
+        (s) => {
+          // status updates handled via hook state; give user small notifications
+          if (s.status === 'Succeeded') {
+            toast.success(t('translatorTranslateComplete') || 'Translation completed');
+          }
+          if (s.status === 'Failed') {
+            toast.error(t('translatorTranslateFailed') || 'Translation failed');
+          }
+        },
+      );
+    } catch (err) {
+      console.error('Upload/translate flow failed', err);
+      toast.error(t('translatorTranslateFailed') || 'Translation failed');
+    }
+  };
+
+  const handleDownloadTranslated = async () => {
+    const blobName = jobStatus?.translated_blob_name;
+    if (!blobName) {
+      toast.error('No translated file available');
+      return;
+    }
+    try {
+      const blob = await documentService.downloadBlob(blobName, false);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = uploadedDocument?.filename || 'translated';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('download failed', e);
+      toast.error('Download failed');
+    }
+  };
+
   const modalContent = (
     <>
+      {/* Document upload & translate section */}
+      <div className="mb-4 p-3 border rounded bg-gray-50 dark:bg-gray-800">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+          {t('translatorDocumentUploadTitle', 'Upload document to translate')}
+        </label>
+        <div className="mt-2 flex items-center space-x-2">
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+            className="text-sm"
+          />
+          <button
+            onClick={handleUploadAndTranslate}
+            className="py-2 px-3 bg-indigo-600 text-white rounded"
+          >
+            {t('translatorUploadAndTranslateButton', 'Upload & Translate')}
+          </button>
+        </div>
+        {file && (
+          <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">{file.name}</div>
+        )}
+        <div className="mt-2 text-sm">
+          {docFlowStatus && <div>Translation flow: {docFlowStatus}</div>}
+          {jobStatus && <div>Job status: {jobStatus.status}</div>}
+          {jobStatus?.status === 'Succeeded' && jobStatus.translated_blob_name && (
+            <div className="mt-2">
+              <button
+                onClick={handleDownloadTranslated}
+                className="py-1 px-2 bg-green-600 text-white rounded text-sm"
+              >
+                {t('translatorDownloadButton', 'Download translated file')}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
       {/* Language selection */}
       <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
         <div className="w-full">
