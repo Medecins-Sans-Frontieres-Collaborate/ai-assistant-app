@@ -10,12 +10,10 @@ import React, {
 import toast from 'react-hot-toast';
 
 import { useTranslation } from 'next-i18next';
-import useDocumentTranslation from '@/hooks/useDocumentTranslation';
-import documentService from '@/services/documentService';
-import HomeContext from '@/pages/api/home/home.context';
 
 import BetaBadge from '@/components/Beta/Badge';
 import Modal from '@/components/UI/Modal';
+import { useDocumentTranslationWithStatus } from '@/hooks/useDocumentTranslation';
 
 interface ChatInputTranslateProps {
   setTextFieldValue: Dispatch<SetStateAction<string>>;
@@ -39,18 +37,6 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
   const [inputText, setInputText] = useState(defaultText ?? '');
   const [sourceLanguage, setSourceLanguage] = useState('');
   const [targetLanguage, setTargetLanguage] = useState('');
-  const [file, setFile] = useState<File | null>(null);
-  const { state: homeState } = React.useContext(HomeContext);
-  const { user } = homeState || ({} as any);
-
-  const {
-    status: docFlowStatus,
-    document: uploadedDocument,
-    jobStatus,
-    upload: docUpload,
-    startTranslation: docStartTranslation,
-    download: docDownload,
-  } = useDocumentTranslation();
   const [translationType, setTranslationType] = useState('balanced');
   const [domainSpecific, setDomainSpecific] = useState('general');
   const [useFormalLanguage, setUseFormalLanguage] = useState(false);
@@ -62,6 +48,18 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
     useState<boolean>(true);
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
   const inputTextRef = useRef<HTMLTextAreaElement>(null);
+
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  const {
+    startTranslation,
+    phase,
+    jobId,
+    startResponse,
+    status,
+    error: documentError,
+    isPolling,
+    stopPolling,
+  } = useDocumentTranslationWithStatus({ pollIntervalMs: 2000 });
 
   useEffect(() => {
     if (isReadyToSend) {
@@ -148,107 +146,59 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
     setInputText('');
   };
 
-  const handleUploadAndTranslate = async () => {
-    if (!file) {
-      toast.error(t('translatorNoFileError') || 'No file selected');
+    // ---------------- DOCUMENT TRANSLATION (new) ----------------
+
+  const handleStartDocumentTranslation = async () => {
+    if (!documentFile) {
+      toast.error('Please select a document to translate.');
+      return;
+    }
+    if (!sourceLanguage) {
+      toast.error('Please select a source language for the document.');
       return;
     }
     if (!targetLanguage) {
-      toast.error(t('translatorNoTargetLanguageError'));
+      toast.error('Please select a target language for the document.');
       return;
     }
 
     try {
-      // Upload via hook (wraps documentService)
-      const doc = await docUpload(file, file.name, { department: 'translation' });
-      toast.success(t('uploaderUploadSuccess') || 'Uploaded');
+      await startTranslation({
+        file: documentFile,
+        sourceLanguage,
+        targetLanguage,
+      });
 
-      const userId = (user && ((user as any).id || (user as any).email)) || 'unknown';
-
-      await docStartTranslation(
-        {
-          document_id: doc.id,
-          user_id: userId,
-          source_lang: sourceLanguage || undefined,
-          target_lang: targetLanguage,
-        },
-        (s) => {
-          // status updates handled via hook state; give user small notifications
-          if (s.status === 'Succeeded') {
-            toast.success(t('translatorTranslateComplete') || 'Translation completed');
-          }
-          if (s.status === 'Failed') {
-            toast.error(t('translatorTranslateFailed') || 'Translation failed');
-          }
-        },
-      );
+      toast.success('Document translation started.');
     } catch (err) {
-      console.error('Upload/translate flow failed', err);
-      toast.error(t('translatorTranslateFailed') || 'Translation failed');
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'Failed to start document translation.';
+      toast.error(message);
     }
   };
 
-  const handleDownloadTranslated = async () => {
-    const blobName = jobStatus?.translated_blob_name;
-    if (!blobName) {
-      toast.error('No translated file available');
-      return;
-    }
-    try {
-      const blob = await documentService.downloadBlob(blobName, false);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = uploadedDocument?.filename || 'translated';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error('download failed', e);
-      toast.error('Download failed');
-    }
-  };
+  const isDocumentBusy =
+    phase === 'starting' || phase === 'running' || isPolling;
+
+  const documentStatusLabel = (() => {
+    if (phase === 'idle') return 'Idle';
+    if (phase === 'starting') return 'Starting…';
+    if (phase === 'running') return status?.status ?? 'Running…';
+    if (phase === 'completed') return status?.status ?? 'Completed';
+    if (phase === 'failed') return status?.status ?? 'Failed';
+    return 'Unknown';
+  })();
+
+  const canDownloadTranslatedDocument =
+    phase === 'completed' &&
+    status?.succeeded &&
+    !!startResponse?.target_sas_url;
 
   const modalContent = (
     <>
-      {/* Document upload & translate section */}
-      <div className="mb-4 p-3 border rounded bg-gray-50 dark:bg-gray-800">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-          {t('translatorDocumentUploadTitle', 'Upload document to translate')}
-        </label>
-        <div className="mt-2 flex items-center space-x-2">
-          <input
-            type="file"
-            onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-            className="text-sm"
-          />
-          <button
-            onClick={handleUploadAndTranslate}
-            className="py-2 px-3 bg-indigo-600 text-white rounded"
-          >
-            {t('translatorUploadAndTranslateButton', 'Upload & Translate')}
-          </button>
-        </div>
-        {file && (
-          <div className="mt-2 text-sm text-gray-600 dark:text-gray-300">{file.name}</div>
-        )}
-        <div className="mt-2 text-sm">
-          {docFlowStatus && <div>Translation flow: {docFlowStatus}</div>}
-          {jobStatus && <div>Job status: {jobStatus.status}</div>}
-          {jobStatus?.status === 'Succeeded' && jobStatus.translated_blob_name && (
-            <div className="mt-2">
-              <button
-                onClick={handleDownloadTranslated}
-                className="py-1 px-2 bg-green-600 text-white rounded text-sm"
-              >
-                {t('translatorDownloadButton', 'Download translated file')}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-      {/* Language selection */}
+      {/* Language selection (shared for text + document) */}
       <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
         <div className="w-full">
           <label
@@ -263,7 +213,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
             value={sourceLanguage}
             onChange={(e) => setSourceLanguage(e.target.value)}
           >
-            <option value="" className={'text-gray-400 dark:text-gray-400'}>
+            <option value="" className="text-gray-400 dark:text-gray-400">
               {t('translatorEmptyFromLanguage')}
             </option>
             {languages.map((language) => (
@@ -274,7 +224,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           </select>
         </div>
         <button
-          id={'translate-language-swap'}
+          id="translate-language-swap"
           onClick={() => {
             const temp = sourceLanguage;
             setSourceLanguage(targetLanguage);
@@ -312,7 +262,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
               value={targetLanguage}
               onChange={(e) => setTargetLanguage(e.target.value)}
             >
-              <option value="" className={'text-gray-400 dark:text-gray-400'}>
+              <option value="" className="text-gray-400 dark:text-gray-400">
                 {t('translatorEmptyToLanguage')}
               </option>
               {languages.map((language) => (
@@ -332,7 +282,8 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           )}
         </div>
       </div>
-      {/* Input text area */}
+
+      {/* TEXT TRANSLATION AREA (existing behavior) */}
       <div className="my-4">
         <label
           htmlFor="input-text"
@@ -350,7 +301,8 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           onChange={(e) => setInputText(e.target.value)}
         ></textarea>
       </div>
-      {/* Advanced options */}
+
+      {/* Advanced options (still for text prompt) */}
       <div className="my-4">
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
@@ -376,7 +328,6 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
         </button>
         {showAdvanced && (
           <div className="mt-2 p-4 border border-gray-300 dark:border-gray-600 rounded-md">
-            {/* Advanced options content */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
@@ -473,8 +424,9 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           </div>
         )}
       </div>
-      {/* Add auto-submit toggle before the Translate button */}
-      <div className="flex items-center mt-4">
+
+      {/* Auto-submit toggle (still for text prompt) */}
+      <div className="flex items-center mt-4 mb-6">
         <input
           id="auto-submit"
           type="checkbox"
@@ -488,6 +440,113 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
         >
           {t('autoSubmitButton')}
         </label>
+      </div>
+
+      {/* DOCUMENT TRANSLATION SECTION */}
+      <div className="mt-6 border-t border-gray-300 dark:border-gray-700 pt-4">
+        <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">
+          Document translation
+        </h4>
+
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          Upload a document to translate it between the selected languages.
+        </p>
+
+        <div className="flex flex-col gap-3">
+          <div>
+            <label
+              htmlFor="document-file"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+              Document file
+            </label>
+            <input
+              id="document-file"
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,.rtf,.ppt,.pptx"
+              className="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 dark:file:border-gray-600 file:text-sm file:font-semibold file:bg-gray-50 dark:file:bg-gray-700 file:text-gray-700 dark:file:text-gray-200 hover:file:bg-gray-100 dark:hover:file:bg-gray-600"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                setDocumentFile(file ?? null);
+              }}
+            />
+            {documentFile && (
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Selected: <span className="font-medium">{documentFile.name}</span>
+              </p>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between gap-3 mt-2">
+            <button
+              type="button"
+              onClick={handleStartDocumentTranslation}
+              disabled={isDocumentBusy}
+              className={`flex-1 inline-flex justify-center py-2 px-4 text-sm font-medium rounded-md border ${
+                isDocumentBusy
+                  ? 'bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-300 dark:border-gray-700 cursor-not-allowed'
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white border-transparent'
+              }`}
+            >
+              {isDocumentBusy ? 'Translating…' : 'Start document translation'}
+            </button>
+
+            {canDownloadTranslatedDocument && startResponse?.target_sas_url && (
+              <a
+                href={startResponse.target_sas_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-3 py-2 text-xs font-medium rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                Download translated document
+              </a>
+            )}
+          </div>
+
+          {/* Status + errors */}
+          <div className="mt-2 text-xs text-gray-600 dark:text-gray-300 space-y-1">
+            <div>
+              <span className="font-medium">Status:</span>{' '}
+              <span>{documentStatusLabel}</span>
+            </div>
+            {jobId && (
+              <div className="text-[11px] text-gray-500 dark:text-gray-400">
+                Job ID: <code className="break-all">{jobId}</code>
+              </div>
+            )}
+            {documentError && (
+              <div className="text-[11px] text-red-500 dark:text-red-400">
+                {documentError}
+              </div>
+            )}
+            {status?.error && (
+              <div className="text-[11px] text-red-500 dark:text-red-400">
+                {status.error}
+              </div>
+            )}
+            {phase === 'completed' && status?.succeeded && (
+              <div className="text-[11px] text-emerald-600 dark:text-emerald-400">
+                Translation completed. You can download the translated document
+                above.
+              </div>
+            )}
+            {phase === 'failed' && (
+              <div className="text-[11px] text-red-500 dark:text-red-400">
+                Translation failed. Please try again or upload another document.
+              </div>
+            )}
+          </div>
+
+          {isDocumentBusy && (
+            <button
+              type="button"
+              onClick={stopPolling}
+              className="self-start mt-1 text-[11px] text-gray-500 dark:text-gray-400 underline hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              Stop polling
+            </button>
+          )}
+        </div>
       </div>
     </>
   );
