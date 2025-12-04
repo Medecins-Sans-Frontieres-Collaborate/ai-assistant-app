@@ -1,117 +1,140 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import documentService from '@/services/documentService';
 import {
-  DocumentResponse,
   DocumentTranslationResponse,
   DocumentTranslationStatusResponse,
+  DocumentTranslationRequest,
 } from '@/types/document';
+import {
+  translateDocument,
+  getDocumentTranslationStatus,
+} from '@/services/documentService';
 
-type Status = 'idle' | 'uploading' | 'translating' | 'completed' | 'failed' | 'canceled' | 'polling';
+type TranslationPhase = 'idle' | 'starting' | 'running' | 'completed' | 'failed';
 
-export function useDocumentTranslation() {
-  const [status, setStatus] = useState<Status>('idle');
-  const [document, setDocument] = useState<DocumentResponse | null>(null);
-  const [translation, setTranslation] = useState<DocumentTranslationResponse | null>(null);
-  const [jobStatus, setJobStatus] = useState<DocumentTranslationStatusResponse | null>(null);
-  const pollingRef = useRef<{ canceled: boolean }>({ canceled: false });
+interface UseDocumentTranslationOptions {
+  pollIntervalMs?: number;
+}
 
+export function useDocumentTranslationWithStatus(
+  options: UseDocumentTranslationOptions = {},
+) {
+  const { pollIntervalMs = 2000 } = options;
+
+  const [phase, setPhase] = useState<TranslationPhase>('idle');
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [startResponse, setStartResponse] =
+    useState<DocumentTranslationResponse | null>(null);
+  const [status, setStatus] =
+    useState<DocumentTranslationStatusResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isPolling, setIsPolling] = useState(false);
+
+  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearPollTimer = () => {
+    if (pollTimerRef.current) {
+      clearInterval(pollTimerRef.current);
+      pollTimerRef.current = null;
+    }
+  };
+
+  const stopPolling = useCallback(() => {
+    clearPollTimer();
+    setIsPolling(false);
+  }, []);
+
+  const startPolling = useCallback(
+    (jobIdToPoll: string) => {
+      clearPollTimer();
+      setIsPolling(true);
+      setPhase('running');
+
+      const tick = async () => {
+        try {
+          const s = await getDocumentTranslationStatus(jobIdToPoll);
+          setStatus(s);
+
+          const isDone =
+            s.succeeded ||
+            s.status.toLowerCase() === 'completed' ||
+            s.status.toLowerCase() === 'failed';
+
+          if (isDone) {
+            stopPolling();
+            setPhase(s.succeeded ? 'completed' : 'failed');
+          }
+        } catch (err) {
+          console.error('[useDocumentTranslationWithStatus] poll error', err);
+          stopPolling();
+          setPhase('failed');
+          const msg =
+            err instanceof Error ? err.message : 'Failed to poll translation';
+          setError(msg);
+        }
+      };
+
+      // immediate first tick
+      void tick();
+
+      pollTimerRef.current = setInterval(() => {
+        void tick();
+      }, pollIntervalMs);
+    },
+    [pollIntervalMs, stopPolling],
+  );
+
+  const startTranslation = useCallback(
+    async (payload: DocumentTranslationRequest) => {
+      setPhase('starting');
+      setError(null);
+      setStatus(null);
+      setStartResponse(null);
+      setJobId(null);
+
+      try {
+        const resp = await translateDocument(payload);
+        setStartResponse(resp);
+
+        if (!resp.job_id) {
+          throw new Error('Translation response missing job_id');
+        }
+
+        setJobId(resp.job_id);
+        startPolling(resp.job_id);
+
+        return resp;
+      } catch (err) {
+        console.error('[useDocumentTranslationWithStatus] start error', err);
+        const msg =
+          err instanceof Error
+            ? err.message
+            : 'Failed to start document translation';
+        setError(msg);
+        setPhase('failed');
+        throw err;
+      }
+    },
+    [startPolling],
+  );
+
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      pollingRef.current.canceled = true;
+      clearPollTimer();
     };
   }, []);
 
-  const upload = useCallback(async (file: File | Blob, metadata?: Record<string, any>) => {
-    setStatus('uploading');
-    try {
-      const doc = await documentService.uploadDocument(file, undefined, metadata);
-      setDocument(doc);
-      setStatus('idle');
-      return doc;
-    } catch (err) {
-      setStatus('failed');
-      throw err;
-    }
-  }, []);
-
-  const startTranslation = useCallback(async (params: { document_id: number; user_id: string | number; target_lang: string; source_lang?: string }, onStatusUpdate?: (s: DocumentTranslationStatusResponse) => void) => {
-    setStatus('translating');
-    try {
-      const resp = await documentService.translateDocument({
-        document_id: params.document_id,
-        user_id: params.user_id,
-        source_lang: params.source_lang,
-        target_lang: params.target_lang,
-      });
-      setTranslation(resp);
-      setStatus('polling');
-      // start polling
-      pollStatus(resp.job_id, onStatusUpdate).catch((e) => {
-        // failures handled inside pollStatus
-      });
-      return resp;
-    } catch (err) {
-      setStatus('failed');
-      throw err;
-    }
-  }, []);
-
-  const pollStatus = useCallback(async (jobId: string, onStatusUpdate?: (s: DocumentTranslationStatusResponse) => void) => {
-    pollingRef.current.canceled = false;
-    const start = Date.now();
-    const maxElapsed = 10 * 60 * 1000; // 10 minutes
-    let attempt = 0;
-    const delays = [2000, 4000, 8000, 16000, 30000];
-
-    while (!pollingRef.current.canceled) {
-      try {
-        const s = await documentService.getTranslationStatus(jobId);
-        setJobStatus(s);
-        onStatusUpdate?.(s);
-        if (s.status === 'Succeeded' || s.status === 'Failed') {
-          setStatus(s.status === 'Succeeded' ? 'completed' : 'failed');
-          return s;
-        }
-        // continue polling
-      } catch (err) {
-        // transient error: continue with backoff
-        console.error('[useDocumentTranslation] pollStatus error', err);
-      }
-
-      attempt = Math.min(attempt + 1, delays.length - 1);
-      const delay = delays[Math.min(attempt, delays.length - 1)];
-      // stop if exceeded max elapsed
-      if (Date.now() - start > maxElapsed) {
-        setStatus('failed');
-        throw new Error('Translation status polling timed out');
-      }
-      await new Promise((res) => setTimeout(res, delay));
-    }
-    setStatus('canceled');
-    throw new Error('Polling canceled');
-  }, []);
-
-  const cancelPolling = useCallback(() => {
-    pollingRef.current.canceled = true;
-    setStatus('canceled');
-  }, []);
-
-  const download = useCallback(async (blobName: string, source = false) => {
-    const blob = await documentService.downloadBlob(blobName, source);
-    return blob;
-  }, []);
-
   return {
-    status,
-    document,
-    translation,
-    jobStatus,
-    upload,
+    // actions
     startTranslation,
-    pollStatus,
-    cancelPolling,
-    download,
-  } as const;
-}
+    stopPolling,
 
-export default useDocumentTranslation;
+    // state
+    phase,
+    jobId,
+    startResponse, // contains job_id + target_sas_url
+    status, // live backend status
+    error,
+    isPolling,
+  };
+}
