@@ -1,24 +1,15 @@
-export interface DocumentResponse {
+export interface DocumentUploadResponse {
   id: number;
-  blob_name: string;
-  filename: string;
-  size: number;
-  content_type: string;
+  file_name: string;
+  file_type: string;
+  blob_url: string;
   uploaded_by: number | string;
-  uploaded_at: string; // ISO timestamp
-  department?: string | null;
+  created_at: string;
 }
 
 export interface DocumentTranslationResponse {
   job_id: string;
-  document_id: number;
-  source_language: string;
-  target_language: string;
-  status: string;
-  translated_blob_name?: string | null;
-  created_at: string;
-  updated_at?: string | null;
-  estimated_cost?: number | null;
+  target_sas_url: string;
 }
 
 export interface DocumentTranslationStatusResponse {
@@ -30,14 +21,13 @@ export interface DocumentTranslationStatusResponse {
 }
 
 export interface DocumentCostResponse {
+  blob_name: string;
   characters: number;
   estimated_cost: number; // in currency units used by the service
 }
 
-// Request payload shapes used by the client
-export interface TranslateDocumentRequest {
-  document_id: number;
-  user_id: number | string;
-  source_lang?: string;
-  target_lang: string;
+export interface DocumentTranslationRequest {
+  file: File;
+  sourceLanguage: string; // 'en'
+  targetLanguage: string; // 'fr'
 }
