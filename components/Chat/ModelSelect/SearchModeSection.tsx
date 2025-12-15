@@ -5,6 +5,10 @@ import {
 } from '@tabler/icons-react';
 import React, { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
+import { getSearchModeLabels } from '@/lib/utils/app/modelTranslations';
+
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
@@ -27,6 +31,9 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
   handleToggleSearchMode,
   handleSetSearchMode,
 }) => {
+  const t = useTranslations();
+  const labels = getSearchModeLabels(t);
+
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
       <div className="flex items-center justify-between mb-3">
@@ -34,10 +41,10 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
           <IconWorld size={20} className="text-gray-600 dark:text-gray-400" />
           <div>
             <div className="font-medium text-gray-900 dark:text-white">
-              Search Mode
+              {labels.searchMode}
             </div>
             <div className="text-xs text-gray-600 dark:text-gray-400">
-              Will use web search when needed
+              {labels.searchModeDescription}
             </div>
           </div>
         </div>
@@ -60,7 +67,7 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
         <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
-              Search Routing:
+              {labels.searchRouting}:
             </div>
             <a
               href="/info/search-mode"
@@ -68,7 +75,7 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
               rel="noopener noreferrer"
               className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
             >
-              What's the difference?
+              {labels.whatIsTheDifference}
               <IconInfoCircle size={12} />
             </a>
           </div>
@@ -90,11 +97,11 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
                   className="text-gray-600 dark:text-gray-400"
                 />
                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                  Privacy-Focused (Default)
+                  {labels.privacyFocusedDefault}
                 </span>
               </div>
               <div className="text-xs text-gray-600 dark:text-gray-400">
-                Slower but more private
+                {labels.privacyFocusedDescription}
               </div>
             </div>
           </label>
@@ -114,11 +121,11 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
                 <div className="flex items-center gap-2 mb-1">
                   <AzureAIIcon className="w-4 h-4 flex-shrink-0" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Azure AI Agent Mode
+                    {labels.azureAIAgentMode}
                   </span>
                 </div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">
-                  Faster but stores conversation data in the cloud
+                  {labels.azureAIAgentModeDescription}
                 </div>
               </div>
             </label>
@@ -133,11 +140,10 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
                 />
                 <div className="flex-1">
                   <div className="text-xs font-medium text-amber-800 dark:text-amber-200 mb-1">
-                    Important Privacy Information
+                    {labels.importantPrivacyInformation}
                   </div>
                   <div className="text-xs text-amber-700 dark:text-amber-300 mb-2">
-                    Your full conversation will be sent to Azure AI Foundry
-                    agent.
+                    {labels.fullConversationSentWarning}
                   </div>
                   <a
                     href="/info/search-mode"
@@ -145,7 +151,7 @@ export const SearchModeSection: FC<SearchModeSectionProps> = ({
                     rel="noopener noreferrer"
                     className="text-xs text-amber-800 dark:text-amber-200 hover:underline font-medium flex items-center gap-1"
                   >
-                    Learn more about data storage
+                    {labels.learnMoreDataStorage}
                     <IconInfoCircle size={12} />
                   </a>
                 </div>
