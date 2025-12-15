@@ -327,13 +327,25 @@
   "Tones": "Tony",
   "Create Your First Tone": "Utwórz swój pierwszy ton",
   "Search tones": "Szukaj tonów...",
-  "Voice Guidelines": "Wytyczne głosowe",
+  "Voice Guidelines": "Wytyczne Głosowe",
   "Examples": "Przykłady",
   "Select a tone to view details": "Wybierz ton, aby zobaczyć szczegóły",
   "Team Templates": "Szablony zespołu",
   "selected": "wybrano",
   "folders": "foldery",
-  "agents": "agenci",
+  "agents": {
+    "exportAgent": "Eksportuj agenta",
+    "editAgent": "Edytuj agenta",
+    "agentName": "Nazwa agenta",
+    "myResearchAssistant": "Mój asystent badawczy",
+    "agentId": "ID agenta",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Opis (opcjonalnie)",
+    "descriptionPlaceholder": "Agent wyspecjalizowany w zadaniach badawczych...",
+    "baseModel": "Model bazowy",
+    "formatDescription": "Format: asst_xxxxx (z MSF AI Assistant Foundry)",
+    "importantInfo": "Ten agent będzie miał dostęp do kontekstu rozmowy i będzie mógł korzystać z tych samych narzędzi co standardowe modele. Upewnij się, że ID agenta jest poprawne, ponieważ nie można go później zmienić."
+  },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Wpisz / w czacie, wybierz swój prompt i wypełnij zmienne, gdy zostaniesz o to poproszony",
@@ -380,7 +392,6 @@
   "Custom Agents": "Niestandardowi Agenci",
   "Delete template and all its items": "Usuń szablon i wszystkie jego elementy",
   "Description (Optional)": "Opis (Opcjonalnie)",
-  "Edit Prompt": "Edytuj Prompt",
   "Edit Tone": "Edytuj Ton",
   "Email Response Template": "Szablon Odpowiedzi E-mail",
   "Example Prompt": "Przykładowy Prompt",
@@ -440,7 +451,6 @@
   "msf_logo_alt": "Logo MSF",
   "collapse_sidebar": "Zwiń pasek boczny",
   "expand_sidebar": "Rozwiń pasek boczny",
-  "Voice Guidelines": "Wytyczne Głosowe",
   "Please upload some content or describe the tone you want": "Prześlij treść lub opisz ton, którego chcesz",
   "Untitled Tone": "Ton Bez Tytułu",
   "Failed to analyze tone": "Nie udało się przeanalizować tonu",
@@ -553,19 +563,6 @@
     "quickActionsTitle": "Szybkie akcje",
     "quickActions": "Szybkie akcje"
   },
-  "agents": {
-    "exportAgent": "Eksportuj agenta",
-    "editAgent": "Edytuj agenta",
-    "agentName": "Nazwa agenta",
-    "myResearchAssistant": "Mój asystent badawczy",
-    "agentId": "ID agenta",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Opis (opcjonalnie)",
-    "descriptionPlaceholder": "Agent wyspecjalizowany w zadaniach badawczych...",
-    "baseModel": "Model bazowy",
-    "formatDescription": "Format: asst_xxxxx (z MSF AI Assistant Foundry)",
-    "importantInfo": "Ten agent będzie miał dostęp do kontekstu rozmowy i będzie mógł korzystać z tych samych narzędzi co standardowe modele. Upewnij się, że ID agenta jest poprawne, ponieważ nie można go później zmienić."
-  },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI"
   },
@@ -647,5 +644,75 @@
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Model AI zasilany przez GPT-4.1 z wyszukiwaniem w czasie rzeczywistym przez Bing. Zapewnia aktualne informacje, sprawdzanie faktów i świadomość bieżących wydarzeń. Najlepszy do badań wymagających najnowszych informacji, analizy wiadomości i weryfikacji faktów."
+    },
+    "gpt-5": {
+      "description": "Najbardziej zaawansowany model OpenAI, doskonały w złożonym rozumowaniu, generowaniu kodu i rozwiązywaniu problemów technicznych. Najlepszy do zadań analitycznych, wyzwań programistycznych, badań i szczegółowych wyjaśnień. Obsługuje regulowany wysiłek rozumowania i szczegółowość odpowiedzi."
+    },
+    "gpt-5-mini": {
+      "description": "Szybsza i bardziej ekonomiczna wersja GPT-5, zoptymalizowana pod kątem szybkości przy zachowaniu wysokiej jakości. Idealna do codziennych zadań, szybkich zapytań, sterowania narzędziami i aplikacji wymagających szybkich czasów odpowiedzi. Doskonała równowaga między wydajnością a efektywnością."
+    },
+    "gpt-5-chat": {
+      "description": "Wyspecjalizowana wersja GPT-5 zoptymalizowana do interakcji konwersacyjnych i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, wsparciu zdrowia psychicznego, kreatywnym pisaniu, burzy mózgów i naturalnym dialogu. Idealna do swobodnych rozmów, scenariuszy doradczych i zadań wymagających świadomości emocjonalnej."
+    },
+    "o3": {
+      "description": "Najbardziej zaawansowany model rozumowania OpenAI z przełomowymi możliwościami rozwiązywania problemów. Doskonały w złożonej matematyce, rozumowaniu naukowym, wyzwaniach programistycznych i wielopoziomowych zadaniach logicznych. Rozszerzone okno kontekstu 200K. Obsługuje kontrolę wysiłku rozumowania."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Szybki i ekonomiczny model od Meta. Doskonały do codziennych zadań, takich jak pisanie, streszczanie i podstawowa pomoc w kodowaniu. Dobra równowaga między szybkością a jakością dla rutynowej pracy."
+    },
+    "DeepSeek-R1": {
+      "description": "Specjalista od rozumowania, który pokazuje swoją pracę krok po kroku. Doskonały w problemach matematycznych, zagadkach logicznych i rozumieniu złożonych koncepcji. Zobacz, jak myśli o problemach w czasie rzeczywistym."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Potężny model wszechstronny, szczególnie dobry w kodzie i pisaniu technicznym. Doskonały do debugowania kodu, pisania dokumentacji i wyjaśniania koncepcji technicznych. Szybki i niezawodny do pracy deweloperskiej."
+    },
+    "grok-3": {
+      "description": "Wszechstronny model od xAI znany z niuansowanych odpowiedzi. Doskonały do otwartych dyskusji, projektów kreatywnych i radzenia sobie ze złożonymi problemami."
+    },
+    "modelTypes": {
+      "foundational": "Podstawowy",
+      "omni": "Omni",
+      "reasoning": "Rozumowanie",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Powrót do modeli",
+      "knowledgeCutoff": "Granica wiedzy",
+      "realTimeWebSearch": "Wyszukiwanie w czasie rzeczywistym",
+      "searchMode": "Tryb wyszukiwania",
+      "searchModeDescription": "Użyje wyszukiwania w razie potrzeby",
+      "privacyFocusedDefault": "Skupiony na prywatności (domyślnie)",
+      "privacyFocusedDescription": "Wolniejszy, ale bardziej prywatny",
+      "azureAIAgentMode": "Tryb agenta Azure AI",
+      "azureAIAgentModeDescription": "Szybszy, ale przechowuje dane rozmów w chmurze",
+      "importantPrivacyInformation": "Ważne informacje o prywatności",
+      "fullConversationSentWarning": "Cała Twoja rozmowa zostanie wysłana do agenta Azure AI Foundry.",
+      "learnMoreDataStorage": "Dowiedz się więcej o przechowywaniu danych",
+      "searchRouting": "Routing wyszukiwania",
+      "whatIsTheDifference": "Jaka jest różnica?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Wysiłek rozumowania",
+      "reasoningEffortDescription": "Kontroluje, jak bardzo model myśli przed odpowiedzią",
+      "minimal": "Minimalny",
+      "minimalDescription": "Szybkie i lekkie myślenie",
+      "low": "Niski",
+      "lowDescription": "Podstawowe rozumowanie",
+      "medium": "Średni",
+      "mediumDescription": "Zrównoważone rozumowanie",
+      "high": "Wysoki",
+      "highDescription": "Głębokie rozumowanie",
+      "verbosity": "Szczegółowość",
+      "verbosityDescription": "Kontroluje, ile szczegółów dostarcza model",
+      "verbosityLow": "Niski",
+      "verbosityMedium": "Średni",
+      "verbosityHigh": "Wysoki"
+    }
   }
 }

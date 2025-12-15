@@ -174,7 +174,6 @@
   "Data Management": "Gegevensbeheer",
   "Account": "Account",
   "Mobile App": "Mobiele app",
-  "Mobile App": "Mobiele app",
   "Help & Support": "Hulp & Ondersteuning",
   "App Settings": "App-instellingen",
   "Default Temperature": "Standaard temperatuur",
@@ -217,7 +216,7 @@
   "Options": "Opties",
   "Are you sure you want to delete this folder?": "Weet je zeker dat je deze map wilt verwijderen?",
   "New Prompt": "Nieuwe prompt",
-  "Edit Prompt": "Prompt bewerken",
+  "Edit Prompt": "Prompt Bewerken",
   "Prompt name": "Promptnaam",
   "Prompt content": "Promptinhoud",
   "Are you sure you want to delete this prompt?": "Weet je zeker dat je deze prompt wilt verwijderen?",
@@ -296,13 +295,25 @@
   "Tones": "Tonen",
   "Create Your First Tone": "Maak je eerste toon",
   "Search tones": "Zoek tonen...",
-  "Voice Guidelines": "Spraakrichtlijnen",
+  "Voice Guidelines": "Stem Richtlijnen",
   "Examples": "Voorbeelden",
   "Select a tone to view details": "Selecteer een toon om details te bekijken",
   "Team Templates": "Teamsjablonen",
   "selected": "geselecteerd",
   "folders": "mappen",
-  "agents": "agenten",
+  "agents": {
+    "exportAgent": "Agent exporteren",
+    "editAgent": "Agent bewerken",
+    "agentName": "Naam agent",
+    "myResearchAssistant": "Mijn onderzoeksassistent",
+    "agentId": "Agent-ID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Beschrijving (optioneel)",
+    "descriptionPlaceholder": "Agent gespecialiseerd in onderzoekstaken...",
+    "baseModel": "Basismodel",
+    "formatDescription": "Formaat: asst_xxxxx (van MSF AI Assistant Foundry)",
+    "importantInfo": "Deze agent heeft toegang tot de gesprekscontext en kan dezelfde tools gebruiken als standaardmodellen. Zorg ervoor dat de agent-ID correct is, aangezien deze later niet kan worden gewijzigd."
+  },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Typ / in chat, selecteer je prompt en vul de variabelen in wanneer daarom wordt gevraagd",
@@ -349,7 +360,6 @@
   "Custom Agents": "Aangepaste Agents",
   "Delete template and all its items": "Sjabloon en alle items verwijderen",
   "Description (Optional)": "Beschrijving (Optioneel)",
-  "Edit Prompt": "Prompt Bewerken",
   "Edit Tone": "Toon Bewerken",
   "Email Response Template": "E-mail Reactie Sjabloon",
   "Example Prompt": "Voorbeeld Prompt",
@@ -409,7 +419,6 @@
   "msf_logo_alt": "MSF Logo",
   "collapse_sidebar": "Zijbalk inklappen",
   "expand_sidebar": "Zijbalk uitklappen",
-  "Voice Guidelines": "Stem Richtlijnen",
   "Please upload some content or describe the tone you want": "Upload wat inhoud of beschrijf de gewenste toon",
   "Untitled Tone": "Naamloze Toon",
   "Failed to analyze tone": "Toon analyseren mislukt",
@@ -522,19 +531,6 @@
     "quickActionsTitle": "Snelle acties",
     "quickActions": "Snelle acties"
   },
-  "agents": {
-    "exportAgent": "Agent exporteren",
-    "editAgent": "Agent bewerken",
-    "agentName": "Naam agent",
-    "myResearchAssistant": "Mijn onderzoeksassistent",
-    "agentId": "Agent-ID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Beschrijving (optioneel)",
-    "descriptionPlaceholder": "Agent gespecialiseerd in onderzoekstaken...",
-    "baseModel": "Basismodel",
-    "formatDescription": "Formaat: asst_xxxxx (van MSF AI Assistant Foundry)",
-    "importantInfo": "Deze agent heeft toegang tot de gesprekscontext en kan dezelfde tools gebruiken als standaardmodellen. Zorg ervoor dat de agent-ID correct is, aangezien deze later niet kan worden gewijzigd."
-  },
   "prompts": {
     "buildReusablePrompts": "Bouw herbruikbare prompts met AI-assistentie"
   },
@@ -616,5 +612,75 @@
   },
   "notFound": {
     "lostDog": "Verloren hond"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "AI-model aangedreven door GPT-4.1 met realtime webzoekopdrachten via Bing. Biedt actuele informatie, feitencontrole en bewustzijn van actuele gebeurtenissen. Het beste voor onderzoek dat recente informatie, nieuwsanalyse en feitenverificatie vereist."
+    },
+    "gpt-5": {
+      "description": "OpenAI's meest geavanceerde model, uitstekend in complexe redenering, codegeneratie en technische probleemoplossing. Het beste voor analytische taken, programmeeruitdagingen, onderzoek en gedetailleerde uitleg. Ondersteunt instelbare redeneerinspanning en responsdetails."
+    },
+    "gpt-5-mini": {
+      "description": "Snellere en kosteneffectievere variant van GPT-5, geoptimaliseerd voor snelheid met behoud van hoge kwaliteit. Ideaal voor dagelijkse taken, snelle query's, gereedschapsbesturing en toepassingen die snelle responstijden vereisen. Uitstekende balans tussen prestaties en efficiëntie."
+    },
+    "gpt-5-chat": {
+      "description": "Gespecialiseerde variant van GPT-5 geoptimaliseerd voor conversationele interacties en emotionele intelligentie. Uitstekend in empathische communicatie, ondersteuning van geestelijke gezondheid, creatief schrijven, brainstormen en natuurlijke dialoog. Ideaal voor informele gesprekken, adviesscenario's en taken die emotioneel bewustzijn vereisen."
+    },
+    "o3": {
+      "description": "OpenAI's meest geavanceerde redeneermodel met baanbrekende probleemoplossende capaciteiten. Uitstekend in complexe wiskunde, wetenschappelijke redenering, programmeeruitdagingen en meerlagige logische taken. Uitgebreid 200K contextvenster. Ondersteunt controle over redeneerinspanning."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Snel en kosteneffectief model van Meta. Uitstekend voor dagelijkse taken zoals schrijven, samenvatten en basiscodeondersteuning. Goede balans tussen snelheid en kwaliteit voor routinewerk."
+    },
+    "DeepSeek-R1": {
+      "description": "Redeneringsspecialist die zijn werk stap voor stap toont. Uitstekend voor wiskundige problemen, logische puzzels en het begrijpen van complexe concepten. Zie in realtime hoe het over problemen nadenkt."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Krachtig allround model, bijzonder goed in code en technisch schrijven. Uitstekend voor het debuggen van code, het schrijven van documentatie en het uitleggen van technische concepten. Snel en betrouwbaar voor ontwikkelingswerk."
+    },
+    "grok-3": {
+      "description": "Veelzijdig model van xAI bekend om genuanceerde antwoorden. Uitstekend voor open discussies, creatieve projecten en het aanpakken van complexe problemen."
+    },
+    "modelTypes": {
+      "foundational": "Fundamenteel",
+      "omni": "Omni",
+      "reasoning": "Redenering",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Terug naar modellen",
+      "knowledgeCutoff": "Kennisgrens",
+      "realTimeWebSearch": "Realtime webzoekopdracht",
+      "searchMode": "Zoekmodus",
+      "searchModeDescription": "Gebruikt webzoekopdrachten indien nodig",
+      "privacyFocusedDefault": "Privacy gericht (standaard)",
+      "privacyFocusedDescription": "Langzamer, maar privater",
+      "azureAIAgentMode": "Azure AI-agentmodus",
+      "azureAIAgentModeDescription": "Sneller, maar slaat gespreksgegevens op in de cloud",
+      "importantPrivacyInformation": "Belangrijke privacy-informatie",
+      "fullConversationSentWarning": "Uw volledige gesprek wordt verzonden naar de Azure AI Foundry-agent.",
+      "learnMoreDataStorage": "Meer informatie over gegevensopslag",
+      "searchRouting": "Zoekrouting",
+      "whatIsTheDifference": "Wat is het verschil?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Redeneerinspanning",
+      "reasoningEffortDescription": "Regelt hoeveel het model nadenkt voordat het reageert",
+      "minimal": "Minimaal",
+      "minimalDescription": "Snel en licht denken",
+      "low": "Laag",
+      "lowDescription": "Basisredenering",
+      "medium": "Gemiddeld",
+      "mediumDescription": "Evenwichtige redenering",
+      "high": "Hoog",
+      "highDescription": "Diepe redenering",
+      "verbosity": "Uitvoerigheid",
+      "verbosityDescription": "Regelt hoeveel details het model biedt",
+      "verbosityLow": "Laag",
+      "verbosityMedium": "Gemiddeld",
+      "verbosityHigh": "Hoog"
+    }
   }
 }

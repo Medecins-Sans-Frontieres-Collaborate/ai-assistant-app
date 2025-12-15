@@ -253,7 +253,19 @@
   "Team Templates": "Violezo vya Timu",
   "selected": "imechaguliwa",
   "folders": "folda",
-  "agents": "mawakala",
+  "agents": {
+    "exportAgent": "Hamisha wakala",
+    "editAgent": "Hariri wakala",
+    "agentName": "Jina la wakala",
+    "myResearchAssistant": "Msaidizi wangu wa utafiti",
+    "agentId": "Kitambulisho cha wakala",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Maelezo (si lazima)",
+    "descriptionPlaceholder": "Wakala aliye na ujuzi wa kazi za utafiti...",
+    "baseModel": "Modeli ya msingi",
+    "formatDescription": "Muundo: asst_xxxxx (kutoka MSF AI Assistant Foundry)",
+    "importantInfo": "Wakala huyu atakuwa na ufikiaji wa muktadha wa mazungumzo na ataweza kutumia zana sawa na miundo ya kawaida. Hakikisha kitambulisho cha wakala ni sahihi kwa sababu hakiwezi kubadilishwa baadaye."
+  },
   "Quick Actions": "Vitendo vya Haraka",
   "Type / in chat to access your prompts": "Andika / katika mazungumzo ili kufikia vidokezo vyako",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Andika / katika mazungumzo, chagua kidokezo chako, na jaza vigeu vinapotakiwa",
@@ -471,19 +483,6 @@
     "quickActionsTitle": "Vitendo vya Haraka",
     "quickActions": "Vitendo vya Haraka"
   },
-  "agents": {
-    "exportAgent": "Hamisha wakala",
-    "editAgent": "Hariri wakala",
-    "agentName": "Jina la wakala",
-    "myResearchAssistant": "Msaidizi wangu wa utafiti",
-    "agentId": "Kitambulisho cha wakala",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Maelezo (si lazima)",
-    "descriptionPlaceholder": "Wakala aliye na ujuzi wa kazi za utafiti...",
-    "baseModel": "Modeli ya msingi",
-    "formatDescription": "Muundo: asst_xxxxx (kutoka MSF AI Assistant Foundry)",
-    "importantInfo": "Wakala huyu atakuwa na ufikiaji wa muktadha wa mazungumzo na ataweza kutumia zana sawa na miundo ya kawaida. Hakikisha kitambulisho cha wakala ni sahihi kwa sababu hakiwezi kubadilishwa baadaye."
-  },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI"
   },
@@ -565,5 +564,75 @@
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Mfano wa AI unaotumia GPT-4.1 na utafutaji wa wavuti wa wakati halisi kupitia Bing. Hutoa taarifa za kisasa, ukaguzi wa ukweli, na ufahamu wa matukio ya sasa. Bora kwa utafiti unaohitaji taarifa za hivi karibuni, uchambuzi wa habari, na uthibitisho wa ukweli."
+    },
+    "gpt-5": {
+      "description": "Mfano wa hali ya juu zaidi wa OpenAI, bora katika kufikiri kwa kina, uzalishaji wa msimbo na kutatua matatizo ya kiufundi. Bora kwa kazi za uchanganuzi, changamoto za msimbo, utafiti na maelezo ya kina. Inasaidia juhudi za kufikiri zinazoweza kurekebishwa na kiwango cha maelezo ya jibu."
+    },
+    "gpt-5-mini": {
+      "description": "Toleo la haraka na lenye ufanisi wa gharama la GPT-5, lililoboreshwa kwa kasi huku likidumisha ubora wa juu. Bora kwa kazi za kila siku, maswali ya haraka, udhibiti wa zana na programu zinazohitaji nyakati za haraka za majibu. Usawa mzuri kati ya utendaji na ufanisi."
+    },
+    "gpt-5-chat": {
+      "description": "Toleo maalum la GPT-5 lililoboreshwa kwa mwingiliano wa mazungumzo na akili ya kihisia. Bora katika mawasiliano ya huruma, msaada wa afya ya akili, uandishi wa ubunifu, kujadili mawazo na mazungumzo ya asili. Bora kwa mazungumzo ya kawaida, hali za ushauri na kazi zinazohitaji ufahamu wa kihisia."
+    },
+    "o3": {
+      "description": "Mfano wa hali ya juu zaidi wa kufikiri wa OpenAI na uwezo wa kipekee wa kutatua matatizo. Bora katika hesabu ngumu, kufikiri kisayansi, changamoto za msimbo na kazi za kimantiki za viwango vingi. Dirisha la muktadha lililopanuliwa la 200K. Inasaidia udhibiti wa juhudi za kufikiri."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Mfano wa haraka na wa gharama nafuu kutoka Meta. Bora kwa kazi za kila siku kama kuandika, kufupisha na msaada wa msingi wa msimbo. Usawa mzuri kati ya kasi na ubora kwa kazi ya kawaida."
+    },
+    "DeepSeek-R1": {
+      "description": "Mtaalamu wa kufikiri anayeonyesha kazi yake hatua kwa hatua. Bora katika matatizo ya hesabu, fumbo za kimantiki na kuelewa dhana ngumu. Tazama jinsi unavyofikiri kuhusu matatizo kwa wakati halisi."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Mfano wenye nguvu na wa matumizi mengi, hasa mzuri katika msimbo na uandishi wa kiufundi. Bora kwa utatuzi wa msimbo, uandishi wa hati na kueleza dhana za kiufundi. Wa haraka na wa kuaminika kwa kazi ya maendeleo."
+    },
+    "grok-3": {
+      "description": "Mfano wa matumizi mengi kutoka xAI unaojulikana kwa majibu yenye kina. Bora kwa majadiliano ya wazi, miradi ya ubunifu na kushughulikia masuala changamano."
+    },
+    "modelTypes": {
+      "foundational": "Ya Msingi",
+      "omni": "Omni",
+      "reasoning": "Kufikiri",
+      "agent": "Wakala"
+    },
+    "ui": {
+      "backToModels": "Rudi kwa Mifano",
+      "knowledgeCutoff": "Kikomo cha Maarifa",
+      "realTimeWebSearch": "Utafutaji wa Wavuti wa Wakati Halisi",
+      "searchMode": "Hali ya Utafutaji",
+      "searchModeDescription": "Itatumia utafutaji wa wavuti inapohitajika",
+      "privacyFocusedDefault": "Inayozingatia Faragha (Chaguo-msingi)",
+      "privacyFocusedDescription": "Polepole zaidi lakini ya faragha zaidi",
+      "azureAIAgentMode": "Hali ya Wakala wa Azure AI",
+      "azureAIAgentModeDescription": "Haraka zaidi lakini inahifadhi data ya mazungumzo kwenye wingu",
+      "importantPrivacyInformation": "Taarifa Muhimu za Faragha",
+      "fullConversationSentWarning": "Mazungumzo yako yote yatatumwa kwa wakala wa Azure AI Foundry.",
+      "learnMoreDataStorage": "Jifunze zaidi kuhusu uhifadhi wa data",
+      "searchRouting": "Upelekaji wa Utafutaji",
+      "whatIsTheDifference": "Tofauti ni nini?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Juhudi za Kufikiri",
+      "reasoningEffortDescription": "Inadhibiti jinsi mfano unavyofikiri kabla ya kujibu",
+      "minimal": "Ya Chini Kabisa",
+      "minimalDescription": "Kufikiri kwa haraka na kwa urahisi",
+      "low": "Chini",
+      "lowDescription": "Kufikiri kwa msingi",
+      "medium": "Ya Kati",
+      "mediumDescription": "Kufikiri kwa usawa",
+      "high": "Juu",
+      "highDescription": "Kufikiri kwa kina",
+      "verbosity": "Kiwango cha Maelezo",
+      "verbosityDescription": "Inadhibiti maelezo mangapi mfano unatoa",
+      "verbosityLow": "Chini",
+      "verbosityMedium": "Ya Kati",
+      "verbosityHigh": "Juu"
+    }
   }
 }

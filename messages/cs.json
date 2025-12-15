@@ -261,7 +261,19 @@
   "Team Templates": "Týmové šablony",
   "selected": "vybráno",
   "folders": "složky",
-  "agents": "agenti",
+  "agents": {
+    "exportAgent": "Exportovat agenta",
+    "editAgent": "Upravit agenta",
+    "agentName": "Název agenta",
+    "myResearchAssistant": "Můj výzkumný asistent",
+    "agentId": "ID agenta",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Popis (volitelné)",
+    "descriptionPlaceholder": "Specializovaný agent pro výzkumné úkoly...",
+    "baseModel": "Základní model",
+    "formatDescription": "Formát: asst_xxxxx (z MSF AI Assistant Foundry)",
+    "importantInfo": "Tento agent bude mít přístup ke kontextu konverzace a může používat stejné nástroje jako standardní modely. Ujistěte se, že ID agenta je správné, protože jej nelze později změnit."
+  },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Napište / v chatu, vyberte svou výzvu a vyplňte proměnné, když budete vyzváni",
@@ -308,7 +320,6 @@
   "Custom Agents": "Vlastní agenti",
   "Delete template and all its items": "Smazat šablonu a všechny její položky",
   "Description (Optional)": "Popis (volitelné)",
-  "Edit Prompt": "Upravit výzvu",
   "Edit Tone": "Upravit tón",
   "Email Response Template": "Šablona odpovědi e-mailu",
   "Example Prompt": "Příklad výzvy",
@@ -368,7 +379,6 @@
   "msf_logo_alt": "Logo MSF",
   "collapse_sidebar": "Sbalit postranní panel",
   "expand_sidebar": "Rozbalit postranní panel",
-  "Voice Guidelines": "Pokyny pro hlasový tón",
   "Please upload some content or describe the tone you want": "Nahrajte prosím nějaký obsah nebo popište tón, který chcete",
   "Untitled Tone": "Nepojmenovaný tón",
   "Failed to analyze tone": "Analýza tónu se nezdařila",
@@ -481,19 +491,6 @@
     "quickActionsTitle": "Rychlé akce",
     "quickActions": "Rychlé akce"
   },
-  "agents": {
-    "exportAgent": "Exportovat agenta",
-    "editAgent": "Upravit agenta",
-    "agentName": "Název agenta",
-    "myResearchAssistant": "Můj výzkumný asistent",
-    "agentId": "ID agenta",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Popis (volitelné)",
-    "descriptionPlaceholder": "Specializovaný agent pro výzkumné úkoly...",
-    "baseModel": "Základní model",
-    "formatDescription": "Formát: asst_xxxxx (z MSF AI Assistant Foundry)",
-    "importantInfo": "Tento agent bude mít přístup ke kontextu konverzace a může používat stejné nástroje jako standardní modely. Ujistěte se, že ID agenta je správné, protože jej nelze později změnit."
-  },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI"
   },
@@ -575,5 +572,75 @@
   },
   "notFound": {
     "lostDog": "Ztracený pes"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Model AI poháněný GPT-4.1 s vyhledáváním na webu v reálném čase prostřednictvím Bingu. Poskytuje aktuální informace, ověřování faktů a povědomí o aktuálních událostech. Ideální pro výzkum vyžadující nejnovější informace, analýzu zpráv a ověřování faktů."
+    },
+    "gpt-5": {
+      "description": "Nejpokročilejší model OpenAI, vynikající v komplexním uvažování, generování kódu a technickém řešení problémů. Ideální pro analytické úkoly, programátorské výzvy, výzkum a podrobná vysvětlení. Podporuje nastavitelné úsilí uvažování a podrobnost odpovědí."
+    },
+    "gpt-5-mini": {
+      "description": "Rychlejší a cenově dostupnější varianta GPT-5, optimalizovaná pro rychlost při zachování vysoké kvality. Ideální pro každodenní úkoly, rychlé dotazy, řízení nástrojů a aplikace vyžadující rychlé doby odezvy. Vynikající rovnováha mezi výkonem a efektivitou."
+    },
+    "gpt-5-chat": {
+      "description": "Specializovaná varianta GPT-5 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vynikající v empatické komunikaci, podpoře duševního zdraví, kreativním psaní, brainstormingu a přirozeném dialogu. Ideální pro neformální konverzace, poradenské scénáře a úkoly vyžadující emocionální povědomí."
+    },
+    "o3": {
+      "description": "Nejpokročilejší model uvažování OpenAI s průlomovými schopnostmi řešení problémů. Vynikající v komplexní matematice, vědeckém uvažování, programátorských výzvách a víceúrovňových logických úlohách. Rozšířené kontextové okno 200K. Podporuje kontrolu úsilí uvažování."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Rychlý a cenově dostupný model od Mety. Skvělý pro každodenní úkoly, jako je psaní, shrnutí a základní pomoc s kódem. Dobrá rovnováha mezi rychlostí a kvalitou pro rutinní práci."
+    },
+    "DeepSeek-R1": {
+      "description": "Specialista na uvažování, který ukazuje svou práci krok za krokem. Vynikající pro matematické problémy, logické hádanky a pochopení složitých konceptů. Sledujte, jak přemýšlí o problémech v reálném čase."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Silný všestranný model, obzvláště dobrý v kódu a technickém psaní. Vynikající pro ladění kódu, psaní dokumentace a vysvětlování technických konceptů. Rychlý a spolehlivý pro vývojovou práci."
+    },
+    "grok-3": {
+      "description": "Všestranný model od xAI známý pro detailní odpovědi. Skvělý pro otevřené diskuse, kreativní projekty a řešení složitých problémů."
+    },
+    "modelTypes": {
+      "foundational": "Základní",
+      "omni": "Omni",
+      "reasoning": "Uvažování",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Zpět na modely",
+      "knowledgeCutoff": "Hranice znalostí",
+      "realTimeWebSearch": "Vyhledávání na webu v reálném čase",
+      "searchMode": "Režim vyhledávání",
+      "searchModeDescription": "V případě potřeby použije webové vyhledávání",
+      "privacyFocusedDefault": "Zaměřeno na soukromí (výchozí)",
+      "privacyFocusedDescription": "Pomalejší, ale soukromější",
+      "azureAIAgentMode": "Režim agenta Azure AI",
+      "azureAIAgentModeDescription": "Rychlejší, ale ukládá data konverzace do cloudu",
+      "importantPrivacyInformation": "Důležité informace o soukromí",
+      "fullConversationSentWarning": "Vaše celá konverzace bude odeslána agentovi Azure AI Foundry.",
+      "learnMoreDataStorage": "Další informace o ukládání dat",
+      "searchRouting": "Směrování vyhledávání",
+      "whatIsTheDifference": "Jaký je rozdíl?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Úsilí uvažování",
+      "reasoningEffortDescription": "Kontroluje, kolik model přemýšlí před odpovědí",
+      "minimal": "Minimální",
+      "minimalDescription": "Rychlé a lehké myšlení",
+      "low": "Nízké",
+      "lowDescription": "Základní uvažování",
+      "medium": "Střední",
+      "mediumDescription": "Vyvážené uvažování",
+      "high": "Vysoké",
+      "highDescription": "Hluboké uvažování",
+      "verbosity": "Podrobnost",
+      "verbosityDescription": "Kontroluje, kolik detailů model poskytuje",
+      "verbosityLow": "Nízká",
+      "verbosityMedium": "Střední",
+      "verbosityHigh": "Vysoká"
+    }
   }
 }

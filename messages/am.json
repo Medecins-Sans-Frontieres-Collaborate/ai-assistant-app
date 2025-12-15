@@ -261,7 +261,19 @@
   "Team Templates": "የቡድን አብነቶች",
   "selected": "የተመረጠ",
   "folders": "አቃፊዎች",
-  "agents": "ወኪሎች",
+  "agents": {
+    "exportAgent": "ወኪልን ላክ",
+    "editAgent": "ወኪልን አርትዕ",
+    "agentName": "የወኪል ስም",
+    "myResearchAssistant": "የእኔ ምርምር አስስታንት",
+    "agentId": "የወኪል መታወቂያ",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "መግለጫ (አማራጭ)",
+    "descriptionPlaceholder": "ለምርምር ስራዎች ልዩ ወኪል...",
+    "baseModel": "መሰረታዊ ሞዴል",
+    "formatDescription": "ቅርጸት፡ asst_xxxxx (ከMSF AI Assistant Foundry)",
+    "importantInfo": "ይህ ወኪል የውይይት አውድ መዳረሻ ይኖረዋል እና እንደ መደበኛ ሞዴሎች ተመሳሳይ መሳሪያዎችን መጠቀም ይችላል። የወኪል መታወቂያው ትክክል መሆኑን ያረጋግጡ፣ ምክንያቱም ከዚያ በኋላ መቀየር አይቻልም።"
+  },
   "Quick Actions": "ፈጣን ድርጊቶች",
   "Type / in chat to access your prompts": "ጥያቄዎችዎን ለማግኘት በውይይት ውስጥ / ይተይቡ",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "በውይይት ውስጥ / ይተይቡ፣ ጥያቄዎን ይምረጡ፣ እና ሲጠየቁ ተለዋዋጮችን ይሙሉ",
@@ -308,7 +320,6 @@
   "Custom Agents": "ብጁ ወኪሎች",
   "Delete template and all its items": "አብነት እና ሁሉንም ንጥሎቹን ሰርዝ",
   "Description (Optional)": "መግለጫ (አማራጭ)",
-  "Edit Prompt": "ጥያቄን አርትዕ",
   "Edit Tone": "ቃናን አርትዕ",
   "Email Response Template": "የኢሜይል ምላሽ አብነት",
   "Example Prompt": "ምሳሌ ጥያቄ",
@@ -368,7 +379,6 @@
   "msf_logo_alt": "የኤምኤስኤፍ አርማ",
   "collapse_sidebar": "የጎን አሞሌውን ሰብስብ",
   "expand_sidebar": "የጎን አሞሌውን አስፋፋ",
-  "Voice Guidelines": "የድምጽ መመሪያዎች",
   "Please upload some content or describe the tone you want": "እባኮትን አንዳንድ ይዘት ያስገቡ ወይም የሚፈልጉትን ቃና ይግለጹ",
   "Untitled Tone": "ርዕስ የሌለው ቃና",
   "Failed to analyze tone": "ቃናን መተንተን አልተሳካም",
@@ -453,19 +463,6 @@
     "expandSidebar": "የጎን አሞሌውን አስፋፋ",
     "quickActionsTitle": "ፈጣን ድርጊቶች",
     "quickActions": "ፈጣን ድርጊቶች"
-  },
-  "agents": {
-    "exportAgent": "ወኪልን ላክ",
-    "editAgent": "ወኪልን አርትዕ",
-    "agentName": "የወኪል ስም",
-    "myResearchAssistant": "የእኔ ምርምር አስስታንት",
-    "agentId": "የወኪል መታወቂያ",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "መግለጫ (አማራጭ)",
-    "descriptionPlaceholder": "ለምርምር ስራዎች ልዩ ወኪል...",
-    "baseModel": "መሰረታዊ ሞዴል",
-    "formatDescription": "ቅርጸት፡ asst_xxxxx (ከMSF AI Assistant Foundry)",
-    "importantInfo": "ይህ ወኪል የውይይት አውድ መዳረሻ ይኖረዋል እና እንደ መደበኛ ሞዴሎች ተመሳሳይ መሳሪያዎችን መጠቀም ይችላል። የወኪል መታወቂያው ትክክል መሆኑን ያረጋግጡ፣ ምክንያቱም ከዚያ በኋላ መቀየር አይቻልም።"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ"
@@ -596,5 +593,75 @@
     "errorSessionExpired": "የእርስዎ ክፍለ-ጊዜ ጊዜው አልፏል። ለመቀጠል እባክዎን እንደገና ይግቡ።",
     "errorFallback": "ከማረጋገጫ አገልግሎት ጋር መገናኘት አልተቻለም። እባክዎን እንደገና ይሞክሩ ወይም ችግሩ ከቀጠለ ድጋፍን ያነጋግሩ።",
     "tryAgain": "እንደገና ይሞክሩ"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "በ GPT-4.1 የተጎላበተ AI ሞዴል በ Bing በኩል በእውነተኛ ጊዜ የድር ፍለጋ። የዘመነ መረጃን፣ እውነት-ማረጋገጫን እና የአሁን ክስተቶች ግንዛቤን ይሰጣል። የቅርብ ጊዜ መረጃ፣ የዜና ትንተና እና የእውነታ ማረጋገጫ ለሚፈልግ ምርምር በጣም ጥሩ።"
+    },
+    "gpt-5": {
+      "description": "የOpenAI በጣም የላቀ ሞዴል፣ በውስብስብ ምክንያት፣ የኮድ ማመንጨት እና የቴክኒክ ችግር መፍታት ላይ ድንቅ። ለትንታኔ ተግባራት፣ የፕሮግራም ፈተናዎች፣ ምርምር እና ዝርዝር ማብራሪያዎች በጣም ጥሩ። የሚቀየር የምክንያት ጥረት እና የምላሽ ዝርዝርነት ይደግፋል።"
+    },
+    "gpt-5-mini": {
+      "description": "የ GPT-5 ፈጣን እና ኢኮኖሚያዊ ልዩነት፣ ከፍተኛ ጥራትን እየጠበቀ ለፍጥነት የተመቻቸ። ለእለት ተእለት ተግባራት፣ ፈጣን ጥያቄዎች፣ መሣሪያ መምራት እና ፈጣን የምላሽ ጊዜ ለሚፈልጉ ትግበራዎች ተስማሚ። የአፈጻጸም እና ቅልጥፍና ግሩም ሚዛን።"
+    },
+    "gpt-5-chat": {
+      "description": "ለውይይታዊ መስተጋብር እና ስሜታዊ ብልህነት የተመቻቸ የ GPT-5 ልዩ ልዩነት። በመተሳሰብ ላይ በሚደረግ ግንኙነት፣ ከስነልቦና ጤና ድጋፍ፣ ፈጠራ ጽሑፍ፣ አስተሳሰብ እና ተፈጥሯዊ ውይይት ድንቅ። ለተራ ውይይቶች፣ የምክር ሁኔታዎች እና ስሜታዊ ግንዛቤ ለሚፈልጉ ተግባራት በጣም ጥሩ።"
+    },
+    "o3": {
+      "description": "የOpenAI በጣም የላቀ የምክንያት ሞዴል በፈጣን ችግር መፍቻ ችሎታዎች። በውስብስብ ሂሳብ፣ ሳይንሳዊ ምክንያት፣ የኮድ ፈተናዎች እና ባለብዙ-ደረጃ ምክንያታዊ ተግባራት ድንቅ። የተዘረጋ 200K የትርጓሜ መስኮት። የምክንያት ጥረት ቁጥጥር ይደግፋል።"
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "ከMeta ፈጣን እና ኢኮኖሚያዊ ሞዴል። እንደ ጽሑፍ፣ ማጠቃለያ እና መሰረታዊ የኮድ እገዛ ላሉ የዕለት ተቡራቅ ተግባራት ድንቅ። ለመደበኛ ስራ ጥሩ የፍጥነት እና የጥራት ሚዛን።"
+    },
+    "DeepSeek-R1": {
+      "description": "ሥራውን በደረጃ የሚያሳይ የምክንያት ስፔሻሊስት። ለሂሳብ ችግሮች፣ የምክንያት እንቆቅልሾች እና ውስብስብ ፅንሰ-ሃሳቦችን ለመረዳት ድንቅ። በእውነተኛ ጊዜ በችግሮች እንዴት እንደሚያስብ ይመልከቱ።"
+    },
+    "DeepSeek-V3-1": {
+      "description": "በኮድ እና በቴክኒክ ጽሑፍ ላይ በተለይ ጥሩ የሆነ ጠንካራ አጠቃላይ ሞዴል። የኮድ ስህተቶችን ለማስተካከል፣ ሰነዶችን ለመጻፍ እና ቴክኒካል ፅንሰ-ሃሳቦችን ለማብራራት ድንቅ። ለልማት ሥራ ፈጣን እና አስተማማኝ።"
+    },
+    "grok-3": {
+      "description": "በዝርዝር ምላሾች ለሚታወቀው ከxAI ሁለገብ ሞዴል። ለክፍት ውይይቶች፣ ለፈጠራ ፕሮጀክቶች እና ውስብስብ ችግሮችን ለመፍታት ድንቅ።"
+    },
+    "modelTypes": {
+      "foundational": "መሰረታዊ",
+      "omni": "ኦምኒ",
+      "reasoning": "አስተሳሰብ",
+      "agent": "ወኪል"
+    },
+    "ui": {
+      "backToModels": "ወደ ሞዴሎች ተመለስ",
+      "knowledgeCutoff": "የእውቀት ገደብ",
+      "realTimeWebSearch": "በእውነተኛ ጊዜ የድር ፍለጋ",
+      "searchMode": "የፍለጋ ሁነታ",
+      "searchModeDescription": "አስፈላጊ ሲሆን የድር ፍለጋ ይጠቀማል",
+      "privacyFocusedDefault": "ግላዊነት ላይ ያተኮረ (ነባሪ)",
+      "privacyFocusedDescription": "ቀርፋፋ ግን ይበልጥ ግላዊ",
+      "azureAIAgentMode": "የAzure AI ወኪል ሁነታ",
+      "azureAIAgentModeDescription": "ፈጣን ግን የውይይት ውሂብን በክላውድ ውስጥ ያከማቻል",
+      "importantPrivacyInformation": "አስፈላጊ የግላዊነት መረጃ",
+      "fullConversationSentWarning": "ሙሉ ውይይትዎ ወደ Azure AI Foundry ወኪል ይላካል።",
+      "learnMoreDataStorage": "ስለ ውሂብ ማከማቻ የበለጠ ይወቁ",
+      "searchRouting": "የፍለጋ መምራት",
+      "whatIsTheDifference": "ልዩነቱ ምንድን ነው?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "የምክንያት ጥረት",
+      "reasoningEffortDescription": "ሞዴሉ ከመመለሱ በፊት ምን ያህል እንደሚያስብ ይቆጣጠራል",
+      "minimal": "አነስተኛ",
+      "minimalDescription": "ፈጣን እና ቀላል ሐሳብ",
+      "low": "ዝቅተኛ",
+      "lowDescription": "መሰረታዊ ምክንያት",
+      "medium": "መካከለኛ",
+      "mediumDescription": "ሚዛናዊ ምክንያት",
+      "high": "ከፍተኛ",
+      "highDescription": "ጥልቅ ምክንያት",
+      "verbosity": "ዝርዝርነት",
+      "verbosityDescription": "ሞዴሉ ምን ያህል ዝርዝር እንደሚሰጥ ይቆጣጠራል",
+      "verbosityLow": "ዝቅተኛ",
+      "verbosityMedium": "መካከለኛ",
+      "verbosityHigh": "ከፍተኛ"
+    }
   }
 }

@@ -309,7 +309,19 @@
   "Team Templates": "टीम टेम्पलेट",
   "selected": "चयनित",
   "folders": "फ़ोल्डर",
-  "agents": "एजेंट",
+  "agents": {
+    "exportAgent": "एजेंट निर्यात करें",
+    "editAgent": "एजेंट संपादित करें",
+    "agentName": "एजेंट नाम",
+    "myResearchAssistant": "मेरा शोध सहायक",
+    "agentId": "एजेंट ID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "विवरण (वैकल्पिक)",
+    "descriptionPlaceholder": "शोध कार्यों में विशेषज्ञ एजेंट...",
+    "baseModel": "आधार मॉडल",
+    "formatDescription": "प्रारूप: asst_xxxxx (MSF AI Assistant Foundry से)",
+    "importantInfo": "इस एजेंट की वार्तालाप संदर्भ तक पहुंच होगी और यह मानक मॉडल के समान उपकरणों का उपयोग कर सकता है। सुनिश्चित करें कि एजेंट ID सही है क्योंकि इसे बाद में बदला नहीं जा सकता।"
+  },
   "Quick Actions": "त्वरित क्रियाएं",
   "Type / in chat to access your prompts": "अपने प्रॉम्प्ट एक्सेस करने के लिए चैट में / टाइप करें",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "चैट में / टाइप करें, अपना प्रॉम्प्ट चुनें और जब कहा जाए तो वेरिएबल भरें",
@@ -356,7 +368,6 @@
   "Custom Agents": "कस्टम एजेंट",
   "Delete template and all its items": "टेम्पलेट और इसके सभी आइटम हटाएं",
   "Description (Optional)": "विवरण (वैकल्पिक)",
-  "Edit Prompt": "प्रॉम्प्ट संपादित करें",
   "Edit Tone": "टोन संपादित करें",
   "Email Response Template": "ईमेल प्रतिक्रिया टेम्पलेट",
   "Example Prompt": "उदाहरण प्रॉम्प्ट",
@@ -416,7 +427,6 @@
   "msf_logo_alt": "MSF लोगो",
   "collapse_sidebar": "साइडबार संक्षिप्त करें",
   "expand_sidebar": "साइडबार विस्तृत करें",
-  "Voice Guidelines": "आवाज़ दिशानिर्देश",
   "Please upload some content or describe the tone you want": "कृपया कुछ सामग्री अपलोड करें या जिस टोन की आप चाहत रखते हैं उसका वर्णन करें",
   "Untitled Tone": "शीर्षकहीन टोन",
   "Failed to analyze tone": "टोन का विश्लेषण करने में विफल",
@@ -529,19 +539,6 @@
     "quickActionsTitle": "त्वरित क्रियाएं",
     "quickActions": "त्वरित क्रियाएं"
   },
-  "agents": {
-    "exportAgent": "एजेंट निर्यात करें",
-    "editAgent": "एजेंट संपादित करें",
-    "agentName": "एजेंट नाम",
-    "myResearchAssistant": "मेरा शोध सहायक",
-    "agentId": "एजेंट ID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "विवरण (वैकल्पिक)",
-    "descriptionPlaceholder": "शोध कार्यों में विशेषज्ञ एजेंट...",
-    "baseModel": "आधार मॉडल",
-    "formatDescription": "प्रारूप: asst_xxxxx (MSF AI Assistant Foundry से)",
-    "importantInfo": "इस एजेंट की वार्तालाप संदर्भ तक पहुंच होगी और यह मानक मॉडल के समान उपकरणों का उपयोग कर सकता है। सुनिश्चित करें कि एजेंट ID सही है क्योंकि इसे बाद में बदला नहीं जा सकता।"
-  },
   "prompts": {
     "buildReusablePrompts": "AI सहायता से पुन: प्रयोज्य प्रॉम्प्ट बनाएं"
   },
@@ -623,5 +620,75 @@
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "GPT-4.1 द्वारा संचालित AI मॉडल जो Bing के माध्यम से रीयल-टाइम वेब खोज के साथ है। अद्यतन जानकारी, तथ्य-जांच और वर्तमान घटनाओं की जागरूकता प्रदान करता है। हाल की जानकारी, समाचार विश्लेषण और तथ्य सत्यापन की आवश्यकता वाले शोध के लिए सर्वोत्तम।"
+    },
+    "gpt-5": {
+      "description": "OpenAI का सबसे उन्नत मॉडल, जटिल तर्क, कोड जनरेशन और तकनीकी समस्या-समाधान में उत्कृष्ट। विश्लेषणात्मक कार्यों, कोडिंग चुनौतियों, अनुसंधान और विस्तृत स्पष्टीकरण के लिए सर्वोत्तम। समायोज्य तर्क प्रयास और प्रतिक्रिया विस्तार का समर्थन करता है।"
+    },
+    "gpt-5-mini": {
+      "description": "GPT-5 का तेज़ और अधिक किफायती संस्करण, उच्च गुणवत्ता बनाए रखते हुए गति के लिए अनुकूलित। दैनिक कार्यों, त्वरित प्रश्नों, टूल नियंत्रण और तेज़ प्रतिक्रिया समय की आवश्यकता वाले अनुप्रयोगों के लिए आदर्श। प्रदर्शन और दक्षता के बीच उत्कृष्ट संतुलन।"
+    },
+    "gpt-5-chat": {
+      "description": "GPT-5 का विशेष संस्करण जो संवादात्मक इंटरैक्शन और भावनात्मक बुद्धिमत्ता के लिए अनुकूलित है। सहानुभूतिपूर्ण संचार, मानसिक स्वास्थ्य समर्थन, रचनात्मक लेखन, विचार-मंथन और प्राकृतिक संवाद में उत्कृष्ट। आकस्मिक बातचीत, परामर्श परिदृश्यों और भावनात्मक जागरूकता की आवश्यकता वाले कार्यों के लिए आदर्श।"
+    },
+    "o3": {
+      "description": "OpenAI का सबसे उन्नत तर्क मॉडल जिसमें अभूतपूर्व समस्या-समाधान क्षमताएं हैं। जटिल गणित, वैज्ञानिक तर्क, कोडिंग चुनौतियों और बहु-स्तरीय तार्किक कार्यों में उत्कृष्ट। विस्तारित 200K संदर्भ विंडो। तर्क प्रयास नियंत्रण का समर्थन करता है।"
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Meta का तेज़ और किफायती मॉडल। लेखन, सारांश और बुनियादी कोड सहायता जैसे दैनिक कार्यों के लिए बढ़िया। नियमित काम के लिए गति और गुणवत्ता के बीच अच्छा संतुलन।"
+    },
+    "DeepSeek-R1": {
+      "description": "तर्क विशेषज्ञ जो अपने काम को चरण-दर-चरण दिखाता है। गणितीय समस्याओं, तर्क पहेलियों और जटिल अवधारणाओं को समझने में उत्कृष्ट। वास्तविक समय में देखें कि यह समस्याओं के बारे में कैसे सोचता है।"
+    },
+    "DeepSeek-V3-1": {
+      "description": "शक्तिशाली ऑल-राउंड मॉडल, कोड और तकनीकी लेखन में विशेष रूप से अच्छा। कोड डिबगिंग, दस्तावेज़ीकरण लिखने और तकनीकी अवधारणाओं की व्याख्या करने के लिए उत्कृष्ट। विकास कार्य के लिए तेज़ और विश्वसनीय।"
+    },
+    "grok-3": {
+      "description": "xAI का बहुमुखी मॉडल जो सूक्ष्म उत्तरों के लिए जाना जाता है। खुली चर्चाओं, रचनात्मक परियोजनाओं और जटिल समस्याओं से निपटने के लिए उत्कृष्ट।"
+    },
+    "modelTypes": {
+      "foundational": "मूलभूत",
+      "omni": "सर्वव्यापी",
+      "reasoning": "तर्क",
+      "agent": "एजेंट"
+    },
+    "ui": {
+      "backToModels": "मॉडल पर वापस जाएं",
+      "knowledgeCutoff": "ज्ञान कटऑफ",
+      "realTimeWebSearch": "रीयल-टाइम वेब खोज",
+      "searchMode": "खोज मोड",
+      "searchModeDescription": "आवश्यकता होने पर वेब खोज का उपयोग करेगा",
+      "privacyFocusedDefault": "गोपनीयता-केंद्रित (डिफ़ॉल्ट)",
+      "privacyFocusedDescription": "धीमा, लेकिन अधिक निजी",
+      "azureAIAgentMode": "Azure AI एजेंट मोड",
+      "azureAIAgentModeDescription": "तेज़, लेकिन वार्तालाप डेटा को क्लाउड में संग्रहीत करता है",
+      "importantPrivacyInformation": "महत्वपूर्ण गोपनीयता जानकारी",
+      "fullConversationSentWarning": "आपकी पूरी बातचीत Azure AI Foundry एजेंट को भेजी जाएगी।",
+      "learnMoreDataStorage": "डेटा संग्रहण के बारे में और जानें",
+      "searchRouting": "खोज रूटिंग",
+      "whatIsTheDifference": "क्या अंतर है?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "तर्क प्रयास",
+      "reasoningEffortDescription": "नियंत्रित करता है कि मॉडल प्रतिक्रिया देने से पहले कितना सोचता है",
+      "minimal": "न्यूनतम",
+      "minimalDescription": "त्वरित और हल्का सोच",
+      "low": "कम",
+      "lowDescription": "बुनियादी तर्क",
+      "medium": "मध्यम",
+      "mediumDescription": "संतुलित तर्क",
+      "high": "उच्च",
+      "highDescription": "गहरा तर्क",
+      "verbosity": "विस्तार",
+      "verbosityDescription": "नियंत्रित करता है कि मॉडल कितना विवरण प्रदान करता है",
+      "verbosityLow": "कम",
+      "verbosityMedium": "मध्यम",
+      "verbosityHigh": "उच्च"
+    }
   }
 }

@@ -303,7 +303,19 @@
   "Team Templates": "Teammallar",
   "selected": "vald",
   "folders": "mappar",
-  "agents": "agenter",
+  "agents": {
+    "exportAgent": "Exportera agent",
+    "editAgent": "Redigera agent",
+    "agentName": "Agentnamn",
+    "myResearchAssistant": "Min forskningsassistent",
+    "agentId": "Agent-ID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Beskrivning (valfritt)",
+    "descriptionPlaceholder": "Agent specialiserad på forskningsuppgifter...",
+    "baseModel": "Basmodell",
+    "formatDescription": "Format: asst_xxxxx (från MSF AI Assistant Foundry)",
+    "importantInfo": "Denna agent kommer att ha tillgång till konversationskontexten och kan använda samma verktyg som standardmodeller. Se till att agent-ID:t är korrekt eftersom det inte kan ändras senare."
+  },
   "Quick Actions": "Snabbåtgärder",
   "Type / in chat to access your prompts": "Skriv / i chatten för att komma åt dina prompter",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Skriv / i chatten, välj din prompt och fyll i variablerna när du uppmanas",
@@ -350,7 +362,6 @@
   "Custom Agents": "Anpassade agenter",
   "Delete template and all its items": "Ta bort mall och alla dess objekt",
   "Description (Optional)": "Beskrivning (valfritt)",
-  "Edit Prompt": "Redigera prompt",
   "Edit Tone": "Redigera ton",
   "Email Response Template": "Mall för e-postsvar",
   "Example Prompt": "Exempelprompt",
@@ -410,7 +421,6 @@
   "msf_logo_alt": "MSF-logotyp",
   "collapse_sidebar": "Fäll ihop sidofält",
   "expand_sidebar": "Expandera sidofält",
-  "Voice Guidelines": "Röstriktlinjer",
   "Please upload some content or describe the tone you want": "Vänligen ladda upp innehåll eller beskriv den ton du vill ha",
   "Untitled Tone": "Namnlös ton",
   "Failed to analyze tone": "Kunde inte analysera ton",
@@ -523,19 +533,6 @@
     "quickActionsTitle": "Snabbåtgärder",
     "quickActions": "Snabbåtgärder"
   },
-  "agents": {
-    "exportAgent": "Exportera agent",
-    "editAgent": "Redigera agent",
-    "agentName": "Agentnamn",
-    "myResearchAssistant": "Min forskningsassistent",
-    "agentId": "Agent-ID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Beskrivning (valfritt)",
-    "descriptionPlaceholder": "Agent specialiserad på forskningsuppgifter...",
-    "baseModel": "Basmodell",
-    "formatDescription": "Format: asst_xxxxx (från MSF AI Assistant Foundry)",
-    "importantInfo": "Denna agent kommer att ha tillgång till konversationskontexten och kan använda samma verktyg som standardmodeller. Se till att agent-ID:t är korrekt eftersom det inte kan ändras senare."
-  },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans"
   },
@@ -617,5 +614,75 @@
   },
   "notFound": {
     "lostDog": "Förlorad hund"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "AI-modell driven av GPT-4.1 med realtidswebbsökning via Bing. Ger uppdaterad information, faktakontroll och medvetenhet om aktuella händelser. Bäst för forskning som kräver senaste information, nyhetsanalys och faktakontroll."
+    },
+    "gpt-5": {
+      "description": "OpenAI:s mest avancerade modell, utmärkt i komplex resonemang, kodgenerering och teknisk problemlösning. Bäst för analytiska uppgifter, kodningsutmaningar, forskning och detaljerade förklaringar. Stöder justerbar resonemangsansträngning och svardetalj."
+    },
+    "gpt-5-mini": {
+      "description": "Snabbare och mer kostnadseffektiv version av GPT-5, optimerad för hastighet samtidigt som hög kvalitet bibehålls. Idealisk för dagliga uppgifter, snabba förfrågningar, verktygskontroll och applikationer som kräver snabba svarstider. Utmärkt balans mellan prestanda och effektivitet."
+    },
+    "gpt-5-chat": {
+      "description": "Specialiserad version av GPT-5 optimerad för konversationsinteraktioner och emotionell intelligens. Utmärkt i empatisk kommunikation, mental hälsostöd, kreativt skrivande, brainstorming och naturlig dialog. Idealisk för avslappnade samtal, rådgivningsscenarier och uppgifter som kräver emotionell medvetenhet."
+    },
+    "o3": {
+      "description": "OpenAI:s mest avancerade resoneringsmodell med banbrytande problemlösningsförmåga. Utmärkt i komplex matematik, vetenskapligt resonemang, kodningsutmaningar och flerskiktade logiska uppgifter. Utökat kontextfönster på 200K. Stöder kontroll av resonemangsansträngning."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Snabb och kostnadseffektiv modell från Meta. Utmärkt för dagliga uppgifter som att skriva, sammanfatta och grundläggande kodningshjälp. Bra balans mellan hastighet och kvalitet för rutinarbete."
+    },
+    "DeepSeek-R1": {
+      "description": "Resonemangsspecialist som visar sitt arbete steg för steg. Utmärkt i matematikproblem, logiska pussel och förståelse av komplexa koncept. Se hur den tänker på problem i realtid."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Kraftfull mångsidig modell, särskilt bra på kod och teknisk skrivning. Utmärkt för kodavlusning, dokumentationsskrivning och förklaring av tekniska koncept. Snabb och pålitlig för utvecklingsarbete."
+    },
+    "grok-3": {
+      "description": "Mångsidig modell från xAI känd för nyanserade svar. Utmärkt för öppna diskussioner, kreativa projekt och hantering av komplexa problem."
+    },
+    "modelTypes": {
+      "foundational": "Grundläggande",
+      "omni": "Omni",
+      "reasoning": "Resonemang",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Tillbaka till modeller",
+      "knowledgeCutoff": "Kunskapsgräns",
+      "realTimeWebSearch": "Realtidswebbsökning",
+      "searchMode": "Sökläge",
+      "searchModeDescription": "Kommer att använda webbsökning vid behov",
+      "privacyFocusedDefault": "Integritetsfokuserad (Standard)",
+      "privacyFocusedDescription": "Långsammare men mer privat",
+      "azureAIAgentMode": "Azure AI-agentläge",
+      "azureAIAgentModeDescription": "Snabbare men lagrar konversationsdata i molnet",
+      "importantPrivacyInformation": "Viktig integritetsinformation",
+      "fullConversationSentWarning": "Hela din konversation kommer att skickas till Azure AI Foundry-agenten.",
+      "learnMoreDataStorage": "Läs mer om datalagring",
+      "searchRouting": "Sökroutning",
+      "whatIsTheDifference": "Vad är skillnaden?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Resonemangsansträngning",
+      "reasoningEffortDescription": "Styr hur mycket modellen tänker innan den svarar",
+      "minimal": "Minimal",
+      "minimalDescription": "Snabbt och lätt tänkande",
+      "low": "Låg",
+      "lowDescription": "Grundläggande resonemang",
+      "medium": "Medium",
+      "mediumDescription": "Balanserat resonemang",
+      "high": "Hög",
+      "highDescription": "Djupt resonemang",
+      "verbosity": "Detaljnivå",
+      "verbosityDescription": "Styr hur mycket detaljer modellen ger",
+      "verbosityLow": "Låg",
+      "verbosityMedium": "Medium",
+      "verbosityHigh": "Hög"
+    }
   }
 }

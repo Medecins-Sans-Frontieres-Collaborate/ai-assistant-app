@@ -311,7 +311,19 @@
   "Team Templates": "チームテンプレート",
   "selected": "選択済み",
   "folders": "フォルダ",
-  "agents": "エージェント",
+  "agents": {
+    "exportAgent": "エージェントをエクスポート",
+    "editAgent": "エージェントを編集",
+    "agentName": "エージェント名",
+    "myResearchAssistant": "私の研究アシスタント",
+    "agentId": "エージェントID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "説明（オプション）",
+    "descriptionPlaceholder": "研究タスクに特化したエージェント...",
+    "baseModel": "ベースモデル",
+    "formatDescription": "形式：asst_xxxxx（MSF AI Assistant Foundryより）",
+    "importantInfo": "このエージェントは会話のコンテキストにアクセスでき、標準モデルと同じツールを使用できます。エージェントIDが正しいことを確認してください。後で変更することはできません。"
+  },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "チャットで / を入力し、プロンプトを選択して、求められたら変数を入力してください",
@@ -358,7 +370,6 @@
   "Custom Agents": "カスタムエージェント",
   "Delete template and all its items": "テンプレートとすべてのアイテムを削除",
   "Description (Optional)": "説明（オプション）",
-  "Edit Prompt": "プロンプトを編集",
   "Edit Tone": "トーンを編集",
   "Email Response Template": "メール返信テンプレート",
   "Example Prompt": "プロンプト例",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "MSFロゴ",
   "collapse_sidebar": "サイドバーを折りたたむ",
   "expand_sidebar": "サイドバーを展開",
-  "Voice Guidelines": "音声ガイドライン",
   "Please upload some content or describe the tone you want": "コンテンツをアップロードするか、希望するトーンを説明してください",
   "Untitled Tone": "無題のトーン",
   "Failed to analyze tone": "トーンの分析に失敗しました",
@@ -531,19 +541,6 @@
     "quickActionsTitle": "クイックアクション",
     "quickActions": "クイックアクション"
   },
-  "agents": {
-    "exportAgent": "エージェントをエクスポート",
-    "editAgent": "エージェントを編集",
-    "agentName": "エージェント名",
-    "myResearchAssistant": "私の研究アシスタント",
-    "agentId": "エージェントID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "説明（オプション）",
-    "descriptionPlaceholder": "研究タスクに特化したエージェント...",
-    "baseModel": "ベースモデル",
-    "formatDescription": "形式：asst_xxxxx（MSF AI Assistant Foundryより）",
-    "importantInfo": "このエージェントは会話のコンテキストにアクセスでき、標準モデルと同じツールを使用できます。エージェントIDが正しいことを確認してください。後で変更することはできません。"
-  },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築"
   },
@@ -625,5 +622,75 @@
   },
   "notFound": {
     "lostDog": "迷子の犬"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Bingを通じてリアルタイムのウェブ検索を備えたGPT-4.1を搭載したAIモデル。最新情報、ファクトチェック、時事問題の認識を提供します。最新情報、ニュース分析、事実確認が必要な研究に最適です。"
+    },
+    "gpt-5": {
+      "description": "OpenAIの最も高度なモデルで、複雑な推論、コード生成、技術的問題解決に優れています。分析タスク、コーディングチャレンジ、研究、詳細な説明に最適です。調整可能な推論努力と応答の詳細度をサポートします。"
+    },
+    "gpt-5-mini": {
+      "description": "GPT-5のより高速で費用対効果の高いバージョンで、高品質を維持しながら速度に最適化されています。日常のタスク、迅速なクエリ、ツール制御、高速応答時間を必要とするアプリケーションに最適です。パフォーマンスと効率の優れたバランス。"
+    },
+    "gpt-5-chat": {
+      "description": "会話的なインタラクションと感情的知性に最適化されたGPT-5の特殊バージョン。共感的なコミュニケーション、メンタルヘルスサポート、クリエイティブライティング、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリングシナリオ、感情的認識を必要とするタスクに最適です。"
+    },
+    "o3": {
+      "description": "OpenAIの最も高度な推論モデルで、画期的な問題解決能力を持っています。複雑な数学、科学的推論、コーディングチャレンジ、多層論理タスクに優れています。拡張された200Kコンテキストウィンドウ。推論努力制御をサポートします。"
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Metaの高速で費用対効果の高いモデル。執筆、要約、基本的なコード支援などの日常タスクに優れています。日常業務に適した速度と品質の良好なバランス。"
+    },
+    "DeepSeek-R1": {
+      "description": "作業を段階的に示す推論スペシャリスト。数学の問題、論理パズル、複雑な概念の理解に優れています。リアルタイムで問題についてどのように考えるかを見てください。"
+    },
+    "DeepSeek-V3-1": {
+      "description": "強力なオールラウンドモデルで、特にコードと技術的な文章に優れています。コードのデバッグ、ドキュメントの作成、技術的概念の説明に優れています。開発作業に迅速で信頼性があります。"
+    },
+    "grok-3": {
+      "description": "xAIの多目的モデルで、ニュアンスのある回答で知られています。オープンディスカッション、クリエイティブプロジェクト、複雑な問題への対処に優れています。"
+    },
+    "modelTypes": {
+      "foundational": "基礎",
+      "omni": "オムニ",
+      "reasoning": "推論",
+      "agent": "エージェント"
+    },
+    "ui": {
+      "backToModels": "モデルに戻る",
+      "knowledgeCutoff": "知識の限界",
+      "realTimeWebSearch": "リアルタイムウェブ検索",
+      "searchMode": "検索モード",
+      "searchModeDescription": "必要に応じてウェブ検索を使用します",
+      "privacyFocusedDefault": "プライバシー重視（デフォルト）",
+      "privacyFocusedDescription": "遅いが、よりプライベート",
+      "azureAIAgentMode": "Azure AIエージェントモード",
+      "azureAIAgentModeDescription": "高速ですが、会話データをクラウドに保存します",
+      "importantPrivacyInformation": "重要なプライバシー情報",
+      "fullConversationSentWarning": "あなたの会話全体がAzure AI Foundryエージェントに送信されます。",
+      "learnMoreDataStorage": "データストレージについて詳しく学ぶ",
+      "searchRouting": "検索ルーティング",
+      "whatIsTheDifference": "違いは何ですか？",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "推論努力",
+      "reasoningEffortDescription": "モデルが応答する前にどれだけ考えるかを制御します",
+      "minimal": "最小",
+      "minimalDescription": "迅速で軽い思考",
+      "low": "低",
+      "lowDescription": "基本的な推論",
+      "medium": "中",
+      "mediumDescription": "バランスの取れた推論",
+      "high": "高",
+      "highDescription": "深い推論",
+      "verbosity": "詳細度",
+      "verbosityDescription": "モデルがどれだけ詳細を提供するかを制御します",
+      "verbosityLow": "低",
+      "verbosityMedium": "中",
+      "verbosityHigh": "高"
+    }
   }
 }

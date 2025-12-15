@@ -311,7 +311,19 @@
   "Team Templates": "תבניות צוות",
   "selected": "נבחר",
   "folders": "תיקיות",
-  "agents": "סוכנים",
+  "agents": {
+    "exportAgent": "ייצוא סוכן",
+    "editAgent": "עריכת סוכן",
+    "agentName": "שם סוכן",
+    "myResearchAssistant": "עוזר המחקר שלי",
+    "agentId": "מזהה סוכן",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "תיאור (אופציונלי)",
+    "descriptionPlaceholder": "סוכן המתמחה במשימות מחקר...",
+    "baseModel": "מודל בסיס",
+    "formatDescription": "פורמט: asst_xxxxx (מ-MSF AI Assistant Foundry)",
+    "importantInfo": "לסוכן זה תהיה גישה להקשר השיחה והוא יוכל להשתמש באותם כלים כמו מודלים סטנדרטיים. ודא שמזהה הסוכן נכון מכיוון שלא ניתן לשנות אותו מאוחר יותר."
+  },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "הקלד / בצ'אט, בחר את ההנחיה שלך ומלא את המשתנים כאשר תתבקש",
@@ -358,7 +370,6 @@
   "Custom Agents": "סוכנים מותאמים אישית",
   "Delete template and all its items": "מחק תבנית וכל הפריטים שלה",
   "Description (Optional)": "תיאור (אופציונלי)",
-  "Edit Prompt": "ערוך הנחיה",
   "Edit Tone": "ערוך טון",
   "Email Response Template": "תבנית תגובה לדוא\"ל",
   "Example Prompt": "הנחיה לדוגמה",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "לוגו MSF",
   "collapse_sidebar": "כווץ סרגל צד",
   "expand_sidebar": "הרחב סרגל צד",
-  "Voice Guidelines": "הנחיות קול",
   "Please upload some content or describe the tone you want": "אנא העלה תוכן או תאר את הטון שאתה רוצה",
   "Untitled Tone": "טון ללא כותרת",
   "Failed to analyze tone": "ניתוח טון נכשל",
@@ -531,19 +541,6 @@
     "quickActionsTitle": "פעולות מהירות",
     "quickActions": "פעולות מהירות"
   },
-  "agents": {
-    "exportAgent": "ייצוא סוכן",
-    "editAgent": "עריכת סוכן",
-    "agentName": "שם סוכן",
-    "myResearchAssistant": "עוזר המחקר שלי",
-    "agentId": "מזהה סוכן",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "תיאור (אופציונלי)",
-    "descriptionPlaceholder": "סוכן המתמחה במשימות מחקר...",
-    "baseModel": "מודל בסיס",
-    "formatDescription": "פורמט: asst_xxxxx (מ-MSF AI Assistant Foundry)",
-    "importantInfo": "לסוכן זה תהיה גישה להקשר השיחה והוא יוכל להשתמש באותם כלים כמו מודלים סטנדרטיים. ודא שמזהה הסוכן נכון מכיוון שלא ניתן לשנות אותו מאוחר יותר."
-  },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI"
   },
@@ -625,5 +622,75 @@
   },
   "notFound": {
     "lostDog": "כלב אבוד"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "מודל AI מופעל על ידי GPT-4.1 עם חיפוש אינטרנט בזמן אמת דרך Bing. מספק מידע עדכני, בדיקת עובדות ומודעות לאירועים עכשוויים. מומלץ למחקר הדורש מידע עדכני, ניתוח חדשות ואימות עובדות."
+    },
+    "gpt-5": {
+      "description": "המודל המתקדם ביותר של OpenAI, מצטיין בהיגיון מורכב, יצירת קוד ופתרון בעיות טכניות. מומלץ למשימות אנליטיות, אתגרי קידוד, מחקר והסברים מפורטים. תומך במאמץ היגיון מתכוונן ורמת פירוט בתגובה."
+    },
+    "gpt-5-mini": {
+      "description": "גרסה מהירה וחסכונית יותר של GPT-5, ממוטבת למהירות תוך שמירה על איכות גבוהה. אידיאלי למשימות יומיומיות, שאילתות מהירות, שליטה בכלים ויישומים הדורשים זמני תגובה מהירים. איזון מצוין בין ביצועים ויעילות."
+    },
+    "gpt-5-chat": {
+      "description": "גרסה מיוחדת של GPT-5 ממוטבת לאינטראקציות שיחה ואינטליגנציה רגשית. מצטיינת בתקשורת אמפתית, תמיכה בבריאות נפשית, כתיבה יצירתית, סיעור מוחות ודיאלוג טבעי. אידיאלי לשיחות נינוחות, תרחישי ייעוץ ומשימות הדורשות מודעות רגשית."
+    },
+    "o3": {
+      "description": "מודל ההיגיון המתקדם ביותר של OpenAI עם יכולות פתרון בעיות פורצות דרך. מצטיין במתמטיקה מורכבת, היגיון מדעי, אתגרי קידוד ומשימות לוגיות רב-שכבתיות. חלון הקשר מורחב של 200K. תומך בשליטה על מאמץ ההיגיון."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "מודל מהיר וחסכוני מבית Meta. מעולה למשימות יומיומיות כמו כתיבה, סיכום ועזרה בסיסית בקוד. איזון טוב בין מהירות לאיכות לעבודה שגרתית."
+    },
+    "DeepSeek-R1": {
+      "description": "מומחה היגיון שמראה את העבודה שלו צעד אחר צעד. מצטיין בבעיות מתמטיות, חידות היגיון והבנת מושגים מורכבים. צפו כיצד הוא חושב על בעיות בזמן אמת."
+    },
+    "DeepSeek-V3-1": {
+      "description": "מודל רב-תכליתי חזק, טוב במיוחד בקוד ובכתיבה טכנית. מעולה לניפוי באגים בקוד, כתיבת תיעוד והסבר מושגים טכניים. מהיר ואמין לעבודת פיתוח."
+    },
+    "grok-3": {
+      "description": "מודל רב-תכליתי מבית xAI הידוע בתשובות מנומנסות. מעולה לדיונים פתוחים, פרויקטים יצירתיים וטיפול בבעיות מורכבות."
+    },
+    "modelTypes": {
+      "foundational": "יסודי",
+      "omni": "אומני",
+      "reasoning": "היגיון",
+      "agent": "סוכן"
+    },
+    "ui": {
+      "backToModels": "חזרה למודלים",
+      "knowledgeCutoff": "גבול ידע",
+      "realTimeWebSearch": "חיפוש אינטרנט בזמן אמת",
+      "searchMode": "מצב חיפוש",
+      "searchModeDescription": "ישתמש בחיפוש אינטרנט בעת הצורך",
+      "privacyFocusedDefault": "ממוקד פרטיות (ברירת מחדל)",
+      "privacyFocusedDescription": "איטי יותר, אך פרטי יותר",
+      "azureAIAgentMode": "מצב סוכן Azure AI",
+      "azureAIAgentModeDescription": "מהיר יותר, אך שומר נתוני שיחה בענן",
+      "importantPrivacyInformation": "מידע פרטיות חשוב",
+      "fullConversationSentWarning": "כל השיחה שלך תישלח לסוכן Azure AI Foundry.",
+      "learnMoreDataStorage": "למד עוד על אחסון נתונים",
+      "searchRouting": "ניתוב חיפוש",
+      "whatIsTheDifference": "מה ההבדל?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "מאמץ היגיון",
+      "reasoningEffortDescription": "שולט על כמה המודל חושב לפני התגובה",
+      "minimal": "מינימלי",
+      "minimalDescription": "חשיבה מהירה וקלה",
+      "low": "נמוך",
+      "lowDescription": "היגיון בסיסי",
+      "medium": "בינוני",
+      "mediumDescription": "היגיון מאוזן",
+      "high": "גבוה",
+      "highDescription": "היגיון עמוק",
+      "verbosity": "רמת פירוט",
+      "verbosityDescription": "שולט על כמה פרטים המודל מספק",
+      "verbosityLow": "נמוך",
+      "verbosityMedium": "בינוני",
+      "verbosityHigh": "גבוה"
+    }
   }
 }

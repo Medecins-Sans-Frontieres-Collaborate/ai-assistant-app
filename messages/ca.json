@@ -226,7 +226,7 @@
   "Options": "Opcions",
   "Are you sure you want to delete this folder?": "Esteu segur que voleu eliminar aquesta carpeta?",
   "New Prompt": "Nou avís",
-  "Edit Prompt": "Edita l'avís",
+  "Edit Prompt": "Editar avís",
   "Prompt name": "Nom de l'avís",
   "Prompt content": "Contingut de l'avís",
   "Are you sure you want to delete this prompt?": "Esteu segur que voleu eliminar aquest avís?",
@@ -311,7 +311,19 @@
   "Team Templates": "Plantilles d'equip",
   "selected": "seleccionat",
   "folders": "carpetes",
-  "agents": "agents",
+  "agents": {
+    "exportAgent": "Exportar agent",
+    "editAgent": "Editar agent",
+    "agentName": "Nom de l'agent",
+    "myResearchAssistant": "El meu assistent de recerca",
+    "agentId": "ID d'agent",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Descripció (opcional)",
+    "descriptionPlaceholder": "Agent especialitzat per a tasques de recerca...",
+    "baseModel": "Model base",
+    "formatDescription": "Format: asst_xxxxx (de MSF AI Assistant Foundry)",
+    "importantInfo": "Aquest agent tindrà accés al context de la conversa i podrà utilitzar les mateixes eines que els models estàndard. Assegureu-vos que l'ID de l'agent sigui correcte ja que no es pot canviar més endavant."
+  },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Escriu / al xat, selecciona el teu avís i omple les variables quan se't demani",
@@ -358,7 +370,6 @@
   "Custom Agents": "Agents personalitzats",
   "Delete template and all its items": "Eliminar plantilla i tots els seus elements",
   "Description (Optional)": "Descripció (opcional)",
-  "Edit Prompt": "Editar avís",
   "Edit Tone": "Editar to",
   "Email Response Template": "Plantilla de resposta de correu electrònic",
   "Example Prompt": "Exemple d'avís",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "Logotip de MSF",
   "collapse_sidebar": "Reduir barra lateral",
   "expand_sidebar": "Expandir barra lateral",
-  "Voice Guidelines": "Directrius de veu",
   "Please upload some content or describe the tone you want": "Si us plau, carrega contingut o descriu el to que vols",
   "Untitled Tone": "To sense títol",
   "Failed to analyze tone": "Error en analitzar el to",
@@ -531,19 +541,6 @@
     "quickActionsTitle": "Accions ràpides",
     "quickActions": "Accions ràpides"
   },
-  "agents": {
-    "exportAgent": "Exportar agent",
-    "editAgent": "Editar agent",
-    "agentName": "Nom de l'agent",
-    "myResearchAssistant": "El meu assistent de recerca",
-    "agentId": "ID d'agent",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Descripció (opcional)",
-    "descriptionPlaceholder": "Agent especialitzat per a tasques de recerca...",
-    "baseModel": "Model base",
-    "formatDescription": "Format: asst_xxxxx (de MSF AI Assistant Foundry)",
-    "importantInfo": "Aquest agent tindrà accés al context de la conversa i podrà utilitzar les mateixes eines que els models estàndard. Assegureu-vos que l'ID de l'agent sigui correcte ja que no es pot canviar més endavant."
-  },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA"
   },
@@ -625,5 +622,75 @@
   },
   "notFound": {
     "lostDog": "Gos perdut"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Model d'IA impulsat per GPT-4.1 amb cerca web en temps real mitjançant Bing. Proporciona informació actualitzada, verificació de dades i coneixement d'esdeveniments actuals. Ideal per a recerca que requereix informació recent, anàlisi de notícies i verificació de fets."
+    },
+    "gpt-5": {
+      "description": "El model més avançat d'OpenAI, excel·lent en raonament complex, generació de codi i resolució de problemes tècnics. Ideal per a tasques analítiques, reptes de programació, recerca i explicacions detallades. Compatible amb esforç de raonament ajustable i detall de resposta."
+    },
+    "gpt-5-mini": {
+      "description": "Variant més ràpida i rendible de GPT-5, optimitzada per a velocitat mantenint alta qualitat. Ideal per a tasques quotidianes, consultes ràpides, gestió d'eines i aplicacions que requereixen temps de resposta ràpids. Excel·lent equilibri entre rendiment i eficiència."
+    },
+    "gpt-5-chat": {
+      "description": "Variant especialitzada de GPT-5 optimitzada per a interaccions conversacionals i intel·ligència emocional. Excel·lent en comunicació empàtica, suport a la salut mental, escriptura creativa, pluja d'idees i diàleg natural. Ideal per a converses informals, escenaris de consell i tasques que requereixen consciència emocional."
+    },
+    "o3": {
+      "description": "El model de raonament més avançat d'OpenAI amb capacitats revolucionàries de resolució de problemes. Excel·lent en matemàtiques complexes, raonament científic, reptes de codificació i tasques lògiques de múltiples passos. Finestra de context ampliada de 200K. Compatible amb control d'esforç de raonament."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Model ràpid i rendible de Meta. Excel·lent per a tasques quotidianes com escriptura, resum i assistència bàsica amb codi. Bon equilibri entre velocitat i qualitat per a treball rutinari."
+    },
+    "DeepSeek-R1": {
+      "description": "Especialista en raonament que mostra el seu treball pas a pas. Excel·lent per a problemes matemàtics, enigmes lògics i comprensió de conceptes complexos. Veu com pensa a través dels problemes en temps real."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Model complet especialment bo en codi i escriptura tècnica. Excel·lent per a depurar codi, escriure documentació i explicar conceptes tècnics. Ràpid i fiable per a treball de desenvolupament."
+    },
+    "grok-3": {
+      "description": "Model versàtil de xAI conegut per respostes matisades. Excel·lent per a discussions obertes, projectes creatius i abordar problemes complexos."
+    },
+    "modelTypes": {
+      "foundational": "Fonamental",
+      "omni": "Omni",
+      "reasoning": "Raonament",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Tornar a models",
+      "knowledgeCutoff": "Tall de coneixement",
+      "realTimeWebSearch": "Cerca web en temps real",
+      "searchMode": "Mode de cerca",
+      "searchModeDescription": "Utilitzarà cerca web quan calgui",
+      "privacyFocusedDefault": "Centrat en la privadesa (predeterminat)",
+      "privacyFocusedDescription": "Més lent però més privat",
+      "azureAIAgentMode": "Mode d'agent d'Azure AI",
+      "azureAIAgentModeDescription": "Més ràpid però emmagatzema dades de conversa al núvol",
+      "importantPrivacyInformation": "Informació important sobre privadesa",
+      "fullConversationSentWarning": "La teva conversa completa s'enviarà a l'agent d'Azure AI Foundry.",
+      "learnMoreDataStorage": "Més informació sobre l'emmagatzematge de dades",
+      "searchRouting": "Encaminament de cerca",
+      "whatIsTheDifference": "Quina és la diferència?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Esforç de raonament",
+      "reasoningEffortDescription": "Controla quant pensa el model abans de respondre",
+      "minimal": "Mínim",
+      "minimalDescription": "Pensament ràpid i lleuger",
+      "low": "Baix",
+      "lowDescription": "Raonament bàsic",
+      "medium": "Mitjà",
+      "mediumDescription": "Raonament equilibrat",
+      "high": "Alt",
+      "highDescription": "Raonament profund",
+      "verbosity": "Detall",
+      "verbosityDescription": "Controla quant detall proporciona el model",
+      "verbosityLow": "Baix",
+      "verbosityMedium": "Mitjà",
+      "verbosityHigh": "Alt"
+    }
   }
 }

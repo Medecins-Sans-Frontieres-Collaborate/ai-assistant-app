@@ -334,7 +334,19 @@
   "Team Templates": "Takım Şablonları",
   "selected": "seçili",
   "folders": "klasörler",
-  "agents": "ajanlar",
+  "agents": {
+    "exportAgent": "Ajanı dışa aktar",
+    "editAgent": "Ajanı düzenle",
+    "agentName": "Ajan adı",
+    "myResearchAssistant": "Araştırma asistanım",
+    "agentId": "Ajan kimliği",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Açıklama (isteğe bağlı)",
+    "descriptionPlaceholder": "Araştırma görevlerinde uzmanlaşmış ajan...",
+    "baseModel": "Temel model",
+    "formatDescription": "Format: asst_xxxxx (MSF AI Assistant Foundry'den)",
+    "importantInfo": "Bu ajan konuşma bağlamına erişebilecek ve standart modellerle aynı araçları kullanabilecektir. Ajan kimliğinin doğru olduğundan emin olun çünkü daha sonra değiştirilemez."
+  },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Sohbette / yazın, isteminizi seçin ve istendiğinde değişkenleri doldurun",
@@ -552,19 +564,6 @@
     "quickActionsTitle": "Hızlı İşlemler",
     "quickActions": "Hızlı İşlemler"
   },
-  "agents": {
-    "exportAgent": "Ajanı dışa aktar",
-    "editAgent": "Ajanı düzenle",
-    "agentName": "Ajan adı",
-    "myResearchAssistant": "Araştırma asistanım",
-    "agentId": "Ajan kimliği",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Açıklama (isteğe bağlı)",
-    "descriptionPlaceholder": "Araştırma görevlerinde uzmanlaşmış ajan...",
-    "baseModel": "Temel model",
-    "formatDescription": "Format: asst_xxxxx (MSF AI Assistant Foundry'den)",
-    "importantInfo": "Bu ajan konuşma bağlamına erişebilecek ve standart modellerle aynı araçları kullanabilecektir. Ajan kimliğinin doğru olduğundan emin olun çünkü daha sonra değiştirilemez."
-  },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun"
   },
@@ -646,5 +645,75 @@
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Bing aracılığıyla gerçek zamanlı web aramasına sahip GPT-4.1 destekli AI modeli. Güncel bilgi, olgu kontrolü ve güncel olaylar farkındalığı sağlar. En son bilgileri gerektiren araştırmalar, haber analizi ve olgu doğrulama için en iyisidir."
+    },
+    "gpt-5": {
+      "description": "OpenAI'nin en gelişmiş modeli, karmaşık akıl yürütme, kod üretimi ve teknik problem çözme konusunda mükemmel. Analitik görevler, kodlama zorlukları, araştırma ve ayrıntılı açıklamalar için en iyisidir. Ayarlanabilir akıl yürütme çabası ve yanıt ayrıntısını destekler."
+    },
+    "gpt-5-mini": {
+      "description": "GPT-5'in daha hızlı ve daha uygun maliyetli versiyonu, yüksek kaliteyi korurken hız için optimize edilmiştir. Günlük görevler, hızlı sorgular, araç kontrolü ve hızlı yanıt süreleri gerektiren uygulamalar için idealdir. Performans ve verimlilik arasında mükemmel denge."
+    },
+    "gpt-5-chat": {
+      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5'in özel versiyonu. Empatik iletişim, ruh sağlığı desteği, yaratıcı yazma, beyin fırtınası ve doğal diyalog konusunda mükemmel. Rahat sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için idealdir."
+    },
+    "o3": {
+      "description": "Çığır açan problem çözme yetenekleriyle OpenAI'nin en gelişmiş akıl yürütme modeli. Karmaşık matematik, bilimsel akıl yürütme, kodlama zorlukları ve çok katmanlı mantık görevlerinde mükemmel. 200K genişletilmiş bağlam penceresi. Akıl yürütme çabası kontrolünü destekler."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Meta'dan hızlı ve uygun maliyetli model. Yazma, özetleme ve temel kodlama yardımı gibi günlük görevler için mükemmel. Rutin işler için hız ve kalite arasında iyi bir denge."
+    },
+    "DeepSeek-R1": {
+      "description": "İşini adım adım gösteren akıl yürütme uzmanı. Matematik problemleri, mantık bulmacaları ve karmaşık kavramları anlamada mükemmel. Problemleri gerçek zamanlı olarak nasıl düşündüğünü görün."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Güçlü çok yönlü model, özellikle kod ve teknik yazımda iyidir. Kod hata ayıklama, dokümantasyon yazma ve teknik kavramları açıklama konusunda mükemmel. Geliştirme işi için hızlı ve güvenilir."
+    },
+    "grok-3": {
+      "description": "xAI'den nüanslı yanıtlarıyla bilinen çok yönlü model. Açık uçlu tartışmalar, yaratıcı projeler ve karmaşık sorunları ele alma için mükemmel."
+    },
+    "modelTypes": {
+      "foundational": "Temel",
+      "omni": "Omni",
+      "reasoning": "Akıl Yürütme",
+      "agent": "Ajan"
+    },
+    "ui": {
+      "backToModels": "Modellere Dön",
+      "knowledgeCutoff": "Bilgi Kesme Tarihi",
+      "realTimeWebSearch": "Gerçek Zamanlı Web Araması",
+      "searchMode": "Arama Modu",
+      "searchModeDescription": "Gerektiğinde web aramasını kullanacaktır",
+      "privacyFocusedDefault": "Gizlilik Odaklı (Varsayılan)",
+      "privacyFocusedDescription": "Daha yavaş ama daha özel",
+      "azureAIAgentMode": "Azure AI Ajan Modu",
+      "azureAIAgentModeDescription": "Daha hızlı ama konuşma verilerini bulutta depolar",
+      "importantPrivacyInformation": "Önemli Gizlilik Bilgisi",
+      "fullConversationSentWarning": "Tüm konuşmanız Azure AI Foundry ajanına gönderilecektir.",
+      "learnMoreDataStorage": "Veri depolama hakkında daha fazla bilgi edinin",
+      "searchRouting": "Arama Yönlendirme",
+      "whatIsTheDifference": "Fark nedir?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Akıl Yürütme Çabası",
+      "reasoningEffortDescription": "Yanıt vermeden önce modelin ne kadar düşündüğünü kontrol eder",
+      "minimal": "Minimal",
+      "minimalDescription": "Hızlı ve hafif düşünme",
+      "low": "Düşük",
+      "lowDescription": "Temel akıl yürütme",
+      "medium": "Orta",
+      "mediumDescription": "Dengeli akıl yürütme",
+      "high": "Yüksek",
+      "highDescription": "Derin akıl yürütme",
+      "verbosity": "Ayrıntı Düzeyi",
+      "verbosityDescription": "Modelin ne kadar ayrıntı sağladığını kontrol eder",
+      "verbosityLow": "Düşük",
+      "verbosityMedium": "Orta",
+      "verbosityHigh": "Yüksek"
+    }
   }
 }

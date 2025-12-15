@@ -217,7 +217,7 @@
   "Options": "Opțiuni",
   "Are you sure you want to delete this folder?": "Sigur doriți să ștergeți acest folder?",
   "New Prompt": "Solicitare nouă",
-  "Edit Prompt": "Editare solicitare",
+  "Edit Prompt": "Editează Prompt",
   "Prompt name": "Nume solicitare",
   "Prompt content": "Conținut solicitare",
   "Are you sure you want to delete this prompt?": "Sigur doriți să ștergeți această solicitare?",
@@ -328,13 +328,25 @@
   "Tones": "Tonuri",
   "Create Your First Tone": "Creați primul ton",
   "Search tones": "Căutați tonuri...",
-  "Voice Guidelines": "Linii directoare de ton",
+  "Voice Guidelines": "Ghiduri Vocale",
   "Examples": "Exemple",
   "Select a tone to view details": "Selectați un ton pentru a vizualiza detalii",
   "Team Templates": "Șabloane de echipă",
   "selected": "selectat",
   "folders": "dosare",
-  "agents": "agenți",
+  "agents": {
+    "exportAgent": "Exportă agentul",
+    "editAgent": "Editează agentul",
+    "agentName": "Numele agentului",
+    "myResearchAssistant": "Asistentul meu de cercetare",
+    "agentId": "ID agent",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Descriere (opțional)",
+    "descriptionPlaceholder": "Agent specializat pentru sarcini de cercetare...",
+    "baseModel": "Model de bază",
+    "formatDescription": "Format: asst_xxxxx (de la MSF AI Assistant Foundry)",
+    "importantInfo": "Acest agent va avea acces la contextul conversației și va putea folosi aceleași instrumente ca modelele standard. Asigurați-vă că ID-ul agentului este corect deoarece nu poate fi modificat ulterior."
+  },
   "Quick Actions": "Acțiuni rapide",
   "Type / in chat to access your prompts": "Tastați / în chat pentru a accesa solicitările",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Tastați / în chat, selectați solicitarea și completați variabilele când vi se solicită",
@@ -381,7 +393,6 @@
   "Custom Agents": "Agenți Personalizați",
   "Delete template and all its items": "Șterge șablonul și toate elementele sale",
   "Description (Optional)": "Descriere (Opțional)",
-  "Edit Prompt": "Editează Prompt",
   "Edit Tone": "Editează Ton",
   "Email Response Template": "Șablon Răspuns Email",
   "Example Prompt": "Exemplu Prompt",
@@ -441,7 +452,6 @@
   "msf_logo_alt": "Logo MSF",
   "collapse_sidebar": "Restrânge bara laterală",
   "expand_sidebar": "Extinde bara laterală",
-  "Voice Guidelines": "Ghiduri Vocale",
   "Please upload some content or describe the tone you want": "Vă rugăm încărcați conținut sau descrieți tonul dorit",
   "Untitled Tone": "Ton Fără Titlu",
   "Failed to analyze tone": "Analiza tonului a eșuat",
@@ -554,19 +564,6 @@
     "quickActionsTitle": "Acțiuni rapide",
     "quickActions": "Acțiuni rapide"
   },
-  "agents": {
-    "exportAgent": "Exportă agentul",
-    "editAgent": "Editează agentul",
-    "agentName": "Numele agentului",
-    "myResearchAssistant": "Asistentul meu de cercetare",
-    "agentId": "ID agent",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Descriere (opțional)",
-    "descriptionPlaceholder": "Agent specializat pentru sarcini de cercetare...",
-    "baseModel": "Model de bază",
-    "formatDescription": "Format: asst_xxxxx (de la MSF AI Assistant Foundry)",
-    "importantInfo": "Acest agent va avea acces la contextul conversației și va putea folosi aceleași instrumente ca modelele standard. Asigurați-vă că ID-ul agentului este corect deoarece nu poate fi modificat ulterior."
-  },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI"
   },
@@ -648,5 +645,75 @@
   },
   "notFound": {
     "lostDog": "Câine pierdut"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Model AI alimentat de GPT-4.1 cu căutare web în timp real prin Bing. Oferă informații actualizate, verificare de fapte și conștientizare a evenimentelor actuale. Cel mai bun pentru cercetare care necesită informații recente, analiză de știri și verificare de fapte."
+    },
+    "gpt-5": {
+      "description": "Cel mai avansat model al OpenAI, excelând în raționament complex, generare de cod și rezolvare de probleme tehnice. Cel mai bun pentru sarcini analitice, provocări de programare, cercetare și explicații detaliate. Suportă efort de raționament reglabil și detaliere a răspunsului."
+    },
+    "gpt-5-mini": {
+      "description": "Versiune mai rapidă și mai rentabilă a GPT-5, optimizată pentru viteză, menținând în același timp calitate ridicată. Ideal pentru sarcini zilnice, interogări rapide, control al instrumentelor și aplicații care necesită timpi de răspuns rapizi. Echilibru excelent între performanță și eficiență."
+    },
+    "gpt-5-chat": {
+      "description": "Versiune specializată a GPT-5 optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, sprijin pentru sănătatea mintală, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, scenarii de consiliere și sarcini care necesită conștientizare emoțională."
+    },
+    "o3": {
+      "description": "Cel mai avansat model de raționament al OpenAI cu capacități revoluționare de rezolvare a problemelor. Excelează în matematică complexă, raționament științific, provocări de programare și sarcini logice pe mai multe niveluri. Fereastră de context extinsă de 200K. Suportă controlul efortului de raționament."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Model rapid și rentabil de la Meta. Excelează pentru sarcinile zilnice cum ar fi scrierea, rezumarea și asistența de bază pentru programare. Echilibru bun între viteză și calitate pentru munca de rutină."
+    },
+    "DeepSeek-R1": {
+      "description": "Specialist în raționament care își arată munca pas cu pas. Excelează în probleme de matematică, puzzle-uri logice și înțelegerea conceptelor complexe. Vedeți cum gândește problemele în timp real."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Model puternic versatil, deosebit de bun la cod și scriere tehnică. Excelează la depanarea codului, scrierea documentației și explicarea conceptelor tehnice. Rapid și de încredere pentru munca de dezvoltare."
+    },
+    "grok-3": {
+      "description": "Model versatil de la xAI cunoscut pentru răspunsuri nuanțate. Excelează pentru discuții deschise, proiecte creative și abordarea problemelor complexe."
+    },
+    "modelTypes": {
+      "foundational": "Fundamental",
+      "omni": "Omni",
+      "reasoning": "Raționament",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Înapoi la Modele",
+      "knowledgeCutoff": "Limita Cunoștințelor",
+      "realTimeWebSearch": "Căutare Web în Timp Real",
+      "searchMode": "Mod Căutare",
+      "searchModeDescription": "Va folosi căutarea web când este necesar",
+      "privacyFocusedDefault": "Axat pe Confidențialitate (Implicit)",
+      "privacyFocusedDescription": "Mai lent, dar mai privat",
+      "azureAIAgentMode": "Mod Agent Azure AI",
+      "azureAIAgentModeDescription": "Mai rapid, dar stochează date de conversație în cloud",
+      "importantPrivacyInformation": "Informații Importante despre Confidențialitate",
+      "fullConversationSentWarning": "Întreaga conversație va fi trimisă către agentul Azure AI Foundry.",
+      "learnMoreDataStorage": "Aflați mai multe despre stocarea datelor",
+      "searchRouting": "Rutare Căutare",
+      "whatIsTheDifference": "Care este diferența?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Efort de Raționament",
+      "reasoningEffortDescription": "Controlează cât de mult gândește modelul înainte de a răspunde",
+      "minimal": "Minimal",
+      "minimalDescription": "Gândire rapidă și ușoară",
+      "low": "Scăzut",
+      "lowDescription": "Raționament de bază",
+      "medium": "Mediu",
+      "mediumDescription": "Raționament echilibrat",
+      "high": "Ridicat",
+      "highDescription": "Raționament profund",
+      "verbosity": "Detaliere",
+      "verbosityDescription": "Controlează câte detalii oferă modelul",
+      "verbosityLow": "Scăzut",
+      "verbosityMedium": "Mediu",
+      "verbosityHigh": "Ridicat"
+    }
   }
 }

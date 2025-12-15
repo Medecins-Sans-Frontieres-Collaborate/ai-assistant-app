@@ -311,7 +311,19 @@
   "Team Templates": "টিম টেমপ্লেট",
   "selected": "নির্বাচিত",
   "folders": "ফোল্ডার",
-  "agents": "এজেন্ট",
+  "agents": {
+    "exportAgent": "এজেন্ট রপ্তানি করুন",
+    "editAgent": "এজেন্ট সম্পাদনা করুন",
+    "agentName": "এজেন্ট নাম",
+    "myResearchAssistant": "আমার গবেষণা সহায়ক",
+    "agentId": "এজেন্ট আইডি",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "বিবরণ (ঐচ্ছিক)",
+    "descriptionPlaceholder": "গবেষণা কাজের জন্য বিশেষায়িত এজেন্ট...",
+    "baseModel": "বেস মডেল",
+    "formatDescription": "ফর্ম্যাট: asst_xxxxx (MSF AI Assistant Foundry থেকে)",
+    "importantInfo": "এই এজেন্টটির কথোপকথন প্রসঙ্গে অ্যাক্সেস থাকবে এবং স্ট্যান্ডার্ড মডেলের মতো একই সরঞ্জাম ব্যবহার করতে পারবে। নিশ্চিত করুন যে এজেন্ট আইডি সঠিক কারণ এটি পরে পরিবর্তন করা যাবে না।"
+  },
   "Quick Actions": "দ্রুত ক্রিয়া",
   "Type / in chat to access your prompts": "আপনার প্রম্পট অ্যাক্সেস করতে চ্যাটে / টাইপ করুন",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "চ্যাটে / টাইপ করুন, আপনার প্রম্পট নির্বাচন করুন এবং অনুরোধ করা হলে ভেরিয়েবলগুলি পূরণ করুন",
@@ -337,9 +349,6 @@
   "Chat Settings": "চ্যাট সেটিংস",
   "Default System Prompt": "ডিফল্ট সিস্টেম প্রম্পট",
   "Email": "ইমেইল",
-  "Export folder": "ফোল্ডার রপ্তানি করুন",
-  "Import conversation": "কথোপকথন আমদানি করুন",
-  "Import folder": "ফোল্ডার আমদানি করুন",
   "Conversation exported successfully": "কথোপকথন সফলভাবে রপ্তানি করা হয়েছে",
   "Failed to export conversation": "কথোপকথন রপ্তানি করতে ব্যর্থ হয়েছে",
   "Conversation imported successfully": "কথোপকথন সফলভাবে আমদানি করা হয়েছে",
@@ -352,9 +361,6 @@
   "Invalid folder file": "অবৈধ ফোল্ডার ফাইল",
   "Failed to import file": "ফাইল আমদানি করতে ব্যর্থ হয়েছে",
   "Unrecognized file format": "অচেনা ফাইল ফরম্যাট",
-  "Save as prompt": "প্রম্পট হিসেবে সংরক্ষণ করুন",
-  "Optional": "ঐচ্ছিক",
-  "What is this?": "এটি কী?",
   "No prompts found": "কোনও প্রম্পট পাওয়া যায়নি",
   "Select a prompt to view details": "বিস্তারিত দেখতে একটি প্রম্পট নির্বাচন করুন",
   "Content": "বিষয়বস্তু",
@@ -385,7 +391,6 @@
   "Custom Agents": "কাস্টম এজেন্ট",
   "Delete template and all its items": "টেমপ্লেট এবং এর সমস্ত আইটেম মুছুন",
   "Description (Optional)": "বিবরণ (ঐচ্ছিক)",
-  "Edit Prompt": "প্রম্পট সম্পাদনা করুন",
   "Edit Tone": "টোন সম্পাদনা করুন",
   "Email Response Template": "ইমেইল প্রতিক্রিয়া টেমপ্লেট",
   "Example Prompt": "উদাহরণ প্রম্পট",
@@ -445,7 +450,6 @@
   "msf_logo_alt": "MSF লোগো",
   "collapse_sidebar": "সাইডবার সংকুচিত করুন",
   "expand_sidebar": "সাইডবার প্রসারিত করুন",
-  "Voice Guidelines": "ভয়েস নির্দেশিকা",
   "Please upload some content or describe the tone you want": "দয়া করে কিছু বিষয়বস্তু আপলোড করুন বা আপনি যে টোন চান তা বর্ণনা করুন",
   "Untitled Tone": "শিরোনামহীন টোন",
   "Failed to analyze tone": "টোন বিশ্লেষণ করতে ব্যর্থ হয়েছে",
@@ -530,19 +534,6 @@
     "expandSidebar": "সাইডবার প্রসারিত করুন",
     "quickActionsTitle": "দ্রুত ক্রিয়া",
     "quickActions": "দ্রুত ক্রিয়া"
-  },
-  "agents": {
-    "exportAgent": "এজেন্ট রপ্তানি করুন",
-    "editAgent": "এজেন্ট সম্পাদনা করুন",
-    "agentName": "এজেন্ট নাম",
-    "myResearchAssistant": "আমার গবেষণা সহায়ক",
-    "agentId": "এজেন্ট আইডি",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "বিবরণ (ঐচ্ছিক)",
-    "descriptionPlaceholder": "গবেষণা কাজের জন্য বিশেষায়িত এজেন্ট...",
-    "baseModel": "বেস মডেল",
-    "formatDescription": "ফর্ম্যাট: asst_xxxxx (MSF AI Assistant Foundry থেকে)",
-    "importantInfo": "এই এজেন্টটির কথোপকথন প্রসঙ্গে অ্যাক্সেস থাকবে এবং স্ট্যান্ডার্ড মডেলের মতো একই সরঞ্জাম ব্যবহার করতে পারবে। নিশ্চিত করুন যে এজেন্ট আইডি সঠিক কারণ এটি পরে পরিবর্তন করা যাবে না।"
   },
   "prompts": {
     "buildReusablePrompts": "AI সহায়তায় পুনর্ব্যবহারযোগ্য প্রম্পট তৈরি করুন"
@@ -673,5 +664,75 @@
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Bing-এর মাধ্যমে রিয়েল-টাইম ওয়েব সার্চ সহ GPT-4.1 দ্বারা চালিত AI মডেল। আপ-টু-ডেট তথ্য, তথ্য-যাচাই এবং বর্তমান ঘটনা সচেতনতা প্রদান করে। সাম্প্রতিক তথ্য, সংবাদ বিশ্লেষণ এবং তথ্য যাচাইকরণের প্রয়োজন এমন গবেষণার জন্য সেরা।"
+    },
+    "gpt-5": {
+      "description": "OpenAI-এর সবচেয়ে উন্নত মডেল, জটিল যুক্তি, কোড তৈরি এবং প্রযুক্তিগত সমস্যা সমাধানে দক্ষ। বিশ্লেষণাত্মক কাজ, কোডিং চ্যালেঞ্জ, গবেষণা এবং বিস্তারিত ব্যাখ্যার জন্য সেরা। সামঞ্জস্যযোগ্য যুক্তি প্রচেষ্টা এবং প্রতিক্রিয়া বিস্তারিততা সমর্থন করে।"
+    },
+    "gpt-5-mini": {
+      "description": "GPT-5-এর দ্রুততর এবং আরও সাশ্রয়ী সংস্করণ, উচ্চ মান বজায় রেখে গতির জন্য অপ্টিমাইজ করা। দৈনন্দিন কাজ, দ্রুত প্রশ্ন, টুল স্টিয়ারিং এবং দ্রুত প্রতিক্রিয়া সময় প্রয়োজন এমন অ্যাপ্লিকেশনের জন্য আদর্শ। কর্মক্ষমতা এবং দক্ষতার চমৎকার ভারসাম্য।"
+    },
+    "gpt-5-chat": {
+      "description": "কথোপকথন এবং আবেগগত বুদ্ধিমত্তার জন্য অপ্টিমাইজ করা GPT-5-এর বিশেষায়িত সংস্করণ। সহানুভূতিশীল যোগাযোগ, মানসিক স্বাস্থ্য সহায়তা, সৃজনশীল লেখা, ব্রেনস্টর্মিং এবং প্রাকৃতিক সংলাপে দক্ষ। নৈমিত্তিক কথোপকথন, পরামর্শ পরিস্থিতি এবং আবেগগত সচেতনতা প্রয়োজন এমন কাজের জন্য সেরা।"
+    },
+    "o3": {
+      "description": "OpenAI-এর সবচেয়ে উন্নত যুক্তি মডেল যা যুগান্তকারী সমস্যা সমাধান ক্ষমতা সহ। জটিল গণিত, বৈজ্ঞানিক যুক্তি, কোডিং চ্যালেঞ্জ এবং বহু-পদক্ষেপ যৌক্তিক কাজে দক্ষ। বর্ধিত 200K প্রসঙ্গ উইন্ডো। যুক্তি প্রচেষ্টা নিয়ন্ত্রণ সমর্থন করে।"
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Meta থেকে দ্রুত এবং সাশ্রয়ী মডেল। লেখা, সংক্ষিপ্তকরণ এবং মৌলিক কোড সহায়তার মতো দৈনন্দিন কাজের জন্য দুর্দান্ত। নিয়মিত কাজের জন্য গতি এবং মানের ভাল ভারসাম্য।"
+    },
+    "DeepSeek-R1": {
+      "description": "যুক্তি বিশেষজ্ঞ যা তার কাজ ধাপে ধাপে দেখায়। গণিত সমস্যা, যুক্তি ধাঁধা এবং জটিল ধারণা বুঝতে দুর্দান্ত। রিয়েল-টাইমে কীভাবে এটি সমস্যার মাধ্যমে চিন্তা করে তা দেখুন।"
+    },
+    "DeepSeek-V3-1": {
+      "description": "কোড এবং প্রযুক্তিগত লেখায় বিশেষভাবে ভাল শক্তিশালী সর্বরাউন্ড মডেল। কোড ডিবাগ করা, ডকুমেন্টেশন লেখা এবং প্রযুক্তিগত ধারণা ব্যাখ্যা করার জন্য দুর্দান্ত। উন্নয়ন কাজের জন্য দ্রুত এবং নির্ভরযোগ্য।"
+    },
+    "grok-3": {
+      "description": "xAI থেকে বহুমুখী মডেল যা বিস্তারিত প্রতিক্রিয়ার জন্য পরিচিত। উন্মুক্ত আলোচনা, সৃজনশীল প্রকল্প এবং জটিল সমস্যা সমাধানের জন্য দুর্দান্ত।"
+    },
+    "modelTypes": {
+      "foundational": "ভিত্তিগত",
+      "omni": "সর্বব্যাপী",
+      "reasoning": "যুক্তি",
+      "agent": "এজেন্ট"
+    },
+    "ui": {
+      "backToModels": "মডেলগুলিতে ফিরে যান",
+      "knowledgeCutoff": "জ্ঞান কাটঅফ",
+      "realTimeWebSearch": "রিয়েল-টাইম ওয়েব সার্চ",
+      "searchMode": "সার্চ মোড",
+      "searchModeDescription": "প্রয়োজন হলে ওয়েব সার্চ ব্যবহার করবে",
+      "privacyFocusedDefault": "গোপনীয়তা-কেন্দ্রিক (ডিফল্ট)",
+      "privacyFocusedDescription": "ধীর কিন্তু আরও ব্যক্তিগত",
+      "azureAIAgentMode": "Azure AI এজেন্ট মোড",
+      "azureAIAgentModeDescription": "দ্রুত কিন্তু ক্লাউডে কথোপকথন ডেটা সংরক্ষণ করে",
+      "importantPrivacyInformation": "গুরুত্বপূর্ণ গোপনীয়তা তথ্য",
+      "fullConversationSentWarning": "আপনার সম্পূর্ণ কথোপকথন Azure AI Foundry এজেন্টে পাঠানো হবে।",
+      "learnMoreDataStorage": "ডেটা স্টোরেজ সম্পর্কে আরও জানুন",
+      "searchRouting": "সার্চ রাউটিং",
+      "whatIsTheDifference": "পার্থক্য কী?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "যুক্তি প্রচেষ্টা",
+      "reasoningEffortDescription": "মডেল প্রতিক্রিয়া দেওয়ার আগে কতটা চিন্তা করে তা নিয়ন্ত্রণ করে",
+      "minimal": "ন্যূনতম",
+      "minimalDescription": "দ্রুত এবং হালকা চিন্তা",
+      "low": "নিম্ন",
+      "lowDescription": "মৌলিক যুক্তি",
+      "medium": "মাঝারি",
+      "mediumDescription": "ভারসাম্যপূর্ণ যুক্তি",
+      "high": "উচ্চ",
+      "highDescription": "গভীর যুক্তি",
+      "verbosity": "বিস্তারিততা",
+      "verbosityDescription": "মডেল কতটা বিস্তারিত প্রদান করে তা নিয়ন্ত্রণ করে",
+      "verbosityLow": "নিম্ন",
+      "verbosityMedium": "মাঝারি",
+      "verbosityHigh": "উচ্চ"
+    }
   }
 }

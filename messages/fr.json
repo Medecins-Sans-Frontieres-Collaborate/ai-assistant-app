@@ -204,7 +204,7 @@
   "Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}": "Contenu de l'invite. Utilisez {{}} pour désigner une variable. Ex : {{nom}} est un {{adjectif}} {{nom}}",
   "A name for your prompt_": "Un nom pour votre invite.",
   "New Prompt": "Nouvelle invite",
-  "Edit Prompt": "Modifier l'invite",
+  "Edit Prompt": "Modifier l'instruction",
   "Prompt name": "Nom de l'invite",
   "Prompt content": "Contenu de l'invite",
   "Are you sure you want to delete this prompt?": "Êtes-vous sûr de vouloir supprimer cette invite ?",
@@ -316,7 +316,19 @@
   "Team Templates": "Modèles d'équipe",
   "selected": "sélectionné",
   "folders": "dossiers",
-  "agents": "agents",
+  "agents": {
+    "exportAgent": "Exporter l'agent",
+    "editAgent": "Modifier l'agent",
+    "agentName": "Nom de l'agent",
+    "myResearchAssistant": "Mon assistant de recherche",
+    "agentId": "ID de l'agent",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Description (facultatif)",
+    "descriptionPlaceholder": "Agent spécialisé pour les tâches de recherche...",
+    "baseModel": "Modèle de base",
+    "formatDescription": "Format: asst_xxxxx (de MSF AI Assistant Foundry)",
+    "importantInfo": "Cet agent aura accès au contexte de la conversation et pourra utiliser les mêmes outils que les modèles standard. Assurez-vous que l'ID de l'agent est correct car il ne pourra pas être modifié ultérieurement."
+  },
   "Quick Actions": "Actions rapides",
   "Type / in chat to access your prompts": "Tapez / dans le chat pour accéder à vos instructions",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Tapez / dans le chat, sélectionnez votre instruction et remplissez les variables lorsque demandé",
@@ -363,7 +375,6 @@
   "Custom Agents": "Agents personnalisés",
   "Delete template and all its items": "Supprimer le modèle et tous ses éléments",
   "Description (Optional)": "Description (Optionnel)",
-  "Edit Prompt": "Modifier l'instruction",
   "Edit Tone": "Modifier le ton",
   "Email Response Template": "Modèle de réponse par e-mail",
   "Example Prompt": "Exemple d'instruction",
@@ -423,7 +434,6 @@
   "msf_logo_alt": "Logo MSF",
   "collapse_sidebar": "Réduire la barre latérale",
   "expand_sidebar": "Développer la barre latérale",
-  "Voice Guidelines": "Directives vocales",
   "Please upload some content or describe the tone you want": "Veuillez télécharger du contenu ou décrire le ton que vous souhaitez",
   "Untitled Tone": "Ton sans titre",
   "Failed to analyze tone": "Échec de l'analyse du ton",
@@ -522,19 +532,6 @@
     "criticalErrorReload": "Une erreur critique s'est produite. Veuillez recharger la page.",
     "reloadPage": "Recharger la page",
     "persistContactSupport": "Si ce problème persiste, veuillez contacter le support"
-  },
-  "agents": {
-    "exportAgent": "Exporter l'agent",
-    "editAgent": "Modifier l'agent",
-    "agentName": "Nom de l'agent",
-    "myResearchAssistant": "Mon assistant de recherche",
-    "agentId": "ID de l'agent",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Description (facultatif)",
-    "descriptionPlaceholder": "Agent spécialisé pour les tâches de recherche...",
-    "baseModel": "Modèle de base",
-    "formatDescription": "Format: asst_xxxxx (de MSF AI Assistant Foundry)",
-    "importantInfo": "Cet agent aura accès au contexte de la conversation et pourra utiliser les mêmes outils que les modèles standard. Assurez-vous que l'ID de l'agent est correct car il ne pourra pas être modifié ultérieurement."
   },
   "prompts": {
     "buildReusablePrompts": "Créer des instructions réutilisables avec l'assistance de l'IA"
@@ -651,5 +648,75 @@
   },
   "notFound": {
     "lostDog": "Chien perdu"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Modèle d'IA alimenté par GPT-4.1 avec recherche web en temps réel via Bing. Fournit des informations à jour, la vérification des faits et une connaissance des événements actuels. Idéal pour la recherche nécessitant des informations récentes, l'analyse de l'actualité et la vérification des faits."
+    },
+    "gpt-5": {
+      "description": "Le modèle le plus avancé d'OpenAI, excellent en raisonnement complexe, génération de code et résolution de problèmes techniques. Idéal pour les tâches analytiques, les défis de codage, la recherche et les explications détaillées. Prend en charge l'effort de raisonnement ajustable et la verbosité de la réponse."
+    },
+    "gpt-5-mini": {
+      "description": "Version plus rapide et plus économique de GPT-5, optimisée pour la vitesse tout en maintenant une haute qualité. Idéal pour les tâches quotidiennes, les requêtes rapides, le contrôle d'outils et les applications nécessitant des temps de réponse rapides. Excellent équilibre entre performance et efficacité."
+    },
+    "gpt-5-chat": {
+      "description": "Variante spécialisée de GPT-5 optimisée pour les interactions conversationnelles et l'intelligence émotionnelle. Excellent en communication empathique, soutien à la santé mentale, écriture créative, brainstorming et dialogue naturel. Idéal pour les conversations décontractées, les scénarios de conseil et les tâches nécessitant une conscience émotionnelle."
+    },
+    "o3": {
+      "description": "Le modèle de raisonnement le plus avancé d'OpenAI avec des capacités de résolution de problèmes révolutionnaires. Excellent en mathématiques complexes, raisonnement scientifique, défis de codage et tâches logiques multi-niveaux. Fenêtre contextuelle étendue de 200K. Prend en charge le contrôle de l'effort de raisonnement."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Modèle rapide et économique de Meta. Excellent pour les tâches quotidiennes comme l'écriture, le résumé et l'aide au code de base. Bon équilibre entre vitesse et qualité pour le travail de routine."
+    },
+    "DeepSeek-R1": {
+      "description": "Spécialiste du raisonnement qui montre son travail étape par étape. Excellent pour les problèmes mathématiques, les énigmes logiques et la compréhension de concepts complexes. Regardez comment il réfléchit aux problèmes en temps réel."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Modèle polyvalent puissant, particulièrement bon en code et en écriture technique. Excellent pour le débogage de code, l'écriture de documentation et l'explication de concepts techniques. Rapide et fiable pour le travail de développement."
+    },
+    "grok-3": {
+      "description": "Modèle polyvalent de xAI connu pour ses réponses nuancées. Excellent pour les discussions ouvertes, les projets créatifs et la résolution de problèmes complexes."
+    },
+    "modelTypes": {
+      "foundational": "Fondamental",
+      "omni": "Omni",
+      "reasoning": "Raisonnement",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Retour aux modèles",
+      "knowledgeCutoff": "Limite de connaissance",
+      "realTimeWebSearch": "Recherche web en temps réel",
+      "searchMode": "Mode recherche",
+      "searchModeDescription": "Utilisera la recherche web si nécessaire",
+      "privacyFocusedDefault": "Axé sur la confidentialité (par défaut)",
+      "privacyFocusedDescription": "Plus lent, mais plus privé",
+      "azureAIAgentMode": "Mode agent Azure AI",
+      "azureAIAgentModeDescription": "Plus rapide, mais stocke les données de conversation dans le cloud",
+      "importantPrivacyInformation": "Informations importantes sur la confidentialité",
+      "fullConversationSentWarning": "Votre conversation complète sera envoyée à l'agent Azure AI Foundry.",
+      "learnMoreDataStorage": "En savoir plus sur le stockage des données",
+      "searchRouting": "Routage de recherche",
+      "whatIsTheDifference": "Quelle est la différence ?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Effort de raisonnement",
+      "reasoningEffortDescription": "Contrôle combien le modèle réfléchit avant de répondre",
+      "minimal": "Minimal",
+      "minimalDescription": "Réflexion rapide et légère",
+      "low": "Faible",
+      "lowDescription": "Raisonnement de base",
+      "medium": "Moyen",
+      "mediumDescription": "Raisonnement équilibré",
+      "high": "Élevé",
+      "highDescription": "Raisonnement profond",
+      "verbosity": "Verbosité",
+      "verbosityDescription": "Contrôle le niveau de détail fourni par le modèle",
+      "verbosityLow": "Faible",
+      "verbosityMedium": "Moyen",
+      "verbosityHigh": "Élevé"
+    }
   }
 }

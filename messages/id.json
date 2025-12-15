@@ -297,13 +297,25 @@
   "Tones": "Nada",
   "Create Your First Tone": "Buat Nada Pertama Anda",
   "Search tones": "Cari nada...",
-  "Voice Guidelines": "Panduan Suara",
+  "Voice Guidelines": "Pedoman Suara",
   "Examples": "Contoh",
   "Select a tone to view details": "Pilih nada untuk melihat detail",
   "Team Templates": "Template Tim",
   "selected": "dipilih",
   "folders": "folder",
-  "agents": "agen",
+  "agents": {
+    "exportAgent": "Ekspor agen",
+    "editAgent": "Edit agen",
+    "agentName": "Nama Agen",
+    "myResearchAssistant": "Asisten Riset Saya",
+    "agentId": "ID Agen",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Deskripsi (opsional)",
+    "descriptionPlaceholder": "Agen khusus untuk tugas riset...",
+    "baseModel": "Model Dasar",
+    "formatDescription": "Format: asst_xxxxx (dari MSF AI Assistant Foundry)",
+    "importantInfo": "Agen ini akan memiliki akses ke konteks percakapan dan dapat menggunakan alat yang sama dengan model standar. Pastikan ID Agen benar karena tidak dapat diubah nanti."
+  },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Ketik / dalam obrolan, pilih prompt Anda, dan isi variabel saat diminta",
@@ -350,7 +362,6 @@
   "Custom Agents": "Agen Kustom",
   "Delete template and all its items": "Hapus template dan semua itemnya",
   "Description (Optional)": "Deskripsi (Opsional)",
-  "Edit Prompt": "Edit Prompt",
   "Edit Tone": "Edit Nada",
   "Email Response Template": "Template Respons Email",
   "Example Prompt": "Contoh Prompt",
@@ -410,7 +421,6 @@
   "msf_logo_alt": "Logo MSF",
   "collapse_sidebar": "Ciutkan bilah sisi",
   "expand_sidebar": "Perluas bilah sisi",
-  "Voice Guidelines": "Pedoman Suara",
   "Please upload some content or describe the tone you want": "Silakan unggah konten atau deskripsikan nada yang Anda inginkan",
   "Untitled Tone": "Nada Tanpa Judul",
   "Failed to analyze tone": "Gagal menganalisis nada",
@@ -523,19 +533,6 @@
     "quickActionsTitle": "Tindakan Cepat",
     "quickActions": "Tindakan Cepat"
   },
-  "agents": {
-    "exportAgent": "Ekspor agen",
-    "editAgent": "Edit agen",
-    "agentName": "Nama Agen",
-    "myResearchAssistant": "Asisten Riset Saya",
-    "agentId": "ID Agen",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Deskripsi (opsional)",
-    "descriptionPlaceholder": "Agen khusus untuk tugas riset...",
-    "baseModel": "Model Dasar",
-    "formatDescription": "Format: asst_xxxxx (dari MSF AI Assistant Foundry)",
-    "importantInfo": "Agen ini akan memiliki akses ke konteks percakapan dan dapat menggunakan alat yang sama dengan model standar. Pastikan ID Agen benar karena tidak dapat diubah nanti."
-  },
   "prompts": {
     "buildReusablePrompts": "Bangun prompt yang dapat digunakan kembali dengan bantuan AI"
   },
@@ -617,5 +614,75 @@
   },
   "notFound": {
     "lostDog": "Anjing hilang"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Model AI yang didukung oleh GPT-4.1 dengan pencarian web waktu nyata melalui Bing. Menyediakan informasi terkini, pemeriksaan fakta, dan kesadaran peristiwa terkini. Terbaik untuk penelitian yang memerlukan informasi terbaru, analisis berita, dan verifikasi fakta."
+    },
+    "gpt-5": {
+      "description": "Model paling canggih dari OpenAI, unggul dalam penalaran kompleks, pembuatan kode, dan pemecahan masalah teknis. Terbaik untuk tugas analitis, tantangan pengkodean, penelitian, dan penjelasan terperinci. Mendukung upaya penalaran yang dapat disesuaikan dan verbositas respons."
+    },
+    "gpt-5-mini": {
+      "description": "Varian GPT-5 yang lebih cepat dan hemat biaya, dioptimalkan untuk kecepatan sambil mempertahankan kualitas tinggi. Ideal untuk tugas sehari-hari, kueri cepat, kontrol alat, dan aplikasi yang memerlukan waktu respons cepat. Keseimbangan sangat baik antara kinerja dan efisiensi."
+    },
+    "gpt-5-chat": {
+      "description": "Varian khusus GPT-5 yang dioptimalkan untuk interaksi percakapan dan kecerdasan emosional. Unggul dalam komunikasi empatik, dukungan kesehatan mental, penulisan kreatif, brainstorming, dan dialog alami. Ideal untuk percakapan santai, skenario konseling, dan tugas yang memerlukan kesadaran emosional."
+    },
+    "o3": {
+      "description": "Model penalaran paling canggih dari OpenAI dengan kemampuan pemecahan masalah yang terobosan. Unggul dalam matematika kompleks, penalaran ilmiah, tantangan pengkodean, dan tugas logis multi-tingkat. Jendela konteks diperluas 200K. Mendukung kontrol upaya penalaran."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Model cepat dan hemat biaya dari Meta. Sangat baik untuk tugas sehari-hari seperti menulis, meringkas, dan bantuan kode dasar. Keseimbangan yang baik antara kecepatan dan kualitas untuk pekerjaan rutin."
+    },
+    "DeepSeek-R1": {
+      "description": "Spesialis penalaran yang menunjukkan pekerjaannya langkah demi langkah. Unggul dalam masalah matematika, teka-teki logika, dan memahami konsep kompleks. Lihat bagaimana ia memikirkan masalah secara real-time."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Model serba guna yang kuat, sangat baik dalam kode dan penulisan teknis. Sangat baik untuk debugging kode, menulis dokumentasi, dan menjelaskan konsep teknis. Cepat dan andal untuk pekerjaan pengembangan."
+    },
+    "grok-3": {
+      "description": "Model serbaguna dari xAI yang dikenal dengan jawaban yang bernuansa. Sangat baik untuk diskusi terbuka, proyek kreatif, dan menangani masalah kompleks."
+    },
+    "modelTypes": {
+      "foundational": "Dasar",
+      "omni": "Omni",
+      "reasoning": "Penalaran",
+      "agent": "Agen"
+    },
+    "ui": {
+      "backToModels": "Kembali ke Model",
+      "knowledgeCutoff": "Batas pengetahuan",
+      "realTimeWebSearch": "Pencarian web waktu nyata",
+      "searchMode": "Mode Pencarian",
+      "searchModeDescription": "Akan menggunakan pencarian web jika diperlukan",
+      "privacyFocusedDefault": "Fokus privasi (default)",
+      "privacyFocusedDescription": "Lebih lambat, tetapi lebih privat",
+      "azureAIAgentMode": "Mode Agen Azure AI",
+      "azureAIAgentModeDescription": "Lebih cepat, tetapi menyimpan data percakapan di cloud",
+      "importantPrivacyInformation": "Informasi privasi penting",
+      "fullConversationSentWarning": "Seluruh percakapan Anda akan dikirim ke agen Azure AI Foundry.",
+      "learnMoreDataStorage": "Pelajari lebih lanjut tentang penyimpanan data",
+      "searchRouting": "Perutean pencarian",
+      "whatIsTheDifference": "Apa perbedaannya?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Upaya Penalaran",
+      "reasoningEffortDescription": "Mengontrol seberapa banyak model berpikir sebelum merespons",
+      "minimal": "Minimal",
+      "minimalDescription": "Pemikiran cepat dan ringan",
+      "low": "Rendah",
+      "lowDescription": "Penalaran dasar",
+      "medium": "Sedang",
+      "mediumDescription": "Penalaran seimbang",
+      "high": "Tinggi",
+      "highDescription": "Penalaran mendalam",
+      "verbosity": "Verbositas",
+      "verbosityDescription": "Mengontrol seberapa banyak detail yang diberikan model",
+      "verbosityLow": "Rendah",
+      "verbosityMedium": "Sedang",
+      "verbosityHigh": "Tinggi"
+    }
   }
 }

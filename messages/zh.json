@@ -311,7 +311,19 @@
   "Team Templates": "团队模板",
   "selected": "已选择",
   "folders": "文件夹",
-  "agents": "代理",
+  "agents": {
+    "exportAgent": "导出代理",
+    "editAgent": "编辑代理",
+    "agentName": "代理名称",
+    "myResearchAssistant": "我的研究助手",
+    "agentId": "代理 ID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "描述（可选）",
+    "descriptionPlaceholder": "专门从事研究任务的代理...",
+    "baseModel": "基础模型",
+    "formatDescription": "格式：asst_xxxxx（来自 MSF AI Assistant Foundry）",
+    "importantInfo": "此代理将有权访问对话上下文，并可以使用与标准模型相同的工具。确保代理 ID 正确，因为以后无法更改。"
+  },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "在聊天中输入 /，选择您的提示，并在提示时填写变量",
@@ -358,7 +370,6 @@
   "Custom Agents": "自定义代理",
   "Delete template and all its items": "删除模板及其所有项目",
   "Description (Optional)": "描述（可选）",
-  "Edit Prompt": "编辑提示",
   "Edit Tone": "编辑语气",
   "Email Response Template": "电子邮件回复模板",
   "Example Prompt": "示例提示",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "MSF徽标",
   "collapse_sidebar": "折叠侧边栏",
   "expand_sidebar": "展开侧边栏",
-  "Voice Guidelines": "语音指南",
   "Please upload some content or describe the tone you want": "请上传一些内容或描述您想要的语气",
   "Untitled Tone": "无标题语气",
   "Failed to analyze tone": "分析语气失败",
@@ -531,19 +541,6 @@
     "quickActionsTitle": "快速操作",
     "quickActions": "快速操作"
   },
-  "agents": {
-    "exportAgent": "导出代理",
-    "editAgent": "编辑代理",
-    "agentName": "代理名称",
-    "myResearchAssistant": "我的研究助手",
-    "agentId": "代理 ID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "描述（可选）",
-    "descriptionPlaceholder": "专门从事研究任务的代理...",
-    "baseModel": "基础模型",
-    "formatDescription": "格式：asst_xxxxx（来自 MSF AI Assistant Foundry）",
-    "importantInfo": "此代理将有权访问对话上下文，并可以使用与标准模型相同的工具。确保代理 ID 正确，因为以后无法更改。"
-  },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示"
   },
@@ -625,5 +622,75 @@
   },
   "notFound": {
     "lostDog": "迷路的狗"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "由GPT-4.1驱动的AI模型，通过Bing进行实时网络搜索。提供最新信息、事实核查和当前事件意识。最适合需要最新信息、新闻分析和事实验证的研究。"
+    },
+    "gpt-5": {
+      "description": "OpenAI最先进的模型，在复杂推理、代码生成和技术问题解决方面表现出色。最适合分析任务、编码挑战、研究和详细解释。支持可调整的推理努力和响应细节。"
+    },
+    "gpt-5-mini": {
+      "description": "GPT-5的更快、更经济实惠的版本，针对速度进行了优化，同时保持高质量。非常适合日常任务、快速查询、工具控制以及需要快速响应时间的应用程序。性能和效率之间的极佳平衡。"
+    },
+    "gpt-5-chat": {
+      "description": "GPT-5的专门版本，针对对话互动和情商进行了优化。在同理心沟通、心理健康支持、创意写作、头脑风暴和自然对话方面表现出色。非常适合休闲对话、咨询场景和需要情感意识的任务。"
+    },
+    "o3": {
+      "description": "OpenAI最先进的推理模型，具有突破性的问题解决能力。在复杂数学、科学推理、编码挑战和多层逻辑任务方面表现出色。200K扩展上下文窗口。支持推理努力控制。"
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "来自Meta的快速且经济实惠的模型。非常适合写作、总结和基本编码帮助等日常任务。常规工作的速度和质量之间的良好平衡。"
+    },
+    "DeepSeek-R1": {
+      "description": "展示其逐步工作的推理专家。在数学问题、逻辑谜题和理解复杂概念方面表现出色。看看它如何实时思考问题。"
+    },
+    "DeepSeek-V3-1": {
+      "description": "功能强大的多用途模型，特别擅长代码和技术写作。在代码调试、编写文档和解释技术概念方面表现出色。开发工作快速可靠。"
+    },
+    "grok-3": {
+      "description": "来自xAI的多用途模型，以细致入微的回答而闻名。非常适合开放式讨论、创意项目和处理复杂问题。"
+    },
+    "modelTypes": {
+      "foundational": "基础",
+      "omni": "Omni",
+      "reasoning": "推理",
+      "agent": "代理"
+    },
+    "ui": {
+      "backToModels": "返回模型",
+      "knowledgeCutoff": "知识截止",
+      "realTimeWebSearch": "实时网络搜索",
+      "searchMode": "搜索模式",
+      "searchModeDescription": "需要时将使用网络搜索",
+      "privacyFocusedDefault": "注重隐私（默认）",
+      "privacyFocusedDescription": "较慢但更私密",
+      "azureAIAgentMode": "Azure AI 代理模式",
+      "azureAIAgentModeDescription": "更快但将对话数据存储在云中",
+      "importantPrivacyInformation": "重要隐私信息",
+      "fullConversationSentWarning": "您的整个对话将被发送到Azure AI Foundry代理。",
+      "learnMoreDataStorage": "了解有关数据存储的更多信息",
+      "searchRouting": "搜索路由",
+      "whatIsTheDifference": "有什么区别？",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "推理努力",
+      "reasoningEffortDescription": "控制模型在响应之前思考多少",
+      "minimal": "最小",
+      "minimalDescription": "快速轻松的思考",
+      "low": "低",
+      "lowDescription": "基本推理",
+      "medium": "中等",
+      "mediumDescription": "平衡推理",
+      "high": "高",
+      "highDescription": "深度推理",
+      "verbosity": "详细程度",
+      "verbosityDescription": "控制模型提供多少细节",
+      "verbosityLow": "低",
+      "verbosityMedium": "中等",
+      "verbosityHigh": "高"
+    }
   }
 }

@@ -311,7 +311,19 @@
   "Team Templates": "Tiimimallit",
   "selected": "valittu",
   "folders": "kansiot",
-  "agents": "agentit",
+  "agents": {
+    "exportAgent": "Vie agentti",
+    "editAgent": "Muokkaa agenttia",
+    "agentName": "Agentin nimi",
+    "myResearchAssistant": "Tutkimusavustajani",
+    "agentId": "Agentti-ID",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Kuvaus (valinnainen)",
+    "descriptionPlaceholder": "Tutkimustehtäviin erikoistunut agentti...",
+    "baseModel": "Perusmalli",
+    "formatDescription": "Muoto: asst_xxxxx (MSF AI Assistant Foundrysta)",
+    "importantInfo": "Tällä agentilla on pääsy keskustelukontekstiin ja se voi käyttää samoja työkaluja kuin vakiomallit. Varmista, että Agentti-ID on oikein, koska sitä ei voi muuttaa myöhemmin."
+  },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Kirjoita / keskustelussa, valitse kehote ja täytä muuttujat pyydettäessä",
@@ -358,7 +370,6 @@
   "Custom Agents": "Mukautetut agentit",
   "Delete template and all its items": "Poista mallipohja ja kaikki sen kohteet",
   "Description (Optional)": "Kuvaus (valinnainen)",
-  "Edit Prompt": "Muokkaa kehotetta",
   "Edit Tone": "Muokkaa sävyä",
   "Email Response Template": "Sähköpostivastausmalli",
   "Example Prompt": "Esimerkkikehote",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "MSF-logo",
   "collapse_sidebar": "Pienennä sivupalkki",
   "expand_sidebar": "Laajenna sivupalkki",
-  "Voice Guidelines": "Äänen ohjeet",
   "Please upload some content or describe the tone you want": "Lataa sisältöä tai kuvaile haluamasi sävy",
   "Untitled Tone": "Nimetön sävy",
   "Failed to analyze tone": "Sävyn analyysi epäonnistui",
@@ -531,19 +541,6 @@
     "quickActionsTitle": "Pikatoiminnot",
     "quickActions": "Pikatoiminnot"
   },
-  "agents": {
-    "exportAgent": "Vie agentti",
-    "editAgent": "Muokkaa agenttia",
-    "agentName": "Agentin nimi",
-    "myResearchAssistant": "Tutkimusavustajani",
-    "agentId": "Agentti-ID",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Kuvaus (valinnainen)",
-    "descriptionPlaceholder": "Tutkimustehtäviin erikoistunut agentti...",
-    "baseModel": "Perusmalli",
-    "formatDescription": "Muoto: asst_xxxxx (MSF AI Assistant Foundrysta)",
-    "importantInfo": "Tällä agentilla on pääsy keskustelukontekstiin ja se voi käyttää samoja työkaluja kuin vakiomallit. Varmista, että Agentti-ID on oikein, koska sitä ei voi muuttaa myöhemmin."
-  },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla"
   },
@@ -625,5 +622,75 @@
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Tekoälymalli, joka käyttää GPT-4.1:tä reaaliaikaisen verkkohakun kanssa Bingin kautta. Tarjoaa ajantasaista tietoa, faktantarkistusta ja tietoisuutta ajankohtaisista tapahtumista. Paras tutkimukseen, joka vaatii tuoreita tietoja, uutisanalyysia ja faktantarkistusta."
+    },
+    "gpt-5": {
+      "description": "OpenAI:n edistynein malli, joka loistaa monimutkaisessa päättelyssä, koodin generoinnissa ja teknisessä ongelmanratkaisussa. Paras analyyttisiin tehtäviin, koodaushaasteisiin, tutkimukseen ja yksityiskohtaisiin selityksiin. Tukee säädettävää päättelyvaivaa ja vastauksen yksityiskohtaisuutta."
+    },
+    "gpt-5-mini": {
+      "description": "Nopeampi ja kustannustehokkaampi GPT-5-versio, optimoitu nopeudelle korkean laadun säilyttäen. Ihanteellinen päivittäisiin tehtäviin, nopeisiin kyselyihin, työkalun ohjaukseen ja sovelluksiin, jotka vaativat nopeita vastausaikoja. Erinomainen tasapaino suorituskyvyn ja tehokkuuden välillä."
+    },
+    "gpt-5-chat": {
+      "description": "Erikoistunut GPT-5-versio, joka on optimoitu keskusteluvuorovaikutukseen ja emotionaaliseen älykkyy­teen. Loistaa empaattisessa viestinnässä, mielenterveyden tuessa, luovassa kirjoittamisessa, aivoriihessä ja luonnollisessa dialogissa. Ihanteellinen rennompiin keskusteluihin, neuvontaskenaarioihin ja tehtäviin, jotka vaativat emotionaalista tietoisuutta."
+    },
+    "o3": {
+      "description": "OpenAI:n edistynein päättelymalli, jolla on uraauurtavat ongelmanratkaisukyvyt. Loistaa monimutkaisessa matematiikassa, tieteellisessä päättelyssä, koodaushaasteissa ja monitasoisissa loogisissa tehtävissä. Laajennettu 200K konteksti-ikkuna. Tukee päättelyvaivan ohjausta."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Nopea ja kustannustehokas malli Metalta. Erinomainen päivittäisiin tehtäviin, kuten kirjoittamiseen, tiivistämiseen ja peruskoodiapuun. Hyvä tasapaino nopeuden ja laadun välillä rutiinityöhön."
+    },
+    "DeepSeek-R1": {
+      "description": "Päättelyasiantuntija, joka näyttää työnsä vaihe vaiheelta. Loistaa matemaattisissa ongelmissa, logiikkapulmissa ja monimutkaisten käsitteiden ymmärtämisessä. Katso, miten se ajattelee ongelmia reaaliajassa."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Vahva yleismalli, erityisen hyvä koodissa ja teknisessä kirjoittamisessa. Loistava koodin debuggaukseen, dokumentaation kirjoittamiseen ja teknisten käsitteiden selittämiseen. Nopea ja luotettava kehitystyöhön."
+    },
+    "grok-3": {
+      "description": "Monipuolinen malli xAI:lta, joka tunnetaan vivahteikkaista vastauksista. Erinomainen avoimiin keskusteluihin, luoviin projekteihin ja monimutkaisten ongelmien käsittelyyn."
+    },
+    "modelTypes": {
+      "foundational": "Perustava",
+      "omni": "Omni",
+      "reasoning": "Päättely",
+      "agent": "Agentti"
+    },
+    "ui": {
+      "backToModels": "Takaisin malleihin",
+      "knowledgeCutoff": "Tiedon raja",
+      "realTimeWebSearch": "Reaaliaikainen verkkohaku",
+      "searchMode": "Hakutila",
+      "searchModeDescription": "Käyttää verkkohakua tarvittaessa",
+      "privacyFocusedDefault": "Yksityisyyteen keskittyvä (oletus)",
+      "privacyFocusedDescription": "Hitaampi, mutta yksityisempi",
+      "azureAIAgentMode": "Azure AI -agenttitila",
+      "azureAIAgentModeDescription": "Nopeampi, mutta tallentaa keskustelutiedot pilveen",
+      "importantPrivacyInformation": "Tärkeää tietosuojatietoa",
+      "fullConversationSentWarning": "Koko keskustelusi lähetetään Azure AI Foundry -agentille.",
+      "learnMoreDataStorage": "Lue lisää tietojen tallentamisesta",
+      "searchRouting": "Haun reititys",
+      "whatIsTheDifference": "Mikä on ero?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Päättelyvaiva",
+      "reasoningEffortDescription": "Ohjaa, kuinka paljon malli ajattelee ennen vastaamista",
+      "minimal": "Minimaalinen",
+      "minimalDescription": "Nopea ja kevyt ajattelu",
+      "low": "Matala",
+      "lowDescription": "Peruspäättely",
+      "medium": "Keskitaso",
+      "mediumDescription": "Tasapainoinen päättely",
+      "high": "Korkea",
+      "highDescription": "Syvä päättely",
+      "verbosity": "Yksityiskohtaisuus",
+      "verbosityDescription": "Ohjaa, kuinka paljon yksityiskohtia malli tarjoaa",
+      "verbosityLow": "Matala",
+      "verbosityMedium": "Keskitaso",
+      "verbosityHigh": "Korkea"
+    }
   }
 }

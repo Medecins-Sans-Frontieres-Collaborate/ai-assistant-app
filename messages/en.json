@@ -670,5 +670,75 @@
     "Contact Support": "Contact Support",
     "Popular Questions": "Popular Questions",
     "View all FAQs": "View all FAQs"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "AI model powered by GPT-4.1 with real-time web search via Bing. Provides up-to-date information, fact-checking, and current events awareness. Best for research requiring recent information, news analysis, and fact verification."
+    },
+    "gpt-5": {
+      "description": "OpenAI's most advanced model, excelling in complex reasoning, code generation, and technical problem-solving. Best for analytical tasks, coding challenges, research, and detailed explanations. Supports adjustable reasoning effort and response verbosity."
+    },
+    "gpt-5-mini": {
+      "description": "Faster and more cost-effective variant of GPT-5, optimized for speed while maintaining high quality. Ideal for everyday tasks, quick queries, tool steering, and applications requiring fast response times. Excellent balance of performance and efficiency."
+    },
+    "gpt-5-chat": {
+      "description": "Specialized variant of GPT-5 optimized for conversational interactions and emotional intelligence. Excels in empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness."
+    },
+    "o3": {
+      "description": "OpenAI's most advanced reasoning model with breakthrough problem-solving capabilities. Excels in complex mathematics, scientific reasoning, coding challenges, and multi-step logical tasks. Extended 200K context window. Supports reasoning effort control."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Fast and cost-effective model from Meta. Great for everyday tasks like writing, summarizing, and basic code assistance. Good balance of speed and quality for routine work."
+    },
+    "DeepSeek-R1": {
+      "description": "Reasoning specialist that shows its work step-by-step. Excellent for math problems, logic puzzles, and understanding complex concepts. Watch it think through problems in real-time."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Strong all-around model particularly good at code and technical writing. Excellent for debugging code, writing documentation, and explaining technical concepts. Fast and reliable for development work."
+    },
+    "grok-3": {
+      "description": "Versatile model from xAI known for detailed responses. Great for open-ended discussions, creative projects, and tackling complex problems."
+    },
+    "modelTypes": {
+      "foundational": "Foundational",
+      "omni": "Omni",
+      "reasoning": "Reasoning",
+      "agent": "Agent"
+    },
+    "ui": {
+      "backToModels": "Back to Models",
+      "knowledgeCutoff": "Knowledge cutoff",
+      "realTimeWebSearch": "Real-time web search",
+      "searchMode": "Search Mode",
+      "searchModeDescription": "Will use web search when needed",
+      "privacyFocusedDefault": "Privacy-Focused (Default)",
+      "privacyFocusedDescription": "Slower but more private",
+      "azureAIAgentMode": "Azure AI Agent Mode",
+      "azureAIAgentModeDescription": "Faster but stores conversation data in the cloud",
+      "importantPrivacyInformation": "Important Privacy Information",
+      "fullConversationSentWarning": "Your full conversation will be sent to Azure AI Foundry agent.",
+      "learnMoreDataStorage": "Learn more about data storage",
+      "searchRouting": "Search Routing",
+      "whatIsTheDifference": "What's the difference?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Reasoning Effort",
+      "reasoningEffortDescription": "Controls how much the model thinks before responding",
+      "minimal": "Minimal",
+      "minimalDescription": "Quick and light thinking",
+      "low": "Low",
+      "lowDescription": "Basic reasoning",
+      "medium": "Medium",
+      "mediumDescription": "Balanced reasoning",
+      "high": "High",
+      "highDescription": "Deep reasoning",
+      "verbosity": "Verbosity",
+      "verbosityDescription": "Controls how much detail the model provides",
+      "verbosityLow": "Low",
+      "verbosityMedium": "Medium",
+      "verbosityHigh": "High"
+    }
   }
 }

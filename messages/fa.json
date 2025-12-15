@@ -261,7 +261,19 @@
   "Team Templates": "قالب‌های تیمی",
   "selected": "انتخاب شده",
   "folders": "پوشه‌ها",
-  "agents": "عامل‌ها",
+  "agents": {
+    "exportAgent": "صادرات عامل",
+    "editAgent": "ویرایش عامل",
+    "agentName": "نام عامل",
+    "myResearchAssistant": "دستیار تحقیق من",
+    "agentId": "شناسه عامل",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "توضیحات (اختیاری)",
+    "descriptionPlaceholder": "عامل متخصص در وظایف تحقیق...",
+    "baseModel": "مدل پایه",
+    "formatDescription": "فرمت: asst_xxxxx (از MSF AI Assistant Foundry)",
+    "importantInfo": "این عامل به زمینه مکالمه دسترسی خواهد داشت و می‌تواند از همان ابزارهای مدل‌های استاندارد استفاده کند. مطمئن شوید که شناسه عامل صحیح است زیرا بعداً نمی‌توان آن را تغییر داد."
+  },
   "Quick Actions": "اقدامات سریع",
   "Type / in chat to access your prompts": "در چت / را تایپ کنید تا به دستورات خود دسترسی پیدا کنید",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "در چت / را تایپ کنید، دستور خود را انتخاب کنید و متغیرها را زمانی که درخواست می‌شود پر کنید",
@@ -308,7 +320,6 @@
   "Custom Agents": "عامل‌های سفارشی",
   "Delete template and all its items": "حذف قالب و تمام موارد آن",
   "Description (Optional)": "توضیحات (اختیاری)",
-  "Edit Prompt": "ویرایش دستور",
   "Edit Tone": "ویرایش لحن",
   "Email Response Template": "قالب پاسخ ایمیل",
   "Example Prompt": "دستور نمونه",
@@ -368,7 +379,6 @@
   "msf_logo_alt": "لوگوی MSF",
   "collapse_sidebar": "جمع کردن نوار کناری",
   "expand_sidebar": "گسترش نوار کناری",
-  "Voice Guidelines": "دستورالعمل‌های صدا",
   "Please upload some content or describe the tone you want": "لطفاً محتوایی بارگذاری کنید یا لحن مورد نظر خود را توصیف کنید",
   "Untitled Tone": "لحن بدون عنوان",
   "Failed to analyze tone": "تحلیل لحن ناموفق بود",
@@ -481,19 +491,6 @@
     "quickActionsTitle": "اقدامات سریع",
     "quickActions": "اقدامات سریع"
   },
-  "agents": {
-    "exportAgent": "صادرات عامل",
-    "editAgent": "ویرایش عامل",
-    "agentName": "نام عامل",
-    "myResearchAssistant": "دستیار تحقیق من",
-    "agentId": "شناسه عامل",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "توضیحات (اختیاری)",
-    "descriptionPlaceholder": "عامل متخصص در وظایف تحقیق...",
-    "baseModel": "مدل پایه",
-    "formatDescription": "فرمت: asst_xxxxx (از MSF AI Assistant Foundry)",
-    "importantInfo": "این عامل به زمینه مکالمه دسترسی خواهد داشت و می‌تواند از همان ابزارهای مدل‌های استاندارد استفاده کند. مطمئن شوید که شناسه عامل صحیح است زیرا بعداً نمی‌توان آن را تغییر داد."
-  },
   "prompts": {
     "buildReusablePrompts": "ساخت پرامپت‌های قابل استفاده مجدد با کمک هوش مصنوعی"
   },
@@ -575,5 +572,75 @@
   },
   "notFound": {
     "lostDog": "سگ گمشده"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "مدل هوش مصنوعی مجهز به GPT-4.1 با جستجوی وب بلادرنگ از طریق Bing. اطلاعات به‌روز، بررسی حقایق و آگاهی از رویدادهای جاری را ارائه می‌دهد. بهترین برای تحقیقاتی که نیاز به اطلاعات اخیر، تحلیل اخبار و تأیید حقایق دارد."
+    },
+    "gpt-5": {
+      "description": "پیشرفته‌ترین مدل OpenAI، برتر در استدلال پیچیده، تولید کد و حل مسائل فنی. بهترین برای وظایف تحلیلی، چالش‌های کدنویسی، تحقیق و توضیحات دقیق. از تلاش استدلال قابل تنظیم و جزئیات پاسخ پشتیبانی می‌کند."
+    },
+    "gpt-5-mini": {
+      "description": "نسخه سریع‌تر و مقرون به صرفه‌تر GPT-5، بهینه شده برای سرعت در حفظ کیفیت بالا. ایده‌آل برای کارهای روزمره، پرسش‌های سریع، کنترل ابزار و برنامه‌هایی که نیاز به زمان پاسخ سریع دارند. تعادل عالی بین عملکرد و کارایی."
+    },
+    "gpt-5-chat": {
+      "description": "نسخه تخصصی GPT-5 بهینه شده برای تعاملات مکالمه‌ای و هوش هیجانی. برتر در ارتباط همدلانه، حمایت از سلامت روان، نوشتن خلاق، طوفان فکری و گفتگوی طبیعی. ایده‌آل برای مکالمات غیررسمی، سناریوهای مشاوره و وظایفی که نیاز به آگاهی احساسی دارند."
+    },
+    "o3": {
+      "description": "پیشرفته‌ترین مدل استدلال OpenAI با قابلیت‌های پیشرفته حل مسئله. برتر در ریاضیات پیچیده، استدلال علمی، چالش‌های کدنویسی و وظایف منطقی چند مرحله‌ای. پنجره زمینه گسترده 200K. از کنترل تلاش استدلال پشتیبانی می‌کند."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "مدل سریع و مقرون به صرفه از Meta. عالی برای کارهای روزمره مانند نوشتن، خلاصه‌سازی و کمک پایه به کد. تعادل خوب بین سرعت و کیفیت برای کار معمول."
+    },
+    "DeepSeek-R1": {
+      "description": "متخصص استدلال که کار خود را گام به گام نشان می‌دهد. برتر در مسائل ریاضی، معماهای منطقی و درک مفاهیم پیچیده. ببینید چگونه در زمان واقعی در مورد مسائل فکر می‌کند."
+    },
+    "DeepSeek-V3-1": {
+      "description": "مدل همه‌کاره قدرتمند، به ویژه در کد و نوشتار فنی خوب است. برتر برای اشکال‌زدایی کد، نوشتن مستندات و توضیح مفاهیم فنی. سریع و قابل اعتماد برای کار توسعه."
+    },
+    "grok-3": {
+      "description": "مدل همه‌کاره از xAI شناخته شده برای پاسخ‌های دقیق. عالی برای بحث‌های باز، پروژه‌های خلاق و رسیدگی به مسائل پیچیده."
+    },
+    "modelTypes": {
+      "foundational": "بنیادی",
+      "omni": "همه‌کاره",
+      "reasoning": "استدلال",
+      "agent": "عامل"
+    },
+    "ui": {
+      "backToModels": "بازگشت به مدل‌ها",
+      "knowledgeCutoff": "محدودیت دانش",
+      "realTimeWebSearch": "جستجوی وب بلادرنگ",
+      "searchMode": "حالت جستجو",
+      "searchModeDescription": "در صورت نیاز از جستجوی وب استفاده می‌کند",
+      "privacyFocusedDefault": "متمرکز بر حریم خصوصی (پیش‌فرض)",
+      "privacyFocusedDescription": "کندتر، اما خصوصی‌تر",
+      "azureAIAgentMode": "حالت عامل Azure AI",
+      "azureAIAgentModeDescription": "سریع‌تر، اما داده‌های مکالمه را در ابر ذخیره می‌کند",
+      "importantPrivacyInformation": "اطلاعات مهم حریم خصوصی",
+      "fullConversationSentWarning": "کل مکالمه شما به عامل Azure AI Foundry ارسال می‌شود.",
+      "learnMoreDataStorage": "بیشتر درباره ذخیره‌سازی داده بیاموزید",
+      "searchRouting": "مسیریابی جستجو",
+      "whatIsTheDifference": "تفاوت چیست؟",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "تلاش استدلال",
+      "reasoningEffortDescription": "کنترل می‌کند که مدل چقدر قبل از پاسخ فکر کند",
+      "minimal": "حداقل",
+      "minimalDescription": "تفکر سریع و سبک",
+      "low": "کم",
+      "lowDescription": "استدلال پایه",
+      "medium": "متوسط",
+      "mediumDescription": "استدلال متعادل",
+      "high": "زیاد",
+      "highDescription": "استدلال عمیق",
+      "verbosity": "جزئیات",
+      "verbosityDescription": "کنترل می‌کند که مدل چه مقدار جزئیات ارائه دهد",
+      "verbosityLow": "کم",
+      "verbosityMedium": "متوسط",
+      "verbosityHigh": "زیاد"
+    }
   }
 }

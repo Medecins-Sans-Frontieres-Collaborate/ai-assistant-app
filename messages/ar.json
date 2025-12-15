@@ -226,7 +226,7 @@
   "Options": "خيارات",
   "Are you sure you want to delete this folder?": "هل أنت متأكد أنك تريد حذف هذا المجلد؟",
   "New Prompt": "مطالبة جديدة",
-  "Edit Prompt": "تعديل المطالبة",
+  "Edit Prompt": "تحرير الموجه",
   "Prompt name": "اسم المطالبة",
   "Prompt content": "محتوى المطالبة",
   "Are you sure you want to delete this prompt?": "هل أنت متأكد أنك تريد حذف هذه المطالبة؟",
@@ -311,7 +311,19 @@
   "Team Templates": "قوالب الفريق",
   "selected": "محدد",
   "folders": "مجلدات",
-  "agents": "وكلاء",
+  "agents": {
+    "exportAgent": "تصدير الوكيل",
+    "editAgent": "تحرير الوكيل",
+    "agentName": "اسم الوكيل",
+    "myResearchAssistant": "مساعد البحث الخاص بي",
+    "agentId": "معرّف الوكيل",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "الوصف (اختياري)",
+    "descriptionPlaceholder": "وكيل متخصص لمهام البحث...",
+    "baseModel": "النموذج الأساسي",
+    "formatDescription": "التنسيق: asst_xxxxx (من MSF AI Assistant Foundry)",
+    "importantInfo": "سيحصل هذا الوكيل على إمكانية الوصول إلى سياق المحادثة ويمكنه استخدام نفس الأدوات كنماذج قياسية. تأكد من أن معرّف الوكيل صحيح حيث لا يمكن تغييره لاحقاً."
+  },
   "Quick Actions": "إجراءات سريعة",
   "Type / in chat to access your prompts": "اكتب / في الدردشة للوصول إلى مطالباتك",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "اكتب / في الدردشة، اختر مطالبتك، واملأ المتغيرات عندما يُطلب منك",
@@ -358,7 +370,6 @@
   "Custom Agents": "وكلاء مخصصون",
   "Delete template and all its items": "حذف القالب وجميع عناصره",
   "Description (Optional)": "الوصف (اختياري)",
-  "Edit Prompt": "تحرير الموجه",
   "Edit Tone": "تحرير النبرة",
   "Email Response Template": "قالب الرد على البريد الإلكتروني",
   "Example Prompt": "مثال على الموجه",
@@ -418,7 +429,6 @@
   "msf_logo_alt": "شعار MSF",
   "collapse_sidebar": "طي الشريط الجانبي",
   "expand_sidebar": "توسيع الشريط الجانبي",
-  "Voice Guidelines": "إرشادات الصوت",
   "Please upload some content or describe the tone you want": "الرجاء تحميل بعض المحتوى أو وصف النبرة التي تريدها",
   "Untitled Tone": "نبرة بدون عنوان",
   "Failed to analyze tone": "فشل في تحليل النبرة",
@@ -503,19 +513,6 @@
     "expandSidebar": "توسيع الشريط الجانبي",
     "quickActionsTitle": "الإجراءات السريعة",
     "quickActions": "الإجراءات السريعة"
-  },
-  "agents": {
-    "exportAgent": "تصدير الوكيل",
-    "editAgent": "تحرير الوكيل",
-    "agentName": "اسم الوكيل",
-    "myResearchAssistant": "مساعد البحث الخاص بي",
-    "agentId": "معرّف الوكيل",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "الوصف (اختياري)",
-    "descriptionPlaceholder": "وكيل متخصص لمهام البحث...",
-    "baseModel": "النموذج الأساسي",
-    "formatDescription": "التنسيق: asst_xxxxx (من MSF AI Assistant Foundry)",
-    "importantInfo": "سيحصل هذا الوكيل على إمكانية الوصول إلى سياق المحادثة ويمكنه استخدام نفس الأدوات كنماذج قياسية. تأكد من أن معرّف الوكيل صحيح حيث لا يمكن تغييره لاحقاً."
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي"
@@ -646,5 +643,75 @@
     "errorSessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى للمتابعة.",
     "errorFallback": "تعذر الاتصال بخدمة المصادقة. يرجى المحاولة مرة أخرى أو الاتصال بالدعم إذا استمرت المشكلة.",
     "tryAgain": "حاول مرة أخرى"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "نموذج ذكاء اصطناعي مدعوم بـ GPT-4.1 مع بحث ويب في الوقت الفعلي عبر Bing. يوفر معلومات محدثة، والتحقق من الحقائق، والوعي بالأحداث الجارية. الأفضل للبحث الذي يتطلب معلومات حديثة، وتحليل الأخبار، والتحقق من الحقائق."
+    },
+    "gpt-5": {
+      "description": "نموذج OpenAI الأكثر تقدمًا، متفوق في التفكير المعقد، وتوليد الكود، وحل المشكلات التقنية. الأفضل للمهام التحليلية، وتحديات البرمجة، والبحث، والتفسيرات التفصيلية. يدعم جهد التفكير القابل للتعديل ومستوى التفصيل في الاستجابة."
+    },
+    "gpt-5-mini": {
+      "description": "نسخة أسرع وأكثر فعالية من حيث التكلفة من GPT-5، محسنة للسرعة مع الحفاظ على جودة عالية. مثالي للمهام اليومية، والاستعلامات السريعة، وتوجيه الأدوات، والتطبيقات التي تتطلب أوقات استجابة سريعة. توازن ممتاز بين الأداء والكفاءة."
+    },
+    "gpt-5-chat": {
+      "description": "نسخة متخصصة من GPT-5 محسنة للتفاعلات الحوارية والذكاء العاطفي. تتفوق في التواصل التعاطفي، ودعم الصحة النفسية، والكتابة الإبداعية، والعصف الذهني، والحوار الطبيعي. الأفضل للمحادثات غير الرسمية، وسيناريوهات الاستشارة، والمهام التي تتطلب وعيًا عاطفيًا."
+    },
+    "o3": {
+      "description": "نموذج التفكير الأكثر تقدمًا من OpenAI مع قدرات حل مشكلات ثورية. يتفوق في الرياضيات المعقدة، والتفكير العلمي، وتحديات البرمجة، والمهام المنطقية متعددة الخطوات. نافذة سياق ممتدة بحجم 200 ألف رمز. يدعم التحكم في جهد التفكير."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "نموذج سريع وفعال من حيث التكلفة من Meta. رائع للمهام اليومية مثل الكتابة والتلخيص والمساعدة الأساسية في البرمجة. توازن جيد بين السرعة والجودة للعمل الروتيني."
+    },
+    "DeepSeek-R1": {
+      "description": "متخصص في التفكير يعرض عمله خطوة بخطوة. ممتاز لحل مسائل الرياضيات، والألغاز المنطقية، وفهم المفاهيم المعقدة. شاهد كيف يفكر في المشاكل في الوقت الفعلي."
+    },
+    "DeepSeek-V3-1": {
+      "description": "نموذج شامل جيد بشكل خاص في البرمجة والكتابة التقنية. ممتاز لتصحيح الأخطاء البرمجية، وكتابة الوثائق، وشرح المفاهيم التقنية. سريع وموثوق لأعمال التطوير."
+    },
+    "grok-3": {
+      "description": "نموذج متعدد الاستخدامات من xAI معروف بالاستجابات الدقيقة. رائع للنقاشات المفتوحة، والمشاريع الإبداعية، ومعالجة المشكلات المعقدة."
+    },
+    "modelTypes": {
+      "foundational": "أساسي",
+      "omni": "شامل",
+      "reasoning": "تفكير",
+      "agent": "وكيل"
+    },
+    "ui": {
+      "backToModels": "العودة إلى النماذج",
+      "knowledgeCutoff": "حد المعرفة",
+      "realTimeWebSearch": "بحث ويب في الوقت الفعلي",
+      "searchMode": "وضع البحث",
+      "searchModeDescription": "سيستخدم بحث الويب عند الحاجة",
+      "privacyFocusedDefault": "يركز على الخصوصية (افتراضي)",
+      "privacyFocusedDescription": "أبطأ لكن أكثر خصوصية",
+      "azureAIAgentMode": "وضع وكيل Azure AI",
+      "azureAIAgentModeDescription": "أسرع لكنه يخزن بيانات المحادثة في السحابة",
+      "importantPrivacyInformation": "معلومات خصوصية مهمة",
+      "fullConversationSentWarning": "سيتم إرسال محادثتك الكاملة إلى وكيل Azure AI Foundry.",
+      "learnMoreDataStorage": "تعرف على المزيد حول تخزين البيانات",
+      "searchRouting": "توجيه البحث",
+      "whatIsTheDifference": "ما الفرق؟",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "جهد التفكير",
+      "reasoningEffortDescription": "يتحكم في مقدار تفكير النموذج قبل الاستجابة",
+      "minimal": "أدنى",
+      "minimalDescription": "تفكير سريع وخفيف",
+      "low": "منخفض",
+      "lowDescription": "تفكير أساسي",
+      "medium": "متوسط",
+      "mediumDescription": "تفكير متوازن",
+      "high": "عالي",
+      "highDescription": "تفكير عميق",
+      "verbosity": "مستوى التفصيل",
+      "verbosityDescription": "يتحكم في مقدار التفاصيل التي يقدمها النموذج",
+      "verbosityLow": "منخفض",
+      "verbosityMedium": "متوسط",
+      "verbosityHigh": "عالي"
+    }
   }
 }
