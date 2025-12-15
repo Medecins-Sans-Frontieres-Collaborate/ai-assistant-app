@@ -306,7 +306,19 @@
   "Team Templates": "Mẫu nhóm",
   "selected": "đã chọn",
   "folders": "thư mục",
-  "agents": "tác nhân",
+  "agents": {
+    "exportAgent": "Xuất tác nhân",
+    "editAgent": "Chỉnh sửa tác nhân",
+    "agentName": "Tên tác nhân",
+    "myResearchAssistant": "Trợ lý nghiên cứu của tôi",
+    "agentId": "ID tác nhân",
+    "agentIdExample": "asst_abc123def456",
+    "descriptionOptional": "Mô tả (tùy chọn)",
+    "descriptionPlaceholder": "Tác nhân chuyên về các nhiệm vụ nghiên cứu...",
+    "baseModel": "Mô hình cơ sở",
+    "formatDescription": "Định dạng: asst_xxxxx (từ MSF AI Assistant Foundry)",
+    "importantInfo": "Tác nhân này sẽ có quyền truy cập vào ngữ cảnh cuộc trò chuyện và có thể sử dụng các công cụ giống như các mô hình tiêu chuẩn. Đảm bảo ID tác nhân chính xác vì không thể thay đổi sau này."
+  },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",
   "Type / in chat, select your prompt, and fill in the variables when prompted": "Gõ / trong trò chuyện, chọn lời nhắc của bạn và điền các biến khi được nhắc",
@@ -524,19 +536,6 @@
     "quickActionsTitle": "Hành động nhanh",
     "quickActions": "Hành động nhanh"
   },
-  "agents": {
-    "exportAgent": "Xuất tác nhân",
-    "editAgent": "Chỉnh sửa tác nhân",
-    "agentName": "Tên tác nhân",
-    "myResearchAssistant": "Trợ lý nghiên cứu của tôi",
-    "agentId": "ID tác nhân",
-    "agentIdExample": "asst_abc123def456",
-    "descriptionOptional": "Mô tả (tùy chọn)",
-    "descriptionPlaceholder": "Tác nhân chuyên về các nhiệm vụ nghiên cứu...",
-    "baseModel": "Mô hình cơ sở",
-    "formatDescription": "Định dạng: asst_xxxxx (từ MSF AI Assistant Foundry)",
-    "importantInfo": "Tác nhân này sẽ có quyền truy cập vào ngữ cảnh cuộc trò chuyện và có thể sử dụng các công cụ giống như các mô hình tiêu chuẩn. Đảm bảo ID tác nhân chính xác vì không thể thay đổi sau này."
-  },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI"
   },
@@ -618,5 +617,75 @@
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
+  },
+  "models": {
+    "gpt-4-1": {
+      "description": "Mô hình AI được hỗ trợ bởi GPT-4.1 với tìm kiếm web thời gian thực qua Bing. Cung cấp thông tin cập nhật, kiểm tra sự thật và nhận thức về các sự kiện hiện tại. Tốt nhất cho nghiên cứu yêu cầu thông tin gần đây, phân tích tin tức và xác minh sự thật."
+    },
+    "gpt-5": {
+      "description": "Mô hình tiên tiến nhất của OpenAI, xuất sắc trong lập luận phức tạp, tạo mã và giải quyết vấn đề kỹ thuật. Tốt nhất cho các nhiệm vụ phân tích, thử thách mã hóa, nghiên cứu và giải thích chi tiết. Hỗ trợ nỗ lực lập luận có thể điều chỉnh và chi tiết phản hồi."
+    },
+    "gpt-5-mini": {
+      "description": "Phiên bản nhanh hơn và tiết kiệm chi phí hơn của GPT-5, được tối ưu hóa cho tốc độ trong khi vẫn duy trì chất lượng cao. Lý tưởng cho các nhiệm vụ hàng ngày, truy vấn nhanh, kiểm soát công cụ và các ứng dụng yêu cầu thời gian phản hồi nhanh. Cân bằng tuyệt vời giữa hiệu suất và hiệu quả."
+    },
+    "gpt-5-chat": {
+      "description": "Phiên bản chuyên dụng của GPT-5 được tối ưu hóa cho tương tác trò chuyện và trí tuệ cảm xúc. Xuất sắc trong giao tiếp đồng cảm, hỗ trợ sức khỏe tâm thần, viết sáng tạo, suy nghĩ và đối thoại tự nhiên. Lý tưởng cho các cuộc trò chuyện thoải mái, kịch bản tư vấn và các nhiệm vụ yêu cầu nhận thức cảm xúc."
+    },
+    "o3": {
+      "description": "Mô hình lập luận tiên tiến nhất của OpenAI với khả năng giải quyết vấn đề đột phá. Xuất sắc trong toán học phức tạp, lập luận khoa học, thử thách mã hóa và các nhiệm vụ logic đa tầng. Cửa sổ ngữ cảnh mở rộng 200K. Hỗ trợ kiểm soát nỗ lực lập luận."
+    },
+    "Llama-4-Maverick-17B-128E-Instruct-FP8": {
+      "description": "Mô hình nhanh và tiết kiệm chi phí từ Meta. Xuất sắc cho các nhiệm vụ hàng ngày như viết, tóm tắt và hỗ trợ mã hóa cơ bản. Cân bằng tốt giữa tốc độ và chất lượng cho công việc thường xuyên."
+    },
+    "DeepSeek-R1": {
+      "description": "Chuyên gia lập luận hiển thị công việc của nó từng bước. Xuất sắc trong các vấn đề toán học, câu đố logic và hiểu các khái niệm phức tạp. Xem nó suy nghĩ về vấn đề theo thời gian thực như thế nào."
+    },
+    "DeepSeek-V3-1": {
+      "description": "Mô hình đa năng mạnh mẽ, đặc biệt tốt trong mã và viết kỹ thuật. Xuất sắc trong gỡ lỗi mã, viết tài liệu và giải thích các khái niệm kỹ thuật. Nhanh chóng và đáng tin cậy cho công việc phát triển."
+    },
+    "grok-3": {
+      "description": "Mô hình đa năng từ xAI được biết đến với các câu trả lời tinh tế. Xuất sắc cho các cuộc thảo luận mở, dự án sáng tạo và xử lý các vấn đề phức tạp."
+    },
+    "modelTypes": {
+      "foundational": "Nền tảng",
+      "omni": "Omni",
+      "reasoning": "Lập luận",
+      "agent": "Tác nhân"
+    },
+    "ui": {
+      "backToModels": "Quay lại Mô hình",
+      "knowledgeCutoff": "Giới hạn Kiến thức",
+      "realTimeWebSearch": "Tìm kiếm Web Thời gian Thực",
+      "searchMode": "Chế độ Tìm kiếm",
+      "searchModeDescription": "Sẽ sử dụng tìm kiếm web khi cần",
+      "privacyFocusedDefault": "Tập trung vào Quyền riêng tư (Mặc định)",
+      "privacyFocusedDescription": "Chậm hơn nhưng riêng tư hơn",
+      "azureAIAgentMode": "Chế độ Tác nhân Azure AI",
+      "azureAIAgentModeDescription": "Nhanh hơn nhưng lưu trữ dữ liệu trò chuyện trên đám mây",
+      "importantPrivacyInformation": "Thông tin Quyền riêng tư Quan trọng",
+      "fullConversationSentWarning": "Toàn bộ cuộc trò chuyện của bạn sẽ được gửi đến tác nhân Azure AI Foundry.",
+      "learnMoreDataStorage": "Tìm hiểu thêm về lưu trữ dữ liệu",
+      "searchRouting": "Định tuyến Tìm kiếm",
+      "whatIsTheDifference": "Sự khác biệt là gì?",
+      "advancedOptions": "Advanced Options",
+      "temperatureNote": "Note: This model uses fixed temperature values for consistent performance."
+    },
+    "advancedSettings": {
+      "reasoningEffort": "Nỗ lực Lập luận",
+      "reasoningEffortDescription": "Kiểm soát mô hình suy nghĩ bao nhiêu trước khi phản hồi",
+      "minimal": "Tối thiểu",
+      "minimalDescription": "Suy nghĩ nhanh và nhẹ",
+      "low": "Thấp",
+      "lowDescription": "Lập luận cơ bản",
+      "medium": "Trung bình",
+      "mediumDescription": "Lập luận cân bằng",
+      "high": "Cao",
+      "highDescription": "Lập luận sâu",
+      "verbosity": "Độ chi tiết",
+      "verbosityDescription": "Kiểm soát mô hình cung cấp bao nhiêu chi tiết",
+      "verbosityLow": "Thấp",
+      "verbosityMedium": "Trung bình",
+      "verbosityHigh": "Cao"
+    }
   }
 }
