@@ -6,6 +6,10 @@ import {
 } from '@tabler/icons-react';
 import React, { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
+import { getAdvancedSettingsLabels } from '@/lib/utils/app/modelTranslations';
+
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
@@ -26,6 +30,9 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
   setShowModelAdvanced,
   updateConversation,
 }) => {
+  const t = useTranslations();
+  const labels = getAdvancedSettingsLabels(t);
+
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
       <button
@@ -38,7 +45,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
             className="text-gray-600 dark:text-gray-400"
           />
           <span className="text-sm font-medium text-gray-900 dark:text-white">
-            Advanced Options
+            {labels.advancedOptions}
           </span>
         </div>
         {showModelAdvanced ? (
@@ -59,7 +66,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
           {modelConfig?.supportsTemperature !== false && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Temperature
+                {labels.temperature}
               </label>
               <TemperatureSlider
                 temperature={selectedConversation.temperature || 0.5}
@@ -80,8 +87,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                   className="mr-2 mt-0.5 flex-shrink-0 text-blue-600 dark:text-blue-400"
                 />
                 <div className="text-blue-700 dark:text-blue-300">
-                  <strong>Note:</strong> This model uses fixed temperature
-                  values for consistent performance.
+                  {labels.temperatureNote}
                 </div>
               </div>
             </div>
@@ -90,7 +96,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
           {modelConfig?.supportsReasoningEffort && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Reasoning Effort
+                {labels.reasoningEffort}
               </label>
               <div className="grid grid-cols-4 gap-2">
                 {modelConfig?.supportsMinimalReasoning && (
@@ -108,7 +114,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                         : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                     }`}
                   >
-                    Minimal
+                    {labels.minimal}
                   </button>
                 )}
                 <button
@@ -124,7 +130,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  Low
+                  {labels.low}
                 </button>
                 <button
                   onClick={() =>
@@ -139,7 +145,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  Medium
+                  {labels.medium}
                 </button>
                 <button
                   onClick={() =>
@@ -154,7 +160,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  High
+                  {labels.high}
                 </button>
               </div>
             </div>
@@ -163,7 +169,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
           {modelConfig?.supportsVerbosity && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Verbosity
+                {labels.verbosity}
               </label>
               <div className="grid grid-cols-3 gap-2">
                 <button
@@ -179,7 +185,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  Low
+                  {labels.verbosityLow}
                 </button>
                 <button
                   onClick={() =>
@@ -194,7 +200,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  Medium
+                  {labels.verbosityMedium}
                 </button>
                 <button
                   onClick={() =>
@@ -209,7 +215,7 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
                       : 'bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                   }`}
                 >
-                  High
+                  {labels.verbosityHigh}
                 </button>
               </div>
             </div>
