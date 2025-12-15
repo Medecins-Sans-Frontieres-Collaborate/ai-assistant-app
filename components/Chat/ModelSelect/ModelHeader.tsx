@@ -1,6 +1,15 @@
 import { IconChevronLeft } from '@tabler/icons-react';
 import React, { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
+import {
+  getBackToModelsLabel,
+  getKnowledgeCutoffLabel,
+  getTranslatedModelDescription,
+  getTranslatedModelType,
+} from '@/lib/utils/app/modelTranslations';
+
 import { OpenAIModel } from '@/types/openai';
 
 import { ModelProviderIcon } from './ModelProviderIcon';
@@ -16,6 +25,22 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   modelConfig,
   setMobileView,
 }) => {
+  const t = useTranslations();
+
+  // Get translated description or use default
+  const translatedDescription = getTranslatedModelDescription(
+    selectedModel.id,
+    t,
+  );
+  const displayDescription =
+    translatedDescription ||
+    selectedModel.description ||
+    modelConfig?.description;
+
+  // Get translated model type
+  const modelType = modelConfig?.modelType || 'foundational';
+  const translatedModelType = getTranslatedModelType(modelType, t);
+
   return (
     <div>
       <button
@@ -23,7 +48,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         className="md:hidden flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-4"
       >
         <IconChevronLeft size={16} />
-        Back to Models
+        {getBackToModelsLabel(t)}
       </button>
 
       <div className="flex items-center gap-2 md:gap-3 mb-3">
@@ -36,7 +61,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         </h2>
       </div>
       <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-3">
-        {selectedModel.description || modelConfig?.description}
+        {displayDescription}
       </p>
 
       <div className="flex items-center gap-2 flex-wrap">
@@ -51,11 +76,14 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
                   : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300'
           }`}
         >
-          {modelConfig?.modelType || 'foundational'}
+          {translatedModelType}
         </span>
         {modelConfig?.knowledgeCutoff && (
           <span className="text-xs text-gray-600 dark:text-gray-400">
-            Knowledge cutoff: {modelConfig.knowledgeCutoff}
+            {getKnowledgeCutoffLabel(t)}:{' '}
+            {modelConfig.knowledgeCutoff === 'Real-time web search'
+              ? t('models.ui.realTimeWebSearch')
+              : modelConfig.knowledgeCutoff}
           </span>
         )}
       </div>
