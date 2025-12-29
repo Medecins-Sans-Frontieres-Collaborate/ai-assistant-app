@@ -598,7 +598,30 @@
   },
   "help": {
     "sharePoint": "SharePoint",
-    "viewTechnicalFlowDiagram": "View Technical Flow Diagram"
+    "viewTechnicalFlowDiagram": "View Technical Flow Diagram",
+    "backToChat": "Back to Chat",
+    "helpCenterTitle": "Help Center",
+    "helpCenterSubtitle": "Find answers, learn about privacy, and get support",
+    "faqCardTitle": "Frequently Asked Questions",
+    "faqCardDescription": "Find answers to common questions about using the AI Assistant",
+    "faqArticlesCount": "articles",
+    "privacyCardTitle": "Privacy & Data",
+    "privacyCardDescription": "Learn how your data is stored and protected",
+    "privacyTopicsCount": "topics",
+    "contactCardTitle": "Contact & Resources",
+    "contactCardDescription": "Get in touch with our team and access helpful links",
+    "contactAvailableLabel": "Support available",
+    "searchFaqsPlaceholder": "Search FAQs...",
+    "searchPrivacyTopicsPlaceholder": "Search privacy topics...",
+    "privacyBannerTitle": "Your Privacy Matters",
+    "privacyBannerDescription": "All conversations are stored locally on your device. Data processing happens within MSF systems using Azure infrastructure.",
+    "localStorageOnly": "Local storage only",
+    "msfControlled": "MSF-controlled",
+    "noPersonalData": "No personal data",
+    "noSensitiveOps": "No sensitive ops",
+    "noFaqsMatch": "No FAQs match your search",
+    "tryDifferentSearch": "Try a different search term",
+    "noPrivacyTopicsMatch": "No privacy topics match your search"
   },
   "notFound": {
     "lostDog": "Lost dog"
