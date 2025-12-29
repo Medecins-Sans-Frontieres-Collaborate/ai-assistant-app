@@ -11,6 +11,9 @@ import faqFr from '@/lib/data/faq.fr.json';
 import privacyEn from '@/lib/data/privacyPolicy.en.json';
 import privacyEs from '@/lib/data/privacyPolicy.es.json';
 import privacyFr from '@/lib/data/privacyPolicy.fr.json';
+import messagesEn from '@/messages/en.json';
+import messagesEs from '@/messages/es.json';
+import messagesFr from '@/messages/fr.json';
 
 interface PageProps {
   params: Promise<{
@@ -40,6 +43,12 @@ const contactTranslations: Record<string, any> = {
   es: contactEs.contact || contactEs,
 };
 
+const uiTranslations: Record<string, any> = {
+  en: messagesEn.help,
+  fr: messagesFr.help,
+  es: messagesEs.help,
+};
+
 export default async function HelpPage({ params }: PageProps) {
   const session = await auth();
   const { locale } = await params;
@@ -60,6 +69,7 @@ export default async function HelpPage({ params }: PageProps) {
       faqTranslations={faqTranslations}
       privacyTranslations={privacyTranslations}
       contactTranslations={contactTranslations}
+      uiTranslations={uiTranslations}
       initialLocale={initialLocale}
       availableLocales={[...AVAILABLE_FAQ_LOCALES]}
     />
