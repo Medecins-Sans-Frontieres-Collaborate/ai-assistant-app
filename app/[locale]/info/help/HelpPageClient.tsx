@@ -68,6 +68,7 @@ interface HelpPageClientProps {
   faqTranslations: Record<string, FAQItem[]>;
   privacyTranslations: Record<string, PrivacyItem[]>;
   contactTranslations: Record<string, ContactTranslations>;
+  uiTranslations: Record<string, any>;
   initialLocale: string;
   availableLocales: string[];
 }
@@ -77,6 +78,7 @@ export function HelpPageClient({
   faqTranslations,
   privacyTranslations,
   contactTranslations,
+  uiTranslations,
   initialLocale,
   availableLocales,
 }: HelpPageClientProps) {
@@ -93,6 +95,7 @@ export function HelpPageClient({
     privacyTranslations[currentLocale] || privacyTranslations['en'] || [];
   const contactText =
     contactTranslations[currentLocale] || contactTranslations['en'];
+  const t = uiTranslations[currentLocale] || uiTranslations['en'];
 
   // Debug log on mount
   useEffect(() => {
@@ -215,7 +218,7 @@ export function HelpPageClient({
             className="inline-flex items-center gap-2 mb-4 px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
             <IconArrowLeft size={18} />
-            Back to Chat
+            {t.backToChat}
           </Link>
 
           <div className="flex items-center justify-between gap-4 mb-2">
@@ -228,10 +231,10 @@ export function HelpPageClient({
               </div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-                  Help Center
+                  {t.helpCenterTitle}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Find answers, learn about privacy, and get support
+                  {t.helpCenterSubtitle}
                 </p>
               </div>
             </div>
@@ -300,13 +303,15 @@ export function HelpPageClient({
               />
             </div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Frequently Asked Questions
+              {t.faqCardTitle}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-              Find answers to common questions about using the AI Assistant
+              {t.faqCardDescription}
             </p>
             <div className="flex items-center gap-2 text-xs font-medium text-blue-600 dark:text-blue-400">
-              <span>{faqs.length} articles</span>
+              <span>
+                {faqs.length} {t.faqArticlesCount}
+              </span>
             </div>
           </button>
 
@@ -344,13 +349,15 @@ export function HelpPageClient({
               />
             </div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Privacy & Data
+              {t.privacyCardTitle}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-              Learn how your data is stored and protected
+              {t.privacyCardDescription}
             </p>
             <div className="flex items-center gap-2 text-xs font-medium text-green-600 dark:text-green-400">
-              <span>{privacyItems.length} topics</span>
+              <span>
+                {privacyItems.length} {t.privacyTopicsCount}
+              </span>
             </div>
           </button>
 
@@ -388,13 +395,13 @@ export function HelpPageClient({
               />
             </div>
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Contact & Resources
+              {t.contactCardTitle}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-              Get in touch with our team and access helpful links
+              {t.contactCardDescription}
             </p>
             <div className="flex items-center gap-2 text-xs font-medium text-purple-600 dark:text-purple-400">
-              <span>Support available</span>
+              <span>{t.contactAvailableLabel}</span>
             </div>
           </button>
         </div>
@@ -412,7 +419,11 @@ export function HelpPageClient({
                   />
                   <input
                     type="text"
-                    placeholder={`Search ${expandedSection === 'faq' ? 'FAQs' : 'privacy topics'}...`}
+                    placeholder={
+                      expandedSection === 'faq'
+                        ? t.searchFaqsPlaceholder
+                        : t.searchPrivacyTopicsPlaceholder
+                    }
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
@@ -431,10 +442,10 @@ export function HelpPageClient({
                       className="mx-auto mb-4 text-gray-400 dark:text-gray-500"
                     />
                     <p className="text-gray-600 dark:text-gray-400 font-medium">
-                      No FAQs match your search
+                      {t.noFaqsMatch}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                      Try a different search term
+                      {t.tryDifferentSearch}
                     </p>
                   </div>
                 ) : (
@@ -482,12 +493,10 @@ export function HelpPageClient({
                     </div>
                     <div className="flex-1">
                       <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2">
-                        Your Privacy Matters
+                        {t.privacyBannerTitle}
                       </h3>
                       <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
-                        All conversations are stored locally on your device.
-                        Data processing happens within MSF systems using Azure
-                        infrastructure.
+                        {t.privacyBannerDescription}
                       </p>
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div className="flex items-center gap-2">
@@ -495,7 +504,7 @@ export function HelpPageClient({
                             ✓
                           </span>
                           <span className="text-gray-700 dark:text-gray-300">
-                            Local storage only
+                            {t.localStorageOnly}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -503,7 +512,7 @@ export function HelpPageClient({
                             ✓
                           </span>
                           <span className="text-gray-700 dark:text-gray-300">
-                            MSF-controlled
+                            {t.msfControlled}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -511,7 +520,7 @@ export function HelpPageClient({
                             ✗
                           </span>
                           <span className="text-gray-700 dark:text-gray-300">
-                            No personal data
+                            {t.noPersonalData}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -519,7 +528,7 @@ export function HelpPageClient({
                             ✗
                           </span>
                           <span className="text-gray-700 dark:text-gray-300">
-                            No sensitive ops
+                            {t.noSensitiveOps}
                           </span>
                         </div>
                       </div>
@@ -536,10 +545,10 @@ export function HelpPageClient({
                         className="mx-auto mb-4 text-gray-400 dark:text-gray-500"
                       />
                       <p className="text-gray-600 dark:text-gray-400 font-medium">
-                        No privacy topics match your search
+                        {t.noPrivacyTopicsMatch}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                        Try a different search term
+                        {t.tryDifferentSearch}
                       </p>
                     </div>
                   ) : (
