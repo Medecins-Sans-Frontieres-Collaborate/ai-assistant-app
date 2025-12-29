@@ -341,30 +341,30 @@ describe('artifactStore', () => {
   });
 
   describe('getArtifactContext', () => {
-    it('should return null when editor is not open', () => {
+    it('should return null when editor is not open', async () => {
       const { result } = renderHook(() => useArtifactStore());
 
-      expect(result.current.getArtifactContext()).toBeNull();
+      expect(await result.current.getArtifactContext()).toBeNull();
     });
 
-    it('should return null when editor is open but has no content', () => {
+    it('should return null when editor is open but has no content', async () => {
       const { result } = renderHook(() => useArtifactStore());
 
       act(() => {
         result.current.openArtifact('', 'javascript');
       });
 
-      expect(result.current.getArtifactContext()).toBeNull();
+      expect(await result.current.getArtifactContext()).toBeNull();
     });
 
-    it('should return artifact context when editor has content', () => {
+    it('should return artifact context when editor has content', async () => {
       const { result } = renderHook(() => useArtifactStore());
 
       act(() => {
         result.current.openArtifact('test code', 'javascript', 'test.js');
       });
 
-      const context = result.current.getArtifactContext();
+      const context = await result.current.getArtifactContext();
       expect(context).toEqual({
         fileName: 'test.js',
         language: 'javascript',

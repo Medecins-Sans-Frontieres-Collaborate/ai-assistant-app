@@ -54,7 +54,7 @@ async function summarizeChunk(
         },
       ],
       temperature: 0.1,
-      max_tokens: 1000,
+      max_completion_tokens: 5000,
       stream: false,
       user: JSON.stringify(user),
     });
@@ -187,7 +187,7 @@ export async function parseAndQueryFileOpenAI({
       },
     ] as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
     temperature: 0.1,
-    max_tokens: null,
+    max_completion_tokens: 5000,
     stream: stream,
     user: JSON.stringify(user),
   };

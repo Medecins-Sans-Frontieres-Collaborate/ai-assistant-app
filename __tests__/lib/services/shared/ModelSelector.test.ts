@@ -16,7 +16,7 @@ describe('ModelSelector', () => {
 
   describe('selectModel', () => {
     it('should select requested model for text-only conversation', () => {
-      const model = OpenAIModels[OpenAIModelID.GPT_5];
+      const model = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
         {
           role: 'user',
@@ -52,7 +52,7 @@ describe('ModelSelector', () => {
     });
 
     it('should not upgrade vision model when images are detected', () => {
-      const model = OpenAIModels[OpenAIModelID.GPT_5];
+      const model = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
         {
           role: 'user',
@@ -215,7 +215,7 @@ describe('ModelSelector', () => {
 
   describe('integration scenarios', () => {
     it('should handle standard chat without images', () => {
-      const model = OpenAIModels[OpenAIModelID.GPT_5];
+      const model = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
         { role: 'user', content: 'Hello', messageType: undefined },
         { role: 'assistant', content: 'Hi there!', messageType: undefined },
@@ -275,7 +275,7 @@ describe('ModelSelector', () => {
     });
 
     it('should handle vision model staying as vision model', () => {
-      const visionModel = OpenAIModels[OpenAIModelID.GPT_5];
+      const visionModel = OpenAIModels[OpenAIModelID.GPT_5_2];
       const messages: Message[] = [
         {
           role: 'user',

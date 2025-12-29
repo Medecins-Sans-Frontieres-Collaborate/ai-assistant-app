@@ -323,9 +323,8 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
         sourceFormat = extension ? formatMap[extension] || null : null;
       }
 
-      // Open in document editor with source content
-      // User can switch to document mode to see rendered version
-      openDocument(content, sourceFormat, filename);
+      // Open in document editor with source content in document mode
+      openDocument(content, sourceFormat, filename, 'document');
     } catch (error) {
       console.error('Error opening file in document editor:', error);
       alert('Failed to open file in document editor. Please try again.');

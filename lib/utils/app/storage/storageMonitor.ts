@@ -11,6 +11,7 @@
  * Updated for Zustand persist middleware
  */
 import { Conversation } from '@/types/chat';
+import { StorageBreakdown } from '@/types/storage';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 
@@ -31,6 +32,25 @@ const ZUSTAND_STORAGE_KEYS = {
   SETTINGS: 'settings-storage', // Zustand persist key for settingsStore
   UI: 'ui-storage', // Zustand persist key for uiStore
 };
+
+/**
+ * Legacy localStorage keys that may contain unmigrated data.
+ * Exported for use in migration and deletion functions.
+ */
+export const LEGACY_STORAGE_KEYS = [
+  'conversationHistory', // Old conversation storage key
+  'conversations', // Alternative legacy conversation key
+  'folders', // Legacy folders
+  'prompts', // Legacy prompts
+  'customAgents', // Legacy custom agents
+  'temperature', // Legacy temperature setting
+  'systemPrompt', // Legacy system prompt
+  'selectedConversationId', // Legacy selected conversation
+  'showChatbar', // Legacy UI setting
+  'showPromptbar', // Legacy UI setting
+  'defaultModelId', // Legacy model setting
+  'models', // Legacy models list
+] as const;
 
 // Helper to check if we're in a browser environment
 export const isBrowserEnv = () =>
@@ -114,6 +134,79 @@ export const getStorageUsage = () => {
       maxUsage: 5 * 1024 * 1024,
       percentUsed: 0,
       isNearingLimit: false,
+    };
+  }
+};
+
+/**
+ * Get a detailed breakdown of localStorage usage by category.
+ * Categorizes storage into: Zustand (conversations, settings, ui), Legacy, and Other.
+ *
+ * @returns Detailed breakdown of storage usage
+ */
+export const getStorageBreakdown = (): StorageBreakdown => {
+  requireBrowser();
+
+  try {
+    // Calculate Zustand storage sizes
+    const zustandConvs = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    const zustandSettings = getItemSize(ZUSTAND_STORAGE_KEYS.SETTINGS);
+    const zustandUI = getItemSize(ZUSTAND_STORAGE_KEYS.UI);
+    const zustandTotal = zustandConvs + zustandSettings + zustandUI;
+
+    // Calculate legacy storage sizes
+    const legacyItems: Array<{ key: string; size: number }> = [];
+    let legacyTotal = 0;
+    for (const key of LEGACY_STORAGE_KEYS) {
+      const size = getItemSize(key);
+      if (size > 0) {
+        legacyItems.push({ key, size });
+        legacyTotal += size;
+      }
+    }
+
+    // Get total usage
+    const { currentUsage, maxUsage } = getStorageUsage();
+
+    // Calculate "other" (anything not Zustand or legacy)
+    const other = Math.max(0, currentUsage - zustandTotal - legacyTotal);
+
+    return {
+      total: currentUsage,
+      maxUsage,
+      percentUsed: maxUsage > 0 ? (currentUsage / maxUsage) * 100 : 0,
+      zustand: {
+        conversations: zustandConvs,
+        settings: zustandSettings,
+        ui: zustandUI,
+        total: zustandTotal,
+      },
+      legacy: {
+        total: legacyTotal,
+        hasLegacyData: legacyTotal > 0,
+        keys: legacyItems,
+      },
+      other,
+    };
+  } catch (error) {
+    console.error('Error calculating storage breakdown:', error);
+    const maxUsage = 5 * 1024 * 1024;
+    return {
+      total: 0,
+      maxUsage,
+      percentUsed: 0,
+      zustand: {
+        conversations: 0,
+        settings: 0,
+        ui: 0,
+        total: 0,
+      },
+      legacy: {
+        total: 0,
+        hasLegacyData: false,
+        keys: [],
+      },
+      other: 0,
     };
   }
 };

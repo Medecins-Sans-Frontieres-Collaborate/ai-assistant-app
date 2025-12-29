@@ -11,9 +11,9 @@ export interface OpenAIModel {
   isAgent?: boolean;
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   agentId?: string; // Azure AI Agent ID for this model
-  provider?: 'openai' | 'deepseek' | 'xai' | 'meta'; // Model provider
+  provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic'; // Model provider
   knowledgeCutoff?: string; // Knowledge cutoff date
-  sdk?: 'azure-openai' | 'openai'; // Which SDK this model requires
+  sdk?: 'azure-openai' | 'openai' | 'anthropic'; // Which SDK this model requires
   supportsTemperature?: boolean; // Whether this model supports custom temperature values
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
@@ -29,12 +29,15 @@ export interface OpenAIModel {
   usesResponsesAPI?: boolean; // Uses Azure responses.create() instead of chat.completions
 }
 
+// Model order determines display order in UI (most advanced first)
 export enum OpenAIModelID {
-  GPT_4_1 = 'gpt-4.1',
-  GPT_5 = 'gpt-5',
-  GPT_5_MINI = 'gpt-5-mini',
-  GPT_5_CHAT = 'gpt-5-chat',
+  GPT_5_2 = 'gpt-5.2',
+  GPT_5_2_CHAT = 'gpt-5.2-chat',
   GPT_o3 = 'o3',
+  GPT_5_MINI = 'gpt-5-mini',
+  GPT_4_1 = 'gpt-4.1',
+  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
+  CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
   DEEPSEEK_R1 = 'DeepSeek-R1',
   DEEPSEEK_V3_1 = 'DeepSeek-V3.1',
@@ -43,14 +46,16 @@ export enum OpenAIModelID {
 
 export enum OpenAIVisionModelID {
   GPT_4_1 = 'gpt-4.1',
-  GPT_5 = 'gpt-5',
+  GPT_5_2 = 'gpt-5.2',
   GPT_5_MINI = 'gpt-5-mini',
-  GPT_5_CHAT = 'gpt-5-chat',
+  GPT_5_2_CHAT = 'gpt-5.2-chat',
   GROK_3 = 'grok-3',
+  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
+  CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
 }
 
 // Fallback model ID
-export const fallbackModelID = OpenAIModelID.GPT_4_1;
+export const fallbackModelID = OpenAIModelID.GPT_5_2_CHAT;
 
 /**
  * Environment-specific configuration for models
@@ -66,12 +71,12 @@ const ENVIRONMENT_CONFIGS: Record<
 > = {
   dev: {
     [OpenAIModelID.GPT_4_1]: {
-      agentId: 'asst_Puf3ldskHlYHmW5z9aQy5fZL',
+      agentId: 'asst_sbddkxz8DLyCXATINdB10pys', // Agent145 - dev
     },
   },
   prod: {
     [OpenAIModelID.GPT_4_1]: {
-      agentId: 'asst_PROD_AGENT_ID_PLACEHOLDER', // Production agent ID - set in Terraform
+      agentId: 'asst_31fflP2JhFb9iJmeauwV82X5', // Agent312 - gpt-4.1
     },
   },
 };
@@ -106,9 +111,9 @@ function createModelConfigs(
       supportsReasoningEffort: false,
       supportsVerbosity: false,
     },
-    [OpenAIModelID.GPT_5]: {
-      id: OpenAIModelID.GPT_5,
-      name: 'GPT-5',
+    [OpenAIModelID.GPT_5_2]: {
+      id: OpenAIModelID.GPT_5_2,
+      name: 'GPT-5.2',
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
@@ -116,12 +121,12 @@ function createModelConfigs(
         "OpenAI's most advanced model, excelling at complex reasoning, code generation, and technical problem-solving. Best for analytical tasks, programming challenges, research, and detailed explanations. Supports adjustable reasoning effort and response verbosity.",
       isDisabled: false,
       provider: 'openai',
-      knowledgeCutoff: 'Aug 6, 2025 8:00 PM',
+      knowledgeCutoff: 'Dec 2025',
       sdk: 'azure-openai',
       supportsTemperature: false,
       reasoningEffort: 'medium',
       supportsReasoningEffort: true,
-      supportsMinimalReasoning: true, // GPT-5 uniquely supports 'minimal' effort
+      supportsMinimalReasoning: true, // GPT-5.2 uniquely supports 'minimal' effort
       verbosity: 'medium',
       supportsVerbosity: true,
     },
@@ -144,17 +149,17 @@ function createModelConfigs(
       verbosity: 'low',
       supportsVerbosity: false,
     },
-    [OpenAIModelID.GPT_5_CHAT]: {
-      id: OpenAIModelID.GPT_5_CHAT,
-      name: 'GPT-5 Chat',
+    [OpenAIModelID.GPT_5_2_CHAT]: {
+      id: OpenAIModelID.GPT_5_2_CHAT,
+      name: 'GPT-5.2 Chat',
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
       description:
-        'Specialized variant of GPT-5 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.',
+        'Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.',
       isDisabled: false,
       provider: 'openai',
-      knowledgeCutoff: 'Oct 1, 2025 8:00 PM',
+      knowledgeCutoff: 'Dec 2025',
       sdk: 'azure-openai',
       supportsTemperature: false,
       supportsReasoningEffort: false,
@@ -246,6 +251,40 @@ function createModelConfigs(
       knowledgeCutoff: 'May 13, 2025 12:16 AM',
       sdk: 'openai',
       supportsTemperature: true,
+      supportsReasoningEffort: false,
+      supportsVerbosity: false,
+    },
+    [OpenAIModelID.CLAUDE_SONNET_4_5]: {
+      id: OpenAIModelID.CLAUDE_SONNET_4_5,
+      name: 'Claude Sonnet 4.5',
+      maxLength: 200000,
+      tokenLimit: 8192,
+      modelType: 'omni',
+      description:
+        "Anthropic's most balanced model, excelling at coding, analysis, and nuanced conversations. Strong at following complex instructions with thoughtful, well-structured responses. Great for software development, research, and detailed writing tasks.",
+      isDisabled: false,
+      provider: 'anthropic',
+      knowledgeCutoff: 'Sep 2025',
+      sdk: 'anthropic',
+      supportsTemperature: true,
+      deploymentName: 'claude-sonnet-4-5',
+      supportsReasoningEffort: false,
+      supportsVerbosity: false,
+    },
+    [OpenAIModelID.CLAUDE_HAIKU_4_5]: {
+      id: OpenAIModelID.CLAUDE_HAIKU_4_5,
+      name: 'Claude Haiku 4.5',
+      maxLength: 200000,
+      tokenLimit: 8192,
+      modelType: 'foundational',
+      description:
+        "Anthropic's fastest and most cost-effective model. Ideal for quick tasks, simple questions, and high-volume applications. Maintains strong reasoning capabilities while delivering near-instant responses.",
+      isDisabled: false,
+      provider: 'anthropic',
+      knowledgeCutoff: 'Oct 2025',
+      sdk: 'anthropic',
+      supportsTemperature: true,
+      deploymentName: 'claude-haiku-4-5',
       supportsReasoningEffort: false,
       supportsVerbosity: false,
     },

@@ -69,7 +69,7 @@ export default function DocumentEditor({
           const { autoConvertToHtml } = await import(
             '@/lib/utils/document/formatConverter'
           );
-          const converted = autoConvertToHtml(modifiedCode, fileName);
+          const converted = await autoConvertToHtml(modifiedCode, fileName);
           setModifiedCode(converted);
         }
       }

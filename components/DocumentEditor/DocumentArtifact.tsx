@@ -90,7 +90,7 @@ export default function DocumentArtifact({
         }
 
         case 'txt': {
-          const plainText = htmlToPlainText(modifiedCode);
+          const plainText = await htmlToPlainText(modifiedCode);
           downloadFileUtil(plainText, `${baseFileName}.txt`, 'text/plain');
           toast.success('Exported as Text');
           break;

@@ -16,6 +16,7 @@ import { useUI } from '@/client/hooks/ui/useUI';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
+  ClaudeIcon,
   DeepSeekIcon,
   OpenAIIcon,
   XAIIcon,
@@ -55,6 +56,8 @@ export function MobileChatHeader({
         return <DeepSeekIcon {...iconProps} />;
       case 'xai':
         return <XAIIcon {...iconProps} />;
+      case 'anthropic':
+        return <ClaudeIcon {...iconProps} />;
       default:
         return null;
     }

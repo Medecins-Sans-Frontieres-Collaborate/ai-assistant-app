@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 
-import { LocalStorageService } from '@/client/services/storage/localStorageService';
-
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
@@ -15,10 +13,12 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  *
  * With Zustand persist middleware, localStorage hydration is automatic.
  * This component handles:
- * 1. Automatic background data migration (from old localStorage format)
- * 2. Model filtering (based on environment config)
- * 3. Default model selection (from environment if not persisted)
- * 4. Selected conversation validation
+ * 1. Model filtering (based on environment config)
+ * 2. Default model selection (from environment if not persisted)
+ * 3. Selected conversation validation
+ *
+ * Note: Data migration from legacy localStorage is handled by MigrationDialog
+ * in ChatShell.tsx to provide user feedback during the migration process.
  */
 export function AppInitializer() {
   const hasLoadedRef = useRef(false);
@@ -29,19 +29,6 @@ export function AppInitializer() {
     hasLoadedRef.current = true;
 
     try {
-      // Run automatic background migration first (if needed)
-      // This safely copies old data to new Zustand format without deleting anything
-      if (LocalStorageService.hasLegacyData()) {
-        const result = LocalStorageService.migrateFromLegacy();
-
-        if (!result.success) {
-          console.error('Migration failed:', result.errors);
-          // Continue anyway - stores will use defaults or partial data
-        }
-        // No reload needed - Zustand will use the newly created data
-      }
-
-      // Continue with normal initialization
       // Access stores directly for one-time initialization
       const { setModels, defaultModelId, setDefaultModelId } =
         useSettingsStore.getState();

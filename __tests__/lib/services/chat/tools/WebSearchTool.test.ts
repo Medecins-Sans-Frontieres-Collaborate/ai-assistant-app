@@ -23,8 +23,18 @@ describe('WebSearchTool', () => {
       const mockResults = {
         text: 'Search results about AI',
         citations: [
-          { number: 1, url: 'https://example.com', title: 'AI Article' },
-          { number: 2, url: 'https://example2.com', title: 'AI Research' },
+          {
+            number: 1,
+            url: 'https://example.com',
+            title: 'AI Article',
+            date: '2024-01-01',
+          },
+          {
+            number: 2,
+            url: 'https://example2.com',
+            title: 'AI Research',
+            date: '2024-01-02',
+          },
         ],
       };
 
@@ -34,13 +44,13 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'artificial intelligence',
-        model: OpenAIModels[OpenAIModelID.GPT_4O],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
       expect(result.text).toBe('Search results about AI');
       expect(result.citations).toHaveLength(2);
-      expect(result.citations[0].url).toBe('https://example.com');
+      expect(result.citations![0].url).toBe('https://example.com');
     });
 
     it('should return error message when search fails', async () => {
@@ -51,7 +61,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4O],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -68,7 +78,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4O],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -84,7 +94,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'test query',
-        model: OpenAIModels[OpenAIModelID.GPT_4O],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 
@@ -101,7 +111,7 @@ describe('WebSearchTool', () => {
 
       const result = await webSearchTool.execute({
         searchQuery: 'test',
-        model: OpenAIModels[OpenAIModelID.GPT_4O],
+        model: OpenAIModels[OpenAIModelID.GPT_4_1],
         user: { email: 'test@example.com' } as any,
       });
 

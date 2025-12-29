@@ -56,7 +56,7 @@ const serverEnvSchema = z.object({
     .transform((val) => val === 'true'),
 
   // Application Configuration
-  DEFAULT_MODEL: z.string().default('gpt-4.1'),
+  DEFAULT_MODEL: z.string().default('gpt-5.2-chat'),
   DEFAULT_USE_KNOWLEDGE_BASE: z
     .string()
     .default('false')

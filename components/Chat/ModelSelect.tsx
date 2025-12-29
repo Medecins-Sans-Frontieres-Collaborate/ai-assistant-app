@@ -79,24 +79,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         !m.isCustomAgent,
     )
     .sort((a, b) => {
-      const aProvider = OpenAIModels[a.id as OpenAIModelID]?.provider || '';
-      const bProvider = OpenAIModels[b.id as OpenAIModelID]?.provider || '';
-
-      // Provider order: openai, meta, deepseek, xai
-      const providerOrder = { openai: 0, meta: 1, deepseek: 2, xai: 3 };
-      const providerDiff =
-        (providerOrder[aProvider as keyof typeof providerOrder] ?? 4) -
-        (providerOrder[bProvider as keyof typeof providerOrder] ?? 4);
-
-      if (providerDiff !== 0) return providerDiff;
-
-      // Within OpenAI, ensure GPT-4.1 is first
-      if (aProvider === 'openai') {
-        if (a.id === OpenAIModelID.GPT_4_1) return -1;
-        if (b.id === OpenAIModelID.GPT_4_1) return 1;
-      }
-
-      return a.name.localeCompare(b.name);
+      // Sort by enum order (defined in types/openai.ts)
+      const enumValues = Object.values(OpenAIModelID);
+      const aIndex = enumValues.indexOf(a.id as OpenAIModelID);
+      const bIndex = enumValues.indexOf(b.id as OpenAIModelID);
+      return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
     });
 
   // Convert custom agents to OpenAIModel format
@@ -125,7 +112,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     ? OpenAIModels[selectedModel.id as OpenAIModelID]
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
-  const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5;
+  const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
   const agentAvailable = modelConfig?.agentId !== undefined;
 
   // Get current search mode from conversation (default to INTELLIGENT for privacy)

@@ -1,5 +1,6 @@
+import { getDOMPurify } from './domPurify';
+
 import { decode } from 'he';
-import DOMPurify from 'isomorphic-dompurify';
 import TurndownService from 'turndown';
 
 /**
@@ -28,7 +29,9 @@ export function htmlToMarkdown(html: string): string {
 /**
  * Convert HTML to plain text
  */
-export function htmlToPlainText(html: string): string {
+export async function htmlToPlainText(html: string): Promise<string> {
+  const DOMPurify = await getDOMPurify();
+
   // Sanitize HTML first to prevent any injection attacks
   const cleanHtml = DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [], // Strip all tags

@@ -1,5 +1,6 @@
 import { OpenAIModel } from '@/types/openai';
 
+import { AnthropicHandler } from './AnthropicHandler';
 import { AzureOpenAIHandler } from './AzureOpenAIHandler';
 import { DeepSeekHandler } from './DeepSeekHandler';
 import { ModelHandler } from './ModelHandler';
@@ -11,9 +12,10 @@ import OpenAI, { AzureOpenAI } from 'openai';
  * Factory for creating the appropriate ModelHandler based on model configuration.
  *
  * Selection logic:
- * 1. If model.sdk === 'azure-openai' → AzureOpenAIHandler (GPT-5, o3, GPT-4.1)
- * 2. If model.avoidSystemPrompt === true → DeepSeekHandler (DeepSeek-R1, V3.1)
- * 3. Otherwise → StandardOpenAIHandler (Grok, Llama, future models)
+ * 1. If model.sdk === 'anthropic' → AnthropicHandler (Claude models)
+ * 2. If model.sdk === 'azure-openai' → AzureOpenAIHandler (GPT-5, o3, GPT-4.1)
+ * 3. If model.avoidSystemPrompt === true → DeepSeekHandler (DeepSeek-R1, V3.1)
+ * 4. Otherwise → StandardOpenAIHandler (Grok, Llama, future models)
  */
 export class HandlerFactory {
   /**
@@ -27,6 +29,11 @@ export class HandlerFactory {
     // Validate model input
     if (!model) {
       throw new Error('Model configuration is required to create handler');
+    }
+
+    // Anthropic Claude models
+    if (model.sdk === 'anthropic') {
+      return new AnthropicHandler();
     }
 
     // Azure OpenAI models (GPT-5, o3, GPT-4.1 non-agent)
@@ -48,6 +55,7 @@ export class HandlerFactory {
    */
   static getHandlerName(model: OpenAIModel | null | undefined): string {
     if (!model) return 'Unknown';
+    if (model.sdk === 'anthropic') return 'AnthropicHandler';
     if (model.sdk === 'azure-openai') return 'AzureOpenAIHandler';
     if (model.avoidSystemPrompt === true) return 'DeepSeekHandler';
     return 'StandardOpenAIHandler';

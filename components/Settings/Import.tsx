@@ -1,5 +1,6 @@
 import { IconFileImport } from '@tabler/icons-react';
 import { FC } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -27,8 +28,12 @@ export const Import: FC<Props> = ({ onImport }) => {
           const file = e.target.files[0];
           const reader = new FileReader();
           reader.onload = (e) => {
-            let json = JSON.parse(e.target?.result as string);
-            onImport(json);
+            try {
+              const json = JSON.parse(e.target?.result as string);
+              onImport(json);
+            } catch (error) {
+              toast.error(t('importBackupParseError'));
+            }
           };
           reader.readAsText(file);
         }}

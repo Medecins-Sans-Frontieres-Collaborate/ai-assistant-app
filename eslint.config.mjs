@@ -103,6 +103,7 @@ export default [
         AbortSignal: "readonly",
         btoa: "readonly",
         atob: "readonly",
+        queueMicrotask: "readonly",
         // Node.js globals
         global: "readonly",
         process: "readonly",

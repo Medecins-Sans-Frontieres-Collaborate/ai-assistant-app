@@ -170,7 +170,7 @@ describe('ChatStore - AbortController (Unit Tests)', () => {
         isStreaming: true,
         streamingContent: 'content',
         streamingConversationId: 'conv-123',
-        citations: [{ number: 1, url: 'test', title: 'test' }],
+        citations: [{ number: 1, url: 'test', title: 'test', date: '' }],
         error: 'error',
         stopRequested: true,
         loadingMessage: 'Loading...',

@@ -18,6 +18,7 @@ import { SearchMode } from '@/types/searchMode';
 import { Settings } from '@/types/settings';
 
 import packageJson from '../../package.json';
+import { MigrationDialog } from '../Migration/MigrationDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
@@ -64,6 +65,7 @@ export function SettingDialog() {
     SettingsSection.GENERAL,
   );
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
+  const [showMigrationDialog, setShowMigrationDialog] = useState(false);
 
   // Load settings and storage on client side only
   useEffect(() => {
@@ -81,6 +83,9 @@ export function SettingDialog() {
   // Close on click outside
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
+      // Don't close if MigrationDialog is open - it's rendered outside modalRef
+      if (showMigrationDialog) return;
+
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         window.addEventListener('mouseup', handleMouseUp);
       }
@@ -98,7 +103,7 @@ export function SettingDialog() {
     return () => {
       window.removeEventListener('mousedown', handleMouseDown);
     };
-  }, [isSettingsOpen, setIsSettingsOpen]);
+  }, [isSettingsOpen, setIsSettingsOpen, showMigrationDialog]);
 
   // Update storage data when dialog opens
   useEffect(() => {
@@ -310,6 +315,7 @@ export function SettingDialog() {
                     handleReset={handleReset}
                     onClose={() => setIsSettingsOpen(false)}
                     checkStorage={checkStorage}
+                    onOpenMigration={() => setShowMigrationDialog(true)}
                   />
                 )}
 
@@ -325,6 +331,12 @@ export function SettingDialog() {
           </div>
         </div>
       </div>
+
+      {/* Migration Dialog - opened from Data Management section */}
+      <MigrationDialog
+        isOpen={showMigrationDialog}
+        onComplete={() => setShowMigrationDialog(false)}
+      />
     </div>
   );
 }

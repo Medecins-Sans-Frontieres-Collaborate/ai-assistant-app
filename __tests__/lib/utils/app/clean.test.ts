@@ -12,7 +12,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 let tempConversation: Conversation = {
   id: '1',
   name: 'Test Conversation',
-  model: OpenAIModels[OpenAIModelID.GPT_5],
+  model: OpenAIModels[OpenAIModelID.GPT_5_2],
   prompt: '',
   messages: [],
   folderId: '',
@@ -25,7 +25,7 @@ beforeEach(() => {
   tempConversation = {
     id: '1',
     name: 'Test Conversation',
-    model: OpenAIModels[OpenAIModelID.GPT_5],
+    model: OpenAIModels[OpenAIModelID.GPT_5_2],
     prompt: '',
     messages: [],
     folderId: '',
@@ -44,7 +44,7 @@ describe('Conversation tests', () => {
     const results: Conversation[] = cleanConversationHistory(tempHistory);
 
     for (const result of results) {
-      expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5]);
+      expect(result.model).toBe(OpenAIModels[OpenAIModelID.GPT_5_2]);
       expect(result.prompt).toBe(DEFAULT_SYSTEM_PROMPT);
       expect(result.temperature).toBe(DEFAULT_TEMPERATURE);
       expect(result.folderId).toBe(null);

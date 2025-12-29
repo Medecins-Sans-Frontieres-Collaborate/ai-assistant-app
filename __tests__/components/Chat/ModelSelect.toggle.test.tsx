@@ -63,7 +63,7 @@ describe('ModelSelect - Toggle Functionality', () => {
         name: 'Test',
         messages: [],
         model: {
-          ...OpenAIModels[OpenAIModelID.GPT_5],
+          ...OpenAIModels[OpenAIModelID.GPT_5_2],
         },
         prompt: '',
         temperature: 0.7,
@@ -105,7 +105,7 @@ describe('ModelSelect - Toggle Functionality', () => {
         name: 'Test',
         messages: [],
         model: {
-          ...OpenAIModels[OpenAIModelID.GPT_5],
+          ...OpenAIModels[OpenAIModelID.GPT_5_2],
         },
         prompt: '',
         temperature: 0.7,
@@ -270,7 +270,7 @@ describe('ModelSelect - Toggle Functionality', () => {
         id: 'conv-1',
         name: 'Test',
         messages: [],
-        model: OpenAIModels[OpenAIModelID.GPT_5], // No agentId
+        model: OpenAIModels[OpenAIModelID.GPT_5_2], // No agentId
         prompt: '',
         temperature: 0.7,
         folderId: null,

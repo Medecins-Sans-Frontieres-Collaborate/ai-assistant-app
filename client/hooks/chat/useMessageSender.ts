@@ -89,7 +89,7 @@ export function useMessageSender({
     );
   }, [submitType, textFieldValue, imageFieldValue, fileFieldValue]);
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(async () => {
     const validation = validateMessageSubmission(
       textFieldValue,
       filePreviews,
@@ -102,7 +102,7 @@ export function useMessageSender({
     }
 
     // Get artifact context if editor is open
-    const artifactContext = getArtifactContext();
+    const artifactContext = await getArtifactContext();
 
     // If we have an artifact context, remove any uploaded file that matches the artifact fileName
     // This prevents sending both the original upload AND the edited version

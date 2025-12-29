@@ -22,7 +22,7 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
         (conversation.model as OpenAIModel)?.isDisabled
       ) {
         // TODO: Replace with environmentally set default model so fixing doesn't require code change
-        conversation.model = OpenAIModels[OpenAIModelID.GPT_5];
+        conversation.model = OpenAIModels[OpenAIModelID.GPT_5_2_CHAT];
       }
 
       if (!conversation.prompt) {

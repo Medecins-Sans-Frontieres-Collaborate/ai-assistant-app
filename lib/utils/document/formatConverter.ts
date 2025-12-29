@@ -1,4 +1,5 @@
-import DOMPurify from 'isomorphic-dompurify';
+import { getDOMPurify } from './domPurify';
+
 import { marked } from 'marked';
 
 /**
@@ -107,7 +108,9 @@ export async function pdfToHtml(pdfData: ArrayBuffer): Promise<string> {
 /**
  * Sanitize HTML using DOMPurify for security
  */
-export function sanitizeHtml(html: string): string {
+export async function sanitizeHtml(html: string): Promise<string> {
+  const DOMPurify = await getDOMPurify();
+
   // Use DOMPurify for comprehensive sanitization
   return DOMPurify.sanitize(html, {
     // Allow common safe tags
@@ -151,10 +154,10 @@ export function sanitizeHtml(html: string): string {
 /**
  * Convert any supported format to HTML
  */
-export function convertToHtml(
+export async function convertToHtml(
   content: string,
   format: SupportedFormat,
-): string {
+): Promise<string> {
   switch (format) {
     case 'md':
     case 'markdown':
@@ -165,7 +168,7 @@ export function convertToHtml(
 
     case 'html':
     case 'htm':
-      return sanitizeHtml(content);
+      return await sanitizeHtml(content);
 
     default:
       // Fallback to text
@@ -176,7 +179,10 @@ export function convertToHtml(
 /**
  * Auto-detect format and convert to HTML
  */
-export function autoConvertToHtml(content: string, fileName?: string): string {
+export async function autoConvertToHtml(
+  content: string,
+  fileName?: string,
+): Promise<string> {
   if (!fileName) {
     // Try to detect if it's markdown by looking for markdown patterns
     if (content.match(/^#{1,6}\s|[*_]{1,2}[^*_]+[*_]{1,2}|\[.+\]\(.+\)|```/m)) {
@@ -188,7 +194,7 @@ export function autoConvertToHtml(content: string, fileName?: string): string {
 
   const format = detectFormat(fileName);
   if (format) {
-    return convertToHtml(content, format);
+    return await convertToHtml(content, format);
   }
 
   // Fallback to text

@@ -395,6 +395,7 @@
   "Formality": "Formality",
   "Friendly, authoritative, empathetic, direct": "Friendly, authoritative, empathetic, direct",
   "Import Backup": "Import Backup",
+  "importBackupParseError": "Failed to parse backup file. Please ensure it is valid JSON.",
   "Import Team Template": "Import Team Template",
   "Import Template": "Import Template",
   "Imported": "Imported",

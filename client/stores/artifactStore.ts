@@ -42,11 +42,11 @@ interface ArtifactStore {
     initialMode?: EditorMode,
   ) => void;
   closeArtifact: () => void;
-  getArtifactContext: () => {
+  getArtifactContext: () => Promise<{
     fileName: string;
     language: string;
     code: string;
-  } | null; // Get artifact metadata for including in messages
+  } | null>; // Get artifact metadata for including in messages
   canSwitchToDocumentMode: () => boolean; // Check if current file can switch to document mode
 }
 
@@ -196,19 +196,19 @@ export const useArtifactStore = create<ArtifactStore>()((set, get) => ({
     // Import conversion utilities
     import('@/lib/utils/document/formatConverter').then(({ convertToHtml }) => {
       import('@/lib/utils/document/exportUtils').then(
-        ({ htmlToMarkdown, htmlToPlainText }) => {
+        async ({ htmlToMarkdown, htmlToPlainText }) => {
           let convertedContent = modifiedCode;
 
           // Convert between formats when switching modes
           if (mode === 'document' && currentMode === 'code') {
             // Code → Document: Convert source format to HTML
-            convertedContent = convertToHtml(modifiedCode, sourceFormat);
+            convertedContent = await convertToHtml(modifiedCode, sourceFormat);
           } else if (mode === 'code' && currentMode === 'document') {
             // Document → Code: Convert HTML back to source format
             if (sourceFormat === 'md' || sourceFormat === 'markdown') {
               convertedContent = htmlToMarkdown(modifiedCode);
             } else if (sourceFormat === 'txt') {
-              convertedContent = htmlToPlainText(modifiedCode);
+              convertedContent = await htmlToPlainText(modifiedCode);
             } else if (sourceFormat === 'html' || sourceFormat === 'htm') {
               // HTML stays as-is
               convertedContent = modifiedCode;
@@ -285,8 +285,8 @@ export const useArtifactStore = create<ArtifactStore>()((set, get) => ({
     // If starting in document mode, convert to HTML first
     if (initialMode === 'document' && sourceFormat) {
       import('@/lib/utils/document/formatConverter').then(
-        ({ convertToHtml }) => {
-          const htmlContent = convertToHtml(content, sourceFormat);
+        async ({ convertToHtml }) => {
+          const htmlContent = await convertToHtml(content, sourceFormat);
           set({
             originalCode: htmlContent,
             modifiedCode: htmlContent,
@@ -321,7 +321,7 @@ export const useArtifactStore = create<ArtifactStore>()((set, get) => ({
     });
   },
 
-  getArtifactContext: () => {
+  getArtifactContext: async () => {
     const state = get();
 
     // Check if editor is open AND has content (not just isArtifactOpen)
@@ -341,7 +341,7 @@ export const useArtifactStore = create<ArtifactStore>()((set, get) => ({
           '[ArtifactStore] Converted HTML to Markdown for chat context',
         );
       } else if (state.sourceFormat === 'txt') {
-        codeToSend = htmlToPlainText(state.modifiedCode);
+        codeToSend = await htmlToPlainText(state.modifiedCode);
         console.log(
           '[ArtifactStore] Converted HTML to plain text for chat context',
         );

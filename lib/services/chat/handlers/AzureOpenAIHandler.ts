@@ -62,6 +62,7 @@ export class AzureOpenAIHandler extends ModelHandler {
       messages,
       user: JSON.stringify(user),
       stream: streamResponse,
+      max_completion_tokens: modelConfig?.tokenLimit || 16384,
     };
 
     // Add temperature if supported

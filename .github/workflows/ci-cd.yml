@@ -5,18 +5,25 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-  # Trigger for Staging deployment
+  # Trigger for Beta deployment (push to main)
   push:
     branches:
       - main
 
-  # Trigger for Production deployment
+  # Trigger for Live deployment (manual)
   workflow_dispatch:
     inputs:
       image_tag:
-        description: 'Image tag to deploy to Production (must exist in prod ACR)'
+        description: 'Image tag to deploy to Live (must exist in ACR)'
         required: true
         type: string
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - live
+          - beta
 
 permissions:
   id-token: write
@@ -95,34 +102,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Run tests in a container to generate coverage files
-        run: |
-          docker build --target test -t test-runner-image .
-          docker run --name test-container test-runner-image
-
-      - name: Copy coverage report from the container
-        if: always()
-        run: docker cp test-container:/app/coverage ./coverage || true
-
-      - name: Clean up the test container
-        if: always()
-        run: docker rm test-container
-
-      - name: Generate coverage stats
-        id: coverage-stats
-        run: |
-          JSON_PATH="./coverage/coverage-summary.json"
-          echo "lines=$(jq -r '.total.lines.pct' $JSON_PATH)" >> $GITHUB_OUTPUT
-          echo "functions=$(jq -r '.total.functions.pct' $JSON_PATH)" >> $GITHUB_OUTPUT
-          echo "branches=$(jq -r '.total.branches.pct' $JSON_PATH)" >> $GITHUB_OUTPUT
-
-      - name: Upload coverage report as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: ./coverage
-          retention-days: 90
-
       - name: 🚀 Deploy Container App
         id: deploy
         run: |
@@ -144,22 +123,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const lines = parseFloat('${{ steps.coverage-stats.outputs.lines }}') || 0;
-            const functions = parseFloat('${{ steps.coverage-stats.outputs.functions }}') || 0;
-            const branches = parseFloat('${{ steps.coverage-stats.outputs.branches }}') || 0;
-            const artifactUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const previewUrl = `${{ steps.get_url.outputs.containerAppUrl }}`;
             const prNumber = context.issue.number;
-
-            const statusLine = (name, pct) => {
-              let symbol = ' '; // Neutral
-              if (pct >= 80) symbol = '+'; // Good
-              if (pct < 60) symbol = '-'; // Below Threshold
-
-              const paddedName = name.padEnd(10);
-              const row = `| ${paddedName}| \`${pct}%\``;
-              return `${symbol} ${row}`;
-            };
 
             const body = `
             🚀 **PR Preview Ready**
@@ -169,19 +134,6 @@ jobs:
             [**View Live Preview**](${previewUrl})
 
             > **Warning:** This is a shared environment. It will be overwritten by the next PR that is pushed. The content at this URL currently reflects commit \`${context.sha.substring(0, 7)}\` from PR #${prNumber}.
-
-            ---
-
-            ### Vitest Code Coverage
-            \`\`\`diff
-            | Category   | Coverage |
-            |------------|----------|
-            ${statusLine('Lines', lines)}
-            ${statusLine('Functions', functions)}
-            ${statusLine('Branches', branches)}
-            \`\`\`
-
-            [View detailed coverage report](${artifactUrl})
             `;
 
             const { data: comments } = await github.rest.issues.listComments({
@@ -201,12 +153,12 @@ jobs:
 
   # JOB 2: This job has been removed as the preview environment is now permanent and should not be cleaned up.
 
-  # JOB 3: Build for PROD and Deploy to STAGING after a merge to main
-  build_and_deploy_staging:
+  # JOB 3: Build and Deploy to BETA after a merge to main
+  build_and_deploy_beta:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: lint_and_typecheck
     runs-on: ubuntu-latest
-    environment: staging
+    environment: beta
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -236,17 +188,17 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: 🚀 Deploy Container App
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          resourceGroup: ${{ vars.RESOURCE_GROUP }}
-          containerAppName: ${{ vars.CONTAINER_APP_NAME }}
-          imageToDeploy: ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
+        run: |
+          az containerapp update \
+            --name ${{ vars.CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
 
-  # JOB 4: Manual deployment to PRODUCTION
-  deploy_prod_manual:
+  # JOB 4: Manual deployment to LIVE or BETA
+  deploy_manual:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: prod
+    environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -256,8 +208,8 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: 🚀 Deploy Container App
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          resourceGroup: ${{ vars.RESOURCE_GROUP }}
-          containerAppName: ${{ vars.CONTAINER_APP_NAME }}
-          imageToDeploy: ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.event.inputs.image_tag }}
+        run: |
+          az containerapp update \
+            --name ${{ vars.CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.event.inputs.image_tag }}

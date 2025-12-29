@@ -9,8 +9,8 @@ describe('Model Configuration', () => {
     });
 
     it('GPT-5 models should use azure-openai SDK', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5].sdk).toBe('azure-openai');
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].sdk).toBe('azure-openai');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].sdk).toBe('azure-openai');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].sdk).toBe('azure-openai');
     });
 
     it('o3 should use azure-openai SDK', () => {
@@ -34,8 +34,10 @@ describe('Model Configuration', () => {
     });
 
     it('GPT-5 models should not support temperature', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5].supportsTemperature).toBe(false);
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].supportsTemperature).toBe(
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].supportsTemperature).toBe(
+        false,
+      );
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].supportsTemperature).toBe(
         false,
       );
     });
@@ -67,10 +69,10 @@ describe('Model Configuration', () => {
     });
 
     it('GPT-5 and GPT-5 Chat should not have agent capabilities', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5].agentId).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5].isAgent).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].agentId).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].isAgent).toBeUndefined();
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].agentId).toBeUndefined();
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].isAgent).toBeUndefined();
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].agentId).toBeUndefined();
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].isAgent).toBeUndefined();
     });
 
     it('non-OpenAI models should not have agent capabilities', () => {
@@ -82,8 +84,8 @@ describe('Model Configuration', () => {
   describe('Provider Configuration', () => {
     it('GPT models should have openai provider', () => {
       expect(OpenAIModels[OpenAIModelID.GPT_4_1].provider).toBe('openai');
-      expect(OpenAIModels[OpenAIModelID.GPT_5].provider).toBe('openai');
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].provider).toBe('openai');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].provider).toBe('openai');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].provider).toBe('openai');
       expect(OpenAIModels[OpenAIModelID.GPT_o3].provider).toBe('openai');
     });
 
@@ -104,11 +106,11 @@ describe('Model Configuration', () => {
     });
 
     it('GPT-5 should be omni model', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5].modelType).toBe('omni');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].modelType).toBe('omni');
     });
 
     it('GPT-5 Chat should be omni model', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5_CHAT].modelType).toBe('omni');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].modelType).toBe('omni');
     });
 
     it('o3 should be reasoning model', () => {

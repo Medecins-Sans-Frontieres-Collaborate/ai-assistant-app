@@ -103,7 +103,7 @@ describe('cleanData Functions', () => {
                 content: 'Hi',
               },
             ],
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             prompt: DEFAULT_SYSTEM_PROMPT,
             temperature: DEFAULT_TEMPERATURE,
             folderId: null,
@@ -161,7 +161,7 @@ describe('cleanData Functions', () => {
                 content: 'Hi',
               },
             ],
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             prompt: DEFAULT_SYSTEM_PROMPT,
             temperature: DEFAULT_TEMPERATURE,
             folderId: null,
@@ -199,7 +199,7 @@ describe('cleanData Functions', () => {
                 content: 'Hi',
               },
             ],
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             prompt: DEFAULT_SYSTEM_PROMPT,
             temperature: DEFAULT_TEMPERATURE,
             folderId: null,
@@ -218,7 +218,7 @@ describe('cleanData Functions', () => {
             name: 'prompt 1',
             description: '',
             content: '',
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             folderId: null,
           },
         ],
@@ -242,7 +242,7 @@ describe('cleanData Functions', () => {
                 content: 'Hi',
               },
             ],
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             prompt: DEFAULT_SYSTEM_PROMPT,
             temperature: DEFAULT_TEMPERATURE,
             folderId: null,
@@ -261,13 +261,50 @@ describe('cleanData Functions', () => {
             name: 'prompt 1',
             description: '',
             content: '',
-            model: OpenAIModels[OpenAIModelID.GPT_5],
+            model: OpenAIModels[OpenAIModelID.GPT_5_2],
             folderId: null,
           },
         ],
         tones: [],
         customAgents: [],
       });
+    });
+
+    it('should handle v4 data with missing folders and prompts fields', () => {
+      // This simulates production exports that may be missing optional fields
+      const data = {
+        version: 4,
+        history: [
+          {
+            id: '1',
+            name: 'conversation 1',
+            messages: [
+              {
+                role: 'user',
+                content: "what's up ?",
+              },
+              {
+                role: 'assistant',
+                content: 'Hi',
+              },
+            ],
+            model: OpenAIModels[OpenAIModelID.GPT_5],
+            prompt: DEFAULT_SYSTEM_PROMPT,
+            temperature: DEFAULT_TEMPERATURE,
+            folderId: null,
+          },
+        ],
+        // Note: folders and prompts are intentionally missing
+      };
+
+      // Should not throw when fields are missing
+      const obj = cleanData(data as ExportFormatV4);
+      expect(isLatestExportFormat(obj)).toBe(true);
+      expect(obj.folders).toEqual([]);
+      expect(obj.prompts).toEqual([]);
+      expect(obj.tones).toEqual([]);
+      expect(obj.customAgents).toEqual([]);
+      expect(obj.history).toHaveLength(1);
     });
   });
 });

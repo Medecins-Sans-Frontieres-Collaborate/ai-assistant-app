@@ -190,6 +190,19 @@ export function Sidebar() {
   const handleNewConversation = () => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
 
+    // Check if the latest conversation is already empty
+    const latestConversation = conversations[0];
+    if (latestConversation && latestConversation.messages.length === 0) {
+      if (latestConversation.id !== selectedConversation?.id) {
+        // Switch to the existing empty conversation
+        selectConversation(latestConversation.id);
+      } else {
+        // Already on the empty conversation - show toast
+        toast(t('This conversation is already empty'));
+      }
+      return;
+    }
+
     // Get the most recently selected model from the current conversation if available,
     // otherwise fall back to the default model from settings
     const currentModel = selectedConversation?.model;

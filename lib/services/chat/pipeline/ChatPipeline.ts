@@ -20,8 +20,8 @@ const STAGE_TIMEOUTS: Record<string, number> = {
   RAGEnricher: 10000, // 10s for knowledge base search
   ToolRouterEnricher: 45000, // 45s for web search (AI agent + Bing search + result processing)
   AgentEnricher: 5000, // 5s for agent selection
-  StandardChatHandler: 30000, // 30s for LLM response
-  AgentChatHandler: 60000, // 60s for agent execution
+  StandardChatHandler: 90000, // 90s for LLM response (reasoning models can take longer)
+  AgentChatHandler: 120000, // 120s for agent execution
 };
 
 /**
