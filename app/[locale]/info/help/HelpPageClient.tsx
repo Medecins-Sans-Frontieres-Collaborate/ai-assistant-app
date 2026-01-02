@@ -112,8 +112,13 @@ export function HelpPageClient({
   const getLanguageName = (locale: string): string => {
     const localeNames: Record<string, string> = {
       en: 'English',
-      fr: 'Français',
       es: 'Español',
+      fr: 'Français',
+      de: 'Deutsch',
+      it: 'Italiano',
+      pt: 'Português',
+      ar: 'العربية',
+      nl: 'Nederlands',
     };
     return localeNames[locale] || locale;
   };
