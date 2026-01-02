@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Wat is de MSF AI-assistent?",
+      "answer": "De MSF AI-assistent is een op maat gemaakt intern AI-chattool voor medewerkers van Artsen zonder Grenzen (MSF). Deze oplossing verbetert de privacy door gespreksgegevens binnen MSF-systemen te houden en biedt een veilig alternatief voor externe diensten. Het ondersteunt meerdere AI-modellen (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) en functies zoals zoeken op het web, spraaktranscriptie met vertaling en aanpasbare prompts en tonen. De AI-assistent kan helpen bij het beantwoorden van vragen, het genereren van content, het vertalen van tekst, het brainstormen over ideeën en meer. Het is ontworpen als een assistent voor uw werk - controleer altijd de output op kwaliteit en nauwkeurigheid."
+    },
+    {
+      "question": "Welke modellen zijn beschikbaar?",
+      "answer": "De MSF AI-assistent biedt toegang tot meerdere AI-modellen:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI-redeneermodellen)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nU kunt op elk moment van model wisselen met behulp van het modelselectie-dropdown bovenaan de chat."
+    },
+    {
+      "question": "Wat zijn snelle acties (prompts en tonen)?",
+      "answer": "Met snelle acties kunt u snel prompts en tonen op uw berichten toepassen:\n\n• Prompts: Herbruikbare sjablonen voor veelvoorkomende taken (bijv. 'Vertaal naar Frans', 'Vat dit document samen'). Maak aangepaste prompts of gebruik de ingebouwde AI-assistent om ze te genereren.\n\n• Tonen: Pas aan hoe de AI reageert (bijv. Professioneel, Informeel, Technisch). Pas tonen toe om antwoorden aan uw behoeften te laten voldoen.\n\nOpen snelle acties via het bliksempictogram (⚡) in de chatinvoer of druk op / om te zoeken."
+    },
+    {
+      "question": "Wat is de zoekmodus?",
+      "answer": "Zoekmodus schakelt zoeken op het web in wanneer de AI actuele informatie nodig heeft. Er zijn twee opties:\n\n• Privacy-gerichte modus (standaard): Stuurt alleen zoekopdrachten naar Azure AI Foundry, niet uw volledige gesprek. Privéer maar langzamer.\n\n• Azure AI Foundry-modus (alleen GPT-4.1): Slaat uw volledige gesprek op in Azure AI Foundry voor snellere antwoorden met directe toegang tot zoeken op het web.\n\nLees meer over de privacyverschillen in Instellingen > Modellen > Zoekroutering."
+    },
+    {
+      "question": "Hoe gebruik ik spraaktranscriptie?",
+      "answer": "Klik op het microfoonpictogram in de chatinvoer om op te nemen. De AI transcribeert uw spraak naar tekst. Na transcriptie kunt u:\n- De tekst kopiëren\n- Downloaden als bestand\n- Vertalen naar meer dan 13 talen (Arabisch, Bengaals, Engels, Frans, Portugees, Russisch, Spaans, Swahili, Oekraïens, Urdu en meer)\n\nDeze functie is geweldig voor vergadernotities, interviews of snelle spraakinvoer."
+    },
+    {
+      "question": "Kan ik de MSF AI-assistent op mijn telefoon gebruiken?",
+      "answer": "Ja! De MSF AI-assistent werkt als een Progressive Web App (PWA). Op mobiel:\n1. Open ai.msf.org in uw browser en meld u aan\n2. Ga naar Instellingen > Mobiele app voor gedetailleerde instructies\n3. Tik op 'Toevoegen aan startscherm' (iOS Safari) of 'Installeren' (Android Chrome)\n4. De app werkt als een native app met offline ondersteuning en snellere laadtijden\n\nBelangrijk: Installeer na het aanmelden om uw authenticatie te behouden. U kunt het ook op desktopbrowsers installeren voor een betere ervaring."
+    },
+    {
+      "question": "Waar worden mijn gespreksgegevens opgeslagen?",
+      "answer": "Uw gespreksgeschiedenis wordt lokaal opgeslagen in de opslag van uw browser, niet op een server. Dit betekent:\n- Uw chats bestaan alleen op uw apparaat\n- Ze synchroniseren niet tussen apparaten of browsers\n- Het wissen van browsergegevens verwijdert uw gesprekken\n\nAls u Azure AI Foundry-modus gebruikt voor zoeken, worden alleen die gesprekken ook opgeslagen in Azure AI Foundry met een thread-ID. Zie Instellingen > Modellen voor meer details."
+    },
+    {
+      "question": "Wat zijn aangepaste agents?",
+      "answer": "Aangepaste agents zijn geavanceerde AI-configuraties die draaien op de MSF AI Assistant Foundry-instantie met gespecialiseerde mogelijkheden. Ze kunnen automatisch tools zoals zoeken op het web en code-interpretatie gebruiken. Dit is een geavanceerde functie die coördinatie vereist met het technische team van de AI-assistent om agent-ID's te maken. Vind ze in Instellingen > Modellen > tabblad Agents."
+    },
+    {
+      "question": "Moet ik de antwoorden van de AI 100% vertrouwen?",
+      "answer": "Nee. Hoewel de MSF AI-assistent een krachtige tool is, mag het menselijk oordeel en expertise niet vervangen. Altijd:\n- Feitelijke informatie verifiëren\n- Controleren op vooringenomenheid en nauwkeurigheid\n- Outputs beoordelen voordat u ze in officieel werk gebruikt\n- Voer geen persoonlijke gegevens of zeer gevoelige informatie in\n\nDe AI is een assistent, geen besluitvormer."
+    },
+    {
+      "question": "Welke gegevens moet ik NIET in de AI-assistent invoeren?",
+      "answer": "Voer niet in:\n- Persoonlijke gegevens (namen, telefoonnummers, e-mailadressen, cv's)\n- Zeer gevoelige operationele details\n- Patiëntinformatie of medische dossiers\n- Alles wat individuen kan identificeren of de veiligheid in gevaar kan brengen\n\nZie het privacybeleid in het Helpcentrum voor volledige richtlijnen."
+    },
+    {
+      "question": "Hoe exporteer of wis ik mijn gegevens?",
+      "answer": "In Instellingen > Gegevensbeheer kunt u:\n- Alle gesprekken en prompts exporteren als JSON\n- Alle gesprekken wissen\n- Eerder geëxporteerde gegevens importeren\n- Opslaggebruik controleren\n\nGeëxporteerde gegevens kunnen later worden geïmporteerd of naar een andere browser worden verplaatst."
+    },
+    {
+      "question": "Waar moet ik naartoe met vragen of feedback?",
+      "answer": "Neem contact op met ondersteuning:\n- Gebruikers in de VS: ai@newyork.msf.org\n- Gebruikers buiten de VS: ai.team@amsterdam.msf.org\n\nU kunt het Helpcentrum ook altijd openen vanuit Instellingen > Help en ondersteuning."
+    },
+    {
+      "question": "Waar kan ik meer leren over het AI-assistentproject?",
+      "answer": "Bezoek de AI Accelerator-portal op Pamoja voor projectdocumentatie, updates en bronnen:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nDeze portal bevat informatie over de projectroadmap, trainingsmateriaal en manieren om betrokken te raken."
+    },
+    {
+      "question": "Is de MSF AI-assistent open source?",
+      "answer": "Ja! De MSF AI-assistent is open source en beschikbaar op GitHub. U kunt de codebase bekijken, verbeteringen bijdragen of leren van de implementatie:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nHet project is gebouwd met Next.js, React en integreert met meerdere AI-providers. Bijdragen en feedback zijn welkom!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Wat is de MSF AI-assistent en hoe beschermt het de privacy?",
+        "answer": "De MSF AI-assistent is een interne AI-chatbot ontwikkeld voor MSF-personeel. Het gebruikt de Open AI-grote taalmodellen van Microsoft Azure terwijl alle gegevens binnen MSF worden gehouden, waardoor privacy en controle worden gewaarborgd. Het gebruik van ai.msf.org is een veiligere en veiliger omgeving dan het gebruik van andere externe gratis AI-tools, die zeer weinig privacygaranties bieden.",
+        "keywords": [
+          "privacy",
+          "gegevensbescherming",
+          "intern",
+          "veilig",
+          "MSF",
+          "Azure",
+          "AI-assistent",
+          "chatbot",
+          "gegevens binnen MSF",
+          "privacygaranties",
+          "veiliger",
+          "externe tools"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Waar worden mijn gegevens opgeslagen en verwerkt?",
+        "answer": "Alle gespreksgegevens met de MSF AI-assistent worden lokaal op uw eigen computer opgeslagen en verwerkt binnen MSF-systemen met behulp van de infrastructuur van Microsoft Azure. Uw inloginformatie wordt verwerkt door MSF zoals beschreven in het privacybeleid van uw MSF-entiteit. Gegevens worden binnen MSF bewaard, waardoor privacy en controle worden gewaarborgd.",
+        "keywords": [
+          "gegevensopslag",
+          "waar opgeslagen",
+          "lokaal",
+          "computer",
+          "MSF-systemen",
+          "Microsoft Azure",
+          "inloginformatie",
+          "verwerkt door MSF",
+          "privacybeleid",
+          "binnen MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Welke gegevens moet ik NIET in de MSF AI-assistent invoeren?",
+        "answer": "U zult NIET in ai.msf.org de volgende informatie invoeren:\n- Persoonlijke gegevens (namen, telefoonnummers, cv's, getuigenissen; alles wat direct of indirect een individu kan identificeren -- dit omvat een combinatie van gegevens die samen het mogelijk kunnen maken een individu te identificeren)\n- Zeer gevoelige gegevens (gegevens die opzettelijk of onopzettelijk kunnen worden gebruikt om individuen, gemeenschappen, MSF of haar personeel te schaden -- het bepalen van de gevoeligheid van gegevens vereist het opnemen van contextanalyse, bijvoorbeeld locaties van gevoelige projecten of risicogroepen, beveiligingsincidenten en andere operationele details)",
+        "keywords": [
+          "verboden gegevens",
+          "persoonlijke gegevens",
+          "gevoelige gegevens",
+          "namen",
+          "telefoonnummers",
+          "cv's",
+          "getuigenissen",
+          "individu identificeren",
+          "schade",
+          "gevoelige projecten",
+          "beveiligingsincidenten",
+          "operationele details",
+          "wat niet in te voeren"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Wat zijn de richtlijnen voor verantwoord gebruik van de MSF AI-assistent?",
+        "answer": "U gaat ermee akkoord ai.msf.org verantwoord te gebruiken. U zult:\n- Het gebruiken in overeenstemming met de toepasselijke ICT-, AI- en andere beleidslijnen van uw MSF-entiteiten\n- Altijd outputs controleren op nauwkeurigheid, inclusiviteit en vooringenomenheid\n- Controleren dat outputs geen inbreuk maken op intellectuele eigendomsrechten van derden\n- Transparant zijn over uw AI-gebruik en outputs markeren als AI-gegenereerd",
+        "keywords": [
+          "verantwoord gebruik",
+          "richtlijnen",
+          "MSF-beleid",
+          "ICT-beleid",
+          "AI-beleid",
+          "outputs controleren",
+          "nauwkeurigheid",
+          "vooringenomenheid",
+          "intellectueel eigendom",
+          "transparantie",
+          "AI-gegenereerd",
+          "outputs markeren"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Wat zijn de verboden toepassingen van de MSF AI-assistent?",
+        "answer": "U zult ai.msf.org NIET gebruiken voor een van de volgende doeleinden:\n- Gezondheidszorg (om gezondheidszorg te verlenen of gezondheidsgerelateerde vragen te beantwoorden)\n- Toezicht of monitoring van MSF-patiënten of gemeenschappen of enig ander individu\n- Werkgerelateerde beslissingen (om werkgerelateerde beslissingen te ondersteunen of te vervangen)\n- Geautomatiseerde besluitvorming (om beslissingen te nemen die schadelijk kunnen zijn voor een individu of gemeenschap)\n- Het creëren van media-inhoud voor externe communicatie over zaken van algemeen belang\n- Illegale of schadelijke activiteiten",
+        "keywords": [
+          "verboden toepassingen",
+          "gezondheidszorg",
+          "toezicht",
+          "monitoring",
+          "werkgelegenheidsbeslissingen",
+          "geautomatiseerde besluitvorming",
+          "media-inhoud",
+          "externe communicatie",
+          "illegale activiteiten",
+          "schadelijke activiteiten",
+          "waarvoor niet te gebruiken"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Hoe nauwkeurig zijn de outputs van de MSF AI-assistent?",
+        "answer": "Ai.msf.org gebruikt experimentele technologie -- het geeft geen garantie dat de outputs nauwkeurig zullen zijn. Bovendien is de technologie niet getraind met gegevens die representatief zijn voor MSF-patiënten en -gemeenschappen. AI-outputs kunnen vooringenomenheid, discriminatie en stereotypen in stand houden. U bent verantwoordelijk voor het controleren van de geproduceerde outputs.",
+        "keywords": [
+          "nauwkeurigheid",
+          "experimentele technologie",
+          "geen garantie",
+          "vooringenomenheid",
+          "discriminatie",
+          "stereotypen",
+          "outputs controleren",
+          "verantwoordelijk",
+          "MSF-patiënten",
+          "gemeenschappen",
+          "niet getraind"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Met wie moet ik contact opnemen voor privacyproblemen of incidenten?",
+        "answer": "Als u zorgen heeft of een incident wilt melden, neem dan contact op met: ai.team@amsterdam.msf.org. Voor specifieke regio's kunt u ook contact opnemen met uw lokale DPO (functionaris voor gegevensbescherming) of verantwoordelijk ICT-team (informatie- en communicatietechnologie).",
+        "keywords": [
+          "privacyproblemen",
+          "incidenten",
+          "contact",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "functionaris voor gegevensbescherming",
+          "ICT",
+          "ondersteuning",
+          "incident melden"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Kunnen de gebruiksvoorwaarden worden gewijzigd?",
+        "answer": "Deze voorwaarden kunnen op elk moment door MSF worden gewijzigd -- we zullen u op de hoogte stellen als we ze wijzigen -- uw voortgezet gebruik van ai.msf.org houdt acceptatie van eventuele wijzigingen in.",
+        "keywords": [
+          "gebruiksvoorwaarden",
+          "gewijzigd",
+          "wijzigingen",
+          "kennisgeving",
+          "voortgezet gebruik",
+          "acceptatie",
+          "updates",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Een ondersteuningsverzoek indienen",
+      "subtitle": "Krijg hulp van ons team",
+      "description": "Hulp nodig of feedback willen geven? Klik hieronder om ons ondersteuningsformulier te openen.",
+      "buttonText": "Ondersteuningsformulier openen"
+    },
+    "otherWays": {
+      "title": "Andere manieren om ons te bereiken"
+    },
+    "emailSupport": {
+      "title": "E-mailondersteuning",
+      "description": "Stuur ons een e-mail voor vragen, feedback of technische problemen"
+    },
+    "additionalResources": {
+      "title": "Aanvullende bronnen"
+    },
+    "aiAcceleratorPortal": {
+      "title": "AI Accelerator-portal",
+      "description": "Documentatie, projectupdates en trainingsmateriaal"
+    },
+    "githubRepository": {
+      "title": "Open source-repository",
+      "description": "Bekijk code, meld problemen en draag bij op GitHub"
+    }
+  }
+}
