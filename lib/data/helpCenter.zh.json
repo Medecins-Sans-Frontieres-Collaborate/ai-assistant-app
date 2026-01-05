@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "什么是MSF AI助手？",
+      "answer": "MSF AI助手是为无国界医生组织（MSF）员工定制的内部AI聊天工具。该解决方案通过将对话数据保留在MSF系统内来增强隐私保护，为外部服务提供安全的替代方案。它支持多种AI模型（GPT-4.1、GPT-4o、o1、DeepSeek、Llama、Grok）以及网络搜索、带翻译的语音转录以及可自定义的提示和语气等功能。AI助手可以帮助回答问题、生成内容、翻译文本、头脑风暴想法等。它被设计为您工作的助手——请始终检查输出的质量和准确性。"
+    },
+    {
+      "question": "有哪些可用的模型？",
+      "answer": "MSF AI助手提供多种AI模型的访问：\n- GPT-4.1、GPT-4o、GPT-4o-mini（OpenAI）\n- o1、o1-mini（OpenAI推理模型）\n- DeepSeek-V3、DeepSeek-R1（DeepSeek）\n- Llama 3.3 70B、Llama 3.1 405B（Meta）\n- Grok-2（xAI）\n\n您可以随时使用聊天顶部的模型选择下拉菜单切换模型。"
+    },
+    {
+      "question": "什么是快速操作（提示和语气）？",
+      "answer": "快速操作允许您快速将提示和语气应用于您的消息：\n\n• 提示：用于常见任务的可重用模板（例如「翻译成法语」、「总结这份文档」）。创建自定义提示或使用内置AI助手生成它们。\n\n• 语气：调整AI的响应方式（例如专业、随意、技术性）。应用语气以符合您的需求。\n\n通过聊天输入中的闪电图标（⚡）访问快速操作，或按/进行搜索。"
+    },
+    {
+      "question": "什么是搜索模式？",
+      "answer": "搜索模式在AI需要最新信息时启用网络搜索。有两个选项：\n\n• 注重隐私模式（默认）：仅将搜索查询发送到Azure AI Foundry，而不是您的完整对话。更私密但速度较慢。\n\n• Azure AI Foundry模式（仅限GPT-4.1）：将您的完整对话存储在Azure AI Foundry中，以获得更快的响应并直接访问网络搜索。\n\n在设置 > 模型 > 搜索路由中了解更多关于隐私差异的信息。"
+    },
+    {
+      "question": "如何使用语音转录？",
+      "answer": "单击聊天输入中的麦克风图标进行录音。AI会将您的语音转录为文本。转录后，您可以：\n- 复制文本\n- 下载为文件\n- 翻译成13种以上语言（阿拉伯语、孟加拉语、英语、法语、葡萄牙语、俄语、西班牙语、斯瓦希里语、乌克兰语、乌尔都语等）\n\n此功能非常适合会议记录、采访或快速语音输入。"
+    },
+    {
+      "question": "我可以在手机上使用MSF AI助手吗？",
+      "answer": "可以！MSF AI助手作为渐进式Web应用（PWA）运行。在移动设备上：\n1. 在浏览器中打开ai.msf.org并登录\n2. 转到设置 > 移动应用获取详细说明\n3. 点击「添加到主屏幕」（iOS Safari）或「安装」（Android Chrome）\n4. 该应用将像原生应用一样运行，支持离线功能和更快的加载时间\n\n重要提示：登录后安装以保留您的身份验证。您也可以在桌面浏览器上安装以获得更好的体验。"
+    },
+    {
+      "question": "我的对话数据存储在哪里？",
+      "answer": "您的对话历史记录本地存储在浏览器的存储中，而不是服务器上。这意味着：\n- 您的聊天仅存在于您的设备上\n- 它们不会在设备或浏览器之间同步\n- 清除浏览器数据将删除您的对话\n\n如果您使用Azure AI Foundry模式进行搜索，则仅这些对话也会使用线程ID存储在Azure AI Foundry中。有关更多详细信息，请参阅设置 > 模型。"
+    },
+    {
+      "question": "什么是自定义代理？",
+      "answer": "自定义代理是在MSF AI Assistant Foundry实例上运行的高级AI配置，具有专门的功能。它们可以自动使用网络搜索和代码解释等工具。这是一项高级功能，需要与AI助手技术团队协调以创建代理ID。在设置 > 模型 > 代理选项卡中找到它们。"
+    },
+    {
+      "question": "我应该100%信任AI的答案吗？",
+      "answer": "不应该。虽然MSF AI助手是一个强大的工具，但它不应该取代人类的判断和专业知识。始终：\n- 验证事实信息\n- 检查偏见和准确性\n- 在将输出用于正式工作之前进行审查\n- 不要输入个人数据或高度敏感信息\n\nAI是助手，不是决策者。"
+    },
+    {
+      "question": "我不应该在AI助手中输入哪些数据？",
+      "answer": "不要输入：\n- 个人数据（姓名、电话号码、电子邮件地址、简历）\n- 高度敏感的操作细节\n- 患者信息或医疗记录\n- 任何可能识别个人或危及安全的内容\n\n有关完整指南，请参阅帮助中心中的隐私政策。"
+    },
+    {
+      "question": "如何导出或删除我的数据？",
+      "answer": "在设置 > 数据管理中，您可以：\n- 将所有对话和提示导出为JSON\n- 删除所有对话\n- 导入先前导出的数据\n- 检查存储使用情况\n\n导出的数据可以稍后导入或移至其他浏览器。"
+    },
+    {
+      "question": "如有问题或反馈，我应该联系谁？",
+      "answer": "联系支持：\n- 美国用户：ai@newyork.msf.org\n- 美国以外用户：ai.team@amsterdam.msf.org\n\n您也可以随时从设置 > 帮助和支持访问帮助中心。"
+    },
+    {
+      "question": "我在哪里可以了解更多关于AI助手项目的信息？",
+      "answer": "访问Pamoja上的AI Accelerator门户获取项目文档、更新和资源：\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\n此门户包含有关项目路线图、培训材料和参与方式的信息。"
+    },
+    {
+      "question": "MSF AI助手是开源的吗？",
+      "answer": "是的！MSF AI助手是开源的，可在GitHub上获取。您可以查看代码库、贡献改进或从实现中学习：\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\n该项目使用Next.js、React构建，并与多个AI提供商集成。欢迎贡献和反馈！"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "什么是MSF AI助手，它如何保护隐私？",
+        "answer": "MSF AI助手是为MSF员工开发的内部AI聊天机器人。它使用Microsoft Azure的Open AI大型语言模型，同时将所有数据保留在MSF内，确保隐私和控制。使用ai.msf.org是比使用其他外部免费AI工具更安全的环境，后者几乎不提供隐私保证。",
+        "keywords": [
+          "隐私",
+          "数据保护",
+          "内部",
+          "安全",
+          "MSF",
+          "Azure",
+          "AI助手",
+          "聊天机器人",
+          "MSF内数据",
+          "隐私保证",
+          "更安全",
+          "外部工具"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "我的数据存储和处理在哪里？",
+        "answer": "与MSF AI助手的所有对话数据都本地存储在您自己的计算机上，并使用Microsoft Azure基础设施在MSF系统内处理。您的登录信息按照您的MSF实体隐私政策的描述由MSF处理。数据保留在MSF内，确保隐私和控制。",
+        "keywords": [
+          "数据存储",
+          "存储位置",
+          "本地",
+          "计算机",
+          "MSF系统",
+          "Microsoft Azure",
+          "登录信息",
+          "MSF处理",
+          "隐私政策",
+          "MSF内"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "我不应该在MSF AI助手中输入哪些数据？",
+        "answer": "您不应在ai.msf.org中输入以下信息：\n- 个人数据（姓名、电话号码、简历、证词；任何可以直接或间接识别个人的内容——这包括组合起来可能识别个人的数据组合）\n- 高度敏感数据（可能故意或无意地用于伤害个人、社区、MSF或其员工的数据——确定数据的敏感性需要包括背景分析，例如敏感项目或风险群体的位置、安全事件和其他操作细节）",
+        "keywords": [
+          "禁止数据",
+          "个人数据",
+          "敏感数据",
+          "姓名",
+          "电话号码",
+          "简历",
+          "证词",
+          "识别个人",
+          "伤害",
+          "敏感项目",
+          "安全事件",
+          "操作细节",
+          "不应输入"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "MSF AI助手的负责任使用指南是什么？",
+        "answer": "您同意负责任地使用ai.msf.org。您将：\n- 按照您的MSF实体的适用ICT、AI和其他政策使用它\n- 始终审查输出的准确性、包容性和偏见\n- 检查输出是否侵犯第三方知识产权\n- 对您的AI使用保持透明，并将输出标记为AI生成",
+        "keywords": [
+          "负责任使用",
+          "指南",
+          "MSF政策",
+          "ICT政策",
+          "AI政策",
+          "审查输出",
+          "准确性",
+          "偏见",
+          "知识产权",
+          "透明度",
+          "AI生成",
+          "标记输出"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "MSF AI助手的禁止用途是什么？",
+        "answer": "您不应将ai.msf.org用于以下任何目的：\n- 医疗保健（提供医疗保健或回答与健康相关的问题）\n- 监督或监控MSF患者或社区或任何其他个人\n- 就业相关决策（支持或替代就业相关决策）\n- 自动决策（做出可能对个人或社区有害的决策）\n- 为有关公共利益事项的外部通信创建媒体内容\n- 非法或有害活动",
+        "keywords": [
+          "禁止用途",
+          "医疗保健",
+          "监督",
+          "监控",
+          "就业决策",
+          "自动决策",
+          "媒体内容",
+          "外部通信",
+          "非法活动",
+          "有害活动",
+          "不应用于"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "MSF AI助手的输出有多准确？",
+        "answer": "Ai.msf.org使用实验性技术——它不保证输出准确。此外，该技术未使用代表MSF患者和社区的数据进行训练。AI输出可能会延续偏见、歧视和刻板印象。您有责任审查产生的输出。",
+        "keywords": [
+          "准确性",
+          "实验性技术",
+          "无保证",
+          "偏见",
+          "歧视",
+          "刻板印象",
+          "审查输出",
+          "负责",
+          "MSF患者",
+          "社区",
+          "未训练"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "如有隐私问题或事件，我应该联系谁？",
+        "answer": "如果您有疑虑或想报告事件，请联系：ai.team@amsterdam.msf.org。对于特定地区，您也可以联系当地的DPO（数据保护官）或负责的ICT（信息和通信技术）团队。",
+        "keywords": [
+          "隐私问题",
+          "事件",
+          "联系",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "数据保护官",
+          "ICT",
+          "支持",
+          "报告事件"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "使用条款可以更改吗？",
+        "answer": "MSF可以随时更改这些条款——如果我们更改它们，我们会通知您——您继续使用ai.msf.org即表示接受任何更改。",
+        "keywords": [
+          "使用条款",
+          "更改",
+          "变更",
+          "通知",
+          "继续使用",
+          "接受",
+          "更新",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "提交支持请求",
+      "subtitle": "从我们的团队获得帮助",
+      "description": "需要帮助或想提供反馈？单击下面打开我们的支持表单。",
+      "buttonText": "打开支持表单"
+    },
+    "otherWays": {
+      "title": "联系我们的其他方式"
+    },
+    "emailSupport": {
+      "title": "电子邮件支持",
+      "description": "发送电子邮件给我们提出问题、反馈或技术问题"
+    },
+    "additionalResources": {
+      "title": "其他资源"
+    },
+    "aiAcceleratorPortal": {
+      "title": "AI Accelerator门户",
+      "description": "文档、项目更新和培训材料"
+    },
+    "githubRepository": {
+      "title": "开源存储库",
+      "description": "在GitHub上查看代码、报告问题和贡献"
+    }
+  }
+}
