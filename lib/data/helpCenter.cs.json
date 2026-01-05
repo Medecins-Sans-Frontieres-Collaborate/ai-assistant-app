@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Co je MSF AI asistent?",
+      "answer": "MSF AI asistent je interní nástroj pro chatování s umělou inteligencí přizpůsobený pro zaměstnance Médecins Sans Frontières (MSF). Toto řešení zvyšuje soukromí tím, že uchovává konverzační data v systémech MSF a poskytuje bezpečnou alternativu k externím službám. Podporuje více AI modelů (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) a funkce jako webové vyhledávání, transkripci hlasu s překladem a přizpůsobitelné výzvy a tóny. AI asistent může pomoci odpovídat na otázky, vytvářet obsah, překládat text, brainstormovat a mnoho dalšího. Je navržen jako asistent pro vaši práci - vždy kontrolujte kvalitu a přesnost výstupů."
+    },
+    {
+      "question": "Jaké modely jsou k dispozici?",
+      "answer": "MSF AI asistent poskytuje přístup k několika AI modelům:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (modely uvažování OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nModel můžete kdykoli změnit pomocí rozbalovací nabídky pro výběr modelu v horní části chatu."
+    },
+    {
+      "question": "Co jsou rychlé akce (výzvy a tóny)?",
+      "answer": "Rychlé akce vám umožňují rychle aplikovat výzvy a tóny na vaše zprávy:\n\n• Výzvy: Opakovaně použitelné šablony pro běžné úkoly (např. 「Přeložit do francouzštiny」, 「Shrňte tento dokument」). Vytvořte vlastní výzvy nebo použijte zabudovaného AI asistenta k jejich generování.\n\n• Tóny: Upravte způsob, jakým AI odpovídá (např. profesionální, neformální, technický). Aplikujte tóny vhodné pro vaše potřeby.\n\nPřistupujte k rychlým akcím prostřednictvím ikony blesku (⚡) ve vstupu chatu nebo stiskněte / pro vyhledávání."
+    },
+    {
+      "question": "Co je režim vyhledávání?",
+      "answer": "Režim vyhledávání aktivuje webové vyhledávání, když AI potřebuje aktuální informace. Existují dvě možnosti:\n\n• Režim zaměřený na soukromí (výchozí): Odesílá pouze vyhledávací dotazy do Azure AI Foundry, nikoli celou vaši konverzaci. Soukromější, ale pomalejší.\n\n• Režim Azure AI Foundry (pouze GPT-4.1): Ukládá celou vaši konverzaci v Azure AI Foundry pro rychlejší odpovědi a přímý přístup k webovému vyhledávání.\n\nZjistěte více o rozdílech v ochraně soukromí v Nastavení > Model > Směrování vyhledávání."
+    },
+    {
+      "question": "Jak používám transkripci hlasu?",
+      "answer": "Klikněte na ikonu mikrofonu ve vstupu chatu pro nahrávání. AI přepíše váš hlas na text. Po transkripci můžete:\n- Zkopírovat text\n- Stáhnout jako soubor\n- Přeložit do více než 13 jazyků (arabština, bengálština, angličtina, francouzština, portugalština, ruština, španělština, svahilština, ukrajinština, urdština a další)\n\nTato funkce je skvělá pro poznámky ze schůzek, rozhovory nebo rychlý hlasový vstup."
+    },
+    {
+      "question": "Mohu používat MSF AI asistenta na svém telefonu?",
+      "answer": "Ano! MSF AI asistent funguje jako progresivní webová aplikace (PWA) na mobilních zařízeních:\n1. Otevřete ai.msf.org ve svém prohlížeči a přihlaste se\n2. Přejděte do Nastavení > Mobilní aplikace pro podrobné pokyny\n3. Klepněte na 「Přidat na domovskou obrazovku」 (iOS Safari) nebo 「Nainstalovat」 (Android Chrome)\n4. Aplikace bude fungovat jako nativní aplikace s offline podporou a rychlejším načítáním\n\nDůležité: Nainstalujte po přihlášení, abyste si zachovali ověření. Můžete ji také nainstalovat do svého desktopového prohlížeče pro lepší zážitek."
+    },
+    {
+      "question": "Kde jsou uložena data mé konverzace?",
+      "answer": "Historie vaší konverzace je uložena místně v úložišti vašeho prohlížeče, nikoli na serveru. To znamená:\n- Vaše chaty existují pouze na vašem zařízení\n- Žádná synchronizace mezi zařízeními nebo prohlížeči\n- Vymazání dat prohlížeče odstraní vaše konverzace\n\nPokud používáte režim Azure AI Foundry pro vyhledávání, pouze tyto konverzace jsou také uloženy v Azure AI Foundry s ID vlákna. Viz Nastavení > Model pro více podrobností."
+    },
+    {
+      "question": "Co jsou vlastní agenti?",
+      "answer": "Vlastní agenti jsou pokročilé AI konfigurace, které běží na instanci MSF AI Assistant Foundry se specializovanými schopnostmi. Mohou automaticky používat nástroje jako webové vyhledávání a interpretaci kódu. Toto je pokročilá funkce, která vyžaduje koordinaci s technickým týmem AI asistenta pro vytvoření ID agentů. Najděte je v Nastavení > Model > karta Agenti."
+    },
+    {
+      "question": "Měl bych 100% důvěřovat odpovědím AI?",
+      "answer": "Ne. Přestože je MSF AI asistent mocným nástrojem, neměl by nahrazovat lidské úsudky a odborné znalosti. Vždy:\n- Ověřujte faktické informace\n- Kontrolujte předpojatost a přesnost\n- Revidujte výstupy před jejich použitím v oficiální práci\n- Nevkládejte osobní údaje nebo vysoce citlivé informace\n\nAI je asistent, ne rozhodovatel."
+    },
+    {
+      "question": "Jaká data bych neměl zadávat do AI asistenta?",
+      "answer": "Nezadávejte:\n- Osobní údaje (jména, telefonní čísla, e-mailové adresy, životopisy)\n- Vysoce citlivé operační detaily\n- Informace o pacientech nebo zdravotní záznamy\n- Cokoli, co by mohlo identifikovat jednotlivce nebo ohrozit bezpečnost\n\nViz Zásady ochrany osobních údajů v Centru nápovědy pro úplné pokyny."
+    },
+    {
+      "question": "Jak mohu exportovat nebo smazat svá data?",
+      "answer": "V Nastavení > Správa dat můžete:\n- Exportovat všechny konverzace a výzvy jako JSON\n- Smazat všechny konverzace\n- Importovat dříve exportovaná data\n- Zkontrolovat využití úložného prostoru\n\nExportovaná data lze později importovat nebo přenést do jiného prohlížeče."
+    },
+    {
+      "question": "Na koho se mám obrátit s dotazy nebo zpětnou vazbou?",
+      "answer": "Kontaktujte podporu:\n- Uživatelé z USA: ai@newyork.msf.org\n- Uživatelé mimo USA: ai.team@amsterdam.msf.org\n\nMůžete také kdykoli přistupovat k Centru nápovědy z Nastavení > Nápověda a podpora."
+    },
+    {
+      "question": "Kde se mohu dozvědět více o projektu AI asistenta?",
+      "answer": "Navštivte portál AI Accelerator na Pamoja pro projektovou dokumentaci, aktualizace a zdroje:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nTento portál obsahuje informace o cestovní mapě projektu, školicích materiálech a jak přispět."
+    },
+    {
+      "question": "Je MSF AI asistent open source?",
+      "answer": "Ano! MSF AI asistent je open source a dostupný na GitHubu. Můžete si prohlédnout kódovou základnu, přispět k vylepšením nebo se učit z implementace:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProjekt je postaven pomocí Next.js, React a integruje se s několika poskytovateli AI. Příspěvky a zpětná vazba jsou vždy vítány!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Co je MSF AI asistent a jak chrání soukromí?",
+        "answer": "MSF AI asistent je interní AI chatbot vyvinutý pro zaměstnance MSF. Používá jazykové modely Open AI od Microsoft Azure a zároveň uchovává všechna data v rámci MSF, což zajišťuje soukromí a kontrolu. Používání ai.msf.org je bezpečnější prostředí než používání jiných externích bezplatných AI nástrojů, které nabízejí velmi málo záruk soukromí.",
+        "keywords": [
+          "soukromí",
+          "ochrana dat",
+          "interní",
+          "bezpečný",
+          "MSF",
+          "Azure",
+          "AI asistent",
+          "chatbot",
+          "data v rámci MSF",
+          "záruky soukromí",
+          "bezpečnější",
+          "externí nástroje"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Kde jsou uložena a zpracována má data?",
+        "answer": "Všechna konverzační data s MSF AI asistentem jsou uložena místně na vašem vlastním počítači a zpracována v rámci systémů MSF pomocí infrastruktury Microsoft Azure. Vaše přihlašovací údaje jsou zpracovány MSF, jak je popsáno v zásadách ochrany osobních údajů vaší entity MSF. Data jsou uchovávána v rámci MSF, což zajišťuje soukromí a kontrolu.",
+        "keywords": [
+          "úložiště dat",
+          "kde uloženo",
+          "místně",
+          "počítač",
+          "systémy MSF",
+          "Microsoft Azure",
+          "přihlašovací údaje",
+          "zpracováno MSF",
+          "zásady ochrany osobních údajů",
+          "v rámci MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Jaká data bych neměl zadávat do MSF AI asistenta?",
+        "answer": "Do ai.msf.org nebudete zadávat následující informace:\n- Osobní údaje (jména, telefonní čísla, životopisy, svědectví; cokoli, co by mohlo identifikovat osobu přímo nebo nepřímo -- to zahrnuje kombinace dat, které při kombinaci mohou umožnit identifikaci osoby)\n- Vysoce citlivá data (data, která lze úmyslně nebo neúmyslně použít k poškození jednotlivců, komunit, MSF nebo jejích zaměstnanců -- určení citlivosti dat vyžaduje kontextovou analýzu, např. umístění citlivých projektů nebo rizikových skupin, bezpečnostní incidenty a další operační detaily)",
+        "keywords": [
+          "zakázaná data",
+          "osobní údaje",
+          "citlivá data",
+          "jména",
+          "telefonní čísla",
+          "životopisy",
+          "svědectví",
+          "identifikovat osoby",
+          "poškodit",
+          "citlivé projekty",
+          "bezpečnostní incidenty",
+          "operační detaily",
+          "nezadávejte"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Jaké jsou pokyny pro odpovědné použití MSF AI asistenta?",
+        "answer": "Souhlasíte s odpovědným používáním ai.msf.org. Budete:\n- Používat v souladu s ICT, AI a jinými příslušnými zásadami vaší entity MSF\n- Vždy revidovat výstupy z hlediska přesnosti, úplnosti a předpojatosti\n- Ověřit, že výstupy neporušují práva duševního vlastnictví třetích stran\n- Být transparentní ohledně vašeho použití AI a označit výstupy jako generované AI",
+        "keywords": [
+          "odpovědné použití",
+          "pokyny",
+          "zásady MSF",
+          "zásady ICT",
+          "zásady AI",
+          "revidovat výstupy",
+          "přesnost",
+          "předpojatost",
+          "duševní vlastnictví",
+          "transparentnost",
+          "generováno AI",
+          "označit výstupy"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Jaká jsou zakázaná použití MSF AI asistenta?",
+        "answer": "Ai.msf.org nebudete používat pro následující účely:\n- Zdravotní péče (poskytování zdravotní péče nebo odpovídání na zdravotní otázky)\n- Dohled nebo sledování pacientů nebo komunit MSF nebo jakýchkoli jiných osob\n- Rozhodnutí související se zaměstnáním (podpora nebo nahrazení rozhodnutí souvisejících se zaměstnáním)\n- Automatizované rozhodování (přijímání rozhodnutí, která by mohla poškodit osobu nebo komunitu)\n- Generování mediálního obsahu pro externí komunikaci o záležitostech veřejného zájmu\n- Nezákonné nebo škodlivé aktivity",
+        "keywords": [
+          "zakázaná použití",
+          "zdravotní péče",
+          "dohled",
+          "sledování",
+          "rozhodnutí o zaměstnání",
+          "automatizované rozhodování",
+          "mediální obsah",
+          "externí komunikace",
+          "nezákonné aktivity",
+          "škodlivé aktivity",
+          "nepoužívejte pro"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Jak přesné jsou výstupy MSF AI asistenta?",
+        "answer": "Ai.msf.org používá experimentální technologii -- nezaručuje, že výstupy budou přesné. Navíc technologie nebyla vyškolena na datech reprezentativních pro pacienty a komunity MSF. Výstupy AI mohou zachovávat předpojatost, diskriminaci a stereotypy. Je vaší odpovědností revidovat generované výstupy.",
+        "keywords": [
+          "přesnost",
+          "experimentální technologie",
+          "nezaručeno",
+          "předpojatost",
+          "diskriminace",
+          "stereotypy",
+          "revidovat výstupy",
+          "odpovědnost",
+          "pacienti MSF",
+          "komunity",
+          "nevyškoleno"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Na koho se mám obrátit s obavami nebo incidenty týkajícími se soukromí?",
+        "answer": "Pokud máte obavy nebo chcete nahlásit incident, kontaktujte: ai.team@amsterdam.msf.org. Pro konkrétní regiony můžete také kontaktovat svého místního DPO (Data Protection Officer) nebo odpovědný ICT (Information and Communication Technology) tým.",
+        "keywords": [
+          "obavy o soukromí",
+          "incident",
+          "kontakt",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "pověřenec pro ochranu osobních údajů",
+          "ICT",
+          "podpora",
+          "nahlášení incidentu"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Mohou se podmínky použití změnit?",
+        "answer": "Tyto podmínky mohou být kdykoli změněny MSF -- upozorníme vás, pokud je změníme -- vaše pokračující používání ai.msf.org znamená váš souhlas s případnými změnami.",
+        "keywords": [
+          "podmínky použití",
+          "změnitelné",
+          "změny",
+          "oznámení",
+          "pokračující používání",
+          "souhlas",
+          "aktualizace",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Odeslat žádost o podporu",
+      "subtitle": "Získejte pomoc od našeho týmu",
+      "description": "Potřebujete pomoc nebo chcete poskytnout zpětnou vazbu? Kliknutím níže otevřete náš formulář podpory.",
+      "buttonText": "Otevřít formulář podpory"
+    },
+    "otherWays": {
+      "title": "Další způsoby, jak nás kontaktovat"
+    },
+    "emailSupport": {
+      "title": "E-mailová podpora",
+      "description": "Pošlete nám e-mail s dotazy, zpětnou vazbou nebo technickými problémy"
+    },
+    "additionalResources": {
+      "title": "Další zdroje"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Portál AI Accelerator",
+      "description": "Dokumentace, aktualizace projektu a školicí materiály"
+    },
+    "githubRepository": {
+      "title": "Open Source repozitář",
+      "description": "Prohlédněte si kód, nahlaste problémy a přispějte na GitHubu"
+    }
+  }
+}
