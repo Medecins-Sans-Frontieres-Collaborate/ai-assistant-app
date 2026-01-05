@@ -124,6 +124,11 @@ export function HelpPageClient({
       ja: '日本語',
       hi: 'हिन्दी',
       sw: 'Kiswahili',
+      ko: '한국어',
+      vi: 'Tiếng Việt',
+      uk: 'Українська',
+      bn: 'বাংলা',
+      ur: 'اردو',
     };
     return localeNames[locale] || locale;
   };
