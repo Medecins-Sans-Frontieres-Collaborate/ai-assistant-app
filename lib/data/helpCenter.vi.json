@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Trợ lý AI của MSF là gì?",
+      "answer": "Trợ lý AI của MSF là công cụ trò chuyện AI nội bộ được tùy chỉnh cho nhân viên Médecins Sans Frontières (MSF). Giải pháp này tăng cường quyền riêng tư bằng cách giữ dữ liệu cuộc trò chuyện trong hệ thống MSF, cung cấp giải pháp thay thế an toàn cho các dịch vụ bên ngoài. Nó hỗ trợ nhiều mô hình AI (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) và các tính năng như tìm kiếm web, phiên âm giọng nói có dịch thuật và lời nhắc và giọng điệu có thể tùy chỉnh. Trợ lý AI có thể giúp trả lời câu hỏi, tạo nội dung, dịch văn bản, động não ý tưởng và hơn thế nữa. Nó được thiết kế để trở thành trợ lý cho công việc của bạn - luôn kiểm tra chất lượng và độ chính xác của đầu ra."
+    },
+    {
+      "question": "Có những mô hình nào?",
+      "answer": "Trợ lý AI của MSF cung cấp quyền truy cập vào nhiều mô hình AI:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (Mô hình lý luận OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nBạn có thể chuyển đổi mô hình bất cứ lúc nào bằng menu thả xuống lựa chọn mô hình ở đầu cuộc trò chuyện."
+    },
+    {
+      "question": "Hành động nhanh (lời nhắc và giọng điệu) là gì?",
+      "answer": "Hành động nhanh cho phép bạn nhanh chóng áp dụng lời nhắc và giọng điệu cho tin nhắn của mình:\n\n• Lời nhắc: Mẫu có thể tái sử dụng cho các tác vụ phổ biến (ví dụ: 「Dịch sang tiếng Pháp」, 「Tóm tắt tài liệu này」). Tạo lời nhắc tùy chỉnh hoặc sử dụng trợ lý AI tích hợp để tạo chúng.\n\n• Giọng điệu: Điều chỉnh cách AI phản hồi (ví dụ: Chuyên nghiệp, Thân mật, Kỹ thuật). Áp dụng giọng điệu để phù hợp với nhu cầu của bạn.\n\nTruy cập hành động nhanh qua biểu tượng sét (⚡) trong đầu vào trò chuyện hoặc nhấn / để tìm kiếm."
+    },
+    {
+      "question": "Chế độ tìm kiếm là gì?",
+      "answer": "Chế độ tìm kiếm cho phép tìm kiếm web khi AI cần thông tin cập nhật. Có hai tùy chọn:\n\n• Chế độ tập trung vào quyền riêng tư (mặc định): Chỉ gửi truy vấn tìm kiếm đến Azure AI Foundry, không phải toàn bộ cuộc trò chuyện của bạn. Riêng tư hơn nhưng chậm hơn.\n\n• Chế độ Azure AI Foundry (chỉ GPT-4.1): Lưu trữ toàn bộ cuộc trò chuyện của bạn trong Azure AI Foundry để có phản hồi nhanh hơn và truy cập trực tiếp vào tìm kiếm web.\n\nTìm hiểu thêm về sự khác biệt về quyền riêng tư trong Cài đặt > Mô hình > Định tuyến tìm kiếm."
+    },
+    {
+      "question": "Làm thế nào để sử dụng phiên âm giọng nói?",
+      "answer": "Nhấp vào biểu tượng micrô trong đầu vào trò chuyện để ghi âm. AI sẽ phiên âm giọng nói của bạn thành văn bản. Sau khi phiên âm, bạn có thể:\n- Sao chép văn bản\n- Tải xuống dưới dạng tệp\n- Dịch sang hơn 13 ngôn ngữ (Tiếng Ả Rập, Tiếng Bengal, Tiếng Anh, Tiếng Pháp, Tiếng Bồ Đào Nha, Tiếng Nga, Tiếng Tây Ban Nha, Tiếng Swahili, Tiếng Ukraina, Tiếng Urdu và nhiều hơn nữa)\n\nTính năng này rất tuyệt vời cho ghi chú cuộc họp, phỏng vấn hoặc nhập liệu giọng nói nhanh."
+    },
+    {
+      "question": "Tôi có thể sử dụng Trợ lý AI của MSF trên điện thoại không?",
+      "answer": "Có! Trợ lý AI của MSF hoạt động như một Ứng dụng Web Tiến bộ (PWA). Trên thiết bị di động:\n1. Mở ai.msf.org trong trình duyệt của bạn và đăng nhập\n2. Vào Cài đặt > Ứng dụng di động để biết hướng dẫn chi tiết\n3. Nhấn 「Thêm vào Màn hình chính」 (iOS Safari) hoặc 「Cài đặt」 (Android Chrome)\n4. Ứng dụng sẽ hoạt động như ứng dụng gốc với hỗ trợ ngoại tuyến và thời gian tải nhanh hơn\n\nQuan trọng: Cài đặt sau khi đăng nhập để giữ xác thực của bạn. Bạn cũng có thể cài đặt nó trên trình duyệt máy tính để bàn để có trải nghiệm tốt hơn."
+    },
+    {
+      "question": "Dữ liệu cuộc trò chuyện của tôi được lưu trữ ở đâu?",
+      "answer": "Lịch sử cuộc trò chuyện của bạn được lưu trữ cục bộ trong bộ nhớ trình duyệt của bạn, không phải trên máy chủ. Điều này có nghĩa là:\n- Cuộc trò chuyện của bạn chỉ tồn tại trên thiết bị của bạn\n- Chúng không đồng bộ hóa giữa các thiết bị hoặc trình duyệt\n- Xóa dữ liệu trình duyệt sẽ xóa cuộc trò chuyện của bạn\n\nNếu bạn sử dụng chế độ Azure AI Foundry để tìm kiếm, chỉ những cuộc trò chuyện đó cũng được lưu trữ trong Azure AI Foundry với ID luồng. Xem Cài đặt > Mô hình để biết thêm chi tiết."
+    },
+    {
+      "question": "Tác nhân tùy chỉnh là gì?",
+      "answer": "Tác nhân tùy chỉnh là cấu hình AI nâng cao chạy trên phiên bản MSF AI Assistant Foundry với khả năng chuyên biệt. Chúng có thể tự động sử dụng các công cụ như tìm kiếm web và giải thích mã. Đây là tính năng nâng cao đòi hỏi phối hợp với nhóm kỹ thuật trợ lý AI để tạo ID tác nhân. Tìm chúng trong Cài đặt > Mô hình > tab Tác nhân."
+    },
+    {
+      "question": "Tôi có nên tin tưởng 100% vào câu trả lời của AI không?",
+      "answer": "Không. Mặc dù Trợ lý AI của MSF là một công cụ mạnh mẽ, nhưng nó không nên thay thế phán đoán và chuyên môn của con người. Luôn luôn:\n- Xác minh thông tin thực tế\n- Kiểm tra thiên vị và độ chính xác\n- Xem xét đầu ra trước khi sử dụng trong công việc chính thức\n- Không nhập dữ liệu cá nhân hoặc thông tin rất nhạy cảm\n\nAI là trợ lý, không phải người ra quyết định."
+    },
+    {
+      "question": "Tôi KHÔNG nên nhập dữ liệu nào vào trợ lý AI?",
+      "answer": "Không nhập:\n- Dữ liệu cá nhân (tên, số điện thoại, địa chỉ email, sơ yếu lý lịch)\n- Chi tiết hoạt động rất nhạy cảm\n- Thông tin bệnh nhân hoặc hồ sơ y tế\n- Bất cứ điều gì có thể xác định cá nhân hoặc đe dọa an ninh\n\nXem chính sách quyền riêng tư trong Trung tâm trợ giúp để biết hướng dẫn đầy đủ."
+    },
+    {
+      "question": "Làm thế nào để xuất hoặc xóa dữ liệu của tôi?",
+      "answer": "Trong Cài đặt > Quản lý dữ liệu, bạn có thể:\n- Xuất tất cả cuộc trò chuyện và lời nhắc dưới dạng JSON\n- Xóa tất cả cuộc trò chuyện\n- Nhập dữ liệu đã xuất trước đó\n- Kiểm tra mức sử dụng bộ nhớ\n\nDữ liệu đã xuất có thể được nhập sau hoặc chuyển sang trình duyệt khác."
+    },
+    {
+      "question": "Tôi nên liên hệ với ai cho các câu hỏi hoặc phản hồi?",
+      "answer": "Liên hệ hỗ trợ:\n- Người dùng Hoa Kỳ: ai@newyork.msf.org\n- Người dùng ngoài Hoa Kỳ: ai.team@amsterdam.msf.org\n\nBạn cũng có thể truy cập Trung tâm trợ giúp bất cứ lúc nào từ Cài đặt > Trợ giúp và hỗ trợ."
+    },
+    {
+      "question": "Tôi có thể tìm hiểu thêm về dự án trợ lý AI ở đâu?",
+      "answer": "Truy cập cổng thông tin AI Accelerator trên Pamoja để biết tài liệu dự án, cập nhật và tài nguyên:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nCổng thông tin này chứa thông tin về lộ trình dự án, tài liệu đào tạo và cách tham gia."
+    },
+    {
+      "question": "Trợ lý AI của MSF có phải là mã nguồn mở không?",
+      "answer": "Có! Trợ lý AI của MSF là mã nguồn mở và có sẵn trên GitHub. Bạn có thể xem cơ sở mã, đóng góp cải tiến hoặc học hỏi từ việc triển khai:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nDự án được xây dựng bằng Next.js, React và tích hợp với nhiều nhà cung cấp AI. Đóng góp và phản hồi được hoan nghênh!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Trợ lý AI của MSF là gì và nó bảo vệ quyền riêng tư như thế nào?",
+        "answer": "Trợ lý AI của MSF là chatbot AI nội bộ được phát triển cho nhân viên MSF. Nó sử dụng các mô hình ngôn ngữ lớn Open AI của Microsoft Azure trong khi giữ tất cả dữ liệu trong MSF, đảm bảo quyền riêng tư và kiểm soát. Sử dụng ai.msf.org là một môi trường an toàn và bảo mật hơn so với việc sử dụng các công cụ AI miễn phí bên ngoài khác, cung cấp rất ít đảm bảo về quyền riêng tư.",
+        "keywords": [
+          "quyền riêng tư",
+          "bảo vệ dữ liệu",
+          "nội bộ",
+          "an toàn",
+          "MSF",
+          "Azure",
+          "trợ lý AI",
+          "chatbot",
+          "dữ liệu trong MSF",
+          "đảm bảo quyền riêng tư",
+          "an toàn hơn",
+          "công cụ bên ngoài"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Dữ liệu của tôi được lưu trữ và xử lý ở đâu?",
+        "answer": "Tất cả dữ liệu cuộc trò chuyện với Trợ lý AI của MSF được lưu trữ cục bộ trên máy tính của riêng bạn và được xử lý trong hệ thống MSF bằng cách sử dụng cơ sở hạ tầng Microsoft Azure. Thông tin đăng nhập của bạn được xử lý bởi MSF như được mô tả trong chính sách quyền riêng tư của thực thể MSF của bạn. Dữ liệu được giữ trong MSF, đảm bảo quyền riêng tư và kiểm soát.",
+        "keywords": [
+          "lưu trữ dữ liệu",
+          "lưu trữ ở đâu",
+          "cục bộ",
+          "máy tính",
+          "hệ thống MSF",
+          "Microsoft Azure",
+          "thông tin đăng nhập",
+          "xử lý bởi MSF",
+          "chính sách quyền riêng tư",
+          "trong MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Tôi KHÔNG nên nhập dữ liệu nào vào Trợ lý AI của MSF?",
+        "answer": "Bạn sẽ KHÔNG nhập thông tin sau vào ai.msf.org:\n- Dữ liệu cá nhân (tên, số điện thoại, sơ yếu lý lịch, lời khai; bất cứ điều gì có thể xác định trực tiếp hoặc gián tiếp một cá nhân -- điều này bao gồm sự kết hợp của dữ liệu có thể cùng nhau cho phép xác định một cá nhân)\n- Dữ liệu rất nhạy cảm (dữ liệu có thể được sử dụng một cách cố ý hoặc vô ý để gây hại cho cá nhân, cộng đồng, MSF hoặc nhân viên của nó -- xác định độ nhạy cảm của dữ liệu đòi hỏi bao gồm phân tích bối cảnh, ví dụ như vị trí của các dự án nhạy cảm hoặc nhóm có nguy cơ, sự cố an ninh và các chi tiết hoạt động khác)",
+        "keywords": [
+          "dữ liệu bị cấm",
+          "dữ liệu cá nhân",
+          "dữ liệu nhạy cảm",
+          "tên",
+          "số điện thoại",
+          "sơ yếu lý lịch",
+          "lời khai",
+          "xác định cá nhân",
+          "gây hại",
+          "dự án nhạy cảm",
+          "sự cố an ninh",
+          "chi tiết hoạt động",
+          "không nhập"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Hướng dẫn sử dụng có trách nhiệm Trợ lý AI của MSF là gì?",
+        "answer": "Bạn đồng ý sử dụng ai.msf.org có trách nhiệm. Bạn sẽ:\n- Sử dụng nó theo chính sách ICT, AI và các chính sách khác hiện hành của thực thể MSF của bạn\n- Luôn xem xét đầu ra về độ chính xác, tính toàn diện và thiên vị\n- Kiểm tra xem đầu ra không vi phạm quyền sở hữu trí tuệ của bên thứ ba\n- Minh bạch về việc sử dụng AI của bạn và đánh dấu đầu ra là do AI tạo ra",
+        "keywords": [
+          "sử dụng có trách nhiệm",
+          "hướng dẫn",
+          "chính sách MSF",
+          "chính sách ICT",
+          "chính sách AI",
+          "xem xét đầu ra",
+          "độ chính xác",
+          "thiên vị",
+          "sở hữu trí tuệ",
+          "minh bạch",
+          "do AI tạo ra",
+          "đánh dấu đầu ra"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Việc sử dụng bị cấm của Trợ lý AI của MSF là gì?",
+        "answer": "Bạn sẽ KHÔNG sử dụng ai.msf.org cho bất kỳ mục đích nào sau đây:\n- Chăm sóc sức khỏe (để cung cấp dịch vụ chăm sóc sức khỏe hoặc trả lời các câu hỏi liên quan đến sức khỏe)\n- Giám sát hoặc theo dõi bệnh nhân hoặc cộng đồng MSF hoặc bất kỳ cá nhân nào khác\n- Quyết định liên quan đến việc làm (để hỗ trợ hoặc thay thế các quyết định liên quan đến việc làm)\n- Ra quyết định tự động (để đưa ra quyết định có thể gây hại cho một cá nhân hoặc cộng đồng)\n- Tạo nội dung truyền thông cho truyền thông bên ngoài về các vấn đề có lợi ích công cộng\n- Hoạt động bất hợp pháp hoặc có hại",
+        "keywords": [
+          "việc sử dụng bị cấm",
+          "chăm sóc sức khỏe",
+          "giám sát",
+          "theo dõi",
+          "quyết định việc làm",
+          "ra quyết định tự động",
+          "nội dung truyền thông",
+          "truyền thông bên ngoài",
+          "hoạt động bất hợp pháp",
+          "hoạt động có hại",
+          "không sử dụng cho"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Đầu ra của Trợ lý AI của MSF chính xác như thế nào?",
+        "answer": "Ai.msf.org sử dụng công nghệ thử nghiệm -- nó không đảm bảo rằng đầu ra sẽ chính xác. Hơn nữa, công nghệ không được đào tạo với dữ liệu đại diện cho bệnh nhân và cộng đồng MSF. Đầu ra AI có thể duy trì thiên vị, phân biệt đối xử và định kiến. Bạn có trách nhiệm xem xét đầu ra được tạo ra.",
+        "keywords": [
+          "độ chính xác",
+          "công nghệ thử nghiệm",
+          "không đảm bảo",
+          "thiên vị",
+          "phân biệt đối xử",
+          "định kiến",
+          "xem xét đầu ra",
+          "trách nhiệm",
+          "bệnh nhân MSF",
+          "cộng đồng",
+          "không được đào tạo"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Tôi nên liên hệ với ai về các mối quan tâm về quyền riêng tư hoặc sự cố?",
+        "answer": "Nếu bạn có mối quan tâm hoặc muốn báo cáo sự cố, hãy liên hệ: ai.team@amsterdam.msf.org. Đối với các khu vực cụ thể, bạn cũng có thể liên hệ với DPO (Nhân viên Bảo vệ Dữ liệu) địa phương hoặc nhóm ICT (Công nghệ Thông tin và Truyền thông) có trách nhiệm của bạn.",
+        "keywords": [
+          "mối quan tâm về quyền riêng tư",
+          "sự cố",
+          "liên hệ",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "nhân viên bảo vệ dữ liệu",
+          "ICT",
+          "hỗ trợ",
+          "báo cáo sự cố"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Điều khoản sử dụng có thể thay đổi không?",
+        "answer": "Các điều khoản này có thể được thay đổi bởi MSF bất cứ lúc nào -- chúng tôi sẽ thông báo cho bạn nếu chúng tôi thay đổi chúng -- việc bạn tiếp tục sử dụng ai.msf.org ngụ ý chấp nhận bất kỳ thay đổi nào.",
+        "keywords": [
+          "điều khoản sử dụng",
+          "thay đổi",
+          "thay đổi",
+          "thông báo",
+          "tiếp tục sử dụng",
+          "chấp nhận",
+          "cập nhật",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Gửi yêu cầu hỗ trợ",
+      "subtitle": "Nhận trợ giúp từ nhóm của chúng tôi",
+      "description": "Cần trợ giúp hoặc muốn cung cấp phản hồi? Nhấp bên dưới để mở biểu mẫu hỗ trợ của chúng tôi.",
+      "buttonText": "Mở biểu mẫu hỗ trợ"
+    },
+    "otherWays": {
+      "title": "Các cách khác để tiếp cận chúng tôi"
+    },
+    "emailSupport": {
+      "title": "Hỗ trợ qua email",
+      "description": "Gửi email cho chúng tôi để biết câu hỏi, phản hồi hoặc sự cố kỹ thuật"
+    },
+    "additionalResources": {
+      "title": "Tài nguyên bổ sung"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Cổng thông tin AI Accelerator",
+      "description": "Tài liệu, cập nhật dự án và tài liệu đào tạo"
+    },
+    "githubRepository": {
+      "title": "Kho lưu trữ mã nguồn mở",
+      "description": "Xem mã, báo cáo vấn đề và đóng góp trên GitHub"
+    }
+  }
+}
