@@ -119,6 +119,11 @@ export function HelpPageClient({
       pt: 'Português',
       ar: 'العربية',
       nl: 'Nederlands',
+      ru: 'Русский',
+      zh: '中文',
+      ja: '日本語',
+      hi: 'हिन्दी',
+      sw: 'Kiswahili',
     };
     return localeNames[locale] || locale;
   };
