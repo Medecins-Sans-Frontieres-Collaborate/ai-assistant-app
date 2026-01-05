@@ -7,18 +7,28 @@ import helpCenterDe from '@/lib/data/helpCenter.de.json';
 import helpCenterEn from '@/lib/data/helpCenter.en.json';
 import helpCenterEs from '@/lib/data/helpCenter.es.json';
 import helpCenterFr from '@/lib/data/helpCenter.fr.json';
+import helpCenterHi from '@/lib/data/helpCenter.hi.json';
 import helpCenterIt from '@/lib/data/helpCenter.it.json';
+import helpCenterJa from '@/lib/data/helpCenter.ja.json';
 import helpCenterNl from '@/lib/data/helpCenter.nl.json';
 import helpCenterPt from '@/lib/data/helpCenter.pt.json';
+import helpCenterRu from '@/lib/data/helpCenter.ru.json';
+import helpCenterSw from '@/lib/data/helpCenter.sw.json';
+import helpCenterZh from '@/lib/data/helpCenter.zh.json';
 import messagesAr from '@/messages/ar.json';
 import messagesDe from '@/messages/de.json';
 // Import UI translations
 import messagesEn from '@/messages/en.json';
 import messagesEs from '@/messages/es.json';
 import messagesFr from '@/messages/fr.json';
+import messagesHi from '@/messages/hi.json';
 import messagesIt from '@/messages/it.json';
+import messagesJa from '@/messages/ja.json';
 import messagesNl from '@/messages/nl.json';
 import messagesPt from '@/messages/pt.json';
+import messagesRu from '@/messages/ru.json';
+import messagesSw from '@/messages/sw.json';
+import messagesZh from '@/messages/zh.json';
 
 interface PageProps {
   params: Promise<{
@@ -36,6 +46,11 @@ const AVAILABLE_FAQ_LOCALES = [
   'pt',
   'ar',
   'nl',
+  'ru',
+  'zh',
+  'ja',
+  'hi',
+  'sw',
 ] as const;
 
 // Pre-bundle all FAQ translations
@@ -48,6 +63,11 @@ const faqTranslations: Record<string, any> = {
   pt: helpCenterPt.faq,
   ar: helpCenterAr.faq,
   nl: helpCenterNl.faq,
+  ru: helpCenterRu.faq,
+  zh: helpCenterZh.faq,
+  ja: helpCenterJa.faq,
+  hi: helpCenterHi.faq,
+  sw: helpCenterSw.faq,
 };
 
 const privacyTranslations: Record<string, any> = {
@@ -59,6 +79,11 @@ const privacyTranslations: Record<string, any> = {
   pt: helpCenterPt.privacyPolicy.items,
   ar: helpCenterAr.privacyPolicy.items,
   nl: helpCenterNl.privacyPolicy.items,
+  ru: helpCenterRu.privacyPolicy.items,
+  zh: helpCenterZh.privacyPolicy.items,
+  ja: helpCenterJa.privacyPolicy.items,
+  hi: helpCenterHi.privacyPolicy.items,
+  sw: helpCenterSw.privacyPolicy.items,
 };
 
 const contactTranslations: Record<string, any> = {
@@ -70,6 +95,11 @@ const contactTranslations: Record<string, any> = {
   pt: helpCenterPt.contact,
   ar: helpCenterAr.contact,
   nl: helpCenterNl.contact,
+  ru: helpCenterRu.contact,
+  zh: helpCenterZh.contact,
+  ja: helpCenterJa.contact,
+  hi: helpCenterHi.contact,
+  sw: helpCenterSw.contact,
 };
 
 const uiTranslations: Record<string, any> = {
@@ -81,6 +111,11 @@ const uiTranslations: Record<string, any> = {
   pt: messagesPt.help,
   ar: messagesAr.help,
   nl: messagesNl.help,
+  ru: messagesRu.help,
+  zh: messagesZh.help,
+  ja: messagesJa.help,
+  hi: messagesHi.help,
+  sw: messagesSw.help,
 };
 
 export default async function HelpPage({ params }: PageProps) {
