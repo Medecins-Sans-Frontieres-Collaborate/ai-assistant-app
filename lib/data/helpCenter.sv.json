@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Vad är MSF AI-assistenten?",
+      "answer": "MSF AI-assistenten är ett internt AI-chattverktyg anpassat för personal vid Médecins Sans Frontières (MSF). Denna lösning förbättrar integriteten genom att hålla samtalsdata inom MSF:s system och tillhandahåller ett säkert alternativ till externa tjänster. Den stöder flera AI-modeller (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) och funktioner som webbsökning, rösttranskription med översättning och anpassningsbara frågor och toner. AI-assistenten kan hjälpa till att svara på frågor, skapa innehåll, översätta text, brainstorma och mycket mer. Den är utformad för att vara en assistent för ditt arbete - kontrollera alltid kvalitet och noggrannhet i utdata."
+    },
+    {
+      "question": "Vilka modeller finns tillgängliga?",
+      "answer": "MSF AI-assistenten ger tillgång till flera AI-modeller:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI-resonemangsmodeller)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nDu kan byta modell när som helst med hjälp av rullgardinsmenyn för modellval högst upp i chatten."
+    },
+    {
+      "question": "Vad är snabbåtgärder (frågor och toner)?",
+      "answer": "Snabbåtgärder låter dig snabbt tillämpa frågor och toner på dina meddelanden:\n\n• Frågor: Återanvändbara mallar för vanliga uppgifter (t.ex. 「Översätt till franska」, 「Sammanfatta detta dokument」). Skapa anpassade frågor eller använd den inbyggda AI-assistenten för att generera dem.\n\n• Toner: Justera hur AI svarar (t.ex. professionell, avslappnad, teknisk). Tillämpa toner lämpliga för dina behov.\n\nÅtkomst till snabbåtgärder via blixtsymbolen (⚡) i chattinmatningen eller tryck på / för att söka."
+    },
+    {
+      "question": "Vad är sökläge?",
+      "answer": "Sökläge aktiverar webbsökning när AI behöver uppdaterad information. Det finns två alternativ:\n\n• Integritetsfokuserat läge (standard): Skickar endast sökfrågor till Azure AI Foundry, inte hela din konversation. Mer privat men långsammare.\n\n• Azure AI Foundry-läge (endast GPT-4.1): Lagrar hela din konversation i Azure AI Foundry för snabbare svar och direkt åtkomst till webbsökning.\n\nLäs mer om integritetsskillnader i Inställningar > Modell > Söklutning."
+    },
+    {
+      "question": "Hur använder jag rösttranskription?",
+      "answer": "Klicka på mikrofonikonen i chattinmatningen för att spela in. AI kommer att transkribera ditt tal till text. Efter transkription kan du:\n- Kopiera texten\n- Ladda ner som fil\n- Översätt till över 13 språk (arabiska, bengali, engelska, franska, portugisiska, ryska, spanska, swahili, ukrainska, urdu och fler)\n\nDenna funktion är utmärkt för mötesanteckningar, intervjuer eller snabb röstinmatning."
+    },
+    {
+      "question": "Kan jag använda MSF AI-assistenten på min telefon?",
+      "answer": "Ja! MSF AI-assistenten fungerar som en progressiv webbapp (PWA) på mobila enheter:\n1. Öppna ai.msf.org i din webbläsare och logga in\n2. Gå till Inställningar > Mobilapp för detaljerade instruktioner\n3. Tryck på 「Lägg till på hemskärmen」 (iOS Safari) eller 「Installera」 (Android Chrome)\n4. Appen kommer att fungera som en native app med offlinestöd och snabbare laddningstider\n\nViktigt: Installera efter inloggning för att behålla din autentisering. Du kan också installera den i din skrivbordswebbläsare för en bättre upplevelse."
+    },
+    {
+      "question": "Var lagras min samtalsdata?",
+      "answer": "Din konversationshistorik lagras lokalt i din webbläsares lagring, inte på en server. Detta innebär:\n- Dina chattar finns endast på din enhet\n- Ingen synkronisering mellan enheter eller webbläsare\n- Att rensa webbläsardata kommer att ta bort dina konversationer\n\nOm du använder Azure AI Foundry-läge för sökningar lagras endast dessa konversationer också i Azure AI Foundry med ett tråd-ID. Se Inställningar > Modell för mer information."
+    },
+    {
+      "question": "Vad är anpassade agenter?",
+      "answer": "Anpassade agenter är avancerade AI-konfigurationer som körs på MSF AI Assistant Foundry-instansen med specialiserade funktioner. De kan automatiskt använda verktyg som webbsökning och kodtolkning. Detta är en avancerad funktion som kräver samordning med AI-assistentens tekniska team för att skapa agent-ID:n. Hitta dem i Inställningar > Modell > fliken Agenter."
+    },
+    {
+      "question": "Bör jag lita 100% på AI-svar?",
+      "answer": "Nej. Även om MSF AI-assistenten är ett kraftfullt verktyg, bör den inte ersätta mänskligt omdöme och expertis. Alltid:\n- Verifiera faktainformation\n- Kontrollera partiskhet och noggrannhet\n- Granska utdata innan de används i officiellt arbete\n- Mata inte in personuppgifter eller mycket känslig information\n\nAI är en assistent, inte en beslutsfattare."
+    },
+    {
+      "question": "Vilka data bör jag inte mata in i AI-assistenten?",
+      "answer": "Mata inte in:\n- Personuppgifter (namn, telefonnummer, e-postadresser, CV:n)\n- Mycket känsliga operativa detaljer\n- Patientinformation eller medicinska journaler\n- Allt som kan identifiera individer eller hota säkerheten\n\nSe integritetspolicyn i hjälpcentret för fullständig vägledning."
+    },
+    {
+      "question": "Hur kan jag exportera eller ta bort mina data?",
+      "answer": "I Inställningar > Datahantering kan du:\n- Exportera alla konversationer och frågor som JSON\n- Ta bort alla konversationer\n- Importera tidigare exporterade data\n- Kontrollera lagringsutrymme användning\n\nExporterade data kan importeras senare eller överföras till en annan webbläsare."
+    },
+    {
+      "question": "Vem ska jag kontakta för frågor eller feedback?",
+      "answer": "Kontakta support:\n- USA-användare: ai@newyork.msf.org\n- Icke-USA-användare: ai.team@amsterdam.msf.org\n\nDu kan också komma åt hjälpcentret när som helst från Inställningar > Hjälp och support."
+    },
+    {
+      "question": "Var kan jag lära mig mer om AI-assistentprojektet?",
+      "answer": "Besök AI Accelerator-portalen på Pamoja för projektdokumentation, uppdateringar och resurser:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nDenna portal innehåller information om projektets färdplan, utbildningsmaterial och hur man bidrar."
+    },
+    {
+      "question": "Är MSF AI-assistenten öppen källkod?",
+      "answer": "Ja! MSF AI-assistenten är öppen källkod och tillgänglig på GitHub. Du kan se kodbasen, bidra till förbättringar eller lära dig av implementationen:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProjektet är byggt med Next.js, React och integreras med flera AI-leverantörer. Bidrag och feedback är alltid välkomna!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Vad är MSF AI-assistenten och hur skyddar den integriteten?",
+        "answer": "MSF AI-assistenten är en intern AI-chatbot utvecklad för MSF-personal. Den använder Open AI stora språkmodeller från Microsoft Azure samtidigt som all data hålls inom MSF, vilket säkerställer integritet och kontroll. Att använda ai.msf.org är en säkrare miljö än att använda andra externa gratis AI-verktyg som erbjuder mycket få integritetsgarantier.",
+        "keywords": [
+          "integritet",
+          "dataskydd",
+          "intern",
+          "säker",
+          "MSF",
+          "Azure",
+          "AI-assistent",
+          "chatbot",
+          "data inom MSF",
+          "integritetsgarantier",
+          "säkrare",
+          "externa verktyg"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Var lagras och bearbetas mina data?",
+        "answer": "All samtalsdata med MSF AI-assistenten lagras lokalt på din egen dator och bearbetas inom MSF:s system med hjälp av Microsoft Azure-infrastruktur. Din inloggningsinformation bearbetas av MSF enligt beskrivningen i din MSF-enhets integritetspolicy. Data hålls inom MSF, vilket säkerställer integritet och kontroll.",
+        "keywords": [
+          "datalagring",
+          "var lagras",
+          "lokalt",
+          "dator",
+          "MSF-system",
+          "Microsoft Azure",
+          "inloggningsinformation",
+          "bearbetad av MSF",
+          "integritetspolicy",
+          "inom MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Vilka data bör jag inte mata in i MSF AI-assistenten?",
+        "answer": "Du ska inte mata in följande information i ai.msf.org:\n- Personuppgifter (namn, telefonnummer, CV:n, intyg; allt som kan identifiera en person direkt eller indirekt -- detta inkluderar datakombinationer som när de kombineras kan möjliggöra identifiering av en person)\n- Mycket känsliga data (data som avsiktligt eller oavsiktligt kan användas för att skada individer, samhällen, MSF eller dess personal -- att bestämma datakänslighet kräver kontextuell analys, till exempel plats för känsliga projekt eller riskgrupper, säkerhetsincidenter och andra operativa detaljer)",
+        "keywords": [
+          "förbjudna data",
+          "personuppgifter",
+          "känsliga data",
+          "namn",
+          "telefonnummer",
+          "CV:n",
+          "intyg",
+          "identifiera personer",
+          "skada",
+          "känsliga projekt",
+          "säkerhetsincidenter",
+          "operativa detaljer",
+          "mata inte in"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Vilka är riktlinjerna för ansvarsfull användning av MSF AI-assistenten?",
+        "answer": "Du samtycker till att använda ai.msf.org ansvarsfullt. Du kommer:\n- Använda i enlighet med din MSF-enhets IKT-, AI- och andra tillämpliga policyer\n- Alltid granska utdata för noggrannhet, fullständighet och partiskhet\n- Verifiera att utdata inte kränker tredje parts immateriella rättigheter\n- Vara transparent om din AI-användning och märka utdata som AI-genererade",
+        "keywords": [
+          "ansvarsfull användning",
+          "riktlinjer",
+          "MSF-policyer",
+          "IKT-policy",
+          "AI-policy",
+          "granska utdata",
+          "noggrannhet",
+          "partiskhet",
+          "immateriella rättigheter",
+          "transparens",
+          "AI-genererade",
+          "märka utdata"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Vilka är förbjudna användningar av MSF AI-assistenten?",
+        "answer": "Du ska inte använda ai.msf.org för följande syften:\n- Hälsovård (för att tillhandahålla hälsovård eller svara på hälsofrågor)\n- Övervakning eller bevakning av patienter eller MSF-samhällen eller andra personer\n- Anställningsrelaterade beslut (för att stödja eller ersätta anställningsrelaterade beslut)\n- Automatiserat beslutsfattande (för att fatta beslut som kan skada en person eller samhälle)\n- Generera medieinnehåll för extern kommunikation om frågor av allmänt intresse\n- Olagliga eller skadliga aktiviteter",
+        "keywords": [
+          "förbjudna användningar",
+          "hälsovård",
+          "övervakning",
+          "bevakning",
+          "anställningsbeslut",
+          "automatiserat beslutsfattande",
+          "medieinnehåll",
+          "extern kommunikation",
+          "olagliga aktiviteter",
+          "skadliga aktiviteter",
+          "använd inte för"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Hur noggranna är MSF AI-assistentens utdata?",
+        "answer": "Ai.msf.org använder experimentell teknik -- garanterar inte att utdata kommer att vara noggranna. Dessutom har tekniken inte tränats med data som är representativa för MSF:s patienter och samhällen. AI-utdata kan upprätthålla partiskhet, diskriminering och stereotyper. Det är ditt ansvar att granska genererade utdata.",
+        "keywords": [
+          "noggrannhet",
+          "experimentell teknik",
+          "inte garanterad",
+          "partiskhet",
+          "diskriminering",
+          "stereotyper",
+          "granska utdata",
+          "ansvar",
+          "MSF-patienter",
+          "samhällen",
+          "inte tränade"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Vem ska jag kontakta för integritetsfrågor eller incidenter?",
+        "answer": "Om du har frågor eller vill rapportera en incident, kontakta: ai.team@amsterdam.msf.org. För specifika regioner kan du också kontakta din lokala DPO (Data Protection Officer) eller ansvarig IKT-team (informations- och kommunikationsteknik).",
+        "keywords": [
+          "integritetsfrågor",
+          "incident",
+          "kontakt",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "dataskyddsombud",
+          "IKT",
+          "support",
+          "incidentrapportering"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Kan användarvillkoren ändras?",
+        "answer": "Dessa villkor kan ändras av MSF när som helst -- vi kommer att meddela dig om vi ändrar dem -- din fortsatta användning av ai.msf.org innebär ditt godkännande av eventuella ändringar.",
+        "keywords": [
+          "användarvillkor",
+          "kan ändras",
+          "ändringar",
+          "meddelande",
+          "fortsatt användning",
+          "godkännande",
+          "uppdateringar",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Skicka en supportförfrågan",
+      "subtitle": "Få hjälp från vårt team",
+      "description": "Behöver du hjälp eller vill ge feedback? Klicka nedan för att öppna vårt supportformulär.",
+      "buttonText": "Öppna supportformulär"
+    },
+    "otherWays": {
+      "title": "Andra sätt att kontakta oss"
+    },
+    "emailSupport": {
+      "title": "E-postsupport",
+      "description": "Skicka ett e-postmeddelande till oss för frågor, feedback eller tekniska problem"
+    },
+    "additionalResources": {
+      "title": "Ytterligare resurser"
+    },
+    "aiAcceleratorPortal": {
+      "title": "AI Accelerator-portalen",
+      "description": "Dokumentation, projektuppdateringar och utbildningsmaterial"
+    },
+    "githubRepository": {
+      "title": "Öppen källkodsförråd",
+      "description": "Visa kod, rapportera problem och bidra på GitHub"
+    }
+  }
+}
