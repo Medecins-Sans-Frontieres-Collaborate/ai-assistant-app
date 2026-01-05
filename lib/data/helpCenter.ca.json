@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Què és l'Assistent d'IA de MSF?",
+      "answer": "L'Assistent d'IA de MSF és una eina de xat d'IA interna personalitzada per al personal de Médecins Sans Frontières (MSF). Aquesta solució millora la privadesa mantenint les dades de conversa dins dels sistemes de MSF, proporcionant una alternativa segura als serveis externs. Admet diversos models d'IA (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) i funcions com ara cerca web, transcripció de veu amb traducció i indicacions i tons personalitzables. L'Assistent d'IA pot ajudar a respondre preguntes, crear contingut, traduir text, fer pluja d'idees i molt més. Està dissenyat per ser un assistent per a la teva feina - comprova sempre la qualitat i precisió de les sortides."
+    },
+    {
+      "question": "Quins models estan disponibles?",
+      "answer": "L'Assistent d'IA de MSF proporciona accés a diversos models d'IA:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (models de raonament d'OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nPots canviar de model en qualsevol moment utilitzant el menú desplegable de selecció de models a la part superior del xat."
+    },
+    {
+      "question": "Què són les Accions Ràpides (indicacions i tons)?",
+      "answer": "Les Accions Ràpides et permeten aplicar ràpidament indicacions i tons als teus missatges:\n\n• Indicacions: Plantilles reutilitzables per a tasques comunes (p. ex., 「Tradueix al francès」, 「Resume aquest document」). Crea indicacions personalitzades o utilitza l'Assistent d'IA integrat per generar-les.\n\n• Tons: Ajusta com l'IA respon (p. ex., professional, informal, tècnic). Aplica tons adequats a les teves necessitats.\n\nAccedeix a les Accions Ràpides mitjançant la icona del llamp (⚡) a l'entrada del xat o prem / per cercar."
+    },
+    {
+      "question": "Què és el Mode de Cerca?",
+      "answer": "El Mode de Cerca activa la cerca web quan l'IA necessita informació actualitzada. Hi ha dues opcions:\n\n• Mode Centrat en la Privadesa (predeterminat): Envia només consultes de cerca a Azure AI Foundry, no tota la teva conversa. Més privat però més lent.\n\n• Mode Azure AI Foundry (només GPT-4.1): Emmagatzema tota la teva conversa a Azure AI Foundry per a respostes més ràpides i accés directe a la cerca web.\n\nMés informació sobre les diferències de privadesa a Configuració > Model > Encaminament de Cerca."
+    },
+    {
+      "question": "Com utilitzo la transcripció de veu?",
+      "answer": "Fes clic a la icona del micròfon a l'entrada del xat per gravar. L'IA transcriurà la teva parla a text. Després de la transcripció, pots:\n- Copiar el text\n- Descarregar com a fitxer\n- Traduir a més de 13 idiomes (àrab, bengalí, anglès, francès, portuguès, rus, espanyol, suahili, ucraïnès, urdú i més)\n\nAquesta funció és excel·lent per a notes de reunions, entrevistes o entrada de veu ràpida."
+    },
+    {
+      "question": "Puc utilitzar l'Assistent d'IA de MSF al meu telèfon?",
+      "answer": "Sí! L'Assistent d'IA de MSF funciona com una Aplicació Web Progressiva (PWA) en dispositius mòbils:\n1. Obre ai.msf.org al teu navegador i inicia sessió\n2. Ves a Configuració > Aplicació Mòbil per a instruccions detallades\n3. Toca 「Afegeix a la pantalla d'inici」 (iOS Safari) o 「Instal·la」 (Android Chrome)\n4. L'aplicació funcionarà com una aplicació nativa amb suport fora de línia i temps de càrrega més ràpids\n\nImportant: Instal·la després d'iniciar sessió per mantenir la teva autenticació. També pots instal·lar-la al teu navegador d'escriptori per a una millor experiència."
+    },
+    {
+      "question": "On s'emmagatzemen les dades de la meva conversa?",
+      "answer": "El teu historial de converses s'emmagatzema localment a l'emmagatzematge del teu navegador, no en un servidor. Això significa:\n- Els teus xats només existeixen al teu dispositiu\n- No hi ha sincronització entre dispositius o navegadors\n- Esborrar les dades del navegador eliminarà les teves converses\n\nSi utilitzes el Mode Azure AI Foundry per a cerques, només aquestes converses també s'emmagatzemen a Azure AI Foundry amb un ID de fil. Consulta Configuració > Model per a més detalls."
+    },
+    {
+      "question": "Què són els Agents Personalitzats?",
+      "answer": "Els Agents Personalitzats són configuracions avançades d'IA que s'executen a la instància de MSF AI Assistant Foundry amb capacitats especialitzades. Poden utilitzar automàticament eines com ara cerca web i interpretació de codi. Aquesta és una funció avançada que requereix coordinació amb l'equip tècnic de l'Assistent d'IA per crear ID d'agents. Troba'ls a Configuració > Model > pestanya Agents."
+    },
+    {
+      "question": "He de confiar al 100% en les respostes de l'IA?",
+      "answer": "No. Tot i que l'Assistent d'IA de MSF és una eina poderosa, no hauria de substituir el judici i l'experiència humans. Sempre:\n- Verifica la informació factual\n- Comprova biaix i precisió\n- Revisa les sortides abans d'utilitzar-les en treball oficial\n- No introdueixis dades personals o informació molt sensible\n\nL'IA és un assistent, no un prenedor de decisions."
+    },
+    {
+      "question": "Quines dades no hauria d'introduir a l'Assistent d'IA?",
+      "answer": "No introdueixis:\n- Dades personals (noms, números de telèfon, adreces de correu electrònic, CV)\n- Detalls operatius molt sensibles\n- Informació de pacients o registres mèdics\n- Qualsevol cosa que pugui identificar persones o amenaçar la seguretat\n\nConsulta la Política de Privadesa al Centre d'Ajuda per a una guia completa."
+    },
+    {
+      "question": "Com puc exportar o eliminar les meves dades?",
+      "answer": "A Configuració > Gestió de Dades, pots:\n- Exportar totes les converses i indicacions com a JSON\n- Eliminar totes les converses\n- Importar dades exportades prèviament\n- Comprovar l'ús d'espai d'emmagatzematge\n\nLes dades exportades es poden importar posteriorment o transferir a un altre navegador."
+    },
+    {
+      "question": "Amb qui hauria de contactar per a preguntes o comentaris?",
+      "answer": "Contacta amb el suport:\n- Usuaris dels EUA: ai@newyork.msf.org\n- Usuaris fora dels EUA: ai.team@amsterdam.msf.org\n\nTambé pots accedir al Centre d'Ajuda en qualsevol moment des de Configuració > Ajuda i Suport."
+    },
+    {
+      "question": "On puc aprendre més sobre el projecte de l'Assistent d'IA?",
+      "answer": "Visita el portal AI Accelerator a Pamoja per a documentació del projecte, actualitzacions i recursos:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nAquest portal conté informació sobre la fulla de ruta del projecte, materials de formació i com contribuir."
+    },
+    {
+      "question": "L'Assistent d'IA de MSF és de codi obert?",
+      "answer": "Sí! L'Assistent d'IA de MSF és de codi obert i està disponible a GitHub. Pots veure la base de codi, contribuir a millores o aprendre de la implementació:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nEl projecte està construït amb Next.js, React i s'integra amb diversos proveïdors d'IA. Les contribucions i comentaris sempre són benvinguts!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Què és l'Assistent d'IA de MSF i com protegeix la privadesa?",
+        "answer": "L'Assistent d'IA de MSF és un chatbot d'IA intern desenvolupat per al personal de MSF. Utilitza models de llenguatge grans d'Open AI de Microsoft Azure mentre manté totes les dades dins de MSF, garantint privadesa i control. Utilitzar ai.msf.org és un entorn més segur que utilitzar altres eines d'IA gratuïtes externes que ofereixen molt poques garanties de privadesa.",
+        "keywords": [
+          "privadesa",
+          "protecció de dades",
+          "intern",
+          "segur",
+          "MSF",
+          "Azure",
+          "Assistent d'IA",
+          "chatbot",
+          "dades dins de MSF",
+          "garanties de privadesa",
+          "més segur",
+          "eines externes"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "On s'emmagatzemen i processen les meves dades?",
+        "answer": "Totes les dades de conversa amb l'Assistent d'IA de MSF s'emmagatzemen localment al teu propi ordinador i es processen dins dels sistemes de MSF utilitzant la infraestructura de Microsoft Azure. La teva informació d'inici de sessió és processada per MSF tal com es descriu a la política de privadesa de la teva entitat MSF. Les dades es mantenen dins de MSF, garantint privadesa i control.",
+        "keywords": [
+          "emmagatzematge de dades",
+          "on s'emmagatzema",
+          "localment",
+          "ordinador",
+          "sistemes MSF",
+          "Microsoft Azure",
+          "informació d'inici de sessió",
+          "processat per MSF",
+          "política de privadesa",
+          "dins de MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Quines dades no hauria d'introduir a l'Assistent d'IA de MSF?",
+        "answer": "No introduiràs la següent informació a ai.msf.org:\n- Dades personals (noms, números de telèfon, CV, testimonis; qualsevol cosa que pugui identificar una persona directament o indirectament -- això inclou combinacions de dades que quan es combinen poden permetre la identificació d'una persona)\n- Dades molt sensibles (dades que es poden utilitzar intencionadament o no per fer mal a persones, comunitats, MSF o el seu personal -- determinar la sensibilitat de les dades requereix anàlisi contextual, per exemple ubicació de projectes sensibles o grups de risc, incidents de seguretat i altres detalls operatius)",
+        "keywords": [
+          "dades prohibides",
+          "dades personals",
+          "dades sensibles",
+          "noms",
+          "números de telèfon",
+          "CV",
+          "testimonis",
+          "identificar persones",
+          "fer mal",
+          "projectes sensibles",
+          "incidents de seguretat",
+          "detalls operatius",
+          "no introdueixis"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Quines són les directrius d'ús responsable de l'Assistent d'IA de MSF?",
+        "answer": "Acceptes utilitzar ai.msf.org de manera responsable. Ho faràs:\n- Utilitzar-lo d'acord amb les polítiques TIC, IA i altres polítiques aplicables de la teva entitat MSF\n- Revisar sempre les sortides per a precisió, exhaustivitat i biaix\n- Verificar que les sortides no infringeixin els drets de propietat intel·lectual de tercers\n- Ser transparent sobre el teu ús de l'IA i marcar les sortides com a generades per IA",
+        "keywords": [
+          "ús responsable",
+          "directrius",
+          "polítiques MSF",
+          "política TIC",
+          "política IA",
+          "revisar sortides",
+          "precisió",
+          "biaix",
+          "propietat intel·lectual",
+          "transparència",
+          "generat per IA",
+          "marcar sortides"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Quins són els usos prohibits de l'Assistent d'IA de MSF?",
+        "answer": "No utilitzaràs ai.msf.org per als següents propòsits:\n- Atenció sanitària (per proporcionar atenció sanitària o respondre preguntes de salut)\n- Vigilància o monitorització de pacients o comunitats de MSF o qualsevol altra persona\n- Decisions relacionades amb l'ocupació (per donar suport o substituir decisions relacionades amb l'ocupació)\n- Presa de decisions automatitzada (per prendre decisions que puguin perjudicar una persona o comunitat)\n- Generar contingut mediàtic per a comunicacions externes sobre assumptes d'interès públic\n- Activitats il·legals o perjudicials",
+        "keywords": [
+          "usos prohibits",
+          "atenció sanitària",
+          "vigilància",
+          "monitorització",
+          "decisions d'ocupació",
+          "presa de decisions automatitzada",
+          "contingut mediàtic",
+          "comunicacions externes",
+          "activitats il·legals",
+          "activitats perjudicials",
+          "no utilitzis per a"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Què tan precises són les sortides de l'Assistent d'IA de MSF?",
+        "answer": "Ai.msf.org utilitza tecnologia experimental -- no garanteix que les sortides siguin precises. A més, la tecnologia no ha estat entrenada amb dades representatives dels pacients i comunitats de MSF. Les sortides d'IA poden perpetuar biaix, discriminació i estereotips. És la teva responsabilitat revisar les sortides generades.",
+        "keywords": [
+          "precisió",
+          "tecnologia experimental",
+          "no garantit",
+          "biaix",
+          "discriminació",
+          "estereotips",
+          "revisar sortides",
+          "responsabilitat",
+          "pacients MSF",
+          "comunitats",
+          "no entrenat"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Amb qui hauria de contactar per a preocupacions o incidents de privadesa?",
+        "answer": "Si tens preocupacions o vols informar d'un incident, contacta amb: ai.team@amsterdam.msf.org. Per a regions específiques, també pots contactar amb el teu DPO local (Delegat de Protecció de Dades) o l'equip TIC (Tecnologia de la Informació i Comunicació) responsable.",
+        "keywords": [
+          "preocupacions de privadesa",
+          "incident",
+          "contactar",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "Delegat de Protecció de Dades",
+          "TIC",
+          "suport",
+          "informar incident"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Poden canviar els termes d'ús?",
+        "answer": "Aquests termes poden ser modificats per MSF en qualsevol moment -- et notificarem si els canviem -- el teu ús continuat de ai.msf.org significa la teva acceptació de qualsevol canvi.",
+        "keywords": [
+          "termes d'ús",
+          "modificable",
+          "canvis",
+          "notificació",
+          "ús continuat",
+          "acceptació",
+          "actualitzacions",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Envia una Sol·licitud de Suport",
+      "subtitle": "Obtén ajuda del nostre equip",
+      "description": "Necessites ajuda o vols proporcionar comentaris? Fes clic a continuació per obrir el nostre formulari de suport.",
+      "buttonText": "Obre el Formulari de Suport"
+    },
+    "otherWays": {
+      "title": "Altres Maneres de Contactar-nos"
+    },
+    "emailSupport": {
+      "title": "Suport per Correu Electrònic",
+      "description": "Envia'ns un correu electrònic per a preguntes, comentaris o problemes tècnics"
+    },
+    "additionalResources": {
+      "title": "Recursos Addicionals"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Portal AI Accelerator",
+      "description": "Documentació, actualitzacions del projecte i materials de formació"
+    },
+    "githubRepository": {
+      "title": "Repositori de Codi Obert",
+      "description": "Veure codi, informar de problemes i contribuir a GitHub"
+    }
+  }
+}
