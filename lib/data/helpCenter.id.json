@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Apa itu Asisten AI MSF?",
+      "answer": "Asisten AI MSF adalah alat obrolan AI internal yang disesuaikan untuk staf Médecins Sans Frontières (MSF). Solusi ini meningkatkan privasi dengan menyimpan data percakapan dalam sistem MSF, menyediakan alternatif yang aman untuk layanan eksternal. Mendukung beberapa model AI (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) dan fitur seperti pencarian web, transkripsi suara dengan terjemahan, dan prompt serta tone yang dapat disesuaikan. Asisten AI dapat membantu menjawab pertanyaan, membuat konten, menerjemahkan teks, brainstorming, dan banyak lagi. Dirancang sebagai asisten untuk pekerjaan Anda - selalu periksa kualitas dan keakuratan output."
+    },
+    {
+      "question": "Model apa saja yang tersedia?",
+      "answer": "Asisten AI MSF menyediakan akses ke beberapa model AI:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (model penalaran OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nAnda dapat beralih model kapan saja menggunakan dropdown pemilihan model di bagian atas obrolan."
+    },
+    {
+      "question": "Apa itu Tindakan Cepat (prompt dan tone)?",
+      "answer": "Tindakan Cepat memungkinkan Anda dengan cepat menerapkan prompt dan tone ke pesan Anda:\n\n• Prompt: Template yang dapat digunakan kembali untuk tugas umum (misalnya 「Terjemahkan ke bahasa Prancis」, 「Ringkas dokumen ini」). Buat prompt kustom atau gunakan Asisten AI bawaan untuk menghasilkannya.\n\n• Tone: Sesuaikan bagaimana AI merespons (misalnya profesional, santai, teknis). Terapkan tone yang sesuai dengan kebutuhan Anda.\n\nAkses Tindakan Cepat melalui ikon petir (⚡) di input obrolan atau tekan / untuk mencari."
+    },
+    {
+      "question": "Apa itu Mode Pencarian?",
+      "answer": "Mode Pencarian mengaktifkan pencarian web saat AI memerlukan informasi terkini. Ada dua opsi:\n\n• Mode Berfokus Privasi (default): Hanya mengirim kueri pencarian ke Azure AI Foundry, bukan seluruh percakapan Anda. Lebih privat tetapi lebih lambat.\n\n• Mode Azure AI Foundry (hanya GPT-4.1): Menyimpan seluruh percakapan Anda di Azure AI Foundry untuk respons lebih cepat dan akses langsung ke pencarian web.\n\nPelajari lebih lanjut tentang perbedaan privasi di Pengaturan > Model > Routing Pencarian."
+    },
+    {
+      "question": "Bagaimana cara menggunakan transkripsi suara?",
+      "answer": "Klik ikon mikrofon di input obrolan untuk merekam. AI akan menyalin ucapan Anda menjadi teks. Setelah transkripsi, Anda dapat:\n- Salin teks\n- Unduh sebagai file\n- Terjemahkan ke lebih dari 13 bahasa (Arab, Bengali, Inggris, Prancis, Portugis, Rusia, Spanyol, Swahili, Ukraina, Urdu, dan lainnya)\n\nFitur ini bagus untuk catatan rapat, wawancara, atau input suara cepat."
+    },
+    {
+      "question": "Bisakah saya menggunakan Asisten AI MSF di ponsel saya?",
+      "answer": "Ya! Asisten AI MSF berfungsi sebagai Progressive Web App (PWA) di perangkat seluler:\n1. Buka ai.msf.org di browser Anda dan masuk\n2. Buka Pengaturan > Aplikasi Seluler untuk instruksi terperinci\n3. Ketuk 「Tambahkan ke Layar Utama」 (iOS Safari) atau 「Pasang」 (Android Chrome)\n4. Aplikasi akan berfungsi seperti aplikasi asli dengan dukungan offline dan waktu muat lebih cepat\n\nPenting: Pasang setelah masuk untuk mempertahankan autentikasi Anda. Anda juga dapat memasangnya di browser desktop untuk pengalaman yang lebih baik."
+    },
+    {
+      "question": "Di mana data percakapan saya disimpan?",
+      "answer": "Riwayat percakapan Anda disimpan secara lokal di penyimpanan browser Anda, bukan di server. Ini berarti:\n- Obrolan Anda hanya ada di perangkat Anda\n- Tidak ada sinkronisasi lintas perangkat atau browser\n- Menghapus data browser akan menghapus percakapan Anda\n\nJika Anda menggunakan Mode Azure AI Foundry untuk pencarian, hanya percakapan tersebut yang juga disimpan di Azure AI Foundry dengan ID thread. Lihat Pengaturan > Model untuk detail lebih lanjut."
+    },
+    {
+      "question": "Apa itu Agen Kustom?",
+      "answer": "Agen Kustom adalah konfigurasi AI lanjutan yang berjalan pada instance MSF AI Assistant Foundry dengan kemampuan khusus. Mereka dapat menggunakan alat seperti pencarian web dan interpretasi kode secara otomatis. Ini adalah fitur lanjutan yang memerlukan koordinasi dengan tim teknis Asisten AI untuk membuat ID agen. Temukan mereka di Pengaturan > Model > tab Agen."
+    },
+    {
+      "question": "Haruskah saya mempercayai jawaban AI 100%?",
+      "answer": "Tidak. Meskipun Asisten AI MSF adalah alat yang kuat, seharusnya tidak menggantikan penilaian dan keahlian manusia. Selalu:\n- Verifikasi informasi faktual\n- Periksa bias dan akurasi\n- Tinjau output sebelum digunakan dalam pekerjaan resmi\n- Jangan masukkan data pribadi atau informasi yang sangat sensitif\n\nAI adalah asisten, bukan pengambil keputusan."
+    },
+    {
+      "question": "Data apa yang tidak boleh saya masukkan ke Asisten AI?",
+      "answer": "Jangan masukkan:\n- Data pribadi (nama, nomor telepon, alamat email, CV)\n- Detail operasional yang sangat sensitif\n- Informasi pasien atau catatan medis\n- Apa pun yang dapat mengidentifikasi individu atau mengancam keamanan\n\nLihat Kebijakan Privasi di Pusat Bantuan untuk panduan lengkap."
+    },
+    {
+      "question": "Bagaimana cara mengekspor atau menghapus data saya?",
+      "answer": "Di Pengaturan > Manajemen Data, Anda dapat:\n- Ekspor semua percakapan dan prompt sebagai JSON\n- Hapus semua percakapan\n- Impor data yang diekspor sebelumnya\n- Periksa penggunaan ruang penyimpanan\n\nData yang diekspor dapat diimpor kembali nanti atau ditransfer ke browser lain."
+    },
+    {
+      "question": "Siapa yang harus saya hubungi untuk pertanyaan atau masukan?",
+      "answer": "Hubungi dukungan:\n- Pengguna AS: ai@newyork.msf.org\n- Pengguna non-AS: ai.team@amsterdam.msf.org\n\nAnda juga dapat mengakses Pusat Bantuan kapan saja dari Pengaturan > Bantuan & Dukungan."
+    },
+    {
+      "question": "Di mana saya dapat mempelajari lebih lanjut tentang proyek Asisten AI?",
+      "answer": "Kunjungi portal AI Accelerator di Pamoja untuk dokumentasi proyek, pembaruan, dan sumber daya:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nPortal ini berisi informasi tentang roadmap proyek, materi pelatihan, dan cara berkontribusi."
+    },
+    {
+      "question": "Apakah Asisten AI MSF bersumber terbuka?",
+      "answer": "Ya! Asisten AI MSF adalah sumber terbuka dan tersedia di GitHub. Anda dapat melihat codebase, berkontribusi pada perbaikan, atau belajar dari implementasinya:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProyek ini dibangun dengan Next.js, React, dan terintegrasi dengan beberapa penyedia AI. Kontribusi dan umpan balik selalu disambut baik!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Apa itu Asisten AI MSF dan bagaimana melindungi privasi?",
+        "answer": "Asisten AI MSF adalah chatbot AI internal yang dikembangkan untuk staf MSF. Menggunakan model bahasa besar Open AI Microsoft Azure sambil menyimpan semua data di dalam MSF, memastikan privasi dan kontrol. Menggunakan ai.msf.org adalah lingkungan yang lebih aman daripada menggunakan alat AI eksternal gratis lainnya yang menawarkan jaminan privasi sangat sedikit.",
+        "keywords": [
+          "privasi",
+          "perlindungan data",
+          "internal",
+          "aman",
+          "MSF",
+          "Azure",
+          "Asisten AI",
+          "chatbot",
+          "data di dalam MSF",
+          "jaminan privasi",
+          "lebih aman",
+          "alat eksternal"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Di mana data saya disimpan dan diproses?",
+        "answer": "Semua data percakapan dengan Asisten AI MSF disimpan secara lokal di komputer Anda sendiri dan diproses dalam sistem MSF menggunakan infrastruktur Microsoft Azure. Informasi login Anda diproses oleh MSF sebagaimana dijelaskan dalam kebijakan privasi entitas MSF Anda. Data disimpan di dalam MSF, memastikan privasi dan kontrol.",
+        "keywords": [
+          "penyimpanan data",
+          "di mana disimpan",
+          "lokal",
+          "komputer",
+          "sistem MSF",
+          "Microsoft Azure",
+          "informasi login",
+          "diproses oleh MSF",
+          "kebijakan privasi",
+          "di dalam MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Data apa yang tidak boleh saya masukkan ke Asisten AI MSF?",
+        "answer": "Anda tidak akan memasukkan informasi berikut di ai.msf.org:\n- Data pribadi (nama, nomor telepon, CV, testimonial; apa pun yang dapat mengidentifikasi individu secara langsung atau tidak langsung -- ini termasuk kombinasi data yang ketika digabungkan mungkin memungkinkan identifikasi individu)\n- Data yang sangat sensitif (data yang dapat digunakan secara sengaja atau tidak sengaja untuk merugikan individu, komunitas, MSF, atau stafnya -- menentukan sensitivitas data memerlukan analisis konteks, misalnya lokasi proyek sensitif atau kelompok berisiko, insiden keamanan, dan detail operasional lainnya)",
+        "keywords": [
+          "data terlarang",
+          "data pribadi",
+          "data sensitif",
+          "nama",
+          "nomor telepon",
+          "CV",
+          "testimonial",
+          "mengidentifikasi individu",
+          "merugikan",
+          "proyek sensitif",
+          "insiden keamanan",
+          "detail operasional",
+          "jangan masukkan"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Apa panduan penggunaan yang bertanggung jawab untuk Asisten AI MSF?",
+        "answer": "Anda setuju untuk menggunakan ai.msf.org secara bertanggung jawab. Anda akan:\n- Menggunakannya sesuai dengan kebijakan ICT, AI, dan kebijakan lain yang berlaku dari entitas MSF Anda\n- Selalu meninjau output untuk akurasi, kelengkapan, dan bias\n- Memverifikasi bahwa output tidak melanggar hak kekayaan intelektual pihak ketiga\n- Bersikap transparan tentang penggunaan AI Anda dan menandai output sebagai dihasilkan oleh AI",
+        "keywords": [
+          "penggunaan yang bertanggung jawab",
+          "panduan",
+          "kebijakan MSF",
+          "kebijakan ICT",
+          "kebijakan AI",
+          "tinjau output",
+          "akurasi",
+          "bias",
+          "kekayaan intelektual",
+          "transparansi",
+          "dihasilkan oleh AI",
+          "tandai output"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Apa penggunaan yang dilarang untuk Asisten AI MSF?",
+        "answer": "Anda tidak akan menggunakan ai.msf.org untuk tujuan berikut:\n- Perawatan kesehatan (untuk memberikan perawatan kesehatan atau menjawab pertanyaan kesehatan)\n- Pengawasan atau pemantauan pasien atau komunitas MSF atau individu lainnya\n- Keputusan terkait pekerjaan (untuk mendukung atau menggantikan keputusan terkait pekerjaan)\n- Pengambilan keputusan otomatis (untuk membuat keputusan yang mungkin merugikan individu atau komunitas)\n- Menghasilkan konten media untuk komunikasi eksternal tentang masalah kepentingan publik\n- Aktivitas ilegal atau berbahaya",
+        "keywords": [
+          "penggunaan yang dilarang",
+          "perawatan kesehatan",
+          "pengawasan",
+          "pemantauan",
+          "keputusan pekerjaan",
+          "pengambilan keputusan otomatis",
+          "konten media",
+          "komunikasi eksternal",
+          "aktivitas ilegal",
+          "aktivitas berbahaya",
+          "jangan gunakan untuk"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Seberapa akurat output Asisten AI MSF?",
+        "answer": "Ai.msf.org menggunakan teknologi eksperimental -- tidak menjamin bahwa output akan akurat. Selain itu, teknologi belum dilatih dengan data yang mewakili pasien dan komunitas MSF. Output AI dapat melestarikan bias, diskriminasi, dan stereotip. Adalah tanggung jawab Anda untuk meninjau output yang dihasilkan.",
+        "keywords": [
+          "akurasi",
+          "teknologi eksperimental",
+          "tidak dijamin",
+          "bias",
+          "diskriminasi",
+          "stereotip",
+          "tinjau output",
+          "tanggung jawab",
+          "pasien MSF",
+          "komunitas",
+          "tidak dilatih"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Siapa yang harus saya hubungi untuk kekhawatiran atau insiden privasi?",
+        "answer": "Jika Anda memiliki kekhawatiran atau ingin melaporkan insiden, hubungi: ai.team@amsterdam.msf.org. Untuk wilayah tertentu, Anda juga dapat menghubungi DPO lokal Anda (Petugas Perlindungan Data) atau tim ICT (Teknologi Informasi dan Komunikasi) yang bertanggung jawab Anda.",
+        "keywords": [
+          "kekhawatiran privasi",
+          "insiden",
+          "hubungi",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "Petugas Perlindungan Data",
+          "ICT",
+          "dukungan",
+          "laporkan insiden"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Apakah ketentuan penggunaan dapat berubah?",
+        "answer": "Ketentuan ini dapat diubah oleh MSF kapan saja -- kami akan memberi tahu Anda jika kami mengubahnya -- penggunaan berkelanjutan Anda terhadap ai.msf.org menandakan penerimaan Anda terhadap perubahan apa pun.",
+        "keywords": [
+          "ketentuan penggunaan",
+          "dapat diubah",
+          "perubahan",
+          "notifikasi",
+          "penggunaan berkelanjutan",
+          "penerimaan",
+          "pembaruan",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Kirim Permintaan Dukungan",
+      "subtitle": "Dapatkan bantuan dari tim kami",
+      "description": "Butuh bantuan atau ingin memberikan masukan? Klik di bawah untuk membuka formulir dukungan kami.",
+      "buttonText": "Buka Formulir Dukungan"
+    },
+    "otherWays": {
+      "title": "Cara Lain untuk Menghubungi Kami"
+    },
+    "emailSupport": {
+      "title": "Dukungan Email",
+      "description": "Kirim email kepada kami untuk pertanyaan, masukan, atau masalah teknis"
+    },
+    "additionalResources": {
+      "title": "Sumber Daya Tambahan"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Portal AI Accelerator",
+      "description": "Dokumentasi, pembaruan proyek, dan materi pelatihan"
+    },
+    "githubRepository": {
+      "title": "Repositori Sumber Terbuka",
+      "description": "Lihat kode, laporkan masalah, dan berkontribusi di GitHub"
+    }
+  }
+}
