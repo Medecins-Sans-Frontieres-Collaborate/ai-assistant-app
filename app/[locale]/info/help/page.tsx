@@ -5,18 +5,23 @@ import { auth } from '@/auth';
 import helpCenterAm from '@/lib/data/helpCenter.am.json';
 import helpCenterAr from '@/lib/data/helpCenter.ar.json';
 import helpCenterBn from '@/lib/data/helpCenter.bn.json';
+import helpCenterCa from '@/lib/data/helpCenter.ca.json';
 import helpCenterDe from '@/lib/data/helpCenter.de.json';
 import helpCenterEn from '@/lib/data/helpCenter.en.json';
 import helpCenterEs from '@/lib/data/helpCenter.es.json';
 import helpCenterFa from '@/lib/data/helpCenter.fa.json';
+import helpCenterFi from '@/lib/data/helpCenter.fi.json';
 import helpCenterFr from '@/lib/data/helpCenter.fr.json';
+import helpCenterHe from '@/lib/data/helpCenter.he.json';
 import helpCenterHi from '@/lib/data/helpCenter.hi.json';
 import helpCenterId from '@/lib/data/helpCenter.id.json';
 import helpCenterIt from '@/lib/data/helpCenter.it.json';
 import helpCenterJa from '@/lib/data/helpCenter.ja.json';
 import helpCenterKo from '@/lib/data/helpCenter.ko.json';
 import helpCenterNl from '@/lib/data/helpCenter.nl.json';
+import helpCenterPl from '@/lib/data/helpCenter.pl.json';
 import helpCenterPt from '@/lib/data/helpCenter.pt.json';
+import helpCenterRo from '@/lib/data/helpCenter.ro.json';
 import helpCenterRu from '@/lib/data/helpCenter.ru.json';
 import helpCenterSw from '@/lib/data/helpCenter.sw.json';
 import helpCenterTh from '@/lib/data/helpCenter.th.json';
@@ -29,18 +34,23 @@ import helpCenterZh from '@/lib/data/helpCenter.zh.json';
 import messagesAm from '@/messages/am.json';
 import messagesAr from '@/messages/ar.json';
 import messagesBn from '@/messages/bn.json';
+import messagesCa from '@/messages/ca.json';
 import messagesDe from '@/messages/de.json';
 import messagesEn from '@/messages/en.json';
 import messagesEs from '@/messages/es.json';
 import messagesFa from '@/messages/fa.json';
+import messagesFi from '@/messages/fi.json';
 import messagesFr from '@/messages/fr.json';
+import messagesHe from '@/messages/he.json';
 import messagesHi from '@/messages/hi.json';
 import messagesId from '@/messages/id.json';
 import messagesIt from '@/messages/it.json';
 import messagesJa from '@/messages/ja.json';
 import messagesKo from '@/messages/ko.json';
 import messagesNl from '@/messages/nl.json';
+import messagesPl from '@/messages/pl.json';
 import messagesPt from '@/messages/pt.json';
+import messagesRo from '@/messages/ro.json';
 import messagesRu from '@/messages/ru.json';
 import messagesSw from '@/messages/sw.json';
 import messagesTh from '@/messages/th.json';
@@ -61,18 +71,23 @@ const AVAILABLE_FAQ_LOCALES = [
   'am',
   'ar',
   'bn',
+  'ca',
   'de',
   'en',
   'es',
   'fa',
+  'fi',
   'fr',
+  'he',
   'hi',
   'id',
   'it',
   'ja',
   'ko',
   'nl',
+  'pl',
   'pt',
+  'ro',
   'ru',
   'sw',
   'th',
@@ -88,18 +103,23 @@ const faqTranslations: Record<string, any> = {
   am: helpCenterAm.faq,
   ar: helpCenterAr.faq,
   bn: helpCenterBn.faq,
+  ca: helpCenterCa.faq,
   de: helpCenterDe.faq,
   en: helpCenterEn.faq,
   es: helpCenterEs.faq,
   fa: helpCenterFa.faq,
+  fi: helpCenterFi.faq,
   fr: helpCenterFr.faq,
+  he: helpCenterHe.faq,
   hi: helpCenterHi.faq,
   id: helpCenterId.faq,
   it: helpCenterIt.faq,
   ja: helpCenterJa.faq,
   ko: helpCenterKo.faq,
   nl: helpCenterNl.faq,
+  pl: helpCenterPl.faq,
   pt: helpCenterPt.faq,
+  ro: helpCenterRo.faq,
   ru: helpCenterRu.faq,
   sw: helpCenterSw.faq,
   th: helpCenterTh.faq,
@@ -114,18 +134,23 @@ const privacyTranslations: Record<string, any> = {
   am: helpCenterAm.privacyPolicy.items,
   ar: helpCenterAr.privacyPolicy.items,
   bn: helpCenterBn.privacyPolicy.items,
+  ca: helpCenterCa.privacyPolicy.items,
   de: helpCenterDe.privacyPolicy.items,
   en: helpCenterEn.privacyPolicy.items,
   es: helpCenterEs.privacyPolicy.items,
   fa: helpCenterFa.privacyPolicy.items,
+  fi: helpCenterFi.privacyPolicy.items,
   fr: helpCenterFr.privacyPolicy.items,
+  he: helpCenterHe.privacyPolicy.items,
   hi: helpCenterHi.privacyPolicy.items,
   id: helpCenterId.privacyPolicy.items,
   it: helpCenterIt.privacyPolicy.items,
   ja: helpCenterJa.privacyPolicy.items,
   ko: helpCenterKo.privacyPolicy.items,
   nl: helpCenterNl.privacyPolicy.items,
+  pl: helpCenterPl.privacyPolicy.items,
   pt: helpCenterPt.privacyPolicy.items,
+  ro: helpCenterRo.privacyPolicy.items,
   ru: helpCenterRu.privacyPolicy.items,
   sw: helpCenterSw.privacyPolicy.items,
   th: helpCenterTh.privacyPolicy.items,
@@ -140,18 +165,23 @@ const contactTranslations: Record<string, any> = {
   am: helpCenterAm.contact,
   ar: helpCenterAr.contact,
   bn: helpCenterBn.contact,
+  ca: helpCenterCa.contact,
   de: helpCenterDe.contact,
   en: helpCenterEn.contact,
   es: helpCenterEs.contact,
   fa: helpCenterFa.contact,
+  fi: helpCenterFi.contact,
   fr: helpCenterFr.contact,
+  he: helpCenterHe.contact,
   hi: helpCenterHi.contact,
   id: helpCenterId.contact,
   it: helpCenterIt.contact,
   ja: helpCenterJa.contact,
   ko: helpCenterKo.contact,
   nl: helpCenterNl.contact,
+  pl: helpCenterPl.contact,
   pt: helpCenterPt.contact,
+  ro: helpCenterRo.contact,
   ru: helpCenterRu.contact,
   sw: helpCenterSw.contact,
   th: helpCenterTh.contact,
@@ -166,18 +196,23 @@ const uiTranslations: Record<string, any> = {
   am: messagesAm.help,
   ar: messagesAr.help,
   bn: messagesBn.help,
+  ca: messagesCa.help,
   de: messagesDe.help,
   en: messagesEn.help,
   es: messagesEs.help,
   fa: messagesFa.help,
+  fi: messagesFi.help,
   fr: messagesFr.help,
+  he: messagesHe.help,
   hi: messagesHi.help,
   id: messagesId.help,
   it: messagesIt.help,
   ja: messagesJa.help,
   ko: messagesKo.help,
   nl: messagesNl.help,
+  pl: messagesPl.help,
   pt: messagesPt.help,
+  ro: messagesRo.help,
   ru: messagesRu.help,
   sw: messagesSw.help,
   th: messagesTh.help,
