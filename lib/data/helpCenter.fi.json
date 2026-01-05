@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Mikä on MSF:n tekoälyavustaja?",
+      "answer": "MSF:n tekoälyavustaja on sisäinen tekoälykeskustelutyökalu, joka on räätälöity Médecins Sans Frontières (MSF) -henkilöstölle. Tämä ratkaisu parantaa yksityisyyttä pitämällä keskustelutiedot MSF:n järjestelmissä ja tarjoaa turvallisen vaihtoehdon ulkoisille palveluille. Se tukee useita tekoälymalleja (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) ja ominaisuuksia, kuten verkkohakua, äänen transkriptiota käännöksellä sekä mukautettavia kehotteita ja sävyjä. Tekoälyavustaja voi auttaa vastaamaan kysymyksiin, luomaan sisältöä, kääntämään tekstiä, ideoimaan ja paljon muuta. Se on suunniteltu avustajaksi työhösi - tarkista aina tulosten laatu ja tarkkuus."
+    },
+    {
+      "question": "Mitä malleja on saatavilla?",
+      "answer": "MSF:n tekoälyavustaja tarjoaa pääsyn useisiin tekoälymalleihin:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI:n päättelymallit)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nVoit vaihtaa mallia milloin tahansa käyttämällä mallin valintavalikko keskustelun yläosassa."
+    },
+    {
+      "question": "Mitä ovat Pikatoiminnot (kehoteet ja sävyt)?",
+      "answer": "Pikatoiminnot mahdollistavat kehotteide ja sävyjen nopean käytön viesteissäsi:\n\n• Kehoteet: Uudelleenkäytettävät mallit yleisiin tehtäviin (esim. 「Käännä ranskaksi」, 「Tiivistä tämä asiakirja」). Luo mukautettuja kehotteita tai käytä sisäänrakennettua tekoälyavustajaa niiden luomiseen.\n\n• Sävyt: Säädä miten tekoäly vastaa (esim. ammattimainen, rento, tekninen). Käytä tarpeisiisi sopivia sävyjä.\n\nKäytä Pikatoimintoja salamasymbolin (⚡) kautta keskustelun syötekentässä tai paina / hakeaksesi."
+    },
+    {
+      "question": "Mikä on Hakutila?",
+      "answer": "Hakutila aktivoi verkkohaun, kun tekoäly tarvitsee ajankohtaista tietoa. Vaihtoehtoja on kaksi:\n\n• Yksityisyyteen keskittyvä tila (oletus): Lähettää vain hakukyselyt Azure AI Foundryyn, ei koko keskusteluasi. Yksityisempi mutta hitaampi.\n\n• Azure AI Foundry -tila (vain GPT-4.1): Tallentaa koko keskustelun Azure AI Foundryyn nopeampien vastausten ja suoran pääsyn saamiseksi verkkohakuun.\n\nLue lisää yksityisyyseroista kohdasta Asetukset > Malli > Hakureititys."
+    },
+    {
+      "question": "Miten käytän äänen transkriptiota?",
+      "answer": "Napsauta mikrofonikuvaketta keskustelun syötekentässä tallentaaksesi. Tekoäly transkriptoi puheesi tekstiksi. Transkription jälkeen voit:\n- Kopioida tekstin\n- Ladata tiedostona\n- Kääntää yli 13 kielelle (arabia, bengali, englanti, ranska, portugali, venäjä, espanja, swahili, ukraina, urdu ja muut)\n\nTämä ominaisuus on erinomainen kokousmuistiinpanoille, haastatteluille tai nopealle äänisyötölle."
+    },
+    {
+      "question": "Voinko käyttää MSF:n tekoälyavustajaa puhelimellani?",
+      "answer": "Kyllä! MSF:n tekoälyavustaja toimii Progressiivisena Verkkosovelluksena (PWA) mobiililaitteilla:\n1. Avaa ai.msf.org selaimessasi ja kirjaudu sisään\n2. Siirry kohtaan Asetukset > Mobiilisovellus yksityiskohtaisia ohjeita varten\n3. Napauta 「Lisää aloitusnäyttöön」 (iOS Safari) tai 「Asenna」 (Android Chrome)\n4. Sovellus toimii kuten natiivi sovellus offline-tuella ja nopeammilla latausajoilla\n\nTärkeää: Asenna kirjautumisen jälkeen säilyttääksesi todennuksesi. Voit myös asentaa sen työpöytäselaimeen paremman kokemuksen saamiseksi."
+    },
+    {
+      "question": "Missä keskustelutietoni tallennetaan?",
+      "answer": "Keskusteluhistoriasi tallennetaan paikallisesti selaimesi tallennustilaan, ei palvelimelle. Tämä tarkoittaa:\n- Keskustelusi ovat vain laitteellasi\n- Ei synkronointia laitteiden tai selainten välillä\n- Selaimen tietojen tyhjentäminen poistaa keskustelusi\n\nJos käytät Azure AI Foundry -tilaa hauissa, vain kyseiset keskustelut tallennetaan myös Azure AI Foundryyn säie-ID:llä. Katso Asetukset > Malli lisätietoja varten."
+    },
+    {
+      "question": "Mitä ovat Mukautetut Agentit?",
+      "answer": "Mukautetut Agentit ovat edistyneitä tekoälykonfiguraatioita, jotka toimivat MSF AI Assistant Foundry -instanssissa erikoisominaisuuksilla. Ne voivat käyttää automaattisesti työkaluja, kuten verkkohakua ja koodin tulkintaa. Tämä on edistynyt ominaisuus, joka vaatii koordinointia tekoälyavustajan teknisen tiimin kanssa agentti-ID:iden luomiseksi. Löydät ne kohdasta Asetukset > Malli > Agentit-välilehti."
+    },
+    {
+      "question": "Pitäisikö minun luottaa 100% tekoälyn vastauksiin?",
+      "answer": "Ei. Vaikka MSF:n tekoälyavustaja on tehokas työkalu, sen ei pitäisi korvata inhimillistä harkintaa ja asiantuntemusta. Aina:\n- Tarkista tosiasiatiedot\n- Tarkista ennakkoluulot ja tarkkuus\n- Tarkista tulokset ennen niiden käyttöä virallisessa työssä\n- Älä syötä henkilötietoja tai erittäin arkaluonteista tietoa\n\nTekoäly on avustaja, ei päätöksentekijä."
+    },
+    {
+      "question": "Mitä tietoja minun ei pitäisi syöttää tekoälyavustajaan?",
+      "answer": "Älä syötä:\n- Henkilötietoja (nimet, puhelinnumerot, sähköpostiosoitteet, ansioluettelot)\n- Erittäin arkaluonteisia operatiivisia tietoja\n- Potilastietoja tai sairauskertomuksia\n- Mitään mikä voisi tunnistaa henkilöt tai uhata turvallisuutta\n\nKatso Tietosuojakäytäntö Ohje-keskuksesta täydellistä ohjeistusta varten."
+    },
+    {
+      "question": "Miten voin viedä tai poistaa tietoni?",
+      "answer": "Kohdassa Asetukset > Tiedonhallinta voit:\n- Viedä kaikki keskustelut ja kehoteet JSON-muodossa\n- Poistaa kaikki keskustelut\n- Tuoda aiemmin viedyt tiedot\n- Tarkistaa tallennustilan käytön\n\nViedyt tiedot voidaan tuoda myöhemmin tai siirtää toiseen selaimeen."
+    },
+    {
+      "question": "Kehen minun tulisi ottaa yhteyttä kysymyksissä tai palautteessa?",
+      "answer": "Ota yhteyttä tukeen:\n- Yhdysvaltalaiset käyttäjät: ai@newyork.msf.org\n- Muut kuin yhdysvaltalaiset käyttäjät: ai.team@amsterdam.msf.org\n\nVoit myös käyttää Ohje-keskusta milloin tahansa kohdasta Asetukset > Ohje ja Tuki."
+    },
+    {
+      "question": "Mistä voin oppia lisää tekoälyavustajaprojektista?",
+      "answer": "Vieraile AI Accelerator -portaalissa Pamojassa projektidokumentaation, päivitysten ja resurssien saamiseksi:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nTämä portaali sisältää tietoa projektin tiekartasta, koulutusmateriaalista ja osallistumisesta."
+    },
+    {
+      "question": "Onko MSF:n tekoälyavustaja avoimen lähdekoodin?",
+      "answer": "Kyllä! MSF:n tekoälyavustaja on avoimen lähdekoodin ja saatavilla GitHubissa. Voit tarkastella koodikantaa, osallistua parannuksiin tai oppia toteutuksesta:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProjekti on rakennettu Next.js:llä, Reactilla ja integroituu useiden tekoälytarjoajien kanssa. Panokset ja palaute ovat aina tervetulleita!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Mikä on MSF:n tekoälyavustaja ja miten se suojaa yksityisyyttä?",
+        "answer": "MSF:n tekoälyavustaja on sisäinen tekoälykeskustelubotti, joka on kehitetty MSF-henkilöstölle. Se käyttää Microsoft Azuren Open AI:n suuria kielimalleja pitäen kaikki tiedot MSF:n sisällä, varmistaen yksityisyyden ja valvonnan. Ai.msf.org:n käyttäminen on turvallisempi ympäristö kuin muiden ulkoisten ilmaisten tekoälytyökalujen käyttö, jotka tarjoavat hyvin vähän yksityisyystakeita.",
+        "keywords": [
+          "yksityisyys",
+          "tietosuoja",
+          "sisäinen",
+          "turvallinen",
+          "MSF",
+          "Azure",
+          "tekoälyavustaja",
+          "keskustelubotti",
+          "tiedot MSF:n sisällä",
+          "yksityisyystakeet",
+          "turvallisempi",
+          "ulkoiset työkalut"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Missä tietoni tallennetaan ja käsitellään?",
+        "answer": "Kaikki keskustelutiedot MSF:n tekoälyavustajan kanssa tallennetaan paikallisesti omalle tietokoneellesi ja käsitellään MSF:n järjestelmissä Microsoft Azuren infrastruktuuria käyttäen. Kirjautumistietosi käsitellään MSF:n toimesta MSF-yksikkösi tietosuojakäytännön mukaisesti. Tiedot pidetään MSF:n sisällä, varmistaen yksityisyyden ja valvonnan.",
+        "keywords": [
+          "tietojen tallennus",
+          "missä tallennetaan",
+          "paikallisesti",
+          "tietokone",
+          "MSF:n järjestelmät",
+          "Microsoft Azure",
+          "kirjautumistiedot",
+          "MSF:n käsittelemä",
+          "tietosuojakäytäntö",
+          "MSF:n sisällä"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Mitä tietoja minun ei pitäisi syöttää MSF:n tekoälyavustajaan?",
+        "answer": "Et saa syöttää seuraavia tietoja ai.msf.org:iin:\n- Henkilötietoja (nimet, puhelinnumerot, ansioluettelot, todistukset; mitään mikä voisi tunnistaa henkilön suoraan tai epäsuorasti -- tämä sisältää tietoyhdistelmät, jotka yhdessä voivat mahdollistaa henkilön tunnistamisen)\n- Erittäin arkaluonteisia tietoja (tietoja, joita voidaan käyttää tarkoituksella tai tahattomasti henkilöiden, yhteisöjen, MSF:n tai sen henkilöstön vahingoittamiseen -- tietojen arkaluontoisuuden määrittäminen vaatii kontekstianalyysiä, esimerkiksi arkaluonteisten projektien tai riskialttiiden ryhmien sijainti, turvallisuusincidentit ja muut operatiiviset tiedot)",
+        "keywords": [
+          "kielletyt tiedot",
+          "henkilötiedot",
+          "arkaluonteiset tiedot",
+          "nimet",
+          "puhelinnumerot",
+          "ansioluettelot",
+          "todistukset",
+          "tunnista henkilöt",
+          "vahingoittaa",
+          "arkaluonteiset projektit",
+          "turvallisuusincidentit",
+          "operatiiviset tiedot",
+          "älä syötä"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Mitkä ovat MSF:n tekoälyavustajan vastuullisen käytön ohjeet?",
+        "answer": "Suostut käyttämään ai.msf.org:ia vastuullisesti. Tulet:\n- Käyttämään sitä MSF-yksikkösi ICT-, tekoäly- ja muiden sovellettavien käytäntöjen mukaisesti\n- Aina tarkastelemaan tuloksia tarkkuuden, kattavuuden ja ennakkoluulojen varalta\n- Varmistamaan, että tulokset eivät riko kolmansien osapuolten immateriaalioikeuksia\n- Olemaan avoin tekoälyn käytöstäsi ja merkitsemään tulokset tekoälyn luomiksi",
+        "keywords": [
+          "vastuullinen käyttö",
+          "ohjeet",
+          "MSF:n käytännöt",
+          "ICT-käytäntö",
+          "tekoälykäytäntö",
+          "tulosten tarkastelu",
+          "tarkkuus",
+          "ennakkoluulot",
+          "immateriaalioi",
+          "avoimuus",
+          "tekoälyn luoma",
+          "tulosten merkintä"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Mitkä ovat MSF:n tekoälyavustajan kielletyt käyttötarkoitukset?",
+        "answer": "Et saa käyttää ai.msf.org:ia seuraaviin tarkoituksiin:\n- Terveydenhuolto (terveydenhuollon tarjoamiseen tai terveyskysymyksiin vastaamiseen)\n- Potilaiden tai MSF:n yhteisöjen tai muiden henkilöiden valvonta tai seuranta\n- Työsuhteeseen liittyvät päätökset (työsuhteeseen liittyvien päätösten tukemiseen tai korvaamiseen)\n- Automaattinen päätöksenteko (päätösten tekemiseen, jotka voivat vahingoittaa henkilöä tai yhteisöä)\n- Mediasisällön tuottaminen ulkoiseen viestintään yleisen mielenkiinnon aiheista\n- Laittomat tai haitalliset toimet",
+        "keywords": [
+          "kielletyt käytöt",
+          "terveydenhuolto",
+          "valvonta",
+          "seuranta",
+          "työsuhteen päätökset",
+          "automaattinen päätöksenteko",
+          "mediasisältö",
+          "ulkoinen viestintä",
+          "laittomat toimet",
+          "haitalliset toimet",
+          "älä käytä"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Kuinka tarkkoja MSF:n tekoälyavustajan tulokset ovat?",
+        "answer": "Ai.msf.org käyttää kokeellista teknologiaa -- ei takaa, että tulokset ovat tarkkoja. Lisäksi teknologiaa ei ole koulutettu MSF:n potilaita ja yhteisöjä edustavalla datalla. Tekoälytulokset voivat säilyttää ennakkoluuloja, syrjintää ja stereotypioita. On sinun vastuullasi tarkastella luotuja tuloksia.",
+        "keywords": [
+          "tarkkuus",
+          "kokeellinen teknologia",
+          "ei takuuta",
+          "ennakkoluulot",
+          "syrjintä",
+          "stereotypiat",
+          "tulosten tarkastelu",
+          "vastuu",
+          "MSF:n potilaat",
+          "yhteisöt",
+          "ei koulutettu"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Kehen minun tulisi ottaa yhteyttä yksityisyyshuolissa tai -tapahtumissa?",
+        "answer": "Jos sinulla on huolia tai haluat raportoida tapahtuman, ota yhteyttä: ai.team@amsterdam.msf.org. Tietyillä alueilla voit myös ottaa yhteyttä paikalliseen tietosuojavastaavaasi (DPO) tai vastuulliseen ICT-tiimiin (tieto- ja viestintäteknologia).",
+        "keywords": [
+          "yksityisyyshuolet",
+          "tapahtuma",
+          "yhteydenotto",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "tietosuojavastaava",
+          "ICT",
+          "tuki",
+          "tapahtuman raportointi"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Voivatko käyttöehdot muuttua?",
+        "answer": "Näitä ehtoja voi muuttaa MSF milloin tahansa -- ilmoitamme sinulle, jos muutamme niitä -- jatkuva käyttösi ai.msf.org:sta tarkoittaa hyväksyntääsi muutoksille.",
+        "keywords": [
+          "käyttöehdot",
+          "muutettavissa",
+          "muutokset",
+          "ilmoitus",
+          "jatkuva käyttö",
+          "hyväksyntä",
+          "päivitykset",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Lähetä tukipyyntö",
+      "subtitle": "Saa apua tiimiltämme",
+      "description": "Tarvitsetko apua tai haluat antaa palautetta? Klikkaa alla avataksesi tukilo",
+      "buttonText": "Avaa tukilomake"
+    },
+    "otherWays": {
+      "title": "Muut tavat ottaa yhteyttä"
+    },
+    "emailSupport": {
+      "title": "Sähköpostituki",
+      "description": "Lähetä meille sähköpostia kysymyksiä, palautetta tai teknisiä ongelmia varten"
+    },
+    "additionalResources": {
+      "title": "Lisäresurssit"
+    },
+    "aiAcceleratorPortal": {
+      "title": "AI Accelerator -portaali",
+      "description": "Dokumentaatio, projektipäivitykset ja koulutusmateriaalit"
+    },
+    "githubRepository": {
+      "title": "Avoimen lähdekoodin tietovarasto",
+      "description": "Katso koodi, raportoi ongelmia ja osallistu GitHubissa"
+    }
+  }
+}
