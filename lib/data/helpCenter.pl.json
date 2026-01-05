@@ -1,0 +1,250 @@
+{
+  "version": "1.0.1",
+  "lastUpdated": "2025-01-20",
+  "faq": [
+    {
+      "question": "Czym jest Asystent AI MSF?",
+      "answer": "Asystent AI MSF to wewnętrzne narzędzie czatu AI dostosowane dla pracowników Médecins Sans Frontières (MSF). To rozwiązanie zwiększa prywatność, przechowując dane konwersacji w systemach MSF, zapewniając bezpieczną alternatywę dla usług zewnętrznych. Obsługuje wiele modeli AI (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) oraz funkcje takie jak wyszukiwanie w sieci, transkrypcja głosu z tłumaczeniem oraz konfigurowalne polecenia i tony. Asystent AI może pomóc w odpowiadaniu na pytania, tworzeniu treści, tłumaczeniu tekstu, burzy mózgów i wielu innych. Jest zaprojektowany jako asystent dla Twojej pracy - zawsze sprawdzaj jakość i dokładność wyników."
+    },
+    {
+      "question": "Jakie modele są dostępne?",
+      "answer": "Asystent AI MSF zapewnia dostęp do wielu modeli AI:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (modele rozumowania OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nMożesz przełączać modele w dowolnym momencie za pomocą menu wyboru modelu u góry czatu."
+    },
+    {
+      "question": "Czym są Szybkie Akcje (polecenia i tony)?",
+      "answer": "Szybkie Akcje pozwalają szybko zastosować polecenia i tony do wiadomości:\n\n• Polecenia: Szablony wielokrotnego użytku dla typowych zadań (np. 「Przetłumacz na francuski」, 「Podsumuj ten dokument」). Twórz niestandardowe polecenia lub użyj wbudowanego Asystenta AI do ich generowania.\n\n• Tony: Dostosuj sposób odpowiadania AI (np. profesjonalny, swobodny, techniczny). Stosuj tony dopasowane do Twoich potrzeb.\n\nUzyskaj dostęp do Szybkich Akcji przez ikonę błyskawicy (⚡) w polu czatu lub naciśnij / aby wyszukać."
+    },
+    {
+      "question": "Co to jest Tryb Wyszukiwania?",
+      "answer": "Tryb Wyszukiwania włącza wyszukiwanie w sieci, gdy AI potrzebuje aktualnych informacji. Są dwie opcje:\n\n• Tryb Skoncentrowany na Prywatności (domyślny): Wysyła tylko zapytania wyszukiwania do Azure AI Foundry, a nie całą rozmowę. Bardziej prywatny, ale wolniejszy.\n\n• Tryb Azure AI Foundry (tylko GPT-4.1): Przechowuje całą rozmowę w Azure AI Foundry dla szybszych odpowiedzi i bezpośredniego dostępu do wyszukiwania w sieci.\n\nDowiedz się więcej o różnicach w prywatności w Ustawienia > Model > Routing Wyszukiwania."
+    },
+    {
+      "question": "Jak korzystać z transkrypcji głosu?",
+      "answer": "Kliknij ikonę mikrofonu w polu czatu, aby nagrać. AI przepisze Twoją mowę na tekst. Po transkrypcji możesz:\n- Skopiować tekst\n- Pobrać jako plik\n- Przetłumaczyć na ponad 13 języków (arabski, bengalski, angielski, francuski, portugalski, rosyjski, hiszpański, suahili, ukraiński, urdu i inne)\n\nTa funkcja jest świetna dla notatek ze spotkań, wywiadów lub szybkiego wprowadzania głosowego."
+    },
+    {
+      "question": "Czy mogę używać Asystenta AI MSF na moim telefonie?",
+      "answer": "Tak! Asystent AI MSF działa jako Progressive Web App (PWA) na urządzeniach mobilnych:\n1. Otwórz ai.msf.org w przeglądarce i zaloguj się\n2. Przejdź do Ustawienia > Aplikacja Mobilna po szczegółowe instrukcje\n3. Dotknij 「Dodaj do ekranu głównego」 (iOS Safari) lub 「Zainstaluj」 (Android Chrome)\n4. Aplikacja będzie działać jak natywna aplikacja z obsługą offline i szybszymi czasami ładowania\n\nWażne: Zainstaluj po zalogowaniu, aby zachować uwierzytelnienie. Możesz także zainstalować w przeglądarce na komputerze dla lepszych wrażeń."
+    },
+    {
+      "question": "Gdzie przechowywane są dane moich rozmów?",
+      "answer": "Historia rozmów jest przechowywana lokalnie w pamięci przeglądarki, a nie na serwerze. To oznacza:\n- Twoje czaty istnieją tylko na Twoim urządzeniu\n- Brak synchronizacji między urządzeniami lub przeglądarkami\n- Wyczyszczenie danych przeglądarki usunie Twoje rozmowy\n\nJeśli używasz Trybu Azure AI Foundry do wyszukiwania, tylko te rozmowy są również przechowywane w Azure AI Foundry z ID wątku. Zobacz Ustawienia > Model po więcej szczegółów."
+    },
+    {
+      "question": "Czym są Niestandardowi Agenci?",
+      "answer": "Niestandardowi Agenci to zaawansowane konfiguracje AI działające na instancji MSF AI Assistant Foundry ze specjalistycznymi możliwościami. Mogą automatycznie używać narzędzi takich jak wyszukiwanie w sieci i interpretacja kodu. To zaawansowana funkcja wymagająca koordynacji z zespołem technicznym Asystenta AI w celu utworzenia ID agentów. Znajdź je w Ustawienia > Model > zakładka Agenci."
+    },
+    {
+      "question": "Czy powinienem w 100% ufać odpowiedziom AI?",
+      "answer": "Nie. Choć Asystent AI MSF jest potężnym narzędziem, nie powinien zastępować ludzkiego osądu i wiedzy specjalistycznej. Zawsze:\n- Weryfikuj informacje faktyczne\n- Sprawdzaj uprzedzenia i dokładność\n- Przeglądaj wyniki przed użyciem w oficjalnej pracy\n- Nie wprowadzaj danych osobowych ani bardzo wrażliwych informacji\n\nAI jest asystentem, nie decydentem."
+    },
+    {
+      "question": "Jakich danych nie powinienem wprowadzać do Asystenta AI?",
+      "answer": "Nie wprowadzaj:\n- Danych osobowych (imiona, numery telefonów, adresy e-mail, CV)\n- Bardzo wrażliwych szczegółów operacyjnych\n- Informacji o pacjentach lub dokumentacji medycznej\n- Wszystkiego, co może identyfikować osoby lub zagrażać bezpieczeństwu\n\nZobacz Politykę Prywatności w Centrum Pomocy po pełne wytyczne."
+    },
+    {
+      "question": "Jak mogę wyeksportować lub usunąć moje dane?",
+      "answer": "W Ustawienia > Zarządzanie Danymi możesz:\n- Wyeksportować wszystkie rozmowy i polecenia jako JSON\n- Usunąć wszystkie rozmowy\n- Zaimportować wcześniej wyeksportowane dane\n- Sprawdzić wykorzystanie miejsca do przechowywania\n\nWyeksportowane dane można później zaimportować lub przenieść do innej przeglądarki."
+    },
+    {
+      "question": "Z kim powinienem się skontaktować w sprawie pytań lub opinii?",
+      "answer": "Skontaktuj się z pomocą techniczną:\n- Użytkownicy w USA: ai@newyork.msf.org\n- Użytkownicy spoza USA: ai.team@amsterdam.msf.org\n\nMożesz także w każdej chwili uzyskać dostęp do Centrum Pomocy z Ustawienia > Pomoc i Wsparcie."
+    },
+    {
+      "question": "Gdzie mogę dowiedzieć się więcej o projekcie Asystenta AI?",
+      "answer": "Odwiedź portal AI Accelerator w Pamoja po dokumentację projektu, aktualizacje i zasoby:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nTen portal zawiera informacje o planie działania projektu, materiały szkoleniowe i jak wnieść wkład."
+    },
+    {
+      "question": "Czy Asystent AI MSF jest open source?",
+      "answer": "Tak! Asystent AI MSF jest open source i dostępny na GitHub. Możesz zobaczyć kod źródłowy, przyczynić się do ulepszeń lub uczyć się z implementacji:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProjekt jest zbudowany z Next.js, React i integruje się z wieloma dostawcami AI. Wkłady i opinie są zawsze mile widziane!"
+    }
+  ],
+  "privacyPolicy": {
+    "items": [
+      {
+        "id": "privacy_001",
+        "type": "privacy_policy",
+        "category": "overview",
+        "question": "Czym jest Asystent AI MSF i jak chroni prywatność?",
+        "answer": "Asystent AI MSF to wewnętrzny chatbot AI opracowany dla pracowników MSF. Wykorzystuje modele językowe Open AI Microsoft Azure, jednocześnie przechowując wszystkie dane w MSF, zapewniając prywatność i kontrolę. Korzystanie z ai.msf.org jest bezpieczniejszym środowiskiem niż używanie innych zewnętrznych darmowych narzędzi AI, które oferują bardzo niewiele gwarancji prywatności.",
+        "keywords": [
+          "prywatność",
+          "ochrona danych",
+          "wewnętrzny",
+          "bezpieczny",
+          "MSF",
+          "Azure",
+          "Asystent AI",
+          "chatbot",
+          "dane w MSF",
+          "gwarancje prywatności",
+          "bezpieczniejszy",
+          "narzędzia zewnętrzne"
+        ]
+      },
+      {
+        "id": "privacy_002",
+        "type": "privacy_policy",
+        "category": "data_storage",
+        "question": "Gdzie moje dane są przechowywane i przetwarzane?",
+        "answer": "Wszystkie dane rozmowy z Asystentem AI MSF są przechowywane lokalnie na Twoim własnym komputerze i przetwarzane w systemach MSF przy użyciu infrastruktury Microsoft Azure. Twoje dane logowania są przetwarzane przez MSF zgodnie z opisem w polityce prywatności Twojej jednostki MSF. Dane są przechowywane w MSF, zapewniając prywatność i kontrolę.",
+        "keywords": [
+          "przechowywanie danych",
+          "gdzie przechowywane",
+          "lokalnie",
+          "komputer",
+          "systemy MSF",
+          "Microsoft Azure",
+          "dane logowania",
+          "przetwarzane przez MSF",
+          "polityka prywatności",
+          "w MSF"
+        ]
+      },
+      {
+        "id": "privacy_003",
+        "type": "privacy_policy",
+        "category": "prohibited_data",
+        "question": "Jakich danych nie powinienem wprowadzać do Asystenta AI MSF?",
+        "answer": "Nie będziesz wprowadzać następujących informacji w ai.msf.org:\n- Danych osobowych (imiona, numery telefonów, CV, zeznania; wszystko, co może identyfikować osobę bezpośrednio lub pośrednio -- obejmuje to kombinacje danych, które po połączeniu mogą umożliwić identyfikację osoby)\n- Bardzo wrażliwych danych (dane, które mogą być używane celowo lub nieumyślnie do szkodzenia osobom, społecznościom, MSF lub jego personelowi -- określenie wrażliwości danych wymaga analizy kontekstu, np. lokalizacja wrażliwych projektów lub grup ryzyka, incydenty bezpieczeństwa i inne szczegóły operacyjne)",
+        "keywords": [
+          "zabronione dane",
+          "dane osobowe",
+          "wrażliwe dane",
+          "imiona",
+          "numery telefonów",
+          "CV",
+          "zeznania",
+          "identyfikacja osób",
+          "szkodzenie",
+          "wrażliwe projekty",
+          "incydenty bezpieczeństwa",
+          "szczegóły operacyjne",
+          "nie wprowadzaj"
+        ]
+      },
+      {
+        "id": "privacy_004",
+        "type": "privacy_policy",
+        "category": "responsible_use",
+        "question": "Jakie są wytyczne odpowiedzialnego korzystania z Asystenta AI MSF?",
+        "answer": "Zgadzasz się odpowiedzialnie korzystać z ai.msf.org. Będziesz:\n- Używać go zgodnie z politykami ICT, AI i innymi mającymi zastosowanie politykami Twojej jednostki MSF\n- Zawsze przeglądać wyniki pod kątem dokładności, kompletności i uprzedzeń\n- Weryfikować, że wyniki nie naruszają praw własności intelektualnej stron trzecich\n- Być transparentnym co do wykorzystania AI i oznaczać wyniki jako wygenerowane przez AI",
+        "keywords": [
+          "odpowiedzialne korzystanie",
+          "wytyczne",
+          "polityki MSF",
+          "polityka ICT",
+          "polityka AI",
+          "przegląd wyników",
+          "dokładność",
+          "uprzedzenia",
+          "własność intelektualna",
+          "transparentność",
+          "wygenerowane przez AI",
+          "oznaczanie wyników"
+        ]
+      },
+      {
+        "id": "privacy_005",
+        "type": "privacy_policy",
+        "category": "prohibited_uses",
+        "question": "Jakie są zabronione zastosowania Asystenta AI MSF?",
+        "answer": "Nie będziesz używać ai.msf.org do następujących celów:\n- Opieki zdrowotnej (do świadczenia opieki zdrowotnej lub odpowiadania na pytania zdrowotne)\n- Nadzoru lub monitorowania pacjentów lub społeczności MSF lub innych osób\n- Decyzji związanych z zatrudnieniem (do wspierania lub zastępowania decyzji związanych z zatrudnieniem)\n- Automatycznego podejmowania decyzji (do podejmowania decyzji, które mogą zaszkodzić osobie lub społeczności)\n- Generowania treści medialnych do komunikacji zewnętrznej na tematy będące przedmiotem zainteresowania publicznego\n- Działalności nielegalnej lub szkodliwej",
+        "keywords": [
+          "zabronione zastosowania",
+          "opieka zdrowotna",
+          "nadzór",
+          "monitorowanie",
+          "decyzje zatrudnieniowe",
+          "automatyczne podejmowanie decyzji",
+          "treści medialne",
+          "komunikacja zewnętrzna",
+          "działalność nielegalna",
+          "działalność szkodliwa",
+          "nie używaj do"
+        ]
+      },
+      {
+        "id": "privacy_006",
+        "type": "privacy_policy",
+        "category": "accuracy",
+        "question": "Jak dokładne są wyniki Asystenta AI MSF?",
+        "answer": "Ai.msf.org wykorzystuje technologię eksperymentalną -- nie gwarantuje, że wyniki będą dokładne. Dodatkowo technologia nie została wytrenowana na danych reprezentujących pacjentów i społeczności MSF. Wyniki AI mogą utrwalać uprzedzenia, dyskryminację i stereotypy. Twoim obowiązkiem jest przegląd wygenerowanych wyników.",
+        "keywords": [
+          "dokładność",
+          "technologia eksperymentalna",
+          "nie gwarantowane",
+          "uprzedzenia",
+          "dyskryminacja",
+          "stereotypy",
+          "przegląd wyników",
+          "odpowiedzialność",
+          "pacjenci MSF",
+          "społeczności",
+          "nie wytrenowane"
+        ]
+      },
+      {
+        "id": "privacy_007",
+        "type": "privacy_policy",
+        "category": "support",
+        "question": "Z kim powinienem się skontaktować w sprawie obaw lub incydentów dotyczących prywatności?",
+        "answer": "Jeśli masz obawy lub chcesz zgłosić incydent, skontaktuj się z: ai.team@amsterdam.msf.org. Dla konkretnych regionów możesz także skontaktować się z lokalnym DPO (Data Protection Officer) lub odpowiedzialnym zespołem ICT (Information and Communication Technology).",
+        "keywords": [
+          "obawy o prywatność",
+          "incydent",
+          "kontakt",
+          "ai.team@amsterdam.msf.org",
+          "DPO",
+          "Inspektor Ochrony Danych",
+          "ICT",
+          "wsparcie",
+          "zgłoś incydent"
+        ]
+      },
+      {
+        "id": "privacy_008",
+        "type": "privacy_policy",
+        "category": "terms_updates",
+        "question": "Czy warunki użytkowania mogą się zmienić?",
+        "answer": "Te warunki mogą zostać zmienione przez MSF w dowolnym momencie -- powiadomimy Cię, jeśli je zmienimy -- dalsze korzystanie z ai.msf.org oznacza Twoją akceptację wszelkich zmian.",
+        "keywords": [
+          "warunki użytkowania",
+          "możliwość zmiany",
+          "zmiany",
+          "powiadomienie",
+          "dalsze korzystanie",
+          "akceptacja",
+          "aktualizacje",
+          "MSF"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "submitRequest": {
+      "title": "Wyślij Prośbę o Wsparcie",
+      "subtitle": "Uzyskaj pomoc od naszego zespołu",
+      "description": "Potrzebujesz pomocy lub chcesz przekazać opinię? Kliknij poniżej, aby otworzyć nasz formularz wsparcia.",
+      "buttonText": "Otwórz Formularz Wsparcia"
+    },
+    "otherWays": {
+      "title": "Inne Sposoby Kontaktu"
+    },
+    "emailSupport": {
+      "title": "Wsparcie E-mail",
+      "description": "Wyślij nam e-mail w sprawie pytań, opinii lub problemów technicznych"
+    },
+    "additionalResources": {
+      "title": "Dodatkowe Zasoby"
+    },
+    "aiAcceleratorPortal": {
+      "title": "Portal AI Accelerator",
+      "description": "Dokumentacja, aktualizacje projektu i materiały szkoleniowe"
+    },
+    "githubRepository": {
+      "title": "Repozytorium Open Source",
+      "description": "Zobacz kod, zgłoś problemy i wnieś wkład na GitHub"
+    }
+  }
+}
