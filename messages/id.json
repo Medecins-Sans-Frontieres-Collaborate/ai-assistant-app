@@ -712,12 +712,12 @@
           "answer": "MSF AI Assistant menyediakan akses ke beberapa model AI:\\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\\n- o1, o1-mini (model penalaran OpenAI)\\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\\n- Grok-2 (xAI)\\n\\nAnda dapat beralih antar model kapan saja menggunakan menu pemilih model di atas chat."
         },
         {
-          "question": "Apa itu Quick Actions?",
-          "answer": "Quick Actions memungkinkan Anda menerapkan prompts dan tones ke pesan Anda dengan cepat. Prompts: Template yang dapat digunakan kembali untuk tugas umum. Tones: Sesuaikan bagaimana respons AI ditulis. Akses melalui ikon petir (⚡) atau dengan mengetik /."
+          "question": "Apa itu Tindakan Cepat?",
+          "answer": "Tindakan Cepat memungkinkan Anda menerapkan prompts dan tones ke pesan Anda dengan cepat. Prompts: Template yang dapat digunakan kembali untuk tugas umum. Tones: Sesuaikan bagaimana respons AI ditulis. Akses melalui ikon petir (⚡) atau dengan mengetik /."
         },
         {
-          "question": "Apa itu Search Mode?",
-          "answer": "Search Mode memungkinkan AI menggunakan pencarian web untuk informasi terkini saat diperlukan. Mode Fokus Privasi (default): Hanya query pencarian yang dikirim. Mode Azure AI Foundry (hanya GPT-4.1): Menyimpan percakapan lengkap untuk respons lebih cepat."
+          "question": "Apa itu Mode Pencarian?",
+          "answer": "Mode Pencarian memungkinkan AI menggunakan pencarian web untuk informasi terkini saat diperlukan. Mode Fokus Privasi (default): Hanya query pencarian yang dikirim. Mode Azure AI Foundry (hanya GPT-4.1): Menyimpan percakapan lengkap untuk respons lebih cepat."
         },
         {
           "question": "Bagaimana cara menggunakan transkripsi audio?",
