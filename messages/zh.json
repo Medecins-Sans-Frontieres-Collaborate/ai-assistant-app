@@ -734,7 +734,65 @@
       "articles": "文章",
       "searchPlaceholder": "搜索常见问题...",
       "noResults": "未找到匹配的常见问题",
-      "noResultsHint": "尝试其他搜索词"
+      "noResultsHint": "尝试其他搜索词",
+      "items": [
+        {
+          "question": "什么是MSF AI助手？",
+          "answer": "MSF AI助手是为无国界医生组织(MSF)员工定制的内部AI聊天工具。该解决方案通过将对话数据保留在MSF系统内来增强隐私，提供了外部服务的安全替代方案。它支持多个AI模型(GPT-4.1、GPT-4o、o1、DeepSeek、Llama、Grok)以及网络搜索、带翻译的语音转录和可定制的提示和语调等功能。AI助手可以帮助回答问题、生成内容、翻译文本、头脑风暴等。"
+        },
+        {
+          "question": "有哪些可用的模型？",
+          "answer": "MSF AI助手提供对多个AI模型的访问：\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI推理模型)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\n您可以随时使用聊天顶部的模型选择下拉菜单切换模型。"
+        },
+        {
+          "question": "什么是快速操作？",
+          "answer": "快速操作允许您快速将提示和语调应用于您的消息。提示：用于常见任务的可重复使用模板。语调：调整AI的响应方式。通过闪电图标(⚡)访问或按/。"
+        },
+        {
+          "question": "什么是搜索模式？",
+          "answer": "当AI需要最新信息时，搜索模式会启用网络搜索。注重隐私模式(默认)：仅发送搜索查询。Azure AI Foundry模式(仅限GPT-4.1)：存储您的完整对话以获得更快的响应。"
+        },
+        {
+          "question": "如何使用语音转录？",
+          "answer": "点击麦克风图标开始录音。AI会将您的语音转录为文本。转录后，您可以复制文本、下载文件或翻译成13+种语言。"
+        },
+        {
+          "question": "我可以在手机上使用MSF AI助手吗？",
+          "answer": "可以！MSF AI助手可作为渐进式Web应用(PWA)使用。在手机上：在浏览器中打开ai.msf.org并登录，转到设置>移动应用，点击\"添加到主屏幕\"(iOS)或\"安装\"(Android)。"
+        },
+        {
+          "question": "我的对话数据存储在哪里？",
+          "answer": "您的对话历史记录存储在浏览器存储中，而不是任何服务器上。您的聊天仅存在于您的设备上，不会在设备之间同步。如果您使用Azure AI Foundry模式进行搜索，这些对话也会存储在Azure AI Foundry中。"
+        },
+        {
+          "question": "什么是自定义代理？",
+          "answer": "自定义代理是在MSF AI Assistant Foundry实例上运行的高级AI配置，具有专门的功能。它们可以自动使用网络搜索和代码解释等工具。这是一个高级功能，需要与技术团队协调。"
+        },
+        {
+          "question": "我应该100%信任AI的回答吗？",
+          "answer": "不应该。虽然MSF AI助手是一个强大的工具，但它不应取代人类的判断和专业知识。始终：核实事实信息，检查偏见和准确性，使用前审查输出，不要输入个人数据或敏感信息。"
+        },
+        {
+          "question": "哪些数据我不应该输入？",
+          "answer": "不要输入：个人数据(姓名、电话号码、电子邮件地址、简历)，高度敏感的运营细节，患者信息或医疗记录，任何可以识别个人身份的信息。"
+        },
+        {
+          "question": "如何导出或清除我的数据？",
+          "answer": "在设置>数据管理中：将所有对话和提示导出为JSON，清除所有对话，导入先前导出的数据，检查存储使用情况。"
+        },
+        {
+          "question": "有问题应该去哪里？",
+          "answer": "联系支持：\n- 美国用户：ai@newyork.msf.org\n- 非美国用户：ai.team@amsterdam.msf.org\n\n您也可以随时从设置>帮助与支持访问帮助中心。"
+        },
+        {
+          "question": "在哪里可以了解更多关于项目的信息？",
+          "answer": "访问Pamoja上的AI Accelerator门户：\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\n该门户包含有关项目路线图和培训材料的信息。"
+        },
+        {
+          "question": "MSF AI助手是开源的吗？",
+          "answer": "是的！可在GitHub上获得：\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\n使用Next.js和React构建。欢迎贡献！"
+        }
+      ]
     },
     "privacy": {
       "title": "隐私与数据",
@@ -748,7 +806,41 @@
       "localStorageOnly": "仅本地存储",
       "msfControlled": "MSF 控制",
       "noPersonalData": "无个人数据",
-      "noSensitiveOps": "无敏感操作"
+      "noSensitiveOps": "无敏感操作",
+      "items": [
+        {
+          "question": "什么是MSF AI助手，它如何保护隐私？",
+          "answer": "MSF AI助手是为MSF员工开发的内部AI聊天机器人。它使用微软Azure的Open AI大语言模型，同时将所有数据保留在MSF内部，确保隐私和控制。使用ai.msf.org比使用其他外部免费AI工具更安全，后者提供的隐私保证非常少。"
+        },
+        {
+          "question": "我的数据存储和处理在哪里？",
+          "answer": "与MSF AI助手的所有对话数据都存储在您自己的计算机上，并使用微软Azure基础设施在MSF系统内处理。您的登录信息将由MSF按照您的MSF实体的隐私政策进行处理。数据保留在MSF内部，确保隐私和控制。"
+        },
+        {
+          "question": "哪些数据我不应该放入MSF AI助手？",
+          "answer": "您不会在ai.msf.org中输入/上传以下任何信息：\n- 个人数据(姓名、电话号码、简历、证词；任何可以直接或间接识别个人身份的内容)\n- 高度敏感数据(可能有意或无意地用于伤害个人、社区、MSF或其员工的数据 -- 确定数据敏感性需要结合背景分析，例如敏感项目地点或风险群体、安全事件和其他运营细节)"
+        },
+        {
+          "question": "负责任使用的指南是什么？",
+          "answer": "您同意负责任地使用ai.msf.org。您将：\n- 按照您的MSF实体适用的ICT、AI和其他政策使用它\n- 始终检查输出的准确性、包容性和偏见\n- 检查输出是否侵犯第三方知识产权\n- 对您使用AI保持透明，并将输出标记为AI生成"
+        },
+        {
+          "question": "禁止的应用有哪些？",
+          "answer": "您不会将ai.msf.org用于以下任何目的：\n- 医疗保健(提供医疗保健或回答与健康相关的问题)\n- 监视或监控MSF患者或社区或其他个人\n- 与就业相关的决定\n- 自动化决策(做出可能对个人或社区有害的决定)\n- 为有关公共利益问题的外部通信创建媒体内容\n- 非法或有害活动"
+        },
+        {
+          "question": "输出有多准确？",
+          "answer": "Ai.msf.org使用实验性技术 -- 它不能保证输出将是准确的。此外，该技术没有使用MSF患者和社区的代表性数据进行训练。AI输出可能会延续偏见、歧视和刻板印象。您有责任验证产生的输出。"
+        },
+        {
+          "question": "对于隐私问题或事件我应该联系谁？",
+          "answer": "如果您有任何顾虑，想要报告事件，请联系：ai.team@amsterdam.msf.org。对于特定地区，您也可以联系您当地的DPO(数据保护官)或负责的ICT(信息和通信技术)团队。"
+        },
+        {
+          "question": "使用条款可以修改吗？",
+          "answer": "这些条款可以由MSF随时修改 -- 如果我们修改它们，我们会通知您 -- 您继续使用ai.msf.org即表示接受任何更改。"
+        }
+      ]
     },
     "contact": {
       "title": "联系与资源",
