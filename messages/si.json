@@ -712,8 +712,8 @@
           "answer": "MSF AI Assistant බහු AI ආකෘති වෙත ප්‍රවේශය සපයයි:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI reasoning models)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nඔබට සංවාදයේ ඉහළින් ඇති ආකෘතිය තෝරාගැනීමේ dropdown භාවිතයෙන් ඕනෑම අවස්ථාවක ආකෘති අතර මාරු විය හැක."
         },
         {
-          "question": "Quick Actions යනු කුමක්ද?",
-          "answer": "Quick Actions මඟින් ඔබට ඔබේ පණිවිඩ වෙත ඉක්මනින් විමසීම් සහ තානයන් යෙදිය හැක. විමසීම්: සාමාන්‍ය කාර්යයන් සඳහා නැවත භාවිතා කළ හැකි සැකිලි. තානයන්: AI ප්‍රතිචාර දක්වන ආකාරය සකස් කරන්න. විදුලි අයිකනය (⚡) හෝ / එබීමෙන් ප්‍රවේශ වන්න."
+          "question": "ඉක්මන් ක්‍රියා යනු කුමක්ද?",
+          "answer": "ඉක්මන් ක්‍රියා මඟින් ඔබට ඔබේ පණිවිඩ වෙත ඉක්මනින් විමසීම් සහ තානයන් යෙදිය හැක. විමසීම්: සාමාන්‍ය කාර්යයන් සඳහා නැවත භාවිතා කළ හැකි සැකිලි. තානයන්: AI ප්‍රතිචාර දක්වන ආකාරය සකස් කරන්න. විදුලි අයිකනය (⚡) හෝ / එබීමෙන් ප්‍රවේශ වන්න."
         },
         {
           "question": "සෙවීම් මාදිලිය යනු කුමක්ද?",
@@ -1447,7 +1447,7 @@
       "title": "ශබ්දSW (Voice Profiles)",
       "description": "AI සිතුවම් රීති, නිබන්ධනය සහ පෞද්ගලිකත්වය පාලනය කරන්න",
       "createTones": "1. ශබ්දSW නිර්මාණය කරන්න:",
-      "createTonesInstructions": "ඉවුනු පැති තීරුවේ Quick Actions → Tones ටැබය",
+      "createTonesInstructions": "ඉවුනු පැති තීරුවේ ඉක්මන් ක්‍රියා → Tones ටැබය",
       "useTones": "2. ශබ්දSW භාවිතා කරන්න:",
       "useTonesInstructions": "චැට් උත්ප්‍රේරකය අසළ tone dropdown එක ඔබන්න",
       "exampleProfessionalDesc": "නිල, වෘත්තීය ස්වරය",
@@ -1456,7 +1456,7 @@
     "aiAssist": {
       "title": "ප්‍රේරණ සහ ශබ්දSW සඳහා AI උදව්",
       "description": "AI ඔබට වඩා හොඳ ප්‍රේරණ සහ ශබ්දSW වේගයෙන් නිර්මාණයට උපකාරී වේ",
-      "step1": "ඉවුණු පැති තීරුවේ Quick Actions විවෘත කරන්න",
+      "step1": "ඉවුණු පැති තීරුවේ ඉක්මන් ක්‍රියා විවෘත කරන්න",
       "step2": "{prompts} හෝ {tones} ටැබය වෙත යන්න",
       "step3": "AI Assistant පැනලය සොයන්න",
       "getSuggestions": "පිළිවෙලින් ඉඟි ලබාගන්න",
@@ -1632,7 +1632,7 @@
     "noToneDefault": "සුරැස්සුවක් නැහැ (පෙරනිමිය)",
     "useDefaultStyle": "පෙරනිමි ලිවීමේ විලාසය භාවිතා කරන්න",
     "noTonesCreated": "තවම සුරැස්සු නිර්මාණය කර නැත",
-    "createTonesHint": "Quick Actions තුළ සුරැස්සු නිර්මාණය කරන්න",
+    "createTonesHint": "ඉක්මන් ක්‍රියා තුළ සුරැස්සු නිර්මාණය කරන්න",
     "translateDocumentTooltip": "ප්‍රලේඛ පරිවර්තනය වෙනත් භාෂාවකට.\n\nසහාය වන හැඳුනුම්පත්: Word, Excel, PowerPoint, PDF, HTML, TXT\nඋපරිම ප්‍රමාණය: 40MB\n\nවිකල්ප ශබ්ද කෝෂ ගොනු සමඟ භාෂා 80+කට සහය දක්වයි."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
