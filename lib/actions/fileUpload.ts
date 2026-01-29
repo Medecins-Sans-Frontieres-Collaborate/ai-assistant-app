@@ -77,6 +77,25 @@ export async function uploadFileAction(
       return { success: false, error: executableValidation.error };
     }
 
+    // Early rejection: check declared size before buffering the file.
+    // This is advisory only — the authoritative check runs against actual
+    // buffer length at the validateFileSizeRaw call below, so a false
+    // 'size' value cannot bypass validation.
+    const declaredSize = formData.get('size');
+    if (declaredSize) {
+      const parsed = parseInt(declaredSize as string, 10);
+      if (!isNaN(parsed)) {
+        const earlyCheck = validateFileSizeRaw(
+          filename,
+          parsed,
+          mimeType ?? undefined,
+        );
+        if (!earlyCheck.valid) {
+          return { success: false, error: earlyCheck.error };
+        }
+      }
+    }
+
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer();
     const fileData = Buffer.from(arrayBuffer);
@@ -273,6 +292,15 @@ export async function uploadChunkAction(
       return { success: false, chunkIndex, error: 'Unauthorized' };
     }
 
+    // Reject chunks beyond the expected range
+    if (chunkIndex < 0 || chunkIndex >= session.totalChunks) {
+      return {
+        success: false,
+        chunkIndex,
+        error: `Chunk index ${chunkIndex} is out of range (expected 0-${session.totalChunks - 1})`,
+      };
+    }
+
     const chunk = chunkData.get('chunk') as Blob | null;
     if (!chunk) {
       return { success: false, chunkIndex, error: 'No chunk data provided' };
@@ -281,6 +309,16 @@ export async function uploadChunkAction(
     // Convert chunk to buffer
     const arrayBuffer = await chunk.arrayBuffer();
     const chunkBuffer = Buffer.from(arrayBuffer);
+
+    // Reject oversized chunks to prevent cumulative size abuse
+    const expectedMaxChunkSize = session.chunkSize + 1024;
+    if (chunkBuffer.length > expectedMaxChunkSize) {
+      return {
+        success: false,
+        chunkIndex,
+        error: `Chunk size ${chunkBuffer.length} exceeds expected maximum ${expectedMaxChunkSize}`,
+      };
+    }
 
     // Get blob storage client
     const blobStorageClient = createBlobStorageClient(authSession);
