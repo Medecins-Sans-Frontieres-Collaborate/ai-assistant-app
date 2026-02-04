@@ -1,0 +1,60 @@
+name: Configure AI Search
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - beta
+          - live
+      allow_downtime:
+        description: 'Allow index downtime (required for schema changes)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  configure_search:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Configure AI Search
+        env:
+          SEARCH_ENDPOINT: ${{ vars.SEARCH_ENDPOINT }}
+          SEARCH_INDEX: ${{ vars.SEARCH_INDEX }}
+          SEARCH_SKILLSET: ${{ vars.SEARCH_SKILLSET }}
+          SEARCH_DATASOURCE: ${{ vars.SEARCH_DATASOURCE }}
+          SEARCH_INDEXER: ${{ vars.SEARCH_INDEXER }}
+          STORAGE_DATA_SOURCE_CONTAINER: ${{ vars.STORAGE_DATA_SOURCE_CONTAINER }}
+          STORAGE_RESOURCE_ID: ${{ vars.STORAGE_RESOURCE_ID }}
+          AZURE_OPENAI_ENDPOINT: ${{ vars.AZURE_OPENAI_ENDPOINT }}
+          OPENAI_EMBEDDING_DEPLOYMENT: ${{ vars.OPENAI_EMBEDDING_DEPLOYMENT }}
+          ALLOW_INDEX_DOWNTIME: ${{ github.event.inputs.allow_downtime }}
+        run: npm run search:config

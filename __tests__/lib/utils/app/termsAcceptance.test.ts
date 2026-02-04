@@ -91,7 +91,9 @@ describe('termsAcceptance utility', () => {
   });
 
   afterEach(() => {
-    delete (global as any).window;
+    // Use undefined assignment instead of delete to avoid "Cannot delete property" errors
+    (global as any).window = undefined;
+    (global as any).localStorage = undefined;
     vi.clearAllMocks();
   });
 

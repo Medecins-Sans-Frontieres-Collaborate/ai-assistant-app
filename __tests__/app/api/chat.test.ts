@@ -31,6 +31,32 @@ vi.mock('@azure/identity', () => ({
     .mockReturnValue(() => Promise.resolve('mock-token')),
 }));
 
+// Mock Azure Search SDK - required for RAGService
+vi.mock('@azure/search-documents', () => ({
+  SearchClient: class MockSearchClient {
+    search = vi.fn().mockReturnValue({
+      results: (async function* () {
+        // Empty results for tests
+      })(),
+    });
+  },
+}));
+
+// Mock environment config to provide required search endpoints
+vi.mock('@/config/environment', () => ({
+  env: {
+    NODE_ENV: 'test',
+    SEARCH_ENDPOINT: 'https://mock-search.example.com',
+    SEARCH_INDEX: 'mock-index',
+    NEXT_PUBLIC_ENV: 'localhost',
+  },
+  isProduction: () => false,
+  isDevelopment: () => true,
+  isStaging: () => false,
+  isBeta: () => false,
+  getCurrentEnvironment: () => 'localhost',
+}));
+
 // Mock blob storage factory to prevent Azure blob storage initialization
 vi.mock('@/lib/services/blobStorageFactory', () => ({
   createBlobStorageClient: vi.fn().mockReturnValue({
@@ -157,7 +183,7 @@ describe('/api/chat - Integration Tests', () => {
   describe('Happy Path - Standard Chat', () => {
     it('should successfully handle a simple text chat request', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -183,7 +209,7 @@ describe('/api/chat - Integration Tests', () => {
 
     it('should successfully handle a streaming chat request', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -207,7 +233,7 @@ describe('/api/chat - Integration Tests', () => {
 
     it('should handle multiple messages in conversation', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -241,7 +267,7 @@ describe('/api/chat - Integration Tests', () => {
       vi.mocked(auth).mockResolvedValue(null as any);
 
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -263,7 +289,7 @@ describe('/api/chat - Integration Tests', () => {
   describe('Rate Limiting', () => {
     it('should allow requests within rate limit', async () => {
       const requestBody = {
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -288,7 +314,7 @@ describe('/api/chat - Integration Tests', () => {
       const limiter = RateLimiter.getInstance(2, 1); // 2 requests per minute
 
       const requestBody = {
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -334,7 +360,7 @@ describe('/api/chat - Integration Tests', () => {
 
     it('should reject requests with empty messages array', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [],
       });
 
@@ -348,7 +374,7 @@ describe('/api/chat - Integration Tests', () => {
 
     it('should reject requests with invalid temperature', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -371,7 +397,7 @@ describe('/api/chat - Integration Tests', () => {
       const largeContent = 'x'.repeat(11 * 1024 * 1024); // 11MB (over 10MB limit)
 
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -391,7 +417,7 @@ describe('/api/chat - Integration Tests', () => {
 
     it('should reject invalid message roles', async () => {
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'invalid_role', // Invalid role
@@ -423,7 +449,7 @@ describe('/api/chat - Integration Tests', () => {
       );
 
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -459,7 +485,7 @@ describe('/api/chat - Integration Tests', () => {
       const getInstanceSpy = vi.spyOn(ServiceContainer, 'getInstance');
 
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -487,7 +513,7 @@ describe('/api/chat - Integration Tests', () => {
       mockCreateFn.mockRejectedValueOnce(new Error('OpenAI API Error'));
 
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [
           {
             role: 'user',
@@ -510,7 +536,7 @@ describe('/api/chat - Integration Tests', () => {
       // This is already tested in validation tests, but good to verify
       // that PipelineErrors are properly caught and formatted
       const request = createChatRequest({
-        model: { id: 'gpt-4', name: 'GPT-4', tokenLimit: 8000 },
+        model: { id: 'gpt-5.2-chat', name: 'GPT-5.2 Chat', tokenLimit: 16000 },
         messages: [], // Invalid
       });
 

@@ -258,7 +258,7 @@ export function getIndexConfig(
           azureOpenAIParameters: {
             resourceUri: openaiEndpoint,
             deploymentId: openaiEmbeddingDeployment,
-            modelName: 'text-embedding-ada-002',
+            modelName: 'text-embedding-3-small',
           },
         },
       ],

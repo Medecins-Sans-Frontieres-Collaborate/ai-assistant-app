@@ -88,6 +88,45 @@ describe('ToolRouter Enricher', () => {
 
       expect(enricher.shouldRun(context)).toBe(false);
     });
+
+    describe('with organization agents (botId)', () => {
+      it('should return true for org agent with allowWebSearch and INTELLIGENT mode', () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          botId: 'msf_communications', // This agent has allowWebSearch: true
+        });
+
+        expect(enricher.shouldRun(context)).toBe(true);
+      });
+
+      it('should return true for org agent with allowWebSearch and ALWAYS mode', () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.ALWAYS,
+          botId: 'msf_communications',
+        });
+
+        expect(enricher.shouldRun(context)).toBe(true);
+      });
+
+      it('should return false for org agent with allowWebSearch but OFF mode', () => {
+        const context = createTestChatContext({
+          searchMode: SearchMode.OFF,
+          botId: 'msf_communications',
+        });
+
+        expect(enricher.shouldRun(context)).toBe(false);
+      });
+
+      it('should return false for org agent without allowWebSearch', () => {
+        // Non-existent agent ID will return undefined from getOrganizationAgentById
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          botId: 'agent_without_web_search',
+        });
+
+        expect(enricher.shouldRun(context)).toBe(false);
+      });
+    });
   });
 
   describe('executeStage', () => {
@@ -185,7 +224,7 @@ describe('ToolRouter Enricher', () => {
         expect(result.enrichedMessages?.[1]).toEqual(context.messages[0]);
       });
 
-      it('should store citations in metadata', async () => {
+      it('should store citations in metadata with number property', async () => {
         mockToolRouterService.determineTool.mockResolvedValue({
           tools: ['web_search'],
           searchQuery: 'latest AI news',
@@ -210,7 +249,81 @@ describe('ToolRouter Enricher', () => {
 
         const result = await enricher.execute(context);
 
-        expect(result.processedContent?.metadata?.citations).toEqual(citations);
+        // Citations should be merged with number property for proper ordering
+        expect(result.processedContent?.metadata?.citations).toEqual([
+          { title: 'AI News 1', url: 'https://example.com/1', number: 1 },
+          { title: 'AI News 2', url: 'https://example.com/2', number: 2 },
+        ]);
+      });
+
+      it('should merge web search citations with existing RAG citations', async () => {
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: ['web_search'],
+          searchQuery: 'MSF operations',
+          reasoning: 'Need current information',
+        });
+
+        const webSearchCitations = [
+          { title: 'Web Source 1', url: 'https://web1.com' },
+          { title: 'Web Source 2', url: 'https://web2.com' },
+        ];
+
+        (enricher as any).webSearchTool.execute.mockResolvedValue({
+          text: 'Web search results',
+          citations: webSearchCitations,
+        });
+
+        // Simulate existing RAG citations (from RAGEnricher)
+        const existingRagCitations = [
+          {
+            title: 'RAG Source 1',
+            url: 'https://rag1.com',
+            date: '2024-01-15',
+            number: 1,
+          },
+          {
+            title: 'RAG Source 2',
+            url: 'https://rag2.com',
+            date: '2024-01-10',
+            number: 2,
+          },
+        ];
+
+        const context = createTestChatContext({
+          searchMode: SearchMode.ALWAYS,
+          messages: [createTestMessage({ content: 'Tell me about MSF' })],
+          model: { agentId: 'test-agent' },
+          processedContent: {
+            metadata: {
+              citations: existingRagCitations,
+            },
+          },
+        });
+
+        const result = await enricher.execute(context);
+
+        // Should have 4 citations total: 2 RAG + 2 web search
+        expect(result.processedContent?.metadata?.citations).toHaveLength(4);
+
+        // RAG citations should be preserved as-is
+        expect(result.processedContent?.metadata?.citations?.[0]).toEqual(
+          existingRagCitations[0],
+        );
+        expect(result.processedContent?.metadata?.citations?.[1]).toEqual(
+          existingRagCitations[1],
+        );
+
+        // Web search citations should have numbers continuing from RAG
+        expect(result.processedContent?.metadata?.citations?.[2]).toEqual({
+          title: 'Web Source 1',
+          url: 'https://web1.com',
+          number: 3, // Continues from RAG citation #2
+        });
+        expect(result.processedContent?.metadata?.citations?.[3]).toEqual({
+          title: 'Web Source 2',
+          url: 'https://web2.com',
+          number: 4,
+        });
       });
 
       it('should force web search in ALWAYS mode', async () => {

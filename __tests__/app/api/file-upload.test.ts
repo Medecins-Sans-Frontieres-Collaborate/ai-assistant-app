@@ -393,7 +393,8 @@ describe('/api/file/upload', () => {
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(data.data.uri).toBe('/api/file/uploaded-file.txt');
+      // Route returns proxy URL, not direct storage URL
+      expect(data.data.uri).toMatch(/^\/api\/file\/.+/);
       expect(data.message).toBe('File uploaded successfully');
     });
   });

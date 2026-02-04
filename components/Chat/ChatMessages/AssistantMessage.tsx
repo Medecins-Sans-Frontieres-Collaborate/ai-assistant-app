@@ -479,15 +479,29 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
   };
 
   return (
-    <div className="relative flex px-4 py-3 text-base lg:px-0 w-full">
-      <div className="mt-[-2px] w-full">
+    <div
+      className="relative flex px-4 py-3 text-base lg:px-0"
+      style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+    >
+      <div
+        className="mt-[-2px]"
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+          minWidth: 0,
+          overflow: 'hidden',
+        }}
+      >
         {loadingMessage && (
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 animate-pulse">
             {loadingMessage}
           </div>
         )}
 
-        <div className="flex flex-col w-full">
+        <div
+          className="flex flex-col"
+          style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+        >
           {/* Thinking block - displayed before main content */}
           {thinking && (
             <ThinkingBlock

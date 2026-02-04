@@ -69,9 +69,8 @@ export default function DocumentEditor({
         const trimmed = modifiedCode.trim();
         // Check if content is NOT HTML
         if (!trimmed.startsWith('<')) {
-          const { autoConvertToHtml } = await import(
-            '@/lib/utils/shared/document/formatConverter'
-          );
+          const { autoConvertToHtml } =
+            await import('@/lib/utils/shared/document/formatConverter');
           const converted = await autoConvertToHtml(modifiedCode, fileName);
           setModifiedCode(converted);
         }
@@ -97,7 +96,7 @@ export default function DocumentEditor({
   }
 
   return (
-    <div className="h-full w-full flex flex-col overflow-hidden">
+    <div className="h-full w-full flex flex-col overflow-hidden min-w-0">
       {/* Toolbar */}
       <div className="flex flex-wrap gap-1 p-2 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
         {/* Text Formatting */}
@@ -280,7 +279,7 @@ export default function DocumentEditor({
       </div>
 
       {/* Editor */}
-      <div className="flex-1 overflow-y-auto p-4 bg-white dark:bg-neutral-900">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-white dark:bg-neutral-900 min-w-0">
         <EditorContent editor={editor} />
       </div>
     </div>

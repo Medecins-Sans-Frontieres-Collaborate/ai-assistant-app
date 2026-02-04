@@ -59,6 +59,7 @@ import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -248,6 +249,9 @@ export function Sidebar() {
       searchMode = SearchMode.INTELLIGENT;
     }
 
+    // Get bot ID for organization agents (enables RAG)
+    const botId = getOrganizationAgentIdFromModelId(defaultModel.id);
+
     const newConversation: Conversation = {
       id: uuidv4(),
       name: '',
@@ -257,6 +261,7 @@ export function Sidebar() {
       temperature: temperature || 0.5,
       folderId: null,
       defaultSearchMode: searchMode, // Use model-appropriate search mode
+      bot: botId || undefined, // Set bot ID for RAG-enabled organization agents
     };
 
     addConversation(newConversation);

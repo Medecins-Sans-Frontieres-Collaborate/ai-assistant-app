@@ -8,6 +8,8 @@ import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { WebSearchTool } from '../tools/WebSearchTool';
 
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
+
 /**
  * ToolRouterEnricher adds intelligent tool routing capabilities.
  *
@@ -42,6 +44,19 @@ export class ToolRouterEnricher extends BasePipelineStage {
   }
 
   shouldRun(context: ChatContext): boolean {
+    // Check if org agent allows web search
+    if (context.botId) {
+      const agent = getOrganizationAgentById(context.botId);
+      if (agent?.allowWebSearch) {
+        return (
+          context.searchMode === SearchMode.INTELLIGENT ||
+          context.searchMode === SearchMode.ALWAYS
+        );
+      }
+      return false; // Org agent without allowWebSearch - no web search
+    }
+
+    // Standard search mode check for non-org-agent models
     return (
       context.searchMode === SearchMode.INTELLIGENT ||
       context.searchMode === SearchMode.ALWAYS
@@ -132,16 +147,24 @@ export class ToolRouterEnricher extends BasePipelineStage {
           JSON.stringify(searchResult.citations, null, 2),
         );
 
+        // Get existing RAG citations to calculate correct numbering
+        const existingCitations =
+          context.processedContent?.metadata?.citations || [];
+        const citationOffset = existingCitations.length;
+
         // Add search results as a system message before the last user message
+        // Citation numbers must match the merged citation numbers (RAG first, then web)
         const citationReferences = searchResult.citations
           ? searchResult.citations
-              .map((c, idx) => `[${idx + 1}] ${c.title || c.url}`)
+              .map(
+                (c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`,
+              )
               .join('\n')
           : '';
 
         const searchContextMessage: Message = {
           role: 'system',
-          content: `Web Search results:\n\n${searchResult.text}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use ONLY citation markers like [1], [2], etc. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`,
+          content: `Web Search results:\n\n${searchResult.text}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`,
           messageType: MessageType.TEXT,
         };
 
@@ -151,12 +174,25 @@ export class ToolRouterEnricher extends BasePipelineStage {
           searchContextMessage,
           baseMessages[baseMessages.length - 1],
         ];
+        const newCitations = searchResult.citations || [];
 
-        // Store citations in metadata for later use
+        const mergedCitations = [
+          ...existingCitations,
+          ...newCitations.map((c, idx) => ({
+            ...c,
+            number: existingCitations.length + idx + 1,
+          })),
+        ];
+
         console.log(
-          '[ToolRouterEnricher] Storing citations in context.processedContent.metadata:',
-          searchResult.citations?.length || 0,
+          '[ToolRouterEnricher] Merging citations - existing:',
+          existingCitations.length,
+          'new:',
+          newCitations.length,
+          'total:',
+          mergedCitations.length,
         );
+
         return {
           ...context,
           enrichedMessages,
@@ -164,7 +200,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
             ...context.processedContent,
             metadata: {
               ...context.processedContent?.metadata,
-              citations: searchResult.citations,
+              citations: mergedCitations,
             },
           },
         };

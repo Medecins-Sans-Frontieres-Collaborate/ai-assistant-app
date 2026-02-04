@@ -27,7 +27,7 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
   const { hostname, cleanDomain } = processUrl(citation.url);
 
   return (
-    <div className="relative bg-gray-200 dark:bg-[#171717] rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg h-[132px] w-48 p-2 mb-5">
+    <div className="relative bg-gray-200 dark:bg-[#171717] rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg h-[132px] w-48 p-2">
       <Link
         href={citation.url}
         target="_blank"
@@ -45,7 +45,7 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
             {new Date(citation.date).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
-              day: 'numeric'
+              day: 'numeric',
             })}
           </div>
         )}

@@ -111,11 +111,11 @@ jobs:
 
   # JOB 2: Deploy Preview (only for internal PRs against main - requires secrets)
   deploy_preview:
-    # Only run for internal PRs (not forks) targeting main branch
+    # Only run for internal PRs (not external forks) targeting main branch
     if: |
       github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.fork == false &&
-      github.event.pull_request.base.ref == 'main'
+      github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name &&
+      github.base_ref == 'main'
     needs: test_pr
     runs-on: ubuntu-latest
     environment: dev
@@ -127,7 +127,7 @@ jobs:
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
       - name: Azure Login (OIDC)
-        uses: azure/login@v2
+        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
@@ -213,7 +213,7 @@ jobs:
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
       - name: Azure Login (OIDC)
-        uses: azure/login@v2
+        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
@@ -247,7 +247,7 @@ jobs:
     environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Azure Login (OIDC)
-        uses: azure/login@v2
+        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
