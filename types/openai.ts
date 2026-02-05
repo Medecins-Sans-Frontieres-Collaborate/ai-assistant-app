@@ -102,7 +102,7 @@ const ENVIRONMENT_CONFIGS: Record<
   },
   prod: {
     [OpenAIModelID.GPT_4_1]: {
-      agentId: 'asst_31fflP2JhFb9iJmeauwV82X5', // Agent312 - gpt-4.1
+      agentId: 'asst_31ffIP2JhFb9iJmeauwV82X5', // Agent312 - gpt-4.1
     },
   },
 };
