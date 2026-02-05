@@ -13,10 +13,6 @@ on:
   # Trigger for Live deployment (manual)
   workflow_dispatch:
     inputs:
-      image_tag:
-        description: 'Image tag to deploy to Live (must exist in ACR)'
-        required: true
-        type: string
       environment:
         description: 'Target environment'
         required: true
@@ -24,6 +20,11 @@ on:
         options:
           - live
           - beta
+      image_tag:
+        description: 'Image tag to deploy (defaults to latest)'
+        required: false
+        type: string
+        default: 'latest'
 
 permissions:
   id-token: write
@@ -227,7 +228,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
+          tags: |
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:latest
           build-args: |
             BUILD=${{ github.run_number }}
           cache-from: type=gha
@@ -240,29 +243,7 @@ jobs:
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
 
-  # JOB 4: Deploy to LIVE (manual approval after beta)
-  # This job appears as a pending step after beta deploys - click to approve and deploy to production
-  deploy_live:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: build_and_deploy_beta
-    runs-on: ubuntu-latest
-    environment: live
-    steps:
-      - name: Azure Login (OIDC)
-        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
-        with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-
-      - name: 🚀 Deploy to Live
-        run: |
-          az containerapp update \
-            --name ${{ vars.CONTAINER_APP_NAME }} \
-            --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
-
-  # JOB 5: Manual deployment with custom image tag (standalone)
+  # JOB 4: Manual deployment to Live (or Beta) via workflow_dispatch
   deploy_manual:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

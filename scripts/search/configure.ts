@@ -4,7 +4,10 @@ import { createOrUpdateIndexer } from './components/create-indexer';
 import { createOrUpdateSkillset } from './components/create-skillset';
 
 import { DefaultAzureCredential } from '@azure/identity';
-import { SearchIndexerClient } from '@azure/search-documents';
+import {
+  AzureKeyCredential,
+  SearchIndexerClient,
+} from '@azure/search-documents';
 
 export interface SearchConfig {
   endpoint: string;
@@ -18,18 +21,22 @@ export interface SearchConfig {
   openaiEndpoint: string;
   openaiApiKey?: string;
   openaiEmbeddingDeployment: string;
+  searchApiKey?: string;
 }
 
 export async function configureSearch(config: SearchConfig) {
   console.log('Starting Azure Search configuration for RAG system...');
-  console.log(
-    'Using managed identity (DefaultAzureCredential) for authentication',
-  );
 
   const apiVersion = '2024-11-01-preview';
 
-  // Use managed identity for authentication
-  const credential = new DefaultAzureCredential();
+  // Use API key if provided, otherwise fall back to managed identity
+  const credential = config.searchApiKey
+    ? new AzureKeyCredential(config.searchApiKey)
+    : new DefaultAzureCredential();
+
+  console.log(
+    `Using ${config.searchApiKey ? 'API key' : 'managed identity (DefaultAzureCredential)'} for authentication`,
+  );
 
   const indexerClient = new SearchIndexerClient(config.endpoint, credential, {
     apiVersion,
@@ -48,6 +55,7 @@ export async function configureSearch(config: SearchConfig) {
       config.endpoint,
       config.openaiEndpoint,
       config.openaiEmbeddingDeployment,
+      config.searchApiKey,
     );
 
     /*
@@ -67,6 +75,7 @@ export async function configureSearch(config: SearchConfig) {
       config.endpoint,
       config.openaiEndpoint,
       config.openaiEmbeddingDeployment,
+      config.searchApiKey,
     );
 
     await createOrUpdateIndexer(

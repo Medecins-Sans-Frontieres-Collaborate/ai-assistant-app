@@ -353,9 +353,10 @@ function createModelConfigs(
 }
 
 // Select the appropriate configuration based on environment
-// NEXT_PUBLIC_ENV is set in .env files: 'localhost', 'development', 'staging', 'beta', 'production'
+// NEXT_PUBLIC_ENV is set in .env files: 'localhost', 'dev', 'staging', 'beta', 'live', 'prod'
 const environment = process.env.NEXT_PUBLIC_ENV || 'localhost';
-const isProduction = environment === 'production' || environment === 'beta';
+const isProduction =
+  environment === 'prod' || environment === 'live' || environment === 'beta';
 
 export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> =
   createModelConfigs(isProduction);

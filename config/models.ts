@@ -33,7 +33,7 @@ export function getCurrentEnvironment(): Environment {
   // Only use NEXT_PUBLIC_ENV to ensure server/client consistency
   const env = process.env.NEXT_PUBLIC_ENV;
 
-  if (env === 'production' || env === 'prod') {
+  if (env === 'production' || env === 'prod' || env === 'live') {
     return 'prod';
   }
 
