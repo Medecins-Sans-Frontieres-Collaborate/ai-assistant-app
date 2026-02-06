@@ -1,4 +1,5 @@
 import { IconX } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -24,6 +25,10 @@ import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelTypeIcon } from './ModelSelect/ModelTypeIcon';
 
 import { CustomAgent } from '@/client/stores/settingsStore';
+import {
+  getOrganizationAgentIdFromModelId,
+  getOrganizationAgents,
+} from '@/lib/organizationAgents';
 
 interface ModelSelectProps {
   onClose?: () => void;
@@ -31,10 +36,15 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
+  const { exploreBots } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
     useSettings();
+
+  // Feature flag: Control organization bots visibility via LaunchDarkly
+  // Default to true if LaunchDarkly is not configured (for local development)
+  const isBotsEnabled = exploreBots !== false;
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
@@ -132,8 +142,39 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       });
   }, [customAgents, defunctAgentIds]);
 
-  // Combine base models and custom agents
-  const availableModels = [...baseModels, ...customAgentModels];
+  // Convert organization agents to OpenAIModel format
+  // Only include organization agents if the exploreBots feature flag is enabled
+  const organizationAgentModels: OpenAIModel[] = useMemo(() => {
+    // Feature flag check: Skip organization agents if disabled in LaunchDarkly
+    if (!isBotsEnabled) {
+      return [];
+    }
+
+    const orgAgents = getOrganizationAgents();
+    return orgAgents.map((agent) => {
+      // Use gpt-4.1 as default base model for RAG agents, or specified baseModelId
+      const baseModelId =
+        (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
+      const baseModel =
+        OpenAIModels[baseModelId] || OpenAIModels[OpenAIModelID.GPT_4_1];
+      return {
+        ...baseModel,
+        id: `org-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: agent.type === 'foundry' ? ('agent' as const) : undefined,
+        agentId: agent.agentId, // For foundry agents
+        isOrganizationAgent: true,
+      };
+    });
+  }, [isBotsEnabled]);
+
+  // Combine base models, custom agents, and organization agents
+  const availableModels = [
+    ...baseModels,
+    ...customAgentModels,
+    ...organizationAgentModels,
+  ];
 
   const selectedModel =
     availableModels.find((m) => m.id === selectedModelId) || availableModels[0];
@@ -156,23 +197,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       : currentSearchMode;
 
   // Automatically fix invalid state when conversation loads with AGENT mode on non-agent model
-  // Also ensure custom agents always have search mode OFF
   // NOTE: This should ONLY run when conversation or model changes, NOT when search mode changes
   useEffect(() => {
     if (!selectedConversation) return;
 
     const searchMode = selectedConversation.defaultSearchMode;
-
-    // Custom agents should always have search mode OFF
-    if (isCustomAgent && searchMode !== SearchMode.OFF) {
-      console.log(
-        '[ModelSelect] Auto-fixing custom agent to have search mode OFF',
-      );
-      updateConversation(selectedConversation.id, {
-        defaultSearchMode: SearchMode.OFF,
-      });
-      return;
-    }
 
     // Fix invalid AGENT mode on non-agent models
     if (!isCustomAgent && searchMode === SearchMode.AGENT && !agentAvailable) {
@@ -225,41 +254,48 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       model: model,
     };
 
-    // Custom agents always have search mode OFF
-    if (model.isCustomAgent) {
-      updates.defaultSearchMode = SearchMode.OFF;
+    // Set bot ID for organization agents (enables RAG)
+    const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
+    if (orgAgentId) {
+      updates.bot = orgAgentId;
       console.log(
-        `[ModelSelect] Setting search mode to OFF for custom agent: ${model.id}`,
+        `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
       );
-    } else {
-      // Check if the new model supports agents
-      const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-      const newModelHasAgent = newModelConfig?.agentId !== undefined;
+    } else if (selectedConversation.bot) {
+      // Clear bot if switching away from an organization agent
+      updates.bot = undefined;
+      console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
+    }
 
-      // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-      if (
-        !newModelHasAgent &&
-        selectedConversation.defaultSearchMode === SearchMode.AGENT
-      ) {
-        updates.defaultSearchMode = SearchMode.INTELLIGENT;
-        console.log(
-          `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
-        );
-      }
+    // Check if the new model supports agents
+    const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
+    const newModelHasAgent = newModelConfig?.agentId !== undefined;
 
-      // Only set defaultSearchMode if it's not already set on the conversation
-      if (selectedConversation.defaultSearchMode === undefined) {
-        updates.defaultSearchMode = SearchMode.INTELLIGENT;
-        console.log(
-          `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
-        );
-      }
+    // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
+    if (
+      !newModelHasAgent &&
+      selectedConversation.defaultSearchMode === SearchMode.AGENT
+    ) {
+      updates.defaultSearchMode = SearchMode.INTELLIGENT;
+      console.log(
+        `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+      );
+    }
+
+    // Only set defaultSearchMode if it's not already set on the conversation
+    if (selectedConversation.defaultSearchMode === undefined) {
+      updates.defaultSearchMode = SearchMode.INTELLIGENT;
+      console.log(
+        `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
+      );
     }
 
     console.log(
       `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
     );
     updateConversation(selectedConversation.id, updates);
+
+    // Don't auto-close - let user review settings and close manually
   };
 
   const handleToggleSearchMode = () => {
@@ -440,17 +476,30 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
       {activeTab === 'agents' && (
         <AgentsTab
-          showAgentWarning={showAgentWarning}
-          setShowAgentWarning={setShowAgentWarning}
           openAgentForm={openAgentForm}
           customAgents={customAgents}
           handleEditAgent={handleEditAgent}
           handleDeleteAgent={handleDeleteAgent}
-          handleImportAgents={handleImportAgents}
           handleModelSelect={handleModelSelect}
           customAgentModels={customAgentModels}
+          organizationAgentModels={organizationAgentModels}
           selectedModelId={selectedModelId}
           defunctAgentIds={defunctAgentIds}
+          // Props for details panel
+          selectedModel={selectedModel}
+          modelConfig={modelConfig}
+          isCustomAgent={isCustomAgent}
+          searchModeEnabled={searchModeEnabled}
+          displaySearchMode={displaySearchMode}
+          agentAvailable={agentAvailable}
+          showModelAdvanced={showModelAdvanced}
+          selectedConversation={selectedConversation}
+          mobileView={mobileView}
+          setMobileView={setMobileView}
+          handleToggleSearchMode={handleToggleSearchMode}
+          handleSetSearchMode={handleSetSearchMode}
+          setShowModelAdvanced={setShowModelAdvanced}
+          updateConversation={updateConversation}
         />
       )}
 

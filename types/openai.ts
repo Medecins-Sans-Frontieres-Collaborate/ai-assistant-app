@@ -10,6 +10,7 @@ export interface OpenAIModel {
   isDisabled?: boolean;
   isAgent?: boolean;
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
+  isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
   agentId?: string; // Azure AI Agent ID for this model
   provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic'; // Model provider
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")

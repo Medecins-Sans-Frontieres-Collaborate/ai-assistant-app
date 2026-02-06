@@ -371,10 +371,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const modelSupportsStreaming = conversation.model.stream !== false;
 
     // Get latest model config - if model no longer exists, use fallback
+    // Organization agents (org-*) and custom agents (custom-*) are dynamically created
+    // and won't be in the static OpenAIModels map - use the conversation model directly
+    const isOrganizationAgent =
+      conversation.model.id.startsWith('org-') ||
+      conversation.model.isOrganizationAgent;
+    const isCustomAgent =
+      conversation.model.id.startsWith('custom-') ||
+      conversation.model.isCustomAgent;
+
     let latestModelConfig =
       OpenAIModels[conversation.model.id as OpenAIModelID];
 
-    if (!latestModelConfig) {
+    if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
@@ -389,7 +398,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     }
 
-    const modelToSend = { ...conversation.model, ...latestModelConfig };
+    // For organization/custom agents, use the conversation model directly (it already has full config)
+    // For base models, merge with latest config from OpenAIModels
+    const modelToSend =
+      isOrganizationAgent || isCustomAgent
+        ? conversation.model
+        : { ...conversation.model, ...latestModelConfig };
 
     // Flatten messages for API call
     const messagesForAPI = flattenEntriesForAPI(conversation.messages);

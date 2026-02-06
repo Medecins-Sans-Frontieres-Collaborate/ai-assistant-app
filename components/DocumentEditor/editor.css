@@ -1,9 +1,36 @@
 /* TipTap Editor Styles */
 
+/* Force editor to respect container bounds */
 .ProseMirror {
   min-height: 100%;
+  max-width: 100% !important;
+  width: 100% !important;
   padding: 1rem;
   outline: none;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+/* Ensure the editor wrapper constrains content */
+.tiptap,
+.tiptap-wrapper,
+[data-tiptap-editor],
+.ProseMirror-wrapper {
+  max-width: 100%;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Force all direct children of ProseMirror to respect container width */
+.ProseMirror > * {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .ProseMirror p {

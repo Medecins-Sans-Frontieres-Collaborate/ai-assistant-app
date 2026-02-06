@@ -3,13 +3,13 @@ import { Session } from 'next-auth';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
-import { Bot } from '@/types/bots';
 import { Message } from '@/types/chat';
+import { OrganizationAgent } from '@/types/organizationAgent';
 import { Citation, SearchResult } from '@/types/rag';
 
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SearchClient } from '@azure/search-documents';
-import { AzureOpenAI } from 'openai';
 import OpenAI from 'openai';
 import { ChatCompletion } from 'openai/resources';
 
@@ -19,7 +19,7 @@ import { ChatCompletion } from 'openai/resources';
  */
 export class RAGService {
   private searchClient: SearchClient<SearchResult>;
-  private openAIClient: AzureOpenAI;
+  private openAIClient: OpenAI;
   private searchIndex: string;
   public searchDocs: SearchResult[] = [];
 
@@ -37,12 +37,12 @@ export class RAGService {
    * Creates a new instance of RAGService.
    * @param {string} searchEndpoint - The endpoint URL for the Azure Search service.
    * @param {string} searchIndex - The name of the search index to query.
-   * @param {AzureOpenAI} openAIClient - Client for making OpenAI API calls.
+   * @param {OpenAI} openAIClient - Client for making OpenAI API calls (Foundry endpoint).
    */
   constructor(
     searchEndpoint: string,
     searchIndex: string,
-    openAIClient: AzureOpenAI,
+    openAIClient: OpenAI,
   ) {
     // Use DefaultAzureCredential for managed identity authentication
     this.searchClient = new SearchClient<SearchResult>(
@@ -59,19 +59,17 @@ export class RAGService {
    * Supports both streaming and non-streaming responses.
    *
    * @param {Message[]} messages - The conversation messages to augment.
-   * @param {string} botId - The ID of the bot to use for the completion.
-   * @param {Bot[]} bots - Available bots configuration.
+   * @param {string} agentId - The ID of the organization agent to use for the completion.
    * @param {string} modelId - The ID of the model to use for completion.
    * @param {boolean} [stream=false] - Whether to stream the response.
    * @param {Session['user']} user - User information for logging.
    * @returns {Promise<ReadableStream | ChatCompletion>}
    *          Returns either a streaming response or chat completion depending on the stream parameter.
-   * @throws {Error} If the specified bot is not found.
+   * @throws {Error} If the specified agent is not found.
    */
   async augmentMessages(
     messages: Message[],
-    botId: string,
-    bots: Bot[],
+    agentId: string,
     modelId: string,
     stream: boolean = false,
     user: Session['user'],
@@ -84,32 +82,44 @@ export class RAGService {
 
       const { searchDocs, searchMetadata } = await this.performSearch(
         messages,
-        botId,
-        bots,
+        agentId,
         user,
       );
       this.searchDocs = searchDocs;
 
-      const bot = bots.find((b) => b.id === botId);
-      if (!bot) throw new Error('Bot not found');
+      const agent = getOrganizationAgentById(agentId);
+      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
+
+      const systemPrompt = agent.systemPrompt || '';
 
       const enhancedMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
         {
           role: 'system',
-          content: `${bot.prompt}\n\nWhen citing sources:
-            1. ONLY cite source numbers that are actually provided in the search results
-            2. Do not make up or reference source numbers that don't exist in the provided sources
-            3. Use source numbers exactly as provided (e.g., if source 5 is relevant, use [5])
-            4. Each source should only be cited once
-            5. Place source numbers immediately after the relevant information
-            6. DO NOT include numbered source lists at the beginning or end of your response
-            7. DO NOT include "Sources:" or "References:" sections
-            8. DO NOT create hyperlinked source titles
-            9. Remember that the frontend will automatically display all source information based on your citation numbers
+          content: `${systemPrompt}
 
-            The frontend system will handle the formatting and display of sources. Only cite sources that actually exist in the provided search results.`,
+CRITICAL CITATION RULES - YOU MUST FOLLOW THESE:
+- Cite sources inline using [#] notation immediately after the relevant information
+- Use SEPARATE brackets for each source like [1][2][3] - NEVER group them like [1,2,3]
+- NEVER include a "Sources:", "References:", or similar section listing sources
+- NEVER list sources at the end of your response - the frontend handles this automatically
+- NEVER create bullet points or numbered lists of sources with titles/dates
+- Only use citation numbers that exist in the provided sources (e.g., [1], [2])
+- The user interface will display clickable source cards - your job is ONLY to cite inline with [#]
+
+Example of CORRECT formatting:
+"The outbreak affected thousands of people [1][2]. Vaccination rates remain low [3]."
+
+Example of WRONG formatting (DO NOT DO THIS):
+"The outbreak affected thousands of people [1,2]."
+
+Example of WRONG formatting (DO NOT DO THIS):
+"Sources:
+[1] Article Title, Date
+[2] Another Article, Date"
+
+The frontend automatically shows source information. Just cite inline and end your response naturally.`,
         },
-        ...this.getCompletionMessages(messages, bot, searchDocs),
+        ...this.getCompletionMessages(messages, agent, searchDocs),
       ];
 
       if (stream) {
@@ -131,7 +141,7 @@ export class RAGService {
           duration: Date.now() - startTime,
           modelId,
           messageCount: messages.length,
-          botId,
+          agentId,
           userId: user?.id,
         });
 
@@ -169,7 +179,7 @@ export class RAGService {
           duration: Date.now() - startTime,
           modelId,
           messageCount: messages.length,
-          botId,
+          agentId,
           userId: user?.id,
         });
 
@@ -227,8 +237,9 @@ export class RAGService {
         Return ONLY the reformulated search query with no additional text.`;
 
       // Ask the model to generate an improved search query
+      // Use low temperature for focused, deterministic query generation
       const completion = await this.openAIClient.chat.completions.create({
-        model: 'gpt-4o-mini',
+        model: 'gpt-5-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           {
@@ -258,24 +269,22 @@ export class RAGService {
    * Uses query reformulation for follow-up questions to capture conversation context.
    *
    * @param {Message[]} messages - The conversation messages to extract query from.
-   * @param {string} botId - The ID of the bot making the search request.
-   * @param {Bot[]} bots - Available bots configuration.
+   * @param {string} agentId - The ID of the organization agent making the search request.
    * @param {Session['user']} user - User information for logging.
    * @returns {Promise<{searchDocs: SearchResult[], searchMetadata: {dateRange: DateRange, resultCount: number}}>}
    *          Returns search results and metadata including date range of results.
-   * @throws {Error} If the specified bot is not found.
+   * @throws {Error} If the specified agent is not found.
    */
   public async performSearch(
     messages: Message[],
-    botId: string,
-    bots: Bot[],
+    agentId: string,
     user: Session['user'],
   ) {
     const startTime = Date.now();
 
     try {
-      const bot = bots.find((b) => b.id === botId);
-      if (!bot) throw new Error(`Bot ${botId} not found`);
+      const agent = getOrganizationAgentById(agentId);
+      if (!agent) throw new Error(`Organization agent ${agentId} not found`);
 
       // Use query reformulation for follow-up questions
       const isFollowUpQuestion =
@@ -290,24 +299,25 @@ export class RAGService {
         query = this.extractQuery(messages);
       }
 
-      const semanticConfigName = `${this.searchIndex}-semantic-configuration`;
+      // Get ragConfig from agent (if available)
+      const ragConfig = agent.ragConfig || {};
+      const topK = ragConfig.topK || 10;
 
-      // Perform the search
+      // Get semantic config from agent ragConfig if available, otherwise use index default
+      const semanticConfig =
+        ragConfig.semanticConfig ||
+        `${this.searchIndex}-semantic-configuration`;
+
+      // Perform hybrid search: vector + semantic with reranking
+      // Fetch more results (30) to allow for quality filtering and deduplication
       const searchResults = await this.searchClient.search(query, {
-        select: ['chunk', 'title', 'date', 'url'],
-        top: 10,
-        queryType: 'semantic' as any,
+        select: ['chunk', 'title', 'date', 'url', 'chunk_id'],
+        top: 30,
+        queryType: 'semantic',
         semanticSearchOptions: {
-          configurationName: semanticConfigName,
-          captions: {
-            captionType: 'extractive',
-            highlight: true,
-          },
-          answers: {
-            answerType: 'extractive',
-            count: 10,
-            threshold: 0.7,
-          },
+          configurationName: semanticConfig,
+          captions: { captionType: 'extractive' },
+          answers: { answerType: 'extractive', count: 3 },
         },
         vectorSearchOptions: {
           queries: [
@@ -315,19 +325,91 @@ export class RAGService {
               kind: 'text',
               text: query,
               fields: ['text_vector'] as any,
-              kNearestNeighborsCount: 10,
+              kNearestNeighborsCount: 30,
             },
           ],
         },
       });
 
-      const searchDocs: SearchResult[] = [];
-      let newestDate: Date | null = null;
-      let oldestDate: Date | null = null;
+      const allDocs: Array<{
+        doc: SearchResult;
+        rerankerScore: number;
+        combinedScore: number;
+      }> = [];
 
+      const TWO_YEARS_AGO = new Date();
+      TWO_YEARS_AGO.setFullYear(TWO_YEARS_AGO.getFullYear() - 2);
+      const NOW = Date.now();
+      const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+
+      // Collect all results from semantic search with scores
       for await (const result of searchResults.results) {
         const doc = result.document;
-        searchDocs.push(doc);
+        const docDate = new Date(doc.date);
+        const rerankerScore = result.rerankerScore ?? 0;
+
+        // Filter out very old documents with low reranker scores
+        if (docDate < TWO_YEARS_AGO && rerankerScore < 2.0) {
+          console.log(
+            `[RAGService] Filtering old low-relevance doc: ${doc.title} (date: ${doc.date}, rerankerScore: ${rerankerScore})`,
+          );
+          continue;
+        }
+
+        // Calculate recency boost (0-1 scale, 1 = today, 0 = 1+ year old)
+        const ageMs = NOW - docDate.getTime();
+        const recencyScore = Math.max(0, 1 - ageMs / ONE_YEAR_MS);
+
+        // Combined score: 70% semantic relevance + 30% recency
+        // Normalize rerankerScore (typically 0-4) to 0-1 scale
+        const normalizedRerankerScore = Math.min(rerankerScore / 4, 1);
+        const combinedScore =
+          normalizedRerankerScore * 0.7 + recencyScore * 0.3;
+
+        console.log(
+          `[RAGService] Result: ${doc.title} (date: ${doc.date}, rerankerScore: ${rerankerScore.toFixed(2)}, combinedScore: ${combinedScore.toFixed(2)})`,
+        );
+
+        allDocs.push({ doc, rerankerScore, combinedScore });
+      }
+
+      // Deduplicate by chunk_id and limit chunks per article for source diversity
+      const seenChunkIds = new Set<string>();
+      const chunksPerUrl = new Map<string, number>();
+      const MAX_CHUNKS_PER_ARTICLE = 2; // Ensure diverse sources
+
+      const deduplicatedDocs = allDocs.filter(({ doc }) => {
+        const chunkId = doc.chunk_id || '';
+        const url = doc.url || '';
+
+        // Skip duplicate chunks
+        if (chunkId && seenChunkIds.has(chunkId)) {
+          return false;
+        }
+
+        // Limit chunks per article to ensure source diversity
+        const currentCount = chunksPerUrl.get(url) || 0;
+        if (currentCount >= MAX_CHUNKS_PER_ARTICLE) {
+          return false;
+        }
+
+        if (chunkId) seenChunkIds.add(chunkId);
+        chunksPerUrl.set(url, currentCount + 1);
+        return true;
+      });
+
+      // Sort by combined score (relevance + recency)
+      const sortedDocs = deduplicatedDocs.sort(
+        (a, b) => b.combinedScore - a.combinedScore,
+      );
+
+      // Take top results based on agent config
+      const searchDocs = sortedDocs.slice(0, topK).map((item) => item.doc);
+
+      // Calculate date range from final results
+      let newestDate: Date | null = null;
+      let oldestDate: Date | null = null;
+      for (const doc of searchDocs) {
         const docDate = new Date(doc.date);
         if (!newestDate || docDate > newestDate) newestDate = docDate;
         if (!oldestDate || docDate < oldestDate) oldestDate = docDate;
@@ -341,17 +423,21 @@ export class RAGService {
         resultCount: searchDocs.length,
       };
 
+      console.log(
+        `[RAGService] After filtering and deduplication: ${allDocs.length} -> ${deduplicatedDocs.length} -> ${searchDocs.length} results`,
+      );
+
       // Log successful search
       console.log('[RAGService] Search completed:', {
         duration: Date.now() - startTime,
-        botId,
+        agentId,
         resultsCount: searchDocs.length,
         dateRange: searchMetadata.dateRange,
         userId: user?.id,
       });
 
       return {
-        searchDocs: this.deduplicateResults(searchDocs), // Still deduplicate results from the current search
+        searchDocs, // Already deduplicated above
         searchMetadata,
       };
     } catch (error) {
@@ -359,7 +445,7 @@ export class RAGService {
       console.error('[RAGService] Search error:', {
         duration: Date.now() - startTime,
         error: error instanceof Error ? error.message : String(error),
-        botId,
+        agentId,
         userId: user?.id,
       });
       throw error;
@@ -367,29 +453,28 @@ export class RAGService {
   }
 
   /**
-   * Deduplication of search results.
+   * Deduplication of search results by chunk_id.
+   * This allows multiple chunks from the same article (same URL/title) while
+   * preventing duplicate chunks from appearing.
    *
    * @param {SearchResult[]} results - The search results to deduplicate.
    * @returns {SearchResult[]} Deduplicated search results.
    */
   private deduplicateResults(results: SearchResult[]): SearchResult[] {
     const uniqueResults: SearchResult[] = [];
-    const seenUrls = new Set<string>();
-    const seenTitles = new Set<string>();
+    const seenChunkIds = new Set<string>();
 
     for (const result of results) {
-      const url = result.url || '';
-      const title = result.title || '';
+      const chunkId = result.chunk_id || '';
 
-      // Check if we've seen either the URL or the title before
-      if ((url && seenUrls.has(url)) || (title && seenTitles.has(title))) {
-        // Skip this duplicate
-        continue;
+      // If we have a chunk_id, use it for deduplication
+      if (chunkId) {
+        if (seenChunkIds.has(chunkId)) {
+          continue;
+        }
+        seenChunkIds.add(chunkId);
       }
 
-      // Add to our seen sets and unique results
-      if (url) seenUrls.add(url);
-      if (title) seenTitles.add(title);
       uniqueResults.push(result);
     }
 
@@ -427,13 +512,13 @@ export class RAGService {
    * Now all sources are consolidated and given unique numbers.
    *
    * @param {Message[]} messages - The original conversation messages.
-   * @param {Bot} bot - The bot configuration to use.
+   * @param {OrganizationAgent} agent - The organization agent configuration to use.
    * @param {SearchResult[]} searchDocs - The search results to incorporate.
    * @returns {OpenAI.Chat.ChatCompletionMessageParam[]} Messages formatted for the chat completion API.
    */
   public getCompletionMessages(
     messages: Message[],
-    bot: Bot,
+    agent: OrganizationAgent,
     searchDocs: SearchResult[],
   ): OpenAI.Chat.ChatCompletionMessageParam[] {
     const query = this.extractQuery(messages);

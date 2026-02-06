@@ -40,7 +40,7 @@ export function getSkillsetConfig(
         resourceUri: openaiEndpoint,
         deploymentId: openaiEmbeddingDeployment,
         dimensions: 1536,
-        modelName: 'text-embedding-ada-002',
+        modelName: 'text-embedding-3-small',
         inputs: [
           {
             name: 'text',

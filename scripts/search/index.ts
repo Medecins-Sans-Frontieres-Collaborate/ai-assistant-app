@@ -31,7 +31,7 @@ async function main() {
     openaiEndpoint: process.env.AZURE_OPENAI_ENDPOINT || '',
     openaiApiKey: process.env.OPENAI_API_KEY || '',
     openaiEmbeddingDeployment:
-      process.env.OPENAI_EMBEDDING_DEPLOYMENT || 'text-embedding',
+      process.env.OPENAI_EMBEDDING_DEPLOYMENT || 'text-embedding-3-small',
   };
 
   // Validate required config

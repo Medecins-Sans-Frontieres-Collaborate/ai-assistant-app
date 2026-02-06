@@ -179,9 +179,16 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
 
   return (
     <div
-      className={`mt-4 mb-3 w-full transition-opacity duration-500 ease-in-out ${
+      className={`mt-4 mb-3 transition-opacity duration-500 ease-in-out ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        overflow: 'hidden',
+        contain: 'inline-size',
+      }}
     >
       <div
         className="flex items-center cursor-pointer group rounded-lg px-3.5 py-2 dark:bg-[#1a1a1a] bg-gray-50/80 border border-gray-200/60 dark:border-gray-700/40 transition-all duration-200 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-gray-100/80 dark:hover:bg-[#222222]"
@@ -265,23 +272,26 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
               : 'max-h-[400px] opacity-100'
             : 'max-h-0 opacity-0'
         }`}
+        style={{ width: '100%' }}
       >
         {viewMode === 'cards' ? (
           <div
             ref={scrollContainerRef}
-            className="flex w-full overflow-x-auto gap-4 no-scrollbar pt-5"
+            className="overflow-x-auto no-scrollbar pt-5"
             style={{ scrollBehavior: 'auto' }}
             onMouseMove={handleReactMouseMove}
             onMouseLeave={handleReactMouseLeave}
           >
-            {uniqueCitations.map((citation, index) => (
-              <div
-                key={citation.number || citation.url || index}
-                className="flex-shrink-0"
-              >
-                <CitationItem citation={citation} />
-              </div>
-            ))}
+            <div className="inline-flex gap-4">
+              {uniqueCitations.map((citation, index) => (
+                <div
+                  key={citation.number || citation.url || index}
+                  className="flex-shrink-0"
+                >
+                  <CitationItem citation={citation} />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-2 pt-3 overflow-y-auto max-h-[350px]">

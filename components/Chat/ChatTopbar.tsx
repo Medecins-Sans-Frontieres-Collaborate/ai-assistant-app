@@ -4,6 +4,7 @@ import {
   IconDots,
   IconWorld,
 } from '@tabler/icons-react';
+import * as TablerIcons from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -21,6 +22,21 @@ import {
   XAIIcon,
 } from '../Icons/providers';
 
+// Helper to get Tabler icon by name
+const getTablerIcon = (iconName: string) => {
+  const Icon = (
+    TablerIcons as Record<
+      string,
+      React.ComponentType<{
+        size?: number;
+        className?: string;
+        style?: React.CSSProperties;
+      }>
+    >
+  )[iconName];
+  return Icon || TablerIcons.IconRobot;
+};
+
 interface Props {
   botInfo: {
     id: string;
@@ -31,6 +47,9 @@ interface Props {
   selectedModelProvider?: string;
   selectedModelId?: string;
   isCustomAgent?: boolean;
+  isOrganizationAgent?: boolean;
+  organizationAgentIcon?: string;
+  organizationAgentColor?: string;
   showSettings: boolean;
   onSettingsClick: () => void;
   onModelClick?: () => void;
@@ -47,6 +66,9 @@ export const ChatTopbar = ({
   selectedModelProvider,
   selectedModelId,
   isCustomAgent = false,
+  isOrganizationAgent = false,
+  organizationAgentIcon,
+  organizationAgentColor,
   showSettings,
   onSettingsClick,
   onModelClick,
@@ -78,6 +100,22 @@ export const ChatTopbar = ({
 
   // Helper function to get provider icon
   const getProviderIcon = (provider?: string) => {
+    // For organization agents, show their custom icon
+    if (isOrganizationAgent && organizationAgentIcon) {
+      const OrgIcon = getTablerIcon(organizationAgentIcon);
+      return (
+        <OrgIcon
+          size={16}
+          className="w-4 h-4 flex-shrink-0"
+          style={
+            organizationAgentColor
+              ? { color: organizationAgentColor }
+              : undefined
+          }
+        />
+      );
+    }
+
     const iconProps = { className: 'w-4 h-4 flex-shrink-0' };
     switch (provider) {
       case 'openai':

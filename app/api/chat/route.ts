@@ -113,6 +113,8 @@ export async function POST(req: NextRequest): Promise<Response> {
       const inputValidator = new InputValidator();
       // Create blob storage client for batch transcription support
       const blobStorageClient = createBlobStorageClient(context.session);
+      // Get Foundry OpenAI client for RAG service (uses gpt-5-mini for query reformulation)
+      const foundryOpenAIClient = container.getOpenAIClient();
       const pipeline = new ChatPipeline([
         // Content processors
         new FileProcessor(
@@ -123,7 +125,11 @@ export async function POST(req: NextRequest): Promise<Response> {
         new ImageProcessor(),
 
         // Feature enrichers
-        new RAGEnricher(env.SEARCH_ENDPOINT!, env.SEARCH_INDEX!),
+        new RAGEnricher(
+          env.SEARCH_ENDPOINT!,
+          env.SEARCH_INDEX!,
+          foundryOpenAIClient,
+        ),
         new ToolRouterEnricher(toolRouterService, agentChatService),
         new AgentEnricher(),
 

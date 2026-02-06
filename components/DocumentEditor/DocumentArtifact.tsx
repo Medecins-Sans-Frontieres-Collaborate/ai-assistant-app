@@ -126,9 +126,9 @@ export default function DocumentArtifact({
   return (
     <div className="flex flex-col h-full w-full min-w-0">
       {/* Toolbar */}
-      <div className="relative flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 flex-shrink-0 min-w-0">
+      <div className="relative flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 flex-shrink-0 min-w-0 overflow-hidden">
         {/* Left: Filename and Mode */}
-        <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
           {isEditing ? (
             <input
               type="text"
@@ -228,7 +228,7 @@ export default function DocumentArtifact({
       </div>
 
       {/* Document Editor */}
-      <div className="flex-1 overflow-hidden min-h-0">
+      <div className="flex-1 overflow-hidden min-h-0 min-w-0">
         <DocumentEditor theme={theme} />
       </div>
 

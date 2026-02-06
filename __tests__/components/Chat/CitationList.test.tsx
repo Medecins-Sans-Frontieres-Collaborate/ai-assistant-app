@@ -258,11 +258,13 @@ describe('CitationList', () => {
       fireEvent.click(header!);
 
       await waitFor(() => {
-        const citationsContainer = container.querySelector('.overflow-x-auto');
-        expect(citationsContainer).toBeInTheDocument();
-        expect(citationsContainer).toHaveClass('flex');
-        expect(citationsContainer).toHaveClass('gap-4');
-        expect(citationsContainer).toHaveClass('no-scrollbar');
+        const scrollContainer = container.querySelector('.overflow-x-auto');
+        expect(scrollContainer).toBeInTheDocument();
+        expect(scrollContainer).toHaveClass('no-scrollbar');
+        // Inner container has inline-flex and gap
+        const innerContainer = scrollContainer?.querySelector('.inline-flex');
+        expect(innerContainer).toBeInTheDocument();
+        expect(innerContainer).toHaveClass('gap-4');
       });
     });
   });

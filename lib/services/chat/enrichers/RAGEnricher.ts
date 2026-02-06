@@ -1,11 +1,14 @@
 import { getAzureMonitorLogger } from '@/lib/services/observability';
+import { RAGService } from '@/lib/services/ragService';
 
 import { Message, MessageType } from '@/types/chat';
 
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
+import OpenAI from 'openai';
 
 /**
  * RAGEnricher adds RAG (Retrieval Augmented Generation) capabilities to the chat.
@@ -14,9 +17,11 @@ import { SpanStatusCode, trace } from '@opentelemetry/api';
  * - Adds Azure AI Search data sources to chat requests
  * - Works with ANY content type (text, images, files, audio)
  * - Enriches messages with knowledge base context
+ * - Gets organization agent configuration for custom system prompts and RAG settings
  *
  * Modifies context:
  * - context.enrichedMessages (adds RAG configuration)
+ * - context.systemPrompt (overrides with organization agent's system prompt)
  *
  * Note: RAG is orthogonal to content type - you can use RAG with:
  * - Text only
@@ -29,15 +34,23 @@ import { SpanStatusCode, trace } from '@opentelemetry/api';
 export class RAGEnricher extends BasePipelineStage {
   readonly name = 'RAGEnricher';
   private tracer = trace.getTracer('rag-enricher');
+  private ragService: RAGService;
+  private searchEndpoint: string;
+  private searchIndex: string;
 
   constructor(
-    private searchEndpoint: string,
-    private searchIndex: string,
+    searchEndpoint: string,
+    searchIndex: string,
+    openAIClient: OpenAI,
   ) {
     super();
+    this.searchEndpoint = searchEndpoint;
+    this.searchIndex = searchIndex;
+    this.ragService = new RAGService(searchEndpoint, searchIndex, openAIClient);
   }
 
   shouldRun(context: ChatContext): boolean {
+    // botId is used for organization agent ID (e.g., "msf_communications")
     return !!context.botId;
   }
 
@@ -79,7 +92,7 @@ export class RAGEnricher extends BasePipelineStage {
       'rag.enrich',
       {
         attributes: {
-          'bot.id': context.botId || 'none',
+          'organization_agent.id': context.botId || 'none',
           'search.endpoint': this.searchEndpoint,
           'search.index': this.searchIndex,
           'message.count': context.messages.length,
@@ -87,24 +100,39 @@ export class RAGEnricher extends BasePipelineStage {
       },
       async (span) => {
         try {
-          console.log(`[RAGEnricher] Adding RAG with botId: ${context.botId}`);
+          console.log(
+            `[RAGEnricher] Adding RAG with organization agent: ${context.botId}`,
+          );
+
+          // Get organization agent configuration
+          const agent = context.botId
+            ? getOrganizationAgentById(context.botId)
+            : undefined;
+
+          if (!agent) {
+            console.warn(
+              `[RAGEnricher] Organization agent not found: ${context.botId}`,
+            );
+            span.setAttribute('rag.agent_found', false);
+            span.setStatus({ code: SpanStatusCode.OK });
+            return context;
+          }
+
+          console.log(`[RAGEnricher] Found organization agent: ${agent.name}`);
 
           // Start with processed content if available, otherwise original messages
           const baseMessages = context.enrichedMessages || context.messages;
-
-          // If we have processed content (files/transcripts), inject it into messages
           let enrichedMessages: Message[] = [...baseMessages];
 
+          // If we have processed content (files/transcripts), inject it into messages
           if (context.processedContent) {
             const { fileSummaries, transcripts } = context.processedContent;
 
-            // Add file summaries to system context
             if (fileSummaries && fileSummaries.length > 0) {
               const summaryText = fileSummaries
                 .map((f) => `File: ${f.filename}\n${f.summary}`)
                 .join('\n\n');
 
-              // Prepend as system message
               enrichedMessages = [
                 {
                   role: 'system',
@@ -115,7 +143,6 @@ export class RAGEnricher extends BasePipelineStage {
               ];
             }
 
-            // Add transcripts to system context
             if (transcripts && transcripts.length > 0) {
               const transcriptText = transcripts
                 .map(
@@ -135,20 +162,73 @@ export class RAGEnricher extends BasePipelineStage {
             }
           }
 
-          // RAG configuration will be added at execution time
-          // We just mark that RAG should be used
+          // Perform the RAG search to get relevant documents
+          console.log(`[RAGEnricher] Performing search for agent: ${agent.id}`);
+          const { searchDocs, searchMetadata } =
+            await this.ragService.performSearch(
+              enrichedMessages,
+              agent.id,
+              context.user,
+            );
+
+          console.log(
+            `[RAGEnricher] Search returned ${searchDocs.length} documents`,
+          );
+          span.setAttribute('rag.search_results_count', searchDocs.length);
+          span.setAttribute(
+            'rag.date_range',
+            `${searchMetadata.dateRange.oldest} to ${searchMetadata.dateRange.newest}`,
+          );
+
+          // Format search results as context for the LLM
+          if (searchDocs.length > 0) {
+            const contextString = searchDocs
+              .map((doc, index) => {
+                const sourceNumber = index + 1;
+                const date = new Date(doc.date).toISOString().split('T')[0];
+                return `Source ${sourceNumber}:\nTitle: ${doc.title}\nDate: ${date}\nURL: ${doc.url}\nContent: ${doc.chunk}`;
+              })
+              .join('\n\n');
+
+            // Add RAG context as a system message
+            enrichedMessages = [
+              {
+                role: 'system',
+                content: `You have access to the following knowledge base sources. When citing information, use source numbers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3].\n\nAvailable sources:\n\n${contextString}`,
+                messageType: MessageType.TEXT,
+              },
+              ...enrichedMessages,
+            ];
+          }
+
+          // Convert search results to citations format for downstream handlers
+          const citations = searchDocs.map((doc, index) => ({
+            title: doc.title,
+            date: doc.date,
+            url: doc.url,
+            number: index + 1,
+          }));
+
+          // Store metadata for downstream processing (citations, etc.)
           const result = {
             ...context,
             enrichedMessages,
-            // Store RAG config for later use (no API key - using managed identity)
+            // Override system prompt with organization agent's system prompt
+            systemPrompt: agent.systemPrompt || context.systemPrompt,
             processedContent: {
               ...context.processedContent,
               metadata: {
                 ...context.processedContent?.metadata,
+                // Citations in format expected by StandardChatHandler
+                citations,
                 ragConfig: {
                   searchEndpoint: this.searchEndpoint,
                   searchIndex: this.searchIndex,
-                  botId: context.botId,
+                  organizationAgentId: context.botId,
+                  agentName: agent.name,
+                  agentSources: agent.sources,
+                  searchResults: searchDocs,
+                  searchMetadata,
                 },
               },
             },
@@ -166,6 +246,7 @@ export class RAGEnricher extends BasePipelineStage {
             'rag.enriched_messages_count',
             enrichedMessages.length,
           );
+          span.setAttribute('rag.agent_name', agent.name);
           span.setStatus({ code: SpanStatusCode.OK });
 
           // Log RAG configuration (the actual search is performed by Azure OpenAI)
@@ -183,7 +264,8 @@ export class RAGEnricher extends BasePipelineStage {
 
           return result;
         } catch (error) {
-          // Log RAG error
+          console.error('[RAGEnricher] Error during RAG enrichment:', error);
+          // Log RAG error to Azure Monitor
           const logger = getAzureMonitorLogger();
           void logger.logSearchError({
             user: context.user,
@@ -199,7 +281,11 @@ export class RAGEnricher extends BasePipelineStage {
             code: SpanStatusCode.ERROR,
             message: error instanceof Error ? error.message : 'Unknown error',
           });
-          throw error;
+          // Gracefully degrade - continue without RAG results instead of failing the request
+          console.warn(
+            '[RAGEnricher] Continuing without RAG results due to error',
+          );
+          return context;
         } finally {
           span.end();
         }

@@ -7,7 +7,19 @@ import {
   textToHtml,
 } from '@/lib/utils/shared/document/formatConverter';
 
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
+// Mock getDOMPurify to avoid slow jsdom initialization in tests
+vi.mock('@/lib/utils/shared/document/domPurify', () => ({
+  getDOMPurify: vi.fn().mockResolvedValue({
+    sanitize: (html: string, config?: object) => {
+      // Test mock only - real sanitization uses DOMPurify
+      return html
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/\s*on\w+="[^"]*"/gi, '');
+    },
+  }),
+}));
 
 describe('formatConverter', () => {
   describe('detectFormat', () => {
