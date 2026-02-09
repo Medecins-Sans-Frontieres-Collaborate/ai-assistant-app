@@ -6,12 +6,21 @@ import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 
 import Hasher from '@/lib/utils/app/hash';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
-import { AzureBlobStorage, BlobStorage } from '@/lib/utils/server/blob/blob';
+import {
+  AzureBlobStorage,
+  BlobProperty,
+  BlobStorage,
+} from '@/lib/utils/server/blob/blob';
+import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import {
   getContentType,
   validateBufferSignature,
   validateFileNotExecutable,
 } from '@/lib/utils/server/file/mimeTypes';
+import {
+  getCachedTextPath,
+  shouldCacheText,
+} from '@/lib/utils/server/file/textCacheUtils';
 
 import type {
   ChunkUploadResult,
@@ -23,6 +32,45 @@ import type {
 import { auth } from '@/auth';
 import { validateFileSizeRaw } from '@/lib/constants/fileLimits';
 import { v4 as uuidv4 } from 'uuid';
+
+/**
+ * Extracts text from a document and uploads it as a cached plain-text file.
+ * Runs as fire-and-forget; failures are logged but do not affect the upload.
+ *
+ * @param blobPath - The blob storage path of the original file
+ * @param data - The file contents as a Buffer
+ * @param filename - The original filename (used for MIME type detection)
+ * @param session - The authenticated user session
+ */
+async function extractAndCacheText(
+  blobPath: string,
+  data: Buffer,
+  filename: string,
+  session: Session,
+): Promise<void> {
+  try {
+    // Convert Buffer to Uint8Array for File constructor compatibility
+    const uint8Array = new Uint8Array(data);
+    const file = new File([uint8Array], filename);
+    const text = await loadDocument(file);
+
+    if (!text?.trim()) {
+      console.warn(`[TextCache] Empty text extracted from: ${filename}`);
+      return;
+    }
+
+    const blobStorage = createBlobStorageClient(session);
+    await blobStorage.upload(getCachedTextPath(blobPath), text, {
+      blobHTTPHeaders: { blobContentType: 'text/plain; charset=utf-8' },
+    });
+
+    console.log(
+      `[TextCache] Cached text for ${filename} (${text.length} chars)`,
+    );
+  } catch (error) {
+    console.error(`[TextCache] Failed to cache text for ${filename}:`, error);
+  }
+}
 
 /**
  * Result of a file upload operation.
@@ -178,15 +226,20 @@ async function uploadFileToBlobStorage(
     }
   }
 
-  return await blobStorageClient.upload(
-    `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`,
-    data,
-    {
-      blobHTTPHeaders: {
-        blobContentType: contentType,
-      },
+  const blobPath = `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`;
+
+  const url = await blobStorageClient.upload(blobPath, data, {
+    blobHTTPHeaders: {
+      blobContentType: contentType,
     },
-  );
+  });
+
+  // Fire-and-forget text extraction for cacheable file types
+  if (shouldCacheText(filename)) {
+    void extractAndCacheText(blobPath, data, filename, session);
+  }
+
+  return url;
 }
 
 /**
@@ -404,6 +457,29 @@ export async function finalizeChunkedUploadAction(
         },
       },
     );
+
+    // Fire-and-forget: download committed blob and cache text
+    if (shouldCacheText(session.filename)) {
+      void (async () => {
+        try {
+          const blob = (await blobStorageClient.get(
+            session.blobPath,
+            BlobProperty.BLOB,
+          )) as Buffer;
+          await extractAndCacheText(
+            session.blobPath,
+            blob,
+            session.filename,
+            authSession,
+          );
+        } catch (error) {
+          console.error(
+            '[TextCache] Chunked upload cache failed:',
+            error instanceof Error ? error.message : error,
+          );
+        }
+      })();
+    }
 
     return { success: true, uri };
   } catch (error) {
