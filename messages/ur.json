@@ -1056,7 +1056,8 @@
         "title": "فیصلے کی مدد",
         "prompt": "فیصلے کرنے میں مدد کریں۔"
       }
-    }
+    },
+    "changeDisplayName": "اپنا نام تبدیل کرنے کے لیے کلک کریں"
   },
   "modelSelect": {
     "advancedOptions": {

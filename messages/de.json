@@ -969,7 +969,8 @@
         "title": "Zeitpläne erstellen",
         "prompt": "Ich brauche Hilfe bei der Zeitorganisation und Erstellung von Zeitplänen. Zeigen Sie mir verschiedene Möglichkeiten, Agenden, Kalender oder zeitbasierte Pläne mit Beispielen zu strukturieren."
       }
-    }
+    },
+    "changeDisplayName": "Klicken Sie, um Ihre Anrede zu ändern"
   },
   "modelSelect": {
     "tabs": {

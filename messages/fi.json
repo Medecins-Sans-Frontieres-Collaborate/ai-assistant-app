@@ -1056,7 +1056,8 @@
         "title": "Luo aikatauluja",
         "prompt": "Tarvitsen apua ajankäytön järjestämisessä ja aikataulujen luomisessa. Näytä eri tapoja rakentaa agendoja, kalentereita tai aikaperusteisia suunnitelmia esimerkein."
       }
-    }
+    },
+    "changeDisplayName": "Napsauta vaihtaaksesi, miten puhuttelemme sinua"
   },
   "modelSelect": {
     "tabs": {

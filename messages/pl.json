@@ -1056,7 +1056,8 @@
         "title": "Tworzenie harmonogramów",
         "prompt": "Potrzebuję pomocy w organizowaniu czasu i układaniu harmonogramów. Pokaż różne sposoby tworzenia agend, kalendarzy lub planów czasowych – z przykładami."
       }
-    }
+    },
+    "changeDisplayName": "Kliknij, aby zmienić sposób, w jaki się do Ciebie zwracamy"
   },
   "modelSelect": {
     "tabs": {

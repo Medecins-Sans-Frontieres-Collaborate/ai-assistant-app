@@ -1013,7 +1013,8 @@
         "title": "Roosters Maken",
         "prompt": "Help me een schema of agenda te maken. Hoe zou u taken prioriteren, tijd toewijzen en een realistisch plan opstellen?"
       }
-    }
+    },
+    "changeDisplayName": "Klik om te wijzigen hoe we u aanspreken"
   },
   "modelSelect": {
     "tabs": {

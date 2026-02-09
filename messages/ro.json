@@ -1056,7 +1056,8 @@
         "title": "Creează programe",
         "prompt": "Am nevoie de ajutor pentru organizarea timpului și crearea programelor. Arată-mi diverse moduri de a structura agende, calendare sau planuri bazate pe timp, cu exemple."
       }
-    }
+    },
+    "changeDisplayName": "Apăsați pentru a schimba modul în care vă adresăm"
   },
   "modelSelect": {
     "tabs": {

@@ -1056,7 +1056,8 @@
         "title": "Crea horaris",
         "prompt": "Necessito ajuda per organitzar el temps i crear horaris. Mostra'm diferents maneres d'estructurar agendes, calendaris o plans basats en el temps, amb exemples."
       }
-    }
+    },
+    "changeDisplayName": "Feu clic per canviar com us adrecem"
   },
   "modelSelect": {
     "tabs": {

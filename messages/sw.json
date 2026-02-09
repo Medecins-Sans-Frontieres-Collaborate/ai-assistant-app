@@ -972,7 +972,8 @@
         "title": "Unda Ratiba",
         "prompt": "Ninahitaji msaada kupanga wakati na kuunda ratiba. Nionyeshe njia tofauti unavyoweza kuunda ajenda, kalenda, au mipango ya msingi wa wakati na mifano."
       }
-    }
+    },
+    "changeDisplayName": "Bofya kubadilisha jinsi tunavyokuhusu"
   },
   "modelSelect": {
     "tabs": {

@@ -972,7 +972,8 @@
         "title": "Skapa scheman",
         "prompt": "Hjälp mig att organisera min tid och skapa scheman. Visa mig olika sätt att strukturera agendor, kalendrar eller tidsbaserade planer med exempel."
       }
-    }
+    },
+    "changeDisplayName": "Klicka för att ändra hur vi tilltalar dig"
   },
   "modelSelect": {
     "tabs": {

@@ -1056,7 +1056,8 @@
         "title": "Crea pianificazioni",
         "prompt": "Ho bisogno di aiuto a organizzare il tempo e creare pianificazioni. Mostrami diversi modi in cui puoi strutturare agende, calendari o piani basati sul tempo con esempi."
       }
-    }
+    },
+    "changeDisplayName": "Fai clic per cambiare il modo in cui ti chiamiamo"
   },
   "modelSelect": {
     "tabs": {
