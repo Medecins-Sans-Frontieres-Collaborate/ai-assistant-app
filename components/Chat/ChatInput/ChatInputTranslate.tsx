@@ -49,15 +49,22 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
   const inputTextRef = useRef<HTMLTextAreaElement>(null);
 
+  // Use a ref for handleSend to avoid re-triggering the effect when
+  // setTextFieldValue changes the handleSend reference (it depends on textFieldValue).
+  // Without this, the effect fires multiple times causing duplicate sends.
+  const handleSendRef = useRef(handleSend);
+  handleSendRef.current = handleSend;
+
   useEffect(() => {
     if (isReadyToSend) {
-      setTimeout(() => {
-        setIsReadyToSend(false); // Reset the flag
-        handleSend();
+      const timeoutId = setTimeout(() => {
+        setIsReadyToSend(false);
+        handleSendRef.current();
         setParentModalIsOpen(false);
       }, 0);
+      return () => clearTimeout(timeoutId);
     }
-  }, [isReadyToSend, handleSend, setParentModalIsOpen]);
+  }, [isReadyToSend, setParentModalIsOpen]);
 
   useEffect(() => {
     if (simulateClick && openModalButtonRef.current) {

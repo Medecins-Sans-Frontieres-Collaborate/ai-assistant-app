@@ -415,22 +415,22 @@ describe('/api/chat/prompts/revise', () => {
       expect(callArgs.max_tokens).toBeUndefined();
     });
 
-    it('uses correct model (gpt-5)', async () => {
+    it('uses correct model (gpt-5.2)', async () => {
       const request = createReviseRequest({});
       await POST(request);
 
       expect(mockCreate).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'gpt-5',
+          model: 'gpt-5.2',
         }),
       );
     });
 
-    it('does not set temperature for reasoning model', async () => {
+    it('does not set temperature', async () => {
       const request = createReviseRequest({});
       await POST(request);
 
-      // GPT-5 is a reasoning model and doesn't support custom temperature
+      // Route does not set temperature — only max_completion_tokens is configured
       const callArgs = mockCreate.mock.calls[0][0];
       expect(callArgs.temperature).toBeUndefined();
     });
