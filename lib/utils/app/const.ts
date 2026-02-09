@@ -169,15 +169,21 @@ export const API_TIMEOUTS = {
  * Configuration for dynamic document chunking based on model context window.
  * These values define bounds for chunk size, batch size, and summary length
  * that scale with the selected model's capabilities.
+ *
+ * Each chunk is processed individually by `summarizeChunk`, so we can use
+ * nearly the full context window for input (minus output tokens and prompt overhead).
  */
 export const CHUNK_CONFIG = {
   // Chunk size bounds (in characters)
+  // MAX allows ~100K tokens for Latin text (4 chars/token)
   MIN_CHUNK_CHARS: 4000,
-  MAX_CHUNK_CHARS: 20000,
-  DEFAULT_CHUNK_CHARS: 6000,
+  MAX_CHUNK_CHARS: 400000,
+  DEFAULT_CHUNK_CHARS: 50000,
 
-  // Reserved tokens for system prompt, response buffer, and safety margin
-  RESERVED_TOKENS: 1000,
+  // Token overhead for summarization prompts (used in calculateChunkConfig)
+  // System message: ~70 tokens, user wrapper + typical prompt: ~200 tokens
+  SYSTEM_PROMPT_TOKENS: 100,
+  PROMPT_WRAPPER_TOKENS: 200,
 
   // Batch size bounds (number of chunks processed in parallel)
   MIN_BATCH_SIZE: 3,
