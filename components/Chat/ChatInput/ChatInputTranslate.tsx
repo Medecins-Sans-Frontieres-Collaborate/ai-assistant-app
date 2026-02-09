@@ -53,7 +53,9 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
   // setTextFieldValue changes the handleSend reference (it depends on textFieldValue).
   // Without this, the effect fires multiple times causing duplicate sends.
   const handleSendRef = useRef(handleSend);
-  handleSendRef.current = handleSend;
+  useEffect(() => {
+    handleSendRef.current = handleSend;
+  }, [handleSend]);
 
   useEffect(() => {
     if (isReadyToSend) {
