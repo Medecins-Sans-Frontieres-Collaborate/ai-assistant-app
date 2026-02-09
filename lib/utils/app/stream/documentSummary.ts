@@ -2,15 +2,15 @@ import { Session } from 'next-auth';
 
 import {
   CHUNK_CONFIG,
-  CONTENT_LIMITS,
   OPENAI_API_VERSION,
+  TOKEN_ESTIMATION,
 } from '@/lib/utils/app/const';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { ImageMessageContent } from '@/types/chat';
-import { OpenAIModel, OpenAIModels } from '@/types/openai';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { env } from '@/config/environment';
 import {
@@ -20,6 +20,57 @@ import {
 import OpenAI from 'openai';
 import { AzureOpenAI } from 'openai';
 import { ChatCompletion } from 'openai/resources';
+
+/**
+ * Estimates the chars-per-token ratio based on the dominant script type in the content.
+ * Uses more conservative (lower) ratios for non-Latin scripts where tokens are shorter,
+ * which results in larger character chunks to achieve the same token count.
+ *
+ * @param content - The text content to analyze
+ * @param sampleSize - Number of characters to sample for analysis (default: 1000)
+ * @returns The estimated characters per token ratio
+ */
+export function estimateCharsPerToken(
+  content: string,
+  sampleSize: number = 1000,
+): number {
+  // Sample first N chars for efficiency
+  const sample = content.slice(0, sampleSize);
+  if (sample.length === 0) {
+    return TOKEN_ESTIMATION.LATIN;
+  }
+
+  // Count CJK characters (Chinese, Japanese Kanji, Korean Hanja)
+  const cjkPattern = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/g;
+  const cjkCount = (sample.match(cjkPattern) || []).length;
+
+  // Count Japanese Hiragana/Katakana
+  const jpKanaPattern = /[\u3040-\u309F\u30A0-\u30FF]/g;
+  const kanaCount = (sample.match(jpKanaPattern) || []).length;
+
+  // Count Arabic/Hebrew
+  const rtlPattern = /[\u0600-\u06FF\u0590-\u05FF]/g;
+  const rtlCount = (sample.match(rtlPattern) || []).length;
+
+  // Count Cyrillic
+  const cyrillicPattern = /[\u0400-\u04FF]/g;
+  const cyrillicCount = (sample.match(cyrillicPattern) || []).length;
+
+  const cjkTotal = cjkCount + kanaCount;
+  const rtlCyrillicTotal = rtlCount + cyrillicCount;
+  const nonLatinCount = cjkTotal + rtlCyrillicTotal;
+  const nonLatinRatio = nonLatinCount / sample.length;
+
+  // If >30% non-Latin characters, use appropriate estimate
+  if (nonLatinRatio > 0.3) {
+    if (cjkTotal > rtlCyrillicTotal) {
+      return TOKEN_ESTIMATION.CJK;
+    }
+    return TOKEN_ESTIMATION.RTL_CYRILLIC;
+  }
+
+  return TOKEN_ESTIMATION.LATIN;
+}
 
 /**
  * Configuration for document chunking, calculated based on model capabilities.
@@ -46,11 +97,18 @@ interface ChunkConfig {
  * - Max summary length: Scales with model output capacity for richer summaries.
  *
  * @param model - The OpenAI model configuration, or undefined for defaults
+ * @param charsPerToken - Estimated characters per token ratio for the content script type
  * @returns ChunkConfig with calculated values
  */
-export function calculateChunkConfig(model?: OpenAIModel): ChunkConfig {
+export function calculateChunkConfig(
+  model?: OpenAIModel,
+  charsPerToken: number = TOKEN_ESTIMATION.LATIN,
+): ChunkConfig {
   // Return defaults if no model provided
   if (!model) {
+    console.log(
+      '[DocumentSummary] Using default chunk config (no model provided)',
+    );
     return {
       chunkSize: CHUNK_CONFIG.DEFAULT_CHUNK_CHARS,
       batchSize: CHUNK_CONFIG.DEFAULT_BATCH_SIZE,
@@ -64,7 +122,7 @@ export function calculateChunkConfig(model?: OpenAIModel): ChunkConfig {
   const availableTokens = model.maxLength - CHUNK_CONFIG.RESERVED_TOKENS;
   // Aim for approximately 10 chunks worth of content to fit in context
   const chunkTokens = Math.floor(availableTokens / 10);
-  const rawChunkSize = chunkTokens * CONTENT_LIMITS.CHARS_PER_TOKEN_ESTIMATE;
+  const rawChunkSize = chunkTokens * charsPerToken;
 
   // Apply bounds to chunk size
   const chunkSize = Math.max(
@@ -97,6 +155,7 @@ export function calculateChunkConfig(model?: OpenAIModel): ChunkConfig {
     model: model.id,
     modelMaxLength: model.maxLength,
     modelTokenLimit: model.tokenLimit,
+    charsPerToken,
     chunkSize,
     batchSize,
     maxCompletionTokens,
@@ -201,15 +260,30 @@ export async function parseAndQueryFileOpenAI({
     sanitizeForLog(prompt.length),
   );
 
-  // Get model configuration for dynamic chunk sizing
-  const modelConfig = Object.values(OpenAIModels).find((m) => m.id === modelId);
-  const chunkConfig = calculateChunkConfig(modelConfig);
-
+  // Load document content first (needed for token estimation)
   const fileContent = await loadDocument(file);
   console.log(
     '[parseAndQueryFileOpenAI] File content loaded, length:',
     fileContent.length,
   );
+
+  // Get model configuration for dynamic chunk sizing using direct key access
+  console.log('[parseAndQueryFileOpenAI] Looking up model:', modelId);
+  const modelConfig = OpenAIModels[modelId as OpenAIModelID];
+  if (!modelConfig) {
+    console.log(
+      '[parseAndQueryFileOpenAI] Model not found in OpenAIModels, using defaults',
+    );
+  }
+
+  // Estimate chars per token based on content script type
+  const charsPerToken = estimateCharsPerToken(fileContent);
+  console.log(
+    '[parseAndQueryFileOpenAI] Estimated chars per token:',
+    charsPerToken,
+  );
+
+  const chunkConfig = calculateChunkConfig(modelConfig, charsPerToken);
 
   let chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
   console.log(
