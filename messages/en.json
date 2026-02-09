@@ -1063,6 +1063,7 @@
   "emptyState": {
     "greeting": "How can I help?",
     "greetingWithName": "How can I help, {name}?",
+    "changeDisplayName": "Click to change how we address you",
     "suggestedPrompts": {
       "createDiagrams": {
         "title": "Create Diagrams",
