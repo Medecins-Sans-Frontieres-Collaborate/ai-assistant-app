@@ -1,18 +1,9 @@
-import { getCachedTextPath, shouldCacheText } from '@/lib/actions/fileUpload';
-import { describe, expect, it, vi } from 'vitest';
+import {
+  getCachedTextPath,
+  shouldCacheText,
+} from '@/lib/utils/server/file/textCacheUtils';
 
-// Mock auth and server-side imports
-vi.mock('@/auth', () => ({
-  auth: vi.fn(),
-}));
-
-vi.mock('@/lib/services/blobStorageFactory', () => ({
-  createBlobStorageClient: vi.fn(),
-}));
-
-vi.mock('@/lib/utils/server/file/fileHandling', () => ({
-  loadDocument: vi.fn(),
-}));
+import { describe, expect, it } from 'vitest';
 
 describe('Text Caching Utilities', () => {
   describe('shouldCacheText', () => {
