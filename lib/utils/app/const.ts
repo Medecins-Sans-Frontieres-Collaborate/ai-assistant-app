@@ -144,3 +144,35 @@ export const API_TIMEOUTS = {
   TRANSCRIPTION: 180,
   BATCH_TRANSCRIPTION: 600, // 10 minutes for large audio files (>25MB)
 } as const;
+
+// =============================================================================
+// Document Chunking Configuration
+// =============================================================================
+
+/**
+ * Configuration for dynamic document chunking based on model context window.
+ * These values define bounds for chunk size, batch size, and summary length
+ * that scale with the selected model's capabilities.
+ */
+export const CHUNK_CONFIG = {
+  // Chunk size bounds (in characters)
+  MIN_CHUNK_CHARS: 4000,
+  MAX_CHUNK_CHARS: 20000,
+  DEFAULT_CHUNK_CHARS: 6000,
+
+  // Reserved tokens for system prompt, response buffer, and safety margin
+  RESERVED_TOKENS: 1000,
+
+  // Batch size bounds (number of chunks processed in parallel)
+  MIN_BATCH_SIZE: 3,
+  MAX_BATCH_SIZE: 10,
+  DEFAULT_BATCH_SIZE: 5,
+
+  // Maximum summary length bounds (in characters)
+  MIN_SUMMARY_LENGTH: 16000,
+  MAX_SUMMARY_LENGTH: 64000,
+  DEFAULT_SUMMARY_LENGTH: 16000,
+
+  // Default max completion tokens for summarization
+  DEFAULT_MAX_COMPLETION_TOKENS: 5000,
+} as const;
