@@ -45,6 +45,7 @@ export const DisplayNamePreferencePicker: FC<
   user,
   showPreview = variant === 'inline',
   showHelpText = variant === 'inline',
+  onClose,
 }) => {
   const t = useTranslations();
   const {
@@ -96,7 +97,12 @@ export const DisplayNamePreferencePicker: FC<
         {displayNameOptions.map(({ key, icon: Icon, tooltip }) => (
           <Tooltip key={key} content={tooltip}>
             <button
-              onClick={() => setDisplayNamePreference(key)}
+              onClick={() => {
+                setDisplayNamePreference(key);
+                if (key !== 'custom') {
+                  onClose?.();
+                }
+              }}
               className={`p-2 rounded-md transition-all ${
                 displayNamePreference === key
                   ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
