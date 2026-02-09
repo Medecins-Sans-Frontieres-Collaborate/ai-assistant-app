@@ -121,7 +121,7 @@ export function EmptyState({ userName, user, interactive }: EmptyStateProps) {
             aria-haspopup="dialog"
             aria-expanded={isPopoverOpen}
             aria-label={t('changeDisplayName')}
-            className="cursor-pointer transition-[filter,text-decoration] duration-200 hover:underline hover:brightness-110 underline-offset-4 decoration-rose-500/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#212121] rounded"
+            className="cursor-pointer transition-[text-decoration-color] duration-200 hover:underline underline-offset-4 decoration-rose-500/40 hover:decoration-rose-500/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#212121] rounded"
           >
             {greetingText}
           </span>
