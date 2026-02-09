@@ -1,12 +1,16 @@
 import { Session } from 'next-auth';
 
-import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
+import {
+  CHUNK_CONFIG,
+  CONTENT_LIMITS,
+  OPENAI_API_VERSION,
+} from '@/lib/utils/app/const';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { ImageMessageContent } from '@/types/chat';
-import { OpenAIModels } from '@/types/openai';
+import { OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { env } from '@/config/environment';
 import {
@@ -17,26 +21,119 @@ import OpenAI from 'openai';
 import { AzureOpenAI } from 'openai';
 import { ChatCompletion } from 'openai/resources';
 
+/**
+ * Configuration for document chunking, calculated based on model capabilities.
+ */
+interface ChunkConfig {
+  /** Size of each document chunk in characters */
+  chunkSize: number;
+  /** Number of chunks to process in parallel per batch */
+  batchSize: number;
+  /** Maximum tokens for summarization completion */
+  maxCompletionTokens: number;
+  /** Maximum length of the combined summary in characters */
+  maxSummaryLength: number;
+}
+
+/**
+ * Calculates optimal chunk configuration based on the model's context window and output limits.
+ *
+ * The calculation strategy:
+ * - Chunk size: Derived from available tokens after reserving space for system prompt and buffer.
+ *   Aims for ~10 chunks worth of content to fit in context.
+ * - Batch size: Scales with context window size (larger context = more parallel chunks).
+ * - Max completion tokens: Based on model's output token limit, capped for efficiency.
+ * - Max summary length: Scales with model output capacity for richer summaries.
+ *
+ * @param model - The OpenAI model configuration, or undefined for defaults
+ * @returns ChunkConfig with calculated values
+ */
+export function calculateChunkConfig(model?: OpenAIModel): ChunkConfig {
+  // Return defaults if no model provided
+  if (!model) {
+    return {
+      chunkSize: CHUNK_CONFIG.DEFAULT_CHUNK_CHARS,
+      batchSize: CHUNK_CONFIG.DEFAULT_BATCH_SIZE,
+      maxCompletionTokens: CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
+      maxSummaryLength: CHUNK_CONFIG.DEFAULT_SUMMARY_LENGTH,
+    };
+  }
+
+  // Calculate chunk size based on model's context window
+  // Reserve tokens for system prompt and response buffer
+  const availableTokens = model.maxLength - CHUNK_CONFIG.RESERVED_TOKENS;
+  // Aim for approximately 10 chunks worth of content to fit in context
+  const chunkTokens = Math.floor(availableTokens / 10);
+  const rawChunkSize = chunkTokens * CONTENT_LIMITS.CHARS_PER_TOKEN_ESTIMATE;
+
+  // Apply bounds to chunk size
+  const chunkSize = Math.max(
+    CHUNK_CONFIG.MIN_CHUNK_CHARS,
+    Math.min(CHUNK_CONFIG.MAX_CHUNK_CHARS, rawChunkSize),
+  );
+
+  // Batch size scales with context window
+  // Larger context windows can handle more parallel chunk processing
+  const rawBatchSize = Math.floor(model.maxLength / 20000);
+  const batchSize = Math.max(
+    CHUNK_CONFIG.MIN_BATCH_SIZE,
+    Math.min(CHUNK_CONFIG.MAX_BATCH_SIZE, rawBatchSize),
+  );
+
+  // Max completion tokens based on model's output limit, capped for efficiency
+  const maxCompletionTokens = Math.min(
+    CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
+    Math.floor(model.tokenLimit / 4),
+  );
+
+  // Summary length scales with model output capacity
+  const rawSummaryLength = model.tokenLimit * 2;
+  const maxSummaryLength = Math.max(
+    CHUNK_CONFIG.MIN_SUMMARY_LENGTH,
+    Math.min(CHUNK_CONFIG.MAX_SUMMARY_LENGTH, rawSummaryLength),
+  );
+
+  console.log('[DocumentSummary] Chunk config calculated:', {
+    model: model.id,
+    modelMaxLength: model.maxLength,
+    modelTokenLimit: model.tokenLimit,
+    chunkSize,
+    batchSize,
+    maxCompletionTokens,
+    maxSummaryLength,
+  });
+
+  return { chunkSize, batchSize, maxCompletionTokens, maxSummaryLength };
+}
+
 interface ParseAndQueryFilterOpenAIArguments {
   file: File;
   prompt: string;
   modelId: string;
-  maxLength?: number;
   user: Session['user'];
   botId?: string;
   stream?: boolean;
   images?: ImageMessageContent[];
 }
 
+/**
+ * Summarizes a single chunk of document text with relevance to the user's prompt.
+ *
+ * @param azureOpenai - The OpenAI client instance
+ * @param modelId - The model identifier to use for summarization
+ * @param prompt - The user's original prompt to guide relevance filtering
+ * @param chunk - The text chunk to summarize
+ * @param user - The session user for API attribution
+ * @param maxCompletionTokens - Maximum tokens for the completion response
+ * @returns The summarized text, or null if summarization fails
+ */
 async function summarizeChunk(
   azureOpenai: OpenAI,
   modelId: string,
   prompt: string,
   chunk: string,
   user: Session['user'],
-  startTimeChunk: number,
-  filename?: string,
-  fileSize?: number,
+  maxCompletionTokens: number,
 ): Promise<string | null> {
   const summaryPrompt: string = `Summarize the following text with relevance to the prompt, but keep enough details to maintain the tone, character, and content of the original. If nothing is relevant, then return an empty string:\n\n\`\`\`prompt\n${prompt}\`\`\`\n\n\`\`\`text\n${chunk}\n\`\`\``;
 
@@ -59,29 +156,38 @@ async function summarizeChunk(
         },
       ],
       ...(supportsTemperature && { temperature: 0.1 }),
-      max_completion_tokens: 5000,
+      max_completion_tokens: maxCompletionTokens,
       stream: false,
       user: JSON.stringify(user),
     });
 
     return chunkSummary?.choices?.[0]?.message?.content?.trim() ?? '';
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error summarizing chunk:', error);
     return null;
   }
 }
 
+/**
+ * Parses a document file, summarizes its content, and queries an LLM with the user's prompt.
+ *
+ * This function handles large documents by:
+ * 1. Loading the document and splitting into chunks (size based on model context window)
+ * 2. Summarizing each chunk in parallel batches (batch size based on model capabilities)
+ * 3. Combining summaries and sending to LLM with the user's prompt
+ *
+ * @param args - Configuration for document processing
+ * @returns A ReadableStream for streaming responses, or a string for non-streaming
+ */
 export async function parseAndQueryFileOpenAI({
   file,
   prompt,
   modelId,
-  maxLength = 16000,
   user,
   botId,
   stream = true,
   images = [],
 }: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
-  const startTime = Date.now();
   console.log(
     '[parseAndQueryFileOpenAI] Starting with file:',
     sanitizeForLog(file.name),
@@ -95,14 +201,23 @@ export async function parseAndQueryFileOpenAI({
     sanitizeForLog(prompt.length),
   );
 
+  // Get model configuration for dynamic chunk sizing
+  const modelConfig = Object.values(OpenAIModels).find((m) => m.id === modelId);
+  const chunkConfig = calculateChunkConfig(modelConfig);
+
   const fileContent = await loadDocument(file);
   console.log(
     '[parseAndQueryFileOpenAI] File content loaded, length:',
     fileContent.length,
   );
 
-  let chunks: string[] = splitIntoChunks(fileContent);
-  console.log('[parseAndQueryFileOpenAI] Split into chunks:', chunks.length);
+  let chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
+  console.log(
+    '[parseAndQueryFileOpenAI] Split into chunks:',
+    chunks.length,
+    'chunk size:',
+    chunkConfig.chunkSize,
+  );
 
   const scope = 'https://cognitiveservices.azure.com/.default';
   const azureADTokenProvider = getBearerTokenProvider(
@@ -118,10 +233,9 @@ export async function parseAndQueryFileOpenAI({
 
   let combinedSummary: string = '';
   let processedChunkCount = 0;
-  let totalChunkCount = chunks.length;
 
   while (chunks.length > 0) {
-    const currentChunks = chunks.splice(0, 5);
+    const currentChunks = chunks.splice(0, chunkConfig.batchSize);
     console.log(
       `[parseAndQueryFileOpenAI] Processing batch of ${currentChunks.length} chunks, ${chunks.length} remaining`,
     );
@@ -133,9 +247,7 @@ export async function parseAndQueryFileOpenAI({
         prompt,
         chunk,
         user,
-        Date.now(),
-        file.name,
-        file.size,
+        chunkConfig.maxCompletionTokens,
       ),
     );
 
@@ -150,7 +262,7 @@ export async function parseAndQueryFileOpenAI({
 
     let batchSummary = '';
     for (const summary of validSummaries) {
-      if ((batchSummary + summary).length > maxLength) {
+      if ((batchSummary + summary).length > chunkConfig.maxSummaryLength) {
         break;
       }
       batchSummary += summary + ' ';
@@ -158,6 +270,13 @@ export async function parseAndQueryFileOpenAI({
 
     combinedSummary += batchSummary;
   }
+
+  console.log(
+    '[parseAndQueryFileOpenAI] Summarization complete, processed chunks:',
+    processedChunkCount,
+    'combined summary length:',
+    combinedSummary.length,
+  );
 
   const finalPrompt: string = `${combinedSummary}\n\nUser prompt: ${prompt}`;
 
@@ -178,8 +297,7 @@ export async function parseAndQueryFileOpenAI({
         ]
       : finalPrompt;
 
-  // Check if model supports custom temperature values
-  const modelConfig = Object.values(OpenAIModels).find((m) => m.id === modelId);
+  // Check if model supports custom temperature values (reuse modelConfig from above)
   const supportsTemperature = modelConfig?.supportsTemperature !== false;
 
   const commonParams = {
@@ -196,7 +314,7 @@ export async function parseAndQueryFileOpenAI({
       },
     ] as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
     ...(supportsTemperature && { temperature: 0.1 }),
-    max_completion_tokens: 5000,
+    max_completion_tokens: chunkConfig.maxCompletionTokens,
     stream: stream,
     user: JSON.stringify(user),
   };
@@ -253,9 +371,16 @@ export async function parseAndQueryFileOpenAI({
   }
 }
 
+/**
+ * Splits text into chunks of specified size for batch processing.
+ *
+ * @param text - The text content to split
+ * @param chunkSize - The maximum size of each chunk in characters
+ * @returns Array of text chunks
+ */
 export function splitIntoChunks(
   text: string,
-  chunkSize: number = 6000,
+  chunkSize: number = CHUNK_CONFIG.DEFAULT_CHUNK_CHARS,
 ): string[] {
   const chunks: string[] = [];
   for (let i = 0; i < text.length; i += chunkSize) {
