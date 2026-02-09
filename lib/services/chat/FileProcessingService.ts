@@ -5,8 +5,8 @@ import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { retryAsync } from '@/lib/utils/app/retry';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
+import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
 
-import { getCachedTextPath } from '@/lib/actions/fileUpload';
 import fs from 'fs';
 
 /**
