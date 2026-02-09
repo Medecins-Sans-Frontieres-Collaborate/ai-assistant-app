@@ -343,6 +343,7 @@ export function Chat({
                     displayNamePreference,
                     customDisplayName,
                   )}
+                  user={session?.user}
                 />
 
                 {/* Centered Chat Input */}
