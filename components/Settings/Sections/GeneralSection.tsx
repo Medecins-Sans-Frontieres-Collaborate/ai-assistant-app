@@ -1,14 +1,9 @@
 import {
   IconDevices,
-  IconId,
   IconLanguage,
   IconMoon,
-  IconPencil,
   IconSettings,
   IconSun,
-  IconUser,
-  IconUserCircle,
-  IconUserOff,
 } from '@tabler/icons-react';
 import { FC, useEffect, useState } from 'react';
 
@@ -16,14 +11,11 @@ import { Session } from 'next-auth';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
-import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useUI } from '@/client/hooks/ui/useUI';
 
-import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
-
-import { DisplayNamePreference } from '@/types/settings';
 import { Settings } from '@/types/settings';
 
+import { DisplayNamePreferencePicker } from '@/components/Settings/DisplayNamePreferencePicker';
 import LanguageSwitcher from '@/components/Sidebar/components/LanguageSwitcher';
 import { Tooltip } from '@/components/UI/Tooltip';
 
@@ -68,35 +60,7 @@ export const GeneralSection: FC<GeneralSectionProps> = ({
   prefetchedProfile,
 }) => {
   const t = useTranslations();
-
-  // Display name preference options with icons
-  const displayNameOptions = [
-    {
-      key: 'firstName' as const,
-      icon: IconUserCircle,
-      tooltip: t('settings.First Name'),
-    },
-    {
-      key: 'lastName' as const,
-      icon: IconId,
-      tooltip: t('settings.Last Name'),
-    },
-    {
-      key: 'fullName' as const,
-      icon: IconUser,
-      tooltip: t('settings.Full Name'),
-    },
-    { key: 'custom' as const, icon: IconPencil, tooltip: t('settings.Custom') },
-    { key: 'none' as const, icon: IconUserOff, tooltip: t('settings.None') },
-  ];
-
   const { theme, setTheme } = useUI();
-  const {
-    displayNamePreference,
-    customDisplayName,
-    setDisplayNamePreference,
-    setCustomDisplayName,
-  } = useSettings();
   const [fullProfile, setFullProfile] = useState<FullUserProfile | null>(
     prefetchedProfile || null,
   );
@@ -194,64 +158,12 @@ export const GeneralSection: FC<GeneralSectionProps> = ({
             <div className="border-t border-gray-200 dark:border-gray-600 my-4" />
 
             {/* Display Name Preference */}
-            <div>
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                {t('settings.howShouldWeAddressYou')}
-              </div>
-
-              {/* Icon Buttons */}
-              <div className="flex items-center gap-1 p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 w-fit">
-                {displayNameOptions.map(({ key, icon: Icon, tooltip }) => (
-                  <Tooltip key={key} content={tooltip}>
-                    <button
-                      onClick={() => setDisplayNamePreference(key)}
-                      className={`p-2 rounded-md transition-all ${
-                        displayNamePreference === key
-                          ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                      }`}
-                    >
-                      <Icon size={18} />
-                    </button>
-                  </Tooltip>
-                ))}
-              </div>
-
-              {/* Custom Name Input */}
-              {displayNamePreference === 'custom' && (
-                <div className="mt-3">
-                  <input
-                    type="text"
-                    value={customDisplayName}
-                    onChange={(e) => setCustomDisplayName(e.target.value)}
-                    placeholder={t('settings.Custom Display Name Placeholder')}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                    maxLength={50}
-                  />
-                </div>
-              )}
-
-              {/* Preview */}
-              <div className="mt-3 text-sm text-gray-500 dark:text-gray-400 italic">
-                {(() => {
-                  const previewName = getUserDisplayName(
-                    user,
-                    displayNamePreference,
-                    customDisplayName,
-                  );
-                  return t('settings.displayNamePreview', {
-                    greeting: previewName
-                      ? t('emptyState.greetingWithName', { name: previewName })
-                      : t('emptyState.greeting'),
-                  });
-                })()}
-              </div>
-
-              {/* UI-only note */}
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                {t('settings.displayNameUIOnly')}
-              </p>
-            </div>
+            <DisplayNamePreferencePicker
+              variant="inline"
+              user={user}
+              showPreview={true}
+              showHelpText={true}
+            />
           </div>
         )}
 
