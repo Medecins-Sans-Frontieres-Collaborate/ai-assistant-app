@@ -6,7 +6,16 @@ import { retryAsync } from '@/lib/utils/app/retry';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
+import { getCachedTextPath } from '@/lib/actions/fileUpload';
 import fs from 'fs';
+
+/**
+ * Result of downloading a file with cache preference.
+ */
+export interface DownloadResult {
+  /** True if the cached plain-text version was used */
+  usedCache: boolean;
+}
 
 /**
  * Service for file processing operations.
@@ -66,6 +75,59 @@ export class FileProcessingService {
     await fs.promises.writeFile(filePath, new Uint8Array(blob), {
       mode: 0o600,
     });
+  }
+
+  /**
+   * Downloads a file from blob storage, preferring the cached plain-text version if available.
+   * Falls back to the original file if no cache exists.
+   *
+   * This optimization avoids expensive document conversions (PDF, DOCX, etc.) on every chat.
+   * Text was extracted and cached during the original upload.
+   *
+   * @param fileUrl - The blob storage URL of the file
+   * @param filePath - Local path where file should be saved
+   * @param user - User session for authentication
+   * @returns Result indicating whether the cached version was used
+   */
+  async downloadFilePreferCached(
+    fileUrl: string,
+    filePath: string,
+    user: Session['user'],
+  ): Promise<DownloadResult> {
+    const session: Session = { user, expires: '' } as Session;
+    const userId = getUserIdFromSession(session);
+    const id: string | undefined = fileUrl.split('/').pop();
+
+    if (!id) throw new Error(`Could not find file id from URL: ${fileUrl}`);
+
+    const blobPath = `${userId}/uploads/files/${id}`;
+    const cachedPath = getCachedTextPath(blobPath);
+    const blobStorage = createBlobStorageClient(session);
+
+    // Try cached version first
+    try {
+      if (await blobStorage.blobExists(cachedPath)) {
+        const cached = (await blobStorage.get(
+          cachedPath,
+          BlobProperty.BLOB,
+        )) as Buffer;
+        await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
+        console.log(`[FileProcessingService] Using cached text: ${id}`);
+        return { usedCache: true };
+      }
+    } catch (error) {
+      console.warn(
+        `[FileProcessingService] Cache check failed, falling back:`,
+        error instanceof Error ? error.message : error,
+      );
+    }
+
+    // Fall back to original file
+    const blob = (await blobStorage.get(blobPath, BlobProperty.BLOB)) as Buffer;
+    await fs.promises.writeFile(filePath, new Uint8Array(blob), {
+      mode: 0o600,
+    });
+    return { usedCache: false };
   }
 
   /**
