@@ -56,6 +56,22 @@ export const CONTENT_LIMITS = {
   CHARS_PER_TOKEN_ESTIMATE: 4,
 } as const;
 
+/**
+ * Token estimation ratios for different character scripts.
+ * These values represent approximate characters per token for each script type.
+ * Used for dynamic chunk sizing based on content language.
+ */
+export const TOKEN_ESTIMATION = {
+  /** English and European languages using Latin script */
+  LATIN: 4,
+  /** Chinese, Japanese (Kanji), Korean (Hanja) - very short tokens */
+  CJK: 1.5,
+  /** Arabic, Hebrew, Cyrillic, and other non-Latin scripts */
+  RTL_CYRILLIC: 2.5,
+  /** Fallback for unknown or mixed content - conservative estimate */
+  CONSERVATIVE: 2,
+} as const;
+
 // =============================================================================
 // Display Formatting Utilities
 // =============================================================================
