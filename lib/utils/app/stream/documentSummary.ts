@@ -90,8 +90,9 @@ interface ChunkConfig {
  * Calculates optimal chunk configuration based on the model's context window and output limits.
  *
  * The calculation strategy:
- * - Chunk size: Derived from available tokens after reserving space for system prompt and buffer.
- *   Aims for ~10 chunks worth of content to fit in context.
+ * - Each chunk is processed individually by `summarizeChunk`, so we can use nearly the full
+ *   context window for input (minus output tokens and prompt overhead).
+ * - Chunk size: Available input tokens × chars per token, bounded by MIN/MAX_CHUNK_CHARS.
  * - Batch size: Scales with context window size (larger context = more parallel chunks).
  * - Max completion tokens: Based on model's output token limit, capped for efficiency.
  * - Max summary length: Scales with model output capacity for richer summaries.
@@ -117,12 +118,21 @@ export function calculateChunkConfig(
     };
   }
 
-  // Calculate chunk size based on model's context window
-  // Reserve tokens for system prompt and response buffer
-  const availableTokens = model.maxLength - CHUNK_CONFIG.RESERVED_TOKENS;
-  // Aim for approximately 10 chunks worth of content to fit in context
-  const chunkTokens = Math.floor(availableTokens / 10);
-  const rawChunkSize = chunkTokens * charsPerToken;
+  // Calculate output tokens we'll actually use for the summary response
+  const maxCompletionTokens = Math.min(
+    CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
+    Math.floor(model.tokenLimit / 4),
+  );
+
+  // Calculate available input tokens per chunk
+  // Each chunk is processed individually, so we can use nearly the full context window
+  const promptOverhead =
+    CHUNK_CONFIG.SYSTEM_PROMPT_TOKENS + CHUNK_CONFIG.PROMPT_WRAPPER_TOKENS;
+  const availableInputTokens =
+    model.maxLength - maxCompletionTokens - promptOverhead;
+
+  // Convert tokens to characters based on content script type
+  const rawChunkSize = availableInputTokens * charsPerToken;
 
   // Apply bounds to chunk size
   const chunkSize = Math.max(
@@ -131,17 +141,11 @@ export function calculateChunkConfig(
   );
 
   // Batch size scales with context window
-  // Larger context windows can handle more parallel chunk processing
-  const rawBatchSize = Math.floor(model.maxLength / 20000);
+  // With larger chunks, we need fewer chunks in parallel
+  const rawBatchSize = Math.floor(model.maxLength / 50000);
   const batchSize = Math.max(
     CHUNK_CONFIG.MIN_BATCH_SIZE,
     Math.min(CHUNK_CONFIG.MAX_BATCH_SIZE, rawBatchSize),
-  );
-
-  // Max completion tokens based on model's output limit, capped for efficiency
-  const maxCompletionTokens = Math.min(
-    CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
-    Math.floor(model.tokenLimit / 4),
   );
 
   // Summary length scales with model output capacity
@@ -155,10 +159,12 @@ export function calculateChunkConfig(
     model: model.id,
     modelMaxLength: model.maxLength,
     modelTokenLimit: model.tokenLimit,
+    maxCompletionTokens,
+    promptOverhead,
+    availableInputTokens,
     charsPerToken,
     chunkSize,
     batchSize,
-    maxCompletionTokens,
     maxSummaryLength,
   });
 
