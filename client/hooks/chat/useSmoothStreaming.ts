@@ -26,11 +26,12 @@ export const useSmoothStreaming = ({
   const lastTimestampRef = useRef<number>(0);
   const charsPerFrameRef = useRef(charsPerFrame);
   const frameDelayRef = useRef(frameDelay);
+  const needsResetRef = useRef(false);
 
-  // Reset displayed content when a new streaming session starts
+  // Signal reset when a new streaming session starts (picked up by animation loop)
   useEffect(() => {
     if (isStreaming) {
-      setDisplayedContent('');
+      needsResetRef.current = true;
       contentRef.current = '';
     }
   }, [isStreaming]);
@@ -57,6 +58,13 @@ export const useSmoothStreaming = ({
       lastTimestampRef.current = timestamp;
 
       setDisplayedContent((prev) => {
+        // Handle reset for new streaming session
+        if (needsResetRef.current) {
+          needsResetRef.current = false;
+          animationFrameRef.current = requestAnimationFrame(animateText);
+          return '';
+        }
+
         // If caught up, just return current content
         if (prev.length >= contentRef.current.length) {
           animationFrameRef.current = requestAnimationFrame(animateText);
