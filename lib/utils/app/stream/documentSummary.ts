@@ -179,6 +179,8 @@ interface ParseAndQueryFilterOpenAIArguments {
   botId?: string;
   stream?: boolean;
   images?: ImageMessageContent[];
+  /** Pre-extracted text content to avoid double extraction when caller already loaded the document */
+  preExtractedText?: string;
 }
 
 /**
@@ -252,6 +254,7 @@ export async function parseAndQueryFileOpenAI({
   botId,
   stream = true,
   images = [],
+  preExtractedText,
 }: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
   console.log(
     '[parseAndQueryFileOpenAI] Starting with file:',
@@ -266,8 +269,8 @@ export async function parseAndQueryFileOpenAI({
     sanitizeForLog(prompt.length),
   );
 
-  // Load document content first (needed for token estimation)
-  const fileContent = await loadDocument(file);
+  // Use pre-extracted text if provided, otherwise load document
+  const fileContent = preExtractedText ?? (await loadDocument(file));
   console.log(
     '[parseAndQueryFileOpenAI] File content loaded, length:',
     fileContent.length,
