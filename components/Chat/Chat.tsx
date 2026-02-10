@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
@@ -264,6 +264,24 @@ export function Chat({
     messages.length > 0 ||
     (isStreaming && streamingConversationId === selectedConversation?.id);
 
+  // Memoize organization agent lookup to avoid recomputing on every render
+  const orgAgentInfo = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    const orgAgentId =
+      selectedConversation?.bot ||
+      (modelId?.startsWith('org-') ? modelId.replace('org-', '') : undefined);
+    const orgAgent = orgAgentId
+      ? getOrganizationAgentById(orgAgentId)
+      : undefined;
+    const isOrgAgent =
+      !!orgAgent || selectedConversation?.model?.isOrganizationAgent;
+    return { orgAgent, isOrgAgent };
+  }, [
+    selectedConversation?.bot,
+    selectedConversation?.model?.id,
+    selectedConversation?.model?.isOrganizationAgent,
+  ]);
+
   // Show loading screen until session and data are fully loaded
   // This prevents UI flickering during initialization
   if (status === 'loading' || !isLoaded || models.length === 0) {
@@ -283,48 +301,31 @@ export function Chat({
       >
         {/* Header - Hidden on mobile, shown on desktop */}
         <div className="hidden md:block">
-          {(() => {
-            // Get organization agent info - check both bot field and model ID prefix
-            const modelId = selectedConversation?.model?.id;
-            const orgAgentId =
-              selectedConversation?.bot ||
-              (modelId?.startsWith('org-')
-                ? modelId.replace('org-', '')
-                : undefined);
-            const orgAgent = orgAgentId
-              ? getOrganizationAgentById(orgAgentId)
-              : undefined;
-            const isOrgAgent =
-              !!orgAgent || selectedConversation?.model?.isOrganizationAgent;
-
-            return (
-              <ChatTopbar
-                botInfo={null}
-                selectedModelName={
-                  selectedConversation?.model?.name ||
-                  models.find((m) => m.id === defaultModelId)?.name ||
-                  'GPT-4o'
-                }
-                selectedModelProvider={
-                  OpenAIModels[selectedConversation?.model?.id as OpenAIModelID]
-                    ?.provider ||
-                  models.find((m) => m.id === defaultModelId)?.provider
-                }
-                selectedModelId={selectedConversation?.model?.id}
-                isCustomAgent={selectedConversation?.model?.isCustomAgent}
-                isOrganizationAgent={isOrgAgent}
-                organizationAgentIcon={orgAgent?.icon}
-                organizationAgentColor={orgAgent?.color}
-                showSettings={isSettingsOpen}
-                onSettingsClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                onModelClick={() => setIsModelSelectOpen(true)}
-                onClearAll={clearConversation}
-                hasMessages={hasMessages}
-                searchMode={selectedConversation?.defaultSearchMode}
-                showChatbar={showChatbar}
-              />
-            );
-          })()}
+          <ChatTopbar
+            botInfo={null}
+            selectedModelName={
+              selectedConversation?.model?.name ||
+              models.find((m) => m.id === defaultModelId)?.name ||
+              'GPT-4o'
+            }
+            selectedModelProvider={
+              OpenAIModels[selectedConversation?.model?.id as OpenAIModelID]
+                ?.provider ||
+              models.find((m) => m.id === defaultModelId)?.provider
+            }
+            selectedModelId={selectedConversation?.model?.id}
+            isCustomAgent={selectedConversation?.model?.isCustomAgent}
+            isOrganizationAgent={orgAgentInfo.isOrgAgent}
+            organizationAgentIcon={orgAgentInfo.orgAgent?.icon}
+            organizationAgentColor={orgAgentInfo.orgAgent?.color}
+            showSettings={isSettingsOpen}
+            onSettingsClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            onModelClick={() => setIsModelSelectOpen(true)}
+            onClearAll={clearConversation}
+            hasMessages={hasMessages}
+            searchMode={selectedConversation?.defaultSearchMode}
+            showChatbar={showChatbar}
+          />
         </div>
 
         {/* Messages container - always mounted to prevent scroll reset */}
