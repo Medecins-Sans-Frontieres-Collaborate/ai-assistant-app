@@ -2,14 +2,21 @@ import { FileProcessingService } from '@/lib/services/chat';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
 import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
-import { parseAndQueryFileOpenAI } from '@/lib/utils/app/stream/documentSummary';
+import {
+  calculateChunkConfig,
+  estimateCharsPerToken,
+  parseAndQueryFileOpenAI,
+} from '@/lib/utils/app/stream/documentSummary';
 import {
   extractAudioFromVideo,
   isFFmpegAvailable,
 } from '@/lib/utils/server/audio/audioExtractor';
 import { BlobStorage, getBlobBase64String } from '@/lib/utils/server/blob/blob';
+import { loadDocument } from '@/lib/utils/server/file/fileHandling';
 import { validateBufferSignature } from '@/lib/utils/server/file/fileValidation';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { getChunkedTranscriptionService } from '../../transcription/chunkedTranscriptionService';
 import { TranscriptionServiceFactory } from '../../transcriptionService';
@@ -78,6 +85,11 @@ export class FileProcessor extends BasePipelineStage {
             filename: string;
             summary: string;
             originalContent: string;
+          }> = [];
+
+          const inlineFiles: Array<{
+            filename: string;
+            content: string;
           }> = [];
 
           const transcripts: Array<{
@@ -434,32 +446,58 @@ export class FileProcessor extends BasePipelineStage {
                   {},
                 );
 
-                // Process with parseAndQueryFileOpenAI
-                // Note: We get the summary as a string (non-streaming for pipeline)
-                // Note: Images are NOT passed here - they remain in the message for the final chat
-                const summary = await parseAndQueryFileOpenAI({
-                  file: docFile,
-                  prompt: prompt || 'Summarize this document',
-                  modelId: context.modelId,
-                  user: context.user,
-                  botId: context.botId,
-                  stream: false,
-                  // Don't pass images - blob URLs aren't accessible to Azure OpenAI during summarization
-                  // Images will be included in the final message content by StandardChatHandler
-                  images: undefined,
-                });
+                // Extract text first to determine if small-file inline path applies
+                const text = await loadDocument(docFile);
 
-                if (typeof summary !== 'string') {
-                  throw new Error(
-                    'Expected string summary from parseAndQueryFileOpenAI',
+                // Calculate chunk threshold for this model/content
+                const modelConfig =
+                  OpenAIModels[context.modelId as OpenAIModelID];
+                const charsPerToken = estimateCharsPerToken(text);
+                const { chunkSize } = calculateChunkConfig(
+                  modelConfig,
+                  charsPerToken,
+                );
+
+                if (text.length <= chunkSize) {
+                  // Small file: skip summarization, include raw content inline
+                  console.log(
+                    `[FileProcessor] Small file (${text.length} chars <= ${chunkSize} chunk size), inlining: ${sanitizeForLog(filename)}`,
                   );
-                }
+                  inlineFiles.push({ filename, content: text });
+                } else {
+                  // Large file: use chunking/summarization pipeline
+                  console.log(
+                    `[FileProcessor] Large file (${text.length} chars > ${chunkSize} chunk size), summarizing: ${sanitizeForLog(filename)}`,
+                  );
 
-                fileSummaries.push({
-                  filename,
-                  summary,
-                  originalContent: fileBuffer.toString('utf-8', 0, 1000), // First 1000 chars
-                });
+                  // Process with parseAndQueryFileOpenAI, passing pre-extracted text
+                  // Note: We get the summary as a string (non-streaming for pipeline)
+                  // Note: Images are NOT passed here - they remain in the message for the final chat
+                  const summary = await parseAndQueryFileOpenAI({
+                    file: docFile,
+                    prompt: prompt || 'Summarize this document',
+                    modelId: context.modelId,
+                    user: context.user,
+                    botId: context.botId,
+                    stream: false,
+                    // Don't pass images - blob URLs aren't accessible to Azure OpenAI during summarization
+                    // Images will be included in the final message content by StandardChatHandler
+                    images: undefined,
+                    preExtractedText: text,
+                  });
+
+                  if (typeof summary !== 'string') {
+                    throw new Error(
+                      'Expected string summary from parseAndQueryFileOpenAI',
+                    );
+                  }
+
+                  fileSummaries.push({
+                    filename,
+                    summary,
+                    originalContent: fileBuffer.toString('utf-8', 0, 1000), // First 1000 chars
+                  });
+                }
 
                 console.log(
                   `[FileProcessor] Document processed: ${sanitizeForLog(filename)}`,
@@ -542,6 +580,7 @@ export class FileProcessor extends BasePipelineStage {
           // Add span attributes
           span.setAttribute('file.count', files.length);
           span.setAttribute('file.summaries_count', fileSummaries.length);
+          span.setAttribute('file.inline_files_count', inlineFiles.length);
           span.setAttribute('file.transcripts_count', transcripts.length);
           span.setAttribute('file.images_count', convertedImages.length);
           span.setStatus({ code: SpanStatusCode.OK });
@@ -553,6 +592,7 @@ export class FileProcessor extends BasePipelineStage {
               ...context.processedContent,
               fileSummaries:
                 fileSummaries.length > 0 ? fileSummaries : undefined,
+              inlineFiles: inlineFiles.length > 0 ? inlineFiles : undefined,
               transcripts: transcripts.length > 0 ? transcripts : undefined,
               images: convertedImages.length > 0 ? convertedImages : undefined,
             },
