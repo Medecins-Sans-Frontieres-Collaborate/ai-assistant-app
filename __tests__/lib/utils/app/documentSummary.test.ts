@@ -141,14 +141,17 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // With 128K context, should calculate larger chunks
-      // (128000 - 1000) / 10 * 4 = 50800, but capped at MAX_CHUNK_CHARS
+      // New formula: each chunk uses nearly full context
+      // maxCompletionTokens = min(5000, 16000/4) = 4000
+      // promptOverhead = 100 + 200 = 300
+      // availableInputTokens = 128000 - 4000 - 300 = 123700
+      // rawChunkSize = 123700 * 4 = 494800, capped at MAX_CHUNK_CHARS (400000)
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
-      // 128000 / 20000 = 6.4 → 6, clamped to max 10
-      expect(config.batchSize).toBe(6);
+      // 128000 / 50000 = 2.56 → 2, clamped to MIN_BATCH_SIZE (3)
+      expect(config.batchSize).toBe(CHUNK_CONFIG.MIN_BATCH_SIZE);
       // min(5000, 16000 / 4) = 4000
       expect(config.maxCompletionTokens).toBe(4000);
-      // 16000 * 2 = 32000, clamped to 16K-64K range
+      // 16000 * 2 = 32000, within 16K-64K range
       expect(config.maxSummaryLength).toBe(32000);
     });
 
@@ -162,17 +165,19 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // With 200K context, chunk size hits max
+      // maxCompletionTokens = min(5000, 100000/4) = 5000
+      // availableInputTokens = 200000 - 5000 - 300 = 194700
+      // rawChunkSize = 194700 * 4 = 778800, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
-      // 200000 / 20000 = 10, clamped to max
-      expect(config.batchSize).toBe(CHUNK_CONFIG.MAX_BATCH_SIZE);
+      // 200000 / 50000 = 4
+      expect(config.batchSize).toBe(4);
       // min(5000, 100000 / 4) = 5000
       expect(config.maxCompletionTokens).toBe(5000);
-      // 100000 * 2 = 200000, but capped at MAX_SUMMARY_LENGTH
+      // 100000 * 2 = 200000, capped at MAX_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MAX_SUMMARY_LENGTH);
     });
 
-    it('should calculate smaller values for a model with limited context', () => {
+    it('should calculate appropriately for a model with limited context', () => {
       const model: OpenAIModel = {
         id: 'small-model',
         name: 'Small Model',
@@ -182,17 +187,19 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // (16000 - 1000) / 10 * 4 = 6000
-      expect(config.chunkSize).toBe(6000);
-      // 16000 / 20000 = 0.8 → 0, clamped to MIN_BATCH_SIZE
+      // maxCompletionTokens = min(5000, 4000/4) = 1000
+      // availableInputTokens = 16000 - 1000 - 300 = 14700
+      // rawChunkSize = 14700 * 4 = 58800 (no longer capped with higher MAX)
+      expect(config.chunkSize).toBe(58800);
+      // 16000 / 50000 = 0.32 → 0, clamped to MIN_BATCH_SIZE
       expect(config.batchSize).toBe(CHUNK_CONFIG.MIN_BATCH_SIZE);
       // min(5000, 4000 / 4) = 1000
       expect(config.maxCompletionTokens).toBe(1000);
-      // 4000 * 2 = 8000, but clamped to MIN_SUMMARY_LENGTH
+      // 4000 * 2 = 8000, clamped to MIN_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MIN_SUMMARY_LENGTH);
     });
 
-    it('should respect minimum bounds for very small context windows', () => {
+    it('should handle very small context windows appropriately', () => {
       const model: OpenAIModel = {
         id: 'tiny-model',
         name: 'Tiny Model',
@@ -202,8 +209,10 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // (4000 - 1000) / 10 * 4 = 1200, clamped to MIN_CHUNK_CHARS
-      expect(config.chunkSize).toBe(CHUNK_CONFIG.MIN_CHUNK_CHARS);
+      // maxCompletionTokens = min(5000, 1000/4) = 250
+      // availableInputTokens = 4000 - 250 - 300 = 3450
+      // rawChunkSize = 3450 * 4 = 13800 (within bounds)
+      expect(config.chunkSize).toBe(13800);
       expect(config.batchSize).toBe(CHUNK_CONFIG.MIN_BATCH_SIZE);
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MIN_SUMMARY_LENGTH);
     });
@@ -218,10 +227,12 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // Large context = max chunk size
+      // maxCompletionTokens = min(5000, 64000/4) = 5000
+      // availableInputTokens = 200000 - 5000 - 300 = 194700
+      // rawChunkSize = 194700 * 4 = 778800, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
-      // 200000 / 20000 = 10
-      expect(config.batchSize).toBe(CHUNK_CONFIG.MAX_BATCH_SIZE);
+      // 200000 / 50000 = 4
+      expect(config.batchSize).toBe(4);
       // min(5000, 64000 / 4) = 5000
       expect(config.maxCompletionTokens).toBe(5000);
       // 64000 * 2 = 128000, capped at MAX_SUMMARY_LENGTH
@@ -238,8 +249,12 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
+      // maxCompletionTokens = min(5000, 32768/4) = 5000
+      // availableInputTokens = 128000 - 5000 - 300 = 122700
+      // rawChunkSize = 122700 * 4 = 490800, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
-      expect(config.batchSize).toBe(6);
+      // 128000 / 50000 = 2.56 → 2, clamped to MIN_BATCH_SIZE
+      expect(config.batchSize).toBe(CHUNK_CONFIG.MIN_BATCH_SIZE);
       expect(config.maxCompletionTokens).toBe(5000);
       // 32768 * 2 = 65536, capped at MAX_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MAX_SUMMARY_LENGTH);
@@ -253,15 +268,15 @@ describe('Document Summary Utilities', () => {
         tokenLimit: 16000,
       };
 
-      // With Latin (4 chars/token), raw chunk = (128000-1000)/10 * 4 = 50800
+      // maxCompletionTokens = 4000, promptOverhead = 300
+      // availableInputTokens = 128000 - 4000 - 300 = 123700
       const latinConfig = calculateChunkConfig(model, TOKEN_ESTIMATION.LATIN);
-
-      // With CJK (1.5 chars/token), raw chunk = (128000-1000)/10 * 1.5 = 19050
-      const cjkConfig = calculateChunkConfig(model, TOKEN_ESTIMATION.CJK);
-
-      // Both hit MAX_CHUNK_CHARS, but CJK should be smaller if we had lower max
+      // rawChunkSize (Latin) = 123700 * 4 = 494800, capped at 400000
       expect(latinConfig.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
-      expect(cjkConfig.chunkSize).toBe(19050);
+
+      const cjkConfig = calculateChunkConfig(model, TOKEN_ESTIMATION.CJK);
+      // rawChunkSize (CJK) = 123700 * 1.5 = 185550 (within bounds)
+      expect(cjkConfig.chunkSize).toBe(185550);
     });
 
     it('should calculate chunk size proportionally with different charsPerToken values', () => {
@@ -272,23 +287,26 @@ describe('Document Summary Utilities', () => {
         tokenLimit: 4000,
       };
 
+      // maxCompletionTokens = 1000, promptOverhead = 300
+      // availableInputTokens = 16000 - 1000 - 300 = 14700
+
       // With Latin (4 chars/token)
       const latinConfig = calculateChunkConfig(model, TOKEN_ESTIMATION.LATIN);
-      // (16000 - 1000) / 10 * 4 = 6000
-      expect(latinConfig.chunkSize).toBe(6000);
+      // 14700 * 4 = 58800
+      expect(latinConfig.chunkSize).toBe(58800);
 
       // With CJK (1.5 chars/token)
       const cjkConfig = calculateChunkConfig(model, TOKEN_ESTIMATION.CJK);
-      // (16000 - 1000) / 10 * 1.5 = 2250, clamped to MIN_CHUNK_CHARS (4000)
-      expect(cjkConfig.chunkSize).toBe(CHUNK_CONFIG.MIN_CHUNK_CHARS);
+      // 14700 * 1.5 = 22050
+      expect(cjkConfig.chunkSize).toBe(22050);
 
       // With RTL/Cyrillic (2.5 chars/token)
       const rtlConfig = calculateChunkConfig(
         model,
         TOKEN_ESTIMATION.RTL_CYRILLIC,
       );
-      // (16000 - 1000) / 10 * 2.5 = 3750, clamped to MIN_CHUNK_CHARS (4000)
-      expect(rtlConfig.chunkSize).toBe(CHUNK_CONFIG.MIN_CHUNK_CHARS);
+      // 14700 * 2.5 = 36750
+      expect(rtlConfig.chunkSize).toBe(36750);
     });
 
     it('should use default charsPerToken when not provided', () => {
@@ -312,14 +330,14 @@ describe('Document Summary Utilities', () => {
   });
 
   describe('splitIntoChunks', () => {
-    it('should split text into default 6000 character chunks', () => {
-      const text = 'A'.repeat(15000);
+    it('should split text into default 50000 character chunks', () => {
+      const text = 'A'.repeat(125000);
       const chunks = splitIntoChunks(text);
 
       expect(chunks).toHaveLength(3);
-      expect(chunks[0]).toHaveLength(6000);
-      expect(chunks[1]).toHaveLength(6000);
-      expect(chunks[2]).toHaveLength(3000);
+      expect(chunks[0]).toHaveLength(50000);
+      expect(chunks[1]).toHaveLength(50000);
+      expect(chunks[2]).toHaveLength(25000);
     });
 
     it('should split text into custom sized chunks', () => {
@@ -342,11 +360,11 @@ describe('Document Summary Utilities', () => {
     });
 
     it('should handle text exactly equal to chunk size', () => {
-      const text = 'C'.repeat(6000);
+      const text = 'C'.repeat(50000);
       const chunks = splitIntoChunks(text);
 
       expect(chunks).toHaveLength(1);
-      expect(chunks[0]).toHaveLength(6000);
+      expect(chunks[0]).toHaveLength(50000);
     });
 
     it('should handle empty string', () => {
