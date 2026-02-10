@@ -1048,7 +1048,8 @@
         "title": "Dukungan Keputusan",
         "prompt": "Bantu membuat keputusan."
       }
-    }
+    },
+    "changeDisplayName": "Klik untuk mengubah nama panggilan Anda"
   },
   "modelSelect": {
     "advancedOptions": {

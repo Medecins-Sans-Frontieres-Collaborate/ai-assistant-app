@@ -20,6 +20,12 @@ export interface ProcessedContent {
     originalContent: string;
   }[];
 
+  /** Inline file content for small files that don't need chunking */
+  inlineFiles?: {
+    filename: string;
+    content: string;
+  }[];
+
   /** Transcripts from audio/video files */
   transcripts?: {
     filename: string;

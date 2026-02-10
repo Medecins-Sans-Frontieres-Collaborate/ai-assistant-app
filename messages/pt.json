@@ -972,7 +972,8 @@
         "title": "Criar cronogramas",
         "prompt": "Preciso de ajuda para organizar tempo e criar cronogramas. Mostre-me diferentes maneiras de estruturar agendas, calendários ou planos baseados em tempo com exemplos."
       }
-    }
+    },
+    "changeDisplayName": "Clique para alterar como tratamos você"
   },
   "modelSelect": {
     "tabs": {

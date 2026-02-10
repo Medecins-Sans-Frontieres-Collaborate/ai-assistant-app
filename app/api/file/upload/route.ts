@@ -119,6 +119,25 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
+    // Early rejection: check Content-Length before consuming the request body.
+    // This is advisory only — the authoritative check runs against actual
+    // buffer length after the body is read, so a spoofed Content-Length
+    // header cannot bypass validation.
+    const contentLength = request.headers.get('content-length');
+    if (contentLength) {
+      const declaredSize = parseInt(contentLength, 10);
+      if (!isNaN(declaredSize)) {
+        const earlyCheck = validateFileSizeRaw(
+          filename,
+          declaredSize,
+          mimeType ?? undefined,
+        );
+        if (!earlyCheck.valid) {
+          return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
+        }
+      }
+    }
+
     // Check Content-Type to determine upload format
     const contentTypeHeader = request.headers.get('content-type') || '';
 

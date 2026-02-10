@@ -56,6 +56,22 @@ export const CONTENT_LIMITS = {
   CHARS_PER_TOKEN_ESTIMATE: 4,
 } as const;
 
+/**
+ * Token estimation ratios for different character scripts.
+ * These values represent approximate characters per token for each script type.
+ * Used for dynamic chunk sizing based on content language.
+ */
+export const TOKEN_ESTIMATION = {
+  /** English and European languages using Latin script */
+  LATIN: 4,
+  /** Chinese, Japanese (Kanji), Korean (Hanja) - very short tokens */
+  CJK: 1.5,
+  /** Arabic, Hebrew, Cyrillic, and other non-Latin scripts */
+  RTL_CYRILLIC: 2.5,
+  /** Fallback for unknown or mixed content - conservative estimate */
+  CONSERVATIVE: 2,
+} as const;
+
 // =============================================================================
 // Display Formatting Utilities
 // =============================================================================
@@ -140,4 +156,42 @@ export const API_TIMEOUTS = {
   FILE_PROCESSING: 120,
   TRANSCRIPTION: 180,
   BATCH_TRANSCRIPTION: 600, // 10 minutes for large audio files (>25MB)
+} as const;
+
+// =============================================================================
+// Document Chunking Configuration
+// =============================================================================
+
+/**
+ * Configuration for dynamic document chunking based on model context window.
+ * These values define bounds for chunk size, batch size, and summary length
+ * that scale with the selected model's capabilities.
+ *
+ * Each chunk is processed individually by `summarizeChunk`, so we can use
+ * nearly the full context window for input (minus output tokens and prompt overhead).
+ */
+export const CHUNK_CONFIG = {
+  // Chunk size bounds (in characters)
+  // MAX allows ~100K tokens for Latin text (4 chars/token)
+  MIN_CHUNK_CHARS: 4000,
+  MAX_CHUNK_CHARS: 400000,
+  DEFAULT_CHUNK_CHARS: 50000,
+
+  // Token overhead for summarization prompts (used in calculateChunkConfig)
+  // System message: ~70 tokens, user wrapper + typical prompt: ~200 tokens
+  SYSTEM_PROMPT_TOKENS: 100,
+  PROMPT_WRAPPER_TOKENS: 200,
+
+  // Batch size bounds (number of chunks processed in parallel)
+  MIN_BATCH_SIZE: 3,
+  MAX_BATCH_SIZE: 10,
+  DEFAULT_BATCH_SIZE: 5,
+
+  // Maximum summary length bounds (in characters)
+  MIN_SUMMARY_LENGTH: 16000,
+  MAX_SUMMARY_LENGTH: 64000,
+  DEFAULT_SUMMARY_LENGTH: 16000,
+
+  // Default max completion tokens for summarization
+  DEFAULT_MAX_COMPLETION_TOKENS: 5000,
 } as const;

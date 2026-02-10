@@ -972,7 +972,8 @@
         "title": "Programlar oluştur",
         "prompt": "Zamanımı organize etmeme ve programlar oluşturmama yardım edin. Gündemler, takvimler veya zaman tabanlı planları yapılandırmanın farklı yollarını örneklerle gösterin."
       }
-    }
+    },
+    "changeDisplayName": "Size nasıl hitap edeceğimizi değiştirmek için tıklayın"
   },
   "modelSelect": {
     "tabs": {

@@ -58,6 +58,7 @@ export default [
         HTMLDivElement: "readonly",
         HTMLSelectElement: "readonly",
         HTMLOptionElement: "readonly",
+        HTMLSpanElement: "readonly",
         HTMLUListElement: "readonly",
         HTMLVideoElement: "readonly",
         HTMLCanvasElement: "readonly",

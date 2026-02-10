@@ -21,7 +21,7 @@ type Components = Record<string, ComponentType<any>>;
 interface CitationStreamdownProps extends Omit<StreamdownProps, 'components'> {
   citations?: Citation[];
   components?: Components;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   mermaid?: {
     config?: any;
   };

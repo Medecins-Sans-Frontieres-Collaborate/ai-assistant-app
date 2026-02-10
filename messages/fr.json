@@ -972,7 +972,8 @@
         "title": "Créer des plannings",
         "prompt": "J'ai besoin d'aide pour organiser le temps et créer des plannings. Montrez-moi différentes façons de structurer des agendas, calendriers ou plans basés sur le temps avec des exemples."
       }
-    }
+    },
+    "changeDisplayName": "Cliquez pour modifier la façon dont nous vous appelons"
   },
   "modelSelect": {
     "tabs": {

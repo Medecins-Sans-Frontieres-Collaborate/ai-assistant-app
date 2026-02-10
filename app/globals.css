@@ -16,6 +16,12 @@
   max-width: none !important;
 }
 
+/* Fix list-inside + <p> inside <li> causing text to drop below bullet marker */
+.prose .list-inside > li > p:first-child,
+.prose-invert .list-inside > li > p:first-child {
+  display: inline;
+}
+
 /* Ensure prose code blocks don't overflow */
 .prose pre,
 .prose-invert pre {

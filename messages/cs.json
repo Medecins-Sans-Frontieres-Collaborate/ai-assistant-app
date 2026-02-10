@@ -972,7 +972,8 @@
         "title": "Vytvořit rozvrhy",
         "prompt": "Potřebuji pomoc s organizací času a vytvářením rozvrhů. Ukažte mi různé způsoby, jak můžete strukturovat agendy, kalendáře nebo časové plány s příklady."
       }
-    }
+    },
+    "changeDisplayName": "Klikněte pro změnu oslovení"
   },
   "modelSelect": {
     "tabs": {

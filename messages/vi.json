@@ -1056,7 +1056,8 @@
         "title": "Lên lịch trình",
         "prompt": "Tôi cần giúp tổ chức thời gian và tạo lịch trình. Hãy cho tôi các ví dụ về cách bạn lên chương trình, lịch hoặc kế hoạch theo thời gian."
       }
-    }
+    },
+    "changeDisplayName": "Nhấn để thay đổi cách chúng tôi xưng hô với bạn"
   },
   "modelSelect": {
     "tabs": {

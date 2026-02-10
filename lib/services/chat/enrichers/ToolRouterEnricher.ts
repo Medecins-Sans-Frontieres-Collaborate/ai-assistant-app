@@ -79,9 +79,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       // Add file summaries
       if (context.processedContent.fileSummaries) {
         const summaries = context.processedContent.fileSummaries
-          .map((f) => `[File: ${f.filename}]\n${f.summary}`)
+          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
           .join('\n\n');
         additionalContext.push(summaries);
+      }
+
+      // Add inline file content
+      if (context.processedContent.inlineFiles) {
+        const inlineText = context.processedContent.inlineFiles
+          .map((f) => `[File: ${f.filename}]\n${f.content}`)
+          .join('\n\n');
+        additionalContext.push(inlineText);
       }
 
       // Add transcripts

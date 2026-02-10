@@ -972,7 +972,8 @@
         "title": "Crear Horarios",
         "prompt": "Necesito ayuda para organizar el tiempo y crear horarios. Muéstrame diferentes formas en que puedes estructurar agendas, calendarios o planes basados en el tiempo con ejemplos."
       }
-    }
+    },
+    "changeDisplayName": "Haz clic para cambiar cómo nos dirigimos a ti"
   },
   "modelSelect": {
     "tabs": {

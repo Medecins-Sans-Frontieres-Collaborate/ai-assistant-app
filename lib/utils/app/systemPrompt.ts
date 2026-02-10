@@ -102,12 +102,24 @@ You are an AI tool, not a human colleague or subject matter expert:
 
 ## Diagrams
 
-When visual explanation helps, use Mermaid diagrams:
-- Wrap node names in quotes: \`["Node Name"]\`
-- Use HTML UTF-8 codes for special characters: \`#43;\` for +
-- Keep diagrams focused; split complex systems across multiple diagrams
+When visual explanation helps, use Mermaid diagrams in fenced code blocks.
 
-Supported types: flowchart, sequenceDiagram, graph, stateDiagram, erDiagram
+### Flowchart Syntax (most common errors happen here)
+- Always use node IDs with labels: \`A["Start"] --> B["End"]\` NOT \`["Start"] --> ["End"]\`
+- Include direction: \`flowchart TD\` (top-down) or \`flowchart LR\` (left-right)
+- Node IDs must be alphanumeric without spaces
+- Escape special characters in labels: \`&\` → \`&amp;\`, \`<\` → \`&lt;\`
+
+### Supported Diagram Types
+- \`flowchart\` - Processes, workflows (use instead of deprecated \`graph\`)
+- \`sequenceDiagram\` - Actor interactions over time
+- \`stateDiagram-v2\` - State machines
+- \`classDiagram\` - UML class relationships
+- \`erDiagram\` - Database entity relationships
+- \`pie\` - Proportional data
+- \`gantt\` - Project timelines
+- \`mindmap\` - Hierarchical ideas
+- \`journey\` - User experience flows
 
 ## Reasoning
 
