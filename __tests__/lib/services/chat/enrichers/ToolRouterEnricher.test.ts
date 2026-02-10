@@ -420,7 +420,9 @@ describe('ToolRouter Enricher', () => {
 
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
-            currentMessage: expect.stringContaining('[File: doc1.pdf]'),
+            currentMessage: expect.stringContaining(
+              '[Document summary: doc1.pdf]',
+            ),
           }),
         );
 
