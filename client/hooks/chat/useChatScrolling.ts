@@ -168,9 +168,9 @@ export function useChatScrolling({
     }
   }, [isActive]);
 
-  // Smooth auto-scroll during streaming - stops when streaming ends
+  // Smooth auto-scroll during streaming/drain - stops when both end
   useEffect(() => {
-    if (!isStreaming || !shouldAutoScrollRef.current) {
+    if (!isActive || !shouldAutoScrollRef.current) {
       return;
     }
 
@@ -179,7 +179,7 @@ export function useChatScrolling({
 
     const smoothScroll = () => {
       const container = chatContainerRef.current;
-      if (!container || !shouldAutoScrollRef.current || !isStreaming) return;
+      if (!container || !shouldAutoScrollRef.current || !isActive) return;
 
       const targetScroll = container.scrollHeight - container.clientHeight;
       const currentScroll = container.scrollTop;
@@ -206,11 +206,11 @@ export function useChatScrolling({
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [isStreaming]);
+  }, [isActive]);
 
-  // Restore scroll position after streaming ends - use layoutEffect to prevent flash
+  // Restore scroll position after streaming/drain ends - use layoutEffect to prevent flash
   useLayoutEffect(() => {
-    if (isStreaming) return;
+    if (isActive) return;
 
     const container = chatContainerRef.current;
     if (!container) return;
@@ -222,11 +222,11 @@ export function useChatScrolling({
       // User scrolled away — restore their position
       container.scrollTop = scrollPositionBeforeStreamEndRef.current;
     }
-  }, [isStreaming, messageCount, streamingContent]);
+  }, [isActive, messageCount, streamingContent]);
 
   // Additional restore after paint to catch any async updates
   useEffect(() => {
-    if (isStreaming) return;
+    if (isActive) return;
 
     const container = chatContainerRef.current;
     if (!container) return;
@@ -245,7 +245,7 @@ export function useChatScrolling({
         container.scrollTop = scrollPositionBeforeStreamEndRef.current;
       }
     });
-  }, [isStreaming, messageCount]);
+  }, [isActive, messageCount]);
 
   // Handle scroll detection for scroll-down button
   useEffect(() => {
