@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useSmoothStreaming } from '@/client/hooks/chat/useSmoothStreaming';
+
 import {
   entryToDisplayMessage,
   getVersionInfo,
@@ -95,6 +97,12 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
 }) => {
   const t = useTranslations();
 
+  const smoothedContent = useSmoothStreaming({
+    isStreaming,
+    content: streamingContent ?? '',
+    enabled: isStreaming,
+  });
+
   return (
     <>
       {messages.map((entry, index) => {
@@ -153,11 +161,11 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
       {/* Streaming message or loading indicator */}
       {isStreaming && streamingConversationId === selectedConversationId && (
         <>
-          {streamingContent ? (
+          {smoothedContent ? (
             <MemoizedChatMessage
               message={{
                 role: 'assistant',
-                content: streamingContent,
+                content: smoothedContent,
                 messageType: MessageType.TEXT,
                 citations,
               }}
