@@ -164,7 +164,6 @@ export class StandardChatService {
         request.user,
         request.transcript,
         request.citations,
-        request.streamingSpeed,
       );
     }
 
@@ -214,7 +213,6 @@ export class StandardChatService {
         request.transcript, // transcript metadata
         request.citations, // web search citations
         request.pendingTranscriptions, // async batch transcription jobs
-        request.streamingSpeed, // smooth streaming speed configuration
       );
 
       console.log(
@@ -249,7 +247,6 @@ export class StandardChatService {
     user: Session['user'],
     transcript?: TranscriptMetadata,
     citations?: Citation[],
-    streamingSpeed?: StreamingSpeedConfig,
   ): Promise<Response> {
     // Validate Anthropic client is configured
     if (!this.anthropicFoundryClient) {
@@ -293,7 +290,6 @@ export class StandardChatService {
         undefined, // stopConversationRef
         transcript,
         citations,
-        streamingSpeed,
       );
 
       return new Response(processedStream, {
