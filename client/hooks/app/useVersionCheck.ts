@@ -14,10 +14,11 @@ interface VersionCheckResult {
 
 export function useVersionCheck(): VersionCheckResult {
   const [serverBuild, setServerBuild] = useState<string | null>(null);
-  const [dismissedAt, setDismissedAt] = useState<number | null>(null);
+  const [isDismissed, setIsDismissed] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const initialDelayRef = useRef<NodeJS.Timeout | null>(null);
   const refocusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dismissTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const isLocalDev = CLIENT_BUILD === 'unknown';
 
@@ -62,12 +63,19 @@ export function useVersionCheck(): VersionCheckResult {
       if (initialDelayRef.current) clearTimeout(initialDelayRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (refocusTimeoutRef.current) clearTimeout(refocusTimeoutRef.current);
+      if (dismissTimeoutRef.current) clearTimeout(dismissTimeoutRef.current);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [isLocalDev, checkVersion]);
 
   const dismiss = useCallback(() => {
-    setDismissedAt(Date.now());
+    setIsDismissed(true);
+
+    // Auto-clear dismiss after cooldown so banner re-appears
+    if (dismissTimeoutRef.current) clearTimeout(dismissTimeoutRef.current);
+    dismissTimeoutRef.current = setTimeout(() => {
+      setIsDismissed(false);
+    }, DISMISS_COOLDOWN_MS);
   }, []);
 
   // Determine if update banner should show
@@ -77,10 +85,7 @@ export function useVersionCheck(): VersionCheckResult {
     serverBuild !== 'unknown' &&
     serverBuild !== CLIENT_BUILD;
 
-  const isDismissActive =
-    dismissedAt !== null && Date.now() - dismissedAt < DISMISS_COOLDOWN_MS;
-
-  const isUpdateAvailable = isMismatch && !isDismissActive;
+  const isUpdateAvailable = isMismatch && !isDismissed;
 
   return { isUpdateAvailable, dismiss };
 }
