@@ -432,10 +432,10 @@ export class StandardChatHandler extends BasePipelineStage {
           }
         });
 
-        // Add file summaries
+        // Add file summaries (extracted content from large files)
         if (fileSummaries && fileSummaries.length > 0) {
           const summaryText = fileSummaries
-            .map((f) => `[File: ${f.filename}]\n${f.summary}`)
+            .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
             .join('\n\n');
           textParts.push(summaryText);
         }
