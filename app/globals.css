@@ -116,6 +116,23 @@ pre {
   overflow-x: auto;
 }
 
+/* Monaco editor container constraints */
+.monaco-editor,
+.monaco-editor .overflow-guard {
+  max-width: 100% !important;
+}
+
+/* Ensure Streamdown code blocks respect container bounds */
+[data-streamdown="code-block"] {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+[data-streamdown="code-block-body"] {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 @media (max-width: 720px) {
   pre {
     width: calc(100vw - 110px);
@@ -320,7 +337,16 @@ select {
   color: #f3f4f6;
 }
 
-/* Removed custom code/pre styling - let Streamdown handle it with Shiki */
+/* Shiki dual theme support - Streamdown uses Tailwind v4 syntax that doesn't work in v3 */
+/* This CSS applies the --shiki-dark variables that Shiki sets inline */
+.dark [data-streamdown="code-block-body"] span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+.dark [data-streamdown="code-block-body"] {
+  background-color: var(--shiki-dark-bg) !important;
+}
 
 .dark .prose blockquote,
 .dark .prose-invert blockquote {

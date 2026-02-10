@@ -218,21 +218,43 @@ The frontend automatically shows source information. Just cite inline and end yo
 
       console.log('Reformulating query with conversation context');
 
+      // Get current date for temporal reference conversion
+      const now = new Date();
+      const currentMonth = now.toLocaleString('en-US', { month: 'long' });
+      const currentYear = now.getFullYear();
+      const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const lastMonthName = lastMonth.toLocaleString('en-US', {
+        month: 'long',
+      });
+      const lastMonthYear = lastMonth.getFullYear();
+
       // Azure-optimized system prompt
-      const systemPrompt = `You are a search query optimizer for Azure AI Search.
+      const systemPrompt = `You are a search query optimizer for Azure AI Search. Today is ${currentMonth} ${now.getDate()}, ${currentYear}.
 
         Your task is to create concise, effective search queries that:
-        1. Prioritize recent information by default when appropriate (using terms like "latest," "recent," "this week," "today")
-        2. Respect the original intent when the query is about historical events
-        3. Include key entities and concepts from the original query and conversation context
-        4. Work effectively with Azure AI Search semantic ranking
+        1. CONVERT temporal references to ACTUAL dates/months (this is critical for vector search)
+        2. Include key entities and concepts from the original query
+        3. Work effectively with Azure AI Search semantic ranking
+
+        CRITICAL - TEMPORAL CONVERSION RULES:
+        - "this week" / "recent" / "latest" / "current" → "${currentMonth} ${currentYear}"
+        - "last week" / "last month" → "${lastMonthName} ${lastMonthYear}" or "${currentMonth} ${currentYear}"
+        - "today" / "now" → "${currentMonth} ${now.getDate()} ${currentYear}"
+        - "this year" → "${currentYear}"
+        - Keep historical queries unchanged (e.g., "2023 earthquake" stays as-is)
 
         GUIDELINES FOR AZURE AI SEARCH:
         - Keep queries CONCISE (under 20 words)
         - Focus on CORE CONCEPTS and ENTITIES
         - Use NATURAL LANGUAGE phrasing
-        - Include 1-2 temporal terms at most when prioritizing recency
+        - ALWAYS include the actual month/year when recency is implied
         - Avoid complex boolean operators or syntax
+
+        EXAMPLES:
+        - "what did MSF say about Pakistan this week" → "MSF Pakistan ${currentMonth} ${currentYear}"
+        - "latest news on Gaza" → "Gaza humanitarian crisis ${currentMonth} ${currentYear}"
+        - "recent updates Sudan" → "Sudan ${currentMonth} ${currentYear} updates"
+        - "MSF response to 2023 earthquake" → "MSF 2023 earthquake response" (historical, no change)
 
         Return ONLY the reformulated search query with no additional text.`;
 
@@ -286,18 +308,8 @@ The frontend automatically shows source information. Just cite inline and end yo
       const agent = getOrganizationAgentById(agentId);
       if (!agent) throw new Error(`Organization agent ${agentId} not found`);
 
-      // Use query reformulation for follow-up questions
-      const isFollowUpQuestion =
-        messages.filter((m) => m.role === 'user').length > 1;
-      let query;
-
-      if (isFollowUpQuestion) {
-        // Reformulate the query for better context in follow-up questions
-        query = await this.reformulateQuery(messages);
-      } else {
-        // Use the original query for the first question
-        query = this.extractQuery(messages);
-      }
+      // Always reformulate queries to handle temporal references and improve search
+      const query = await this.reformulateQuery(messages);
 
       // Get ragConfig from agent (if available)
       const ragConfig = agent.ragConfig || {};
@@ -308,11 +320,15 @@ The frontend automatically shows source information. Just cite inline and end yo
         ragConfig.semanticConfig ||
         `${this.searchIndex}-semantic-configuration`;
 
+      // Fetch slightly more than topK to allow for deduplication
+      // Azure's BoostedRerankerScore already applies freshness boost from dateScore profile
+      const fetchCount = Math.min(topK * 2, 20);
+
       // Perform hybrid search: vector + semantic with reranking
-      // Fetch more results (30) to allow for quality filtering and deduplication
+      // Azure applies dateScore freshness boost via BoostedRerankerScore
       const searchResults = await this.searchClient.search(query, {
         select: ['chunk', 'title', 'date', 'url', 'chunk_id'],
-        top: 30,
+        top: fetchCount,
         queryType: 'semantic',
         semanticSearchOptions: {
           configurationName: semanticConfig,
@@ -325,52 +341,24 @@ The frontend automatically shows source information. Just cite inline and end yo
               kind: 'text',
               text: query,
               fields: ['text_vector'] as any,
-              kNearestNeighborsCount: 30,
+              kNearestNeighborsCount: fetchCount,
             },
           ],
         },
       });
 
-      const allDocs: Array<{
-        doc: SearchResult;
-        rerankerScore: number;
-        combinedScore: number;
-      }> = [];
+      const allDocs: SearchResult[] = [];
 
-      const TWO_YEARS_AGO = new Date();
-      TWO_YEARS_AGO.setFullYear(TWO_YEARS_AGO.getFullYear() - 2);
-      const NOW = Date.now();
-      const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
-
-      // Collect all results from semantic search with scores
+      // Collect results - Azure already returns them in boosted order
       for await (const result of searchResults.results) {
         const doc = result.document;
-        const docDate = new Date(doc.date);
         const rerankerScore = result.rerankerScore ?? 0;
 
-        // Filter out very old documents with low reranker scores
-        if (docDate < TWO_YEARS_AGO && rerankerScore < 2.0) {
-          console.log(
-            `[RAGService] Filtering old low-relevance doc: ${doc.title} (date: ${doc.date}, rerankerScore: ${rerankerScore})`,
-          );
-          continue;
-        }
-
-        // Calculate recency boost (0-1 scale, 1 = today, 0 = 1+ year old)
-        const ageMs = NOW - docDate.getTime();
-        const recencyScore = Math.max(0, 1 - ageMs / ONE_YEAR_MS);
-
-        // Combined score: 70% semantic relevance + 30% recency
-        // Normalize rerankerScore (typically 0-4) to 0-1 scale
-        const normalizedRerankerScore = Math.min(rerankerScore / 4, 1);
-        const combinedScore =
-          normalizedRerankerScore * 0.7 + recencyScore * 0.3;
-
         console.log(
-          `[RAGService] Result: ${doc.title} (date: ${doc.date}, rerankerScore: ${rerankerScore.toFixed(2)}, combinedScore: ${combinedScore.toFixed(2)})`,
+          `[RAGService] Result: ${doc.title} (date: ${doc.date}, rerankerScore: ${rerankerScore.toFixed(2)})`,
         );
 
-        allDocs.push({ doc, rerankerScore, combinedScore });
+        allDocs.push(doc);
       }
 
       // Deduplicate by chunk_id and limit chunks per article for source diversity
@@ -378,33 +366,28 @@ The frontend automatically shows source information. Just cite inline and end yo
       const chunksPerUrl = new Map<string, number>();
       const MAX_CHUNKS_PER_ARTICLE = 2; // Ensure diverse sources
 
-      const deduplicatedDocs = allDocs.filter(({ doc }) => {
+      const searchDocs: SearchResult[] = [];
+      for (const doc of allDocs) {
+        if (searchDocs.length >= topK) break;
+
         const chunkId = doc.chunk_id || '';
         const url = doc.url || '';
 
         // Skip duplicate chunks
         if (chunkId && seenChunkIds.has(chunkId)) {
-          return false;
+          continue;
         }
 
         // Limit chunks per article to ensure source diversity
         const currentCount = chunksPerUrl.get(url) || 0;
         if (currentCount >= MAX_CHUNKS_PER_ARTICLE) {
-          return false;
+          continue;
         }
 
         if (chunkId) seenChunkIds.add(chunkId);
         chunksPerUrl.set(url, currentCount + 1);
-        return true;
-      });
-
-      // Sort by combined score (relevance + recency)
-      const sortedDocs = deduplicatedDocs.sort(
-        (a, b) => b.combinedScore - a.combinedScore,
-      );
-
-      // Take top results based on agent config
-      const searchDocs = sortedDocs.slice(0, topK).map((item) => item.doc);
+        searchDocs.push(doc);
+      }
 
       // Calculate date range from final results
       let newestDate: Date | null = null;
@@ -424,7 +407,7 @@ The frontend automatically shows source information. Just cite inline and end yo
       };
 
       console.log(
-        `[RAGService] After filtering and deduplication: ${allDocs.length} -> ${deduplicatedDocs.length} -> ${searchDocs.length} results`,
+        `[RAGService] After deduplication: ${allDocs.length} -> ${searchDocs.length} results`,
       );
 
       // Log successful search

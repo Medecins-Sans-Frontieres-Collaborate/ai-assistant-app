@@ -30,13 +30,20 @@ async function main() {
     allowIndexDowntime: allowDowntime,
     openaiEndpoint: process.env.AZURE_OPENAI_ENDPOINT || '',
     openaiApiKey: process.env.OPENAI_API_KEY || '',
+    searchApiKey: process.env.SEARCH_API_KEY || '',
     openaiEmbeddingDeployment:
       process.env.OPENAI_EMBEDDING_DEPLOYMENT || 'text-embedding-3-small',
   };
 
   // Validate required config
   const missingVars = Object.entries(config)
-    .filter(([key, value]) => !value && key !== 'allowIndexDowntime')
+    .filter(
+      ([key, value]) =>
+        !value &&
+        key !== 'allowIndexDowntime' &&
+        key !== 'openaiApiKey' &&
+        key !== 'searchApiKey',
+    )
     .map(([key, _]) => key);
 
   if (missingVars.length > 0) {
@@ -56,7 +63,10 @@ async function main() {
 
 // Run if executed directly
 if (require.main === module) {
-  main().catch(console.error);
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 }
 
 export { configureSearch };

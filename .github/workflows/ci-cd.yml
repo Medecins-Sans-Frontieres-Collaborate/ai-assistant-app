@@ -13,10 +13,6 @@ on:
   # Trigger for Live deployment (manual)
   workflow_dispatch:
     inputs:
-      image_tag:
-        description: 'Image tag to deploy to Live (must exist in ACR)'
-        required: true
-        type: string
       environment:
         description: 'Target environment'
         required: true
@@ -24,6 +20,11 @@ on:
         options:
           - live
           - beta
+      image_tag:
+        description: 'Image tag to deploy (defaults to latest)'
+        required: false
+        type: string
+        default: 'latest'
 
 permissions:
   id-token: write
@@ -227,7 +228,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
+          tags: |
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:latest
           build-args: |
             BUILD=${{ github.run_number }}
           cache-from: type=gha
@@ -240,7 +243,7 @@ jobs:
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
 
-  # JOB 4: Manual deployment to LIVE or BETA
+  # JOB 4: Manual deployment to Live (or Beta) via workflow_dispatch
   deploy_manual:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

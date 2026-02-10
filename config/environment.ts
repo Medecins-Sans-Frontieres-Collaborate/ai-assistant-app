@@ -9,7 +9,14 @@ import { z } from 'zod';
 /**
  * Environment enum
  */
-const EnvironmentEnum = z.enum(['localhost', 'dev', 'staging', 'beta', 'prod']);
+const EnvironmentEnum = z.enum([
+  'localhost',
+  'dev',
+  'staging',
+  'beta',
+  'live',
+  'prod',
+]);
 
 /**
  * Server-side environment schema (includes secrets)
@@ -81,7 +88,7 @@ const serverEnvSchema = z.object({
   // Azure Monitor Log Ingestion
   LOGS_INJESTION_ENDPOINT: z.string().url().optional(),
   DATA_COLLECTION_RULE_ID: z.string().optional(),
-  STREAM_NAME: z.string().default('Custom-ChatBotLogs_CL'),
+  STREAM_NAME: z.string().default('Custom-aiplatform_CL'),
 
   // LaunchDarkly
   LAUNCHDARKLY_SDK_KEY: z.string().optional(),
@@ -169,7 +176,8 @@ export type Environment = z.infer<typeof EnvironmentEnum>;
 /**
  * Helper functions
  */
-export const isProduction = () => env.NEXT_PUBLIC_ENV === 'prod';
+export const isProduction = () =>
+  env.NEXT_PUBLIC_ENV === 'prod' || env.NEXT_PUBLIC_ENV === 'live';
 export const isDevelopment = () =>
   env.NEXT_PUBLIC_ENV === 'localhost' || env.NEXT_PUBLIC_ENV === 'dev';
 export const isStaging = () => env.NEXT_PUBLIC_ENV === 'staging';

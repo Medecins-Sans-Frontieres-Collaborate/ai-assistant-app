@@ -143,14 +143,11 @@ export const VALIDATION_LIMITS = {
 } as const;
 
 // Default model for AI analysis operations (tone analysis, prompt revision, etc.)
-// Uses 'gpt-5' - reasoning model with advanced analysis capabilities
-export const DEFAULT_ANALYSIS_MODEL = 'gpt-5';
+// Must match an Azure AI Foundry deployment name
+export const DEFAULT_ANALYSIS_MODEL = 'gpt-5.2';
 
 // Default max tokens for AI analysis operations
 export const DEFAULT_ANALYSIS_MAX_TOKENS = 100000;
-
-// Note: GPT-5 is a reasoning model and does not support custom temperature
-// Temperature is automatically set to 1 by the model
 
 // API route timeouts (in seconds)
 export const API_TIMEOUTS = {

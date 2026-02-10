@@ -63,7 +63,7 @@ export default function CodeEditor({ theme = 'light' }: CodeEditorProps) {
   const showPlaceholder = !modifiedCode;
 
   return (
-    <div className="h-full w-full flex flex-col relative">
+    <div className="h-full w-full flex flex-col relative overflow-hidden min-w-0">
       {showPlaceholder && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
           <div className="text-center text-neutral-400 dark:text-neutral-500">
@@ -75,44 +75,49 @@ export default function CodeEditor({ theme = 'light' }: CodeEditorProps) {
         </div>
       )}
 
-      <Editor
-        height="100%"
-        width="100%"
-        defaultLanguage={language}
-        defaultValue={modifiedCode || t('artifact.codeEditor.startCoding')}
-        theme={monacoTheme}
-        onMount={handleEditorDidMount}
-        onChange={(value) => {
-          if (value !== undefined) {
-            setModifiedCode(value);
-          }
-        }}
-        loading={
-          <div className="flex items-center justify-center h-full w-full bg-white dark:bg-neutral-900">
-            <IconLoader2
-              size={24}
-              className="animate-spin text-neutral-900 dark:text-neutral-100"
-            />
-          </div>
-        }
-        options={{
-          minimap: { enabled: false },
-          fontSize: 14,
-          lineNumbers: 'on',
-          scrollBeyondLastLine: false,
-          wordWrap: 'on',
-          automaticLayout: true,
-          tabSize: 2,
-          insertSpaces: true,
-          formatOnPaste: true,
-          formatOnType: true,
-          suggestOnTriggerCharacters: true,
-          quickSuggestions: true,
-          folding: true,
-          foldingStrategy: 'indentation',
-          showFoldingControls: 'always',
-        }}
-      />
+      {/* Wrapper to contain Monaco and prevent ResizeObserver loops */}
+      <div className="flex-1 relative min-h-0">
+        <div className="absolute inset-0">
+          <Editor
+            height="100%"
+            width="100%"
+            defaultLanguage={language}
+            defaultValue={modifiedCode || t('artifact.codeEditor.startCoding')}
+            theme={monacoTheme}
+            onMount={handleEditorDidMount}
+            onChange={(value) => {
+              if (value !== undefined) {
+                setModifiedCode(value);
+              }
+            }}
+            loading={
+              <div className="flex items-center justify-center h-full w-full bg-white dark:bg-neutral-900">
+                <IconLoader2
+                  size={24}
+                  className="animate-spin text-neutral-900 dark:text-neutral-100"
+                />
+              </div>
+            }
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineNumbers: 'on',
+              scrollBeyondLastLine: false,
+              wordWrap: 'on',
+              automaticLayout: true,
+              tabSize: 2,
+              insertSpaces: true,
+              formatOnPaste: true,
+              formatOnType: true,
+              suggestOnTriggerCharacters: true,
+              quickSuggestions: true,
+              folding: true,
+              foldingStrategy: 'indentation',
+              showFoldingControls: 'always',
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
