@@ -361,7 +361,15 @@ export async function parseAndQueryFileOpenAI({
     combinedSummary.length,
   );
 
-  const finalPrompt: string = `${combinedSummary}\n\nUser prompt: ${prompt}`;
+  // When non-streaming (pipeline mode), produce a content summary for the main LLM
+  // to process with the user's query. When streaming, produce a direct response.
+  const finalPrompt: string = stream
+    ? `${combinedSummary}\n\nUser prompt: ${prompt}`
+    : `${combinedSummary}\n\nThe user's query is: "${prompt}"\n\nProduce a comprehensive summary of the document content that is relevant to the user's query. Include key details, data, and context. Do NOT answer the query directly — just extract and organize the relevant content.`;
+
+  const systemPrompt = stream
+    ? 'You are a document analyzer AI Assistant. You perform all tasks the user requests of you, careful to make sure you are responding to the spirit and intentions behind their request. You make it clear how your responses relate to the base text that you are processing and provide your responses in markdown format when special formatting is necessary.'
+    : "You are a document content extractor. Your job is to produce a clear, comprehensive summary of document content relevant to the user's query. Preserve key details, numbers, names, and structure. Do NOT answer the user's query — the summary you produce will be passed to another AI that will answer it.";
 
   // Build user message content - include images if present
   const userMessageContent:
@@ -388,8 +396,7 @@ export async function parseAndQueryFileOpenAI({
     messages: [
       {
         role: 'system',
-        content:
-          'You are a document analyzer AI Assistant. You perform all tasks the user requests of you, careful to make sure you are responding to the spirit and intentions behind their request. You make it clear how your responses relate to the base text that you are processing and provide your responses in markdown format when special formatting is necessary.',
+        content: systemPrompt,
       },
       {
         role: 'user',
