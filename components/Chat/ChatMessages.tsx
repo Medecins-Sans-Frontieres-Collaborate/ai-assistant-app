@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useSmoothStreaming } from '@/client/hooks/chat/useSmoothStreaming';
-
 import {
   entryToDisplayMessage,
   getVersionInfo,
@@ -61,7 +59,8 @@ interface ChatMessagesProps {
   isStreaming: boolean;
   streamingConversationId?: string | null;
   selectedConversationId?: string;
-  streamingContent?: string;
+  smoothedContent: string;
+  isDraining: boolean;
   citations?: Citation[];
   loadingMessage?: string | null;
   transcriptionStatus: string | null;
@@ -83,7 +82,8 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   isStreaming,
   streamingConversationId,
   selectedConversationId,
-  streamingContent,
+  smoothedContent,
+  isDraining,
   citations,
   loadingMessage,
   transcriptionStatus,
@@ -96,12 +96,6 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   onNavigateVersion,
 }) => {
   const t = useTranslations();
-
-  const { content: smoothedContent, isDraining } = useSmoothStreaming({
-    isStreaming,
-    content: streamingContent ?? '',
-    enabled: isStreaming,
-  });
 
   const showStreamingDiv =
     (isStreaming && streamingConversationId === selectedConversationId) ||
