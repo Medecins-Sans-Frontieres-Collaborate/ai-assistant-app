@@ -2,12 +2,39 @@ import { CHUNK_CONFIG, TOKEN_ESTIMATION } from '@/lib/utils/app/const';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
+  parseAndQueryFileOpenAI,
   splitIntoChunks,
 } from '@/lib/utils/app/stream/documentSummary';
 
 import { OpenAIModel } from '@/types/openai';
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+// Mock external dependencies for parseAndQueryFileOpenAI tests
+const mockLoadDocument = vi.fn();
+vi.mock('@/lib/utils/server/file/fileHandling', () => ({
+  loadDocument: (...args: any[]) => mockLoadDocument(...args),
+}));
+
+const mockCreate = vi.fn();
+vi.mock('@azure/identity', () => ({
+  DefaultAzureCredential: vi.fn(),
+  getBearerTokenProvider: vi.fn().mockReturnValue(vi.fn()),
+}));
+
+vi.mock('openai', () => {
+  class MockAzureOpenAI {
+    chat = {
+      completions: {
+        create: (...args: any[]) => mockCreate(...args),
+      },
+    };
+  }
+  return {
+    default: MockAzureOpenAI,
+    AzureOpenAI: MockAzureOpenAI,
+  };
+});
 
 describe('Document Summary Utilities', () => {
   describe('estimateCharsPerToken', () => {
@@ -442,6 +469,52 @@ describe('Document Summary Utilities', () => {
 
       expect(chunks).toHaveLength(1);
       expect(chunks[0]).toBe(text);
+    });
+  });
+
+  describe('parseAndQueryFileOpenAI preExtractedText', () => {
+    const mockUser = { id: 'test-user', name: 'Test' };
+    const mockFile = new File(['content'], 'test.txt');
+
+    it('should skip loadDocument when preExtractedText is provided', async () => {
+      mockLoadDocument.mockResolvedValue('should not be called');
+
+      // Mock the summarize chunk + final completion calls
+      // First call: chunk summary, Second call: final response
+      mockCreate.mockResolvedValue({
+        choices: [{ message: { content: 'mocked response' } }],
+      });
+
+      await parseAndQueryFileOpenAI({
+        file: mockFile,
+        prompt: 'test prompt',
+        modelId: 'gpt-4.1',
+        user: mockUser as any,
+        stream: false,
+        preExtractedText: 'pre-extracted content here',
+      });
+
+      // loadDocument should NOT be called since preExtractedText was provided
+      expect(mockLoadDocument).not.toHaveBeenCalled();
+    });
+
+    it('should call loadDocument when preExtractedText is not provided', async () => {
+      mockLoadDocument.mockResolvedValue('loaded from file');
+
+      mockCreate.mockResolvedValue({
+        choices: [{ message: { content: 'mocked response' } }],
+      });
+
+      await parseAndQueryFileOpenAI({
+        file: mockFile,
+        prompt: 'test prompt',
+        modelId: 'gpt-4.1',
+        user: mockUser as any,
+        stream: false,
+      });
+
+      // loadDocument SHOULD be called since no preExtractedText
+      expect(mockLoadDocument).toHaveBeenCalledWith(mockFile);
     });
   });
 });
