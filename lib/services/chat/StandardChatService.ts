@@ -19,8 +19,10 @@ import { ModelSelector, StreamingService, ToneService } from '../shared';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
 
+import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
 import OpenAI, { AzureOpenAI } from 'openai';
+import { performance } from 'perf_hooks';
 
 /**
  * Streaming speed configuration for smooth text output.
@@ -95,17 +97,26 @@ export class StandardChatService {
    */
   public async handleChat(request: StandardChatRequest): Promise<Response> {
     const startTime = Date.now();
+    const perfStart = performance.now();
 
     // Select appropriate model (may upgrade for images, validate, etc.)
+    const perfModelStart = performance.now();
     const { modelId, modelConfig } = this.modelSelector.selectModel(
       request.model,
       request.messages,
     );
+    console.log(
+      `[Perf] StandardChatService.selectModel: ${(performance.now() - perfModelStart).toFixed(1)}ms → ${sanitizeForLog(modelId)}`,
+    );
 
     // Apply tone to system prompt if specified
+    const perfToneStart = performance.now();
     const enhancedPrompt = this.toneService.applyTone(
       request.tone,
       request.systemPrompt,
+    );
+    console.log(
+      `[Perf] StandardChatService.applyTone: ${(performance.now() - perfToneStart).toFixed(1)}ms`,
     );
     if (request.tone) {
       console.log('[StandardChatService] Applied tone:', request.tone.name);
@@ -127,6 +138,7 @@ export class StandardChatService {
 
     // Prepare messages with token limit filtering
     // Use cached Tiktoken instance for better performance
+    const perfMsgStart = performance.now();
     const encoding = await getGlobalTiktoken();
     const promptTokens = encoding.encode(enhancedPrompt);
     const messagesToSend = await getMessagesToSend(
@@ -135,6 +147,9 @@ export class StandardChatService {
       promptTokens.length,
       modelConfig.tokenLimit,
       request.user,
+    );
+    console.log(
+      `[Perf] StandardChatService.prepareMessages: ${(performance.now() - perfMsgStart).toFixed(1)}ms (${messagesToSend.length} messages)`,
     );
     // Don't free() - encoding is shared across requests
 
@@ -184,7 +199,11 @@ export class StandardChatService {
     );
 
     // Execute request
+    const perfExecStart = performance.now();
     const response = await handler.executeRequest(requestParams, stream);
+    console.log(
+      `[Perf] StandardChatService.executeRequest: ${(performance.now() - perfExecStart).toFixed(1)}ms`,
+    );
 
     // Return appropriate response format
     if (stream) {
@@ -198,16 +217,18 @@ export class StandardChatService {
         request.streamingSpeed, // smooth streaming speed configuration
       );
 
+      console.log(
+        `[Perf] StandardChatService.handleChat total: ${(performance.now() - perfStart).toFixed(1)}ms (stream)`,
+      );
       return new Response(processedStream, {
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
-        },
+        headers: STREAMING_RESPONSE_HEADERS,
       });
     } else {
       const completion = response as OpenAI.Chat.Completions.ChatCompletion;
 
+      console.log(
+        `[Perf] StandardChatService.handleChat total: ${(performance.now() - perfStart).toFixed(1)}ms (non-stream)`,
+      );
       return new Response(
         JSON.stringify({ text: completion.choices[0]?.message?.content }),
         { headers: { 'Content-Type': 'application/json' } },
@@ -276,11 +297,7 @@ export class StandardChatService {
       );
 
       return new Response(processedStream, {
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
-        },
+        headers: STREAMING_RESPONSE_HEADERS,
       });
     } else {
       // Build non-streaming request parameters
