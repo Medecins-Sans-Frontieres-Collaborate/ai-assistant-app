@@ -27,6 +27,7 @@ import { InputValidator } from '../validators/InputValidator';
 import { isAudioVideoFile } from '@/lib/constants/fileTypes';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import fs from 'fs';
+import { performance } from 'perf_hooks';
 
 // Note: Synchronous polling was removed in favor of async client-side polling.
 // Batch transcription jobs are now submitted and returned immediately with pending state.
@@ -75,6 +76,7 @@ export class FileProcessor extends BasePipelineStage {
       },
       async (span) => {
         try {
+          const perfStart = performance.now();
           const lastMessage = context.messages[context.messages.length - 1];
 
           if (!Array.isArray(lastMessage.content)) {
@@ -134,6 +136,7 @@ export class FileProcessor extends BasePipelineStage {
 
           // STEP 1: Validate all file sizes in parallel (I/O bound)
           console.log(`[FileProcessor] Validating file sizes...`);
+          const perfValidateStart = performance.now();
           await Promise.all(
             files.map((file) =>
               this.inputValidator.validateFileSize(
@@ -143,6 +146,9 @@ export class FileProcessor extends BasePipelineStage {
                   this.fileProcessingService.getFileSize(url, user),
               ),
             ),
+          );
+          console.log(
+            `[Perf] FileProcessor.validateFileSizes: ${(performance.now() - perfValidateStart).toFixed(1)}ms`,
           );
 
           // STEP 2: Download all files in parallel (I/O bound)
@@ -167,18 +173,26 @@ export class FileProcessor extends BasePipelineStage {
               );
 
               // Download file
+              const perfDownloadStart = performance.now();
               await this.fileProcessingService.downloadFile(
                 file.url,
                 filePath,
                 context.user,
               );
               console.log(
+                `[Perf] FileProcessor.downloadFile "${sanitizeForLog(filename)}": ${(performance.now() - perfDownloadStart).toFixed(1)}ms`,
+              );
+              console.log(
                 `[FileProcessor] Downloaded: ${sanitizeForLog(filename)}`,
               );
 
               // Read file into buffer
+              const perfReadStart = performance.now();
               const fileBuffer =
                 await this.fileProcessingService.readFile(filePath);
+              console.log(
+                `[Perf] FileProcessor.readFile "${sanitizeForLog(filename)}": ${(performance.now() - perfReadStart).toFixed(1)}ms`,
+              );
 
               return {
                 file,
@@ -447,7 +461,11 @@ export class FileProcessor extends BasePipelineStage {
                 );
 
                 // Extract text first to determine if small-file inline path applies
+                const perfLoadDocStart = performance.now();
                 const text = await loadDocument(docFile);
+                console.log(
+                  `[Perf] FileProcessor.loadDocument "${sanitizeForLog(filename)}": ${(performance.now() - perfLoadDocStart).toFixed(1)}ms`,
+                );
 
                 // Calculate chunk threshold for this model/content
                 const modelConfig =
@@ -473,6 +491,7 @@ export class FileProcessor extends BasePipelineStage {
                   // Process with parseAndQueryFileOpenAI, passing pre-extracted text
                   // Note: We get the summary as a string (non-streaming for pipeline)
                   // Note: Images are NOT passed here - they remain in the message for the final chat
+                  const perfSummaryStart = performance.now();
                   const summary = await parseAndQueryFileOpenAI({
                     file: docFile,
                     prompt: prompt || 'Summarize this document',
@@ -485,6 +504,9 @@ export class FileProcessor extends BasePipelineStage {
                     images: undefined,
                     preExtractedText: text,
                   });
+                  console.log(
+                    `[Perf] FileProcessor.parseAndQueryFileOpenAI "${sanitizeForLog(filename)}": ${(performance.now() - perfSummaryStart).toFixed(1)}ms`,
+                  );
 
                   if (typeof summary !== 'string') {
                     throw new Error(
@@ -541,10 +563,14 @@ export class FileProcessor extends BasePipelineStage {
           console.log(
             `[FileProcessor] Cleaning up ${downloadedFiles.length} temp file(s)...`,
           );
+          const perfCleanupStart = performance.now();
           await Promise.all(
             downloadedFiles.map(({ filePath }) =>
               this.fileProcessingService.cleanupFile(filePath),
             ),
+          );
+          console.log(
+            `[Perf] FileProcessor.cleanupTempFiles: ${(performance.now() - perfCleanupStart).toFixed(1)}ms`,
           );
 
           // STEP 5: Convert images to base64 for LLM consumption
@@ -554,6 +580,7 @@ export class FileProcessor extends BasePipelineStage {
             console.log(
               `[FileProcessor] Converting ${images.length} image(s) to base64...`,
             );
+            const perfImgStart = performance.now();
             convertedImages = await Promise.all(
               images.map(async (image) => {
                 // Skip if already a base64 data URL
@@ -573,6 +600,9 @@ export class FileProcessor extends BasePipelineStage {
               }),
             );
             console.log(
+              `[Perf] FileProcessor.imageBase64Conversion: ${(performance.now() - perfImgStart).toFixed(1)}ms (${images.length} images)`,
+            );
+            console.log(
               `[FileProcessor] Converted ${convertedImages.length} image(s) to base64`,
             );
           }
@@ -584,6 +614,10 @@ export class FileProcessor extends BasePipelineStage {
           span.setAttribute('file.transcripts_count', transcripts.length);
           span.setAttribute('file.images_count', convertedImages.length);
           span.setStatus({ code: SpanStatusCode.OK });
+
+          console.log(
+            `[Perf] FileProcessor.processFiles total: ${(performance.now() - perfStart).toFixed(1)}ms (${files.length} files, ${images.length} images)`,
+          );
 
           // Return context with processed content
           return {
