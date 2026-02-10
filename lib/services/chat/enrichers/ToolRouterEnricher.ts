@@ -79,7 +79,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
       // Add file summaries
       if (context.processedContent.fileSummaries) {
         const summaries = context.processedContent.fileSummaries
-          .map((f) => `[File: ${f.filename}]\n${f.summary}`)
+          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
           .join('\n\n');
         additionalContext.push(summaries);
       }
