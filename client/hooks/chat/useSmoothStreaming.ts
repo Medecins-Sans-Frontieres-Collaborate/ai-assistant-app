@@ -27,6 +27,14 @@ export const useSmoothStreaming = ({
   const charsPerFrameRef = useRef(charsPerFrame);
   const frameDelayRef = useRef(frameDelay);
 
+  // Reset displayed content when a new streaming session starts
+  useEffect(() => {
+    if (isStreaming) {
+      setDisplayedContent('');
+      contentRef.current = '';
+    }
+  }, [isStreaming]);
+
   // Update refs when props change
   useEffect(() => {
     contentRef.current = content;
