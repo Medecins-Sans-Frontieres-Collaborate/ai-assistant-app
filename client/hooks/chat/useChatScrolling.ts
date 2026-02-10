@@ -204,8 +204,11 @@ export function useChatScrolling({
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // Restore immediately (runs before browser paint)
-    if (scrollPositionBeforeStreamEndRef.current > 0) {
+    if (shouldAutoScrollRef.current) {
+      // User was following along — scroll to the very bottom
+      container.scrollTop = container.scrollHeight;
+    } else if (scrollPositionBeforeStreamEndRef.current > 0) {
+      // User scrolled away — restore their position
       container.scrollTop = scrollPositionBeforeStreamEndRef.current;
     }
   }, [isStreaming, messageCount, streamingContent]);
@@ -219,8 +222,12 @@ export function useChatScrolling({
 
     // Double-check scroll position after paint
     requestAnimationFrame(() => {
-      if (
-        container &&
+      if (!container) return;
+
+      if (shouldAutoScrollRef.current) {
+        // User was following along — ensure we're at the bottom
+        container.scrollTop = container.scrollHeight;
+      } else if (
         scrollPositionBeforeStreamEndRef.current > 0 &&
         container.scrollTop === 0
       ) {
