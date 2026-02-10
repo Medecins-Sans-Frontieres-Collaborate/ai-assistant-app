@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+
+import { auth } from '@/auth';
+import { env } from '@/config/environment';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { DefaultAzureCredential } from '@azure/identity';
 import { SearchClient } from '@azure/search-documents';
@@ -30,12 +34,24 @@ function getCached(key: string): RecentSourceData[] | null {
   return null;
 }
 
+const MAX_CACHE_SIZE = 100;
+
 function setCache(key: string, data: RecentSourceData[]): void {
+  if (cache.size >= MAX_CACHE_SIZE) {
+    // Evict oldest entry (first key in insertion order)
+    const oldest = cache.keys().next().value;
+    if (oldest) cache.delete(oldest);
+  }
   cache.set(key, { data, expires: Date.now() + TTL_MS });
 }
 
 export async function GET(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return unauthorizedResponse();
+    }
+
     const agentId = request.nextUrl.searchParams.get('agentId');
 
     if (!agentId) {
@@ -65,8 +81,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get search config from environment
-    const searchEndpoint = process.env.SEARCH_ENDPOINT;
-    const searchIndex = process.env.SEARCH_INDEX;
+    const searchEndpoint = env.SEARCH_ENDPOINT;
+    const searchIndex = env.SEARCH_INDEX;
 
     if (!searchEndpoint || !searchIndex) {
       return NextResponse.json(
