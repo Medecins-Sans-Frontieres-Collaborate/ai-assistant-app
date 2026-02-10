@@ -2,9 +2,10 @@ import {
   IconChevronDown,
   IconClearAll,
   IconDots,
+  IconNews,
+  IconRobot,
   IconWorld,
 } from '@tabler/icons-react';
-import * as TablerIcons from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -22,20 +23,22 @@ import {
   XAIIcon,
 } from '../Icons/providers';
 
-// Helper to get Tabler icon by name
-const getTablerIcon = (iconName: string) => {
-  const Icon = (
-    TablerIcons as Record<
-      string,
-      React.ComponentType<{
-        size?: number;
-        className?: string;
-        style?: React.CSSProperties;
-      }>
-    >
-  )[iconName];
-  return Icon || TablerIcons.IconRobot;
+// Static map of icon names used in organization-agents config.
+// When adding new org agent icons, import them above and add to this map.
+const AGENT_ICON_MAP: Record<
+  string,
+  React.ComponentType<{
+    size?: number;
+    className?: string;
+    style?: React.CSSProperties;
+  }>
+> = {
+  IconNews,
+  IconRobot,
 };
+
+const getTablerIcon = (iconName: string) =>
+  AGENT_ICON_MAP[iconName] || IconRobot;
 
 interface Props {
   botInfo: {
