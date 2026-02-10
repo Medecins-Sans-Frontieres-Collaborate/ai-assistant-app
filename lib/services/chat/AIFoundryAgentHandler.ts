@@ -50,7 +50,6 @@ export class AIFoundryAgentHandler {
     user: Session['user'],
     botId: string | undefined,
     threadId?: string,
-    streamingSpeed?: { charsPerBatch: number; delayMs: number },
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -262,36 +261,9 @@ export class AIFoundryAgentHandler {
               const citationMap = new Map<string, number>();
               let hasCompletedMessage = false;
 
-              // Two-stage buffering for citation markers and smooth streaming:
-              // - markerBuffer: Accumulates text to handle markers split across chunks
-              // - streamBuffer: Holds processed text for smooth output
+              // markerBuffer: Accumulates text to handle citation markers split across chunks
               let markerBuffer = '';
-              let streamBuffer = '';
               let controllerClosed = false;
-
-              // Use configurable streaming speed or defaults
-              const charsPerBatch = streamingSpeed?.charsPerBatch ?? 3;
-              const delayMs = streamingSpeed?.delayMs ?? 8;
-
-              // Background task to stream buffered content smoothly
-              // Sends configured characters every configured ms for a consistent output rate
-              const smoothStream = async () => {
-                while (!controllerClosed) {
-                  if (streamBuffer.length > 0) {
-                    const charsToSend = Math.min(
-                      charsPerBatch,
-                      streamBuffer.length,
-                    );
-                    const toSend = streamBuffer.slice(0, charsToSend);
-                    streamBuffer = streamBuffer.slice(charsToSend);
-                    controller.enqueue(encoder.encode(toSend));
-                  }
-                  await new Promise((resolve) => setTimeout(resolve, delayMs));
-                }
-              };
-
-              // Start the smooth streaming background task
-              smoothStream();
 
               try {
                 for await (const eventMessage of streamEventMessages) {
@@ -359,15 +331,22 @@ export class AIFoundryAgentHandler {
 
                             if (lastOpenBracket > lastCloseBracket) {
                               // Incomplete marker at end - keep it in buffer, send the rest
-                              streamBuffer += processedBuffer.slice(
+                              const completeText = processedBuffer.slice(
                                 0,
                                 lastOpenBracket,
                               );
+                              if (completeText) {
+                                controller.enqueue(
+                                  encoder.encode(completeText),
+                                );
+                              }
                               markerBuffer =
                                 processedBuffer.slice(lastOpenBracket);
                             } else {
                               // All markers complete - send everything
-                              streamBuffer += processedBuffer;
+                              controller.enqueue(
+                                encoder.encode(processedBuffer),
+                              );
                               markerBuffer = '';
                             }
                           }
@@ -440,15 +419,10 @@ export class AIFoundryAgentHandler {
                       }
                     }
                   } else if (eventMessage.event === 'thread.run.completed') {
-                    // Flush any remaining marker buffer to stream buffer
+                    // Flush any remaining marker buffer
                     if (markerBuffer) {
-                      streamBuffer += markerBuffer;
+                      controller.enqueue(encoder.encode(markerBuffer));
                       markerBuffer = '';
-                    }
-
-                    // Wait for stream buffer to drain before appending metadata
-                    while (streamBuffer.length > 0) {
-                      await new Promise((resolve) => setTimeout(resolve, 10));
                     }
 
                     // Append metadata at the very end using utility function
