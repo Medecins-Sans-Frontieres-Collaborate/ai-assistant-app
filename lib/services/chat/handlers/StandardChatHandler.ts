@@ -410,7 +410,8 @@ export class StandardChatHandler extends BasePipelineStage {
 
     // If we have processed content, inject it into messages
     if (context.processedContent) {
-      const { fileSummaries, transcripts, images } = context.processedContent;
+      const { fileSummaries, inlineFiles, transcripts, images } =
+        context.processedContent;
 
       // Start with original messages
       let messages = [...context.messages];
@@ -437,6 +438,14 @@ export class StandardChatHandler extends BasePipelineStage {
             .map((f) => `[File: ${f.filename}]\n${f.summary}`)
             .join('\n\n');
           textParts.push(summaryText);
+        }
+
+        // Add inline file content (small files included as-is)
+        if (inlineFiles && inlineFiles.length > 0) {
+          const inlineText = inlineFiles
+            .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
+            .join('\n\n');
+          textParts.push(inlineText);
         }
 
         // Add transcripts
