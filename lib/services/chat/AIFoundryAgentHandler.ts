@@ -19,6 +19,7 @@ import { OpenAIModel } from '@/types/openai';
 import { MetricsService } from '../observability/MetricsService';
 
 import { env } from '@/config/environment';
+import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
@@ -493,11 +494,7 @@ export class AIFoundryAgentHandler {
           span.setAttribute('agent.duration_ms', duration);
 
           return new Response(stream, {
-            headers: {
-              'Content-Type': 'text/plain; charset=utf-8',
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
-            },
+            headers: STREAMING_RESPONSE_HEADERS,
           });
         } catch (error) {
           // Record exception in span
