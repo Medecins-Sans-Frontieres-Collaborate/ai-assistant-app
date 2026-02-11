@@ -214,12 +214,14 @@ export function useChatScrolling({
   useEffect(() => {
     if (isActive) return;
 
-    const container = chatContainerRef.current;
-    if (!container) return;
+    let cancelled = false;
+    let outerRafId: number;
+    let innerRafId: number;
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (!container) return;
+    outerRafId = requestAnimationFrame(() => {
+      innerRafId = requestAnimationFrame(() => {
+        const container = chatContainerRef.current;
+        if (cancelled || !container) return;
 
         if (shouldAutoScrollRef.current) {
           // User was following along — scroll to the very bottom
@@ -230,6 +232,12 @@ export function useChatScrolling({
         }
       });
     });
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(outerRafId);
+      cancelAnimationFrame(innerRafId);
+    };
   }, [isActive, messageCount]);
 
   // Handle scroll detection for scroll-down button
