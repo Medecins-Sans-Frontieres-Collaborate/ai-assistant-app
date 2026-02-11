@@ -55,8 +55,9 @@ export const useSmoothStreaming = ({
   }, [isStreaming, content]);
 
   // Detect streaming transitions (useLayoutEffect runs before paint)
-  // setState calls are wrapped in queueMicrotask to satisfy lint rules
-  // while still executing before browser paint
+  // setState calls are wrapped in queueMicrotask to satisfy lint rules.
+  // The one-frame gap this creates (where both enabled and isDraining are
+  // false) is handled in the return logic by falling back to displayedContent.
   useLayoutEffect(() => {
     const wasStreaming = prevIsStreamingRef.current;
     prevIsStreamingRef.current = isStreaming;
@@ -187,6 +188,15 @@ export const useSmoothStreaming = ({
 
   // Return logic: handle each state with appropriate content
   if (!enabled && !isDraining) {
+    // isDrainingRef is set synchronously in useLayoutEffect while the
+    // isDraining state updates via queueMicrotask. When the ref is true
+    // but state is false, we're in the one-frame gap before drain kicks in.
+    // Reading the ref during render is intentional — it's the only synchronous
+    // signal available before the queued state update fires.
+    // eslint-disable-next-line react-hooks/refs -- bridges sync ref / async state gap
+    if (isDrainingRef.current && displayedContent) {
+      return { content: displayedContent, isDraining: true };
+    }
     return { content, isDraining: false };
   }
 

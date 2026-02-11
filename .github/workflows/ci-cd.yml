@@ -167,7 +167,7 @@ jobs:
 
       - name: Get Container App URL
         id: get_url
-        uses: azure/CLI@v1
+        uses: azure/CLI@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1
         with:
           inlineScript: |
             APP_URL=$(az containerapp show --name ${{ vars.CONTAINER_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query "properties.configuration.ingress.fqdn" -o tsv)
