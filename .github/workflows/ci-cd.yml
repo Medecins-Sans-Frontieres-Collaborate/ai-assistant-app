@@ -259,6 +259,10 @@ jobs:
         with:
           ref: ${{ github.event.inputs.ref || github.sha }}
 
+      - name: Get checked-out commit SHA
+        id: get-sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
 
@@ -278,7 +282,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ github.sha }}
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ steps.get-sha.outputs.sha }}
           build-args: |
             BUILD=${{ github.run_number }}
             ENV=dev
@@ -290,7 +294,7 @@ jobs:
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ github.sha }}
+            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ steps.get-sha.outputs.sha }}
 
   # JOB 4b: Manual deployment to Live (or Beta) via workflow_dispatch
   deploy_manual:
