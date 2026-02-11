@@ -55,8 +55,9 @@ export const useSmoothStreaming = ({
   }, [isStreaming, content]);
 
   // Detect streaming transitions (useLayoutEffect runs before paint)
-  // setState calls are wrapped in queueMicrotask to satisfy lint rules
-  // while still executing before browser paint
+  // setState calls are wrapped in queueMicrotask to satisfy lint rules.
+  // The one-frame gap this creates (where both enabled and isDraining are
+  // false) is handled in the return logic by falling back to displayedContent.
   useLayoutEffect(() => {
     const wasStreaming = prevIsStreamingRef.current;
     prevIsStreamingRef.current = isStreaming;
@@ -187,6 +188,12 @@ export const useSmoothStreaming = ({
 
   // Return logic: handle each state with appropriate content
   if (!enabled && !isDraining) {
+    // When content is empty but displayedContent isn't, we're in the brief
+    // gap before drain state kicks in — return displayedContent to prevent
+    // a one-frame flash to empty string
+    if (!content && displayedContent) {
+      return { content: displayedContent, isDraining: false };
+    }
     return { content, isDraining: false };
   }
 
