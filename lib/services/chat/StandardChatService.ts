@@ -7,7 +7,10 @@ import {
 import { createAnthropicStreamProcessor } from '@/lib/utils/app/stream/anthropicStreamProcessor';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  perfLog,
+  sanitizeForLog,
+} from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import { Message } from '@/types/chat';
@@ -105,8 +108,10 @@ export class StandardChatService {
       request.model,
       request.messages,
     );
-    console.log(
-      `[Perf] StandardChatService.selectModel: ${(performance.now() - perfModelStart).toFixed(1)}ms → ${sanitizeForLog(modelId)}`,
+    perfLog(
+      'StandardChatService.selectModel',
+      perfModelStart,
+      `→ ${sanitizeForLog(modelId)}`,
     );
 
     // Apply tone to system prompt if specified
@@ -115,9 +120,7 @@ export class StandardChatService {
       request.tone,
       request.systemPrompt,
     );
-    console.log(
-      `[Perf] StandardChatService.applyTone: ${(performance.now() - perfToneStart).toFixed(1)}ms`,
-    );
+    perfLog('StandardChatService.applyTone', perfToneStart);
     if (request.tone) {
       console.log('[StandardChatService] Applied tone:', request.tone.name);
       console.log(
@@ -148,8 +151,10 @@ export class StandardChatService {
       modelConfig.tokenLimit,
       request.user,
     );
-    console.log(
-      `[Perf] StandardChatService.prepareMessages: ${(performance.now() - perfMsgStart).toFixed(1)}ms (${messagesToSend.length} messages)`,
+    perfLog(
+      'StandardChatService.prepareMessages',
+      perfMsgStart,
+      `(${messagesToSend.length} messages)`,
     );
     // Don't free() - encoding is shared across requests
 
@@ -200,9 +205,7 @@ export class StandardChatService {
     // Execute request
     const perfExecStart = performance.now();
     const response = await handler.executeRequest(requestParams, stream);
-    console.log(
-      `[Perf] StandardChatService.executeRequest: ${(performance.now() - perfExecStart).toFixed(1)}ms`,
-    );
+    perfLog('StandardChatService.executeRequest', perfExecStart);
 
     // Return appropriate response format
     if (stream) {
@@ -215,17 +218,17 @@ export class StandardChatService {
         request.pendingTranscriptions, // async batch transcription jobs
       );
 
-      console.log(
-        `[Perf] StandardChatService.handleChat total: ${(performance.now() - perfStart).toFixed(1)}ms (stream)`,
-      );
+      perfLog('StandardChatService.handleChat total', perfStart, '(stream)');
       return new Response(processedStream, {
         headers: STREAMING_RESPONSE_HEADERS,
       });
     } else {
       const completion = response as OpenAI.Chat.Completions.ChatCompletion;
 
-      console.log(
-        `[Perf] StandardChatService.handleChat total: ${(performance.now() - perfStart).toFixed(1)}ms (non-stream)`,
+      perfLog(
+        'StandardChatService.handleChat total',
+        perfStart,
+        '(non-stream)',
       );
       return new Response(
         JSON.stringify({ text: completion.choices[0]?.message?.content }),

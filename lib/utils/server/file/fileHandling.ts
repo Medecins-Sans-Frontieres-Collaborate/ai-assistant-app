@@ -1,3 +1,8 @@
+import {
+  perfLog,
+  sanitizeForLog,
+} from '@/lib/utils/server/log/logSanitization';
+
 import { getPdfPageCount } from './pdfUtils';
 
 import {
@@ -359,8 +364,10 @@ export async function loadDocument(file: File): Promise<string> {
         throw error;
       }
   }
-  console.log(
-    `[Perf] loadDocument total "${file.name}": ${(performance.now() - perfStart).toFixed(1)}ms (${mimeType})`,
+  perfLog(
+    'loadDocument total',
+    perfStart,
+    `${sanitizeForLog(file.name)} (${mimeType})`,
   );
   return text;
 }
