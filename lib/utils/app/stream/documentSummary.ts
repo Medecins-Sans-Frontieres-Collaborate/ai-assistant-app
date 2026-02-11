@@ -20,6 +20,7 @@ import {
 import OpenAI from 'openai';
 import { AzureOpenAI } from 'openai';
 import { ChatCompletion } from 'openai/resources';
+import { performance } from 'perf_hooks';
 
 /**
  * Estimates the chars-per-token ratio based on the dominant script type in the content.
@@ -209,6 +210,7 @@ async function summarizeChunk(
   const supportsTemperature = modelConfig?.supportsTemperature !== false;
 
   try {
+    const perfLlmStart = performance.now();
     const chunkSummary = await azureOpenai.chat.completions.create({
       model: modelId,
       messages: [
@@ -227,6 +229,10 @@ async function summarizeChunk(
       stream: false,
       user: JSON.stringify(user),
     });
+
+    console.log(
+      `[Perf] summarizeChunk LLM call: ${(performance.now() - perfLlmStart).toFixed(1)}ms`,
+    );
 
     return chunkSummary?.choices?.[0]?.message?.content?.trim() ?? '';
   } catch (error: unknown) {
@@ -269,8 +275,14 @@ export async function parseAndQueryFileOpenAI({
     sanitizeForLog(prompt.length),
   );
 
+  const perfTotalStart = performance.now();
+
   // Use pre-extracted text if provided, otherwise load document
+  const perfLoadStart = performance.now();
   const fileContent = preExtractedText ?? (await loadDocument(file));
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.loadContent: ${(performance.now() - perfLoadStart).toFixed(1)}ms (${preExtractedText ? 'pre-extracted' : 'loaded from file'})`,
+  );
   console.log(
     '[parseAndQueryFileOpenAI] File content loaded, length:',
     fileContent.length,
@@ -294,7 +306,11 @@ export async function parseAndQueryFileOpenAI({
 
   const chunkConfig = calculateChunkConfig(modelConfig, charsPerToken);
 
+  const perfChunkStart = performance.now();
   let chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.splitIntoChunks: ${(performance.now() - perfChunkStart).toFixed(1)}ms (${chunks.length} chunks)`,
+  );
   console.log(
     '[parseAndQueryFileOpenAI] Split into chunks:',
     chunks.length,
@@ -334,7 +350,11 @@ export async function parseAndQueryFileOpenAI({
       ),
     );
 
+    const perfBatchStart = performance.now();
     const summaries = await Promise.all(summaryPromises);
+    console.log(
+      `[Perf] parseAndQueryFileOpenAI.batch: ${(performance.now() - perfBatchStart).toFixed(1)}ms (${currentChunks.length} chunks)`,
+    );
     console.log(
       '[parseAndQueryFileOpenAI] Batch completed, summaries received:',
       summaries.filter((s) => s !== null).length,
@@ -413,6 +433,7 @@ export async function parseAndQueryFileOpenAI({
     '[parseAndQueryFileOpenAI] Creating chat completion, botId:',
     sanitizeForLog(botId),
   );
+  const perfFinalLlmStart = performance.now();
   let response;
   if (botId) {
     console.log('[parseAndQueryFileOpenAI] Using bot with data sources');
@@ -437,10 +458,17 @@ export async function parseAndQueryFileOpenAI({
     console.log('[parseAndQueryFileOpenAI] Using standard chat completion');
     response = await client.chat.completions.create(commonParams);
   }
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.finalCompletion: ${(performance.now() - perfFinalLlmStart).toFixed(1)}ms`,
+  );
 
   console.log(
     '[parseAndQueryFileOpenAI] Got response, stream:',
     sanitizeForLog(stream),
+  );
+
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI total: ${(performance.now() - perfTotalStart).toFixed(1)}ms`,
   );
 
   if (stream) {

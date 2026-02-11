@@ -1663,5 +1663,10 @@
     "translating": "ትርጉም በማድረግ ላይ...",
     "translationError": "ትርጉም ማድረግ አልተቻለም። እባክዎን እንደገና ይሞክሩ።",
     "selectLanguage": "ቋንቋ ይምረጡ"
+  },
+  "updateBanner": {
+    "title": "አዲስ ስሪት ዝግጁ ነው",
+    "refresh": "ያድሱ",
+    "refreshNow": "ለማደሻ ያድሱ"
   }
 }

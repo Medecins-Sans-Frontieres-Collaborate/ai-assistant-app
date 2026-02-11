@@ -16,6 +16,7 @@ import { StandardChatService } from '../StandardChatService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
+import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /** Union of all possible message content types */
@@ -168,11 +169,7 @@ export class StandardChatHandler extends BasePipelineStage {
               return {
                 ...context,
                 response: new Response(stream, {
-                  headers: {
-                    'Content-Type': 'text/plain; charset=utf-8',
-                    'Cache-Control': 'no-cache',
-                    Connection: 'keep-alive',
-                  },
+                  headers: STREAMING_RESPONSE_HEADERS,
                 }),
               };
             }
@@ -234,11 +231,7 @@ export class StandardChatHandler extends BasePipelineStage {
             return {
               ...context,
               response: new Response(stream, {
-                headers: {
-                  'Content-Type': 'text/plain; charset=utf-8',
-                  'Cache-Control': 'no-cache',
-                  Connection: 'keep-alive',
-                },
+                headers: STREAMING_RESPONSE_HEADERS,
               }),
             };
           }

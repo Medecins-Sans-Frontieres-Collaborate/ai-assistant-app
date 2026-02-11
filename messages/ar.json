@@ -1663,5 +1663,10 @@
     "translating": "جارٍ الترجمة...",
     "translationError": "فشلت عملية الترجمة. يرجى المحاولة مرة أخرى.",
     "selectLanguage": "اختر اللغة"
+  },
+  "updateBanner": {
+    "title": "إصدار جديد متوفر",
+    "refresh": "تحديث",
+    "refreshNow": "تحديث للحصول على آخر إصدار"
   }
 }

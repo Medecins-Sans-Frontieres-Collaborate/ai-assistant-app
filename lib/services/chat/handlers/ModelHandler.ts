@@ -4,6 +4,7 @@ import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
 import OpenAI, { AzureOpenAI } from 'openai';
+import { performance } from 'perf_hooks';
 
 /**
  * Type for chat completion request parameters.
@@ -70,7 +71,11 @@ export abstract class ModelHandler {
     streamResponse: boolean,
   ): Promise<ChatCompletionResponse> {
     const client = this.getClient();
+    const perfStart = performance.now();
     const response = await client.chat.completions.create(requestParams);
+    console.log(
+      `[Perf] ModelHandler.executeRequest (client.chat.completions.create): ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return response;
   }
 

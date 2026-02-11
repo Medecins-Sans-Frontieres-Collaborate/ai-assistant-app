@@ -1663,5 +1663,10 @@
     "translating": "Đang dịch...",
     "translationError": "Không thể dịch. Vui lòng thử lại.",
     "selectLanguage": "Chọn ngôn ngữ"
+  },
+  "updateBanner": {
+    "title": "Có phiên bản mới",
+    "refresh": "Làm mới",
+    "refreshNow": "Làm mới để cập nhật"
   }
 }

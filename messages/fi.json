@@ -1663,5 +1663,10 @@
     "translating": "Käännetään...",
     "translationError": "Käännös epäonnistui. Yritä uudelleen.",
     "selectLanguage": "Valitse kieli"
+  },
+  "updateBanner": {
+    "title": "Uusi versio saatavilla",
+    "refresh": "Päivitä",
+    "refreshNow": "Päivitä saadaksesi uusin versio"
   }
 }

@@ -22,6 +22,7 @@ import {
   StorageSharedKeyCredential as QueueSharedKeyCredential,
 } from '@azure/storage-queue';
 import { lookup } from 'mime-types';
+import { performance } from 'perf_hooks';
 import { Readable } from 'stream';
 
 export enum BlobProperty {
@@ -170,8 +171,12 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const perfStart = performance.now();
 
     if (await this.blobExists(blobName)) {
+      console.log(
+        `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
+      );
       return blockBlobClient.url;
     }
 
@@ -194,6 +199,9 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     }
 
     await blockBlobClient.upload(uploadContent, contentLength, options);
+    console.log(
+      `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return blockBlobClient.url;
   }
 
@@ -235,13 +243,27 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       return blockBlobClient.url;
     } else if (property === BlobProperty.BLOB) {
       try {
+        const perfStart = performance.now();
         const downloadResponse = await blockBlobClient.download();
+        console.log(
+          `[Perf] AzureBlobStorage.get download: ${(performance.now() - perfStart).toFixed(1)}ms`,
+        );
 
         if (!downloadResponse.readableStreamBody) {
           throw new Error('No readable stream available');
         }
 
-        return this.streamToBuffer(downloadResponse.readableStreamBody);
+        const perfStreamStart = performance.now();
+        const buffer = await this.streamToBuffer(
+          downloadResponse.readableStreamBody,
+        );
+        console.log(
+          `[Perf] AzureBlobStorage.get streamToBuffer: ${(performance.now() - perfStreamStart).toFixed(1)}ms`,
+        );
+        console.log(
+          `[Perf] AzureBlobStorage.get total: ${(performance.now() - perfStart).toFixed(1)}ms`,
+        );
+        return buffer;
       } catch (error) {
         console.error('Error downloading blob:', error);
         throw error;
@@ -252,11 +274,16 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
   }
 
   async blobExists(blobName: string): Promise<boolean> {
+    const perfStart = performance.now();
     const containerClient = this.blobServiceClient.getContainerClient(
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    return blockBlobClient.exists();
+    const result = await blockBlobClient.exists();
+    console.log(
+      `[Perf] AzureBlobStorage.blobExists: ${(performance.now() - perfStart).toFixed(1)}ms (${result})`,
+    );
+    return result;
   }
 
   async getBlobSize(blobName: string): Promise<number> {

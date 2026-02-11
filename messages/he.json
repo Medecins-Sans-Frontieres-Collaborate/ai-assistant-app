@@ -1663,5 +1663,10 @@
     "translating": "מתרגם...",
     "translationError": "התרגום נכשל. אנא נסה שוב.",
     "selectLanguage": "בחר שפה"
+  },
+  "updateBanner": {
+    "title": "גרסה חדשה זמינה",
+    "refresh": "רענן",
+    "refreshNow": "רענון לעדכון"
   }
 }

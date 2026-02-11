@@ -1,3 +1,4 @@
+import { performance } from 'perf_hooks';
 import { serializeError } from 'serialize-error';
 
 /**
@@ -50,4 +51,18 @@ export function sanitizeForLog(value: unknown): string {
  */
 export function sanitizeForLogMultiple(...values: unknown[]): string[] {
   return values.map(sanitizeForLog);
+}
+
+/**
+ * Logs a performance measurement, gated to non-production environments.
+ * Suppresses [Perf] noise in production where it adds cost with no benefit.
+ *
+ * @param label - A descriptive label for the measured operation
+ * @param startTime - The `performance.now()` timestamp when the operation started
+ * @param extra - Optional extra context to append (will NOT be sanitized — caller must sanitize if needed)
+ */
+export function perfLog(label: string, startTime: number, extra?: string) {
+  if (process.env.NODE_ENV === 'production') return;
+  const ms = (performance.now() - startTime).toFixed(1);
+  console.log(`[Perf] ${label}: ${ms}ms${extra ? ` ${extra}` : ''}`);
 }

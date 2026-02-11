@@ -228,6 +228,7 @@ describe('/api/chat - Integration Tests', () => {
         'text/plain; charset=utf-8',
       );
       expect(response.headers.get('Cache-Control')).toBe('no-cache');
+      expect(response.headers.get('X-Accel-Buffering')).toBe('no');
       expect(response.body).toBeDefined();
     });
 

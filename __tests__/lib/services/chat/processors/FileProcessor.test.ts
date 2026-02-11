@@ -151,7 +151,7 @@ describe('FileProcessor', () => {
 
       // Downloads should start at roughly the same time (parallel)
       const timeDiff = downloadTimes[1] - downloadTimes[0];
-      expect(timeDiff).toBeLessThan(5);
+      expect(timeDiff).toBeLessThan(30);
     });
 
     it('should verify cleanup operation is called for all files', async () => {

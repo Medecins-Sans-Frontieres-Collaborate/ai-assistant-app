@@ -1663,5 +1663,10 @@
     "translating": "Sedang menerjemahkan...",
     "translationError": "Gagal menerjemahkan. Silakan coba lagi.",
     "selectLanguage": "Pilih bahasa"
+  },
+  "updateBanner": {
+    "title": "Versi baru tersedia",
+    "refresh": "Segarkan",
+    "refreshNow": "Segarkan untuk memperbarui"
   }
 }
