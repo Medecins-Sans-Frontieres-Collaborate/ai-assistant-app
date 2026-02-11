@@ -1663,5 +1663,10 @@
     "translating": "Bezig met vertalen...",
     "translationError": "Vertalen mislukt. Probeer het opnieuw.",
     "selectLanguage": "Selecteer taal"
+  },
+  "updateBanner": {
+    "title": "Er is een nieuwe versie beschikbaar",
+    "refresh": "Vernieuwen",
+    "refreshNow": "Vernieuwen om bij te werken"
   }
 }

@@ -1663,5 +1663,10 @@
     "translating": "Překládání…",
     "translationError": "Překlad se nezdařil. Zkuste to prosím znovu.",
     "selectLanguage": "Vyberte jazyk"
+  },
+  "updateBanner": {
+    "title": "Je k dispozici nová verze",
+    "refresh": "Obnovit",
+    "refreshNow": "Obnovit pro aktualizaci"
   }
 }

@@ -1663,5 +1663,10 @@
     "translating": "S'està traduint...",
     "translationError": "No s'ha pogut traduir. Torneu-ho a provar.",
     "selectLanguage": "Seleccioneu l'idioma"
+  },
+  "updateBanner": {
+    "title": "Hi ha una nova versió disponible",
+    "refresh": "Actualitza",
+    "refreshNow": "Actualitza per a obtenir l'última versió"
   }
 }

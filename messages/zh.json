@@ -1663,5 +1663,10 @@
     "translating": "正在翻译...",
     "translationError": "翻译失败。请重试。",
     "selectLanguage": "选择语言"
+  },
+  "updateBanner": {
+    "title": "有新版本可用",
+    "refresh": "刷新",
+    "refreshNow": "刷新以更新"
   }
 }

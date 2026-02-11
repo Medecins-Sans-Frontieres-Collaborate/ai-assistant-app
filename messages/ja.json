@@ -1663,5 +1663,10 @@
     "translating": "翻訳中...",
     "translationError": "翻訳に失敗しました。再度お試しください。",
     "selectLanguage": "言語を選択"
+  },
+  "updateBanner": {
+    "title": "新しいバージョンが利用可能です",
+    "refresh": "更新",
+    "refreshNow": "更新してアップデート"
   }
 }

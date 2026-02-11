@@ -1663,5 +1663,10 @@
     "translating": "Übersetze...",
     "translationError": "Übersetzung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "selectLanguage": "Sprache auswählen"
+  },
+  "updateBanner": {
+    "title": "Eine neue Version ist verfügbar",
+    "refresh": "Aktualisieren",
+    "refreshNow": "Zum Aktualisieren neu laden"
   }
 }
