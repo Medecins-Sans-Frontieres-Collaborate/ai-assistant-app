@@ -91,12 +91,6 @@ export function Chat({
     acceptModelSwitch,
   } = useChat();
 
-  const { content: smoothedContent, isDraining } = useSmoothStreaming({
-    isStreaming,
-    content: streamingContent ?? '',
-    enabled: isStreaming,
-  });
-
   const { isSettingsOpen, setIsSettingsOpen, showChatbar } = useUI();
   const {
     models,
@@ -107,7 +101,16 @@ export function Chat({
     displayNamePreference,
     customDisplayName,
     addPrompt,
+    streamingSpeed,
   } = useSettings();
+
+  const { content: smoothedContent, isDraining } = useSmoothStreaming({
+    isStreaming,
+    content: streamingContent ?? '',
+    charsPerFrame: streamingSpeed.charsPerBatch,
+    frameDelay: streamingSpeed.delayMs,
+    enabled: isStreaming,
+  });
   const {
     isArtifactOpen,
     editorMode,
