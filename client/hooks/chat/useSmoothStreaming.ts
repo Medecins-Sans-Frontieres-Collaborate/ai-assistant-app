@@ -192,7 +192,7 @@ export const useSmoothStreaming = ({
     // gap before drain state kicks in — return displayedContent to prevent
     // a one-frame flash to empty string
     if (!content && displayedContent) {
-      return { content: displayedContent, isDraining: false };
+      return { content: displayedContent, isDraining: true };
     }
     return { content, isDraining: false };
   }
