@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { scrollToBottom } from '@/lib/utils/app/scrolling';
 
@@ -208,42 +208,27 @@ export function useChatScrolling({
     };
   }, [isActive]);
 
-  // Restore scroll position after streaming/drain ends - use layoutEffect to prevent flash
-  useLayoutEffect(() => {
-    if (isActive) return;
-
-    const container = chatContainerRef.current;
-    if (!container) return;
-
-    if (shouldAutoScrollRef.current) {
-      // User was following along — scroll to the very bottom
-      container.scrollTop = container.scrollHeight;
-    } else if (scrollPositionBeforeStreamEndRef.current > 0) {
-      // User scrolled away — restore their position
-      container.scrollTop = scrollPositionBeforeStreamEndRef.current;
-    }
-  }, [isActive, messageCount, streamingContent]);
-
-  // Additional restore after paint to catch any async updates
+  // Restore scroll position after streaming/drain ends
+  // Double-RAF ensures the DOM has fully settled after the
+  // streaming-div → normal-message swap (action buttons appear, etc.)
   useEffect(() => {
     if (isActive) return;
 
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // Double-check scroll position after paint
     requestAnimationFrame(() => {
-      if (!container) return;
+      requestAnimationFrame(() => {
+        if (!container) return;
 
-      if (shouldAutoScrollRef.current) {
-        // User was following along — ensure we're at the bottom
-        container.scrollTop = container.scrollHeight;
-      } else if (
-        scrollPositionBeforeStreamEndRef.current > 0 &&
-        container.scrollTop === 0
-      ) {
-        container.scrollTop = scrollPositionBeforeStreamEndRef.current;
-      }
+        if (shouldAutoScrollRef.current) {
+          // User was following along — scroll to the very bottom
+          container.scrollTop = container.scrollHeight;
+        } else if (scrollPositionBeforeStreamEndRef.current > 0) {
+          // User scrolled away — restore their position
+          container.scrollTop = scrollPositionBeforeStreamEndRef.current;
+        }
+      });
     });
   }, [isActive, messageCount]);
 
