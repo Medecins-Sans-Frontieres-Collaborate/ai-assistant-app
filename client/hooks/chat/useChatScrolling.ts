@@ -215,8 +215,8 @@ export function useChatScrolling({
     if (isActive) return;
 
     let cancelled = false;
-    let outerRafId: number;
-    let innerRafId: number;
+    let outerRafId = 0;
+    let innerRafId = 0;
 
     outerRafId = requestAnimationFrame(() => {
       innerRafId = requestAnimationFrame(() => {
