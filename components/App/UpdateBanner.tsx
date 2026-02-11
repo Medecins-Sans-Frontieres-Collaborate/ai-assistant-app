@@ -1,6 +1,6 @@
 'use client';
 
-import { IconRefresh, IconX } from '@tabler/icons-react';
+import { IconAlertTriangle, IconX } from '@tabler/icons-react';
 
 import { useTranslations } from 'next-intl';
 
@@ -26,16 +26,16 @@ export function UpdateBanner() {
 
         {/* Banner content */}
         <div className="flex-1 pointer-events-auto">
-          <div className="relative overflow-hidden">
-            <div className="relative bg-gradient-to-r from-blue-100/95 via-sky-50/90 to-blue-100/95 dark:from-[#212121]/70 dark:via-[#212121]/60 dark:to-[#212121]/70 backdrop-blur-xl shadow-lg border-b border-blue-200/70 dark:border-gray-700/30">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent dark:from-blue-600/15 dark:via-sky-600/15 dark:to-blue-600/15 pointer-events-none" />
+          <div className="relative overflow-hidden animate-fade-in-top">
+            <div className="relative bg-gradient-to-r from-amber-100/95 via-amber-50/90 to-amber-100/95 dark:from-[#212121]/70 dark:via-[#212121]/60 dark:to-[#212121]/70 backdrop-blur-xl shadow-lg border-b border-amber-200/70 dark:border-amber-800/30">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent dark:from-amber-600/15 dark:via-amber-500/15 dark:to-amber-600/15 pointer-events-none" />
               <div className="px-3 md:px-4 py-1.5 md:py-2">
                 <div className="flex items-center justify-between gap-2 md:gap-3">
                   <div className="flex items-center gap-1.5 md:gap-2 flex-1 min-w-0">
-                    <div className="p-0.5 md:p-1 bg-blue-500/20 rounded flex-shrink-0">
-                      <IconRefresh
+                    <div className="p-0.5 md:p-1 bg-amber-500/20 rounded flex-shrink-0">
+                      <IconAlertTriangle
                         size={14}
-                        className="text-blue-600 dark:text-blue-400 md:w-4 md:h-4"
+                        className="text-amber-600 dark:text-amber-400 md:w-4 md:h-4 animate-pulse"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -48,7 +48,7 @@ export function UpdateBanner() {
                   <div className="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
                     <button
                       onClick={() => window.location.reload()}
-                      className="px-2 md:px-2.5 py-0.5 md:py-1 text-[10px] md:text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors whitespace-nowrap shadow-[0_2px_12px_rgba(37,99,235,0.45)] hover:shadow-[0_2px_16px_rgba(37,99,235,0.55)] dark:shadow-[0_2px_12px_rgba(96,165,250,0.4)] dark:hover:shadow-[0_2px_16px_rgba(96,165,250,0.5)] ring-1 ring-blue-400/30 dark:ring-blue-400/50"
+                      className="px-2 md:px-2.5 py-0.5 md:py-1 text-[10px] md:text-xs font-medium bg-amber-600 hover:bg-amber-700 text-white rounded transition-colors whitespace-nowrap shadow-[0_2px_12px_rgba(217,119,6,0.45)] hover:shadow-[0_2px_16px_rgba(217,119,6,0.55)] dark:shadow-[0_2px_12px_rgba(251,191,36,0.4)] dark:hover:shadow-[0_2px_16px_rgba(251,191,36,0.5)] ring-1 ring-amber-400/30 dark:ring-amber-400/50"
                     >
                       <span className="md:hidden">
                         {t('updateBanner.refresh')}
