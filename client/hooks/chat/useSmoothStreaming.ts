@@ -188,10 +188,13 @@ export const useSmoothStreaming = ({
 
   // Return logic: handle each state with appropriate content
   if (!enabled && !isDraining) {
-    // When content is empty but displayedContent isn't, we're in the brief
-    // gap before drain state kicks in — return displayedContent to prevent
-    // a one-frame flash to empty string
-    if (!content && displayedContent) {
+    // isDrainingRef is set synchronously in useLayoutEffect while the
+    // isDraining state updates via queueMicrotask. When the ref is true
+    // but state is false, we're in the one-frame gap before drain kicks in.
+    // Reading the ref during render is intentional — it's the only synchronous
+    // signal available before the queued state update fires.
+    // eslint-disable-next-line react-hooks/refs -- bridges sync ref / async state gap
+    if (isDrainingRef.current && displayedContent) {
       return { content: displayedContent, isDraining: true };
     }
     return { content, isDraining: false };
