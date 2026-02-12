@@ -31,7 +31,7 @@ FROM node:24-alpine AS production
 WORKDIR /app
 
 # Set Node.js options to handle larger HTTP headers (for NextAuth cookies)
-ENV NODE_OPTIONS="--max-http-header-size=32768"
+ENV NODE_OPTIONS="--max-http-header-size=65536"
 
 # pdftotext package
 RUN apk add --no-cache poppler poppler-dev poppler-utils libxml2 libxslt zlib fontconfig ttf-dejavu \

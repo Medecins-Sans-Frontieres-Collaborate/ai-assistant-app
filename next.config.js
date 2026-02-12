@@ -42,6 +42,17 @@ const nextConfig = {
     ],
   },
 
+  // Redirect old NextAuth v4 callback URL to Auth.js v5 provider name
+  redirects: async () => {
+    return [
+      {
+        source: '/api/auth/callback/azure-ad',
+        destination: '/api/auth/callback/microsoft-entra-id',
+        permanent: true,
+      },
+    ];
+  },
+
   rewrites: async () => {
     return [
       {
