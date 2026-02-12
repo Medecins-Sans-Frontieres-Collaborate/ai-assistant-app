@@ -27,7 +27,7 @@ export default function SignInPage() {
   const env = process.env.NEXT_PUBLIC_ENV;
   const email = process.env.NEXT_PUBLIC_EMAIL;
 
-  // Check for errors in URL params (from NextAuth redirects)
+  // Check for errors in URL params (from NextAuth redirects or cookie cleanup)
   useEffect(() => {
     const urlError = searchParams.get('error');
     if (urlError) {
@@ -45,6 +45,9 @@ export default function SignInPage() {
         CredentialsSignin: t('auth.errorCredentialsSignin'),
         SessionRequired: t('auth.errorSessionRequired'),
         SessionExpired: t('auth.errorSessionExpired'),
+        // Cookie cleanup errors
+        CookiesCleared: t('auth.errorCookiesCleared'),
+        HeadersTooLarge: t('auth.errorHeadersTooLarge'),
       };
       setTimeout(() => {
         setError(errorMessages[urlError] || t('auth.errorFallback'));
