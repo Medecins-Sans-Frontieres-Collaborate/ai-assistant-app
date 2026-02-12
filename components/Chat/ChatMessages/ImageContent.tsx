@@ -55,6 +55,7 @@ interface ImageContentProps {
  * and lightbox functionality. Supports single and multiple image layouts.
  */
 export const ImageContent: FC<ImageContentProps> = ({ images }) => {
+  const t = useTranslations('chat');
   const [imageBase64s, setImageBase64s] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadError, setLoadError] = useState<boolean>(false);
@@ -136,7 +137,7 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
             }}
           >
             <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-shimmer">
-              <span className="sr-only">Loading image...</span>
+              <span className="sr-only">{t('loadingImage')}</span>
             </div>
           </div>
         ))}
@@ -153,7 +154,7 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
           }}
         >
           <div className="flex items-center justify-center w-full h-full text-red-500 text-sm p-3">
-            <span>Failed to load image</span>
+            <span>{t('failedToLoadImage')}</span>
           </div>
         </div>
       )}
@@ -177,7 +178,7 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageBase64}
-              alt={`Image ${index + 1}`}
+              alt={t('imageAlt', { number: index + 1 })}
               className="w-full h-full object-cover"
             />
             {/* Hover overlay with badge and download icon */}
@@ -188,7 +189,7 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
               <button
                 onClick={(e) => downloadImage(e, imageBase64, index)}
                 className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 transition-colors"
-                title="Download"
+                title={t('download')}
               >
                 <IconDownload className="w-4 h-4 text-gray-700 dark:text-gray-300" />
               </button>

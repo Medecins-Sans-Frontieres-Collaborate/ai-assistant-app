@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "Invia un messaggio all'assistente AI di MSF qui",
   "chatInputPlaceholderFull": "Invia un messaggio all'assistente AI di MSF qui o digita \"/\" per selezionare un prompt...",
   "transcribingChatPlaceholder": "Trascrivendo...",
-  "sendFeedback": "Invia feedback",
+  "sendFeedback": "Richiedi assistenza",
   "welcomeMessage": "Benvenuto nell'assistente AI di MSF",
   "appName": "Assistente AI MSF",
   "modelSelectionDialogue": "Selezione del modello IA",
@@ -323,7 +323,39 @@
     "baseModel": "Modello base",
     "formatDescription": "Formato: asst_xxxxx (da MSF AI Assistant Foundry)",
     "importantInfo": "Questo agente avrà accesso al contesto della conversazione e può utilizzare gli stessi strumenti dei modelli standard. Assicurati che l'ID dell'agente sia corretto poiché non può essere modificato in seguito.",
-    "defunctWarning": "Il modello di base di questo agente non è più disponibile. Modifica l’agente per selezionare un nuovo modello di base o eliminalo."
+    "defunctWarning": "Il modello di base di questo agente non è più disponibile. Modifica l'agente per selezionare un nuovo modello di base o eliminalo.",
+    "editCustomAgent": "Modifica agente personalizzato",
+    "addCustomAgent": "Aggiungi agente personalizzato",
+    "experimental": "Sperimentale",
+    "createNew": "Crea nuovo",
+    "import": "Importa",
+    "importCustomAgents": "Importa agenti personalizzati",
+    "importFileDescription": "Seleziona un file JSON con una o più configurazioni di agente",
+    "chooseFile": "Scegli file",
+    "validatedSuccess": "Agente validato con successo!",
+    "cancel": "Annulla",
+    "validating": "Validazione...",
+    "updateAgent": "Aggiorna agente",
+    "addAgent": "Aggiungi agente",
+    "nameRequired": "Il nome dell'agente è obbligatorio",
+    "idRequired": "L'ID dell'agente è obbligatorio",
+    "invalidIdFormat": "Formato ID agente non valido. Formato previsto: asst_xxxxx",
+    "invalidFileFormat": "Formato file non valido",
+    "noAgentsInFile": "Nessun agente trovato nel file di importazione",
+    "importFailed": "Importazione del file non riuscita",
+    "importConflict": "I seguenti agenti hanno conflitti:\n\n{conflicts}\n\nImportare comunque? Verranno creati duplicati.",
+    "importSuccess": "{count} agente/i importato/i con successo",
+    "agentDetails": "Dettagli agente",
+    "agentIdLabel": "ID agente:",
+    "baseModelLabel": "Modello base:",
+    "unknown": "Sconosciuto",
+    "descriptionLabel": "Descrizione:",
+    "export": "Esporta",
+    "edit": "Modifica",
+    "confirmDelete": "Conferma",
+    "delete": "Elimina",
+    "noCustomAgentsYet": "Nessun agente personalizzato per ora.",
+    "noOrgAgentsConfigured": "Nessun agente dell'organizzazione configurato."
   },
   "Quick Actions": "Azioni rapide",
   "Type / in chat to access your prompts": "Digita / nella chat per accedere ai tuoi prompt",
@@ -479,7 +511,8 @@
     "discard": "Scarta",
     "keepEditing": "Continua modifica",
     "yes": "Sì",
-    "no": "No"
+    "no": "No",
+    "beta": "Beta"
   },
   "chat": {
     "downloadAudio": "Scarica audio",
@@ -512,6 +545,14 @@
     "deleteMessage": "Elimina messaggio",
     "imageContent": "Contenuto dell'immagine",
     "fullSizePreview": "Anteprima a dimensione intera",
+    "failedToLoadImage": "Impossibile caricare l'immagine",
+    "loadingImage": "Caricamento immagine...",
+    "imageAlt": "Immagine {number}",
+    "download": "Scarica",
+    "openAsDocument": "Apri come documento",
+    "openInCodeEditor": "Apri nell'editor di codice",
+    "failedToOpenCodeEditor": "Impossibile aprire il file nell'editor di codice. Per favore riprova.",
+    "failedToOpenDocEditor": "Impossibile aprire il file nell'editor di documenti. Per favore riprova.",
     "enterSearchQueryPlaceholder": "Inserisci la tua query di ricerca o domanda...",
     "errorFetchingUrl": "Si è verificato un errore durante il recupero del contenuto dell'URL",
     "errorInitiatingSearch": "Si è verificato un errore durante l'avvio della ricerca web",
@@ -677,7 +718,7 @@
     "contactSupport": "Contatta l'assistenza",
     "secureSso": "SSO sicuro",
     "howToGetAccess": "Come ottengo l'accesso?",
-    "accessLimitedText": "Attualmente MSF AI Assistant è disponibile solo per il personale di USA e Amsterdam.",
+    "accessLimitedText": "Attualmente MSF AI Assistant è disponibile solo per il personale di USA, Amsterdam e Ginevra.",
     "expandAccessSoon": "Speriamo di espandere l'accesso presto!",
     "errorConfiguration": "C'è un problema con la configurazione del server.",
     "errorAccessDenied": "Non hai l'autorizzazione per accedere.",
@@ -1060,6 +1101,7 @@
     "changeDisplayName": "Fai clic per cambiare il modo in cui ti chiamiamo"
   },
   "modelSelect": {
+    "maintainedBy": "Gestito da ",
     "tabs": {
       "models": "Modelli",
       "agents": "Agenti"
@@ -1416,6 +1458,13 @@
       "benefit1": "Avvia come un'app nativa dalla schermata Home",
       "benefit2": "Schermo intero senza l'interfaccia del browser",
       "benefit3": "Accesso offline alle conversazioni salvate"
+    },
+    "languageSupport": {
+      "title": "54 lingue supportate",
+      "description": "Ora disponibile in 54 lingue affinché più team e comunità di MSF possano utilizzare l'Assistente AI nella propria lingua",
+      "autoDetect": "La tua lingua viene rilevata automaticamente dalle impostazioni del browser",
+      "manualSwitch": "Cambia in qualsiasi momento tramite il selettore di lingua nella barra laterale",
+      "andMore": "e altro"
     }
   },
   "Professional": "Professionale",
@@ -1668,5 +1717,57 @@
     "title": "È disponibile una nuova versione",
     "refresh": "Aggiorna",
     "refreshNow": "Aggiorna per aggiornare"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agenti dell'organizzazione"
+    },
+    "customAgents": {
+      "title": "Agenti personalizzati",
+      "advancedBadge": "Avanzato",
+      "experimentalBlurb": "Sperimentale — sviluppato in collaborazione diretta con gli utenti esperti di MSF. Non per uso generale.",
+      "createButton": "Crea agente personalizzato"
+    },
+    "selectAgentPrompt": "Seleziona un agente per vedere i dettagli"
+  },
+  "privacy": {
+    "policyTitle": "Informativa sulla privacy &amp; Protezione dei dati",
+    "policyDescription": "Scopri come i tuoi dati sono protetti e quali informazioni non devono essere inserite",
+    "termsOfUse": "Condizioni d'uso",
+    "termsDescription": "Consulta le linee guida sull'uso responsabile e gli usi vietati",
+    "keyPrivacyPoints": "Punti chiave sulla privacy",
+    "localStorage": "Le tue conversazioni sono archiviate localmente sul tuo dispositivo",
+    "azureInfra": "Tutta l'elaborazione dei dati avviene all'interno dei sistemi MSF utilizzando l'infrastruttura Azure",
+    "noPersonalData": "Non inserire dati personali (nomi, numeri di telefono, ecc.)",
+    "noSensitiveData": "Non inserire dettagli operativi altamente sensibili",
+    "concernsTitle": "Preoccupazioni o incidenti sulla privacy?",
+    "contactUs": "Contattaci immediatamente se hai preoccupazioni sulla privacy:"
+  },
+  "variableModal": {
+    "fillInstructions": "Compila le variabili qui sotto per personalizzare il tuo prompt",
+    "optional": "Facoltativo",
+    "required": "Obbligatorio",
+    "default": "Predefinito:",
+    "defaultPlaceholder": "{defaultValue} (predefinito)",
+    "enterValue": "Inserisci un valore per {key}...",
+    "cancel": "Annulla",
+    "apply": "Applica"
+  },
+  "recentSources": {
+    "title": "Ultime fonti dati",
+    "unableToLoad": "Impossibile caricare le ultime fonti",
+    "retry": "Riprova",
+    "noSources": "Nessuna fonte recente disponibile",
+    "refresh": "Aggiorna",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "daysAgo": "{count} giorni fa"
+  },
+  "chatInput": {
+    "filePickerError": "Impossibile aprire il selettore di file. Prova a usare il trascinamento.",
+    "addDocument": "Aggiungi documento",
+    "uploadDocument": "Carica documento",
+    "images": "Immagini",
+    "addImage": "Aggiungi immagine"
   }
 }

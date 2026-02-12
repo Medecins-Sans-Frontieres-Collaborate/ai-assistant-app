@@ -3,6 +3,8 @@
 import { IconCheck, IconRobot } from '@tabler/icons-react';
 import { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { OrganizationAgent } from '@/types/organizationAgent';
 
 import {
@@ -24,6 +26,7 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
   onSelect,
   selectedAgentId,
 }) => {
+  const t = useTranslations('agents');
   const agents = getOrganizationAgents();
 
   if (agents.length === 0) {
@@ -34,7 +37,7 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
           className="mx-auto mb-3 text-gray-400 dark:text-gray-600"
         />
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          No organization agents configured.
+          {t('noOrgAgentsConfigured')}
         </p>
       </div>
     );

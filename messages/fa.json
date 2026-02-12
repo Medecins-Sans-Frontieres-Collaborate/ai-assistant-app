@@ -2,7 +2,7 @@
   "welcomeMessage": "به دستیار هوش مصنوعی MSF خوش آمدید",
   "transcribingChatPlaceholder": "در حال رونویسی...",
   "temperatureDescription": "مقادیر بالاتر مانند 0.8 خروجی را خلاق‌تر می‌کند، در حالی که مقادیر پایین‌تر مانند 0.2 آن را متمرکزتر و قطعی‌تر می‌کند.",
-  "sendFeedback": "ارسال بازخورد",
+  "sendFeedback": "درخواست پشتیبانی",
   "modelSelectionDialogue": "انتخاب مدل هوش مصنوعی",
   "appName": "دستیار هوش مصنوعی MSF",
   "chatDisclaimer": "دستیار هوش مصنوعی MSF ممکن است اشتباه کند. اطلاعات مهم را بررسی کنید.",
@@ -180,8 +180,8 @@
   "Prompt name": "نام دستور",
   "Prompt content": "محتوای دستور",
   "Are you sure you want to delete this prompt?": "آیا مطمئن هستید که می‌خواهید این دستور را حذف کنید؟",
-  "Import data from sidebar": "وارد کردن داده از نوار کناری",
-  "Export data from sidebar": "صادر کردن داده از نوار کناری",
+  "Import data from sidebar": "بازیابی تاریخچه گفتگو",
+  "Export data from sidebar": "پشتیبان‌گیری از تاریخچه گفتگو",
   "Search chats": "جستجوی گفتگوها",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "این مجموعه‌ای از دستورالعمل‌ها است که دستیار هوش مصنوعی را راهنمایی می‌کند که چگونه پاسخ دهد. این به هوش مصنوعی کمک می‌کند تا با ارائه زمینه برای سؤالات پرسیده شده، اطلاعات مفید و دقیق ارائه دهد.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "یک دستور وارد کنید یا \"/\" را تایپ کنید تا یک دستور انتخاب کنید...",
@@ -273,7 +273,39 @@
     "baseModel": "مدل پایه",
     "formatDescription": "فرمت: asst_xxxxx (از MSF AI Assistant Foundry)",
     "importantInfo": "این عامل به زمینه مکالمه دسترسی خواهد داشت و می‌تواند از همان ابزارهای مدل‌های استاندارد استفاده کند. مطمئن شوید که شناسه عامل صحیح است زیرا بعداً نمی‌توان آن را تغییر داد.",
-    "defunctWarning": "مدل پایه‌ی این عامل دیگر در دسترس نیست. برای انتخاب یک مدل پایه جدید، عامل را ویرایش کنید یا آن را حذف نمایید."
+    "defunctWarning": "مدل پایه‌ی این عامل دیگر در دسترس نیست. برای انتخاب یک مدل پایه جدید، عامل را ویرایش کنید یا آن را حذف نمایید.",
+    "editCustomAgent": "ویرایش عامل سفارشی",
+    "addCustomAgent": "افزودن عامل سفارشی",
+    "experimental": "آزمایشی",
+    "createNew": "ایجاد جدید",
+    "import": "وارد کردن",
+    "importCustomAgents": "وارد کردن عوامل سفارشی",
+    "importFileDescription": "یک فایل JSON حاوی یک یا چند پیکربندی عامل انتخاب کنید",
+    "chooseFile": "انتخاب فایل",
+    "validatedSuccess": "عامل با موفقیت تأیید شد!",
+    "cancel": "لغو",
+    "validating": "در حال تأیید...",
+    "updateAgent": "به‌روزرسانی عامل",
+    "addAgent": "افزودن عامل",
+    "nameRequired": "نام عامل الزامی است",
+    "idRequired": "شناسه عامل الزامی است",
+    "invalidIdFormat": "فرمت شناسه عامل نامعتبر است. فرمت مورد انتظار: asst_xxxxx",
+    "invalidFileFormat": "فرمت فایل نامعتبر",
+    "noAgentsInFile": "هیچ عاملی در فایل واردشده یافت نشد",
+    "importFailed": "وارد کردن فایل ناموفق بود",
+    "importConflict": "عوامل زیر تداخل دارند:\n\n{conflicts}\n\nبا این حال وارد شوند؟ این کار موارد تکراری ایجاد خواهد کرد.",
+    "importSuccess": "{count} عامل با موفقیت وارد شد",
+    "agentDetails": "جزئیات عامل",
+    "agentIdLabel": "شناسه عامل:",
+    "baseModelLabel": "مدل پایه:",
+    "unknown": "ناشناخته",
+    "descriptionLabel": "توضیحات:",
+    "export": "صادر کردن",
+    "edit": "ویرایش",
+    "confirmDelete": "تأیید",
+    "delete": "حذف",
+    "noCustomAgentsYet": "هنوز عامل سفارشی وجود ندارد.",
+    "noOrgAgentsConfigured": "هیچ عامل سازمانی پیکربندی نشده است."
   },
   "Quick Actions": "اقدامات سریع",
   "Type / in chat to access your prompts": "در چت / را تایپ کنید تا به دستورات خود دسترسی پیدا کنید",
@@ -429,7 +461,8 @@
     "discard": "صرف‌نظر",
     "keepEditing": "ادامه ویرایش",
     "yes": "بله",
-    "no": "خیر"
+    "no": "خیر",
+    "beta": "بتا"
   },
   "errors": {
     "unexpectedErrorOccurred": "یک خطای غیرمنتظره رخ داد",
@@ -457,7 +490,7 @@
     "contactSupport": "تماس با پشتیبانی",
     "secureSso": "SSO امن",
     "howToGetAccess": "چگونه دسترسی پیدا کنم؟",
-    "accessLimitedText": "در حال حاضر دستیار هوش مصنوعی MSF فقط برای کارکنان ایالات متحده و آمستردام در دسترس است.",
+    "accessLimitedText": "در حال حاضر دستیار هوش مصنوعی MSF فقط برای کارکنان ایالات متحده، آمستردام و ژنو در دسترس است.",
     "expandAccessSoon": "امیدواریم به زودی دسترسی را گسترش دهیم!",
     "errorConfiguration": "مشکلی در پیکربندی سرور وجود دارد.",
     "errorAccessDenied": "شما مجوز ورود ندارید.",
@@ -510,6 +543,14 @@
     "deleteMessage": "حذف پیام",
     "imageContent": "محتوای تصویر",
     "fullSizePreview": "پیش‌نمایش تمام صفحه",
+    "failedToLoadImage": "بارگذاری تصویر ناموفق بود",
+    "loadingImage": "در حال بارگذاری تصویر...",
+    "imageAlt": "تصویر {number}",
+    "download": "دانلود",
+    "openAsDocument": "باز کردن به عنوان سند",
+    "openInCodeEditor": "باز کردن در ویرایشگر کد",
+    "failedToOpenCodeEditor": "باز کردن فایل در ویرایشگر کد ناموفق بود. لطفاً دوباره تلاش کنید.",
+    "failedToOpenDocEditor": "باز کردن فایل در ویرایشگر سند ناموفق بود. لطفاً دوباره تلاش کنید.",
     "enterSearchQueryPlaceholder": "پرس و جو یا سوال جستجوی خود را وارد کنید...",
     "errorFetchingUrl": "خطایی در دریافت محتوای URL رخ داد",
     "errorInitiatingSearch": "خطایی در شروع جستجوی وب رخ داد",
@@ -1067,6 +1108,7 @@
     "sections": {
       "baseModels": "مدل‌های پایه"
     },
+    "maintainedBy": "نگهداری توسط ",
     "agents": {
       "advancedFeatureBadge": "ویژگی پیشرفته",
       "description": "عامل‌های هوش مصنوعی سفارشی با قابلیت‌های تخصصی بسازید و مدیریت کنید. این عامل‌ها روی نمونه MSF AI Assistant Foundry اجرا می‌شوند.",
@@ -1416,6 +1458,13 @@
       "benefit1": "مانند یک اپلیکیشن بومی از صفحه اصلی اجرا کنید",
       "benefit2": "تمام‌صفحه بدون رابط مرورگر",
       "benefit3": "دسترسی آفلاین به گفتگوهای ذخیره‌شده"
+    },
+    "languageSupport": {
+      "title": "پشتیبانی از ۵۴ زبان",
+      "description": "اکنون به ۵۴ زبان در دسترس است تا تیم‌ها و جوامع بیشتر پزشکان بدون مرز بتوانند از دستیار هوش مصنوعی به زبان خود استفاده کنند",
+      "autoDetect": "زبان شما به‌طور خودکار از تنظیمات مرورگرتان شناسایی می‌شود",
+      "manualSwitch": "هر زمان که بخواهید از طریق انتخابگر زبان در نوار کناری تغییر دهید",
+      "andMore": "و بیشتر"
     }
   },
   "Professional": "حرفه‌ای",
@@ -1668,5 +1717,57 @@
     "title": "نسخه جدیدی در دسترس است",
     "refresh": "بارگذاری مجدد",
     "refreshNow": "برای به‌روزرسانی بارگذاری مجدد کنید"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "عوامل سازمان"
+    },
+    "customAgents": {
+      "title": "عوامل سفارشی",
+      "advancedBadge": "پیشرفته",
+      "experimentalBlurb": "آزمایشی — با همکاری مستقیم کاربران حرفه‌ای MSF ساخته شده است. برای استفاده عمومی نیست.",
+      "createButton": "ایجاد عامل سفارشی"
+    },
+    "selectAgentPrompt": "برای مشاهده جزئیات یک عامل انتخاب کنید"
+  },
+  "privacy": {
+    "policyTitle": "سیاست حفظ حریم خصوصی و حفاظت از داده‌ها",
+    "policyDescription": "بیاموزید که داده‌های شما چگونه محافظت می‌شوند و چه اطلاعاتی نباید وارد شوند",
+    "termsOfUse": "شرایط استفاده",
+    "termsDescription": "دستورالعمل‌های استفاده مسئولانه و موارد ممنوعه را مرور کنید",
+    "keyPrivacyPoints": "نکات کلیدی حریم خصوصی",
+    "localStorage": "مکالمات شما به صورت محلی در دستگاه شما ذخیره می‌شوند",
+    "azureInfra": "تمام پردازش داده‌ها در سیستم‌های MSF با استفاده از زیرساخت Azure انجام می‌شود",
+    "noPersonalData": "داده‌های شخصی وارد نکنید (نام‌ها، شماره تلفن و غیره)",
+    "noSensitiveData": "جزئیات عملیاتی بسیار حساس وارد نکنید",
+    "concernsTitle": "نگرانی‌ها یا حوادث مربوط به حریم خصوصی؟",
+    "contactUs": "در صورت داشتن نگرانی درباره حریم خصوصی فوراً با ما تماس بگیرید:"
+  },
+  "variableModal": {
+    "fillInstructions": "متغیرهای زیر را برای سفارشی‌سازی دستور خود پر کنید",
+    "optional": "اختیاری",
+    "required": "الزامی",
+    "default": "پیش‌فرض:",
+    "defaultPlaceholder": "{defaultValue} (پیش‌فرض)",
+    "enterValue": "مقدار {key} را وارد کنید...",
+    "cancel": "لغو",
+    "apply": "اعمال"
+  },
+  "recentSources": {
+    "title": "آخرین داده‌های منبع",
+    "unableToLoad": "بارگذاری آخرین منابع امکان‌پذیر نیست",
+    "retry": "تلاش مجدد",
+    "noSources": "هیچ منبع اخیری در دسترس نیست",
+    "refresh": "بازخوانی",
+    "today": "امروز",
+    "yesterday": "دیروز",
+    "daysAgo": "{count} روز پیش"
+  },
+  "chatInput": {
+    "filePickerError": "انتخاب‌گر فایل باز نشد. به جای آن از کشیدن و رها کردن استفاده کنید.",
+    "addDocument": "افزودن سند",
+    "uploadDocument": "بارگذاری سند",
+    "images": "تصاویر",
+    "addImage": "افزودن تصویر"
   }
 }

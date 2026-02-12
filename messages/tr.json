@@ -42,7 +42,7 @@
   "chatInputPlaceholder": "MSF AI Asistanına buradan mesaj gönderin",
   "chatInputPlaceholderFull": "MSF AI Asistanına buradan mesaj gönderin veya bir istem seçmek için \"/\" yazın...",
   "transcribingChatPlaceholder": "Transkripsiyon yapılıyor...",
-  "sendFeedback": "Destek Talep Et",
+  "sendFeedback": "Destek talep et",
   "welcomeMessage": "MSF AI Asistanına Hoş Geldiniz",
   "appName": "MSF AI Asistanı",
   "modelSelectionDialogue": "AI Model Seçimi:",
@@ -348,7 +348,39 @@
     "baseModel": "Temel model",
     "formatDescription": "Format: asst_xxxxx (MSF AI Assistant Foundry'den)",
     "importantInfo": "Bu ajan konuşma bağlamına erişebilecek ve standart modellerle aynı araçları kullanabilecektir. Ajan kimliğinin doğru olduğundan emin olun çünkü daha sonra değiştirilemez.",
-    "defunctWarning": "Bu ajanın temel modeli artık mevcut değil. Yeni bir temel model seçmek için ajanı düzenleyin veya silin."
+    "defunctWarning": "Bu ajanın temel modeli artık mevcut değil. Yeni bir temel model seçmek için ajanı düzenleyin veya silin.",
+    "editCustomAgent": "Özel Ajanı Düzenle",
+    "addCustomAgent": "Özel Ajan Ekle",
+    "experimental": "Deneysel",
+    "createNew": "Yeni Oluştur",
+    "import": "İçe Aktar",
+    "importCustomAgents": "Özel Ajanları İçe Aktar",
+    "importFileDescription": "Bir veya daha fazla ajan yapılandırması içeren bir JSON dosyası seçin",
+    "chooseFile": "Dosya Seç",
+    "validatedSuccess": "Ajan başarıyla doğrulandı!",
+    "cancel": "İptal",
+    "validating": "Doğrulanıyor...",
+    "updateAgent": "Ajanı Güncelle",
+    "addAgent": "Ajan Ekle",
+    "nameRequired": "Ajan adı gereklidir",
+    "idRequired": "Ajan ID'si gereklidir",
+    "invalidIdFormat": "Geçersiz Ajan ID formatı. Beklenen format: asst_xxxxx",
+    "invalidFileFormat": "Geçersiz dosya formatı",
+    "noAgentsInFile": "İçe aktarma dosyasında ajan bulunamadı",
+    "importFailed": "Dosya içe aktarılamadı",
+    "importConflict": "Aşağıdaki ajanlarda çakışmalar var:\n\n{conflicts}\n\nYine de içe aktarılsın mı? Bu, yinelenenleri oluşturacaktır.",
+    "importSuccess": "{count} ajan başarıyla içe aktarıldı",
+    "agentDetails": "Ajan Detayları",
+    "agentIdLabel": "Ajan ID:",
+    "baseModelLabel": "Temel Model:",
+    "unknown": "Bilinmiyor",
+    "descriptionLabel": "Açıklama:",
+    "export": "Dışa Aktar",
+    "edit": "Düzenle",
+    "confirmDelete": "Onayla",
+    "delete": "Sil",
+    "noCustomAgentsYet": "Henüz özel ajan yok.",
+    "noOrgAgentsConfigured": "Yapılandırılmış kuruluş ajanı yok."
   },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",
@@ -504,7 +536,8 @@
     "discard": "Vazgeç",
     "keepEditing": "Düzenlemeye devam et",
     "yes": "Evet",
-    "no": "Hayır"
+    "no": "Hayır",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
@@ -532,7 +565,7 @@
     "contactSupport": "Destek ekibiyle iletişime geçin",
     "secureSso": "Güvenli SSO",
     "howToGetAccess": "Erişimi nasıl alabilirim?",
-    "accessLimitedText": "Şu anda MSF AI Assistant yalnızca ABD ve Amsterdam personeli için kullanılabilir.",
+    "accessLimitedText": "Şu anda MSF AI Assistant yalnızca ABD, Amsterdam ve Cenevre personeli için kullanılabilir.",
     "expandAccessSoon": "Yakında erişimi genişletmeyi umuyoruz!",
     "errorConfiguration": "Sunucu yapılandırmasında bir sorun var.",
     "errorAccessDenied": "Oturum açma izniniz yok.",
@@ -585,6 +618,14 @@
     "deleteMessage": "Mesajı sil",
     "imageContent": "Resim içeriği",
     "fullSizePreview": "Tam boyut önizleme",
+    "failedToLoadImage": "Görsel yüklenemedi",
+    "loadingImage": "Görsel yükleniyor...",
+    "imageAlt": "Görsel {number}",
+    "download": "İndir",
+    "openAsDocument": "Belge olarak aç",
+    "openInCodeEditor": "Kod düzenleyicide aç",
+    "failedToOpenCodeEditor": "Dosya kod düzenleyicide açılamadı. Lütfen tekrar deneyin.",
+    "failedToOpenDocEditor": "Dosya belge düzenleyicide açılamadı. Lütfen tekrar deneyin.",
     "enterSearchQueryPlaceholder": "Arama sorgunuzu veya sorunuzu girin...",
     "errorFetchingUrl": "URL içeriği alınırken bir hata oluştu",
     "errorInitiatingSearch": "Web araması başlatılırken bir hata oluştu",
@@ -976,6 +1017,7 @@
     "changeDisplayName": "Size nasıl hitap edeceğimizi değiştirmek için tıklayın"
   },
   "modelSelect": {
+    "maintainedBy": "Bakımı yapan ",
     "tabs": {
       "models": "Modeller",
       "agents": "Ajanlar"
@@ -1416,6 +1458,13 @@
       "benefit1": "Ana ekrandan yerel uygulama gibi başlatılır",
       "benefit2": "Tarayıcı arayüzü olmadan tam ekran",
       "benefit3": "Kaydedilen konuşmalara çevrimdışı erişim"
+    },
+    "languageSupport": {
+      "title": "54 Dil Destekleniyor",
+      "description": "Artık 54 dilde kullanılabilir, böylece daha fazla MSF ekibi ve topluluğu AI Asistanını kendi dillerinde kullanabilir",
+      "autoDetect": "Diliniz tarayıcı ayarlarınızdan otomatik olarak algılanır",
+      "manualSwitch": "Kenar çubuğundaki dil seçici aracılığıyla istediğiniz zaman değiştirin",
+      "andMore": "ve daha fazlası"
     }
   },
   "Professional": "Profesyonel",
@@ -1668,5 +1717,57 @@
     "title": "Yeni bir sürüm mevcut",
     "refresh": "Yenile",
     "refreshNow": "Güncellemek için yenileyin"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Kuruluş Ajanları"
+    },
+    "customAgents": {
+      "title": "Özel Ajanlar",
+      "advancedBadge": "Gelişmiş",
+      "experimentalBlurb": "Deneysel — MSF ileri düzey kullanıcılarıyla doğrudan iş birliği içinde geliştirilmiştir. Genel kullanım için değildir.",
+      "createButton": "Özel Ajan Oluştur"
+    },
+    "selectAgentPrompt": "Detayları görmek için bir ajan seçin"
+  },
+  "privacy": {
+    "policyTitle": "Gizlilik Politikası &amp; Veri Koruma",
+    "policyDescription": "Verilerinizin nasıl korunduğunu ve hangi bilgilerin girilmemesi gerektiğini öğrenin",
+    "termsOfUse": "Kullanım Koşulları",
+    "termsDescription": "Sorumlu kullanım kılavuzlarını ve yasaklanmış kullanımları inceleyin",
+    "keyPrivacyPoints": "Temel Gizlilik Noktaları",
+    "localStorage": "Konuşmalarınız cihazınızda yerel olarak saklanır",
+    "azureInfra": "Tüm veri işleme, Azure altyapısı kullanılarak MSF sistemleri içinde gerçekleşir",
+    "noPersonalData": "Kişisel veri girmeyin (isimler, telefon numaraları vb.)",
+    "noSensitiveData": "Son derece hassas operasyonel detaylar girmeyin",
+    "concernsTitle": "Gizlilik Endişeleri veya Olaylar?",
+    "contactUs": "Gizlilik endişeleriniz varsa derhal bizimle iletişime geçin:"
+  },
+  "variableModal": {
+    "fillInstructions": "İsteminizi özelleştirmek için aşağıdaki değişkenleri doldurun",
+    "optional": "İsteğe bağlı",
+    "required": "Gerekli",
+    "default": "Varsayılan:",
+    "defaultPlaceholder": "{defaultValue} (varsayılan)",
+    "enterValue": "{key} için değer girin...",
+    "cancel": "İptal",
+    "apply": "Uygula"
+  },
+  "recentSources": {
+    "title": "En Son Kaynak Verileri",
+    "unableToLoad": "En son kaynaklar yüklenemedi",
+    "retry": "Tekrar Dene",
+    "noSources": "Son kaynak mevcut değil",
+    "refresh": "Yenile",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "daysAgo": "{count} gün önce"
+  },
+  "chatInput": {
+    "filePickerError": "Dosya seçici açılamadı. Sürükle ve bırak kullanmayı deneyin.",
+    "addDocument": "Belge ekle",
+    "uploadDocument": "Belge Yükle",
+    "images": "Görseller",
+    "addImage": "Görsel ekle"
   }
 }

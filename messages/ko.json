@@ -28,7 +28,7 @@
   "Please set your OpenAI API key in the bottom left of the sidebar_": "사이드바 왼쪽 하단에 OpenAI API 키를 설정하세요.",
   "Stop Generating": "생성 중지",
   "Prompt limit is {{maxLength}} characters": "프롬프트 제한은 {{maxLength}}자입니다.",
-  "System Prompt": "시스템 프롬트",
+  "System Prompt": "시스템 프롬프트",
   "You are ChatGPT, a large language model trained by OpenAI_ Follow the user's instructions carefully_ Respond using markdown_": "당신은 OpenAI에서 훈련된 대규모 언어 모델 ChatGPT입니다. 사용자의 지시를 주의해서 따르세요. 마크다운을 사용하여 응답하세요.",
   "Enter a prompt": "프롬프트를 입력하세요",
   "Regenerate response": "응답 재생성",
@@ -41,8 +41,8 @@
   "Error fetching models_": "모델을 가져오는 중 오류가 발생했습니다.",
   "AI": "인공지능",
   "You": "당신",
-  "Cancel": "Cancel",
-  "Save & Submit": "Save & Submit",
+  "Cancel": "취소",
+  "Save & Submit": "저장 및 제출",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAI API 키가 사이드바 왼쪽 하단에 설정되어 있는지 확인하세요.",
   "If you completed this step, OpenAI may be experiencing issues_": "이 단계를 완료한 경우 OpenAI에 문제가 있을 수도 있습니다.",
   "click if using a _env_local file": "click if using a .env.local file",
@@ -65,7 +65,7 @@
   "chatInputPlaceholder": "여기에서 MSF AI 어시스턴트에게 메시지를 보내세요",
   "chatInputPlaceholderFull": "여기에서 MSF AI 어시스턴트에게 메시지를 보내거나 \"/\"를 입력하여 프롬프트를 선택하세요...",
   "transcribingChatPlaceholder": "필사 중...",
-  "sendFeedback": "피드백 보내기",
+  "sendFeedback": "지원 요청",
   "welcomeMessage": "MSF AI 어시스턴트에 오신 것을 환영합니다",
   "appName": "MSF AI 어시스턴트",
   "modelSelectionDialogue": "AI 모델 선택",
@@ -141,7 +141,7 @@
   "chatFeaturesDropdownTransform": "변환",
   "chatFeaturesDropdownImageModal": "이미지",
   "chatFeaturesDropdownFile": "파일",
-  "chatFeaturesDropdownCompose": "작곡",
+  "chatFeaturesDropdownCompose": "작성",
   "webUrlInputDescription": "AI 분석을 위한 웹사이트 URL 입력",
   "webUrlQuestionDescription": "이 웹사이트에 대해 무엇을 알고 싶으신가요?",
   "webSearchInputDescription": "AI 기반 분석으로 인터넷 검색",
@@ -255,8 +255,8 @@
   "Prompt name": "프롬프트 이름",
   "Prompt content": "프롬프트 내용",
   "Are you sure you want to delete this prompt?": "이 프롬프트를 삭제하시겠습니까?",
-  "Import data from sidebar": "사이드바에서 데이터 가져오기",
-  "Export data from sidebar": "사이드바에서 데이터 내보내기",
+  "Import data from sidebar": "채팅 기록 복원",
+  "Export data from sidebar": "채팅 기록 백업",
   "Search chats": "채팅 검색",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "이것은 AI 어시스턴트가 응답하는 방법을 안내하는 일련의 지침입니다. 질문에 맥락을 제공하여 AI가 유용하고 정확한 정보를 제공하는 데 도움이 됩니다.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "프롬프트를 입력하거나 \"/\"를 입력하여 프롬프트를 선택...",
@@ -348,7 +348,39 @@
     "baseModel": "기본 모델",
     "formatDescription": "형식: asst_xxxxx (MSF AI Assistant Foundry에서)",
     "importantInfo": "이 에이전트는 대화 컨텍스트에 액세스하고 표준 모델과 동일한 도구를 사용할 수 있습니다. 에이전트 ID가 올바른지 확인하세요. 나중에 변경할 수 없습니다.",
-    "defunctWarning": "이 에이전트의 기본 모델을 더 이상 사용할 수 없습니다. 에이전트를 수정하여 새로운 기본 모델을 선택하거나 삭제하세요."
+    "defunctWarning": "이 에이전트의 기본 모델을 더 이상 사용할 수 없습니다. 에이전트를 수정하여 새로운 기본 모델을 선택하거나 삭제하세요.",
+    "editCustomAgent": "커스텀 에이전트 편집",
+    "addCustomAgent": "커스텀 에이전트 추가",
+    "experimental": "실험적",
+    "createNew": "새로 만들기",
+    "import": "가져오기",
+    "importCustomAgents": "커스텀 에이전트 가져오기",
+    "importFileDescription": "하나 이상의 에이전트 구성이 포함된 JSON 파일을 선택하세요",
+    "chooseFile": "파일 선택",
+    "validatedSuccess": "에이전트 검증 성공!",
+    "cancel": "취소",
+    "validating": "검증 중...",
+    "updateAgent": "에이전트 업데이트",
+    "addAgent": "에이전트 추가",
+    "nameRequired": "에이전트 이름은 필수입니다",
+    "idRequired": "에이전트 ID는 필수입니다",
+    "invalidIdFormat": "잘못된 에이전트 ID 형식입니다. 예상 형식: asst_xxxxx",
+    "invalidFileFormat": "잘못된 파일 형식",
+    "noAgentsInFile": "가져오기 파일에서 에이전트를 찾을 수 없습니다",
+    "importFailed": "파일 가져오기 실패",
+    "importConflict": "다음 에이전트에 충돌이 있습니다:\n\n{conflicts}\n\n그래도 가져오시겠습니까? 중복이 생성됩니다.",
+    "importSuccess": "{count}개의 에이전트를 성공적으로 가져왔습니다",
+    "agentDetails": "에이전트 상세정보",
+    "agentIdLabel": "에이전트 ID:",
+    "baseModelLabel": "기본 모델:",
+    "unknown": "알 수 없음",
+    "descriptionLabel": "설명:",
+    "export": "내보내기",
+    "edit": "편집",
+    "confirmDelete": "확인",
+    "delete": "삭제",
+    "noCustomAgentsYet": "아직 커스텀 에이전트가 없습니다.",
+    "noOrgAgentsConfigured": "조직 에이전트가 구성되지 않았습니다."
   },
   "Quick Actions": "빠른 작업",
   "Type / in chat to access your prompts": "채팅에서 /를 입력하여 프롬프트에 액세스하세요",
@@ -504,7 +536,8 @@
     "discard": "취소",
     "keepEditing": "계속 편집",
     "yes": "예",
-    "no": "아니오"
+    "no": "아니오",
+    "beta": "베타"
   },
   "errors": {
     "unexpectedErrorOccurred": "예기치 않은 오류가 발생했습니다",
@@ -532,7 +565,7 @@
     "contactSupport": "지원팀에 문의",
     "secureSso": "보안 SSO",
     "howToGetAccess": "액세스 권한을 얻으려면?",
-    "accessLimitedText": "현재 MSF AI Assistant는 미국 및 암스테르담 직원만 사용할 수 있습니다.",
+    "accessLimitedText": "현재 MSF AI Assistant는 미국, 암스테르담 및 제네바 직원만 사용할 수 있습니다.",
     "expandAccessSoon": "곧 액세스를 확대할 수 있기를 바랍니다!",
     "errorConfiguration": "서버 구성에 문제가 있습니다.",
     "errorAccessDenied": "로그인할 권한이 없습니다.",
@@ -585,6 +618,14 @@
     "deleteMessage": "메시지 삭제",
     "imageContent": "이미지 콘텐츠",
     "fullSizePreview": "전체 크기 미리보기",
+    "failedToLoadImage": "이미지를 불러오지 못했습니다",
+    "loadingImage": "이미지 로딩 중...",
+    "imageAlt": "이미지 {number}",
+    "download": "다운로드",
+    "openAsDocument": "문서로 열기",
+    "openInCodeEditor": "코드 편집기에서 열기",
+    "failedToOpenCodeEditor": "코드 편집기에서 파일을 열지 못했습니다. 다시 시도해 주세요.",
+    "failedToOpenDocEditor": "문서 편집기에서 파일을 열지 못했습니다. 다시 시도해 주세요.",
     "enterSearchQueryPlaceholder": "검색 쿼리 또는 질문을 입력하세요...",
     "errorFetchingUrl": "URL 콘텐츠를 가져오는 중 오류가 발생했습니다",
     "errorInitiatingSearch": "웹 검색을 시작하는 중 오류가 발생했습니다",
@@ -976,6 +1017,7 @@
     "changeDisplayName": "클릭하여 호칭을 변경하세요"
   },
   "modelSelect": {
+    "maintainedBy": "관리: ",
     "tabs": {
       "models": "모델",
       "agents": "에이전트"
@@ -1416,6 +1458,13 @@
       "benefit1": "홈 화면에서 네이티브 앱처럼 실행",
       "benefit2": "브라우저 UI 없이 전체 화면 사용",
       "benefit3": "저장된 대화 오프라인 접근"
+    },
+    "languageSupport": {
+      "title": "54개 언어 지원",
+      "description": "이제 54개 언어로 제공되어 더 많은 MSF 팀과 커뮤니티가 자신의 언어로 AI 어시스턴트를 사용할 수 있습니다",
+      "autoDetect": "브라우저 설정에서 언어가 자동으로 감지됩니다",
+      "manualSwitch": "사이드바의 언어 선택기를 통해 언제든지 전환하세요",
+      "andMore": "그 외"
     }
   },
   "Professional": "전문적",
@@ -1668,5 +1717,57 @@
     "title": "새 버전이 이용 가능합니다",
     "refresh": "새로고침",
     "refreshNow": "업데이트하려면 새로고침하세요"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "조직 에이전트"
+    },
+    "customAgents": {
+      "title": "커스텀 에이전트",
+      "advancedBadge": "고급",
+      "experimentalBlurb": "실험적 기능 — MSF 파워 유저와의 직접 협력으로 구축됨. 일반 사용 목적이 아닙니다.",
+      "createButton": "커스텀 에이전트 만들기"
+    },
+    "selectAgentPrompt": "에이전트를 선택하여 세부정보 보기"
+  },
+  "privacy": {
+    "policyTitle": "개인정보 보호정책 &amp; 데이터 보호",
+    "policyDescription": "귀하의 데이터가 어떻게 보호되는지, 어떤 정보를 입력하면 안 되는지 알아보세요",
+    "termsOfUse": "이용약관",
+    "termsDescription": "책임 있는 사용 지침 및 금지 사항을 검토하세요",
+    "keyPrivacyPoints": "핵심 개인정보 보호 사항",
+    "localStorage": "대화는 귀하의 기기에 로컬로 저장됩니다",
+    "azureInfra": "모든 데이터 처리는 Azure 인프라를 사용하여 MSF 시스템 내에서 이루어집니다",
+    "noPersonalData": "개인 데이터(이름, 전화번호 등)를 입력하지 마세요",
+    "noSensitiveData": "매우 민감한 운영 세부정보를 입력하지 마세요",
+    "concernsTitle": "개인정보 보호 관련 우려 또는 사고?",
+    "contactUs": "개인정보 보호에 대한 우려가 있으시면 즉시 연락주세요:"
+  },
+  "variableModal": {
+    "fillInstructions": "아래 변수를 입력하여 프롬프트를 맞춤 설정하세요",
+    "optional": "선택사항",
+    "required": "필수",
+    "default": "기본값:",
+    "defaultPlaceholder": "{defaultValue} (기본값)",
+    "enterValue": "{key}의 값을 입력하세요...",
+    "cancel": "취소",
+    "apply": "적용"
+  },
+  "recentSources": {
+    "title": "최신 소스 데이터",
+    "unableToLoad": "최신 소스를 불러올 수 없습니다",
+    "retry": "재시도",
+    "noSources": "최근 소스가 없습니다",
+    "refresh": "새로고침",
+    "today": "오늘",
+    "yesterday": "어제",
+    "daysAgo": "{count}일 전"
+  },
+  "chatInput": {
+    "filePickerError": "파일 선택기를 열 수 없습니다. 드래그 앤 드롭을 사용해 보세요.",
+    "addDocument": "문서 추가",
+    "uploadDocument": "문서 업로드",
+    "images": "이미지",
+    "addImage": "이미지 추가"
   }
 }

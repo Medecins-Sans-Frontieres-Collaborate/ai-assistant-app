@@ -42,7 +42,7 @@
   "AI": "AI",
   "You": "あなた",
   "Cancel": "キャンセル",
-  "Save & Submit": "Save & Submit",
+  "Save & Submit": "保存して送信",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "OpenAIのAPIキーがサイドバーの左下に設定されていることを確認してください。",
   "If you completed this step, OpenAI may be experiencing issues_": "このステップを完了した場合、OpenAIに問題が発生している可能性があります。",
   "click if using a _env_local file": "もし.env.localファイルを使用している場合はこちらをクリックしてください",
@@ -65,7 +65,7 @@
   "chatInputPlaceholder": "ここでMSF AIアシスタントにメッセージを送る",
   "chatInputPlaceholderFull": "ここでMSF AIアシスタントにメッセージを送るか、「/」を入力してプロンプトを選択してください...",
   "transcribingChatPlaceholder": "書き起こし中...",
-  "sendFeedback": "フィードバックを送信",
+  "sendFeedback": "サポートを依頼",
   "welcomeMessage": "MSF AIアシスタントへようこそ",
   "appName": "MSF AIアシスタント",
   "modelSelectionDialogue": "AIモデル選択",
@@ -141,7 +141,7 @@
   "chatFeaturesDropdownTransform": "変換",
   "chatFeaturesDropdownImageModal": "画像",
   "chatFeaturesDropdownFile": "ファイル",
-  "chatFeaturesDropdownCompose": "構成",
+  "chatFeaturesDropdownCompose": "作成",
   "webUrlInputDescription": "AI分析用のURLを入力してください",
   "webUrlQuestionDescription": "このウェブサイトについて何を知りたいですか？",
   "webSearchInputDescription": "AI分析を活用してインターネットを検索",
@@ -255,8 +255,8 @@
   "Prompt name": "プロンプト名",
   "Prompt content": "プロンプトの内容",
   "Are you sure you want to delete this prompt?": "このプロンプトを削除してもよろしいですか？",
-  "Import data from sidebar": "サイドバーからデータをインポート",
-  "Export data from sidebar": "サイドバーからデータをエクスポート",
+  "Import data from sidebar": "チャット履歴を復元",
+  "Export data from sidebar": "チャット履歴をバックアップ",
   "Search chats": "チャットを検索",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "これは、AIアシスタントが応答する方法を導く一連の指示です。質問に文脈を与えることで、AIが有用で正確な情報を提供するのに役立ちます。",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "プロンプトを入力するか、「/」を入力してプロンプトを選択...",
@@ -301,7 +301,7 @@
   "iOS (iPhone/iPad)": "iOS（iPhone/iPad）",
   "PWA Safari Warning": "⚠️ 重要：Safariブラウザを使用する必要があります。ChromeやFirefoxなどの他のブラウザは、iOSへのインストールには機能しません。",
   "PWA Install Tip": "💡 ヒント：認証を保持し、最高の体験を得るために、サインイン後にインストールしてください。",
-  "Open this page in Safari": "SafariでこのページRを開く",
+  "Open this page in Safari": "Safariでこのページを開く",
   "(not Chrome or other browsers)": "（Chromeや他のブラウザではありません）",
   "Tap the": "タップする",
   "Share": "共有",
@@ -348,7 +348,39 @@
     "baseModel": "ベースモデル",
     "formatDescription": "形式：asst_xxxxx（MSF AI Assistant Foundryより）",
     "importantInfo": "このエージェントは会話のコンテキストにアクセスでき、標準モデルと同じツールを使用できます。エージェントIDが正しいことを確認してください。後で変更することはできません。",
-    "defunctWarning": "このエージェントのベースモデルは利用できなくなりました。新しいベースモデルを選択するか、エージェントを削除してください。"
+    "defunctWarning": "このエージェントのベースモデルは利用できなくなりました。新しいベースモデルを選択するか、エージェントを削除してください。",
+    "editCustomAgent": "カスタムエージェントを編集",
+    "addCustomAgent": "カスタムエージェントを追加",
+    "experimental": "実験的",
+    "createNew": "新規作成",
+    "import": "インポート",
+    "importCustomAgents": "カスタムエージェントをインポート",
+    "importFileDescription": "1つ以上のエージェント構成を含むJSONファイルを選択してください",
+    "chooseFile": "ファイルを選択",
+    "validatedSuccess": "エージェントの検証に成功しました！",
+    "cancel": "キャンセル",
+    "validating": "検証中...",
+    "updateAgent": "エージェントを更新",
+    "addAgent": "エージェントを追加",
+    "nameRequired": "エージェント名は必須です",
+    "idRequired": "エージェントIDは必須です",
+    "invalidIdFormat": "エージェントIDの形式が無効です。期待される形式：asst_xxxxx",
+    "invalidFileFormat": "無効なファイル形式",
+    "noAgentsInFile": "インポートファイルにエージェントが見つかりません",
+    "importFailed": "ファイルのインポートに失敗しました",
+    "importConflict": "以下のエージェントに競合があります：\n\n{conflicts}\n\nそれでもインポートしますか？重複が作成されます。",
+    "importSuccess": "{count}件のエージェントを正常にインポートしました",
+    "agentDetails": "エージェントの詳細",
+    "agentIdLabel": "エージェントID：",
+    "baseModelLabel": "ベースモデル：",
+    "unknown": "不明",
+    "descriptionLabel": "説明：",
+    "export": "エクスポート",
+    "edit": "編集",
+    "confirmDelete": "確認",
+    "delete": "削除",
+    "noCustomAgentsYet": "カスタムエージェントはまだありません。",
+    "noOrgAgentsConfigured": "組織エージェントが設定されていません。"
   },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",
@@ -504,7 +536,8 @@
     "discard": "破棄",
     "keepEditing": "編集を続ける",
     "yes": "はい",
-    "no": "いいえ"
+    "no": "いいえ",
+    "beta": "ベータ"
   },
   "errors": {
     "unexpectedErrorOccurred": "予期しないエラーが発生しました",
@@ -532,7 +565,7 @@
     "contactSupport": "サポートに連絡",
     "secureSso": "セキュアSSO",
     "howToGetAccess": "アクセス権を取得するには?",
-    "accessLimitedText": "現在、MSF AIアシスタントは米国とアムステルダムのスタッフのみが利用できます。",
+    "accessLimitedText": "現在、MSF AIアシスタントは米国、アムステルダム、およびジュネーブのスタッフのみが利用できます。",
     "expandAccessSoon": "近いうちにアクセスを拡大したいと考えています!",
     "errorConfiguration": "サーバー構成に問題があります。",
     "errorAccessDenied": "サインインする権限がありません。",
@@ -585,6 +618,14 @@
     "deleteMessage": "メッセージを削除",
     "imageContent": "画像コンテンツ",
     "fullSizePreview": "フルサイズプレビュー",
+    "failedToLoadImage": "画像の読み込みに失敗しました",
+    "loadingImage": "画像を読み込み中...",
+    "imageAlt": "画像 {number}",
+    "download": "ダウンロード",
+    "openAsDocument": "ドキュメントとして開く",
+    "openInCodeEditor": "コードエディターで開く",
+    "failedToOpenCodeEditor": "コードエディターでファイルを開けませんでした。もう一度お試しください。",
+    "failedToOpenDocEditor": "ドキュメントエディターでファイルを開けませんでした。もう一度お試しください。",
     "enterSearchQueryPlaceholder": "検索クエリまたは質問を入力してください...",
     "errorFetchingUrl": "URLコンテンツの取得中にエラーが発生しました",
     "errorInitiatingSearch": "ウェブ検索の開始中にエラーが発生しました",
@@ -976,6 +1017,7 @@
     "changeDisplayName": "クリックして、呼び方を変更できます"
   },
   "modelSelect": {
+    "maintainedBy": "管理者：",
     "tabs": {
       "models": "モデル",
       "agents": "エージェント"
@@ -1416,6 +1458,13 @@
       "benefit1": "ホーム画面からネイティブアプリのように起動",
       "benefit2": "ブラウザ表示なしの全画面モード",
       "benefit3": "保存済み会話へのオフラインアクセス"
+    },
+    "languageSupport": {
+      "title": "54言語対応",
+      "description": "54言語で利用可能になり、より多くのMSFチームとコミュニティが自分の言語でAIアシスタントを使用できます",
+      "autoDetect": "ブラウザの設定から言語が自動的に検出されます",
+      "manualSwitch": "サイドバーの言語セレクターからいつでも切り替えられます",
+      "andMore": "その他"
     }
   },
   "Professional": "プロフェッショナル",
@@ -1668,5 +1717,57 @@
     "title": "新しいバージョンが利用可能です",
     "refresh": "更新",
     "refreshNow": "更新してアップデート"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "組織エージェント"
+    },
+    "customAgents": {
+      "title": "カスタムエージェント",
+      "advancedBadge": "上級",
+      "experimentalBlurb": "実験的機能 — MSFのパワーユーザーとの直接的な協力により構築。一般利用向けではありません。",
+      "createButton": "カスタムエージェントを作成"
+    },
+    "selectAgentPrompt": "エージェントを選択して詳細を表示"
+  },
+  "privacy": {
+    "policyTitle": "プライバシーポリシー &amp; データ保護",
+    "policyDescription": "あなたのデータがどのように保護されているか、どの情報を入力すべきでないかを確認してください",
+    "termsOfUse": "利用規約",
+    "termsDescription": "責任ある使用ガイドラインと禁止事項を確認してください",
+    "keyPrivacyPoints": "プライバシーの要点",
+    "localStorage": "あなたの会話はデバイスにローカルで保存されます",
+    "azureInfra": "すべてのデータ処理はAzureインフラストラクチャを使用してMSFシステム内で行われます",
+    "noPersonalData": "個人データ（名前、電話番号など）を入力しないでください",
+    "noSensitiveData": "非常に機密性の高い運用上の詳細を入力しないでください",
+    "concernsTitle": "プライバシーに関する懸念やインシデント？",
+    "contactUs": "プライバシーに関する懸念がある場合は、すぐにご連絡ください："
+  },
+  "variableModal": {
+    "fillInstructions": "以下の変数を入力してプロンプトをカスタマイズしてください",
+    "optional": "オプション",
+    "required": "必須",
+    "default": "デフォルト：",
+    "defaultPlaceholder": "{defaultValue}（デフォルト）",
+    "enterValue": "{key}の値を入力...",
+    "cancel": "キャンセル",
+    "apply": "適用"
+  },
+  "recentSources": {
+    "title": "最新ソースデータ",
+    "unableToLoad": "最新ソースを読み込めません",
+    "retry": "再試行",
+    "noSources": "最近のソースはありません",
+    "refresh": "更新",
+    "today": "今日",
+    "yesterday": "昨日",
+    "daysAgo": "{count}日前"
+  },
+  "chatInput": {
+    "filePickerError": "ファイル選択を開けませんでした。代わりにドラッグ＆ドロップをお試しください。",
+    "addDocument": "ドキュメントを追加",
+    "uploadDocument": "ドキュメントをアップロード",
+    "images": "画像",
+    "addImage": "画像を追加"
   }
 }

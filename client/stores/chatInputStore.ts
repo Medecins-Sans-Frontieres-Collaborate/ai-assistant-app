@@ -234,6 +234,8 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     set({
       textFieldValue: '',
       selectedToneId: null,
+      usedPromptId: null,
+      usedPromptVariables: null,
     }),
 
   clearUploadState: () =>

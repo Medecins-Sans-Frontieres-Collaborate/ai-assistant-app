@@ -11,38 +11,59 @@ describe('locales', () => {
     it('contains all expected locales', () => {
       const expectedLocales = [
         'am',
-        'en',
-        'es',
         'ar',
         'bn',
         'ca',
         'cs',
         'de',
+        'el',
+        'en',
+        'es',
         'fa',
+        'ff',
         'fi',
         'fr',
+        'ha',
         'he',
         'hi',
+        'ht',
         'id',
         'it',
         'ja',
+        'km',
         'ko',
+        'ku',
+        'ln',
+        'mg',
         'my',
+        'ne',
         'nl',
+        'ny',
         'pl',
+        'ps',
         'pt',
+        'rn',
         'ro',
         'ru',
+        'rw',
+        'sg',
         'si',
+        'so',
+        'sr',
         'sv',
         'sw',
+        'ta',
         'te',
+        'tg',
         'th',
+        'ti',
         'tr',
         'uk',
         'ur',
         'vi',
+        'yo',
         'zh',
+        'zu',
       ];
 
       expectedLocales.forEach((locale) => {
@@ -84,7 +105,7 @@ describe('locales', () => {
     });
 
     it('contains 33 locales', () => {
-      expect(Object.keys(localeToAutonym).length).toBe(33);
+      expect(Object.keys(localeToAutonym).length).toBe(54);
     });
   });
 
@@ -206,7 +227,7 @@ describe('locales', () => {
 
     it('returns correct number of locales', () => {
       const locales = getSupportedLocales();
-      expect(locales.length).toBe(33);
+      expect(locales.length).toBe(54);
     });
 
     it('contains all expected locales', () => {
@@ -316,6 +337,32 @@ describe('locales', () => {
         expect(locales).toContain('my'); // Burmese
         expect(locales).toContain('si'); // Sinhala
         expect(locales).toContain('te'); // Telugu
+      });
+
+      it('includes MSF operational languages', () => {
+        const locales = getSupportedLocales();
+
+        expect(locales).toContain('so'); // Somali
+        expect(locales).toContain('ti'); // Tigrinya
+        expect(locales).toContain('ps'); // Pashto
+        expect(locales).toContain('ha'); // Hausa
+        expect(locales).toContain('ln'); // Lingala
+        expect(locales).toContain('km'); // Khmer
+        expect(locales).toContain('ne'); // Nepali
+        expect(locales).toContain('rw'); // Kinyarwanda
+        expect(locales).toContain('ta'); // Tamil
+        expect(locales).toContain('rn'); // Kirundi
+        expect(locales).toContain('ht'); // Haitian Creole
+        expect(locales).toContain('yo'); // Yoruba
+        expect(locales).toContain('ff'); // Fulah
+        expect(locales).toContain('ny'); // Chichewa
+        expect(locales).toContain('mg'); // Malagasy
+        expect(locales).toContain('ku'); // Kurdish
+        expect(locales).toContain('zu'); // Zulu
+        expect(locales).toContain('sg'); // Sango (CAR)
+        expect(locales).toContain('el'); // Greek
+        expect(locales).toContain('tg'); // Tajik
+        expect(locales).toContain('sr'); // Serbian
       });
     });
   });

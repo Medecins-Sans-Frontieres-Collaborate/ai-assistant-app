@@ -6,6 +6,8 @@ import React, {
   useRef,
 } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import {
   ChatInputSubmitTypes,
   FileFieldValue,
@@ -49,6 +51,7 @@ const ChatInputImage = ({
   labelText,
   imageInputRef,
 }: ChatInputImageProps) => {
+  const t = useTranslations('chatInput');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useImperativeHandle(imageInputRef, () => ({
@@ -88,10 +91,10 @@ const ChatInputImage = ({
       >
         <ImageIcon className="text-black dark:text-white mr-2 rounded h-5 w-5 hover:bg-gray-200 dark:hover:bg-gray-700" />
         <span className="text-black dark:text-white">
-          {labelText ?? 'Images'}
+          {labelText ?? t('images')}
         </span>
 
-        <span className="sr-only">Add image</span>
+        <span className="sr-only">{t('addImage')}</span>
       </button>
     </>
   );

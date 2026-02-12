@@ -137,7 +137,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           className={`text-xs mb-3 ${hasBackgroundImage ? 'text-white/70' : 'text-gray-500 dark:text-gray-400'}`}
           style={textShadow}
         >
-          Maintained by{' '}
+          {t('modelSelect.maintainedBy')}
           <span
             className={
               hasBackgroundImage

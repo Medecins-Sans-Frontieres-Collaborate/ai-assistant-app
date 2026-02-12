@@ -76,7 +76,7 @@
   "welcomeMessage": "Vítejte v asistentu MSF AI",
   "transcribingChatPlaceholder": "Přepisování...",
   "temperatureDescription": "Vyšší hodnoty jako 0,8 způsobí, že výsledek bude kreativnější, zatímco nižší hodnoty jako 0,2 ho učiní více zaměřeným a deterministickým.",
-  "sendFeedback": "Odeslat zpětnou vazbu",
+  "sendFeedback": "Požádat o podporu",
   "modelSelectionDialogue": "Výběr modelu AI",
   "appName": "Asistent AI MSF",
   "chatDisclaimer": "Asistent umělé inteligence MSF může udělat chyby. Zkontrolujte důležité informace.",
@@ -254,8 +254,8 @@
   "Prompt name": "Název výzvy",
   "Prompt content": "Obsah výzvy",
   "Are you sure you want to delete this prompt?": "Opravdu chcete smazat tuto výzvu?",
-  "Import data from sidebar": "Importovat data z postranního panelu",
-  "Export data from sidebar": "Exportovat data z postranního panelu",
+  "Import data from sidebar": "Obnovit historii chatů",
+  "Export data from sidebar": "Zálohovat historii chatů",
   "Search chats": "Hledat chaty",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Toto je soubor pokynů, které vedou asistenta AI, jak reagovat. Pomáhá AI poskytovat užitečné a přesné informace tím, že dává kontext pokládaným otázkám.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Zadejte výzvu nebo napište \"/\" pro výběr výzvy...",
@@ -348,7 +348,39 @@
     "baseModel": "Základní model",
     "formatDescription": "Formát: asst_xxxxx (z MSF AI Assistant Foundry)",
     "importantInfo": "Tento agent bude mít přístup ke kontextu konverzace a může používat stejné nástroje jako standardní modely. Ujistěte se, že ID agenta je správné, protože jej nelze později změnit.",
-    "defunctWarning": "Základní model tohoto agenta již není k dispozici. Upravte agenta a vyberte nový základní model, nebo ho smažte."
+    "defunctWarning": "Základní model tohoto agenta již není k dispozici. Upravte agenta a vyberte nový základní model, nebo ho smažte.",
+    "editCustomAgent": "Upravit vlastního agenta",
+    "addCustomAgent": "Přidat vlastního agenta",
+    "experimental": "Experimentální",
+    "createNew": "Vytvořit nový",
+    "import": "Importovat",
+    "importCustomAgents": "Importovat vlastní agenty",
+    "importFileDescription": "Vyberte JSON soubor s jednou nebo více konfiguracemi agentů",
+    "chooseFile": "Vybrat soubor",
+    "validatedSuccess": "Agent úspěšně ověřen!",
+    "cancel": "Zrušit",
+    "validating": "Ověřování...",
+    "updateAgent": "Aktualizovat agenta",
+    "addAgent": "Přidat agenta",
+    "nameRequired": "Jméno agenta je povinné",
+    "idRequired": "ID agenta je povinné",
+    "invalidIdFormat": "Neplatný formát ID agenta. Očekávaný formát: asst_xxxxx",
+    "invalidFileFormat": "Neplatný formát souboru",
+    "noAgentsInFile": "V importovaném souboru nebyli nalezeni žádní agenti",
+    "importFailed": "Import souboru se nezdařil",
+    "importConflict": "Následující agenti mají konflikty:\n\n{conflicts}\n\nPřesto importovat? Tím se vytvoří duplikáty.",
+    "importSuccess": "Úspěšně importováno {count} agent(ů)",
+    "agentDetails": "Podrobnosti agenta",
+    "agentIdLabel": "ID agenta:",
+    "baseModelLabel": "Základní model:",
+    "unknown": "Neznámý",
+    "descriptionLabel": "Popis:",
+    "export": "Exportovat",
+    "edit": "Upravit",
+    "confirmDelete": "Potvrdit",
+    "delete": "Smazat",
+    "noCustomAgentsYet": "Zatím žádní vlastní agenti.",
+    "noOrgAgentsConfigured": "Nejsou nakonfigurováni žádní agenti organizace."
   },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",
@@ -504,7 +536,8 @@
     "discard": "Zahodit",
     "keepEditing": "Pokračovat v úpravách",
     "yes": "Ano",
-    "no": "Ne"
+    "no": "Ne",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Došlo k neočekávané chybě",
@@ -532,7 +565,7 @@
     "contactSupport": "Kontaktovat podporu",
     "secureSso": "Zabezpečené SSO",
     "howToGetAccess": "Jak získám přístup?",
-    "accessLimitedText": "V současné době je MSF AI Assistant k dispozici pouze pro zaměstnance v USA a Amsterdamu.",
+    "accessLimitedText": "V současné době je MSF AI Assistant k dispozici pouze pro zaměstnance v USA, Amsterdamu a Ženevě.",
     "expandAccessSoon": "Doufáme, že brzy rozšíříme přístup!",
     "errorConfiguration": "Došlo k problému s konfigurací serveru.",
     "errorAccessDenied": "Nemáte oprávnění k přihlášení.",
@@ -585,6 +618,14 @@
     "deleteMessage": "Smazat zprávu",
     "imageContent": "Obsah obrázku",
     "fullSizePreview": "Náhled v plné velikosti",
+    "failedToLoadImage": "Nepodařilo se načíst obrázek",
+    "loadingImage": "Načítání obrázku...",
+    "imageAlt": "Obrázek {number}",
+    "download": "Stáhnout",
+    "openAsDocument": "Otevřít jako dokument",
+    "openInCodeEditor": "Otevřít v editoru kódu",
+    "failedToOpenCodeEditor": "Nepodařilo se otevřít soubor v editoru kódu. Zkuste to prosím znovu.",
+    "failedToOpenDocEditor": "Nepodařilo se otevřít soubor v editoru dokumentů. Zkuste to prosím znovu.",
     "enterSearchQueryPlaceholder": "Zadejte vyhledávací dotaz nebo otázku...",
     "errorFetchingUrl": "Při načítání obsahu URL došlo k chybě",
     "errorInitiatingSearch": "Při zahájení webového vyhledávání došlo k chybě",
@@ -983,6 +1024,7 @@
     "sections": {
       "baseModels": "Základní modely"
     },
+    "maintainedBy": "Spravováno ",
     "agents": {
       "advancedFeatureBadge": "Pokročilá funkce",
       "description": "Vytvářejte a spravujte vlastní AI agenty se specializovanými schopnostmi. Tito agenti běží na instanci MSF AI Assistant Foundry.",
@@ -1332,6 +1374,13 @@
       "benefit1": "Spouštění jako nativní aplikace z plochy",
       "benefit2": "Celá obrazovka bez rozhraní prohlížeče",
       "benefit3": "Offline přístup k uloženým konverzacím"
+    },
+    "languageSupport": {
+      "title": "Podpora 54 jazyků",
+      "description": "Nyní dostupné v 54 jazycích, aby více týmů a komunit MSF mohlo používat AI asistenta ve svém vlastním jazyce",
+      "autoDetect": "Váš jazyk je automaticky rozpoznán z nastavení prohlížeče",
+      "manualSwitch": "Kdykoli přepněte pomocí přepínače jazyků v postranním panelu",
+      "andMore": "a další"
     }
   },
   "Professional": "Profesionální",
@@ -1668,5 +1717,57 @@
     "title": "Je k dispozici nová verze",
     "refresh": "Obnovit",
     "refreshNow": "Obnovit pro aktualizaci"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agenti organizace"
+    },
+    "customAgents": {
+      "title": "Vlastní agenti",
+      "advancedBadge": "Pokročilé",
+      "experimentalBlurb": "Experimentální — vytvořeno v přímé spolupráci s pokročilými uživateli MSF. Není určeno pro běžné použití.",
+      "createButton": "Vytvořit vlastního agenta"
+    },
+    "selectAgentPrompt": "Vyberte agenta pro zobrazení podrobností"
+  },
+  "privacy": {
+    "policyTitle": "Zásady ochrany osobních údajů a ochrana dat",
+    "policyDescription": "Zjistěte, jak jsou vaše data chráněna a jaké informace by neměly být zadávány",
+    "termsOfUse": "Podmínky používání",
+    "termsDescription": "Prostudujte si pokyny pro odpovědné používání a zakázaná použití",
+    "keyPrivacyPoints": "Klíčové body ochrany soukromí",
+    "localStorage": "Vaše konverzace jsou uloženy lokálně na vašem zařízení",
+    "azureInfra": "Veškeré zpracování dat probíhá v rámci systémů MSF s využitím infrastruktury Azure",
+    "noPersonalData": "Nezadávejte osobní údaje (jména, telefonní čísla atd.)",
+    "noSensitiveData": "Nezadávejte vysoce citlivé provozní údaje",
+    "concernsTitle": "Obavy nebo incidenty týkající se soukromí?",
+    "contactUs": "Kontaktujte nás okamžitě, pokud máte obavy o soukromí:"
+  },
+  "variableModal": {
+    "fillInstructions": "Vyplňte proměnné níže pro přizpůsobení vaší výzvy",
+    "optional": "Volitelné",
+    "required": "Povinné",
+    "default": "Výchozí:",
+    "defaultPlaceholder": "{defaultValue} (výchozí)",
+    "enterValue": "Zadejte hodnotu pro {key}...",
+    "cancel": "Zrušit",
+    "apply": "Použít"
+  },
+  "recentSources": {
+    "title": "Nejnovější zdrojová data",
+    "unableToLoad": "Nelze načíst nejnovější zdroje",
+    "retry": "Zkusit znovu",
+    "noSources": "Žádné nedávné zdroje nejsou k dispozici",
+    "refresh": "Obnovit",
+    "today": "Dnes",
+    "yesterday": "Včera",
+    "daysAgo": "před {count} dny"
+  },
+  "chatInput": {
+    "filePickerError": "Nepodařilo se otevřít výběr souborů. Zkuste místo toho přetažení.",
+    "addDocument": "Přidat dokument",
+    "uploadDocument": "Nahrát dokument",
+    "images": "Obrázky",
+    "addImage": "Přidat obrázek"
   }
 }

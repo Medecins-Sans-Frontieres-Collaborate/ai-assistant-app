@@ -297,11 +297,25 @@ jobs:
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ steps.get-sha.outputs.sha }}
 
   # JOB 4b: Manual deployment to Live (or Beta) via workflow_dispatch
+  # NOTE: Uses the commit SHA tag by default instead of 'latest' to ensure
+  # az containerapp update always creates a new revision (identical image
+  # references are treated as a no-op by Azure Container Apps).
   deploy_manual:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != 'dev'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     steps:
+      - name: Resolve image tag
+        id: resolve-tag
+        run: |
+          TAG="${{ github.event.inputs.image_tag }}"
+          if [ "$TAG" = "latest" ]; then
+            # Use the commit SHA tag to guarantee a new revision is created.
+            # The beta build pushes both :latest and :<sha> tags for every merge to main.
+            TAG="${{ github.sha }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
       - name: Azure Login (OIDC)
         uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
         with:
@@ -314,4 +328,4 @@ jobs:
           az containerapp update \
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
-            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.event.inputs.image_tag }}
+            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ steps.resolve-tag.outputs.tag }}

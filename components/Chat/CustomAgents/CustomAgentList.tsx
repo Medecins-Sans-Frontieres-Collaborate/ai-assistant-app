@@ -3,6 +3,8 @@
 import { IconAlertTriangle, IconCheck, IconRobot } from '@tabler/icons-react';
 import { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { OpenAIModels } from '@/types/openai';
 
 import {
@@ -33,6 +35,7 @@ export const CustomAgentList: FC<CustomAgentListProps> = ({
   selectedModelId,
   defunctAgentIds,
 }) => {
+  const t = useTranslations('agents');
   // Helper function to get provider icon
   const getProviderIcon = (provider?: string) => {
     const iconProps = { className: 'w-4 h-4 flex-shrink-0' };
@@ -60,7 +63,7 @@ export const CustomAgentList: FC<CustomAgentListProps> = ({
           className="mx-auto mb-2 text-gray-400 dark:text-gray-600"
         />
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          No custom agents yet.
+          {t('noCustomAgentsYet')}
         </p>
       </div>
     );
