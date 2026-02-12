@@ -42,12 +42,19 @@ const nextConfig = {
     ],
   },
 
-  // Redirect old NextAuth v4 callback URL to Auth.js v5 provider name
+  // Redirect old NextAuth v4 routes to current paths
   redirects: async () => {
     return [
+      // Old v4 callback provider name → new v5 provider name
       {
         source: '/api/auth/callback/azure-ad',
         destination: '/api/auth/callback/microsoft-entra-id',
+        permanent: true,
+      },
+      // Old v4 built-in signin page → custom signin page
+      {
+        source: '/auth/signin',
+        destination: '/signin',
         permanent: true,
       },
     ];
