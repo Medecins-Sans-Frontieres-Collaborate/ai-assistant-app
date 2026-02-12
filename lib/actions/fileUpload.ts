@@ -394,8 +394,7 @@ export async function uploadChunkAction(
     return { success: true, chunkIndex, blockId };
   } catch (error) {
     console.error(
-      '[uploadChunkAction] Error uploading chunk %s:',
-      chunkIndex,
+      `[uploadChunkAction] Error uploading chunk ${chunkIndex}:`,
       error,
     );
     return {

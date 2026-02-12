@@ -10,6 +10,7 @@ import { SearchMode } from '@/types/searchMode';
 import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
 import { ModelHeader } from './ModelHeader';
+import { RecentSourcesSection } from './RecentSourcesSection';
 import { SearchModeSection } from './SearchModeSection';
 
 import { CustomAgent } from '@/client/stores/settingsStore';
@@ -62,18 +63,9 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
       {/* Header with optional background image for org agents (desktop only) */}
       {hasAgentImage ? (
         <>
-          {/* Mobile: Simple header without background image */}
-          <div className="md:hidden">
-            <ModelHeader
-              selectedModel={selectedModel}
-              modelConfig={modelConfig}
-              setMobileView={setMobileView}
-              organizationAgent={organizationAgent}
-            />
-          </div>
-          {/* Desktop: Header with background image */}
+          {/* Desktop: Header with background image - rendered first to avoid space-y margin */}
           <div
-            className="hidden md:block relative rounded-lg overflow-hidden min-h-[300px] border"
+            className="hidden md:block relative rounded-lg overflow-hidden min-h-[220px] border"
             style={{
               borderColor: organizationAgent.color + '60',
               boxShadow: `0 0 24px ${organizationAgent.color}25`,
@@ -93,7 +85,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
             </div>
             {/* Header content */}
-            <div className="relative z-10 p-8 flex flex-col justify-end h-full">
+            <div className="relative z-10 p-6 pt-5 flex flex-col justify-start h-full">
               <ModelHeader
                 selectedModel={selectedModel}
                 modelConfig={modelConfig}
@@ -102,6 +94,15 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
                 hasBackgroundImage
               />
             </div>
+          </div>
+          {/* Mobile: Simple header without background image */}
+          <div className="md:hidden">
+            <ModelHeader
+              selectedModel={selectedModel}
+              modelConfig={modelConfig}
+              setMobileView={setMobileView}
+              organizationAgent={organizationAgent}
+            />
           </div>
         </>
       ) : (
@@ -120,6 +121,11 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           onEdit={onEditAgent}
           onDelete={onDeleteAgent}
         />
+      )}
+
+      {/* Recent Sources for RAG organization agents */}
+      {organizationAgent?.type === 'rag' && (
+        <RecentSourcesSection agentId={organizationAgent.id} />
       )}
 
       <SearchModeSection

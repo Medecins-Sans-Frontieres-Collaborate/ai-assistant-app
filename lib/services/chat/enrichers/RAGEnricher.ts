@@ -126,17 +126,33 @@ export class RAGEnricher extends BasePipelineStage {
 
           // If we have processed content (files/transcripts), inject it into messages
           if (context.processedContent) {
-            const { fileSummaries, transcripts } = context.processedContent;
+            const { fileSummaries, inlineFiles, transcripts } =
+              context.processedContent;
 
             if (fileSummaries && fileSummaries.length > 0) {
               const summaryText = fileSummaries
-                .map((f) => `File: ${f.filename}\n${f.summary}`)
+                .map((f) => `Document summary: ${f.filename}\n${f.summary}`)
                 .join('\n\n');
 
               enrichedMessages = [
                 {
                   role: 'system',
-                  content: `The user has uploaded the following documents:\n\n${summaryText}`,
+                  content: `The user has uploaded the following documents (summarized from large files):\n\n${summaryText}`,
+                  messageType: MessageType.TEXT,
+                },
+                ...enrichedMessages,
+              ];
+            }
+
+            if (inlineFiles && inlineFiles.length > 0) {
+              const inlineText = inlineFiles
+                .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
+                .join('\n\n');
+
+              enrichedMessages = [
+                {
+                  role: 'system',
+                  content: `The user has uploaded the following documents:\n\n${inlineText}`,
                   messageType: MessageType.TEXT,
                 },
                 ...enrichedMessages,

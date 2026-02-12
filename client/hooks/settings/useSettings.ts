@@ -21,6 +21,7 @@ export function useSettings() {
     ttsSettings: store.ttsSettings,
     reasoningEffort: store.reasoningEffort,
     verbosity: store.verbosity,
+    streamingSpeed: store.streamingSpeed,
 
     // Actions
     setTemperature: store.setTemperature,

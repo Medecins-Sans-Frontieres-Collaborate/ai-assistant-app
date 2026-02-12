@@ -170,11 +170,12 @@ describe('RAGService', () => {
         mockUser as any,
       );
 
-      // Upstream implementation always fetches 30 results for quality filtering
+      // Fetches topK * 2 (max 20) for deduplication buffer
+      // Agent has topK: 5, so fetchCount = min(5 * 2, 20) = 10
       expect(mockSearch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
-          top: 30,
+          top: 10,
         }),
       );
     });
@@ -333,7 +334,7 @@ describe('RAGService', () => {
       );
     });
 
-    it('should use original query for first question', async () => {
+    it('should reformulate even first question for temporal handling', async () => {
       const messages = createTestMessages('What is the communications policy?');
 
       mockSearch.mockReturnValue(createMockSearchResults([]));
@@ -344,12 +345,12 @@ describe('RAGService', () => {
         mockUser as any,
       );
 
-      // Should NOT have called OpenAI for query reformulation
-      expect(mockOpenAIClient.chat.completions.create).not.toHaveBeenCalled();
+      // Should have called OpenAI for query reformulation (now runs on all queries)
+      expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
 
-      // Search should use the original query
+      // Search should use the reformulated query
       expect(mockSearch).toHaveBeenCalledWith(
-        'What is the communications policy?',
+        'reformulated search query',
         expect.any(Object),
       );
     });

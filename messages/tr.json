@@ -1663,5 +1663,10 @@
     "translating": "Çevriliyor...",
     "translationError": "Çeviri başarısız oldu. Lütfen tekrar deneyin.",
     "selectLanguage": "Dil seçin"
+  },
+  "updateBanner": {
+    "title": "Yeni bir sürüm mevcut",
+    "refresh": "Yenile",
+    "refreshNow": "Güncellemek için yenileyin"
   }
 }

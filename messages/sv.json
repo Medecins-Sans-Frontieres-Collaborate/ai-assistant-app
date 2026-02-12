@@ -1663,5 +1663,10 @@
     "translating": "Översätter...",
     "translationError": "Det gick inte att översätta. Försök igen.",
     "selectLanguage": "Välj språk"
+  },
+  "updateBanner": {
+    "title": "En ny version är tillgänglig",
+    "refresh": "Uppdatera",
+    "refreshNow": "Uppdatera för att få senaste versionen"
   }
 }

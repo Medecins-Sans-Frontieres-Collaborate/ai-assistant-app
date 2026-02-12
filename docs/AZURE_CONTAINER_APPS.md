@@ -250,7 +250,7 @@ az role assignment create \
 
 1. Ensure GitHub Actions cache is working (`Restored cache` in logs)
 2. Verify Docker BuildKit cache is enabled (`cache-from: type=gha`)
-3. Check if Turbopack is active (should see `▲ Next.js 16.0.1 (Turbopack)`)
+3. Check if Turbopack is active (should see `▲ Next.js 16.x (Turbopack)`)
 
 ## 📚 Additional Resources
 
@@ -259,20 +259,7 @@ az role assignment create \
 - [Azure Container Apps Documentation](https://learn.microsoft.com/en-us/azure/container-apps/)
 - [Azure Blob Storage SDK](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-nodejs)
 
-## 🔄 Migration Checklist
-
-- [x] Next.js 16 upgrade complete
-- [x] Turbopack enabled (default in 16)
-- [x] Proxy migration (middleware → proxy.ts)
-- [x] GitHub Actions caching configured
-- [x] Custom cache handler implemented
-- [ ] Azure Blob Storage container created
-- [ ] Environment variables configured in Container App
-- [ ] Verify cache working in production (check logs)
-- [ ] Monitor performance with Application Insights
-- [ ] Consider Managed Identity for enhanced security
-
 ---
 
-**Last Updated:** After Next.js 16.0.1 upgrade
+**Last Updated:** 2025-02-10
 **Compatible With:** Azure Container Apps, Next.js 16.x

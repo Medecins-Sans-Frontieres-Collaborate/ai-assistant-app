@@ -1663,5 +1663,10 @@
     "translating": "Se traduce...",
     "translationError": "Traducerea nu a reușit. Vă rugăm să încercați din nou.",
     "selectLanguage": "Selectați limba"
+  },
+  "updateBanner": {
+    "title": "Este disponibilă o nouă versiune",
+    "refresh": "Reîmprospătează",
+    "refreshNow": "Reîmprospătează pentru a actualiza"
   }
 }

@@ -1,4 +1,4 @@
-import { Message, MessageType, ToolRouterRequest } from '@/types/chat';
+import { Message, ToolRouterRequest } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
@@ -79,9 +79,17 @@ export class ToolRouterEnricher extends BasePipelineStage {
       // Add file summaries
       if (context.processedContent.fileSummaries) {
         const summaries = context.processedContent.fileSummaries
-          .map((f) => `[File: ${f.filename}]\n${f.summary}`)
+          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
           .join('\n\n');
         additionalContext.push(summaries);
+      }
+
+      // Add inline file content
+      if (context.processedContent.inlineFiles) {
+        const inlineText = context.processedContent.inlineFiles
+          .map((f) => `[File: ${f.filename}]\n${f.content}`)
+          .join('\n\n');
+        additionalContext.push(inlineText);
       }
 
       // Add transcripts
@@ -152,7 +160,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
           context.processedContent?.metadata?.citations || [];
         const citationOffset = existingCitations.length;
 
-        // Add search results as a system message before the last user message
+        // Build search context to prepend to the last user message
+        // We merge search results INTO the user message instead of using a separate
+        // system message, because Anthropic's API only supports 'user' and 'assistant'
+        // roles — system messages are stripped by the Anthropic handler.
         // Citation numbers must match the merged citation numbers (RAG first, then web)
         const citationReferences = searchResult.citations
           ? searchResult.citations
@@ -162,17 +173,19 @@ export class ToolRouterEnricher extends BasePipelineStage {
               .join('\n')
           : '';
 
-        const searchContextMessage: Message = {
-          role: 'system',
-          content: `Web Search results:\n\n${searchResult.text}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`,
-          messageType: MessageType.TEXT,
-        };
+        const searchContext = `Web Search results:\n\n${searchResult.text}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
 
-        // Insert search results before the last user message
+        // Merge search context into the last user message so it works with ALL
+        // model providers (OpenAI, Anthropic, DeepSeek, Llama, etc.)
+        const lastMsg = baseMessages[baseMessages.length - 1];
+        const enrichedLastMessage = this.prependContextToMessage(
+          lastMsg,
+          searchContext,
+        );
+
         const enrichedMessages = [
           ...baseMessages.slice(0, -1),
-          searchContextMessage,
-          baseMessages[baseMessages.length - 1],
+          enrichedLastMessage,
         ];
         const newCitations = searchResult.citations || [];
 
@@ -212,6 +225,47 @@ export class ToolRouterEnricher extends BasePipelineStage {
     }
 
     return context;
+  }
+
+  /**
+   * Prepends context text to a message's content.
+   * Handles both string and array content formats.
+   */
+  private prependContextToMessage(message: Message, context: string): Message {
+    if (typeof message.content === 'string') {
+      return {
+        ...message,
+        content: `${context}\n\n---\n\n${message.content}`,
+      };
+    }
+
+    if (Array.isArray(message.content)) {
+      // Prepend to the first text block only
+      const hasText = message.content.some((c) => c.type === 'text');
+      if (hasText) {
+        let modified = false;
+        const modifiedContent = message.content.map((c) => {
+          if (!modified && c.type === 'text' && 'text' in c) {
+            modified = true;
+            return { ...c, text: `${context}\n\n---\n\n${c.text}` };
+          }
+          return c;
+        });
+        return { ...message, content: modifiedContent };
+      }
+
+      // No text content, add as first item
+      return {
+        ...message,
+        content: [{ type: 'text', text: context }, ...message.content],
+      };
+    }
+
+    // Fallback: convert to string
+    return {
+      ...message,
+      content: `${context}\n\n---\n\n${String(message.content)}`,
+    };
   }
 
   /**

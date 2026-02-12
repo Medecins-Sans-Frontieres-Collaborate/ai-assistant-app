@@ -8,6 +8,7 @@ import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
 
 import fs from 'fs';
+import { performance } from 'perf_hooks';
 
 /**
  * Result of downloading a file with cache preference.
@@ -58,6 +59,7 @@ export class FileProcessingService {
     filePath: string,
     user: Session['user'],
   ): Promise<void> {
+    const perfStart = performance.now();
     const session: Session = { user, expires: '' } as Session;
     const userId = getUserIdFromSession(session);
     const remoteFilepath = `${userId}/uploads/files`;
@@ -65,16 +67,31 @@ export class FileProcessingService {
 
     if (!id) throw new Error(`Could not find file id from URL: ${fileUrl}`);
 
+    const perfClientStart = performance.now();
     const blobStorage = createBlobStorageClient(session);
+    console.log(
+      `[Perf] FileProcessingService.createBlobStorageClient: ${(performance.now() - perfClientStart).toFixed(1)}ms`,
+    );
+    const perfBlobGetStart = performance.now();
     const blob: Buffer = await (blobStorage.get(
       `${remoteFilepath}/${id}`,
       BlobProperty.BLOB,
     ) as Promise<Buffer>);
+    console.log(
+      `[Perf] FileProcessingService.blobGet: ${(performance.now() - perfBlobGetStart).toFixed(1)}ms`,
+    );
 
     // Write file with secure permissions (0o600 = read/write for owner only)
+    const perfWriteStart = performance.now();
     await fs.promises.writeFile(filePath, new Uint8Array(blob), {
       mode: 0o600,
     });
+    console.log(
+      `[Perf] FileProcessingService.fsWriteFile: ${(performance.now() - perfWriteStart).toFixed(1)}ms`,
+    );
+    console.log(
+      `[Perf] FileProcessingService.downloadFile total: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
   }
 
   /**
@@ -94,6 +111,7 @@ export class FileProcessingService {
     filePath: string,
     user: Session['user'],
   ): Promise<DownloadResult> {
+    const perfStart = performance.now();
     const session: Session = { user, expires: '' } as Session;
     const userId = getUserIdFromSession(session);
     const id: string | undefined = fileUrl.split('/').pop();
@@ -106,15 +124,25 @@ export class FileProcessingService {
 
     // Try cached version first
     try {
+      const perfExistsStart = performance.now();
       if (await blobStorage.blobExists(cachedPath)) {
+        console.log(
+          `[Perf] FileProcessingService.blobExists (cache check): ${(performance.now() - perfExistsStart).toFixed(1)}ms - hit`,
+        );
         const cached = (await blobStorage.get(
           cachedPath,
           BlobProperty.BLOB,
         )) as Buffer;
         await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
         console.log(`[FileProcessingService] Using cached text: ${id}`);
+        console.log(
+          `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
+        );
         return { usedCache: true };
       }
+      console.log(
+        `[Perf] FileProcessingService.blobExists (cache check): ${(performance.now() - perfExistsStart).toFixed(1)}ms - miss`,
+      );
     } catch (error) {
       console.warn(
         `[FileProcessingService] Cache check failed, falling back:`,
@@ -127,6 +155,9 @@ export class FileProcessingService {
     await fs.promises.writeFile(filePath, new Uint8Array(blob), {
       mode: 0o600,
     });
+    console.log(
+      `[Perf] FileProcessingService.downloadFilePreferCached (cache miss): ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return { usedCache: false };
   }
 

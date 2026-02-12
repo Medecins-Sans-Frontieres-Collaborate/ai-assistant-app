@@ -34,7 +34,7 @@ npm install
 
 This will install all required packages including:
 
-- Next.js 15
+- Next.js 16
 - React 19
 - TypeScript
 - Tailwind CSS
@@ -90,7 +90,7 @@ Follow these steps to set up your Azure resources for the application.
    - Endpoint → `AZURE_OPENAI_ENDPOINT`
 5. Go to "Model deployments"
 6. Deploy required models:
-   - GPT-4o, GPT-4, or GPT-3.5-turbo
+   - GPT-5.2, GPT-4.1, or GPT-5-mini
    - (Optional) Whisper for transcription (deployment name must be "whisper")
    - (Optional) Text-embedding-ada-002 for embeddings
 7. Copy your preferred default deployment name → `DEFAULT_MODEL`

@@ -6,6 +6,11 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['streamdown', 'shiki', 'mermaid'],
 
+  // Disable Next.js built-in gzip compression — it buffers chunks into
+  // compression blocks, which breaks fine-grained streaming.  Compression
+  // should be handled by the upstream reverse proxy / CDN instead.
+  compress: false,
+
   // Experimental settings for large file uploads
   // Supports up to 1.5GB video files + buffer for form data overhead
   experimental: {
@@ -37,6 +42,24 @@ const nextConfig = {
     ],
   },
 
+  // Redirect old NextAuth v4 routes to current paths
+  redirects: async () => {
+    return [
+      // Old v4 callback provider name → new v5 provider name
+      {
+        source: '/api/auth/callback/azure-ad',
+        destination: '/api/auth/callback/microsoft-entra-id',
+        permanent: true,
+      },
+      // Old v4 built-in signin page → custom signin page
+      {
+        source: '/auth/signin',
+        destination: '/signin',
+        permanent: true,
+      },
+    ];
+  },
+
   rewrites: async () => {
     return [
       {
@@ -49,6 +72,11 @@ const nextConfig = {
   // Security headers
   headers: async () => {
     return [
+      // Disable proxy buffering for the streaming chat endpoint (defense-in-depth)
+      {
+        source: '/api/chat',
+        headers: [{ key: 'X-Accel-Buffering', value: 'no' }],
+      },
       {
         source: '/(.*)',
         headers: [
@@ -76,7 +104,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
               "img-src 'self' data: https: blob:; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://login.microsoftonline.com https://graph.microsoft.com https://*.ai.msfusa.org; " +
+              "connect-src 'self' https://login.microsoftonline.com https://graph.microsoft.com https://*.ai.msfusa.org https://*.launchdarkly.com; " +
               "media-src 'self' blob:; " +
               "worker-src 'self' blob:; " +
               "frame-src 'self'; " +

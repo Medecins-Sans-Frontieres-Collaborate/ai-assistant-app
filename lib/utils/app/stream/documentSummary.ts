@@ -20,6 +20,7 @@ import {
 import OpenAI from 'openai';
 import { AzureOpenAI } from 'openai';
 import { ChatCompletion } from 'openai/resources';
+import { performance } from 'perf_hooks';
 
 /**
  * Estimates the chars-per-token ratio based on the dominant script type in the content.
@@ -179,6 +180,8 @@ interface ParseAndQueryFilterOpenAIArguments {
   botId?: string;
   stream?: boolean;
   images?: ImageMessageContent[];
+  /** Pre-extracted text content to avoid double extraction when caller already loaded the document */
+  preExtractedText?: string;
 }
 
 /**
@@ -207,6 +210,7 @@ async function summarizeChunk(
   const supportsTemperature = modelConfig?.supportsTemperature !== false;
 
   try {
+    const perfLlmStart = performance.now();
     const chunkSummary = await azureOpenai.chat.completions.create({
       model: modelId,
       messages: [
@@ -225,6 +229,10 @@ async function summarizeChunk(
       stream: false,
       user: JSON.stringify(user),
     });
+
+    console.log(
+      `[Perf] summarizeChunk LLM call: ${(performance.now() - perfLlmStart).toFixed(1)}ms`,
+    );
 
     return chunkSummary?.choices?.[0]?.message?.content?.trim() ?? '';
   } catch (error: unknown) {
@@ -252,6 +260,7 @@ export async function parseAndQueryFileOpenAI({
   botId,
   stream = true,
   images = [],
+  preExtractedText,
 }: ParseAndQueryFilterOpenAIArguments): Promise<ReadableStream | string> {
   console.log(
     '[parseAndQueryFileOpenAI] Starting with file:',
@@ -266,8 +275,14 @@ export async function parseAndQueryFileOpenAI({
     sanitizeForLog(prompt.length),
   );
 
-  // Load document content first (needed for token estimation)
-  const fileContent = await loadDocument(file);
+  const perfTotalStart = performance.now();
+
+  // Use pre-extracted text if provided, otherwise load document
+  const perfLoadStart = performance.now();
+  const fileContent = preExtractedText ?? (await loadDocument(file));
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.loadContent: ${(performance.now() - perfLoadStart).toFixed(1)}ms (${preExtractedText ? 'pre-extracted' : 'loaded from file'})`,
+  );
   console.log(
     '[parseAndQueryFileOpenAI] File content loaded, length:',
     fileContent.length,
@@ -291,7 +306,11 @@ export async function parseAndQueryFileOpenAI({
 
   const chunkConfig = calculateChunkConfig(modelConfig, charsPerToken);
 
+  const perfChunkStart = performance.now();
   let chunks: string[] = splitIntoChunks(fileContent, chunkConfig.chunkSize);
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.splitIntoChunks: ${(performance.now() - perfChunkStart).toFixed(1)}ms (${chunks.length} chunks)`,
+  );
   console.log(
     '[parseAndQueryFileOpenAI] Split into chunks:',
     chunks.length,
@@ -331,7 +350,11 @@ export async function parseAndQueryFileOpenAI({
       ),
     );
 
+    const perfBatchStart = performance.now();
     const summaries = await Promise.all(summaryPromises);
+    console.log(
+      `[Perf] parseAndQueryFileOpenAI.batch: ${(performance.now() - perfBatchStart).toFixed(1)}ms (${currentChunks.length} chunks)`,
+    );
     console.log(
       '[parseAndQueryFileOpenAI] Batch completed, summaries received:',
       summaries.filter((s) => s !== null).length,
@@ -358,7 +381,15 @@ export async function parseAndQueryFileOpenAI({
     combinedSummary.length,
   );
 
-  const finalPrompt: string = `${combinedSummary}\n\nUser prompt: ${prompt}`;
+  // When non-streaming (pipeline mode), produce a content summary for the main LLM
+  // to process with the user's query. When streaming, produce a direct response.
+  const finalPrompt: string = stream
+    ? `${combinedSummary}\n\nUser prompt: ${prompt}`
+    : `${combinedSummary}\n\nThe user's query is: "${prompt}"\n\nProduce a comprehensive summary of the document content that is relevant to the user's query. Include key details, data, and context. Do NOT answer the query directly — just extract and organize the relevant content.`;
+
+  const systemPrompt = stream
+    ? 'You are a document analyzer AI Assistant. You perform all tasks the user requests of you, careful to make sure you are responding to the spirit and intentions behind their request. You make it clear how your responses relate to the base text that you are processing and provide your responses in markdown format when special formatting is necessary.'
+    : "You are a document content extractor. Your job is to produce a clear, comprehensive summary of document content relevant to the user's query. Preserve key details, numbers, names, and structure. Do NOT answer the user's query — the summary you produce will be passed to another AI that will answer it.";
 
   // Build user message content - include images if present
   const userMessageContent:
@@ -385,8 +416,7 @@ export async function parseAndQueryFileOpenAI({
     messages: [
       {
         role: 'system',
-        content:
-          'You are a document analyzer AI Assistant. You perform all tasks the user requests of you, careful to make sure you are responding to the spirit and intentions behind their request. You make it clear how your responses relate to the base text that you are processing and provide your responses in markdown format when special formatting is necessary.',
+        content: systemPrompt,
       },
       {
         role: 'user',
@@ -403,6 +433,7 @@ export async function parseAndQueryFileOpenAI({
     '[parseAndQueryFileOpenAI] Creating chat completion, botId:',
     sanitizeForLog(botId),
   );
+  const perfFinalLlmStart = performance.now();
   let response;
   if (botId) {
     console.log('[parseAndQueryFileOpenAI] Using bot with data sources');
@@ -427,10 +458,17 @@ export async function parseAndQueryFileOpenAI({
     console.log('[parseAndQueryFileOpenAI] Using standard chat completion');
     response = await client.chat.completions.create(commonParams);
   }
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI.finalCompletion: ${(performance.now() - perfFinalLlmStart).toFixed(1)}ms`,
+  );
 
   console.log(
     '[parseAndQueryFileOpenAI] Got response, stream:',
     sanitizeForLog(stream),
+  );
+
+  console.log(
+    `[Perf] parseAndQueryFileOpenAI total: ${(performance.now() - perfTotalStart).toFixed(1)}ms`,
   );
 
   if (stream) {

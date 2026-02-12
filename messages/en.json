@@ -494,6 +494,11 @@
     "whatsNew": "What's New",
     "whatsNewQuestion": "What's New?"
   },
+  "updateBanner": {
+    "title": "A new version is available",
+    "refresh": "Refresh",
+    "refreshNow": "Refresh to update"
+  },
   "welcomeV2": {
     "backToChat": "Back to Chat",
     "title": "Welcome to AI Assistant V2",

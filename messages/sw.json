@@ -1663,5 +1663,10 @@
     "translating": "Inatafsiri...",
     "translationError": "Imeshindwa kutafsiri. Tafadhali jaribu tena.",
     "selectLanguage": "Chagua lugha"
+  },
+  "updateBanner": {
+    "title": "Toleo jipya linapatikana",
+    "refresh": "Onyesha upya",
+    "refreshNow": "Onyesha upya ili kusasisha"
   }
 }

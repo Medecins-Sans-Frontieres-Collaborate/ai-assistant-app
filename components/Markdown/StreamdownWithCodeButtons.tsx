@@ -30,12 +30,12 @@ export const StreamdownWithCodeButtons: React.FC<CodeBlockWrapperProps> = ({
 
       // Find all Streamdown code block containers
       const codeBlocks = containerRef.current.querySelectorAll(
-        '[data-code-block-container="true"]',
+        '[data-streamdown="code-block"]',
       );
 
       codeBlocks.forEach((codeBlock) => {
         const header = codeBlock.querySelector(
-          '[data-code-block-header="true"]',
+          '[data-streamdown="code-block-header"]',
         );
         const pre = codeBlock.querySelector('pre');
         const code = pre?.querySelector('code');
@@ -47,7 +47,16 @@ export const StreamdownWithCodeButtons: React.FC<CodeBlockWrapperProps> = ({
 
         // Get language from data attribute
         const language = codeBlock.getAttribute('data-language') || 'plaintext';
-        const codeText = code.textContent || '';
+
+        // Extract code text with proper line breaks
+        // Streamdown wraps each line in a span, so we need to join them with newlines
+        const lineSpans = code.querySelectorAll(':scope > span');
+        const codeText =
+          lineSpans.length > 0
+            ? Array.from(lineSpans)
+                .map((span) => span.textContent || '')
+                .join('\n')
+            : code.textContent || '';
 
         // Create button
         const button = document.createElement('button');

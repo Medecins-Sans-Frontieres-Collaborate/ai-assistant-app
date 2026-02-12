@@ -89,7 +89,7 @@ export function getIndexConfig(
         filterable: true,
         retrievable: true,
         stored: true,
-        sortable: false,
+        sortable: true,
         facetable: false,
         key: false,
         synonymMaps: [],
@@ -217,6 +217,9 @@ export function getIndexConfig(
       configurations: [
         {
           name: `${indexName}-semantic-configuration`,
+          // Apply freshness scoring profile boost to semantically ranked results
+          // This enables the dateScore profile to influence final ordering
+          rankingOrder: 'BoostedRerankerScore',
           prioritizedFields: {
             titleField: {
               fieldName: 'title',

@@ -9,6 +9,7 @@ export async function createOrUpdateIndex(
   endpoint: string,
   openaiEndpoint: string,
   openaiEmbeddingDeployment: string,
+  searchApiKey?: string,
 ) {
   console.log(`Creating/updating index: ${indexName}`);
   console.log(`Allow index downtime: ${allowIndexDowntime}`);
@@ -26,23 +27,29 @@ export async function createOrUpdateIndex(
       : undefined;
 
     if (endpoint) {
-      // Use managed identity for authentication
-      const credential = new DefaultAzureCredential();
-      const token = await credential.getToken(
-        'https://search.azure.com/.default',
-      );
+      // Build auth header: use API key if provided, otherwise managed identity
+      let authHeader: Record<string, string>;
+      if (searchApiKey) {
+        authHeader = { 'api-key': searchApiKey };
+      } else {
+        const credential = new DefaultAzureCredential();
+        const token = await credential.getToken(
+          'https://search.azure.com/.default',
+        );
+        authHeader = { Authorization: `Bearer ${token.token}` };
+      }
 
       try {
         const rawJson = JSON.stringify(indexConfig);
         console.log('Index configuration being sent:', rawJson);
 
         const response = await fetch(
-          `${endpoint}/indexes/${indexName}?api-version=2024-07-01`,
+          `${endpoint}/indexes/${indexName}?api-version=2025-09-01`,
           {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token.token}`,
+              ...authHeader,
             },
             body: rawJson,
           },

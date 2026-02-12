@@ -210,18 +210,20 @@ describe('ToolRouter Enricher', () => {
 
         // Verify enrichedMessages were created
         expect(result.enrichedMessages).toBeDefined();
-        expect(result.enrichedMessages?.length).toBe(2);
+        expect(result.enrichedMessages?.length).toBe(1);
 
-        // Check that search results message was added
-        const searchMessage = result.enrichedMessages?.[0];
-        expect(searchMessage?.role).toBe('system');
-        expect(searchMessage?.content).toContain(
+        // Check that search results were merged into the user message
+        const enrichedMessage = result.enrichedMessages?.[0];
+        expect(enrichedMessage?.role).toBe('user');
+        expect(enrichedMessage?.content).toContain(
           'The weather in Seattle is 65°F and partly cloudy.',
         );
-        expect(searchMessage?.content).toContain('[1] Weather.com');
+        expect(enrichedMessage?.content).toContain('[1] Weather.com');
 
-        // Verify original message is last
-        expect(result.enrichedMessages?.[1]).toEqual(context.messages[0]);
+        // Verify original message content is also present
+        expect(enrichedMessage?.content).toContain(
+          "What's the weather in Seattle?",
+        );
       });
 
       it('should store citations in metadata with number property', async () => {
@@ -420,7 +422,9 @@ describe('ToolRouter Enricher', () => {
 
         expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
           expect.objectContaining({
-            currentMessage: expect.stringContaining('[File: doc1.pdf]'),
+            currentMessage: expect.stringContaining(
+              '[Document summary: doc1.pdf]',
+            ),
           }),
         );
 
