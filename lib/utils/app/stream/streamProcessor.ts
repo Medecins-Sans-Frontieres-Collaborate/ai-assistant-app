@@ -13,12 +13,6 @@ import { Citation } from '@/types/rag';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 import OpenAI from 'openai';
 
-/** Streaming speed configuration for smooth text output */
-interface StreamingSpeedConfig {
-  charsPerBatch: number;
-  delayMs: number;
-}
-
 /**
  * Creates a stream processor for Azure OpenAI completions that handles citation tracking.
  *
@@ -28,7 +22,6 @@ interface StreamingSpeedConfig {
  * @param {TranscriptMetadata} [transcript] - Optional transcript metadata for audio/video transcriptions.
  * @param {Citation[]} [webSearchCitations] - Optional citations from web search (intelligent search mode).
  * @param {PendingTranscriptionInfo[]} [pendingTranscriptions] - Optional pending batch transcription jobs.
- * @param {StreamingSpeedConfig} [streamingSpeed] - Optional smooth streaming speed configuration.
  * @returns {ReadableStream} A processed stream with citation data appended.
  */
 export function createAzureOpenAIStreamProcessor(
@@ -38,36 +31,12 @@ export function createAzureOpenAIStreamProcessor(
   transcript?: TranscriptMetadata,
   webSearchCitations?: Citation[],
   pendingTranscriptions?: PendingTranscriptionInfo[],
-  streamingSpeed?: StreamingSpeedConfig,
 ): ReadableStream {
   return new ReadableStream({
     start: (controller) => {
       const encoder = createStreamEncoder();
       let allContent = '';
       let controllerClosed = false;
-      let buffer = '';
-
-      // Use configurable streaming speed or defaults
-      const charsPerBatch = streamingSpeed?.charsPerBatch ?? 3;
-      const delayMs = streamingSpeed?.delayMs ?? 8;
-
-      // Background task to stream buffered content character by character
-      const streamBuffer = async () => {
-        while (!controllerClosed) {
-          if (buffer.length > 0) {
-            // Send configured number of characters at a time for smooth streaming
-            const charsToSend = Math.min(charsPerBatch, buffer.length);
-            const toSend = buffer.slice(0, charsToSend);
-            buffer = buffer.slice(charsToSend);
-            controller.enqueue(encoder.encode(toSend));
-          }
-          // Wait configured delay between sends for smoother streaming
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
-        }
-      };
-
-      // Start the buffer streaming task
-      streamBuffer();
 
       (async function () {
         try {
@@ -100,14 +69,8 @@ export function createAzureOpenAIStreamProcessor(
                   ragService.processCitationInChunk(contentChunk);
               }
 
-              // Add to buffer for smooth streaming
-              buffer += processedChunk;
+              controller.enqueue(encoder.encode(processedChunk));
             }
-          }
-
-          // Wait for buffer to drain
-          while (buffer.length > 0 && !controllerClosed) {
-            await new Promise((resolve) => setTimeout(resolve, 10));
           }
 
           if (!controllerClosed) {

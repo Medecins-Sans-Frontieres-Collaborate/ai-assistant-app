@@ -1,3 +1,8 @@
+import {
+  perfLog,
+  sanitizeForLog,
+} from '@/lib/utils/server/log/logSanitization';
+
 import { getPdfPageCount } from './pdfUtils';
 
 import {
@@ -8,6 +13,7 @@ import { exec } from 'child_process';
 import fs from 'fs';
 import { lookup } from 'mime-types';
 import path from 'path';
+import { performance } from 'perf_hooks';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
@@ -76,10 +82,14 @@ export async function convertWithPandoc(
 ): Promise<string> {
   const outputPath = `${inputPath}.${outputFormat}`;
   const command = `pandoc "${inputPath}" -o "${outputPath}"`;
+  const perfStart = performance.now();
 
   try {
     await execAsync(command);
     const { stdout } = await execAsync(`cat "${outputPath}"`);
+    console.log(
+      `[Perf] convertWithPandoc: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return stdout;
   } catch (error) {
     console.error(`Error converting file with Pandoc: ${error}`);
@@ -160,11 +170,19 @@ async function extractTextWithPdfToTextCli(inputPath: string): Promise<string> {
  * @throws Error if both extraction methods fail
  */
 async function pdfToText(inputPath: string): Promise<string> {
+  const perfStart = performance.now();
   // Try pdfjs-dist first (more robust for malformed PDFs)
   try {
+    const perfPdfjsStart = performance.now();
     const text = await extractTextWithPdfJs(inputPath);
+    console.log(
+      `[Perf] extractTextWithPdfJs: ${(performance.now() - perfPdfjsStart).toFixed(1)}ms`,
+    );
     if (text.trim()) {
       console.log('[pdfToText] Successfully extracted with pdfjs-dist');
+      console.log(
+        `[Perf] pdfToText (pdfjs-dist): ${(performance.now() - perfStart).toFixed(1)}ms`,
+      );
       return text;
     }
     console.warn(
@@ -179,9 +197,16 @@ async function pdfToText(inputPath: string): Promise<string> {
 
   // Fallback to pdftotext CLI
   try {
+    const perfCliStart = performance.now();
     const stdout = await extractTextWithPdfToTextCli(inputPath);
+    console.log(
+      `[Perf] extractTextWithPdfToTextCli: ${(performance.now() - perfCliStart).toFixed(1)}ms`,
+    );
     if (stdout.trim()) {
       console.log('[pdfToText] Successfully extracted with pdftotext CLI');
+      console.log(
+        `[Perf] pdfToText (CLI fallback): ${(performance.now() - perfStart).toFixed(1)}ms`,
+      );
       return stdout;
     }
     console.warn('[pdfToText] pdftotext CLI returned empty text');
@@ -198,6 +223,7 @@ async function pdfToText(inputPath: string): Promise<string> {
 }
 
 async function xlsxToText(inputPath: string): Promise<string> {
+  const perfStart = performance.now();
   const tempDir = await fs.promises.mkdtemp('/tmp/xlsx-');
   const baseName = path.basename(inputPath, path.extname(inputPath));
   const outputPattern = path.join(tempDir, `${baseName}_.csv`);
@@ -228,6 +254,9 @@ async function xlsxToText(inputPath: string): Promise<string> {
       }
     }
 
+    console.log(
+      `[Perf] xlsxToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return result;
   } finally {
     // Clean up temporary directory and files
@@ -240,6 +269,7 @@ async function xlsxToText(inputPath: string): Promise<string> {
 }
 
 async function pptToText(inputPath: string): Promise<string> {
+  const perfStart = performance.now();
   // TODO: Possibly find a way to do this without converting to PDF first
   const outputDir = await fs.promises.mkdtemp('/tmp/ppt-');
   const baseName = path.basename(inputPath, path.extname(inputPath));
@@ -264,6 +294,9 @@ async function pptToText(inputPath: string): Promise<string> {
 
     // Extract text from the PDF
     const text = await pdfToText(pdfPath);
+    console.log(
+      `[Perf] pptToText: ${(performance.now() - perfStart).toFixed(1)}ms`,
+    );
     return text;
   } catch (error) {
     console.error(
@@ -280,6 +313,7 @@ async function pptToText(inputPath: string): Promise<string> {
 
 export async function loadDocument(file: File): Promise<string> {
   const mimeType = lookup(file.name) || 'application/octet-stream';
+  const perfStart = performance.now();
   const tempFilePath = `/tmp/${file.name}`;
 
   // Write the file to a temporary location with secure permissions (0o600 = read/write for owner only)
@@ -330,6 +364,11 @@ export async function loadDocument(file: File): Promise<string> {
         throw error;
       }
   }
+  perfLog(
+    'loadDocument total',
+    perfStart,
+    `${sanitizeForLog(file.name)} (${mimeType})`,
+  );
   return text;
 }
 

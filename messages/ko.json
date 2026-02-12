@@ -1663,5 +1663,10 @@
     "translating": "번역 중...",
     "translationError": "번역에 실패했습니다. 다시 시도해 주세요.",
     "selectLanguage": "언어 선택"
+  },
+  "updateBanner": {
+    "title": "새 버전이 이용 가능합니다",
+    "refresh": "새로고침",
+    "refreshNow": "업데이트하려면 새로고침하세요"
   }
 }

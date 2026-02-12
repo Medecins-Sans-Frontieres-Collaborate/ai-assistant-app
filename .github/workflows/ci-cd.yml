@@ -10,7 +10,7 @@ on:
     branches:
       - main
 
-  # Trigger for Live deployment (manual)
+  # Trigger for Live/Beta/Dev deployment (manual)
   workflow_dispatch:
     inputs:
       environment:
@@ -20,8 +20,13 @@ on:
         options:
           - live
           - beta
+          - dev
+      ref:
+        description: 'Branch or commit SHA to build and deploy (only used for dev)'
+        required: false
+        type: string
       image_tag:
-        description: 'Image tag to deploy (defaults to latest)'
+        description: 'Image tag to deploy (for live/beta, defaults to latest)'
         required: false
         type: string
         default: 'latest'
@@ -162,7 +167,7 @@ jobs:
 
       - name: Get Container App URL
         id: get_url
-        uses: azure/CLI@v1
+        uses: azure/CLI@4db43908b9df2e7ac93c8275a8f9a448c59338dd # v1
         with:
           inlineScript: |
             APP_URL=$(az containerapp show --name ${{ vars.CONTAINER_APP_NAME }} --resource-group ${{ vars.RESOURCE_GROUP }} --query "properties.configuration.ingress.fqdn" -o tsv)
@@ -243,9 +248,57 @@ jobs:
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ github.sha }}
 
-  # JOB 4: Manual deployment to Live (or Beta) via workflow_dispatch
+  # JOB 4a: Manual deployment to Dev via workflow_dispatch (requires build)
+  deploy_dev_manual:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'dev'
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.sha }}
+
+      - name: Get checked-out commit SHA
+        id: get-sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@eec3c95657c1536435858eda1f3ff5437fee8474 # v2.3.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Log in to Azure Container Registry
+        run: az acr login --name ${{ vars.ACR_NAME }}
+
+      - name: Build and Push Dev Image
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ steps.get-sha.outputs.sha }}
+          build-args: |
+            BUILD=${{ github.run_number }}
+            ENV=dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy Container App
+        run: |
+          az containerapp update \
+            --name ${{ vars.CONTAINER_APP_NAME }} \
+            --resource-group ${{ vars.RESOURCE_GROUP }} \
+            --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:dev-manual-${{ steps.get-sha.outputs.sha }}
+
+  # JOB 4b: Manual deployment to Live (or Beta) via workflow_dispatch
   deploy_manual:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != 'dev'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     steps:

@@ -1663,5 +1663,10 @@
     "translating": "ترجمہ ہو رہا ہے...",
     "translationError": "ترجمہ ناکام ہو گیا۔ براہ کرم دوبارہ کوشش کریں۔",
     "selectLanguage": "زبان منتخب کریں"
+  },
+  "updateBanner": {
+    "title": "نیا ورژن دستیاب ہے",
+    "refresh": "تازہ کریں",
+    "refreshNow": "اپ ڈیٹ کے لیے تازہ کریں"
   }
 }

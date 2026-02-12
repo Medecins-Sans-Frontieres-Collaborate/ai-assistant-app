@@ -35,6 +35,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 0,
           isStreaming: false,
+          isDraining: false,
         }),
       );
 
@@ -47,6 +48,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 0,
           isStreaming: false,
+          isDraining: false,
         }),
       );
 
@@ -64,6 +66,7 @@ describe('useChatScrolling', () => {
             selectedConversationId: conversationId,
             messageCount: 5,
             isStreaming: false,
+            isDraining: false,
           }),
         { initialProps: { conversationId: 'conv-1' } },
       );
@@ -94,6 +97,7 @@ describe('useChatScrolling', () => {
             selectedConversationId: 'conv-1',
             messageCount,
             isStreaming: false,
+            isDraining: false,
           }),
         { initialProps: { messageCount: 0 } },
       );
@@ -132,6 +136,7 @@ describe('useChatScrolling', () => {
             selectedConversationId: 'conv-1',
             messageCount,
             isStreaming,
+            isDraining: false,
           }),
         { initialProps: { messageCount: 0, isStreaming: true } },
       );
@@ -167,6 +172,7 @@ describe('useChatScrolling', () => {
             selectedConversationId: 'conv-1',
             messageCount: 1,
             isStreaming,
+            isDraining: false,
           }),
         { initialProps: { isStreaming: true } },
       );
@@ -177,6 +183,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 1,
           isStreaming: true,
+          isDraining: false,
         }),
       );
       (result.current.chatContainerRef as any).current = mockContainer;
@@ -196,6 +203,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 5,
           isStreaming: false,
+          isDraining: false,
         }),
       );
 
@@ -229,6 +237,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 5,
           isStreaming: false,
+          isDraining: false,
         }),
       );
 
@@ -264,6 +273,7 @@ describe('useChatScrolling', () => {
           selectedConversationId: 'conv-1',
           messageCount: 5,
           isStreaming: false,
+          isDraining: false,
         }),
       );
 
@@ -286,6 +296,7 @@ describe('useChatScrolling', () => {
             selectedConversationId: 'conv-1',
             messageCount: 1,
             isStreaming,
+            isDraining: false,
           }),
         { initialProps: { isStreaming: false } },
       );

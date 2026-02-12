@@ -8,6 +8,7 @@ import { LocalStorageService } from '@/client/services/storage/localStorageServi
 
 import { shouldShowStorageWarning } from '@/lib/utils/app/storage/storageMonitor';
 
+import { UpdateBanner } from '@/components/App/UpdateBanner';
 import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
@@ -77,6 +78,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <UpdateBanner />
       <MigrationDialog
         isOpen={showMigrationDialog}
         onComplete={handleMigrationComplete}

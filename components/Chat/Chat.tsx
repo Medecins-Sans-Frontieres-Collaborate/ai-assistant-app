@@ -11,6 +11,7 @@ import { useChatActions } from '@/client/hooks/chat/useChatActions';
 import { useChatScrolling } from '@/client/hooks/chat/useChatScrolling';
 import { useConversationInitialization } from '@/client/hooks/chat/useConversationInitialization';
 import { usePromptSaving } from '@/client/hooks/chat/usePromptSaving';
+import { useSmoothStreaming } from '@/client/hooks/chat/useSmoothStreaming';
 import { useClearConversation } from '@/client/hooks/conversation/useClearConversation';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
@@ -89,6 +90,7 @@ export function Chat({
     dismissModelSwitchPrompt,
     acceptModelSwitch,
   } = useChat();
+
   const { isSettingsOpen, setIsSettingsOpen, showChatbar } = useUI();
   const {
     models,
@@ -99,7 +101,16 @@ export function Chat({
     displayNamePreference,
     customDisplayName,
     addPrompt,
+    streamingSpeed,
   } = useSettings();
+
+  const { content: smoothedContent, isDraining } = useSmoothStreaming({
+    isStreaming,
+    content: streamingContent ?? '',
+    charsPerFrame: streamingSpeed.charsPerBatch,
+    frameDelay: streamingSpeed.delayMs,
+    enabled: isStreaming,
+  });
   const {
     isArtifactOpen,
     editorMode,
@@ -184,6 +195,7 @@ export function Chat({
     messageCount: selectedConversation?.messages?.length || 0,
     isStreaming,
     streamingContent,
+    isDraining,
   });
 
   const {
@@ -381,7 +393,8 @@ export function Chat({
                 isStreaming={isStreaming}
                 streamingConversationId={streamingConversationId}
                 selectedConversationId={selectedConversation?.id}
-                streamingContent={streamingContent}
+                smoothedContent={smoothedContent}
+                isDraining={isDraining}
                 citations={citations}
                 loadingMessage={loadingMessage}
                 transcriptionStatus={transcriptionStatus}

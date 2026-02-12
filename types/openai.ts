@@ -306,7 +306,7 @@ function createModelConfigs(
       modelType: 'omni',
       description:
         'Balanced Claude model offering excellent performance across coding, analysis, and creative tasks. Great for everyday use with fast response times.',
-      isDisabled: false,
+      isDisabled: true,
       provider: 'anthropic',
       knowledgeCutoffDate: '2025-01',
       sdk: 'anthropic-foundry',
@@ -340,7 +340,7 @@ function createModelConfigs(
       modelType: 'foundational',
       description:
         'Fast and cost-effective Claude model optimized for quick tasks. Great for simple queries, summarization, and high-volume applications.',
-      isDisabled: false,
+      isDisabled: true,
       provider: 'anthropic',
       knowledgeCutoffDate: '2025-01',
       sdk: 'anthropic-foundry',

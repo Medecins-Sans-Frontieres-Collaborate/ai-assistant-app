@@ -1663,5 +1663,10 @@
     "translating": "กำลังแปล...",
     "translationError": "ไม่สามารถแปลได้ กรุณาลองใหม่อีกครั้ง",
     "selectLanguage": "เลือกภาษา"
+  },
+  "updateBanner": {
+    "title": "มีเวอร์ชันใหม่พร้อมใช้งานแล้ว",
+    "refresh": "รีเฟรช",
+    "refreshNow": "รีเฟรชเพื่ออัปเดต"
   }
 }

@@ -59,7 +59,8 @@ interface ChatMessagesProps {
   isStreaming: boolean;
   streamingConversationId?: string | null;
   selectedConversationId?: string;
-  streamingContent?: string;
+  smoothedContent: string;
+  isDraining: boolean;
   citations?: Citation[];
   loadingMessage?: string | null;
   transcriptionStatus: string | null;
@@ -81,7 +82,8 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   isStreaming,
   streamingConversationId,
   selectedConversationId,
-  streamingContent,
+  smoothedContent,
+  isDraining,
   citations,
   loadingMessage,
   transcriptionStatus,
@@ -95,10 +97,18 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
 }) => {
   const t = useTranslations();
 
+  const showStreamingDiv =
+    (isStreaming && streamingConversationId === selectedConversationId) ||
+    isDraining;
+
+  // During drain, hide the last message to avoid duplicate content
+  // (the finalized message is already in the list, but we're still animating it)
+  const displayMessages = isDraining ? messages.slice(0, -1) : messages;
+
   return (
     <>
-      {messages.map((entry, index) => {
-        const isLastMessage = index === messages.length - 1;
+      {displayMessages.map((entry, index) => {
+        const isLastMessage = index === displayMessages.length - 1;
         const displayMessage = entryToDisplayMessage(entry);
         const versionInfo = getVersionInfo(entry);
 
@@ -151,13 +161,13 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
       )}
 
       {/* Streaming message or loading indicator */}
-      {isStreaming && streamingConversationId === selectedConversationId && (
+      {showStreamingDiv && (
         <>
-          {streamingContent ? (
+          {smoothedContent ? (
             <MemoizedChatMessage
               message={{
                 role: 'assistant',
-                content: streamingContent,
+                content: smoothedContent,
                 messageType: MessageType.TEXT,
                 citations,
               }}

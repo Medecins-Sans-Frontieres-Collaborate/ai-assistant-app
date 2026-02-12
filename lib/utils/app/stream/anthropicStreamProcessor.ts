@@ -8,12 +8,6 @@ import { Citation } from '@/types/rag';
 
 import Anthropic from '@anthropic-ai/sdk';
 
-/** Streaming speed configuration for smooth text output */
-interface StreamingSpeedConfig {
-  charsPerBatch: number;
-  delayMs: number;
-}
-
 /**
  * Creates a stream processor for Anthropic Claude completions.
  *
@@ -29,7 +23,6 @@ interface StreamingSpeedConfig {
  * @param stopConversationRef - Optional reference to stop conversation flag
  * @param transcript - Optional transcript metadata for audio/video transcriptions
  * @param webSearchCitations - Optional citations from web search
- * @param streamingSpeed - Optional smooth streaming speed configuration
  * @returns A ReadableStream with processed text content
  */
 export function createAnthropicStreamProcessor(
@@ -37,7 +30,6 @@ export function createAnthropicStreamProcessor(
   stopConversationRef?: { current: boolean },
   transcript?: TranscriptMetadata,
   webSearchCitations?: Citation[],
-  streamingSpeed?: StreamingSpeedConfig,
 ): ReadableStream {
   return new ReadableStream({
     start: (controller) => {
@@ -45,29 +37,6 @@ export function createAnthropicStreamProcessor(
       let allContent = '';
       let allThinking = '';
       let controllerClosed = false;
-      let buffer = '';
-
-      // Use configurable streaming speed or defaults
-      const charsPerBatch = streamingSpeed?.charsPerBatch ?? 3;
-      const delayMs = streamingSpeed?.delayMs ?? 8;
-
-      // Background task to stream buffered content smoothly
-      const streamBuffer = async () => {
-        while (!controllerClosed) {
-          if (buffer.length > 0) {
-            // Send configured number of characters at a time for smooth streaming
-            const charsToSend = Math.min(charsPerBatch, buffer.length);
-            const toSend = buffer.slice(0, charsToSend);
-            buffer = buffer.slice(charsToSend);
-            controller.enqueue(encoder.encode(toSend));
-          }
-          // Wait configured delay between sends for smoother streaming
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
-        }
-      };
-
-      // Start the buffer streaming task
-      streamBuffer();
 
       (async function () {
         try {
@@ -101,7 +70,7 @@ export function createAnthropicStreamProcessor(
               if (delta.type === 'text_delta' && delta.text) {
                 const textChunk = delta.text;
                 allContent += textChunk;
-                buffer += textChunk;
+                controller.enqueue(encoder.encode(textChunk));
               }
 
               // Handle thinking_delta events (extended thinking feature)
@@ -113,11 +82,6 @@ export function createAnthropicStreamProcessor(
                 // It will be included in metadata at the end
               }
             }
-          }
-
-          // Wait for buffer to drain
-          while (buffer.length > 0 && !controllerClosed) {
-            await new Promise((resolve) => setTimeout(resolve, 10));
           }
 
           if (!controllerClosed) {

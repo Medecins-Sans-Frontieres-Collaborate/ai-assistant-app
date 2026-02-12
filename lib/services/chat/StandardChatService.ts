@@ -7,7 +7,10 @@ import {
 import { createAnthropicStreamProcessor } from '@/lib/utils/app/stream/anthropicStreamProcessor';
 import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
-import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  perfLog,
+  sanitizeForLog,
+} from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import { Message } from '@/types/chat';
@@ -19,8 +22,10 @@ import { ModelSelector, StreamingService, ToneService } from '../shared';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
 
+import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
 import OpenAI, { AzureOpenAI } from 'openai';
+import { performance } from 'perf_hooks';
 
 /**
  * Streaming speed configuration for smooth text output.
@@ -95,18 +100,27 @@ export class StandardChatService {
    */
   public async handleChat(request: StandardChatRequest): Promise<Response> {
     const startTime = Date.now();
+    const perfStart = performance.now();
 
     // Select appropriate model (may upgrade for images, validate, etc.)
+    const perfModelStart = performance.now();
     const { modelId, modelConfig } = this.modelSelector.selectModel(
       request.model,
       request.messages,
     );
+    perfLog(
+      'StandardChatService.selectModel',
+      perfModelStart,
+      `→ ${sanitizeForLog(modelId)}`,
+    );
 
     // Apply tone to system prompt if specified
+    const perfToneStart = performance.now();
     const enhancedPrompt = this.toneService.applyTone(
       request.tone,
       request.systemPrompt,
     );
+    perfLog('StandardChatService.applyTone', perfToneStart);
     if (request.tone) {
       console.log('[StandardChatService] Applied tone:', request.tone.name);
       console.log(
@@ -127,6 +141,7 @@ export class StandardChatService {
 
     // Prepare messages with token limit filtering
     // Use cached Tiktoken instance for better performance
+    const perfMsgStart = performance.now();
     const encoding = await getGlobalTiktoken();
     const promptTokens = encoding.encode(enhancedPrompt);
     const messagesToSend = await getMessagesToSend(
@@ -135,6 +150,11 @@ export class StandardChatService {
       promptTokens.length,
       modelConfig.tokenLimit,
       request.user,
+    );
+    perfLog(
+      'StandardChatService.prepareMessages',
+      perfMsgStart,
+      `(${messagesToSend.length} messages)`,
     );
     // Don't free() - encoding is shared across requests
 
@@ -149,7 +169,6 @@ export class StandardChatService {
         request.user,
         request.transcript,
         request.citations,
-        request.streamingSpeed,
       );
     }
 
@@ -184,7 +203,9 @@ export class StandardChatService {
     );
 
     // Execute request
+    const perfExecStart = performance.now();
     const response = await handler.executeRequest(requestParams, stream);
+    perfLog('StandardChatService.executeRequest', perfExecStart);
 
     // Return appropriate response format
     if (stream) {
@@ -195,19 +216,20 @@ export class StandardChatService {
         request.transcript, // transcript metadata
         request.citations, // web search citations
         request.pendingTranscriptions, // async batch transcription jobs
-        request.streamingSpeed, // smooth streaming speed configuration
       );
 
+      perfLog('StandardChatService.handleChat total', perfStart, '(stream)');
       return new Response(processedStream, {
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
-        },
+        headers: STREAMING_RESPONSE_HEADERS,
       });
     } else {
       const completion = response as OpenAI.Chat.Completions.ChatCompletion;
 
+      perfLog(
+        'StandardChatService.handleChat total',
+        perfStart,
+        '(non-stream)',
+      );
       return new Response(
         JSON.stringify({ text: completion.choices[0]?.message?.content }),
         { headers: { 'Content-Type': 'application/json' } },
@@ -228,7 +250,6 @@ export class StandardChatService {
     user: Session['user'],
     transcript?: TranscriptMetadata,
     citations?: Citation[],
-    streamingSpeed?: StreamingSpeedConfig,
   ): Promise<Response> {
     // Validate Anthropic client is configured
     if (!this.anthropicFoundryClient) {
@@ -272,15 +293,10 @@ export class StandardChatService {
         undefined, // stopConversationRef
         transcript,
         citations,
-        streamingSpeed,
       );
 
       return new Response(processedStream, {
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
-        },
+        headers: STREAMING_RESPONSE_HEADERS,
       });
     } else {
       // Build non-streaming request parameters

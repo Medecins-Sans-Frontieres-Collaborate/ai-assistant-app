@@ -6,6 +6,11 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['streamdown', 'shiki', 'mermaid'],
 
+  // Disable Next.js built-in gzip compression — it buffers chunks into
+  // compression blocks, which breaks fine-grained streaming.  Compression
+  // should be handled by the upstream reverse proxy / CDN instead.
+  compress: false,
+
   // Experimental settings for large file uploads
   // Supports up to 1.5GB video files + buffer for form data overhead
   experimental: {
@@ -49,6 +54,11 @@ const nextConfig = {
   // Security headers
   headers: async () => {
     return [
+      // Disable proxy buffering for the streaming chat endpoint (defense-in-depth)
+      {
+        source: '/api/chat',
+        headers: [{ key: 'X-Accel-Buffering', value: 'no' }],
+      },
       {
         source: '/(.*)',
         headers: [
