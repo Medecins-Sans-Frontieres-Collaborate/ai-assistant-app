@@ -24,6 +24,7 @@ vi.mock('@/lib/utils/shared/chat/contentBuilder', () => ({
 
 // Must mock react since we're in node environment, not jsdom
 vi.mock('react', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   useCallback: (fn: Function) => fn,
 }));
 
