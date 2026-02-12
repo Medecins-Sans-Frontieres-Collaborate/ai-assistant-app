@@ -38,23 +38,6 @@ const authMiddleware = auth((req) => {
 export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Clean up stale NextAuth v4 cookies (next-auth.* prefix).
-  // Auth.js v5 uses authjs.* prefix and doesn't know about old cookies,
-  // so they accumulate and bloat request headers, causing 431 errors.
-  const legacyCookies = req.cookies
-    .getAll()
-    .filter((c) => c.name.includes('next-auth'));
-  if (legacyCookies.length > 0) {
-    console.warn(
-      `[Middleware] Clearing ${legacyCookies.length} stale NextAuth v4 cookies`,
-    );
-    const response = NextResponse.next();
-    for (const cookie of legacyCookies) {
-      response.cookies.set(cookie.name, '', { maxAge: 0, path: '/' });
-    }
-    return response;
-  }
-
   // Debug: Log proxy headers to diagnose cookie issues (Azure only)
   // Log on root, signin, and auth callback paths where redirect loops occur
   const shouldLog =
@@ -89,6 +72,26 @@ export default function proxy(req: NextRequest) {
   // Skip API routes and static files entirely
   if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
     return NextResponse.next();
+  }
+
+  // Clean up stale NextAuth v4 cookies (next-auth.* prefix).
+  // Auth.js v5 uses authjs.* prefix and doesn't know about old cookies,
+  // so they accumulate and bloat request headers, causing 431 errors.
+  // Redirect to the same URL so cookies are cleared and the next request
+  // goes through the full middleware chain (i18n, auth, etc.).
+  // Placed after API skip so fetch requests aren't interrupted.
+  const legacyCookies = req.cookies
+    .getAll()
+    .filter((c) => c.name.includes('next-auth'));
+  if (legacyCookies.length > 0) {
+    console.warn(
+      `[Middleware] Clearing ${legacyCookies.length} stale NextAuth v4 cookies`,
+    );
+    const response = NextResponse.redirect(req.nextUrl);
+    for (const cookie of legacyCookies) {
+      response.cookies.set(cookie.name, '', { maxAge: 0, path: '/' });
+    }
+    return response;
   }
 
   const isPublicPage = publicPathnameRegex.test(pathname);
