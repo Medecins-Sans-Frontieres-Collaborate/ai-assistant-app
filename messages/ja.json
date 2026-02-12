@@ -1731,7 +1731,7 @@
     "selectAgentPrompt": "エージェントを選択して詳細を表示"
   },
   "privacy": {
-    "policyTitle": "プライバシーポリシー &amp; データ保護",
+    "policyTitle": "プライバシーポリシー & データ保護",
     "policyDescription": "あなたのデータがどのように保護されているか、どの情報を入力すべきでないかを確認してください",
     "termsOfUse": "利用規約",
     "termsDescription": "責任ある使用ガイドラインと禁止事項を確認してください",

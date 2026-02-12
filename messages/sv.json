@@ -565,7 +565,7 @@
     "contactSupport": "Kontakta support",
     "secureSso": "Säker SSO",
     "howToGetAccess": "Hur får jag åtkomst?",
-    "accessLimitedText": "För närvarande är MSF AI Assistant endast tillgänglig för personal i USA, Amsterdam och Geneve.",
+    "accessLimitedText": "För närvarande är MSF AI Assistant endast tillgänglig för personal i USA, Amsterdam och Genève.",
     "expandAccessSoon": "Vi hoppas kunna utöka åtkomsten snart!",
     "errorConfiguration": "Det finns ett problem med serverkonfigurationen.",
     "errorAccessDenied": "Du har inte behörighet att logga in.",
@@ -1731,7 +1731,7 @@
     "selectAgentPrompt": "Välj en agent för att visa detaljer"
   },
   "privacy": {
-    "policyTitle": "Integritetspolicy &amp; Dataskydd",
+    "policyTitle": "Integritetspolicy & Dataskydd",
     "policyDescription": "Lär dig hur dina data skyddas och vilken information som inte bör anges",
     "termsOfUse": "Användningsvillkor",
     "termsDescription": "Granska riktlinjer för ansvarsfull användning och förbjudna användningsområden",

@@ -302,7 +302,8 @@ describe('artifactStore', () => {
           appendChild: appendChildSpy,
           removeChild: removeChildSpy,
         },
-      } as unknown as Document;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
 
       const originalCreateObjectURL = URL.createObjectURL;
       const originalRevokeObjectURL = URL.revokeObjectURL;
