@@ -86,7 +86,7 @@ function shouldClearCookie(cookieName: string): boolean {
 function createCookieClearResponse(req: NextRequest): NextResponse {
   // Extract locale from current path to preserve it in redirect
   const pathname = req.nextUrl.pathname;
-  const localeMatch = pathname.match(new RegExp(`^/(${locales.join('|')})/`));
+  const localeMatch = pathname.match(LOCALE_PREFIX_REGEX);
   const locale = localeMatch ? localeMatch[1] : '';
 
   const signInPath = locale ? `/${locale}/signin` : '/signin';
@@ -114,6 +114,9 @@ function createCookieClearResponse(req: NextRequest): NextResponse {
 
   return response;
 }
+
+// Regex to extract locale prefix from pathname (e.g., '/fr/dashboard' -> 'fr')
+const LOCALE_PREFIX_REGEX = new RegExp(`^/(${locales.join('|')})/`);
 
 // Regex to match public pages with optional locale prefix
 const publicPathnameRegex = RegExp(
