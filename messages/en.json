@@ -837,6 +837,8 @@
     "errorSessionRequired": "Please sign in to access this page.",
     "errorSessionExpired": "Your session has expired. Please sign in again to continue.",
     "errorFallback": "Unable to connect to authentication service. Please try again or contact support if the issue persists.",
+    "errorCookiesCleared": "Session data was cleared due to storage limits. Please sign in again.",
+    "errorHeadersTooLarge": "Session data was too large. Please sign in again.",
     "tryAgain": "Try Again"
   },
   "help": {
