@@ -40,13 +40,20 @@ const AUTH_COOKIE_PATTERNS = [
 /**
  * Partial match patterns for flexible cookie identification.
  */
-const AUTH_COOKIE_PARTIAL_PATTERNS = ['auth', 'session'];
+// More specific patterns to avoid false positives (e.g., 'my-authorization-preference')
+const AUTH_COOKIE_PARTIAL_PATTERNS = [
+  'authjs',
+  'next-auth',
+  '-session-token',
+  '-csrf-token',
+  '-callback-url',
+];
 
 /**
  * Calculates total cookie size from request headers.
  *
  * @param req - The incoming Next.js request
- * @returns The byte length of the cookie header
+ * @returns The character length of the cookie header
  */
 function getCookieSizeFromRequest(req: NextRequest): number {
   const cookieHeader = req.headers.get('cookie') || '';
@@ -77,7 +84,13 @@ function shouldClearCookie(cookieName: string): boolean {
  * @returns A redirect response with cookie-clearing headers
  */
 function createCookieClearResponse(req: NextRequest): NextResponse {
-  const signInUrl = new URL('/signin', req.url);
+  // Extract locale from current path to preserve it in redirect
+  const pathname = req.nextUrl.pathname;
+  const localeMatch = pathname.match(new RegExp(`^/(${locales.join('|')})/`));
+  const locale = localeMatch ? localeMatch[1] : '';
+
+  const signInPath = locale ? `/${locale}/signin` : '/signin';
+  const signInUrl = new URL(signInPath, req.url);
   signInUrl.searchParams.set('error', 'CookiesCleared');
 
   const response = NextResponse.redirect(signInUrl);
@@ -86,9 +99,15 @@ function createCookieClearResponse(req: NextRequest): NextResponse {
   const cookies = req.cookies.getAll();
   for (const cookie of cookies) {
     if (shouldClearCookie(cookie.name)) {
+      // Secure-prefixed cookies require secure attribute to be cleared
+      const isSecurePrefixed =
+        cookie.name.startsWith('__Secure-') ||
+        cookie.name.startsWith('__Host-');
+
       response.cookies.set(cookie.name, '', {
         expires: new Date(0),
         path: '/',
+        ...(isSecurePrefixed && { secure: true }),
       });
     }
   }
@@ -132,6 +151,8 @@ export default function proxy(req: NextRequest) {
   const skipCookieCheck =
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
+    pathname.startsWith('/signin') ||
+    pathname.startsWith('/auth-error') ||
     pathname.includes('.');
 
   if (!skipCookieCheck) {
