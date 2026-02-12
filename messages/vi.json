@@ -522,7 +522,9 @@
     "errorSessionExpired": "Phiên của bạn đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
     "errorFallback": "Không thể kết nối với dịch vụ xác thực. Vui lòng thử lại hoặc liên hệ hỗ trợ nếu sự cố vẫn tiếp diễn.",
     "tryAgain": "Thử lại",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Dữ liệu phiên đã bị xóa do giới hạn lưu trữ. Vui lòng đăng nhập lại.",
+    "errorHeadersTooLarge": "Dữ liệu phiên quá lớn. Vui lòng đăng nhập lại."
   },
   "chat": {
     "downloadAudio": "Tải xuống âm thanh",

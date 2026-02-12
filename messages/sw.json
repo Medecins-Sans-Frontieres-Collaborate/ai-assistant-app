@@ -552,7 +552,9 @@
     "errorSessionExpired": "Kipindi chako kimeisha. Tafadhali ingia tena ili kuendelea.",
     "errorFallback": "Imeshindwa kuunganisha na huduma ya uthibitishaji. Tafadhali jaribu tena au wasiliana na usaidizi ikiwa tatizo linaendelea.",
     "tryAgain": "Jaribu Tena",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Data za kikao zimefutwa kutokana na ukomo wa hifadhi. Tafadhali ingia tena.",
+    "errorHeadersTooLarge": "Data za kikao zilikuwa kubwa mno. Tafadhali ingia tena."
   },
   "chat": {
     "downloadAudio": "Pakua sauti",

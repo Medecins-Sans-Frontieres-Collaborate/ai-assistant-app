@@ -550,7 +550,9 @@
     "errorSessionExpired": "Sesiunea dvs. a expirat. Vă rugăm autentificați-vă din nou pentru a continua.",
     "errorFallback": "Nu se poate conecta la serviciul de autentificare. Vă rugăm încercați din nou sau contactați asistența dacă problema persistă.",
     "tryAgain": "Încercați din nou",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Datele sesiunii au fost șterse din cauza limitelor de stocare. Vă rugăm să vă autentificați din nou.",
+    "errorHeadersTooLarge": "Datele sesiunii erau prea mari. Vă rugăm să vă autentificați din nou."
   },
   "chat": {
     "downloadAudio": "Descarcă audio",

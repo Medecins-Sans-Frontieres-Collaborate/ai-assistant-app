@@ -552,7 +552,9 @@
     "errorSessionExpired": "세션이 만료되었습니다. 계속하려면 다시 로그인하세요.",
     "errorFallback": "인증 서비스에 연결할 수 없습니다. 다시 시도하거나 문제가 지속되면 지원팀에 문의하세요.",
     "tryAgain": "다시 시도",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "저장 공간 제한으로 세션 데이터가 삭제되었습니다. 다시 로그인해 주세요.",
+    "errorHeadersTooLarge": "세션 데이터가 너무 큽니다. 다시 로그인해 주세요."
   },
   "chat": {
     "downloadAudio": "오디오 다운로드",

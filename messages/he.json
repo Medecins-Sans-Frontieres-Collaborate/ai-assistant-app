@@ -527,7 +527,9 @@
     "errorSessionExpired": "ההפעלה שלך פגה. אנא התחבר שוב כדי להמשיך.",
     "errorFallback": "לא ניתן להתחבר לשירות האימות. אנא נסה שוב או צור קשר עם התמיכה אם הבעיה נמשכת.",
     "tryAgain": "נסה שוב",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "נתוני ההתחברות נמחקו עקב מגבלות אחסון. יש להיכנס שוב.",
+    "errorHeadersTooLarge": "נתוני ההתחברות היו גדולים מדי. יש להיכנס שוב."
   },
   "chat": {
     "downloadAudio": "הורדת אודיו",

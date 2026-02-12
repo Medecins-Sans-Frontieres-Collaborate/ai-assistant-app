@@ -549,7 +549,9 @@
     "errorSessionExpired": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
     "errorFallback": "Nie można połączyć się z usługą uwierzytelniania. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał.",
     "tryAgain": "Spróbuj ponownie",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Dane sesji zostały usunięte z powodu ograniczeń pamięci. Proszę zalogować się ponownie.",
+    "errorHeadersTooLarge": "Dane sesji były zbyt duże. Proszę zalogować się ponownie."
   },
   "chat": {
     "downloadAudio": "Pobierz audio",
