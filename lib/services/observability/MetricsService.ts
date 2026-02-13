@@ -113,7 +113,13 @@ export class MetricsService {
    * Record request completion
    */
   static recordRequest(
-    operation: 'chat' | 'file_upload' | 'transcription' | 'agent' | 'rag',
+    operation:
+      | 'chat'
+      | 'file_upload'
+      | 'transcription'
+      | 'agent'
+      | 'rag'
+      | 'code_interpreter',
     duration: number,
     context: {
       user: Session['user'];
