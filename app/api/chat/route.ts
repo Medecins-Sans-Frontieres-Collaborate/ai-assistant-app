@@ -3,11 +3,9 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
-import { CodeInterpreterEnricher } from '@/lib/services/chat/enrichers/CodeInterpreterEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
-import { CodeInterpreterHandler } from '@/lib/services/chat/handlers/CodeInterpreterHandler';
 import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHandler';
 import { ChatPipeline, buildChatContext } from '@/lib/services/chat/pipeline';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
@@ -135,14 +133,10 @@ export async function POST(req: NextRequest): Promise<Response> {
           foundryOpenAIClient,
         ),
         new ToolRouterEnricher(toolRouterService, agentChatService),
-        new CodeInterpreterEnricher(
-          codeInterpreterFileService,
-          fileProcessingService,
-        ),
-        new AgentEnricher(),
+        // AgentEnricher handles both standard agents and Code Interpreter capability
+        new AgentEnricher(codeInterpreterFileService, fileProcessingService),
 
-        // Execution handlers (CodeInterpreterHandler first, then AgentChatHandler, StandardChatHandler as fallback)
-        new CodeInterpreterHandler(aiFoundryAgentHandler),
+        // Execution handlers (AgentChatHandler handles all agent capabilities, StandardChatHandler as fallback)
         new AgentChatHandler(aiFoundryAgentHandler),
         new StandardChatHandler(standardChatService),
       ]);
