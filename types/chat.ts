@@ -1,5 +1,6 @@
 import { TranscriptMetadata } from '@/lib/utils/app/metadata';
 
+import { CodeInterpreterMetadata } from './codeInterpreter';
 import { OpenAIModel } from './openai';
 import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
@@ -85,6 +86,8 @@ export interface Message {
   pendingTranscriptionFilename?: string;
   /** Blob path for cleanup after transcription completes */
   pendingTranscriptionBlobPath?: string;
+  /** Code Interpreter execution metadata (for messages with code execution) */
+  codeInterpreter?: CodeInterpreterMetadata;
 }
 
 export type Role = 'system' | 'assistant' | 'user';
@@ -106,6 +109,7 @@ export interface AssistantMessageVersion {
   citations?: Citation[];
   thinking?: string;
   transcript?: TranscriptMetadata;
+  codeInterpreter?: CodeInterpreterMetadata;
   error?: boolean;
   createdAt: string; // ISO timestamp for when this version was generated
 }
