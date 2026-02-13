@@ -600,7 +600,20 @@
     "discard": "Discard",
     "keepEditing": "Keep Editing",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "download": "Download"
+  },
+  "codeInterpreter": {
+    "uploadingFiles": "Uploading files...",
+    "executingPython": "Executing Python...",
+    "executionError": "Execution error",
+    "downloadFailed": "Download failed",
+    "imageLoadFailed": "Failed to load image",
+    "generatedFile": "Generated file",
+    "generatedFiles": "Generated Files",
+    "pythonCode": "Python Code",
+    "running": "Running...",
+    "output": "Output"
   },
   "terms": {
     "officialLanguages": "Official version:",
