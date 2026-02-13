@@ -14,6 +14,11 @@ import {
   Message,
   TextMessageContent,
 } from '@/types/chat';
+import {
+  CodeInterpreterFile,
+  CodeInterpreterMetadata,
+  CodeInterpreterOutput,
+} from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
@@ -492,6 +497,391 @@ export class AIFoundryAgentHandler {
             model: modelId,
             botId,
           });
+
+          throw error;
+        } finally {
+          span.end();
+        }
+      },
+    );
+  }
+
+  /**
+   * Handles Code Interpreter chat completion using Azure AI Foundry Agents.
+   *
+   * Extends handleAgentChat with Code Interpreter-specific event handling:
+   * - Streams Python code as it's being executed
+   * - Captures execution logs (print output)
+   * - Extracts generated file annotations (images, CSV, etc.)
+   * - Appends Code Interpreter metadata to stream
+   *
+   * @param modelId - The model ID being used
+   * @param modelConfig - Model configuration
+   * @param messages - Conversation messages
+   * @param temperature - Temperature setting
+   * @param user - Authenticated user
+   * @param botId - Optional bot/knowledge base ID
+   * @param threadId - Optional existing thread ID
+   * @param uploadedFiles - Files uploaded for Code Interpreter use
+   */
+  async handleCodeInterpreterChat(
+    modelId: string,
+    modelConfig: OpenAIModel,
+    messages: Message[],
+    temperature: number,
+    user: Session['user'],
+    botId: string | undefined,
+    threadId: string | undefined,
+    uploadedFiles: CodeInterpreterFile[],
+  ): Promise<Response> {
+    const startTime = Date.now();
+
+    return await this.tracer.startActiveSpan(
+      'ai_foundry_agent.code_interpreter',
+      {
+        attributes: {
+          'agent.id': modelConfig.agentId || 'unknown',
+          'agent.model': modelId,
+          'agent.type': 'code_interpreter',
+          'message.count': messages.length,
+          'files.count': uploadedFiles.length,
+          'user.id': user.id,
+          'thread.id': threadId || 'new',
+        },
+      },
+      async (span) => {
+        try {
+          const aiAgents = await import('@azure/ai-agents');
+          const { DefaultAzureCredential } = await import('@azure/identity');
+
+          const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
+          const agentId =
+            modelConfig.codeInterpreterAgentId || modelConfig.agentId;
+
+          if (!endpoint || !agentId) {
+            throw new Error(
+              'Azure AI Foundry endpoint or Code Interpreter Agent ID not configured',
+            );
+          }
+
+          const client = new aiAgents.AgentsClient(
+            endpoint,
+            new DefaultAzureCredential(),
+          );
+
+          // Process messages
+          const encoding = await getGlobalTiktoken();
+          const processedMessages = await getMessagesToSend(
+            messages,
+            encoding,
+            0,
+            modelConfig.tokenLimit,
+            user,
+          );
+
+          const lastMessage = processedMessages[processedMessages.length - 1];
+
+          // Create or reuse thread
+          let thread;
+          let isNewThread = false;
+
+          if (threadId) {
+            thread = { id: threadId };
+          } else {
+            thread = await client.threads.create();
+            isNewThread = true;
+          }
+
+          // Get message content as string
+          let messageContent: string;
+          if (typeof lastMessage.content === 'string') {
+            messageContent = lastMessage.content;
+          } else if (
+            typeof lastMessage.content === 'object' &&
+            'text' in lastMessage.content
+          ) {
+            messageContent = (lastMessage.content as TextMessageContent).text;
+          } else {
+            messageContent = String(lastMessage.content);
+          }
+
+          // Create message with file attachments for Code Interpreter
+          // The file IDs tell the agent which files to use
+          const attachments = uploadedFiles.map((file) => ({
+            file_id: file.id,
+            tools: [{ type: 'code_interpreter' as const }],
+          }));
+
+          console.log(
+            '[AIFoundryAgentHandler] Creating message with attachments:',
+            {
+              threadId: thread.id,
+              fileCount: attachments.length,
+              fileIds: uploadedFiles.map((f) => f.id),
+            },
+          );
+
+          // Create message with attachments
+          await client.messages.create(thread.id, 'user', messageContent, {
+            attachments,
+          });
+
+          // Create run with streaming
+          const run = client.runs.create(thread.id, String(agentId));
+          const streamEventMessages = await run.stream();
+
+          // Track Code Interpreter metadata
+          const codeInterpreterMetadata: CodeInterpreterMetadata = {
+            executionPhase: 'executing',
+            outputs: [],
+            uploadedFiles,
+            code: undefined,
+            error: undefined,
+          };
+
+          // Create readable stream for response
+          const stream = new ReadableStream({
+            async start(controller) {
+              const encoder = createStreamEncoder();
+              let markerBuffer = '';
+              let currentCode = '';
+              const outputs: CodeInterpreterOutput[] = [];
+
+              try {
+                for await (const eventMessage of streamEventMessages) {
+                  // Handle text content streaming
+                  if (eventMessage.event === 'thread.message.delta') {
+                    const messageData = eventMessage.data as {
+                      delta?: {
+                        content?: Array<{
+                          type: string;
+                          text?: { value: string };
+                        }>;
+                      };
+                    };
+
+                    if (messageData?.delta?.content) {
+                      for (const contentPart of messageData.delta.content) {
+                        if (
+                          contentPart.type === 'text' &&
+                          contentPart.text?.value
+                        ) {
+                          controller.enqueue(
+                            encoder.encode(contentPart.text.value),
+                          );
+                        }
+                      }
+                    }
+                  }
+
+                  // Handle Code Interpreter step events
+                  else if (eventMessage.event === 'thread.run.step.delta') {
+                    const stepData = eventMessage.data as {
+                      delta?: {
+                        step_details?: {
+                          tool_calls?: Array<{
+                            type: string;
+                            code_interpreter?: {
+                              input?: string;
+                              outputs?: Array<{
+                                type: string;
+                                logs?: string;
+                                image?: {
+                                  file_id: string;
+                                };
+                              }>;
+                            };
+                          }>;
+                        };
+                      };
+                    };
+
+                    const toolCalls = stepData?.delta?.step_details?.tool_calls;
+                    if (toolCalls) {
+                      for (const toolCall of toolCalls) {
+                        if (toolCall.type === 'code_interpreter') {
+                          const ci = toolCall.code_interpreter;
+
+                          // Stream Python code input
+                          if (ci?.input) {
+                            currentCode += ci.input;
+
+                            // Send code block indicator for UI rendering
+                            controller.enqueue(
+                              encoder.encode(`\n\`\`\`python\n${ci.input}`),
+                            );
+                          }
+
+                          // Handle outputs
+                          if (ci?.outputs) {
+                            for (const output of ci.outputs) {
+                              if (output.type === 'logs' && output.logs) {
+                                // Execution logs (print statements, etc.)
+                                outputs.push({
+                                  type: 'logs',
+                                  content: output.logs,
+                                });
+
+                                // Close code block if open and show logs
+                                controller.enqueue(
+                                  encoder.encode(
+                                    `\n\`\`\`\n\n**Output:**\n\`\`\`\n${output.logs}\n\`\`\`\n`,
+                                  ),
+                                );
+                              } else if (
+                                output.type === 'image' &&
+                                output.image?.file_id
+                              ) {
+                                // Generated image (chart, plot, etc.)
+                                outputs.push({
+                                  type: 'image',
+                                  fileId: output.image.file_id,
+                                  mimeType: 'image/png',
+                                });
+
+                                // Add placeholder for image - client will render
+                                controller.enqueue(
+                                  encoder.encode(
+                                    `\n\n![Generated Image](code_interpreter:${output.image.file_id})\n`,
+                                  ),
+                                );
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                  // Handle message completion - extract file annotations
+                  else if (eventMessage.event === 'thread.message.completed') {
+                    const messageData = eventMessage.data as {
+                      content?: Array<{
+                        text?: {
+                          annotations?: Array<{
+                            type: string;
+                            text?: string;
+                            file_path?: {
+                              file_id: string;
+                            };
+                          }>;
+                        };
+                      }>;
+                    };
+
+                    // Extract container_file_citation annotations
+                    const annotations =
+                      messageData?.content?.[0]?.text?.annotations;
+                    if (annotations) {
+                      for (const annotation of annotations) {
+                        if (
+                          annotation.type === 'file_path' &&
+                          annotation.file_path?.file_id
+                        ) {
+                          outputs.push({
+                            type: 'file',
+                            fileId: annotation.file_path.file_id,
+                            filename: annotation.text || 'generated_file',
+                          });
+                        }
+                      }
+                    }
+
+                    codeInterpreterMetadata.executionPhase = 'completed';
+                    codeInterpreterMetadata.code = currentCode || undefined;
+                    codeInterpreterMetadata.outputs = outputs;
+                  }
+
+                  // Handle run completion
+                  else if (eventMessage.event === 'thread.run.completed') {
+                    // Flush any remaining buffer
+                    if (markerBuffer) {
+                      controller.enqueue(encoder.encode(markerBuffer));
+                    }
+
+                    // Update metadata
+                    codeInterpreterMetadata.executionPhase = 'completed';
+                    codeInterpreterMetadata.durationMs = Date.now() - startTime;
+
+                    // Append metadata
+                    appendMetadataToStream(controller, {
+                      threadId: isNewThread ? thread.id : undefined,
+                      codeInterpreter: codeInterpreterMetadata,
+                    });
+                  }
+
+                  // Handle errors
+                  else if (eventMessage.event === 'error') {
+                    codeInterpreterMetadata.executionPhase = 'error';
+                    codeInterpreterMetadata.error = JSON.stringify(
+                      eventMessage.data,
+                    );
+
+                    controller.error(
+                      new Error(
+                        `Code Interpreter error: ${JSON.stringify(eventMessage.data)}`,
+                      ),
+                    );
+                  }
+
+                  // Handle done
+                  else if (eventMessage.event === 'done') {
+                    controller.close();
+                  }
+                }
+              } catch (error) {
+                codeInterpreterMetadata.executionPhase = 'error';
+                codeInterpreterMetadata.error =
+                  error instanceof Error ? error.message : String(error);
+                controller.error(error);
+              }
+            },
+          });
+
+          // Record metrics
+          const duration = Date.now() - startTime;
+          MetricsService.recordRequest('code_interpreter', duration, {
+            user,
+            success: true,
+            model: modelId,
+            botId,
+          });
+
+          span.setStatus({ code: SpanStatusCode.OK });
+          span.setAttribute('response.stream', true);
+          span.setAttribute('code_interpreter.duration_ms', duration);
+          span.setAttribute(
+            'code_interpreter.files_uploaded',
+            uploadedFiles.length,
+          );
+
+          return new Response(stream, {
+            headers: STREAMING_RESPONSE_HEADERS,
+          });
+        } catch (error) {
+          span.recordException(error as Error);
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: error instanceof Error ? error.message : 'Unknown error',
+          });
+
+          MetricsService.recordError('code_interpreter_failed', {
+            user,
+            operation: 'code_interpreter',
+            model: modelId,
+            message: error instanceof Error ? error.message : 'Unknown error',
+          });
+
+          MetricsService.recordRequest(
+            'code_interpreter',
+            Date.now() - startTime,
+            {
+              user,
+              success: false,
+              model: modelId,
+              botId,
+            },
+          );
 
           throw error;
         } finally {
