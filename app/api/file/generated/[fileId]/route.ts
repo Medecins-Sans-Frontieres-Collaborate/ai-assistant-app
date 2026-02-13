@@ -69,7 +69,7 @@ export async function GET(
     void logger.logFileRetrievalSuccess({
       user: session.user,
       fileId,
-      fileType: 'generated',
+      fileType: 'file', // Use 'file' type for logging
       duration,
     });
 
@@ -86,7 +86,7 @@ export async function GET(
         `attachment; filename="${encodeURIComponent(downloadFilename)}"`;
     }
 
-    return new NextResponse(buffer, { headers });
+    return new NextResponse(new Uint8Array(buffer), { headers });
   } catch (error) {
     console.error('[Generated File API] Error retrieving file:', error);
 
@@ -94,7 +94,7 @@ export async function GET(
     void logger.logFileRetrievalError({
       user: session.user,
       fileId,
-      fileType: 'generated',
+      fileType: 'file', // Use 'file' type for logging
       errorCode: 'GENERATED_FILE_RETRIEVAL_ERROR',
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
     });
