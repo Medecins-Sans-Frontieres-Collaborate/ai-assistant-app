@@ -48,6 +48,13 @@ export interface ProcessedContent {
     detail: 'auto' | 'low' | 'high';
   }[];
 
+  /** Raw file buffers for use by downstream processors (e.g., Code Interpreter) */
+  rawFiles?: {
+    filename: string;
+    buffer: Buffer;
+    url: string;
+  }[];
+
   /** Any metadata from processing */
   metadata?: Record<string, any>;
 }
