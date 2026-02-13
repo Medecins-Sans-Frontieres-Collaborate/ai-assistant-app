@@ -105,7 +105,7 @@ export class AgentEnricher extends BasePipelineStage {
 
     return {
       ...context,
-      executionStrategy: 'agent',
+      executionStrategy: 'agent' as const,
       agentCapabilities: capabilities,
     };
   }
@@ -154,7 +154,7 @@ export class AgentEnricher extends BasePipelineStage {
             capabilities.bingGrounding = { enabled: true };
             return {
               ...context,
-              executionStrategy: 'agent',
+              executionStrategy: 'agent' as const,
               agentCapabilities: capabilities,
             };
           }
@@ -185,7 +185,7 @@ export class AgentEnricher extends BasePipelineStage {
 
           return {
             ...context,
-            executionStrategy: 'agent',
+            executionStrategy: 'agent' as const,
             agentCapabilities: capabilities,
             enrichedMessages,
           };
