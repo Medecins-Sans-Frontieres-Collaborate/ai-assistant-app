@@ -69,6 +69,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let transcript: TranscriptMetadata | undefined;
   let action: string | undefined;
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
+  let codeInterpreter: CodeInterpreterMetadata | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -102,6 +103,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (parsedData.pendingTranscriptions) {
         pendingTranscriptions = parsedData.pendingTranscriptions;
       }
+      if (parsedData.codeInterpreter) {
+        codeInterpreter = parsedData.codeInterpreter;
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -119,6 +123,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     transcript,
     action,
     pendingTranscriptions,
+    codeInterpreter,
     extractionMethod,
   };
 }
@@ -146,6 +151,8 @@ export function appendMetadataToStream(
   if (metadata.action) cleanMetadata.action = metadata.action;
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
+  if (metadata.codeInterpreter)
+    cleanMetadata.codeInterpreter = metadata.codeInterpreter;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
