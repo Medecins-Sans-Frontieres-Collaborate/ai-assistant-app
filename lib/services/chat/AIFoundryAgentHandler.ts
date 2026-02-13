@@ -1,9 +1,5 @@
 import { Session } from 'next-auth';
 
-import {
-  appendMetadataToStream,
-  createStreamEncoder,
-} from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
@@ -14,13 +10,14 @@ import {
   Message,
   TextMessageContent,
 } from '@/types/chat';
-import {
-  CodeInterpreterMetadata,
-  CodeInterpreterOutput,
-} from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import {
+  AgentCapabilityHandler,
+  BingGroundingHandler,
+  CodeInterpreterHandler,
+} from './agentCapabilities';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -256,20 +253,14 @@ export class AIFoundryAgentHandler {
             throw streamError;
           }
 
-          // Create the response stream
-          const stream = hasCodeInterpreter
-            ? this.createCodeInterpreterStream(
-                streamEventMessages,
-                thread,
-                isNewThread,
-                uploadedFiles,
-                startTime,
-              )
-            : this.createStandardAgentStream(
-                streamEventMessages,
-                thread,
-                isNewThread,
-              );
+          // Select capability handler and create the response stream
+          const capabilityHandler = this.selectCapabilityHandler(capabilities);
+          const stream = capabilityHandler.createStream(streamEventMessages, {
+            thread,
+            isNewThread,
+            startTime,
+            uploadedFiles: capabilities?.codeInterpreter?.uploadedFiles,
+          });
 
           // Record metrics
           const duration = Date.now() - startTime;
@@ -403,411 +394,28 @@ export class AIFoundryAgentHandler {
   }
 
   /**
-   * Creates a ReadableStream for standard agent responses (Bing grounding).
-   */
-  private createStandardAgentStream(
-    streamEventMessages: AsyncIterable<any>,
-    thread: { id: string },
-    isNewThread: boolean,
-  ): ReadableStream {
-    return new ReadableStream({
-      async start(controller) {
-        const encoder = createStreamEncoder();
-        let citations: Array<{
-          number: number;
-          title: string;
-          url: string;
-          date: string;
-        }> = [];
-        let citationIndex = 1;
-        const citationMap = new Map<string, number>();
-
-        // markerBuffer: Accumulates text to handle citation markers split across chunks
-        let markerBuffer = '';
-
-        try {
-          for await (const eventMessage of streamEventMessages) {
-            // Handle different event types
-            if (eventMessage.event === 'thread.message.delta') {
-              const messageData = eventMessage.data as {
-                delta?: {
-                  content?: Array<{
-                    type: string;
-                    text?: { value: string };
-                  }>;
-                };
-              };
-              if (
-                messageData?.delta?.content &&
-                Array.isArray(messageData.delta.content)
-              ) {
-                messageData.delta.content.forEach(
-                  (contentPart: { type: string; text?: { value: string } }) => {
-                    if (
-                      contentPart.type === 'text' &&
-                      contentPart.text?.value
-                    ) {
-                      const textChunk = contentPart.text.value;
-
-                      // Stage 1: Accumulate text in marker buffer
-                      markerBuffer += textChunk;
-
-                      // Stage 2: Process complete citation markers in accumulated buffer
-                      //
-                      // Azure agents return citations in two formats:
-                      // - Short: 【3:0†source】 (just the word "source")
-                      // - Long:  【3:0†Title†URL】 (embedded title and URL)
-                      //
-                      // Regex breakdown: /【(\d+):(\d+)†[^】]+】/g
-                      // - 【        : Opening bracket (Chinese left lenticular bracket)
-                      // - (\d+)    : First number (source index)
-                      // - :        : Literal colon
-                      // - (\d+)    : Second number (sub-index)
-                      // - †        : Dagger symbol separator
-                      // - [^】]+   : Any characters except closing bracket
-                      // - 】       : Closing bracket (Chinese right lenticular bracket)
-                      //
-                      // Each unique marker gets a sequential number [1], [2], etc.
-                      const processedBuffer = markerBuffer.replace(
-                        /【(\d+):(\d+)†[^】]+】/g,
-                        (match: string) => {
-                          if (!citationMap.has(match)) {
-                            citationMap.set(match, citationIndex);
-                            citationIndex++;
-                          }
-                          return `[${citationMap.get(match)}]`;
-                        },
-                      );
-
-                      // Stage 3: Check for incomplete markers at end of buffer
-                      // If there's an opening bracket without a closing one, keep it
-                      const lastOpenBracket = processedBuffer.lastIndexOf('【');
-                      const lastCloseBracket =
-                        processedBuffer.lastIndexOf('】');
-
-                      if (lastOpenBracket > lastCloseBracket) {
-                        // Incomplete marker at end - keep it in buffer, send the rest
-                        const completeText = processedBuffer.slice(
-                          0,
-                          lastOpenBracket,
-                        );
-                        if (completeText) {
-                          controller.enqueue(encoder.encode(completeText));
-                        }
-                        markerBuffer = processedBuffer.slice(lastOpenBracket);
-                      } else {
-                        // All markers complete - send everything
-                        controller.enqueue(encoder.encode(processedBuffer));
-                        markerBuffer = '';
-                      }
-                    }
-                  },
-                );
-              }
-            } else if (eventMessage.event === 'thread.message.completed') {
-              // Extract citations from annotations
-              const messageData = eventMessage.data as {
-                content?: Array<{
-                  text?: {
-                    annotations?: Array<{
-                      type: string;
-                      text?: string;
-                      urlCitation?: { title?: string; url?: string };
-                    }>;
-                  };
-                }>;
-              };
-              if (messageData?.content?.[0]?.text?.annotations) {
-                const annotations = messageData.content[0].text.annotations;
-
-                // Build a map from citation marker to annotation
-                const markerToAnnotation = new Map<
-                  string,
-                  { title?: string; url?: string }
-                >();
-                annotations.forEach(
-                  (annotation: {
-                    type: string;
-                    text?: string;
-                    urlCitation?: { title?: string; url?: string };
-                  }) => {
-                    if (
-                      annotation.type === 'url_citation' &&
-                      annotation.text &&
-                      annotation.urlCitation
-                    ) {
-                      markerToAnnotation.set(
-                        annotation.text,
-                        annotation.urlCitation,
-                      );
-                    }
-                  },
-                );
-
-                // Build citations list based on citationMap order
-                // This ensures inline numbers match the citation list
-                citations = [];
-                for (const [marker, number] of citationMap.entries()) {
-                  const urlCitation = markerToAnnotation.get(marker);
-                  // Always add citation even if annotation is missing
-                  citations.push({
-                    number: number,
-                    title: urlCitation?.title || `Source ${number}`,
-                    url: urlCitation?.url || '',
-                    date: '',
-                  });
-
-                  if (!urlCitation) {
-                    console.warn(
-                      `[AIFoundryAgentHandler] No annotation found for marker ${marker}, using placeholder`,
-                    );
-                  }
-                }
-              }
-            } else if (eventMessage.event === 'thread.run.completed') {
-              // Flush any remaining marker buffer
-              if (markerBuffer) {
-                controller.enqueue(encoder.encode(markerBuffer));
-                markerBuffer = '';
-              }
-
-              // Append metadata at the very end using utility function
-              // No need to deduplicate - citationMap already ensured uniqueness
-              appendMetadataToStream(controller, {
-                citations: citations.length > 0 ? citations : undefined,
-                threadId: isNewThread ? thread.id : undefined,
-              });
-            } else if (eventMessage.event === 'error') {
-              controller.error(
-                new Error(`Agent error: ${JSON.stringify(eventMessage.data)}`),
-              );
-            } else if (eventMessage.event === 'done') {
-              // Stop the smooth streaming loop and close
-              controller.close();
-            }
-          }
-        } catch (error) {
-          controller.error(error);
-        }
-      },
-    });
-  }
-
-  /**
-   * Creates a ReadableStream for Code Interpreter responses.
+   * Selects the appropriate capability handler based on enabled capabilities.
    *
-   * Handles additional event types:
-   * - thread.run.step.delta: Python code input and execution outputs
-   * - File annotations in thread.message.completed
+   * @param capabilities - Agent capabilities enabled for this execution
+   * @returns The handler that should process the stream
    */
-  private createCodeInterpreterStream(
-    streamEventMessages: AsyncIterable<any>,
-    thread: { id: string },
-    isNewThread: boolean,
-    uploadedFiles: Array<{ id: string; filename: string }>,
-    startTime: number,
-  ): ReadableStream {
-    return new ReadableStream({
-      async start(controller) {
-        const encoder = createStreamEncoder();
-        let markerBuffer = '';
-        let currentCode = '';
-        const outputs: CodeInterpreterOutput[] = [];
+  private selectCapabilityHandler(
+    capabilities?: AgentCapabilities,
+  ): AgentCapabilityHandler {
+    // Registered handlers in priority order
+    const handlers: AgentCapabilityHandler[] = [
+      new CodeInterpreterHandler(),
+      new BingGroundingHandler(), // Default fallback
+    ];
 
-        // Track Code Interpreter metadata
-        const codeInterpreterMetadata: CodeInterpreterMetadata = {
-          executionPhase: 'executing',
-          outputs: [],
-          uploadedFiles: uploadedFiles.map((f) => ({
-            id: f.id,
-            filename: f.filename,
-            purpose: 'assistants' as const,
-          })),
-          code: undefined,
-          error: undefined,
-        };
+    // Return first handler that can handle the capabilities
+    for (const handler of handlers) {
+      if (handler.canHandle(capabilities)) {
+        return handler;
+      }
+    }
 
-        try {
-          for await (const eventMessage of streamEventMessages) {
-            // Handle text content streaming
-            if (eventMessage.event === 'thread.message.delta') {
-              const messageData = eventMessage.data as {
-                delta?: {
-                  content?: Array<{
-                    type: string;
-                    text?: { value: string };
-                  }>;
-                };
-              };
-
-              if (messageData?.delta?.content) {
-                for (const contentPart of messageData.delta.content) {
-                  if (contentPart.type === 'text' && contentPart.text?.value) {
-                    controller.enqueue(encoder.encode(contentPart.text.value));
-                  }
-                }
-              }
-            }
-
-            // Handle Code Interpreter step events
-            else if (eventMessage.event === 'thread.run.step.delta') {
-              const stepData = eventMessage.data as {
-                delta?: {
-                  step_details?: {
-                    tool_calls?: Array<{
-                      type: string;
-                      code_interpreter?: {
-                        input?: string;
-                        outputs?: Array<{
-                          type: string;
-                          logs?: string;
-                          image?: {
-                            file_id: string;
-                          };
-                        }>;
-                      };
-                    }>;
-                  };
-                };
-              };
-
-              const toolCalls = stepData?.delta?.step_details?.tool_calls;
-              if (toolCalls) {
-                for (const toolCall of toolCalls) {
-                  if (toolCall.type === 'code_interpreter') {
-                    const ci = toolCall.code_interpreter;
-
-                    // Stream Python code input
-                    if (ci?.input) {
-                      currentCode += ci.input;
-
-                      // Send code block indicator for UI rendering
-                      controller.enqueue(
-                        encoder.encode(`\n\`\`\`python\n${ci.input}`),
-                      );
-                    }
-
-                    // Handle outputs
-                    if (ci?.outputs) {
-                      for (const output of ci.outputs) {
-                        if (output.type === 'logs' && output.logs) {
-                          // Execution logs (print statements, etc.)
-                          outputs.push({
-                            type: 'logs',
-                            content: output.logs,
-                          });
-
-                          // Close code block if open and show logs
-                          controller.enqueue(
-                            encoder.encode(
-                              `\n\`\`\`\n\n**Output:**\n\`\`\`\n${output.logs}\n\`\`\`\n`,
-                            ),
-                          );
-                        } else if (
-                          output.type === 'image' &&
-                          output.image?.file_id
-                        ) {
-                          // Generated image (chart, plot, etc.)
-                          outputs.push({
-                            type: 'image',
-                            fileId: output.image.file_id,
-                            mimeType: 'image/png',
-                          });
-
-                          // Add placeholder for image - client will render
-                          controller.enqueue(
-                            encoder.encode(
-                              `\n\n![Generated Image](code_interpreter:${output.image.file_id})\n`,
-                            ),
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            // Handle message completion - extract file annotations
-            else if (eventMessage.event === 'thread.message.completed') {
-              const messageData = eventMessage.data as {
-                content?: Array<{
-                  text?: {
-                    annotations?: Array<{
-                      type: string;
-                      text?: string;
-                      file_path?: {
-                        file_id: string;
-                      };
-                    }>;
-                  };
-                }>;
-              };
-
-              // Extract container_file_citation annotations
-              const annotations = messageData?.content?.[0]?.text?.annotations;
-              if (annotations) {
-                for (const annotation of annotations) {
-                  if (
-                    annotation.type === 'file_path' &&
-                    annotation.file_path?.file_id
-                  ) {
-                    outputs.push({
-                      type: 'file',
-                      fileId: annotation.file_path.file_id,
-                      filename: annotation.text || 'generated_file',
-                    });
-                  }
-                }
-              }
-
-              codeInterpreterMetadata.executionPhase = 'completed';
-              codeInterpreterMetadata.code = currentCode || undefined;
-              codeInterpreterMetadata.outputs = outputs;
-            }
-
-            // Handle run completion
-            else if (eventMessage.event === 'thread.run.completed') {
-              // Flush any remaining buffer
-              if (markerBuffer) {
-                controller.enqueue(encoder.encode(markerBuffer));
-              }
-
-              // Update metadata
-              codeInterpreterMetadata.executionPhase = 'completed';
-              codeInterpreterMetadata.durationMs = Date.now() - startTime;
-
-              // Append metadata
-              appendMetadataToStream(controller, {
-                threadId: isNewThread ? thread.id : undefined,
-                codeInterpreter: codeInterpreterMetadata,
-              });
-            }
-
-            // Handle errors
-            else if (eventMessage.event === 'error') {
-              codeInterpreterMetadata.executionPhase = 'error';
-              codeInterpreterMetadata.error = JSON.stringify(eventMessage.data);
-
-              controller.error(
-                new Error(
-                  `Code Interpreter error: ${JSON.stringify(eventMessage.data)}`,
-                ),
-              );
-            }
-
-            // Handle done
-            else if (eventMessage.event === 'done') {
-              controller.close();
-            }
-          }
-        } catch (error) {
-          codeInterpreterMetadata.executionPhase = 'error';
-          codeInterpreterMetadata.error =
-            error instanceof Error ? error.message : String(error);
-          controller.error(error);
-        }
-      },
-    });
+    // Should never reach here since BingGroundingHandler handles all non-CodeInterpreter
+    return new BingGroundingHandler();
   }
 }
