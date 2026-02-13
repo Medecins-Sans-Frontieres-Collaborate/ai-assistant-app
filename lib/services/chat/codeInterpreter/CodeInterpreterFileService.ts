@@ -71,19 +71,19 @@ export class CodeInterpreterFileService {
 
           const client = new aiAgents.AgentsClient(endpoint, this.credential);
 
-          // Create a File object from the buffer
-          // Convert Buffer to Uint8Array for File constructor
-          const file = new File([new Uint8Array(buffer)], filename, {
-            type: mimeType || 'application/octet-stream',
+          // Create a ReadableStream from the buffer
+          // The Azure AI Agents SDK expects a ReadableStream
+          const stream = new ReadableStream({
+            start(controller) {
+              controller.enqueue(new Uint8Array(buffer));
+              controller.close();
+            },
           });
 
           // Upload file with purpose='assistants' for Code Interpreter use
-          // The SDK requires: file, purpose, options (can be empty)
-          const uploadResult = await client.files.upload(
-            file,
-            'assistants',
-            {},
-          );
+          const uploadResult = await client.files.upload(stream, 'assistants', {
+            fileName: filename,
+          });
 
           console.log('[CodeInterpreterFileService] File uploaded:', {
             id: uploadResult.id,
