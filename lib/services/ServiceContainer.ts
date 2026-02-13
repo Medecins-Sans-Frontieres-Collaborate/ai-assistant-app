@@ -5,6 +5,7 @@ import { AgentChatService } from './chat/AgentChatService';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
+import { CodeInterpreterFileService } from './chat/codeInterpreter/CodeInterpreterFileService';
 import { ModelSelector, StreamingService, ToneService } from './shared';
 
 import { env } from '@/config/environment';
@@ -48,6 +49,7 @@ export class ServiceContainer {
   private toolRouterService!: ToolRouterService;
   private agentChatService!: AgentChatService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
+  private codeInterpreterFileService!: CodeInterpreterFileService;
 
   // Chat service (uses all the above)
   private standardChatService!: StandardChatService;
@@ -121,6 +123,7 @@ export class ServiceContainer {
     this.toolRouterService = new ToolRouterService(this.openAIClient);
     this.agentChatService = new AgentChatService();
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
+    this.codeInterpreterFileService = new CodeInterpreterFileService();
 
     // 4. Initialize chat service (uses multiple dependencies)
     this.standardChatService = new StandardChatService(
@@ -187,5 +190,9 @@ export class ServiceContainer {
 
   public getStandardChatService(): StandardChatService {
     return this.standardChatService;
+  }
+
+  public getCodeInterpreterFileService(): CodeInterpreterFileService {
+    return this.codeInterpreterFileService;
   }
 }
