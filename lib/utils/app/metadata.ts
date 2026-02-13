@@ -1,3 +1,4 @@
+import { CodeInterpreterMetadata } from '@/types/codeInterpreter';
 import { Citation } from '@/types/rag';
 
 /**
@@ -33,8 +34,9 @@ export interface StreamMetadata {
   threadId?: string;
   thinking?: string;
   transcript?: TranscriptMetadata;
-  action?: string; // Current action being performed (e.g., "searching_web", "processing")
+  action?: string; // Current action being performed (e.g., "searching_web", "processing", "executing_code")
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
+  codeInterpreter?: CodeInterpreterMetadata; // Code Interpreter execution metadata
 }
 
 /**
@@ -48,6 +50,7 @@ export interface ParsedMetadata {
   transcript?: TranscriptMetadata;
   action?: string;
   pendingTranscriptions?: PendingTranscriptionInfo[];
+  codeInterpreter?: CodeInterpreterMetadata;
   extractionMethod: 'metadata' | 'none';
 }
 
