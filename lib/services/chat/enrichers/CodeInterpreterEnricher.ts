@@ -189,7 +189,7 @@ export class CodeInterpreterEnricher extends BasePipelineStage {
           return {
             ...context,
             codeInterpreterFiles: uploadedFiles,
-            executionStrategy: 'code_interpreter',
+            executionStrategy: 'code_interpreter' as const,
             enrichedMessages,
           };
         } catch (error) {
