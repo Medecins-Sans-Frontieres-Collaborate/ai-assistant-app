@@ -72,13 +72,18 @@ export class CodeInterpreterFileService {
           const client = new aiAgents.AgentsClient(endpoint, this.credential);
 
           // Create a File object from the buffer
-          // The SDK expects a File-like object with name property
-          const file = new File([buffer], filename, {
+          // Convert Buffer to Uint8Array for File constructor
+          const file = new File([new Uint8Array(buffer)], filename, {
             type: mimeType || 'application/octet-stream',
           });
 
           // Upload file with purpose='assistants' for Code Interpreter use
-          const uploadResult = await client.files.upload(file, 'assistants');
+          // The SDK requires: file, purpose, options (can be empty)
+          const uploadResult = await client.files.upload(
+            file,
+            'assistants',
+            {},
+          );
 
           console.log('[CodeInterpreterFileService] File uploaded:', {
             id: uploadResult.id,
@@ -93,7 +98,7 @@ export class CodeInterpreterFileService {
           return {
             id: uploadResult.id,
             filename: uploadResult.filename || filename,
-            purpose: 'assistants',
+            purpose: 'assistants' as const,
             mimeType,
             size: uploadResult.bytes,
           };
@@ -176,25 +181,28 @@ export class CodeInterpreterFileService {
 
           const client = new aiAgents.AgentsClient(endpoint, this.credential);
 
-          // Download file content from container
-          // Note: The exact API may vary based on SDK version
+          // Download file content
+          // The SDK returns the content directly (string or Uint8Array)
           const content = await client.files.getContent(fileId);
 
-          // Convert ReadableStream to Buffer
-          const chunks: Uint8Array[] = [];
-          const reader = content.body?.getReader();
-
-          if (!reader) {
-            throw new Error('No response body received');
+          // Convert content to Buffer based on its type
+          let buffer: Buffer;
+          if (typeof content === 'string') {
+            buffer = Buffer.from(content);
+          } else if (content instanceof Uint8Array) {
+            buffer = Buffer.from(content);
+          } else if (
+            content &&
+            typeof content === 'object' &&
+            'body' in content
+          ) {
+            // Handle Response-like object with body stream
+            const response = content as unknown as Response;
+            const arrayBuffer = await response.arrayBuffer();
+            buffer = Buffer.from(arrayBuffer);
+          } else {
+            throw new Error('Unexpected content type from getContent');
           }
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            chunks.push(value);
-          }
-
-          const buffer = Buffer.concat(chunks);
 
           console.log('[CodeInterpreterFileService] File downloaded:', {
             fileId,
