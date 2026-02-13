@@ -2,8 +2,8 @@ import { Session } from 'next-auth';
 
 import { ModelSelector } from '@/lib/services/shared';
 
+import { AgentCapabilities } from '@/types/agent';
 import { Message } from '@/types/chat';
-import { CodeInterpreterFile } from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -184,11 +184,22 @@ export interface ChatContext {
   /** Enriched messages (populated by feature enrichers) */
   enrichedMessages?: Message[];
 
-  /** Execution strategy (standard, agent, or code_interpreter) */
-  executionStrategy?: 'standard' | 'agent' | 'code_interpreter';
+  /**
+   * Execution strategy for the chat request.
+   * - 'standard': Use StandardChatHandler (OpenAI/Azure OpenAI)
+   * - 'agent': Use AgentChatHandler (AI Foundry agents)
+   *
+   * Note: Code Interpreter is handled as an agent capability,
+   * not a separate execution strategy. See agentCapabilities.
+   */
+  executionStrategy?: 'standard' | 'agent';
 
-  /** Files uploaded to AI Foundry for Code Interpreter use */
-  codeInterpreterFiles?: CodeInterpreterFile[];
+  /**
+   * Capabilities enabled for agent execution.
+   * Populated by AgentEnricher when using AI Foundry agents.
+   * Tracks Code Interpreter files, Bing grounding, etc.
+   */
+  agentCapabilities?: AgentCapabilities;
 
   /** Final response (populated by execution handler) */
   response?: Response;
