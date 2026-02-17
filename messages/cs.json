@@ -1024,7 +1024,7 @@
     "sections": {
       "baseModels": "Základní modely"
     },
-    "maintainedBy": "Spravováno ",
+    "maintainedBy": "Spravováno",
     "agents": {
       "advancedFeatureBadge": "Pokročilá funkce",
       "description": "Vytvářejte a spravujte vlastní AI agenty se specializovanými schopnostmi. Tito agenti běží na instanci MSF AI Assistant Foundry.",

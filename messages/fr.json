@@ -1024,7 +1024,7 @@
     "sections": {
       "baseModels": "Modèles de base"
     },
-    "maintainedBy": "Maintenu par ",
+    "maintainedBy": "Maintenu par",
     "agents": {
       "advancedFeatureBadge": "Fonctionnalité avancée",
       "description": "Créez et gérez des agents IA personnalisés avec des capacités spécialisées. Ces agents fonctionnent sur l'instance MSF AI Assistant Foundry.",

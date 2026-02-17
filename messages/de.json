@@ -1021,7 +1021,7 @@
     "sections": {
       "baseModels": "Basismodelle"
     },
-    "maintainedBy": "Gepflegt von ",
+    "maintainedBy": "Gepflegt von",
     "agents": {
       "advancedFeatureBadge": "Erweiterte Funktion",
       "description": "Erstellen und verwalten Sie benutzerdefinierte KI-Agenten mit spezialisierten Fähigkeiten. Diese Agenten laufen auf der MSF AI Assistant Foundry-Instanz.",

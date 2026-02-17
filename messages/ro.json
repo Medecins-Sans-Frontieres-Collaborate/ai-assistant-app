@@ -1101,7 +1101,7 @@
     "changeDisplayName": "Apăsați pentru a schimba modul în care vă adresăm"
   },
   "modelSelect": {
-    "maintainedBy": "Întreținut de ",
+    "maintainedBy": "Întreținut de",
     "tabs": {
       "models": "Modele",
       "agents": "Agenți"

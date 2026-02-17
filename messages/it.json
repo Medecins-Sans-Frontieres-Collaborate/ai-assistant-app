@@ -1101,7 +1101,7 @@
     "changeDisplayName": "Fai clic per cambiare il modo in cui ti chiamiamo"
   },
   "modelSelect": {
-    "maintainedBy": "Gestito da ",
+    "maintainedBy": "Gestito da",
     "tabs": {
       "models": "Modelli",
       "agents": "Agenti"

@@ -1017,7 +1017,7 @@
     "changeDisplayName": "Clique para alterar como tratamos você"
   },
   "modelSelect": {
-    "maintainedBy": "Mantido por ",
+    "maintainedBy": "Mantido por",
     "tabs": {
       "models": "Modelos",
       "agents": "Agentes"

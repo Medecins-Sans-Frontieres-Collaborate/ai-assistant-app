@@ -1017,7 +1017,7 @@
     "changeDisplayName": "Size nasıl hitap edeceğimizi değiştirmek için tıklayın"
   },
   "modelSelect": {
-    "maintainedBy": "Bakımı yapan ",
+    "maintainedBy": "Bakımı yapan",
     "tabs": {
       "models": "Modeller",
       "agents": "Ajanlar"

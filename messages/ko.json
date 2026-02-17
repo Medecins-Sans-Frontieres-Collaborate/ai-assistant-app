@@ -1017,7 +1017,7 @@
     "changeDisplayName": "클릭하여 호칭을 변경하세요"
   },
   "modelSelect": {
-    "maintainedBy": "관리: ",
+    "maintainedBy": "관리:",
     "tabs": {
       "models": "모델",
       "agents": "에이전트"

@@ -1101,7 +1101,7 @@
     "changeDisplayName": "คลิกเพื่อเปลี่ยนชื่อที่เราใช้เรียกคุณ"
   },
   "modelSelect": {
-    "maintainedBy": "ดูแลโดย ",
+    "maintainedBy": "ดูแลโดย",
     "tabs": {
       "models": "โมเดล",
       "agents": "เอเจนต์"

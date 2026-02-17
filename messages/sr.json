@@ -1172,7 +1172,7 @@
     "sections": {
       "baseModels": "Основни модели"
     },
-    "maintainedBy": "Одржава ",
+    "maintainedBy": "Одржава",
     "agents": {
       "advancedFeatureBadge": "Напредна функција",
       "description": "Креирајте и управљајте прилагођеним AI агентима са специјализованим могућностима. Ови агенти раде на МСФ AI Асистент Foundry инстанци.",

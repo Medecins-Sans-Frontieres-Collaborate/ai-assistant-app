@@ -1024,7 +1024,7 @@
     "sections": {
       "baseModels": "বেস মডেল"
     },
-    "maintainedBy": "রক্ষণাবেক্ষণকারী ",
+    "maintainedBy": "রক্ষণাবেক্ষণকারী",
     "agents": {
       "advancedFeatureBadge": "উন্নত বৈশিষ্ট্য",
       "description": "বিশেষায়িত সক্ষমতা সহ কাস্টম AI এজেন্ট তৈরি এবং পরিচালনা করুন। এই এজেন্টগুলি MSF AI Assistant Foundry ইনস্ট্যান্সে চলে।",

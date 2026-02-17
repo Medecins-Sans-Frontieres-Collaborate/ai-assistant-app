@@ -1017,7 +1017,7 @@
     "changeDisplayName": "Нажмите, чтобы изменить ваше отображаемое имя"
   },
   "modelSelect": {
-    "maintainedBy": "Поддерживается ",
+    "maintainedBy": "Поддерживается",
     "tabs": {
       "models": "Модели",
       "agents": "Агенты"

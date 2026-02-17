@@ -1024,7 +1024,7 @@
     "sections": {
       "baseModels": "आधार मॉडल"
     },
-    "maintainedBy": "द्वारा अनुरक्षित ",
+    "maintainedBy": "द्वारा अनुरक्षित",
     "agents": {
       "advancedFeatureBadge": "उन्नत सुविधा",
       "description": "विशेष क्षमताओं के साथ कस्टम AI एजेंट बनाएं और प्रबंधित करें। ये एजेंट MSF AI Assistant Foundry इंस्टेंस पर चलते हैं।",

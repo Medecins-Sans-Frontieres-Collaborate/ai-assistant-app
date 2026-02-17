@@ -1058,7 +1058,7 @@
     "changeDisplayName": "Klik om te wijzigen hoe we u aanspreken"
   },
   "modelSelect": {
-    "maintainedBy": "Onderhouden door ",
+    "maintainedBy": "Onderhouden door",
     "tabs": {
       "models": "Modellen",
       "agents": "Agents"

@@ -309,12 +309,12 @@
   "agents": {
     "exportAgent": "Xuất tác nhân",
     "editAgent": "Chỉnh sửa tác nhân",
-    "agentName": "Tên tác nhân",
+    "agentName": "Tên Agent",
     "myResearchAssistant": "Trợ lý nghiên cứu của tôi",
     "agentId": "ID tác nhân",
     "agentIdExample": "asst_abc123def456",
     "descriptionOptional": "Mô tả (tùy chọn)",
-    "descriptionPlaceholder": "Tác nhân chuyên về các nhiệm vụ nghiên cứu...",
+    "descriptionPlaceholder": "Nhập mô tả cho agent",
     "baseModel": "Mô hình cơ sở",
     "formatDescription": "Định dạng: asst_xxxxx (từ MSF AI Assistant Foundry)",
     "importantInfo": "Tác nhân này sẽ có quyền truy cập vào ngữ cảnh cuộc trò chuyện và có thể sử dụng các công cụ giống như các mô hình tiêu chuẩn. Đảm bảo ID tác nhân chính xác vì không thể thay đổi sau này.",
@@ -331,10 +331,8 @@
     "createError": "Không thể tạo agent tùy chỉnh",
     "updateSuccess": "Agent tùy chỉnh đã được cập nhật thành công",
     "updateError": "Không thể cập nhật agent tùy chỉnh",
-    "agentName": "Tên Agent",
     "agentNamePlaceholder": "Nhập tên agent",
     "description": "Mô tả",
-    "descriptionPlaceholder": "Nhập mô tả cho agent",
     "instructions": "Hướng dẫn",
     "instructionsPlaceholder": "Nhập hướng dẫn hệ thống cho agent",
     "conversationStarters": "Câu bắt đầu hội thoại",
@@ -1102,7 +1100,7 @@
     "changeDisplayName": "Nhấn để thay đổi cách chúng tôi xưng hô với bạn"
   },
   "modelSelect": {
-    "maintainedBy": "Được duy trì bởi ",
+    "maintainedBy": "Được duy trì bởi",
     "tabs": {
       "models": "Mô hình",
       "agents": "Tác vụ"
@@ -1720,7 +1718,9 @@
     "refreshNow": "Làm mới để cập nhật"
   },
   "agentsTab": {
-    "organizationAgents": "Agent Tổ chức",
+    "organizationAgents": {
+      "title": "Agent Tổ chức"
+    },
     "customAgents": {
       "title": "Agent Tùy chỉnh",
       "advancedBadge": "Nâng cao",
@@ -1730,42 +1730,43 @@
     "selectAgentPrompt": "Chọn một agent để bắt đầu"
   },
   "privacy": {
-    "title": "Quyền riêng tư",
-    "dataUsage": "Sử dụng dữ liệu",
-    "dataUsageDescription": "Chúng tôi coi trọng quyền riêng tư của bạn. Đây là cách chúng tôi xử lý dữ liệu của bạn.",
-    "conversationData": "Dữ liệu hội thoại",
-    "conversationDataDescription": "Các cuộc hội thoại của bạn được lưu trữ an toàn và không được sử dụng để huấn luyện mô hình.",
-    "analytics": "Phân tích",
-    "analyticsDescription": "Chúng tôi thu thập dữ liệu sử dụng ẩn danh để cải thiện dịch vụ.",
-    "thirdParty": "Dịch vụ bên thứ ba",
-    "thirdPartyDescription": "Chúng tôi không chia sẻ dữ liệu của bạn với bên thứ ba mà không có sự đồng ý của bạn.",
-    "learnMore": "Tìm hiểu thêm về chính sách quyền riêng tư của chúng tôi",
-    "lastUpdated": "Cập nhật lần cuối"
+    "policyTitle": "Chính sách quyền riêng tư & Bảo vệ dữ liệu",
+    "policyDescription": "Tìm hiểu cách dữ liệu của bạn được bảo vệ và những thông tin không nên nhập",
+    "termsOfUse": "Điều khoản sử dụng",
+    "termsDescription": "Xem hướng dẫn sử dụng có trách nhiệm và các mục đích bị cấm",
+    "keyPrivacyPoints": "Các điểm chính về quyền riêng tư",
+    "localStorage": "Các cuộc hội thoại của bạn được lưu trữ cục bộ trên thiết bị của bạn",
+    "azureInfra": "Tất cả xử lý dữ liệu diễn ra trong hệ thống MSF sử dụng hạ tầng Azure",
+    "noPersonalData": "Không nhập dữ liệu cá nhân (tên, số điện thoại, v.v.)",
+    "noSensitiveData": "Không nhập thông tin vận hành nhạy cảm cao",
+    "concernsTitle": "Vấn đề hoặc sự cố về quyền riêng tư?",
+    "contactUs": "Liên hệ ngay với chúng tôi nếu bạn có lo ngại về quyền riêng tư:"
   },
   "variableModal": {
-    "title": "Cấu hình biến",
-    "description": "Agent này yêu cầu các biến sau để sử dụng.",
-    "variableName": "Biến",
-    "defaultValue": "Mặc định: {defaultValue}",
-    "placeholder": "Nhập giá trị cho {key}",
-    "submit": "Bắt đầu Agent",
-    "cancel": "Hủy"
+    "fillInstructions": "Điền các biến bên dưới để tùy chỉnh lời nhắc của bạn",
+    "optional": "Tùy chọn",
+    "required": "Bắt buộc",
+    "default": "Mặc định:",
+    "defaultPlaceholder": "{defaultValue} (mặc định)",
+    "enterValue": "Nhập giá trị cho {key}...",
+    "cancel": "Hủy",
+    "apply": "Áp dụng"
   },
   "recentSources": {
-    "title": "Nguồn gần đây",
-    "noSources": "Chưa có nguồn nào",
-    "noSourcesDescription": "Các nguồn bạn tham chiếu sẽ xuất hiện ở đây.",
-    "document": "Tài liệu",
-    "webpage": "Trang web",
-    "image": "Hình ảnh",
-    "showMore": "Hiển thị thêm {count}",
-    "showLess": "Hiển thị ít hơn"
+    "title": "Dữ liệu nguồn mới nhất",
+    "unableToLoad": "Không thể tải nguồn mới nhất",
+    "retry": "Thử lại",
+    "noSources": "Chưa có nguồn gần đây",
+    "refresh": "Làm mới",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "daysAgo": "{count} ngày trước"
   },
   "chatInput": {
-    "placeholder": "Nhập tin nhắn...",
-    "send": "Gửi",
-    "stop": "Dừng",
-    "attachFile": "Đính kèm tệp",
-    "characterCount": "{count} ký tự"
+    "filePickerError": "Không thể mở trình chọn tệp. Hãy thử kéo và thả thay thế.",
+    "addDocument": "Thêm tài liệu",
+    "uploadDocument": "Tải lên tài liệu",
+    "images": "Hình ảnh",
+    "addImage": "Thêm hình ảnh"
   }
 }

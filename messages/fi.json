@@ -1108,7 +1108,7 @@
     "sections": {
       "baseModels": "Perusmallit"
     },
-    "maintainedBy": "Ylläpitäjä ",
+    "maintainedBy": "Ylläpitäjä",
     "agents": {
       "advancedFeatureBadge": "Edistynyt ominaisuus",
       "description": "Luo ja hallitse räätälöityjä AI-agentteja erikoistoiminnoilla. Nämä agentit toimivat MSF AI Assistant Foundry -instanssissa.",

@@ -1108,7 +1108,7 @@
     "sections": {
       "baseModels": "מודלים בסיסיים"
     },
-    "maintainedBy": "מתוחזק על ידי ",
+    "maintainedBy": "מתוחזק על ידי",
     "agents": {
       "advancedFeatureBadge": "פונקציה מתקדמת",
       "description": "יצירה וניהול של סוכני AI מותאמים עם יכולות מתקדמות. סוכנים אלו פועלים על מופע ה־MSF AI Assistant Foundry.",

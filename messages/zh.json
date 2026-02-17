@@ -344,7 +344,7 @@
     "agentId": "代理 ID",
     "agentIdExample": "asst_abc123def456",
     "descriptionOptional": "描述（可选）",
-    "descriptionPlaceholder": "专门从事研究任务的代理...",
+    "descriptionPlaceholder": "输入代理描述",
     "baseModel": "基础模型",
     "formatDescription": "格式：asst_xxxxx（来自 MSF AI Assistant Foundry）",
     "importantInfo": "此代理将有权访问对话上下文，并可以使用与标准模型相同的工具。确保代理 ID 正确，因为以后无法更改。",
@@ -361,10 +361,8 @@
     "createError": "创建自定义代理失败",
     "updateSuccess": "自定义代理已成功更新",
     "updateError": "更新自定义代理失败",
-    "agentName": "代理名称",
     "agentNamePlaceholder": "输入代理名称",
     "description": "描述",
-    "descriptionPlaceholder": "输入代理描述",
     "instructions": "指令",
     "instructionsPlaceholder": "输入代理的系统指令",
     "conversationStarters": "对话开场白",
@@ -1018,7 +1016,7 @@
     "changeDisplayName": "点击更改我们的称呼方式"
   },
   "modelSelect": {
-    "maintainedBy": "维护者 ",
+    "maintainedBy": "维护者",
     "tabs": {
       "models": "模型",
       "agents": "代理"
@@ -1720,7 +1718,9 @@
     "refreshNow": "刷新以更新"
   },
   "agentsTab": {
-    "organizationAgents": "组织代理",
+    "organizationAgents": {
+      "title": "组织代理"
+    },
     "customAgents": {
       "title": "自定义代理",
       "advancedBadge": "高级",
@@ -1730,42 +1730,43 @@
     "selectAgentPrompt": "选择一个代理以开始"
   },
   "privacy": {
-    "title": "隐私",
-    "dataUsage": "数据使用",
-    "dataUsageDescription": "我们认真对待您的隐私。以下是我们如何处理您的数据。",
-    "conversationData": "对话数据",
-    "conversationDataDescription": "您的对话安全存储，不会用于模型训练。",
-    "analytics": "分析",
-    "analyticsDescription": "我们收集匿名使用数据以改善服务。",
-    "thirdParty": "第三方服务",
-    "thirdPartyDescription": "未经您的同意，我们不会与第三方共享您的数据。",
-    "learnMore": "了解更多关于我们的隐私政策",
-    "lastUpdated": "最后更新"
+    "policyTitle": "隐私政策与数据保护",
+    "policyDescription": "了解您的数据如何受到保护以及不应输入哪些信息",
+    "termsOfUse": "使用条款",
+    "termsDescription": "查看负责任使用指南和禁止用途",
+    "keyPrivacyPoints": "关键隐私要点",
+    "localStorage": "您的对话存储在本地设备上",
+    "azureInfra": "所有数据处理都在MSF系统内使用Azure基础设施进行",
+    "noPersonalData": "请勿输入个人数据（姓名、电话号码等）",
+    "noSensitiveData": "请勿输入高度敏感的运营细节",
+    "concernsTitle": "隐私问题或事件？",
+    "contactUs": "如果您有隐私问题，请立即联系我们："
   },
   "variableModal": {
-    "title": "变量配置",
-    "description": "此代理需要以下变量才能使用。",
-    "variableName": "变量",
-    "defaultValue": "默认值：{defaultValue}",
-    "placeholder": "输入 {key} 的值",
-    "submit": "启动代理",
-    "cancel": "取消"
+    "fillInstructions": "填写以下变量以自定义您的提示",
+    "optional": "可选",
+    "required": "必填",
+    "default": "默认值：",
+    "defaultPlaceholder": "{defaultValue}（默认）",
+    "enterValue": "输入 {key} 的值...",
+    "cancel": "取消",
+    "apply": "应用"
   },
   "recentSources": {
-    "title": "最近来源",
-    "noSources": "暂无来源",
-    "noSourcesDescription": "您引用的来源将显示在此处。",
-    "document": "文档",
-    "webpage": "网页",
-    "image": "图片",
-    "showMore": "显示更多 {count} 个",
-    "showLess": "显示更少"
+    "title": "最新来源数据",
+    "unableToLoad": "无法加载最新来源",
+    "retry": "重试",
+    "noSources": "暂无最近来源",
+    "refresh": "刷新",
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{count} 天前"
   },
   "chatInput": {
-    "placeholder": "输入消息...",
-    "send": "发送",
-    "stop": "停止",
-    "attachFile": "附加文件",
-    "characterCount": "{count} 个字符"
+    "filePickerError": "无法打开文件选择器。请尝试使用拖放方式。",
+    "addDocument": "添加文档",
+    "uploadDocument": "上传文档",
+    "images": "图片",
+    "addImage": "添加图片"
   }
 }

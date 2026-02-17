@@ -1172,7 +1172,7 @@
     "sections": {
       "baseModels": "आधार मोडेलहरू"
     },
-    "maintainedBy": "द्वारा मर्मत गरिएको ",
+    "maintainedBy": "द्वारा मर्मत गरिएको",
     "agents": {
       "advancedFeatureBadge": "उन्नत सुविधा",
       "description": "विशेष क्षमताहरू भएका कस्टम AI एजेन्टहरू बनाउनुहोस् र व्यवस्थापन गर्नुहोस्। यी एजेन्टहरू MSF AI Assistant Foundry इन्स्ट्यान्समा चल्छन्।",

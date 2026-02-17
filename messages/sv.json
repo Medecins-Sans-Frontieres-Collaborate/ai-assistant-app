@@ -1017,7 +1017,7 @@
     "changeDisplayName": "Klicka för att ändra hur vi tilltalar dig"
   },
   "modelSelect": {
-    "maintainedBy": "Underhålls av ",
+    "maintainedBy": "Underhålls av",
     "tabs": {
       "models": "Modeller",
       "agents": "Agenter"

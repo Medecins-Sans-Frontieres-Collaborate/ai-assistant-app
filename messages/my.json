@@ -1101,7 +1101,7 @@
     "changeDisplayName": "သင်အား မည်သို့ခေါ်ဝေါ်မည်ကို ပြောင်းရန် နှိပ်ပါ"
   },
   "modelSelect": {
-    "maintainedBy": "ထိန်းသိမ်းသူ ",
+    "maintainedBy": "ထိန်းသိမ်းသူ",
     "tabs": {
       "models": "ပုံစံများ",
       "agents": "Agent များ"

@@ -1021,7 +1021,7 @@
     "sections": {
       "baseModels": "መሰረታዊ ሞዴሎች"
     },
-    "maintainedBy": "የሚያስተዳድረው ",
+    "maintainedBy": "የሚያስተዳድረው",
     "agents": {
       "advancedFeatureBadge": "ከፍተኛ ባህሪ",
       "description": "ልዩ ችሎታዎች ያላቸው ብጁ AI ወኪሎችን ይፍጠሩ እና ያስተዳድሩ። እነዚህ ወኪሎች በMSF AI Assistant Foundry ምሳሌ ላይ ይሰራሉ።",

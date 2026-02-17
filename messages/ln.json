@@ -1172,7 +1172,7 @@
     "sections": {
       "baseModels": "Base Models"
     },
-    "maintainedBy": "Maintained by ",
+    "maintainedBy": "Maintained by",
     "agents": {
       "advancedFeatureBadge": "Advanced Feature",
       "description": "Create and manage custom AI agents with specialized capabilities. These agents run on the MSF AI Assistant Foundry instance.",

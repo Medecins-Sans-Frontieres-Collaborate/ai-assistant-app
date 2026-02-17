@@ -1101,7 +1101,7 @@
     "changeDisplayName": "Натисніть, щоб змінити, як до вас звертаються"
   },
   "modelSelect": {
-    "maintainedBy": "Підтримується ",
+    "maintainedBy": "Підтримується",
     "tabs": {
       "models": "Моделі",
       "agents": "Агенти"

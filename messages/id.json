@@ -1093,7 +1093,7 @@
     "changeDisplayName": "Klik untuk mengubah nama panggilan Anda"
   },
   "modelSelect": {
-    "maintainedBy": "Dikelola oleh ",
+    "maintainedBy": "Dikelola oleh",
     "advancedOptions": {
       "title": "Opsi Lanjutan",
       "temperature": "Temperatur",

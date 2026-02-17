@@ -1108,7 +1108,7 @@
     "sections": {
       "baseModels": "Models base"
     },
-    "maintainedBy": "Mantingut per ",
+    "maintainedBy": "Mantingut per",
     "agents": {
       "advancedFeatureBadge": "Funció avançada",
       "description": "Crea i gestiona agents d'IA personalitzats amb capacitats especialitzades. Aquests agents funcionen a la instància MSF AI Assistant Foundry.",
