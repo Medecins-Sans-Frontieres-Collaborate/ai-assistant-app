@@ -194,41 +194,43 @@ export const ChatTopbar = ({
           </div>
         </div>
 
-        {/* Controls - 3-dot menu */}
-        <div className="flex items-center justify-center" ref={menuRef}>
-          <div className="relative">
-            <button
-              className="p-1.5 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
-              onClick={() => setShowMenu(!showMenu)}
-              aria-label={t('common.menu')}
-              title={t('common.menu')}
-            >
-              <IconDots size={20} className="text-black dark:text-white" />
-            </button>
+        {/* Controls - 3-dot menu - only show when there are options */}
+        {hasMessages && (
+          <div className="flex items-center justify-center" ref={menuRef}>
+            <div className="relative">
+              <button
+                className="p-1.5 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                onClick={() => setShowMenu(!showMenu)}
+                aria-label={t('common.menu')}
+                title={t('common.menu')}
+              >
+                <IconDots size={20} className="text-black dark:text-white" />
+              </button>
 
-            {/* Dropdown menu */}
-            {showMenu && hasMessages && (
-              <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
-                <div className="p-1">
-                  {/* Clear option */}
-                  <button
-                    className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
-                    onClick={() => {
-                      onClearAll?.();
-                      setShowMenu(false);
-                    }}
-                  >
-                    <IconClearAll
-                      size={16}
-                      className="text-neutral-600 dark:text-neutral-400 shrink-0"
-                    />
-                    Clear
-                  </button>
+              {/* Dropdown menu */}
+              {showMenu && (
+                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
+                  <div className="p-1">
+                    {/* Clear option */}
+                    <button
+                      className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                      onClick={() => {
+                        onClearAll?.();
+                        setShowMenu(false);
+                      }}
+                    >
+                      <IconClearAll
+                        size={16}
+                        className="text-neutral-600 dark:text-neutral-400 shrink-0"
+                      />
+                      Clear
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
