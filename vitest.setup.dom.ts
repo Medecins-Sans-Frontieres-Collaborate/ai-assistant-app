@@ -39,6 +39,7 @@ const mockMessages: Record<string, unknown> = {
     variable: 'Variable',
     variables: 'Variables',
     search: 'Search',
+    beta: 'Beta',
   },
   chat: {
     fullSizePreview: 'Full size preview',
@@ -52,8 +53,16 @@ const mockMessages: Record<string, unknown> = {
     clearSearch: 'Clear search',
     searchFeatures: 'Search features',
     changePlaybackSpeed: 'Change playback speed',
-    imageLoadError: 'Failed to load image',
+    failedToLoadImage: 'Failed to load image',
     loadingImage: 'Loading image...',
+    download: 'Download',
+    openAsDocument: 'Open as Document',
+    openInCodeEditor: 'Open in Code Editor',
+    failedToOpenCodeEditor:
+      'Failed to open file in code editor. Please try again.',
+    failedToOpenDocEditor:
+      'Failed to open file in document editor. Please try again.',
+    imageAlt: 'Image {number}',
   },
   fileUpload: {
     attachment: 'attachment',
@@ -259,6 +268,16 @@ const mockMessages: Record<string, unknown> = {
     speed: 'Speed',
     playbackSpeed: 'Playback speed',
     changePlaybackSpeed: 'Change playback speed',
+  },
+  variableModal: {
+    fillInstructions: 'Fill in the variables below to customize your prompt',
+    optional: 'Optional',
+    required: 'Required',
+    default: 'Default:',
+    defaultPlaceholder: '{defaultValue} (default)',
+    enterValue: 'Enter value for {key}...',
+    cancel: 'Cancel',
+    apply: 'Apply',
   },
 };
 
