@@ -347,7 +347,8 @@
     "confirmDelete": "තහවුරු කරන්න",
     "delete": "මකන්න",
     "noCustomAgentsYet": "තවම අභිරුචි නියෝජිතයින් නැත.",
-    "noOrgAgentsConfigured": "සංවිධාන නියෝජිතයින් සකසා නැත."
+    "noOrgAgentsConfigured": "සංවිධාන නියෝජිතයින් සකසා නැත.",
+    "validationFailed": "වලංගුකරණය අසාර්ථකයි"
   },
   "Quick Actions": "ඉක්මන් ක්‍රියා",
   "Type / in chat to access your prompts": "ඔබේ ප්‍රේරක වෙත ප්‍රවේශ වීමට චැට් එකේ / ටයිප් කරන්න",

@@ -378,7 +378,8 @@
     "confirmDelete": "Confirmă",
     "delete": "Șterge",
     "noCustomAgentsYet": "Niciun agent personalizat încă.",
-    "noOrgAgentsConfigured": "Niciun agent de organizație configurat."
+    "noOrgAgentsConfigured": "Niciun agent de organizație configurat.",
+    "validationFailed": "Validarea a eșuat"
   },
   "Quick Actions": "Acțiuni rapide",
   "Type / in chat to access your prompts": "Tastați / în chat pentru a accesa solicitările",

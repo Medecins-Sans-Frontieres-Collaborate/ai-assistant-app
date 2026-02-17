@@ -384,7 +384,8 @@
     "confirmDelete": "Qinisekisa",
     "delete": "Susa",
     "noCustomAgentsYet": "Azikho ama-ejensi angokwezifiso okwamanje.",
-    "noOrgAgentsConfigured": "Awekho ama-ejensi enhlangano amiswe."
+    "noOrgAgentsConfigured": "Awekho ama-ejensi enhlangano amiswe.",
+    "validationFailed": "Ukuqinisekisa kuhlulekile"
   },
   "Quick Actions": "Izenzo Ezisheshayo",
   "Type / in chat to access your prompts": "Thayipha / engxoxweni ukufinyelela iziqondiso zakho",

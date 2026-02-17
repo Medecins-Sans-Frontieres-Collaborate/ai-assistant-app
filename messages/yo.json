@@ -384,7 +384,8 @@
     "confirmDelete": "Fìdí múlẹ̀",
     "delete": "Pa rẹ́",
     "noCustomAgentsYet": "Kò sí aṣojú àdáni títí di ìsinsin yìí.",
-    "noOrgAgentsConfigured": "Kò sí aṣojú àjọ tí a ṣètò."
+    "noOrgAgentsConfigured": "Kò sí aṣojú àjọ tí a ṣètò.",
+    "validationFailed": "Ìfọwọ́sí kùnà"
   },
   "Quick Actions": "Àwọn Ìṣe Kíákíá",
   "Type / in chat to access your prompts": "Tẹ / nínú ìfọ̀rọ̀wérọ̀ láti wọlé sí àwọn ìtọ́sọ́nà rẹ",

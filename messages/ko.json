@@ -380,7 +380,8 @@
     "confirmDelete": "확인",
     "delete": "삭제",
     "noCustomAgentsYet": "아직 커스텀 에이전트가 없습니다.",
-    "noOrgAgentsConfigured": "조직 에이전트가 구성되지 않았습니다."
+    "noOrgAgentsConfigured": "조직 에이전트가 구성되지 않았습니다.",
+    "validationFailed": "유효성 검사 실패"
   },
   "Quick Actions": "빠른 작업",
   "Type / in chat to access your prompts": "채팅에서 /를 입력하여 프롬프트에 액세스하세요",

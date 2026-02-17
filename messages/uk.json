@@ -297,7 +297,8 @@
     "confirmDelete": "Підтвердити",
     "delete": "Видалити",
     "noCustomAgentsYet": "Користувацьких агентів поки немає.",
-    "noOrgAgentsConfigured": "Агентів організації не налаштовано."
+    "noOrgAgentsConfigured": "Агентів організації не налаштовано.",
+    "validationFailed": "Перевірка не вдалася"
   },
   "Quick Actions": "Швидкі дії",
   "Type / in chat to access your prompts": "Введіть / у чаті для доступу до ваших підказок",

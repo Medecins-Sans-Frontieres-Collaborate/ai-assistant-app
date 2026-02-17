@@ -379,7 +379,8 @@
     "confirmDelete": "تصدیق کریں",
     "delete": "حذف کریں",
     "noCustomAgentsYet": "ابھی تک کوئی حسب ضرورت ایجنٹ نہیں۔",
-    "noOrgAgentsConfigured": "کوئی تنظیمی ایجنٹ ترتیب نہیں دیا گیا۔"
+    "noOrgAgentsConfigured": "کوئی تنظیمی ایجنٹ ترتیب نہیں دیا گیا۔",
+    "validationFailed": "توثیق ناکام ہوگئی"
   },
   "Quick Actions": "فوری کارروائیاں",
   "Type / in chat to access your prompts": "اپنے پرامپٹس تک رسائی کے لیے چیٹ میں / ٹائپ کریں",

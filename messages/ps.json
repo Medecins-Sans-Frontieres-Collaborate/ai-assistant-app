@@ -384,7 +384,8 @@
     "confirmDelete": "Confirm",
     "delete": "Delete",
     "noCustomAgentsYet": "No custom agents yet.",
-    "noOrgAgentsConfigured": "No organization agents configured."
+    "noOrgAgentsConfigured": "No organization agents configured.",
+    "validationFailed": "تایید ناکام شو"
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",

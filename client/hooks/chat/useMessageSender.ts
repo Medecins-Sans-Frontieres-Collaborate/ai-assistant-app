@@ -119,18 +119,6 @@ export function useMessageSender({
   const t = useTranslations();
   const { getArtifactContext } = useArtifactStore();
 
-  const buildContent = useCallback(() => {
-    // Don't prepend artifact context to content anymore
-    // It will be attached as metadata
-    return buildMessageContent(
-      submitType,
-      textFieldValue,
-      imageFieldValue,
-      fileFieldValue,
-      null, // No longer prepending artifact context
-    );
-  }, [submitType, textFieldValue, imageFieldValue, fileFieldValue]);
-
   const handleSend = useCallback(async () => {
     const validation = validateMessageSubmission(
       textFieldValue,

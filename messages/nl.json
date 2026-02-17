@@ -345,7 +345,8 @@
     "confirmDelete": "Bevestigen",
     "delete": "Verwijderen",
     "noCustomAgentsYet": "Nog geen aangepaste agents.",
-    "noOrgAgentsConfigured": "Geen organisatie-agents geconfigureerd."
+    "noOrgAgentsConfigured": "Geen organisatie-agents geconfigureerd.",
+    "validationFailed": "Validatie mislukt"
   },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",

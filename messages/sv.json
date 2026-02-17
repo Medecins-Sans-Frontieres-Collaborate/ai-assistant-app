@@ -380,7 +380,8 @@
     "confirmDelete": "Bekräfta",
     "delete": "Ta bort",
     "noCustomAgentsYet": "Inga anpassade agenter ännu.",
-    "noOrgAgentsConfigured": "Inga organisationsagenter konfigurerade."
+    "noOrgAgentsConfigured": "Inga organisationsagenter konfigurerade.",
+    "validationFailed": "Validering misslyckades"
   },
   "Quick Actions": "Snabbåtgärder",
   "Type / in chat to access your prompts": "Skriv / i chatten för att komma åt dina prompter",

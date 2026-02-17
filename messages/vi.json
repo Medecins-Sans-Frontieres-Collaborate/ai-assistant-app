@@ -349,7 +349,8 @@
     "loadingAgents": "Đang tải agent...",
     "noOrgAgents": "Không có agent tổ chức nào khả dụng",
     "noOrgAgentsDescription": "Tổ chức của bạn chưa cấu hình bất kỳ agent nào.",
-    "noOrgAgentsConfigured": "Chưa có agent tổ chức nào được cấu hình"
+    "noOrgAgentsConfigured": "Chưa có agent tổ chức nào được cấu hình",
+    "validationFailed": "Xác thực thất bại"
   },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",

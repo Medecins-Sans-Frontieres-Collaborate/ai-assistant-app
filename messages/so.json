@@ -384,7 +384,8 @@
     "confirmDelete": "Xaqiiji",
     "delete": "Tirtir",
     "noCustomAgentsYet": "Wali wakiil gaar ah ma jiro.",
-    "noOrgAgentsConfigured": "Wakiilada hay'adda lama habeynin."
+    "noOrgAgentsConfigured": "Wakiilada hay'adda lama habeynin.",
+    "validationFailed": "Xaqiijintu waa fashilantay"
   },
   "Quick Actions": "Ficilada Degdegga ah",
   "Type / in chat to access your prompts": "Ku qor / sheekada si aad u gasho tilmaamahaaga",

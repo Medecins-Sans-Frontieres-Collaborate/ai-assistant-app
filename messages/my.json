@@ -355,7 +355,8 @@
     "confirmDelete": "အတည်ပြုပါ",
     "delete": "ဖျက်ရန်",
     "noCustomAgentsYet": "စိတ်ကြိုက် အေးဂျင့် မရှိသေးပါ။",
-    "noOrgAgentsConfigured": "အဖွဲ့အစည်း အေးဂျင့်များ သတ်မှတ်ထားခြင်း မရှိပါ။"
+    "noOrgAgentsConfigured": "အဖွဲ့အစည်း အေးဂျင့်များ သတ်မှတ်ထားခြင်း မရှိပါ။",
+    "validationFailed": "အတည်ပြုခြင်း မအောင်မြင်ပါ"
   },
   "Quick Actions": "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
   "Type / in chat to access your prompts": "သင့်အညွှန်းများကို ဝင်ရောက်ရန် စကားပြောခန်းတွင် / ရိုက်ပါ",

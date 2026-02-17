@@ -384,7 +384,8 @@
     "confirmDelete": "Bipejirîne",
     "delete": "Jê bibe",
     "noCustomAgentsYet": "Hîn tu ajanên taybet tune.",
-    "noOrgAgentsConfigured": "Tu ajanên rêxistinê nehatine mîhengkirin."
+    "noOrgAgentsConfigured": "Tu ajanên rêxistinê nehatine mîhengkirin.",
+    "validationFailed": "Piştrastkirin têk çû"
   },
   "Quick Actions": "Kiryarên Bilez",
   "Type / in chat to access your prompts": "Di sohbetê de / binivîse ku bigihîjî pirsên xwe",

@@ -358,7 +358,8 @@
     "confirmDelete": "নিশ্চিত করুন",
     "delete": "মুছুন",
     "noCustomAgentsYet": "এখনো কোনো কাস্টম এজেন্ট নেই।",
-    "noOrgAgentsConfigured": "কোনো সংস্থা এজেন্ট কনফিগার করা হয়নি।"
+    "noOrgAgentsConfigured": "কোনো সংস্থা এজেন্ট কনফিগার করা হয়নি।",
+    "validationFailed": "যাচাইকরণ ব্যর্থ হয়েছে"
   },
   "Quick Actions": "দ্রুত ক্রিয়া",
   "Type / in chat to access your prompts": "আপনার প্রম্পট অ্যাক্সেস করতে চ্যাটে / টাইপ করুন",

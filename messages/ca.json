@@ -355,7 +355,8 @@
     "confirmDelete": "Confirma",
     "delete": "Suprimeix",
     "noCustomAgentsYet": "Encara no hi ha agents personalitzats.",
-    "noOrgAgentsConfigured": "No hi ha agents d'organització configurats."
+    "noOrgAgentsConfigured": "No hi ha agents d'organització configurats.",
+    "validationFailed": "La validació ha fallat"
   },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",

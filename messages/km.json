@@ -384,7 +384,8 @@
     "confirmDelete": "បញ្ជាក់",
     "delete": "លុប",
     "noCustomAgentsYet": "មិនទាន់មានភ្នាក់ងារផ្ទាល់ខ្លួនទេ។",
-    "noOrgAgentsConfigured": "គ្មានភ្នាក់ងារអង្គភាពត្រូវបានកំណត់ទេ។"
+    "noOrgAgentsConfigured": "គ្មានភ្នាក់ងារអង្គភាពត្រូវបានកំណត់ទេ។",
+    "validationFailed": "ការផ្ទៀងផ្ទាត់បរាជ័យ"
   },
   "Quick Actions": "សកម្មភាពរហ័ស",
   "Type / in chat to access your prompts": "វាយ / ក្នុងការជជែកដើម្បីចូលការណែនាំរបស់អ្នក",

@@ -384,7 +384,8 @@
     "confirmDelete": "Emeza",
     "delete": "Siba",
     "noCustomAgentsYet": "Nta bahagararizi bihariye barabaho.",
-    "noOrgAgentsConfigured": "Nta bahagararizi b'umuryango bashyizweho."
+    "noOrgAgentsConfigured": "Nta bahagararizi b'umuryango bashyizweho.",
+    "validationFailed": "Kwemeza byanze"
   },
   "Quick Actions": "Ibikorwa Byihuse",
   "Type / in chat to access your prompts": "Andika / mu kiganiro kugira ngo ugere ku mabwiriza yawe",

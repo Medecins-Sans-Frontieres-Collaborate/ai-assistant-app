@@ -384,7 +384,8 @@
     "confirmDelete": "Tsimikizani",
     "delete": "Chotsani",
     "noCustomAgentsYet": "Palibe ma-ejansi apadera pakadali pano.",
-    "noOrgAgentsConfigured": "Palibe ma-ejansi a bungwe okhazikitsidwa."
+    "noOrgAgentsConfigured": "Palibe ma-ejansi a bungwe okhazikitsidwa.",
+    "validationFailed": "Kutsimikizika kwalephera"
   },
   "Quick Actions": "Zochitika Mwachangu",
   "Type / in chat to access your prompts": "Lembani / mu kucheza kuti mupeze malamulo anu",

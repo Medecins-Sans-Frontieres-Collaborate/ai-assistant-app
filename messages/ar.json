@@ -380,7 +380,8 @@
     "confirmDelete": "تأكيد",
     "delete": "حذف",
     "noCustomAgentsYet": "لا يوجد وكلاء مخصصون بعد.",
-    "noOrgAgentsConfigured": "لم يتم تكوين وكلاء المنظمة."
+    "noOrgAgentsConfigured": "لم يتم تكوين وكلاء المنظمة.",
+    "validationFailed": "فشل التحقق"
   },
   "Quick Actions": "إجراءات سريعة",
   "Type / in chat to access your prompts": "اكتب / في الدردشة للوصول إلى مطالباتك",

@@ -380,7 +380,8 @@
     "confirmDelete": "Onayla",
     "delete": "Sil",
     "noCustomAgentsYet": "Henüz özel ajan yok.",
-    "noOrgAgentsConfigured": "Yapılandırılmış kuruluş ajanı yok."
+    "noOrgAgentsConfigured": "Yapılandırılmış kuruluş ajanı yok.",
+    "validationFailed": "Doğrulama başarısız oldu"
   },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",

@@ -305,7 +305,8 @@
     "confirmDelete": "تأیید",
     "delete": "حذف",
     "noCustomAgentsYet": "هنوز عامل سفارشی وجود ندارد.",
-    "noOrgAgentsConfigured": "هیچ عامل سازمانی پیکربندی نشده است."
+    "noOrgAgentsConfigured": "هیچ عامل سازمانی پیکربندی نشده است.",
+    "validationFailed": "اعتبارسنجی ناموفق بود"
   },
   "Quick Actions": "اقدامات سریع",
   "Type / in chat to access your prompts": "در چت / را تایپ کنید تا به دستورات خود دسترسی پیدا کنید",

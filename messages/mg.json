@@ -384,7 +384,8 @@
     "confirmDelete": "Hamafiso",
     "delete": "Fafao",
     "noCustomAgentsYet": "Tsy mbola misy mpandraharaha manokana.",
-    "noOrgAgentsConfigured": "Tsy mbola misy mpandraharahan'ny fikambanana voapetraka."
+    "noOrgAgentsConfigured": "Tsy mbola misy mpandraharahan'ny fikambanana voapetraka.",
+    "validationFailed": "Tsy nahomby ny fanamarinana"
   },
   "Quick Actions": "Hetsika haingana",
   "Type / in chat to access your prompts": "Soraty / ao amin'ny resadresaka hidirana amin'ny toro-hevitrao",

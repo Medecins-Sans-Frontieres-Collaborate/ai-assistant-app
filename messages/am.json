@@ -376,7 +376,8 @@
     "confirmDelete": "አረጋግጥ",
     "delete": "ሰርዝ",
     "noCustomAgentsYet": "ገና ብጁ ወኪሎች የሉም።",
-    "noOrgAgentsConfigured": "የድርጅት ወኪሎች አልተዋቀሩም።"
+    "noOrgAgentsConfigured": "የድርጅት ወኪሎች አልተዋቀሩም።",
+    "validationFailed": "ማረጋገጥ አልተሳካም"
   },
   "Quick Actions": "ፈጣን ድርጊቶች",
   "Type / in chat to access your prompts": "ጥያቄዎችዎን ለማግኘት በውይይት ውስጥ / ይተይቡ",

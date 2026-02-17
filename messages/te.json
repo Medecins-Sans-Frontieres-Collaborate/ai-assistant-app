@@ -378,7 +378,8 @@
     "confirmDelete": "నిర్ధారించండి",
     "delete": "తొలగించండి",
     "noCustomAgentsYet": "ఇంకా కస్టమ్ ఏజెంట్లు లేవు.",
-    "noOrgAgentsConfigured": "సంస్థ ఏజెంట్లు కాన్ఫిగర్ చేయబడలేదు."
+    "noOrgAgentsConfigured": "సంస్థ ఏజెంట్లు కాన్ఫిగర్ చేయబడలేదు.",
+    "validationFailed": "ధ్రువీకరణ విఫలమైంది"
   },
   "Quick Actions": "త్వరిత చర్యలు",
   "Type / in chat to access your prompts": "మీ ప్రాంప్ట్‌లను యాక్సెస్ చేయడానికి చాట్‌లో / టైప్ చేయండి",

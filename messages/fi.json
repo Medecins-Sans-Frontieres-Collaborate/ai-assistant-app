@@ -355,7 +355,8 @@
     "confirmDelete": "Vahvista",
     "delete": "Poista",
     "noCustomAgentsYet": "Ei vielä mukautettuja agentteja.",
-    "noOrgAgentsConfigured": "Organisaatioagentteja ei ole määritetty."
+    "noOrgAgentsConfigured": "Organisaatioagentteja ei ole määritetty.",
+    "validationFailed": "Vahvistus epäonnistui"
   },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",

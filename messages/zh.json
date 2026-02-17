@@ -379,7 +379,8 @@
     "loadingAgents": "正在加载代理...",
     "noOrgAgents": "没有可用的组织代理",
     "noOrgAgentsDescription": "您的组织尚未配置任何代理。",
-    "noOrgAgentsConfigured": "尚未配置组织代理"
+    "noOrgAgentsConfigured": "尚未配置组织代理",
+    "validationFailed": "验证失败"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",

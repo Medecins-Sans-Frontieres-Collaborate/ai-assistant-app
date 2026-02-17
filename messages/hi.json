@@ -380,7 +380,8 @@
     "confirmDelete": "पुष्टि करें",
     "delete": "हटाएं",
     "noCustomAgentsYet": "अभी तक कोई कस्टम एजेंट नहीं।",
-    "noOrgAgentsConfigured": "कोई संगठन एजेंट कॉन्फ़िगर नहीं किए गए।"
+    "noOrgAgentsConfigured": "कोई संगठन एजेंट कॉन्फ़िगर नहीं किए गए।",
+    "validationFailed": "सत्यापन विफल रहा"
   },
   "Quick Actions": "त्वरित क्रियाएं",
   "Type / in chat to access your prompts": "अपने प्रॉम्प्ट एक्सेस करने के लिए चैट में / टाइप करें",

@@ -384,7 +384,8 @@
     "confirmDelete": "Konfime",
     "delete": "Efase",
     "noCustomAgentsYet": "Pa gen ajan pèsonalize ankò.",
-    "noOrgAgentsConfigured": "Pa gen ajan òganizasyon konfigire."
+    "noOrgAgentsConfigured": "Pa gen ajan òganizasyon konfigire.",
+    "validationFailed": "Validasyon echwe"
   },
   "Quick Actions": "Aksyon Rapid",
   "Type / in chat to access your prompts": "Tape / nan chat pou jwenn aksè nan enstriksyon ou yo",

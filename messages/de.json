@@ -380,7 +380,8 @@
     "confirmDelete": "Bestätigen",
     "delete": "Löschen",
     "noCustomAgentsYet": "Noch keine benutzerdefinierten Agenten.",
-    "noOrgAgentsConfigured": "Keine Organisationsagenten konfiguriert."
+    "noOrgAgentsConfigured": "Keine Organisationsagenten konfiguriert.",
+    "validationFailed": "Validierung fehlgeschlagen"
   },
   "Quick Actions": "Schnellaktionen",
   "Type / in chat to access your prompts": "Geben Sie / im Chat ein, um auf Ihre Eingabeaufforderungen zuzugreifen",

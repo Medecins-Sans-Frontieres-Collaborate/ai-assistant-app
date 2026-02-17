@@ -384,7 +384,8 @@
     "confirmDelete": "ኣረጋግጽ",
     "delete": "ደምስስ",
     "noCustomAgentsYet": "ክሳብ ሕጂ ብሕታዊ ወኪላት የለን።",
-    "noOrgAgentsConfigured": "ናይ ትካል ወኪላት ኣይተዋቐረን።"
+    "noOrgAgentsConfigured": "ናይ ትካል ወኪላት ኣይተዋቐረን።",
+    "validationFailed": "ማረጋገጺ ኣይተዓወተን"
   },
   "Quick Actions": "ቅልጡፍ ተግባራት",
   "Type / in chat to access your prompts": "ፕሮምፕትታትካ ንምርካብ ኣብ ዕላል / ጸሓፍ",

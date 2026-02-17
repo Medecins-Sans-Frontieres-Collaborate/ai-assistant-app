@@ -380,7 +380,8 @@
     "confirmDelete": "Confirmer",
     "delete": "Supprimer",
     "noCustomAgentsYet": "Aucun agent personnalisé pour le moment.",
-    "noOrgAgentsConfigured": "Aucun agent d'organisation configuré."
+    "noOrgAgentsConfigured": "Aucun agent d'organisation configuré.",
+    "validationFailed": "Échec de la validation"
   },
   "Quick Actions": "Actions rapides",
   "Type / in chat to access your prompts": "Tapez / dans le chat pour accéder à vos instructions",

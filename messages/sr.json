@@ -384,7 +384,8 @@
     "confirmDelete": "Потврди",
     "delete": "Обриши",
     "noCustomAgentsYet": "Још нема прилагођених агената.",
-    "noOrgAgentsConfigured": "Нису конфигурисани агенти организације."
+    "noOrgAgentsConfigured": "Нису конфигурисани агенти организације.",
+    "validationFailed": "Валидација није успела"
   },
   "Quick Actions": "Брзе Акције",
   "Type / in chat to access your prompts": "Откуцајте / у ћаскању за приступ упутствима",

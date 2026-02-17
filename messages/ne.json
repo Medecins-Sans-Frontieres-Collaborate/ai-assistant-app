@@ -384,7 +384,8 @@
     "confirmDelete": "पुष्टि गर्नुहोस्",
     "delete": "मेट्नुहोस्",
     "noCustomAgentsYet": "अहिलेसम्म कुनै कस्टम एजेन्ट छैन।",
-    "noOrgAgentsConfigured": "कुनै संगठन एजेन्ट कन्फिगर गरिएको छैन।"
+    "noOrgAgentsConfigured": "कुनै संगठन एजेन्ट कन्फिगर गरिएको छैन।",
+    "validationFailed": "प्रमाणीकरण असफल भयो"
   },
   "Quick Actions": "द्रुत कार्यहरू",
   "Type / in chat to access your prompts": "आफ्ना प्रम्प्टहरू पहुँच गर्न च्याटमा / टाइप गर्नुहोस्",

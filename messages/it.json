@@ -355,7 +355,8 @@
     "confirmDelete": "Conferma",
     "delete": "Elimina",
     "noCustomAgentsYet": "Nessun agente personalizzato per ora.",
-    "noOrgAgentsConfigured": "Nessun agente dell'organizzazione configurato."
+    "noOrgAgentsConfigured": "Nessun agente dell'organizzazione configurato.",
+    "validationFailed": "Validazione non riuscita"
   },
   "Quick Actions": "Azioni rapide",
   "Type / in chat to access your prompts": "Digita / nella chat per accedere ai tuoi prompt",

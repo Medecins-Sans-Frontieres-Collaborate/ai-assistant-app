@@ -297,7 +297,8 @@
     "confirmDelete": "Thibitisha",
     "delete": "Futa",
     "noCustomAgentsYet": "Hakuna mawakala maalum bado.",
-    "noOrgAgentsConfigured": "Hakuna mawakala wa shirika waliosanidiwa."
+    "noOrgAgentsConfigured": "Hakuna mawakala wa shirika waliosanidiwa.",
+    "validationFailed": "Uthibitishaji umeshindwa"
   },
   "Quick Actions": "Vitendo vya Haraka",
   "Type / in chat to access your prompts": "Andika / katika mazungumzo ili kufikia vidokezo vyako",

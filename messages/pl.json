@@ -377,7 +377,8 @@
     "confirmDelete": "Potwierdź",
     "delete": "Usuń",
     "noCustomAgentsYet": "Brak niestandardowych agentów.",
-    "noOrgAgentsConfigured": "Brak skonfigurowanych agentów organizacji."
+    "noOrgAgentsConfigured": "Brak skonfigurowanych agentów organizacji.",
+    "validationFailed": "Walidacja nie powiodła się"
   },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",

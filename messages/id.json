@@ -347,7 +347,8 @@
     "confirmDelete": "Konfirmasi",
     "delete": "Hapus",
     "noCustomAgentsYet": "Belum ada agen kustom.",
-    "noOrgAgentsConfigured": "Tidak ada agen organisasi yang dikonfigurasi."
+    "noOrgAgentsConfigured": "Tidak ada agen organisasi yang dikonfigurasi.",
+    "validationFailed": "Validasi gagal"
   },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",

@@ -380,7 +380,8 @@
     "confirmDelete": "確認",
     "delete": "削除",
     "noCustomAgentsYet": "カスタムエージェントはまだありません。",
-    "noOrgAgentsConfigured": "組織エージェントが設定されていません。"
+    "noOrgAgentsConfigured": "組織エージェントが設定されていません。",
+    "validationFailed": "検証に失敗しました"
   },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",

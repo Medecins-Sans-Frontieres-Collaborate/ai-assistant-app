@@ -384,7 +384,8 @@
     "confirmDelete": "உறுதிப்படுத்து",
     "delete": "நீக்கு",
     "noCustomAgentsYet": "இதுவரை தனிப்பயன் முகவர்கள் இல்லை.",
-    "noOrgAgentsConfigured": "நிறுவன முகவர்கள் எதுவும் கட்டமைக்கப்படவில்லை."
+    "noOrgAgentsConfigured": "நிறுவன முகவர்கள் எதுவும் கட்டமைக்கப்படவில்லை.",
+    "validationFailed": "சரிபார்ப்பு தோல்வியடைந்தது"
   },
   "Quick Actions": "விரைவு செயல்கள்",
   "Type / in chat to access your prompts": "உங்கள் ப்ராம்ப்ட்களை அணுக அரட்டையில் / தட்டச்சு செய்யுங்கள்",

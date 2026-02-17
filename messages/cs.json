@@ -380,7 +380,8 @@
     "confirmDelete": "Potvrdit",
     "delete": "Smazat",
     "noCustomAgentsYet": "Zatím žádní vlastní agenti.",
-    "noOrgAgentsConfigured": "Nejsou nakonfigurováni žádní agenti organizace."
+    "noOrgAgentsConfigured": "Nejsou nakonfigurováni žádní agenti organizace.",
+    "validationFailed": "Ověření selhalo"
   },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",

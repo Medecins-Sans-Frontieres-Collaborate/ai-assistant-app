@@ -100,8 +100,11 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
       }
 
       if (conflicts.length > 0) {
-        const confirmMessage = `The following agents have conflicts:\n\n${conflicts.join('\n')}\n\nImport anyway? This will create duplicates.`;
-        if (!confirm(confirmMessage)) {
+        if (
+          !confirm(
+            t('agents.importConflict', { conflicts: conflicts.join('\n') }),
+          )
+        ) {
           return;
         }
       }
@@ -112,7 +115,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
       });
 
       setImportSuccess(
-        `Successfully imported ${importedAgents.length} agent${importedAgents.length > 1 ? 's' : ''}`,
+        t('agents.importSuccess', { count: importedAgents.length }),
       );
 
       // Close after a short delay
@@ -150,7 +153,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
           ? err.response?.details || err.message
           : err instanceof Error
             ? err.message
-            : 'Validation failed';
+            : t('agents.validationFailed');
       setError(message);
       return false;
     } finally {

@@ -384,7 +384,8 @@
     "confirmDelete": "Επιβεβαίωση",
     "delete": "Διαγραφή",
     "noCustomAgentsYet": "Δεν υπάρχουν προσαρμοσμένοι πράκτορες ακόμα.",
-    "noOrgAgentsConfigured": "Δεν έχουν ρυθμιστεί πράκτορες οργανισμού."
+    "noOrgAgentsConfigured": "Δεν έχουν ρυθμιστεί πράκτορες οργανισμού.",
+    "validationFailed": "Η επικύρωση απέτυχε"
   },
   "Quick Actions": "Γρήγορες Ενέργειες",
   "Type / in chat to access your prompts": "Πληκτρολογήστε / στη συνομιλία για πρόσβαση στις προτροπές σας",

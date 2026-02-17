@@ -380,7 +380,8 @@
     "confirmDelete": "Подтвердить",
     "delete": "Удалить",
     "noCustomAgentsYet": "Пользовательских агентов пока нет.",
-    "noOrgAgentsConfigured": "Агенты организации не настроены."
+    "noOrgAgentsConfigured": "Агенты организации не настроены.",
+    "validationFailed": "Проверка не удалась"
   },
   "Quick Actions": "Быстрые действия",
   "Type / in chat to access your prompts": "Введите / в чате, чтобы получить доступ к вашим подсказкам",

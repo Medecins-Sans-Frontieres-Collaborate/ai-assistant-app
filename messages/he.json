@@ -355,7 +355,8 @@
     "confirmDelete": "אישור",
     "delete": "מחיקה",
     "noCustomAgentsYet": "עדיין אין סוכנים מותאמים אישית.",
-    "noOrgAgentsConfigured": "לא הוגדרו סוכני ארגון."
+    "noOrgAgentsConfigured": "לא הוגדרו סוכני ארגון.",
+    "validationFailed": "האימות נכשל"
   },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",

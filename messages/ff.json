@@ -384,7 +384,8 @@
     "confirmDelete": "Tabbintin",
     "delete": "Momtu",
     "noCustomAgentsYet": "Alaa wakiiluuji keeriɗɗi taawo.",
-    "noOrgAgentsConfigured": "Alaa wakiiluuji fedde teelaaɗi."
+    "noOrgAgentsConfigured": "Alaa wakiiluuji fedde teelaaɗi.",
+    "validationFailed": "Tabbital huɓtidingol woorii"
   },
   "Quick Actions": "Golle Jaawɗe",
   "Type / in chat to access your prompts": "Tap / e yeewtere ngam heɓde tinndinooje maa",

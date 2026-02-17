@@ -384,7 +384,8 @@
     "confirmDelete": "Confirmer",
     "delete": "Zïa",
     "noCustomAgentsYet": "Agent tî mo pepe na kötörö.",
-    "noOrgAgentsConfigured": "Agent tî organisation pepe a configurer."
+    "noOrgAgentsConfigured": "Agent tî organisation pepe a configurer.",
+    "validationFailed": "Vérification a yeke na peko"
   },
   "Quick Actions": "Sâra na hïngângö",
   "Type / in chat to access your prompts": "Sü / na polëngö tî gä na âtene tî mo",

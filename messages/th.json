@@ -297,7 +297,8 @@
     "confirmDelete": "ยืนยัน",
     "delete": "ลบ",
     "noCustomAgentsYet": "ยังไม่มีเอเจนต์กำหนดเอง",
-    "noOrgAgentsConfigured": "ยังไม่มีเอเจนต์องค์กรที่กำหนดค่าไว้"
+    "noOrgAgentsConfigured": "ยังไม่มีเอเจนต์องค์กรที่กำหนดค่าไว้",
+    "validationFailed": "การตรวจสอบล้มเหลว"
   },
   "Quick Actions": "การดำเนินการด่วน",
   "Type / in chat to access your prompts": "พิมพ์ / ในแชทเพื่อเข้าถึงพรอมต์ของคุณ",
