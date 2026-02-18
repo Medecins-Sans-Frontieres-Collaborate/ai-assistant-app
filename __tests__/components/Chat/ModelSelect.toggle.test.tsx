@@ -268,7 +268,7 @@ describe('ModelSelect - Toggle Functionality', () => {
         id: 'conv-1',
         name: 'Test',
         messages: [],
-        model: OpenAIModels[OpenAIModelID.GPT_5_2], // No agentId
+        model: OpenAIModels[OpenAIModelID.GPT_5_MINI], // No agentId
         prompt: '',
         temperature: 0.7,
         folderId: null,

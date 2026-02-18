@@ -351,17 +351,14 @@ export class AIFoundryAgentHandler {
                 if (!controllerClosed) {
                   if (markerBuffer) {
                     controller.enqueue(encoder.encode(markerBuffer));
-                    markerBuffer = '';
                   }
                   appendMetadataToStream(controller, {
                     citations: citations.length > 0 ? citations : undefined,
                     threadId: isNewConversation ? conversationId : undefined,
                   });
-                  controllerClosed = true;
                   controller.close();
                 }
               } catch (error) {
-                controllerClosed = true;
                 controller.error(error);
               }
             },
