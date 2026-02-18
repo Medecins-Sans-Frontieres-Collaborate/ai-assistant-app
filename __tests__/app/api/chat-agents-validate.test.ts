@@ -65,7 +65,7 @@ describe('/api/chat/agents/validate', () => {
     mockAIProjectClient.mockImplementation(function (this: any) {
       return {
         agents: {
-          getAgent: mockGetAgent,
+          get: mockGetAgent,
         },
       };
     });
@@ -670,7 +670,7 @@ describe('/api/chat/agents/validate', () => {
         mockAIProjectClient.mockImplementation(function (this: any) {
           return {
             agents: {
-              getAgent: mockGetAgent,
+              get: mockGetAgent,
             },
           };
         });

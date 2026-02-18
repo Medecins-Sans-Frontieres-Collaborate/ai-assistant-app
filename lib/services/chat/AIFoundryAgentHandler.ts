@@ -87,7 +87,7 @@ export class AIFoundryAgentHandler {
             endpoint,
             new DefaultAzureCredential(),
           );
-          const openAIClient = project.getOpenAIClient();
+          const openAIClient = await project.getOpenAIClient();
 
           // Process messages to inject artifactContext and handle token limits
           const encoding = await getGlobalTiktoken();
@@ -199,8 +199,11 @@ export class AIFoundryAgentHandler {
               endpoint: endpoint,
             });
 
-            const response = openAIClient.responses.create(
-              { conversation: conversationId },
+            const stream = await openAIClient.responses.create(
+              {
+                conversation: conversationId,
+                stream: true,
+              },
               {
                 body: {
                   agent: {
@@ -211,7 +214,7 @@ export class AIFoundryAgentHandler {
               },
             );
 
-            streamEventMessages = await response.stream();
+            streamEventMessages = stream;
           } catch (streamError: any) {
             console.error('Error creating stream:', streamError);
             if (streamError instanceof Error) {
@@ -243,7 +246,9 @@ export class AIFoundryAgentHandler {
                 url: string;
                 date: string;
               }> = [];
-              let citationIndex = 1;
+              // Separate counters for marker-based and annotation-based citations
+              // to avoid numbering conflicts between the two systems
+              let markerCitationIndex = 1;
               const citationMap = new Map<string, number>();
 
               // markerBuffer: Accumulates text to handle citation markers split across chunks
@@ -251,151 +256,71 @@ export class AIFoundryAgentHandler {
               let controllerClosed = false;
 
               try {
-                for await (const eventMessage of streamEventMessages) {
-                  // Handle different event types
-                  // The new API uses similar delta events
-                  if (
-                    eventMessage.event === 'thread.message.delta' ||
-                    eventMessage.event === 'response.delta'
-                  ) {
-                    const messageData = eventMessage.data as {
-                      delta?: {
-                        content?: Array<{
-                          type: string;
-                          text?: { value: string };
-                        }>;
-                      };
-                    };
-                    if (
-                      messageData?.delta?.content &&
-                      Array.isArray(messageData.delta.content)
-                    ) {
-                      messageData.delta.content.forEach(
-                        (contentPart: {
-                          type: string;
-                          text?: { value: string };
-                        }) => {
-                          if (
-                            contentPart.type === 'text' &&
-                            contentPart.text?.value
-                          ) {
-                            const textChunk = contentPart.text.value;
+                for await (const event of streamEventMessages) {
+                  // Handle Responses API stream events
+                  // Events use 'type' field, not 'event'
+                  if (event.type === 'response.output_text.delta') {
+                    const textChunk = event.delta;
 
-                            // Stage 1: Accumulate text in marker buffer
-                            markerBuffer += textChunk;
+                    // Stage 1: Accumulate text in marker buffer
+                    markerBuffer += textChunk;
 
-                            // Stage 2: Process complete citation markers in accumulated buffer
-                            //
-                            // Azure agents return citations in two formats:
-                            // - Short: 【3:0†source】 (just the word "source")
-                            // - Long:  【3:0†Title†URL】 (embedded title and URL)
-                            const processedBuffer = markerBuffer.replace(
-                              /【(\d+):(\d+)†[^】]+】/g,
-                              (match: string) => {
-                                if (!citationMap.has(match)) {
-                                  citationMap.set(match, citationIndex);
-                                  citationIndex++;
-                                }
-                                return `[${citationMap.get(match)}]`;
-                              },
-                            );
-
-                            // Stage 3: Check for incomplete markers at end of buffer
-                            const lastOpenBracket =
-                              processedBuffer.lastIndexOf('【');
-                            const lastCloseBracket =
-                              processedBuffer.lastIndexOf('】');
-
-                            if (lastOpenBracket > lastCloseBracket) {
-                              // Incomplete marker at end - keep it in buffer, send the rest
-                              const completeText = processedBuffer.slice(
-                                0,
-                                lastOpenBracket,
-                              );
-                              if (completeText) {
-                                controller.enqueue(
-                                  encoder.encode(completeText),
-                                );
-                              }
-                              markerBuffer =
-                                processedBuffer.slice(lastOpenBracket);
-                            } else {
-                              // All markers complete - send everything
-                              controller.enqueue(
-                                encoder.encode(processedBuffer),
-                              );
-                              markerBuffer = '';
-                            }
-                          }
-                        },
-                      );
-                    }
-                  } else if (
-                    eventMessage.event === 'thread.message.completed' ||
-                    eventMessage.event === 'response.completed'
-                  ) {
-                    // Extract citations from annotations
-                    const messageData = eventMessage.data as {
-                      content?: Array<{
-                        text?: {
-                          annotations?: Array<{
-                            type: string;
-                            text?: string;
-                            urlCitation?: { title?: string; url?: string };
-                          }>;
-                        };
-                      }>;
-                    };
-                    if (messageData?.content?.[0]?.text?.annotations) {
-                      const annotations =
-                        messageData.content[0].text.annotations;
-
-                      // Build a map from citation marker to annotation
-                      const markerToAnnotation = new Map<
-                        string,
-                        { title?: string; url?: string }
-                      >();
-                      annotations.forEach(
-                        (annotation: {
-                          type: string;
-                          text?: string;
-                          urlCitation?: { title?: string; url?: string };
-                        }) => {
-                          if (
-                            annotation.type === 'url_citation' &&
-                            annotation.text &&
-                            annotation.urlCitation
-                          ) {
-                            markerToAnnotation.set(
-                              annotation.text,
-                              annotation.urlCitation,
-                            );
-                          }
-                        },
-                      );
-
-                      // Build citations list based on citationMap order
-                      citations = [];
-                      for (const [marker, number] of citationMap.entries()) {
-                        const urlCitation = markerToAnnotation.get(marker);
-                        citations.push({
-                          number: number,
-                          title: urlCitation?.title || `Source ${number}`,
-                          url: urlCitation?.url || '',
-                          date: '',
-                        });
-
-                        if (!urlCitation) {
-                          console.warn(
-                            `[AIFoundryAgentHandler] No annotation found for marker ${marker}, using placeholder`,
-                          );
+                    // Stage 2: Process complete citation markers in accumulated buffer
+                    //
+                    // Azure agents may return inline citation markers:
+                    // - Short: 【3:0†source】 (just the word "source")
+                    // - Long:  【3:0†Title†URL】 (embedded title and URL)
+                    const processedBuffer = markerBuffer.replace(
+                      /【(\d+):(\d+)†[^】]+】/g,
+                      (match: string) => {
+                        if (!citationMap.has(match)) {
+                          citationMap.set(match, markerCitationIndex);
+                          markerCitationIndex++;
                         }
+                        return `[${citationMap.get(match)}]`;
+                      },
+                    );
+
+                    // Stage 3: Check for incomplete markers at end of buffer
+                    const lastOpenBracket = processedBuffer.lastIndexOf('【');
+                    const lastCloseBracket = processedBuffer.lastIndexOf('】');
+
+                    if (lastOpenBracket > lastCloseBracket) {
+                      // Incomplete marker at end - keep it in buffer, send the rest
+                      const completeText = processedBuffer.slice(
+                        0,
+                        lastOpenBracket,
+                      );
+                      if (completeText) {
+                        controller.enqueue(encoder.encode(completeText));
                       }
+                      markerBuffer = processedBuffer.slice(lastOpenBracket);
+                    } else {
+                      // All markers complete - send everything
+                      controller.enqueue(encoder.encode(processedBuffer));
+                      markerBuffer = '';
                     }
                   } else if (
-                    eventMessage.event === 'thread.run.completed' ||
-                    eventMessage.event === 'response.end'
+                    event.type === 'response.output_text.annotation.added'
                   ) {
+                    // Collect citation annotations as they arrive
+                    // These provide structured citation data (URL, title)
+                    // numbered independently from inline markers
+                    const annotation = event as any;
+                    if (
+                      annotation.annotation?.type === 'url_citation' &&
+                      annotation.annotation?.url
+                    ) {
+                      citations.push({
+                        number: citations.length + 1,
+                        title:
+                          annotation.annotation.title ||
+                          `Source ${citations.length + 1}`,
+                        url: annotation.annotation.url,
+                        date: '',
+                      });
+                    }
+                  } else if (event.type === 'response.completed') {
                     // Flush any remaining marker buffer
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
@@ -408,18 +333,32 @@ export class AIFoundryAgentHandler {
                       citations: citations.length > 0 ? citations : undefined,
                       threadId: isNewConversation ? conversationId : undefined,
                     });
-                  } else if (eventMessage.event === 'error') {
+
+                    controllerClosed = true;
+                    controller.close();
+                  } else if (event.type === 'response.failed') {
+                    const errorEvent = event as any;
                     controllerClosed = true;
                     controller.error(
                       new Error(
-                        `Agent error: ${JSON.stringify(eventMessage.data)}`,
+                        `Agent error: ${errorEvent.response?.error?.message || 'Unknown error'}`,
                       ),
                     );
-                  } else if (eventMessage.event === 'done') {
-                    // Stop the smooth streaming loop and close
-                    controllerClosed = true;
-                    controller.close();
                   }
+                }
+
+                // If stream ended without response.completed, close gracefully
+                if (!controllerClosed) {
+                  if (markerBuffer) {
+                    controller.enqueue(encoder.encode(markerBuffer));
+                    markerBuffer = '';
+                  }
+                  appendMetadataToStream(controller, {
+                    citations: citations.length > 0 ? citations : undefined,
+                    threadId: isNewConversation ? conversationId : undefined,
+                  });
+                  controllerClosed = true;
+                  controller.close();
                 }
               } catch (error) {
                 controllerClosed = true;

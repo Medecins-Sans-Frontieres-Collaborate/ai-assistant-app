@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       );
 
       // Try to retrieve the agent to verify it exists and is accessible
-      const agent = await project.agents.getAgent(agentId);
+      const agent = await project.agents.get(agentId);
 
       if (!agent) {
         return NextResponse.json(
