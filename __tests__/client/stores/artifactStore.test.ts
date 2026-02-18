@@ -1,13 +1,7 @@
-/**
- * @vitest-environment jsdom
- */
-import { act, renderHook, waitFor } from '@testing-library/react';
-
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import DOMPurify from 'isomorphic-dompurify';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the format converter
+// Mock the format converter (dynamically imported by setEditorMode / openDocument)
 vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
   convertToHtml: vi.fn((content: string, format: string) => {
     if (format === 'md' || format === 'markdown') {
@@ -20,83 +14,64 @@ vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
   }),
 }));
 
+// Mock export utils (dynamically imported by setEditorMode, statically by getArtifactContext)
 vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   htmlToMarkdown: vi.fn((html: string) => {
-    // Use DOMPurify to safely strip HTML tags
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [],
-      KEEP_CONTENT: true,
-    });
+    // Simple HTML tag stripping for test purposes
+    return html.replace(/<[^>]*>/g, '');
   }),
   htmlToPlainText: vi.fn((html: string) => {
-    // Use DOMPurify to safely strip HTML tags
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [],
-      KEEP_CONTENT: true,
-    });
+    return html.replace(/<[^>]*>/g, '');
   }),
 }));
 
 describe('artifactStore', () => {
   beforeEach(() => {
-    // Reset store before each test
-    const { result } = renderHook(() => useArtifactStore());
-    act(() => {
-      result.current.resetEditor();
-    });
+    vi.clearAllMocks();
+    useArtifactStore.getState().resetEditor();
   });
 
   describe('Initial State', () => {
     it('should have correct initial state', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      const state = useArtifactStore.getState();
 
-      expect(result.current.originalCode).toBe('');
-      expect(result.current.modifiedCode).toBe('');
-      expect(result.current.language).toBe('typescript');
-      expect(result.current.fileName).toBe('untitled.ts');
-      expect(result.current.isArtifactOpen).toBe(false);
-      expect(result.current.isEditorOpen).toBe(false);
-      expect(result.current.editorMode).toBe('code');
-      expect(result.current.sourceFormat).toBeNull();
+      expect(state.originalCode).toBe('');
+      expect(state.modifiedCode).toBe('');
+      expect(state.language).toBe('typescript');
+      expect(state.fileName).toBe('untitled.ts');
+      expect(state.isArtifactOpen).toBe(false);
+      expect(state.isEditorOpen).toBe(false);
+      expect(state.editorMode).toBe('code');
+      expect(state.sourceFormat).toBeNull();
     });
   });
 
   describe('openArtifact', () => {
     it('should open code artifact with correct state', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openArtifact('console.log("test");', 'javascript', 'test.js');
 
-      act(() => {
-        result.current.openArtifact(
-          'console.log("test");',
-          'javascript',
-          'test.js',
-        );
-      });
-
-      expect(result.current.originalCode).toBe('console.log("test");');
-      expect(result.current.modifiedCode).toBe('console.log("test");');
-      expect(result.current.language).toBe('javascript');
-      expect(result.current.fileName).toBe('test.js');
-      expect(result.current.isArtifactOpen).toBe(true);
-      expect(result.current.isEditorOpen).toBe(true);
-      expect(result.current.editorMode).toBe('code');
-      expect(result.current.sourceFormat).toBeNull();
+      const state = useArtifactStore.getState();
+      expect(state.originalCode).toBe('console.log("test");');
+      expect(state.modifiedCode).toBe('console.log("test");');
+      expect(state.language).toBe('javascript');
+      expect(state.fileName).toBe('test.js');
+      expect(state.isArtifactOpen).toBe(true);
+      expect(state.isEditorOpen).toBe(true);
+      expect(state.editorMode).toBe('code');
+      expect(state.sourceFormat).toBeNull();
     });
 
     it('should generate default filename based on language', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openArtifact('def hello():', 'python');
 
-      act(() => {
-        result.current.openArtifact('def hello():', 'python');
-      });
-
-      expect(result.current.fileName).toBe('untitled.py');
-      expect(result.current.language).toBe('python');
+      const state = useArtifactStore.getState();
+      expect(state.fileName).toBe('untitled.py');
+      expect(state.language).toBe('python');
     });
 
     it('should handle various language types', () => {
-      const { result } = renderHook(() => useArtifactStore());
-
       const tests = [
         { language: 'typescript', expectedExt: 'ts' },
         { language: 'python', expectedExt: 'py' },
@@ -106,46 +81,39 @@ describe('artifactStore', () => {
       ];
 
       tests.forEach(({ language, expectedExt }) => {
-        act(() => {
-          result.current.openArtifact('test', language);
-        });
-        expect(result.current.fileName).toBe(`untitled.${expectedExt}`);
+        useArtifactStore.getState().openArtifact('test', language);
+        expect(useArtifactStore.getState().fileName).toBe(
+          `untitled.${expectedExt}`,
+        );
       });
     });
   });
 
   describe('openDocument', () => {
     it('should open document in code mode by default', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openDocument('# Hello', 'md', 'test.md');
 
-      act(() => {
-        result.current.openDocument('# Hello', 'md', 'test.md');
-      });
-
-      expect(result.current.originalCode).toBe('# Hello');
-      expect(result.current.modifiedCode).toBe('# Hello');
-      expect(result.current.language).toBe('markdown');
-      expect(result.current.fileName).toBe('test.md');
-      expect(result.current.editorMode).toBe('code');
-      expect(result.current.sourceFormat).toBe('md');
+      const state = useArtifactStore.getState();
+      expect(state.originalCode).toBe('# Hello');
+      expect(state.modifiedCode).toBe('# Hello');
+      expect(state.language).toBe('markdown');
+      expect(state.fileName).toBe('test.md');
+      expect(state.editorMode).toBe('code');
+      expect(state.sourceFormat).toBe('md');
     });
 
     it('should open document in document mode when specified', async () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openDocument('# Hello', 'md', 'test.md', 'document');
 
-      act(() => {
-        result.current.openDocument('# Hello', 'md', 'test.md', 'document');
-      });
-
-      await waitFor(() => {
-        expect(result.current.editorMode).toBe('document');
-        expect(result.current.modifiedCode).toBe('<p># Hello</p>');
+      await vi.waitFor(() => {
+        expect(useArtifactStore.getState().editorMode).toBe('document');
+        expect(useArtifactStore.getState().modifiedCode).toBe('<p># Hello</p>');
       });
     });
 
     it('should handle different document formats', () => {
-      const { result } = renderHook(() => useArtifactStore());
-
       const tests = [
         { format: 'md' as const, expectedLang: 'markdown' },
         { format: 'txt' as const, expectedLang: 'plaintext' },
@@ -153,157 +121,116 @@ describe('artifactStore', () => {
       ];
 
       tests.forEach(({ format, expectedLang }) => {
-        act(() => {
-          result.current.openDocument('content', format, `test.${format}`);
-        });
-        expect(result.current.language).toBe(expectedLang);
-        expect(result.current.sourceFormat).toBe(format);
+        useArtifactStore
+          .getState()
+          .openDocument('content', format, `test.${format}`);
+        expect(useArtifactStore.getState().language).toBe(expectedLang);
+        expect(useArtifactStore.getState().sourceFormat).toBe(format);
       });
     });
   });
 
   describe('setModifiedCode', () => {
     it('should update both modified and original code', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openArtifact('old code', 'javascript');
+      useArtifactStore.getState().setModifiedCode('new code');
 
-      act(() => {
-        result.current.openArtifact('old code', 'javascript');
-      });
-
-      act(() => {
-        result.current.setModifiedCode('new code');
-      });
-
-      expect(result.current.modifiedCode).toBe('new code');
-      expect(result.current.originalCode).toBe('new code');
+      const state = useArtifactStore.getState();
+      expect(state.modifiedCode).toBe('new code');
+      expect(state.originalCode).toBe('new code');
     });
   });
 
   describe('setEditorMode', () => {
     it('should convert markdown to HTML when switching to document mode', async () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openDocument('# Hello World', 'md', 'test.md');
+      useArtifactStore.getState().setEditorMode('document');
 
-      act(() => {
-        result.current.openDocument('# Hello World', 'md', 'test.md');
-      });
-
-      act(() => {
-        result.current.setEditorMode('document');
-      });
-
-      await waitFor(() => {
-        expect(result.current.editorMode).toBe('document');
-        expect(result.current.modifiedCode).toContain('Hello World');
+      await vi.waitFor(() => {
+        expect(useArtifactStore.getState().editorMode).toBe('document');
+        expect(useArtifactStore.getState().modifiedCode).toContain(
+          'Hello World',
+        );
       });
     });
 
     it('should convert HTML back to markdown when switching to code mode', async () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openDocument('# Hello', 'md', 'test.md', 'document');
 
-      act(() => {
-        result.current.openDocument('# Hello', 'md', 'test.md', 'document');
+      await vi.waitFor(() => {
+        expect(useArtifactStore.getState().editorMode).toBe('document');
       });
 
-      await waitFor(() => {
-        expect(result.current.editorMode).toBe('document');
-      });
+      useArtifactStore.getState().setEditorMode('code');
 
-      act(() => {
-        result.current.setEditorMode('code');
-      });
-
-      await waitFor(() => {
-        expect(result.current.editorMode).toBe('code');
+      await vi.waitFor(() => {
+        expect(useArtifactStore.getState().editorMode).toBe('code');
       });
     });
 
     it('should not switch modes for files without sourceFormat', () => {
-      const { result } = renderHook(() => useArtifactStore());
-
-      act(() => {
-        result.current.openArtifact('console.log("test");', 'javascript');
-      });
-
-      act(() => {
-        result.current.setEditorMode('document');
-      });
+      useArtifactStore
+        .getState()
+        .openArtifact('console.log("test");', 'javascript');
+      useArtifactStore.getState().setEditorMode('document');
 
       // Should stay in document mode but not convert
-      expect(result.current.editorMode).toBe('document');
+      expect(useArtifactStore.getState().editorMode).toBe('document');
     });
   });
 
   describe('canSwitchToDocumentMode', () => {
     it('should return true for markdown files', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openDocument('# Test', 'md', 'test.md');
 
-      act(() => {
-        result.current.openDocument('# Test', 'md', 'test.md');
-      });
-
-      expect(result.current.canSwitchToDocumentMode()).toBe(true);
+      expect(useArtifactStore.getState().canSwitchToDocumentMode()).toBe(true);
     });
 
     it('should return true for text files', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openDocument('Hello', 'txt', 'test.txt');
 
-      act(() => {
-        result.current.openDocument('Hello', 'txt', 'test.txt');
-      });
-
-      expect(result.current.canSwitchToDocumentMode()).toBe(true);
+      expect(useArtifactStore.getState().canSwitchToDocumentMode()).toBe(true);
     });
 
     it('should return true for HTML files', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openDocument('<p>Test</p>', 'html', 'test.html');
 
-      act(() => {
-        result.current.openDocument('<p>Test</p>', 'html', 'test.html');
-      });
-
-      expect(result.current.canSwitchToDocumentMode()).toBe(true);
+      expect(useArtifactStore.getState().canSwitchToDocumentMode()).toBe(true);
     });
 
     it('should return false for pure code files', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openArtifact('console.log("test");', 'javascript', 'test.js');
 
-      act(() => {
-        result.current.openArtifact(
-          'console.log("test");',
-          'javascript',
-          'test.js',
-        );
-      });
-
-      expect(result.current.canSwitchToDocumentMode()).toBe(false);
+      expect(useArtifactStore.getState().canSwitchToDocumentMode()).toBe(false);
     });
 
     it('should return false for Python files', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openArtifact('print("test")', 'python', 'test.py');
 
-      act(() => {
-        result.current.openArtifact('print("test")', 'python', 'test.py');
-      });
-
-      expect(result.current.canSwitchToDocumentMode()).toBe(false);
+      expect(useArtifactStore.getState().canSwitchToDocumentMode()).toBe(false);
     });
   });
 
   describe('setFileName', () => {
     it('should update filename and auto-detect language', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().setFileName('myfile.py');
 
-      act(() => {
-        result.current.setFileName('myfile.py');
-      });
-
-      expect(result.current.fileName).toBe('myfile.py');
-      expect(result.current.language).toBe('python');
+      const state = useArtifactStore.getState();
+      expect(state.fileName).toBe('myfile.py');
+      expect(state.language).toBe('python');
     });
 
     it('should handle various file extensions', () => {
-      const { result } = renderHook(() => useArtifactStore());
-
       const tests = [
         { file: 'test.ts', lang: 'typescript' },
         { file: 'test.js', lang: 'javascript' },
@@ -313,58 +240,44 @@ describe('artifactStore', () => {
       ];
 
       tests.forEach(({ file, lang }) => {
-        act(() => {
-          result.current.setFileName(file);
-        });
-        expect(result.current.language).toBe(lang);
+        useArtifactStore.getState().setFileName(file);
+        expect(useArtifactStore.getState().language).toBe(lang);
       });
     });
   });
 
   describe('closeArtifact', () => {
     it('should close artifact but preserve content', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openArtifact('test code', 'javascript', 'test.js');
+      useArtifactStore.getState().closeArtifact();
 
-      act(() => {
-        result.current.openArtifact('test code', 'javascript', 'test.js');
-      });
-
-      act(() => {
-        result.current.closeArtifact();
-      });
-
-      expect(result.current.isArtifactOpen).toBe(false);
-      expect(result.current.isEditorOpen).toBe(false);
+      const state = useArtifactStore.getState();
+      expect(state.isArtifactOpen).toBe(false);
+      expect(state.isEditorOpen).toBe(false);
       // Content should still be there (no localStorage, but in memory)
-      expect(result.current.modifiedCode).toBe('test code');
+      expect(state.modifiedCode).toBe('test code');
     });
   });
 
   describe('getArtifactContext', () => {
     it('should return null when editor is not open', async () => {
-      const { result } = renderHook(() => useArtifactStore());
-
-      expect(await result.current.getArtifactContext()).toBeNull();
+      expect(await useArtifactStore.getState().getArtifactContext()).toBeNull();
     });
 
     it('should return null when editor is open but has no content', async () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openArtifact('', 'javascript');
 
-      act(() => {
-        result.current.openArtifact('', 'javascript');
-      });
-
-      expect(await result.current.getArtifactContext()).toBeNull();
+      expect(await useArtifactStore.getState().getArtifactContext()).toBeNull();
     });
 
     it('should return artifact context when editor has content', async () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore
+        .getState()
+        .openArtifact('test code', 'javascript', 'test.js');
 
-      act(() => {
-        result.current.openArtifact('test code', 'javascript', 'test.js');
-      });
-
-      const context = await result.current.getArtifactContext();
+      const context = await useArtifactStore.getState().getArtifactContext();
       expect(context).toEqual({
         fileName: 'test.js',
         language: 'javascript',
@@ -375,81 +288,80 @@ describe('artifactStore', () => {
 
   describe('downloadFile', () => {
     it('should create download link with correct attributes', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      const mockLink = { href: '', download: '', click: vi.fn() };
+      const createElementSpy = vi.fn().mockReturnValue(mockLink);
+      const appendChildSpy = vi.fn();
+      const removeChildSpy = vi.fn();
+      const createObjectURLSpy = vi.fn().mockReturnValue('blob:test');
+      const revokeObjectURLSpy = vi.fn();
 
-      // Mock DOM methods
-      const createElementSpy = vi.spyOn(document, 'createElement');
-      const createObjectURLSpy = vi
-        .spyOn(URL, 'createObjectURL')
-        .mockReturnValue('blob:test');
-      const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
+      // Set up DOM globals for node environment
+      globalThis.document = {
+        createElement: createElementSpy,
+        body: {
+          appendChild: appendChildSpy,
+          removeChild: removeChildSpy,
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
 
-      act(() => {
-        result.current.openArtifact('test content', 'javascript', 'test.js');
-      });
+      const originalCreateObjectURL = URL.createObjectURL;
+      const originalRevokeObjectURL = URL.revokeObjectURL;
+      URL.createObjectURL = createObjectURLSpy;
+      URL.revokeObjectURL = revokeObjectURLSpy;
 
-      act(() => {
-        result.current.downloadFile();
-      });
+      try {
+        useArtifactStore
+          .getState()
+          .openArtifact('test content', 'javascript', 'test.js');
+        useArtifactStore.getState().downloadFile();
 
-      expect(createElementSpy).toHaveBeenCalledWith('a');
-      expect(createObjectURLSpy).toHaveBeenCalled();
-      expect(revokeObjectURLSpy).toHaveBeenCalled();
-
-      createElementSpy.mockRestore();
-      createObjectURLSpy.mockRestore();
-      revokeObjectURLSpy.mockRestore();
+        expect(createElementSpy).toHaveBeenCalledWith('a');
+        expect(createObjectURLSpy).toHaveBeenCalled();
+        expect(revokeObjectURLSpy).toHaveBeenCalled();
+      } finally {
+        // Restore globals
+        delete (globalThis as unknown as Record<string, unknown>).document;
+        URL.createObjectURL = originalCreateObjectURL;
+        URL.revokeObjectURL = originalRevokeObjectURL;
+      }
     });
   });
 
   describe('setLanguage', () => {
     it('should update language and filename when using default name', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().setLanguage('python');
 
-      act(() => {
-        result.current.setLanguage('python');
-      });
-
-      expect(result.current.language).toBe('python');
-      expect(result.current.fileName).toBe('untitled.py');
+      const state = useArtifactStore.getState();
+      expect(state.language).toBe('python');
+      expect(state.fileName).toBe('untitled.py');
     });
 
     it('should update language but not filename when using custom name', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().setFileName('myfile.js');
+      useArtifactStore.getState().setLanguage('python');
 
-      act(() => {
-        result.current.setFileName('myfile.js');
-      });
-
-      act(() => {
-        result.current.setLanguage('python');
-      });
-
-      expect(result.current.language).toBe('python');
-      expect(result.current.fileName).toBe('myfile.js'); // Should not change
+      const state = useArtifactStore.getState();
+      expect(state.language).toBe('python');
+      expect(state.fileName).toBe('myfile.js'); // Should not change
     });
   });
 
   describe('resetEditor', () => {
     it('should reset all editor state to defaults', () => {
-      const { result } = renderHook(() => useArtifactStore());
+      useArtifactStore.getState().openArtifact('test', 'python', 'test.py');
+      useArtifactStore.getState().setIsLoading(true);
+      useArtifactStore.getState().setError('test error');
 
-      act(() => {
-        result.current.openArtifact('test', 'python', 'test.py');
-        result.current.setIsLoading(true);
-        result.current.setError('test error');
-      });
+      useArtifactStore.getState().resetEditor();
 
-      act(() => {
-        result.current.resetEditor();
-      });
-
-      expect(result.current.originalCode).toBe('');
-      expect(result.current.modifiedCode).toBe('');
-      expect(result.current.language).toBe('typescript');
-      expect(result.current.fileName).toBe('untitled.ts');
-      expect(result.current.isLoading).toBe(false);
-      expect(result.current.error).toBeNull();
+      const state = useArtifactStore.getState();
+      expect(state.originalCode).toBe('');
+      expect(state.modifiedCode).toBe('');
+      expect(state.language).toBe('typescript');
+      expect(state.fileName).toBe('untitled.ts');
+      expect(state.isLoading).toBe(false);
+      expect(state.error).toBeNull();
     });
   });
 });

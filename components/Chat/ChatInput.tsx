@@ -189,6 +189,8 @@ export const ChatInput = ({
     filePreviews,
     uploadProgress,
     selectedToneId,
+    usedPromptId,
+    usedPromptVariables,
     searchMode,
     onSend,
     onClearInput: clearInput,
@@ -196,6 +198,8 @@ export const ChatInput = ({
     setImageFieldValue,
     setFileFieldValue,
     setFilePreviews,
+    setUsedPromptId,
+    setUsedPromptVariables,
   });
 
   const [variables, setVariables] = useState<string[]>([]);

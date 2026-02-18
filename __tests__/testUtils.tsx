@@ -96,6 +96,16 @@ const mockMessages = {
   },
   remove: 'Remove',
   imageContent: 'Image Content',
+  variableModal: {
+    fillInstructions: 'Fill in the variables below to customize your prompt',
+    optional: 'Optional',
+    required: 'Required',
+    default: 'Default:',
+    defaultPlaceholder: '{defaultValue} (default)',
+    enterValue: 'Enter value for {key}...',
+    cancel: 'Cancel',
+    apply: 'Apply',
+  },
 };
 
 interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -26,6 +26,8 @@ interface UseMessageSenderProps {
   filePreviews: FilePreview[];
   uploadProgress: { [key: string]: number };
   selectedToneId: string | null;
+  usedPromptId: string | null;
+  usedPromptVariables: { [key: string]: string } | null;
   searchMode: SearchMode;
   onSend: (message: Message, searchMode?: SearchMode) => void;
   onClearInput: () => void;
@@ -33,6 +35,8 @@ interface UseMessageSenderProps {
   setImageFieldValue: React.Dispatch<React.SetStateAction<ImageFieldValue>>;
   setFileFieldValue: React.Dispatch<React.SetStateAction<FileFieldValue>>;
   setFilePreviews: React.Dispatch<React.SetStateAction<FilePreview[]>>;
+  setUsedPromptId: (id: string | null) => void;
+  setUsedPromptVariables: (variables: { [key: string]: string } | null) => void;
 }
 
 /**
@@ -100,6 +104,8 @@ export function useMessageSender({
   filePreviews,
   uploadProgress,
   selectedToneId,
+  usedPromptId,
+  usedPromptVariables,
   searchMode,
   onSend,
   onClearInput,
@@ -107,26 +113,11 @@ export function useMessageSender({
   setImageFieldValue,
   setFileFieldValue,
   setFilePreviews,
+  setUsedPromptId,
+  setUsedPromptVariables,
 }: UseMessageSenderProps) {
   const t = useTranslations();
   const { getArtifactContext } = useArtifactStore();
-
-  const [usedPromptId, setUsedPromptId] = useState<string | null>(null);
-  const [usedPromptVariables, setUsedPromptVariables] = useState<{
-    [key: string]: string;
-  } | null>(null);
-
-  const buildContent = useCallback(() => {
-    // Don't prepend artifact context to content anymore
-    // It will be attached as metadata
-    return buildMessageContent(
-      submitType,
-      textFieldValue,
-      imageFieldValue,
-      fileFieldValue,
-      null, // No longer prepending artifact context
-    );
-  }, [submitType, textFieldValue, imageFieldValue, fileFieldValue]);
 
   const handleSend = useCallback(async () => {
     const validation = validateMessageSubmission(
@@ -228,14 +219,12 @@ export function useMessageSender({
     setFileFieldValue,
     setSubmitType,
     setFilePreviews,
+    setUsedPromptId,
+    setUsedPromptVariables,
     getArtifactContext,
   ]);
 
   return {
     handleSend,
-    usedPromptId,
-    setUsedPromptId,
-    usedPromptVariables,
-    setUsedPromptVariables,
   };
 }

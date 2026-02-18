@@ -71,11 +71,11 @@ const FileImagePreview: FC<{ image: ImageMessageContent }> = ({ image }) => {
       >
         {isLoading ? (
           <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-shimmer">
-            <span className="sr-only">Loading image...</span>
+            <span className="sr-only">{t('chat.loadingImage')}</span>
           </div>
         ) : loadError ? (
           <div className="flex items-center justify-center w-full h-full text-red-500 text-sm p-3">
-            <span>Failed to load image</span>
+            <span>{t('chat.failedToLoadImage')}</span>
           </div>
         ) : imageSrc ? (
           <>
@@ -190,6 +190,7 @@ const isDocumentFile = (extension: string): boolean => {
  * Renders file attachments with download functionality and image previews.
  */
 export const FileContent: FC<FileContentProps> = ({ files, images }) => {
+  const t = useTranslations();
   const { openArtifact, openDocument } = useArtifactStore();
   const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
 
@@ -261,7 +262,7 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
       openArtifact(text, language, filename);
     } catch (error) {
       console.error('Error opening file in code editor:', error);
-      alert('Failed to open file in code editor. Please try again.');
+      alert(t('chat.failedToOpenCodeEditor'));
     } finally {
       setIsLoadingFile(null);
     }
@@ -299,9 +300,8 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
 
       // Handle PDF files specially (they need ArrayBuffer)
       if (extension === 'pdf') {
-        const { pdfToHtml } = await import(
-          '@/lib/utils/shared/document/formatConverter'
-        );
+        const { pdfToHtml } =
+          await import('@/lib/utils/shared/document/formatConverter');
         const arrayBuffer = await blob.arrayBuffer();
         content = await pdfToHtml(arrayBuffer);
         sourceFormat = 'pdf';
@@ -327,7 +327,7 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
       openDocument(content, sourceFormat, filename, 'document');
     } catch (error) {
       console.error('Error opening file in document editor:', error);
-      alert('Failed to open file in document editor. Please try again.');
+      alert(t('chat.failedToOpenDocEditor'));
     } finally {
       setIsLoadingFile(null);
     }
@@ -475,7 +475,7 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
                     }
                     disabled={isLoading}
                     className="p-1 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Open as Document"
+                    title={t('chat.openAsDocument')}
                   >
                     <IconFileText
                       className={`w-4 h-4 ${
@@ -494,7 +494,7 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
                     }
                     disabled={isLoading}
                     className="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Open in Code Editor"
+                    title={t('chat.openInCodeEditor')}
                   >
                     <IconCode
                       className={`w-4 h-4 ${
@@ -509,7 +509,7 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
                 <button
                   onClick={(event) => downloadFile(event, file.url)}
                   className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  title="Download"
+                  title={t('chat.download')}
                 >
                   <IconDownload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                 </button>

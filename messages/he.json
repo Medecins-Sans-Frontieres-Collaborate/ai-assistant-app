@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "שלח הודעה לעוזר הבינה המלאכותית של MSF כאן",
   "chatInputPlaceholderFull": "הודעה לעוזר הבינה המלאכותית של MSF כאן או הקלד \"/\" כדי לבחור בקשה...",
   "transcribingChatPlaceholder": "מתמלל...",
-  "sendFeedback": "שלח משוב",
+  "sendFeedback": "בקשת תמיכה",
   "welcomeMessage": "ברוך הבא לעוזר ה-AI של MSF",
   "appName": "עוזר AI של MSF",
   "modelSelectionDialogue": "בחירת מודל AI",
@@ -230,8 +230,8 @@
   "Prompt name": "שם הנחיה",
   "Prompt content": "תוכן הנחיה",
   "Are you sure you want to delete this prompt?": "האם אתה בטוח שברצונך למחוק הנחיה זו?",
-  "Import data from sidebar": "ייבא נתונים מהסרגל הצדדי",
-  "Export data from sidebar": "ייצא נתונים מהסרגל הצדדי",
+  "Import data from sidebar": "שחזור היסטוריית צ'אט",
+  "Export data from sidebar": "גיבוי היסטוריית צ'אט",
   "Search chats": "חפש צ'אטים",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "זהו סט הוראות המנחה את עוזר הבינה המלאכותית כיצד להגיב. זה עוזר לבינה המלאכותית לספק מידע שימושי ומדויק על ידי מתן הקשר לשאלות שנשאלו.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "הזן הנחיה או הקלד \"/\" כדי לבחור הנחיה...",
@@ -323,7 +323,40 @@
     "baseModel": "מודל בסיס",
     "formatDescription": "פורמט: asst_xxxxx (מ-MSF AI Assistant Foundry)",
     "importantInfo": "לסוכן זה תהיה גישה להקשר השיחה והוא יוכל להשתמש באותם כלים כמו מודלים סטנדרטיים. ודא שמזהה הסוכן נכון מכיוון שלא ניתן לשנות אותו מאוחר יותר.",
-    "defunctWarning": "דגם הבסיס של סוכן זה אינו זמין עוד. ערוך את הסוכן כדי לבחור דגם בסיס חדש, או מחק אותו."
+    "defunctWarning": "דגם הבסיס של סוכן זה אינו זמין עוד. ערוך את הסוכן כדי לבחור דגם בסיס חדש, או מחק אותו.",
+    "editCustomAgent": "ערוך סוכן מותאם אישית",
+    "addCustomAgent": "הוסף סוכן מותאם אישית",
+    "experimental": "ניסיוני",
+    "createNew": "צור חדש",
+    "import": "ייבוא",
+    "importCustomAgents": "ייבוא סוכנים מותאמים אישית",
+    "importFileDescription": "בחר קובץ JSON עם תצורת סוכן אחת או יותר",
+    "chooseFile": "בחר קובץ",
+    "validatedSuccess": "הסוכן אומת בהצלחה!",
+    "cancel": "ביטול",
+    "validating": "מאמת...",
+    "updateAgent": "עדכן סוכן",
+    "addAgent": "הוסף סוכן",
+    "nameRequired": "שם הסוכן נדרש",
+    "idRequired": "מזהה הסוכן נדרש",
+    "invalidIdFormat": "פורמט מזהה סוכן לא תקין. פורמט צפוי: asst_xxxxx",
+    "invalidFileFormat": "פורמט קובץ לא תקין",
+    "noAgentsInFile": "לא נמצאו סוכנים בקובץ הייבוא",
+    "importFailed": "ייבוא הקובץ נכשל",
+    "importConflict": "לסוכנים הבאים יש התנגשויות:\n\n{conflicts}\n\nלייבא בכל זאת? פעולה זו תיצור כפילויות.",
+    "importSuccess": "{count} סוכן(ים) יובאו בהצלחה",
+    "agentDetails": "פרטי הסוכן",
+    "agentIdLabel": "מזהה סוכן:",
+    "baseModelLabel": "דגם בסיס:",
+    "unknown": "לא ידוע",
+    "descriptionLabel": "תיאור:",
+    "export": "ייצוא",
+    "edit": "עריכה",
+    "confirmDelete": "אישור",
+    "delete": "מחיקה",
+    "noCustomAgentsYet": "עדיין אין סוכנים מותאמים אישית.",
+    "noOrgAgentsConfigured": "לא הוגדרו סוכני ארגון.",
+    "validationFailed": "האימות נכשל"
   },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",
@@ -479,7 +512,8 @@
     "discard": "בטל שינויים",
     "keepEditing": "המשך עריכה",
     "yes": "כן",
-    "no": "לא"
+    "no": "לא",
+    "beta": "בטא"
   },
   "errors": {
     "unexpectedErrorOccurred": "אירעה שגיאה בלתי צפויה",
@@ -507,7 +541,7 @@
     "contactSupport": "צור קשר עם התמיכה",
     "secureSso": "SSO מאובטח",
     "howToGetAccess": "איך אני מקבל גישה?",
-    "accessLimitedText": "כרגע עוזר ה-AI של MSF זמין רק לצוות ארה\"ב ואמסטרדם.",
+    "accessLimitedText": "כרגע עוזר ה-AI של MSF זמין רק לצוות ארה\"ב, אמסטרדם וג'נבה.",
     "expandAccessSoon": "אנו מקווים להרחיב את הגישה בקרוב!",
     "errorConfiguration": "יש בעיה בתצורת השרת.",
     "errorAccessDenied": "אין לך הרשאה להתחבר.",
@@ -560,6 +594,14 @@
     "deleteMessage": "מחיקת הודעה",
     "imageContent": "תוכן תמונה",
     "fullSizePreview": "תצוגה מקדימה בגודל מלא",
+    "failedToLoadImage": "טעינת התמונה נכשלה",
+    "loadingImage": "טוען תמונה...",
+    "imageAlt": "תמונה {number}",
+    "download": "הורדה",
+    "openAsDocument": "פתח כמסמך",
+    "openInCodeEditor": "פתח בעורך קוד",
+    "failedToOpenCodeEditor": "פתיחת הקובץ בעורך הקוד נכשלה. אנא נסה שוב.",
+    "failedToOpenDocEditor": "פתיחת הקובץ בעורך המסמכים נכשלה. אנא נסה שוב.",
     "enterSearchQueryPlaceholder": "הזן את שאילתת החיפוש או השאלה שלך...",
     "errorFetchingUrl": "אירעה שגיאה באחזור תוכן כתובת האתר",
     "errorInitiatingSearch": "אירעה שגיאה בהתחלת חיפוש באינטרנט",
@@ -1067,6 +1109,7 @@
     "sections": {
       "baseModels": "מודלים בסיסיים"
     },
+    "maintainedBy": "מתוחזק על ידי",
     "agents": {
       "advancedFeatureBadge": "פונקציה מתקדמת",
       "description": "יצירה וניהול של סוכני AI מותאמים עם יכולות מתקדמות. סוכנים אלו פועלים על מופע ה־MSF AI Assistant Foundry.",
@@ -1416,6 +1459,13 @@
       "benefit1": "הפעלה כמו אפליקציה ישירות ממסך הבית",
       "benefit2": "מסך מלא ללא ממשק הדפדפן",
       "benefit3": "גישה לא מקוונת לשיחות ששמרתם"
+    },
+    "languageSupport": {
+      "title": "תמיכה ב-54 שפות",
+      "description": "זמין כעת ב-54 שפות כדי שיותר צוותים וקהילות של רופאים ללא גבולות יוכלו להשתמש בעוזר הבינה המלאכותית בשפה שלהם",
+      "autoDetect": "השפה שלך מזוהה אוטומטית מהגדרות הדפדפן שלך",
+      "manualSwitch": "החליפו בכל עת באמצעות בורר השפות בסרגל הצד",
+      "andMore": "ועוד"
     }
   },
   "Professional": "מקצועי",
@@ -1668,5 +1718,57 @@
     "title": "גרסה חדשה זמינה",
     "refresh": "רענן",
     "refreshNow": "רענון לעדכון"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "סוכני ארגון"
+    },
+    "customAgents": {
+      "title": "סוכנים מותאמים אישית",
+      "advancedBadge": "מתקדם",
+      "experimentalBlurb": "ניסיוני — נבנה בשיתוף פעולה ישיר עם משתמשים מתקדמים של MSF. לא מיועד לשימוש כללי.",
+      "createButton": "צור סוכן מותאם אישית"
+    },
+    "selectAgentPrompt": "בחר סוכן לצפייה בפרטים"
+  },
+  "privacy": {
+    "policyTitle": "מדיניות פרטיות והגנת מידע",
+    "policyDescription": "למד כיצד המידע שלך מוגן ואילו פרטים אין להזין",
+    "termsOfUse": "תנאי שימוש",
+    "termsDescription": "עיין בהנחיות שימוש אחראי ובשימושים אסורים",
+    "keyPrivacyPoints": "נקודות פרטיות עיקריות",
+    "localStorage": "השיחות שלך מאוחסנות מקומית במכשיר שלך",
+    "azureInfra": "כל עיבוד הנתונים מתבצע במערכות MSF באמצעות תשתית Azure",
+    "noPersonalData": "אל תזין מידע אישי (שמות, מספרי טלפון וכו')",
+    "noSensitiveData": "אל תזין פרטים תפעוליים רגישים במיוחד",
+    "concernsTitle": "חששות או אירועי פרטיות?",
+    "contactUs": "צור איתנו קשר מיד אם יש לך חששות בנוגע לפרטיות:"
+  },
+  "variableModal": {
+    "fillInstructions": "מלא את המשתנים למטה כדי להתאים אישית את ההנחיה שלך",
+    "optional": "אופציונלי",
+    "required": "נדרש",
+    "default": "ברירת מחדל:",
+    "defaultPlaceholder": "{defaultValue} (ברירת מחדל)",
+    "enterValue": "הזן ערך עבור {key}...",
+    "cancel": "ביטול",
+    "apply": "החל"
+  },
+  "recentSources": {
+    "title": "נתוני מקור אחרונים",
+    "unableToLoad": "לא ניתן לטעון מקורות אחרונים",
+    "retry": "נסה שוב",
+    "noSources": "אין מקורות אחרונים זמינים",
+    "refresh": "רענן",
+    "today": "היום",
+    "yesterday": "אתמול",
+    "daysAgo": "לפני {count} ימים"
+  },
+  "chatInput": {
+    "filePickerError": "לא ניתן לפתוח את בורר הקבצים. נסה גרירה ושחרור במקום.",
+    "addDocument": "הוסף מסמך",
+    "uploadDocument": "העלה מסמך",
+    "images": "תמונות",
+    "addImage": "הוסף תמונה"
   }
 }

@@ -2,6 +2,8 @@ import { IconBuilding, IconPlus, IconTools } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
@@ -66,6 +68,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   setShowModelAdvanced,
   updateConversation,
 }) => {
+  const t = useTranslations('agentsTab');
   const { exploreBots } = useFlags();
 
   const organizationAgents = getOrganizationAgents();
@@ -110,7 +113,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   className="text-blue-600 dark:text-blue-400"
                 />
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                  Organization Agents
+                  {t('organizationAgents.title')}
                 </h3>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   ({organizationAgents.length})
@@ -138,21 +141,24 @@ export const AgentsTab: FC<AgentsTabProps> = ({
 
           {/* Custom Agents Section - Same style as Organization Agents */}
           <section>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-2">
               <IconTools
                 size={20}
                 className="text-purple-600 dark:text-purple-400"
               />
               <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-                Custom Agents
+                {t('customAgents.title')}
               </h3>
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 ({customAgents.length})
               </span>
               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
-                Advanced
+                {t('customAgents.advancedBadge')}
               </span>
             </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+              {t('customAgents.experimentalBlurb')}
+            </p>
 
             {/* Custom Agents List */}
             <CustomAgentList
@@ -176,7 +182,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               className="w-full mt-2 p-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:border-purple-400 dark:hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all flex items-center justify-center gap-2"
             >
               <IconPlus size={18} />
-              Create Custom Agent
+              {t('customAgents.createButton')}
             </button>
           </section>
         </div>
@@ -214,7 +220,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
             )}
           {!isAgentSelected && (
             <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
-              <p className="text-sm">Select an agent to view details</p>
+              <p className="text-sm">{t('selectAgentPrompt')}</p>
             </div>
           )}
         </div>

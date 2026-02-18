@@ -65,7 +65,7 @@
   "chatInputPlaceholder": "راسل مساعد الذكاء الاصطناعي MSF هنا",
   "chatInputPlaceholderFull": "راسل مساعد MSF AI هنا أو اكتب \"/\" لاختيار موجه...",
   "transcribingChatPlaceholder": "قيد التفريغ...",
-  "sendFeedback": "إرسال ملاحظات",
+  "sendFeedback": "طلب الدعم",
   "welcomeMessage": "مرحبًا بك في مساعد MSF AI",
   "appName": "مساعد MSF AI",
   "modelSelectionDialogue": "اختيار نموذج الذكاء الاصطناعي",
@@ -255,8 +255,8 @@
   "Prompt name": "اسم المطالبة",
   "Prompt content": "محتوى المطالبة",
   "Are you sure you want to delete this prompt?": "هل أنت متأكد أنك تريد حذف هذه المطالبة؟",
-  "Import data from sidebar": "استعادة سجل الدردشة",
-  "Export data from sidebar": "نسخ احتياطي لسجل الدردشة",
+  "Import data from sidebar": "استعادة سجل المحادثات",
+  "Export data from sidebar": "نسخ احتياطي لسجل المحادثات",
   "Search chats": "البحث في الدردشات",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "هذه مجموعة من التعليمات التي توجه مساعد الذكاء الاصطناعي حول كيفية الرد. إنه يساعد الذكاء الاصطناعي على تقديم معلومات مفيدة ودقيقة من خلال إعطاء سياق للأسئلة المطروحة.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "أدخل مطالبة أو اكتب \"/\" لاختيار مطالبة...",
@@ -348,7 +348,40 @@
     "baseModel": "النموذج الأساسي",
     "formatDescription": "التنسيق: asst_xxxxx (من MSF AI Assistant Foundry)",
     "importantInfo": "سيحصل هذا الوكيل على إمكانية الوصول إلى سياق المحادثة ويمكنه استخدام نفس الأدوات كنماذج قياسية. تأكد من أن معرّف الوكيل صحيح حيث لا يمكن تغييره لاحقاً.",
-    "defunctWarning": "لم يعد نموذج الأساس لهذا الوكيل متوفراً. يرجى تعديل الوكيل لاختيار نموذج أساس جديد أو حذفه."
+    "defunctWarning": "لم يعد نموذج الأساس لهذا الوكيل متوفراً. يرجى تعديل الوكيل لاختيار نموذج أساس جديد أو حذفه.",
+    "editCustomAgent": "تعديل الوكيل المخصص",
+    "addCustomAgent": "إضافة وكيل مخصص",
+    "experimental": "تجريبي",
+    "createNew": "إنشاء جديد",
+    "import": "استيراد",
+    "importCustomAgents": "استيراد وكلاء مخصصين",
+    "importFileDescription": "حدد ملف JSON يحتوي على تكوين وكيل واحد أو أكثر",
+    "chooseFile": "اختيار ملف",
+    "validatedSuccess": "تم التحقق من الوكيل بنجاح!",
+    "cancel": "إلغاء",
+    "validating": "جارٍ التحقق...",
+    "updateAgent": "تحديث الوكيل",
+    "addAgent": "إضافة وكيل",
+    "nameRequired": "اسم الوكيل مطلوب",
+    "idRequired": "معرّف الوكيل مطلوب",
+    "invalidIdFormat": "تنسيق معرّف الوكيل غير صالح. التنسيق المتوقع: asst_xxxxx",
+    "invalidFileFormat": "تنسيق ملف غير صالح",
+    "noAgentsInFile": "لم يتم العثور على وكلاء في ملف الاستيراد",
+    "importFailed": "فشل استيراد الملف",
+    "importConflict": "الوكلاء التالية لديهم تعارضات:\n\n{conflicts}\n\nهل تريد الاستيراد على أي حال؟ سيؤدي ذلك إلى إنشاء نسخ مكررة.",
+    "importSuccess": "تم استيراد {count} وكيل(وكلاء) بنجاح",
+    "agentDetails": "تفاصيل الوكيل",
+    "agentIdLabel": "معرّف الوكيل:",
+    "baseModelLabel": "النموذج الأساسي:",
+    "unknown": "غير معروف",
+    "descriptionLabel": "الوصف:",
+    "export": "تصدير",
+    "edit": "تعديل",
+    "confirmDelete": "تأكيد",
+    "delete": "حذف",
+    "noCustomAgentsYet": "لا يوجد وكلاء مخصصون بعد.",
+    "noOrgAgentsConfigured": "لم يتم تكوين وكلاء المنظمة.",
+    "validationFailed": "فشل التحقق"
   },
   "Quick Actions": "إجراءات سريعة",
   "Type / in chat to access your prompts": "اكتب / في الدردشة للوصول إلى مطالباتك",
@@ -504,7 +537,8 @@
     "discard": "تجاهل",
     "keepEditing": "متابعة التحرير",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "beta": "تجريبي"
   },
   "chat": {
     "downloadAudio": "تنزيل الصوت",
@@ -537,6 +571,14 @@
     "deleteMessage": "حذف الرسالة",
     "imageContent": "محتوى الصورة",
     "fullSizePreview": "معاينة بالحجم الكامل",
+    "failedToLoadImage": "فشل تحميل الصورة",
+    "loadingImage": "جارٍ تحميل الصورة...",
+    "imageAlt": "صورة {number}",
+    "download": "تنزيل",
+    "openAsDocument": "فتح كمستند",
+    "openInCodeEditor": "فتح في محرر الكود",
+    "failedToOpenCodeEditor": "فشل فتح الملف في محرر الكود. يرجى المحاولة مرة أخرى.",
+    "failedToOpenDocEditor": "فشل فتح الملف في محرر المستندات. يرجى المحاولة مرة أخرى.",
     "enterSearchQueryPlaceholder": "أدخل استعلام البحث أو سؤالك...",
     "errorFetchingUrl": "حدث خطأ أثناء جلب محتوى عنوان URL",
     "errorInitiatingSearch": "حدث خطأ أثناء بدء بحث الويب",
@@ -903,7 +945,7 @@
     "contactSupport": "اتصل بالدعم",
     "secureSso": "تسجيل دخول موحد آمن",
     "howToGetAccess": "كيف أحصل على إمكانية الوصول؟",
-    "accessLimitedText": "حالياً، مساعد MSF AI متاح فقط لموظفي الولايات المتحدة وأمستردام.",
+    "accessLimitedText": "حالياً، مساعد MSF AI متاح فقط لموظفي الولايات المتحدة وأمستردام وجنيف.",
     "expandAccessSoon": "نأمل في توسيع إمكانية الوصول قريباً!",
     "errorConfiguration": "هناك مشكلة في تكوين الخادم.",
     "errorAccessDenied": "ليس لديك إذن لتسجيل الدخول.",
@@ -983,6 +1025,7 @@
     "sections": {
       "baseModels": "النماذج الأساسية"
     },
+    "maintainedBy": "يديره",
     "agents": {
       "advancedFeatureBadge": "ميزة متقدمة",
       "description": "أنشئ وأدر وكلاء ذكاء اصطناعي مخصصين بقدرات متخصصة. يعمل هؤلاء الوكلاء على مثيل MSF AI Assistant Foundry.",
@@ -1332,6 +1375,13 @@
       "benefit1": "إمكانية التشغيل كتطبيق أصلي من الشاشة الرئيسية",
       "benefit2": "شاشة كاملة بدون واجهة المتصفح",
       "benefit3": "إمكانية الوصول دون اتصال للمحادثات المحفوظة"
+    },
+    "languageSupport": {
+      "title": "دعم 54 لغة",
+      "description": "متوفر الآن بـ 54 لغة حتى يتمكن المزيد من فرق ومجتمعات أطباء بلا حدود من استخدام مساعد الذكاء الاصطناعي بلغتهم الخاصة",
+      "autoDetect": "يتم اكتشاف لغتك تلقائيًا من إعدادات المتصفح",
+      "manualSwitch": "قم بالتبديل في أي وقت عبر محدد اللغة في الشريط الجانبي",
+      "andMore": "والمزيد"
     }
   },
   "Professional": "رسمي",
@@ -1668,5 +1718,57 @@
     "title": "إصدار جديد متوفر",
     "refresh": "تحديث",
     "refreshNow": "تحديث للحصول على آخر إصدار"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "وكلاء المنظمة"
+    },
+    "customAgents": {
+      "title": "وكلاء مخصصون",
+      "advancedBadge": "متقدم",
+      "experimentalBlurb": "تجريبي — تم بناؤه بالتعاون المباشر مع المستخدمين المتقدمين في MSF. ليس للاستخدام العام.",
+      "createButton": "إنشاء وكيل مخصص"
+    },
+    "selectAgentPrompt": "حدد وكيلاً لعرض التفاصيل"
+  },
+  "privacy": {
+    "policyTitle": "سياسة الخصوصية وحماية البيانات",
+    "policyDescription": "تعرف على كيفية حماية بياناتك وما هي المعلومات التي لا يجب إدخالها",
+    "termsOfUse": "شروط الاستخدام",
+    "termsDescription": "مراجعة إرشادات الاستخدام المسؤول والاستخدامات المحظورة",
+    "keyPrivacyPoints": "نقاط الخصوصية الرئيسية",
+    "localStorage": "يتم تخزين محادثاتك محلياً على جهازك",
+    "azureInfra": "تتم جميع عمليات معالجة البيانات داخل أنظمة MSF باستخدام بنية Azure التحتية",
+    "noPersonalData": "لا تدخل بيانات شخصية (أسماء، أرقام هواتف، إلخ)",
+    "noSensitiveData": "لا تدخل تفاصيل عملياتية حساسة للغاية",
+    "concernsTitle": "مخاوف أو حوادث تتعلق بالخصوصية؟",
+    "contactUs": "اتصل بنا فوراً إذا كانت لديك مخاوف بشأن الخصوصية:"
+  },
+  "variableModal": {
+    "fillInstructions": "املأ المتغيرات أدناه لتخصيص طلبك",
+    "optional": "اختياري",
+    "required": "مطلوب",
+    "default": "افتراضي:",
+    "defaultPlaceholder": "{defaultValue} (افتراضي)",
+    "enterValue": "أدخل قيمة لـ {key}...",
+    "cancel": "إلغاء",
+    "apply": "تطبيق"
+  },
+  "recentSources": {
+    "title": "أحدث بيانات المصادر",
+    "unableToLoad": "تعذر تحميل أحدث المصادر",
+    "retry": "إعادة المحاولة",
+    "noSources": "لا توجد مصادر حديثة متاحة",
+    "refresh": "تحديث",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "daysAgo": "منذ {count} أيام"
+  },
+  "chatInput": {
+    "filePickerError": "تعذر فتح منتقي الملفات. حاول استخدام السحب والإفلات بدلاً من ذلك.",
+    "addDocument": "إضافة مستند",
+    "uploadDocument": "رفع مستند",
+    "images": "صور",
+    "addImage": "إضافة صورة"
   }
 }

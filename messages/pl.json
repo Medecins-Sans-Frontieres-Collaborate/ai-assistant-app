@@ -41,7 +41,7 @@
   "chatInputPlaceholder": "Wyślij wiadomość do asystenta AI MSF tutaj",
   "chatInputPlaceholderFull": "Wyślij wiadomość do Asystenta AI MSF tutaj lub wpisz \"/\", aby wybrać monit...",
   "transcribingChatPlaceholder": "Transkrypcja...",
-  "sendFeedback": "Prześlij opinię",
+  "sendFeedback": "Poproś o wsparcie",
   "welcomeMessage": "Witamy w asystencie AI MSF",
   "appName": "Asystent AI MSF",
   "modelSelectionDialogue": "Wybór modelu AI",
@@ -250,8 +250,8 @@
   "Prompt name": "Nazwa promptu",
   "Prompt content": "Treść promptu",
   "Are you sure you want to delete this prompt?": "Czy na pewno chcesz usunąć ten prompt?",
-  "Import data from sidebar": "Importuj dane z paska bocznego",
-  "Export data from sidebar": "Eksportuj dane z paska bocznego",
+  "Import data from sidebar": "Przywróć historię czatów",
+  "Export data from sidebar": "Utwórz kopię zapasową historii czatów",
   "Search chats": "Szukaj czatów",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "To zestaw instrukcji, które kierują asystentem AI, jak reagować. Pomaga AI dostarczać przydatnych i dokładnych informacji, nadając kontekst zadawanym pytaniom.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Wprowadź prompt lub wpisz \"/\", aby wybrać prompt...",
@@ -345,7 +345,40 @@
     "baseModel": "Model bazowy",
     "formatDescription": "Format: asst_xxxxx (z MSF AI Assistant Foundry)",
     "importantInfo": "Ten agent będzie miał dostęp do kontekstu rozmowy i będzie mógł korzystać z tych samych narzędzi co standardowe modele. Upewnij się, że ID agenta jest poprawne, ponieważ nie można go później zmienić.",
-    "defunctWarning": "Model bazowy tego agenta nie jest już dostępny. Edytuj agenta, aby wybrać nowy model bazowy, lub usuń go."
+    "defunctWarning": "Model bazowy tego agenta nie jest już dostępny. Edytuj agenta, aby wybrać nowy model bazowy, lub usuń go.",
+    "editCustomAgent": "Edytuj niestandardowego agenta",
+    "addCustomAgent": "Dodaj niestandardowego agenta",
+    "experimental": "Eksperymentalne",
+    "createNew": "Utwórz nowy",
+    "import": "Importuj",
+    "importCustomAgents": "Importuj niestandardowych agentów",
+    "importFileDescription": "Wybierz plik JSON z jedną lub więcej konfiguracjami agentów",
+    "chooseFile": "Wybierz plik",
+    "validatedSuccess": "Agent zwalidowany pomyślnie!",
+    "cancel": "Anuluj",
+    "validating": "Walidowanie...",
+    "updateAgent": "Zaktualizuj agenta",
+    "addAgent": "Dodaj agenta",
+    "nameRequired": "Nazwa agenta jest wymagana",
+    "idRequired": "ID agenta jest wymagane",
+    "invalidIdFormat": "Nieprawidłowy format ID agenta. Oczekiwany format: asst_xxxxx",
+    "invalidFileFormat": "Nieprawidłowy format pliku",
+    "noAgentsInFile": "Nie znaleziono agentów w pliku importu",
+    "importFailed": "Import pliku nie powiódł się",
+    "importConflict": "Następujący agenci mają konflikty:\n\n{conflicts}\n\nImportować mimo to? Zostaną utworzone duplikaty.",
+    "importSuccess": "Pomyślnie zaimportowano {count} agenta(ów)",
+    "agentDetails": "Szczegóły agenta",
+    "agentIdLabel": "ID agenta:",
+    "baseModelLabel": "Model bazowy:",
+    "unknown": "Nieznany",
+    "descriptionLabel": "Opis:",
+    "export": "Eksportuj",
+    "edit": "Edytuj",
+    "confirmDelete": "Potwierdź",
+    "delete": "Usuń",
+    "noCustomAgentsYet": "Brak niestandardowych agentów.",
+    "noOrgAgentsConfigured": "Brak skonfigurowanych agentów organizacji.",
+    "validationFailed": "Walidacja nie powiodła się"
   },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",
@@ -501,7 +534,8 @@
     "discard": "Odrzuć",
     "keepEditing": "Kontynuuj edycję",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Wystąpił nieoczekiwany błąd",
@@ -529,7 +563,7 @@
     "contactSupport": "Skontaktuj się z pomocą techniczną",
     "secureSso": "Bezpieczne SSO",
     "howToGetAccess": "Jak uzyskać dostęp?",
-    "accessLimitedText": "Obecnie MSF AI Assistant jest dostępny tylko dla pracowników w USA i Amsterdamie.",
+    "accessLimitedText": "Obecnie MSF AI Assistant jest dostępny tylko dla pracowników w USA, Amsterdamie i Genewie.",
     "expandAccessSoon": "Mamy nadzieję wkrótce rozszerzyć dostęp!",
     "errorConfiguration": "Wystąpił problem z konfiguracją serwera.",
     "errorAccessDenied": "Nie masz uprawnień do logowania.",
@@ -582,6 +616,14 @@
     "deleteMessage": "Usuń wiadomość",
     "imageContent": "Zawartość obrazu",
     "fullSizePreview": "Podgląd pełnego rozmiaru",
+    "failedToLoadImage": "Nie udało się załadować obrazu",
+    "loadingImage": "Ładowanie obrazu...",
+    "imageAlt": "Obraz {number}",
+    "download": "Pobierz",
+    "openAsDocument": "Otwórz jako dokument",
+    "openInCodeEditor": "Otwórz w edytorze kodu",
+    "failedToOpenCodeEditor": "Nie udało się otworzyć pliku w edytorze kodu. Spróbuj ponownie.",
+    "failedToOpenDocEditor": "Nie udało się otworzyć pliku w edytorze dokumentów. Spróbuj ponownie.",
     "enterSearchQueryPlaceholder": "Wprowadź zapytanie lub pytanie wyszukiwania...",
     "errorFetchingUrl": "Wystąpił błąd podczas pobierania zawartości adresu URL",
     "errorInitiatingSearch": "Wystąpił błąd podczas inicjowania wyszukiwania w sieci",
@@ -1060,6 +1102,7 @@
     "changeDisplayName": "Kliknij, aby zmienić sposób, w jaki się do Ciebie zwracamy"
   },
   "modelSelect": {
+    "maintainedBy": "Utrzymywane przez",
     "tabs": {
       "models": "Modele",
       "agents": "Agentów"
@@ -1416,6 +1459,13 @@
       "benefit1": "Uruchamiaj jak natywną aplikację z ekranu głównego",
       "benefit2": "Pełny ekran bez interfejsu przeglądarki",
       "benefit3": "Dostęp offline do zapisanych rozmów"
+    },
+    "languageSupport": {
+      "title": "Obsługa 54 języków",
+      "description": "Teraz dostępny w 54 językach, aby więcej zespołów i społeczności MSF mogło korzystać z Asystenta AI w swoim własnym języku",
+      "autoDetect": "Twój język jest automatycznie wykrywany na podstawie ustawień przeglądarki",
+      "manualSwitch": "Zmień w dowolnym momencie za pomocą selektora języka na pasku bocznym",
+      "andMore": "i więcej"
     }
   },
   "Professional": "Profesjonalny",
@@ -1668,5 +1718,57 @@
     "title": "Dostępna jest nowa wersja",
     "refresh": "Odśwież",
     "refreshNow": "Odśwież, aby zaktualizować"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agenci organizacji"
+    },
+    "customAgents": {
+      "title": "Niestandardowi agenci",
+      "advancedBadge": "Zaawansowane",
+      "experimentalBlurb": "Eksperymentalne — stworzone w bezpośredniej współpracy z zaawansowanymi użytkownikami MSF. Nie do ogólnego użytku.",
+      "createButton": "Utwórz niestandardowego agenta"
+    },
+    "selectAgentPrompt": "Wybierz agenta, aby wyświetlić szczegóły"
+  },
+  "privacy": {
+    "policyTitle": "Polityka prywatności & Ochrona danych",
+    "policyDescription": "Dowiedz się, jak chronione są Twoje dane i jakie informacje nie powinny być wprowadzane",
+    "termsOfUse": "Warunki użytkowania",
+    "termsDescription": "Zapoznaj się z wytycznymi odpowiedzialnego użytkowania i zabronionych zastosowań",
+    "keyPrivacyPoints": "Kluczowe punkty prywatności",
+    "localStorage": "Twoje rozmowy są przechowywane lokalnie na Twoim urządzeniu",
+    "azureInfra": "Całe przetwarzanie danych odbywa się w systemach MSF z wykorzystaniem infrastruktury Azure",
+    "noPersonalData": "Nie wprowadzaj danych osobowych (imion, numerów telefonów itp.)",
+    "noSensitiveData": "Nie wprowadzaj wysoce wrażliwych szczegółów operacyjnych",
+    "concernsTitle": "Obawy lub incydenty dotyczące prywatności?",
+    "contactUs": "Skontaktuj się z nami natychmiast, jeśli masz obawy dotyczące prywatności:"
+  },
+  "variableModal": {
+    "fillInstructions": "Wypełnij poniższe zmienne, aby dostosować prompt",
+    "optional": "Opcjonalne",
+    "required": "Wymagane",
+    "default": "Domyślne:",
+    "defaultPlaceholder": "{defaultValue} (domyślne)",
+    "enterValue": "Wprowadź wartość dla {key}...",
+    "cancel": "Anuluj",
+    "apply": "Zastosuj"
+  },
+  "recentSources": {
+    "title": "Najnowsze dane źródłowe",
+    "unableToLoad": "Nie można załadować najnowszych źródeł",
+    "retry": "Ponów próbę",
+    "noSources": "Brak dostępnych ostatnich źródeł",
+    "refresh": "Odśwież",
+    "today": "Dzisiaj",
+    "yesterday": "Wczoraj",
+    "daysAgo": "{count} dni temu"
+  },
+  "chatInput": {
+    "filePickerError": "Nie można otworzyć selektora plików. Spróbuj użyć przeciągnij i upuść.",
+    "addDocument": "Dodaj dokument",
+    "uploadDocument": "Prześlij dokument",
+    "images": "Obrazy",
+    "addImage": "Dodaj obraz"
   }
 }

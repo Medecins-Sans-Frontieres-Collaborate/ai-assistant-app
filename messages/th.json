@@ -2,7 +2,7 @@
   "welcomeMessage": "ยินดีต้อนรับสู่ผู้ช่วย AI ของ MSF",
   "transcribingChatPlaceholder": "การถอดความ...",
   "temperatureDescription": "ค่าในระดับที่สูงขึ้น เช่น 0.8 จะทำให้ผลลัพธ์มีความคิดสร้างสรรค์มากขึ้น ในขณะที่ค่าที่ต่ำลง เช่น 0.2 จะทำให้มันมีความเน้นและแน่นอนมากขึ้น",
-  "sendFeedback": "ส่งข้อเสนอแนะ",
+  "sendFeedback": "ขอการสนับสนุน",
   "modelSelectionDialogue": "การเลือกโมเดล AI",
   "appName": "ผู้ช่วย AI ของ MSF",
   "chatDisclaimer": "ผู้ช่วย AI ของ MSF อาจทำผิดพลาดได้ ตรวจสอบข้อมูลสำคัญ",
@@ -102,7 +102,7 @@
   "copiedToClipboard": "คัดลอกไปยังคลิปบอร์ดแล้ว",
   "copyToClipboard": "คัดลอกไปยังคลิปบอร์ด",
   "downloadAsTXT": "ดาวน์โหลดเป็น TXT",
-  "injectIntoChat": "ฉีดเข้าไปในแชท",
+  "injectIntoChat": "แทรกในแชท",
   "orDragAndDrop": "หรือลากและวาง",
   "pleaseSelectFile": "โปรดเลือกไฟล์ที่จะถอดเสียง",
   "selectedFile": "ไฟล์ที่เลือก",
@@ -172,8 +172,8 @@
   "Prompt name": "ชื่อพร้อมท์",
   "Prompt content": "เนื้อหาพร้อมท์",
   "Are you sure you want to delete this prompt?": "คุณแน่ใจหรือไม่ว่าต้องการลบพร้อมท์นี้?",
-  "Import data from sidebar": "นำเข้าข้อมูลจากแถบด้านข้าง",
-  "Export data from sidebar": "ส่งออกข้อมูลจากแถบด้านข้าง",
+  "Import data from sidebar": "กู้คืนประวัติแชท",
+  "Export data from sidebar": "สำรองประวัติแชท",
   "Search chats": "ค้นหาแชท",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "นี่คือชุดคำแนะนำที่แนะนำผู้ช่วย AI เกี่ยวกับวิธีการตอบสนอง ช่วยให้ AI ให้ข้อมูลที่เป็นประโยชน์และถูกต้องโดยให้บริบทกับคำถามที่ถูกถาม",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "ป้อนพร้อมท์หรือพิมพ์ \"/\" เพื่อเลือกพร้อมท์...",
@@ -265,7 +265,40 @@
     "baseModel": "โมเดลพื้นฐาน",
     "formatDescription": "รูปแบบ: asst_xxxxx (จาก MSF AI Assistant Foundry)",
     "importantInfo": "ตัวแทนนี้จะสามารถเข้าถึงบริบทการสนทนาและใช้เครื่องมือเดียวกับโมเดลมาตรฐาน ตรวจสอบให้แน่ใจว่ารหัสตัวแทนถูกต้องเนื่องจากไม่สามารถเปลี่ยนแปลงได้ในภายหลัง",
-    "defunctWarning": "โมเดลหลักของตัวแทนนี้ไม่สามารถใช้งานได้อีกต่อไป โปรดแก้ไขตัวแทนเพื่อเลือกโมเดลหลักใหม่ หรือทำการลบตัวแทนนี้"
+    "defunctWarning": "โมเดลหลักของตัวแทนนี้ไม่สามารถใช้งานได้อีกต่อไป โปรดแก้ไขตัวแทนเพื่อเลือกโมเดลหลักใหม่ หรือทำการลบตัวแทนนี้",
+    "editCustomAgent": "แก้ไขเอเจนต์กำหนดเอง",
+    "addCustomAgent": "เพิ่มเอเจนต์กำหนดเอง",
+    "experimental": "ทดลอง",
+    "createNew": "สร้างใหม่",
+    "import": "นำเข้า",
+    "importCustomAgents": "นำเข้าเอเจนต์กำหนดเอง",
+    "importFileDescription": "เลือกไฟล์ JSON ที่มีการกำหนดค่าเอเจนต์หนึ่งรายการหรือมากกว่า",
+    "chooseFile": "เลือกไฟล์",
+    "validatedSuccess": "ตรวจสอบเอเจนต์สำเร็จแล้ว!",
+    "cancel": "ยกเลิก",
+    "validating": "กำลังตรวจสอบ...",
+    "updateAgent": "อัปเดตเอเจนต์",
+    "addAgent": "เพิ่มเอเจนต์",
+    "nameRequired": "จำเป็นต้องระบุชื่อเอเจนต์",
+    "idRequired": "จำเป็นต้องระบุ ID เอเจนต์",
+    "invalidIdFormat": "รูปแบบ ID เอเจนต์ไม่ถูกต้อง รูปแบบที่คาดหวัง: asst_xxxxx",
+    "invalidFileFormat": "รูปแบบไฟล์ไม่ถูกต้อง",
+    "noAgentsInFile": "ไม่พบเอเจนต์ในไฟล์นำเข้า",
+    "importFailed": "การนำเข้าไฟล์ล้มเหลว",
+    "importConflict": "เอเจนต์ต่อไปนี้มีข้อขัดแย้ง:\n\n{conflicts}\n\nนำเข้าต่อไปหรือไม่? จะสร้างรายการซ้ำ",
+    "importSuccess": "นำเข้าเอเจนต์ {count} รายการสำเร็จ",
+    "agentDetails": "รายละเอียดเอเจนต์",
+    "agentIdLabel": "ID เอเจนต์:",
+    "baseModelLabel": "โมเดลหลัก:",
+    "unknown": "ไม่ทราบ",
+    "descriptionLabel": "คำอธิบาย:",
+    "export": "ส่งออก",
+    "edit": "แก้ไข",
+    "confirmDelete": "ยืนยัน",
+    "delete": "ลบ",
+    "noCustomAgentsYet": "ยังไม่มีเอเจนต์กำหนดเอง",
+    "noOrgAgentsConfigured": "ยังไม่มีเอเจนต์องค์กรที่กำหนดค่าไว้",
+    "validationFailed": "การตรวจสอบล้มเหลว"
   },
   "Quick Actions": "การดำเนินการด่วน",
   "Type / in chat to access your prompts": "พิมพ์ / ในแชทเพื่อเข้าถึงพรอมต์ของคุณ",
@@ -421,7 +454,8 @@
     "discard": "ทิ้ง",
     "keepEditing": "แก้ไขต่อ",
     "yes": "ใช่",
-    "no": "ไม่ใช่"
+    "no": "ไม่ใช่",
+    "beta": "เบต้า"
   },
   "errors": {
     "unexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
@@ -449,7 +483,7 @@
     "contactSupport": "ติดต่อฝ่ายสนับสนุน",
     "secureSso": "SSO ที่ปลอดภัย",
     "howToGetAccess": "ฉันจะเข้าถึงได้อย่างไร?",
-    "accessLimitedText": "ปัจจุบัน MSF AI Assistant พร้อมให้บริการเฉพาะเจ้าหน้าที่ใน USA และ Amsterdam เท่านั้น",
+    "accessLimitedText": "ปัจจุบัน MSF AI Assistant พร้อมให้บริการเฉพาะเจ้าหน้าที่ใน USA, Amsterdam และ เจนีวา เท่านั้น",
     "expandAccessSoon": "เราหวังว่าจะขยายการเข้าถึงในเร็วๆ นี้!",
     "errorConfiguration": "มีปัญหากับการกำหนดค่าเซิร์ฟเวอร์",
     "errorAccessDenied": "คุณไม่มีสิทธิ์ในการเข้าสู่ระบบ",
@@ -502,6 +536,14 @@
     "deleteMessage": "ลบข้อความ",
     "imageContent": "เนื้อหารูปภาพ",
     "fullSizePreview": "ดูตัวอย่างขนาดเต็ม",
+    "failedToLoadImage": "โหลดรูปภาพไม่สำเร็จ",
+    "loadingImage": "กำลังโหลดรูปภาพ...",
+    "imageAlt": "รูปภาพ {number}",
+    "download": "ดาวน์โหลด",
+    "openAsDocument": "เปิดเป็นเอกสาร",
+    "openInCodeEditor": "เปิดในตัวแก้ไขโค้ด",
+    "failedToOpenCodeEditor": "ไม่สามารถเปิดไฟล์ในตัวแก้ไขโค้ด โปรดลองอีกครั้ง",
+    "failedToOpenDocEditor": "ไม่สามารถเปิดไฟล์ในตัวแก้ไขเอกสาร โปรดลองอีกครั้ง",
     "enterSearchQueryPlaceholder": "ป้อนคำค้นหาหรือคำถามของคุณ...",
     "errorFetchingUrl": "เกิดข้อผิดพลาดในการดึงเนื้อหา URL",
     "errorInitiatingSearch": "เกิดข้อผิดพลาดในการเริ่มการค้นหาเว็บ",
@@ -1060,6 +1102,7 @@
     "changeDisplayName": "คลิกเพื่อเปลี่ยนชื่อที่เราใช้เรียกคุณ"
   },
   "modelSelect": {
+    "maintainedBy": "ดูแลโดย",
     "tabs": {
       "models": "โมเดล",
       "agents": "เอเจนต์"
@@ -1416,6 +1459,13 @@
       "benefit1": "เปิดใช้งานได้เหมือนแอปบนหน้าจอหลัก",
       "benefit2": "เต็มหน้าจอโดยไม่มี UI ของเบราว์เซอร์",
       "benefit3": "เข้าถึงการสนทนาที่บันทึกไว้แบบออฟไลน์ได้"
+    },
+    "languageSupport": {
+      "title": "รองรับ 54 ภาษา",
+      "description": "พร้อมใช้งานใน 54 ภาษาแล้ว เพื่อให้ทีมและชุมชน MSF มากขึ้นสามารถใช้ผู้ช่วย AI ในภาษาของตนเอง",
+      "autoDetect": "ภาษาของคุณจะถูกตรวจจับโดยอัตโนมัติจากการตั้งค่าเบราว์เซอร์ของคุณ",
+      "manualSwitch": "สลับได้ตลอดเวลาผ่านตัวเลือกภาษาในแถบด้านข้าง",
+      "andMore": "และอื่นๆ"
     }
   },
   "Professional": "ทางการ",
@@ -1668,5 +1718,57 @@
     "title": "มีเวอร์ชันใหม่พร้อมใช้งานแล้ว",
     "refresh": "รีเฟรช",
     "refreshNow": "รีเฟรชเพื่ออัปเดต"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "เอเจนต์องค์กร"
+    },
+    "customAgents": {
+      "title": "เอเจนต์กำหนดเอง",
+      "advancedBadge": "ขั้นสูง",
+      "experimentalBlurb": "ทดลอง — สร้างขึ้นจากความร่วมมือโดยตรงกับผู้ใช้ระดับสูงของ MSF ไม่ได้มีไว้สำหรับการใช้งานทั่วไป",
+      "createButton": "สร้างเอเจนต์กำหนดเอง"
+    },
+    "selectAgentPrompt": "เลือกเอเจนต์เพื่อดูรายละเอียด"
+  },
+  "privacy": {
+    "policyTitle": "นโยบายความเป็นส่วนตัว & การปกป้องข้อมูล",
+    "policyDescription": "เรียนรู้วิธีการปกป้องข้อมูลของคุณและข้อมูลใดที่ไม่ควรป้อน",
+    "termsOfUse": "เงื่อนไขการใช้งาน",
+    "termsDescription": "ตรวจสอบแนวทางการใช้งานอย่างรับผิดชอบและการใช้งานที่ห้าม",
+    "keyPrivacyPoints": "ประเด็นสำคัญด้านความเป็นส่วนตัว",
+    "localStorage": "การสนทนาของคุณถูกจัดเก็บไว้ในอุปกรณ์ของคุณ",
+    "azureInfra": "การประมวลผลข้อมูลทั้งหมดเกิดขึ้นภายในระบบ MSF โดยใช้โครงสร้างพื้นฐาน Azure",
+    "noPersonalData": "ห้ามป้อนข้อมูลส่วนบุคคล (ชื่อ หมายเลขโทรศัพท์ ฯลฯ)",
+    "noSensitiveData": "ห้ามป้อนรายละเอียดการปฏิบัติงานที่มีความอ่อนไหวสูง",
+    "concernsTitle": "ข้อกังวลหรือเหตุการณ์ด้านความเป็นส่วนตัว?",
+    "contactUs": "ติดต่อเราทันทีหากคุณมีข้อกังวลด้านความเป็นส่วนตัว:"
+  },
+  "variableModal": {
+    "fillInstructions": "กรอกตัวแปรด้านล่างเพื่อปรับแต่งพรอมต์ของคุณ",
+    "optional": "ไม่บังคับ",
+    "required": "จำเป็น",
+    "default": "ค่าเริ่มต้น:",
+    "defaultPlaceholder": "{defaultValue} (ค่าเริ่มต้น)",
+    "enterValue": "ป้อนค่าสำหรับ {key}...",
+    "cancel": "ยกเลิก",
+    "apply": "นำไปใช้"
+  },
+  "recentSources": {
+    "title": "ข้อมูลแหล่งที่มาล่าสุด",
+    "unableToLoad": "ไม่สามารถโหลดแหล่งที่มาล่าสุด",
+    "retry": "ลองใหม่",
+    "noSources": "ไม่มีแหล่งที่มาล่าสุด",
+    "refresh": "รีเฟรช",
+    "today": "วันนี้",
+    "yesterday": "เมื่อวาน",
+    "daysAgo": "{count} วันที่แล้ว"
+  },
+  "chatInput": {
+    "filePickerError": "ไม่สามารถเปิดตัวเลือกไฟล์ ลองใช้การลากและวางแทน",
+    "addDocument": "เพิ่มเอกสาร",
+    "uploadDocument": "อัปโหลดเอกสาร",
+    "images": "รูปภาพ",
+    "addImage": "เพิ่มรูปภาพ"
   }
 }

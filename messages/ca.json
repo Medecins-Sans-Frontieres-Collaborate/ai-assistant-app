@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "Envia un missatge a l'assistent d'IA de MSF aquí",
   "chatInputPlaceholderFull": "Envia un missatge a l'assistent d'IA de MSF aquí o escriu \"/\" per seleccionar un suggeriment...",
   "transcribingChatPlaceholder": "Transcrivint...",
-  "sendFeedback": "Envia comentaris",
+  "sendFeedback": "Sol·licitar suport",
   "welcomeMessage": "Benvingut a l'assistent d'IA de MSF",
   "appName": "Assistent d'IA de MSF",
   "modelSelectionDialogue": "Selecció de model d'IA",
@@ -230,8 +230,8 @@
   "Prompt name": "Nom de l'avís",
   "Prompt content": "Contingut de l'avís",
   "Are you sure you want to delete this prompt?": "Esteu segur que voleu eliminar aquest avís?",
-  "Import data from sidebar": "Importa dades de la barra lateral",
-  "Export data from sidebar": "Exporta dades de la barra lateral",
+  "Import data from sidebar": "Restaurar historial de xats",
+  "Export data from sidebar": "Fer còpia de seguretat de l'historial de xats",
   "Search chats": "Cerca xats",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Aquest és un conjunt d'instruccions que guien l'assistent d'IA sobre com respondre. Ajuda l'IA a proporcionar informació útil i precisa donant context a les preguntes formulades.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Introduïu un avís o escriviu \"/\" per seleccionar un avís...",
@@ -323,7 +323,40 @@
     "baseModel": "Model base",
     "formatDescription": "Format: asst_xxxxx (de MSF AI Assistant Foundry)",
     "importantInfo": "Aquest agent tindrà accés al context de la conversa i podrà utilitzar les mateixes eines que els models estàndard. Assegureu-vos que l'ID de l'agent sigui correcte ja que no es pot canviar més endavant.",
-    "defunctWarning": "El model base d’aquest agent ja no està disponible. Modifiqueu l’agent per seleccionar-ne un de nou o suprimiu-lo."
+    "defunctWarning": "El model base d'aquest agent ja no està disponible. Modifiqueu l'agent per seleccionar-ne un de nou o suprimiu-lo.",
+    "editCustomAgent": "Edita l'agent personalitzat",
+    "addCustomAgent": "Afegeix un agent personalitzat",
+    "experimental": "Experimental",
+    "createNew": "Crea nou",
+    "import": "Importa",
+    "importCustomAgents": "Importa agents personalitzats",
+    "importFileDescription": "Seleccioneu un fitxer JSON amb una o més configuracions d'agent",
+    "chooseFile": "Tria fitxer",
+    "validatedSuccess": "Agent validat correctament!",
+    "cancel": "Cancel·la",
+    "validating": "Validant...",
+    "updateAgent": "Actualitza l'agent",
+    "addAgent": "Afegeix agent",
+    "nameRequired": "El nom de l'agent és obligatori",
+    "idRequired": "L'ID de l'agent és obligatori",
+    "invalidIdFormat": "Format d'ID d'agent no vàlid. Format esperat: asst_xxxxx",
+    "invalidFileFormat": "Format de fitxer no vàlid",
+    "noAgentsInFile": "No s'han trobat agents al fitxer d'importació",
+    "importFailed": "No s'ha pogut importar el fitxer",
+    "importConflict": "Els agents següents tenen conflictes:\n\n{conflicts}\n\nImportar igualment? Això crearà duplicats.",
+    "importSuccess": "{count} agent(s) importat(s) correctament",
+    "agentDetails": "Detalls de l'agent",
+    "agentIdLabel": "ID de l'agent:",
+    "baseModelLabel": "Model base:",
+    "unknown": "Desconegut",
+    "descriptionLabel": "Descripció:",
+    "export": "Exporta",
+    "edit": "Edita",
+    "confirmDelete": "Confirma",
+    "delete": "Suprimeix",
+    "noCustomAgentsYet": "Encara no hi ha agents personalitzats.",
+    "noOrgAgentsConfigured": "No hi ha agents d'organització configurats.",
+    "validationFailed": "La validació ha fallat"
   },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",
@@ -479,7 +512,8 @@
     "discard": "Descarta",
     "keepEditing": "Continua editant",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -507,7 +541,7 @@
     "contactSupport": "Contactar amb el suport",
     "secureSso": "SSO segur",
     "howToGetAccess": "Com puc obtenir accés?",
-    "accessLimitedText": "Actualment, l'Assistent d'IA de MSF només està disponible per al personal dels Estats Units i Amsterdam.",
+    "accessLimitedText": "Actualment, l'Assistent d'IA de MSF només està disponible per al personal dels Estats Units, Amsterdam i Ginebra.",
     "expandAccessSoon": "Esperem ampliar l'accés aviat!",
     "errorConfiguration": "Hi ha un problema amb la configuració del servidor.",
     "errorAccessDenied": "No teniu permís per iniciar sessió.",
@@ -560,6 +594,14 @@
     "deleteMessage": "Eliminar missatge",
     "imageContent": "Contingut d'imatge",
     "fullSizePreview": "Vista prèvia a mida completa",
+    "failedToLoadImage": "No s'ha pogut carregar la imatge",
+    "loadingImage": "Carregant imatge...",
+    "imageAlt": "Imatge {number}",
+    "download": "Descarrega",
+    "openAsDocument": "Obre com a document",
+    "openInCodeEditor": "Obre a l'editor de codi",
+    "failedToOpenCodeEditor": "No s'ha pogut obrir el fitxer a l'editor de codi. Si us plau, torneu-ho a provar.",
+    "failedToOpenDocEditor": "No s'ha pogut obrir el fitxer a l'editor de documents. Si us plau, torneu-ho a provar.",
     "enterSearchQueryPlaceholder": "Introduïu la vostra consulta o pregunta de cerca...",
     "errorFetchingUrl": "S'ha produït un error en recuperar el contingut de l'URL",
     "errorInitiatingSearch": "S'ha produït un error en iniciar la cerca web",
@@ -1067,6 +1109,7 @@
     "sections": {
       "baseModels": "Models base"
     },
+    "maintainedBy": "Mantingut per",
     "agents": {
       "advancedFeatureBadge": "Funció avançada",
       "description": "Crea i gestiona agents d'IA personalitzats amb capacitats especialitzades. Aquests agents funcionen a la instància MSF AI Assistant Foundry.",
@@ -1416,6 +1459,13 @@
       "benefit1": "Llanceu-la com una aplicació des de la pantalla d'inici",
       "benefit2": "Pantalla completa sense la interfície del navegador",
       "benefit3": "Accés fora de línia a les converses desades"
+    },
+    "languageSupport": {
+      "title": "54 idiomes compatibles",
+      "description": "Ara disponible en 54 idiomes perquè més equips i comunitats de MSF puguin utilitzar l'Assistent d'IA en el seu propi idioma",
+      "autoDetect": "El vostre idioma es detecta automàticament a partir de la configuració del navegador",
+      "manualSwitch": "Canvieu en qualsevol moment mitjançant el selector d'idioma de la barra lateral",
+      "andMore": "i més"
     }
   },
   "Professional": "Professional",
@@ -1668,5 +1718,57 @@
     "title": "Hi ha una nova versió disponible",
     "refresh": "Actualitza",
     "refreshNow": "Actualitza per a obtenir l'última versió"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agents de l'organització"
+    },
+    "customAgents": {
+      "title": "Agents personalitzats",
+      "advancedBadge": "Avançat",
+      "experimentalBlurb": "Experimental — creat en col·laboració directa amb usuaris avançats de MSF. No és per a ús general.",
+      "createButton": "Crea un agent personalitzat"
+    },
+    "selectAgentPrompt": "Seleccioneu un agent per veure'n els detalls"
+  },
+  "privacy": {
+    "policyTitle": "Política de privacitat i protecció de dades",
+    "policyDescription": "Descobriu com es protegeixen les vostres dades i quina informació no s'ha d'introduir",
+    "termsOfUse": "Condicions d'ús",
+    "termsDescription": "Reviseu les directrius d'ús responsable i els usos prohibits",
+    "keyPrivacyPoints": "Punts clau de privacitat",
+    "localStorage": "Les vostres converses s'emmagatzemen localment al vostre dispositiu",
+    "azureInfra": "Tot el processament de dades es fa dins dels sistemes de MSF utilitzant la infraestructura d'Azure",
+    "noPersonalData": "No introduïu dades personals (noms, números de telèfon, etc.)",
+    "noSensitiveData": "No introduïu detalls operatius altament sensibles",
+    "concernsTitle": "Preocupacions o incidents de privacitat?",
+    "contactUs": "Contacteu-nos immediatament si teniu preocupacions de privacitat:"
+  },
+  "variableModal": {
+    "fillInstructions": "Empleneu les variables a continuació per personalitzar el vostre avís",
+    "optional": "Opcional",
+    "required": "Obligatori",
+    "default": "Per defecte:",
+    "defaultPlaceholder": "{defaultValue} (per defecte)",
+    "enterValue": "Introduïu un valor per a {key}...",
+    "cancel": "Cancel·la",
+    "apply": "Aplica"
+  },
+  "recentSources": {
+    "title": "Últimes dades de fonts",
+    "unableToLoad": "No s'han pogut carregar les últimes fonts",
+    "retry": "Reintenta",
+    "noSources": "No hi ha fonts recents disponibles",
+    "refresh": "Actualitza",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "daysAgo": "fa {count} dies"
+  },
+  "chatInput": {
+    "filePickerError": "No s'ha pogut obrir el selector de fitxers. Proveu d'arrossegar i deixar anar.",
+    "addDocument": "Afegeix document",
+    "uploadDocument": "Puja document",
+    "images": "Imatges",
+    "addImage": "Afegeix imatge"
   }
 }

@@ -40,7 +40,7 @@
   "temperatureDescription": "Hogere waarden zoals 0,8 maken de output creatiever, terwijl lagere waarden zoals 0,2 het meer gefocust en deterministisch maken.",
   "welcomeMessage": "Welkom bij de MSF AI-assistent",
   "transcribingChatPlaceholder": "Transcriberen...",
-  "sendFeedback": "Feedback verzenden",
+  "sendFeedback": "Ondersteuning aanvragen",
   "chatDisclaimer": "De MSF AI-assistent kan fouten maken. Controleer belangrijke informatie.",
   "chatInputPlaceholderFull": "Stuur hier een bericht naar de MSF AI-assistent of typ \"/\" om een prompt te selecteren...",
   "chatInputPlaceholder": "Bericht MSF AI Assistent hier",
@@ -142,7 +142,7 @@
   "copiedToClipboard": "Gekopieerd naar klembord",
   "copyToClipboard": "Kopiëren naar klembord",
   "downloadAsTXT": "Downloaden als TXT",
-  "injectIntoChat": "Injecteren in chat",
+  "injectIntoChat": "Invoegen in chat",
   "orDragAndDrop": "of slepen en neerzetten",
   "pleaseSelectFile": "Selecteer alstublieft een bestand om te transcriberen.",
   "selectedFile": "Geselecteerd bestand",
@@ -220,8 +220,8 @@
   "Prompt name": "Promptnaam",
   "Prompt content": "Promptinhoud",
   "Are you sure you want to delete this prompt?": "Weet je zeker dat je deze prompt wilt verwijderen?",
-  "Import data from sidebar": "Gegevens importeren vanuit zijbalk",
-  "Export data from sidebar": "Gegevens exporteren vanuit zijbalk",
+  "Import data from sidebar": "Chat-geschiedenis herstellen",
+  "Export data from sidebar": "Chat-geschiedenis back-uppen",
   "Search chats": "Zoek chats",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Dit is een reeks instructies die de AI-assistent begeleiden bij het reageren. Het helpt de AI nuttige en nauwkeurige informatie te verstrekken door context te geven aan de gestelde vragen.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Voer een prompt in of typ \"/\" om een prompt te selecteren...",
@@ -313,7 +313,40 @@
     "baseModel": "Basismodel",
     "formatDescription": "Formaat: asst_xxxxx (van MSF AI Assistant Foundry)",
     "importantInfo": "Deze agent heeft toegang tot de gesprekscontext en kan dezelfde tools gebruiken als standaardmodellen. Zorg ervoor dat de agent-ID correct is, aangezien deze later niet kan worden gewijzigd.",
-    "defunctWarning": "Het basismodel van deze agent is niet meer beschikbaar. Bewerk de agent om een nieuw basismodel te selecteren of verwijder deze."
+    "defunctWarning": "Het basismodel van deze agent is niet meer beschikbaar. Bewerk de agent om een nieuw basismodel te selecteren of verwijder deze.",
+    "editCustomAgent": "Aangepaste agent bewerken",
+    "addCustomAgent": "Aangepaste agent toevoegen",
+    "experimental": "Experimenteel",
+    "createNew": "Nieuw aanmaken",
+    "import": "Importeren",
+    "importCustomAgents": "Aangepaste agents importeren",
+    "importFileDescription": "Selecteer een JSON-bestand met een of meer agentconfiguraties",
+    "chooseFile": "Bestand kiezen",
+    "validatedSuccess": "Agent succesvol gevalideerd!",
+    "cancel": "Annuleren",
+    "validating": "Valideren...",
+    "updateAgent": "Agent bijwerken",
+    "addAgent": "Agent toevoegen",
+    "nameRequired": "Agentnaam is vereist",
+    "idRequired": "Agent-ID is vereist",
+    "invalidIdFormat": "Ongeldig agent-ID-formaat. Verwacht formaat: asst_xxxxx",
+    "invalidFileFormat": "Ongeldig bestandsformaat",
+    "noAgentsInFile": "Geen agents gevonden in het importbestand",
+    "importFailed": "Bestand importeren mislukt",
+    "importConflict": "De volgende agents hebben conflicten:\n\n{conflicts}\n\nToch importeren? Dit maakt duplicaten aan.",
+    "importSuccess": "{count} agent(en) succesvol geïmporteerd",
+    "agentDetails": "Agentdetails",
+    "agentIdLabel": "Agent-ID:",
+    "baseModelLabel": "Basismodel:",
+    "unknown": "Onbekend",
+    "descriptionLabel": "Beschrijving:",
+    "export": "Exporteren",
+    "edit": "Bewerken",
+    "confirmDelete": "Bevestigen",
+    "delete": "Verwijderen",
+    "noCustomAgentsYet": "Nog geen aangepaste agents.",
+    "noOrgAgentsConfigured": "Geen organisatie-agents geconfigureerd.",
+    "validationFailed": "Validatie mislukt"
   },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",
@@ -469,7 +502,8 @@
     "discard": "Verwerpen",
     "keepEditing": "Doorgaan met bewerken",
     "yes": "Ja",
-    "no": "Nee"
+    "no": "Nee",
+    "beta": "Bèta"
   },
   "errors": {
     "somethingWentWrong": "Er is iets misgegaan",
@@ -497,7 +531,7 @@
     "contactSupport": "Neem contact op met ondersteuning",
     "secureSso": "Beveiligde SSO",
     "howToGetAccess": "Hoe krijg ik toegang?",
-    "accessLimitedText": "Momenteel is MSF AI Assistant alleen beschikbaar voor personeel in de VS en Amsterdam.",
+    "accessLimitedText": "Momenteel is MSF AI Assistant alleen beschikbaar voor personeel in de VS, Amsterdam en Genève.",
     "expandAccessSoon": "We hopen de toegang binnenkort uit te breiden!",
     "errorConfiguration": "Er is een probleem met de serverconfiguratie.",
     "errorAccessDenied": "U heeft geen toestemming om in te loggen.",
@@ -552,6 +586,14 @@
     "deleteMessage": "Bericht verwijderen",
     "imageContent": "Afbeeldingsinhoud",
     "fullSizePreview": "Volledige grootte voorbeeld",
+    "failedToLoadImage": "Afbeelding laden mislukt",
+    "loadingImage": "Afbeelding laden...",
+    "imageAlt": "Afbeelding {number}",
+    "download": "Downloaden",
+    "openAsDocument": "Openen als document",
+    "openInCodeEditor": "Openen in code-editor",
+    "failedToOpenCodeEditor": "Kan bestand niet openen in code-editor. Probeer het opnieuw.",
+    "failedToOpenDocEditor": "Kan bestand niet openen in documenteditor. Probeer het opnieuw.",
     "enterSearchQueryPlaceholder": "Voer uw zoekopdracht of vraag in...",
     "errorFetchingUrl": "Er is een fout opgetreden bij het ophalen van de URL-inhoud",
     "errorInitiatingSearch": "Er is een fout opgetreden bij het starten van webzoeken",
@@ -1017,6 +1059,7 @@
     "changeDisplayName": "Klik om te wijzigen hoe we u aanspreken"
   },
   "modelSelect": {
+    "maintainedBy": "Onderhouden door",
     "tabs": {
       "models": "Modellen",
       "agents": "Agents"
@@ -1416,6 +1459,13 @@
       "benefit1": "Start zoals een native app vanaf het beginscherm",
       "benefit2": "Volledig scherm zonder browserinterface",
       "benefit3": "Offline toegang tot opgeslagen gesprekken"
+    },
+    "languageSupport": {
+      "title": "54 talen ondersteund",
+      "description": "Nu beschikbaar in 54 talen zodat meer MSF-teams en gemeenschappen de AI-assistent in hun eigen taal kunnen gebruiken",
+      "autoDetect": "Uw taal wordt automatisch gedetecteerd op basis van uw browserinstellingen",
+      "manualSwitch": "Wissel op elk moment via de taalkiezer in de zijbalk",
+      "andMore": "en meer"
     }
   },
   "Professional": "Professioneel",
@@ -1668,5 +1718,57 @@
     "title": "Er is een nieuwe versie beschikbaar",
     "refresh": "Vernieuwen",
     "refreshNow": "Vernieuwen om bij te werken"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Organisatie-agents"
+    },
+    "customAgents": {
+      "title": "Aangepaste agents",
+      "advancedBadge": "Geavanceerd",
+      "experimentalBlurb": "Experimenteel — gebouwd in directe samenwerking met MSF-powerusers. Niet voor algemeen gebruik.",
+      "createButton": "Aangepaste agent aanmaken"
+    },
+    "selectAgentPrompt": "Selecteer een agent om details te bekijken"
+  },
+  "privacy": {
+    "policyTitle": "Privacybeleid & Gegevensbescherming",
+    "policyDescription": "Ontdek hoe uw gegevens worden beschermd en welke informatie niet mag worden ingevoerd",
+    "termsOfUse": "Gebruiksvoorwaarden",
+    "termsDescription": "Bekijk de richtlijnen voor verantwoord gebruik en verboden gebruik",
+    "keyPrivacyPoints": "Belangrijke privacypunten",
+    "localStorage": "Uw gesprekken worden lokaal op uw apparaat opgeslagen",
+    "azureInfra": "Alle gegevensverwerking vindt plaats binnen MSF-systemen met behulp van Azure-infrastructuur",
+    "noPersonalData": "Voer geen persoonlijke gegevens in (namen, telefoonnummers, enz.)",
+    "noSensitiveData": "Voer geen zeer gevoelige operationele details in",
+    "concernsTitle": "Privacyzorgen of incidenten?",
+    "contactUs": "Neem onmiddellijk contact met ons op als u privacyzorgen heeft:"
+  },
+  "variableModal": {
+    "fillInstructions": "Vul de onderstaande variabelen in om uw prompt aan te passen",
+    "optional": "Optioneel",
+    "required": "Vereist",
+    "default": "Standaard:",
+    "defaultPlaceholder": "{defaultValue} (standaard)",
+    "enterValue": "Voer een waarde in voor {key}...",
+    "cancel": "Annuleren",
+    "apply": "Toepassen"
+  },
+  "recentSources": {
+    "title": "Laatste brongegevens",
+    "unableToLoad": "Kan laatste bronnen niet laden",
+    "retry": "Opnieuw proberen",
+    "noSources": "Geen recente bronnen beschikbaar",
+    "refresh": "Vernieuwen",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "daysAgo": "{count} dagen geleden"
+  },
+  "chatInput": {
+    "filePickerError": "Kan bestandskiezer niet openen. Probeer slepen en neerzetten.",
+    "addDocument": "Document toevoegen",
+    "uploadDocument": "Document uploaden",
+    "images": "Afbeeldingen",
+    "addImage": "Afbeelding toevoegen"
   }
 }

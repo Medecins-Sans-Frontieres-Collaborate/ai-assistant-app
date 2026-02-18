@@ -47,7 +47,7 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Privacy Policy & Data Protection
+                {t('privacy.policyTitle')}
               </h3>
               <IconExternalLink
                 size={14}
@@ -55,8 +55,7 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400">
-              Learn how your data is protected and what information should not
-              be entered
+              {t('privacy.policyDescription')}
             </p>
           </div>
         </Link>
@@ -73,7 +72,7 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Terms of Use
+                {t('privacy.termsOfUse')}
               </h3>
               <IconExternalLink
                 size={14}
@@ -81,7 +80,7 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
               />
             </div>
             <p className="text-xs text-gray-600 dark:text-gray-400">
-              Review responsible use guidelines and prohibited uses
+              {t('privacy.termsDescription')}
             </p>
           </div>
         </Link>
@@ -89,33 +88,28 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
         {/* Key Privacy Highlights */}
         <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-            Key Privacy Points
+            {t('privacy.keyPrivacyPoints')}
           </h3>
           <ul className="space-y-2 text-xs text-gray-700 dark:text-gray-300">
             <li className="flex items-start gap-2">
               <span className="text-green-600 dark:text-green-400 mt-0.5">
                 ✓
               </span>
-              <span>Your conversations are stored locally on your device</span>
+              <span>{t('privacy.localStorage')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-green-600 dark:text-green-400 mt-0.5">
                 ✓
               </span>
-              <span>
-                All data processing happens within MSF systems using Azure
-                infrastructure
-              </span>
+              <span>{t('privacy.azureInfra')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-red-600 dark:text-red-400 mt-0.5">✗</span>
-              <span>
-                Do not enter personal data (names, phone numbers, etc.)
-              </span>
+              <span>{t('privacy.noPersonalData')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-red-600 dark:text-red-400 mt-0.5">✗</span>
-              <span>Do not enter highly sensitive operational details</span>
+              <span>{t('privacy.noSensitiveData')}</span>
             </li>
           </ul>
         </div>
@@ -123,10 +117,10 @@ export const PrivacyControlSection: React.FC<PrivacyControlSectionProps> = ({
         {/* Contact for Privacy Concerns */}
         <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-            Privacy Concerns or Incidents?
+            {t('privacy.concernsTitle')}
           </h3>
           <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-            Contact us immediately if you have privacy concerns:
+            {t('privacy.contactUs')}
           </p>
           <a
             href="mailto:ai.team@amsterdam.msf.org"

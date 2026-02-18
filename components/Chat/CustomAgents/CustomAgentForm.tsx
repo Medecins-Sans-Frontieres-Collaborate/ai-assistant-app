@@ -85,7 +85,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
 
       const validation = validateCustomAgentImport(data);
       if (!validation.valid) {
-        setError(validation.error || 'Invalid file format');
+        setError(validation.error || t('agents.invalidFileFormat'));
         return;
       }
 
@@ -95,13 +95,16 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
       );
 
       if (importedAgents.length === 0) {
-        setError('No agents found in the import file');
+        setError(t('agents.noAgentsInFile'));
         return;
       }
 
       if (conflicts.length > 0) {
-        const confirmMessage = `The following agents have conflicts:\n\n${conflicts.join('\n')}\n\nImport anyway? This will create duplicates.`;
-        if (!confirm(confirmMessage)) {
+        if (
+          !confirm(
+            t('agents.importConflict', { conflicts: conflicts.join('\n') }),
+          )
+        ) {
           return;
         }
       }
@@ -112,7 +115,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
       });
 
       setImportSuccess(
-        `Successfully imported ${importedAgents.length} agent${importedAgents.length > 1 ? 's' : ''}`,
+        t('agents.importSuccess', { count: importedAgents.length }),
       );
 
       // Close after a short delay
@@ -122,7 +125,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
     } catch (error) {
       console.error('Import error:', error);
       setError(
-        error instanceof Error ? error.message : 'Failed to import file',
+        error instanceof Error ? error.message : t('agents.importFailed'),
       );
     } finally {
       // Reset file input
@@ -150,7 +153,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
           ? err.response?.details || err.message
           : err instanceof Error
             ? err.message
-            : 'Validation failed';
+            : t('agents.validationFailed');
       setError(message);
       return false;
     } finally {
@@ -165,17 +168,17 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
 
     // Basic validation
     if (!name.trim()) {
-      setError('Agent name is required');
+      setError(t('agents.nameRequired'));
       return;
     }
 
     if (!agentId.trim()) {
-      setError('Agent ID is required');
+      setError(t('agents.idRequired'));
       return;
     }
 
     if (!validateAgentId(agentId)) {
-      setError('Invalid Agent ID format. Expected format: asst_xxxxx');
+      setError(t('agents.invalidIdFormat'));
       return;
     }
 
@@ -204,10 +207,12 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center gap-3">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {existingAgent ? 'Edit Custom Agent' : 'Add Custom Agent'}
+              {existingAgent
+                ? t('agents.editCustomAgent')
+                : t('agents.addCustomAgent')}
             </h3>
             <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
-              Experimental
+              {t('agents.experimental')}
             </span>
           </div>
           <button
@@ -232,7 +237,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 }`}
               >
                 <IconPlus size={16} />
-                Create New
+                {t('agents.createNew')}
               </button>
               <button
                 type="button"
@@ -244,7 +249,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 }`}
               >
                 <IconUpload size={16} />
-                Import
+                {t('agents.import')}
               </button>
             </div>
           </div>
@@ -294,10 +299,10 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 className="mx-auto mb-3 text-gray-400 dark:text-gray-600"
               />
               <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-1">
-                Import Custom Agents
+                {t('agents.importCustomAgents')}
               </h4>
               <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
-                Select a JSON file with one or more agent configurations
+                {t('agents.importFileDescription')}
               </p>
               <button
                 type="button"
@@ -305,7 +310,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 className="w-full py-2.5 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
               >
                 <IconUpload size={18} />
-                Choose File
+                {t('agents.chooseFile')}
               </button>
             </div>
 
@@ -355,7 +360,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                     className="flex-shrink-0 text-green-600 dark:text-green-400"
                   />
                   <span className="text-sm text-green-700 dark:text-green-300">
-                    Agent validated successfully!
+                    {t('agents.validatedSuccess')}
                   </span>
                 </div>
               )}
@@ -476,7 +481,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 disabled={isValidating}
                 className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Cancel
+                {t('agents.cancel')}
               </button>
               <button
                 type="submit"
@@ -486,12 +491,12 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
                 {isValidating ? (
                   <>
                     <IconLoader2 size={16} className="animate-spin" />
-                    Validating...
+                    {t('agents.validating')}
                   </>
                 ) : existingAgent ? (
-                  'Update Agent'
+                  t('agents.updateAgent')
                 ) : (
-                  'Add Agent'
+                  t('agents.addAgent')
                 )}
               </button>
             </div>

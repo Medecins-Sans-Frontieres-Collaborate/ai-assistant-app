@@ -111,7 +111,7 @@
   "appName": "MSF مصنوعی ذہانت معاون",
   "webSearchModalSafeSearchLabel": "محفوظ تلاش",
   "translatorTranslationDomainLegal": "قانونی",
-  "sendFeedback": "معاونت کی درخواست کریں",
+  "sendFeedback": "سپورٹ کی درخواست کریں",
   "webPullerCitationPrompt": "متن سے کیے گئے کسی بھی دعوے کا حوالہ دیں اور URL کا حوالہ دیں",
   "webPullerPullingStatusMessage": "URL سے مواد حاصل کر رہا ہے...",
   "advancedOptionsButton": "اعلی اختیارات",
@@ -252,8 +252,8 @@
   "Prompt name": "پرامپٹ کا نام",
   "Prompt content": "پرامپٹ کا مواد",
   "Are you sure you want to delete this prompt?": "کیا آپ واقعی اس پرامپٹ کو حذف کرنا چاہتے ہیں؟",
-  "Import data from sidebar": "سائیڈبار سے ڈیٹا درآمد کریں",
-  "Export data from sidebar": "سائیڈبار سے ڈیٹا برآمد کریں",
+  "Import data from sidebar": "چیٹ ہسٹری بحال کریں",
+  "Export data from sidebar": "چیٹ ہسٹری کا بیک اپ لیں",
   "Search chats": "چیٹس تلاش کریں",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "یہ ہدایات کا ایک مجموعہ ہے جو مصنوعی ذہانت معاون کو جواب دینے کے طریقے کے بارے میں رہنمائی کرتا ہے۔ یہ پوچھے گئے سوالات کے سیاق و سباق فراہم کرکے مصنوعی ذہانت کو مفید اور درست معلومات فراہم کرنے میں مدد کرتا ہے۔",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "پرامپٹ درج کریں یا پرامپٹ منتخب کرنے کے لیے \"/\" ٹائپ کریں...",
@@ -347,7 +347,40 @@
     "baseModel": "بنیادی ماڈل",
     "formatDescription": "فارمیٹ: asst_xxxxx (MSF AI Assistant Foundry سے)",
     "importantInfo": "اس ایجنٹ کو گفتگو کے سیاق و سباق تک رسائی حاصل ہو گی اور یہ معیاری ماڈلز کی طرح ایک ہی ٹولز استعمال کر سکے گا۔ یقینی بنائیں کہ ایجنٹ ID درست ہے کیونکہ اسے بعد میں تبدیل نہیں کیا جا سکتا۔",
-    "defunctWarning": "اس ایجنٹ کا بنیادی ماڈل اب دستیاب نہیں ہے۔ نیا بنیادی ماڈل منتخب کرنے کے لیے ایجنٹ کو ایڈٹ کریں، یا اسے حذف کریں۔"
+    "defunctWarning": "اس ایجنٹ کا بنیادی ماڈل اب دستیاب نہیں ہے۔ نیا بنیادی ماڈل منتخب کرنے کے لیے ایجنٹ کو ایڈٹ کریں، یا اسے حذف کریں۔",
+    "editCustomAgent": "حسب ضرورت ایجنٹ ایڈٹ کریں",
+    "addCustomAgent": "حسب ضرورت ایجنٹ شامل کریں",
+    "experimental": "تجرباتی",
+    "createNew": "نیا بنائیں",
+    "import": "درآمد کریں",
+    "importCustomAgents": "حسب ضرورت ایجنٹ درآمد کریں",
+    "importFileDescription": "ایک یا زیادہ ایجنٹ ترتیبات والی JSON فائل منتخب کریں",
+    "chooseFile": "فائل منتخب کریں",
+    "validatedSuccess": "ایجنٹ کی کامیابی سے تصدیق ہو گئی!",
+    "cancel": "منسوخ کریں",
+    "validating": "تصدیق ہو رہی ہے...",
+    "updateAgent": "ایجنٹ اپ ڈیٹ کریں",
+    "addAgent": "ایجنٹ شامل کریں",
+    "nameRequired": "ایجنٹ کا نام ضروری ہے",
+    "idRequired": "ایجنٹ کی ID ضروری ہے",
+    "invalidIdFormat": "غلط ایجنٹ ID فارمیٹ۔ متوقع فارمیٹ: asst_xxxxx",
+    "invalidFileFormat": "غلط فائل فارمیٹ",
+    "noAgentsInFile": "درآمدی فائل میں کوئی ایجنٹ نہیں ملے",
+    "importFailed": "فائل درآمد ناکام ہو گئی",
+    "importConflict": "درج ذیل ایجنٹوں میں تنازعات ہیں:\n\n{conflicts}\n\nپھر بھی درآمد کریں؟ یہ ڈپلیکیٹ بنائے گا۔",
+    "importSuccess": "{count} ایجنٹ(ز) کامیابی سے درآمد ہو گئے",
+    "agentDetails": "ایجنٹ کی تفصیلات",
+    "agentIdLabel": "ایجنٹ ID:",
+    "baseModelLabel": "بنیادی ماڈل:",
+    "unknown": "نامعلوم",
+    "descriptionLabel": "تفصیل:",
+    "export": "برآمد کریں",
+    "edit": "ایڈٹ کریں",
+    "confirmDelete": "تصدیق کریں",
+    "delete": "حذف کریں",
+    "noCustomAgentsYet": "ابھی تک کوئی حسب ضرورت ایجنٹ نہیں۔",
+    "noOrgAgentsConfigured": "کوئی تنظیمی ایجنٹ ترتیب نہیں دیا گیا۔",
+    "validationFailed": "توثیق ناکام ہوگئی"
   },
   "Quick Actions": "فوری کارروائیاں",
   "Type / in chat to access your prompts": "اپنے پرامپٹس تک رسائی کے لیے چیٹ میں / ٹائپ کریں",
@@ -503,7 +536,8 @@
     "keepEditing": "ترمیم جاری رکھیں",
     "no": "نہیں",
     "yes": "ہاں",
-    "noResults": "کوئی نتائج نہیں"
+    "noResults": "کوئی نتائج نہیں",
+    "beta": "بیٹا"
   },
   "errors": {
     "unexpectedErrorOccurred": "ایک غیر متوقع خرابی پیش آگئی",
@@ -531,7 +565,7 @@
     "contactSupport": "سپورٹ سے رابطہ کریں",
     "secureSso": "محفوظ SSO",
     "howToGetAccess": "میں رسائی کیسے حاصل کروں؟",
-    "accessLimitedText": "فی الوقت MSF AI اسسٹنٹ صرف USA اور Amsterdam کے عملے کے لیے دستیاب ہے۔",
+    "accessLimitedText": "فی الوقت MSF AI اسسٹنٹ صرف USA، Amsterdam اور Geneva کے عملے کے لیے دستیاب ہے۔",
     "expandAccessSoon": "ہم امید کرتے ہیں کہ جلد ہی رسائی میں اضافہ کریں گے!",
     "errorConfiguration": "سرور کی تشکیل میں مسئلہ ہے۔",
     "errorAccessDenied": "آپ کو سائن ان کرنے کی اجازت نہیں ہے۔",
@@ -584,6 +618,14 @@
     "deleteMessage": "پیغام حذف کریں",
     "imageContent": "تصویری مواد",
     "fullSizePreview": "مکمل سائز کا پیش نظارہ",
+    "failedToLoadImage": "تصویر لوڈ نہیں ہو سکی",
+    "loadingImage": "تصویر لوڈ ہو رہی ہے...",
+    "imageAlt": "تصویر {number}",
+    "download": "ڈاؤن لوڈ",
+    "openAsDocument": "دستاویز کے طور پر کھولیں",
+    "openInCodeEditor": "کوڈ ایڈیٹر میں کھولیں",
+    "failedToOpenCodeEditor": "کوڈ ایڈیٹر میں فائل نہیں کھل سکی۔ براہ کرم دوبارہ کوشش کریں۔",
+    "failedToOpenDocEditor": "دستاویز ایڈیٹر میں فائل نہیں کھل سکی۔ براہ کرم دوبارہ کوشش کریں۔",
     "enterSearchQueryPlaceholder": "اپنی تلاش یا سوال درج کریں...",
     "errorFetchingUrl": "URL مواد حاصل کرنے میں خرابی",
     "errorInitiatingSearch": "ویب تلاش شروع کرنے میں خرابی",
@@ -599,7 +641,7 @@
     "expandThinking": "سوچ کو پھیلائیں",
     "collapseThinking": "سوچ کو سمیٹیں",
     "viewReasoningProcess": "استدلال کا عمل دیکھیں",
-    "modelSwitchPrompt": "اس پیغام میں تصاویر ہیں جو موجودہ ماڈل سے مطابقت نہیں رکھتیں۔",
+    "modelSwitchPrompt": "{original} ناکام ہوا لیکن {fallback} کامیاب ہوا۔ کیا آپ ماڈل تبدیل کرنا چاہیں گے؟",
     "switchToModel": "ماڈل پر سوئچ کریں",
     "keepOriginalModel": "اصل ماڈل رکھیں",
     "alwaysSwitchToModel": "ہمیشہ اس ماڈل پر سوئچ کریں",
@@ -1060,6 +1102,7 @@
     "changeDisplayName": "اپنا نام تبدیل کرنے کے لیے کلک کریں"
   },
   "modelSelect": {
+    "maintainedBy": "برقرار رکھنے والا",
     "advancedOptions": {
       "title": "اعلی ترتیبات",
       "temperature": "درجہ حرارت",
@@ -1416,6 +1459,13 @@
       "benefit1": "ہوم اسکرین سے نیٹو ایپ کی طرح لانچ کریں",
       "benefit2": "براؤزر UI کے بغیر مکمل اسکرین",
       "benefit3": "محفوظ کردہ گفتگو کو آف لائن بھی استعمال کریں"
+    },
+    "languageSupport": {
+      "title": "54 زبانیں معاون ہیں",
+      "description": "اب 54 زبانوں میں دستیاب ہے تاکہ MSF کی مزید ٹیمیں اور کمیونٹیز AI اسسٹنٹ کو اپنی زبان میں استعمال کر سکیں",
+      "autoDetect": "آپ کی زبان آپ کے براؤزر کی ترتیبات سے خودکار طور پر پہچان لی جاتی ہے",
+      "manualSwitch": "سائیڈ بار میں زبان کے انتخاب کے ذریعے کسی بھی وقت تبدیل کریں",
+      "andMore": "اور مزید"
     }
   },
   "Professional": "پیشہ ورانہ",
@@ -1668,5 +1718,54 @@
     "title": "نیا ورژن دستیاب ہے",
     "refresh": "تازہ کریں",
     "refreshNow": "اپ ڈیٹ کے لیے تازہ کریں"
+  },
+  "agentsTab": {
+    "organizationAgents": "تنظیم کے ایجنٹس",
+    "customAgents": {
+      "title": "اپنی مرضی کے ایجنٹس",
+      "advancedBadge": "اعلی",
+      "createButton": "اپنی مرضی کا ایجنٹ بنائیں",
+      "experimentalBlurb": "تجرباتی — MSF کے ماہر صارفین کے ساتھ براہ راست تعاون سے تیار کیا گیا۔ عام استعمال کے لیے نہیں۔"
+    },
+    "selectAgentPrompt": "شروع کرنے کے لیے ایک ایجنٹ منتخب کریں"
+  },
+  "privacy": {
+    "title": "رازداری",
+    "dataUsage": "ڈیٹا کا استعمال",
+    "dataUsageDescription": "ہم آپ کی رازداری کو سنجیدگی سے لیتے ہیں۔ یہاں ہم آپ کا ڈیٹا کیسے سنبھالتے ہیں۔",
+    "conversationData": "گفتگو کا ڈیٹا",
+    "conversationDataDescription": "آپ کی گفتگو محفوظ طریقے سے محفوظ کی جاتی ہے اور ماڈل کی تربیت کے لیے استعمال نہیں ہوتی۔",
+    "analytics": "تجزیات",
+    "analyticsDescription": "ہم سروس کو بہتر بنانے کے لیے گمنام استعمال کے اعداد و شمار جمع کرتے ہیں۔",
+    "thirdParty": "تیسرے فریق کی خدمات",
+    "thirdPartyDescription": "ہم آپ کا ڈیٹا آپ کی رضامندی کے بغیر تیسرے فریق کے ساتھ شیئر نہیں کرتے۔",
+    "learnMore": "ہماری رازداری کی پالیسی کے بارے میں مزید جانیں",
+    "lastUpdated": "آخری تازہ کاری"
+  },
+  "variableModal": {
+    "title": "متغیرات کی ترتیب",
+    "description": "اس ایجنٹ کو استعمال کے لیے درج ذیل متغیرات کی ضرورت ہے۔",
+    "variableName": "متغیر",
+    "defaultValue": "ڈیفالٹ: {defaultValue}",
+    "placeholder": "{key} کی قیمت درج کریں",
+    "submit": "ایجنٹ شروع کریں",
+    "cancel": "منسوخ کریں"
+  },
+  "recentSources": {
+    "title": "حالیہ ذرائع",
+    "noSources": "ابھی تک کوئی ذرائع نہیں",
+    "noSourcesDescription": "آپ کے حوالہ دیے گئے ذرائع یہاں ظاہر ہوں گے۔",
+    "document": "دستاویز",
+    "webpage": "ویب صفحہ",
+    "image": "تصویر",
+    "showMore": "{count} مزید دکھائیں",
+    "showLess": "کم دکھائیں"
+  },
+  "chatInput": {
+    "placeholder": "ایک پیغام ٹائپ کریں...",
+    "send": "بھیجیں",
+    "stop": "روکیں",
+    "attachFile": "فائل منسلک کریں",
+    "characterCount": "{count} حروف"
   }
 }

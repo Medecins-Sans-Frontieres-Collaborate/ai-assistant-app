@@ -16,8 +16,8 @@
   "Error fetching models_": "Kesalahan dalam mengambil model.",
   "AI": "AI",
   "You": "Anda",
-  "Cancel": "Cancel",
-  "Save & Submit": "Save & Submit",
+  "Cancel": "Batal",
+  "Save & Submit": "Simpan & Kirim",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Pastikan kunci API OpenAI Anda diatur di bagian kiri bawah bilah sisi.",
   "If you completed this step, OpenAI may be experiencing issues_": "Jika Anda telah menyelesaikan langkah ini, OpenAI mungkin mengalami masalah.",
   "click if using a _env_local file": "klik jika menggunakan file .env.local",
@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "Kirim pesan ke Asisten AI MSF di sini",
   "chatInputPlaceholderFull": "Kirim pesan ke Asisten AI MSF di sini atau ketik \"/\" untuk memilih prompt...",
   "transcribingChatPlaceholder": "Menyalin...",
-  "sendFeedback": "Kirim Tanggapan",
+  "sendFeedback": "Minta Dukungan",
   "welcomeMessage": "Selamat datang di Asisten AI MSF",
   "appName": "Asisten AI MSF",
   "modelSelectionDialogue": "Pemilihan Model AI",
@@ -222,8 +222,8 @@
   "Prompt name": "Nama prompt",
   "Prompt content": "Konten prompt",
   "Are you sure you want to delete this prompt?": "Apakah Anda yakin ingin menghapus prompt ini?",
-  "Import data from sidebar": "Impor data dari bilah sisi",
-  "Export data from sidebar": "Ekspor data dari bilah sisi",
+  "Import data from sidebar": "Pulihkan riwayat obrolan",
+  "Export data from sidebar": "Cadangkan riwayat obrolan",
   "Search chats": "Cari obrolan",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Ini adalah seperangkat instruksi yang memandu Asisten AI tentang cara merespons. Ini membantu AI memberikan informasi yang berguna dan akurat dengan memberikan konteks pada pertanyaan yang diajukan.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Masukkan prompt atau ketik \"/\" untuk memilih prompt...",
@@ -315,7 +315,40 @@
     "baseModel": "Model Dasar",
     "formatDescription": "Format: asst_xxxxx (dari MSF AI Assistant Foundry)",
     "importantInfo": "Agen ini akan memiliki akses ke konteks percakapan dan dapat menggunakan alat yang sama dengan model standar. Pastikan ID Agen benar karena tidak dapat diubah nanti.",
-    "defunctWarning": "Model dasar agen ini sudah tidak tersedia. Edit agen untuk memilih model dasar baru, atau hapus agen ini."
+    "defunctWarning": "Model dasar agen ini sudah tidak tersedia. Edit agen untuk memilih model dasar baru, atau hapus agen ini.",
+    "editCustomAgent": "Edit Agen Kustom",
+    "addCustomAgent": "Tambah Agen Kustom",
+    "experimental": "Eksperimental",
+    "createNew": "Buat Baru",
+    "import": "Impor",
+    "importCustomAgents": "Impor Agen Kustom",
+    "importFileDescription": "Pilih file JSON dengan satu atau lebih konfigurasi agen",
+    "chooseFile": "Pilih File",
+    "validatedSuccess": "Agen berhasil divalidasi!",
+    "cancel": "Batal",
+    "validating": "Memvalidasi...",
+    "updateAgent": "Perbarui Agen",
+    "addAgent": "Tambah Agen",
+    "nameRequired": "Nama agen wajib diisi",
+    "idRequired": "ID agen wajib diisi",
+    "invalidIdFormat": "Format ID Agen tidak valid. Format yang diharapkan: asst_xxxxx",
+    "invalidFileFormat": "Format file tidak valid",
+    "noAgentsInFile": "Tidak ada agen ditemukan dalam file impor",
+    "importFailed": "Gagal mengimpor file",
+    "importConflict": "Agen berikut memiliki konflik:\n\n{conflicts}\n\nTetap impor? Ini akan membuat duplikat.",
+    "importSuccess": "Berhasil mengimpor {count} agen",
+    "agentDetails": "Detail Agen",
+    "agentIdLabel": "ID Agen:",
+    "baseModelLabel": "Model Dasar:",
+    "unknown": "Tidak diketahui",
+    "descriptionLabel": "Deskripsi:",
+    "export": "Ekspor",
+    "edit": "Edit",
+    "confirmDelete": "Konfirmasi",
+    "delete": "Hapus",
+    "noCustomAgentsYet": "Belum ada agen kustom.",
+    "noOrgAgentsConfigured": "Tidak ada agen organisasi yang dikonfigurasi.",
+    "validationFailed": "Validasi gagal"
   },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",
@@ -471,7 +504,8 @@
     "keepEditing": "Lanjut mengedit",
     "no": "Tidak",
     "yes": "Ya",
-    "noResults": "Tidak ada hasil"
+    "noResults": "Tidak ada hasil",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Terjadi kesalahan yang tidak terduga",
@@ -499,7 +533,7 @@
     "contactSupport": "Hubungi dukungan",
     "secureSso": "SSO Aman",
     "howToGetAccess": "Bagaimana cara mendapatkan akses?",
-    "accessLimitedText": "Saat ini MSF AI Assistant hanya tersedia untuk staf USA dan Amsterdam.",
+    "accessLimitedText": "Saat ini MSF AI Assistant hanya tersedia untuk staf USA, Amsterdam, dan Jenewa.",
     "expandAccessSoon": "Kami berharap dapat memperluas akses segera!",
     "errorConfiguration": "Ada masalah dengan konfigurasi server.",
     "errorAccessDenied": "Anda tidak memiliki izin untuk masuk.",
@@ -552,6 +586,14 @@
     "deleteMessage": "Hapus pesan",
     "imageContent": "Konten Gambar",
     "fullSizePreview": "Pratinjau ukuran penuh",
+    "failedToLoadImage": "Gagal memuat gambar",
+    "loadingImage": "Memuat gambar...",
+    "imageAlt": "Gambar {number}",
+    "download": "Unduh",
+    "openAsDocument": "Buka sebagai Dokumen",
+    "openInCodeEditor": "Buka di Editor Kode",
+    "failedToOpenCodeEditor": "Gagal membuka file di editor kode. Silakan coba lagi.",
+    "failedToOpenDocEditor": "Gagal membuka file di editor dokumen. Silakan coba lagi.",
     "enterSearchQueryPlaceholder": "Masukkan kueri pencarian atau pertanyaan Anda...",
     "errorFetchingUrl": "Terjadi kesalahan saat mengambil konten URL",
     "errorInitiatingSearch": "Terjadi kesalahan saat memulai pencarian web",
@@ -1052,6 +1094,7 @@
     "changeDisplayName": "Klik untuk mengubah nama panggilan Anda"
   },
   "modelSelect": {
+    "maintainedBy": "Dikelola oleh",
     "advancedOptions": {
       "title": "Opsi Lanjutan",
       "temperature": "Temperatur",
@@ -1416,6 +1459,13 @@
       "benefit1": "Dapat dibuka seperti aplikasi asli dari layar utama",
       "benefit2": "Layar penuh tanpa tampilan browser",
       "benefit3": "Akses offline ke percakapan yang tersimpan"
+    },
+    "languageSupport": {
+      "title": "54 Bahasa Didukung",
+      "description": "Kini tersedia dalam 54 bahasa agar lebih banyak tim dan komunitas MSF dapat menggunakan Asisten AI dalam bahasa mereka sendiri",
+      "autoDetect": "Bahasa Anda terdeteksi secara otomatis dari pengaturan browser Anda",
+      "manualSwitch": "Ganti kapan saja melalui pemilih bahasa di bilah samping",
+      "andMore": "dan lainnya"
     }
   },
   "Professional": "Profesional",
@@ -1668,5 +1718,57 @@
     "title": "Versi baru tersedia",
     "refresh": "Segarkan",
     "refreshNow": "Segarkan untuk memperbarui"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agen Organisasi"
+    },
+    "customAgents": {
+      "title": "Agen Kustom",
+      "advancedBadge": "Lanjutan",
+      "experimentalBlurb": "Eksperimental — dibuat melalui kolaborasi langsung dengan pengguna mahir MSF. Bukan untuk penggunaan umum.",
+      "createButton": "Buat Agen Kustom"
+    },
+    "selectAgentPrompt": "Pilih agen untuk melihat detail"
+  },
+  "privacy": {
+    "policyTitle": "Kebijakan Privasi & Perlindungan Data",
+    "policyDescription": "Pelajari bagaimana data Anda dilindungi dan informasi apa yang tidak boleh dimasukkan",
+    "termsOfUse": "Ketentuan Penggunaan",
+    "termsDescription": "Tinjau pedoman penggunaan yang bertanggung jawab dan penggunaan yang dilarang",
+    "keyPrivacyPoints": "Poin Privasi Utama",
+    "localStorage": "Percakapan Anda disimpan secara lokal di perangkat Anda",
+    "azureInfra": "Semua pemrosesan data terjadi dalam sistem MSF menggunakan infrastruktur Azure",
+    "noPersonalData": "Jangan masukkan data pribadi (nama, nomor telepon, dll.)",
+    "noSensitiveData": "Jangan masukkan detail operasional yang sangat sensitif",
+    "concernsTitle": "Kekhawatiran atau Insiden Privasi?",
+    "contactUs": "Hubungi kami segera jika Anda memiliki kekhawatiran privasi:"
+  },
+  "variableModal": {
+    "fillInstructions": "Isi variabel di bawah untuk menyesuaikan prompt Anda",
+    "optional": "Opsional",
+    "required": "Wajib",
+    "default": "Default:",
+    "defaultPlaceholder": "{defaultValue} (default)",
+    "enterValue": "Masukkan nilai untuk {key}...",
+    "cancel": "Batal",
+    "apply": "Terapkan"
+  },
+  "recentSources": {
+    "title": "Data Sumber Terbaru",
+    "unableToLoad": "Tidak dapat memuat sumber terbaru",
+    "retry": "Coba Lagi",
+    "noSources": "Tidak ada sumber terbaru yang tersedia",
+    "refresh": "Segarkan",
+    "today": "Hari Ini",
+    "yesterday": "Kemarin",
+    "daysAgo": "{count} hari yang lalu"
+  },
+  "chatInput": {
+    "filePickerError": "Tidak dapat membuka pemilih file. Coba gunakan seret dan lepas.",
+    "addDocument": "Tambah dokumen",
+    "uploadDocument": "Unggah Dokumen",
+    "images": "Gambar",
+    "addImage": "Tambah gambar"
   }
 }

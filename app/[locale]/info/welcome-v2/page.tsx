@@ -395,6 +395,75 @@ export default function WelcomeV2Page() {
           </div>
         </div>
 
+        {/* Language Support */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="p-2.5 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl shrink-0">
+              <IconLanguage
+                size={28}
+                className="text-emerald-600 dark:text-emerald-400"
+              />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+                  {t('welcomeV2.languageSupport.title')}
+                </h3>
+                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-md border border-emerald-300 dark:border-emerald-700">
+                  +21
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t('welcomeV2.languageSupport.description')}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-sm">
+            <div className="flex flex-wrap gap-2">
+              {[
+                'Soomaali',
+                'ትግርኛ',
+                'پښتو',
+                'Hausa',
+                'Lingála',
+                'Kurdî',
+                'Kreyòl Ayisyen',
+                'தமிழ்',
+                'ខ្មែរ',
+                'Sängö',
+              ].map((lang) => (
+                <span
+                  key={lang}
+                  className="px-2.5 py-1 text-xs bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded-md border border-emerald-200 dark:border-emerald-800"
+                >
+                  {lang}
+                </span>
+              ))}
+              <span className="px-2.5 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md">
+                {t('welcomeV2.languageSupport.andMore')}
+              </span>
+            </div>
+
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <IconCheck
+                  size={16}
+                  className="text-emerald-600 dark:text-emerald-400 flex-shrink-0"
+                />
+                <span>{t('welcomeV2.languageSupport.autoDetect')}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <IconCheck
+                  size={16}
+                  className="text-emerald-600 dark:text-emerald-400 flex-shrink-0"
+                />
+                <span>{t('welcomeV2.languageSupport.manualSwitch')}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* PWA */}
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
           <div className="flex items-start gap-4 mb-6">

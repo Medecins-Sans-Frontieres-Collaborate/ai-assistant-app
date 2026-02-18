@@ -18,8 +18,8 @@
   "Error fetching models_": "Erro ao buscar os modelos.",
   "AI": "IA",
   "You": "Você",
-  "Cancel": "Cancel",
-  "Save & Submit": "Save & Submit",
+  "Cancel": "Cancelar",
+  "Save & Submit": "Salvar e enviar",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Certifique-se de que sua API Key da OpenAI esteja definida na parte inferior esquerda da barra lateral.",
   "If you completed this step, OpenAI may be experiencing issues_": "Se você concluiu esta etapa, o OpenAI pode estar com problemas.",
   "click if using a _env_local file": "clique se estiver usando um arquivo .env.local",
@@ -43,7 +43,7 @@
   "chatInputPlaceholder": "Envie uma mensagem para o assistente de IA da MSF aqui",
   "chatInputPlaceholderFull": "Envie uma mensagem ao Assistente de IA MSF aqui ou digite \"/\" para selecionar um prompt...",
   "transcribingChatPlaceholder": "Transcrevendo...",
-  "sendFeedback": "Enviar feedback",
+  "sendFeedback": "Solicitar suporte",
   "welcomeMessage": "Bem-vindo ao Assistente de IA MSF",
   "appName": "Assistente de IA MSF",
   "modelSelectionDialogue": "Seleção de modelo de IA",
@@ -155,7 +155,7 @@
   "copiedToClipboard": "Copiado para a área de transferência",
   "copyToClipboard": "Copiar para a área de transferência",
   "downloadAsTXT": "Baixar como TXT",
-  "injectIntoChat": "Injetar no chat",
+  "injectIntoChat": "Inserir no chat",
   "orDragAndDrop": "ou arraste e solte",
   "pleaseSelectFile": "Por favor, selecione um arquivo para transcrever.",
   "selectedFile": "Arquivo selecionado",
@@ -234,7 +234,7 @@
   "Prompt content": "Conteúdo do prompt",
   "Are you sure you want to delete this prompt?": "Tem certeza de que deseja excluir este prompt?",
   "Import data from sidebar": "Restaurar histórico de chat",
-  "Export data from sidebar": "Backup de histórico de chat",
+  "Export data from sidebar": "Fazer backup do histórico de chat",
   "Search chats": "Pesquisar chats",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Este é um conjunto de instruções que orientam o assistente de IA sobre como responder. Ajuda a IA a fornecer informações úteis e precisas, dando contexto às perguntas feitas.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Digite um prompt ou digite \"/\" para selecionar um prompt...",
@@ -348,7 +348,40 @@
     "baseModel": "Modelo base",
     "formatDescription": "Formato: asst_xxxxx (do MSF AI Assistant Foundry)",
     "importantInfo": "Este agente terá acesso ao contexto da conversa e pode usar as mesmas ferramentas que os modelos padrão. Certifique-se de que o ID do agente está correto, pois não pode ser alterado posteriormente.",
-    "defunctWarning": "O modelo base deste agente não está mais disponível. Edite o agente para selecionar um novo modelo base ou exclua-o."
+    "defunctWarning": "O modelo base deste agente não está mais disponível. Edite o agente para selecionar um novo modelo base ou exclua-o.",
+    "editCustomAgent": "Editar agente personalizado",
+    "addCustomAgent": "Adicionar agente personalizado",
+    "experimental": "Experimental",
+    "createNew": "Criar novo",
+    "import": "Importar",
+    "importCustomAgents": "Importar agentes personalizados",
+    "importFileDescription": "Selecione um arquivo JSON com uma ou mais configurações de agente",
+    "chooseFile": "Escolher arquivo",
+    "validatedSuccess": "Agente validado com sucesso!",
+    "cancel": "Cancelar",
+    "validating": "Validando...",
+    "updateAgent": "Atualizar agente",
+    "addAgent": "Adicionar agente",
+    "nameRequired": "O nome do agente é obrigatório",
+    "idRequired": "O ID do agente é obrigatório",
+    "invalidIdFormat": "Formato de ID de agente inválido. Formato esperado: asst_xxxxx",
+    "invalidFileFormat": "Formato de arquivo inválido",
+    "noAgentsInFile": "Nenhum agente encontrado no arquivo de importação",
+    "importFailed": "Falha ao importar arquivo",
+    "importConflict": "Os seguintes agentes têm conflitos:\n\n{conflicts}\n\nImportar mesmo assim? Isso criará duplicatas.",
+    "importSuccess": "{count} agente(s) importado(s) com sucesso",
+    "agentDetails": "Detalhes do agente",
+    "agentIdLabel": "ID do agente:",
+    "baseModelLabel": "Modelo base:",
+    "unknown": "Desconhecido",
+    "descriptionLabel": "Descrição:",
+    "export": "Exportar",
+    "edit": "Editar",
+    "confirmDelete": "Confirmar",
+    "delete": "Excluir",
+    "noCustomAgentsYet": "Nenhum agente personalizado ainda.",
+    "noOrgAgentsConfigured": "Nenhum agente da organização configurado.",
+    "validationFailed": "Falha na validação"
   },
   "Quick Actions": "Ações rápidas",
   "Type / in chat to access your prompts": "Digite / no chat para acessar seus prompts",
@@ -504,7 +537,8 @@
     "discard": "Descartar",
     "keepEditing": "Continuar editando",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "beta": "Beta"
   },
   "chat": {
     "downloadAudio": "Baixar áudio",
@@ -537,6 +571,14 @@
     "deleteMessage": "Excluir mensagem",
     "imageContent": "Conteúdo da imagem",
     "fullSizePreview": "Visualização em tamanho real",
+    "failedToLoadImage": "Falha ao carregar imagem",
+    "loadingImage": "Carregando imagem...",
+    "imageAlt": "Imagem {number}",
+    "download": "Baixar",
+    "openAsDocument": "Abrir como documento",
+    "openInCodeEditor": "Abrir no editor de código",
+    "failedToOpenCodeEditor": "Falha ao abrir arquivo no editor de código. Por favor, tente novamente.",
+    "failedToOpenDocEditor": "Falha ao abrir arquivo no editor de documentos. Por favor, tente novamente.",
     "enterSearchQueryPlaceholder": "Digite sua consulta de pesquisa ou pergunta...",
     "errorFetchingUrl": "Ocorreu um erro ao buscar o conteúdo da URL",
     "errorInitiatingSearch": "Ocorreu um erro ao iniciar a pesquisa na web",
@@ -702,7 +744,7 @@
     "contactSupport": "Entrar em contato com o suporte",
     "secureSso": "SSO seguro",
     "howToGetAccess": "Como obtenho acesso?",
-    "accessLimitedText": "Atualmente, o MSF AI Assistant está disponível apenas para funcionários dos EUA e Amsterdã.",
+    "accessLimitedText": "Atualmente, o MSF AI Assistant está disponível apenas para funcionários dos EUA, Amsterdã e Genebra.",
     "expandAccessSoon": "Esperamos expandir o acesso em breve!",
     "errorConfiguration": "Há um problema com a configuração do servidor.",
     "errorAccessDenied": "Você não tem permissão para fazer login.",
@@ -976,6 +1018,7 @@
     "changeDisplayName": "Clique para alterar como tratamos você"
   },
   "modelSelect": {
+    "maintainedBy": "Mantido por",
     "tabs": {
       "models": "Modelos",
       "agents": "Agentes"
@@ -1332,6 +1375,13 @@
       "benefit1": "Abra como um app nativo a partir da tela inicial",
       "benefit2": "Tela cheia sem a interface do navegador",
       "benefit3": "Acesso offline às conversas salvas"
+    },
+    "languageSupport": {
+      "title": "54 idiomas suportados",
+      "description": "Agora disponível em 54 idiomas para que mais equipes e comunidades do MSF possam usar o Assistente de IA em seu próprio idioma",
+      "autoDetect": "Seu idioma é detectado automaticamente a partir das configurações do navegador",
+      "manualSwitch": "Troque a qualquer momento pelo seletor de idioma na barra lateral",
+      "andMore": "e mais"
     }
   },
   "Professional": "Profissional",
@@ -1668,5 +1718,57 @@
     "title": "Uma nova versão está disponível",
     "refresh": "Atualizar",
     "refreshNow": "Atualizar para atualizar"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agentes da organização"
+    },
+    "customAgents": {
+      "title": "Agentes personalizados",
+      "advancedBadge": "Avançado",
+      "experimentalBlurb": "Experimental — desenvolvido em colaboração direta com utilizadores avançados da MSF. Não é para uso geral.",
+      "createButton": "Criar agente personalizado"
+    },
+    "selectAgentPrompt": "Selecione um agente para ver detalhes"
+  },
+  "privacy": {
+    "policyTitle": "Política de Privacidade & Proteção de Dados",
+    "policyDescription": "Saiba como seus dados são protegidos e quais informações não devem ser inseridas",
+    "termsOfUse": "Termos de uso",
+    "termsDescription": "Revise as diretrizes de uso responsável e usos proibidos",
+    "keyPrivacyPoints": "Pontos-chave de privacidade",
+    "localStorage": "Suas conversas são armazenadas localmente no seu dispositivo",
+    "azureInfra": "Todo o processamento de dados acontece dentro dos sistemas MSF usando a infraestrutura Azure",
+    "noPersonalData": "Não insira dados pessoais (nomes, números de telefone, etc.)",
+    "noSensitiveData": "Não insira detalhes operacionais altamente sensíveis",
+    "concernsTitle": "Preocupações ou incidentes de privacidade?",
+    "contactUs": "Entre em contato conosco imediatamente se tiver preocupações com a privacidade:"
+  },
+  "variableModal": {
+    "fillInstructions": "Preencha as variáveis abaixo para personalizar seu prompt",
+    "optional": "Opcional",
+    "required": "Obrigatório",
+    "default": "Padrão:",
+    "defaultPlaceholder": "{defaultValue} (padrão)",
+    "enterValue": "Insira o valor para {key}...",
+    "cancel": "Cancelar",
+    "apply": "Aplicar"
+  },
+  "recentSources": {
+    "title": "Dados de fontes mais recentes",
+    "unableToLoad": "Não foi possível carregar as fontes mais recentes",
+    "retry": "Tentar novamente",
+    "noSources": "Nenhuma fonte recente disponível",
+    "refresh": "Atualizar",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "daysAgo": "{count} dias atrás"
+  },
+  "chatInput": {
+    "filePickerError": "Não foi possível abrir o seletor de arquivos. Tente usar arrastar e soltar.",
+    "addDocument": "Adicionar documento",
+    "uploadDocument": "Carregar documento",
+    "images": "Imagens",
+    "addImage": "Adicionar imagem"
   }
 }
