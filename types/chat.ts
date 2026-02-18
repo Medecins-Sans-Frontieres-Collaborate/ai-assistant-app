@@ -164,7 +164,7 @@ export interface ChatBody {
   temperature: number;
   botId: string | undefined;
   stream?: boolean;
-  threadId?: string; // Azure AI Agent thread ID
+  threadId?: string; // Azure AI Foundry conversation ID (legacy name kept for compatibility)
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   forcedAgentType?: string; // Force routing to specific agent type (e.g., 'web_search')
@@ -189,7 +189,7 @@ export interface Conversation {
   bot?: string;
   createdAt?: string;
   updatedAt?: string;
-  threadId?: string; // Azure AI Agent thread ID
+  threadId?: string; // Azure AI Foundry conversation ID (legacy name kept for compatibility)
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation

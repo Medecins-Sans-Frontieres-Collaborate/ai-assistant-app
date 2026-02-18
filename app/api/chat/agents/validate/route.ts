@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { isValidAgentId } from '@/lib/utils/app/agentId';
+
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
-import { AgentsClient } from '@azure/ai-agents';
+import { AIProjectClient } from '@azure/ai-projects';
 import { DefaultAzureCredential } from '@azure/identity';
 
 /**
- * Validates that an Azure AI Foundry agent ID is accessible
+ * Validates that an Azure AI Foundry agent is accessible
  * POST /api/chat/agents/validate
+ *
+ * Accepts both legacy (asst_xxxxx) and new (agent-name) formats.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -25,13 +29,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate agent ID format
-    const agentIdPattern = /^asst_[A-Za-z0-9_-]+$/;
-    if (!agentIdPattern.test(agentId)) {
+    // Validate agent ID format (supports both legacy asst_xxx and new agent-name)
+    if (!isValidAgentId(agentId)) {
       return NextResponse.json(
         {
           error: 'Invalid agent ID format',
-          details: 'Agent ID must match format: asst_xxxxx',
+          details: 'Agent ID must match format: agent-name or asst_xxxxx',
         },
         { status: 400 },
       );
@@ -52,16 +55,19 @@ export async function POST(req: NextRequest) {
 
     // Test connection to the agent
     try {
-      const client = new AgentsClient(endpoint, new DefaultAzureCredential());
+      const project = new AIProjectClient(
+        endpoint,
+        new DefaultAzureCredential(),
+      );
 
       // Try to retrieve the agent to verify it exists and is accessible
-      const agent = await client.getAgent(agentId);
+      const agent = await project.agents.get(agentId);
 
       if (!agent) {
         return NextResponse.json(
           {
             error: 'Agent not found',
-            details: `Agent ID "${agentId}" does not exist in the MSF AI Assistant Foundry instance.`,
+            details: `Agent "${agentId}" does not exist in the MSF AI Assistant Foundry instance.`,
           },
           { status: 404 },
         );
@@ -82,7 +88,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(
           {
             error: 'Agent not found',
-            details: `Agent ID "${agentId}" does not exist in the MSF AI Assistant Foundry instance. Please verify the ID with your administrator.`,
+            details: `Agent "${agentId}" does not exist in the MSF AI Assistant Foundry instance. Please verify the ID with your administrator.`,
           },
           { status: 404 },
         );

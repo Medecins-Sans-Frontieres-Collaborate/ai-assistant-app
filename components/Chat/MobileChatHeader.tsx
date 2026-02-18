@@ -17,7 +17,7 @@ import { useUI } from '@/client/hooks/ui/useUI';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
-  ClaudeAIIcon,
+  ClaudeAIIconBrand,
   DeepSeekIcon,
   MetaIcon,
   OpenAIIcon,
@@ -44,9 +44,13 @@ export function MobileChatHeader({
 
   const displayModelName = selectedConversation?.model?.name || '';
   const hasMessages = (selectedConversation?.messages?.length || 0) > 0;
-  const isAgent = selectedConversation?.model?.isAgent === true;
+  // Only show agent indicator for custom/organization agents, not base models with agent capabilities
+  const isAgent =
+    selectedConversation?.model?.isCustomAgent === true ||
+    selectedConversation?.model?.isOrganizationAgent === true;
   const modelProvider =
-    OpenAIModels[selectedConversation?.model?.id as OpenAIModelID]?.provider;
+    OpenAIModels[selectedConversation?.model?.id as OpenAIModelID]?.provider ||
+    selectedConversation?.model?.provider;
 
   // Helper function to get provider icon
   const getProviderIcon = (provider?: string) => {
@@ -61,7 +65,7 @@ export function MobileChatHeader({
       case 'meta':
         return <MetaIcon {...iconProps} />;
       case 'anthropic':
-        return <ClaudeAIIcon {...iconProps} />;
+        return <ClaudeAIIconBrand {...iconProps} />;
       default:
         return null;
     }

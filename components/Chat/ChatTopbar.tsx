@@ -2,8 +2,6 @@ import {
   IconChevronDown,
   IconClearAll,
   IconDots,
-  IconNews,
-  IconRobot,
   IconWorld,
 } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
@@ -23,22 +21,7 @@ import {
   XAIIcon,
 } from '../Icons/providers';
 
-// Static map of icon names used in organization-agents config.
-// When adding new org agent icons, import them above and add to this map.
-const AGENT_ICON_MAP: Record<
-  string,
-  React.ComponentType<{
-    size?: number;
-    className?: string;
-    style?: React.CSSProperties;
-  }>
-> = {
-  IconNews,
-  IconRobot,
-};
-
-const getTablerIcon = (iconName: string) =>
-  AGENT_ICON_MAP[iconName] || IconRobot;
+import { getIconComponent } from '@/lib/organizationAgents';
 
 interface Props {
   botInfo: {
@@ -53,6 +36,7 @@ interface Props {
   isOrganizationAgent?: boolean;
   organizationAgentIcon?: string;
   organizationAgentColor?: string;
+  organizationAgentAllowWebSearch?: boolean;
   showSettings: boolean;
   onSettingsClick: () => void;
   onModelClick?: () => void;
@@ -72,6 +56,7 @@ export const ChatTopbar = ({
   isOrganizationAgent = false,
   organizationAgentIcon,
   organizationAgentColor,
+  organizationAgentAllowWebSearch,
   showSettings,
   onSettingsClick,
   onModelClick,
@@ -105,7 +90,7 @@ export const ChatTopbar = ({
   const getProviderIcon = (provider?: string) => {
     // For organization agents, show their custom icon
     if (isOrganizationAgent && organizationAgentIcon) {
-      const OrgIcon = getTablerIcon(organizationAgentIcon);
+      const OrgIcon = getIconComponent(organizationAgentIcon);
       return (
         <OrgIcon
           size={16}
@@ -167,19 +152,29 @@ export const ChatTopbar = ({
               >
                 {selectedModelName || t('chat.selectModel')}
               </span>
-              {!isCustomAgent && searchMode === SearchMode.INTELLIGENT && (
-                <IconWorld
-                  size={14}
-                  className="ml-1.5 text-blue-600 dark:text-blue-400"
-                  title={t('chat.privacyFocusedSearch')}
-                />
-              )}
-              {!isCustomAgent && searchMode === SearchMode.AGENT && (
-                <AzureAIIcon
-                  className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
-                  aria-label={t('chat.azureAIAgentMode')}
-                />
-              )}
+              {!isCustomAgent &&
+                !(
+                  isOrganizationAgent &&
+                  organizationAgentAllowWebSearch === false
+                ) &&
+                searchMode === SearchMode.INTELLIGENT && (
+                  <IconWorld
+                    size={14}
+                    className="ml-1.5 text-blue-600 dark:text-blue-400"
+                    title={t('chat.privacyFocusedSearch')}
+                  />
+                )}
+              {!isCustomAgent &&
+                !(
+                  isOrganizationAgent &&
+                  organizationAgentAllowWebSearch === false
+                ) &&
+                searchMode === SearchMode.AGENT && (
+                  <AzureAIIcon
+                    className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                    aria-label={t('chat.azureAIAgentMode')}
+                  />
+                )}
               {isCustomAgent && (
                 <AzureAIIcon
                   className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"

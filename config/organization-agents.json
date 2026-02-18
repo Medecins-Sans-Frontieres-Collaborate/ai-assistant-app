@@ -27,6 +27,20 @@
         "topK": 10
       },
       "allowWebSearch": true
+    },
+    {
+      "id": "style_guide",
+      "name": "MSF Style Guide",
+      "description": "MSF USA brand and communications style guide assistant.",
+      "icon": "IconPalette",
+      "color": "#e74c3c",
+      "image": "/images/agents/style-guide.jpg",
+      "maintainedBy": "MSF USA",
+      "type": "foundry",
+      "category": "Knowledge Base",
+      "enabled": true,
+      "agentId": "style-guide",
+      "allowWebSearch": false
     }
   ]
 }

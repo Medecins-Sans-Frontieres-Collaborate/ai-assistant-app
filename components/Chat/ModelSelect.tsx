@@ -36,7 +36,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots } = useFlags();
+  const { exploreBots, enableClaudeModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -74,6 +74,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     handleDeleteAgent: deleteAgentFromStore,
   } = useAgentManagement();
 
+  // Feature flag: Control Claude models visibility via LaunchDarkly
+  // Default to true if LaunchDarkly is not configured (for local development)
+  const isClaudeEnabled = enableClaudeModels !== false;
+
   // Filter out disabled models and custom agents (custom agents should only appear in Agents tab)
   const baseModels = useMemo(
     () =>
@@ -81,9 +85,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         (m) =>
           !OpenAIModels[m.id as OpenAIModelID]?.isDisabled &&
           !m.id.startsWith('custom-') &&
-          !m.isCustomAgent,
+          !m.isCustomAgent &&
+          (OpenAIModels[m.id as OpenAIModelID]?.provider !== 'anthropic' ||
+            isClaudeEnabled),
       ),
-    [models],
+    [models, isClaudeEnabled],
   );
 
   // Use the model ordering hook for sorting and reordering
@@ -183,7 +189,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
   const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
-  const agentAvailable = modelConfig?.agentId !== undefined;
+  // Check agentId on both modelConfig (for base models) and selectedModel (for org/custom agents)
+  const agentAvailable =
+    modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
   // Get current search mode from conversation (default to INTELLIGENT for privacy)
   const currentSearchMode =
@@ -267,9 +275,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
     }
 
-    // Check if the new model supports agents
+    // Check if the new model supports agents (check both static config and model object for org agents)
     const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-    const newModelHasAgent = newModelConfig?.agentId !== undefined;
+    const newModelHasAgent =
+      newModelConfig?.agentId !== undefined || model.agentId !== undefined;
 
     // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
     if (

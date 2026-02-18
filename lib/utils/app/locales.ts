@@ -88,7 +88,7 @@ export const getSupportedLocales = (): string[] => {
  * @example
  * modelIdToLocaleKey('gpt-4.1') // 'gpt_4_1'
  * modelIdToLocaleKey('DeepSeek-R1') // 'deepseek_r1'
- * modelIdToLocaleKey('claude-opus-4-5') // 'claude_opus_4_5'
+ * modelIdToLocaleKey('claude-opus-4-6') // 'claude_opus_4_6'
  */
 export const modelIdToLocaleKey = (modelId: string): string => {
   return modelId.toLowerCase().replace(/[.-]/g, '_');

@@ -60,19 +60,18 @@ describe('Model Configuration', () => {
   });
 
   describe('Agent Configuration', () => {
-    it('GPT-4.1 should have correct agent ID with Bing grounding', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_4_1].agentId).toBe(
-        'asst_sbddkxz8DLyCXATINdB10pys',
-      );
+    it('GPT-4.1 should have correct agent name with Bing grounding', () => {
+      expect(OpenAIModels[OpenAIModelID.GPT_4_1].agentId).toBe('gpt-41');
       expect(OpenAIModels[OpenAIModelID.GPT_4_1].isAgent).toBe(true);
-      expect(OpenAIModels[OpenAIModelID.GPT_4_1].modelType).toBe('agent');
     });
 
-    it('GPT-5 and GPT-5 Chat should not have agent capabilities', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2].agentId).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2].isAgent).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].agentId).toBeUndefined();
-      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].isAgent).toBeUndefined();
+    it('GPT-5 and GPT-5 Chat should have agent capabilities', () => {
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].agentId).toBe('gpt-52');
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2].isAgent).toBe(true);
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].agentId).toBe(
+        'gpt-52-chat',
+      );
+      expect(OpenAIModels[OpenAIModelID.GPT_5_2_CHAT].isAgent).toBe(true);
     });
 
     it('non-OpenAI models should not have agent capabilities', () => {
@@ -101,8 +100,8 @@ describe('Model Configuration', () => {
   });
 
   describe('Model Types', () => {
-    it('GPT-4.1 should be agent model', () => {
-      expect(OpenAIModels[OpenAIModelID.GPT_4_1].modelType).toBe('agent');
+    it('GPT-4.1 should be omni model', () => {
+      expect(OpenAIModels[OpenAIModelID.GPT_4_1].modelType).toBe('omni');
     });
 
     it('GPT-5 should be omni model', () => {
@@ -194,13 +193,14 @@ describe('Model Configuration', () => {
 
       agentModels.forEach((model) => {
         expect(model.agentId).toBeDefined();
-        expect(model.agentId).toMatch(/^asst_[A-Za-z0-9]+$/);
+        // Agent IDs can be new-format names (e.g., gpt-41) or legacy asst_xxx
+        expect(model.agentId).toMatch(/^[A-Za-z0-9][A-Za-z0-9_-]*$/);
       });
     });
   });
 
   describe('SDK and Temperature Consistency', () => {
-    it('azure-openai SDK models should not support temperature (OpenAI constraint)', () => {
+    it('azure-openai SDK models should not support temperature', () => {
       const azureOpenAIModels = Object.values(OpenAIModels).filter(
         (m) => m.sdk === 'azure-openai',
       );
