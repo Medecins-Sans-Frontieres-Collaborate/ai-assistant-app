@@ -330,6 +330,9 @@ export function Chat({
             isOrganizationAgent={orgAgentInfo.isOrgAgent}
             organizationAgentIcon={orgAgentInfo.orgAgent?.icon}
             organizationAgentColor={orgAgentInfo.orgAgent?.color}
+            organizationAgentAllowWebSearch={
+              orgAgentInfo.orgAgent?.allowWebSearch
+            }
             showSettings={isSettingsOpen}
             onSettingsClick={() => setIsSettingsOpen(!isSettingsOpen)}
             onModelClick={() => setIsModelSelectOpen(true)}

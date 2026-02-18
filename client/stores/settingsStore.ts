@@ -35,7 +35,7 @@ export interface ConsecutiveModelUsage {
 export interface CustomAgent {
   id: string;
   name: string;
-  agentId: string; // Azure AI Foundry agent ID
+  agentId: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
   baseModelId: OpenAIModelID;
   description?: string;
   createdAt: string;

@@ -3,7 +3,6 @@ import { Session } from 'next-auth';
 import {
   appendMetadataToStream,
   createStreamEncoder,
-  deduplicateCitations,
 } from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
@@ -23,16 +22,13 @@ import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
- * Handles Azure AI Foundry Agent-based chat completions with Bing grounding
+ * Handles Azure AI Foundry Agent-based chat completions
  *
- * Package structure:
- * - Uses @azure/ai-agents (AgentsClient) for streaming support
- *
- * API structure:
- * - client.threads.create() - creates a new thread
- * - client.messages.create(threadId, role, content) - adds a message
- * - client.runs.create(threadId, agentId) - returns run object with stream() method (DO NOT await!)
- * - run.stream() - returns async iterator of streaming events
+ * Uses @azure/ai-projects (AIProjectClient) with the Foundry Agent Service API:
+ * - project.getOpenAIClient() → openAIClient for conversations and responses
+ * - openAIClient.conversations.create({items}) - creates a new conversation
+ * - openAIClient.conversations.items.create(conversationId, {items}) - adds items
+ * - openAIClient.responses.create({conversation, agent_reference}) - gets response stream
  */
 export class AIFoundryAgentHandler {
   private tracer = trace.getTracer('ai-foundry-agent-handler');
@@ -74,8 +70,7 @@ export class AIFoundryAgentHandler {
       },
       async (span) => {
         try {
-          // Use Azure AI Agents SDK for streaming support
-          const aiAgents = await import('@azure/ai-agents');
+          const aiProjects = await import('@azure/ai-projects');
           const { DefaultAzureCredential } = await import('@azure/identity');
 
           // AI Foundry uses a separate project endpoint (services.ai.azure.com)
@@ -88,10 +83,11 @@ export class AIFoundryAgentHandler {
             );
           }
 
-          const client = new aiAgents.AgentsClient(
+          const project = new aiProjects.AIProjectClient(
             endpoint,
             new DefaultAzureCredential(),
           );
+          const openAIClient = project.getOpenAIClient();
 
           // Process messages to inject artifactContext and handle token limits
           const encoding = await getGlobalTiktoken();
@@ -109,46 +105,17 @@ export class AIFoundryAgentHandler {
             hasArtifactContext: messages.some((m) => m.artifactContext),
           });
 
-          // Create a thread and run for this conversation with streaming
+          // Build the last user message content
           const lastMessage = processedMessages[processedMessages.length - 1];
+          let messageContent: string;
 
-          let thread;
-          let isNewThread = false;
-
-          try {
-            if (threadId) {
-              // For existing thread, just reuse it
-              // The thread already has all previous messages persisted
-              thread = { id: threadId };
-            } else {
-              // Create a new thread for the first message
-              thread = await client.threads.create();
-              isNewThread = true;
-            }
-          } catch (threadError) {
-            console.error('Error with thread:', threadError);
-            throw threadError;
-          }
-
-          try {
-            // The SDK expects parameters to be passed separately: (threadId, role, content)
-            // For multimodal content (images, files), convert to SDK format
-            let messageContent:
-              | string
-              | Array<
-                  | { type: 'text'; text: string }
-                  | {
-                      type: 'image_url';
-                      imageUrl: { url: string; detail: string };
-                    }
-                >;
-
-            if (typeof lastMessage.content === 'string') {
-              // Simple text message
-              messageContent = lastMessage.content;
-            } else if (Array.isArray(lastMessage.content)) {
-              // Multimodal content - convert to Azure SDK format
-              messageContent = lastMessage.content.map(
+          if (typeof lastMessage.content === 'string') {
+            messageContent = lastMessage.content;
+          } else if (Array.isArray(lastMessage.content)) {
+            // For multimodal content, concatenate text parts
+            // The new API handles images differently - extract text for now
+            messageContent = lastMessage.content
+              .map(
                 (
                   item:
                     | TextMessageContent
@@ -156,81 +123,100 @@ export class AIFoundryAgentHandler {
                     | FileMessageContent,
                 ) => {
                   if (item.type === 'text') {
-                    return { type: 'text', text: item.text };
+                    return item.text;
                   } else if (item.type === 'image_url') {
-                    // Convert image_url to imageUrl (Azure SDK uses camelCase)
-                    return {
-                      type: 'image_url',
-                      imageUrl: {
-                        url: item.image_url.url,
-                        detail: item.image_url.detail || 'auto',
-                      },
-                    };
+                    return '[Image attached]';
                   } else if (item.type === 'file_url') {
-                    // For non-image files, add as text with context
-                    // Note: Azure AI Agents SDK handles files via file search tool
-                    return {
-                      type: 'text',
-                      text: `[File attached: ${item.originalFilename || 'file'}]`,
-                    };
+                    return `[File attached: ${item.originalFilename || 'file'}]`;
                   }
-                  return item;
+                  return '';
                 },
-              );
-            } else if (
-              typeof lastMessage.content === 'object' &&
-              'text' in lastMessage.content
-            ) {
-              // Single TextMessageContent object
-              messageContent = (lastMessage.content as TextMessageContent).text;
-            } else {
-              // Fallback
-              messageContent = String(lastMessage.content);
-            }
-
-            await client.messages.create(thread.id, 'user', messageContent);
-          } catch (messageError) {
-            console.error('Error creating message:', messageError);
-            console.error(
-              'Full error object:',
-              JSON.stringify(messageError, null, 2),
-            );
-            throw messageError;
+              )
+              .filter(Boolean)
+              .join('\n');
+          } else if (
+            typeof lastMessage.content === 'object' &&
+            'text' in lastMessage.content
+          ) {
+            messageContent = (lastMessage.content as TextMessageContent).text;
+          } else {
+            messageContent = String(lastMessage.content);
           }
 
-          // Create a run and get the stream
+          let conversationId: string;
+          let isNewConversation = false;
+
+          try {
+            if (threadId) {
+              // Reuse existing conversation
+              conversationId = threadId;
+            } else {
+              // Create a new conversation with the first message
+              const conversation = await openAIClient.conversations.create({
+                items: [
+                  {
+                    type: 'message',
+                    role: 'user',
+                    content: messageContent,
+                  },
+                ],
+              });
+              conversationId = conversation.id;
+              isNewConversation = true;
+            }
+          } catch (convError) {
+            console.error('Error with conversation:', convError);
+            throw convError;
+          }
+
+          // If reusing an existing conversation, add the new message
+          if (!isNewConversation) {
+            try {
+              await openAIClient.conversations.items.create(conversationId, {
+                items: [
+                  {
+                    type: 'message',
+                    role: 'user',
+                    content: messageContent,
+                  },
+                ],
+              });
+            } catch (messageError) {
+              console.error(
+                'Error adding message to conversation:',
+                messageError,
+              );
+              throw messageError;
+            }
+          }
+
+          // Create a response (replaces runs.create)
           let streamEventMessages;
           try {
-            // Debug logging
-            console.log('Creating run with:', {
-              threadId: thread.id,
-              agentId: String(agentId),
+            console.log('Creating response with:', {
+              conversationId,
+              agentName: String(agentId),
               endpoint: endpoint,
             });
 
-            // Check if client.runs exists
-            if (!client.runs) {
-              console.error(
-                'client.runs is undefined. Client structure:',
-                Object.keys(client),
-              );
-              throw new Error(
-                'AgentsClient does not have runs property - check SDK version',
-              );
-            }
+            const response = openAIClient.responses.create(
+              { conversation: conversationId },
+              {
+                body: {
+                  agent: {
+                    name: String(agentId),
+                    type: 'agent_reference',
+                  },
+                },
+              },
+            );
 
-            // The Azure AI Agents SDK expects the agentId as the second parameter
-            // and returns an object with a stream() method (DO NOT await the create call!)
-            const run = client.runs.create(thread.id, String(agentId));
-
-            // Call stream() on the run object
-            streamEventMessages = await run.stream();
+            streamEventMessages = await response.stream();
           } catch (streamError: any) {
             console.error('Error creating stream:', streamError);
             if (streamError instanceof Error) {
               console.error('Error stack:', streamError.stack);
             }
-            // Log the full error details including response body if available
             if (streamError.response) {
               console.error(
                 'Error response status:',
@@ -259,7 +245,6 @@ export class AIFoundryAgentHandler {
               }> = [];
               let citationIndex = 1;
               const citationMap = new Map<string, number>();
-              let hasCompletedMessage = false;
 
               // markerBuffer: Accumulates text to handle citation markers split across chunks
               let markerBuffer = '';
@@ -268,7 +253,11 @@ export class AIFoundryAgentHandler {
               try {
                 for await (const eventMessage of streamEventMessages) {
                   // Handle different event types
-                  if (eventMessage.event === 'thread.message.delta') {
+                  // The new API uses similar delta events
+                  if (
+                    eventMessage.event === 'thread.message.delta' ||
+                    eventMessage.event === 'response.delta'
+                  ) {
                     const messageData = eventMessage.data as {
                       delta?: {
                         content?: Array<{
@@ -300,17 +289,6 @@ export class AIFoundryAgentHandler {
                             // Azure agents return citations in two formats:
                             // - Short: 【3:0†source】 (just the word "source")
                             // - Long:  【3:0†Title†URL】 (embedded title and URL)
-                            //
-                            // Regex breakdown: /【(\d+):(\d+)†[^】]+】/g
-                            // - 【        : Opening bracket (Chinese left lenticular bracket)
-                            // - (\d+)    : First number (source index)
-                            // - :        : Literal colon
-                            // - (\d+)    : Second number (sub-index)
-                            // - †        : Dagger symbol separator
-                            // - [^】]+   : Any characters except closing bracket
-                            // - 】       : Closing bracket (Chinese right lenticular bracket)
-                            //
-                            // Each unique marker gets a sequential number [1], [2], etc.
                             const processedBuffer = markerBuffer.replace(
                               /【(\d+):(\d+)†[^】]+】/g,
                               (match: string) => {
@@ -323,7 +301,6 @@ export class AIFoundryAgentHandler {
                             );
 
                             // Stage 3: Check for incomplete markers at end of buffer
-                            // If there's an opening bracket without a closing one, keep it
                             const lastOpenBracket =
                               processedBuffer.lastIndexOf('【');
                             const lastCloseBracket =
@@ -354,10 +331,9 @@ export class AIFoundryAgentHandler {
                       );
                     }
                   } else if (
-                    eventMessage.event === 'thread.message.completed'
+                    eventMessage.event === 'thread.message.completed' ||
+                    eventMessage.event === 'response.completed'
                   ) {
-                    hasCompletedMessage = true;
-
                     // Extract citations from annotations
                     const messageData = eventMessage.data as {
                       content?: Array<{
@@ -399,11 +375,9 @@ export class AIFoundryAgentHandler {
                       );
 
                       // Build citations list based on citationMap order
-                      // This ensures inline numbers match the citation list
                       citations = [];
                       for (const [marker, number] of citationMap.entries()) {
                         const urlCitation = markerToAnnotation.get(marker);
-                        // Always add citation even if annotation is missing
                         citations.push({
                           number: number,
                           title: urlCitation?.title || `Source ${number}`,
@@ -418,7 +392,10 @@ export class AIFoundryAgentHandler {
                         }
                       }
                     }
-                  } else if (eventMessage.event === 'thread.run.completed') {
+                  } else if (
+                    eventMessage.event === 'thread.run.completed' ||
+                    eventMessage.event === 'response.end'
+                  ) {
                     // Flush any remaining marker buffer
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
@@ -426,10 +403,10 @@ export class AIFoundryAgentHandler {
                     }
 
                     // Append metadata at the very end using utility function
-                    // No need to deduplicate - citationMap already ensured uniqueness
+                    // Keep metadata field name as threadId to avoid client-side breakage
                     appendMetadataToStream(controller, {
                       citations: citations.length > 0 ? citations : undefined,
-                      threadId: isNewThread ? thread.id : undefined,
+                      threadId: isNewConversation ? conversationId : undefined,
                     });
                   } else if (eventMessage.event === 'error') {
                     controllerClosed = true;
@@ -459,9 +436,6 @@ export class AIFoundryAgentHandler {
             model: modelId,
             botId,
           });
-
-          // TODO: Extract token usage from agent response and record
-          // MetricsService.recordTokenUsage({ total: tokens }, { user, model: modelId, operation: 'agent', botId });
 
           span.setStatus({ code: SpanStatusCode.OK });
           span.setAttribute('response.stream', true);

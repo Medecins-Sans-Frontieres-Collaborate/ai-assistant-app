@@ -74,7 +74,7 @@ export interface OrganizationAgent {
   // ========================================
   // Foundry Agent Fields (type: 'foundry')
   // ========================================
-  /** Azure AI Foundry agent ID (Foundry agents only) */
+  /** Azure AI Foundry agent name or legacy asst_xxx ID (Foundry agents only) */
   agentId?: string;
 
   // ========================================

@@ -52,7 +52,7 @@ const createTestModels = (): OpenAIModel[] => [
     tokenLimit: 16000,
   },
   {
-    id: OpenAIModelID.CLAUDE_OPUS_4_5,
+    id: OpenAIModelID.CLAUDE_OPUS_4_6,
     name: 'Claude Opus 4.5',
     maxLength: 200000,
     tokenLimit: 64000,
@@ -150,7 +150,7 @@ describe('useModelOrder', () => {
         [OpenAIModelID.DEEPSEEK_R1]: 10,
         [OpenAIModelID.GPT_4_1]: 5,
         [OpenAIModelID.GPT_5_2]: 3,
-        [OpenAIModelID.CLAUDE_OPUS_4_5]: 1,
+        [OpenAIModelID.CLAUDE_OPUS_4_6]: 1,
       };
 
       const testModels = createTestModels();
@@ -167,7 +167,7 @@ describe('useModelOrder', () => {
       // GPT-5.2 should be third (3 uses)
       expect(orderedIds[2]).toBe(OpenAIModelID.GPT_5_2);
       // Claude should be last (1 use)
-      expect(orderedIds[3]).toBe(OpenAIModelID.CLAUDE_OPUS_4_5);
+      expect(orderedIds[3]).toBe(OpenAIModelID.CLAUDE_OPUS_4_6);
     });
 
     it('should use default order as tiebreaker for equal usage counts', () => {
@@ -177,7 +177,7 @@ describe('useModelOrder', () => {
         [OpenAIModelID.DEEPSEEK_R1]: 5,
         [OpenAIModelID.GPT_4_1]: 5,
         [OpenAIModelID.GPT_5_2]: 5,
-        [OpenAIModelID.CLAUDE_OPUS_4_5]: 5,
+        [OpenAIModelID.CLAUDE_OPUS_4_6]: 5,
       };
 
       const testModels = createTestModels();
@@ -210,7 +210,7 @@ describe('useModelOrder', () => {
     it('should sort models by customModelOrder', () => {
       mockModelOrderMode = 'custom';
       mockCustomModelOrder = [
-        OpenAIModelID.CLAUDE_OPUS_4_5,
+        OpenAIModelID.CLAUDE_OPUS_4_6,
         OpenAIModelID.DEEPSEEK_R1,
         OpenAIModelID.GPT_4_1,
         OpenAIModelID.GPT_5_2,
@@ -221,7 +221,7 @@ describe('useModelOrder', () => {
 
       const orderedIds = result.current.orderedModels.map((m) => m.id);
 
-      expect(orderedIds[0]).toBe(OpenAIModelID.CLAUDE_OPUS_4_5);
+      expect(orderedIds[0]).toBe(OpenAIModelID.CLAUDE_OPUS_4_6);
       expect(orderedIds[1]).toBe(OpenAIModelID.DEEPSEEK_R1);
       expect(orderedIds[2]).toBe(OpenAIModelID.GPT_4_1);
       expect(orderedIds[3]).toBe(OpenAIModelID.GPT_5_2);

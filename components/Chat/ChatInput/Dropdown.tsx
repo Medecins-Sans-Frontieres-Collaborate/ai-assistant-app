@@ -51,6 +51,10 @@ import {
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
+import {
+  getOrganizationAgentById,
+  getOrganizationAgentIdFromModelId,
+} from '@/lib/organizationAgents';
 
 interface DropdownProps {
   onCameraClick: () => void;
@@ -92,6 +96,16 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
   const filePreviews = useChatInputStore((state) => state.filePreviews);
   const { selectedConversation, updateConversation } = useConversations();
+
+  // Check if the selected org agent allows web search
+  const hideWebSearch = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    if (!modelId) return false;
+    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
+    if (!orgAgentId) return false;
+    const agent = getOrganizationAgentById(orgAgentId);
+    return agent?.allowWebSearch === false;
+  }, [selectedConversation?.model?.id]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -257,20 +271,27 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Define menu items - memoized to avoid ref access issues during render
   const menuItems: MenuItem[] = useMemo(
     () => [
-      {
-        id: 'search',
-        icon: <IconWorld size={18} className="text-blue-500 flex-shrink-0" />,
-        label:
-          searchMode === SearchMode.ALWAYS
-            ? `✓ ${t('webSearchDropdown')}`
-            : t('webSearchDropdown'),
-        infoTooltip: t('dropdown.searchTooltip'),
-        onClick: () => {
-          toggleSearchMode();
-          closeDropdown();
-        },
-        category: 'web',
-      },
+      // Hide web search toggle for organization agents with allowWebSearch: false
+      ...(hideWebSearch
+        ? []
+        : [
+            {
+              id: 'search',
+              icon: (
+                <IconWorld size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label:
+                searchMode === SearchMode.ALWAYS
+                  ? `✓ ${t('webSearchDropdown')}`
+                  : t('webSearchDropdown'),
+              infoTooltip: t('dropdown.searchTooltip'),
+              onClick: () => {
+                toggleSearchMode();
+                closeDropdown();
+              },
+              category: 'web' as const,
+            },
+          ]),
       {
         id: 'tone',
         icon: (
@@ -361,6 +382,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       selectedToneId,
       tones,
       hasCameraSupport,
+      hideWebSearch,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,

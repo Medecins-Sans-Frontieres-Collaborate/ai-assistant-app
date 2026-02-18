@@ -246,7 +246,7 @@ describe('Document Summary Utilities', () => {
 
     it('should handle Claude models with large output capacity', () => {
       const model: OpenAIModel = {
-        id: 'claude-sonnet-4-5',
+        id: 'claude-sonnet-4-6',
         name: 'Claude Sonnet 4.5',
         maxLength: 200000,
         tokenLimit: 64000,

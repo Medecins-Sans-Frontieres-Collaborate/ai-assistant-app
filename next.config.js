@@ -72,6 +72,16 @@ const nextConfig = {
   // Security headers
   headers: async () => {
     return [
+      // Cache static images (org agent backgrounds, etc.) for 1 year with immutable
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
       // Disable proxy buffering for the streaming chat endpoint (defense-in-depth)
       {
         source: '/api/chat',

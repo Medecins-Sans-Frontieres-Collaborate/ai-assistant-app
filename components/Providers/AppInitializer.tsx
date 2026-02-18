@@ -1,5 +1,6 @@
 'use client';
 
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect, useRef } from 'react';
 
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -13,7 +14,7 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  *
  * With Zustand persist middleware, localStorage hydration is automatic.
  * This component handles:
- * 1. Model filtering (based on environment config)
+ * 1. Model filtering (based on environment config and feature flags)
  * 2. Default model selection (from environment if not persisted)
  * 3. Selected conversation validation
  *
@@ -22,16 +23,29 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  */
 export function AppInitializer() {
   const hasLoadedRef = useRef(false);
+  const { enableClaudeModels } = useFlags();
 
+  // Model filtering: re-runs when enableClaudeModels flag changes
   useEffect(() => {
-    // Ensure we only initialize once, even in React StrictMode
+    const { setModels } = useSettingsStore.getState();
+
+    // enableClaudeModels: defaults to true when LD is not configured (undefined !== false)
+    const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
+      (m) =>
+        !m.isDisabled &&
+        !isModelDisabled(m.id) &&
+        (m.provider !== 'anthropic' || enableClaudeModels !== false),
+    );
+    setModels(models);
+  }, [enableClaudeModels]);
+
+  // One-time initialization
+  useEffect(() => {
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
 
     try {
-      // Access stores directly for one-time initialization
-      const { setModels, defaultModelId, setDefaultModelId } =
-        useSettingsStore.getState();
+      const { defaultModelId, setDefaultModelId } = useSettingsStore.getState();
       const {
         conversations,
         selectedConversationId,
@@ -39,13 +53,10 @@ export function AppInitializer() {
         setIsLoaded,
       } = useConversationStore.getState();
 
-      // 1. Initialize models list (filtered by environment)
-      const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
-        (m) => !m.isDisabled && !isModelDisabled(m.id),
-      );
-      setModels(models);
+      // Get current models (already set by the model filtering effect above)
+      const models = useSettingsStore.getState().models;
 
-      // 2. Set default model if not already persisted
+      // Set default model if not already persisted
       if (!defaultModelId && models.length > 0) {
         const envDefaultModelId = getDefaultModel();
         const defaultModel =
@@ -62,12 +73,11 @@ export function AppInitializer() {
         );
       }
 
-      // 3. Validate selected conversation exists
+      // Validate selected conversation exists
       if (
         selectedConversationId &&
         !conversations.find((c) => c.id === selectedConversationId)
       ) {
-        // Selected conversation no longer exists, select first available
         if (conversations.length > 0) {
           selectConversation(conversations[0].id);
         } else {
@@ -79,7 +89,6 @@ export function AppInitializer() {
       setIsLoaded(true);
     } catch (error) {
       console.error('Error initializing app state:', error);
-      // On error, mark as loaded anyway to prevent blocking the app
       useConversationStore.getState().setIsLoaded(true);
     }
   }, []); // Empty deps - only run once

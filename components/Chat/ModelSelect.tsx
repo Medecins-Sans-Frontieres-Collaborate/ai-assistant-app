@@ -36,7 +36,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots } = useFlags();
+  const { exploreBots, enableClaudeModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -74,6 +74,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     handleDeleteAgent: deleteAgentFromStore,
   } = useAgentManagement();
 
+  // Feature flag: Control Claude models visibility via LaunchDarkly
+  // Default to true if LaunchDarkly is not configured (for local development)
+  const isClaudeEnabled = enableClaudeModels !== false;
+
   // Filter out disabled models and custom agents (custom agents should only appear in Agents tab)
   const baseModels = useMemo(
     () =>
@@ -81,9 +85,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         (m) =>
           !OpenAIModels[m.id as OpenAIModelID]?.isDisabled &&
           !m.id.startsWith('custom-') &&
-          !m.isCustomAgent,
+          !m.isCustomAgent &&
+          (OpenAIModels[m.id as OpenAIModelID]?.provider !== 'anthropic' ||
+            isClaudeEnabled),
       ),
-    [models],
+    [models, isClaudeEnabled],
   );
 
   // Use the model ordering hook for sorting and reordering

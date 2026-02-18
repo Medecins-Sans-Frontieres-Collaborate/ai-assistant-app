@@ -8,10 +8,12 @@ import {
   IconUpload,
   IconX,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { isValidAgentId } from '@/lib/utils/app/agentId';
 import {
   importCustomAgents,
   validateCustomAgentImport,
@@ -54,17 +56,16 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
   const [showNotice, setShowNotice] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Available base models (excluding disabled models)
+  const { enableClaudeModels } = useFlags();
+  const isClaudeEnabled = enableClaudeModels !== false;
+
+  // Available base models (excluding disabled models and Claude models when flag is off)
   // Note: We allow models with isAgent=true because custom agents can be based on
   // agent-capable models like GPT-5. The baseModel provides configuration like
   // tokenLimit for message trimming, while the custom agentId determines behavior.
-  const baseModels = Object.values(OpenAIModels).filter((m) => !m.isDisabled);
-
-  const validateAgentId = (id: string): boolean => {
-    // Azure AI Foundry agent IDs typically follow the pattern: asst_[alphanumeric]
-    const agentIdPattern = /^asst_[A-Za-z0-9_-]+$/;
-    return agentIdPattern.test(id);
-  };
+  const baseModels = Object.values(OpenAIModels).filter(
+    (m) => !m.isDisabled && (m.provider !== 'anthropic' || isClaudeEnabled),
+  );
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
@@ -177,8 +178,10 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
       return;
     }
 
-    if (!validateAgentId(agentId)) {
-      setError(t('agents.invalidIdFormat'));
+    if (!isValidAgentId(agentId)) {
+      setError(
+        'Invalid Agent ID format. Expected format: agent-name or asst_xxxxx',
+      );
       return;
     }
 
