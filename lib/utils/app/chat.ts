@@ -72,7 +72,18 @@ export const isCustomAgentModel = (modelId: string | undefined): boolean => {
 };
 
 /**
- * Validates if a model ID exists in the allowed model IDs or is a custom agent
+ * Checks if a model ID represents an organization agent.
+ * Prefer using model.isOrganizationAgent when the full model object is available.
+ */
+export const isOrganizationAgentModel = (
+  modelId: string | undefined,
+): boolean => {
+  if (!modelId) return false;
+  return modelId.startsWith('org-');
+};
+
+/**
+ * Validates if a model ID exists in the allowed model IDs or is a custom/organization agent
  */
 export const checkIsModelValid = (
   modelId: string | undefined,
@@ -81,6 +92,8 @@ export const checkIsModelValid = (
   if (!modelId) return false;
   // Custom agents are always valid
   if (isCustomAgentModel(modelId)) return true;
+  // Organization agents are always valid
+  if (isOrganizationAgentModel(modelId)) return true;
   return Object.values(allowedModelIds).includes(modelId);
 };
 

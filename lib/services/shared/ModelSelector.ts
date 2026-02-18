@@ -2,6 +2,7 @@ import {
   checkIsModelValid,
   isCustomAgentModel,
   isImageConversation,
+  isOrganizationAgentModel,
 } from '@/lib/utils/app/chat';
 import { DEFAULT_MODEL } from '@/lib/utils/app/const';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -37,6 +38,7 @@ export class ModelSelector {
   ): { modelId: string; modelConfig: OpenAIModel } {
     const needsToHandleImages = isImageConversation(messages);
     const isCustomAgent = isCustomAgentModel(requestedModel.id);
+    const isOrganizationAgent = isOrganizationAgentModel(requestedModel.id);
     const isValidModel = checkIsModelValid(requestedModel.id, OpenAIModelID);
     const isImageModel = checkIsModelValid(
       requestedModel.id,
@@ -50,7 +52,8 @@ export class ModelSelector {
       isValidModel &&
       needsToHandleImages &&
       !isImageModel &&
-      !isCustomAgent
+      !isCustomAgent &&
+      !isOrganizationAgent
     ) {
       modelId = 'gpt-5';
       console.log(
@@ -66,10 +69,10 @@ export class ModelSelector {
     }
 
     // Get model configuration
-    // For custom agents, use the model config passed in (which already has the full config)
+    // For custom/organization agents, use the model config passed in (which already has the full config)
     // For standard models, look up in OpenAIModels
     const modelConfig =
-      isCustomAgent && modelId === requestedModel.id
+      (isCustomAgent || isOrganizationAgent) && modelId === requestedModel.id
         ? requestedModel
         : (Object.values(OpenAIModels).find((m) => m.id === modelId) as
             | OpenAIModel

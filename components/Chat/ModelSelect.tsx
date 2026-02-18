@@ -189,7 +189,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
   const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
-  const agentAvailable = modelConfig?.agentId !== undefined;
+  // Check agentId on both modelConfig (for base models) and selectedModel (for org/custom agents)
+  const agentAvailable =
+    modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
   // Get current search mode from conversation (default to INTELLIGENT for privacy)
   const currentSearchMode =
@@ -273,9 +275,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
     }
 
-    // Check if the new model supports agents
+    // Check if the new model supports agents (check both static config and model object for org agents)
     const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-    const newModelHasAgent = newModelConfig?.agentId !== undefined;
+    const newModelHasAgent =
+      newModelConfig?.agentId !== undefined || model.agentId !== undefined;
 
     // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
     if (
