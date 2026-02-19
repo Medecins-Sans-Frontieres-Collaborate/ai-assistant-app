@@ -14,6 +14,7 @@ import {
   Message,
   MessageType,
 } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
@@ -27,7 +28,12 @@ interface UseMessageSenderProps {
   uploadProgress: { [key: string]: number };
   selectedToneId: string | null;
   searchMode: SearchMode;
-  onSend: (message: Message, searchMode?: SearchMode) => void;
+  codeInterpreterMode: CodeInterpreterMode;
+  onSend: (
+    message: Message,
+    searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
+  ) => void;
   onClearInput: () => void;
   setSubmitType: React.Dispatch<React.SetStateAction<ChatInputSubmitTypes>>;
   setImageFieldValue: React.Dispatch<React.SetStateAction<ImageFieldValue>>;
@@ -101,6 +107,7 @@ export function useMessageSender({
   uploadProgress,
   selectedToneId,
   searchMode,
+  codeInterpreterMode,
   onSend,
   onClearInput,
   setSubmitType,
@@ -197,6 +204,7 @@ export function useMessageSender({
         artifactContext: artifactContext || undefined,
       },
       searchMode,
+      codeInterpreterMode,
     );
 
     // Clear input state
@@ -219,6 +227,7 @@ export function useMessageSender({
     imageFieldValue,
     selectedToneId,
     searchMode,
+    codeInterpreterMode,
     usedPromptId,
     usedPromptVariables,
     t,
