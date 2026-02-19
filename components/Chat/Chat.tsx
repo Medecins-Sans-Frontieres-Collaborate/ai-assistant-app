@@ -39,18 +39,33 @@ import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
+/** Retries a dynamic import once after 1.5 s on chunk load failure. */
+function retryImport<T>(importFn: () => Promise<T>): Promise<T> {
+  return importFn().catch(
+    () =>
+      new Promise<T>((resolve, reject) =>
+        setTimeout(() => importFn().then(resolve, reject), 1500),
+      ),
+  );
+}
+
+function ArtifactLoadingSpinner() {
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-300 border-t-neutral-600 dark:border-neutral-600 dark:border-t-neutral-300" />
+    </div>
+  );
+}
+
 const CodeArtifact = dynamic(
-  () => import('@/components/CodeEditor/CodeArtifact'),
-  {
-    ssr: false,
-  },
+  () => retryImport(() => import('@/components/CodeEditor/CodeArtifact')),
+  { ssr: false, loading: ArtifactLoadingSpinner },
 );
 
 const DocumentArtifact = dynamic(
-  () => import('@/components/DocumentEditor/DocumentArtifact'),
-  {
-    ssr: false,
-  },
+  () =>
+    retryImport(() => import('@/components/DocumentEditor/DocumentArtifact')),
+  { ssr: false, loading: ArtifactLoadingSpinner },
 );
 
 interface ChatProps {
