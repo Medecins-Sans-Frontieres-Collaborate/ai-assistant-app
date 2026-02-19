@@ -84,7 +84,7 @@ const nextConfig = {
       },
       // HTML pages — always revalidate so browsers fetch the latest chunk manifest
       {
-        source: '/((?!_next/static|icons|favicon).*)',
+        source: '/((?!_next|api|icons|favicon).*)',
         headers: [
           {
             key: 'Cache-Control',
