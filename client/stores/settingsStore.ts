@@ -1,5 +1,6 @@
 'use client';
 
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import {
   DEFAULT_MODEL_ORDER,
   OpenAIModel,
@@ -52,6 +53,7 @@ interface SettingsStore {
   systemPrompt: string;
   defaultModelId: OpenAIModelID | undefined;
   defaultSearchMode: SearchMode;
+  defaultCodeInterpreterMode: CodeInterpreterMode;
   autoSwitchOnFailure: boolean;
   displayNamePreference: DisplayNamePreference;
   customDisplayName: string;
@@ -91,6 +93,7 @@ interface SettingsStore {
   setSystemPrompt: (prompt: string) => void;
   setDefaultModelId: (id: OpenAIModelID | undefined) => void;
   setDefaultSearchMode: (mode: SearchMode) => void;
+  setDefaultCodeInterpreterMode: (mode: CodeInterpreterMode) => void;
   setAutoSwitchOnFailure: (enabled: boolean) => void;
   setDisplayNamePreference: (preference: DisplayNamePreference) => void;
   setCustomDisplayName: (name: string) => void;
@@ -154,6 +157,7 @@ export const useSettingsStore = create<SettingsStore>()(
       systemPrompt: DEFAULT_SYSTEM_PROMPT,
       defaultModelId: undefined,
       defaultSearchMode: SearchMode.INTELLIGENT, // Privacy-focused intelligent search by default
+      defaultCodeInterpreterMode: CodeInterpreterMode.INTELLIGENT, // Intelligent Code Interpreter routing by default
       autoSwitchOnFailure: false,
       displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
       customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
@@ -190,6 +194,9 @@ export const useSettingsStore = create<SettingsStore>()(
       setDefaultModelId: (id) => set({ defaultModelId: id }),
 
       setDefaultSearchMode: (mode) => set({ defaultSearchMode: mode }),
+
+      setDefaultCodeInterpreterMode: (mode) =>
+        set({ defaultCodeInterpreterMode: mode }),
 
       setAutoSwitchOnFailure: (enabled) =>
         set({ autoSwitchOnFailure: enabled }),
@@ -383,6 +390,7 @@ export const useSettingsStore = create<SettingsStore>()(
           temperature: DEFAULT_TEMPERATURE,
           systemPrompt: DEFAULT_SYSTEM_PROMPT,
           defaultSearchMode: SearchMode.INTELLIGENT,
+          defaultCodeInterpreterMode: CodeInterpreterMode.INTELLIGENT,
           displayNamePreference: DEFAULT_DISPLAY_NAME_PREFERENCE,
           customDisplayName: DEFAULT_CUSTOM_DISPLAY_NAME,
           prompts: [],
@@ -404,13 +412,14 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 13, // Increment this when schema changes to trigger migrations
+      version: 14, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
         systemPrompt: state.systemPrompt,
         defaultModelId: state.defaultModelId,
         defaultSearchMode: state.defaultSearchMode,
+        defaultCodeInterpreterMode: state.defaultCodeInterpreterMode,
         autoSwitchOnFailure: state.autoSwitchOnFailure,
         displayNamePreference: state.displayNamePreference,
         customDisplayName: state.customDisplayName,
@@ -506,6 +515,13 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 13) {
           if (state.consecutiveModelUsage === undefined) {
             state.consecutiveModelUsage = { modelId: null, count: 0 };
+          }
+        }
+
+        // Version 13 → 14: Add defaultCodeInterpreterMode
+        if (version < 14) {
+          if (state.defaultCodeInterpreterMode === undefined) {
+            state.defaultCodeInterpreterMode = CodeInterpreterMode.INTELLIGENT;
           }
         }
 
