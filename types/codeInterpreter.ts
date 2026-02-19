@@ -7,6 +7,50 @@
  */
 
 /**
+ * Code Interpreter Mode Configuration
+ *
+ * Controls when Code Interpreter is triggered for chat requests.
+ * Allows intelligent routing based on query intent rather than just file presence.
+ */
+export enum CodeInterpreterMode {
+  /**
+   * Never use Code Interpreter, even if files are present.
+   * Use for summarization, explanation, or text-based analysis.
+   */
+  OFF = 'off',
+
+  /**
+   * AI intelligently decides when Code Interpreter is needed.
+   * Analyzes query to determine if code execution is required:
+   * - Data generation, transformation, analysis
+   * - Chart/visualization creation
+   * - File format conversion
+   * Falls back to standard chat for summarization, explanation, etc.
+   */
+  INTELLIGENT = 'intelligent',
+
+  /**
+   * Always use Code Interpreter when compatible files are present.
+   * Original behavior - file presence + compatibility triggers CI.
+   */
+  ALWAYS = 'always',
+}
+
+/**
+ * Type guard for CodeInterpreterMode
+ *
+ * @param value - Value to check
+ * @returns true if value is a valid CodeInterpreterMode
+ */
+export function isCodeInterpreterMode(
+  value: unknown,
+): value is CodeInterpreterMode {
+  return Object.values(CodeInterpreterMode).includes(
+    value as CodeInterpreterMode,
+  );
+}
+
+/**
  * File uploaded to AI Foundry for Code Interpreter use.
  * Files are uploaded via the OpenAI files API with purpose='assistants'.
  */
