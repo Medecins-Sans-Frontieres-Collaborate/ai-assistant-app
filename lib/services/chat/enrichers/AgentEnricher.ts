@@ -18,6 +18,7 @@ import { AgentCapabilities } from '@/types/agent';
 import { FileMessageContent, Message } from '@/types/chat';
 import {
   CodeInterpreterFile,
+  CodeInterpreterMode,
   isCodeInterpreterSupported,
 } from '@/types/codeInterpreter';
 import { SearchMode } from '@/types/searchMode';
@@ -71,15 +72,18 @@ export class AgentEnricher extends BasePipelineStage {
     // Initialize capabilities
     const capabilities: AgentCapabilities = {};
 
-    // Check if Code Interpreter is enabled and files are present
-    const canUseCodeInterpreter =
-      context.model.codeInterpreter &&
-      context.hasFiles &&
-      this.hasCompatibleFiles(context) &&
-      this.codeInterpreterFileService &&
-      this.fileProcessingService;
+    // Determine if Code Interpreter should be used based on mode and routing
+    const shouldUseCI = this.shouldUseCodeInterpreter(context);
 
-    if (canUseCodeInterpreter) {
+    console.log('[AgentEnricher] Code Interpreter decision:', {
+      mode: context.codeInterpreterMode,
+      recommended: context.codeInterpreterRecommended,
+      hasFiles: context.hasFiles,
+      hasCompatibleFiles: context.hasFiles && this.hasCompatibleFiles(context),
+      decision: shouldUseCI,
+    });
+
+    if (shouldUseCI) {
       // Handle Code Interpreter capability
       return await this.handleCodeInterpreterCapability(context, capabilities);
     }
@@ -125,6 +129,59 @@ export class AgentEnricher extends BasePipelineStage {
         section.originalFilename &&
         isCodeInterpreterSupported(section.originalFilename),
     );
+  }
+
+  /**
+   * Determines if Code Interpreter should be used based on mode and routing.
+   *
+   * Decision logic:
+   * - OFF: Never use Code Interpreter
+   * - ALWAYS: Use if model supports + services available + compatible files present
+   * - INTELLIGENT: Use based on codeInterpreterRecommended from routing analysis
+   *
+   * Note: In INTELLIGENT mode, Code Interpreter can trigger WITHOUT files
+   * if the query needs generation (e.g., "Create an Excel with sales data").
+   */
+  private shouldUseCodeInterpreter(context: ChatContext): boolean {
+    // Model must support Code Interpreter
+    const modelSupports = context.model.codeInterpreter;
+
+    // Required services must be available
+    const hasServices =
+      this.codeInterpreterFileService && this.fileProcessingService;
+
+    if (!modelSupports || !hasServices) {
+      return false;
+    }
+
+    // Check based on mode
+    switch (context.codeInterpreterMode) {
+      case CodeInterpreterMode.OFF:
+        // Never use Code Interpreter
+        return false;
+
+      case CodeInterpreterMode.ALWAYS:
+        // Original behavior: file presence + compatibility
+        return context.hasFiles && this.hasCompatibleFiles(context);
+
+      case CodeInterpreterMode.INTELLIGENT:
+        // Use routing recommendation from CodeInterpreterRouterEnricher
+        // This can trigger even WITHOUT files for generation queries
+        if (context.codeInterpreterRecommended === true) {
+          // If files are present, they must be compatible
+          // If no files, Code Interpreter can still be used for generation
+          if (context.hasFiles) {
+            return this.hasCompatibleFiles(context);
+          }
+          return true;
+        }
+        return false;
+
+      default:
+        // Default behavior (when mode is not specified):
+        // Fall back to ALWAYS behavior for backward compatibility
+        return context.hasFiles && this.hasCompatibleFiles(context);
+    }
   }
 
   /**
