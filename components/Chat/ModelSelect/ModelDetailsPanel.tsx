@@ -8,6 +8,7 @@ import { OrganizationAgent } from '@/types/organizationAgent';
 import { SearchMode } from '@/types/searchMode';
 
 import { AdvancedOptionsSection } from './AdvancedOptionsSection';
+import { CodeInterpreterSection } from './CodeInterpreterSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
@@ -35,6 +36,9 @@ interface ModelDetailsPanelProps {
   onDeleteAgent?: (agentId: string) => void;
   // Organization agent props
   organizationAgent?: OrganizationAgent;
+  // Code Interpreter props
+  codeInterpreterEnabled?: boolean;
+  handleToggleCodeInterpreterMode?: () => void;
 }
 
 export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
@@ -55,6 +59,8 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   onEditAgent,
   onDeleteAgent,
   organizationAgent,
+  codeInterpreterEnabled,
+  handleToggleCodeInterpreterMode,
 }) => {
   const hasAgentImage = organizationAgent?.image;
 
@@ -136,6 +142,16 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         handleToggleSearchMode={handleToggleSearchMode}
         handleSetSearchMode={handleSetSearchMode}
       />
+
+      {/* Code Interpreter Section - only for non-agent models */}
+      {!isCustomAgent &&
+        !organizationAgent &&
+        handleToggleCodeInterpreterMode && (
+          <CodeInterpreterSection
+            codeInterpreterEnabled={codeInterpreterEnabled ?? false}
+            handleToggleCodeInterpreterMode={handleToggleCodeInterpreterMode}
+          />
+        )}
 
       {displaySearchMode !== SearchMode.AGENT &&
         selectedConversation &&
