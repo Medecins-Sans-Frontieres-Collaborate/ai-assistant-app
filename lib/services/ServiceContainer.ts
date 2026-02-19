@@ -5,7 +5,10 @@ import { AgentChatService } from './chat/AgentChatService';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
-import { CodeInterpreterFileService } from './chat/codeInterpreter/CodeInterpreterFileService';
+import {
+  CodeInterpreterFileService,
+  CodeInterpreterRouterService,
+} from './chat/codeInterpreter';
 import { ModelSelector, StreamingService, ToneService } from './shared';
 
 import { env } from '@/config/environment';
@@ -47,6 +50,7 @@ export class ServiceContainer {
   private streamingService!: StreamingService;
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
+  private codeInterpreterRouterService!: CodeInterpreterRouterService;
   private agentChatService!: AgentChatService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
   private codeInterpreterFileService!: CodeInterpreterFileService;
@@ -121,6 +125,9 @@ export class ServiceContainer {
 
     // 3. Initialize services that depend on clients
     this.toolRouterService = new ToolRouterService(this.openAIClient);
+    this.codeInterpreterRouterService = new CodeInterpreterRouterService(
+      this.openAIClient,
+    );
     this.agentChatService = new AgentChatService();
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
     this.codeInterpreterFileService = new CodeInterpreterFileService();
@@ -194,5 +201,9 @@ export class ServiceContainer {
 
   public getCodeInterpreterFileService(): CodeInterpreterFileService {
     return this.codeInterpreterFileService;
+  }
+
+  public getCodeInterpreterRouterService(): CodeInterpreterRouterService {
+    return this.codeInterpreterRouterService;
   }
 }
