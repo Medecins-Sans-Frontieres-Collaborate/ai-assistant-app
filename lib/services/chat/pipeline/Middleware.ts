@@ -12,6 +12,7 @@ import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { getMessageContentTypes } from '@/lib/utils/server/chat/chat';
 
 import { ChatBody } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { SearchMode } from '@/types/searchMode';
 
@@ -136,6 +137,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      codeInterpreterMode,
       threadId,
       forcedAgentType,
       tone,
@@ -172,6 +174,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      codeInterpreterMode,
       threadId,
       forcedAgentType,
       tone,
@@ -349,6 +352,7 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
     hasAudio: context.hasAudio,
     botId: context.botId,
     searchMode: context.searchMode,
+    codeInterpreterMode: context.codeInterpreterMode,
     agentMode: context.agentMode,
   });
 
