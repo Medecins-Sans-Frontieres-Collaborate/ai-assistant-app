@@ -10,6 +10,7 @@ import {
 import React, { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 import { CodeInterpreterOutput } from '@/types/codeInterpreter';
 
@@ -118,10 +119,13 @@ export const GeneratedFilePreview: FC<GeneratedFilePreviewProps> = ({
     if (output.base64Data) {
       return (
         <div className="my-3">
-          <img
+          <Image
             src={`data:${output.mimeType || 'image/png'};base64,${output.base64Data}`}
             alt={output.filename || 'Generated image'}
+            width={800}
+            height={600}
             className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700"
+            unoptimized
           />
           <div className="flex items-center gap-2 mt-2">
             <button
@@ -162,10 +166,13 @@ export const GeneratedFilePreview: FC<GeneratedFilePreviewProps> = ({
 
         {imageUrl && (
           <>
-            <img
+            <Image
               src={imageUrl}
               alt={output.filename || 'Generated image'}
+              width={800}
+              height={600}
               className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700"
+              unoptimized
             />
             <div className="flex items-center gap-2 mt-2">
               <button
