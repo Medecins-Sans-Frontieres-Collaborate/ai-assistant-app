@@ -5,3 +5,8 @@
  */
 
 export { CodeInterpreterFileService } from './CodeInterpreterFileService';
+export {
+  CodeInterpreterRouterService,
+  type CodeInterpreterRouterRequest,
+  type CodeInterpreterRouterResponse,
+} from './CodeInterpreterRouterService';
