@@ -236,7 +236,7 @@ export function useChatActions({
         messages: messagesForAPI,
       };
 
-      sendMessage?.(userMessage, apiConversation, undefined);
+      sendMessage?.(userMessage, apiConversation, undefined, undefined);
     },
     [sendMessage],
   );
