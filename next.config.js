@@ -69,9 +69,29 @@ const nextConfig = {
     ];
   },
 
-  // Security headers
+  // Security & caching headers
   headers: async () => {
     return [
+      // Hashed static assets — immutable, cache for 1 year (defense-in-depth)
+      {
+        source: '/_next/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // HTML pages — always revalidate so browsers fetch the latest chunk manifest
+      {
+        source: '/((?!_next/static|icons|favicon).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
       // Disable proxy buffering for the streaming chat endpoint (defense-in-depth)
       {
         source: '/api/chat',
