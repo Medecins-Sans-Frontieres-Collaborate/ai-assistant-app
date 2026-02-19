@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 
@@ -29,6 +30,9 @@ export const InputControlsBar: React.FC<InputControlsBarProps> = ({
   handleSend,
 }) => {
   const searchMode = useChatInputStore((state) => state.searchMode);
+  const codeInterpreterMode = useChatInputStore(
+    (state) => state.codeInterpreterMode,
+  );
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const isMultiline = useChatInputStore((state) => state.isMultiline);
   return (
@@ -36,7 +40,10 @@ export const InputControlsBar: React.FC<InputControlsBarProps> = ({
       {/* Left controls */}
       <div
         className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
-          searchMode === SearchMode.ALWAYS || selectedToneId || isMultiline
+          searchMode === SearchMode.ALWAYS ||
+          codeInterpreterMode === CodeInterpreterMode.ALWAYS ||
+          selectedToneId ||
+          isMultiline
             ? 'bottom-2'
             : 'top-1/2 transform -translate-y-1/2'
         }`}
@@ -52,7 +59,10 @@ export const InputControlsBar: React.FC<InputControlsBarProps> = ({
       {/* Right controls */}
       <div
         className={`absolute right-2.5 flex items-center gap-2 z-[10001] transition-all duration-200 ${
-          searchMode === SearchMode.ALWAYS || selectedToneId || isMultiline
+          searchMode === SearchMode.ALWAYS ||
+          codeInterpreterMode === CodeInterpreterMode.ALWAYS ||
+          selectedToneId ||
+          isMultiline
             ? 'bottom-2'
             : 'top-1/2 transform -translate-y-1/2'
         }`}
