@@ -95,6 +95,55 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Chunk load error auto-recovery: reloads once after deploy-induced chunk failures */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var RELOAD_KEY = 'chunk_error_reload';
+
+                function isChunkError(message) {
+                  if (!message) return false;
+                  var patterns = [
+                    'ChunkLoadError',
+                    'Loading chunk',
+                    'Failed to fetch dynamically imported module',
+                    'error loading dynamically imported module'
+                  ];
+                  for (var i = 0; i < patterns.length; i++) {
+                    if (message.indexOf(patterns[i]) !== -1) return true;
+                  }
+                  return false;
+                }
+
+                function handleChunkError() {
+                  try {
+                    if (sessionStorage.getItem(RELOAD_KEY)) return;
+                    sessionStorage.setItem(RELOAD_KEY, '1');
+                    window.location.reload();
+                  } catch (e) {}
+                }
+
+                window.addEventListener('error', function(e) {
+                  if (isChunkError(e.message || (e.error && e.error.message))) {
+                    handleChunkError();
+                  }
+                });
+
+                window.addEventListener('unhandledrejection', function(e) {
+                  var msg = e.reason && (e.reason.message || String(e.reason));
+                  if (isChunkError(msg)) {
+                    handleChunkError();
+                  }
+                });
+
+                window.addEventListener('load', function() {
+                  try { sessionStorage.removeItem(RELOAD_KEY); } catch (e) {}
+                });
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         {children}
