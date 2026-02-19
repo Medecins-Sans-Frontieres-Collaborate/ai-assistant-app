@@ -7,10 +7,12 @@ import React, {
 } from 'react';
 import toast from 'react-hot-toast';
 
+import { useTranslations } from 'next-intl';
+
 import {
   ChatInputSubmitTypes,
-  FilePreview,
   FileFieldValue,
+  FilePreview,
 } from '@/types/chat';
 
 import FileIcon from '@/components/Icons/file';
@@ -39,6 +41,7 @@ const ChatInputFile = ({
   setImageFieldValue,
   setUploadProgress,
 }: ChatInputFileProps) => {
+  const t = useTranslations('chatInput');
   const fileInputRef: MutableRefObject<any> = useRef(null);
 
   const handleFileButtonClick = (
@@ -50,15 +53,11 @@ const ChatInputFile = ({
         fileInputRef.current.click();
       } else {
         console.error('File input reference is not available');
-        toast.error(
-          'Could not open file picker. Try using drag and drop instead.',
-        );
+        toast.error(t('filePickerError'));
       }
     } catch (error) {
       console.error('Error triggering file input:', error);
-      toast.error(
-        'Could not open file picker. Try using drag and drop instead.',
-      );
+      toast.error(t('filePickerError'));
     }
   };
 
@@ -86,10 +85,10 @@ const ChatInputFile = ({
       <div className="relative group">
         <button onClick={handleFileButtonClick} className="flex">
           <FileIcon className="text-black dark:text-white rounded h-5 w-5 hover:bg-gray-200 dark:hover:bg-gray-700" />
-          <span className="sr-only">Add document</span>
+          <span className="sr-only">{t('addDocument')}</span>
         </button>
         <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md">
-          Upload Document
+          {t('uploadDocument')}
         </div>
       </div>
     </>

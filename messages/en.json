@@ -352,7 +352,40 @@
     "baseModel": "Base Model",
     "formatDescription": "Format: asst_xxxxx (from MSF AI Assistant Foundry)",
     "importantInfo": "This agent will have access to conversation context and can use the same tools as standard models. Make sure the Agent ID is correct as it cannot be changed later.",
-    "defunctWarning": "This agent's base model is no longer available. Edit the agent to select a new base model, or delete it."
+    "defunctWarning": "This agent's base model is no longer available. Edit the agent to select a new base model, or delete it.",
+    "editCustomAgent": "Edit Custom Agent",
+    "addCustomAgent": "Add Custom Agent",
+    "experimental": "Experimental",
+    "createNew": "Create New",
+    "import": "Import",
+    "importCustomAgents": "Import Custom Agents",
+    "importFileDescription": "Select a JSON file with one or more agent configurations",
+    "chooseFile": "Choose File",
+    "validatedSuccess": "Agent validated successfully!",
+    "cancel": "Cancel",
+    "validating": "Validating...",
+    "updateAgent": "Update Agent",
+    "addAgent": "Add Agent",
+    "nameRequired": "Agent name is required",
+    "idRequired": "Agent ID is required",
+    "invalidIdFormat": "Invalid Agent ID format. Expected format: asst_xxxxx",
+    "invalidFileFormat": "Invalid file format",
+    "noAgentsInFile": "No agents found in the import file",
+    "importFailed": "Failed to import file",
+    "importConflict": "The following agents have conflicts:\n\n{conflicts}\n\nImport anyway? This will create duplicates.",
+    "importSuccess": "Successfully imported {count} agent(s)",
+    "agentDetails": "Agent Details",
+    "agentIdLabel": "Agent ID:",
+    "baseModelLabel": "Base Model:",
+    "unknown": "Unknown",
+    "descriptionLabel": "Description:",
+    "export": "Export",
+    "edit": "Edit",
+    "confirmDelete": "Confirm",
+    "delete": "Delete",
+    "noCustomAgentsYet": "No custom agents yet.",
+    "noOrgAgentsConfigured": "No organization agents configured.",
+    "validationFailed": "Validation failed"
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -564,6 +597,13 @@
       "availableLanguages": "Available languages:",
       "moreLanguages": "+7 more"
     },
+    "languageSupport": {
+      "title": "54 Languages Supported",
+      "description": "Now available in 54 languages so more MSF teams and communities can use the AI Assistant in their own language",
+      "autoDetect": "Your language is automatically detected from your browser settings",
+      "manualSwitch": "Switch anytime via the language selector in the sidebar",
+      "andMore": "and more"
+    },
     "pwa": {
       "title": "Install as Mobile App",
       "description": "Progressive Web App with native experience",
@@ -614,7 +654,9 @@
     "generatedFiles": "Generated Files",
     "pythonCode": "Python Code",
     "running": "Running...",
-    "output": "Output"
+    "output": "Output",
+    "no": "No",
+    "beta": "Beta"
   },
   "terms": {
     "officialLanguages": "Official version:",
@@ -666,6 +708,14 @@
     "deleteMessage": "Delete message",
     "imageContent": "Image Content",
     "fullSizePreview": "Full size preview",
+    "failedToLoadImage": "Failed to load image",
+    "loadingImage": "Loading image...",
+    "imageAlt": "Image {number}",
+    "download": "Download",
+    "openAsDocument": "Open as Document",
+    "openInCodeEditor": "Open in Code Editor",
+    "failedToOpenCodeEditor": "Failed to open file in code editor. Please try again.",
+    "failedToOpenDocEditor": "Failed to open file in document editor. Please try again.",
     "enterSearchQueryPlaceholder": "Enter your search query or question...",
     "errorFetchingUrl": "An error occurred while fetching the URL content",
     "errorInitiatingSearch": "An error occurred while initiating web search",
@@ -837,7 +887,7 @@
     "contactSupport": "Contact support",
     "secureSso": "Secure SSO",
     "howToGetAccess": "How do I get access?",
-    "accessLimitedText": "Currently MSF AI Assistant is only available to USA and Amsterdam staff.",
+    "accessLimitedText": "Currently MSF AI Assistant is only available to USA, Amsterdam, and Geneva staff.",
     "expandAccessSoon": "We hope to expand access soon!",
     "errorConfiguration": "There is a problem with the server configuration.",
     "errorAccessDenied": "You do not have permission to sign in.",
@@ -1138,6 +1188,7 @@
     "sections": {
       "baseModels": "Base Models"
     },
+    "maintainedBy": "Maintained by",
     "agents": {
       "advancedFeatureBadge": "Advanced Feature",
       "description": "Create and manage custom AI agents with specialized capabilities. These agents run on the MSF AI Assistant Foundry instance.",
@@ -1678,5 +1729,57 @@
     "expired": "This translation has expired and is no longer available",
     "expiresSoon": "Expires in {days} day(s) - download soon",
     "expires": "Available for {days} days"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Organization Agents"
+    },
+    "customAgents": {
+      "title": "Custom Agents",
+      "advancedBadge": "Advanced",
+      "experimentalBlurb": "Experimental — built in direct collaboration with MSF power users. Not for general use.",
+      "createButton": "Create Custom Agent"
+    },
+    "selectAgentPrompt": "Select an agent to view details"
+  },
+  "privacy": {
+    "policyTitle": "Privacy Policy & Data Protection",
+    "policyDescription": "Learn how your data is protected and what information should not be entered",
+    "termsOfUse": "Terms of Use",
+    "termsDescription": "Review responsible use guidelines and prohibited uses",
+    "keyPrivacyPoints": "Key Privacy Points",
+    "localStorage": "Your conversations are stored locally on your device",
+    "azureInfra": "All data processing happens within MSF systems using Azure infrastructure",
+    "noPersonalData": "Do not enter personal data (names, phone numbers, etc.)",
+    "noSensitiveData": "Do not enter highly sensitive operational details",
+    "concernsTitle": "Privacy Concerns or Incidents?",
+    "contactUs": "Contact us immediately if you have privacy concerns:"
+  },
+  "variableModal": {
+    "fillInstructions": "Fill in the variables below to customize your prompt",
+    "optional": "Optional",
+    "required": "Required",
+    "default": "Default:",
+    "defaultPlaceholder": "{defaultValue} (default)",
+    "enterValue": "Enter value for {key}...",
+    "cancel": "Cancel",
+    "apply": "Apply"
+  },
+  "recentSources": {
+    "title": "Latest Source Data",
+    "unableToLoad": "Unable to load latest sources",
+    "retry": "Retry",
+    "noSources": "No recent sources available",
+    "refresh": "Refresh",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{count} days ago"
+  },
+  "chatInput": {
+    "filePickerError": "Could not open file picker. Try using drag and drop instead.",
+    "addDocument": "Add document",
+    "uploadDocument": "Upload Document",
+    "images": "Images",
+    "addImage": "Add image"
   }
 }

@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "Lähetä viesti MSF AI -avustajalle täällä",
   "chatInputPlaceholderFull": "Lähetä viesti MSF AI -avustajalle täällä tai kirjoita \"/\" valitaksesi kehotteen...",
   "transcribingChatPlaceholder": "Puhtaaksikirjoitetaan...",
-  "sendFeedback": "Lähetä palautetta",
+  "sendFeedback": "Pyydä tukea",
   "welcomeMessage": "Tervetuloa MSF AI -assistenttiin",
   "appName": "MSF AI -avustaja",
   "modelSelectionDialogue": "AI-mallin valinta",
@@ -116,7 +116,7 @@
   "chatFeaturesDropdownTransform": "Muuta",
   "chatFeaturesDropdownImageModal": "kuvat",
   "chatFeaturesDropdownFile": "Tiedosto",
-  "chatFeaturesDropdownCompose": "Säveltää",
+  "chatFeaturesDropdownCompose": "Kirjoita",
   "webUrlInputDescription": "Syötä verkkosivuston URL tekoälyanalyysiä varten",
   "webUrlQuestionDescription": "Mitä haluaisit tietää tästä verkkosivustosta?",
   "webSearchInputDescription": "Etsi internetistä tekoälypohjaisella analyysillä",
@@ -230,8 +230,8 @@
   "Prompt name": "Kehotteen nimi",
   "Prompt content": "Kehotteen sisältö",
   "Are you sure you want to delete this prompt?": "Haluatko varmasti poistaa tämän kehotteen?",
-  "Import data from sidebar": "Tuo tietoja sivupalkista",
-  "Export data from sidebar": "Vie tietoja sivupalkista",
+  "Import data from sidebar": "Palauta keskusteluhistoria",
+  "Export data from sidebar": "Varmuuskopioi keskusteluhistoria",
   "Search chats": "Hae keskusteluja",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Tämä on joukko ohjeita, jotka ohjaavat tekoälyavustajaa vastaamaan. Se auttaa tekoälyä tarjoamaan hyödyllistä ja tarkkaa tietoa antamalla kontekstin esitettyihin kysymyksiin.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Syötä kehote tai kirjoita \"/\" valitaksesi kehotteen...",
@@ -323,7 +323,40 @@
     "baseModel": "Perusmalli",
     "formatDescription": "Muoto: asst_xxxxx (MSF AI Assistant Foundrysta)",
     "importantInfo": "Tällä agentilla on pääsy keskustelukontekstiin ja se voi käyttää samoja työkaluja kuin vakiomallit. Varmista, että Agentti-ID on oikein, koska sitä ei voi muuttaa myöhemmin.",
-    "defunctWarning": "Tämän agentin perusmalli ei ole enää saatavilla. Muokkaa agenttia valitaksesi uuden perusmallin tai poista agentti."
+    "defunctWarning": "Tämän agentin perusmalli ei ole enää saatavilla. Muokkaa agenttia valitaksesi uuden perusmallin tai poista agentti.",
+    "editCustomAgent": "Muokkaa mukautettua agenttia",
+    "addCustomAgent": "Lisää mukautettu agentti",
+    "experimental": "Kokeellinen",
+    "createNew": "Luo uusi",
+    "import": "Tuo",
+    "importCustomAgents": "Tuo mukautettuja agentteja",
+    "importFileDescription": "Valitse JSON-tiedosto, joka sisältää yhden tai useamman agenttimäärityksen",
+    "chooseFile": "Valitse tiedosto",
+    "validatedSuccess": "Agentti vahvistettu onnistuneesti!",
+    "cancel": "Peruuta",
+    "validating": "Vahvistetaan...",
+    "updateAgent": "Päivitä agentti",
+    "addAgent": "Lisää agentti",
+    "nameRequired": "Agentin nimi on pakollinen",
+    "idRequired": "Agentin tunniste on pakollinen",
+    "invalidIdFormat": "Virheellinen agenttitunnisteen muoto. Odotettu muoto: asst_xxxxx",
+    "invalidFileFormat": "Virheellinen tiedostomuoto",
+    "noAgentsInFile": "Tuontitiedostosta ei löytynyt agentteja",
+    "importFailed": "Tiedoston tuonti epäonnistui",
+    "importConflict": "Seuraavilla agenteilla on ristiriitoja:\n\n{conflicts}\n\nTuodaanko silti? Tämä luo kopioita.",
+    "importSuccess": "{count} agentti(a) tuotu onnistuneesti",
+    "agentDetails": "Agentin tiedot",
+    "agentIdLabel": "Agentin tunniste:",
+    "baseModelLabel": "Perusmalli:",
+    "unknown": "Tuntematon",
+    "descriptionLabel": "Kuvaus:",
+    "export": "Vie",
+    "edit": "Muokkaa",
+    "confirmDelete": "Vahvista",
+    "delete": "Poista",
+    "noCustomAgentsYet": "Ei vielä mukautettuja agentteja.",
+    "noOrgAgentsConfigured": "Organisaatioagentteja ei ole määritetty.",
+    "validationFailed": "Vahvistus epäonnistui"
   },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",
@@ -480,7 +513,8 @@
     "keepEditing": "Jatka muokkaamista",
     "yes": "Kyllä",
     "no": "Ei",
-    "download": "Lataa"
+    "download": "Lataa",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Odottamaton virhe tapahtui",
@@ -508,7 +542,7 @@
     "contactSupport": "Ota yhteyttä tukeen",
     "secureSso": "Turvallinen SSO",
     "howToGetAccess": "Miten saan käyttöoikeuden?",
-    "accessLimitedText": "Tällä hetkellä MSF AI Assistant on saatavilla vain USA:n ja Amsterdamin henkilöstölle.",
+    "accessLimitedText": "Tällä hetkellä MSF AI Assistant on saatavilla vain USA:n, Amsterdamin ja Geneven henkilöstölle.",
     "expandAccessSoon": "Toivomme voivamme laajentaa käyttöoikeutta pian!",
     "errorConfiguration": "Palvelimen määrityksessä on ongelma.",
     "errorAccessDenied": "Sinulla ei ole oikeutta kirjautua sisään.",
@@ -561,6 +595,14 @@
     "deleteMessage": "Poista viesti",
     "imageContent": "Kuvasisältö",
     "fullSizePreview": "Täysikokoinen esikatselu",
+    "failedToLoadImage": "Kuvan lataaminen epäonnistui",
+    "loadingImage": "Ladataan kuvaa...",
+    "imageAlt": "Kuva {number}",
+    "download": "Lataa",
+    "openAsDocument": "Avaa asiakirjana",
+    "openInCodeEditor": "Avaa koodieditorissa",
+    "failedToOpenCodeEditor": "Tiedoston avaaminen koodieditorissa epäonnistui. Yritä uudelleen.",
+    "failedToOpenDocEditor": "Tiedoston avaaminen asiakirjaeditorissa epäonnistui. Yritä uudelleen.",
     "enterSearchQueryPlaceholder": "Kirjoita hakukyselysi tai kysymyksesi...",
     "errorFetchingUrl": "Virhe URL-sisällön hakemisessa",
     "errorInitiatingSearch": "Virhe verkkohaun aloittamisessa",
@@ -1068,6 +1110,7 @@
     "sections": {
       "baseModels": "Perusmallit"
     },
+    "maintainedBy": "Ylläpitäjä",
     "agents": {
       "advancedFeatureBadge": "Edistynyt ominaisuus",
       "description": "Luo ja hallitse räätälöityjä AI-agentteja erikoistoiminnoilla. Nämä agentit toimivat MSF AI Assistant Foundry -instanssissa.",
@@ -1422,6 +1465,13 @@
       "benefit1": "Käynnistä sovellus kotinäytöltä kuten natiivi sovellus",
       "benefit2": "Koko näytön tila ilman selaimen käyttöliittymää",
       "benefit3": "Pääsy tallennettuihin keskusteluihin myös offline-tilassa"
+    },
+    "languageSupport": {
+      "title": "54 kieltä tuettu",
+      "description": "Nyt saatavilla 54 kielellä, jotta useammat MSF-tiimit ja yhteisöt voivat käyttää tekoälyavustajaa omalla kielellään",
+      "autoDetect": "Kielesi tunnistetaan automaattisesti selaimesi asetuksista",
+      "manualSwitch": "Vaihda milloin tahansa sivupalkin kielivalitsimen kautta",
+      "andMore": "ja lisää"
     }
   },
   "Professional": "Ammatillinen",
@@ -1692,5 +1742,57 @@
     "modeChangedAlways": "Koodin tulkki: Aina käytössä",
     "modeOverrideEnabled": "Koodin tulkki: Pakotettu tässä viestissä",
     "modeOverrideDisabled": "Koodin tulkki: Käytetään keskustelun oletusta"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Organisaation agentit"
+    },
+    "customAgents": {
+      "title": "Mukautetut agentit",
+      "advancedBadge": "Edistynyt",
+      "experimentalBlurb": "Kokeellinen — rakennettu suorassa yhteistyössä MSF:n tehokäyttäjien kanssa. Ei yleiseen käyttöön.",
+      "createButton": "Luo mukautettu agentti"
+    },
+    "selectAgentPrompt": "Valitse agentti nähdäksesi tiedot"
+  },
+  "privacy": {
+    "policyTitle": "Tietosuojakäytäntö ja tietosuoja",
+    "policyDescription": "Opi miten tietosi suojataan ja mitä tietoja ei tulisi syöttää",
+    "termsOfUse": "Käyttöehdot",
+    "termsDescription": "Tutustu vastuullisen käytön ohjeisiin ja kiellettyihin käyttötapoihin",
+    "keyPrivacyPoints": "Tärkeimmät tietosuojakohdat",
+    "localStorage": "Keskustelusi tallennetaan paikallisesti laitteellesi",
+    "azureInfra": "Kaikki tietojenkäsittely tapahtuu MSF-järjestelmissä Azure-infrastruktuuria käyttäen",
+    "noPersonalData": "Älä syötä henkilötietoja (nimiä, puhelinnumeroita jne.)",
+    "noSensitiveData": "Älä syötä erittäin arkaluonteisia toiminnallisia tietoja",
+    "concernsTitle": "Tietosuojahuolia tai poikkeamia?",
+    "contactUs": "Ota meihin yhteyttä välittömästi, jos sinulla on tietosuojahuolia:"
+  },
+  "variableModal": {
+    "fillInstructions": "Täytä alla olevat muuttujat mukauttaaksesi kehotettasi",
+    "optional": "Valinnainen",
+    "required": "Pakollinen",
+    "default": "Oletus:",
+    "defaultPlaceholder": "{defaultValue} (oletus)",
+    "enterValue": "Syötä arvo kohteelle {key}...",
+    "cancel": "Peruuta",
+    "apply": "Käytä"
+  },
+  "recentSources": {
+    "title": "Uusimmat lähdetiedot",
+    "unableToLoad": "Uusimpia lähteitä ei voitu ladata",
+    "retry": "Yritä uudelleen",
+    "noSources": "Ei viimeaikaisia lähteitä saatavilla",
+    "refresh": "Päivitä",
+    "today": "Tänään",
+    "yesterday": "Eilen",
+    "daysAgo": "{count} päivää sitten"
+  },
+  "chatInput": {
+    "filePickerError": "Tiedostovalitsinta ei voitu avata. Kokeile vetämistä ja pudottamista.",
+    "addDocument": "Lisää asiakirja",
+    "uploadDocument": "Lataa asiakirja",
+    "images": "Kuvat",
+    "addImage": "Lisää kuva"
   }
 }

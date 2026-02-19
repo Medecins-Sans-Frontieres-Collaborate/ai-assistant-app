@@ -41,8 +41,8 @@
   "Error fetching models_": "Fehler beim Abrufen der Sprachmodelle.",
   "AI": "KI",
   "You": "Du",
-  "Cancel": "Cancel",
-  "Save & Submit": "Save & Submit",
+  "Cancel": "Abbrechen",
+  "Save & Submit": "Speichern und absenden",
   "Make sure your OpenAI API key is set in the bottom left of the sidebar_": "Stelle sicher, dass dein OpenAI API-Schlüssel in der unteren linken Ecke der Seitenleiste eingetragen ist.",
   "If you completed this step, OpenAI may be experiencing issues_": "Wenn dies der Fall ist, könnte OpenAI möglicherweise momentan Probleme haben.",
   "click if using a _env_local file": "click if using a .env.local file",
@@ -65,7 +65,7 @@
   "chatInputPlaceholder": "Nachricht an MSF AI-Assistent hier",
   "chatInputPlaceholderFull": "Nachricht an MSF KI-Assistenten hier oder \"/\" eingeben, um eine Eingabeaufforderung auszuwählen...",
   "transcribingChatPlaceholder": "Transkribieren...",
-  "sendFeedback": "Feedback senden",
+  "sendFeedback": "Support anfragen",
   "welcomeMessage": "Willkommen beim MSF AI-Assistenten",
   "appName": "MSF AI-Assistent",
   "modelSelectionDialogue": "KI-Modell-Auswahl",
@@ -141,7 +141,7 @@
   "chatFeaturesDropdownTransform": "Umwandeln",
   "chatFeaturesDropdownImageModal": "Bilder",
   "chatFeaturesDropdownFile": "Datei",
-  "chatFeaturesDropdownCompose": "Komponieren",
+  "chatFeaturesDropdownCompose": "Verfassen",
   "webUrlInputDescription": "Geben Sie eine URL für die KI-Analyse ein",
   "webUrlQuestionDescription": "Was möchten Sie über diese Website wissen?",
   "webSearchInputDescription": "Durchsuchen Sie das Internet mit KI-gestützter Analyse",
@@ -168,7 +168,7 @@
   "Light mode": "Light Mode",
   "Settings": "Einstellungen",
   "Dark mode": "Dark Mode",
-  "Theme": "Thema",
+  "Theme": "Design",
   "Copy code": "Code kopieren",
   "Copied!": "Kopiert!",
   "Enter file name": "Dateinamen eingeben",
@@ -348,7 +348,40 @@
     "baseModel": "Basismodell",
     "formatDescription": "Format: asst_xxxxx (von MSF AI Assistant Foundry)",
     "importantInfo": "Dieser Agent hat Zugriff auf den Konversationskontext und kann die gleichen Tools wie Standardmodelle verwenden. Stellen Sie sicher, dass die Agenten-ID korrekt ist, da sie später nicht geändert werden kann.",
-    "defunctWarning": "Das Basismodell dieses Agents ist nicht mehr verfügbar. Bearbeiten Sie den Agent, um ein neues Basismodell auszuwählen, oder löschen Sie ihn."
+    "defunctWarning": "Das Basismodell dieses Agents ist nicht mehr verfügbar. Bearbeiten Sie den Agent, um ein neues Basismodell auszuwählen, oder löschen Sie ihn.",
+    "editCustomAgent": "Benutzerdefinierten Agenten bearbeiten",
+    "addCustomAgent": "Benutzerdefinierten Agenten hinzufügen",
+    "experimental": "Experimentell",
+    "createNew": "Neu erstellen",
+    "import": "Importieren",
+    "importCustomAgents": "Benutzerdefinierte Agenten importieren",
+    "importFileDescription": "Wählen Sie eine JSON-Datei mit einer oder mehreren Agentenkonfigurationen",
+    "chooseFile": "Datei auswählen",
+    "validatedSuccess": "Agent erfolgreich validiert!",
+    "cancel": "Abbrechen",
+    "validating": "Validierung...",
+    "updateAgent": "Agent aktualisieren",
+    "addAgent": "Agent hinzufügen",
+    "nameRequired": "Agentenname ist erforderlich",
+    "idRequired": "Agenten-ID ist erforderlich",
+    "invalidIdFormat": "Ungültiges Agenten-ID-Format. Erwartetes Format: asst_xxxxx",
+    "invalidFileFormat": "Ungültiges Dateiformat",
+    "noAgentsInFile": "Keine Agenten in der Importdatei gefunden",
+    "importFailed": "Datei konnte nicht importiert werden",
+    "importConflict": "Die folgenden Agenten haben Konflikte:\n\n{conflicts}\n\nTrotzdem importieren? Dies erstellt Duplikate.",
+    "importSuccess": "{count} Agent(en) erfolgreich importiert",
+    "agentDetails": "Agentendetails",
+    "agentIdLabel": "Agenten-ID:",
+    "baseModelLabel": "Basismodell:",
+    "unknown": "Unbekannt",
+    "descriptionLabel": "Beschreibung:",
+    "export": "Exportieren",
+    "edit": "Bearbeiten",
+    "confirmDelete": "Bestätigen",
+    "delete": "Löschen",
+    "noCustomAgentsYet": "Noch keine benutzerdefinierten Agenten.",
+    "noOrgAgentsConfigured": "Keine Organisationsagenten konfiguriert.",
+    "validationFailed": "Validierung fehlgeschlagen"
   },
   "Quick Actions": "Schnellaktionen",
   "Type / in chat to access your prompts": "Geben Sie / im Chat ein, um auf Ihre Eingabeaufforderungen zuzugreifen",
@@ -505,7 +538,8 @@
     "keepEditing": "Weiter bearbeiten",
     "yes": "Ja",
     "no": "Nein",
-    "download": "Herunterladen"
+    "download": "Herunterladen",
+    "beta": "Beta"
   },
   "chat": {
     "downloadAudio": "Audio herunterladen",
@@ -538,6 +572,14 @@
     "deleteMessage": "Nachricht löschen",
     "imageContent": "Bildinhalt",
     "fullSizePreview": "Vorschau in voller Größe",
+    "failedToLoadImage": "Bild konnte nicht geladen werden",
+    "loadingImage": "Bild wird geladen...",
+    "imageAlt": "Bild {number}",
+    "download": "Herunterladen",
+    "openAsDocument": "Als Dokument öffnen",
+    "openInCodeEditor": "Im Code-Editor öffnen",
+    "failedToOpenCodeEditor": "Datei konnte nicht im Code-Editor geöffnet werden. Bitte versuchen Sie es erneut.",
+    "failedToOpenDocEditor": "Datei konnte nicht im Dokumenten-Editor geöffnet werden. Bitte versuchen Sie es erneut.",
     "enterSearchQueryPlaceholder": "Geben Sie Ihre Suchanfrage oder Frage ein...",
     "errorFetchingUrl": "Beim Abrufen des URL-Inhalts ist ein Fehler aufgetreten",
     "errorInitiatingSearch": "Beim Starten der Websuche ist ein Fehler aufgetreten",
@@ -703,7 +745,7 @@
     "contactSupport": "Support kontaktieren",
     "secureSso": "Sichere SSO",
     "howToGetAccess": "Wie bekomme ich Zugang?",
-    "accessLimitedText": "Derzeit ist der MSF AI Assistant nur für Mitarbeiter in den USA und Amsterdam verfügbar.",
+    "accessLimitedText": "Derzeit ist der MSF AI Assistant nur für Mitarbeiter in den USA, Amsterdam und Genf verfügbar.",
     "expandAccessSoon": "Wir hoffen, den Zugang bald zu erweitern!",
     "errorConfiguration": "Es gibt ein Problem mit der Serverkonfiguration.",
     "errorAccessDenied": "Sie haben keine Berechtigung zum Anmelden.",
@@ -981,6 +1023,7 @@
     "sections": {
       "baseModels": "Basismodelle"
     },
+    "maintainedBy": "Gepflegt von",
     "agents": {
       "advancedFeatureBadge": "Erweiterte Funktion",
       "description": "Erstellen und verwalten Sie benutzerdefinierte KI-Agenten mit spezialisierten Fähigkeiten. Diese Agenten laufen auf der MSF AI Assistant Foundry-Instanz.",
@@ -1422,6 +1465,13 @@
       "benefit1": "Wie eine native App vom Startbildschirm starten",
       "benefit2": "Vollbild ohne Browser-Oberfläche",
       "benefit3": "Offline-Zugriff auf gespeicherte Unterhaltungen"
+    },
+    "languageSupport": {
+      "title": "54 Sprachen unterstützt",
+      "description": "Jetzt in 54 Sprachen verfügbar, damit mehr MSF-Teams und Gemeinschaften den KI-Assistenten in ihrer eigenen Sprache nutzen können",
+      "autoDetect": "Ihre Sprache wird automatisch aus Ihren Browsereinstellungen erkannt",
+      "manualSwitch": "Wechseln Sie jederzeit über die Sprachauswahl in der Seitenleiste",
+      "andMore": "und mehr"
     }
   },
   "Professional": "Professionell",
@@ -1692,5 +1742,57 @@
     "modeChangedAlways": "Code Interpreter: Immer aktiv",
     "modeOverrideEnabled": "Code Interpreter: Für diese Nachricht erzwungen",
     "modeOverrideDisabled": "Code Interpreter: Standard der Unterhaltung"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Organisationsagenten"
+    },
+    "customAgents": {
+      "title": "Benutzerdefinierte Agenten",
+      "advancedBadge": "Erweitert",
+      "experimentalBlurb": "Experimentell — in direkter Zusammenarbeit mit MSF-Power-Usern entwickelt. Nicht für den allgemeinen Gebrauch.",
+      "createButton": "Benutzerdefinierten Agenten erstellen"
+    },
+    "selectAgentPrompt": "Wählen Sie einen Agenten aus, um Details anzuzeigen"
+  },
+  "privacy": {
+    "policyTitle": "Datenschutzrichtlinie & Datenschutz",
+    "policyDescription": "Erfahren Sie, wie Ihre Daten geschützt werden und welche Informationen nicht eingegeben werden sollten",
+    "termsOfUse": "Nutzungsbedingungen",
+    "termsDescription": "Überprüfen Sie die Richtlinien zur verantwortungsvollen Nutzung und verbotene Verwendungen",
+    "keyPrivacyPoints": "Wichtige Datenschutzpunkte",
+    "localStorage": "Ihre Gespräche werden lokal auf Ihrem Gerät gespeichert",
+    "azureInfra": "Die gesamte Datenverarbeitung erfolgt innerhalb der MSF-Systeme unter Verwendung der Azure-Infrastruktur",
+    "noPersonalData": "Geben Sie keine personenbezogenen Daten ein (Namen, Telefonnummern usw.)",
+    "noSensitiveData": "Geben Sie keine hochsensiblen operativen Details ein",
+    "concernsTitle": "Datenschutzbedenken oder Vorfälle?",
+    "contactUs": "Kontaktieren Sie uns umgehend bei Datenschutzbedenken:"
+  },
+  "variableModal": {
+    "fillInstructions": "Füllen Sie die untenstehenden Variablen aus, um Ihre Eingabeaufforderung anzupassen",
+    "optional": "Optional",
+    "required": "Erforderlich",
+    "default": "Standard:",
+    "defaultPlaceholder": "{defaultValue} (Standard)",
+    "enterValue": "Wert für {key} eingeben...",
+    "cancel": "Abbrechen",
+    "apply": "Anwenden"
+  },
+  "recentSources": {
+    "title": "Neueste Quelldaten",
+    "unableToLoad": "Neueste Quellen konnten nicht geladen werden",
+    "retry": "Erneut versuchen",
+    "noSources": "Keine aktuellen Quellen verfügbar",
+    "refresh": "Aktualisieren",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "daysAgo": "vor {count} Tagen"
+  },
+  "chatInput": {
+    "filePickerError": "Dateiauswahl konnte nicht geöffnet werden. Versuchen Sie stattdessen Drag & Drop.",
+    "addDocument": "Dokument hinzufügen",
+    "uploadDocument": "Dokument hochladen",
+    "images": "Bilder",
+    "addImage": "Bild hinzufügen"
   }
 }

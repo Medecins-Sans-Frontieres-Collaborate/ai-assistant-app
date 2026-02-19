@@ -2,7 +2,7 @@
   "welcomeMessage": "Karibu kwenye Msaidizi wa AI wa MSF",
   "transcribingChatPlaceholder": "Kuandika...",
   "temperatureDescription": "Thamani za juu kama 0.8 zitafanya matokeo kuwa ya ubunifu zaidi, wakati thamani za chini kama 0.2 zitafanya kuwa na umakini zaidi na ya kimaamuzi.",
-  "sendFeedback": "Tuma Maoni",
+  "sendFeedback": "Omba Msaada",
   "modelSelectionDialogue": "Uteuzi wa Mfano wa AI",
   "appName": "Msaidizi wa AI wa MSF",
   "chatDisclaimer": "Msaidizi wa AI wa MSF anaweza kufanya makosa. Angalia taarifa muhimu.",
@@ -172,8 +172,8 @@
   "Prompt name": "Jina la kidokezo",
   "Prompt content": "Maudhui ya kidokezo",
   "Are you sure you want to delete this prompt?": "Je, una uhakika unataka kufuta kidokezo hiki?",
-  "Import data from sidebar": "Ingiza data kutoka kwa upau wa kando",
-  "Export data from sidebar": "Toa data kutoka kwa upau wa kando",
+  "Import data from sidebar": "Rejesha historia ya mazungumzo",
+  "Export data from sidebar": "Hifadhi nakala ya historia ya mazungumzo",
   "Search chats": "Tafuta mazungumzo",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Hii ni seti ya maelekezo ambayo yanaongoza Msaidizi wa AI jinsi ya kujibu. Inasaidia AI kutoa habari muhimu na sahihi kwa kutoa muktadha kwa maswali yanayoulizwa.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Ingiza kidokezo au andika \"/\" kuchagua kidokezo...",
@@ -265,7 +265,40 @@
     "baseModel": "Modeli ya msingi",
     "formatDescription": "Muundo: asst_xxxxx (kutoka MSF AI Assistant Foundry)",
     "importantInfo": "Wakala huyu atakuwa na ufikiaji wa muktadha wa mazungumzo na ataweza kutumia zana sawa na miundo ya kawaida. Hakikisha kitambulisho cha wakala ni sahihi kwa sababu hakiwezi kubadilishwa baadaye.",
-    "defunctWarning": "Mfano wa msingi wa wakala huyu haupatikani tena. Hariri wakala kuchagua mfano mpya wa msingi, au futa."
+    "defunctWarning": "Mfano wa msingi wa wakala huyu haupatikani tena. Hariri wakala kuchagua mfano mpya wa msingi, au futa.",
+    "editCustomAgent": "Hariri Wakala Maalum",
+    "addCustomAgent": "Ongeza Wakala Maalum",
+    "experimental": "Majaribio",
+    "createNew": "Tengeneza Mpya",
+    "import": "Ingiza",
+    "importCustomAgents": "Ingiza Mawakala Maalum",
+    "importFileDescription": "Chagua faili ya JSON yenye usanidi mmoja au zaidi wa wakala",
+    "chooseFile": "Chagua Faili",
+    "validatedSuccess": "Wakala amethibitishwa kwa mafanikio!",
+    "cancel": "Ghairi",
+    "validating": "Inathibitisha...",
+    "updateAgent": "Sasisha Wakala",
+    "addAgent": "Ongeza Wakala",
+    "nameRequired": "Jina la wakala linahitajika",
+    "idRequired": "Kitambulisho cha wakala kinahitajika",
+    "invalidIdFormat": "Muundo batili wa Kitambulisho cha Wakala. Muundo unaotarajiwa: asst_xxxxx",
+    "invalidFileFormat": "Muundo batili wa faili",
+    "noAgentsInFile": "Hakuna mawakala waliopatikana katika faili ya kuingiza",
+    "importFailed": "Imeshindwa kuingiza faili",
+    "importConflict": "Mawakala wafuatao wana migogoro:\n\n{conflicts}\n\nIngiza hata hivyo? Hii itaunda nakala.",
+    "importSuccess": "Mawakala {count} wameingizwa kwa mafanikio",
+    "agentDetails": "Maelezo ya Wakala",
+    "agentIdLabel": "Kitambulisho cha Wakala:",
+    "baseModelLabel": "Mfano wa Msingi:",
+    "unknown": "Haijulikani",
+    "descriptionLabel": "Maelezo:",
+    "export": "Hamisha",
+    "edit": "Hariri",
+    "confirmDelete": "Thibitisha",
+    "delete": "Futa",
+    "noCustomAgentsYet": "Hakuna mawakala maalum bado.",
+    "noOrgAgentsConfigured": "Hakuna mawakala wa shirika waliosanidiwa.",
+    "validationFailed": "Uthibitishaji umeshindwa"
   },
   "Quick Actions": "Vitendo vya Haraka",
   "Type / in chat to access your prompts": "Andika / katika mazungumzo ili kufikia vidokezo vyako",
@@ -505,7 +538,8 @@
     "keepEditing": "Endelea Kuhariri",
     "yes": "Ndiyo",
     "no": "Hapana",
-    "download": "Pakua"
+    "download": "Pakua",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Hitilafu isiyotarajiwa imetokea",
@@ -533,7 +567,7 @@
     "contactSupport": "Wasiliana na usaidizi",
     "secureSso": "SSO Salama",
     "howToGetAccess": "Nipataje ufikiaji?",
-    "accessLimitedText": "Kwa sasa MSF AI Assistant inapatikana tu kwa wafanyakazi wa Marekani na Amsterdam.",
+    "accessLimitedText": "Kwa sasa MSF AI Assistant inapatikana tu kwa wafanyakazi wa Marekani, Amsterdam na Geneva.",
     "expandAccessSoon": "Tunatumaini kupanua ufikiaji hivi karibuni!",
     "errorConfiguration": "Kuna tatizo la usanidi wa seva.",
     "errorAccessDenied": "Huna ruhusa ya kuingia.",
@@ -586,6 +620,14 @@
     "deleteMessage": "Futa ujumbe",
     "imageContent": "Maudhui ya picha",
     "fullSizePreview": "Onyesho la ukubwa kamili",
+    "failedToLoadImage": "Imeshindwa kupakia picha",
+    "loadingImage": "Inapakia picha...",
+    "imageAlt": "Picha {number}",
+    "download": "Pakua",
+    "openAsDocument": "Fungua kama Hati",
+    "openInCodeEditor": "Fungua katika Kihariri cha Msimbo",
+    "failedToOpenCodeEditor": "Imeshindwa kufungua faili katika kihariri cha msimbo. Tafadhali jaribu tena.",
+    "failedToOpenDocEditor": "Imeshindwa kufungua faili katika kihariri cha hati. Tafadhali jaribu tena.",
     "enterSearchQueryPlaceholder": "Ingiza hoja yako ya utaftaji au swali...",
     "errorFetchingUrl": "Hitilafu ilitokea wakati wa kuleta maudhui ya URL",
     "errorInitiatingSearch": "Hitilafu ilitokea wakati wa kuanzisha utaftaji wa wavuti",
@@ -977,6 +1019,7 @@
     "changeDisplayName": "Bofya kubadilisha jinsi tunavyokuhusu"
   },
   "modelSelect": {
+    "maintainedBy": "Inadumishwa na",
     "tabs": {
       "models": "Modeli",
       "agents": "Mawakala"
@@ -1422,6 +1465,13 @@
       "benefit1": "Fungua kama app ya asili kutoka kwenye skrini ya mwanzo",
       "benefit2": "Skrini nzima bila kiolesura cha kivinjari",
       "benefit3": "Upatikanaji wa mazungumzo uliyookoa bila mtandao"
+    },
+    "languageSupport": {
+      "title": "Lugha 54 Zinazotumika",
+      "description": "Sasa inapatikana kwa lugha 54 ili timu na jamii zaidi za MSF ziweze kutumia Msaidizi wa AI kwa lugha yao wenyewe",
+      "autoDetect": "Lugha yako inatambuliwa kiotomatiki kutoka kwa mipangilio ya kivinjari chako",
+      "manualSwitch": "Badilisha wakati wowote kupitia kichaguzi cha lugha kwenye upau wa kando",
+      "andMore": "na zaidi"
     }
   },
   "Professional": "Kitaalamu",
@@ -1692,5 +1742,57 @@
     "modeChangedAlways": "Mfasiri wa Nambari: Wakati wote",
     "modeOverrideEnabled": "Mfasiri wa Nambari: Imelazimishwa kwa ujumbe huu",
     "modeOverrideDisabled": "Mfasiri wa Nambari: Anatumia chaguo-msingi ya mazungumzo"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Mawakala wa Shirika"
+    },
+    "customAgents": {
+      "title": "Mawakala Maalum",
+      "advancedBadge": "Ya Juu",
+      "experimentalBlurb": "Majaribio — imejengwa kwa ushirikiano wa moja kwa moja na watumiaji wa kiwango cha juu wa MSF. Si kwa matumizi ya kawaida.",
+      "createButton": "Tengeneza Wakala Maalum"
+    },
+    "selectAgentPrompt": "Chagua wakala ili kuona maelezo"
+  },
+  "privacy": {
+    "policyTitle": "Sera ya Faragha & Ulinzi wa Data",
+    "policyDescription": "Jifunze jinsi data yako inavyolindwa na ni taarifa gani haipaswi kuingizwa",
+    "termsOfUse": "Masharti ya Matumizi",
+    "termsDescription": "Kagua miongozo ya matumizi ya kuwajibika na matumizi yaliyokatazwa",
+    "keyPrivacyPoints": "Mambo Muhimu ya Faragha",
+    "localStorage": "Mazungumzo yako yanahifadhiwa ndani ya kifaa chako",
+    "azureInfra": "Uchakataji wote wa data unafanyika ndani ya mifumo ya MSF kwa kutumia miundombinu ya Azure",
+    "noPersonalData": "Usiingize data ya kibinafsi (majina, nambari za simu, n.k.)",
+    "noSensitiveData": "Usiingize maelezo nyeti sana ya uendeshaji",
+    "concernsTitle": "Wasiwasi au Matukio ya Faragha?",
+    "contactUs": "Wasiliana nasi mara moja ikiwa una wasiwasi kuhusu faragha:"
+  },
+  "variableModal": {
+    "fillInstructions": "Jaza vigeuzi vilivyo hapa chini ili kubinafsisha amri yako",
+    "optional": "Si lazima",
+    "required": "Inahitajika",
+    "default": "Chaguomsingi:",
+    "defaultPlaceholder": "{defaultValue} (chaguomsingi)",
+    "enterValue": "Ingiza thamani ya {key}...",
+    "cancel": "Ghairi",
+    "apply": "Tumia"
+  },
+  "recentSources": {
+    "title": "Data ya Hivi Karibuni ya Vyanzo",
+    "unableToLoad": "Imeshindwa kupakia vyanzo vya hivi karibuni",
+    "retry": "Jaribu Tena",
+    "noSources": "Hakuna vyanzo vya hivi karibuni vinavyopatikana",
+    "refresh": "Onyesha Upya",
+    "today": "Leo",
+    "yesterday": "Jana",
+    "daysAgo": "siku {count} zilizopita"
+  },
+  "chatInput": {
+    "filePickerError": "Imeshindwa kufungua kichaguzi cha faili. Jaribu kutumia buruta na udondoshe.",
+    "addDocument": "Ongeza hati",
+    "uploadDocument": "Pakia Hati",
+    "images": "Picha",
+    "addImage": "Ongeza picha"
   }
 }

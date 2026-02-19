@@ -40,7 +40,7 @@
   "chatInputPlaceholder": "Gửi tin nhắn cho Trợ lý AI MSF tại đây",
   "chatInputPlaceholderFull": "Nhắn tin cho Trợ lý AI MSF tại đây hoặc gõ \"/\" để chọn một lời nhắc...",
   "transcribingChatPlaceholder": "Đang ghi chép...",
-  "sendFeedback": "Gửi phản hồi",
+  "sendFeedback": "Yêu cầu hỗ trợ",
   "welcomeMessage": "Chào mừng đến với Trợ lý AI MSF",
   "appName": "Trợ lý AI MSF",
   "modelSelectionDialogue": "Lựa chọn mô hình AI",
@@ -152,7 +152,7 @@
   "copiedToClipboard": "Đã sao chép vào bộ nhớ tạm",
   "copyToClipboard": "Sao chép vào bộ nhớ tạm",
   "downloadAsTXT": "Tải xuống dưới dạng TXT",
-  "injectIntoChat": "Tiêm vào Trò chuyện",
+  "injectIntoChat": "Chèn vào cuộc trò chuyện",
   "orDragAndDrop": "hoặc kéo và thả",
   "pleaseSelectFile": "Vui lòng chọn một tệp để sao chép.",
   "selectedFile": "Tệp đã chọn",
@@ -222,8 +222,8 @@
   "Prompt name": "Tên lời nhắc",
   "Prompt content": "Nội dung lời nhắc",
   "Are you sure you want to delete this prompt?": "Bạn có chắc chắn muốn xóa lời nhắc này không?",
-  "Import data from sidebar": "Nhập dữ liệu từ thanh bên",
-  "Export data from sidebar": "Xuất dữ liệu từ thanh bên",
+  "Import data from sidebar": "Khôi phục lịch sử trò chuyện",
+  "Export data from sidebar": "Sao lưu lịch sử trò chuyện",
   "Search chats": "Tìm kiếm trò chuyện",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "Đây là một tập hợp các hướng dẫn hướng dẫn Trợ lý AI về cách phản hồi. Nó giúp AI cung cấp thông tin hữu ích và chính xác bằng cách cung cấp ngữ cảnh cho các câu hỏi được hỏi.",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "Nhập lời nhắc hoặc gõ \"/\" để chọn lời nhắc...",
@@ -309,16 +309,48 @@
   "agents": {
     "exportAgent": "Xuất tác nhân",
     "editAgent": "Chỉnh sửa tác nhân",
-    "agentName": "Tên tác nhân",
+    "agentName": "Tên Agent",
     "myResearchAssistant": "Trợ lý nghiên cứu của tôi",
     "agentId": "ID tác nhân",
     "agentIdExample": "asst_abc123def456",
     "descriptionOptional": "Mô tả (tùy chọn)",
-    "descriptionPlaceholder": "Tác nhân chuyên về các nhiệm vụ nghiên cứu...",
+    "descriptionPlaceholder": "Nhập mô tả cho agent",
     "baseModel": "Mô hình cơ sở",
     "formatDescription": "Định dạng: asst_xxxxx (từ MSF AI Assistant Foundry)",
     "importantInfo": "Tác nhân này sẽ có quyền truy cập vào ngữ cảnh cuộc trò chuyện và có thể sử dụng các công cụ giống như các mô hình tiêu chuẩn. Đảm bảo ID tác nhân chính xác vì không thể thay đổi sau này.",
-    "defunctWarning": "Mô hình cơ sở của agent này không còn khả dụng. Hãy chỉnh sửa agent để chọn mô hình cơ sở mới hoặc xóa agent này."
+    "defunctWarning": "Mô hình cơ sở của agent này không còn khả dụng. Hãy chỉnh sửa agent để chọn mô hình cơ sở mới hoặc xóa agent này.",
+    "editCustomAgent": "Chỉnh sửa Agent Tùy chỉnh",
+    "deleteCustomAgent": "Xóa Agent Tùy chỉnh",
+    "deleteConfirmTitle": "Xóa Agent Tùy chỉnh",
+    "deleteConfirmMessage": "Bạn có chắc chắn muốn xóa agent tùy chỉnh này? Hành động này không thể hoàn tác.",
+    "deleteSuccess": "Agent tùy chỉnh đã được xóa thành công",
+    "deleteError": "Không thể xóa agent tùy chỉnh",
+    "createCustomAgent": "Tạo Agent Tùy chỉnh",
+    "updateCustomAgent": "Cập nhật Agent Tùy chỉnh",
+    "createSuccess": "Agent tùy chỉnh đã được tạo thành công",
+    "createError": "Không thể tạo agent tùy chỉnh",
+    "updateSuccess": "Agent tùy chỉnh đã được cập nhật thành công",
+    "updateError": "Không thể cập nhật agent tùy chỉnh",
+    "agentNamePlaceholder": "Nhập tên agent",
+    "description": "Mô tả",
+    "instructions": "Hướng dẫn",
+    "instructionsPlaceholder": "Nhập hướng dẫn hệ thống cho agent",
+    "conversationStarters": "Câu bắt đầu hội thoại",
+    "conversationStartersPlaceholder": "Nhập một câu bắt đầu hội thoại",
+    "addConversationStarter": "Thêm câu bắt đầu hội thoại",
+    "icon": "Biểu tượng",
+    "iconPlaceholder": "Chọn một biểu tượng",
+    "variables": "Biến",
+    "variableKey": "Khóa biến",
+    "variableDefaultValue": "Giá trị mặc định",
+    "addVariable": "Thêm biến",
+    "noAgentsFound": "Không tìm thấy agent",
+    "noAgentsFoundDescription": "Tạo agent tùy chỉnh đầu tiên của bạn để bắt đầu.",
+    "loadingAgents": "Đang tải agent...",
+    "noOrgAgents": "Không có agent tổ chức nào khả dụng",
+    "noOrgAgentsDescription": "Tổ chức của bạn chưa cấu hình bất kỳ agent nào.",
+    "noOrgAgentsConfigured": "Chưa có agent tổ chức nào được cấu hình",
+    "validationFailed": "Xác thực thất bại"
   },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",
@@ -475,7 +507,8 @@
     "keepEditing": "Tiếp tục chỉnh sửa",
     "yes": "Có",
     "no": "Không",
-    "download": "Tải xuống"
+    "download": "Tải xuống",
+    "beta": "Beta"
   },
   "errors": {
     "unexpectedErrorOccurred": "Đã xảy ra lỗi không mong muốn",
@@ -503,7 +536,7 @@
     "contactSupport": "Liên hệ hỗ trợ",
     "secureSso": "SSO An toàn",
     "howToGetAccess": "Làm thế nào để có quyền truy cập?",
-    "accessLimitedText": "Hiện tại MSF AI Assistant chỉ khả dụng cho nhân viên Hoa Kỳ và Amsterdam.",
+    "accessLimitedText": "Hiện tại MSF AI Assistant chỉ khả dụng cho nhân viên Hoa Kỳ, Amsterdam và Geneva.",
     "expandAccessSoon": "Chúng tôi hy vọng sẽ mở rộng quyền truy cập sớm!",
     "errorConfiguration": "Có vấn đề với cấu hình máy chủ.",
     "errorAccessDenied": "Bạn không có quyền đăng nhập.",
@@ -556,6 +589,14 @@
     "deleteMessage": "Xóa tin nhắn",
     "imageContent": "Nội dung hình ảnh",
     "fullSizePreview": "Xem trước kích thước đầy đủ",
+    "failedToLoadImage": "Không thể tải hình ảnh",
+    "loadingImage": "Đang tải hình ảnh...",
+    "imageAlt": "Hình ảnh trong cuộc trò chuyện",
+    "download": "Tải xuống",
+    "openAsDocument": "Mở dưới dạng tài liệu",
+    "openInCodeEditor": "Mở trong trình soạn mã",
+    "failedToOpenCodeEditor": "Không thể mở trình soạn mã",
+    "failedToOpenDocEditor": "Không thể mở trình soạn tài liệu",
     "enterSearchQueryPlaceholder": "Nhập truy vấn hoặc câu hỏi tìm kiếm của bạn...",
     "errorFetchingUrl": "Đã xảy ra lỗi khi tải nội dung URL",
     "errorInitiatingSearch": "Đã xảy ra lỗi khi bắt đầu tìm kiếm web",
@@ -1061,6 +1102,7 @@
     "changeDisplayName": "Nhấn để thay đổi cách chúng tôi xưng hô với bạn"
   },
   "modelSelect": {
+    "maintainedBy": "Được duy trì bởi",
     "tabs": {
       "models": "Mô hình",
       "agents": "Tác vụ"
@@ -1422,6 +1464,13 @@
       "benefit1": "Khởi động như ứng dụng gốc từ màn hình chính",
       "benefit2": "Toàn màn hình, không có giao diện trình duyệt",
       "benefit3": "Truy cập ngoại tuyến các cuộc hội thoại đã lưu"
+    },
+    "languageSupport": {
+      "title": "Hỗ trợ 54 ngôn ngữ",
+      "description": "Hiện có sẵn bằng 54 ngôn ngữ để nhiều đội và cộng đồng MSF hơn có thể sử dụng Trợ lý AI bằng ngôn ngữ của riêng họ",
+      "autoDetect": "Ngôn ngữ của bạn được tự động phát hiện từ cài đặt trình duyệt",
+      "manualSwitch": "Chuyển đổi bất cứ lúc nào qua bộ chọn ngôn ngữ trên thanh bên",
+      "andMore": "và nhiều hơn nữa"
     }
   },
   "Professional": "Chuyên nghiệp",
@@ -1692,5 +1741,57 @@
     "modeChangedAlways": "Code Interpreter: Luôn bật",
     "modeOverrideEnabled": "Code Interpreter: Bắt buộc cho tin nhắn này",
     "modeOverrideDisabled": "Code Interpreter: Dùng mặc định cho cuộc hội thoại"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agent Tổ chức"
+    },
+    "customAgents": {
+      "title": "Agent Tùy chỉnh",
+      "advancedBadge": "Nâng cao",
+      "createButton": "Tạo Agent Tùy chỉnh",
+      "experimentalBlurb": "Thử nghiệm — được xây dựng với sự hợp tác trực tiếp từ người dùng nâng cao của MSF. Không dành cho mục đích sử dụng chung."
+    },
+    "selectAgentPrompt": "Chọn một agent để bắt đầu"
+  },
+  "privacy": {
+    "policyTitle": "Chính sách quyền riêng tư & Bảo vệ dữ liệu",
+    "policyDescription": "Tìm hiểu cách dữ liệu của bạn được bảo vệ và những thông tin không nên nhập",
+    "termsOfUse": "Điều khoản sử dụng",
+    "termsDescription": "Xem hướng dẫn sử dụng có trách nhiệm và các mục đích bị cấm",
+    "keyPrivacyPoints": "Các điểm chính về quyền riêng tư",
+    "localStorage": "Các cuộc hội thoại của bạn được lưu trữ cục bộ trên thiết bị của bạn",
+    "azureInfra": "Tất cả xử lý dữ liệu diễn ra trong hệ thống MSF sử dụng hạ tầng Azure",
+    "noPersonalData": "Không nhập dữ liệu cá nhân (tên, số điện thoại, v.v.)",
+    "noSensitiveData": "Không nhập thông tin vận hành nhạy cảm cao",
+    "concernsTitle": "Vấn đề hoặc sự cố về quyền riêng tư?",
+    "contactUs": "Liên hệ ngay với chúng tôi nếu bạn có lo ngại về quyền riêng tư:"
+  },
+  "variableModal": {
+    "fillInstructions": "Điền các biến bên dưới để tùy chỉnh lời nhắc của bạn",
+    "optional": "Tùy chọn",
+    "required": "Bắt buộc",
+    "default": "Mặc định:",
+    "defaultPlaceholder": "{defaultValue} (mặc định)",
+    "enterValue": "Nhập giá trị cho {key}...",
+    "cancel": "Hủy",
+    "apply": "Áp dụng"
+  },
+  "recentSources": {
+    "title": "Dữ liệu nguồn mới nhất",
+    "unableToLoad": "Không thể tải nguồn mới nhất",
+    "retry": "Thử lại",
+    "noSources": "Chưa có nguồn gần đây",
+    "refresh": "Làm mới",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "daysAgo": "{count} ngày trước"
+  },
+  "chatInput": {
+    "filePickerError": "Không thể mở trình chọn tệp. Hãy thử kéo và thả thay thế.",
+    "addDocument": "Thêm tài liệu",
+    "uploadDocument": "Tải lên tài liệu",
+    "images": "Hình ảnh",
+    "addImage": "Thêm hình ảnh"
   }
 }

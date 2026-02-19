@@ -150,7 +150,7 @@ export const VariableModal: FC<Props> = ({
         <div className="max-h-[calc(90vh-220px)] overflow-y-auto px-6 py-5 space-y-5">
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/10 px-3 py-2 rounded-lg border border-blue-100 dark:border-blue-900/30">
             <IconBraces size={16} className="shrink-0" />
-            <span>Fill in the variables below to customize your prompt</span>
+            <span>{t('variableModal.fillInstructions')}</span>
           </div>
 
           {updatedVariables.map((variable, index) => (
@@ -164,11 +164,11 @@ export const VariableModal: FC<Props> = ({
                 </span>
                 {variable.definition.isOptional ? (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                    Optional
+                    {t('variableModal.optional')}
                   </span>
                 ) : (
                   <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
-                    Required
+                    {t('variableModal.required')}
                   </span>
                 )}
               </label>
@@ -177,7 +177,7 @@ export const VariableModal: FC<Props> = ({
                 <div className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/10 px-2.5 py-1.5 rounded border border-blue-100 dark:border-blue-900/30">
                   <IconInfoCircle size={14} className="shrink-0 mt-0.5" />
                   <span>
-                    Default:{' '}
+                    {t('variableModal.default')}{' '}
                     <span className="font-mono font-medium">
                       {variable.definition.defaultValue}
                     </span>
@@ -191,8 +191,10 @@ export const VariableModal: FC<Props> = ({
                 style={{ resize: 'vertical', minHeight: '80px' }}
                 placeholder={
                   variable.definition.defaultValue
-                    ? `${variable.definition.defaultValue} (default)`
-                    : `Enter value for ${variable.key}...`
+                    ? t('variableModal.defaultPlaceholder', {
+                        defaultValue: variable.definition.defaultValue,
+                      })
+                    : t('variableModal.enterValue', { key: variable.key })
                 }
                 value={variable.value}
                 onChange={(e) => handleChange(index, e.target.value)}
@@ -210,14 +212,14 @@ export const VariableModal: FC<Props> = ({
                 onClick={onClose}
                 className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               >
-                Cancel
+                {t('variableModal.cancel')}
               </button>
               <button
                 onClick={handleSubmit}
                 className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 <IconCheck size={16} />
-                <span>Apply</span>
+                <span>{t('variableModal.apply')}</span>
               </button>
             </div>
           </div>

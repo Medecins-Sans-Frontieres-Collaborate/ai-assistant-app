@@ -4,7 +4,7 @@
  */
 
 /** Locales that use right-to-left text direction */
-export const RTL_LOCALES = ['ar', 'he', 'fa', 'ur'] as const;
+export const RTL_LOCALES = ['ar', 'he', 'fa', 'ps', 'ur'] as const;
 
 export type RTLLocale = (typeof RTL_LOCALES)[number];
 

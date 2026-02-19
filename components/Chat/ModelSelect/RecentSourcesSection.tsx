@@ -5,6 +5,8 @@ import {
 } from '@tabler/icons-react';
 import React, { FC, useEffect, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 interface RecentDoc {
   title: string;
   date: string;
@@ -24,6 +26,7 @@ interface RecentSourcesSectionProps {
 export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
   agentId,
 }) => {
+  const t = useTranslations('recentSources');
   const [sources, setSources] = useState<RecentSourceData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +43,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
       const data = await response.json();
       setSources(data.sources || []);
     } catch (err) {
-      setError('Unable to load recent sources');
+      setError(t('unableToLoad'));
       console.error('[RecentSourcesSection] Error:', err);
     } finally {
       setLoading(false);
@@ -59,9 +62,9 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
       const diffMs = now.getTime() - date.getTime();
       const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-      if (diffDays === 0) return 'Today';
-      if (diffDays === 1) return 'Yesterday';
-      if (diffDays < 7) return `${diffDays} days ago`;
+      if (diffDays === 0) return t('today');
+      if (diffDays === 1) return t('yesterday');
+      if (diffDays < 7) return t('daysAgo', { count: diffDays });
 
       // Include year if not current year
       const currentYear = now.getFullYear();
@@ -99,7 +102,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
             className="text-gray-500 dark:text-gray-400"
           />
           <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-            Latest Source Data
+            {t('title')}
           </h4>
         </div>
         <div className="space-y-2">
@@ -121,7 +124,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
           <div className="flex items-center gap-2">
             <IconDatabase size={16} className="text-gray-400" />
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              Unable to load latest sources
+              {t('unableToLoad')}
             </span>
           </div>
           <button
@@ -129,7 +132,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
             className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
           >
             <IconRefresh size={12} />
-            Retry
+            {t('retry')}
           </button>
         </div>
       </div>
@@ -143,7 +146,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
           <div className="flex items-center gap-2">
             <IconDatabase size={16} className="text-gray-400" />
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              No recent sources available
+              {t('noSources')}
             </span>
           </div>
           <button
@@ -151,7 +154,7 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
             className="flex items-center gap-1 px-2 py-1 text-xs text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
           >
             <IconRefresh size={12} />
-            Retry
+            {t('retry')}
           </button>
         </div>
       </div>
@@ -167,13 +170,13 @@ export const RecentSourcesSection: FC<RecentSourcesSectionProps> = ({
             className="text-gray-500 dark:text-gray-400"
           />
           <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-            Latest Source Data
+            {t('title')}
           </h4>
         </div>
         <button
           onClick={() => fetchRecentSources(agentId)}
           className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          title="Refresh"
+          title={t('refresh')}
         >
           <IconRefresh size={14} />
         </button>

@@ -504,8 +504,7 @@
     "discard": "Descartar",
     "keepEditing": "Seguir editando",
     "yes": "Sí",
-    "no": "No",
-    "download": "Descargar"
+    "no": "No"
   },
   "chat": {
     "downloadAudio": "Descargar audio",
@@ -1055,11 +1054,6 @@
       "reasoning": "Razonamiento avanzado para problemas complejos",
       "omni": "Modelo multimodal con amplias capacidades",
       "agent": "Agente con herramientas en tiempo real y acceso web"
-    },
-    "codeInterpreter": {
-      "title": "Intérprete de código",
-      "subtitle": "La IA usará ejecución de código cuando sea útil",
-      "smartModeDescription": "Al activarlo, la IA decide de manera inteligente cuándo usar la ejecución de código Python según tu consulta. Ideal para análisis de datos, cálculos, generación de archivos y visualizaciones."
     }
   },
   "models": {
@@ -1466,9 +1460,7 @@
     "useDefaultStyle": "Usar estilo de escritura predeterminado",
     "noTonesCreated": "Aún no se han creado tonos",
     "createTonesHint": "Cree tonos en Acciones rápidas",
-    "translateDocumentTooltip": "Traduce documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales.",
-    "codeInterpreterTooltip": "Controla el intérprete de código para análisis de datos y generación de archivos.\n\n• Desactivado: Nunca usa el intérprete de código\n• Inteligente: La IA decide según tu consulta\n• Siempre: Siempre usa cuando hay archivos compatibles\n\nHaz clic para cambiar de modo.",
-    "codeInterpreterTooltipToggle": "Forzar el intérprete de código para este mensaje.\n\nSi está marcado (✓), el intérprete de código se ejecutará siempre en tu próximo mensaje.\n\nÚsalo para análisis de datos, cálculos, visualizaciones y generación de archivos."
+    "translateDocumentTooltip": "Traduce documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales."
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -1676,21 +1668,5 @@
     "title": "Hay una nueva versión disponible",
     "refresh": "Actualizar",
     "refreshNow": "Actualizar para actualizar"
-  },
-  "codeInterpreterDropdown": "Intérprete de código",
-  "codeInterpreter": {
-    "intelligent": "Inteligente",
-    "always": "Siempre",
-    "off": "Desactivado",
-    "modeIntelligent": "Código: Inteligente",
-    "modeAlways": "Código: Siempre",
-    "modeForced": "Código: Forzado",
-    "disable": "Desactivar intérprete de código",
-    "alwaysPlaceholder": "Analizar datos o generar archivos...",
-    "modeChangedOff": "Intérprete de código desactivado",
-    "modeChangedSmart": "Intérprete de código: modo inteligente",
-    "modeChangedAlways": "Intérprete de código: siempre activado",
-    "modeOverrideEnabled": "Intérprete de código: forzado para este mensaje",
-    "modeOverrideDisabled": "Intérprete de código: usando configuración predeterminada de la conversación"
   }
 }

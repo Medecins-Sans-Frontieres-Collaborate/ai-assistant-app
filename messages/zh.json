@@ -53,19 +53,19 @@
   "Higher values like 0_8 will make the output more random, while lower values like 0_2 will make it more focused and deterministic_": "较高的数值（例如0.8）会使输出更随机，而较低的数值（例如0.2）会使输出更加聚焦和确定性更强。",
   "View Account Usage": "查阅账户用量",
   "Temperature": "生成温度",
-  "Precise": "保守",
+  "Precise": "精确",
   "Neutral": "中性",
-  "Creative": "随性",
+  "Creative": "创意",
   "chatUrlInputTitle": "网页提取器",
   "Search_ellipsis": "搜索...",
   "transcriptionComplete": "转录完成！文本已添加到聊天输入。",
-  "Type a message_ellipsis": "",
+  "Type a message_ellipsis": "输入消息...",
   "Unrecognized file format": "无法识别的文件格式",
   "chatDisclaimer": "MSF AI助手可能会出错。请检查重要信息。",
   "chatInputPlaceholder": "在此给MSF AI助理发消息",
   "chatInputPlaceholderFull": "在此处向MSF AI助手发送消息或键入“/”以选择提示...",
   "transcribingChatPlaceholder": "转录中...",
-  "sendFeedback": "发送反馈",
+  "sendFeedback": "请求支持",
   "welcomeMessage": "欢迎使用 MSF AI 助手",
   "appName": "MSF AI助手",
   "modelSelectionDialogue": "AI模型选择",
@@ -255,8 +255,8 @@
   "Prompt name": "提示名称",
   "Prompt content": "提示内容",
   "Are you sure you want to delete this prompt?": "您确定要删除此提示吗？",
-  "Import data from sidebar": "恢复聊天历史",
-  "Export data from sidebar": "备份聊天历史",
+  "Import data from sidebar": "恢复聊天记录",
+  "Export data from sidebar": "备份聊天记录",
   "Search chats": "搜索聊天",
   "This is a set of instructions that guide the AI Assistant on how to respond_ It helps the AI provide useful and accurate information by giving context to the questions asked_": "这是一组指导 AI 助手如何响应的说明。它通过为提出的问题提供上下文来帮助 AI 提供有用且准确的信息。",
   "Enter a prompt or type \"/\" to select a prompt_ellipsis": "输入提示或键入\"/\"以选择提示...",
@@ -344,11 +344,43 @@
     "agentId": "代理 ID",
     "agentIdExample": "asst_abc123def456",
     "descriptionOptional": "描述（可选）",
-    "descriptionPlaceholder": "专门从事研究任务的代理...",
+    "descriptionPlaceholder": "输入代理描述",
     "baseModel": "基础模型",
     "formatDescription": "格式：asst_xxxxx（来自 MSF AI Assistant Foundry）",
     "importantInfo": "此代理将有权访问对话上下文，并可以使用与标准模型相同的工具。确保代理 ID 正确，因为以后无法更改。",
-    "defunctWarning": "此代理的基础模型已不可用。请编辑代理以选择新的基础模型，或删除该代理。"
+    "defunctWarning": "此代理的基础模型已不可用。请编辑代理以选择新的基础模型，或删除该代理。",
+    "editCustomAgent": "编辑自定义代理",
+    "deleteCustomAgent": "删除自定义代理",
+    "deleteConfirmTitle": "删除自定义代理",
+    "deleteConfirmMessage": "您确定要删除此自定义代理吗？此操作无法撤销。",
+    "deleteSuccess": "自定义代理已成功删除",
+    "deleteError": "删除自定义代理失败",
+    "createCustomAgent": "创建自定义代理",
+    "updateCustomAgent": "更新自定义代理",
+    "createSuccess": "自定义代理已成功创建",
+    "createError": "创建自定义代理失败",
+    "updateSuccess": "自定义代理已成功更新",
+    "updateError": "更新自定义代理失败",
+    "agentNamePlaceholder": "输入代理名称",
+    "description": "描述",
+    "instructions": "指令",
+    "instructionsPlaceholder": "输入代理的系统指令",
+    "conversationStarters": "对话开场白",
+    "conversationStartersPlaceholder": "输入一个对话开场白",
+    "addConversationStarter": "添加对话开场白",
+    "icon": "图标",
+    "iconPlaceholder": "选择一个图标",
+    "variables": "变量",
+    "variableKey": "变量键",
+    "variableDefaultValue": "默认值",
+    "addVariable": "添加变量",
+    "noAgentsFound": "未找到代理",
+    "noAgentsFoundDescription": "创建您的第一个自定义代理以开始使用。",
+    "loadingAgents": "正在加载代理...",
+    "noOrgAgents": "没有可用的组织代理",
+    "noOrgAgentsDescription": "您的组织尚未配置任何代理。",
+    "noOrgAgentsConfigured": "尚未配置组织代理",
+    "validationFailed": "验证失败"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",
@@ -505,7 +537,8 @@
     "keepEditing": "继续编辑",
     "yes": "是",
     "no": "否",
-    "download": "下载"
+    "download": "下载",
+    "beta": "测试版"
   },
   "errors": {
     "unexpectedErrorOccurred": "发生了意外错误",
@@ -533,7 +566,7 @@
     "contactSupport": "联系支持",
     "secureSso": "安全 SSO",
     "howToGetAccess": "如何获得访问权限？",
-    "accessLimitedText": "目前 MSF AI Assistant 仅适用于美国和阿姆斯特丹员工。",
+    "accessLimitedText": "目前 MSF AI Assistant 仅适用于美国、阿姆斯特丹和日内瓦员工。",
     "expandAccessSoon": "我们希望很快扩大访问范围！",
     "errorConfiguration": "服务器配置存在问题。",
     "errorAccessDenied": "您没有登录权限。",
@@ -586,6 +619,14 @@
     "deleteMessage": "删除消息",
     "imageContent": "图片内容",
     "fullSizePreview": "全尺寸预览",
+    "failedToLoadImage": "无法加载图片",
+    "loadingImage": "正在加载图片...",
+    "imageAlt": "聊天中的图片",
+    "download": "下载",
+    "openAsDocument": "以文档形式打开",
+    "openInCodeEditor": "在代码编辑器中打开",
+    "failedToOpenCodeEditor": "无法打开代码编辑器",
+    "failedToOpenDocEditor": "无法打开文档编辑器",
     "enterSearchQueryPlaceholder": "输入您的搜索查询或问题...",
     "errorFetchingUrl": "获取URL内容时出错",
     "errorInitiatingSearch": "启动网页搜索时出错",
@@ -977,6 +1018,7 @@
     "changeDisplayName": "点击更改我们的称呼方式"
   },
   "modelSelect": {
+    "maintainedBy": "维护者",
     "tabs": {
       "models": "模型",
       "agents": "代理"
@@ -1338,6 +1380,13 @@
       "benefit1": "可像本地应用一样从主屏幕启动",
       "benefit2": "全屏显示，无浏览器界面",
       "benefit3": "离线访问已保存的对话"
+    },
+    "languageSupport": {
+      "title": "支持54种语言",
+      "description": "现已支持54种语言，让更多MSF团队和社区能够使用自己语言的AI助手",
+      "autoDetect": "您的语言会根据浏览器设置自动检测",
+      "manualSwitch": "随时通过侧边栏的语言选择器进行切换",
+      "andMore": "等更多"
     }
   },
   "Professional": "专业",
@@ -1692,5 +1741,57 @@
     "modeChangedAlways": "代码解释器：始终开启",
     "modeOverrideEnabled": "代码解释器：本消息强制启用",
     "modeOverrideDisabled": "代码解释器：使用会话默认设置"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "组织代理"
+    },
+    "customAgents": {
+      "title": "自定义代理",
+      "advancedBadge": "高级",
+      "createButton": "创建自定义代理",
+      "experimentalBlurb": "实验性功能 — 与MSF高级用户直接协作构建。不适用于一般使用。"
+    },
+    "selectAgentPrompt": "选择一个代理以开始"
+  },
+  "privacy": {
+    "policyTitle": "隐私政策与数据保护",
+    "policyDescription": "了解您的数据如何受到保护以及不应输入哪些信息",
+    "termsOfUse": "使用条款",
+    "termsDescription": "查看负责任使用指南和禁止用途",
+    "keyPrivacyPoints": "关键隐私要点",
+    "localStorage": "您的对话存储在本地设备上",
+    "azureInfra": "所有数据处理都在MSF系统内使用Azure基础设施进行",
+    "noPersonalData": "请勿输入个人数据（姓名、电话号码等）",
+    "noSensitiveData": "请勿输入高度敏感的运营细节",
+    "concernsTitle": "隐私问题或事件？",
+    "contactUs": "如果您有隐私问题，请立即联系我们："
+  },
+  "variableModal": {
+    "fillInstructions": "填写以下变量以自定义您的提示",
+    "optional": "可选",
+    "required": "必填",
+    "default": "默认值：",
+    "defaultPlaceholder": "{defaultValue}（默认）",
+    "enterValue": "输入 {key} 的值...",
+    "cancel": "取消",
+    "apply": "应用"
+  },
+  "recentSources": {
+    "title": "最新来源数据",
+    "unableToLoad": "无法加载最新来源",
+    "retry": "重试",
+    "noSources": "暂无最近来源",
+    "refresh": "刷新",
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{count} 天前"
+  },
+  "chatInput": {
+    "filePickerError": "无法打开文件选择器。请尝试使用拖放方式。",
+    "addDocument": "添加文档",
+    "uploadDocument": "上传文档",
+    "images": "图片",
+    "addImage": "添加图片"
   }
 }

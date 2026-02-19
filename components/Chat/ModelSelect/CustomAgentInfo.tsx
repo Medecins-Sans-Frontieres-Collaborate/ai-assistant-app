@@ -1,6 +1,8 @@
 import { IconDownload, IconEdit, IconTrash } from '@tabler/icons-react';
 import React, { FC, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { exportSingleCustomAgent } from '@/lib/utils/app/export/customAgentExport';
 
 import { OpenAIModels } from '@/types/openai';
@@ -18,6 +20,7 @@ export const CustomAgentInfo: FC<CustomAgentInfoProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const t = useTranslations('agents');
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const baseModel = OpenAIModels[agent.baseModelId];
 
@@ -40,27 +43,29 @@ export const CustomAgentInfo: FC<CustomAgentInfoProps> = ({
       {/* Agent Details */}
       <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
         <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">
-          Agent Details
+          {t('agentDetails')}
         </h4>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500 dark:text-gray-400">Agent ID:</span>
+            <span className="text-gray-500 dark:text-gray-400">
+              {t('agentIdLabel')}
+            </span>
             <code className="bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded text-xs text-gray-900 dark:text-gray-100">
               {agent.agentId}
             </code>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500 dark:text-gray-400">
-              Base Model:
+              {t('baseModelLabel')}
             </span>
             <span className="text-gray-900 dark:text-white">
-              {baseModel?.name || 'Unknown'}
+              {baseModel?.name || t('unknown')}
             </span>
           </div>
           {agent.description && (
             <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
               <span className="text-gray-500 dark:text-gray-400 block mb-1">
-                Description:
+                {t('descriptionLabel')}
               </span>
               <p className="text-gray-700 dark:text-gray-300 text-xs">
                 {agent.description}
@@ -77,14 +82,14 @@ export const CustomAgentInfo: FC<CustomAgentInfoProps> = ({
           className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
         >
           <IconDownload size={16} />
-          Export
+          {t('export')}
         </button>
         <button
           onClick={() => onEdit(agent)}
           className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
         >
           <IconEdit size={16} />
-          Edit
+          {t('edit')}
         </button>
         <button
           onClick={handleDelete}
@@ -95,7 +100,7 @@ export const CustomAgentInfo: FC<CustomAgentInfoProps> = ({
           }`}
         >
           <IconTrash size={16} />
-          {deleteConfirm ? 'Confirm' : 'Delete'}
+          {deleteConfirm ? t('confirmDelete') : t('delete')}
         </button>
       </div>
     </div>
