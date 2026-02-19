@@ -502,7 +502,8 @@
     "discard": "Renunță",
     "keepEditing": "Continuă editarea",
     "yes": "Da",
-    "no": "Nu"
+    "no": "Nu",
+    "download": "Descarcă"
   },
   "errors": {
     "unexpectedErrorOccurred": "A apărut o eroare neașteptată",
@@ -1138,6 +1139,11 @@
       "reasoning": "Raționament extins pentru probleme complexe",
       "omni": "Model multimodal cu capacități extinse",
       "agent": "Agent cu instrumente în timp real și acces web"
+    },
+    "codeInterpreter": {
+      "title": "Interpret de Cod",
+      "subtitle": "AI va folosi execuția de cod când este util",
+      "smartModeDescription": "Când este activat, AI decide inteligent când să folosească execuția codului Python pe baza solicitării dumneavoastră. Ideal pentru analiză de date, calcule, generare de fișiere și vizualizări."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Folosiți stilul de scriere implicit",
     "noTonesCreated": "Nu au fost create tonuri încă",
     "createTonesHint": "Creați tonuri în Acțiuni rapide",
-    "translateDocumentTooltip": "Tradu documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi, cu fișiere glosar opționale."
+    "translateDocumentTooltip": "Tradu documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi, cu fișiere glosar opționale.",
+    "codeInterpreterTooltip": "Controlează Interpretul de Cod pentru analiza datelor și generarea fișierelor.\n\n• Dezactivat: Nu folosi niciodată Interpretul de Cod\n• Inteligent: AI decide în funcție de solicitare\n• Întotdeauna: Folosește mereu când există fișiere compatibile\n\nClick pentru a schimba modul.",
+    "codeInterpreterTooltipToggle": "Forțează Interpretul de Cod pentru acest mesaj.\n\nCând este bifat (✓), Interpretul de Cod va rula întotdeauna la următorul mesaj.\n\nFolosiți pentru analiză de date, calcule, vizualizări și generare de fișiere."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -1668,5 +1676,21 @@
     "title": "Este disponibilă o nouă versiune",
     "refresh": "Reîmprospătează",
     "refreshNow": "Reîmprospătează pentru a actualiza"
+  },
+  "codeInterpreterDropdown": "Interpret de Cod",
+  "codeInterpreter": {
+    "intelligent": "Inteligent",
+    "always": "Întotdeauna",
+    "off": "Dezactivat",
+    "modeIntelligent": "Cod: Inteligent",
+    "modeAlways": "Cod: Întotdeauna",
+    "modeForced": "Cod: Forțat",
+    "disable": "Dezactivează Interpretul de Cod",
+    "alwaysPlaceholder": "Analizează date sau generează fișiere...",
+    "modeChangedOff": "Interpret de cod dezactivat",
+    "modeChangedSmart": "Interpret de Cod: Mod inteligent",
+    "modeChangedAlways": "Interpret de Cod: Activ permanent",
+    "modeOverrideEnabled": "Interpret de Cod: Forțat pentru acest mesaj",
+    "modeOverrideDisabled": "Interpret de Cod: Folosește setarea conversației"
   }
 }

@@ -504,7 +504,8 @@
     "discard": "Descartar",
     "keepEditing": "Continuar editando",
     "yes": "Sim",
-    "no": "Não"
+    "no": "Não",
+    "download": "Baixar"
   },
   "chat": {
     "downloadAudio": "Baixar áudio",
@@ -1054,6 +1055,11 @@
       "reasoning": "Raciocínio avançado para problemas complexos",
       "omni": "Modelo multimodal com amplas capacidades",
       "agent": "Agente com ferramentas em tempo real e acesso à web"
+    },
+    "codeInterpreter": {
+      "title": "Interpretador de Código",
+      "subtitle": "A IA usará execução de código quando for útil",
+      "smartModeDescription": "Quando ativado, a IA decide de forma inteligente quando usar execução de código Python com base na sua solicitação. Ideal para análise de dados, cálculos, geração de arquivos e visualizações."
     }
   },
   "models": {
@@ -1460,7 +1466,9 @@
     "useDefaultStyle": "Usar estilo de escrita padrão",
     "noTonesCreated": "Nenhum tom criado ainda",
     "createTonesHint": "Crie tons em Ações Rápidas",
-    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos suportados: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamanho máximo: 40 MB\n\nSuporta mais de 80 idiomas e arquivos de glossário opcionais."
+    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos suportados: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamanho máximo: 40 MB\n\nSuporta mais de 80 idiomas e arquivos de glossário opcionais.",
+    "codeInterpreterTooltip": "Controle o Interpretador de Código para análise de dados e geração de arquivos.\n\n• Desligado: Nunca usar o Interpretador de Código\n• Inteligente: A IA decide com base na sua solicitação\n• Sempre: Sempre usar quando houver arquivos compatíveis\n\nClique para alternar entre os modos.",
+    "codeInterpreterTooltipToggle": "Forçar o Interpretador de Código para esta mensagem.\n\nQuando marcado (✓), o Interpretador de Código sempre será executado na sua próxima mensagem.\n\nUse para análise de dados, cálculos, visualizações e geração de arquivos."
   },
   "transcription": {
     "transcribesOnSend": "Transcreve ao enviar",
@@ -1668,5 +1676,21 @@
     "title": "Uma nova versão está disponível",
     "refresh": "Atualizar",
     "refreshNow": "Atualizar para atualizar"
+  },
+  "codeInterpreterDropdown": "Interpretador de Código",
+  "codeInterpreter": {
+    "intelligent": "Inteligente",
+    "always": "Sempre",
+    "off": "Desligado",
+    "modeIntelligent": "Código: Inteligente",
+    "modeAlways": "Código: Sempre",
+    "modeForced": "Código: Forçado",
+    "disable": "Desativar Interpretador de Código",
+    "alwaysPlaceholder": "Analisar dados ou gerar arquivos...",
+    "modeChangedOff": "Interpretador de Código desativado",
+    "modeChangedSmart": "Interpretador de Código: Modo inteligente",
+    "modeChangedAlways": "Interpretador de Código: Sempre ativado",
+    "modeOverrideEnabled": "Interpretador de Código: Forçado para esta mensagem",
+    "modeOverrideDisabled": "Interpretador de Código: Usando padrão da conversa"
   }
 }

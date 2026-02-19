@@ -504,7 +504,8 @@
     "discard": "Zahodit",
     "keepEditing": "Pokračovat v úpravách",
     "yes": "Ano",
-    "no": "Ne"
+    "no": "Ne",
+    "download": "Stáhnout"
   },
   "errors": {
     "unexpectedErrorOccurred": "Došlo k neočekávané chybě",
@@ -1054,6 +1055,11 @@
       "reasoning": "Rozšířené uvažování pro složité problémy",
       "omni": "Multimodální model se širokými schopnostmi",
       "agent": "Agent s nástroji v reálném čase a přístupem na web"
+    },
+    "codeInterpreter": {
+      "title": "Interpreter kódu",
+      "subtitle": "AI použije spuštění kódu, pokud to bude užitečné",
+      "smartModeDescription": "Pokud je zapnuto, AI chytře rozhoduje, kdy použít vykonávání Python kódu podle vašeho dotazu. Ideální pro analýzu dat, výpočty, generování souborů a vizualizace."
     }
   },
   "models": {
@@ -1460,7 +1466,9 @@
     "useDefaultStyle": "Použít výchozí styl psaní",
     "noTonesCreated": "Zatím nebyly vytvořeny žádné tóny",
     "createTonesHint": "Vytvořte tóny v Rychlých akcích",
-    "translateDocumentTooltip": "Překládejte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximální velikost: 40 MB\n\nPodporuje více než 80 jazyků s volitelnými soubory glosáře."
+    "translateDocumentTooltip": "Překládejte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximální velikost: 40 MB\n\nPodporuje více než 80 jazyků s volitelnými soubory glosáře.",
+    "codeInterpreterTooltip": "Nastavení interpreteru kódu pro analýzu dat a generování souborů.\n\n• Vypnuto: Interpreter kódu se nikdy nepoužije\n• Chytrý: AI rozhodne dle vašeho dotazu\n• Vždy: Použít vždy, jsou-li přítomny kompatibilní soubory\n\nKliknutím přepínejte mezi režimy.",
+    "codeInterpreterTooltipToggle": "Vynutit interpreter kódu pro tuto zprávu.\n\nPokud je zaškrtnuto (✓), interpreter kódu se vždy spustí u vaší následující zprávy.\n\nPoužijte pro analýzu dat, výpočty, vizualizace a generování souborů."
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -1668,5 +1676,21 @@
     "title": "Je k dispozici nová verze",
     "refresh": "Obnovit",
     "refreshNow": "Obnovit pro aktualizaci"
+  },
+  "codeInterpreterDropdown": "Interpreter kódu",
+  "codeInterpreter": {
+    "intelligent": "Chytrý",
+    "always": "Vždy",
+    "off": "Vypnuto",
+    "modeIntelligent": "Kód: Chytrý",
+    "modeAlways": "Kód: Vždy",
+    "modeForced": "Kód: Vynucený",
+    "disable": "Vypnout interpreter kódu",
+    "alwaysPlaceholder": "Analýza dat nebo generování souborů...",
+    "modeChangedOff": "Interpreter kódu vypnut",
+    "modeChangedSmart": "Interpreter kódu: Chytrý režim",
+    "modeChangedAlways": "Interpreter kódu: Vždy zapnuto",
+    "modeOverrideEnabled": "Interpreter kódu: Vynucený pro tuto zprávu",
+    "modeOverrideDisabled": "Interpreter kódu: Výchozí nastavení konverzace"
   }
 }

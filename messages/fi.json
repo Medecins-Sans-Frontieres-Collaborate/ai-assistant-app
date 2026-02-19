@@ -479,7 +479,8 @@
     "discard": "Hylkää",
     "keepEditing": "Jatka muokkaamista",
     "yes": "Kyllä",
-    "no": "Ei"
+    "no": "Ei",
+    "download": "Lataa"
   },
   "errors": {
     "unexpectedErrorOccurred": "Odottamaton virhe tapahtui",
@@ -1138,6 +1139,11 @@
       "reasoning": "Laajennettu päättely kyseen monimutkaisissa ongelmissa",
       "omni": "Monimuotoinen malli laajalla osaamisella",
       "agent": "Agentti reaaliaikaisilla työkaluilla ja verkkoyhteydellä"
+    },
+    "codeInterpreter": {
+      "title": "Koodin tulkki",
+      "subtitle": "AI käyttää koodin suoritusta tarvittaessa",
+      "smartModeDescription": "Kun tämä on käytössä, AI päättää älykkäästi, milloin käyttää Python-koodin suoritusta pyyntösi perusteella. Ihanteellinen datan analysointiin, laskelmiin, tiedostojen luontiin ja visualisointeihin."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Käytä oletuskirjoitustyyliä",
     "noTonesCreated": "Äänensävyjä ei ole vielä luotu",
     "createTonesHint": "Luo äänensävyjä Pikatoiminnoissa",
-    "translateDocumentTooltip": "Käännä asiakirjoja toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, PDF, HTML, TXT\nEnimmäiskoko: 40 Mt\n\nTukee yli 80 kieltä sekä valinnaisia sanastotiedostoja."
+    "translateDocumentTooltip": "Käännä asiakirjoja toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, PDF, HTML, TXT\nEnimmäiskoko: 40 Mt\n\nTukee yli 80 kieltä sekä valinnaisia sanastotiedostoja.",
+    "codeInterpreterTooltip": "Hallitse koodin tulkin käyttöä datan analysointiin ja tiedostojen luomiseen.\n\n• Pois päältä: Ei koskaan käytä koodin tulkkia\n• Älykäs: AI päättää pyyntösi perusteella\n• Aina: Käytetään aina, kun yhteensopivia tiedostoja on\n\nNapsauta vaihtaaksesi tilaa.",
+    "codeInterpreterTooltipToggle": "Pakota koodin tulkki tähän viestiin.\n\nKun valittuna (✓), koodin tulkki suoritetaan aina seuraavassa viestissäsi.\n\nKäytä tätä datan analysointiin, laskelmiin, visualisointeihin ja tiedostojen luomiseen."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -1668,5 +1676,21 @@
     "title": "Uusi versio saatavilla",
     "refresh": "Päivitä",
     "refreshNow": "Päivitä saadaksesi uusin versio"
+  },
+  "codeInterpreterDropdown": "Koodin tulkki",
+  "codeInterpreter": {
+    "intelligent": "Älykäs",
+    "always": "Aina",
+    "off": "Pois päältä",
+    "modeIntelligent": "Koodi: Älykäs",
+    "modeAlways": "Koodi: Aina",
+    "modeForced": "Koodi: Pakotettu",
+    "disable": "Poista koodin tulkki käytöstä",
+    "alwaysPlaceholder": "Analysoi dataa tai luo tiedostoja...",
+    "modeChangedOff": "Koodin tulkki poistettu käytöstä",
+    "modeChangedSmart": "Koodin tulkki: Älykäs tila",
+    "modeChangedAlways": "Koodin tulkki: Aina käytössä",
+    "modeOverrideEnabled": "Koodin tulkki: Pakotettu tässä viestissä",
+    "modeOverrideDisabled": "Koodin tulkki: Käytetään keskustelun oletusta"
   }
 }

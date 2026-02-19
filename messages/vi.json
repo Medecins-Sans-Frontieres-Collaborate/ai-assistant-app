@@ -474,7 +474,8 @@
     "discard": "Bỏ",
     "keepEditing": "Tiếp tục chỉnh sửa",
     "yes": "Có",
-    "no": "Không"
+    "no": "Không",
+    "download": "Tải xuống"
   },
   "errors": {
     "unexpectedErrorOccurred": "Đã xảy ra lỗi không mong muốn",
@@ -1138,6 +1139,11 @@
       "reasoning": "Nâng cao khả năng suy luận cho vấn đề phức tạp",
       "omni": "Mô hình đa phương tiện với khả năng toàn diện",
       "agent": "Tác nhân với công cụ thời gian thực & truy cập web"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "AI sẽ sử dụng thực thi mã khi cần thiết",
+      "smartModeDescription": "Khi bật, AI sẽ tự động quyết định khi nào dùng Python để thực thi mã dựa trên yêu cầu của bạn. Phù hợp cho phân tích dữ liệu, tính toán, tạo file và trực quan hóa."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Sử dụng phong cách viết mặc định",
     "noTonesCreated": "Chưa tạo giọng điệu nào",
     "createTonesHint": "Tạo giọng điệu trong Quick Actions",
-    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, PDF, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn."
+    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, PDF, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn.",
+    "codeInterpreterTooltip": "Kiểm soát Code Interpreter cho phân tích dữ liệu và tạo file.\n\n• Tắt: Không bao giờ dùng Code Interpreter\n• Thông minh: AI quyết định dựa trên yêu cầu của bạn\n• Luôn bật: Luôn dùng khi có file phù hợp\n\nBấm để chuyển chế độ.",
+    "codeInterpreterTooltipToggle": "Bắt buộc Code Interpreter cho tin nhắn này.\n\nKhi được chọn (✓), Code Interpreter sẽ luôn chạy cho tin nhắn tiếp theo của bạn.\n\nDùng để phân tích dữ liệu, tính toán, trực quan hóa và tạo file."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -1668,5 +1676,21 @@
     "title": "Có phiên bản mới",
     "refresh": "Làm mới",
     "refreshNow": "Làm mới để cập nhật"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Thông minh",
+    "always": "Luôn bật",
+    "off": "Tắt",
+    "modeIntelligent": "Code: Thông minh",
+    "modeAlways": "Code: Luôn bật",
+    "modeForced": "Code: Bắt buộc",
+    "disable": "Tắt Code Interpreter",
+    "alwaysPlaceholder": "Phân tích dữ liệu hoặc tạo file...",
+    "modeChangedOff": "Đã tắt Code Interpreter",
+    "modeChangedSmart": "Code Interpreter: Chế độ thông minh",
+    "modeChangedAlways": "Code Interpreter: Luôn bật",
+    "modeOverrideEnabled": "Code Interpreter: Bắt buộc cho tin nhắn này",
+    "modeOverrideDisabled": "Code Interpreter: Dùng mặc định cho cuộc hội thoại"
   }
 }

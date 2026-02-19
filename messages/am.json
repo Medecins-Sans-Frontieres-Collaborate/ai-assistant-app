@@ -501,7 +501,8 @@
     "discard": "ጣል",
     "keepEditing": "ማርትዕ ቀጥል",
     "yes": "አዎ",
-    "no": "አይ"
+    "no": "አይ",
+    "download": "ማውረድ"
   },
   "chat": {
     "downloadAudio": "ድምጽን አውርድ",
@@ -1051,6 +1052,11 @@
       "reasoning": "ለውስብስብ ችግኞች የተሰፋ ምስላ አነጋጋሪ ሞዴል",
       "omni": "ጠቃሚ ችሎታዎች ያሉት የሚታወቀው አይነተኛ ሞዴል",
       "agent": "በቅኝ ጊዜ መሳሪያዎችና የድህረ መረብ መዳረሻ ያለው agent"
+    },
+    "codeInterpreter": {
+      "title": "ኮድ ትርጉም መነሻ",
+      "subtitle": "AI አጋጣሚ በሆነ ቦታ ኮድ ተግባር ይሰራል",
+      "smartModeDescription": "ሲጠቀም፣ AI እንደጥያቄዎ መሰረት በPython ኮድ ማከናወን እንዲጠቀም በጥበብ ውሳኔ ይሰጣል። ለውሂብ ተንትኖ፣ ሂሳብ፣ ፋይል ፍጠራ እና ማስያዣዎች ተስማሚ ነው።"
     }
   },
   "models": {
@@ -1460,7 +1466,9 @@
     "useDefaultStyle": "ነባሪ የመጻፍ ዘዴ ይጠቀሙ",
     "noTonesCreated": "ምንም ድምፅ አልተፈጠረም",
     "createTonesHint": "ድምፆችን በፈጣን ተግባራት ውስጥ ይፍጠሩ",
-    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ይተርጉሙ፡፡\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, PDF, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80+ ቋንቋዎችን በአማራጭ glossary ፋይሎች ይደግፋል።"
+    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ይተርጉሙ፡፡\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, PDF, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80+ ቋንቋዎችን በአማራጭ glossary ፋይሎች ይደግፋል።",
+    "codeInterpreterTooltip": "ለውሂብ ተንትኖና ለፋይል ፍጠራ የኮድ ትርጉም መነሻን ይቆጣጠሩ።\n\n• ጠፍቷል፡ ከቶ እንዳይሰራ ያድርጉት\n• ጥበበኛ፡ AI እንደጥያቄዎ ውሳኔ ይሰጣል\n• ሁልጊዜ፡ ተገቢ ፋይሎች ካሉ ሁልጊዜ ይጠቀማል\n\nሁነታዎችን ለመቀየር ይጫኑ።",
+    "codeInterpreterTooltipToggle": "ለዚህ መልእክት ኮድ ትርጉም መነሻን በግድ ያስነሱ።\n\nካሰከረ (✓) ኮድ ትርጉም መነሻ ለሚቀጥለው መልእክትዎ ሁልጊዜ ይሰራል።\n\nይህን ለውሂብ ተንትኖ፣ ሂሳብ፣ ማስያዣና ፋይል ፍጠራ ይጠቀሙት።"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -1668,5 +1676,21 @@
     "title": "አዲስ ስሪት ዝግጁ ነው",
     "refresh": "ያድሱ",
     "refreshNow": "ለማደሻ ያድሱ"
+  },
+  "codeInterpreterDropdown": "ኮድ ትርጉም መነሻ",
+  "codeInterpreter": {
+    "intelligent": "ጥበበኛ",
+    "always": "ሁልጊዜ",
+    "off": "ጠፍቷል",
+    "modeIntelligent": "ኮድ፡ ጥበበኛ",
+    "modeAlways": "ኮድ፡ ሁልጊዜ",
+    "modeForced": "ኮድ፡ በግድ",
+    "disable": "ኮድ ትርጉም መነሻ አጥፋ",
+    "alwaysPlaceholder": "ውሂብ ተንትኖ ወይም ፋይሎች ይፍጠሩ...",
+    "modeChangedOff": "ኮድ ትርጉም መነሻ አጥፋል",
+    "modeChangedSmart": "ኮድ ትርጉም መነሻ፡ ጥበበኛ ሁነታ",
+    "modeChangedAlways": "ኮድ ትርጉም መነሻ፡ ሁልጊዜ አስተናግዷል",
+    "modeOverrideEnabled": "ኮድ ትርጉም መነሻ፡ ለዚህ መልእክት በግድ ተመርጧል",
+    "modeOverrideDisabled": "ኮድ ትርጉም መነሻ፡ ነባር ውይይትን ተጠቅመዋል"
   }
 }

@@ -479,7 +479,8 @@
     "discard": "Descarta",
     "keepEditing": "Continua editant",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "download": "Descarrega"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -1138,6 +1139,11 @@
       "reasoning": "Capacitat de raonament ampliada per a problemes complexos",
       "omni": "Model multimodal amb capacitats àmplies",
       "agent": "Agent amb eines en temps real i accés web"
+    },
+    "codeInterpreter": {
+      "title": "Intèrpret de codi",
+      "subtitle": "La IA executarà codi quan sigui útil",
+      "smartModeDescription": "Quan està activat, la IA decideix intel·ligentment quan utilitzar l'execució de codi Python segons la teva consulta. Ideal per a anàlisi de dades, càlculs, generació de fitxers i visualitzacions."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Fes servir l'estil d'escriptura per defecte",
     "noTonesCreated": "Encara no s'ha creat cap to",
     "createTonesHint": "Crea tons a Accions Ràpides",
-    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, PDF, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb arxius de glossari opcionals."
+    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, PDF, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb arxius de glossari opcionals.",
+    "codeInterpreterTooltip": "Controla l'Intèrpret de codi per a l'anàlisi de dades i la generació de fitxers.\n\n• Desactivat: No utilitza mai l'Intèrpret de codi\n• Intelligent: La IA decideix segons la teva consulta\n• Sempre: S'utilitza sempre que hi hagi fitxers compatibles\n\nFes clic per canviar de mode.",
+    "codeInterpreterTooltipToggle": "Força l'Intèrpret de codi per a aquest missatge.\n\nQuan està marcat (✓), l'Intèrpret de codi s'executarà sempre en el teu proper missatge.\n\nUtilitza-ho per a anàlisi de dades, càlculs, visualitzacions i generació de fitxers."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -1668,5 +1676,21 @@
     "title": "Hi ha una nova versió disponible",
     "refresh": "Actualitza",
     "refreshNow": "Actualitza per a obtenir l'última versió"
+  },
+  "codeInterpreterDropdown": "Intèrpret de codi",
+  "codeInterpreter": {
+    "intelligent": "Intelligent",
+    "always": "Sempre",
+    "off": "Desactivat",
+    "modeIntelligent": "Codi: Intelligent",
+    "modeAlways": "Codi: Sempre",
+    "modeForced": "Codi: Forçat",
+    "disable": "Desactiva l'Intèrpret de codi",
+    "alwaysPlaceholder": "Analitza dades o genera fitxers...",
+    "modeChangedOff": "Intèrpret de codi desactivat",
+    "modeChangedSmart": "Intèrpret de codi: mode Intelligent",
+    "modeChangedAlways": "Intèrpret de codi: sempre activat",
+    "modeOverrideEnabled": "Intèrpret de codi: forçat per a aquest missatge",
+    "modeOverrideDisabled": "Intèrpret de codi: utilitzant la configuració per defecte de la conversa"
   }
 }

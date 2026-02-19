@@ -504,7 +504,8 @@
     "discard": "Kassera",
     "keepEditing": "Fortsätt redigera",
     "yes": "Ja",
-    "no": "Nej"
+    "no": "Nej",
+    "download": "Ladda ner"
   },
   "errors": {
     "unexpectedErrorOccurred": "Ett oväntat fel uppstod",
@@ -1054,6 +1055,11 @@
       "reasoning": "Utökat resonemang för komplexa problem",
       "omni": "Multimodal modell med breda möjligheter",
       "agent": "Agent med realtidsverktyg och webbtillgång"
+    },
+    "codeInterpreter": {
+      "title": "Kodtolkare",
+      "subtitle": "AI använder kodexekvering när det är användbart",
+      "smartModeDescription": "När aktiverat avgör AI intelligent om Pythonkod ska köras baserat på din fråga. Perfekt för dataanalys, beräkningar, filgenerering och visualiseringar."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Använd standardstil",
     "noTonesCreated": "Inga toner har skapats ännu",
     "createTonesHint": "Skapa toner i Snabbåtgärder",
-    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaxstorlek: 40 MB\n\nStöder 80+ språk med valfria ordlistor."
+    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaxstorlek: 40 MB\n\nStöder 80+ språk med valfria ordlistor.",
+    "codeInterpreterTooltip": "Styr Kodtolkare för dataanalys och filgenerering.\n\n• Av: Använd aldrig Kodtolkare\n• Smart: AI avgör baserat på din fråga\n• Alltid: Använd alltid när kompatibla filer finns\n\nKlicka för att växla mellan lägen.",
+    "codeInterpreterTooltipToggle": "Tvinga Kodtolkare för detta meddelande.\n\nNär vald (✓) kommer Kodtolkare alltid att köras för ditt nästa meddelande.\n\nAnvänd detta för dataanalys, beräkningar, visualiseringar och filgenerering."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -1668,5 +1676,21 @@
     "title": "En ny version är tillgänglig",
     "refresh": "Uppdatera",
     "refreshNow": "Uppdatera för att få senaste versionen"
+  },
+  "codeInterpreterDropdown": "Kodtolkare",
+  "codeInterpreter": {
+    "intelligent": "Smart",
+    "always": "Alltid",
+    "off": "Av",
+    "modeIntelligent": "Kod: Smart",
+    "modeAlways": "Kod: Alltid",
+    "modeForced": "Kod: Tvungen",
+    "disable": "Inaktivera kodtolkare",
+    "alwaysPlaceholder": "Analysera data eller generera filer...",
+    "modeChangedOff": "Kodtolkare inaktiverad",
+    "modeChangedSmart": "Kodtolkare: Smart läge",
+    "modeChangedAlways": "Kodtolkare: Alltid på",
+    "modeOverrideEnabled": "Kodtolkare: Tvungen för detta meddelande",
+    "modeOverrideDisabled": "Kodtolkare: Använder konversationens standardinställning"
   }
 }

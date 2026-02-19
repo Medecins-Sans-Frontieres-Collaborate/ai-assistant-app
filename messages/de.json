@@ -504,7 +504,8 @@
     "discard": "Verwerfen",
     "keepEditing": "Weiter bearbeiten",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "download": "Herunterladen"
   },
   "chat": {
     "downloadAudio": "Audio herunterladen",
@@ -1051,6 +1052,11 @@
       "reasoning": "Erweitertes Denkvermögen für komplexe Probleme",
       "omni": "Multimodales Modell mit breiten Fähigkeiten",
       "agent": "Agent mit Echtzeit-Tools & Webzugriff"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "KI verwendet Codeausführung, wenn hilfreich",
+      "smartModeDescription": "Wenn aktiviert, entscheidet die KI intelligent, wann Python-Code ausgeführt werden soll, basierend auf Ihrer Anfrage. Ideal für Datenanalysen, Berechnungen, Dateigenerierung und Visualisierungen."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Standard-Schreibstil verwenden",
     "noTonesCreated": "Noch keine Tonfälle erstellt",
     "createTonesHint": "Tonfälle in den Schnellaktionen erstellen",
-    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
+    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien.",
+    "codeInterpreterTooltip": "Steuern Sie den Code Interpreter für Datenanalyse und Dateigenerierung.\n\n• Aus: Code Interpreter niemals verwenden\n• Intelligent: KI entscheidet anhand Ihrer Anfrage\n• Immer: Immer verwenden, wenn kompatible Dateien vorhanden sind\n\nKlicken zum Wechseln der Modi.",
+    "codeInterpreterTooltipToggle": "Code Interpreter für diese Nachricht erzwingen.\n\nWenn aktiviert (✓), wird der Code Interpreter bei Ihrer nächsten Nachricht immer ausgeführt.\n\nVerwenden Sie dies für Datenanalyse, Berechnungen, Visualisierungen und Dateigenerierung."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",
@@ -1668,5 +1676,21 @@
     "title": "Eine neue Version ist verfügbar",
     "refresh": "Aktualisieren",
     "refreshNow": "Zum Aktualisieren neu laden"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Intelligent",
+    "always": "Immer",
+    "off": "Aus",
+    "modeIntelligent": "Code: Intelligent",
+    "modeAlways": "Code: Immer",
+    "modeForced": "Code: Erzwungen",
+    "disable": "Code Interpreter deaktivieren",
+    "alwaysPlaceholder": "Daten analysieren oder Dateien generieren...",
+    "modeChangedOff": "Code Interpreter deaktiviert",
+    "modeChangedSmart": "Code Interpreter: Intelligenter Modus",
+    "modeChangedAlways": "Code Interpreter: Immer aktiv",
+    "modeOverrideEnabled": "Code Interpreter: Für diese Nachricht erzwungen",
+    "modeOverrideDisabled": "Code Interpreter: Standard der Unterhaltung"
   }
 }

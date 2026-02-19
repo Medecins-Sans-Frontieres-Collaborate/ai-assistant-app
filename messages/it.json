@@ -479,7 +479,8 @@
     "discard": "Scarta",
     "keepEditing": "Continua modifica",
     "yes": "Sì",
-    "no": "No"
+    "no": "No",
+    "download": "Scarica"
   },
   "chat": {
     "downloadAudio": "Scarica audio",
@@ -1138,6 +1139,11 @@
       "reasoning": "Ragionamento avanzato per problemi complessi",
       "omni": "Modello multimodale con ampie capacità",
       "agent": "Agente con strumenti in tempo reale e accesso web"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "L'AI userà l'esecuzione del codice quando utile",
+      "smartModeDescription": "Se abilitato, l'AI decide in modo intelligente quando usare l'esecuzione di codice Python in base alla richiesta. Ideale per analisi dei dati, calcoli, generazione di file e visualizzazioni."
     }
   },
   "models": {
@@ -1544,7 +1550,9 @@
     "useDefaultStyle": "Usa stile di scrittura predefinito",
     "noTonesCreated": "Nessun tono creato",
     "createTonesHint": "Crea toni nelle Azioni rapide",
-    "translateDocumentTooltip": "Traduce documenti in un'altra lingua.\n\nFormati supportati: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensione massima: 40MB\n\nSupporta oltre 80 lingue con file glossario opzionali."
+    "translateDocumentTooltip": "Traduce documenti in un'altra lingua.\n\nFormati supportati: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensione massima: 40MB\n\nSupporta oltre 80 lingue con file glossario opzionali.",
+    "codeInterpreterTooltip": "Controlla Code Interpreter per analisi dei dati e generazione di file.\n\n• Disattivato: Non usare mai Code Interpreter\n• Intelligente: L'AI decide in base alla richiesta\n• Sempre: Usa sempre quando sono presenti file compatibili\n\nClicca per cambiare modalità.",
+    "codeInterpreterTooltipToggle": "Forza Code Interpreter per questo messaggio.\n\nSe selezionato (✓), Code Interpreter verrà sempre eseguito per il prossimo messaggio.\n\nUsare per analisi dati, calcoli, visualizzazioni e generazione di file."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Aggiungi le tue istruzioni personali per personalizzare le risposte dell’IA. Queste si uniscono alle linee guida principali per garantire risposte utili, accurate e sicure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Suggerimento: digita \"/\" per selezionare tra i modelli di prompt salvati.",
@@ -1668,5 +1676,21 @@
     "title": "È disponibile una nuova versione",
     "refresh": "Aggiorna",
     "refreshNow": "Aggiorna per aggiornare"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Intelligente",
+    "always": "Sempre",
+    "off": "Disattivato",
+    "modeIntelligent": "Code: Intelligente",
+    "modeAlways": "Code: Sempre",
+    "modeForced": "Code: Forzato",
+    "disable": "Disattiva Code Interpreter",
+    "alwaysPlaceholder": "Analizza dati o genera file...",
+    "modeChangedOff": "Code Interpreter disattivato",
+    "modeChangedSmart": "Code Interpreter: Modalità intelligente",
+    "modeChangedAlways": "Code Interpreter: Sempre attivo",
+    "modeOverrideEnabled": "Code Interpreter: Forzato per questo messaggio",
+    "modeOverrideDisabled": "Code Interpreter: Usa impostazione predefinita conversazione"
   }
 }

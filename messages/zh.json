@@ -504,7 +504,8 @@
     "discard": "放弃",
     "keepEditing": "继续编辑",
     "yes": "是",
-    "no": "否"
+    "no": "否",
+    "download": "下载"
   },
   "errors": {
     "unexpectedErrorOccurred": "发生了意外错误",
@@ -1054,6 +1055,11 @@
       "reasoning": "适用于复杂问题的扩展推理能力",
       "omni": "多模态模型，功能广泛",
       "agent": "具备实时工具和网页访问功能的智能体"
+    },
+    "codeInterpreter": {
+      "title": "代码解释器",
+      "subtitle": "AI 在有帮助时将执行代码",
+      "smartModeDescription": "启用后，AI 会根据您的请求智能决定是否执行 Python 代码。适用于数据分析、计算、文件生成和可视化。"
     }
   },
   "models": {
@@ -1460,7 +1466,9 @@
     "useDefaultStyle": "使用默认写作风格",
     "noTonesCreated": "尚未创建语气",
     "createTonesHint": "可在快捷操作中创建语气",
-    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。"
+    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。",
+    "codeInterpreterTooltip": "控制代码解释器用于数据分析和文件生成。\n\n• 关闭：从不启用代码解释器\n• 智能：AI 根据您的请求决定\n• 始终：有兼容文件时始终启用\n\n点击切换模式。",
+    "codeInterpreterTooltipToggle": "本消息强制启用代码解释器。\n\n勾选（✓）后，您的下一条消息将始终运行代码解释器。\n\n适用于数据分析、计算、可视化和文件生成。"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -1668,5 +1676,21 @@
     "title": "有新版本可用",
     "refresh": "刷新",
     "refreshNow": "刷新以更新"
+  },
+  "codeInterpreterDropdown": "代码解释器",
+  "codeInterpreter": {
+    "intelligent": "智能",
+    "always": "始终",
+    "off": "关闭",
+    "modeIntelligent": "代码：智能",
+    "modeAlways": "代码：始终",
+    "modeForced": "代码：强制",
+    "disable": "禁用代码解释器",
+    "alwaysPlaceholder": "分析数据或生成文件…",
+    "modeChangedOff": "代码解释器已关闭",
+    "modeChangedSmart": "代码解释器：智能模式",
+    "modeChangedAlways": "代码解释器：始终开启",
+    "modeOverrideEnabled": "代码解释器：本消息强制启用",
+    "modeOverrideDisabled": "代码解释器：使用会话默认设置"
   }
 }
