@@ -4,6 +4,7 @@ import { ModelSelector } from '@/lib/services/shared';
 
 import { AgentCapabilities } from '@/types/agent';
 import { Message } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -135,6 +136,16 @@ export interface ChatContext {
 
   /** Search mode for tool routing */
   searchMode?: SearchMode;
+
+  /** Code Interpreter mode for routing (OFF, INTELLIGENT, ALWAYS) */
+  codeInterpreterMode?: CodeInterpreterMode;
+
+  /**
+   * Whether Code Interpreter is recommended for this request.
+   * Set by CodeInterpreterRouterEnricher when mode is INTELLIGENT.
+   * Used by AgentEnricher to decide whether to enable Code Interpreter.
+   */
+  codeInterpreterRecommended?: boolean;
 
   /** Whether agent mode is enabled */
   agentMode?: boolean;
