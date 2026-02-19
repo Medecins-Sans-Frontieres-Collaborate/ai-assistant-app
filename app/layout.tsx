@@ -95,7 +95,7 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Chunk load error auto-recovery: reloads once after deploy-induced chunk failures */}
+        {/* Chunk load error auto-recovery: reloads once per page-load cycle on deploy-induced chunk failures */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
