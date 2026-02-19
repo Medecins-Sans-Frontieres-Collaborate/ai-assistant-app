@@ -12,7 +12,6 @@ import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { getMessageContentTypes } from '@/lib/utils/server/chat/chat';
 
 import { ChatBody } from '@/types/chat';
-import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { ErrorCode, PipelineError } from '@/types/errors';
 import { SearchMode } from '@/types/searchMode';
 

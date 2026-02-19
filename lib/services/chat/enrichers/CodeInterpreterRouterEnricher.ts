@@ -14,10 +14,7 @@
  * - "Rewrite Python as R" -> Standard chat
  */
 import { FileMessageContent } from '@/types/chat';
-import {
-  CodeInterpreterMode,
-  isCodeInterpreterSupported,
-} from '@/types/codeInterpreter';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 
 import { CodeInterpreterRouterService } from '../codeInterpreter/CodeInterpreterRouterService';
 import { ChatContext } from '../pipeline/ChatContext';

@@ -1,6 +1,6 @@
 'use client';
 
-import { IconCheck, IconCode, IconLoader2, IconX } from '@tabler/icons-react';
+import { IconCode, IconLoader2, IconX } from '@tabler/icons-react';
 import React, { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
