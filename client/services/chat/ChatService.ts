@@ -3,6 +3,7 @@
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
 import { FileMessageContent, ImageMessageContent, Message } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
@@ -180,6 +181,7 @@ export class ChatService {
       botId?: string;
       threadId?: string;
       searchMode?: SearchMode;
+      codeInterpreterMode?: CodeInterpreterMode;
       forcedAgentType?: string;
       isEditorOpen?: boolean;
       tone?: Tone;
@@ -214,6 +216,7 @@ export class ChatService {
         botId: options?.botId,
         threadId: options?.threadId,
         searchMode: options?.searchMode,
+        codeInterpreterMode: options?.codeInterpreterMode,
         forcedAgentType: options?.forcedAgentType,
         isEditorOpen: options?.isEditorOpen,
         tone: options?.tone,
