@@ -347,7 +347,40 @@
     "baseModel": "Modelo base",
     "formatDescription": "Formato: asst_xxxxx (de MSF AI Assistant Foundry)",
     "importantInfo": "Este agente tendrá acceso al contexto de la conversación y puede usar las mismas herramientas que los modelos estándar. Asegúrate de que el ID del agente sea correcto, ya que no se puede cambiar más tarde.",
-    "defunctWarning": "El modelo base de este agente ya no está disponible. Edite el agente para seleccionar un nuevo modelo base o elimínelo."
+    "defunctWarning": "El modelo base de este agente ya no está disponible. Edite el agente para seleccionar un nuevo modelo base o elimínelo.",
+    "editCustomAgent": "Editar agente personalizado",
+    "addCustomAgent": "Agregar agente personalizado",
+    "experimental": "Experimental",
+    "createNew": "Crear nuevo",
+    "import": "Importar",
+    "importCustomAgents": "Importar agentes personalizados",
+    "importFileDescription": "Seleccione un archivo JSON con una o más configuraciones de agente",
+    "chooseFile": "Elegir archivo",
+    "validatedSuccess": "¡Agente validado correctamente!",
+    "cancel": "Cancelar",
+    "validating": "Validando...",
+    "updateAgent": "Actualizar agente",
+    "addAgent": "Agregar agente",
+    "nameRequired": "El nombre del agente es obligatorio",
+    "idRequired": "El ID del agente es obligatorio",
+    "invalidIdFormat": "Formato de ID de agente no válido. Formato esperado: asst_xxxxx",
+    "invalidFileFormat": "Formato de archivo no válido",
+    "noAgentsInFile": "No se encontraron agentes en el archivo importado",
+    "importFailed": "No se pudo importar el archivo",
+    "importConflict": "Los siguientes agentes presentan conflictos:\n\n{conflicts}\n\n¿Importar de todos modos? Esto creará duplicados.",
+    "importSuccess": "{count} agente(s) importado(s) correctamente",
+    "agentDetails": "Detalles del agente",
+    "agentIdLabel": "ID del agente:",
+    "baseModelLabel": "Modelo base:",
+    "unknown": "Desconocido",
+    "descriptionLabel": "Descripción:",
+    "export": "Exportar",
+    "edit": "Editar",
+    "confirmDelete": "Confirmar",
+    "delete": "Eliminar",
+    "noCustomAgentsYet": "Aún no hay agentes personalizados.",
+    "noOrgAgentsConfigured": "No hay agentes de la organización configurados.",
+    "validationFailed": "Falló la validación"
   },
   "Quick Actions": "Acciones rápidas",
   "Type / in chat to access your prompts": "Escribe / en el chat para acceder a tus instrucciones",
@@ -504,7 +537,8 @@
     "discard": "Descartar",
     "keepEditing": "Seguir editando",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "download": "Descargar"
   },
   "chat": {
     "downloadAudio": "Descargar audio",
@@ -585,7 +619,15 @@
     "microphoneAccessDenied": "El acceso al micrófono está denegado. Por favor, actívelo en la configuración de su navegador.",
     "microphoneAccessError": "Error de acceso al micrófono: {message}",
     "voiceInputTranscribing": "Transcribiendo...",
-    "ttsRightClickHint": "Haz clic derecho para opciones de voz"
+    "ttsRightClickHint": "Haz clic derecho para opciones de voz",
+    "failedToLoadImage": "No se pudo cargar la imagen",
+    "loadingImage": "Cargando imagen...",
+    "imageAlt": "Imagen {number}",
+    "download": "Descargar",
+    "openAsDocument": "Abrir como documento",
+    "openInCodeEditor": "Abrir en el editor de código",
+    "failedToOpenCodeEditor": "No se pudo abrir el archivo en el editor de código. Por favor, inténtelo de nuevo.",
+    "failedToOpenDocEditor": "No se pudo abrir el archivo en el editor de documentos. Por favor, inténtelo de nuevo."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -1054,6 +1096,12 @@
       "reasoning": "Razonamiento avanzado para problemas complejos",
       "omni": "Modelo multimodal con amplias capacidades",
       "agent": "Agente con herramientas en tiempo real y acceso web"
+    },
+    "maintainedBy": "Mantenido por",
+    "codeInterpreter": {
+      "title": "Intérprete de código",
+      "subtitle": "La IA usará ejecución de código cuando sea útil",
+      "smartModeDescription": "Cuando está activado, la IA decide de forma inteligente cuándo usar la ejecución de código Python según su consulta. Ideal para análisis de datos, cálculos, generación de archivos y visualizaciones."
     }
   },
   "models": {
@@ -1332,6 +1380,13 @@
       "benefit1": "Láncelo como una app nativa desde la pantalla de inicio",
       "benefit2": "Pantalla completa sin la interfaz del navegador",
       "benefit3": "Acceso sin conexión a conversaciones guardadas"
+    },
+    "languageSupport": {
+      "title": "54 idiomas disponibles",
+      "description": "Ahora disponible en 54 idiomas, para que más equipos y comunidades de MSF puedan usar el Asistente de IA en su propio idioma",
+      "autoDetect": "Su idioma se detecta automáticamente a partir de la configuración de su navegador",
+      "manualSwitch": "Cambie el idioma en cualquier momento con el selector en la barra lateral",
+      "andMore": "y más"
     }
   },
   "Professional": "Profesional",
@@ -1460,7 +1515,9 @@
     "useDefaultStyle": "Usar estilo de escritura predeterminado",
     "noTonesCreated": "Aún no se han creado tonos",
     "createTonesHint": "Cree tonos en Acciones rápidas",
-    "translateDocumentTooltip": "Traduce documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales."
+    "translateDocumentTooltip": "Traduce documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales.",
+    "codeInterpreterTooltip": "Controla el Intérprete de código para análisis de datos y generación de archivos.\n\n• Desactivado: Nunca usar el Intérprete de código\n• Inteligente: La IA decide según su consulta\n• Siempre: Siempre usar cuando haya archivos compatibles\n\nHaga clic para cambiar de modo.",
+    "codeInterpreterTooltipToggle": "Forzar Intérprete de código para este mensaje.\n\nSi está marcado (✓), el Intérprete de código siempre se ejecutará en su próximo mensaje.\n\nUtilícelo para análisis de datos, cálculos, visualizaciones y generación de archivos."
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -1668,5 +1725,73 @@
     "title": "Hay una nueva versión disponible",
     "refresh": "Actualizar",
     "refreshNow": "Actualizar para actualizar"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Inteligente",
+    "always": "Siempre",
+    "off": "Desactivado",
+    "modeIntelligent": "Code: Inteligente",
+    "modeAlways": "Code: Siempre",
+    "modeForced": "Code: Forzado",
+    "disable": "Desactivar Code Interpreter",
+    "alwaysPlaceholder": "Analizar datos o generar archivos...",
+    "modeChangedOff": "Code Interpreter desactivado",
+    "modeChangedSmart": "Code Interpreter: Modo inteligente",
+    "modeChangedAlways": "Intérprete de código: Siempre activado",
+    "modeOverrideEnabled": "Intérprete de código: Forzado para este mensaje",
+    "modeOverrideDisabled": "Intérprete de código: Usando la configuración predeterminada de la conversación"
+  },
+  "agentsTab": {
+    "organizationAgents": {
+      "title": "Agentes de la organización"
+    },
+    "customAgents": {
+      "title": "Agentes personalizados",
+      "advancedBadge": "Avanzado",
+      "experimentalBlurb": "Experimental: desarrollado en colaboración directa con usuarios avanzados de MSF. No apto para uso general.",
+      "createButton": "Crear agente personalizado"
+    },
+    "selectAgentPrompt": "Seleccione un agente para ver los detalles"
+  },
+  "privacy": {
+    "policyTitle": "Política de privacidad y protección de datos",
+    "policyDescription": "Conozca cómo se protege su información y qué datos no debe ingresar",
+    "termsOfUse": "Términos de uso",
+    "termsDescription": "Revise las pautas de uso responsable y usos prohibidos",
+    "keyPrivacyPoints": "Puntos clave sobre privacidad",
+    "localStorage": "Sus conversaciones se almacenan localmente en su dispositivo",
+    "azureInfra": "Todo el procesamiento de datos se realiza dentro de los sistemas de MSF utilizando infraestructura de Azure",
+    "noPersonalData": "No ingrese datos personales (nombres, números de teléfono, etc.)",
+    "noSensitiveData": "No ingrese información operativa altamente sensible",
+    "concernsTitle": "¿Dudas o incidentes de privacidad?",
+    "contactUs": "Contáctenos de inmediato si tiene inquietudes de privacidad:"
+  },
+  "variableModal": {
+    "fillInstructions": "Complete las variables a continuación para personalizar su solicitud",
+    "optional": "Opcional",
+    "required": "Obligatorio",
+    "default": "Predeterminado:",
+    "defaultPlaceholder": "{defaultValue} (predeterminado)",
+    "enterValue": "Introduzca un valor para {key}...",
+    "cancel": "Cancelar",
+    "apply": "Aplicar"
+  },
+  "recentSources": {
+    "title": "Datos fuente más recientes",
+    "unableToLoad": "No se pudieron cargar los últimos datos fuente",
+    "retry": "Reintentar",
+    "noSources": "No hay fuentes recientes disponibles",
+    "refresh": "Actualizar",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "daysAgo": "Hace {count} días"
+  },
+  "chatInput": {
+    "filePickerError": "No se pudo abrir el selector de archivos. Intente usar arrastrar y soltar.",
+    "addDocument": "Agregar documento",
+    "uploadDocument": "Subir documento",
+    "images": "Imágenes",
+    "addImage": "Agregar imagen"
   }
 }

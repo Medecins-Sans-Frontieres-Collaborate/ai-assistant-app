@@ -1744,7 +1744,9 @@
     "modeOverrideDisabled": "کوڈ انٹرپریٹر: گفتگو کا ڈیفالٹ استعمال ہو رہا ہے"
   },
   "agentsTab": {
-    "organizationAgents": "تنظیم کے ایجنٹس",
+    "organizationAgents": {
+      "title": "تنظیمی ایجنٹس"
+    },
     "customAgents": {
       "title": "اپنی مرضی کے ایجنٹس",
       "advancedBadge": "اعلی",
@@ -1764,7 +1766,18 @@
     "thirdParty": "تیسرے فریق کی خدمات",
     "thirdPartyDescription": "ہم آپ کا ڈیٹا آپ کی رضامندی کے بغیر تیسرے فریق کے ساتھ شیئر نہیں کرتے۔",
     "learnMore": "ہماری رازداری کی پالیسی کے بارے میں مزید جانیں",
-    "lastUpdated": "آخری تازہ کاری"
+    "lastUpdated": "آخری تازہ کاری",
+    "policyTitle": "رازداری کی پالیسی اور ڈیٹا کا تحفظ",
+    "policyDescription": "جانیے کہ آپ کا ڈیٹا کیسے محفوظ ہے اور کون سی معلومات داخل نہیں کرنی چاہیے",
+    "termsOfUse": "استعمال کی شرائط",
+    "termsDescription": "ذمہ دارانہ استعمال کے رہنما اصول اور ممنوعہ استعمال کا جائزہ لیں",
+    "keyPrivacyPoints": "اہم رازداری نکات",
+    "localStorage": "آپ کی گفتگو آپ کے آلے پر مقامی طور پر محفوظ ہوتی ہے",
+    "azureInfra": "تمام ڈیٹا پروسیسنگ MSF نظام میں Azure انفراسٹرکچر کے ذریعے ہوتی ہے",
+    "noPersonalData": "ذاتی معلومات (نام، فون نمبر وغیرہ) درج نہ کریں",
+    "noSensitiveData": "انتہائی حساس آپریشنل معلومات درج نہ کریں",
+    "concernsTitle": "رازداری سے متعلق خدشات یا واقعات؟",
+    "contactUs": "اگر آپ کو رازداری سے متعلق خدشات ہوں تو فوراً ہم سے رابطہ کریں:"
   },
   "variableModal": {
     "title": "متغیرات کی ترتیب",
@@ -1773,7 +1786,14 @@
     "defaultValue": "ڈیفالٹ: {defaultValue}",
     "placeholder": "{key} کی قیمت درج کریں",
     "submit": "ایجنٹ شروع کریں",
-    "cancel": "منسوخ کریں"
+    "cancel": "منسوخ کریں",
+    "fillInstructions": "اپنا پرامپٹ ترتیب دینے کے لیے نیچے دیے گئے متغیرات پُر کریں",
+    "optional": "اختیاری",
+    "required": "لازمی",
+    "default": "ڈیفالٹ:",
+    "defaultPlaceholder": "{defaultValue} (ڈیفالٹ)",
+    "enterValue": "{key} کے لیے قدر درج کریں...",
+    "apply": "لاگو کریں"
   },
   "recentSources": {
     "title": "حالیہ ذرائع",
@@ -1783,13 +1803,24 @@
     "webpage": "ویب صفحہ",
     "image": "تصویر",
     "showMore": "{count} مزید دکھائیں",
-    "showLess": "کم دکھائیں"
+    "showLess": "کم دکھائیں",
+    "unableToLoad": "حالیہ ذرائع لوڈ نہیں ہو سکے",
+    "retry": "دوبارہ کوشش کریں",
+    "refresh": "تازہ کریں",
+    "today": "آج",
+    "yesterday": "کل",
+    "daysAgo": "{count} دن پہلے"
   },
   "chatInput": {
     "placeholder": "ایک پیغام ٹائپ کریں...",
     "send": "بھیجیں",
     "stop": "روکیں",
     "attachFile": "فائل منسلک کریں",
-    "characterCount": "{count} حروف"
+    "characterCount": "{count} حروف",
+    "filePickerError": "فائل چننے کی سہولت نہیں کھول سکا۔ اس کے بجائے ڈریگ اینڈ ڈراپ استعمال کریں۔",
+    "addDocument": "دستاویز شامل کریں",
+    "uploadDocument": "دستاویز اپ لوڈ کریں",
+    "images": "تصاویر",
+    "addImage": "تصویر شامل کریں"
   }
 }
