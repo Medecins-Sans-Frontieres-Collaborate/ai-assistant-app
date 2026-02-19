@@ -1,6 +1,9 @@
 import { TranscriptMetadata } from '@/lib/utils/app/metadata';
 
-import { CodeInterpreterMetadata } from './codeInterpreter';
+import {
+  CodeInterpreterMetadata,
+  CodeInterpreterMode,
+} from './codeInterpreter';
 import { OpenAIModel } from './openai';
 import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
@@ -180,6 +183,7 @@ export interface ChatBody {
   userContext?: string; // Additional user context for the AI
   displayNamePreference?: DisplayNamePreference; // For deriving name fallback
   customDisplayName?: string; // Custom display name from General Settings
+  codeInterpreterMode?: CodeInterpreterMode; // Code Interpreter routing mode
 }
 
 export interface Conversation {
@@ -197,6 +201,7 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  defaultCodeInterpreterMode?: import('./codeInterpreter').CodeInterpreterMode; // Default Code Interpreter mode for this conversation
 }
 
 export type FileFieldValue =
