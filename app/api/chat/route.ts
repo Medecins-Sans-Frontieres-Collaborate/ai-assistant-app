@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { CodeInterpreterRouterEnricher } from '@/lib/services/chat/enrichers/CodeInterpreterRouterEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
@@ -104,6 +105,8 @@ export async function POST(req: NextRequest): Promise<Response> {
 
       const fileProcessingService = container.getFileProcessingService();
       const toolRouterService = container.getToolRouterService();
+      const codeInterpreterRouterService =
+        container.getCodeInterpreterRouterService();
       const agentChatService = container.getAgentChatService();
       const aiFoundryAgentHandler = container.getAIFoundryAgentHandler();
       const standardChatService = container.getStandardChatService();
@@ -133,6 +136,8 @@ export async function POST(req: NextRequest): Promise<Response> {
           foundryOpenAIClient,
         ),
         new ToolRouterEnricher(toolRouterService, agentChatService),
+        // CodeInterpreterRouterEnricher analyzes queries to determine if CI is needed (INTELLIGENT mode)
+        new CodeInterpreterRouterEnricher(codeInterpreterRouterService),
         // AgentEnricher handles both standard agents and Code Interpreter capability
         new AgentEnricher(codeInterpreterFileService, fileProcessingService),
 
