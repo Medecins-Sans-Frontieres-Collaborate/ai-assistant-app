@@ -39,7 +39,7 @@ import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
-/** Retries a dynamic import once after 1.5 s on chunk load failure. */
+/** Retries a dynamic import once after 1.5 s on failure. */
 function retryImport<T>(importFn: () => Promise<T>): Promise<T> {
   return importFn().catch(
     () =>
