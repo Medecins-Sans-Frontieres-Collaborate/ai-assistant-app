@@ -48,6 +48,16 @@ export class ApiError extends Error {
   }
 
   /**
+   * Checks if error is a header too large error (431).
+   *
+   * This typically indicates oversized cookies causing request headers to
+   * exceed server limits (e.g., Azure Container Apps' ~8KB limit).
+   */
+  public isHeaderTooLargeError(): boolean {
+    return this.status === 431;
+  }
+
+  /**
    * Returns a user-friendly error message.
    */
   public getUserMessage(): string {

@@ -561,7 +561,9 @@
     "errorSessionExpired": "La vostra sessió ha caducat. Inicieu sessió de nou per continuar.",
     "errorFallback": "No es pot connectar amb el servei d'autenticació. Torneu-ho a provar o poseu-vos en contacte amb el suport si el problema persisteix.",
     "tryAgain": "Torna-ho a provar",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Les dades de la sessió s'han suprimit per límits d'emmagatzematge. Torneu a iniciar sessió.",
+    "errorHeadersTooLarge": "Les dades de la sessió eren massa grans. Torneu a iniciar sessió."
   },
   "chat": {
     "downloadAudio": "Descarregar àudio",

@@ -585,7 +585,9 @@
     "errorSessionExpired": "您的会话已过期。请重新登录以继续。",
     "errorFallback": "无法连接到身份验证服务。请重试，如果问题仍然存在，请联系支持。",
     "tryAgain": "重试",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "由于存储限制，会话数据已被清除。请重新登录。",
+    "errorHeadersTooLarge": "会话数据过大。请重新登录。"
   },
   "chat": {
     "downloadAudio": "下载音频",

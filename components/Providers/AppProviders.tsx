@@ -10,6 +10,7 @@ import { Session } from 'next-auth';
 
 import { UIPreferences } from '@/types/ui';
 
+import { CookieSizeGuard } from '@/components/Auth/CookieSizeGuard';
 import { SessionErrorHandler } from '@/components/Auth/SessionErrorHandler';
 import { UIPreferencesProvider } from '@/components/Providers/UIPreferencesProvider';
 import TermsAcceptanceProvider from '@/components/Terms/TermsAcceptanceProvider';
@@ -42,7 +43,10 @@ interface AppProvidersProps {
 
 /**
  * Wrapper for all application providers
- * Composes: Session, React Query, LaunchDarkly, Terms, Toast
+ * Composes: CookieSizeGuard, Session, React Query, LaunchDarkly, Terms, Toast
+ *
+ * CookieSizeGuard is placed outermost to detect oversized cookies before
+ * any authenticated requests are made, preventing 431 HTTP errors.
  */
 export function AppProviders({
   children,
@@ -52,46 +56,48 @@ export function AppProviders({
   initialUIPreferences,
 }: AppProvidersProps) {
   return (
-    <SessionProvider
-      session={session}
-      refetchInterval={5 * 60 * 1000}
-      refetchOnWindowFocus={true}
-    >
-      <SessionErrorHandler />
-      <QueryClientProvider client={queryClient}>
-        <UIPreferencesProvider initialPreferences={initialUIPreferences}>
-          {launchDarklyClientId ? (
-            <LDProvider
-              clientSideID={launchDarklyClientId}
-              options={{
-                bootstrap: 'localStorage',
-                sendEvents: true,
-              }}
-              context={{
-                kind: 'user',
-                key: userContext?.id || 'anonymous-user',
-                email: userContext?.email,
-                givenName: userContext?.givenName,
-                surName: userContext?.surname,
-                displayName: userContext?.displayName,
-                jobTitle: userContext?.jobTitle,
-                department: userContext?.department,
-                companyName: userContext?.companyName,
-              }}
-            >
+    <CookieSizeGuard>
+      <SessionProvider
+        session={session}
+        refetchInterval={5 * 60 * 1000}
+        refetchOnWindowFocus={true}
+      >
+        <SessionErrorHandler />
+        <QueryClientProvider client={queryClient}>
+          <UIPreferencesProvider initialPreferences={initialUIPreferences}>
+            {launchDarklyClientId ? (
+              <LDProvider
+                clientSideID={launchDarklyClientId}
+                options={{
+                  bootstrap: 'localStorage',
+                  sendEvents: true,
+                }}
+                context={{
+                  kind: 'user',
+                  key: userContext?.id || 'anonymous-user',
+                  email: userContext?.email,
+                  givenName: userContext?.givenName,
+                  surName: userContext?.surname,
+                  displayName: userContext?.displayName,
+                  jobTitle: userContext?.jobTitle,
+                  department: userContext?.department,
+                  companyName: userContext?.companyName,
+                }}
+              >
+                <TermsAcceptanceProvider>
+                  <Toaster position="top-center" />
+                  {children}
+                </TermsAcceptanceProvider>
+              </LDProvider>
+            ) : (
               <TermsAcceptanceProvider>
                 <Toaster position="top-center" />
                 {children}
               </TermsAcceptanceProvider>
-            </LDProvider>
-          ) : (
-            <TermsAcceptanceProvider>
-              <Toaster position="top-center" />
-              {children}
-            </TermsAcceptanceProvider>
-          )}
-        </UIPreferencesProvider>
-      </QueryClientProvider>
-    </SessionProvider>
+            )}
+          </UIPreferencesProvider>
+        </QueryClientProvider>
+      </SessionProvider>
+    </CookieSizeGuard>
   );
 }
