@@ -744,7 +744,65 @@
       "articles": "Artikel",
       "searchPlaceholder": "Cari FAQ...",
       "noResults": "Tidak ada FAQ yang cocok",
-      "noResultsHint": "Coba istilah pencarian lain"
+      "noResultsHint": "Coba istilah pencarian lain",
+      "items": [
+        {
+          "question": "Apa itu MSF AI Assistant?",
+          "answer": "MSF AI Assistant adalah alat chat AI internal yang dirancang khusus untuk staf Médecins Sans Frontières (MSF). Ini menggunakan model bahasa besar OpenAI Microsoft Azure sambil menjaga semua data di dalam MSF, memastikan privasi dan kontrol. Menggunakan ai.msf.org lebih aman daripada menggunakan alat AI gratis lainnya yang menawarkan jaminan privasi lebih rendah."
+        },
+        {
+          "question": "Model apa yang tersedia?",
+          "answer": "MSF AI Assistant menyediakan akses ke beberapa model AI:\\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\\n- o1, o1-mini (model penalaran OpenAI)\\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\\n- Grok-2 (xAI)\\n\\nAnda dapat beralih antar model kapan saja menggunakan menu pemilih model di atas chat."
+        },
+        {
+          "question": "Apa itu Tindakan Cepat?",
+          "answer": "Tindakan Cepat memungkinkan Anda menerapkan prompts dan tones ke pesan Anda dengan cepat. Prompts: Template yang dapat digunakan kembali untuk tugas umum. Tones: Sesuaikan bagaimana respons AI ditulis. Akses melalui ikon petir (⚡) atau dengan mengetik /."
+        },
+        {
+          "question": "Apa itu Mode Pencarian?",
+          "answer": "Mode Pencarian memungkinkan AI menggunakan pencarian web untuk informasi terkini saat diperlukan. Mode Fokus Privasi (default): Hanya query pencarian yang dikirim. Mode Azure AI Foundry (hanya GPT-4.1): Menyimpan percakapan lengkap untuk respons lebih cepat."
+        },
+        {
+          "question": "Bagaimana cara menggunakan transkripsi audio?",
+          "answer": "Klik ikon mikrofon untuk mulai berbicara. AI akan mentranskripsikan ucapan ke teks. Setelah transkripsi, Anda dapat menyalin teks, mengunduh sebagai file, atau menerjemahkan ke 13+ bahasa."
+        },
+        {
+          "question": "Bisakah saya menggunakan MSF AI Assistant di ponsel?",
+          "answer": "Ya! MSF AI Assistant berfungsi sebagai Progressive Web App (PWA). Di ponsel: Buka ai.msf.org di browser Anda, masuk, buka Settings > Mobile App dan klik 'Add to Home Screen' (iOS) atau 'Install' (Android)."
+        },
+        {
+          "question": "Di mana data percakapan saya disimpan?",
+          "answer": "Riwayat percakapan disimpan secara lokal di penyimpanan browser Anda, bukan di server. Percakapan hanya ada di perangkat Anda dan tidak disinkronkan antar perangkat. Jika Anda menggunakan mode Azure AI Foundry untuk pencarian, percakapan tersebut juga disimpan di Azure AI Foundry."
+        },
+        {
+          "question": "Apa itu Custom Agents?",
+          "answer": "Custom Agents adalah konfigurasi lanjutan AI yang berjalan di model MSF AI Assistant Foundry dengan kemampuan khusus. Mereka dapat secara otomatis menggunakan alat seperti pencarian web dan interpretasi kode. Ini adalah fitur lanjutan yang memerlukan koordinasi dengan tim teknis AI Assistant."
+        },
+        {
+          "question": "Bisakah saya mempercayai 100% respons AI?",
+          "answer": "Tidak. MSF AI Assistant adalah alat yang kuat tetapi tidak boleh menggantikan penilaian dan keahlian manusia. Selalu: Verifikasi informasi faktual, Periksa bias dan akurasi, Tinjau output sebelum digunakan, Jangan masukkan informasi pribadi atau sensitif."
+        },
+        {
+          "question": "Data apa yang tidak boleh saya masukkan?",
+          "answer": "Jangan masukkan: Data pribadi (nama, nomor telepon, email, bio), Detail operasi yang sangat sensitif, Informasi pasien atau catatan medis, Apa pun yang dapat mengidentifikasi individu."
+        },
+        {
+          "question": "Bagaimana cara mengekspor atau menghapus data?",
+          "answer": "Dari Settings > Data Management, Anda dapat: Ekspor semua percakapan dan prompts sebagai JSON, Hapus semua percakapan, Impor data yang diekspor sebelumnya, Lihat penggunaan penyimpanan."
+        },
+        {
+          "question": "Ke mana saya harus pergi untuk pertanyaan?",
+          "answer": "Hubungi dukungan:\\n- Pengguna AS: ai@newyork.msf.org\\n- Pengguna di luar AS: ai.team@amsterdam.msf.org\\n\\nAkses Pusat Bantuan kapan saja dari Settings > Help & Support."
+        },
+        {
+          "question": "Di mana saya dapat belajar lebih lanjut tentang proyek ini?",
+          "answer": "Kunjungi Portal AI Accelerator di Pamoja:\\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\\n\\nPortal ini memiliki informasi tentang roadmap proyek dan sumber daya pelatihan."
+        },
+        {
+          "question": "Apakah MSF AI Assistant open source?",
+          "answer": "Ya! Tersedia di GitHub:\\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\\n\\nDibangun dengan Next.js dan React. Kontribusi disambut baik!"
+        }
+      ]
     },
     "privacy": {
       "title": "Privasi & Data",
@@ -758,7 +816,41 @@
       "localStorageOnly": "Hanya Penyimpanan Lokal",
       "msfControlled": "Dikontrol MSF",
       "noPersonalData": "Tidak Ada Data Pribadi",
-      "noSensitiveOps": "Tidak Ada Operasi Sensitif"
+      "noSensitiveOps": "Tidak Ada Operasi Sensitif",
+      "items": [
+        {
+          "question": "Apa itu MSF AI Assistant dan bagaimana melindungi privasi?",
+          "answer": "MSF AI Assistant adalah chatbot AI internal yang dibangun untuk staf MSF. Ini menggunakan model bahasa besar OpenAI Microsoft Azure sambil menjaga semua data di dalam MSF, memastikan privasi dan kontrol. Menggunakan ai.msf.org lebih aman daripada menggunakan alat AI gratis lainnya yang menawarkan jaminan privasi lebih rendah."
+        },
+        {
+          "question": "Di mana data saya disimpan dan diproses?",
+          "answer": "Semua data percakapan dengan MSF AI Assistant disimpan di komputer Anda dan diproses di dalam sistem MSF menggunakan infrastruktur Microsoft Azure. Informasi masuk ditangani oleh MSF seperti yang dijelaskan dalam Kebijakan Privasi Organisasi MSF. Data tetap di dalam MSF, memastikan privasi dan kontrol."
+        },
+        {
+          "question": "Data apa yang tidak boleh saya masukkan ke ai.msf.org?",
+          "answer": "Jangan input/upload ke ai.msf.org:\\n- Data pribadi (nama, nomor telepon, bio, kesaksian; apa pun yang dapat mengidentifikasi individu secara langsung atau tidak langsung)\\n- Data yang sangat sensitif (data yang dapat dengan sengaja atau tidak sengaja merugikan orang, komunitas, MSF atau karyawannya -- penilaian sensitivitas data harus mencakup konteks seperti area proyek sensitif atau kelompok berisiko, insiden keamanan, dan detail operasional lainnya)"
+        },
+        {
+          "question": "Apa pedoman untuk penggunaan yang bertanggung jawab?",
+          "answer": "Anda setuju untuk menggunakan ai.msf.org secara bertanggung jawab. Anda akan:\\n- Gunakan sesuai dengan kebijakan ICT, AI, dan kebijakan Organisasi MSF yang relevan\\n- Selalu verifikasi output untuk akurasi, kelengkapan, dan bias\\n- Pastikan output tidak melanggar hak kekayaan intelektual orang lain\\n- Bersikap transparan tentang penggunaan AI dan tandai output sebagai dihasilkan AI"
+        },
+        {
+          "question": "Apa saja penggunaan yang dilarang?",
+          "answer": "Anda tidak akan menggunakan ai.msf.org untuk:\\n- Perawatan medis (memberikan layanan medis atau menjawab pertanyaan terkait kesehatan)\\n- Pemantauan atau pelacakan pasien MSF atau komunitas atau individu lain\\n- Keputusan terkait pekerjaan\\n- Pengambilan keputusan otomatis (membuat keputusan yang dapat merugikan individu atau komunitas)\\n- Membuat konten media untuk komunikasi eksternal tentang masalah kepentingan publik\\n- Aktivitas ilegal atau berbahaya"
+        },
+        {
+          "question": "Seberapa akurat output?",
+          "answer": "ai.msf.org menggunakan teknologi eksperimental -- kami tidak menjamin output akan akurat. Juga, teknologi belum dilatih menggunakan data yang mewakili pasien dan komunitas MSF. Output AI dapat melanggengkan bias, diskriminasi, dan informasi yang salah. Menjadi tanggung jawab Anda untuk memverifikasi output yang dihasilkan."
+        },
+        {
+          "question": "Siapa yang harus saya hubungi tentang kekhawatiran atau insiden privasi?",
+          "answer": "Jika Anda memiliki kekhawatiran atau ingin melaporkan insiden, hubungi: ai.team@amsterdam.msf.org. Untuk lokasi spesifik Anda, Anda juga dapat menghubungi DPO internal (Data Protection Officer) atau tim ICT (Information and Communication Technology) yang relevan."
+        },
+        {
+          "question": "Dapatkah syarat penggunaan diubah?",
+          "answer": "Syarat ini dapat diubah oleh MSF kapan saja -- kami akan memberi tahu Anda jika berubah -- terus menggunakan ai.msf.org mewakili penerimaan perubahan."
+        }
+      ]
     },
     "contact": {
       "title": "Kontak & Sumber Daya",

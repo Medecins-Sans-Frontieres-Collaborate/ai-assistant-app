@@ -777,7 +777,65 @@
       "articles": "Makaleler",
       "searchPlaceholder": "SSS'leri ara...",
       "noResults": "Aramanızla eşleşen SSS bulunamadı",
-      "noResultsHint": "Farklı arama terimleri deneyin"
+      "noResultsHint": "Farklı arama terimleri deneyin",
+      "items": [
+        {
+          "question": "MSF AI Asistanı nedir?",
+          "answer": "MSF AI Asistanı, Sınır Tanımayan Doktorlar (MSF) personeli için özel olarak oluşturulmuş bir dahili AI sohbet aracıdır. Bu çözüm, konuşma verilerini MSF sistemleri içinde tutarak gizliliği artırır ve harici hizmetlere güvenli bir alternatif sunar. Birden fazla AI modelini (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) ve web araması, çeviri ile ses transkripsiyonu ve özelleştirilebilir istemler ve tonlar gibi özellikleri destekler. AI asistanı, soruları yanıtlamaya, içerik oluşturmaya, metin çevirmeye, fikir geliştirmeye ve daha fazlasına yardımcı olabilir."
+        },
+        {
+          "question": "Hangi modeller mevcut?",
+          "answer": "MSF AI Asistanı, birden fazla AI modeline erişim sağlar:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI akıl yürütme modelleri)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nSohbetin üst kısmındaki model seçimi açılır menüsünü kullanarak istediğiniz zaman model değiştirebilirsiniz."
+        },
+        {
+          "question": "Hızlı Eylemler nedir?",
+          "answer": "Hızlı Eylemler, mesajlarınıza hızlıca istemler ve tonlar uygulamanıza olanak tanır. İstemler: Yaygın görevler için yeniden kullanılabilir şablonlar. Tonlar: AI'nın nasıl yanıt vereceğini ayarlayın. Şimşek simgesi (⚡) veya / tuşuna basarak erişin."
+        },
+        {
+          "question": "Arama Modu nedir?",
+          "answer": "Arama Modu, AI'nın güncel bilgilere ihtiyaç duyduğunda web aramasını etkinleştirir. Gizlilik Odaklı Mod (varsayılan): Yalnızca arama sorgularını gönderir. Azure AI Foundry Modu (yalnızca GPT-4.1): Daha hızlı yanıtlar için tam konuşmanızı saklar."
+        },
+        {
+          "question": "Ses transkripsiyonunu nasıl kullanırım?",
+          "answer": "Kaydı başlatmak için mikrofon simgesine tıklayın. AI, konuşmanızı metne dönüştürür. Transkripsiyon sonrasında metni kopyalayabilir, dosya olarak indirebilir veya 13+ dile çevirebilirsiniz."
+        },
+        {
+          "question": "MSF AI Asistanını telefonumda kullanabilir miyim?",
+          "answer": "Evet! MSF AI Asistanı, Aşamalı Web Uygulaması (PWA) olarak çalışır. Mobilde: tarayıcınızda ai.msf.org'u açın ve giriş yapın, Ayarlar > Mobil Uygulama'ya gidin, 'Ana Ekrana Ekle' (iOS) veya 'Yükle' (Android) seçeneğine dokunun."
+        },
+        {
+          "question": "Konuşma verilerim nerede saklanıyor?",
+          "answer": "Konuşma geçmişiniz herhangi bir sunucuda değil, tarayıcı depolamanızda yerel olarak saklanır. Sohbetleriniz yalnızca cihazınızda bulunur ve cihazlar arasında senkronize edilmez. Arama için Azure AI Foundry Modunu kullanırsanız, bu konuşmalar Azure AI Foundry'de de saklanır."
+        },
+        {
+          "question": "Özel Aracılar nedir?",
+          "answer": "Özel Aracılar, özelleştirilmiş yeteneklere sahip MSF AI Assistant Foundry örneğinde çalışan gelişmiş AI yapılandırmalarıdır. Web araması ve kod yorumlama gibi araçları otomatik olarak kullanabilirler. Bu, teknik ekiple koordinasyon gerektiren gelişmiş bir özelliktir."
+        },
+        {
+          "question": "AI'nın yanıtlarına %100 güvenmeli miyim?",
+          "answer": "Hayır. MSF AI Asistanı güçlü bir araç olsa da, insan yargısı ve uzmanlığının yerini almamalıdır. Her zaman: olgusal bilgileri doğrulayın, önyargı ve doğruluğu kontrol edin, kullanmadan önce çıktıları gözden geçirin, kişisel veriler veya hassas bilgiler girmeyin."
+        },
+        {
+          "question": "Hangi verileri GİRMEMELİYİM?",
+          "answer": "Girmeyin: Kişisel veriler (isimler, telefon numaraları, e-posta adresleri, özgeçmişler), son derece hassas operasyonel detaylar, hasta bilgileri veya tıbbi kayıtlar, bireyleri tanımlayabilecek herhangi bir şey."
+        },
+        {
+          "question": "Verilerimi nasıl dışa aktarır veya temizlerim?",
+          "answer": "Ayarlar > Veri Yönetimi'nde: Tüm konuşmaları ve istemleri JSON olarak dışa aktarın, tüm konuşmaları temizleyin, önceden dışa aktarılan verileri içe aktarın, depolama kullanımını kontrol edin."
+        },
+        {
+          "question": "Sorularım için nereye gitmeliyim?",
+          "answer": "Desteğe başvurun:\n- ABD kullanıcıları: ai@newyork.msf.org\n- ABD dışı kullanıcılar: ai.team@amsterdam.msf.org\n\nYardım Merkezine her zaman Ayarlar > Yardım ve Destek'ten erişebilirsiniz."
+        },
+        {
+          "question": "Proje hakkında daha fazla bilgiyi nereden öğrenebilirim?",
+          "answer": "Pamoja'daki AI Accelerator portalını ziyaret edin:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nBu portal, proje yol haritası ve eğitim materyalleri hakkında bilgi içerir."
+        },
+        {
+          "question": "MSF AI Asistanı açık kaynak mı?",
+          "answer": "Evet! GitHub'da mevcut:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nNext.js ve React ile oluşturulmuştur. Katkılar memnuniyetle karşılanır!"
+        }
+      ]
     },
     "privacy": {
       "title": "Gizlilik ve Veri",
@@ -791,7 +849,41 @@
       "localStorageOnly": "Yalnızca yerel depolama",
       "msfControlled": "MSF kontrollü",
       "noPersonalData": "Kişisel veri yok",
-      "noSensitiveOps": "Hassas işlem yok"
+      "noSensitiveOps": "Hassas işlem yok",
+      "items": [
+        {
+          "question": "MSF AI Asistanı nedir ve gizliliği nasıl korur?",
+          "answer": "MSF AI Asistanı, MSF personeli için geliştirilmiş dahili bir AI sohbet robotudur. Microsoft Azure'un Open AI büyük dil modellerini kullanırken tüm verileri MSF içinde tutarak gizlilik ve kontrol sağlar. ai.msf.org kullanmak, çok az gizlilik garantisi sunan diğer harici ücretsiz AI araçlarını kullanmaktan daha güvenli bir ortamdır."
+        },
+        {
+          "question": "Verilerim nerede saklanıyor ve işleniyor?",
+          "answer": "MSF AI Asistanı ile tüm konuşma verileri kendi bilgisayarınızda yerel olarak saklanır ve Microsoft Azure altyapısını kullanarak MSF sistemleri içinde işlenir. Giriş bilgileriniz, MSF varlığınızın gizlilik politikasında açıklandığı şekilde MSF tarafından işlenecektir. Veriler MSF içinde tutulur, gizlilik ve kontrol sağlanır."
+        },
+        {
+          "question": "MSF AI Asistanına hangi verileri GİRMEMELİYİM?",
+          "answer": "ai.msf.org'a aşağıdaki bilgileri girmeyecek/yüklemeyeceksiniz:\n- Kişisel veriler (isimler, telefon numaraları, özgeçmişler, tanıklıklar; bir bireyi doğrudan veya dolaylı olarak tanımlayabilecek herhangi bir şey)\n- Son derece hassas veriler (bireylere, topluluklara, MSF'ye veya personeline zarar vermek için kasıtlı veya kasıtsız olarak kullanılabilecek veriler -- verilerin hassasiyetini belirlemek, hassas proje konumları veya risk grupları, güvenlik olayları ve diğer operasyonel ayrıntılar gibi bağlam analizini içermeyi gerektirir)"
+        },
+        {
+          "question": "Sorumlu kullanım yönergeleri nelerdir?",
+          "answer": "ai.msf.org'u sorumlu bir şekilde kullanmayı kabul ediyorsunuz. Yapacaksınız:\n- MSF varlıklarınızın geçerli ICT, AI ve diğer politikalarına uygun olarak kullanın\n- Her zaman çıktıları doğruluk, kapsayıcılık ve önyargı açısından kontrol edin\n- Çıktıların üçüncü taraf fikri mülkiyet haklarını ihlal etmediğini kontrol edin\n- AI kullanımınız konusunda şeffaf olun ve çıktıları AI tarafından oluşturulmuş olarak işaretleyin"
+        },
+        {
+          "question": "Yasaklanmış uygulamalar nelerdir?",
+          "answer": "ai.msf.org'u aşağıdaki amaçlarla KULLANMAYACAKSINIZ:\n- Sağlık hizmetleri (sağlık hizmeti sağlamak veya sağlıkla ilgili sorulara cevap vermek için)\n- MSF hastalarının veya topluluklarının veya diğer bireylerin gözetimi veya izlenmesi\n- İstihdamla ilgili kararlar\n- Otomatik karar verme (bir bireye veya topluluğa zararlı olabilecek kararlar vermek için)\n- Kamuya açık konularda harici iletişim için medya içeriği oluşturma\n- Yasadışı veya zararlı faaliyetler"
+        },
+        {
+          "question": "Çıktılar ne kadar doğru?",
+          "answer": "Ai.msf.org deneysel teknoloji kullanır -- çıktıların doğru olacağını garanti etmez. Ayrıca, teknoloji MSF hastalarının ve topluluklarının temsili verileri kullanılarak eğitilmemiştir. AI çıktıları önyargı, ayrımcılık ve stereotipleri sürdürebilir. Üretilen çıktıları doğrulamaktan siz sorumlusunuz."
+        },
+        {
+          "question": "Gizlilik endişeleri veya olaylar için kiminle iletişime geçmeliyim?",
+          "answer": "Herhangi bir endişeniz varsa, bir olay bildirmek istiyorsanız, lütfen iletişime geçin: ai.team@amsterdam.msf.org. Belirli bölgeler için, yerel DPO'nuz (Veri Koruma Görevlisi) veya sorumlu ICT (Bilgi ve İletişim Teknolojisi) ekibinizle de iletişime geçebilirsiniz."
+        },
+        {
+          "question": "Kullanım şartları değiştirilebilir mi?",
+          "answer": "Bu şartlar MSF tarafından herhangi bir zamanda değiştirilebilir -- değiştirirsek size bildirimde bulunacağız -- ai.msf.org'u kullanmaya devam etmeniz herhangi bir değişikliği kabul ettiğiniz anlamına gelir."
+        }
+      ]
     },
     "contact": {
       "title": "İletişim ve Kaynaklar",
