@@ -5,6 +5,10 @@ import { AgentChatService } from './chat/AgentChatService';
 import { FileProcessingService } from './chat/FileProcessingService';
 import { StandardChatService } from './chat/StandardChatService';
 import { ToolRouterService } from './chat/ToolRouterService';
+import {
+  CodeInterpreterFileService,
+  CodeInterpreterRouterService,
+} from './chat/codeInterpreter';
 import { ModelSelector, StreamingService, ToneService } from './shared';
 
 import { env } from '@/config/environment';
@@ -46,8 +50,10 @@ export class ServiceContainer {
   private streamingService!: StreamingService;
   private fileProcessingService!: FileProcessingService;
   private toolRouterService!: ToolRouterService;
+  private codeInterpreterRouterService!: CodeInterpreterRouterService;
   private agentChatService!: AgentChatService;
   private aiFoundryAgentHandler!: AIFoundryAgentHandler;
+  private codeInterpreterFileService!: CodeInterpreterFileService;
 
   // Chat service (uses all the above)
   private standardChatService!: StandardChatService;
@@ -119,8 +125,12 @@ export class ServiceContainer {
 
     // 3. Initialize services that depend on clients
     this.toolRouterService = new ToolRouterService(this.openAIClient);
+    this.codeInterpreterRouterService = new CodeInterpreterRouterService(
+      this.openAIClient,
+    );
     this.agentChatService = new AgentChatService();
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
+    this.codeInterpreterFileService = new CodeInterpreterFileService();
 
     // 4. Initialize chat service (uses multiple dependencies)
     this.standardChatService = new StandardChatService(
@@ -187,5 +197,13 @@ export class ServiceContainer {
 
   public getStandardChatService(): StandardChatService {
     return this.standardChatService;
+  }
+
+  public getCodeInterpreterFileService(): CodeInterpreterFileService {
+    return this.codeInterpreterFileService;
+  }
+
+  public getCodeInterpreterRouterService(): CodeInterpreterRouterService {
+    return this.codeInterpreterRouterService;
   }
 }

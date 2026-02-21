@@ -43,9 +43,16 @@ export class AgentChatHandler extends BasePipelineStage {
     const messagesToSend = context.enrichedMessages || context.messages;
 
     console.log('[AgentChatHandler] Message count:', messagesToSend.length);
+    console.log('[AgentChatHandler] Capabilities:', {
+      codeInterpreter:
+        context.agentCapabilities?.codeInterpreter?.enabled || false,
+      bingGrounding: context.agentCapabilities?.bingGrounding?.enabled || false,
+      fileCount:
+        context.agentCapabilities?.codeInterpreter?.uploadedFiles?.length || 0,
+    });
 
     try {
-      // Execute agent chat
+      // Execute agent chat with capabilities
       const response = await this.aiFoundryAgentHandler.handleAgentChat(
         context.modelId,
         context.model,
@@ -54,6 +61,7 @@ export class AgentChatHandler extends BasePipelineStage {
         context.user,
         context.botId,
         context.threadId,
+        context.agentCapabilities,
       );
 
       const duration = Date.now() - startTime;

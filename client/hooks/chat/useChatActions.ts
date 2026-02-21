@@ -13,6 +13,7 @@ import {
   isAssistantMessageGroup,
   isLegacyMessage,
 } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { SearchMode } from '@/types/searchMode';
 
 import { useChatStore } from '@/client/stores/chatStore';
@@ -25,6 +26,7 @@ interface UseChatActionsProps {
     message: Message,
     conversation: any,
     searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
   ) => void;
 }
 
@@ -84,7 +86,11 @@ export function useChatActions({
   );
 
   const handleSend = useCallback(
-    (message: Message, searchMode?: SearchMode) => {
+    (
+      message: Message,
+      searchMode?: SearchMode,
+      codeInterpreterMode?: CodeInterpreterMode,
+    ) => {
       const conversationState = useConversationStore.getState();
       const settingsState = useSettingsStore.getState();
 
@@ -125,7 +131,12 @@ export function useChatActions({
         conversationState.addConversation(conversationWithMessage);
 
         // Send the message with the new conversation
-        sendMessage?.(message, conversationWithMessage, searchMode);
+        sendMessage?.(
+          message,
+          conversationWithMessage,
+          searchMode,
+          codeInterpreterMode,
+        );
         return;
       }
 
@@ -138,7 +149,12 @@ export function useChatActions({
         ...currentConversation,
         messages: updatedMessages,
       };
-      sendMessage?.(message, updatedConversation, searchMode);
+      sendMessage?.(
+        message,
+        updatedConversation,
+        searchMode,
+        codeInterpreterMode,
+      );
     },
     [updateConversation, sendMessage],
   );
@@ -220,7 +236,7 @@ export function useChatActions({
         messages: messagesForAPI,
       };
 
-      sendMessage?.(userMessage, apiConversation, undefined);
+      sendMessage?.(userMessage, apiConversation, undefined, undefined);
     },
     [sendMessage],
   );

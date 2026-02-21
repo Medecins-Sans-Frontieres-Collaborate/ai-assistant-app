@@ -28,6 +28,10 @@ export interface OpenAIModel {
   // Special handling flags
   avoidSystemPrompt?: boolean; // For DeepSeek-R1: merge system prompt into user message
   usesResponsesAPI?: boolean; // Uses Azure responses.create() instead of chat.completions
+
+  // Code Interpreter support
+  codeInterpreter?: boolean; // Whether this model/agent supports Code Interpreter
+  codeInterpreterAgentId?: string; // Separate agent ID for Code Interpreter (if different from main agentId)
 }
 
 // Model order determines display order in UI (most advanced first)
@@ -37,6 +41,8 @@ export enum OpenAIModelID {
   GPT_o3 = 'o3',
   GPT_5_MINI = 'gpt-5-mini',
   GPT_4_1 = 'gpt-4.1',
+  // Code Interpreter agent
+  CODE_INTERPRETER = 'code-interpreter',
   // Anthropic Claude models (via Azure AI Foundry)
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
   CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
@@ -73,6 +79,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_o3,
   OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1,
+  OpenAIModelID.CODE_INTERPRETER,
   OpenAIModelID.CLAUDE_OPUS_4_5,
   OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
@@ -99,10 +106,16 @@ const ENVIRONMENT_CONFIGS: Record<
     [OpenAIModelID.GPT_4_1]: {
       agentId: 'asst_sbddkxz8DLyCXATINdB10pys', // Agent145 - dev
     },
+    [OpenAIModelID.CODE_INTERPRETER]: {
+      agentId: '', // Code Interpreter agent - dev (configure in Azure Portal)
+    },
   },
   prod: {
     [OpenAIModelID.GPT_4_1]: {
       agentId: 'asst_31ffIP2JhFb9iJmeauwV82X5', // Agent312 - gpt-4.1
+    },
+    [OpenAIModelID.CODE_INTERPRETER]: {
+      agentId: '', // Code Interpreter agent - prod (configure in Azure Portal)
     },
   },
 };
@@ -136,6 +149,25 @@ function createModelConfigs(
       supportsTemperature: false,
       supportsReasoningEffort: false,
       supportsVerbosity: false,
+    },
+    [OpenAIModelID.CODE_INTERPRETER]: {
+      id: OpenAIModelID.CODE_INTERPRETER,
+      name: 'Code Interpreter',
+      maxLength: 128000,
+      tokenLimit: 16000,
+      modelType: 'agent',
+      description:
+        'AI agent with Python code execution capabilities. Analyzes data files (CSV, Excel), generates charts and visualizations, performs calculations, and processes documents. Ideal for data analysis, statistical computations, and automated report generation.',
+      isDisabled: true, // Disabled until agent is configured in Azure Portal
+      isAgent: true,
+      agentId: envConfig[OpenAIModelID.CODE_INTERPRETER]?.agentId || '',
+      provider: 'openai',
+      knowledgeCutoffDate: '2025-12', // Uses GPT-5 backend
+      sdk: 'azure-openai',
+      supportsTemperature: false,
+      supportsReasoningEffort: false,
+      supportsVerbosity: false,
+      codeInterpreter: true,
     },
     [OpenAIModelID.GPT_5_2]: {
       id: OpenAIModelID.GPT_5_2,

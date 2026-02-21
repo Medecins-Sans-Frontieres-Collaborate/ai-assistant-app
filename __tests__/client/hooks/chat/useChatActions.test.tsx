@@ -130,6 +130,7 @@ describe('useChatActions', () => {
           messages: [newMessage],
         }),
         SearchMode.INTELLIGENT,
+        undefined, // codeInterpreterMode
       );
     });
 
@@ -193,7 +194,8 @@ describe('useChatActions', () => {
           messageType: MessageType.TEXT,
         }),
         expect.any(Object),
-        undefined,
+        undefined, // searchMode
+        undefined, // codeInterpreterMode
       );
     });
   });
@@ -250,7 +252,8 @@ describe('useChatActions', () => {
           id: 'conv-1',
           messages: messages.slice(0, 3), // Messages up to and including user message
         }),
-        undefined,
+        undefined, // searchMode
+        undefined, // codeInterpreterMode
       );
     });
 

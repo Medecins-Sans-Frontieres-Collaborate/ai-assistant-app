@@ -136,6 +136,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      codeInterpreterMode,
       threadId,
       forcedAgentType,
       tone,
@@ -172,6 +173,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      codeInterpreterMode,
       threadId,
       forcedAgentType,
       tone,
@@ -349,6 +351,7 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
     hasAudio: context.hasAudio,
     botId: context.botId,
     searchMode: context.searchMode,
+    codeInterpreterMode: context.codeInterpreterMode,
     agentMode: context.agentMode,
   });
 

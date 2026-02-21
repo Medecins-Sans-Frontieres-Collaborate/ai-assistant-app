@@ -1,13 +1,9 @@
 import { Session } from 'next-auth';
 
-import {
-  appendMetadataToStream,
-  createStreamEncoder,
-  deduplicateCitations,
-} from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
+import { AgentCapabilities } from '@/types/agent';
 import {
   FileMessageContent,
   ImageMessageContent,
@@ -17,13 +13,22 @@ import {
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import {
+  AgentCapabilityHandler,
+  BingGroundingHandler,
+  CodeInterpreterHandler,
+} from './agentCapabilities';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
- * Handles Azure AI Foundry Agent-based chat completions with Bing grounding
+ * Handles Azure AI Foundry Agent-based chat completions.
+ *
+ * Supports multiple agent capabilities:
+ * - Bing grounding (default for agents)
+ * - Code Interpreter (when enabled via agentCapabilities)
  *
  * Package structure:
  * - Uses @azure/ai-agents (AgentsClient) for streaming support
@@ -40,7 +45,24 @@ export class AIFoundryAgentHandler {
   constructor() {}
 
   /**
-   * Handles chat completion using Azure AI Foundry Agents
+   * Handles chat completion using Azure AI Foundry Agents.
+   *
+   * This method handles all agent capabilities uniformly:
+   * - Standard agents with Bing grounding
+   * - Agents with Code Interpreter enabled (Python execution)
+   *
+   * The behavior is determined by the `capabilities` parameter:
+   * - If `capabilities.codeInterpreter.enabled`: attachments are added, Code Interpreter events are handled
+   * - Otherwise: standard agent execution with Bing grounding
+   *
+   * @param modelId - The model ID being used
+   * @param modelConfig - Model configuration including agentId
+   * @param messages - Conversation messages
+   * @param temperature - Temperature setting
+   * @param user - Authenticated user
+   * @param botId - Optional bot/knowledge base ID
+   * @param threadId - Optional existing thread ID for conversation continuity
+   * @param capabilities - Optional agent capabilities (Code Interpreter, etc.)
    */
   async handleAgentChat(
     modelId: string,
@@ -50,16 +72,22 @@ export class AIFoundryAgentHandler {
     user: Session['user'],
     botId: string | undefined,
     threadId?: string,
+    capabilities?: AgentCapabilities,
   ): Promise<Response> {
     const startTime = Date.now();
+    const hasCodeInterpreter = capabilities?.codeInterpreter?.enabled || false;
+    const uploadedFiles = capabilities?.codeInterpreter?.uploadedFiles || [];
 
     // Create OpenTelemetry span for tracing
     return await this.tracer.startActiveSpan(
-      'ai_foundry_agent.chat',
+      hasCodeInterpreter
+        ? 'ai_foundry_agent.code_interpreter'
+        : 'ai_foundry_agent.chat',
       {
         attributes: {
           'agent.id': modelConfig.agentId || 'unknown',
           'agent.model': modelId,
+          'agent.type': hasCodeInterpreter ? 'code_interpreter' : 'standard',
           'message.count': messages.length,
           'message.temperature': temperature,
           'user.id': user.id,
@@ -70,6 +98,7 @@ export class AIFoundryAgentHandler {
           'bot.id': botId || 'none',
           'thread.id': threadId || 'new',
           'thread.is_new': !threadId,
+          'files.count': uploadedFiles.length,
         },
       },
       async (span) => {
@@ -80,7 +109,11 @@ export class AIFoundryAgentHandler {
 
           // AI Foundry uses a separate project endpoint (services.ai.azure.com)
           const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
-          const agentId = modelConfig.agentId;
+
+          // Use Code Interpreter agent ID if available and capability is enabled
+          const agentId = hasCodeInterpreter
+            ? modelConfig.codeInterpreterAgentId || modelConfig.agentId
+            : modelConfig.agentId;
 
           if (!endpoint || !agentId) {
             throw new Error(
@@ -107,6 +140,8 @@ export class AIFoundryAgentHandler {
             originalCount: messages.length,
             processedCount: processedMessages.length,
             hasArtifactContext: messages.some((m) => m.artifactContext),
+            hasCodeInterpreter,
+            fileCount: uploadedFiles.length,
           });
 
           // Create a thread and run for this conversation with streaming
@@ -131,64 +166,35 @@ export class AIFoundryAgentHandler {
           }
 
           try {
-            // The SDK expects parameters to be passed separately: (threadId, role, content)
-            // For multimodal content (images, files), convert to SDK format
-            let messageContent:
-              | string
-              | Array<
-                  | { type: 'text'; text: string }
-                  | {
-                      type: 'image_url';
-                      imageUrl: { url: string; detail: string };
-                    }
-                >;
+            // Prepare message content based on capabilities
+            if (hasCodeInterpreter) {
+              // For Code Interpreter: send text-only message with file attachments
+              const messageContent = this.extractTextContent(lastMessage);
 
-            if (typeof lastMessage.content === 'string') {
-              // Simple text message
-              messageContent = lastMessage.content;
-            } else if (Array.isArray(lastMessage.content)) {
-              // Multimodal content - convert to Azure SDK format
-              messageContent = lastMessage.content.map(
-                (
-                  item:
-                    | TextMessageContent
-                    | ImageMessageContent
-                    | FileMessageContent,
-                ) => {
-                  if (item.type === 'text') {
-                    return { type: 'text', text: item.text };
-                  } else if (item.type === 'image_url') {
-                    // Convert image_url to imageUrl (Azure SDK uses camelCase)
-                    return {
-                      type: 'image_url',
-                      imageUrl: {
-                        url: item.image_url.url,
-                        detail: item.image_url.detail || 'auto',
-                      },
-                    };
-                  } else if (item.type === 'file_url') {
-                    // For non-image files, add as text with context
-                    // Note: Azure AI Agents SDK handles files via file search tool
-                    return {
-                      type: 'text',
-                      text: `[File attached: ${item.originalFilename || 'file'}]`,
-                    };
-                  }
-                  return item;
+              // Create attachments from uploaded files
+              const attachments = uploadedFiles.map((file) => ({
+                file_id: file.id,
+                tools: [{ type: 'code_interpreter' as const }],
+              }));
+
+              console.log(
+                '[AIFoundryAgentHandler] Creating message with attachments:',
+                {
+                  threadId: thread.id,
+                  fileCount: attachments.length,
+                  fileIds: uploadedFiles.map((f) => f.id),
                 },
               );
-            } else if (
-              typeof lastMessage.content === 'object' &&
-              'text' in lastMessage.content
-            ) {
-              // Single TextMessageContent object
-              messageContent = (lastMessage.content as TextMessageContent).text;
-            } else {
-              // Fallback
-              messageContent = String(lastMessage.content);
-            }
 
-            await client.messages.create(thread.id, 'user', messageContent);
+              // Create message with attachments
+              await client.messages.create(thread.id, 'user', messageContent, {
+                attachments,
+              });
+            } else {
+              // For standard agents: handle multimodal content
+              const messageContent = this.convertToAgentFormat(lastMessage);
+              await client.messages.create(thread.id, 'user', messageContent);
+            }
           } catch (messageError) {
             console.error('Error creating message:', messageError);
             console.error(
@@ -247,225 +253,34 @@ export class AIFoundryAgentHandler {
             throw streamError;
           }
 
-          // Create a readable stream for the response
-          const stream = new ReadableStream({
-            async start(controller) {
-              const encoder = createStreamEncoder();
-              let citations: Array<{
-                number: number;
-                title: string;
-                url: string;
-                date: string;
-              }> = [];
-              let citationIndex = 1;
-              const citationMap = new Map<string, number>();
-              let hasCompletedMessage = false;
-
-              // markerBuffer: Accumulates text to handle citation markers split across chunks
-              let markerBuffer = '';
-              let controllerClosed = false;
-
-              try {
-                for await (const eventMessage of streamEventMessages) {
-                  // Handle different event types
-                  if (eventMessage.event === 'thread.message.delta') {
-                    const messageData = eventMessage.data as {
-                      delta?: {
-                        content?: Array<{
-                          type: string;
-                          text?: { value: string };
-                        }>;
-                      };
-                    };
-                    if (
-                      messageData?.delta?.content &&
-                      Array.isArray(messageData.delta.content)
-                    ) {
-                      messageData.delta.content.forEach(
-                        (contentPart: {
-                          type: string;
-                          text?: { value: string };
-                        }) => {
-                          if (
-                            contentPart.type === 'text' &&
-                            contentPart.text?.value
-                          ) {
-                            const textChunk = contentPart.text.value;
-
-                            // Stage 1: Accumulate text in marker buffer
-                            markerBuffer += textChunk;
-
-                            // Stage 2: Process complete citation markers in accumulated buffer
-                            //
-                            // Azure agents return citations in two formats:
-                            // - Short: 【3:0†source】 (just the word "source")
-                            // - Long:  【3:0†Title†URL】 (embedded title and URL)
-                            //
-                            // Regex breakdown: /【(\d+):(\d+)†[^】]+】/g
-                            // - 【        : Opening bracket (Chinese left lenticular bracket)
-                            // - (\d+)    : First number (source index)
-                            // - :        : Literal colon
-                            // - (\d+)    : Second number (sub-index)
-                            // - †        : Dagger symbol separator
-                            // - [^】]+   : Any characters except closing bracket
-                            // - 】       : Closing bracket (Chinese right lenticular bracket)
-                            //
-                            // Each unique marker gets a sequential number [1], [2], etc.
-                            const processedBuffer = markerBuffer.replace(
-                              /【(\d+):(\d+)†[^】]+】/g,
-                              (match: string) => {
-                                if (!citationMap.has(match)) {
-                                  citationMap.set(match, citationIndex);
-                                  citationIndex++;
-                                }
-                                return `[${citationMap.get(match)}]`;
-                              },
-                            );
-
-                            // Stage 3: Check for incomplete markers at end of buffer
-                            // If there's an opening bracket without a closing one, keep it
-                            const lastOpenBracket =
-                              processedBuffer.lastIndexOf('【');
-                            const lastCloseBracket =
-                              processedBuffer.lastIndexOf('】');
-
-                            if (lastOpenBracket > lastCloseBracket) {
-                              // Incomplete marker at end - keep it in buffer, send the rest
-                              const completeText = processedBuffer.slice(
-                                0,
-                                lastOpenBracket,
-                              );
-                              if (completeText) {
-                                controller.enqueue(
-                                  encoder.encode(completeText),
-                                );
-                              }
-                              markerBuffer =
-                                processedBuffer.slice(lastOpenBracket);
-                            } else {
-                              // All markers complete - send everything
-                              controller.enqueue(
-                                encoder.encode(processedBuffer),
-                              );
-                              markerBuffer = '';
-                            }
-                          }
-                        },
-                      );
-                    }
-                  } else if (
-                    eventMessage.event === 'thread.message.completed'
-                  ) {
-                    hasCompletedMessage = true;
-
-                    // Extract citations from annotations
-                    const messageData = eventMessage.data as {
-                      content?: Array<{
-                        text?: {
-                          annotations?: Array<{
-                            type: string;
-                            text?: string;
-                            urlCitation?: { title?: string; url?: string };
-                          }>;
-                        };
-                      }>;
-                    };
-                    if (messageData?.content?.[0]?.text?.annotations) {
-                      const annotations =
-                        messageData.content[0].text.annotations;
-
-                      // Build a map from citation marker to annotation
-                      const markerToAnnotation = new Map<
-                        string,
-                        { title?: string; url?: string }
-                      >();
-                      annotations.forEach(
-                        (annotation: {
-                          type: string;
-                          text?: string;
-                          urlCitation?: { title?: string; url?: string };
-                        }) => {
-                          if (
-                            annotation.type === 'url_citation' &&
-                            annotation.text &&
-                            annotation.urlCitation
-                          ) {
-                            markerToAnnotation.set(
-                              annotation.text,
-                              annotation.urlCitation,
-                            );
-                          }
-                        },
-                      );
-
-                      // Build citations list based on citationMap order
-                      // This ensures inline numbers match the citation list
-                      citations = [];
-                      for (const [marker, number] of citationMap.entries()) {
-                        const urlCitation = markerToAnnotation.get(marker);
-                        // Always add citation even if annotation is missing
-                        citations.push({
-                          number: number,
-                          title: urlCitation?.title || `Source ${number}`,
-                          url: urlCitation?.url || '',
-                          date: '',
-                        });
-
-                        if (!urlCitation) {
-                          console.warn(
-                            `[AIFoundryAgentHandler] No annotation found for marker ${marker}, using placeholder`,
-                          );
-                        }
-                      }
-                    }
-                  } else if (eventMessage.event === 'thread.run.completed') {
-                    // Flush any remaining marker buffer
-                    if (markerBuffer) {
-                      controller.enqueue(encoder.encode(markerBuffer));
-                      markerBuffer = '';
-                    }
-
-                    // Append metadata at the very end using utility function
-                    // No need to deduplicate - citationMap already ensured uniqueness
-                    appendMetadataToStream(controller, {
-                      citations: citations.length > 0 ? citations : undefined,
-                      threadId: isNewThread ? thread.id : undefined,
-                    });
-                  } else if (eventMessage.event === 'error') {
-                    controllerClosed = true;
-                    controller.error(
-                      new Error(
-                        `Agent error: ${JSON.stringify(eventMessage.data)}`,
-                      ),
-                    );
-                  } else if (eventMessage.event === 'done') {
-                    // Stop the smooth streaming loop and close
-                    controllerClosed = true;
-                    controller.close();
-                  }
-                }
-              } catch (error) {
-                controllerClosed = true;
-                controller.error(error);
-              }
-            },
+          // Select capability handler and create the response stream
+          const capabilityHandler = this.selectCapabilityHandler(capabilities);
+          const stream = capabilityHandler.createStream(streamEventMessages, {
+            thread,
+            isNewThread,
+            startTime,
+            uploadedFiles: capabilities?.codeInterpreter?.uploadedFiles,
           });
 
           // Record metrics
           const duration = Date.now() - startTime;
-          MetricsService.recordRequest('agent', duration, {
+          const metricType = hasCodeInterpreter ? 'code_interpreter' : 'agent';
+          MetricsService.recordRequest(metricType, duration, {
             user,
             success: true,
             model: modelId,
             botId,
           });
 
-          // TODO: Extract token usage from agent response and record
-          // MetricsService.recordTokenUsage({ total: tokens }, { user, model: modelId, operation: 'agent', botId });
-
           span.setStatus({ code: SpanStatusCode.OK });
           span.setAttribute('response.stream', true);
           span.setAttribute('agent.duration_ms', duration);
+          if (hasCodeInterpreter) {
+            span.setAttribute(
+              'code_interpreter.files_uploaded',
+              uploadedFiles.length,
+            );
+          }
 
           return new Response(stream, {
             headers: STREAMING_RESPONSE_HEADERS,
@@ -479,14 +294,18 @@ export class AIFoundryAgentHandler {
           });
 
           // Record error metrics
-          MetricsService.recordError('agent_execution_failed', {
+          const errorType = hasCodeInterpreter
+            ? 'code_interpreter_failed'
+            : 'agent_execution_failed';
+          MetricsService.recordError(errorType, {
             user,
-            operation: 'agent',
+            operation: hasCodeInterpreter ? 'code_interpreter' : 'agent',
             model: modelId,
             message: error instanceof Error ? error.message : 'Unknown error',
           });
 
-          MetricsService.recordRequest('agent', Date.now() - startTime, {
+          const metricType = hasCodeInterpreter ? 'code_interpreter' : 'agent';
+          MetricsService.recordRequest(metricType, Date.now() - startTime, {
             user,
             success: false,
             model: modelId,
@@ -499,5 +318,104 @@ export class AIFoundryAgentHandler {
         }
       },
     );
+  }
+
+  /**
+   * Extracts text content from a message for Code Interpreter.
+   */
+  private extractTextContent(message: Message): string {
+    if (typeof message.content === 'string') {
+      return message.content;
+    } else if (
+      typeof message.content === 'object' &&
+      'text' in message.content
+    ) {
+      return (message.content as TextMessageContent).text;
+    } else if (Array.isArray(message.content)) {
+      for (const section of message.content) {
+        if (section.type === 'text') {
+          return section.text;
+        }
+      }
+    }
+    return String(message.content);
+  }
+
+  /**
+   * Converts message content to Azure SDK format for standard agents.
+   */
+  private convertToAgentFormat(
+    message: Message,
+  ):
+    | string
+    | Array<
+        | { type: 'text'; text: string }
+        | { type: 'image_url'; imageUrl: { url: string; detail: string } }
+      > {
+    if (typeof message.content === 'string') {
+      return message.content;
+    } else if (Array.isArray(message.content)) {
+      // Multimodal content - convert to Azure SDK format
+      return message.content.map(
+        (
+          item: TextMessageContent | ImageMessageContent | FileMessageContent,
+        ) => {
+          if (item.type === 'text') {
+            return { type: 'text', text: item.text };
+          } else if (item.type === 'image_url') {
+            // Convert image_url to imageUrl (Azure SDK uses camelCase)
+            return {
+              type: 'image_url',
+              imageUrl: {
+                url: item.image_url.url,
+                detail: item.image_url.detail || 'auto',
+              },
+            };
+          } else if (item.type === 'file_url') {
+            // For non-image files, add as text with context
+            // Note: Azure AI Agents SDK handles files via file search tool
+            return {
+              type: 'text',
+              text: `[File attached: ${item.originalFilename || 'file'}]`,
+            };
+          }
+          return item as { type: 'text'; text: string };
+        },
+      );
+    } else if (
+      typeof message.content === 'object' &&
+      'text' in message.content
+    ) {
+      // Single TextMessageContent object
+      return (message.content as TextMessageContent).text;
+    }
+    // Fallback
+    return String(message.content);
+  }
+
+  /**
+   * Selects the appropriate capability handler based on enabled capabilities.
+   *
+   * @param capabilities - Agent capabilities enabled for this execution
+   * @returns The handler that should process the stream
+   */
+  private selectCapabilityHandler(
+    capabilities?: AgentCapabilities,
+  ): AgentCapabilityHandler {
+    // Registered handlers in priority order
+    const handlers: AgentCapabilityHandler[] = [
+      new CodeInterpreterHandler(),
+      new BingGroundingHandler(), // Default fallback
+    ];
+
+    // Return first handler that can handle the capabilities
+    for (const handler of handlers) {
+      if (handler.canHandle(capabilities)) {
+        return handler;
+      }
+    }
+
+    // Should never reach here since BingGroundingHandler handles all non-CodeInterpreter
+    return new BingGroundingHandler();
   }
 }

@@ -50,6 +50,7 @@ import {
   MessageType,
   TextMessageContent,
 } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { Prompt } from '@/types/prompt';
 import { SearchMode } from '@/types/searchMode';
 
@@ -59,6 +60,7 @@ import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImageCapture, {
   ChatInputImageCaptureRef,
 } from '@/components/Chat/ChatInput/ChatInputImageCapture';
+import { CodeInterpreterModeBadge } from '@/components/Chat/ChatInput/CodeInterpreterModeBadge';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
@@ -71,10 +73,15 @@ import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
-  onSend: (message: Message, searchMode?: SearchMode) => void;
+  onSend: (
+    message: Message,
+    searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
+  ) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
   stopConversationRef: MutableRefObject<boolean>;
@@ -146,6 +153,12 @@ export const ChatInput = ({
   );
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const codeInterpreterMode = useChatInputStore(
+    (state) => state.codeInterpreterMode,
+  );
+  const setCodeInterpreterMode = useChatInputStore(
+    (state) => state.setCodeInterpreterMode,
+  );
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const setSelectedToneId = useChatInputStore(
     (state) => state.setSelectedToneId,
@@ -180,6 +193,11 @@ export const ChatInput = ({
     (state) => state.resetForNewConversation,
   );
 
+  // Settings store
+  const defaultCodeInterpreterMode = useSettingsStore(
+    (state) => state.defaultCodeInterpreterMode,
+  );
+
   // Message sending logic
   const { handleSend: handleMessageSend } = useMessageSender({
     textFieldValue,
@@ -192,6 +210,7 @@ export const ChatInput = ({
     usedPromptId,
     usedPromptVariables,
     searchMode,
+    codeInterpreterMode,
     onSend,
     onClearInput: clearInput,
     setSubmitType,
@@ -211,10 +230,14 @@ export const ChatInput = ({
 
   // Reset input when conversation changes
   useEffect(() => {
-    resetForNewConversation(selectedConversation?.defaultSearchMode);
+    resetForNewConversation(
+      selectedConversation?.defaultSearchMode,
+      defaultCodeInterpreterMode,
+    );
   }, [
     selectedConversation?.id,
     selectedConversation?.defaultSearchMode,
+    defaultCodeInterpreterMode,
     resetForNewConversation,
   ]);
 
@@ -477,7 +500,9 @@ export const ChatInput = ({
     ? t('transcribingChatPlaceholder')
     : searchMode === SearchMode.ALWAYS
       ? 'Search the web'
-      : placeholderText;
+      : codeInterpreterMode === CodeInterpreterMode.ALWAYS
+        ? t('codeInterpreter.alwaysPlaceholder')
+        : placeholderText;
 
   return (
     <div
@@ -556,7 +581,7 @@ export const ChatInput = ({
 
             <div className="relative mx-auto w-full max-w-3xl flex-grow px-2 sm:px-4">
               <div
-                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-[#40414F] dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
+                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-[#40414F] dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || codeInterpreterMode === CodeInterpreterMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && codeInterpreterMode !== CodeInterpreterMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
               >
                 <MessageTextarea
                   textareaRef={textareaRef}
@@ -578,6 +603,7 @@ export const ChatInput = ({
                 <div
                   className={`absolute left-2 flex items-center gap-2 z-[10001] transition-all duration-200 ${
                     searchMode === SearchMode.ALWAYS ||
+                    codeInterpreterMode === CodeInterpreterMode.ALWAYS ||
                     selectedToneId ||
                     isMultiline
                       ? 'bottom-2'
@@ -603,6 +629,7 @@ export const ChatInput = ({
                 <div
                   className={`absolute left-14 flex items-center gap-2 z-[10000] transition-all duration-200 ${
                     searchMode === SearchMode.ALWAYS ||
+                    codeInterpreterMode === CodeInterpreterMode.ALWAYS ||
                     selectedToneId ||
                     isMultiline
                       ? 'bottom-2'
@@ -616,6 +643,15 @@ export const ChatInput = ({
                           selectedConversation?.defaultSearchMode ??
                             SearchMode.OFF,
                         )
+                      }
+                    />
+                  )}
+
+                  {codeInterpreterMode === CodeInterpreterMode.ALWAYS && (
+                    <CodeInterpreterModeBadge
+                      mode={codeInterpreterMode}
+                      onRemove={() =>
+                        setCodeInterpreterMode(CodeInterpreterMode.OFF)
                       }
                     />
                   )}

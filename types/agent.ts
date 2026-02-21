@@ -1,6 +1,10 @@
 import { Session } from 'next-auth';
 
 import { Message } from './chat';
+// =============================================================================
+// PIPELINE AGENT CAPABILITIES
+// =============================================================================
+import { CodeInterpreterFile } from './codeInterpreter';
 import { OpenAIModel } from './openai';
 
 /**
@@ -548,4 +552,41 @@ export interface AgentExecutionResult {
   executionTime: number;
   /** Agent instance used */
   agentInstance: BaseAgentInstance;
+}
+
+/**
+ * Capabilities enabled for an agent execution in the chat pipeline.
+ *
+ * This interface tracks what tools/features are enabled for a specific
+ * agent execution. Different agents may have different tools enabled,
+ * and this allows the pipeline to handle them uniformly.
+ *
+ * Key Insight: Code Interpreter is an agent capability, not a separate
+ * execution mode. An agent can have multiple capabilities (e.g., Bing
+ * grounding + Code Interpreter in the future).
+ */
+export interface AgentCapabilities {
+  /**
+   * Code Interpreter tool for Python execution.
+   * When enabled, files are uploaded to AI Foundry and attached to messages.
+   */
+  codeInterpreter?: {
+    /** Whether Code Interpreter is enabled for this execution */
+    enabled: boolean;
+    /** Files uploaded to AI Foundry for Code Interpreter use */
+    uploadedFiles: CodeInterpreterFile[];
+  };
+
+  /**
+   * Bing grounding for web search.
+   * Agents with agentId typically have this enabled by default.
+   */
+  bingGrounding?: {
+    /** Whether Bing grounding is enabled */
+    enabled: boolean;
+  };
+
+  // Future capabilities can be added here:
+  // fileSearch?: { enabled: boolean; vectorStoreIds: string[] };
+  // functionCalling?: { enabled: boolean; functions: FunctionDefinition[] };
 }

@@ -15,6 +15,7 @@ import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
 import { Conversation, Message, MessageType } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -71,6 +72,7 @@ interface ChatStore {
     message: Message,
     conversation: Conversation,
     searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
   ) => Promise<void>;
 
   // Helper methods for sendMessage
@@ -82,6 +84,7 @@ interface ChatStore {
   sendChatRequest: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
   ) => Promise<ReadableStream<Uint8Array>>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -253,8 +256,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         : null,
     })),
 
-  sendMessage: async (message, conversation, searchMode) => {
+  sendMessage: async (
+    message,
+    conversation,
+    searchMode,
+    codeInterpreterMode,
+  ) => {
     console.log('[chatStore.sendMessage] Message toneId:', message.toneId);
+    console.log(
+      '[chatStore.sendMessage] codeInterpreterMode:',
+      codeInterpreterMode,
+    );
     // Log messages - convert entries to display messages for logging
     const flatMessages = flattenEntriesForAPI(conversation.messages);
     console.log(
@@ -276,7 +288,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
 
       // Prepare and send the API request
-      const stream = await get().sendChatRequest(conversation, searchMode);
+      const stream = await get().sendChatRequest(
+        conversation,
+        searchMode,
+        codeInterpreterMode,
+      );
 
       // Process the stream
       const streamParser = new StreamParser();
@@ -366,6 +382,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   sendChatRequest: async (
     conversation: Conversation,
     searchMode?: SearchMode,
+    codeInterpreterMode?: CodeInterpreterMode,
   ): Promise<ReadableStream<Uint8Array>> => {
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
@@ -437,6 +454,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
       searchMode,
+      codeInterpreterMode,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
       streamingSpeed: settings.streamingSpeed, // Pass streaming speed configuration

@@ -238,6 +238,7 @@ describe('useMessageSender', () => {
       expect(onSend).toHaveBeenCalledWith(
         expect.any(Object),
         SearchMode.INTELLIGENT,
+        undefined, // codeInterpreterMode
       );
     });
 

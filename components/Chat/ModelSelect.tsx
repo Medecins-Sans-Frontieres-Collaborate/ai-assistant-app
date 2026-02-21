@@ -11,6 +11,7 @@ import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { Conversation } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
@@ -39,8 +40,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const { exploreBots } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
-  const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
-    useSettings();
+  const {
+    models,
+    defaultModelId,
+    setDefaultModelId,
+    setDefaultSearchMode,
+    setDefaultCodeInterpreterMode,
+  } = useSettings();
 
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -190,6 +196,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     selectedConversation?.defaultSearchMode ?? SearchMode.INTELLIGENT;
   const searchModeEnabled = currentSearchMode !== SearchMode.OFF;
 
+  // Get current Code Interpreter mode from conversation (default to OFF for opt-in)
+  const currentCodeInterpreterMode =
+    selectedConversation?.defaultCodeInterpreterMode ?? CodeInterpreterMode.OFF;
+  const codeInterpreterEnabled =
+    currentCodeInterpreterMode !== CodeInterpreterMode.OFF;
+
   // For non-agent models, if AGENT mode is somehow set, display as INTELLIGENT in UI
   const displaySearchMode =
     currentSearchMode === SearchMode.AGENT && !agentAvailable
@@ -332,6 +344,26 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setDefaultSearchMode(mode);
   };
 
+  const handleToggleCodeInterpreterMode = () => {
+    if (!selectedConversation) return;
+
+    const newMode = codeInterpreterEnabled
+      ? CodeInterpreterMode.OFF
+      : CodeInterpreterMode.INTELLIGENT;
+
+    console.log(
+      `[ModelSelect] Toggling Code Interpreter Mode: ${currentCodeInterpreterMode} → ${newMode}`,
+    );
+
+    // Update current conversation
+    updateConversation(selectedConversation.id, {
+      defaultCodeInterpreterMode: newMode,
+    });
+
+    // Set as default for future conversations
+    setDefaultCodeInterpreterMode(newMode);
+  };
+
   const handleSaveAgent = (agent: CustomAgent) => {
     saveAgentToStore(agent);
     closeAgentForm();
@@ -467,6 +499,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   handleSetSearchMode={handleSetSearchMode}
                   setShowModelAdvanced={setShowModelAdvanced}
                   updateConversation={updateConversation}
+                  codeInterpreterEnabled={codeInterpreterEnabled}
+                  handleToggleCodeInterpreterMode={
+                    handleToggleCodeInterpreterMode
+                  }
                 />
               )}
             </div>

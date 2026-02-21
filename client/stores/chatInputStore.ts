@@ -5,6 +5,7 @@ import {
   ImageFieldValue,
   TranscriptionJobStatus,
 } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { SearchMode } from '@/types/searchMode';
 
 import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
@@ -37,8 +38,9 @@ interface ChatInputState {
   // Batch transcription tracking (for files >25MB)
   pendingTranscriptions: Map<string, PendingTranscription>;
 
-  // Search mode & tone
+  // Search mode, Code Interpreter mode & tone
   searchMode: SearchMode;
+  codeInterpreterMode: CodeInterpreterMode;
   selectedToneId: string | null;
 
   // Upload state
@@ -72,8 +74,9 @@ interface ChatInputState {
     status: TranscriptionJobStatus,
   ) => void;
 
-  // Actions - Search mode & tone
+  // Actions - Search mode, Code Interpreter mode & tone
   setSearchMode: (mode: SearchMode) => void;
+  setCodeInterpreterMode: (mode: CodeInterpreterMode) => void;
   setSelectedToneId: (id: string | null) => void;
 
   // Actions - Upload
@@ -107,7 +110,10 @@ interface ChatInputState {
   // Actions - General
   clearInput: () => void;
   clearUploadState: () => void;
-  resetForNewConversation: (defaultSearchMode?: SearchMode) => void;
+  resetForNewConversation: (
+    defaultSearchMode?: SearchMode,
+    defaultCodeInterpreterMode?: CodeInterpreterMode,
+  ) => void;
 }
 
 export const useChatInputStore = create<ChatInputState>((set, get) => ({
@@ -126,8 +132,9 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   // Initial state - Batch Transcription
   pendingTranscriptions: new Map(),
 
-  // Initial state - Search mode & tone
+  // Initial state - Search mode, Code Interpreter mode & tone
   searchMode: SearchMode.OFF,
+  codeInterpreterMode: CodeInterpreterMode.INTELLIGENT,
   selectedToneId: null,
 
   // Initial state - Upload
@@ -180,8 +187,9 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       return { pendingTranscriptions: newMap };
     }),
 
-  // Actions - Search mode & tone
+  // Actions - Search mode, Code Interpreter mode & tone
   setSearchMode: (mode) => set({ searchMode: mode }),
+  setCodeInterpreterMode: (mode) => set({ codeInterpreterMode: mode }),
   setSelectedToneId: (id) => set({ selectedToneId: id }),
 
   // Actions - Upload
@@ -248,10 +256,14 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       pendingTranscriptions: new Map(),
     }),
 
-  resetForNewConversation: (defaultSearchMode = SearchMode.OFF) =>
+  resetForNewConversation: (
+    defaultSearchMode = SearchMode.OFF,
+    defaultCodeInterpreterMode = CodeInterpreterMode.INTELLIGENT,
+  ) =>
     set({
       textFieldValue: '',
       searchMode: defaultSearchMode,
+      codeInterpreterMode: defaultCodeInterpreterMode,
       selectedToneId: null,
       filePreviews: [],
       fileFieldValue: null,
