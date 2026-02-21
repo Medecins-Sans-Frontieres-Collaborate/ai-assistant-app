@@ -400,8 +400,11 @@ describe('DocumentArtifact', () => {
 
       expect(screen.getByText('Markdown (.md)')).toBeInTheDocument();
 
-      // Simulate clicking outside
-      fireEvent.click(document);
+      // Wait for setTimeout(0) in DropdownPortal to attach the event listener
+      await waitFor(() => {});
+
+      // Simulate clicking outside - DropdownPortal listens for mousedown, not click
+      fireEvent.mouseDown(document.body);
 
       await waitFor(() => {
         expect(screen.queryByText('Markdown (.md)')).not.toBeInTheDocument();
