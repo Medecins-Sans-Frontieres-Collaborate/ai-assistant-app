@@ -122,7 +122,7 @@ export default function DocumentArtifact({
       {/* Toolbar */}
       <div className="relative flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 flex-shrink-0 min-w-0 overflow-hidden">
         {/* Left: Filename and Mode */}
-        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden max-w-[calc(100%-180px)]">
           {isEditing ? (
             <input
               type="text"
