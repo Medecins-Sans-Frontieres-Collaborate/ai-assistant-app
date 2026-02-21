@@ -254,5 +254,44 @@ describe('CodeArtifact', () => {
       expect(footer).toBeInTheDocument();
       expect(footer).toHaveClass('px-4', 'py-2');
     });
+
+    it('should constrain left section width to prevent pushing buttons off-screen', () => {
+      render(<CodeArtifact onClose={mockOnClose} />);
+
+      // The left section (filename area) should have max-width constraint
+      const filenameButton = screen.getByText('test.js');
+      const leftSection = filenameButton.closest('div');
+      expect(leftSection).toHaveClass('max-w-[calc(100%-160px)]');
+    });
+
+    it('should keep action buttons accessible with very long filename', () => {
+      const longFilename = 'a'.repeat(100) + '.js';
+      (useArtifactStore as any).mockReturnValue({
+        fileName: longFilename,
+        language: 'javascript',
+        modifiedCode: 'console.log("test");',
+        downloadFile: mockDownloadFile,
+        setFileName: mockSetFileName,
+        setIsEditorOpen: mockSetIsEditorOpen,
+      });
+
+      render(
+        <CodeArtifact
+          onClose={mockOnClose}
+          onSwitchToDocument={mockOnSwitchToDocument}
+        />,
+      );
+
+      // All action buttons should still be in the document and accessible
+      expect(
+        screen.getByTitle('Switch to Document Editor'),
+      ).toBeInTheDocument();
+      expect(screen.getByTitle('Download')).toBeInTheDocument();
+      expect(screen.getByTitle('Close')).toBeInTheDocument();
+
+      // Filename should have truncate class for text overflow
+      const filenameButton = screen.getByText(longFilename);
+      expect(filenameButton).toHaveClass('truncate');
+    });
   });
 });
