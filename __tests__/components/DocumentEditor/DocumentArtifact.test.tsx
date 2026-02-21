@@ -244,9 +244,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as markdown', async () => {
-      const { htmlToMarkdown, downloadFile } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { htmlToMarkdown, downloadFile } =
+        await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -268,9 +267,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as HTML', async () => {
-      const { downloadFile } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { downloadFile } =
+        await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -291,9 +289,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as plain text', async () => {
-      const { htmlToPlainText, downloadFile } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { htmlToPlainText, downloadFile } =
+        await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -315,9 +312,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as PDF', async () => {
-      const { exportToPDF } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { exportToPDF } =
+        await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -344,9 +340,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as DOCX', async () => {
-      const { exportToDOCX } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { exportToDOCX } =
+        await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -373,9 +368,8 @@ describe('DocumentArtifact', () => {
     });
 
     it('should show error toast when export fails', async () => {
-      const { exportToPDF } = await import(
-        '@/lib/utils/shared/document/exportUtils'
-      );
+      const { exportToPDF } =
+        await import('@/lib/utils/shared/document/exportUtils');
       (exportToPDF as any).mockRejectedValueOnce(new Error('Export failed'));
 
       render(
@@ -485,6 +479,46 @@ describe('DocumentArtifact', () => {
       const footer = container.querySelector('.border-t');
       expect(footer).toBeInTheDocument();
       expect(footer).toHaveClass('px-4', 'py-2');
+    });
+
+    it('should constrain left section width to prevent pushing buttons off-screen', () => {
+      render(
+        <DocumentArtifact
+          onClose={mockOnClose}
+          onSwitchToCode={mockOnSwitchToCode}
+        />,
+      );
+
+      // The left section (filename area) should have max-width constraint
+      const filenameButton = screen.getByText('test.md');
+      const leftSection = filenameButton.closest('div');
+      expect(leftSection).toHaveClass('max-w-[calc(100%-180px)]');
+    });
+
+    it('should keep action buttons accessible with very long filename', () => {
+      const longFilename = 'a'.repeat(100) + '.md';
+      (useArtifactStore as any).mockReturnValue({
+        fileName: longFilename,
+        modifiedCode: '<p>Test content</p>',
+        setFileName: mockSetFileName,
+        setIsEditorOpen: mockSetIsEditorOpen,
+      });
+
+      render(
+        <DocumentArtifact
+          onClose={mockOnClose}
+          onSwitchToCode={mockOnSwitchToCode}
+        />,
+      );
+
+      // All action buttons should still be in the document and accessible
+      expect(screen.getByTitle('Switch to Code Editor')).toBeInTheDocument();
+      expect(screen.getByTitle('Export Document')).toBeInTheDocument();
+      expect(screen.getByTitle('Close')).toBeInTheDocument();
+
+      // Filename should have truncate class for text overflow
+      const filenameButton = screen.getByText(longFilename);
+      expect(filenameButton).toHaveClass('truncate');
     });
   });
 });
