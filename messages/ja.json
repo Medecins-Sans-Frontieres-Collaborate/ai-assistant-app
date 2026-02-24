@@ -538,6 +538,7 @@
     "keepEditing": "編集を続ける",
     "yes": "はい",
     "no": "いいえ",
+    "download": "ダウンロード",
     "beta": "ベータ"
   },
   "errors": {
@@ -1099,6 +1100,11 @@
       "reasoning": "複雑な課題への拡張的な推論",
       "omni": "幅広い機能を持つマルチモーダルモデル",
       "agent": "リアルタイムツールとWebアクセス対応エージェント"
+    },
+    "codeInterpreter": {
+      "title": "コードインタープリター",
+      "subtitle": "AIが必要に応じてコード実行を行います",
+      "smartModeDescription": "有効にすると、AIがご質問内容に応じてPythonコード実行を判断します。データ分析、計算、ファイル生成、可視化などに最適です。"
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "デフォルトの文体を使用",
     "noTonesCreated": "トーンはまだ作成されていません",
     "createTonesHint": "クイックアクションでトーンを作成",
-    "translateDocumentTooltip": "ドキュメントを他の言語に翻訳します。\n\n対応フォーマット：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応し、用語集ファイルの利用も可能です。"
+    "translateDocumentTooltip": "ドキュメントを他の言語に翻訳します。\n\n対応フォーマット：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応し、用語集ファイルの利用も可能です。",
+    "codeInterpreterTooltip": "データ分析やファイル生成のためにコードインタープリターを制御します。\n\n・オフ：コードインタープリターを使用しない\n・スマート：AIがご質問内容に応じて判断\n・常に有効：対応ファイルがある場合必ず使用\n\nクリックでモードを切り替えます。",
+    "codeInterpreterTooltipToggle": "このメッセージでコードインタープリターを強制します。\n\nチェック (✓) の場合、次のメッセージでは必ずコードインタープリターが実行されます。\n\nデータ分析、計算、可視化、ファイル生成などにご利用ください。"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",
@@ -1720,6 +1728,22 @@
     "title": "新しいバージョンが利用可能です",
     "refresh": "更新",
     "refreshNow": "更新してアップデート"
+  },
+  "codeInterpreterDropdown": "コードインタープリター",
+  "codeInterpreter": {
+    "intelligent": "スマート",
+    "always": "常に有効",
+    "off": "オフ",
+    "modeIntelligent": "コード：スマート",
+    "modeAlways": "コード：常に有効",
+    "modeForced": "コード：強制",
+    "disable": "コードインタープリターを無効にする",
+    "alwaysPlaceholder": "データを分析またはファイルを生成...",
+    "modeChangedOff": "コードインタープリターが無効になりました",
+    "modeChangedSmart": "コードインタープリター：スマートモード",
+    "modeChangedAlways": "コードインタープリター：常にオン",
+    "modeOverrideEnabled": "コードインタープリター：このメッセージで強制",
+    "modeOverrideDisabled": "コードインタープリター：会話のデフォルト設定を使用"
   },
   "agentsTab": {
     "organizationAgents": {

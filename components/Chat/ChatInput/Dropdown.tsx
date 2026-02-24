@@ -1,6 +1,7 @@
 import {
   IconCamera,
   IconCirclePlus,
+  IconCode,
   IconFile,
   IconFileMusic,
   IconFileText,
@@ -21,6 +22,7 @@ import React, {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -33,6 +35,7 @@ import {
   FileMessageContent,
   Message,
 } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { DocumentTranslationReference } from '@/types/documentTranslation';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
@@ -83,6 +86,12 @@ const Dropdown: React.FC<DropdownProps> = ({
   const textFieldValue = useChatInputStore((state) => state.textFieldValue);
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const codeInterpreterMode = useChatInputStore(
+    (state) => state.codeInterpreterMode,
+  );
+  const setCodeInterpreterMode = useChatInputStore(
+    (state) => state.setCodeInterpreterMode,
+  );
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -254,6 +263,28 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
+  // Helper function to toggle Code Interpreter mode between ALWAYS and conversation default
+  // This matches the Web Search toggle pattern
+  const toggleCodeInterpreterMode = useCallback(() => {
+    if (codeInterpreterMode === CodeInterpreterMode.ALWAYS) {
+      // Turn off override, return to conversation default
+      const defaultMode =
+        selectedConversation?.defaultCodeInterpreterMode ??
+        CodeInterpreterMode.OFF;
+      setCodeInterpreterMode(defaultMode);
+      toast(t('codeInterpreter.modeOverrideDisabled'), { icon: '🔴' });
+    } else {
+      // Force Code Interpreter for this message
+      setCodeInterpreterMode(CodeInterpreterMode.ALWAYS);
+      toast(t('codeInterpreter.modeOverrideEnabled'), { icon: '🟢' });
+    }
+  }, [
+    codeInterpreterMode,
+    setCodeInterpreterMode,
+    selectedConversation?.defaultCodeInterpreterMode,
+    t,
+  ]);
+
   // Define menu items - memoized to avoid ref access issues during render
   const menuItems: MenuItem[] = useMemo(
     () => [
@@ -267,6 +298,20 @@ const Dropdown: React.FC<DropdownProps> = ({
         infoTooltip: t('dropdown.searchTooltip'),
         onClick: () => {
           toggleSearchMode();
+          closeDropdown();
+        },
+        category: 'web',
+      },
+      {
+        id: 'codeInterpreter',
+        icon: <IconCode size={18} className="text-green-500 flex-shrink-0" />,
+        label:
+          codeInterpreterMode === CodeInterpreterMode.ALWAYS
+            ? `✓ ${t('codeInterpreterDropdown')}`
+            : t('codeInterpreterDropdown'),
+        infoTooltip: t('dropdown.codeInterpreterTooltipToggle'),
+        onClick: () => {
+          toggleCodeInterpreterMode();
           closeDropdown();
         },
         category: 'web',
@@ -358,6 +403,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     [
       t,
       searchMode,
+      codeInterpreterMode,
       selectedToneId,
       tones,
       hasCameraSupport,
@@ -369,6 +415,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       handleTranscribeClick,
       handleDocumentTranslateClick,
       toggleSearchMode,
+      toggleCodeInterpreterMode,
     ],
   );
 

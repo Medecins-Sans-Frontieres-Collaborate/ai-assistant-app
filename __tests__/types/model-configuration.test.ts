@@ -189,7 +189,8 @@ describe('Model Configuration', () => {
 
     it('agent models should have agent-specific fields', () => {
       const agentModels = Object.values(OpenAIModels).filter(
-        (m) => m.isAgent || m.agentId,
+        // Only check enabled agent models (disabled models may have empty agentId until configured)
+        (m) => (m.isAgent || m.agentId) && !m.isDisabled,
       );
 
       agentModels.forEach((model) => {

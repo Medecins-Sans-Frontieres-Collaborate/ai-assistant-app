@@ -1,3 +1,4 @@
+import { CodeInterpreterMetadata } from '@/types/codeInterpreter';
 import { Citation } from '@/types/rag';
 
 /**
@@ -33,8 +34,9 @@ export interface StreamMetadata {
   threadId?: string;
   thinking?: string;
   transcript?: TranscriptMetadata;
-  action?: string; // Current action being performed (e.g., "searching_web", "processing")
+  action?: string; // Current action being performed (e.g., "searching_web", "processing", "executing_code")
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
+  codeInterpreter?: CodeInterpreterMetadata; // Code Interpreter execution metadata
 }
 
 /**
@@ -48,6 +50,7 @@ export interface ParsedMetadata {
   transcript?: TranscriptMetadata;
   action?: string;
   pendingTranscriptions?: PendingTranscriptionInfo[];
+  codeInterpreter?: CodeInterpreterMetadata;
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -66,6 +69,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let transcript: TranscriptMetadata | undefined;
   let action: string | undefined;
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
+  let codeInterpreter: CodeInterpreterMetadata | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -99,6 +103,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (parsedData.pendingTranscriptions) {
         pendingTranscriptions = parsedData.pendingTranscriptions;
       }
+      if (parsedData.codeInterpreter) {
+        codeInterpreter = parsedData.codeInterpreter;
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -116,6 +123,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     transcript,
     action,
     pendingTranscriptions,
+    codeInterpreter,
     extractionMethod,
   };
 }
@@ -143,6 +151,8 @@ export function appendMetadataToStream(
   if (metadata.action) cleanMetadata.action = metadata.action;
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
+  if (metadata.codeInterpreter)
+    cleanMetadata.codeInterpreter = metadata.codeInterpreter;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {

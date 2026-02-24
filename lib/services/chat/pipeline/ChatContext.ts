@@ -2,7 +2,9 @@ import { Session } from 'next-auth';
 
 import { ModelSelector } from '@/lib/services/shared';
 
+import { AgentCapabilities } from '@/types/agent';
 import { Message } from '@/types/chat';
+import { CodeInterpreterMode } from '@/types/codeInterpreter';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -45,6 +47,13 @@ export interface ProcessedContent {
   images?: {
     url: string;
     detail: 'auto' | 'low' | 'high';
+  }[];
+
+  /** Raw file buffers for use by downstream processors (e.g., Code Interpreter) */
+  rawFiles?: {
+    filename: string;
+    buffer: Buffer;
+    url: string;
   }[];
 
   /** Any metadata from processing */
@@ -128,6 +137,16 @@ export interface ChatContext {
   /** Search mode for tool routing */
   searchMode?: SearchMode;
 
+  /** Code Interpreter mode for routing (OFF, INTELLIGENT, ALWAYS) */
+  codeInterpreterMode?: CodeInterpreterMode;
+
+  /**
+   * Whether Code Interpreter is recommended for this request.
+   * Set by CodeInterpreterRouterEnricher when mode is INTELLIGENT.
+   * Used by AgentEnricher to decide whether to enable Code Interpreter.
+   */
+  codeInterpreterRecommended?: boolean;
+
   /** Whether agent mode is enabled */
   agentMode?: boolean;
 
@@ -176,8 +195,22 @@ export interface ChatContext {
   /** Enriched messages (populated by feature enrichers) */
   enrichedMessages?: Message[];
 
-  /** Execution strategy (standard or agent) */
+  /**
+   * Execution strategy for the chat request.
+   * - 'standard': Use StandardChatHandler (OpenAI/Azure OpenAI)
+   * - 'agent': Use AgentChatHandler (AI Foundry agents)
+   *
+   * Note: Code Interpreter is handled as an agent capability,
+   * not a separate execution strategy. See agentCapabilities.
+   */
   executionStrategy?: 'standard' | 'agent';
+
+  /**
+   * Capabilities enabled for agent execution.
+   * Populated by AgentEnricher when using AI Foundry agents.
+   * Tracks Code Interpreter files, Bing grounding, etc.
+   */
+  agentCapabilities?: AgentCapabilities;
 
   /** Final response (populated by execution handler) */
   response?: Response;

@@ -503,6 +503,7 @@
     "keepEditing": "Doorgaan met bewerken",
     "yes": "Ja",
     "no": "Nee",
+    "download": "Downloaden",
     "beta": "Bèta"
   },
   "errors": {
@@ -1140,6 +1141,11 @@
       "reasoning": "Uitgebreid redeneren voor complexe vraagstukken",
       "omni": "Multimodaal model met brede mogelijkheden",
       "agent": "Agent met realtime tools en webtoegang"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "AI gebruikt code-uitvoering wanneer dat nuttig is",
+      "smartModeDescription": "Indien ingeschakeld, beslist de AI intelligent wanneer Python-code uitgevoerd moet worden op basis van uw vraag. Ideaal voor data-analyse, berekeningen, bestands­generatie en visualisaties."
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "Standaard schrijfstijl gebruiken",
     "noTonesCreated": "Nog geen tonen aangemaakt",
     "createTonesHint": "Maak tonen aan in Snelle acties",
-    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale grootte: 40MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden."
+    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale grootte: 40MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden.",
+    "codeInterpreterTooltip": "Beheer Code Interpreter voor data-analyse en bestandsgeneratie.\n\n• Uit: Code Interpreter nooit gebruiken\n• Slim: AI beslist op basis van uw vraag\n• Altijd: Altijd gebruiken bij geschikte bestanden\n\nKlik om tussen de modi te wisselen.",
+    "codeInterpreterTooltipToggle": "Forceer Code Interpreter voor dit bericht.\n\nIndien aangevinkt (✓), wordt Code Interpreter altijd uitgevoerd bij uw volgende bericht.\n\nGebruik dit voor data-analyse, berekeningen, visualisaties en bestandsgeneratie."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -1720,6 +1728,22 @@
     "title": "Er is een nieuwe versie beschikbaar",
     "refresh": "Vernieuwen",
     "refreshNow": "Vernieuwen om bij te werken"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Slim",
+    "always": "Altijd",
+    "off": "Uit",
+    "modeIntelligent": "Code: Slim",
+    "modeAlways": "Code: Altijd",
+    "modeForced": "Code: Geforceerd",
+    "disable": "Code Interpreter uitschakelen",
+    "alwaysPlaceholder": "Data analyseren of bestanden genereren...",
+    "modeChangedOff": "Code Interpreter uitgeschakeld",
+    "modeChangedSmart": "Code Interpreter: Slimme modus",
+    "modeChangedAlways": "Code Interpreter: Altijd aan",
+    "modeOverrideEnabled": "Code Interpreter: Geforceerd voor dit bericht",
+    "modeOverrideDisabled": "Code Interpreter: Standaardinstelling gesprek"
   },
   "agentsTab": {
     "organizationAgents": {

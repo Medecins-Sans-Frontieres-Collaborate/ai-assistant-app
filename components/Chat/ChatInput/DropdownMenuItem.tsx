@@ -11,6 +11,8 @@ export interface MenuItem {
   onClick: () => void;
   category: 'web' | 'media' | 'transform';
   disabled?: boolean;
+  /** Optional custom element to render on the right side (e.g., segmented control) */
+  rightElement?: React.ReactNode;
 }
 
 interface DropdownMenuItemProps {
@@ -76,27 +78,34 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
         tabIndex={isSelected ? 0 : -1}
         disabled={item.disabled}
       >
-        <div className="flex items-center gap-2.5 flex-1">
+        <div className="flex items-center gap-2.5 flex-1 min-w-0">
           {item.icon}
-          <span>{item.label}</span>
+          <span className="truncate">{item.label}</span>
         </div>
-        {item.infoTooltip && (
-          <div
-            ref={infoIconRef}
-            className="relative z-10"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleMouseEnter();
-            }}
-          >
-            <IconInfoCircle
-              size={16}
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help"
-            />
-          </div>
-        )}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          {item.rightElement && (
+            <div onClick={(e) => e.stopPropagation()} className="relative z-10">
+              {item.rightElement}
+            </div>
+          )}
+          {item.infoTooltip && (
+            <div
+              ref={infoIconRef}
+              className="relative z-10"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMouseEnter();
+              }}
+            >
+              <IconInfoCircle
+                size={16}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-help"
+              />
+            </div>
+          )}
+        </div>
       </button>
       {item.infoTooltip &&
         showInfo &&

@@ -505,6 +505,7 @@
     "no": "Tidak",
     "yes": "Ya",
     "noResults": "Tidak ada hasil",
+    "download": "Unduh",
     "beta": "Beta"
   },
   "errors": {
@@ -1175,6 +1176,11 @@
       "reasoning": "Penalaran lanjutan untuk masalah kompleks",
       "omni": "Model multi-modal dengan kemampuan luas",
       "agent": "Agen dengan alat real-time & akses web"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "AI akan menjalankan kode saat diperlukan",
+      "smartModeDescription": "Jika diaktifkan, AI akan secara cerdas memutuskan kapan mengeksekusi kode Python berdasarkan permintaan Anda. Cocok untuk analisis data, perhitungan, pembuatan file, dan visualisasi."
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "Gunakan gaya penulisan default",
     "noTonesCreated": "Belum ada nada yang dibuat",
     "createTonesHint": "Buat nada di Aksi Cepat",
-    "translateDocumentTooltip": "Terjemahkan dokumen ke bahasa lain.\n\nFormat yang didukung: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkuran maksimal: 40MB\n\nMendukung lebih dari 80 bahasa dengan file glosarium opsional."
+    "translateDocumentTooltip": "Terjemahkan dokumen ke bahasa lain.\n\nFormat yang didukung: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkuran maksimal: 40MB\n\nMendukung lebih dari 80 bahasa dengan file glosarium opsional.",
+    "codeInterpreterTooltip": "Kontrol Code Interpreter untuk analisis data dan pembuatan file.\n\n• Mati: Tidak pernah menggunakan Code Interpreter\n• Cerdas: AI menentukan berdasarkan permintaan Anda\n• Selalu: Selalu digunakan jika ada file yang kompatibel\n\nKlik untuk beralih mode.",
+    "codeInterpreterTooltipToggle": "Paksa Code Interpreter untuk pesan ini.\n\nJika dicentang (✓), Code Interpreter akan selalu dijalankan untuk pesan berikutnya.\n\nGunakan ini untuk analisis data, perhitungan, visualisasi, dan pembuatan file."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -1720,6 +1728,22 @@
     "title": "Versi baru tersedia",
     "refresh": "Segarkan",
     "refreshNow": "Segarkan untuk memperbarui"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "Cerdas",
+    "always": "Selalu",
+    "off": "Mati",
+    "modeIntelligent": "Kode: Cerdas",
+    "modeAlways": "Kode: Selalu",
+    "modeForced": "Kode: Paksa",
+    "disable": "Nonaktifkan Code Interpreter",
+    "alwaysPlaceholder": "Analisis data atau buat file...",
+    "modeChangedOff": "Code Interpreter dinonaktifkan",
+    "modeChangedSmart": "Code Interpreter: Mode cerdas",
+    "modeChangedAlways": "Code Interpreter: Selalu aktif",
+    "modeOverrideEnabled": "Code Interpreter: Dipaksa untuk pesan ini",
+    "modeOverrideDisabled": "Code Interpreter: Menggunakan pengaturan percakapan"
   },
   "agentsTab": {
     "organizationAgents": {

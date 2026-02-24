@@ -537,6 +537,7 @@
     "no": "نہیں",
     "yes": "ہاں",
     "noResults": "کوئی نتائج نہیں",
+    "download": "ڈاؤن لوڈ",
     "beta": "بیٹا"
   },
   "errors": {
@@ -1183,6 +1184,11 @@
       "reasoning": "پیچیدہ مسائل کے لیے توسیعی تجزیہ",
       "omni": "وسیع صلاحیتوں کے ساتھ کثیر النوع ماڈل",
       "agent": "حقیقی وقت کے ٹولز اور ویب رسائی والا ایجنٹ"
+    },
+    "codeInterpreter": {
+      "title": "کوڈ انٹرپریٹر",
+      "subtitle": "AI جب مناسب ہو کوڈ ایکزیکیوشن استعمال کرے گا",
+      "smartModeDescription": "جب فعال ہو تو AI آپ کی درخواست کے مطابق ذہانت سے فیصلہ کرے گا کہ Python کوڈ ایکزیکیوشن کب استعمال کرنی ہے۔ یہ ڈیٹا تجزیہ، حساب کتاب، فائل جنریشن اور ویزوئلائزیشن کے لیے بہترین ہے۔"
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "ڈیفالٹ لکھنے کا انداز استعمال کریں",
     "noTonesCreated": "ابھی تک کوئی ٹونز نہیں بنائی گئی ہیں",
     "createTonesHint": "کوئیک ایکشنز میں ٹونز بنائیں",
-    "translateDocumentTooltip": "دستاویزات کا ترجمہ کسی دوسری زبان میں کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, PDF, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی معاونت، اختیاری glossary فائلز کے ساتھ۔"
+    "translateDocumentTooltip": "دستاویزات کا ترجمہ کسی دوسری زبان میں کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, PDF, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی معاونت، اختیاری glossary فائلز کے ساتھ۔",
+    "codeInterpreterTooltip": "ڈیٹا تجزیہ اور فائل جنریشن کے لیے کوڈ انٹرپریٹر کو کنٹرول کریں۔\n\n• بند: کوڈ انٹرپریٹر کبھی استعمال نہ ہو\n• سمارٹ: AI آپ کی درخواست کے مطابق فیصلہ کرے گا\n• ہمیشہ: جب مطابقت رکھنے والی فائلیں ہوں تو ہمیشہ استعمال کریں\n\nموڈز تبدیل کرنے کے لیے کلک کریں۔",
+    "codeInterpreterTooltipToggle": "اس پیغام کے لیے کوڈ انٹرپریٹر لازمی کریں۔\n\nاگر منتخب کیا جائے (✓)، تو اگلے پیغام کے لیے کوڈ انٹرپریٹر ہمیشہ چلے گا۔\n\nاسے ڈیٹا تجزیہ، حساب کتاب، ویزوئلائزیشن اور فائل جنریشن کے لیے استعمال کریں۔"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -1721,8 +1729,26 @@
     "refresh": "تازہ کریں",
     "refreshNow": "اپ ڈیٹ کے لیے تازہ کریں"
   },
+  "codeInterpreterDropdown": "کوڈ انٹرپریٹر",
+  "codeInterpreter": {
+    "intelligent": "سمارٹ",
+    "always": "ہمیشہ",
+    "off": "بند",
+    "modeIntelligent": "کوڈ: سمارٹ",
+    "modeAlways": "کوڈ: ہمیشہ",
+    "modeForced": "کوڈ: لازمی",
+    "disable": "کوڈ انٹرپریٹر غیر فعال کریں",
+    "alwaysPlaceholder": "ڈیٹا کا تجزیہ کریں یا فائلیں تیار کریں...",
+    "modeChangedOff": "کوڈ انٹرپریٹر غیر فعال کر دیا گیا",
+    "modeChangedSmart": "کوڈ انٹرپریٹر: سمارٹ موڈ",
+    "modeChangedAlways": "کوڈ انٹرپریٹر: ہمیشہ فعال",
+    "modeOverrideEnabled": "کوڈ انٹرپریٹر: اس پیغام کے لیے لازمی",
+    "modeOverrideDisabled": "کوڈ انٹرپریٹر: گفتگو کا ڈیفالٹ استعمال ہو رہا ہے"
+  },
   "agentsTab": {
-    "organizationAgents": "تنظیم کے ایجنٹس",
+    "organizationAgents": {
+      "title": "تنظیمی ایجنٹس"
+    },
     "customAgents": {
       "title": "اپنی مرضی کے ایجنٹس",
       "advancedBadge": "اعلی",
@@ -1742,7 +1768,18 @@
     "thirdParty": "تیسرے فریق کی خدمات",
     "thirdPartyDescription": "ہم آپ کا ڈیٹا آپ کی رضامندی کے بغیر تیسرے فریق کے ساتھ شیئر نہیں کرتے۔",
     "learnMore": "ہماری رازداری کی پالیسی کے بارے میں مزید جانیں",
-    "lastUpdated": "آخری تازہ کاری"
+    "lastUpdated": "آخری تازہ کاری",
+    "policyTitle": "رازداری کی پالیسی اور ڈیٹا کا تحفظ",
+    "policyDescription": "جانیے کہ آپ کا ڈیٹا کیسے محفوظ ہے اور کون سی معلومات داخل نہیں کرنی چاہیے",
+    "termsOfUse": "استعمال کی شرائط",
+    "termsDescription": "ذمہ دارانہ استعمال کے رہنما اصول اور ممنوعہ استعمال کا جائزہ لیں",
+    "keyPrivacyPoints": "اہم رازداری نکات",
+    "localStorage": "آپ کی گفتگو آپ کے آلے پر مقامی طور پر محفوظ ہوتی ہے",
+    "azureInfra": "تمام ڈیٹا پروسیسنگ MSF نظام میں Azure انفراسٹرکچر کے ذریعے ہوتی ہے",
+    "noPersonalData": "ذاتی معلومات (نام، فون نمبر وغیرہ) درج نہ کریں",
+    "noSensitiveData": "انتہائی حساس آپریشنل معلومات درج نہ کریں",
+    "concernsTitle": "رازداری سے متعلق خدشات یا واقعات؟",
+    "contactUs": "اگر آپ کو رازداری سے متعلق خدشات ہوں تو فوراً ہم سے رابطہ کریں:"
   },
   "variableModal": {
     "title": "متغیرات کی ترتیب",
@@ -1751,7 +1788,14 @@
     "defaultValue": "ڈیفالٹ: {defaultValue}",
     "placeholder": "{key} کی قیمت درج کریں",
     "submit": "ایجنٹ شروع کریں",
-    "cancel": "منسوخ کریں"
+    "cancel": "منسوخ کریں",
+    "fillInstructions": "اپنا پرامپٹ ترتیب دینے کے لیے نیچے دیے گئے متغیرات پُر کریں",
+    "optional": "اختیاری",
+    "required": "لازمی",
+    "default": "ڈیفالٹ:",
+    "defaultPlaceholder": "{defaultValue} (ڈیفالٹ)",
+    "enterValue": "{key} کے لیے قدر درج کریں...",
+    "apply": "لاگو کریں"
   },
   "recentSources": {
     "title": "حالیہ ذرائع",
@@ -1761,13 +1805,24 @@
     "webpage": "ویب صفحہ",
     "image": "تصویر",
     "showMore": "{count} مزید دکھائیں",
-    "showLess": "کم دکھائیں"
+    "showLess": "کم دکھائیں",
+    "unableToLoad": "حالیہ ذرائع لوڈ نہیں ہو سکے",
+    "retry": "دوبارہ کوشش کریں",
+    "refresh": "تازہ کریں",
+    "today": "آج",
+    "yesterday": "کل",
+    "daysAgo": "{count} دن پہلے"
   },
   "chatInput": {
     "placeholder": "ایک پیغام ٹائپ کریں...",
     "send": "بھیجیں",
     "stop": "روکیں",
     "attachFile": "فائل منسلک کریں",
-    "characterCount": "{count} حروف"
+    "characterCount": "{count} حروف",
+    "filePickerError": "فائل چننے کی سہولت نہیں کھول سکا۔ اس کے بجائے ڈریگ اینڈ ڈراپ استعمال کریں۔",
+    "addDocument": "دستاویز شامل کریں",
+    "uploadDocument": "دستاویز اپ لوڈ کریں",
+    "images": "تصاویر",
+    "addImage": "تصویر شامل کریں"
   }
 }

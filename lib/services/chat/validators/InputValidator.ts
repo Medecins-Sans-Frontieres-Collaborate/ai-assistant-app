@@ -164,6 +164,7 @@ const ChatBodySchema = z
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
     searchMode: z.nativeEnum(SearchMode).optional(),
+    codeInterpreterMode: z.enum(['off', 'intelligent', 'always']).optional(),
     threadId: z.string().max(100, 'Thread ID too long').optional(),
     forcedAgentType: z.string().max(50, 'Agent type too long').optional(),
     tone: ToneSchema.optional(), // Full tone object from client

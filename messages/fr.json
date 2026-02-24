@@ -538,6 +538,7 @@
     "keepEditing": "Continuer à modifier",
     "yes": "Oui",
     "no": "Non",
+    "download": "Télécharger",
     "beta": "Bêta"
   },
   "chat": {
@@ -1099,6 +1100,11 @@
       "reasoning": "Raisonnement étendu pour les problèmes complexes",
       "omni": "Modèle multimodal avec de larges capacités",
       "agent": "Agent avec outils en temps réel et accès Web"
+    },
+    "codeInterpreter": {
+      "title": "Interpréteur de code",
+      "subtitle": "L’IA exécutera du code lorsque cela est utile",
+      "smartModeDescription": "Quand il est activé, l’IA détermine intelligemment si l’exécution de code Python est nécessaire selon votre requête. Idéal pour l’analyse de données, les calculs, la génération de fichiers et les visualisations."
     }
   },
   "models": {
@@ -1512,7 +1518,9 @@
     "useDefaultStyle": "Utiliser le style d’écriture par défaut",
     "noTonesCreated": "Aucun ton créé pour le moment",
     "createTonesHint": "Créez des tons dans Actions rapides",
-    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, PDF, HTML, TXT\nTaille maximale : 40 Mo\n\nPrend en charge plus de 80 langues avec fichiers de glossaire optionnels."
+    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, PDF, HTML, TXT\nTaille maximale : 40 Mo\n\nPrend en charge plus de 80 langues avec fichiers de glossaire optionnels.",
+    "codeInterpreterTooltip": "Gérez l’interpréteur de code pour l’analyse de données et la génération de fichiers.\n\n• Désactivé : Ne jamais utiliser l’interpréteur de code\n• Intelligent : L’IA décide selon votre requête\n• Toujours : Toujours utiliser si des fichiers compatibles sont présents\n\nCliquez pour changer de mode.",
+    "codeInterpreterTooltipToggle": "Forcer l’interpréteur de code pour ce message.\n\nSi coché (✓), l’interpréteur de code sera toujours exécuté pour votre prochain message.\n\nUtilisez ceci pour l’analyse de données, les calculs, les visualisations et la génération de fichiers."
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",
@@ -1720,6 +1728,22 @@
     "title": "Une nouvelle version est disponible",
     "refresh": "Actualiser",
     "refreshNow": "Actualiser pour mettre à jour"
+  },
+  "codeInterpreterDropdown": "Interpréteur de code",
+  "codeInterpreter": {
+    "intelligent": "Intelligent",
+    "always": "Toujours",
+    "off": "Désactivé",
+    "modeIntelligent": "Code : Intelligent",
+    "modeAlways": "Code : Toujours",
+    "modeForced": "Code : Forcé",
+    "disable": "Désactiver l’interpréteur de code",
+    "alwaysPlaceholder": "Analyser des données ou générer des fichiers...",
+    "modeChangedOff": "Interpréteur de code désactivé",
+    "modeChangedSmart": "Interpréteur de code : mode intelligent",
+    "modeChangedAlways": "Interpréteur de code : toujours activé",
+    "modeOverrideEnabled": "Interpréteur de code : forcé pour ce message",
+    "modeOverrideDisabled": "Interpréteur de code : paramètre par défaut de la conversation"
   },
   "agentsTab": {
     "organizationAgents": {

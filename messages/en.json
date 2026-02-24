@@ -504,6 +504,7 @@
   "Failed to revise prompt": "Failed to revise prompt",
   "Please provide either a description or goal for prompt generation": "Please provide either a description or goal for prompt generation",
   "webSearchDropdown": "Web Search",
+  "codeInterpreterDropdown": "Code Interpreter",
   "attachFilesDropdown": "Attach files",
   "transcribeAudioVideoDropdown": "Transcribe Audio/Video",
   "translateTextDropdown": "Translate Text",
@@ -640,6 +641,20 @@
     "discard": "Discard",
     "keepEditing": "Keep Editing",
     "yes": "Yes",
+    "no": "No",
+    "download": "Download"
+  },
+  "codeInterpreter": {
+    "uploadingFiles": "Uploading files...",
+    "executingPython": "Executing Python...",
+    "executionError": "Execution error",
+    "downloadFailed": "Download failed",
+    "imageLoadFailed": "Failed to load image",
+    "generatedFile": "Generated file",
+    "generatedFiles": "Generated Files",
+    "pythonCode": "Python Code",
+    "running": "Running...",
+    "output": "Output",
     "no": "No",
     "beta": "Beta"
   },
@@ -1211,6 +1226,11 @@
       "privacyEnabled": "Privacy-focused search enabled",
       "learnPrivacy": "Learn how your privacy is protected"
     },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "AI will use code execution when helpful",
+      "smartModeDescription": "When enabled, AI intelligently decides when to use Python code execution based on your query. Ideal for data analysis, calculations, file generation, and visualizations."
+    },
     "customAgent": {
       "label": "Custom Agent:",
       "description": "This agent runs on the MSF AI Assistant Foundry instance with tools always enabled.",
@@ -1566,6 +1586,8 @@
   },
   "dropdown": {
     "searchTooltip": "Enable web search for every message.\n\nProvides up-to-date information using real-time Bing web access.",
+    "codeInterpreterTooltip": "Control Code Interpreter for data analysis and file generation.\n\n• Off: Never use Code Interpreter\n• Intelligent: AI decides based on your query\n• Always: Always use when compatible files present\n\nClick to cycle through modes.",
+    "codeInterpreterTooltipToggle": "Force Code Interpreter for this message.\n\nWhen checked (✓), Code Interpreter will always run for your next message.\n\nUse this for data analysis, calculations, visualizations, and file generation.",
     "attachTooltip": "Attach files, images, or audio/video.\n\nSupported formats:\n• Images: JPEG, PNG, GIF, WebP (5MB max, up to 10)\n• Documents: PDF, DOCX, XLSX, PPTX, TXT, MD (10MB max, up to 3)\n• Data: CSV, JSON, XML, YAML (10MB max, up to 3)\n• Code: PY, JS, TS, JAVA, C, CPP, GO, etc. (10MB max, up to 3)\n• Audio/Video: MP3, WAV, MP4, WebM (25MB max, 1 file)\n\nTotal: 10 files, 50MB max",
     "transcribeTooltip": "Upload audio or video files for transcription.\n\nSupported formats: MP3, MP4, WAV, WebM, M4A, MPEG, MPGA\nMax size: 25MB\n\nTranscription happens automatically when you send the message.",
     "selected": "Selected",
@@ -1577,6 +1599,21 @@
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
     "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, PDF, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+  },
+  "codeInterpreter": {
+    "intelligent": "Smart",
+    "always": "Always",
+    "off": "Off",
+    "modeIntelligent": "Code: Smart",
+    "modeAlways": "Code: Always",
+    "modeForced": "Code: Forced",
+    "disable": "Disable Code Interpreter",
+    "alwaysPlaceholder": "Analyze data or generate files...",
+    "modeChangedOff": "Code Interpreter disabled",
+    "modeChangedSmart": "Code Interpreter: Smart mode",
+    "modeChangedAlways": "Code Interpreter: Always on",
+    "modeOverrideEnabled": "Code Interpreter: Forced for this message",
+    "modeOverrideDisabled": "Code Interpreter: Using conversation default"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",

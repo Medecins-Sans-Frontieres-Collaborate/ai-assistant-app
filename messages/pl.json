@@ -535,6 +535,7 @@
     "keepEditing": "Kontynuuj edycję",
     "yes": "Tak",
     "no": "Nie",
+    "download": "Pobierz",
     "beta": "Beta"
   },
   "errors": {
@@ -1183,6 +1184,11 @@
       "reasoning": "Rozszerzone rozumowanie dla złożonych problemów",
       "omni": "Model multimodalny o szerokich możliwościach",
       "agent": "Agent z narzędziami w czasie rzeczywistym i dostępem do Internetu"
+    },
+    "codeInterpreter": {
+      "title": "Interpreter kodu",
+      "subtitle": "AI użyje uruchamiania kodu, gdy będzie to pomocne",
+      "smartModeDescription": "Po włączeniu AI inteligentnie decyduje, kiedy użyć wykonania kodu Python w zależności od zapytania. Idealny do analizy danych, obliczeń, generowania plików i wizualizacji."
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "Użyj domyślnego stylu pisania",
     "noTonesCreated": "Nie utworzono jeszcze tonów",
     "createTonesHint": "Utwórz tony w Szybkich działaniach",
-    "translateDocumentTooltip": "Tłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaks. rozmiar: 40 MB\n\nObsługa ponad 80 języków z opcjonalnymi plikami glosariusza."
+    "translateDocumentTooltip": "Tłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaks. rozmiar: 40 MB\n\nObsługa ponad 80 języków z opcjonalnymi plikami glosariusza.",
+    "codeInterpreterTooltip": "Steruj Interpreterem kodu do analizy danych i generowania plików.\n\n• Wyłączony: Nigdy nie używaj Interpreter kodu\n• Inteligentny: AI decyduje na podstawie zapytania\n• Zawsze: Używaj zawsze, gdy są kompatybilne pliki\n\nKliknij, aby przełączać tryby.",
+    "codeInterpreterTooltipToggle": "Wymuś użycie Interpreter kodu dla tej wiadomości.\n\nGdy zaznaczone (✓), Interpreter kodu uruchomi się zawsze dla następnej wiadomości.\n\nUżyj do analizy danych, obliczeń, wizualizacji i generowania plików."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -1720,6 +1728,22 @@
     "title": "Dostępna jest nowa wersja",
     "refresh": "Odśwież",
     "refreshNow": "Odśwież, aby zaktualizować"
+  },
+  "codeInterpreterDropdown": "Interpreter kodu",
+  "codeInterpreter": {
+    "intelligent": "Inteligentny",
+    "always": "Zawsze",
+    "off": "Wyłączony",
+    "modeIntelligent": "Kod: Inteligentny",
+    "modeAlways": "Kod: Zawsze",
+    "modeForced": "Kod: Wymuszony",
+    "disable": "Wyłącz interpreter kodu",
+    "alwaysPlaceholder": "Analizuj dane lub generuj pliki...",
+    "modeChangedOff": "Interpreter kodu wyłączony",
+    "modeChangedSmart": "Interpreter kodu: tryb inteligentny",
+    "modeChangedAlways": "Interpreter kodu: zawsze włączony",
+    "modeOverrideEnabled": "Interpreter kodu: wymuszony dla tej wiadomości",
+    "modeOverrideDisabled": "Interpreter kodu: domyślny tryb rozmowy"
   },
   "agentsTab": {
     "organizationAgents": {

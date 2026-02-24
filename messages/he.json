@@ -513,6 +513,7 @@
     "keepEditing": "המשך עריכה",
     "yes": "כן",
     "no": "לא",
+    "download": "הורדה",
     "beta": "בטא"
   },
   "errors": {
@@ -1183,6 +1184,11 @@
       "reasoning": "הסקה מורחבת לבעיות מורכבות",
       "omni": "מודל מולטי-מודלי עם יכולות נרחבות",
       "agent": "סוכן עם כלים בזמן אמת וגישה לאינטרנט"
+    },
+    "codeInterpreter": {
+      "title": "מפענח קוד",
+      "subtitle": "ה-AI ישתמש בהרצת קוד כשהדבר מועיל",
+      "smartModeDescription": "כאשר פועל, ה-AI מחליט מתי להריץ קוד Python בהתאם לשאילתה שלך. מתאים לניתוח נתונים, חישובים, יצירת קבצים והמחשות."
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "השתמש בסגנון כתיבה ברירת מחדל",
     "noTonesCreated": "לא נוצרו טונים עדיין",
     "createTonesHint": "צור טונים בפעולות מהירות",
-    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, PDF, HTML, TXT\nגודל מירבי: 40MB\n\nתמיכה ב-80+ שפות עם קבצי מילון אופציונליים."
+    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, PDF, HTML, TXT\nגודל מירבי: 40MB\n\nתמיכה ב-80+ שפות עם קבצי מילון אופציונליים.",
+    "codeInterpreterTooltip": "שלוט במפענח קוד לניתוח נתונים ויצירת קבצים.\n\n• כבוי: לא ישתמש לעולם\n• חכם: AI יחליט לפי הבקשה\n• תמיד: ישתמש תמיד כאשר קיימים קבצים מתאימים\n\nלחץ להחלפת מצב.",
+    "codeInterpreterTooltipToggle": "הפעל מפענח קוד בכפייה להודעה זו.\n\nכאשר מסומן (✓), מפענח הקוד ירוץ תמיד עבור ההודעה הבאה שלך.\n\nהשתמש בכך לניתוח נתונים, חישובים, המחשות ויצירת קבצים."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -1720,6 +1728,22 @@
     "title": "גרסה חדשה זמינה",
     "refresh": "רענן",
     "refreshNow": "רענון לעדכון"
+  },
+  "codeInterpreterDropdown": "מפענח קוד",
+  "codeInterpreter": {
+    "intelligent": "חכם",
+    "always": "תמיד",
+    "off": "כבוי",
+    "modeIntelligent": "קוד: חכם",
+    "modeAlways": "קוד: תמיד",
+    "modeForced": "קוד: כפוי",
+    "disable": "השבת מפענח קוד",
+    "alwaysPlaceholder": "נתח נתונים או צור קבצים...",
+    "modeChangedOff": "מפענח קוד הושבת",
+    "modeChangedSmart": "מפענח קוד: מצב חכם",
+    "modeChangedAlways": "מפענח קוד: פעיל תמיד",
+    "modeOverrideEnabled": "מפענח קוד: הפעלה כפויה להודעה זו",
+    "modeOverrideDisabled": "מפענח קוד: ברירת מחדל של השיחה"
   },
   "agentsTab": {
     "organizationAgents": {

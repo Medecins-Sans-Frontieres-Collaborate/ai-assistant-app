@@ -455,6 +455,7 @@
     "keepEditing": "แก้ไขต่อ",
     "yes": "ใช่",
     "no": "ไม่ใช่",
+    "download": "ดาวน์โหลด",
     "beta": "เบต้า"
   },
   "errors": {
@@ -1183,6 +1184,11 @@
       "reasoning": "การให้เหตุผลขั้นสูงสำหรับปัญหาที่ซับซ้อน",
       "omni": "โมเดลมัลติโหมดที่มีความสามารถหลากหลาย",
       "agent": "เอเจนต์พร้อมเครื่องมือเรียลไทม์และเข้าถึงเว็บ"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "AI จะใช้การรันโค้ดเมื่อเป็นประโยชน์",
+      "smartModeDescription": "เมื่อเปิดใช้งาน AI จะตัดสินใจอย่างชาญฉลาดว่าจะใช้การรันโค้ด Python ตามคำถามของคุณ เหมาะสำหรับการวิเคราะห์ข้อมูล การคำนวณ การสร้างไฟล์ และการสร้างภาพข้อมูล"
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "ใช้รูปแบบการเขียนค่าเริ่มต้น",
     "noTonesCreated": "ยังไม่ได้สร้างโทนเสียง",
     "createTonesHint": "สร้างโทนเสียงใน Quick Actions",
-    "translateDocumentTooltip": "แปลเอกสารเป็นภาษาอื่น\n\nรูปแบบที่รองรับ: Word, Excel, PowerPoint, PDF, HTML, TXT\nขนาดสูงสุด: 40MB\n\nรองรับมากกว่า 80 ภาษา พร้อมไฟล์อภิธานศัพท์เสริม"
+    "translateDocumentTooltip": "แปลเอกสารเป็นภาษาอื่น\n\nรูปแบบที่รองรับ: Word, Excel, PowerPoint, PDF, HTML, TXT\nขนาดสูงสุด: 40MB\n\nรองรับมากกว่า 80 ภาษา พร้อมไฟล์อภิธานศัพท์เสริม",
+    "codeInterpreterTooltip": "ควบคุม Code Interpreter สำหรับการวิเคราะห์ข้อมูลและการสร้างไฟล์\n\n• ปิด: ไม่ใช้ Code Interpreter เลย\n• อัจฉริยะ: AI ตัดสินใจตามคำถาม\n• เสมอ: ใช้เสมอเมื่อมีไฟล์ที่รองรับ\n\nคลิกเพื่อเปลี่ยนโหมด",
+    "codeInterpreterTooltipToggle": "บังคับใช้ Code Interpreter สำหรับข้อความนี้\n\nเมื่อติ๊กถูก (✓) Code Interpreter จะทำงานเสมอสำหรับข้อความถัดไปของคุณ\n\nใช้สำหรับวิเคราะห์ข้อมูล การคำนวณ การสร้างภาพข้อมูล และการสร้างไฟล์"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "เพิ่มคำแนะนำส่วนตัวเพื่อปรับแต่งการตอบสนองของ AI โดยข้อมูลเหล่านี้จะถูกรวมกับแนวทางหลักเพื่อให้มั่นใจว่าการตอบสนองมีประโยชน์ ถูกต้อง และปลอดภัย",
   "Tip: Type \"/\" to select from saved prompt templates_": "เคล็ดลับ: พิมพ์ \"/\" เพื่อเลือกจากเทมเพลตพรอมต์ที่บันทึกไว้",
@@ -1720,6 +1728,22 @@
     "title": "มีเวอร์ชันใหม่พร้อมใช้งานแล้ว",
     "refresh": "รีเฟรช",
     "refreshNow": "รีเฟรชเพื่ออัปเดต"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "อัจฉริยะ",
+    "always": "เสมอ",
+    "off": "ปิด",
+    "modeIntelligent": "Code: อัจฉริยะ",
+    "modeAlways": "Code: เสมอ",
+    "modeForced": "Code: บังคับใช้",
+    "disable": "ปิดการใช้งาน Code Interpreter",
+    "alwaysPlaceholder": "วิเคราะห์ข้อมูลหรือสร้างไฟล์...",
+    "modeChangedOff": "ปิดการใช้งาน Code Interpreter",
+    "modeChangedSmart": "Code Interpreter: โหมดอัจฉริยะ",
+    "modeChangedAlways": "Code Interpreter: เปิดใช้งานเสมอ",
+    "modeOverrideEnabled": "Code Interpreter: บังคับใช้สำหรับข้อความนี้",
+    "modeOverrideDisabled": "Code Interpreter: ใช้ค่าตั้งต้นของการสนทนา"
   },
   "agentsTab": {
     "organizationAgents": {

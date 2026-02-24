@@ -538,6 +538,7 @@
     "keepEditing": "Endelea Kuhariri",
     "yes": "Ndiyo",
     "no": "Hapana",
+    "download": "Pakua",
     "beta": "Beta"
   },
   "errors": {
@@ -1099,6 +1100,11 @@
       "reasoning": "Hoja za kina kwa matatizo changamano",
       "omni": "Mfano wa aina nyingi wenye uwezo mpana",
       "agent": "Wakala mwenye zana za wakati halisi na ufikiaji wa mtandao"
+    },
+    "codeInterpreter": {
+      "title": "Mfasiri wa Nambari",
+      "subtitle": "AI itatumia uendeshaji wa nambari inapohitajika",
+      "smartModeDescription": "Ikiruhusiwa, AI itaamua kwa akili lini itumie uendeshaji wa nambari za Python kulingana na hoja yako. Inafaa kwa uchambuzi wa data, hesabu, utengenezaji wa faili, na vielelezo."
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "Tumia mtindo wa uandishi chaguomsingi",
     "noTonesCreated": "Hakuna tono lililoundwa bado",
     "createTonesHint": "Unda matono kwenye Vitendo vya Haraka",
-    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia zaidi ya lugha 80 na faili za kamusi (glossary) kwa hiari."
+    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia zaidi ya lugha 80 na faili za kamusi (glossary) kwa hiari.",
+    "codeInterpreterTooltip": "Dhibiti Mfasiri wa Nambari kwa ajili ya uchambuzi wa data na utengenezaji wa faili.\n\n• Zima: Usitumie Mfasiri wa Nambari kamwe\n• Mwerevu: AI itaamua kulingana na hoja yako\n• Kila wakati: Tumia kila mara faili zinazofaa zinapopatikana\n\nBonyeza kubadilisha hali.",
+    "codeInterpreterTooltipToggle": "Lazimisha Mfasiri wa Nambari kwa ujumbe huu.\n\nIkiviwa (✓), Mfasiri wa Nambari itaendeshwa kila mara kwa ujumbe wako unaofuata.\n\nTumia kwa uchambuzi wa data, hesabu, vielelezo, na utengenezaji wa faili."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",
@@ -1720,6 +1728,22 @@
     "title": "Toleo jipya linapatikana",
     "refresh": "Onyesha upya",
     "refreshNow": "Onyesha upya ili kusasisha"
+  },
+  "codeInterpreterDropdown": "Mfasiri wa Nambari",
+  "codeInterpreter": {
+    "intelligent": "Mwerevu",
+    "always": "Kila wakati",
+    "off": "Zima",
+    "modeIntelligent": "Nambari: Mwerevu",
+    "modeAlways": "Nambari: Kila wakati",
+    "modeForced": "Nambari: Imelazimishwa",
+    "disable": "Zima Mfasiri wa Nambari",
+    "alwaysPlaceholder": "Changanua data au tengeneza faili...",
+    "modeChangedOff": "Mfasiri wa Nambari umezimwa",
+    "modeChangedSmart": "Mfasiri wa Nambari: Hali ya Uwerevu",
+    "modeChangedAlways": "Mfasiri wa Nambari: Wakati wote",
+    "modeOverrideEnabled": "Mfasiri wa Nambari: Imelazimishwa kwa ujumbe huu",
+    "modeOverrideDisabled": "Mfasiri wa Nambari: Anatumia chaguo-msingi ya mazungumzo"
   },
   "agentsTab": {
     "organizationAgents": {

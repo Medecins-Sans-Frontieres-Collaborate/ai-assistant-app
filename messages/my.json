@@ -513,6 +513,7 @@
     "keepEditing": "ဆက်လက်တည်းဖြတ်ပါ",
     "yes": "ဟုတ်ကဲ့",
     "no": "မဟုတ်ပါ",
+    "download": "ဒေါင်းလုပ်လုပ်မည်",
     "beta": "ဘီတာ"
   },
   "errors": {
@@ -1183,6 +1184,11 @@
       "reasoning": "ရှုပ်ထွေးသော ပြဿနာများအတွက် ကျယ်ပြန့်သော ဆင်ခြင်နိုင်စွမ်း",
       "omni": "စွမ်းရည်အမျိုးမျိုး ဖြည့်ဆောင်နိုင်သော မော်ဒယ်",
       "agent": "အချိန်နောက်ခံ လုပ်ဆောင်နိုင်သောကိရိယာများနှင့် ဝက်ဘ်သုံးခွင့်ရှိသော Agent"
+    },
+    "codeInterpreter": {
+      "title": "Code Interpreter",
+      "subtitle": "အထောက်အကူဖြစ်စေရန် AI မှ code execution ကို အသုံးပြုမည်",
+      "smartModeDescription": "ဖွင့်ထားပါက၊ သင့်မေးခွန်းအပေါ်မူတည်၍ Python code အား အသုံးပြုသင့်မသင့်ကို AI မှ သိပ္ပံနည်းကျဆုံးဖြတ်ပါသည်။ ဒေတာခွဲခြမ်းစိတ်ဖြာမှု၊တွက်ချက်မှုများ၊ ဖိုင်ဖန်တီးခြင်းနှင့် ရုပ်ပုံဖော်ပြခြင်းများအတွက်အထူးသင့်တော်သည်။"
     }
   },
   "models": {
@@ -1596,7 +1602,9 @@
     "useDefaultStyle": "မူလရေးသားပုံကိုအသုံးပြုပါ",
     "noTonesCreated": "အသံသွင်းပုံ မရှိသေးပါ",
     "createTonesHint": "Quick Actions တွင် အသံသွင်းပုံများ တည်ဆောက်နိုင်သည်",
-    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားထဲသို့ ဘာသာပြန်ပါ။\n\nထောက်ပံ့သော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, PDF, HTML, TXT\nအကြီးဆုံးဖိုင်အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်များပါဝင်၍ ဘာသာစကား ၈၀+ ကိုထောက်ပံ့သည်။"
+    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားထဲသို့ ဘာသာပြန်ပါ။\n\nထောက်ပံ့သော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, PDF, HTML, TXT\nအကြီးဆုံးဖိုင်အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်များပါဝင်၍ ဘာသာစကား ၈၀+ ကိုထောက်ပံ့သည်။",
+    "codeInterpreterTooltip": "ဒေတာခွဲခြမ်းစိတ်ဖြာမှုနှင့် ဖိုင်ဖန်တီးခြင်းအတွက် Code Interpreter ကို ထိန်းချုပ်ပါ။\n\n• ပိတ်ထားသည်: Code Interpreter ကို မသုံးပါ\n• သိပ္ပံနည်းကျ: သင့်မေးခွန်းအပေါ်မူတည်၍ AI သုံးပါမည်\n• အမြဲတမ်း: ကိုက်ညီသည့်ဖိုင်များရှိလျှင်အမြဲသုံးပါမည်\n\nMode များလှည့်ပြောင်းရန် ကလစ်နှိပ်ပါ။",
+    "codeInterpreterTooltipToggle": "ဤမက်ဆေ့ခ်ျအတွက် Code Interpreter ကို မဖြစ်မနေ အသုံးပြုပါ။\n\n✓ စစ်ထားလျှင်၊ နောက်လာမည့်မက်ဆေ့ခ်ျအတွက် Code Interpreter အမြဲ အလုပ်လုပ်ပါမည်။\n\nဒေတာခွဲခြမ်းစိတ်ဖြာမှု၊တွက်ချက်မှု၊ရုပ်ပုံဖော်ပြခြင်းနှင့် ဖိုင်ဖန်တီးမှုများအတွက် အသုံးပြုနိုင်ပါသည်။"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ရဲ့ တုန့်ပြန်မှုကို ပြင်ဆင်နိုင်ရန် ကိုယ်ပိုင်ညွှန်ကြားချက်များ ထည့်ပါ။ ဤညွှန်ကြားချက်များကို အထောက်အကူပြု၊ တိကျမှန်ကန်ပြီး လုံခြုံစိတ်ချသော တုန့်ပြန်မှုများ ရရှိစေရန် မူဝါဒအညွှန်းနှင့် တွဲဖက်အသုံးပြုပါသည်။",
   "Tip: Type \"/\" to select from saved prompt templates_": "အကြံပြုချက် - သိမ်းထားသော prompt template များကို ရွေးချယ်ရန် \"/\" ကို ရိုက်ထည့်ပါ။",
@@ -1720,6 +1728,22 @@
     "title": "ဗားရှင်းအသစ် ရရှိနိုင်ပါသည်",
     "refresh": "ပြန်လည်ဖွင့်ရန်",
     "refreshNow": "အပ်ဒိတ်လုပ်ရန် ပြန်လည်ဖွင့်ပါ"
+  },
+  "codeInterpreterDropdown": "Code Interpreter",
+  "codeInterpreter": {
+    "intelligent": "သိပ္ပံနည်းကျ",
+    "always": "အမြဲတမ်း",
+    "off": "ပိတ်ထားသည်",
+    "modeIntelligent": "Code: သိပ္ပံနည်းကျ",
+    "modeAlways": "Code: အမြဲတမ်း",
+    "modeForced": "Code: ထောက်လှမ်းချထားသည်",
+    "disable": "Code Interpreter ကို တုန့်ပြန်မှုပိတ်မည်",
+    "alwaysPlaceholder": "ဒေတာကို ဝေါဟာရပြုသို့မဟုတ် ဖိုင်များဖန်တီးမည်...",
+    "modeChangedOff": "Code Interpreter ပိတ်ထားသည်",
+    "modeChangedSmart": "Code Interpreter: သိပ္ပံနည်းကျ အခြေအနေ",
+    "modeChangedAlways": "Code Interpreter: အမြဲတမ်းဖွင့်",
+    "modeOverrideEnabled": "Code Interpreter: ဤမက်ဆေ့ခ်ျအတွက် သတ်မှတ်အသုံးပြုသည်",
+    "modeOverrideDisabled": "Code Interpreter: စကားဝိုင်းပုံသေ ကိုအသုံးပြုနေသည်"
   },
   "agentsTab": {
     "organizationAgents": {

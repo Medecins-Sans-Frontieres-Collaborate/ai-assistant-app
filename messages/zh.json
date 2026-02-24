@@ -380,7 +380,37 @@
     "noOrgAgents": "没有可用的组织代理",
     "noOrgAgentsDescription": "您的组织尚未配置任何代理。",
     "noOrgAgentsConfigured": "尚未配置组织代理",
-    "validationFailed": "验证失败"
+    "validationFailed": "验证失败",
+    "addCustomAgent": "添加自定义代理",
+    "experimental": "实验性",
+    "createNew": "新建",
+    "import": "导入",
+    "importCustomAgents": "导入自定义代理",
+    "importFileDescription": "选择包含一个或多个代理配置的 JSON 文件",
+    "chooseFile": "选择文件",
+    "validatedSuccess": "代理验证成功！",
+    "cancel": "取消",
+    "validating": "正在验证...",
+    "updateAgent": "更新代理",
+    "addAgent": "添加代理",
+    "nameRequired": "代理名称为必填项",
+    "idRequired": "代理 ID 为必填项",
+    "invalidIdFormat": "无效的代理 ID 格式。预期格式：asst_xxxxx",
+    "invalidFileFormat": "文件格式无效",
+    "noAgentsInFile": "导入文件中未找到代理",
+    "importFailed": "文件导入失败",
+    "importConflict": "以下代理存在冲突：\n\n{conflicts}\n\n仍要导入吗？这将导致重复。",
+    "importSuccess": "成功导入 {count} 个代理",
+    "agentDetails": "代理详情",
+    "agentIdLabel": "代理 ID:",
+    "baseModelLabel": "基础模型:",
+    "unknown": "未知",
+    "descriptionLabel": "描述:",
+    "export": "导出",
+    "edit": "编辑",
+    "confirmDelete": "确认",
+    "delete": "删除",
+    "noCustomAgentsYet": "暂无自定义代理。"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",
@@ -537,6 +567,7 @@
     "keepEditing": "继续编辑",
     "yes": "是",
     "no": "否",
+    "download": "下载",
     "beta": "测试版"
   },
   "errors": {
@@ -1098,6 +1129,11 @@
       "reasoning": "适用于复杂问题的扩展推理能力",
       "omni": "多模态模型，功能广泛",
       "agent": "具备实时工具和网页访问功能的智能体"
+    },
+    "codeInterpreter": {
+      "title": "代码解释器",
+      "subtitle": "AI 在有帮助时将执行代码",
+      "smartModeDescription": "启用后，AI 会根据您的请求智能决定是否执行 Python 代码。适用于数据分析、计算、文件生成和可视化。"
     }
   },
   "models": {
@@ -1511,7 +1547,9 @@
     "useDefaultStyle": "使用默认写作风格",
     "noTonesCreated": "尚未创建语气",
     "createTonesHint": "可在快捷操作中创建语气",
-    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。"
+    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。",
+    "codeInterpreterTooltip": "控制代码解释器用于数据分析和文件生成。\n\n• 关闭：从不启用代码解释器\n• 智能：AI 根据您的请求决定\n• 始终：有兼容文件时始终启用\n\n点击切换模式。",
+    "codeInterpreterTooltipToggle": "本消息强制启用代码解释器。\n\n勾选（✓）后，您的下一条消息将始终运行代码解释器。\n\n适用于数据分析、计算、可视化和文件生成。"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -1719,6 +1757,22 @@
     "title": "有新版本可用",
     "refresh": "刷新",
     "refreshNow": "刷新以更新"
+  },
+  "codeInterpreterDropdown": "代码解释器",
+  "codeInterpreter": {
+    "intelligent": "智能",
+    "always": "始终",
+    "off": "关闭",
+    "modeIntelligent": "代码：智能",
+    "modeAlways": "代码：始终",
+    "modeForced": "代码：强制",
+    "disable": "禁用代码解释器",
+    "alwaysPlaceholder": "分析数据或生成文件…",
+    "modeChangedOff": "代码解释器已关闭",
+    "modeChangedSmart": "代码解释器：智能模式",
+    "modeChangedAlways": "代码解释器：始终开启",
+    "modeOverrideEnabled": "代码解释器：本消息强制启用",
+    "modeOverrideDisabled": "代码解释器：使用会话默认设置"
   },
   "agentsTab": {
     "organizationAgents": {
