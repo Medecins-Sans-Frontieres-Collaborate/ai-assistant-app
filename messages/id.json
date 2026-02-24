@@ -553,7 +553,9 @@
     "errorSessionExpired": "Sesi Anda telah kedaluwarsa. Harap masuk lagi untuk melanjutkan.",
     "errorFallback": "Tidak dapat terhubung ke layanan autentikasi. Harap coba lagi atau hubungi dukungan jika masalah terus berlanjut.",
     "tryAgain": "Coba Lagi",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorCookiesCleared": "Data sesi dihapus karena batas penyimpanan. Silakan masuk kembali.",
+    "errorHeadersTooLarge": "Data sesi terlalu besar. Silakan masuk kembali."
   },
   "chat": {
     "downloadAudio": "Unduh audio",
