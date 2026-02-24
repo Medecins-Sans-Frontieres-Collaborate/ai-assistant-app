@@ -1265,7 +1265,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Mtundu wapadera wa GPT-5.2 wokonzedwa pa kukambirana ndi kudziwa maganizo. Umapambana pa kulankhula momvera, chithandizo cha umoyo wamaganizo, kulemba mwapadera, kuganiza maganizo, ndi kukambirana kwachibadwidwe. Wabwino pa zokambirana zachibale, makhalidwe a uphungu, ndi ntchito zofunikira kudziwa maganizo.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {

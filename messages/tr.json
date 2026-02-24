@@ -1172,8 +1172,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Konuşmaya ve duygusal zekaya özel olarak optimize edilmiş GPT-5.2 varyantı. Empatik iletişim, ruh sağlığı desteği, yaratıcı yazarlık, fikir üretimi ve doğal diyalogda üstündür. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalığın gerekli olduğu görevler için idealdir.",
-      "knowledgeCutoff": "Aralık 2025"
+      "knowledgeCutoff": "Aralık 2025",
+      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu."
     }
   },
   "searchMode": {

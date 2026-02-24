@@ -1172,8 +1172,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Toleo maalumu la GPT-5.2 lililoboreshwa kwa ajili ya mazungumzo na akili ya kihisia. Linabobea katika mawasiliano yenye uelewa, msaada wa afya ya akili, uandishi wa ubunifu, ubunifu wa mawazo, na mazungumzo ya asili. Linapendekezwa kwa mazungumzo ya kawaida, ushauri, na kazi zinazohitaji uelewa wa kihisia.",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Toleo maalum la GPT-5.2 lililoboreshwa kwa mazungumzo na uelewa wa hisia. Limebobea katika mawasiliano ya huruma, uandishi wa ubunifu, kutafuta mawazo mapya, na mazungumzo ya asili. Linapendekezwa kwa mazungumzo ya kawaida, hali za ushauri, na kazi zinazohitaji uelewa wa kihisia."
     }
   },
   "searchMode": {
