@@ -891,7 +891,9 @@
     "errorSessionRequired": "Jọ̀wọ́ wọlé láti ní ààyè sí ojú-ewé yìí.",
     "errorSessionExpired": "Àkókò rẹ ti parí. Jọ̀wọ́ wọlé lẹ́ẹ̀kansi láti tẹ̀síwájú.",
     "errorFallback": "Kò le so mọ́ iṣẹ́ ìfàṣẹ́sí. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi tàbí kàn sí ìtìlẹ́yìn tí ìṣòro náà bá tẹ̀síwájú.",
-    "tryAgain": "Gbìyànjú Lẹ́ẹ̀kansi"
+    "tryAgain": "Gbìyànjú Lẹ́ẹ̀kansi",
+    "errorCookiesCleared": "A ti nu ìpamọ́ àlejò nítorí ìfarapa ibi ipamọ́. Jọ̀wọ́ buwolu wọlé lẹ́ẹ̀kàn síi.",
+    "errorHeadersTooLarge": "Àkópọ̀ ìpamọ́ àlejò pọ̀ ju. Jọ̀wọ́ buwolu wọlé lẹ́ẹ̀kàn síi."
   },
   "help": {
     "sharePoint": "SharePoint",

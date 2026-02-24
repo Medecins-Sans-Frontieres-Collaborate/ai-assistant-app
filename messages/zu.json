@@ -891,7 +891,9 @@
     "errorSessionRequired": "Sicela ungene ngemvume ukufinyelela leli khasi.",
     "errorSessionExpired": "Iseshini yakho isiphelelwe yisikhathi. Sicela ungene ngemvume futhi ukuze uqhubeke.",
     "errorFallback": "Ayikwazi ukuxhumana nesevisi yokuqinisekisa. Sicela uzame futhi noma uxhumane nosekelo uma inkinga iqhubeka.",
-    "tryAgain": "Zama Futhi"
+    "tryAgain": "Zama Futhi",
+    "errorCookiesCleared": "Idatha yeseshini isuswe ngenxa yemikhawulo yokugcina. Sicela ungene futhi.",
+    "errorHeadersTooLarge": "Idatha yeseshini ibikhulu kakhulu. Sicela ungene futhi."
   },
   "help": {
     "sharePoint": "SharePoint",
