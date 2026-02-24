@@ -763,9 +763,7 @@
     "errorSessionRequired": "Veuillez vous connecter pour accéder à cette page.",
     "errorSessionExpired": "Votre session a expiré. Veuillez vous reconnecter pour continuer.",
     "errorFallback": "Impossible de se connecter au service d'authentification. Veuillez réessayer ou contacter le support si le problème persiste.",
-    "tryAgain": "Réessayer",
-    "errorCookiesCleared": "Les données de session ont été effacées en raison de limites de stockage. Veuillez vous reconnecter.",
-    "errorHeadersTooLarge": "Les données de session étaient trop volumineuses. Veuillez vous reconnecter."
+    "tryAgain": "Réessayer"
   },
   "help": {
     "sharePoint": "SharePoint",

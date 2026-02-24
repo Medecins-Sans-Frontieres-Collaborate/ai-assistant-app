@@ -763,9 +763,7 @@
     "errorSessionRequired": "Por favor, inicia sesión para acceder a esta página.",
     "errorSessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente para continuar.",
     "errorFallback": "No se pudo conectar con el servicio de autenticación. Por favor, inténtalo de nuevo o contacta con soporte si el problema persiste.",
-    "tryAgain": "Intentar de nuevo",
-    "errorCookiesCleared": "Los datos de la sesión se borraron debido a límites de almacenamiento. Por favor, inicie sesión de nuevo.",
-    "errorHeadersTooLarge": "Los datos de la sesión eran demasiado grandes. Por favor, inicie sesión de nuevo."
+    "tryAgain": "Intentar de nuevo"
   },
   "help": {
     "sharePoint": "SharePoint",
