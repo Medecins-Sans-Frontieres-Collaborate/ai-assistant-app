@@ -1171,8 +1171,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Spezialisierte Variante von GPT-5.2, optimiert für Konversationsinteraktionen und emotionale Intelligenz. Hervorragend für einfühlsame Kommunikation, mentale Unterstützung, kreatives Schreiben, Brainstorming und natürliche Dialoge. Am besten für lockere Unterhaltungen, Beratungssituationen und Aufgaben mit emotionalem Bezug.",
-      "knowledgeCutoff": "Dez 2025"
+      "knowledgeCutoff": "Dez 2025",
+      "description": "Spezialisierte Variante von GPT-5.2, optimiert für Gespräche und emotionale Intelligenz. Hervorragend geeignet für einfühlsame Kommunikation, kreatives Schreiben, Brainstorming und natürliche Dialoge. Am besten geeignet für informelle Gespräche, Beratungssituationen und Aufgaben, die emotionale Sensibilität erfordern."
     }
   },
   "searchMode": {

@@ -1258,8 +1258,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Variante specializzata di GPT-5.2 ottimizzata per interazioni conversazionali ed intelligenza emotiva. Eccelle nella comunicazione empatica, supporto alla salute mentale, scrittura creativa, brainstorming e dialogo naturale. Ideale per conversazioni informali, consulenza e attività che richiedono consapevolezza emotiva.",
-      "knowledgeCutoff": "Dic 2025"
+      "knowledgeCutoff": "Dic 2025",
+      "description": "Variante specializzata di GPT-5.2 ottimizzata per interazioni conversazionali e intelligenza emotiva. Eccelle nella comunicazione empatica, nella scrittura creativa, nel brainstorming e nei dialoghi naturali. Ideale per conversazioni informali, contesti di supporto e attività che richiedono consapevolezza emotiva."
     }
   },
   "searchMode": {

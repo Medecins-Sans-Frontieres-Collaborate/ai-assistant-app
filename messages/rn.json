@@ -1265,7 +1265,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Ingero ihariye ya GPT-5.2 yatunganijwe ku biganiro n'ubwenge bw'inyiyumvo. Iri hejuru mu guhanahana kw'impuhwe, inkunga y'amagara yo mu mutwe, kwandika vy'ubuhanga, kwirabira ibiyumviro, n'ikiganiro gisanzwe. Ikwiye cane ibiganiro bisanzwe, ibiganiro vy'ubujyanama, n'ibikorwa bikeneye kumenya inyiyumvo.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {

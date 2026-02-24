@@ -1250,12 +1250,10 @@
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
-      "description": "AI model powered by GPT-4.1 with real-time web search via Bing. Provides up-to-date information, fact-checking, and current event awareness. Best for research requiring recent information, news analysis, and fact verification.",
       "knowledgeCutoff": "Real-time web search"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
-      "description": "OpenAI's most advanced model, excelling at complex reasoning, code generation, and technical problem-solving. Best for analytical tasks, programming challenges, research, and detailed explanations. Supports adjustable reasoning effort and response verbosity.",
       "knowledgeCutoff": "Dec 2025"
     },
     "gpt_5_mini": {
@@ -1265,7 +1263,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {

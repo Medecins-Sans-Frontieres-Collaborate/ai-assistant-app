@@ -182,7 +182,7 @@ function createModelConfigs(
       tokenLimit: 16000,
       modelType: 'omni',
       description:
-        'Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.',
+        'Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.',
       isDisabled: false,
       provider: 'openai',
       knowledgeCutoffDate: '2025-12',

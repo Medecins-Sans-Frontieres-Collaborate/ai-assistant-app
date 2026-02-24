@@ -1265,7 +1265,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Variante spécialisé tî GPT-5.2 optimisé tî polëngö na intelligence émotionnel. Nzönî na communication na bê, sâra tî santé mental, sü créatif, pössö na idée, na dialogue naturel. Nzönî tî polëngö na lêgê, scénarios tî conseil, na sâra sô a kë hînga tî émotion.",
       "knowledgeCutoff": "Déc 2025"
     },
     "o3": {

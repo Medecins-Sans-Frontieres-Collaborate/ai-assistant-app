@@ -1265,7 +1265,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Varyant espesyalize GPT-5.2 optimize pou entèaksyon konvèsasyonèl ak entèlijans emosyonèl. Ekselè nan kominikasyon empatik, sipò sante mantal, ekriti kreyatif, jenerasyon lide, ak dyalòg natirèl. Pi bon pou konvèsasyon enfòmèl, senaryo konsèy, ak travay ki bezwen konsyans emosyonèl.",
       "knowledgeCutoff": "Des 2025"
     },
     "o3": {

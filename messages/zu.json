@@ -1265,7 +1265,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ingxoxo",
-      "description": "Inguqulo ekhethekile ye-GPT-5.2 elungiselelwe ukuxoxisana nemizwa. Iyinhle ekuxhumaneni okunozwela, ukusekela kwempilo yengqondo, ukubhala okwakhayo, ukucabanga amasu, nengxoxo yemvelo. Iyinhle kakhulu ezingxoxweni ezejwayelekile, izimo zokululeka, nemisebenzi edinga ukuqonda imizwa.",
       "knowledgeCutoff": "Dis 2025"
     },
     "o3": {
