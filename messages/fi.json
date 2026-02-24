@@ -561,9 +561,7 @@
     "errorSessionExpired": "Istuntosi on vanhentunut. Kirjaudu uudelleen jatkaaksesi.",
     "errorFallback": "Todennuspalveluun ei voitu muodostaa yhteyttä. Yritä uudelleen tai ota yhteyttä tukeen, jos ongelma jatkuu.",
     "tryAgain": "Yritä uudelleen",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Istuntotiedot poistettiin tallennusrajan vuoksi. Kirjaudu sisään uudelleen.",
-    "errorHeadersTooLarge": "Istuntotiedot olivat liian suuret. Kirjaudu sisään uudelleen."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Lataa ääni",
@@ -1258,8 +1256,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "GPT-5.2:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, mielenterveystuessa, luovassa kirjoittamisessa, ideoinnissa ja luonnollisessa dialogissa. Paras vapaamuotoisiin keskusteluihin, neuvontatilanteisiin ja tehtäviin, jotka vaativat tunneälyä.",
-      "knowledgeCutoff": "joulukuu 2025"
+      "knowledgeCutoff": "joulukuu 2025",
+      "description": "GPT-5.2:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, luovassa kirjoittamisessa, ideoinnissa ja luonnollisissa vuoropuheluissa. Paras rentoihin keskusteluihin, ohjaustilanteisiin ja tehtäviin, jotka vaativat tunneherkkyyttä."
     }
   },
   "searchMode": {

@@ -553,9 +553,7 @@
     "errorSessionExpired": "Sesi Anda telah kedaluwarsa. Harap masuk lagi untuk melanjutkan.",
     "errorFallback": "Tidak dapat terhubung ke layanan autentikasi. Harap coba lagi atau hubungi dukungan jika masalah terus berlanjut.",
     "tryAgain": "Coba Lagi",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Data sesi dihapus karena batas penyimpanan. Silakan masuk kembali.",
-    "errorHeadersTooLarge": "Data sesi terlalu besar. Silakan masuk kembali."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Unduh audio",
@@ -1250,8 +1248,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Varian khusus dari GPT-5.2 yang dioptimalkan untuk interaksi percakapan dan kecerdasan emosional. Unggul dalam komunikasi empatik, dukungan kesehatan mental, penulisan kreatif, brainstorming, dan dialog alami. Paling cocok untuk percakapan santai, skenario konseling, dan tugas yang membutuhkan kesadaran emosional.",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Varian khusus dari GPT-5.2 yang dioptimalkan untuk interaksi percakapan dan kecerdasan emosional. Unggul dalam komunikasi empati, penulisan kreatif, brainstorming, dan dialog alami. Paling cocok untuk percakapan santai, skenario konseling, dan tugas yang memerlukan kesadaran emosional."
     }
   },
   "searchMode": {

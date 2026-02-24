@@ -586,9 +586,7 @@
     "errorSessionExpired": "Vaše relace vypršela. Pro pokračování se znovu přihlaste.",
     "errorFallback": "Nelze se připojit k ověřovací službě. Zkuste to znovu nebo kontaktujte podporu, pokud problém přetrvává.",
     "tryAgain": "Zkusit znovu",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Data relace byla vymazána kvůli omezením úložiště. Přihlaste se prosím znovu.",
-    "errorHeadersTooLarge": "Data relace byla příliš velká. Přihlaste se prosím znovu."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Stáhnout zvuk",
@@ -1174,8 +1172,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emoční inteligenci. Vyniká v empatické komunikaci, podpoře duševního zdraví, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální konverzace, poradenské situace a úkoly vyžadující emoční vnímavost.",
-      "knowledgeCutoff": "Prosinec 2025"
+      "knowledgeCutoff": "Prosinec 2025",
+      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost."
     }
   },
   "searchMode": {

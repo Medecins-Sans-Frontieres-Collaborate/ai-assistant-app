@@ -1267,7 +1267,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Guhertoya taybet a GPT-5.2 ku ji bo danûstendinên sohbetî û zîrekiya hestiyarî optimize kirî ye. Di danûstendina empatîk, piştgiriya tendirûstiya derûnî, nivîsandina afirîner, fikirîna afirîner, û dîaloga xwezayî de serfiraz e. Ji bo sohbetên neresmi, senaryoyên şêwirmendiyê, û karên ku agahdariya hestiyar hewce dikin çêtirîn e.",
       "knowledgeCutoff": "Kanûn 2025"
     },
     "o3": {

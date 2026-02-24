@@ -1267,7 +1267,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Yamre GPT-5.2 keeriɗɗo moƴƴitinɗo ngam jokkondiral yeewtereewal e ganndal ɓerɗe. Ɓuri waawde e jokkondiral muñal, wallitorde hakkille, winndiyankaagal cosaan, miijtoragol, e yeewtere tabiɗɗe. Ɓuri moƴƴude ngam yeewterɗe ñooɓinɗe, sahaaji wasiyaagol, e golle hatojinɗe ganndal ɓerɗe.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {

@@ -1267,7 +1267,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Kinova manokana an'ny GPT-5.2 natao ho an'ny fifandraisana mifampiresaka sy ny fahiratan-tsaina ara-pihetseham-po. Mahay amin'ny fifandraisana miaraka amin'ny fangorahana, fanohanana ara-tsaina, fanoratana mamorona, fitadiavana hevitra, ary resadresaka voajanahary. Tsara indrindra ho an'ny resadresaka tsotra, toe-javatra torohevitra, ary asa mila fahafantarana ny fihetseham-po.",
       "knowledgeCutoff": "Des 2025"
     },
     "o3": {

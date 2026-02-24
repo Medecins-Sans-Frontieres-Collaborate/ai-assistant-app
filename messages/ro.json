@@ -584,9 +584,7 @@
     "errorSessionExpired": "Sesiunea dvs. a expirat. Vă rugăm autentificați-vă din nou pentru a continua.",
     "errorFallback": "Nu se poate conecta la serviciul de autentificare. Vă rugăm încercați din nou sau contactați asistența dacă problema persistă.",
     "tryAgain": "Încercați din nou",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Datele sesiunii au fost șterse din cauza limitelor de stocare. Vă rugăm să vă autentificați din nou.",
-    "errorHeadersTooLarge": "Datele sesiunii erau prea mari. Vă rugăm să vă autentificați din nou."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Descarcă audio",
@@ -1258,8 +1256,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Variantă specializată a modelului GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, suport pentru sănătate mintală, scriere creativă, brainstorming și dialog natural. Recomandat pentru conversații lejere, consiliere și sarcini care necesită conștientizare emoțională.",
-      "knowledgeCutoff": "Decembrie 2025"
+      "knowledgeCutoff": "Decembrie 2025",
+      "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională."
     }
   },
   "searchMode": {

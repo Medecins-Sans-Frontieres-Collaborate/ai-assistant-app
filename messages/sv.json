@@ -586,9 +586,7 @@
     "errorSessionExpired": "Din session har gått ut. Vänligen logga in igen för att fortsätta.",
     "errorFallback": "Kunde inte ansluta till autentiseringstjänsten. Vänligen försök igen eller kontakta support om problemet kvarstår.",
     "tryAgain": "Försök igen",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Sessionsdata rensades på grund av lagringsbegränsningar. Vänligen logga in igen.",
-    "errorHeadersTooLarge": "Sessionsdata var för stor. Vänligen logga in igen."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Ladda ner ljud",
@@ -1174,8 +1172,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Specialversion av GPT-5.2 optimerad för konversationsinteraktioner och emotionell intelligens. Utmärker sig i empatisk kommunikation, stöd för mental hälsa, kreativt skrivande, idégenerering och naturlig dialog. Bäst för vardagliga samtal, rådgivningssituationer och uppgifter som kräver emotionell medvetenhet.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Specialiserad variant av GPT-5.2 optimerad för samtal och emotionell intelligens. Utmärker sig inom empatisk kommunikation, kreativt skrivande, idégenerering och naturliga dialoger. Bäst för informella samtal, rådgivningssituationer och uppgifter som kräver emotionell medvetenhet."
     }
   },
   "searchMode": {

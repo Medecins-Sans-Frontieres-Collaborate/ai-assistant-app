@@ -583,9 +583,7 @@
     "errorSessionExpired": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
     "errorFallback": "Nie można połączyć się z usługą uwierzytelniania. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał.",
     "tryAgain": "Spróbuj ponownie",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Dane sesji zostały usunięte z powodu ograniczeń pamięci. Proszę zalogować się ponownie.",
-    "errorHeadersTooLarge": "Dane sesji były zbyt duże. Proszę zalogować się ponownie."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Pobierz audio",
@@ -1258,8 +1256,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Specjalna wersja GPT-5.2 zoptymalizowana do rozmów i inteligencji emocjonalnej. Znakomita w empatycznej komunikacji, wsparciu zdrowia psychicznego, kreatywnym pisaniu, burzy mózgów oraz naturalnych dialogach. Najlepsza do rozmów nieformalnych, scenariuszy doradczych i zadań wymagających świadomości emocjonalnej.",
-      "knowledgeCutoff": "grudzień 2025"
+      "knowledgeCutoff": "grudzień 2025",
+      "description": "Specjalna wersja GPT-5.2 zoptymalizowana pod kątem interakcji konwersacyjnych i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, kreatywnym pisaniu, burzy mózgów i naturalnym dialogu. Najlepsza do swobodnych rozmów, sytuacji doradczych i zadań wymagających świadomości emocjonalnej."
     }
   },
   "searchMode": {

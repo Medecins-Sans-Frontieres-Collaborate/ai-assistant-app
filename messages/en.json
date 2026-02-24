@@ -891,8 +891,6 @@
     "errorSessionRequired": "Please sign in to access this page.",
     "errorSessionExpired": "Your session has expired. Please sign in again to continue.",
     "errorFallback": "Unable to connect to authentication service. Please try again or contact support if the issue persists.",
-    "errorCookiesCleared": "Session data was cleared due to storage limits. Please sign in again.",
-    "errorHeadersTooLarge": "Session data was too large. Please sign in again.",
     "tryAgain": "Try Again"
   },
   "help": {
@@ -1267,7 +1265,7 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.",
+      "description": "Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {

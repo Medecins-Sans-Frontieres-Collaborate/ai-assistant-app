@@ -551,9 +551,7 @@
     "errorSessionExpired": "Uw sessie is verlopen. Log opnieuw in om door te gaan.",
     "errorFallback": "Kan geen verbinding maken met de authenticatieservice. Probeer het opnieuw of neem contact op met ondersteuning als het probleem aanhoudt.",
     "tryAgain": "Opnieuw proberen",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Sessiedata is gewist vanwege opslaglimieten. Meld u alstublieft opnieuw aan.",
-    "errorHeadersTooLarge": "Sessiedata was te groot. Meld u alstublieft opnieuw aan."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "discardChanges": "Wijzigingen verwerpen",
@@ -1215,8 +1213,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Gespecialiseerde variant van GPT-5.2, geoptimaliseerd voor conversaties en emotionele intelligentie. Uitstekend in empathische communicatie, mentale ondersteuning, creatief schrijven, brainstormen en natuurlijke dialogen. Ideaal voor informele gesprekken, begeleidingssituaties en taken die emotioneel bewustzijn vereisen.",
-      "knowledgeCutoff": "dec 2025"
+      "knowledgeCutoff": "dec 2025",
+      "description": "Gespecialiseerde variant van GPT-5.2, geoptimaliseerd voor conversatie en emotionele intelligentie. Uitstekend in empathische communicatie, creatief schrijven, brainstormen en natuurlijke dialogen. Ideaal voor informele gesprekken, counseling en taken die emotioneel bewustzijn vereisen."
     }
   },
   "transcription": {

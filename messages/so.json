@@ -1267,7 +1267,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Nooc gaar ah oo GPT-5.2 ah oo loo hagaajiyey isdhexgalka wada hadalka iyo caqliga dareenka. Wuxuu ku fiican yahay xiriirka naxariista, taageerada caafimaadka maskaxda, qoraalka hal-abuurka, hal-abuurka fikradaha, iyo wada hadalka dabiiciga ah. Ugu wanaagsan wada hadalka caadiga ah, xaaladaha la-talintu, iyo hawlaha u baahan ogaanshaha dareenka.",
       "knowledgeCutoff": "Dis 2025"
     },
     "o3": {

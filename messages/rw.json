@@ -1267,7 +1267,6 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Verisiyo yihariye ya GPT-5.2 yanonosoye ku biganiro n'ubuhanga bw'amarangamutima. Yizewe mu guhamagarana ku mpuhwe, ubufasha bw'ubuzima bwo mu mutwe, kwandika byiza, gushakisha ibitekerezo, n'ikiganiro gisanzwe. Nziza cyane ku biganiro bisanzwe, imirimo isaba ubumenyi bw'amarangamutima.",
       "knowledgeCutoff": "Ukuboza 2025"
     },
     "o3": {

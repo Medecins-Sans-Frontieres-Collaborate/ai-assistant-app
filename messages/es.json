@@ -763,9 +763,7 @@
     "errorSessionRequired": "Por favor, inicia sesión para acceder a esta página.",
     "errorSessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión nuevamente para continuar.",
     "errorFallback": "No se pudo conectar con el servicio de autenticación. Por favor, inténtalo de nuevo o contacta con soporte si el problema persiste.",
-    "tryAgain": "Intentar de nuevo",
-    "errorCookiesCleared": "Los datos de la sesión se borraron debido a límites de almacenamiento. Por favor, inicie sesión de nuevo.",
-    "errorHeadersTooLarge": "Los datos de la sesión eran demasiado grandes. Por favor, inicie sesión de nuevo."
+    "tryAgain": "Intentar de nuevo"
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1174,8 +1172,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Variante especializada de GPT-5.2 optimizada para interacciones conversacionales e inteligencia emocional. Destaca en comunicación empática, apoyo en salud mental, escritura creativa, lluvia de ideas y diálogo natural. Ideal para conversaciones informales, escenarios de asesoramiento y tareas que requieren conciencia emocional.",
-      "knowledgeCutoff": "Dic 2025"
+      "knowledgeCutoff": "Dic 2025",
+      "description": "Variante especializada de GPT-5.2 optimizada para interacciones conversacionales e inteligencia emocional. Destaca en comunicación empática, escritura creativa, lluvia de ideas y diálogo natural. Ideal para conversaciones informales, escenarios de asesoramiento y tareas que requieren sensibilidad emocional."
     }
   },
   "searchMode": {

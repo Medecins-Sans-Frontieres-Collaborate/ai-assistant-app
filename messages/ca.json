@@ -561,9 +561,7 @@
     "errorSessionExpired": "La vostra sessió ha caducat. Inicieu sessió de nou per continuar.",
     "errorFallback": "No es pot connectar amb el servei d'autenticació. Torneu-ho a provar o poseu-vos en contacte amb el suport si el problema persisteix.",
     "tryAgain": "Torna-ho a provar",
-    "microsoft": "Microsoft",
-    "errorCookiesCleared": "Les dades de la sessió s'han suprimit per límits d'emmagatzematge. Torneu a iniciar sessió.",
-    "errorHeadersTooLarge": "Les dades de la sessió eren massa grans. Torneu a iniciar sessió."
+    "microsoft": "Microsoft"
   },
   "chat": {
     "downloadAudio": "Descarregar àudio",
@@ -1258,8 +1256,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Variant especialitzada de GPT-5.2 optimitzada per a converses i intel·ligència emocional. Excel·leix en la comunicació empàtica, suport en salut mental, escriptura creativa, generació d'idees i diàlegs naturals. Recomanada per a converses informals, escenaris de suport i tasques que requereixen consciència emocional.",
-      "knowledgeCutoff": "des. 2025"
+      "knowledgeCutoff": "des. 2025",
+      "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional."
     }
   },
   "searchMode": {
