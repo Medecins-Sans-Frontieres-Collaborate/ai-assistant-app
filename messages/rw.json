@@ -891,7 +891,9 @@
     "errorSessionRequired": "Nyamuneka injira kugira ngo ugere kuri iyi paji.",
     "errorSessionExpired": "Igihe cyawe cyarangiye. Nyamuneka ongere winjire kugira ngo ukomeze.",
     "errorFallback": "Ntushobora kwiyunga na serivisi yo kwemeza. Nyamuneka ongera ugerageze cyangwa uhamagare ubufasha niba ikibazo gikomeje.",
-    "tryAgain": "Ongera Ugerageze"
+    "tryAgain": "Ongera Ugerageze",
+    "errorCookiesCleared": "Amakuru y'ikiganiro yasibwe kubera aho kubika haciyeho. Mwongera kwiyandikisha.",
+    "errorHeadersTooLarge": "Amakuru y'ikiganiro yari menshi cyane. Mwongera kwiyandikisha."
   },
   "help": {
     "sharePoint": "SharePoint",

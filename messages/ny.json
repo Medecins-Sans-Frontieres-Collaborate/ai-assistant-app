@@ -891,7 +891,9 @@
     "errorSessionRequired": "Chonde lowani kuti mupeze tsamba ili.",
     "errorSessionExpired": "Nthawi yanu yatha. Chonde lowani kuti mupitirize.",
     "errorFallback": "Sikunatheke kulumikizana ndi ntchito yotsimikizira. Chonde yesaninso kapena lumikizanani ndi chithandizo ngati vutoli likupitirira.",
-    "tryAgain": "Yesaninso"
+    "tryAgain": "Yesaninso",
+    "errorCookiesCleared": "Deta ya gawo la ntchito yachotsedwa chifukwa cha malire a posungira. Chonde lowaninso.",
+    "errorHeadersTooLarge": "Deta ya gawo la ntchito ndi yayikulu kwambiri. Chonde lowaninso."
   },
   "help": {
     "sharePoint": "SharePoint",

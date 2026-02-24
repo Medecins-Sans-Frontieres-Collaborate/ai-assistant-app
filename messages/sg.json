@@ -891,7 +891,9 @@
     "errorSessionRequired": "Ngo tî gä na page sô.",
     "errorSessionExpired": "Session tî mo a dü. Ngo ngâ tî tëne kôzo.",
     "errorFallback": "A lingbi tî gä na service tî authentification pepe. Tëne ngâ wala hunda sâra töngana problème a dû.",
-    "tryAgain": "Tëne ngâ"
+    "tryAgain": "Tëne ngâ",
+    "errorCookiesCleared": "Données ti session ayeke eföto na bïrï sängö tî mo. Zënga köda laa ayeke këngö.",
+    "errorHeadersTooLarge": "Données ti session ayeke gbüngbï na bïrï sängö tî mo. Zënga köda laa ayeke këngö."
   },
   "help": {
     "sharePoint": "SharePoint",

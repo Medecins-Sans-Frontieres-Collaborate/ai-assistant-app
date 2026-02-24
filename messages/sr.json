@@ -891,7 +891,9 @@
     "errorSessionRequired": "Пријавите се да бисте приступили овој страници.",
     "errorSessionExpired": "Ваша сесија је истекла. Пријавите се поново да наставите.",
     "errorFallback": "Није могуће повезати се са сервисом за аутентификацију. Покушајте поново или контактирајте подршку ако проблем и даље постоји.",
-    "tryAgain": "Покушајте поново"
+    "tryAgain": "Покушајте поново",
+    "errorCookiesCleared": "Podaci sesije su obrisani zbog ograničenja za skladištenje. Molimo prijavite se ponovo.",
+    "errorHeadersTooLarge": "Podaci sesije su preveliki. Molimo prijavite se ponovo."
   },
   "help": {
     "sharePoint": "SharePoint",

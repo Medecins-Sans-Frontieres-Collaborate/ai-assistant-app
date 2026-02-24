@@ -891,7 +891,9 @@
     "errorSessionRequired": "Fadlan soo gal si aad u gasho boggan.",
     "errorSessionExpired": "Kulankaagu wuu dhacay. Fadlan dib u soo gal si aad u sii waddo.",
     "errorFallback": "Lama xidhi karo adeegga xaqiijinta. Fadlan dib u isku day ama la xidhiidh taageerada haddii dhibaatadu sii jirto.",
-    "tryAgain": "Dib u Isku day"
+    "tryAgain": "Dib u Isku day",
+    "errorCookiesCleared": "Xogta fadhi-ku-joogga waa la tirtiray xaddiga kaydka awgiis. Fadlan dib isu qor.",
+    "errorHeadersTooLarge": "Xogta fadhi-ku-joogga aad bay u weynaatay. Fadlan dib isu qor."
   },
   "help": {
     "sharePoint": "SharePoint",
