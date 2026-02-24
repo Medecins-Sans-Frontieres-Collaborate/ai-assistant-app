@@ -891,7 +891,9 @@
     "errorSessionRequired": "Ji kerema xwe ji bo gihîştina vê rûpelê têkeve.",
     "errorSessionExpired": "Danişîna te qediya. Ji kerema xwe ji bo berdewamkirinê dîsa têkeve.",
     "errorFallback": "Nehat girêdan bi xizmeta nasnameyê re. Ji kerema xwe dîsa biceribîne an heke pirsgirêk bidomîne bi piştgiriyê re têkilî bike.",
-    "tryAgain": "Dîsa Biceribîne"
+    "tryAgain": "Dîsa Biceribîne",
+    "errorCookiesCleared": "زانیاری دانیشتن سڕاوە بەهۆی سنوورداربوونی ئەنجامی پاشەکەوتکردنەوە. تکایە دووبارە بچنە ژوورەوە.",
+    "errorHeadersTooLarge": "زانیاری دانیشتن زۆر گەورە بوو. تکایە دووبارە بچنە ژوورەوە."
   },
   "help": {
     "sharePoint": "SharePoint",
