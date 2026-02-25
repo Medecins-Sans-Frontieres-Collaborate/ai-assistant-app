@@ -117,7 +117,62 @@ Si vous avez des préoccupations ou souhaitez signaler un incident, veuillez con
 Ces conditions peuvent être modifiées à tout moment par MSF --- nous vous en informerons en cas de changement --- votre utilisation continue de ai.msf.org vaut acceptation de toute modification.
 `;
 
-// TODO: Add Spanish terms when official translation is available for version 2.0.1
+// Spanish terms
+const termsTextEs: string = `# *ai.msf.org* Condiciones de Uso
+
+El Asistente de IA de MSF es un chatbot de IA interno desarrollado para el personal de MSF. Utiliza modelos de lenguaje de gran escala dentro de Microsoft Azure Foundry, manteniendo todos los datos dentro de MSF, lo que garantiza privacidad y control.
+
+El Asistente de IA puede ayudarte con tareas cotidianas como redactar textos, resumir documentos, traducir idiomas y redactar correos electrónicos o informes. También puede ayudar con el análisis de datos, la generación de ideas y encontrar respuestas rápidas a preguntas, lo que lo convierte en una herramienta útil para las actividades laborales diarias.
+
+Al usar ai.msf.org, aceptas los siguientes términos y condiciones:
+
+## Uso responsable:
+
+Aceptas usar ai.msf.org de manera responsable. Te comprometes a:
+
+-   Usarlo de acuerdo con las políticas de TIC, IA y otras políticas aplicables de tu entidad de MSF.
+
+-   Verificar siempre que los resultados sean precisos, inclusivos y sin sesgos. Ai.msf.org utiliza tecnología experimental -- no garantiza que los resultados sean precisos. Además, la tecnología no ha sido entrenada con datos representativos de los pacientes y comunidades de MSF. Los resultados de IA pueden perpetuar sesgos, discriminación y estereotipos. Eres responsable de verificar los resultados producidos.
+
+-   Verificar que los resultados no infrinjan los derechos de propiedad intelectual de terceros -- especialmente para cualquier uso público. Como otros sistemas de IA generativa, la tecnología detrás de ai.msf.org ha sido entrenada con propiedad intelectual de terceros sin permisos y licencias claras.
+
+-   Ser transparente sobre tu uso de IA. Informa a las personas si algo que usas ha sido producido por IA, y marca los resultados como generados por IA.
+
+**NO utilizarás ai.msf.org para ninguno de los siguientes propósitos:**
+
+-   **Atención médica** *(para proporcionar atención médica o responder preguntas relacionadas con la salud)*
+
+-   **Vigilancia o monitoreo de pacientes o comunidades de MSF o cualquier otro individuo(s)**
+
+-   **Decisiones relacionadas con el empleo** *(para asistir o reemplazar decisiones relacionadas con el empleo)*
+
+-   **Toma de decisiones automatizada** *(para tomar decisiones que podrían ser perjudiciales para un individuo o comunidad)*
+
+-   **Creación de contenido mediático para comunicaciones externas sobre asuntos de interés público**
+
+-   **Actividades ilegales o dañinas**
+
+## Privacidad:
+
+Usar ai.msf.org es un entorno más seguro y protegido que usar otras herramientas de IA gratuitas externas, que ofrecen muy pocas garantías de privacidad. Sin embargo, ten en cuenta que aún existen límites y advertencias -- consulta la política de uso para más detalles.
+
+Como otros productos de Microsoft, tu información de inicio de sesión será procesada por MSF según lo descrito en la política de privacidad de tu entidad de MSF.
+
+**NO ingresarás ni cargarás en ai.msf.org la siguiente información:**
+
+-   **Datos personales sensibles** (esto incluye: origen racial o étnico, orientación sexual, datos genéticos o biométricos, información financiera personal, información de salud personal, opiniones políticas, afiliación sindical, o creencias religiosas o filosóficas). Los datos personales no sensibles, como un nombre o dirección de correo electrónico, pueden usarse en una consulta para uso general, como reescribir un correo electrónico.
+
+-   **Datos altamente sensibles** (datos que pueden usarse intencional o involuntariamente para dañar a individuos, comunidades, MSF o su personal -- determinar la sensibilidad de los datos requiere incorporar análisis de contexto, por ejemplo: ubicaciones de proyectos sensibles o grupos en riesgo, incidentes de seguridad y otros detalles operativos)
+
+**Si planeas usar datos personales en el Asistente de IA de MSF como parte de un proceso empresarial existente, contacta primero a tu DPO.**
+
+**Si deseas usar una solución de IA para ayudar a gestionar o procesar datos personales sensibles o datos médicos, contacta al Equipo de IA para obtener asesoramiento.**
+
+## Incumplimientos / comentarios
+
+Si tienes alguna inquietud o deseas notificar un incidente, contacta a: [ai.team@amsterdam.msf.org](mailto:ai.team@amsterdam.msf.org)
+
+Estos términos pueden ser modificados en cualquier momento por MSF -- te notificaremos si los cambiamos -- tu uso continuado de ai.msf.org constituye la aceptación de cualquier cambio.`;
 
 const calculateHash = (content: string): string => {
   return crypto.createHash('sha256').update(content).digest('hex');
@@ -150,6 +205,10 @@ const termsData: TermsData = {
       fr: {
         content: termsTextFr,
         hash: calculateHash(termsTextFr),
+      },
+      es: {
+        content: termsTextEs,
+        hash: calculateHash(termsTextEs),
       },
     },
     version: '2.0.1',
