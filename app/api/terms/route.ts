@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import type {
-  LocalizedContent,
-  TermsData,
-  TermsDocument,
-} from '@/lib/utils/app/user/termsAcceptance';
+import type { TermsData } from '@/lib/utils/app/user/termsAcceptance';
 
 import crypto from 'crypto';
 
