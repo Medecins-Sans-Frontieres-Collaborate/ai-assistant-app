@@ -35,6 +35,16 @@ import {
 
 import { Streamdown } from 'streamdown';
 
+/**
+ * Strips the first H1 heading from markdown content.
+ * Handles leading whitespace and both Windows (CRLF) and Unix (LF) line endings.
+ * @param content - The markdown content to process
+ * @returns The content with the first H1 heading removed
+ */
+const stripFirstHeading = (content: string): string => {
+  return content.replace(/^\s*#\s+.+[\r\n]+/, '');
+};
+
 interface TermsAcceptanceModalProps {
   user: Session['user'];
   onAcceptance: () => void;
@@ -623,7 +633,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
               {isShowingTranslation && translatedContent ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-200 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-ul:text-gray-700 dark:prose-ul:text-gray-200 prose-li:text-gray-700 dark:prose-li:text-gray-200">
                   <Streamdown>
-                    {translatedContent.replace(/^#\s+.+\n+/, '')}
+                    {stripFirstHeading(translatedContent)}
                   </Streamdown>
                 </div>
               ) : (
@@ -636,7 +646,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                     '';
 
                   // Remove the main title from the markdown content
-                  documentContent = documentContent.replace(/^#\s+.+\n+/, '');
+                  documentContent = stripFirstHeading(documentContent);
 
                   return (
                     <div
