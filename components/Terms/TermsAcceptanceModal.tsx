@@ -22,7 +22,11 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { translateText } from '@/lib/services/translation/translationService';
 
-import { getAutonym, getSupportedLocales } from '@/lib/utils/app/locales';
+import {
+  getAutonym,
+  getOfficialTermsLanguageName,
+  getSupportedLocales,
+} from '@/lib/utils/app/locales';
 import {
   TermsData,
   fetchTermsData,
@@ -62,12 +66,17 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    showAbove: false,
+  });
 
   // Refs for dropdown positioning and focus management
   const translationButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const optionsListRef = useRef<HTMLDivElement>(null);
 
   // Get all supported locales for translation (excluding official ones)
   const translationLocales = useMemo(() => {
@@ -105,10 +114,18 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     if (showTranslationDropdown && translationButtonRef.current) {
       const buttonRect = translationButtonRef.current.getBoundingClientRect();
       const dropdownWidth = 256; // w-64 = 16rem = 256px
+      const dropdownHeight = 240; // max-h-48 (192px) + search input padding (~48px)
 
-      // Position below the button, align left edge
+      // Check if dropdown should flip above button
+      const spaceBelow = window.innerHeight - buttonRect.bottom - 8;
+      const spaceAbove = buttonRect.top - 8;
+      const showAbove = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
+
+      // Position below or above the button
       let left = buttonRect.left;
-      const top = buttonRect.bottom + 4; // 4px gap below
+      const top = showAbove
+        ? buttonRect.top - dropdownHeight - 4
+        : buttonRect.bottom + 4;
 
       // Ensure dropdown doesn't go off-screen to the right
       if (left + dropdownWidth > window.innerWidth - 8) {
@@ -120,24 +137,34 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
         left = 8;
       }
 
-      setDropdownPosition({ top, left });
+      setDropdownPosition({ top, left, showAbove });
     }
   }, [showTranslationDropdown]);
 
   // Focus search input when dropdown opens and reset state when closed
   useEffect(() => {
     if (showTranslationDropdown) {
-      // Small delay to ensure DOM is ready
-      const timeoutId = setTimeout(() => {
+      // Use requestAnimationFrame to ensure DOM is ready
+      const rafId = requestAnimationFrame(() => {
         searchInputRef.current?.focus();
-      }, 50);
-      return () => clearTimeout(timeoutId);
+      });
+      return () => cancelAnimationFrame(rafId);
     } else {
       // Reset state when dropdown closes
       setSearchQuery('');
       setSelectedIndex(-1);
     }
   }, [showTranslationDropdown]);
+
+  // Scroll highlighted option into view
+  useEffect(() => {
+    if (selectedIndex >= 0 && optionsListRef.current) {
+      const optionElement = optionsListRef.current.querySelector(
+        `[data-option-index="${selectedIndex}"]`,
+      );
+      optionElement?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [selectedIndex]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -308,16 +335,6 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     setTranslationError(null);
   }, []);
 
-  // Get localized name for a language
-  const getLanguageName = (locale: string): string => {
-    const localeNames: Record<string, string> = {
-      en: 'English',
-      fr: 'Français',
-      es: 'Español',
-    };
-    return localeNames[locale] || locale;
-  };
-
   // Determine if we're showing AI translation
   const isShowingTranslation =
     translatedContent !== null && translationLocale !== null;
@@ -421,7 +438,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                       value={locale}
                       className="bg-white dark:bg-gray-800"
                     >
-                      {getLanguageName(locale)}
+                      {getOfficialTermsLanguageName(locale)}
                     </option>
                   ))}
                 </select>
@@ -438,6 +455,10 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                   setShowTranslationDropdown(!showTranslationDropdown)
                 }
                 disabled={isTranslating}
+                aria-haspopup="listbox"
+                aria-expanded={showTranslationDropdown}
+                aria-controls="terms-translation-listbox"
+                aria-busy={isTranslating}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-colors disabled:opacity-50"
               >
                 <IconWorld size={14} />
@@ -457,6 +478,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                 createPortal(
                   <div
                     ref={dropdownRef}
+                    id="terms-translation-listbox"
                     className="fixed z-[100] w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden"
                     style={{
                       top: `${dropdownPosition.top}px`,
@@ -464,7 +486,12 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                     }}
                     role="listbox"
                     aria-label={t('chat.selectLanguage')}
-                    onKeyDown={handleDropdownKeyDown}
+                    aria-activedescendant={
+                      selectedIndex >= 0 &&
+                      filteredTranslationLocales[selectedIndex]
+                        ? `terms-lang-${filteredTranslationLocales[selectedIndex]}`
+                        : undefined
+                    }
                   >
                     {/* Search input */}
                     <div className="p-2 border-b border-gray-200 dark:border-gray-700">
@@ -478,7 +505,9 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                           type="text"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyDown={handleDropdownKeyDown}
                           placeholder={t('chat.searchLanguages')}
+                          aria-label={t('chat.searchLanguages')}
                           className="w-full pl-8 pr-8 py-1.5 text-xs bg-gray-100 dark:bg-gray-700 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
                         />
                         {searchQuery && (
@@ -493,13 +522,18 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                     </div>
 
                     {/* Language list */}
-                    <div className="max-h-48 overflow-y-auto">
+                    <div
+                      ref={optionsListRef}
+                      className="max-h-48 overflow-y-auto"
+                    >
                       {filteredTranslationLocales.map((locale, index) => {
                         const isHighlighted = selectedIndex === index;
 
                         return (
                           <button
                             key={locale}
+                            id={`terms-lang-${locale}`}
+                            data-option-index={index}
                             onClick={() => handleTranslate(locale)}
                             disabled={isTranslating}
                             className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
@@ -524,7 +558,10 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
 
                       {/* No results */}
                       {filteredTranslationLocales.length === 0 && (
-                        <div className="px-3 py-4 text-center text-xs text-gray-500 dark:text-gray-400">
+                        <div
+                          className="px-3 py-4 text-center text-xs text-gray-500 dark:text-gray-400"
+                          aria-live="polite"
+                        >
                           {t('common.noResults')}
                         </div>
                       )}
@@ -586,7 +623,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
               {isShowingTranslation && translatedContent ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-200 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-ul:text-gray-700 dark:prose-ul:text-gray-200 prose-li:text-gray-700 dark:prose-li:text-gray-200">
                   <Streamdown>
-                    {translatedContent.replace(/^#\s+.*?Terms.*?\n+/i, '')}
+                    {translatedContent.replace(/^#\s+.+\n+/, '')}
                   </Streamdown>
                 </div>
               ) : (
@@ -599,10 +636,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                     '';
 
                   // Remove the main title from the markdown content
-                  documentContent = documentContent.replace(
-                    /^#\s+.*?Terms.*?\n+/i,
-                    '',
-                  );
+                  documentContent = documentContent.replace(/^#\s+.+\n+/, '');
 
                   return (
                     <div
