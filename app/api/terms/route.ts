@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 
+import type {
+  LocalizedContent,
+  TermsData,
+  TermsDocument,
+} from '@/lib/utils/app/user/termsAcceptance';
+
 import crypto from 'crypto';
 
 // English terms
@@ -177,23 +183,6 @@ Estos términos pueden ser modificados en cualquier momento por MSF -- te notifi
 const calculateHash = (content: string): string => {
   return crypto.createHash('sha256').update(content).digest('hex');
 };
-
-interface LocalizedContent {
-  [locale: string]: {
-    content: string;
-    hash: string;
-  };
-}
-
-interface TermsItem {
-  localized: LocalizedContent;
-  version: string;
-  required: boolean;
-}
-
-interface TermsData {
-  platformTerms: TermsItem;
-}
 
 const termsData: TermsData = {
   platformTerms: {
