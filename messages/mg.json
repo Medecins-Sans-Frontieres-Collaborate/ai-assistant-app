@@ -891,7 +891,9 @@
     "errorSessionRequired": "Midira azafady mba hidirana ity pejy ity.",
     "errorSessionExpired": "Lany daty ny fotoana fidirana. Midira indray azafady mba hanohy.",
     "errorFallback": "Tsy afaka mifandray amin'ny serivisy fanamarinana. Avereno azafady na mifandraisa amin'ny fanohanana raha mitohy ny olana.",
-    "tryAgain": "Avereno"
+    "tryAgain": "Avereno",
+    "errorCookiesCleared": "Voafafa ny angon-drakitra fivoriana noho ny fetra fitahirizana. Azafady, midira indray.",
+    "errorHeadersTooLarge": "Lehibe loatra ny angon-drakitra fivoriana. Azafady, midira indray."
   },
   "help": {
     "sharePoint": "SharePoint",

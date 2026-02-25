@@ -1,17 +1,32 @@
 import {
   IconAlertTriangle,
+  IconChevronDown,
   IconLanguage,
   IconLoader2,
+  IconSearch,
   IconWorld,
+  IconX,
 } from '@tabler/icons-react';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 
 import { Session } from 'next-auth';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { translateText } from '@/lib/services/translation/translationService';
 
-import { getAutonym, getSupportedLocales } from '@/lib/utils/app/locales';
+import {
+  getAutonym,
+  getOfficialTermsLanguageName,
+  getSupportedLocales,
+} from '@/lib/utils/app/locales';
 import {
   TermsData,
   fetchTermsData,
@@ -19,6 +34,16 @@ import {
 } from '@/lib/utils/app/user/termsAcceptance';
 
 import { Streamdown } from 'streamdown';
+
+/**
+ * Strips the first H1 heading from markdown content.
+ * Handles leading whitespace and both Windows (CRLF) and Unix (LF) line endings.
+ * @param content - The markdown content to process
+ * @returns The content with the first H1 heading removed
+ */
+const stripFirstHeading = (content: string): string => {
+  return content.replace(/^\s*#\s+.+[\r\n]+/, '');
+};
 
 interface TermsAcceptanceModalProps {
   user: Session['user'];
@@ -30,7 +55,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
   onAcceptance,
 }) => {
   const t = useTranslations();
-  const userLocale = 'en'; // Default to English for terms
+  const userLocale = useLocale();
 
   const [termsData, setTermsData] = useState<TermsData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,15 +74,39 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
   const [translationError, setTranslationError] = useState<string | null>(null);
   const [showTranslationDropdown, setShowTranslationDropdown] =
     useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    showAbove: false,
+  });
+
+  // Refs for dropdown positioning and focus management
+  const translationButtonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const optionsListRef = useRef<HTMLDivElement>(null);
 
   // Get all supported locales for translation (excluding official ones)
   const translationLocales = useMemo(() => {
     const allLocales = getSupportedLocales();
-    // Filter out official locales (en, fr) and sort alphabetically by autonym
+    // Filter out official locales (en, fr, es) and sort alphabetically by autonym
     return allLocales
       .filter((locale) => !availableLocales.includes(locale))
       .sort((a, b) => getAutonym(a).localeCompare(getAutonym(b)));
   }, [availableLocales]);
+
+  // Filter translation locales based on search query
+  const filteredTranslationLocales = useMemo(() => {
+    if (!searchQuery.trim()) return translationLocales;
+
+    const query = searchQuery.toLowerCase();
+    return translationLocales.filter((locale) => {
+      const autonym = getAutonym(locale).toLowerCase();
+      return autonym.includes(query) || locale.includes(query);
+    });
+  }, [translationLocales, searchQuery]);
 
   // Use email (mail) as the primary identifier for terms acceptance
   // This ensures consistency with checkUserTermsAcceptance
@@ -69,6 +118,89 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
       console.error('Terms Modal: Missing user ID/email. User object:', user);
     }
   }, [userId, user]);
+
+  // Calculate dropdown position when opened
+  useEffect(() => {
+    if (showTranslationDropdown && translationButtonRef.current) {
+      const buttonRect = translationButtonRef.current.getBoundingClientRect();
+      const dropdownWidth = 256; // w-64 = 16rem = 256px
+      const dropdownHeight = 240; // max-h-48 (192px) + search input padding (~48px)
+
+      // Check if dropdown should flip above button
+      const spaceBelow = window.innerHeight - buttonRect.bottom - 8;
+      const spaceAbove = buttonRect.top - 8;
+      const showAbove = spaceBelow < dropdownHeight && spaceAbove > spaceBelow;
+
+      // Position below or above the button
+      let left = buttonRect.left;
+      const top = showAbove
+        ? buttonRect.top - dropdownHeight - 4
+        : buttonRect.bottom + 4;
+
+      // Ensure dropdown doesn't go off-screen to the right
+      if (left + dropdownWidth > window.innerWidth - 8) {
+        left = window.innerWidth - dropdownWidth - 8;
+      }
+
+      // Ensure dropdown doesn't go off-screen to the left
+      if (left < 8) {
+        left = 8;
+      }
+
+      setDropdownPosition({ top, left, showAbove });
+    }
+  }, [showTranslationDropdown]);
+
+  // Focus search input when dropdown opens and reset state when closed
+  useEffect(() => {
+    if (showTranslationDropdown) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      const rafId = requestAnimationFrame(() => {
+        searchInputRef.current?.focus();
+      });
+      return () => cancelAnimationFrame(rafId);
+    } else {
+      // Reset state when dropdown closes
+      setSearchQuery('');
+      setSelectedIndex(-1);
+    }
+  }, [showTranslationDropdown]);
+
+  // Scroll highlighted option into view
+  useEffect(() => {
+    if (selectedIndex >= 0 && optionsListRef.current) {
+      const optionElement = optionsListRef.current.querySelector(
+        `[data-option-index="${selectedIndex}"]`,
+      );
+      optionElement?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [selectedIndex]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    if (!showTranslationDropdown) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        translationButtonRef.current &&
+        !translationButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowTranslationDropdown(false);
+      }
+    };
+
+    // Add small delay to prevent immediate closing
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTranslationDropdown]);
 
   // Fetch terms data
   useEffect(() => {
@@ -177,22 +309,41 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     [termsData, t],
   );
 
+  // Keyboard navigation for dropdown
+  const handleDropdownKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const items = filteredTranslationLocales.length;
+      if (items === 0) return;
+
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          setSelectedIndex((prev) => (prev + 1) % items);
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          setSelectedIndex((prev) => (prev - 1 + items) % items);
+          break;
+        case 'Enter':
+          event.preventDefault();
+          if (selectedIndex >= 0 && filteredTranslationLocales[selectedIndex]) {
+            handleTranslate(filteredTranslationLocales[selectedIndex]);
+          }
+          break;
+        case 'Escape':
+          setShowTranslationDropdown(false);
+          break;
+      }
+    },
+    [filteredTranslationLocales, selectedIndex, handleTranslate],
+  );
+
   // Clear AI translation and return to official version
   const handleViewOfficialVersion = useCallback(() => {
     setTranslatedContent(null);
     setTranslationLocale(null);
     setTranslationError(null);
   }, []);
-
-  // Get localized name for a language
-  const getLanguageName = (locale: string): string => {
-    const localeNames: Record<string, string> = {
-      en: 'English',
-      fr: 'Français',
-      es: 'Español',
-    };
-    return localeNames[locale] || locale;
-  };
 
   // Determine if we're showing AI translation
   const isShowingTranslation =
@@ -297,7 +448,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                       value={locale}
                       className="bg-white dark:bg-gray-800"
                     >
-                      {getLanguageName(locale)}
+                      {getOfficialTermsLanguageName(locale)}
                     </option>
                   ))}
                 </select>
@@ -309,33 +460,125 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
           <div className="mt-3 flex items-center justify-between">
             <div className="relative">
               <button
+                ref={translationButtonRef}
                 onClick={() =>
                   setShowTranslationDropdown(!showTranslationDropdown)
                 }
                 disabled={isTranslating}
-                className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors disabled:opacity-50"
+                aria-haspopup="listbox"
+                aria-expanded={showTranslationDropdown}
+                aria-controls="terms-translation-listbox"
+                aria-busy={isTranslating}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-colors disabled:opacity-50"
               >
                 <IconWorld size={14} />
                 <span>{t('terms.translateForUnderstanding')}</span>
-                {isTranslating && (
-                  <IconLoader2 size={12} className="animate-spin ml-1" />
+                {isTranslating ? (
+                  <IconLoader2 size={12} className="animate-spin" />
+                ) : (
+                  <IconChevronDown
+                    size={14}
+                    className={`transition-transform ${showTranslationDropdown ? 'rotate-180' : ''}`}
+                  />
                 )}
               </button>
 
-              {/* Translation language dropdown */}
-              {showTranslationDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-48 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
-                  {translationLocales.map((locale) => (
-                    <button
-                      key={locale}
-                      onClick={() => handleTranslate(locale)}
-                      className="w-full px-3 py-2 text-left text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              {/* Searchable Translation Dropdown (Portal) */}
+              {showTranslationDropdown &&
+                createPortal(
+                  <div
+                    ref={dropdownRef}
+                    id="terms-translation-listbox"
+                    className="fixed z-[100] w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden"
+                    style={{
+                      top: `${dropdownPosition.top}px`,
+                      left: `${dropdownPosition.left}px`,
+                    }}
+                    role="listbox"
+                    aria-label={t('chat.selectLanguage')}
+                    aria-activedescendant={
+                      selectedIndex >= 0 &&
+                      filteredTranslationLocales[selectedIndex]
+                        ? `terms-lang-${filteredTranslationLocales[selectedIndex]}`
+                        : undefined
+                    }
+                  >
+                    {/* Search input */}
+                    <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                      <div className="relative">
+                        <IconSearch
+                          size={14}
+                          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+                        <input
+                          ref={searchInputRef}
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onKeyDown={handleDropdownKeyDown}
+                          placeholder={t('chat.searchLanguages')}
+                          aria-label={t('chat.searchLanguages')}
+                          className="w-full pl-8 pr-8 py-1.5 text-xs bg-gray-100 dark:bg-gray-700 border-0 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white placeholder-gray-500"
+                        />
+                        {searchQuery && (
+                          <button
+                            onClick={() => setSearchQuery('')}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                          >
+                            <IconX size={12} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Language list */}
+                    <div
+                      ref={optionsListRef}
+                      className="max-h-48 overflow-y-auto"
                     >
-                      {getAutonym(locale)}
-                    </button>
-                  ))}
-                </div>
-              )}
+                      {filteredTranslationLocales.map((locale, index) => {
+                        const isHighlighted = selectedIndex === index;
+
+                        return (
+                          <button
+                            key={locale}
+                            id={`terms-lang-${locale}`}
+                            data-option-index={index}
+                            onClick={() => handleTranslate(locale)}
+                            disabled={isTranslating}
+                            className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                              isHighlighted
+                                ? 'bg-gray-100 dark:bg-gray-700'
+                                : ''
+                            }`}
+                            role="option"
+                            aria-selected={isHighlighted}
+                          >
+                            <span className="flex items-center gap-2">
+                              <span className="font-medium text-gray-900 dark:text-white">
+                                {getAutonym(locale)}
+                              </span>
+                              <span className="text-gray-500 dark:text-gray-400 text-[10px]">
+                                {locale}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+
+                      {/* No results */}
+                      {filteredTranslationLocales.length === 0 && (
+                        <div
+                          className="px-3 py-4 text-center text-xs text-gray-500 dark:text-gray-400"
+                          aria-live="polite"
+                        >
+                          {t('common.noResults')}
+                        </div>
+                      )}
+                    </div>
+                  </div>,
+                  document.body,
+                )}
             </div>
 
             {/* View official version link (shown when viewing translation) */}
@@ -390,7 +633,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
               {isShowingTranslation && translatedContent ? (
                 <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-200 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-strong:text-gray-900 dark:prose-strong:text-white prose-ul:text-gray-700 dark:prose-ul:text-gray-200 prose-li:text-gray-700 dark:prose-li:text-gray-200">
                   <Streamdown>
-                    {translatedContent.replace(/^#\s+.*?Terms.*?\n+/i, '')}
+                    {stripFirstHeading(translatedContent)}
                   </Streamdown>
                 </div>
               ) : (
@@ -403,10 +646,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                     '';
 
                   // Remove the main title from the markdown content
-                  documentContent = documentContent.replace(
-                    /^#\s+.*?Terms.*?\n+/i,
-                    '',
-                  );
+                  documentContent = stripFirstHeading(documentContent);
 
                   return (
                     <div

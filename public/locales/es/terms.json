@@ -1,0 +1,35 @@
+{
+  "title": "Términos de Servicio",
+  "description": "Por favor, revise y acepte nuestros Términos de Servicio para continuar.",
+  "accept": "Aceptar",
+  "decline": "Rechazar",
+  "privacyPolicy": "Política de Privacidad",
+  "termsOfService": "Términos de Servicio",
+  "and": "y",
+  "byAccepting": "Al aceptar, usted acepta nuestros",
+  "content": {
+    "title": "Acuerdo de Términos de Servicio",
+    "introduction": "Bienvenido a nuestra aplicación. Al acceder o utilizar nuestro servicio, usted acepta estar sujeto a estos Términos de Servicio.",
+    "section1": {
+      "title": "1. Responsabilidades del Usuario",
+      "content": "Los usuarios son responsables de mantener la confidencialidad de la información de su cuenta y de todas las actividades que ocurran bajo su cuenta."
+    },
+    "section2": {
+      "title": "2. Uso Aceptable",
+      "content": "Usted se compromete a no utilizar el servicio para ningún propósito ilegal o no autorizado. No debe violar ninguna ley en su jurisdicción."
+    },
+    "section3": {
+      "title": "3. Propiedad Intelectual",
+      "content": "Todo el contenido incluido en este servicio, como texto, gráficos, logotipos y software, es propiedad de nuestra empresa o de sus proveedores de contenido y está protegido por las leyes de derechos de autor."
+    },
+    "section4": {
+      "title": "4. Limitación de Responsabilidad",
+      "content": "Nuestra empresa no será responsable de ningún daño indirecto, incidental, especial o consecuente que resulte del uso o la imposibilidad de usar el servicio."
+    },
+    "section5": {
+      "title": "5. Cambios en los Términos",
+      "content": "Nos reservamos el derecho de modificar estos términos en cualquier momento. Su uso continuado del servicio después de la publicación de cambios constituye su aceptación de dichos cambios."
+    },
+    "conclusion": "Gracias por utilizar nuestro servicio. Si tiene alguna pregunta sobre estos términos, por favor contáctenos."
+  }
+}

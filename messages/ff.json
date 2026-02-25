@@ -891,7 +891,9 @@
     "errorSessionRequired": "Tiiɗno naatnu ngam heɓde ngol hello.",
     "errorSessionExpired": "Yolnde maa gasii. Tiiɗno naatnu kadi ngam jokkude.",
     "errorFallback": "Horiima jokkondirde e gollal ñeɲtinol. Tiiɗno fuɗɗito walla jokkondiru e wallitorde so caɗeele ndee duumiima.",
-    "tryAgain": "Fuɗɗito"
+    "tryAgain": "Fuɗɗito",
+    "errorCookiesCleared": "Jokku ngal ɗoftine e jam ɓamɗe. Hay so taw titsine.",
+    "errorHeadersTooLarge": "Jokku ngal ɓuri laɓtuɗe. Hay so taw titsine."
   },
   "help": {
     "sharePoint": "SharePoint",

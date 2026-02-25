@@ -891,7 +891,9 @@
     "errorSessionRequired": "በጃኻ ነዚ ገጽ ንምርካብ እቶ።",
     "errorSessionExpired": "ናይ ዘመንካ ግዜ ወዲኡ። ንምቕጻል በጃኻ ደግም እቶ።",
     "errorFallback": "ናብ ናይ ምረጋገጽ ኣገልግሎት ምርኻብ ኣይተኻእለን። በጃኻ ደግም ፈትን ወይ ጸገም እንተ ቀጺሉ ደገፍ ርኸብ።",
-    "tryAgain": "ደግም ፈትን"
+    "tryAgain": "ደግም ፈትን",
+    "errorCookiesCleared": "ውዕል ዳታ ብክብደት እንዳተመሃላት ተወፍሶ ኣሎ። በጃኹም ደሓን መእተዊ ኣእቱ።",
+    "errorHeadersTooLarge": "ውዕል ዳታ ዝበጽሑ ነበረ። በጃኹም ደሓን መእተዊ ኣእቱ።"
   },
   "help": {
     "sharePoint": "SharePoint",

@@ -891,7 +891,9 @@
     "errorSessionRequired": "Tanpri konekte pou jwenn aksè nan paj sa a.",
     "errorSessionExpired": "Sesyon ou an ekspire. Tanpri konekte ankò pou kontinye.",
     "errorFallback": "Pa kapab konekte ak sèvis otantifikasyon. Tanpri eseye ankò oswa kontakte sipò si pwoblèm nan kontinye.",
-    "tryAgain": "Eseye Ankò"
+    "tryAgain": "Eseye Ankò",
+    "errorCookiesCleared": "Done sesyon an efase akòz limit depo. Tanpri konekte ankò.",
+    "errorHeadersTooLarge": "Done sesyon an te twò gwo. Tanpri konekte ankò."
   },
   "help": {
     "sharePoint": "SharePoint",
