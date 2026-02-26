@@ -8,6 +8,10 @@ import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnri
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
 import { StandardChatHandler } from '@/lib/services/chat/handlers/StandardChatHandler';
 import { ChatPipeline, buildChatContext } from '@/lib/services/chat/pipeline';
+import {
+  ActiveFileInjector,
+  ActiveFileProcessor,
+} from '@/lib/services/chat/processors';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
@@ -123,6 +127,9 @@ export async function POST(req: NextRequest): Promise<Response> {
           blobStorageClient,
         ),
         new ImageProcessor(),
+        // Active files (process cache + inject context)
+        new ActiveFileProcessor(),
+        new ActiveFileInjector(),
 
         // Feature enrichers
         new RAGEnricher(
