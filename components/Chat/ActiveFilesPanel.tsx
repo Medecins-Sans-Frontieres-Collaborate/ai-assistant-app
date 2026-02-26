@@ -1,23 +1,41 @@
 'use client';
 
 import { useMemo } from 'react';
-
-import { useConversations } from '@/client/hooks/conversation/useConversations';
+import { useShallow } from 'zustand/react/shallow';
 
 import { ActiveFile } from '@/types/chat';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 
+/**
+ * Panel displaying active files for the current conversation.
+ * Shows file status, token counts, and provides pin/remove controls.
+ */
 export function ActiveFilesPanel() {
-  const { selectedConversation } = useConversations();
-  const { deactivateFile, clearAllActiveFiles, setPinned } =
-    useConversationStore((s) => ({
-      deactivateFile: s.deactivateFile,
-      clearAllActiveFiles: s.clearAllActiveFiles,
-      setPinned: s.setPinned,
-    }));
+  // Use useShallow to prevent "getSnapshot should be cached" React 19 warning.
+  // This ensures stable object references when underlying values haven't changed.
+  const {
+    selectedConversation,
+    deactivateFile,
+    clearAllActiveFiles,
+    setPinned,
+  } = useConversationStore(
+    useShallow((state) => ({
+      selectedConversation:
+        state.conversations.find(
+          (c) => c.id === state.selectedConversationId,
+        ) || null,
+      deactivateFile: state.deactivateFile,
+      clearAllActiveFiles: state.clearAllActiveFiles,
+      setPinned: state.setPinned,
+    })),
+  );
 
-  const files: ActiveFile[] = selectedConversation?.activeFiles || [];
+  const files = useMemo<ActiveFile[]>(
+    () => selectedConversation?.activeFiles ?? [],
+    [selectedConversation?.activeFiles],
+  );
+
   const totalTokens = useMemo(
     () =>
       files.reduce(
