@@ -35,6 +35,17 @@ export interface StreamMetadata {
   transcript?: TranscriptMetadata;
   action?: string; // Current action being performed (e.g., "searching_web", "processing")
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
+  fileCacheUpdates?: Array<{
+    fileId: string;
+    processedContent: {
+      type: 'document' | 'transcript' | 'image';
+      content: string;
+      summary?: string;
+      tokenEstimate: number;
+      tokenEstimateEncoding?: string;
+      processedAt: string;
+    };
+  }>;
 }
 
 /**
@@ -48,6 +59,7 @@ export interface ParsedMetadata {
   transcript?: TranscriptMetadata;
   action?: string;
   pendingTranscriptions?: PendingTranscriptionInfo[];
+  fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -66,6 +78,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let transcript: TranscriptMetadata | undefined;
   let action: string | undefined;
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
+  let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -99,6 +112,13 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (parsedData.pendingTranscriptions) {
         pendingTranscriptions = parsedData.pendingTranscriptions;
       }
+      const anyData = parsedData as any;
+      if (anyData.fileCacheUpdates) {
+        // Keep as-is for client to dispatch into store
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        fileCacheUpdates =
+          anyData.fileCacheUpdates as StreamMetadata['fileCacheUpdates'];
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -116,6 +136,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     transcript,
     action,
     pendingTranscriptions,
+    fileCacheUpdates,
     extractionMethod,
   };
 }
@@ -143,6 +164,8 @@ export function appendMetadataToStream(
   if (metadata.action) cleanMetadata.action = metadata.action;
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
+  if (metadata.fileCacheUpdates)
+    cleanMetadata.fileCacheUpdates = metadata.fileCacheUpdates;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
