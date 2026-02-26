@@ -58,6 +58,8 @@ export interface ThinkingContent {
 }
 
 export interface Message {
+  /** Stable id for referencing messages (optional until migration runs) */
+  id?: string;
   role: Role;
   content:
     | string
@@ -193,6 +195,11 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  // Active file context (optional; initialized via migration)
+  activeFiles?: ActiveFile[];
+  activeFilesTokenBudget?: number;
+  activeFilesPriority?: 'recent' | 'pinned' | 'sizeAsc';
+  activeFilesMaxCount?: number;
 }
 
 export type FileFieldValue =
@@ -260,4 +267,34 @@ export interface ToolRouterRequest {
   messages: Message[];
   currentMessage: string;
   forceWebSearch?: boolean; // When true, always use web search (search mode enabled)
+}
+
+// Persistent File Context types
+export interface ActiveFile {
+  id: string; // Unique identifier (e.g., hash of URL + originalFilename)
+  url: string;
+  originalFilename: string;
+  addedAt: string; // ISO timestamp
+  sourceMessageId: string; // Stable message id
+
+  // Lifecycle & UX
+  status: 'idle' | 'processing' | 'ready' | 'error';
+  lastUsedAt?: string;
+  errorMessage?: string;
+  pinned?: boolean;
+
+  // Cached processed content (populated after first use)
+  processedContent?: {
+    type: 'document' | 'transcript' | 'image';
+    content: string; // Extracted text or transcript
+    summary?: string; // Optional summarized content for large docs
+    tokenEstimate: number;
+    tokenEstimateEncoding?: string;
+    processedAt: string; // ISO timestamp
+  };
+
+  // Metadata
+  mimeType?: string;
+  sizeBytes?: number;
+  sha256?: string; // Optional integrity/dedup signal
 }
