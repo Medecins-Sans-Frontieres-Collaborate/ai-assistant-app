@@ -178,6 +178,8 @@ export interface ChatBody {
   userContext?: string; // Additional user context for the AI
   displayNamePreference?: DisplayNamePreference; // For deriving name fallback
   customDisplayName?: string; // Custom display name from General Settings
+  // Active files to include in context (optional)
+  activeFiles?: ActiveFile[];
 }
 
 export interface Conversation {
