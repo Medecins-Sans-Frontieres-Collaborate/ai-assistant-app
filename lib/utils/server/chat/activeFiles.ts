@@ -48,12 +48,48 @@ export function buildActiveFileTextBlock(
  * Simple budget selection (placeholder). Returns files unchanged.
  * Can be extended to apply token budgets and policies.
  */
+export function isPinned(f: ActiveFile) {
+  return !!f.pinned;
+}
+
 export function selectFilesForBudget(
   files: ActiveFile[],
-  _budgetTokens?: number,
-  _policy?: 'recent' | 'pinned' | 'sizeAsc',
+  budgetTokens: number = 2000,
+  policy: 'recent' | 'pinned' | 'sizeAsc' = 'recent',
 ): ActiveFile[] {
-  return files;
+  // Estimation using processed tokenEstimate or fallback to rough heuristic
+  const estimate = (f: ActiveFile) =>
+    f.processedContent?.tokenEstimate ??
+    Math.max(200, Math.floor((f.sizeBytes ?? 50_000) / 4));
+
+  const partition = (arr: ActiveFile[], pred: (f: ActiveFile) => boolean) => {
+    const a: ActiveFile[] = [];
+    const b: ActiveFile[] = [];
+    for (const it of arr) (pred(it) ? a : b).push(it);
+    return [a, b] as const;
+  };
+
+  const [pinned, rest] = partition(files, isPinned);
+  const sorters = {
+    recent: (a: ActiveFile, b: ActiveFile) =>
+      (b.lastUsedAt ?? b.addedAt).localeCompare(a.lastUsedAt ?? a.addedAt),
+    sizeAsc: (a: ActiveFile, b: ActiveFile) => estimate(a) - estimate(b),
+  } as const;
+
+  const sorter = policy === 'sizeAsc' ? sorters.sizeAsc : sorters.recent;
+  pinned.sort(sorter);
+  rest.sort(sorter);
+
+  const selected: ActiveFile[] = [];
+  let used = 0;
+  for (const f of [...pinned, ...rest]) {
+    const est = estimate(f);
+    if (used + est <= budgetTokens) {
+      selected.push(f);
+      used += est;
+    }
+  }
+  return selected.length > 0 ? selected : files.slice(0, 1);
 }
 
 /**
