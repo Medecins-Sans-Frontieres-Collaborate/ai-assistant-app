@@ -1744,5 +1744,21 @@
     "uploadDocument": "Upload Document",
     "images": "Images",
     "addImage": "Add image"
+  },
+  "activeFiles": {
+    "title": "Active Files",
+    "tokenUsage": "Token usage",
+    "keepInContext": "Keep in context",
+    "addedToContext": "Added to context",
+    "removeFromContext": "Remove from context",
+    "clearAll": "Clear all",
+    "noActiveFiles": "No active files",
+    "processing": "Processing",
+    "ready": "Ready",
+    "error": "Error",
+    "retry": "Retry",
+    "pinned": "Pinned",
+    "pin": "Pin",
+    "tokens": "tokens"
   }
 }
