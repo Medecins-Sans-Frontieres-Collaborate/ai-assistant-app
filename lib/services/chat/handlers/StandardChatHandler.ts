@@ -304,6 +304,48 @@ export class StandardChatHandler extends BasePipelineStage {
             streamingSpeed: context.streamingSpeed,
           });
 
+          // If we have active file cache updates and streaming, append as metadata at end of stream
+          let finalResponse = response;
+          if (
+            context.stream &&
+            (context.activeFilesCacheUpdates?.length ?? 0) > 0 &&
+            response.body
+          ) {
+            const encoder = new TextEncoder();
+            const reader = response.body.getReader();
+            const stream = new ReadableStream({
+              start: async (controller) => {
+                try {
+                  while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    controller.enqueue(value);
+                  }
+
+                  // Append file cache update metadata
+                  const updates = (context.activeFilesCacheUpdates ?? []).map(
+                    (u) => ({
+                      fileId: u.fileId,
+                      processedContent: u.processedContent,
+                    }),
+                  );
+                  const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify({
+                    action: 'file_cache_update',
+                    fileCacheUpdates: updates,
+                  })}<<<METADATA_END>>>`;
+                  controller.enqueue(encoder.encode(metadata));
+                } catch (err) {
+                  controller.error(err);
+                  return;
+                }
+                controller.close();
+              },
+            });
+            finalResponse = new Response(stream, {
+              headers: STREAMING_RESPONSE_HEADERS,
+            });
+          }
+
           // Record metrics
           const duration = Date.now() - startTime;
           MetricsService.recordRequest(ragConfig ? 'rag' : 'chat', duration, {
@@ -337,7 +379,7 @@ export class StandardChatHandler extends BasePipelineStage {
 
           return {
             ...context,
-            response,
+            response: finalResponse,
           };
         } catch (error) {
           // Record error metrics
