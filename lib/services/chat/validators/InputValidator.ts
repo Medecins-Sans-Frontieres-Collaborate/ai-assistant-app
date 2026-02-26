@@ -143,6 +143,34 @@ const StreamingSpeedSchema = z.object({
 /**
  * Zod schema for the main chat request body.
  */
+// Minimal schema for ActiveFile to allow optional validation
+const ActiveFileProcessedContentSchema = z
+  .object({
+    type: z.enum(['document', 'transcript', 'image']),
+    content: z.string(),
+    summary: z.string().optional(),
+    tokenEstimate: z.number().int().nonnegative(),
+    tokenEstimateEncoding: z.string().optional(),
+    processedAt: z.string(),
+  })
+  .partial({ summary: true, tokenEstimateEncoding: true });
+
+const ActiveFileSchema = z.object({
+  id: z.string(),
+  url: urlOrDataUrl('Invalid file URL'),
+  originalFilename: z.string(),
+  addedAt: z.string(),
+  sourceMessageId: z.string(),
+  status: z.enum(['idle', 'processing', 'ready', 'error']),
+  lastUsedAt: z.string().optional(),
+  errorMessage: z.string().optional(),
+  pinned: z.boolean().optional(),
+  processedContent: ActiveFileProcessedContentSchema.optional(),
+  mimeType: z.string().optional(),
+  sizeBytes: z.number().int().nonnegative().optional(),
+  sha256: z.string().optional(),
+});
+
 const ChatBodySchema = z
   .object({
     model: OpenAIModelSchema,
@@ -184,6 +212,7 @@ const ChatBodySchema = z
       .string()
       .max(100, 'Custom display name too long (max 100 chars)')
       .optional(),
+    activeFiles: z.array(ActiveFileSchema).optional(),
   })
   .strict(); // Reject unknown properties
 
