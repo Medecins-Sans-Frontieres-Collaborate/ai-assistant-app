@@ -752,7 +752,65 @@
       "articles": "artikkelit",
       "searchPlaceholder": "Etsi usein kysyttyjä...",
       "noResults": "Hakusi ei tuottanut osumia",
-      "noResultsHint": "Kokeile toista hakusanaa"
+      "noResultsHint": "Kokeile toista hakusanaa",
+      "items": [
+        {
+          "question": "Mikä on MSF AI-avustaja?",
+          "answer": "MSF AI-avustaja on Lääkärit Ilman Rajoja (MSF) -henkilöstölle räätälöity sisäinen tekoäly-chat-työkalu. Tämä ratkaisu parantaa yksityisyyttä pitämällä keskustelutiedot MSF-järjestelmissä ja tarjoaa turvallisen vaihtoehdon ulkoisille palveluille. Se tukee useita tekoälymalleja (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) ja ominaisuuksia, kuten verkkohaku, äänen transkriptio käännöksineen ja mukautettavat kehotukset ja sävyt. AI-avustaja voi auttaa kysymyksiin vastaamisessa, sisällön luomisessa, tekstin kääntämisessä, ideoiden kehittämisessä ja muussa. Se on suunniteltu työn avustajaksi - tarkista aina sen tuotoksen laatu ja tarkkuus."
+        },
+        {
+          "question": "Mitä malleja on saatavilla?",
+          "answer": "MSF AI-avustaja tarjoaa pääsyn useisiin tekoälymalleihin:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (OpenAI-päättelymallit)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nVoit vaihtaa malleja milloin tahansa käyttämällä mallin valintavalikko-pudotusvalikkoa chatin yläosassa."
+        },
+        {
+          "question": "Mitä ovat Pikatoiminnot (Kehotukset ja sävyt)?",
+          "answer": "Pikatoimintojen avulla voit nopeasti käyttää kehotuksia ja sävyjä viesteissäsi:\n\n• Kehotukset: Uudelleenkäytettäviä malleja yleisiin tehtäviin (esim. 'Käännä ranskaksi', 'Tee yhteenveto tästä asiakirjasta'). Luo mukautettuja kehotuksia tai käytä sisäänrakennettua tekoälyavustajaa niiden luomiseen.\n\n• Sävyt: Säädä miten tekoäly vastaa (esim. Ammattimainen, Rento, Tekninen). Käytä sävyjä saadaksesi vastaukset vastaamaan tarpeitasi.\n\nKäytä Pikatoimintoja salamakuvakkeen (⚡) kautta chat-syötteessä tai paina / hakeaksesi."
+        },
+        {
+          "question": "Mikä on Hakutila?",
+          "answer": "Hakutila mahdollistaa verkkohaun, kun tekoäly tarvitsee ajankohtaista tietoa. Vaihtoehtoja on kaksi:\n\n• Yksityisyyteen keskittyvä tila (oletus): Lähettää vain hakukyselyt Azure AI Foundryyn, ei koko keskustelua. Yksityisempi mutta hitaampi.\n\n• Azure AI Foundry -tila (vain GPT-4.1): Tallentaa koko keskustelusi Azure AI Foundryyn nopeampien vastausten saamiseksi suoralla verkkohakuyhteydellä.\n\nLue lisää yksityisyyden eroista kohdasta Asetukset > Mallit > Hakureititys."
+        },
+        {
+          "question": "Kuinka käytän äänitranskriptiota?",
+          "answer": "Napsauta mikrofonikuvaketta chat-syötteessä aloittaaksesi tallennuksen. Tekoäly transkriptoi puheesi tekstiksi. Transkription jälkeen voit:\n- Kopioida tekstin\n- Ladata tiedostona\n- Kääntää yli 13 kielelle (arabia, bengali, englanti, ranska, portugali, venäjä, espanja, swahili, ukraina, urdu ja muut)\n\nTämä ominaisuus on loistava kokousmuistiinpanoihin, haastatteluihin tai nopeaan äänisyötteeseen."
+        },
+        {
+          "question": "Voinko käyttää MSF AI-avustajaa puhelimellani?",
+          "answer": "Kyllä! MSF AI-avustaja toimii progressiivisena verkkosovelluksena (PWA). Mobiilissa:\n1. Avaa ai.msf.org selaimessasi ja kirjaudu sisään\n2. Siirry kohtaan Asetukset > Mobiilisovellus yksityiskohtaisia ohjeita varten\n3. Napauta 'Lisää aloitusnäyttöön' (iOS Safari) tai 'Asenna' (Android Chrome)\n4. Sovellus toimii natiivisovelluksen tavoin offline-tuen ja nopeamman latauksen kanssa\n\nTärkeää: Asenna kirjautumisen jälkeen säilyttääksesi todennuksen. Voit myös asentaa sen työpöytäselaimiin parempaa käyttökokemusta varten."
+        },
+        {
+          "question": "Mihin keskustelutietoni tallennetaan?",
+          "answer": "Keskusteluhistoriasi tallennetaan paikallisesti selaimesi tallennustilaan, ei mihinkään palvelimeen. Tämä tarkoittaa:\n- Chattisi ovat vain laitteellasi\n- Ne eivät synkronoidu laitteiden tai selainten välillä\n- Selaimen tietojen tyhjentäminen poistaa keskustelusi\n\nJos käytät Azure AI Foundry -tilaa haussa, vain nämä keskustelut tallennetaan myös Azure AI Foundryyn ketjutunnuksella. Katso Asetukset > Mallit lisätietoja varten."
+        },
+        {
+          "question": "Mitä ovat mukautetut agentit?",
+          "answer": "Mukautetut agentit ovat edistyneitä tekoälykonfiguraatioita, jotka toimivat MSF AI Assistant Foundry -instanssissa erikoiskyvyillä. Ne voivat käyttää työkaluja, kuten verkkohakua ja koodin tulkintaa automaattisesti. Tämä on edistynyt ominaisuus, joka vaatii koordinointia AI-avustajan teknisen tiimin kanssa agenttitunnusten luomiseksi. Löydät ne kohdasta Asetukset > Mallit > Agentit-välilehti."
+        },
+        {
+          "question": "Pitäisikö minun luottaa tekoälyn vastauksiin 100 %?",
+          "answer": "Ei. Vaikka MSF AI-avustaja on tehokas työkalu, sen ei pitäisi korvata inhimillistä harkintaa ja asiantuntemusta. Aina:\n- Tarkista tosiasiallinen tieto\n- Tarkista puolueellisuus ja tarkkuus\n- Tarkista tuotokset ennen niiden käyttöä virallisessa työssä\n- Älä syötä henkilökohtaisia tietoja tai erittäin arkaluontoista tietoa\n\nTekoäly on avustaja, ei päättäjä."
+        },
+        {
+          "question": "Mitä tietoja en saisi laittaa AI-avustajaan?",
+          "answer": "Älä syötä:\n- Henkilökohtaisia tietoja (nimet, puhelinnumerot, sähköpostiosoitteet, ansioluettelot)\n- Erittäin arkaluontoisia toiminnallisia yksityiskohtia\n- Potilastietoja tai sairauskertomuksia\n- Mitään, mikä voisi tunnistaa yksilöitä tai vaarantaa turvallisuuden\n\nKatso täydelliset ohjeet Help Centerin tietosuojakäytännöstä."
+        },
+        {
+          "question": "Kuinka vien tai tyhjennän tietoni?",
+          "answer": "Kohdassa Asetukset > Tiedonhallinta voit:\n- Viedä kaikki keskustelut ja kehotukset JSON-muodossa\n- Tyhjentää kaikki keskustelut\n- Tuoda aiemmin vietyä tietoa\n- Tarkistaa tallennustilan käyttöä\n\nViety tieto voidaan tuoda myöhemmin tai siirtää toiseen selaimeen."
+        },
+        {
+          "question": "Minne minun pitäisi mennä kysymysten tai palautteen kanssa?",
+          "answer": "Ota yhteyttä tukeen:\n- USA:n käyttäjät: ai@newyork.msf.org\n- Muut käyttäjät: ai.team@amsterdam.msf.org\n\nVoit myös käyttää Help Centeriä milloin tahansa kohdasta Asetukset > Ohje ja tuki."
+        },
+        {
+          "question": "Mistä voin oppia lisää AI-avustajaprojektista?",
+          "answer": "Vieraile AI Accelerator -portaalissa Pamojassa projektidokumentaatiota, päivityksiä ja resursseja varten:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nTämä portaali sisältää tietoa projektin etenemissuunnitelmasta, koulutusmateriaalista ja tavoista osallistua."
+        },
+        {
+          "question": "Onko MSF AI-avustaja avoimen lähdekoodin?",
+          "answer": "Kyllä! MSF AI-avustaja on avoimen lähdekoodin ja saatavilla GitHubissa. Voit tarkastella koodipohjaa, osallistua parannuksiin tai oppia toteutuksesta:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nProjekti on rakennettu Next.js:llä, Reactilla ja integroituu useiden tekoälytarjoajien kanssa. Osallistumiset ja palaute ovat tervetulleita!"
+        }
+      ]
     },
     "privacy": {
       "title": "Yksityisyys ja tiedot",
@@ -766,7 +824,41 @@
       "localStorageOnly": "Vain paikallinen tallennus",
       "msfControlled": "MSF:n hallinnoima",
       "noPersonalData": "Ei henkilötietoja",
-      "noSensitiveOps": "Ei arkaluonteisia toimintoja"
+      "noSensitiveOps": "Ei arkaluonteisia toimintoja",
+      "items": [
+        {
+          "question": "Mikä on MSF AI Assistant ja miten se suojaa yksityisyyttä?",
+          "answer": "MSF AI Assistant on sisäinen tekoälychätbotti, joka on kehitetty MSF:n henkilöstölle. Se käyttää Microsoftin Azuren Open AI -suuria kielimalleja pitäen kaikki tiedot MSF:n sisällä, varmistaen yksityisyyden ja hallinnan. Ai.msf.org:n käyttäminen on turvallisempi ja suojatumpi ympäristö kuin muiden ulkoisten ilmaisten tekoälytyökalujen käyttö, jotka tarjoavat hyvin vähän yksityisyystakuita."
+        },
+        {
+          "question": "Missä tietoni tallennetaan ja käsitellään?",
+          "answer": "Kaikki keskustelutiedot MSF AI Assistantin kanssa tallennetaan paikallisesti omalle tietokoneellesi ja käsitellään MSF:n järjestelmissä käyttäen Microsoft Azuren infrastruktuuria. Kirjautumistietosi käsitellään MSF:n toimesta MSF-yksikkösi tietosuojakäytännön mukaisesti. Tiedot säilytetään MSF:n sisällä, varmistaen yksityisyyden ja hallinnan."
+        },
+        {
+          "question": "Mitä tietoja EI PIDÄ laittaa MSF AI Assistantiin?",
+          "answer": "ET laita ai.msf.org:iin tai lataa siihen mitään seuraavista tiedoista:\n- Henkilötiedot (nimet, puhelinnumerot, CV:t, todistukset; mikä tahansa, joka voi suoraan tai epäsuorasti tunnistaa yksilön -- tähän sisältyy tietojen yhdistelmä, joka yhdessä voi mahdollistaa yksilön tunnistamisen)\n- Erittäin arkaluonteiset tiedot (tiedot, joita voidaan tarkoituksella tai tahattomasti käyttää yksilöiden, yhteisöjen, MSF:n tai sen henkilöstön vahingoittamiseen -- tietojen arkaluonteisuuden määrittäminen edellyttää kontekstianalyysin sisällyttämistä, esim. arkaluonteisten projektien tai vaarassa olevien ryhmien sijainnit, turvallisuusinsidentit ja muut operatiiviset yksityiskohdat)"
+        },
+        {
+          "question": "Mitkä ovat MSF AI Assistantin vastuullisen käytön ohjeet?",
+          "answer": "Hyväksyt käyttäväsi ai.msf.org:ia vastuullisesti. Sinä:\n- Käytät sitä MSF-yksikköjesi sovellettavien ICT-, tekoäly- ja muiden käytäntöjen mukaisesti\n- Tarkistat aina tuotokset tarkkuuden, inklusiivisuuden ja ennakkoluulojen varalta\n- Tarkistat, että tuotokset eivät loukkaa kolmansien osapuolten immateriaalioikeuksia\n- Olet avoin tekoälyn käytöstäsi ja merkitset tuotokset tekoälyn tuottamiksi"
+        },
+        {
+          "question": "Mitkä ovat MSF AI Assistantin kielletyt käyttötarkoitukset?",
+          "answer": "ET käytä ai.msf.org:ia mihinkään seuraavista tarkoituksista:\n- Terveydenhuolto (terveydenhuollon tarjoamiseen tai terveysaiheisiin kysymyksiin vastaamiseen)\n- MSF:n potilaiden tai yhteisöjen tai minkään muun henkilön valvonta tai seuranta\n- Työhön liittyvät päätökset (työhön liittyvien päätösten avustamiseen tai korvaamiseen)\n- Automaattinen päätöksenteko (päätösten tekemiseen, jotka voisivat olla haitallisia yksilölle tai yhteisölle)\n- Mediasisällön luominen ulkoiseen viestintään yleistä kiinnostusta herättävistä asioista\n- Laittomat tai haitalliset toiminnot"
+        },
+        {
+          "question": "Kuinka tarkkoja MSF AI Assistantin tuotokset ovat?",
+          "answer": "Ai.msf.org käyttää kokeellista teknologiaa -- se ei takaa, että tuotokset ovat tarkkoja. Lisäksi teknologiaa ei ole koulutettu MSF:n potilaita ja yhteisöjä edustavalla datalla. Tekoälyn tuotokset voivat jatkaa ennakkoluuloja, syrjintää ja stereotypioita. Olet vastuussa tuotettujen tuotosten tarkistamisesta."
+        },
+        {
+          "question": "Keneen minun tulisi ottaa yhteyttä yksityisyyshuolien tai tapausten osalta?",
+          "answer": "Jos sinulla on huolia, haluat ilmoittaa tapauksen, ota yhteyttä: ai.team@amsterdam.msf.org. Tietyillä alueilla voit myös ottaa yhteyttä paikalliseen DPO:hon (Data Protection Officer) tai vastuulliseen ICT (Information and Communication Technology) -tiimiin."
+        },
+        {
+          "question": "Voidaanko käyttöehtoja muuttaa?",
+          "answer": "Näitä ehtoja voidaan muuttaa milloin tahansa MSF:n toimesta -- ilmoitamme sinulle, jos muutamme niitä -- jatkuva ai.msf.org:n käyttösi merkitsee muutosten hyväksymistä."
+        }
+      ]
     },
     "contact": {
       "title": "Yhteydenotto ja resurssit",
