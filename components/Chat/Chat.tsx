@@ -25,7 +25,6 @@ import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
 import { PromptModal } from '@/components/Prompts/PromptModal';
 
-import { ActiveFilesPanel } from './ActiveFilesPanel';
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
 import { ChatMessages } from './ChatMessages';
@@ -67,6 +66,12 @@ const DocumentArtifact = dynamic(
   () =>
     retryImport(() => import('@/components/DocumentEditor/DocumentArtifact')),
   { ssr: false, loading: ArtifactLoadingSpinner },
+);
+
+// Dynamic import to avoid HMR issues with this specific file
+const ActiveFilesPanel = dynamic(
+  () => import('./ActiveFilesPanel').then((mod) => mod.ActiveFilesPanel),
+  { ssr: false },
 );
 
 interface ChatProps {
@@ -227,14 +232,16 @@ export function Chat({
   const { clearConversation } = useClearConversation();
 
   // Version navigation callback for message versioning
+  // FIXED: Use getState() to avoid dependency on selectedConversation object
   const handleNavigateVersion = useCallback(
     (messageIndex: number, direction: 'prev' | 'next') => {
-      if (!selectedConversation) return;
+      const convId = useConversationStore.getState().selectedConversationId;
+      if (!convId) return;
       useConversationStore
         .getState()
-        .navigateVersion(selectedConversation.id, messageIndex, direction);
+        .navigateVersion(convId, messageIndex, direction);
     },
-    [selectedConversation],
+    [],
   );
 
   const {
