@@ -10,7 +10,7 @@ import {
   detectFormat,
 } from '@/lib/utils/shared/document/formatConverter';
 
-import { FileMessageContent, ImageMessageContent } from '@/types/chat';
+import { FileMessageContent, ImageMessageContent, Message } from '@/types/chat';
 
 import FileIcon from '@/components/Icons/file';
 import ImageIcon from '@/components/Icons/image';
@@ -129,6 +129,10 @@ const FileImagePreview: FC<{ image: ImageMessageContent }> = ({ image }) => {
 interface FileContentProps {
   files: FileMessageContent[];
   images: ImageMessageContent[];
+  /** Optional parent message containing this file content */
+  parentMessage?: Message;
+  /** Optional index of the parent message in the conversation */
+  parentMessageIndex?: number;
 }
 
 /**
@@ -189,7 +193,12 @@ const isDocumentFile = (extension: string): boolean => {
  *
  * Renders file attachments with download functionality and image previews.
  */
-export const FileContent: FC<FileContentProps> = ({ files, images }) => {
+export const FileContent: FC<FileContentProps> = ({
+  files,
+  images,
+  parentMessage: _parentMessage,
+  parentMessageIndex: _parentMessageIndex,
+}) => {
   const t = useTranslations();
   const { openArtifact, openDocument } = useArtifactStore();
   const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
