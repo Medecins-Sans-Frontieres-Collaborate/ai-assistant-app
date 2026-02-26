@@ -25,6 +25,7 @@ import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
 import { PromptModal } from '@/components/Prompts/PromptModal';
 
+import { ActiveFilesPanel } from './ActiveFilesPanel';
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
 import { ChatMessages } from './ChatMessages';
@@ -447,6 +448,9 @@ export function Chat({
             onAlwaysSwitch={() => acceptModelSwitch(true)}
           />
         )}
+
+        {/* Active Files Panel */}
+        <ActiveFilesPanel />
 
         {/* Chat Input - Bottom position (hidden in empty state) */}
         {hasMessages && (
