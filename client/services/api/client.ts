@@ -219,8 +219,33 @@ export class ApiClient {
 
   /**
    * Handles error responses.
+   *
+   * Special handling for 431 (Request Header Fields Too Large) errors:
+   * These typically indicate oversized cookies. We redirect to signin
+   * with an error code so the user can choose to clear their session data.
+   * We do NOT automatically clear cookies to avoid login loops.
    */
   private async handleErrorResponse(response: Response): Promise<never> {
+    // Handle 431 - Request Header Fields Too Large
+    // Redirect to signin with error code - user can choose to clear cookies
+    if (response.status === 431) {
+      console.error('[ApiClient] 431 error - redirecting to signin');
+
+      // Dynamic import to get error code constant
+      const { COOKIE_ERROR_CODES } =
+        await import('@/lib/utils/client/auth/cookieCleanup');
+
+      // Redirect to signin with error code - do NOT clear cookies automatically
+      window.location.href = `/signin?error=${COOKIE_ERROR_CODES.HEADERS_TOO_LARGE}`;
+
+      // Throw error to stop execution (redirect happens asynchronously)
+      throw new ApiError(
+        'Request headers too large - please clear session data',
+        431,
+        'Request Header Fields Too Large',
+      );
+    }
+
     let errorData: any;
 
     try {
