@@ -23,7 +23,7 @@ const EMPTY_FILES: ActiveFile[] = [];
  */
 export function ActiveFilesPanel() {
   const t = useTranslations('activeFiles');
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   // SAFE: Primitive selector - only re-renders when ID changes
   const selectedConversationId = useConversationStore(
