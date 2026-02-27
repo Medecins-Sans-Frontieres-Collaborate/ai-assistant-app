@@ -51,7 +51,7 @@ export class ActiveFileProcessor extends BasePipelineStage {
         // Skip if already processed
         if (file.processedContent && file.status === 'ready') return;
 
-        const [blobId, tempPath] = fileService.getTempFilePath(file.url);
+        const [_blobId, tempPath] = fileService.getTempFilePath(file.url);
 
         // Download file, preferring cached plain-text version
         const { usedCache } = await fileService.downloadFilePreferCached(
