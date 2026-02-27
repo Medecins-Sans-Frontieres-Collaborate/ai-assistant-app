@@ -19,6 +19,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { v4 as uuidv4 } from 'uuid';
 
 interface UseMessageSenderProps {
@@ -217,7 +218,7 @@ export function useMessageSender({
               addedAt: new Date().toISOString(),
               sourceMessageId: messageId,
               status: 'idle',
-              pinned: false,
+              pinned: useSettingsStore.getState().autoPinActiveFiles,
             };
             activateFile(conversationId, activeFile);
           }
