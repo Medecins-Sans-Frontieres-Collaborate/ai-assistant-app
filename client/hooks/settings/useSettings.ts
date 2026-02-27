@@ -41,5 +41,9 @@ export function useSettings() {
     setReasoningEffort: store.setReasoningEffort,
     setVerbosity: store.setVerbosity,
     resetSettings: store.resetSettings,
+
+    // Active Files Settings
+    autoPinActiveFiles: store.autoPinActiveFiles,
+    setAutoPinActiveFiles: store.setAutoPinActiveFiles,
   };
 }

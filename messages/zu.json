@@ -1114,6 +1114,10 @@
       "quickSettings": "Izilungiselelo Zezwi",
       "overrideForThisMessage": "Lungisa izilungiselelo zalo mlayezo",
       "speakWithSettings": "Khuluma"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Beka othomathikhi amafayela alayishiwe esicongweni",
+      "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ingxoxo",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Uhlobo olukhethekile lwe-GPT-5.2 olwenziwe kahle ukuxoxa nokwazisa imizwa. Lukhuthele ekuxhumaneni nokuzwa, ukubhala okudala, nasekuqhamukeni ngemibono. Lungele izingxoxo ezijwayelekile, ukusizana ngokweluleka, nemisebenzi edinga ukuqonda imizwa."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Layisha Idokhumenti",
     "images": "Izithombe",
     "addImage": "Engeza isithombe"
+  },
+  "activeFiles": {
+    "title": "Amafayela Asebenzayo",
+    "tokenUsage": "Ukusetshenziswa kwama-token",
+    "keepInContext": "Gcina kumongo",
+    "addedToContext": "Kufakwe kumongo",
+    "removeFromContext": "Susa kumongo",
+    "clearAll": "Sula konke",
+    "noActiveFiles": "Awekho amafayela asebenzayo",
+    "processing": "Kuyacubungulwa",
+    "ready": "Sekulungile",
+    "error": "Iphutha",
+    "retry": "Phinda uzame",
+    "pinned": "Kubekwe esicongweni",
+    "pin": "Beka esicongweni",
+    "tokens": "ama-token"
   }
 }

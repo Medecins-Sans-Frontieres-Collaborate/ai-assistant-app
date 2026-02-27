@@ -1,4 +1,10 @@
-import { IconCode, IconDownload, IconFileText } from '@tabler/icons-react';
+import {
+  IconBookmarkFilled,
+  IconBookmarkPlus,
+  IconCode,
+  IconDownload,
+  IconFileText,
+} from '@tabler/icons-react';
 import React, { FC, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -6,16 +12,14 @@ import { useTranslations } from 'next-intl';
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
 import {
-  autoConvertToHtml,
-  detectFormat,
-} from '@/lib/utils/shared/document/formatConverter';
-
-import { FileMessageContent, ImageMessageContent } from '@/types/chat';
-
-import FileIcon from '@/components/Icons/file';
-import ImageIcon from '@/components/Icons/image';
+  ActiveFile,
+  FileMessageContent,
+  ImageMessageContent,
+  Message,
+} from '@/types/chat';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useConversationStore } from '@/client/stores/conversationStore';
 
 /**
  * Component to display image files
@@ -129,6 +133,10 @@ const FileImagePreview: FC<{ image: ImageMessageContent }> = ({ image }) => {
 interface FileContentProps {
   files: FileMessageContent[];
   images: ImageMessageContent[];
+  /** Optional parent message containing this file content */
+  parentMessage?: Message;
+  /** Optional index of the parent message in the conversation */
+  parentMessageIndex?: number;
 }
 
 /**
@@ -189,10 +197,42 @@ const isDocumentFile = (extension: string): boolean => {
  *
  * Renders file attachments with download functionality and image previews.
  */
-export const FileContent: FC<FileContentProps> = ({ files, images }) => {
+export const FileContent: FC<FileContentProps> = ({
+  files,
+  images,
+  parentMessage,
+  parentMessageIndex: _parentMessageIndex,
+}) => {
   const t = useTranslations();
   const { openArtifact, openDocument } = useArtifactStore();
   const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
+  const [activatedFiles, setActivatedFiles] = useState<Set<string>>(new Set());
+
+  const selectedConversationId = useConversationStore(
+    (s) => s.selectedConversationId,
+  );
+  const activateFile = useConversationStore((s) => s.activateFile);
+
+  /**
+   * Handler to add a file to the active files context
+   */
+  const handleKeepInContext = (file: FileMessageContent) => {
+    if (!selectedConversationId || !parentMessage?.id) return;
+
+    const activeFile: ActiveFile = {
+      id: `${file.url}-${Date.now()}`,
+      url: file.url,
+      originalFilename:
+        file.originalFilename || file.url.split('/').pop() || 'file',
+      addedAt: new Date().toISOString(),
+      sourceMessageId: parentMessage.id,
+      status: 'idle',
+      pinned: false,
+    };
+
+    activateFile(selectedConversationId, activeFile);
+    setActivatedFiles((prev) => new Set(prev).add(file.url));
+  };
 
   const downloadFile = (event: React.MouseEvent, fileUrl: string) => {
     event.preventDefault();
@@ -513,6 +553,35 @@ export const FileContent: FC<FileContentProps> = ({ files, images }) => {
                 >
                   <IconDownload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                 </button>
+                {/* Keep in context button */}
+                {parentMessage && (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleKeepInContext(file);
+                    }}
+                    disabled={activatedFiles.has(file.url)}
+                    className={`p-1.5 rounded-md transition-colors w-10 h-10 md:w-8 md:h-8
+                      flex items-center justify-center
+                      ${
+                        activatedFiles.has(file.url)
+                          ? 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30'
+                      }`}
+                    title={
+                      activatedFiles.has(file.url)
+                        ? t('activeFiles.addedToContext')
+                        : t('activeFiles.keepInContext')
+                    }
+                  >
+                    {activatedFiles.has(file.url) ? (
+                      <IconBookmarkFilled size={18} />
+                    ) : (
+                      <IconBookmarkPlus size={18} />
+                    )}
+                  </button>
+                )}
               </div>
             </div>
             <div className="min-w-0 flex-1">

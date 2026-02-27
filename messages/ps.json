@@ -1114,6 +1114,10 @@
       "quickSettings": "د غږ تنظیمات",
       "overrideForThisMessage": "د دې پیغام لپاره ترتیبات تنظیم کړئ",
       "speakWithSettings": "غږ وکړئ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "خپل‌شخصه اپلوډ شوې فایلونه پن کړئ",
+      "autoPinUploadsDescription": "د فایلونو اپلوډ کېدو سره سم یې په اتومات ډول پن کړئ تر څو له لیست څخه ونه لیري شي"
     }
   },
   "emptyState": {
@@ -1746,5 +1750,21 @@
     "uploadDocument": "سند پورته کړئ",
     "images": "انځورونه",
     "addImage": "انځور اضافه کړئ"
+  },
+  "activeFiles": {
+    "title": "فعال فایلونه",
+    "tokenUsage": "توکن کارونه",
+    "keepInContext": "په متن کې وساتئ",
+    "addedToContext": "متن ته اضافه شو",
+    "removeFromContext": "له متن څخه لرې کړئ",
+    "clearAll": "ټول پاک کړئ",
+    "noActiveFiles": "هیڅ فعال فایل نشته",
+    "processing": "چلند روان دی",
+    "ready": "چمتو",
+    "error": "تېروتنه",
+    "retry": "بیا هڅه وکړئ",
+    "pinned": "پن شوی",
+    "pin": "پن کړئ",
+    "tokens": "توکنونه"
   }
 }

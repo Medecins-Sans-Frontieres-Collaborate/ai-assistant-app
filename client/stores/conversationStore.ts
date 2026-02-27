@@ -6,6 +6,7 @@ import {
 } from '@/lib/utils/shared/chat/messageVersioning';
 
 import {
+  ActiveFile,
   AssistantMessageVersion,
   Conversation,
   isAssistantMessageGroup,
@@ -79,6 +80,17 @@ interface ConversationStore {
     filename: string,
     jobId?: string,
   ) => void;
+
+  // Active file actions
+  activateFile: (conversationId: string, file: ActiveFile) => void;
+  deactivateFile: (conversationId: string, fileId: string) => void;
+  updateFileProcessedContent: (
+    conversationId: string,
+    fileId: string,
+    content: NonNullable<ActiveFile['processedContent']>,
+  ) => void;
+  clearAllActiveFiles: (conversationId: string) => void;
+  setPinned: (conversationId: string, fileId: string, pinned: boolean) => void;
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -292,10 +304,108 @@ export const useConversationStore = create<ConversationStore>()(
             return { ...c, messages, updatedAt: new Date().toISOString() };
           }),
         })),
+
+      // Active file actions
+      activateFile: (conversationId, file) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+
+            const existing = c.activeFiles ?? [];
+
+            // Deduplicate by id
+            const alreadyExists = existing.some((f) => f.id === file.id);
+            let next = alreadyExists ? existing : [...existing, file];
+
+            // If exceeding 5 files, remove oldest unpinned files
+            const MAX_FILES = 5;
+            while (next.length > MAX_FILES) {
+              // Find oldest unpinned file
+              const unpinned = next.filter((f) => !f.pinned);
+              if (unpinned.length === 0) break; // All pinned, can't remove
+
+              // Sort by addedAt ascending (oldest first)
+              unpinned.sort((a, b) => a.addedAt.localeCompare(b.addedAt));
+              const oldestUnpinned = unpinned[0];
+
+              // Remove it
+              next = next.filter((f) => f.id !== oldestUnpinned.id);
+            }
+
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      deactivateFile: (conversationId, fileId) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next = existing.filter((f) => f.id !== fileId);
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      updateFileProcessedContent: (conversationId, fileId, content) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next: ActiveFile[] = existing.map(
+              (f): ActiveFile =>
+                f.id === fileId
+                  ? ({
+                      ...f,
+                      status: 'ready',
+                      processedContent: content,
+                      lastUsedAt: new Date().toISOString(),
+                    } as ActiveFile)
+                  : (f as ActiveFile),
+            );
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      clearAllActiveFiles: (conversationId) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) =>
+            c.id === conversationId
+              ? { ...c, activeFiles: [], updatedAt: new Date().toISOString() }
+              : c,
+          ),
+        })),
+
+      setPinned: (conversationId, fileId, pinned) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next = existing.map((f) =>
+              f.id === fileId ? { ...f, pinned } : f,
+            );
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
     }),
     {
       name: 'conversation-storage',
-      version: 2, // Incremented for message versioning migration
+      version: 3, // Incremented for active files + message ids migration
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         conversations: state.conversations,
@@ -317,6 +427,29 @@ export const useConversationStore = create<ConversationStore>()(
               ? migrateLegacyMessages(conv.messages as never[])
               : conv.messages,
           }));
+          return { ...state, conversations: migratedConversations };
+        }
+        // Phase 1: Add message ids and initialize active files
+        if (version < 3) {
+          const { v4: uuidv4 } = require('uuid');
+          const migratedConversations = state.conversations.map((conv) => {
+            const messages = [...conv.messages];
+            // Assign ids only to legacy Message entries (not groups)
+            const withIds = messages.map((entry: any) => {
+              if (isAssistantMessageGroup(entry)) return entry;
+              if (typeof entry === 'object') {
+                return entry.id ? entry : { ...entry, id: uuidv4() };
+              }
+              return entry;
+            });
+
+            return {
+              ...conv,
+              messages: withIds,
+              activeFiles: conv.activeFiles ?? [],
+              activeFilesMaxCount: conv.activeFilesMaxCount ?? 10,
+            } as Conversation;
+          });
           return { ...state, conversations: migratedConversations };
         }
         return state;

@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Standardnivå för resonemang",
     "reasoningEffortDescription": "Styr djupet på resonemanget för resonemangsmodeller. Högre nivå ger mer grundlig analys.",
     "Default Verbosity": "Standardnivå för utförlighet",
-    "verbosityDescription": "Styr detaljnivån för svar från GPT-5-modeller."
+    "verbosityDescription": "Styr detaljnivån för svar från GPT-5-modeller.",
+    "activeFiles": {
+      "autoPinUploads": "Fäst uppladdade filer automatiskt",
+      "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort"
+    }
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Ladda upp dokument",
     "images": "Bilder",
     "addImage": "Lägg till bild"
+  },
+  "activeFiles": {
+    "title": "Aktiva filer",
+    "tokenUsage": "Tokenanvändning",
+    "keepInContext": "Behåll i kontext",
+    "addedToContext": "Lagt till i kontext",
+    "removeFromContext": "Ta bort från kontext",
+    "clearAll": "Rensa alla",
+    "noActiveFiles": "Inga aktiva filer",
+    "processing": "Bearbetar",
+    "ready": "Klar",
+    "error": "Fel",
+    "retry": "Försök igen",
+    "pinned": "Fäst",
+    "pin": "Fäst",
+    "tokens": "token"
   }
 }

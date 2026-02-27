@@ -928,7 +928,11 @@
     "Default Reasoning Effort": "Upaya Penalaran Default",
     "reasoningEffortDescription": "Mengatur tingkat kedalaman berpikir untuk model penalaran. Upaya yang lebih tinggi menghasilkan analisis yang lebih menyeluruh.",
     "Default Verbosity": "Verbosity Default",
-    "verbosityDescription": "Mengatur tingkat detail respons untuk model GPT-5."
+    "verbosityDescription": "Mengatur tingkat detail respons untuk model GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Pin otomatis file yang diunggah",
+      "autoPinUploadsDescription": "Secara otomatis pin file yang diunggah agar tidak dihapus dari daftar"
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Unggah Dokumen",
     "images": "Gambar",
     "addImage": "Tambah gambar"
+  },
+  "activeFiles": {
+    "title": "File Aktif",
+    "tokenUsage": "Penggunaan token",
+    "keepInContext": "Pertahankan dalam konteks",
+    "addedToContext": "Ditambahkan ke konteks",
+    "removeFromContext": "Hapus dari konteks",
+    "clearAll": "Hapus semua",
+    "noActiveFiles": "Tidak ada file aktif",
+    "processing": "Memproses",
+    "ready": "Siap",
+    "error": "Galat",
+    "retry": "Coba lagi",
+    "pinned": "Sudah dipin",
+    "pin": "Pin",
+    "tokens": "token"
   }
 }

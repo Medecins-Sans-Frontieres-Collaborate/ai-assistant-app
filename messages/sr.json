@@ -1114,6 +1114,10 @@
       "quickSettings": "Подешавања гласа",
       "overrideForThisMessage": "Прилагодите подешавања за ову поруку",
       "speakWithSettings": "Говори"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Automatski zakači otpremljene fajlove",
+      "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Дец 2025"
+      "knowledgeCutoff": "Дец 2025",
+      "description": "Specijalizovana varijanta GPT-5.2 optimizovana za konverzacijske interakcije i emocionalnu inteligenciju. Odlična u empatičnoj komunikaciji, kreativnom pisanju, razmeni ideja i prirodnim dijalozima. Najbolja za neformalni razgovor, savetodavne situacije i zadatke koji zahtevaju emotivnu svest."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Отпреми документ",
     "images": "Слике",
     "addImage": "Додај слику"
+  },
+  "activeFiles": {
+    "title": "Aktivni fajlovi",
+    "tokenUsage": "Upotreba tokena",
+    "keepInContext": "Zadrži u kontekstu",
+    "addedToContext": "Dodato u kontekst",
+    "removeFromContext": "Ukloni iz konteksta",
+    "clearAll": "Obriši sve",
+    "noActiveFiles": "Nema aktivnih fajlova",
+    "processing": "Obrada",
+    "ready": "Spremno",
+    "error": "Greška",
+    "retry": "Pokušaj ponovo",
+    "pinned": "Zakačen",
+    "pin": "Zakači",
+    "tokens": "tokeni"
   }
 }

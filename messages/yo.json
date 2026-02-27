@@ -1114,6 +1114,10 @@
       "quickSettings": "Àwọn Ètò Ohùn",
       "overrideForThisMessage": "Ṣàtúnṣe àwọn ètò fún ìfiránṣẹ́ yìí",
       "speakWithSettings": "Sọ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ",
+      "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ìfọ̀rọ̀wérọ̀",
-      "knowledgeCutoff": "Oṣù Kejìlá 2025"
+      "knowledgeCutoff": "Oṣù Kejìlá 2025",
+      "description": "Àṣàyàn pataki ti GPT-5.2 tó jẹ́ fún ìbánisọ̀rọ̀, ìmọ̀ inú àti ẹ̀dá Ìbánisọ̀rọ̀. Ó dáa fún pípàárọ̀ ẹ̀dá, ìkọ̀wé àtinúdá, àṣàrọ̀, àti àyẹ̀wò àjọṣe pẹ̀lú ìmọ̀ inú. Dáa jùlọ fún ìjíròrò asọtẹ́lẹ̀, ìmọ̀ràn, àti àwọn iṣẹ́ tó nílò ìmọ̀ ọkàn."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Gbe Ìwé Sókè",
     "images": "Àwọn Àwòrán",
     "addImage": "Fi àwòrán kún"
+  },
+  "activeFiles": {
+    "title": "Àwọn Faili Tó N Lọ",
+    "tokenUsage": "Lílò àmi",
+    "keepInContext": "Fi sí inú àkóónú",
+    "addedToContext": "Fi kun àkóónú",
+    "removeFromContext": "Yọ kúrò nínú àkóónú",
+    "clearAll": "Nu gbogbo rè",
+    "noActiveFiles": "Kò si faili tó n lọ",
+    "processing": "Ìṣètò",
+    "ready": "Ṣetán",
+    "error": "Àsìṣe",
+    "retry": "Tun gbìyànjú",
+    "pinned": "Fi sí àkójọ",
+    "pin": "Fi sí àkójọ",
+    "tokens": "àmi"
   }
 }

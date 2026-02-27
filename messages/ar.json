@@ -913,7 +913,11 @@
     "Default Reasoning Effort": "جهد الاستدلال الافتراضي",
     "reasoningEffortDescription": "يتحكم في عمق التفكير لنماذج الاستدلال. الجهد الأعلى ينتج تحليلاً أكثر شمولاً.",
     "Default Verbosity": "الإسهاب الافتراضي",
-    "verbosityDescription": "يتحكم في مستوى تفاصيل الاستجابة لنماذج GPT-5."
+    "verbosityDescription": "يتحكم في مستوى تفاصيل الاستجابة لنماذج GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "تثبيت الملفات المرفوعة تلقائيًا",
+      "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها"
+    }
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "رفع مستند",
     "images": "صور",
     "addImage": "إضافة صورة"
+  },
+  "activeFiles": {
+    "title": "الملفات النشطة",
+    "tokenUsage": "استخدام التوكن",
+    "keepInContext": "الإبقاء في السياق",
+    "addedToContext": "تمت الإضافة إلى السياق",
+    "removeFromContext": "إزالة من السياق",
+    "clearAll": "مسح الكل",
+    "noActiveFiles": "لا توجد ملفات نشطة",
+    "processing": "جارٍ المعالجة",
+    "ready": "جاهز",
+    "error": "خطأ",
+    "retry": "إعادة المحاولة",
+    "pinned": "مثبت",
+    "pin": "تثبيت",
+    "tokens": "توكنات"
   }
 }

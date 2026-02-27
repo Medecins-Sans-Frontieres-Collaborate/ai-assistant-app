@@ -1,45 +1,62 @@
+import { useShallow } from 'zustand/react/shallow';
+
 import { useChatStore } from '@/client/stores/chatStore';
 
 /**
- * Hook that manages active chat state (no persistence needed - ephemeral)
+ * Hook that manages active chat state (no persistence needed - ephemeral).
+ *
+ * ## Why useShallow?
+ *
+ * Without useShallow, selecting multiple values as an object creates a new reference
+ * on every store update, causing unnecessary re-renders even when values haven't changed.
+ * This is critical for chat state because:
+ *
+ * 1. **High-frequency updates**: During streaming, `streamingContent` updates rapidly
+ * 2. **Broad consumption**: Many components use this hook
+ * 3. **Subset usage**: Components typically only use a few values from the returned object
+ *
+ * useShallow performs shallow equality comparison, only triggering re-renders when
+ * actual values change. This follows the same pattern as useConversations.ts.
+ *
+ * @see https://zustand.docs.pmnd.rs/guides/prevent-rerenders-with-use-shallow
  */
 export function useChat() {
-  const store = useChatStore();
+  const state = useChatStore(
+    useShallow((s) => ({
+      currentMessage: s.currentMessage,
+      isStreaming: s.isStreaming,
+      streamingContent: s.streamingContent,
+      streamingConversationId: s.streamingConversationId,
+      citations: s.citations,
+      error: s.error,
+      stopRequested: s.stopRequested,
+      loadingMessage: s.loadingMessage,
+      isRetrying: s.isRetrying,
+      retryWithFallback: s.retryWithFallback,
+      originalModelId: s.originalModelId,
+      showModelSwitchPrompt: s.showModelSwitchPrompt,
+      failedConversation: s.failedConversation,
+    })),
+  );
 
-  return {
-    // State
-    currentMessage: store.currentMessage,
-    isStreaming: store.isStreaming,
-    streamingContent: store.streamingContent,
-    streamingConversationId: store.streamingConversationId,
-    citations: store.citations,
-    error: store.error,
-    stopRequested: store.stopRequested,
-    loadingMessage: store.loadingMessage,
+  const actions = useChatStore(
+    useShallow((s) => ({
+      setCurrentMessage: s.setCurrentMessage,
+      setIsStreaming: s.setIsStreaming,
+      setStreamingContent: s.setStreamingContent,
+      appendStreamingContent: s.appendStreamingContent,
+      setCitations: s.setCitations,
+      setError: s.setError,
+      clearError: s.clearError,
+      requestStop: s.requestStop,
+      resetStop: s.resetStop,
+      resetChat: s.resetChat,
+      setLoadingMessage: s.setLoadingMessage,
+      sendMessage: s.sendMessage,
+      dismissModelSwitchPrompt: s.dismissModelSwitchPrompt,
+      acceptModelSwitch: s.acceptModelSwitch,
+    })),
+  );
 
-    // Retry-related state
-    isRetrying: store.isRetrying,
-    retryWithFallback: store.retryWithFallback,
-    originalModelId: store.originalModelId,
-    showModelSwitchPrompt: store.showModelSwitchPrompt,
-    failedConversation: store.failedConversation,
-
-    // Actions
-    setCurrentMessage: store.setCurrentMessage,
-    setIsStreaming: store.setIsStreaming,
-    setStreamingContent: store.setStreamingContent,
-    appendStreamingContent: store.appendStreamingContent,
-    setCitations: store.setCitations,
-    setError: store.setError,
-    clearError: store.clearError,
-    requestStop: store.requestStop,
-    resetStop: store.resetStop,
-    resetChat: store.resetChat,
-    setLoadingMessage: store.setLoadingMessage,
-    sendMessage: store.sendMessage,
-
-    // Retry-related actions
-    dismissModelSwitchPrompt: store.dismissModelSwitchPrompt,
-    acceptModelSwitch: store.acceptModelSwitch,
-  };
+  return { ...state, ...actions };
 }

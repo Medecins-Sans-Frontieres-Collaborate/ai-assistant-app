@@ -958,7 +958,11 @@
     "Default Reasoning Effort": "Domyślny poziom rozumowania",
     "reasoningEffortDescription": "Określa głębokość analizy dla modeli rozumowania. Wyższy poziom zapewnia bardziej szczegółową analizę.",
     "Default Verbosity": "Domyślny poziom szczegółowości",
-    "verbosityDescription": "Określa poziom szczegółowości odpowiedzi dla modeli GPT-5."
+    "verbosityDescription": "Określa poziom szczegółowości odpowiedzi dla modeli GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Automatyczne przypinanie przesłanych plików",
+      "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu"
+    }
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Prześlij dokument",
     "images": "Obrazy",
     "addImage": "Dodaj obraz"
+  },
+  "activeFiles": {
+    "title": "Aktywne pliki",
+    "tokenUsage": "Zużycie tokenów",
+    "keepInContext": "Zachowaj w kontekście",
+    "addedToContext": "Dodano do kontekstu",
+    "removeFromContext": "Usuń z kontekstu",
+    "clearAll": "Wyczyść wszystko",
+    "noActiveFiles": "Brak aktywnych plików",
+    "processing": "Przetwarzanie",
+    "ready": "Gotowe",
+    "error": "Błąd",
+    "retry": "Ponów próbę",
+    "pinned": "Przypięte",
+    "pin": "Przypnij",
+    "tokens": "tokeny"
   }
 }

@@ -928,7 +928,11 @@
     "Default Reasoning Effort": "පෙරනිමි ඉලක්කිත තර්කනය",
     "reasoningEffortDescription": "තර්ක ආදර්ශ සඳහා සිතීමේ ගැඹුර පාලනය කරයි. වැඩි උත්සාහයක් විශේෂිත විශ්ලේෂණයක් ලබා දෙයි.",
     "Default Verbosity": "පෙරනිමි විස්තරාත්මකතාවය",
-    "verbosityDescription": "GPT-5 ආදර්ශ සඳහා පිළිතුරු විස්තර මට්ටම පාලනය කරයි."
+    "verbosityDescription": "GPT-5 ආදර්ශ සඳහා පිළිතුරු විස්තර මට්ටම පාලනය කරයි.",
+    "activeFiles": {
+      "autoPinUploads": "ඉදිරිප්‍රවේශ ගොනු ස්වයංක්‍රීයව පිහිටුවන්න",
+      "autoPinUploadsDescription": "ඉදිරිප්‍රවේශගත වන විට ගොනු ස්වයංක්‍රීයව පිහිටීම, ඒවා ඉවත් නොවන ලෙස"
+    }
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "ලේඛනය උඩුගත කරන්න",
     "images": "රූප",
     "addImage": "රූපය එක් කරන්න"
+  },
+  "activeFiles": {
+    "title": "සක්‍රීය ගොනු",
+    "tokenUsage": "ටෝකන භාවිතය",
+    "keepInContext": "ප්‍රසංගයේ තබා ගන්න",
+    "addedToContext": "ප්‍රසංගයට එකතු විය",
+    "removeFromContext": "ප්‍රසංගයෙන් ඉවත් කරන්න",
+    "clearAll": "සියල්ල ඉවත් කරන්න",
+    "noActiveFiles": "සක්‍රීය ගොනු නොමැත",
+    "processing": "සැකසෙමින් පවතියි",
+    "ready": "සූදානම්",
+    "error": "දෝෂයකි",
+    "retry": "නැවත උත්සාහ කරන්න",
+    "pinned": "පිහිටුවා ඇත",
+    "pin": "පිහිටුවන්න",
+    "tokens": "ටෝකන"
   }
 }
