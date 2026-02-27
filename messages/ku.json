@@ -893,7 +893,9 @@
     "errorFallback": "Nehat girêdan bi xizmeta nasnameyê re. Ji kerema xwe dîsa biceribîne an heke pirsgirêk bidomîne bi piştgiriyê re têkilî bike.",
     "tryAgain": "Dîsa Biceribîne",
     "errorCookiesCleared": "زانیاری دانیشتن سڕاوە بەهۆی سنوورداربوونی ئەنجامی پاشەکەوتکردنەوە. تکایە دووبارە بچنە ژوورەوە.",
-    "errorHeadersTooLarge": "زانیاری دانیشتن زۆر گەورە بوو. تکایە دووبارە بچنە ژوورەوە."
+    "errorHeadersTooLarge": "زانیاری دانیشتن زۆر گەورە بوو. تکایە دووبارە بچنە ژوورەوە.",
+    "clearSessionData": "سڕینەوەی زانیاری کۆتایی دانیشتن",
+    "clearingSession": "لە سڕینەوەدا..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Kanûn 2025"
+      "knowledgeCutoff": "Kanûn 2025",
+      "description": "جۆری تایبەتی GPT-5.2 کە بۆ گفتوگۆ و زانیاری هەستەکان باشتر کراوە. زۆر باشە لە پەیوەندیکردنی دڵسۆزانه، نوسینی خەیاڵی، بڕیاردان، و دیالۆگی سرووشتی. گونجاوە بۆ گفتوگۆی ئاسایی، ڕاوێژکاری، و ئەرکەکان کە هەست و ئاسایشی دڵدا ئەرک پێویستە."
     },
     "o3": {
       "name": "o3",

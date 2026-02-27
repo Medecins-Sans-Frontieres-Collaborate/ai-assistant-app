@@ -617,7 +617,9 @@
     "tryAgain": "重试",
     "microsoft": "Microsoft",
     "errorCookiesCleared": "由于存储限制，会话数据已被清除。请重新登录。",
-    "errorHeadersTooLarge": "会话数据过大。请重新登录。"
+    "errorHeadersTooLarge": "会话数据过大。请重新登录。",
+    "clearSessionData": "清除会话数据",
+    "clearingSession": "正在清除..."
   },
   "chat": {
     "downloadAudio": "下载音频",

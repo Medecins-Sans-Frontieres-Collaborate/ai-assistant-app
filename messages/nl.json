@@ -551,7 +551,10 @@
     "errorSessionExpired": "Uw sessie is verlopen. Log opnieuw in om door te gaan.",
     "errorFallback": "Kan geen verbinding maken met de authenticatieservice. Probeer het opnieuw of neem contact op met ondersteuning als het probleem aanhoudt.",
     "tryAgain": "Opnieuw proberen",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Uw sessiegegevens zijn te groot geworden. Klik op de knop hieronder om deze te wissen en opnieuw in te loggen.",
+    "clearSessionData": "Sessiegegevens wissen",
+    "clearingSession": "Bezig met wissen..."
   },
   "chat": {
     "discardChanges": "Wijzigingen verwerpen",

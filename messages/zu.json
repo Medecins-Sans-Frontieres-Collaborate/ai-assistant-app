@@ -893,7 +893,9 @@
     "errorFallback": "Ayikwazi ukuxhumana nesevisi yokuqinisekisa. Sicela uzame futhi noma uxhumane nosekelo uma inkinga iqhubeka.",
     "tryAgain": "Zama Futhi",
     "errorCookiesCleared": "Idatha yeseshini isuswe ngenxa yemikhawulo yokugcina. Sicela ungene futhi.",
-    "errorHeadersTooLarge": "Idatha yeseshini ibikhulu kakhulu. Sicela ungene futhi."
+    "errorHeadersTooLarge": "Idatha yeseshini ibikhulu kakhulu. Sicela ungene futhi.",
+    "clearSessionData": "Sula Idatha Yeseshini",
+    "clearingSession": "Kusulwa..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ingxoxo",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Ingqikithi ekhethekile ye-GPT-5.2 elungiselelwe izingxoxo nokuhlakanipha kwezomzwelo. Iphumelela ekuxhumeni ngomusa, ukubhala ngokudala, ukufaka imicabango, nengxoxo yemvelo. Ilungele izingxoxo ezijwayelekile, izimo zokwelulekwa, nemisebenzi edinga ukuqonda imizwa."
     },
     "o3": {
       "name": "o3",

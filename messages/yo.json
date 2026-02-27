@@ -893,7 +893,9 @@
     "errorFallback": "Kò le so mọ́ iṣẹ́ ìfàṣẹ́sí. Jọ̀wọ́ gbìyànjú lẹ́ẹ̀kansi tàbí kàn sí ìtìlẹ́yìn tí ìṣòro náà bá tẹ̀síwájú.",
     "tryAgain": "Gbìyànjú Lẹ́ẹ̀kansi",
     "errorCookiesCleared": "A ti nu ìpamọ́ àlejò nítorí ìfarapa ibi ipamọ́. Jọ̀wọ́ buwolu wọlé lẹ́ẹ̀kàn síi.",
-    "errorHeadersTooLarge": "Àkópọ̀ ìpamọ́ àlejò pọ̀ ju. Jọ̀wọ́ buwolu wọlé lẹ́ẹ̀kàn síi."
+    "errorHeadersTooLarge": "Àkópọ̀ ìpamọ́ àlejò pọ̀ ju. Jọ̀wọ́ buwolu wọlé lẹ́ẹ̀kàn síi.",
+    "clearSessionData": "Nu Ìlànà Ipò Kúrò",
+    "clearingSession": "N ń nu…"
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ìfọ̀rọ̀wérọ̀",
-      "knowledgeCutoff": "Oṣù Kejìlá 2025"
+      "knowledgeCutoff": "Oṣù Kejìlá 2025",
+      "description": "Ẹ̀ya pataki ti GPT-5.2 tí a ṣe fún ibanisọrọ ati ìmọ̀ràn-ara eni. Ó dára jùlọ nípa ibanisọrọ pẹ̀lú ìtẹ́ríba, kikọ́ ìmọ̀ràn, ìròyìn, àti àjọṣe adayeba. Ó yẹ fún ìjíròrò àìlera, ìsọ̀ràn, àti iṣẹ́ tí ó nílò ìmọ̀ràn imọ̀-ara ẹni."
     },
     "o3": {
       "name": "o3",

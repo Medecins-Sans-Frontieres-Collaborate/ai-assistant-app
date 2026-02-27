@@ -893,7 +893,9 @@
     "errorFallback": "A lingbi tî gä na service tî authentification pepe. Tëne ngâ wala hunda sâra töngana problème a dû.",
     "tryAgain": "Tëne ngâ",
     "errorCookiesCleared": "Données ti session ayeke eföto na bïrï sängö tî mo. Zënga köda laa ayeke këngö.",
-    "errorHeadersTooLarge": "Données ti session ayeke gbüngbï na bïrï sängö tî mo. Zënga köda laa ayeke këngö."
+    "errorHeadersTooLarge": "Données ti session ayeke gbüngbï na bïrï sängö tî mo. Zënga köda laa ayeke këngö.",
+    "clearSessionData": "Kété data ti session",
+    "clearingSession": "Bo kété..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Déc 2025"
+      "knowledgeCutoff": "Déc 2025",
+      "description": "Modèle spéciaux ti GPT-5.2, lo yeke ti dialogue na ti mo na mo, eke pimo téré na ti yângâ tî mûtu, na kodro ti nzönî tî gbangâ, kôdörö, na kodro ti dialogue tî nature. A yeke tî sala na-zonî wa, na maboko tî ngu nzoni ti yi na kodro tî mûtu."
     },
     "o3": {
       "name": "o3",

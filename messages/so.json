@@ -893,7 +893,9 @@
     "errorFallback": "Lama xidhi karo adeegga xaqiijinta. Fadlan dib u isku day ama la xidhiidh taageerada haddii dhibaatadu sii jirto.",
     "tryAgain": "Dib u Isku day",
     "errorCookiesCleared": "Xogta fadhi-ku-joogga waa la tirtiray xaddiga kaydka awgiis. Fadlan dib isu qor.",
-    "errorHeadersTooLarge": "Xogta fadhi-ku-joogga aad bay u weynaatay. Fadlan dib isu qor."
+    "errorHeadersTooLarge": "Xogta fadhi-ku-joogga aad bay u weynaatay. Fadlan dib isu qor.",
+    "clearSessionData": "Tirtir Xogta Kalfadhiga",
+    "clearingSession": "Waxaa la tirtirayaa..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Nooc khaas ah oo GPT-5.2 ah oo loo habeeyey wada sheekaysiga iyo fahamka dareenka. Aad buu ugu fiican yahay isgaarsiinta naxariista leh, qorista hal-abuurka leh, maskax-furista, iyo wada sheekaysiga dabiiciga ah. Waxaa ugu habboon sheekaysiyada caadiga ah, xaaladaha la-talinta, iyo hawlaha u baahan ka warqabka dareenka."
     },
     "o3": {
       "name": "o3",

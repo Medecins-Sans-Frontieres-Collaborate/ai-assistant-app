@@ -893,7 +893,9 @@
     "errorFallback": "Није могуће повезати се са сервисом за аутентификацију. Покушајте поново или контактирајте подршку ако проблем и даље постоји.",
     "tryAgain": "Покушајте поново",
     "errorCookiesCleared": "Podaci sesije su obrisani zbog ograničenja za skladištenje. Molimo prijavite se ponovo.",
-    "errorHeadersTooLarge": "Podaci sesije su preveliki. Molimo prijavite se ponovo."
+    "errorHeadersTooLarge": "Podaci sesije su preveliki. Molimo prijavite se ponovo.",
+    "clearSessionData": "Obriši podatke sesije",
+    "clearingSession": "Brisanje..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Дец 2025"
+      "knowledgeCutoff": "Дец 2025",
+      "description": "Specijalizovana varijanta modela GPT-5.2 optimizovana za konverzacijske interakcije i emocionalnu inteligenciju. Izuzetno uspešno komunicira empatično, piše kreativne tekstove, pomaže u brainstormingu i vodi prirodan dijalog. Najbolje za neformalne razgovore, savetodavne situacije i zadatke koji zahtevaju emocionalnu svest."
     },
     "o3": {
       "name": "o3",

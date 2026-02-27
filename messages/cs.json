@@ -586,7 +586,10 @@
     "errorSessionExpired": "Vaše relace vypršela. Pro pokračování se znovu přihlaste.",
     "errorFallback": "Nelze se připojit k ověřovací službě. Zkuste to znovu nebo kontaktujte podporu, pokud problém přetrvává.",
     "tryAgain": "Zkusit znovu",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Vaše data relace jsou příliš velká. Kliknutím na tlačítko níže je vymažete a znovu se přihlásíte.",
+    "clearSessionData": "Vymazat data relace",
+    "clearingSession": "Mazání..."
   },
   "chat": {
     "downloadAudio": "Stáhnout zvuk",

@@ -893,7 +893,9 @@
     "errorFallback": "Ntibishoboka guhuza ku bikorwa vyo kwemeza. Nyamuneka ongera ugerageze canke utuhumurize nimba iki kibazo gikomeje.",
     "tryAgain": "Ongera Ugerageze",
     "errorCookiesCleared": "Amakuru y’ikoraniro yarakuweho kubera aho kubika harangiye. Ndakwinginze winjire ukundi.",
-    "errorHeadersTooLarge": "Amakuru y’ikoraniro yari menshi cane. Ndakwinginze winjire ukundi."
+    "errorHeadersTooLarge": "Amakuru y’ikoraniro yari menshi cane. Ndakwinginze winjire ukundi.",
+    "clearSessionData": "Siba Amakuru y'Ikiganiro",
+    "clearingSession": "Biriko birasibwa..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Ubwoko bwihariye bwa GPT-5.2 bwatunganyirijwe ibiganiro no gutahura amarangamutima. Bushoboye kuvugana n'imbabazi, kwandika mu buryo buhanga, gutanga ivyiyumviro bishasha, no kuganira mu buryo busanzwe. Bubereye ibiganiro vyoroheje, guhanura, no mu bikorwa bisaba kwitaho amarangamutima."
     },
     "o3": {
       "name": "o3",
