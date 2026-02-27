@@ -231,14 +231,14 @@ export class ApiClient {
     if (response.status === 431) {
       console.error('[ApiClient] 431 error - redirecting to signin');
 
-      // Dynamic import to get error code constant
-      const { COOKIE_ERROR_CODES } =
-        await import('@/lib/utils/client/auth/cookieCleanup');
+      // Guard against SSR - only redirect if running in browser
+      if (typeof window !== 'undefined') {
+        const { COOKIE_ERROR_CODES } =
+          await import('@/lib/utils/client/auth/cookieCleanup');
+        window.location.href = `/signin?error=${COOKIE_ERROR_CODES.HEADERS_TOO_LARGE}`;
+      }
 
-      // Redirect to signin with error code - do NOT clear cookies automatically
-      window.location.href = `/signin?error=${COOKIE_ERROR_CODES.HEADERS_TOO_LARGE}`;
-
-      // Throw error to stop execution (redirect happens asynchronously)
+      // Throw error to stop execution (redirect happens asynchronously in browser)
       throw new ApiError(
         'Request headers too large - please clear session data',
         431,
