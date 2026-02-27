@@ -168,6 +168,7 @@ export const ChatInput = ({
   const submitType = useChatInputStore((state) => state.submitType);
   const setSubmitType = useChatInputStore((state) => state.setSubmitType);
   const handleFileUpload = useChatInputStore((state) => state.handleFileUpload);
+  const removeFile = useChatInputStore((state) => state.removeFile);
   const usedPromptId = useChatInputStore((state) => state.usedPromptId);
   const setUsedPromptId = useChatInputStore((state) => state.setUsedPromptId);
   const usedPromptVariables = useChatInputStore(
@@ -516,6 +517,7 @@ export const ChatInput = ({
               setFilePreviews={setFilePreviews}
               setSubmitType={setSubmitType}
               uploadProgress={uploadProgress}
+              removeFile={removeFile}
             />
           </div>
         )}
