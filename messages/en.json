@@ -1112,6 +1112,10 @@
       "quickSettings": "Voice Settings",
       "overrideForThisMessage": "Adjust settings for this message",
       "speakWithSettings": "Speak"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Auto-pin uploaded files",
+      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out"
     }
   },
   "emptyState": {
