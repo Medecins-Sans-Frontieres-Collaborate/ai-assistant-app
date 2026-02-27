@@ -137,6 +137,10 @@ interface SettingsStore {
   setReasoningEffort: (effort: ReasoningEffort | undefined) => void;
   setVerbosity: (verbosity: Verbosity | undefined) => void;
 
+  // Active Files Settings
+  autoPinActiveFiles: boolean;
+  setAutoPinActiveFiles: (enabled: boolean) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -181,6 +185,9 @@ export const useSettingsStore = create<SettingsStore>()(
       // Reasoning model settings (undefined = use model defaults)
       reasoningEffort: undefined,
       verbosity: undefined,
+
+      // Active files settings
+      autoPinActiveFiles: true, // Auto-pin uploaded files by default
 
       // Actions
       setTemperature: (temperature) => set({ temperature }),
@@ -378,6 +385,9 @@ export const useSettingsStore = create<SettingsStore>()(
       setReasoningEffort: (effort) => set({ reasoningEffort: effort }),
       setVerbosity: (verbosity) => set({ verbosity }),
 
+      // Active Files Actions
+      setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
+
       resetSettings: () =>
         set({
           temperature: DEFAULT_TEMPERATURE,
@@ -400,11 +410,12 @@ export const useSettingsStore = create<SettingsStore>()(
           ttsSettings: DEFAULT_TTS_SETTINGS,
           reasoningEffort: undefined,
           verbosity: undefined,
+          autoPinActiveFiles: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 13, // Increment this when schema changes to trigger migrations
+      version: 14, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -429,6 +440,7 @@ export const useSettingsStore = create<SettingsStore>()(
         ttsSettings: state.ttsSettings,
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
+        autoPinActiveFiles: state.autoPinActiveFiles,
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
@@ -506,6 +518,13 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 13) {
           if (state.consecutiveModelUsage === undefined) {
             state.consecutiveModelUsage = { modelId: null, count: 0 };
+          }
+        }
+
+        // Version 13 → 14: Add autoPinActiveFiles setting
+        if (version < 14) {
+          if (state.autoPinActiveFiles === undefined) {
+            state.autoPinActiveFiles = true;
           }
         }
 
