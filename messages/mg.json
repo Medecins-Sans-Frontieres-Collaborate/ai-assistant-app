@@ -893,7 +893,9 @@
     "errorFallback": "Tsy afaka mifandray amin'ny serivisy fanamarinana. Avereno azafady na mifandraisa amin'ny fanohanana raha mitohy ny olana.",
     "tryAgain": "Avereno",
     "errorCookiesCleared": "Voafafa ny angon-drakitra fivoriana noho ny fetra fitahirizana. Azafady, midira indray.",
-    "errorHeadersTooLarge": "Lehibe loatra ny angon-drakitra fivoriana. Azafady, midira indray."
+    "errorHeadersTooLarge": "Lehibe loatra ny angon-drakitra fivoriana. Azafady, midira indray.",
+    "clearSessionData": "Fafao ny Angon-drakitra Fotoam-pivoriana",
+    "clearingSession": "Fafàna..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Dikan-teny manokana avy amin'ny GPT-5.2 natao hanatsarana ny fifandraisana amin'ny resaka sy ny faharanitan-tsaina ara-pihetseham-po. Mivoatra amin'ny fifampiresahana am-pitsinjovana, fanoratana an-tsary, fitadiavana hevitra, ary resaka voajanahary. Tsara indrindra amin'ny resaka an-davanandro, toe-javatra manome torohevitra, sy asa mitaky fahatsapana fihetseham-po."
     },
     "o3": {
       "name": "o3",

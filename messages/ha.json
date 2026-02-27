@@ -893,7 +893,9 @@
     "errorFallback": "An kasa haɗawa da sabis na tantancewa. Da fatan a gwada sake ko tuntubi taimako idan matsalar ta ci gaba.",
     "errorCookiesCleared": "An share bayanan zama saboda iyakar ajiyar bayanai. Da fatan a sake shiga.",
     "errorHeadersTooLarge": "Bayanan zama sun yi yawa. Da fatan a sake shiga.",
-    "tryAgain": "Sake Gwada"
+    "tryAgain": "Sake Gwada",
+    "clearSessionData": "Share Bayanai na Zama",
+    "clearingSession": "Ana Sharewa..."
   },
   "help": {
     "sharePoint": "SharePoint",

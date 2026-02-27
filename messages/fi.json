@@ -561,7 +561,10 @@
     "errorSessionExpired": "Istuntosi on vanhentunut. Kirjaudu uudelleen jatkaaksesi.",
     "errorFallback": "Todennuspalveluun ei voitu muodostaa yhteyttä. Yritä uudelleen tai ota yhteyttä tukeen, jos ongelma jatkuu.",
     "tryAgain": "Yritä uudelleen",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Istuntosi tiedot ovat kasvaneet liian suuriksi. Napsauta alla olevaa painiketta tyhjentääksesi tiedot ja kirjautuaksesi uudelleen.",
+    "clearSessionData": "Tyhjennä istuntotiedot",
+    "clearingSession": "Tyhjennetään..."
   },
   "chat": {
     "downloadAudio": "Lataa ääni",

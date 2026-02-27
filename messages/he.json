@@ -561,7 +561,10 @@
     "errorSessionExpired": "ההפעלה שלך פגה. אנא התחבר שוב כדי להמשיך.",
     "errorFallback": "לא ניתן להתחבר לשירות האימות. אנא נסה שוב או צור קשר עם התמיכה אם הבעיה נמשכת.",
     "tryAgain": "נסה שוב",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "נתוני הסשן שלך גדלו מדי. לחץ על הכפתור למטה כדי לנקות אותם ולהתחבר מחדש.",
+    "clearSessionData": "נקה נתוני סשן",
+    "clearingSession": "מנקה..."
   },
   "chat": {
     "downloadAudio": "הורדת אודיו",

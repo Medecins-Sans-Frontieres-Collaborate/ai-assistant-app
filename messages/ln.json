@@ -893,7 +893,9 @@
     "errorFallback": "Ekokaki te kokutana na service ya kokota. Meleka lisusu to benga lisungi soki likambo ekoki te.",
     "errorCookiesCleared": "Donnee ya session elongwe mpo na limite ya stockage. Kota lisusu.",
     "errorHeadersTooLarge": "Donnee ya session ezalaki mingi. Kota lisusu.",
-    "tryAgain": "Meleka lisusu"
+    "tryAgain": "Meleka lisusu",
+    "clearSessionData": "Kolongola Donnée ya Session",
+    "clearingSession": "Kolongola..."
   },
   "help": {
     "sharePoint": "SharePoint",

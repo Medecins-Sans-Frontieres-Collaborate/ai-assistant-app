@@ -586,7 +586,10 @@
     "errorSessionExpired": "Oturumunuzun süresi doldu. Devam etmek için lütfen tekrar oturum açın.",
     "errorFallback": "Kimlik doğrulama hizmetine bağlanılamadı. Lütfen tekrar deneyin veya sorun devam ederse destek ekibiyle iletişime geçin.",
     "tryAgain": "Tekrar Dene",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Oturum verileriniz çok büyüdü. Aşağıdaki butona tıklayarak verileri temizleyin ve tekrar giriş yapın.",
+    "clearSessionData": "Oturum Verilerini Temizle",
+    "clearingSession": "Temizleniyor..."
   },
   "chat": {
     "downloadAudio": "Ses dosyasını indir",

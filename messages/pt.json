@@ -763,7 +763,10 @@
     "errorSessionRequired": "Faça login para acessar esta página.",
     "errorSessionExpired": "Sua sessão expirou. Faça login novamente para continuar.",
     "errorFallback": "Não foi possível conectar ao serviço de autenticação. Tente novamente ou entre em contato com o suporte se o problema persistir.",
-    "tryAgain": "Tentar novamente"
+    "tryAgain": "Tentar novamente",
+    "errorHeadersTooLarge": "Os dados da sua sessão ficaram muito grandes. Clique no botão abaixo para limpá-los e fazer login novamente.",
+    "clearSessionData": "Limpar Dados da Sessão",
+    "clearingSession": "Limpando..."
   },
   "help": {
     "sharePoint": "SharePoint",

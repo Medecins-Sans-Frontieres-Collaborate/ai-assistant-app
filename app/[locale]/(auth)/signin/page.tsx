@@ -1,6 +1,11 @@
 'use client';
 
-import { IconAlertCircle, IconHelp, IconMail } from '@tabler/icons-react';
+import {
+  IconAlertCircle,
+  IconHelp,
+  IconMail,
+  IconTrash,
+} from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
@@ -18,9 +23,13 @@ import microsoftLogo from '@/public/microsoft-logo.svg';
 export default function SignInPage() {
   const t = useTranslations();
   const [isLoading, setIsLoading] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
   const [showAccessInfo, setShowAccessInfo] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
+
+  // Check if this is a header size error that requires user action
+  const isHeaderError = searchParams.get('error') === 'HeadersTooLarge';
 
   const version = packageJson.version;
   const build = process.env.NEXT_PUBLIC_BUILD;
@@ -45,6 +54,8 @@ export default function SignInPage() {
         CredentialsSignin: t('auth.errorCredentialsSignin'),
         SessionRequired: t('auth.errorSessionRequired'),
         SessionExpired: t('auth.errorSessionExpired'),
+        // Cookie/header size errors
+        HeadersTooLarge: t('auth.errorHeadersTooLarge'),
       };
       setTimeout(() => {
         setError(errorMessages[urlError] || t('auth.errorFallback'));
@@ -74,6 +85,25 @@ export default function SignInPage() {
       console.error('Sign in error:', err);
       setError(t('auth.errorFallback'));
       setIsLoading(false);
+    }
+  };
+
+  /**
+   * Handles user-initiated session data clearing.
+   * Only called when user explicitly clicks the "Clear Session Data" button
+   * to avoid login loops from automatic clearing.
+   */
+  const handleClearSession = async () => {
+    setIsClearing(true);
+    try {
+      const { clearAuthCookies } =
+        await import('@/lib/utils/client/auth/cookieCleanup');
+      clearAuthCookies();
+      // Remove error param and reload to give user a fresh start
+      window.location.href = '/signin';
+    } catch (err) {
+      console.error('Failed to clear session:', err);
+      setIsClearing(false);
     }
   };
 
@@ -180,13 +210,26 @@ export default function SignInPage() {
                         {error}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 md:gap-3">
-                        <button
-                          onClick={handleSignIn}
-                          disabled={isLoading}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 hover:text-red-100 border border-red-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {t('auth.tryAgain')}
-                        </button>
+                        {isHeaderError ? (
+                          <button
+                            onClick={handleClearSession}
+                            disabled={isClearing}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 hover:text-red-100 border border-red-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <IconTrash className="h-3 w-3" />
+                            {isClearing
+                              ? t('auth.clearingSession')
+                              : t('auth.clearSessionData')}
+                          </button>
+                        ) : (
+                          <button
+                            onClick={handleSignIn}
+                            disabled={isLoading}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-200 hover:text-red-100 border border-red-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {t('auth.tryAgain')}
+                          </button>
+                        )}
                         {email && (
                           <a
                             href={`mailto:${email}`}

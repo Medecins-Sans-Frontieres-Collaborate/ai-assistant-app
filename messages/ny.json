@@ -893,7 +893,9 @@
     "errorFallback": "Sikunatheke kulumikizana ndi ntchito yotsimikizira. Chonde yesaninso kapena lumikizanani ndi chithandizo ngati vutoli likupitirira.",
     "tryAgain": "Yesaninso",
     "errorCookiesCleared": "Deta ya gawo la ntchito yachotsedwa chifukwa cha malire a posungira. Chonde lowaninso.",
-    "errorHeadersTooLarge": "Deta ya gawo la ntchito ndi yayikulu kwambiri. Chonde lowaninso."
+    "errorHeadersTooLarge": "Deta ya gawo la ntchito ndi yayikulu kwambiri. Chonde lowaninso.",
+    "clearSessionData": "Chotsani Zambiri za Gawo",
+    "clearingSession": "Kuchotsa..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Mtundu wapadera wa GPT-5.2 womwe wachita bwino pa zokambirana komanso kumva zinthu za ena. Umanyadira polankhula mwachifundo, kulemba mwaluso, kuganizira limodzi ndi kuyankhulana mwachilengedwe. Uli bwino pa zokambirana zongokambirana, upangiri, ndi ntchito zofuna kumva za anzanu."
     },
     "o3": {
       "name": "o3",

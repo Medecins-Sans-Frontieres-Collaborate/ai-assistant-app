@@ -763,7 +763,10 @@
     "errorSessionRequired": "Bitte melden Sie sich an, um auf diese Seite zuzugreifen.",
     "errorSessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an, um fortzufahren.",
     "errorFallback": "Verbindung zum Authentifizierungsdienst nicht möglich. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support, wenn das Problem weiterhin besteht.",
-    "tryAgain": "Erneut versuchen"
+    "tryAgain": "Erneut versuchen",
+    "errorHeadersTooLarge": "Ihre Sitzungsdaten sind zu groß geworden. Klicken Sie unten auf den Button, um sie zu löschen und sich erneut anzumelden.",
+    "clearSessionData": "Sitzungsdaten löschen",
+    "clearingSession": "Wird gelöscht..."
   },
   "help": {
     "sharePoint": "SharePoint",

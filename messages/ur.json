@@ -587,7 +587,9 @@
     "tryAgain": "دوبارہ کوشش کریں",
     "microsoft": "Microsoft",
     "errorCookiesCleared": "اسٹوریج کی حد کی وجہ سے سیشن ڈیٹا صاف کر دیا گیا ہے۔ براہ کرم دوبارہ سائن ان کریں۔",
-    "errorHeadersTooLarge": "سیشن ڈیٹا بہت زیادہ تھا۔ براہ کرم دوبارہ سائن ان کریں۔"
+    "errorHeadersTooLarge": "سیشن ڈیٹا بہت زیادہ تھا۔ براہ کرم دوبارہ سائن ان کریں۔",
+    "clearSessionData": "سیشن ڈیٹا صاف کریں",
+    "clearingSession": "صاف کیا جا رہا ہے..."
   },
   "chat": {
     "downloadAudio": "آڈیو ڈاؤن لوڈ کریں",

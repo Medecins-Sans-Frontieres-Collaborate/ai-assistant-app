@@ -583,7 +583,10 @@
     "errorSessionExpired": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
     "errorFallback": "Nie można połączyć się z usługą uwierzytelniania. Spróbuj ponownie lub skontaktuj się z pomocą techniczną, jeśli problem będzie się powtarzał.",
     "tryAgain": "Spróbuj ponownie",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Dane Twojej sesji są zbyt obszerne. Kliknij poniższy przycisk, aby je wyczyścić i zalogować się ponownie.",
+    "clearSessionData": "Wyczyść dane sesji",
+    "clearingSession": "Czyszczenie..."
   },
   "chat": {
     "downloadAudio": "Pobierz audio",

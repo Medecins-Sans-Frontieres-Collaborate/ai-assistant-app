@@ -893,7 +893,9 @@
     "errorFallback": "Horiima jokkondirde e gollal ñeɲtinol. Tiiɗno fuɗɗito walla jokkondiru e wallitorde so caɗeele ndee duumiima.",
     "tryAgain": "Fuɗɗito",
     "errorCookiesCleared": "Jokku ngal ɗoftine e jam ɓamɗe. Hay so taw titsine.",
-    "errorHeadersTooLarge": "Jokku ngal ɓuri laɓtuɗe. Hay so taw titsine."
+    "errorHeadersTooLarge": "Jokku ngal ɓuri laɓtuɗe. Hay so taw titsine.",
+    "clearSessionData": "Momtu Cariiɗe Zaman",
+    "clearingSession": "Naatnoy..."
   },
   "help": {
     "sharePoint": "SharePoint",
@@ -1267,7 +1269,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Wondude e mum faamde GPT-5.2 mo feewi ko e jawdi jawdi e moƴƴi ɓe. Moƴƴi tuggi jawdi goɗɗo, winndude binndi ummoraande, donee binndi e jawdi yaasi. Mo feewi cokkude e jawdi ñaam-ñaamtita, gandal cuɓiiɗi ton, e heftinirde ley kanndude yaasi ɓurnde yidde."
     },
     "o3": {
       "name": "o3",

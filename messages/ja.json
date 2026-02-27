@@ -586,7 +586,10 @@
     "errorSessionExpired": "セッションの有効期限が切れました。続けるには再度サインインしてください。",
     "errorFallback": "認証サービスに接続できません。もう一度お試しいただくか、問題が解決しない場合はサポートにお問い合わせください。",
     "tryAgain": "もう一度試す",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "セッションデータが大きくなりすぎました。下のボタンをクリックしてデータを消去し、再度サインインしてください。",
+    "clearSessionData": "セッションデータを消去",
+    "clearingSession": "消去中..."
   },
   "chat": {
     "downloadAudio": "音声をダウンロード",

@@ -587,7 +587,9 @@
     "tryAgain": "Thử lại",
     "microsoft": "Microsoft",
     "errorCookiesCleared": "Dữ liệu phiên đã bị xóa do giới hạn lưu trữ. Vui lòng đăng nhập lại.",
-    "errorHeadersTooLarge": "Dữ liệu phiên quá lớn. Vui lòng đăng nhập lại."
+    "errorHeadersTooLarge": "Dữ liệu phiên quá lớn. Vui lòng đăng nhập lại.",
+    "clearSessionData": "Xóa dữ liệu phiên làm việc",
+    "clearingSession": "Đang xóa..."
   },
   "chat": {
     "downloadAudio": "Tải xuống âm thanh",

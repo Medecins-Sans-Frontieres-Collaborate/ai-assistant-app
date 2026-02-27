@@ -1,7 +1,14 @@
 import { ApiClient } from '@/client/services/api/client';
 import { ApiError } from '@/client/services/api/errors';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Mock the cookie cleanup module
+vi.mock('@/lib/utils/client/auth/cookieCleanup', () => ({
+  COOKIE_ERROR_CODES: {
+    HEADERS_TOO_LARGE: 'HeadersTooLarge',
+  },
+}));
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -9,10 +16,34 @@ global.fetch = mockFetch;
 
 describe('ApiClient', () => {
   let client: ApiClient;
+  let originalWindow: typeof globalThis.window;
+  let mockLocationHref: string;
 
   beforeEach(() => {
     vi.clearAllMocks();
     client = new ApiClient();
+
+    // Store original window
+    originalWindow = global.window;
+
+    // Mock window.location for 431 redirect tests
+    mockLocationHref = '';
+    // @ts-expect-error - mocking window for tests
+    global.window = {
+      location: {
+        get href() {
+          return mockLocationHref;
+        },
+        set href(value: string) {
+          mockLocationHref = value;
+        },
+      },
+    };
+  });
+
+  afterEach(() => {
+    // Restore original window
+    global.window = originalWindow;
   });
 
   describe('constructor', () => {
@@ -286,6 +317,75 @@ describe('ApiClient', () => {
       await expect(
         client.postStream('/api/stream', { data: 'test' }),
       ).rejects.toThrow(ApiError);
+    });
+  });
+
+  describe('431 header too large handling', () => {
+    it('should redirect to signin with HeadersTooLarge error on 431 response', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 431,
+        statusText: 'Request Header Fields Too Large',
+        json: async () => ({ message: 'Headers too large' }),
+      });
+
+      await expect(client.get('/api/test')).rejects.toThrow(ApiError);
+
+      // Should redirect to signin with error param
+      expect(mockLocationHref).toBe('/signin?error=HeadersTooLarge');
+    });
+
+    it('should throw ApiError with correct status and message on 431', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 431,
+        statusText: 'Request Header Fields Too Large',
+        json: async () => ({ message: 'Headers too large' }),
+      });
+
+      try {
+        await client.get('/api/test');
+        expect.fail('Should have thrown an error');
+      } catch (error) {
+        expect(error).toBeInstanceOf(ApiError);
+        const apiError = error as ApiError;
+        expect(apiError.status).toBe(431);
+        expect(apiError.message).toBe(
+          'Request headers too large - please clear session data',
+        );
+        expect(apiError.statusText).toBe('Request Header Fields Too Large');
+        expect(apiError.isHeaderTooLargeError()).toBe(true);
+      }
+    });
+
+    it('should handle 431 in SSR environment (no window)', async () => {
+      // Remove window to simulate SSR
+      // @ts-expect-error - removing window for test
+      delete global.window;
+
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 431,
+        statusText: 'Request Header Fields Too Large',
+        json: async () => ({ message: 'Headers too large' }),
+      });
+
+      // Should still throw error but not crash
+      await expect(client.get('/api/test')).rejects.toThrow(ApiError);
+    });
+
+    it('should handle 431 in postStream method', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 431,
+        statusText: 'Request Header Fields Too Large',
+        json: async () => ({ message: 'Headers too large' }),
+      });
+
+      await expect(client.postStream('/api/stream', {})).rejects.toThrow(
+        ApiError,
+      );
+      expect(mockLocationHref).toBe('/signin?error=HeadersTooLarge');
     });
   });
 

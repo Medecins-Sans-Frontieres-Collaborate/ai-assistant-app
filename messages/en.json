@@ -891,7 +891,10 @@
     "errorSessionRequired": "Please sign in to access this page.",
     "errorSessionExpired": "Your session has expired. Please sign in again to continue.",
     "errorFallback": "Unable to connect to authentication service. Please try again or contact support if the issue persists.",
-    "tryAgain": "Try Again"
+    "errorHeadersTooLarge": "Your session data has grown too large. Click the button below to clear it and sign in fresh.",
+    "tryAgain": "Try Again",
+    "clearSessionData": "Clear Session Data",
+    "clearingSession": "Clearing..."
   },
   "help": {
     "sharePoint": "SharePoint",

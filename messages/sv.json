@@ -586,7 +586,10 @@
     "errorSessionExpired": "Din session har gått ut. Vänligen logga in igen för att fortsätta.",
     "errorFallback": "Kunde inte ansluta till autentiseringstjänsten. Vänligen försök igen eller kontakta support om problemet kvarstår.",
     "tryAgain": "Försök igen",
-    "microsoft": "Microsoft"
+    "microsoft": "Microsoft",
+    "errorHeadersTooLarge": "Dina sessionsdata har blivit för stora. Klicka på knappen nedan för att rensa och logga in på nytt.",
+    "clearSessionData": "Rensa sessionsdata",
+    "clearingSession": "Rensar..."
   },
   "chat": {
     "downloadAudio": "Ladda ner ljud",
