@@ -962,7 +962,11 @@
     "Default Reasoning Effort": "ڈیفالٹ منطقی کوشش",
     "reasoningEffortDescription": "منطقی ماڈلز کے لیے سوچ کی گہرائی کو کنٹرول کرتا ہے۔ زیادہ کوشش سے زیادہ جامع تجزیہ حاصل ہوتا ہے۔",
     "Default Verbosity": "ڈیفالٹ تفصیل",
-    "verbosityDescription": "GPT-5 ماڈلز کے لیے جواب کی تفصیل کا درجہ کنٹرول کرتا ہے۔"
+    "verbosityDescription": "GPT-5 ماڈلز کے لیے جواب کی تفصیل کا درجہ کنٹرول کرتا ہے۔",
+    "activeFiles": {
+      "autoPinUploads": "اپ لوڈ شدہ فائلز کو خودکار طور پر پن کریں",
+      "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں"
+    }
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1800,5 +1804,21 @@
     "uploadDocument": "دستاویز اپ لوڈ کریں",
     "images": "تصاویر",
     "addImage": "تصویر شامل کریں"
+  },
+  "activeFiles": {
+    "title": "فعال فائلز",
+    "tokenUsage": "ٹوکن کا استعمال",
+    "keepInContext": "سیاق و سباق میں رکھیں",
+    "addedToContext": "سیاق و سباق میں شامل کر دی گئی ہے",
+    "removeFromContext": "سیاق و سباق سے ہٹائیں",
+    "clearAll": "سب صاف کریں",
+    "noActiveFiles": "کوئی فعال فائل نہیں",
+    "processing": "پروسیسنگ ہو رہی ہے",
+    "ready": "تیار ہے",
+    "error": "خرابی",
+    "retry": "دوبارہ کوشش کریں",
+    "pinned": "پن کی گئی",
+    "pin": "پن کریں",
+    "tokens": "ٹوکنز"
   }
 }

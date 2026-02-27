@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "डिफ़ॉल्ट तर्क प्रयास",
     "reasoningEffortDescription": "तर्क मॉडल के लिए सोच की गहराई नियंत्रित करता है। अधिक प्रयास से अधिक गहराई से विश्लेषण होता है।",
     "Default Verbosity": "डिफ़ॉल्ट विवरण स्तर",
-    "verbosityDescription": "GPT-5 मॉडलों के लिए प्रतिक्रिया का विस्तार स्तर नियंत्रित करता है।"
+    "verbosityDescription": "GPT-5 मॉडलों के लिए प्रतिक्रिया का विस्तार स्तर नियंत्रित करता है।",
+    "activeFiles": {
+      "autoPinUploads": "अपलोड की गई फ़ाइलें स्वतः पिन करें",
+      "autoPinUploadsDescription": "फ़ाइलों को अपलोड करते समय उन्हें स्वतः पिन करें ताकि वे हटाई न जाएं"
+    }
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "दस्तावेज़ अपलोड करें",
     "images": "छवियां",
     "addImage": "छवि जोड़ें"
+  },
+  "activeFiles": {
+    "title": "सक्रिय फ़ाइलें",
+    "tokenUsage": "टोकन उपयोग",
+    "keepInContext": "संदर्भ में रखें",
+    "addedToContext": "संदर्भ में जोड़ा गया",
+    "removeFromContext": "संदर्भ से हटाएं",
+    "clearAll": "सभी साफ़ करें",
+    "noActiveFiles": "कोई सक्रिय फ़ाइलें नहीं",
+    "processing": "प्रसंस्करण हो रहा है",
+    "ready": "तैयार",
+    "error": "त्रुटि",
+    "retry": "पुनः प्रयास करें",
+    "pinned": "पिन की गई",
+    "pin": "पिन करें",
+    "tokens": "टोकन"
   }
 }

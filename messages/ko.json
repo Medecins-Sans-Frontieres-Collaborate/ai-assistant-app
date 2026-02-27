@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "기본 추론 수준",
     "reasoningEffortDescription": "추론 모델의 사고 깊이를 조절합니다. 높은 수준일수록 더 철저한 분석이 이루어집니다.",
     "Default Verbosity": "기본 상세 설명",
-    "verbosityDescription": "GPT-5 모델의 응답 상세 수준을 조절합니다."
+    "verbosityDescription": "GPT-5 모델의 응답 상세 수준을 조절합니다.",
+    "activeFiles": {
+      "autoPinUploads": "업로드된 파일 자동 고정",
+      "autoPinUploadsDescription": "업로드 시 파일을 자동으로 고정하여 교체되지 않도록 합니다"
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "문서 업로드",
     "images": "이미지",
     "addImage": "이미지 추가"
+  },
+  "activeFiles": {
+    "title": "활성 파일",
+    "tokenUsage": "토큰 사용량",
+    "keepInContext": "컨텍스트에 유지",
+    "addedToContext": "컨텍스트에 추가됨",
+    "removeFromContext": "컨텍스트에서 제거",
+    "clearAll": "모두 지우기",
+    "noActiveFiles": "활성 파일 없음",
+    "processing": "처리 중",
+    "ready": "준비 완료",
+    "error": "오류",
+    "retry": "다시 시도",
+    "pinned": "고정됨",
+    "pin": "고정",
+    "tokens": "토큰"
   }
 }

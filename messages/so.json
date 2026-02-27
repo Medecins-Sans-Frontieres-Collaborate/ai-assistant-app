@@ -1114,6 +1114,10 @@
       "quickSettings": "Dejinta Codka",
       "overrideForThisMessage": "Hagaaji dejinta fariintan",
       "speakWithSettings": "Hadal"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Si toos ah ugu xiro faylasha la soo geliyay",
+      "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Nooc khaas ah oo ka mid ah GPT-5.2 oo lagu habeeyay is-dhexgal wada sheekeysi iyo xasaasiyad bulsho. Aad ayuu ugu fiican yahay isgaarsiinta naxariista leh, qorista hal abuurka ah, fekrad-samaynta, iyo wada sheekeysi dabiici ah. Ku habboon wada sheekeysi aan rasmi ahayn, la-talinta, iyo hawlaha u baahan feejignaan shucuur."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Soo geli Dukumenti",
     "images": "Sawirro",
     "addImage": "Ku dar sawir"
+  },
+  "activeFiles": {
+    "title": "Faylasha Firfircoon",
+    "tokenUsage": "Isticmaalka token",
+    "keepInContext": "Ku hay macnaha guud",
+    "addedToContext": "Waxaa lagu daray macnaha guud",
+    "removeFromContext": "Ka saar macnaha guud",
+    "clearAll": "Jabi dhammaan",
+    "noActiveFiles": "Ma jiro fayl firfircoon",
+    "processing": "Waa la farsameynayaa",
+    "ready": "Waa diyaar",
+    "error": "Khalad",
+    "retry": "Dib isku day",
+    "pinned": "La xidhay",
+    "pin": "Xidho",
+    "tokens": "tokens"
   }
 }

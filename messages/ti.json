@@ -1114,6 +1114,10 @@
       "quickSettings": "ናይ ድምጺ ቅጥዒታት",
       "overrideForThisMessage": "ነዚ መልእኽቲ ቅጥዒታት ኣመሓይሽ",
       "speakWithSettings": "ተዛረብ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
+      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "ሕዳር 2025"
+      "knowledgeCutoff": "ሕዳር 2025",
+      "description": "ንመዓልቲ ንዝተስፋፋሕ መወዓውዒ ኣውያን፣ ስነ-ስብኣትን ጸገምን ዝቐልዑ ናይ GPT-5.2 ብምምሕዳር። ምሕረታዊ መዝሓን መወዓውዒ ንምዃኑ፣ ፈጣሪ ጽሑፍን ብሓቂ ብምምሕዳር፣ ምንባብ ናብ ሓድሽ ሓሳብን ዝምልከት እንዳበል። ምሕረታዊ ሕቶታት፣ ቀሊል መወዓውዒ ንዝጠወቀ ኣገዳስ ብምግባር ትሕቲኡ ይሓቅበኒ።"
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "ሰነድ ጸዓን",
     "images": "ስእልታት",
     "addImage": "ስእሊ ወስኽ"
+  },
+  "activeFiles": {
+    "title": "ንዕኡ ፋይልታት",
+    "tokenUsage": "መጠን ቶከን",
+    "keepInContext": "ኣብ ምስእ ተዋህዶ",
+    "addedToContext": "ኣብ ምስእ ተወስኹ",
+    "removeFromContext": "ካብ ምስእ ኣውጽኡ",
+    "clearAll": "ኩሎም ኣነጹ",
+    "noActiveFiles": "ንዕኡ ፋይል የለን",
+    "processing": "ብምስራሕ ኣሎ",
+    "ready": "ዝዘጋጀ",
+    "error": "ሓገዝ",
+    "retry": "ድገም",
+    "pinned": "ዝጣልፉ",
+    "pin": "ኣጣልፉ",
+    "tokens": "ቶከን"
   }
 }

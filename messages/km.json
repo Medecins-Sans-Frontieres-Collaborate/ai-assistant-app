@@ -1114,6 +1114,10 @@
       "quickSettings": "ការកំណត់សម្លេង",
       "overrideForThisMessage": "កែសម្រួលការកំណត់សម្រាប់សារ​នេះ",
       "speakWithSettings": "និយាយ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "ដាក់​ថ្មី​ស្វ័យប្រវត្តិ​ឯកសារ​ដែលបានផ្ទុកឡើង",
+      "autoPinUploadsDescription": "ខ្ចាប់ឯកសារដែលបានផ្ទុកឡើងស្វ័យប្រវត្តិ ដើម្បីទប់ស្កាត់ឲ្យកំពុងត្រូវដកចេញ"
     }
   },
   "emptyState": {
@@ -1746,5 +1750,21 @@
     "uploadDocument": "ផ្ទុកឯកសារឡើង",
     "images": "រូបភាព",
     "addImage": "បន្ថែមរូបភាព"
+  },
+  "activeFiles": {
+    "title": "ឯកសារដែលកំពុងប្រើ",
+    "tokenUsage": "ការប្រើប្រាស់ Token",
+    "keepInContext": "រក្សាទុកក្នុងបរិបទ",
+    "addedToContext": "បានបន្ថែមទៅកាន់បរិបទ",
+    "removeFromContext": "យកចេញពីបរិបទ",
+    "clearAll": "សម្អាត​ទាំងអស់",
+    "noActiveFiles": "មិនមានឯកសារដែលកំពុងប្រើ",
+    "processing": "កំពុងដំណើរការ",
+    "ready": "រួចរាល",
+    "error": "បញ្ហា",
+    "retry": "ព្យាយាម​ម្ដងទៀត",
+    "pinned": "បានខ្ចាប់",
+    "pin": "ខ្ចាប់",
+    "tokens": "Token"
   }
 }

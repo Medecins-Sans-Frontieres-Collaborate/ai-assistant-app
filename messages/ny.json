@@ -1114,6 +1114,10 @@
       "quickSettings": "Zikhazikiko za Mawu",
       "overrideForThisMessage": "Konzani zikhazikiko za uthenga uwu",
       "speakWithSettings": "Lankhulani"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
+      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Mtundu wapadera wa GPT-5.2 wokonzedwa pa zokambirana komanso kuzindikira maganizo. Ndi wabwino polankhula mwachifundo, kulemba zatsopano, kulingalira komanso zokambirana zachilengedwe. Ndioyenera pa zokambirana, uphungu, komanso ntchito zofuna kumvetsetsa maganizo."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Kwezani Chikalata",
     "images": "Zithunzi",
     "addImage": "Onjezani chithunzi"
+  },
+  "activeFiles": {
+    "title": "Mafayilo Ogwira Ntchito",
+    "tokenUsage": "Kugwiritsa ntchito ma token",
+    "keepInContext": "Sungani mu polankhulirana",
+    "addedToContext": "Zawonjezedwa mu polankhulirana",
+    "removeFromContext": "Chotsani mu polankhulirana",
+    "clearAll": "Chotsani zonse",
+    "noActiveFiles": "Palibe mafayilo ogwira ntchito",
+    "processing": "Ikukonzedwa",
+    "ready": "Yakonzeka",
+    "error": "Vuto",
+    "retry": "Yesaninso",
+    "pinned": "Yakwezedwa",
+    "pin": "Kwezera",
+    "tokens": "ma token"
   }
 }

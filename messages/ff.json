@@ -1114,6 +1114,10 @@
       "quickSettings": "Teelte Daande",
       "overrideForThisMessage": "Feewnu teelte ngam ngol neldol",
       "speakWithSettings": "Yewtu"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Paɗtol fayliiji ɓeydii jaasi",
+      "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Noone mum ngurndannde GPT-5.2 maaɓɓi e doggol huuwi e topirɗe. Wawii fow e falane yimɓe, wonde heɓɓinaa, nataaloo, e junngirde doggol. Mooftoraa e jawdi diine, laawol topirɗe e laawol gollal ko nda hoore yumma."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Nuldu Ɗerewol",
     "images": "Nate",
     "addImage": "Ɓeydu natal"
+  },
+  "activeFiles": {
+    "title": "Fayliiji ɓurndam",
+    "tokenUsage": "Naatirde token",
+    "keepInContext": "Dobo e konteks",
+    "addedToContext": "Jokkondiraa e konteks",
+    "removeFromContext": "Yaltu e konteks",
+    "clearAll": "Momtu fow",
+    "noActiveFiles": "Fayliiji ɓurndam alaa",
+    "processing": "Nyaamde",
+    "ready": "Paykun",
+    "error": "Juulnde",
+    "retry": "Fuɗɗito seɗa",
+    "pinned": "Paɗlinii",
+    "pin": "Paɗlo",
+    "tokens": "tokenji"
   }
 }

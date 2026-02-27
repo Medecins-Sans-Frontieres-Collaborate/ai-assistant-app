@@ -959,7 +959,11 @@
     "Default Reasoning Effort": "Efort de Raționament Implicit",
     "reasoningEffortDescription": "Controlează profunzimea raționamentului pentru modelele de analiză. Un efort mai mare produce o analiză mai detaliată.",
     "Default Verbosity": "Nivel de Detaliere Implicit",
-    "verbosityDescription": "Controlează nivelul de detaliere al răspunsurilor pentru modelele GPT-5."
+    "verbosityDescription": "Controlează nivelul de detaliere al răspunsurilor pentru modelele GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Fixează automat fișierele încărcate",
+      "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor"
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Încarcă document",
     "images": "Imagini",
     "addImage": "Adaugă imagine"
+  },
+  "activeFiles": {
+    "title": "Fișiere active",
+    "tokenUsage": "Utilizare tokenuri",
+    "keepInContext": "Păstrează în context",
+    "addedToContext": "Adăugat în context",
+    "removeFromContext": "Elimină din context",
+    "clearAll": "Șterge tot",
+    "noActiveFiles": "Nu există fișiere active",
+    "processing": "Se procesează",
+    "ready": "Gata",
+    "error": "Eroare",
+    "retry": "Reîncearcă",
+    "pinned": "Fixat",
+    "pin": "Fixează",
+    "tokens": "tokenuri"
   }
 }
