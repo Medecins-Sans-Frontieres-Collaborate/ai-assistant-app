@@ -28,11 +28,13 @@ vi.mock('@/components/Icons/file', () => ({
 describe('ChatFileUploadPreviews', () => {
   const mockSetFilePreviews = vi.fn();
   const mockSetSubmitType = vi.fn();
+  const mockRemoveFile = vi.fn();
 
   beforeEach(() => {
     vi.useFakeTimers();
     mockSetFilePreviews.mockClear();
     mockSetSubmitType.mockClear();
+    mockRemoveFile.mockClear();
   });
 
   afterEach(() => {
@@ -62,6 +64,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -77,6 +80,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -92,6 +96,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -110,6 +115,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={previews}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -128,6 +134,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -142,6 +149,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -158,6 +166,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -174,6 +183,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -189,6 +199,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -205,6 +216,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -220,6 +232,7 @@ describe('ChatFileUploadPreviews', () => {
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
           uploadProgress={{ [filePreview.name]: 50 }}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -233,6 +246,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -247,6 +261,7 @@ describe('ChatFileUploadPreviews', () => {
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
           uploadProgress={{ [filePreview.name]: 75 }}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -264,6 +279,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -278,6 +294,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -301,6 +318,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={previews}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -324,6 +342,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -348,6 +367,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -372,6 +392,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -391,6 +412,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -411,6 +433,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -428,6 +451,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -453,6 +477,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -468,6 +493,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -502,6 +528,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -516,6 +543,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -531,6 +559,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
@@ -546,6 +575,7 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
+          removeFile={mockRemoveFile}
         />,
       );
 
