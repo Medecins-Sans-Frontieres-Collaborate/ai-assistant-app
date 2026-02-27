@@ -311,19 +311,30 @@ export const useConversationStore = create<ConversationStore>()(
           conversations: state.conversations.map((c) => {
             if (c.id !== conversationId) return c;
 
-            const maxCount = c.activeFilesMaxCount ?? 10;
             const existing = c.activeFiles ?? [];
 
             // Deduplicate by id
             const alreadyExists = existing.some((f) => f.id === file.id);
-            const next = alreadyExists ? existing : [file, ...existing];
+            let next = alreadyExists ? existing : [...existing, file];
 
-            // Enforce max count
-            const trimmed = next.slice(0, maxCount);
+            // If exceeding 5 files, remove oldest unpinned files
+            const MAX_FILES = 5;
+            while (next.length > MAX_FILES) {
+              // Find oldest unpinned file
+              const unpinned = next.filter((f) => !f.pinned);
+              if (unpinned.length === 0) break; // All pinned, can't remove
+
+              // Sort by addedAt ascending (oldest first)
+              unpinned.sort((a, b) => a.addedAt.localeCompare(b.addedAt));
+              const oldestUnpinned = unpinned[0];
+
+              // Remove it
+              next = next.filter((f) => f.id !== oldestUnpinned.id);
+            }
 
             return {
               ...c,
-              activeFiles: trimmed,
+              activeFiles: next,
               updatedAt: new Date().toISOString(),
             };
           }),
