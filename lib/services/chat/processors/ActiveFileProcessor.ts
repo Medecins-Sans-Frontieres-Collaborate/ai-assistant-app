@@ -1,5 +1,7 @@
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 
+import { loadDocumentFromPath } from '@/lib/utils/server/file/fileHandling';
+import { getContentType } from '@/lib/utils/server/file/mimeTypes';
 import { countTokens } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import { ActiveFile } from '@/types/chat';
@@ -51,15 +53,28 @@ export class ActiveFileProcessor extends BasePipelineStage {
 
         const [blobId, tempPath] = fileService.getTempFilePath(file.url);
 
-        // Prefer cached text if available
-        await fileService.downloadFilePreferCached(
+        // Download file, preferring cached plain-text version
+        const { usedCache } = await fileService.downloadFilePreferCached(
           file.url,
           tempPath,
           context.user,
         );
-        const buffer = await fileService.readFile(tempPath);
-        // Read as UTF-8 with cap to avoid memory blowups
-        const text = buffer.toString('utf-8');
+
+        let text: string;
+        if (usedCache) {
+          // Cached version is already plain text
+          const buffer = await fileService.readFile(tempPath);
+          text = buffer.toString('utf-8');
+        } else {
+          // Use proper document extraction (handles PDF, DOCX, XLSX, PPTX, etc.)
+          const mimeType =
+            file.mimeType || getContentType(file.originalFilename);
+          text = await loadDocumentFromPath(
+            tempPath,
+            mimeType,
+            file.originalFilename,
+          );
+        }
 
         const tokenEstimate = await countTokens(text);
         const processedContent = {
