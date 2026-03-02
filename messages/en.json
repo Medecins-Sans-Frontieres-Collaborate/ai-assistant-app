@@ -1744,5 +1744,22 @@
     "uploadDocument": "Upload Document",
     "images": "Images",
     "addImage": "Add image"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "pressEscapeToClose": "Press Escape to close",
+    "categoryNavigation": "Navigation",
+    "categoryConversation": "Conversation",
+    "categoryInput": "Input",
+    "categoryApp": "Application",
+    "focusChatInput": "Focus chat input",
+    "newConversation": "New conversation",
+    "stopGeneration": "Stop generation",
+    "toggleSidebar": "Toggle sidebar",
+    "openSettings": "Open settings",
+    "openModelSelector": "Change model",
+    "scrollToBottom": "Scroll to bottom",
+    "showHelp": "Show keyboard shortcuts",
+    "attachFile": "Attach file"
   }
 }
