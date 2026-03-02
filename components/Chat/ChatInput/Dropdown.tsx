@@ -158,6 +158,21 @@ const Dropdown: React.FC<DropdownProps> = ({
     fileInputRef.current?.click();
   }, [closeDropdown]);
 
+  // Listen for keyboard shortcut to attach file (Ctrl+Shift+U)
+  useEffect(() => {
+    const handleKeyboardAttach = () => {
+      fileInputRef.current?.click();
+    };
+
+    document.addEventListener('keyboard-attach-file', handleKeyboardAttach);
+    return () => {
+      document.removeEventListener(
+        'keyboard-attach-file',
+        handleKeyboardAttach,
+      );
+    };
+  }, []);
+
   // Handler for transcribe audio/video file selection
   const handleTranscribeClick = useCallback(() => {
     closeDropdown();

@@ -268,6 +268,25 @@ export function Sidebar() {
     selectConversation(newConversation.id);
   };
 
+  // Listen for keyboard shortcut event to create new conversation
+  useEffect(() => {
+    const handler = () => handleNewConversation();
+    document.addEventListener('keyboard-new-conversation', handler);
+    return () => {
+      document.removeEventListener('keyboard-new-conversation', handler);
+    };
+    // handleNewConversation depends on many values, but we want to always use the latest version
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    conversations,
+    selectedConversation,
+    models,
+    defaultModelId,
+    systemPrompt,
+    temperature,
+    defaultSearchMode,
+  ]);
+
   const handleSelectConversation = (conversationId: string) => {
     // Skip if already selected
     if (conversationId === selectedConversation?.id) return;
