@@ -9,7 +9,6 @@
  */
 import {
   KeyboardShortcut,
-  ModifierKey,
   ShortcutAction,
   ShortcutContext,
   ShortcutContextState,
