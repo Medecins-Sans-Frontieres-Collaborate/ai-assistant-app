@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Déc 2025"
+      "knowledgeCutoff": "Déc 2025",
+      "description": "Ködörö ti GPT-5.2 tîgu sô tî loso-mbeni, yeke ti sâra kêtê tî gbâ-firifiri na sô tî môlengê ni nzönî. A sô tî yôkê na kêtê, tëngbï, sâra maboko tî foro, na sô tî mingi nginza, ni bûku na maboko tî nzönî wa. A ndö a môlengê na mo, ngangu-lingbi na maboko tî si a lônzi, na siriri sô tî nga yângâ-nginza."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Upload Document",
     "images": "Images",
     "addImage": "Add image"
+  },
+  "shortcuts": {
+    "title": "Káfù tî kobanga-lêko",
+    "pressEscapeToClose": "Bêta Escape pou wa-matâ",
+    "categoryNavigation": "Nao",
+    "categoryConversation": "Nzönî",
+    "categoryInput": "Kombere",
+    "categoryApp": "Applikasïon",
+    "focusChatInput": "Gbe kombere tî nzönî",
+    "newConversation": "Nzönî mbï",
+    "stopGeneration": "Kûete tî swè-sôngo",
+    "toggleSidebar": "Yêlî sidebar",
+    "openSettings": "Kötï parametër",
+    "openModelSelector": "Läkü modèlï",
+    "scrollToBottom": "Tîrî na nganza na ndô",
+    "showHelp": "Zëgë káfù tî kobanga-lêko",
+    "attachFile": "Köta dosié"
   }
 }

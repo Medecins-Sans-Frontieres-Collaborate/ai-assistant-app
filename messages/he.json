@@ -1770,5 +1770,22 @@
     "uploadDocument": "העלה מסמך",
     "images": "תמונות",
     "addImage": "הוסף תמונה"
+  },
+  "shortcuts": {
+    "title": "קיצורי מקלדת",
+    "pressEscapeToClose": "לחץ Escape כדי לסגור",
+    "categoryNavigation": "ניווט",
+    "categoryConversation": "שיחה",
+    "categoryInput": "קלט",
+    "categoryApp": "אפליקציה",
+    "focusChatInput": "התמקד בשדה הצ'אט",
+    "newConversation": "שיחה חדשה",
+    "stopGeneration": "הפסק יצירה",
+    "toggleSidebar": "הצג/הסתר סרגל צדדי",
+    "openSettings": "פתח הגדרות",
+    "openModelSelector": "שנה מודל",
+    "scrollToBottom": "גלול לתחתית",
+    "showHelp": "הצג קיצורי מקלדת",
+    "attachFile": "צרף קובץ"
   }
 }

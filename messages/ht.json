@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Telechaje Dokiman",
     "images": "Imaj",
     "addImage": "Ajoute imaj"
+  },
+  "shortcuts": {
+    "title": "Koutchemen Klavye",
+    "pressEscapeToClose": "Peze Escape pou fèmen",
+    "categoryNavigation": "Navigasyon",
+    "categoryConversation": "Konvèsasyon",
+    "categoryInput": "Antre",
+    "categoryApp": "Aplikasyon",
+    "focusChatInput": "Fokus sou bwat chita pale",
+    "newConversation": "Nouvo konvèsasyon",
+    "stopGeneration": "Sispann jenerasyon",
+    "toggleSidebar": "Aktive/dezaktive ba lateral la",
+    "openSettings": "Louvri paramèt yo",
+    "openModelSelector": "Chanje modèl",
+    "scrollToBottom": "Desann jiska anba",
+    "showHelp": "Montre koutchemen klavye yo",
+    "attachFile": "Ajoute fichye"
   }
 }

@@ -1770,5 +1770,22 @@
     "uploadDocument": "Încarcă document",
     "images": "Imagini",
     "addImage": "Adaugă imagine"
+  },
+  "shortcuts": {
+    "title": "Scurtături de la tastatură",
+    "pressEscapeToClose": "Apăsați Escape pentru a închide",
+    "categoryNavigation": "Navigare",
+    "categoryConversation": "Conversație",
+    "categoryInput": "Introducere",
+    "categoryApp": "Aplicație",
+    "focusChatInput": "Focalizare câmp chat",
+    "newConversation": "Conversație nouă",
+    "stopGeneration": "Oprire generare",
+    "toggleSidebar": "Comutare bara laterală",
+    "openSettings": "Deschide setările",
+    "openModelSelector": "Schimbă modelul",
+    "scrollToBottom": "Derulează în jos",
+    "showHelp": "Afișează scurtăturile de la tastatură",
+    "attachFile": "Atașează fișier"
   }
 }

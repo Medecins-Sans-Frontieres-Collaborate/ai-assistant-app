@@ -1770,5 +1770,22 @@
     "uploadDocument": "อัปโหลดเอกสาร",
     "images": "รูปภาพ",
     "addImage": "เพิ่มรูปภาพ"
+  },
+  "shortcuts": {
+    "title": "คีย์ลัดบนแป้นพิมพ์",
+    "pressEscapeToClose": "กด Escape เพื่อปิด",
+    "categoryNavigation": "การนำทาง",
+    "categoryConversation": "บทสนทนา",
+    "categoryInput": "การป้อนข้อมูล",
+    "categoryApp": "แอปพลิเคชัน",
+    "focusChatInput": "โฟกัสที่ช่องแชท",
+    "newConversation": "เริ่มบทสนทนาใหม่",
+    "stopGeneration": "หยุดการสร้างข้อความ",
+    "toggleSidebar": "เปิด/ปิดแถบด้านข้าง",
+    "openSettings": "เปิดการตั้งค่า",
+    "openModelSelector": "เปลี่ยนโมเดล",
+    "scrollToBottom": "เลื่อนไปด้านล่างสุด",
+    "showHelp": "แสดงคีย์ลัดบนแป้นพิมพ์",
+    "attachFile": "แนบไฟล์"
   }
 }

@@ -1770,5 +1770,22 @@
     "uploadDocument": "Lataa asiakirja",
     "images": "Kuvat",
     "addImage": "Lisää kuva"
+  },
+  "shortcuts": {
+    "title": "Pikanäppäimet",
+    "pressEscapeToClose": "Sulje painamalla Escape",
+    "categoryNavigation": "Navigointi",
+    "categoryConversation": "Keskustelu",
+    "categoryInput": "Syöte",
+    "categoryApp": "Sovellus",
+    "focusChatInput": "Kohdista keskustelun syötekenttään",
+    "newConversation": "Aloita uusi keskustelu",
+    "stopGeneration": "Pysäytä generointi",
+    "toggleSidebar": "Näytä/piilota sivupaneeli",
+    "openSettings": "Avaa asetukset",
+    "openModelSelector": "Vaihda mallia",
+    "scrollToBottom": "Vieritä alas",
+    "showHelp": "Näytä pikanäppäimet",
+    "attachFile": "Liitä tiedosto"
   }
 }

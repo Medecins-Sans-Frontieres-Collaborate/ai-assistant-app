@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Дец 2025"
+      "knowledgeCutoff": "Дец 2025",
+      "description": "Specijalizovana verzija GPT-5.2, optimizovana za konverzacijske interakcije i emocionalnu inteligenciju. Odlikuje se empatičnom komunikacijom, kreativnim pisanjem, razmenom ideja i prirodnim dijalogom. Najbolji je za neformalne razgovore, savetodavne situacije i zadatke koji zahtevaju emocionalnu svesnost."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Отпреми документ",
     "images": "Слике",
     "addImage": "Додај слику"
+  },
+  "shortcuts": {
+    "title": "Prečice na tastaturi",
+    "pressEscapeToClose": "Pritisnite Escape za zatvaranje",
+    "categoryNavigation": "Navigacija",
+    "categoryConversation": "Razgovor",
+    "categoryInput": "Unos",
+    "categoryApp": "Aplikacija",
+    "focusChatInput": "Fokusiraj polje za unos",
+    "newConversation": "Novi razgovor",
+    "stopGeneration": "Zaustavi generisanje",
+    "toggleSidebar": "Prikaži/sakrij bočnu traku",
+    "openSettings": "Otvori podešavanja",
+    "openModelSelector": "Promeni model",
+    "scrollToBottom": "Pomeri na dno",
+    "showHelp": "Prikaži prečice na tastaturi",
+    "attachFile": "Priloži fajl"
   }
 }

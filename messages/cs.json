@@ -1770,5 +1770,22 @@
     "uploadDocument": "Nahrát dokument",
     "images": "Obrázky",
     "addImage": "Přidat obrázek"
+  },
+  "shortcuts": {
+    "title": "Klávesové zkratky",
+    "pressEscapeToClose": "Pro zavření stiskněte Escape",
+    "categoryNavigation": "Navigace",
+    "categoryConversation": "Konverzace",
+    "categoryInput": "Vstup",
+    "categoryApp": "Aplikace",
+    "focusChatInput": "Přepnout na vstup chatu",
+    "newConversation": "Nová konverzace",
+    "stopGeneration": "Zastavit generování",
+    "toggleSidebar": "Přepnout postranní panel",
+    "openSettings": "Otevřít nastavení",
+    "openModelSelector": "Změnit model",
+    "scrollToBottom": "Posunout dolů",
+    "showHelp": "Zobrazit klávesové zkratky",
+    "attachFile": "Připojit soubor"
   }
 }

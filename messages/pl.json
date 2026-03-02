@@ -1770,5 +1770,22 @@
     "uploadDocument": "Prześlij dokument",
     "images": "Obrazy",
     "addImage": "Dodaj obraz"
+  },
+  "shortcuts": {
+    "title": "Skróty klawiaturowe",
+    "pressEscapeToClose": "Naciśnij Escape, aby zamknąć",
+    "categoryNavigation": "Nawigacja",
+    "categoryConversation": "Konwersacja",
+    "categoryInput": "Wprowadzanie",
+    "categoryApp": "Aplikacja",
+    "focusChatInput": "Ustaw fokus na polu czatu",
+    "newConversation": "Nowa rozmowa",
+    "stopGeneration": "Zatrzymaj generowanie",
+    "toggleSidebar": "Pokaż/ukryj panel boczny",
+    "openSettings": "Otwórz ustawienia",
+    "openModelSelector": "Zmień model",
+    "scrollToBottom": "Przewiń do dołu",
+    "showHelp": "Pokaż skróty klawiaturowe",
+    "attachFile": "Dołącz plik"
   }
 }

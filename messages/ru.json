@@ -1770,5 +1770,22 @@
     "uploadDocument": "Загрузить документ",
     "images": "Изображения",
     "addImage": "Добавить изображение"
+  },
+  "shortcuts": {
+    "title": "Горячие клавиши",
+    "pressEscapeToClose": "Нажмите Escape, чтобы закрыть",
+    "categoryNavigation": "Навигация",
+    "categoryConversation": "Диалог",
+    "categoryInput": "Ввод",
+    "categoryApp": "Приложение",
+    "focusChatInput": "Фокус на поле ввода чата",
+    "newConversation": "Новый диалог",
+    "stopGeneration": "Остановить генерацию",
+    "toggleSidebar": "Показать/скрыть боковую панель",
+    "openSettings": "Открыть настройки",
+    "openModelSelector": "Сменить модель",
+    "scrollToBottom": "Прокрутить вниз",
+    "showHelp": "Показать горячие клавиши",
+    "attachFile": "Прикрепить файл"
   }
 }

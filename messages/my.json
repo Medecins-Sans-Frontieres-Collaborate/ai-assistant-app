@@ -1770,5 +1770,22 @@
     "uploadDocument": "စာရွက်စာတမ်း တင်ရန်",
     "images": "ပုံများ",
     "addImage": "ပုံ ထည့်ရန်"
+  },
+  "shortcuts": {
+    "title": "ကီးဘုဒ် အနုတ်လမ်းများ",
+    "pressEscapeToClose": "ပိတ်ရန် Escape ကိုနှိပ်ပါ",
+    "categoryNavigation": "အည်အသွားအလာ",
+    "categoryConversation": "ဆွေးနွေးမှု",
+    "categoryInput": "ထည့်သွင်းခြင်း",
+    "categoryApp": "အက်ပ်လီကေးရှင်း",
+    "focusChatInput": "စာပို့ထည့်သွင်းရန်အာရုံစိုက်ပါ",
+    "newConversation": "ဆွေးနွေးမှုအသစ်",
+    "stopGeneration": "ထုတ်လုပ်မှုအားရပ်ပါ",
+    "toggleSidebar": "ဘေးဘားကိုဖွင့်/ပိတ်",
+    "openSettings": "ဆက်တင်များဖွင့်ပါ",
+    "openModelSelector": "မော်ဒယ်ပြောင်းရန်",
+    "scrollToBottom": "အောက်ဆုံးသို့ဆွဲကြည့်ပါ",
+    "showHelp": "ကီးဘုတ် အနုတ်လမ်းများ ပြပါ",
+    "attachFile": "ဖိုင်တစ်ခု ပူးတွဲပါ"
   }
 }

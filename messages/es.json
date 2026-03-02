@@ -1770,5 +1770,22 @@
     "uploadDocument": "Subir documento",
     "images": "Imágenes",
     "addImage": "Agregar imagen"
+  },
+  "shortcuts": {
+    "title": "Atajos de teclado",
+    "pressEscapeToClose": "Pulse Escape para cerrar",
+    "categoryNavigation": "Navegación",
+    "categoryConversation": "Conversación",
+    "categoryInput": "Entrada",
+    "categoryApp": "Aplicación",
+    "focusChatInput": "Enfocar entrada de chat",
+    "newConversation": "Nueva conversación",
+    "stopGeneration": "Detener generación",
+    "toggleSidebar": "Mostrar/ocultar barra lateral",
+    "openSettings": "Abrir configuración",
+    "openModelSelector": "Cambiar modelo",
+    "scrollToBottom": "Desplazar al final",
+    "showHelp": "Mostrar atajos de teclado",
+    "attachFile": "Adjuntar archivo"
   }
 }

@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Nooc khaas ah oo GPT-5.2 ah oo loo habeeyey wada sheekeysi iyo fahamka dareenka. Aad buu ugu fiican yahay isgaarsiinta naxariista leh, qoraalka hal-abuurka ah, fikir-wadaagga, iyo wada sheekeysiga dabiiciga ah. Ugu habboon wadahadallada caadiga ah, xaaladaha latalinta, iyo hawlaha u baahan ogaal dareen."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Soo geli Dukumenti",
     "images": "Sawirro",
     "addImage": "Ku dar sawir"
+  },
+  "shortcuts": {
+    "title": "Furayaasha Fududeynta Kumbuyuutarka",
+    "pressEscapeToClose": "Riix Escape si aad u xireyso",
+    "categoryNavigation": "Socodsiin",
+    "categoryConversation": "Wadahadal",
+    "categoryInput": "Gelinta",
+    "categoryApp": "Barnaamij",
+    "focusChatInput": "Diiradda saar qeybta gelinta sheekada",
+    "newConversation": "Wadahadal cusub",
+    "stopGeneration": "Jooji abuurista",
+    "toggleSidebar": "Beddel dhinac-bar",
+    "openSettings": "Fur dejimaha",
+    "openModelSelector": "Beddel moodelka",
+    "scrollToBottom": "Rog ilaa hoose",
+    "showHelp": "Tuso furayaasha fududeynta kumbuyuutarka",
+    "attachFile": "Ku lifaaq fayl"
   }
 }
