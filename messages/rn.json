@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Ubwoko bwihariye bwa GPT-5.2 bwakozwe neza ku biganiro biganisha ku bwenge bwo kumva irungu ry’uwundi. Bufasha mu kuganira neza n’ukwiyumvanamwo, kwandika udushya, gutanga ivyiyumviro, no kuganira bisanzwe. Bubereye ibiganiro vyoroshe, guhanura, n’ibikorwa bisaba kumenya akamere k’iyumviro ry’uwundi."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Shiriza Inyandiko",
     "images": "Amashusho",
     "addImage": "Ongereza ishusho"
+  },
+  "shortcuts": {
+    "title": "Uburyo bwo gukoresha urufunguruzo rwa klaviyeri",
+    "pressEscapeToClose": "Kanda Escape kugira ufunge",
+    "categoryNavigation": "Igena-nzira",
+    "categoryConversation": "Ikiganiro",
+    "categoryInput": "Kwuzuzamwo",
+    "categoryApp": "Porogaramu",
+    "focusChatInput": "Shira iciyumviro ku kwinjiza ubutumwa",
+    "newConversation": "Tangira ikiganiro gishasha",
+    "stopGeneration": "Hagarika ivikora",
+    "toggleSidebar": "Guhindura uruhande rw’inyuma",
+    "openSettings": "Fungura ubushikiranganji",
+    "openModelSelector": "Hindura model",
+    "scrollToBottom": "Manura gushika hasi",
+    "showHelp": "Erekana inzira za klaviyeri",
+    "attachFile": "Mena dosiye"
   }
 }

@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ingxoxo",
-      "knowledgeCutoff": "Dis 2025"
+      "knowledgeCutoff": "Dis 2025",
+      "description": "Inhlobo ekhethekile ye-GPT-5.2 eyenziwe kahle ezingxoxweni kanye nobuhlakani bemizwa. Ikhombisa amakhono okuxhumana ngozwelo, ukubhala okudala, ukuveza imibono, nengxoxo yemvelo. Ifanele kakhulu izingxoxo ezijwayelekile, izimo zokweluleka, nemisebenzi edinga ukuqonda imizwa."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Layisha Idokhumenti",
     "images": "Izithombe",
     "addImage": "Engeza isithombe"
+  },
+  "shortcuts": {
+    "title": "Izinqamuleli Zekhibhodi",
+    "pressEscapeToClose": "Cindezela u-Escape ukuvala",
+    "categoryNavigation": "Ukuhamba",
+    "categoryConversation": "Ingxoxo",
+    "categoryInput": "Okufakiwe",
+    "categoryApp": "Uhlelo",
+    "focusChatInput": "Gxila kokufakiwe kwengxoxo",
+    "newConversation": "Ingxoxo entsha",
+    "stopGeneration": "Misa ukukhiqiza",
+    "toggleSidebar": "Shintsha iphaneli eceleni",
+    "openSettings": "Vula izilungiselelo",
+    "openModelSelector": "Shintsha imodeli",
+    "scrollToBottom": "Skrolela phansi",
+    "showHelp": "Bonisa izinqamuleli zekhibhodi",
+    "attachFile": "Namathisela ifayela"
   }
 }

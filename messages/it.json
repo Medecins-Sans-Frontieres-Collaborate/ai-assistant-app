@@ -1770,5 +1770,22 @@
     "uploadDocument": "Carica documento",
     "images": "Immagini",
     "addImage": "Aggiungi immagine"
+  },
+  "shortcuts": {
+    "title": "Scorciatoie da tastiera",
+    "pressEscapeToClose": "Premi Escape per chiudere",
+    "categoryNavigation": "Navigazione",
+    "categoryConversation": "Conversazione",
+    "categoryInput": "Input",
+    "categoryApp": "Applicazione",
+    "focusChatInput": "Vai al campo di input della chat",
+    "newConversation": "Nuova conversazione",
+    "stopGeneration": "Interrompi generazione",
+    "toggleSidebar": "Mostra/nascondi barra laterale",
+    "openSettings": "Apri impostazioni",
+    "openModelSelector": "Cambia modello",
+    "scrollToBottom": "Scorri in fondo",
+    "showHelp": "Mostra scorciatoie da tastiera",
+    "attachFile": "Allega file"
   }
 }

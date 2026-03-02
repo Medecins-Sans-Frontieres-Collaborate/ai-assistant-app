@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Kanûn 2025"
+      "knowledgeCutoff": "Kanûn 2025",
+      "description": "وەشانی تایبەتی GPT-5.2 کە بۆ گفتوگۆ و زاناییدا بەراوردن و هەستییەتی پەرەس راگرتووە. باشترین لە گفتوگۆی سۆزوودار، نووسینی خەیاڵی، بیرۆکەسازی و دیالۆگ ئاسان. گونجاوە بۆ گفتوگۆی هەڵسوکەوتی، ئامرازکردن، و ئەرکەکان کە هەستگەیشتن پێویستن."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Belgeyê Bar Bike",
     "images": "Wêne",
     "addImage": "Wêne zêde bike"
+  },
+  "shortcuts": {
+    "title": "کورتەکاری کلید",
+    "pressEscapeToClose": "Escape بکەرەوە بۆ داخستن",
+    "categoryNavigation": "ڕێنیشاندن",
+    "categoryConversation": "گفتوگۆ",
+    "categoryInput": "تێخستن",
+    "categoryApp": "بەرنامە",
+    "focusChatInput": "سەرجەمبە تێخستنی گفتوگۆ",
+    "newConversation": "گفتوگۆی نوێ",
+    "stopGeneration": "وەستاندنی درووستکردن",
+    "toggleSidebar": "گۆڕینی داواکاری لای",
+    "openSettings": "کردنەوەی ڕێکخستەکان",
+    "openModelSelector": "گۆڕینی مۆدێل",
+    "scrollToBottom": "بچۆ بۆ خوارەوە",
+    "showHelp": "نیشاندانی کورتەکاری کلید",
+    "attachFile": "پیوستکردنی فایل"
   }
 }

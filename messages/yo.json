@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ìfọ̀rọ̀wérọ̀",
-      "knowledgeCutoff": "Oṣù Kejìlá 2025"
+      "knowledgeCutoff": "Oṣù Kejìlá 2025",
+      "description": "Ẹya pataki ti GPT-5.2 ti a ṣe atunṣe fun ibaraẹnisọrọ ati oye ẹdun. O jẹ amọja ninu ibaraẹnisọrọ onirẹlẹ, kikọ iṣẹda, ironu papọ, ati iwiregbe adayeba. Dara julọ fun ibaraẹnisọrọ alaafia, ijumọsọrọ, ati awọn iṣẹ ti o nilo imọ ẹdun."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Gbe Ìwé Sókè",
     "images": "Àwọn Àwòrán",
     "addImage": "Fi àwòrán kún"
+  },
+  "shortcuts": {
+    "title": "Awọn ọna abuja bọtini",
+    "pressEscapeToClose": "Tẹ Escape lati pa",
+    "categoryNavigation": "Ìsọ̀kan",
+    "categoryConversation": "Ibaraẹnisọrọ",
+    "categoryInput": "Ìfikún",
+    "categoryApp": "Ohun elo",
+    "focusChatInput": "Yanju si ìbànísọ̀rọ̀",
+    "newConversation": "Bẹrẹ ibaraẹnisọrọ tuntun",
+    "stopGeneration": "Duro ṣiṣe",
+    "toggleSidebar": "Yipada ẹgbẹ ẹgbẹ",
+    "openSettings": "Ṣí eto",
+    "openModelSelector": "Yipada awoṣe",
+    "scrollToBottom": "Yi lọ sí isalẹ",
+    "showHelp": "Fi awọn ọna abuja bọtini han",
+    "attachFile": "So faili pọ"
   }
 }

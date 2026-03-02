@@ -1770,5 +1770,22 @@
     "uploadDocument": "Завантажити документ",
     "images": "Зображення",
     "addImage": "Додати зображення"
+  },
+  "shortcuts": {
+    "title": "Клавіатурні скорочення",
+    "pressEscapeToClose": "Натисніть Escape, щоб закрити",
+    "categoryNavigation": "Навігація",
+    "categoryConversation": "Розмова",
+    "categoryInput": "Введення",
+    "categoryApp": "Застосунок",
+    "focusChatInput": "Фокус на полі введення чату",
+    "newConversation": "Нова розмова",
+    "stopGeneration": "Зупинити генерацію",
+    "toggleSidebar": "Показати/сховати бокову панель",
+    "openSettings": "Відкрити налаштування",
+    "openModelSelector": "Змінити модель",
+    "scrollToBottom": "Прокрутити донизу",
+    "showHelp": "Показати клавіатурні скорочення",
+    "attachFile": "Додати файл"
   }
 }

@@ -1770,5 +1770,22 @@
     "uploadDocument": "ලේඛනය උඩුගත කරන්න",
     "images": "රූප",
     "addImage": "රූපය එක් කරන්න"
+  },
+  "shortcuts": {
+    "title": "යතුරුපුවරු කෙටි මාර්ග",
+    "pressEscapeToClose": "වසීමට Escape ඔබන්න",
+    "categoryNavigation": "සංචාලනය",
+    "categoryConversation": "සාකච්ඡාව",
+    "categoryInput": "ආදානය",
+    "categoryApp": "යෙදුම",
+    "focusChatInput": "කතා බස් ආදානයට අවධානය යොමු කරන්න",
+    "newConversation": "නව සංවාදයක්",
+    "stopGeneration": "සාදනය නවත්වන්න",
+    "toggleSidebar": "පාර්ශ්ව තීරය මාරු කරන්න",
+    "openSettings": "සැකසුම් විවෘත කරන්න",
+    "openModelSelector": "මාදිලිය වෙනස් කරන්න",
+    "scrollToBottom": "පහළට අනුචලනය කරන්න",
+    "showHelp": "යතුරුපුවරු කෙටි මාර්ගය පෙන්වන්න",
+    "attachFile": "ගොනුව එක් කරන්න"
   }
 }
