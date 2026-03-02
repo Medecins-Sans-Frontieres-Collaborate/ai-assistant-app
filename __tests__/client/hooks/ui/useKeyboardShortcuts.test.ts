@@ -405,7 +405,7 @@ describe('Keyboard Shortcuts Utilities', () => {
     it('shortcuts use safe key combinations', () => {
       // Verify no single-key shortcuts that would conflict with typing
       // (except for Escape and / which have context restrictions)
-      for (const [action, shortcut] of Object.entries(DEFAULT_SHORTCUTS)) {
+      for (const shortcut of Object.values(DEFAULT_SHORTCUTS)) {
         if (shortcut.modifiers.length === 0) {
           // Single key shortcuts should be disableInInput or special keys
           expect(
