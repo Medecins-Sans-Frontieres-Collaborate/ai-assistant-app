@@ -1,5 +1,7 @@
-import { formatCommentsSection } from '@/lib/utils/server/file/commentExtraction/formatComments';
-import { DocumentComment } from '@/lib/utils/server/file/commentExtraction/types';
+import {
+  DocumentComment,
+  formatCommentsSection,
+} from '@/lib/utils/server/file/commentExtraction';
 
 import { describe, expect, it } from 'vitest';
 
