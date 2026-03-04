@@ -3,6 +3,10 @@ import {
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 
+import {
+  extractAndFormatComments,
+  supportsCommentExtraction,
+} from './commentExtraction';
 import { getPdfPageCount } from './pdfUtils';
 
 import {
@@ -323,53 +327,67 @@ export async function loadDocument(file: File): Promise<string> {
   });
 
   let text: string;
-  switch (true) {
-    case mimeType.startsWith('application/pdf'):
-      text = await pdfToText(tempFilePath);
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ):
-      text = await convertWithPandoc(tempFilePath, 'markdown');
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    ) || file.name.endsWith('.xlsx'):
-      text = await xlsxToText(tempFilePath);
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
-      text = await pptToText(tempFilePath);
-      break;
-    case mimeType.startsWith('application/epub+zip'):
-      text = await convertWithPandoc(tempFilePath, 'markdown');
-      break;
-    case mimeType.startsWith('text/') ||
-      mimeType.startsWith('application/csv') ||
-      file.name.endsWith('.py') ||
-      file.name.endsWith('.sql') ||
-      mimeType.startsWith('application/json') ||
-      mimeType.startsWith('application/xhtml+xml') ||
-      file.name.endsWith('.tex'):
-    default:
-      try {
-        text = await file.text();
-        if (!text) {
-          // If file.text() fails or returns empty, read from the temp file
-          text = await fs.promises.readFile(tempFilePath, 'utf8');
+  try {
+    switch (true) {
+      case mimeType.startsWith('application/pdf'):
+        text = await pdfToText(tempFilePath);
+        break;
+      case mimeType.startsWith(
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ):
+        text = await convertWithPandoc(tempFilePath, 'markdown');
+        break;
+      case mimeType.startsWith(
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ) || file.name.endsWith('.xlsx'):
+        text = await xlsxToText(tempFilePath);
+        break;
+      case mimeType.startsWith(
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
+        text = await pptToText(tempFilePath);
+        break;
+      case mimeType.startsWith('application/epub+zip'):
+        text = await convertWithPandoc(tempFilePath, 'markdown');
+        break;
+      case mimeType.startsWith('text/') ||
+        mimeType.startsWith('application/csv') ||
+        file.name.endsWith('.py') ||
+        file.name.endsWith('.sql') ||
+        mimeType.startsWith('application/json') ||
+        mimeType.startsWith('application/xhtml+xml') ||
+        file.name.endsWith('.tex'):
+      default:
+        try {
+          text = await file.text();
+          if (!text) {
+            // If file.text() fails or returns empty, read from the temp file
+            text = await fs.promises.readFile(tempFilePath, 'utf8');
+          }
+        } catch (error) {
+          console.error(`Could not parse text from ${file.name}`);
+          throw error;
         }
-      } catch (error) {
-        console.error(`Could not parse text from ${file.name}`);
-        throw error;
+    }
+
+    // Extract and append comments for supported Office document formats
+    if (supportsCommentExtraction(mimeType, file.name)) {
+      const commentsSection = await extractAndFormatComments(buffer, mimeType);
+      if (commentsSection) {
+        text += '\n\n' + commentsSection;
       }
+    }
+
+    perfLog(
+      'loadDocument total',
+      perfStart,
+      `${sanitizeForLog(file.name)} (${mimeType})`,
+    );
+    return text;
+  } finally {
+    // Clean up temporary file (safe to call even if already deleted by convertWithPandoc)
+    retryRemoveFile(tempFilePath).catch(() => {});
   }
-  perfLog(
-    'loadDocument total',
-    perfStart,
-    `${sanitizeForLog(file.name)} (${mimeType})`,
-  );
-  return text;
 }
 
 /**
@@ -404,43 +422,49 @@ export async function loadDocumentWithValidation(
   let text: string;
   let pageCount: number | undefined;
 
-  // Handle PDF separately to get page count for validation
-  if (mimeType.startsWith('application/pdf')) {
-    // Get page count first for validation
-    try {
-      pageCount = await getPdfPageCount(tempFilePath);
-    } catch (error) {
-      console.warn(
-        '[loadDocumentWithValidation] Failed to get PDF page count:',
-        error,
-      );
-      // Continue without page count - will fall back to character validation
+  try {
+    // Handle PDF separately to get page count for validation
+    if (mimeType.startsWith('application/pdf')) {
+      // Get page count first for validation
+      try {
+        pageCount = await getPdfPageCount(tempFilePath);
+      } catch (error) {
+        console.warn(
+          '[loadDocumentWithValidation] Failed to get PDF page count:',
+          error,
+        );
+        // Continue without page count - will fall back to character validation
+      }
+
+      // Validate page count if we got it
+      if (pageCount !== undefined && requiresContentValidation(file.name)) {
+        const validation = validateDocumentContent(file.name, '', pageCount);
+        if (!validation.valid) {
+          throw new Error(validation.error);
+        }
+      }
+
+      // Extract text
+      text = await pdfToText(tempFilePath);
+    } else {
+      // For non-PDF files, load the document first
+      // Note: loadDocument will write its own temp file and clean it up
+      text = await loadDocument(file);
     }
 
-    // Validate page count if we got it
-    if (pageCount !== undefined && requiresContentValidation(file.name)) {
-      const validation = validateDocumentContent(file.name, '', pageCount);
+    // Validate content length for text-based files
+    if (requiresContentValidation(file.name)) {
+      const validation = validateDocumentContent(file.name, text, pageCount);
       if (!validation.valid) {
-        // Clean up temp file before throwing
-        retryRemoveFile(tempFilePath).catch(() => {});
         throw new Error(validation.error);
       }
     }
 
-    // Extract text
-    text = await pdfToText(tempFilePath);
-  } else {
-    // For non-PDF files, load the document first
-    text = await loadDocument(file);
-  }
-
-  // Validate content length for text-based files
-  if (requiresContentValidation(file.name)) {
-    const validation = validateDocumentContent(file.name, text, pageCount);
-    if (!validation.valid) {
-      throw new Error(validation.error);
+    return { text, pageCount };
+  } finally {
+    // Clean up temporary file for PDF path (non-PDF is handled by loadDocument)
+    if (mimeType.startsWith('application/pdf')) {
+      retryRemoveFile(tempFilePath).catch(() => {});
     }
   }
-
-  return { text, pageCount };
 }
