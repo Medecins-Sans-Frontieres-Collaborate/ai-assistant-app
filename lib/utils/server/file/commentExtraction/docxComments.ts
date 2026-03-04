@@ -1,4 +1,5 @@
-import { CommentExtractionResult, DocumentComment } from './types';
+import type { CommentExtractionResult, DocumentComment } from '.';
+import { OFFICE_XML_PARSER_OPTIONS } from './constants';
 
 import { XMLParser } from 'fast-xml-parser';
 import JSZip from 'jszip';
@@ -93,11 +94,7 @@ export async function extractDocxComments(
 
     const commentsXml = await commentsFile.async('string');
 
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-      attributeNamePrefix: '@_',
-      textNodeName: '#text',
-    });
+    const parser = new XMLParser(OFFICE_XML_PARSER_OPTIONS);
 
     const parsed: DocxCommentsXml = parser.parse(commentsXml);
     const commentsRoot = parsed['w:comments'];
