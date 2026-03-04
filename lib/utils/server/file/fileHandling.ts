@@ -3,6 +3,10 @@ import {
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 
+import {
+  extractAndFormatComments,
+  supportsCommentExtraction,
+} from './commentExtraction';
 import { getPdfPageCount } from './pdfUtils';
 
 import {
@@ -364,6 +368,15 @@ export async function loadDocument(file: File): Promise<string> {
         throw error;
       }
   }
+
+  // Extract and append comments for supported Office document formats
+  if (supportsCommentExtraction(mimeType)) {
+    const commentsSection = await extractAndFormatComments(buffer, mimeType);
+    if (commentsSection) {
+      text += '\n\n' + commentsSection;
+    }
+  }
+
   perfLog(
     'loadDocument total',
     perfStart,
