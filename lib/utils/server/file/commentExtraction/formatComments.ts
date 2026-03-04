@@ -1,4 +1,4 @@
-import { DocumentComment } from './types';
+import type { DocumentComment } from '.';
 
 /**
  * Formats a date string for display in the comments section.
