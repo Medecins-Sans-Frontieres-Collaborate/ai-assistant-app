@@ -148,6 +148,64 @@ describe('supportsCommentExtraction', () => {
       false,
     );
   });
+
+  describe('extension fallback', () => {
+    it('should return true for .docx extension when MIME is generic', () => {
+      expect(
+        supportsCommentExtraction('application/octet-stream', 'document.docx'),
+      ).toBe(true);
+    });
+
+    it('should return true for .xlsx extension when MIME is generic', () => {
+      expect(
+        supportsCommentExtraction(
+          'application/octet-stream',
+          'spreadsheet.xlsx',
+        ),
+      ).toBe(true);
+    });
+
+    it('should return true for .pptx extension when MIME is generic', () => {
+      expect(
+        supportsCommentExtraction(
+          'application/octet-stream',
+          'presentation.pptx',
+        ),
+      ).toBe(true);
+    });
+
+    it('should be case-insensitive for extensions', () => {
+      expect(
+        supportsCommentExtraction('application/octet-stream', 'DOCUMENT.DOCX'),
+      ).toBe(true);
+      expect(
+        supportsCommentExtraction('application/octet-stream', 'File.XlSx'),
+      ).toBe(true);
+    });
+
+    it('should return false for unsupported extension with generic MIME', () => {
+      expect(
+        supportsCommentExtraction('application/octet-stream', 'document.pdf'),
+      ).toBe(false);
+      expect(
+        supportsCommentExtraction('application/octet-stream', 'legacy.doc'),
+      ).toBe(false);
+    });
+
+    it('should return false when no filename provided and MIME is generic', () => {
+      expect(supportsCommentExtraction('application/octet-stream')).toBe(false);
+    });
+
+    it('should prioritize MIME type over extension', () => {
+      // If MIME is correct, extension doesn't matter
+      expect(
+        supportsCommentExtraction(
+          SUPPORTED_COMMENT_MIME_TYPES.DOCX,
+          'file.pdf',
+        ),
+      ).toBe(true);
+    });
+  });
 });
 
 describe('extractComments', () => {
