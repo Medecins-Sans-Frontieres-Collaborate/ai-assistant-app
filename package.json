@@ -57,6 +57,7 @@
     "html-to-docx": "^1.8.0",
     "html2pdf.js": "^0.14.0",
     "isomorphic-dompurify": "^2.31.0",
+    "jszip": "^3.10.1",
     "katex": "^0.16.25",
     "launchdarkly-react-client-sdk": "^3.6.1",
     "lowlight": "^3.3.0",
@@ -125,7 +126,7 @@
   },
   "overrides": {
     "lodash-es": "4.17.23",
-    "fast-xml-parser": "5.3.6",
-    "minimatch": "10.2.2"
+    "fast-xml-parser": "5.4.2",
+    "minimatch": "10.2.4"
   }
 }
