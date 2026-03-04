@@ -39,17 +39,48 @@ export const SUPPORTED_COMMENT_MIME_TYPES = {
 } as const;
 
 /**
- * Checks if a MIME type supports comment extraction.
+ * File extensions for Office documents that support comment extraction.
+ * Used as fallback when MIME type detection fails (e.g., application/octet-stream).
+ */
+export const SUPPORTED_COMMENT_EXTENSIONS = [
+  '.docx',
+  '.xlsx',
+  '.pptx',
+] as const;
+
+/**
+ * Checks if a file supports comment extraction based on MIME type or filename extension.
+ *
+ * This function first checks the MIME type, then falls back to extension-based detection
+ * if the MIME type is generic (e.g., application/octet-stream). This ensures consistency
+ * with how loadDocument handles format detection.
  *
  * @param mimeType - The MIME type to check
- * @returns True if comment extraction is supported for this type
+ * @param filename - Optional filename for extension-based fallback
+ * @returns True if comment extraction is supported for this file
  */
-export function supportsCommentExtraction(mimeType: string): boolean {
-  return (
+export function supportsCommentExtraction(
+  mimeType: string,
+  filename?: string,
+): boolean {
+  // Check MIME type first
+  if (
     mimeType.startsWith(SUPPORTED_COMMENT_MIME_TYPES.DOCX) ||
     mimeType.startsWith(SUPPORTED_COMMENT_MIME_TYPES.XLSX) ||
     mimeType.startsWith(SUPPORTED_COMMENT_MIME_TYPES.PPTX)
-  );
+  ) {
+    return true;
+  }
+
+  // Fall back to extension check if filename provided
+  if (filename) {
+    const lowerFilename = filename.toLowerCase();
+    return SUPPORTED_COMMENT_EXTENSIONS.some((ext) =>
+      lowerFilename.endsWith(ext),
+    );
+  }
+
+  return false;
 }
 
 export { formatCommentsSection } from './formatComments';
