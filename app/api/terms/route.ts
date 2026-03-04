@@ -158,17 +158,17 @@ Aceptas usar ai.msf.org de manera responsable. Te comprometes a:
 
 Usar ai.msf.org es un entorno más seguro y protegido que usar otras herramientas de IA gratuitas externas, que ofrecen muy pocas garantías de privacidad. Sin embargo, ten en cuenta que aún existen límites y advertencias -- consulta la política de uso para más detalles.
 
-Como otros productos de Microsoft, tu información de inicio de sesión será procesada por MSF según lo descrito en la política de privacidad de tu entidad de MSF.
+Al igual que con otros productos de Microsoft, MSF procesará su información de inicio de sesión tal como se describe en nuestra política de protección de datos.
 
-**NO ingresarás ni cargarás en ai.msf.org la siguiente información:**
+**NO debemos incluir en ai.msf.org indicaciones (prompts) ni subidas en la plataforma ninguna de la siguiente información:**
 
 -   **Datos personales sensibles** (esto incluye: origen racial o étnico, orientación sexual, datos genéticos o biométricos, información financiera personal, información de salud personal, opiniones políticas, afiliación sindical, o creencias religiosas o filosóficas). Los datos personales no sensibles, como un nombre o dirección de correo electrónico, pueden usarse en una consulta para uso general, como reescribir un correo electrónico.
 
 -   **Datos altamente sensibles** (datos que pueden usarse intencional o involuntariamente para dañar a individuos, comunidades, MSF o su personal -- determinar la sensibilidad de los datos requiere incorporar análisis de contexto, por ejemplo: ubicaciones de proyectos sensibles o grupos en riesgo, incidentes de seguridad y otros detalles operativos)
 
-**Si planeas usar datos personales en el Asistente de IA de MSF como parte de un proceso empresarial existente, contacta primero a tu DPO.**
+**Si deseas utilizar datos personales en el Asistente de IA de MSF como parte de un proceso comercial existente contacta primero tu DPO.**
 
-**Si deseas usar una solución de IA para ayudar a gestionar o procesar datos personales sensibles o datos médicos, contacta al Equipo de IA para obtener asesoramiento.**
+**Si deseas utilizar una solución de IA como apoyo en la gestión o el procesamiento de datos personales sensibles, ponte en contacto con el Equipo de IA para obtener asesoramiento.**
 
 ## Incumplimientos / comentarios
 
