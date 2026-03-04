@@ -30,11 +30,40 @@ interface DocxRun {
 }
 
 /**
+ * Extracts text content from a single DOCX paragraph.
+ * A paragraph contains runs (w:r) which contain text nodes (w:t).
+ *
+ * @param paragraph - The parsed DOCX paragraph object
+ * @returns The concatenated text content of the paragraph
+ */
+function extractParagraphText(paragraph: DocxParagraph): string {
+  const runs = paragraph['w:r'];
+  if (!runs) {
+    return '';
+  }
+
+  const runArray = Array.isArray(runs) ? runs : [runs];
+  const textParts: string[] = [];
+
+  for (const run of runArray) {
+    const textNode = run['w:t'];
+    if (textNode) {
+      const text =
+        typeof textNode === 'string' ? textNode : textNode['#text'] || '';
+      textParts.push(text);
+    }
+  }
+
+  return textParts.join('');
+}
+
+/**
  * Extracts text content from a DOCX comment's paragraph structure.
  * Comments can have nested paragraphs (w:p) containing runs (w:r) with text (w:t).
+ * Multi-paragraph comments are joined with newlines to preserve structure.
  *
  * @param comment - The parsed DOCX comment object
- * @returns The concatenated text content of the comment
+ * @returns The text content of the comment with paragraph breaks preserved
  */
 function extractCommentText(comment: DocxComment): string {
   const paragraphs = comment['w:p'];
@@ -43,24 +72,16 @@ function extractCommentText(comment: DocxComment): string {
   }
 
   const paragraphArray = Array.isArray(paragraphs) ? paragraphs : [paragraphs];
-  const textParts: string[] = [];
+  const paragraphTexts: string[] = [];
 
   for (const paragraph of paragraphArray) {
-    const runs = paragraph['w:r'];
-    if (!runs) continue;
-
-    const runArray = Array.isArray(runs) ? runs : [runs];
-    for (const run of runArray) {
-      const textNode = run['w:t'];
-      if (textNode) {
-        const text =
-          typeof textNode === 'string' ? textNode : textNode['#text'] || '';
-        textParts.push(text);
-      }
+    const text = extractParagraphText(paragraph);
+    if (text) {
+      paragraphTexts.push(text);
     }
   }
 
-  return textParts.join('');
+  return paragraphTexts.join('\n');
 }
 
 /**
