@@ -1,4 +1,5 @@
-import { CommentExtractionResult, DocumentComment } from './types';
+import type { CommentExtractionResult, DocumentComment } from '.';
+import { OFFICE_XML_PARSER_OPTIONS } from './constants';
 
 import { XMLParser } from 'fast-xml-parser';
 import JSZip from 'jszip';
@@ -119,11 +120,7 @@ export async function extractXlsxComments(
     const comments: DocumentComment[] = [];
     let commentIndex = 0;
 
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-      attributeNamePrefix: '@_',
-      textNodeName: '#text',
-    });
+    const parser = new XMLParser(OFFICE_XML_PARSER_OPTIONS);
 
     // Extract legacy comments from xl/comments*.xml files
     const commentFiles = Object.keys(zip.files).filter(
