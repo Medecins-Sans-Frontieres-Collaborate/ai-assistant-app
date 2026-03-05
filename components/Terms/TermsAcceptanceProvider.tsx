@@ -41,7 +41,7 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
       // Can be triggered via environment variable or URL parameter
       const forceTermsEnv =
         process.env.NEXT_PUBLIC_FORCE_TERMS_MODAL === 'true';
-      const forceTermsUrl = searchParams.get('forceShowTerms') === 'true';
+      const forceTermsUrl = searchParams?.get('forceShowTerms') === 'true';
       const forceTerms = forceTermsEnv || forceTermsUrl;
 
       if (forceTerms && status === 'authenticated' && session?.user) {
