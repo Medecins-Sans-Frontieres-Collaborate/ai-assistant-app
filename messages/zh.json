@@ -992,7 +992,11 @@
     "Default Reasoning Effort": "默认推理力度",
     "reasoningEffortDescription": "控制推理模型的思考深度。更高力度可生成更全面的分析。",
     "Default Verbosity": "默认详细程度",
-    "verbosityDescription": "控制GPT-5模型响应的详细程度。"
+    "verbosityDescription": "控制GPT-5模型响应的详细程度。",
+    "activeFiles": {
+      "autoPinUploads": "自动固定已上传文件",
+      "autoPinUploadsDescription": "上传文件时自动固定，以防被移出"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1801,5 +1805,21 @@
     "uploadDocument": "上传文档",
     "images": "图片",
     "addImage": "添加图片"
+  },
+  "activeFiles": {
+    "title": "活跃文件",
+    "tokenUsage": "Token 使用情况",
+    "keepInContext": "保留在上下文中",
+    "addedToContext": "已添加到上下文",
+    "removeFromContext": "从上下文中移除",
+    "clearAll": "全部清除",
+    "noActiveFiles": "无活跃文件",
+    "processing": "处理中",
+    "ready": "已就绪",
+    "error": "错误",
+    "retry": "重试",
+    "pinned": "已固定",
+    "pin": "固定",
+    "tokens": "tokens"
   }
 }

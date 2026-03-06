@@ -1,6 +1,7 @@
 import {
   IconAdjustments,
   IconChevronDown,
+  IconFiles,
   IconInfoCircle,
   IconMessage,
   IconUser,
@@ -46,6 +47,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
   const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
   const [isAboutYouExpanded, setIsAboutYouExpanded] = useState(false);
   const [isTTSExpanded, setIsTTSExpanded] = useState(false);
+  const [isActiveFilesExpanded, setIsActiveFilesExpanded] = useState(false);
   const {
     displayNamePreference,
     customDisplayName,
@@ -55,6 +57,8 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
     setReasoningEffort,
     verbosity,
     setVerbosity,
+    autoPinActiveFiles,
+    setAutoPinActiveFiles,
   } = useSettings();
 
   // Compute derived name from General Settings for placeholder
@@ -321,6 +325,50 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                 settings={ttsSettings}
                 onChange={setTTSSettings}
               />
+            </div>
+          )}
+        </div>
+
+        {/* Active Files Section - Collapsible */}
+        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+          <button
+            onClick={() => setIsActiveFilesExpanded(!isActiveFilesExpanded)}
+            className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <IconFiles
+                size={18}
+                className="text-gray-500 dark:text-gray-400"
+              />
+              <h3 className="text-sm font-bold text-black dark:text-white">
+                {t('activeFiles.title')}
+              </h3>
+            </div>
+            <IconChevronDown
+              size={18}
+              className={`text-gray-500 dark:text-gray-400 transition-transform ${
+                isActiveFilesExpanded ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          {isActiveFilesExpanded && (
+            <div className="px-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+              {/* Auto-pin toggle */}
+              <label className="flex items-center gap-3 mt-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                  checked={autoPinActiveFiles}
+                  onChange={(e) => setAutoPinActiveFiles(e.target.checked)}
+                />
+                <span className="text-sm text-black dark:text-neutral-200">
+                  {t('settings.activeFiles.autoPinUploads')}
+                </span>
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
+                {t('settings.activeFiles.autoPinUploadsDescription')}
+              </p>
             </div>
           )}
         </div>

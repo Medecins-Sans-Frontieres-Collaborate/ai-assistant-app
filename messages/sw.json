@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Jitihada Chaguo-msingi ya Upekuzi",
     "reasoningEffortDescription": "Hudhibiti kina cha fikra kwenye modeli za kutoa hoja. Jitihada kubwa hutoa uchambuzi wa kina zaidi.",
     "Default Verbosity": "Ufafanuzi Chaguo-msingi",
-    "verbosityDescription": "Hudhibiti kiwango cha undani wa majibu kwa modeli za GPT-5."
+    "verbosityDescription": "Hudhibiti kiwango cha undani wa majibu kwa modeli za GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Funga faili zilizopakiwa moja kwa moja",
+      "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe"
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Pakia Hati",
     "images": "Picha",
     "addImage": "Ongeza picha"
+  },
+  "activeFiles": {
+    "title": "Faili Zinazotumika",
+    "tokenUsage": "Matumizi ya tokeni",
+    "keepInContext": "Weka kwenye muktadha",
+    "addedToContext": "Imeongezwa kwenye muktadha",
+    "removeFromContext": "Ondoa kwenye muktadha",
+    "clearAll": "Futa zote",
+    "noActiveFiles": "Hakuna faili zinazotumika",
+    "processing": "Inachakatwa",
+    "ready": "Iko tayari",
+    "error": "Hitilafu",
+    "retry": "Jaribu tena",
+    "pinned": "Imezibitiwa",
+    "pin": "Biti",
+    "tokens": "tokeni"
   }
 }

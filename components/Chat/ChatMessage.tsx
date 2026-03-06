@@ -206,7 +206,12 @@ export const ChatMessage: FC<Props> = ({
           onRegenerate={onRegenerate}
           onSaveAsPrompt={handleSaveAsPromptClick}
         >
-          <FileContent files={files} images={images} />
+          <FileContent
+            files={files}
+            images={images}
+            parentMessage={message}
+            parentMessageIndex={messageIndex}
+          />
           {text && (
             <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none mt-2">
               {text.text}
@@ -229,7 +234,12 @@ export const ChatMessage: FC<Props> = ({
             onNextVersion={onNextVersion}
           >
             <div className="mb-3">
-              <FileContent files={files} images={images} />
+              <FileContent
+                files={files}
+                images={images}
+                parentMessage={message}
+                parentMessageIndex={messageIndex}
+              />
             </div>
             {text && <div className="prose dark:prose-invert">{text.text}</div>}
           </AssistantMessage>

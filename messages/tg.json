@@ -1114,6 +1114,10 @@
       "quickSettings": "Танзимоти овоз",
       "overrideForThisMessage": "Танзимотро барои ин паём тағйир диҳед",
       "speakWithSettings": "Суханронӣ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Файлҳои боршударо худкор пайваст кардан",
+      "autoPinUploadsDescription": "Файлҳоро ҳангоми боркунӣ худкор пайваст кунед, то онҳо нест шаванд"
     }
   },
   "emptyState": {
@@ -1746,5 +1750,21 @@
     "uploadDocument": "Ҳуҷҷатро боргузорӣ кунед",
     "images": "Тасвирҳо",
     "addImage": "Тасвир илова кунед"
+  },
+  "activeFiles": {
+    "title": "Файлҳои фаъол",
+    "tokenUsage": "Истифодаи токен",
+    "keepInContext": "Дар контекст нигоҳ доред",
+    "addedToContext": "Ба контекст илова шуд",
+    "removeFromContext": "Аз контекст хориҷ кунед",
+    "clearAll": "Ҳамаро тоза кунед",
+    "noActiveFiles": "Файлҳои фаъол нест",
+    "processing": "Коркард мешавад",
+    "ready": "Омода",
+    "error": "Хато",
+    "retry": "Такрор кунед",
+    "pinned": "Пайваст шуд",
+    "pin": "Пайваст кардан",
+    "tokens": "токенҳо"
   }
 }

@@ -1114,6 +1114,10 @@
       "quickSettings": "Mîhengên Dengê",
       "overrideForThisMessage": "Mîhengan ji bo vê peyamê eyar bike",
       "speakWithSettings": "Biaxive"
+    },
+    "activeFiles": {
+      "autoPinUploads": "خۆکارانە پەیوەستکردنی پەڕگە بارکراوەکان",
+      "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Kanûn 2025"
+      "knowledgeCutoff": "Kanûn 2025",
+      "description": "وەشانی تایبەتی GPT-5.2 کە بۆ گفتوگۆ و وردەکاریی ھەستیار بەهێز کراوە. بە باشی خۆشەویستی و تێگەیشتن، نووسینی شارەزایی، بیرچوون، و دیالۆگی سرووشتی پێشکەش دەکات. باشترین هەڵبژاردن بۆ گفتوگۆی ئاسایی، ڕاهەمکردنەوە و کارەکان کە وردەکاری هەستیار پێداویستە."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Belgeyê Bar Bike",
     "images": "Wêne",
     "addImage": "Wêne zêde bike"
+  },
+  "activeFiles": {
+    "title": "پەڕگە چالاکەکان",
+    "tokenUsage": "بەکارهێنانی تۆکەن",
+    "keepInContext": "لە ناو بابەتدا بپارێزە",
+    "addedToContext": "زیادکرا بۆ بابەت",
+    "removeFromContext": "لابردن لە بابەت",
+    "clearAll": "سڕینەوەی هەموو",
+    "noActiveFiles": "پەڕگە چالاک نییە",
+    "processing": "لە پڕۆسەدا",
+    "ready": "ئامادە",
+    "error": "هەڵە",
+    "retry": "دووبارە هەوڵ بدە",
+    "pinned": "پەیوەستکراو",
+    "pin": "پەیوەست بکە",
+    "tokens": "تۆکەنەکان"
   }
 }

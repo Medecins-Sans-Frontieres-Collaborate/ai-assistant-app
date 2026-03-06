@@ -18,6 +18,7 @@ import { SearchMode } from '@/types/searchMode';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { v4 as uuidv4 } from 'uuid';
 
 interface UseChatActionsProps {
   updateConversation: (id: string, updates: any) => void;
@@ -146,6 +147,7 @@ export function useChatActions({
   const handleSelectPrompt = useCallback(
     (prompt: string) => {
       handleSend({
+        id: uuidv4(),
         role: 'user',
         content: prompt,
         messageType: MessageType.TEXT,

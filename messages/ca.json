@@ -936,7 +936,11 @@
     "Default Reasoning Effort": "Esforç de raonament predeterminat",
     "reasoningEffortDescription": "Controla la profunditat del raonament dels models. Un esforç més alt produeix una anàlisi més exhaustiva.",
     "Default Verbosity": "Verbositats predeterminades",
-    "verbosityDescription": "Controla el nivell de detall de la resposta per als models GPT-5."
+    "verbosityDescription": "Controla el nivell de detall de la resposta per als models GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Fixa automàticament els fitxers pujats",
+      "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin"
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Puja document",
     "images": "Imatges",
     "addImage": "Afegeix imatge"
+  },
+  "activeFiles": {
+    "title": "Fitxers actius",
+    "tokenUsage": "Ús de tokens",
+    "keepInContext": "Mantén en context",
+    "addedToContext": "Afegit al context",
+    "removeFromContext": "Elimina del context",
+    "clearAll": "Neteja-ho tot",
+    "noActiveFiles": "No hi ha fitxers actius",
+    "processing": "Processant",
+    "ready": "Preparat",
+    "error": "Error",
+    "retry": "Reintenta",
+    "pinned": "Fixat",
+    "pin": "Fixa",
+    "tokens": "tokens"
   }
 }

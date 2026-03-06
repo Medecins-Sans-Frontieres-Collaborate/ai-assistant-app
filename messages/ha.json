@@ -1114,6 +1114,10 @@
       "quickSettings": "Saitin Muryar",
       "overrideForThisMessage": "Gyara saituna don wannan sakon",
       "speakWithSettings": "Karanta"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Naɗe fayilolin da aka ɗora ta atomatik",
+      "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani"
     }
   },
   "emptyState": {
@@ -1746,5 +1750,21 @@
     "uploadDocument": "Loda Takarda",
     "images": "Hotuna",
     "addImage": "Ƙara hoto"
+  },
+  "activeFiles": {
+    "title": "Fayiloli Masu Aiki",
+    "tokenUsage": "Amfani da token",
+    "keepInContext": "Bar a cikin yanayi",
+    "addedToContext": "An ƙara zuwa yanayi",
+    "removeFromContext": "Cire daga yanayi",
+    "clearAll": "Goge duka",
+    "noActiveFiles": "Babu fayil masu aiki",
+    "processing": "Ana sarrafawa",
+    "ready": "A shirye",
+    "error": "Kuskure",
+    "retry": "Sake gwadawa",
+    "pinned": "An naɗe",
+    "pin": "Naɗe",
+    "tokens": "token"
   }
 }

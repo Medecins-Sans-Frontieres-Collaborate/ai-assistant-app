@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Varsayılan Akıl Yürütme Çabası",
     "reasoningEffortDescription": "Akıl yürütme modelleri için düşünme derinliğini kontrol eder. Daha yüksek çaba, daha ayrıntılı analiz sağlar.",
     "Default Verbosity": "Varsayılan Detay Seviyesi",
-    "verbosityDescription": "GPT-5 modelleri için yanıt detay seviyesini kontrol eder."
+    "verbosityDescription": "GPT-5 modelleri için yanıt detay seviyesini kontrol eder.",
+    "activeFiles": {
+      "autoPinUploads": "Yüklenen dosyaları otomatik olarak sabitle",
+      "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir"
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Belge Yükle",
     "images": "Görseller",
     "addImage": "Görsel ekle"
+  },
+  "activeFiles": {
+    "title": "Aktif Dosyalar",
+    "tokenUsage": "Token kullanımı",
+    "keepInContext": "Bağlamda tut",
+    "addedToContext": "Bağlama eklendi",
+    "removeFromContext": "Bağlamdan çıkar",
+    "clearAll": "Tümünü temizle",
+    "noActiveFiles": "Aktif dosya yok",
+    "processing": "İşleniyor",
+    "ready": "Hazır",
+    "error": "Hata",
+    "retry": "Tekrar dene",
+    "pinned": "Sabitlendi",
+    "pin": "Sabitle",
+    "tokens": "token"
   }
 }

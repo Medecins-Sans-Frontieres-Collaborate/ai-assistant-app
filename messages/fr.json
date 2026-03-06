@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Effort de raisonnement par défaut",
     "reasoningEffortDescription": "Contrôle la profondeur de réflexion des modèles de raisonnement. Un effort élevé produit une analyse plus approfondie.",
     "Default Verbosity": "Verbosité par défaut",
-    "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5."
+    "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Épingler automatiquement les fichiers téléchargés",
+      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés"
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Télécharger un document",
     "images": "Images",
     "addImage": "Ajouter une image"
+  },
+  "activeFiles": {
+    "title": "Fichiers actifs",
+    "tokenUsage": "Utilisation des jetons",
+    "keepInContext": "Garder dans le contexte",
+    "addedToContext": "Ajouté au contexte",
+    "removeFromContext": "Retirer du contexte",
+    "clearAll": "Tout effacer",
+    "noActiveFiles": "Aucun fichier actif",
+    "processing": "Traitement en cours",
+    "ready": "Prêt",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "pinned": "Épinglé",
+    "pin": "Épingler",
+    "tokens": "jetons"
   }
 }

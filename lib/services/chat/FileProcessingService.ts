@@ -8,6 +8,7 @@ import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
 
 import fs from 'fs';
+import path from 'path';
 import { performance } from 'perf_hooks';
 
 /**
@@ -134,7 +135,9 @@ export class FileProcessingService {
           BlobProperty.BLOB,
         )) as Buffer;
         await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
-        console.log(`[FileProcessingService] Using cached text: ${id}`);
+        // Sanitize id for logging to prevent log injection
+        const safeId = id.replace(/[\r\n\t]/g, '');
+        console.log(`[FileProcessingService] Using cached text: ${safeId}`);
         console.log(
           `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
         );
@@ -200,14 +203,33 @@ export class FileProcessingService {
 
   /**
    * Generates a safe temporary file path using blob ID.
+   * Includes sanitization to prevent path traversal attacks.
    *
    * @param fileUrl - The blob storage URL
-   * @returns Tuple of [blobId, filePath]
+   * @returns Tuple of [sanitizedBlobId, resolvedFilePath]
+   * @throws Error if blobId is missing, contains unsafe characters, or results in path traversal
    */
   getTempFilePath(fileUrl: string): [string, string] {
     const blobId = fileUrl.split('/').pop();
     if (!blobId) throw new Error('Could not parse blob ID from URL!');
 
-    return [blobId, `/tmp/${blobId}`];
+    // Sanitize: strip any path components (e.g., "../" attacks)
+    const sanitized = path.basename(blobId);
+
+    // Validate: only allow alphanumeric, hyphens, underscores, and dots
+    // This matches expected SHA256 hex hashes plus common file extensions
+    if (!/^[\w.-]+$/.test(sanitized)) {
+      throw new Error('Invalid blob ID: contains unsafe characters');
+    }
+
+    const filePath = path.join('/tmp', sanitized);
+
+    // Defense in depth: verify resolved path stays within /tmp/
+    const resolved = path.resolve(filePath);
+    if (!resolved.startsWith('/tmp/')) {
+      throw new Error('Path traversal detected');
+    }
+
+    return [sanitized, resolved];
   }
 }

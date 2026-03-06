@@ -936,7 +936,11 @@
     "Default Reasoning Effort": "Sforzo di ragionamento predefinito",
     "reasoningEffortDescription": "Controlla la profondità del ragionamento nei modelli di analisi. Un maggiore sforzo produce analisi più approfondite.",
     "Default Verbosity": "Verbosià predefinita",
-    "verbosityDescription": "Controlla il livello di dettaglio delle risposte per i modelli GPT-5."
+    "verbosityDescription": "Controlla il livello di dettaglio delle risposte per i modelli GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Fissa automaticamente i file caricati",
+      "autoPinUploadsDescription": "Fissa automaticamente i file quando vengono caricati per evitare che vengano rimossi"
+    }
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Carica documento",
     "images": "Immagini",
     "addImage": "Aggiungi immagine"
+  },
+  "activeFiles": {
+    "title": "File attivi",
+    "tokenUsage": "Utilizzo token",
+    "keepInContext": "Mantieni nel contesto",
+    "addedToContext": "Aggiunto al contesto",
+    "removeFromContext": "Rimuovi dal contesto",
+    "clearAll": "Rimuovi tutti",
+    "noActiveFiles": "Nessun file attivo",
+    "processing": "Elaborazione",
+    "ready": "Pronto",
+    "error": "Errore",
+    "retry": "Riprova",
+    "pinned": "Fissato",
+    "pin": "Fissa",
+    "tokens": "token"
   }
 }

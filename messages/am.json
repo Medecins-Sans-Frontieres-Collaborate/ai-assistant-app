@@ -910,7 +910,11 @@
     "Default Reasoning Effort": "ነባሪ የማመዛዘን ጥረት",
     "reasoningEffortDescription": "ለማመዛዘን ሞዴሎች የማመዛዘን ጥረት ደረጃን ይቆጣጠራል። ከፍተኛ ጥረት ዝርዝር ትንተና ይሰጣል።",
     "Default Verbosity": "ነባሪ የቃላት ብዛት",
-    "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።"
+    "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።",
+    "activeFiles": {
+      "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
+      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "ሰነድ ስቀል",
     "images": "ምስሎች",
     "addImage": "ምስል ጨምር"
+  },
+  "activeFiles": {
+    "title": "በተሳተፉ ያሉ ፋይሎች",
+    "tokenUsage": "የቶክን አጠቃቀም",
+    "keepInContext": "በአቀባበል ውስጥ አስቀምጥ",
+    "addedToContext": "ወደ አቀባበል ታክሏል",
+    "removeFromContext": "ከአቀባበሉ አስወግድ",
+    "clearAll": "ሁሉንም አጥፋ",
+    "noActiveFiles": "ምንም ተሳተፉ ፋይሎች የሉም",
+    "processing": "በሂደት ላይ",
+    "ready": "ዝግጁ",
+    "error": "ስህተት",
+    "retry": "እንደገና ይሞክሩ",
+    "pinned": "የተያዘ",
+    "pin": "አስያዝ",
+    "tokens": "ቶክኖች"
   }
 }

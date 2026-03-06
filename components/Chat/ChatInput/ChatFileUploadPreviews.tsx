@@ -64,6 +64,7 @@ interface ChatFileUploadPreviewsProps {
   setFilePreviews: Dispatch<SetStateAction<FilePreview[]>>;
   setSubmitType: Dispatch<SetStateAction<ChatInputSubmitTypes>>;
   uploadProgress?: { [key: string]: number };
+  removeFile: (filePreview: FilePreview) => void;
 }
 
 interface ChatFileUploadPreviewProps {
@@ -71,6 +72,7 @@ interface ChatFileUploadPreviewProps {
   setFilePreviews: Dispatch<SetStateAction<FilePreview[]>>;
   setSubmitType: Dispatch<SetStateAction<ChatInputSubmitTypes>>;
   progress?: number;
+  removeFile: (filePreview: FilePreview) => void;
 }
 
 /**
@@ -234,6 +236,7 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
   setFilePreviews,
   setSubmitType,
   progress,
+  removeFile,
 }) => {
   const t = useTranslations();
   const { openArtifact } = useArtifactStore();
@@ -256,13 +259,7 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
     setIsRemoving(true);
     // Wait for animation to complete before removing from state
     setTimeout(() => {
-      setFilePreviews((prevPreviews) => {
-        const newPreviews = prevPreviews.filter(
-          (prevPreview) => prevPreview !== filePreview,
-        );
-        if (newPreviews.length === 0) setSubmitType('TEXT');
-        return newPreviews;
-      });
+      removeFile(filePreview);
     }, 200); // Match the animation duration
   };
 
@@ -689,6 +686,7 @@ const ChatFileUploadPreviews: FC<ChatFileUploadPreviewsProps> = ({
   setFilePreviews,
   setSubmitType,
   uploadProgress,
+  removeFile,
 }) => {
   const t = useTranslations();
 
@@ -714,6 +712,7 @@ const ChatFileUploadPreviews: FC<ChatFileUploadPreviewsProps> = ({
             setFilePreviews={setFilePreviews}
             setSubmitType={setSubmitType}
             progress={uploadProgress?.[filePreview.name]}
+            removeFile={removeFile}
           />
         ))}
       </div>

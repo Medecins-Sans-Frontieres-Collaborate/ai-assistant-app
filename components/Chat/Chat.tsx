@@ -68,6 +68,12 @@ const DocumentArtifact = dynamic(
   { ssr: false, loading: ArtifactLoadingSpinner },
 );
 
+// Dynamic import to avoid HMR issues with this specific file
+const ActiveFilesPanel = dynamic(
+  () => import('./ActiveFilesPanel').then((mod) => mod.ActiveFilesPanel),
+  { ssr: false },
+);
+
 interface ChatProps {
   mobileModelSelectOpen?: boolean;
   onMobileModelSelectChange?: (open: boolean) => void;
@@ -226,14 +232,16 @@ export function Chat({
   const { clearConversation } = useClearConversation();
 
   // Version navigation callback for message versioning
+  // FIXED: Use getState() to avoid dependency on selectedConversation object
   const handleNavigateVersion = useCallback(
     (messageIndex: number, direction: 'prev' | 'next') => {
-      if (!selectedConversation) return;
+      const convId = useConversationStore.getState().selectedConversationId;
+      if (!convId) return;
       useConversationStore
         .getState()
-        .navigateVersion(selectedConversation.id, messageIndex, direction);
+        .navigateVersion(convId, messageIndex, direction);
     },
-    [selectedConversation],
+    [],
   );
 
   const {
@@ -447,6 +455,9 @@ export function Chat({
             onAlwaysSwitch={() => acceptModelSwitch(true)}
           />
         )}
+
+        {/* Active Files Panel */}
+        <ActiveFilesPanel />
 
         {/* Chat Input - Bottom position (hidden in empty state) */}
         {hasMessages && (

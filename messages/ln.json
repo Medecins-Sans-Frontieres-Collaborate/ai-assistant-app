@@ -1114,6 +1114,10 @@
       "quickSettings": "Makambo ya mongongo",
       "overrideForThisMessage": "Bongisa maponami pona nsango oyo",
       "speakWithSettings": "Sebisa"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Kangisa ndenge ya kokangisa mafayile nyonso oyo ebakisami",
+      "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te"
     }
   },
   "emptyState": {
@@ -1746,5 +1750,21 @@
     "uploadDocument": "Upload Document",
     "images": "Ba elili",
     "addImage": "Tía elili"
+  },
+  "activeFiles": {
+    "title": "Mafayile oyo ezali",
+    "tokenUsage": "Bosaleli ya ba token",
+    "keepInContext": "Tika yango na contexte",
+    "addedToContext": "Ebakisami na contexte",
+    "removeFromContext": "Longola na contexte",
+    "clearAll": "Kolongola nyonso",
+    "noActiveFiles": "Mafayile moko te nyonso",
+    "processing": "Ezalaki kosala",
+    "ready": "Esili",
+    "error": "Esalaki likambo te",
+    "retry": "Luka lisusu",
+    "pinned": "Ekangami",
+    "pin": "Kangisa",
+    "tokens": "matoken"
   }
 }

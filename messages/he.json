@@ -936,7 +936,11 @@
     "Default Reasoning Effort": "רמת מאמץ חשיבה כברירת מחדל",
     "reasoningEffortDescription": "שולט בעומק החשיבה במודלים של נימוק. רמת מאמץ גבוהה יותר תפיק ניתוח מעמיק יותר.",
     "Default Verbosity": "רמת פירוט כברירת מחדל",
-    "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5."
+    "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
+      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "העלה מסמך",
     "images": "תמונות",
     "addImage": "הוסף תמונה"
+  },
+  "activeFiles": {
+    "title": "קבצים פעילים",
+    "tokenUsage": "שימוש בטוקנים",
+    "keepInContext": "השאר בהקשר",
+    "addedToContext": "נוסף להקשר",
+    "removeFromContext": "הסר מההקשר",
+    "clearAll": "נקה הכל",
+    "noActiveFiles": "אין קבצים פעילים",
+    "processing": "מעבד",
+    "ready": "מוכן",
+    "error": "שגיאה",
+    "retry": "נסה שוב",
+    "pinned": "נעוץ",
+    "pin": "נעץ",
+    "tokens": "טוקנים"
   }
 }

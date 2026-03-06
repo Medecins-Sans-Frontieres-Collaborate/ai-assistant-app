@@ -311,6 +311,65 @@ async function pptToText(inputPath: string): Promise<string> {
   }
 }
 
+/**
+ * Extracts text content from a document file on disk.
+ * Handles PDF, DOCX, XLSX, PPTX, EPUB, and plain text files.
+ *
+ * @param filePath - Path to the file on disk
+ * @param mimeType - MIME type of the file
+ * @param originalFilename - Original filename (used for extension-based fallback detection)
+ * @returns Extracted text content
+ * @throws Error if text extraction fails
+ */
+export async function loadDocumentFromPath(
+  filePath: string,
+  mimeType: string,
+  originalFilename: string,
+): Promise<string> {
+  const perfStart = performance.now();
+
+  let text: string;
+  switch (true) {
+    case mimeType.startsWith('application/pdf'):
+      text = await pdfToText(filePath);
+      break;
+    case mimeType.startsWith(
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ):
+      text = await convertWithPandoc(filePath, 'markdown');
+      break;
+    case mimeType.startsWith(
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ) || originalFilename.endsWith('.xlsx'):
+      text = await xlsxToText(filePath);
+      break;
+    case mimeType.startsWith(
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
+      text = await pptToText(filePath);
+      break;
+    case mimeType.startsWith('application/epub+zip'):
+      text = await convertWithPandoc(filePath, 'markdown');
+      break;
+    case mimeType.startsWith('text/') ||
+      mimeType.startsWith('application/csv') ||
+      originalFilename.endsWith('.py') ||
+      originalFilename.endsWith('.sql') ||
+      mimeType.startsWith('application/json') ||
+      mimeType.startsWith('application/xhtml+xml') ||
+      originalFilename.endsWith('.tex'):
+    default:
+      text = await fs.promises.readFile(filePath, 'utf8');
+  }
+
+  perfLog(
+    'loadDocumentFromPath total',
+    perfStart,
+    `${sanitizeForLog(originalFilename)} (${mimeType})`,
+  );
+  return text;
+}
+
 export async function loadDocument(file: File): Promise<string> {
   const mimeType = lookup(file.name) || 'application/octet-stream';
   const perfStart = performance.now();
@@ -322,48 +381,8 @@ export async function loadDocument(file: File): Promise<string> {
     mode: 0o600,
   });
 
-  let text: string;
-  switch (true) {
-    case mimeType.startsWith('application/pdf'):
-      text = await pdfToText(tempFilePath);
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ):
-      text = await convertWithPandoc(tempFilePath, 'markdown');
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    ) || file.name.endsWith('.xlsx'):
-      text = await xlsxToText(tempFilePath);
-      break;
-    case mimeType.startsWith(
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    ) || mimeType.startsWith('application/vnd.ms-powerpoint'):
-      text = await pptToText(tempFilePath);
-      break;
-    case mimeType.startsWith('application/epub+zip'):
-      text = await convertWithPandoc(tempFilePath, 'markdown');
-      break;
-    case mimeType.startsWith('text/') ||
-      mimeType.startsWith('application/csv') ||
-      file.name.endsWith('.py') ||
-      file.name.endsWith('.sql') ||
-      mimeType.startsWith('application/json') ||
-      mimeType.startsWith('application/xhtml+xml') ||
-      file.name.endsWith('.tex'):
-    default:
-      try {
-        text = await file.text();
-        if (!text) {
-          // If file.text() fails or returns empty, read from the temp file
-          text = await fs.promises.readFile(tempFilePath, 'utf8');
-        }
-      } catch (error) {
-        console.error(`Could not parse text from ${file.name}`);
-        throw error;
-      }
-  }
+  const text = await loadDocumentFromPath(tempFilePath, mimeType, file.name);
+
   perfLog(
     'loadDocument total',
     perfStart,

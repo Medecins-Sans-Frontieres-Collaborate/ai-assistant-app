@@ -936,7 +936,11 @@
     "Default Reasoning Effort": "Oletusarvoinen päättelytason vaivannäkö",
     "reasoningEffortDescription": "Säätää päättelymallien ajattelun syvyyttä. Suurempi vaivannäkö tuottaa perusteellisemman analyysin.",
     "Default Verbosity": "Oletusarvoinen sanamäärä",
-    "verbosityDescription": "Säätää GPT-5-mallien vastausten yksityiskohtaisuutta."
+    "verbosityDescription": "Säätää GPT-5-mallien vastausten yksityiskohtaisuutta.",
+    "activeFiles": {
+      "autoPinUploads": "Kiinnitä ladatut tiedostot automaattisesti",
+      "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä"
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Lataa asiakirja",
     "images": "Kuvat",
     "addImage": "Lisää kuva"
+  },
+  "activeFiles": {
+    "title": "Aktiiviset tiedostot",
+    "tokenUsage": "Tokenien käyttö",
+    "keepInContext": "Pidä kontekstissa",
+    "addedToContext": "Lisätty kontekstiin",
+    "removeFromContext": "Poista kontekstista",
+    "clearAll": "Tyhjennä kaikki",
+    "noActiveFiles": "Ei aktiivisia tiedostoja",
+    "processing": "Käsitellään",
+    "ready": "Valmis",
+    "error": "Virhe",
+    "retry": "Yritä uudelleen",
+    "pinned": "Kiinnitetty",
+    "pin": "Kiinnitä",
+    "tokens": "tokenit"
   }
 }

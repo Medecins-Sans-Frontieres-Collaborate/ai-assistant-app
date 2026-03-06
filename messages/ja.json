@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "デフォルトの推論労力",
     "reasoningEffortDescription": "推論モデルの思考の深さを調整します。値を高くすると、より詳細な分析が行われます。",
     "Default Verbosity": "デフォルトの詳細レベル",
-    "verbosityDescription": "GPT-5モデルの応答の詳細度を調整します。"
+    "verbosityDescription": "GPT-5モデルの応答の詳細度を調整します。",
+    "activeFiles": {
+      "autoPinUploads": "アップロードファイルを自動でピン留め",
+      "autoPinUploadsDescription": "アップロード時にファイルを自動的にピン留めし、循環から除外します"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "ドキュメントをアップロード",
     "images": "画像",
     "addImage": "画像を追加"
+  },
+  "activeFiles": {
+    "title": "アクティブファイル",
+    "tokenUsage": "トークン使用量",
+    "keepInContext": "コンテキストに保持",
+    "addedToContext": "コンテキストに追加済み",
+    "removeFromContext": "コンテキストから削除",
+    "clearAll": "すべてクリア",
+    "noActiveFiles": "アクティブファイルなし",
+    "processing": "処理中",
+    "ready": "準備完了",
+    "error": "エラー",
+    "retry": "再試行",
+    "pinned": "ピン留め済み",
+    "pin": "ピン留め",
+    "tokens": "トークン"
   }
 }

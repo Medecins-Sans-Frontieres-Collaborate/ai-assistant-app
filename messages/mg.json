@@ -1114,6 +1114,10 @@
       "quickSettings": "Fitsipiky ny Feo",
       "overrideForThisMessage": "Amboary ny fitsipika ho an'ity hafatra ity",
       "speakWithSettings": "Mitenena"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
+      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Fandikan-teny manokana amin'ny GPT-5.2 natokana ho an'ny fifanakalozan-dresaka sy fahakingan-tsain'ny fihetseham-po. Mahay amin'ny fifandraisana mahafatra-po, fanoratana mamorona, famoahana hevitra, ary fifanakalozan-dresaka voajanahary. Mety indrindra amin'ny resaka tsy ofisialy, toe-javatra fanoroana hevitra, ary asa mitaky fahatsapana ara-pihetseham-po."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Ampakaro Tahirin-kevitra",
     "images": "Sary",
     "addImage": "Ampio sary"
+  },
+  "activeFiles": {
+    "title": "Rakitra Miasa",
+    "tokenUsage": "Fampiasana token",
+    "keepInContext": "Tazomy ao anatin'ny sehatra",
+    "addedToContext": "Nampidirina ao amin'ny sehatra",
+    "removeFromContext": "Esory ao amin'ny sehatra",
+    "clearAll": "Fafao rehetra",
+    "noActiveFiles": "Tsy misy rakitra miasa",
+    "processing": "Eo am-pikarakarana",
+    "ready": "Vita",
+    "error": "Hadisoana",
+    "retry": "Avereno",
+    "pinned": "Voafatotra",
+    "pin": "Afa-toroka",
+    "tokens": "token"
   }
 }

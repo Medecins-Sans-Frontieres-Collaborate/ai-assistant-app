@@ -97,6 +97,17 @@ interface ChatStore {
       totalChunks?: number;
       jobType?: 'chunked' | 'batch';
     }[];
+    fileCacheUpdates?: Array<{
+      fileId: string;
+      processedContent: {
+        type: 'document' | 'transcript' | 'image';
+        content: string;
+        summary?: string;
+        tokenEstimate: number;
+        tokenEstimateEncoding?: string;
+        processedAt: string;
+      };
+    }>;
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -280,8 +291,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Process the stream
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions } =
-        await get().processStream(stream, streamParser, showLoadingTimeout);
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        fileCacheUpdates,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
@@ -308,6 +323,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
       );
+
+      // Apply file cache updates to conversation store
+      if (fileCacheUpdates && fileCacheUpdates.length > 0) {
+        const conversationStore = useConversationStore.getState();
+        for (const u of fileCacheUpdates) {
+          if (u?.fileId && u?.processedContent) {
+            conversationStore.updateFileProcessedContent(
+              conversation.id,
+              u.fileId,
+              u.processedContent as any,
+            );
+          }
+        }
+      }
 
       // Track successful model usage for ordering stability
       const { recordSuccessfulModelUsage } = useSettingsStore.getState();
@@ -445,6 +474,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       userContext: settings.userContext,
       displayNamePreference: settings.displayNamePreference,
       customDisplayName: settings.customDisplayName,
+      activeFiles: conversation.activeFiles,
     });
   },
 
@@ -462,6 +492,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       totalChunks?: number;
       jobType?: 'chunked' | 'batch';
     }[];
+    fileCacheUpdates?: Array<{
+      fileId: string;
+      processedContent: {
+        type: 'document' | 'transcript' | 'image';
+        content: string;
+        summary?: string;
+        tokenEstimate: number;
+        tokenEstimateEncoding?: string;
+        processedAt: string;
+      };
+    }>;
   }> => {
     const reader = stream.getReader();
 
@@ -521,6 +562,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       finalContent,
       threadId: streamParser.getThreadId(),
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
+      fileCacheUpdates: (streamParser as any).getFileCacheUpdates?.(),
     };
   },
 
@@ -776,8 +818,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Process the stream
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions } =
-        await get().processStream(stream, streamParser, showLoadingTimeout);
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        fileCacheUpdates,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
@@ -803,6 +849,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
       );
+
+      if (fileCacheUpdates && fileCacheUpdates.length > 0) {
+        const conversationStore = useConversationStore.getState();
+        for (const u of fileCacheUpdates) {
+          if (u?.fileId && u?.processedContent) {
+            conversationStore.updateFileProcessedContent(
+              conversation.id,
+              u.fileId,
+              u.processedContent as any,
+            );
+          }
+        }
+      }
 
       // Clear streaming state and show success
       get().clearStreamingState();

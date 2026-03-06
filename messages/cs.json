@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Výchozí úroveň úsilí při uvažování",
     "reasoningEffortDescription": "Určuje hloubku uvažování pro modely zaměřené na logické myšlení. Vyšší úsilí vede k důkladnější analýze.",
     "Default Verbosity": "Výchozí úroveň podrobnosti",
-    "verbosityDescription": "Určuje úroveň detailu odpovědí u modelů GPT-5."
+    "verbosityDescription": "Určuje úroveň detailu odpovědí u modelů GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Automaticky připnout nahrané soubory",
+      "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění"
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Nahrát dokument",
     "images": "Obrázky",
     "addImage": "Přidat obrázek"
+  },
+  "activeFiles": {
+    "title": "Aktivní soubory",
+    "tokenUsage": "Využití tokenů",
+    "keepInContext": "Ponechat v kontextu",
+    "addedToContext": "Přidáno do kontextu",
+    "removeFromContext": "Odebrat z kontextu",
+    "clearAll": "Vymazat vše",
+    "noActiveFiles": "Žádné aktivní soubory",
+    "processing": "Zpracovává se",
+    "ready": "Připraveno",
+    "error": "Chyba",
+    "retry": "Zkusit znovu",
+    "pinned": "Připnuto",
+    "pin": "Připnout",
+    "tokens": "tokeny"
   }
 }

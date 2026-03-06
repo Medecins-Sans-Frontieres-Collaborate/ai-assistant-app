@@ -926,7 +926,11 @@
     "Default Reasoning Effort": "Standaard redeneersinspanning",
     "reasoningEffortDescription": "Bepaalt de diepgang van het denkproces voor redeneermodellen. Meer inspanning leidt tot een grondigere analyse.",
     "Default Verbosity": "Standaard verhaallengte",
-    "verbosityDescription": "Bepaalt het detailniveau van antwoorden voor GPT-5-modellen."
+    "verbosityDescription": "Bepaalt het detailniveau van antwoorden voor GPT-5-modellen.",
+    "activeFiles": {
+      "autoPinUploads": "Geüploade bestanden automatisch vastzetten",
+      "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd"
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1770,5 +1774,21 @@
     "uploadDocument": "Document uploaden",
     "images": "Afbeeldingen",
     "addImage": "Afbeelding toevoegen"
+  },
+  "activeFiles": {
+    "title": "Actieve bestanden",
+    "tokenUsage": "Token-gebruik",
+    "keepInContext": "In context houden",
+    "addedToContext": "Toegevoegd aan context",
+    "removeFromContext": "Uit context verwijderen",
+    "clearAll": "Alles wissen",
+    "noActiveFiles": "Geen actieve bestanden",
+    "processing": "Bezig met verwerken",
+    "ready": "Gereed",
+    "error": "Fout",
+    "retry": "Opnieuw proberen",
+    "pinned": "Vastgezet",
+    "pin": "Vastzetten",
+    "tokens": "tokens"
   }
 }

@@ -6,6 +6,7 @@ import { buildMessageContent } from '@/lib/utils/shared/chat/contentBuilder';
 import { validateMessageSubmission } from '@/lib/utils/shared/chat/validation';
 
 import {
+  ActiveFile,
   ChatInputSubmitTypes,
   FileFieldValue,
   FileMessageContent,
@@ -17,6 +18,9 @@ import {
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import { v4 as uuidv4 } from 'uuid';
 
 interface UseMessageSenderProps {
   textFieldValue: string;
@@ -177,8 +181,12 @@ export function useMessageSender({
       null,
     );
 
+    // Generate message ID before sending so we can reference it for active files
+    const messageId = uuidv4();
+
     onSend(
       {
+        id: messageId,
         role: 'user',
         content,
         messageType: mapSubmitTypeToMessageType(submitType ?? 'TEXT'),
@@ -189,6 +197,34 @@ export function useMessageSender({
       },
       searchMode,
     );
+
+    // Auto-activate uploaded files so they persist in context for follow-up messages
+    if (filteredFileFieldValue) {
+      const conversationId =
+        useConversationStore.getState().selectedConversationId;
+      if (conversationId) {
+        const filesToActivate = Array.isArray(filteredFileFieldValue)
+          ? filteredFileFieldValue
+          : [filteredFileFieldValue];
+        const activateFile = useConversationStore.getState().activateFile;
+
+        for (const file of filesToActivate) {
+          if (file.type === 'file_url') {
+            const activeFile: ActiveFile = {
+              id: `${file.url}-${Date.now()}`,
+              url: file.url,
+              originalFilename:
+                file.originalFilename || file.url.split('/').pop() || 'file',
+              addedAt: new Date().toISOString(),
+              sourceMessageId: messageId,
+              status: 'idle',
+              pinned: useSettingsStore.getState().autoPinActiveFiles,
+            };
+            activateFile(conversationId, activeFile);
+          }
+        }
+      }
+    }
 
     // Clear input state
     onClearInput();

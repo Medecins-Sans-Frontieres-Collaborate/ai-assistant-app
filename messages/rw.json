@@ -1114,6 +1114,10 @@
       "quickSettings": "Igenamiterere ry'Ijwi",
       "overrideForThisMessage": "Hindura igenamiterere ku butumwa bwa hano",
       "speakWithSettings": "Vuga"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Kufungira mu buryo bwikora amadosiye ashyizweho",
+      "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Ukuboza 2025"
+      "knowledgeCutoff": "Ukuboza 2025",
+      "description": "Ubwoko buzusubirwemo bwa GPT-5.2 bwihariye ku biganiro n’ubwenge bw’amarangamutima. Bumenyereye kuganira kwuje impuhwe, kwandika byihariye, gutangaho ibitekerezo, n’ikiganiro cy’umwimerere. Bukwiriye ibiganiro bisanzwe, inama zihumuriza, n’imirimo isaba kumenya amarangamutima."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Ohereza Inyandiko",
     "images": "Amashusho",
     "addImage": "Ongeraho ishusho"
+  },
+  "activeFiles": {
+    "title": "Amadosiye Akora",
+    "tokenUsage": "Imikoreshereze ya token",
+    "keepInContext": "Bika mu kwitegura",
+    "addedToContext": "Byongerewe mu kwitegura",
+    "removeFromContext": "Bikuremo mu kwitegura",
+    "clearAll": "Sukura byose",
+    "noActiveFiles": "Nta madosiye akora",
+    "processing": "Birimo gutunganywa",
+    "ready": "Byiteguye",
+    "error": "Ikosa",
+    "retry": "Kongera",
+    "pinned": "Byafungiwe",
+    "pin": "Fungira",
+    "tokens": "token"
   }
 }

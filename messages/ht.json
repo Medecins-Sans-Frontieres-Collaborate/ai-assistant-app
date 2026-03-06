@@ -1114,6 +1114,10 @@
       "quickSettings": "Paramèt Vwa",
       "overrideForThisMessage": "Ajiste paramèt pou mesaj sa a",
       "speakWithSettings": "Pale"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Pine otomatikman fichye w telechaje yo",
+      "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la"
     }
   },
   "emptyState": {
@@ -1267,7 +1271,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Varyasyon espesyal GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Ekselan nan kominikasyon anpatik, ekriti kreyatif, bay lide, ak dyalòg natirèl. Pi bon pou konvèsasyon senp, senaryo konsèy, ak taches ki mande sansiblite emosyonèl."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1750,21 @@
     "uploadDocument": "Telechaje Dokiman",
     "images": "Imaj",
     "addImage": "Ajoute imaj"
+  },
+  "activeFiles": {
+    "title": "Fichye Aktif",
+    "tokenUsage": "Itilizasyon tokèn",
+    "keepInContext": "Kenbe nan kontèks",
+    "addedToContext": "Ajoute nan kontèks",
+    "removeFromContext": "Retire nan kontèks",
+    "clearAll": "Efase tout",
+    "noActiveFiles": "Pa gen fichye aktif",
+    "processing": "Ap trete",
+    "ready": "Pare",
+    "error": "Erè",
+    "retry": "Reeseye",
+    "pinned": "Fikse",
+    "pin": "Fikse",
+    "tokens": "tokèn"
   }
 }

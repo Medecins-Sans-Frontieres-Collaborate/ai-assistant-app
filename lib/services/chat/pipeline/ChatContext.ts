@@ -2,7 +2,7 @@ import { Session } from 'next-auth';
 
 import { ModelSelector } from '@/lib/services/shared';
 
-import { Message } from '@/types/chat';
+import { ActiveFile, Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -175,6 +175,15 @@ export interface ChatContext {
 
   /** Enriched messages (populated by feature enrichers) */
   enrichedMessages?: Message[];
+
+  /** Active files to include in context (from client) */
+  activeFiles?: ActiveFile[];
+
+  /** Cache updates for active files (emitted as SSE events) */
+  activeFilesCacheUpdates?: Array<{
+    fileId: string;
+    processedContent: NonNullable<ActiveFile['processedContent']>;
+  }>;
 
   /** Execution strategy (standard or agent) */
   executionStrategy?: 'standard' | 'agent';
