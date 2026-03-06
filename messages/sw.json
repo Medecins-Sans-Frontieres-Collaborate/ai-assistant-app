@@ -777,7 +777,65 @@
       "articles": "makala",
       "searchPlaceholder": "Tafuta Maswali...",
       "noResults": "Hakuna Maswali yanayolingana na utafutaji wako",
-      "noResultsHint": "Jaribu neno lingine la utafutaji"
+      "noResultsHint": "Jaribu neno lingine la utafutaji",
+      "items": [
+        {
+          "question": "MSF AI Assistant ni nini?",
+          "answer": "MSF AI Assistant ni zana ya mazungumzo ya AI ya ndani iliyoundwa maalum kwa wafanyakazi wa Médecins Sans Frontières (MSF). Suluhisho hili linaimarisha faragha kwa kuweka data ya mazungumzo ndani ya mifumo ya MSF, likitoa mbadala salama kwa huduma za nje. Inasaidia mifano mingi ya AI (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) na vipengele kama utafutaji wa wavuti, unukuzi wa sauti na tafsiri, vidokezo maalum na mitindo. Msaidizi wa AI anaweza kusaidia kujibu maswali, kuunda maudhui, kutafsiri maandishi, kuvumbua mawazo na zaidi."
+        },
+        {
+          "question": "Mifano ipi inapatikana?",
+          "answer": "MSF AI Assistant hutoa ufikiaji wa mifano mingi ya AI:\\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\\n- o1, o1-mini (mifano ya kufikiria ya OpenAI)\\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\\n- Grok-2 (xAI)\\n\\nUnaweza kubadilisha kati ya mifano wakati wowote kwa kutumia menyu ya kuchagua modeli juu ya mazungumzo."
+        },
+        {
+          "question": "Vitendo vya Haraka ni nini?",
+          "answer": "Vitendo vya Haraka vinakuruhusu kutumia vidokezo na mitindo kwa ujumbe wako haraka. Vidokezo: Violezo vinavyoweza kutumika tena kwa kazi za kawaida. Mitindo: Rekebisha jinsi AI inavyojibu. Fikia kupitia ikoni ya radi (⚡) au kwa kubofya /."
+        },
+        {
+          "question": "Hali ya Utafutaji ni nini?",
+          "answer": "Hali ya Utafutaji inaruhusu AI kutumia utafutaji wa wavuti unapohitajika taarifa za hivi karibuni. Hali inayolenga faragha (chaguo-msingi): Inatuma hoja za utafutazi tu. Hali ya Azure AI Foundry (GPT-4.1 tu): Inahifadhi mazungumzo kamili kwa majibu ya haraka."
+        },
+        {
+          "question": "Ninatumia vipi unukuzi wa sauti?",
+          "answer": "Bofya ikoni ya maikrofoni kuanza kurekodi. AI itanukuu hotuba kwenda kwenye maandishi. Baada ya unukuzi unaweza kunakili maandishi, kupakua kama faili au kutafsiri kwa lugha 13+."
+        },
+        {
+          "question": "Je, ninaweza kutumia MSF AI Assistant kwenye simu yangu?",
+          "answer": "Ndiyo! MSF AI Assistant inafanya kazi kama Progressive Web App (PWA). Kwenye simu: Fungua ai.msf.org kwenye kivinjari chako, ingia, nenda kwenye Mipangilio > Programu ya Simu na ugonge 'Ongeza kwenye Skrini ya Mwanzo' (iOS) au 'Sakinisha' (Android)."
+        },
+        {
+          "question": "Data ya mazungumzo yangu inahifadhiwa wapi?",
+          "answer": "Historia ya mazungumzo inahifadhiwa ndani ya hifadhi ya kivinjari, sio kwenye seva. Mazungumzo yanaishi kwenye kifaa chako tu na hayalandanishwi kati ya vifaa. Ikiwa unatumia hali ya Azure AI Foundry kwa utafutaji, mazungumzo hayo pia yanahifadhiwa kwenye Azure AI Foundry."
+        },
+        {
+          "question": "Mawakala Maalum ni nini?",
+          "answer": "Mawakala Maalum ni usanidi wa hali ya juu wa AI unaoendeshwa kwenye mfano wa MSF AI Assistant Foundry na uwezo wa kipekee. Wanaweza kutumia zana kiotomatiki kama utafutaji wa wavuti na ufafanuzi wa msimbo. Hii ni kipengele cha hali ya juu kinachohitaji uratibu na timu ya kiufundi."
+        },
+        {
+          "question": "Je, ninapaswa kuamini 100% majibu ya AI?",
+          "answer": "Hapana. MSF AI Assistant ni zana yenye nguvu lakini haipaswi kubadilisha hukumu ya kibinadamu na utaalam. Daima: Thibitisha taarifa za ukweli, Angalia upendeleo na usahihi, Kagua matokeo kabla ya kutumia, Usiingize data ya kibinafsi au taarifa nyeti."
+        },
+        {
+          "question": "Ni data gani nisiyoingiza?",
+          "answer": "Usiingize: Data ya kibinafsi (majina, nambari za simu, barua pepe, wasifu), Maelezo ya shughuli nyeti sana, Taarifa za wagonjwa au rekodi za matibabu, Chochote kinachoweza kutambua watu."
+        },
+        {
+          "question": "Ninaweza vipi kusafirisha au kufuta data?",
+          "answer": "Kutoka Mipangilio > Usimamizi wa Data unaweza: Safirisha mazungumzo yote na vidokezo kama JSON, Futa mazungumzo yote, Leta data iliyosafirishwa awali, Angalia matumizi ya hifadhi."
+        },
+        {
+          "question": "Niende wapi kwa maswali?",
+          "answer": "Wasiliana na usaidizi:\\n- Watumiaji wa Marekani: ai@newyork.msf.org\\n- Watumiaji nje ya Marekani: ai.team@amsterdam.msf.org\\n\\nFikia Kituo cha Msaada wakati wowote kutoka Mipangilio > Msaada na Usaidizi."
+        },
+        {
+          "question": "Ninaweza kujifunza zaidi kuhusu mradi wapi?",
+          "answer": "Tembelea Lango la AI Accelerator kwenye Pamoja:\\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\\n\\nLango hili lina taarifa kuhusu ramani ya barabara ya mradi na nyenzo za mafunzo."
+        },
+        {
+          "question": "Je, MSF AI Assistant ni chanzo wazi?",
+          "answer": "Ndiyo! Inapatikana kwenye GitHub:\\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\\n\\nImejengwa kwa Next.js na React. Michango inakaribishwa!"
+        }
+      ]
     },
     "privacy": {
       "title": "Faragha na Data",
@@ -791,7 +849,41 @@
       "localStorageOnly": "Hifadhi ya ndani tu",
       "msfControlled": "Inasimamiwa na MSF",
       "noPersonalData": "Hakuna data ya kibinafsi",
-      "noSensitiveOps": "Hakuna shughuli nyeti"
+      "noSensitiveOps": "Hakuna shughuli nyeti",
+      "items": [
+        {
+          "question": "MSF AI Assistant ni nini na inacholinda vipi faragha?",
+          "answer": "MSF AI Assistant ni chatbot wa AI wa ndani ulioundwa kwa wafanyakazi wa MSF. Inatumia mifano mikubwa ya lugha ya Open AI ya Microsoft Azure huku ikiweka data yote ndani ya MSF, ikihakikisha faragha na udhibiti. Kutumia ai.msf.org ni salama zaidi kuliko kutumia zana nyingine za nje za AI za bure ambazo zinatoa uhakika mdogo wa faragha."
+        },
+        {
+          "question": "Data yangu inahifadhiwa na kushughulikiwa wapi?",
+          "answer": "Data yote ya mazungumzo na MSF AI Assistant inahifadhiwa ndani ya kompyuta yako na kushughulikiwa ndani ya mifumo ya MSF kwa kutumia miundombinu ya Microsoft Azure. Taarifa za kuingia zinashughulikiwa na MSF kama ilivyoelezwa katika Sera ya Faragha ya Shirika la MSF. Data inabaki ndani ya MSF, ikihakikisha faragha na udhibiti."
+        },
+        {
+          "question": "Ni data gani nisiyoingiza katika MSF AI Assistant?",
+          "answer": "Usiingize/upakue kwenye ai.msf.org:\\n- Data ya kibinafsi (majina, nambari za simu, wasifu, ushuhuda; chochote kinachotambua watu moja kwa moja au kwa njia isiyo ya moja kwa moja)\\n- Data nyeti sana (data inayoweza kutumika kwa makusudi au bila makusudi kudhuru watu, jumuiya, MSF au wafanyakazi wake -- uamuzi wa unyeti wa data unapaswa kujumuisha uchambuzi wa muktadha kama vile maeneo ya miradi nyeti au vikundi vya hatari, matukio ya usalama na maelezo mengine ya uendeshaji)"
+        },
+        {
+          "question": "Miongozo ya matumizi yenye uwajibikaji ni ipi?",
+          "answer": "Unakubali kutumia ai.msf.org kwa uwajibikaji. Utafanya:\\n- Tumia kulingana na sera husika za ICT, AI na zingine za Shirika la MSF\\n- Thibitisha daima matokeo kwa usahihi, ukamilifu na upendeleo\\n- Hakikisha matokeo hayakiuki haki za milki ya akili za watu wengine\\n- Kuwa wazi kuhusu matumizi ya AI na weka alama matokeo kama yaliyozalishwa na AI"
+        },
+        {
+          "question": "Ni matumizi gani yanayokatazwa?",
+          "answer": "Hautatumia ai.msf.org kwa:\\n- Matibabu (kutoa huduma za matibabu au kujibu maswali yanayohusiana na afya)\\n- Ufuatiliaji au ufuatiliaji wa wagonjwa wa MSF au jumuiya au watu wengine\\n- Maamuzi yanayohusiana na ajira\\n- Maamuzi ya kiotomatiki (kufanya maamuzi yanayoweza kudhuru watu au jumuiya)\\n- Kuunda maudhui ya vyombo vya habari kwa mawasiliano ya nje kuhusu masuala ya maslahi ya umma\\n- Shughuli haramu au zenye madhara"
+        },
+        {
+          "question": "Matokeo ni sahihi kiasi gani?",
+          "answer": "Ai.msf.org inatumia teknolojia ya majaribio -- hatuahidi matokeo yatakuwa sahihi. Aidha, teknolojia haijafunzwa kwa kutumia data inayowakilisha wagonjwa na jumuiya za MSF. Matokeo ya AI yanaweza kuendeleza upendeleo, ubaguzi na hadith potofu. Unawajibika kuthibitisha matokeo yaliyozalishwa."
+        },
+        {
+          "question": "Ni nani nitawasiliana naye kuhusu wasiwasi au matukio ya faragha?",
+          "answer": "Ikiwa una wasiwasi au unataka kuripoti tukio, wasiliana na: ai.team@amsterdam.msf.org. Kwa eneo lako maalum unaweza pia kuwasiliana na DPO (Afisa wa Ulinzi wa Data) wa ndani au timu inayohusika ya ICT (Teknolojia ya Taarifa na Mawasiliano)."
+        },
+        {
+          "question": "Je, masharti ya matumizi yanaweza kurekebIshwa?",
+          "answer": "Masharti haya yanaweza kurekebIshwa na MSF wakati wowote -- tutakujulisha ikiwa yatabadilika -- kuendelea kutumia ai.msf.org kunawakilisha kukubali mabadiliko."
+        }
+      ]
     },
     "contact": {
       "title": "Wasiliana na Rasilimali",

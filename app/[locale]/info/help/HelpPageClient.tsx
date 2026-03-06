@@ -8,7 +8,6 @@ import {
   IconExternalLink,
   IconFileText,
   IconHelp,
-  IconInfoCircle,
   IconLanguage,
   IconMail,
   IconSearch,
@@ -18,7 +17,6 @@ import { useEffect, useState } from 'react';
 import { FaGithub } from 'react-icons/fa';
 
 import { Session } from 'next-auth';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import { MSFOrganization } from '@/types/organization';
@@ -28,8 +26,41 @@ import { OrganizationSupportWrapper } from '@/components/Support/OrganizationSup
 import { SupportContactSection } from '@/components/Support/SupportContactSection';
 
 import { EXTERNAL_LINKS } from '@/lib/constants/externalLinks';
-import privacyData from '@/lib/data/privacyPolicy.json';
 import { Link } from '@/lib/navigation';
+// Import all message files for dynamic locale switching
+import messagesAm from '@/messages/am.json';
+import messagesAr from '@/messages/ar.json';
+import messagesBn from '@/messages/bn.json';
+import messagesCa from '@/messages/ca.json';
+import messagesCs from '@/messages/cs.json';
+import messagesDe from '@/messages/de.json';
+import messagesEn from '@/messages/en.json';
+import messagesEs from '@/messages/es.json';
+import messagesFa from '@/messages/fa.json';
+import messagesFi from '@/messages/fi.json';
+import messagesFr from '@/messages/fr.json';
+import messagesHe from '@/messages/he.json';
+import messagesHi from '@/messages/hi.json';
+import messagesId from '@/messages/id.json';
+import messagesIt from '@/messages/it.json';
+import messagesJa from '@/messages/ja.json';
+import messagesKo from '@/messages/ko.json';
+import messagesMy from '@/messages/my.json';
+import messagesNl from '@/messages/nl.json';
+import messagesPl from '@/messages/pl.json';
+import messagesPt from '@/messages/pt.json';
+import messagesRo from '@/messages/ro.json';
+import messagesRu from '@/messages/ru.json';
+import messagesSi from '@/messages/si.json';
+import messagesSv from '@/messages/sv.json';
+import messagesSw from '@/messages/sw.json';
+import messagesTe from '@/messages/te.json';
+import messagesTh from '@/messages/th.json';
+import messagesTr from '@/messages/tr.json';
+import messagesUk from '@/messages/uk.json';
+import messagesUr from '@/messages/ur.json';
+import messagesVi from '@/messages/vi.json';
+import messagesZh from '@/messages/zh.json';
 
 type SectionType = 'faq' | 'privacy' | 'contact' | null;
 
@@ -38,12 +69,54 @@ interface FAQItem {
   answer: string;
 }
 
+interface Messages {
+  [key: string]: any;
+}
+
+// Map of all message files by locale
+const allMessages: Record<string, Messages> = {
+  am: messagesAm,
+  ar: messagesAr,
+  bn: messagesBn,
+  ca: messagesCa,
+  cs: messagesCs,
+  de: messagesDe,
+  en: messagesEn,
+  es: messagesEs,
+  fa: messagesFa,
+  fi: messagesFi,
+  fr: messagesFr,
+  he: messagesHe,
+  hi: messagesHi,
+  id: messagesId,
+  it: messagesIt,
+  ja: messagesJa,
+  ko: messagesKo,
+  my: messagesMy,
+  nl: messagesNl,
+  pl: messagesPl,
+  pt: messagesPt,
+  ro: messagesRo,
+  ru: messagesRu,
+  si: messagesSi,
+  sv: messagesSv,
+  sw: messagesSw,
+  te: messagesTe,
+  th: messagesTh,
+  tr: messagesTr,
+  uk: messagesUk,
+  ur: messagesUr,
+  vi: messagesVi,
+  zh: messagesZh,
+};
+
 interface HelpPageClientProps {
   /** Session from server-side auth() call */
   session: Session | null;
   /** Organization detected from server-side email analysis */
   detectedOrganization: MSFOrganization;
   faqTranslations: Record<string, FAQItem[]>;
+  privacyTranslations: Record<string, FAQItem[]>;
   initialLocale: string;
   availableLocales: string[];
 }
@@ -52,20 +125,33 @@ export function HelpPageClient({
   session,
   detectedOrganization: _serverDetectedOrg,
   faqTranslations,
+  privacyTranslations,
   initialLocale,
   availableLocales,
 }: HelpPageClientProps) {
-  const t = useTranslations();
   const [expandedSection, setExpandedSection] = useState<SectionType>('faq');
   const [searchQuery, setSearchQuery] = useState('');
   const [openFaqItems, setOpenFaqItems] = useState<Set<number>>(new Set());
-  const [openPrivacyItems, setOpenPrivacyItems] = useState<Set<string>>(
+  const [openPrivacyItems, setOpenPrivacyItems] = useState<Set<number>>(
     new Set(),
   );
   const [currentLocale, setCurrentLocale] = useState<string>(initialLocale);
 
+  // Get translations for current locale
+  const messages = allMessages[currentLocale] || allMessages['en'];
+  const t = (key: string) => {
+    const keys = key.split('.');
+    let value: any = messages;
+    for (const k of keys) {
+      value = value?.[k];
+      if (value === undefined) return key;
+    }
+    return value || key;
+  };
+
   const faqs = faqTranslations[currentLocale] || faqTranslations['en'] || [];
-  const privacyItems = privacyData.items;
+  const privacyItems =
+    privacyTranslations[currentLocale] || privacyTranslations['en'] || [];
 
   // Debug log on mount
   useEffect(() => {
@@ -81,9 +167,39 @@ export function HelpPageClient({
   // Get localized language names
   const getLanguageName = (locale: string): string => {
     const localeNames: Record<string, string> = {
+      am: 'አማርኛ',
+      ar: 'العربية',
+      bn: 'বাংলা',
+      ca: 'Català',
+      cs: 'Čeština',
+      de: 'Deutsch',
       en: 'English',
-      fr: 'Français',
       es: 'Español',
+      fa: 'فارسی',
+      fi: 'Suomi',
+      fr: 'Français',
+      he: 'עברית',
+      hi: 'हिन्दी',
+      id: 'Bahasa Indonesia',
+      it: 'Italiano',
+      ja: '日本語',
+      ko: '한국어',
+      my: 'မြန်မာ',
+      nl: 'Nederlands',
+      pl: 'Polski',
+      pt: 'Português',
+      ro: 'Română',
+      ru: 'Русский',
+      si: 'සිංහල',
+      sv: 'Svenska',
+      sw: 'Kiswahili',
+      te: 'తెలుగు',
+      th: 'ไทย',
+      tr: 'Türkçe',
+      uk: 'Українська',
+      ur: 'اردو',
+      vi: 'Tiếng Việt',
+      zh: '中文',
     };
     return localeNames[locale] || locale;
   };
@@ -156,13 +272,13 @@ export function HelpPageClient({
     });
   };
 
-  const togglePrivacyItem = (id: string) => {
+  const togglePrivacyItem = (index: number) => {
     setOpenPrivacyItems((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
+      if (next.has(index)) {
+        next.delete(index);
       } else {
-        next.add(id);
+        next.add(index);
       }
       return next;
     });
@@ -522,15 +638,15 @@ export function HelpPageClient({
                       </p>
                     </div>
                   ) : (
-                    filteredPrivacy.map((item) => {
-                      const isOpen = openPrivacyItems.has(item.id);
+                    filteredPrivacy.map((item, index) => {
+                      const isOpen = openPrivacyItems.has(index);
                       return (
                         <div
-                          key={item.id}
+                          key={index}
                           className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden hover:border-green-300 dark:hover:border-green-600 transition-colors"
                         >
                           <button
-                            onClick={() => togglePrivacyItem(item.id)}
+                            onClick={() => togglePrivacyItem(index)}
                             className="w-full flex items-center justify-between gap-3 p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
                           >
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">

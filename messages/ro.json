@@ -775,7 +775,65 @@
       "articles": "articole",
       "searchPlaceholder": "Caută în întrebări frecvente...",
       "noResults": "Nicio întrebare frecventă nu corespunde căutării tale",
-      "noResultsHint": "Încearcă un alt termen de căutare"
+      "noResultsHint": "Încearcă un alt termen de căutare",
+      "items": [
+        {
+          "question": "Ce este MSF AI Assistant?",
+          "answer": "MSF AI Assistant este un instrument intern de chat AI conceput special pentru personalul Médecins Sans Frontières (MSF). Această soluție sporește confidențialitatea prin păstrarea datelor conversațiilor în sistemele MSF, oferind o alternativă sigură la serviciile externe. Suportă mai multe modele AI (GPT-4.1, GPT-4o, o1, DeepSeek, Llama, Grok) și caracteristici precum căutare web, transcriere vocală cu traducere, comenzi rapide și tonuri personalizate. AI Assistant poate ajuta la răspunsuri la întrebări, generare de conținut, traducere text, brainstorming și multe altele."
+        },
+        {
+          "question": "Ce modele sunt disponibile?",
+          "answer": "MSF AI Assistant oferă acces la mai multe modele AI:\n- GPT-4.1, GPT-4o, GPT-4o-mini (OpenAI)\n- o1, o1-mini (modele de raționament OpenAI)\n- DeepSeek-V3, DeepSeek-R1 (DeepSeek)\n- Llama 3.3 70B, Llama 3.1 405B (Meta)\n- Grok-2 (xAI)\n\nPoți comuta între modele oricând folosind meniul de selecție a modelului din partea de sus a chatului."
+        },
+        {
+          "question": "Ce sunt Acțiunile Rapide?",
+          "answer": "Acțiunile Rapide îți permit să aplici rapid comenzi rapide și tonuri la mesajele tale. Comenzi rapide: Șabloane reutilizabile pentru sarcini comune. Tonuri: Ajustează modul în care răspunde AI. Acces prin pictograma fulger (⚡) sau apăsând /."
+        },
+        {
+          "question": "Ce este Modul de căutare?",
+          "answer": "Modul de căutare permite AI-ului să folosească căutarea web atunci când are nevoie de informații actualizate. Mod axat pe confidențialitate (implicit): Trimite doar interogarea de căutare. Mod Azure AI Foundry (doar GPT-4.1): Stochează conversația completă pentru răspunsuri mai rapide."
+        },
+        {
+          "question": "Cum folosesc transcrierea vocală?",
+          "answer": "Apasă pictograma microfonului pentru a începe înregistrarea. AI transcrie vorbirea în text. După transcriere, poți copia textul, descărca ca fișier sau traduce în peste 13 limbi."
+        },
+        {
+          "question": "Pot folosi MSF AI Assistant pe telefonul meu?",
+          "answer": "Da! MSF AI Assistant funcționează ca o Progressive Web App (PWA). Pe mobil: Deschide ai.msf.org în browser, autentifică-te, mergi la Setări > Aplicație mobilă și apasă \"Adaugă la ecranul de pornire\" (iOS) sau \"Instalează\" (Android)."
+        },
+        {
+          "question": "Unde sunt stocate datele conversațiilor mele?",
+          "answer": "Istoricul conversațiilor este stocat local în stocarea browserului, nu pe server. Conversațiile există doar pe dispozitivul tău și nu se sincronizează între dispozitive. Dacă folosești modul Azure AI Foundry pentru căutare, acele conversații sunt de asemenea stocate în Azure AI Foundry."
+        },
+        {
+          "question": "Ce sunt Agenții personalizați?",
+          "answer": "Agenții personalizați sunt configurații AI avansate care rulează pe instanța MSF AI Assistant Foundry cu capabilități specializate. Pot folosi automat instrumente precum căutarea web și interpretarea codului. Aceasta este o caracteristică avansată care necesită coordonare cu echipa tehnică."
+        },
+        {
+          "question": "Ar trebui să am încredere 100% în răspunsurile AI?",
+          "answer": "Nu. MSF AI Assistant este un instrument puternic, dar nu ar trebui să înlocuiască judecata umană și expertiza. Întotdeauna: Verifică informațiile factuale, Verifică pentru prejudecăți și acuratețe, Revizuiește ieșirile înainte de utilizare, Nu introduce date personale sau informații sensibile."
+        },
+        {
+          "question": "Ce date nu ar trebui să introduc?",
+          "answer": "Nu introduce: Date personale (nume, numere de telefon, adrese de email, CV-uri), Detalii operaționale foarte sensibile, Informații despre pacienți sau înregistrări medicale, Orice care ar putea identifica persoane."
+        },
+        {
+          "question": "Cum pot exporta sau șterge date?",
+          "answer": "Din Setări > Gestionare date poți: Exporta toate conversațiile și comenzile rapide ca JSON, Șterge toate conversațiile, Importa date exportate anterior, Verifica utilizarea stocării."
+        },
+        {
+          "question": "Unde mă pot adresa cu întrebări?",
+          "answer": "Contactează suportul:\n- Utilizatori din SUA: ai@newyork.msf.org\n- Utilizatori din afara SUA: ai.team@amsterdam.msf.org\n\nAccesează Centrul de ajutor oricând din Setări > Ajutor & suport."
+        },
+        {
+          "question": "Unde pot afla mai multe despre proiect?",
+          "answer": "Vizitează portalul AI Accelerator pe Pamoja:\nhttps://msfintl.sharepoint.com/sites/PamojaPortal_AIAccelerator\n\nPortalul conține informații despre foaia de parcurs și materiale de instruire."
+        },
+        {
+          "question": "Este MSF AI Assistant open source?",
+          "answer": "Da! Disponibil pe GitHub:\nhttps://github.com/Medecins-Sans-Frontieres-Collaborate/ai-assistant-app\n\nConstruit cu Next.js și React. Contribuțiile sunt binevenite!"
+        }
+      ]
     },
     "privacy": {
       "title": "Confidențialitate & date",
@@ -789,7 +847,41 @@
       "localStorageOnly": "Doar stocare locală",
       "msfControlled": "Controlat de MSF",
       "noPersonalData": "Fără date personale",
-      "noSensitiveOps": "Fără operațiuni sensibile"
+      "noSensitiveOps": "Fără operațiuni sensibile",
+      "items": [
+        {
+          "question": "Ce este MSF AI Assistant și cum protejează confidențialitatea?",
+          "answer": "MSF AI Assistant este un chatbot AI intern dezvoltat pentru personalul MSF. Folosește modelele lingvistice mari Open AI ale Microsoft Azure, păstrând toate datele în cadrul MSF, asigurând confidențialitatea și controlul. Utilizarea ai.msf.org este mai sigură decât folosirea altor instrumente AI externe gratuite care oferă puține garanții de confidențialitate."
+        },
+        {
+          "question": "Unde sunt stocate și procesate datele mele?",
+          "answer": "Toate datele de conversație cu MSF AI Assistant sunt stocate local pe computerul tău și procesate în sistemele MSF folosind infrastructura Microsoft Azure. Informațiile de autentificare sunt procesate de MSF conform Politicii de confidențialitate a entității MSF. Datele rămân în cadrul MSF, asigurând confidențialitatea și controlul."
+        },
+        {
+          "question": "Ce date nu ar trebui să introduc în MSF AI Assistant?",
+          "answer": "Nu introduce/încărca în ai.msf.org:\n- Date personale (nume, numere de telefon, CV-uri, mărturii; orice care identifică persoane direct sau indirect)\n- Date foarte sensibile (date care ar putea fi folosite intenționat sau neintenționat pentru a dăuna persoanelor, comunităților, MSF sau personalului său - determinarea sensibilității datelor trebuie să includă analiza contextului cum ar fi locațiile de proiect sensibile sau grupurile la risc, incidentele de securitate și alte detalii operaționale)"
+        },
+        {
+          "question": "Care sunt îndrumările pentru utilizare responsabilă?",
+          "answer": "Ești de acord să folosești ai.msf.org în mod responsabil. Vei:\n- Folosi conform politicilor ICT, AI și altora aplicabile ale entității MSF\n- Întotdeauna verifica ieșirile pentru acuratețe, exhaustivitate și prejudecăți\n- Asigura că ieșirile nu încalcă drepturile de proprietate intelectuală ale terților\n- Fi transparent despre utilizarea AI și marca ieșirile ca fiind generate de AI"
+        },
+        {
+          "question": "Care sunt aplicațiile interzise?",
+          "answer": "Nu vei folosi ai.msf.org pentru:\n- Medicină (furnizare de servicii medicale sau răspuns la întrebări legate de sănătate)\n- Supraveghere sau monitorizare a pacienților MSF sau a comunităților sau a altor persoane\n- Decizii legate de angajare\n- Luarea automată de decizii (luarea deciziilor care ar putea dăuna persoanelor sau comunităților)\n- Generarea de conținut media pentru comunicări externe pe probleme de interes public\n- Activități ilegale sau dăunătoare"
+        },
+        {
+          "question": "Cât de precise sunt ieșirile?",
+          "answer": "Ai.msf.org folosește tehnologie experimentală - nu garantăm că ieșirile vor fi corecte. În plus, tehnologia nu a fost antrenată folosind date reprezentative ale pacienților și comunităților MSF. Ieșirile AI pot perpetua prejudecăți, discriminare și stereotipuri. Ești responsabil pentru verificarea ieșirilor generate."
+        },
+        {
+          "question": "Cu cine ar trebui să iau legătura pentru preocupări sau incidente legate de confidențialitate?",
+          "answer": "Dacă ai preocupări sau dorești să raportezi un incident, contactează: ai.team@amsterdam.msf.org. Pentru regiunea ta specifică, poți de asemenea contacta DPO-ul local (Data Protection Officer) sau echipa ICT responsabilă (Information and Communication Technology)."
+        },
+        {
+          "question": "Pot fi modificați termenii de utilizare?",
+          "answer": "Acești termeni pot fi modificați de MSF oricând - te vom notifica dacă se schimbă - utilizarea continuă a ai.msf.org constituie acceptarea modificărilor."
+        }
+      ]
     },
     "contact": {
       "title": "Contact & Resurse",
