@@ -1786,6 +1786,10 @@
     "openModelSelector": "မော်ဒယ်ပြောင်းရန်",
     "scrollToBottom": "အောက်ဆုံးသို့ဆွဲကြည့်ပါ",
     "showHelp": "ကီးဘုတ် အနုတ်လမ်းများ ပြပါ",
-    "attachFile": "ဖိုင်တစ်ခု ပူးတွဲပါ"
+    "attachFile": "ဖိုင်တစ်ခု ပူးတွဲပါ",
+    "searchConversations": "စကားပြောချက်များကို ရှာဖွေပါ",
+    "toggleTheme": "အပြင်အဆင် ပြောင်းပါ",
+    "regenerateResponse": "တုံပြန်ချက်အသစ် ပြန်ထုတ်ပါ",
+    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ"
   }
 }

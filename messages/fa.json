@@ -1786,6 +1786,10 @@
     "openModelSelector": "تغییر مدل",
     "scrollToBottom": "اسکرول به پایین",
     "showHelp": "نمایش میانبرهای صفحه‌کلید",
-    "attachFile": "پیوست فایل"
+    "attachFile": "پیوست فایل",
+    "searchConversations": "جستجوی گفتگوها",
+    "toggleTheme": "تغییر تم",
+    "regenerateResponse": "تولید مجدد پاسخ",
+    "copyLastResponse": "کپی آخرین پاسخ"
   }
 }

@@ -1786,6 +1786,10 @@
     "openModelSelector": "Zmień model",
     "scrollToBottom": "Przewiń do dołu",
     "showHelp": "Pokaż skróty klawiaturowe",
-    "attachFile": "Dołącz plik"
+    "attachFile": "Dołącz plik",
+    "searchConversations": "Wyszukaj rozmowy",
+    "toggleTheme": "Przełącz motyw",
+    "regenerateResponse": "Wygeneruj ponownie odpowiedź",
+    "copyLastResponse": "Kopiuj ostatnią odpowiedź"
   }
 }

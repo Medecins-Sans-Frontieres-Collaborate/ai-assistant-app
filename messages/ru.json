@@ -1786,6 +1786,10 @@
     "openModelSelector": "Сменить модель",
     "scrollToBottom": "Прокрутить вниз",
     "showHelp": "Показать горячие клавиши",
-    "attachFile": "Прикрепить файл"
+    "attachFile": "Прикрепить файл",
+    "searchConversations": "Поиск по беседам",
+    "toggleTheme": "Переключить тему",
+    "regenerateResponse": "Сгенерировать ответ снова",
+    "copyLastResponse": "Скопировать последний ответ"
   }
 }

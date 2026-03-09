@@ -1786,6 +1786,10 @@
     "openModelSelector": "Cambia modello",
     "scrollToBottom": "Scorri in fondo",
     "showHelp": "Mostra scorciatoie da tastiera",
-    "attachFile": "Allega file"
+    "attachFile": "Allega file",
+    "searchConversations": "Cerca conversazioni",
+    "toggleTheme": "Cambia tema",
+    "regenerateResponse": "Rigenera risposta",
+    "copyLastResponse": "Copia l'ultima risposta"
   }
 }

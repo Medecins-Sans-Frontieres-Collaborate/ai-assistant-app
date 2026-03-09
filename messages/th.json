@@ -1786,6 +1786,10 @@
     "openModelSelector": "เปลี่ยนโมเดล",
     "scrollToBottom": "เลื่อนไปด้านล่างสุด",
     "showHelp": "แสดงคีย์ลัดบนแป้นพิมพ์",
-    "attachFile": "แนบไฟล์"
+    "attachFile": "แนบไฟล์",
+    "searchConversations": "ค้นหาการสนทนา",
+    "toggleTheme": "สลับธีม",
+    "regenerateResponse": "สร้างคำตอบใหม่อีกครั้ง",
+    "copyLastResponse": "คัดลอกคำตอบล่าสุด"
   }
 }

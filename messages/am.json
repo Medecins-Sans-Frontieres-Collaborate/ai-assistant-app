@@ -1786,6 +1786,10 @@
     "openModelSelector": "ሞዴል ቀይር",
     "scrollToBottom": "ከታች ወደ ታች ውሰድ",
     "showHelp": "የቁልፍ ማጠቃለያዎችን አሳይ",
-    "attachFile": "ፋይል ያካትቱ"
+    "attachFile": "ፋይል ያካትቱ",
+    "searchConversations": "ውይይቶችን ፈልግ",
+    "toggleTheme": "አቀማመጡን ቀይር",
+    "regenerateResponse": "መልሱን ዳግመኛ ፍጠር",
+    "copyLastResponse": "የመጨረሻውን መልስ ቅዳ"
   }
 }

@@ -1786,6 +1786,10 @@
     "openModelSelector": "Changer de modèle",
     "scrollToBottom": "Aller en bas",
     "showHelp": "Afficher les raccourcis clavier",
-    "attachFile": "Joindre un fichier"
+    "attachFile": "Joindre un fichier",
+    "searchConversations": "Rechercher dans les conversations",
+    "toggleTheme": "Changer de thème",
+    "regenerateResponse": "Régénerer la réponse",
+    "copyLastResponse": "Copier la dernière réponse"
   }
 }

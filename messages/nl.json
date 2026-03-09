@@ -1786,6 +1786,10 @@
     "openModelSelector": "Model wijzigen",
     "scrollToBottom": "Scroll naar beneden",
     "showHelp": "Toetsenbord­shortcuts tonen",
-    "attachFile": "Bestand bijvoegen"
+    "attachFile": "Bestand bijvoegen",
+    "searchConversations": "Gesprekken zoeken",
+    "toggleTheme": "Thema wisselen",
+    "regenerateResponse": "Antwoord opnieuw genereren",
+    "copyLastResponse": "Laatste antwoord kopiëren"
   }
 }

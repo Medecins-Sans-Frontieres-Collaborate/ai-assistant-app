@@ -1786,6 +1786,10 @@
     "openModelSelector": "모델 변경",
     "scrollToBottom": "맨 아래로 이동",
     "showHelp": "키보드 단축키 보기",
-    "attachFile": "파일 첨부"
+    "attachFile": "파일 첨부",
+    "searchConversations": "대화 검색",
+    "toggleTheme": "테마 전환",
+    "regenerateResponse": "응답 다시 생성",
+    "copyLastResponse": "마지막 응답 복사"
   }
 }

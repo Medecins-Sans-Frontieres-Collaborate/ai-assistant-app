@@ -1786,6 +1786,10 @@
     "openModelSelector": "Byt modell",
     "scrollToBottom": "Scrolla till botten",
     "showHelp": "Visa kortkommandon",
-    "attachFile": "Bifoga fil"
+    "attachFile": "Bifoga fil",
+    "searchConversations": "Sök konversationer",
+    "toggleTheme": "Växla tema",
+    "regenerateResponse": "Återskapa svar",
+    "copyLastResponse": "Kopiera senaste svaret"
   }
 }

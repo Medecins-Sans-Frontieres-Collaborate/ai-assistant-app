@@ -1786,6 +1786,10 @@
     "openModelSelector": "שנה מודל",
     "scrollToBottom": "גלול לתחתית",
     "showHelp": "הצג קיצורי מקלדת",
-    "attachFile": "צרף קובץ"
+    "attachFile": "צרף קובץ",
+    "searchConversations": "חיפוש שיחות",
+    "toggleTheme": "החלפת ערכת נושא",
+    "regenerateResponse": "הפק תגובה מחדש",
+    "copyLastResponse": "העתקת התגובה האחרונה"
   }
 }

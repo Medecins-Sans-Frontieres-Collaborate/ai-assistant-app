@@ -1786,6 +1786,10 @@
     "openModelSelector": "Badilisha mfano",
     "scrollToBottom": "Shusha hadi chini",
     "showHelp": "Onyesha vifupisho vya kibodi",
-    "attachFile": "Ambatisha faili"
+    "attachFile": "Ambatisha faili",
+    "searchConversations": "Tafuta mazungumzo",
+    "toggleTheme": "Badilisha mandhari",
+    "regenerateResponse": "Tengeneza upya majibu",
+    "copyLastResponse": "Nakili jibu la mwisho"
   }
 }

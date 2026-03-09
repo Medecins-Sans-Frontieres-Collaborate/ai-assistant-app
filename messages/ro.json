@@ -1786,6 +1786,10 @@
     "openModelSelector": "Schimbă modelul",
     "scrollToBottom": "Derulează în jos",
     "showHelp": "Afișează scurtăturile de la tastatură",
-    "attachFile": "Atașează fișier"
+    "attachFile": "Atașează fișier",
+    "searchConversations": "Caută în conversații",
+    "toggleTheme": "Comută tema",
+    "regenerateResponse": "Regenerează răspunsul",
+    "copyLastResponse": "Copiază ultimul răspuns"
   }
 }

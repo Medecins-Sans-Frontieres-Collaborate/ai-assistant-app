@@ -1786,6 +1786,10 @@
     "openModelSelector": "Modeli değiştir",
     "scrollToBottom": "En alta kaydır",
     "showHelp": "Klavye kısayollarını göster",
-    "attachFile": "Dosya ekle"
+    "attachFile": "Dosya ekle",
+    "searchConversations": "Konuşmaları ara",
+    "toggleTheme": "Temayı değiştir",
+    "regenerateResponse": "Yanıtı yeniden oluştur",
+    "copyLastResponse": "Son yanıtı kopyala"
   }
 }

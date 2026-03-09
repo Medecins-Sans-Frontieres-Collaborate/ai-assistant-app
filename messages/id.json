@@ -1786,6 +1786,10 @@
     "openModelSelector": "Ganti model",
     "scrollToBottom": "Gulir ke bawah",
     "showHelp": "Tampilkan pintasan keyboard",
-    "attachFile": "Lampirkan berkas"
+    "attachFile": "Lampirkan berkas",
+    "searchConversations": "Cari percakapan",
+    "toggleTheme": "Ganti tema",
+    "regenerateResponse": "Buat ulang respons",
+    "copyLastResponse": "Salin respons terakhir"
   }
 }

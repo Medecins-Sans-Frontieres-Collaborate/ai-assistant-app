@@ -1786,6 +1786,10 @@
     "openModelSelector": "Vaihda mallia",
     "scrollToBottom": "Vieritä alas",
     "showHelp": "Näytä pikanäppäimet",
-    "attachFile": "Liitä tiedosto"
+    "attachFile": "Liitä tiedosto",
+    "searchConversations": "Etsi keskusteluja",
+    "toggleTheme": "Vaihda teemaa",
+    "regenerateResponse": "Luo vastaus uudelleen",
+    "copyLastResponse": "Kopioi viimeisin vastaus"
   }
 }

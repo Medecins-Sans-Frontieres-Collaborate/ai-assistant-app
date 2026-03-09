@@ -1816,6 +1816,10 @@
     "openModelSelector": "ماڈل تبدیل کریں",
     "scrollToBottom": "نیچے اسکرول کریں",
     "showHelp": "کی بورڈ شارٹ کٹس دکھائیں",
-    "attachFile": "فائل منسلک کریں"
+    "attachFile": "فائل منسلک کریں",
+    "searchConversations": "گفتگو تلاش کریں",
+    "toggleTheme": "تھیم تبدیل کریں",
+    "regenerateResponse": "جواب دوبارہ تیار کریں",
+    "copyLastResponse": "آخری جواب نقل کریں"
   }
 }

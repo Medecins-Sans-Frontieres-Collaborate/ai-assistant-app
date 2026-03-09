@@ -1817,6 +1817,10 @@
     "openModelSelector": "更换模型",
     "scrollToBottom": "滚动到底部",
     "showHelp": "显示键盘快捷键",
-    "attachFile": "附加文件"
+    "attachFile": "附加文件",
+    "searchConversations": "搜索对话",
+    "toggleTheme": "切换主题",
+    "regenerateResponse": "重新生成回复",
+    "copyLastResponse": "复制上次回复"
   }
 }

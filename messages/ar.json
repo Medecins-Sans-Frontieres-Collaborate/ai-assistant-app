@@ -1786,6 +1786,10 @@
     "openModelSelector": "تغيير النموذج",
     "scrollToBottom": "تمرير إلى الأسفل",
     "showHelp": "عرض اختصارات لوحة المفاتيح",
-    "attachFile": "إرفاق ملف"
+    "attachFile": "إرفاق ملف",
+    "searchConversations": "البحث في المحادثات",
+    "toggleTheme": "تبديل السمة",
+    "regenerateResponse": "إعادة توليد الرد",
+    "copyLastResponse": "نسخ آخر رد"
   }
 }

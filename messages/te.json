@@ -1786,6 +1786,10 @@
     "openModelSelector": "మోడెల్ మార్చు",
     "scrollToBottom": "కిందికి స్క్రోల్ చేయండి",
     "showHelp": "కీబోర్డ్ షార్ట్‌కట్‌లను చూపండి",
-    "attachFile": "ఫైల్ జతచేయండి"
+    "attachFile": "ఫైల్ జతచేయండి",
+    "searchConversations": "సంభాషణలను వెతకండి",
+    "toggleTheme": "థీమ్ మార్చు",
+    "regenerateResponse": "ప్రతిస్పందన మళ్లీ సృష్టించు",
+    "copyLastResponse": "తాజా ప్రతిస్పందనను కాపీ చేయండి"
   }
 }

@@ -1786,6 +1786,10 @@
     "openModelSelector": "මාදිලිය වෙනස් කරන්න",
     "scrollToBottom": "පහළට අනුචලනය කරන්න",
     "showHelp": "යතුරුපුවරු කෙටි මාර්ගය පෙන්වන්න",
-    "attachFile": "ගොනුව එක් කරන්න"
+    "attachFile": "ගොනුව එක් කරන්න",
+    "searchConversations": "සාකච්ඡා සොයන්න",
+    "toggleTheme": "තේමාව මාරු කරන්න",
+    "regenerateResponse": "ප්‍රතිචාරය නැවත ජනනය කරන්න",
+    "copyLastResponse": "අවසන් ප්‍රතිචාරය පිටපත් කරන්න"
   }
 }

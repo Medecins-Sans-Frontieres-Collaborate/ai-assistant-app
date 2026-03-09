@@ -1786,6 +1786,10 @@
     "openModelSelector": "Змінити модель",
     "scrollToBottom": "Прокрутити донизу",
     "showHelp": "Показати клавіатурні скорочення",
-    "attachFile": "Додати файл"
+    "attachFile": "Додати файл",
+    "searchConversations": "Пошук розмов",
+    "toggleTheme": "Змінити тему",
+    "regenerateResponse": "Згенерувати відповідь ще раз",
+    "copyLastResponse": "Скопіювати останню відповідь"
   }
 }

@@ -1786,6 +1786,10 @@
     "openModelSelector": "Změnit model",
     "scrollToBottom": "Posunout dolů",
     "showHelp": "Zobrazit klávesové zkratky",
-    "attachFile": "Připojit soubor"
+    "attachFile": "Připojit soubor",
+    "searchConversations": "Hledat konverzace",
+    "toggleTheme": "Přepnout motiv",
+    "regenerateResponse": "Znovu vygenerovat odpověď",
+    "copyLastResponse": "Kopírovat poslední odpověď"
   }
 }
