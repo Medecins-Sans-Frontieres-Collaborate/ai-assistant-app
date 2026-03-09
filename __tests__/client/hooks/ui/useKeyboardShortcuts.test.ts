@@ -383,6 +383,10 @@ describe('Keyboard Shortcuts Utilities', () => {
         'scrollToBottom',
         'showShortcutsHelp',
         'attachFile',
+        'searchConversations',
+        'toggleTheme',
+        'regenerateResponse',
+        'copyLastResponse',
       ];
 
       for (const action of expectedActions) {
