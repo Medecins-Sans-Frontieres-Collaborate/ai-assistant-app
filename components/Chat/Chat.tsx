@@ -16,6 +16,7 @@ import { useClearConversation } from '@/client/hooks/conversation/useClearConver
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
+import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
 import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
 import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { useUI } from '@/client/hooks/ui/useUI';
@@ -38,6 +39,7 @@ import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
@@ -108,8 +110,13 @@ export function Chat({
     acceptModelSwitch,
   } = useChat();
 
-  const { isSettingsOpen, setIsSettingsOpen, showChatbar, toggleChatbar } =
-    useUI();
+  const {
+    isSettingsOpen,
+    setIsSettingsOpen,
+    showChatbar,
+    toggleChatbar,
+    toggleTheme,
+  } = useUI();
   const {
     models,
     defaultModelId,
@@ -246,15 +253,59 @@ export function Chat({
     }
   }, []);
 
-  useKeyboardShortcuts({
-    enabled: true,
-    onShowHelp: handleShowShortcutsHelp,
-    onFocusChatInput: handleFocusChatInput,
-    onOpenModelSelector: handleOpenModelSelector,
-    onScrollToBottom: handleScrollDown,
-    onNewConversation: handleNewConversation,
-    onAttachFile: handleAttachFile,
-  });
+  const handleSearchConversations = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-search-conversations'));
+    }
+  }, []);
+
+  const handleToggleTheme = useCallback(() => {
+    toggleTheme();
+  }, [toggleTheme]);
+
+  const handleCopyLastResponse = useCallback(() => {
+    if (!selectedConversation?.messages?.length) return;
+
+    const extractText = (
+      content:
+        | string
+        | Array<{ type: string; text?: string; [key: string]: unknown }>
+        | { type: string; text?: string },
+    ): string => {
+      if (typeof content === 'string') return content;
+      if (Array.isArray(content)) {
+        return content
+          .filter((c) => c.type === 'text' && c.text)
+          .map((c) => c.text as string)
+          .join('\n');
+      }
+      return '';
+    };
+
+    // Find the last assistant entry (could be a Message or AssistantMessageGroup)
+    const entries = selectedConversation.messages;
+    let lastContent: string | undefined;
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const entry = entries[i];
+      if ('type' in entry && entry.type === 'assistant_group') {
+        const version = entry.versions[entry.activeIndex];
+        if (version) {
+          lastContent = extractText(
+            version.content as Parameters<typeof extractText>[0],
+          );
+        }
+        break;
+      } else if ('role' in entry && entry.role === 'assistant') {
+        lastContent = extractText(
+          entry.content as Parameters<typeof extractText>[0],
+        );
+        break;
+      }
+    }
+    if (lastContent) {
+      navigator.clipboard.writeText(lastContent);
+    }
+  }, [selectedConversation?.messages]);
 
   // Listen for toggle sidebar event from keyboard shortcuts
   useEffect(() => {
@@ -277,6 +328,22 @@ export function Chat({
     updateConversation,
     sendMessage,
   });
+
+  useKeyboardShortcuts({
+    enabled: true,
+    onShowHelp: handleShowShortcutsHelp,
+    onFocusChatInput: handleFocusChatInput,
+    onOpenModelSelector: handleOpenModelSelector,
+    onScrollToBottom: handleScrollDown,
+    onNewConversation: handleNewConversation,
+    onAttachFile: handleAttachFile,
+    onSearchConversations: handleSearchConversations,
+    onToggleTheme: handleToggleTheme,
+    onRegenerateResponse: handleRegenerate,
+    onCopyLastResponse: handleCopyLastResponse,
+  });
+
+  useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
 
   const { clearConversation } = useClearConversation();
 
