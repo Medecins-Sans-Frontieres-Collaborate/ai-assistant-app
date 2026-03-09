@@ -41,7 +41,11 @@ export type ShortcutAction =
   | 'openModelSelector'
   | 'scrollToBottom'
   | 'showShortcutsHelp'
-  | 'attachFile';
+  | 'attachFile'
+  | 'searchConversations'
+  | 'toggleTheme'
+  | 'regenerateResponse'
+  | 'copyLastResponse';
 
 /**
  * A keyboard shortcut definition.
