@@ -38,6 +38,18 @@ export interface UseKeyboardShortcutsOptions {
 
   /** Callback to trigger file attachment */
   onAttachFile?: () => void;
+
+  /** Callback to search conversations */
+  onSearchConversations?: () => void;
+
+  /** Callback to toggle theme */
+  onToggleTheme?: () => void;
+
+  /** Callback to regenerate last response */
+  onRegenerateResponse?: () => void;
+
+  /** Callback to copy last response */
+  onCopyLastResponse?: () => void;
 }
 
 /**
@@ -84,6 +96,10 @@ export function useKeyboardShortcuts({
   onOpenModelSelector,
   onScrollToBottom,
   onAttachFile,
+  onSearchConversations,
+  onToggleTheme,
+  onRegenerateResponse,
+  onCopyLastResponse,
 }: UseKeyboardShortcutsOptions = {}) {
   // Get state from stores for context detection
   const isStreaming = useChatStore((state) => state.isStreaming);
@@ -187,6 +203,34 @@ export function useKeyboardShortcuts({
           }
           return false;
 
+        case 'searchConversations':
+          if (onSearchConversations) {
+            onSearchConversations();
+            return true;
+          }
+          return false;
+
+        case 'toggleTheme':
+          if (onToggleTheme) {
+            onToggleTheme();
+            return true;
+          }
+          return false;
+
+        case 'regenerateResponse':
+          if (onRegenerateResponse) {
+            onRegenerateResponse();
+            return true;
+          }
+          return false;
+
+        case 'copyLastResponse':
+          if (onCopyLastResponse) {
+            onCopyLastResponse();
+            return true;
+          }
+          return false;
+
         default:
           return false;
       }
@@ -200,6 +244,10 @@ export function useKeyboardShortcuts({
       onScrollToBottom,
       onShowHelp,
       onAttachFile,
+      onSearchConversations,
+      onToggleTheme,
+      onRegenerateResponse,
+      onCopyLastResponse,
     ],
   );
 
