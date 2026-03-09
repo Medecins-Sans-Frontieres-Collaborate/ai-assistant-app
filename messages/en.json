@@ -1760,6 +1760,10 @@
     "openModelSelector": "Change model",
     "scrollToBottom": "Scroll to bottom",
     "showHelp": "Show keyboard shortcuts",
-    "attachFile": "Attach file"
+    "attachFile": "Attach file",
+    "searchConversations": "Search conversations",
+    "toggleTheme": "Toggle theme",
+    "regenerateResponse": "Regenerate response",
+    "copyLastResponse": "Copy last response"
   }
 }
