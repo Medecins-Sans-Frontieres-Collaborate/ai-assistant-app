@@ -39,7 +39,6 @@ import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
