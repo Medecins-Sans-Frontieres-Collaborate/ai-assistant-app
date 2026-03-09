@@ -168,17 +168,19 @@ export function Sidebar() {
     fetchUserPhoto();
   }, [session?.user?.id]);
 
-  // Keyboard shortcut for search (⌘K / Ctrl+K)
+  // Listen for search conversations event from keyboard shortcuts system
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsSearchModalOpen(true);
-      }
+    const handleSearchConversations = () => setIsSearchModalOpen(true);
+    document.addEventListener(
+      'keyboard-search-conversations',
+      handleSearchConversations,
+    );
+    return () => {
+      document.removeEventListener(
+        'keyboard-search-conversations',
+        handleSearchConversations,
+      );
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Close folder menu when clicking outside
