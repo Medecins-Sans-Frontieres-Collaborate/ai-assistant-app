@@ -100,6 +100,42 @@ export const DEFAULT_SHORTCUTS: Record<ShortcutAction, KeyboardShortcut> = {
     contextRequired: 'notStreaming',
     disableInInput: false,
   },
+  searchConversations: {
+    id: 'search-conversations',
+    key: 'k',
+    modifiers: ['ctrl'],
+    labelKey: 'shortcuts.searchConversations',
+    categoryKey: 'shortcuts.categoryNavigation',
+    contextRequired: 'always',
+    disableInInput: false,
+  },
+  toggleTheme: {
+    id: 'toggle-theme',
+    key: 'd',
+    modifiers: ['ctrl', 'shift'],
+    labelKey: 'shortcuts.toggleTheme',
+    categoryKey: 'shortcuts.categoryApp',
+    contextRequired: 'always',
+    disableInInput: false,
+  },
+  regenerateResponse: {
+    id: 'regenerate-response',
+    key: 'r',
+    modifiers: ['ctrl', 'shift'],
+    labelKey: 'shortcuts.regenerateResponse',
+    categoryKey: 'shortcuts.categoryConversation',
+    contextRequired: 'hasMessages',
+    disableInInput: false,
+  },
+  copyLastResponse: {
+    id: 'copy-last-response',
+    key: 'c',
+    modifiers: ['ctrl', 'shift'],
+    labelKey: 'shortcuts.copyLastResponse',
+    categoryKey: 'shortcuts.categoryConversation',
+    contextRequired: 'hasMessages',
+    disableInInput: false,
+  },
 };
 
 /**
