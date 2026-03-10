@@ -17,6 +17,10 @@ import { ActiveFile } from '@/types/chat';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
+import {
+  ACTIVE_FILE_PIN_TOKEN_LIMIT,
+  ACTIVE_FILE_SESSION_QUOTA,
+} from '@/lib/constants/activeFileQuotas';
 
 /**
  * CRITICAL: Stable reference for empty state.
@@ -58,6 +62,15 @@ export function ActiveFilesPanel() {
     return conv?.activeFilesTokenBudget ?? 8000;
   });
 
+  // FIXED: Return primitive (number), not object
+  const sessionTokensUsed = useConversationStore((state) => {
+    if (!state.selectedConversationId) return 0;
+    const conv = state.conversations.find(
+      (c) => c.id === state.selectedConversationId,
+    );
+    return conv?.activeFilesTokensUsed ?? 0;
+  });
+
   // SAFE: Action selectors are stable function references
   const deactivateFile = useConversationStore((state) => state.deactivateFile);
   const clearAllActiveFiles = useConversationStore(
@@ -76,6 +89,18 @@ export function ActiveFilesPanel() {
     budgetUsedPercent > 100
       ? 'exceeded'
       : budgetUsedPercent > 85
+        ? 'warning'
+        : 'normal';
+
+  // Session quota computations
+  const sessionQuotaPercent = Math.min(
+    100,
+    (sessionTokensUsed / ACTIVE_FILE_SESSION_QUOTA) * 100,
+  );
+  const sessionQuotaStatus =
+    sessionQuotaPercent > 85
+      ? 'exceeded'
+      : sessionQuotaPercent > 60
         ? 'warning'
         : 'normal';
 
@@ -157,6 +182,35 @@ export function ActiveFilesPanel() {
             </div>
           </div>
 
+          {/* Session Quota Bar */}
+          {sessionTokensUsed > 0 && (
+            <div className="mb-2">
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>{t('sessionQuota')}</span>
+                <span>
+                  {t('sessionQuotaUsage', {
+                    used: sessionTokensUsed.toLocaleString(),
+                    total: ACTIVE_FILE_SESSION_QUOTA.toLocaleString(),
+                  })}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                <div
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    sessionQuotaStatus === 'exceeded'
+                      ? 'bg-red-500'
+                      : sessionQuotaStatus === 'warning'
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
+                  }`}
+                  style={{
+                    width: `${Math.min(100, sessionQuotaPercent)}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Clear All Button */}
           <div className="flex justify-end mb-2">
             <button
@@ -224,32 +278,50 @@ export function ActiveFilesPanel() {
                 ) : null}
 
                 {/* Pin Button */}
-                <Tooltip
-                  content={f.pinned ? t('pinnedTooltip') : t('unpinnedTooltip')}
-                  position="top"
-                >
-                  <button
-                    onClick={() =>
-                      setPinned(selectedConversationId, f.id, !f.pinned)
-                    }
-                    className={`text-[10px] px-2 py-1.5 md:px-1 md:py-0.5 rounded border
-                      min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0
-                      flex items-center justify-center transition-colors ${
-                        f.pinned
-                          ? 'bg-blue-600 text-white border-blue-600'
-                          : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                      }`}
-                    aria-label={
-                      f.pinned ? t('pinnedTooltip') : t('unpinnedTooltip')
-                    }
-                  >
-                    {f.pinned ? (
-                      <IconPinnedFilled size={14} />
-                    ) : (
-                      <IconPinnedOff size={14} />
-                    )}
-                  </button>
-                </Tooltip>
+                {(() => {
+                  const isPinBlocked =
+                    !f.pinned &&
+                    (f.processedContent?.tokenEstimate ?? 0) >
+                      ACTIVE_FILE_PIN_TOKEN_LIMIT;
+                  const tooltipContent = isPinBlocked
+                    ? t('pinBlockedTooLarge', {
+                        tokens: (
+                          f.processedContent?.tokenEstimate ?? 0
+                        ).toLocaleString(),
+                        limit: ACTIVE_FILE_PIN_TOKEN_LIMIT.toLocaleString(),
+                      })
+                    : f.pinned
+                      ? t('pinnedTooltip')
+                      : t('unpinnedTooltip');
+
+                  return (
+                    <Tooltip content={tooltipContent} position="top">
+                      <button
+                        onClick={() =>
+                          !isPinBlocked &&
+                          setPinned(selectedConversationId, f.id, !f.pinned)
+                        }
+                        disabled={isPinBlocked}
+                        className={`text-[10px] px-2 py-1.5 md:px-1 md:py-0.5 rounded border
+                          min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0
+                          flex items-center justify-center transition-colors ${
+                            isPinBlocked
+                              ? 'opacity-30 cursor-not-allowed pointer-events-none border-gray-300 dark:border-gray-600 text-gray-400'
+                              : f.pinned
+                                ? 'bg-blue-600 text-white border-blue-600'
+                                : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        aria-label={tooltipContent}
+                      >
+                        {f.pinned ? (
+                          <IconPinnedFilled size={14} />
+                        ) : (
+                          <IconPinnedOff size={14} />
+                        )}
+                      </button>
+                    </Tooltip>
+                  );
+                })()}
 
                 {/* Remove Button */}
                 <button
