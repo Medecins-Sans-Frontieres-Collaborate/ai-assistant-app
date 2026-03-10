@@ -1771,7 +1771,9 @@
     "sessionQuotaUsage": "{used} / {total} tokens used this session",
     "sessionQuotaExhausted": "Active files session quota reached. Files have been cleared.",
     "pinBlockedTooLarge": "File too large to pin ({tokens} tokens, limit: {limit})",
-    "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})"
+    "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})",
+    "sessionQuotaWarning": "Session quota running low — {remaining} tokens remaining",
+    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
