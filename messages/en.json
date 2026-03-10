@@ -1763,6 +1763,9 @@
     "retry": "Retry",
     "pinned": "Pinned",
     "pin": "Pin",
+    "pinnedTooltip": "Pinned: always included",
+    "unpinnedTooltip": "Unpinned: may be excluded or auto-removed",
+    "pinnedCount": "{pinned} pinned / {total}",
     "tokens": "tokens"
   },
   "shortcuts": {
