@@ -304,11 +304,15 @@ export class StandardChatHandler extends BasePipelineStage {
             streamingSpeed: context.streamingSpeed,
           });
 
-          // If we have active file cache updates and streaming, append as metadata at end of stream
+          // If we have active file cache updates or token consumption and streaming, append as metadata at end of stream
           let finalResponse = response;
+          const hasFileUpdates =
+            (context.activeFilesCacheUpdates?.length ?? 0) > 0;
+          const hasTokensConsumed =
+            (context.activeFilesTokensConsumedThisTurn ?? 0) > 0;
           if (
             context.stream &&
-            (context.activeFilesCacheUpdates?.length ?? 0) > 0 &&
+            (hasFileUpdates || hasTokensConsumed) &&
             response.body
           ) {
             const encoder = new TextEncoder();
@@ -322,17 +326,26 @@ export class StandardChatHandler extends BasePipelineStage {
                     controller.enqueue(value);
                   }
 
-                  // Append file cache update metadata
-                  const updates = (context.activeFilesCacheUpdates ?? []).map(
-                    (u) => ({
+                  // Build metadata payload
+                  const metadataPayload: Record<string, unknown> = {
+                    action: 'file_cache_update',
+                  };
+
+                  if (hasFileUpdates) {
+                    metadataPayload.fileCacheUpdates = (
+                      context.activeFilesCacheUpdates ?? []
+                    ).map((u) => ({
                       fileId: u.fileId,
                       processedContent: u.processedContent,
-                    }),
-                  );
-                  const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify({
-                    action: 'file_cache_update',
-                    fileCacheUpdates: updates,
-                  })}<<<METADATA_END>>>`;
+                    }));
+                  }
+
+                  if (hasTokensConsumed) {
+                    metadataPayload.activeFilesTokensConsumed =
+                      context.activeFilesTokensConsumedThisTurn;
+                  }
+
+                  const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify(metadataPayload)}<<<METADATA_END>>>`;
                   controller.enqueue(encoder.encode(metadata));
                 } catch (err) {
                   controller.error(err);
