@@ -8,6 +8,7 @@ import {
 } from '@/lib/utils/shared/chat/messageVersioning';
 
 import {
+  ActiveFile,
   Message,
   MessageType,
   isAssistantMessageGroup,
@@ -85,7 +86,11 @@ export function useChatActions({
   );
 
   const handleSend = useCallback(
-    (message: Message, searchMode?: SearchMode) => {
+    (
+      message: Message,
+      searchMode?: SearchMode,
+      initialActiveFiles?: ActiveFile[],
+    ) => {
       const conversationState = useConversationStore.getState();
       const settingsState = useSettingsStore.getState();
 
@@ -108,7 +113,7 @@ export function useChatActions({
           return;
         }
 
-        // Create a new conversation with the user's message
+        // Create a new conversation with the user's message and active files
         const newConversation = createDefaultConversation(
           models,
           defaultModelId,
@@ -120,6 +125,7 @@ export function useChatActions({
         const conversationWithMessage = {
           ...newConversation,
           messages: [message],
+          activeFiles: initialActiveFiles ?? [],
         };
 
         // Add and select the new conversation
@@ -130,7 +136,17 @@ export function useChatActions({
         return;
       }
 
-      // Existing conversation flow
+      // Existing conversation flow — activate files in the store first
+      if (initialActiveFiles?.length) {
+        for (const file of initialActiveFiles) {
+          conversationState.activateFile(currentConversation.id, file);
+        }
+        // Re-read to get updated activeFiles
+        currentConversation = useConversationStore
+          .getState()
+          .conversations.find((c) => c.id === currentConversation!.id)!;
+      }
+
       const updatedMessages = [...currentConversation.messages, message];
 
       updateConversation(currentConversation.id, { messages: updatedMessages });
