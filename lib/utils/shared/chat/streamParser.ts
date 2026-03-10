@@ -22,6 +22,7 @@ export class StreamParser {
     fileId: string;
     processedContent: any;
   }>;
+  private extractedActiveFilesTokensConsumed?: number;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -78,6 +79,16 @@ export class StreamParser {
     // Capture file cache updates if present
     if ((parsed as any).fileCacheUpdates && !this.extractedFileCacheUpdates) {
       this.extractedFileCacheUpdates = (parsed as any).fileCacheUpdates;
+    }
+
+    // Capture active files tokens consumed if present
+    if (
+      (parsed as any).activeFilesTokensConsumed != null &&
+      this.extractedActiveFilesTokensConsumed == null
+    ) {
+      this.extractedActiveFilesTokensConsumed = (
+        parsed as any
+      ).activeFilesTokensConsumed;
     }
 
     // Check if we've received actual content (not just metadata)
@@ -174,6 +185,13 @@ export class StreamParser {
     | Array<{ fileId: string; processedContent: any }>
     | undefined {
     return this.extractedFileCacheUpdates;
+  }
+
+  /**
+   * Get the number of active file tokens consumed this turn (from SSE metadata)
+   */
+  getActiveFilesTokensConsumed(): number | undefined {
+    return this.extractedActiveFilesTokensConsumed;
   }
 
   /**
