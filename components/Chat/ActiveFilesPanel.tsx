@@ -54,15 +54,6 @@ export function ActiveFilesPanel() {
   );
 
   // FIXED: Return primitive (number), not object
-  const tokenBudget = useConversationStore((state) => {
-    if (!state.selectedConversationId) return 8000;
-    const conv = state.conversations.find(
-      (c) => c.id === state.selectedConversationId,
-    );
-    return conv?.activeFilesTokenBudget ?? 8000;
-  });
-
-  // FIXED: Return primitive (number), not object
   const sessionTokensUsed = useConversationStore((state) => {
     if (!state.selectedConversationId) return 0;
     const conv = state.conversations.find(
@@ -84,14 +75,6 @@ export function ActiveFilesPanel() {
     (sum, f) => sum + (f.processedContent?.tokenEstimate || 0),
     0,
   );
-  const budgetUsedPercent = Math.min(100, (totalTokens / tokenBudget) * 100);
-  const budgetStatus =
-    budgetUsedPercent > 100
-      ? 'exceeded'
-      : budgetUsedPercent > 85
-        ? 'warning'
-        : 'normal';
-
   // Session quota computations
   const sessionQuotaPercent = Math.min(
     100,
@@ -160,56 +143,46 @@ export function ActiveFilesPanel() {
       {/* Collapsible Content */}
       {!isCollapsed && (
         <div className="p-2 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
-          {/* Token Budget Bar */}
+          {/* Session Quota Bar */}
           <div className="mb-2">
             <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-              <span>{t('tokenUsage')}</span>
+              <span>{t('sessionQuota')}</span>
               <span>
-                {totalTokens.toLocaleString()} / {tokenBudget.toLocaleString()}
+                {t('sessionQuotaUsage', {
+                  used: sessionTokensUsed.toLocaleString(),
+                  total: ACTIVE_FILE_SESSION_QUOTA.toLocaleString(),
+                })}
               </span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
               <div
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  budgetStatus === 'exceeded'
+                  sessionQuotaStatus === 'exceeded'
                     ? 'bg-red-500'
-                    : budgetStatus === 'warning'
+                    : sessionQuotaStatus === 'warning'
                       ? 'bg-yellow-500'
-                      : 'bg-blue-500'
+                      : 'bg-green-500'
                 }`}
-                style={{ width: `${Math.min(100, budgetUsedPercent)}%` }}
+                style={{
+                  width: `${Math.min(100, sessionQuotaPercent)}%`,
+                }}
               />
             </div>
+            {sessionQuotaStatus === 'warning' && (
+              <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-1">
+                {t('sessionQuotaWarning', {
+                  remaining: (
+                    ACTIVE_FILE_SESSION_QUOTA - sessionTokensUsed
+                  ).toLocaleString(),
+                })}
+              </p>
+            )}
+            {sessionQuotaStatus === 'exceeded' && (
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                {t('sessionQuotaNearlyExhausted')}
+              </p>
+            )}
           </div>
-
-          {/* Session Quota Bar */}
-          {sessionTokensUsed > 0 && (
-            <div className="mb-2">
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
-                <span>{t('sessionQuota')}</span>
-                <span>
-                  {t('sessionQuotaUsage', {
-                    used: sessionTokensUsed.toLocaleString(),
-                    total: ACTIVE_FILE_SESSION_QUOTA.toLocaleString(),
-                  })}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
-                <div
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    sessionQuotaStatus === 'exceeded'
-                      ? 'bg-red-500'
-                      : sessionQuotaStatus === 'warning'
-                        ? 'bg-yellow-500'
-                        : 'bg-green-500'
-                  }`}
-                  style={{
-                    width: `${Math.min(100, sessionQuotaPercent)}%`,
-                  }}
-                />
-              </div>
-            </div>
-          )}
 
           {/* Clear All Button */}
           <div className="flex justify-end mb-2">
