@@ -1770,5 +1770,26 @@
     "uploadDocument": "ডকুমেন্ট আপলোড করুন",
     "images": "ছবি",
     "addImage": "ছবি যোগ করুন"
+  },
+  "shortcuts": {
+    "title": "কী-বোর্ড শর্টকাট",
+    "pressEscapeToClose": "বন্ধ করতে Escape চাপুন",
+    "categoryNavigation": "নেভিগেশন",
+    "categoryConversation": "কথোপকথন",
+    "categoryInput": "ইনপুট",
+    "categoryApp": "অ্যাপ্লিকেশন",
+    "focusChatInput": "চ্যাট ইনপুটে ফোকাস করুন",
+    "newConversation": "নতুন কথোপকথন",
+    "stopGeneration": "জেনারেশন বন্ধ করুন",
+    "toggleSidebar": "সাইডবার চালু/বন্ধ করুন",
+    "openSettings": "সেটিংস খুলুন",
+    "openModelSelector": "মডেল পরিবর্তন করুন",
+    "scrollToBottom": "নিচে স্ক্রল করুন",
+    "showHelp": "কী-বোর্ড শর্টকাট দেখান",
+    "attachFile": "ফাইল সংযুক্ত করুন",
+    "searchConversations": "কথোপকথনগুলি অনুসন্ধান করুন",
+    "toggleTheme": "থিম পরিবর্তন করুন",
+    "regenerateResponse": "উত্তর পুনরায় তৈরি করুন",
+    "copyLastResponse": "শেষ উত্তর কপি করুন"
   }
 }

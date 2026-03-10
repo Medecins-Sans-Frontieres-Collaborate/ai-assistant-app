@@ -1770,5 +1770,26 @@
     "uploadDocument": "दस्तावेज़ अपलोड करें",
     "images": "छवियां",
     "addImage": "छवि जोड़ें"
+  },
+  "shortcuts": {
+    "title": "कीबोर्ड शॉर्टकट्स",
+    "pressEscapeToClose": "बंद करने के लिए Escape दबाएँ",
+    "categoryNavigation": "नेविगेशन",
+    "categoryConversation": "संवाद",
+    "categoryInput": "इनपुट",
+    "categoryApp": "एप्लीकेशन",
+    "focusChatInput": "चैट इनपुट पर फोकस करें",
+    "newConversation": "नई बातचीत",
+    "stopGeneration": "जनरेशन रोकें",
+    "toggleSidebar": "साइडबार टॉगल करें",
+    "openSettings": "सेटिंग्स खोलें",
+    "openModelSelector": "मॉडल बदलें",
+    "scrollToBottom": "नीचे तक स्क्रॉल करें",
+    "showHelp": "कीबोर्ड शॉर्टकट्स दिखाएँ",
+    "attachFile": "फ़ाइल संलग्न करें",
+    "searchConversations": "वार्तालाप खोजें",
+    "toggleTheme": "थीम बदलें",
+    "regenerateResponse": "उत्तर पुनः बनाएँ",
+    "copyLastResponse": "अंतिम उत्तर कॉपी करें"
   }
 }

@@ -1770,5 +1770,26 @@
     "uploadDocument": "Dokument hochladen",
     "images": "Bilder",
     "addImage": "Bild hinzufügen"
+  },
+  "shortcuts": {
+    "title": "Tastenkombinationen",
+    "pressEscapeToClose": "Escape drücken, um zu schließen",
+    "categoryNavigation": "Navigation",
+    "categoryConversation": "Konversation",
+    "categoryInput": "Eingabe",
+    "categoryApp": "Anwendung",
+    "focusChatInput": "Chat-Eingabefeld fokussieren",
+    "newConversation": "Neue Konversation",
+    "stopGeneration": "Generierung stoppen",
+    "toggleSidebar": "Seitenleiste ein-/ausblenden",
+    "openSettings": "Einstellungen öffnen",
+    "openModelSelector": "Modell wechseln",
+    "scrollToBottom": "Nach unten scrollen",
+    "showHelp": "Tastenkombinationen anzeigen",
+    "attachFile": "Datei anhängen",
+    "searchConversations": "Konversationen durchsuchen",
+    "toggleTheme": "Design umschalten",
+    "regenerateResponse": "Antwort neu generieren",
+    "copyLastResponse": "Letzte Antwort kopieren"
   }
 }

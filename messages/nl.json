@@ -1770,5 +1770,26 @@
     "uploadDocument": "Document uploaden",
     "images": "Afbeeldingen",
     "addImage": "Afbeelding toevoegen"
+  },
+  "shortcuts": {
+    "title": "Toetsenbord­shortcuts",
+    "pressEscapeToClose": "Druk op Escape om te sluiten",
+    "categoryNavigation": "Navigatie",
+    "categoryConversation": "Gesprek",
+    "categoryInput": "Invoer",
+    "categoryApp": "Applicatie",
+    "focusChatInput": "Focus op chatinvoer",
+    "newConversation": "Nieuw gesprek",
+    "stopGeneration": "Generatie stoppen",
+    "toggleSidebar": "Zijbalk in-/uitschakelen",
+    "openSettings": "Instellingen openen",
+    "openModelSelector": "Model wijzigen",
+    "scrollToBottom": "Scroll naar beneden",
+    "showHelp": "Toetsenbord­shortcuts tonen",
+    "attachFile": "Bestand bijvoegen",
+    "searchConversations": "Gesprekken zoeken",
+    "toggleTheme": "Thema wisselen",
+    "regenerateResponse": "Antwoord opnieuw genereren",
+    "copyLastResponse": "Laatste antwoord kopiëren"
   }
 }

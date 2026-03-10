@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "description": "Kinam-pahaizana manokana amin'ny GPT-5.2 izay natokana ho an'ny fifanakalozan-dresaka sy faharanitan-tsaina ara-pihetseham-po. Mahavita tsara amin'ny fifandraisana amin-kafaliana, fanoratana mamorona, fanehoan-kevitra, ary dinika voajanahary. Tsara indrindra ho an'ny resaka tsy dia ara-pomba ofisialy, toe-javatra ahitana fanoroana hevitra, ary asa mitaky fahatsiarovan-tena ara-pihetseham-po."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Ampakaro Tahirin-kevitra",
     "images": "Sary",
     "addImage": "Ampio sary"
+  },
+  "shortcuts": {
+    "title": "Fanalahidin-tsoratra haingana",
+    "pressEscapeToClose": "Tsindrio Escape hanakatona",
+    "categoryNavigation": "Fizoran-dalana",
+    "categoryConversation": "Resadresaka",
+    "categoryInput": "Fampidirana",
+    "categoryApp": "Fampiharana",
+    "focusChatInput": "Hifantoka amin'ny famenoana hafatra",
+    "newConversation": "Hanomboka resaka vaovao",
+    "stopGeneration": "Atsaharo ny famoronana",
+    "toggleSidebar": "Atsimpona/ahena ny tsipika sisiny",
+    "openSettings": "Sokafy ny fikirakirana",
+    "openModelSelector": "Hanova maodely",
+    "scrollToBottom": "Ahodina ho any ambany",
+    "showHelp": "Aseho ny fanalahidy haingana",
+    "attachFile": "Manampy rakitra"
   }
 }

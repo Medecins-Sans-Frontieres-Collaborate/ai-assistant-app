@@ -1801,5 +1801,26 @@
     "uploadDocument": "Tải lên tài liệu",
     "images": "Hình ảnh",
     "addImage": "Thêm hình ảnh"
+  },
+  "shortcuts": {
+    "title": "Phím tắt bàn phím",
+    "pressEscapeToClose": "Nhấn Escape để đóng",
+    "categoryNavigation": "Điều hướng",
+    "categoryConversation": "Trò chuyện",
+    "categoryInput": "Nhập liệu",
+    "categoryApp": "Ứng dụng",
+    "focusChatInput": "Di chuyển đến ô nhập trò chuyện",
+    "newConversation": "Tạo cuộc trò chuyện mới",
+    "stopGeneration": "Dừng tạo nội dung",
+    "toggleSidebar": "Ẩn/hiện thanh bên",
+    "openSettings": "Mở cài đặt",
+    "openModelSelector": "Thay đổi mô hình",
+    "scrollToBottom": "Cuộn xuống cuối",
+    "showHelp": "Hiển thị phím tắt bàn phím",
+    "attachFile": "Đính kèm tệp",
+    "searchConversations": "Tìm kiếm cuộc trò chuyện",
+    "toggleTheme": "Chuyển đổi giao diện",
+    "regenerateResponse": "Tạo lại phản hồi",
+    "copyLastResponse": "Sao chép phản hồi cuối cùng"
   }
 }

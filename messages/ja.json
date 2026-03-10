@@ -1770,5 +1770,26 @@
     "uploadDocument": "ドキュメントをアップロード",
     "images": "画像",
     "addImage": "画像を追加"
+  },
+  "shortcuts": {
+    "title": "キーボードショートカット",
+    "pressEscapeToClose": "Escapeキーで閉じる",
+    "categoryNavigation": "ナビゲーション",
+    "categoryConversation": "会話",
+    "categoryInput": "入力",
+    "categoryApp": "アプリケーション",
+    "focusChatInput": "チャット入力欄にフォーカス",
+    "newConversation": "新しい会話",
+    "stopGeneration": "生成を停止",
+    "toggleSidebar": "サイドバーの切り替え",
+    "openSettings": "設定を開く",
+    "openModelSelector": "モデルの変更",
+    "scrollToBottom": "一番下までスクロール",
+    "showHelp": "キーボードショートカットを表示",
+    "attachFile": "ファイルを添付",
+    "searchConversations": "会話を検索する",
+    "toggleTheme": "テーマを切り替える",
+    "regenerateResponse": "回答を再生成する",
+    "copyLastResponse": "最後の回答をコピーする"
   }
 }

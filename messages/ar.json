@@ -1770,5 +1770,26 @@
     "uploadDocument": "رفع مستند",
     "images": "صور",
     "addImage": "إضافة صورة"
+  },
+  "shortcuts": {
+    "title": "اختصارات لوحة المفاتيح",
+    "pressEscapeToClose": "اضغط على Escape للإغلاق",
+    "categoryNavigation": "التنقل",
+    "categoryConversation": "المحادثة",
+    "categoryInput": "الإدخال",
+    "categoryApp": "التطبيق",
+    "focusChatInput": "تركيز على حقل الدردشة",
+    "newConversation": "محادثة جديدة",
+    "stopGeneration": "إيقاف التوليد",
+    "toggleSidebar": "إظهار/إخفاء الشريط الجانبي",
+    "openSettings": "فتح الإعدادات",
+    "openModelSelector": "تغيير النموذج",
+    "scrollToBottom": "تمرير إلى الأسفل",
+    "showHelp": "عرض اختصارات لوحة المفاتيح",
+    "attachFile": "إرفاق ملف",
+    "searchConversations": "البحث في المحادثات",
+    "toggleTheme": "تبديل السمة",
+    "regenerateResponse": "إعادة توليد الرد",
+    "copyLastResponse": "نسخ آخر رد"
   }
 }

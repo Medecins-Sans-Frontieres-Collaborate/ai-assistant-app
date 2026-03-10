@@ -16,6 +16,8 @@ import { useClearConversation } from '@/client/hooks/conversation/useClearConver
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
+import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
+import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
 import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { useUI } from '@/client/hooks/ui/useUI';
 
@@ -23,6 +25,7 @@ import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
+import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
 
 import { ChatError } from './ChatError';
@@ -106,7 +109,13 @@ export function Chat({
     acceptModelSwitch,
   } = useChat();
 
-  const { isSettingsOpen, setIsSettingsOpen, showChatbar } = useUI();
+  const {
+    isSettingsOpen,
+    setIsSettingsOpen,
+    showChatbar,
+    toggleChatbar,
+    toggleTheme,
+  } = useUI();
   const {
     models,
     defaultModelId,
@@ -197,6 +206,7 @@ export function Chat({
     false,
     onMobileModelSelectChange,
   );
+  const [isShortcutsHelpOpen, setIsShortcutsHelpOpen] = useState(false);
 
   // Custom hooks for state management
   const {
@@ -213,6 +223,101 @@ export function Chat({
     isDraining,
   });
 
+  // Keyboard shortcuts
+  const handleShowShortcutsHelp = useCallback(
+    () => setIsShortcutsHelpOpen(true),
+    [],
+  );
+  const handleFocusChatInput = useCallback(
+    () => textareaRef.current?.focus(),
+    [],
+  );
+  const handleOpenModelSelector = useCallback(
+    () => setIsModelSelectOpen(true),
+    // setIsModelSelectOpen is a stable setState function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const handleNewConversation = useCallback(() => {
+    // Dispatch custom event for sidebar to handle new conversation
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-new-conversation'));
+    }
+  }, []);
+
+  const handleAttachFile = useCallback(() => {
+    // Dispatch custom event for Dropdown to handle file attachment
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-attach-file'));
+    }
+  }, []);
+
+  const handleSearchConversations = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-search-conversations'));
+    }
+  }, []);
+
+  const handleToggleTheme = useCallback(() => {
+    toggleTheme();
+  }, [toggleTheme]);
+
+  const handleCopyLastResponse = useCallback(() => {
+    if (!selectedConversation?.messages?.length) return;
+
+    const extractText = (
+      content:
+        | string
+        | Array<{ type: string; text?: string; [key: string]: unknown }>
+        | { type: string; text?: string },
+    ): string => {
+      if (typeof content === 'string') return content;
+      if (Array.isArray(content)) {
+        return content
+          .filter((c) => c.type === 'text' && c.text)
+          .map((c) => c.text as string)
+          .join('\n');
+      }
+      return '';
+    };
+
+    // Find the last assistant entry (could be a Message or AssistantMessageGroup)
+    const entries = selectedConversation.messages;
+    let lastContent: string | undefined;
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const entry = entries[i];
+      if ('type' in entry && entry.type === 'assistant_group') {
+        const version = entry.versions[entry.activeIndex];
+        if (version) {
+          lastContent = extractText(
+            version.content as Parameters<typeof extractText>[0],
+          );
+        }
+        break;
+      } else if ('role' in entry && entry.role === 'assistant') {
+        lastContent = extractText(
+          entry.content as Parameters<typeof extractText>[0],
+        );
+        break;
+      }
+    }
+    if (lastContent) {
+      navigator.clipboard.writeText(lastContent);
+    }
+  }, [selectedConversation?.messages]);
+
+  // Listen for toggle sidebar event from keyboard shortcuts
+  useEffect(() => {
+    const handleToggleSidebar = () => toggleChatbar();
+    document.addEventListener('keyboard-toggle-sidebar', handleToggleSidebar);
+    return () => {
+      document.removeEventListener(
+        'keyboard-toggle-sidebar',
+        handleToggleSidebar,
+      );
+    };
+  }, [toggleChatbar]);
+
   const {
     handleEditMessage,
     handleSend,
@@ -222,6 +327,22 @@ export function Chat({
     updateConversation,
     sendMessage,
   });
+
+  useKeyboardShortcuts({
+    enabled: true,
+    onShowHelp: handleShowShortcutsHelp,
+    onFocusChatInput: handleFocusChatInput,
+    onOpenModelSelector: handleOpenModelSelector,
+    onScrollToBottom: handleScrollDown,
+    onNewConversation: handleNewConversation,
+    onAttachFile: handleAttachFile,
+    onSearchConversations: handleSearchConversations,
+    onToggleTheme: handleToggleTheme,
+    onRegenerateResponse: handleRegenerate,
+    onCopyLastResponse: handleCopyLastResponse,
+  });
+
+  useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
 
   const { clearConversation } = useClearConversation();
 
@@ -485,6 +606,12 @@ export function Chat({
           initialDescription={savePromptDescription}
           initialContent={savePromptContent}
           title={t('Save as prompt')}
+        />
+
+        {/* Keyboard Shortcuts Help Modal */}
+        <KeyboardShortcutsModal
+          isOpen={isShortcutsHelpOpen}
+          onClose={() => setIsShortcutsHelpOpen(false)}
         />
       </div>
 

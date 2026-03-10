@@ -1267,7 +1267,8 @@
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "description": "Ñaawanre GPT-5.2 wentorɗo e jaɓɓorgo moƴƴude ley conversational e yimɓe ɓuri hilde. Moƴƴi e ñaama buggitare, heftinirde yimɓe, geseede kiɗɗe, e waɗde ñaawdi to ñaawndu. Moƴƴi tawa ñaawdi to feere, ɗaɓɓannde counseling, e suɓre ɓe nanndiri yimɓe."
     },
     "o3": {
       "name": "o3",
@@ -1745,5 +1746,22 @@
     "uploadDocument": "Nuldu Ɗerewol",
     "images": "Nate",
     "addImage": "Ɓeydu natal"
+  },
+  "shortcuts": {
+    "title": "Teene dulnde keyboard",
+    "pressEscapeToClose": "Kuɗɗo Escape ngollu",
+    "categoryNavigation": "Dawtagol",
+    "categoryConversation": "Ñaawndu",
+    "categoryInput": "Naatagol",
+    "categoryApp": "Jumre",
+    "focusChatInput": "Tarɗo nanndu ñaawndu",
+    "newConversation": "Ñaawndu hesere",
+    "stopGeneration": "Yaltu waɗtinirde",
+    "toggleSidebar": "Naaga/sakka maayo goo",
+    "openSettings": "Uddu teelte",
+    "openModelSelector": "Waylu moodulu",
+    "scrollToBottom": "Luuyi les volgol",
+    "showHelp": "Hollu teene dulnde keyboard",
+    "attachFile": "Nguurto faylu"
   }
 }

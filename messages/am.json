@@ -1770,5 +1770,26 @@
     "uploadDocument": "ሰነድ ስቀል",
     "images": "ምስሎች",
     "addImage": "ምስል ጨምር"
+  },
+  "shortcuts": {
+    "title": "የቁልፍ ማጠቃለያዎች",
+    "pressEscapeToClose": "ለመዝጋት Escape ይጫኑ",
+    "categoryNavigation": "አሰሳ",
+    "categoryConversation": "ንግግር",
+    "categoryInput": "ማስገቢያ",
+    "categoryApp": "መተግበሪያ",
+    "focusChatInput": "ወደ ቻት ማስገቢያ ያቆዩ",
+    "newConversation": "አዲስ ንግግር",
+    "stopGeneration": "መፍጠር አቁም",
+    "toggleSidebar": "Sidebar ያነሱ/ያዝጉ",
+    "openSettings": "ማስተካከያዎችን ክፈት",
+    "openModelSelector": "ሞዴል ቀይር",
+    "scrollToBottom": "ከታች ወደ ታች ውሰድ",
+    "showHelp": "የቁልፍ ማጠቃለያዎችን አሳይ",
+    "attachFile": "ፋይል ያካትቱ",
+    "searchConversations": "ውይይቶችን ፈልግ",
+    "toggleTheme": "አቀማመጡን ቀይር",
+    "regenerateResponse": "መልሱን ዳግመኛ ፍጠር",
+    "copyLastResponse": "የመጨረሻውን መልስ ቅዳ"
   }
 }

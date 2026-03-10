@@ -1770,5 +1770,26 @@
     "uploadDocument": "Puja document",
     "images": "Imatges",
     "addImage": "Afegeix imatge"
+  },
+  "shortcuts": {
+    "title": "Dreceres de teclat",
+    "pressEscapeToClose": "Prem Escape per tancar",
+    "categoryNavigation": "Navegació",
+    "categoryConversation": "Conversa",
+    "categoryInput": "Entrada",
+    "categoryApp": "Aplicació",
+    "focusChatInput": "Focalitza l’entrada del xat",
+    "newConversation": "Nova conversa",
+    "stopGeneration": "Atura la generació",
+    "toggleSidebar": "Mostra/amaga la barra lateral",
+    "openSettings": "Obre la configuració",
+    "openModelSelector": "Canvia el model",
+    "scrollToBottom": "Desplaça fins avall",
+    "showHelp": "Mostra les dreceres de teclat",
+    "attachFile": "Adjunta un fitxer",
+    "searchConversations": "Cerca converses",
+    "toggleTheme": "Canvia el tema",
+    "regenerateResponse": "Torna a generar la resposta",
+    "copyLastResponse": "Copia l’última resposta"
   }
 }

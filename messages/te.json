@@ -1770,5 +1770,26 @@
     "uploadDocument": "పత్రం అప్‌లోడ్ చేయండి",
     "images": "చిత్రాలు",
     "addImage": "చిత్రం జోడించండి"
+  },
+  "shortcuts": {
+    "title": "కీబోర్డ్ షార్ట్‌కట్‌లు",
+    "pressEscapeToClose": "మూసేందుకు Escape నొక్కండి",
+    "categoryNavigation": "నావిగేషన్",
+    "categoryConversation": "సంవాదం",
+    "categoryInput": "ఇన్పుట్",
+    "categoryApp": "అప్లికేషన్",
+    "focusChatInput": "చాట్ ఇన్పుట్‌పై ఫోకస్",
+    "newConversation": "కొత్త సంభాషణ",
+    "stopGeneration": "జెనరేషన్ నిలిపివేయి",
+    "toggleSidebar": "సైడ్‌బార్ మార్చు",
+    "openSettings": "సెట్టింగ్‌లు తెరవండి",
+    "openModelSelector": "మోడెల్ మార్చు",
+    "scrollToBottom": "కిందికి స్క్రోల్ చేయండి",
+    "showHelp": "కీబోర్డ్ షార్ట్‌కట్‌లను చూపండి",
+    "attachFile": "ఫైల్ జతచేయండి",
+    "searchConversations": "సంభాషణలను వెతకండి",
+    "toggleTheme": "థీమ్ మార్చు",
+    "regenerateResponse": "ప్రతిస్పందన మళ్లీ సృష్టించు",
+    "copyLastResponse": "తాజా ప్రతిస్పందనను కాపీ చేయండి"
   }
 }

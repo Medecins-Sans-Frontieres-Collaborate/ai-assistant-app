@@ -1746,5 +1746,22 @@
     "uploadDocument": "Ҳуҷҷатро боргузорӣ кунед",
     "images": "Тасвирҳо",
     "addImage": "Тасвир илова кунед"
+  },
+  "shortcuts": {
+    "title": "Миқдори кутоҳҳои клавиатурӣ",
+    "pressEscapeToClose": "Барои пӯшида шудан Escape-ро пахш кунед",
+    "categoryNavigation": "Навигатсия",
+    "categoryConversation": "Сӯҳбат",
+    "categoryInput": "Воридкунӣ",
+    "categoryApp": "Барнома",
+    "focusChatInput": "Ба воридкунии сӯҳбат гузаштан",
+    "newConversation": "Сӯҳбати нав",
+    "stopGeneration": "Ист кардани тавлид",
+    "toggleSidebar": "Фаъол/ғайрифаъол кардани панели паҳлуӣ",
+    "openSettings": "Кушодани танзимот",
+    "openModelSelector": "Тағйир додани модел",
+    "scrollToBottom": "Ба поён гардондан",
+    "showHelp": "Намоиши кутоҳҳои клавиатурӣ",
+    "attachFile": "Замима кардани файл"
   }
 }

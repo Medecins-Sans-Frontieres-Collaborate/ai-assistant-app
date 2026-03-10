@@ -1746,5 +1746,22 @@
     "uploadDocument": "ផ្ទុកឯកសារឡើង",
     "images": "រូបភាព",
     "addImage": "បន្ថែមរូបភាព"
+  },
+  "shortcuts": {
+    "title": "ផ្លូវកាត់​ក្ដារចុច",
+    "pressEscapeToClose": "ចុច Escape ដើម្បីបិទ",
+    "categoryNavigation": "ការរុករក",
+    "categoryConversation": "ការជជែក",
+    "categoryInput": "ការបញ្ចូល",
+    "categoryApp": "កម្មវិធី",
+    "focusChatInput": "ផ្ដោតទៅបញ្ចូលជជែក",
+    "newConversation": "ការជជែកថ្មី",
+    "stopGeneration": "បញ្ឈប់ការបង្កើត",
+    "toggleSidebar": "បិទ/បើករបារ​ចំហៀង",
+    "openSettings": "បើកការកំណត់",
+    "openModelSelector": "ផ្លាស់ប្តូរពិធីការ",
+    "scrollToBottom": "រមូរទៅខាងក្រោម",
+    "showHelp": "បង្ហាញផ្លូវកាត់​ក្ដារចុច",
+    "attachFile": "ភ្ជាប់ឯកសារ"
   }
 }
