@@ -185,6 +185,13 @@ export interface ChatContext {
     processedContent: NonNullable<ActiveFile['processedContent']>;
   }>;
 
+  /** Cumulative active file tokens used so far (from client) */
+  activeFilesTokensUsed?: number;
+  /** Session quota for active files (from client, or default constant) */
+  activeFilesSessionQuota?: number;
+  /** Output: tokens injected this turn */
+  activeFilesTokensConsumedThisTurn?: number;
+
   /** Execution strategy (standard or agent) */
   executionStrategy?: 'standard' | 'agent';
 
