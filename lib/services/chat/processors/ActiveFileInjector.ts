@@ -8,6 +8,11 @@ import { OpenAIVisionModelID } from '@/types/openai';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
+import {
+  ACTIVE_FILE_PIN_TOKEN_LIMIT,
+  ACTIVE_FILE_SESSION_QUOTA,
+} from '@/lib/constants/activeFileQuotas';
+
 /**
  * Injects active file content into the system prompt and/or messages.
  */
@@ -21,8 +26,40 @@ export class ActiveFileInjector extends BasePipelineStage {
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     const activeFiles = context.activeFiles ?? [];
 
-    // Apply simple budget selection (placeholder)
-    const selected = selectFilesForBudget(activeFiles);
+    // Server backstop: strip pinned flag from files exceeding pin token limit
+    const sanitizedFiles = activeFiles.map((f) => {
+      if (
+        f.pinned &&
+        f.processedContent?.tokenEstimate &&
+        f.processedContent.tokenEstimate > ACTIVE_FILE_PIN_TOKEN_LIMIT
+      ) {
+        return { ...f, pinned: false };
+      }
+      return f;
+    });
+
+    // Session quota enforcement
+    const usedSoFar = context.activeFilesTokensUsed ?? 0;
+    const quota = context.activeFilesSessionQuota ?? ACTIVE_FILE_SESSION_QUOTA;
+    const remaining = quota - usedSoFar;
+
+    if (remaining <= 0) {
+      console.warn(
+        '[ActiveFileInjector] Session quota exhausted, skipping file injection',
+      );
+      return { ...context, activeFilesTokensConsumedThisTurn: 0 };
+    }
+
+    // Apply budget selection with session quota cap
+    const budgetTokens = 2000;
+    const effectiveBudget = Math.min(budgetTokens, remaining);
+    const selected = selectFilesForBudget(sanitizedFiles, effectiveBudget);
+
+    // Calculate tokens consumed this turn
+    const tokensConsumedThisTurn = selected.reduce(
+      (sum, f) => sum + (f.processedContent?.tokenEstimate ?? 0),
+      0,
+    );
 
     // Separate images from text-like files
     const imageFiles = selected.filter(
@@ -67,6 +104,7 @@ export class ActiveFileInjector extends BasePipelineStage {
       ...context,
       systemPrompt: enrichedSystemPrompt,
       enrichedMessages,
+      activeFilesTokensConsumedThisTurn: tokensConsumedThisTurn,
     };
   }
 }
