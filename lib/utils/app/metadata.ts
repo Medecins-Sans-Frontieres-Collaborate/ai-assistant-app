@@ -60,6 +60,7 @@ export interface ParsedMetadata {
   action?: string;
   pendingTranscriptions?: PendingTranscriptionInfo[];
   fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
+  activeFilesTokensConsumed?: number;
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -79,6 +80,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let action: string | undefined;
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
   let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
+  let activeFilesTokensConsumed: number | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -119,6 +121,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
         fileCacheUpdates =
           anyData.fileCacheUpdates as StreamMetadata['fileCacheUpdates'];
       }
+      if (typeof anyData.activeFilesTokensConsumed === 'number') {
+        activeFilesTokensConsumed = anyData.activeFilesTokensConsumed;
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -137,6 +142,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     action,
     pendingTranscriptions,
     fileCacheUpdates,
+    activeFilesTokensConsumed,
     extractionMethod,
   };
 }
