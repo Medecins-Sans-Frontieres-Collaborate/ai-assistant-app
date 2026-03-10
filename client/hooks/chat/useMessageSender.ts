@@ -18,7 +18,6 @@ import {
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,7 +32,11 @@ interface UseMessageSenderProps {
   usedPromptId: string | null;
   usedPromptVariables: { [key: string]: string } | null;
   searchMode: SearchMode;
-  onSend: (message: Message, searchMode?: SearchMode) => void;
+  onSend: (
+    message: Message,
+    searchMode?: SearchMode,
+    initialActiveFiles?: ActiveFile[],
+  ) => void;
   onClearInput: () => void;
   setSubmitType: React.Dispatch<React.SetStateAction<ChatInputSubmitTypes>>;
   setImageFieldValue: React.Dispatch<React.SetStateAction<ImageFieldValue>>;
@@ -184,30 +187,26 @@ export function useMessageSender({
     // Generate message ID before sending so we can reference it for active files
     const messageId = uuidv4();
 
-    // Auto-activate uploaded files BEFORE sending so the server sees them in activeFiles
+    // Build ActiveFile[] from uploaded files to pass through the send chain.
+    // This ensures files are activated even when no conversation exists yet.
+    let initialActiveFiles: ActiveFile[] = [];
     if (filteredFileFieldValue) {
-      const conversationId =
-        useConversationStore.getState().selectedConversationId;
-      if (conversationId) {
-        const filesToActivate = Array.isArray(filteredFileFieldValue)
-          ? filteredFileFieldValue
-          : [filteredFileFieldValue];
-        const activateFile = useConversationStore.getState().activateFile;
+      const filesToActivate = Array.isArray(filteredFileFieldValue)
+        ? filteredFileFieldValue
+        : [filteredFileFieldValue];
 
-        for (const file of filesToActivate) {
-          if (file.type === 'file_url') {
-            const activeFile: ActiveFile = {
-              id: `${file.url}-${Date.now()}`,
-              url: file.url,
-              originalFilename:
-                file.originalFilename || file.url.split('/').pop() || 'file',
-              addedAt: new Date().toISOString(),
-              sourceMessageId: messageId,
-              status: 'idle',
-              pinned: useSettingsStore.getState().autoPinActiveFiles,
-            };
-            activateFile(conversationId, activeFile);
-          }
+      for (const file of filesToActivate) {
+        if (file.type === 'file_url') {
+          initialActiveFiles.push({
+            id: `${file.url}-${Date.now()}`,
+            url: file.url,
+            originalFilename:
+              file.originalFilename || file.url.split('/').pop() || 'file',
+            addedAt: new Date().toISOString(),
+            sourceMessageId: messageId,
+            status: 'idle',
+            pinned: useSettingsStore.getState().autoPinActiveFiles,
+          });
         }
       }
     }
@@ -224,6 +223,7 @@ export function useMessageSender({
         artifactContext: artifactContext || undefined,
       },
       searchMode,
+      initialActiveFiles.length > 0 ? initialActiveFiles : undefined,
     );
 
     // Clear input state
