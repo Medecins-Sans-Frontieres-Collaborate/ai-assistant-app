@@ -1789,7 +1789,17 @@
     "retry": "Повторити",
     "pinned": "Закріплено",
     "pin": "Закріпити",
-    "tokens": "токени"
+    "tokens": "токени",
+    "pinnedTooltip": "Закріплено: завжди включено",
+    "unpinnedTooltip": "Відкріплено: може бути виключено або автоматично видалено",
+    "pinnedCount": "{pinned} закріплено / {total}",
+    "sessionQuota": "Квота сесії",
+    "sessionQuotaUsage": "Використано {used} із {total} токенів за цю сесію",
+    "sessionQuotaExhausted": "Досягнуто квоти активних файлів у сесії. Файли було очищено.",
+    "pinBlockedTooLarge": "Файл занадто великий для закріплення ({tokens} токенів, ліміт: {limit})",
+    "activationRejectedTooLarge": "Файл занадто великий для активного контексту ({tokens} токенів, ліміт: {limit})",
+    "sessionQuotaWarning": "Квота сесії майже вичерпана — залишилося {remaining} токенів",
+    "sessionQuotaNearlyExhausted": "Квота сесії майже вичерпана — активні файли можуть не включатися"
   },
   "shortcuts": {
     "title": "Клавіатурні скорочення",

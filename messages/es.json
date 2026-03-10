@@ -1789,7 +1789,17 @@
     "retry": "Reintentar",
     "pinned": "Fijado",
     "pin": "Fijar",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Fijado: siempre incluido",
+    "unpinnedTooltip": "No fijado: puede ser excluido o eliminado automáticamente",
+    "pinnedCount": "{pinned} fijados / {total}",
+    "sessionQuota": "Cuota de sesión",
+    "sessionQuotaUsage": "{used} / {total} tokens utilizados en esta sesión",
+    "sessionQuotaExhausted": "Se alcanzó la cuota de archivos activos de la sesión. Los archivos han sido eliminados.",
+    "pinBlockedTooLarge": "Archivo demasiado grande para fijar ({tokens} tokens, límite: {limit})",
+    "activationRejectedTooLarge": "Archivo demasiado grande para el contexto activo ({tokens} tokens, límite: {limit})",
+    "sessionQuotaWarning": "La cuota de sesión está baja — quedan {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "La cuota de sesión está casi agotada — es posible que no se incluyan archivos activos"
   },
   "shortcuts": {
     "title": "Atajos de teclado",

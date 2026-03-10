@@ -1789,7 +1789,17 @@
     "retry": "पुनः प्रयास करें",
     "pinned": "पिन की गई",
     "pin": "पिन करें",
-    "tokens": "टोकन"
+    "tokens": "टोकन",
+    "pinnedTooltip": "पिन किया गया: हमेशा शामिल",
+    "unpinnedTooltip": "अनपिन किया गया: शामिल नहीं किया जा सकता है या स्वतः हटाया जा सकता है",
+    "pinnedCount": "{pinned} पिन किए गए / {total}",
+    "sessionQuota": "सत्र कोटा",
+    "sessionQuotaUsage": "इस सत्र में {used} / {total} टोकन उपयोग किए गए",
+    "sessionQuotaExhausted": "सक्रिय फ़ाइलों का सत्र कोटा पूरा हो गया है। फ़ाइलें हटा दी गई हैं।",
+    "pinBlockedTooLarge": "फ़ाइल पिन करने के लिए बहुत बड़ी है ({tokens} टोकन, सीमा: {limit})",
+    "activationRejectedTooLarge": "सक्रिय संदर्भ के लिए फ़ाइल बहुत बड़ी है ({tokens} टोकन, सीमा: {limit})",
+    "sessionQuotaWarning": "सत्र कोटा कम हो रहा है — {remaining} टोकन बचे हैं",
+    "sessionQuotaNearlyExhausted": "सत्र कोटा लगभग समाप्त — सक्रिय फ़ाइलें शामिल नहीं हो सकती हैं"
   },
   "shortcuts": {
     "title": "कीबोर्ड शॉर्टकट्स",

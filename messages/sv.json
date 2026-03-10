@@ -1789,7 +1789,17 @@
     "retry": "Försök igen",
     "pinned": "Fäst",
     "pin": "Fäst",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Fastnålad: alltid inkluderad",
+    "unpinnedTooltip": "Ej fastnålad: kan uteslutas eller tas bort automatiskt",
+    "pinnedCount": "{pinned} fastnålade / {total}",
+    "sessionQuota": "Sessionskvot",
+    "sessionQuotaUsage": "{used} / {total} tokens använda denna session",
+    "sessionQuotaExhausted": "Sessionskvoten för aktiva filer har uppnåtts. Filer har rensats.",
+    "pinBlockedTooLarge": "Filen är för stor för att fastnålas ({tokens} tokens, gräns: {limit})",
+    "activationRejectedTooLarge": "Filen är för stor för aktiv kontext ({tokens} tokens, gräns: {limit})",
+    "sessionQuotaWarning": "Sessionskvoten nästan slut — {remaining} tokens kvar",
+    "sessionQuotaNearlyExhausted": "Sessionskvoten är nästan slut — aktiva filer kan uteslutas"
   },
   "shortcuts": {
     "title": "Kortkommandon",

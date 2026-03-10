@@ -1789,7 +1789,17 @@
     "retry": "Coba lagi",
     "pinned": "Sudah dipin",
     "pin": "Pin",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Disematkan: selalu disertakan",
+    "unpinnedTooltip": "Tidak disematkan: dapat dikecualikan atau dihapus otomatis",
+    "pinnedCount": "{pinned} disematkan / {total}",
+    "sessionQuota": "Kuota sesi",
+    "sessionQuotaUsage": "{used} / {total} token digunakan di sesi ini",
+    "sessionQuotaExhausted": "Kuota sesi file aktif telah tercapai. File telah dihapus.",
+    "pinBlockedTooLarge": "File terlalu besar untuk disematkan ({tokens} token, batas: {limit})",
+    "activationRejectedTooLarge": "File terlalu besar untuk konteks aktif ({tokens} token, batas: {limit})",
+    "sessionQuotaWarning": "Kuota sesi hampir habis — {remaining} token tersisa",
+    "sessionQuotaNearlyExhausted": "Kuota sesi hampir habis — file aktif mungkin tidak akan disertakan"
   },
   "shortcuts": {
     "title": "Pintasan Keyboard",

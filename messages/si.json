@@ -1789,7 +1789,17 @@
     "retry": "නැවත උත්සාහ කරන්න",
     "pinned": "පිහිටුවා ඇත",
     "pin": "පිහිටුවන්න",
-    "tokens": "ටෝකන"
+    "tokens": "ටෝකන",
+    "pinnedTooltip": "සවිස්ථිර කළෙහි: සෑම විටම ඇතුළත් වේ",
+    "unpinnedTooltip": "සවිස්ථිර නොකළෙහි: හැකිනම් ඉවත් නොකළ හෝ ස්වයංක්‍රීයව ඉවත් කළ හැකිය",
+    "pinnedCount": "{pinned} සවිස්ථිර / {total}",
+    "sessionQuota": "සැසියක ප්‍රමාණය",
+    "sessionQuotaUsage": "මෙම සැසිය භාවිතා කළේ {used} / {total} ටෝකන",
+    "sessionQuotaExhausted": "සක්‍රීය ගොනු සැසියක ප්‍රමාණ සීමාවට ළඟා වී ඇත. ගොනු ඉවත් කර ඇත.",
+    "pinBlockedTooLarge": "ගොනුව සවිස්ථිර කිරීමට විශාල වැඩිවේ ({tokens} ටෝකන, සීමාව: {limit})",
+    "activationRejectedTooLarge": "සක්‍රීය පරිදිය සඳහා ගොනුව විශාල වැඩිවේ ({tokens} ටෝකන, සීමාව: {limit})",
+    "sessionQuotaWarning": "සැසියක ප්‍රමාණය අවසන් වීමට නුදුරයි — ඉතිරිව ඇති {remaining} ටෝකන",
+    "sessionQuotaNearlyExhausted": "සැසියක ප්‍රමාණය අවසන් වීමට ආසන්නයි — සක්‍රීය ගොනු ඇතුළත් නොවිය හැක"
   },
   "shortcuts": {
     "title": "යතුරුපුවරු කෙටි මාර්ග",

@@ -1789,7 +1789,17 @@
     "retry": "Tentar novamente",
     "pinned": "Fixado",
     "pin": "Fixar",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Fixado: sempre incluído",
+    "unpinnedTooltip": "Desafixado: pode ser excluído ou removido automaticamente",
+    "pinnedCount": "{pinned} fixados / {total}",
+    "sessionQuota": "Cota da sessão",
+    "sessionQuotaUsage": "{used} / {total} tokens usados nesta sessão",
+    "sessionQuotaExhausted": "Cota de arquivos ativos da sessão atingida. Arquivos foram limpos.",
+    "pinBlockedTooLarge": "Arquivo muito grande para fixar ({tokens} tokens, limite: {limit})",
+    "activationRejectedTooLarge": "Arquivo muito grande para o contexto ativo ({tokens} tokens, limite: {limit})",
+    "sessionQuotaWarning": "Cota da sessão quase no fim — {remaining} tokens restantes",
+    "sessionQuotaNearlyExhausted": "Cota da sessão quase esgotada — arquivos ativos podem não ser incluídos"
   },
   "shortcuts": {
     "title": "Atalhos de Teclado",

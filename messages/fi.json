@@ -1789,7 +1789,17 @@
     "retry": "Yritä uudelleen",
     "pinned": "Kiinnitetty",
     "pin": "Kiinnitä",
-    "tokens": "tokenit"
+    "tokens": "tokenit",
+    "pinnedTooltip": "Kiinnitetty: sisällytetään aina",
+    "unpinnedTooltip": "Ei kiinnitetty: voidaan jättää pois tai poistaa automaattisesti",
+    "pinnedCount": "{pinned} kiinnitetty / {total}",
+    "sessionQuota": "Istunnon kiintiö",
+    "sessionQuotaUsage": "{used} / {total} tokenia käytetty tässä istunnossa",
+    "sessionQuotaExhausted": "Aktiivitiedostojen istuntokiintiö saavutettu. Tiedostot on tyhjennetty.",
+    "pinBlockedTooLarge": "Tiedosto liian suuri kiinnitettäväksi ({tokens} tokenia, raja: {limit})",
+    "activationRejectedTooLarge": "Tiedosto liian suuri aktiiviseen kontekstiin ({tokens} tokenia, raja: {limit})",
+    "sessionQuotaWarning": "Istuntokiintiö vähissä — {remaining} tokenia jäljellä",
+    "sessionQuotaNearlyExhausted": "Istuntokiintiö lähes käytetty — aktiivisia tiedostoja ei ehkä sisällytetä"
   },
   "shortcuts": {
     "title": "Pikanäppäimet",

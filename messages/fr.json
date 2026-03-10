@@ -1789,7 +1789,17 @@
     "retry": "Réessayer",
     "pinned": "Épinglé",
     "pin": "Épingler",
-    "tokens": "jetons"
+    "tokens": "jetons",
+    "pinnedTooltip": "Épinglé : toujours inclus",
+    "unpinnedTooltip": "Non épinglé : peut être exclu ou supprimé automatiquement",
+    "pinnedCount": "{pinned} épinglés / {total}",
+    "sessionQuota": "Quota de session",
+    "sessionQuotaUsage": "{used} / {total} jetons utilisés cette session",
+    "sessionQuotaExhausted": "Quota de session atteint pour les fichiers actifs. Les fichiers ont été supprimés.",
+    "pinBlockedTooLarge": "Fichier trop volumineux pour être épinglé ({tokens} jetons, limite : {limit})",
+    "activationRejectedTooLarge": "Fichier trop volumineux pour le contexte actif ({tokens} jetons, limite : {limit})",
+    "sessionQuotaWarning": "Quota de session bientôt atteint — {remaining} jetons restants",
+    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus"
   },
   "shortcuts": {
     "title": "Raccourcis clavier",

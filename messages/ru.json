@@ -1789,7 +1789,17 @@
     "retry": "Повторить",
     "pinned": "Закреплено",
     "pin": "Закрепить",
-    "tokens": "токены"
+    "tokens": "токены",
+    "pinnedTooltip": "Закреплено: всегда включено",
+    "unpinnedTooltip": "Откреплено: может быть исключено или автоматически удалено",
+    "pinnedCount": "{pinned} закреплено / {total}",
+    "sessionQuota": "Лимит сессии",
+    "sessionQuotaUsage": "Использовано {used} из {total} токенов в этой сессии",
+    "sessionQuotaExhausted": "Достигнут лимит файлов в сессии. Файлы были удалены.",
+    "pinBlockedTooLarge": "Файл слишком большой для закрепления ({tokens} токенов, лимит: {limit})",
+    "activationRejectedTooLarge": "Файл слишком большой для активного контекста ({tokens} токенов, лимит: {limit})",
+    "sessionQuotaWarning": "Лимит сессии на исходе — осталось {remaining} токенов",
+    "sessionQuotaNearlyExhausted": "Лимит сессии почти исчерпан — активные файлы могут быть не включены"
   },
   "shortcuts": {
     "title": "Горячие клавиши",

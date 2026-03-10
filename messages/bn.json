@@ -1789,7 +1789,17 @@
     "retry": "পুনরায় চেষ্টা করুন",
     "pinned": "পিন করা হয়েছে",
     "pin": "পিন করুন",
-    "tokens": "টোকেন"
+    "tokens": "টোকেন",
+    "pinnedTooltip": "পিন করা: সবসময় যুক্ত থাকবে",
+    "unpinnedTooltip": "আনপিন করা: বাদ পড়তে বা স্বয়ংক্রিয়ভাবে মুছে যেতে পারে",
+    "pinnedCount": "{pinned} পিন করা / {total}",
+    "sessionQuota": "সেশনের সীমা",
+    "sessionQuotaUsage": "এই সেশনে ব্যবহৃত {used} / {total} টোকেন",
+    "sessionQuotaExhausted": "সক্রিয় ফাইলের সেশনের কোটা শেষ। ফাইলসমূহ মুছে ফেলা হয়েছে।",
+    "pinBlockedTooLarge": "ফাইলটি পিন করার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
+    "activationRejectedTooLarge": "সক্রিয় কনটেক্সটে ফাইলটি রাখার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
+    "sessionQuotaWarning": "সেশনের সীমা প্রায় শেষ — {remaining} টোকেন বাকি",
+    "sessionQuotaNearlyExhausted": "সেশনের সীমা প্রায় শেষ — সক্রিয় ফাইলগুলি অন্তর্ভুক্ত নাও হতে পারে"
   },
   "shortcuts": {
     "title": "কী-বোর্ড শর্টকাট",

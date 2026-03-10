@@ -1789,7 +1789,17 @@
     "retry": "إعادة المحاولة",
     "pinned": "مثبت",
     "pin": "تثبيت",
-    "tokens": "توكنات"
+    "tokens": "توكنات",
+    "pinnedTooltip": "مثبّت: دائماً مشمول",
+    "unpinnedTooltip": "غير مثبّت: قد يُستبعد أو يُزال تلقائياً",
+    "pinnedCount": "{pinned} مثبّت / {total}",
+    "sessionQuota": "حصة الجلسة",
+    "sessionQuotaUsage": "{used} / {total} رمز مستخدم في هذه الجلسة",
+    "sessionQuotaExhausted": "تم الوصول إلى حصة الجلسة للملفات النشطة. تم مسح الملفات.",
+    "pinBlockedTooLarge": "الملف كبير جداً للتثبيت ({tokens} رمز، الحد: {limit})",
+    "activationRejectedTooLarge": "الملف كبير جداً للسياق النشط ({tokens} رمز، الحد: {limit})",
+    "sessionQuotaWarning": "حصة الجلسة منخفضة — متبقي {remaining} رمز",
+    "sessionQuotaNearlyExhausted": "حصة الجلسة أوشكت على النفاد — قد لا يتم تضمين الملفات النشطة"
   },
   "shortcuts": {
     "title": "اختصارات لوحة المفاتيح",

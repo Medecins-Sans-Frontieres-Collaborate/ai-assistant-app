@@ -1789,7 +1789,17 @@
     "retry": "다시 시도",
     "pinned": "고정됨",
     "pin": "고정",
-    "tokens": "토큰"
+    "tokens": "토큰",
+    "pinnedTooltip": "고정됨: 항상 포함됨",
+    "unpinnedTooltip": "고정 해제됨: 제외되거나 자동으로 제거될 수 있음",
+    "pinnedCount": "{pinned}개 고정 / {total}개",
+    "sessionQuota": "세션 할당량",
+    "sessionQuotaUsage": "이번 세션 사용: {used} / {total} 토큰",
+    "sessionQuotaExhausted": "활성 파일 세션 할당량에 도달했습니다. 파일이 모두 삭제되었습니다.",
+    "pinBlockedTooLarge": "파일이 너무 커서 고정할 수 없습니다 ({tokens} 토큰, 제한: {limit})",
+    "activationRejectedTooLarge": "파일이 너무 커서 활성 컨텍스트에 추가할 수 없습니다 ({tokens} 토큰, 제한: {limit})",
+    "sessionQuotaWarning": "세션 할당량이 부족합니다 — {remaining} 토큰 남음",
+    "sessionQuotaNearlyExhausted": "세션 할당량이 거의 소진되었습니다 — 활성 파일이 포함되지 않을 수 있습니다"
   },
   "shortcuts": {
     "title": "키보드 단축키",

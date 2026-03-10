@@ -1789,7 +1789,17 @@
     "retry": "Erneut versuchen",
     "pinned": "Angeheftet",
     "pin": "Anheften",
-    "tokens": "Tokens"
+    "tokens": "Tokens",
+    "pinnedTooltip": "Angeheftet: immer einbezogen",
+    "unpinnedTooltip": "Nicht angeheftet: kann ausgeschlossen oder automatisch entfernt werden",
+    "pinnedCount": "{pinned} angeheftet / {total}",
+    "sessionQuota": "Sitzungskontingent",
+    "sessionQuotaUsage": "{used} / {total} Token in dieser Sitzung verwendet",
+    "sessionQuotaExhausted": "Sitzungskontingent für aktive Dateien erreicht. Dateien wurden gelöscht.",
+    "pinBlockedTooLarge": "Datei zu groß zum Anheften ({tokens} Token, Limit: {limit})",
+    "activationRejectedTooLarge": "Datei zu groß für aktiven Kontext ({tokens} Token, Limit: {limit})",
+    "sessionQuotaWarning": "Sitzungskontingent fast aufgebraucht — {remaining} Token verbleibend",
+    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen"
   },
   "shortcuts": {
     "title": "Tastenkombinationen",

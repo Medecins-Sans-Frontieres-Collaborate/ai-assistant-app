@@ -1789,7 +1789,17 @@
     "retry": "Riprova",
     "pinned": "Fissato",
     "pin": "Fissa",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Fissato: sempre incluso",
+    "unpinnedTooltip": "Non fissato: può essere escluso o rimosso automaticamente",
+    "pinnedCount": "{pinned} fissati / {total}",
+    "sessionQuota": "Quota sessione",
+    "sessionQuotaUsage": "{used} / {total} token utilizzati in questa sessione",
+    "sessionQuotaExhausted": "Quota sessione file attivi raggiunta. I file sono stati rimossi.",
+    "pinBlockedTooLarge": "File troppo grande per essere fissato ({tokens} token, limite: {limit})",
+    "activationRejectedTooLarge": "File troppo grande per il contesto attivo ({tokens} token, limite: {limit})",
+    "sessionQuotaWarning": "Quota sessione quasi esaurita — {remaining} token rimasti",
+    "sessionQuotaNearlyExhausted": "Quota sessione quasi esaurita — i file attivi potrebbero non essere inclusi"
   },
   "shortcuts": {
     "title": "Scorciatoie da tastiera",

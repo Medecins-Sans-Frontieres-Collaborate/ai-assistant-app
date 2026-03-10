@@ -1789,7 +1789,17 @@
     "retry": "Reîncearcă",
     "pinned": "Fixat",
     "pin": "Fixează",
-    "tokens": "tokenuri"
+    "tokens": "tokenuri",
+    "pinnedTooltip": "Fixat: întotdeauna inclus",
+    "unpinnedTooltip": "Nefixat: poate fi exclus sau eliminat automat",
+    "pinnedCount": "{pinned} fixate / {total}",
+    "sessionQuota": "Cota pentru sesiune",
+    "sessionQuotaUsage": "{used} / {total} tokenuri folosite în această sesiune",
+    "sessionQuotaExhausted": "Cota pentru fișiere active a fost atinsă. Fișierele au fost eliminate.",
+    "pinBlockedTooLarge": "Fișier prea mare pentru a fi fixat ({tokens} tokenuri, limită: {limit})",
+    "activationRejectedTooLarge": "Fișier prea mare pentru contextul activ ({tokens} tokenuri, limită: {limit})",
+    "sessionQuotaWarning": "Cota pentru sesiune este aproape de final — au rămas {remaining} tokenuri",
+    "sessionQuotaNearlyExhausted": "Cota pentru sesiune este aproape epuizată — fișierele active ar putea să nu fie incluse"
   },
   "shortcuts": {
     "title": "Scurtături de la tastatură",

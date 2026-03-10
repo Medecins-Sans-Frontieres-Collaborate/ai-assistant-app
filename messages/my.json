@@ -1789,7 +1789,17 @@
     "retry": "ပြန်လည်ကြိုးစားပါ",
     "pinned": "Pinned လုပ်ထားသည်",
     "pin": "Pin လုပ်ပါ",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Pinned - အမြဲတင်ထည့်ထားသည်",
+    "unpinnedTooltip": "Unpinned - ဖယ်ရှားပစ်နိုင်သို့မဟုတ် အလိုအလျောက်ဖယ်ရှားနိုင်သည်",
+    "pinnedCount": "{pinned} ခု တင်ထားပြီး / {total} ခု",
+    "sessionQuota": "Session quota",
+    "sessionQuotaUsage": "ယခု session တွင်အသုံးပြုထားသော token - {used} / {total}",
+    "sessionQuotaExhausted": "Active files session quota ကို ပြည့်မြောက်ပြီးဖြစ်သည်။ File များကို ဖယ်ရှားပြီးပါပြီ။",
+    "pinBlockedTooLarge": "File သည် အရွယ်အစားကြီးနေသဖြင့် pin မလုပ်နိုင်ပါ ({tokens} tokens, ကန့်သတ်ချက်: {limit})",
+    "activationRejectedTooLarge": "File သည် active context အတွက် အရွယ်ကြီးလွန်းနေသည် ({tokens} tokens, ကန့်သတ်ချက်: {limit})",
+    "sessionQuotaWarning": "Session quota ကိုအသုံးပြုနေပြီး - လက်ကျန် {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "Session quota နီးပါးကုန်ဆုံးပြီ — active files မပါဝင်နိုင်ကြောင်း သတိပေးသည်"
   },
   "shortcuts": {
     "title": "ကီးဘုဒ် အနုတ်လမ်းများ",

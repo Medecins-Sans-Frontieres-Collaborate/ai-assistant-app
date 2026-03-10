@@ -1819,7 +1819,17 @@
     "retry": "دوبارہ کوشش کریں",
     "pinned": "پن کی گئی",
     "pin": "پن کریں",
-    "tokens": "ٹوکنز"
+    "tokens": "ٹوکنز",
+    "pinnedTooltip": "پن کیا گیا: ہمیشہ شامل ہوتا ہے",
+    "unpinnedTooltip": "غیر پن کیا گیا: شامل نہ بھی ہو سکتا ہے یا خودکار طور پر ہٹایا جا سکتا ہے",
+    "pinnedCount": "{pinned} پن کیے گئے / {total}",
+    "sessionQuota": "سیشن کوٹا",
+    "sessionQuotaUsage": "اس سیشن میں {used} / {total} ٹوکنز استعمال ہوئے",
+    "sessionQuotaExhausted": "فعال فائلز کے سیشن کوٹے کی حد مکمل ہوگئی۔ فائلز صاف کر دی گئی ہیں۔",
+    "pinBlockedTooLarge": "فائل بہت بڑی ہے پن کرنے کے لیے ({tokens} ٹوکنز، حد: {limit})",
+    "activationRejectedTooLarge": "فعال تناظر کے لیے فائل بہت بڑی ہے ({tokens} ٹوکنز، حد: {limit})",
+    "sessionQuotaWarning": "سیشن کوٹا کم رہ گیا ہے — {remaining} ٹوکنز باقی",
+    "sessionQuotaNearlyExhausted": "سیشن کوٹا تقریباً ختم ہو چکا ہے — فعال فائلز شامل نہیں ہو سکتیں"
   },
   "shortcuts": {
     "title": "کی بورڈ شارٹ کٹس",

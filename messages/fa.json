@@ -1789,7 +1789,17 @@
     "retry": "تلاش مجدد",
     "pinned": "سنجاق شده",
     "pin": "سنجاق کردن",
-    "tokens": "توکن‌ها"
+    "tokens": "توکن‌ها",
+    "pinnedTooltip": "پین‌شده: همیشه لحاظ می‌شود",
+    "unpinnedTooltip": "بدون پین: ممکن است حذف یا به‌صورت خودکار کنار گذاشته شود",
+    "pinnedCount": "{pinned} پین‌شده / {total}",
+    "sessionQuota": "سهمیه جلسه",
+    "sessionQuotaUsage": "{used} / {total} توکن مصرف شده در این جلسه",
+    "sessionQuotaExhausted": "سهمیه فایل‌های فعال در این جلسه به پایان رسید. فایل‌ها پاک شد.",
+    "pinBlockedTooLarge": "فایل برای پین شدن بیش از حد بزرگ است ({tokens} توکن، محدودیت: {limit})",
+    "activationRejectedTooLarge": "فایل برای زمینه فعال بیش از حد بزرگ است ({tokens} توکن، محدودیت: {limit})",
+    "sessionQuotaWarning": "سهمیه جلسه رو به پایان است — {remaining} توکن باقی مانده",
+    "sessionQuotaNearlyExhausted": "سهمیه جلسه تقریباً پایان یافته — ممکن است فایل‌های فعال لحاظ نشوند"
   },
   "shortcuts": {
     "title": "میانبرهای صفحه‌کلید",

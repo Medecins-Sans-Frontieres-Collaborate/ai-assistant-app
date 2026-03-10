@@ -1810,6 +1810,16 @@
     "retry": "እንደገና ይሞክሩ",
     "pinned": "የተያዘ",
     "pin": "አስያዝ",
-    "tokens": "ቶክኖች"
+    "tokens": "ቶክኖች",
+    "pinnedTooltip": "ተሰቅቋል፡ ሁልጊዜ ከተካተቱ ነው",
+    "unpinnedTooltip": "አልተሰቀመም፡ ሊወገዱ ወይም በራስ-ሰር ሊወገዱ ይችላሉ",
+    "pinnedCount": "{pinned} ተሰቅቋል / {total}",
+    "sessionQuota": "የስብሰባ አቅም",
+    "sessionQuotaUsage": "በዚህ ስብሰባ {used} / {total} ቶክኖች ተጠቀሙ",
+    "sessionQuotaExhausted": "የአባል ፋይሎች የስብሰባ አቅም ተሟል። ፋይሎቹ አጽድተዋል።",
+    "pinBlockedTooLarge": "ፋይሉ ለመሰቀል በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
+    "activationRejectedTooLarge": "ፋይሉ ለአክቲቭ ኮንቴክስት በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
+    "sessionQuotaWarning": "የስብሰባ አቅም ማቅረብ ነው — {remaining} ቶክኖች ቀርበዋል",
+    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም"
   }
 }

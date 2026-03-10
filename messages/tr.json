@@ -1789,7 +1789,17 @@
     "retry": "Tekrar dene",
     "pinned": "Sabitlendi",
     "pin": "Sabitle",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Sabitlendi: her zaman dahil edilir",
+    "unpinnedTooltip": "Sabitlenmemiş: hariç tutulabilir veya otomatik olarak kaldırılabilir",
+    "pinnedCount": "{pinned} sabitli / {total}",
+    "sessionQuota": "Oturum kotası",
+    "sessionQuotaUsage": "Bu oturumda {used} / {total} token kullanıldı",
+    "sessionQuotaExhausted": "Aktif dosyalar oturum kotasına ulaşıldı. Dosyalar temizlendi.",
+    "pinBlockedTooLarge": "Dosya sabitlemek için çok büyük ({tokens} token, limit: {limit})",
+    "activationRejectedTooLarge": "Dosya aktif bağlam için çok büyük ({tokens} token, limit: {limit})",
+    "sessionQuotaWarning": "Oturum kotası azalıyor — {remaining} token kaldı",
+    "sessionQuotaNearlyExhausted": "Oturum kotası neredeyse tükendi — aktif dosyalar dahil edilmeyebilir"
   },
   "shortcuts": {
     "title": "Klavye Kısayolları",

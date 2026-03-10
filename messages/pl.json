@@ -1789,7 +1789,17 @@
     "retry": "Ponów próbę",
     "pinned": "Przypięte",
     "pin": "Przypnij",
-    "tokens": "tokeny"
+    "tokens": "tokeny",
+    "pinnedTooltip": "Przypięte: zawsze uwzględnione",
+    "unpinnedTooltip": "Odpinane: mogą zostać wykluczone lub automatycznie usunięte",
+    "pinnedCount": "{pinned} przypiętych / {total}",
+    "sessionQuota": "Limit sesji",
+    "sessionQuotaUsage": "{used} / {total} tokenów użyto w tej sesji",
+    "sessionQuotaExhausted": "Osiągnięto limit aktywnych plików w sesji. Pliki zostały wyczyszczone.",
+    "pinBlockedTooLarge": "Plik zbyt duży do przypięcia ({tokens} tokenów, limit: {limit})",
+    "activationRejectedTooLarge": "Plik zbyt duży dla aktywnego kontekstu ({tokens} tokenów, limit: {limit})",
+    "sessionQuotaWarning": "Limit sesji się kończy — pozostało {remaining} tokenów",
+    "sessionQuotaNearlyExhausted": "Limit sesji prawie wyczerpany — aktywne pliki mogą nie zostać uwzględnione"
   },
   "shortcuts": {
     "title": "Skróty klawiaturowe",

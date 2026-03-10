@@ -1789,7 +1789,17 @@
     "retry": "Jaribu tena",
     "pinned": "Imezibitiwa",
     "pin": "Biti",
-    "tokens": "tokeni"
+    "tokens": "tokeni",
+    "pinnedTooltip": "Imepachikwa: itawekwa kila wakati",
+    "unpinnedTooltip": "Haijapachikwa: inaweza kuondolewa au kufutwa moja kwa moja",
+    "pinnedCount": "{pinned} zimepachikwa / {total}",
+    "sessionQuota": "Kikomo cha kikao",
+    "sessionQuotaUsage": "{used} / {total} tokeni zimetumika kwenye kikao hiki",
+    "sessionQuotaExhausted": "Kikomo cha kikao cha faili zinazotumika kimefikiwa. Faili zimeondolewa.",
+    "pinBlockedTooLarge": "Faili ni kubwa mno kupachikwa ({tokens} tokeni, kikomo: {limit})",
+    "activationRejectedTooLarge": "Faili ni kubwa mno kwa muktadha unaotumika ({tokens} tokeni, kikomo: {limit})",
+    "sessionQuotaWarning": "Kikomo cha kikao kinakaribia kuisha — tokeni {remaining} zimesalia",
+    "sessionQuotaNearlyExhausted": "Kikomo cha kikao kinakaribia kuisha — faili zinazotumika huenda zisiwepo"
   },
   "shortcuts": {
     "title": "Vifupisho vya Kibodi",

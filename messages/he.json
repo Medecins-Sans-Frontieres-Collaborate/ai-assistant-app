@@ -1789,7 +1789,17 @@
     "retry": "נסה שוב",
     "pinned": "נעוץ",
     "pin": "נעץ",
-    "tokens": "טוקנים"
+    "tokens": "טוקנים",
+    "pinnedTooltip": "צמוד: תמיד כלול",
+    "unpinnedTooltip": "לא צמוד: ייתכן שיוצא או יוסר אוטומטית",
+    "pinnedCount": "{pinned} צמודים / {total}",
+    "sessionQuota": "מכסת סשן",
+    "sessionQuotaUsage": "{used} / {total} טוקנים נוצלו בסשן זה",
+    "sessionQuotaExhausted": "הגעת למכסת הקבצים האקטיביים לסשן. הקבצים נמחקו.",
+    "pinBlockedTooLarge": "הקובץ גדול מדי להצמדה ({tokens} טוקנים, מגבלה: {limit})",
+    "activationRejectedTooLarge": "הקובץ גדול מדי להקשר אקטיבי ({tokens} טוקנים, מגבלה: {limit})",
+    "sessionQuotaWarning": "המכסה לסשן קרובה לסיום — נותרו {remaining} טוקנים",
+    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו"
   },
   "shortcuts": {
     "title": "קיצורי מקלדת",

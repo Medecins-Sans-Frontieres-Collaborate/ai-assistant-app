@@ -1789,7 +1789,17 @@
     "retry": "Reintenta",
     "pinned": "Fixat",
     "pin": "Fixa",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Fixat: sempre inclòs",
+    "unpinnedTooltip": "No fixat: es pot excloure o eliminar automàticament",
+    "pinnedCount": "{pinned} fixats / {total}",
+    "sessionQuota": "Quota de sessió",
+    "sessionQuotaUsage": "{used} / {total} tokens utilitzats aquesta sessió",
+    "sessionQuotaExhausted": "S'ha assolit la quota de fitxers actius de la sessió. Els fitxers s'han esborrat.",
+    "pinBlockedTooLarge": "Fitxer massa gran per fixar ({tokens} tokens, límit: {limit})",
+    "activationRejectedTooLarge": "Fitxer massa gran per al context actiu ({tokens} tokens, límit: {limit})",
+    "sessionQuotaWarning": "Quota de sessió baixa — resten {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "Quota de sessió gairebé esgotada — potser no s'inclouran fitxers actius"
   },
   "shortcuts": {
     "title": "Dreceres de teclat",

@@ -1789,7 +1789,17 @@
     "retry": "Zkusit znovu",
     "pinned": "Připnuto",
     "pin": "Připnout",
-    "tokens": "tokeny"
+    "tokens": "tokeny",
+    "pinnedTooltip": "Připnuto: vždy zahrnuto",
+    "unpinnedTooltip": "Odepnuto: může být vynecháno nebo automaticky odstraněno",
+    "pinnedCount": "{pinned} připnuto / {total}",
+    "sessionQuota": "Limit relace",
+    "sessionQuotaUsage": "{used} / {total} tokenů použito v této relaci",
+    "sessionQuotaExhausted": "Byl dosažen limit aktivních souborů pro tuto relaci. Soubory byly vymazány.",
+    "pinBlockedTooLarge": "Soubor je příliš velký na připnutí ({tokens} tokenů, limit: {limit})",
+    "activationRejectedTooLarge": "Soubor je příliš velký pro aktivní kontext ({tokens} tokenů, limit: {limit})",
+    "sessionQuotaWarning": "Limit relace se blíží vyčerpání — zbývá {remaining} tokenů",
+    "sessionQuotaNearlyExhausted": "Limit relace je téměř vyčerpán — aktivní soubory nemusí být zahrnuty"
   },
   "shortcuts": {
     "title": "Klávesové zkratky",

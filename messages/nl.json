@@ -1789,7 +1789,17 @@
     "retry": "Opnieuw proberen",
     "pinned": "Vastgezet",
     "pin": "Vastzetten",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Vastgezet: altijd inbegrepen",
+    "unpinnedTooltip": "Losgemaakt: kan worden uitgesloten of automatisch verwijderd",
+    "pinnedCount": "{pinned} vastgezet / {total}",
+    "sessionQuota": "Sessielimiet",
+    "sessionQuotaUsage": "{used} / {total} tokens gebruikt deze sessie",
+    "sessionQuotaExhausted": "Limiet voor actieve bestanden bereikt. Bestanden zijn gewist.",
+    "pinBlockedTooLarge": "Bestand te groot om vast te zetten ({tokens} tokens, limiet: {limit})",
+    "activationRejectedTooLarge": "Bestand te groot voor actieve context ({tokens} tokens, limiet: {limit})",
+    "sessionQuotaWarning": "Sessielimiet bijna bereikt — {remaining} tokens resterend",
+    "sessionQuotaNearlyExhausted": "Sessielimiet vrijwel bereikt — actieve bestanden worden mogelijk niet opgenomen"
   },
   "shortcuts": {
     "title": "Toetsenbord­shortcuts",

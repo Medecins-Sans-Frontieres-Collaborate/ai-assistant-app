@@ -1820,7 +1820,17 @@
     "retry": "重试",
     "pinned": "已固定",
     "pin": "固定",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "已固定：始终包含",
+    "unpinnedTooltip": "未固定：可能被排除或自动移除",
+    "pinnedCount": "{pinned} 已固定 / {total}",
+    "sessionQuota": "会话额度",
+    "sessionQuotaUsage": "本会话已用 {used} / {total} 令牌",
+    "sessionQuotaExhausted": "已达到活动文件会话额度。文件已被清除。",
+    "pinBlockedTooLarge": "文件过大，无法固定（{tokens} 令牌，限制：{limit}）",
+    "activationRejectedTooLarge": "文件过大，无法添加至活动上下文（{tokens} 令牌，限制：{limit}）",
+    "sessionQuotaWarning": "会话额度不足 — 剩余 {remaining} 令牌",
+    "sessionQuotaNearlyExhausted": "会话额度即将用尽 — 活动文件可能无法被包含"
   },
   "shortcuts": {
     "title": "键盘快捷键",

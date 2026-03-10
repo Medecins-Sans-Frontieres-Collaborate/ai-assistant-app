@@ -1789,7 +1789,17 @@
     "retry": "再試行",
     "pinned": "ピン留め済み",
     "pin": "ピン留め",
-    "tokens": "トークン"
+    "tokens": "トークン",
+    "pinnedTooltip": "ピン留め：常に含まれます",
+    "unpinnedTooltip": "ピン留めされていません：除外または自動削除される場合があります",
+    "pinnedCount": "{pinned} 件ピン留め / {total}",
+    "sessionQuota": "セッション上限",
+    "sessionQuotaUsage": "このセッションで {used} / {total} トークン使用済み",
+    "sessionQuotaExhausted": "アクティブファイルのセッション上限に達しました。ファイルはクリアされました。",
+    "pinBlockedTooLarge": "ファイルが大きすぎてピン留めできません（{tokens} トークン、上限：{limit}）",
+    "activationRejectedTooLarge": "アクティブコンテキストにはファイルが大きすぎます（{tokens} トークン、上限：{limit}）",
+    "sessionQuotaWarning": "セッション上限が残り少なくなっています — 残り {remaining} トークン",
+    "sessionQuotaNearlyExhausted": "セッション上限がほぼ尽きかけています — アクティブファイルが含まれない可能性があります"
   },
   "shortcuts": {
     "title": "キーボードショートカット",

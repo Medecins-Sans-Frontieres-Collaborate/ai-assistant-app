@@ -1789,7 +1789,17 @@
     "retry": "ลองใหม่",
     "pinned": "ปักหมุดแล้ว",
     "pin": "ปักหมุด",
-    "tokens": "โทเคน"
+    "tokens": "โทเคน",
+    "pinnedTooltip": "ปักหมุด: รวมไว้เสมอ",
+    "unpinnedTooltip": "ไม่ปักหมุด: อาจถูกตัดออกหรือถูกลบอัตโนมัติ",
+    "pinnedCount": "ปักหมุด {pinned} / {total}",
+    "sessionQuota": "โควตาเซสชัน",
+    "sessionQuotaUsage": "ใช้ไปแล้ว {used} / {total} โทเค็นในเซสชันนี้",
+    "sessionQuotaExhausted": "ถึงโควตาเซสชันไฟล์ที่ใช้งานแล้ว ไฟล์ถูกล้างข้อมูลแล้ว",
+    "pinBlockedTooLarge": "ไฟล์ใหญ่เกินไปที่จะปักหมุด ({tokens} โทเค็น, ขีดจำกัด: {limit})",
+    "activationRejectedTooLarge": "ไฟล์ใหญ่เกินไปสำหรับบริบทที่ใช้งาน ({tokens} โทเค็น, ขีดจำกัด: {limit})",
+    "sessionQuotaWarning": "โควตาเซสชันเหลือน้อย — เหลือ {remaining} โทเค็น",
+    "sessionQuotaNearlyExhausted": "โควตาเซสชันใกล้หมด — อาจไม่รวมไฟล์ที่ใช้งานอยู่"
   },
   "shortcuts": {
     "title": "คีย์ลัดบนแป้นพิมพ์",
