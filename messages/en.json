@@ -1766,7 +1766,12 @@
     "pinnedTooltip": "Pinned: always included",
     "unpinnedTooltip": "Unpinned: may be excluded or auto-removed",
     "pinnedCount": "{pinned} pinned / {total}",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "sessionQuota": "Session quota",
+    "sessionQuotaUsage": "{used} / {total} tokens used this session",
+    "sessionQuotaExhausted": "Active files session quota reached. Files have been cleared.",
+    "pinBlockedTooLarge": "File too large to pin ({tokens} tokens, limit: {limit})",
+    "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
