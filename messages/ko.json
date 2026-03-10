@@ -1790,5 +1790,26 @@
     "pinned": "고정됨",
     "pin": "고정",
     "tokens": "토큰"
+  },
+  "shortcuts": {
+    "title": "키보드 단축키",
+    "pressEscapeToClose": "Esc 키를 눌러 닫기",
+    "categoryNavigation": "네비게이션",
+    "categoryConversation": "대화",
+    "categoryInput": "입력",
+    "categoryApp": "애플리케이션",
+    "focusChatInput": "채팅 입력창으로 이동",
+    "newConversation": "새 대화 시작",
+    "stopGeneration": "생성 중지",
+    "toggleSidebar": "사이드바 토글",
+    "openSettings": "설정 열기",
+    "openModelSelector": "모델 변경",
+    "scrollToBottom": "맨 아래로 이동",
+    "showHelp": "키보드 단축키 보기",
+    "attachFile": "파일 첨부",
+    "searchConversations": "대화 검색",
+    "toggleTheme": "테마 전환",
+    "regenerateResponse": "응답 다시 생성",
+    "copyLastResponse": "마지막 응답 복사"
   }
 }

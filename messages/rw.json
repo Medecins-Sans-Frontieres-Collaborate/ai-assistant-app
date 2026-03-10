@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Ukuboza 2025",
-      "description": "Ubwoko buzusubirwemo bwa GPT-5.2 bwihariye ku biganiro n’ubwenge bw’amarangamutima. Bumenyereye kuganira kwuje impuhwe, kwandika byihariye, gutangaho ibitekerezo, n’ikiganiro cy’umwimerere. Bukwiriye ibiganiro bisanzwe, inama zihumuriza, n’imirimo isaba kumenya amarangamutima."
+      "description": "Variant idasanzwe ya GPT-5.2 yanozwe kugira ngo ibashe kuganira neza no gusobanukirwa amarangamutima. Irangwa no kumva abandi, kwandika mu buryo bw’ihangano, gutanga ibitekerezo bishya, no kuganira mu buryo busanzwe. Ikwiriye imirimo isaba kumva amarangamutima, ibiganiro bisanzwe, ndetse no gufasha mu nama no kugisha inama."
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "Byafungiwe",
     "pin": "Fungira",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Inyunganirangingo za klavieri",
+    "pressEscapeToClose": "Kanda Escape kugira ngo ufunge",
+    "categoryNavigation": "Kuyobora",
+    "categoryConversation": "Ikiganiro",
+    "categoryInput": "Kwandika",
+    "categoryApp": "Porogaramu",
+    "focusChatInput": "Jya aho wandika ubutumwa",
+    "newConversation": "Tangira ikiganiro gishya",
+    "stopGeneration": "Hagarika gukora",
+    "toggleSidebar": "Hindura aho uruhande ruri",
+    "openSettings": "Fungura imiterere",
+    "openModelSelector": "Hindura model",
+    "scrollToBottom": "Manuka hepfo",
+    "showHelp": "Erekana inyunganirangingo za klavieri",
+    "attachFile": "Shyiraho dosiye"
   }
 }

@@ -1790,5 +1790,26 @@
     "pinned": "Imezibitiwa",
     "pin": "Biti",
     "tokens": "tokeni"
+  },
+  "shortcuts": {
+    "title": "Vifupisho vya Kibodi",
+    "pressEscapeToClose": "Bonyeza Escape kufunga",
+    "categoryNavigation": "Uabiri",
+    "categoryConversation": "Mawasiliano",
+    "categoryInput": "Uingizaji",
+    "categoryApp": "Programu",
+    "focusChatInput": "Lenga uingizaji wa mazungumzo",
+    "newConversation": "Mazungumzo mapya",
+    "stopGeneration": "Sitisha uundaji",
+    "toggleSidebar": "Washa/zima upau wa pembeni",
+    "openSettings": "Fungua mipangilio",
+    "openModelSelector": "Badilisha mfano",
+    "scrollToBottom": "Shusha hadi chini",
+    "showHelp": "Onyesha vifupisho vya kibodi",
+    "attachFile": "Ambatisha faili",
+    "searchConversations": "Tafuta mazungumzo",
+    "toggleTheme": "Badilisha mandhari",
+    "regenerateResponse": "Tengeneza upya majibu",
+    "copyLastResponse": "Nakili jibu la mwisho"
   }
 }

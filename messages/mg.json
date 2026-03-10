@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
-      "description": "Fandikan-teny manokana amin'ny GPT-5.2 natokana ho an'ny fifanakalozan-dresaka sy fahakingan-tsain'ny fihetseham-po. Mahay amin'ny fifandraisana mahafatra-po, fanoratana mamorona, famoahana hevitra, ary fifanakalozan-dresaka voajanahary. Mety indrindra amin'ny resaka tsy ofisialy, toe-javatra fanoroana hevitra, ary asa mitaky fahatsapana ara-pihetseham-po."
+      "description": "Kinam-pahaizana manokana amin'ny GPT-5.2 izay natokana ho an'ny fifanakalozan-dresaka sy faharanitan-tsaina ara-pihetseham-po. Mahavita tsara amin'ny fifandraisana amin-kafaliana, fanoratana mamorona, fanehoan-kevitra, ary dinika voajanahary. Tsara indrindra ho an'ny resaka tsy dia ara-pomba ofisialy, toe-javatra ahitana fanoroana hevitra, ary asa mitaky fahatsiarovan-tena ara-pihetseham-po."
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "Voafatotra",
     "pin": "Afa-toroka",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Fanalahidin-tsoratra haingana",
+    "pressEscapeToClose": "Tsindrio Escape hanakatona",
+    "categoryNavigation": "Fizoran-dalana",
+    "categoryConversation": "Resadresaka",
+    "categoryInput": "Fampidirana",
+    "categoryApp": "Fampiharana",
+    "focusChatInput": "Hifantoka amin'ny famenoana hafatra",
+    "newConversation": "Hanomboka resaka vaovao",
+    "stopGeneration": "Atsaharo ny famoronana",
+    "toggleSidebar": "Atsimpona/ahena ny tsipika sisiny",
+    "openSettings": "Sokafy ny fikirakirana",
+    "openModelSelector": "Hanova maodely",
+    "scrollToBottom": "Ahodina ho any ambany",
+    "showHelp": "Aseho ny fanalahidy haingana",
+    "attachFile": "Manampy rakitra"
   }
 }

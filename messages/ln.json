@@ -1766,5 +1766,22 @@
     "pinned": "Ekangami",
     "pin": "Kangisa",
     "tokens": "matoken"
+  },
+  "shortcuts": {
+    "title": "Bansango ya minzoto ya kelasi",
+    "pressEscapeToClose": "Finá Escape mpo na kokanga",
+    "categoryNavigation": "Kotalaka",
+    "categoryConversation": "Lisungi",
+    "categoryInput": "Kopesa maloba",
+    "categoryApp": "Porogaramu",
+    "focusChatInput": "Fanda na esika ya kokoma",
+    "newConversation": "Sukola lisungi ya sika",
+    "stopGeneration": "Tika kobimisa",
+    "toggleSidebar": "Bonisa/Sukisa etando ya mopanzi",
+    "openSettings": "Fungola bibongiseli",
+    "openModelSelector": "Bongola modele",
+    "scrollToBottom": "Kitisá kino na suka",
+    "showHelp": "Lakisa bansango ya minzoto ya kelasi",
+    "attachFile": "Kobatela fichier"
   }
 }

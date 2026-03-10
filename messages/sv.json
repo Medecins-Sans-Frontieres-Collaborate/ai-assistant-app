@@ -1790,5 +1790,26 @@
     "pinned": "Fäst",
     "pin": "Fäst",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Kortkommandon",
+    "pressEscapeToClose": "Tryck på Escape för att stänga",
+    "categoryNavigation": "Navigering",
+    "categoryConversation": "Konversation",
+    "categoryInput": "Inmatning",
+    "categoryApp": "Applikation",
+    "focusChatInput": "Fokusera på chattinmatning",
+    "newConversation": "Ny konversation",
+    "stopGeneration": "Stoppa generering",
+    "toggleSidebar": "Visa/dölj sidopanel",
+    "openSettings": "Öppna inställningar",
+    "openModelSelector": "Byt modell",
+    "scrollToBottom": "Scrolla till botten",
+    "showHelp": "Visa kortkommandon",
+    "attachFile": "Bifoga fil",
+    "searchConversations": "Sök konversationer",
+    "toggleTheme": "Växla tema",
+    "regenerateResponse": "Återskapa svar",
+    "copyLastResponse": "Kopiera senaste svaret"
   }
 }

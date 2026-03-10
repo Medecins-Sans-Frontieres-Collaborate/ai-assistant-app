@@ -1790,5 +1790,26 @@
     "pinned": "Sudah dipin",
     "pin": "Pin",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Pintasan Keyboard",
+    "pressEscapeToClose": "Tekan Escape untuk menutup",
+    "categoryNavigation": "Navigasi",
+    "categoryConversation": "Percakapan",
+    "categoryInput": "Input",
+    "categoryApp": "Aplikasi",
+    "focusChatInput": "Fokus ke input chat",
+    "newConversation": "Percakapan baru",
+    "stopGeneration": "Hentikan pembuatan",
+    "toggleSidebar": "Buka/tutup sidebar",
+    "openSettings": "Buka pengaturan",
+    "openModelSelector": "Ganti model",
+    "scrollToBottom": "Gulir ke bawah",
+    "showHelp": "Tampilkan pintasan keyboard",
+    "attachFile": "Lampirkan berkas",
+    "searchConversations": "Cari percakapan",
+    "toggleTheme": "Ganti tema",
+    "regenerateResponse": "Buat ulang respons",
+    "copyLastResponse": "Salin respons terakhir"
   }
 }

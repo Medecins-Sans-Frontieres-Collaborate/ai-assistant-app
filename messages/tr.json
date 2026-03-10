@@ -1790,5 +1790,26 @@
     "pinned": "Sabitlendi",
     "pin": "Sabitle",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Klavye Kısayolları",
+    "pressEscapeToClose": "Kapatmak için Escape tuşuna basın",
+    "categoryNavigation": "Gezinti",
+    "categoryConversation": "Sohbet",
+    "categoryInput": "Girdi",
+    "categoryApp": "Uygulama",
+    "focusChatInput": "Sohbet girişine odaklan",
+    "newConversation": "Yeni sohbet",
+    "stopGeneration": "Oluşturmayı durdur",
+    "toggleSidebar": "Kenar çubuğunu aç/kapat",
+    "openSettings": "Ayarları aç",
+    "openModelSelector": "Modeli değiştir",
+    "scrollToBottom": "En alta kaydır",
+    "showHelp": "Klavye kısayollarını göster",
+    "attachFile": "Dosya ekle",
+    "searchConversations": "Konuşmaları ara",
+    "toggleTheme": "Temayı değiştir",
+    "regenerateResponse": "Yanıtı yeniden oluştur",
+    "copyLastResponse": "Son yanıtı kopyala"
   }
 }

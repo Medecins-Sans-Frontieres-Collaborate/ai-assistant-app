@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dec 2025",
-      "description": "Mtundu wapadera wa GPT-5.2 wokonzedwa pa zokambirana komanso kuzindikira maganizo. Ndi wabwino polankhula mwachifundo, kulemba zatsopano, kulingalira komanso zokambirana zachilengedwe. Ndioyenera pa zokambirana, uphungu, komanso ntchito zofuna kumvetsetsa maganizo."
+      "description": "Mtundu wapadera wa GPT-5.2 wokonzedwa kuti ugwiritsidwe ntchito pa kukambirana komanso kuzindikira m'maganizo. Umagwira bwino poyankhula mwachifundo, kulemba mwaluso, kupanga malingaliro atsopano, ndi kukambirana mwachilengedwe. Uli bwino pa zokambirana zosadetsa, thandizo la upangiri, komanso ntchito zofunikira kuzindikira maganizo a anthu."
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "Yakwezedwa",
     "pin": "Kwezera",
     "tokens": "ma token"
+  },
+  "shortcuts": {
+    "title": "Njira Zachidule pa Kiyibodi",
+    "pressEscapeToClose": "Dinani Escape kuti mutseke",
+    "categoryNavigation": "Nayigwesheni",
+    "categoryConversation": "Kukambirana",
+    "categoryInput": "Lowetsa zolembedwa",
+    "categoryApp": "Pulogalamu",
+    "focusChatInput": "Yang'anani malo olowetsamo mauthenga",
+    "newConversation": "Kuyamba kukambirana kwatsopano",
+    "stopGeneration": "Lekani kupanga",
+    "toggleSidebar": "Tsegulani/Kutseka sidebar",
+    "openSettings": "Tsegulani zoikamo",
+    "openModelSelector": "Sinthani model",
+    "scrollToBottom": "Yendetsani pansi",
+    "showHelp": "Onetsani njira zachidule pa kiyibodi",
+    "attachFile": "Ikani fayilo"
   }
 }

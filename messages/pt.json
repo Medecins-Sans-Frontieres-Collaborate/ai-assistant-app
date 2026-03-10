@@ -1790,5 +1790,26 @@
     "pinned": "Fixado",
     "pin": "Fixar",
     "tokens": "tokens"
+  },
+  "shortcuts": {
+    "title": "Atalhos de Teclado",
+    "pressEscapeToClose": "Pressione Escape para fechar",
+    "categoryNavigation": "Navegação",
+    "categoryConversation": "Conversa",
+    "categoryInput": "Entrada",
+    "categoryApp": "Aplicação",
+    "focusChatInput": "Focar campo de chat",
+    "newConversation": "Nova conversa",
+    "stopGeneration": "Parar geração",
+    "toggleSidebar": "Alternar barra lateral",
+    "openSettings": "Abrir configurações",
+    "openModelSelector": "Alterar modelo",
+    "scrollToBottom": "Rolar para o final",
+    "showHelp": "Mostrar atalhos de teclado",
+    "attachFile": "Anexar arquivo",
+    "searchConversations": "Procurar conversas",
+    "toggleTheme": "Alternar tema",
+    "regenerateResponse": "Regenerar resposta",
+    "copyLastResponse": "Copiar última resposta"
   }
 }

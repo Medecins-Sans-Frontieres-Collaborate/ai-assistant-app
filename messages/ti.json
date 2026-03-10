@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "ሕዳር 2025",
-      "description": "ንመዓልቲ ንዝተስፋፋሕ መወዓውዒ ኣውያን፣ ስነ-ስብኣትን ጸገምን ዝቐልዑ ናይ GPT-5.2 ብምምሕዳር። ምሕረታዊ መዝሓን መወዓውዒ ንምዃኑ፣ ፈጣሪ ጽሑፍን ብሓቂ ብምምሕዳር፣ ምንባብ ናብ ሓድሽ ሓሳብን ዝምልከት እንዳበል። ምሕረታዊ ሕቶታት፣ ቀሊል መወዓውዒ ንዝጠወቀ ኣገዳስ ብምግባር ትሕቲኡ ይሓቅበኒ።"
+      "description": "ዝተማሃረ ስሪት ናይ GPT-5.2 ዝግበረ ንቀሊል ውይይትን ንፍቓድ ግንዛቤን። ብምሕላው ውይይት፣ ፈጠራዊ ጽሑፍ፣ ምምዝጋብን ናይ ተፈጥሮ ውይይትን ይሰራሕ። ንተወካይ ውይይታታት፣ መካነ ኣግልጋይ ኣቕሓዳይነትን ናይ ነፍሲ ግንዛቤ ዝደሊ ስራሕታት ዝበለጸ።"
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "ዝጣልፉ",
     "pin": "ኣጣልፉ",
     "tokens": "ቶከን"
+  },
+  "shortcuts": {
+    "title": "ናይ ቁልፊ ብግሪ ጽሑፋት",
+    "pressEscapeToClose": "ምሽጋብ ንምዕጽው Escape ጠይቑ",
+    "categoryNavigation": "መምዘን",
+    "categoryConversation": "ውይይት",
+    "categoryInput": "ውህብታ",
+    "categoryApp": "መተግበሪ",
+    "focusChatInput": "ኣብ ውይይት ምቃኑን ኣተው",
+    "newConversation": "ሓድሽ ውይይት",
+    "stopGeneration": "ምፍጣር ዕቁፅ",
+    "toggleSidebar": "ግንባር ኣቋርጽ/ኣኽይድ",
+    "openSettings": "ቅንጥታት ክፈት",
+    "openModelSelector": "ሞዴል ቀይር",
+    "scrollToBottom": "ናብ ታበባ ተንከባከብ",
+    "showHelp": "ናይ ቁልፊ ብግሪ ጽሑፋት ርኢ",
+    "attachFile": "ፋይል ጨምር"
   }
 }

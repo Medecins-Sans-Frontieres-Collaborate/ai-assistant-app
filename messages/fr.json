@@ -1790,5 +1790,26 @@
     "pinned": "Épinglé",
     "pin": "Épingler",
     "tokens": "jetons"
+  },
+  "shortcuts": {
+    "title": "Raccourcis clavier",
+    "pressEscapeToClose": "Appuyez sur Échap pour fermer",
+    "categoryNavigation": "Navigation",
+    "categoryConversation": "Conversation",
+    "categoryInput": "Saisie",
+    "categoryApp": "Application",
+    "focusChatInput": "Activer le champ de saisie",
+    "newConversation": "Nouvelle conversation",
+    "stopGeneration": "Arrêter la génération",
+    "toggleSidebar": "Afficher/masquer la barre latérale",
+    "openSettings": "Ouvrir les paramètres",
+    "openModelSelector": "Changer de modèle",
+    "scrollToBottom": "Aller en bas",
+    "showHelp": "Afficher les raccourcis clavier",
+    "attachFile": "Joindre un fichier",
+    "searchConversations": "Rechercher dans les conversations",
+    "toggleTheme": "Changer de thème",
+    "regenerateResponse": "Régénerer la réponse",
+    "copyLastResponse": "Copier la dernière réponse"
   }
 }

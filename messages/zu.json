@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Ingxoxo",
       "knowledgeCutoff": "Dis 2025",
-      "description": "Uhlobo olukhethekile lwe-GPT-5.2 olwenziwe kahle ukuxoxa nokwazisa imizwa. Lukhuthele ekuxhumaneni nokuzwa, ukubhala okudala, nasekuqhamukeni ngemibono. Lungele izingxoxo ezijwayelekile, ukusizana ngokweluleka, nemisebenzi edinga ukuqonda imizwa."
+      "description": "Inhlobo ekhethekile ye-GPT-5.2 eyenziwe kahle ezingxoxweni kanye nobuhlakani bemizwa. Ikhombisa amakhono okuxhumana ngozwelo, ukubhala okudala, ukuveza imibono, nengxoxo yemvelo. Ifanele kakhulu izingxoxo ezijwayelekile, izimo zokweluleka, nemisebenzi edinga ukuqonda imizwa."
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "Kubekwe esicongweni",
     "pin": "Beka esicongweni",
     "tokens": "ama-token"
+  },
+  "shortcuts": {
+    "title": "Izinqamuleli Zekhibhodi",
+    "pressEscapeToClose": "Cindezela u-Escape ukuvala",
+    "categoryNavigation": "Ukuhamba",
+    "categoryConversation": "Ingxoxo",
+    "categoryInput": "Okufakiwe",
+    "categoryApp": "Uhlelo",
+    "focusChatInput": "Gxila kokufakiwe kwengxoxo",
+    "newConversation": "Ingxoxo entsha",
+    "stopGeneration": "Misa ukukhiqiza",
+    "toggleSidebar": "Shintsha iphaneli eceleni",
+    "openSettings": "Vula izilungiselelo",
+    "openModelSelector": "Shintsha imodeli",
+    "scrollToBottom": "Skrolela phansi",
+    "showHelp": "Bonisa izinqamuleli zekhibhodi",
+    "attachFile": "Namathisela ifayela"
   }
 }

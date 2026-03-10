@@ -1790,5 +1790,26 @@
     "pinned": "Pinned လုပ်ထားသည်",
     "pin": "Pin လုပ်ပါ",
     "tokens": "tokens"
+  },
+  "shortcuts": {
+    "title": "ကီးဘုဒ် အနုတ်လမ်းများ",
+    "pressEscapeToClose": "ပိတ်ရန် Escape ကိုနှိပ်ပါ",
+    "categoryNavigation": "အည်အသွားအလာ",
+    "categoryConversation": "ဆွေးနွေးမှု",
+    "categoryInput": "ထည့်သွင်းခြင်း",
+    "categoryApp": "အက်ပ်လီကေးရှင်း",
+    "focusChatInput": "စာပို့ထည့်သွင်းရန်အာရုံစိုက်ပါ",
+    "newConversation": "ဆွေးနွေးမှုအသစ်",
+    "stopGeneration": "ထုတ်လုပ်မှုအားရပ်ပါ",
+    "toggleSidebar": "ဘေးဘားကိုဖွင့်/ပိတ်",
+    "openSettings": "ဆက်တင်များဖွင့်ပါ",
+    "openModelSelector": "မော်ဒယ်ပြောင်းရန်",
+    "scrollToBottom": "အောက်ဆုံးသို့ဆွဲကြည့်ပါ",
+    "showHelp": "ကီးဘုတ် အနုတ်လမ်းများ ပြပါ",
+    "attachFile": "ဖိုင်တစ်ခု ပူးတွဲပါ",
+    "searchConversations": "စကားပြောချက်များကို ရှာဖွေပါ",
+    "toggleTheme": "အပြင်အဆင် ပြောင်းပါ",
+    "regenerateResponse": "တုံပြန်ချက်အသစ် ပြန်ထုတ်ပါ",
+    "copyLastResponse": "နောက်ဆုံးတုံပြန်ချက် ကူးယူပါ"
   }
 }

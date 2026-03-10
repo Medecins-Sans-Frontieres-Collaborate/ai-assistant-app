@@ -1790,5 +1790,26 @@
     "pinned": "سنجاق شده",
     "pin": "سنجاق کردن",
     "tokens": "توکن‌ها"
+  },
+  "shortcuts": {
+    "title": "میانبرهای صفحه‌کلید",
+    "pressEscapeToClose": "برای بستن، Escape را فشار دهید",
+    "categoryNavigation": "ناوبری",
+    "categoryConversation": "گفت‌وگو",
+    "categoryInput": "ورودی",
+    "categoryApp": "برنامه",
+    "focusChatInput": "تمرکز روی ورودی چت",
+    "newConversation": "گفت‌وگوی جدید",
+    "stopGeneration": "توقف تولید",
+    "toggleSidebar": "نمایش/مخفی کردن نوار کناری",
+    "openSettings": "باز کردن تنظیمات",
+    "openModelSelector": "تغییر مدل",
+    "scrollToBottom": "اسکرول به پایین",
+    "showHelp": "نمایش میانبرهای صفحه‌کلید",
+    "attachFile": "پیوست فایل",
+    "searchConversations": "جستجوی گفتگوها",
+    "toggleTheme": "تغییر تم",
+    "regenerateResponse": "تولید مجدد پاسخ",
+    "copyLastResponse": "کپی آخرین پاسخ"
   }
 }

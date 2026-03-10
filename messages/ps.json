@@ -1766,5 +1766,22 @@
     "pinned": "پن شوی",
     "pin": "پن کړئ",
     "tokens": "توکنونه"
+  },
+  "shortcuts": {
+    "title": "د کيبورډ شارټکټونه",
+    "pressEscapeToClose": "د تړلو لپاره Escape کيکاږئ",
+    "categoryNavigation": "نېويګېشن",
+    "categoryConversation": "خبروات",
+    "categoryInput": "داخلول",
+    "categoryApp": "اپلېکېشن",
+    "focusChatInput": "د چټ داخلولو تمرکز",
+    "newConversation": "نوې خبرې اترې",
+    "stopGeneration": "جوړونه ودروئ",
+    "toggleSidebar": "سايډبار فعاله/غیرفعاله کړئ",
+    "openSettings": "ترتیبات خلاص کړئ",
+    "openModelSelector": "ماډل بدل کړئ",
+    "scrollToBottom": "پای ته سکرول کړئ",
+    "showHelp": "د کيبورډ شارټکټونه وښایئ",
+    "attachFile": "فايل نښلول"
   }
 }

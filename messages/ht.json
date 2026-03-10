@@ -1272,7 +1272,7 @@
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
-      "description": "Varyasyon espesyal GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Ekselan nan kominikasyon anpatik, ekriti kreyatif, bay lide, ak dyalòg natirèl. Pi bon pou konvèsasyon senp, senaryo konsèy, ak taches ki mande sansiblite emosyonèl."
+      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl."
     },
     "o3": {
       "name": "o3",
@@ -1766,5 +1766,22 @@
     "pinned": "Fikse",
     "pin": "Fikse",
     "tokens": "tokèn"
+  },
+  "shortcuts": {
+    "title": "Koutchemen Klavye",
+    "pressEscapeToClose": "Peze Escape pou fèmen",
+    "categoryNavigation": "Navigasyon",
+    "categoryConversation": "Konvèsasyon",
+    "categoryInput": "Antre",
+    "categoryApp": "Aplikasyon",
+    "focusChatInput": "Fokus sou bwat chita pale",
+    "newConversation": "Nouvo konvèsasyon",
+    "stopGeneration": "Sispann jenerasyon",
+    "toggleSidebar": "Aktive/dezaktive ba lateral la",
+    "openSettings": "Louvri paramèt yo",
+    "openModelSelector": "Chanje modèl",
+    "scrollToBottom": "Desann jiska anba",
+    "showHelp": "Montre koutchemen klavye yo",
+    "attachFile": "Ajoute fichye"
   }
 }

@@ -1766,5 +1766,22 @@
     "pinned": "An naɗe",
     "pin": "Naɗe",
     "tokens": "token"
+  },
+  "shortcuts": {
+    "title": "Gajerun hanyoyin madanni",
+    "pressEscapeToClose": "Danna Escape don rufewa",
+    "categoryNavigation": "Kewaya",
+    "categoryConversation": "Tattaunawa",
+    "categoryInput": "Shigarwa",
+    "categoryApp": "Manhaja",
+    "focusChatInput": "Mayar da hankali kan shigarwar hira",
+    "newConversation": "Sabuwar tattaunawa",
+    "stopGeneration": "Tsayar da kirkira",
+    "toggleSidebar": "Buɗe/ruffewa gefe",
+    "openSettings": "Buɗe saituna",
+    "openModelSelector": "Canza samfurin",
+    "scrollToBottom": "Gungura zuwa ƙasa",
+    "showHelp": "Nuna gajerun hanyoyin madanni",
+    "attachFile": "Haɗa fayil"
   }
 }

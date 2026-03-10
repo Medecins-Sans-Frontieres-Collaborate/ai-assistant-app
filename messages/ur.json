@@ -1820,5 +1820,26 @@
     "pinned": "پن کی گئی",
     "pin": "پن کریں",
     "tokens": "ٹوکنز"
+  },
+  "shortcuts": {
+    "title": "کی بورڈ شارٹ کٹس",
+    "pressEscapeToClose": "بند کرنے کے لیے Escape دبائیں",
+    "categoryNavigation": "نیویگیشن",
+    "categoryConversation": "مکالمہ",
+    "categoryInput": "ان پٹ",
+    "categoryApp": "ایپلیکیشن",
+    "focusChatInput": "چیٹ ان پٹ پر فوکس کریں",
+    "newConversation": "نئی گفتگو",
+    "stopGeneration": "جنریشن روکیں",
+    "toggleSidebar": "سائیڈبار ٹوگل کریں",
+    "openSettings": "سیٹنگز کھولیں",
+    "openModelSelector": "ماڈل تبدیل کریں",
+    "scrollToBottom": "نیچے اسکرول کریں",
+    "showHelp": "کی بورڈ شارٹ کٹس دکھائیں",
+    "attachFile": "فائل منسلک کریں",
+    "searchConversations": "گفتگو تلاش کریں",
+    "toggleTheme": "تھیم تبدیل کریں",
+    "regenerateResponse": "جواب دوبارہ تیار کریں",
+    "copyLastResponse": "آخری جواب نقل کریں"
   }
 }
