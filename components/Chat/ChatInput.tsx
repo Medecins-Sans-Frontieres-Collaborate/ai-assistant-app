@@ -40,6 +40,7 @@ import {
 
 import { AgentType } from '@/types/agent';
 import {
+  ActiveFile,
   ChatInputSubmitTypes,
   FileFieldValue,
   FileMessageContent,
@@ -74,7 +75,11 @@ import { useChatStore } from '@/client/stores/chatStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
-  onSend: (message: Message, searchMode?: SearchMode) => void;
+  onSend: (
+    message: Message,
+    searchMode?: SearchMode,
+    initialActiveFiles?: ActiveFile[],
+  ) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
   stopConversationRef: MutableRefObject<boolean>;
