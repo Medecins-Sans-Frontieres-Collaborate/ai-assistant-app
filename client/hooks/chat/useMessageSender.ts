@@ -184,21 +184,7 @@ export function useMessageSender({
     // Generate message ID before sending so we can reference it for active files
     const messageId = uuidv4();
 
-    onSend(
-      {
-        id: messageId,
-        role: 'user',
-        content,
-        messageType: mapSubmitTypeToMessageType(submitType ?? 'TEXT'),
-        toneId: selectedToneId,
-        promptId: usedPromptId,
-        promptVariables: usedPromptVariables || undefined,
-        artifactContext: artifactContext || undefined,
-      },
-      searchMode,
-    );
-
-    // Auto-activate uploaded files so they persist in context for follow-up messages
+    // Auto-activate uploaded files BEFORE sending so the server sees them in activeFiles
     if (filteredFileFieldValue) {
       const conversationId =
         useConversationStore.getState().selectedConversationId;
@@ -225,6 +211,20 @@ export function useMessageSender({
         }
       }
     }
+
+    onSend(
+      {
+        id: messageId,
+        role: 'user',
+        content,
+        messageType: mapSubmitTypeToMessageType(submitType ?? 'TEXT'),
+        toneId: selectedToneId,
+        promptId: usedPromptId,
+        promptVariables: usedPromptVariables || undefined,
+        artifactContext: artifactContext || undefined,
+      },
+      searchMode,
+    );
 
     // Clear input state
     onClearInput();
