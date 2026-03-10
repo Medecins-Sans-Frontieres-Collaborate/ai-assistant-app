@@ -108,11 +108,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               <button
                 key={conversation.id}
                 ref={index === activeIndex ? activeItemRef : undefined}
-                className={`w-full flex items-center gap-3 px-6 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left ${
+                className={`w-full flex items-center gap-3 px-6 py-3 transition-colors text-left ${
                   index === activeIndex
                     ? 'bg-neutral-100 dark:bg-neutral-800'
                     : ''
                 }`}
+                onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => handleSelectConversation(conversation.id)}
               >
                 <IconMessage
