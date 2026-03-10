@@ -9,6 +9,8 @@ import { ActiveFile } from '@/types/chat';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
+import { ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT } from '@/lib/constants/activeFileQuotas';
+
 /**
  * Processes active files that don't have cached content.
  *
@@ -77,6 +79,20 @@ export class ActiveFileProcessor extends BasePipelineStage {
         }
 
         const tokenEstimate = await countTokens(text);
+
+        // Reject files exceeding activation token limit
+        if (tokenEstimate > ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT) {
+          const idx = updatedFiles.findIndex((f) => f.id === file.id);
+          if (idx !== -1) {
+            updatedFiles[idx] = {
+              ...updatedFiles[idx],
+              status: 'error',
+              errorMessage: `File too large for active context (${tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT.toLocaleString()})`,
+            };
+          }
+          return;
+        }
+
         const processedContent = {
           type: 'document' as const,
           content: text,
