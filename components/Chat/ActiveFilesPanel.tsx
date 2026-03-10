@@ -1,12 +1,20 @@
 'use client';
 
-import { IconChevronDown, IconFiles, IconRefresh } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconFiles,
+  IconPinnedFilled,
+  IconPinnedOff,
+  IconRefresh,
+} from '@tabler/icons-react';
 import { useCallback, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { useTranslations } from 'next-intl';
 
 import { ActiveFile } from '@/types/chat';
+
+import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 
@@ -101,7 +109,14 @@ export function ActiveFilesPanel() {
         <div className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
           <IconFiles size={16} />
           <span>
-            {t('title')} ({files.length})
+            {t('title')} (
+            {files.some((f) => f.pinned)
+              ? t('pinnedCount', {
+                  pinned: files.filter((f) => f.pinned).length,
+                  total: files.length,
+                })
+              : files.length}
+            )
           </span>
           {totalTokens > 0 && (
             <span className="text-gray-500 dark:text-gray-400">
@@ -157,7 +172,11 @@ export function ActiveFilesPanel() {
             {files.map((f) => (
               <div
                 key={f.id}
-                className="flex items-center gap-2 px-2 py-1 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900"
+                className={`flex items-center gap-2 px-2 py-1 rounded border bg-white dark:bg-gray-900 transition-opacity ${
+                  f.pinned
+                    ? 'border-gray-300 dark:border-gray-700'
+                    : 'border-dashed border-gray-300 dark:border-gray-600 opacity-60'
+                }`}
               >
                 <span
                   className="text-xs text-gray-800 dark:text-gray-200 max-w-[180px] truncate"
@@ -205,21 +224,32 @@ export function ActiveFilesPanel() {
                 ) : null}
 
                 {/* Pin Button */}
-                <button
-                  onClick={() =>
-                    setPinned(selectedConversationId, f.id, !f.pinned)
-                  }
-                  className={`text-[10px] px-2 py-1.5 md:px-1 md:py-0.5 rounded border
-                    min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0
-                    flex items-center justify-center transition-colors ${
-                      f.pinned
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
-                  title={f.pinned ? t('pinned') : t('pin')}
+                <Tooltip
+                  content={f.pinned ? t('pinnedTooltip') : t('unpinnedTooltip')}
+                  position="top"
                 >
-                  {f.pinned ? t('pinned') : t('pin')}
-                </button>
+                  <button
+                    onClick={() =>
+                      setPinned(selectedConversationId, f.id, !f.pinned)
+                    }
+                    className={`text-[10px] px-2 py-1.5 md:px-1 md:py-0.5 rounded border
+                      min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0
+                      flex items-center justify-center transition-colors ${
+                        f.pinned
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      }`}
+                    aria-label={
+                      f.pinned ? t('pinnedTooltip') : t('unpinnedTooltip')
+                    }
+                  >
+                    {f.pinned ? (
+                      <IconPinnedFilled size={14} />
+                    ) : (
+                      <IconPinnedOff size={14} />
+                    )}
+                  </button>
+                </Tooltip>
 
                 {/* Remove Button */}
                 <button
