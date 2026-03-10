@@ -89,7 +89,8 @@ export function selectFilesForBudget(
       used += est;
     }
   }
-  return selected.length > 0 ? selected : files.slice(0, 1);
+  if (selected.length > 0) return selected;
+  return budgetTokens > 0 ? files.slice(0, 1) : [];
 }
 
 /**
