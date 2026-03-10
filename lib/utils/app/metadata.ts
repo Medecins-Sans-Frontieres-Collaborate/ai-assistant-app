@@ -46,6 +46,7 @@ export interface StreamMetadata {
       processedAt: string;
     };
   }>;
+  activeFilesTokensConsumed?: number;
 }
 
 /**
@@ -172,6 +173,12 @@ export function appendMetadataToStream(
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
   if (metadata.fileCacheUpdates)
     cleanMetadata.fileCacheUpdates = metadata.fileCacheUpdates;
+  if (
+    metadata.activeFilesTokensConsumed != null &&
+    metadata.activeFilesTokensConsumed > 0
+  )
+    (cleanMetadata as Record<string, unknown>).activeFilesTokensConsumed =
+      metadata.activeFilesTokensConsumed;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
