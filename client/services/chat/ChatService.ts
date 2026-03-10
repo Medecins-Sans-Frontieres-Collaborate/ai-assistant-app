@@ -196,6 +196,7 @@ export class ChatService {
       displayNamePreference?: DisplayNamePreference;
       customDisplayName?: string;
       activeFiles?: ActiveFile[];
+      activeFilesTokensUsed?: number;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     // Convert image file references to base64 at API call time
@@ -230,6 +231,7 @@ export class ChatService {
         displayNamePreference: options?.displayNamePreference,
         customDisplayName: options?.customDisplayName,
         activeFiles: options?.activeFiles,
+        activeFilesTokensUsed: options?.activeFilesTokensUsed,
       },
       {
         signal: options?.signal,
