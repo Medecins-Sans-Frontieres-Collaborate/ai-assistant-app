@@ -1,5 +1,5 @@
 import { IconMessage, IconSearch } from '@tabler/icons-react';
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Conversation } from '@/types/chat';
 
@@ -24,11 +24,49 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   selectConversation,
   t,
 }) => {
-  const handleSelectConversation = (id: string) => {
-    selectConversation(id);
-    onClose();
-    setSearchTerm('');
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeItemRef = useRef<HTMLButtonElement>(null);
+
+  // Auto-scroll active item into view
+  useEffect(() => {
+    activeItemRef.current?.scrollIntoView({ block: 'nearest' });
+  });
+
+  const handleSelectConversation = useCallback(
+    (id: string) => {
+      selectConversation(id);
+      onClose();
+      setSearchTerm('');
+    },
+    [selectConversation, onClose, setSearchTerm],
+  );
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value);
+      setActiveIndex(0);
+    },
+    [setSearchTerm],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const count = filteredConversations.length;
+      if (count === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex((prev) => (prev + 1) % count);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex((prev) => (prev - 1 + count) % count);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSelectConversation(filteredConversations[activeIndex].id);
+      }
+    },
+    [filteredConversations, activeIndex, handleSelectConversation],
+  );
 
   return (
     <Modal
@@ -51,7 +89,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           type="text"
           placeholder={t('Search_ellipsis')}
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
+          onKeyDown={handleKeyDown}
           autoFocus
           className="flex-1 bg-transparent text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none"
         />
@@ -65,10 +104,15 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         )}
         {filteredConversations.length > 0 && (
           <div className="py-2">
-            {filteredConversations.map((conversation) => (
+            {filteredConversations.map((conversation, index) => (
               <button
                 key={conversation.id}
-                className="w-full flex items-center gap-3 px-6 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                ref={index === activeIndex ? activeItemRef : undefined}
+                className={`w-full flex items-center gap-3 px-6 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left ${
+                  index === activeIndex
+                    ? 'bg-neutral-100 dark:bg-neutral-800'
+                    : ''
+                }`}
                 onClick={() => handleSelectConversation(conversation.id)}
               >
                 <IconMessage
