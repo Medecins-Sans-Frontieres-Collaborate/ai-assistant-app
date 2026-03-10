@@ -108,6 +108,7 @@ interface ChatStore {
         processedAt: string;
       };
     }>;
+    activeFilesTokensConsumed?: number;
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -296,6 +297,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
         fileCacheUpdates,
+        activeFilesTokensConsumed,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
@@ -325,8 +327,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       );
 
       // Apply file cache updates to conversation store
+      const conversationStore = useConversationStore.getState();
       if (fileCacheUpdates && fileCacheUpdates.length > 0) {
-        const conversationStore = useConversationStore.getState();
         for (const u of fileCacheUpdates) {
           if (u?.fileId && u?.processedContent) {
             conversationStore.updateFileProcessedContent(
@@ -336,6 +338,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             );
           }
         }
+      }
+
+      // Deduct active files session quota
+      if (activeFilesTokensConsumed && activeFilesTokensConsumed > 0) {
+        conversationStore.deductActiveFilesTokens(
+          conversation.id,
+          activeFilesTokensConsumed,
+        );
       }
 
       // Track successful model usage for ordering stability
@@ -475,6 +485,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       displayNamePreference: settings.displayNamePreference,
       customDisplayName: settings.customDisplayName,
       activeFiles: conversation.activeFiles,
+      activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
     });
   },
 
@@ -503,6 +514,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         processedAt: string;
       };
     }>;
+    activeFilesTokensConsumed?: number;
   }> => {
     const reader = stream.getReader();
 
@@ -563,6 +575,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       threadId: streamParser.getThreadId(),
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
       fileCacheUpdates: (streamParser as any).getFileCacheUpdates?.(),
+      activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
     };
   },
 
@@ -823,6 +836,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
         fileCacheUpdates,
+        activeFilesTokensConsumed,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
@@ -850,8 +864,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
       );
 
+      const conversationStore = useConversationStore.getState();
       if (fileCacheUpdates && fileCacheUpdates.length > 0) {
-        const conversationStore = useConversationStore.getState();
         for (const u of fileCacheUpdates) {
           if (u?.fileId && u?.processedContent) {
             conversationStore.updateFileProcessedContent(
@@ -861,6 +875,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             );
           }
         }
+      }
+
+      // Deduct active files session quota
+      if (activeFilesTokensConsumed && activeFilesTokensConsumed > 0) {
+        conversationStore.deductActiveFilesTokens(
+          conversation.id,
+          activeFilesTokensConsumed,
+        );
       }
 
       // Clear streaming state and show success
