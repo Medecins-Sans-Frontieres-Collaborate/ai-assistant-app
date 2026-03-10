@@ -213,6 +213,7 @@ const ChatBodySchema = z
       .max(100, 'Custom display name too long (max 100 chars)')
       .optional(),
     activeFiles: z.array(ActiveFileSchema).optional(),
+    activeFilesTokensUsed: z.number().int().min(0).optional(),
   })
   .strict(); // Reject unknown properties
 
