@@ -202,6 +202,7 @@ export interface Conversation {
   activeFilesTokenBudget?: number;
   activeFilesPriority?: 'recent' | 'pinned' | 'sizeAsc';
   activeFilesMaxCount?: number;
+  activeFilesTokensUsed?: number; // cumulative tokens consumed, starts at 0
 }
 
 export type FileFieldValue =
