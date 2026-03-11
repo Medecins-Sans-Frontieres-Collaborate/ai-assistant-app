@@ -47,6 +47,16 @@ export interface StreamMetadata {
     };
   }>;
   activeFilesTokensConsumed?: number;
+  transcriptActiveFile?: {
+    url: string;
+    originalFilename: string;
+    processedContent: {
+      type: 'transcript';
+      content: string;
+      tokenEstimate: number;
+      processedAt: string;
+    };
+  };
 }
 
 /**
@@ -62,6 +72,7 @@ export interface ParsedMetadata {
   pendingTranscriptions?: PendingTranscriptionInfo[];
   fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   activeFilesTokensConsumed?: number;
+  transcriptActiveFile?: StreamMetadata['transcriptActiveFile'];
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -82,6 +93,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
   let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
   let activeFilesTokensConsumed: number | undefined;
+  let transcriptActiveFile: StreamMetadata['transcriptActiveFile'] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -125,6 +137,10 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (typeof anyData.activeFilesTokensConsumed === 'number') {
         activeFilesTokensConsumed = anyData.activeFilesTokensConsumed;
       }
+      if (anyData.transcriptActiveFile) {
+        transcriptActiveFile =
+          anyData.transcriptActiveFile as StreamMetadata['transcriptActiveFile'];
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -144,6 +160,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     pendingTranscriptions,
     fileCacheUpdates,
     activeFilesTokensConsumed,
+    transcriptActiveFile,
     extractionMethod,
   };
 }
@@ -173,6 +190,8 @@ export function appendMetadataToStream(
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
   if (metadata.fileCacheUpdates)
     cleanMetadata.fileCacheUpdates = metadata.fileCacheUpdates;
+  if (metadata.transcriptActiveFile)
+    cleanMetadata.transcriptActiveFile = metadata.transcriptActiveFile;
   if (
     metadata.activeFilesTokensConsumed != null &&
     metadata.activeFilesTokensConsumed > 0
