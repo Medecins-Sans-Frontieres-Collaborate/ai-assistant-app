@@ -1,6 +1,7 @@
 import {
   ParsedMetadata,
   PendingTranscriptionInfo,
+  StreamMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
@@ -23,6 +24,9 @@ export class StreamParser {
     processedContent: any;
   }>;
   private extractedActiveFilesTokensConsumed?: number;
+  private extractedTranscriptActiveFile:
+    | StreamMetadata['transcriptActiveFile']
+    | null = null;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -89,6 +93,11 @@ export class StreamParser {
       this.extractedActiveFilesTokensConsumed = (
         parsed as any
       ).activeFilesTokensConsumed;
+    }
+
+    // Capture transcript active file if present (sync transcription path)
+    if (parsed.transcriptActiveFile && !this.extractedTranscriptActiveFile) {
+      this.extractedTranscriptActiveFile = parsed.transcriptActiveFile;
     }
 
     // Check if we've received actual content (not just metadata)
@@ -192,6 +201,13 @@ export class StreamParser {
    */
   getActiveFilesTokensConsumed(): number | undefined {
     return this.extractedActiveFilesTokensConsumed;
+  }
+
+  /**
+   * Get transcript active file from sync transcription (if extracted from metadata)
+   */
+  getTranscriptActiveFile(): StreamMetadata['transcriptActiveFile'] | null {
+    return this.extractedTranscriptActiveFile;
   }
 
   /**
