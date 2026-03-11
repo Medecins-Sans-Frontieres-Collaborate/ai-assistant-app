@@ -10,6 +10,7 @@ import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
 import { ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT } from '@/lib/constants/activeFileQuotas';
+import { isAudioVideoFileByTypeOrName } from '@/lib/constants/fileTypes';
 
 /**
  * Processes active files that don't have cached content.
@@ -50,6 +51,10 @@ export class ActiveFileProcessor extends BasePipelineStage {
       try {
         // Skip if image (handled as URL injection rather than text extraction)
         if (isImage(file)) return;
+
+        // Skip audio/video (transcription handled separately by FileProcessor)
+        if (isAudioVideoFileByTypeOrName(file.originalFilename, file.mimeType))
+          return;
 
         // Skip if already processed
         if (file.processedContent && file.status === 'ready') return;
