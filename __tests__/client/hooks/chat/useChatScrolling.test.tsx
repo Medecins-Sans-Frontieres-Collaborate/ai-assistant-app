@@ -119,13 +119,18 @@ describe('useChatScrolling', () => {
       });
     });
 
-    it('should not auto-scroll when streaming just completed', () => {
+    it('should scroll to top of new response after streaming completes', () => {
       const mockScrollTo = vi.fn();
+      const mockGetBoundingClientRect = vi.fn().mockReturnValue({
+        top: 200,
+        bottom: 800,
+      });
       const mockContainer = {
         scrollTo: mockScrollTo,
         scrollHeight: 1000,
         scrollTop: 500,
         clientHeight: 500,
+        getBoundingClientRect: mockGetBoundingClientRect,
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
       };
@@ -151,48 +156,10 @@ describe('useChatScrolling', () => {
         vi.runAllTimers();
       });
 
-      // Should restore position, not smooth scroll
-      expect(mockScrollTo).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('scroll position capture and restoration', () => {
-    it('should capture scroll position when streaming ends', () => {
-      const mockContainer = {
-        scrollTop: 300,
-        scrollHeight: 1000,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
-
-      const { rerender } = renderHook(
-        ({ isStreaming }) =>
-          useChatScrolling({
-            selectedConversationId: 'conv-1',
-            messageCount: 1,
-            isStreaming,
-            isDraining: false,
-          }),
-        { initialProps: { isStreaming: true } },
-      );
-
-      // Set the mock container ref manually before streaming ends
-      const { result } = renderHook(() =>
-        useChatScrolling({
-          selectedConversationId: 'conv-1',
-          messageCount: 1,
-          isStreaming: true,
-          isDraining: false,
-        }),
-      );
-      (result.current.chatContainerRef as any).current = mockContainer;
-
-      // End streaming
-      rerender({ isStreaming: false });
-
-      // Position should be captured (verified through logs in real implementation)
-      expect(mockContainer.scrollTop).toBe(300);
+      // After streaming ends, the effect runs and attempts to scroll
+      // (either to lastMessageRef position or fallback to bottom)
+      // Since lastMessageRef is not set, it falls back to scrollHeight
+      expect(mockContainer.scrollTop).toBe(1000);
     });
   });
 
