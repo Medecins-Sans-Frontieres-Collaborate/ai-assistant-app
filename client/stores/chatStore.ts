@@ -14,7 +14,7 @@ import {
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { Conversation, Message, MessageType } from '@/types/chat';
+import { ActiveFile, Conversation, Message, MessageType } from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -109,6 +109,16 @@ interface ChatStore {
       };
     }>;
     activeFilesTokensConsumed?: number;
+    transcriptActiveFile?: {
+      url: string;
+      originalFilename: string;
+      processedContent: {
+        type: 'transcript';
+        content: string;
+        tokenEstimate: number;
+        processedAt: string;
+      };
+    } | null;
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -515,6 +525,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       };
     }>;
     activeFilesTokensConsumed?: number;
+    transcriptActiveFile?: {
+      url: string;
+      originalFilename: string;
+      processedContent: {
+        type: 'transcript';
+        content: string;
+        tokenEstimate: number;
+        processedAt: string;
+      };
+    } | null;
   }> => {
     const reader = stream.getReader();
 
