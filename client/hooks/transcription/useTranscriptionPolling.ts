@@ -20,6 +20,7 @@ import toast from 'react-hot-toast';
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { ActiveFile } from '@/types/chat';
 import {
   BatchTranscriptionStatusResponse,
   TRANSCRIPT_BLOB_THRESHOLD,
@@ -307,6 +308,27 @@ export function useTranscriptionPolling(): void {
           filename,
           jobId, // Pass jobId for reliable message matching
         );
+
+        // Auto-activate transcript as active file
+        const tokenEstimate = Math.ceil(data.transcript.length / 4);
+        const transcriptActiveFile: ActiveFile = {
+          id: `transcript-${jobId}-${Date.now()}`,
+          url: `transcript://${jobId}/${encodeURIComponent(filename)}`,
+          originalFilename: `${filename}.transcript.txt`,
+          addedAt: new Date().toISOString(),
+          sourceMessageId: '',
+          status: 'ready',
+          pinned: false,
+          processedContent: {
+            type: 'transcript',
+            content: data.transcript,
+            tokenEstimate,
+            processedAt: new Date().toISOString(),
+          },
+        };
+        useConversationStore
+          .getState()
+          .activateFile(conversationId, transcriptActiveFile);
 
         // Clear pending state
         setConversationTranscriptionPending(null);
