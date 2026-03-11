@@ -308,6 +308,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
         fileCacheUpdates,
         activeFilesTokensConsumed,
+        transcriptActiveFile,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
@@ -348,6 +349,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             );
           }
         }
+      }
+
+      // Auto-activate transcript as active file (sync transcription path)
+      if (transcriptActiveFile) {
+        const activeFile: ActiveFile = {
+          id: `transcript-sync-${Date.now()}`,
+          ...transcriptActiveFile,
+          addedAt: new Date().toISOString(),
+          sourceMessageId: '',
+          status: 'ready' as const,
+          pinned: false,
+        };
+        conversationStore.activateFile(conversation.id, activeFile);
       }
 
       // Deduct active files session quota
@@ -596,6 +610,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
       fileCacheUpdates: (streamParser as any).getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
+      transcriptActiveFile: streamParser.getTranscriptActiveFile?.(),
     };
   },
 
