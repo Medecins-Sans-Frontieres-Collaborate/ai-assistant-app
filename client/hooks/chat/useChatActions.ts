@@ -125,7 +125,7 @@ export function useChatActions({
         const conversationWithMessage = {
           ...newConversation,
           messages: [message],
-          activeFiles: initialActiveFiles ?? [],
+          activeFiles: (initialActiveFiles ?? []).slice(0, 5),
         };
 
         // Add and select the new conversation
