@@ -4,7 +4,6 @@ import {
 } from '@/lib/services/observability';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
-import { countTokens } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import {
   FileMessageContent,
@@ -305,39 +304,15 @@ export class StandardChatHandler extends BasePipelineStage {
             streamingSpeed: context.streamingSpeed,
           });
 
-          // Check for sync transcripts to return as active files
-          const syncTranscript = context.processedContent?.transcripts?.[0];
-          const isSyncTranscript =
-            syncTranscript &&
-            !syncTranscript.transcript.startsWith('[Transcription in progress');
-
-          let transcriptActiveFilePayload: Record<string, unknown> | undefined;
-          if (isSyncTranscript) {
-            const tokenEstimate = await countTokens(syncTranscript.transcript);
-            transcriptActiveFilePayload = {
-              url: `transcript://sync/${encodeURIComponent(syncTranscript.filename)}`,
-              originalFilename: `${syncTranscript.filename}.transcript.txt`,
-              processedContent: {
-                type: 'transcript',
-                content: syncTranscript.transcript,
-                tokenEstimate,
-                processedAt: new Date().toISOString(),
-              },
-            };
-          }
-
-          // If we have active file cache updates, token consumption, or sync transcript and streaming, append as metadata at end of stream
+          // If we have active file cache updates or token consumption and streaming, append as metadata at end of stream
           let finalResponse = response;
           const hasFileUpdates =
             (context.activeFilesCacheUpdates?.length ?? 0) > 0;
           const hasTokensConsumed =
             (context.activeFilesTokensConsumedThisTurn ?? 0) > 0;
-          const hasSyncTranscriptForActivation = !!transcriptActiveFilePayload;
           if (
             context.stream &&
-            (hasFileUpdates ||
-              hasTokensConsumed ||
-              hasSyncTranscriptForActivation) &&
+            (hasFileUpdates || hasTokensConsumed) &&
             response.body
           ) {
             const encoder = new TextEncoder();
@@ -368,11 +343,6 @@ export class StandardChatHandler extends BasePipelineStage {
                   if (hasTokensConsumed) {
                     metadataPayload.activeFilesTokensConsumed =
                       context.activeFilesTokensConsumedThisTurn;
-                  }
-
-                  if (transcriptActiveFilePayload) {
-                    metadataPayload.transcriptActiveFile =
-                      transcriptActiveFilePayload;
                   }
 
                   const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify(metadataPayload)}<<<METADATA_END>>>`;
