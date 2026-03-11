@@ -19,6 +19,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { isAudioVideoFile } from '@/lib/constants/fileTypes';
 import { v4 as uuidv4 } from 'uuid';
 
 interface UseMessageSenderProps {
@@ -197,6 +198,9 @@ export function useMessageSender({
 
       for (const file of filesToActivate) {
         if (file.type === 'file_url') {
+          const filename =
+            file.originalFilename || file.url.split('/').pop() || '';
+          if (isAudioVideoFile(filename)) continue; // Transcript activated separately
           initialActiveFiles.push({
             id: `${file.url}-${Date.now()}`,
             url: file.url,
