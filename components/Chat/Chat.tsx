@@ -219,6 +219,7 @@ export function Chat({
     messagesEndRef,
     chatContainerRef,
     lastMessageRef,
+    bottomSpacerRef,
     showScrollDownButton,
     handleScrollDown,
   } = useChatScrolling({
@@ -550,6 +551,7 @@ export function Chat({
                 onSaveAsPrompt={handleOpenSavePromptModal}
                 onNavigateVersion={handleNavigateVersion}
               />
+              <div ref={bottomSpacerRef} />
             </div>
           )}
         </div>
