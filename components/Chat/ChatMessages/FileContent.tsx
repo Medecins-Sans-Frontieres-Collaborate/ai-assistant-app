@@ -553,8 +553,8 @@ export const FileContent: FC<FileContentProps> = ({
                 >
                   <IconDownload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                 </button>
-                {/* Keep in context button */}
-                {parentMessage && (
+                {/* Keep in context button (hidden for audio/video — transcript is auto-activated) */}
+                {parentMessage && !isAudioVideo && (
                   <button
                     onClick={(e) => {
                       e.preventDefault();
