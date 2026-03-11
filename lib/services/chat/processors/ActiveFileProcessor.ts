@@ -46,6 +46,7 @@ export class ActiveFileProcessor extends BasePipelineStage {
       /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(f.originalFilename);
 
     const processOne = async (file: ActiveFile) => {
+      let tempPath: string | undefined;
       try {
         // Skip if image (handled as URL injection rather than text extraction)
         if (isImage(file)) return;
@@ -53,7 +54,13 @@ export class ActiveFileProcessor extends BasePipelineStage {
         // Skip if already processed
         if (file.processedContent && file.status === 'ready') return;
 
-        const [_blobId, tempPath] = fileService.getTempFilePath(file.url);
+        // Skip errored files — user must explicitly retry
+        if (file.status === 'error') return;
+
+        const [_blobId, resolvedTempPath] = fileService.getTempFilePath(
+          file.url,
+        );
+        tempPath = resolvedTempPath;
 
         // Download file, preferring cached plain-text version
         const { usedCache } = await fileService.downloadFilePreferCached(
@@ -90,6 +97,7 @@ export class ActiveFileProcessor extends BasePipelineStage {
               errorMessage: `File too large for active context (${tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT.toLocaleString()})`,
             };
           }
+          await fileService.cleanupFile(tempPath);
           return;
         }
 
@@ -124,6 +132,7 @@ export class ActiveFileProcessor extends BasePipelineStage {
             errorMessage: e instanceof Error ? e.message : String(e),
           };
         }
+        if (tempPath) await fileService.cleanupFile(tempPath).catch(() => {});
       }
     };
 
