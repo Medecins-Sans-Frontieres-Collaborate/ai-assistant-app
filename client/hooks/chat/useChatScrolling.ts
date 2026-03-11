@@ -95,12 +95,16 @@ export function useChatScrolling({
           top: chatContainerRef.current.scrollHeight,
           behavior: 'instant',
         });
-        // Follow-up scroll after DOM settles (catches loading indicator)
+        // Double-RAF: wait for React to commit the streaming div, then scroll again
         requestAnimationFrame(() => {
-          if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop =
-              chatContainerRef.current.scrollHeight;
-          }
+          requestAnimationFrame(() => {
+            if (chatContainerRef.current) {
+              chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: 'instant',
+              });
+            }
+          });
         });
       }
     }
@@ -190,7 +194,8 @@ export function useChatScrolling({
         const diff = targetScroll - currentScroll;
 
         if (Math.abs(diff) > 0.5) {
-          container.scrollTop = currentScroll + diff * 0.2;
+          const factor = Math.abs(diff) > 100 ? 0.5 : 0.2;
+          container.scrollTop = currentScroll + diff * factor;
         } else {
           container.scrollTop = targetScroll;
         }
