@@ -109,16 +109,6 @@ interface ChatStore {
       };
     }>;
     activeFilesTokensConsumed?: number;
-    transcriptActiveFile?: {
-      url: string;
-      originalFilename: string;
-      processedContent: {
-        type: 'transcript';
-        content: string;
-        tokenEstimate: number;
-        processedAt: string;
-      };
-    } | null;
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -308,7 +298,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
         fileCacheUpdates,
         activeFilesTokensConsumed,
-        transcriptActiveFile,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
@@ -352,14 +341,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       // Auto-activate transcript as active file (sync transcription path)
-      if (transcriptActiveFile) {
+      const transcript = streamParser.getTranscript();
+      const isSyncTranscript =
+        transcript?.transcript &&
+        !transcript.transcript.startsWith('[Transcription in progress');
+
+      if (isSyncTranscript) {
+        const tokenEstimate = Math.ceil(transcript.transcript.length / 4);
         const activeFile: ActiveFile = {
           id: `transcript-sync-${Date.now()}`,
-          ...transcriptActiveFile,
+          url: `transcript://sync/${encodeURIComponent(transcript.filename)}`,
+          originalFilename: `${transcript.filename}.transcript.txt`,
           addedAt: new Date().toISOString(),
           sourceMessageId: '',
-          status: 'ready' as const,
+          status: 'ready',
           pinned: false,
+          processedContent: {
+            type: 'transcript',
+            content: transcript.transcript,
+            tokenEstimate,
+            processedAt: new Date().toISOString(),
+          },
         };
         conversationStore.activateFile(conversation.id, activeFile);
       }
@@ -539,16 +541,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       };
     }>;
     activeFilesTokensConsumed?: number;
-    transcriptActiveFile?: {
-      url: string;
-      originalFilename: string;
-      processedContent: {
-        type: 'transcript';
-        content: string;
-        tokenEstimate: number;
-        processedAt: string;
-      };
-    } | null;
   }> => {
     const reader = stream.getReader();
 
@@ -610,7 +602,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
       fileCacheUpdates: (streamParser as any).getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
-      transcriptActiveFile: streamParser.getTranscriptActiveFile?.(),
     };
   },
 
@@ -910,6 +901,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             );
           }
         }
+      }
+
+      // Auto-activate transcript as active file (sync transcription path)
+      const transcript = streamParser.getTranscript();
+      const isSyncTranscript =
+        transcript?.transcript &&
+        !transcript.transcript.startsWith('[Transcription in progress');
+
+      if (isSyncTranscript) {
+        const tokenEstimate = Math.ceil(transcript.transcript.length / 4);
+        const activeFile: ActiveFile = {
+          id: `transcript-sync-${Date.now()}`,
+          url: `transcript://sync/${encodeURIComponent(transcript.filename)}`,
+          originalFilename: `${transcript.filename}.transcript.txt`,
+          addedAt: new Date().toISOString(),
+          sourceMessageId: '',
+          status: 'ready',
+          pinned: false,
+          processedContent: {
+            type: 'transcript',
+            content: transcript.transcript,
+            tokenEstimate,
+            processedAt: new Date().toISOString(),
+          },
+        };
+        conversationStore.activateFile(conversation.id, activeFile);
       }
 
       // Deduct active files session quota
