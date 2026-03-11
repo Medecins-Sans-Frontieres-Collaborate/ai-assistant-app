@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { scrollToBottom } from '@/lib/utils/app/scrolling';
 
 import { UI_CONSTANTS } from '@/lib/constants/ui';
+
+type ScrollPhase = 'idle' | 'streaming' | 'completing';
 
 interface UseChatScrollingProps {
   selectedConversationId?: string;
@@ -13,8 +15,12 @@ interface UseChatScrollingProps {
 }
 
 /**
- * Custom hook to manage all chat scrolling behavior
- * Handles auto-scroll, manual scroll detection, scroll button, and refs
+ * State-machine-based chat scrolling hook.
+ *
+ * Phase transitions: idle → streaming → completing → idle
+ *
+ * The phaseRef acts as a synchronous kill switch — RAF callbacks check it
+ * before touching scrollTop, eliminating ghost-frame races.
  */
 export function useChatScrolling({
   selectedConversationId,
@@ -23,206 +29,177 @@ export function useChatScrolling({
   streamingContent,
   isDraining = false,
 }: UseChatScrollingProps) {
-  // Content is still being produced (streaming or drain animation)
   const isActive = isStreaming || isDraining;
 
-  // Scroll-related state
   const [showScrollDownButton, setShowScrollDownButton] = useState(false);
 
   // DOM refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const bottomSpacerRef = useRef<HTMLDivElement>(null);
 
-  // Tracking refs
-  const previousMessageCountRef = useRef<number>(0);
-  const wasActiveRef = useRef(false);
-  const isInitialRenderRef = useRef(true);
+  // State machine refs
+  const phaseRef = useRef<ScrollPhase>('idle');
   const shouldAutoScrollRef = useRef(true);
+  const rafIdRef = useRef(0);
+  const prevMessageCountRef = useRef(0);
 
-  // Reset scroll state when conversation changes
+  // Effect 1 — Reset on conversation change
   useEffect(() => {
-    isInitialRenderRef.current = true;
-    previousMessageCountRef.current = 0;
-    wasActiveRef.current = false;
+    phaseRef.current = 'idle';
+    shouldAutoScrollRef.current = true;
+    prevMessageCountRef.current = 0;
   }, [selectedConversationId]);
 
-  // Smooth scroll to bottom on new messages (NOT during or after streaming/drain)
-  useEffect(() => {
-    const currentMessageCount = messageCount;
-    const previousCount = previousMessageCountRef.current;
-
-    const activeJustCompleted = wasActiveRef.current === true && !isActive;
-
-    // Only scroll to bottom for new messages when:
-    // 1. Message count increased (new message added)
-    // 2. Not currently active (streaming or draining)
-    // 3. Active cycle didn't just complete (let it stay where it is)
-    // 4. Should auto scroll (user hasn't manually scrolled away)
-    if (
-      currentMessageCount > previousCount &&
-      !isActive &&
-      !activeJustCompleted &&
-      shouldAutoScrollRef.current &&
-      chatContainerRef.current
-    ) {
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTo({
-            top: chatContainerRef.current.scrollHeight,
-            behavior: 'smooth',
-          });
-        }
-      }, 0);
-    }
-
-    previousMessageCountRef.current = currentMessageCount;
-    wasActiveRef.current = isActive;
-    isInitialRenderRef.current = false;
-  }, [messageCount, isActive]);
-
-  // When streaming starts, scroll to bottom and enable auto-scroll
-  useEffect(() => {
-    if (isStreaming) {
+  // Effect 2 — Phase transitions (useLayoutEffect for synchronous phase updates)
+  useLayoutEffect(() => {
+    if (isActive && phaseRef.current === 'idle') {
+      // idle → streaming
+      phaseRef.current = 'streaming';
       shouldAutoScrollRef.current = true;
 
-      // Immediately scroll to bottom when streaming starts
+      if (bottomSpacerRef.current) {
+        bottomSpacerRef.current.style.height = '0px';
+      }
+
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTo({
           top: chatContainerRef.current.scrollHeight,
           behavior: 'instant',
         });
-        // Double-RAF: wait for React to commit the streaming div, then scroll again
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (chatContainerRef.current) {
-              chatContainerRef.current.scrollTo({
-                top: chatContainerRef.current.scrollHeight,
-                behavior: 'instant',
-              });
-            }
-          });
-        });
       }
-    }
-  }, [isStreaming]);
+    } else if (!isActive && phaseRef.current === 'streaming') {
+      // streaming → completing → idle
+      phaseRef.current = 'completing';
 
-  // Detect manual scroll during streaming or drain
-  useEffect(() => {
-    const handleScrollDuringStream = () => {
-      if (isActive && chatContainerRef.current) {
-        const container = chatContainerRef.current;
-        const distanceFromBottom =
-          container.scrollHeight - container.scrollTop - container.clientHeight;
-
-        if (distanceFromBottom > UI_CONSTANTS.SCROLL.AUTO_SCROLL_THRESHOLD) {
-          shouldAutoScrollRef.current = false;
-          setShowScrollDownButton(true);
-        } else {
-          shouldAutoScrollRef.current = true;
-        }
-      }
-    };
-
-    const container = chatContainerRef.current;
-    if (container) {
-      container.addEventListener('wheel', handleScrollDuringStream, {
-        passive: true,
-      });
-      container.addEventListener('touchmove', handleScrollDuringStream, {
-        passive: true,
-      });
-      return () => {
-        container.removeEventListener('wheel', handleScrollDuringStream);
-        container.removeEventListener('touchmove', handleScrollDuringStream);
-      };
-    }
-  }, [isActive]);
-
-  // Snap-to-bottom auto-scroll during streaming/drain
-  useEffect(() => {
-    if (!isActive || !shouldAutoScrollRef.current) {
-      return;
-    }
-
-    let animationFrameId: number;
-
-    const smoothScroll = () => {
       const container = chatContainerRef.current;
-      if (!container || !shouldAutoScrollRef.current || !isActive) return;
+      const lastMsg = lastMessageRef.current;
 
-      const targetScroll = container.scrollHeight - container.clientHeight;
-      container.scrollTop = targetScroll;
-
-      animationFrameId = requestAnimationFrame(smoothScroll);
-    };
-
-    animationFrameId = requestAnimationFrame(smoothScroll);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [isActive]);
-
-  // After streaming/drain ends, scroll to top of new response
-  useEffect(() => {
-    if (isActive) return;
-
-    let cancelled = false;
-    let outerRafId = 0;
-    let innerRafId = 0;
-
-    outerRafId = requestAnimationFrame(() => {
-      innerRafId = requestAnimationFrame(() => {
-        const container = chatContainerRef.current;
-        const lastMsg = lastMessageRef.current;
-        if (cancelled || !container) return;
-
+      if (shouldAutoScrollRef.current && container) {
         if (lastMsg) {
           const containerRect = container.getBoundingClientRect();
           const msgRect = lastMsg.getBoundingClientRect();
           const relativeTop =
             msgRect.top - containerRect.top + container.scrollTop;
-          const contextMargin = 60; // px of user's question visible above
+          const contextMargin = 60;
+
+          const desiredScroll = Math.max(0, relativeTop - contextMargin);
+          const maxScroll = container.scrollHeight - container.clientHeight;
+          if (desiredScroll > maxScroll && bottomSpacerRef.current) {
+            bottomSpacerRef.current.style.height = `${desiredScroll - maxScroll}px`;
+          }
           container.scrollTo({
-            top: Math.max(0, relativeTop - contextMargin),
-            behavior: 'smooth',
+            top: desiredScroll,
+            behavior: 'instant',
           });
         } else {
-          // Fallback if ref not attached yet
           container.scrollTop = container.scrollHeight;
         }
-      });
+      }
+
+      phaseRef.current = 'idle';
+    }
+  }, [isActive]);
+
+  // Effect 3 — RAF loop + manual scroll detection during streaming
+  useEffect(() => {
+    if (!isActive) return;
+
+    const container = chatContainerRef.current;
+    if (!container) return;
+
+    // RAF loop: snap to bottom each frame while streaming
+    const tick = () => {
+      if (phaseRef.current !== 'streaming' || !shouldAutoScrollRef.current) {
+        return;
+      }
+      const c = chatContainerRef.current;
+      if (c) {
+        c.scrollTop = c.scrollHeight - c.clientHeight;
+      }
+      rafIdRef.current = requestAnimationFrame(tick);
+    };
+    rafIdRef.current = requestAnimationFrame(tick);
+
+    // Manual scroll detection
+    const handleUserScroll = () => {
+      const c = chatContainerRef.current;
+      if (!c) return;
+      const distanceFromBottom = c.scrollHeight - c.scrollTop - c.clientHeight;
+
+      if (distanceFromBottom > UI_CONSTANTS.SCROLL.AUTO_SCROLL_THRESHOLD) {
+        shouldAutoScrollRef.current = false;
+        setShowScrollDownButton(true);
+      } else {
+        shouldAutoScrollRef.current = true;
+      }
+    };
+
+    container.addEventListener('wheel', handleUserScroll, { passive: true });
+    container.addEventListener('touchmove', handleUserScroll, {
+      passive: true,
     });
 
     return () => {
-      cancelled = true;
-      cancelAnimationFrame(outerRafId);
-      cancelAnimationFrame(innerRafId);
+      cancelAnimationFrame(rafIdRef.current);
+      container.removeEventListener('wheel', handleUserScroll);
+      container.removeEventListener('touchmove', handleUserScroll);
     };
-  }, [isActive, messageCount]);
+  }, [isActive]);
 
-  // Handle scroll detection for scroll-down button
+  // Effect 4 — Scroll button visibility + idle new-message scroll
   useEffect(() => {
-    const handleScroll = () => {
-      const container = chatContainerRef.current;
-      if (!container) return;
+    const container = chatContainerRef.current;
 
+    // Scroll button visibility
+    const handleScroll = () => {
+      if (!container) return;
       const isAtBottom =
         container.scrollHeight - container.scrollTop - container.clientHeight <
         100;
-
       const hasContent = messageCount > 0 || !!streamingContent;
       setShowScrollDownButton(!isAtBottom && hasContent);
+
+      // Progressively shrink spacer so user can't scroll into whitespace
+      const spacer = bottomSpacerRef.current;
+      if (spacer && phaseRef.current === 'idle') {
+        const spacerHeight = spacer.offsetHeight;
+        if (spacerHeight > 0) {
+          const realContentHeight = container.scrollHeight - spacerHeight;
+          const maxRealScroll = realContentHeight - container.clientHeight;
+          const neededSpacer = Math.max(0, container.scrollTop - maxRealScroll);
+          if (neededSpacer < spacerHeight) {
+            spacer.style.height = `${neededSpacer}px`;
+          }
+        }
+      }
     };
 
-    const container = chatContainerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
     }
+
+    // Idle new-message scroll
+    if (
+      phaseRef.current === 'idle' &&
+      messageCount > prevMessageCountRef.current &&
+      shouldAutoScrollRef.current &&
+      container
+    ) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+
+    prevMessageCountRef.current = messageCount;
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, [messageCount, streamingContent]);
 
   const handleScrollDown = () => {
@@ -231,13 +208,11 @@ export function useChatScrolling({
   };
 
   return {
-    // Refs for DOM
     messagesEndRef,
     chatContainerRef,
     lastMessageRef,
-    // State
+    bottomSpacerRef,
     showScrollDownButton,
-    // Handlers
     handleScrollDown,
   };
 }
