@@ -333,8 +333,8 @@ export const useConversationStore = create<ConversationStore>()(
 
             const existing = c.activeFiles ?? [];
 
-            // Deduplicate by id
-            const alreadyExists = existing.some((f) => f.id === file.id);
+            // Deduplicate by url — same file should not appear twice
+            const alreadyExists = existing.some((f) => f.url === file.url);
             let next = alreadyExists ? existing : [...existing, file];
 
             // If exceeding 5 files, remove oldest unpinned files
