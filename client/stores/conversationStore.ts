@@ -490,21 +490,19 @@ export const useConversationStore = create<ConversationStore>()(
 
         if (version < 2) {
           // Migrate conversations to new format with message versioning
-          const migratedConversations = state.conversations.map((conv) => ({
+          state.conversations = state.conversations.map((conv) => ({
             ...conv,
             messages: needsMigration(conv.messages)
               ? migrateLegacyMessages(conv.messages as never[])
               : conv.messages,
           }));
-          return { ...state, conversations: migratedConversations };
         }
-        // Phase 1: Add message ids and initialize active files
+
         if (version < 3) {
+          // Add message ids and initialize active files
           const { v4: uuidv4 } = require('uuid');
-          const migratedConversations = state.conversations.map((conv) => {
-            const messages = [...conv.messages];
-            // Assign ids only to legacy Message entries (not groups)
-            const withIds = messages.map((entry: any) => {
+          state.conversations = state.conversations.map((conv) => {
+            const withIds = conv.messages.map((entry: any) => {
               if (isAssistantMessageGroup(entry)) return entry;
               if (typeof entry === 'object') {
                 return entry.id ? entry : { ...entry, id: uuidv4() };
@@ -519,16 +517,16 @@ export const useConversationStore = create<ConversationStore>()(
               activeFilesMaxCount: conv.activeFilesMaxCount ?? 10,
             } as Conversation;
           });
-          return { ...state, conversations: migratedConversations };
         }
-        // Initialize activeFilesTokensUsed on existing conversations
+
         if (version < 4) {
-          const migratedConversations = state.conversations.map((conv) => ({
+          // Initialize activeFilesTokensUsed on existing conversations
+          state.conversations = state.conversations.map((conv) => ({
             ...conv,
             activeFilesTokensUsed: conv.activeFilesTokensUsed ?? 0,
           }));
-          return { ...state, conversations: migratedConversations };
         }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
