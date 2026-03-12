@@ -505,7 +505,7 @@ export class LocalStorageService {
                 oldSelectedId ??
                 null,
             },
-            version: 3, // Must match conversationStore persist version
+            version: 2, // Write as version 2 so conversationStore version<3 migration assigns message IDs
           };
 
           localStorage.setItem(
