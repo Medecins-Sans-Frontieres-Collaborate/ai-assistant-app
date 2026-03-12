@@ -14,7 +14,7 @@ import {
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { ActiveFile, Conversation, Message, MessageType } from '@/types/chat';
+import { ActiveFile, Conversation, Message } from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
