@@ -5,7 +5,7 @@ import {
   IconDownload,
   IconFileText,
 } from '@tabler/icons-react';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -206,12 +206,23 @@ export const FileContent: FC<FileContentProps> = ({
   const t = useTranslations();
   const { openArtifact, openDocument } = useArtifactStore();
   const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
-  const [activatedFiles, setActivatedFiles] = useState<Set<string>>(new Set());
 
   const selectedConversationId = useConversationStore(
     (s) => s.selectedConversationId,
   );
   const activateFile = useConversationStore((s) => s.activateFile);
+  const storeActiveFiles = useConversationStore(
+    useCallback(
+      (s) =>
+        s.conversations.find((c) => c.id === selectedConversationId)
+          ?.activeFiles,
+      [selectedConversationId],
+    ),
+  );
+  const activatedFiles = useMemo(
+    () => new Set((storeActiveFiles ?? []).map((f) => f.url)),
+    [storeActiveFiles],
+  );
 
   /**
    * Handler to add a file to the active files context
@@ -231,7 +242,6 @@ export const FileContent: FC<FileContentProps> = ({
     };
 
     activateFile(selectedConversationId, activeFile);
-    setActivatedFiles((prev) => new Set(prev).add(file.url));
   };
 
   const downloadFile = (event: React.MouseEvent, fileUrl: string) => {
