@@ -180,6 +180,7 @@ export interface ChatBody {
   customDisplayName?: string; // Custom display name from General Settings
   // Active files to include in context (optional)
   activeFiles?: ActiveFile[];
+  activeFilesTokensUsed?: number; // Cumulative tokens consumed by active files
 }
 
 export interface Conversation {
