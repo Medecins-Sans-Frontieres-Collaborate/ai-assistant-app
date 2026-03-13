@@ -4,7 +4,7 @@ import { PipelineStage } from '@/lib/services/chat/pipeline/PipelineStage';
 
 import { ErrorCode, PipelineError } from '@/types/errors';
 
-import { createTestChatContext } from '../testUtils';
+import { createTestChatContext, createTestMessage } from '../testUtils';
 
 import { describe, expect, it, vi } from 'vitest';
 
@@ -206,6 +206,142 @@ describe('ChatPipeline', () => {
       const result = await pipeline.execute(context);
 
       // No timeout because stage was skipped
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('FileProcessor error sanitization', () => {
+    const fileMessage = createTestMessage({
+      content: [
+        { type: 'text', text: 'Transcribe this audio' },
+        {
+          type: 'file_url',
+          file_url: { url: 'https://example.com/audio.mp3' },
+        },
+      ] as never,
+    });
+
+    it('should sanitize file_url content when FileProcessor adds errors', async () => {
+      const fileProcessorStage: PipelineStage = {
+        name: 'FileProcessor',
+        shouldRun: () => true,
+        execute: async (context) => {
+          const errors = context.errors || [];
+          errors.push(new Error('Whisper API failed'));
+          return { ...context, errors };
+        },
+      };
+
+      const context = createTestChatContext({ messages: [fileMessage] });
+      const pipeline = new ChatPipeline([fileProcessorStage], {
+        FileProcessor: 5000,
+      });
+
+      const result = await pipeline.execute(context);
+
+      // file_url should be removed from messages
+      const content = result.messages[0].content;
+      expect(
+        typeof content === 'string' ||
+          !Array.isArray(content) ||
+          content.every((c: { type: string }) => c.type !== 'file_url'),
+      ).toBe(true);
+
+      // fileProcessingFailed flag should be set
+      expect(result.processedContent?.metadata?.fileProcessingFailed).toBe(
+        true,
+      );
+
+      // Notice text should be present
+      const textContent = typeof content === 'string' ? content : '';
+      expect(textContent).toContain('could not be processed');
+    });
+
+    it('should sanitize file_url content when FileProcessor times out', async () => {
+      const slowFileProcessor: PipelineStage = {
+        name: 'FileProcessor',
+        shouldRun: () => true,
+        execute: async (context) => {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          return context;
+        },
+      };
+
+      const context = createTestChatContext({ messages: [fileMessage] });
+      const pipeline = new ChatPipeline([slowFileProcessor], {
+        FileProcessor: 50,
+      });
+
+      const result = await pipeline.execute(context);
+
+      // fileProcessingFailed flag should be set
+      expect(result.processedContent?.metadata?.fileProcessingFailed).toBe(
+        true,
+      );
+
+      // Should have a timeout error
+      expect(
+        result.errors!.some(
+          (e) =>
+            e instanceof PipelineError && e.code === ErrorCode.PIPELINE_TIMEOUT,
+        ),
+      ).toBe(true);
+    });
+
+    it('should NOT sanitize when a non-FileProcessor stage adds errors', async () => {
+      const otherStage: PipelineStage = {
+        name: 'OtherStage',
+        shouldRun: () => true,
+        execute: async (context) => {
+          const errors = context.errors || [];
+          errors.push(new Error('Some other error'));
+          return { ...context, errors };
+        },
+      };
+
+      const context = createTestChatContext({ messages: [fileMessage] });
+      const pipeline = new ChatPipeline([otherStage], { OtherStage: 5000 });
+
+      const result = await pipeline.execute(context);
+
+      // file_url should still be present (no sanitization)
+      const content = result.messages[0].content;
+      expect(Array.isArray(content)).toBe(true);
+      if (Array.isArray(content)) {
+        expect(
+          content.some((c: { type: string }) => c.type === 'file_url'),
+        ).toBe(true);
+      }
+
+      // fileProcessingFailed should NOT be set
+      expect(
+        result.processedContent?.metadata?.fileProcessingFailed,
+      ).toBeUndefined();
+    });
+
+    it('should NOT sanitize when FileProcessor succeeds without errors', async () => {
+      const successfulFileProcessor: PipelineStage = {
+        name: 'FileProcessor',
+        shouldRun: () => true,
+        execute: async (context) => {
+          return {
+            ...context,
+            processedContent: { metadata: { processed: true } },
+          };
+        },
+      };
+
+      const context = createTestChatContext({ messages: [fileMessage] });
+      const pipeline = new ChatPipeline([successfulFileProcessor], {
+        FileProcessor: 5000,
+      });
+
+      const result = await pipeline.execute(context);
+
+      // fileProcessingFailed should NOT be set
+      expect(
+        result.processedContent?.metadata?.fileProcessingFailed,
+      ).toBeUndefined();
       expect(result.errors).toHaveLength(0);
     });
   });
