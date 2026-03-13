@@ -600,7 +600,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       finalContent,
       threadId: streamParser.getThreadId(),
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
-      fileCacheUpdates: (streamParser as any).getFileCacheUpdates?.(),
+      fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
     };
   },

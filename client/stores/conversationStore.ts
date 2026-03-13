@@ -338,7 +338,7 @@ export const useConversationStore = create<ConversationStore>()(
             let next = alreadyExists ? existing : [...existing, file];
 
             // If exceeding 5 files, remove oldest unpinned files
-            const MAX_FILES = 5;
+            const MAX_FILES = c.activeFilesMaxCount ?? 5;
             while (next.length > MAX_FILES) {
               // Find oldest unpinned file
               const unpinned = next.filter((f) => !f.pinned);
