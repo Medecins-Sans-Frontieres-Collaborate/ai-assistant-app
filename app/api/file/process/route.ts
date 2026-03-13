@@ -2,6 +2,9 @@ import { NextRequest } from 'next/server';
 
 import { FileProcessingService } from '@/lib/services/chat/FileProcessingService';
 
+import { loadDocumentFromPath } from '@/lib/utils/server/file/fileHandling';
+import { getContentType } from '@/lib/utils/server/file/mimeTypes';
+
 import { auth } from '@/auth';
 
 /**
@@ -31,12 +34,27 @@ export async function POST(req: NextRequest): Promise<Response> {
 
     const runOne = async (url: string) => {
       const [, path] = fps.getTempFilePath(url);
-      await fps.downloadFilePreferCached(url, path, session.user);
-      const buf = await fps.readFile(path);
+      const { usedCache } = await fps.downloadFilePreferCached(
+        url,
+        path,
+        session.user,
+      );
+      let content: string;
+      if (usedCache) {
+        const buf = await fps.readFile(path);
+        content = buf.toString('utf-8');
+      } else {
+        const mimeType = getContentType(path);
+        content = await loadDocumentFromPath(
+          path,
+          mimeType,
+          path.split('/').pop() || 'file',
+        );
+      }
       await fps.cleanupFile(path);
       return {
         url,
-        content: buf.toString('utf-8'),
+        content,
         processedAt: new Date().toISOString(),
       };
     };
