@@ -35,6 +35,7 @@ import { Prompt } from '@/types/prompt';
 
 import { PromptDashboard } from '../Prompts/PromptDashboard';
 import { PromptItem } from '../Prompts/PromptItem';
+import { TabEmptyState } from './TabEmptyState';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -169,80 +170,47 @@ export function PromptsTab({ prompts, folders, onClose }: PromptsTabProps) {
     // Show full-width empty state when there are no prompts
     if (filteredPrompts.length === 0 && !searchQuery) {
       return (
-        <div className="flex flex-col h-full">
-          <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
-            <div className="max-w-3xl w-full mx-auto my-auto space-y-8 p-8">
-              {/* Header */}
-              <div className="text-center space-y-2">
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  {t('Save Time with Reusable Prompts')}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {t('Turn your repetitive tasks into one-click commands')}
-                </p>
-              </div>
-
-              {/* Example */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <IconSparkles
-                    size={18}
-                    className="text-gray-600 dark:text-gray-400"
-                  />
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {t('Example Prompt')}
-                  </h4>
-                </div>
-
-                <div className="space-y-4">
-                  {/* Prompt definition */}
-                  <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-                    <div className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {t('Email Response Template')}
-                      </p>
-                    </div>
-                    <div className="p-4 bg-white dark:bg-neutral-900">
-                      <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
-                        {`Write an email response to {{recipient}} regarding {{topic}}.
+        <TabEmptyState
+          title={t('Save Time with Reusable Prompts')}
+          subtitle={t('Turn your repetitive tasks into one-click commands')}
+          sectionIcon={
+            <IconSparkles
+              size={18}
+              className="text-gray-600 dark:text-gray-400"
+            />
+          }
+          sectionTitle={t('Example Prompt')}
+          tipIcon={
+            <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+              /
+            </span>
+          }
+          tipText={t(
+            'Type / in chat, select your prompt, and fill in the variables when prompted',
+          )}
+          ctaIcon={<IconSparkles size={18} />}
+          ctaLabel={t('Create Your First Prompt')}
+          onCtaClick={() => promptModal.openNew()}
+        >
+          {/* Example prompt template */}
+          <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+            <div className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {t('Email Response Template')}
+              </p>
+            </div>
+            <div className="p-4 bg-white dark:bg-neutral-900">
+              <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
+                {`Write an email response to {{recipient}} regarding {{topic}}.
 
 Include:
 - Response to their inquiry
 - Clear next steps
 - Action items or deadlines if applicable`}
-                      </pre>
-                    </div>
-                  </div>
-
-                  {/* How to use */}
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-                    <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-neutral-200 dark:bg-neutral-700 mt-0.5">
-                      <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">
-                        /
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {t(
-                          'Type / in chat, select your prompt, and fill in the variables when prompted',
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </pre>
             </div>
           </div>
-          <div className="shrink-0 flex justify-center p-4 border-t border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => promptModal.openNew()}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow-lg"
-            >
-              <IconSparkles size={18} />
-              {t('Create Your First Prompt')}
-            </button>
-          </div>
-        </div>
+        </TabEmptyState>
       );
     }
 

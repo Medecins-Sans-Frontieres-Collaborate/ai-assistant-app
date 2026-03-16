@@ -35,6 +35,7 @@ import { Tone } from '@/types/tone';
 
 import { ToneDashboard } from '../Tones/ToneDashboard';
 import { ToneItem } from '../Tones/ToneItem';
+import { TabEmptyState } from './TabEmptyState';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -168,99 +169,65 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
     // Show full-width empty state when there are no tones
     if (filteredTones.length === 0 && !searchQuery) {
       return (
-        <div className="flex flex-col h-full">
-          <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
-            <div className="max-w-3xl w-full mx-auto my-auto space-y-8 p-8">
-              {/* Header */}
-              <div className="text-center space-y-2">
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                  {t('Control Your Voice with Custom Tones')}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  {t('Create voice profiles for consistent writing style')}
-                </p>
-              </div>
-
-              {/* What Tones Capture */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <IconInfoCircle
-                    size={18}
-                    className="text-gray-600 dark:text-gray-400"
-                  />
-                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    {t('What Tones Capture')}
-                  </h4>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        {t('Writing Style')}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {t(
-                          'Sentence length, complexity, active vs passive voice',
-                        )}
-                      </p>
-                    </div>
-                    <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        {t('Vocabulary')}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {t('Preferred words, phrases to use or avoid')}
-                      </p>
-                    </div>
-                    <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        {t('Formality')}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {t('Professional, casual, conversational, technical')}
-                      </p>
-                    </div>
-                    <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                      <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                        {t('Personality')}
-                      </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
-                        {t('Friendly, authoritative, empathetic, direct')}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* How to use */}
-                  <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-                    <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-neutral-200 dark:bg-neutral-700 mt-0.5">
-                      <IconVolume
-                        size={14}
-                        className="text-neutral-600 dark:text-neutral-400"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {t(
-                          'Apply tones in chat via Expand Actions to ensure all responses match your desired voice',
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <TabEmptyState
+          title={t('Control Your Voice with Custom Tones')}
+          subtitle={t('Create voice profiles for consistent writing style')}
+          sectionIcon={
+            <IconInfoCircle
+              size={18}
+              className="text-gray-600 dark:text-gray-400"
+            />
+          }
+          sectionTitle={t('What Tones Capture')}
+          tipIcon={
+            <IconVolume
+              size={14}
+              className="text-neutral-600 dark:text-neutral-400"
+            />
+          }
+          tipText={t(
+            'Apply tones in chat via Expand Actions to ensure all responses match your desired voice',
+          )}
+          ctaIcon={<IconSparkles size={18} />}
+          ctaLabel={t('Create Your First Tone')}
+          onCtaClick={() => toneModal.openNew()}
+        >
+          {/* 2x2 feature grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Writing Style')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Sentence length, complexity, active vs passive voice')}
+              </p>
+            </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Vocabulary')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Preferred words, phrases to use or avoid')}
+              </p>
+            </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Formality')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Professional, casual, conversational, technical')}
+              </p>
+            </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Personality')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Friendly, authoritative, empathetic, direct')}
+              </p>
             </div>
           </div>
-          <div className="shrink-0 flex justify-center p-4 border-t border-gray-200 dark:border-gray-700">
-            <button
-              onClick={() => toneModal.openNew()}
-              className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow-lg"
-            >
-              <IconSparkles size={18} />
-              {t('Create Your First Tone')}
-            </button>
-          </div>
-        </div>
+        </TabEmptyState>
       );
     }
 
