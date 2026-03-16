@@ -595,6 +595,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
               voiceRules,
               examples,
               tags,
+              updatedAt: new Date().toISOString(),
             });
           } else {
             // Create new tone
