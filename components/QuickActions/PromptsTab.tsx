@@ -524,51 +524,6 @@ Include:
             </div>
           )}
         </div>
-
-        {/* Prompt Editor Modal */}
-        <PromptDashboard
-          isOpen={promptModal.isOpen}
-          onClose={() => promptModal.close()}
-          onSave={(
-            name: string,
-            description: string,
-            content: string,
-            toneId?: string | null,
-            tags?: string[],
-          ) => {
-            if (promptModal.itemId) {
-              // Update existing prompt
-              updatePrompt(promptModal.itemId, {
-                name,
-                description,
-                content,
-                toneId,
-                tags,
-              });
-            } else {
-              // Create new prompt
-              const defaultModel =
-                models.find((m) => m.id === defaultModelId) || models[0];
-              const newPrompt: Prompt = {
-                id: uuidv4(),
-                name,
-                description,
-                content,
-                model: defaultModel,
-                folderId: null,
-                toneId,
-                tags,
-              };
-              addPrompt(newPrompt);
-            }
-            promptModal.close();
-          }}
-          initialName={promptModal.formData.name}
-          initialDescription={promptModal.formData.description}
-          initialContent={promptModal.formData.content}
-          initialToneId={promptModal.formData.toneId}
-          initialTags={promptModal.formData.tags}
-        />
       </div>
     );
   };

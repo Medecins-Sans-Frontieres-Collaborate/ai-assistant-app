@@ -568,50 +568,6 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
             </div>
           )}
         </div>
-
-        {/* Tone Editor Modal */}
-        <ToneDashboard
-          isOpen={toneModal.isOpen}
-          onClose={() => toneModal.close()}
-          onSave={(
-            name: string,
-            description: string,
-            voiceRules: string,
-            examples: string,
-            tags: string[],
-          ) => {
-            if (toneModal.itemId) {
-              // Update existing tone
-              updateTone(toneModal.itemId, {
-                name,
-                description,
-                voiceRules,
-                examples,
-                tags,
-                updatedAt: new Date().toISOString(),
-              });
-            } else {
-              // Create new tone
-              const newTone: Tone = {
-                id: uuidv4(),
-                name,
-                description,
-                voiceRules,
-                examples,
-                tags,
-                createdAt: new Date().toISOString(),
-                folderId: null,
-              };
-              addTone(newTone);
-            }
-            toneModal.close();
-          }}
-          initialName={toneModal.formData.name}
-          initialDescription={toneModal.formData.description}
-          initialVoiceRules={toneModal.formData.voiceRules}
-          initialExamples={toneModal.formData.examples}
-          initialTags={toneModal.formData.tags}
-        />
       </div>
     );
   };
