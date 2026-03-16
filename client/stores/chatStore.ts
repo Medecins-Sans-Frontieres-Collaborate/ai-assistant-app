@@ -14,7 +14,7 @@ import {
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { Conversation, Message, MessageType } from '@/types/chat';
+import { ActiveFile, Conversation, Message } from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -97,6 +97,18 @@ interface ChatStore {
       totalChunks?: number;
       jobType?: 'chunked' | 'batch';
     }[];
+    fileCacheUpdates?: Array<{
+      fileId: string;
+      processedContent: {
+        type: 'document' | 'transcript' | 'image';
+        content: string;
+        summary?: string;
+        tokenEstimate: number;
+        tokenEstimateEncoding?: string;
+        processedAt: string;
+      };
+    }>;
+    activeFilesTokensConsumed?: number;
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -280,8 +292,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Process the stream
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions } =
-        await get().processStream(stream, streamParser, showLoadingTimeout);
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        fileCacheUpdates,
+        activeFilesTokensConsumed,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
@@ -308,6 +325,54 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
       );
+
+      // Apply file cache updates to conversation store
+      const conversationStore = useConversationStore.getState();
+      if (fileCacheUpdates && fileCacheUpdates.length > 0) {
+        for (const u of fileCacheUpdates) {
+          if (u?.fileId && u?.processedContent) {
+            conversationStore.updateFileProcessedContent(
+              conversation.id,
+              u.fileId,
+              u.processedContent as any,
+            );
+          }
+        }
+      }
+
+      // Auto-activate transcript as active file (sync transcription path)
+      const transcript = streamParser.getTranscript();
+      const isSyncTranscript =
+        transcript?.transcript &&
+        !transcript.transcript.startsWith('[Transcription in progress');
+
+      if (isSyncTranscript) {
+        const tokenEstimate = Math.ceil(transcript.transcript.length / 4);
+        const activeFile: ActiveFile = {
+          id: `transcript-sync-${Date.now()}`,
+          url: `transcript://sync/${encodeURIComponent(transcript.filename)}`,
+          originalFilename: `${transcript.filename}.transcript.txt`,
+          addedAt: new Date().toISOString(),
+          sourceMessageId: '',
+          status: 'ready',
+          pinned: false,
+          processedContent: {
+            type: 'transcript',
+            content: transcript.transcript,
+            tokenEstimate,
+            processedAt: new Date().toISOString(),
+          },
+        };
+        conversationStore.activateFile(conversation.id, activeFile);
+      }
+
+      // Deduct active files session quota
+      if (activeFilesTokensConsumed && activeFilesTokensConsumed > 0) {
+        conversationStore.deductActiveFilesTokens(
+          conversation.id,
+          activeFilesTokensConsumed,
+        );
+      }
 
       // Track successful model usage for ordering stability
       const { recordSuccessfulModelUsage } = useSettingsStore.getState();
@@ -445,6 +510,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       userContext: settings.userContext,
       displayNamePreference: settings.displayNamePreference,
       customDisplayName: settings.customDisplayName,
+      activeFiles: conversation.activeFiles,
+      activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
     });
   },
 
@@ -462,6 +529,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       totalChunks?: number;
       jobType?: 'chunked' | 'batch';
     }[];
+    fileCacheUpdates?: Array<{
+      fileId: string;
+      processedContent: {
+        type: 'document' | 'transcript' | 'image';
+        content: string;
+        summary?: string;
+        tokenEstimate: number;
+        tokenEstimateEncoding?: string;
+        processedAt: string;
+      };
+    }>;
+    activeFilesTokensConsumed?: number;
   }> => {
     const reader = stream.getReader();
 
@@ -521,6 +600,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       finalContent,
       threadId: streamParser.getThreadId(),
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
+      fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
+      activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
     };
   },
 
@@ -776,8 +857,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Process the stream
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions } =
-        await get().processStream(stream, streamParser, showLoadingTimeout);
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        fileCacheUpdates,
+        activeFilesTokensConsumed,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
@@ -803,6 +889,53 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         threadId,
         pendingTranscriptions,
       );
+
+      const conversationStore = useConversationStore.getState();
+      if (fileCacheUpdates && fileCacheUpdates.length > 0) {
+        for (const u of fileCacheUpdates) {
+          if (u?.fileId && u?.processedContent) {
+            conversationStore.updateFileProcessedContent(
+              conversation.id,
+              u.fileId,
+              u.processedContent as any,
+            );
+          }
+        }
+      }
+
+      // Auto-activate transcript as active file (sync transcription path)
+      const transcript = streamParser.getTranscript();
+      const isSyncTranscript =
+        transcript?.transcript &&
+        !transcript.transcript.startsWith('[Transcription in progress');
+
+      if (isSyncTranscript) {
+        const tokenEstimate = Math.ceil(transcript.transcript.length / 4);
+        const activeFile: ActiveFile = {
+          id: `transcript-sync-${Date.now()}`,
+          url: `transcript://sync/${encodeURIComponent(transcript.filename)}`,
+          originalFilename: `${transcript.filename}.transcript.txt`,
+          addedAt: new Date().toISOString(),
+          sourceMessageId: '',
+          status: 'ready',
+          pinned: false,
+          processedContent: {
+            type: 'transcript',
+            content: transcript.transcript,
+            tokenEstimate,
+            processedAt: new Date().toISOString(),
+          },
+        };
+        conversationStore.activateFile(conversation.id, activeFile);
+      }
+
+      // Deduct active files session quota
+      if (activeFilesTokensConsumed && activeFilesTokensConsumed > 0) {
+        conversationStore.deductActiveFilesTokens(
+          conversation.id,
+          activeFilesTokensConsumed,
+        );
+      }
 
       // Clear streaming state and show success
       get().clearStreamingState();

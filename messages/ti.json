@@ -1114,6 +1114,10 @@
       "quickSettings": "ናይ ድምጺ ቅጥዒታት",
       "overrideForThisMessage": "ነዚ መልእኽቲ ቅጥዒታት ኣመሓይሽ",
       "speakWithSettings": "ተዛረብ"
+    },
+    "activeFiles": {
+      "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
+      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "ሰነድ ጸዓን",
     "images": "ስእልታት",
     "addImage": "ስእሊ ወስኽ"
+  },
+  "activeFiles": {
+    "title": "ንዕኡ ፋይልታት",
+    "tokenUsage": "መጠን ቶከን",
+    "keepInContext": "ኣብ ምስእ ተዋህዶ",
+    "addedToContext": "ኣብ ምስእ ተወስኹ",
+    "removeFromContext": "ካብ ምስእ ኣውጽኡ",
+    "clearAll": "ኩሎም ኣነጹ",
+    "noActiveFiles": "ንዕኡ ፋይል የለን",
+    "processing": "ብምስራሕ ኣሎ",
+    "ready": "ዝዘጋጀ",
+    "error": "ሓገዝ",
+    "retry": "ድገም",
+    "pinned": "ዝጣልፉ",
+    "pin": "ኣጣልፉ",
+    "tokens": "ቶከን"
   },
   "shortcuts": {
     "title": "ናይ ቁልፊ ብግሪ ጽሑፋት",

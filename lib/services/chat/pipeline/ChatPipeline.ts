@@ -121,6 +121,8 @@ export class ChatPipeline {
           `[Pipeline] Running stage: ${stage.name} (timeout: ${timeout}ms)`,
         );
 
+        const errorCountBefore = context.errors?.length ?? 0;
+
         try {
           context = await Promise.race([
             stage.execute(context),
@@ -141,12 +143,31 @@ export class ChatPipeline {
             errors.push(error);
             context = { ...context, errors };
 
+            // FileProcessor timeout: sanitize file_url content to prevent misleading LLM responses
+            if (stage.name === 'FileProcessor') {
+              console.warn(
+                '[Pipeline] FileProcessor timed out, sanitizing file_url content from messages',
+              );
+              context = this.sanitizeFileUrlsOnError(context);
+            }
+
             // Continue to next stage (graceful degradation)
             continue;
           }
 
           // Re-throw non-timeout errors
           throw error;
+        }
+
+        // FileProcessor error (non-throwing): sanitize file_url content
+        if (
+          stage.name === 'FileProcessor' &&
+          (context.errors?.length ?? 0) > errorCountBefore
+        ) {
+          console.warn(
+            '[Pipeline] FileProcessor failed, sanitizing file_url content from messages',
+          );
+          context = this.sanitizeFileUrlsOnError(context);
         }
 
         // Check for critical errors that should stop the pipeline
@@ -179,15 +200,6 @@ export class ChatPipeline {
             : new Error(`Uncaught error in ${stage.name}: ${String(error)}`),
         );
         context = { ...context, errors };
-
-        // Special handling for FileProcessor failures:
-        // Remove file_url content from messages to prevent Azure OpenAI errors
-        if (stage.name === 'FileProcessor') {
-          console.warn(
-            '[Pipeline] FileProcessor failed, sanitizing file_url content from messages',
-          );
-          context = this.sanitizeFileUrlsOnError(context);
-        }
 
         // Continue to next stage
       }

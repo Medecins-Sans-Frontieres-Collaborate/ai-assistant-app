@@ -40,6 +40,7 @@ import {
 
 import { AgentType } from '@/types/agent';
 import {
+  ActiveFile,
   ChatInputSubmitTypes,
   FileFieldValue,
   FileMessageContent,
@@ -74,7 +75,11 @@ import { useChatStore } from '@/client/stores/chatStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
-  onSend: (message: Message, searchMode?: SearchMode) => void;
+  onSend: (
+    message: Message,
+    searchMode?: SearchMode,
+    initialActiveFiles?: ActiveFile[],
+  ) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
   stopConversationRef: MutableRefObject<boolean>;
@@ -168,6 +173,7 @@ export const ChatInput = ({
   const submitType = useChatInputStore((state) => state.submitType);
   const setSubmitType = useChatInputStore((state) => state.setSubmitType);
   const handleFileUpload = useChatInputStore((state) => state.handleFileUpload);
+  const removeFile = useChatInputStore((state) => state.removeFile);
   const usedPromptId = useChatInputStore((state) => state.usedPromptId);
   const setUsedPromptId = useChatInputStore((state) => state.setUsedPromptId);
   const usedPromptVariables = useChatInputStore(
@@ -516,6 +522,7 @@ export const ChatInput = ({
               setFilePreviews={setFilePreviews}
               setSubmitType={setSubmitType}
               uploadProgress={uploadProgress}
+              removeFile={removeFile}
             />
           </div>
         )}

@@ -1114,6 +1114,10 @@
       "quickSettings": "Paramèt Vwa",
       "overrideForThisMessage": "Ajiste paramèt pou mesaj sa a",
       "speakWithSettings": "Pale"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Pine otomatikman fichye w telechaje yo",
+      "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Telechaje Dokiman",
     "images": "Imaj",
     "addImage": "Ajoute imaj"
+  },
+  "activeFiles": {
+    "title": "Fichye Aktif",
+    "tokenUsage": "Itilizasyon tokèn",
+    "keepInContext": "Kenbe nan kontèks",
+    "addedToContext": "Ajoute nan kontèks",
+    "removeFromContext": "Retire nan kontèks",
+    "clearAll": "Efase tout",
+    "noActiveFiles": "Pa gen fichye aktif",
+    "processing": "Ap trete",
+    "ready": "Pare",
+    "error": "Erè",
+    "retry": "Reeseye",
+    "pinned": "Fikse",
+    "pin": "Fikse",
+    "tokens": "tokèn"
   },
   "shortcuts": {
     "title": "Koutchemen Klavye",

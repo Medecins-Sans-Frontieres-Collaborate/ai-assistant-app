@@ -99,6 +99,7 @@ interface ChatInputState {
   handleFileUpload: (
     event: React.ChangeEvent<HTMLInputElement> | FileList | File[],
   ) => Promise<void>;
+  removeFile: (filePreview: FilePreview) => void;
 
   // Actions - Prompt
   setUsedPromptId: (id: string | null) => void;
@@ -223,6 +224,65 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       get().setUploadProgress,
     );
   },
+
+  removeFile: (filePreview) =>
+    set((state) => {
+      // Remove from filePreviews
+      const newPreviews = state.filePreviews.filter((fp) => fp !== filePreview);
+
+      // Remove from fileFieldValue by matching originalFilename or image URL
+      let newFileFieldValue = state.fileFieldValue;
+      if (newFileFieldValue) {
+        if (Array.isArray(newFileFieldValue)) {
+          newFileFieldValue = newFileFieldValue.filter((file) => {
+            if ('originalFilename' in file) {
+              return file.originalFilename !== filePreview.name;
+            }
+            if ('image_url' in file) {
+              return file.image_url.url !== filePreview.previewUrl;
+            }
+            return true;
+          });
+          if (newFileFieldValue.length === 0) newFileFieldValue = null;
+        } else if (
+          'originalFilename' in newFileFieldValue &&
+          newFileFieldValue.originalFilename === filePreview.name
+        ) {
+          newFileFieldValue = null;
+        } else if (
+          'image_url' in newFileFieldValue &&
+          newFileFieldValue.image_url.url === filePreview.previewUrl
+        ) {
+          newFileFieldValue = null;
+        }
+      }
+
+      // Remove from imageFieldValue by matching URL
+      let newImageFieldValue = state.imageFieldValue;
+      if (newImageFieldValue) {
+        if (Array.isArray(newImageFieldValue)) {
+          newImageFieldValue = newImageFieldValue.filter(
+            (img) => img.image_url.url !== filePreview.previewUrl,
+          );
+          if (newImageFieldValue.length === 0) newImageFieldValue = null;
+        } else if (
+          newImageFieldValue.image_url.url === filePreview.previewUrl
+        ) {
+          newImageFieldValue = null;
+        }
+      }
+
+      // Clean up uploadProgress for this file
+      const { [filePreview.name]: _, ...newProgress } = state.uploadProgress;
+
+      return {
+        filePreviews: newPreviews,
+        fileFieldValue: newFileFieldValue,
+        imageFieldValue: newImageFieldValue,
+        uploadProgress: newProgress,
+        submitType: newPreviews.length === 0 ? 'TEXT' : state.submitType,
+      };
+    }),
 
   // Actions - Prompt
   setUsedPromptId: (id) => set({ usedPromptId: id }),

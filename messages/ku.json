@@ -1114,6 +1114,10 @@
       "quickSettings": "Mîhengên Dengê",
       "overrideForThisMessage": "Mîhengan ji bo vê peyamê eyar bike",
       "speakWithSettings": "Biaxive"
+    },
+    "activeFiles": {
+      "autoPinUploads": "خۆکارانە پەیوەستکردنی پەڕگە بارکراوەکان",
+      "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Belgeyê Bar Bike",
     "images": "Wêne",
     "addImage": "Wêne zêde bike"
+  },
+  "activeFiles": {
+    "title": "پەڕگە چالاکەکان",
+    "tokenUsage": "بەکارهێنانی تۆکەن",
+    "keepInContext": "لە ناو بابەتدا بپارێزە",
+    "addedToContext": "زیادکرا بۆ بابەت",
+    "removeFromContext": "لابردن لە بابەت",
+    "clearAll": "سڕینەوەی هەموو",
+    "noActiveFiles": "پەڕگە چالاک نییە",
+    "processing": "لە پڕۆسەدا",
+    "ready": "ئامادە",
+    "error": "هەڵە",
+    "retry": "دووبارە هەوڵ بدە",
+    "pinned": "پەیوەستکراو",
+    "pin": "پەیوەست بکە",
+    "tokens": "تۆکەنەکان"
   },
   "shortcuts": {
     "title": "کورتەکاری کلید",

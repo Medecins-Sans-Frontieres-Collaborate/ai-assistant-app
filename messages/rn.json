@@ -1114,6 +1114,10 @@
       "quickSettings": "Amategeko y'Ijwi",
       "overrideForThisMessage": "Hindura amategeko kuri ubu butumwa",
       "speakWithSettings": "Vuga"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Kwishingira ku buryo bwikora amadosiye yashizweho",
+      "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Shiriza Inyandiko",
     "images": "Amashusho",
     "addImage": "Ongereza ishusho"
+  },
+  "activeFiles": {
+    "title": "Amadosiye Akora",
+    "tokenUsage": "Uko amakarata akoreshwa",
+    "keepInContext": "Gumana mu bijanye",
+    "addedToContext": "Vyongerewe mu bijanye",
+    "removeFromContext": "Kura mu bijanye",
+    "clearAll": "Hana vyose",
+    "noActiveFiles": "Nta madosiye akora",
+    "processing": "Biriko biratunganywa",
+    "ready": "Biteguye",
+    "error": "Ikosa",
+    "retry": "Subira",
+    "pinned": "Vyashinzwe",
+    "pin": "Shingira",
+    "tokens": "amakarata"
   },
   "shortcuts": {
     "title": "Uburyo bwo gukoresha urufunguruzo rwa klaviyeri",

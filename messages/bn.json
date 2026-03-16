@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "ডিফল্ট রিজনিং এফর্ট",
     "reasoningEffortDescription": "রিজনিং মডেলের চিন্তার গভীরতা নিয়ন্ত্রণ করে। উচ্চতর এফর্ট আরও বিস্তারিত বিশ্লেষণ দেয়।",
     "Default Verbosity": "ডিফল্ট ভার্বোসিটি",
-    "verbosityDescription": "GPT-5 মডেলের জন্য প্রতিক্রিয়ার বিস্তারিততার স্তর নিয়ন্ত্রণ করে।"
+    "verbosityDescription": "GPT-5 মডেলের জন্য প্রতিক্রিয়ার বিস্তারিততার স্তর নিয়ন্ত্রণ করে।",
+    "activeFiles": {
+      "autoPinUploads": "আপলোড করা ফাইলগুলি স্বয়ংক্রিয়ভাবে পিন করুন",
+      "autoPinUploadsDescription": "আপলোড করার পর ফাইলগুলো স্বয়ংক্রিয়ভাবে পিন করুন যাতে এগুলো মুছে না যায়"
+    }
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "ডকুমেন্ট আপলোড করুন",
     "images": "ছবি",
     "addImage": "ছবি যোগ করুন"
+  },
+  "activeFiles": {
+    "title": "সক্রিয় ফাইলসমূহ",
+    "tokenUsage": "টোকেন ব্যবহার",
+    "keepInContext": "প্রাসঙ্গিকতায় রাখুন",
+    "addedToContext": "প্রাসঙ্গিকতায় যোগ করা হয়েছে",
+    "removeFromContext": "প্রাসঙ্গিকতা থেকে সরান",
+    "clearAll": "সব মুছুন",
+    "noActiveFiles": "কোনও সক্রিয় ফাইল নেই",
+    "processing": "প্রক্রিয়াকরণ চলছে",
+    "ready": "তৈরি",
+    "error": "ত্রুটি",
+    "retry": "পুনরায় চেষ্টা করুন",
+    "pinned": "পিন করা হয়েছে",
+    "pin": "পিন করুন",
+    "tokens": "টোকেন",
+    "pinnedTooltip": "পিন করা: সবসময় যুক্ত থাকবে",
+    "unpinnedTooltip": "আনপিন করা: বাদ পড়তে বা স্বয়ংক্রিয়ভাবে মুছে যেতে পারে",
+    "pinnedCount": "{pinned} পিন করা / {total}",
+    "sessionQuota": "সেশনের সীমা",
+    "sessionQuotaUsage": "এই সেশনে ব্যবহৃত {used} / {total} টোকেন",
+    "sessionQuotaExhausted": "সক্রিয় ফাইলের সেশনের কোটা শেষ। ফাইলসমূহ মুছে ফেলা হয়েছে।",
+    "pinBlockedTooLarge": "ফাইলটি পিন করার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
+    "activationRejectedTooLarge": "সক্রিয় কনটেক্সটে ফাইলটি রাখার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
+    "sessionQuotaWarning": "সেশনের সীমা প্রায় শেষ — {remaining} টোকেন বাকি",
+    "sessionQuotaNearlyExhausted": "সেশনের সীমা প্রায় শেষ — সক্রিয় ফাইলগুলি অন্তর্ভুক্ত নাও হতে পারে"
   },
   "shortcuts": {
     "title": "কী-বোর্ড শর্টকাট",

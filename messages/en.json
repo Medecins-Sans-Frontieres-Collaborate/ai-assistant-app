@@ -1112,6 +1112,10 @@
       "quickSettings": "Voice Settings",
       "overrideForThisMessage": "Adjust settings for this message",
       "speakWithSettings": "Speak"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Auto-pin uploaded files",
+      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out"
     }
   },
   "emptyState": {
@@ -1744,6 +1748,32 @@
     "uploadDocument": "Upload Document",
     "images": "Images",
     "addImage": "Add image"
+  },
+  "activeFiles": {
+    "title": "Active Files",
+    "tokenUsage": "Token usage",
+    "keepInContext": "Keep in context",
+    "addedToContext": "Added to context",
+    "removeFromContext": "Remove from context",
+    "clearAll": "Clear all",
+    "noActiveFiles": "No active files",
+    "processing": "Processing",
+    "ready": "Ready",
+    "error": "Error",
+    "retry": "Retry",
+    "pinned": "Pinned",
+    "pin": "Pin",
+    "pinnedTooltip": "Pinned: always included",
+    "unpinnedTooltip": "Unpinned: may be excluded or auto-removed",
+    "pinnedCount": "{pinned} pinned / {total}",
+    "tokens": "tokens",
+    "sessionQuota": "Session quota",
+    "sessionQuotaUsage": "{used} / {total} tokens used this session",
+    "sessionQuotaExhausted": "Active files session quota reached. Files have been cleared.",
+    "pinBlockedTooLarge": "File too large to pin ({tokens} tokens, limit: {limit})",
+    "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})",
+    "sessionQuotaWarning": "Session quota running low — {remaining} tokens remaining",
+    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",

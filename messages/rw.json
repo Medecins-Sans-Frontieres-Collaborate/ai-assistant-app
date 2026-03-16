@@ -1114,6 +1114,10 @@
       "quickSettings": "Igenamiterere ry'Ijwi",
       "overrideForThisMessage": "Hindura igenamiterere ku butumwa bwa hano",
       "speakWithSettings": "Vuga"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Kufungira mu buryo bwikora amadosiye ashyizweho",
+      "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Ohereza Inyandiko",
     "images": "Amashusho",
     "addImage": "Ongeraho ishusho"
+  },
+  "activeFiles": {
+    "title": "Amadosiye Akora",
+    "tokenUsage": "Imikoreshereze ya token",
+    "keepInContext": "Bika mu kwitegura",
+    "addedToContext": "Byongerewe mu kwitegura",
+    "removeFromContext": "Bikuremo mu kwitegura",
+    "clearAll": "Sukura byose",
+    "noActiveFiles": "Nta madosiye akora",
+    "processing": "Birimo gutunganywa",
+    "ready": "Byiteguye",
+    "error": "Ikosa",
+    "retry": "Kongera",
+    "pinned": "Byafungiwe",
+    "pin": "Fungira",
+    "tokens": "token"
   },
   "shortcuts": {
     "title": "Inyunganirangingo za klavieri",

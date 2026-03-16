@@ -1114,6 +1114,10 @@
       "quickSettings": "Sëndängö tî gbegbê",
       "overrideForThisMessage": "Sëndä sëndängö tî mëngö sô",
       "speakWithSettings": "Polëngö"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Fânga ti yângâ nî tî kodro wüngö",
+      "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Upload Document",
     "images": "Images",
     "addImage": "Add image"
+  },
+  "activeFiles": {
+    "title": "Kondro ti mû na yângâ",
+    "tokenUsage": "Gbû â token",
+    "keepInContext": "Lâ na sôsôngo",
+    "addedToContext": "Gbëtîna na sôsôngo",
+    "removeFromContext": "Kûê na sôsôngo",
+    "clearAll": "Kûtî sô tî yângâ",
+    "noActiveFiles": "Kodro tî mû na yângâ alî yeke",
+    "processing": "Na wüngö",
+    "ready": "Tenî",
+    "error": "Mbênî",
+    "retry": "Kɔda",
+    "pinned": "Yângâ",
+    "pin": "Yângâ",
+    "tokens": "â token"
   },
   "shortcuts": {
     "title": "Káfù tî kobanga-lêko",

@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Effort de raisonnement par défaut",
     "reasoningEffortDescription": "Contrôle la profondeur de réflexion des modèles de raisonnement. Un effort élevé produit une analyse plus approfondie.",
     "Default Verbosity": "Verbosité par défaut",
-    "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5."
+    "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Épingler automatiquement les fichiers téléchargés",
+      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés"
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "Télécharger un document",
     "images": "Images",
     "addImage": "Ajouter une image"
+  },
+  "activeFiles": {
+    "title": "Fichiers actifs",
+    "tokenUsage": "Utilisation des jetons",
+    "keepInContext": "Garder dans le contexte",
+    "addedToContext": "Ajouté au contexte",
+    "removeFromContext": "Retirer du contexte",
+    "clearAll": "Tout effacer",
+    "noActiveFiles": "Aucun fichier actif",
+    "processing": "Traitement en cours",
+    "ready": "Prêt",
+    "error": "Erreur",
+    "retry": "Réessayer",
+    "pinned": "Épinglé",
+    "pin": "Épingler",
+    "tokens": "jetons",
+    "pinnedTooltip": "Épinglé : toujours inclus",
+    "unpinnedTooltip": "Non épinglé : peut être exclu ou supprimé automatiquement",
+    "pinnedCount": "{pinned} épinglés / {total}",
+    "sessionQuota": "Quota de session",
+    "sessionQuotaUsage": "{used} / {total} jetons utilisés cette session",
+    "sessionQuotaExhausted": "Quota de session atteint pour les fichiers actifs. Les fichiers ont été supprimés.",
+    "pinBlockedTooLarge": "Fichier trop volumineux pour être épinglé ({tokens} jetons, limite : {limit})",
+    "activationRejectedTooLarge": "Fichier trop volumineux pour le contexte actif ({tokens} jetons, limite : {limit})",
+    "sessionQuotaWarning": "Quota de session bientôt atteint — {remaining} jetons restants",
+    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus"
   },
   "shortcuts": {
     "title": "Raccourcis clavier",

@@ -12,3 +12,5 @@
 
 export { FileProcessor } from './FileProcessor';
 export { ImageProcessor } from './ImageProcessor';
+export { ActiveFileProcessor } from './ActiveFileProcessor';
+export { ActiveFileInjector } from './ActiveFileInjector';

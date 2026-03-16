@@ -1,17 +1,25 @@
 'use client';
 
+import toast from 'react-hot-toast';
+
 import {
   migrateLegacyMessages,
   needsMigration,
 } from '@/lib/utils/shared/chat/messageVersioning';
 
 import {
+  ActiveFile,
   AssistantMessageVersion,
   Conversation,
   isAssistantMessageGroup,
 } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
+import {
+  ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
+  ACTIVE_FILE_PIN_TOKEN_LIMIT,
+  ACTIVE_FILE_SESSION_QUOTA,
+} from '@/lib/constants/activeFileQuotas';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -79,6 +87,18 @@ interface ConversationStore {
     filename: string,
     jobId?: string,
   ) => void;
+
+  // Active file actions
+  activateFile: (conversationId: string, file: ActiveFile) => void;
+  deactivateFile: (conversationId: string, fileId: string) => void;
+  updateFileProcessedContent: (
+    conversationId: string,
+    fileId: string,
+    content: NonNullable<ActiveFile['processedContent']>,
+  ) => void;
+  clearAllActiveFiles: (conversationId: string) => void;
+  setPinned: (conversationId: string, fileId: string, pinned: boolean) => void;
+  deductActiveFilesTokens: (conversationId: string, tokens: number) => void;
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -292,10 +312,169 @@ export const useConversationStore = create<ConversationStore>()(
             return { ...c, messages, updatedAt: new Date().toISOString() };
           }),
         })),
+
+      // Active file actions
+      activateFile: (conversationId, file) => {
+        // Reject files that already have a token estimate exceeding the limit
+        if (
+          file.processedContent?.tokenEstimate &&
+          file.processedContent.tokenEstimate >
+            ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT
+        ) {
+          toast.error(
+            `File too large for active context (${file.processedContent.tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT.toLocaleString()})`,
+          );
+          return;
+        }
+
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+
+            const existing = c.activeFiles ?? [];
+
+            // Deduplicate by url — same file should not appear twice
+            const alreadyExists = existing.some((f) => f.url === file.url);
+            let next = alreadyExists ? existing : [...existing, file];
+
+            // If exceeding 5 files, remove oldest unpinned files
+            const MAX_FILES = c.activeFilesMaxCount ?? 5;
+            while (next.length > MAX_FILES) {
+              // Find oldest unpinned file
+              const unpinned = next.filter((f) => !f.pinned);
+              if (unpinned.length === 0) break; // All pinned, can't remove
+
+              // Sort by addedAt ascending (oldest first)
+              unpinned.sort((a, b) => a.addedAt.localeCompare(b.addedAt));
+              const oldestUnpinned = unpinned[0];
+
+              // Remove it
+              next = next.filter((f) => f.id !== oldestUnpinned.id);
+            }
+
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        }));
+      },
+
+      deactivateFile: (conversationId, fileId) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next = existing.filter((f) => f.id !== fileId);
+            return {
+              ...c,
+              activeFiles: next,
+              // Reset quota when all files are removed
+              ...(next.length === 0 ? { activeFilesTokensUsed: 0 } : {}),
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      updateFileProcessedContent: (conversationId, fileId, content) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next: ActiveFile[] = existing.map(
+              (f): ActiveFile =>
+                f.id === fileId
+                  ? ({
+                      ...f,
+                      status: 'ready',
+                      processedContent: content,
+                      lastUsedAt: new Date().toISOString(),
+                    } as ActiveFile)
+                  : (f as ActiveFile),
+            );
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      clearAllActiveFiles: (conversationId) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) =>
+            c.id === conversationId
+              ? {
+                  ...c,
+                  activeFiles: [],
+                  activeFilesTokensUsed: 0,
+                  updatedAt: new Date().toISOString(),
+                }
+              : c,
+          ),
+        })),
+
+      setPinned: (conversationId, fileId, pinned) => {
+        if (pinned) {
+          // Check pin threshold before allowing
+          const state = get();
+          const conv = state.conversations.find((c) => c.id === conversationId);
+          const file = conv?.activeFiles?.find((f) => f.id === fileId);
+          if (
+            file?.processedContent?.tokenEstimate &&
+            file.processedContent.tokenEstimate > ACTIVE_FILE_PIN_TOKEN_LIMIT
+          ) {
+            toast.error(
+              `File too large to pin (${file.processedContent.tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_PIN_TOKEN_LIMIT.toLocaleString()})`,
+            );
+            return;
+          }
+        }
+
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const existing = c.activeFiles ?? [];
+            const next = existing.map((f) =>
+              f.id === fileId ? { ...f, pinned } : f,
+            );
+            return {
+              ...c,
+              activeFiles: next,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        }));
+      },
+
+      deductActiveFilesTokens: (conversationId, tokens) => {
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const newTotal = (c.activeFilesTokensUsed ?? 0) + tokens;
+            return {
+              ...c,
+              activeFilesTokensUsed: newTotal,
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        }));
+
+        // Check if quota is exhausted and auto-clear
+        const conv = get().conversations.find((c) => c.id === conversationId);
+        if (
+          conv &&
+          (conv.activeFilesTokensUsed ?? 0) >= ACTIVE_FILE_SESSION_QUOTA
+        ) {
+          get().clearAllActiveFiles(conversationId);
+          toast('Active files session quota reached. Files have been cleared.');
+        }
+      },
     }),
     {
       name: 'conversation-storage',
-      version: 2, // Incremented for message versioning migration
+      version: 4, // Incremented for active files session quota
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         conversations: state.conversations,
@@ -311,14 +490,43 @@ export const useConversationStore = create<ConversationStore>()(
 
         if (version < 2) {
           // Migrate conversations to new format with message versioning
-          const migratedConversations = state.conversations.map((conv) => ({
+          state.conversations = state.conversations.map((conv) => ({
             ...conv,
             messages: needsMigration(conv.messages)
               ? migrateLegacyMessages(conv.messages as never[])
               : conv.messages,
           }));
-          return { ...state, conversations: migratedConversations };
         }
+
+        if (version < 3) {
+          // Add message ids and initialize active files
+          const { v4: uuidv4 } = require('uuid');
+          state.conversations = state.conversations.map((conv) => {
+            const withIds = conv.messages.map((entry: any) => {
+              if (isAssistantMessageGroup(entry)) return entry;
+              if (typeof entry === 'object') {
+                return entry.id ? entry : { ...entry, id: uuidv4() };
+              }
+              return entry;
+            });
+
+            return {
+              ...conv,
+              messages: withIds,
+              activeFiles: conv.activeFiles ?? [],
+              activeFilesMaxCount: conv.activeFilesMaxCount ?? 10,
+            } as Conversation;
+          });
+        }
+
+        if (version < 4) {
+          // Initialize activeFilesTokensUsed on existing conversations
+          state.conversations = state.conversations.map((conv) => ({
+            ...conv,
+            activeFilesTokensUsed: conv.activeFilesTokensUsed ?? 0,
+          }));
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {

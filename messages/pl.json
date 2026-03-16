@@ -958,7 +958,11 @@
     "Default Reasoning Effort": "Domyślny poziom rozumowania",
     "reasoningEffortDescription": "Określa głębokość analizy dla modeli rozumowania. Wyższy poziom zapewnia bardziej szczegółową analizę.",
     "Default Verbosity": "Domyślny poziom szczegółowości",
-    "verbosityDescription": "Określa poziom szczegółowości odpowiedzi dla modeli GPT-5."
+    "verbosityDescription": "Określa poziom szczegółowości odpowiedzi dla modeli GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Automatyczne przypinanie przesłanych plików",
+      "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu"
+    }
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "Prześlij dokument",
     "images": "Obrazy",
     "addImage": "Dodaj obraz"
+  },
+  "activeFiles": {
+    "title": "Aktywne pliki",
+    "tokenUsage": "Zużycie tokenów",
+    "keepInContext": "Zachowaj w kontekście",
+    "addedToContext": "Dodano do kontekstu",
+    "removeFromContext": "Usuń z kontekstu",
+    "clearAll": "Wyczyść wszystko",
+    "noActiveFiles": "Brak aktywnych plików",
+    "processing": "Przetwarzanie",
+    "ready": "Gotowe",
+    "error": "Błąd",
+    "retry": "Ponów próbę",
+    "pinned": "Przypięte",
+    "pin": "Przypnij",
+    "tokens": "tokeny",
+    "pinnedTooltip": "Przypięte: zawsze uwzględnione",
+    "unpinnedTooltip": "Odpinane: mogą zostać wykluczone lub automatycznie usunięte",
+    "pinnedCount": "{pinned} przypiętych / {total}",
+    "sessionQuota": "Limit sesji",
+    "sessionQuotaUsage": "{used} / {total} tokenów użyto w tej sesji",
+    "sessionQuotaExhausted": "Osiągnięto limit aktywnych plików w sesji. Pliki zostały wyczyszczone.",
+    "pinBlockedTooLarge": "Plik zbyt duży do przypięcia ({tokens} tokenów, limit: {limit})",
+    "activationRejectedTooLarge": "Plik zbyt duży dla aktywnego kontekstu ({tokens} tokenów, limit: {limit})",
+    "sessionQuotaWarning": "Limit sesji się kończy — pozostało {remaining} tokenów",
+    "sessionQuotaNearlyExhausted": "Limit sesji prawie wyczerpany — aktywne pliki mogą nie zostać uwzględnione"
   },
   "shortcuts": {
     "title": "Skróty klawiaturowe",

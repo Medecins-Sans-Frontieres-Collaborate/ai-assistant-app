@@ -878,7 +878,11 @@
     "Default Reasoning Effort": "ความพยายามในการใช้เหตุผลเริ่มต้น",
     "reasoningEffortDescription": "ควบคุมระดับความลึกในการคิดสำหรับโมเดลเหตุผล ค่า effort ที่สูงจะให้การวิเคราะห์ที่ละเอียดขึ้น",
     "Default Verbosity": "ระดับความละเอียดของข้อความเริ่มต้น",
-    "verbosityDescription": "ควบคุมระดับรายละเอียดของคำตอบสำหรับโมเดล GPT-5"
+    "verbosityDescription": "ควบคุมระดับรายละเอียดของคำตอบสำหรับโมเดล GPT-5",
+    "activeFiles": {
+      "autoPinUploads": "ปักหมุดไฟล์ที่อัปโหลดโดยอัตโนมัติ",
+      "autoPinUploadsDescription": "ปักหมุดไฟล์โดยอัตโนมัติเมื่ออัปโหลดเพื่อป้องกันไม่ให้ไฟล์ถูกลบออก"
+    }
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "อัปโหลดเอกสาร",
     "images": "รูปภาพ",
     "addImage": "เพิ่มรูปภาพ"
+  },
+  "activeFiles": {
+    "title": "ไฟล์ที่ใช้งานอยู่",
+    "tokenUsage": "การใช้โทเคน",
+    "keepInContext": "เก็บไว้ในบริบท",
+    "addedToContext": "เพิ่มเข้าในบริบทแล้ว",
+    "removeFromContext": "นำออกจากบริบท",
+    "clearAll": "ล้างทั้งหมด",
+    "noActiveFiles": "ไม่มีไฟล์ที่ใช้งานอยู่",
+    "processing": "กำลังประมวลผล",
+    "ready": "พร้อมใช้งาน",
+    "error": "ข้อผิดพลาด",
+    "retry": "ลองใหม่",
+    "pinned": "ปักหมุดแล้ว",
+    "pin": "ปักหมุด",
+    "tokens": "โทเคน",
+    "pinnedTooltip": "ปักหมุด: รวมไว้เสมอ",
+    "unpinnedTooltip": "ไม่ปักหมุด: อาจถูกตัดออกหรือถูกลบอัตโนมัติ",
+    "pinnedCount": "ปักหมุด {pinned} / {total}",
+    "sessionQuota": "โควตาเซสชัน",
+    "sessionQuotaUsage": "ใช้ไปแล้ว {used} / {total} โทเค็นในเซสชันนี้",
+    "sessionQuotaExhausted": "ถึงโควตาเซสชันไฟล์ที่ใช้งานแล้ว ไฟล์ถูกล้างข้อมูลแล้ว",
+    "pinBlockedTooLarge": "ไฟล์ใหญ่เกินไปที่จะปักหมุด ({tokens} โทเค็น, ขีดจำกัด: {limit})",
+    "activationRejectedTooLarge": "ไฟล์ใหญ่เกินไปสำหรับบริบทที่ใช้งาน ({tokens} โทเค็น, ขีดจำกัด: {limit})",
+    "sessionQuotaWarning": "โควตาเซสชันเหลือน้อย — เหลือ {remaining} โทเค็น",
+    "sessionQuotaNearlyExhausted": "โควตาเซสชันใกล้หมด — อาจไม่รวมไฟล์ที่ใช้งานอยู่"
   },
   "shortcuts": {
     "title": "คีย์ลัดบนแป้นพิมพ์",

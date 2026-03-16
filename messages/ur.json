@@ -962,7 +962,11 @@
     "Default Reasoning Effort": "ڈیفالٹ منطقی کوشش",
     "reasoningEffortDescription": "منطقی ماڈلز کے لیے سوچ کی گہرائی کو کنٹرول کرتا ہے۔ زیادہ کوشش سے زیادہ جامع تجزیہ حاصل ہوتا ہے۔",
     "Default Verbosity": "ڈیفالٹ تفصیل",
-    "verbosityDescription": "GPT-5 ماڈلز کے لیے جواب کی تفصیل کا درجہ کنٹرول کرتا ہے۔"
+    "verbosityDescription": "GPT-5 ماڈلز کے لیے جواب کی تفصیل کا درجہ کنٹرول کرتا ہے۔",
+    "activeFiles": {
+      "autoPinUploads": "اپ لوڈ شدہ فائلز کو خودکار طور پر پن کریں",
+      "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں"
+    }
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1800,6 +1804,32 @@
     "uploadDocument": "دستاویز اپ لوڈ کریں",
     "images": "تصاویر",
     "addImage": "تصویر شامل کریں"
+  },
+  "activeFiles": {
+    "title": "فعال فائلز",
+    "tokenUsage": "ٹوکن کا استعمال",
+    "keepInContext": "سیاق و سباق میں رکھیں",
+    "addedToContext": "سیاق و سباق میں شامل کر دی گئی ہے",
+    "removeFromContext": "سیاق و سباق سے ہٹائیں",
+    "clearAll": "سب صاف کریں",
+    "noActiveFiles": "کوئی فعال فائل نہیں",
+    "processing": "پروسیسنگ ہو رہی ہے",
+    "ready": "تیار ہے",
+    "error": "خرابی",
+    "retry": "دوبارہ کوشش کریں",
+    "pinned": "پن کی گئی",
+    "pin": "پن کریں",
+    "tokens": "ٹوکنز",
+    "pinnedTooltip": "پن کیا گیا: ہمیشہ شامل ہوتا ہے",
+    "unpinnedTooltip": "غیر پن کیا گیا: شامل نہ بھی ہو سکتا ہے یا خودکار طور پر ہٹایا جا سکتا ہے",
+    "pinnedCount": "{pinned} پن کیے گئے / {total}",
+    "sessionQuota": "سیشن کوٹا",
+    "sessionQuotaUsage": "اس سیشن میں {used} / {total} ٹوکنز استعمال ہوئے",
+    "sessionQuotaExhausted": "فعال فائلز کے سیشن کوٹے کی حد مکمل ہوگئی۔ فائلز صاف کر دی گئی ہیں۔",
+    "pinBlockedTooLarge": "فائل بہت بڑی ہے پن کرنے کے لیے ({tokens} ٹوکنز، حد: {limit})",
+    "activationRejectedTooLarge": "فعال تناظر کے لیے فائل بہت بڑی ہے ({tokens} ٹوکنز، حد: {limit})",
+    "sessionQuotaWarning": "سیشن کوٹا کم رہ گیا ہے — {remaining} ٹوکنز باقی",
+    "sessionQuotaNearlyExhausted": "سیشن کوٹا تقریباً ختم ہو چکا ہے — فعال فائلز شامل نہیں ہو سکتیں"
   },
   "shortcuts": {
     "title": "کی بورڈ شارٹ کٹس",

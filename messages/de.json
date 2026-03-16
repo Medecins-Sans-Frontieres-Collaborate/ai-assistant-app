@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Standardmäßiger Denkaufwand",
     "reasoningEffortDescription": "Steuert die Denktiefe bei Reasoning-Modellen. Höherer Aufwand führt zu einer gründlicheren Analyse.",
     "Default Verbosity": "Standardmäßige Ausführlichkeit",
-    "verbosityDescription": "Steuert das Detaillierungsniveau der Antworten für GPT-5-Modelle."
+    "verbosityDescription": "Steuert das Detaillierungsniveau der Antworten für GPT-5-Modelle.",
+    "activeFiles": {
+      "autoPinUploads": "Hochgeladene Dateien automatisch anheften",
+      "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden"
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1770,6 +1774,32 @@
     "uploadDocument": "Dokument hochladen",
     "images": "Bilder",
     "addImage": "Bild hinzufügen"
+  },
+  "activeFiles": {
+    "title": "Aktive Dateien",
+    "tokenUsage": "Token-Verbrauch",
+    "keepInContext": "Im Kontext behalten",
+    "addedToContext": "Zum Kontext hinzugefügt",
+    "removeFromContext": "Aus Kontext entfernen",
+    "clearAll": "Alle löschen",
+    "noActiveFiles": "Keine aktiven Dateien",
+    "processing": "Wird verarbeitet",
+    "ready": "Bereit",
+    "error": "Fehler",
+    "retry": "Erneut versuchen",
+    "pinned": "Angeheftet",
+    "pin": "Anheften",
+    "tokens": "Tokens",
+    "pinnedTooltip": "Angeheftet: immer einbezogen",
+    "unpinnedTooltip": "Nicht angeheftet: kann ausgeschlossen oder automatisch entfernt werden",
+    "pinnedCount": "{pinned} angeheftet / {total}",
+    "sessionQuota": "Sitzungskontingent",
+    "sessionQuotaUsage": "{used} / {total} Token in dieser Sitzung verwendet",
+    "sessionQuotaExhausted": "Sitzungskontingent für aktive Dateien erreicht. Dateien wurden gelöscht.",
+    "pinBlockedTooLarge": "Datei zu groß zum Anheften ({tokens} Token, Limit: {limit})",
+    "activationRejectedTooLarge": "Datei zu groß für aktiven Kontext ({tokens} Token, Limit: {limit})",
+    "sessionQuotaWarning": "Sitzungskontingent fast aufgebraucht — {remaining} Token verbleibend",
+    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen"
   },
   "shortcuts": {
     "title": "Tastenkombinationen",

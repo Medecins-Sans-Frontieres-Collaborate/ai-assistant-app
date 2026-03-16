@@ -69,6 +69,8 @@ export const getMessagesToSend = async (
   promptLength: number,
   tokenLimit: number,
   user: Session['user'],
+  // Optional active files (not used here; injection handled earlier in pipeline)
+  _activeFiles?: import('@/types/chat').ActiveFile[],
 ): Promise<Message[]> => {
   const conversationType: ContentType = getPrimaryContentType(
     messages[messages.length - 1].content,

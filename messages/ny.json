@@ -1114,6 +1114,10 @@
       "quickSettings": "Zikhazikiko za Mawu",
       "overrideForThisMessage": "Konzani zikhazikiko za uthenga uwu",
       "speakWithSettings": "Lankhulani"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
+      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Kwezani Chikalata",
     "images": "Zithunzi",
     "addImage": "Onjezani chithunzi"
+  },
+  "activeFiles": {
+    "title": "Mafayilo Ogwira Ntchito",
+    "tokenUsage": "Kugwiritsa ntchito ma token",
+    "keepInContext": "Sungani mu polankhulirana",
+    "addedToContext": "Zawonjezedwa mu polankhulirana",
+    "removeFromContext": "Chotsani mu polankhulirana",
+    "clearAll": "Chotsani zonse",
+    "noActiveFiles": "Palibe mafayilo ogwira ntchito",
+    "processing": "Ikukonzedwa",
+    "ready": "Yakonzeka",
+    "error": "Vuto",
+    "retry": "Yesaninso",
+    "pinned": "Yakwezedwa",
+    "pin": "Kwezera",
+    "tokens": "ma token"
   },
   "shortcuts": {
     "title": "Njira Zachidule pa Kiyibodi",

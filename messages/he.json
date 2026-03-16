@@ -936,7 +936,11 @@
     "Default Reasoning Effort": "רמת מאמץ חשיבה כברירת מחדל",
     "reasoningEffortDescription": "שולט בעומק החשיבה במודלים של נימוק. רמת מאמץ גבוהה יותר תפיק ניתוח מעמיק יותר.",
     "Default Verbosity": "רמת פירוט כברירת מחדל",
-    "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5."
+    "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
+      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "העלה מסמך",
     "images": "תמונות",
     "addImage": "הוסף תמונה"
+  },
+  "activeFiles": {
+    "title": "קבצים פעילים",
+    "tokenUsage": "שימוש בטוקנים",
+    "keepInContext": "השאר בהקשר",
+    "addedToContext": "נוסף להקשר",
+    "removeFromContext": "הסר מההקשר",
+    "clearAll": "נקה הכל",
+    "noActiveFiles": "אין קבצים פעילים",
+    "processing": "מעבד",
+    "ready": "מוכן",
+    "error": "שגיאה",
+    "retry": "נסה שוב",
+    "pinned": "נעוץ",
+    "pin": "נעץ",
+    "tokens": "טוקנים",
+    "pinnedTooltip": "צמוד: תמיד כלול",
+    "unpinnedTooltip": "לא צמוד: ייתכן שיוצא או יוסר אוטומטית",
+    "pinnedCount": "{pinned} צמודים / {total}",
+    "sessionQuota": "מכסת סשן",
+    "sessionQuotaUsage": "{used} / {total} טוקנים נוצלו בסשן זה",
+    "sessionQuotaExhausted": "הגעת למכסת הקבצים האקטיביים לסשן. הקבצים נמחקו.",
+    "pinBlockedTooLarge": "הקובץ גדול מדי להצמדה ({tokens} טוקנים, מגבלה: {limit})",
+    "activationRejectedTooLarge": "הקובץ גדול מדי להקשר אקטיבי ({tokens} טוקנים, מגבלה: {limit})",
+    "sessionQuotaWarning": "המכסה לסשן קרובה לסיום — נותרו {remaining} טוקנים",
+    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו"
   },
   "shortcuts": {
     "title": "קיצורי מקלדת",

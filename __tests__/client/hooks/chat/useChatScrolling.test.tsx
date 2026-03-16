@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 
 import { useChatScrolling } from '@/client/hooks/chat/useChatScrolling';
 
@@ -6,30 +6,62 @@ import { scrollToBottom } from '@/lib/utils/app/scrolling';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock scrollToBottom utility
 vi.mock('@/lib/utils/app/scrolling');
 
-// Mock UI constants
 vi.mock('@/lib/constants/ui', () => ({
   UI_CONSTANTS: {
     SCROLL: {
-      AUTO_SCROLL_THRESHOLD: 50,
+      AUTO_SCROLL_THRESHOLD: 200,
     },
   },
 }));
 
+function createMockContainer(overrides: Record<string, unknown> = {}) {
+  return {
+    scrollTo: vi.fn(),
+    scrollHeight: 2000,
+    scrollTop: 1500,
+    clientHeight: 500,
+    getBoundingClientRect: vi.fn().mockReturnValue({ top: 0 }),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    ...overrides,
+  };
+}
+
+function createMockLastMessage(top = 400) {
+  return {
+    getBoundingClientRect: vi.fn().mockReturnValue({ top }),
+  };
+}
+
 describe('useChatScrolling', () => {
+  let rafCallbacks: Array<() => void>;
+  let originalRAF: typeof requestAnimationFrame;
+  let originalCancelRAF: typeof cancelAnimationFrame;
+
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.useFakeTimers();
+    rafCallbacks = [];
+    originalRAF = globalThis.requestAnimationFrame;
+    originalCancelRAF = globalThis.cancelAnimationFrame;
+
+    let rafId = 0;
+    globalThis.requestAnimationFrame = vi.fn((cb: (time: number) => void) => {
+      rafId += 1;
+      rafCallbacks.push(cb as () => void);
+      return rafId;
+    });
+    globalThis.cancelAnimationFrame = vi.fn();
   });
 
   afterEach(() => {
-    vi.useRealTimers();
+    globalThis.requestAnimationFrame = originalRAF;
+    globalThis.cancelAnimationFrame = originalCancelRAF;
   });
 
   describe('initial state', () => {
-    it('should initialize with scroll button hidden', () => {
+    it('should initialize with scroll button hidden and refs created', () => {
       const { result } = renderHook(() =>
         useChatScrolling({
           selectedConversationId: 'conv-1',
@@ -40,56 +72,208 @@ describe('useChatScrolling', () => {
       );
 
       expect(result.current.showScrollDownButton).toBe(false);
-    });
-
-    it('should create necessary refs', () => {
-      const { result } = renderHook(() =>
-        useChatScrolling({
-          selectedConversationId: 'conv-1',
-          messageCount: 0,
-          isStreaming: false,
-          isDraining: false,
-        }),
-      );
-
       expect(result.current.messagesEndRef).toBeDefined();
       expect(result.current.chatContainerRef).toBeDefined();
       expect(result.current.lastMessageRef).toBeDefined();
     });
   });
 
-  describe('conversation change', () => {
-    it('should reset scroll state when conversation changes', () => {
-      const { rerender } = renderHook(
-        ({ conversationId }) =>
+  describe('conversation reset', () => {
+    it('should reset phase to idle on conversation change', () => {
+      const mockContainer = createMockContainer();
+
+      const { result, rerender } = renderHook(
+        ({ conversationId, messageCount }) =>
           useChatScrolling({
             selectedConversationId: conversationId,
-            messageCount: 5,
+            messageCount,
             isStreaming: false,
             isDraining: false,
           }),
-        { initialProps: { conversationId: 'conv-1' } },
+        { initialProps: { conversationId: 'conv-1', messageCount: 5 } },
       );
 
-      // Change conversation
-      rerender({ conversationId: 'conv-2' });
+      (result.current.chatContainerRef as any).current = mockContainer;
 
-      // Internal refs should be reset (verified through behavior in other tests)
-      expect(true).toBe(true);
+      // Change conversation — should reset, then a new message should trigger smooth scroll
+      rerender({ conversationId: 'conv-2', messageCount: 0 });
+      rerender({ conversationId: 'conv-2', messageCount: 1 });
+
+      expect(mockContainer.scrollTo).toHaveBeenCalledWith({
+        top: mockContainer.scrollHeight,
+        behavior: 'smooth',
+      });
     });
   });
 
-  describe('auto-scroll behavior', () => {
-    it('should auto-scroll when new messages arrive', async () => {
-      const mockScrollTo = vi.fn();
-      const mockContainer = {
-        scrollTo: mockScrollTo,
-        scrollHeight: 1000,
-        scrollTop: 0,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
+  describe('idle → streaming transition', () => {
+    it('should scroll to bottom instantly when streaming starts', () => {
+      const mockContainer = createMockContainer({ scrollTop: 0 });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+
+      rerender({ isStreaming: true });
+
+      expect(mockContainer.scrollTo).toHaveBeenCalledWith({
+        top: mockContainer.scrollHeight,
+        behavior: 'instant',
+      });
+    });
+  });
+
+  describe('streaming → completing transition', () => {
+    it('should scroll to top of last message after streaming completes', () => {
+      const mockContainer = createMockContainer({ scrollTop: 1500 });
+      const mockLastMsg = createMockLastMessage(400);
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming, messageCount }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false, messageCount: 1 } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      (result.current.lastMessageRef as any).current = mockLastMsg;
+
+      // Start streaming
+      rerender({ isStreaming: true, messageCount: 1 });
+      mockContainer.scrollTo.mockClear();
+
+      // Stop streaming
+      rerender({ isStreaming: false, messageCount: 2 });
+
+      // relativeTop = msgRect.top(400) - containerRect.top(0) + scrollTop(1500) = 1900
+      // scrollTarget = 1900 - 60 = 1840
+      expect(mockContainer.scrollTo).toHaveBeenCalledWith({
+        top: 1840,
+        behavior: 'instant',
+      });
+    });
+
+    it('should fall back to scrollHeight when lastMessageRef is not set', () => {
+      const mockContainer = createMockContainer();
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      // lastMessageRef intentionally left null
+
+      rerender({ isStreaming: true });
+      rerender({ isStreaming: false });
+
+      expect(mockContainer.scrollTop).toBe(mockContainer.scrollHeight);
+    });
+  });
+
+  describe('user scrolled away during streaming', () => {
+    it('should skip completion scroll when user has scrolled away', () => {
+      const mockContainer = createMockContainer();
+      const mockLastMsg = createMockLastMessage(400);
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      (result.current.lastMessageRef as any).current = mockLastMsg;
+
+      // Start streaming
+      rerender({ isStreaming: true });
+      mockContainer.scrollTo.mockClear();
+
+      // Simulate user scrolling away via wheel event
+      const wheelHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'wheel',
+      )?.[1];
+
+      if (wheelHandler) {
+        // Set container to be far from bottom
+        mockContainer.scrollTop = 0;
+        act(() => {
+          wheelHandler();
+        });
+      }
+
+      // Stop streaming
+      rerender({ isStreaming: false });
+
+      // Completion scroll should NOT have been called
+      expect(mockContainer.scrollTo).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('ghost RAF after completion', () => {
+    it('should not overwrite scrollTop when phase is no longer streaming', () => {
+      const mockContainer = createMockContainer({ scrollTop: 500 });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+
+      // Start streaming — this schedules RAF callbacks
+      rerender({ isStreaming: true });
+
+      // Capture the RAF callback that was scheduled
+      const capturedCallbacks = [...rafCallbacks];
+      rafCallbacks = [];
+
+      // Stop streaming — phase transitions to completing then idle
+      rerender({ isStreaming: false });
+
+      // Now fire the captured ghost RAF callback
+      const scrollTopBefore = mockContainer.scrollTop;
+      capturedCallbacks.forEach((cb) => cb());
+
+      // scrollTop should NOT have been changed to scrollHeight - clientHeight
+      // because the phase guard prevents it
+      expect(mockContainer.scrollTop).toBe(scrollTopBefore);
+    });
+  });
+
+  describe('new message in idle', () => {
+    it('should smooth scroll to bottom for new messages when idle', () => {
+      const mockContainer = createMockContainer();
 
       const { result, rerender } = renderHook(
         ({ messageCount }) =>
@@ -99,175 +283,22 @@ describe('useChatScrolling', () => {
             isStreaming: false,
             isDraining: false,
           }),
-        { initialProps: { messageCount: 0 } },
+        { initialProps: { messageCount: 1 } },
       );
 
-      // Set the mock container ref
       (result.current.chatContainerRef as any).current = mockContainer;
 
-      // Add a new message
-      rerender({ messageCount: 1 });
+      rerender({ messageCount: 2 });
 
-      // Fast-forward timers to trigger setTimeout
-      await act(async () => {
-        vi.runAllTimers();
-      });
-
-      expect(mockScrollTo).toHaveBeenCalledWith({
-        top: 1000,
+      expect(mockContainer.scrollTo).toHaveBeenCalledWith({
+        top: mockContainer.scrollHeight,
         behavior: 'smooth',
       });
-    });
-
-    it('should not auto-scroll when streaming just completed', () => {
-      const mockScrollTo = vi.fn();
-      const mockContainer = {
-        scrollTo: mockScrollTo,
-        scrollHeight: 1000,
-        scrollTop: 500,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
-
-      const { result, rerender } = renderHook(
-        ({ messageCount, isStreaming }) =>
-          useChatScrolling({
-            selectedConversationId: 'conv-1',
-            messageCount,
-            isStreaming,
-            isDraining: false,
-          }),
-        { initialProps: { messageCount: 0, isStreaming: true } },
-      );
-
-      // Set the mock container ref
-      (result.current.chatContainerRef as any).current = mockContainer;
-
-      // Streaming completes and message count increases
-      rerender({ messageCount: 1, isStreaming: false });
-
-      act(() => {
-        vi.runAllTimers();
-      });
-
-      // Should restore position, not smooth scroll
-      expect(mockScrollTo).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('scroll position capture and restoration', () => {
-    it('should capture scroll position when streaming ends', () => {
-      const mockContainer = {
-        scrollTop: 300,
-        scrollHeight: 1000,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
-
-      const { rerender } = renderHook(
-        ({ isStreaming }) =>
-          useChatScrolling({
-            selectedConversationId: 'conv-1',
-            messageCount: 1,
-            isStreaming,
-            isDraining: false,
-          }),
-        { initialProps: { isStreaming: true } },
-      );
-
-      // Set the mock container ref manually before streaming ends
-      const { result } = renderHook(() =>
-        useChatScrolling({
-          selectedConversationId: 'conv-1',
-          messageCount: 1,
-          isStreaming: true,
-          isDraining: false,
-        }),
-      );
-      (result.current.chatContainerRef as any).current = mockContainer;
-
-      // End streaming
-      rerender({ isStreaming: false });
-
-      // Position should be captured (verified through logs in real implementation)
-      expect(mockContainer.scrollTop).toBe(300);
-    });
-  });
-
-  describe('manual scroll detection', () => {
-    it('should show scroll button when user scrolls away from bottom', () => {
-      const { result } = renderHook(() =>
-        useChatScrolling({
-          selectedConversationId: 'conv-1',
-          messageCount: 5,
-          isStreaming: false,
-          isDraining: false,
-        }),
-      );
-
-      const mockContainer = {
-        scrollTop: 0,
-        scrollHeight: 1000,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
-
-      (result.current.chatContainerRef as any).current = mockContainer;
-
-      // Trigger scroll event
-      const scrollHandler = mockContainer.addEventListener.mock.calls.find(
-        (call: any) => call[0] === 'scroll',
-      )?.[1];
-
-      if (scrollHandler) {
-        act(() => {
-          scrollHandler();
-        });
-
-        expect(result.current.showScrollDownButton).toBe(true);
-      }
-    });
-
-    it('should hide scroll button when at bottom', () => {
-      const { result } = renderHook(() =>
-        useChatScrolling({
-          selectedConversationId: 'conv-1',
-          messageCount: 5,
-          isStreaming: false,
-          isDraining: false,
-        }),
-      );
-
-      const mockContainer = {
-        scrollTop: 500,
-        scrollHeight: 1000,
-        clientHeight: 500,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-      };
-
-      (result.current.chatContainerRef as any).current = mockContainer;
-
-      // Trigger scroll event
-      const scrollHandler = mockContainer.addEventListener.mock.calls.find(
-        (call: any) => call[0] === 'scroll',
-      )?.[1];
-
-      if (scrollHandler) {
-        act(() => {
-          scrollHandler();
-        });
-
-        expect(result.current.showScrollDownButton).toBe(false);
-      }
     });
   });
 
   describe('handleScrollDown', () => {
-    it('should call scrollToBottom when invoked', () => {
+    it('should call scrollToBottom with smooth behavior', () => {
       const { result } = renderHook(() =>
         useChatScrolling({
           selectedConversationId: 'conv-1',
@@ -285,28 +316,6 @@ describe('useChatScrolling', () => {
         result.current.messagesEndRef,
         'smooth',
       );
-    });
-  });
-
-  describe('streaming auto-scroll', () => {
-    it('should enable auto-scroll when streaming starts', () => {
-      const { rerender } = renderHook(
-        ({ isStreaming }) =>
-          useChatScrolling({
-            selectedConversationId: 'conv-1',
-            messageCount: 1,
-            isStreaming,
-            isDraining: false,
-          }),
-        { initialProps: { isStreaming: false } },
-      );
-
-      // Start streaming
-      rerender({ isStreaming: true });
-
-      // Internal shouldAutoScrollRef should be set to true
-      // (verified through behavior in scroll tests)
-      expect(true).toBe(true);
     });
   });
 });

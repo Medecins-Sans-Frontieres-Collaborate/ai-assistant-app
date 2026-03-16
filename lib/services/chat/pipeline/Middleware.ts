@@ -176,6 +176,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       forcedAgentType,
       tone,
       streamingSpeed,
+      // Active files from client (optional)
+      activeFiles: (body as any).activeFiles,
+      activeFilesTokensUsed: (body as any).activeFilesTokensUsed,
     };
   } catch (error) {
     if (error instanceof PipelineError) {

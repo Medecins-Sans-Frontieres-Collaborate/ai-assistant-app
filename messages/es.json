@@ -961,7 +961,11 @@
     "Default Reasoning Effort": "Esfuerzo de razonamiento predeterminado",
     "reasoningEffortDescription": "Controla la profundidad de pensamiento para los modelos de razonamiento. Un esfuerzo mayor produce un análisis más exhaustivo.",
     "Default Verbosity": "Verbosidad predeterminada",
-    "verbosityDescription": "Controla el nivel de detalle de las respuestas para los modelos GPT-5."
+    "verbosityDescription": "Controla el nivel de detalle de las respuestas para los modelos GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Fijar archivos subidos automáticamente",
+      "autoPinUploadsDescription": "Fija automáticamente los archivos al subirlos para evitar que se eliminen del contexto"
+    }
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "Subir documento",
     "images": "Imágenes",
     "addImage": "Agregar imagen"
+  },
+  "activeFiles": {
+    "title": "Archivos activos",
+    "tokenUsage": "Uso de tokens",
+    "keepInContext": "Mantener en contexto",
+    "addedToContext": "Añadido al contexto",
+    "removeFromContext": "Eliminar del contexto",
+    "clearAll": "Eliminar todo",
+    "noActiveFiles": "No hay archivos activos",
+    "processing": "Procesando",
+    "ready": "Listo",
+    "error": "Error",
+    "retry": "Reintentar",
+    "pinned": "Fijado",
+    "pin": "Fijar",
+    "tokens": "tokens",
+    "pinnedTooltip": "Fijado: siempre incluido",
+    "unpinnedTooltip": "No fijado: puede ser excluido o eliminado automáticamente",
+    "pinnedCount": "{pinned} fijados / {total}",
+    "sessionQuota": "Cuota de sesión",
+    "sessionQuotaUsage": "{used} / {total} tokens utilizados en esta sesión",
+    "sessionQuotaExhausted": "Se alcanzó la cuota de archivos activos de la sesión. Los archivos han sido eliminados.",
+    "pinBlockedTooLarge": "Archivo demasiado grande para fijar ({tokens} tokens, límite: {limit})",
+    "activationRejectedTooLarge": "Archivo demasiado grande para el contexto activo ({tokens} tokens, límite: {limit})",
+    "sessionQuotaWarning": "La cuota de sesión está baja — quedan {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "La cuota de sesión está casi agotada — es posible que no se incluyan archivos activos"
   },
   "shortcuts": {
     "title": "Atajos de teclado",

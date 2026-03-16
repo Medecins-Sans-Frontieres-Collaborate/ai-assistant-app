@@ -910,7 +910,11 @@
     "Default Reasoning Effort": "ነባሪ የማመዛዘን ጥረት",
     "reasoningEffortDescription": "ለማመዛዘን ሞዴሎች የማመዛዘን ጥረት ደረጃን ይቆጣጠራል። ከፍተኛ ጥረት ዝርዝር ትንተና ይሰጣል።",
     "Default Verbosity": "ነባሪ የቃላት ብዛት",
-    "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።"
+    "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።",
+    "activeFiles": {
+      "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
+      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1791,5 +1795,31 @@
     "toggleTheme": "አቀማመጡን ቀይር",
     "regenerateResponse": "መልሱን ዳግመኛ ፍጠር",
     "copyLastResponse": "የመጨረሻውን መልስ ቅዳ"
+  },
+  "activeFiles": {
+    "title": "በተሳተፉ ያሉ ፋይሎች",
+    "tokenUsage": "የቶክን አጠቃቀም",
+    "keepInContext": "በአቀባበል ውስጥ አስቀምጥ",
+    "addedToContext": "ወደ አቀባበል ታክሏል",
+    "removeFromContext": "ከአቀባበሉ አስወግድ",
+    "clearAll": "ሁሉንም አጥፋ",
+    "noActiveFiles": "ምንም ተሳተፉ ፋይሎች የሉም",
+    "processing": "በሂደት ላይ",
+    "ready": "ዝግጁ",
+    "error": "ስህተት",
+    "retry": "እንደገና ይሞክሩ",
+    "pinned": "የተያዘ",
+    "pin": "አስያዝ",
+    "tokens": "ቶክኖች",
+    "pinnedTooltip": "ተሰቅቋል፡ ሁልጊዜ ከተካተቱ ነው",
+    "unpinnedTooltip": "አልተሰቀመም፡ ሊወገዱ ወይም በራስ-ሰር ሊወገዱ ይችላሉ",
+    "pinnedCount": "{pinned} ተሰቅቋል / {total}",
+    "sessionQuota": "የስብሰባ አቅም",
+    "sessionQuotaUsage": "በዚህ ስብሰባ {used} / {total} ቶክኖች ተጠቀሙ",
+    "sessionQuotaExhausted": "የአባል ፋይሎች የስብሰባ አቅም ተሟል። ፋይሎቹ አጽድተዋል።",
+    "pinBlockedTooLarge": "ፋይሉ ለመሰቀል በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
+    "activationRejectedTooLarge": "ፋይሉ ለአክቲቭ ኮንቴክስት በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
+    "sessionQuotaWarning": "የስብሰባ አቅም ማቅረብ ነው — {remaining} ቶክኖች ቀርበዋል",
+    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም"
   }
 }

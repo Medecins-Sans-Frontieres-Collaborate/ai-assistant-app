@@ -962,7 +962,11 @@
     "Default Reasoning Effort": "Mức Độ Suy Luận Mặc Định",
     "reasoningEffortDescription": "Điều chỉnh độ sâu tư duy cho các mô hình suy luận. Mức độ cao hơn sẽ tạo ra phân tích kỹ lưỡng hơn.",
     "Default Verbosity": "Mức Chi Tiết Mặc Định",
-    "verbosityDescription": "Điều chỉnh mức độ chi tiết của phản hồi cho các mô hình GPT-5."
+    "verbosityDescription": "Điều chỉnh mức độ chi tiết của phản hồi cho các mô hình GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "Tự động ghim tệp đã tải lên",
+      "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách"
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1801,6 +1805,32 @@
     "uploadDocument": "Tải lên tài liệu",
     "images": "Hình ảnh",
     "addImage": "Thêm hình ảnh"
+  },
+  "activeFiles": {
+    "title": "Tệp đang hoạt động",
+    "tokenUsage": "Sử dụng token",
+    "keepInContext": "Giữ trong ngữ cảnh",
+    "addedToContext": "Đã thêm vào ngữ cảnh",
+    "removeFromContext": "Loại khỏi ngữ cảnh",
+    "clearAll": "Xóa tất cả",
+    "noActiveFiles": "Không có tệp đang hoạt động",
+    "processing": "Đang xử lý",
+    "ready": "Sẵn sàng",
+    "error": "Lỗi",
+    "retry": "Thử lại",
+    "pinned": "Đã ghim",
+    "pin": "Ghim",
+    "tokens": "token",
+    "pinnedTooltip": "Đã ghim: luôn được bao gồm",
+    "unpinnedTooltip": "Chưa ghim: có thể bị loại bỏ hoặc tự động xóa",
+    "pinnedCount": "{pinned} đã ghim / {total}",
+    "sessionQuota": "Hạn mức phiên",
+    "sessionQuotaUsage": "Đã sử dụng {used} / {total} token trong phiên này",
+    "sessionQuotaExhausted": "Đã đạt hạn mức phiên cho tệp đang hoạt động. Các tệp đã được xóa.",
+    "pinBlockedTooLarge": "Tệp quá lớn để ghim ({tokens} token, giới hạn: {limit})",
+    "activationRejectedTooLarge": "Tệp quá lớn cho ngữ cảnh hoạt động ({tokens} token, giới hạn: {limit})",
+    "sessionQuotaWarning": "Hạn mức phiên sắp hết — còn lại {remaining} token",
+    "sessionQuotaNearlyExhausted": "Hạn mức phiên gần hết — các tệp đang hoạt động có thể không được bao gồm"
   },
   "shortcuts": {
     "title": "Phím tắt bàn phím",

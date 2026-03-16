@@ -1114,6 +1114,10 @@
       "quickSettings": "Fitsipiky ny Feo",
       "overrideForThisMessage": "Amboary ny fitsipika ho an'ity hafatra ity",
       "speakWithSettings": "Mitenena"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
+      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Ampakaro Tahirin-kevitra",
     "images": "Sary",
     "addImage": "Ampio sary"
+  },
+  "activeFiles": {
+    "title": "Rakitra Miasa",
+    "tokenUsage": "Fampiasana token",
+    "keepInContext": "Tazomy ao anatin'ny sehatra",
+    "addedToContext": "Nampidirina ao amin'ny sehatra",
+    "removeFromContext": "Esory ao amin'ny sehatra",
+    "clearAll": "Fafao rehetra",
+    "noActiveFiles": "Tsy misy rakitra miasa",
+    "processing": "Eo am-pikarakarana",
+    "ready": "Vita",
+    "error": "Hadisoana",
+    "retry": "Avereno",
+    "pinned": "Voafatotra",
+    "pin": "Afa-toroka",
+    "tokens": "token"
   },
   "shortcuts": {
     "title": "Fanalahidin-tsoratra haingana",

@@ -18,6 +18,11 @@ export class StreamParser {
   private extractedThreadId?: string;
   private extractedTranscript?: any;
   private extractedPendingTranscriptions?: PendingTranscriptionInfo[];
+  private extractedFileCacheUpdates?: Array<{
+    fileId: string;
+    processedContent: any;
+  }>;
+  private extractedActiveFilesTokensConsumed?: number;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -69,6 +74,21 @@ export class StreamParser {
     // Update pending transcriptions if found (only once)
     if (parsed.pendingTranscriptions && !this.extractedPendingTranscriptions) {
       this.extractedPendingTranscriptions = parsed.pendingTranscriptions;
+    }
+
+    // Capture file cache updates if present
+    if ((parsed as any).fileCacheUpdates && !this.extractedFileCacheUpdates) {
+      this.extractedFileCacheUpdates = (parsed as any).fileCacheUpdates;
+    }
+
+    // Capture active files tokens consumed if present
+    if (
+      (parsed as any).activeFilesTokensConsumed != null &&
+      this.extractedActiveFilesTokensConsumed == null
+    ) {
+      this.extractedActiveFilesTokensConsumed = (
+        parsed as any
+      ).activeFilesTokensConsumed;
     }
 
     // Check if we've received actual content (not just metadata)
@@ -156,6 +176,22 @@ export class StreamParser {
    */
   getPendingTranscriptions(): PendingTranscriptionInfo[] | undefined {
     return this.extractedPendingTranscriptions;
+  }
+
+  /**
+   * Get any file cache updates sent via SSE metadata
+   */
+  getFileCacheUpdates():
+    | Array<{ fileId: string; processedContent: any }>
+    | undefined {
+    return this.extractedFileCacheUpdates;
+  }
+
+  /**
+   * Get the number of active file tokens consumed this turn (from SSE metadata)
+   */
+  getActiveFilesTokensConsumed(): number | undefined {
+    return this.extractedActiveFilesTokensConsumed;
   }
 
   /**

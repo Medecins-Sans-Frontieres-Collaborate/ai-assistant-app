@@ -1114,6 +1114,10 @@
       "quickSettings": "Dejinta Codka",
       "overrideForThisMessage": "Hagaaji dejinta fariintan",
       "speakWithSettings": "Hadal"
+    },
+    "activeFiles": {
+      "autoPinUploads": "Si toos ah ugu xiro faylasha la soo geliyay",
+      "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro"
     }
   },
   "emptyState": {
@@ -1746,6 +1750,22 @@
     "uploadDocument": "Soo geli Dukumenti",
     "images": "Sawirro",
     "addImage": "Ku dar sawir"
+  },
+  "activeFiles": {
+    "title": "Faylasha Firfircoon",
+    "tokenUsage": "Isticmaalka token",
+    "keepInContext": "Ku hay macnaha guud",
+    "addedToContext": "Waxaa lagu daray macnaha guud",
+    "removeFromContext": "Ka saar macnaha guud",
+    "clearAll": "Jabi dhammaan",
+    "noActiveFiles": "Ma jiro fayl firfircoon",
+    "processing": "Waa la farsameynayaa",
+    "ready": "Waa diyaar",
+    "error": "Khalad",
+    "retry": "Dib isku day",
+    "pinned": "La xidhay",
+    "pin": "Xidho",
+    "tokens": "tokens"
   },
   "shortcuts": {
     "title": "Furayaasha Fududeynta Kumbuyuutarka",

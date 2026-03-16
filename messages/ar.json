@@ -913,7 +913,11 @@
     "Default Reasoning Effort": "جهد الاستدلال الافتراضي",
     "reasoningEffortDescription": "يتحكم في عمق التفكير لنماذج الاستدلال. الجهد الأعلى ينتج تحليلاً أكثر شمولاً.",
     "Default Verbosity": "الإسهاب الافتراضي",
-    "verbosityDescription": "يتحكم في مستوى تفاصيل الاستجابة لنماذج GPT-5."
+    "verbosityDescription": "يتحكم في مستوى تفاصيل الاستجابة لنماذج GPT-5.",
+    "activeFiles": {
+      "autoPinUploads": "تثبيت الملفات المرفوعة تلقائيًا",
+      "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها"
+    }
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1770,6 +1774,32 @@
     "uploadDocument": "رفع مستند",
     "images": "صور",
     "addImage": "إضافة صورة"
+  },
+  "activeFiles": {
+    "title": "الملفات النشطة",
+    "tokenUsage": "استخدام التوكن",
+    "keepInContext": "الإبقاء في السياق",
+    "addedToContext": "تمت الإضافة إلى السياق",
+    "removeFromContext": "إزالة من السياق",
+    "clearAll": "مسح الكل",
+    "noActiveFiles": "لا توجد ملفات نشطة",
+    "processing": "جارٍ المعالجة",
+    "ready": "جاهز",
+    "error": "خطأ",
+    "retry": "إعادة المحاولة",
+    "pinned": "مثبت",
+    "pin": "تثبيت",
+    "tokens": "توكنات",
+    "pinnedTooltip": "مثبّت: دائماً مشمول",
+    "unpinnedTooltip": "غير مثبّت: قد يُستبعد أو يُزال تلقائياً",
+    "pinnedCount": "{pinned} مثبّت / {total}",
+    "sessionQuota": "حصة الجلسة",
+    "sessionQuotaUsage": "{used} / {total} رمز مستخدم في هذه الجلسة",
+    "sessionQuotaExhausted": "تم الوصول إلى حصة الجلسة للملفات النشطة. تم مسح الملفات.",
+    "pinBlockedTooLarge": "الملف كبير جداً للتثبيت ({tokens} رمز، الحد: {limit})",
+    "activationRejectedTooLarge": "الملف كبير جداً للسياق النشط ({tokens} رمز، الحد: {limit})",
+    "sessionQuotaWarning": "حصة الجلسة منخفضة — متبقي {remaining} رمز",
+    "sessionQuotaNearlyExhausted": "حصة الجلسة أوشكت على النفاد — قد لا يتم تضمين الملفات النشطة"
   },
   "shortcuts": {
     "title": "اختصارات لوحة المفاتيح",
