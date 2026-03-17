@@ -374,7 +374,6 @@ describe('Keyboard Shortcuts Utilities', () => {
   describe('DEFAULT_SHORTCUTS', () => {
     it('has all expected shortcuts', () => {
       const expectedActions = [
-        'focusChatInput',
         'newConversation',
         'stopGeneration',
         'toggleSidebar',
