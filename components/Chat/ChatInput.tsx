@@ -279,7 +279,6 @@ export const ChatInput = ({
     }
 
     setTextFieldValue(value);
-    updatePromptListVisibilityCallback(value);
   };
 
   const handleSend = () => {
@@ -393,6 +392,10 @@ export const ChatInput = ({
     setTextareaScrollHeight,
     setIsMultiline,
   ]);
+
+  useEffect(() => {
+    updatePromptListVisibilityCallback(textFieldValue);
+  }, [textFieldValue, updatePromptListVisibilityCallback]);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {

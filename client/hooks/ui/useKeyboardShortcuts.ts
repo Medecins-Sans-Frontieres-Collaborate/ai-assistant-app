@@ -24,9 +24,6 @@ export interface UseKeyboardShortcutsOptions {
   /** Callback when shortcuts help modal should be shown */
   onShowHelp?: () => void;
 
-  /** Callback to focus the chat input */
-  onFocusChatInput?: () => void;
-
   /** Callback to create a new conversation */
   onNewConversation?: () => void;
 
@@ -91,7 +88,6 @@ function isTypingInInput(event: KeyboardEvent): boolean {
 export function useKeyboardShortcuts({
   enabled = true,
   onShowHelp,
-  onFocusChatInput,
   onNewConversation,
   onOpenModelSelector,
   onScrollToBottom,
@@ -147,13 +143,6 @@ export function useKeyboardShortcuts({
   const executeAction = useCallback(
     (action: ShortcutAction): boolean => {
       switch (action) {
-        case 'focusChatInput':
-          if (onFocusChatInput) {
-            onFocusChatInput();
-            return true;
-          }
-          return false;
-
         case 'newConversation':
           if (onNewConversation) {
             onNewConversation();
@@ -236,7 +225,6 @@ export function useKeyboardShortcuts({
       }
     },
     [
-      onFocusChatInput,
       onNewConversation,
       requestStop,
       setIsSettingsOpen,
