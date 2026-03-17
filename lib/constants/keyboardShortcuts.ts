@@ -19,15 +19,6 @@ import {
  * Uses Ctrl+Shift combinations to avoid browser conflicts.
  */
 export const DEFAULT_SHORTCUTS: Record<ShortcutAction, KeyboardShortcut> = {
-  focusChatInput: {
-    id: 'focus-chat-input',
-    key: '/',
-    modifiers: [],
-    labelKey: 'shortcuts.focusChatInput',
-    categoryKey: 'shortcuts.categoryNavigation',
-    contextRequired: 'notStreaming',
-    disableInInput: true,
-  },
   newConversation: {
     id: 'new-conversation',
     key: 'l',

@@ -33,7 +33,6 @@ export type ShortcutContext =
  * Each action corresponds to a specific feature in the chat UI.
  */
 export type ShortcutAction =
-  | 'focusChatInput'
   | 'newConversation'
   | 'stopGeneration'
   | 'toggleSidebar'
