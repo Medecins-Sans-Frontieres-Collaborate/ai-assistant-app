@@ -230,8 +230,7 @@ export const ChatInput = ({
     activeItemIndex,
     setActiveItemIndex,
     searchInputValue,
-    filteredPrompts,
-    filteredTones,
+    filteredItems,
     slashMenuRef,
     handleItemSelect,
     handleKeyDownSlashMenu,
@@ -663,20 +662,17 @@ export const ChatInput = ({
                   </button>
                 </div>
 
-                {showSlashMenu &&
-                  (filteredPrompts.length > 0 || filteredTones.length > 0) && (
-                    <div className="absolute bottom-12 w-full">
-                      <SlashMenu
-                        activeItemIndex={activeItemIndex}
-                        prompts={filteredPrompts}
-                        tones={filteredTones}
-                        onSelect={handleItemSelect}
-                        onMouseOver={setActiveItemIndex}
-                        slashMenuRef={slashMenuRef}
-                        folders={folders}
-                      />
-                    </div>
-                  )}
+                {showSlashMenu && filteredItems.length > 0 && (
+                  <div className="absolute bottom-12 w-full">
+                    <SlashMenu
+                      activeItemIndex={activeItemIndex}
+                      items={filteredItems}
+                      onSelect={handleItemSelect}
+                      onMouseOver={setActiveItemIndex}
+                      slashMenuRef={slashMenuRef}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
