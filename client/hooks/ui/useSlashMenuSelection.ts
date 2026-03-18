@@ -1,4 +1,11 @@
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import {
   findPromptMatch,
@@ -7,15 +14,17 @@ import {
 import { parseVariables } from '@/lib/utils/shared/chat/variables';
 
 import { Prompt } from '@/types/prompt';
+import { SlashMenuItem, SlashMenuItemType } from '@/types/slashMenu';
 import { Tone } from '@/types/tone';
+
+import { useSettingsStore } from '@/client/stores/settingsStore';
 
 export interface UseSlashMenuSelectionReturn {
   // State
   showSlashMenu: boolean;
   activeItemIndex: number;
   searchInputValue: string;
-  filteredPrompts: Prompt[];
-  filteredTones: Tone[];
+  filteredItems: SlashMenuItem[];
   slashMenuRef: React.MutableRefObject<HTMLUListElement | null>;
 
   // Setters
@@ -46,8 +55,17 @@ export interface UseSlashMenuSelectionOptions {
   onResetInputState?: () => void;
 }
 
+/** Get the display name for a slash menu item */
+const getItemName = (item: SlashMenuItem): string =>
+  item.type === SlashMenuItemType.PROMPT ? item.prompt.name : item.tone.name;
+
+/** Get the ID for a slash menu item */
+const getItemId = (item: SlashMenuItem): string =>
+  item.type === SlashMenuItemType.PROMPT ? item.prompt.id : item.tone.id;
+
 /**
- * Hook to manage slash menu selection (prompts + tones) with keyboard navigation
+ * Hook to manage slash menu selection (prompts + tones) with keyboard navigation.
+ * Items are intermixed in a single list, sorted by usage frequency then alphabetically.
  */
 export function useSlashMenuSelection({
   prompts,
@@ -61,16 +79,46 @@ export function useSlashMenuSelection({
   const [searchInputValue, setSearchInputValue] = useState<string>('');
   const slashMenuRef = useRef<HTMLUListElement | null>(null);
 
-  // Filter prompts and tones based on input
-  const filteredPrompts: Prompt[] = prompts.filter((prompt) =>
-    prompt.name.toLowerCase().includes(searchInputValue.toLowerCase()),
+  const usageCounts = useSettingsStore((state) => state.slashMenuUsageCounts);
+  const incrementSlashMenuUsage = useSettingsStore(
+    (state) => state.incrementSlashMenuUsage,
   );
 
-  const filteredTones: Tone[] = tones.filter((tone) =>
-    tone.name.toLowerCase().includes(searchInputValue.toLowerCase()),
-  );
+  // Build unified filtered + sorted item list
+  const filteredItems: SlashMenuItem[] = useMemo(() => {
+    const searchLower = searchInputValue.toLowerCase();
 
-  const totalSelectableCount = filteredPrompts.length + filteredTones.length;
+    const items: SlashMenuItem[] = [
+      ...prompts
+        .filter((p) => p.name.toLowerCase().includes(searchLower))
+        .map(
+          (prompt): SlashMenuItem => ({
+            type: SlashMenuItemType.PROMPT,
+            prompt,
+          }),
+        ),
+      ...tones
+        .filter((t) => t.name.toLowerCase().includes(searchLower))
+        .map(
+          (tone): SlashMenuItem => ({
+            type: SlashMenuItemType.TONE,
+            tone,
+          }),
+        ),
+    ];
+
+    // Sort: usage count desc, then alphabetical asc
+    items.sort((a, b) => {
+      const aCount = usageCounts[getItemId(a)] ?? 0;
+      const bCount = usageCounts[getItemId(b)] ?? 0;
+      if (aCount !== bCount) return bCount - aCount;
+      return getItemName(a).localeCompare(getItemName(b));
+    });
+
+    return items;
+  }, [prompts, tones, searchInputValue, usageCounts]);
+
+  const totalSelectableCount = filteredItems.length;
 
   /**
    * Handle selecting a prompt
@@ -99,30 +147,30 @@ export function useSlashMenuSelection({
   );
 
   /**
-   * Select the active item (prompt or tone) based on current index
+   * Select the active item based on current index
    */
   const handleItemSelect = useCallback(() => {
-    if (activeItemIndex < filteredPrompts.length) {
-      // Index falls within prompts range
-      const selectedPrompt = filteredPrompts[activeItemIndex];
-      if (selectedPrompt) {
-        handlePromptSelectInternal(selectedPrompt);
-      }
+    const item = filteredItems[activeItemIndex];
+    if (!item) {
+      setShowSlashMenu(false);
+      return;
+    }
+
+    // Track usage
+    incrementSlashMenuUsage(getItemId(item));
+
+    if (item.type === SlashMenuItemType.PROMPT) {
+      handlePromptSelectInternal(item.prompt);
     } else {
-      // Index falls within tones range
-      const toneIndex = activeItemIndex - filteredPrompts.length;
-      const selectedTone = filteredTones[toneIndex];
-      if (selectedTone) {
-        handleToneSelectInternal(selectedTone);
-      }
+      handleToneSelectInternal(item.tone);
     }
     setShowSlashMenu(false);
   }, [
-    filteredPrompts,
-    filteredTones,
+    filteredItems,
     activeItemIndex,
     handlePromptSelectInternal,
     handleToneSelectInternal,
+    incrementSlashMenuUsage,
   ]);
 
   /**
@@ -217,8 +265,7 @@ export function useSlashMenuSelection({
     showSlashMenu,
     activeItemIndex,
     searchInputValue,
-    filteredPrompts,
-    filteredTones,
+    filteredItems,
     slashMenuRef,
 
     // Setters
