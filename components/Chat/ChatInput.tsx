@@ -229,13 +229,11 @@ export const ChatInput = ({
     setShowSlashMenu,
     activeItemIndex,
     setActiveItemIndex,
-    searchInputValue,
     filteredItems,
     slashMenuRef,
     handleItemSelect,
     handleKeyDownSlashMenu,
     updateSlashMenuVisibility,
-    findAndSelectMatchingItem,
   } = useSlashMenuSelection({
     prompts,
     tones,
