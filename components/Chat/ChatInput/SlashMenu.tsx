@@ -1,8 +1,8 @@
 import {
   IconCheck,
   IconCommand,
-  IconFolder,
   IconHelp,
+  IconMessage,
   IconRobot,
   IconSettings,
   IconVolume,
@@ -12,13 +12,12 @@ import { FC, MutableRefObject, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CommandDefinition, CommandType } from '@/types/commands';
-import { FolderInterface } from '@/types/folder';
 import { Prompt } from '@/types/prompt';
+import { SlashMenuItem, SlashMenuItemType } from '@/types/slashMenu';
 import { Tone } from '@/types/tone';
 
 interface Props {
-  prompts: Prompt[];
-  tones: Tone[];
+  items: SlashMenuItem[];
   activeItemIndex: number;
   onSelect: () => void;
   onMouseOver: (index: number) => void;
@@ -26,7 +25,6 @@ interface Props {
   commands?: CommandDefinition[];
   showCommands?: boolean;
   onImmediateCommandExecution?: (command: CommandDefinition) => void;
-  folders?: FolderInterface[];
 }
 
 interface CommandItemProps {
@@ -170,6 +168,8 @@ const PromptItem: FC<PromptItemProps> = ({
   onClick,
   onMouseEnter,
 }) => {
+  const t = useTranslations();
+
   return (
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
@@ -185,15 +185,23 @@ const PromptItem: FC<PromptItemProps> = ({
       onMouseEnter={onMouseEnter}
     >
       <div className="flex items-start gap-2">
-        <div className={`flex-1 min-w-0`}>
-          <div
-            className={`font-medium truncate transition-colors ${
-              isActive
-                ? 'text-blue-700 dark:text-blue-400'
-                : 'text-black dark:text-white'
-            }`}
-          >
-            {prompt.name}
+        <div className="flex-shrink-0 mt-0.5">
+          <IconMessage size={16} className="text-blue-500" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span
+              className={`font-medium truncate transition-colors ${
+                isActive
+                  ? 'text-blue-700 dark:text-blue-400'
+                  : 'text-black dark:text-white'
+              }`}
+            >
+              {prompt.name}
+            </span>
+            <span className="flex-shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+              {t('Prompt')}
+            </span>
           </div>
           {isActive && prompt.description && (
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 animate-fade-in-fast">
@@ -219,6 +227,8 @@ const ToneItem: FC<ToneItemProps> = ({
   onClick,
   onMouseEnter,
 }) => {
+  const t = useTranslations();
+
   return (
     <li
       className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
@@ -237,15 +247,20 @@ const ToneItem: FC<ToneItemProps> = ({
         <div className="flex-shrink-0 mt-0.5">
           <IconVolume size={16} className="text-purple-500" />
         </div>
-        <div className={`flex-1 min-w-0`}>
-          <div
-            className={`font-medium truncate transition-colors ${
-              isActive
-                ? 'text-purple-700 dark:text-purple-400'
-                : 'text-black dark:text-white'
-            }`}
-          >
-            {tone.name}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span
+              className={`font-medium truncate transition-colors ${
+                isActive
+                  ? 'text-purple-700 dark:text-purple-400'
+                  : 'text-black dark:text-white'
+              }`}
+            >
+              {tone.name}
+            </span>
+            <span className="flex-shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400">
+              {t('Tone')}
+            </span>
           </div>
           {isActive && tone.description && (
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 animate-fade-in-fast">
@@ -259,8 +274,7 @@ const ToneItem: FC<ToneItemProps> = ({
 };
 
 export const SlashMenu: FC<Props> = ({
-  prompts,
-  tones,
+  items,
   activeItemIndex,
   onSelect,
   onMouseOver,
@@ -268,32 +282,10 @@ export const SlashMenu: FC<Props> = ({
   commands = [],
   showCommands = false,
   onImmediateCommandExecution,
-  folders = [],
 }) => {
   const t = useTranslations();
 
-  // Filter prompt folders only
-  const promptFolders = folders.filter((f) => f.type === 'prompt');
-
-  // Group prompts by folder
-  const promptsByFolder: Record<string, Prompt[]> = {};
-  const unfolderedPrompts: Prompt[] = [];
-
-  prompts.forEach((prompt) => {
-    if (prompt.folderId) {
-      if (!promptsByFolder[prompt.folderId]) {
-        promptsByFolder[prompt.folderId] = [];
-      }
-      promptsByFolder[prompt.folderId].push(prompt);
-    } else {
-      unfolderedPrompts.push(prompt);
-    }
-  });
-
-  // Count items for index calculation
-  const commandsCount = showCommands ? commands.length : 0;
-  const totalPromptsCount = prompts.length;
-  const totalItems = commandsCount + totalPromptsCount + tones.length;
+  const totalItems = (showCommands ? commands.length : 0) + items.length;
 
   const handleItemClick = (index: number) => {
     onMouseOver(index);
@@ -303,9 +295,6 @@ export const SlashMenu: FC<Props> = ({
   const handleItemMouseEnter = (index: number) => {
     onMouseOver(index);
   };
-
-  // Calculate the base index where tones start (after all prompts)
-  const tonesBaseIndex = totalPromptsCount;
 
   return (
     <ul
@@ -324,108 +313,38 @@ export const SlashMenu: FC<Props> = ({
               onImmediateExecution={onImmediateCommandExecution}
             />
           ))}
-          {(prompts.length > 0 || tones.length > 0) && (
+          {items.length > 0 && (
             <li className="border-t border-gray-200 dark:border-gray-700 my-1" />
           )}
         </>
       )}
 
-      {/* Prompts section */}
-      {prompts.length > 0 && (
-        <>
-          {/* Prompts section header */}
-          <li className="sticky top-0 z-10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-50/95 dark:bg-neutral-800/95 backdrop-blur-sm">
-            {t('Prompts')}
-          </li>
+      {/* Intermixed prompts and tones, sorted by usage then alphabetically */}
+      {items.map((item, index) => {
+        const adjustedIndex = index;
 
-          {/* Render folder sections */}
-          {promptFolders.map((folder) => {
-            const folderPrompts = promptsByFolder[folder.id] || [];
-            if (folderPrompts.length === 0) return null;
+        if (item.type === SlashMenuItemType.PROMPT) {
+          return (
+            <PromptItem
+              key={`prompt-${item.prompt.id}`}
+              prompt={item.prompt}
+              isActive={adjustedIndex === activeItemIndex}
+              onClick={() => handleItemClick(adjustedIndex)}
+              onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
+            />
+          );
+        }
 
-            // Find the base index for this folder's prompts within the flat prompt list
-            let promptIndexOffset = 0;
-            for (const f of promptFolders) {
-              if (f.id === folder.id) break;
-              promptIndexOffset += (promptsByFolder[f.id] || []).length;
-            }
-
-            return (
-              <div key={folder.id}>
-                <li className="sticky top-[28px] z-[9] px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-100/95 dark:bg-neutral-800/95 backdrop-blur-sm flex items-center gap-2 border-b border-gray-200 dark:border-neutral-700">
-                  <IconFolder
-                    size={14}
-                    className="text-gray-500 dark:text-gray-400"
-                  />
-                  <span className="flex-1">{folder.name}</span>
-                  <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-700 px-2 text-[10px] font-medium text-gray-600 dark:text-gray-300">
-                    {folderPrompts.length}
-                  </span>
-                </li>
-                {folderPrompts.map((prompt, index) => {
-                  const adjustedIndex = promptIndexOffset + index;
-                  return (
-                    <PromptItem
-                      key={prompt.id}
-                      prompt={prompt}
-                      isActive={adjustedIndex === activeItemIndex}
-                      onClick={() => handleItemClick(adjustedIndex)}
-                      onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
-
-          {/* Render unfoldered prompts */}
-          {unfolderedPrompts.length > 0 && (
-            <>
-              {unfolderedPrompts.map((prompt, index) => {
-                const adjustedIndex =
-                  Object.values(promptsByFolder).flat().length + index;
-                return (
-                  <PromptItem
-                    key={prompt.id}
-                    prompt={prompt}
-                    isActive={adjustedIndex === activeItemIndex}
-                    onClick={() => handleItemClick(adjustedIndex)}
-                    onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
-                  />
-                );
-              })}
-            </>
-          )}
-        </>
-      )}
-
-      {/* Tones section */}
-      {tones.length > 0 && (
-        <>
-          {prompts.length > 0 && (
-            <li className="border-t border-gray-200 dark:border-gray-700 my-1" />
-          )}
-
-          {/* Tones section header */}
-          <li className="sticky top-0 z-10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 bg-gray-50/95 dark:bg-neutral-800/95 backdrop-blur-sm flex items-center gap-1.5">
-            <IconVolume size={12} className="text-purple-500" />
-            {t('Tones')}
-          </li>
-
-          {tones.map((tone, index) => {
-            const adjustedIndex = tonesBaseIndex + index;
-            return (
-              <ToneItem
-                key={tone.id}
-                tone={tone}
-                isActive={adjustedIndex === activeItemIndex}
-                onClick={() => handleItemClick(adjustedIndex)}
-                onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
-              />
-            );
-          })}
-        </>
-      )}
+        return (
+          <ToneItem
+            key={`tone-${item.tone.id}`}
+            tone={item.tone}
+            isActive={adjustedIndex === activeItemIndex}
+            onClick={() => handleItemClick(adjustedIndex)}
+            onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
+          />
+        );
+      })}
 
       {totalItems === 0 && (
         <li className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400 text-center">
