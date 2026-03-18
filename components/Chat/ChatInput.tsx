@@ -25,7 +25,7 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
 import { useTranscriptionPolling } from '@/client/hooks/transcription/useTranscriptionPolling';
-import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
+import { useSlashMenuSelection } from '@/client/hooks/ui/useSlashMenuSelection';
 
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
@@ -65,7 +65,7 @@ import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 
-import { PromptList } from './ChatInput/PromptList';
+import { SlashMenu } from './ChatInput/SlashMenu';
 import { VariableModal } from './ChatInput/VariableModal';
 import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator';
 
@@ -225,20 +225,21 @@ export const ChatInput = ({
   ]);
 
   const {
-    showPromptList,
-    setShowPromptList,
-    activePromptIndex,
-    setActivePromptIndex,
-    promptInputValue,
+    showSlashMenu,
+    setShowSlashMenu,
+    activeItemIndex,
+    setActiveItemIndex,
+    searchInputValue,
     filteredPrompts,
-    promptListRef,
-    handlePromptSelect: handlePromptSelectFromHook,
-    handleKeyDownPromptList,
-    handleInitModal,
-    updatePromptListVisibilityCallback,
-    findAndSelectMatchingPrompt,
-  } = usePromptSelection({
+    filteredTones,
+    slashMenuRef,
+    handleItemSelect,
+    handleKeyDownSlashMenu,
+    updateSlashMenuVisibility,
+    findAndSelectMatchingItem,
+  } = useSlashMenuSelection({
     prompts,
+    tones,
     onPromptSelect: (prompt, parsedVariables, hasVariables) => {
       setVariables(parsedVariables);
 
@@ -250,8 +251,12 @@ export const ChatInput = ({
           const updatedContent = prevContent?.replace(/\/\w*$/, prompt.content);
           return updatedContent;
         });
-        updatePromptListVisibilityCallback(prompt.content);
+        updateSlashMenuVisibility(prompt.content);
       }
+    },
+    onToneSelect: (tone) => {
+      setSelectedToneId(tone.id);
+      setTextFieldValue((prev) => prev.replace(/\/\w*$/, ''));
     },
     onResetInputState: () => {
       if (submitType !== 'TEXT') {
@@ -329,8 +334,8 @@ export const ChatInput = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (showPromptList) {
-      handleKeyDownPromptList(e);
+    if (showSlashMenu) {
+      handleKeyDownSlashMenu(e);
     } else {
       handleKeyDownInput(e.key, e);
     }
@@ -394,16 +399,16 @@ export const ChatInput = ({
   ]);
 
   useEffect(() => {
-    updatePromptListVisibilityCallback(textFieldValue);
-  }, [textFieldValue, updatePromptListVisibilityCallback]);
+    updateSlashMenuVisibility(textFieldValue);
+  }, [textFieldValue, updateSlashMenuVisibility]);
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (
-        promptListRef.current &&
-        !promptListRef.current.contains(e.target as Node)
+        slashMenuRef.current &&
+        !slashMenuRef.current.contains(e.target as Node)
       ) {
-        setShowPromptList(false);
+        setShowSlashMenu(false);
       }
     };
 
@@ -658,18 +663,20 @@ export const ChatInput = ({
                   </button>
                 </div>
 
-                {showPromptList && filteredPrompts.length > 0 && (
-                  <div className="absolute bottom-12 w-full">
-                    <PromptList
-                      activePromptIndex={activePromptIndex}
-                      prompts={filteredPrompts}
-                      onSelect={handleInitModal}
-                      onMouseOver={setActivePromptIndex}
-                      promptListRef={promptListRef}
-                      folders={folders}
-                    />
-                  </div>
-                )}
+                {showSlashMenu &&
+                  (filteredPrompts.length > 0 || filteredTones.length > 0) && (
+                    <div className="absolute bottom-12 w-full">
+                      <SlashMenu
+                        activeItemIndex={activeItemIndex}
+                        prompts={filteredPrompts}
+                        tones={filteredTones}
+                        onSelect={handleItemSelect}
+                        onMouseOver={setActiveItemIndex}
+                        slashMenuRef={slashMenuRef}
+                        folders={folders}
+                      />
+                    </div>
+                  )}
               </div>
             </div>
 
