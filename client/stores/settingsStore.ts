@@ -79,6 +79,9 @@ interface SettingsStore {
   // Organization preference for support contacts (null = auto-detect)
   organizationPreference: MSFOrganization | null;
 
+  // Slash menu usage tracking
+  slashMenuUsageCounts: Record<string, number>;
+
   // Text-to-Speech settings
   ttsSettings: TTSSettings;
 
@@ -137,6 +140,9 @@ interface SettingsStore {
   setReasoningEffort: (effort: ReasoningEffort | undefined) => void;
   setVerbosity: (verbosity: Verbosity | undefined) => void;
 
+  // Slash Menu Usage Actions
+  incrementSlashMenuUsage: (itemId: string) => void;
+
   // Active Files Settings
   autoPinActiveFiles: boolean;
   setAutoPinActiveFiles: (enabled: boolean) => void;
@@ -175,6 +181,9 @@ export const useSettingsStore = create<SettingsStore>()(
       customModelOrder: [],
       modelUsageStats: {},
       consecutiveModelUsage: { modelId: null, count: 0 },
+
+      // Slash menu usage tracking
+      slashMenuUsageCounts: {},
 
       // Organization preference (null = auto-detect from email)
       organizationPreference: null,
@@ -385,6 +394,15 @@ export const useSettingsStore = create<SettingsStore>()(
       setReasoningEffort: (effort) => set({ reasoningEffort: effort }),
       setVerbosity: (verbosity) => set({ verbosity }),
 
+      // Slash Menu Usage Actions
+      incrementSlashMenuUsage: (itemId) =>
+        set((state) => ({
+          slashMenuUsageCounts: {
+            ...state.slashMenuUsageCounts,
+            [itemId]: (state.slashMenuUsageCounts[itemId] ?? 0) + 1,
+          },
+        })),
+
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
 
@@ -410,12 +428,13 @@ export const useSettingsStore = create<SettingsStore>()(
           ttsSettings: DEFAULT_TTS_SETTINGS,
           reasoningEffort: undefined,
           verbosity: undefined,
+          slashMenuUsageCounts: {},
           autoPinActiveFiles: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 14, // Increment this when schema changes to trigger migrations
+      version: 15, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -440,6 +459,7 @@ export const useSettingsStore = create<SettingsStore>()(
         ttsSettings: state.ttsSettings,
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
+        slashMenuUsageCounts: state.slashMenuUsageCounts,
         autoPinActiveFiles: state.autoPinActiveFiles,
       }),
       migrate: (persistedState, version) => {
@@ -525,6 +545,13 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 14) {
           if (state.autoPinActiveFiles === undefined) {
             state.autoPinActiveFiles = true;
+          }
+        }
+
+        // Version 14 → 15: Add slashMenuUsageCounts
+        if (version < 15) {
+          if (state.slashMenuUsageCounts === undefined) {
+            state.slashMenuUsageCounts = {};
           }
         }
 

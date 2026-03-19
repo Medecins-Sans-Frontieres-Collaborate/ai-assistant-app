@@ -24,8 +24,8 @@ export function useAutoFocusChatInput({
       if (event.ctrlKey || event.altKey || event.metaKey) return;
 
       // Skip if already in an input/textarea/contenteditable
-      const target = event.target as HTMLElement;
-      if (target) {
+      const target = event.target;
+      if (target instanceof HTMLElement) {
         const tagName = target.tagName.toUpperCase();
         if (
           tagName === 'INPUT' ||

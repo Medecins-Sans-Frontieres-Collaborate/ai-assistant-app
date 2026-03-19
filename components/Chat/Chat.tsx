@@ -235,10 +235,6 @@ export function Chat({
     () => setIsShortcutsHelpOpen(true),
     [],
   );
-  const handleFocusChatInput = useCallback(
-    () => textareaRef.current?.focus(),
-    [],
-  );
   const handleOpenModelSelector = useCallback(
     () => setIsModelSelectOpen(true),
     // setIsModelSelectOpen is a stable setState function
@@ -338,7 +334,6 @@ export function Chat({
   useKeyboardShortcuts({
     enabled: true,
     onShowHelp: handleShowShortcutsHelp,
-    onFocusChatInput: handleFocusChatInput,
     onOpenModelSelector: handleOpenModelSelector,
     onScrollToBottom: handleScrollDown,
     onNewConversation: handleNewConversation,

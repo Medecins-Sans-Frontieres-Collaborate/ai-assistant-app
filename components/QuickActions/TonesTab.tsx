@@ -35,6 +35,7 @@ import { Tone } from '@/types/tone';
 
 import { ToneDashboard } from '../Tones/ToneDashboard';
 import { ToneItem } from '../Tones/ToneItem';
+import { TabEmptyState } from './TabEmptyState';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -168,99 +169,65 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
     // Show full-width empty state when there are no tones
     if (filteredTones.length === 0 && !searchQuery) {
       return (
-        <div className="flex h-full items-center justify-center p-8">
-          <div className="max-w-3xl mx-auto space-y-8">
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                {t('Control Your Voice with Custom Tones')}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                {t('Create voice profiles for consistent writing style')}
+        <TabEmptyState
+          title={t('Control Your Voice with Custom Tones')}
+          subtitle={t('Create voice profiles for consistent writing style')}
+          sectionIcon={
+            <IconInfoCircle
+              size={18}
+              className="text-gray-600 dark:text-gray-400"
+            />
+          }
+          sectionTitle={t('What Tones Capture')}
+          tipIcon={
+            <IconVolume
+              size={14}
+              className="text-neutral-600 dark:text-neutral-400"
+            />
+          }
+          tipText={t(
+            'Apply tones in chat via Expand Actions to ensure all responses match your desired voice',
+          )}
+          ctaIcon={<IconSparkles size={18} />}
+          ctaLabel={t('Create Your First Tone')}
+          onCtaClick={() => toneModal.openNew()}
+        >
+          {/* 2x2 feature grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Writing Style')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Sentence length, complexity, active vs passive voice')}
               </p>
             </div>
-
-            {/* What Tones Capture */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-              <div className="flex items-center gap-2 mb-4">
-                <IconInfoCircle
-                  size={18}
-                  className="text-gray-600 dark:text-gray-400"
-                />
-                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                  {t('What Tones Capture')}
-                </h4>
-              </div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {t('Writing Style')}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {t(
-                        'Sentence length, complexity, active vs passive voice',
-                      )}
-                    </p>
-                  </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {t('Vocabulary')}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {t('Preferred words, phrases to use or avoid')}
-                    </p>
-                  </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {t('Formality')}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {t('Professional, casual, conversational, technical')}
-                    </p>
-                  </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
-                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                      {t('Personality')}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {t('Friendly, authoritative, empathetic, direct')}
-                    </p>
-                  </div>
-                </div>
-
-                {/* How to use */}
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-                  <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-neutral-200 dark:bg-neutral-700 mt-0.5">
-                    <IconVolume
-                      size={14}
-                      className="text-neutral-600 dark:text-neutral-400"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {t(
-                        'Apply tones in chat via Expand Actions to ensure all responses match your desired voice',
-                      )}
-                    </p>
-                  </div>
-                </div>
-
-                {/* CTA Button */}
-                <div className="flex justify-center pt-4">
-                  <button
-                    onClick={() => toneModal.openNew()}
-                    className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow-lg"
-                  >
-                    <IconSparkles size={18} />
-                    {t('Create Your First Tone')}
-                  </button>
-                </div>
-              </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Vocabulary')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Preferred words, phrases to use or avoid')}
+              </p>
+            </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Formality')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Professional, casual, conversational, technical')}
+              </p>
+            </div>
+            <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+              <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                {t('Personality')}
+              </p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {t('Friendly, authoritative, empathetic, direct')}
+              </p>
             </div>
           </div>
-        </div>
+        </TabEmptyState>
       );
     }
 
@@ -271,7 +238,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
         <div className="w-full md:w-1/2 border-r-0 md:border-r border-b md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col max-h-[50%] md:max-h-full">
           {/* Toolbar */}
           <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               {/* Search */}
               <div className="flex-1 relative max-w-md">
                 <IconSearch
@@ -515,59 +482,61 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
         {/* Right Panel - Detail */}
         <div className="w-full md:w-1/2 flex flex-col min-h-0">
           {selectedTone ? (
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                    {selectedTone.name}
-                  </h2>
-                  {selectedTone.description && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      {selectedTone.description}
-                    </p>
-                  )}
-                  {selectedTone.tags && selectedTone.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {selectedTone.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+            <>
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+                      {selectedTone.name}
+                    </h2>
+                    {selectedTone.description && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        {selectedTone.description}
+                      </p>
+                    )}
+                    {selectedTone.tags && selectedTone.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {selectedTone.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Voice Rules */}
-              <div className="mb-6">
-                <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-                  {t('Voice Guidelines')}
-                </h3>
-                <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
-                  <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-sans">
-                    {selectedTone.voiceRules}
-                  </pre>
-                </div>
-              </div>
-
-              {/* Examples (if any) */}
-              {selectedTone.examples && (
+                {/* Voice Rules */}
                 <div className="mb-6">
                   <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
-                    {t('Examples')}
+                    {t('Voice Guidelines')}
                   </h3>
                   <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
                     <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-sans">
-                      {selectedTone.examples}
+                      {selectedTone.voiceRules}
                     </pre>
                   </div>
                 </div>
-              )}
 
-              <div className="flex gap-2">
+                {/* Examples (if any) */}
+                {selectedTone.examples && (
+                  <div className="mb-6">
+                    <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                      {t('Examples')}
+                    </h3>
+                    <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
+                      <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-sans">
+                        {selectedTone.examples}
+                      </pre>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-shrink-0 flex gap-2 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => {
                     toneModal.openEdit(selectedTone.id, {
@@ -589,7 +558,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                   {t('Delete')}
                 </button>
               </div>
-            </div>
+            </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-600">
               <div className="text-center">
@@ -599,50 +568,6 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
             </div>
           )}
         </div>
-
-        {/* Tone Editor Modal */}
-        <ToneDashboard
-          isOpen={toneModal.isOpen}
-          onClose={() => toneModal.close()}
-          onSave={(
-            name: string,
-            description: string,
-            voiceRules: string,
-            examples: string,
-            tags: string[],
-          ) => {
-            if (toneModal.itemId) {
-              // Update existing tone
-              updateTone(toneModal.itemId, {
-                name,
-                description,
-                voiceRules,
-                examples,
-                tags,
-                updatedAt: new Date().toISOString(),
-              });
-            } else {
-              // Create new tone
-              const newTone: Tone = {
-                id: uuidv4(),
-                name,
-                description,
-                voiceRules,
-                examples,
-                tags,
-                createdAt: new Date().toISOString(),
-                folderId: null,
-              };
-              addTone(newTone);
-            }
-            toneModal.close();
-          }}
-          initialName={toneModal.formData.name}
-          initialDescription={toneModal.formData.description}
-          initialVoiceRules={toneModal.formData.voiceRules}
-          initialExamples={toneModal.formData.examples}
-          initialTags={toneModal.formData.tags}
-        />
       </div>
     );
   };
@@ -670,6 +595,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
               voiceRules,
               examples,
               tags,
+              updatedAt: new Date().toISOString(),
             });
           } else {
             // Create new tone
