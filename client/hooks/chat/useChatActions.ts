@@ -6,6 +6,7 @@ import {
   findPrecedingUserMessageIndex,
   flattenEntriesForAPI,
 } from '@/lib/utils/shared/chat/messageVersioning';
+import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 
 import {
   ActiveFile,
@@ -228,9 +229,11 @@ export function useChatActions({
       chatState.setRegeneratingIndex(targetIndex);
 
       // Create a flattened conversation snapshot for the API call
-      // Only include messages up to and including the user message
-      const messagesForAPI = flattenEntriesForAPI(
-        currentConversation.messages.slice(0, userMessageIndex + 1),
+      // Only include messages up to and including the user message, with windowing
+      const messagesForAPI = windowMessagesForAPI(
+        flattenEntriesForAPI(
+          currentConversation.messages.slice(0, userMessageIndex + 1),
+        ),
       );
 
       const apiConversation = {
