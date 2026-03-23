@@ -527,7 +527,13 @@
     "dismissError": "סגור שגיאה",
     "applicationError": "שגיאת יישום",
     "chatLoadError": "אירעה שגיאה בטעינת הצ'אט",
-    "anErrorOccurredTryAgain": "אירעה שגיאה. נסה שוב."
+    "anErrorOccurredTryAgain": "אירעה שגיאה. נסה שוב.",
+    "exportDataForRecovery": "ייצוא נתוני שיחה לשחזור",
+    "dataExported": "הנתונים יוצאו",
+    "exportDataDescription": "שתפו קובץ זה עם צוות התמיכה הטכנית כדי לסייע בשחזור הנתונים שלכם.",
+    "resetStoragePrompt": "אם הרענון לא עוזר, נסו לאפס את אחסון השיחות",
+    "resetStorageWarning": "איפוס ימחוק את כל נתוני השיחה. לפני האיפוס, תוכלו לייצא עותק של הנתונים הגולמיים. שתפו את הקובץ עם צוות התמיכה הטכנית במידת הצורך לשחזור השיחות.",
+    "resetStorage": "איפוס אחסון"
   },
   "auth": {
     "authenticationError": "שגיאת אימות",

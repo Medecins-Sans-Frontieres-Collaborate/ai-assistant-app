@@ -550,7 +550,13 @@
     "dismissError": "Închide eroarea",
     "applicationError": "Eroare a aplicației",
     "chatLoadError": "A apărut o eroare la încărcarea chatului",
-    "anErrorOccurredTryAgain": "A apărut o eroare. Vă rugăm să încercați din nou."
+    "anErrorOccurredTryAgain": "A apărut o eroare. Vă rugăm să încercați din nou.",
+    "exportDataForRecovery": "Exportă datele conversației pentru recuperare",
+    "dataExported": "Date exportate",
+    "exportDataDescription": "Partajați acest fișier cu echipa tehnică pentru a vă ajuta să recuperați datele.",
+    "resetStoragePrompt": "Dacă reîncărcarea nu ajută, încercați să resetați stocarea conversațiilor",
+    "resetStorageWarning": "Resetarea va șterge toate datele conversațiilor. Înainte de resetare, puteți exporta o copie a datelor brute. Partajați acest fișier cu echipa tehnică dacă aveți nevoie de ajutor pentru recuperarea conversațiilor.",
+    "resetStorage": "Resetează stocarea"
   },
   "auth": {
     "authenticationError": "Eroare de autentificare",

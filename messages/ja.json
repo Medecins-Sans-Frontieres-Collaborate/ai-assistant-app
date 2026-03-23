@@ -552,7 +552,13 @@
     "dismissError": "エラーを閉じる",
     "applicationError": "アプリケーションエラー",
     "chatLoadError": "チャットの読み込み中にエラーが発生しました",
-    "anErrorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。"
+    "anErrorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。",
+    "exportDataForRecovery": "復旧用に会話データをエクスポートする",
+    "dataExported": "データをエクスポートしました",
+    "exportDataDescription": "このファイルを技術チームと共有して、データの復旧にご利用ください。",
+    "resetStoragePrompt": "再読み込みで解決しない場合は、会話ストレージのリセットをお試しください",
+    "resetStorageWarning": "リセットするとすべての会話データが消去されます。リセット前に生データのコピーをエクスポートできます。会話の復旧が必要な場合は、このファイルを技術チームと共有してください。",
+    "resetStorage": "ストレージをリセットする"
   },
   "auth": {
     "authenticationError": "認証エラー",

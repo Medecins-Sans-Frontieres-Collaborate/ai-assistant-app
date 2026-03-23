@@ -552,7 +552,13 @@
     "dismissError": "Hatayı kapat",
     "applicationError": "Uygulama hatası",
     "chatLoadError": "Sohbet yüklenirken hata oluştu",
-    "anErrorOccurredTryAgain": "Bir hata oluştu. Lütfen tekrar deneyin."
+    "anErrorOccurredTryAgain": "Bir hata oluştu. Lütfen tekrar deneyin.",
+    "exportDataForRecovery": "Kurtarma için konuşma verilerini dışa aktar",
+    "dataExported": "Veriler dışa aktarıldı",
+    "exportDataDescription": "Verilerinizi kurtarmak için bu dosyayı teknik ekiple paylaşın.",
+    "resetStoragePrompt": "Yeniden yükleme yardımcı olmazsa, konuşma alanını sıfırlamayı deneyin",
+    "resetStorageWarning": "Sıfırlama, tüm konuşma verilerini silecektir. Sıfırlamadan önce ham verilerin bir kopyasını dışa aktarabilirsiniz. Konuşmalarınızı kurtarmak için yardıma ihtiyacınız olursa bu dosyayı teknik ekiple paylaşın.",
+    "resetStorage": "Depolamayı sıfırla"
   },
   "auth": {
     "authenticationError": "Kimlik Doğrulama Hatası",

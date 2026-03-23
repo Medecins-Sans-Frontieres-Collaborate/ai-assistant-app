@@ -519,7 +519,13 @@
     "applicationError": "Kesalahan aplikasi",
     "dismissError": "Tutup kesalahan",
     "copyErrorMessage": "Salin pesan kesalahan",
-    "contactSupport": "Hubungi dukungan"
+    "contactSupport": "Hubungi dukungan",
+    "exportDataForRecovery": "Ekspor data percakapan untuk pemulihan",
+    "dataExported": "Data berhasil diekspor",
+    "exportDataDescription": "Bagikan file ini kepada tim teknis untuk membantu memulihkan data Anda.",
+    "resetStoragePrompt": "Jika memuat ulang tidak membantu, coba setel ulang penyimpanan percakapan",
+    "resetStorageWarning": "Menyetel ulang akan menghapus semua data percakapan. Sebelum menyetel ulang, Anda dapat mengekspor salinan data mentah. Bagikan file ini kepada tim teknis jika Anda membutuhkan bantuan untuk memulihkan percakapan Anda.",
+    "resetStorage": "Setel ulang penyimpanan"
   },
   "auth": {
     "authenticationError": "Kesalahan Autentikasi",

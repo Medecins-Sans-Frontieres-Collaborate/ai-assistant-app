@@ -622,7 +622,13 @@
     "unexpectedErrorOccurred": "Si è verificato un errore imprevisto",
     "criticalErrorReload": "Si è verificato un errore critico. Ricarica la pagina.",
     "reloadPage": "Ricarica pagina",
-    "persistContactSupport": "Se questo problema persiste, contatta l'assistenza"
+    "persistContactSupport": "Se questo problema persiste, contatta l'assistenza",
+    "exportDataForRecovery": "Esporta i dati della conversazione per il recupero",
+    "dataExported": "Dati esportati",
+    "exportDataDescription": "Condividi questo file con il team tecnico per aiutare a recuperare i tuoi dati.",
+    "resetStoragePrompt": "Se il ricaricamento non aiuta, prova a reimpostare l'archiviazione delle conversazioni",
+    "resetStorageWarning": "La reimpostazione cancellerà tutti i dati delle conversazioni. Prima di reimpostare, puoi esportare una copia dei dati grezzi. Condividi questo file con il team tecnico se hai bisogno di aiuto per recuperare le tue conversazioni.",
+    "resetStorage": "Reimposta archiviazione"
   },
   "prompts": {
     "buildReusablePrompts": "Crea prompt riutilizzabili con assistenza AI",

@@ -581,7 +581,13 @@
     "dismissError": "关闭错误",
     "applicationError": "应用程序错误",
     "chatLoadError": "加载聊天时出错",
-    "anErrorOccurredTryAgain": "发生了错误。请重试。"
+    "anErrorOccurredTryAgain": "发生了错误。请重试。",
+    "exportDataForRecovery": "导出会话数据以便恢复",
+    "dataExported": "数据已导出",
+    "exportDataDescription": "将此文件分享给技术团队，以协助恢复您的数据。",
+    "resetStoragePrompt": "如果重新加载无效，请尝试重置会话存储",
+    "resetStorageWarning": "重置将清除所有会话数据。重置前，您可以导出原始数据副本。如需恢复会话，可将该文件分享给技术团队。",
+    "resetStorage": "重置存储"
   },
   "auth": {
     "authenticationError": "身份验证错误",

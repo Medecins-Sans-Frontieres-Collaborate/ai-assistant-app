@@ -527,7 +527,13 @@
     "dismissError": "Descarta l’error",
     "applicationError": "Error de l'aplicació",
     "chatLoadError": "S'ha produït un error en carregar la conversa",
-    "anErrorOccurredTryAgain": "S'ha produït un error. Torneu-ho a provar."
+    "anErrorOccurredTryAgain": "S'ha produït un error. Torneu-ho a provar.",
+    "exportDataForRecovery": "Exporta les dades de la conversa per a la recuperació",
+    "dataExported": "Dades exportades",
+    "exportDataDescription": "Comparteix aquest fitxer amb l'equip tècnic per ajudar a recuperar les teves dades.",
+    "resetStoragePrompt": "Si recarregar no resol el problema, prova de restablir l'emmagatzematge de la conversa",
+    "resetStorageWarning": "Restablir eliminarà totes les dades de les converses. Abans de restablir-les, pots exportar una còpia de les dades originals. Comparteix aquest fitxer amb l'equip tècnic si necessites ajuda per recuperar les teves converses.",
+    "resetStorage": "Restableix l'emmagatzematge"
   },
   "auth": {
     "authenticationError": "Error d'autenticació",

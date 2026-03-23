@@ -527,7 +527,13 @@
     "dismissError": "Sulje virhe",
     "applicationError": "Sovellusvirhe",
     "chatLoadError": "Tapahtui virhe ladattaessa keskustelua",
-    "anErrorOccurredTryAgain": "Tapahtui virhe. Yritä uudelleen."
+    "anErrorOccurredTryAgain": "Tapahtui virhe. Yritä uudelleen.",
+    "exportDataForRecovery": "Vie keskustelutiedot palautusta varten",
+    "dataExported": "Tiedot viety",
+    "exportDataDescription": "Jaa tämä tiedosto tekniselle tiimille, jotta he voivat auttaa tietojesi palautuksessa.",
+    "resetStoragePrompt": "Jos uudelleenlataus ei auta, kokeile keskustelutallennuksen nollausta",
+    "resetStorageWarning": "Nollaus poistaa kaikki keskustelutiedot. Ennen nollausta voit viedä raakadatasta kopion. Jaa tämä tiedosto tekniselle tiimille, jos tarvitset apua keskustelujen palauttamisessa.",
+    "resetStorage": "Nollaa tallennus"
   },
   "auth": {
     "authenticationError": "Todennusvirhe",

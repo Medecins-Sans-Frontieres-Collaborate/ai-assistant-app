@@ -551,7 +551,13 @@
     "dismissError": "Đóng thông báo lỗi",
     "applicationError": "Lỗi ứng dụng",
     "chatLoadError": "Đã xảy ra lỗi khi tải cuộc trò chuyện",
-    "anErrorOccurredTryAgain": "Đã xảy ra lỗi. Vui lòng thử lại."
+    "anErrorOccurredTryAgain": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "exportDataForRecovery": "Xuất dữ liệu hội thoại để khôi phục",
+    "dataExported": "Đã xuất dữ liệu",
+    "exportDataDescription": "Chia sẻ tệp này với đội ngũ kỹ thuật để hỗ trợ khôi phục dữ liệu của bạn.",
+    "resetStoragePrompt": "Nếu tải lại không có tác dụng, hãy thử đặt lại bộ lưu trữ hội thoại",
+    "resetStorageWarning": "Việc đặt lại sẽ xóa toàn bộ dữ liệu hội thoại. Trước khi đặt lại, bạn có thể xuất một bản sao dữ liệu gốc. Chia sẻ tệp này với đội ngũ kỹ thuật nếu bạn cần hỗ trợ khôi phục hội thoại.",
+    "resetStorage": "Đặt lại bộ lưu trữ"
   },
   "auth": {
     "authenticationError": "Lỗi Xác thực",

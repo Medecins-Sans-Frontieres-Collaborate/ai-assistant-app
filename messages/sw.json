@@ -552,7 +552,13 @@
     "dismissError": "Ondoa hitilafu",
     "applicationError": "Hitilafu ya Programu",
     "chatLoadError": "Hitilafu imetokea wakati wa kupakia mazungumzo",
-    "anErrorOccurredTryAgain": "Hitilafu imetokea. Tafadhali jaribu tena."
+    "anErrorOccurredTryAgain": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "exportDataForRecovery": "Hamisha data ya mazungumzo kwa ajili ya urejeshaji",
+    "dataExported": "Data imehamishwa",
+    "exportDataDescription": "Shiriki faili hii na timu ya teknolojia ili kusaidia kurejesha data yako.",
+    "resetStoragePrompt": "Ikiwa kupakia upya hakusaidii, jaribu kuweka upya hifadhi ya mazungumzo",
+    "resetStorageWarning": "Kuweka upya kutafuta data yote ya mazungumzo. Kabla ya kuweka upya, unaweza kuhifadhi nakala ya data ghafi. Shiriki faili hii na timu ya teknolojia iwapo unahitaji msaada wa kurejesha mazungumzo yako.",
+    "resetStorage": "Weka upya hifadhi"
   },
   "auth": {
     "authenticationError": "Hitilafu ya Uthibitishaji",

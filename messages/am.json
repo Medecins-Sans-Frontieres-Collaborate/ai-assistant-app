@@ -931,7 +931,13 @@
     "unexpectedErrorOccurred": "ያልተጠበቀ ስህተት ተከስቷል",
     "criticalErrorReload": "ወሳኝ ስህተት ተከስቷል። እባክዎን ገጹን እንደገና ይጫኑ።",
     "reloadPage": "ገጹን እንደገና ይጫኑ",
-    "persistContactSupport": "ይህ ችግር ከቀጠለ፣ እባክዎን ድጋፍን ያነጋግሩ"
+    "persistContactSupport": "ይህ ችግር ከቀጠለ፣ እባክዎን ድጋፍን ያነጋግሩ",
+    "exportDataForRecovery": "ውይይት ውሂብ ለመመለስ ወደ ውጭ ያውጡ",
+    "dataExported": "ውሂብ ተላክቷል",
+    "exportDataDescription": "ውሂቡን ለቴክኒክ ቡድን ያጋሩ እንዲያግዙኝ ዘንድ።",
+    "resetStoragePrompt": "መድገም አልደረገም ከሆነ፣ የውይይት ማከማቻ ዳግም ይጀምሩ",
+    "resetStorageWarning": "ማዳመጥ ሁሉንም የውይይት ውሂብ ያጠፋል። ከማዳመጥ በፊት፣ የጥሬ ውሂብ ቅጂ ወደ ውጭ ማውጣት ትችላለህ። ውይይቶችህን ለመቀላቀል እርዳታ ከፈለጉ ይህን ፋይል በቴክኒክ ቡድን ያጋሩ።",
+    "resetStorage": "ማከማቻ ዳግም ጀምር"
   },
   "auth": {
     "microsoft": "Microsoft",

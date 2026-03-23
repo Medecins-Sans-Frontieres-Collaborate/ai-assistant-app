@@ -647,7 +647,13 @@
     "unexpectedErrorOccurred": "Ein unerwarteter Fehler ist aufgetreten",
     "criticalErrorReload": "Ein kritischer Fehler ist aufgetreten. Bitte laden Sie die Seite neu.",
     "reloadPage": "Seite neu laden",
-    "persistContactSupport": "Wenn dieses Problem weiterhin besteht, wenden Sie sich bitte an den Support"
+    "persistContactSupport": "Wenn dieses Problem weiterhin besteht, wenden Sie sich bitte an den Support",
+    "exportDataForRecovery": "Konversationsdaten für Wiederherstellung exportieren",
+    "dataExported": "Daten exportiert",
+    "exportDataDescription": "Teilen Sie diese Datei mit dem Technikteam, um bei der Wiederherstellung Ihrer Daten zu helfen.",
+    "resetStoragePrompt": "Wenn das Neuladen nicht hilft, versuchen Sie, den Konversationsspeicher zurückzusetzen",
+    "resetStorageWarning": "Das Zurücksetzen löscht alle Konversationsdaten. Vor dem Zurücksetzen können Sie eine Kopie der Rohdaten exportieren. Teilen Sie diese Datei mit dem Technikteam, wenn Sie Hilfe bei der Wiederherstellung Ihrer Konversationen benötigen.",
+    "resetStorage": "Speicher zurücksetzen"
   },
   "prompts": {
     "buildReusablePrompts": "Erstellen Sie wiederverwendbare Eingabeaufforderungen mit KI-Unterstützung",

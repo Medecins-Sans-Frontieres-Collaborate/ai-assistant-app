@@ -549,7 +549,13 @@
     "dismissError": "Ukryj błąd",
     "applicationError": "Błąd aplikacji",
     "chatLoadError": "Wystąpił błąd podczas ładowania czatu",
-    "anErrorOccurredTryAgain": "Wystąpił błąd. Prosimy spróbować ponownie."
+    "anErrorOccurredTryAgain": "Wystąpił błąd. Prosimy spróbować ponownie.",
+    "exportDataForRecovery": "Eksportuj dane rozmowy do odzyskania",
+    "dataExported": "Dane wyeksportowano",
+    "exportDataDescription": "Udostępnij ten plik zespołowi technicznemu, aby pomóc w odzyskaniu danych.",
+    "resetStoragePrompt": "Jeśli ponowne wczytanie nie pomaga, spróbuj zresetować magazyn rozmów",
+    "resetStorageWarning": "Resetowanie usunie wszystkie dane rozmów. Przed resetowaniem możesz wyeksportować kopię surowych danych. Udostępnij ten plik zespołowi technicznemu, jeśli potrzebujesz pomocy w odzyskaniu rozmów.",
+    "resetStorage": "Resetuj magazyn"
   },
   "auth": {
     "authenticationError": "Błąd uwierzytelniania",

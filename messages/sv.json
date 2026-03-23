@@ -552,7 +552,13 @@
     "dismissError": "Avvisa fel",
     "applicationError": "Applikationsfel",
     "chatLoadError": "Ett fel uppstod vid laddning av chatt",
-    "anErrorOccurredTryAgain": "Ett fel uppstod. Vänligen försök igen."
+    "anErrorOccurredTryAgain": "Ett fel uppstod. Vänligen försök igen.",
+    "exportDataForRecovery": "Exportera samtalsdata för återställning",
+    "dataExported": "Data exporterad",
+    "exportDataDescription": "Dela denna fil med tekniska teamet för att få hjälp att återställa dina data.",
+    "resetStoragePrompt": "Om omladdning inte hjälper, försök att återställa samtalslagringen",
+    "resetStorageWarning": "En återställning raderar all samtalsdata. Innan du återställer kan du exportera en kopia av rådata. Dela denna fil med tekniska teamet om du behöver hjälp att återställa dina samtal.",
+    "resetStorage": "Återställ lagring"
   },
   "auth": {
     "authenticationError": "Autentiseringsfel",
