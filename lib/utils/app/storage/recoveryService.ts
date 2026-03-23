@@ -7,7 +7,7 @@
  * 2. Field repair — fill missing required fields with defaults
  * 3. Message salvage — keep valid messages, discard corrupt ones
  */
-import { ConversationEntry } from '@/types/chat';
+import { Conversation, ConversationEntry } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { RecoveryResult, RecoveryStats } from '@/types/storage';
 
