@@ -346,7 +346,7 @@ export const perConversationStorage: StateStorage = {
             );
             lastWrittenTimestamps.set(conv.id, conv.updatedAt);
           } catch (e) {
-            if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+            if (e instanceof Error && e.name === 'QuotaExceededError') {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing ${conv.id}`,
               );
@@ -368,7 +368,7 @@ export const perConversationStorage: StateStorage = {
               JSON.stringify(folder),
             );
           } catch (e) {
-            if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+            if (e instanceof Error && e.name === 'QuotaExceededError') {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
               );
