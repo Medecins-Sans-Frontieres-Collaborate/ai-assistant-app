@@ -6,7 +6,6 @@ import { ErrorDisplay } from '@/components/ErrorBoundary/ErrorDisplay';
 
 export default function ChatError({
   error,
-  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
@@ -23,6 +22,8 @@ export default function ChatError({
       onRetry={() => window.location.reload()}
       retryLabel="Reload chat"
       showSupportInfo={true}
+      showDataExport={true}
+      showStorageReset={true}
     />
   );
 }
