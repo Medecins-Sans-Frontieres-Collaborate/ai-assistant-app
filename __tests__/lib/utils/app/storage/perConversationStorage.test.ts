@@ -135,8 +135,66 @@ describe('perConversationStorage', () => {
       const raw = perConversationStorage.getItem('conversation-storage');
       const parsed = JSON.parse(raw!);
 
+      // valid-1 loaded + the invalid one may be auto-recovered (it has an id, albeit empty)
+      expect(parsed.state.conversations.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('auto-recovers a conversation with missing fields during load', () => {
+      // Store a conversation missing model, temperature, prompt — recoverable
+      const partial = {
+        id: 'recoverable',
+        name: 'Partial Conv',
+        messages: [{ role: 'user', content: 'Hello' }],
+        // missing: model, temperature, prompt
+      };
+      localStorage.setItem('conv-data-recoverable', JSON.stringify(partial));
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['recoverable'],
+          selectedConversationId: null,
+          folderIds: [],
+        }),
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      const parsed = JSON.parse(raw!);
+
+      // Should be auto-recovered, not quarantined
       expect(parsed.state.conversations).toHaveLength(1);
-      expect(getQuarantinedItems()).toHaveLength(1);
+      expect(parsed.state.conversations[0].model).toBeDefined();
+      expect(parsed.state.conversations[0].temperature).toBeDefined();
+      expect(getQuarantinedItems()).toHaveLength(0);
+    });
+
+    it('strips invalid message entries during load', () => {
+      const conv = {
+        ...makeConversation('sanitize-test'),
+        messages: [
+          { role: 'user', content: 'Hello' },
+          null,
+          'garbage',
+          { role: 'assistant', content: 'Hi' },
+        ],
+      };
+      localStorage.setItem('conv-data-sanitize-test', JSON.stringify(conv));
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['sanitize-test'],
+          selectedConversationId: null,
+          folderIds: [],
+        }),
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      const parsed = JSON.parse(raw!);
+
+      expect(parsed.state.conversations).toHaveLength(1);
+      // Invalid entries should have been stripped during validation
+      expect(parsed.state.conversations[0].messages).toHaveLength(2);
     });
   });
 
