@@ -63,6 +63,35 @@ const getPrimaryContentType = (
   throw new Error('Invalid content type or structure');
 };
 
+/**
+ * Extracts the text content from a message and counts its tokens.
+ */
+const countMessageTokens = (message: Message, encoding: Tiktoken): number => {
+  if (typeof message.content === 'string') {
+    return encoding.encode(message.content).length;
+  }
+  if (Array.isArray(message.content)) {
+    let tokens = 0;
+    for (const part of message.content) {
+      if (part.type === 'text') {
+        tokens += encoding.encode((part as TextMessageContent).text).length;
+      }
+    }
+    return tokens;
+  }
+  if (
+    (
+      message.content as
+        | TextMessageContent
+        | FileMessageContent
+        | ImageMessageContent
+    )?.type === 'text'
+  ) {
+    return encoding.encode((message.content as TextMessageContent).text).length;
+  }
+  return 0;
+};
+
 export const getMessagesToSend = async (
   messages: Message[],
   encoding: Tiktoken,
@@ -138,6 +167,19 @@ export const getMessagesToSend = async (
     ) {
       message.content = extractTextContent(message.content);
     }
+
+    // Token-based truncation: skip older messages that exceed the budget
+    // Always include the most recent message (isLastMessage)
+    const messageTokens = countMessageTokens(message, encoding);
+    if (
+      !isLastMessage &&
+      acc.messagesToSend.length > 0 &&
+      acc.tokenCount + messageTokens > tokenLimit
+    ) {
+      continue;
+    }
+
+    acc.tokenCount += messageTokens;
     acc.messagesToSend = [message, ...acc.messagesToSend];
   }
 
