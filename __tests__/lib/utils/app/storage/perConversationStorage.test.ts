@@ -5,7 +5,7 @@ import {
 } from '@/lib/utils/app/storage/perConversationStorage';
 import { getQuarantinedItems } from '@/lib/utils/app/storage/quarantineStore';
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 function makeConversation(id: string, name = 'Test') {
   return {
@@ -27,6 +27,7 @@ function makeFolder(id: string, name = 'Folder') {
 
 describe('perConversationStorage', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     localStorage.clear();
   });
 
@@ -162,6 +163,96 @@ describe('perConversationStorage', () => {
       expect(index.conversationIds).toContain('c1');
       expect(index.conversationIds).toContain('c2');
       expect(index.selectedConversationId).toBe('c1');
+    });
+
+    it('preserves existing conversation when QuotaExceededError on update', () => {
+      // Write initial conversation
+      const initial = {
+        state: {
+          conversations: [makeConversation('c1')],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(initial),
+      );
+
+      const originalData = localStorage.getItem('conv-data-c1');
+      expect(originalData).not.toBeNull();
+
+      // Make setItem throw QuotaExceededError for the next write
+      const originalSetItem = localStorage.setItem.bind(localStorage);
+      let callCount = 0;
+      vi.spyOn(localStorage, 'setItem').mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'conv-data-c1' && callCount++ > 0) {
+            const err = new Error('QuotaExceededError');
+            err.name = 'QuotaExceededError';
+            throw err;
+          }
+          originalSetItem(key, value);
+        },
+      );
+
+      // Try to update the conversation
+      const updated = {
+        state: {
+          conversations: [{ ...makeConversation('c1'), name: 'Updated Name' }],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(updated),
+      );
+
+      vi.restoreAllMocks();
+
+      // The original data should still be in localStorage (not deleted)
+      expect(localStorage.getItem('conv-data-c1')).toBe(originalData);
+
+      // The index should still include c1
+      const index = JSON.parse(localStorage.getItem('conv-index')!);
+      expect(index.conversationIds).toContain('c1');
+    });
+
+    it('persists folder renames', () => {
+      // Write initial state with a folder
+      const initial = {
+        state: {
+          conversations: [],
+          selectedConversationId: null,
+          folders: [makeFolder('f1', 'Original Name')],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(initial),
+      );
+
+      // Rename the folder
+      const updated = {
+        state: {
+          conversations: [],
+          selectedConversationId: null,
+          folders: [makeFolder('f1', 'Renamed Folder')],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(updated),
+      );
+
+      // Verify the rename persisted
+      const stored = JSON.parse(localStorage.getItem('conv-folder-f1')!);
+      expect(stored.name).toBe('Renamed Folder');
     });
 
     it('removes deleted conversations', () => {
