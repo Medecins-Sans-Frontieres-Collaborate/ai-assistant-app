@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "An unexpected error occurred",
     "criticalErrorReload": "A critical error occurred. Please reload the page.",
     "reloadPage": "Reload page",
-    "persistContactSupport": "If this issue persists, please contact support"
+    "persistContactSupport": "If this issue persists, please contact support",
+    "exportDataForRecovery": "Export conversation data for recovery",
+    "dataExported": "Data exported",
+    "exportDataDescription": "Share this file with the tech team to help recover your data.",
+    "resetStoragePrompt": "If reloading doesn't help, try resetting conversation storage",
+    "resetStorageWarning": "Resetting will clear all conversation data. Before resetting, you can export a copy of the raw data. Share this file with the tech team if you need help recovering your conversations.",
+    "resetStorage": "Reset storage"
   },
   "prompts": {
     "buildReusablePrompts": "Build reusable prompts with AI assistance",
