@@ -11,6 +11,8 @@ export interface ValidationResult<T> {
   valid: boolean;
   data?: T;
   errors: string[];
+  /** Number of message entries that were stripped during sanitization */
+  messagesStripped?: number;
 }
 
 /**
@@ -80,12 +82,20 @@ export function validateConversation(
   }
 
   // Sanitize message entries — strip invalid ones to prevent runtime crashes
+  let messagesStripped = 0;
   if (Array.isArray(obj.messages)) {
+    const originalCount = obj.messages.length;
     const sanitized = sanitizeMessages(obj.messages);
     (obj as Record<string, unknown>).messages = sanitized;
+    messagesStripped = originalCount - sanitized.length;
   }
 
-  return { valid: true, data: data as Conversation, errors: [] };
+  return {
+    valid: true,
+    data: data as Conversation,
+    errors: [],
+    messagesStripped,
+  };
 }
 
 /**
