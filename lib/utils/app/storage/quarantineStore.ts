@@ -28,12 +28,14 @@ export function getQuarantinedItems(): QuarantinedItem[] {
 /**
  * Add a conversation to quarantine.
  * Preserves the raw data string as-is for maximum recoverability.
+ * Returns true if the data was successfully quarantined, false if the write failed.
+ * Callers should only delete source data if this returns true.
  */
 export function quarantineConversation(
   rawData: string,
   errors: string[],
   sourceKey: string,
-): void {
+): boolean {
   try {
     const items = getQuarantinedItems();
 
@@ -49,9 +51,9 @@ export function quarantineConversation(
       id = globalThis.crypto.randomUUID();
     }
 
-    // Don't add duplicate entries for the same id
+    // Don't add duplicate entries for the same id (treat as success — data already preserved)
     if (items.some((item) => item.id === id)) {
-      return;
+      return true;
     }
 
     const item: QuarantinedItem = {
@@ -65,8 +67,10 @@ export function quarantineConversation(
 
     items.push(item);
     localStorage.setItem(QUARANTINE_KEY, JSON.stringify(items));
+    return true;
   } catch (e) {
     console.error('[QuarantineStore] Failed to quarantine conversation:', e);
+    return false;
   }
 }
 
