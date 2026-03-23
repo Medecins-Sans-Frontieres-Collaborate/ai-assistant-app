@@ -114,7 +114,7 @@ export function attemptRecovery(rawData: string): RecoveryResult {
 
   // Level 2: Field repair — fill missing required fields
   if (typeof obj.id !== 'string' || obj.id.length === 0) {
-    obj.id = crypto.randomUUID();
+    obj.id = globalThis.crypto.randomUUID();
     stats.fieldsRepaired.push('id');
   }
 
