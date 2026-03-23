@@ -13,6 +13,7 @@ import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
+import { QuarantineNotice } from '@/components/Storage/QuarantineNotice';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
 
 /**
@@ -89,6 +90,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         severity={storageThreshold}
       />
       <AppInitializer />
+      <QuarantineNotice />
       <div className="flex h-screen w-screen overflow-hidden">
         <Sidebar />
 
