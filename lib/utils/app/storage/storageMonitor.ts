@@ -10,6 +10,8 @@
  *
  * Updated for Zustand persist middleware
  */
+import { getPerConversationStorageSize } from '@/lib/utils/app/storage/perConversationStorage';
+
 import { Conversation } from '@/types/chat';
 import { StorageBreakdown } from '@/types/storage';
 
@@ -28,9 +30,11 @@ const DISMISSED_THRESHOLDS_KEY = 'dismissedStorageThresholds';
 
 // Zustand persist storage keys (these are the actual localStorage keys)
 const ZUSTAND_STORAGE_KEYS = {
-  CONVERSATIONS: 'conversation-storage', // Zustand persist key for conversationStore
+  CONVERSATIONS: 'conversation-storage', // Legacy blob key (v4 and earlier)
   SETTINGS: 'settings-storage', // Zustand persist key for settingsStore
   UI: 'ui-storage', // Zustand persist key for uiStore
+  // v5+ uses per-conversation keys (conv-index, conv-data-*, conv-folder-*)
+  // managed by perConversationStorage adapter
 };
 
 /**
@@ -149,7 +153,10 @@ export const getStorageBreakdown = (): StorageBreakdown => {
 
   try {
     // Calculate Zustand storage sizes
-    const zustandConvs = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    // v5+ uses per-conversation keys; fall back to legacy blob size
+    const legacyBlobSize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    const perConvSize = getPerConversationStorageSize();
+    const zustandConvs = perConvSize > 0 ? perConvSize : legacyBlobSize;
     const zustandSettings = getItemSize(ZUSTAND_STORAGE_KEYS.SETTINGS);
     const zustandUI = getItemSize(ZUSTAND_STORAGE_KEYS.UI);
     const zustandTotal = zustandConvs + zustandSettings + zustandUI;
@@ -332,21 +339,14 @@ export const updateStorageStats = () => {
 
 /**
  * Get conversations sorted by date (most recent first)
- * Updated to read from Zustand persist structure
+ * Reads from Zustand store (works with both v4 blob and v5 per-conversation keys)
  */
 export const getSortedConversations = (): Conversation[] => {
   requireBrowser();
 
   try {
-    // Read from Zustand persist structure: {state: {conversations: [...]}, version: 1}
-    const conversationStorageJson = localStorage.getItem(
-      ZUSTAND_STORAGE_KEYS.CONVERSATIONS,
-    );
-    if (!conversationStorageJson) return [];
-
-    const persistedData = JSON.parse(conversationStorageJson);
-    const conversations: Conversation[] =
-      persistedData?.state?.conversations || [];
+    const conversations = useConversationStore.getState().conversations;
+    if (!conversations || conversations.length === 0) return [];
 
     // Separate conversations with and without dates
     const conversationsWithDates: Conversation[] = [];
@@ -407,19 +407,19 @@ export const calculateSpaceFreed = (
       return { spaceFreed: 0, conversationsRemoved: 0, percentFreed: 0 };
     }
 
-    // Get the current size of Zustand conversation storage
-    const currentSize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    // Get the current total size of conversation storage
+    const perConvSize = getPerConversationStorageSize();
+    const legacySize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    const currentSize = perConvSize > 0 ? perConvSize : legacySize;
 
-    // Calculate what would be kept (need to account for Zustand persist wrapper)
+    // Calculate what would be kept
     const keptConversations = sortedConversations.slice(0, keepCount);
-    const keptPersistStructure = {
-      state: { conversations: keptConversations },
-      version: 1,
-    };
-    const keptSize = getStringSizeInBytes(JSON.stringify(keptPersistStructure));
+    const keptSize = getStringSizeInBytes(
+      keptConversations.map((c) => JSON.stringify(c)).join(''),
+    );
 
     // Calculate space freed
-    const spaceFreed = currentSize - keptSize;
+    const spaceFreed = Math.max(0, currentSize - keptSize);
     const conversationsRemoved = sortedConversations.length - keepCount;
 
     // Calculate percentage of total storage freed
@@ -582,15 +582,15 @@ export const calculateSpaceFreedByDays = (
       return { spaceFreed: 0, conversationsRemoved: 0, percentFreed: 0 };
     }
 
-    // Get the current size of Zustand conversation storage
-    const currentSize = getItemSize('conversation-storage');
+    // Get the current total size of conversation storage
+    const perConvSize = getPerConversationStorageSize();
+    const legacySize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
+    const currentSize = perConvSize > 0 ? perConvSize : legacySize;
 
-    // Calculate what would be kept (need to account for Zustand persist wrapper)
-    const keptPersistStructure = {
-      state: { conversations: conversationsToKeep },
-      version: 1,
-    };
-    const keptSize = getStringSizeInBytes(JSON.stringify(keptPersistStructure));
+    // Calculate what would be kept
+    const keptSize = getStringSizeInBytes(
+      conversationsToKeep.map((c) => JSON.stringify(c)).join(''),
+    );
 
     // Calculate space freed
     const spaceFreed = Math.max(0, currentSize - keptSize);
