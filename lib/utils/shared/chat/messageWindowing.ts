@@ -15,8 +15,12 @@ export function windowMessagesForAPI(
   messages: Message[],
   maxMessages: number = VALIDATION_LIMITS.CLIENT_MAX_MESSAGES,
 ): Message[] {
-  if (messages.length <= maxMessages) {
+  if (messages.length <= maxMessages || maxMessages <= 0) {
     return messages;
+  }
+
+  if (maxMessages === 1) {
+    return [messages[messages.length - 1]];
   }
 
   // Always preserve the first message (initial context) and the most recent messages
