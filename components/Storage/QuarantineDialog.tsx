@@ -7,7 +7,7 @@ import {
   IconTrash,
   IconX,
 } from '@tabler/icons-react';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useReducer, useState } from 'react';
 
 import {
   clearAllQuarantined,
@@ -33,9 +33,8 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [items, setItems] = useState<QuarantinedItem[]>(() =>
-    isOpen ? getQuarantinedItems() : [],
-  );
+  // Version counter to trigger re-reads after mutations (recovery/delete)
+  const [, forceRefresh] = useReducer((x: number) => x + 1, 0);
   const [recoveryStatus, setRecoveryStatus] = useState<
     Record<string, 'success' | 'failed' | undefined>
   >({});
@@ -44,20 +43,15 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
     (state) => state.addConversation,
   );
 
-  // Refresh items when dialog opens
+  // Refresh items after recovery/delete operations
   const refreshItems = useCallback(() => {
-    setItems(getQuarantinedItems());
+    forceRefresh();
   }, []);
 
   if (!isOpen) return null;
 
-  // Refresh on first render
-  if (items.length === 0) {
-    const current = getQuarantinedItems();
-    if (current.length > 0) {
-      setItems(current);
-    }
-  }
+  // Read items on each render when open (cheap localStorage read, avoids setState-in-effect)
+  const items = getQuarantinedItems();
 
   const handleRecovery = (item: QuarantinedItem) => {
     const result = attemptRecovery(item.rawData);
@@ -90,7 +84,6 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
 
   const handleDeleteAll = () => {
     clearAllQuarantined();
-    setItems([]);
     onClose();
   };
 
