@@ -99,7 +99,7 @@ export class AIFoundryAgentHandler {
             messages,
             encoding,
             0, // No system prompt for agents (they have built-in instructions)
-            modelConfig.tokenLimit,
+            modelConfig.maxLength - modelConfig.tokenLimit,
             user,
           );
 
