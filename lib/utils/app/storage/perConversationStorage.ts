@@ -147,18 +147,23 @@ function migrateFromLegacyBlob(): {
   const { state, version = 1 } = parsed.data;
   const conversations: Conversation[] = [];
   const folders: FolderInterface[] = [];
+  // Track IDs that were successfully written to localStorage,
+  // so the index only references data that actually persisted.
+  const writtenConvIds: string[] = [];
+  const writtenFolderIds: string[] = [];
 
   // Validate and write each conversation individually
   if (Array.isArray(state.conversations)) {
     for (const conv of state.conversations) {
       const validation = validateConversation(conv);
       if (validation.valid && validation.data) {
-        conversations.push(validation.data);
+        conversations.push(validation.data); // always include for in-memory state
         try {
           localStorage.setItem(
             `${CONV_PREFIX}${validation.data.id}`,
             JSON.stringify(validation.data),
           );
+          writtenConvIds.push(validation.data.id);
           lastWrittenTimestamps.set(
             validation.data.id,
             validation.data.updatedAt,
@@ -168,6 +173,7 @@ function migrateFromLegacyBlob(): {
             `[PerConvStorage] Failed to write conv-data-${validation.data.id}:`,
             e,
           );
+          // Don't add to writtenConvIds — index won't reference this conversation
         }
       } else {
         const convRaw = JSON.stringify(conv);
@@ -181,12 +187,13 @@ function migrateFromLegacyBlob(): {
     for (const folder of state.folders) {
       const validation = validateFolder(folder);
       if (validation.valid && validation.data) {
-        folders.push(validation.data);
+        folders.push(validation.data); // always include for in-memory state
         try {
           localStorage.setItem(
             `${FOLDER_PREFIX}${validation.data.id}`,
             JSON.stringify(validation.data),
           );
+          writtenFolderIds.push(validation.data.id);
         } catch (e) {
           console.error(
             `[PerConvStorage] Failed to write conv-folder-${validation.data.id}:`,
@@ -197,18 +204,26 @@ function migrateFromLegacyBlob(): {
     }
   }
 
-  // Write the index
+  // Write the index — only reference IDs that were successfully persisted
   const index: ConversationIndex = {
     version: 5,
-    conversationIds: conversations.map((c) => c.id),
+    conversationIds: writtenConvIds,
     selectedConversationId:
       (state.selectedConversationId as string | null) ?? null,
-    folderIds: folders.map((f) => f.id),
+    folderIds: writtenFolderIds,
   };
-  writeIndex(index);
 
-  // Remove the legacy blob now that migration is complete
-  localStorage.removeItem(LEGACY_BLOB_KEY);
+  try {
+    writeIndex(index);
+    // Only remove legacy blob after the index is successfully written
+    localStorage.removeItem(LEGACY_BLOB_KEY);
+  } catch (e) {
+    console.error(
+      '[PerConvStorage] Failed to write index during migration, preserving legacy blob:',
+      e,
+    );
+    // Legacy blob is preserved — next load will retry migration
+  }
 
   console.log(
     `[PerConvStorage] Migrated from legacy blob: ${conversations.length} conversations, ${folders.length} folders`,
@@ -350,8 +365,12 @@ export const perConversationStorage: StateStorage = {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing ${conv.id}`,
               );
-              // Don't update the index for this conversation
-              newConvIds.delete(conv.id);
+              if (isNew) {
+                // New conversation with no prior stored copy — remove from index
+                newConvIds.delete(conv.id);
+              }
+              // For existing conversations: keep the id in newConvIds so the
+              // old stored version is preserved (don't update the timestamp cache)
             } else {
               throw e;
             }
@@ -359,23 +378,23 @@ export const perConversationStorage: StateStorage = {
         }
       }
 
-      // Write changed/new folders
+      // Write all folders (folders are small — always write to catch renames)
       for (const folder of state.folders) {
-        if (!currentFolderIds.has(folder.id)) {
-          try {
-            localStorage.setItem(
-              `${FOLDER_PREFIX}${folder.id}`,
-              JSON.stringify(folder),
+        try {
+          localStorage.setItem(
+            `${FOLDER_PREFIX}${folder.id}`,
+            JSON.stringify(folder),
+          );
+        } catch (e) {
+          if (e instanceof Error && e.name === 'QuotaExceededError') {
+            console.error(
+              `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
             );
-          } catch (e) {
-            if (e instanceof Error && e.name === 'QuotaExceededError') {
-              console.error(
-                `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
-              );
+            if (!currentFolderIds.has(folder.id)) {
               newFolderIds.delete(folder.id);
-            } else {
-              throw e;
             }
+          } else {
+            throw e;
           }
         }
       }
