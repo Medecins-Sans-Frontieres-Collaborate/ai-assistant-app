@@ -183,6 +183,26 @@ function loadConversation(id: string): Conversation | null {
     return null;
   }
 
+  // If messages were stripped during validation, quarantine the raw data as backup
+  if (validation.messagesStripped && validation.messagesStripped > 0) {
+    console.warn(
+      `[PerConvStorage] ${validation.messagesStripped} invalid message(s) stripped from ${key}, quarantining raw backup`,
+    );
+    quarantineConversation(
+      raw,
+      [
+        `${validation.messagesStripped} invalid message entries stripped during validation`,
+      ],
+      key,
+    );
+    // Write the sanitized version back to localStorage
+    try {
+      localStorage.setItem(key, JSON.stringify(validation.data));
+    } catch {
+      // Write-back failed, but we still return the sanitized data for in-memory use
+    }
+  }
+
   return validation.data!;
 }
 
@@ -258,12 +278,13 @@ function migrateFromLegacyBlob(): {
     for (const conv of state.conversations) {
       const validation = validateConversation(conv);
       if (validation.valid && validation.data) {
-        conversations.push(validation.data); // always include for in-memory state
         try {
           localStorage.setItem(
             `${CONV_PREFIX}${validation.data.id}`,
             JSON.stringify(validation.data),
           );
+          // Only include in return value if write succeeded
+          conversations.push(validation.data);
           writtenConvIds.push(validation.data.id);
           lastWrittenTimestamps.set(
             validation.data.id,
@@ -274,7 +295,7 @@ function migrateFromLegacyBlob(): {
             `[PerConvStorage] Failed to write conv-data-${validation.data.id}:`,
             e,
           );
-          // Don't add to writtenConvIds — index won't reference this conversation
+          // Don't include — legacy blob will be preserved if index write also fails
         }
       } else {
         // Attempt auto-recovery before quarantining
@@ -284,12 +305,12 @@ function migrateFromLegacyBlob(): {
           console.log(
             `[PerConvStorage] Auto-recovered conversation during migration (${recovery.stats.fieldsRepaired.join(', ')})`,
           );
-          conversations.push(recovery.conversation);
           try {
             localStorage.setItem(
               `${CONV_PREFIX}${recovery.conversation.id}`,
               JSON.stringify(recovery.conversation),
             );
+            conversations.push(recovery.conversation);
             writtenConvIds.push(recovery.conversation.id);
             lastWrittenTimestamps.set(
               recovery.conversation.id,
@@ -313,12 +334,12 @@ function migrateFromLegacyBlob(): {
     for (const folder of state.folders) {
       const validation = validateFolder(folder);
       if (validation.valid && validation.data) {
-        folders.push(validation.data); // always include for in-memory state
         try {
           localStorage.setItem(
             `${FOLDER_PREFIX}${validation.data.id}`,
             JSON.stringify(validation.data),
           );
+          folders.push(validation.data);
           writtenFolderIds.push(validation.data.id);
         } catch (e) {
           console.error(
@@ -577,20 +598,31 @@ export const perConversationStorage: StateStorage = {
 };
 
 /**
+ * Scan localStorage for all conv-data-* and conv-folder-* keys.
+ * Finds orphaned keys not referenced by the index.
+ */
+function scanAllConversationKeys(): string[] {
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && (key.startsWith(CONV_PREFIX) || key.startsWith(FOLDER_PREFIX))) {
+      keys.push(key);
+    }
+  }
+  return keys;
+}
+
+/**
  * Get all localStorage keys used by the per-conversation storage.
+ * Includes both indexed and orphaned keys.
  * Useful for storage monitoring and cleanup.
  */
 export function getPerConversationStorageKeys(): string[] {
   const keys: string[] = [INDEX_KEY];
-  const index = readIndex();
-  if (index) {
-    for (const id of index.conversationIds) {
-      keys.push(`${CONV_PREFIX}${id}`);
-    }
-    for (const id of index.folderIds) {
-      keys.push(`${FOLDER_PREFIX}${id}`);
-    }
-  }
+
+  // Use scan to catch both indexed and orphaned keys
+  const scannedKeys = scanAllConversationKeys();
+  keys.push(...scannedKeys);
   return keys;
 }
 
@@ -614,17 +646,14 @@ export function getPerConversationStorageSize(): number {
 
 /**
  * Clear all per-conversation storage keys and the quarantine.
+ * Scans localStorage directly to catch orphaned keys not in the index.
  * Used as an emergency reset escape hatch.
  */
 export function clearAllConversationStorage(): void {
-  const index = readIndex();
-  if (index) {
-    for (const id of index.conversationIds) {
-      localStorage.removeItem(`${CONV_PREFIX}${id}`);
-    }
-    for (const id of index.folderIds) {
-      localStorage.removeItem(`${FOLDER_PREFIX}${id}`);
-    }
+  // Scan for all conv-data-* and conv-folder-* keys (including orphans)
+  const allKeys = scanAllConversationKeys();
+  for (const key of allKeys) {
+    localStorage.removeItem(key);
   }
   localStorage.removeItem(INDEX_KEY);
   localStorage.removeItem('conv-quarantine');
@@ -645,33 +674,13 @@ export function exportRawConversationData(): string {
   const data: Record<string, string | null> = {};
 
   try {
-    // v5 per-conversation keys
-    const indexRaw = localStorage.getItem(INDEX_KEY);
-    data[INDEX_KEY] = indexRaw;
+    // v5 index (may be missing or corrupted)
+    data[INDEX_KEY] = localStorage.getItem(INDEX_KEY);
 
-    if (indexRaw) {
-      try {
-        const index = JSON.parse(indexRaw) as ConversationIndex;
-        for (const id of index.conversationIds) {
-          const key = `${CONV_PREFIX}${id}`;
-          data[key] = localStorage.getItem(key);
-        }
-        for (const id of index.folderIds) {
-          const key = `${FOLDER_PREFIX}${id}`;
-          data[key] = localStorage.getItem(key);
-        }
-      } catch {
-        // Index itself is corrupted — scan localStorage for conv-data-* keys
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (
-            key &&
-            (key.startsWith(CONV_PREFIX) || key.startsWith(FOLDER_PREFIX))
-          ) {
-            data[key] = localStorage.getItem(key);
-          }
-        }
-      }
+    // Always scan for all conv-data-*/conv-folder-* keys (catches orphans too)
+    const allKeys = scanAllConversationKeys();
+    for (const key of allKeys) {
+      data[key] = localStorage.getItem(key);
     }
 
     // v4 legacy blob (may still exist if migration failed)
