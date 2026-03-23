@@ -36,13 +36,72 @@ const LEGACY_BLOB_KEY = 'conversation-storage';
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
 /**
+ * Validate that a parsed object is a well-formed ConversationIndex.
+ */
+function isValidIndex(data: unknown): data is ConversationIndex {
+  if (!data || typeof data !== 'object') return false;
+  const obj = data as Record<string, unknown>;
+  return Array.isArray(obj.conversationIds) && Array.isArray(obj.folderIds);
+}
+
+/**
  * Read the conversation index from localStorage.
+ * Returns null if missing or malformed (callers should try rebuildIndexFromKeys).
  */
 function readIndex(): ConversationIndex | null {
   const raw = localStorage.getItem(INDEX_KEY);
   if (!raw) return null;
   const result = tryParseJSON<ConversationIndex>(raw);
-  return result.data ?? null;
+  if (!result.data || !isValidIndex(result.data)) {
+    console.warn(
+      '[PerConvStorage] conv-index exists but is malformed, will attempt rebuild',
+    );
+    return null;
+  }
+  return result.data;
+}
+
+/**
+ * Rebuild the conversation index by scanning localStorage for conv-data-* and conv-folder-* keys.
+ * Used as a fallback when conv-index is missing or corrupted but per-conversation keys exist.
+ */
+function rebuildIndexFromKeys(): ConversationIndex | null {
+  const conversationIds: string[] = [];
+  const folderIds: string[] = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key) continue;
+    if (key.startsWith(CONV_PREFIX)) {
+      conversationIds.push(key.slice(CONV_PREFIX.length));
+    } else if (key.startsWith(FOLDER_PREFIX)) {
+      folderIds.push(key.slice(FOLDER_PREFIX.length));
+    }
+  }
+
+  if (conversationIds.length === 0 && folderIds.length === 0) {
+    return null;
+  }
+
+  console.log(
+    `[PerConvStorage] Rebuilt index from keys: ${conversationIds.length} conversations, ${folderIds.length} folders`,
+  );
+
+  const index: ConversationIndex = {
+    version: 5,
+    conversationIds,
+    selectedConversationId: null,
+    folderIds,
+  };
+
+  // Persist the rebuilt index
+  try {
+    writeIndex(index);
+  } catch (e) {
+    console.error('[PerConvStorage] Failed to persist rebuilt index:', e);
+  }
+
+  return index;
 }
 
 /**
@@ -310,8 +369,12 @@ function migrateFromLegacyBlob(): {
 export const perConversationStorage: StateStorage = {
   getItem(name: string): string | null {
     try {
-      // Check for per-conversation index first
-      const index = readIndex();
+      // Check for per-conversation index first, with rebuild fallback
+      let index = readIndex();
+      if (!index) {
+        // Index missing or malformed — try rebuilding from orphaned conv-data-* keys
+        index = rebuildIndexFromKeys();
+      }
 
       if (index) {
         // Load conversations individually
