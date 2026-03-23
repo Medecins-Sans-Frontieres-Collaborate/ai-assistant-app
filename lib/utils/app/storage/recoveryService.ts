@@ -7,15 +7,15 @@
  * 2. Field repair — fill missing required fields with defaults
  * 3. Message salvage — keep valid messages, discard corrupt ones
  */
-import {
-  Conversation,
-  ConversationEntry,
-  isAssistantMessageGroup,
-} from '@/types/chat';
+import { ConversationEntry } from '@/types/chat';
 import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { RecoveryResult, RecoveryStats } from '@/types/storage';
 
-import { tryParseJSON, validateConversation } from './conversationValidator';
+import {
+  isValidMessageEntry,
+  tryParseJSON,
+  validateConversation,
+} from './conversationValidator';
 
 import { getDefaultModel } from '@/config/models';
 
@@ -57,32 +57,6 @@ function getRecoveryModel() {
   // Fallback to first available model
   const models = Object.values(OpenAIModels);
   return models[0];
-}
-
-/**
- * Validate a single message entry (Message or AssistantMessageGroup).
- * Returns true if the entry is structurally valid enough to keep.
- */
-function isValidMessageEntry(entry: unknown): entry is ConversationEntry {
-  if (!entry || typeof entry !== 'object') return false;
-
-  const obj = entry as Record<string, unknown>;
-
-  // Check if it's an AssistantMessageGroup
-  if (obj.type === 'assistant_group') {
-    return (
-      Array.isArray(obj.versions) &&
-      obj.versions.length > 0 &&
-      typeof obj.activeIndex === 'number'
-    );
-  }
-
-  // Check if it's a Message — must have role and content
-  if (typeof obj.role === 'string' && obj.content !== undefined) {
-    return true;
-  }
-
-  return false;
 }
 
 /**
