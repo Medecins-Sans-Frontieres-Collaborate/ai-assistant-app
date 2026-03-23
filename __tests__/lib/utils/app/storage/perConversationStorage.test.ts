@@ -168,6 +168,49 @@ describe('perConversationStorage', () => {
       expect(getQuarantinedItems()).toHaveLength(0);
     });
 
+    it('rebuilds index from orphaned conv-data-* keys', () => {
+      // Store conversations without an index
+      localStorage.setItem(
+        'conv-data-orphan1',
+        JSON.stringify(makeConversation('orphan1')),
+      );
+      localStorage.setItem(
+        'conv-data-orphan2',
+        JSON.stringify(makeConversation('orphan2')),
+      );
+      localStorage.setItem('conv-folder-f1', JSON.stringify(makeFolder('f1')));
+      // No conv-index!
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // Index should have been rebuilt and persisted
+      const index = JSON.parse(localStorage.getItem('conv-index')!);
+      expect(index.conversationIds).toContain('orphan1');
+      expect(index.conversationIds).toContain('orphan2');
+      expect(index.folderIds).toContain('f1');
+    });
+
+    it('recovers from malformed conv-index', () => {
+      // Store valid conversation data
+      localStorage.setItem(
+        'conv-data-c1',
+        JSON.stringify(makeConversation('c1')),
+      );
+      // Store malformed index
+      localStorage.setItem('conv-index', '{"broken": true}');
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.conversations).toHaveLength(1);
+      expect(parsed.state.conversations[0].id).toBe('c1');
+    });
+
     it('strips invalid message entries during load', () => {
       const conv = {
         ...makeConversation('sanitize-test'),
