@@ -211,7 +211,7 @@ describe('perConversationStorage', () => {
       expect(parsed.state.conversations[0].id).toBe('c1');
     });
 
-    it('strips invalid message entries during load', () => {
+    it('strips invalid message entries and quarantines raw backup', () => {
       const conv = {
         ...makeConversation('sanitize-test'),
         messages: [
@@ -238,6 +238,11 @@ describe('perConversationStorage', () => {
       expect(parsed.state.conversations).toHaveLength(1);
       // Invalid entries should have been stripped during validation
       expect(parsed.state.conversations[0].messages).toHaveLength(2);
+
+      // Raw data should be quarantined as backup
+      const quarantined = getQuarantinedItems();
+      expect(quarantined).toHaveLength(1);
+      expect(quarantined[0].errors[0]).toContain('invalid message');
     });
   });
 
