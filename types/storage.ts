@@ -195,3 +195,65 @@ export interface DeleteLegacyResult {
   /** Total bytes freed by deletion */
   freedBytes: number;
 }
+
+// ============================================================================
+// Quarantine and Recovery Types
+// ============================================================================
+
+/**
+ * A conversation that failed validation and was quarantined for potential recovery.
+ * The raw data is preserved as-is to maximize recovery chances.
+ */
+export interface QuarantinedItem {
+  /** Original conversation id if recoverable, or generated UUID */
+  id: string;
+  /** Raw JSON string preserved exactly as found in localStorage */
+  rawData: string;
+  /** Validation errors that caused quarantine */
+  errors: string[];
+  /** ISO timestamp when the item was quarantined */
+  quarantinedAt: string;
+  /** The localStorage key the data came from */
+  sourceKey: string;
+  /** Whether a recovery attempt has been made */
+  recoveryAttempted: boolean;
+}
+
+/**
+ * Statistics about a recovery attempt.
+ */
+export interface RecoveryStats {
+  /** Number of messages successfully recovered */
+  messagesRecovered: number;
+  /** Number of messages that could not be recovered */
+  messagesLost: number;
+  /** Fields that were repaired with default values */
+  fieldsRepaired: string[];
+}
+
+/**
+ * Result of attempting to recover a quarantined conversation.
+ */
+export interface RecoveryResult {
+  /** Whether recovery produced a usable conversation */
+  recovered: boolean;
+  /** The recovered conversation (if successful) */
+  conversation?: import('@/types/chat').Conversation;
+  /** Statistics about what was recovered/lost */
+  stats: RecoveryStats;
+}
+
+/**
+ * Index stored in localStorage that tracks per-conversation keys.
+ * Used by the per-conversation storage adapter (v5+).
+ */
+export interface ConversationIndex {
+  /** Storage format version */
+  version: number;
+  /** IDs of conversations stored in individual keys */
+  conversationIds: string[];
+  /** Currently selected conversation ID */
+  selectedConversationId: string | null;
+  /** IDs of folders stored in individual keys */
+  folderIds: string[];
+}
