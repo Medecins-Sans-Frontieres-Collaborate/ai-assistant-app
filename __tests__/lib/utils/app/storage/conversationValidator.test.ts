@@ -1,4 +1,6 @@
 import {
+  isValidMessageEntry,
+  sanitizeMessages,
   tryParseJSON,
   validateConversation,
   validateFolder,
@@ -115,6 +117,113 @@ describe('conversationValidator', () => {
       const result = validateConversation({});
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(1);
+    });
+
+    it('sanitizes invalid message entries during validation', () => {
+      const result = validateConversation({
+        ...validConversation,
+        messages: [
+          { role: 'user', content: 'Hello' },
+          null,
+          'garbage',
+          { role: 'assistant', content: 'Hi' },
+          { broken: true },
+        ],
+      });
+      expect(result.valid).toBe(true);
+      // Invalid entries should be stripped
+      expect(result.data!.messages).toHaveLength(2);
+    });
+
+    it('strips assistant_group with empty versions', () => {
+      const result = validateConversation({
+        ...validConversation,
+        messages: [
+          { role: 'user', content: 'Hello' },
+          { type: 'assistant_group', activeIndex: 0, versions: [] },
+        ],
+      });
+      expect(result.valid).toBe(true);
+      expect(result.data!.messages).toHaveLength(1);
+    });
+
+    it('strips assistant_group with out-of-bounds activeIndex', () => {
+      const result = validateConversation({
+        ...validConversation,
+        messages: [
+          {
+            type: 'assistant_group',
+            activeIndex: 5,
+            versions: [
+              { content: 'v1', messageType: 'TEXT', createdAt: '2024-01-01' },
+            ],
+          },
+        ],
+      });
+      expect(result.valid).toBe(true);
+      expect(result.data!.messages).toHaveLength(0);
+    });
+  });
+
+  describe('isValidMessageEntry', () => {
+    it('accepts valid user message', () => {
+      expect(isValidMessageEntry({ role: 'user', content: 'Hello' })).toBe(
+        true,
+      );
+    });
+
+    it('accepts valid assistant_group', () => {
+      expect(
+        isValidMessageEntry({
+          type: 'assistant_group',
+          activeIndex: 0,
+          versions: [
+            {
+              content: 'response',
+              messageType: 'TEXT',
+              createdAt: '2024-01-01',
+            },
+          ],
+        }),
+      ).toBe(true);
+    });
+
+    it('rejects null', () => {
+      expect(isValidMessageEntry(null)).toBe(false);
+    });
+
+    it('rejects string', () => {
+      expect(isValidMessageEntry('text')).toBe(false);
+    });
+
+    it('rejects assistant_group with empty versions', () => {
+      expect(
+        isValidMessageEntry({
+          type: 'assistant_group',
+          activeIndex: 0,
+          versions: [],
+        }),
+      ).toBe(false);
+    });
+
+    it('rejects object without role or content', () => {
+      expect(isValidMessageEntry({ broken: true })).toBe(false);
+    });
+  });
+
+  describe('sanitizeMessages', () => {
+    it('filters out invalid entries', () => {
+      const result = sanitizeMessages([
+        { role: 'user', content: 'Hello' },
+        null,
+        42,
+        { role: 'assistant', content: 'Hi' },
+      ]);
+      expect(result).toHaveLength(2);
+    });
+
+    it('returns empty array for all invalid entries', () => {
+      expect(sanitizeMessages([null, 'garbage', {}])).toHaveLength(0);
     });
   });
 
