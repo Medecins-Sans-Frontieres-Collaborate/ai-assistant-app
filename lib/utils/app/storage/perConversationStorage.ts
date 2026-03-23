@@ -484,5 +484,64 @@ export function clearAllConversationStorage(): void {
   lastWrittenTimestamps.clear();
 }
 
+/**
+ * Export all raw conversation storage data for diagnostic purposes.
+ * Collects data from both v5 per-conversation keys and v4 legacy blob,
+ * plus any quarantined items. Does not attempt to parse — preserves raw strings
+ * so even corrupted data is captured.
+ *
+ * Returns a JSON string that can be saved to a file.
+ */
+export function exportRawConversationData(): string {
+  const data: Record<string, string | null> = {};
+
+  try {
+    // v5 per-conversation keys
+    const indexRaw = localStorage.getItem(INDEX_KEY);
+    data[INDEX_KEY] = indexRaw;
+
+    if (indexRaw) {
+      try {
+        const index = JSON.parse(indexRaw) as ConversationIndex;
+        for (const id of index.conversationIds) {
+          const key = `${CONV_PREFIX}${id}`;
+          data[key] = localStorage.getItem(key);
+        }
+        for (const id of index.folderIds) {
+          const key = `${FOLDER_PREFIX}${id}`;
+          data[key] = localStorage.getItem(key);
+        }
+      } catch {
+        // Index itself is corrupted — scan localStorage for conv-data-* keys
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (
+            key &&
+            (key.startsWith(CONV_PREFIX) || key.startsWith(FOLDER_PREFIX))
+          ) {
+            data[key] = localStorage.getItem(key);
+          }
+        }
+      }
+    }
+
+    // v4 legacy blob (may still exist if migration failed)
+    const legacyBlob = localStorage.getItem(LEGACY_BLOB_KEY);
+    if (legacyBlob) {
+      data[LEGACY_BLOB_KEY] = legacyBlob;
+    }
+
+    // Quarantined items
+    const quarantine = localStorage.getItem('conv-quarantine');
+    if (quarantine) {
+      data['conv-quarantine'] = quarantine;
+    }
+  } catch (e) {
+    data['_export_error'] = String(e);
+  }
+
+  return JSON.stringify(data, null, 2);
+}
+
 // Export constants for use in other modules
 export { CONV_PREFIX, FOLDER_PREFIX, INDEX_KEY, LEGACY_BLOB_KEY };
