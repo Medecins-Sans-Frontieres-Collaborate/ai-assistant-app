@@ -41,9 +41,12 @@ export function quarantineConversation(
     let id: string;
     try {
       const parsed = JSON.parse(rawData);
-      id = typeof parsed?.id === 'string' ? parsed.id : crypto.randomUUID();
+      id =
+        typeof parsed?.id === 'string'
+          ? parsed.id
+          : globalThis.crypto.randomUUID();
     } catch {
-      id = crypto.randomUUID();
+      id = globalThis.crypto.randomUUID();
     }
 
     // Don't add duplicate entries for the same id
