@@ -2,6 +2,7 @@
 
 import toast from 'react-hot-toast';
 
+import { perConversationStorage } from '@/lib/utils/app/storage/perConversationStorage';
 import {
   migrateLegacyMessages,
   needsMigration,
@@ -474,8 +475,8 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 4, // Incremented for active files session quota
-      storage: createJSONStorage(() => localStorage),
+      version: 5, // v5: per-conversation localStorage keys for corruption resilience
+      storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
         selectedConversationId: state.selectedConversationId,
@@ -487,6 +488,15 @@ export const useConversationStore = create<ConversationStore>()(
           selectedConversationId: string | null;
           folders: FolderInterface[];
         };
+
+        // Guard against completely invalid state from corrupted storage
+        if (!state || !Array.isArray(state.conversations)) {
+          return {
+            conversations: [],
+            selectedConversationId: null,
+            folders: [],
+          };
+        }
 
         if (version < 2) {
           // Migrate conversations to new format with message versioning
@@ -529,8 +539,11 @@ export const useConversationStore = create<ConversationStore>()(
 
         return state;
       },
-      onRehydrateStorage: () => (state) => {
-        // Mark as loaded after hydration
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('[ConversationStore] Hydration error:', error);
+        }
+        // Mark as loaded after hydration (even on error, to prevent blocking the app)
         if (state) {
           state.isLoaded = true;
         }
