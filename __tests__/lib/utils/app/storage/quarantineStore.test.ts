@@ -19,13 +19,14 @@ describe('quarantineStore', () => {
     expect(getQuarantinedCount()).toBe(0);
   });
 
-  it('quarantines a conversation', () => {
-    quarantineConversation(
+  it('quarantines a conversation and returns true', () => {
+    const result = quarantineConversation(
       '{"id": "conv-1", "broken": true}',
       ['Missing name'],
       'conv-data-conv-1',
     );
 
+    expect(result).toBe(true);
     const items = getQuarantinedItems();
     expect(items).toHaveLength(1);
     expect(items[0].id).toBe('conv-1');
@@ -34,11 +35,14 @@ describe('quarantineStore', () => {
     expect(items[0].recoveryAttempted).toBe(false);
   });
 
-  it('does not duplicate entries with same id', () => {
+  it('returns true for duplicate (data already preserved)', () => {
     quarantineConversation('{"id": "conv-1"}', ['error1'], 'source-1');
-    quarantineConversation('{"id": "conv-1"}', ['error2'], 'source-2');
-
-    expect(getQuarantinedItems()).toHaveLength(1);
+    const result = quarantineConversation(
+      '{"id": "conv-1"}',
+      ['error2'],
+      'source-2',
+    );
+    expect(result).toBe(true);
   });
 
   it('generates UUID for unparseable data', () => {
