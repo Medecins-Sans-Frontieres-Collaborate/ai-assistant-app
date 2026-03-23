@@ -23,6 +23,7 @@ import {
   validateFolder,
 } from './conversationValidator';
 import { quarantineConversation } from './quarantineStore';
+import { attemptRecovery } from './recoveryService';
 
 import type { StateStorage } from 'zustand/middleware';
 
@@ -53,7 +54,8 @@ function writeIndex(index: ConversationIndex): void {
 
 /**
  * Load a single conversation from its per-conversation key.
- * Returns the conversation or null (quarantining on failure).
+ * On parse/validation failure, attempts auto-recovery before quarantining.
+ * Only deletes source data if quarantine write succeeds.
  */
 function loadConversation(id: string): Conversation | null {
   const key = `${CONV_PREFIX}${id}`;
@@ -69,8 +71,29 @@ function loadConversation(id: string): Conversation | null {
     console.warn(
       `[PerConvStorage] JSON parse failed for ${key}: ${parsed.error}`,
     );
-    quarantineConversation(raw, [`JSON parse error: ${parsed.error}`], key);
-    localStorage.removeItem(key);
+    // Attempt auto-recovery before quarantining
+    const recovery = attemptRecovery(raw);
+    if (recovery.recovered && recovery.conversation) {
+      console.log(
+        `[PerConvStorage] Auto-recovered conversation ${id} (${recovery.stats.fieldsRepaired.join(', ')})`,
+      );
+      // Write recovered version back
+      try {
+        localStorage.setItem(key, JSON.stringify(recovery.conversation));
+      } catch {
+        // Write-back failed, but we can still return the recovered data for in-memory use
+      }
+      return recovery.conversation;
+    }
+    // Recovery failed — quarantine, only delete source if quarantine succeeded
+    const quarantined = quarantineConversation(
+      raw,
+      [`JSON parse error: ${parsed.error}`],
+      key,
+    );
+    if (quarantined) {
+      localStorage.removeItem(key);
+    }
     return null;
   }
 
@@ -80,8 +103,24 @@ function loadConversation(id: string): Conversation | null {
       `[PerConvStorage] Validation failed for ${key}:`,
       validation.errors,
     );
-    quarantineConversation(raw, validation.errors, key);
-    localStorage.removeItem(key);
+    // Attempt auto-recovery before quarantining
+    const recovery = attemptRecovery(raw);
+    if (recovery.recovered && recovery.conversation) {
+      console.log(
+        `[PerConvStorage] Auto-recovered conversation ${id} (${recovery.stats.fieldsRepaired.join(', ')})`,
+      );
+      try {
+        localStorage.setItem(key, JSON.stringify(recovery.conversation));
+      } catch {
+        // Write-back failed, but we can still return the recovered data
+      }
+      return recovery.conversation;
+    }
+    // Recovery failed — quarantine, only delete source if quarantine succeeded
+    const quarantined = quarantineConversation(raw, validation.errors, key);
+    if (quarantined) {
+      localStorage.removeItem(key);
+    }
     return null;
   }
 
@@ -130,12 +169,15 @@ function migrateFromLegacyBlob(): {
 
   if (!parsed.data?.state) {
     // Entire blob is unparseable — quarantine the whole thing
-    quarantineConversation(
+    const quarantined = quarantineConversation(
       raw,
       ['Entire conversation blob unparseable'],
       LEGACY_BLOB_KEY,
     );
-    localStorage.removeItem(LEGACY_BLOB_KEY);
+    // Only delete legacy blob if quarantine succeeded (data is preserved)
+    if (quarantined) {
+      localStorage.removeItem(LEGACY_BLOB_KEY);
+    }
     return {
       conversations: [],
       selectedConversationId: null,
@@ -176,8 +218,33 @@ function migrateFromLegacyBlob(): {
           // Don't add to writtenConvIds — index won't reference this conversation
         }
       } else {
+        // Attempt auto-recovery before quarantining
         const convRaw = JSON.stringify(conv);
-        quarantineConversation(convRaw, validation.errors, LEGACY_BLOB_KEY);
+        const recovery = attemptRecovery(convRaw);
+        if (recovery.recovered && recovery.conversation) {
+          console.log(
+            `[PerConvStorage] Auto-recovered conversation during migration (${recovery.stats.fieldsRepaired.join(', ')})`,
+          );
+          conversations.push(recovery.conversation);
+          try {
+            localStorage.setItem(
+              `${CONV_PREFIX}${recovery.conversation.id}`,
+              JSON.stringify(recovery.conversation),
+            );
+            writtenConvIds.push(recovery.conversation.id);
+            lastWrittenTimestamps.set(
+              recovery.conversation.id,
+              recovery.conversation.updatedAt,
+            );
+          } catch (e) {
+            console.error(
+              `[PerConvStorage] Failed to write recovered conv-data-${recovery.conversation.id}:`,
+              e,
+            );
+          }
+        } else {
+          quarantineConversation(convRaw, validation.errors, LEGACY_BLOB_KEY);
+        }
       }
     }
   }
