@@ -241,12 +241,11 @@ describe('perConversationStorage', () => {
       const originalData = localStorage.getItem('conv-data-c1');
       expect(originalData).not.toBeNull();
 
-      // Make setItem throw QuotaExceededError for the next write
+      // Make setItem throw QuotaExceededError for conv-data-c1
       const originalSetItem = localStorage.setItem.bind(localStorage);
-      let callCount = 0;
       vi.spyOn(localStorage, 'setItem').mockImplementation(
         (key: string, value: string) => {
-          if (key === 'conv-data-c1' && callCount++ > 0) {
+          if (key === 'conv-data-c1') {
             const err = new Error('QuotaExceededError');
             err.name = 'QuotaExceededError';
             throw err;
@@ -255,10 +254,16 @@ describe('perConversationStorage', () => {
         },
       );
 
-      // Try to update the conversation
+      // Try to update the conversation (different updatedAt forces write attempt)
       const updated = {
         state: {
-          conversations: [{ ...makeConversation('c1'), name: 'Updated Name' }],
+          conversations: [
+            {
+              ...makeConversation('c1'),
+              name: 'Updated Name',
+              updatedAt: '2099-01-01T00:00:00Z',
+            },
+          ],
           selectedConversationId: null,
           folders: [],
         },
