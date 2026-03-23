@@ -4,7 +4,7 @@
  * Provides validation functions for conversation and folder data.
  * Used during storage hydration to detect and quarantine corrupted data.
  */
-import { Conversation } from '@/types/chat';
+import { Conversation, ConversationEntry } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
 export interface ValidationResult<T> {
@@ -79,7 +79,51 @@ export function validateConversation(
     return { valid: false, errors };
   }
 
+  // Sanitize message entries — strip invalid ones to prevent runtime crashes
+  if (Array.isArray(obj.messages)) {
+    const sanitized = sanitizeMessages(obj.messages);
+    (obj as Record<string, unknown>).messages = sanitized;
+  }
+
   return { valid: true, data: data as Conversation, errors: [] };
+}
+
+/**
+ * Validate a single message entry (Message or AssistantMessageGroup).
+ * Returns true if the entry is structurally valid enough to keep.
+ */
+export function isValidMessageEntry(
+  entry: unknown,
+): entry is ConversationEntry {
+  if (!entry || typeof entry !== 'object') return false;
+
+  const obj = entry as Record<string, unknown>;
+
+  // Check if it's an AssistantMessageGroup
+  if (obj.type === 'assistant_group') {
+    return (
+      Array.isArray(obj.versions) &&
+      obj.versions.length > 0 &&
+      typeof obj.activeIndex === 'number' &&
+      obj.activeIndex >= 0 &&
+      obj.activeIndex < obj.versions.length
+    );
+  }
+
+  // Check if it's a Message — must have role and content
+  if (typeof obj.role === 'string' && obj.content !== undefined) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Filter a messages array to only include structurally valid entries.
+ * Invalid entries are silently stripped to prevent runtime crashes.
+ */
+export function sanitizeMessages(messages: unknown[]): ConversationEntry[] {
+  return messages.filter(isValidMessageEntry);
 }
 
 /**
