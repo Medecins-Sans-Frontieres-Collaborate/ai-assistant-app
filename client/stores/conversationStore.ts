@@ -160,9 +160,11 @@ export const useConversationStore = create<ConversationStore>()(
       deleteFolder: (id) =>
         set((state) => ({
           folders: state.folders.filter((f) => f.id !== id),
-          // Remove folder from conversations
+          // Remove folder from conversations (with updatedAt so the change persists)
           conversations: state.conversations.map((c) =>
-            c.folderId === id ? { ...c, folderId: null } : c,
+            c.folderId === id
+              ? { ...c, folderId: null, updatedAt: new Date().toISOString() }
+              : c,
           ),
         })),
 
