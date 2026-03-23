@@ -140,6 +140,12 @@ export const VALIDATION_LIMITS = {
   REQUEST_BODY_MAX_BYTES: 10 * 1024 * 1024, // 10MB
   // Maximum file size for pre-download validation (matches largest file type)
   FILE_DOWNLOAD_MAX_BYTES: FILE_SIZE_LIMITS.VIDEO_MAX_BYTES, // 1.5GB
+  // Server-side safety net for message count (only API-bypass attempts should hit this)
+  MAX_API_MESSAGES: 200,
+  // Client-side windowing: max messages sent per API request
+  CLIENT_MAX_MESSAGES: 80,
+  // Title generation only needs a few messages for context
+  TITLE_MAX_MESSAGES: 6,
 } as const;
 
 // Default model for AI analysis operations (tone analysis, prompt revision, etc.)
