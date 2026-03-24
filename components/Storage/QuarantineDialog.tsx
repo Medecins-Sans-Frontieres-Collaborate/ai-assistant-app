@@ -151,6 +151,15 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                   )}
                 </div>
 
+                {/* Type badge */}
+                {item.itemType && item.itemType !== 'conversation' && (
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-1 italic">
+                    {item.itemType === 'folder'
+                      ? 'Folder data'
+                      : 'Backup (original with stripped messages)'}
+                  </p>
+                )}
+
                 {/* Errors */}
                 <div className="mb-2">
                   {item.errors.map((err, i) => (
@@ -165,14 +174,16 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
 
                 {/* Actions */}
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleRecovery(item)}
-                    className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
-                    disabled={recoveryStatus[item.id] === 'success'}
-                  >
-                    <IconRefresh size={12} />
-                    Recover
-                  </button>
+                  {(!item.itemType || item.itemType === 'conversation') && (
+                    <button
+                      onClick={() => handleRecovery(item)}
+                      className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                      disabled={recoveryStatus[item.id] === 'success'}
+                    >
+                      <IconRefresh size={12} />
+                      Recover
+                    </button>
+                  )}
                   <button
                     onClick={() => handleExport(item)}
                     className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
