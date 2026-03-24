@@ -35,14 +35,33 @@ describe('quarantineStore', () => {
     expect(items[0].recoveryAttempted).toBe(false);
   });
 
-  it('returns true for duplicate (data already preserved)', () => {
-    quarantineConversation('{"id": "conv-1"}', ['error1'], 'source-1');
+  it('updates existing entry on duplicate id with newer raw data', () => {
+    quarantineConversation('{"id": "conv-1", "v": 1}', ['error1'], 'source-1');
     const result = quarantineConversation(
-      '{"id": "conv-1"}',
+      '{"id": "conv-1", "v": 2}',
       ['error2'],
       'source-2',
     );
     expect(result).toBe(true);
+
+    const items = getQuarantinedItems();
+    expect(items).toHaveLength(1);
+    // Should have the NEWER raw data
+    expect(items[0].rawData).toBe('{"id": "conv-1", "v": 2}');
+    expect(items[0].errors).toEqual(['error2']);
+  });
+
+  it('preserves itemType on quarantined entries', () => {
+    quarantineConversation('{"id": "f1"}', ['err'], 'src', 'folder');
+    const items = getQuarantinedItems();
+    expect(items[0].itemType).toBe('folder');
+  });
+
+  it('uses composite key for backup type to avoid collision', () => {
+    quarantineConversation('{"id": "c1"}', ['err'], 'src', 'conversation');
+    quarantineConversation('{"id": "c1"}', ['stripped'], 'src', 'backup');
+    const items = getQuarantinedItems();
+    expect(items).toHaveLength(2);
   });
 
   it('generates UUID for unparseable data', () => {
