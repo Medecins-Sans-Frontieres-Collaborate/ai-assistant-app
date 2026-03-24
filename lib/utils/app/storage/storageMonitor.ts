@@ -10,7 +10,10 @@
  *
  * Updated for Zustand persist middleware
  */
-import { getPerConversationStorageSize } from '@/lib/utils/app/storage/perConversationStorage';
+import {
+  getConversationDataSize,
+  getPerConversationStorageSize,
+} from '@/lib/utils/app/storage/perConversationStorage';
 
 import { Conversation } from '@/types/chat';
 import { StorageBreakdown } from '@/types/storage';
@@ -407,10 +410,10 @@ export const calculateSpaceFreed = (
       return { spaceFreed: 0, conversationsRemoved: 0, percentFreed: 0 };
     }
 
-    // Get the current total size of conversation storage
-    const perConvSize = getPerConversationStorageSize();
+    // Get the current size of conversation data only (excludes index/folder overhead)
+    const convDataSize = getConversationDataSize();
     const legacySize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
-    const currentSize = perConvSize > 0 ? perConvSize : legacySize;
+    const currentSize = convDataSize > 0 ? convDataSize : legacySize;
 
     // Calculate what would be kept
     const keptConversations = sortedConversations.slice(0, keepCount);
@@ -582,10 +585,10 @@ export const calculateSpaceFreedByDays = (
       return { spaceFreed: 0, conversationsRemoved: 0, percentFreed: 0 };
     }
 
-    // Get the current total size of conversation storage
-    const perConvSize = getPerConversationStorageSize();
+    // Get the current size of conversation data only (excludes index/folder overhead)
+    const convDataSize = getConversationDataSize();
     const legacySize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
-    const currentSize = perConvSize > 0 ? perConvSize : legacySize;
+    const currentSize = convDataSize > 0 ? convDataSize : legacySize;
 
     // Calculate what would be kept
     const keptSize = getStringSizeInBytes(
