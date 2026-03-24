@@ -166,11 +166,13 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-mono text-gray-600 dark:text-gray-400 truncate">
-                      ID: {item.id}
+                      {t('itemId', { id: item.id })}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">
-                      {new Date(item.quarantinedAt).toLocaleDateString()} from{' '}
-                      {item.sourceKey}
+                      {t('itemSource', {
+                        date: new Date(item.quarantinedAt).toLocaleDateString(),
+                        source: item.sourceKey,
+                      })}
                     </p>
                   </div>
                   {recoveryStatus[item.id] === 'success' && (
