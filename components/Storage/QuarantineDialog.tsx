@@ -42,6 +42,10 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
   const addConversation = useConversationStore(
     (state) => state.addConversation,
   );
+  const updateConversation = useConversationStore(
+    (state) => state.updateConversation,
+  );
+  const conversations = useConversationStore((state) => state.conversations);
 
   // Refresh items after recovery/delete operations
   const refreshItems = useCallback(() => {
@@ -58,7 +62,15 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
     markRecoveryAttempted(item.id);
 
     if (result.recovered && result.conversation) {
-      addConversation(result.conversation);
+      // Dedup: update if conversation with same id already exists, otherwise add
+      const existing = conversations.find(
+        (c) => c.id === result.conversation!.id,
+      );
+      if (existing) {
+        updateConversation(result.conversation.id, result.conversation);
+      } else {
+        addConversation(result.conversation);
+      }
       removeQuarantinedItem(item.id);
       setRecoveryStatus((prev) => ({ ...prev, [item.id]: 'success' }));
       refreshItems();
