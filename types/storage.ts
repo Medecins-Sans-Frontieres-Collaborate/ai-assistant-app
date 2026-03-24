@@ -217,6 +217,8 @@ export interface QuarantinedItem {
   sourceKey: string;
   /** Whether a recovery attempt has been made */
   recoveryAttempted: boolean;
+  /** Type of quarantined data — determines what recovery actions are available */
+  itemType?: 'conversation' | 'folder' | 'backup';
 }
 
 /**
