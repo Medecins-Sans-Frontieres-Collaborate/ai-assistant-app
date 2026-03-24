@@ -66,6 +66,12 @@ function readIndex(): ConversationIndex | null {
  * Used as a fallback when conv-index is missing or corrupted but per-conversation keys exist.
  */
 function rebuildIndexFromKeys(): ConversationIndex | null {
+  // If a legacy blob exists, don't build a partial index from orphaned keys —
+  // let getItem fall through to migrateFromLegacyBlob() for a full migration retry.
+  if (localStorage.getItem(LEGACY_BLOB_KEY)) {
+    return null;
+  }
+
   const conversationIds: string[] = [];
   const folderIds: string[] = [];
 
@@ -194,7 +200,7 @@ function loadConversation(id: string): Conversation | null {
     console.warn(
       `[PerConvStorage] ${validation.messagesStripped} invalid message(s) stripped from ${key}, quarantining raw backup`,
     );
-    quarantineConversation(
+    const quarantined = quarantineConversation(
       raw,
       [
         `${validation.messagesStripped} invalid message entries stripped during validation`,
@@ -202,12 +208,15 @@ function loadConversation(id: string): Conversation | null {
       key,
       'backup',
     );
-    // Write the sanitized version back to localStorage
-    try {
-      localStorage.setItem(key, JSON.stringify(validation.data));
-    } catch {
-      // Write-back failed, but we still return the sanitized data for in-memory use
+    // Only overwrite source with sanitized version if quarantine preserved the original
+    if (quarantined) {
+      try {
+        localStorage.setItem(key, JSON.stringify(validation.data));
+      } catch {
+        // Write-back failed, but we still return the sanitized data for in-memory use
+      }
     }
+    // If quarantine failed, leave the source key untouched (original data preserved there)
   }
 
   return validation.data!;
@@ -598,22 +607,8 @@ export const perConversationStorage: StateStorage = {
         }
       }
 
-      // Remove deleted conversations
-      for (const id of currentConvIds) {
-        if (!newConvIds.has(id)) {
-          localStorage.removeItem(`${CONV_PREFIX}${id}`);
-          lastWrittenTimestamps.delete(id);
-        }
-      }
-
-      // Remove deleted folders
-      for (const id of currentFolderIds) {
-        if (!newFolderIds.has(id)) {
-          localStorage.removeItem(`${FOLDER_PREFIX}${id}`);
-        }
-      }
-
-      // Write index last (so partial failures don't leave inconsistent state)
+      // Write index before deleting old keys — if index write fails,
+      // old keys remain intact and consistent with the previous index.
       const index: ConversationIndex = {
         version: version ?? 5,
         conversationIds: Array.from(newConvIds),
@@ -621,6 +616,19 @@ export const perConversationStorage: StateStorage = {
         folderIds: Array.from(newFolderIds),
       };
       writeIndex(index);
+
+      // Only delete old keys after the index has been successfully written
+      for (const id of currentConvIds) {
+        if (!newConvIds.has(id)) {
+          localStorage.removeItem(`${CONV_PREFIX}${id}`);
+          lastWrittenTimestamps.delete(id);
+        }
+      }
+      for (const id of currentFolderIds) {
+        if (!newFolderIds.has(id)) {
+          localStorage.removeItem(`${FOLDER_PREFIX}${id}`);
+        }
+      }
     } catch (e) {
       console.error('[PerConvStorage] Error in setItem:', e);
     }
