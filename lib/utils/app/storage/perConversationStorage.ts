@@ -901,6 +901,11 @@ export function getPerConversationStorageSize(): number {
         total += item.length * 2; // UTF-16 encoding: 2 bytes per char
       }
     }
+    // Include quarantine size
+    const quarantine = localStorage.getItem('conv-quarantine');
+    if (quarantine) {
+      total += quarantine.length * 2;
+    }
     return total;
   } catch {
     return 0;
