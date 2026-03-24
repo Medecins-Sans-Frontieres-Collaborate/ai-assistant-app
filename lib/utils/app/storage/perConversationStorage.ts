@@ -364,8 +364,15 @@ function migrateFromLegacyBlob(): {
         '[PerConvStorage] JSON repair succeeded on legacy blob, retrying migration',
       );
       // Replace the blob with the repaired version and recurse
-      localStorage.setItem(LEGACY_BLOB_KEY, repaired);
-      return migrateFromLegacyBlob();
+      try {
+        localStorage.setItem(LEGACY_BLOB_KEY, repaired);
+        return migrateFromLegacyBlob();
+      } catch {
+        // Quota or storage error — fall through to salvage/quarantine
+        console.warn(
+          '[PerConvStorage] Failed to persist repaired legacy blob, falling back to salvage/quarantine',
+        );
+      }
     }
 
     // Attempt to salvage individual conversations from the corrupted blob
