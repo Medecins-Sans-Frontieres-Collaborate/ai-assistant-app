@@ -111,13 +111,20 @@ export function isValidMessageEntry(
 
   // Check if it's an AssistantMessageGroup
   if (obj.type === 'assistant_group') {
-    return (
-      Array.isArray(obj.versions) &&
-      obj.versions.length > 0 &&
-      typeof obj.activeIndex === 'number' &&
-      obj.activeIndex >= 0 &&
-      obj.activeIndex < obj.versions.length
-    );
+    if (
+      !Array.isArray(obj.versions) ||
+      obj.versions.length === 0 ||
+      typeof obj.activeIndex !== 'number' ||
+      obj.activeIndex < 0 ||
+      obj.activeIndex >= obj.versions.length
+    ) {
+      return false;
+    }
+    // Verify the active version has a defined content field
+    const activeVersion = (obj.versions as Record<string, unknown>[])[
+      obj.activeIndex
+    ];
+    return activeVersion != null && activeVersion.content !== undefined;
   }
 
   // Check if it's a Message — must have role and content
