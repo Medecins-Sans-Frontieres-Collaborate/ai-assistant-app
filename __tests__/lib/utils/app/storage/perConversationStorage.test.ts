@@ -211,6 +211,64 @@ describe('perConversationStorage', () => {
       expect(parsed.state.conversations[0].id).toBe('c1');
     });
 
+    it('returns loaded data even when index write fails during hydration', () => {
+      // Set up valid per-conv data
+      localStorage.setItem(
+        'conv-data-c1',
+        JSON.stringify(makeConversation('c1')),
+      );
+      // Store a corrupted conversation that will be quarantined
+      localStorage.setItem('conv-data-bad', '{broken}');
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['c1', 'bad'],
+          selectedConversationId: null,
+          folderIds: [],
+        }),
+      );
+
+      // Make index writes fail (simulating full storage after quarantine)
+      const originalSetItem = localStorage.setItem.bind(localStorage);
+      vi.spyOn(localStorage, 'setItem').mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'conv-index') {
+            throw new Error('QuotaExceededError');
+          }
+          originalSetItem(key, value);
+        },
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      vi.restoreAllMocks();
+
+      // Should still return the valid conversation despite index write failure
+      expect(raw).not.toBeNull();
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.conversations).toHaveLength(1);
+      expect(parsed.state.conversations[0].id).toBe('c1');
+    });
+
+    it('recovers from truncated legacy blob via JSON repair', () => {
+      // Simulate a truncated legacy blob (missing closing brackets)
+      const truncatedBlob =
+        '{"state":{"conversations":[{"id":"rescued","name":"Truncated","messages":[],"model":{"id":"gpt-4","name":"GPT-4"},"temperature":0.7,"prompt":"","folderId":null}],"selectedConversationId":null,"folders":[]},"version":4';
+      // Note: missing final closing brace
+
+      localStorage.setItem('conversation-storage', truncatedBlob);
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.conversations).toHaveLength(1);
+      expect(parsed.state.conversations[0].id).toBe('rescued');
+
+      // Legacy blob should be cleaned up after successful repair + migration
+      expect(localStorage.getItem('conversation-storage')).toBeNull();
+    });
+
     it('strips invalid message entries and quarantines raw backup', () => {
       const conv = {
         ...makeConversation('sanitize-test'),
