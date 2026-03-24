@@ -23,7 +23,7 @@ import {
   validateFolder,
 } from './conversationValidator';
 import { quarantineConversation } from './quarantineStore';
-import { attemptRecovery } from './recoveryService';
+import { attemptRecovery, repairJSON } from './recoveryService';
 
 import type { StateStorage } from 'zustand/middleware';
 
@@ -280,10 +280,31 @@ function migrateFromLegacyBlob(): {
   }>(raw);
 
   if (!parsed.data?.state) {
-    // Entire blob is unparseable — quarantine the whole thing
+    // Attempt JSON repair before giving up (handles truncation, trailing commas)
+    const repaired = repairJSON(raw);
+    const repairedParsed = tryParseJSON<{
+      state?: {
+        conversations?: unknown[];
+        selectedConversationId?: string | null;
+        folders?: unknown[];
+      };
+      version?: number;
+    }>(repaired);
+
+    if (repairedParsed.data?.state) {
+      // Repair succeeded — re-run migration with the repaired data
+      console.log(
+        '[PerConvStorage] JSON repair succeeded on legacy blob, retrying migration',
+      );
+      // Replace the blob with the repaired version and recurse
+      localStorage.setItem(LEGACY_BLOB_KEY, repaired);
+      return migrateFromLegacyBlob();
+    }
+
+    // Repair failed — quarantine the whole thing
     const quarantined = quarantineConversation(
       raw,
-      ['Entire conversation blob unparseable'],
+      ['Entire conversation blob unparseable (JSON repair also failed)'],
       LEGACY_BLOB_KEY,
       'conversation',
     );
@@ -496,7 +517,7 @@ export const perConversationStorage: StateStorage = {
           }
         }
 
-        // Update index if some items were quarantined
+        // Update index if some items were quarantined (best-effort, don't fail hydration)
         if (
           validIds.length !== index.conversationIds.length ||
           validFolderIds.length !== index.folderIds.length
@@ -508,11 +529,18 @@ export const perConversationStorage: StateStorage = {
               `[PerConvStorage] ${quarantinedCount} conversation(s) quarantined during load`,
             );
           }
-          writeIndex({
-            ...index,
-            conversationIds: validIds,
-            folderIds: validFolderIds,
-          });
+          try {
+            writeIndex({
+              ...index,
+              conversationIds: validIds,
+              folderIds: validFolderIds,
+            });
+          } catch (e) {
+            console.warn(
+              '[PerConvStorage] Failed to update index after quarantine, continuing with loaded data:',
+              e,
+            );
+          }
         }
 
         // Check if legacy blob still exists (failed previous migration) and merge unmigrated data
@@ -534,12 +562,19 @@ export const perConversationStorage: StateStorage = {
                 validFolderIds.push(folder.id);
               }
             }
-            // Update the index with merged data
-            writeIndex({
-              ...index,
-              conversationIds: validIds,
-              folderIds: validFolderIds,
-            });
+            // Update the index with merged data (best-effort)
+            try {
+              writeIndex({
+                ...index,
+                conversationIds: validIds,
+                folderIds: validFolderIds,
+              });
+            } catch (e) {
+              console.warn(
+                '[PerConvStorage] Failed to update index after merge, continuing:',
+                e,
+              );
+            }
           }
         }
 
