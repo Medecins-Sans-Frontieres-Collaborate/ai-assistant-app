@@ -156,10 +156,10 @@ export const getStorageBreakdown = (): StorageBreakdown => {
 
   try {
     // Calculate Zustand storage sizes
-    // v5+ uses per-conversation keys; fall back to legacy blob size
+    // During partial migration, both per-conv keys AND legacy blob can exist
     const legacyBlobSize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
     const perConvSize = getPerConversationStorageSize();
-    const zustandConvs = perConvSize > 0 ? perConvSize : legacyBlobSize;
+    const zustandConvs = perConvSize + legacyBlobSize;
     const zustandSettings = getItemSize(ZUSTAND_STORAGE_KEYS.SETTINGS);
     const zustandUI = getItemSize(ZUSTAND_STORAGE_KEYS.UI);
     const zustandTotal = zustandConvs + zustandSettings + zustandUI;
