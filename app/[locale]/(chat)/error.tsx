@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { ErrorDisplay } from '@/components/ErrorBoundary/ErrorDisplay';
 
 export default function ChatError({
@@ -10,6 +12,8 @@ export default function ChatError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations();
+
   useEffect(() => {
     console.error('Chat error:', error);
   }, [error]);
@@ -17,10 +21,10 @@ export default function ChatError({
   return (
     <ErrorDisplay
       error={error}
-      title="Something went wrong"
-      description="An error occurred while loading the chat"
+      title={t('errors.somethingWentWrong')}
+      description={t('errors.chatLoadError')}
       onRetry={() => window.location.reload()}
-      retryLabel="Reload chat"
+      retryLabel={t('errors.reloadPage')}
       showSupportInfo={true}
       showDataExport={true}
       showStorageReset={true}
