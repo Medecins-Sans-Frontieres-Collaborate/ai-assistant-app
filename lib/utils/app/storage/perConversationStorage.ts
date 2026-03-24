@@ -12,6 +12,13 @@
  *
  * Migration: On first read, if conv-index doesn't exist but the legacy
  * conversation-storage blob does, it performs an automatic migration.
+ *
+ * Quarantine policy: BEST-EFFORT PRESERVE, ALWAYS PROCEED.
+ * When corrupted data is encountered, we attempt to quarantine the raw bytes
+ * for potential export/inspection. If the quarantine write itself fails (e.g.,
+ * storage full), we still proceed — delete the source key and continue loading.
+ * The app staying functional takes priority over preserving every corrupted byte.
+ * Conversation data may be sensitive, so quarantine storage should be minimal.
  */
 import { Conversation } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
@@ -144,16 +151,14 @@ function loadConversation(id: string): Conversation | null {
       }
       return recovery.conversation;
     }
-    // Recovery failed — quarantine, only delete source if quarantine succeeded
-    const quarantined = quarantineConversation(
+    // Recovery failed — best-effort quarantine, then proceed
+    quarantineConversation(
       raw,
       [`JSON parse error: ${parsed.error}`],
       key,
       'conversation',
     );
-    if (quarantined) {
-      localStorage.removeItem(key);
-    }
+    localStorage.removeItem(key);
     return null;
   }
 
@@ -176,16 +181,9 @@ function loadConversation(id: string): Conversation | null {
       }
       return recovery.conversation;
     }
-    // Recovery failed — quarantine, only delete source if quarantine succeeded
-    const quarantined = quarantineConversation(
-      raw,
-      validation.errors,
-      key,
-      'conversation',
-    );
-    if (quarantined) {
-      localStorage.removeItem(key);
-    }
+    // Recovery failed — best-effort quarantine, then proceed
+    quarantineConversation(raw, validation.errors, key, 'conversation');
+    localStorage.removeItem(key);
     return null;
   }
 
@@ -194,7 +192,7 @@ function loadConversation(id: string): Conversation | null {
     console.warn(
       `[PerConvStorage] ${validation.messagesStripped} invalid message(s) stripped from ${key}, quarantining raw backup`,
     );
-    const quarantined = quarantineConversation(
+    quarantineConversation(
       raw,
       [
         `${validation.messagesStripped} invalid message entries stripped during validation`,
@@ -202,15 +200,12 @@ function loadConversation(id: string): Conversation | null {
       key,
       'backup',
     );
-    // Only overwrite source with sanitized version if quarantine preserved the original
-    if (quarantined) {
-      try {
-        localStorage.setItem(key, JSON.stringify(validation.data));
-      } catch {
-        // Write-back failed, but we still return the sanitized data for in-memory use
-      }
+    // Write sanitized version back (best-effort)
+    try {
+      localStorage.setItem(key, JSON.stringify(validation.data));
+    } catch {
+      // Write-back failed, but we still return the sanitized data for in-memory use
     }
-    // If quarantine failed, leave the source key untouched (original data preserved there)
   }
 
   return validation.data!;
@@ -228,29 +223,20 @@ function loadFolder(id: string): FolderInterface | null {
 
   const parsed = tryParseJSON<unknown>(raw);
   if (!parsed.data) {
-    const quarantined = quarantineConversation(
+    quarantineConversation(
       raw,
       [`Folder JSON parse error: ${parsed.error}`],
       key,
       'folder',
     );
-    if (quarantined) {
-      localStorage.removeItem(key);
-    }
+    localStorage.removeItem(key);
     return null;
   }
 
   const validation = validateFolder(parsed.data);
   if (!validation.valid) {
-    const quarantined = quarantineConversation(
-      raw,
-      validation.errors,
-      key,
-      'folder',
-    );
-    if (quarantined) {
-      localStorage.removeItem(key);
-    }
+    quarantineConversation(raw, validation.errors, key, 'folder');
+    localStorage.removeItem(key);
     return null;
   }
 
