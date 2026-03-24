@@ -9,6 +9,8 @@ import {
 } from '@tabler/icons-react';
 import { FC, useCallback, useReducer, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { CONV_PREFIX } from '@/lib/utils/app/storage/perConversationStorage';
 import {
   clearAllQuarantined,
@@ -34,6 +36,7 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
   isOpen,
   onClose,
 }) => {
+  const t = useTranslations('quarantine');
   // Version counter to trigger re-reads after mutations (recovery/delete)
   const [, forceRefresh] = useReducer((x: number) => x + 1, 0);
   const [recoveryStatus, setRecoveryStatus] = useState<
@@ -133,11 +136,10 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
             </div>
             <div>
               <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Quarantined Conversations
+                {t('title')}
               </h2>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {items.length} item{items.length !== 1 ? 's' : ''} with data
-                issues
+                {t('itemCount', { count: items.length })}
               </p>
             </div>
           </div>
@@ -153,7 +155,7 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
         <div className="flex-1 overflow-y-auto px-5 py-3 space-y-3">
           {items.length === 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-6">
-              No quarantined items.
+              {t('noItems')}
             </p>
           ) : (
             items.map((item) => (
@@ -173,12 +175,12 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                   </div>
                   {recoveryStatus[item.id] === 'success' && (
                     <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                      Recovered
+                      {t('recovered')}
                     </span>
                   )}
                   {recoveryStatus[item.id] === 'failed' && (
                     <span className="text-xs text-red-600 dark:text-red-400 font-medium">
-                      Recovery failed
+                      {t('recoveryFailed')}
                     </span>
                   )}
                 </div>
@@ -187,8 +189,8 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                 {item.itemType && item.itemType !== 'conversation' && (
                   <p className="text-xs text-gray-400 dark:text-gray-500 mb-1 italic">
                     {item.itemType === 'folder'
-                      ? 'Folder data'
-                      : 'Backup (original with stripped messages)'}
+                      ? t('folderData')
+                      : t('backupData')}
                   </p>
                 )}
 
@@ -213,7 +215,7 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                       disabled={recoveryStatus[item.id] === 'success'}
                     >
                       <IconRefresh size={12} />
-                      Recover
+                      {t('recover')}
                     </button>
                   )}
                   <button
@@ -221,14 +223,14 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
                     className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     <IconDownload size={12} />
-                    Export
+                    {t('export')}
                   </button>
                   <button
                     onClick={() => handleDelete(item.id)}
                     className="flex items-center gap-1 px-2 py-1 text-xs rounded bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
                   >
                     <IconTrash size={12} />
-                    Delete
+                    {t('delete')}
                   </button>
                 </div>
               </div>
@@ -243,13 +245,13 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
               onClick={handleDeleteAll}
               className="text-xs text-red-600 dark:text-red-400 hover:underline"
             >
-              Delete all quarantined data
+              {t('deleteAll')}
             </button>
             <button
               onClick={onClose}
               className="px-3 py-1.5 text-xs rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
-              Close
+              {t('close')}
             </button>
           </div>
         )}

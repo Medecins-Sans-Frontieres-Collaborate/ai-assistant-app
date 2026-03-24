@@ -783,6 +783,22 @@
     "resetStorageWarning": "Resetting will clear all conversation data. Before resetting, you can export a copy of the raw data. Share this file with the tech team if you need help recovering your conversations.",
     "resetStorage": "Reset storage"
   },
+  "quarantine": {
+    "title": "Quarantined Conversations",
+    "itemCount": "{count, plural, one {# item} other {# items}} with data issues",
+    "noItems": "No quarantined items.",
+    "recover": "Recover",
+    "export": "Export",
+    "delete": "Delete",
+    "deleteAll": "Delete all quarantined data",
+    "close": "Close",
+    "recovered": "Recovered",
+    "recoveryFailed": "Recovery failed",
+    "folderData": "Folder data",
+    "backupData": "Backup (original with stripped messages)",
+    "bannerMessage": "{count, plural, one {# conversation had data issues and was quarantined.} other {# conversations had data issues and were quarantined.}}",
+    "review": "Review"
+  },
   "prompts": {
     "buildReusablePrompts": "Build reusable prompts with AI assistance",
     "noToneDefault": "No tone (use default)",
