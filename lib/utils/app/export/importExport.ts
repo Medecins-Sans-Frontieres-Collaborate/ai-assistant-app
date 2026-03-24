@@ -1,5 +1,3 @@
-import { LocalStorageService } from '@/client/services/storage/localStorageService';
-
 import { Conversation } from '@/types/chat';
 import {
   ExportFormatV1,
@@ -108,10 +106,8 @@ function currentDate() {
 }
 
 export const exportData = () => {
-  // Migrate any legacy data to Zustand format first
-  LocalStorageService.migrateFromLegacy();
-
   // Read from Zustand stores directly (works with both v4 blob and v5 per-conversation keys)
+  // Stores are already hydrated by the time the user can trigger export
   const conversationState = useConversationStore.getState();
   const historyArray: Conversation[] = conversationState.conversations || [];
   const foldersArray: FolderInterface[] = conversationState.folders || [];
@@ -147,9 +143,6 @@ export const exportData = () => {
 export const importData = (
   data: SupportedExportFormats,
 ): LatestExportFormat => {
-  // Migrate any legacy data to Zustand format first
-  LocalStorageService.migrateFromLegacy();
-
   const { history, folders, prompts, tones, customAgents } = cleanData(data);
 
   // Read existing data from Zustand store (works with v5 per-conversation keys)
