@@ -9,6 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { FC, useCallback, useReducer, useState } from 'react';
 
+import { CONV_PREFIX } from '@/lib/utils/app/storage/perConversationStorage';
 import {
   clearAllQuarantined,
   getQuarantinedItems,
@@ -80,8 +81,18 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
       } else {
         addConversation(result.conversation);
       }
-      removeQuarantinedItem(item.id);
-      setRecoveryStatus((prev) => ({ ...prev, [item.id]: 'success' }));
+      // Verify the conversation actually persisted before removing from quarantine
+      const convKey = `${CONV_PREFIX}${result.conversation.id}`;
+      if (localStorage.getItem(convKey)) {
+        removeQuarantinedItem(item.id);
+        setRecoveryStatus((prev) => ({ ...prev, [item.id]: 'success' }));
+      } else {
+        // Persistence failed (likely quota) — keep quarantine entry as safety net
+        setRecoveryStatus((prev) => ({
+          ...prev,
+          [item.id]: 'failed',
+        }));
+      }
       refreshItems();
     } else {
       setRecoveryStatus((prev) => ({ ...prev, [item.id]: 'failed' }));
