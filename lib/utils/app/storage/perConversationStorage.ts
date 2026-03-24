@@ -149,6 +149,7 @@ function loadConversation(id: string): Conversation | null {
       raw,
       [`JSON parse error: ${parsed.error}`],
       key,
+      'conversation',
     );
     if (quarantined) {
       localStorage.removeItem(key);
@@ -176,7 +177,12 @@ function loadConversation(id: string): Conversation | null {
       return recovery.conversation;
     }
     // Recovery failed — quarantine, only delete source if quarantine succeeded
-    const quarantined = quarantineConversation(raw, validation.errors, key);
+    const quarantined = quarantineConversation(
+      raw,
+      validation.errors,
+      key,
+      'conversation',
+    );
     if (quarantined) {
       localStorage.removeItem(key);
     }
@@ -194,6 +200,7 @@ function loadConversation(id: string): Conversation | null {
         `${validation.messagesStripped} invalid message entries stripped during validation`,
       ],
       key,
+      'backup',
     );
     // Write the sanitized version back to localStorage
     try {
@@ -222,6 +229,7 @@ function loadFolder(id: string): FolderInterface | null {
       raw,
       [`Folder JSON parse error: ${parsed.error}`],
       key,
+      'folder',
     );
     if (quarantined) {
       localStorage.removeItem(key);
@@ -231,7 +239,12 @@ function loadFolder(id: string): FolderInterface | null {
 
   const validation = validateFolder(parsed.data);
   if (!validation.valid) {
-    const quarantined = quarantineConversation(raw, validation.errors, key);
+    const quarantined = quarantineConversation(
+      raw,
+      validation.errors,
+      key,
+      'folder',
+    );
     if (quarantined) {
       localStorage.removeItem(key);
     }
@@ -269,6 +282,7 @@ function migrateFromLegacyBlob(): {
       raw,
       ['Entire conversation blob unparseable'],
       LEGACY_BLOB_KEY,
+      'conversation',
     );
     // Only delete legacy blob if quarantine succeeded (data is preserved)
     if (quarantined) {
@@ -293,16 +307,19 @@ function migrateFromLegacyBlob(): {
   // Validate and write each conversation individually
   if (Array.isArray(state.conversations)) {
     for (const conv of state.conversations) {
+      // Capture raw BEFORE validation (which mutates messages in place)
+      const convRawBeforeValidation = JSON.stringify(conv);
       const validation = validateConversation(conv);
       if (validation.valid && validation.data) {
         // Quarantine raw backup if messages were stripped during validation
         if (validation.messagesStripped && validation.messagesStripped > 0) {
           quarantineConversation(
-            JSON.stringify(conv),
+            convRawBeforeValidation,
             [
               `${validation.messagesStripped} invalid message entries stripped during migration`,
             ],
             LEGACY_BLOB_KEY,
+            'backup',
           );
         }
         try {
@@ -325,9 +342,8 @@ function migrateFromLegacyBlob(): {
           // Don't include — legacy blob will be preserved if index write also fails
         }
       } else {
-        // Attempt auto-recovery before quarantining
-        const convRaw = JSON.stringify(conv);
-        const recovery = attemptRecovery(convRaw);
+        // Attempt auto-recovery before quarantining (use pre-validation raw)
+        const recovery = attemptRecovery(convRawBeforeValidation);
         if (recovery.recovered && recovery.conversation) {
           console.log(
             `[PerConvStorage] Auto-recovered conversation during migration (${recovery.stats.fieldsRepaired.join(', ')})`,
@@ -350,7 +366,12 @@ function migrateFromLegacyBlob(): {
             );
           }
         } else {
-          quarantineConversation(convRaw, validation.errors, LEGACY_BLOB_KEY);
+          quarantineConversation(
+            convRawBeforeValidation,
+            validation.errors,
+            LEGACY_BLOB_KEY,
+            'conversation',
+          );
         }
       }
     }
