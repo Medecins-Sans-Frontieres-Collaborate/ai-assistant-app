@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Дошло је до неочекиване грешке",
     "criticalErrorReload": "Дошло је до критичне грешке. Поново учитајте страницу.",
     "reloadPage": "Поново учитај страницу",
-    "persistContactSupport": "Ако проблем и даље постоји, контактирајте подршку"
+    "persistContactSupport": "Ако проблем и даље постоји, контактирајте подршку",
+    "exportDataForRecovery": "Izvezi podatke razgovora radi oporavka",
+    "dataExported": "Podaci su izvezeni",
+    "exportDataDescription": "Podelite ovu datoteku sa tehničkim timom da biste pomogli u oporavku vaših podataka.",
+    "resetStoragePrompt": "Ako ponovno učitavanje ne pomogne, pokušajte da resetujete skladište razgovora",
+    "resetStorageWarning": "Resetovanjem će biti obrisani svi podaci iz razgovora. Pre resetovanja, možete izvesti kopiju sirovih podataka. Podelite ovu datoteku sa tehničkim timom ako vam je potrebna pomoć pri oporavku razgovora.",
+    "resetStorage": "Resetuj skladište"
   },
   "prompts": {
     "buildReusablePrompts": "Направите промпте за поновну употребу уз AI помоћ",
@@ -1765,7 +1771,17 @@
     "retry": "Pokušaj ponovo",
     "pinned": "Zakačen",
     "pin": "Zakači",
-    "tokens": "tokeni"
+    "tokens": "tokeni",
+    "pinnedTooltip": "Prikačeno: uvek uključeno",
+    "unpinnedTooltip": "Neprikačeno: može biti isključeno ili automatski uklonjeno",
+    "pinnedCount": "{pinned} prikačenih / {total}",
+    "sessionQuota": "Kvota sesije",
+    "sessionQuotaUsage": "{used} / {total} tokena iskorišćeno u ovoj sesiji",
+    "sessionQuotaExhausted": "Kvota za aktivne datoteke je dostignuta. Datoteke su obrisane.",
+    "pinBlockedTooLarge": "Datoteka je prevelika za priključivanje ({tokens} tokena, ograničenje: {limit})",
+    "activationRejectedTooLarge": "Datoteka je prevelika za aktivni kontekst ({tokens} tokena, ograničenje: {limit})",
+    "sessionQuotaWarning": "Kvota sesije je pri kraju — preostalo {remaining} tokena",
+    "sessionQuotaNearlyExhausted": "Kvota sesije je skoro potrošena — aktivne datoteke možda neće biti uključene"
   },
   "shortcuts": {
     "title": "Prečice na tastaturi",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Promeni model",
     "scrollToBottom": "Pomeri na dno",
     "showHelp": "Prikaži prečice na tastaturi",
-    "attachFile": "Priloži fajl"
+    "attachFile": "Priloži fajl",
+    "searchConversations": "Pretraži razgovore",
+    "toggleTheme": "Promeni temu",
+    "regenerateResponse": "Regeneriši odgovor",
+    "copyLastResponse": "Kopiraj poslednji odgovor"
   }
 }

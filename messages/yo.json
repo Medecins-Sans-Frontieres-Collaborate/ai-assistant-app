@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Àṣìṣe àìretí kan ṣẹlẹ̀",
     "criticalErrorReload": "Àṣìṣe pàtàkì kan ṣẹlẹ̀. Jọ̀wọ́ tún ojú-ìwé ṣe.",
     "reloadPage": "Tún ojú-ìwé ṣe",
-    "persistContactSupport": "Tí ìṣòro yìí bá tẹ̀síwájú, jọ̀wọ́ kàn sí àtìlẹ́yìn"
+    "persistContactSupport": "Tí ìṣòro yìí bá tẹ̀síwájú, jọ̀wọ́ kàn sí àtìlẹ́yìn",
+    "exportDataForRecovery": "Gbe data ibanisọrọ jade fun imupadabọ",
+    "dataExported": "Data ti gbe jade",
+    "exportDataDescription": "Pin faili yii pẹlu ẹgbẹ imọ-ẹrọ lati ṣe iranwọ fun imupadabọ data rẹ.",
+    "resetStoragePrompt": "Ti atun-loading ko ba ṣiṣẹ, gbiyanju atunto ipamọ ibanisọrọ",
+    "resetStorageWarning": "Atunto yoo pa gbogbo data ibanisọrọ rẹ. Ṣaaju ki o to tunto, o le gbe ẹda data atilẹba rẹ jade. Pin faili yii pẹlu ẹgbẹ imọ-ẹrọ ti o ba nilo iranlọwọ fun imupadabọ ibanisọrọ rẹ.",
+    "resetStorage": "Tun ipamọ ṣe"
   },
   "prompts": {
     "buildReusablePrompts": "Kọ́ àwọn ìtọ́sọ́nà tí a lè tún lò pẹ̀lú ìrànlọ́wọ́ AI",
@@ -1765,7 +1771,17 @@
     "retry": "Tun gbìyànjú",
     "pinned": "Fi sí àkójọ",
     "pin": "Fi sí àkójọ",
-    "tokens": "àmi"
+    "tokens": "àmi",
+    "pinnedTooltip": "Ti wa ni didapọ: yoo wa nigbagbogbo",
+    "unpinnedTooltip": "Ti ko ni didapọ: le wa ni yọ kuro tabi paarẹ laifọwọyi",
+    "pinnedCount": "{pinned} ti wa ni didapọ / {total}",
+    "sessionQuota": "Iye akoko igba",
+    "sessionQuotaUsage": "{used} / {total} awọn tọọki lo ninu igba yii",
+    "sessionQuotaExhausted": "Iye akoko igba fun awọn faili ti pari. Awọn faili ti wa ni nu.",
+    "pinBlockedTooLarge": "Faili tobi ju lati so mọ ({tokens} tọọki, aala: {limit})",
+    "activationRejectedTooLarge": "Faili tobi ju fun ipo lilo gangan ({tokens} tọọki, aala: {limit})",
+    "sessionQuotaWarning": "Iye akoko igba n lọ silẹ — {remaining} tọọki ku",
+    "sessionQuotaNearlyExhausted": "Iye akoko igba fẹrẹ parí — awọn faili to n ṣiṣẹ le ma wa"
   },
   "shortcuts": {
     "title": "Awọn ọna abuja bọtini",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Yipada awoṣe",
     "scrollToBottom": "Yi lọ sí isalẹ",
     "showHelp": "Fi awọn ọna abuja bọtini han",
-    "attachFile": "So faili pọ"
+    "attachFile": "So faili pọ",
+    "searchConversations": "Wa ibanisọrọ",
+    "toggleTheme": "Yi àkópọ́ àyẹyẹ pada",
+    "regenerateResponse": "Tun idahun ṣẹda",
+    "copyLastResponse": "Da idahun to kẹhin mọ"
   }
 }

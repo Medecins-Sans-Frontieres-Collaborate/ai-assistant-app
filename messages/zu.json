@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Kwenzeke iphutha elingalindelekile",
     "criticalErrorReload": "Kwenzeke iphutha elibalulekile. Sicela ulayishe kabusha ikhasi.",
     "reloadPage": "Layisha kabusha ikhasi",
-    "persistContactSupport": "Uma le nkinga iqhubeka, sicela uxhumane nosekelo"
+    "persistContactSupport": "Uma le nkinga iqhubeka, sicela uxhumane nosekelo",
+    "exportDataForRecovery": "Thumela idatha yengxoxo ukuze ibuyiselwe",
+    "dataExported": "Idatha ithunyelwe",
+    "exportDataDescription": "Yabelana ngaleli fayela nethimba lobuchwepheshe ukuze bakusize ukubuyisa idatha yakho.",
+    "resetStoragePrompt": "Uma ukuvuselela kungasizi, zama ukusetha kabusha isitoreji sengxoxo",
+    "resetStorageWarning": "Ukusetha kabusha kuzocisha yonke idatha yengxoxo. Ngaphambi kokusetha kabusha, ungathumela ikhophi yedatha engakahleleki. Yabelana ngaleli fayela nethimba lobuchwepheshe uma ufuna usizo ekubuyiseleni izingxoxo zakho.",
+    "resetStorage": "Setha kabusha isitoreji"
   },
   "prompts": {
     "buildReusablePrompts": "Yakha iziqondiso ezisetshenziswa kabusha ngosizo lwe-AI",
@@ -1765,7 +1771,17 @@
     "retry": "Phinda uzame",
     "pinned": "Kubekwe esicongweni",
     "pin": "Beka esicongweni",
-    "tokens": "ama-token"
+    "tokens": "ama-token",
+    "pinnedTooltip": "Kukhonjiwe: kuhlale kufakiwe",
+    "unpinnedTooltip": "Akunakhonjwanga: kungasuswa noma kungafakwanga",
+    "pinnedCount": "{pinned} abakhonjwe / {total}",
+    "sessionQuota": "Isabelo seseshini",
+    "sessionQuotaUsage": "{used} / {total} amathokheni asetshenzisiwe kulesi sikhathi",
+    "sessionQuotaExhausted": "Isabelo sefayela elisebenzayo sesiphelile. Amafayela asusiwe.",
+    "pinBlockedTooLarge": "Ifayela likhulu kakhulu ukubekwa phezulu ({tokens} amathokheni, umkhawulo: {limit})",
+    "activationRejectedTooLarge": "Ifayela likhulu kakhulu kunesimo esisebenzayo ({tokens} amathokheni, umkhawulo: {limit})",
+    "sessionQuotaWarning": "Isabelo seseshini siphelile — kusele amathokheni angu-{remaining}",
+    "sessionQuotaNearlyExhausted": "Isabelo seseshini cishe siphelile — amafayela asebenzayo angahle angafakwa"
   },
   "shortcuts": {
     "title": "Izinqamuleli Zekhibhodi",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Shintsha imodeli",
     "scrollToBottom": "Skrolela phansi",
     "showHelp": "Bonisa izinqamuleli zekhibhodi",
-    "attachFile": "Namathisela ifayela"
+    "attachFile": "Namathisela ifayela",
+    "searchConversations": "Sesha izingxoxo",
+    "toggleTheme": "Shintsha itimu",
+    "regenerateResponse": "Phinda uphendule",
+    "copyLastResponse": "Kopisha impendulo yokugcina"
   }
 }

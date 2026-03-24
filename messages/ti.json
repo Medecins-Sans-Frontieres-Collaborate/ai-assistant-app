@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "ዘይተጸበኻዮ ጌጋ ተፈጢሩ",
     "criticalErrorReload": "ከቢድ ጌጋ ተፈጢሩ። በጃኻ ገጹ ዳግም ጸዓን።",
     "reloadPage": "ገጽ ዳግም ጸዓን",
-    "persistContactSupport": "እዚ ጸገም እንተ ቀጺሉ፣ በጃኻ ደገፍ ርኸብ"
+    "persistContactSupport": "እዚ ጸገም እንተ ቀጺሉ፣ በጃኻ ደገፍ ርኸብ",
+    "exportDataForRecovery": "ቓወደ-መገናኛ ውሑድ ንናይ ምምላስ ምልኣኽ ኣልዎ",
+    "dataExported": "ውሑድ ተልኢኹ",
+    "exportDataDescription": "እዚ ፋይል ምስ ቴክ ቡድን ምስመሓት ንምምላስ ውሑድካ ንኣገዳሲ ካብኡ ኣብዚ ራእዩ።",
+    "resetStoragePrompt": "ምስ መነጽር ኣይሰርሕካን እንተኾነ ሞክሩ ናይ ቓወደ-መገናኛ ማእታዊ ውሑድ እንደገና ምውጣን።",
+    "resetStorageWarning": "እንደገና ምውጣን ቓወደ-መገናኛ ውሑድ ኩሉ ይሰርዝ። ቅድሚ ምውጣን ዝሓደስ ውሑድ ምልኣኽ ትኽእሉ ኢኻ። ምስ ቴክ ቡድን ምምላስ ዝፈልጡ እቲ ፋይል ካይትላኡሎም።",
+    "resetStorage": "ማእታዊ ውሑድ እንደገና ኣኣልዎ"
   },
   "prompts": {
     "buildReusablePrompts": "ብAI ሓገዝ ደጋጋሚ ዝጥቀሙ ፕሮምፕትታት ስራሕ",
@@ -1765,7 +1771,17 @@
     "retry": "ድገም",
     "pinned": "ዝጣልፉ",
     "pin": "ኣጣልፉ",
-    "tokens": "ቶከን"
+    "tokens": "ቶከን",
+    "pinnedTooltip": "ተሰቕሉ: ምዃኑ ዋህዎ።",
+    "unpinnedTooltip": "ዝተፈታ: ክተዕጸዉ ወይ ንብሑል ይወጽኡ ይኽእሉ።",
+    "pinnedCount": "{pinned} ተሰቕሉ / {total}",
+    "sessionQuota": "ኣብ ክፍሊት ደረጃ ኣብዛት",
+    "sessionQuotaUsage": "{used} / {total} token ተጠቒሙ ኣብዚ ክፍሊት",
+    "sessionQuotaExhausted": "ደረጃ ዕዳእ ፋይል ብምሉእ ተሸፍኡ። ፋይልታት ጸፍኡ።",
+    "pinBlockedTooLarge": "ፋይል ውሕሳኵ እዩ ንምሰቅል ({tokens} token, ዎለታ: {limit})",
+    "activationRejectedTooLarge": "ፋይል ውሕሳኵ እዩ ንኣብ ንጥፈት context ({tokens} token, ዎለታ: {limit})",
+    "sessionQuotaWarning": "ደረጃ ዕዳእ ብትንኩር ኣሎ – {remaining} token ኣሎ።",
+    "sessionQuotaNearlyExhausted": "ደረጃ ዕዳእ በጃኹም ንሃይልኦ – ኣብ አካባቢ ፋይል ክወድቕ ይኽእል።"
   },
   "shortcuts": {
     "title": "ናይ ቁልፊ ብግሪ ጽሑፋት",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "ሞዴል ቀይር",
     "scrollToBottom": "ናብ ታበባ ተንከባከብ",
     "showHelp": "ናይ ቁልፊ ብግሪ ጽሑፋት ርኢ",
-    "attachFile": "ፋይል ጨምር"
+    "attachFile": "ፋይል ጨምር",
+    "searchConversations": "ቓወዲ መገናኛታት ድልየት",
+    "toggleTheme": "ምቕያር ገጽታ",
+    "regenerateResponse": "መልሲ እንደገና ኣውጽኦ",
+    "copyLastResponse": "መጨረሻ መልሲ ኣቐዲሉ"
   }
 }

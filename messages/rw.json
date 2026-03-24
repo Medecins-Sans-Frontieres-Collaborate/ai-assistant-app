@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Habaye ikosa ritunguranye",
     "criticalErrorReload": "Habaye ikosa rikomeye. Nyamuneka ongera utangire paji.",
     "reloadPage": "Ongera utangire paji",
-    "persistContactSupport": "Niba iki kibazo gikomeje, nyamuneka hamagara ubufasha"
+    "persistContactSupport": "Niba iki kibazo gikomeje, nyamuneka hamagara ubufasha",
+    "exportDataForRecovery": "Ohereza amakuru y'ikiganiro kugira ngo abungabungwe",
+    "dataExported": "Amakuru yohererejwe",
+    "exportDataDescription": "Sangira iri fayili n'itsinda rya tekiniki kugira ngo bagufashe kugarura amakuru yawe.",
+    "resetStoragePrompt": "Niba gusubizaho bitagikemuye, gerageza gusiba ububiko bw'ibiganiro",
+    "resetStorageWarning": "Gusiba bizasiba amakuru yose y'ibiganiro. Mbere yo gusiba, ushobora kubanza kohereza kopi y'amakuru adatunganyijwe. Sangira iyi fayili n'itsinda rya tekiniki niba ukeneye ubufasha mu kugarura ibiganiro byawe.",
+    "resetStorage": "Siba ububiko"
   },
   "prompts": {
     "buildReusablePrompts": "Kora amabwiriza akoreshwa inshuro nyinshi n'ubufasha bwa AI",
@@ -1765,7 +1771,17 @@
     "retry": "Kongera",
     "pinned": "Byafungiwe",
     "pin": "Fungira",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Bibitswe burundu: bikomeza kubarwa",
+    "unpinnedTooltip": "Ntibyabitswe burundu: bishobora gusibwa cyangwa bikavanwamo",
+    "pinnedCount": "{pinned} bibitswe burundu / {total}",
+    "sessionQuota": "Umubare ntarengwa wa session",
+    "sessionQuotaUsage": "{used} / {total} tokens zakoreshejwe muri iyi session",
+    "sessionQuotaExhausted": "Umubare ntarengwa wa session ku mafayili ararenze. Amafayili yasibwe.",
+    "pinBlockedTooLarge": "Fayili nini cyane ngo bibikwe burundu ({tokens} tokens, ntarengwa: {limit})",
+    "activationRejectedTooLarge": "Fayili nini cyane ku ishyirwa mu bikorwa ({tokens} tokens, ntarengwa: {limit})",
+    "sessionQuotaWarning": "Umubare ntarengwa wa session uragabanutse — hasigaye {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "Umubare ntarengwa wa session ugiye kurangira — amafayili akora ashobora kutarimo"
   },
   "shortcuts": {
     "title": "Inyunganirangingo za klavieri",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Hindura model",
     "scrollToBottom": "Manuka hepfo",
     "showHelp": "Erekana inyunganirangingo za klavieri",
-    "attachFile": "Shyiraho dosiye"
+    "attachFile": "Shyiraho dosiye",
+    "searchConversations": "Shakisha ibiganiro",
+    "toggleTheme": "Hindura insanganyamatsiko",
+    "regenerateResponse": "Sohora igisubizo bundi bushya",
+    "copyLastResponse": "Gukoporora igisubizo giheruka"
   }
 }

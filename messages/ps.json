@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "ناڅاپي تېروتنه رامنځته شوه",
     "criticalErrorReload": "یوه مهمه تېروتنه رامنځته شوې. مهرباني وکړئ پاڼه بیا پورته کړئ.",
     "reloadPage": "پاڼه بیا پورته کړئ",
-    "persistContactSupport": "که دا ستونزه دوام وکړي، مهرباني وکړئ ملاتړ سره اړیکه ونیسئ"
+    "persistContactSupport": "که دا ستونزه دوام وکړي، مهرباني وکړئ ملاتړ سره اړیکه ونیسئ",
+    "exportDataForRecovery": "د خبرواترو معلوماتو صادرول د بېرته ترلاسه کولو لپاره",
+    "dataExported": "معلومات صادر شول",
+    "exportDataDescription": "دا فایل له تخنیکي ټیم سره شریکه کړئ څو ستاسو معلومات بېرته ترلاسه کړي.",
+    "resetStoragePrompt": "که بیا تازه کول مرسته نه کوي، د خبرو ذخیره بیا تنظیم کړئ",
+    "resetStorageWarning": "د بیا تنظیم له امله ټول د خبرو معلومات پاکېږي. له بیا تنظیم مخکې، تاسو کولی شئ د خامو معلوماتو یوه نسخه صادره کړئ. که د خبرو بېرته ترلاسه کولو کې مرستې ته اړتیا لرئ، دا فایل له تخنیکي ټیم سره شریکه کړئ.",
+    "resetStorage": "ذخیره بیا تنظیم کړئ"
   },
   "prompts": {
     "buildReusablePrompts": "د AI سره د بیا کارېدونکو پوښتنو جوړول",
@@ -1765,7 +1771,17 @@
     "retry": "بیا هڅه وکړئ",
     "pinned": "پن شوی",
     "pin": "پن کړئ",
-    "tokens": "توکنونه"
+    "tokens": "توکنونه",
+    "pinnedTooltip": "ټومبل: تل شاملیږي",
+    "unpinnedTooltip": "ناتومبل: ښايي و نه شامل شي یا اتومات حذف شي",
+    "pinnedCount": "{pinned} ټومبل شوي / {total}",
+    "sessionQuota": "د غونډې کوټه",
+    "sessionQuotaUsage": "په دې غونډه کې {used} / {total} ټوکنونه کارول شوي",
+    "sessionQuotaExhausted": "د فعاله فایلونو غونډه کوټه خلاصه شوه. فایلونه پاک شول.",
+    "pinBlockedTooLarge": "فایل د ټومبل لپاره ډېر لوی دی ({tokens} ټوکنونه، حد: {limit})",
+    "activationRejectedTooLarge": "فایل د فعاله کانتېکټ لپاره ډېر لوی دی ({tokens} ټوکنونه، حد: {limit})",
+    "sessionQuotaWarning": "د غونډې کوټه کمېږي — {remaining} ټوکنونه پاتې دي",
+    "sessionQuotaNearlyExhausted": "د غونډې کوټه نږدې خلاصه ده — ښايي فعاله فایلونه شامل نه شي"
   },
   "shortcuts": {
     "title": "د کيبورډ شارټکټونه",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "ماډل بدل کړئ",
     "scrollToBottom": "پای ته سکرول کړئ",
     "showHelp": "د کيبورډ شارټکټونه وښایئ",
-    "attachFile": "فايل نښلول"
+    "attachFile": "فايل نښلول",
+    "searchConversations": "خبرواترو لټون",
+    "toggleTheme": "بڼه بدله کړئ",
+    "regenerateResponse": "ځواب بیا تولید کړئ",
+    "copyLastResponse": "وروستی ځواب کاپي کړئ"
   }
 }

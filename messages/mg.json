@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Nisy hadisoana tsy nampoizina",
     "criticalErrorReload": "Nisy hadisoana goavana. Avereno ampidirina ny pejy azafady.",
     "reloadPage": "Avereno ampidirina ny pejy",
-    "persistContactSupport": "Raha mitohy ity olana ity, mifandraisa amin'ny fanohanana azafady"
+    "persistContactSupport": "Raha mitohy ity olana ity, mifandraisa amin'ny fanohanana azafady",
+    "exportDataForRecovery": "Manondrana angona resaka ho an'ny famerenana",
+    "dataExported": "Voatondrana ny angona",
+    "exportDataDescription": "Zarao amin'ny ekipa ara-teknika ity rakitra ity mba hanampiana amin'ny fanarenana ny angon-drakitrao.",
+    "resetStoragePrompt": "Raha tsy manampy ny famerenana pejy dia andramo averina ny fitahirizana resaka",
+    "resetStorageWarning": "Ny famerenana dia hanadio ny angona resaka rehetra. Alohan'ny hanavaozana dia afaka manondrana kopian'ny angona voalohany ianao. Zarao amin'ny ekipa ara-teknika io rakitra io raha mila fanampiana amin'ny fanarenana ny resaka.",
+    "resetStorage": "Averina ny fitahirizana"
   },
   "prompts": {
     "buildReusablePrompts": "Atsangano toro-hevitra azo ampiasaina indray miaraka amin'ny fanampian'ny AI",
@@ -1765,7 +1771,17 @@
     "retry": "Avereno",
     "pinned": "Voafatotra",
     "pin": "Afa-toroka",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "Hikambana: tafiditra mandrakariva",
+    "unpinnedTooltip": "Tsy hikambana: mety ho esorina na tsy tafiditra",
+    "pinnedCount": "{pinned} no hikambana / {total}",
+    "sessionQuota": "Fetra amin'ity fivoriana ity",
+    "sessionQuotaUsage": "{used} / {total} token no efa nampiasaina tamin'ity fivoriana ity",
+    "sessionQuotaExhausted": "Tratra ny fetra amin'ny fivoriana amin'ny rakitra mavitrika. Voafafa ny rakitra.",
+    "pinBlockedTooLarge": "Lehibe loatra ny rakitra hikambana ({tokens} token, fetra: {limit})",
+    "activationRejectedTooLarge": "Lehibe loatra ny rakitra ho an'ny tontolo iainana mavitrika ({tokens} token, fetra: {limit})",
+    "sessionQuotaWarning": "Efa ho lany ny fetra amin'ny fivoriana — {remaining} token sisa",
+    "sessionQuotaNearlyExhausted": "Efa ho voafetra ny fivoriana — mety tsy ho tafiditra ny rakitra mavitrika"
   },
   "shortcuts": {
     "title": "Fanalahidin-tsoratra haingana",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Hanova maodely",
     "scrollToBottom": "Ahodina ho any ambany",
     "showHelp": "Aseho ny fanalahidy haingana",
-    "attachFile": "Manampy rakitra"
+    "attachFile": "Manampy rakitra",
+    "searchConversations": "Mitady resaka",
+    "toggleTheme": "Hanova lohahevitra",
+    "regenerateResponse": "Averina mamorona valiny",
+    "copyLastResponse": "Adikao ny valiny farany"
   }
 }

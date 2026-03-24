@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Juumre ɗe ɗaminaaka waɗii",
     "criticalErrorReload": "Juumre sattunde waɗii. Tiiɗno loowto hello ngoo.",
     "reloadPage": "Loowto hello",
-    "persistContactSupport": "So ndee caɗeele duumiima, tiiɗno jokkondiru e wallitorde"
+    "persistContactSupport": "So ndee caɗeele duumiima, tiiɗno jokkondiru e wallitorde",
+    "exportDataForRecovery": "Noddin eɗen bisinooki ngaddan e hoore ituɗe",
+    "dataExported": "Bisinooki noddinii",
+    "exportDataDescription": "Hollu faydal he tech team ngad dati makko wondude bisinooki maa.",
+    "resetStoragePrompt": "So reload-nde waawi haali, fuɗɗu buɓɓitde bisinooki ngaddan",
+    "resetStorageWarning": "Buɓɓitde ngaddan ena momti ɗum so wonaa hoore bisinikeeji fow. Nder yaande buɓɓitde, fuɗɗu noddude koypeeje raw. Hollu faydal he tech team so a waɗi billa wondude bisinooki maa.",
+    "resetStorage": "Buɓɓit ngaddan"
   },
   "prompts": {
     "buildReusablePrompts": "Mah tinndinooje kuutorteeje e ballal AI",
@@ -1765,7 +1771,17 @@
     "retry": "Fuɗɗito seɗa",
     "pinned": "Paɗlinii",
     "pin": "Paɗlo",
-    "tokens": "tokenji"
+    "tokens": "tokenji",
+    "pinnedTooltip": "Nannitere: talli tigi",
+    "unpinnedTooltip": "Wonaa nannitere: waawi gollude walla momtude",
+    "pinnedCount": "{pinned} nannitere / {total}",
+    "sessionQuota": "Qoota roundu",
+    "sessionQuotaUsage": "{used} / {total} tokens jogii nder roundu",
+    "sessionQuotaExhausted": "Qoota bisinooki roundu tagii. Bisinooki momtinii.",
+    "pinBlockedTooLarge": "Bisinooki suuɗi loowdi nannitde ({tokens} tokens, dencaa: {limit})",
+    "activationRejectedTooLarge": "Bisinooki suuɗi loowdi e ɗum doole active context ({tokens} tokens, dencaa: {limit})",
+    "sessionQuotaWarning": "Qoota roundu yakin — {remaining} tokens ñalli",
+    "sessionQuotaNearlyExhausted": "Qoota roundu ngalaa — bisinooki active waawi walaa"
   },
   "shortcuts": {
     "title": "Teene dulnde keyboard",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Waylu moodulu",
     "scrollToBottom": "Luuyi les volgol",
     "showHelp": "Hollu teene dulnde keyboard",
-    "attachFile": "Nguurto faylu"
+    "attachFile": "Nguurto faylu",
+    "searchConversations": "Yiyloo ngaddan e bisinooki",
+    "toggleTheme": "Waylo jamɗi theme",
+    "regenerateResponse": "Waɗtu e njaɓnirde",
+    "copyLastResponse": "Natto njaɓnirde so yidi"
   }
 }

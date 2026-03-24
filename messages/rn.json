@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Habaye ikosa ridatezwe",
     "criticalErrorReload": "Habaye ikosa rikomeye. Nyamuneka subira upakire paji.",
     "reloadPage": "Subira upakire paji",
-    "persistContactSupport": "Nimba iki kibazo gikomeje, nyamuneka tuhumurize"
+    "persistContactSupport": "Nimba iki kibazo gikomeje, nyamuneka tuhumurize",
+    "exportDataForRecovery": "Sohora amakuru y'ibiganiro kugira usubirane",
+    "dataExported": "Amakuru arazohowe",
+    "exportDataDescription": "Sangira iri dosiye n'abatekinisiye kugira bagufashe gusubiza amakuru yawe.",
+    "resetStoragePrompt": "Nimba gusubiramwo bitakugiriye akamaro, gerageza gusubizaho ububiko bw'ibiganiro",
+    "resetStorageWarning": "Gusubizaho bizogira ico bikora ku makuru y'ibiganiro vyose. Imbere yo gusubizaho, urashobora kubika kopi y'amakuru y'umwimerere. Sangira iri dosiye n'abatekinisiye nimba ukeneye ko bagufasha gusubiza ibiganiro.",
+    "resetStorage": "Subizaho ububiko"
   },
   "prompts": {
     "buildReusablePrompts": "Kubaka ibibazo bisanzwe bisubira gukoreshwa hamwe n'ubufasha bwa AI",
@@ -1765,7 +1771,17 @@
     "retry": "Subira",
     "pinned": "Vyashinzwe",
     "pin": "Shingira",
-    "tokens": "amakarata"
+    "tokens": "amakarata",
+    "pinnedTooltip": "Bisheemejwe: bizama birimwo",
+    "unpinnedTooltip": "Nta bisheemejwe: birashobora gusohorwa canke kwikurwako",
+    "pinnedCount": "{pinned} vyasheemejwe / {total}",
+    "sessionQuota": "Nkigereranyo ca session",
+    "sessionQuotaUsage": "{used} / {total} tokens zakoreshejwe kuri iyi session",
+    "sessionQuotaExhausted": "Nkigereranyo ca session kirarangiye. Amadosiye yarasanzwe.",
+    "pinBlockedTooLarge": "Idosiye nini cane kugira yemezwe ({tokens} tokens, ntarengwa: {limit})",
+    "activationRejectedTooLarge": "Idosiye nini cane ku bisanzwe bikoreshwa ({tokens} tokens, ntarengwa: {limit})",
+    "sessionQuotaWarning": "Nkigereranyo ca session kiriko kirashira — hasigaye {remaining} tokens",
+    "sessionQuotaNearlyExhausted": "Nkigereranyo ca session kirashira — amadosiye ashobora kutarimwo"
   },
   "shortcuts": {
     "title": "Uburyo bwo gukoresha urufunguruzo rwa klaviyeri",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Hindura model",
     "scrollToBottom": "Manura gushika hasi",
     "showHelp": "Erekana inzira za klaviyeri",
-    "attachFile": "Mena dosiye"
+    "attachFile": "Mena dosiye",
+    "searchConversations": "Rondera ibiganiro",
+    "toggleTheme": "Hindura insanganyamatsiko",
+    "regenerateResponse": "Sazangura inyishu",
+    "copyLastResponse": "Koporora inyishu yanyuma"
   }
 }

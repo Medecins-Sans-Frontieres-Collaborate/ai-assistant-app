@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Esalemi libunga oyo esalemaki na motuya te",
     "criticalErrorReload": "Libunga monene esalemi. S'il vous plaît, panzola page.",
     "reloadPage": "Panzola page",
-    "persistContactSupport": "Soki likambo ezali kaka, benga ba support"
+    "persistContactSupport": "Soki likambo ezali kaka, benga ba support",
+    "exportDataForRecovery": "Bimisa ba données ya boyokanisi mpo na kobimisa yango",
+    "dataExported": "Ba données ebimi",
+    "exportDataDescription": "Kabelá file oyo na équipe technique mpo bá pesa yo lisungi na kozwa ba données na yo lisusu.",
+    "resetStoragePrompt": "Soki koloadá lisusu esalemi te, meka kolongola esika ya kobomba ba boyokanisi",
+    "resetStorageWarning": "Kolongola esika ekopesola ba données nionso ya boyokanisi. Libosó ya kolongola, okoki kobimisa kopí ya ba données ya ebandeli. Kabelá file oyo na équipe technique soki olingi basalisa yo kozwa ba boyokanisi na yo lisusu.",
+    "resetStorage": "Longola esika"
   },
   "prompts": {
     "buildReusablePrompts": "Bongisa ba prompts oyo ekoki kosalelama mingi na lisungi ya AI",
@@ -1765,7 +1771,17 @@
     "retry": "Luka lisusu",
     "pinned": "Ekangami",
     "pin": "Kangisa",
-    "tokens": "matoken"
+    "tokens": "matoken",
+    "pinnedTooltip": "Ezali épinglée: ekotangama ntango nyonso",
+    "unpinnedTooltip": "Oépingué: ekoki kotika to kolongwama na ndenge automatique",
+    "pinnedCount": "{pinned} ba épinglée / {total}",
+    "sessionQuota": "Limite ya session",
+    "sessionQuotaUsage": "{used} / {total} tokens esalelami session oyo",
+    "sessionQuotaExhausted": "Limite ya session ya ba fichiers actifs ekómi. Ba fichiers elongwaki.",
+    "pinBlockedTooLarge": "Fichier eleki monene mpo na koépingué ({tokens} tokens, limite: {limit})",
+    "activationRejectedTooLarge": "Fichier eleki monene mpo na contexte active ({tokens} tokens, limite: {limit})",
+    "sessionQuotaWarning": "Limite ya session ekómi pene kokokisama — {remaining} tokens ezali",
+    "sessionQuotaNearlyExhausted": "Limite ya session ekómi pene — ba fichiers actifs ekoki kozanga komonana"
   },
   "shortcuts": {
     "title": "Bansango ya minzoto ya kelasi",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "Bongola modele",
     "scrollToBottom": "Kitisá kino na suka",
     "showHelp": "Lakisa bansango ya minzoto ya kelasi",
-    "attachFile": "Kobatela fichier"
+    "attachFile": "Kobatela fichier",
+    "searchConversations": "Luka na boyokanisi",
+    "toggleTheme": "Bongola thème",
+    "regenerateResponse": "Salisa eyano lisusu",
+    "copyLastResponse": "Kopía eyano ya suka"
   }
 }

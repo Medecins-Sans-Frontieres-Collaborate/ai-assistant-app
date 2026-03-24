@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Çewtiyek nebendewar çêbû",
     "criticalErrorReload": "Çewtiyek krîtîk çêbû. Ji kerema xwe rûpelê nû bar bike.",
     "reloadPage": "Rûpelê nû bar bike",
-    "persistContactSupport": "Heke ev pirsgirêk bidomîne, ji kerema xwe bi piştgiriyê re têkilî bike"
+    "persistContactSupport": "Heke ev pirsgirêk bidomîne, ji kerema xwe bi piştgiriyê re têkilî bike",
+    "exportDataForRecovery": "هەناردەکانی گفتوگۆ بۆ گەڕاندن داتاکان دەرچێنەوە",
+    "dataExported": "داتا دەرخرایەوە",
+    "exportDataDescription": "ئەم پەڕگەیە بە تیمی تەکنیکی بەشەرەوە بۆ یارمەتی گەڕاندنەوەی داتاکانت.",
+    "resetStoragePrompt": "ئەگەر نوێکردنەوە یارمەتی نەدا، تاقیگەڕاندنەوەی هەڵگرتنی گفتوگۆ بکە",
+    "resetStorageWarning": "گەڕاندنەوە فەرمی هەموو داتای گفتوگۆیەکەت دەسڕێتەوە. پێش گەڕاندنەوە، دەتوانیت کۆپیکی داتای سەرچاوە دەر بکەیت. ئەم پەڕگەیە بە تیمی تەکنیکی بەشەرەوە ئەگەر یارمەتی گەڕاندنەوەی گفتوگۆکانت پێویستت بوو.",
+    "resetStorage": "گەڕاندنەوەی هەڵگرتن"
   },
   "prompts": {
     "buildReusablePrompts": "Bi alîkariya AI pirsên dubare-bikaranîn ava bike",
@@ -1765,7 +1771,17 @@
     "retry": "دووبارە هەوڵ بدە",
     "pinned": "پەیوەستکراو",
     "pin": "پەیوەست بکە",
-    "tokens": "تۆکەنەکان"
+    "tokens": "تۆکەنەکان",
+    "pinnedTooltip": "پەیوەستکراو: هەمیشە لەناوە",
+    "unpinnedTooltip": "پەیوەست نەکراو: دەتوانرێت لاببرێت یان خۆکارانە بسڕدرێتەوە",
+    "pinnedCount": "{pinned} پەیوەستکراو / {total}",
+    "sessionQuota": "بریتییەکانی دانیشتان",
+    "sessionQuotaUsage": "{used} / {total} تۆکەن لە ئامادەبوونی دانیشتان بەکاردەهێنرێت",
+    "sessionQuotaExhausted": "بریتی دانیشتانی فایلە چالاکەکان تەواو بوو. فایلەکان سڕدرانەوە.",
+    "pinBlockedTooLarge": "فایل زۆر گەورەیە بۆ پەیوەستن ({tokens} تۆکەن، سنوور: {limit})",
+    "activationRejectedTooLarge": "فایل زۆر گەورەیە بۆ بەرزکردنەوە لە ناوەڕاست ({tokens} تۆکەن، سنوور: {limit})",
+    "sessionQuotaWarning": "بریتی دانیشتان کەم دەبێت — {remaining} تۆکەن ماوە",
+    "sessionQuotaNearlyExhausted": "بریتی دانیشتان نزیکە تەواوکردنەوەیە — فایلە چالاکەکان ڕەنگە بکرێنەوە"
   },
   "shortcuts": {
     "title": "کورتەکاری کلید",
@@ -1782,6 +1798,10 @@
     "openModelSelector": "گۆڕینی مۆدێل",
     "scrollToBottom": "بچۆ بۆ خوارەوە",
     "showHelp": "نیشاندانی کورتەکاری کلید",
-    "attachFile": "پیوستکردنی فایل"
+    "attachFile": "پیوستکردنی فایل",
+    "searchConversations": "گفتوگۆکان بگەڕێ",
+    "toggleTheme": "ڕوخسار بگۆڕە",
+    "regenerateResponse": "وەڵام نوێ بیکەوە",
+    "copyLastResponse": "دوایین وەڵام کۆپی بکە"
   }
 }
