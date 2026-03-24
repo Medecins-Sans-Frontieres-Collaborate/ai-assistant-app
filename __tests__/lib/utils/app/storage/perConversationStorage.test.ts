@@ -412,6 +412,45 @@ describe('perConversationStorage', () => {
       expect(localStorage.getItem('conv-data-c2')).not.toBeNull();
     });
 
+    it('preserves newer per-conv keys when legacy blob still exists', () => {
+      // Simulate: user edited a conversation during session, but index write failed
+      // so legacy blob is still present with stale data
+      const newerConv = {
+        ...makeConversation('c1'),
+        name: 'Updated in current session',
+        updatedAt: '2099-01-01T00:00:00Z',
+      };
+      localStorage.setItem('conv-data-c1', JSON.stringify(newerConv));
+
+      const legacyBlob = {
+        state: {
+          conversations: [
+            { ...makeConversation('c1'), name: 'Old from legacy' },
+            makeConversation('c2'),
+          ],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      const parsed = JSON.parse(raw!);
+
+      // Should have both conversations
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // c1 should have the NEWER name (not overwritten by legacy blob)
+      const c1 = parsed.state.conversations.find(
+        (c: { id: string }) => c.id === 'c1',
+      );
+      expect(c1.name).toBe('Updated in current session');
+
+      // Legacy blob should be cleaned up
+      expect(localStorage.getItem('conversation-storage')).toBeNull();
+    });
+
     it('retries legacy migration when orphaned keys exist alongside legacy blob', () => {
       // Simulate a failed migration: some conv-data-* keys + legacy blob still present
       localStorage.setItem(
