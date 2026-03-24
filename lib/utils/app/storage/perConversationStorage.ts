@@ -66,12 +66,6 @@ function readIndex(): ConversationIndex | null {
  * Used as a fallback when conv-index is missing or corrupted but per-conversation keys exist.
  */
 function rebuildIndexFromKeys(): ConversationIndex | null {
-  // If a legacy blob exists, don't build a partial index from orphaned keys —
-  // let getItem fall through to migrateFromLegacyBlob() for a full migration retry.
-  if (localStorage.getItem(LEGACY_BLOB_KEY)) {
-    return null;
-  }
-
   const conversationIds: string[] = [];
   const folderIds: string[] = [];
 
@@ -331,11 +325,15 @@ function migrateFromLegacyBlob(): {
             'backup',
           );
         }
+        // Skip write if a per-conv key already exists (it may be newer from a previous session)
+        const convKey = `${CONV_PREFIX}${validation.data.id}`;
+        if (localStorage.getItem(convKey)) {
+          writtenConvIds.push(validation.data.id);
+          conversations.push(validation.data);
+          continue;
+        }
         try {
-          localStorage.setItem(
-            `${CONV_PREFIX}${validation.data.id}`,
-            JSON.stringify(validation.data),
-          );
+          localStorage.setItem(convKey, JSON.stringify(validation.data));
           // Only include in return value if write succeeded
           conversations.push(validation.data);
           writtenConvIds.push(validation.data.id);
@@ -357,22 +355,29 @@ function migrateFromLegacyBlob(): {
           console.log(
             `[PerConvStorage] Auto-recovered conversation during migration (${recovery.stats.fieldsRepaired.join(', ')})`,
           );
-          try {
-            localStorage.setItem(
-              `${CONV_PREFIX}${recovery.conversation.id}`,
-              JSON.stringify(recovery.conversation),
-            );
+          // Skip write if a per-conv key already exists (newer from previous session)
+          const recoveredKey = `${CONV_PREFIX}${recovery.conversation.id}`;
+          if (localStorage.getItem(recoveredKey)) {
             conversations.push(recovery.conversation);
             writtenConvIds.push(recovery.conversation.id);
-            lastWrittenTimestamps.set(
-              recovery.conversation.id,
-              recovery.conversation.updatedAt,
-            );
-          } catch (e) {
-            console.error(
-              `[PerConvStorage] Failed to write recovered conv-data-${recovery.conversation.id}:`,
-              e,
-            );
+          } else {
+            try {
+              localStorage.setItem(
+                recoveredKey,
+                JSON.stringify(recovery.conversation),
+              );
+              conversations.push(recovery.conversation);
+              writtenConvIds.push(recovery.conversation.id);
+              lastWrittenTimestamps.set(
+                recovery.conversation.id,
+                recovery.conversation.updatedAt,
+              );
+            } catch (e) {
+              console.error(
+                `[PerConvStorage] Failed to write recovered conv-data-${recovery.conversation.id}:`,
+                e,
+              );
+            }
           }
         } else {
           quarantineConversation(
@@ -391,11 +396,15 @@ function migrateFromLegacyBlob(): {
     for (const folder of state.folders) {
       const validation = validateFolder(folder);
       if (validation.valid && validation.data) {
+        const folderKey = `${FOLDER_PREFIX}${validation.data.id}`;
+        // Skip write if folder key already exists (newer from previous session)
+        if (localStorage.getItem(folderKey)) {
+          folders.push(validation.data);
+          writtenFolderIds.push(validation.data.id);
+          continue;
+        }
         try {
-          localStorage.setItem(
-            `${FOLDER_PREFIX}${validation.data.id}`,
-            JSON.stringify(validation.data),
-          );
+          localStorage.setItem(folderKey, JSON.stringify(validation.data));
           folders.push(validation.data);
           writtenFolderIds.push(validation.data.id);
         } catch (e) {
@@ -404,6 +413,14 @@ function migrateFromLegacyBlob(): {
             e,
           );
         }
+      } else {
+        // Quarantine invalid folders
+        quarantineConversation(
+          JSON.stringify(folder),
+          validation.errors,
+          LEGACY_BLOB_KEY,
+          'folder',
+        );
       }
     }
   }
@@ -496,6 +513,34 @@ export const perConversationStorage: StateStorage = {
             conversationIds: validIds,
             folderIds: validFolderIds,
           });
+        }
+
+        // Check if legacy blob still exists (failed previous migration) and merge unmigrated data
+        if (localStorage.getItem(LEGACY_BLOB_KEY)) {
+          const merged = migrateFromLegacyBlob();
+          if (merged) {
+            // Add any conversations/folders from the blob that aren't already loaded
+            const existingIds = new Set(validIds);
+            for (const conv of merged.conversations) {
+              if (!existingIds.has(conv.id)) {
+                conversations.push(conv);
+                validIds.push(conv.id);
+              }
+            }
+            const existingFolderIds = new Set(validFolderIds);
+            for (const folder of merged.folders) {
+              if (!existingFolderIds.has(folder.id)) {
+                folders.push(folder);
+                validFolderIds.push(folder.id);
+              }
+            }
+            // Update the index with merged data
+            writeIndex({
+              ...index,
+              conversationIds: validIds,
+              folderIds: validFolderIds,
+            });
+          }
         }
 
         // Return in Zustand persist format
