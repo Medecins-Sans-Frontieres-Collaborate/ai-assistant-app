@@ -258,6 +258,56 @@ function loadFolder(id: string): FolderInterface | null {
 }
 
 /**
+ * Best-effort extraction of conversation objects from a corrupted blob string.
+ * Uses regex to find JSON objects that look like conversations (have id, name, messages fields),
+ * then validates each one individually. Returns whatever is salvageable.
+ */
+function salvageConversationsFromBlob(raw: string): Conversation[] {
+  const salvaged: Conversation[] = [];
+
+  // Match objects that contain "id" and "name" fields — conversation-shaped
+  // This regex finds balanced braces at the top level of the conversations array
+  const conversationPattern =
+    /\{"id"\s*:\s*"[^"]+"\s*,\s*"name"\s*:\s*"[^"]*"/g;
+  let match;
+
+  while ((match = conversationPattern.exec(raw)) !== null) {
+    // Try to extract a balanced JSON object starting at this position
+    const startIdx = match.index;
+    let depth = 0;
+    let endIdx = startIdx;
+
+    for (let i = startIdx; i < raw.length; i++) {
+      if (raw[i] === '{') depth++;
+      else if (raw[i] === '}') depth--;
+      if (depth === 0) {
+        endIdx = i + 1;
+        break;
+      }
+    }
+
+    if (depth !== 0) continue; // Unbalanced — skip
+
+    const fragment = raw.slice(startIdx, endIdx);
+    const parsed = tryParseJSON<unknown>(fragment);
+    if (!parsed.data) continue;
+
+    const validation = validateConversation(parsed.data);
+    if (validation.valid && validation.data) {
+      salvaged.push(validation.data);
+    } else {
+      // Try recovery on the fragment
+      const recovery = attemptRecovery(fragment);
+      if (recovery.recovered && recovery.conversation) {
+        salvaged.push(recovery.conversation);
+      }
+    }
+  }
+
+  return salvaged;
+}
+
+/**
  * Migrate from legacy single-blob format (conversation-storage) to per-conversation keys.
  * Validates each conversation individually, quarantining corrupt ones.
  */
@@ -301,12 +351,65 @@ function migrateFromLegacyBlob(): {
       return migrateFromLegacyBlob();
     }
 
-    // Repair failed — quarantine the whole thing
+    // Attempt to salvage individual conversations from the corrupted blob
+    const salvaged = salvageConversationsFromBlob(raw);
+    if (salvaged.length > 0) {
+      console.log(
+        `[PerConvStorage] Salvaged ${salvaged.length} conversation(s) from corrupted blob`,
+      );
+      const writtenConvIds: string[] = [];
+      for (const conv of salvaged) {
+        const convKey = `${CONV_PREFIX}${conv.id}`;
+        if (!localStorage.getItem(convKey)) {
+          try {
+            localStorage.setItem(convKey, JSON.stringify(conv));
+            writtenConvIds.push(conv.id);
+          } catch {
+            // Quota — skip this one
+          }
+        } else {
+          writtenConvIds.push(conv.id);
+        }
+      }
+      if (writtenConvIds.length > 0) {
+        const salvageIndex: ConversationIndex = {
+          version: 5,
+          conversationIds: writtenConvIds,
+          selectedConversationId: null,
+          folderIds: [],
+        };
+        try {
+          writeIndex(salvageIndex);
+          localStorage.removeItem(LEGACY_BLOB_KEY);
+        } catch {
+          // Index write failed — blob preserved
+        }
+        // Quarantine the original blob as backup
+        quarantineConversation(
+          raw,
+          [
+            `Blob partially corrupted — ${salvaged.length} conversation(s) salvaged`,
+          ],
+          LEGACY_BLOB_KEY,
+          'backup',
+        );
+        return {
+          conversations: salvaged,
+          selectedConversationId: null,
+          folders: [],
+          version: 1,
+        };
+      }
+    }
+
+    // Nothing salvageable — quarantine the whole blob as backup (not recoverable as conversation)
     const quarantined = quarantineConversation(
       raw,
-      ['Entire conversation blob unparseable (JSON repair also failed)'],
+      [
+        'Entire conversation blob unparseable (JSON repair and salvage both failed)',
+      ],
       LEGACY_BLOB_KEY,
-      'conversation',
+      'backup',
     );
     // Only delete legacy blob if quarantine succeeded (data is preserved)
     if (quarantined) {
@@ -772,6 +875,27 @@ export function getPerConversationStorageSize(): number {
       const item = localStorage.getItem(key);
       if (item) {
         total += item.length * 2; // UTF-16 encoding: 2 bytes per char
+      }
+    }
+    return total;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Get the total size in bytes of only conv-data-* keys (conversations only).
+ * Used for accurate storage cleanup estimates (excludes index + folder overhead).
+ */
+export function getConversationDataSize(): number {
+  try {
+    let total = 0;
+    for (const key of scanAllConversationKeys()) {
+      if (key.startsWith(CONV_PREFIX)) {
+        const item = localStorage.getItem(key);
+        if (item) {
+          total += item.length * 2;
+        }
       }
     }
     return total;
