@@ -133,7 +133,7 @@ export function clearAllQuarantined(): void {
 }
 
 /**
- * Get the count of quarantined items (without parsing all data).
+ * Get the count of quarantined items.
  */
 export function getQuarantinedCount(): number {
   return getQuarantinedItems().length;
