@@ -26,18 +26,22 @@ export function getQuarantinedItems(): QuarantinedItem[] {
 }
 
 /**
- * Add a conversation to quarantine.
+ * Add data to quarantine.
  * Preserves the raw data string as-is for maximum recoverability.
  * Returns true if the data was successfully quarantined, false if the write failed.
  * Callers should only delete source data if this returns true.
+ *
+ * If an entry with the same id already exists, its rawData and errors are updated
+ * to the latest values (so re-corruption preserves the newest snapshot).
  */
 export function quarantineConversation(
   rawData: string,
   errors: string[],
   sourceKey: string,
+  itemType: 'conversation' | 'folder' | 'backup' = 'conversation',
 ): boolean {
   try {
-    const items = getQuarantinedItems();
+    let items = getQuarantinedItems();
 
     // Try to extract the id from the raw data for deduplication
     let id: string;
@@ -51,21 +55,36 @@ export function quarantineConversation(
       id = globalThis.crypto.randomUUID();
     }
 
-    // Don't add duplicate entries for the same id (treat as success — data already preserved)
-    if (items.some((item) => item.id === id)) {
-      return true;
+    // For backup entries, use a composite key to avoid colliding with conversation entries
+    const effectiveId = itemType === 'backup' ? `backup-${id}` : id;
+
+    const existingIndex = items.findIndex((item) => item.id === effectiveId);
+    if (existingIndex !== -1) {
+      // Update existing entry with the latest raw data
+      items = items.map((item, i) =>
+        i === existingIndex
+          ? {
+              ...item,
+              rawData,
+              errors,
+              quarantinedAt: new Date().toISOString(),
+              sourceKey,
+              itemType,
+            }
+          : item,
+      );
+    } else {
+      items.push({
+        id: effectiveId,
+        rawData,
+        errors,
+        quarantinedAt: new Date().toISOString(),
+        sourceKey,
+        recoveryAttempted: false,
+        itemType,
+      });
     }
 
-    const item: QuarantinedItem = {
-      id,
-      rawData,
-      errors,
-      quarantinedAt: new Date().toISOString(),
-      sourceKey,
-      recoveryAttempted: false,
-    };
-
-    items.push(item);
     localStorage.setItem(QUARANTINE_KEY, JSON.stringify(items));
     return true;
   } catch (e) {
