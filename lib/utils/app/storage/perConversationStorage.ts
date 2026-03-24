@@ -208,6 +208,7 @@ function loadConversation(id: string): Conversation | null {
 
 /**
  * Load a single folder from its per-folder key.
+ * Quarantines corrupted folder data before returning null.
  */
 function loadFolder(id: string): FolderInterface | null {
   const key = `${FOLDER_PREFIX}${id}`;
@@ -216,10 +217,26 @@ function loadFolder(id: string): FolderInterface | null {
   if (!raw) return null;
 
   const parsed = tryParseJSON<unknown>(raw);
-  if (!parsed.data) return null;
+  if (!parsed.data) {
+    const quarantined = quarantineConversation(
+      raw,
+      [`Folder JSON parse error: ${parsed.error}`],
+      key,
+    );
+    if (quarantined) {
+      localStorage.removeItem(key);
+    }
+    return null;
+  }
 
   const validation = validateFolder(parsed.data);
-  if (!validation.valid) return null;
+  if (!validation.valid) {
+    const quarantined = quarantineConversation(raw, validation.errors, key);
+    if (quarantined) {
+      localStorage.removeItem(key);
+    }
+    return null;
+  }
 
   return validation.data!;
 }
@@ -278,6 +295,16 @@ function migrateFromLegacyBlob(): {
     for (const conv of state.conversations) {
       const validation = validateConversation(conv);
       if (validation.valid && validation.data) {
+        // Quarantine raw backup if messages were stripped during validation
+        if (validation.messagesStripped && validation.messagesStripped > 0) {
+          quarantineConversation(
+            JSON.stringify(conv),
+            [
+              `${validation.messagesStripped} invalid message entries stripped during migration`,
+            ],
+            LEGACY_BLOB_KEY,
+          );
+        }
         try {
           localStorage.setItem(
             `${CONV_PREFIX}${validation.data.id}`,
