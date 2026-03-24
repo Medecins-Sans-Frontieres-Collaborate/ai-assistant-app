@@ -1803,5 +1803,23 @@
     "toggleTheme": "Waylo jamɗi theme",
     "regenerateResponse": "Waɗtu e njaɓnirde",
     "copyLastResponse": "Natto njaɓnirde so yidi"
+  },
+  "quarantine": {
+    "title": "Kisennangol jawdiiji",
+    "itemCount": "{count, plural, one {# jawdi} other {# jawdiiji}} waɗi lollondiral data",
+    "noItems": "Aladi kisennangol jawdi.",
+    "recover": "Artir",
+    "export": "Jannga",
+    "delete": "Momtu",
+    "deleteAll": "Momtu hoɗɗum kisennangol data",
+    "close": "Uddu",
+    "recovered": "Artirde",
+    "recoveryFailed": "Artiro waawi yamirde",
+    "folderData": "Data tore",
+    "backupData": "Backup (aslol original anndude hirdirde luwaaji)",
+    "bannerMessage": "{count, plural, one {# jawdi anndi lollondiral data tawi kisennangol.} other {# jawdiiji anndi lollondiral data tawi kisennangol.}}",
+    "review": "Yiylo",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} eɓɓo {source}"
   }
 }

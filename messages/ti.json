@@ -1803,5 +1803,23 @@
     "toggleTheme": "ምቕያር ገጽታ",
     "regenerateResponse": "መልሲ እንደገና ኣውጽኦ",
     "copyLastResponse": "መጨረሻ መልሲ ኣቐዲሉ"
+  },
+  "quarantine": {
+    "title": "ተሰወሩ ዝተይዉዎ ውይይታታት",
+    "itemCount": "{count, plural, one {# ነገር} other {# ነገራት}} ዝሕቶ ዳታ ኣሎዎ።",
+    "noItems": "ዝተይዉ ነገራት አይተረኽበን።",
+    "recover": "መልሳ ኣትው",
+    "export": "ኣልግስ",
+    "delete": "ኣስደምስ",
+    "deleteAll": "ኩሉ ዝተይዉ ዳታ ኣስደምስ",
+    "close": "ዝጋ",
+    "recovered": "ተመልሰ።",
+    "recoveryFailed": "መልሳ ኣልፍጠንን።",
+    "folderData": "ዳታ ፎልደር",
+    "backupData": "ባከፕ (መዓልታዊ ምስ ዝወጹ መልእኽቲ)",
+    "bannerMessage": "{count, plural, one {# ውይይት ዳታ ሕጂ፣ ተሰዊሩ፡፡} other {# ውይይታት ዳታ ሕጂ፣ ተሰወሩ፡፡}}",
+    "review": "ኣየው",
+    "itemId": "መለያ: {id}",
+    "itemSource": "{date} ካብ {source}"
   }
 }

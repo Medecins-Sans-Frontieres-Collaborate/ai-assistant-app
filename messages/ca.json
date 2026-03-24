@@ -1827,5 +1827,23 @@
     "toggleTheme": "Canvia el tema",
     "regenerateResponse": "Torna a generar la resposta",
     "copyLastResponse": "Copia l’última resposta"
+  },
+  "quarantine": {
+    "title": "Converses en quarantena",
+    "itemCount": "{count, plural, one {# element} other {# elements}} amb problemes de dades",
+    "noItems": "No hi ha elements en quarantena.",
+    "recover": "Recuperar",
+    "export": "Exporta",
+    "delete": "Suprimeix",
+    "deleteAll": "Suprimeix totes les dades en quarantena",
+    "close": "Tanca",
+    "recovered": "Recuperat",
+    "recoveryFailed": "Ha fallat la recuperació",
+    "folderData": "Dades de la carpeta",
+    "backupData": "Còpia de seguretat (original amb missatges eliminats)",
+    "bannerMessage": "{count, plural, one {# conversa tenia problemes de dades i s'ha posat en quarantena.} other {# converses tenien problemes de dades i s'han posat en quarantena.}}",
+    "review": "Revisa",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de {source}"
   }
 }

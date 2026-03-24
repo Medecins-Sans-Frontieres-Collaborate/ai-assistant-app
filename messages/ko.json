@@ -1827,5 +1827,23 @@
     "toggleTheme": "테마 전환",
     "regenerateResponse": "응답 다시 생성",
     "copyLastResponse": "마지막 응답 복사"
+  },
+  "quarantine": {
+    "title": "격리된 대화",
+    "itemCount": "데이터 문제가 있는 항목 {count, plural, one {#개} other {#개}}",
+    "noItems": "격리된 항목이 없습니다.",
+    "recover": "복구",
+    "export": "내보내기",
+    "delete": "삭제",
+    "deleteAll": "모든 격리 데이터 삭제",
+    "close": "닫기",
+    "recovered": "복구됨",
+    "recoveryFailed": "복구 실패",
+    "folderData": "폴더 데이터",
+    "backupData": "백업(메시지 일부 삭제된 원본)",
+    "bannerMessage": "{count, plural, one {#개의 대화에서 데이터 문제가 발생하여 격리되었습니다.} other {#개의 대화에서 데이터 문제가 발생하여 격리되었습니다.}}",
+    "review": "검토",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} · {source}에서"
   }
 }

@@ -1827,5 +1827,23 @@
     "toggleTheme": "Vaihda teemaa",
     "regenerateResponse": "Luo vastaus uudelleen",
     "copyLastResponse": "Kopioi viimeisin vastaus"
+  },
+  "quarantine": {
+    "title": "Karanteenissa olevat keskustelut",
+    "itemCount": "{count, plural, one {# tietue, jossa on dataongelmia} other {# tietuetta, joissa on dataongelmia}}",
+    "noItems": "Ei karanteenissa olevia tietoja.",
+    "recover": "Palauta",
+    "export": "Vie",
+    "delete": "Poista",
+    "deleteAll": "Poista kaikki karanteenissa oleva data",
+    "close": "Sulje",
+    "recovered": "Palautettu",
+    "recoveryFailed": "Palautus epäonnistui",
+    "folderData": "Kansiotiedot",
+    "backupData": "Varmuuskopio (alkuperäinen, josta viestit poistettu)",
+    "bannerMessage": "{count, plural, one {# keskustelussa oli dataongelmia ja se asetettiin karanteeniin.} other {# keskustelussa oli dataongelmia ja ne asetettiin karanteeniin.}}",
+    "review": "Tarkista",
+    "itemId": "Tunniste: {id}",
+    "itemSource": "{date} lähteestä {source}"
   }
 }

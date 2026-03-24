@@ -1803,5 +1803,23 @@
     "toggleTheme": "Hindura insanganyamatsiko",
     "regenerateResponse": "Sazangura inyishu",
     "copyLastResponse": "Koporora inyishu yanyuma"
+  },
+  "quarantine": {
+    "title": "Inyigisho Zashizwe mu Gitaro",
+    "itemCount": "{count, plural, one {# igikoresho gifise ikibazo c'amakuru} other {# ibikoresho bifise ibibazo vy'amakuru}}",
+    "noItems": "Nta bikoresho vyashizwe mu gitabo bihari.",
+    "recover": "Subiza",
+    "export": "Sohora",
+    "delete": "Siba",
+    "deleteAll": "Siba amakuru yose yashizwe mu gitabo",
+    "close": "Funga",
+    "recovered": "Vyongeye kuboneka",
+    "recoveryFailed": "Gusubira kubona vyarananiwe",
+    "folderData": "Amakuru ya dosiye",
+    "backupData": "Backup (gutondeka vy'inkomoko vyakuweko ubutumwa)",
+    "bannerMessage": "{count, plural, one {# kiganiro gifise ikibazo c'amakuru kandi cashizwe mu gitabo.} other {# biganiro bifise ibibazo vy'amakuru kandi vyashizwe mu gitabo.}}",
+    "review": "Raba",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} bivuye kuri {source}"
   }
 }

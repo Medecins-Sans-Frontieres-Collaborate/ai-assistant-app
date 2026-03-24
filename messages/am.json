@@ -1827,5 +1827,23 @@
     "activationRejectedTooLarge": "ፋይሉ ለአክቲቭ ኮንቴክስት በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
     "sessionQuotaWarning": "የስብሰባ አቅም ማቅረብ ነው — {remaining} ቶክኖች ቀርበዋል",
     "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም"
+  },
+  "quarantine": {
+    "title": "በመለጠፍ የተለየ ውይይቶች",
+    "itemCount": "{count, plural, one {# ነገር} other {# ነገሮች}} የውሂብ ችግር ያላቸው",
+    "noItems": "የተለየ ነገር የለም።",
+    "recover": "አስመልስ",
+    "export": "ላክ",
+    "delete": "ሰርዝ",
+    "deleteAll": "ሁሉንም የተለየ ውሂብ ሰርዝ",
+    "close": "ዝጋ",
+    "recovered": "ተመልሷል",
+    "recoveryFailed": "መመለስ አልተቻለም",
+    "folderData": "የፎልደር ውሂብ",
+    "backupData": "ተቀማጭ (ዋናው በመስበክ ያልቀረው)",
+    "bannerMessage": "{count, plural, one {# ውይይት የውሂብ ችግር ስለነበረው ተለይቷል።} other {# ውይይቶች የውሂብ ችግር ስለነበራቸው ተለይተዋል።}}",
+    "review": "አድምጥ",
+    "itemId": "መታወቂያ፡ {id}",
+    "itemSource": "{date} ከ {source}"
   }
 }

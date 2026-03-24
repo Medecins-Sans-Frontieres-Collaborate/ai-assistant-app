@@ -1827,5 +1827,23 @@
     "toggleTheme": "Przełącz motyw",
     "regenerateResponse": "Wygeneruj ponownie odpowiedź",
     "copyLastResponse": "Kopiuj ostatnią odpowiedź"
+  },
+  "quarantine": {
+    "title": "Rozmowy w kwarantannie",
+    "itemCount": "{count, plural, one {# element z problemami danych} other {# elementów z problemami danych}}",
+    "noItems": "Brak elementów w kwarantannie.",
+    "recover": "Przywróć",
+    "export": "Eksportuj",
+    "delete": "Usuń",
+    "deleteAll": "Usuń wszystkie dane z kwarantanny",
+    "close": "Zamknij",
+    "recovered": "Przywrócono",
+    "recoveryFailed": "Przywracanie nie powiodło się",
+    "folderData": "Dane folderu",
+    "backupData": "Kopia zapasowa (oryginał z usuniętymi wiadomościami)",
+    "bannerMessage": "{count, plural, one {# rozmowa miała problem z danymi i została poddana kwarantannie.} other {# rozmów miało problemy z danymi i zostało poddanych kwarantannie.}}",
+    "review": "Przejrzyj",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} z {source}"
   }
 }

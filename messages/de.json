@@ -1827,5 +1827,23 @@
     "toggleTheme": "Design umschalten",
     "regenerateResponse": "Antwort neu generieren",
     "copyLastResponse": "Letzte Antwort kopieren"
+  },
+  "quarantine": {
+    "title": "Quarantänisierte Konversationen",
+    "itemCount": "{count, plural, one {# Element} other {# Elemente}} mit Datenproblemen",
+    "noItems": "Keine quarantänisierten Elemente.",
+    "recover": "Wiederherstellen",
+    "export": "Exportieren",
+    "delete": "Löschen",
+    "deleteAll": "Alle quarantänisierten Daten löschen",
+    "close": "Schließen",
+    "recovered": "Wiederhergestellt",
+    "recoveryFailed": "Wiederherstellung fehlgeschlagen",
+    "folderData": "Ordnerdaten",
+    "backupData": "Backup (Original mit entfernten Nachrichten)",
+    "bannerMessage": "{count, plural, one {# Konversation hatte Datenprobleme und wurde unter Quarantäne gestellt.} other {# Konversationen hatten Datenprobleme und wurden unter Quarantäne gestellt.}}",
+    "review": "Prüfen",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} von {source}"
   }
 }

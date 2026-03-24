@@ -1803,5 +1803,23 @@
     "toggleTheme": "Sinthani mutu",
     "regenerateResponse": "Bwezeretsaninso yankho",
     "copyLastResponse": "Koperani yankho lomaliza"
+  },
+  "quarantine": {
+    "title": "Zokambirana Zomwe Zili mu Quarantine",
+    "itemCount": "{count, plural, one {# chinthu} other {# zinthu}} zokhala ndi mavuto a deta",
+    "noItems": "Palibe zinthu zomwe zili mu quarantine.",
+    "recover": "Kubwezeretsa",
+    "export": "Tumizani kunja",
+    "delete": "Chotsani",
+    "deleteAll": "Chotsani deta zonse zomwe zili mu quarantine",
+    "close": "Tseka",
+    "recovered": "Zabwezeretsedwa",
+    "recoveryFailed": "Kubwezeretsa kwalephera",
+    "folderData": "Zambiri za foda",
+    "backupData": "Backup (original yomwe yachotsedwa mauthenga)",
+    "bannerMessage": "{count, plural, one {# zokambirana inali ndi mavuto a deta ndipo zidayikidwa mu quarantine.} other {# zokambirana zinali ndi mavuto a deta ndipo zidayikidwa mu quarantine.}}",
+    "review": "Onaninso",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} kuchokera ku {source}"
   }
 }

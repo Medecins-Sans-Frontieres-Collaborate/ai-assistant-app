@@ -1827,5 +1827,23 @@
     "toggleTheme": "Comută tema",
     "regenerateResponse": "Regenerează răspunsul",
     "copyLastResponse": "Copiază ultimul răspuns"
+  },
+  "quarantine": {
+    "title": "Conversații în carantină",
+    "itemCount": "{count, plural, one {# element cu probleme de date} other {# elemente cu probleme de date}}",
+    "noItems": "Nu există elemente în carantină.",
+    "recover": "Recuperează",
+    "export": "Exportă",
+    "delete": "Șterge",
+    "deleteAll": "Șterge toate datele în carantină",
+    "close": "Închide",
+    "recovered": "Recuperat",
+    "recoveryFailed": "Recuperarea a eșuat",
+    "folderData": "Datele folderului",
+    "backupData": "Backup (original cu mesaje eliminate)",
+    "bannerMessage": "{count, plural, one {# conversație a avut probleme cu datele și a fost pusă în carantină.} other {# conversații au avut probleme cu datele și au fost puse în carantină.}}",
+    "review": "Revizuiește",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de la {source}"
   }
 }

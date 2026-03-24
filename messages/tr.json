@@ -1827,5 +1827,23 @@
     "toggleTheme": "Temayı değiştir",
     "regenerateResponse": "Yanıtı yeniden oluştur",
     "copyLastResponse": "Son yanıtı kopyala"
+  },
+  "quarantine": {
+    "title": "Karantinaya Alınan Konuşmalar",
+    "itemCount": "Veri sorunu olan {count, plural, one {# öğe} other {# öğe}}",
+    "noItems": "Karantinaya alınan öğe yok.",
+    "recover": "Kurtar",
+    "export": "Dışa Aktar",
+    "delete": "Sil",
+    "deleteAll": "Tüm karantinadaki verileri sil",
+    "close": "Kapat",
+    "recovered": "Kurtarıldı",
+    "recoveryFailed": "Kurtarma başarısız oldu",
+    "folderData": "Klasör verisi",
+    "backupData": "Yedek (mesajlar çıkarılmış orijinal)",
+    "bannerMessage": "{count, plural, one {# konuşmada veri sorunu var ve karantinaya alındı.} other {# konuşmada veri sorunu var ve karantinaya alındı.}}",
+    "review": "İncele",
+    "itemId": "Kimlik: {id}",
+    "itemSource": "{source} - {date}"
   }
 }

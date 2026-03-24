@@ -1857,5 +1857,23 @@
     "toggleTheme": "تھیم تبدیل کریں",
     "regenerateResponse": "جواب دوبارہ تیار کریں",
     "copyLastResponse": "آخری جواب نقل کریں"
+  },
+  "quarantine": {
+    "title": "قرنطینہ شدہ گفتگوئیں",
+    "itemCount": "{count, plural, one {# آئٹم} other {# آئٹمز}} جن میں ڈیٹا کے مسائل ہیں",
+    "noItems": "کوئی قرنطینہ شدہ آئٹمز نہیں ہیں۔",
+    "recover": "بحال کریں",
+    "export": "ایکسپورٹ",
+    "delete": "حذف کریں",
+    "deleteAll": "تمام قرنطینہ شدہ ڈیٹا حذف کریں",
+    "close": "بند کریں",
+    "recovered": "بحال ہو گیا",
+    "recoveryFailed": "بحالی ناکام ہوئی",
+    "folderData": "فولڈر ڈیٹا",
+    "backupData": "بیک اپ (اصل، جن میں پیغامات حذف کیے گئے ہیں)",
+    "bannerMessage": "{count, plural, one {# گفتگو میں ڈیٹا کے مسائل تھے اور اسے قرنطینہ کیا گیا۔} other {# گفتگوؤں میں ڈیٹا کے مسائل تھے اور انہیں قرنطینہ کیا گیا۔}}",
+    "review": "جائزہ لیں",
+    "itemId": "شناختی نمبر: {id}",
+    "itemSource": "{source} سے {date}"
   }
 }

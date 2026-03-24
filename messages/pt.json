@@ -1827,5 +1827,23 @@
     "toggleTheme": "Alternar tema",
     "regenerateResponse": "Regenerar resposta",
     "copyLastResponse": "Copiar última resposta"
+  },
+  "quarantine": {
+    "title": "Conversas em quarentena",
+    "itemCount": "{count, plural, one {# item} other {# itens}} com problemas de dados",
+    "noItems": "Nenhum item em quarentena.",
+    "recover": "Recuperar",
+    "export": "Exportar",
+    "delete": "Excluir",
+    "deleteAll": "Excluir todos os dados em quarentena",
+    "close": "Fechar",
+    "recovered": "Recuperado",
+    "recoveryFailed": "Falha na recuperação",
+    "folderData": "Dados da pasta",
+    "backupData": "Backup (original com mensagens removidas)",
+    "bannerMessage": "{count, plural, one {# conversa apresentou problemas de dados e foi colocada em quarentena.} other {# conversas apresentaram problemas de dados e foram colocadas em quarentena.}}",
+    "review": "Revisar",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de {source}"
   }
 }

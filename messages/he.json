@@ -1827,5 +1827,23 @@
     "toggleTheme": "החלפת ערכת נושא",
     "regenerateResponse": "הפק תגובה מחדש",
     "copyLastResponse": "העתקת התגובה האחרונה"
+  },
+  "quarantine": {
+    "title": "שיחות בהסגר",
+    "itemCount": "{count, plural, one {פריט אחד עם בעיות נתונים} other {# פריטים עם בעיות נתונים}}",
+    "noItems": "אין פריטים בהסגר.",
+    "recover": "שחזור",
+    "export": "יצוא",
+    "delete": "מחיקה",
+    "deleteAll": "מחק את כל הנתונים שבחסימה",
+    "close": "סגור",
+    "recovered": "שוחזר",
+    "recoveryFailed": "הפעולה נכשלה",
+    "folderData": "נתוני תיקייה",
+    "backupData": "גיבוי (מקור עם הודעות מוסרות)",
+    "bannerMessage": "{count, plural, one {לשיחה אחת היו בעיות נתונים והיא נכנסה להסגר.} other {ל-# שיחות היו בעיות נתונים והן נכנסו להסגר.}}",
+    "review": "סקירה",
+    "itemId": "מזהה: {id}",
+    "itemSource": "{date} מ-{source}"
   }
 }

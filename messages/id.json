@@ -1827,5 +1827,23 @@
     "toggleTheme": "Ganti tema",
     "regenerateResponse": "Buat ulang respons",
     "copyLastResponse": "Salin respons terakhir"
+  },
+  "quarantine": {
+    "title": "Percakapan Dikarantina",
+    "itemCount": "{count, plural, one {# item} other {# item}} dengan masalah data",
+    "noItems": "Tidak ada item yang dikarantina.",
+    "recover": "Pulihkan",
+    "export": "Ekspor",
+    "delete": "Hapus",
+    "deleteAll": "Hapus semua data yang dikarantina",
+    "close": "Tutup",
+    "recovered": "Berhasil dipulihkan",
+    "recoveryFailed": "Pemulihan gagal",
+    "folderData": "Data folder",
+    "backupData": "Cadangan (asli dengan pesan yang dihapus)",
+    "bannerMessage": "{count, plural, one {# percakapan memiliki masalah data dan telah dikarantina.} other {# percakapan memiliki masalah data dan telah dikarantina.}}",
+    "review": "Tinjau",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} dari {source}"
   }
 }

@@ -1803,5 +1803,23 @@
     "toggleTheme": "Canja jigo",
     "regenerateResponse": "Sake samar da amsa",
     "copyLastResponse": "Kwafi amsa ta ƙarshe"
+  },
+  "quarantine": {
+    "title": "Hirar da aka killace",
+    "itemCount": "{count, plural, one {# abu} other {# abubuwa}} da matsalar bayanai",
+    "noItems": "Babu abubuwan da aka killace.",
+    "recover": "Farfaɗo",
+    "export": "Fitar da bayanai",
+    "delete": "Goge",
+    "deleteAll": "Goge duk bayanan da aka killace",
+    "close": "Rufe",
+    "recovered": "An farfaɗo",
+    "recoveryFailed": "Farfaɗowa ta ƙi",
+    "folderData": "Bayanan fayil",
+    "backupData": "Ajiyar baya (asali ba saƙonni)",
+    "bannerMessage": "{count, plural, one {# hirar ta samu matsalar bayanai an killace ta.} other {# hirarraki sun samu matsalar bayanai an killace su.}}",
+    "review": "Duba",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} daga {source}"
   }
 }

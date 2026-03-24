@@ -1803,5 +1803,23 @@
     "toggleTheme": "ប្ដូរពណ៌ផ្ទៃ",
     "regenerateResponse": "បង្កើតចម្លើយឡើងវិញ",
     "copyLastResponse": "ចម្លងចម្លើយចុងក្រោយ"
+  },
+  "quarantine": {
+    "title": "ការសន្ទនា​ដែល​បានដាក់ឯង",
+    "itemCount": "{count, plural, one {# ធាតុ} other {# ធាតុ}} មានបញ្ហាទិន្នន័យ",
+    "noItems": "មិនមានធាតុដែលបានដាក់ឯងទេ។",
+    "recover": "ស្ដារឡើងវិញ",
+    "export": "នាំចេញ",
+    "delete": "លុប",
+    "deleteAll": "លុបទិន្នន័យដែលបានដាក់ឯងទាំងអស់",
+    "close": "បិទ",
+    "recovered": "បានស្ដារ",
+    "recoveryFailed": "ការស្ដារ​បានបរាជ័យ",
+    "folderData": "ទិន្នន័យថត",
+    "backupData": "បម្រុងទុក (ដើមមានលុបសារ) ",
+    "bannerMessage": "{count, plural, one {# ការសន្ទនា​មានបញ្ហាទិន្នន័យ និងត្រូវបានដាក់ឯង។} other {# ការសន្ទនាមានបញ្ហាទិន្នន័យ និងត្រូវបានដាក់ឯង។}}",
+    "review": "ពិនិត្យ",
+    "itemId": "លេខសំគាល់៖ {id}",
+    "itemSource": "{date} ពី {source}"
   }
 }

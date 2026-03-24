@@ -1803,5 +1803,23 @@
     "toggleTheme": "Bongola thème",
     "regenerateResponse": "Salisa eyano lisusu",
     "copyLastResponse": "Kopía eyano ya suka"
+  },
+  "quarantine": {
+    "title": "Bapanzi na karantine",
+    "itemCount": "{count, plural, one {# eloko} other {# biloko}} ezali na mikakatano ya ba données",
+    "noItems": "Naza na eloko moko te ya karantine.",
+    "recover": "Zongisa",
+    "export": "Exporter",
+    "delete": "Longola",
+    "deleteAll": "Longola ba données nyonso ya karantine",
+    "close": "Kokanga",
+    "recovered": "Ezongisami",
+    "recoveryFailed": "Zongiseli eboyaki",
+    "folderData": "Ba données ya dosié",
+    "backupData": "Backup (ya liboso na ba mesaje oyo elongolamaki)",
+    "bannerMessage": "{count, plural, one {# lisolo ezalaki na mikakatano ya ba données mpe ebakisamaki na karantine.} other {# lisolo ezalaki na mikakatano ya ba données mpe ebakisamaki na karantine.}}",
+    "review": "Tala lisusu",
+    "itemId": "ID : {id}",
+    "itemSource": "{date} uta na {source}"
   }
 }

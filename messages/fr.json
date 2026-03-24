@@ -1827,5 +1827,23 @@
     "toggleTheme": "Changer de thème",
     "regenerateResponse": "Régénerer la réponse",
     "copyLastResponse": "Copier la dernière réponse"
+  },
+  "quarantine": {
+    "title": "Conversations mises en quarantaine",
+    "itemCount": "{count, plural, one {# élément} other {# éléments}} présentant des problèmes de données",
+    "noItems": "Aucun élément mis en quarantaine.",
+    "recover": "Récupérer",
+    "export": "Exporter",
+    "delete": "Supprimer",
+    "deleteAll": "Supprimer toutes les données mises en quarantaine",
+    "close": "Fermer",
+    "recovered": "Récupéré",
+    "recoveryFailed": "La récupération a échoué",
+    "folderData": "Données du dossier",
+    "backupData": "Sauvegarde (original avec messages supprimés)",
+    "bannerMessage": "{count, plural, one {# conversation présentait des problèmes de données et a été mise en quarantaine.} other {# conversations présentaient des problèmes de données et ont été mises en quarantaine.}}",
+    "review": "Examiner",
+    "itemId": "ID : {id}",
+    "itemSource": "{date} de {source}"
   }
 }

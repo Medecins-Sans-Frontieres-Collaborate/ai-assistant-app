@@ -1803,5 +1803,23 @@
     "toggleTheme": "Shintsha itimu",
     "regenerateResponse": "Phinda uphendule",
     "copyLastResponse": "Kopisha impendulo yokugcina"
+  },
+  "quarantine": {
+    "title": "Izingxoxo EzikuQuarantine",
+    "itemCount": "{count, plural, one {# into} other {# izinto}} ezinenkinga yedatha",
+    "noItems": "Awekho izinto ezikuquarantine.",
+    "recover": "Buyisa",
+    "export": "Thumela ngaphandle",
+    "delete": "Susa",
+    "deleteAll": "Susa yonke idatha ekuquarantine",
+    "close": "Vala",
+    "recovered": "Kubuyisiwe",
+    "recoveryFailed": "Ukubuyisa kwehlulekile",
+    "folderData": "Idatha yefolda",
+    "backupData": "I-backup (yoqobo ngaphandle kwemilayezo esusiwe)",
+    "bannerMessage": "{count, plural, one {# ingxoxo ibe nenkinga yedatha yafakwa kuquarantine.} other {# izingxoxo zibe nezingqinamba zedatha zafakwa kuquarantine.}}",
+    "review": "Bheka kabusha",
+    "itemId": "I-ID: {id}",
+    "itemSource": "{date} ivela ku-{source}"
   }
 }

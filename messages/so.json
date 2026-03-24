@@ -1803,5 +1803,23 @@
     "toggleTheme": "Bedel mawduuca",
     "regenerateResponse": "Soo noolee jawaabta",
     "copyLastResponse": "Nuqul jawaabtii ugu dambeysay"
+  },
+  "quarantine": {
+    "title": "Wadahadallada Karanteysan",
+    "itemCount": "{count, plural, one {# shay} other {# shay} } oo leh dhibaato xog",
+    "noItems": "Lama helin shay la karantiilay.",
+    "recover": "Soo Celin",
+    "export": "Dhoofin",
+    "delete": "Tirtir",
+    "deleteAll": "Tirtir dhammaan xogta la karantiilay",
+    "close": "Xidh",
+    "recovered": "Waa la soo celiyay",
+    "recoveryFailed": "Soo celintu way fashilantay",
+    "folderData": "Xogta faylka",
+    "backupData": "Keyd (asalka oo farriimaha laga saaray)",
+    "bannerMessage": "{count, plural, one {# wada sheekeysi ayaa la kulmay dhibaato xog ah oo la karantiilay.} other {# wada sheekeysi ayaa la kulmay dhibaatooyin xog iyo la karantiilay.}}",
+    "review": "Dib u eeg",
+    "itemId": "Aqoonsi: {id}",
+    "itemSource": "{date} laga bilaabo {source}"
   }
 }

@@ -1827,5 +1827,23 @@
     "toggleTheme": "Badilisha mandhari",
     "regenerateResponse": "Tengeneza upya majibu",
     "copyLastResponse": "Nakili jibu la mwisho"
+  },
+  "quarantine": {
+    "title": "Mazungumzo Yaliyo kwenye Karantini",
+    "itemCount": "{count, plural, one {kipengee #} other {vipengee #}} vyenye matatizo ya data",
+    "noItems": "Hakuna vipengee vilivyowekwa karantini.",
+    "recover": "Rejesha",
+    "export": "Hamisha",
+    "delete": "Futa",
+    "deleteAll": "Futa data yote iliyowekwa karantini",
+    "close": "Funga",
+    "recovered": "Imerejeshwa",
+    "recoveryFailed": "Urejeshaji umeshindikana",
+    "folderData": "Data ya folda",
+    "backupData": "Hifadhi (asili yenye ujumbe ulioondolewa)",
+    "bannerMessage": "{count, plural, one {Mazungumzo # yalikuwa na matatizo ya data na yaliwekwa karantini.} other {Mazungumzo # yalikuwa na matatizo ya data na yaliwekwa karantini.}}",
+    "review": "Kagua",
+    "itemId": "Kitambulisho: {id}",
+    "itemSource": "{date} kutoka {source}"
   }
 }

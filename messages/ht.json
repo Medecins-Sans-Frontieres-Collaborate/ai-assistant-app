@@ -1803,5 +1803,23 @@
     "toggleTheme": "Chanje tèm",
     "regenerateResponse": "Rejenere repons",
     "copyLastResponse": "Kopye dènye repons lan"
+  },
+  "quarantine": {
+    "title": "Konvèsasyon Ankarantèn",
+    "itemCount": "{count, plural, one {# atik} other {# atik}} ki gen pwoblèm done",
+    "noItems": "Pa gen atik ankarantèn.",
+    "recover": "Rekipere",
+    "export": "Ekspòte",
+    "delete": "Efase",
+    "deleteAll": "Efase tout done ankarantèn",
+    "close": "Fèmen",
+    "recovered": "Rekiperasyon fèt",
+    "recoveryFailed": "Rekiperasyon echwe",
+    "folderData": "Done Katab",
+    "backupData": "Sovgad (original ak mesaj retire)",
+    "bannerMessage": "{count, plural, one {# konvèsasyon te gen pwoblèm done epi yo mete l ankarantèn.} other {# konvèsasyon te gen pwoblèm done epi yo mete yo ankarantèn.}}",
+    "review": "Revize",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} soti nan {source}"
   }
 }

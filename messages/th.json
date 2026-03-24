@@ -1827,5 +1827,23 @@
     "toggleTheme": "สลับธีม",
     "regenerateResponse": "สร้างคำตอบใหม่อีกครั้ง",
     "copyLastResponse": "คัดลอกคำตอบล่าสุด"
+  },
+  "quarantine": {
+    "title": "การสนทนาที่ถูกกักกัน",
+    "itemCount": "{count, plural, one {# รายการ} other {# รายการ}} ที่มีปัญหาข้อมูล",
+    "noItems": "ไม่มีรายการที่ถูกกักกัน",
+    "recover": "กู้คืน",
+    "export": "ส่งออก",
+    "delete": "ลบ",
+    "deleteAll": "ลบข้อมูลที่ถูกกักกันทั้งหมด",
+    "close": "ปิด",
+    "recovered": "กู้คืนแล้ว",
+    "recoveryFailed": "กู้คืนไม่สำเร็จ",
+    "folderData": "ข้อมูลโฟลเดอร์",
+    "backupData": "สำรองข้อมูล (ต้นฉบับที่ลบข้อความออก)",
+    "bannerMessage": "{count, plural, one {# การสนทนามีปัญหาข้อมูลและถูกกักกัน} other {# การสนทนามีปัญหาข้อมูลและถูกกักกัน}}",
+    "review": "ตรวจสอบ",
+    "itemId": "รหัส: {id}",
+    "itemSource": "{date} จาก {source}"
   }
 }

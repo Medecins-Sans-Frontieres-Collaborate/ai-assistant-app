@@ -1827,5 +1827,23 @@
     "toggleTheme": "Thema wisselen",
     "regenerateResponse": "Antwoord opnieuw genereren",
     "copyLastResponse": "Laatste antwoord kopiëren"
+  },
+  "quarantine": {
+    "title": "Geïnventariseerde gesprekken",
+    "itemCount": "{count, plural, one {# item} other {# items}} met gegevensproblemen",
+    "noItems": "Geen geïnventariseerde items.",
+    "recover": "Herstellen",
+    "export": "Exporteren",
+    "delete": "Verwijderen",
+    "deleteAll": "Alle geïnventariseerde gegevens verwijderen",
+    "close": "Sluiten",
+    "recovered": "Hersteld",
+    "recoveryFailed": "Herstel mislukt",
+    "folderData": "Mapgegevens",
+    "backupData": "Back-up (origineel met verwijderde berichten)",
+    "bannerMessage": "{count, plural, one {# gesprek had gegevensproblemen en is geïnventariseerd.} other {# gesprekken hadden gegevensproblemen en zijn geïnventariseerd.}}",
+    "review": "Beoordelen",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} van {source}"
   }
 }

@@ -1827,5 +1827,23 @@
     "toggleTheme": "Växla tema",
     "regenerateResponse": "Återskapa svar",
     "copyLastResponse": "Kopiera senaste svaret"
+  },
+  "quarantine": {
+    "title": "Karantänsatta konversationer",
+    "itemCount": "{count, plural, one {# objekt} other {# objekt} } med dataproblem",
+    "noItems": "Inga karantänsatta objekt.",
+    "recover": "Återställ",
+    "export": "Exportera",
+    "delete": "Ta bort",
+    "deleteAll": "Ta bort all karantänsatt data",
+    "close": "Stäng",
+    "recovered": "Återställd",
+    "recoveryFailed": "Återställning misslyckades",
+    "folderData": "Mappdata",
+    "backupData": "Backup (original med borttagna meddelanden)",
+    "bannerMessage": "{count, plural, one {# konversation hade dataproblem och lades i karantän.} other {# konversationer hade dataproblem och lades i karantän.}}",
+    "review": "Granska",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} från {source}"
   }
 }

@@ -1827,5 +1827,23 @@
     "toggleTheme": "थीम बदलें",
     "regenerateResponse": "उत्तर पुनः बनाएँ",
     "copyLastResponse": "अंतिम उत्तर कॉपी करें"
+  },
+  "quarantine": {
+    "title": "क्वारंटीन की गई बातचीत",
+    "itemCount": "{count, plural, one {# आइटम} other {# आइटम्स}} में डेटा समस्या है",
+    "noItems": "कोई क्वारंटीन आइटम नहीं।",
+    "recover": "पुनः प्राप्त करें",
+    "export": "निर्यात करें",
+    "delete": "हटाएं",
+    "deleteAll": "सभी क्वारंटीन डेटा हटाएं",
+    "close": "बंद करें",
+    "recovered": "पुनः प्राप्त किया गया",
+    "recoveryFailed": "पुनः प्राप्ति असफल रही",
+    "folderData": "फोल्डर डेटा",
+    "backupData": "बैकअप (मूल, संदेशों के बिना)",
+    "bannerMessage": "{count, plural, one {# बातचीत में डेटा समस्या थी और क्वारंटीन किया गया।} other {# बातचीतों में डेटा समस्या थी और क्वारंटीन किया गया।}}",
+    "review": "समीक्षा करें",
+    "itemId": "आईडी: {id}",
+    "itemSource": "{source} से {date}"
   }
 }

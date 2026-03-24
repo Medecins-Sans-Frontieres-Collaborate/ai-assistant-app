@@ -1858,5 +1858,23 @@
     "toggleTheme": "Chuyển đổi giao diện",
     "regenerateResponse": "Tạo lại phản hồi",
     "copyLastResponse": "Sao chép phản hồi cuối cùng"
+  },
+  "quarantine": {
+    "title": "Cuộc trò chuyện bị cách ly",
+    "itemCount": "{count, plural, one {# mục} other {# mục}} có vấn đề về dữ liệu",
+    "noItems": "Không có mục nào bị cách ly.",
+    "recover": "Khôi phục",
+    "export": "Xuất",
+    "delete": "Xoá",
+    "deleteAll": "Xoá toàn bộ dữ liệu bị cách ly",
+    "close": "Đóng",
+    "recovered": "Đã khôi phục",
+    "recoveryFailed": "Khôi phục thất bại",
+    "folderData": "Dữ liệu thư mục",
+    "backupData": "Sao lưu (bản gốc đã loại bỏ tin nhắn)",
+    "bannerMessage": "{count, plural, one {# cuộc trò chuyện có vấn đề về dữ liệu và đã bị cách ly.} other {# cuộc trò chuyện có vấn đề về dữ liệu và đã bị cách ly.}}",
+    "review": "Xem xét",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} từ {source}"
   }
 }

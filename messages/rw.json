@@ -1803,5 +1803,23 @@
     "toggleTheme": "Hindura insanganyamatsiko",
     "regenerateResponse": "Sohora igisubizo bundi bushya",
     "copyLastResponse": "Gukoporora igisubizo giheruka"
+  },
+  "quarantine": {
+    "title": "Ikiganiro cyashyizwe mu kato",
+    "itemCount": "{count, plural, one {# kintu} other {# bintu}} bifite ibibazo by’amakuru",
+    "noItems": "Nta kintu cyashyizwe mu kato.",
+    "recover": "Garura",
+    "export": "Sohora",
+    "delete": "Siba",
+    "deleteAll": "Siba amakuru yose yashyizwe mu kato",
+    "close": "Funga",
+    "recovered": "Byagaruwe",
+    "recoveryFailed": "Gusubirana byanze",
+    "folderData": "Amakuru ya dosiye",
+    "backupData": "Backup (yari isanzwe ariko ubutumwa bwavanyweho)",
+    "bannerMessage": "{count, plural, one {Ikiganiro # cyagize ibibazo by’amakuru gishyirwa mu kato.} other {Ibiganiro # byagize ibibazo by’amakuru bishyirwa mu kato.}}",
+    "review": "Suzuma",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} yaturutse kuri {source}"
   }
 }

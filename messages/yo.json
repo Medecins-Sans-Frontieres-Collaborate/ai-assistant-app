@@ -1803,5 +1803,23 @@
     "toggleTheme": "Yi àkópọ́ àyẹyẹ pada",
     "regenerateResponse": "Tun idahun ṣẹda",
     "copyLastResponse": "Da idahun to kẹhin mọ"
+  },
+  "quarantine": {
+    "title": "Ìbánisọ̀rọ̀ tí wọ́n wà nínú ìdàabobo",
+    "itemCount": "{count, plural, one {# nǹkan} other {# àwọn nǹkan}} pẹ̀lú ìṣòro data",
+    "noItems": "Kò sí nǹkan tó wà nínú ìdàabobo.",
+    "recover": "Gbà padà",
+    "export": "Èkó",
+    "delete": "Pa kuro",
+    "deleteAll": "Pa gbogbo data tó wà nínú ìdàabobo rẹ́",
+    "close": "Tì",
+    "recovered": "Ti gba padà",
+    "recoveryFailed": "Ìgbàpadà ṣàkúnya",
+    "folderData": "Data àpò",
+    "backupData": "Afẹyinti (àtọkànwá pẹ̀lú àwọn ìtẹ̀jáde tó yọkúrò)",
+    "bannerMessage": "{count, plural, one {Ìbánisọ̀rọ̀ # ní ìṣòro data ó sì wà nínú ìdàabobo.} other {# àwọn ìbánisọ̀rọ̀ ní ìṣòro data ó sì wà nínú ìdàabobo.}}",
+    "review": "Ìtúpalẹ̀",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} láti {source}"
   }
 }

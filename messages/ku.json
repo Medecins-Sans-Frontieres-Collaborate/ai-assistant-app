@@ -1803,5 +1803,23 @@
     "toggleTheme": "ڕوخسار بگۆڕە",
     "regenerateResponse": "وەڵام نوێ بیکەوە",
     "copyLastResponse": "دوایین وەڵام کۆپی بکە"
+  },
+  "quarantine": {
+    "title": "وتووێژە قرەنتینەکراوەکان",
+    "itemCount": "{count, plural, one {# بابەت} other {# بابەت}} کێشەی داتا هەیە",
+    "noItems": "هیچ بابەتی قرەنتینەکراو نییە.",
+    "recover": "گەراندنەوە",
+    "export": "هەناردن",
+    "delete": "سڕینەوە",
+    "deleteAll": "سڕینەوەی هەموو داتای قرەنتینەکراو",
+    "close": "داخستن",
+    "recovered": "گەراندراوەتەوە",
+    "recoveryFailed": "گەراندنەوە سەرکەوتوو نەبوو",
+    "folderData": "داتای پەڕگە",
+    "backupData": "پاشەکەوت (ئەسڵی بە پەیامی سڕاوەکان)",
+    "bannerMessage": "{count, plural, one {# وتووێژ کێشەی داتا هبوو و قرەنتینەکرایەوە.} other {# وتووێژ کێشەی داتا هبوون و قرەنتینەکران.}}",
+    "review": "بینینەوە",
+    "itemId": "ناسنامه: {id}",
+    "itemSource": "{date} لە {source}"
   }
 }

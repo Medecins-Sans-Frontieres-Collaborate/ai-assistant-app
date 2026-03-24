@@ -1803,5 +1803,23 @@
     "toggleTheme": "Promeni temu",
     "regenerateResponse": "Regeneriši odgovor",
     "copyLastResponse": "Kopiraj poslednji odgovor"
+  },
+  "quarantine": {
+    "title": "Razgovori u karantinu",
+    "itemCount": "{count, plural, one {# stavka sa problemima u podacima} few {# stavke sa problemima u podacima} other {# stavki sa problemima u podacima}}",
+    "noItems": "Nema stavki u karantinu.",
+    "recover": "Povrati",
+    "export": "Izvezi",
+    "delete": "Obriši",
+    "deleteAll": "Obriši sve podatke iz karantina",
+    "close": "Zatvori",
+    "recovered": "Povraćeno",
+    "recoveryFailed": "Povraćaj neuspešan",
+    "folderData": "Podaci o fascikli",
+    "backupData": "Backup (original bez poruka)",
+    "bannerMessage": "{count, plural, one {# razgovor je imao problem sa podacima i stavljen je u karantin.} few {# razgovora su imala problem sa podacima i stavljena su u karantin.} other {# razgovora je imalo problem sa podacima i stavljeno je u karantin.}}",
+    "review": "Pregledaj",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} od {source}"
   }
 }

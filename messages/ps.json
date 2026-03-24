@@ -1803,5 +1803,23 @@
     "toggleTheme": "بڼه بدله کړئ",
     "regenerateResponse": "ځواب بیا تولید کړئ",
     "copyLastResponse": "وروستی ځواب کاپي کړئ"
+  },
+  "quarantine": {
+    "title": "قرنطین شوې خبرې اترې",
+    "itemCount": "{count, plural, one {# توکي} other {# توکي}} د معلوماتو ستونزې لري",
+    "noItems": "هیڅ قرنطین شوي توکي نشته.",
+    "recover": "بېرته ترلاسه کول",
+    "export": "صادروه",
+    "delete": "ړنګول",
+    "deleteAll": "ټول قرنطین شوې معلومات ړنګ کړئ",
+    "close": "بندول",
+    "recovered": "بېرته ترلاسه شو",
+    "recoveryFailed": "بېرته ترلاسه کول ناکام شول",
+    "folderData": "د فولډر معلومات",
+    "backupData": "بیک اپ (اصلي د پیغامونو پرته)",
+    "bannerMessage": "{count, plural, one {# خبرې اترې د معلوماتو ستونزه درلوده او قرنطین شوې وه.} other {# خبرې اترې د معلوماتو ستونزې لري او قرنطین شوې دي.}}",
+    "review": "کتنه",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} له {source} څخه"
   }
 }

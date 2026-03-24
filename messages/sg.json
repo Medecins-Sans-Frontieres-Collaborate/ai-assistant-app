@@ -1803,5 +1803,23 @@
     "toggleTheme": "Kutanga thème",
     "regenerateResponse": "Koko gara azîrî",
     "copyLastResponse": "Kopi azîrî apekpe"
+  },
+  "quarantine": {
+    "title": "Yângö ti sôzi u kôndö",
+    "itemCount": "{count, plural, one {# yângö} other {# yângö}} ti sôzi na fadä",
+    "noItems": "Ala yângö ti sôzi.",
+    "recover": "Küè",
+    "export": "Export",
+    "delete": "Kûta",
+    "deleteAll": "Kûta yângö mbëtï ti sôzi",
+    "close": "Zânga",
+    "recovered": "A köda",
+    "recoveryFailed": "Ködörö tï küè abû kété",
+    "folderData": "Dönî ti dossi",
+    "backupData": "Backup (dönî tî sôso na sôhoro nî zu wama)",
+    "bannerMessage": "{count, plural, one {# sôzi fadä na yângö ti kôndö.} other {# sôzi fadä na yângö ti kôndö.}}",
+    "review": "Gbé",
+    "itemId": "Kode: {id}",
+    "itemSource": "{date} tî {source}"
   }
 }

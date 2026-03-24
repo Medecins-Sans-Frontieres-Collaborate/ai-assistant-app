@@ -1827,5 +1827,23 @@
     "toggleTheme": "تبديل السمة",
     "regenerateResponse": "إعادة توليد الرد",
     "copyLastResponse": "نسخ آخر رد"
+  },
+  "quarantine": {
+    "title": "المحادثات المحجوزة",
+    "itemCount": "{count, plural, one {عنصر واحد به مشكلة بيانات} other {# عناصر بها مشاكل بيانات}}",
+    "noItems": "لا توجد عناصر محجوزة.",
+    "recover": "استعادة",
+    "export": "تصدير",
+    "delete": "حذف",
+    "deleteAll": "حذف جميع البيانات المحجوزة",
+    "close": "إغلاق",
+    "recovered": "تمت الاستعادة",
+    "recoveryFailed": "فشلت الاستعادة",
+    "folderData": "بيانات المجلد",
+    "backupData": "نسخة احتياطية (الأصلية مع الرسائل المحذوفة)",
+    "bannerMessage": "{count, plural, one {تم حجز محادثة واحدة بسبب مشكلة بيانات.} other {تم حجز # محادثات بسبب مشاكل بيانات.}}",
+    "review": "مراجعة",
+    "itemId": "المعرّف: {id}",
+    "itemSource": "{date} من {source}"
   }
 }

@@ -1827,5 +1827,23 @@
     "toggleTheme": "Přepnout motiv",
     "regenerateResponse": "Znovu vygenerovat odpověď",
     "copyLastResponse": "Kopírovat poslední odpověď"
+  },
+  "quarantine": {
+    "title": "Konverzace v karanténě",
+    "itemCount": "{count, plural, one {# položka} few {# položky} other {# položek}} s datovými problémy",
+    "noItems": "Žádné položky v karanténě.",
+    "recover": "Obnovit",
+    "export": "Exportovat",
+    "delete": "Smazat",
+    "deleteAll": "Smazat všechna data v karanténě",
+    "close": "Zavřít",
+    "recovered": "Obnoveno",
+    "recoveryFailed": "Obnova selhala",
+    "folderData": "Data složky",
+    "backupData": "Záloha (původní bez zpráv)",
+    "bannerMessage": "{count, plural, one {# konverzace měla datové problémy a byla dána do karantény.} few {# konverzace měly datové problémy a byly dány do karantény.} other {# konverzací mělo datové problémy a bylo dáno do karantény.}}",
+    "review": "Zkontrolovat",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} od {source}"
   }
 }

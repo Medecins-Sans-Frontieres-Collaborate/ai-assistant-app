@@ -1827,5 +1827,23 @@
     "toggleTheme": "تغییر تم",
     "regenerateResponse": "تولید مجدد پاسخ",
     "copyLastResponse": "کپی آخرین پاسخ"
+  },
+  "quarantine": {
+    "title": "گفت‌وگوهای قرنطینه‌شده",
+    "itemCount": "{count, plural, one {# مورد} other {# مورد}} با مشکل داده",
+    "noItems": "مورد قرنطینه‌شده‌ای وجود ندارد.",
+    "recover": "بازیابی",
+    "export": "صادر کردن",
+    "delete": "حذف",
+    "deleteAll": "حذف همه داده‌های قرنطینه‌شده",
+    "close": "بستن",
+    "recovered": "بازیابی شد",
+    "recoveryFailed": "بازیابی انجام نشد",
+    "folderData": "داده‌های پوشه",
+    "backupData": "پشتیبان (نسخه اصلی با پیام‌های حذف‌شده)",
+    "bannerMessage": "{count, plural, one {# گفت‌وگو با مشکل داده مواجه شد و قرنطینه شد.} other {# گفت‌وگو با مشکل داده مواجه شدند و قرنطینه شدند.}}",
+    "review": "بازبینی",
+    "itemId": "شناسه: {id}",
+    "itemSource": "{date} از {source}"
   }
 }
