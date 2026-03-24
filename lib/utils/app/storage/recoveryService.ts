@@ -105,7 +105,8 @@ export function attemptRecovery(rawData: string): RecoveryResult {
   if (
     !obj.model ||
     typeof obj.model !== 'object' ||
-    typeof (obj.model as Record<string, unknown>).id !== 'string'
+    typeof (obj.model as Record<string, unknown>).id !== 'string' ||
+    typeof (obj.model as Record<string, unknown>).name !== 'string'
   ) {
     obj.model = getRecoveryModel();
     stats.fieldsRepaired.push('model');
