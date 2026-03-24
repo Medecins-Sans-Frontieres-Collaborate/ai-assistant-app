@@ -62,12 +62,21 @@ export const QuarantineDialog: FC<QuarantineDialogProps> = ({
     markRecoveryAttempted(item.id);
 
     if (result.recovered && result.conversation) {
-      // Dedup: update if conversation with same id already exists, otherwise add
+      // Dedup: only add/update if recovered version is newer than existing
       const existing = conversations.find(
         (c) => c.id === result.conversation!.id,
       );
       if (existing) {
-        updateConversation(result.conversation.id, result.conversation);
+        const existingTime = existing.updatedAt
+          ? new Date(existing.updatedAt).getTime()
+          : 0;
+        const recoveredTime = result.conversation.updatedAt
+          ? new Date(result.conversation.updatedAt).getTime()
+          : 0;
+        if (recoveredTime > existingTime || existingTime === 0) {
+          updateConversation(result.conversation.id, result.conversation);
+        }
+        // If existing is newer, skip — just remove from quarantine below
       } else {
         addConversation(result.conversation);
       }
