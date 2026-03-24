@@ -419,8 +419,8 @@ function migrateFromLegacyBlob(): {
       }
     }
 
-    // Nothing salvageable — quarantine the whole blob as backup (not recoverable as conversation)
-    const quarantined = quarantineConversation(
+    // Nothing salvageable — best-effort quarantine, then proceed
+    quarantineConversation(
       raw,
       [
         'Entire conversation blob unparseable (JSON repair and salvage both failed)',
@@ -428,10 +428,7 @@ function migrateFromLegacyBlob(): {
       LEGACY_BLOB_KEY,
       'backup',
     );
-    // Only delete legacy blob if quarantine succeeded (data is preserved)
-    if (quarantined) {
-      localStorage.removeItem(LEGACY_BLOB_KEY);
-    }
+    localStorage.removeItem(LEGACY_BLOB_KEY);
     return {
       conversations: [],
       selectedConversationId: null,
