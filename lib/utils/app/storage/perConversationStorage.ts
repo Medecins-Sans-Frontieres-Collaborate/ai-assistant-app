@@ -262,31 +262,57 @@ function loadFolder(id: string): FolderInterface | null {
  * Uses regex to find JSON objects that look like conversations (have id, name, messages fields),
  * then validates each one individually. Returns whatever is salvageable.
  */
+/**
+ * Extract a balanced JSON object from a raw string starting at `startIdx`,
+ * respecting quoted strings (so braces inside message content don't break it).
+ * Returns the end index (exclusive) or -1 if unbalanced.
+ */
+function findBalancedObjectEnd(raw: string, startIdx: number): number {
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let i = startIdx; i < raw.length; i++) {
+    const ch = raw[i];
+
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (ch === '\\' && inString) {
+      escaped = true;
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = !inString;
+      continue;
+    }
+
+    if (inString) continue;
+
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+
+    if (depth === 0) return i + 1;
+  }
+
+  return -1; // Unbalanced
+}
+
 function salvageConversationsFromBlob(raw: string): Conversation[] {
   const salvaged: Conversation[] = [];
+  const seenIds = new Set<string>();
 
-  // Match objects that contain "id" and "name" fields — conversation-shaped
-  // This regex finds balanced braces at the top level of the conversations array
-  const conversationPattern =
-    /\{"id"\s*:\s*"[^"]+"\s*,\s*"name"\s*:\s*"[^"]*"/g;
+  // Relaxed pattern: find objects that start with {"id": (any property order after)
+  const conversationPattern = /\{"id"\s*:\s*"[^"]+"/g;
   let match;
 
   while ((match = conversationPattern.exec(raw)) !== null) {
-    // Try to extract a balanced JSON object starting at this position
     const startIdx = match.index;
-    let depth = 0;
-    let endIdx = startIdx;
-
-    for (let i = startIdx; i < raw.length; i++) {
-      if (raw[i] === '{') depth++;
-      else if (raw[i] === '}') depth--;
-      if (depth === 0) {
-        endIdx = i + 1;
-        break;
-      }
-    }
-
-    if (depth !== 0) continue; // Unbalanced — skip
+    const endIdx = findBalancedObjectEnd(raw, startIdx);
+    if (endIdx === -1) continue;
 
     const fragment = raw.slice(startIdx, endIdx);
     const parsed = tryParseJSON<unknown>(fragment);
@@ -294,12 +320,17 @@ function salvageConversationsFromBlob(raw: string): Conversation[] {
 
     const validation = validateConversation(parsed.data);
     if (validation.valid && validation.data) {
-      salvaged.push(validation.data);
+      if (!seenIds.has(validation.data.id)) {
+        salvaged.push(validation.data);
+        seenIds.add(validation.data.id);
+      }
     } else {
-      // Try recovery on the fragment
       const recovery = attemptRecovery(fragment);
       if (recovery.recovered && recovery.conversation) {
-        salvaged.push(recovery.conversation);
+        if (!seenIds.has(recovery.conversation.id)) {
+          salvaged.push(recovery.conversation);
+          seenIds.add(recovery.conversation.id);
+        }
       }
     }
   }
@@ -665,12 +696,17 @@ export const perConversationStorage: StateStorage = {
                 validFolderIds.push(folder.id);
               }
             }
+            // Use blob's selectedConversationId as fallback if index has none
+            const mergedSelectedId =
+              index.selectedConversationId ?? merged.selectedConversationId;
+
             // Update the index with merged data (best-effort)
             try {
               writeIndex({
                 ...index,
                 conversationIds: validIds,
                 folderIds: validFolderIds,
+                selectedConversationId: mergedSelectedId,
               });
             } catch (e) {
               console.warn(
@@ -678,6 +714,11 @@ export const perConversationStorage: StateStorage = {
                 e,
               );
             }
+            // Update index for the return value
+            index = {
+              ...index,
+              selectedConversationId: mergedSelectedId,
+            };
           }
         }
 
