@@ -121,7 +121,7 @@ function writeIndex(index: ConversationIndex): void {
 /**
  * Load a single conversation from its per-conversation key.
  * On parse/validation failure, attempts auto-recovery before quarantining.
- * Only deletes source data if quarantine write succeeds.
+ * Follows best-effort quarantine policy: always proceeds even if quarantine fails.
  */
 function loadConversation(id: string): Conversation | null {
   const key = `${CONV_PREFIX}${id}`;
@@ -881,7 +881,7 @@ function scanAllConversationKeys(): string[] {
  * Useful for storage monitoring and cleanup.
  */
 export function getPerConversationStorageKeys(): string[] {
-  const keys: string[] = [INDEX_KEY];
+  const keys: string[] = [INDEX_KEY, 'conv-quarantine'];
 
   // Use scan to catch both indexed and orphaned keys
   const scannedKeys = scanAllConversationKeys();
@@ -900,11 +900,6 @@ export function getPerConversationStorageSize(): number {
       if (item) {
         total += item.length * 2; // UTF-16 encoding: 2 bytes per char
       }
-    }
-    // Include quarantine size
-    const quarantine = localStorage.getItem('conv-quarantine');
-    if (quarantine) {
-      total += quarantine.length * 2;
     }
     return total;
   } catch {
