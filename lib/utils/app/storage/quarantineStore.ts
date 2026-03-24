@@ -26,10 +26,13 @@ export function getQuarantinedItems(): QuarantinedItem[] {
 }
 
 /**
- * Add data to quarantine.
+ * Add data to quarantine (best-effort).
  * Preserves the raw data string as-is for maximum recoverability.
  * Returns true if the data was successfully quarantined, false if the write failed.
- * Callers should only delete source data if this returns true.
+ *
+ * Note: The storage adapter follows a "best-effort quarantine, always proceed" policy —
+ * callers proceed regardless of the return value. The boolean is useful for logging
+ * and for the manual recovery dialog (which checks persistence before removing entries).
  *
  * If an entry with the same id already exists, its rawData and errors are updated
  * to the latest values (so re-corruption preserves the newest snapshot).
