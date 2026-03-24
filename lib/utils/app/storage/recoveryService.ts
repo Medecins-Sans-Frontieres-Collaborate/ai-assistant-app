@@ -23,7 +23,7 @@ import { getDefaultModel } from '@/config/models';
  * Attempt to repair broken JSON strings.
  * Handles trailing commas, truncated JSON (unclosed brackets/braces).
  */
-function repairJSON(raw: string): string {
+export function repairJSON(raw: string): string {
   let repaired = raw.trim();
 
   // Remove trailing commas before closing brackets/braces
