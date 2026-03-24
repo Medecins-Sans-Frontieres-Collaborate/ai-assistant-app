@@ -366,6 +366,81 @@ describe('perConversationStorage', () => {
       expect(stored.name).toBe('Renamed Folder');
     });
 
+    it('preserves deleted keys if index write fails', () => {
+      // Write initial state
+      const initial = {
+        state: {
+          conversations: [makeConversation('c1'), makeConversation('c2')],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(initial),
+      );
+
+      // Mock index write to fail
+      const originalSetItem = localStorage.setItem.bind(localStorage);
+      vi.spyOn(localStorage, 'setItem').mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'conv-index') {
+            throw new Error('QuotaExceededError');
+          }
+          originalSetItem(key, value);
+        },
+      );
+
+      // Try to delete c2
+      const updated = {
+        state: {
+          conversations: [makeConversation('c1')],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(updated),
+      );
+
+      vi.restoreAllMocks();
+
+      // c2 should NOT have been deleted (index write failed, so deletions were skipped)
+      expect(localStorage.getItem('conv-data-c2')).not.toBeNull();
+    });
+
+    it('retries legacy migration when orphaned keys exist alongside legacy blob', () => {
+      // Simulate a failed migration: some conv-data-* keys + legacy blob still present
+      localStorage.setItem(
+        'conv-data-partial',
+        JSON.stringify(makeConversation('partial')),
+      );
+      const legacyBlob = {
+        state: {
+          conversations: [
+            makeConversation('partial'),
+            makeConversation('full'),
+          ],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+      // No conv-index — simulates failed index write during previous migration
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      const parsed = JSON.parse(raw!);
+
+      // Should have both conversations (full migration retried, not partial rebuild)
+      expect(parsed.state.conversations).toHaveLength(2);
+      // Legacy blob should now be removed (migration succeeded)
+      expect(localStorage.getItem('conversation-storage')).toBeNull();
+    });
+
     it('removes deleted conversations', () => {
       // First write with two conversations
       const initial = {
