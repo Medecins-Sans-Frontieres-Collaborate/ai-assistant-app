@@ -69,7 +69,7 @@ export function QuarantineNotice() {
 
   return (
     <>
-      <div className="mx-3 mt-2 mb-1 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2">
+      <div className="absolute top-2 left-3 right-3 z-10 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-800 dark:text-amber-300 flex items-center gap-2 shadow-sm">
         <IconAlertTriangle size={14} className="flex-shrink-0" />
         <span className="flex-1">{t('bannerMessage', { count })}</span>
         <button
