@@ -3,7 +3,9 @@ import {
   IconChevronDown,
   IconChevronRight,
   IconDatabase,
+  IconDownload,
   IconFileExport,
+  IconRefresh,
   IconTransfer,
   IconTrash,
   IconUsersGroup,
@@ -16,12 +18,17 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 
 import { LocalStorageService } from '@/client/services/storage/localStorageService';
 
+import {
+  clearAllQuarantined,
+  getQuarantinedItems,
+} from '@/lib/utils/app/storage/quarantineStore';
 import { getStorageBreakdown } from '@/lib/utils/app/storage/storageMonitor';
 import { formatBytes } from '@/lib/utils/app/storage/storageUtils';
 
 import { StorageBreakdown } from '@/types/storage';
 
 import { SidebarButton } from '../../Sidebar/SidebarButton';
+import { QuarantineDialog } from '../../Storage/QuarantineDialog';
 import { ClearConversations } from '../ClearConversations';
 import { Import } from '../Import';
 import { TeamTemplateModal } from '../TeamTemplateModal';
@@ -55,6 +62,12 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
     freedBytes: number;
   } | null>(null);
   const [showLegacyOptions, setShowLegacyOptions] = useState(false);
+  const [showQuarantineOptions, setShowQuarantineOptions] = useState(false);
+  const [showQuarantineDeleteConfirm, setShowQuarantineDeleteConfirm] =
+    useState(false);
+  const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
+  const [quarantineCount, setQuarantineCount] = useState(0);
+  const [quarantineSize, setQuarantineSize] = useState(0);
 
   // Refresh storage breakdown
   const refreshBreakdown = useCallback(() => {
@@ -66,9 +79,19 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
     }
   }, []);
 
+  // Refresh quarantine info
+  const refreshQuarantine = useCallback(() => {
+    const items = getQuarantinedItems();
+    setQuarantineCount(items.length);
+    setQuarantineSize(
+      items.reduce((sum, item) => sum + item.rawData.length * 2, 0),
+    );
+  }, []);
+
   // Update storage data when component mounts
   useEffect(() => {
     refreshBreakdown();
+    refreshQuarantine();
     checkStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Only run on mount
@@ -105,6 +128,33 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
       setIsDeleting(false);
       setShowDeleteConfirm(false);
     }
+  };
+
+  // Export all quarantined data as a JSON file
+  const handleExportQuarantine = () => {
+    try {
+      const items = getQuarantinedItems();
+      const blob = new Blob([JSON.stringify(items, null, 2)], {
+        type: 'application/json',
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `quarantined-data-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting quarantine data:', error);
+    }
+  };
+
+  // Delete all quarantined data
+  const confirmDeleteQuarantine = () => {
+    clearAllQuarantined();
+    setShowQuarantineDeleteConfirm(false);
+    refreshQuarantine();
+    refreshBreakdown();
+    checkStorage();
   };
 
   // Calculate percentage of max storage for a category (for stacked bar)
@@ -343,6 +393,93 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
             )}
           </div>
         )}
+
+        {/* Quarantined Data Section - Only show if quarantined items exist */}
+        {quarantineCount > 0 && (
+          <div className="border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <IconAlertTriangle
+                size={18}
+                className="text-amber-600 dark:text-amber-400"
+              />
+              <h3 className="text-md font-bold text-amber-800 dark:text-amber-300">
+                {t('settings.Quarantined Data')}
+              </h3>
+            </div>
+            <p className="text-xs text-amber-700 dark:text-amber-400 mb-3">
+              {t('settings.quarantineDataDescription', {
+                count: quarantineCount,
+                size: formatBytes(quarantineSize),
+              })}
+            </p>
+
+            {/* Expandable actions */}
+            <button
+              className="flex items-center gap-1 text-xs font-medium text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors"
+              onClick={() => setShowQuarantineOptions(!showQuarantineOptions)}
+            >
+              {showQuarantineOptions ? (
+                <IconChevronDown size={16} />
+              ) : (
+                <IconChevronRight size={16} />
+              )}
+              {t('settings.Explore solutions')}
+            </button>
+
+            {showQuarantineOptions && (
+              <div className="flex flex-col space-y-2 mt-3 pl-5">
+                <SidebarButton
+                  text={t('settings.Review & Recover')}
+                  icon={<IconRefresh size={18} />}
+                  onClick={() => setShowQuarantineDialog(true)}
+                />
+                <SidebarButton
+                  text={t('settings.Export Quarantined Data')}
+                  icon={<IconDownload size={18} />}
+                  onClick={handleExportQuarantine}
+                />
+                <SidebarButton
+                  text={t('settings.Delete Quarantined Data')}
+                  icon={<IconTrash size={18} />}
+                  onClick={() => setShowQuarantineDeleteConfirm(true)}
+                />
+              </div>
+            )}
+
+            {/* Delete confirmation */}
+            {showQuarantineDeleteConfirm && (
+              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg">
+                <p className="text-xs text-red-700 dark:text-red-400 mb-3">
+                  {t('settings.deleteQuarantineConfirm')}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+                    onClick={confirmDeleteQuarantine}
+                  >
+                    {t('settings.Confirm Delete')}
+                  </button>
+                  <button
+                    className="px-3 py-1 text-xs bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500"
+                    onClick={() => setShowQuarantineDeleteConfirm(false)}
+                  >
+                    {t('settings.Cancel')}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Quarantine Dialog (opened from settings) */}
+        <QuarantineDialog
+          isOpen={showQuarantineDialog}
+          onClose={() => {
+            setShowQuarantineDialog(false);
+            refreshQuarantine();
+            refreshBreakdown();
+          }}
+        />
 
         {/* Backup & Restore */}
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
