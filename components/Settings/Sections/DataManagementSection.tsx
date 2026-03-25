@@ -41,6 +41,7 @@ interface DataManagementSectionProps {
   onClose: () => void;
   checkStorage: () => void;
   onOpenMigration?: () => void;
+  onOpenQuarantine?: () => void;
 }
 
 export const DataManagementSection: FC<DataManagementSectionProps> = ({
@@ -50,6 +51,7 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
   onClose,
   checkStorage,
   onOpenMigration,
+  onOpenQuarantine,
 }) => {
   const { conversations } = useConversations();
   const t = useTranslations();
@@ -65,7 +67,6 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
   const [showQuarantineOptions, setShowQuarantineOptions] = useState(false);
   const [showQuarantineDeleteConfirm, setShowQuarantineDeleteConfirm] =
     useState(false);
-  const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
   const [quarantineCount, setQuarantineCount] = useState(0);
   const [quarantineSize, setQuarantineSize] = useState(0);
 
@@ -428,11 +429,13 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
 
             {showQuarantineOptions && (
               <div className="flex flex-col space-y-2 mt-3 pl-5">
-                <SidebarButton
-                  text={t('settings.Review & Recover')}
-                  icon={<IconRefresh size={18} />}
-                  onClick={() => setShowQuarantineDialog(true)}
-                />
+                {onOpenQuarantine && (
+                  <SidebarButton
+                    text={t('settings.Review & Recover')}
+                    icon={<IconRefresh size={18} />}
+                    onClick={onOpenQuarantine}
+                  />
+                )}
                 <SidebarButton
                   text={t('settings.Export Quarantined Data')}
                   icon={<IconDownload size={18} />}
@@ -470,16 +473,6 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
             )}
           </div>
         )}
-
-        {/* Quarantine Dialog (opened from settings) */}
-        <QuarantineDialog
-          isOpen={showQuarantineDialog}
-          onClose={() => {
-            setShowQuarantineDialog(false);
-            refreshQuarantine();
-            refreshBreakdown();
-          }}
-        />
 
         {/* Backup & Restore */}
         <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
