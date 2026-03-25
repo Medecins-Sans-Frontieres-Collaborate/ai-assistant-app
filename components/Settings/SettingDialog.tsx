@@ -19,6 +19,7 @@ import { DEFAULT_STREAMING_SPEED, Settings } from '@/types/settings';
 
 import packageJson from '../../package.json';
 import { MigrationDialog } from '../Migration/MigrationDialog';
+import { QuarantineDialog } from '../Storage/QuarantineDialog';
 import { MobileSettingsHeader } from './MobileSettingsHeader';
 import { ChatSettingsSection } from './Sections/ChatSettingsSection';
 import { DataManagementSection } from './Sections/DataManagementSection';
@@ -72,6 +73,7 @@ export function SettingDialog() {
   );
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
+  const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
 
   // Load settings and storage on client side only
   useEffect(() => {
@@ -89,8 +91,8 @@ export function SettingDialog() {
   // Close on click outside
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
-      // Don't close if MigrationDialog is open - it's rendered outside modalRef
-      if (showMigrationDialog) return;
+      // Don't close if a nested dialog is open - they're rendered outside modalRef
+      if (showMigrationDialog || showQuarantineDialog) return;
 
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         window.addEventListener('mouseup', handleMouseUp);
@@ -109,7 +111,12 @@ export function SettingDialog() {
     return () => {
       window.removeEventListener('mousedown', handleMouseDown);
     };
-  }, [isSettingsOpen, setIsSettingsOpen, showMigrationDialog]);
+  }, [
+    isSettingsOpen,
+    setIsSettingsOpen,
+    showMigrationDialog,
+    showQuarantineDialog,
+  ]);
 
   // Update storage data when dialog opens
   useEffect(() => {
@@ -328,6 +335,7 @@ export function SettingDialog() {
                     onClose={() => setIsSettingsOpen(false)}
                     checkStorage={checkStorage}
                     onOpenMigration={() => setShowMigrationDialog(true)}
+                    onOpenQuarantine={() => setShowQuarantineDialog(true)}
                   />
                 )}
 
@@ -348,6 +356,12 @@ export function SettingDialog() {
       <MigrationDialog
         isOpen={showMigrationDialog}
         onComplete={() => setShowMigrationDialog(false)}
+      />
+
+      {/* Quarantine Dialog - opened from Data Management section */}
+      <QuarantineDialog
+        isOpen={showQuarantineDialog}
+        onClose={() => setShowQuarantineDialog(false)}
       />
     </div>
   );
