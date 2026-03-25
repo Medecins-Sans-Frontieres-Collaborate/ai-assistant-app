@@ -28,7 +28,6 @@ import { formatBytes } from '@/lib/utils/app/storage/storageUtils';
 import { StorageBreakdown } from '@/types/storage';
 
 import { SidebarButton } from '../../Sidebar/SidebarButton';
-import { QuarantineDialog } from '../../Storage/QuarantineDialog';
 import { ClearConversations } from '../ClearConversations';
 import { Import } from '../Import';
 import { TeamTemplateModal } from '../TeamTemplateModal';
