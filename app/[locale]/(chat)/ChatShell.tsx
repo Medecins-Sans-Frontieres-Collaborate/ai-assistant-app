@@ -94,12 +94,12 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         <Sidebar />
 
         <div
-          className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
+          className={`relative flex flex-1 transition-all duration-300 ease-in-out ${
             showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
           }`}
         >
           <QuarantineNotice />
-          <div className="flex-1 min-h-0">{children}</div>
+          {children}
         </div>
 
         <SettingDialog />
