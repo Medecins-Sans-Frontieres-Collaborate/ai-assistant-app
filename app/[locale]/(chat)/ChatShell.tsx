@@ -90,16 +90,16 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         severity={storageThreshold}
       />
       <AppInitializer />
-      <QuarantineNotice />
       <div className="flex h-screen w-screen overflow-hidden">
         <Sidebar />
 
         <div
-          className={`flex flex-1 transition-all duration-300 ease-in-out ${
+          className={`flex flex-1 flex-col transition-all duration-300 ease-in-out ${
             showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
           }`}
         >
-          {children}
+          <QuarantineNotice />
+          <div className="flex-1 min-h-0">{children}</div>
         </div>
 
         <SettingDialog />
