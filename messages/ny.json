@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Panali cholakwika chosayembekezereka",
     "criticalErrorReload": "Panali cholakwika chachikulu. Chonde kwezaninso tsamba.",
     "reloadPage": "Kwezaninso tsamba",
-    "persistContactSupport": "Ngati vutoli likupitirira, chonde lumikizanani ndi chithandizo"
+    "persistContactSupport": "Ngati vutoli likupitirira, chonde lumikizanani ndi chithandizo",
+    "exportDataForRecovery": "Tumizani deta ya zokambirana kuti mubwezeretse",
+    "dataExported": "Deta yatulutsidwa",
+    "exportDataDescription": "Gawani fayiloyi ndi gulu laumisiri kuti akuthandizeni kubwezeretsa deta yanu.",
+    "resetStoragePrompt": "Ngati kukonzanso sikuthandiza, yesani kuyambiranso yosungiramo zokambirana",
+    "resetStorageWarning": "Kuyambiranso kudzafufuta deta yonse ya zokambirana. Musanayambirenso, mutha kutumiza kopi ya deta yoyambirira. Gawani fayiloyi ndi gulu laumisiri ngati mukufuna thandizo pobwezeretsa zokambiranazo.",
+    "resetStorage": "Yambitsaninso yosungiramo"
   },
   "prompts": {
     "buildReusablePrompts": "Pangani malamulo ogwiritsidwa ntchito kangapo ndi thandizo la AI",
@@ -1765,7 +1771,17 @@
     "retry": "Yesaninso",
     "pinned": "Yakwezedwa",
     "pin": "Kwezera",
-    "tokens": "ma token"
+    "tokens": "ma token",
+    "pinnedTooltip": "Yakhazikitsidwa: imakhala nthawi zonse",
+    "unpinnedTooltip": "Siyakhozetsedwa: itha kuchotsedwa kapena kuchotsedwa yokha",
+    "pinnedCount": "{pinned} yakhazikitsidwa / {total}",
+    "sessionQuota": "Malinga ndi nthawi ya ntchito",
+    "sessionQuotaUsage": "{used} / {total} matoken agwiritsidwa ntchito pa nthawiyi",
+    "sessionQuotaExhausted": "Malinga ndi nthawi pa mafayilo agwera. Mafayilo achotsedwa.",
+    "pinBlockedTooLarge": "Fayilo ndi yayikulu kwambiri kuyikako ({tokens} matoken, malire: {limit})",
+    "activationRejectedTooLarge": "Fayilo ndi yayikulu kwambiri pa gawo lamoyo ({tokens} matoken, malire: {limit})",
+    "sessionQuotaWarning": "Malinga ndi nthawi yatsala pang’ono kutha — {remaining} matoken atsala",
+    "sessionQuotaNearlyExhausted": "Malinga ndi nthawi pafupifupi kutha — mafayilo akhanga sakhoza kuphatikizidwa"
   },
   "shortcuts": {
     "title": "Njira Zachidule pa Kiyibodi",
@@ -1782,6 +1798,28 @@
     "openModelSelector": "Sinthani model",
     "scrollToBottom": "Yendetsani pansi",
     "showHelp": "Onetsani njira zachidule pa kiyibodi",
-    "attachFile": "Ikani fayilo"
+    "attachFile": "Ikani fayilo",
+    "searchConversations": "Fufuzani zokambirana",
+    "toggleTheme": "Sinthani mutu",
+    "regenerateResponse": "Bwezeretsaninso yankho",
+    "copyLastResponse": "Koperani yankho lomaliza"
+  },
+  "quarantine": {
+    "title": "Zokambirana Zomwe Zili mu Quarantine",
+    "itemCount": "{count, plural, one {# chinthu} other {# zinthu}} zokhala ndi mavuto a deta",
+    "noItems": "Palibe zinthu zomwe zili mu quarantine.",
+    "recover": "Kubwezeretsa",
+    "export": "Tumizani kunja",
+    "delete": "Chotsani",
+    "deleteAll": "Chotsani deta zonse zomwe zili mu quarantine",
+    "close": "Tseka",
+    "recovered": "Zabwezeretsedwa",
+    "recoveryFailed": "Kubwezeretsa kwalephera",
+    "folderData": "Zambiri za foda",
+    "backupData": "Backup (original yomwe yachotsedwa mauthenga)",
+    "bannerMessage": "{count, plural, one {# zokambirana inali ndi mavuto a deta ndipo zidayikidwa mu quarantine.} other {# zokambirana zinali ndi mavuto a deta ndipo zidayikidwa mu quarantine.}}",
+    "review": "Onaninso",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} kuchokera ku {source}"
   }
 }

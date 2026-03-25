@@ -622,7 +622,13 @@
     "unexpectedErrorOccurred": "Si è verificato un errore imprevisto",
     "criticalErrorReload": "Si è verificato un errore critico. Ricarica la pagina.",
     "reloadPage": "Ricarica pagina",
-    "persistContactSupport": "Se questo problema persiste, contatta l'assistenza"
+    "persistContactSupport": "Se questo problema persiste, contatta l'assistenza",
+    "exportDataForRecovery": "Esporta i dati della conversazione per il recupero",
+    "dataExported": "Dati esportati",
+    "exportDataDescription": "Condividi questo file con il team tecnico per aiutare a recuperare i tuoi dati.",
+    "resetStoragePrompt": "Se il ricaricamento non aiuta, prova a reimpostare l'archiviazione delle conversazioni",
+    "resetStorageWarning": "La reimpostazione cancellerà tutti i dati delle conversazioni. Prima di reimpostare, puoi esportare una copia dei dati grezzi. Condividi questo file con il team tecnico se hai bisogno di aiuto per recuperare le tue conversazioni.",
+    "resetStorage": "Reimposta archiviazione"
   },
   "prompts": {
     "buildReusablePrompts": "Crea prompt riutilizzabili con assistenza AI",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Cambia tema",
     "regenerateResponse": "Rigenera risposta",
     "copyLastResponse": "Copia l'ultima risposta"
+  },
+  "quarantine": {
+    "title": "Conversazioni in quarantena",
+    "itemCount": "{count, plural, one {# elemento} other {# elementi}} con problemi di dati",
+    "noItems": "Nessun elemento in quarantena.",
+    "recover": "Recupera",
+    "export": "Esporta",
+    "delete": "Elimina",
+    "deleteAll": "Elimina tutti i dati in quarantena",
+    "close": "Chiudi",
+    "recovered": "Recuperato",
+    "recoveryFailed": "Recupero non riuscito",
+    "folderData": "Dati della cartella",
+    "backupData": "Backup (originale senza messaggi)",
+    "bannerMessage": "{count, plural, one {# conversazione aveva problemi di dati ed è stata messa in quarantena.} other {# conversazioni avevano problemi di dati e sono state messe in quarantena.}}",
+    "review": "Revisiona",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} da {source}"
   }
 }

@@ -549,7 +549,13 @@
     "dismissError": "Ukryj błąd",
     "applicationError": "Błąd aplikacji",
     "chatLoadError": "Wystąpił błąd podczas ładowania czatu",
-    "anErrorOccurredTryAgain": "Wystąpił błąd. Prosimy spróbować ponownie."
+    "anErrorOccurredTryAgain": "Wystąpił błąd. Prosimy spróbować ponownie.",
+    "exportDataForRecovery": "Eksportuj dane rozmowy do odzyskania",
+    "dataExported": "Dane wyeksportowano",
+    "exportDataDescription": "Udostępnij ten plik zespołowi technicznemu, aby pomóc w odzyskaniu danych.",
+    "resetStoragePrompt": "Jeśli ponowne wczytanie nie pomaga, spróbuj zresetować magazyn rozmów",
+    "resetStorageWarning": "Resetowanie usunie wszystkie dane rozmów. Przed resetowaniem możesz wyeksportować kopię surowych danych. Udostępnij ten plik zespołowi technicznemu, jeśli potrzebujesz pomocy w odzyskaniu rozmów.",
+    "resetStorage": "Resetuj magazyn"
   },
   "auth": {
     "authenticationError": "Błąd uwierzytelniania",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Przełącz motyw",
     "regenerateResponse": "Wygeneruj ponownie odpowiedź",
     "copyLastResponse": "Kopiuj ostatnią odpowiedź"
+  },
+  "quarantine": {
+    "title": "Rozmowy w kwarantannie",
+    "itemCount": "{count, plural, one {# element z problemami danych} other {# elementów z problemami danych}}",
+    "noItems": "Brak elementów w kwarantannie.",
+    "recover": "Przywróć",
+    "export": "Eksportuj",
+    "delete": "Usuń",
+    "deleteAll": "Usuń wszystkie dane z kwarantanny",
+    "close": "Zamknij",
+    "recovered": "Przywrócono",
+    "recoveryFailed": "Przywracanie nie powiodło się",
+    "folderData": "Dane folderu",
+    "backupData": "Kopia zapasowa (oryginał z usuniętymi wiadomościami)",
+    "bannerMessage": "{count, plural, one {# rozmowa miała problem z danymi i została poddana kwarantannie.} other {# rozmów miało problemy z danymi i zostało poddanych kwarantannie.}}",
+    "review": "Przejrzyj",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} z {source}"
   }
 }

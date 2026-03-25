@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "An sami kuskure mara tsammani",
     "criticalErrorReload": "An samu matsala mai tsanani. Da fatan za a sabunta shafin.",
     "reloadPage": "Sabunta shafi",
-    "persistContactSupport": "Idan matsalar ta ci gaba, da fatan za a tuntuɓi taimako"
+    "persistContactSupport": "Idan matsalar ta ci gaba, da fatan za a tuntuɓi taimako",
+    "exportDataForRecovery": "Fitar da bayanan tattaunawa don dawo da su",
+    "dataExported": "An fitar da bayanai",
+    "exportDataDescription": "Raba wannan fayil ɗin da tawagar fasaha don taimakawa dawo da bayananka.",
+    "resetStoragePrompt": "Idan sake loda ba ya aiki, gwada sake saita ajiyar tattaunawa",
+    "resetStorageWarning": "Sake saita zai share duk bayanan tattaunawa. Kafin ka sake saitawa, zaka iya fitar da asalin bayanan. Raba wannan fayil ɗin da tawagar fasaha idan kana buƙatar taimako wajen dawowa da tattaunawarka.",
+    "resetStorage": "Sake saita ajiya"
   },
   "prompts": {
     "buildReusablePrompts": "Gina tambayoyi masu iya amfani da su akai-akai tare da taimakon AI",
@@ -1765,7 +1771,17 @@
     "retry": "Sake gwadawa",
     "pinned": "An naɗe",
     "pin": "Naɗe",
-    "tokens": "token"
+    "tokens": "token",
+    "pinnedTooltip": "An ɗaure: kullum ana haɗawa",
+    "unpinnedTooltip": "Ba a ɗaure ba: na iya cirewa ko gogewa ta atomatik",
+    "pinnedCount": "{pinned} an ɗaure / {total}",
+    "sessionQuota": "Iyakar zama",
+    "sessionQuotaUsage": "{used} / {total} tokens an yi amfani da su a wannan zaman",
+    "sessionQuotaExhausted": "An kai iyakar zama na fayiloli masu aiki. An share fayiloli.",
+    "pinBlockedTooLarge": "Fayil ya yi girma sosai don ɗaurewa ({tokens} tokens, iyaka: {limit})",
+    "activationRejectedTooLarge": "Fayil ya yi girma sosai don mahallin aiki ({tokens} tokens, iyaka: {limit})",
+    "sessionQuotaWarning": "Iyakar zama na ƙarewa — {remaining} tokens saura",
+    "sessionQuotaNearlyExhausted": "Iyakar zama na kusan ƙarewa — wani fayil mai aiki na iya rasa haɗuwa"
   },
   "shortcuts": {
     "title": "Gajerun hanyoyin madanni",
@@ -1782,6 +1798,28 @@
     "openModelSelector": "Canza samfurin",
     "scrollToBottom": "Gungura zuwa ƙasa",
     "showHelp": "Nuna gajerun hanyoyin madanni",
-    "attachFile": "Haɗa fayil"
+    "attachFile": "Haɗa fayil",
+    "searchConversations": "Bincika tattaunawa",
+    "toggleTheme": "Canja jigo",
+    "regenerateResponse": "Sake samar da amsa",
+    "copyLastResponse": "Kwafi amsa ta ƙarshe"
+  },
+  "quarantine": {
+    "title": "Hirar da aka killace",
+    "itemCount": "{count, plural, one {# abu} other {# abubuwa}} da matsalar bayanai",
+    "noItems": "Babu abubuwan da aka killace.",
+    "recover": "Farfaɗo",
+    "export": "Fitar da bayanai",
+    "delete": "Goge",
+    "deleteAll": "Goge duk bayanan da aka killace",
+    "close": "Rufe",
+    "recovered": "An farfaɗo",
+    "recoveryFailed": "Farfaɗowa ta ƙi",
+    "folderData": "Bayanan fayil",
+    "backupData": "Ajiyar baya (asali ba saƙonni)",
+    "bannerMessage": "{count, plural, one {# hirar ta samu matsalar bayanai an killace ta.} other {# hirarraki sun samu matsalar bayanai an killace su.}}",
+    "review": "Duba",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} daga {source}"
   }
 }

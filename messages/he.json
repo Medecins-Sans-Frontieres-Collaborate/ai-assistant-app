@@ -527,7 +527,13 @@
     "dismissError": "סגור שגיאה",
     "applicationError": "שגיאת יישום",
     "chatLoadError": "אירעה שגיאה בטעינת הצ'אט",
-    "anErrorOccurredTryAgain": "אירעה שגיאה. נסה שוב."
+    "anErrorOccurredTryAgain": "אירעה שגיאה. נסה שוב.",
+    "exportDataForRecovery": "ייצוא נתוני שיחה לשחזור",
+    "dataExported": "הנתונים יוצאו",
+    "exportDataDescription": "שתפו קובץ זה עם צוות התמיכה הטכנית כדי לסייע בשחזור הנתונים שלכם.",
+    "resetStoragePrompt": "אם הרענון לא עוזר, נסו לאפס את אחסון השיחות",
+    "resetStorageWarning": "איפוס ימחוק את כל נתוני השיחה. לפני האיפוס, תוכלו לייצא עותק של הנתונים הגולמיים. שתפו את הקובץ עם צוות התמיכה הטכנית במידת הצורך לשחזור השיחות.",
+    "resetStorage": "איפוס אחסון"
   },
   "auth": {
     "authenticationError": "שגיאת אימות",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "החלפת ערכת נושא",
     "regenerateResponse": "הפק תגובה מחדש",
     "copyLastResponse": "העתקת התגובה האחרונה"
+  },
+  "quarantine": {
+    "title": "שיחות בהסגר",
+    "itemCount": "{count, plural, one {פריט אחד עם בעיות נתונים} other {# פריטים עם בעיות נתונים}}",
+    "noItems": "אין פריטים בהסגר.",
+    "recover": "שחזור",
+    "export": "יצוא",
+    "delete": "מחיקה",
+    "deleteAll": "מחק את כל הנתונים שבחסימה",
+    "close": "סגור",
+    "recovered": "שוחזר",
+    "recoveryFailed": "הפעולה נכשלה",
+    "folderData": "נתוני תיקייה",
+    "backupData": "גיבוי (מקור עם הודעות מוסרות)",
+    "bannerMessage": "{count, plural, one {לשיחה אחת היו בעיות נתונים והיא נכנסה להסגר.} other {ל-# שיחות היו בעיות נתונים והן נכנסו להסגר.}}",
+    "review": "סקירה",
+    "itemId": "מזהה: {id}",
+    "itemSource": "{date} מ-{source}"
   }
 }

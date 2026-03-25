@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "មានកំហុសដែលមិនបានរំពឹងទុកកើតឡើង",
     "criticalErrorReload": "មានកំហុសធ្ងន់ធ្ងរកើតឡើង។ សូមផ្ទុកទំព័រឡើងវិញ។",
     "reloadPage": "ផ្ទុកទំព័រឡើងវិញ",
-    "persistContactSupport": "ប្រសិនបើបញ្ហានេះនៅតែបន្ត សូមទាក់ទងផ្នែកជំនួយ"
+    "persistContactSupport": "ប្រសិនបើបញ្ហានេះនៅតែបន្ត សូមទាក់ទងផ្នែកជំនួយ",
+    "exportDataForRecovery": "នាំព័ត៌មានសន្ទនាចេញសម្រាប់កា​រស្ដាឡើងវិញ",
+    "dataExported": "ទិន្នន័យបាននាំចេញ",
+    "exportDataDescription": "ចែករំលែកឯកសារនេះជាមួយក្រុម​បច្ចេកវិទ្យាដើម្បីជួយស្ដារទិន្នន័យរបស់អ្នក។",
+    "resetStoragePrompt": "បើការ​ផ្ទុក​ឡើងវិញមិន​ជួយ​ទេ សូមព្យាយាមកំណត់ឃ្លាំងសន្ទនាឡើងវិញ",
+    "resetStorageWarning": "ការកំណត់ឡើងវិញនឹងលុបព័ត៌មានសន្ទនាទាំងអស់។ មុនពេលកំណត់ឡើងវិញ អ្នកអាចនាំចេញទិន្នន័យដើមថែមទៀតបាន។ សូមចែករំលែកឯកសារនេះជាមួយក្រុមបច្ចេកវិទ្យាបើត្រូវការជំនួយក្នុងការស្ដារសន្ទនារៀងៗខ្លួន។",
+    "resetStorage": "កំណត់ឃ្លាំងឡើងវិញ"
   },
   "prompts": {
     "buildReusablePrompts": "បង្កើតសំណើដែលអាចប្រើម្តងហើយជាមួយជំនួយ AI",
@@ -1765,7 +1771,17 @@
     "retry": "ព្យាយាម​ម្ដងទៀត",
     "pinned": "បានខ្ចាប់",
     "pin": "ខ្ចាប់",
-    "tokens": "Token"
+    "tokens": "Token",
+    "pinnedTooltip": "បានបិទភ្ជាប់៖ រួមបញ្ចូលជានិច្ច",
+    "unpinnedTooltip": "មិនបានបិទភ្ជាប់៖ អាចត្រូវដកចេញឬលុបដោយស្វ័យប្រវត្តិ",
+    "pinnedCount": "បានបិទភ្ជាប់ {pinned} / {total}",
+    "sessionQuota": "កូតាសម័យប្រើប្រាស់",
+    "sessionQuotaUsage": "បានប្រើ {used} / {total} token សម័យនេះ",
+    "sessionQuotaExhausted": "ការប្រើឯកសារក្នុងសម័យឈានដល់កូតា។ ឯកសារត្រូវបានសម្អាត។",
+    "pinBlockedTooLarge": "ឯកសារធំពេកសម្រាប់បិទភ្ជាប់ ({tokens} token, ឧបមា៖ {limit})",
+    "activationRejectedTooLarge": "ឯកសារធំពេកសម្រាប់បរិបទសកម្ម ({tokens} token, ឧបមា៖ {limit})",
+    "sessionQuotaWarning": "កូតាសម័យប្រើប្រាស់ជិតអស់ — នៅសល់ {remaining} token",
+    "sessionQuotaNearlyExhausted": "កូតាសម័យប្រើប្រាស់ជិតអស់ — ឯកសារសកម្មអាចមិនត្រូវរួមបញ្ចូល"
   },
   "shortcuts": {
     "title": "ផ្លូវកាត់​ក្ដារចុច",
@@ -1782,6 +1798,28 @@
     "openModelSelector": "ផ្លាស់ប្តូរពិធីការ",
     "scrollToBottom": "រមូរទៅខាងក្រោម",
     "showHelp": "បង្ហាញផ្លូវកាត់​ក្ដារចុច",
-    "attachFile": "ភ្ជាប់ឯកសារ"
+    "attachFile": "ភ្ជាប់ឯកសារ",
+    "searchConversations": "ស្វែងរកសន្ទនា",
+    "toggleTheme": "ប្ដូរពណ៌ផ្ទៃ",
+    "regenerateResponse": "បង្កើតចម្លើយឡើងវិញ",
+    "copyLastResponse": "ចម្លងចម្លើយចុងក្រោយ"
+  },
+  "quarantine": {
+    "title": "ការសន្ទនា​ដែល​បានដាក់ឯង",
+    "itemCount": "{count, plural, one {# ធាតុ} other {# ធាតុ}} មានបញ្ហាទិន្នន័យ",
+    "noItems": "មិនមានធាតុដែលបានដាក់ឯងទេ។",
+    "recover": "ស្ដារឡើងវិញ",
+    "export": "នាំចេញ",
+    "delete": "លុប",
+    "deleteAll": "លុបទិន្នន័យដែលបានដាក់ឯងទាំងអស់",
+    "close": "បិទ",
+    "recovered": "បានស្ដារ",
+    "recoveryFailed": "ការស្ដារ​បានបរាជ័យ",
+    "folderData": "ទិន្នន័យថត",
+    "backupData": "បម្រុងទុក (ដើមមានលុបសារ) ",
+    "bannerMessage": "{count, plural, one {# ការសន្ទនា​មានបញ្ហាទិន្នន័យ និងត្រូវបានដាក់ឯង។} other {# ការសន្ទនាមានបញ្ហាទិន្នន័យ និងត្រូវបានដាក់ឯង។}}",
+    "review": "ពិនិត្យ",
+    "itemId": "លេខសំគាល់៖ {id}",
+    "itemSource": "{date} ពី {source}"
   }
 }

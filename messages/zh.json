@@ -581,7 +581,13 @@
     "dismissError": "关闭错误",
     "applicationError": "应用程序错误",
     "chatLoadError": "加载聊天时出错",
-    "anErrorOccurredTryAgain": "发生了错误。请重试。"
+    "anErrorOccurredTryAgain": "发生了错误。请重试。",
+    "exportDataForRecovery": "导出会话数据以便恢复",
+    "dataExported": "数据已导出",
+    "exportDataDescription": "将此文件分享给技术团队，以协助恢复您的数据。",
+    "resetStoragePrompt": "如果重新加载无效，请尝试重置会话存储",
+    "resetStorageWarning": "重置将清除所有会话数据。重置前，您可以导出原始数据副本。如需恢复会话，可将该文件分享给技术团队。",
+    "resetStorage": "重置存储"
   },
   "auth": {
     "authenticationError": "身份验证错误",
@@ -1852,5 +1858,23 @@
     "toggleTheme": "切换主题",
     "regenerateResponse": "重新生成回复",
     "copyLastResponse": "复制上次回复"
+  },
+  "quarantine": {
+    "title": "已隔离的会话",
+    "itemCount": "存在数据问题的{count, plural, one {#项} other {#项}}",
+    "noItems": "没有已隔离的数据项。",
+    "recover": "恢复",
+    "export": "导出",
+    "delete": "删除",
+    "deleteAll": "删除所有已隔离数据",
+    "close": "关闭",
+    "recovered": "已恢复",
+    "recoveryFailed": "恢复失败",
+    "folderData": "文件夹数据",
+    "backupData": "备份（原始数据，已去除消息）",
+    "bannerMessage": "{count, plural, one {#个会话存在数据问题，已被隔离。} other {#个会话存在数据问题，已被隔离。}}",
+    "review": "审核",
+    "itemId": "ID：{id}",
+    "itemSource": "{date} 来自 {source}"
   }
 }

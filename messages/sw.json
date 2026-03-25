@@ -552,7 +552,13 @@
     "dismissError": "Ondoa hitilafu",
     "applicationError": "Hitilafu ya Programu",
     "chatLoadError": "Hitilafu imetokea wakati wa kupakia mazungumzo",
-    "anErrorOccurredTryAgain": "Hitilafu imetokea. Tafadhali jaribu tena."
+    "anErrorOccurredTryAgain": "Hitilafu imetokea. Tafadhali jaribu tena.",
+    "exportDataForRecovery": "Hamisha data ya mazungumzo kwa ajili ya urejeshaji",
+    "dataExported": "Data imehamishwa",
+    "exportDataDescription": "Shiriki faili hii na timu ya teknolojia ili kusaidia kurejesha data yako.",
+    "resetStoragePrompt": "Ikiwa kupakia upya hakusaidii, jaribu kuweka upya hifadhi ya mazungumzo",
+    "resetStorageWarning": "Kuweka upya kutafuta data yote ya mazungumzo. Kabla ya kuweka upya, unaweza kuhifadhi nakala ya data ghafi. Shiriki faili hii na timu ya teknolojia iwapo unahitaji msaada wa kurejesha mazungumzo yako.",
+    "resetStorage": "Weka upya hifadhi"
   },
   "auth": {
     "authenticationError": "Hitilafu ya Uthibitishaji",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Badilisha mandhari",
     "regenerateResponse": "Tengeneza upya majibu",
     "copyLastResponse": "Nakili jibu la mwisho"
+  },
+  "quarantine": {
+    "title": "Mazungumzo Yaliyo kwenye Karantini",
+    "itemCount": "{count, plural, one {kipengee #} other {vipengee #}} vyenye matatizo ya data",
+    "noItems": "Hakuna vipengee vilivyowekwa karantini.",
+    "recover": "Rejesha",
+    "export": "Hamisha",
+    "delete": "Futa",
+    "deleteAll": "Futa data yote iliyowekwa karantini",
+    "close": "Funga",
+    "recovered": "Imerejeshwa",
+    "recoveryFailed": "Urejeshaji umeshindikana",
+    "folderData": "Data ya folda",
+    "backupData": "Hifadhi (asili yenye ujumbe ulioondolewa)",
+    "bannerMessage": "{count, plural, one {Mazungumzo # yalikuwa na matatizo ya data na yaliwekwa karantini.} other {Mazungumzo # yalikuwa na matatizo ya data na yaliwekwa karantini.}}",
+    "review": "Kagua",
+    "itemId": "Kitambulisho: {id}",
+    "itemSource": "{date} kutoka {source}"
   }
 }

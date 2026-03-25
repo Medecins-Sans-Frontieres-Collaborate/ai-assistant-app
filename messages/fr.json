@@ -647,7 +647,13 @@
     "unexpectedErrorOccurred": "Une erreur inattendue s'est produite",
     "criticalErrorReload": "Une erreur critique s'est produite. Veuillez recharger la page.",
     "reloadPage": "Recharger la page",
-    "persistContactSupport": "Si ce problème persiste, veuillez contacter le support"
+    "persistContactSupport": "Si ce problème persiste, veuillez contacter le support",
+    "exportDataForRecovery": "Exporter les données de conversation pour récupération",
+    "dataExported": "Données exportées",
+    "exportDataDescription": "Partagez ce fichier avec l'équipe technique pour faciliter la récupération de vos données.",
+    "resetStoragePrompt": "Si le rechargement ne suffit pas, essayez de réinitialiser le stockage des conversations",
+    "resetStorageWarning": "La réinitialisation effacera toutes les données de conversation. Avant de réinitialiser, vous pouvez exporter une copie des données brutes. Partagez ce fichier avec l'équipe technique si vous avez besoin d'aide pour récupérer vos conversations.",
+    "resetStorage": "Réinitialiser le stockage"
   },
   "prompts": {
     "buildReusablePrompts": "Créer des instructions réutilisables avec l'assistance de l'IA",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Changer de thème",
     "regenerateResponse": "Régénerer la réponse",
     "copyLastResponse": "Copier la dernière réponse"
+  },
+  "quarantine": {
+    "title": "Conversations mises en quarantaine",
+    "itemCount": "{count, plural, one {# élément} other {# éléments}} présentant des problèmes de données",
+    "noItems": "Aucun élément mis en quarantaine.",
+    "recover": "Récupérer",
+    "export": "Exporter",
+    "delete": "Supprimer",
+    "deleteAll": "Supprimer toutes les données mises en quarantaine",
+    "close": "Fermer",
+    "recovered": "Récupéré",
+    "recoveryFailed": "La récupération a échoué",
+    "folderData": "Données du dossier",
+    "backupData": "Sauvegarde (original avec messages supprimés)",
+    "bannerMessage": "{count, plural, one {# conversation présentait des problèmes de données et a été mise en quarantaine.} other {# conversations présentaient des problèmes de données et ont été mises en quarantaine.}}",
+    "review": "Examiner",
+    "itemId": "ID : {id}",
+    "itemSource": "{date} de {source}"
   }
 }

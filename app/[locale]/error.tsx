@@ -27,6 +27,7 @@ export default function Error({
       onRetry={reset}
       retryLabel={t('common.tryAgain')}
       showSupportInfo={true}
+      showDataExport={true}
     />
   );
 }

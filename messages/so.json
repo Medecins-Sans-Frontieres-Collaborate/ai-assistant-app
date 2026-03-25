@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Khalad aan la fileyn ayaa dhacay",
     "criticalErrorReload": "Khalad muhiim ah ayaa dhacay. Fadlan dib u soo rar bogga.",
     "reloadPage": "Dib u soo rar bogga",
-    "persistContactSupport": "Haddii dhibaatadan ay sii jirto, fadlan la xidhiidh taageerada"
+    "persistContactSupport": "Haddii dhibaatadan ay sii jirto, fadlan la xidhiidh taageerada",
+    "exportDataForRecovery": "Soo dhoof xogta wada hadalka si loo soo celiyo",
+    "dataExported": "Xog waa la soo dhoofiyay",
+    "exportDataDescription": "Wadaag feylkani kooxda farsamada si ay kaaga caawiyaan soo celinta xogtaada.",
+    "resetStoragePrompt": "Haddii dib u rarista aysan caawin, isku day in aad dib u dejiso kaydka wada hadalka",
+    "resetStorageWarning": "Dib u dejinta waxay tirtireysaa dhammaan xogta wada hadalka. Ka hor inta aanad dib u dejin, waad soo dhoofsan kartaa xogta asalka ah. Wadaag feylkani kooxda farsamada haddii aad u baahan tahay caawimaad soo celinta wada hadalladaada.",
+    "resetStorage": "Dib u deji kaydka"
   },
   "prompts": {
     "buildReusablePrompts": "Samee tilmaamo dib loo isticmaali karo oo leh caawimaadda AI",
@@ -1765,7 +1771,17 @@
     "retry": "Dib isku day",
     "pinned": "La xidhay",
     "pin": "Xidho",
-    "tokens": "tokens"
+    "tokens": "tokens",
+    "pinnedTooltip": "Xiray: had iyo jeer waa la darayaa",
+    "unpinnedTooltip": "Aan la xirin: waa la saari karaa ama si toos ah waa looga saari karaa",
+    "pinnedCount": "{pinned} la xiray / {total}",
+    "sessionQuota": "Xadiga fadhiga",
+    "sessionQuotaUsage": "{used} / {total} tokens ayaa la isticmaalay fadhigan",
+    "sessionQuotaExhausted": "Xadiga fadhiga ee fayllada firfircoon waa la gaaray. Fayllada waa la saaray.",
+    "pinBlockedTooLarge": "Faylka aad buu u weyn yahay in la xiro ({tokens} tokens, xadka: {limit})",
+    "activationRejectedTooLarge": "Fayl aad u weyn in la geliyo macnaha firfircoon ({tokens} tokens, xadka: {limit})",
+    "sessionQuotaWarning": "Xadiga fadhiga oo sii dhammaanaya — {remaining} tokens ayaa ka harsan",
+    "sessionQuotaNearlyExhausted": "Xadiga fadhiga ayaa dhowyahay inuu dhammaado — fayllada firfircoon lama dari karo"
   },
   "shortcuts": {
     "title": "Furayaasha Fududeynta Kumbuyuutarka",
@@ -1782,6 +1798,28 @@
     "openModelSelector": "Beddel moodelka",
     "scrollToBottom": "Rog ilaa hoose",
     "showHelp": "Tuso furayaasha fududeynta kumbuyuutarka",
-    "attachFile": "Ku lifaaq fayl"
+    "attachFile": "Ku lifaaq fayl",
+    "searchConversations": "Raadi wada hadallo",
+    "toggleTheme": "Bedel mawduuca",
+    "regenerateResponse": "Soo noolee jawaabta",
+    "copyLastResponse": "Nuqul jawaabtii ugu dambeysay"
+  },
+  "quarantine": {
+    "title": "Wadahadallada Karanteysan",
+    "itemCount": "{count, plural, one {# shay} other {# shay} } oo leh dhibaato xog",
+    "noItems": "Lama helin shay la karantiilay.",
+    "recover": "Soo Celin",
+    "export": "Dhoofin",
+    "delete": "Tirtir",
+    "deleteAll": "Tirtir dhammaan xogta la karantiilay",
+    "close": "Xidh",
+    "recovered": "Waa la soo celiyay",
+    "recoveryFailed": "Soo celintu way fashilantay",
+    "folderData": "Xogta faylka",
+    "backupData": "Keyd (asalka oo farriimaha laga saaray)",
+    "bannerMessage": "{count, plural, one {# wada sheekeysi ayaa la kulmay dhibaato xog ah oo la karantiilay.} other {# wada sheekeysi ayaa la kulmay dhibaatooyin xog iyo la karantiilay.}}",
+    "review": "Dib u eeg",
+    "itemId": "Aqoonsi: {id}",
+    "itemSource": "{date} laga bilaabo {source}"
   }
 }
