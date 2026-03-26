@@ -1007,6 +1007,11 @@ export const perConversationStorage: StateStorage = {
           localStorage.removeItem(`${FOLDER_PREFIX}${id}`);
         }
       }
+
+      // Clean up legacy blob if it still exists and all conversations are now persisted
+      if (localStorage.getItem(LEGACY_BLOB_KEY)) {
+        localStorage.removeItem(LEGACY_BLOB_KEY);
+      }
     } catch (e) {
       console.error('[PerConvStorage] Error in setItem:', e);
     }
