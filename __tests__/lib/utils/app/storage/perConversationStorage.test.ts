@@ -1,5 +1,6 @@
 import {
   clearAllConversationStorage,
+  clearBlobOnlyTracking,
   getPerConversationStorageKeys,
   perConversationStorage,
 } from '@/lib/utils/app/storage/perConversationStorage';
@@ -29,6 +30,7 @@ describe('perConversationStorage', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     localStorage.clear();
+    clearBlobOnlyTracking();
   });
 
   describe('getItem', () => {
