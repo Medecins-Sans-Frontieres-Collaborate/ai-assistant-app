@@ -538,6 +538,81 @@ describe('perConversationStorage', () => {
       expect(localStorage.getItem('conversation-storage')).toBeNull();
     });
 
+    it('skips automatic migration and preserves blob on quota pressure', () => {
+      // Fill localStorage to near capacity so migration can't duplicate data
+      const legacyBlob = {
+        state: {
+          conversations: [makeConversation('c1'), makeConversation('c2')],
+          selectedConversationId: 'c1',
+          folders: [],
+        },
+        version: 4,
+      };
+      const blobString = JSON.stringify(legacyBlob);
+      localStorage.setItem('conversation-storage', blobString);
+
+      // Fill remaining space with junk so there's <50% of blob size available
+      const blobSize = blobString.length * 2;
+      const fillSize = Math.floor((5 * 1024 * 1024 - blobSize * 2) / 2);
+      if (fillSize > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillSize));
+      }
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      // Conversations should still be returned for in-memory use
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // Legacy blob should be PRESERVED (not deleted) for MigrationDialog
+      expect(localStorage.getItem('conversation-storage')).not.toBeNull();
+
+      // No per-conversation keys should have been written
+      expect(localStorage.getItem('conv-data-c1')).toBeNull();
+      expect(localStorage.getItem('conv-data-c2')).toBeNull();
+    });
+
+    it('rolls back partial migration on quota failure mid-write', () => {
+      const legacyBlob = {
+        state: {
+          conversations: [makeConversation('c1'), makeConversation('c2')],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      // Make the second conv write fail with QuotaExceededError
+      const originalSetItem = localStorage.setItem.bind(localStorage);
+      vi.spyOn(localStorage, 'setItem').mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'conv-data-c2') {
+            const err = new Error('QuotaExceededError');
+            err.name = 'QuotaExceededError';
+            throw err;
+          }
+          originalSetItem(key, value);
+        },
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      vi.restoreAllMocks();
+
+      expect(raw).not.toBeNull();
+      const parsed = JSON.parse(raw!);
+
+      // Should return all conversations for in-memory use (from blob parse)
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // Legacy blob preserved
+      expect(localStorage.getItem('conversation-storage')).not.toBeNull();
+
+      // Partial writes rolled back (c1 was written before c2 failed)
+      expect(localStorage.getItem('conv-data-c1')).toBeNull();
+    });
+
     it('removes deleted conversations', () => {
       // First write with two conversations
       const initial = {
