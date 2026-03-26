@@ -56,7 +56,7 @@ const blobOnlyIds = new Set<string>();
 const blobOnlyFolderIds = new Set<string>();
 
 /** Clear blob-only tracking after successful migration or full reset. */
-function clearBlobOnlyTracking(): void {
+export function clearBlobOnlyTracking(): void {
   blobOnlyIds.clear();
   blobOnlyFolderIds.clear();
 }
