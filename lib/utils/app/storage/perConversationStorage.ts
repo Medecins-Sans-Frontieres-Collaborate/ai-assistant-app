@@ -39,6 +39,14 @@ const CONV_PREFIX = 'conv-data-';
 const FOLDER_PREFIX = 'conv-folder-';
 const LEGACY_BLOB_KEY = 'conversation-storage';
 
+/**
+ * Check if an error is a QuotaExceededError.
+ * Browsers throw DOMException (not Error), so instanceof Error misses it.
+ */
+function isQuotaError(e: unknown): boolean {
+  return (e as { name?: string })?.name === 'QuotaExceededError';
+}
+
 // Cache of last-written updatedAt per conversation, used for diffing in setItem
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
@@ -371,7 +379,9 @@ function parseBlobDataDirectly(
   return {
     conversations,
     selectedConversationId:
-      (state.selectedConversationId as string | null) ?? null,
+      typeof state.selectedConversationId === 'string'
+        ? state.selectedConversationId
+        : null,
     folders,
     version,
   };
@@ -567,7 +577,7 @@ function migrateFromLegacyBlob(): {
             validation.data.updatedAt,
           );
         } catch (e) {
-          if (e instanceof Error && e.name === 'QuotaExceededError') {
+          if (isQuotaError(e)) {
             console.warn(
               `[PerConvStorage] QuotaExceededError during migration at conv ${validation.data.id}, rolling back`,
             );
@@ -604,7 +614,7 @@ function migrateFromLegacyBlob(): {
                 recovery.conversation.updatedAt,
               );
             } catch (e) {
-              if (e instanceof Error && e.name === 'QuotaExceededError') {
+              if (isQuotaError(e)) {
                 quotaFailure = true;
               } else {
                 console.error(
@@ -680,7 +690,9 @@ function migrateFromLegacyBlob(): {
     version: 5,
     conversationIds: writtenConvIds,
     selectedConversationId:
-      (state.selectedConversationId as string | null) ?? null,
+      typeof state.selectedConversationId === 'string'
+        ? state.selectedConversationId
+        : null,
     folderIds: writtenFolderIds,
   };
 
@@ -888,7 +900,7 @@ export const perConversationStorage: StateStorage = {
             );
             lastWrittenTimestamps.set(conv.id, conv.updatedAt);
           } catch (e) {
-            if (e instanceof Error && e.name === 'QuotaExceededError') {
+            if (isQuotaError(e)) {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing ${conv.id}`,
               );
@@ -913,7 +925,7 @@ export const perConversationStorage: StateStorage = {
             JSON.stringify(folder),
           );
         } catch (e) {
-          if (e instanceof Error && e.name === 'QuotaExceededError') {
+          if (isQuotaError(e)) {
             console.error(
               `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
             );
