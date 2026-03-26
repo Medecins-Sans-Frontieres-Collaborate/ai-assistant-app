@@ -39,6 +39,14 @@ const CONV_PREFIX = 'conv-data-';
 const FOLDER_PREFIX = 'conv-folder-';
 const LEGACY_BLOB_KEY = 'conversation-storage';
 
+/**
+ * Check if an error is a QuotaExceededError.
+ * Browsers throw DOMException (not Error), so instanceof Error misses it.
+ */
+function isQuotaError(e: unknown): boolean {
+  return (e as { name?: string })?.name === 'QuotaExceededError';
+}
+
 // Cache of last-written updatedAt per conversation, used for diffing in setItem
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
@@ -325,6 +333,63 @@ function salvageConversationsFromBlob(raw: string): Conversation[] {
 }
 
 /**
+ * Parse blob data directly without writing per-conversation keys.
+ * Used when automatic migration is skipped (quota pressure) or rolled back.
+ * Validates and sanitizes conversations for in-memory use; blob stays intact for MigrationDialog.
+ */
+function parseBlobDataDirectly(
+  state: {
+    conversations?: unknown[];
+    selectedConversationId?: string | null;
+    folders?: unknown[];
+  },
+  version: number,
+): {
+  conversations: Conversation[];
+  selectedConversationId: string | null;
+  folders: FolderInterface[];
+  version: number;
+  persisted: boolean;
+} {
+  const conversations: Conversation[] = [];
+  const folders: FolderInterface[] = [];
+
+  if (Array.isArray(state.conversations)) {
+    for (const conv of state.conversations) {
+      const validation = validateConversation(conv);
+      if (validation.valid && validation.data) {
+        conversations.push(validation.data);
+      } else {
+        const recovery = attemptRecovery(JSON.stringify(conv));
+        if (recovery.recovered && recovery.conversation) {
+          conversations.push(recovery.conversation);
+        }
+      }
+    }
+  }
+
+  if (Array.isArray(state.folders)) {
+    for (const folder of state.folders) {
+      const validation = validateFolder(folder);
+      if (validation.valid && validation.data) {
+        folders.push(validation.data);
+      }
+    }
+  }
+
+  return {
+    conversations,
+    selectedConversationId:
+      typeof state.selectedConversationId === 'string'
+        ? state.selectedConversationId
+        : null,
+    folders,
+    version,
+    persisted: false,
+  };
+}
+
+/**
  * Migrate from legacy single-blob format (conversation-storage) to per-conversation keys.
  * Validates each conversation individually, quarantining corrupt ones.
  */
@@ -333,6 +398,8 @@ function migrateFromLegacyBlob(): {
   selectedConversationId: string | null;
   folders: FolderInterface[];
   version: number;
+  /** Whether per-conv keys were actually written. False = blob-only fallback for in-memory use. */
+  persisted: boolean;
 } | null {
   const raw = localStorage.getItem(LEGACY_BLOB_KEY);
   if (!raw) return null;
@@ -422,6 +489,7 @@ function migrateFromLegacyBlob(): {
           selectedConversationId: null,
           folders: [],
           version: 1,
+          persisted: true, // salvaged convs were written to per-conv keys
         };
       }
     }
@@ -441,20 +509,49 @@ function migrateFromLegacyBlob(): {
       selectedConversationId: null,
       folders: [],
       version: parsed.data?.version ?? 1,
+      persisted: false,
     };
   }
 
   const { state, version = 1 } = parsed.data;
+
+  // Preflight quota check: migration temporarily duplicates data (blob + per-conv keys).
+  // If there isn't enough headroom, skip automatic migration and return blob data directly.
+  // The MigrationDialog (quota-aware, incremental) handles tight-storage migrations.
+  const blobSizeBytes = raw.length * 2; // UTF-16: 2 bytes per char
+  let totalStorageBytes = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key) {
+      const val = localStorage.getItem(key);
+      // Approximate size: UTF-16 = 2 bytes per char (sufficient for preflight threshold)
+      if (val !== null) totalStorageBytes += (key.length + val.length) * 2;
+    }
+  }
+  const maxStorageBytes = 5 * 1024 * 1024;
+  const availableBytes = maxStorageBytes - totalStorageBytes;
+
+  if (availableBytes < blobSizeBytes * 0.5) {
+    console.warn(
+      `[PerConvStorage] Insufficient space for automatic migration ` +
+        `(available: ${availableBytes}B, blob: ${blobSizeBytes}B). ` +
+        `Deferring to MigrationDialog.`,
+    );
+    return parseBlobDataDirectly(state, version);
+  }
+
   const conversations: Conversation[] = [];
   const folders: FolderInterface[] = [];
-  // Track IDs that were successfully written to localStorage,
-  // so the index only references data that actually persisted.
+  // Track keys written during migration for rollback on quota failure
   const writtenConvIds: string[] = [];
   const writtenFolderIds: string[] = [];
+  const writtenKeys: string[] = [];
+  let quotaFailure = false;
 
   // Validate and write each conversation individually
   if (Array.isArray(state.conversations)) {
     for (const conv of state.conversations) {
+      if (quotaFailure) break;
       // Capture raw BEFORE validation (which mutates messages in place)
       const convRawBeforeValidation = JSON.stringify(conv);
       const validation = validateConversation(conv);
@@ -479,19 +576,25 @@ function migrateFromLegacyBlob(): {
         }
         try {
           localStorage.setItem(convKey, JSON.stringify(validation.data));
-          // Only include in return value if write succeeded
           conversations.push(validation.data);
           writtenConvIds.push(validation.data.id);
+          writtenKeys.push(convKey);
           lastWrittenTimestamps.set(
             validation.data.id,
             validation.data.updatedAt,
           );
         } catch (e) {
-          console.error(
-            `[PerConvStorage] Failed to write conv-data-${validation.data.id}:`,
-            e,
-          );
-          // Don't include — legacy blob will be preserved if index write also fails
+          if (isQuotaError(e)) {
+            console.warn(
+              `[PerConvStorage] QuotaExceededError during migration at conv ${validation.data.id}, rolling back`,
+            );
+            quotaFailure = true;
+          } else {
+            console.error(
+              `[PerConvStorage] Failed to write conv-data-${validation.data.id}:`,
+              e,
+            );
+          }
         }
       } else {
         // Attempt auto-recovery before quarantining (use pre-validation raw)
@@ -500,7 +603,6 @@ function migrateFromLegacyBlob(): {
           console.log(
             `[PerConvStorage] Auto-recovered conversation during migration (${recovery.stats.fieldsRepaired.join(', ')})`,
           );
-          // Skip write if a per-conv key already exists (newer from previous session)
           const recoveredKey = `${CONV_PREFIX}${recovery.conversation.id}`;
           if (localStorage.getItem(recoveredKey)) {
             conversations.push(recovery.conversation);
@@ -513,15 +615,20 @@ function migrateFromLegacyBlob(): {
               );
               conversations.push(recovery.conversation);
               writtenConvIds.push(recovery.conversation.id);
+              writtenKeys.push(recoveredKey);
               lastWrittenTimestamps.set(
                 recovery.conversation.id,
                 recovery.conversation.updatedAt,
               );
             } catch (e) {
-              console.error(
-                `[PerConvStorage] Failed to write recovered conv-data-${recovery.conversation.id}:`,
-                e,
-              );
+              if (isQuotaError(e)) {
+                quotaFailure = true;
+              } else {
+                console.error(
+                  `[PerConvStorage] Failed to write recovered conv-data-${recovery.conversation.id}:`,
+                  e,
+                );
+              }
             }
           }
         } else {
@@ -536,13 +643,32 @@ function migrateFromLegacyBlob(): {
     }
   }
 
+  // On quota failure: rollback all written keys, preserve blob, return blob data
+  if (quotaFailure) {
+    console.warn(
+      `[PerConvStorage] Rolling back ${writtenKeys.length} keys written during failed migration`,
+    );
+    for (const key of writtenKeys) {
+      try {
+        localStorage.removeItem(key);
+      } catch {
+        // Best-effort cleanup
+      }
+      // Only clear timestamps for rolled-back keys (preserve existing conv timestamps)
+      const id = key.startsWith(CONV_PREFIX)
+        ? key.slice(CONV_PREFIX.length)
+        : null;
+      if (id) lastWrittenTimestamps.delete(id);
+    }
+    return parseBlobDataDirectly(state, version);
+  }
+
   // Validate and write each folder individually
   if (Array.isArray(state.folders)) {
     for (const folder of state.folders) {
       const validation = validateFolder(folder);
       if (validation.valid && validation.data) {
         const folderKey = `${FOLDER_PREFIX}${validation.data.id}`;
-        // Skip write if folder key already exists (newer from previous session)
         if (localStorage.getItem(folderKey)) {
           folders.push(validation.data);
           writtenFolderIds.push(validation.data.id);
@@ -552,14 +678,21 @@ function migrateFromLegacyBlob(): {
           localStorage.setItem(folderKey, JSON.stringify(validation.data));
           folders.push(validation.data);
           writtenFolderIds.push(validation.data.id);
+          writtenKeys.push(folderKey);
         } catch (e) {
+          if (isQuotaError(e)) {
+            console.warn(
+              `[PerConvStorage] QuotaExceededError during migration at folder ${validation.data.id}, rolling back`,
+            );
+            quotaFailure = true;
+            break;
+          }
           console.error(
             `[PerConvStorage] Failed to write conv-folder-${validation.data.id}:`,
             e,
           );
         }
       } else {
-        // Quarantine invalid folders
         quarantineConversation(
           JSON.stringify(folder),
           validation.errors,
@@ -570,12 +703,33 @@ function migrateFromLegacyBlob(): {
     }
   }
 
+  // Check for quota failure from folder writes
+  if (quotaFailure) {
+    console.warn(
+      `[PerConvStorage] Rolling back ${writtenKeys.length} keys written during failed migration (folder phase)`,
+    );
+    for (const key of writtenKeys) {
+      try {
+        localStorage.removeItem(key);
+      } catch {
+        // Best-effort cleanup
+      }
+      const id = key.startsWith(CONV_PREFIX)
+        ? key.slice(CONV_PREFIX.length)
+        : null;
+      if (id) lastWrittenTimestamps.delete(id);
+    }
+    return parseBlobDataDirectly(state, version);
+  }
+
   // Write the index — only reference IDs that were successfully persisted
   const index: ConversationIndex = {
     version: 5,
     conversationIds: writtenConvIds,
     selectedConversationId:
-      (state.selectedConversationId as string | null) ?? null,
+      typeof state.selectedConversationId === 'string'
+        ? state.selectedConversationId
+        : null,
     folderIds: writtenFolderIds,
   };
 
@@ -600,6 +754,7 @@ function migrateFromLegacyBlob(): {
     selectedConversationId: index.selectedConversationId,
     folders,
     version,
+    persisted: true,
   };
 }
 
@@ -671,38 +826,40 @@ export const perConversationStorage: StateStorage = {
         if (localStorage.getItem(LEGACY_BLOB_KEY)) {
           const merged = migrateFromLegacyBlob();
           if (merged) {
-            // Add any conversations/folders from the blob that aren't already loaded
+            // Add conversations/folders to in-memory arrays for the current session
             const existingIds = new Set(validIds);
             for (const conv of merged.conversations) {
               if (!existingIds.has(conv.id)) {
                 conversations.push(conv);
-                validIds.push(conv.id);
+                if (merged.persisted) validIds.push(conv.id);
               }
             }
             const existingFolderIds = new Set(validFolderIds);
             for (const folder of merged.folders) {
               if (!existingFolderIds.has(folder.id)) {
                 folders.push(folder);
-                validFolderIds.push(folder.id);
+                if (merged.persisted) validFolderIds.push(folder.id);
               }
             }
             // Use blob's selectedConversationId as fallback if index has none
             const mergedSelectedId =
               index.selectedConversationId ?? merged.selectedConversationId;
 
-            // Update the index with merged data (best-effort)
-            try {
-              writeIndex({
-                ...index,
-                conversationIds: validIds,
-                folderIds: validFolderIds,
-                selectedConversationId: mergedSelectedId,
-              });
-            } catch (e) {
-              console.warn(
-                '[PerConvStorage] Failed to update index after merge, continuing:',
-                e,
-              );
+            // Only update the persisted index if migration actually wrote per-conv keys
+            if (merged.persisted) {
+              try {
+                writeIndex({
+                  ...index,
+                  conversationIds: validIds,
+                  folderIds: validFolderIds,
+                  selectedConversationId: mergedSelectedId,
+                });
+              } catch (e) {
+                console.warn(
+                  '[PerConvStorage] Failed to update index after merge, continuing:',
+                  e,
+                );
+              }
             }
             // Update index for the return value
             index = {
@@ -783,7 +940,7 @@ export const perConversationStorage: StateStorage = {
             );
             lastWrittenTimestamps.set(conv.id, conv.updatedAt);
           } catch (e) {
-            if (e instanceof Error && e.name === 'QuotaExceededError') {
+            if (isQuotaError(e)) {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing ${conv.id}`,
               );
@@ -808,7 +965,7 @@ export const perConversationStorage: StateStorage = {
             JSON.stringify(folder),
           );
         } catch (e) {
-          if (e instanceof Error && e.name === 'QuotaExceededError') {
+          if (isQuotaError(e)) {
             console.error(
               `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
             );
@@ -823,10 +980,17 @@ export const perConversationStorage: StateStorage = {
 
       // Write index before deleting old keys — if index write fails,
       // old keys remain intact and consistent with the previous index.
+      // Validate selectedConversationId references a persisted conversation
+      const persistedSelectedId =
+        state.selectedConversationId &&
+        newConvIds.has(state.selectedConversationId)
+          ? state.selectedConversationId
+          : null;
+
       const index: ConversationIndex = {
         version: version ?? 5,
         conversationIds: Array.from(newConvIds),
-        selectedConversationId: state.selectedConversationId,
+        selectedConversationId: persistedSelectedId,
         folderIds: Array.from(newFolderIds),
       };
       writeIndex(index);
@@ -842,6 +1006,11 @@ export const perConversationStorage: StateStorage = {
         if (!newFolderIds.has(id)) {
           localStorage.removeItem(`${FOLDER_PREFIX}${id}`);
         }
+      }
+
+      // Clean up legacy blob if it still exists and all conversations are now persisted
+      if (localStorage.getItem(LEGACY_BLOB_KEY)) {
+        localStorage.removeItem(LEGACY_BLOB_KEY);
       }
     } catch (e) {
       console.error('[PerConvStorage] Error in setItem:', e);

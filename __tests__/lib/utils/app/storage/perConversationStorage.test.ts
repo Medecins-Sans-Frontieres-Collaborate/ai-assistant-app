@@ -538,6 +538,241 @@ describe('perConversationStorage', () => {
       expect(localStorage.getItem('conversation-storage')).toBeNull();
     });
 
+    it('skips automatic migration and preserves blob on quota pressure', () => {
+      const legacyBlob = {
+        state: {
+          conversations: [makeConversation('c1'), makeConversation('c2')],
+          selectedConversationId: 'c1',
+          folders: [],
+        },
+        version: 4,
+      };
+      const blobString = JSON.stringify(legacyBlob);
+      localStorage.setItem('conversation-storage', blobString);
+
+      // Fill storage so that available < 50% of blob size
+      // Blob size in bytes = blobString.length * 2 (UTF-16)
+      // Preflight: max=5MB, threshold = blobSizeBytes * 0.5
+      // We need totalStorageBytes > maxStorage - (blobSizeBytes * 0.5)
+      const blobSizeBytes = blobString.length * 2;
+      const maxStorage = 5 * 1024 * 1024;
+      const targetTotal = maxStorage - Math.floor(blobSizeBytes * 0.5) + 100;
+      // Current total includes the blob key + value
+      const currentKeyOverhead =
+        ('conversation-storage'.length + blobString.length) * 2;
+      const fillNeeded = Math.max(0, targetTotal - currentKeyOverhead);
+      const fillKeyOverhead = '_filler'.length * 2;
+      const fillValueChars = Math.floor((fillNeeded - fillKeyOverhead) / 2);
+      if (fillValueChars > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
+      }
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // Legacy blob should be PRESERVED (not deleted) for MigrationDialog
+      expect(localStorage.getItem('conversation-storage')).not.toBeNull();
+
+      // No per-conversation keys should have been written
+      expect(localStorage.getItem('conv-data-c1')).toBeNull();
+      expect(localStorage.getItem('conv-data-c2')).toBeNull();
+    });
+
+    it('rolls back partial migration on quota failure mid-write', () => {
+      const legacyBlob = {
+        state: {
+          conversations: [makeConversation('c1'), makeConversation('c2')],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      // Make the second conv write fail with QuotaExceededError
+      const originalSetItem = localStorage.setItem.bind(localStorage);
+      vi.spyOn(localStorage, 'setItem').mockImplementation(
+        (key: string, value: string) => {
+          if (key === 'conv-data-c2') {
+            const err = new Error('QuotaExceededError');
+            err.name = 'QuotaExceededError';
+            throw err;
+          }
+          originalSetItem(key, value);
+        },
+      );
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      vi.restoreAllMocks();
+
+      expect(raw).not.toBeNull();
+      const parsed = JSON.parse(raw!);
+
+      // Should return all conversations for in-memory use (from blob parse)
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // Legacy blob preserved
+      expect(localStorage.getItem('conversation-storage')).not.toBeNull();
+
+      // Partial writes rolled back (c1 was written before c2 failed)
+      expect(localStorage.getItem('conv-data-c1')).toBeNull();
+    });
+
+    it('does not pollute conv-index when migration is deferred under existing index', () => {
+      // Set up an existing per-conv index with one conversation
+      localStorage.setItem(
+        'conv-data-existing',
+        JSON.stringify(makeConversation('existing')),
+      );
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['existing'],
+          selectedConversationId: 'existing',
+          folderIds: [],
+        }),
+      );
+
+      // Also have a legacy blob with additional conversations (failed previous migration)
+      const legacyBlob = {
+        state: {
+          conversations: [
+            makeConversation('existing'),
+            makeConversation('blob-only'),
+          ],
+          selectedConversationId: null,
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      // Fill storage to trigger quota-pressure deferral
+      const blobString = JSON.stringify(legacyBlob);
+      const blobSizeBytes = blobString.length * 2;
+      const maxStorage = 5 * 1024 * 1024;
+      const targetTotal = maxStorage - Math.floor(blobSizeBytes * 0.5) + 100;
+      let currentTotal = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k) {
+          const v = localStorage.getItem(k);
+          if (v !== null) currentTotal += (k.length + v.length) * 2;
+        }
+      }
+      const fillNeeded = Math.max(0, targetTotal - currentTotal);
+      const fillKeyOverhead = '_filler'.length * 2;
+      const fillValueChars = Math.floor((fillNeeded - fillKeyOverhead) / 2);
+      if (fillValueChars > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
+      }
+
+      const raw = perConversationStorage.getItem('conversation-storage');
+      expect(raw).not.toBeNull();
+
+      const parsed = JSON.parse(raw!);
+      // Both conversations available in-memory
+      expect(parsed.state.conversations).toHaveLength(2);
+
+      // conv-index should NOT have been updated with 'blob-only'
+      const indexAfter = JSON.parse(localStorage.getItem('conv-index')!);
+      expect(indexAfter.conversationIds).toContain('existing');
+      expect(indexAfter.conversationIds).not.toContain('blob-only');
+
+      // Legacy blob preserved
+      expect(localStorage.getItem('conversation-storage')).not.toBeNull();
+    });
+
+    it('setItem persists deferred blob conversations normally once space is available', () => {
+      // Set up existing index + deferred blob
+      localStorage.setItem(
+        'conv-data-existing',
+        JSON.stringify(makeConversation('existing')),
+      );
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['existing'],
+          selectedConversationId: 'existing',
+          folderIds: [],
+        }),
+      );
+
+      const legacyBlob = {
+        state: {
+          conversations: [
+            makeConversation('existing'),
+            makeConversation('from-blob'),
+          ],
+          selectedConversationId: 'from-blob',
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      // Fill storage to trigger deferral
+      const blobString = JSON.stringify(legacyBlob);
+      const blobSizeBytes = blobString.length * 2;
+      const maxStorage = 5 * 1024 * 1024;
+      const targetTotal = maxStorage - Math.floor(blobSizeBytes * 0.5) + 100;
+      let currentTotal = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k) {
+          const v = localStorage.getItem(k);
+          if (v !== null) currentTotal += (k.length + v.length) * 2;
+        }
+      }
+      const fillNeeded = Math.max(0, targetTotal - currentTotal);
+      const fillKeyOverhead = '_filler'.length * 2;
+      const fillValueChars = Math.floor((fillNeeded - fillKeyOverhead) / 2);
+      if (fillValueChars > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
+      }
+
+      // Hydrate — loads both in-memory, migration deferred
+      perConversationStorage.getItem('conversation-storage');
+
+      // Remove filler to free space
+      localStorage.removeItem('_filler');
+
+      // setItem should now persist the blob-origin conversation normally
+      const stateWithBoth = {
+        state: {
+          conversations: [
+            makeConversation('existing'),
+            { ...makeConversation('from-blob'), name: 'User Edited' },
+          ],
+          selectedConversationId: 'from-blob',
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(stateWithBoth),
+      );
+
+      // Blob-origin conversation should now be persisted
+      expect(localStorage.getItem('conv-data-from-blob')).not.toBeNull();
+      const stored = JSON.parse(localStorage.getItem('conv-data-from-blob')!);
+      expect(stored.name).toBe('User Edited');
+
+      // Index should include it
+      const indexAfter = JSON.parse(localStorage.getItem('conv-index')!);
+      expect(indexAfter.conversationIds).toContain('from-blob');
+      expect(indexAfter.selectedConversationId).toBe('from-blob');
+
+      // Legacy blob should be cleaned up after successful persist
+      expect(localStorage.getItem('conversation-storage')).toBeNull();
+    });
+
     it('removes deleted conversations', () => {
       // First write with two conversations
       const initial = {
