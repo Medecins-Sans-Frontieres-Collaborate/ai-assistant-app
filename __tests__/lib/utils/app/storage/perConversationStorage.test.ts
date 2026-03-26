@@ -687,6 +687,89 @@ describe('perConversationStorage', () => {
       expect(localStorage.getItem('conversation-storage')).not.toBeNull();
     });
 
+    it('setItem does not persist blob-only conversations from deferred migration', () => {
+      // Set up existing index + deferred blob (same setup as index pollution test)
+      localStorage.setItem(
+        'conv-data-existing',
+        JSON.stringify(makeConversation('existing')),
+      );
+      localStorage.setItem(
+        'conv-index',
+        JSON.stringify({
+          version: 5,
+          conversationIds: ['existing'],
+          selectedConversationId: 'existing',
+          folderIds: [],
+        }),
+      );
+
+      const legacyBlob = {
+        state: {
+          conversations: [
+            makeConversation('existing'),
+            makeConversation('blob-only'),
+          ],
+          selectedConversationId: 'blob-only',
+          folders: [],
+        },
+        version: 4,
+      };
+      localStorage.setItem('conversation-storage', JSON.stringify(legacyBlob));
+
+      // Fill storage to trigger deferral
+      const blobString = JSON.stringify(legacyBlob);
+      const blobSizeBytes = blobString.length * 2;
+      const maxStorage = 5 * 1024 * 1024;
+      const targetTotal = maxStorage - Math.floor(blobSizeBytes * 0.5) + 100;
+      let currentTotal = 0;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k) {
+          const v = localStorage.getItem(k);
+          if (v !== null) currentTotal += (k.length + v.length) * 2;
+        }
+      }
+      const fillNeeded = Math.max(0, targetTotal - currentTotal);
+      const fillKeyOverhead = '_filler'.length * 2;
+      const fillValueChars = Math.floor((fillNeeded - fillKeyOverhead) / 2);
+      if (fillValueChars > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
+      }
+
+      // Hydrate — should load both in-memory but not persist blob-only
+      perConversationStorage.getItem('conversation-storage');
+
+      // Remove filler to allow writes
+      localStorage.removeItem('_filler');
+
+      // Now do a setItem (simulating any store update)
+      const stateWithBoth = {
+        state: {
+          conversations: [
+            makeConversation('existing'),
+            { ...makeConversation('blob-only'), name: 'Should Not Persist' },
+          ],
+          selectedConversationId: 'blob-only',
+          folders: [],
+        },
+        version: 5,
+      };
+      perConversationStorage.setItem(
+        'conversation-storage',
+        JSON.stringify(stateWithBoth),
+      );
+
+      // blob-only should NOT have been written to localStorage
+      expect(localStorage.getItem('conv-data-blob-only')).toBeNull();
+
+      // Index should NOT contain blob-only
+      const indexAfter = JSON.parse(localStorage.getItem('conv-index')!);
+      expect(indexAfter.conversationIds).not.toContain('blob-only');
+
+      // selectedConversationId should be null (blob-only ref invalid)
+      expect(indexAfter.selectedConversationId).toBeNull();
+    });
+
     it('removes deleted conversations', () => {
       // First write with two conversations
       const initial = {
