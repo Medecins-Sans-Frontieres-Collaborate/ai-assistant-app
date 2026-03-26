@@ -768,6 +768,9 @@ describe('perConversationStorage', () => {
       const indexAfter = JSON.parse(localStorage.getItem('conv-index')!);
       expect(indexAfter.conversationIds).toContain('from-blob');
       expect(indexAfter.selectedConversationId).toBe('from-blob');
+
+      // Legacy blob should be cleaned up after successful persist
+      expect(localStorage.getItem('conversation-storage')).toBeNull();
     });
 
     it('removes deleted conversations', () => {
