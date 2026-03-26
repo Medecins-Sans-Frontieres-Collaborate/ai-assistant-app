@@ -1,6 +1,5 @@
 import {
   clearAllConversationStorage,
-  clearBlobOnlyTracking,
   getPerConversationStorageKeys,
   perConversationStorage,
 } from '@/lib/utils/app/storage/perConversationStorage';
@@ -30,7 +29,6 @@ describe('perConversationStorage', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     localStorage.clear();
-    clearBlobOnlyTracking();
   });
 
   describe('getItem', () => {
@@ -689,8 +687,8 @@ describe('perConversationStorage', () => {
       expect(localStorage.getItem('conversation-storage')).not.toBeNull();
     });
 
-    it('setItem does not persist blob-only conversations from deferred migration', () => {
-      // Set up existing index + deferred blob (same setup as index pollution test)
+    it('setItem persists deferred blob conversations normally once space is available', () => {
+      // Set up existing index + deferred blob
       localStorage.setItem(
         'conv-data-existing',
         JSON.stringify(makeConversation('existing')),
@@ -709,9 +707,9 @@ describe('perConversationStorage', () => {
         state: {
           conversations: [
             makeConversation('existing'),
-            makeConversation('blob-only'),
+            makeConversation('from-blob'),
           ],
-          selectedConversationId: 'blob-only',
+          selectedConversationId: 'from-blob',
           folders: [],
         },
         version: 4,
@@ -738,20 +736,20 @@ describe('perConversationStorage', () => {
         localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
       }
 
-      // Hydrate — should load both in-memory but not persist blob-only
+      // Hydrate — loads both in-memory, migration deferred
       perConversationStorage.getItem('conversation-storage');
 
-      // Remove filler to allow writes
+      // Remove filler to free space
       localStorage.removeItem('_filler');
 
-      // Now do a setItem (simulating any store update)
+      // setItem should now persist the blob-origin conversation normally
       const stateWithBoth = {
         state: {
           conversations: [
             makeConversation('existing'),
-            { ...makeConversation('blob-only'), name: 'Should Not Persist' },
+            { ...makeConversation('from-blob'), name: 'User Edited' },
           ],
-          selectedConversationId: 'blob-only',
+          selectedConversationId: 'from-blob',
           folders: [],
         },
         version: 5,
@@ -761,15 +759,15 @@ describe('perConversationStorage', () => {
         JSON.stringify(stateWithBoth),
       );
 
-      // blob-only should NOT have been written to localStorage
-      expect(localStorage.getItem('conv-data-blob-only')).toBeNull();
+      // Blob-origin conversation should now be persisted
+      expect(localStorage.getItem('conv-data-from-blob')).not.toBeNull();
+      const stored = JSON.parse(localStorage.getItem('conv-data-from-blob')!);
+      expect(stored.name).toBe('User Edited');
 
-      // Index should NOT contain blob-only
+      // Index should include it
       const indexAfter = JSON.parse(localStorage.getItem('conv-index')!);
-      expect(indexAfter.conversationIds).not.toContain('blob-only');
-
-      // selectedConversationId should be null (blob-only ref invalid)
-      expect(indexAfter.selectedConversationId).toBeNull();
+      expect(indexAfter.conversationIds).toContain('from-blob');
+      expect(indexAfter.selectedConversationId).toBe('from-blob');
     });
 
     it('removes deleted conversations', () => {
