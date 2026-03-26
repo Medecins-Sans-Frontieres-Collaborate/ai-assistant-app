@@ -714,8 +714,11 @@ function migrateFromLegacyBlob(): {
       } catch {
         // Best-effort cleanup
       }
+      const id = key.startsWith(CONV_PREFIX)
+        ? key.slice(CONV_PREFIX.length)
+        : null;
+      if (id) lastWrittenTimestamps.delete(id);
     }
-    lastWrittenTimestamps.clear();
     return parseBlobDataDirectly(state, version);
   }
 
