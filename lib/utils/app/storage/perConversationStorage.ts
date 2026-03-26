@@ -1069,6 +1069,7 @@ export const perConversationStorage: StateStorage = {
       }
       localStorage.removeItem(INDEX_KEY);
       lastWrittenTimestamps.clear();
+      clearBlobOnlyTracking();
     } catch (e) {
       console.error('[PerConvStorage] Error in removeItem:', e);
     }
@@ -1159,6 +1160,7 @@ export function clearAllConversationStorage(): void {
   // Also clear legacy blob if it somehow still exists
   localStorage.removeItem(LEGACY_BLOB_KEY);
   lastWrittenTimestamps.clear();
+  clearBlobOnlyTracking();
 }
 
 /**
