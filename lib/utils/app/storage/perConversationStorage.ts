@@ -50,6 +50,11 @@ function isQuotaError(e: unknown): boolean {
 // Cache of last-written updatedAt per conversation, used for diffing in setItem
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
+// IDs loaded from a deferred/rolled-back legacy migration (in-memory only, not persisted).
+// setItem must exclude these to avoid silently retrying migration outside the guarded path.
+const blobOnlyIds = new Set<string>();
+const blobOnlyFolderIds = new Set<string>();
+
 /**
  * Validate that a parsed object is a well-formed ConversationIndex.
  */
@@ -831,14 +836,22 @@ export const perConversationStorage: StateStorage = {
             for (const conv of merged.conversations) {
               if (!existingIds.has(conv.id)) {
                 conversations.push(conv);
-                if (merged.persisted) validIds.push(conv.id);
+                if (merged.persisted) {
+                  validIds.push(conv.id);
+                } else {
+                  blobOnlyIds.add(conv.id);
+                }
               }
             }
             const existingFolderIds = new Set(validFolderIds);
             for (const folder of merged.folders) {
               if (!existingFolderIds.has(folder.id)) {
                 folders.push(folder);
-                if (merged.persisted) validFolderIds.push(folder.id);
+                if (merged.persisted) {
+                  validFolderIds.push(folder.id);
+                } else {
+                  blobOnlyFolderIds.add(folder.id);
+                }
               }
             }
             // Use blob's selectedConversationId as fallback if index has none
@@ -923,11 +936,20 @@ export const perConversationStorage: StateStorage = {
       const currentConvIds = new Set(currentIndex?.conversationIds ?? []);
       const currentFolderIds = new Set(currentIndex?.folderIds ?? []);
 
-      const newConvIds = new Set(state.conversations.map((c) => c.id));
-      const newFolderIds = new Set(state.folders.map((f) => f.id));
+      // Exclude blob-only items (deferred migration) — they should only be
+      // persisted through the guarded MigrationDialog path, not normal writes.
+      const persistableConvs = state.conversations.filter(
+        (c) => !blobOnlyIds.has(c.id),
+      );
+      const persistableFolders = state.folders.filter(
+        (f) => !blobOnlyFolderIds.has(f.id),
+      );
+
+      const newConvIds = new Set(persistableConvs.map((c) => c.id));
+      const newFolderIds = new Set(persistableFolders.map((f) => f.id));
 
       // Write changed/new conversations
-      for (const conv of state.conversations) {
+      for (const conv of persistableConvs) {
         const lastTimestamp = lastWrittenTimestamps.get(conv.id);
         const isNew = !currentConvIds.has(conv.id);
         const isUpdated = !isNew && conv.updatedAt !== lastTimestamp;
@@ -958,7 +980,7 @@ export const perConversationStorage: StateStorage = {
       }
 
       // Write all folders (folders are small — always write to catch renames)
-      for (const folder of state.folders) {
+      for (const folder of persistableFolders) {
         try {
           localStorage.setItem(
             `${FOLDER_PREFIX}${folder.id}`,
@@ -980,10 +1002,17 @@ export const perConversationStorage: StateStorage = {
 
       // Write index before deleting old keys — if index write fails,
       // old keys remain intact and consistent with the previous index.
+      // Validate selectedConversationId references a persisted conversation
+      const persistedSelectedId =
+        state.selectedConversationId &&
+        newConvIds.has(state.selectedConversationId)
+          ? state.selectedConversationId
+          : null;
+
       const index: ConversationIndex = {
         version: version ?? 5,
         conversationIds: Array.from(newConvIds),
-        selectedConversationId: state.selectedConversationId,
+        selectedConversationId: persistedSelectedId,
         folderIds: Array.from(newFolderIds),
       };
       writeIndex(index);
