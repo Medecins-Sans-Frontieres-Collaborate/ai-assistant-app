@@ -539,7 +539,6 @@ describe('perConversationStorage', () => {
     });
 
     it('skips automatic migration and preserves blob on quota pressure', () => {
-      // Fill localStorage to near capacity so migration can't duplicate data
       const legacyBlob = {
         state: {
           conversations: [makeConversation('c1'), makeConversation('c2')],
@@ -551,18 +550,27 @@ describe('perConversationStorage', () => {
       const blobString = JSON.stringify(legacyBlob);
       localStorage.setItem('conversation-storage', blobString);
 
-      // Fill remaining space with junk so there's <50% of blob size available
-      const blobSize = blobString.length * 2;
-      const fillSize = Math.floor((5 * 1024 * 1024 - blobSize * 2) / 2);
-      if (fillSize > 0) {
-        localStorage.setItem('_filler', 'x'.repeat(fillSize));
+      // Fill storage so that available < 50% of blob size
+      // Blob size in bytes = blobString.length * 2 (UTF-16)
+      // Preflight: max=5MB, threshold = blobSizeBytes * 0.5
+      // We need totalStorageBytes > maxStorage - (blobSizeBytes * 0.5)
+      const blobSizeBytes = blobString.length * 2;
+      const maxStorage = 5 * 1024 * 1024;
+      const targetTotal = maxStorage - Math.floor(blobSizeBytes * 0.5) + 100;
+      // Current total includes the blob key + value
+      const currentKeyOverhead =
+        ('conversation-storage'.length + blobString.length) * 2;
+      const fillNeeded = Math.max(0, targetTotal - currentKeyOverhead);
+      const fillKeyOverhead = '_filler'.length * 2;
+      const fillValueChars = Math.floor((fillNeeded - fillKeyOverhead) / 2);
+      if (fillValueChars > 0) {
+        localStorage.setItem('_filler', 'x'.repeat(fillValueChars));
       }
 
       const raw = perConversationStorage.getItem('conversation-storage');
       expect(raw).not.toBeNull();
 
       const parsed = JSON.parse(raw!);
-      // Conversations should still be returned for in-memory use
       expect(parsed.state.conversations).toHaveLength(2);
 
       // Legacy blob should be PRESERVED (not deleted) for MigrationDialog
