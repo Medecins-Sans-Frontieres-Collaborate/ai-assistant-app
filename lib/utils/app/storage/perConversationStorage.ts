@@ -55,6 +55,12 @@ const lastWrittenTimestamps = new Map<string, string | undefined>();
 const blobOnlyIds = new Set<string>();
 const blobOnlyFolderIds = new Set<string>();
 
+/** Clear blob-only tracking after successful migration or full reset. */
+function clearBlobOnlyTracking(): void {
+  blobOnlyIds.clear();
+  blobOnlyFolderIds.clear();
+}
+
 /**
  * Validate that a parsed object is a well-formed ConversationIndex.
  */
@@ -831,6 +837,10 @@ export const perConversationStorage: StateStorage = {
         if (localStorage.getItem(LEGACY_BLOB_KEY)) {
           const merged = migrateFromLegacyBlob();
           if (merged) {
+            // If migration succeeded, clear blob-only tracking (those IDs are now persisted)
+            if (merged.persisted) {
+              clearBlobOnlyTracking();
+            }
             // Add conversations/folders to in-memory arrays for the current session
             const existingIds = new Set(validIds);
             for (const conv of merged.conversations) {
@@ -896,6 +906,18 @@ export const perConversationStorage: StateStorage = {
       // No index found — check for legacy blob and migrate
       const migrated = migrateFromLegacyBlob();
       if (migrated) {
+        if (migrated.persisted) {
+          // Migration succeeded — clear any stale blob-only tracking
+          clearBlobOnlyTracking();
+        } else {
+          // Deferred — track all IDs as blob-only so setItem won't persist them
+          for (const conv of migrated.conversations) {
+            blobOnlyIds.add(conv.id);
+          }
+          for (const folder of migrated.folders) {
+            blobOnlyFolderIds.add(folder.id);
+          }
+        }
         return JSON.stringify({
           state: {
             conversations: migrated.conversations,
