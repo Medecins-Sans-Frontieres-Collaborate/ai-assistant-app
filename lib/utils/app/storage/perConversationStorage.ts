@@ -518,7 +518,8 @@ function migrateFromLegacyBlob(): {
     const key = localStorage.key(i);
     if (key) {
       const val = localStorage.getItem(key);
-      if (val) totalStorageBytes += (key.length + val.length) * 2;
+      // Approximate size: UTF-16 = 2 bytes per char (sufficient for preflight threshold)
+      if (val !== null) totalStorageBytes += (key.length + val.length) * 2;
     }
   }
   const maxStorageBytes = 5 * 1024 * 1024;
@@ -667,12 +668,19 @@ function migrateFromLegacyBlob(): {
           localStorage.setItem(folderKey, JSON.stringify(validation.data));
           folders.push(validation.data);
           writtenFolderIds.push(validation.data.id);
+          writtenKeys.push(folderKey);
         } catch (e) {
+          if (isQuotaError(e)) {
+            console.warn(
+              `[PerConvStorage] QuotaExceededError during migration at folder ${validation.data.id}, rolling back`,
+            );
+            quotaFailure = true;
+            break;
+          }
           console.error(
             `[PerConvStorage] Failed to write conv-folder-${validation.data.id}:`,
             e,
           );
-          // Folders are small — a quota error here is unlikely but non-fatal
         }
       } else {
         quarantineConversation(
