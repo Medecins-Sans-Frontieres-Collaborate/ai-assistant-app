@@ -349,6 +349,7 @@ function parseBlobDataDirectly(
   selectedConversationId: string | null;
   folders: FolderInterface[];
   version: number;
+  persisted: boolean;
 } {
   const conversations: Conversation[] = [];
   const folders: FolderInterface[] = [];
@@ -384,6 +385,7 @@ function parseBlobDataDirectly(
         : null,
     folders,
     version,
+    persisted: false,
   };
 }
 
@@ -396,6 +398,8 @@ function migrateFromLegacyBlob(): {
   selectedConversationId: string | null;
   folders: FolderInterface[];
   version: number;
+  /** Whether per-conv keys were actually written. False = blob-only fallback for in-memory use. */
+  persisted: boolean;
 } | null {
   const raw = localStorage.getItem(LEGACY_BLOB_KEY);
   if (!raw) return null;
@@ -485,6 +489,7 @@ function migrateFromLegacyBlob(): {
           selectedConversationId: null,
           folders: [],
           version: 1,
+          persisted: true, // salvaged convs were written to per-conv keys
         };
       }
     }
@@ -504,6 +509,7 @@ function migrateFromLegacyBlob(): {
       selectedConversationId: null,
       folders: [],
       version: parsed.data?.version ?? 1,
+      persisted: false,
     };
   }
 
@@ -741,6 +747,7 @@ function migrateFromLegacyBlob(): {
     selectedConversationId: index.selectedConversationId,
     folders,
     version,
+    persisted: true,
   };
 }
 
@@ -812,38 +819,40 @@ export const perConversationStorage: StateStorage = {
         if (localStorage.getItem(LEGACY_BLOB_KEY)) {
           const merged = migrateFromLegacyBlob();
           if (merged) {
-            // Add any conversations/folders from the blob that aren't already loaded
+            // Add conversations/folders to in-memory arrays for the current session
             const existingIds = new Set(validIds);
             for (const conv of merged.conversations) {
               if (!existingIds.has(conv.id)) {
                 conversations.push(conv);
-                validIds.push(conv.id);
+                if (merged.persisted) validIds.push(conv.id);
               }
             }
             const existingFolderIds = new Set(validFolderIds);
             for (const folder of merged.folders) {
               if (!existingFolderIds.has(folder.id)) {
                 folders.push(folder);
-                validFolderIds.push(folder.id);
+                if (merged.persisted) validFolderIds.push(folder.id);
               }
             }
             // Use blob's selectedConversationId as fallback if index has none
             const mergedSelectedId =
               index.selectedConversationId ?? merged.selectedConversationId;
 
-            // Update the index with merged data (best-effort)
-            try {
-              writeIndex({
-                ...index,
-                conversationIds: validIds,
-                folderIds: validFolderIds,
-                selectedConversationId: mergedSelectedId,
-              });
-            } catch (e) {
-              console.warn(
-                '[PerConvStorage] Failed to update index after merge, continuing:',
-                e,
-              );
+            // Only update the persisted index if migration actually wrote per-conv keys
+            if (merged.persisted) {
+              try {
+                writeIndex({
+                  ...index,
+                  conversationIds: validIds,
+                  folderIds: validFolderIds,
+                  selectedConversationId: mergedSelectedId,
+                });
+              } catch (e) {
+                console.warn(
+                  '[PerConvStorage] Failed to update index after merge, continuing:',
+                  e,
+                );
+              }
             }
             // Update index for the return value
             index = {
