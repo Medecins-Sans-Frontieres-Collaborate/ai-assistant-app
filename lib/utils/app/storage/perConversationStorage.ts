@@ -50,17 +50,6 @@ function isQuotaError(e: unknown): boolean {
 // Cache of last-written updatedAt per conversation, used for diffing in setItem
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
-// IDs loaded from a deferred/rolled-back legacy migration (in-memory only, not persisted).
-// setItem must exclude these to avoid silently retrying migration outside the guarded path.
-const blobOnlyIds = new Set<string>();
-const blobOnlyFolderIds = new Set<string>();
-
-/** Clear blob-only tracking after successful migration or full reset. */
-export function clearBlobOnlyTracking(): void {
-  blobOnlyIds.clear();
-  blobOnlyFolderIds.clear();
-}
-
 /**
  * Validate that a parsed object is a well-formed ConversationIndex.
  */
@@ -837,31 +826,19 @@ export const perConversationStorage: StateStorage = {
         if (localStorage.getItem(LEGACY_BLOB_KEY)) {
           const merged = migrateFromLegacyBlob();
           if (merged) {
-            // If migration succeeded, clear blob-only tracking (those IDs are now persisted)
-            if (merged.persisted) {
-              clearBlobOnlyTracking();
-            }
             // Add conversations/folders to in-memory arrays for the current session
             const existingIds = new Set(validIds);
             for (const conv of merged.conversations) {
               if (!existingIds.has(conv.id)) {
                 conversations.push(conv);
-                if (merged.persisted) {
-                  validIds.push(conv.id);
-                } else {
-                  blobOnlyIds.add(conv.id);
-                }
+                if (merged.persisted) validIds.push(conv.id);
               }
             }
             const existingFolderIds = new Set(validFolderIds);
             for (const folder of merged.folders) {
               if (!existingFolderIds.has(folder.id)) {
                 folders.push(folder);
-                if (merged.persisted) {
-                  validFolderIds.push(folder.id);
-                } else {
-                  blobOnlyFolderIds.add(folder.id);
-                }
+                if (merged.persisted) validFolderIds.push(folder.id);
               }
             }
             // Use blob's selectedConversationId as fallback if index has none
@@ -906,18 +883,6 @@ export const perConversationStorage: StateStorage = {
       // No index found — check for legacy blob and migrate
       const migrated = migrateFromLegacyBlob();
       if (migrated) {
-        if (migrated.persisted) {
-          // Migration succeeded — clear any stale blob-only tracking
-          clearBlobOnlyTracking();
-        } else {
-          // Deferred — track all IDs as blob-only so setItem won't persist them
-          for (const conv of migrated.conversations) {
-            blobOnlyIds.add(conv.id);
-          }
-          for (const folder of migrated.folders) {
-            blobOnlyFolderIds.add(folder.id);
-          }
-        }
         return JSON.stringify({
           state: {
             conversations: migrated.conversations,
@@ -958,20 +923,11 @@ export const perConversationStorage: StateStorage = {
       const currentConvIds = new Set(currentIndex?.conversationIds ?? []);
       const currentFolderIds = new Set(currentIndex?.folderIds ?? []);
 
-      // Exclude blob-only items (deferred migration) — they should only be
-      // persisted through the guarded MigrationDialog path, not normal writes.
-      const persistableConvs = state.conversations.filter(
-        (c) => !blobOnlyIds.has(c.id),
-      );
-      const persistableFolders = state.folders.filter(
-        (f) => !blobOnlyFolderIds.has(f.id),
-      );
-
-      const newConvIds = new Set(persistableConvs.map((c) => c.id));
-      const newFolderIds = new Set(persistableFolders.map((f) => f.id));
+      const newConvIds = new Set(state.conversations.map((c) => c.id));
+      const newFolderIds = new Set(state.folders.map((f) => f.id));
 
       // Write changed/new conversations
-      for (const conv of persistableConvs) {
+      for (const conv of state.conversations) {
         const lastTimestamp = lastWrittenTimestamps.get(conv.id);
         const isNew = !currentConvIds.has(conv.id);
         const isUpdated = !isNew && conv.updatedAt !== lastTimestamp;
@@ -1002,7 +958,7 @@ export const perConversationStorage: StateStorage = {
       }
 
       // Write all folders (folders are small — always write to catch renames)
-      for (const folder of persistableFolders) {
+      for (const folder of state.folders) {
         try {
           localStorage.setItem(
             `${FOLDER_PREFIX}${folder.id}`,
@@ -1069,7 +1025,6 @@ export const perConversationStorage: StateStorage = {
       }
       localStorage.removeItem(INDEX_KEY);
       lastWrittenTimestamps.clear();
-      clearBlobOnlyTracking();
     } catch (e) {
       console.error('[PerConvStorage] Error in removeItem:', e);
     }
@@ -1160,7 +1115,6 @@ export function clearAllConversationStorage(): void {
   // Also clear legacy blob if it somehow still exists
   localStorage.removeItem(LEGACY_BLOB_KEY);
   lastWrittenTimestamps.clear();
-  clearBlobOnlyTracking();
 }
 
 /**
