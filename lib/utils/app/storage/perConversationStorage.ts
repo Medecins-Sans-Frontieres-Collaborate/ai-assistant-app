@@ -693,6 +693,22 @@ function migrateFromLegacyBlob(): {
     }
   }
 
+  // Check for quota failure from folder writes
+  if (quotaFailure) {
+    console.warn(
+      `[PerConvStorage] Rolling back ${writtenKeys.length} keys written during failed migration (folder phase)`,
+    );
+    for (const key of writtenKeys) {
+      try {
+        localStorage.removeItem(key);
+      } catch {
+        // Best-effort cleanup
+      }
+    }
+    lastWrittenTimestamps.clear();
+    return parseBlobDataDirectly(state, version);
+  }
+
   // Write the index — only reference IDs that were successfully persisted
   const index: ConversationIndex = {
     version: 5,
