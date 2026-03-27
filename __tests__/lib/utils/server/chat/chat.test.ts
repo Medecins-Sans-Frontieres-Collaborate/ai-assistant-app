@@ -222,10 +222,15 @@ describe('getMessagesToSend – image token budget', () => {
   });
 
   it('stops truncation at first message that exceeds budget', async () => {
-    // With break (not continue), once a message doesn't fit, no older messages are tried
+    // With break (not continue), once a message doesn't fit, no older
+    // messages are tried — even if they would individually fit.
+    // Use a long text string to create a message that exceeds the budget.
+    const longText = Array.from({ length: 100 }, (_, i) => `word${i}`).join(
+      ' ',
+    ); // 100 tokens
     const messages: Message[] = [
       textMessage('old'), // 1 token - would fit individually
-      imageMessage('big', 'auto'), // 766 tokens - doesn't fit
+      textMessage(longText, 'assistant'), // 100 tokens - doesn't fit
       textMessage('recent', 'assistant'), // 1 token
       textMessage('latest'), // 1 token
     ];
@@ -233,10 +238,10 @@ describe('getMessagesToSend – image token budget', () => {
       messages,
       encoding,
       0,
-      100, // fits latest (1) + recent (1) = 2, but not big (766)
+      10, // fits latest (1) + recent (1) = 2, but not longText (100)
       testUser,
     );
-    // Should keep only recent + latest; 'old' is NOT cherry-picked past 'big'
+    // Should keep only recent + latest; 'old' is NOT cherry-picked past longText
     expect(result).toHaveLength(2);
     expect(result[0].content).toBe('recent');
     expect(result[1].content).toBe('latest');
