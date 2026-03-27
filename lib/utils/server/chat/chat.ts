@@ -187,15 +187,17 @@ export const getMessagesToSend = async (
       message.content = extractTextContent(message.content);
     }
 
-    // Token-based truncation: skip older messages that exceed the budget
-    // Always include the most recent message (isLastMessage)
+    // Token-based truncation: stop adding older messages once budget is exceeded.
+    // Breaking (instead of skipping individual messages) preserves contiguous
+    // user/assistant turn pairs so the prompt never contains orphaned turns.
+    // Always include the most recent message (isLastMessage).
     const messageTokens = countMessageTokens(message, encoding);
     if (
       !isLastMessage &&
       acc.messagesToSend.length > 0 &&
       acc.tokenCount + messageTokens > tokenLimit
     ) {
-      continue;
+      break;
     }
 
     acc.tokenCount += messageTokens;
