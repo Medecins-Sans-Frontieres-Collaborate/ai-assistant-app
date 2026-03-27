@@ -22,6 +22,11 @@ type ContentItem =
   | FileMessageContent
   | ImageMessageContent;
 
+/** Fixed token cost for low-detail images per OpenAI vision docs */
+export const IMAGE_TOKENS_LOW_DETAIL = 85;
+/** Conservative estimate for high/auto detail images (exact cost depends on dimensions) */
+export const IMAGE_TOKENS_HIGH_DETAIL = 765;
+
 /**
  * Detects ALL content types present in a message.
  * Returns a Set to properly handle mixed content (e.g., file + image).
@@ -66,7 +71,10 @@ const getPrimaryContentType = (
 /**
  * Extracts the text content from a message and counts its tokens.
  */
-const countMessageTokens = (message: Message, encoding: Tiktoken): number => {
+export const countMessageTokens = (
+  message: Message,
+  encoding: Tiktoken,
+): number => {
   if (typeof message.content === 'string') {
     return encoding.encode(message.content).length;
   }
@@ -75,6 +83,10 @@ const countMessageTokens = (message: Message, encoding: Tiktoken): number => {
     for (const part of message.content) {
       if (part.type === 'text') {
         tokens += encoding.encode((part as TextMessageContent).text).length;
+      } else if (part.type === 'image_url') {
+        const detail = (part as ImageMessageContent).image_url.detail;
+        tokens +=
+          detail === 'low' ? IMAGE_TOKENS_LOW_DETAIL : IMAGE_TOKENS_HIGH_DETAIL;
       }
     }
     return tokens;
@@ -88,6 +100,13 @@ const countMessageTokens = (message: Message, encoding: Tiktoken): number => {
     )?.type === 'text'
   ) {
     return encoding.encode((message.content as TextMessageContent).text).length;
+  }
+  if ((message.content as ContentItem)?.type === 'image_url') {
+    const detail = (message.content as unknown as ImageMessageContent).image_url
+      .detail;
+    return detail === 'low'
+      ? IMAGE_TOKENS_LOW_DETAIL
+      : IMAGE_TOKENS_HIGH_DETAIL;
   }
   return 0;
 };
