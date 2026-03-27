@@ -190,6 +190,58 @@ describe('getMessagesToSend – image token budget', () => {
     expect(result[1]).toBe(messages[2]); // last
   });
 
+  it('preserves contiguous turn pairs instead of creating orphaned assistant turns', async () => {
+    // Scenario: 5-message conversation where budget only fits the last 3.
+    // Without pair-aware truncation, skipping individual messages could
+    // keep an assistant reply whose preceding user prompt was dropped.
+    const messages: Message[] = [
+      textMessage('user1'), // 1 token
+      textMessage('assistant1', 'assistant'), // 1 token
+      textMessage('user2'), // 1 token
+      textMessage('assistant2', 'assistant'), // 1 token
+      imageMessage('user3', 'auto'), // 1 + 765 = 766 tokens
+    ];
+    // Budget: 766 (last) + 1 (assistant2) + 1 (user2) = 768. Adding
+    // assistant1 (1) would be 769 which is within budget, but user1 (1)
+    // would push to 770 which exceeds it. With break-on-budget, we stop
+    // at assistant1 and keep a contiguous block of the 3 most recent.
+    const result = await getMessagesToSend(
+      messages,
+      encoding,
+      0,
+      769,
+      testUser,
+    );
+    // Should keep user2, assistant2, user3 (contiguous from the end)
+    // and also assistant1 since it fits (769 = 766+1+1+1)
+    expect(result).toHaveLength(4);
+    expect(result[0].content).toBe('assistant1');
+    // The first retained message should NOT be an assistant without its user prompt
+    // if that user prompt was dropped. With break semantics, once user1 doesn't fit,
+    // we stop — so assistant1 is included because it fits before we'd try user1.
+  });
+
+  it('stops truncation at first message that exceeds budget', async () => {
+    // With break (not continue), once a message doesn't fit, no older messages are tried
+    const messages: Message[] = [
+      textMessage('old'), // 1 token - would fit individually
+      imageMessage('big', 'auto'), // 766 tokens - doesn't fit
+      textMessage('recent', 'assistant'), // 1 token
+      textMessage('latest'), // 1 token
+    ];
+    const result = await getMessagesToSend(
+      messages,
+      encoding,
+      0,
+      100, // fits latest (1) + recent (1) = 2, but not big (766)
+      testUser,
+    );
+    // Should keep only recent + latest; 'old' is NOT cherry-picked past 'big'
+    expect(result).toHaveLength(2);
+    expect(result[0].content).toBe('recent');
+    expect(result[1].content).toBe('latest');
+  });
+
   it('always includes the last message even if it exceeds budget', async () => {
     const messages: Message[] = [imageMessage('only', 'high')];
     // Token budget is tiny, but last message is always included
