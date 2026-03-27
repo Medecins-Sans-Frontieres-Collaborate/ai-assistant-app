@@ -7,6 +7,10 @@ import { Message } from '@/types/chat';
  * Preserves the first message (initial context) and the most recent messages.
  * Messages in the middle are dropped when the array exceeds maxMessages.
  *
+ * Edge cases:
+ * - maxMessages <= 0: returns all messages unchanged (no windowing)
+ * - maxMessages === 1: returns only the most recent message
+ *
  * @param messages - Flattened messages array
  * @param maxMessages - Maximum number of messages to keep (defaults to CLIENT_MAX_MESSAGES)
  * @returns Windowed messages array
