@@ -69,7 +69,9 @@ const getPrimaryContentType = (
 };
 
 /**
- * Extracts the text content from a message and counts its tokens.
+ * Counts the tokens used by a message's content.
+ * Includes text tokens and approximate token costs for image parts.
+ * This function does not modify or return the message content.
  */
 export const countMessageTokens = (
   message: Message,
@@ -188,8 +190,8 @@ export const getMessagesToSend = async (
     }
 
     // Token-based truncation: stop adding older messages once budget is exceeded.
-    // Breaking (instead of skipping individual messages) preserves contiguous
-    // user/assistant turn pairs so the prompt never contains orphaned turns.
+    // Uses break (not continue) to preserve a contiguous suffix of messages.
+    // A post-loop check drops any leading orphaned assistant message.
     // Always include the most recent message (isLastMessage).
     const messageTokens = countMessageTokens(message, encoding);
     if (
@@ -202,6 +204,14 @@ export const getMessagesToSend = async (
 
     acc.tokenCount += messageTokens;
     acc.messagesToSend = [message, ...acc.messagesToSend];
+  }
+
+  // Drop leading assistant message if its paired user prompt was truncated
+  if (
+    acc.messagesToSend.length > 1 &&
+    acc.messagesToSend[0].role === 'assistant'
+  ) {
+    acc.messagesToSend.shift();
   }
 
   return acc.messagesToSend;
