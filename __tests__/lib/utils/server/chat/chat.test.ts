@@ -172,28 +172,31 @@ describe('getMessagesToSend – image token budget', () => {
   it('drops older messages when image tokens exceed budget', async () => {
     const messages: Message[] = [
       imageMessage('first', 'auto'), // 1 + 765 = 766
-      textMessage('middle', 'assistant'), // 1
+      textMessage('reply', 'assistant'), // 1
+      imageMessage('second', 'auto'), // 1 + 765 = 766
+      textMessage('reply2', 'assistant'), // 1
       imageMessage('last', 'auto'), // 1 + 765 = 766
     ];
-    // Budget: only enough for the last message + one more
-    // Last msg (766) + middle (1) = 767, adding first (766) would be 1533
+    // Budget: last(766) + reply2(1) + second(766) = 1533
+    // Adding reply(1) would be 1534 > 1533, so break.
+    // reply2 is not orphaned (second precedes it as user).
     const result = await getMessagesToSend(
       messages,
       encoding,
       0,
-      800, // fits last (766) + middle (1) = 767, but not first (766) more
+      1533,
       testUser,
     );
-    // First message should be dropped
-    expect(result).toHaveLength(2);
-    expect(result[0]).toBe(messages[1]); // middle
-    expect(result[1]).toBe(messages[2]); // last
+    expect(result).toHaveLength(3);
+    expect(result[0]).toBe(messages[2]); // second
+    expect(result[1]).toBe(messages[3]); // reply2
+    expect(result[2]).toBe(messages[4]); // last
   });
 
-  it('preserves contiguous turn pairs instead of creating orphaned assistant turns', async () => {
-    // Scenario: 5-message conversation where budget only fits the last 3.
-    // Without pair-aware truncation, skipping individual messages could
-    // keep an assistant reply whose preceding user prompt was dropped.
+  it('drops orphaned leading assistant message after truncation', async () => {
+    // Scenario: budget fits assistant1 + user2 + assistant2 + user3, but not
+    // user1. The contiguous suffix starts with assistant1 (orphaned — its
+    // user1 prompt was truncated). The post-loop check drops it.
     const messages: Message[] = [
       textMessage('user1'), // 1 token
       textMessage('assistant1', 'assistant'), // 1 token
@@ -201,36 +204,28 @@ describe('getMessagesToSend – image token budget', () => {
       textMessage('assistant2', 'assistant'), // 1 token
       imageMessage('user3', 'auto'), // 1 + 765 = 766 tokens
     ];
-    // Budget: 766 (last) + 1 (assistant2) + 1 (user2) = 768. Adding
-    // assistant1 (1) would be 769 which is within budget, but user1 (1)
-    // would push to 770 which exceeds it. With break-on-budget, we stop
-    // at assistant1 and keep a contiguous block of the 3 most recent.
     const result = await getMessagesToSend(
       messages,
       encoding,
       0,
-      769,
+      769, // fits user3(766)+assistant2(1)+user2(1)+assistant1(1)=769, not user1
       testUser,
     );
-    // Should keep user2, assistant2, user3 (contiguous from the end)
-    // and also assistant1 since it fits (769 = 766+1+1+1)
-    expect(result).toHaveLength(4);
-    expect(result[0].content).toBe('assistant1');
-    // The first retained message should NOT be an assistant without its user prompt
-    // if that user prompt was dropped. With break semantics, once user1 doesn't fit,
-    // we stop — so assistant1 is included because it fits before we'd try user1.
+    // assistant1 is dropped because it's a leading assistant without its user prompt
+    expect(result).toHaveLength(3);
+    expect(result[0].content).toBe('user2');
+    expect(result[1].content).toBe('assistant2');
   });
 
   it('stops truncation at first message that exceeds budget', async () => {
     // With break (not continue), once a message doesn't fit, no older
     // messages are tried — even if they would individually fit.
-    // Use a long text string to create a message that exceeds the budget.
     const longText = Array.from({ length: 100 }, (_, i) => `word${i}`).join(
       ' ',
     ); // 100 tokens
     const messages: Message[] = [
       textMessage('old'), // 1 token - would fit individually
-      textMessage(longText, 'assistant'), // 100 tokens - doesn't fit
+      textMessage(longText), // 100 tokens - doesn't fit
       textMessage('recent', 'assistant'), // 1 token
       textMessage('latest'), // 1 token
     ];
@@ -241,10 +236,12 @@ describe('getMessagesToSend – image token budget', () => {
       10, // fits latest (1) + recent (1) = 2, but not longText (100)
       testUser,
     );
-    // Should keep only recent + latest; 'old' is NOT cherry-picked past longText
-    expect(result).toHaveLength(2);
-    expect(result[0].content).toBe('recent');
-    expect(result[1].content).toBe('latest');
+    // recent is an orphaned assistant reply (its user prompt longText was dropped),
+    // so it gets dropped too. Only latest remains.
+    // Actually recent is assistant and latest is user, so after orphan drop:
+    // only latest remains since recent (assistant) leads without a user prompt.
+    expect(result).toHaveLength(1);
+    expect(result[0].content).toBe('latest');
   });
 
   it('always includes the last message even if it exceeds budget', async () => {
