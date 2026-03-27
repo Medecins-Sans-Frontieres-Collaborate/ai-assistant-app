@@ -22,6 +22,11 @@ type ContentItem =
   | FileMessageContent
   | ImageMessageContent;
 
+/** Fixed token cost for low-detail images per OpenAI vision docs */
+export const IMAGE_TOKENS_LOW_DETAIL = 85;
+/** Conservative estimate for high/auto detail images (exact cost depends on dimensions) */
+export const IMAGE_TOKENS_HIGH_DETAIL = 765;
+
 /**
  * Detects ALL content types present in a message.
  * Returns a Set to properly handle mixed content (e.g., file + image).
@@ -61,6 +66,51 @@ const getPrimaryContentType = (
   if (types.has('text')) return 'text';
 
   throw new Error('Invalid content type or structure');
+};
+
+/**
+ * Counts the tokens used by a message's content.
+ * Includes text tokens and approximate token costs for image parts.
+ * This function does not modify or return the message content.
+ */
+export const countMessageTokens = (
+  message: Message,
+  encoding: Tiktoken,
+): number => {
+  if (typeof message.content === 'string') {
+    return encoding.encode(message.content).length;
+  }
+  if (Array.isArray(message.content)) {
+    let tokens = 0;
+    for (const part of message.content) {
+      if (part.type === 'text') {
+        tokens += encoding.encode((part as TextMessageContent).text).length;
+      } else if (part.type === 'image_url') {
+        const detail = (part as ImageMessageContent).image_url.detail;
+        tokens +=
+          detail === 'low' ? IMAGE_TOKENS_LOW_DETAIL : IMAGE_TOKENS_HIGH_DETAIL;
+      }
+    }
+    return tokens;
+  }
+  if (
+    (
+      message.content as
+        | TextMessageContent
+        | FileMessageContent
+        | ImageMessageContent
+    )?.type === 'text'
+  ) {
+    return encoding.encode((message.content as TextMessageContent).text).length;
+  }
+  if ((message.content as ContentItem)?.type === 'image_url') {
+    const detail = (message.content as unknown as ImageMessageContent).image_url
+      .detail;
+    return detail === 'low'
+      ? IMAGE_TOKENS_LOW_DETAIL
+      : IMAGE_TOKENS_HIGH_DETAIL;
+  }
+  return 0;
 };
 
 export const getMessagesToSend = async (
@@ -138,7 +188,30 @@ export const getMessagesToSend = async (
     ) {
       message.content = extractTextContent(message.content);
     }
+
+    // Token-based truncation: stop adding older messages once budget is exceeded.
+    // Uses break (not continue) to preserve a contiguous suffix of messages.
+    // A post-loop check drops any leading orphaned assistant message.
+    // Always include the most recent message (isLastMessage).
+    const messageTokens = countMessageTokens(message, encoding);
+    if (
+      !isLastMessage &&
+      acc.messagesToSend.length > 0 &&
+      acc.tokenCount + messageTokens > tokenLimit
+    ) {
+      break;
+    }
+
+    acc.tokenCount += messageTokens;
     acc.messagesToSend = [message, ...acc.messagesToSend];
+  }
+
+  // Drop leading assistant message if its paired user prompt was truncated
+  if (
+    acc.messagesToSend.length > 1 &&
+    acc.messagesToSend[0].role === 'assistant'
+  ) {
+    acc.messagesToSend.shift();
   }
 
   return acc.messagesToSend;

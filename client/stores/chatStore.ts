@@ -11,6 +11,7 @@ import {
   flattenEntriesForAPI,
   messageToVersion,
 } from '@/lib/utils/shared/chat/messageVersioning';
+import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
@@ -470,8 +471,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
-    // Flatten messages for API call
-    const messagesForAPI = flattenEntriesForAPI(conversation.messages);
+    // Flatten messages for API call and apply sliding window to stay within limits
+    const messagesForAPI = windowMessagesForAPI(
+      flattenEntriesForAPI(conversation.messages),
+    );
 
     // Get the toneId from the latest user message and look up the full tone object
     const latestUserMessage = messagesForAPI

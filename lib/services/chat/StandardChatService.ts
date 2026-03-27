@@ -148,7 +148,7 @@ export class StandardChatService {
       request.messages,
       encoding,
       promptTokens.length,
-      modelConfig.tokenLimit,
+      modelConfig.maxLength - modelConfig.tokenLimit,
       request.user,
     );
     perfLog(

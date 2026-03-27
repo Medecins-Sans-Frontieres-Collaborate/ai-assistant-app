@@ -177,7 +177,10 @@ const ChatBodySchema = z
     messages: z
       .array(MessageSchema)
       .min(1, 'At least one message is required')
-      .max(100, 'Too many messages (max 100)'),
+      .max(
+        VALIDATION_LIMITS.MAX_API_MESSAGES,
+        `Too many messages (max ${VALIDATION_LIMITS.MAX_API_MESSAGES})`,
+      ),
     prompt: z
       .string()
       .max(10000, 'System prompt too long (max 10,000 chars)')
