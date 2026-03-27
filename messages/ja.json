@@ -552,7 +552,13 @@
     "dismissError": "エラーを閉じる",
     "applicationError": "アプリケーションエラー",
     "chatLoadError": "チャットの読み込み中にエラーが発生しました",
-    "anErrorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。"
+    "anErrorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。",
+    "exportDataForRecovery": "復旧用に会話データをエクスポートする",
+    "dataExported": "データをエクスポートしました",
+    "exportDataDescription": "このファイルを技術チームと共有して、データの復旧にご利用ください。",
+    "resetStoragePrompt": "再読み込みで解決しない場合は、会話ストレージのリセットをお試しください",
+    "resetStorageWarning": "リセットするとすべての会話データが消去されます。リセット前に生データのコピーをエクスポートできます。会話の復旧が必要な場合は、このファイルを技術チームと共有してください。",
+    "resetStorage": "ストレージをリセットする"
   },
   "auth": {
     "authenticationError": "認証エラー",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "テーマを切り替える",
     "regenerateResponse": "回答を再生成する",
     "copyLastResponse": "最後の回答をコピーする"
+  },
+  "quarantine": {
+    "title": "隔離された会話",
+    "itemCount": "データに問題のある項目：{count, plural, one {# 件} other {# 件}}",
+    "noItems": "隔離された項目はありません。",
+    "recover": "復元",
+    "export": "エクスポート",
+    "delete": "削除",
+    "deleteAll": "隔離データをすべて削除",
+    "close": "閉じる",
+    "recovered": "復元済み",
+    "recoveryFailed": "復元に失敗しました",
+    "folderData": "フォルダデータ",
+    "backupData": "バックアップ（メッセージ除去済みの元データ）",
+    "bannerMessage": "{count, plural, one {# 件の会話でデータ問題が発生し、隔離されました。} other {# 件の会話でデータ問題が発生し、隔離されました。}}",
+    "review": "確認",
+    "itemId": "ID：{id}",
+    "itemSource": "{source} より {date}"
   }
 }

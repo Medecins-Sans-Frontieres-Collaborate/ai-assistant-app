@@ -550,7 +550,13 @@
     "dismissError": "Închide eroarea",
     "applicationError": "Eroare a aplicației",
     "chatLoadError": "A apărut o eroare la încărcarea chatului",
-    "anErrorOccurredTryAgain": "A apărut o eroare. Vă rugăm să încercați din nou."
+    "anErrorOccurredTryAgain": "A apărut o eroare. Vă rugăm să încercați din nou.",
+    "exportDataForRecovery": "Exportă datele conversației pentru recuperare",
+    "dataExported": "Date exportate",
+    "exportDataDescription": "Partajați acest fișier cu echipa tehnică pentru a vă ajuta să recuperați datele.",
+    "resetStoragePrompt": "Dacă reîncărcarea nu ajută, încercați să resetați stocarea conversațiilor",
+    "resetStorageWarning": "Resetarea va șterge toate datele conversațiilor. Înainte de resetare, puteți exporta o copie a datelor brute. Partajați acest fișier cu echipa tehnică dacă aveți nevoie de ajutor pentru recuperarea conversațiilor.",
+    "resetStorage": "Resetează stocarea"
   },
   "auth": {
     "authenticationError": "Eroare de autentificare",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Comută tema",
     "regenerateResponse": "Regenerează răspunsul",
     "copyLastResponse": "Copiază ultimul răspuns"
+  },
+  "quarantine": {
+    "title": "Conversații în carantină",
+    "itemCount": "{count, plural, one {# element cu probleme de date} other {# elemente cu probleme de date}}",
+    "noItems": "Nu există elemente în carantină.",
+    "recover": "Recuperează",
+    "export": "Exportă",
+    "delete": "Șterge",
+    "deleteAll": "Șterge toate datele în carantină",
+    "close": "Închide",
+    "recovered": "Recuperat",
+    "recoveryFailed": "Recuperarea a eșuat",
+    "folderData": "Datele folderului",
+    "backupData": "Backup (original cu mesaje eliminate)",
+    "bannerMessage": "{count, plural, one {# conversație a avut probleme cu datele și a fost pusă în carantină.} other {# conversații au avut probleme cu datele și au fost puse în carantină.}}",
+    "review": "Revizuiește",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de la {source}"
   }
 }

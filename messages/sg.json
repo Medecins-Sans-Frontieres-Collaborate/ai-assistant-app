@@ -775,7 +775,13 @@
     "unexpectedErrorOccurred": "Problème sô a sïnga pepe a yeke",
     "criticalErrorReload": "Problème gâ a yeke. Charger page ngâ.",
     "reloadPage": "Charger page ngâ",
-    "persistContactSupport": "Töngana problème a dû, hunda sâra"
+    "persistContactSupport": "Töngana problème a dû, hunda sâra",
+    "exportDataForRecovery": "Kpengë data na balë pepe ti yeke bîrî",
+    "dataExported": "Data ape kpengë",
+    "exportDataDescription": "Küete lo ti teknikï tî hinga bîrî data mo.",
+    "resetStoragePrompt": "Sô ayeke yanga kôzo, mû tî mûingana storage tî kozo",
+    "resetStorageWarning": "Mûingana na mmusu ti kozo lo mbi tâ data nî. Batu mûingana, apê kpengë data lo ngangu. Küete lo ti teknikï sô mbênî gbângba na bîrî kozo mo.",
+    "resetStorage": "Mûingana storage"
   },
   "prompts": {
     "buildReusablePrompts": "Sara âtene sô a sara ngâ na sâra tî AI",
@@ -1765,7 +1771,17 @@
     "retry": "Kɔda",
     "pinned": "Yângâ",
     "pin": "Yângâ",
-    "tokens": "â token"
+    "tokens": "â token",
+    "pinnedTooltip": "Ape kängbi: kodro tî yeke na wala",
+    "unpinnedTooltip": "Ape mbängbi: lô tî kete ana mo kô ndö apê zo gbî",
+    "pinnedCount": "{pinned} ape kängbi / {total}",
+    "sessionQuota": "Quota tî session",
+    "sessionQuotaUsage": "{used} / {total} tokens ape mû na session nî",
+    "sessionQuotaExhausted": "Quota tî session tî ape yeke fini. Ape ape msû.",
+    "pinBlockedTooLarge": "Ape so ale ti kängbi sô ndro lo ({tokens} tokens, ngbanga: {limit})",
+    "activationRejectedTooLarge": "Ape so ale ti active context ({tokens} tokens, ngbanga: {limit})",
+    "sessionQuotaWarning": "Quota tî session yeke pada— {remaining} tokens yeke kûè",
+    "sessionQuotaNearlyExhausted": "Quota tî session yeke ndro sô lise— ape active lô tî kete ana mo"
   },
   "shortcuts": {
     "title": "Káfù tî kobanga-lêko",
@@ -1782,6 +1798,28 @@
     "openModelSelector": "Läkü modèlï",
     "scrollToBottom": "Tîrî na nganza na ndô",
     "showHelp": "Zëgë káfù tî kobanga-lêko",
-    "attachFile": "Köta dosié"
+    "attachFile": "Köta dosié",
+    "searchConversations": "Sosa kozo",
+    "toggleTheme": "Kutanga thème",
+    "regenerateResponse": "Koko gara azîrî",
+    "copyLastResponse": "Kopi azîrî apekpe"
+  },
+  "quarantine": {
+    "title": "Yângö ti sôzi u kôndö",
+    "itemCount": "{count, plural, one {# yângö} other {# yângö}} ti sôzi na fadä",
+    "noItems": "Ala yângö ti sôzi.",
+    "recover": "Küè",
+    "export": "Export",
+    "delete": "Kûta",
+    "deleteAll": "Kûta yângö mbëtï ti sôzi",
+    "close": "Zânga",
+    "recovered": "A köda",
+    "recoveryFailed": "Ködörö tï küè abû kété",
+    "folderData": "Dönî ti dossi",
+    "backupData": "Backup (dönî tî sôso na sôhoro nî zu wama)",
+    "bannerMessage": "{count, plural, one {# sôzi fadä na yângö ti kôndö.} other {# sôzi fadä na yângö ti kôndö.}}",
+    "review": "Gbé",
+    "itemId": "Kode: {id}",
+    "itemSource": "{date} tî {source}"
   }
 }

@@ -552,7 +552,13 @@
     "dismissError": "Avvisa fel",
     "applicationError": "Applikationsfel",
     "chatLoadError": "Ett fel uppstod vid laddning av chatt",
-    "anErrorOccurredTryAgain": "Ett fel uppstod. Vänligen försök igen."
+    "anErrorOccurredTryAgain": "Ett fel uppstod. Vänligen försök igen.",
+    "exportDataForRecovery": "Exportera samtalsdata för återställning",
+    "dataExported": "Data exporterad",
+    "exportDataDescription": "Dela denna fil med tekniska teamet för att få hjälp att återställa dina data.",
+    "resetStoragePrompt": "Om omladdning inte hjälper, försök att återställa samtalslagringen",
+    "resetStorageWarning": "En återställning raderar all samtalsdata. Innan du återställer kan du exportera en kopia av rådata. Dela denna fil med tekniska teamet om du behöver hjälp att återställa dina samtal.",
+    "resetStorage": "Återställ lagring"
   },
   "auth": {
     "authenticationError": "Autentiseringsfel",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Växla tema",
     "regenerateResponse": "Återskapa svar",
     "copyLastResponse": "Kopiera senaste svaret"
+  },
+  "quarantine": {
+    "title": "Karantänsatta konversationer",
+    "itemCount": "{count, plural, one {# objekt} other {# objekt} } med dataproblem",
+    "noItems": "Inga karantänsatta objekt.",
+    "recover": "Återställ",
+    "export": "Exportera",
+    "delete": "Ta bort",
+    "deleteAll": "Ta bort all karantänsatt data",
+    "close": "Stäng",
+    "recovered": "Återställd",
+    "recoveryFailed": "Återställning misslyckades",
+    "folderData": "Mappdata",
+    "backupData": "Backup (original med borttagna meddelanden)",
+    "bannerMessage": "{count, plural, one {# konversation hade dataproblem och lades i karantän.} other {# konversationer hade dataproblem och lades i karantän.}}",
+    "review": "Granska",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} från {source}"
   }
 }

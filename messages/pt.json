@@ -647,7 +647,13 @@
     "unexpectedErrorOccurred": "Ocorreu um erro inesperado",
     "criticalErrorReload": "Ocorreu um erro crítico. Por favor, recarregue a página.",
     "reloadPage": "Recarregar página",
-    "persistContactSupport": "Se este problema persistir, entre em contato com o suporte"
+    "persistContactSupport": "Se este problema persistir, entre em contato com o suporte",
+    "exportDataForRecovery": "Exportar dados da conversa para recuperação",
+    "dataExported": "Dados exportados",
+    "exportDataDescription": "Compartilhe este arquivo com a equipe técnica para ajudar a recuperar seus dados.",
+    "resetStoragePrompt": "Se recarregar não ajudar, tente redefinir o armazenamento das conversas",
+    "resetStorageWarning": "A redefinição apagará todos os dados das conversas. Antes de redefinir, você pode exportar uma cópia dos dados brutos. Compartilhe este arquivo com a equipe técnica se precisar de ajuda para recuperar suas conversas.",
+    "resetStorage": "Redefinir armazenamento"
   },
   "prompts": {
     "buildReusablePrompts": "Criar prompts reutilizáveis com assistência de IA",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Alternar tema",
     "regenerateResponse": "Regenerar resposta",
     "copyLastResponse": "Copiar última resposta"
+  },
+  "quarantine": {
+    "title": "Conversas em quarentena",
+    "itemCount": "{count, plural, one {# item} other {# itens}} com problemas de dados",
+    "noItems": "Nenhum item em quarentena.",
+    "recover": "Recuperar",
+    "export": "Exportar",
+    "delete": "Excluir",
+    "deleteAll": "Excluir todos os dados em quarentena",
+    "close": "Fechar",
+    "recovered": "Recuperado",
+    "recoveryFailed": "Falha na recuperação",
+    "folderData": "Dados da pasta",
+    "backupData": "Backup (original com mensagens removidas)",
+    "bannerMessage": "{count, plural, one {# conversa apresentou problemas de dados e foi colocada em quarentena.} other {# conversas apresentaram problemas de dados e foram colocadas em quarentena.}}",
+    "review": "Revisar",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de {source}"
   }
 }

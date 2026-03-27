@@ -527,7 +527,13 @@
     "dismissError": "Descarta l’error",
     "applicationError": "Error de l'aplicació",
     "chatLoadError": "S'ha produït un error en carregar la conversa",
-    "anErrorOccurredTryAgain": "S'ha produït un error. Torneu-ho a provar."
+    "anErrorOccurredTryAgain": "S'ha produït un error. Torneu-ho a provar.",
+    "exportDataForRecovery": "Exporta les dades de la conversa per a la recuperació",
+    "dataExported": "Dades exportades",
+    "exportDataDescription": "Comparteix aquest fitxer amb l'equip tècnic per ajudar a recuperar les teves dades.",
+    "resetStoragePrompt": "Si recarregar no resol el problema, prova de restablir l'emmagatzematge de la conversa",
+    "resetStorageWarning": "Restablir eliminarà totes les dades de les converses. Abans de restablir-les, pots exportar una còpia de les dades originals. Comparteix aquest fitxer amb l'equip tècnic si necessites ajuda per recuperar les teves converses.",
+    "resetStorage": "Restableix l'emmagatzematge"
   },
   "auth": {
     "authenticationError": "Error d'autenticació",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Canvia el tema",
     "regenerateResponse": "Torna a generar la resposta",
     "copyLastResponse": "Copia l’última resposta"
+  },
+  "quarantine": {
+    "title": "Converses en quarantena",
+    "itemCount": "{count, plural, one {# element} other {# elements}} amb problemes de dades",
+    "noItems": "No hi ha elements en quarantena.",
+    "recover": "Recuperar",
+    "export": "Exporta",
+    "delete": "Suprimeix",
+    "deleteAll": "Suprimeix totes les dades en quarantena",
+    "close": "Tanca",
+    "recovered": "Recuperat",
+    "recoveryFailed": "Ha fallat la recuperació",
+    "folderData": "Dades de la carpeta",
+    "backupData": "Còpia de seguretat (original amb missatges eliminats)",
+    "bannerMessage": "{count, plural, one {# conversa tenia problemes de dades i s'ha posat en quarantena.} other {# converses tenien problemes de dades i s'han posat en quarantena.}}",
+    "review": "Revisa",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} de {source}"
   }
 }

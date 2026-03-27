@@ -517,7 +517,13 @@
     "unexpectedErrorOccurred": "Er is een onverwachte fout opgetreden",
     "criticalErrorReload": "Er is een kritieke fout opgetreden. Herlaad de pagina.",
     "reloadPage": "Pagina herladen",
-    "persistContactSupport": "Als dit probleem aanhoudt, neem contact op met ondersteuning"
+    "persistContactSupport": "Als dit probleem aanhoudt, neem contact op met ondersteuning",
+    "exportDataForRecovery": "Exporteer gespreksgegevens voor herstel",
+    "dataExported": "Gegevens geëxporteerd",
+    "exportDataDescription": "Deel dit bestand met het technische team om uw gegevens te laten herstellen.",
+    "resetStoragePrompt": "Als opnieuw laden niet helpt, probeer dan het gespreksgeheugen te resetten",
+    "resetStorageWarning": "Door te resetten worden alle gespreksgegevens verwijderd. U kunt eerst een kopie van de ruwe gegevens exporteren. Deel dit bestand met het technische team als u hulp nodig heeft bij het herstellen van uw gesprekken.",
+    "resetStorage": "Reset opslag"
   },
   "auth": {
     "authenticationError": "Authenticatiefout",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "Thema wisselen",
     "regenerateResponse": "Antwoord opnieuw genereren",
     "copyLastResponse": "Laatste antwoord kopiëren"
+  },
+  "quarantine": {
+    "title": "Geïnventariseerde gesprekken",
+    "itemCount": "{count, plural, one {# item} other {# items}} met gegevensproblemen",
+    "noItems": "Geen geïnventariseerde items.",
+    "recover": "Herstellen",
+    "export": "Exporteren",
+    "delete": "Verwijderen",
+    "deleteAll": "Alle geïnventariseerde gegevens verwijderen",
+    "close": "Sluiten",
+    "recovered": "Hersteld",
+    "recoveryFailed": "Herstel mislukt",
+    "folderData": "Mapgegevens",
+    "backupData": "Back-up (origineel met verwijderde berichten)",
+    "bannerMessage": "{count, plural, one {# gesprek had gegevensproblemen en is geïnventariseerd.} other {# gesprekken hadden gegevensproblemen en zijn geïnventariseerd.}}",
+    "review": "Beoordelen",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} van {source}"
   }
 }

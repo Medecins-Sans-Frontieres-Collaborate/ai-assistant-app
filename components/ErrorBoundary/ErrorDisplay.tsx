@@ -1,9 +1,19 @@
 'use client';
 
-import { IconAlertTriangle, IconCopy, IconRefresh } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconCopy,
+  IconDownload,
+  IconRefresh,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
+
+import {
+  clearAllConversationStorage,
+  exportRawConversationData,
+} from '@/lib/utils/app/storage/perConversationStorage';
 
 import { FEEDBACK_EMAIL } from '@/types/contact';
 
@@ -14,6 +24,10 @@ interface ErrorDisplayProps {
   onRetry?: () => void;
   retryLabel?: string;
   showSupportInfo?: boolean;
+  /** Show "Export data" link for saving raw conversation data before recovery */
+  showDataExport?: boolean;
+  /** Show "Reset storage" escape hatch for unrecoverable storage corruption */
+  showStorageReset?: boolean;
 }
 
 export function ErrorDisplay({
@@ -23,9 +37,13 @@ export function ErrorDisplay({
   onRetry,
   retryLabel,
   showSupportInfo = true,
+  showDataExport = false,
+  showStorageReset = false,
 }: ErrorDisplayProps) {
   const t = useTranslations();
   const [copied, setCopied] = useState(false);
+  const [exported, setExported] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Use default feedback email - error contexts may not have session providers
   const supportEmail = FEEDBACK_EMAIL;
@@ -35,6 +53,27 @@ export function ErrorDisplay({
     await navigator.clipboard.writeText(errorText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleExportData = () => {
+    try {
+      const data = exportRawConversationData();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `conversation-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setExported(true);
+    } catch (e) {
+      console.error('Failed to export data:', e);
+    }
+  };
+
+  const handleResetStorage = () => {
+    clearAllConversationStorage();
+    window.location.reload();
   };
 
   return (
@@ -115,6 +154,69 @@ export function ErrorDisplay({
                 {supportEmail}
               </a>
             </p>
+          </div>
+        )}
+
+        {/* Data Export */}
+        {showDataExport && (
+          <div className="mt-3 text-center">
+            <button
+              onClick={handleExportData}
+              className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              <IconDownload size={13} />
+              {exported
+                ? t('errors.dataExported')
+                : t('errors.exportDataForRecovery')}
+            </button>
+            {exported && (
+              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                {t('errors.exportDataDescription')}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Storage Reset */}
+        {showStorageReset && (
+          <div className="mt-3 text-center">
+            {!showResetConfirm ? (
+              <button
+                onClick={() => setShowResetConfirm(true)}
+                className="text-xs text-gray-500 dark:text-gray-400 hover:underline"
+              >
+                {t('errors.resetStoragePrompt')}
+              </button>
+            ) : (
+              <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10 px-4 py-3 space-y-3">
+                <p className="text-xs text-red-700 dark:text-red-300">
+                  {t('errors.resetStorageWarning')}
+                </p>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  <button
+                    onClick={handleExportData}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                  >
+                    <IconDownload size={13} />
+                    {exported
+                      ? t('errors.dataExported')
+                      : t('errors.exportDataForRecovery')}
+                  </button>
+                  <button
+                    onClick={handleResetStorage}
+                    className="px-3 py-1.5 text-xs rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  >
+                    {t('errors.resetStorage')}
+                  </button>
+                  <button
+                    onClick={() => setShowResetConfirm(false)}
+                    className="px-3 py-1.5 text-xs rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    {t('common.cancel')}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

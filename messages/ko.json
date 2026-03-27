@@ -552,7 +552,13 @@
     "dismissError": "오류 닫기",
     "applicationError": "애플리케이션 오류",
     "chatLoadError": "채팅을 로드하는 중 오류가 발생했습니다",
-    "anErrorOccurredTryAgain": "오류가 발생했습니다. 다시 시도하세요."
+    "anErrorOccurredTryAgain": "오류가 발생했습니다. 다시 시도하세요.",
+    "exportDataForRecovery": "복구를 위해 대화 데이터를 내보내기",
+    "dataExported": "데이터가 내보내졌습니다",
+    "exportDataDescription": "데이터 복구를 위해 이 파일을 기술팀에 공유해 주세요.",
+    "resetStoragePrompt": "새로고침으로 해결되지 않으면 대화 저장소를 초기화해 보세요",
+    "resetStorageWarning": "초기화하면 모든 대화 데이터가 삭제됩니다. 초기화 전에 원본 데이터를 내보내 복사본을 저장할 수 있습니다. 대화 복구가 필요하다면 이 파일을 기술팀에 공유해 주세요.",
+    "resetStorage": "저장소 초기화"
   },
   "auth": {
     "authenticationError": "인증 오류",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "테마 전환",
     "regenerateResponse": "응답 다시 생성",
     "copyLastResponse": "마지막 응답 복사"
+  },
+  "quarantine": {
+    "title": "격리된 대화",
+    "itemCount": "데이터 문제가 있는 항목 {count, plural, one {#개} other {#개}}",
+    "noItems": "격리된 항목이 없습니다.",
+    "recover": "복구",
+    "export": "내보내기",
+    "delete": "삭제",
+    "deleteAll": "모든 격리 데이터 삭제",
+    "close": "닫기",
+    "recovered": "복구됨",
+    "recoveryFailed": "복구 실패",
+    "folderData": "폴더 데이터",
+    "backupData": "백업(메시지 일부 삭제된 원본)",
+    "bannerMessage": "{count, plural, one {#개의 대화에서 데이터 문제가 발생하여 격리되었습니다.} other {#개의 대화에서 데이터 문제가 발생하여 격리되었습니다.}}",
+    "review": "검토",
+    "itemId": "ID: {id}",
+    "itemSource": "{date} · {source}에서"
   }
 }

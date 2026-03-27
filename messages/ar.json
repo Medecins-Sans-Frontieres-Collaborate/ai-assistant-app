@@ -934,7 +934,13 @@
     "unexpectedErrorOccurred": "حدث خطأ غير متوقع",
     "criticalErrorReload": "حدث خطأ حرج. يرجى إعادة تحميل الصفحة.",
     "reloadPage": "إعادة تحميل الصفحة",
-    "persistContactSupport": "إذا استمرت هذه المشكلة، يرجى الاتصال بالدعم"
+    "persistContactSupport": "إذا استمرت هذه المشكلة، يرجى الاتصال بالدعم",
+    "exportDataForRecovery": "تصدير بيانات المحادثة للاستعادة",
+    "dataExported": "تم تصدير البيانات",
+    "exportDataDescription": "شارك هذا الملف مع فريق التقنية لمساعدتك في استعادة بياناتك.",
+    "resetStoragePrompt": "إذا لم يساعد إعادة التحميل، جرّب إعادة تعيين تخزين المحادثة",
+    "resetStorageWarning": "إعادة التعيين ستؤدي إلى حذف جميع بيانات المحادثة. يمكنك قبل إعادة التعيين تصدير نسخة من البيانات الخام. شارك هذا الملف مع فريق التقنية إذا احتجت مساعدة في استعادة محادثاتك.",
+    "resetStorage": "إعادة تعيين التخزين"
   },
   "auth": {
     "microsoft": "Microsoft",
@@ -1821,5 +1827,23 @@
     "toggleTheme": "تبديل السمة",
     "regenerateResponse": "إعادة توليد الرد",
     "copyLastResponse": "نسخ آخر رد"
+  },
+  "quarantine": {
+    "title": "المحادثات المحجوزة",
+    "itemCount": "{count, plural, one {عنصر واحد به مشكلة بيانات} other {# عناصر بها مشاكل بيانات}}",
+    "noItems": "لا توجد عناصر محجوزة.",
+    "recover": "استعادة",
+    "export": "تصدير",
+    "delete": "حذف",
+    "deleteAll": "حذف جميع البيانات المحجوزة",
+    "close": "إغلاق",
+    "recovered": "تمت الاستعادة",
+    "recoveryFailed": "فشلت الاستعادة",
+    "folderData": "بيانات المجلد",
+    "backupData": "نسخة احتياطية (الأصلية مع الرسائل المحذوفة)",
+    "bannerMessage": "{count, plural, one {تم حجز محادثة واحدة بسبب مشكلة بيانات.} other {تم حجز # محادثات بسبب مشاكل بيانات.}}",
+    "review": "مراجعة",
+    "itemId": "المعرّف: {id}",
+    "itemSource": "{date} من {source}"
   }
 }
