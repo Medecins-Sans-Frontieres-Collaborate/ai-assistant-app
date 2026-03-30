@@ -29,7 +29,12 @@ export function windowMessagesForAPI(
 
   // Always preserve the first message (initial context) and the most recent messages
   const firstMessage = messages[0];
-  const recentMessages = messages.slice(-(maxMessages - 1));
+  let recentMessages = messages.slice(-(maxMessages - 1));
+
+  // Drop orphaned assistant at boundary — it answers a user message that was dropped
+  if (recentMessages[0].role === 'assistant') {
+    recentMessages = recentMessages.slice(1);
+  }
 
   return [firstMessage, ...recentMessages];
 }
