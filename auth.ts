@@ -125,6 +125,55 @@ async function fetchUserData(accessToken: string): Promise<UserData> {
   };
 }
 
+/**
+ * Gets a fresh access token for OBO exchange from a session's refresh token.
+ * The returned token is scoped to the app's own audience (api://<client-id>/.default)
+ * and serves as the "user assertion" for OnBehalfOfCredential.
+ *
+ * Returns null if the token cannot be acquired (e.g., missing refresh token).
+ */
+export async function getAccessTokenForOBO(
+  session: Session,
+): Promise<string | null> {
+  if (!session.refreshToken) {
+    console.warn('[Auth] No refresh token available for OBO exchange');
+    return null;
+  }
+
+  try {
+    const url = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`;
+
+    const formData = {
+      grant_type: 'refresh_token',
+      client_id: process.env.AZURE_CLIENT_ID || '',
+      client_secret: process.env.AZURE_CLIENT_SECRET || '',
+      refresh_token: session.refreshToken,
+      scope: `api://${process.env.AZURE_CLIENT_ID}/.default`,
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    });
+
+    const tokens = await response.json();
+
+    if (!response.ok) {
+      console.error(
+        '[Auth] OBO token acquisition failed:',
+        tokens.error_description,
+      );
+      return null;
+    }
+
+    return tokens.access_token;
+  } catch (error) {
+    console.error('[Auth] Error acquiring access token for OBO:', error);
+    return null;
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   session: {

@@ -205,7 +205,7 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white dark:bg-[#212121] rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+      <div className="bg-white dark:bg-surface-dark rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center gap-3">
@@ -384,29 +384,40 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
               {/* Two-column layout for Name and Agent ID */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="agent-name"
+                    className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     {t('agents.agentName')}{' '}
-                    <span className="text-red-500">*</span>
+                    <span className="text-red-500" aria-hidden="true">
+                      *
+                    </span>
                   </label>
                   <input
+                    id="agent-name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t('agents.myResearchAssistant')}
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-[#2A2A2A] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    aria-required="true"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-surface-dark-elevated text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label
+                    htmlFor="agent-base-model"
+                    className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >
                     {t('agents.baseModel')}
                   </label>
                   <select
+                    id="agent-base-model"
                     value={baseModelId}
                     onChange={(e) =>
                       setBaseModelId(e.target.value as OpenAIModelID)
                     }
-                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-[#2A2A2A] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-surface-dark-elevated text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {baseModels.map((model) => (
                       <option key={model.id} value={model.id}>
@@ -418,15 +429,23 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  {t('agents.agentId')} <span className="text-red-500">*</span>
+                <label
+                  htmlFor="agent-id"
+                  className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >
+                  {t('agents.agentId')}{' '}
+                  <span className="text-red-500" aria-hidden="true">
+                    *
+                  </span>
                 </label>
                 <input
+                  id="agent-id"
                   type="text"
                   value={agentId}
                   onChange={(e) => setAgentId(e.target.value)}
                   placeholder={t('agents.agentIdExample')}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-[#2A2A2A] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                  aria-required="true"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-surface-dark-elevated text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
                 />
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                   {t('agents.formatDescription')}
@@ -434,15 +453,19 @@ export const CustomAgentForm: FC<CustomAgentFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label
+                  htmlFor="agent-description"
+                  className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+                >
                   {t('agents.descriptionOptional')}
                 </label>
                 <textarea
+                  id="agent-description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={t('agents.descriptionPlaceholder')}
                   rows={2}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-[#2A2A2A] text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-surface-dark-elevated text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
 

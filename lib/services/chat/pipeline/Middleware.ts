@@ -1,6 +1,8 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
+import { RegionResolver } from '@/lib/services/auth/RegionResolver';
+import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -17,8 +19,9 @@ import { SearchMode } from '@/types/searchMode';
 
 import { ChatContext } from './ChatContext';
 
-import { auth } from '@/auth';
+import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
+import { AccessToken, TokenCredential } from '@azure/identity';
 
 /**
  * Middleware function that processes a request and returns partial ChatContext.
@@ -270,6 +273,77 @@ export const createSystemPromptMiddleware = (
 };
 
 /**
+ * Factory for credential middleware that acquires OBO credentials for Foundry agent calls.
+ * Only runs when the selected model is a Foundry agent — standard model calls don't need per-user auth.
+ *
+ * Acquires:
+ * - A Foundry-scoped OBO token (wrapped as TokenCredential) for agent invocations
+ * - The regional Foundry endpoint based on user's region (GDPR compliance)
+ */
+export const createCredentialMiddleware = async (
+  context: Partial<ChatContext>,
+): Promise<Partial<ChatContext>> => {
+  // Only acquire OBO credentials for Foundry agent calls
+  const isFoundryAgent =
+    context.model?.isOrganizationAgent === true && !!context.model?.agentId;
+
+  if (!isFoundryAgent) {
+    return {};
+  }
+
+  if (!context.session) {
+    console.warn(
+      '[CredentialMiddleware] No session available for OBO token acquisition',
+    );
+    return {};
+  }
+
+  try {
+    // Get a fresh access token scoped to the app's audience for OBO exchange
+    const appAccessToken = await getAccessTokenForOBO(context.session);
+    if (!appAccessToken) {
+      console.warn(
+        '[CredentialMiddleware] Could not acquire app access token for OBO — falling back to service credential',
+      );
+      return {};
+    }
+
+    // Exchange for Foundry-scoped token via OBO
+    const tokenProvider = UserTokenProvider.getInstance();
+    const foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
+
+    // Wrap as a TokenCredential for the AIProjectClient
+    const userCredential: TokenCredential = {
+      getToken: async () =>
+        ({
+          token: foundryToken,
+          expiresOnTimestamp: Date.now() + 55 * 60 * 1000, // ~55 min
+        }) as AccessToken,
+    };
+
+    // Resolve regional endpoint
+    const userRegion = context.user?.region || 'EU';
+    const foundryEndpoint = RegionResolver.getFoundryEndpoint(userRegion);
+
+    console.log(
+      `[CredentialMiddleware] OBO credential acquired for user ${context.user?.id}, region: ${userRegion}`,
+    );
+
+    return {
+      userCredential,
+      foundryEndpoint,
+    };
+  } catch (error) {
+    console.error(
+      '[CredentialMiddleware] Failed to acquire OBO credential:',
+      error,
+    );
+    // Don't block the pipeline — let it fall back to DefaultAzureCredential
+    return {};
+  }
+};
+
+/**
  * Factory for model selection middleware that needs access to model and messages.
  */
 export const createModelSelectionMiddleware = (
@@ -333,6 +407,12 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   context = {
     ...context,
     ...createModelSelectionMiddleware(context),
+  };
+
+  // Acquire per-user OBO credentials for Foundry agent calls (after model selection)
+  context = {
+    ...context,
+    ...(await createCredentialMiddleware(context)),
   };
 
   // Initialize metrics

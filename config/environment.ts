@@ -46,6 +46,12 @@ const serverEnvSchema = z.object({
   AZURE_AI_FOUNDRY_ENDPOINT: z.string().url().optional(),
   AZURE_AI_FOUNDRY_OPENAI_ENDPOINT: z.string().url().optional(),
 
+  // Azure AI Foundry Multi-Region (GDPR data residency)
+  AZURE_AI_FOUNDRY_ENDPOINT_EU: z.string().url().optional(),
+  AZURE_AI_FOUNDRY_ENDPOINT_US: z.string().url().optional(),
+  AZURE_AI_FOUNDRY_RESOURCE_ID_EU: z.string().optional(),
+  AZURE_AI_FOUNDRY_RESOURCE_ID_US: z.string().optional(),
+
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
   AZURE_TRANSLATOR_ENDPOINT: z.string().url().optional(),
 

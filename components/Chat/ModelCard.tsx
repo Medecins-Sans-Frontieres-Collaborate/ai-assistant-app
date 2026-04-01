@@ -47,7 +47,7 @@ export const ModelCard: FC<ModelCardProps> = ({
         ${
           isSelected
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-            : 'bg-white dark:bg-[#212121] border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+            : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
         }
       `}
     >
@@ -61,14 +61,14 @@ export const ModelCard: FC<ModelCardProps> = ({
               onMoveUp?.();
             }}
             disabled={!canMoveUp}
-            className={`p-0.5 rounded transition-colors ${
+            className={`p-1.5 rounded transition-colors ${
               canMoveUp
                 ? 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
             aria-label="Move up"
           >
-            <IconChevronUp size={14} />
+            <IconChevronUp size={16} />
           </button>
           <button
             type="button"
@@ -77,14 +77,14 @@ export const ModelCard: FC<ModelCardProps> = ({
               onMoveDown?.();
             }}
             disabled={!canMoveDown}
-            className={`p-0.5 rounded transition-colors ${
+            className={`p-1.5 rounded transition-colors ${
               canMoveDown
                 ? 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
             aria-label="Move down"
           >
-            <IconChevronDown size={14} />
+            <IconChevronDown size={16} />
           </button>
         </div>
       )}
@@ -93,7 +93,7 @@ export const ModelCard: FC<ModelCardProps> = ({
       <button
         type="button"
         onClick={onClick}
-        className="flex-1 flex items-center justify-between text-left"
+        className="flex-1 flex items-center justify-between text-left min-h-[44px]"
       >
         <div className="flex items-center gap-2">
           {icon}

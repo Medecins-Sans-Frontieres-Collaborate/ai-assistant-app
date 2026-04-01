@@ -78,7 +78,7 @@ export const OrganizationSelector: FC<OrganizationSelectorProps> = ({
       <select
         value={isOverridden ? effectiveOrganization : 'auto'}
         onChange={handleChange}
-        className={`cursor-pointer bg-transparent text-neutral-700 dark:text-neutral-200 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
+        className={`cursor-pointer bg-transparent text-gray-700 dark:text-gray-200 text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 ${
           compact ? 'w-auto' : 'min-w-[160px]'
         }`}
       >

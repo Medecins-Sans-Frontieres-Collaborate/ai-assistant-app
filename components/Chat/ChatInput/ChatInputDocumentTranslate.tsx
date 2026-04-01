@@ -77,6 +77,16 @@ import { GLOSSARY_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
  * - Custom output filename
  */
 
+/**
+ * Document Translation Modal Component
+ *
+ * Provides UI for selecting translation options:
+ * - Target language (searchable dropdown with 80+ languages)
+ * - Optional source language (auto-detect if omitted)
+ * - Optional glossary file upload
+ * - Custom output filename
+ */
+
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
   isOpen: boolean;
@@ -338,7 +348,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
             }}
             onFocus={() => setShowTargetDropdown(true)}
             placeholder={t('documentTranslation.searchLanguage')}
-            className="w-full pl-10 pr-4 py-3 text-base bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+            className="w-full pl-10 pr-4 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
           />
           <IconLanguage
             size={18}
@@ -348,7 +358,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
         {showTargetDropdown && (
           <div
             ref={targetDropdownRef}
-            className="absolute z-50 w-full mt-1 max-h-60 overflow-auto bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
+            className="absolute z-50 w-full mt-1 max-h-60 overflow-auto bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
           >
             {filteredTargetLanguages.length === 0 ? (
               <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
@@ -421,7 +431,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                   }}
                   onFocus={() => setShowSourceDropdown(true)}
                   placeholder={t('documentTranslation.searchLanguage')}
-                  className="w-full pl-10 pr-10 py-2.5 text-sm bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+                  className="w-full pl-10 pr-10 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
                 />
                 <IconLanguage
                   size={16}
@@ -440,7 +450,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
               {showSourceDropdown && (
                 <div
                   ref={sourceDropdownRef}
-                  className="absolute z-50 w-full mt-1 max-h-48 overflow-auto bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
+                  className="absolute z-50 w-full mt-1 max-h-48 overflow-auto bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg"
                 >
                   {filteredSourceLanguages.length === 0 ? (
                     <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
@@ -544,7 +554,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                       )
                     : t('documentTranslation.outputFilenamePlaceholder')
                 }
-                className="w-full px-4 py-2.5 text-sm bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+                className="w-full px-4 py-2.5 text-sm bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
               />
             </div>
           </div>

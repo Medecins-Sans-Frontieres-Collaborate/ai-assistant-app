@@ -6,7 +6,7 @@ import React from 'react';
  */
 export function LoadingScreen() {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-[#212121]">
+    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-surface-dark">
       <div className="h-8 w-8 rounded-full bg-gray-500 dark:bg-gray-400 animate-breathing"></div>
     </div>
   );

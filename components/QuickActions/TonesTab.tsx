@@ -194,7 +194,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
 
               <div className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+                  <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
                       {t('Writing Style')}
                     </p>
@@ -204,7 +204,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                       )}
                     </p>
                   </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+                  <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
                       {t('Vocabulary')}
                     </p>
@@ -212,7 +212,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                       {t('Preferred words, phrases to use or avoid')}
                     </p>
                   </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+                  <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
                       {t('Formality')}
                     </p>
@@ -220,7 +220,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                       {t('Professional, casual, conversational, technical')}
                     </p>
                   </div>
-                  <div className="p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900">
+                  <div className="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                     <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
                       {t('Personality')}
                     </p>
@@ -231,11 +231,11 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                 </div>
 
                 {/* How to use */}
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-                  <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-neutral-200 dark:bg-neutral-700 mt-0.5">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                  <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-gray-200 dark:bg-gray-700 mt-0.5">
                     <IconVolume
                       size={14}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                   </div>
                   <div className="flex-1">
@@ -270,7 +270,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
         {/* Left Panel - List */}
         <div className="w-full md:w-1/2 border-r-0 md:border-r border-b md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col max-h-[50%] md:max-h-full">
           {/* Toolbar */}
-          <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-700">
+          <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-surface-dark-recessed border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between gap-3">
               {/* Search */}
               <div className="flex-1 relative max-w-md">
@@ -505,7 +505,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
 
             {/* No search results */}
             {filteredTones.length === 0 && searchQuery && (
-              <div className="text-center py-12 text-neutral-500 dark:text-neutral-400">
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 {t('No tones found')}
               </div>
             )}
@@ -546,7 +546,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
                   {t('Voice Guidelines')}
                 </h3>
-                <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="p-4 bg-gray-50 dark:bg-surface-dark-elevated rounded-lg border border-gray-200 dark:border-gray-700">
                   <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-sans">
                     {selectedTone.voiceRules}
                   </pre>
@@ -559,7 +559,7 @@ export function TonesTab({ tones, folders, onClose }: TonesTabProps) {
                   <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
                     {t('Examples')}
                   </h3>
-                  <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div className="p-4 bg-gray-50 dark:bg-surface-dark-elevated rounded-lg border border-gray-200 dark:border-gray-700">
                     <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-sans">
                       {selectedTone.examples}
                     </pre>

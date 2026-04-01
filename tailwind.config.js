@@ -9,6 +9,18 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        // Semantic dark-mode surface colors
+        // Use these instead of hard-coded hex values
+        surface: {
+          DEFAULT: '#ffffff',
+          dark: '#212121', // Primary dark surface (cards, panels, sidebars)
+          'dark-elevated': '#2a2a2a', // Elevated dark surface (popovers, dropdowns)
+          'dark-base': '#171717', // Root/page-level dark surface
+          'dark-recessed': '#1a1a1a', // Recessed dark surface (headers, footers, insets)
+          'dark-input': '#2D3748', // Dark form inputs (text fields, selects)
+        },
+      },
       fontFamily: {
         sans: [
           'system-ui',
@@ -91,8 +103,8 @@ module.exports = {
         },
         breathing: {
           '0%, 100%': {
-            transform: 'scale(0.25)',
-            opacity: '0.3',
+            transform: 'scale(0.7)',
+            opacity: '0.4',
           },
           '50%': {
             transform: 'scale(1.0)',

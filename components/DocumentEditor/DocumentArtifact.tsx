@@ -126,7 +126,7 @@ export default function DocumentArtifact({
   return (
     <div className="flex flex-col h-full w-full min-w-0">
       {/* Toolbar */}
-      <div className="relative flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 flex-shrink-0 min-w-0 overflow-hidden">
+      <div className="relative flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex-shrink-0 min-w-0 overflow-hidden">
         {/* Left: Filename and Mode */}
         <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
           {isEditing ? (
@@ -136,18 +136,18 @@ export default function DocumentArtifact({
               onChange={(e) => setFileName(e.target.value)}
               onBlur={() => setIsEditing(false)}
               onKeyDown={(e) => e.key === 'Enter' && setIsEditing(false)}
-              className="text-sm font-medium bg-neutral-100 dark:bg-neutral-900/50 rounded px-2 py-1 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white"
+              className="text-sm font-medium bg-gray-100 dark:bg-gray-900/50 rounded px-2 py-1 border-none focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white"
               autoFocus
             />
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="text-sm font-medium bg-neutral-100 dark:bg-neutral-900/50 rounded px-2 py-1 hover:bg-neutral-200 dark:hover:bg-neutral-900 transition-colors dark:text-white truncate"
+              className="text-sm font-medium bg-gray-100 dark:bg-gray-900/50 rounded px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-900 transition-colors dark:text-white truncate"
             >
               {fileName}
             </button>
           )}
-          <span className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1 flex-shrink-0">
+          <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-shrink-0">
             <IconFileText size={14} />
             {t('artifact.document')}
           </span>
@@ -157,7 +157,7 @@ export default function DocumentArtifact({
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <button
             onClick={onSwitchToCode}
-            className="p-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+            className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             title={t('artifact.switchToCodeEditor')}
           >
             <IconCode size={18} />
@@ -171,7 +171,7 @@ export default function DocumentArtifact({
                 setShowExportMenu(!showExportMenu);
               }}
               disabled={!modifiedCode}
-              className="flex items-center gap-1 px-2 py-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1 px-2 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               title={t('artifact.exportDocument')}
             >
               <IconDownload size={18} />
@@ -180,34 +180,34 @@ export default function DocumentArtifact({
 
             {/* Export Menu */}
             {showExportMenu && (
-              <div className="absolute right-0 mt-1 w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg z-50 overflow-hidden">
+              <div className="absolute right-0 mt-1 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden">
                 <button
                   onClick={() => handleExport('md')}
-                  className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   {t('artifact.formatMarkdown')}
                 </button>
                 <button
                   onClick={() => handleExport('html')}
-                  className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   {t('artifact.formatHtml')}
                 </button>
                 <button
                   onClick={() => handleExport('docx')}
-                  className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   {t('artifact.formatDocx')}
                 </button>
                 <button
                   onClick={() => handleExport('txt')}
-                  className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   {t('artifact.formatText')}
                 </button>
                 <button
                   onClick={() => handleExport('pdf')}
-                  className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="w-full px-4 py-2 text-left text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
                   {t('artifact.formatPdf')}
                 </button>
@@ -215,11 +215,11 @@ export default function DocumentArtifact({
             )}
           </div>
 
-          <div className="w-px h-5 bg-neutral-300 dark:bg-neutral-700 mx-1" />
+          <div className="w-px h-5 bg-gray-300 dark:bg-gray-700 mx-1" />
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+            className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             title={t('artifact.close')}
           >
             <IconX size={18} />
@@ -233,8 +233,8 @@ export default function DocumentArtifact({
       </div>
 
       {/* Disclaimer Footer */}
-      <div className="px-4 py-2 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 flex-shrink-0">
-        <p className="text-xs text-center text-neutral-500 dark:text-neutral-400">
+      <div className="px-4 py-2 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex-shrink-0">
+        <p className="text-xs text-center text-gray-500 dark:text-gray-400">
           {t('artifact.editsNotSaved')}
         </p>
       </div>

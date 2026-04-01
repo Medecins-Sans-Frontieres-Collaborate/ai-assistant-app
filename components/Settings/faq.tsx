@@ -36,12 +36,12 @@ export const FAQ: FC<FAQProps> = ({ faq }) => {
         placeholder={t('common.searchEllipsis')}
         value={searchQuery}
         onChange={handleSearch}
-        className="w-full mb-10 rounded-lg border bg-transparent border-neutral-200 px-4 py-3 text-neutral-900 dark:text-neutral-100 dark:border-neutral-600"
+        className="w-full mb-10 rounded-lg border bg-transparent border-gray-200 px-4 py-3 text-gray-900 dark:text-gray-100 dark:border-gray-600"
       />
       {filteredFAQ.map((item, index) => (
         <div key={index} className="mb-4">
           <button
-            className="w-full rounded-lg border border-neutral-200 bg-transparent px-4 py-3 text-neutral-900 dark:border-neutral-600 dark:text-neutral-100 text-left"
+            className="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-3 text-gray-900 dark:border-gray-600 dark:text-gray-100 text-left"
             onClick={() => handleExpand(index)}
           >
             {item.question}

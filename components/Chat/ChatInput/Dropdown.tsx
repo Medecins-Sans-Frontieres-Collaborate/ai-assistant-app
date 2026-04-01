@@ -429,9 +429,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           aria-haspopup="true"
           aria-expanded={isOpen}
           aria-label={t('common.toggleDropdownMenu')}
-          className="focus:outline-none flex"
+          className="focus:outline-none group/btn rounded flex"
         >
-          <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 mr-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200" />
+          <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 mr-2 text-black dark:text-white group-focus-visible/btn:text-blue-500 dark:group-focus-visible/btn:text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200" />
           <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md">
             {t('dropdown.expandActions')}
           </div>
@@ -491,11 +491,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 p-4"
             onClick={() => setIsToneOpen(false)}
           >
             <div
-              className="relative w-full max-w-md bg-white dark:bg-[#212121] rounded-xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">

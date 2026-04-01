@@ -57,7 +57,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   };
 
   return (
-    <div className="hidden md:block md:w-64 md:min-w-64 md:border-r border-gray-300 dark:border-neutral-700 p-4 overflow-y-auto flex flex-col h-full">
+    <div className="hidden md:block md:w-64 md:min-w-64 md:border-r border-gray-300 dark:border-gray-700 p-4 overflow-y-auto flex flex-col h-full">
       <div className="flex-grow">
         <h2 className="text-lg font-bold mb-4 text-black dark:text-white">
           {t('settings.Settings')}
@@ -115,7 +115,7 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-300 dark:border-neutral-700 my-4"></div>
+      <div className="border-t border-gray-300 dark:border-gray-700 my-4"></div>
 
       {/* Action buttons at the bottom */}
       <div className="mt-auto">
@@ -134,16 +134,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
       {/* Reset Confirmation Dialog */}
       {showResetConfirmation && (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-neutral-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
             <h3 className="text-lg font-bold mb-3 text-black dark:text-white">
               {t('settings.Confirm Reset')}
             </h3>
-            <p className="text-neutral-700 dark:text-neutral-300 mb-4">
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
               {t('settings.Reset Confirmation Message')}
             </p>
             <div className="flex justify-end space-x-3">
               <button
-                className="px-4 py-2 rounded-md bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 transition-colors text-black dark:text-white"
+                className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors text-black dark:text-white"
                 onClick={handleCancelReset}
               >
                 {t('Cancel')}

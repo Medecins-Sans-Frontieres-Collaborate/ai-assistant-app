@@ -340,7 +340,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
           onChange={(e) => setName(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={t('enterNamePlaceholder')}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500"
           autoFocus
         />
       </div>
@@ -359,7 +359,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={t('enterDescriptionPlaceholder')}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500 resize-none"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 resize-none"
         />
       </div>
 
@@ -374,7 +374,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={t('enterVoiceGuidelinesPlaceholder')}
           rows={12}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500 resize-none font-mono"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 resize-none font-mono"
         />
       </div>
 
@@ -392,7 +392,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
           onKeyDown={handleKeyDown}
           placeholder={t('enterExamplesPlaceholder')}
           rows={6}
-          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500 resize-none"
+          className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 resize-none"
         />
       </div>
 
@@ -415,7 +415,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
         </div>
 
         {showTagHelp && (
-          <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-lg text-xs text-gray-700 dark:text-gray-300">
+          <div className="mb-3 p-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-xs text-gray-700 dark:text-gray-300">
             <p className="mb-2">{t('tones.tagHelpContent')}</p>
             <div className="flex flex-wrap gap-2 text-xs">
               <span className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
@@ -441,11 +441,11 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={handleTagInputKeyDown}
             placeholder={t('common.addTagEllipsis')}
-            className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500"
+            className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500"
           />
           <button
             onClick={handleAddTag}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 text-sm font-medium rounded-lg transition-colors"
           >
             {t('tones.add')}
           </button>
@@ -456,13 +456,13 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md text-sm"
               >
                 <IconTag size={14} />
                 {tag}
                 <button
                   onClick={() => handleRemoveTag(tag)}
-                  className="ml-1 hover:text-blue-900 dark:hover:text-blue-100"
+                  className="ml-1 hover:text-gray-900 dark:hover:text-gray-100"
                 >
                   <IconX size={14} />
                 </button>
@@ -477,7 +477,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
   // Right Panel - AI Assistant
   const rightPanel = (
     <div
-      className={`flex flex-col bg-gray-50 dark:bg-[#1a1a1a] transition-all duration-300 w-full ${
+      className={`flex flex-col bg-gray-50 dark:bg-surface-dark-recessed transition-all duration-300 w-full ${
         analysisResult ? 'md:w-[600px]' : 'md:w-96'
       }`}
     >
@@ -504,7 +504,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
             onChange={(e) => setAnalysisGoal(e.target.value)}
             placeholder={t('tones.examplePlaceholder')}
             rows={3}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 resize-none"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 resize-none"
             disabled={isAnalyzing}
           />
         </div>
@@ -533,7 +533,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
             isAnalyzing ||
             (!fileContents && !analysisGoal && fileUrls.length === 0)
           }
-          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:from-purple-700 hover:to-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isAnalyzing ? (
             <>
@@ -565,7 +565,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
                   <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('tones.generatedVoiceGuidelines')}
                   </div>
-                  <div className="p-3 bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-700 rounded-lg max-h-48 overflow-y-auto">
+                  <div className="p-3 bg-white dark:bg-surface-dark-elevated border border-gray-200 dark:border-gray-700 rounded-lg max-h-48 overflow-y-auto">
                     <pre className="text-xs text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-mono">
                       {analysisResult.voiceRules}
                     </pre>
@@ -579,7 +579,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
                   <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t('tones.examplePhrases')}
                   </div>
-                  <div className="p-3 bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-700 rounded-lg max-h-32 overflow-y-auto">
+                  <div className="p-3 bg-white dark:bg-surface-dark-elevated border border-gray-200 dark:border-gray-700 rounded-lg max-h-32 overflow-y-auto">
                     <pre className="text-xs text-gray-900 dark:text-gray-100 whitespace-pre-wrap">
                       {analysisResult.examples}
                     </pre>
@@ -598,7 +598,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
                       {analysisResult.suggestedTags.map((tag, index) => (
                         <span
                           key={index}
-                          className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded text-xs"
+                          className="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded text-xs"
                         >
                           <IconTag size={12} />
                           {tag}
@@ -627,7 +627,7 @@ export const ToneDashboard: FC<ToneDashboardProps> = ({
                       {analysisResult.characteristics.map((char, index) => (
                         <div
                           key={index}
-                          className="p-2 bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-700 rounded-lg"
+                          className="p-2 bg-white dark:bg-surface-dark-elevated border border-gray-200 dark:border-gray-700 rounded-lg"
                         >
                           <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 mb-1">
                             {char.category}

@@ -25,6 +25,7 @@ interface AgentsTabProps {
   organizationAgentModels: OpenAIModel[];
   selectedModelId: string | null | undefined;
   defunctAgentIds: Set<string>;
+  isLoadingFoundryAgents?: boolean;
   // Props for details panel
   selectedModel: OpenAIModel | undefined;
   modelConfig: OpenAIModel | null | undefined;
@@ -52,6 +53,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   organizationAgentModels,
   selectedModelId,
   defunctAgentIds,
+  isLoadingFoundryAgents,
   // Details panel props
   selectedModel,
   modelConfig,
@@ -121,8 +123,11 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               </div>
               <OrganizationAgentList
                 onSelect={(agent) => {
+                  // Support both org- and foundry- prefixed agent models
                   const agentModel = organizationAgentModels.find(
-                    (m) => m.id === `org-${agent.id}`,
+                    (m) =>
+                      m.id === `org-${agent.id}` ||
+                      m.id === `foundry-${agent.id}`,
                   );
                   if (agentModel) {
                     handleModelSelect(agentModel);
@@ -131,6 +136,22 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 }}
                 selectedAgentId={selectedModelId ?? undefined}
               />
+              {isLoadingFoundryAgents && (
+                <div className="space-y-2 mt-2">
+                  {[1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="animate-pulse flex items-center gap-3 p-3 rounded-lg bg-gray-100 dark:bg-gray-800"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+                      <div className="flex-1 space-y-1">
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 

@@ -1,4 +1,22 @@
-import * as TablerIcons from '@tabler/icons-react';
+import {
+  IconBriefcase,
+  IconBuildingBank,
+  IconCalculator,
+  IconChartBar,
+  IconCode,
+  IconCurrencyDollar,
+  IconDatabase,
+  IconFileText,
+  IconHeartbeat,
+  IconMail,
+  IconMessage,
+  IconNews,
+  IconRobot,
+  IconSearch,
+  IconShield,
+  IconUsers,
+  IconWorld,
+} from '@tabler/icons-react';
 
 import {
   IconComponent,
@@ -10,15 +28,40 @@ import {
 import organizationAgentsConfig from '@/config/organization-agents.json';
 
 /**
- * Get icon component from icon name string
+ * Registry of icon components available for organization/Foundry agents.
+ * Add new icons here as needed — avoids importing the entire Tabler library.
+ */
+const ICON_REGISTRY: Record<string, IconComponent> = {
+  IconBriefcase,
+  IconBuildingBank,
+  IconCalculator,
+  IconChartBar,
+  IconCode,
+  IconCurrencyDollar,
+  IconDatabase,
+  IconFileText,
+  IconHeartbeat,
+  IconMail,
+  IconMessage,
+  IconNews,
+  IconRobot,
+  IconSearch,
+  IconShield,
+  IconUsers,
+  IconWorld,
+};
+
+/**
+ * Get icon component from icon name string.
+ * Falls back to IconRobot for unknown icon names.
  */
 export function getIconComponent(iconName: string): IconComponent {
-  const icon = (TablerIcons as Record<string, IconComponent>)[iconName];
-  return icon || TablerIcons.IconRobot;
+  return ICON_REGISTRY[iconName] || IconRobot;
 }
 
 /**
- * Get all enabled organization agents
+ * Get all enabled organization agents (both RAG and Foundry from static config).
+ * For Foundry agents discovered dynamically from ARM API, use getFoundryAgents() instead.
  */
 export function getOrganizationAgents(): OrganizationAgent[] {
   const config = organizationAgentsConfig as OrganizationAgentConfig;
@@ -26,7 +69,16 @@ export function getOrganizationAgents(): OrganizationAgent[] {
 }
 
 /**
- * Get organization agent by ID
+ * Get only RAG agents from static config.
+ * RAG agents are app-defined with system prompts and search config —
+ * they don't exist in Foundry and are always loaded from organization-agents.json.
+ */
+export function getRAGAgents(): OrganizationAgent[] {
+  return getOrganizationAgents().filter((agent) => agent.type === 'rag');
+}
+
+/**
+ * Get organization agent by ID (searches both static RAG and static Foundry agents)
  */
 export function getOrganizationAgentById(
   id: string,
@@ -73,6 +125,13 @@ export function isOrganizationAgentId(id: string): boolean {
 }
 
 /**
+ * Check if an agent ID belongs to a dynamically discovered Foundry agent
+ */
+export function isFoundryAgentId(id: string): boolean {
+  return id.startsWith('foundry-');
+}
+
+/**
  * Get the organization agent ID from a model ID
  */
 export function getOrganizationAgentIdFromModelId(
@@ -80,6 +139,16 @@ export function getOrganizationAgentIdFromModelId(
 ): string | null {
   if (modelId.startsWith('org-')) {
     return modelId.replace('org-', '');
+  }
+  return null;
+}
+
+/**
+ * Get the Foundry agent ID from a model ID
+ */
+export function getFoundryAgentIdFromModelId(modelId: string): string | null {
+  if (modelId.startsWith('foundry-')) {
+    return modelId.replace('foundry-', '');
   }
   return null;
 }
@@ -106,7 +175,8 @@ export function getRAGOrganizationAgents(): OrganizationAgent[] {
 }
 
 /**
- * Get all Foundry-based organization agents
+ * Get all Foundry-based organization agents from static config.
+ * @deprecated Use dynamic discovery via /api/agents for Foundry agents
  */
 export function getFoundryOrganizationAgents(): OrganizationAgent[] {
   return getOrganizationAgentsByType('foundry');

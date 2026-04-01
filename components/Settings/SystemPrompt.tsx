@@ -190,7 +190,7 @@ export const SystemPrompt: FC<Props> = ({
 
   return (
     <div className="flex flex-col">
-      <span className="mb-2 text-[12px] text-black/50 dark:text-white/50 text-sm">
+      <span className="mb-2 text-[12px] text-black/50 dark:text-white/60 text-sm">
         {t(
           'Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_',
         )}
@@ -200,7 +200,7 @@ export const SystemPrompt: FC<Props> = ({
       </span>
       <textarea
         ref={textareaRef}
-        className="w-full rounded-lg border border-neutral-200 bg-transparent px-4 py-3 text-neutral-900 dark:border-neutral-600 dark:text-neutral-100"
+        className="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-3 text-gray-900 dark:border-gray-600 dark:text-gray-100"
         style={{
           resize: 'none',
           bottom: `${textareaScrollHeight}px`,

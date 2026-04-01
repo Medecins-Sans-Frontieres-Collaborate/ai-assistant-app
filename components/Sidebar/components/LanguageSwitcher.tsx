@@ -26,7 +26,7 @@ const LanguageSwitcher: FC = () => {
       <select
         value={locale}
         onChange={handleLocaleChange}
-        className="w-[100px] cursor-pointer bg-transparent p-2 text-neutral-700 dark:text-neutral-200 text-center text-sm border-none hover:bg-gray-500/10"
+        className="w-[100px] cursor-pointer bg-transparent p-2 text-gray-700 dark:text-gray-200 text-center text-sm border-none hover:bg-gray-500/10"
       >
         {locales.map((localeOption) => (
           <option

@@ -641,7 +641,9 @@
     "keepEditing": "Keep Editing",
     "yes": "Yes",
     "no": "No",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Copied!",
+    "clear": "Clear"
   },
   "terms": {
     "officialLanguages": "Official version:",
@@ -697,6 +699,7 @@
     "loadingImage": "Loading image...",
     "imageAlt": "Image {number}",
     "download": "Download",
+    "openImage": "Open image",
     "openAsDocument": "Open as Document",
     "openInCodeEditor": "Open in Code Editor",
     "failedToOpenCodeEditor": "Failed to open file in code editor. Please try again.",
@@ -724,6 +727,13 @@
     "expandThinking": "Expand thinking",
     "actionsDisabledForEmbed": "Use the controls in the embedded content above",
     "ttsRightClickHint": "Right-click for voice options",
+    "copyMessage": "Copy message",
+    "stopAudio": "Stop audio",
+    "generatingAudio": "Generating audio...",
+    "listen": "Listen",
+    "processingAudio": "Processing audio...",
+    "ttsError": "Error generating audio. Please try again.",
+    "unsupportedMessageType": "Error rendering message: Unsupported message type",
     "loadingMessages": {
       "transcribingAndProcessing": "Transcribing and processing...",
       "transcribingAudio": "Transcribing audio...",
@@ -1166,6 +1176,7 @@
     }
   },
   "modelSelect": {
+    "title": "Select a model",
     "tabs": {
       "models": "Models",
       "agents": "Agents"

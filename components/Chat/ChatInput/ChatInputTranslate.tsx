@@ -193,7 +193,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
           <input
             type="text"
             placeholder={t('chat.typeLanguagePlaceholder')}
-            className="flex-1 pl-4 pr-10 py-3 text-base bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
+            className="flex-1 pl-4 pr-10 py-3 text-base bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-lg transition-all"
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
           />
@@ -322,7 +322,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
               </div>
               <div className="flex items-center">
                 <input
-                  id="use-gender-neutral-language"
+                  id="use-gender-gray-language"
                   type="checkbox"
                   checked={useGenderNeutralLanguage}
                   onChange={(e) =>
@@ -331,7 +331,7 @@ const ChatInputTranslate: FC<ChatInputTranslateProps> = ({
                   className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded transition-all"
                 />
                 <label
-                  htmlFor="use-gender-neutral-language"
+                  htmlFor="use-gender-gray-language"
                   className="ml-3 block text-sm font-medium text-gray-900 dark:text-gray-100"
                 >
                   {t('translatorGenderNeutralLabel')}

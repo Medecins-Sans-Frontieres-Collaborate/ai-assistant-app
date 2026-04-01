@@ -8,6 +8,8 @@ import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
 import { Tone } from '@/types/tone';
 
+import { TokenCredential } from '@azure/identity';
+
 /**
  * Processed content from content processors.
  * Populated by FileProcessor, AudioProcessor, ImageProcessor.
@@ -166,6 +168,15 @@ export interface ChatContext {
   // ========================================
   /** Model selector instance */
   modelSelector: ModelSelector;
+
+  // ========================================
+  // PER-REQUEST CREDENTIALS (for Foundry agent calls)
+  // ========================================
+  /** OBO credential for making Foundry calls as the authenticated user */
+  userCredential?: TokenCredential;
+
+  /** Regional Foundry endpoint resolved from user's region (GDPR routing) */
+  foundryEndpoint?: string;
 
   // ========================================
   // PIPELINE STATE (Modified by stages)

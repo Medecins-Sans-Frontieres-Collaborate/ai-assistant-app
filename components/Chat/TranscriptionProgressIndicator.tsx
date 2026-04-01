@@ -113,7 +113,11 @@ export function TranscriptionProgressIndicator({
       : 0;
 
   return (
-    <div className="flex flex-col items-center gap-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <div
+      className="flex flex-col items-center gap-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+      role="status"
+      aria-live="polite"
+    >
       <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
         <IconLoader2 className="animate-spin" size={20} />
         <span className="font-medium">{t('inProgress')}</span>

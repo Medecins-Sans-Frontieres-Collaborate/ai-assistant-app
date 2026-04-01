@@ -66,7 +66,7 @@ export default function CodeEditor({ theme = 'light' }: CodeEditorProps) {
     <div className="h-full w-full flex flex-col relative overflow-hidden min-w-0">
       {showPlaceholder && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-center text-neutral-400 dark:text-neutral-500">
+          <div className="text-center text-gray-400 dark:text-gray-500">
             <p className="text-lg mb-2">
               {t('artifact.codeEditor.startTyping')}
             </p>
@@ -91,10 +91,10 @@ export default function CodeEditor({ theme = 'light' }: CodeEditorProps) {
               }
             }}
             loading={
-              <div className="flex items-center justify-center h-full w-full bg-white dark:bg-neutral-900">
+              <div className="flex items-center justify-center h-full w-full bg-white dark:bg-gray-900">
                 <IconLoader2
                   size={24}
-                  className="animate-spin text-neutral-900 dark:text-neutral-100"
+                  className="animate-spin text-gray-900 dark:text-gray-100"
                 />
               </div>
             }

@@ -194,8 +194,8 @@ describe('CitationListItem', () => {
       render(<CitationListItem citation={mockCitation} />);
 
       const link = screen.getByRole('link');
-      expect(link).toHaveClass('dark:bg-[#171717]');
-      expect(link).toHaveClass('dark:hover:bg-[#222222]');
+      expect(link).toHaveClass('dark:bg-surface-dark-base');
+      expect(link).toHaveClass('dark:hover:bg-surface-dark');
     });
 
     it('has hover styling', () => {

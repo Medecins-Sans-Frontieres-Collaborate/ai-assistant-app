@@ -301,7 +301,7 @@ export function Chat({
   }
 
   return (
-    <div className="chat-split-container relative flex h-full w-full overflow-hidden bg-white dark:bg-[#212121]">
+    <div className="chat-split-container relative flex h-full w-full overflow-hidden bg-white dark:bg-surface-dark">
       {/* Main chat area */}
       <div
         className="flex flex-col h-full overflow-hidden min-w-0"
@@ -452,11 +452,17 @@ export function Chat({
         {/* Model Selection Modal */}
         {isModelSelectOpen && (
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[150] animate-fade-in-fast"
+            className="fixed inset-0 flex items-center justify-center bg-black/50 z-[150] animate-fade-in-fast"
             onClick={() => setIsModelSelectOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setIsModelSelectOpen(false);
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('modelSelect.title')}
           >
             <div
-              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-[#212121] p-6 shadow-xl animate-modal-in"
+              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in"
               onClick={(e) => e.stopPropagation()}
             >
               <ModelSelect onClose={() => setIsModelSelectOpen(false)} />
@@ -481,22 +487,22 @@ export function Chat({
         <>
           <div
             onMouseDown={handleMouseDown}
-            className={`relative w-1.5 bg-neutral-300 dark:bg-neutral-700 hover:bg-blue-500 dark:hover:bg-blue-500 cursor-col-resize transition-colors ${
+            className={`relative w-1.5 bg-gray-300 dark:bg-gray-700 hover:bg-blue-500 dark:hover:bg-blue-500 cursor-col-resize transition-colors ${
               isResizing ? 'bg-blue-500 dark:bg-blue-500' : ''
             }`}
             style={{ flexShrink: 0 }}
           >
             {/* Drag Handle */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 pointer-events-none">
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
             </div>
           </div>
 
           {/* Code/Document Editor Panel */}
           <div
-            className="flex flex-col bg-white dark:bg-neutral-900 h-full overflow-hidden animate-slide-in-right min-w-0"
+            className="flex flex-col bg-white dark:bg-gray-900 h-full overflow-hidden animate-slide-in-right min-w-0"
             style={{
               width: `${editorWidth}%`,
               minWidth: '20%',

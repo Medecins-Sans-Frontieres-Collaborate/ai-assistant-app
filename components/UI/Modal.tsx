@@ -116,7 +116,7 @@ const Modal: React.FC<ModalProps> = ({
     >
       {/* Backdrop/overlay */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm animate-fade-in-fast"
+        className="fixed inset-0 bg-black bg-opacity-40 animate-fade-in-fast"
         onClick={!preventOutsideClick ? onClose : undefined}
         aria-hidden="true"
       />
@@ -124,7 +124,7 @@ const Modal: React.FC<ModalProps> = ({
       {/* Modal container */}
       <div
         ref={modalContentRef}
-        className={`${sizeClasses} w-full bg-white dark:bg-[#171717] rounded-lg shadow-lg p-6 relative z-10 animate-modal-in ${className.replace(/!?z-\[?\d+\]?/, '')}`}
+        className={`${sizeClasses} w-full bg-white dark:bg-surface-dark-base rounded-lg shadow-lg p-6 relative z-10 animate-modal-in ${className.replace(/!?z-\[?\d+\]?/, '')}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
@@ -138,9 +138,9 @@ const Modal: React.FC<ModalProps> = ({
         {showCloseButton && !showHeader && (
           <button
             onClick={onClose}
-            className={`text-gray-600 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
+            className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${
               closeWithButton
-                ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-neutral-700 rounded-full'
+                ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full'
                 : 'absolute top-4 right-4'
             }`}
             aria-label={t('common.closeModal')}
@@ -169,7 +169,7 @@ const Modal: React.FC<ModalProps> = ({
         {/* Header with title and close button - only if title or icon exists */}
         {showHeader && (
           <div
-            className={`flex justify-between items-center ${showDivider ? 'border-b dark:border-neutral-700 pb-3 mb-4' : 'mb-4'} ${headerClassName}`}
+            className={`flex justify-between items-center ${showDivider ? 'border-b dark:border-gray-700 pb-3 mb-4' : 'mb-4'} ${headerClassName}`}
           >
             <div className="flex items-center">
               {icon && <div className="mr-2">{icon}</div>}
@@ -189,7 +189,7 @@ const Modal: React.FC<ModalProps> = ({
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className={`text-gray-600 dark:text-neutral-300 hover:text-gray-900 dark:hover:text-white transition-colors ${closeWithButton ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-neutral-700 rounded-full' : ''}`}
+                className={`text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors ${closeWithButton ? 'absolute -top-4 -right-4 p-1 bg-gray-200 dark:bg-gray-700 rounded-full' : ''}`}
                 aria-label={t('common.closeModal')}
               >
                 {closeWithButton ? (
@@ -220,7 +220,7 @@ const Modal: React.FC<ModalProps> = ({
 
         {/* Footer if provided */}
         {footer && (
-          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-neutral-700">
+          <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
             {footer}
           </div>
         )}

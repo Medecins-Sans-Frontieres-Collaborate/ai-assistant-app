@@ -54,7 +54,7 @@ interface ImageContentProps {
  * Renders images from message content with loading states, error handling,
  * and lightbox functionality. Supports single and multiple image layouts.
  */
-export const ImageContent: FC<ImageContentProps> = ({ images }) => {
+export const ImageContent: FC<ImageContentProps> = React.memo(({ images }) => {
   const t = useTranslations('chat');
   const [imageBase64s, setImageBase64s] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -173,7 +173,16 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
               minWidth: '200px',
               height: '150px',
             }}
+            role="button"
+            tabIndex={0}
+            aria-label={t('openImage')}
             onClick={() => openLightbox(imageBase64)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openLightbox(imageBase64);
+              }
+            }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -198,6 +207,6 @@ export const ImageContent: FC<ImageContentProps> = ({ images }) => {
         ))}
     </div>
   );
-};
+});
 
 export default ImageContent;

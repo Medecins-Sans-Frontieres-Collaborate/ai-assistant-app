@@ -38,8 +38,8 @@ export function ErrorDisplay({
   };
 
   return (
-    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-[#212121] p-4">
-      <div className="relative rounded-xl bg-white dark:bg-[#171717] p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-surface-dark p-4">
+      <div className="relative rounded-xl bg-white dark:bg-surface-dark-base p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header with Icon and Title */}
         <div className="flex items-center gap-4 mb-6">
           <div className="rounded-full bg-red-100 dark:bg-red-900/30 p-3 flex-shrink-0">
@@ -93,7 +93,7 @@ export function ErrorDisplay({
         {onRetry && (
           <button
             onClick={onRetry}
-            className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 text-white text-sm font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group mb-5"
+            className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white text-sm font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group mb-5"
           >
             <IconRefresh
               size={16}

@@ -67,7 +67,7 @@ describe('ChatInputSubmitButton', () => {
       const button = screen.getByLabelText('Send message');
       expect(button).toHaveClass('rounded-full');
       expect(button).toHaveClass('bg-gray-300');
-      expect(button).toHaveClass('dark:bg-[#171717]');
+      expect(button).toHaveClass('dark:bg-surface-dark-base');
     });
   });
 
@@ -143,7 +143,7 @@ describe('ChatInputSubmitButton', () => {
       const button = screen.getByLabelText('Stop generation');
       expect(button).toHaveClass('rounded-full');
       expect(button).toHaveClass('bg-gray-300');
-      expect(button).toHaveClass('dark:bg-[#171717]');
+      expect(button).toHaveClass('dark:bg-surface-dark-base');
     });
   });
 

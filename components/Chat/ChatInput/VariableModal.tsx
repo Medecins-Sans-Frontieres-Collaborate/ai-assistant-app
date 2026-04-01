@@ -114,12 +114,12 @@ export const VariableModal: FC<Props> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in-fast"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-fade-in-fast"
       onKeyDown={handleKeyDown}
     >
       <div
         ref={modalRef}
-        className="relative inline-block max-h-[90vh] w-full max-w-lg transform overflow-hidden rounded-xl border border-gray-200 bg-white text-left align-bottom shadow-2xl transition-all dark:border-gray-700 dark:bg-[#212121] sm:my-8 sm:align-middle animate-modal-in"
+        className="relative inline-block max-h-[90vh] w-full max-w-lg transform overflow-hidden rounded-xl border border-gray-200 bg-white text-left align-bottom shadow-xl transition-all dark:border-gray-700 dark:bg-surface-dark sm:my-8 sm:align-middle animate-modal-in"
         role="dialog"
       >
         {/* Header */}
@@ -187,7 +187,7 @@ export const VariableModal: FC<Props> = ({
 
               <textarea
                 ref={index === 0 ? nameInputRef : undefined}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-[#2a2a2a] dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-surface-dark-elevated dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
                 style={{ resize: 'vertical', minHeight: '80px' }}
                 placeholder={
                   variable.definition.defaultValue
@@ -205,7 +205,7 @@ export const VariableModal: FC<Props> = ({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-[#1a1a1a]">
+        <div className="border-t border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-surface-dark-recessed">
           <div className="flex items-center justify-end gap-3">
             <div className="flex gap-2">
               <button

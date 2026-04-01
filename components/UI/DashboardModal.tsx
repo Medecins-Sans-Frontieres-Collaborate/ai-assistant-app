@@ -40,15 +40,15 @@ export const DashboardModal: FC<DashboardModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in-fast"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 animate-fade-in-fast"
       onClick={handleOverlayClick}
     >
       <div
-        className="relative w-full max-w-6xl h-[90vh] mx-4 bg-white dark:bg-[#212121] rounded-xl shadow-2xl flex flex-col overflow-hidden animate-modal-in"
+        className="relative w-full max-w-6xl h-[90vh] mx-4 bg-white dark:bg-surface-dark rounded-xl shadow-xl flex flex-col overflow-hidden animate-modal-in"
         onClick={handleContentClick}
       >
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1a1a1a] px-4 md:px-6 py-3 md:py-4">
+        <div className="flex-shrink-0 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-surface-dark-recessed px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0 mr-4">
               <h2 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-white truncate">
@@ -62,6 +62,7 @@ export const DashboardModal: FC<DashboardModalProps> = ({
             </div>
             <button
               onClick={onClose}
+              aria-label="Close"
               className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <IconX size={20} />
@@ -72,6 +73,8 @@ export const DashboardModal: FC<DashboardModalProps> = ({
           <div className="md:hidden mt-3 flex gap-2">
             <button
               onClick={() => setMobileActivePanel('form')}
+              aria-label="Show form panel"
+              aria-pressed={mobileActivePanel === 'form'}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 mobileActivePanel === 'form'
                   ? 'bg-blue-600 text-white'
@@ -83,6 +86,8 @@ export const DashboardModal: FC<DashboardModalProps> = ({
             </button>
             <button
               onClick={() => setMobileActivePanel('ai')}
+              aria-label="Show AI assist panel"
+              aria-pressed={mobileActivePanel === 'ai'}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 mobileActivePanel === 'ai'
                   ? 'bg-blue-600 text-white'
@@ -120,7 +125,7 @@ export const DashboardModal: FC<DashboardModalProps> = ({
 
         {/* Footer */}
         {footer && (
-          <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#1a1a1a] px-6 py-4">
+          <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-surface-dark-recessed px-6 py-4">
             {footer}
           </div>
         )}

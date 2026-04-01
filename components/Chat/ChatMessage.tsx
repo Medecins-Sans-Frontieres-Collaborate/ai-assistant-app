@@ -1,5 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { useChat } from '@/client/hooks/chat/useChat';
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 
@@ -48,6 +50,7 @@ export const ChatMessage: FC<Props> = ({
   onPreviousVersion,
   onNextVersion,
 }) => {
+  const t = useTranslations();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { isStreaming: messageIsStreaming } = useChat();
@@ -65,8 +68,11 @@ export const ChatMessage: FC<Props> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(event.target.value);
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'inherit';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      const textarea = textareaRef.current;
+      requestAnimationFrame(() => {
+        textarea.style.height = 'inherit';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      });
     }
   };
 
@@ -134,8 +140,11 @@ export const ChatMessage: FC<Props> = ({
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'inherit';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      const textarea = textareaRef.current;
+      requestAnimationFrame(() => {
+        textarea.style.height = 'inherit';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      });
     }
   }, [isEditing]);
 
@@ -328,13 +337,13 @@ export const ChatMessage: FC<Props> = ({
       <div
         className={`group md:px-4 ${
           message.role === 'assistant'
-            ? 'border-b border-black/10 bg-gray-50 text-gray-800 dark:border-gray-900/50 dark:bg-[#2f2f2f] dark:text-gray-100'
-            : 'border-b border-black/10 bg-white text-gray-800 dark:border-gray-900/50 dark:bg-[#2f2f2f] dark:text-gray-100'
+            ? 'border-b border-black/10 bg-gray-50 text-gray-800 dark:border-gray-900/50 dark:bg-surface-dark-elevated dark:text-gray-100'
+            : 'border-b border-black/10 bg-white text-gray-800 dark:border-gray-900/50 dark:bg-surface-dark-elevated dark:text-gray-100'
         }`}
       >
         <div className="relative flex p-4 text-base md:gap-6 md:py-6 lg:px-0 w-full">
           <div className="prose mt-[-2px] w-full dark:prose-invert">
-            Error rendering message: Unsupported message type
+            {t('chat.unsupportedMessageType')}
           </div>
         </div>
       </div>

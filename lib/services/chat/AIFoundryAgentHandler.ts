@@ -13,12 +13,14 @@ import {
   Message,
   TextMessageContent,
 } from '@/types/chat';
+import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
+import { TokenCredential } from '@azure/identity';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
@@ -46,6 +48,8 @@ export class AIFoundryAgentHandler {
     user: Session['user'],
     botId: string | undefined,
     threadId?: string,
+    credential?: TokenCredential,
+    endpoint?: string,
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -73,19 +77,22 @@ export class AIFoundryAgentHandler {
           const aiProjects = await import('@azure/ai-projects');
           const { DefaultAzureCredential } = await import('@azure/identity');
 
-          // AI Foundry uses a separate project endpoint (services.ai.azure.com)
-          const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
+          // Use per-request endpoint/credential if provided (OBO + GDPR routing),
+          // otherwise fall back to default service-level auth
+          const resolvedEndpoint = endpoint || env.AZURE_AI_FOUNDRY_ENDPOINT;
           const agentId = modelConfig.agentId;
 
-          if (!endpoint || !agentId) {
+          if (!resolvedEndpoint || !agentId) {
             throw new Error(
               'Azure AI Foundry endpoint or Agent ID not configured',
             );
           }
 
+          const resolvedCredential = credential || new DefaultAzureCredential();
+
           const project = new aiProjects.AIProjectClient(
-            endpoint,
-            new DefaultAzureCredential(),
+            resolvedEndpoint,
+            resolvedCredential,
           );
           const openAIClient = await project.getOpenAIClient();
 
@@ -196,7 +203,8 @@ export class AIFoundryAgentHandler {
             console.log('Creating response with:', {
               conversationId,
               agentName: String(agentId),
-              endpoint: endpoint,
+              endpoint: resolvedEndpoint,
+              usingOBO: !!credential,
             });
 
             const stream = await openAIClient.responses.create(
@@ -320,6 +328,27 @@ export class AIFoundryAgentHandler {
                         date: '',
                       });
                     }
+                  } else if (
+                    event.type === 'response.mcp_call_arguments.done' ||
+                    event.type === 'response.output_item.added'
+                  ) {
+                    // Handle MCP tool OAuth consent requests
+                    // When a Foundry MCP tool requires user auth (e.g., NetSuite),
+                    // the agent returns an oauth_consent_request with a consent URL.
+                    // We surface this to the user so they can authorize, then the
+                    // agent can be re-invoked with previous_response_id to resume.
+                    const item = (event as any).item || (event as any);
+                    if (
+                      item?.type === 'mcp_approval_request' ||
+                      item?.oauth_consent_url
+                    ) {
+                      const consentUrl =
+                        item.oauth_consent_url || item.url || '';
+                      if (consentUrl) {
+                        const consentMessage = `\n\n---\n**Authorization Required**: This tool needs your permission to access a secure resource. [Click here to authorize](${consentUrl})\n\nAfter authorizing, send your message again to continue.\n---\n\n`;
+                        controller.enqueue(encoder.encode(consentMessage));
+                      }
+                    }
                   } else if (event.type === 'response.completed') {
                     // Flush any remaining marker buffer
                     if (markerBuffer) {
@@ -380,7 +409,32 @@ export class AIFoundryAgentHandler {
           return new Response(stream, {
             headers: STREAMING_RESPONSE_HEADERS,
           });
-        } catch (error) {
+        } catch (error: any) {
+          // Handle 403 Forbidden — user doesn't have RBAC access to this agent
+          const statusCode =
+            error?.statusCode || error?.status || error?.response?.status;
+          if (statusCode === 403) {
+            span.setAttribute('error.type', 'authorization_denied');
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: 'User not authorized for this agent',
+            });
+
+            MetricsService.recordError('agent_authorization_denied', {
+              user,
+              operation: 'agent',
+              model: modelId,
+              message: 'User does not have access to this agent',
+            });
+
+            throw PipelineError.error(
+              ErrorCode.AUTH_UNAUTHORIZED,
+              "You don't have access to this agent. Contact your IT admin to request the Azure AI User role.",
+              { agentId: modelConfig.agentId, model: modelId },
+              error instanceof Error ? error : undefined,
+            );
+          }
+
           // Record exception in span
           span.recordException(error as Error);
           span.setStatus({

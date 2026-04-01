@@ -20,7 +20,7 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
 }) => {
   return (
     <div
-      className={`flex items-center px-3 py-2 border-b transition-all duration-300 ${showChatbar ? 'justify-between border-neutral-300 dark:border-neutral-700' : 'justify-center border-transparent'}`}
+      className={`flex items-center px-3 py-2 border-b transition-all duration-300 ${showChatbar ? 'justify-between border-gray-300 dark:border-gray-700' : 'justify-center border-transparent'}`}
     >
       <div
         className={`transition-all duration-300 overflow-hidden ${showChatbar ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}
@@ -36,9 +36,14 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({
         />
       </div>
       <button
-        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded text-black dark:text-white"
+        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-black dark:text-white"
         onClick={toggleChatbar}
         title={
+          showChatbar
+            ? t('sidebar.collapseSidebar')
+            : t('sidebar.expandSidebar')
+        }
+        aria-label={
           showChatbar
             ? t('sidebar.collapseSidebar')
             : t('sidebar.expandSidebar')

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 
 import { Session } from 'next-auth';
+import { useTranslations } from 'next-intl';
 
 import { DisplayNamePreferencePicker } from '@/components/Settings/DisplayNamePreferencePicker';
 
@@ -34,6 +35,7 @@ export function DisplayNamePopover({
   triggerRef,
   user,
 }: DisplayNamePopoverProps) {
+  const t = useTranslations();
   const popoverRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
@@ -132,7 +134,7 @@ export function DisplayNamePopover({
       }}
       role="dialog"
       aria-modal="true"
-      aria-label="Change display name preference"
+      aria-label={t('emptyState.changeDisplayName')}
     >
       <DisplayNamePreferencePicker
         variant="popover"

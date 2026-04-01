@@ -139,7 +139,7 @@ export const AccountSection: FC<AccountSectionProps> = ({
 
         {/* Sign In/Sign Out */}
         <div>
-          <h3 className="text-sm font-bold mb-3 text-black dark:text-neutral-200">
+          <h3 className="text-sm font-bold mb-3 text-black dark:text-gray-200">
             {t('Authentication')}
           </h3>
           <SignInSignOut />

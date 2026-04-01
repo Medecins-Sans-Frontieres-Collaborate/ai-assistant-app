@@ -89,7 +89,7 @@ export const CustomAgentList: FC<CustomAgentListProps> = ({
                   ? 'border-2 border-amber-300 dark:border-amber-700 opacity-60 cursor-not-allowed bg-amber-50 dark:bg-amber-900/10'
                   : isSelected
                     ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                    : 'bg-white dark:bg-[#212121] border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+                    : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
               }
             `}
           >

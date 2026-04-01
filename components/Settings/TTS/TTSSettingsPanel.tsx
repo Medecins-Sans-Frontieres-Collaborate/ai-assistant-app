@@ -181,7 +181,7 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
       {/* Speech Rate */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium text-black dark:text-neutral-200">
+          <label className="text-sm font-medium text-black dark:text-gray-200">
             {t('settings.tts.rate')}
           </label>
           <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -195,7 +195,7 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
           step={TTS_CONSTRAINTS.rate.step}
           value={settings.rate}
           onChange={handleRateChange}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-neutral-600 dark:accent-neutral-400"
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-gray-600 dark:accent-gray-400"
         />
         <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
           <span>{t('settings.tts.slower')}</span>
@@ -206,7 +206,7 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
       {/* Pitch */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium text-black dark:text-neutral-200">
+          <label className="text-sm font-medium text-black dark:text-gray-200">
             {t('settings.tts.pitch')}
           </label>
           <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -220,7 +220,7 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
           step={TTS_CONSTRAINTS.pitch.step}
           value={settings.pitch}
           onChange={handlePitchChange}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-neutral-600 dark:accent-neutral-400"
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-gray-600 dark:accent-gray-400"
         />
         <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
           <span>{t('settings.tts.lower')}</span>
@@ -230,13 +230,13 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
 
       {/* Audio Quality */}
       <div>
-        <label className="text-sm font-medium text-black dark:text-neutral-200 mb-2 block">
+        <label className="text-sm font-medium text-black dark:text-gray-200 mb-2 block">
           {t('settings.tts.quality')}
         </label>
         <select
           value={settings.outputFormat}
           onChange={handleFormatChange}
-          className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
         >
           {(Object.keys(OUTPUT_FORMAT_LABELS) as TTSOutputFormat[]).map(
             (format) => (
@@ -255,7 +255,7 @@ export const TTSSettingsPanel: FC<TTSSettingsPanelProps> = ({
       <div className="flex items-center gap-3 pt-2">
         <button
           onClick={handleReset}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-200"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg dark:text-gray-400 dark:hover:text-gray-200"
         >
           <IconRefresh size={16} />
           {t('settings.tts.reset')}

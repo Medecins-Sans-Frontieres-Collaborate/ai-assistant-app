@@ -87,7 +87,7 @@ const ChatInputImage = ({
           onImageUploadButtonClick(e, fileInputRef);
         }}
         ref={openModalButtonRef}
-        className="flex items-center w-full text-right hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none"
+        className="flex items-center w-full text-right hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
       >
         <ImageIcon className="text-black dark:text-white mr-2 rounded h-5 w-5 hover:bg-gray-200 dark:hover:bg-gray-700" />
         <span className="text-black dark:text-white">

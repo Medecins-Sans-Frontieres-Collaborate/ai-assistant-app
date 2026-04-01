@@ -115,7 +115,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
 
               {/* Temperature Setting */}
               <div>
-                <div className="text-sm font-bold mb-3 text-black dark:text-neutral-200">
+                <div className="text-sm font-bold mb-3 text-black dark:text-gray-200">
                   {t('Default') + ' ' + t('Temperature') + '*'}
                 </div>
                 <TemperatureSlider
@@ -133,7 +133,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
 
               {/* Reasoning Effort Setting */}
               <div>
-                <div className="text-sm font-bold mb-2 text-black dark:text-neutral-200">
+                <div className="text-sm font-bold mb-2 text-black dark:text-gray-200">
                   {t('settings.Default Reasoning Effort')}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -162,7 +162,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
 
               {/* Verbosity Setting */}
               <div>
-                <div className="text-sm font-bold mb-2 text-black dark:text-neutral-200">
+                <div className="text-sm font-bold mb-2 text-black dark:text-gray-200">
                   {t('settings.Default Verbosity')}
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -211,7 +211,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
             <div className="px-4 pb-3 border-t border-gray-200 dark:border-gray-700">
               {/* Custom Instructions */}
               <div className="mt-3">
-                <div className="text-sm font-bold mb-3 text-black dark:text-neutral-200">
+                <div className="text-sm font-bold mb-3 text-black dark:text-gray-200">
                   {t('settings.Custom Instructions') + '*'}
                 </div>
                 <SystemPrompt
@@ -229,15 +229,15 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
 
               {/* Streaming Speed Setting */}
               <div className="mt-4">
-                <div className="text-sm font-bold mb-2 text-black dark:text-neutral-200">
+                <div className="text-sm font-bold mb-2 text-black dark:text-gray-200">
                   {t('settings.Streaming Speed')}
                 </div>
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2 text-sm text-black dark:text-neutral-200">
+                  <label className="flex items-center gap-2 text-sm text-black dark:text-gray-200">
                     <input
                       type="radio"
                       name="streamingSpeed"
-                      className="accent-neutral-600 dark:accent-neutral-400"
+                      className="accent-gray-600 dark:accent-gray-400"
                       checked={state.streamingSpeed?.delayMs === 12}
                       onChange={() =>
                         dispatch({
@@ -248,11 +248,11 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                     />
                     {t('settings.Slow')}
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-black dark:text-neutral-200">
+                  <label className="flex items-center gap-2 text-sm text-black dark:text-gray-200">
                     <input
                       type="radio"
                       name="streamingSpeed"
-                      className="accent-neutral-600 dark:accent-neutral-400"
+                      className="accent-gray-600 dark:accent-gray-400"
                       checked={
                         state.streamingSpeed?.delayMs === 8 ||
                         !state.streamingSpeed
@@ -266,11 +266,11 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                     />
                     {t('settings.Normal')}
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-black dark:text-neutral-200">
+                  <label className="flex items-center gap-2 text-sm text-black dark:text-gray-200">
                     <input
                       type="radio"
                       name="streamingSpeed"
-                      className="accent-neutral-600 dark:accent-neutral-400"
+                      className="accent-gray-600 dark:accent-gray-400"
                       checked={state.streamingSpeed?.delayMs === 4}
                       onChange={() =>
                         dispatch({
@@ -354,7 +354,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               <label className="flex items-center gap-3 mt-4 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                  className="w-4 h-4 accent-gray-600 dark:accent-gray-400"
                   checked={state.includeUserInfoInPrompt || false}
                   onChange={(e) =>
                     dispatch({
@@ -363,7 +363,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                     })
                   }
                 />
-                <span className="text-sm text-black dark:text-neutral-200">
+                <span className="text-sm text-black dark:text-gray-200">
                   {t('settings.aboutYou.shareBasicInfo')}
                 </span>
               </label>
@@ -376,7 +376,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                 <div className="mt-4 space-y-4 ml-7">
                   {/* Preferred Name */}
                   <div>
-                    <label className="text-sm font-medium text-black dark:text-neutral-200">
+                    <label className="text-sm font-medium text-black dark:text-gray-200">
                       {t('settings.aboutYou.preferredName')}
                     </label>
                     <input
@@ -393,7 +393,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                         t('settings.aboutYou.preferredNamePlaceholder')
                       }
                       maxLength={100}
-                      className="mt-1 w-full rounded-lg border border-neutral-200 bg-transparent px-4 py-2 text-neutral-900 focus:outline-none dark:border-neutral-600 dark:text-neutral-100"
+                      className="mt-1 w-full rounded-lg border border-gray-200 bg-transparent px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:text-gray-100"
                     />
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {t('settings.aboutYou.preferredNameDescriptionWithSync')}
@@ -402,7 +402,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
 
                   {/* Additional Context */}
                   <div>
-                    <label className="text-sm font-medium text-black dark:text-neutral-200">
+                    <label className="text-sm font-medium text-black dark:text-gray-200">
                       {t('settings.aboutYou.additionalContext')}
                     </label>
                     <textarea
@@ -418,7 +418,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
                       )}
                       maxLength={2000}
                       rows={4}
-                      className="mt-1 w-full rounded-lg border border-neutral-200 bg-transparent px-4 py-2 text-neutral-900 focus:outline-none dark:border-neutral-600 dark:text-neutral-100 resize-none"
+                      className="mt-1 w-full rounded-lg border border-gray-200 bg-transparent px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:text-gray-100 resize-none"
                     />
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {t('settings.aboutYou.additionalContextDescription')}
@@ -430,8 +430,8 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
           )}
         </div>
 
-        <hr className="border-gray-300 dark:border-neutral-700" />
-        <span className="block text-[12px] text-black/50 dark:text-white/50">
+        <hr className="border-gray-300 dark:border-gray-700" />
+        <span className="block text-[12px] text-black/50 dark:text-white/60">
           {t(
             '*Note that these default settings only apply to new conversations once saved',
           )}
@@ -440,7 +440,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
         <div className="flex justify-end">
           <button
             type="button"
-            className="w-[120px] p-2 border rounded-lg shadow border-neutral-500 text-neutral-900 hover:bg-neutral-100 focus:outline-none dark:border-neutral-800 dark:border-opacity-50 dark:bg-white dark:text-black dark:hover:bg-neutral-300"
+            className="w-[120px] p-2 border rounded-lg shadow border-gray-500 text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-800 dark:border-opacity-50 dark:bg-white dark:text-black dark:hover:bg-gray-300"
             onClick={() => {
               onSave();
               onClose();

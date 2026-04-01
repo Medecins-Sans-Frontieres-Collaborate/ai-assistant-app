@@ -218,7 +218,7 @@ export function HelpPageClient({
               <select
                 value={currentLocale}
                 onChange={handleLocaleChange}
-                className="bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm font-medium cursor-pointer focus:outline-none border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5"
+                className="bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5"
               >
                 {availableLocales.map((locale) => (
                   <option

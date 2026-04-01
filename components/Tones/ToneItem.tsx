@@ -67,18 +67,18 @@ export const ToneItem: FC<ToneItemProps> = ({
       className={`group relative flex items-center transition-all duration-200 ease-in-out rounded-lg cursor-pointer ${
         isSelected
           ? 'bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500 dark:ring-blue-400 ring-inset'
-          : 'hover:bg-neutral-100 dark:hover:bg-neutral-800'
+          : 'hover:bg-gray-100 dark:hover:bg-gray-800'
       } ${isExpanded ? 'gap-3 px-3 py-3.5' : 'gap-2 px-2 py-2.5'}`}
     >
       <div className="flex-1 min-w-0">
         <div
-          className={`font-medium text-neutral-900 dark:text-neutral-100 truncate ${isExpanded ? 'text-lg' : 'text-base'}`}
+          className={`font-medium text-gray-900 dark:text-gray-100 truncate ${isExpanded ? 'text-lg' : 'text-base'}`}
         >
           {tone.name}
         </div>
         {tone.description && (
           <div
-            className={`text-neutral-500 dark:text-neutral-400 truncate mt-0.5 ${isExpanded ? 'text-base' : 'text-sm'}`}
+            className={`text-gray-500 dark:text-gray-400 truncate mt-0.5 ${isExpanded ? 'text-base' : 'text-sm'}`}
           >
             {tone.description}
           </div>
@@ -109,19 +109,19 @@ export const ToneItem: FC<ToneItemProps> = ({
 
       <div className="shrink-0 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
-          className="rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+          className="rounded p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700"
           onClick={onEdit}
           title={t('Edit')}
         >
           <IconEdit
             size={isExpanded ? 18 : 16}
-            className="text-neutral-600 dark:text-neutral-400"
+            className="text-gray-600 dark:text-gray-400"
           />
         </button>
 
         <div className="relative" ref={menuRef}>
           <button
-            className="rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+            className="rounded p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700"
             onClick={(e) => {
               e.stopPropagation();
               setShowMenu(!showMenu);
@@ -130,15 +130,15 @@ export const ToneItem: FC<ToneItemProps> = ({
           >
             <IconDots
               size={isExpanded ? 18 : 16}
-              className="text-neutral-600 dark:text-neutral-400"
+              className="text-gray-600 dark:text-gray-400"
             />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-1 w-52 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-[#171717] shadow-lg z-50">
+            <div className="absolute right-0 mt-1 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-surface-dark-base shadow-lg z-50">
               <div>
                 <button
-                  className="flex items-center w-full px-3 py-2.5 text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                  className="flex items-center w-full px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowFolderSubmenu(!showFolderSubmenu);
@@ -147,19 +147,19 @@ export const ToneItem: FC<ToneItemProps> = ({
                   <span className="flex items-center gap-2">
                     <IconFolder
                       size={16}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                     {t('Move to folder')}
                   </span>
                   {showFolderSubmenu ? (
                     <IconChevronDown
                       size={16}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                   ) : (
                     <IconChevronRight
                       size={16}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                   )}
                 </button>
@@ -168,7 +168,7 @@ export const ToneItem: FC<ToneItemProps> = ({
                 {showFolderSubmenu && (
                   <div className="pl-4 mt-1">
                     <button
-                      className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                       onClick={(e) => {
                         e.stopPropagation();
                         onMoveToFolder(tone.id, null);
@@ -184,7 +184,7 @@ export const ToneItem: FC<ToneItemProps> = ({
                     {folders.map((folder) => (
                       <button
                         key={folder.id}
-                        className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                        className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                         onClick={(e) => {
                           e.stopPropagation();
                           onMoveToFolder(tone.id, folder.id);
@@ -204,7 +204,7 @@ export const ToneItem: FC<ToneItemProps> = ({
 
               {onExport && (
                 <button
-                  className="flex items-center w-full px-3 py-2.5 text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                  className="flex items-center w-full px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={(e) => {
                     e.stopPropagation();
                     onExport();
@@ -217,7 +217,7 @@ export const ToneItem: FC<ToneItemProps> = ({
               )}
 
               <button
-                className="flex items-center w-full px-3 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 last:rounded-b-lg"
+                className="flex items-center w-full px-3 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 last:rounded-b-lg"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(e);

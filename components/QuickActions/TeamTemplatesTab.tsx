@@ -313,7 +313,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 value={templateName}
                 onChange={(e) => setTemplateName(e.target.value)}
                 placeholder={t('exampleMarketingTeamEngineering')}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -329,7 +329,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                   'Describe what this template includes and when to use it...',
                 )}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />
             </div>
 
@@ -342,7 +342,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 {/* Prompts Section */}
                 {prompts.length > 0 && (
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                       <input
                         type="checkbox"
                         checked={includePrompts}
@@ -378,7 +378,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                     {includePrompts &&
                       showPromptSelection &&
                       prompts.length > 0 && (
-                        <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-neutral-900">
+                        <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-gray-900">
                           <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
                             <button
                               onClick={() =>
@@ -402,7 +402,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                           {prompts.map((prompt) => (
                             <label
                               key={prompt.id}
-                              className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded cursor-pointer"
+                              className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer"
                             >
                               <input
                                 type="checkbox"
@@ -436,7 +436,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 {/* Tones Section */}
                 {tones.length > 0 && (
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                       <input
                         type="checkbox"
                         checked={includeTones}
@@ -470,7 +470,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                       )}
                     </div>
                     {includeTones && showToneSelection && tones.length > 0 && (
-                      <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-neutral-900">
+                      <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-gray-900">
                         <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
                           <button
                             onClick={() =>
@@ -494,7 +494,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                         {tones.map((tone) => (
                           <label
                             key={tone.id}
-                            className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded cursor-pointer"
+                            className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer"
                           >
                             <input
                               type="checkbox"
@@ -529,7 +529,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 {folders.filter((f) => f.type === 'prompt' || f.type === 'tone')
                   .length > 0 && (
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                       <input
                         type="checkbox"
                         checked={includeFolders}
@@ -552,7 +552,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 {/* Custom Agents Section */}
                 {customAgents && customAgents.length > 0 && (
                   <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                       <input
                         type="checkbox"
                         checked={includeCustomAgents}
@@ -602,7 +602,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
 
             <button
               onClick={handleImportClick}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 text-sm font-medium"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium"
             >
               <IconUpload size={18} />
               {t('Import Team Template')}
@@ -616,7 +616,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
             </h4>
 
             <div className="grid gap-3">
-              <div className="p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-gray-700">
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
                 <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
                   {t('Onboarding New Team Members')}
                 </p>
@@ -627,7 +627,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 </p>
               </div>
 
-              <div className="p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-gray-700">
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
                 <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
                   {t('Project-Specific Workflows')}
                 </p>
@@ -636,7 +636,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 </p>
               </div>
 
-              <div className="p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-gray-700">
+              <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700">
                 <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">
                   {t('Backup and Migration')}
                 </p>
@@ -666,7 +666,7 @@ export function TeamTemplatesTab({ onClose }: TeamTemplatesTabProps) {
                 {importedTemplates.map((template) => (
                   <div
                     key={template.templateId}
-                    className="p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-gray-700"
+                    className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">

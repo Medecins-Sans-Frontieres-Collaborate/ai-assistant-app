@@ -42,10 +42,14 @@ export const TabNavigation: FC<TabNavigationProps> = ({
 
   return (
     <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 mb-6">
-      <div className="flex relative">
+      <div className="flex relative" role="tablist">
         {tabs.map((tab) => (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls={`tabpanel-${tab.id}`}
+            id={`tab-${tab.id}`}
             onClick={() => onTabChange(tab.id)}
             className={`px-4 py-2 text-sm font-medium transition-colors duration-200 flex items-center gap-2 ${
               activeTab === tab.id
@@ -79,6 +83,7 @@ export const TabNavigation: FC<TabNavigationProps> = ({
         <button
           className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
           onClick={onClose}
+          aria-label="Close"
         >
           {closeIcon}
         </button>

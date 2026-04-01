@@ -697,7 +697,7 @@ const ChatFileUploadPreviews: FC<ChatFileUploadPreviewsProps> = ({
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-2 sm:px-4 pt-2 bg-white dark:bg-[#212121]">
+    <div className="max-w-3xl mx-auto px-2 sm:px-4 pt-2 bg-white dark:bg-surface-dark">
       <div className="mb-1.5">
         <span className="text-xs text-gray-500 dark:text-gray-400">
           {filePreviews.length}{' '}

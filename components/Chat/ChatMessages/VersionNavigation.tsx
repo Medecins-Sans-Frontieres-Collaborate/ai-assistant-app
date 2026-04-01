@@ -29,7 +29,7 @@ export const VersionNavigation: FC<VersionNavigationProps> = ({
       <button
         onClick={onPrevious}
         disabled={!canGoPrevious}
-        className={`p-0.5 rounded transition-colors ${
+        className={`p-1 rounded transition-colors ${
           canGoPrevious
             ? 'hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
             : 'opacity-30 cursor-not-allowed'
@@ -44,7 +44,7 @@ export const VersionNavigation: FC<VersionNavigationProps> = ({
       <button
         onClick={onNext}
         disabled={!canGoNext}
-        className={`p-0.5 rounded transition-colors ${
+        className={`p-1 rounded transition-colors ${
           canGoNext
             ? 'hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
             : 'opacity-30 cursor-not-allowed'

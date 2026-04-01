@@ -45,7 +45,7 @@ export class AgentChatHandler extends BasePipelineStage {
     console.log('[AgentChatHandler] Message count:', messagesToSend.length);
 
     try {
-      // Execute agent chat
+      // Execute agent chat — pass OBO credential + regional endpoint if available
       const response = await this.aiFoundryAgentHandler.handleAgentChat(
         context.modelId,
         context.model,
@@ -54,6 +54,8 @@ export class AgentChatHandler extends BasePipelineStage {
         context.user,
         context.botId,
         context.threadId,
+        context.userCredential,
+        context.foundryEndpoint,
       );
 
       const duration = Date.now() - startTime;

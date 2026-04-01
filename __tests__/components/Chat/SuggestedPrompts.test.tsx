@@ -223,7 +223,7 @@ describe('SuggestedPrompts', () => {
 
     buttons.forEach((button) => {
       expect(button).toHaveClass('bg-white');
-      expect(button).toHaveClass('dark:bg-[#1F1F1F]');
+      expect(button).toHaveClass('dark:bg-surface-dark');
       expect(button).toHaveClass('border');
       expect(button).toHaveClass('rounded-full');
     });

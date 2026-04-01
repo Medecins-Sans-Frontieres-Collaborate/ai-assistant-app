@@ -133,7 +133,7 @@ export const DataManagementSection: FC<DataManagementSectionProps> = ({
           {breakdown ? (
             <div className="space-y-3">
               {/* Total Usage */}
-              <div className="text-sm text-black dark:text-neutral-300">
+              <div className="text-sm text-black dark:text-gray-300">
                 <span className="font-medium">
                   {t('settings.Storage Usage')}:
                 </span>{' '}

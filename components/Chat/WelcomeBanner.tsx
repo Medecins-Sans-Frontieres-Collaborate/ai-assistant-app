@@ -91,7 +91,7 @@ export function WelcomeBanner({ onVisibilityChange }: WelcomeBannerProps) {
         <div className="flex-1 pointer-events-auto">
           <div className="relative overflow-hidden">
             {/* Glass background with theme-specific colors */}
-            <div className="relative bg-gradient-to-r from-rose-100/95 via-red-50/90 to-rose-100/95 dark:from-[#212121]/70 dark:via-[#212121]/60 dark:to-[#212121]/70 backdrop-blur-xl shadow-lg border-b border-rose-200/70 dark:border-gray-700/30">
+            <div className="relative bg-gradient-to-r from-rose-100/95 via-red-50/90 to-rose-100/95 dark:from-surface-dark/70 dark:via-surface-dark/60 dark:to-surface-dark/70 backdrop-blur-xl shadow-lg border-b border-rose-200/70 dark:border-gray-700/30">
               {/* Subtle gradient accent for dark mode only */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-transparent dark:from-red-600/15 dark:via-rose-600/15 dark:to-pink-600/15 pointer-events-none" />
               <div className="px-3 md:px-4 py-1.5 md:py-2">
@@ -114,7 +114,7 @@ export function WelcomeBanner({ onVisibilityChange }: WelcomeBannerProps) {
                     <Link
                       href="/info/welcome-v2"
                       onClick={handleView}
-                      className="px-2 md:px-2.5 py-0.5 md:py-1 text-[10px] md:text-xs font-medium bg-red-600 hover:bg-red-700 text-white rounded transition-colors whitespace-nowrap shadow-[0_2px_12px_rgba(220,38,38,0.45)] hover:shadow-[0_2px_16px_rgba(220,38,38,0.55)] dark:shadow-[0_2px_12px_rgba(248,113,113,0.4)] dark:hover:shadow-[0_2px_16px_rgba(248,113,113,0.5)] ring-1 ring-red-400/30 dark:ring-red-400/50"
+                      className="px-2 md:px-2.5 py-0.5 md:py-1 text-xs font-medium bg-red-600 hover:bg-red-700 text-white rounded transition-colors whitespace-nowrap shadow-md ring-1 ring-red-400/30 dark:ring-red-400/50"
                     >
                       <span className="md:hidden">
                         {t('welcomeBanner.whatsNew')}

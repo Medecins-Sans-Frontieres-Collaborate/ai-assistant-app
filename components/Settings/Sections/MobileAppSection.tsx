@@ -32,7 +32,7 @@ export const MobileAppSection: FC = () => {
 
       <div className="space-y-6">
         {/* QR Code Section */}
-        <div className="flex flex-col items-center p-6 bg-gray-50 dark:bg-[#212121] rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col items-center p-6 bg-gray-50 dark:bg-surface-dark rounded-lg border border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-semibold mb-4 text-black dark:text-white">
             {t('settings.Scan to Install')}
           </h3>
@@ -88,7 +88,7 @@ export const MobileAppSection: FC = () => {
         </div>
 
         {/* iOS Instructions */}
-        <div className="bg-white dark:bg-[#212121] rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-surface-dark rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center mb-3">
             <IconBrandApple
               className="mr-2 text-gray-700 dark:text-gray-300"
@@ -129,7 +129,7 @@ export const MobileAppSection: FC = () => {
         </div>
 
         {/* Android Instructions */}
-        <div className="bg-white dark:bg-[#212121] rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-surface-dark rounded-lg p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center mb-3">
             <IconBrandAndroid
               className="mr-2 text-gray-700 dark:text-gray-300"

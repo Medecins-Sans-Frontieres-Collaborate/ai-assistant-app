@@ -67,7 +67,20 @@ const FileImagePreview: FC<{ image: ImageMessageContent }> = ({ image }) => {
           minWidth: '200px',
           height: '150px',
         }}
+        role={imageSrc ? 'button' : undefined}
+        tabIndex={imageSrc ? 0 : undefined}
+        aria-label={imageSrc ? t('chat.openImage') : undefined}
         onClick={imageSrc ? handleImageClick : undefined}
+        onKeyDown={
+          imageSrc
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleImageClick();
+                }
+              }
+            : undefined
+        }
       >
         {isLoading ? (
           <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-shimmer">
@@ -189,345 +202,350 @@ const isDocumentFile = (extension: string): boolean => {
  *
  * Renders file attachments with download functionality and image previews.
  */
-export const FileContent: FC<FileContentProps> = ({ files, images }) => {
-  const t = useTranslations();
-  const { openArtifact, openDocument } = useArtifactStore();
-  const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
+export const FileContent: FC<FileContentProps> = React.memo(
+  ({ files, images }) => {
+    const t = useTranslations();
+    const { openArtifact, openDocument } = useArtifactStore();
+    const [isLoadingFile, setIsLoadingFile] = useState<string | null>(null);
 
-  const downloadFile = (event: React.MouseEvent, fileUrl: string) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (fileUrl) {
-      const filename = fileUrl.split('/').pop();
-      const downloadUrl = `/api/file/${filename}`;
-      window.open(downloadUrl, '_blank');
-    }
-  };
-
-  const openInCodeEditor = async (
-    event: React.MouseEvent,
-    fileUrl: string,
-    filename: string,
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    try {
-      setIsLoadingFile(fileUrl);
-      const fileId = fileUrl.split('/').pop();
-      const response = await fetch(`/api/file/${fileId}`);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch file content');
+    const downloadFile = (event: React.MouseEvent, fileUrl: string) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (fileUrl) {
+        const filename = fileUrl.split('/').pop();
+        const downloadUrl = `/api/file/${filename}`;
+        window.open(downloadUrl, '_blank');
       }
+    };
 
-      const blob = await response.blob();
-      const text = await blob.text();
+    const openInCodeEditor = async (
+      event: React.MouseEvent,
+      fileUrl: string,
+      filename: string,
+    ) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-      // Detect language from file extension
-      const extension = filename.split('.').pop()?.toLowerCase() || 'txt';
-      const languageMap: Record<string, string> = {
-        ts: 'typescript',
-        tsx: 'typescript',
-        js: 'javascript',
-        jsx: 'javascript',
-        py: 'python',
-        java: 'java',
-        cs: 'csharp',
-        go: 'go',
-        rs: 'rust',
-        cpp: 'cpp',
-        c: 'c',
-        html: 'html',
-        css: 'css',
-        json: 'json',
-        md: 'markdown',
-        sql: 'sql',
-        sh: 'shell',
-        bash: 'shell',
-        yml: 'yaml',
-        yaml: 'yaml',
-        rb: 'ruby',
-        php: 'php',
-        swift: 'swift',
-        kt: 'kotlin',
-        scala: 'scala',
-        r: 'r',
-        txt: 'plaintext',
-      };
+      try {
+        setIsLoadingFile(fileUrl);
+        const fileId = fileUrl.split('/').pop();
+        const response = await fetch(`/api/file/${fileId}`);
 
-      const language = languageMap[extension] || 'plaintext';
+        if (!response.ok) {
+          throw new Error('Failed to fetch file content');
+        }
 
-      // Open in code editor
-      openArtifact(text, language, filename);
-    } catch (error) {
-      console.error('Error opening file in code editor:', error);
-      alert(t('chat.failedToOpenCodeEditor'));
-    } finally {
-      setIsLoadingFile(null);
-    }
-  };
-
-  const openInDocumentEditor = async (
-    event: React.MouseEvent,
-    fileUrl: string,
-    filename: string,
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    try {
-      setIsLoadingFile(fileUrl);
-      const fileId = fileUrl.split('/').pop();
-      const response = await fetch(`/api/file/${fileId}`);
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch file content');
-      }
-
-      const blob = await response.blob();
-      const extension = filename.split('.').pop()?.toLowerCase();
-
-      let content: string;
-      let sourceFormat:
-        | 'md'
-        | 'markdown'
-        | 'txt'
-        | 'html'
-        | 'htm'
-        | 'pdf'
-        | null = null;
-
-      // Handle PDF files specially (they need ArrayBuffer)
-      if (extension === 'pdf') {
-        const { pdfToHtml } =
-          await import('@/lib/utils/shared/document/formatConverter');
-        const arrayBuffer = await blob.arrayBuffer();
-        content = await pdfToHtml(arrayBuffer);
-        sourceFormat = 'pdf';
-      } else {
+        const blob = await response.blob();
         const text = await blob.text();
-        content = text; // Store original source content
 
-        // Determine source format
-        const formatMap: Record<
-          string,
-          'md' | 'markdown' | 'txt' | 'html' | 'htm'
-        > = {
-          md: 'md',
-          markdown: 'markdown',
-          txt: 'txt',
+        // Detect language from file extension
+        const extension = filename.split('.').pop()?.toLowerCase() || 'txt';
+        const languageMap: Record<string, string> = {
+          ts: 'typescript',
+          tsx: 'typescript',
+          js: 'javascript',
+          jsx: 'javascript',
+          py: 'python',
+          java: 'java',
+          cs: 'csharp',
+          go: 'go',
+          rs: 'rust',
+          cpp: 'cpp',
+          c: 'c',
           html: 'html',
-          htm: 'htm',
+          css: 'css',
+          json: 'json',
+          md: 'markdown',
+          sql: 'sql',
+          sh: 'shell',
+          bash: 'shell',
+          yml: 'yaml',
+          yaml: 'yaml',
+          rb: 'ruby',
+          php: 'php',
+          swift: 'swift',
+          kt: 'kotlin',
+          scala: 'scala',
+          r: 'r',
+          txt: 'plaintext',
         };
-        sourceFormat = extension ? formatMap[extension] || null : null;
+
+        const language = languageMap[extension] || 'plaintext';
+
+        // Open in code editor
+        openArtifact(text, language, filename);
+      } catch (error) {
+        console.error('Error opening file in code editor:', error);
+        alert(t('chat.failedToOpenCodeEditor'));
+      } finally {
+        setIsLoadingFile(null);
       }
+    };
 
-      // Open in document editor with source content in document mode
-      openDocument(content, sourceFormat, filename, 'document');
-    } catch (error) {
-      console.error('Error opening file in document editor:', error);
-      alert(t('chat.failedToOpenDocEditor'));
-    } finally {
-      setIsLoadingFile(null);
-    }
-  };
+    const openInDocumentEditor = async (
+      event: React.MouseEvent,
+      fileUrl: string,
+      filename: string,
+    ) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-  return (
-    <div className="flex flex-wrap gap-2 w-full py-2">
-      {/* Render Images */}
-      {images.map((image, index) => (
-        <FileImagePreview key={`image-${index}`} image={image} />
-      ))}
+      try {
+        setIsLoadingFile(fileUrl);
+        const fileId = fileUrl.split('/').pop();
+        const response = await fetch(`/api/file/${fileId}`);
 
-      {/* Render Files */}
-      {files.map((file, index) => {
-        const filename =
-          file.originalFilename || file.url.split('/').pop() || '';
-        const extension = filename.split('.').pop()?.toLowerCase() || '';
+        if (!response.ok) {
+          throw new Error('Failed to fetch file content');
+        }
 
-        // Check if this is an audio or video file
-        const isAudioVideo = [
-          'mp3',
-          'mp4',
-          'mpeg',
-          'mpga',
-          'm4a',
-          'wav',
-          'webm',
-        ].includes(extension);
+        const blob = await response.blob();
+        const extension = filename.split('.').pop()?.toLowerCase();
 
-        // File type badge color
-        const getBadgeColor = (ext: string) => {
-          // Audio/video files
-          if (isAudioVideo) return 'bg-purple-500 text-white';
+        let content: string;
+        let sourceFormat:
+          | 'md'
+          | 'markdown'
+          | 'txt'
+          | 'html'
+          | 'htm'
+          | 'pdf'
+          | null = null;
 
-          switch (ext) {
-            // Documents
-            case 'pdf':
-              return 'bg-red-500 text-white';
-            case 'doc':
-            case 'docx':
-              return 'bg-blue-500 text-white';
-            case 'xls':
-            case 'xlsx':
-              return 'bg-green-500 text-white';
-            case 'ppt':
-            case 'pptx':
-              return 'bg-orange-500 text-white';
+        // Handle PDF files specially (they need ArrayBuffer)
+        if (extension === 'pdf') {
+          const { pdfToHtml } =
+            await import('@/lib/utils/shared/document/formatConverter');
+          const arrayBuffer = await blob.arrayBuffer();
+          content = await pdfToHtml(arrayBuffer);
+          sourceFormat = 'pdf';
+        } else {
+          const text = await blob.text();
+          content = text; // Store original source content
 
-            // Text
-            case 'txt':
-            case 'md':
-              return 'bg-gray-500 text-white';
+          // Determine source format
+          const formatMap: Record<
+            string,
+            'md' | 'markdown' | 'txt' | 'html' | 'htm'
+          > = {
+            md: 'md',
+            markdown: 'markdown',
+            txt: 'txt',
+            html: 'html',
+            htm: 'htm',
+          };
+          sourceFormat = extension ? formatMap[extension] || null : null;
+        }
 
-            // Data
-            case 'csv':
-              return 'bg-emerald-500 text-white';
-            case 'json':
-              return 'bg-yellow-500 text-white';
-            case 'xml':
-              return 'bg-amber-600 text-white';
-            case 'yaml':
-            case 'yml':
-              return 'bg-violet-500 text-white';
+        // Open in document editor with source content in document mode
+        openDocument(content, sourceFormat, filename, 'document');
+      } catch (error) {
+        console.error('Error opening file in document editor:', error);
+        alert(t('chat.failedToOpenDocEditor'));
+      } finally {
+        setIsLoadingFile(null);
+      }
+    };
 
-            // Code - Programming Languages
-            case 'py':
-              return 'bg-blue-600 text-white';
-            case 'js':
-            case 'jsx':
-              return 'bg-yellow-400 text-gray-900 dark:text-yellow-900';
-            case 'ts':
-            case 'tsx':
-              return 'bg-blue-500 text-white';
-            case 'java':
-              return 'bg-red-600 text-white';
-            case 'c':
-            case 'cpp':
-            case 'cs':
-              return 'bg-purple-600 text-white';
-            case 'go':
-              return 'bg-cyan-500 text-white';
-            case 'rb':
-              return 'bg-red-500 text-white';
-            case 'php':
-              return 'bg-indigo-500 text-white';
-            case 'swift':
-              return 'bg-orange-600 text-white';
-            case 'kt':
-              return 'bg-purple-500 text-white';
-            case 'rs':
-              return 'bg-orange-700 text-white';
-            case 'scala':
-              return 'bg-red-700 text-white';
+    return (
+      <div className="flex flex-wrap gap-2 w-full py-2">
+        {/* Render Images */}
+        {images.map((image, index) => (
+          <FileImagePreview key={`image-${index}`} image={image} />
+        ))}
 
-            // Scripts & Config
-            case 'sql':
-              return 'bg-blue-700 text-white';
-            case 'sh':
-            case 'bash':
-              return 'bg-gray-700 text-white';
-            case 'ps1':
-              return 'bg-blue-800 text-white';
-            case 'r':
-              return 'bg-blue-400 text-white';
-            case 'env':
-            case 'config':
-            case 'ini':
-            case 'toml':
-              return 'bg-slate-600 text-white';
+        {/* Render Files */}
+        {files.map((file, index) => {
+          const filename =
+            file.originalFilename || file.url.split('/').pop() || '';
+          const extension = filename.split('.').pop()?.toLowerCase() || '';
 
-            default:
-              return 'bg-gray-500 text-white';
-          }
-        };
+          // Check if this is an audio or video file
+          const isAudioVideo = [
+            'mp3',
+            'mp4',
+            'mpeg',
+            'mpga',
+            'm4a',
+            'wav',
+            'webm',
+          ].includes(extension);
 
-        // Determine if filename is long
-        const isLongFilename = filename.length > 30;
-        const isCode = isCodeFile(extension);
-        const isDocument = isDocumentFile(extension);
-        const isLoading = isLoadingFile === file.url;
+          // File type badge color
+          const getBadgeColor = (ext: string) => {
+            // Audio/video files
+            if (isAudioVideo) return 'bg-purple-500 text-white';
 
-        return (
-          <div
-            key={`file-${index}`}
-            className="relative flex flex-col p-3 rounded-lg border border-gray-300 dark:border-gray-700 hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-600 transition-all bg-white dark:bg-gray-900 group"
-            style={{
-              width: 'calc(50% - 0.25rem)',
-              maxWidth: '280px',
-              minWidth: '200px',
-              minHeight: isLongFilename ? '90px' : '75px',
-            }}
-          >
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <div
-                className={`px-2 py-1 rounded text-xs font-bold ${getBadgeColor(extension)} flex-shrink-0`}
-              >
-                {extension.toUpperCase()}
-              </div>
-              <div className="flex items-center gap-1">
-                {/* Open as Document button (for document files) */}
-                {isDocument && (
-                  <button
-                    onClick={(event) =>
-                      openInDocumentEditor(event, file.url, filename)
-                    }
-                    disabled={isLoading}
-                    className="p-1 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    title={t('chat.openAsDocument')}
-                  >
-                    <IconFileText
-                      className={`w-4 h-4 ${
-                        isLoading
-                          ? 'text-gray-400 animate-pulse'
-                          : 'text-green-600 dark:text-green-400'
-                      }`}
-                    />
-                  </button>
-                )}
-                {/* Open in Code Editor button (only for code files) */}
-                {isCode && (
-                  <button
-                    onClick={(event) =>
-                      openInCodeEditor(event, file.url, filename)
-                    }
-                    disabled={isLoading}
-                    className="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    title={t('chat.openInCodeEditor')}
-                  >
-                    <IconCode
-                      className={`w-4 h-4 ${
-                        isLoading
-                          ? 'text-gray-400 animate-pulse'
-                          : 'text-blue-600 dark:text-blue-400'
-                      }`}
-                    />
-                  </button>
-                )}
-                {/* Download button */}
-                <button
-                  onClick={(event) => downloadFile(event, file.url)}
-                  className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                  title={t('chat.download')}
+            switch (ext) {
+              // Documents
+              case 'pdf':
+                return 'bg-red-500 text-white';
+              case 'doc':
+              case 'docx':
+                return 'bg-blue-500 text-white';
+              case 'xls':
+              case 'xlsx':
+                return 'bg-green-500 text-white';
+              case 'ppt':
+              case 'pptx':
+                return 'bg-orange-500 text-white';
+
+              // Text
+              case 'txt':
+              case 'md':
+                return 'bg-gray-500 text-white';
+
+              // Data
+              case 'csv':
+                return 'bg-emerald-500 text-white';
+              case 'json':
+                return 'bg-yellow-500 text-white';
+              case 'xml':
+                return 'bg-amber-600 text-white';
+              case 'yaml':
+              case 'yml':
+                return 'bg-violet-500 text-white';
+
+              // Code - Programming Languages
+              case 'py':
+                return 'bg-blue-600 text-white';
+              case 'js':
+              case 'jsx':
+                return 'bg-yellow-400 text-gray-900 dark:text-yellow-900';
+              case 'ts':
+              case 'tsx':
+                return 'bg-blue-500 text-white';
+              case 'java':
+                return 'bg-red-600 text-white';
+              case 'c':
+              case 'cpp':
+              case 'cs':
+                return 'bg-purple-600 text-white';
+              case 'go':
+                return 'bg-cyan-500 text-white';
+              case 'rb':
+                return 'bg-red-500 text-white';
+              case 'php':
+                return 'bg-indigo-500 text-white';
+              case 'swift':
+                return 'bg-orange-600 text-white';
+              case 'kt':
+                return 'bg-purple-500 text-white';
+              case 'rs':
+                return 'bg-orange-700 text-white';
+              case 'scala':
+                return 'bg-red-700 text-white';
+
+              // Scripts & Config
+              case 'sql':
+                return 'bg-blue-700 text-white';
+              case 'sh':
+              case 'bash':
+                return 'bg-gray-700 text-white';
+              case 'ps1':
+                return 'bg-blue-800 text-white';
+              case 'r':
+                return 'bg-blue-400 text-white';
+              case 'env':
+              case 'config':
+              case 'ini':
+              case 'toml':
+                return 'bg-slate-600 text-white';
+
+              default:
+                return 'bg-gray-500 text-white';
+            }
+          };
+
+          // Determine if filename is long
+          const isLongFilename = filename.length > 30;
+          const isCode = isCodeFile(extension);
+          const isDocument = isDocumentFile(extension);
+          const isLoading = isLoadingFile === file.url;
+
+          return (
+            <div
+              key={`file-${index}`}
+              className="relative flex flex-col p-3 rounded-lg border border-gray-300 dark:border-gray-700 hover:shadow-lg hover:border-gray-400 dark:hover:border-gray-600 transition-all bg-white dark:bg-gray-900 group"
+              style={{
+                width: 'calc(50% - 0.25rem)',
+                maxWidth: '280px',
+                minWidth: '200px',
+                minHeight: isLongFilename ? '90px' : '75px',
+              }}
+            >
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div
+                  className={`px-2 py-1 rounded text-xs font-bold ${getBadgeColor(extension)} flex-shrink-0`}
                 >
-                  <IconDownload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                </button>
+                  {extension.toUpperCase()}
+                </div>
+                <div className="flex items-center gap-1">
+                  {/* Open as Document button (for document files) */}
+                  {isDocument && (
+                    <button
+                      onClick={(event) =>
+                        openInDocumentEditor(event, file.url, filename)
+                      }
+                      disabled={isLoading}
+                      className="p-1 rounded hover:bg-green-100 dark:hover:bg-green-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title={t('chat.openAsDocument')}
+                      aria-label={t('chat.openAsDocument')}
+                    >
+                      <IconFileText
+                        className={`w-4 h-4 ${
+                          isLoading
+                            ? 'text-gray-400 animate-pulse'
+                            : 'text-green-600 dark:text-green-400'
+                        }`}
+                      />
+                    </button>
+                  )}
+                  {/* Open in Code Editor button (only for code files) */}
+                  {isCode && (
+                    <button
+                      onClick={(event) =>
+                        openInCodeEditor(event, file.url, filename)
+                      }
+                      disabled={isLoading}
+                      className="p-1 rounded hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      title={t('chat.openInCodeEditor')}
+                      aria-label={t('chat.openInCodeEditor')}
+                    >
+                      <IconCode
+                        className={`w-4 h-4 ${
+                          isLoading
+                            ? 'text-gray-400 animate-pulse'
+                            : 'text-blue-600 dark:text-blue-400'
+                        }`}
+                      />
+                    </button>
+                  )}
+                  {/* Download button */}
+                  <button
+                    onClick={(event) => downloadFile(event, file.url)}
+                    className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    title={t('chat.download')}
+                    aria-label={t('chat.download')}
+                  >
+                    <IconDownload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  </button>
+                </div>
+              </div>
+              <div className="min-w-0 flex-1">
+                <span
+                  className="block text-sm font-medium text-gray-900 dark:text-gray-100 break-words line-clamp-2"
+                  title={filename}
+                >
+                  {filename}
+                </span>
               </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <span
-                className="block text-sm font-medium text-gray-900 dark:text-gray-100 break-words line-clamp-2"
-                title={filename}
-              >
-                {filename}
-              </span>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+          );
+        })}
+      </div>
+    );
+  },
+);
 
 export default FileContent;

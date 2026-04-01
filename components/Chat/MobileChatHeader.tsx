@@ -73,12 +73,12 @@ export function MobileChatHeader({
 
   return (
     <div
-      className={`md:hidden fixed ${bannerVisible ? 'top-8' : 'top-0'} left-0 right-0 z-40 h-14 bg-white dark:bg-[#212121] border-b border-neutral-300 dark:border-neutral-700 flex items-center justify-between px-4 transition-all duration-300`}
+      className={`md:hidden fixed ${bannerVisible ? 'top-8' : 'top-0'} left-0 right-0 z-40 h-14 bg-white dark:bg-surface-dark border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4 transition-all duration-300`}
     >
       <div className="flex items-center flex-1 min-w-0">
         <button
           onClick={toggleChatbar}
-          className="p-2 rounded-lg text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800 transition-colors shrink-0"
+          className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800 transition-colors shrink-0"
           aria-label="Toggle menu"
         >
           <IconMenu2 size={24} />
@@ -88,11 +88,11 @@ export function MobileChatHeader({
         {isLoaded && (
           <button
             onClick={() => onModelSelectChange(true)}
-            className="ml-2 flex items-center px-2 py-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors min-w-0"
+            className="ml-2 flex items-center px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors min-w-0"
             aria-label={t('chat.selectModel')}
           >
             {getProviderIcon(modelProvider)}
-            <span className="font-semibold text-neutral-900 dark:text-white truncate text-base ml-1.5">
+            <span className="font-semibold text-gray-900 dark:text-white truncate text-base ml-1.5">
               {displayModelName || t('chat.selectModel')}
             </span>
             {isAgent && (
@@ -114,7 +114,7 @@ export function MobileChatHeader({
       {hasMessages && (
         <button
           onClick={clearConversation}
-          className="p-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors shrink-0"
+          className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shrink-0"
           aria-label={t('chat.clearConversation')}
           title={t('chat.clearConversation')}
         >

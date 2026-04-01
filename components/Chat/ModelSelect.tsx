@@ -1,11 +1,12 @@
 import { IconX } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useAgentManagement } from '@/client/hooks/settings/useAgentManagement';
+import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
@@ -28,6 +29,8 @@ import { CustomAgent } from '@/client/stores/settingsStore';
 import {
   getOrganizationAgentIdFromModelId,
   getOrganizationAgents,
+  getRAGAgents,
+  isFoundryAgentId,
 } from '@/lib/organizationAgents';
 
 interface ModelSelectProps {
@@ -45,6 +48,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   // Feature flag: Control organization bots visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
   const isBotsEnabled = exploreBots !== false;
+
+  // Dynamically discovered Foundry agents (RBAC-filtered per user)
+  const { foundryAgents, isLoadingFoundryAgents } = useFoundryAgents();
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
@@ -149,16 +155,16 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   }, [customAgents, defunctAgentIds]);
 
   // Convert organization agents to OpenAIModel format
-  // Only include organization agents if the exploreBots feature flag is enabled
+  // Combines static RAG agents (from JSON config) with dynamically discovered Foundry agents
   const organizationAgentModels: OpenAIModel[] = useMemo(() => {
     // Feature flag check: Skip organization agents if disabled in LaunchDarkly
     if (!isBotsEnabled) {
       return [];
     }
 
-    const orgAgents = getOrganizationAgents();
-    return orgAgents.map((agent) => {
-      // Use gpt-4.1 as default base model for RAG agents, or specified baseModelId
+    // Static agents from organization-agents.json (RAG agents + any static Foundry agents)
+    const staticAgents = getOrganizationAgents();
+    const staticModels = staticAgents.map((agent) => {
       const baseModelId =
         (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
       const baseModel =
@@ -169,11 +175,34 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         name: agent.name,
         description: agent.description,
         modelType: agent.type === 'foundry' ? ('agent' as const) : undefined,
-        agentId: agent.agentId, // For foundry agents
+        agentId: agent.agentId,
         isOrganizationAgent: true,
       };
     });
-  }, [isBotsEnabled]);
+
+    // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user)
+    const dynamicModels = foundryAgents.map((agent) => {
+      const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
+      return {
+        ...baseModel,
+        id: `foundry-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: 'agent' as const,
+        agentId: agent.agentName,
+        isOrganizationAgent: true,
+      };
+    });
+
+    // Deduplicate: if a Foundry agent exists in both static config and dynamic discovery,
+    // prefer the dynamic version (it has RBAC validation)
+    const dynamicAgentNames = new Set(foundryAgents.map((a) => a.agentName));
+    const deduplicatedStatic = staticModels.filter(
+      (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
+    );
+
+    return [...deduplicatedStatic, ...dynamicModels];
+  }, [isBotsEnabled, foundryAgents]);
 
   // Combine base models, custom agents, and organization agents
   const availableModels = [
@@ -230,84 +259,99 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     updateConversation,
   ]);
 
-  const handleModelSelect = (model: OpenAIModel) => {
-    if (!selectedConversation) {
-      console.warn(
-        '[ModelSelect] No conversation selected, cannot update model',
-      );
-      return;
-    }
+  const handleModelSelect = useCallback(
+    (model: OpenAIModel) => {
+      if (!selectedConversation) {
+        console.warn(
+          '[ModelSelect] No conversation selected, cannot update model',
+        );
+        return;
+      }
 
-    // Validate that the model exists in available models
-    if (!availableModels.find((m) => m.id === model.id)) {
-      console.error(
-        '[ModelSelect] Selected model not found in available models:',
-        model.id,
-      );
-      return;
-    }
+      // Validate that the model exists in available models
+      if (!availableModels.find((m) => m.id === model.id)) {
+        console.error(
+          '[ModelSelect] Selected model not found in available models:',
+          model.id,
+        );
+        return;
+      }
 
-    // Switch to details view on mobile when a model is selected
-    setMobileView('details');
+      // Switch to details view on mobile when a model is selected
+      setMobileView('details');
 
-    // Set as default model for future conversations
-    console.log(
-      `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
-    );
-    setDefaultModelId(model.id as OpenAIModelID);
-
-    // Update conversation with selected model
-    // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
-    const updates: Partial<Conversation> = {
-      model: model,
-    };
-
-    // Set bot ID for organization agents (enables RAG)
-    const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
-    if (orgAgentId) {
-      updates.bot = orgAgentId;
+      // Set as default model for future conversations
       console.log(
-        `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+        `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
       );
-    } else if (selectedConversation.bot) {
-      // Clear bot if switching away from an organization agent
-      updates.bot = undefined;
-      console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
-    }
+      setDefaultModelId(model.id as OpenAIModelID);
 
-    // Check if the new model supports agents (check both static config and model object for org agents)
-    const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-    const newModelHasAgent =
-      newModelConfig?.agentId !== undefined || model.agentId !== undefined;
+      // Update conversation with selected model
+      // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
+      const updates: Partial<Conversation> = {
+        model: model,
+      };
 
-    // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-    if (
-      !newModelHasAgent &&
-      selectedConversation.defaultSearchMode === SearchMode.AGENT
-    ) {
-      updates.defaultSearchMode = SearchMode.INTELLIGENT;
+      // Set bot ID for organization agents (enables RAG) or Foundry agents
+      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
+      const foundryAgentId = isFoundryAgentId(model.id);
+      if (orgAgentId) {
+        updates.bot = orgAgentId;
+        console.log(
+          `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+        );
+      } else if (foundryAgentId) {
+        // Dynamic Foundry agents don't use bot ID — agent routing is via agentId
+        console.log(
+          `[ModelSelect] Selected dynamic Foundry agent: ${model.id}`,
+        );
+      } else if (selectedConversation.bot) {
+        // Clear bot if switching away from an organization agent
+        updates.bot = undefined;
+        console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
+      }
+
+      // Check if the new model supports agents (check both static config and model object for org agents)
+      const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
+      const newModelHasAgent =
+        newModelConfig?.agentId !== undefined || model.agentId !== undefined;
+
+      // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
+      if (
+        !newModelHasAgent &&
+        selectedConversation.defaultSearchMode === SearchMode.AGENT
+      ) {
+        updates.defaultSearchMode = SearchMode.INTELLIGENT;
+        console.log(
+          `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+        );
+      }
+
+      // Only set defaultSearchMode if it's not already set on the conversation
+      if (selectedConversation.defaultSearchMode === undefined) {
+        updates.defaultSearchMode = SearchMode.INTELLIGENT;
+        console.log(
+          `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
+        );
+      }
+
       console.log(
-        `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+        `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
       );
-    }
+      updateConversation(selectedConversation.id, updates);
 
-    // Only set defaultSearchMode if it's not already set on the conversation
-    if (selectedConversation.defaultSearchMode === undefined) {
-      updates.defaultSearchMode = SearchMode.INTELLIGENT;
-      console.log(
-        `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
-      );
-    }
+      // Don't auto-close - let user review settings and close manually
+    },
+    [
+      selectedConversation,
+      availableModels,
+      setMobileView,
+      setDefaultModelId,
+      updateConversation,
+    ],
+  );
 
-    console.log(
-      `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
-    );
-    updateConversation(selectedConversation.id, updates);
-
-    // Don't auto-close - let user review settings and close manually
-  };
-
-  const handleToggleSearchMode = () => {
+  const handleToggleSearchMode = useCallback(() => {
     if (!selectedConversation) return;
 
     const newMode = searchModeEnabled ? SearchMode.OFF : SearchMode.INTELLIGENT;
@@ -323,54 +367,85 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
     // Set as default search mode for future conversations
     setDefaultSearchMode(newMode);
-  };
+  }, [
+    selectedConversation,
+    searchModeEnabled,
+    currentSearchMode,
+    updateConversation,
+    setDefaultSearchMode,
+  ]);
 
-  const handleSetSearchMode = (mode: SearchMode) => {
-    if (!selectedConversation) return;
+  const handleSetSearchMode = useCallback(
+    (mode: SearchMode) => {
+      if (!selectedConversation) return;
 
-    console.log(
-      `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
-    );
+      console.log(
+        `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
+      );
 
-    // Update current conversation
-    updateConversation(selectedConversation.id, {
-      defaultSearchMode: mode,
-    });
-
-    // Set as default search mode for future conversations
-    setDefaultSearchMode(mode);
-  };
-
-  const handleSaveAgent = (agent: CustomAgent) => {
-    saveAgentToStore(agent);
-    closeAgentForm();
-  };
-
-  const handleEditAgent = (agent: CustomAgent) => {
-    openAgentForm(agent);
-  };
-
-  const handleImportAgents = (agents: CustomAgent[]) => {
-    agents.forEach((agent) => {
-      saveAgentToStore(agent);
-    });
-  };
-
-  const handleDeleteAgent = (agentId: string) => {
-    deleteAgentFromStore(agentId);
-
-    // If currently selected model is the deleted agent, switch to default
-    if (
-      selectedConversation &&
-      selectedConversation.model?.id === `custom-${agentId}`
-    ) {
-      const defaultModel = baseModels[0];
-      // Only update the model field to avoid overwriting other conversation properties
+      // Update current conversation
       updateConversation(selectedConversation.id, {
-        model: defaultModel,
+        defaultSearchMode: mode,
       });
-    }
-  };
+
+      // Set as default search mode for future conversations
+      setDefaultSearchMode(mode);
+    },
+    [
+      selectedConversation,
+      currentSearchMode,
+      updateConversation,
+      setDefaultSearchMode,
+    ],
+  );
+
+  const handleSaveAgent = useCallback(
+    (agent: CustomAgent) => {
+      saveAgentToStore(agent);
+      closeAgentForm();
+    },
+    [saveAgentToStore, closeAgentForm],
+  );
+
+  const handleEditAgent = useCallback(
+    (agent: CustomAgent) => {
+      openAgentForm(agent);
+    },
+    [openAgentForm],
+  );
+
+  const handleImportAgents = useCallback(
+    (agents: CustomAgent[]) => {
+      agents.forEach((agent) => {
+        saveAgentToStore(agent);
+      });
+    },
+    [saveAgentToStore],
+  );
+
+  const handleDeleteAgent = useCallback(
+    (agentId: string) => {
+      deleteAgentFromStore(agentId);
+
+      // If currently selected model is the deleted agent, switch to default
+      if (
+        selectedConversation &&
+        selectedConversation.model?.id === `custom-${agentId}`
+      ) {
+        const defaultModel = baseModels[0];
+        // Only update the model field to avoid overwriting other conversation properties
+        updateConversation(selectedConversation.id, {
+          model: defaultModel,
+        });
+      }
+    },
+    [
+      deleteAgentFromStore,
+      selectedConversation,
+      baseModels,
+      updateConversation,
+    ],
+  );
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -494,6 +569,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           organizationAgentModels={organizationAgentModels}
           selectedModelId={selectedModelId}
           defunctAgentIds={defunctAgentIds}
+          isLoadingFoundryAgents={isLoadingFoundryAgents}
           // Props for details panel
           selectedModel={selectedModel}
           modelConfig={modelConfig}

@@ -360,25 +360,25 @@ export const ChatInput = ({
   };
 
   useEffect(() => {
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = 'inherit';
-      textareaRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
-      textareaRef.current.style.overflow = `${
-        textareaRef?.current?.scrollHeight > UI_CONSTANTS.TEXTAREA.MAX_HEIGHT
-          ? 'auto'
-          : 'hidden'
-      }`;
+    const textarea = textareaRef?.current;
+    if (!textarea) return;
 
-      // Store scroll height in state for use in render
-      setTextareaScrollHeight(textareaRef.current.scrollHeight);
+    // Batch layout read/write in a single rAF to avoid layout thrashing
+    const rafId = requestAnimationFrame(() => {
+      // Write: reset height to measure natural scrollHeight
+      textarea.style.height = 'inherit';
+      // Read: measure once
+      const scrollHeight = textarea.scrollHeight;
+      // Write: apply measured values
+      textarea.style.height = `${scrollHeight}px`;
+      textarea.style.overflow =
+        scrollHeight > UI_CONSTANTS.TEXTAREA.MAX_HEIGHT ? 'auto' : 'hidden';
 
-      // Check if textarea is multiline - single line is typically ~44px or less
-      // Only consider it multiline if scrollHeight exceeds threshold to avoid false positives
-      setIsMultiline(
-        textareaRef.current.scrollHeight >
-          UI_CONSTANTS.TEXTAREA.MULTILINE_THRESHOLD,
-      );
-    }
+      setTextareaScrollHeight(scrollHeight);
+      setIsMultiline(scrollHeight > UI_CONSTANTS.TEXTAREA.MULTILINE_THRESHOLD);
+    });
+
+    return () => cancelAnimationFrame(rafId);
   }, [
     textFieldValue,
     searchMode,
@@ -482,7 +482,7 @@ export const ChatInput = ({
   return (
     <div
       {...getRootProps()}
-      className={`bg-white dark:bg-[#212121] transition-colors ${isDragActive ? 'bg-blue-50 dark:bg-blue-900/30 border-t border-blue-300 dark:border-blue-700' : ''}`}
+      className={`bg-white dark:bg-surface-dark transition-colors ${isDragActive ? 'bg-blue-50 dark:bg-blue-900/30 border-t border-blue-300 dark:border-blue-700' : ''}`}
     >
       <input {...getInputProps()} />
       {isDragActive && (
@@ -508,7 +508,7 @@ export const ChatInput = ({
         </div>
       )}
 
-      <div className="sticky bottom-0 bg-white dark:bg-[#212121]">
+      <div className="sticky bottom-0 bg-white dark:bg-surface-dark">
         {filePreviews.length > 0 && (
           <div className="max-h-52 overflow-y-auto">
             <ChatFileUploadPreviews
@@ -556,7 +556,7 @@ export const ChatInput = ({
 
             <div className="relative mx-auto w-full max-w-3xl flex-grow px-2 sm:px-4">
               <div
-                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-[#40414F] dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
+                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-surface-dark-input dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
               >
                 <MessageTextarea
                   textareaRef={textareaRef}
@@ -637,7 +637,7 @@ export const ChatInput = ({
                   }`}
                 >
                   <button
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-300 text-gray-800 shadow-md hover:shadow-lg focus:outline-none dark:bg-gray-700 dark:text-neutral-200 transition-shadow"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-300 text-gray-800 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-offset-gray-900 transition-shadow"
                     onClick={(e) => {
                       onScrollDownClick();
                       e.currentTarget.blur(); // Remove focus after click
@@ -678,7 +678,7 @@ export const ChatInput = ({
         </div>
       </div>
       {showDisclaimer && (
-        <div className="px-3 pt-1 pb-3 text-center items-center text-[12px] text-black/50 dark:text-white/50 md:px-4 md:pt-1 md:pb-3">
+        <div className="px-3 pt-1 pb-3 text-center items-center text-[12px] text-black/50 dark:text-white/60 md:px-4 md:pt-1 md:pb-3">
           {t('chatDisclaimer')}
         </div>
       )}

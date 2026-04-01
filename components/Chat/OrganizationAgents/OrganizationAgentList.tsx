@@ -47,7 +47,9 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
     <div className="space-y-2">
       {agents.map((agent) => {
         const IconComp = getIconComponent(agent.icon);
-        const isSelected = selectedAgentId === `org-${agent.id}`;
+        const isSelected =
+          selectedAgentId === `org-${agent.id}` ||
+          selectedAgentId === `foundry-${agent.id}`;
 
         return (
           <button
@@ -59,7 +61,7 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
               ${
                 isSelected
                   ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                  : 'bg-white dark:bg-[#212121] border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+                  : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
               }
             `}
           >

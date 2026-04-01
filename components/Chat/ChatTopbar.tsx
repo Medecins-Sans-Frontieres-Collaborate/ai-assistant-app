@@ -122,7 +122,7 @@ export const ChatTopbar = ({
   };
 
   return (
-    <div className="sticky top-0 z-20 py-2 text-sm text-neutral-500 dark:text-neutral-200 transition-all duration-300 ease-in-out bg-white dark:bg-[#212121]">
+    <div className="sticky top-0 z-20 py-2 text-sm text-gray-500 dark:text-gray-200 transition-all duration-300 ease-in-out bg-white dark:bg-surface-dark">
       <div className="mr-8 px-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 transition-all duration-300">
         {/* Bot/Model Info */}
         <div className="flex items-center min-w-0 justify-center sm:justify-start">
@@ -140,7 +140,7 @@ export const ChatTopbar = ({
           )}
           <div className="truncate min-w-0">
             <button
-              className="flex items-center justify-center rounded-md transition-colors px-2 py-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 border border-transparent hover:border-neutral-300 dark:hover:border-neutral-600"
+              className="flex items-center justify-center rounded-md transition-colors px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-700 border border-transparent hover:border-gray-300 dark:hover:border-gray-600"
               onClick={onModelClick || onSettingsClick}
               aria-label={t('chat.selectModel')}
               title={t('chat.selectModel')}
@@ -194,7 +194,7 @@ export const ChatTopbar = ({
           <div className="flex items-center justify-center" ref={menuRef}>
             <div className="relative">
               <button
-                className="p-1.5 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 onClick={() => setShowMenu(!showMenu)}
                 aria-label={t('common.menu')}
                 title={t('common.menu')}
@@ -204,11 +204,11 @@ export const ChatTopbar = ({
 
               {/* Dropdown menu */}
               {showMenu && (
-                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
+                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
                   <div className="p-1">
                     {/* Clear option */}
                     <button
-                      className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                       onClick={() => {
                         onClearAll?.();
                         setShowMenu(false);
@@ -216,9 +216,9 @@ export const ChatTopbar = ({
                     >
                       <IconClearAll
                         size={16}
-                        className="text-neutral-600 dark:text-neutral-400 shrink-0"
+                        className="text-gray-600 dark:text-gray-400 shrink-0"
                       />
-                      Clear
+                      {t('common.clear')}
                     </button>
                   </div>
                 </div>

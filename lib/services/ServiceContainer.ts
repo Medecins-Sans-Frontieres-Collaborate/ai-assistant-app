@@ -120,6 +120,8 @@ export class ServiceContainer {
     // 3. Initialize services that depend on clients
     this.toolRouterService = new ToolRouterService(this.openAIClient);
     this.agentChatService = new AgentChatService();
+    // AIFoundryAgentHandler is stateless — credentials are passed per-request
+    // from the pipeline context (OBO for Foundry agents, DefaultAzureCredential fallback)
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
 
     // 4. Initialize chat service (uses multiple dependencies)

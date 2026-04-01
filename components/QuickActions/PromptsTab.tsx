@@ -195,13 +195,13 @@ export function PromptsTab({ prompts, folders, onClose }: PromptsTabProps) {
 
               <div className="space-y-4">
                 {/* Prompt definition */}
-                <div className="rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-                  <div className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+                <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                  <div className="bg-gray-100 dark:bg-gray-800 px-4 py-2 border-b border-gray-200 dark:border-gray-700">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {t('Email Response Template')}
                     </p>
                   </div>
-                  <div className="p-4 bg-white dark:bg-neutral-900">
+                  <div className="p-4 bg-white dark:bg-gray-900">
                     <pre className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap font-mono">
                       {`Write an email response to {{recipient}} regarding {{topic}}.
 
@@ -214,9 +214,9 @@ Include:
                 </div>
 
                 {/* How to use */}
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
-                  <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-neutral-200 dark:bg-neutral-700 mt-0.5">
-                    <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                  <div className="shrink-0 w-6 h-6 flex items-center justify-center rounded bg-gray-200 dark:bg-gray-700 mt-0.5">
+                    <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                       /
                     </span>
                   </div>
@@ -252,7 +252,7 @@ Include:
         {/* Left Panel - List */}
         <div className="w-full md:w-1/2 border-r-0 md:border-r border-b md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col max-h-[50%] md:max-h-full">
           {/* Toolbar */}
-          <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-[#1a1a1a] border-b border-gray-200 dark:border-gray-700">
+          <div className="flex-shrink-0 px-4 py-3 bg-gray-50 dark:bg-surface-dark-recessed border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between gap-3">
               {/* Search */}
               <div className="flex-1 relative max-w-md">
@@ -491,7 +491,7 @@ Include:
 
             {/* No search results */}
             {filteredPrompts.length === 0 && searchQuery && (
-              <div className="text-center py-12 text-neutral-500 dark:text-neutral-400">
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                 {t('No prompts found')}
               </div>
             )}
@@ -515,7 +515,7 @@ Include:
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
                   {t('Content')}
                 </h3>
-                <div className="p-4 bg-gray-50 dark:bg-[#2a2a2a] rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="p-4 bg-gray-50 dark:bg-surface-dark-elevated rounded-lg border border-gray-200 dark:border-gray-700">
                   <pre className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-mono">
                     {selectedPrompt.content}
                   </pre>

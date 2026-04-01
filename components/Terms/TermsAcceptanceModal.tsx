@@ -200,8 +200,8 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
-        <div className="bg-white dark:bg-[#1f1f1f] p-6 rounded-2xl shadow-2xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+        <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 mb-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
               <div className="w-6 h-6 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -217,8 +217,8 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
 
   if (error) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
-        <div className="bg-white dark:bg-[#1f1f1f] p-6 rounded-2xl shadow-2xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+        <div className="bg-white dark:bg-surface-dark p-6 rounded-2xl shadow-xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 mb-3 rounded-full bg-red-100 dark:bg-red-900/30">
               <svg
@@ -239,7 +239,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
               {error}
             </p>
             <button
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all"
               onClick={() => window.location.reload()}
             >
               {t('Retry')}
@@ -261,8 +261,8 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     .join(', ');
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-xl w-full max-h-[80vh] flex flex-col overflow-hidden border border-gray-300 dark:border-gray-600">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+      <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl max-w-xl w-full max-h-[80vh] flex flex-col overflow-hidden border border-gray-300 dark:border-gray-600">
         {/* Header */}
         <div className="px-5 py-4 border-b border-gray-300 dark:border-gray-600">
           <div className="flex items-center justify-between">
@@ -289,7 +289,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
                   value={currentLocale}
                   onChange={handleLocaleChange}
                   disabled={isShowingTranslation}
-                  className="bg-transparent text-gray-800 dark:text-white text-xs font-medium cursor-pointer focus:outline-none border-0 disabled:opacity-50"
+                  className="bg-transparent text-gray-800 dark:text-white text-xs font-medium cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 rounded border-0 disabled:opacity-50"
                 >
                   {availableLocales.map((locale) => (
                     <option

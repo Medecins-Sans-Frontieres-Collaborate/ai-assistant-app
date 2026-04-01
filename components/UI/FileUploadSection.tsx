@@ -88,7 +88,7 @@ export const FileUploadSection: FC<FileUploadSectionProps> = ({
   return (
     <div>
       <label className="block text-sm font-semibold mb-2 text-gray-900 dark:text-white cursor-pointer">
-        <div className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-[#1a1a1a] px-4 py-8 text-sm text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all">
+        <div className="flex items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-surface-dark-recessed px-4 py-8 text-sm text-gray-600 dark:text-gray-400 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all">
           <IconUpload size={20} />
           <span>{t('fileUpload.uploadFiles')}</span>
         </div>
@@ -109,7 +109,7 @@ export const FileUploadSection: FC<FileUploadSectionProps> = ({
             return (
               <div
                 key={index}
-                className="flex items-center justify-between p-2 bg-white dark:bg-[#2a2a2a] border border-gray-200 dark:border-gray-700 rounded-lg"
+                className="flex items-center justify-between p-2 bg-white dark:bg-surface-dark-elevated border border-gray-200 dark:border-gray-700 rounded-lg"
               >
                 <div className="flex items-center gap-2 flex-1 min-w-0">
                   {getFileIcon(file)}

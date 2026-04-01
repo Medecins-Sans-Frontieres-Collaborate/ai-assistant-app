@@ -24,7 +24,7 @@ export const SearchModeBadge: React.FC<SearchModeBadgeProps> = ({
       <span>Search</span>
       <button
         onClick={onRemove}
-        className="ml-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-0.5 transition-colors"
+        className="ml-0.5 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full p-1 transition-colors"
         aria-label={t('chat.disableWebSearch')}
       >
         <svg

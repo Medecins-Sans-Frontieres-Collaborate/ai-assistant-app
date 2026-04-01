@@ -27,7 +27,7 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
   const { hostname, cleanDomain } = processUrl(citation.url);
 
   return (
-    <div className="relative bg-gray-200 dark:bg-[#171717] rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg h-[132px] w-48 p-2">
+    <div className="relative bg-gray-200 dark:bg-surface-dark-base rounded-lg transition-all duration-300 overflow-hidden text-xs border-2 border-transparent hover:border-blue-500 hover:shadow-lg h-[132px] w-48 p-2">
       <Link
         href={citation.url}
         target="_blank"
@@ -49,7 +49,7 @@ export const CitationItem: React.FC<{ citation: Citation }> = ({
             })}
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 dark:bg-[#1f1f1f] bg-gray-100 px-2 py-1 flex items-center dark:text-white text-gray-500 text-[11.5px] space-x-1">
+        <div className="absolute bottom-0 left-0 right-0 dark:bg-surface-dark bg-gray-100 px-2 py-1 flex items-center dark:text-white text-gray-500 text-[11.5px] space-x-1">
           <div className="flex items-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

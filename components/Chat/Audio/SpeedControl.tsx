@@ -46,7 +46,7 @@ export const SpeedControl: React.FC<SpeedControlProps> = ({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={onToggleDropdown}
-        className="mx-1 px-2 py-1 text-xs rounded flex items-center bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none"
+        className="mx-1 px-2 py-1 text-xs rounded flex items-center bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-label={t('chat.changePlaybackSpeed')}
         title={t('chat.changePlaybackSpeed')}
       >

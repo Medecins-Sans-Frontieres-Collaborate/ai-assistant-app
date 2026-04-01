@@ -8,7 +8,7 @@ export default function InfoLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed inset-0 w-full h-full overflow-y-auto bg-white dark:bg-[#212121]">
+    <div className="fixed inset-0 w-full h-full overflow-y-auto bg-white dark:bg-surface-dark">
       {children}
     </div>
   );

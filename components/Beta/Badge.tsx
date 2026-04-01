@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 const BetaBadge = () => {
   const t = useTranslations('common');
   return (
-    <span className="items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+    <span className="items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
       {t('beta')}
     </span>
   );

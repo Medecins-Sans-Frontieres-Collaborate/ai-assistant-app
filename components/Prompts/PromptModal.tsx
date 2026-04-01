@@ -72,7 +72,7 @@ export const PromptModal: FC<PromptModalProps> = ({
       footer={
         <div className="flex justify-end gap-2">
           <button
-            className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 rounded-md"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 rounded-md"
             onClick={handleClose}
           >
             {t('Cancel')}
@@ -98,7 +98,7 @@ export const PromptModal: FC<PromptModalProps> = ({
             onChange={(e) => setName(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={t('A name for your prompt_')}
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-transparent px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
             autoFocus
           />
         </div>
@@ -116,7 +116,7 @@ export const PromptModal: FC<PromptModalProps> = ({
             onKeyDown={handleKeyDown}
             placeholder={t('A description for your prompt_')}
             rows={3}
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-transparent px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           />
         </div>
 
@@ -171,7 +171,7 @@ export const PromptModal: FC<PromptModalProps> = ({
               'Prompt content_ Use {{}} to denote a variable_ Ex: {{name}} is a {{adjective}} {{noun}}',
             )}
             rows={8}
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-600 bg-transparent px-4 py-3 text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm"
+            className="w-full rounded-lg border border-gray-200 dark:border-gray-600 bg-transparent px-4 py-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono text-sm"
           />
         </div>
       </div>
