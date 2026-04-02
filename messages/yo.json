@@ -739,7 +739,10 @@
       "filesCount": "fáìlì {count}",
       "audioVideo": "ohùn/fídíò",
       "empty": "òfo"
-    }
+    },
+    "microphoneNotDetected": "Ko ri makírófóònù",
+    "microphoneBlocked": "Makírófóònù ti di. Ṣàyẹ̀wò àwọn ètò aṣàwákiri rẹ.",
+    "voiceTranscriptionFailed": "Ìtúmọ̀ ohùn kọ́ṣeé ṣè. Jọwọ gbìyànjú lẹ́ẹkansi."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ",
       "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà"
-    }
+    },
+    "Quarantined Data": "Ìlúpọ̀ Data",
+    "quarantineDataDescription": "O ní {count} {count, plural, one {nkan} other {awọn nkan}} tí wọ́n wà nínú ìlúpọ̀ ({size}) pẹ̀lú ìṣòro data tí kò lè ṣí lásìkò deede.",
+    "Review & Recover": "Àyẹ̀wò & Ìmúlòpadà",
+    "Export Quarantined Data": "Jáde Ìlúpọ̀ Data",
+    "Delete Quarantined Data": "Pa Ìlúpọ̀ Data Rẹ́",
+    "deleteQuarantineConfirm": "Ṣé ó dájú pé o fẹ́ pa gbogbo data tó wà nínú ìlúpọ̀ rẹ́? Ìgbésẹ̀ yìí kò le yí padà.",
+    "quarantineDeleteSuccess": "Ìpamọ́ gbogbo data inú ìlúpọ̀ ti wọlé."
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",

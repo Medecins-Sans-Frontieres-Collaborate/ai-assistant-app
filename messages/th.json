@@ -598,7 +598,10 @@
     "microphoneAccessDenied": "ไม่สามารถเข้าถึงไมโครโฟน กรุณาเปิดใช้งานในตั้งค่าเบราว์เซอร์ของคุณ",
     "microphoneAccessError": "เกิดข้อผิดพลาดในการเข้าถึงไมโครโฟน: {message}",
     "voiceInputTranscribing": "กำลังถอดเสียง...",
-    "ttsRightClickHint": "คลิกขวาเพื่อดูตัวเลือกเสียง"
+    "ttsRightClickHint": "คลิกขวาเพื่อดูตัวเลือกเสียง",
+    "microphoneNotDetected": "ไม่พบไมโครโฟน",
+    "microphoneBlocked": "ไมโครโฟนถูกบล็อก กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์",
+    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -888,7 +891,14 @@
     "activeFiles": {
       "autoPinUploads": "ปักหมุดไฟล์ที่อัปโหลดโดยอัตโนมัติ",
       "autoPinUploadsDescription": "ปักหมุดไฟล์โดยอัตโนมัติเมื่ออัปโหลดเพื่อป้องกันไม่ให้ไฟล์ถูกลบออก"
-    }
+    },
+    "Quarantined Data": "ข้อมูลที่ถูกกักกัน",
+    "quarantineDataDescription": "คุณมี {count} {count, plural, one {รายการ} other {รายการ}} ที่ถูกกักกัน ({size}) ซึ่งมีปัญหาข้อมูลและไม่สามารถโหลดได้ตามปกติ",
+    "Review & Recover": "ตรวจสอบและกู้คืน",
+    "Export Quarantined Data": "ส่งออกข้อมูลที่ถูกกักกัน",
+    "Delete Quarantined Data": "ลบข้อมูลที่ถูกกักกัน",
+    "deleteQuarantineConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลที่ถูกกักกันทั้งหมด? การดำเนินการนี้ไม่สามารถย้อนกลับได้",
+    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"

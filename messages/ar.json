@@ -627,7 +627,10 @@
     "microphoneAccessDenied": "تم رفض الوصول إلى الميكروفون. يرجى تفعيله في إعدادات المتصفح.",
     "microphoneAccessError": "خطأ في الوصول إلى الميكروفون: {message}",
     "voiceInputTranscribing": "جارٍ التحويل إلى نص...",
-    "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت"
+    "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت",
+    "microphoneNotDetected": "لم يتم الكشف عن ميكروفون",
+    "microphoneBlocked": "الميكروفون محجوب. يرجى التحقق من إعدادات المتصفح.",
+    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى."
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -917,7 +920,14 @@
     "activeFiles": {
       "autoPinUploads": "تثبيت الملفات المرفوعة تلقائيًا",
       "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها"
-    }
+    },
+    "Quarantined Data": "البيانات المعزولة",
+    "quarantineDataDescription": "لديك {count} {count, plural, one {عنصر} other {عناصر}} معزول ({size}) تحتوي على مشكلات بيانات تعذر تحميلها بشكل طبيعي.",
+    "Review & Recover": "مراجعة واستعادة",
+    "Export Quarantined Data": "تصدير البيانات المعزولة",
+    "Delete Quarantined Data": "حذف البيانات المعزولة",
+    "deleteQuarantineConfirm": "هل أنت متأكد أنك تريد حذف جميع البيانات المعزولة؟ لا يمكن التراجع عن هذا الإجراء.",
+    "quarantineDeleteSuccess": "تم حذف جميع البيانات المعزولة بنجاح."
   },
   "notFound": {
     "lostDog": "كلب ضائع"

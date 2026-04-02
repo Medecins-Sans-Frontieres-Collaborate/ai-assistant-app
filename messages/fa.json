@@ -606,7 +606,10 @@
     "microphoneAccessDenied": "دسترسی به میکروفون رد شده است. لطفاً این دسترسی را در تنظیمات مرورگر فعال کنید.",
     "microphoneAccessError": "خطا در دسترسی به میکروفون: {message}",
     "voiceInputTranscribing": "در حال تبدیل گفتار به متن...",
-    "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید"
+    "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید",
+    "microphoneNotDetected": "میکروفون شناسایی نشد",
+    "microphoneBlocked": "دسترسی به میکروفون مسدود شده است. تنظیمات مرورگر را بررسی کنید.",
+    "voiceTranscriptionFailed": "تبدیل صدا به متن ناموفق بود. لطفاً دوباره تلاش کنید."
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -896,7 +899,14 @@
     "activeFiles": {
       "autoPinUploads": "سنجاق خودکار فایل‌های آپلودشده",
       "autoPinUploadsDescription": "فایل‌ها را هنگام بارگذاری به‌صورت خودکار سنجاق کنید تا حذف نشوند."
-    }
+    },
+    "Quarantined Data": "داده‌های قرنطینه‌شده",
+    "quarantineDataDescription": "شما {count} داده قرنطینه‌شده ({size}) دارید که به علت مشکلات داده قابل بارگذاری عادی نیستند.",
+    "Review & Recover": "بررسی و بازیابی",
+    "Export Quarantined Data": "خروجی گرفتن از داده‌های قرنطینه‌شده",
+    "Delete Quarantined Data": "حذف داده‌های قرنطینه‌شده",
+    "deleteQuarantineConfirm": "آیا از حذف همه داده‌های قرنطینه‌شده مطمئن هستید؟ این عمل برگشت‌ناپذیر است.",
+    "quarantineDeleteSuccess": "همه داده‌های قرنطینه‌شده با موفقیت حذف شد."
   },
   "notFound": {
     "lostDog": "سگ گمشده"

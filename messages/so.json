@@ -739,7 +739,10 @@
       "filesCount": "{count} fayl",
       "audioVideo": "cod/fiidiyow",
       "empty": "madhan"
-    }
+    },
+    "microphoneNotDetected": "Makarafoon lama helin",
+    "microphoneBlocked": "Makarafoon waa la xannibay. Fadlan hubi dejimaha biraawsarka.",
+    "voiceTranscriptionFailed": "Qoraalka codka waa uu fashilmay. Fadlan dib iskuday."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Si toos ah ugu xiro faylasha la soo geliyay",
       "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro"
-    }
+    },
+    "Quarantined Data": "Xog la karantiilay",
+    "quarantineDataDescription": "Waxaad haysataa {count} xog la karantiilay {count, plural, one {shay} other {shayo}} ({size}) oo dhibaato xogeed leh, lamana dajin karin si caadi ah.",
+    "Review & Recover": "Dib u eeg oo Soo celi",
+    "Export Quarantined Data": "Soo saaro Xogta la Karantiilay",
+    "Delete Quarantined Data": "Tirtir Xogta la Karantiilay",
+    "deleteQuarantineConfirm": "Ma hubtaa inaad rabto in aad tirtirto xogta la karantiilay oo dhan? Falkan lama soo celin karo.",
+    "quarantineDeleteSuccess": "Si guul leh ayaa loo tirtiray dhammaan xogta la karantiilay."
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",

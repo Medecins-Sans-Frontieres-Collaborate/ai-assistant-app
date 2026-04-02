@@ -739,7 +739,10 @@
       "filesCount": "mafayilo {count}",
       "audioVideo": "mawu/kanema",
       "empty": "zopanda kanthu"
-    }
+    },
+    "microphoneNotDetected": "Palibe maikolofoni amene anapezeka",
+    "microphoneBlocked": "Maikolofoni yatsekedwa. Chongani makonzedwe a msakatuli.",
+    "voiceTranscriptionFailed": "Kutanthauzira mawu kukanidwa. Chonde yesaninso."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
       "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
-    }
+    },
+    "Quarantined Data": "Deta Yosungidwa Mu Quarantine",
+    "quarantineDataDescription": "Muli ndi {count} {count, plural, one {chinthu} other {zinthu}} zasungidwa mu quarantine ({size}) zomwe zili ndi mavuto a deta zomwe sizingathe kutsegulidwa bwinobwino.",
+    "Review & Recover": "Onani & Kubwezeretsa",
+    "Export Quarantined Data": "Tumizani Deta Yosungidwa Mu Quarantine",
+    "Delete Quarantined Data": "Chotsani Deta Yosungidwa Mu Quarantine",
+    "deleteQuarantineConfirm": "Kodi mukutsimikiza kuti mukufuna kuchotsa deta yonse yosungidwa mu quarantine? Simudzatha kubwezeretsa izi.",
+    "quarantineDeleteSuccess": "Deta yonse yosungidwa mu quarantine yachotsedwa bwinobwino."
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",

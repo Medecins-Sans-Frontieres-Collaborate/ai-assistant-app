@@ -656,7 +656,10 @@
     "microphoneAccessDenied": "Mikrofonin käyttö estetty. Ota käyttöön selaimen asetuksista.",
     "microphoneAccessError": "Virhe mikrofonin käytössä: {message}",
     "voiceInputTranscribing": "Muunnetaan puhetta tekstiksi...",
-    "ttsRightClickHint": "Napsauta hiiren oikealla valitaksesi äänivaihtoehdot"
+    "ttsRightClickHint": "Napsauta hiiren oikealla valitaksesi äänivaihtoehdot",
+    "microphoneNotDetected": "Mikrofonia ei havaittu",
+    "microphoneBlocked": "Mikrofoni estetty. Tarkista selaimen asetukset.",
+    "voiceTranscriptionFailed": "Puheentunnistus epäonnistui. Yritä uudelleen."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -946,7 +949,14 @@
     "activeFiles": {
       "autoPinUploads": "Kiinnitä ladatut tiedostot automaattisesti",
       "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä"
-    }
+    },
+    "Quarantined Data": "Karanteenissa oleva data",
+    "quarantineDataDescription": "Sinulla on {count} karanteenissa olevaa {count, plural, one {kohdetta} other {kohdetta}} ({size}), joissa on tietoja, joita ei voitu ladata normaalisti.",
+    "Review & Recover": "Tarkastele ja palauta",
+    "Export Quarantined Data": "Vie karanteenidata",
+    "Delete Quarantined Data": "Poista karanteenidata",
+    "deleteQuarantineConfirm": "Haluatko varmasti poistaa kaiken karanteenidatan? Tätä toimintoa ei voi perua.",
+    "quarantineDeleteSuccess": "Karanteenidata poistettu onnistuneesti."
   },
   "notFound": {
     "lostDog": "Kadonnut koira"

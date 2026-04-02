@@ -739,7 +739,10 @@
       "filesCount": "Amafayela angu-{count}",
       "audioVideo": "umsindo/ividiyo",
       "empty": "akunalutho"
-    }
+    },
+    "microphoneNotDetected": "Ayikho imakrofoni etholakele",
+    "microphoneBlocked": "Imakrofoni ivinjiwe. Hlola izilungiselelo zesiphequluli.",
+    "voiceTranscriptionFailed": "Ukuhumusha kwezwi kwehlulekile. Sicela uzame futhi."
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Beka othomathikhi amafayela alayishiwe esicongweni",
       "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi"
-    }
+    },
+    "Quarantined Data": "Idatha esebhantwini",
+    "quarantineDataDescription": "Unayo {count} {count, plural, one {into} other {izinto}} esebhantwini ({size}) enezinkinga zedatha ezingalethwanga ngendlela ejwayelekile.",
+    "Review & Recover": "Bheka & Buyisa",
+    "Export Quarantined Data": "Thumela Idatha Esebhantwini",
+    "Delete Quarantined Data": "Susa Idatha Esebhantwini",
+    "deleteQuarantineConfirm": "Uqinisekile ukuthi ufuna ukususa yonke idatha esebhantwini? Lesi senzo asikwazi ukubuyiselwa emuva.",
+    "quarantineDeleteSuccess": "Idatha esebhantwini isusiwe ngempumelelo."
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",

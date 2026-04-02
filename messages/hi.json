@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "माइक्रोफ़ोन एक्सेस अस्वीकृत है। कृपया अपने ब्राउज़र सेटिंग्स में इसे सक्षम करें।",
     "microphoneAccessError": "माइक्रोफ़ोन एक्सेस त्रुटि: {message}",
     "voiceInputTranscribing": "प्रतिलेखन किया जा रहा है...",
-    "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें"
+    "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें",
+    "microphoneNotDetected": "माइक्रोफोन नहीं मिला",
+    "microphoneBlocked": "माइक्रोफोन ब्लॉक किया गया है। ब्राउज़र सेटिंग जाँचें।",
+    "voiceTranscriptionFailed": "वॉइस ट्रांसक्रिप्शन विफल रहा। कृपया फिर से प्रयास करें।"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "अपलोड की गई फ़ाइलें स्वतः पिन करें",
       "autoPinUploadsDescription": "फ़ाइलों को अपलोड करते समय उन्हें स्वतः पिन करें ताकि वे हटाई न जाएं"
-    }
+    },
+    "Quarantined Data": "क्वारंटीन डेटा",
+    "quarantineDataDescription": "आपके पास {count} क्वारंटीन {count, plural, one {आइटम} other {आइटम्स}} ({size}) हैं, जिनमें डेटा समस्या है, जिन्हें सामान्य रूप से लोड नहीं किया जा सका।",
+    "Review & Recover": "समीक्षा करें और पुनर्प्राप्त करें",
+    "Export Quarantined Data": "क्वारंटीन डेटा एक्सपोर्ट करें",
+    "Delete Quarantined Data": "क्वारंटीन डेटा हटाएं",
+    "deleteQuarantineConfirm": "क्या आप वाकई सभी क्वारंटीन डेटा हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।",
+    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटाया गया।"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"

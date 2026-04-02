@@ -739,7 +739,10 @@
       "filesCount": "fiilde(en) {count}",
       "audioVideo": "nanndol/wideyoo",
       "empty": "mehol"
-    }
+    },
+    "microphoneNotDetected": "Microphone so wonaa anndaa",
+    "microphoneBlocked": "Microphone wallitii. Naatnu seerɗe browser maa.",
+    "voiceTranscriptionFailed": "Tarƴe heɓa kelleede ginaa. Teeŋtii kadi."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Paɗtol fayliiji ɓeydii jaasi",
       "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa"
-    }
+    },
+    "Quarantined Data": "Bayyinol Quarantine",
+    "quarantineDataDescription": "Ɓeɗɗitii {count} bayyinol {count, plural, one {item} other {items}} ({size}) e dille ɗi mbayri, ɗum waawani anndude si tawii.",
+    "Review & Recover": "Yiɗtu e Artin",
+    "Export Quarantined Data": "Jooɗnu Bayyinol Quarantine",
+    "Delete Quarantined Data": "Momtu Bayyinol Quarantine",
+    "deleteQuarantineConfirm": "A tunaniɗaa momtude kala bayyinol quarantine? Toŋngol ngol waawaa firtude.",
+    "quarantineDeleteSuccess": "Bayyinol quarantine kala momtaama e success."
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",

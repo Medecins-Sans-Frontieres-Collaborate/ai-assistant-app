@@ -739,7 +739,10 @@
       "filesCount": "{count} rakitra",
       "audioVideo": "feo/video",
       "empty": "foana"
-    }
+    },
+    "microphoneNotDetected": "Tsy misy mikrô hitan'ny rafitra",
+    "microphoneBlocked": "Voasakana ny mikrô. Hamarino ny fikirakirana navigateur-nao.",
+    "voiceTranscriptionFailed": "Tsy nahomby ny fandikana feo. Azafady, andramo indray."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
       "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
-    }
+    },
+    "Quarantined Data": "Tahiry natao anaty karantina",
+    "quarantineDataDescription": "Manana {count} {count, plural, one {zavatra} other {zavatra}} natao anaty karantina ianao ({size}) misy olana amin'ny angon-drakitra ka tsy afaka tafiditra ara-dalàna.",
+    "Review & Recover": "Jereo sy Avereno",
+    "Export Quarantined Data": "Hondrana ny tahiry natao anaty karantina",
+    "Delete Quarantined Data": "Fafana ny tahiry natao anaty karantina",
+    "deleteQuarantineConfirm": "Hafatatra ve fa tianao ho fafana avokoa ny tahiry rehetra natao anaty karantina? Tsy mety averina ity hetsika ity.",
+    "quarantineDeleteSuccess": "Vita soa aman-tsara ny famafana ny tahiry rehetra natao anaty karantina."
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",

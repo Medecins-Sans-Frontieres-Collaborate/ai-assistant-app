@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "Přístup k mikrofonu byl odepřen. Povolit jej můžete v nastavení vašeho prohlížeče.",
     "microphoneAccessError": "Chyba přístupu k mikrofonu: {message}",
     "voiceInputTranscribing": "Přepisování...",
-    "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu"
+    "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu",
+    "microphoneNotDetected": "Mikrofon nebyl detekován",
+    "microphoneBlocked": "Mikrofon je zablokován. Zkontrolujte nastavení prohlížeče.",
+    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Automaticky připnout nahrané soubory",
       "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění"
-    }
+    },
+    "Quarantined Data": "Uložená data v karanténě",
+    "quarantineDataDescription": "Máte {count} {count, plural, one {položku} few {položky} other {položek}} v karanténě ({size}) s problémy s daty, které nelze běžně načíst.",
+    "Review & Recover": "Zkontrolovat a obnovit",
+    "Export Quarantined Data": "Exportovat data v karanténě",
+    "Delete Quarantined Data": "Smazat data v karanténě",
+    "deleteQuarantineConfirm": "Opravdu chcete smazat všechna data v karanténě? Tuto akci nelze vrátit zpět.",
+    "quarantineDeleteSuccess": "Všechna data v karanténě byla úspěšně smazána."
   },
   "notFound": {
     "lostDog": "Ztracený pes"

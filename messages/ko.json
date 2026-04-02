@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "마이크 접근이 거부되었습니다. 브라우저 설정에서 활성화해 주세요.",
     "microphoneAccessError": "마이크 접근 오류: {message}",
     "voiceInputTranscribing": "음성 변환 중...",
-    "ttsRightClickHint": "음성 옵션을 보려면 오른쪽 클릭하세요"
+    "ttsRightClickHint": "음성 옵션을 보려면 오른쪽 클릭하세요",
+    "microphoneNotDetected": "마이크가 감지되지 않았습니다",
+    "microphoneBlocked": "마이크가 차단되었습니다. 브라우저 설정을 확인하세요.",
+    "voiceTranscriptionFailed": "음성 전사에 실패했습니다. 다시 시도해 주세요."
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "업로드된 파일 자동 고정",
       "autoPinUploadsDescription": "업로드 시 파일을 자동으로 고정하여 교체되지 않도록 합니다"
-    }
+    },
+    "Quarantined Data": "격리된 데이터",
+    "quarantineDataDescription": "문제가 발생하여 정상적으로 불러올 수 없는 데이터 {count}개의 격리된 {count, plural, one {항목} other {항목들}}({size})가 있습니다.",
+    "Review & Recover": "검토 및 복구",
+    "Export Quarantined Data": "격리된 데이터 내보내기",
+    "Delete Quarantined Data": "격리된 데이터 삭제",
+    "deleteQuarantineConfirm": "정말로 모든 격리된 데이터를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.",
+    "quarantineDeleteSuccess": "모든 격리된 데이터가 성공적으로 삭제되었습니다."
   },
   "notFound": {
     "lostDog": "잃어버린 개"

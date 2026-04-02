@@ -739,7 +739,10 @@
       "filesCount": "{count} ፋይል(ታት)",
       "audioVideo": "ድምጺ/ቪድዮ",
       "empty": "ባዶ"
-    }
+    },
+    "microphoneNotDetected": "ማይክሮፎን ኣልተረኽበን።",
+    "microphoneBlocked": "ማይክሮፎን ተዕጊዙ። ሓተመ ሳሕን ትኣክል።",
+    "voiceTranscriptionFailed": "ድምጺ ቅዳም ኣልተሳካን። እቲ ኣድርጉ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
       "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
-    }
+    },
+    "Quarantined Data": "ጓሂል ትሕወናት ዝርከበ።",
+    "quarantineDataDescription": "ብዝተፈጸመላኩ {count} ትሕወናታት {count, plural, one {ኣባል} other {ኣባላት}} ({size}) ኣብ ጓሂል ሓገዝቲ ብቕድሚ ኣይተመጽኡን።",
+    "Review & Recover": "ምርኣይ እና ምፍለጥ",
+    "Export Quarantined Data": "ጓሂል ትሕወናት ምውጻእ",
+    "Delete Quarantined Data": "ጓሂል ትሕወናት ምድሳድ",
+    "deleteQuarantineConfirm": "ኩሉ ጓሂል ትሕወናት ክትደስድስ እንተምዃኑ ኣረጋግጹ። እዚ ተግባር ክትደገም ኣይከአን።",
+    "quarantineDeleteSuccess": "ኩሉ ጓሂል ትሕወናት ብትክክል ተደስደስ።"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",

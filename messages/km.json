@@ -739,7 +739,10 @@
       "filesCount": "{count} ឯកសារ",
       "audioVideo": "សំឡេង/វីដេអូ",
       "empty": "ទទេ"
-    }
+    },
+    "microphoneNotDetected": "រកមិនឃើញ microphone ឡើយ",
+    "microphoneBlocked": "Microphone ត្រូវបានទប់ស្កាត់។ សូមពិនិត្យការកំណត់កម្មវិធីរុករក។",
+    "voiceTranscriptionFailed": "បញ្ចេញសំឡេងមិនជោគជ័យទេ។ សូមព្យាយាម​ម្ដងទៀត។"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "ដាក់​ថ្មី​ស្វ័យប្រវត្តិ​ឯកសារ​ដែលបានផ្ទុកឡើង",
       "autoPinUploadsDescription": "ខ្ចាប់ឯកសារដែលបានផ្ទុកឡើងស្វ័យប្រវត្តិ ដើម្បីទប់ស្កាត់ឲ្យកំពុងត្រូវដកចេញ"
-    }
+    },
+    "Quarantined Data": "ទិន្នន័យដែលបានដាក់ការ៉ង់តែន",
+    "quarantineDataDescription": "អ្នកមាន {count} ទិន្នន័យដែលបានដាក់ការ៉ង់តែន {count, plural, one {មួយធាតុ} other {ធាតុ}} ({size}) ដែលមានបញ្ហាទិន្នន័យមិនអាចផ្ទុកធម្មតាបាន។",
+    "Review & Recover": "ពិនិត្យ និងស្ដារឡើងវិញ",
+    "Export Quarantined Data": "នាំចេញទិន្នន័យដែលបានដាក់ការ៉ង់តែន",
+    "Delete Quarantined Data": "លុបទិន្នន័យដែលបានដាក់ការ៉ង់តែន",
+    "deleteQuarantineConfirm": "តើអ្នកប្រាកដជាចង់លុបទិន្នន័យដែលបានដាក់ការ៉ង់តែនទាំងអស់មែនទេ? សកម្មភាពនេះមិនអាចបង្ខំត្រឡប់វិញបានទេ។",
+    "quarantineDeleteSuccess": "លុបទិន្នន័យដែលបានដាក់ការ៉ង់តែនជោគជ័យ។"
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",

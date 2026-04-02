@@ -627,7 +627,10 @@
     "microphoneAccessDenied": "Acesso ao microfone negado. Ative-o nas configurações do seu navegador.",
     "microphoneAccessError": "Erro de acesso ao microfone: {message}",
     "voiceInputTranscribing": "Transcrevendo...",
-    "ttsRightClickHint": "Clique com o botão direito para opções de voz"
+    "ttsRightClickHint": "Clique com o botão direito para opções de voz",
+    "microphoneNotDetected": "Nenhum microfone detectado",
+    "microphoneBlocked": "Microfone bloqueado. Verifique as configurações do navegador.",
+    "voiceTranscriptionFailed": "Falha na transcrição de voz. Tente novamente."
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixar automaticamente arquivos enviados",
       "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos"
-    }
+    },
+    "Quarantined Data": "Dados em quarentena",
+    "quarantineDataDescription": "Você tem {count} {count, plural, one {item} other {itens}} em quarentena ({size}) com problemas de dados que não puderam ser carregados normalmente.",
+    "Review & Recover": "Revisar e Recuperar",
+    "Export Quarantined Data": "Exportar dados em quarentena",
+    "Delete Quarantined Data": "Excluir dados em quarentena",
+    "deleteQuarantineConfirm": "Tem certeza de que deseja excluir todos os dados em quarentena? Esta ação não pode ser desfeita.",
+    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso."
   },
   "notFound": {
     "lostDog": "Cão perdido"

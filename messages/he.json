@@ -656,7 +656,10 @@
     "microphoneAccessDenied": "הגישה למיקרופון נחסמה. אנא אפשר/י זאת בהגדרות הדפדפן.",
     "microphoneAccessError": "שגיאת גישה למיקרופון: {message}",
     "voiceInputTranscribing": "מתמלל...",
-    "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול"
+    "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול",
+    "microphoneNotDetected": "לא זוהה מיקרופון",
+    "microphoneBlocked": "המיקרופון חסום. יש לבדוק את הגדרות הדפדפן.",
+    "voiceTranscriptionFailed": "ההמרה לקול נכשלה. אנא נסו שוב."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -946,7 +949,14 @@
     "activeFiles": {
       "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
       "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
-    }
+    },
+    "Quarantined Data": "נתונים בהסגר",
+    "quarantineDataDescription": "יש ברשותך {count} {count, plural, one {פריט} other {פריטים}} בהסגר ({size}) עם בעיות נתונים שלא ניתן היה לטעון כראוי.",
+    "Review & Recover": "סקירה ושחזור",
+    "Export Quarantined Data": "ייצוא נתונים בהסגר",
+    "Delete Quarantined Data": "מחיקת נתונים בהסגר",
+    "deleteQuarantineConfirm": "האם אתה בטוח שברצונך למחוק את כל הנתונים שבהסגר? פעולה זו לא ניתנת לביטול.",
+    "quarantineDeleteSuccess": "הנתונים שבהסגר נמחקו בהצלחה."
   },
   "notFound": {
     "lostDog": "כלב אבוד"

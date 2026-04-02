@@ -739,7 +739,10 @@
       "filesCount": "{count} fichier",
       "audioVideo": "audio/video",
       "empty": "pamba"
-    }
+    },
+    "microphoneNotDetected": "Mikrofono ezwami te",
+    "microphoneBlocked": "Mikrofono ekangami. Tala mindule ya browser.",
+    "voiceTranscriptionFailed": "Kokoma ya mongongo ekokisami te. Sila komeka lisusu."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Kangisa ndenge ya kokangisa mafayile nyonso oyo ebakisami",
       "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te"
-    }
+    },
+    "Quarantined Data": "Donnee na karantene",
+    "quarantineDataDescription": "Ozali na {count} {count, plural, one {eloko} other {biloko}} na karantene ({size}) oyo bazwaki na mikakatano na donnee mpe bakokaki kocharga yango nango ya normal te.",
+    "Review & Recover": "Luka mpe Zongisa",
+    "Export Quarantined Data": "Exporter ba donnee na karantene",
+    "Delete Quarantined Data": "Longola ba donnee na karantene",
+    "deleteQuarantineConfirm": "Ozali sik’oyo kolongola ba donnee nyonso na karantene ? Likambo oyo ekoki kozongisama te.",
+    "quarantineDeleteSuccess": "Longolamaki na bososoli ba donnee nyonso na karantene."
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",

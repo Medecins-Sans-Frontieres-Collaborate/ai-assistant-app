@@ -739,7 +739,10 @@
       "filesCount": "{count} fichye",
       "audioVideo": "odyo/videyo",
       "empty": "vid"
-    }
+    },
+    "microphoneNotDetected": "Pa gen mikwofòn detekte",
+    "microphoneBlocked": "Mikwofòn bloke. Tcheke anviwònman navigatè a.",
+    "voiceTranscriptionFailed": "Transkripsyon vwa a echwe. Tanpri eseye ankò."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Pine otomatikman fichye w telechaje yo",
       "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la"
-    }
+    },
+    "Quarantined Data": "Done an karantèn",
+    "quarantineDataDescription": "Ou gen {count} done an karantèn {count, plural, one {atik} other {atik yo}} ({size}) ki gen pwoblèm done epi yo pa ka chaje nòmalman.",
+    "Review & Recover": "Revize & Rekipere",
+    "Export Quarantined Data": "Ekspòte Done an Karantèn",
+    "Delete Quarantined Data": "Efase Done an Karantèn",
+    "deleteQuarantineConfirm": "Èske ou sèten ou vle efase tout done an karantèn yo? Aksyon sa a pa ka anile.",
+    "quarantineDeleteSuccess": "Tout done an karantèn yo efase avèk siksè."
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",

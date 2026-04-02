@@ -739,7 +739,10 @@
       "filesCount": "{count} idosiye (amadosiye)",
       "audioVideo": "amajwi/amashusho",
       "empty": "biravuye"
-    }
+    },
+    "microphoneNotDetected": "Nta mikrofone yabonetse",
+    "microphoneBlocked": "Mikrofone yarabujijwe. Raba neza ivyo wagenye muri browser.",
+    "voiceTranscriptionFailed": "Ihindura amajwi mu nyandiko ntivyagenze neza. Gerageza gusubira."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Kwishingira ku buryo bwikora amadosiye yashizweho",
       "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa"
-    }
+    },
+    "Quarantined Data": "Amakuru ari mu bubiko bw'ivyago",
+    "quarantineDataDescription": "Ufise {count} {count, plural, one {ikintu} other {ivyintu}} birimwo ibibazo vy'ugusoma amakuru ({size}) bitashoboye gupakirwa bisanzwe.",
+    "Review & Recover": "Raba usubize",
+    "Export Quarantined Data": "Sohora amakuru ari mu bubiko bw'ivyago",
+    "Delete Quarantined Data": "Siba amakuru ari mu bubiko bw'ivyago",
+    "deleteQuarantineConfirm": "Uravyemera neza ko ushaka gusiba amakuru yose ari mu bubiko bw'ivyago? Ibi ntibishobora gusubirwamwo.",
+    "quarantineDeleteSuccess": "Amakuru yose ari mu bubiko bw'ivyago yasibwe neza."
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",

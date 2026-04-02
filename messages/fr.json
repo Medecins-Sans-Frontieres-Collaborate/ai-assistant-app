@@ -627,7 +627,10 @@
     "microphoneAccessDenied": "Accès au microphone refusé. Veuillez l’activer dans les paramètres de votre navigateur.",
     "microphoneAccessError": "Erreur d'accès au microphone : {message}",
     "voiceInputTranscribing": "Transcription en cours...",
-    "ttsRightClickHint": "Cliquez droit pour les options vocales"
+    "ttsRightClickHint": "Cliquez droit pour les options vocales",
+    "microphoneNotDetected": "Aucun microphone détecté",
+    "microphoneBlocked": "Microphone bloqué. Vérifiez les paramètres du navigateur.",
+    "voiceTranscriptionFailed": "La transcription vocale a échoué. Veuillez réessayer."
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Épingler automatiquement les fichiers téléchargés",
       "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés"
-    }
+    },
+    "Quarantined Data": "Données en quarantaine",
+    "quarantineDataDescription": "Vous avez {count} {count, plural, one {élément} other {éléments}} en quarantaine ({size}) présentant des problèmes de données qui n'ont pas pu être chargés normalement.",
+    "Review & Recover": "Réviser et restaurer",
+    "Export Quarantined Data": "Exporter les données en quarantaine",
+    "Delete Quarantined Data": "Supprimer les données en quarantaine",
+    "deleteQuarantineConfirm": "Êtes-vous sûr de vouloir supprimer toutes les données en quarantaine ? Cette action est irréversible.",
+    "quarantineDeleteSuccess": "Suppression réussie de toutes les données en quarantaine."
   },
   "notFound": {
     "lostDog": "Chien perdu"

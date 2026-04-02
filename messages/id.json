@@ -648,7 +648,10 @@
     "microphoneAccessDenied": "Akses mikrofon ditolak. Silakan aktifkan di pengaturan browser Anda.",
     "microphoneAccessError": "Kesalahan akses mikrofon: {message}",
     "voiceInputTranscribing": "Sedang mentranskripsikan...",
-    "ttsRightClickHint": "Klik kanan untuk opsi suara"
+    "ttsRightClickHint": "Klik kanan untuk opsi suara",
+    "microphoneNotDetected": "Mikrofon tidak terdeteksi",
+    "microphoneBlocked": "Mikrofon diblokir. Periksa pengaturan browser Anda.",
+    "voiceTranscriptionFailed": "Transkripsi suara gagal. Silakan coba lagi."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -938,7 +941,14 @@
     "activeFiles": {
       "autoPinUploads": "Pin otomatis file yang diunggah",
       "autoPinUploadsDescription": "Secara otomatis pin file yang diunggah agar tidak dihapus dari daftar"
-    }
+    },
+    "Quarantined Data": "Data Dikarantina",
+    "quarantineDataDescription": "Anda memiliki {count} {count, plural, one {item} other {items}} dikarantina ({size}) dengan masalah data yang tidak dapat dimuat secara normal.",
+    "Review & Recover": "Tinjau & Pulihkan",
+    "Export Quarantined Data": "Ekspor Data Dikarantina",
+    "Delete Quarantined Data": "Hapus Data Dikarantina",
+    "deleteQuarantineConfirm": "Apakah Anda yakin ingin menghapus semua data yang dikarantina? Tindakan ini tidak dapat dibatalkan.",
+    "quarantineDeleteSuccess": "Berhasil menghapus semua data yang dikarantina."
   },
   "notFound": {
     "lostDog": "Anjing hilang"

@@ -679,7 +679,10 @@
     "microphoneAccessDenied": "మైక్రోఫోన్ యాక్సెస్ నిషేధించబడింది. దయచేసి మీ బ్రౌజర్ సెట్టింగ్‌లలో దీనిని ప్రారంభించండి.",
     "microphoneAccessError": "మైక్రోఫోన్ యాక్సెస్ లో లోపం: {message}",
     "voiceInputTranscribing": "వాయిస్ ట్రాన్స్‌క్రైబ్ చేస్తున్నది...",
-    "ttsRightClickHint": "వాయిస్ ఎంపికలకు రైట్-క్లిక్ చేయండి"
+    "ttsRightClickHint": "వాయిస్ ఎంపికలకు రైట్-క్లిక్ చేయండి",
+    "microphoneNotDetected": "మైనిఫోన్ గుర్తించబడలేదు",
+    "microphoneBlocked": "మైనిఫోన్ కనిపించదు. బ్రౌజర్ సెట్టింగ్స్‌ను తనిఖీ చేయండి.",
+    "voiceTranscriptionFailed": "వాయిస్ ట్రాన్స్క్రిప్షన్ విఫలమైంది. దయచేసి మరలా ప్రయత్నించండి."
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",
@@ -969,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "అప్‌లోడ్ చేసిన ఫైల్స్‌ను ఆటోమేటిక్‌గా పిన్ చేయండి",
       "autoPinUploadsDescription": "ఫైల్స్‌ను అప్‌లోడ్ చేసిన వెంటనే వాటిని పిన్ చేసి, అవి తొలగించబడకుండా నిరోధించండి"
-    }
+    },
+    "Quarantined Data": "ఐసోలేట్ చేసిన డేటా",
+    "quarantineDataDescription": "మీకు {count} ఐసోలేట్ చేసిన {count, plural, one {item} other {items}} ({size}) ఉన్నాయి. వీటిలో డేటా సమస్యల కారణంగా సహజంగా లోడ్ చేయడం సాధ్యపడలేదు.",
+    "Review & Recover": "సమీక్షించండి & పునరుద్ధరించండి",
+    "Export Quarantined Data": "ఐసోలేట్ చేసిన డేటాను ఎగుమతి చేయండి",
+    "Delete Quarantined Data": "ఐసోలేట్ చేసిన డేటాను తొలగించండి",
+    "deleteQuarantineConfirm": "అన్ని ఐసోలేట్ చేసిన డేటాను తొలగించాలా? ఈ చర్యను రద్దు చేయడం సాధ్యపడదు.",
+    "quarantineDeleteSuccess": "ఐసోలేట్ చేసిన డేటా విజయవంతంగా తొలగించబడింది."
   },
   "notFound": {
     "lostDog": "కోల్పోయిన కుక్క"

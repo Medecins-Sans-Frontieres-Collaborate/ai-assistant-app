@@ -739,7 +739,10 @@
       "filesCount": "{count} файл",
       "audioVideo": "аудио/видео",
       "empty": "холӣ"
-    }
+    },
+    "microphoneNotDetected": "Микрофон ошкор нашуд",
+    "microphoneBlocked": "Микрофон баста шудааст. Танзимоти браузерро санҷед.",
+    "voiceTranscriptionFailed": "Транскрипсияи овоз ноком шуд. Лутфан боз кӯшиш кунед."
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Файлҳои боршударо худкор пайваст кардан",
       "autoPinUploadsDescription": "Файлҳоро ҳангоми боркунӣ худкор пайваст кунед, то онҳо нест шаванд"
-    }
+    },
+    "Quarantined Data": "Маълумоти карантиншуда",
+    "quarantineDataDescription": "Шумо {count} {count, plural, one {элемент} other {элементҳо}} ({size}) бо мушкилоти маълумот доред, ки намешавад муътадил бор шавад.",
+    "Review & Recover": "Баррасӣ ва барқарор кардан",
+    "Export Quarantined Data": "Содироти маълумоти карантиншуда",
+    "Delete Quarantined Data": "Нест кардани маълумоти карантиншуда",
+    "deleteQuarantineConfirm": "Шумо мутмаин ҳастед, ки тамоми маълумоти карантиншударо нест карданӣ ҳастед? Ин амал бозгаштнопазир аст.",
+    "quarantineDeleteSuccess": "Тамоми маълумоти карантиншуда бо муваффақият нест карда шуд."
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",

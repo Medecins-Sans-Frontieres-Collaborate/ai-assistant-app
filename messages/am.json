@@ -624,7 +624,10 @@
     "microphoneAccessDenied": "የማይክሮፎን መዳረሻ ተከልክሏል። እባክዎ በአሳሽዎ ቅንብሮች ውስጥ ያንቁ።",
     "microphoneAccessError": "የማይክሮፎን መዳረሻ ስህተት፡ {message}",
     "voiceInputTranscribing": "በመቅዳት ላይ...",
-    "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ"
+    "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ",
+    "microphoneNotDetected": "ማያያዣ ማይክሮፎን አልተገኘም",
+    "microphoneBlocked": "ማይክሮፎኑ ታግዷል። የብራውዘር ቅንብሮችዎን ያረጋግጡ።",
+    "voiceTranscriptionFailed": "የድምፅ ትርጉም አልተሳካም። እባክዎ ደግመው ይሞክሩ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -914,7 +917,14 @@
     "activeFiles": {
       "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
       "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
-    }
+    },
+    "Quarantined Data": "ቀጣፊ መረጃ",
+    "quarantineDataDescription": "የ{count} ቀጣፊ {count, plural, one {ነገር} other {ነገሮች}} ({size}) አሉ፣ ጉዳይ ስለነበራቸው መደበኛ ለመጫን አልቻሉም።",
+    "Review & Recover": "ተመልከትና አድስ",
+    "Export Quarantined Data": "ቀጣፊ መረጃ ወደ ውጭ አውጣ",
+    "Delete Quarantined Data": "ቀጣፊ መረጃ ሰርዝ",
+    "deleteQuarantineConfirm": "ሁሉንም ቀጣፊ መረጃ ለማጥፋት እርግጠኛ ነዎት? ይህ ተግባር ማድረጉ አይቻልም።",
+    "quarantineDeleteSuccess": "ቀጣፊ መረጃዎቹ በትክክል ተሰርዟል።"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"

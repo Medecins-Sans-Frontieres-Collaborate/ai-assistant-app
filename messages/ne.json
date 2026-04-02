@@ -739,7 +739,10 @@
       "filesCount": "{count} फाइल(हरू)",
       "audioVideo": "अडियो/भिडियो",
       "empty": "खाली"
-    }
+    },
+    "microphoneNotDetected": "माइक्रोफोन फेला परेन",
+    "microphoneBlocked": "माइक्रोफोन ब्लक छ। कृपया ब्राउजर सेटिङ जाँच गर्नुहोस्।",
+    "voiceTranscriptionFailed": "भ्वाइस ट्रान्सक्रिप्सन असफल भयो। कृपया पुन: प्रयास गर्नुहोस्।"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "अपलोड गरिएका फाइलहरूलाई स्वतः पिन गर्नुहोस्",
       "autoPinUploadsDescription": "अपलोड गर्दा फाइलहरू आफूलाई हट्न नदिनको लागि स्वचालित रूपमा पिन गरिन्छन्"
-    }
+    },
+    "Quarantined Data": "क्वारेन्टाइन गरिएको डाटा",
+    "quarantineDataDescription": "तपाईंको {count} वटा क्वारेन्टाइन गरिएको {count, plural, one {वस्तु} other {वस्तुहरू}} ({size}) मा समस्या भएको डाटा छ जुन सामान्य रूपमा लोड हुन सकेन।",
+    "Review & Recover": "समिक्षा गर्नुहोस् र पुन: प्राप्त गर्नुहोस्",
+    "Export Quarantined Data": "क्वारेन्टाइन गरिएको डाटा निर्यात गर्नुहोस्",
+    "Delete Quarantined Data": "क्वारेन्टाइन गरिएको डाटा मेटाउनहोस्",
+    "deleteQuarantineConfirm": "के तपाईं सबै क्वारेन्टाइन गरिएको डाटा मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्वावस्थामा फर्काउन सकिँदैन।",
+    "quarantineDeleteSuccess": "सबै क्वारेन्टाइन गरिएको डाटा सफलतापूर्वक मेटाइयो।"
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
