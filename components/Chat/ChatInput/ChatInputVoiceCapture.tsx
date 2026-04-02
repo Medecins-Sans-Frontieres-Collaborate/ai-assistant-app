@@ -1,5 +1,6 @@
 import { IconPlayerRecordFilled } from '@tabler/icons-react';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -10,6 +11,10 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 const SILENCE_THRESHOLD = -50;
 const TRANSCRIBE_SILENCE_DURATION = 2000; // 2 seconds of silence triggers transcription
 const MAX_SILENT_DURATION = 6000; // 6 seconds of silence stops recording
+const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
+const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
+
+type MicStatus = 'unknown' | 'available' | 'unavailable' | 'denied' | 'error';
 
 const ChatInputVoiceCapture: FC = React.memo(() => {
   const setTextFieldValue = useChatInputStore(
@@ -19,10 +24,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     (state) => state.setIsTranscribing,
   );
   const t = useTranslations();
-  const [hasMicrophone, setHasMicrophone] = useState(false);
+  const [micStatus, setMicStatus] = useState<MicStatus>('unknown');
   const [isInitializing, setIsInitializing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribingSegment, setIsTranscribingSegment] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -33,6 +39,9 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const silenceStartTimeRef = useRef<number | null>(null);
   const checkSilenceIntervalRef = useRef<number | null>(null);
+  const isWarmedUpRef = useRef(false);
+  const warmupStartTimeRef = useRef<number>(0);
+  const lastAudioLevelUpdateRef = useRef<number>(0);
 
   useEffect(() => {
     // Check for microphone availability
@@ -40,13 +49,118 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       .enumerateDevices()
       .then((devices) => {
         const hasMic = devices.some((device) => device.kind === 'audioinput');
-        setHasMicrophone(hasMic);
+        const hasAnyDevice = devices.length > 0;
+        if (hasMic) {
+          setMicStatus('available');
+        } else if (hasAnyDevice) {
+          // API is working and explicitly reports no audioinput devices
+          setMicStatus('unavailable');
+        }
+        // else: zero devices returned (e.g. Firefox before permission grant) — keep 'unknown', show button
       })
       .catch((err) => {
         console.error('[VoiceCapture] Error accessing media devices:', err);
-        setHasMicrophone(false);
+        // Keep 'unknown' — don't hide the button on enumeration failure
       });
   }, []);
+
+  const stopRecording = useCallback(() => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== 'inactive'
+    ) {
+      mediaRecorderRef.current.stop();
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+    if (checkSilenceIntervalRef.current) {
+      clearInterval(checkSilenceIntervalRef.current);
+      checkSilenceIntervalRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+    silenceStartTimeRef.current = null;
+    isWarmedUpRef.current = false;
+    setIsInitializing(false);
+    setIsRecording(false);
+    setAudioLevel(0);
+  }, []);
+
+  const transcribeAudio = useCallback(
+    async (audioBlob: Blob) => {
+      setIsTranscribing(true);
+      try {
+        const filename = 'audio.webm';
+        const mimeType = audioBlob.type || 'audio/webm';
+
+        const encodedFileName = encodeURIComponent(filename);
+        const encodedMimeType = encodeURIComponent(mimeType);
+
+        // Upload using FormData (binary, not base64)
+        const formData = new FormData();
+        formData.append('file', audioBlob, filename);
+
+        const uploadResponse = await fetch(
+          `/api/file/upload?filename=${encodedFileName}&filetype=file&mime=${encodedMimeType}`,
+          {
+            method: 'POST',
+            body: formData,
+          },
+        );
+
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Failed to upload audio');
+        }
+
+        const uploadResult = await uploadResponse.json();
+        const fileURI = uploadResult.data?.uri;
+
+        if (!fileURI) {
+          throw new Error('Failed to get file URI from upload response');
+        }
+
+        const fileID = encodeURIComponent(fileURI.split('/').pop()!);
+
+        // Call the transcribe endpoint
+        const transcribeResponse = await fetch(
+          `/api/file/${fileID}/transcribe`,
+          {
+            method: 'GET',
+          },
+        );
+
+        if (!transcribeResponse.ok) {
+          const errorData = await transcribeResponse.json().catch(() => ({}));
+          throw new Error(errorData.error || 'Failed to transcribe audio');
+        }
+
+        const transcribeResult = await transcribeResponse.json();
+
+        // Voice capture audio is always small enough for synchronous transcription
+        if (transcribeResult.async) {
+          throw new Error(
+            'Audio file too large for voice capture. Please use the file upload option for large audio files.',
+          );
+        }
+
+        const transcript = transcribeResult.transcript;
+
+        setTextFieldValue((prevText) =>
+          prevText?.length ? prevText + ' ' + transcript : transcript,
+        );
+      } catch (error) {
+        console.error('Error during transcription:', error);
+        toast.error(t('chat.voiceTranscriptionFailed'));
+      } finally {
+        setIsTranscribing(false);
+      }
+    },
+    [setIsTranscribing, setTextFieldValue, t],
+  );
 
   const startRecording = async () => {
     // Check current permission status
@@ -56,10 +170,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       });
 
       if (permissionStatus.state === 'denied') {
-        alert(t('chat.microphoneAccessDenied'));
+        setMicStatus('denied');
+        toast.error(t('chat.microphoneAccessDenied'));
         return;
       }
-    } catch (permErr) {
+    } catch {
       // Permissions API not supported, continue anyway
     }
 
@@ -67,6 +182,10 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
+
+      // If we got here, mic is available
+      setMicStatus('available');
+
       mediaStreamRef.current = stream;
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
@@ -98,8 +217,9 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       };
 
       // Set up audio context for silence detection
-      audioContextRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+      audioContextRef.current = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
       const source = audioContextRef.current.createMediaStreamSource(stream);
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.minDecibels = -90;
@@ -110,90 +230,93 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
       // Show initializing state immediately
       setIsInitializing(true);
+      isWarmedUpRef.current = false;
+      warmupStartTimeRef.current = Date.now();
 
-      // Start checking for silence
+      // Start checking for audio signal / silence
       silenceStartTimeRef.current = null;
       checkSilenceIntervalRef.current = window.setInterval(() => {
-        if (analyserRef.current) {
-          const dataArray = new Uint8Array(analyserRef.current.fftSize);
-          analyserRef.current.getByteTimeDomainData(dataArray);
+        if (!analyserRef.current) return;
 
-          // Calculate RMS (Root Mean Square) to get volume level
-          let sum = 0;
-          for (const amplitude of dataArray) {
-            const normalized = amplitude / 128 - 1;
-            sum += normalized * normalized;
+        const dataArray = new Uint8Array(analyserRef.current.fftSize);
+        analyserRef.current.getByteTimeDomainData(dataArray);
+
+        // Calculate RMS (Root Mean Square) to get volume level
+        let sum = 0;
+        for (const amplitude of dataArray) {
+          const normalized = amplitude / 128 - 1;
+          sum += normalized * normalized;
+        }
+        const rms = Math.sqrt(sum / dataArray.length);
+        const db = 20 * Math.log10(rms);
+
+        // Normalize audio level to 0-1 range for the visual indicator
+        // Map from roughly -60dB..0dB to 0..1
+        const normalizedLevel = Math.max(0, Math.min(1, (db + 60) / 60));
+
+        // Throttle audio level state updates
+        const now = Date.now();
+        if (now - lastAudioLevelUpdateRef.current > AUDIO_LEVEL_THROTTLE_MS) {
+          lastAudioLevelUpdateRef.current = now;
+          setAudioLevel(normalizedLevel);
+        }
+
+        // Handle warmup: wait for audio signal or fallback timeout
+        if (!isWarmedUpRef.current) {
+          const elapsed = now - warmupStartTimeRef.current;
+          const hasAudioSignal = !isNaN(db) && db > SILENCE_THRESHOLD;
+
+          if (hasAudioSignal || elapsed >= WARMUP_FALLBACK_MS) {
+            isWarmedUpRef.current = true;
+            setIsInitializing(false);
+            setIsRecording(true);
           }
-          const rms = Math.sqrt(sum / dataArray.length);
-          const db = 20 * Math.log10(rms);
+          return; // Don't run silence detection until warmed up
+        }
 
-          if (db < SILENCE_THRESHOLD || isNaN(db)) {
-            if (silenceStartTimeRef.current === null) {
-              silenceStartTimeRef.current = Date.now();
-            } else {
-              const silentDuration = Date.now() - silenceStartTimeRef.current;
+        // Silence detection (only runs after warmup)
+        if (db < SILENCE_THRESHOLD || isNaN(db)) {
+          if (silenceStartTimeRef.current === null) {
+            silenceStartTimeRef.current = Date.now();
+          } else {
+            const silentDuration = Date.now() - silenceStartTimeRef.current;
 
-              // Trigger transcription on shorter silence (while continuing to record)
-              if (
-                silentDuration > TRANSCRIBE_SILENCE_DURATION &&
-                !isTranscribingSegment
-              ) {
-                const hasUntranscribedChunks =
-                  audioChunksRef.current.length >
-                  lastTranscribedChunkIndexRef.current;
+            // Trigger transcription on shorter silence (while continuing to record)
+            if (
+              silentDuration > TRANSCRIBE_SILENCE_DURATION &&
+              !isTranscribingSegment
+            ) {
+              const hasUntranscribedChunks =
+                audioChunksRef.current.length >
+                lastTranscribedChunkIndexRef.current;
 
-                if (hasUntranscribedChunks) {
-                  transcribeSegment();
-                  silenceStartTimeRef.current = Date.now(); // Reset timer after triggering
-                }
-              }
-
-              // Stop recording on longer silence
-              if (silentDuration > MAX_SILENT_DURATION) {
-                stopRecording();
+              if (hasUntranscribedChunks) {
+                transcribeSegment();
+                silenceStartTimeRef.current = Date.now(); // Reset timer after triggering
               }
             }
-          } else {
-            silenceStartTimeRef.current = null;
+
+            // Stop recording on longer silence
+            if (silentDuration > MAX_SILENT_DURATION) {
+              stopRecording();
+            }
           }
+        } else {
+          silenceStartTimeRef.current = null;
         }
       }, 100);
-
-      // TODO: detect stream readiness rather than using a hardcoded delay
-      // Wait for stream warmup before signaling ready to record
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      setIsInitializing(false);
-      setIsRecording(true);
     } catch (err: any) {
       console.error('[VoiceCapture] Error getting user media:', err);
       console.error('[VoiceCapture] Error name:', err.name);
       console.error('[VoiceCapture] Error message:', err.message);
-      alert(t('chat.microphoneAccessError', { message: err.message }));
-    }
-  };
 
-  const stopRecording = () => {
-    if (
-      mediaRecorderRef.current &&
-      mediaRecorderRef.current.state !== 'inactive'
-    ) {
-      mediaRecorderRef.current.stop();
+      if (err.name === 'NotAllowedError') {
+        setMicStatus('denied');
+        toast.error(t('chat.microphoneAccessDenied'));
+      } else {
+        toast.error(t('chat.microphoneAccessError', { message: err.message }));
+      }
     }
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-    }
-    if (checkSilenceIntervalRef.current) {
-      clearInterval(checkSilenceIntervalRef.current);
-      checkSilenceIntervalRef.current = null;
-    }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    silenceStartTimeRef.current = null;
-    setIsInitializing(false);
-    setIsRecording(false);
   };
 
   /**
@@ -225,74 +348,43 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     }
   };
 
-  const transcribeAudio = async (audioBlob: Blob) => {
-    setIsTranscribing(true);
-    try {
-      const filename = 'audio.webm';
-      const mimeType = audioBlob.type || 'audio/webm';
+  // Always show button unless we're certain no mic exists (and it's not a permission issue)
+  if (micStatus === 'unavailable') {
+    return (
+      <div className="voice-capture">
+        <div className="group relative">
+          <button
+            className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-full text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed"
+            disabled
+            aria-label={t('chat.microphoneNotDetected')}
+          >
+            <MicIcon className="h-5 w-5 md:h-4 md:w-4" />
+          </button>
+          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap z-50">
+            {t('chat.microphoneNotDetected')}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-      const encodedFileName = encodeURIComponent(filename);
-      const encodedMimeType = encodeURIComponent(mimeType);
-
-      // Upload using FormData (binary, not base64)
-      const formData = new FormData();
-      formData.append('file', audioBlob, filename);
-
-      const uploadResponse = await fetch(
-        `/api/file/upload?filename=${encodedFileName}&filetype=file&mime=${encodedMimeType}`,
-        {
-          method: 'POST',
-          body: formData,
-        },
-      );
-
-      if (!uploadResponse.ok) {
-        const errorData = await uploadResponse.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to upload audio');
-      }
-
-      const uploadResult = await uploadResponse.json();
-      const fileURI = uploadResult.data?.uri;
-
-      if (!fileURI) {
-        throw new Error('Failed to get file URI from upload response');
-      }
-
-      const fileID = encodeURIComponent(fileURI.split('/').pop()!);
-
-      // Call the transcribe endpoint
-      const transcribeResponse = await fetch(`/api/file/${fileID}/transcribe`, {
-        method: 'GET',
-      });
-
-      if (!transcribeResponse.ok) {
-        const errorData = await transcribeResponse.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to transcribe audio');
-      }
-
-      const transcribeResult = await transcribeResponse.json();
-
-      // Voice capture audio is always small enough for synchronous transcription
-      if (transcribeResult.async) {
-        throw new Error(
-          'Audio file too large for voice capture. Please use the file upload option for large audio files.',
-        );
-      }
-
-      const transcript = transcribeResult.transcript;
-
-      setTextFieldValue((prevText) =>
-        prevText?.length ? prevText + ' ' + transcript : transcript,
-      );
-    } catch (error) {
-      console.error('Error during transcription:', error);
-    } finally {
-      setIsTranscribing(false);
-    }
-  };
-
-  if (!hasMicrophone) {
-    return null; // Don't display the component if no microphones are available
+  if (micStatus === 'denied') {
+    return (
+      <div className="voice-capture">
+        <div className="group relative">
+          <button
+            className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-full text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed"
+            disabled
+            aria-label={t('chat.microphoneBlocked')}
+          >
+            <MicIcon className="h-5 w-5 md:h-4 md:w-4" />
+          </button>
+          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap z-50">
+            {t('chat.microphoneBlocked')}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -327,6 +419,13 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
             <span className="text-xs text-red-500 dark:text-red-400/70 whitespace-nowrap">
               {t('chat.voiceInputTapToStop')}
             </span>
+            {/* Audio level indicator */}
+            <div className="w-full h-1 bg-red-200 dark:bg-red-900/40 rounded-full mt-0.5 overflow-hidden">
+              <div
+                className="h-full bg-red-500 rounded-full transition-all duration-100"
+                style={{ width: `${Math.max(audioLevel * 100, 3)}%` }}
+              />
+            </div>
           </div>
         </button>
       ) : (
