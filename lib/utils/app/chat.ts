@@ -79,7 +79,7 @@ export const isOrganizationAgentModel = (
   modelId: string | undefined,
 ): boolean => {
   if (!modelId) return false;
-  return modelId.startsWith('org-');
+  return modelId.startsWith('org-') || modelId.startsWith('foundry-');
 };
 
 /**

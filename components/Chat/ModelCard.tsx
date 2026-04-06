@@ -43,7 +43,7 @@ export const ModelCard: FC<ModelCardProps> = ({
     <div
       key={id}
       className={`
-        w-full text-left p-3 rounded-lg transition-all duration-150 flex items-center gap-2
+        w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center gap-2
         ${
           isSelected
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'

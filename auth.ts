@@ -148,7 +148,7 @@ export async function getAccessTokenForOBO(
       client_id: process.env.AZURE_CLIENT_ID || '',
       client_secret: process.env.AZURE_CLIENT_SECRET || '',
       refresh_token: session.refreshToken,
-      scope: `api://${process.env.AZURE_CLIENT_ID}/.default`,
+      scope: `${process.env.AZURE_CLIENT_ID}/.default`,
     };
 
     const response = await fetch(url, {

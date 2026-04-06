@@ -279,6 +279,7 @@ export function Chat({
   // Memoize organization agent lookup to avoid recomputing on every render
   const orgAgentInfo = useMemo(() => {
     const modelId = selectedConversation?.model?.id;
+    const isFoundryAgent = modelId?.startsWith('foundry-');
     const orgAgentId =
       selectedConversation?.bot ||
       (modelId?.startsWith('org-') ? modelId.replace('org-', '') : undefined);
@@ -286,11 +287,29 @@ export function Chat({
       ? getOrganizationAgentById(orgAgentId)
       : undefined;
     const isOrgAgent =
-      !!orgAgent || selectedConversation?.model?.isOrganizationAgent;
+      !!orgAgent ||
+      isFoundryAgent ||
+      selectedConversation?.model?.isOrganizationAgent;
+
+    // For Foundry agents without a static config, create a minimal agent info
+    // so the topbar can render correctly (no web search, no specific icon)
+    if (isFoundryAgent && !orgAgent) {
+      return {
+        orgAgent: {
+          icon: undefined,
+          color: undefined,
+          allowWebSearch: false,
+          name: selectedConversation?.model?.name || '',
+        },
+        isOrgAgent: true,
+      };
+    }
+
     return { orgAgent, isOrgAgent };
   }, [
     selectedConversation?.bot,
     selectedConversation?.model?.id,
+    selectedConversation?.model?.name,
     selectedConversation?.model?.isOrganizationAgent,
   ]);
 
@@ -462,7 +481,7 @@ export function Chat({
             aria-label={t('modelSelect.title')}
           >
             <div
-              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in"
+              className="max-w-4xl w-full h-[80vh] max-h-[80vh] overflow-hidden mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <ModelSelect onClose={() => setIsModelSelectOpen(false)} />

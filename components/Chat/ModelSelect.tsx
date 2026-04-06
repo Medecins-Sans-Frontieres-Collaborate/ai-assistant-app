@@ -5,7 +5,6 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
-import { useAgentManagement } from '@/client/hooks/settings/useAgentManagement';
 import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
@@ -17,7 +16,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { AzureAIIcon, AzureOpenAIIcon } from '../Icons/providers';
 import { TabNavigation } from '../UI/TabNavigation';
-import { CustomAgentForm } from './CustomAgents/CustomAgentForm';
+import { AgentSourceForm } from './AgentSources/AgentSourceForm';
 import { ModelCard } from './ModelCard';
 import { AgentsTab } from './ModelSelect/AgentsTab';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
@@ -25,7 +24,7 @@ import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelTypeIcon } from './ModelSelect/ModelTypeIcon';
 
-import { CustomAgent } from '@/client/stores/settingsStore';
+import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
   getOrganizationAgentIdFromModelId,
   getOrganizationAgents,
@@ -50,19 +49,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const isBotsEnabled = exploreBots !== false;
 
   // Dynamically discovered Foundry agents (RBAC-filtered per user)
-  const { foundryAgents, isLoadingFoundryAgents } = useFoundryAgents();
+  const { foundryAgents, isLoadingFoundryAgents, refetchFoundryAgents } =
+    useFoundryAgents();
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
-  // Check if the currently selected model is a custom agent
-  const isSelectedModelAgent = selectedModelId?.startsWith('custom-') ?? false;
+  // Check if the currently selected model is a custom/foundry agent
+  const isSelectedModelAgent =
+    selectedModelId?.startsWith('custom-') ||
+    selectedModelId?.startsWith('foundry-') ||
+    false;
 
   // Custom hooks for state management
   const {
     activeTab,
     setActiveTab,
     showAgentForm,
-    editingAgent,
     openAgentForm,
     closeAgentForm,
     showModelAdvanced,
@@ -73,12 +75,16 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setShowAgentWarning,
   } = useModelSelectState(isSelectedModelAgent);
 
-  // Agent management
-  const {
-    customAgents,
-    handleSaveAgent: saveAgentToStore,
-    handleDeleteAgent: deleteAgentFromStore,
-  } = useAgentManagement();
+  // Agent source management
+  const customAgentSources = useSettingsStore((s) => s.customAgentSources);
+  const addCustomAgentSource = useSettingsStore((s) => s.addCustomAgentSource);
+  const updateCustomAgentSource = useSettingsStore(
+    (s) => s.updateCustomAgentSource,
+  );
+  const deleteCustomAgentSource = useSettingsStore(
+    (s) => s.deleteCustomAgentSource,
+  );
+  const [editingSource, setEditingSource] = useState<AgentSource | undefined>();
 
   // Feature flag: Control Claude models visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -123,36 +129,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     }
     setIsEditingOrder(!isEditingOrder);
   };
-
-  // Track which agents have defunct base models (deprecated/removed)
-  // These agents are shown in the UI but cannot be selected
-  const defunctAgentIds = useMemo(() => {
-    return new Set(
-      customAgents
-        .filter((agent) => !OpenAIModels[agent.baseModelId])
-        .map((agent) => agent.id),
-    );
-  }, [customAgents]);
-
-  // Convert custom agents to OpenAIModel format (only valid ones)
-  // Agents with defunct base models are filtered out here but displayed separately in AgentsTab
-  const customAgentModels: OpenAIModel[] = useMemo(() => {
-    return customAgents
-      .filter((agent) => !defunctAgentIds.has(agent.id))
-      .map((agent) => {
-        const baseModel = OpenAIModels[agent.baseModelId];
-        return {
-          ...baseModel,
-          id: `custom-${agent.id}`,
-          name: agent.name,
-          agentId: agent.agentId,
-          description:
-            agent.description || `Custom agent based on ${baseModel.name}`,
-          modelType: 'agent' as const,
-          isCustomAgent: true,
-        };
-      });
-  }, [customAgents, defunctAgentIds]);
 
   // Convert organization agents to OpenAIModel format
   // Combines static RAG agents (from JSON config) with dynamically discovered Foundry agents
@@ -204,12 +180,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     return [...deduplicatedStatic, ...dynamicModels];
   }, [isBotsEnabled, foundryAgents]);
 
-  // Combine base models, custom agents, and organization agents
-  const availableModels = [
-    ...baseModels,
-    ...customAgentModels,
-    ...organizationAgentModels,
-  ];
+  // Combine base models and organization/discovered agents
+  const availableModels = [...baseModels, ...organizationAgentModels];
 
   const selectedModel =
     availableModels.find((m) => m.id === selectedModelId) || availableModels[0];
@@ -302,6 +274,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         );
       } else if (foundryAgentId) {
         // Dynamic Foundry agents don't use bot ID — agent routing is via agentId
+        // Clear any previous bot setting
+        updates.bot = undefined;
         console.log(
           `[ModelSelect] Selected dynamic Foundry agent: ${model.id}`,
         );
@@ -399,52 +373,37 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     ],
   );
 
-  const handleSaveAgent = useCallback(
-    (agent: CustomAgent) => {
-      saveAgentToStore(agent);
+  const handleSaveAgentSource = useCallback(
+    (source: AgentSource) => {
+      if (editingSource) {
+        updateCustomAgentSource(source);
+      } else {
+        addCustomAgentSource(source);
+      }
+      setEditingSource(undefined);
       closeAgentForm();
     },
-    [saveAgentToStore, closeAgentForm],
+    [
+      editingSource,
+      addCustomAgentSource,
+      updateCustomAgentSource,
+      closeAgentForm,
+    ],
   );
 
-  const handleEditAgent = useCallback(
-    (agent: CustomAgent) => {
-      openAgentForm(agent);
+  const handleEditSource = useCallback(
+    (source: AgentSource) => {
+      setEditingSource(source);
+      openAgentForm();
     },
     [openAgentForm],
   );
 
-  const handleImportAgents = useCallback(
-    (agents: CustomAgent[]) => {
-      agents.forEach((agent) => {
-        saveAgentToStore(agent);
-      });
+  const handleDeleteAgentSource = useCallback(
+    (sourceId: string) => {
+      deleteCustomAgentSource(sourceId);
     },
-    [saveAgentToStore],
-  );
-
-  const handleDeleteAgent = useCallback(
-    (agentId: string) => {
-      deleteAgentFromStore(agentId);
-
-      // If currently selected model is the deleted agent, switch to default
-      if (
-        selectedConversation &&
-        selectedConversation.model?.id === `custom-${agentId}`
-      ) {
-        const defaultModel = baseModels[0];
-        // Only update the model field to avoid overwriting other conversation properties
-        updateConversation(selectedConversation.id, {
-          model: defaultModel,
-        });
-      }
-    },
-    [
-      deleteAgentFromStore,
-      selectedConversation,
-      baseModels,
-      updateConversation,
-    ],
+    [deleteCustomAgentSource],
   );
 
   return (
@@ -456,7 +415,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             id: 'models',
             label: t('modelSelect.tabs.models'),
             icon: <AzureOpenAIIcon className="w-5 h-5" />,
-            width: '110px',
+            width: '115px',
           },
           {
             id: 'agents',
@@ -484,10 +443,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'details' ? 'hidden md:block' : 'block'
               } w-full md:w-80 flex-shrink-0 overflow-y-auto md:border-e border-gray-200 dark:border-gray-700 md:pe-4`}
             >
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {/* Base Models */}
                 <div>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1.5">
                     <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
                       {t('modelSelect.sections.baseModels')}
                     </h4>
@@ -499,7 +458,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       onToggleEdit={handleToggleEditOrder}
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {orderedModels.map((model) => {
                       const config = OpenAIModels[model.id as OpenAIModelID];
                       const isSelected = selectedModelId === model.id;
@@ -536,7 +495,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'list' ? 'hidden md:block' : 'block'
               } flex-1 overflow-y-auto`}
             >
-              {selectedModel && (modelConfig || isCustomAgent) && (
+              {selectedModel && (modelConfig || isCustomAgent) ? (
                 <ModelDetailsPanel
                   selectedModel={selectedModel}
                   modelConfig={modelConfig}
@@ -552,6 +511,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   setShowModelAdvanced={setShowModelAdvanced}
                   updateConversation={updateConversation}
                 />
+              ) : (
+                <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                  <p className="text-sm">
+                    {t('modelSelect.modelsDescription')}
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -560,16 +525,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
       {activeTab === 'agents' && (
         <AgentsTab
-          openAgentForm={openAgentForm}
-          customAgents={customAgents}
-          handleEditAgent={handleEditAgent}
-          handleDeleteAgent={handleDeleteAgent}
           handleModelSelect={handleModelSelect}
-          customAgentModels={customAgentModels}
           organizationAgentModels={organizationAgentModels}
+          foundryAgents={foundryAgents}
           selectedModelId={selectedModelId}
-          defunctAgentIds={defunctAgentIds}
           isLoadingFoundryAgents={isLoadingFoundryAgents}
+          onRefreshAgents={() => refetchFoundryAgents()}
+          agentSources={customAgentSources}
+          onAddSource={() => {
+            setEditingSource(undefined);
+            openAgentForm();
+          }}
+          onEditSource={handleEditSource}
+          onDeleteSource={handleDeleteAgentSource}
           // Props for details panel
           selectedModel={selectedModel}
           modelConfig={modelConfig}
@@ -588,13 +556,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         />
       )}
 
-      {/* Custom Agent Form Modal */}
+      {/* Agent Source Form Modal */}
       {showAgentForm && (
-        <CustomAgentForm
-          onSave={handleSaveAgent}
-          onClose={closeAgentForm}
-          existingAgent={editingAgent}
-          existingAgents={customAgents}
+        <AgentSourceForm
+          onSave={handleSaveAgentSource}
+          onClose={() => {
+            setEditingSource(undefined);
+            closeAgentForm();
+          }}
+          existingSource={editingSource}
         />
       )}
     </div>

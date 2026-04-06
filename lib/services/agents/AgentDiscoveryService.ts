@@ -9,6 +9,7 @@
  */
 
 const ARM_API_VERSION = '2025-10-01-preview';
+// const FOUNDRY_AGENTS_API_VERSION = '2025-05-15-preview';
 
 interface FoundryAgentApp {
   /** Agent Application resource name (ARM name) */
@@ -38,6 +39,8 @@ interface DiscoveredAgent {
   agentName: string;
   /** Source type */
   type: 'foundry';
+  /** ARM resource path this agent was discovered from */
+  source?: string;
   /** Tabler icon name (from ui-icon tag) */
   icon?: string;
   /** Hex color (from ui-color tag) */
@@ -212,6 +215,13 @@ export class AgentDiscoveryService {
       hash |= 0;
     }
     return hash.toString(36);
+  }
+
+  /**
+   * Clears all entries from the cache. Used when user explicitly refreshes.
+   */
+  clearCache(): void {
+    this.cache.clear();
   }
 
   /**

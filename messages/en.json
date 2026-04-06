@@ -385,7 +385,36 @@
     "delete": "Delete",
     "noCustomAgentsYet": "No custom agents yet.",
     "noOrgAgentsConfigured": "No organization agents configured.",
-    "validationFailed": "Validation failed"
+    "validationFailed": "Validation failed",
+    "addAgentSource": "Add Custom Source",
+    "connectFoundryProject": "Connect a Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "Discover agents from another office or team's Azure Foundry project. You'll only see agents you have permission to access.",
+    "foundryProjectPath": "Foundry Project Path",
+    "foundryProjectPathHelp": "Find this in the Azure Portal under the Foundry project's Properties page → Resource ID.",
+    "copyFormat": "Format",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Amsterdam Office, Geneva Research",
+    "nameRequired": "Give this source a name so you can identify it later.",
+    "pathRequired": "Paste the Foundry project resource path.",
+    "pathInvalidFormat": "This doesn't look like a resource path. It should start with /subscriptions/...",
+    "connectionFailed": "Could not reach this project. Check the path is correct and that you have access.",
+    "connectionSuccessAgents": "Connected — {count} agent(s) found",
+    "connectionSuccessEmpty": "Connected, but no agents found. You may need the Azure AI User role on this project to see its agents.",
+    "checkingConnection": "Checking connection...",
+    "connect": "Connect",
+    "cancel": "Cancel",
+    "sourceName": "Source Name",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Source name is required.",
+    "resourcePath": "Resource Path",
+    "resourcePathRequired": "Resource path is required.",
+    "resourcePathHelp": "The ARM resource path to a Foundry project. Ask your administrator for this value.",
+    "invalidResourcePathFormat": "Resource path must start with /subscriptions/...",
+    "validatingSource": "Discovering agents...",
+    "sourceValidatedEmpty": "Valid source, but no agents found. You may not have access to agents in this project.",
+    "invalidSource": "Could not access this resource path. Verify the path and your permissions.",
+    "addSource": "Add Source",
+    "removeSource": "Remove Source"
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -1181,6 +1210,7 @@
       "models": "Models",
       "agents": "Agents"
     },
+    "modelsDescription": "Choose an AI model for your conversation. Each model has different strengths — select one to see details.",
     "sections": {
       "baseModels": "Base Models"
     },
@@ -1705,14 +1735,30 @@
     "expires": "Available for {days} days"
   },
   "agentsTab": {
+    "description": "Specialized AI agents for specific tasks. Default agents are managed centrally; add custom sources to discover agents from other Foundry projects.",
     "organizationAgents": {
-      "title": "Organization Agents"
+      "title": "Base Agents"
     },
     "customAgents": {
       "title": "Custom Agents",
       "advancedBadge": "Advanced",
       "experimentalBlurb": "Experimental — built in direct collaboration with MSF power users. Not for general use.",
       "createButton": "Create Custom Agent"
+    },
+    "agentSources": {
+      "title": "Foundry Connections",
+      "description": "Connect to other Foundry projects to discover their agents.",
+      "connectButton": "Connect a Microsoft Azure Foundry project",
+      "connectButtonShort": "Connect a Foundry project",
+      "addButton": "Add Custom Source",
+      "addAnother": "Add another",
+      "noSources": "No custom sources configured.",
+      "removeSource": "Remove source",
+      "confirmRemove": "Remove?",
+      "sourceConnected": "custom source connected",
+      "sourcesConnected": "custom sources connected",
+      "backToAgents": "Back",
+      "discoveredAgents": "Discovered Agents"
     },
     "selectAgentPrompt": "Select an agent to view details"
   },

@@ -2,6 +2,7 @@ import {
   IconChevronDown,
   IconClearAll,
   IconDots,
+  IconHexagon,
   IconWorld,
 } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
@@ -100,6 +101,16 @@ export const ChatTopbar = ({
               ? { color: organizationAgentColor }
               : undefined
           }
+        />
+      );
+    }
+
+    // For Foundry agents without a custom icon, show hexagon
+    if (isOrganizationAgent && !organizationAgentIcon) {
+      return (
+        <IconHexagon
+          size={16}
+          className="w-4 h-4 flex-shrink-0 text-blue-400"
         />
       );
     }
