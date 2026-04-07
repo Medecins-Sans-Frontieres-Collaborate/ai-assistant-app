@@ -113,6 +113,8 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     }
     silenceStartTimeRef.current = null;
     isWarmedUpRef.current = false;
+    audioChunksRef.current = [];
+    lastTranscribedChunkIndexRef.current = 0;
     setIsInitializing(false);
     setIsRecording(false);
     setAudioLevel(0);
@@ -287,7 +289,9 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
         // Normalize audio level to 0-1 range for the visual indicator
         // Map from roughly -60dB..0dB to 0..1
-        const normalizedLevel = Math.max(0, Math.min(1, (db + 60) / 60));
+        const normalizedLevel = Number.isFinite(db)
+          ? Math.max(0, Math.min(1, (db + 60) / 60))
+          : 0;
 
         // Throttle audio level state updates
         const now = Date.now();
@@ -340,16 +344,19 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           silenceStartTimeRef.current = null;
         }
       }, 100);
-    } catch (err: any) {
-      console.error('[VoiceCapture] Error getting user media:', err);
-      console.error('[VoiceCapture] Error name:', err.name);
-      console.error('[VoiceCapture] Error message:', err.message);
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      console.error('[VoiceCapture] Error getting user media:', error);
+      console.error('[VoiceCapture] Error name:', error.name);
+      console.error('[VoiceCapture] Error message:', error.message);
 
-      if (err.name === 'NotAllowedError') {
+      if (error.name === 'NotAllowedError') {
         setMicStatus('denied');
         toast.error(t('chat.microphoneAccessDenied'));
       } else {
-        toast.error(t('chat.microphoneAccessError', { message: err.message }));
+        toast.error(
+          t('chat.microphoneAccessError', { message: error.message }),
+        );
       }
     }
   };
