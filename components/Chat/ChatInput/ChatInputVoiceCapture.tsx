@@ -42,6 +42,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const isWarmedUpRef = useRef(false);
   const warmupStartTimeRef = useRef<number>(0);
   const lastAudioLevelUpdateRef = useRef<number>(0);
+  // Ref mirror for access inside setInterval (avoids stale closure)
   const isTranscribingSegmentRef = useRef(false);
 
   useEffect(() => {
@@ -189,7 +190,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           prevText?.length ? prevText + ' ' + transcript : transcript,
         );
       } catch (error) {
-        console.error('Error during transcription:', error);
+        console.error('[VoiceCapture] Error during transcription:', error);
         toast.error(t('chat.voiceTranscriptionFailed'));
         throw error;
       } finally {
@@ -347,8 +348,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     } catch (err: unknown) {
       const error = err instanceof Error ? err : new Error(String(err));
       console.error('[VoiceCapture] Error getting user media:', error);
-      console.error('[VoiceCapture] Error name:', error.name);
-      console.error('[VoiceCapture] Error message:', error.message);
 
       if (error.name === 'NotAllowedError') {
         setMicStatus('denied');
@@ -396,38 +395,23 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   };
 
   // Always show button unless we're certain no mic exists (and it's not a permission issue)
-  if (micStatus === 'unavailable') {
+  if (micStatus === 'unavailable' || micStatus === 'denied') {
+    const messageKey =
+      micStatus === 'denied'
+        ? 'chat.microphoneBlocked'
+        : 'chat.microphoneNotDetected';
     return (
       <div className="voice-capture">
         <div className="group relative">
           <button
             className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-full text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed"
             disabled
-            aria-label={t('chat.microphoneNotDetected')}
+            aria-label={t(messageKey)}
           >
             <MicIcon className="h-5 w-5 md:h-4 md:w-4" />
           </button>
           <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap z-50">
-            {t('chat.microphoneNotDetected')}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (micStatus === 'denied') {
-    return (
-      <div className="voice-capture">
-        <div className="group relative">
-          <button
-            className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-full text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed"
-            disabled
-            aria-label={t('chat.microphoneBlocked')}
-          >
-            <MicIcon className="h-5 w-5 md:h-4 md:w-4" />
-          </button>
-          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap z-50">
-            {t('chat.microphoneBlocked')}
+            {t(messageKey)}
           </div>
         </div>
       </div>
