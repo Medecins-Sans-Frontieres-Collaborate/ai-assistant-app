@@ -14,7 +14,7 @@ const MAX_SILENT_DURATION = 6000; // 6 seconds of silence stops recording
 const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
 const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
 
-type MicStatus = 'unknown' | 'available' | 'unavailable' | 'denied' | 'error';
+type MicStatus = 'unknown' | 'available' | 'unavailable' | 'denied';
 
 const ChatInputVoiceCapture: FC = React.memo(() => {
   const setTextFieldValue = useChatInputStore(
@@ -42,6 +42,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const isWarmedUpRef = useRef(false);
   const warmupStartTimeRef = useRef<number>(0);
   const lastAudioLevelUpdateRef = useRef<number>(0);
+  const isTranscribingSegmentRef = useRef(false);
 
   useEffect(() => {
     // Check for microphone availability
@@ -62,6 +63,34 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         console.error('[VoiceCapture] Error accessing media devices:', err);
         // Keep 'unknown' — don't hide the button on enumeration failure
       });
+
+    // Listen for permission changes to recover from 'denied' state
+    // eslint-disable-next-line no-undef
+    let permissionStatus: PermissionStatus | null = null;
+    let handleChange: (() => void) | null = null;
+
+    navigator.permissions
+      .query({ name: 'microphone' as PermissionName })
+      .then((status) => {
+        permissionStatus = status;
+        handleChange = () => {
+          if (status.state === 'granted' || status.state === 'prompt') {
+            setMicStatus('available');
+          } else if (status.state === 'denied') {
+            setMicStatus('denied');
+          }
+        };
+        status.addEventListener('change', handleChange);
+      })
+      .catch(() => {
+        // Permissions API not supported in this browser
+      });
+
+    return () => {
+      if (permissionStatus && handleChange) {
+        permissionStatus.removeEventListener('change', handleChange);
+      }
+    };
   }, []);
 
   const stopRecording = useCallback(() => {
@@ -88,6 +117,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     setIsRecording(false);
     setAudioLevel(0);
   }, []);
+
+  // Cleanup recording resources on unmount
+  useEffect(() => {
+    return () => stopRecording();
+  }, [stopRecording]);
 
   const transcribeAudio = useCallback(
     async (audioBlob: Blob) => {
@@ -155,6 +189,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       } catch (error) {
         console.error('Error during transcription:', error);
         toast.error(t('chat.voiceTranscriptionFailed'));
+        throw error;
       } finally {
         setIsTranscribing(false);
       }
@@ -212,7 +247,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         );
         if (remainingChunks.length > 0) {
           const finalBlob = new Blob(remainingChunks, { type: 'audio/webm' });
-          transcribeAudio(finalBlob);
+          transcribeAudio(finalBlob).catch(() => {});
         }
       };
 
@@ -284,7 +319,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
             // Trigger transcription on shorter silence (while continuing to record)
             if (
               silentDuration > TRANSCRIBE_SILENCE_DURATION &&
-              !isTranscribingSegment
+              !isTranscribingSegmentRef.current
             ) {
               const hasUntranscribedChunks =
                 audioChunksRef.current.length >
@@ -341,9 +376,14 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
     // Transcribe with UI indicator
     setIsTranscribingSegment(true);
+    isTranscribingSegmentRef.current = true;
     try {
       await transcribeAudio(segmentBlob);
+    } catch {
+      // Roll back so these chunks get retried on next silence or final stop
+      lastTranscribedChunkIndexRef.current = startIndex;
     } finally {
+      isTranscribingSegmentRef.current = false;
       setIsTranscribingSegment(false);
     }
   };
