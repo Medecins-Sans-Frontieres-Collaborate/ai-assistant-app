@@ -42,7 +42,8 @@ export function useFoundryAgents() {
       }
       return response.json();
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes — matches server cache TTL
+    staleTime: 24 * 60 * 60 * 1000, // 24 hours — user can manually refresh
+    gcTime: 24 * 60 * 60 * 1000, // 24 hours — persist cache across modal open/close
     retry: 1,
     refetchOnWindowFocus: false,
   });

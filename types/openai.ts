@@ -12,6 +12,7 @@ export interface OpenAIModel {
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
   agentId?: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
+  foundryEndpoint?: string; // Foundry project endpoint for this agent (for custom sources)
   provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic'; // Model provider
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires

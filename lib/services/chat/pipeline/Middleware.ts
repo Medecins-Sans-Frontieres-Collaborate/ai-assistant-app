@@ -285,7 +285,9 @@ export const createCredentialMiddleware = async (
 ): Promise<Partial<ChatContext>> => {
   // Only acquire OBO credentials for Foundry agent calls
   const isFoundryAgent =
-    context.model?.isOrganizationAgent === true && !!context.model?.agentId;
+    (context.model?.isOrganizationAgent === true ||
+      context.modelId?.startsWith('foundry-')) &&
+    !!context.model?.agentId;
 
   if (!isFoundryAgent) {
     return {};
@@ -299,35 +301,39 @@ export const createCredentialMiddleware = async (
   }
 
   try {
-    // Get a fresh access token scoped to the app's audience for OBO exchange
-    const appAccessToken = await getAccessTokenForOBO(context.session);
-    if (!appAccessToken) {
-      console.warn(
-        '[CredentialMiddleware] Could not acquire app access token for OBO — falling back to service credential',
+    // Use agent-specific endpoint if available (for custom source agents),
+    // otherwise resolve from user region (for default project agents)
+    const foundryEndpoint =
+      context.model?.foundryEndpoint ||
+      RegionResolver.getFoundryEndpoint(context.user?.region || 'EU');
+
+    // Try OBO first for per-user Foundry access, fall back to DefaultAzureCredential
+    let userCredential: TokenCredential | undefined;
+
+    try {
+      const appAccessToken = await getAccessTokenForOBO(context.session);
+      if (!appAccessToken) throw new Error('No OBO token');
+
+      const tokenProvider = UserTokenProvider.getInstance();
+      const foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
+
+      userCredential = {
+        getToken: async () =>
+          ({
+            token: foundryToken,
+            expiresOnTimestamp: Date.now() + 55 * 60 * 1000,
+          }) as AccessToken,
+      };
+
+      console.log(
+        `[CredentialMiddleware] OBO credential acquired, endpoint: ${foundryEndpoint}`,
       );
-      return {};
+    } catch {
+      // OBO failed — use DefaultAzureCredential (managed identity or az login)
+      console.log(
+        `[CredentialMiddleware] OBO unavailable, using default credential for ${foundryEndpoint}`,
+      );
     }
-
-    // Exchange for Foundry-scoped token via OBO
-    const tokenProvider = UserTokenProvider.getInstance();
-    const foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
-
-    // Wrap as a TokenCredential for the AIProjectClient
-    const userCredential: TokenCredential = {
-      getToken: async () =>
-        ({
-          token: foundryToken,
-          expiresOnTimestamp: Date.now() + 55 * 60 * 1000, // ~55 min
-        }) as AccessToken,
-    };
-
-    // Resolve regional endpoint
-    const userRegion = context.user?.region || 'EU';
-    const foundryEndpoint = RegionResolver.getFoundryEndpoint(userRegion);
-
-    console.log(
-      `[CredentialMiddleware] OBO credential acquired for user ${context.user?.id}, region: ${userRegion}`,
-    );
 
     return {
       userCredential,
@@ -335,7 +341,7 @@ export const createCredentialMiddleware = async (
     };
   } catch (error) {
     console.error(
-      '[CredentialMiddleware] Failed to acquire OBO credential:',
+      '[CredentialMiddleware] Failed to acquire credential:',
       error,
     );
     // Don't block the pipeline — let it fall back to DefaultAzureCredential
@@ -362,11 +368,18 @@ export const createModelSelectionMiddleware = (
   // Determine if we're in agent mode based on:
   // 1. User explicitly requested AGENT search mode
   // 2. Custom agents always use agent mode
-  // 3. Organization agents with agentId (Foundry type) always use agent mode
+  // 3. Organization/Foundry agents with agentId always use agent mode
+  //    Check both the model property AND the model ID prefix (the property may
+  //    not survive serialization through conversation storage)
+  const isOrgAgent =
+    modelConfig.isOrganizationAgent === true ||
+    modelId.startsWith('foundry-') ||
+    modelId.startsWith('org-');
   const agentMode =
     context.searchMode === SearchMode.AGENT ||
     modelConfig.isCustomAgent === true ||
-    (modelConfig.isOrganizationAgent === true && !!modelConfig.agentId);
+    modelId.startsWith('custom-') ||
+    (isOrgAgent && !!modelConfig.agentId);
 
   return {
     modelSelector,

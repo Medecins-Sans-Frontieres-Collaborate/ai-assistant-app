@@ -113,9 +113,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Use GPT-5-mini for title generation (fast and cheap)
     // Fall back to it for reasoning models which are too expensive for this task
     const model = OpenAIModels[modelId as OpenAIModelID];
+    const isAgentModel =
+      modelId.startsWith('foundry-') ||
+      modelId.startsWith('org-') ||
+      modelId.startsWith('custom-');
     const deploymentId =
-      model?.usesResponsesAPI || isReasoningModel(modelId)
-        ? OpenAIModelID.GPT_5_MINI
+      isAgentModel || model?.usesResponsesAPI || isReasoningModel(modelId)
+        ? OpenAIModelID.GPT_5_2_CHAT
         : (modelId as OpenAIModelID);
 
     const openai = new AzureOpenAI({

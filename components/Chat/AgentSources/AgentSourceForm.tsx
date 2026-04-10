@@ -7,7 +7,7 @@ import {
   IconPlus,
   IconX,
 } from '@tabler/icons-react';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useTranslations } from 'next-intl';
@@ -20,6 +20,26 @@ interface AgentSourceFormProps {
   existingSource?: AgentSource;
 }
 
+interface BrowseItem {
+  id?: string;
+  name: string;
+  resourceGroup?: string;
+  location?: string;
+}
+
+function parseResourcePath(path: string) {
+  const match = path.match(
+    /\/subscriptions\/([^/]+)\/resourceGroups\/([^/]+)\/providers\/[^/]+\/[^/]+\/([^/]+)(?:\/projects\/([^/]+))?/,
+  );
+  if (!match) return null;
+  return {
+    subscriptionId: match[1],
+    resourceGroup: match[2],
+    accountName: match[3],
+    projectName: match[4] || 'default',
+  };
+}
+
 export const AgentSourceForm: FC<AgentSourceFormProps> = ({
   onSave,
   onClose,
@@ -28,9 +48,6 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
   const t = useTranslations('agents');
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(existingSource?.name || '');
-  const [resourcePath, setResourcePath] = useState(
-    existingSource?.resourcePath || '',
-  );
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<{
@@ -38,17 +55,120 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     agentCount: number;
   } | null>(null);
 
+  const existing = existingSource
+    ? parseResourcePath(existingSource.resourcePath)
+    : null;
+
+  const [inputMode, setInputMode] = useState<'browse' | 'manual'>('browse');
+
+  // Browse state
+  const [subscriptions, setSubscriptions] = useState<BrowseItem[]>([]);
+  const [accounts, setAccounts] = useState<BrowseItem[]>([]);
+  const [projects, setProjects] = useState<BrowseItem[]>([]);
+  const [loadingSubs, setLoadingSubs] = useState(false);
+  const [loadingAccounts, setLoadingAccounts] = useState(false);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+
+  // Selected values
+  const [subscriptionId, setSubscriptionId] = useState(
+    existing?.subscriptionId || '',
+  );
+  const [resourceGroup, setResourceGroup] = useState(
+    existing?.resourceGroup || '',
+  );
+  const [accountName, setAccountName] = useState(existing?.accountName || '');
+  const [projectName, setProjectName] = useState(
+    existing?.projectName || 'default',
+  );
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const validateSource = async (): Promise<boolean> => {
+  // Load subscriptions on mount
+  useEffect(() => {
+    if (!mounted) return;
+    setLoadingSubs(true);
+    fetch('/api/agents/browse?level=subscriptions')
+      .then((r) => r.json())
+      .then((data) => setSubscriptions(data.items || []))
+      .catch(() => setSubscriptions([]))
+      .finally(() => setLoadingSubs(false));
+  }, [mounted]);
+
+  // Load accounts when subscription changes
+  const loadAccounts = useCallback((subId: string) => {
+    if (!subId) {
+      setAccounts([]);
+      return;
+    }
+    setLoadingAccounts(true);
+    setAccounts([]);
+    setProjects([]);
+    fetch(`/api/agents/browse?level=accounts&subscriptionId=${subId}`)
+      .then((r) => r.json())
+      .then((data) => setAccounts(data.items || []))
+      .catch(() => setAccounts([]))
+      .finally(() => setLoadingAccounts(false));
+  }, []);
+
+  // Load projects when account changes
+  const loadProjects = useCallback(
+    (subId: string, rg: string, acct: string) => {
+      if (!subId || !rg || !acct) {
+        setProjects([]);
+        return;
+      }
+      setLoadingProjects(true);
+      setProjects([]);
+      fetch(
+        `/api/agents/browse?level=projects&subscriptionId=${subId}&resourceGroup=${rg}&accountName=${acct}`,
+      )
+        .then((r) => r.json())
+        .then((data) => setProjects(data.items || []))
+        .catch(() => setProjects([]))
+        .finally(() => setLoadingProjects(false));
+    },
+    [],
+  );
+
+  // Auto-load accounts for existing source
+  useEffect(() => {
+    if (existing?.subscriptionId) {
+      loadAccounts(existing.subscriptionId);
+    }
+  }, [existing?.subscriptionId, loadAccounts]);
+
+  // Auto-load projects for existing source
+  useEffect(() => {
+    if (
+      existing?.subscriptionId &&
+      existing?.resourceGroup &&
+      existing?.accountName
+    ) {
+      loadProjects(
+        existing.subscriptionId,
+        existing.resourceGroup,
+        existing.accountName,
+      );
+    }
+  }, [
+    existing?.subscriptionId,
+    existing?.resourceGroup,
+    existing?.accountName,
+    loadProjects,
+  ]);
+
+  const buildPath = () =>
+    `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects/${projectName || 'default'}`;
+
+  const validateSource = async (path: string): Promise<boolean> => {
     setIsValidating(true);
     setError('');
     setValidationResult(null);
 
     try {
-      const params = new URLSearchParams({ sources: resourcePath });
+      const params = new URLSearchParams({ sources: path });
       const response = await fetch(`/api/agents?${params.toString()}`);
 
       if (!response.ok) {
@@ -76,30 +196,31 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       return;
     }
 
-    if (!resourcePath.trim()) {
-      setError(t('pathRequired'));
+    if (!subscriptionId || !resourceGroup || !accountName) {
+      setError('Select a subscription, account, and project.');
       return;
     }
 
-    if (!resourcePath.startsWith('/subscriptions/')) {
-      setError(t('pathInvalidFormat'));
-      return;
-    }
-
-    const isValid = await validateSource();
+    const finalPath = buildPath();
+    const isValid = await validateSource(finalPath);
     if (!isValid) return;
 
     const source: AgentSource = {
       id: existingSource?.id || crypto.randomUUID(),
       name: name.trim(),
-      resourcePath: resourcePath.trim(),
+      resourcePath: finalPath.trim(),
       createdAt: existingSource?.createdAt || new Date().toISOString(),
     };
 
     onSave(source);
   };
 
+  const isFormFilled = !!(subscriptionId && resourceGroup && accountName);
+
   if (!mounted) return null;
+
+  const selectClass =
+    'w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none appearance-none';
 
   return createPortal(
     <div
@@ -107,7 +228,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg mx-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-2xl"
+        className="relative w-full max-w-lg mx-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -166,80 +287,212 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             />
           </div>
 
-          {/* Resource Path */}
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
-              {t('foundryProjectPath')}
+          {/* Mode toggle */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium text-gray-900 dark:text-white">
+              Foundry Project
             </label>
-            <input
-              type="text"
-              value={resourcePath}
-              onChange={(e) => {
-                setResourcePath(e.target.value.replace(/\s+/g, ''));
-                setValidationResult(null);
-              }}
-              placeholder="Paste the Resource ID from Azure Portal"
-              className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-              spellCheck={false}
-            />
-            {resourcePath && resourcePath.includes('/') ? (
-              <div className="mt-2 rounded-md bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-3 py-2 text-xs font-mono text-gray-500 dark:text-gray-400 space-y-0.5">
-                {(() => {
-                  const match = resourcePath.match(
-                    /\/subscriptions\/([^/]+)\/resourceGroups\/([^/]+)\/providers\/[^/]+\/[^/]+\/([^/]+)(?:\/projects\/([^/]+))?/,
-                  );
-                  if (!match)
-                    return (
-                      <span className="text-amber-500">
-                        Could not parse path — check the format
-                      </span>
-                    );
-                  return (
-                    <>
-                      <div>
-                        <span className="text-gray-400 dark:text-gray-500">
-                          Subscription:
-                        </span>{' '}
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {match[1]}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400 dark:text-gray-500">
-                          Resource Group:
-                        </span>{' '}
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {match[2]}
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-gray-400 dark:text-gray-500">
-                          Account:
-                        </span>{' '}
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {match[3]}
-                        </span>
-                      </div>
-                      {match[4] && (
-                        <div>
-                          <span className="text-gray-400 dark:text-gray-500">
-                            Project:
-                          </span>{' '}
-                          <span className="text-gray-700 dark:text-gray-300">
-                            {match[4]}
-                          </span>
-                        </div>
-                      )}
-                    </>
-                  );
-                })()}
-              </div>
-            ) : (
-              <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
-                {t('foundryProjectPathHelp')}
-              </p>
-            )}
+            <button
+              type="button"
+              onClick={() =>
+                setInputMode(inputMode === 'browse' ? 'manual' : 'browse')
+              }
+              className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            >
+              {inputMode === 'browse' ? 'Enter manually' : 'Browse resources'}
+            </button>
           </div>
+
+          {inputMode === 'manual' ? (
+            /* Manual entry fields */
+            <div className="space-y-3">
+              <div>
+                <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                  Subscription ID
+                </label>
+                <input
+                  type="text"
+                  value={subscriptionId}
+                  onChange={(e) => {
+                    setSubscriptionId(e.target.value.trim());
+                    setValidationResult(null);
+                  }}
+                  placeholder="e49ac66c-c18d-4586-b132-8f201de8f2c2"
+                  className={selectClass}
+                  spellCheck={false}
+                />
+              </div>
+              <div>
+                <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                  Resource Group
+                </label>
+                <input
+                  type="text"
+                  value={resourceGroup}
+                  onChange={(e) => {
+                    setResourceGroup(e.target.value.trim());
+                    setValidationResult(null);
+                  }}
+                  placeholder="rg-my-foundry"
+                  className={selectClass}
+                  spellCheck={false}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                    Account Name
+                  </label>
+                  <input
+                    type="text"
+                    value={accountName}
+                    onChange={(e) => {
+                      setAccountName(e.target.value.trim());
+                      setValidationResult(null);
+                    }}
+                    placeholder="my-foundry-account"
+                    className={selectClass}
+                    spellCheck={false}
+                  />
+                </div>
+                <div>
+                  <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                    Project Name
+                  </label>
+                  <input
+                    type="text"
+                    value={projectName}
+                    onChange={(e) => {
+                      setProjectName(e.target.value.trim());
+                      setValidationResult(null);
+                    }}
+                    placeholder="default"
+                    className={selectClass}
+                    spellCheck={false}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Browse dropdowns */
+            <>
+              {/* Subscription */}
+              <div>
+                <label className="mb-1 block text-xs text-gray-500 dark:text-gray-400">
+                  Subscription
+                </label>
+                {loadingSubs ? (
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
+                    <IconLoader2 size={14} className="animate-spin" />
+                    Loading subscriptions...
+                  </div>
+                ) : (
+                  <select
+                    value={subscriptionId}
+                    onChange={(e) => {
+                      const subId = e.target.value;
+                      setSubscriptionId(subId);
+                      setAccountName('');
+                      setResourceGroup('');
+                      setProjectName('default');
+                      setValidationResult(null);
+                      loadAccounts(subId);
+                    }}
+                    className={selectClass}
+                  >
+                    <option value="">Select a subscription...</option>
+                    {subscriptions.map((sub) => (
+                      <option key={sub.id} value={sub.id}>
+                        {sub.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* Account */}
+              {subscriptionId && (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
+                    Foundry Account
+                  </label>
+                  {loadingAccounts ? (
+                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
+                      <IconLoader2 size={14} className="animate-spin" />
+                      Loading accounts...
+                    </div>
+                  ) : accounts.length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 py-1.5">
+                      No Foundry accounts found in this subscription.
+                    </p>
+                  ) : (
+                    <select
+                      value={accountName}
+                      onChange={(e) => {
+                        const acct = accounts.find(
+                          (a) => a.name === e.target.value,
+                        );
+                        setAccountName(e.target.value);
+                        setResourceGroup(acct?.resourceGroup || '');
+                        setProjectName('default');
+                        setValidationResult(null);
+                        if (acct) {
+                          loadProjects(
+                            subscriptionId,
+                            acct.resourceGroup || '',
+                            e.target.value,
+                          );
+                        }
+                      }}
+                      className={selectClass}
+                    >
+                      <option value="">Select an account...</option>
+                      {accounts.map((acct) => (
+                        <option key={acct.name} value={acct.name}>
+                          {acct.name}
+                          {acct.location ? ` (${acct.location})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              )}
+
+              {/* Project */}
+              {accountName && (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
+                    Project
+                  </label>
+                  {loadingProjects ? (
+                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
+                      <IconLoader2 size={14} className="animate-spin" />
+                      Loading projects...
+                    </div>
+                  ) : projects.length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 py-1.5">
+                      No projects found. Using &quot;default&quot;.
+                    </p>
+                  ) : (
+                    <select
+                      value={projectName}
+                      onChange={(e) => {
+                        setProjectName(e.target.value);
+                        setValidationResult(null);
+                      }}
+                      className={selectClass}
+                    >
+                      {projects.map((proj) => (
+                        <option key={proj.name} value={proj.name}>
+                          {proj.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Actions */}
@@ -252,7 +505,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
           </button>
           <button
             onClick={handleSubmit}
-            disabled={isValidating || !name.trim() || !resourcePath.trim()}
+            disabled={isValidating || !name.trim() || !isFormFilled}
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
           >
             {isValidating ? (

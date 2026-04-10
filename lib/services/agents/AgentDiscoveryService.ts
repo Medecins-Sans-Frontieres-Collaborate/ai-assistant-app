@@ -41,6 +41,8 @@ interface DiscoveredAgent {
   type: 'foundry';
   /** ARM resource path this agent was discovered from */
   source?: string;
+  /** Foundry project endpoint for invoking this agent */
+  foundryEndpoint?: string;
   /** Tabler icon name (from ui-icon tag) */
   icon?: string;
   /** Hex color (from ui-color tag) */
@@ -193,12 +195,20 @@ export class AgentDiscoveryService {
    *   ui-maintained-by: "Finance Team" (maintainer info)
    */
   private mapToDiscoveredAgent(app: FoundryAgentApp): DiscoveredAgent {
+    // Derive project endpoint from baseUrl:
+    // baseUrl: https://account.services.ai.azure.com/api/projects/default/applications/name
+    // endpoint: https://account.services.ai.azure.com/api/projects/default
+    const foundryEndpoint = app.baseUrl
+      ? app.baseUrl.split('/applications/')[0]
+      : undefined;
+
     return {
       id: app.id,
       name: app.name,
       description: app.description,
       agentName: app.agentName,
       type: 'foundry',
+      foundryEndpoint,
       icon: app.tags['ui-icon'] || undefined,
       color: app.tags['ui-color'] || undefined,
       image: app.tags['ui-image'] || undefined,

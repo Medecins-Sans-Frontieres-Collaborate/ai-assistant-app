@@ -56,10 +56,8 @@ export async function GET(request: NextRequest) {
       AgentDiscoveryService.getInstance().clearCache();
     }
 
-    // Acquire ARM token — try OBO first (per-user RBAC), fall back to DefaultAzureCredential
-    // OBO requires tenant admin consent which may not be granted. The fallback uses the
-    // app's managed identity (deployed) or az login (localhost) — agents are still discovered,
-    // just not RBAC-filtered per user.
+    // Acquire ARM token via OBO (per-user RBAC filtering).
+    // Falls back to ManagedIdentity/AzureCLI if OBO fails (no per-user filtering).
     let armToken: string;
 
     try {
@@ -67,10 +65,11 @@ export async function GET(request: NextRequest) {
       if (!appAccessToken) throw new Error('No OBO token');
       const tokenProvider = UserTokenProvider.getInstance();
       armToken = await tokenProvider.getArmToken(appAccessToken);
-    } catch {
-      // Fallback: use AzureCLICredential (az login) or ManagedIdentityCredential (deployed)
-      // Skip EnvironmentCredential — it picks up the app registration which only has
-      // RBAC on its own subscription, not on cross-subscription custom sources.
+    } catch (e) {
+      console.warn(
+        '[/api/agents] OBO failed, using fallback credential:',
+        e instanceof Error ? e.message : e,
+      );
       const {
         ChainedTokenCredential,
         AzureCliCredential,

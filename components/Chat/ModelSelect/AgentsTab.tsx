@@ -1,4 +1,6 @@
 import {
+  IconCheck,
+  IconHexagon,
   IconLoader2,
   IconPlug,
   IconPlus,
@@ -91,6 +93,14 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   const [selectedSourceId, setSelectedSourceId] = useState<string | null>(null);
   const selectedSource = agentSources.find((s) => s.id === selectedSourceId);
 
+  // Split discovered agents: default (from env-configured sources) vs custom (from user-added sources)
+  const customSourcePaths = new Set(agentSources.map((s) => s.resourcePath));
+  const defaultFoundryAgents = foundryAgents.filter(
+    (a) => !a.source || !customSourcePaths.has(a.source),
+  );
+  const getSourceAgents = (sourcePath: string) =>
+    foundryAgents.filter((a) => a.source === sourcePath);
+
   const isAgentSelected =
     selectedModelId?.startsWith('org-') ||
     selectedModelId?.startsWith('foundry-') ||
@@ -155,7 +165,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   }
                 }}
                 selectedAgentId={selectedModelId ?? undefined}
-                discoveredAgents={foundryAgents.map((a) => ({
+                discoveredAgents={defaultFoundryAgents.map((a) => ({
                   id: a.id,
                   name: a.name,
                   description: a.description,
@@ -181,110 +191,126 @@ export const AgentsTab: FC<AgentsTabProps> = ({
             </section>
           )}
 
-          {/* Custom Sources — collapsed by default, subtle */}
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-            {agentSources.length === 0 ? (
-              /* No sources: compact button */
-              <button
-                onClick={onAddSource}
-                className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+          {/* Custom source sections — each gets a header like BASE AGENTS */}
+          {agentSources.map((source) => {
+            const sourceAgents = getSourceAgents(source.resourcePath);
+            return (
+              <section
+                key={source.id}
+                className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
               >
-                <IconPlug size={16} className="shrink-0" />
-                <span>
-                  {t('agentSources.connectButtonShort') ||
-                    'Connect a Foundry project'}
-                </span>
-              </button>
-            ) : (
-              /* Has sources: collapsible section */
-              <div className="space-y-2">
-                <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1.5">
-                  {t('agentSources.title') || 'Foundry Connections'}
-                </h4>
-                {agentSources.map((source) => {
-                  const parts = source.resourcePath.split('/');
-                  const accountIdx = parts.indexOf('accounts');
-                  const projectIdx = parts.indexOf('projects');
-                  const accountName =
-                    accountIdx >= 0 ? parts[accountIdx + 1] : null;
-                  const projectName =
-                    projectIdx >= 0 ? parts[projectIdx + 1] : 'default';
-                  const sourceAgentCount = foundryAgents.filter(
-                    (a) => a.source === source.resourcePath,
-                  ).length;
-
-                  return (
-                    <div
-                      key={source.id}
-                      className={`rounded-lg border transition-colors cursor-pointer p-3 ${
-                        selectedSourceId === source.id
-                          ? 'border-blue-300 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className={`w-2 h-2 rounded-full shrink-0 ${
+                        isLoadingFoundryAgents
+                          ? 'bg-gray-400 animate-pulse'
+                          : sourceAgents.length > 0
+                            ? 'bg-green-500'
+                            : 'bg-amber-500'
                       }`}
+                    />
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+                      {source.name}
+                    </span>
+                    <button
                       onClick={() => setSelectedSourceId(source.id)}
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                     >
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span
-                              className={`w-2 h-2 rounded-full shrink-0 ${
-                                isLoadingFoundryAgents
-                                  ? 'bg-gray-400 animate-pulse'
-                                  : sourceAgentCount > 0
-                                    ? 'bg-green-500'
-                                    : 'bg-amber-500'
-                              }`}
-                            />
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                              {source.name}
-                            </span>
-                            {!isLoadingFoundryAgents && (
-                              <span className="text-xs text-gray-500 dark:text-gray-400">
-                                ({sourceAgentCount})
-                              </span>
-                            )}
-                          </div>
-                          {accountName && (
-                            <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 pl-3.5">
-                              {accountName}
-                              {projectName !== 'default'
-                                ? ` / ${projectName}`
-                                : ''}
-                            </div>
-                          )}
-                        </div>
+                      Edit
+                    </button>
+                  </div>
+                  <button
+                    onClick={onRefreshAgents}
+                    disabled={isLoadingFoundryAgents}
+                    className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 disabled:opacity-50 transition-colors"
+                    title={`Refresh ${source.name}`}
+                  >
+                    <IconRefresh
+                      size={14}
+                      className={isLoadingFoundryAgents ? 'animate-spin' : ''}
+                    />
+                  </button>
+                </div>
+                {isLoadingFoundryAgents ? (
+                  <div className="space-y-1">
+                    {[1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className="animate-pulse flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800"
+                      >
+                        <div className="w-4 h-4 rounded bg-gray-200 dark:bg-gray-700" />
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+                      </div>
+                    ))}
+                  </div>
+                ) : sourceAgents.length > 0 ? (
+                  <div className="space-y-1">
+                    {sourceAgents.map((agent) => {
+                      const agentModel = organizationAgentModels.find(
+                        (m) => m.id === `foundry-${agent.id}`,
+                      );
+                      const isSelected =
+                        selectedModelId === `foundry-${agent.id}`;
+                      return (
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteWithConfirm(source.id);
+                          key={agent.id}
+                          type="button"
+                          onClick={() => {
+                            if (agentModel) {
+                              handleModelSelect(agentModel);
+                              setSelectedSourceId(null);
+                              setMobileView('details');
+                            }
                           }}
-                          className={`shrink-0 rounded-md px-2 py-1 text-xs transition-colors ${
-                            confirmingDeleteId === source.id
-                              ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-medium'
-                              : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20'
+                          className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center justify-between gap-2 ${
+                            isSelected
+                              ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
+                              : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
                           }`}
                         >
-                          {confirmingDeleteId === source.id ? (
-                            t('agentSources.confirmRemove') || 'Disconnect?'
-                          ) : (
-                            <IconTrash size={14} />
+                          <div className="flex items-center gap-2.5">
+                            <IconHexagon
+                              size={18}
+                              className="shrink-0 text-blue-400"
+                            />
+                            <span className="font-medium text-sm text-gray-900 dark:text-white">
+                              {agent.name}
+                            </span>
+                          </div>
+                          {isSelected && (
+                            <IconCheck
+                              size={16}
+                              className="text-blue-600 dark:text-blue-400 shrink-0"
+                            />
                           )}
                         </button>
-                      </div>
-                    </div>
-                  );
-                })}
-                <button
-                  onClick={onAddSource}
-                  className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
-                >
-                  <IconPlug size={16} className="shrink-0" />
-                  <span>
-                    {t('agentSources.addAnother') || 'Connect another'}
-                  </span>
-                </button>
-              </div>
-            )}
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400 dark:text-gray-500 italic px-1">
+                    No agents published
+                  </p>
+                )}
+              </section>
+            );
+          })}
+
+          {/* Connect button */}
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <button
+              onClick={onAddSource}
+              className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+            >
+              <IconPlug size={16} className="shrink-0" />
+              <span>
+                {agentSources.length === 0
+                  ? t('agentSources.connectButtonShort') ||
+                    'Connect a Foundry project'
+                  : t('agentSources.addAnother') || 'Add another connection'}
+              </span>
+            </button>
           </div>
         </div>
 

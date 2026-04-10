@@ -108,7 +108,9 @@ const OpenAIModelSchema = z.object({
   // Agent-specific fields (for custom agents and built-in agents)
   isAgent: z.boolean().optional(),
   isCustomAgent: z.boolean().optional(),
+  isOrganizationAgent: z.boolean().optional(),
   agentId: z.string().optional(),
+  foundryEndpoint: z.string().optional(),
   // Add other fields as needed but keep them optional
   // to avoid breaking existing code
 }) as z.ZodType<OpenAIModel>;
