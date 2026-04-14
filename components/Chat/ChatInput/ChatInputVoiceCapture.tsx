@@ -11,6 +11,7 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 const SILENCE_THRESHOLD = -50;
 const SILENCE_AUTO_STOP_MS = 10_000; // Auto-stop after this much continuous silence
 const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
+const WARMUP_REQUIRED_FRAMES = 3; // Consecutive above-threshold frames (~300ms) to confirm signal
 const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
 
 // Ordered by preference; first supported wins. Azure Whisper accepts all of these.
@@ -64,27 +65,38 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const checkSilenceIntervalRef = useRef<number | null>(null);
   const isWarmedUpRef = useRef(false);
   const warmupStartTimeRef = useRef<number>(0);
+  const warmupSignalFramesRef = useRef<number>(0);
   const lastAudioLevelUpdateRef = useRef<number>(0);
+  const isStartingRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
-    // Check for microphone availability
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices) => {
-        const hasMic = devices.some((device) => device.kind === 'audioinput');
-        const hasAnyDevice = devices.length > 0;
-        if (hasMic) {
-          setMicStatus('available');
-        } else if (hasAnyDevice) {
-          // API is working and explicitly reports no audioinput devices
-          setMicStatus('unavailable');
-        }
-        // else: zero devices returned (e.g. Firefox before permission grant) — keep 'unknown', show button
-      })
-      .catch((err) => {
-        console.error('[VoiceCapture] Error accessing media devices:', err);
-        // Keep 'unknown' — don't hide the button on enumeration failure
-      });
+    isMountedRef.current = true;
+
+    const refreshDevices = () => {
+      navigator.mediaDevices
+        .enumerateDevices()
+        .then((devices) => {
+          if (!isMountedRef.current) return;
+          const hasMic = devices.some((device) => device.kind === 'audioinput');
+          const hasAnyDevice = devices.length > 0;
+          if (hasMic) {
+            setMicStatus('available');
+          } else if (hasAnyDevice) {
+            // API is working and explicitly reports no audioinput devices
+            setMicStatus('unavailable');
+          }
+          // else: zero devices returned (e.g. Firefox before permission grant) — keep 'unknown', show button
+        })
+        .catch((err) => {
+          console.error('[VoiceCapture] Error accessing media devices:', err);
+          // Keep current status — don't hide the button on enumeration failure
+        });
+    };
+
+    refreshDevices();
+    navigator.mediaDevices.addEventListener('devicechange', refreshDevices);
 
     // Listen for permission changes to recover from 'denied' state
     // eslint-disable-next-line no-undef
@@ -109,6 +121,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       });
 
     return () => {
+      isMountedRef.current = false;
+      navigator.mediaDevices.removeEventListener(
+        'devicechange',
+        refreshDevices,
+      );
       if (permissionStatus && handleChange) {
         permissionStatus.removeEventListener('change', handleChange);
       }
@@ -135,18 +152,28 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     }
     silenceStartTimeRef.current = null;
     isWarmedUpRef.current = false;
+    warmupSignalFramesRef.current = 0;
+    isStartingRef.current = false;
     setIsInitializing(false);
     setIsRecording(false);
     setAudioLevel(0);
   }, []);
 
-  // Cleanup recording resources on unmount
+  // Cleanup recording resources and abort any in-flight transcription on unmount.
   useEffect(() => {
-    return () => stopRecording();
-  }, [stopRecording]);
+    return () => {
+      stopRecording();
+      abortControllerRef.current?.abort();
+      // Ensure the global isTranscribing flag does not stick if we unmount mid-request.
+      setIsTranscribing(false);
+    };
+  }, [stopRecording, setIsTranscribing]);
 
   const transcribeAudio = useCallback(
     async (audioBlob: Blob) => {
+      const controller = new AbortController();
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = controller;
       setIsTranscribing(true);
       try {
         const mimeType =
@@ -165,6 +192,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           {
             method: 'POST',
             body: formData,
+            signal: controller.signal,
           },
         );
 
@@ -187,6 +215,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           `/api/file/${fileID}/transcribe`,
           {
             method: 'GET',
+            signal: controller.signal,
           },
         );
 
@@ -206,21 +235,33 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
         const transcript = transcribeResult.transcript;
 
+        if (!isMountedRef.current) return;
         setTextFieldValue((prevText) =>
           prevText?.length ? prevText + ' ' + transcript : transcript,
         );
       } catch (error) {
+        if (controller.signal.aborted) return;
         console.error('[VoiceCapture] Error during transcription:', error);
-        toast.error(t('chat.voiceTranscriptionFailed'));
-        throw error;
+        if (isMountedRef.current) {
+          toast.error(t('chat.voiceTranscriptionFailed'));
+        }
       } finally {
-        setIsTranscribing(false);
+        if (abortControllerRef.current === controller) {
+          abortControllerRef.current = null;
+        }
+        if (isMountedRef.current) {
+          setIsTranscribing(false);
+        }
       }
     },
     [setIsTranscribing, setTextFieldValue, t],
   );
 
   const startRecording = async () => {
+    // Guard against double-invocation while getUserMedia is awaiting.
+    if (isStartingRef.current || isRecording || isInitializing) return;
+    isStartingRef.current = true;
+
     // Check current permission status
     try {
       const permissionStatus = await navigator.permissions.query({
@@ -230,6 +271,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       if (permissionStatus.state === 'denied') {
         setMicStatus('denied');
         toast.error(t('chat.microphoneAccessDenied'));
+        isStartingRef.current = false;
         return;
       }
     } catch {
@@ -260,12 +302,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
       };
 
-      mediaRecorder.onstart = () => {
-        console.log(
-          '[VoiceCapture] Recording initialized - audio capture active',
-        );
-      };
-
       mediaRecorder.onstop = () => {
         const chunks = audioChunksRef.current;
         audioChunksRef.current = [];
@@ -273,7 +309,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         const finalBlob = new Blob(chunks, {
           type: recorderMimeTypeRef.current || 'audio/webm',
         });
-        transcribeAudio(finalBlob).catch(() => {});
+        transcribeAudio(finalBlob);
       };
 
       // Set up audio context for silence detection
