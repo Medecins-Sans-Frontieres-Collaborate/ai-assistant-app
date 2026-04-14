@@ -328,6 +328,10 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       setIsInitializing(true);
       isWarmedUpRef.current = false;
       warmupStartTimeRef.current = Date.now();
+      warmupSignalFramesRef.current = 0;
+
+      // Successful setup — clear the starting guard; warmup takes over from here.
+      isStartingRef.current = false;
 
       // Start checking for audio signal / silence
       silenceStartTimeRef.current = null;
@@ -345,10 +349,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
         const rms = Math.sqrt(sum / dataArray.length);
         const db = 20 * Math.log10(rms);
+        const dbFinite = Number.isFinite(db);
 
         // Normalize audio level to 0-1 range for the visual indicator
         // Map from roughly -60dB..0dB to 0..1
-        const normalizedLevel = Number.isFinite(db)
+        const normalizedLevel = dbFinite
           ? Math.max(0, Math.min(1, (db + 60) / 60))
           : 0;
 
@@ -359,12 +364,21 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           setAudioLevel(normalizedLevel);
         }
 
-        // Handle warmup: wait for audio signal or fallback timeout
-        if (!isWarmedUpRef.current) {
-          const elapsed = now - warmupStartTimeRef.current;
-          const hasAudioSignal = !isNaN(db) && db > SILENCE_THRESHOLD;
+        const isSignal = dbFinite && db > SILENCE_THRESHOLD;
 
-          if (hasAudioSignal || elapsed >= WARMUP_FALLBACK_MS) {
+        // Warmup: require sustained signal so a single-frame transient
+        // (mic click, pop, door slam) does not flip the state. Fall back
+        // to a time budget so a genuinely silent start still proceeds.
+        if (!isWarmedUpRef.current) {
+          if (isSignal) {
+            warmupSignalFramesRef.current += 1;
+          } else {
+            warmupSignalFramesRef.current = 0;
+          }
+          const elapsed = now - warmupStartTimeRef.current;
+          const sustained =
+            warmupSignalFramesRef.current >= WARMUP_REQUIRED_FRAMES;
+          if (sustained || elapsed >= WARMUP_FALLBACK_MS) {
             isWarmedUpRef.current = true;
             setIsInitializing(false);
             setIsRecording(true);
@@ -373,8 +387,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
 
         // Silence detection (only runs after warmup)
-        const isSilent = isNaN(db) || db < SILENCE_THRESHOLD;
-        if (isSilent) {
+        if (!isSignal) {
           if (silenceStartTimeRef.current === null) {
             silenceStartTimeRef.current = now;
           } else if (now - silenceStartTimeRef.current > SILENCE_AUTO_STOP_MS) {
@@ -385,6 +398,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
       }, 100);
     } catch (err: unknown) {
+      isStartingRef.current = false;
       const error = err instanceof Error ? err : new Error(String(err));
       console.error('[VoiceCapture] Error getting user media:', error);
 
