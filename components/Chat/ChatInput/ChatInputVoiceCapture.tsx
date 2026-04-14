@@ -9,10 +9,34 @@ import MicIcon from '@/components/Icons/mic';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 
 const SILENCE_THRESHOLD = -50;
-const TRANSCRIBE_SILENCE_DURATION = 2000; // 2 seconds of silence triggers transcription
-const MAX_SILENT_DURATION = 6000; // 6 seconds of silence stops recording
+const SILENCE_AUTO_STOP_MS = 10_000; // Auto-stop after this much continuous silence
 const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
 const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
+
+// Ordered by preference; first supported wins. Azure Whisper accepts all of these.
+const PREFERRED_MIME_TYPES = [
+  'audio/webm;codecs=opus',
+  'audio/webm',
+  'audio/mp4;codecs=mp4a.40.2',
+  'audio/mp4',
+  'audio/ogg;codecs=opus',
+  'audio/ogg',
+];
+
+const FILENAME_FOR_MIME = (mimeType: string): string => {
+  if (mimeType.startsWith('audio/webm')) return 'audio.webm';
+  if (mimeType.startsWith('audio/mp4')) return 'audio.mp4';
+  if (mimeType.startsWith('audio/ogg')) return 'audio.ogg';
+  return 'audio.webm';
+};
+
+const pickSupportedMimeType = (): string => {
+  if (typeof MediaRecorder === 'undefined') return '';
+  for (const candidate of PREFERRED_MIME_TYPES) {
+    if (MediaRecorder.isTypeSupported(candidate)) return candidate;
+  }
+  return '';
+};
 
 type MicStatus = 'unknown' | 'available' | 'unavailable' | 'denied';
 
@@ -27,13 +51,12 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const [micStatus, setMicStatus] = useState<MicStatus>('unknown');
   const [isInitializing, setIsInitializing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [isTranscribingSegment, setIsTranscribingSegment] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
-  const lastTranscribedChunkIndexRef = useRef<number>(0);
+  const recorderMimeTypeRef = useRef<string>('');
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -42,8 +65,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const isWarmedUpRef = useRef(false);
   const warmupStartTimeRef = useRef<number>(0);
   const lastAudioLevelUpdateRef = useRef<number>(0);
-  // Ref mirror for access inside setInterval (avoids stale closure)
-  const isTranscribingSegmentRef = useRef(false);
 
   useEffect(() => {
     // Check for microphone availability
@@ -114,8 +135,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     }
     silenceStartTimeRef.current = null;
     isWarmedUpRef.current = false;
-    audioChunksRef.current = [];
-    lastTranscribedChunkIndexRef.current = 0;
     setIsInitializing(false);
     setIsRecording(false);
     setAudioLevel(0);
@@ -130,8 +149,9 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     async (audioBlob: Blob) => {
       setIsTranscribing(true);
       try {
-        const filename = 'audio.webm';
-        const mimeType = audioBlob.type || 'audio/webm';
+        const mimeType =
+          audioBlob.type || recorderMimeTypeRef.current || 'audio/webm';
+        const filename = FILENAME_FOR_MIME(mimeType);
 
         const encodedFileName = encodeURIComponent(filename);
         const encodedMimeType = encodeURIComponent(mimeType);
@@ -225,16 +245,19 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       setMicStatus('available');
 
       mediaStreamRef.current = stream;
-      const mediaRecorder = new MediaRecorder(stream);
+      const mimeType = pickSupportedMimeType();
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+      recorderMimeTypeRef.current = mediaRecorder.mimeType || mimeType;
       mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
       mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
 
-      // Empty the chunks and reset transcription index
-      audioChunksRef.current = [];
-      lastTranscribedChunkIndexRef.current = 0;
-
       mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
+        if (event.data && event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
       };
 
       mediaRecorder.onstart = () => {
@@ -244,14 +267,13 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       };
 
       mediaRecorder.onstop = () => {
-        // Only transcribe remaining chunks that haven't been transcribed yet
-        const remainingChunks = audioChunksRef.current.slice(
-          lastTranscribedChunkIndexRef.current,
-        );
-        if (remainingChunks.length > 0) {
-          const finalBlob = new Blob(remainingChunks, { type: 'audio/webm' });
-          transcribeAudio(finalBlob).catch(() => {});
-        }
+        const chunks = audioChunksRef.current;
+        audioChunksRef.current = [];
+        if (chunks.length === 0) return;
+        const finalBlob = new Blob(chunks, {
+          type: recorderMimeTypeRef.current || 'audio/webm',
+        });
+        transcribeAudio(finalBlob).catch(() => {});
       };
 
       // Set up audio context for silence detection
@@ -315,31 +337,12 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
 
         // Silence detection (only runs after warmup)
-        if (db < SILENCE_THRESHOLD || isNaN(db)) {
+        const isSilent = isNaN(db) || db < SILENCE_THRESHOLD;
+        if (isSilent) {
           if (silenceStartTimeRef.current === null) {
-            silenceStartTimeRef.current = Date.now();
-          } else {
-            const silentDuration = Date.now() - silenceStartTimeRef.current;
-
-            // Trigger transcription on shorter silence (while continuing to record)
-            if (
-              silentDuration > TRANSCRIBE_SILENCE_DURATION &&
-              !isTranscribingSegmentRef.current
-            ) {
-              const hasUntranscribedChunks =
-                audioChunksRef.current.length >
-                lastTranscribedChunkIndexRef.current;
-
-              if (hasUntranscribedChunks) {
-                transcribeSegment();
-                silenceStartTimeRef.current = Date.now(); // Reset timer after triggering
-              }
-            }
-
-            // Stop recording on longer silence
-            if (silentDuration > MAX_SILENT_DURATION) {
-              stopRecording();
-            }
+            silenceStartTimeRef.current = now;
+          } else if (now - silenceStartTimeRef.current > SILENCE_AUTO_STOP_MS) {
+            stopRecording();
           }
         } else {
           silenceStartTimeRef.current = null;
@@ -357,40 +360,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           t('chat.microphoneAccessError', { message: error.message }),
         );
       }
-    }
-  };
-
-  /**
-   * Transcribe a segment of audio while continuing to record.
-   * Takes chunks from lastTranscribedChunkIndex to current length.
-   */
-  const transcribeSegment = async () => {
-    const startIndex = lastTranscribedChunkIndexRef.current;
-    const endIndex = audioChunksRef.current.length;
-
-    // Skip if no new chunks
-    if (endIndex <= startIndex) return;
-
-    // Get pending chunks
-    const pendingChunks = audioChunksRef.current.slice(startIndex, endIndex);
-
-    // Update index before async operation to prevent re-processing
-    lastTranscribedChunkIndexRef.current = endIndex;
-
-    // Create blob from pending chunks
-    const segmentBlob = new Blob(pendingChunks, { type: 'audio/webm' });
-
-    // Transcribe with UI indicator
-    setIsTranscribingSegment(true);
-    isTranscribingSegmentRef.current = true;
-    try {
-      await transcribeAudio(segmentBlob);
-    } catch {
-      // Roll back so these chunks get retried on next silence or final stop
-      lastTranscribedChunkIndexRef.current = startIndex;
-    } finally {
-      isTranscribingSegmentRef.current = false;
-      setIsTranscribingSegment(false);
     }
   };
 
@@ -443,9 +412,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           <IconPlayerRecordFilled className="h-5 w-5 animate-pulse text-red-500" />
           <div className="flex flex-col items-start">
             <span className="text-sm font-medium text-red-600 dark:text-red-400 whitespace-nowrap">
-              {isTranscribingSegment
-                ? t('chat.voiceInputTranscribing')
-                : t('chat.voiceInputRecording')}
+              {t('chat.voiceInputRecording')}
             </span>
             <span className="text-xs text-red-500 dark:text-red-400/70 whitespace-nowrap">
               {t('chat.voiceInputTapToStop')}
