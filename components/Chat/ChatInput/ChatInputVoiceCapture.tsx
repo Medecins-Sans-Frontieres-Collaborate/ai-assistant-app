@@ -56,7 +56,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
-  const audioChunksRef = useRef<BlobPart[]>([]);
   const recorderMimeTypeRef = useRef<string>('');
 
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -106,8 +105,10 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     navigator.permissions
       .query({ name: 'microphone' as PermissionName })
       .then((status) => {
+        if (!isMountedRef.current) return;
         permissionStatus = status;
         handleChange = () => {
+          if (!isMountedRef.current) return;
           if (status.state === 'granted' || status.state === 'prompt') {
             setMicStatus('available');
           } else if (status.state === 'denied') {
@@ -278,33 +279,35 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       // Permissions API not supported, continue anyway
     }
 
+    let acquiredStream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      acquiredStream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
 
       // If we got here, mic is available
       setMicStatus('available');
 
-      mediaStreamRef.current = stream;
+      mediaStreamRef.current = acquiredStream;
       const mimeType = pickSupportedMimeType();
       const mediaRecorder = mimeType
-        ? new MediaRecorder(stream, { mimeType })
-        : new MediaRecorder(stream);
+        ? new MediaRecorder(acquiredStream, { mimeType })
+        : new MediaRecorder(acquiredStream);
       recorderMimeTypeRef.current = mediaRecorder.mimeType || mimeType;
       mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-      mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
+
+      // Per-recording chunks: avoids races when a new recording starts before
+      // the previous recorder's onstop fires.
+      const chunks: Blob[] = [];
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data && event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+          chunks.push(event.data);
         }
       };
 
       mediaRecorder.onstop = () => {
-        const chunks = audioChunksRef.current;
-        audioChunksRef.current = [];
+        if (!isMountedRef.current) return;
         if (chunks.length === 0) return;
         const finalBlob = new Blob(chunks, {
           type: recorderMimeTypeRef.current || 'audio/webm',
@@ -312,11 +315,24 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         transcribeAudio(finalBlob);
       };
 
+      mediaRecorder.onerror = (event: Event) => {
+        const err = (event as unknown as { error?: DOMException }).error;
+        const message = err?.message || err?.name || 'unknown';
+        console.error('[VoiceCapture] MediaRecorder error:', err || event);
+        stopRecording();
+        if (isMountedRef.current) {
+          toast.error(t('chat.microphoneAccessError', { message }));
+        }
+      };
+
+      mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
+
       // Set up audio context for silence detection
       audioContextRef.current = new (
         window.AudioContext || (window as any).webkitAudioContext
       )();
-      const source = audioContextRef.current.createMediaStreamSource(stream);
+      const source =
+        audioContextRef.current.createMediaStreamSource(acquiredStream);
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.minDecibels = -90;
       analyserRef.current.maxDecibels = -10;
@@ -399,6 +415,12 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       }, 100);
     } catch (err: unknown) {
       isStartingRef.current = false;
+      // If getUserMedia succeeded but a downstream step (MediaRecorder
+      // construction, AudioContext creation, etc.) threw, the mic stream is
+      // still live. Release every resource we may have set up.
+      if (acquiredStream) {
+        stopRecording();
+      }
       const error = err instanceof Error ? err : new Error(String(err));
       console.error('[VoiceCapture] Error getting user media:', error);
 
