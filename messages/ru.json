@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "Доступ к микрофону запрещён. Пожалуйста, включите его в настройках браузера.",
     "microphoneAccessError": "Ошибка доступа к микрофону: {message}",
     "voiceInputTranscribing": "Распознавание речи...",
-    "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций"
+    "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций",
+    "microphoneNotDetected": "Микрофон не обнаружен",
+    "microphoneBlocked": "Микрофон заблокирован. Проверьте настройки браузера.",
+    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте ещё раз."
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Автоматически закреплять загружаемые файлы",
       "autoPinUploadsDescription": "Автоматически закреплять файлы при загрузке, чтобы они не удалялись"
-    }
+    },
+    "Quarantined Data": "Карантинные данные",
+    "quarantineDataDescription": "У вас {count} карантинных {count, plural, one {элемент} other {элементов}} ({size}) с проблемами данных, которые не удалось загрузить.",
+    "Review & Recover": "Проверить и восстановить",
+    "Export Quarantined Data": "Экспортировать карантинные данные",
+    "Delete Quarantined Data": "Удалить карантинные данные",
+    "deleteQuarantineConfirm": "Вы уверены, что хотите удалить все карантинные данные? Это действие нельзя отменить.",
+    "quarantineDeleteSuccess": "Все карантинные данные успешно удалены."
   },
   "notFound": {
     "lostDog": "Потерянная собака"

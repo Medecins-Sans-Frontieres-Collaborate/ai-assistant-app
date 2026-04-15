@@ -656,7 +656,10 @@
     "microphoneAccessDenied": "L'accés al micròfon està denegat. Activeu-lo a la configuració del vostre navegador.",
     "microphoneAccessError": "Error d'accés al micròfon: {message}",
     "voiceInputTranscribing": "Transcripció en curs...",
-    "ttsRightClickHint": "Clic dret per opcions de veu"
+    "ttsRightClickHint": "Clic dret per opcions de veu",
+    "microphoneNotDetected": "No s'ha detectat cap micròfon",
+    "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",
+    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -946,7 +949,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixa automàticament els fitxers pujats",
       "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin"
-    }
+    },
+    "Quarantined Data": "Dades en quarantena",
+    "quarantineDataDescription": "Teniu {count} {count, plural, one {element} other {elements}} en quarantena ({size}) amb problemes de dades que no s'han pogut carregar correctament.",
+    "Review & Recover": "Revisa i recupera",
+    "Export Quarantined Data": "Exporta dades en quarantena",
+    "Delete Quarantined Data": "Elimina dades en quarantena",
+    "deleteQuarantineConfirm": "Esteu segur que voleu eliminar totes les dades en quarantena? Aquesta acció no es pot desfer.",
+    "quarantineDeleteSuccess": "Totes les dades en quarantena s'han eliminat correctament."
   },
   "notFound": {
     "lostDog": "Gos perdut"

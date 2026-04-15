@@ -739,7 +739,10 @@
       "filesCount": "{count} pel",
       "audioVideo": "deng/vîdyo",
       "empty": "vala"
-    }
+    },
+    "microphoneNotDetected": "میکروفۆن نەدۆزرایەوە",
+    "microphoneBlocked": "میکروفۆن بلۆککراوە. تێچوونی وێبسەرەکە بپشکنە.",
+    "voiceTranscriptionFailed": "ناسەندی دەنگ سەرکەوتوو نەبوو. تکایە دووبارە هەوڵبدە."
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "خۆکارانە پەیوەستکردنی پەڕگە بارکراوەکان",
       "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە"
-    }
+    },
+    "Quarantined Data": "داتای قوارانتینکراو",
+    "quarantineDataDescription": "تۆ {count} {count, plural, one {بابەت} other {بابەت}}ی قوارانتینکراوت هەیە ({size}) کە کێشەی داتا هەیە و نەتوانراوە بەشێوەی ئاسایی باردەکرێت.",
+    "Review & Recover": "پیشاندانی زانیاری و گەڕاندنەوە",
+    "Export Quarantined Data": "هەناردەکردنی داتای قوارانتینکراو",
+    "Delete Quarantined Data": "سڕینەوەی داتای قوارانتینکراو",
+    "deleteQuarantineConfirm": "دڵنیایت کە دەتەوێت هەموو داتای قوارانتینکراو بسڕیتەوە؟ ئەم کردارە ناتوانرێت گەرێدەر بکرێت.",
+    "quarantineDeleteSuccess": "هەموو داتای قوارانتینکراو بەسەرکەوتوویی سڕدرایەوە."
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",

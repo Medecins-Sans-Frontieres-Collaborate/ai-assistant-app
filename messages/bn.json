@@ -627,7 +627,10 @@
     "microphoneAccessDenied": "মাইক্রোফোন ব্যবহারের অনুমতি নেই। দয়া করে ব্রাউজারের সেটিংসে এটি সক্রিয় করুন।",
     "microphoneAccessError": "মাইক্রোফোন ব্যবহারে ত্রুটি: {message}",
     "voiceInputTranscribing": "ট্র্যান্সক্রাইব করা হচ্ছে...",
-    "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন"
+    "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন",
+    "microphoneNotDetected": "কোনো মাইক্রোফোন শনাক্ত করা যায়নি",
+    "microphoneBlocked": "মাইক্রোফোন বন্ধ আছে। ব্রাউজারের সেটিংস চেক করুন।",
+    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। দয়া করে আবার চেষ্টা করুন।"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "আপলোড করা ফাইলগুলি স্বয়ংক্রিয়ভাবে পিন করুন",
       "autoPinUploadsDescription": "আপলোড করার পর ফাইলগুলো স্বয়ংক্রিয়ভাবে পিন করুন যাতে এগুলো মুছে না যায়"
-    }
+    },
+    "Quarantined Data": "কোয়ারেন্টাইনের ডেটা",
+    "quarantineDataDescription": "আপনার কাছে {count}টি কোয়ারেন্টাইনকৃত {count, plural, one {আইটেম} other {আইটেমসমূহ}} আছে ({size}) যেগুলোর ডেটা সমস্যার কারণে স্বাভাবিকভাবে লোড করা যায়নি।",
+    "Review & Recover": "পর্যালোচনা ও পুনরুদ্ধার",
+    "Export Quarantined Data": "কোয়ারেন্টাইনে থাকা ডেটা এক্সপোর্ট করুন",
+    "Delete Quarantined Data": "কোয়ারেন্টাইনের ডেটা ডিলিট করুন",
+    "deleteQuarantineConfirm": "আপনি কি সত্যিই সব কোয়ারেন্টাইনকৃত ডেটা মুছে ফেলতে চান? এই কাজটি ফেরত নেওয়া যাবে না।",
+    "quarantineDeleteSuccess": "সফলভাবে সব কোয়ারেন্টাইনকৃত ডেটা মুছে ফেলা হয়েছে।"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"

@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "マイクへのアクセスが拒否されています。ブラウザの設定で有効にしてください。",
     "microphoneAccessError": "マイクアクセスエラー：{message}",
     "voiceInputTranscribing": "音声を文字起こし中...",
-    "ttsRightClickHint": "右クリックで音声オプションを表示"
+    "ttsRightClickHint": "右クリックで音声オプションを表示",
+    "microphoneNotDetected": "マイクが検出されませんでした",
+    "microphoneBlocked": "マイクがブロックされています。ブラウザの設定を確認してください。",
+    "voiceTranscriptionFailed": "音声の文字起こしに失敗しました。再度お試しください。"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "アップロードファイルを自動でピン留め",
       "autoPinUploadsDescription": "アップロード時にファイルを自動的にピン留めし、循環から除外します"
-    }
+    },
+    "Quarantined Data": "隔離データ",
+    "quarantineDataDescription": "データ問題により通常通り読み込めなかった隔離された{count}件の{count, plural, one {アイテム} other {アイテム}}（{size}）があります。",
+    "Review & Recover": "確認して復元",
+    "Export Quarantined Data": "隔離データをエクスポート",
+    "Delete Quarantined Data": "隔離データを削除",
+    "deleteQuarantineConfirm": "すべての隔離データを削除してもよろしいですか？この操作は元に戻せません。",
+    "quarantineDeleteSuccess": "隔離データの削除が完了しました。"
   },
   "notFound": {
     "lostDog": "迷子の犬"

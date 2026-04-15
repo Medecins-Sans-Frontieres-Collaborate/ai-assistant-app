@@ -712,7 +712,10 @@
     "microphoneAccessDenied": "麦克风访问被拒绝，请在浏览器设置中启用。",
     "microphoneAccessError": "麦克风访问错误：{message}",
     "voiceInputTranscribing": "正在转录…",
-    "ttsRightClickHint": "右键点击以选择语音选项"
+    "ttsRightClickHint": "右键点击以选择语音选项",
+    "microphoneNotDetected": "未检测到麦克风",
+    "microphoneBlocked": "麦克风被阻止。请检查浏览器设置。",
+    "voiceTranscriptionFailed": "语音转写失败。请重试。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1002,7 +1005,14 @@
     "activeFiles": {
       "autoPinUploads": "自动固定已上传文件",
       "autoPinUploadsDescription": "上传文件时自动固定，以防被移出"
-    }
+    },
+    "Quarantined Data": "隔离数据",
+    "quarantineDataDescription": "您有 {count} 个被隔离的 {count, plural, one {项目} other {项目}}（{size}），由于数据问题无法正常加载。",
+    "Review & Recover": "查看与恢复",
+    "Export Quarantined Data": "导出隔离数据",
+    "Delete Quarantined Data": "删除隔离数据",
+    "deleteQuarantineConfirm": "您确定要删除所有隔离数据吗？此操作无法撤销。",
+    "quarantineDeleteSuccess": "已成功删除所有隔离数据。"
   },
   "notFound": {
     "lostDog": "迷路的狗"

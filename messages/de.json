@@ -627,7 +627,10 @@
     "microphoneAccessDenied": "Mikrofonzugriff verweigert. Bitte aktivieren Sie ihn in den Browsereinstellungen.",
     "microphoneAccessError": "Fehler beim Mikrofonzugriff: {message}",
     "voiceInputTranscribing": "Transkription läuft...",
-    "ttsRightClickHint": "Rechtsklick für Sprachauswahl"
+    "ttsRightClickHint": "Rechtsklick für Sprachauswahl",
+    "microphoneNotDetected": "Kein Mikrofon erkannt",
+    "microphoneBlocked": "Mikrofon blockiert. Bitte überprüfen Sie die Browsereinstellungen.",
+    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Hochgeladene Dateien automatisch anheften",
       "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden"
-    }
+    },
+    "Quarantined Data": "Quarantänedaten",
+    "quarantineDataDescription": "Sie haben {count} {count, plural, one {Element} other {Elemente}} in Quarantäne ({size}) mit Datenproblemen, die nicht normal geladen werden konnten.",
+    "Review & Recover": "Überprüfen & Wiederherstellen",
+    "Export Quarantined Data": "Quarantänedaten exportieren",
+    "Delete Quarantined Data": "Quarantänedaten löschen",
+    "deleteQuarantineConfirm": "Sind Sie sicher, dass Sie alle Quarantänedaten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht."
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",

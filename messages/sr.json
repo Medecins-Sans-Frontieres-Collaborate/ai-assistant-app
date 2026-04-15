@@ -739,7 +739,10 @@
       "filesCount": "{count} фајл(ова)",
       "audioVideo": "аудио/видео",
       "empty": "празно"
-    }
+    },
+    "microphoneNotDetected": "Микрофон није детектован",
+    "microphoneBlocked": "Микрофон је блокиран. Проверите подешавања прегледача.",
+    "voiceTranscriptionFailed": "Препознавање гласа није успело. Покушајте поново."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Automatski zakači otpremljene fajlove",
       "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje"
-    }
+    },
+    "Quarantined Data": "Карантински подаци",
+    "quarantineDataDescription": "Имате {count} карантинских {count, plural, one {ставку} other {ставки}} ({size}) са проблемима у подацима који нису могли бити учитани на стандардни начин.",
+    "Review & Recover": "Прегледај и опорави",
+    "Export Quarantined Data": "Извези карантинске податке",
+    "Delete Quarantined Data": "Обриши карантинске податке",
+    "deleteQuarantineConfirm": "Да ли сте сигурни да желите да обришете све карантинске податке? Ова радња је неповратна.",
+    "quarantineDeleteSuccess": "Успешно су обрисани сви карантински подаци."
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",

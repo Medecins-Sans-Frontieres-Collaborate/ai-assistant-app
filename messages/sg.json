@@ -739,7 +739,10 @@
       "filesCount": "{count} fichier",
       "audioVideo": "audio/vidéo",
       "empty": "pepe"
-    }
+    },
+    "microphoneNotDetected": "Aï mikrofono keti nzönî",
+    "microphoneBlocked": "Mikrofono mo agbetê. Tala yeke browser na yo.",
+    "voiceTranscriptionFailed": "Kûê nî ti sô na ndö i atusî. Yeke gayango."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Fânga ti yângâ nî tî kodro wüngö",
       "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô"
-    }
+    },
+    "Quarantined Data": "Dönî ti bô na quarantine",
+    "quarantineDataDescription": "O yeke {count} {count, plural, one {item} other {items}} ti bô na quarantine ({size}) na biani gbêtî ti mbî mbi yâ tî zanako.",
+    "Review & Recover": "Tîngi na zîa",
+    "Export Quarantined Data": "Kûê dönî ti quarantine",
+    "Delete Quarantined Data": "Küti dönî ti quarantine",
+    "deleteQuarantineConfirm": "O yeke siriri na küti ka dönî o tî quarantine? Giga tî yâ tî songe aphâ.",
+    "quarantineDeleteSuccess": "Küti dönî o tî quarantine mo pepê."
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",

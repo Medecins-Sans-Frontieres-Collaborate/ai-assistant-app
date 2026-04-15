@@ -598,7 +598,10 @@
     "microphoneAccessDenied": "Доступ до мікрофона заборонено. Будь ласка, увімкніть його в налаштуваннях браузера.",
     "microphoneAccessError": "Помилка доступу до мікрофона: {message}",
     "voiceInputTranscribing": "Транскрибування...",
-    "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування"
+    "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування",
+    "microphoneNotDetected": "Мікрофон не виявлено",
+    "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",
+    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз."
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -888,7 +891,14 @@
     "activeFiles": {
       "autoPinUploads": "Автоматичне закріплення завантажених файлів",
       "autoPinUploadsDescription": "Автоматично закріплювати файли при завантаженні, щоб їх не було видалено з активних"
-    }
+    },
+    "Quarantined Data": "Карантині дані",
+    "quarantineDataDescription": "У вас {count} карантинних {count, plural, one {елемент} few {елементи} many {елементів} other {елемента}} ({size}) з проблемами даних, які не вдалося завантажити звичайним способом.",
+    "Review & Recover": "Перегляд і відновлення",
+    "Export Quarantined Data": "Експортувати карантині дані",
+    "Delete Quarantined Data": "Видалити карантині дані",
+    "deleteQuarantineConfirm": "Ви впевнені, що хочете видалити всі карантинні дані? Цю дію неможливо скасувати.",
+    "quarantineDeleteSuccess": "Усі карантинні дані успішно видалено."
   },
   "notFound": {
     "lostDog": "Загублений пес"

@@ -678,7 +678,10 @@
     "microphoneAccessDenied": "Dostęp do mikrofonu został zablokowany. Proszę włączyć go w ustawieniach przeglądarki.",
     "microphoneAccessError": "Błąd dostępu do mikrofonu: {message}",
     "voiceInputTranscribing": "Transkrypcja...",
-    "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu"
+    "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu",
+    "microphoneNotDetected": "Nie wykryto mikrofonu",
+    "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",
+    "voiceTranscriptionFailed": "Transkrypcja głosu nie powiodła się. Proszę spróbować ponownie."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -968,7 +971,14 @@
     "activeFiles": {
       "autoPinUploads": "Automatyczne przypinanie przesłanych plików",
       "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu"
-    }
+    },
+    "Quarantined Data": "Dane poddane kwarantannie",
+    "quarantineDataDescription": "Masz {count} {count, plural, one {element} other {elementów}} ({size}) z problemami danych, które nie mogły zostać załadowane w standardowy sposób.",
+    "Review & Recover": "Przejrzyj i odzyskaj",
+    "Export Quarantined Data": "Eksportuj dane poddane kwarantannie",
+    "Delete Quarantined Data": "Usuń dane poddane kwarantannie",
+    "deleteQuarantineConfirm": "Czy na pewno chcesz usunąć wszystkie dane poddane kwarantannie? Tego działania nie można cofnąć.",
+    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane poddane kwarantannie."
   },
   "notFound": {
     "lostDog": "Zagubiony pies"

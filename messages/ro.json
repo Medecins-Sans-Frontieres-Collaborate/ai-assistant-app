@@ -679,7 +679,10 @@
     "microphoneAccessDenied": "Accesul la microfon este refuzat. Vă rugăm să îl activați în setările browserului.",
     "microphoneAccessError": "Eroare de acces la microfon: {message}",
     "voiceInputTranscribing": "Transcriere în curs...",
-    "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce"
+    "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce",
+    "microphoneNotDetected": "Microfon nedetectat",
+    "microphoneBlocked": "Microfon blocat. Verificați setările browserului.",
+    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -969,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixează automat fișierele încărcate",
       "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor"
-    }
+    },
+    "Quarantined Data": "Date în carantină",
+    "quarantineDataDescription": "Aveți {count} {count, plural, one {element} other {elemente}} în carantină ({size}) cu probleme de date care nu au putut fi încărcate normal.",
+    "Review & Recover": "Revizuiți și recuperați",
+    "Export Quarantined Data": "Exportați datele în carantină",
+    "Delete Quarantined Data": "Ștergeți datele în carantină",
+    "deleteQuarantineConfirm": "Sigur doriți să ștergeți toate datele din carantină? Această acțiune este ireversibilă.",
+    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes."
   },
   "notFound": {
     "lostDog": "Câine pierdut"

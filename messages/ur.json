@@ -682,7 +682,10 @@
     "microphoneAccessDenied": "مائیکروفون تک رسائی مسترد کر دی گئی ہے۔ براہ کرم اپنے براؤزر سیٹنگز میں اسے فعال کریں۔",
     "microphoneAccessError": "مائیکروفون تک رسائی میں خرابی: {message}",
     "voiceInputTranscribing": "ٹرانسکرائب کیا جا رہا ہے...",
-    "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں"
+    "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں",
+    "microphoneNotDetected": "مائیکروفون نہیں ملا",
+    "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی ترتیبات چیک کریں۔",
+    "voiceTranscriptionFailed": "آواز کی نقل میں ناکامی۔ براہ کرم دوبارہ کوشش کریں۔"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -972,7 +975,14 @@
     "activeFiles": {
       "autoPinUploads": "اپ لوڈ شدہ فائلز کو خودکار طور پر پن کریں",
       "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں"
-    }
+    },
+    "Quarantined Data": "قرنطینہ شدہ ڈیٹا",
+    "quarantineDataDescription": "آپ کے پاس {count} قرنطینہ شدہ {count, plural, one {آئٹم} other {آئٹمز}} ({size}) ہے/ہیں جن میں ڈیٹا کے مسائل ہیں اور انہیں معمول کے مطابق لوڈ نہیں کیا جا سکا۔",
+    "Review & Recover": "جائزہ لیں اور بحال کریں",
+    "Export Quarantined Data": "قرنطینہ شدہ ڈیٹا ایکسپورٹ کریں",
+    "Delete Quarantined Data": "قرنطینہ شدہ ڈیٹا حذف کریں",
+    "deleteQuarantineConfirm": "کیا آپ واقعی تمام قرنطینہ شدہ ڈیٹا حذف کرنا چاہتے ہیں؟ یہ عمل واپسی کے قابل نہیں۔",
+    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف ہو گیا۔"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"

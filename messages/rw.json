@@ -739,7 +739,10 @@
       "filesCount": "Amadosiye {count}",
       "audioVideo": "amajwi/videwo",
       "empty": "ubusa"
-    }
+    },
+    "microphoneNotDetected": "Mikoro ntiboneka",
+    "microphoneBlocked": "Mikoro yafunzwe. Reba imiterere ya porogaramu (browser).",
+    "voiceTranscriptionFailed": "Guhindura ijwi nti byagenze neza. Mwongere mugerageze."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Kufungira mu buryo bwikora amadosiye ashyizweho",
       "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo"
-    }
+    },
+    "Quarantined Data": "Ibyabitswe mu kato",
+    "quarantineDataDescription": "Ufite {count} {count, plural, one {igikoresho} other {ibikoresho}} byabitswe mu kato ({size}) bifite ibibazo bya data bitashoboye gufungurwa bisanzwe.",
+    "Review & Recover": "Reba & Sigasira",
+    "Export Quarantined Data": "Ohereza Data yagiye mu kato",
+    "Delete Quarantined Data": "Siba Data yagiye mu kato",
+    "deleteQuarantineConfirm": "Urizeye ko ushaka gusiba data yose iri mu kato? Ibi ntibizashoboka kongera kubisubiza.",
+    "quarantineDeleteSuccess": "Data yose iri mu kato yasibwe neza."
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",

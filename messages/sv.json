@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "Mikrofonåtkomst nekad. Aktivera det i webbläsarens inställningar.",
     "microphoneAccessError": "Fel vid mikrofonåtkomst: {message}",
     "voiceInputTranscribing": "Transkriberar...",
-    "ttsRightClickHint": "Högerklicka för röstalternativ"
+    "ttsRightClickHint": "Högerklicka för röstalternativ",
+    "microphoneNotDetected": "Ingen mikrofon hittades",
+    "microphoneBlocked": "Mikrofonen är blockerad. Kontrollera webbläsarens inställningar.",
+    "voiceTranscriptionFailed": "Rösttranskriberingen misslyckades. Försök igen."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Fäst uppladdade filer automatiskt",
       "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort"
-    }
+    },
+    "Quarantined Data": "Karantänsatta data",
+    "quarantineDataDescription": "Du har {count} karantänsatta {count, plural, one {post} other {poster}} ({size}) med dataproblem som inte kunde läsas in normalt.",
+    "Review & Recover": "Granska och återställ",
+    "Export Quarantined Data": "Exportera karantänsatta data",
+    "Delete Quarantined Data": "Radera karantänsatta data",
+    "deleteQuarantineConfirm": "Är du säker på att du vill radera all karantänsatt data? Detta kan inte ångras.",
+    "quarantineDeleteSuccess": "All karantänsatt data har raderats."
   },
   "notFound": {
     "lostDog": "Förlorad hund"

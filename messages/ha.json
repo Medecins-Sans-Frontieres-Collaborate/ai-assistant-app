@@ -739,7 +739,10 @@
       "filesCount": "{count} fayil/fayiloli",
       "audioVideo": "sauti/bidio",
       "empty": "babu"
-    }
+    },
+    "microphoneNotDetected": "An kasa gano makirufo",
+    "microphoneBlocked": "An toshe makirufo. Duba saitunan burauza.",
+    "voiceTranscriptionFailed": "Rubutun murya ya gaza. Da fatan za a sake gwadawa."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "Naɗe fayilolin da aka ɗora ta atomatik",
       "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani"
-    }
+    },
+    "Quarantined Data": "Bayanan da aka killace",
+    "quarantineDataDescription": "Kana da {count} {count, plural, one {abu} other {abubuwa}} da aka killace ({size}) saboda matsalar bayanai da ba a iya loda su yadda ya kamata ba.",
+    "Review & Recover": "Duba & Mayar",
+    "Export Quarantined Data": "Fitar da bayanan da aka killace",
+    "Delete Quarantined Data": "Goge bayanan da aka killace",
+    "deleteQuarantineConfirm": "Ka tabbata kana son goge duk bayanan da aka killace? Ba za a iya dawo da wannan mataki ba.",
+    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara."
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",

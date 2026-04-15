@@ -681,7 +681,10 @@
     "microphoneAccessDenied": "Ufikiaji wa kipaza sauti umekataliwa. Tafadhali wezesha kwenye mipangilio ya kivinjari chako.",
     "microphoneAccessError": "Hitilafu ya ufikiaji wa kipaza sauti: {message}",
     "voiceInputTranscribing": "Inatambua...",
-    "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti"
+    "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti",
+    "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
+    "microphoneBlocked": "Kipaza sauti kimezuiwa. Angalia mipangilio ya kivinjari.",
+    "voiceTranscriptionFailed": "Ufafanuzi wa sauti umeshindikana. Tafadhali jaribu tena."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -971,7 +974,14 @@
     "activeFiles": {
       "autoPinUploads": "Funga faili zilizopakiwa moja kwa moja",
       "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe"
-    }
+    },
+    "Quarantined Data": "Data Iliyo Karantiniwa",
+    "quarantineDataDescription": "Una {count} {count, plural, one {kitu} other {vitu}} vilivyo karantiniwa ({size}) vyenye matatizo ya data ambavyo havikuweza kupakiwa kawaida.",
+    "Review & Recover": "Kagua & Rejesha",
+    "Export Quarantined Data": "Hamisha Data Iliyo Karantiniwa",
+    "Delete Quarantined Data": "Futa Data Iliyo Karantiniwa",
+    "deleteQuarantineConfirm": "Je, una uhakika unataka kufuta data yote iliyo karantiniwa? Hatua hii haiwezi kubatilishwa.",
+    "quarantineDeleteSuccess": "Data yote iliyo karantiniwa imefutwa kwa mafanikio."
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"

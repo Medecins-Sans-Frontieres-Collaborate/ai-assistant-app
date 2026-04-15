@@ -739,7 +739,10 @@
       "filesCount": "{count} فایل(ونه)",
       "audioVideo": "آډیو/ویډیو",
       "empty": "خالی"
-    }
+    },
+    "microphoneNotDetected": "مایکروفون ونه موندل شو",
+    "microphoneBlocked": "مایکروفون بند شوی. د براوزر تنظیمات وګورئ.",
+    "voiceTranscriptionFailed": "د غږ لیکلو هڅه ناکامه شوه. مهرباني وکړئ بیا هڅه وکړئ."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1124,7 +1127,14 @@
     "activeFiles": {
       "autoPinUploads": "خپل‌شخصه اپلوډ شوې فایلونه پن کړئ",
       "autoPinUploadsDescription": "د فایلونو اپلوډ کېدو سره سم یې په اتومات ډول پن کړئ تر څو له لیست څخه ونه لیري شي"
-    }
+    },
+    "Quarantined Data": "قرنطین شوې معلومات",
+    "quarantineDataDescription": "تاسو {count} قرنطین {count, plural, one {توکي} other {توکي}} لرئ ({size}) چې په معلوماتو کې ستونزه شته او نورمال ډول نه شي پورته کېدلی.",
+    "Review & Recover": "بیاکتنه او بیرته ترلاسه کول",
+    "Export Quarantined Data": "قرنطین شوې معلومات صادر کړئ",
+    "Delete Quarantined Data": "قرنطین شوې معلومات ړنګ کړئ",
+    "deleteQuarantineConfirm": "ایا ډاډه یاست چې ټول قرنطین شوې معلومات ړنګول غواړئ؟ دا عمل نه شي بیرته راتلای.",
+    "quarantineDeleteSuccess": "ټول قرنطین شوې معلومات په بریالیتوب سره ړنګ شول."
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",

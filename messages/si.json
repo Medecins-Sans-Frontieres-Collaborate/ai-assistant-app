@@ -648,7 +648,10 @@
     "microphoneAccessDenied": "මයික්රොෆෝන් ප්‍රවේශය ප්‍රතික්ෂේප වී ඇත. කරුණාකර ඔබේ බ්‍රව්සරයේ සැකසුම්වලදී එය සක්‍රිය කරන්න.",
     "microphoneAccessError": "මයික්රොෆෝන් ප්‍රවේශ දෝෂය: {message}",
     "voiceInputTranscribing": "පරිවර්තනය වෙමින්...",
-    "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න"
+    "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න",
+    "microphoneNotDetected": "මයික්‍රෝෆෝනයක් හඳුනාගන්නා නොහැක",
+    "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර වී ඇත. බ්‍රව්සරයේ සැකසුම් පරීක්ෂා කරන්න.",
+    "voiceTranscriptionFailed": "හඬ පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න."
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -938,7 +941,14 @@
     "activeFiles": {
       "autoPinUploads": "ඉදිරිප්‍රවේශ ගොනු ස්වයංක්‍රීයව පිහිටුවන්න",
       "autoPinUploadsDescription": "ඉදිරිප්‍රවේශගත වන විට ගොනු ස්වයංක්‍රීයව පිහිටීම, ඒවා ඉවත් නොවන ලෙස"
-    }
+    },
+    "Quarantined Data": "නිරෝධායන තොරතුරු",
+    "quarantineDataDescription": "ඔබ සතුව දෝෂ සහිතව සාමාන්‍ය වශයෙන් පූරණය කළ නොහැකි {count} නිරෝධායන {count, plural, one {අයිතමයක්} other {අයිතම}} ({size}) ඇත.",
+    "Review & Recover": "සමාලෝචනය හා ප්‍රතිසාධනය",
+    "Export Quarantined Data": "නිරෝධායන තොරතුරු අපනයනය කරන්න",
+    "Delete Quarantined Data": "නිරෝධායන තොරතුරු මකන්න",
+    "deleteQuarantineConfirm": "සියලුම නිරෝධායන තොරතුරු මකා දැමීමට ඔබට විශ්වාසද? මෙම ක්‍රියාව ආපසු ලබාගත නොහැක.",
+    "quarantineDeleteSuccess": "සියලුම නිරෝධායන තොරතුරු සාර්ථකව මකන ලදී."
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"

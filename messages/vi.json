@@ -682,7 +682,10 @@
     "microphoneAccessDenied": "Truy cập micro đã bị từ chối. Vui lòng cho phép trong cài đặt trình duyệt của bạn.",
     "microphoneAccessError": "Lỗi truy cập micro: {message}",
     "voiceInputTranscribing": "Đang chuyển thành văn bản...",
-    "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói"
+    "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói",
+    "microphoneNotDetected": "Không phát hiện thấy micro",
+    "microphoneBlocked": "Micro bị chặn. Vui lòng kiểm tra cài đặt trình duyệt.",
+    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -972,7 +975,14 @@
     "activeFiles": {
       "autoPinUploads": "Tự động ghim tệp đã tải lên",
       "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách"
-    }
+    },
+    "Quarantined Data": "Dữ liệu bị cách ly",
+    "quarantineDataDescription": "Bạn có {count} {count, plural, one {mục} other {mục}} bị cách ly ({size}) với sự cố dữ liệu không thể tải lên như bình thường.",
+    "Review & Recover": "Xem lại & Khôi phục",
+    "Export Quarantined Data": "Xuất dữ liệu bị cách ly",
+    "Delete Quarantined Data": "Xóa dữ liệu bị cách ly",
+    "deleteQuarantineConfirm": "Bạn có chắc muốn xóa toàn bộ dữ liệu bị cách ly không? Hành động này không thể hoàn tác.",
+    "quarantineDeleteSuccess": "Đã xóa toàn bộ dữ liệu bị cách ly thành công."
   },
   "notFound": {
     "lostDog": "Chó bị lạc"

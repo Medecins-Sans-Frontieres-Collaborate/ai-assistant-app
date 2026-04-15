@@ -646,7 +646,10 @@
     "microphoneAccessDenied": "Microfoontoegang is geweigerd. Schakel deze in via uw browserinstellingen.",
     "microphoneAccessError": "Microfoontoegangsprobleem: {message}",
     "voiceInputTranscribing": "Transcriberen...",
-    "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties"
+    "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties",
+    "microphoneNotDetected": "Geen microfoon gedetecteerd",
+    "microphoneBlocked": "Microfoon geblokkeerd. Controleer de browserinstellingen.",
+    "voiceTranscriptionFailed": "Transcriptie van spraak mislukt. Probeer het opnieuw."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -936,7 +939,14 @@
     "activeFiles": {
       "autoPinUploads": "Geüploade bestanden automatisch vastzetten",
       "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd"
-    }
+    },
+    "Quarantined Data": "Geïnfecteerde gegevens",
+    "quarantineDataDescription": "U heeft {count} in quarantaine geplaatste {count, plural, one {item} other {items}} ({size}) met gegevensproblemen die niet normaal konden worden geladen.",
+    "Review & Recover": "Controleren & Herstellen",
+    "Export Quarantined Data": "Geïnfecteerde gegevens exporteren",
+    "Delete Quarantined Data": "Geïnfecteerde gegevens verwijderen",
+    "deleteQuarantineConfirm": "Weet u zeker dat u alle geïnfecteerde gegevens wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "quarantineDeleteSuccess": "Alle geïnfecteerde gegevens zijn succesvol verwijderd."
   },
   "notFound": {
     "lostDog": "Verloren hond"
