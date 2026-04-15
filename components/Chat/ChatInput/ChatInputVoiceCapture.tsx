@@ -316,7 +316,9 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       };
 
       mediaRecorder.onerror = (event: Event) => {
-        const err = (event as unknown as { error?: DOMException }).error;
+        const err = (
+          event as unknown as { error?: { name?: string; message?: string } }
+        ).error;
         const message = err?.message || err?.name || 'unknown';
         console.error('[VoiceCapture] MediaRecorder error:', err || event);
         stopRecording();
