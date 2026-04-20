@@ -68,6 +68,7 @@ export function TranscriptionProgressIndicator({
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isStalled, setIsStalled] = useState(false);
 
   const handleCancel = async () => {
     if (!jobId || isCancelling) return;
@@ -90,6 +91,22 @@ export function TranscriptionProgressIndicator({
     estimateMs: number;
     timestamp: number;
   } | null>(null);
+
+  // Track when `progress.completed` last advanced so we can surface a
+  // "Still processing" hint if a chunk takes unusually long.
+  const lastProgressAtRef = useRef<number>(Date.now());
+  const lastCompletedChunksRef = useRef<number>(0);
+  const STALLED_THRESHOLD_MS = 2 * 60 * 1000; // 2 min with no chunk advance
+
+  // Reset the stall timer whenever the completed-chunks count advances.
+  useEffect(() => {
+    const completed = progress?.completed ?? 0;
+    if (completed !== lastCompletedChunksRef.current) {
+      lastCompletedChunksRef.current = completed;
+      lastProgressAtRef.current = Date.now();
+      setIsStalled(false);
+    }
+  }, [progress?.completed]);
 
   useEffect(() => {
     const interval = setInterval(() => {
