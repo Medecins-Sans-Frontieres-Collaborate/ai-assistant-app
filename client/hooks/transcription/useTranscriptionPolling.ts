@@ -590,6 +590,7 @@ export function useTranscriptionPolling(): void {
     conversations,
     updateConversation,
     getAbortSignal,
+    scheduleCleanup,
     setTranscriptionReconnecting,
   ]);
 
