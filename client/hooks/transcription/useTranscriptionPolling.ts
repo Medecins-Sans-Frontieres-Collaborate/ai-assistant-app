@@ -246,6 +246,9 @@ export function useTranscriptionPolling(): void {
   const updateTranscriptionProgress = useChatStore(
     (state) => state.updateTranscriptionProgress,
   );
+  const setTranscriptionReconnecting = useChatStore(
+    (state) => state.setTranscriptionReconnecting,
+  );
 
   // Conversation store for updating messages
   const updateMessageWithTranscript = useConversationStore(
