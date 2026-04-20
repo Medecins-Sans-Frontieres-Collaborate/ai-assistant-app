@@ -632,7 +632,7 @@ export function useTranscriptionPolling(): void {
                 : data.transcript || '',
             );
 
-            toast.success(`Transcription complete: ${job.filename}`, {
+            toast.success(t('completedToast', { filename: job.filename }), {
               duration: 4000,
             });
 
@@ -641,23 +641,21 @@ export function useTranscriptionPolling(): void {
               removePendingTranscription(fileId);
             }, 1000);
           }
-          // Handle failure case
+          // Handle failure case (including user-initiated cancel).
           else if (data.status === 'Failed') {
-            updateTranscriptionStatus(fileId, 'failed');
+            const copy = pickFailureCopy(data, job.filename, t);
+            updateTranscriptionStatus(fileId, copy.previewStatus);
 
-            // Update file preview status
+            // Update file preview status — neutral 'cancelled' or red 'failed'.
             setFilePreviews((prev) =>
               prev.map((p) =>
                 p.transcriptionJobId === job.jobId
-                  ? { ...p, transcriptionStatus: 'failed' }
+                  ? { ...p, transcriptionStatus: copy.previewStatus }
                   : p,
               ),
             );
 
-            toast.error(
-              `Transcription failed: ${job.filename}${data.error ? ` - ${data.error}` : ''}`,
-              { duration: 5000 },
-            );
+            showFailureToast(copy);
           }
           // Handle running case - update to processing if not already
           else if (data.status === 'Running' && job.status === 'pending') {
@@ -708,6 +706,7 @@ export function useTranscriptionPolling(): void {
     pendingTranscriptions,
     pendingConversationTranscription,
     pollConversationTranscription,
+    t,
     updateTranscriptionStatus,
     removePendingTranscription,
     setTextFieldValue,
