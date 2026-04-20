@@ -10,10 +10,16 @@
  */
 import { NextRequest } from 'next/server';
 
+import {
+  getJob,
+  getJobForUser,
+} from '@/lib/services/transcription/chunkedJobStore';
+
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
   badRequestResponse,
   errorResponse,
+  notFoundResponse,
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
@@ -32,6 +38,13 @@ interface StoreRequest {
   transcript: string;
   filename: string;
 }
+
+/** UUID format for jobIds. */
+const JOB_ID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Ceiling on stored transcript size to stop a client writing unbounded blobs. */
+const MAX_TRANSCRIPT_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export async function POST(request: NextRequest) {
   // Verify authentication
@@ -54,6 +67,29 @@ export async function POST(request: NextRequest) {
       'jobId, transcript, and filename are required',
       'MISSING_PARAMS',
     );
+  }
+
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return badRequestResponse('Invalid jobId format', 'INVALID_JOB_ID');
+  }
+
+  if (Buffer.byteLength(transcript, 'utf-8') > MAX_TRANSCRIPT_BYTES) {
+    return badRequestResponse(
+      `Transcript exceeds the ${MAX_TRANSCRIPT_BYTES / (1024 * 1024)}MB limit`,
+      'TRANSCRIPT_TOO_LARGE',
+    );
+  }
+
+  // If the jobId corresponds to a known chunked job, require ownership.
+  // Batch jobs don't have a local record — we fall back to the user-prefixed
+  // blob path as the boundary in that case (each user can only write into
+  // their own `${userId}/transcripts/` folder via this endpoint).
+  const knownChunkedJob = getJob(jobId);
+  if (knownChunkedJob) {
+    const ownedJob = getJobForUser(jobId, session.user.id);
+    if (!ownedJob) {
+      return notFoundResponse('Transcription job');
+    }
   }
 
   try {
