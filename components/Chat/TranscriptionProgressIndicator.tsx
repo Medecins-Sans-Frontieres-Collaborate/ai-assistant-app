@@ -5,12 +5,22 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { computeTimeoutMs } from '@/client/hooks/transcription/useTranscriptionPolling';
+
 interface Props {
   /** Timestamp when transcription started */
   startedAt: number;
   /** Filename being transcribed */
   filename: string;
-  /** Maximum duration in milliseconds (default: 10 minutes) */
+  /**
+   * Total chunk count for a chunked job. Used to derive the honest
+   * "may take up to N minutes" note. Takes precedence over `maxDurationMs`.
+   */
+  totalChunks?: number;
+  /**
+   * Explicit override for the max duration ceiling (ms). Only needed if the
+   * caller has special knowledge; prefer passing `totalChunks`.
+   */
   maxDurationMs?: number;
   /** Progress for chunked transcription (optional) */
   progress?: {
@@ -33,11 +43,20 @@ interface Props {
 export function TranscriptionProgressIndicator({
   startedAt,
   filename,
-  maxDurationMs = 10 * 60 * 1000,
+  totalChunks,
+  maxDurationMs,
   progress,
   jobId,
   onCancel,
 }: Props) {
+  // Honest ceiling: prefer the chunk-count-scaled timeout from the polling
+  // hook over a hardcoded 10 minutes. Fall back to the 10-min default only
+  // when neither signal is available.
+  const effectiveMaxDurationMs =
+    maxDurationMs ??
+    (totalChunks !== undefined
+      ? computeTimeoutMs(totalChunks)
+      : 10 * 60 * 1000);
   const t = useTranslations('transcription');
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
