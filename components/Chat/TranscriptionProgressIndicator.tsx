@@ -31,6 +31,12 @@ interface Props {
   jobId?: string;
   /** Called when cancellation succeeds (or fails — caller decides UX). */
   onCancel?: () => void;
+  /**
+   * True when the status channel has had consecutive failures but hasn't
+   * yet given up. Renders a subtle "Reconnecting…" hint so the user isn't
+   * left wondering whether the spinner is genuinely progressing.
+   */
+  isReconnecting?: boolean;
 }
 
 /**
@@ -48,6 +54,7 @@ export function TranscriptionProgressIndicator({
   progress,
   jobId,
   onCancel,
+  isReconnecting,
 }: Props) {
   // Honest ceiling: prefer the chunk-count-scaled timeout from the polling
   // hook over a hardcoded 10 minutes. Fall back to the 10-min default only
@@ -177,6 +184,13 @@ export function TranscriptionProgressIndicator({
       <div className="text-sm text-gray-600 dark:text-gray-400">
         {t('processingFile', { filename })}
       </div>
+
+      {isReconnecting && (
+        <div className="text-xs text-yellow-600 dark:text-yellow-400 flex items-center gap-1">
+          <IconLoader2 size={12} className="animate-spin" />
+          <span>{t('reconnecting')}</span>
+        </div>
+      )}
 
       {/* Show chunk progress if available */}
       {progress && progress.total > 1 && progress.completed > 0 && (
