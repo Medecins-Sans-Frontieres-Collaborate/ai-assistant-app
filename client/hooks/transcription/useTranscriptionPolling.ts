@@ -291,6 +291,26 @@ export function useTranscriptionPolling(): void {
   }, []);
 
   /**
+   * Fire-and-forget request to release Azure resources for a finished job
+   * (batch-service record + temp blob). Every failure/cancellation/timeout
+   * path ends the same way, so this helper keeps those call sites aligned
+   * and ensures we consistently attach the hook's abort signal.
+   */
+  const scheduleCleanup = useCallback(
+    (payload: { jobId: string; blobPath?: string }) => {
+      fetch('/api/transcription/cleanup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: getAbortSignal(),
+      }).catch((err) => {
+        if (!isAbortError(err)) console.warn(err);
+      });
+    },
+    [getAbortSignal],
+  );
+
+  /**
    * Polls the status of a post-submit conversation transcription job.
    * These are for large files (>25MB) that were submitted and are tracked
    * after the message is already in the conversation.
@@ -334,15 +354,7 @@ export function useTranscriptionPolling(): void {
         duration: 5000,
       });
 
-      // Cleanup Azure resources
-      fetch('/api/transcription/cleanup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobId, blobPath }),
-        signal: getAbortSignal(),
-      }).catch((err) => {
-        if (!isAbortError(err)) console.warn(err);
-      });
+      scheduleCleanup({ jobId, blobPath });
 
       return;
     }
