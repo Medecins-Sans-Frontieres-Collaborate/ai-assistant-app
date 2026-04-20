@@ -31,6 +31,10 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
 /**
  * Stores a large transcript in blob storage and returns a reference.
  * Returns null if storage fails (caller should fall back to inline storage).
@@ -39,12 +43,14 @@ async function storeTranscriptInBlob(
   jobId: string,
   transcript: string,
   filename: string,
+  signal?: AbortSignal,
 ): Promise<TranscriptReference | null> {
   try {
     const response = await fetch('/api/transcription/store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jobId, transcript, filename }),
+      signal,
     });
 
     if (!response.ok) {
@@ -58,6 +64,9 @@ async function storeTranscriptInBlob(
     const data = responseBody.data || responseBody;
     return data as TranscriptReference;
   } catch (error) {
+    if (isAbortError(error)) {
+      return null;
+    }
     console.warn(
       '[useTranscriptionPolling] Error storing transcript in blob:',
       error,
@@ -149,6 +158,17 @@ export function useTranscriptionPolling(): void {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isPollingRef = useRef(false);
   const consecutiveFailuresRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Lazily create the AbortController the first time we need it; keep the same
+  // controller for the lifetime of the mounted hook and abort on unmount. All
+  // in-flight fetches share it so unmount cancels every pending request.
+  const getAbortSignal = useCallback((): AbortSignal => {
+    if (!abortControllerRef.current) {
+      abortControllerRef.current = new AbortController();
+    }
+    return abortControllerRef.current.signal;
+  }, []);
 
   /** Maximum consecutive failures before giving up and clearing state */
   const MAX_CONSECUTIVE_FAILURES = 5;
@@ -198,13 +218,18 @@ export function useTranscriptionPolling(): void {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobId, blobPath }),
-      }).catch(console.warn);
+        signal: getAbortSignal(),
+      }).catch((err) => {
+        if (!isAbortError(err)) console.warn(err);
+      });
 
       return;
     }
 
     try {
-      const response = await fetch(`/api/transcription/status/${jobId}`);
+      const response = await fetch(`/api/transcription/status/${jobId}`, {
+        signal: getAbortSignal(),
+      });
 
       if (!response.ok) {
         consecutiveFailuresRef.current++;
