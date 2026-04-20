@@ -10,6 +10,29 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 const SILENCE_THRESHOLD = -50;
 const TRANSCRIBE_SILENCE_DURATION = 2000; // 2 seconds of silence triggers transcription
 const MAX_SILENT_DURATION = 6000; // 6 seconds of silence stops recording
+const WARMUP_MS = 2000;
+
+/** MIME types MediaRecorder can produce; ordered by preference. */
+const MIME_CANDIDATES: Array<{ mime: string; ext: string }> = [
+  { mime: 'audio/webm;codecs=opus', ext: 'webm' },
+  { mime: 'audio/webm', ext: 'webm' },
+  { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' },
+  { mime: 'audio/mp4', ext: 'm4a' },
+  { mime: 'audio/ogg;codecs=opus', ext: 'ogg' },
+];
+
+function pickRecorderFormat(): { mime: string; ext: string } | null {
+  if (typeof MediaRecorder === 'undefined') {
+    return null;
+  }
+  for (const candidate of MIME_CANDIDATES) {
+    if (MediaRecorder.isTypeSupported(candidate.mime)) {
+      return candidate;
+    }
+  }
+  // Last resort: let the browser pick its default container.
+  return { mime: '', ext: 'webm' };
+}
 
 const ChatInputVoiceCapture: FC = React.memo(() => {
   const setTextFieldValue = useChatInputStore(
@@ -28,11 +51,16 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
   const lastTranscribedChunkIndexRef = useRef<number>(0);
+  const recordingMimeRef = useRef<string>('audio/webm');
+  const recordingExtRef = useRef<string>('webm');
 
   const audioContextRef = useRef<AudioContext | null>(null);
+  const audioSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const silenceStartTimeRef = useRef<number | null>(null);
   const checkSilenceIntervalRef = useRef<number | null>(null);
+  const warmupTimeoutRef = useRef<number | null>(null);
+  const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
     // Check for microphone availability
@@ -48,7 +76,34 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       });
   }, []);
 
+  // Release mic/stream/context/timers if the component unmounts mid-recording.
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      stopRecording();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const startRecording = async () => {
+    // Re-entry guard: ignore clicks while a recording is being set up or active.
+    if (isInitializing || isRecording) {
+      return;
+    }
+
+    // Pick a MediaRecorder MIME the current browser can actually produce.
+    // Prevents construction failures on Safari where webm is unsupported.
+    const format = pickRecorderFormat();
+    if (!format) {
+      alert(
+        t('chat.microphoneAccessError', {
+          message: 'MediaRecorder not supported',
+        }),
+      );
+      return;
+    }
+
     // Check current permission status
     try {
       const permissionStatus = await navigator.permissions.query({
@@ -63,12 +118,31 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       // Permissions API not supported, continue anyway
     }
 
+    // Mark initializing *before* the async getUserMedia so subsequent clicks
+    // during the permission prompt are rejected by the guard above.
+    setIsInitializing(true);
+
+    let stream: MediaStream | null = null;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
+
+      // If the component unmounted or stop was called while waiting for the
+      // permission prompt, release the stream immediately.
+      if (!isMountedRef.current) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+
       mediaStreamRef.current = stream;
-      const mediaRecorder = new MediaRecorder(stream);
+      recordingMimeRef.current = format.mime || 'audio/webm';
+      recordingExtRef.current = format.ext;
+
+      const recorderOptions: MediaRecorderOptions | undefined = format.mime
+        ? { mimeType: format.mime }
+        : undefined;
+      const mediaRecorder = new MediaRecorder(stream, recorderOptions);
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
 
@@ -92,24 +166,25 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           lastTranscribedChunkIndexRef.current,
         );
         if (remainingChunks.length > 0) {
-          const finalBlob = new Blob(remainingChunks, { type: 'audio/webm' });
+          const finalBlob = new Blob(remainingChunks, {
+            type: recordingMimeRef.current,
+          });
           transcribeAudio(finalBlob);
         }
       };
 
       // Set up audio context for silence detection
-      audioContextRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
-      const source = audioContextRef.current.createMediaStreamSource(stream);
+      audioContextRef.current = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
+      audioSourceRef.current =
+        audioContextRef.current.createMediaStreamSource(stream);
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.minDecibels = -90;
       analyserRef.current.maxDecibels = -10;
       analyserRef.current.smoothingTimeConstant = 0.85;
 
-      source.connect(analyserRef.current);
-
-      // Show initializing state immediately
-      setIsInitializing(true);
+      audioSourceRef.current.connect(analyserRef.current);
 
       // Start checking for silence
       silenceStartTimeRef.current = null;
@@ -159,41 +234,76 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
         }
       }, 100);
 
+      // Warmup: give the mic stream a moment to stabilize before exposing
+      // the "recording" UI. Tracked by ref so stopRecording() can cancel it
+      // if the user bails during the warmup window.
       // TODO: detect stream readiness rather than using a hardcoded delay
-      // Wait for stream warmup before signaling ready to record
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      setIsInitializing(false);
-      setIsRecording(true);
+      warmupTimeoutRef.current = window.setTimeout(() => {
+        warmupTimeoutRef.current = null;
+        if (!isMountedRef.current) return;
+        setIsInitializing(false);
+        setIsRecording(true);
+      }, WARMUP_MS);
     } catch (err: any) {
       console.error('[VoiceCapture] Error getting user media:', err);
       console.error('[VoiceCapture] Error name:', err.name);
       console.error('[VoiceCapture] Error message:', err.message);
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+      mediaStreamRef.current = null;
+      if (isMountedRef.current) {
+        setIsInitializing(false);
+      }
       alert(t('chat.microphoneAccessError', { message: err.message }));
     }
   };
 
   const stopRecording = () => {
+    if (warmupTimeoutRef.current !== null) {
+      clearTimeout(warmupTimeoutRef.current);
+      warmupTimeoutRef.current = null;
+    }
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== 'inactive'
     ) {
-      mediaRecorderRef.current.stop();
+      try {
+        mediaRecorderRef.current.stop();
+      } catch {
+        // MediaRecorder.stop can throw if the recorder is already inactive
+        // due to a race; swallow — we're tearing down anyway.
+      }
     }
+    mediaRecorderRef.current = null;
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+      mediaStreamRef.current = null;
     }
     if (checkSilenceIntervalRef.current) {
       clearInterval(checkSilenceIntervalRef.current);
       checkSilenceIntervalRef.current = null;
     }
+    if (audioSourceRef.current) {
+      try {
+        audioSourceRef.current.disconnect();
+      } catch {
+        // disconnect can throw if already disconnected
+      }
+      audioSourceRef.current = null;
+    }
+    analyserRef.current = null;
     if (audioContextRef.current) {
-      audioContextRef.current.close();
+      if (audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close().catch(() => {});
+      }
       audioContextRef.current = null;
     }
     silenceStartTimeRef.current = null;
-    setIsInitializing(false);
-    setIsRecording(false);
+    if (isMountedRef.current) {
+      setIsInitializing(false);
+      setIsRecording(false);
+    }
   };
 
   /**
@@ -214,22 +324,29 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     lastTranscribedChunkIndexRef.current = endIndex;
 
     // Create blob from pending chunks
-    const segmentBlob = new Blob(pendingChunks, { type: 'audio/webm' });
+    const segmentBlob = new Blob(pendingChunks, {
+      type: recordingMimeRef.current,
+    });
 
     // Transcribe with UI indicator
     setIsTranscribingSegment(true);
     try {
       await transcribeAudio(segmentBlob);
     } finally {
-      setIsTranscribingSegment(false);
+      if (isMountedRef.current) {
+        setIsTranscribingSegment(false);
+      }
     }
   };
 
   const transcribeAudio = async (audioBlob: Blob) => {
-    setIsTranscribing(true);
+    if (isMountedRef.current) {
+      setIsTranscribing(true);
+    }
     try {
-      const filename = 'audio.webm';
-      const mimeType = audioBlob.type || 'audio/webm';
+      const filename = `audio.${recordingExtRef.current}`;
+      const mimeType =
+        audioBlob.type || recordingMimeRef.current || 'audio/webm';
 
       const encodedFileName = encodeURIComponent(filename);
       const encodedMimeType = encodeURIComponent(mimeType);
@@ -281,13 +398,17 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
       const transcript = transcribeResult.transcript;
 
-      setTextFieldValue((prevText) =>
-        prevText?.length ? prevText + ' ' + transcript : transcript,
-      );
+      if (isMountedRef.current) {
+        setTextFieldValue((prevText) =>
+          prevText?.length ? prevText + ' ' + transcript : transcript,
+        );
+      }
     } catch (error) {
       console.error('Error during transcription:', error);
     } finally {
-      setIsTranscribing(false);
+      if (isMountedRef.current) {
+        setIsTranscribing(false);
+      }
     }
   };
 
