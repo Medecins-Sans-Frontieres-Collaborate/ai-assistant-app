@@ -39,18 +39,25 @@ export async function GET(
     return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
   }
 
+  // Distinguish "malformed jobId" from "not found / not yours" — they mean
+  // different things for the client.
+  const JOB_ID_REGEX =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return NextResponse.json(
+      { error: 'Invalid jobId format', code: 'INVALID_JOB_ID' },
+      { status: 400 },
+    );
+  }
+
   // First, check if this is a chunked transcription job owned by this user.
   // getJobForUser returns undefined on ownership mismatch, which is
   // indistinguishable from "not found" — prevents jobId enumeration.
-  let chunkedJob;
-  try {
-    chunkedJob = getJobForUser(jobId, session.user.id);
-  } catch {
-    // Invalid job ID format (not a UUID) — fall through to 404-equivalent
-    chunkedJob = undefined;
-  }
+  const chunkedJob = getJobForUser(jobId, session.user.id);
   if (chunkedJob) {
-    // Map internal status to API status
+    // Map internal status to API status. Cancelled collapses into Failed
+    // for the wire format so existing clients don't need to learn a new
+    // status literal; the message carries the distinction.
     let status: 'NotStarted' | 'Running' | 'Succeeded' | 'Failed';
     switch (chunkedJob.status) {
       case 'pending':
@@ -63,6 +70,7 @@ export async function GET(
         status = 'Succeeded';
         break;
       case 'failed':
+      case 'cancelled':
         status = 'Failed';
         break;
     }
@@ -70,7 +78,10 @@ export async function GET(
     return successResponse({
       status,
       transcript: chunkedJob.transcript,
-      error: chunkedJob.error,
+      error:
+        chunkedJob.status === 'cancelled'
+          ? 'Cancelled by user'
+          : chunkedJob.error,
       progress: {
         completed: chunkedJob.completedChunks,
         total: chunkedJob.totalChunks,
