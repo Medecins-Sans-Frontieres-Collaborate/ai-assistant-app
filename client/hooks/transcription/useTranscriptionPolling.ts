@@ -18,6 +18,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { useTranslations } from 'next-intl';
+
 import { generateConversationTitle } from '@/client/services/titleService';
 
 import { ActiveFile } from '@/types/chat';
@@ -33,6 +35,86 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === 'AbortError';
+}
+
+/**
+ * Picks localized copy and the right `react-hot-toast` variant for a failure
+ * based on the server's classification. Keeping this in one place ensures the
+ * toast string, the message-body string, and the file-preview state stay in
+ * sync across cancellation, timeout, and the various error classes.
+ */
+type FailureCopy = {
+  toastMessage: string;
+  body: string;
+  previewStatus: 'failed' | 'cancelled';
+  /** True → `toast()`; false → `toast.error()`. */
+  neutral: boolean;
+};
+
+function pickFailureCopy(
+  data: Pick<
+    BatchTranscriptionStatusResponse,
+    'error' | 'errorClass' | 'cancelled'
+  >,
+  filename: string,
+  t: (key: string, values?: Record<string, string | number>) => string,
+): FailureCopy {
+  if (data.cancelled) {
+    return {
+      toastMessage: t('cancelledToast', { filename }),
+      body: `[${t('cancelledBody')}]`,
+      previewStatus: 'cancelled',
+      neutral: true,
+    };
+  }
+  switch (data.errorClass) {
+    case 'rate_limit':
+      return {
+        toastMessage: t('rateLimitedToast', { filename }),
+        body: `[${t('rateLimitedBody')}]`,
+        previewStatus: 'failed',
+        neutral: false,
+      };
+    case 'auth':
+      return {
+        toastMessage: t('authFailedToast', { filename }),
+        body: `[${t('authFailedBody')}]`,
+        previewStatus: 'failed',
+        neutral: false,
+      };
+    case 'transient':
+      return {
+        toastMessage: t('transientToast', { filename }),
+        body: `[${t('transientBody')}]`,
+        previewStatus: 'failed',
+        neutral: false,
+      };
+    case 'permanent':
+      return {
+        toastMessage: t('permanentToast', {
+          filename,
+          error: data.error ? ` — ${data.error}` : '',
+        }),
+        body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
+        previewStatus: 'failed',
+        neutral: false,
+      };
+    default:
+      return {
+        toastMessage: t('failedToast', { filename }),
+        body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
+        previewStatus: 'failed',
+        neutral: false,
+      };
+  }
+}
+
+function showFailureToast(copy: FailureCopy): void {
+  if (copy.neutral) {
+    toast(copy.toastMessage, { duration: 5000 });
+  } else {
+    toast.error(copy.toastMessage, { duration: 5000 });
+  }
 }
 
 /**
@@ -132,6 +214,8 @@ function computeTimeoutMs(totalChunks?: number): number {
 }
 
 export function useTranscriptionPolling(): void {
+  const t = useTranslations('transcription');
+
   // Pre-submit transcription tracking (chatInputStore)
   const pendingTranscriptions = useChatInputStore(
     (state) => state.pendingTranscriptions,
@@ -220,7 +304,7 @@ export function useTranscriptionPolling(): void {
       updateMessageWithTranscript(
         conversationId,
         messageIndex,
-        `[Transcription timed out after ${timeoutMinutes} minutes]`,
+        `[${t('timedOut', { minutes: timeoutMinutes })}]`,
         filename,
         jobId, // Pass jobId for reliable message matching
       );
@@ -228,7 +312,7 @@ export function useTranscriptionPolling(): void {
       // Clear pending state
       setConversationTranscriptionPending(null);
 
-      toast.error(`Transcription timed out: ${filename}`, {
+      toast.error(t('timedOutToast', { filename }), {
         duration: 5000,
       });
 
@@ -257,20 +341,24 @@ export function useTranscriptionPolling(): void {
             `(failure ${consecutiveFailuresRef.current}/${MAX_CONSECUTIVE_FAILURES})`,
         );
 
-        // After N consecutive failures, assume job is dead and clear state
+        // After N consecutive failures, assume the status channel is dead
+        // and clear state. Treat as transient so the user sees "please try
+        // again" rather than a generic permanent-failure message.
         if (consecutiveFailuresRef.current >= MAX_CONSECUTIVE_FAILURES) {
+          const copy = pickFailureCopy(
+            { errorClass: 'transient' },
+            filename,
+            t,
+          );
           updateMessageWithTranscript(
             conversationId,
             messageIndex,
-            `[Transcription failed: Unable to retrieve status after ${MAX_CONSECUTIVE_FAILURES} attempts]`,
+            copy.body,
             filename,
-            jobId, // Pass jobId for reliable message matching
+            jobId,
           );
           setConversationTranscriptionPending(null);
-          toast.error(
-            `Transcription failed: ${filename} - Unable to retrieve status`,
-            { duration: 5000 },
-          );
+          showFailureToast(copy);
 
           // Cleanup Azure resources
           fetch('/api/transcription/cleanup', {
@@ -378,7 +466,7 @@ export function useTranscriptionPolling(): void {
         // Clear pending state
         setConversationTranscriptionPending(null);
 
-        toast.success(`Transcription complete: ${filename}`, {
+        toast.success(t('completedToast', { filename }), {
           duration: 4000,
         });
 
@@ -409,28 +497,26 @@ export function useTranscriptionPolling(): void {
           body: JSON.stringify({ jobId, blobPath }),
         }).catch(console.warn);
       }
-      // Handle failure case
+      // Handle failure case (including user-initiated cancel, which the
+      // server reports as `status: 'Failed'` with `cancelled: true`).
       else if (data.status === 'Failed') {
-        console.error(
-          `[useTranscriptionPolling] Conversation transcription failed: ${filename}`,
+        const copy = pickFailureCopy(data, filename, t);
+        console[copy.neutral ? 'log' : 'error'](
+          `[useTranscriptionPolling] Conversation transcription ${
+            copy.previewStatus
+          }: ${filename}${data.errorClass ? ` (${data.errorClass})` : ''}`,
         );
 
-        // Update message with failure error
         updateMessageWithTranscript(
           conversationId,
           messageIndex,
-          `[Transcription failed${data.error ? `: ${data.error}` : ''}]`,
+          copy.body,
           filename,
-          jobId, // Pass jobId for reliable message matching
+          jobId,
         );
 
-        // Clear pending state
         setConversationTranscriptionPending(null);
-
-        toast.error(
-          `Transcription failed: ${filename}${data.error ? ` - ${data.error}` : ''}`,
-          { duration: 5000 },
-        );
+        showFailureToast(copy);
 
         // Cleanup Azure resources
         fetch('/api/transcription/cleanup', {
@@ -452,19 +538,19 @@ export function useTranscriptionPolling(): void {
         error,
       );
 
-      // After N consecutive failures, assume job is dead and clear state
+      // After N consecutive failures, the status channel is effectively dead.
+      // Treat as transient so the user sees "please try again" copy.
       if (consecutiveFailuresRef.current >= MAX_CONSECUTIVE_FAILURES) {
+        const copy = pickFailureCopy({ errorClass: 'transient' }, filename, t);
         updateMessageWithTranscript(
           conversationId,
           messageIndex,
-          `[Transcription failed: Network error after ${MAX_CONSECUTIVE_FAILURES} attempts]`,
+          copy.body,
           filename,
-          jobId, // Pass jobId for reliable message matching
+          jobId,
         );
         setConversationTranscriptionPending(null);
-        toast.error(`Transcription failed: ${filename} - Network error`, {
-          duration: 5000,
-        });
+        showFailureToast(copy);
 
         // Cleanup Azure resources
         fetch('/api/transcription/cleanup', {
@@ -478,6 +564,7 @@ export function useTranscriptionPolling(): void {
     }
   }, [
     pendingConversationTranscription,
+    t,
     updateMessageWithTranscript,
     setConversationTranscriptionPending,
     updateTranscriptionProgress,
