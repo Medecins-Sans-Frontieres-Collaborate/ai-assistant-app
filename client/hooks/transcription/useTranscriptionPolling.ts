@@ -279,6 +279,12 @@ export function useTranscriptionPolling(): void {
   // still running server-side. At the medium polling cadence (5s), 15 failures
   // ≈ 75 seconds of connectivity loss before we give up.
   const MAX_CONSECUTIVE_FAILURES = 15;
+  /**
+   * Threshold at which the UI starts showing a subtle "Reconnecting…" hint —
+   * well before the hard give-up at MAX_CONSECUTIVE_FAILURES. Keeps users
+   * informed during transient blips without prematurely declaring failure.
+   */
+  const RECONNECTING_THRESHOLD = 3;
 
   /**
    * Polls the status of a post-submit conversation transcription job.
