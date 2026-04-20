@@ -20,6 +20,8 @@ export type ChunkedJobStatus =
 export interface ChunkedJob {
   /** Unique job identifier */
   jobId: string;
+  /** ID of the user who owns this job */
+  userId: string;
   /** Current job status */
   status: ChunkedJobStatus;
   /** Total number of chunks to process */
@@ -57,10 +59,13 @@ const JOB_RETENTION_MS = 60 * 60 * 1000;
  * @param jobId - The job ID to validate
  * @throws Error if the job ID format is invalid
  */
+const JOB_ID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function validateJobId(jobId: string): void {
-  // Job IDs should be alphanumeric with hyphens and underscores only
-  // This prevents path traversal (e.g., "../../../etc/passwd")
-  if (!/^[a-zA-Z0-9_-]+$/.test(jobId)) {
+  // Job IDs must be UUIDs. Strict format blocks path traversal and
+  // any accidental filesystem-unsafe characters.
+  if (!JOB_ID_REGEX.test(jobId)) {
     throw new Error('Invalid job ID format');
   }
 }
@@ -91,20 +96,26 @@ function getJobFilePath(jobId: string): string {
 /**
  * Saves a job to the file system with secure permissions.
  * Files are created with mode 0o600 (owner read/write only).
+ *
+ * Uses a tmp-then-rename pattern so concurrent readers never observe
+ * a partially written file. `rename` is atomic on the same filesystem.
  */
 function saveJob(job: ChunkedJob): void {
   ensureStoreDir();
   const filePath = getJobFilePath(job.jobId);
-  fs.writeFileSync(filePath, JSON.stringify(job, null, 2), {
+  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+  fs.writeFileSync(tmpPath, JSON.stringify(job, null, 2), {
     encoding: 'utf-8',
     mode: 0o600,
   });
+  fs.renameSync(tmpPath, filePath);
 }
 
 /**
  * Creates a new chunked transcription job.
  *
  * @param jobId - Unique job identifier
+ * @param userId - ID of the user who owns this job
  * @param totalChunks - Total number of chunks to process
  * @param chunkPaths - Paths to the chunk files
  * @param filename - Original filename for display
@@ -112,6 +123,7 @@ function saveJob(job: ChunkedJob): void {
  */
 export function createJob(
   jobId: string,
+  userId: string,
   totalChunks: number,
   chunkPaths: string[],
   filename: string,
@@ -121,6 +133,7 @@ export function createJob(
 
   const job: ChunkedJob = {
     jobId,
+    userId,
     status: 'pending',
     totalChunks,
     completedChunks: 0,
@@ -156,8 +169,7 @@ export function updateProgress(
 ): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] updateProgress: Job ${jobId} not found`);
-    return;
+    throw new Error(`Job ${jobId} not found`);
   }
 
   job.status = 'processing';
@@ -183,8 +195,7 @@ export function updateProgress(
 export function completeJob(jobId: string, transcript: string): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] completeJob: Job ${jobId} not found`);
-    return;
+    throw new Error(`Job ${jobId} not found`);
   }
 
   job.status = 'succeeded';
@@ -208,8 +219,7 @@ export function completeJob(jobId: string, transcript: string): void {
 export function failJob(jobId: string, error: string): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] failJob: Job ${jobId} not found`);
-    return;
+    throw new Error(`Job ${jobId} not found`);
   }
 
   job.status = 'failed';
@@ -240,6 +250,22 @@ export function getJob(jobId: string): ChunkedJob | undefined {
     console.warn(`[ChunkedJobStore] Error reading job ${jobId}:`, error);
     return undefined;
   }
+}
+
+/**
+ * Gets a job by ID, but only if it belongs to the given user.
+ * Returns undefined on mismatch so callers can't distinguish
+ * "not yours" from "not found" (prevents enumeration).
+ */
+export function getJobForUser(
+  jobId: string,
+  userId: string,
+): ChunkedJob | undefined {
+  const job = getJob(jobId);
+  if (!job || job.userId !== userId) {
+    return undefined;
+  }
+  return job;
 }
 
 /**

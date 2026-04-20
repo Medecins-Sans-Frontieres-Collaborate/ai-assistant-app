@@ -85,12 +85,14 @@ export class ChunkedTranscriptionService {
    *
    * @param audioPath - Path to the audio file to transcribe
    * @param filename - Original filename for display
+   * @param userId - ID of the user who owns this job (for authorization)
    * @param options - Transcription options (language, etc.)
    * @returns Job ID and total chunk count
    */
   async startJob(
     audioPath: string,
     filename: string,
+    userId: string,
     options?: ChunkedTranscriptionOptions,
   ): Promise<ChunkedJobStartResult> {
     // Verify FFmpeg is available
@@ -117,7 +119,7 @@ export class ChunkedTranscriptionService {
     );
 
     // Create job in store
-    createJob(jobId, chunkCount, chunkPaths, filename, audioPath);
+    createJob(jobId, userId, chunkCount, chunkPaths, filename, audioPath);
 
     // Start async processing (don't await - runs in background)
     this.processChunksAsync(jobId, chunkPaths, filename, options).catch(
@@ -126,7 +128,14 @@ export class ChunkedTranscriptionService {
           `[ChunkedTranscription] Background processing error for ${jobId}:`,
           error,
         );
-        failJob(jobId, error.message || 'Unknown error');
+        try {
+          failJob(jobId, error.message || 'Unknown error');
+        } catch (failError) {
+          console.error(
+            `[ChunkedTranscription] Could not mark job ${jobId} failed:`,
+            failError,
+          );
+        }
       },
     );
 
