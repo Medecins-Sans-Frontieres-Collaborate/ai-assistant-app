@@ -83,7 +83,6 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       isMountedRef.current = false;
       stopRecording();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startRecording = async () => {
