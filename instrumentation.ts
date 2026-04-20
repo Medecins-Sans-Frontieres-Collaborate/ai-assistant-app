@@ -11,6 +11,20 @@ export async function register() {
   // Only run on Node.js runtime (not Edge)
   // Edge Runtime doesn't support OpenTelemetry NodeSDK
   if (process.env.NEXT_RUNTIME === 'nodejs') {
+    // Reconcile chunked transcription jobs that were mid-flight when the
+    // previous process exited. Without this, clients polling such jobs see a
+    // permanent 404 with no indication the job was lost to a restart.
+    try {
+      const { markInterruptedJobsFailed } =
+        await import('@/lib/services/transcription/chunkedJobStore');
+      markInterruptedJobsFailed();
+    } catch (err) {
+      console.warn(
+        '[Instrumentation] Could not reconcile interrupted transcription jobs:',
+        err,
+      );
+    }
+
     // Skip OpenTelemetry in development unless explicitly enabled.
     // OTel's request body cloning conflicts with routes that read request.text().
     // Set ENABLE_OTEL=true to enable telemetry in development for testing.
@@ -27,9 +41,8 @@ export async function register() {
     const { registerOTel } = await import('@vercel/otel');
     const { AzureMonitorTraceExporter, AzureMonitorMetricExporter } =
       await import('@azure/monitor-opentelemetry-exporter');
-    const { PeriodicExportingMetricReader } = await import(
-      '@opentelemetry/sdk-metrics'
-    );
+    const { PeriodicExportingMetricReader } =
+      await import('@opentelemetry/sdk-metrics');
 
     const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
 
