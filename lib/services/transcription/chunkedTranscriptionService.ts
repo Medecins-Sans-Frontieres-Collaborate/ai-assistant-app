@@ -45,12 +45,15 @@ const MAX_CONCURRENT_CHUNKS = Math.max(
 );
 
 /**
- * Retries per chunk. Tunable via TRANSCRIPTION_RETRIES.
+ * Total attempts per chunk (1 initial call + additional retries on transient
+ * failure). Tunable via TRANSCRIPTION_RETRIES, which expresses *retries* for
+ * legacy compatibility; the loop uses ATTEMPTS = retries + 1.
  */
-const MAX_CHUNK_RETRIES = Math.max(
+const TRANSCRIPTION_RETRIES = Math.max(
   0,
   Number(process.env.TRANSCRIPTION_RETRIES) || 2,
 );
+const MAX_CHUNK_ATTEMPTS = TRANSCRIPTION_RETRIES + 1;
 
 /** Delay before retry after failure (ms) */
 const RETRY_DELAY_MS = 2000;
