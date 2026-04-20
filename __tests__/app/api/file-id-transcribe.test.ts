@@ -34,9 +34,11 @@ vi.mock('@/lib/services/transcriptionService', () => ({
 }));
 
 // Mock fs, os, and path
+const mockUnlink = vi.fn((path, callback) => callback(null));
 vi.mock('fs', () => ({
   default: {
-    unlink: vi.fn((path, callback) => callback(null)),
+    unlink: (path: string, callback: (err: unknown) => void) =>
+      mockUnlink(path, callback),
   },
 }));
 
@@ -158,13 +160,14 @@ describe('/api/file/[id]/transcribe', () => {
       expect(tmpPath).toContain(fileId);
     });
 
-    it('uses timestamp in temp filename', async () => {
+    it('uses a UUID in the temp filename to avoid collisions', async () => {
       const request = createRequest(fileId);
       await GET(request, { params: Promise.resolve({ id: fileId }) });
 
       const tmpPath = mockBlockBlobClient.downloadToFile.mock.calls[0][0];
-      // Should contain Date.now() timestamp
-      expect(tmpPath).toMatch(/\/tmp\/\d+_audio-file-123\.mp3/);
+      expect(tmpPath).toMatch(
+        /\/tmp\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_audio-file-123\.mp3/i,
+      );
     });
 
     it('handles different file IDs', async () => {
@@ -388,6 +391,17 @@ describe('/api/file/[id]/transcribe', () => {
       expect(data.message).toBe('Failed to transcribe audio');
     });
 
+    it('unlinks the temp file even when transcription throws', async () => {
+      mockTranscriptionService.transcribe.mockRejectedValue(new Error('Boom'));
+
+      const request = createRequest(fileId);
+      await GET(request, { params: Promise.resolve({ id: fileId }) });
+
+      expect(mockUnlink).toHaveBeenCalledTimes(1);
+      const unlinkedPath = mockUnlink.mock.calls[0][0];
+      expect(unlinkedPath).toContain(fileId);
+    });
+
     it('handles blob deletion errors gracefully', async () => {
       mockBlockBlobClient.delete.mockRejectedValue(new Error('Delete failed'));
       mockTranscriptionService.transcribe.mockResolvedValue(
@@ -458,14 +472,27 @@ describe('/api/file/[id]/transcribe', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles file IDs with special characters', async () => {
-      const specialId = 'file-with-special_chars@123.mp3';
+    it('accepts file IDs with safe path characters', async () => {
+      const specialId = 'file-with-safe_chars.123.mp3';
       const request = createRequest(specialId);
       await GET(request, { params: Promise.resolve({ id: specialId }) });
 
       expect(mockBlobStorageClient.getBlockBlobClient).toHaveBeenCalledWith(
         `test-user-id/uploads/files/${specialId}`,
       );
+    });
+
+    it('rejects file IDs containing path separators', async () => {
+      const maliciousId = '../other-user/uploads/files/leak.mp3';
+      const request = createRequest(encodeURIComponent(maliciousId));
+      const response = await GET(request, {
+        params: Promise.resolve({ id: maliciousId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('INVALID_FILE_ID');
+      expect(mockBlobStorageClient.getBlockBlobClient).not.toHaveBeenCalled();
     });
 
     it('handles file IDs without extension', async () => {
