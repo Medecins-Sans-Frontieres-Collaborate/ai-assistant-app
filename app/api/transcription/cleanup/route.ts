@@ -10,7 +10,10 @@
 import { NextRequest } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
-import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
+import {
+  JOB_ID_REGEX,
+  getJobForUser,
+} from '@/lib/services/transcription/chunkedJobStore';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -30,10 +33,6 @@ interface CleanupRequest {
   jobId?: string;
   blobPath?: string;
 }
-
-/** UUID format for jobIds and transcript filenames. */
-const JOB_ID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Ensures the blob path is shaped like `${userId}/transcripts/${uuid}.txt`

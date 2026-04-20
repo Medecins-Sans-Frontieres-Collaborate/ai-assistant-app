@@ -13,7 +13,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
-import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
+import {
+  JOB_CANCELLED_MESSAGE,
+  JOB_ID_REGEX,
+  getJobForUser,
+} from '@/lib/services/transcription/chunkedJobStore';
 
 import {
   errorResponse,
@@ -41,8 +45,6 @@ export async function GET(
 
   // Distinguish "malformed jobId" from "not found / not yours" — they mean
   // different things for the client.
-  const JOB_ID_REGEX =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!JOB_ID_REGEX.test(jobId)) {
     return NextResponse.json(
       { error: 'Invalid jobId format', code: 'INVALID_JOB_ID' },
@@ -80,7 +82,7 @@ export async function GET(
       transcript: chunkedJob.transcript,
       error:
         chunkedJob.status === 'cancelled'
-          ? 'Cancelled by user'
+          ? JOB_CANCELLED_MESSAGE
           : chunkedJob.error,
       progress: {
         completed: chunkedJob.completedChunks,

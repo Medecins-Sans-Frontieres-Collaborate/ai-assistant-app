@@ -9,6 +9,7 @@
 import { NextRequest } from 'next/server';
 
 import {
+  JOB_ID_REGEX,
   cancelJob,
   getJobForUser,
 } from '@/lib/services/transcription/chunkedJobStore';
@@ -22,10 +23,6 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 
 import { auth } from '@/auth';
-
-/** UUID format for jobIds. */
-const JOB_ID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface RouteParams {
   params: Promise<{ jobId: string }>;

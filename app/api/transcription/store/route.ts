@@ -11,6 +11,7 @@
 import { NextRequest } from 'next/server';
 
 import {
+  JOB_ID_REGEX,
   getJob,
   getJobForUser,
 } from '@/lib/services/transcription/chunkedJobStore';
@@ -38,10 +39,6 @@ interface StoreRequest {
   transcript: string;
   filename: string;
 }
-
-/** UUID format for jobIds. */
-const JOB_ID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Ceiling on stored transcript size to stop a client writing unbounded blobs. */
 const MAX_TRANSCRIPT_BYTES = 10 * 1024 * 1024; // 10 MB
