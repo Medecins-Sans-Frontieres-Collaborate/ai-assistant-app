@@ -14,6 +14,7 @@ import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
+import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
 
@@ -61,6 +62,18 @@ export async function GET(
     // Get file size to determine which service to use
     const properties = await blockBlobClient.getProperties();
     const fileSize = properties.contentLength || 0;
+
+    if (fileSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
+      return NextResponse.json(
+        {
+          message: `File exceeds the ${Math.round(
+            FILE_SIZE_LIMITS.VIDEO_MAX_BYTES / (1024 * 1024 * 1024),
+          )}GB transcription limit`,
+          error: 'PAYLOAD_TOO_LARGE',
+        },
+        { status: 413 },
+      );
+    }
 
     // Determine which transcription service to use based on file size
     const serviceType =
