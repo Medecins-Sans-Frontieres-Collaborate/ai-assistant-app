@@ -186,6 +186,14 @@ export function updateProgress(
     throw new Error(`Job ${jobId} not found`);
   }
 
+  // Bail if the job is already terminal — a background chunk that finishes
+  // after the user cancelled (or after a failure was recorded) must not
+  // clobber the terminal status back to 'processing'. Racing writes are
+  // otherwise resolved last-writer-wins by the tmp+rename save path.
+  if (job.status !== 'pending' && job.status !== 'processing') {
+    return;
+  }
+
   job.status = 'processing';
   job.completedChunks = completedChunks;
   if (currentChunk !== undefined) {
@@ -210,6 +218,14 @@ export function completeJob(jobId: string, transcript: string): void {
   const job = getJob(jobId);
   if (!job) {
     throw new Error(`Job ${jobId} not found`);
+  }
+
+  // Preserve terminal status. If the user cancelled while the final batch
+  // was in flight, the combined-transcript write must not flip the job
+  // back to 'succeeded'. The transcript is discarded by design — cancelled
+  // means the user doesn't want it.
+  if (job.status !== 'pending' && job.status !== 'processing') {
+    return;
   }
 
   job.status = 'succeeded';
