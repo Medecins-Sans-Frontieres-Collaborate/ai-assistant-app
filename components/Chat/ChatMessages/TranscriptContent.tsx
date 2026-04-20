@@ -20,6 +20,13 @@ const POLL_INTERVAL_MS = 3000;
 /** Maximum polling attempts (20 minutes at 3s intervals = 400 attempts) */
 const MAX_POLL_ATTEMPTS = 400;
 
+/**
+ * Cap retries specifically for 404 (transcript not found). An early 404 can
+ * just mean the blob upload is in flight, but sustained 404s mean it's
+ * either expired or was never written — no point burning 20 minutes.
+ */
+const MAX_NOT_FOUND_ATTEMPTS = 5;
+
 interface TranscriptContentProps {
   /** The message content which may be inline text or a blob reference */
   content: string;
@@ -75,6 +82,7 @@ export function TranscriptContent({
   const [loadedContent, setLoadedContent] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [pollCount, setPollCount] = useState(0);
+  const [notFoundCount, setNotFoundCount] = useState(0);
 
   // Use ref to track if component is mounted (for cleanup)
   const isMountedRef = useRef(true);
@@ -118,11 +126,16 @@ export function TranscriptContent({
       }
 
       if (response.status === 404) {
-        // Not found - could be still uploading
+        // Not found - could be still uploading (benign early) OR expired/
+        // never-uploaded (permanent). Count 404s separately so sustained
+        // 404s terminate quickly instead of burning the full 20-min budget.
+        if (isMountedRef.current) {
+          setNotFoundCount((c) => c + 1);
+        }
         console.log(
           `[TranscriptContent] Blob not found for job ${blobRef.jobId}, will retry`,
         );
-        return false; // Retry
+        return false; // Retry (bounded by MAX_NOT_FOUND_ATTEMPTS check below)
       }
 
       // Other error - stop polling
@@ -151,6 +164,15 @@ export function TranscriptContent({
     const poll = async () => {
       const success = await fetchTranscript();
 
+      // If we've hit the 404 cap, bail early with a specific message rather
+      // than continuing to poll a blob that clearly isn't there.
+      if (!success && notFoundCount >= MAX_NOT_FOUND_ATTEMPTS) {
+        if (isMountedRef.current) {
+          setFetchError(t('expiredOrDeleted'));
+        }
+        return;
+      }
+
       if (!success && isMountedRef.current && pollCount < MAX_POLL_ATTEMPTS) {
         // Schedule next poll
         timeoutRef.current = setTimeout(() => {
@@ -175,7 +197,7 @@ export function TranscriptContent({
         timeoutRef.current = null;
       }
     };
-  }, [shouldPoll, fetchTranscript, pollCount, t]);
+  }, [shouldPoll, fetchTranscript, pollCount, notFoundCount, t]);
 
   // Inline content - render directly
   if (!blobRef) {
