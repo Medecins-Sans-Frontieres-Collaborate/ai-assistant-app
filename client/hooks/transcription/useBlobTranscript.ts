@@ -69,6 +69,23 @@ export function useBlobTranscript(
 
   const blobRef = useMemo(() => parseBlobReference(content), [content]);
 
+  // Reset counters + cached content when the hook is reused for a different
+  // blob reference. Without this, a component instance that sees a rapid
+  // succession of blob refs inherits the previous jobId's 404/poll counts
+  // and may prematurely declare the new blob "expired or deleted".
+  //
+  // Uses the render-time reset pattern (React docs: "You might not need an
+  // effect → Resetting all state when a prop changes") so the reset is
+  // observed on the same render, not one frame later as with useEffect.
+  const prevJobIdRef = useRef<string | undefined>(blobRef?.jobId);
+  if (prevJobIdRef.current !== blobRef?.jobId) {
+    prevJobIdRef.current = blobRef?.jobId;
+    setLoadedContent(null);
+    setError(null);
+    setPollCount(0);
+    setNotFoundCount(0);
+  }
+
   const daysUntilExpiry = blobRef
     ? getDaysUntilExpiry(blobRef.expiresAt)
     : null;
