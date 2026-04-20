@@ -384,6 +384,7 @@ export class FileProcessor extends BasePipelineStage {
                       await chunkedService.startJob(
                         fileToTranscribe,
                         filename,
+                        context.user.id,
                         {
                           language: file.transcriptionLanguage,
                           prompt: file.transcriptionPrompt,
