@@ -230,7 +230,10 @@ export function TranscriptionProgressIndicator({
         <div className="w-full mt-1">
           <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
             <span>
-              Chunk {progress.completed}/{progress.total}
+              {t('chunkProgress', {
+                completed: progress.completed,
+                total: progress.total,
+              })}
             </span>
             <span>{progressPercent}%</span>
           </div>
