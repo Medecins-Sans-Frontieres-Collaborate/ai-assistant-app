@@ -1,6 +1,6 @@
 'use client';
 
-import { IconLoader2 } from '@tabler/icons-react';
+import { IconLoader2, IconX } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -17,6 +17,10 @@ interface Props {
     completed: number;
     total: number;
   };
+  /** Job ID; required to enable the cancel button */
+  jobId?: string;
+  /** Called when cancellation succeeds (or fails — caller decides UX). */
+  onCancel?: () => void;
 }
 
 /**
