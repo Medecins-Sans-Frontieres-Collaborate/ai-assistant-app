@@ -147,6 +147,8 @@ interface ChatStore {
     filename: string;
     blobPath?: string; // Only for batch jobs
     startedAt: number;
+    /** Total chunks, if this is a chunked job — used to scale client timeout. */
+    totalChunks?: number;
     progress?: {
       completed: number;
       total: number;
@@ -159,6 +161,7 @@ interface ChatStore {
       messageIndex: number;
       filename: string;
       blobPath?: string;
+      totalChunks?: number;
     } | null,
   ) => void;
   updateTranscriptionProgress: (completed: number, total: number) => void;
