@@ -17,6 +17,7 @@ import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 
 import { TranscriptionResponse } from '@/types/transcription';
 
@@ -60,7 +61,10 @@ export async function GET(
     const blockBlobClient = blobStorageClient.getBlockBlobClient(filePath);
 
     // Get file size to determine which service to use
-    const properties = await blockBlobClient.getProperties();
+    const properties = await withAzureRetry(
+      () => blockBlobClient.getProperties(),
+      { label: 'getProperties' },
+    );
     const fileSize = properties.contentLength || 0;
 
     if (fileSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
@@ -83,7 +87,12 @@ export async function GET(
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
       try {
-        await blockBlobClient.downloadToFile(tmpFilePath);
+        await withAzureRetry(
+          () => blockBlobClient.downloadToFile(tmpFilePath),
+          {
+            label: 'downloadToFile',
+          },
+        );
 
         const transcriptionService =
           TranscriptionServiceFactory.getTranscriptionService('whisper');
@@ -93,8 +102,21 @@ export async function GET(
         // Always clean up the temp file, even if transcription throws.
         await unlinkAsync(tmpFilePath).catch(() => {});
       }
-      // Delete the blob after successful transcription
-      await blockBlobClient.delete();
+      // Delete the blob after successful transcription. Retry on transient
+      // Azure failures; if the blob is already gone (404), treat as success.
+      try {
+        await withAzureRetry(() => blockBlobClient.delete(), {
+          label: 'blobDelete',
+        });
+      } catch (deleteErr) {
+        const status = (deleteErr as { statusCode?: number })?.statusCode;
+        if (status !== 404) {
+          console.warn(
+            `[Transcribe] Failed to delete source blob after transcription:`,
+            deleteErr,
+          );
+        }
+      }
 
       const response: TranscriptionResponse = {
         async: false,
@@ -119,10 +141,16 @@ export async function GET(
       }
 
       // Generate a SAS URL for the blob (batch API needs public access)
-      const sasUrl = await blobStorageClient.generateSasUrl(filePath, 24);
+      const sasUrl = await withAzureRetry(
+        () => blobStorageClient.generateSasUrl(filePath, 24),
+        { label: 'generateSasUrl' },
+      );
 
       // Submit the batch transcription job
-      const jobId = await batchService.submitTranscription(sasUrl);
+      const jobId = await withAzureRetry(
+        () => batchService.submitTranscription(sasUrl),
+        { label: 'submitTranscription' },
+      );
 
       // Note: We don't delete the blob yet - it will be deleted after
       // the batch job completes and the transcript is retrieved
