@@ -1,10 +1,12 @@
 import {
   ChunkedJob,
+  cancelJob,
   completeJob,
   createJob,
   failJob,
   getJob,
   getJobForUser,
+  markInterruptedJobsFailed,
   updateProgress,
 } from '@/lib/services/transcription/chunkedJobStore';
 
@@ -130,6 +132,53 @@ describe('chunkedJobStore', () => {
       updateProgress(jobId, 1, 0);
       const leftovers = [...memoryFs.keys()].filter((k) => k.endsWith('.tmp'));
       expect(leftovers).toEqual([]);
+    });
+  });
+
+  describe('markInterruptedJobsFailed', () => {
+    const jobA = '11111111-1111-1111-1111-111111111111';
+    const jobB = '22222222-2222-2222-2222-222222222222';
+    const jobC = '33333333-3333-3333-3333-333333333333';
+
+    it('marks pending/processing jobs failed but leaves terminal jobs alone', () => {
+      createJob(jobA, ownerId, 1, [], 'pending.mp3');
+      createJob(jobB, ownerId, 1, [], 'processing.mp3');
+      updateProgress(jobB, 0, 0);
+      createJob(jobC, ownerId, 1, [], 'done.mp3');
+      completeJob(jobC, 'hello');
+
+      const marked = markInterruptedJobsFailed();
+
+      expect(marked.sort()).toEqual([jobA, jobB].sort());
+      expect(getJob(jobA)?.status).toBe('failed');
+      expect(getJob(jobB)?.status).toBe('failed');
+      expect(getJob(jobC)?.status).toBe('succeeded');
+      expect(getJob(jobA)?.error).toMatch(/server restart/i);
+    });
+
+    it('is a no-op when no jobs exist', () => {
+      expect(markInterruptedJobsFailed()).toEqual([]);
+    });
+  });
+
+  describe('cancelJob', () => {
+    it('marks a running job as cancelled', () => {
+      createJob(jobId, ownerId, 2, [], 'file.mp3');
+      cancelJob(jobId);
+      expect(getJob(jobId)?.status).toBe('cancelled');
+      expect(getJob(jobId)?.error).toMatch(/cancelled/i);
+    });
+
+    it('is a no-op on terminal jobs', () => {
+      createJob(jobId, ownerId, 1, [], 'file.mp3');
+      completeJob(jobId, 'hi');
+      cancelJob(jobId);
+      expect(getJob(jobId)?.status).toBe('succeeded');
+    });
+
+    it('throws when the job does not exist', () => {
+      const missingId = '99999999-9999-9999-9999-999999999999';
+      expect(() => cancelJob(missingId)).toThrow(/not found/);
     });
   });
 });
