@@ -66,6 +66,19 @@ export interface BatchTranscriptionStatusResponse {
   transcript?: string;
   /** Error message (only when status is 'Failed') */
   error?: string;
+  /**
+   * Classification of the failure so clients can pick the right recovery UX
+   * (retry vs re-auth vs unsupported-format). Only set when the server has
+   * a confident classification; absent for unknown errors or non-failure states.
+   */
+  errorClass?: TranscriptionErrorClass;
+  /**
+   * True when the server-side job was cancelled by the user. The top-level
+   * `status` is still mapped to `'Failed'` for backwards compatibility, but
+   * clients that care should branch on this flag before rendering a generic
+   * "failed" message.
+   */
+  cancelled?: boolean;
   /** Progress for chunked transcription jobs */
   progress?: TranscriptionProgress;
   /** Type of job ('chunked' or 'batch') */
