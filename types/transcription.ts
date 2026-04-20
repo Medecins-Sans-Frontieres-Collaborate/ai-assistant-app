@@ -100,3 +100,22 @@ export const TRANSCRIPT_BLOB_THRESHOLD = 10 * 1024;
 
 /** Number of days before transcript expires */
 export const TRANSCRIPT_EXPIRY_DAYS = 7;
+
+/**
+ * How transcription errors classify for retry decisions.
+ * - `auth`: credential expired or invalid — re-init credentials and retry.
+ * - `rate_limit`: backoff and retry.
+ * - `transient`: 5xx / network — backoff and retry.
+ * - `permanent`: 4xx (not 401/403/429) — don't retry.
+ * - `unknown`: unclassified — treat as transient once.
+ */
+export type TranscriptionErrorClass =
+  | 'auth'
+  | 'rate_limit'
+  | 'transient'
+  | 'permanent'
+  | 'unknown';
+
+export interface TranscriptionError extends Error {
+  errorClass: TranscriptionErrorClass;
+}
