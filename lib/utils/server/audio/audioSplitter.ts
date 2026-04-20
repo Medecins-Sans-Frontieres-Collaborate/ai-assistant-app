@@ -421,8 +421,11 @@ async function runSegmentation(
   outputFormat: string,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    // Ring buffer: newest ffmpeg stderr line pushes the oldest out once the
+    // buffer is full. The tail is surfaced in server logs on failure so the
+    // operator can tell e.g. "unsupported codec" from "disk full".
     const stderrTail: string[] = [];
-    const STDERR_TAIL_LINES = 20;
+    const STDERR_TAIL_CAPACITY = 20;
 
     const command = ffmpeg(inputPath)
       .outputOptions([
@@ -456,7 +459,7 @@ async function runSegmentation(
       })
       .on('stderr', (line: string) => {
         stderrTail.push(line);
-        if (stderrTail.length > STDERR_TAIL_LINES) stderrTail.shift();
+        if (stderrTail.length > STDERR_TAIL_CAPACITY) stderrTail.shift();
       })
       .on('end', () => {
         resolve();
