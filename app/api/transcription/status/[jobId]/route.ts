@@ -77,13 +77,15 @@ export async function GET(
         break;
     }
 
+    const cancelled = chunkedJob.status === 'cancelled';
     return successResponse({
       status,
       transcript: chunkedJob.transcript,
-      error:
-        chunkedJob.status === 'cancelled'
-          ? JOB_CANCELLED_MESSAGE
-          : chunkedJob.error,
+      error: cancelled ? JOB_CANCELLED_MESSAGE : chunkedJob.error,
+      // Expose classification so the client can pick appropriate recovery UX
+      // (retry vs re-auth vs "try a different file"). Absent for non-failures.
+      errorClass: cancelled ? undefined : chunkedJob.errorClass,
+      cancelled: cancelled || undefined,
       progress: {
         completed: chunkedJob.completedChunks,
         total: chunkedJob.totalChunks,
