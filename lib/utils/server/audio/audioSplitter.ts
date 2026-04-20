@@ -323,11 +323,25 @@ export async function splitAudioFile(
   }
 
   // Calculate segment duration
-  const segmentDuration = await calculateSegmentDuration(
+  let segmentDuration = await calculateSegmentDuration(
     inputPath,
     targetChunkSizeBytes,
   );
-  const estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+  let estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+
+  // Cap chunk count so pathologically long audio doesn't spray hundreds of
+  // chunks into tmpdir and the Whisper queue. If we'd exceed the cap, grow
+  // segmentDuration so the whole file fits in MAX_CHUNKS segments. The
+  // trade-off is chunks can exceed targetChunkSizeBytes, but the transcription
+  // service will re-split/retry if Whisper rejects one for size.
+  const MAX_CHUNKS = 60;
+  if (estimatedChunks > MAX_CHUNKS) {
+    segmentDuration = Math.ceil(totalDuration / MAX_CHUNKS);
+    estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+    console.warn(
+      `[AudioSplitter] Chunk count exceeded cap; growing segment duration to ${segmentDuration}s (~${estimatedChunks} chunks)`,
+    );
+  }
 
   console.log(
     `[AudioSplitter] Splitting ${(fileSize / 1024 / 1024).toFixed(1)}MB file ` +
