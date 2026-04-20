@@ -116,6 +116,19 @@ export function TranscriptionProgressIndicator({
       const elapsed = now - startedAt;
       setElapsedSeconds(Math.floor(elapsed / 1000));
 
+      // Surface a "Still processing" hint if no chunk completed for a while.
+      // Only meaningful for chunked jobs that report progress.
+      if (
+        progress &&
+        progress.total > 1 &&
+        progress.completed < progress.total
+      ) {
+        const idle = now - lastProgressAtRef.current;
+        setIsStalled(idle > STALLED_THRESHOLD_MS);
+      } else {
+        setIsStalled(false);
+      }
+
       // No progress data yet - show "??" for remaining time
       if (!progress || progress.total === 0 || progress.completed === 0) {
         setRemainingSeconds(null);
@@ -220,10 +233,20 @@ export function TranscriptionProgressIndicator({
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
-              className="bg-blue-500 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
+              className={
+                'h-2 rounded-full transition-all duration-300 ' +
+                (isStalled
+                  ? 'bg-gray-400 dark:bg-gray-500 animate-pulse'
+                  : 'bg-blue-500 dark:bg-blue-400')
+              }
               style={{ width: `${progressPercent}%` }}
             />
           </div>
+          {isStalled && (
+            <div className="mt-1 text-xs italic text-gray-500 dark:text-gray-400">
+              {t('stillProcessing')}
+            </div>
+          )}
         </div>
       )}
 
