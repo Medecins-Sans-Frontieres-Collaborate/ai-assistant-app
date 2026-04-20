@@ -29,10 +29,32 @@ interface CleanupRequest {
   blobPath?: string;
 }
 
+/** UUID format for jobIds and transcript filenames. */
+const JOB_ID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Ensures the blob path is shaped like `${userId}/transcripts/${uuid}.txt`
+ * and the prefix matches the authenticated user. Blocks arbitrary-delete
+ * attacks via crafted paths (including other users' blobs).
+ */
+function isValidTranscriptBlobPath(blobPath: string, userId: string): boolean {
+  const prefix = `${userId}/transcripts/`;
+  if (!blobPath.startsWith(prefix)) {
+    return false;
+  }
+  const filename = blobPath.slice(prefix.length);
+  if (!filename.endsWith('.txt')) {
+    return false;
+  }
+  const basename = filename.slice(0, -'.txt'.length);
+  return JOB_ID_REGEX.test(basename);
+}
+
 export async function POST(request: NextRequest) {
   // Verify authentication
   const session = await auth();
-  if (!session) {
+  if (!session?.user?.id) {
     return unauthorizedResponse();
   }
 
@@ -50,6 +72,17 @@ export async function POST(request: NextRequest) {
       'At least one of jobId or blobPath is required',
       'MISSING_PARAMS',
     );
+  }
+
+  if (jobId !== undefined && !JOB_ID_REGEX.test(jobId)) {
+    return badRequestResponse('Invalid jobId format', 'INVALID_JOB_ID');
+  }
+
+  if (
+    blobPath !== undefined &&
+    !isValidTranscriptBlobPath(blobPath, session.user.id)
+  ) {
+    return badRequestResponse('Invalid blobPath', 'INVALID_BLOB_PATH');
   }
 
   const results: {
