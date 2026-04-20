@@ -8,6 +8,8 @@
  *
  * Jobs are tracked from submission through completion.
  */
+import { TranscriptionErrorClass } from '@/types/transcription';
+
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -35,6 +37,12 @@ export interface ChunkedJob {
   transcript?: string;
   /** Error message (only set when failed) */
   error?: string;
+  /**
+   * Classification of the failure cause — clients use this to pick recovery
+   * UX (retry vs re-auth vs format error). Absent for unknown errors or
+   * non-failure states.
+   */
+  errorClass?: TranscriptionErrorClass;
   /** Paths to chunk files (for cleanup) */
   chunkPaths: string[];
   /** Path to original audio file (for cleanup) */
@@ -222,7 +230,19 @@ export function completeJob(jobId: string, transcript: string): void {
  * @param jobId - Job identifier
  * @param error - Error message
  */
-export function failJob(jobId: string, error: string): void {
+/**
+ * Marks a job as failed.
+ *
+ * @param jobId - Job identifier
+ * @param error - Human-readable error message
+ * @param errorClass - Optional classification so clients can branch on
+ *   recovery UX (e.g. auto-retry vs re-auth vs permanent).
+ */
+export function failJob(
+  jobId: string,
+  error: string,
+  errorClass?: TranscriptionErrorClass,
+): void {
   const job = getJob(jobId);
   if (!job) {
     throw new Error(`Job ${jobId} not found`);
@@ -230,11 +250,14 @@ export function failJob(jobId: string, error: string): void {
 
   job.status = 'failed';
   job.error = error;
+  job.errorClass = errorClass;
   job.updatedAt = Date.now();
 
   saveJob(job);
 
-  console.error(`[ChunkedJobStore] Job ${jobId} failed: ${error}`);
+  console.error(
+    `[ChunkedJobStore] Job ${jobId} failed (${errorClass ?? 'unclassified'}): ${error}`,
+  );
 }
 
 /**
@@ -346,7 +369,9 @@ export function markInterruptedJobsFailed(): string[] {
   for (const job of jobs) {
     if (job.status !== 'pending' && job.status !== 'processing') continue;
     try {
-      failJob(job.jobId, 'Job interrupted by server restart');
+      // Classify as transient so clients render a "please try again" message
+      // instead of treating a restart as a permanent failure.
+      failJob(job.jobId, 'Job interrupted by server restart', 'transient');
       marked.push(job.jobId);
     } catch (err) {
       console.warn(
