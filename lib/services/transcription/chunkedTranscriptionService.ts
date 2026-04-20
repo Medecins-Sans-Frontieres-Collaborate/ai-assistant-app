@@ -16,7 +16,11 @@ import {
   splitAudioFile,
 } from '@/lib/utils/server/audio/audioSplitter';
 
-import { TranscriptionOptions } from '@/types/transcription';
+import {
+  TranscriptionError,
+  TranscriptionErrorClass,
+  TranscriptionOptions,
+} from '@/types/transcription';
 
 import {
   ChunkedJob,
@@ -263,7 +267,13 @@ export class ChunkedTranscriptionService {
   }
 
   /**
-   * Transcribes a single chunk with retry logic.
+   * Transcribes a single chunk with retry logic that respects error class.
+   *
+   * - `permanent`: don't retry (user error — bad codec, oversized, etc.).
+   * - `auth`: rebuild the Whisper client once (handles token expiry on long jobs)
+   *           and retry.
+   * - `rate_limit`: retry with doubled backoff.
+   * - `transient` / `unknown`: retry with normal backoff.
    */
   private async transcribeChunkWithRetry(
     chunkPath: string,
@@ -271,7 +281,7 @@ export class ChunkedTranscriptionService {
     totalChunks: number,
     options?: TranscriptionOptions,
   ): Promise<string> {
-    let lastError: Error | null = null;
+    let lastError: Error = new Error('Unknown chunk transcription error');
 
     for (let attempt = 1; attempt <= MAX_CHUNK_RETRIES + 1; attempt++) {
       try {
@@ -283,28 +293,43 @@ export class ChunkedTranscriptionService {
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
 
-        // Check if it's a rate limit error
-        const isRateLimit =
-          lastError.message.includes('rate limit') ||
-          lastError.message.includes('capacity') ||
-          lastError.message.includes('429');
+        const errorClass: TranscriptionErrorClass =
+          (lastError as TranscriptionError).errorClass ?? 'unknown';
 
-        if (attempt <= MAX_CHUNK_RETRIES) {
-          const waitTime = isRateLimit ? RETRY_DELAY_MS * 2 : RETRY_DELAY_MS;
-
-          console.warn(
-            `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed ` +
-              `(attempt ${attempt}/${MAX_CHUNK_RETRIES + 1}), retrying in ${waitTime}ms...`,
-          );
-
-          await delay(waitTime);
+        if (errorClass === 'permanent') {
+          // User-visible error (bad codec, oversize, etc.); don't waste retries.
+          throw lastError;
         }
+
+        if (attempt > MAX_CHUNK_RETRIES) break;
+
+        if (errorClass === 'auth') {
+          // Token likely expired during a long job — rebuild the client.
+          console.warn(
+            `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} hit auth error; re-initializing Whisper client`,
+          );
+          this.whisperService = new WhisperTranscriptionService();
+          await delay(RETRY_DELAY_MS);
+          continue;
+        }
+
+        const waitTime =
+          errorClass === 'rate_limit' ? RETRY_DELAY_MS * 2 : RETRY_DELAY_MS;
+
+        console.warn(
+          `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed (${errorClass}, ` +
+            `attempt ${attempt}/${MAX_CHUNK_RETRIES + 1}), retrying in ${waitTime}ms...`,
+        );
+
+        await delay(waitTime);
       }
     }
 
-    throw new Error(
-      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_RETRIES + 1} attempts: ${lastError?.message}`,
-    );
+    const err = new Error(
+      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_RETRIES + 1} attempts: ${lastError.message}`,
+    ) as TranscriptionError;
+    err.errorClass = (lastError as TranscriptionError).errorClass ?? 'unknown';
+    throw err;
   }
 
   /**
