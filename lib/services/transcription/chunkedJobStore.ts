@@ -60,8 +60,12 @@ const JOB_RETENTION_MS = 60 * 60 * 1000;
  * @param jobId - The job ID to validate
  * @throws Error if the job ID format is invalid
  */
-const JOB_ID_REGEX =
+/** UUID format for transcription job IDs. Shared across every route. */
+export const JOB_ID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** User-visible error text recorded on a cancelled chunked job. */
+export const JOB_CANCELLED_MESSAGE = 'Cancelled by user';
 
 function validateJobId(jobId: string): void {
   // Job IDs must be UUIDs. Strict format blocks path traversal and
@@ -376,7 +380,7 @@ export function cancelJob(jobId: string): void {
     return;
   }
   job.status = 'cancelled';
-  job.error = 'Cancelled by user';
+  job.error = JOB_CANCELLED_MESSAGE;
   job.updatedAt = Date.now();
   saveJob(job);
   console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
