@@ -482,6 +482,25 @@ describe('/api/file/[id]/transcribe', () => {
       );
     });
 
+    it('rejects files exceeding the transcription size limit with 413', async () => {
+      // 2GB — well over the 1.5GB video cap.
+      mockBlockBlobClient.getProperties.mockResolvedValue({
+        contentLength: 2 * 1024 * 1024 * 1024,
+      });
+
+      const request = createRequest(fileId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: fileId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(413);
+      expect(data.error).toBe('PAYLOAD_TOO_LARGE');
+      // Transcription service must not have been engaged.
+      expect(mockBlockBlobClient.downloadToFile).not.toHaveBeenCalled();
+      expect(mockTranscriptionService.transcribe).not.toHaveBeenCalled();
+    });
+
     it('rejects file IDs containing path separators', async () => {
       const maliciousId = '../other-user/uploads/files/leak.mp3';
       const request = createRequest(encodeURIComponent(maliciousId));
