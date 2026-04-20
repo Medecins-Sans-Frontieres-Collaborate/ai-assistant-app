@@ -23,6 +23,15 @@ vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
   }),
 }));
 
+const mockGetJobForUser = vi.fn();
+const mockCleanupChunks = vi.fn();
+vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
+  getJobForUser: (...args: unknown[]) => mockGetJobForUser(...args),
+}));
+vi.mock('@/lib/utils/server/audio/audioSplitter', () => ({
+  cleanupChunks: (...args: unknown[]) => mockCleanupChunks(...args),
+}));
+
 vi.mock('@/config/environment', () => ({
   env: {
     AZURE_BLOB_STORAGE_NAME: 'test-storage',
@@ -61,6 +70,11 @@ describe('/api/transcription/cleanup', () => {
     } as any);
     mockBlobClient.exists.mockResolvedValue(true);
     mockBlobClient.delete.mockResolvedValue(undefined);
+
+    // Default: no known chunked job for this jobId. Tests that need chunk
+    // cascade set this explicitly.
+    mockGetJobForUser.mockReturnValue(undefined);
+    mockCleanupChunks.mockResolvedValue(undefined);
   });
 
   const makeRequest = (body: unknown) =>
@@ -153,5 +167,28 @@ describe('/api/transcription/cleanup', () => {
 
     expect(response.status).toBe(400);
     expect(data.details).toBe('MISSING_PARAMS');
+  });
+
+  it('cascades chunk cleanup when the jobId matches a chunked job owned by the user', async () => {
+    const chunkPaths = ['/tmp/chunked-transcription/jobX/a.mp3'];
+    mockGetJobForUser.mockReturnValue({
+      jobId: validJobId,
+      userId,
+      chunkPaths,
+    });
+
+    const response = await POST(makeRequest({ jobId: validJobId }));
+
+    expect(response.status).toBe(200);
+    expect(mockGetJobForUser).toHaveBeenCalledWith(validJobId, userId);
+    expect(mockCleanupChunks).toHaveBeenCalledWith(chunkPaths);
+  });
+
+  it('does not invoke cleanupChunks when the job is not owned by the user', async () => {
+    mockGetJobForUser.mockReturnValue(undefined);
+    const response = await POST(makeRequest({ jobId: validJobId }));
+
+    expect(response.status).toBe(200);
+    expect(mockCleanupChunks).not.toHaveBeenCalled();
   });
 });
