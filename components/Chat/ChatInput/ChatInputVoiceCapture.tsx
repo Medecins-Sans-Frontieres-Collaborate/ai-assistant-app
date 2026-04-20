@@ -24,7 +24,7 @@ const PREFERRED_MIME_TYPES = [
   'audio/ogg',
 ];
 
-const FILENAME_FOR_MIME = (mimeType: string): string => {
+const filenameForMime = (mimeType: string): string => {
   if (mimeType.startsWith('audio/webm')) return 'audio.webm';
   if (mimeType.startsWith('audio/mp4')) return 'audio.mp4';
   if (mimeType.startsWith('audio/ogg')) return 'audio.ogg';
@@ -140,9 +140,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     ) {
       mediaRecorderRef.current.stop();
     }
+    mediaRecorderRef.current = null;
     if (mediaStreamRef.current) {
       mediaStreamRef.current.getTracks().forEach((track) => track.stop());
     }
+    mediaStreamRef.current = null;
     if (checkSilenceIntervalRef.current) {
       clearInterval(checkSilenceIntervalRef.current);
       checkSilenceIntervalRef.current = null;
@@ -179,7 +181,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       try {
         const mimeType =
           audioBlob.type || recorderMimeTypeRef.current || 'audio/webm';
-        const filename = FILENAME_FOR_MIME(mimeType);
+        const filename = filenameForMime(mimeType);
 
         const encodedFileName = encodeURIComponent(filename);
         const encodedMimeType = encodeURIComponent(mimeType);
@@ -419,10 +421,11 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       isStartingRef.current = false;
       // If getUserMedia succeeded but a downstream step (MediaRecorder
       // construction, AudioContext creation, etc.) threw, the mic stream is
-      // still live. Release every resource we may have set up.
+      // still live. Release it directly in case it wasn't assigned to the ref.
       if (acquiredStream) {
-        stopRecording();
+        acquiredStream.getTracks().forEach((track) => track.stop());
       }
+      stopRecording();
       const error = err instanceof Error ? err : new Error(String(err));
       console.error('[VoiceCapture] Error getting user media:', error);
 
