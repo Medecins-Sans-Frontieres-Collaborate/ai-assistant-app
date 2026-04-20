@@ -153,6 +153,12 @@ interface ChatStore {
       completed: number;
       total: number;
     };
+    /**
+     * True when the status channel has had several consecutive failures but
+     * hasn't yet given up — surfaced as a "Reconnecting…" hint in the UI so
+     * the user knows we're still trying, rather than silently spinning.
+     */
+    isReconnecting?: boolean;
   } | null;
   setConversationTranscriptionPending: (
     info: {
@@ -165,6 +171,7 @@ interface ChatStore {
     } | null,
   ) => void;
   updateTranscriptionProgress: (completed: number, total: number) => void;
+  setTranscriptionReconnecting: (isReconnecting: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -266,6 +273,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             ...state.pendingConversationTranscription,
             progress: { completed, total },
           }
+        : null,
+    })),
+
+  setTranscriptionReconnecting: (isReconnecting) =>
+    set((state) => ({
+      pendingConversationTranscription: state.pendingConversationTranscription
+        ? { ...state.pendingConversationTranscription, isReconnecting }
         : null,
     })),
 
