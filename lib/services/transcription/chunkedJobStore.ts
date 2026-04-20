@@ -15,7 +15,8 @@ export type ChunkedJobStatus =
   | 'pending'
   | 'processing'
   | 'succeeded'
-  | 'failed';
+  | 'failed'
+  | 'cancelled';
 
 export interface ChunkedJob {
   /** Unique job identifier */
@@ -324,6 +325,61 @@ export function getActiveJobCount(): number {
   return jobs.filter(
     (job) => job.status === 'pending' || job.status === 'processing',
   ).length;
+}
+
+/**
+ * Marks any job that was mid-flight (pending or processing) when the server
+ * was last stopped as failed with a recognizable reason. Intended to be
+ * called once at server startup so clients polling such jobs see a clean
+ * failure rather than a permanent 404.
+ *
+ * @returns The job IDs that were marked failed.
+ */
+export function markInterruptedJobsFailed(): string[] {
+  const marked: string[] = [];
+  const jobs = listJobs();
+  for (const job of jobs) {
+    if (job.status !== 'pending' && job.status !== 'processing') continue;
+    try {
+      failJob(job.jobId, 'Job interrupted by server restart');
+      marked.push(job.jobId);
+    } catch (err) {
+      console.warn(
+        `[ChunkedJobStore] Could not mark interrupted job ${job.jobId}:`,
+        err,
+      );
+    }
+  }
+  if (marked.length > 0) {
+    console.log(
+      `[ChunkedJobStore] Marked ${marked.length} interrupted job(s) as failed on startup`,
+    );
+  }
+  return marked;
+}
+
+/**
+ * Marks a job as cancelled by the user. Cooperative — the background chunk
+ * processor polls job status between batches and aborts when it sees this.
+ */
+export function cancelJob(jobId: string): void {
+  const job = getJob(jobId);
+  if (!job) {
+    throw new Error(`Job ${jobId} not found`);
+  }
+  // Already terminal — no-op.
+  if (
+    job.status === 'succeeded' ||
+    job.status === 'failed' ||
+    job.status === 'cancelled'
+  ) {
+    return;
+  }
+  job.status = 'cancelled';
+  job.error = 'Cancelled by user';
+  job.updatedAt = Date.now();
+  saveJob(job);
+  console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
 }
 
 // Cleanup timer reference
