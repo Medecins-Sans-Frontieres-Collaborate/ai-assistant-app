@@ -175,6 +175,7 @@ export function createJob(
  * @param completedChunks - Number of chunks completed so far
  * @param currentChunk - 0-based index of the chunk currently being processed
  *   (i.e., the chunk that has just been started, not yet completed)
+ * @throws Error when no job record exists for `jobId`.
  */
 export function updateProgress(
   jobId: string,
@@ -244,15 +245,10 @@ export function completeJob(jobId: string, transcript: string): void {
  * Marks a job as failed.
  *
  * @param jobId - Job identifier
- * @param error - Error message
- */
-/**
- * Marks a job as failed.
- *
- * @param jobId - Job identifier
  * @param error - Human-readable error message
  * @param errorClass - Optional classification so clients can branch on
  *   recovery UX (e.g. auto-retry vs re-auth vs permanent).
+ * @throws Error when no job record exists for `jobId`.
  */
 export function failJob(
   jobId: string,
