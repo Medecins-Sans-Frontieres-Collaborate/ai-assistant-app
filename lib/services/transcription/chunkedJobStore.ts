@@ -407,6 +407,8 @@ function scheduleCleanup(): void {
     },
     10 * 60 * 1000,
   ); // 10 minutes
+  // Don't block Node from exiting just because the cleanup timer is pending.
+  cleanupTimer.unref?.();
 }
 
 /**
