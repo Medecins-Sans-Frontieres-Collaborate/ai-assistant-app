@@ -120,6 +120,23 @@ describe('chunkedJobStore', () => {
     });
   });
 
+  describe('failJob persists errorClass', () => {
+    it('stores the provided errorClass alongside the error message', () => {
+      createJob(jobId, ownerId, 1, [], 'file.mp3');
+      failJob(jobId, 'Azure said no', 'auth');
+      const job = getJob(jobId);
+      expect(job?.errorClass).toBe('auth');
+      expect(job?.error).toBe('Azure said no');
+      expect(job?.status).toBe('failed');
+    });
+
+    it('leaves errorClass undefined when not provided', () => {
+      createJob(jobId, ownerId, 1, [], 'file.mp3');
+      failJob(jobId, 'mystery');
+      expect(getJob(jobId)?.errorClass).toBeUndefined();
+    });
+  });
+
   describe('atomic writes', () => {
     it('does not leave tmp files behind after createJob', () => {
       createJob(jobId, ownerId, 1, [], 'file.mp3');
@@ -154,6 +171,12 @@ describe('chunkedJobStore', () => {
       expect(getJob(jobB)?.status).toBe('failed');
       expect(getJob(jobC)?.status).toBe('succeeded');
       expect(getJob(jobA)?.error).toMatch(/server restart/i);
+    });
+
+    it('tags interrupted jobs with errorClass=transient so clients suggest retry', () => {
+      createJob(jobA, ownerId, 1, [], 'pending.mp3');
+      markInterruptedJobsFailed();
+      expect(getJob(jobA)?.errorClass).toBe('transient');
     });
 
     it('is a no-op when no jobs exist', () => {
