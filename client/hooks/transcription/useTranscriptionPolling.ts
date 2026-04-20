@@ -394,12 +394,7 @@ export function useTranscriptionPolling(): void {
           setConversationTranscriptionPending(null);
           showFailureToast(copy);
 
-          // Cleanup Azure resources
-          fetch('/api/transcription/cleanup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ jobId, blobPath }),
-          }).catch(console.warn);
+          scheduleCleanup({ jobId, blobPath });
 
           consecutiveFailuresRef.current = 0;
         }
@@ -525,12 +520,7 @@ export function useTranscriptionPolling(): void {
             });
         }
 
-        // Cleanup Azure resources (batch job + temp blob)
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
       }
       // Handle failure case (including user-initiated cancel, which the
       // server reports as `status: 'Failed'` with `cancelled: true`).
@@ -553,12 +543,7 @@ export function useTranscriptionPolling(): void {
         setConversationTranscriptionPending(null);
         showFailureToast(copy);
 
-        // Cleanup Azure resources
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
       }
       // Running or NotStarted - continue polling
     } catch (error) {
@@ -591,12 +576,7 @@ export function useTranscriptionPolling(): void {
         setConversationTranscriptionPending(null);
         showFailureToast(copy);
 
-        // Cleanup Azure resources
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
 
         consecutiveFailuresRef.current = 0;
       }
