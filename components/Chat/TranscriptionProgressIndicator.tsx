@@ -114,7 +114,10 @@ export function TranscriptionProgressIndicator({
         const estimatedRemainingMs = baseEstimateMs * 1.6;
 
         // Cap at maxDuration
-        const cappedEstimateMs = Math.min(estimatedRemainingMs, maxDurationMs);
+        const cappedEstimateMs = Math.min(
+          estimatedRemainingMs,
+          effectiveMaxDurationMs,
+        );
 
         // Store the snapshot
         lastEstimateRef.current = {
@@ -134,7 +137,7 @@ export function TranscriptionProgressIndicator({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startedAt, maxDurationMs, progress]);
+  }, [startedAt, effectiveMaxDurationMs, progress]);
 
   // Format elapsed time as MM:SS
   const elapsedMinutes = Math.floor(elapsedSeconds / 60);
@@ -198,7 +201,9 @@ export function TranscriptionProgressIndicator({
         {t('timeRemaining', { time: remainingDisplay })}
       </div>
       <div className="text-xs text-gray-500 dark:text-gray-500">
-        {t('maxDurationNote', { minutes: Math.ceil(maxDurationMs / 60000) })}
+        {t('maxDurationNote', {
+          minutes: Math.ceil(effectiveMaxDurationMs / 60000),
+        })}
       </div>
     </div>
   );
