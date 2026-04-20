@@ -20,12 +20,16 @@ import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
 import { TranscriptionResponse } from '@/types/transcription';
 
 import { auth } from '@/auth';
+import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { promisify } from 'util';
 
 const unlinkAsync = promisify(fs.unlink);
+
+/** Blob IDs are expected to be opaque tokens — reject anything path-shaped. */
+const BLOB_ID_REGEX = /^[A-Za-z0-9._-]+$/;
 
 export async function GET(
   request: NextRequest,
@@ -37,6 +41,13 @@ export async function GET(
   }
 
   const { id } = await params;
+
+  if (!BLOB_ID_REGEX.test(id)) {
+    return NextResponse.json(
+      { message: 'Invalid file id', error: 'INVALID_FILE_ID' },
+      { status: 400 },
+    );
+  }
 
   let transcript: string | undefined;
 
@@ -57,15 +68,18 @@ export async function GET(
 
     if (serviceType === 'whisper') {
       // Synchronous transcription for small files (≤25MB)
-      const tmpFilePath = join(tmpdir(), `${Date.now()}_${id}`);
-      await blockBlobClient.downloadToFile(tmpFilePath);
+      const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
+      try {
+        await blockBlobClient.downloadToFile(tmpFilePath);
 
-      const transcriptionService =
-        TranscriptionServiceFactory.getTranscriptionService('whisper');
+        const transcriptionService =
+          TranscriptionServiceFactory.getTranscriptionService('whisper');
 
-      transcript = await transcriptionService.transcribe(tmpFilePath);
-
-      await unlinkAsync(tmpFilePath);
+        transcript = await transcriptionService.transcribe(tmpFilePath);
+      } finally {
+        // Always clean up the temp file, even if transcription throws.
+        await unlinkAsync(tmpFilePath).catch(() => {});
+      }
       // Delete the blob after successful transcription
       await blockBlobClient.delete();
 
