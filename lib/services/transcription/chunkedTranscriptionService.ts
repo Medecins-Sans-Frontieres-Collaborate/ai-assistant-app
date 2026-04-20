@@ -152,7 +152,8 @@ export class ChunkedTranscriptionService {
           error,
         );
         try {
-          failJob(jobId, error.message || 'Unknown error');
+          const errorClass = (error as TranscriptionError)?.errorClass;
+          failJob(jobId, error.message || 'Unknown error', errorClass);
         } catch (failError) {
           console.error(
             `[ChunkedTranscription] Could not mark job ${jobId} failed:`,
@@ -282,11 +283,12 @@ export class ChunkedTranscriptionService {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
+      const errorClass = (error as TranscriptionError)?.errorClass;
       console.error(
-        `[ChunkedTranscription] Job ${jobId} failed:`,
+        `[ChunkedTranscription] Job ${jobId} failed (${errorClass ?? 'unclassified'}):`,
         errorMessage,
       );
-      failJob(jobId, errorMessage);
+      failJob(jobId, errorMessage, errorClass);
       throw error;
     } finally {
       // Always clean up chunk files
