@@ -1,7 +1,7 @@
 import { FileProcessingService } from '@/lib/services/chat';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
-import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
@@ -314,6 +314,16 @@ export class FileProcessor extends BasePipelineStage {
                   console.log(
                     `[FileProcessor] File to transcribe size: ${audioSizeMB}MB${extractedAudioPath ? ' (extracted audio)' : ' (original file)'}`,
                   );
+
+                  if (audioSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
+                    const capGB = (
+                      FILE_SIZE_LIMITS.VIDEO_MAX_BYTES /
+                      (1024 * 1024 * 1024)
+                    ).toFixed(1);
+                    throw new Error(
+                      `Audio file "${filename}" (${audioSizeMB}MB) exceeds the ${capGB}GB transcription limit.`,
+                    );
+                  }
 
                   let transcript: string;
 
