@@ -35,10 +35,28 @@ export function TranscriptionProgressIndicator({
   filename,
   maxDurationMs = 10 * 60 * 1000,
   progress,
+  jobId,
+  onCancel,
 }: Props) {
   const t = useTranslations('transcription');
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  const handleCancel = async () => {
+    if (!jobId || isCancelling) return;
+    setIsCancelling(true);
+    try {
+      await fetch(`/api/transcription/cancel/${jobId}`, { method: 'POST' });
+    } catch (err) {
+      console.warn('[TranscriptionProgressIndicator] Cancel failed:', err);
+    } finally {
+      // Notify the caller regardless — it will clear local state and the
+      // next status poll will confirm server-side cancellation.
+      onCancel?.();
+      setIsCancelling(false);
+    }
+  };
 
   // Snapshot of the last estimate to enable linear countdown between chunk completions
   const lastEstimateRef = useRef<{
@@ -117,7 +135,19 @@ export function TranscriptionProgressIndicator({
       : 0;
 
   return (
-    <div className="flex flex-col items-center gap-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+    <div className="relative flex flex-col items-center gap-1 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+      {jobId && (
+        <button
+          type="button"
+          onClick={handleCancel}
+          disabled={isCancelling}
+          aria-label={t('cancel')}
+          title={t('cancel')}
+          className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
+        >
+          <IconX size={16} />
+        </button>
+      )}
       <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
         <IconLoader2 className="animate-spin" size={20} />
         <span className="font-medium">{t('inProgress')}</span>
