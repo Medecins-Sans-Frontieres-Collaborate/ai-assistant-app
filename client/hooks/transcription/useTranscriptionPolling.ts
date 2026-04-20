@@ -199,11 +199,16 @@ function getPollingInterval(elapsedMs: number): number {
  * when all jobs are complete or failed.
  */
 /** Base client-side timeout; scales up for chunked jobs with many chunks. */
-const BASE_TRANSCRIPTION_TIMEOUT_MS = 10 * 60 * 1000; // 10 min floor
-const PER_CHUNK_TIMEOUT_MS = 2 * 60 * 1000; // 2 min per chunk
-const MAX_TRANSCRIPTION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 h ceiling
+export const BASE_TRANSCRIPTION_TIMEOUT_MS = 10 * 60 * 1000; // 10 min floor
+export const PER_CHUNK_TIMEOUT_MS = 2 * 60 * 1000; // 2 min per chunk
+export const MAX_TRANSCRIPTION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 h ceiling
 
-function computeTimeoutMs(totalChunks?: number): number {
+/**
+ * Computes the per-job client-side timeout. Exported so UI components (e.g.
+ * `TranscriptionProgressIndicator`'s "may take up to N minutes" note) stay
+ * in sync with the polling hook's abort window.
+ */
+export function computeTimeoutMs(totalChunks?: number): number {
   if (!totalChunks || totalChunks <= 1) {
     return BASE_TRANSCRIPTION_TIMEOUT_MS;
   }
