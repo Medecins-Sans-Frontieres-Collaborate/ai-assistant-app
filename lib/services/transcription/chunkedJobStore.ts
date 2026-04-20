@@ -214,6 +214,7 @@ export function updateProgress(
  *
  * @param jobId - Job identifier
  * @param transcript - Combined transcript text
+ * @throws Error when no job record exists for `jobId`.
  */
 export function completeJob(jobId: string, transcript: string): void {
   const job = getJob(jobId);
@@ -403,6 +404,8 @@ export function markInterruptedJobsFailed(): string[] {
 /**
  * Marks a job as cancelled by the user. Cooperative — the background chunk
  * processor polls job status between batches and aborts when it sees this.
+ *
+ * @throws Error when no job record exists for `jobId`.
  */
 export function cancelJob(jobId: string): void {
   const job = getJob(jobId);
