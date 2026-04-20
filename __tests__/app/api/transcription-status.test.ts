@@ -93,15 +93,12 @@ describe('/api/transcription/status/[jobId]', () => {
     expect(getJobForUser).toHaveBeenCalledWith(jobId, ownerId);
   });
 
-  it('returns 404 when jobId is not a UUID', async () => {
-    vi.mocked(getJobForUser).mockImplementation(() => {
-      throw new Error('Invalid job ID format');
-    });
-
+  it('returns 400 when jobId is not a UUID', async () => {
     const response = await GET(makeRequest(), {
       params: Promise.resolve({ jobId: 'not-a-uuid' }),
     });
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
+    expect(getJobForUser).not.toHaveBeenCalled();
   });
 });
