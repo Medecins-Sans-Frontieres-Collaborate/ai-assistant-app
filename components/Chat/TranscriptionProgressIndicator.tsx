@@ -7,6 +7,10 @@ import { useTranslations } from 'next-intl';
 
 import { computeTimeoutMs } from '@/client/hooks/transcription/useTranscriptionPolling';
 
+/** Idle threshold before a chunked job's progress bar switches to the
+ * "still processing" hint + muted pulse. */
+const STALLED_THRESHOLD_MS = 2 * 60 * 1000;
+
 interface Props {
   /** Timestamp when transcription started */
   startedAt: number;
@@ -96,7 +100,6 @@ export function TranscriptionProgressIndicator({
   // "Still processing" hint if a chunk takes unusually long.
   const lastProgressAtRef = useRef<number>(Date.now());
   const lastCompletedChunksRef = useRef<number>(0);
-  const STALLED_THRESHOLD_MS = 2 * 60 * 1000; // 2 min with no chunk advance
 
   // Reset the stall timer whenever the completed-chunks count advances.
   useEffect(() => {
