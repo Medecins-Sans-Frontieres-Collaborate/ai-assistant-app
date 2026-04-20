@@ -17,9 +17,11 @@ vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
 }));
 
 vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
-  BatchTranscriptionService: vi
-    .fn()
-    .mockImplementation(() => ({ isConfigured: () => false })),
+  BatchTranscriptionService: vi.fn().mockImplementation(function (this: any) {
+    this.isConfigured = () => false;
+    this.getStatus = vi.fn();
+    this.getTranscript = vi.fn();
+  }),
 }));
 
 describe('/api/transcription/status/[jobId]', () => {
