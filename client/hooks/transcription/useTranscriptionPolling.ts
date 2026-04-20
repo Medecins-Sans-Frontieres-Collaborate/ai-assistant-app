@@ -305,6 +305,7 @@ export function useTranscriptionPolling(): void {
             jobId,
             data.transcript,
             filename,
+            getAbortSignal(),
           );
 
           if (blobRef) {
@@ -421,6 +422,10 @@ export function useTranscriptionPolling(): void {
       }
       // Running or NotStarted - continue polling
     } catch (error) {
+      if (isAbortError(error)) {
+        // Hook unmounted while fetch was in flight; stop quietly.
+        return;
+      }
       consecutiveFailuresRef.current++;
       console.error(
         `[useTranscriptionPolling] Error polling conversation job ${jobId} ` +
@@ -485,6 +490,7 @@ export function useTranscriptionPolling(): void {
         try {
           const response = await fetch(
             `/api/transcription/status/${job.jobId}`,
+            { signal: getAbortSignal() },
           );
 
           if (!response.ok) {
@@ -560,6 +566,7 @@ export function useTranscriptionPolling(): void {
             );
           }
         } catch (error) {
+          if (isAbortError(error)) return;
           console.error(`Error polling job ${job.jobId}:`, error);
         }
       }
@@ -624,6 +631,16 @@ export function useTranscriptionPolling(): void {
       }
     };
   }, [pendingTranscriptions, pendingConversationTranscription, pollJobs]);
+
+  // Separate effect for unmount-only abort. Runs once per hook lifetime so
+  // in-flight fetches are only canceled when the consumer unmounts — not when
+  // pendingTranscriptions changes.
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = null;
+    };
+  }, []);
 }
 
 export default useTranscriptionPolling;
