@@ -594,6 +594,7 @@ export function useTranscriptionPolling(): void {
     conversations,
     updateConversation,
     getAbortSignal,
+    setTranscriptionReconnecting,
   ]);
 
   /**
