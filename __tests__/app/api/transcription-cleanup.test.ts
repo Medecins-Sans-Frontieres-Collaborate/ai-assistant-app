@@ -17,10 +17,10 @@ vi.mock('@/lib/utils/server/blob/blob', () => ({
 }));
 
 vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
-  BatchTranscriptionService: vi.fn().mockImplementation(() => ({
-    isConfigured: () => false,
-    deleteTranscription: vi.fn(),
-  })),
+  BatchTranscriptionService: vi.fn().mockImplementation(function (this: any) {
+    this.isConfigured = () => false;
+    this.deleteTranscription = vi.fn();
+  }),
 }));
 
 vi.mock('@/config/environment', () => ({
@@ -87,7 +87,7 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('INVALID_BLOB_PATH');
+    expect(data.details).toBe('INVALID_BLOB_PATH');
     expect(mockBlobStorage.getBlockBlobClient).not.toHaveBeenCalled();
   });
 
@@ -100,7 +100,7 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('INVALID_BLOB_PATH');
+    expect(data.details).toBe('INVALID_BLOB_PATH');
     expect(mockBlobStorage.getBlockBlobClient).not.toHaveBeenCalled();
   });
 
@@ -113,7 +113,7 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('INVALID_BLOB_PATH');
+    expect(data.details).toBe('INVALID_BLOB_PATH');
     expect(mockBlobStorage.getBlockBlobClient).not.toHaveBeenCalled();
   });
 
@@ -126,7 +126,7 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('INVALID_BLOB_PATH');
+    expect(data.details).toBe('INVALID_BLOB_PATH');
   });
 
   it('rejects a non-UUID jobId', async () => {
@@ -134,7 +134,7 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('INVALID_JOB_ID');
+    expect(data.details).toBe('INVALID_JOB_ID');
   });
 
   it('accepts and deletes a valid own-user blobPath', async () => {
@@ -152,6 +152,6 @@ describe('/api/transcription/cleanup', () => {
     const data = await parseJsonResponse(response);
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('MISSING_PARAMS');
+    expect(data.details).toBe('MISSING_PARAMS');
   });
 });
