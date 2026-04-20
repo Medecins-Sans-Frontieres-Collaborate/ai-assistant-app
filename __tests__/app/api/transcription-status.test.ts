@@ -14,6 +14,9 @@ vi.mock('@/auth', () => ({
 
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
   getJobForUser: vi.fn(),
+  JOB_ID_REGEX:
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+  JOB_CANCELLED_MESSAGE: 'Cancelled by user',
 }));
 
 vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({

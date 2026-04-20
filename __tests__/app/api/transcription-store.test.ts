@@ -27,6 +27,8 @@ const mockGetJobForUser = vi.fn();
 vi.mock('@/lib/services/transcription/chunkedJobStore', () => ({
   getJob: (...args: unknown[]) => mockGetJob(...args),
   getJobForUser: (...args: unknown[]) => mockGetJobForUser(...args),
+  JOB_ID_REGEX:
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
 }));
 
 describe('/api/transcription/store', () => {
