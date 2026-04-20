@@ -544,6 +544,7 @@ export const ChatInput = ({
               progress={pendingConversationTranscription.progress}
               totalChunks={pendingConversationTranscription.totalChunks}
               jobId={pendingConversationTranscription.jobId}
+              isReconnecting={pendingConversationTranscription.isReconnecting}
               onCancel={() => setConversationTranscriptionPending(null)}
             />
           </div>
