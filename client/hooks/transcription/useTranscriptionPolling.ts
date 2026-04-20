@@ -464,6 +464,7 @@ export function useTranscriptionPolling(): void {
     updateTranscriptionProgress,
     conversations,
     updateConversation,
+    getAbortSignal,
   ]);
 
   /**
@@ -605,6 +606,7 @@ export function useTranscriptionPolling(): void {
     removePendingTranscription,
     setTextFieldValue,
     setFilePreviews,
+    getAbortSignal,
   ]);
 
   // Start/stop polling based on pending transcriptions (pre-submit or post-submit)
