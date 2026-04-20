@@ -164,8 +164,9 @@ export function createJob(
  * Updates job progress.
  *
  * @param jobId - Job identifier
- * @param completedChunks - Number of chunks completed
- * @param currentChunk - Index of chunk currently being processed
+ * @param completedChunks - Number of chunks completed so far
+ * @param currentChunk - 0-based index of the chunk currently being processed
+ *   (i.e., the chunk that has just been started, not yet completed)
  */
 export function updateProgress(
   jobId: string,
