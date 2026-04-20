@@ -604,6 +604,12 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
                   <span>{t('fileUpload.transcriptionFailed')}</span>
                 </div>
               )}
+              {filePreview.transcriptionStatus === 'cancelled' && (
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <IconX size={12} className="flex-shrink-0" />
+                  <span>{t('fileUpload.transcriptionCancelled')}</span>
+                </div>
+              )}
               {/* Extracted from video indicator */}
               {filePreview.extractedFromVideo && status === 'completed' && (
                 <div className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
