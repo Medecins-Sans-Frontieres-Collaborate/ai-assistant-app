@@ -104,4 +104,62 @@ describe('/api/transcription/status/[jobId]', () => {
     expect(response.status).toBe(400);
     expect(getJobForUser).not.toHaveBeenCalled();
   });
+
+  it('surfaces errorClass for failed jobs so clients can render recovery UX', async () => {
+    vi.mocked(getJobForUser).mockReturnValue({
+      jobId,
+      userId: ownerId,
+      status: 'failed',
+      totalChunks: 1,
+      completedChunks: 0,
+      currentChunk: 0,
+      error: 'Whisper rate limit',
+      errorClass: 'rate_limit',
+      chunkPaths: [],
+      filename: 'x.mp3',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    } as any);
+
+    const response = await GET(makeRequest(), {
+      params: Promise.resolve({ jobId }),
+    });
+    const body = await parseJsonResponse(response);
+    const data = body.data ?? body;
+
+    expect(response.status).toBe(200);
+    expect(data.status).toBe('Failed');
+    expect(data.errorClass).toBe('rate_limit');
+    expect(data.error).toBe('Whisper rate limit');
+    expect(data.cancelled).toBeUndefined();
+  });
+
+  it('flags cancelled jobs with cancelled:true and omits errorClass', async () => {
+    vi.mocked(getJobForUser).mockReturnValue({
+      jobId,
+      userId: ownerId,
+      status: 'cancelled',
+      totalChunks: 3,
+      completedChunks: 1,
+      currentChunk: 1,
+      // Even if a stale errorClass sits on the record, cancelled should win.
+      errorClass: 'auth',
+      chunkPaths: [],
+      filename: 'x.mp3',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    } as any);
+
+    const response = await GET(makeRequest(), {
+      params: Promise.resolve({ jobId }),
+    });
+    const body = await parseJsonResponse(response);
+    const data = body.data ?? body;
+
+    expect(response.status).toBe(200);
+    expect(data.status).toBe('Failed'); // wire-format compat
+    expect(data.cancelled).toBe(true);
+    expect(data.errorClass).toBeUndefined();
+    expect(data.error).toBe('Cancelled by user');
+  });
 });
