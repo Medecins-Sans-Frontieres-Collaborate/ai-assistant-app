@@ -355,6 +355,10 @@ export function useTranscriptionPolling(): void {
             `(failure ${consecutiveFailuresRef.current}/${MAX_CONSECUTIVE_FAILURES})`,
         );
 
+        if (consecutiveFailuresRef.current >= RECONNECTING_THRESHOLD) {
+          setTranscriptionReconnecting(true);
+        }
+
         // After N consecutive failures, assume the status channel is dead
         // and clear state. Treat as transient so the user sees "please try
         // again" rather than a generic permanent-failure message.
@@ -388,6 +392,7 @@ export function useTranscriptionPolling(): void {
 
       // Reset failure counter on successful response
       consecutiveFailuresRef.current = 0;
+      setTranscriptionReconnecting(false);
 
       const responseBody = await response.json();
       // Unwrap API response envelope (successResponse wraps data in { success, data })
@@ -551,6 +556,10 @@ export function useTranscriptionPolling(): void {
           `(failure ${consecutiveFailuresRef.current}/${MAX_CONSECUTIVE_FAILURES}):`,
         error,
       );
+
+      if (consecutiveFailuresRef.current >= RECONNECTING_THRESHOLD) {
+        setTranscriptionReconnecting(true);
+      }
 
       // After N consecutive failures, the status channel is effectively dead.
       // Treat as transient so the user sees "please try again" copy.
