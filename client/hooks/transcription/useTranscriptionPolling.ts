@@ -203,20 +203,24 @@ export function useTranscriptionPolling(): void {
       startedAt,
       conversationId,
       messageIndex,
+      totalChunks,
     } = pendingConversationTranscription;
 
-    // Check for timeout (10 minutes)
+    // Scale the client-side timeout by chunk count so long-but-healthy
+    // chunked jobs don't get killed before the server finishes.
+    const timeoutMs = computeTimeoutMs(totalChunks);
     const elapsedMs = Date.now() - startedAt;
-    if (elapsedMs > MAX_TRANSCRIPTION_TIME_MS) {
+    if (elapsedMs > timeoutMs) {
+      const timeoutMinutes = Math.round(timeoutMs / 60000);
       console.warn(
-        `[useTranscriptionPolling] Transcription timed out for ${filename}`,
+        `[useTranscriptionPolling] Transcription timed out for ${filename} (${timeoutMinutes}m)`,
       );
 
       // Update message with timeout error
       updateMessageWithTranscript(
         conversationId,
         messageIndex,
-        '[Transcription timed out after 10 minutes]',
+        `[Transcription timed out after ${timeoutMinutes} minutes]`,
         filename,
         jobId, // Pass jobId for reliable message matching
       );
