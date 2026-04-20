@@ -34,11 +34,23 @@ import { WhisperTranscriptionService } from './whisperTranscriptionService';
 
 import { v4 as uuidv4 } from 'uuid';
 
-/** Maximum number of chunks to process in parallel */
-const MAX_CONCURRENT_CHUNKS = 3;
+/**
+ * Number of chunks to process in parallel. Tunable at deploy time via
+ * TRANSCRIPTION_CONCURRENCY — higher if your Whisper deployment has more
+ * throughput, lower if you're hitting 429s.
+ */
+const MAX_CONCURRENT_CHUNKS = Math.max(
+  1,
+  Number(process.env.TRANSCRIPTION_CONCURRENCY) || 3,
+);
 
-/** Maximum retries for a single chunk */
-const MAX_CHUNK_RETRIES = 2;
+/**
+ * Retries per chunk. Tunable via TRANSCRIPTION_RETRIES.
+ */
+const MAX_CHUNK_RETRIES = Math.max(
+  0,
+  Number(process.env.TRANSCRIPTION_RETRIES) || 2,
+);
 
 /** Delay before retry after failure (ms) */
 const RETRY_DELAY_MS = 2000;
@@ -106,14 +118,21 @@ export class ChunkedTranscriptionService {
       );
     }
 
+    // Generate the jobId first so chunk files can live in a per-job
+    // subdir — makes cleanup atomic (rm-rf the subdir) and prevents parallel
+    // jobs from interleaving their chunk files.
+    const jobId = uuidv4();
+
     // Split the audio file into chunks
-    console.log(`[ChunkedTranscription] Splitting audio file: ${audioPath}`);
+    console.log(
+      `[ChunkedTranscription] Splitting audio file for job ${jobId}: ${audioPath}`,
+    );
     const splitResult = await splitAudioFile(audioPath, {
       targetChunkSizeBytes: 20 * 1024 * 1024, // 20MB chunks
       outputFormat: 'mp3',
+      jobId,
     });
 
-    const jobId = uuidv4();
     const { chunkPaths, chunkCount, totalDurationSecs, chunkDurationSecs } =
       splitResult;
 
@@ -357,12 +376,19 @@ export class ChunkedTranscriptionService {
       return transcripts[0] || '';
     }
 
-    // Multiple chunks - add markers for transparency
+    // Multiple chunks - add markers for transparency. If a chunk was silent
+    // and came back empty, emit a placeholder so users don't read an empty
+    // marker as "the system broke" — they can see that transcription ran
+    // and deliberately found no speech in that segment.
     return transcripts
       .map((text, i) => {
         const chunkNum = i + 1;
         const trimmedText = text.trim();
-        return `[Chunk ${chunkNum}/${totalChunks}]\n${trimmedText}`;
+        const body =
+          trimmedText.length > 0
+            ? trimmedText
+            : '(no speech detected in this segment)';
+        return `[Chunk ${chunkNum}/${totalChunks}]\n${body}`;
       })
       .join('\n\n');
   }
