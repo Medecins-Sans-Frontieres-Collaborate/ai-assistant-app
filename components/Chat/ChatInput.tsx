@@ -542,6 +542,7 @@ export const ChatInput = ({
               startedAt={pendingConversationTranscription.startedAt}
               filename={pendingConversationTranscription.filename}
               progress={pendingConversationTranscription.progress}
+              totalChunks={pendingConversationTranscription.totalChunks}
               jobId={pendingConversationTranscription.jobId}
               onCancel={() => setConversationTranscriptionPending(null)}
             />
