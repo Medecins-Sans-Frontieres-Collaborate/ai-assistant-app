@@ -421,8 +421,12 @@ function runCleanup(): void {
   const jobs = listJobs();
 
   for (const job of jobs) {
-    // Only clean up completed or failed jobs
-    if (job.status !== 'succeeded' && job.status !== 'failed') {
+    // Only clean up jobs in a terminal state.
+    if (
+      job.status !== 'succeeded' &&
+      job.status !== 'failed' &&
+      job.status !== 'cancelled'
+    ) {
       continue;
     }
 
