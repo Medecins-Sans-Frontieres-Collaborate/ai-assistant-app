@@ -204,4 +204,34 @@ describe('chunkedJobStore', () => {
       expect(() => cancelJob(missingId)).toThrow(/not found/);
     });
   });
+
+  describe('terminal state is preserved against late writes', () => {
+    // A background chunk that finishes after the user cancelled (or after
+    // failJob ran) must not clobber the terminal status. These tests pin
+    // that invariant so the cancel-race fix doesn't regress.
+    it('updateProgress is a no-op once a job is cancelled', () => {
+      createJob(jobId, ownerId, 3, [], 'file.mp3');
+      cancelJob(jobId);
+      updateProgress(jobId, 2, 1);
+      const job = getJob(jobId);
+      expect(job?.status).toBe('cancelled');
+      expect(job?.completedChunks).toBe(0);
+    });
+
+    it('updateProgress is a no-op once a job has failed', () => {
+      createJob(jobId, ownerId, 3, [], 'file.mp3');
+      failJob(jobId, 'boom', 'permanent');
+      updateProgress(jobId, 2, 1);
+      expect(getJob(jobId)?.status).toBe('failed');
+    });
+
+    it('completeJob is a no-op once a job is cancelled', () => {
+      createJob(jobId, ownerId, 2, [], 'file.mp3');
+      cancelJob(jobId);
+      completeJob(jobId, 'the finished transcript');
+      const job = getJob(jobId);
+      expect(job?.status).toBe('cancelled');
+      expect(job?.transcript).toBeUndefined();
+    });
+  });
 });
