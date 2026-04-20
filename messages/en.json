@@ -1620,6 +1620,7 @@
     "cancel": "Cancel transcription",
     "reconnecting": "Reconnecting…",
     "stillProcessing": "Still processing — this segment is taking longer than usual",
+    "chunkProgress": "Chunk {completed}/{total}",
     "processingFile": "Processing: {filename}",
     "elapsedTime": "Elapsed: {time}",
     "timeRemaining": "Remaining: {time}",
