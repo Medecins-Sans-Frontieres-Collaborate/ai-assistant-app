@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
-import { getJob } from '@/lib/services/transcription/chunkedJobStore';
+import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
 
 import {
   errorResponse,
@@ -29,7 +29,7 @@ export async function GET(
 ) {
   // Verify authentication
   const session = await auth();
-  if (!session) {
+  if (!session?.user?.id) {
     return unauthorizedResponse();
   }
 
@@ -39,8 +39,16 @@ export async function GET(
     return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
   }
 
-  // First, check if this is a chunked transcription job (in-memory)
-  const chunkedJob = getJob(jobId);
+  // First, check if this is a chunked transcription job owned by this user.
+  // getJobForUser returns undefined on ownership mismatch, which is
+  // indistinguishable from "not found" — prevents jobId enumeration.
+  let chunkedJob;
+  try {
+    chunkedJob = getJobForUser(jobId, session.user.id);
+  } catch {
+    // Invalid job ID format (not a UUID) — fall through to 404-equivalent
+    chunkedJob = undefined;
+  }
   if (chunkedJob) {
     // Map internal status to API status
     let status: 'NotStarted' | 'Running' | 'Succeeded' | 'Failed';
