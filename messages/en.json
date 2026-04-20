@@ -1616,6 +1616,7 @@
     "addInstructions": "Add instructions",
     "instructionsPlaceholder": "Context to improve accuracy (e.g., names, terms)",
     "inProgress": "Transcription in progress",
+    "cancel": "Cancel transcription",
     "processingFile": "Processing: {filename}",
     "elapsedTime": "Elapsed: {time}",
     "timeRemaining": "Remaining: {time}",
