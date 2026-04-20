@@ -141,8 +141,8 @@ export function TranscriptionProgressIndicator({
           type="button"
           onClick={handleCancel}
           disabled={isCancelling}
-          aria-label="Cancel transcription"
-          title="Cancel transcription"
+          aria-label={t('cancel')}
+          title={t('cancel')}
           className="absolute top-2 right-2 p-1 rounded-full text-gray-500 hover:text-gray-800 hover:bg-gray-200 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700 disabled:opacity-50"
         >
           <IconX size={16} />
