@@ -8,6 +8,8 @@ import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 
 import {
   ITranscriptionService,
+  TranscriptionError,
+  TranscriptionErrorClass,
   TranscriptionOptions,
 } from '@/types/transcription';
 
@@ -125,21 +127,39 @@ export class WhisperTranscriptionService implements ITranscriptionService {
 
       return transcription.text || '';
     } catch (error: unknown) {
-      // Handle rate limit errors with user-friendly message
       const err = error as { status?: number; code?: string; message?: string };
-      if (err.status === 429 || err.code === 'rate_limit_exceeded') {
+      const status = err.status;
+      const code = err.code;
+
+      let errorClass: TranscriptionErrorClass = 'unknown';
+      let message = err.message || 'Unknown error';
+
+      if (status === 429 || code === 'rate_limit_exceeded') {
+        errorClass = 'rate_limit';
         const retryAfterMatch = err.message?.match(
           /retry after (\d+) seconds?/i,
         );
         const waitTime = retryAfterMatch ? retryAfterMatch[1] : 'a few';
-
-        throw new Error(
-          `The audio transcription service is currently at capacity due to high usage. Please wait ${waitTime} seconds and try again. Note: This is a shared service, so capacity may be affected by other users.`,
-        );
+        message = `The audio transcription service is currently at capacity due to high usage. Please wait ${waitTime} seconds and try again.`;
+      } else if (status === 401 || status === 403) {
+        errorClass = 'auth';
+        message = `Audio transcription auth failed (${status}): ${err.message || 'Unauthorized'}`;
+      } else if (typeof status === 'number' && status >= 500) {
+        errorClass = 'transient';
+        message = `Audio transcription service error (${status}): ${err.message || 'Server error'}`;
+      } else if (typeof status === 'number' && status >= 400) {
+        errorClass = 'permanent';
+        message = `Audio transcription rejected (${status}): ${err.message || 'Bad request'}`;
+      } else if (!status) {
+        // No HTTP status typically means a network/connection error.
+        errorClass = 'transient';
       }
 
-      const errorMessage = err.message || 'Unknown error';
-      throw new Error(`Error transcribing segment: ${errorMessage}`);
+      const tagged = new Error(
+        `Error transcribing segment: ${message}`,
+      ) as TranscriptionError;
+      tagged.errorClass = errorClass;
+      throw tagged;
     }
   }
 }
