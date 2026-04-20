@@ -116,8 +116,20 @@ function getPollingInterval(elapsedMs: number): number {
  * It will automatically start polling when there are pending jobs and stop
  * when all jobs are complete or failed.
  */
-/** Maximum time to wait for transcription (10 minutes) */
-const MAX_TRANSCRIPTION_TIME_MS = 10 * 60 * 1000;
+/** Base client-side timeout; scales up for chunked jobs with many chunks. */
+const BASE_TRANSCRIPTION_TIMEOUT_MS = 10 * 60 * 1000; // 10 min floor
+const PER_CHUNK_TIMEOUT_MS = 2 * 60 * 1000; // 2 min per chunk
+const MAX_TRANSCRIPTION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 h ceiling
+
+function computeTimeoutMs(totalChunks?: number): number {
+  if (!totalChunks || totalChunks <= 1) {
+    return BASE_TRANSCRIPTION_TIMEOUT_MS;
+  }
+  return Math.min(
+    MAX_TRANSCRIPTION_TIMEOUT_MS,
+    Math.max(BASE_TRANSCRIPTION_TIMEOUT_MS, totalChunks * PER_CHUNK_TIMEOUT_MS),
+  );
+}
 
 export function useTranscriptionPolling(): void {
   // Pre-submit transcription tracking (chatInputStore)
@@ -171,7 +183,10 @@ export function useTranscriptionPolling(): void {
   }, []);
 
   /** Maximum consecutive failures before giving up and clearing state */
-  const MAX_CONSECUTIVE_FAILURES = 5;
+  // Raised from 5 to 15 so brief network blips don't tear down jobs that are
+  // still running server-side. At the medium polling cadence (5s), 15 failures
+  // ≈ 75 seconds of connectivity loss before we give up.
+  const MAX_CONSECUTIVE_FAILURES = 15;
 
   /**
    * Polls the status of a post-submit conversation transcription job.
