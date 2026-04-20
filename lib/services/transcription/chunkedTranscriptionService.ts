@@ -189,6 +189,16 @@ export class ChunkedTranscriptionService {
         batchStart < totalChunks;
         batchStart += MAX_CONCURRENT_CHUNKS
       ) {
+        // Cooperative cancel check between batches — if the user cancelled
+        // or the job was externally terminated, stop burning Whisper calls.
+        const current = getJob(jobId);
+        if (!current || current.status === 'cancelled') {
+          console.log(
+            `[ChunkedTranscription] Job ${jobId} cancelled; aborting remaining chunks`,
+          );
+          return;
+        }
+
         const batchEnd = Math.min(
           batchStart + MAX_CONCURRENT_CHUNKS,
           totalChunks,
