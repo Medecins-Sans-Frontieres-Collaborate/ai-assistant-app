@@ -10,6 +10,7 @@
 import { NextRequest } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
+import { getJobForUser } from '@/lib/services/transcription/chunkedJobStore';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -18,6 +19,7 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
+import { cleanupChunks } from '@/lib/utils/server/audio/audioSplitter';
 import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
@@ -93,6 +95,21 @@ export async function POST(request: NextRequest) {
 
   // Delete transcription job if jobId provided
   if (jobId) {
+    // If this jobId matches a known chunked job owned by the user, also
+    // remove the local chunk files so aborted/timed-out jobs don't leave
+    // their chunks behind in tmpdir.
+    const ownedChunkedJob = getJobForUser(jobId, session.user.id);
+    if (ownedChunkedJob && ownedChunkedJob.chunkPaths.length > 0) {
+      try {
+        await cleanupChunks(ownedChunkedJob.chunkPaths);
+      } catch (error) {
+        console.warn(
+          `[TranscriptionCleanup] Failed to remove chunks for job ${sanitizeForLog(jobId)}:`,
+          error,
+        );
+      }
+    }
+
     try {
       const batchService = new BatchTranscriptionService();
       if (batchService.isConfigured()) {
@@ -102,7 +119,13 @@ export async function POST(request: NextRequest) {
           `[TranscriptionCleanup] Deleted transcription job: ${sanitizeForLog(jobId)}`,
         );
       } else {
-        results.errors?.push('Batch transcription service not configured');
+        // For chunked jobs there's no remote batch service to call; treat
+        // chunk cleanup above as the successful path.
+        if (ownedChunkedJob) {
+          results.jobDeleted = true;
+        } else {
+          results.errors?.push('Batch transcription service not configured');
+        }
       }
     } catch (error) {
       const errorMessage =
