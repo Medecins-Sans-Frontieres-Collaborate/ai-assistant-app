@@ -680,7 +680,6 @@
     "voiceInput": "音声入力",
     "microphoneAccessDenied": "マイクへのアクセスが拒否されています。ブラウザの設定で有効にしてください。",
     "microphoneAccessError": "マイクアクセスエラー：{message}",
-    "voiceInputTranscribing": "音声を文字起こし中...",
     "ttsRightClickHint": "右クリックで音声オプションを表示",
     "microphoneNotDetected": "マイクが検出されませんでした",
     "microphoneBlocked": "マイクがブロックされています。ブラウザの設定を確認してください。",

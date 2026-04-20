@@ -626,7 +626,6 @@
     "voiceInput": "إدخال صوتي",
     "microphoneAccessDenied": "تم رفض الوصول إلى الميكروفون. يرجى تفعيله في إعدادات المتصفح.",
     "microphoneAccessError": "خطأ في الوصول إلى الميكروفون: {message}",
-    "voiceInputTranscribing": "جارٍ التحويل إلى نص...",
     "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت",
     "microphoneNotDetected": "لم يتم الكشف عن ميكروفون",
     "microphoneBlocked": "الميكروفون محجوب. يرجى التحقق من إعدادات المتصفح.",

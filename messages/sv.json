@@ -680,7 +680,6 @@
     "voiceInput": "Röstinmatning",
     "microphoneAccessDenied": "Mikrofonåtkomst nekad. Aktivera det i webbläsarens inställningar.",
     "microphoneAccessError": "Fel vid mikrofonåtkomst: {message}",
-    "voiceInputTranscribing": "Transkriberar...",
     "ttsRightClickHint": "Högerklicka för röstalternativ",
     "microphoneNotDetected": "Ingen mikrofon hittades",
     "microphoneBlocked": "Mikrofonen är blockerad. Kontrollera webbläsarens inställningar.",

@@ -681,7 +681,6 @@
     "voiceInput": "وائس ان پٹ",
     "microphoneAccessDenied": "مائیکروفون تک رسائی مسترد کر دی گئی ہے۔ براہ کرم اپنے براؤزر سیٹنگز میں اسے فعال کریں۔",
     "microphoneAccessError": "مائیکروفون تک رسائی میں خرابی: {message}",
-    "voiceInputTranscribing": "ٹرانسکرائب کیا جا رہا ہے...",
     "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں",
     "microphoneNotDetected": "مائیکروفون نہیں ملا",
     "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی ترتیبات چیک کریں۔",

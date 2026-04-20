@@ -655,7 +655,6 @@
     "voiceInput": "Äänisyöte",
     "microphoneAccessDenied": "Mikrofonin käyttö estetty. Ota käyttöön selaimen asetuksista.",
     "microphoneAccessError": "Virhe mikrofonin käytössä: {message}",
-    "voiceInputTranscribing": "Muunnetaan puhetta tekstiksi...",
     "ttsRightClickHint": "Napsauta hiiren oikealla valitaksesi äänivaihtoehdot",
     "microphoneNotDetected": "Mikrofonia ei havaittu",
     "microphoneBlocked": "Mikrofoni estetty. Tarkista selaimen asetukset.",

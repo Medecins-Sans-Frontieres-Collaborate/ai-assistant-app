@@ -597,7 +597,6 @@
     "voiceInput": "Голосовий ввід",
     "microphoneAccessDenied": "Доступ до мікрофона заборонено. Будь ласка, увімкніть його в налаштуваннях браузера.",
     "microphoneAccessError": "Помилка доступу до мікрофона: {message}",
-    "voiceInputTranscribing": "Транскрибування...",
     "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування",
     "microphoneNotDetected": "Мікрофон не виявлено",
     "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",

@@ -680,7 +680,6 @@
     "voiceInput": "Голосовой ввод",
     "microphoneAccessDenied": "Доступ к микрофону запрещён. Пожалуйста, включите его в настройках браузера.",
     "microphoneAccessError": "Ошибка доступа к микрофону: {message}",
-    "voiceInputTranscribing": "Распознавание речи...",
     "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций",
     "microphoneNotDetected": "Микрофон не обнаружен",
     "microphoneBlocked": "Микрофон заблокирован. Проверьте настройки браузера.",

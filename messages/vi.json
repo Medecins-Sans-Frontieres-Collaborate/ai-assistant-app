@@ -681,7 +681,6 @@
     "voiceInput": "Nhập bằng giọng nói",
     "microphoneAccessDenied": "Truy cập micro đã bị từ chối. Vui lòng cho phép trong cài đặt trình duyệt của bạn.",
     "microphoneAccessError": "Lỗi truy cập micro: {message}",
-    "voiceInputTranscribing": "Đang chuyển thành văn bản...",
     "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói",
     "microphoneNotDetected": "Không phát hiện thấy micro",
     "microphoneBlocked": "Micro bị chặn. Vui lòng kiểm tra cài đặt trình duyệt.",

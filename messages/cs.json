@@ -680,7 +680,6 @@
     "voiceInput": "Hlasový vstup",
     "microphoneAccessDenied": "Přístup k mikrofonu byl odepřen. Povolit jej můžete v nastavení vašeho prohlížeče.",
     "microphoneAccessError": "Chyba přístupu k mikrofonu: {message}",
-    "voiceInputTranscribing": "Přepisování...",
     "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu",
     "microphoneNotDetected": "Mikrofon nebyl detekován",
     "microphoneBlocked": "Mikrofon je zablokován. Zkontrolujte nastavení prohlížeče.",

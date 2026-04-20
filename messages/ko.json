@@ -680,7 +680,6 @@
     "voiceInput": "음성 입력",
     "microphoneAccessDenied": "마이크 접근이 거부되었습니다. 브라우저 설정에서 활성화해 주세요.",
     "microphoneAccessError": "마이크 접근 오류: {message}",
-    "voiceInputTranscribing": "음성 변환 중...",
     "ttsRightClickHint": "음성 옵션을 보려면 오른쪽 클릭하세요",
     "microphoneNotDetected": "마이크가 감지되지 않았습니다",
     "microphoneBlocked": "마이크가 차단되었습니다. 브라우저 설정을 확인하세요.",

@@ -626,7 +626,6 @@
     "voiceInput": "Spracheingabe",
     "microphoneAccessDenied": "Mikrofonzugriff verweigert. Bitte aktivieren Sie ihn in den Browsereinstellungen.",
     "microphoneAccessError": "Fehler beim Mikrofonzugriff: {message}",
-    "voiceInputTranscribing": "Transkription läuft...",
     "ttsRightClickHint": "Rechtsklick für Sprachauswahl",
     "microphoneNotDetected": "Kein Mikrofon erkannt",
     "microphoneBlocked": "Mikrofon blockiert. Bitte überprüfen Sie die Browsereinstellungen.",

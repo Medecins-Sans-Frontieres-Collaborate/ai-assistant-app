@@ -626,7 +626,6 @@
     "voiceInput": "Saisie vocale",
     "microphoneAccessDenied": "Accès au microphone refusé. Veuillez l’activer dans les paramètres de votre navigateur.",
     "microphoneAccessError": "Erreur d'accès au microphone : {message}",
-    "voiceInputTranscribing": "Transcription en cours...",
     "ttsRightClickHint": "Cliquez droit pour les options vocales",
     "microphoneNotDetected": "Aucun microphone détecté",
     "microphoneBlocked": "Microphone bloqué. Vérifiez les paramètres du navigateur.",

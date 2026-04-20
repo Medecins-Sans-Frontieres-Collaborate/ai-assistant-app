@@ -605,7 +605,6 @@
     "voiceInput": "ورودی صوتی",
     "microphoneAccessDenied": "دسترسی به میکروفون رد شده است. لطفاً این دسترسی را در تنظیمات مرورگر فعال کنید.",
     "microphoneAccessError": "خطا در دسترسی به میکروفون: {message}",
-    "voiceInputTranscribing": "در حال تبدیل گفتار به متن...",
     "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید",
     "microphoneNotDetected": "میکروفون شناسایی نشد",
     "microphoneBlocked": "دسترسی به میکروفون مسدود شده است. تنظیمات مرورگر را بررسی کنید.",

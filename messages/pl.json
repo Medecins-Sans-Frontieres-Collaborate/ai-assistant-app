@@ -677,7 +677,6 @@
     "voiceInput": "Wprowadzanie głosowe",
     "microphoneAccessDenied": "Dostęp do mikrofonu został zablokowany. Proszę włączyć go w ustawieniach przeglądarki.",
     "microphoneAccessError": "Błąd dostępu do mikrofonu: {message}",
-    "voiceInputTranscribing": "Transkrypcja...",
     "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu",
     "microphoneNotDetected": "Nie wykryto mikrofonu",
     "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",

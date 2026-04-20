@@ -623,7 +623,6 @@
     "voiceInput": "የድምፅ ግቤት",
     "microphoneAccessDenied": "የማይክሮፎን መዳረሻ ተከልክሏል። እባክዎ በአሳሽዎ ቅንብሮች ውስጥ ያንቁ።",
     "microphoneAccessError": "የማይክሮፎን መዳረሻ ስህተት፡ {message}",
-    "voiceInputTranscribing": "በመቅዳት ላይ...",
     "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ",
     "microphoneNotDetected": "ማያያዣ ማይክሮፎን አልተገኘም",
     "microphoneBlocked": "ማይክሮፎኑ ታግዷል። የብራውዘር ቅንብሮችዎን ያረጋግጡ።",

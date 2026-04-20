@@ -680,7 +680,6 @@
     "voiceInput": "वॉइस इनपुट",
     "microphoneAccessDenied": "माइक्रोफ़ोन एक्सेस अस्वीकृत है। कृपया अपने ब्राउज़र सेटिंग्स में इसे सक्षम करें।",
     "microphoneAccessError": "माइक्रोफ़ोन एक्सेस त्रुटि: {message}",
-    "voiceInputTranscribing": "प्रतिलेखन किया जा रहा है...",
     "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें",
     "microphoneNotDetected": "माइक्रोफोन नहीं मिला",
     "microphoneBlocked": "माइक्रोफोन ब्लॉक किया गया है। ब्राउज़र सेटिंग जाँचें।",

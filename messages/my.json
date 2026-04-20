@@ -655,7 +655,6 @@
     "voiceInput": "အသံဖြင့်ထည့်သွင်းမှု",
     "microphoneAccessDenied": "မိုက်ခရိုဖုန်း လက်ခံခွင့် ပျောက်နေပါသည်။ သင်၏ browser settings တွင် ဖွင့်ပေးပါ။",
     "microphoneAccessError": "မိုက်ခရိုဖုန်း လက်ခံခွင့်အမှား: {message}",
-    "voiceInputTranscribing": "စာသားသို့ ပြောင်းလဲနေသည်...",
     "ttsRightClickHint": "အသံရွေးချယ်ရန် ညာဘက်နှိပ်ပါ",
     "microphoneNotDetected": "မိုက်ခရိုဖုန်းမတွေ့ရှိပါ",
     "microphoneBlocked": "မိုက်ခရိုဖုန်းကို ပိတ်ထားပါသည်။ browser ဆက်တင်များကို စစ်ဆေးပါ။",

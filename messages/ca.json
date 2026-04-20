@@ -655,7 +655,6 @@
     "voiceInput": "Entrada de veu",
     "microphoneAccessDenied": "L'accés al micròfon està denegat. Activeu-lo a la configuració del vostre navegador.",
     "microphoneAccessError": "Error d'accés al micròfon: {message}",
-    "voiceInputTranscribing": "Transcripció en curs...",
     "ttsRightClickHint": "Clic dret per opcions de veu",
     "microphoneNotDetected": "No s'ha detectat cap micròfon",
     "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",

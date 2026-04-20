@@ -626,7 +626,6 @@
     "voiceInput": "Entrada de voz",
     "microphoneAccessDenied": "Acesso ao microfone negado. Ative-o nas configurações do seu navegador.",
     "microphoneAccessError": "Erro de acesso ao microfone: {message}",
-    "voiceInputTranscribing": "Transcrevendo...",
     "ttsRightClickHint": "Clique com o botão direito para opções de voz",
     "microphoneNotDetected": "Nenhum microfone detectado",
     "microphoneBlocked": "Microfone bloqueado. Verifique as configurações do navegador.",

@@ -678,7 +678,6 @@
     "voiceInput": "Introducere vocală",
     "microphoneAccessDenied": "Accesul la microfon este refuzat. Vă rugăm să îl activați în setările browserului.",
     "microphoneAccessError": "Eroare de acces la microfon: {message}",
-    "voiceInputTranscribing": "Transcriere în curs...",
     "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce",
     "microphoneNotDetected": "Microfon nedetectat",
     "microphoneBlocked": "Microfon blocat. Verificați setările browserului.",

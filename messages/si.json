@@ -647,7 +647,6 @@
     "voiceInput": "හඬ ආදානය",
     "microphoneAccessDenied": "මයික්රොෆෝන් ප්‍රවේශය ප්‍රතික්ෂේප වී ඇත. කරුණාකර ඔබේ බ්‍රව්සරයේ සැකසුම්වලදී එය සක්‍රිය කරන්න.",
     "microphoneAccessError": "මයික්රොෆෝන් ප්‍රවේශ දෝෂය: {message}",
-    "voiceInputTranscribing": "පරිවර්තනය වෙමින්...",
     "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න",
     "microphoneNotDetected": "මයික්‍රෝෆෝනයක් හඳුනාගන්නා නොහැක",
     "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර වී ඇත. බ්‍රව්සරයේ සැකසුම් පරීක්ෂා කරන්න.",

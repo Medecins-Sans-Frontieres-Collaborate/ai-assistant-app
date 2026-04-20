@@ -711,7 +711,6 @@
     "voiceInput": "语音输入",
     "microphoneAccessDenied": "麦克风访问被拒绝，请在浏览器设置中启用。",
     "microphoneAccessError": "麦克风访问错误：{message}",
-    "voiceInputTranscribing": "正在转录…",
     "ttsRightClickHint": "右键点击以选择语音选项",
     "microphoneNotDetected": "未检测到麦克风",
     "microphoneBlocked": "麦克风被阻止。请检查浏览器设置。",

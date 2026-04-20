@@ -647,7 +647,6 @@
     "voiceInput": "Input Suara",
     "microphoneAccessDenied": "Akses mikrofon ditolak. Silakan aktifkan di pengaturan browser Anda.",
     "microphoneAccessError": "Kesalahan akses mikrofon: {message}",
-    "voiceInputTranscribing": "Sedang mentranskripsikan...",
     "ttsRightClickHint": "Klik kanan untuk opsi suara",
     "microphoneNotDetected": "Mikrofon tidak terdeteksi",
     "microphoneBlocked": "Mikrofon diblokir. Periksa pengaturan browser Anda.",

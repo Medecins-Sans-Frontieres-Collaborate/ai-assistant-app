@@ -645,7 +645,6 @@
     "voiceInput": "Spraakinvoer",
     "microphoneAccessDenied": "Microfoontoegang is geweigerd. Schakel deze in via uw browserinstellingen.",
     "microphoneAccessError": "Microfoontoegangsprobleem: {message}",
-    "voiceInputTranscribing": "Transcriberen...",
     "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties",
     "microphoneNotDetected": "Geen microfoon gedetecteerd",
     "microphoneBlocked": "Microfoon geblokkeerd. Controleer de browserinstellingen.",

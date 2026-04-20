@@ -655,7 +655,6 @@
     "voiceInput": "קלט קולי",
     "microphoneAccessDenied": "הגישה למיקרופון נחסמה. אנא אפשר/י זאת בהגדרות הדפדפן.",
     "microphoneAccessError": "שגיאת גישה למיקרופון: {message}",
-    "voiceInputTranscribing": "מתמלל...",
     "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול",
     "microphoneNotDetected": "לא זוהה מיקרופון",
     "microphoneBlocked": "המיקרופון חסום. יש לבדוק את הגדרות הדפדפן.",

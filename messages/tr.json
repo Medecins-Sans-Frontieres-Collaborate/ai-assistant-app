@@ -680,7 +680,6 @@
     "voiceInput": "Sesli Giriş",
     "microphoneAccessDenied": "Mikrofona erişim reddedildi. Lütfen tarayıcı ayarlarından etkinleştirin.",
     "microphoneAccessError": "Mikrofona erişim hatası: {message}",
-    "voiceInputTranscribing": "Çevriliyor...",
     "ttsRightClickHint": "Ses seçenekleri için sağ tıklayın",
     "microphoneNotDetected": "Mikrofon algılanmadı",
     "microphoneBlocked": "Mikrofon engellendi. Tarayıcı ayarlarını kontrol edin.",

@@ -668,7 +668,6 @@
     "startVoiceRecording": "Start voice recording",
     "voiceInputStarting": "Preparing microphone...",
     "voiceInputRecording": "Recording...",
-    "voiceInputTranscribing": "Transcribing...",
     "voiceInputTapToStop": "Tap to stop",
     "stopRecording": "Stop recording",
     "voiceInput": "Voice Input",

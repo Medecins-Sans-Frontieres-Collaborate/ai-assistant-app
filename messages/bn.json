@@ -626,7 +626,6 @@
     "voiceInput": "ভয়েস ইনপুট",
     "microphoneAccessDenied": "মাইক্রোফোন ব্যবহারের অনুমতি নেই। দয়া করে ব্রাউজারের সেটিংসে এটি সক্রিয় করুন।",
     "microphoneAccessError": "মাইক্রোফোন ব্যবহারে ত্রুটি: {message}",
-    "voiceInputTranscribing": "ট্র্যান্সক্রাইব করা হচ্ছে...",
     "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন",
     "microphoneNotDetected": "কোনো মাইক্রোফোন শনাক্ত করা যায়নি",
     "microphoneBlocked": "মাইক্রোফোন বন্ধ আছে। ব্রাউজারের সেটিংস চেক করুন।",

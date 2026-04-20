@@ -680,7 +680,6 @@
     "voiceInput": "Kuingiza Sauti",
     "microphoneAccessDenied": "Ufikiaji wa kipaza sauti umekataliwa. Tafadhali wezesha kwenye mipangilio ya kivinjari chako.",
     "microphoneAccessError": "Hitilafu ya ufikiaji wa kipaza sauti: {message}",
-    "voiceInputTranscribing": "Inatambua...",
     "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti",
     "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
     "microphoneBlocked": "Kipaza sauti kimezuiwa. Angalia mipangilio ya kivinjari.",
