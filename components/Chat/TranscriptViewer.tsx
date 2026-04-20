@@ -44,6 +44,9 @@ const POLL_INTERVAL_MS = 3000;
 /** Maximum polling attempts (20 minutes at 3s intervals = 400 attempts) */
 const MAX_POLL_ATTEMPTS = 400;
 
+/** Stop retrying after this many 404s — indicates expired/never-written blob. */
+const MAX_NOT_FOUND_ATTEMPTS = 5;
+
 interface BlobReference {
   filename: string;
   jobId: string;
@@ -119,6 +122,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
   const [loadedTranscript, setLoadedTranscript] = useState<string | null>(null);
   const [blobError, setBlobError] = useState<string | null>(null);
   const [pollCount, setPollCount] = useState(0);
+  const [notFoundCount, setNotFoundCount] = useState(0);
   const isMountedRef = useRef(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -174,11 +178,16 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
       }
 
       if (response.status === 404) {
-        // Not found - could be still uploading
+        // Not found - could be still uploading initially, but sustained 404s
+        // mean the blob is either expired or was never written. Count 404s
+        // separately so we can give up quickly without burning 20 minutes.
+        if (isMountedRef.current) {
+          setNotFoundCount((c) => c + 1);
+        }
         console.log(
           `[TranscriptViewer] Blob not found for job ${blobRef.jobId}, will retry`,
         );
-        return false; // Retry
+        return false; // Retry (bounded below by MAX_NOT_FOUND_ATTEMPTS)
       }
 
       // Other error - stop polling
@@ -207,6 +216,14 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
     const poll = async () => {
       const success = await fetchTranscript();
 
+      // If sustained 404s, give up quickly with a specific message.
+      if (!success && notFoundCount >= MAX_NOT_FOUND_ATTEMPTS) {
+        if (isMountedRef.current) {
+          setBlobError(t('transcription.expiredOrDeleted'));
+        }
+        return;
+      }
+
       if (!success && isMountedRef.current && pollCount < MAX_POLL_ATTEMPTS) {
         // Schedule next poll
         timeoutRef.current = setTimeout(() => {
@@ -231,7 +248,7 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
         timeoutRef.current = null;
       }
     };
-  }, [shouldPoll, fetchTranscript, pollCount, t]);
+  }, [shouldPoll, fetchTranscript, pollCount, notFoundCount, t]);
 
   // Determine currently displayed transcript
   // For blob references, use loadedTranscript; otherwise use transcript prop directly
