@@ -258,6 +258,10 @@ async function calculateSegmentDuration(
 
   const duration = await getAudioDuration(inputPath);
 
+  if (!Number.isFinite(duration) || duration <= 0) {
+    throw new Error('Audio has unusable duration');
+  }
+
   // Calculate bytes per second
   const bytesPerSecond = fileSize / duration;
 
@@ -300,6 +304,10 @@ export async function splitAudioFile(
   const stats = await stat(inputPath);
   const fileSize = stats.size;
   const totalDuration = await getAudioDuration(inputPath);
+
+  if (!Number.isFinite(totalDuration) || totalDuration <= 0) {
+    throw new Error('Audio has unusable duration');
+  }
 
   // If file is small enough, no splitting needed
   if (fileSize <= targetChunkSizeBytes) {
