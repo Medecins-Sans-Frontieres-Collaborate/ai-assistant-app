@@ -317,7 +317,7 @@ export class ChunkedTranscriptionService {
   ): Promise<string> {
     let lastError: Error = new Error('Unknown chunk transcription error');
 
-    for (let attempt = 1; attempt <= MAX_CHUNK_RETRIES + 1; attempt++) {
+    for (let attempt = 1; attempt <= MAX_CHUNK_ATTEMPTS; attempt++) {
       try {
         const transcript = await this.whisperService.transcribe(
           chunkPath,
@@ -335,7 +335,7 @@ export class ChunkedTranscriptionService {
           throw lastError;
         }
 
-        if (attempt > MAX_CHUNK_RETRIES) break;
+        if (attempt >= MAX_CHUNK_ATTEMPTS) break;
 
         if (errorClass === 'auth') {
           // Token likely expired during a long job — rebuild the client.
@@ -352,7 +352,7 @@ export class ChunkedTranscriptionService {
 
         console.warn(
           `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed (${errorClass}, ` +
-            `attempt ${attempt}/${MAX_CHUNK_RETRIES + 1}), retrying in ${waitTime}ms...`,
+            `attempt ${attempt}/${MAX_CHUNK_ATTEMPTS}), retrying in ${waitTime}ms...`,
         );
 
         await delay(waitTime);
@@ -360,7 +360,7 @@ export class ChunkedTranscriptionService {
     }
 
     const err = new Error(
-      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_RETRIES + 1} attempts: ${lastError.message}`,
+      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_ATTEMPTS} attempts: ${lastError.message}`,
     ) as TranscriptionError;
     err.errorClass = (lastError as TranscriptionError).errorClass ?? 'unknown';
     throw err;
