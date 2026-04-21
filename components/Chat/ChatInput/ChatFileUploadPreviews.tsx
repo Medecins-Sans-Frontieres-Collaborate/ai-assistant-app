@@ -78,6 +78,19 @@ interface ChatFileUploadPreviewProps {
 /**
  * Helper function to check if a file is a code file based on extension
  */
+/**
+ * Format a byte count into a short human-readable string (e.g., "3.2 MB").
+ * Unit suffixes are SI-style and intentionally unlocalized — they are
+ * recognized across languages and keep this indicator zero-i18n.
+ */
+const formatBytes = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024)
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+};
+
 const isCodeFile = (extension: string): boolean => {
   const codeExtensions = [
     'py',
