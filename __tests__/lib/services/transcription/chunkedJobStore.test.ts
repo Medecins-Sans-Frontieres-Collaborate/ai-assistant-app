@@ -192,11 +192,29 @@ describe('chunkedJobStore', () => {
       expect(getJob(jobId)?.error).toMatch(/cancelled/i);
     });
 
-    it('is a no-op on terminal jobs', () => {
+    it('is a no-op on a succeeded job', () => {
       createJob(jobId, ownerId, 1, [], 'file.mp3');
       completeJob(jobId, 'hi');
       cancelJob(jobId);
       expect(getJob(jobId)?.status).toBe('succeeded');
+    });
+
+    it('is a no-op on an already-cancelled job', () => {
+      createJob(jobId, ownerId, 2, [], 'file.mp3');
+      cancelJob(jobId);
+      const firstUpdatedAt = getJob(jobId)?.updatedAt;
+      cancelJob(jobId);
+      expect(getJob(jobId)?.status).toBe('cancelled');
+      // updatedAt stays pinned to the original cancel write — no re-save.
+      expect(getJob(jobId)?.updatedAt).toBe(firstUpdatedAt);
+    });
+
+    it('is a no-op on a failed job', () => {
+      createJob(jobId, ownerId, 2, [], 'file.mp3');
+      failJob(jobId, 'boom', 'permanent');
+      cancelJob(jobId);
+      expect(getJob(jobId)?.status).toBe('failed');
+      expect(getJob(jobId)?.error).toBe('boom');
     });
 
     it('throws when the job does not exist', () => {
@@ -232,6 +250,26 @@ describe('chunkedJobStore', () => {
       const job = getJob(jobId);
       expect(job?.status).toBe('cancelled');
       expect(job?.transcript).toBeUndefined();
+    });
+
+    it('failJob is a no-op once a job is cancelled', () => {
+      createJob(jobId, ownerId, 2, [], 'file.mp3');
+      cancelJob(jobId);
+      failJob(jobId, 'late chunk error', 'transient');
+      const job = getJob(jobId);
+      expect(job?.status).toBe('cancelled');
+      // The cancel message is preserved; the late-failure error never lands.
+      expect(job?.error).toMatch(/cancelled/i);
+      expect(job?.errorClass).toBeUndefined();
+    });
+
+    it('failJob is a no-op once a job has succeeded', () => {
+      createJob(jobId, ownerId, 1, [], 'file.mp3');
+      completeJob(jobId, 'transcript');
+      failJob(jobId, 'late error', 'transient');
+      const job = getJob(jobId);
+      expect(job?.status).toBe('succeeded');
+      expect(job?.transcript).toBe('transcript');
     });
   });
 });
