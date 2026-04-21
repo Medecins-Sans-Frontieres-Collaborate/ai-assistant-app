@@ -119,30 +119,28 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
-    // Require a parseable Content-Length so we can reject oversized uploads
-    // before buffering. This doesn't defend against a lying Content-Length
-    // (the authoritative check against actual buffer length below still
-    // catches that), but it closes the honest-client DoS window and
-    // provides a fast 413 for the common case.
+    // Early rejection: check Content-Length before consuming the request body.
+    // Advisory only — a lying Content-Length is caught by the authoritative
+    // buffer-length check further down, and Next.js buffers the body in
+    // `formData()` regardless.
     //
-    // TODO: stream the request body through a size-bounded transform to
-    // reject spoofed Content-Length before `formData()` buffers the whole
-    // body. Tracked as a follow-up to this audit fix.
+    // TODO(file-upload-stream): pipe `request.body` through a size-bounded
+    // transform so an honest-size-header-but-oversized-body request never
+    // reaches `formData()`. Blocked on reworking the multipart path to
+    // accept a pre-bounded buffer.
     const contentLength = request.headers.get('content-length');
-    if (!contentLength) {
-      return errorResponse('Content-Length header is required', 411);
-    }
-    const declaredSize = parseInt(contentLength, 10);
-    if (!Number.isInteger(declaredSize) || declaredSize < 0) {
-      return badRequestResponse('Invalid Content-Length header');
-    }
-    const earlyCheck = validateFileSizeRaw(
-      filename,
-      declaredSize,
-      mimeType ?? undefined,
-    );
-    if (!earlyCheck.valid) {
-      return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
+    if (contentLength) {
+      const declaredSize = parseInt(contentLength, 10);
+      if (Number.isInteger(declaredSize) && declaredSize >= 0) {
+        const earlyCheck = validateFileSizeRaw(
+          filename,
+          declaredSize,
+          mimeType ?? undefined,
+        );
+        if (!earlyCheck.valid) {
+          return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
+        }
+      }
     }
 
     // Check Content-Type to determine upload format
