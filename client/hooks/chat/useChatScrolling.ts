@@ -109,42 +109,56 @@ export function useChatScrolling({
     const container = chatContainerRef.current;
     if (!container) return;
 
-    // RAF loop: snap to bottom each frame while streaming
+    // RAF loop: snap to bottom each frame while streaming, unless the user
+    // has taken control. The loop keeps rearming through the whole streaming
+    // phase so auto-scroll can resume when the user returns to the bottom.
     const tick = () => {
-      if (phaseRef.current !== 'streaming' || !shouldAutoScrollRef.current) {
-        return;
-      }
+      if (phaseRef.current !== 'streaming') return;
       const c = chatContainerRef.current;
-      if (c) {
+      if (c && shouldAutoScrollRef.current) {
         c.scrollTop = c.scrollHeight - c.clientHeight;
       }
       rafIdRef.current = requestAnimationFrame(tick);
     };
     rafIdRef.current = requestAnimationFrame(tick);
 
-    // Manual scroll detection
-    const handleUserScroll = () => {
-      const c = chatContainerRef.current;
-      if (!c) return;
-      const distanceFromBottom = c.scrollHeight - c.scrollTop - c.clientHeight;
-
-      if (distanceFromBottom > UI_CONSTANTS.SCROLL.AUTO_SCROLL_THRESHOLD) {
+    // Any user-initiated interaction = intent to take control. We can't
+    // consult `scrollTop` here because `wheel` / `touchmove` fire before the
+    // browser applies the scroll — at this moment scrollTop is still the
+    // bottom that RAF just snapped it to, so a position-based check reports
+    // "at bottom" and the next RAF tick undoes the user's scroll. Trust the
+    // interaction itself instead.
+    const pauseAutoScroll = () => {
+      if (shouldAutoScrollRef.current) {
         shouldAutoScrollRef.current = false;
         setShowScrollDownButton(true);
-      } else {
-        shouldAutoScrollRef.current = true;
       }
     };
 
-    container.addEventListener('wheel', handleUserScroll, { passive: true });
-    container.addEventListener('touchmove', handleUserScroll, {
-      passive: true,
-    });
+    // Resume auto-scroll when the user has scrolled back near the bottom.
+    // Gated on `shouldAutoScrollRef.current === false` so the scroll events
+    // RAF produces on its own writes don't create a feedback loop that
+    // instantly re-enables the pin the user just disabled.
+    const resumeIfAtBottom = () => {
+      if (shouldAutoScrollRef.current) return;
+      const c = chatContainerRef.current;
+      if (!c) return;
+      const distanceFromBottom = c.scrollHeight - c.scrollTop - c.clientHeight;
+      if (distanceFromBottom < UI_CONSTANTS.SCROLL.BOTTOM_THRESHOLD) {
+        shouldAutoScrollRef.current = true;
+        setShowScrollDownButton(false);
+      }
+    };
+
+    container.addEventListener('wheel', pauseAutoScroll, { passive: true });
+    container.addEventListener('touchmove', pauseAutoScroll, { passive: true });
+    container.addEventListener('scroll', resumeIfAtBottom, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafIdRef.current);
-      container.removeEventListener('wheel', handleUserScroll);
-      container.removeEventListener('touchmove', handleUserScroll);
+      container.removeEventListener('wheel', pauseAutoScroll);
+      container.removeEventListener('touchmove', pauseAutoScroll);
+      container.removeEventListener('scroll', resumeIfAtBottom);
     };
   }, [isActive]);
 
