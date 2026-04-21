@@ -76,9 +76,6 @@ interface ChatFileUploadPreviewProps {
 }
 
 /**
- * Helper function to check if a file is a code file based on extension
- */
-/**
  * Format a byte count into a short human-readable string (e.g., "3.2 MB").
  * Unit suffixes are SI-style and intentionally unlocalized — they are
  * recognized across languages and keep this indicator zero-i18n.
