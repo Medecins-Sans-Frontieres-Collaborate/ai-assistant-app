@@ -128,6 +128,15 @@ export function useChatScrolling({
     // bottom that RAF just snapped it to, so a position-based check reports
     // "at bottom" and the next RAF tick undoes the user's scroll. Trust the
     // interaction itself instead.
+    //
+    // Resume is handled explicitly by the scroll-down button
+    // (`handleScrollDown`) and, in-flight specifically, is a cheap single
+    // click. We deliberately do NOT auto-resume on `scroll` event when the
+    // user drifts back near the bottom — a small wheel tick (especially on
+    // a trackpad) would leave them just within the bottom threshold, the
+    // scroll handler would re-enable the pin, and the next RAF frame would
+    // snap them to the actual bottom. The user would see their small scroll
+    // undone. Explicit resume is friendlier.
     const pauseAutoScroll = () => {
       if (shouldAutoScrollRef.current) {
         shouldAutoScrollRef.current = false;
@@ -135,30 +144,42 @@ export function useChatScrolling({
       }
     };
 
-    // Resume auto-scroll when the user has scrolled back near the bottom.
-    // Gated on `shouldAutoScrollRef.current === false` so the scroll events
-    // RAF produces on its own writes don't create a feedback loop that
-    // instantly re-enables the pin the user just disabled.
-    const resumeIfAtBottom = () => {
-      if (shouldAutoScrollRef.current) return;
-      const c = chatContainerRef.current;
-      if (!c) return;
-      const distanceFromBottom = c.scrollHeight - c.scrollTop - c.clientHeight;
-      if (distanceFromBottom < UI_CONSTANTS.SCROLL.BOTTOM_THRESHOLD) {
-        shouldAutoScrollRef.current = true;
-        setShowScrollDownButton(false);
-      }
-    };
-
     container.addEventListener('wheel', pauseAutoScroll, { passive: true });
     container.addEventListener('touchmove', pauseAutoScroll, { passive: true });
-    container.addEventListener('scroll', resumeIfAtBottom, { passive: true });
+    // Keyboard scrolling (PageUp/PageDown/arrows/Home/End/Space) on the
+    // container. Listener is on `window` because the scroll container
+    // typically isn't focused — the text input is.
+    const handleKeyScroll = (e: KeyboardEvent) => {
+      if (
+        e.key === 'ArrowUp' ||
+        e.key === 'ArrowDown' ||
+        e.key === 'PageUp' ||
+        e.key === 'PageDown' ||
+        e.key === 'Home' ||
+        e.key === 'End'
+      ) {
+        // Only pause if the event target isn't an input/textarea — those
+        // have their own cursor movement semantics and aren't scrolling
+        // the message list.
+        const target = e.target as HTMLElement | null;
+        const tag = target?.tagName;
+        if (
+          tag === 'INPUT' ||
+          tag === 'TEXTAREA' ||
+          target?.isContentEditable
+        ) {
+          return;
+        }
+        pauseAutoScroll();
+      }
+    };
+    window.addEventListener('keydown', handleKeyScroll);
 
     return () => {
       cancelAnimationFrame(rafIdRef.current);
       container.removeEventListener('wheel', pauseAutoScroll);
       container.removeEventListener('touchmove', pauseAutoScroll);
-      container.removeEventListener('scroll', resumeIfAtBottom);
+      window.removeEventListener('keydown', handleKeyScroll);
     };
   }, [isActive]);
 
