@@ -30,8 +30,12 @@ import { promisify } from 'util';
 
 const unlinkAsync = promisify(fs.unlink);
 
-/** Blob IDs are expected to be opaque tokens — reject anything path-shaped. */
-const BLOB_ID_REGEX = /^[A-Za-z0-9._-]+$/;
+/**
+ * Blob IDs are expected to be opaque tokens — reject anything path-shaped.
+ * Must start with an alphanumeric (so `..`, `.env`, `-rf` etc. are rejected
+ * as whole IDs) and is bounded to avoid pathological-length inputs.
+ */
+const BLOB_ID_REGEX = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
 
 export async function GET(
   request: NextRequest,
