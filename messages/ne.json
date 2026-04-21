@@ -739,7 +739,8 @@
       "filesCount": "{count} फाइल(हरू)",
       "audioVideo": "अडियो/भिडियो",
       "empty": "खाली"
-    }
+    },
+    "mediaRecorderNotSupported": "यो ब्राउजरमा अडियो रेकर्डिङ समर्थन गरिएको छैन।"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "अपलोड गरिएका फाइलहरूलाई स्वतः पिन गर्नुहोस्",
       "autoPinUploadsDescription": "अपलोड गर्दा फाइलहरू आफूलाई हट्न नदिनको लागि स्वचालित रूपमा पिन गरिन्छन्"
-    }
+    },
+    "Quarantined Data": "क्वारेन्टाइन गरिएको डेटा",
+    "quarantineDataDescription": "तपाईंसँग {count} क्वारेन्टाइन गरिएको {count, plural, one {आइटम} other {आइटमहरू}} ({size}) छ, जसमा डेटा समस्या भएकाले सामान्य रूपमा लोड गर्न सकिएन।",
+    "Review & Recover": "समिक्षा र पुनर्स्थापना",
+    "Export Quarantined Data": "क्वारेन्टाइन डेटा निर्यात गर्नुहोस्",
+    "Delete Quarantined Data": "क्वारेन्टाइन डेटा मेटाउनुहोस्",
+    "deleteQuarantineConfirm": "के तपाईं सबै क्वारेन्टाइन डेटा मेटाउन चाहनुहुन्छ? यो कार्य फर्काउन सकिँदैन।",
+    "quarantineDeleteSuccess": "सबै क्वारेन्टाइन डेटा सफलतापूर्वक मेटाइयो।"
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "सम्पादकमा खोल्नुहोस्",
     "failedToUpload": "अपलोड गर्न असफल",
     "attachment": "संलग्नक",
-    "attachments": "संलग्नकहरू"
+    "attachments": "संलग्नकहरू",
+    "transcriptionCancelled": "रद्द गरियो"
   },
   "userMessage": {
     "open": "खोल्नुहोस्",
@@ -1670,7 +1679,20 @@
       "urdu": "उर्दू",
       "vietnamese": "भियतनामी",
       "welsh": "वेल्श"
-    }
+    },
+    "cancel": "ट्रान्सक्रिप्सन रद्द गर्नुहोस्",
+    "reconnecting": "फेरि जडान गर्दै…",
+    "stillProcessing": "अझै प्रक्रिया हुँदैछ — यो खण्ड सामान्यभन्दा बढी समय लिइरहेको छ",
+    "chunkProgress": "चंक {completed}/{total}",
+    "transientToast": "ट्रान्सक्रिप्सन असफल: {filename} — कृपया फेरि प्रयास गर्नुहोस्",
+    "authFailedToast": "ट्रान्सक्रिप्सन असफल: {filename} — कृपया फेरि साइन इन गर्नुहोस्",
+    "rateLimitedToast": "ट्रान्सक्रिप्सन रोकियो: {filename} — सेवा व्यस्त छ, छिट्टै पुन: प्रयास गर्नुहोस्",
+    "permanentToast": "ट्रान्सक्रिप्सन असफल: {filename}{error}",
+    "cancelledToast": "ट्रान्सक्रिप्सन रद्द गरियो: {filename}",
+    "cancelledBody": "प्रयोगकर्ताद्वारा रद्द गरियो",
+    "transientBody": "कृपया फेरि प्रयास गर्नुहोस्",
+    "authFailedBody": "कृपया फेरि साइन इन गर्नुहोस्",
+    "rateLimitedBody": "सेवा हाल व्यस्त छ, छिट्टै पुन: प्रयास गर्नुहोस्"
   },
   "documentTranslation": {
     "title": "कागजात अनुवाद",

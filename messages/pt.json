@@ -627,7 +627,8 @@
     "microphoneAccessDenied": "Acesso ao microfone negado. Ative-o nas configurações do seu navegador.",
     "microphoneAccessError": "Erro de acesso ao microfone: {message}",
     "voiceInputTranscribing": "Transcrevendo...",
-    "ttsRightClickHint": "Clique com o botão direito para opções de voz"
+    "ttsRightClickHint": "Clique com o botão direito para opções de voz",
+    "mediaRecorderNotSupported": "A gravação de áudio não é suportada neste navegador."
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixar automaticamente arquivos enviados",
       "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos"
-    }
+    },
+    "Quarantined Data": "Dados em quarentena",
+    "quarantineDataDescription": "Você tem {count} {count, plural, one {item} other {itens}} em quarentena ({size}) com problemas de dados que não puderam ser carregados normalmente.",
+    "Review & Recover": "Revisar e Recuperar",
+    "Export Quarantined Data": "Exportar dados em quarentena",
+    "Delete Quarantined Data": "Excluir dados em quarentena",
+    "deleteQuarantineConfirm": "Tem certeza de que deseja excluir todos os dados em quarentena? Esta ação não pode ser desfeita.",
+    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso."
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -1430,7 +1438,8 @@
     "openInEditor": "Abrir no Editor",
     "failedToUpload": "Falha ao fazer upload",
     "attachment": "anexo",
-    "attachments": "anexos"
+    "attachments": "anexos",
+    "transcriptionCancelled": "Cancelado"
   },
   "transcript": {
     "originalTranscript": "Transcrição Original",
@@ -1604,7 +1613,20 @@
     "fetchError": "Falha ao carregar a transcrição. Por favor, tente novamente.",
     "transcriptExpired": "A transcrição de {filename} expirou. As transcrições são excluídas automaticamente após {days} dias por questões de privacidade.",
     "expirationWarning": "A transcrição de {filename} irá expirar em {days} dia(s). Copie o conteúdo se precisar mantê-lo.",
-    "elapsedTime": "Decorrido: {time}"
+    "elapsedTime": "Decorrido: {time}",
+    "cancel": "Cancelar transcrição",
+    "reconnecting": "Reconectando…",
+    "stillProcessing": "Ainda processando — este segmento está levando mais tempo que o normal",
+    "chunkProgress": "Trecho {completed}/{total}",
+    "transientToast": "Falha na transcrição: {filename} — tente novamente",
+    "authFailedToast": "Falha na transcrição: {filename} — faça login novamente",
+    "rateLimitedToast": "Transcrição pausada: {filename} — serviço com capacidade máxima, tente novamente em breve",
+    "permanentToast": "Falha na transcrição: {filename}{error}",
+    "cancelledToast": "Transcrição cancelada: {filename}",
+    "cancelledBody": "Cancelado pelo usuário",
+    "transientBody": "Por favor, tente novamente",
+    "authFailedBody": "Por favor, faça login novamente",
+    "rateLimitedBody": "Serviço com capacidade máxima, tente novamente em breve"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adicione suas instruções pessoais para personalizar as respostas da IA. Elas são combinadas com diretrizes principais de comportamento que garantem respostas úteis, precisas e seguras.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dica: digite \"/\" para selecionar entre modelos de prompt salvos.",

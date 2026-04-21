@@ -739,7 +739,8 @@
       "filesCount": "{count} rakitra",
       "audioVideo": "feo/video",
       "empty": "foana"
-    }
+    },
+    "mediaRecorderNotSupported": "Tsy tohanana amin'ity navigateur ity ny firaketana feo."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
       "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
-    }
+    },
+    "Quarantined Data": "Angona natao anaty karantina",
+    "quarantineDataDescription": "Manana {count} {count, plural, one {singan-javatra} other {singa}} natao anaty karantina ianao ({size}) misy olana amin'ny angona ka tsy afaka nentina amin'ny fomba mahazatra.",
+    "Review & Recover": "Hamarino & Avereno",
+    "Export Quarantined Data": "Aondrana ny angona anaty karantina",
+    "Delete Quarantined Data": "Fafao ny angona anaty karantina",
+    "deleteQuarantineConfirm": "Tena tianao ho fafana ve ny angona rehetra anaty karantina? Tsy azo averina ity hetsika ity.",
+    "quarantineDeleteSuccess": "Vita soa aman-tsara ny famafana ny angona rehetra anaty karantina."
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Sokafy ao amin'ny Mpanova",
     "failedToUpload": "Tsy nahomby ny fampakàrana",
     "attachment": "fanampiana",
-    "attachments": "fanampiana"
+    "attachments": "fanampiana",
+    "transcriptionCancelled": "Foana"
   },
   "userMessage": {
     "open": "Sokafy",
@@ -1670,7 +1679,20 @@
       "urdu": "Ordoa",
       "vietnamese": "Vietnamianina",
       "welsh": "Galoa"
-    }
+    },
+    "cancel": "Foano ny fandikana",
+    "reconnecting": "Miezaka mifandray indray…",
+    "stillProcessing": "Mbola eo am-pandinihana — ela kokoa noho ny mahazatra ity tapa-kevitra ity",
+    "chunkProgress": "Santionany {completed}/{total}",
+    "transientToast": "Tsy nahomby ny fandikana: {filename} — azafady andramo indray",
+    "authFailedToast": "Tsy nahomby ny fandikana: {filename} — midira indray azafady",
+    "rateLimitedToast": "Najanona vonjimaika ny fandikana: {filename} — feno ny serivisy, andramo vetivety eo",
+    "permanentToast": "Tsy nahomby ny fandikana: {filename}{error}",
+    "cancelledToast": "Foana ny fandikana: {filename}",
+    "cancelledBody": "Nofoanan'ny mpampiasa",
+    "transientBody": "Azafady andramo indray",
+    "authFailedBody": "Midira indray azafady",
+    "rateLimitedBody": "Feno ny serivisy, andramo vetivety eo"
   },
   "documentTranslation": {
     "title": "Fandikan-tahirin-kevitra",

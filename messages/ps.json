@@ -739,7 +739,8 @@
       "filesCount": "{count} فایل(ونه)",
       "audioVideo": "آډیو/ویډیو",
       "empty": "خالی"
-    }
+    },
+    "mediaRecorderNotSupported": "ستاسو براوزر کې د آډیو ثبتول نه‌ ملاتړ کیږي."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "خپل‌شخصه اپلوډ شوې فایلونه پن کړئ",
       "autoPinUploadsDescription": "د فایلونو اپلوډ کېدو سره سم یې په اتومات ډول پن کړئ تر څو له لیست څخه ونه لیري شي"
-    }
+    },
+    "Quarantined Data": "قرنطین شوي معلومات",
+    "quarantineDataDescription": "تاسو {count} قرنطین شوي {count, plural, one {توکی} other {توکي}} ({size}) لرئ چې د معلوماتو ستونزې لري او عادي ډول نشي بار کېدلی.",
+    "Review & Recover": "کتنه او بیرته ترلاسه کول",
+    "Export Quarantined Data": "قرنطین شوي معلومات صادر کړئ",
+    "Delete Quarantined Data": "قرنطین شوي معلومات ړنګ کړئ",
+    "deleteQuarantineConfirm": "ایا تاسې ډاډه یاست چې ټول قرنطین شوي معلومات ړنګول غواړئ؟ دا عمل بېرته نه‌شي راوګرځېدلی.",
+    "quarantineDeleteSuccess": "ټول قرنطین شوي معلومات په بریالیتوب سره ړنګ شول."
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1512,7 +1520,8 @@
     "openInEditor": "په ایډیټر کې خلاص کړئ",
     "failedToUpload": "پورته کول ناکام شول",
     "attachment": "ضمیمه",
-    "attachments": "ضمیمې"
+    "attachments": "ضمیمې",
+    "transcriptionCancelled": "لغوه‌شو"
   },
   "userMessage": {
     "open": "خلاص کړئ",
@@ -1670,7 +1679,20 @@
       "urdu": "اردو",
       "vietnamese": "ويتنامي",
       "welsh": "وېلش"
-    }
+    },
+    "cancel": "آوښتنه لغوه کړئ",
+    "reconnecting": "بیا نښلول…",
+    "stillProcessing": "لا هم روان دی — دا برخه له معمول نه اوږده شوې",
+    "chunkProgress": "برخه {completed}/{total}",
+    "transientToast": "آوښتنه پاتې راغله: {filename} — مهرباني وکړئ بیا هڅه وکړئ",
+    "authFailedToast": "آوښتنه پاتې راغله: {filename} — مهرباني وکړئ بیا ننوتنه وکړئ",
+    "rateLimitedToast": "آوښتنه تم شوه: {filename} — خدمت ډک دی، لږ وروسته بیا هڅه وکړئ",
+    "permanentToast": "آوښتنه پاتې راغله: {filename}{error}",
+    "cancelledToast": "آوښتنه لغوه‌شوه: {filename}",
+    "cancelledBody": "د کارونکي له‌خوا لغوه‌شوه",
+    "transientBody": "مهرباني وکړئ بیا هڅه وکړئ",
+    "authFailedBody": "مهرباني وکړئ بیا ننوتنه وکړئ",
+    "rateLimitedBody": "خدمت ډک دی، مهرباني وکړئ لږ وروسته بیا هڅه وکړئ"
   },
   "documentTranslation": {
     "title": "د سند ژباړه",

@@ -679,7 +679,8 @@
     "microphoneAccessDenied": "Accesul la microfon este refuzat. Vă rugăm să îl activați în setările browserului.",
     "microphoneAccessError": "Eroare de acces la microfon: {message}",
     "voiceInputTranscribing": "Transcriere în curs...",
-    "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce"
+    "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce",
+    "mediaRecorderNotSupported": "Înregistrarea audio nu este suportată în acest browser."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -969,7 +970,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixează automat fișierele încărcate",
       "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor"
-    }
+    },
+    "Quarantined Data": "Date în carantină",
+    "quarantineDataDescription": "Aveți {count} {count, plural, one {element} other {elemente}} în carantină ({size}) cu probleme de date care nu au putut fi încărcate normal.",
+    "Review & Recover": "Revizuire și recuperare",
+    "Export Quarantined Data": "Exportă datele în carantină",
+    "Delete Quarantined Data": "Șterge datele în carantină",
+    "deleteQuarantineConfirm": "Sunteți sigur că doriți să ștergeți toate datele aflate în carantină? Această acțiune nu poate fi anulată.",
+    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes."
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1057,7 +1065,20 @@
     "fetchError": "Nu s-a putut încărca transcrierea. Vă rugăm să încercați din nou.",
     "transcriptExpired": "Transcrierea pentru {filename} a expirat. Transcrierile sunt șterse automat după {days} zile pentru confidențialitate.",
     "expirationWarning": "Transcrierea pentru {filename} va expira în {days} zi(le). Salvați conținutul dacă aveți nevoie de el.",
-    "elapsedTime": "Timp scurs: {time}"
+    "elapsedTime": "Timp scurs: {time}",
+    "cancel": "Anulează transcrierea",
+    "reconnecting": "Reconectare…",
+    "stillProcessing": "Se procesează în continuare — acest segment durează mai mult decât de obicei",
+    "chunkProgress": "Segment {completed}/{total}",
+    "transientToast": "Transcriere eșuată: {filename} — vă rugăm să încercați din nou",
+    "authFailedToast": "Transcriere eșuată: {filename} — vă rugăm să vă autentificați din nou",
+    "rateLimitedToast": "Transcriere întreruptă: {filename} — serviciul este la capacitate maximă, încercați din nou în scurt timp",
+    "permanentToast": "Transcriere eșuată: {filename}{error}",
+    "cancelledToast": "Transcriere anulată: {filename}",
+    "cancelledBody": "Anulat de către utilizator",
+    "transientBody": "Vă rugăm să încercați din nou",
+    "authFailedBody": "Vă rugăm să vă autentificați din nou",
+    "rateLimitedBody": "Serviciul este la capacitate, încercați din nou în scurt timp"
   },
   "importBackupParseError": "Nu s-a putut analiza fișierul de backup. Asigurați-vă că este un fișier JSON valid.",
   "emptyState": {
@@ -1514,7 +1535,8 @@
     "openInEditor": "Deschide în editor",
     "failedToUpload": "Încărcarea a eșuat",
     "attachment": "atașament",
-    "attachments": "atașamente"
+    "attachments": "atașamente",
+    "transcriptionCancelled": "Anulat"
   },
   "transcript": {
     "originalTranscript": "Transcriere originală",

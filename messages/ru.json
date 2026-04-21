@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "Доступ к микрофону запрещён. Пожалуйста, включите его в настройках браузера.",
     "microphoneAccessError": "Ошибка доступа к микрофону: {message}",
     "voiceInputTranscribing": "Распознавание речи...",
-    "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций"
+    "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций",
+    "mediaRecorderNotSupported": "Запись аудио не поддерживается в этом браузере."
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Автоматически закреплять загружаемые файлы",
       "autoPinUploadsDescription": "Автоматически закреплять файлы при загрузке, чтобы они не удалялись"
-    }
+    },
+    "Quarantined Data": "Изолированные данные",
+    "quarantineDataDescription": "У вас {count} изолированных {count, plural, one {элемент} few {элемента} many {элементов} other {элементов}} ({size}) с проблемами данных, которые не удалось загрузить.",
+    "Review & Recover": "Просмотреть и восстановить",
+    "Export Quarantined Data": "Экспортировать изолированные данные",
+    "Delete Quarantined Data": "Удалить изолированные данные",
+    "deleteQuarantineConfirm": "Вы уверены, что хотите удалить все изолированные данные? Это действие необратимо.",
+    "quarantineDeleteSuccess": "Все изолированные данные успешно удалены."
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -1430,7 +1438,8 @@
     "openInEditor": "Открыть в редакторе",
     "failedToUpload": "Не удалось загрузить",
     "attachment": "вложение",
-    "attachments": "вложения"
+    "attachments": "вложения",
+    "transcriptionCancelled": "Отменено"
   },
   "transcript": {
     "originalTranscript": "Оригинальная расшифровка",
@@ -1604,7 +1613,20 @@
     "fetchError": "Не удалось загрузить расшифровку. Пожалуйста, попробуйте еще раз.",
     "transcriptExpired": "Расшифровка для {filename} устарела. Для обеспечения конфиденциальности расшифровки автоматически удаляются через {days} дн.",
     "expirationWarning": "Расшифровка для {filename} будет удалена через {days} дн. Скопируйте содержимое, если хотите его сохранить.",
-    "elapsedTime": "Прошло времени: {time}"
+    "elapsedTime": "Прошло времени: {time}",
+    "cancel": "Отменить транскрипцию",
+    "reconnecting": "Выполняется повторное подключение…",
+    "stillProcessing": "Обработка продолжается — этот сегмент занимает больше времени, чем обычно",
+    "chunkProgress": "Фрагмент {completed}/{total}",
+    "transientToast": "Не удалось транскрибировать: {filename} — пожалуйста, попробуйте еще раз",
+    "authFailedToast": "Не удалось транскрибировать: {filename} — выполните повторный вход",
+    "rateLimitedToast": "Транскрипция приостановлена: {filename} — сервис перегружен, попробуйте позже",
+    "permanentToast": "Не удалось транскрибировать: {filename}{error}",
+    "cancelledToast": "Транскрипция отменена: {filename}",
+    "cancelledBody": "Отменено пользователем",
+    "transientBody": "Пожалуйста, попробуйте еще раз",
+    "authFailedBody": "Пожалуйста, выполните повторный вход",
+    "rateLimitedBody": "Сервис перегружен, попробуйте позднее"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Добавьте свои инструкции, чтобы настроить ответы ИИ. Они будут дополнены основными правилами поведения, обеспечивающими полезные, точные и безопасные ответы.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Совет: введите «/», чтобы выбрать из сохранённых шаблонов запросов.",

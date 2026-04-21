@@ -739,7 +739,8 @@
       "filesCount": "{count} fichye",
       "audioVideo": "odyo/videyo",
       "empty": "vid"
-    }
+    },
+    "mediaRecorderNotSupported": "Navigatè sa a pa sipòte anrejistreman odyo."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Pine otomatikman fichye w telechaje yo",
       "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la"
-    }
+    },
+    "Quarantined Data": "Done karantèn",
+    "quarantineDataDescription": "Ou gen {count} {count, plural, one {atik} other {atik yo}} karantèn ({size}) ki gen pwoblèm done epi ki pa ka chaje nòmalman.",
+    "Review & Recover": "Revize & Rekipere",
+    "Export Quarantined Data": "Ekspòte done karantèn",
+    "Delete Quarantined Data": "Efase done karantèn",
+    "deleteQuarantineConfirm": "Èske ou sèten ou vle efase tout done karantèn yo? Aksyon sa a pa ka anile.",
+    "quarantineDeleteSuccess": "Tout done karantèn yo efase avèk siksè."
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Ouvri nan Editè",
     "failedToUpload": "Echèk nan telechajman",
     "attachment": "fichye atache",
-    "attachments": "fichye atache"
+    "attachments": "fichye atache",
+    "transcriptionCancelled": "Anile"
   },
   "userMessage": {
     "open": "Ouvri",
@@ -1670,7 +1679,20 @@
       "urdu": "Oudou",
       "vietnamese": "Vyetnamyen",
       "welsh": "Galwa"
-    }
+    },
+    "cancel": "Anile transkripsyon",
+    "reconnecting": "Rekoneksyon…",
+    "stillProcessing": "Toujou ap trete — pati sa a pran plis tan pase nòmal",
+    "chunkProgress": "Pati {completed}/{total}",
+    "transientToast": "Transkripsyon echwe: {filename} — tanpri eseye ankò",
+    "authFailedToast": "Transkripsyon echwe: {filename} — tanpri konekte ankò",
+    "rateLimitedToast": "Transkripsyon an poz: {filename} — sèvis la okipe, tanpri eseye ankò pita",
+    "permanentToast": "Transkripsyon echwe: {filename}{error}",
+    "cancelledToast": "Transkripsyon anile: {filename}",
+    "cancelledBody": "Itilizatè a anile",
+    "transientBody": "Tanpri eseye ankò",
+    "authFailedBody": "Tanpri konekte ankò",
+    "rateLimitedBody": "Sèvis la okipe, tanpri eseye ankò pita"
   },
   "documentTranslation": {
     "title": "Tradiksyon Dokiman",

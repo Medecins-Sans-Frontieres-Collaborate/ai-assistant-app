@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "마이크 접근이 거부되었습니다. 브라우저 설정에서 활성화해 주세요.",
     "microphoneAccessError": "마이크 접근 오류: {message}",
     "voiceInputTranscribing": "음성 변환 중...",
-    "ttsRightClickHint": "음성 옵션을 보려면 오른쪽 클릭하세요"
+    "ttsRightClickHint": "음성 옵션을 보려면 오른쪽 클릭하세요",
+    "mediaRecorderNotSupported": "이 브라우저에서는 오디오 녹음이 지원되지 않습니다."
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "업로드된 파일 자동 고정",
       "autoPinUploadsDescription": "업로드 시 파일을 자동으로 고정하여 교체되지 않도록 합니다"
-    }
+    },
+    "Quarantined Data": "격리된 데이터",
+    "quarantineDataDescription": "데이터 문제로 정상적으로 불러올 수 없는 격리된 {count}건의 {count, plural, one {항목} other {항목들}}({size})이(가) 있습니다.",
+    "Review & Recover": "검토 및 복구",
+    "Export Quarantined Data": "격리된 데이터 내보내기",
+    "Delete Quarantined Data": "격리된 데이터 삭제",
+    "deleteQuarantineConfirm": "모든 격리된 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "quarantineDeleteSuccess": "모든 격리된 데이터가 성공적으로 삭제되었습니다."
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -1309,7 +1317,20 @@
     "fetchError": "기록을 불러오는 데 실패했습니다. 다시 시도해 주세요.",
     "transcriptExpired": "{filename}의 기록이 만료되었습니다. 개인정보 보호를 위해 기록은 {days}일 후 자동으로 삭제됩니다.",
     "expirationWarning": "{filename}의 기록이 {days}일 후 만료됩니다. 필요하다면 내용을 복사해 두세요.",
-    "elapsedTime": "경과 시간: {time}"
+    "elapsedTime": "경과 시간: {time}",
+    "cancel": "녹취 중지",
+    "reconnecting": "다시 연결 중…",
+    "stillProcessing": "아직 처리 중입니다 — 이 구간은 예상보다 더 오래 걸리고 있습니다.",
+    "chunkProgress": "청크 {completed}/{total}",
+    "transientToast": "녹취 실패: {filename} — 다시 시도해 주세요.",
+    "authFailedToast": "녹취 실패: {filename} — 다시 로그인해 주세요.",
+    "rateLimitedToast": "녹취 일시 중지: {filename} — 서비스가 포화 상태입니다. 잠시 후 다시 시도해 주세요.",
+    "permanentToast": "녹취 실패: {filename}{error}",
+    "cancelledToast": "녹취 취소됨: {filename}",
+    "cancelledBody": "사용자에 의해 취소됨",
+    "transientBody": "다시 시도해 주세요.",
+    "authFailedBody": "다시 로그인해 주세요.",
+    "rateLimitedBody": "서비스가 포화 상태입니다. 잠시 후 다시 시도해 주세요."
   },
   "migration": {
     "status": {
@@ -1514,7 +1535,8 @@
     "openInEditor": "에디터에서 열기",
     "failedToUpload": "업로드 실패",
     "attachment": "첨부파일",
-    "attachments": "첨부파일"
+    "attachments": "첨부파일",
+    "transcriptionCancelled": "취소됨"
   },
   "transcript": {
     "originalTranscript": "원본 녹취록",

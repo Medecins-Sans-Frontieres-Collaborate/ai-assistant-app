@@ -656,7 +656,8 @@
     "microphoneAccessDenied": "הגישה למיקרופון נחסמה. אנא אפשר/י זאת בהגדרות הדפדפן.",
     "microphoneAccessError": "שגיאת גישה למיקרופון: {message}",
     "voiceInputTranscribing": "מתמלל...",
-    "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול"
+    "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול",
+    "mediaRecorderNotSupported": "הקלטת שמע אינה נתמכת בדפדפן זה."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -946,7 +947,14 @@
     "activeFiles": {
       "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
       "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
-    }
+    },
+    "Quarantined Data": "נתונים בהסגר",
+    "quarantineDataDescription": "יש לך {count} {count, plural, one {פריט} other {פריטים}} בהסגר ({size}) עם בעיות נתונים שלא ניתן היה לטעון כרגיל.",
+    "Review & Recover": "סקירה ושחזור",
+    "Export Quarantined Data": "ייצוא נתונים בהסגר",
+    "Delete Quarantined Data": "מחיקת נתונים בהסגר",
+    "deleteQuarantineConfirm": "האם אתה בטוח שברצונך למחוק את כל הנתונים שבהסגר? לא ניתן לבטל פעולה זו.",
+    "quarantineDeleteSuccess": "כל הנתונים שבהסגר נמחקו בהצלחה."
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1053,7 +1061,20 @@
     "fetchError": "טעינת התמלול נכשלה. אנא נסו שוב.",
     "transcriptExpired": "התמלול עבור {filename} פג תוקף. תמלולים נמחקים אוטומטית לאחר {days} ימים לשמירה על פרטיות.",
     "expirationWarning": "התמלול עבור {filename} יפוג בעוד {days} יום/ימים. העתיקו את התוכן אם ברצונכם לשמור אותו.",
-    "elapsedTime": "משך הזמן: {time}"
+    "elapsedTime": "משך הזמן: {time}",
+    "cancel": "בטל תמלול",
+    "reconnecting": "מתחבר מחדש…",
+    "stillProcessing": "עדיין בעיבוד — קטע זה לוקח יותר זמן מהרגיל",
+    "chunkProgress": "חלק {completed}/{total}",
+    "transientToast": "נכשל תמלול: {filename} — נא נסה שוב",
+    "authFailedToast": "נכשל תמלול: {filename} — נא התחבר מחדש",
+    "rateLimitedToast": "התמלול הושהה: {filename} — השירות בתפוסה מלאה, נא נסה שוב בקרוב",
+    "permanentToast": "נכשל תמלול: {filename}{error}",
+    "cancelledToast": "התמלול בוטל: {filename}",
+    "cancelledBody": "בוטל על ידי המשתמש",
+    "transientBody": "נא נסה שוב",
+    "authFailedBody": "נא התחבר מחדש",
+    "rateLimitedBody": "השירות בתפוסה מלאה, נא נסה שוב בקרוב"
   },
   "transcriptionComplete": "התעתוק הושלם! הטקסט התווסף לשדה השיחה.",
   "No prompts found": "לא נמצאו הנחיות",
@@ -1514,7 +1535,8 @@
     "openInEditor": "פתח בעורך",
     "failedToUpload": "ההעלאה נכשלה",
     "attachment": "קובץ מצורף",
-    "attachments": "קבצים מצורפים"
+    "attachments": "קבצים מצורפים",
+    "transcriptionCancelled": "בוטל"
   },
   "transcript": {
     "originalTranscript": "תמליל מקורי",

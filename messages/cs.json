@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "Přístup k mikrofonu byl odepřen. Povolit jej můžete v nastavení vašeho prohlížeče.",
     "microphoneAccessError": "Chyba přístupu k mikrofonu: {message}",
     "voiceInputTranscribing": "Přepisování...",
-    "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu"
+    "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu",
+    "mediaRecorderNotSupported": "Tento prohlížeč nepodporuje nahrávání zvuku."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Automaticky připnout nahrané soubory",
       "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění"
-    }
+    },
+    "Quarantined Data": "Karanténní data",
+    "quarantineDataDescription": "Máte {count} karanténních {count, plural, one {položku} other {položek}} ({size}) s chybnými daty, které nebylo možné běžně načíst.",
+    "Review & Recover": "Zkontrolovat a obnovit",
+    "Export Quarantined Data": "Exportovat karanténní data",
+    "Delete Quarantined Data": "Smazat karanténní data",
+    "deleteQuarantineConfirm": "Opravdu chcete smazat všechna karanténní data? Tuto akci nelze vrátit zpět.",
+    "quarantineDeleteSuccess": "Všechna karanténní data byla úspěšně smazána."
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1430,7 +1438,8 @@
     "openInEditor": "Otevřít v editoru",
     "failedToUpload": "Nahrání selhalo",
     "attachment": "příloha",
-    "attachments": "přílohy"
+    "attachments": "přílohy",
+    "transcriptionCancelled": "Zrušeno"
   },
   "transcript": {
     "originalTranscript": "Původní přepis",
@@ -1604,7 +1613,20 @@
     "fetchError": "Nepodařilo se načíst přepis. Zkuste to prosím znovu.",
     "transcriptExpired": "Přepis pro {filename} expiroval. Přepisy jsou automaticky smazány po {days} dnech kvůli ochraně soukromí.",
     "expirationWarning": "Přepis pro {filename} vyprší za {days} den/dny. Zkopírujte obsah, pokud jej potřebujete zachovat.",
-    "elapsedTime": "Uplynulo: {time}"
+    "elapsedTime": "Uplynulo: {time}",
+    "cancel": "Zrušit přepis",
+    "reconnecting": "Obnovování spojení…",
+    "stillProcessing": "Stále se zpracovává — tento segment trvá déle než obvykle",
+    "chunkProgress": "Část {completed}/{total}",
+    "transientToast": "Přepis selhal: {filename} — zkuste to prosím znovu",
+    "authFailedToast": "Přepis selhal: {filename} — přihlaste se prosím znovu",
+    "rateLimitedToast": "Přepis pozastaven: {filename} — služba je momentálně plně vytížena, zkuste to za chvíli znovu",
+    "permanentToast": "Přepis selhal: {filename}{error}",
+    "cancelledToast": "Přepis zrušen: {filename}",
+    "cancelledBody": "Zrušeno uživatelem",
+    "transientBody": "Zkuste to prosím znovu",
+    "authFailedBody": "Přihlaste se prosím znovu",
+    "rateLimitedBody": "Služba je plně vytížena, zkuste to za chvíli znovu"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Přidejte své vlastní pokyny pro přizpůsobení odpovědí AI. Tyto pokyny se kombinují se základními zásadami chování, které zajišťují užitečné, přesné a bezpečné odpovědi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Napište „/“ pro výběr z uložených šablon zadání.",

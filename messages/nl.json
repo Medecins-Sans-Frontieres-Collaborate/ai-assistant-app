@@ -646,7 +646,8 @@
     "microphoneAccessDenied": "Microfoontoegang is geweigerd. Schakel deze in via uw browserinstellingen.",
     "microphoneAccessError": "Microfoontoegangsprobleem: {message}",
     "voiceInputTranscribing": "Transcriberen...",
-    "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties"
+    "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties",
+    "mediaRecorderNotSupported": "Audiorecording wordt niet ondersteund in deze browser."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -936,7 +937,14 @@
     "activeFiles": {
       "autoPinUploads": "Geüploade bestanden automatisch vastzetten",
       "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd"
-    }
+    },
+    "Quarantined Data": "Gekwartetineerde gegevens",
+    "quarantineDataDescription": "U heeft {count} gekwartetineerde {count, plural, one {item} other {items}} ({size}) met gegevensproblemen die niet normaal konden worden geladen.",
+    "Review & Recover": "Controleren & Herstellen",
+    "Export Quarantined Data": "Gekwartetineerde gegevens exporteren",
+    "Delete Quarantined Data": "Gekwartetineerde gegevens verwijderen",
+    "deleteQuarantineConfirm": "Weet u zeker dat u alle gekwartetineerde gegevens wilt verwijderen? Deze handeling kan niet ongedaan worden gemaakt.",
+    "quarantineDeleteSuccess": "Alle gekwartetineerde gegevens succesvol verwijderd."
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1309,7 +1317,20 @@
     "fetchError": "Transcriptie kon niet worden geladen. Probeer het alstublieft opnieuw.",
     "transcriptExpired": "De transcriptie voor {filename} is verlopen. Transcripties worden om privacyredenen na {days} dagen automatisch verwijderd.",
     "expirationWarning": "De transcriptie voor {filename} verloopt over {days} dag(en). Kopieer de inhoud als u deze wilt behouden.",
-    "elapsedTime": "Verstreken tijd: {time}"
+    "elapsedTime": "Verstreken tijd: {time}",
+    "cancel": "Transcriptie annuleren",
+    "reconnecting": "Opnieuw verbinden…",
+    "stillProcessing": "Nog aan het verwerken — dit segment duurt langer dan normaal",
+    "chunkProgress": "Deel {completed}/{total}",
+    "transientToast": "Transcriptie mislukt: {filename} — probeer het alstublieft opnieuw",
+    "authFailedToast": "Transcriptie mislukt: {filename} — log alstublieft opnieuw in",
+    "rateLimitedToast": "Transcriptie gepauzeerd: {filename} — service is bezet, probeer het zo dadelijk opnieuw",
+    "permanentToast": "Transcriptie mislukt: {filename}{error}",
+    "cancelledToast": "Transcriptie geannuleerd: {filename}",
+    "cancelledBody": "Geannuleerd door gebruiker",
+    "transientBody": "Probeer het alstublieft opnieuw",
+    "authFailedBody": "Log alstublieft opnieuw in",
+    "rateLimitedBody": "Service is bezet, probeer het zo dadelijk opnieuw"
   },
   "migration": {
     "status": {
@@ -1514,7 +1535,8 @@
     "openInEditor": "Openen in editor",
     "failedToUpload": "Uploaden mislukt",
     "attachment": "bijlage",
-    "attachments": "bijlagen"
+    "attachments": "bijlagen",
+    "transcriptionCancelled": "Geannuleerd"
   },
   "transcript": {
     "originalTranscript": "Origineel transcript",

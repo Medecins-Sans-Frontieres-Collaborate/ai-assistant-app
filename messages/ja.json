@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "マイクへのアクセスが拒否されています。ブラウザの設定で有効にしてください。",
     "microphoneAccessError": "マイクアクセスエラー：{message}",
     "voiceInputTranscribing": "音声を文字起こし中...",
-    "ttsRightClickHint": "右クリックで音声オプションを表示"
+    "ttsRightClickHint": "右クリックで音声オプションを表示",
+    "mediaRecorderNotSupported": "このブラウザでは音声録音がサポートされていません。"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "アップロードファイルを自動でピン留め",
       "autoPinUploadsDescription": "アップロード時にファイルを自動的にピン留めし、循環から除外します"
-    }
+    },
+    "Quarantined Data": "隔離データ",
+    "quarantineDataDescription": "データの問題により通常通り読み込めなかった {count} 件の隔離{count, plural, one {アイテム} other {アイテム}}（{size}）があります。",
+    "Review & Recover": "確認と復元",
+    "Export Quarantined Data": "隔離データをエクスポート",
+    "Delete Quarantined Data": "隔離データを削除",
+    "deleteQuarantineConfirm": "本当にすべての隔離データを削除しますか？この操作は元に戻せません。",
+    "quarantineDeleteSuccess": "すべての隔離データを正常に削除しました。"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1268,7 +1276,20 @@
     "fetchError": "書き起こしの読み込みに失敗しました。再度お試しください。",
     "transcriptExpired": "{filename} の書き起こしは有効期限が切れました。プライバシー保護のため、書き起こしは {days} 日後に自動で削除されます。",
     "expirationWarning": "{filename} の書き起こしはあと {days} 日で有効期限が切れます。必要な場合は内容をコピーしてください。",
-    "elapsedTime": "経過時間：{time}"
+    "elapsedTime": "経過時間：{time}",
+    "cancel": "文字起こしをキャンセル",
+    "reconnecting": "再接続中…",
+    "stillProcessing": "処理中です — このセグメントは通常より時間がかかっています",
+    "chunkProgress": "チャンク {completed}/{total}",
+    "transientToast": "文字起こしに失敗しました: {filename} — 再度お試しください",
+    "authFailedToast": "文字起こしに失敗しました: {filename} — もう一度サインインしてください",
+    "rateLimitedToast": "文字起こし一時停止: {filename} — サービスが混雑していますので、しばらくしてから再試行してください",
+    "permanentToast": "文字起こしに失敗しました: {filename}{error}",
+    "cancelledToast": "文字起こしがキャンセルされました: {filename}",
+    "cancelledBody": "ユーザーによりキャンセルされました",
+    "transientBody": "再度お試しください",
+    "authFailedBody": "もう一度サインインしてください",
+    "rateLimitedBody": "サービスが混雑しています。しばらくしてから再試行してください"
   },
   "searchMode": {
     "backToChat": "チャットに戻る",
@@ -1514,7 +1535,8 @@
     "openInEditor": "エディタで開く",
     "failedToUpload": "アップロードに失敗しました",
     "attachment": "添付ファイル",
-    "attachments": "添付ファイル"
+    "attachments": "添付ファイル",
+    "transcriptionCancelled": "キャンセル済み"
   },
   "transcript": {
     "originalTranscript": "元の書き起こし",

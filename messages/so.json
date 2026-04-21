@@ -739,7 +739,8 @@
       "filesCount": "{count} fayl",
       "audioVideo": "cod/fiidiyow",
       "empty": "madhan"
-    }
+    },
+    "mediaRecorderNotSupported": "Qalabkan browzar ma taageero duubista codka."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Si toos ah ugu xiro faylasha la soo geliyay",
       "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro"
-    }
+    },
+    "Quarantined Data": "Xog la Karantiilay",
+    "quarantineDataDescription": "Waxaad haysataa {count} xog la karantiilay {count, plural, one {shay} other {shayaal}} ({size}) oo leh dhibaatooyin xogeed aan caadiyan la soo rogi karin.",
+    "Review & Recover": "Eeg oo Soo Celi",
+    "Export Quarantined Data": "Dhoofso Xogta la Karantiilay",
+    "Delete Quarantined Data": "Tirtir Xogta la Karantiilay",
+    "deleteQuarantineConfirm": "Ma hubtaa inaad rabto inaad tirtirto dhammaan xogta la karantiilay? Ficilkan lama soo celin karo.",
+    "quarantineDeleteSuccess": "Si guul leh ayaa loo tirtiray dhammaan xogta la karantiilay."
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Ku fur Tifaftiraha",
     "failedToUpload": "Waa lagu guul daraystay soo gelinta",
     "attachment": "ku lifaaqid",
-    "attachments": "ku lifaaqyo"
+    "attachments": "ku lifaaqyo",
+    "transcriptionCancelled": "La joojiyay"
   },
   "userMessage": {
     "open": "Fur",
@@ -1670,7 +1679,20 @@
       "urdu": "Urduu",
       "vietnamese": "Fiyetnaamiis",
       "welsh": "Welsh"
-    }
+    },
+    "cancel": "Jooji turjumaadda codka",
+    "reconnecting": "Waxaa dib loo xariirinayaa…",
+    "stillProcessing": "Weli waa la socdaa — qeybtaan waxay qaadanaysaa waqti ka badan caadiga",
+    "chunkProgress": "Qeyb {completed}/{total}",
+    "transientToast": "Turjumaadda codka waa fashilantay: {filename} — fadlan isku day mar kale",
+    "authFailedToast": "Turjumaadda codka waa fashilantay: {filename} — fadlan dib u gal akoonkaaga",
+    "rateLimitedToast": "Turjumaad la hakiyay: {filename} — adeeggu wuu buuxaa, fadlan isku day wax yar kadib",
+    "permanentToast": "Turjumaaddu waa fashilantay: {filename}{error}",
+    "cancelledToast": "Turjumaad la joojiyay: {filename}",
+    "cancelledBody": "Waxaa joojiyay isticmaale",
+    "transientBody": "Fadlan isku day mar kale",
+    "authFailedBody": "Fadlan dib u gal akoonkaaga",
+    "rateLimitedBody": "Adeeggu wuu buuxaa, fadlan isku day wax yar kadib"
   },
   "documentTranslation": {
     "title": "Turjumaadda Dukumentiga",

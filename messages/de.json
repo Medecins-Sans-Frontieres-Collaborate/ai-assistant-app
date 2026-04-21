@@ -627,7 +627,8 @@
     "microphoneAccessDenied": "Mikrofonzugriff verweigert. Bitte aktivieren Sie ihn in den Browsereinstellungen.",
     "microphoneAccessError": "Fehler beim Mikrofonzugriff: {message}",
     "voiceInputTranscribing": "Transkription läuft...",
-    "ttsRightClickHint": "Rechtsklick für Sprachauswahl"
+    "ttsRightClickHint": "Rechtsklick für Sprachauswahl",
+    "mediaRecorderNotSupported": "Audioaufzeichnung wird in diesem Browser nicht unterstützt."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Hochgeladene Dateien automatisch anheften",
       "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden"
-    }
+    },
+    "Quarantined Data": "Quarantänedaten",
+    "quarantineDataDescription": "Sie haben {count} in Quarantäne befindliche {count, plural, one {Datei} other {Dateien}} ({size}) mit Datenproblemen, die nicht normal geladen werden konnten.",
+    "Review & Recover": "Überprüfen & Wiederherstellen",
+    "Export Quarantined Data": "Quarantänedaten exportieren",
+    "Delete Quarantined Data": "Quarantänedaten löschen",
+    "deleteQuarantineConfirm": "Sind Sie sicher, dass Sie alle Quarantänedaten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht."
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1306,7 +1314,20 @@
     "fetchError": "Transkript konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
     "transcriptExpired": "Das Transkript für {filename} ist abgelaufen. Transkripte werden aus Datenschutzgründen nach {days} Tagen automatisch gelöscht.",
     "expirationWarning": "Das Transkript für {filename} läuft in {days} Tag(en) ab. Kopieren Sie den Inhalt, falls Sie ihn behalten möchten.",
-    "elapsedTime": "Vergangen: {time}"
+    "elapsedTime": "Vergangen: {time}",
+    "cancel": "Transkription abbrechen",
+    "reconnecting": "Wiederherstellen der Verbindung…",
+    "stillProcessing": "Wird noch verarbeitet — dieser Abschnitt dauert länger als gewöhnlich",
+    "chunkProgress": "Segment {completed}/{total}",
+    "transientToast": "Transkription fehlgeschlagen: {filename} — bitte erneut versuchen",
+    "authFailedToast": "Transkription fehlgeschlagen: {filename} — bitte erneut anmelden",
+    "rateLimitedToast": "Transkription pausiert: {filename} — Dienst ist ausgelastet, bitte versuchen Sie es in Kürze erneut",
+    "permanentToast": "Transkription fehlgeschlagen: {filename}{error}",
+    "cancelledToast": "Transkription abgebrochen: {filename}",
+    "cancelledBody": "Vom Benutzer abgebrochen",
+    "transientBody": "Bitte erneut versuchen",
+    "authFailedBody": "Bitte erneut anmelden",
+    "rateLimitedBody": "Dienst ausgelastet, bitte versuchen Sie es in Kürze erneut"
   },
   "notFound": {
     "lostDog": "Verlorener Hund"
@@ -1514,7 +1535,8 @@
     "openInEditor": "Im Editor öffnen",
     "failedToUpload": "Hochladen fehlgeschlagen",
     "attachment": "Anhang",
-    "attachments": "Anhänge"
+    "attachments": "Anhänge",
+    "transcriptionCancelled": "Abgebrochen"
   },
   "transcript": {
     "originalTranscript": "Originaltranskript",

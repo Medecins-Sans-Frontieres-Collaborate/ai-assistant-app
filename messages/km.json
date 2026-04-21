@@ -739,7 +739,8 @@
       "filesCount": "{count} ឯកសារ",
       "audioVideo": "សំឡេង/វីដេអូ",
       "empty": "ទទេ"
-    }
+    },
+    "mediaRecorderNotSupported": "កម្មវិធីរុករកនេះមិនគាំទ្រការថតសម្លេងទេ។"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "ដាក់​ថ្មី​ស្វ័យប្រវត្តិ​ឯកសារ​ដែលបានផ្ទុកឡើង",
       "autoPinUploadsDescription": "ខ្ចាប់ឯកសារដែលបានផ្ទុកឡើងស្វ័យប្រវត្តិ ដើម្បីទប់ស្កាត់ឲ្យកំពុងត្រូវដកចេញ"
-    }
+    },
+    "Quarantined Data": "ទិន្នន័យដាក់វាំងញាក់",
+    "quarantineDataDescription": "អ្នកមាន {count} {count, plural, one {ធាតុ} other {ធាតុ}} ដែលបានដាក់វាំងញាក់ ({size}) មានបញ្ហាទិន្នន័យដែលមិនអាចផ្ទុកបានតាមធម្មតា។",
+    "Review & Recover": "ពិនិត្យនិងស្ដារឡើងវិញ",
+    "Export Quarantined Data": "នាំចេញទិន្នន័យដាក់វាំងញាក់",
+    "Delete Quarantined Data": "លុបទិន្នន័យដាក់វាំងញាក់",
+    "deleteQuarantineConfirm": "តើអ្នកប្រាកដជាចង់លុបទិន្នន័យដាក់វាំងញាក់ទាំងអស់មែនទេ? សកម្មភាពនេះមិនអាចមកវិញបានទេ។",
+    "quarantineDeleteSuccess": "លុបទិន្នន័យដាក់វាំងញាក់ទាំងអស់បានជោគជ័យ។"
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "បើកក្នុងកម្មវិធីកូដ",
     "failedToUpload": "បរាជ័យក្នុងការឧបឡូដ",
     "attachment": "ឯកសារភ្ជាប់",
-    "attachments": "ឯកសារភ្ជាប់"
+    "attachments": "ឯកសារភ្ជាប់",
+    "transcriptionCancelled": "បានបោះបង់"
   },
   "userMessage": {
     "open": "បើក",
@@ -1670,7 +1679,20 @@
       "urdu": "អ៊ឺរឌុ",
       "vietnamese": "វៀតណាម",
       "welsh": "វេលស៏"
-    }
+    },
+    "cancel": "បោះបង់ការបម្លែងអត្ថបទ",
+    "reconnecting": "កំពុងតភ្ជាប់ម្តងទៀត…",
+    "stillProcessing": "កំពុងដំណើរការកន្លែងនេះយូជាងធម្មតា",
+    "chunkProgress": "ផ្នែក {completed}/{total}",
+    "transientToast": "បម្លែងអត្ថបទបរាជ័យ៖ {filename} — សូមព្យាយាមម្តងទៀត",
+    "authFailedToast": "បម្លែងអត្ថបទបរាជ័យ៖ {filename} — សូមចូលគណនីម្តងទៀត",
+    "rateLimitedToast": "បង្ហាប់ការបម្លែង៖ {filename} — សេវាកម្មពេញលេញ សូមព្យាយាមម្តងទៀតបន្តិច",
+    "permanentToast": "បម្លែងអត្ថបទបរាជ័យ៖ {filename}{error}",
+    "cancelledToast": "បានបោះបង់ការបម្លែង៖ {filename}",
+    "cancelledBody": "បោះបង់ដោយអ្នកប្រើប្រាស់",
+    "transientBody": "សូមព្យាយាមម្តងទៀត",
+    "authFailedBody": "សូមចូលគណនីម្តងទៀត",
+    "rateLimitedBody": "សេវាកម្មពេញលេញ សូមព្យាយាមបន្តិច"
   },
   "documentTranslation": {
     "title": "បកប្បភាសាឯកសារ",

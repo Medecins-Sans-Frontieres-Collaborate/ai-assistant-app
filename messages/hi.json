@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "माइक्रोफ़ोन एक्सेस अस्वीकृत है। कृपया अपने ब्राउज़र सेटिंग्स में इसे सक्षम करें।",
     "microphoneAccessError": "माइक्रोफ़ोन एक्सेस त्रुटि: {message}",
     "voiceInputTranscribing": "प्रतिलेखन किया जा रहा है...",
-    "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें"
+    "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें",
+    "mediaRecorderNotSupported": "इस ब्राउज़र में ऑडियो रिकॉर्डिंग समर्थित नहीं है।"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "अपलोड की गई फ़ाइलें स्वतः पिन करें",
       "autoPinUploadsDescription": "फ़ाइलों को अपलोड करते समय उन्हें स्वतः पिन करें ताकि वे हटाई न जाएं"
-    }
+    },
+    "Quarantined Data": "क्वारंटीन किया गया डेटा",
+    "quarantineDataDescription": "आपके पास {count} क्वारंटीन {count, plural, one {आइटम} other {आइटम्स}} ({size}) हैं, जिनमें डेटा समस्याएँ हैं और जिन्हें सामान्य रूप से लोड नहीं किया जा सका।",
+    "Review & Recover": "समीक्षा करें और पुनः प्राप्त करें",
+    "Export Quarantined Data": "क्वारंटीन डेटा निर्यात करें",
+    "Delete Quarantined Data": "क्वारंटीन डेटा हटाएँ",
+    "deleteQuarantineConfirm": "क्या आप वाकई सभी क्वारंटीन डेटा हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती।",
+    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटा दिए गए।"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -1430,7 +1438,8 @@
     "openInEditor": "संपादक में खोलें",
     "failedToUpload": "अपलोड करने में विफल",
     "attachment": "संलग्न",
-    "attachments": "संलग्न दस्तावेज़"
+    "attachments": "संलग्न दस्तावेज़",
+    "transcriptionCancelled": "रद्द किया गया"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रांसक्रिप्ट",
@@ -1604,7 +1613,20 @@
     "fetchError": "ट्रांसक्रिप्ट लोड करने में विफल। कृपया पुनः प्रयास करें।",
     "transcriptExpired": "{filename} के लिए ट्रांसक्रिप्ट समाप्त हो गई है। गोपनीयता के लिए ट्रांसक्रिप्ट {days} दिन बाद स्वचालित रूप से हटा दी जाती है।",
     "expirationWarning": "{filename} के लिए ट्रांसक्रिप्ट {days} दिन में समाप्त हो जाएगी। यदि आपको इसकी आवश्यकता है तो इसकी सामग्री कॉपी कर लें।",
-    "elapsedTime": "बीता समय: {time}"
+    "elapsedTime": "बीता समय: {time}",
+    "cancel": "ट्रांसक्रिप्शन रद्द करें",
+    "reconnecting": "फिर से कनेक्ट हो रहा है…",
+    "stillProcessing": "अभी भी संसाधन जारी है — इस खंड में सामान्य से अधिक समय लग रहा है",
+    "chunkProgress": "खंड {completed}/{total}",
+    "transientToast": "ट्रांसक्रिप्शन विफल: {filename} — कृपया पुनः प्रयास करें",
+    "authFailedToast": "ट्रांसक्रिप्शन विफल: {filename} — कृपया दोबारा साइन इन करें",
+    "rateLimitedToast": "ट्रांसक्रिप्शन रुका: {filename} — सेवा व्यस्त है, कृपया थोड़ी देर में पुनः प्रयास करें",
+    "permanentToast": "ट्रांसक्रिप्शन विफल: {filename}{error}",
+    "cancelledToast": "ट्रांसक्रिप्शन रद्द किया गया: {filename}",
+    "cancelledBody": "उपयोगकर्ता द्वारा रद्द किया गया",
+    "transientBody": "कृपया पुनः प्रयास करें",
+    "authFailedBody": "कृपया पुनः साइन इन करें",
+    "rateLimitedBody": "सेवा व्यस्त है, कृपया थोड़ी देर में पुनः प्रयास करें"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI की प्रतिक्रिया को अनुकूलित करने के लिए अपनी व्यक्तिगत निर्देश जोड़ें। इन्हें मुख्य व्यवहार दिशानिर्देशों के साथ जोड़ा जाता है ताकि प्रतिक्रियाएं सहायक, सटीक और सुरक्षित रहें।",
   "Tip: Type \"/\" to select from saved prompt templates_": "टिप: सहेजे गए प्रॉम्प्ट टेम्पलेट्स में से चुनने के लिए \"/\" टाइप करें।",

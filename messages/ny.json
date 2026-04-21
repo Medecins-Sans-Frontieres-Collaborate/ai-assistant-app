@@ -739,7 +739,8 @@
       "filesCount": "mafayilo {count}",
       "audioVideo": "mawu/kanema",
       "empty": "zopanda kanthu"
-    }
+    },
+    "mediaRecorderNotSupported": "Browser iyi silola kujambula mawu."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
       "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
-    }
+    },
+    "Quarantined Data": "Deta Yosungidwa M'kati",
+    "quarantineDataDescription": "Muli ndi {count} deta yosungidwa m'kati {count, plural, one {item} other {items}} ({size}) yokhala ndi mavuto omwe sangathe kutsegulidwa bwinobwino.",
+    "Review & Recover": "Yang'anirani & Bwezerani",
+    "Export Quarantined Data": "Tumizani Deta Yosungidwa M'kati",
+    "Delete Quarantined Data": "Chotsani Deta Yosungidwa M'kati",
+    "deleteQuarantineConfirm": "Kodi mukutsimikiza kuti mukufuna kuchotsa deta yonse yosungidwa m'kati? Zochitikazi sizingabwezedwe.",
+    "quarantineDeleteSuccess": "Deta yonse yosungidwa m'kati yachotsedwa bwinobwino."
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Tsegulani mu Wosintha",
     "failedToUpload": "Kulephera kukweza",
     "attachment": "chowonjezera",
-    "attachments": "zowonjezera"
+    "attachments": "zowonjezera",
+    "transcriptionCancelled": "Yalephera"
   },
   "userMessage": {
     "open": "Tsegulani",
@@ -1670,7 +1679,20 @@
       "urdu": "Chiurdu",
       "vietnamese": "Chiviyetinamu",
       "welsh": "Chiwelshi"
-    }
+    },
+    "cancel": "Lekani kusintha mawu",
+    "reconnecting": "Ikuyesera kulumikizanso…",
+    "stillProcessing": "Ikadalira — gawo ili likutenga nthawi yaitali kuposa zomwe timayembekezera",
+    "chunkProgress": "Gawo {completed}/{total}",
+    "transientToast": "Sintho la mawu lalephera: {filename} — chonde yesaninso",
+    "authFailedToast": "Sintho la mawu lalephera: {filename} — chonde lowaninso",
+    "rateLimitedToast": "Sintho la mawu layimitsidwa: {filename} — utumiki wadzaza, chonde yesaninso posachedwa",
+    "permanentToast": "Sintho la mawu lalephera: {filename}{error}",
+    "cancelledToast": "Sintho la mawu lalephera: {filename}",
+    "cancelledBody": "Zasiyidwa ndi wogwiritsa",
+    "transientBody": "Chonde yesaninso",
+    "authFailedBody": "Chonde lowaninso",
+    "rateLimitedBody": "Utumiki wadzaza, chonde yesaninso posachedwa"
   },
   "documentTranslation": {
     "title": "Kumasulira Zikalata",

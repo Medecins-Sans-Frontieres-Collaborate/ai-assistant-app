@@ -739,7 +739,8 @@
       "filesCount": "{count} фајл(ова)",
       "audioVideo": "аудио/видео",
       "empty": "празно"
-    }
+    },
+    "mediaRecorderNotSupported": "Audio snimanje nije podržano u ovom pregledaču."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Automatski zakači otpremljene fajlove",
       "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje"
-    }
+    },
+    "Quarantined Data": "Karantinski podaci",
+    "quarantineDataDescription": "Imate {count} karantinskih {count, plural, one {stavku} other {stavki}} ({size}) sa podacima koji nisu mogli biti učitani na uobičajen način.",
+    "Review & Recover": "Pregledaj i povrati",
+    "Export Quarantined Data": "Izvezi karantinske podatke",
+    "Delete Quarantined Data": "Obriši karantinske podatke",
+    "deleteQuarantineConfirm": "Da li ste sigurni da želite da obrišete sve karantinske podatke? Ova radnja je nepovratna.",
+    "quarantineDeleteSuccess": "Uspešno su obrisani svi karantinski podaci."
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Отвори у уређивачу",
     "failedToUpload": "Отпремање није успело",
     "attachment": "прилог",
-    "attachments": "прилози"
+    "attachments": "прилози",
+    "transcriptionCancelled": "Otkazano"
   },
   "userMessage": {
     "open": "Отвори",
@@ -1670,7 +1679,20 @@
       "urdu": "Урду",
       "vietnamese": "Вијетнамски",
       "welsh": "Велшки"
-    }
+    },
+    "cancel": "Otkaži transkripciju",
+    "reconnecting": "Ponovno povezivanje…",
+    "stillProcessing": "Još se obrađuje — ovaj segment traje duže nego obično",
+    "chunkProgress": "Deo {completed}/{total}",
+    "transientToast": "Transkripcija nije uspela: {filename} — pokušajte ponovo",
+    "authFailedToast": "Transkripcija nije uspela: {filename} — prijavite se ponovo",
+    "rateLimitedToast": "Transkripcija pauzirana: {filename} — servis je zauzet, pokušajte uskoro ponovo",
+    "permanentToast": "Transkripcija nije uspela: {filename}{error}",
+    "cancelledToast": "Transkripcija je otkazana: {filename}",
+    "cancelledBody": "Otkazano od strane korisnika",
+    "transientBody": "Pokušajte ponovo",
+    "authFailedBody": "Prijavite se ponovo",
+    "rateLimitedBody": "Servis je zauzet, pokušajte uskoro ponovo"
   },
   "documentTranslation": {
     "title": "Превод документа",

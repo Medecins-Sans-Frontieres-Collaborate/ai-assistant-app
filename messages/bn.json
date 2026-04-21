@@ -627,7 +627,8 @@
     "microphoneAccessDenied": "মাইক্রোফোন ব্যবহারের অনুমতি নেই। দয়া করে ব্রাউজারের সেটিংসে এটি সক্রিয় করুন।",
     "microphoneAccessError": "মাইক্রোফোন ব্যবহারে ত্রুটি: {message}",
     "voiceInputTranscribing": "ট্র্যান্সক্রাইব করা হচ্ছে...",
-    "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন"
+    "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন",
+    "mediaRecorderNotSupported": "এই ব্রাউজারে অডিও রেকর্ডিং সমর্থিত নয়।"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "আপলোড করা ফাইলগুলি স্বয়ংক্রিয়ভাবে পিন করুন",
       "autoPinUploadsDescription": "আপলোড করার পর ফাইলগুলো স্বয়ংক্রিয়ভাবে পিন করুন যাতে এগুলো মুছে না যায়"
-    }
+    },
+    "Quarantined Data": "কোয়ারেন্টাইন করা ডেটা",
+    "quarantineDataDescription": "আপনার কাছে {count} টি কোয়ারেন্টাইন করা {count, plural, one {আইটেম} other {আইটেমসমূহ}} রয়েছে ({size}), যেগুলোর ডেটা সমস্যার কারণে স্বাভাবিকভাবে লোড করা যায়নি।",
+    "Review & Recover": "পর্যালোচনা ও পুনরুদ্ধার",
+    "Export Quarantined Data": "কোয়ারেন্টাইন করা ডেটা এক্সপোর্ট করুন",
+    "Delete Quarantined Data": "কোয়ারেন্টাইন করা ডেটা মুছুন",
+    "deleteQuarantineConfirm": "আপনি কি নিশ্চিতভাবে সব কোয়ারেন্টাইন করা ডেটা মুছে ফেলতে চান? এই কার্যক্রম বাতিল করা যাবে না।",
+    "quarantineDeleteSuccess": "সব কোয়ারেন্টাইন করা ডেটা সফলভাবে মুছে ফেলা হয়েছে।"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1430,7 +1438,8 @@
     "openInEditor": "এডিটরে খুলুন",
     "failedToUpload": "আপলোড ব্যর্থ হয়েছে",
     "attachment": "সংযুক্তি",
-    "attachments": "সংযুক্তিসমূহ"
+    "attachments": "সংযুক্তিসমূহ",
+    "transcriptionCancelled": "বাতিল হয়েছে"
   },
   "transcript": {
     "originalTranscript": "মূল ট্রান্সক্রিপ্ট",
@@ -1604,7 +1613,20 @@
     "fetchError": "ট্রান্সক্রিপ্ট লোড করতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
     "transcriptExpired": "{filename}-এর ট্রান্সক্রিপ্টটির মেয়াদ শেষ হয়ে গেছে। ব্যক্তিগত গোপনীয়তার জন্য ট্রান্সক্রিপ্ট {days} দিন পর স্বয়ংক্রিয়ভাবে মুছে ফেলা হয়।",
     "expirationWarning": "{filename}-এর ট্রান্সক্রিপ্ট {days} দিনের মধ্যে মেয়াদ শেষ হয়ে যাবে। সংরক্ষণ করতে চাইলে কপি করে রাখুন।",
-    "elapsedTime": "অতিক্রান্ত: {time}"
+    "elapsedTime": "অতিক্রান্ত: {time}",
+    "cancel": "ট্রান্সক্রিপশন বাতিল করুন",
+    "reconnecting": "পুনরায় সংযোগ স্থাপন করা হচ্ছে…",
+    "stillProcessing": "এখনো প্রক্রিয়াকরণ চলছে — এই অংশটি স্বাভাবিকের চেয়ে বেশি সময় নিচ্ছে",
+    "chunkProgress": "চাংক {completed}/{total}",
+    "transientToast": "ট্রান্সক্রিপশন ব্যর্থ: {filename} — অনুগ্রহ করে আবার চেষ্টা করুন",
+    "authFailedToast": "ট্রান্সক্রিপশন ব্যর্থ: {filename} — দয়া করে আবার সাইন ইন করুন",
+    "rateLimitedToast": "ট্রান্সক্রিপশন স্থগিত: {filename} — পরিষেবাটি বর্তমানে সম্পূর্ণ ব্যস্ত, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন",
+    "permanentToast": "ট্রান্সক্রিপশন ব্যর্থ: {filename}{error}",
+    "cancelledToast": "ট্রান্সক্রিপশন বাতিল: {filename}",
+    "cancelledBody": "ব্যবহারকারী দ্বারা বাতিল করা হয়েছে",
+    "transientBody": "অনুগ্রহ করে আবার চেষ্টা করুন",
+    "authFailedBody": "অনুগ্রহ করে পুনরায় সাইন ইন করুন",
+    "rateLimitedBody": "পরিষেবা সম্পূর্ণ ব্যস্ত, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI কিভাবে প্রতিক্রিয়া জানাবে তা কাস্টমাইজ করতে আপনার ব্যক্তিগত নির্দেশনা যোগ করুন। এগুলো মূল আচরণ নির্দেশিকার সঙ্গে একত্রিত হয়, যা সহায়ক, সঠিক ও নিরাপদ প্রতিক্রিয়া নিশ্চিত করে।",
   "Tip: Type \"/\" to select from saved prompt templates_": "টিপ: সংরক্ষিত প্রম্পট টেমপ্লেট থেকে নির্বাচন করতে \"/\" লিখুন।",
