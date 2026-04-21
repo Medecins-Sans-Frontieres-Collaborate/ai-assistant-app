@@ -9,61 +9,22 @@ import {
   BlobProperty,
   getBlobBase64String,
 } from '@/lib/utils/server/blob/blob';
+import { validateFileNotExecutable } from '@/lib/utils/server/file/mimeTypes';
 
 import { auth } from '@/auth';
 
-// Allowlist of extensions that may appear on a stored blob. Derived from the
-// supported upload categories (images, documents, audio, video, common text).
-// Anything not in this list is rejected up-front so attackers can't probe
-// blob storage with crafted extensions like `.exe`, `.bat`, etc.
-const ALLOWED_BLOB_EXTENSIONS = new Set([
-  // images
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'webp',
-  'svg',
-  'bmp',
-  'ico',
-  // documents
-  'pdf',
-  'doc',
-  'docx',
-  'xls',
-  'xlsx',
-  'ppt',
-  'pptx',
-  'epub',
-  // text
-  'txt',
-  'md',
-  'json',
-  'xml',
-  'csv',
-  'tex',
-  'py',
-  'sql',
-  // audio
-  'mp3',
-  'wav',
-  'm4a',
-  'mpga',
-  'ogg',
-  'flac',
-  'aac',
-  'mpeg',
-  // video
-  'mp4',
-  'webm',
-  'mkv',
-  'mov',
-  'avi',
-  'flv',
-  'wmv',
-]);
-
-const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
+/**
+ * Validates that `id` is shaped like a stored blob id: a 64-char SHA-256
+ * hex hash, optionally followed by a short extension.
+ *
+ * Rather than maintaining a positive allowlist of extensions (which drifts
+ * out of sync with what the upload endpoint accepts), we reuse
+ * `validateFileNotExecutable` — the same disallow-list enforced at upload
+ * time. If a file was accepted into blob storage, its extension is also
+ * accepted here; only executable/archive extensions are rejected at the
+ * retrieval boundary as defense-in-depth against probing.
+ */
+const isValidBlobId = (id: string | string[] | undefined): boolean => {
   if (typeof id !== 'string' || id.length < 1) {
     console.error(
       `Invalid id type '${typeof id}' for object: ${JSON.stringify(id)}`,
@@ -74,14 +35,18 @@ const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
   if (idParts.length > 2) return false;
 
   const [idHash, idExtension] = idParts;
+  const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
+  if (!VALID_HASH_REGEX.test(idHash)) return false;
+
   if (idExtension !== undefined) {
-    if (!ALLOWED_BLOB_EXTENSIONS.has(idExtension.toLowerCase())) return false;
+    // Bound the extension shape so `<hash>.x<1000 chars>` can't be used as
+    // an oracle. Real upload extensions are ≤5 chars and alphanumeric.
+    if (!/^[a-zA-Z0-9]{1,10}$/.test(idExtension)) return false;
+    const validation = validateFileNotExecutable(`file.${idExtension}`);
+    if (!validation.isValid) return false;
   }
 
-  const SHA256_HASH_LENGTH: number = 64;
-  const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
-
-  return idHash.length === SHA256_HASH_LENGTH && VALID_HASH_REGEX.test(idHash);
+  return true;
 };
 
 export async function GET(
@@ -95,7 +60,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const requestedFileType = searchParams.get('filetype');
 
-  if (!isValidSha256Hash(id)) {
+  if (!isValidBlobId(id)) {
     return NextResponse.json(
       { error: 'Invalid file identifier' },
       { status: 400 },
