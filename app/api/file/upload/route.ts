@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     // Hash data directly - Hasher accepts both Buffer and string
     // For buffers, this avoids base64 string length limit for large files
-    const hashedFileContents = Hasher.sha256(data).slice(0, 200);
+    const hashedFileContents = Hasher.sha256(data);
     const extension: string | undefined = filename.split('.').pop();
 
     let contentType;
