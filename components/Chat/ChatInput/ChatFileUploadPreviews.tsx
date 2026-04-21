@@ -565,6 +565,13 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
               >
                 {filename}
               </div>
+              {filePreview.file && (
+                <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 tabular-nums">
+                  {status === 'uploading' && progress !== undefined
+                    ? `${formatBytes((progress / 100) * filePreview.file.size)} / ${formatBytes(filePreview.file.size)}`
+                    : formatBytes(filePreview.file.size)}
+                </div>
+              )}
               {/* Upload progress bar */}
               {status === 'uploading' && progress !== undefined && (
                 <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mt-1.5">
