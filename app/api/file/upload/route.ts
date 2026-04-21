@@ -119,23 +119,30 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
-    // Early rejection: check Content-Length before consuming the request body.
-    // This is advisory only — the authoritative check runs against actual
-    // buffer length after the body is read, so a spoofed Content-Length
-    // header cannot bypass validation.
+    // Require a parseable Content-Length so we can reject oversized uploads
+    // before buffering. This doesn't defend against a lying Content-Length
+    // (the authoritative check against actual buffer length below still
+    // catches that), but it closes the honest-client DoS window and
+    // provides a fast 413 for the common case.
+    //
+    // TODO: stream the request body through a size-bounded transform to
+    // reject spoofed Content-Length before `formData()` buffers the whole
+    // body. Tracked as a follow-up to this audit fix.
     const contentLength = request.headers.get('content-length');
-    if (contentLength) {
-      const declaredSize = parseInt(contentLength, 10);
-      if (!isNaN(declaredSize)) {
-        const earlyCheck = validateFileSizeRaw(
-          filename,
-          declaredSize,
-          mimeType ?? undefined,
-        );
-        if (!earlyCheck.valid) {
-          return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
-        }
-      }
+    if (!contentLength) {
+      return errorResponse('Content-Length header is required', 411);
+    }
+    const declaredSize = parseInt(contentLength, 10);
+    if (!Number.isInteger(declaredSize) || declaredSize < 0) {
+      return badRequestResponse('Invalid Content-Length header');
+    }
+    const earlyCheck = validateFileSizeRaw(
+      filename,
+      declaredSize,
+      mimeType ?? undefined,
+    );
+    if (!earlyCheck.valid) {
+      return payloadTooLargeResponse(earlyCheck.error ?? 'File too large');
     }
 
     // Check Content-Type to determine upload format
