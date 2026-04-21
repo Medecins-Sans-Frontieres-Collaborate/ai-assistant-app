@@ -22,6 +22,13 @@ type ValidContentBlock =
 /** Narrowed output type; verifiable-assignable to `Message['content']`. */
 type NormalizedContent = string | ValidContentBlock[];
 
+/**
+ * Mirrors the server Zod schema's cap on a string-typed `content` field
+ * (`InputValidator.MessageContentSchema`). Kept in sync manually — if the
+ * server raises its cap, raise this too.
+ */
+const MAX_STRING_CONTENT_LENGTH = 100_000;
+
 const VALID_BLOCK_TYPES = new Set<ValidContentBlock['type']>([
   'text',
   'image_url',
@@ -55,13 +62,26 @@ function isValidContentBlock(item: unknown): item is ValidContentBlock {
  * only valid shapes, without touching UI render paths.
  */
 export function normalizeMessageContent(content: unknown): NormalizedContent {
-  if (typeof content === 'string') return content;
+  if (typeof content === 'string') {
+    // Leave untruncated — a legitimately long string hitting the server cap
+    // is a different class of error (user wrote too much) and should surface
+    // as the explicit "Message content too long" Zod message, not silent
+    // truncation here.
+    return content;
+  }
 
   if (Array.isArray(content)) {
     return content.filter(isValidContentBlock);
   }
 
   if (isValidContentBlock(content) && content.type === 'text') {
+    // Extracted text comes from a corrupted record, not user input, so the
+    // user never knew it existed in this shape. Truncate to the server's
+    // max content length to keep the request valid; a truncation marker
+    // makes the salvage visible in message history.
+    if (content.text.length > MAX_STRING_CONTENT_LENGTH) {
+      return content.text.slice(0, MAX_STRING_CONTENT_LENGTH - 1) + '…';
+    }
     return content.text;
   }
 
