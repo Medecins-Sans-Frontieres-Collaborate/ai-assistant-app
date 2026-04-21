@@ -205,7 +205,14 @@ export class ChatService {
     // can contain messages whose content is null or a bare TextMessageContent
     // object; those would fail server-side Zod validation with
     // "messages.N.content: Invalid input".
-    const normalizedMessages = normalizeMessagesForAPI(messages);
+    const { messages: normalizedMessages, report } =
+      normalizeMessagesForAPI(messages);
+    if (report.repairedCount > 0 || report.droppedCount > 0) {
+      console.warn(
+        `[ChatService] Normalized conversation history before send: ` +
+          `repaired=${report.repairedCount}, dropped=${report.droppedCount}`,
+      );
+    }
 
     // Convert image file references to base64 at API call time
     // This keeps localStorage small (file refs only) while sending base64 to server
