@@ -35,7 +35,7 @@ const authMiddleware = auth((req) => {
   return response;
 });
 
-export default async function proxy(req: NextRequest) {
+export default function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Debug: Log proxy headers to diagnose cookie issues (Azure only)
@@ -69,29 +69,8 @@ export default async function proxy(req: NextRequest) {
     });
   }
 
-  // Proactively clear legacy NextAuth v4 cookies via Set-Cookie headers.
-  // These cookies are no longer used (v5 uses `authjs.*` prefix) but may persist
-  // and cause 431 errors on browsers with strict header size limits (e.g. Edge).
-  const v4CookiesToClear = req.cookies
-    .getAll()
-    .filter(
-      (c) =>
-        c.name.startsWith('next-auth.') ||
-        c.name.startsWith('__Secure-next-auth.'),
-    );
-
   // Skip API routes and static files entirely
   if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
-    if (v4CookiesToClear.length > 0) {
-      const response = NextResponse.next();
-      for (const cookie of v4CookiesToClear) {
-        response.cookies.set(cookie.name, '', {
-          expires: new Date(0),
-          path: '/',
-        });
-      }
-      return response;
-    }
     return NextResponse.next();
   }
 
@@ -99,29 +78,11 @@ export default async function proxy(req: NextRequest) {
 
   // For public pages, only run i18n middleware (don't wrap in auth)
   if (isPublicPage) {
-    const response = handleI18nRouting(req);
-    if (v4CookiesToClear.length > 0 && response) {
-      for (const cookie of v4CookiesToClear) {
-        response.cookies.set(cookie.name, '', {
-          expires: new Date(0),
-          path: '/',
-        });
-      }
-    }
-    return response;
+    return handleI18nRouting(req);
   }
 
   // For protected pages, run auth middleware which includes i18n
-  const response = await (authMiddleware as any)(req);
-  if (v4CookiesToClear.length > 0 && response) {
-    for (const cookie of v4CookiesToClear) {
-      response.cookies.set(cookie.name, '', {
-        expires: new Date(0),
-        path: '/',
-      });
-    }
-  }
-  return response;
+  return (authMiddleware as any)(req);
 }
 
 export const config = {
