@@ -261,6 +261,14 @@ export function failJob(
     throw new Error(`Job ${jobId} not found`);
   }
 
+  // Preserve terminal status. A background chunk that errors after the user
+  // cancelled (or after a different branch already recorded success/failure)
+  // must not flip the stored outcome — cancelled must stay cancelled, a
+  // succeeded job must not revert to failed.
+  if (job.status !== 'pending' && job.status !== 'processing') {
+    return;
+  }
+
   job.status = 'failed';
   job.error = error;
   job.errorClass = errorClass;
