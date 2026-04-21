@@ -228,78 +228,101 @@ describe('InputValidator', () => {
       ).not.toThrow();
     });
 
-    it('rejects filenames containing path separators', () => {
+    it('drops filenames containing path separators but keeps the request valid', () => {
       const validator = new InputValidator();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            originalFilename: '../etc/passwd',
-          }),
-        ),
-      ).toThrow(PipelineError);
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: '../etc/passwd',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBeUndefined();
+      expect(block.url).toBe('https://blob.core.windows.net/container/f.xlsx');
     });
 
-    it('rejects ".." filenames', () => {
+    it('drops bare ".." filenames but keeps the request valid', () => {
       const validator = new InputValidator();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            originalFilename: '..',
-          }),
-        ),
-      ).toThrow(PipelineError);
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: '..',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBeUndefined();
     });
 
-    it('rejects invalid transcription language codes', () => {
+    it('accepts legitimate filenames containing dots (e.g. "archive.tar.gz")', () => {
       const validator = new InputValidator();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            transcriptionLanguage: 'english',
-          }),
-        ),
-      ).toThrow(PipelineError);
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: 'archive.tar.gz',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBe('archive.tar.gz');
     });
 
-    it('accepts ISO-639-1 language codes with optional region', () => {
+    it('drops invalid transcription language codes instead of rejecting the request', () => {
       const validator = new InputValidator();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            transcriptionLanguage: 'es',
-          }),
-        ),
-      ).not.toThrow();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            transcriptionLanguage: 'pt-BR',
-          }),
-        ),
-      ).not.toThrow();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionLanguage: 'english',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionLanguage).toBeUndefined();
     });
 
-    it('rejects transcription prompts over 2000 chars', () => {
+    it('accepts ISO-639-1 codes with optional region and normalizes case', () => {
       const validator = new InputValidator();
-      expect(() =>
-        validator.validateChatRequest(
-          requestWith({
-            type: 'file_url',
-            url: 'https://blob.core.windows.net/container/f.xlsx',
-            transcriptionPrompt: 'x'.repeat(2001),
-          }),
-        ),
-      ).toThrow(PipelineError);
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionLanguage: 'PT-BR',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionLanguage).toBe('pt-br');
+    });
+
+    it('drops transcription prompts over 2000 chars rather than rejecting', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionPrompt: 'x'.repeat(2001),
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionPrompt).toBeUndefined();
     });
   });
 });
