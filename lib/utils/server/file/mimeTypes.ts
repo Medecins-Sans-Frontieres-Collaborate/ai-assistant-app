@@ -2,6 +2,10 @@
  * MIME type utilities for file handling
  * Centralized MIME type mappings to prevent duplication
  */
+import {
+  DISALLOWED_EXTENSIONS_NO_DOT,
+  DISALLOWED_MIME_TYPES,
+} from '@/lib/constants/disallowedFileTypes';
 
 // Re-export file validation utilities for convenience
 export {
@@ -59,36 +63,16 @@ export const MIME_TYPE_MAP: Record<string, string> = {
 };
 
 /**
- * List of executable file extensions that should be blocked for security
+ * Extensions rejected at upload time. Sourced from the shared disallow-list
+ * so client and server stay in sync.
  */
-export const EXECUTABLE_EXTENSIONS = [
-  'exe',
-  'bat',
-  'cmd',
-  'sh',
-  'dll',
-  'msi',
-  'jar',
-  'app',
-  'com',
-  'scr',
-  'vbs',
-  'ps1',
-];
+export const EXECUTABLE_EXTENSIONS = DISALLOWED_EXTENSIONS_NO_DOT;
 
 /**
- * List of executable MIME types that should be blocked for security
+ * MIME types rejected at upload time. Sourced from the shared disallow-list
+ * so client and server stay in sync.
  */
-export const EXECUTABLE_MIME_TYPES = [
-  'application/x-msdownload',
-  'application/x-msdos-program',
-  'application/x-executable',
-  'application/x-sharedlib',
-  'application/java-archive',
-  'application/x-apple-diskimage',
-  'application/x-sh',
-  'application/x-bat',
-];
+export const EXECUTABLE_MIME_TYPES = DISALLOWED_MIME_TYPES;
 
 /**
  * Gets the MIME type for a given filename or extension
