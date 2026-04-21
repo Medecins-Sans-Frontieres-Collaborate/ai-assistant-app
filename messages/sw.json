@@ -682,7 +682,10 @@
     "microphoneAccessError": "Hitilafu ya ufikiaji wa kipaza sauti: {message}",
     "voiceInputTranscribing": "Inatambua...",
     "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti",
-    "mediaRecorderNotSupported": "Rekodi ya sauti haiwezi kufanywa katika kivinjari hiki."
+    "mediaRecorderNotSupported": "Rekodi ya sauti haiwezi kufanywa katika kivinjari hiki.",
+    "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
+    "microphoneBlocked": "Kipaza sauti kimezuiliwa. Angalia mipangilio ya kivinjari.",
+    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",

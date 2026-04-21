@@ -740,7 +740,10 @@
       "audioVideo": "mawu/kanema",
       "empty": "zopanda kanthu"
     },
-    "mediaRecorderNotSupported": "Browser iyi silola kujambula mawu."
+    "mediaRecorderNotSupported": "Browser iyi silola kujambula mawu.",
+    "microphoneNotDetected": "Palibe maikolofoni yomwe yapezeka",
+    "microphoneBlocked": "Maikolofoni yatsekedwa. Chongani makonda a msakatuli.",
+    "voiceTranscriptionFailed": "Kulemba mawu kwalephera. Chonde yesani kachiwiri."
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",

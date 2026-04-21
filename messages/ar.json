@@ -628,7 +628,10 @@
     "microphoneAccessError": "خطأ في الوصول إلى الميكروفون: {message}",
     "voiceInputTranscribing": "جارٍ التحويل إلى نص...",
     "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت",
-    "mediaRecorderNotSupported": "تسجيل الصوت غير مدعوم في هذا المتصفح."
+    "mediaRecorderNotSupported": "تسجيل الصوت غير مدعوم في هذا المتصفح.",
+    "microphoneNotDetected": "لم يتم اكتشاف ميكروفون",
+    "microphoneBlocked": "تم حظر الميكروفون. تحقق من إعدادات المتصفح.",
+    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى."
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",

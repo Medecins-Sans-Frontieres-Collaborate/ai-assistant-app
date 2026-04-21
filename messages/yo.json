@@ -740,7 +740,10 @@
       "audioVideo": "ohùn/fídíò",
       "empty": "òfo"
     },
-    "mediaRecorderNotSupported": "Kíkópọ̀ ohun kò wà láàyè lórí aṣàwákiri yìí."
+    "mediaRecorderNotSupported": "Kíkópọ̀ ohun kò wà láàyè lórí aṣàwákiri yìí.",
+    "microphoneNotDetected": "Ko ri mikrófónù",
+    "microphoneBlocked": "Mikrófónù ti di. Ṣayẹwo eto aṣàwákiri rẹ.",
+    "voiceTranscriptionFailed": "Itumọ ohùn kuna. Jọwọ gbìyànjú lẹẹkansi."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",

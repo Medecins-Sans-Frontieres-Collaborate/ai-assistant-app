@@ -657,7 +657,10 @@
     "microphoneAccessError": "שגיאת גישה למיקרופון: {message}",
     "voiceInputTranscribing": "מתמלל...",
     "ttsRightClickHint": "לחיצה ימנית להצגת אפשרויות קול",
-    "mediaRecorderNotSupported": "הקלטת שמע אינה נתמכת בדפדפן זה."
+    "mediaRecorderNotSupported": "הקלטת שמע אינה נתמכת בדפדפן זה.",
+    "microphoneNotDetected": "לא זוהה מיקרופון",
+    "microphoneBlocked": "המיקרופון חסום. נא לבדוק את הגדרות הדפדפן.",
+    "voiceTranscriptionFailed": "המרת הדיבור לטקסט נכשלה. אנא נסו שוב."
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",

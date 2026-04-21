@@ -740,7 +740,10 @@
       "audioVideo": "آډیو/ویډیو",
       "empty": "خالی"
     },
-    "mediaRecorderNotSupported": "ستاسو براوزر کې د آډیو ثبتول نه‌ ملاتړ کیږي."
+    "mediaRecorderNotSupported": "ستاسو براوزر کې د آډیو ثبتول نه‌ ملاتړ کیږي.",
+    "microphoneNotDetected": "مایکروفون ونه پېژندل شو",
+    "microphoneBlocked": "مایکروفون بند شوی دی. د براوزر تنظیمات وګورئ.",
+    "voiceTranscriptionFailed": "د غږ لیکل ناکام شو. مهرباني وکړئ بیا هڅه وکړئ."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",

@@ -740,7 +740,10 @@
       "audioVideo": "sauti/bidio",
       "empty": "babu"
     },
-    "mediaRecorderNotSupported": "Ba a goyon bayan yin rikodin sauti a wannan burauza."
+    "mediaRecorderNotSupported": "Ba a goyon bayan yin rikodin sauti a wannan burauza.",
+    "microphoneNotDetected": "Ba a gano maƙarƙashiyar murya ba",
+    "microphoneBlocked": "An toshe maƙarƙashiyar murya. Duba saitunan burauza.",
+    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",

@@ -682,7 +682,10 @@
     "microphoneAccessError": "マイクアクセスエラー：{message}",
     "voiceInputTranscribing": "音声を文字起こし中...",
     "ttsRightClickHint": "右クリックで音声オプションを表示",
-    "mediaRecorderNotSupported": "このブラウザでは音声録音がサポートされていません。"
+    "mediaRecorderNotSupported": "このブラウザでは音声録音がサポートされていません。",
+    "microphoneNotDetected": "マイクが検出されません",
+    "microphoneBlocked": "マイクがブロックされています。ブラウザの設定を確認してください。",
+    "voiceTranscriptionFailed": "音声の文字起こしに失敗しました。もう一度お試しください。"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",

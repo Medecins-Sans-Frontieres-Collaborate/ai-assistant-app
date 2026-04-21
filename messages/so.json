@@ -740,7 +740,10 @@
       "audioVideo": "cod/fiidiyow",
       "empty": "madhan"
     },
-    "mediaRecorderNotSupported": "Qalabkan browzar ma taageero duubista codka."
+    "mediaRecorderNotSupported": "Qalabkan browzar ma taageero duubista codka.",
+    "microphoneNotDetected": "Mikrofoon lama helin",
+    "microphoneBlocked": "Mikrofoon waa la xannibay. Fadlan hubi dejimaha bog furaha.",
+    "voiceTranscriptionFailed": "Qoraalka codka wuu fashilmay. Fadlan isku day mar kale."
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",

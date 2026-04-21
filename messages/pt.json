@@ -628,7 +628,10 @@
     "microphoneAccessError": "Erro de acesso ao microfone: {message}",
     "voiceInputTranscribing": "Transcrevendo...",
     "ttsRightClickHint": "Clique com o botão direito para opções de voz",
-    "mediaRecorderNotSupported": "A gravação de áudio não é suportada neste navegador."
+    "mediaRecorderNotSupported": "A gravação de áudio não é suportada neste navegador.",
+    "microphoneNotDetected": "Nenhum microfone detectado",
+    "microphoneBlocked": "Microfone bloqueado. Verifique as configurações do navegador.",
+    "voiceTranscriptionFailed": "Falha na transcrição de voz. Por favor, tente novamente."
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",

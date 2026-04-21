@@ -682,7 +682,10 @@
     "microphoneAccessError": "माइक्रोफ़ोन एक्सेस त्रुटि: {message}",
     "voiceInputTranscribing": "प्रतिलेखन किया जा रहा है...",
     "ttsRightClickHint": "वॉइस विकल्पों के लिए दायाँ क्लिक करें",
-    "mediaRecorderNotSupported": "इस ब्राउज़र में ऑडियो रिकॉर्डिंग समर्थित नहीं है।"
+    "mediaRecorderNotSupported": "इस ब्राउज़र में ऑडियो रिकॉर्डिंग समर्थित नहीं है।",
+    "microphoneNotDetected": "माइक्रोफ़ोन नहीं मिला",
+    "microphoneBlocked": "माइक्रोफ़ोन ब्लॉक है। ब्राउज़र सेटिंग्स जांचें।",
+    "voiceTranscriptionFailed": "आवाज़ ट्रांसक्रिप्शन असफल रहा। कृपया पुनः प्रयास करें।"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",

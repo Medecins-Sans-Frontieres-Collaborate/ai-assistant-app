@@ -599,7 +599,10 @@
     "microphoneAccessError": "Помилка доступу до мікрофона: {message}",
     "voiceInputTranscribing": "Транскрибування...",
     "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування",
-    "mediaRecorderNotSupported": "Аудіозапис не підтримується у цьому браузері."
+    "mediaRecorderNotSupported": "Аудіозапис не підтримується у цьому браузері.",
+    "microphoneNotDetected": "Мікрофон не знайдено",
+    "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",
+    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз."
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",

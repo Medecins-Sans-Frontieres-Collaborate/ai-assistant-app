@@ -740,7 +740,10 @@
       "audioVideo": "deng/vîdyo",
       "empty": "vala"
     },
-    "mediaRecorderNotSupported": "پەیوەستکردنی دەنگ پشتیوانی ناکرێت لە ئەم بەراوزە."
+    "mediaRecorderNotSupported": "پەیوەستکردنی دەنگ پشتیوانی ناکرێت لە ئەم بەراوزە.",
+    "microphoneNotDetected": "میکروفۆن نەدۆزرایەوە",
+    "microphoneBlocked": "میکروفۆن بلۆککراوە. تکایە ڕێکخستنی وێبگەڕ بپشکنە.",
+    "voiceTranscriptionFailed": "وەرگێڕانی دەنگ سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە."
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",

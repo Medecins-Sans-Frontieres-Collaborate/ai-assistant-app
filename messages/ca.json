@@ -657,7 +657,10 @@
     "microphoneAccessError": "Error d'accés al micròfon: {message}",
     "voiceInputTranscribing": "Transcripció en curs...",
     "ttsRightClickHint": "Clic dret per opcions de veu",
-    "mediaRecorderNotSupported": "L’enregistrament d’àudio no és compatible amb aquest navegador."
+    "mediaRecorderNotSupported": "L’enregistrament d’àudio no és compatible amb aquest navegador.",
+    "microphoneNotDetected": "No s'ha detectat cap micròfon",
+    "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",
+    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",

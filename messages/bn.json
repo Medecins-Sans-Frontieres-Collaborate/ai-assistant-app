@@ -628,7 +628,10 @@
     "microphoneAccessError": "মাইক্রোফোন ব্যবহারে ত্রুটি: {message}",
     "voiceInputTranscribing": "ট্র্যান্সক্রাইব করা হচ্ছে...",
     "ttsRightClickHint": "ভয়েস অপশনের জন্য ডান-ক্লিক করুন",
-    "mediaRecorderNotSupported": "এই ব্রাউজারে অডিও রেকর্ডিং সমর্থিত নয়।"
+    "mediaRecorderNotSupported": "এই ব্রাউজারে অডিও রেকর্ডিং সমর্থিত নয়।",
+    "microphoneNotDetected": "মাইক্রোফোন শনাক্ত করা যায়নি",
+    "microphoneBlocked": "মাইক্রোফোন ব্লক করা হয়েছে। ব্রাউজারের সেটিংস পরীক্ষা করুন।",
+    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",

@@ -603,7 +603,10 @@
     "microphoneAccessError": "Errore di accesso al microfono: {message}",
     "voiceInputTranscribing": "Trascrizione in corso...",
     "ttsRightClickHint": "Click destro per opzioni vocali",
-    "mediaRecorderNotSupported": "La registrazione audio non è supportata in questo browser."
+    "mediaRecorderNotSupported": "La registrazione audio non è supportata in questo browser.",
+    "microphoneNotDetected": "Nessun microfono rilevato",
+    "microphoneBlocked": "Microfono bloccato. Controlla le impostazioni del browser.",
+    "voiceTranscriptionFailed": "Trascrizione vocale non riuscita. Riprova."
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",

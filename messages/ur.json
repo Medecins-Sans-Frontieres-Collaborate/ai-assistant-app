@@ -683,7 +683,10 @@
     "microphoneAccessError": "مائیکروفون تک رسائی میں خرابی: {message}",
     "voiceInputTranscribing": "ٹرانسکرائب کیا جا رہا ہے...",
     "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں",
-    "mediaRecorderNotSupported": "اس براؤزر میں آڈیو ریکارڈنگ سپورٹ نہیں کرتی۔"
+    "mediaRecorderNotSupported": "اس براؤزر میں آڈیو ریکارڈنگ سپورٹ نہیں کرتی۔",
+    "microphoneNotDetected": "کوئی مائیکروفون نہیں ملا",
+    "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی سیٹنگز چیک کریں۔",
+    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",

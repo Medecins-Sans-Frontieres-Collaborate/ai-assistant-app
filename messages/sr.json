@@ -740,7 +740,10 @@
       "audioVideo": "аудио/видео",
       "empty": "празно"
     },
-    "mediaRecorderNotSupported": "Audio snimanje nije podržano u ovom pregledaču."
+    "mediaRecorderNotSupported": "Audio snimanje nije podržano u ovom pregledaču.",
+    "microphoneNotDetected": "Mikrofon nije detektovan",
+    "microphoneBlocked": "Mikrofon je blokiran. Proverite podešavanja pregledača.",
+    "voiceTranscriptionFailed": "Transkripcija glasa nije uspela. Pokušajte ponovo."
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",

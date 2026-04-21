@@ -740,7 +740,10 @@
       "audioVideo": "ድምጺ/ቪድዮ",
       "empty": "ባዶ"
     },
-    "mediaRecorderNotSupported": "ድምጺ መቅዳን እዚ ብራውዘር አይግበርን።"
+    "mediaRecorderNotSupported": "ድምጺ መቅዳን እዚ ብራውዘር አይግበርን።",
+    "microphoneNotDetected": "ማይክሮፎን ኣይተረኽበን",
+    "microphoneBlocked": "ማይክሮፎን ተጹጉዑ ኣሎ። ቅንዛዕ ናይ መተንቀሳቐሲ መእተዊ ርኸቡ።",
+    "voiceTranscriptionFailed": "ቃላት ድምጺ ጽሑፍ ምቅዳሕ ኣይሳነበሩን። እቲ ሓደ ግዜ ደጊም ፈትኑ።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",

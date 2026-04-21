@@ -682,7 +682,10 @@
     "microphoneAccessError": "Chyba přístupu k mikrofonu: {message}",
     "voiceInputTranscribing": "Přepisování...",
     "ttsRightClickHint": "Klikněte pravým tlačítkem pro možnosti hlasu",
-    "mediaRecorderNotSupported": "Tento prohlížeč nepodporuje nahrávání zvuku."
+    "mediaRecorderNotSupported": "Tento prohlížeč nepodporuje nahrávání zvuku.",
+    "microphoneNotDetected": "Mikrofon nebyl detekován",
+    "microphoneBlocked": "Mikrofon je zablokován. Zkontrolujte nastavení prohlížeče.",
+    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu."
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",

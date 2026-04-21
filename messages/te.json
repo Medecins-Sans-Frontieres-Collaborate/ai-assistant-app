@@ -680,7 +680,10 @@
     "microphoneAccessError": "మైక్రోఫోన్ యాక్సెస్ లో లోపం: {message}",
     "voiceInputTranscribing": "వాయిస్ ట్రాన్స్‌క్రైబ్ చేస్తున్నది...",
     "ttsRightClickHint": "వాయిస్ ఎంపికలకు రైట్-క్లిక్ చేయండి",
-    "mediaRecorderNotSupported": "ఈ బ్రౌజర్‌లో ఆడియో రికార్డింగ్‌కు మద్దతు లేదు."
+    "mediaRecorderNotSupported": "ఈ బ్రౌజర్‌లో ఆడియో రికార్డింగ్‌కు మద్దతు లేదు.",
+    "microphoneNotDetected": "మైక్రోఫోన్ కనిపించలేదు",
+    "microphoneBlocked": "మైక్రోఫోన్ నిరోధించబడింది. బ్రౌజర్ సెట్టింగులు పరిశీలించండి.",
+    "voiceTranscriptionFailed": "వాయిస్ లిప్యంతరీకరణ విఫలమైంది. దయచేసి మరలా ప్రయత్నించండి."
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",

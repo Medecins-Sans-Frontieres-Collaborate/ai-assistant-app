@@ -740,7 +740,10 @@
       "audioVideo": "nanndol/wideyoo",
       "empty": "mehol"
     },
-    "mediaRecorderNotSupported": "Ndaɓɓitan moftugol audiyo waawaniima e lowre nde."
+    "mediaRecorderNotSupported": "Ndaɓɓitan moftugol audiyo waawaniima e lowre nde.",
+    "microphoneNotDetected": "Curkuleeri mikirofoonuu maa jogii",
+    "microphoneBlocked": "Mikirofoonuu ndiyalanii. Hoolu yaaɓe browser.",
+    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",

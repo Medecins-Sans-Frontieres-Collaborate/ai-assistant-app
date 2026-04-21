@@ -607,7 +607,10 @@
     "microphoneAccessError": "خطا در دسترسی به میکروفون: {message}",
     "voiceInputTranscribing": "در حال تبدیل گفتار به متن...",
     "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید",
-    "mediaRecorderNotSupported": "ضبط صدا در این مرورگر پشتیبانی نمی‌شود."
+    "mediaRecorderNotSupported": "ضبط صدا در این مرورگر پشتیبانی نمی‌شود.",
+    "microphoneNotDetected": "میکروفون شناسایی نشد",
+    "microphoneBlocked": "میکروفون مسدود شده است. تنظیمات مرورگر را بررسی کنید.",
+    "voiceTranscriptionFailed": "تبدیل صدا به متن انجام نشد. لطفاً دوباره تلاش کنید."
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",

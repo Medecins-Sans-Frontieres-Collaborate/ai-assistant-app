@@ -625,7 +625,10 @@
     "microphoneAccessError": "የማይክሮፎን መዳረሻ ስህተት፡ {message}",
     "voiceInputTranscribing": "በመቅዳት ላይ...",
     "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ",
-    "mediaRecorderNotSupported": "የድምፅ መቅዳት በዚህ ብራውዘር አአይደለም።"
+    "mediaRecorderNotSupported": "የድምፅ መቅዳት በዚህ ብራውዘር አአይደለም።",
+    "microphoneNotDetected": "ማድረግ የለም፡ ማድረግ አልተገኘም",
+    "microphoneBlocked": "ማድረግ ታግዷል። የመቃኘት ቅንብሮችዎን ያረጋግጡ።",
+    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",

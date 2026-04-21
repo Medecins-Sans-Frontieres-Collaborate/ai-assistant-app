@@ -599,7 +599,10 @@
     "microphoneAccessError": "เกิดข้อผิดพลาดในการเข้าถึงไมโครโฟน: {message}",
     "voiceInputTranscribing": "กำลังถอดเสียง...",
     "ttsRightClickHint": "คลิกขวาเพื่อดูตัวเลือกเสียง",
-    "mediaRecorderNotSupported": "เบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง"
+    "mediaRecorderNotSupported": "เบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง",
+    "microphoneNotDetected": "ไม่พบไมโครโฟน",
+    "microphoneBlocked": "ไมโครโฟนถูกบล็อก กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์",
+    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",

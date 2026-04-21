@@ -628,7 +628,10 @@
     "microphoneAccessError": "Fehler beim Mikrofonzugriff: {message}",
     "voiceInputTranscribing": "Transkription läuft...",
     "ttsRightClickHint": "Rechtsklick für Sprachauswahl",
-    "mediaRecorderNotSupported": "Audioaufzeichnung wird in diesem Browser nicht unterstützt."
+    "mediaRecorderNotSupported": "Audioaufzeichnung wird in diesem Browser nicht unterstützt.",
+    "microphoneNotDetected": "Kein Mikrofon erkannt",
+    "microphoneBlocked": "Mikrofon blockiert. Bitte überprüfen Sie die Browser-Einstellungen.",
+    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut."
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",

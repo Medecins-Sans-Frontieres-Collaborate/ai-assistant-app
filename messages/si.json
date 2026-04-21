@@ -649,7 +649,10 @@
     "microphoneAccessError": "මයික්රොෆෝන් ප්‍රවේශ දෝෂය: {message}",
     "voiceInputTranscribing": "පරිවර්තනය වෙමින්...",
     "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න",
-    "mediaRecorderNotSupported": "මෙම බ්‍රව්සායේ ශ්‍රව්‍ය රැඳවීම සහය නොදක්වයි."
+    "mediaRecorderNotSupported": "මෙම බ්‍රව්සායේ ශ්‍රව්‍ය රැඳවීම සහය නොදක්වයි.",
+    "microphoneNotDetected": "මයික්‍රෝෆෝනය හඳුනාගෙන නොමැත",
+    "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර කර ඇත. අතිරේකයන්ගේ සැකසුම් සොයා බලන්න.",
+    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න."
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",

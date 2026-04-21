@@ -740,7 +740,10 @@
       "audioVideo": "odyo/videyo",
       "empty": "vid"
     },
-    "mediaRecorderNotSupported": "Navigatè sa a pa sipòte anrejistreman odyo."
+    "mediaRecorderNotSupported": "Navigatè sa a pa sipòte anrejistreman odyo.",
+    "microphoneNotDetected": "Mikwofòn pa detekte",
+    "microphoneBlocked": "Mikwofòn bloke. Tcheke paramèt navigatè a.",
+    "voiceTranscriptionFailed": "Transkripsyon vwa a echwe. Tanpri eseye ankò."
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",

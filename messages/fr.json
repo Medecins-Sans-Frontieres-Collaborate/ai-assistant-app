@@ -628,7 +628,10 @@
     "microphoneAccessError": "Erreur d'accès au microphone : {message}",
     "voiceInputTranscribing": "Transcription en cours...",
     "ttsRightClickHint": "Cliquez droit pour les options vocales",
-    "mediaRecorderNotSupported": "L’enregistrement audio n’est pas pris en charge dans ce navigateur."
+    "mediaRecorderNotSupported": "L’enregistrement audio n’est pas pris en charge dans ce navigateur.",
+    "microphoneNotDetected": "Aucun microphone détecté",
+    "microphoneBlocked": "Microphone bloqué. Vérifiez les paramètres du navigateur.",
+    "voiceTranscriptionFailed": "Échec de la transcription vocale. Veuillez réessayer."
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",

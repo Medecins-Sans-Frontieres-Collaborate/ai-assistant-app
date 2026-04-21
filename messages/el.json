@@ -740,7 +740,10 @@
       "audioVideo": "ήχος/βίντεο",
       "empty": "κενό"
     },
-    "mediaRecorderNotSupported": "Η καταγραφή ήχου δεν υποστηρίζεται σε αυτόν τον περιηγητή."
+    "mediaRecorderNotSupported": "Η καταγραφή ήχου δεν υποστηρίζεται σε αυτόν τον περιηγητή.",
+    "microphoneNotDetected": "Δεν εντοπίστηκε μικρόφωνο",
+    "microphoneBlocked": "Το μικρόφωνο είναι μπλοκαρισμένο. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης.",
+    "voiceTranscriptionFailed": "Η μετατροπή φωνής σε κείμενο απέτυχε. Παρακαλώ δοκιμάστε ξανά."
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",

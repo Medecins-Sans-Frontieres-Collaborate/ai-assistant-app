@@ -740,7 +740,10 @@
       "audioVideo": "amajwi/videwo",
       "empty": "ubusa"
     },
-    "mediaRecorderNotSupported": "Gufata amajwi ntibishyigikiwe muri ubu busa."
+    "mediaRecorderNotSupported": "Gufata amajwi ntibishyigikiwe muri ubu busa.",
+    "microphoneNotDetected": "Mikorofofone ntiyabonetse",
+    "microphoneBlocked": "Mikorofofone yafunzwe. Reba imyanya y'uburyo wifashisha gukoresha urubuga.",
+    "voiceTranscriptionFailed": "Guhindura ijwi mu nyandiko byanze. Gerageza kongera."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",

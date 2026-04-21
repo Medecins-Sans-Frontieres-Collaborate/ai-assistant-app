@@ -657,7 +657,10 @@
     "microphoneAccessError": "မိုက်ခရိုဖုန်း လက်ခံခွင့်အမှား: {message}",
     "voiceInputTranscribing": "စာသားသို့ ပြောင်းလဲနေသည်...",
     "ttsRightClickHint": "အသံရွေးချယ်ရန် ညာဘက်နှိပ်ပါ",
-    "mediaRecorderNotSupported": "ဤ browser တွင် အသံမှတ်တမ်းအလုပ်မလုပ်နိုင်ပါ။"
+    "mediaRecorderNotSupported": "ဤ browser တွင် အသံမှတ်တမ်းအလုပ်မလုပ်နိုင်ပါ။",
+    "microphoneNotDetected": "မိုက်ခရိုဖုန်း ရှာမတွေ့ပါ",
+    "microphoneBlocked": "မိုက်ခရိုဖုန်း ကို ပိတ်ထားပါတယ်။ ဘရောက်ဇာ ဆက်တင်များကို စစ်ပါ။",
+    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",

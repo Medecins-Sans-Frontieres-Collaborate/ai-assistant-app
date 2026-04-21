@@ -740,7 +740,10 @@
       "audioVideo": "audio/vidéo",
       "empty": "pepe"
     },
-    "mediaRecorderNotSupported": "Ködörö tî zo nginza tî audio ape na browser ôko."
+    "mediaRecorderNotSupported": "Ködörö tî zo nginza tî audio ape na browser ôko.",
+    "microphoneNotDetected": "A yékwa microphone",
+    "microphoneBlocked": "Microphone azui. Gbegë na réglage ti navigateur mo.",
+    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",

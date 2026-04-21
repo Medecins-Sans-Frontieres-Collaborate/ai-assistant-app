@@ -740,7 +740,10 @@
       "audioVideo": "feo/video",
       "empty": "foana"
     },
-    "mediaRecorderNotSupported": "Tsy tohanana amin'ity navigateur ity ny firaketana feo."
+    "mediaRecorderNotSupported": "Tsy tohanana amin'ity navigateur ity ny firaketana feo.",
+    "microphoneNotDetected": "Tsy hita ny mikrô",
+    "microphoneBlocked": "Voasakana ny mikrô. Azafady, jereo ny fikirakiran'ny navigateur.",
+    "voiceTranscriptionFailed": "Tsy nahomby ny fandikana feo. Azafady andramo indray."
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",

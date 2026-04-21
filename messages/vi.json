@@ -683,7 +683,10 @@
     "microphoneAccessError": "Lỗi truy cập micro: {message}",
     "voiceInputTranscribing": "Đang chuyển thành văn bản...",
     "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói",
-    "mediaRecorderNotSupported": "Trình duyệt này không hỗ trợ ghi âm."
+    "mediaRecorderNotSupported": "Trình duyệt này không hỗ trợ ghi âm.",
+    "microphoneNotDetected": "Không phát hiện micro",
+    "microphoneBlocked": "Micro đã bị chặn. Vui lòng kiểm tra cài đặt trình duyệt.",
+    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",

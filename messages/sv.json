@@ -682,7 +682,10 @@
     "microphoneAccessError": "Fel vid mikrofonåtkomst: {message}",
     "voiceInputTranscribing": "Transkriberar...",
     "ttsRightClickHint": "Högerklicka för röstalternativ",
-    "mediaRecorderNotSupported": "Ljudinspelning stöds inte i denna webbläsare."
+    "mediaRecorderNotSupported": "Ljudinspelning stöds inte i denna webbläsare.",
+    "microphoneNotDetected": "Ingen mikrofon hittades",
+    "microphoneBlocked": "Mikrofonen är blockerad. Kontrollera webbläsarinställningarna.",
+    "voiceTranscriptionFailed": "Rösttranskribering misslyckades. Försök igen."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",

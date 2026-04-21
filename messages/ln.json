@@ -740,7 +740,10 @@
       "audioVideo": "audio/video",
       "empty": "pamba"
     },
-    "mediaRecorderNotSupported": "Kokanga mongongo epesami te na browser oyo."
+    "mediaRecorderNotSupported": "Kokanga mongongo epesami te na browser oyo.",
+    "microphoneNotDetected": "Mikrofone emonani te",
+    "microphoneBlocked": "Mikrofone ekangami. Tala mindule ya browser.",
+    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",

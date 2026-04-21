@@ -740,7 +740,10 @@
       "audioVideo": "अडियो/भिडियो",
       "empty": "खाली"
     },
-    "mediaRecorderNotSupported": "यो ब्राउजरमा अडियो रेकर्डिङ समर्थन गरिएको छैन।"
+    "mediaRecorderNotSupported": "यो ब्राउजरमा अडियो रेकर्डिङ समर्थन गरिएको छैन।",
+    "microphoneNotDetected": "माइक्रोफोन भेटिएन",
+    "microphoneBlocked": "माइक्रोफोन रोकिएको छ। कृपया ब्राउजर सेटिङहरू जाँच गर्नुहोस्।",
+    "voiceTranscriptionFailed": "आवाज ट्रान्सक्रिप्सन असफल भयो। फेरि प्रयास गर्नुहोस्।"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",

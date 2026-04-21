@@ -740,7 +740,10 @@
       "audioVideo": "umsindo/ividiyo",
       "empty": "akunalutho"
     },
-    "mediaRecorderNotSupported": "Ukurekhoda umsindo akuxhaswanga kulesi siphequluli."
+    "mediaRecorderNotSupported": "Ukurekhoda umsindo akuxhaswanga kulesi siphequluli.",
+    "microphoneNotDetected": "Ayikho imakrofoni etholakele",
+    "microphoneBlocked": "Imakrofoni ivinjiwe. Hlola izilungiselelo zesiphequluli.",
+    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi."
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",

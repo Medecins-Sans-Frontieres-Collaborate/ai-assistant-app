@@ -682,7 +682,10 @@
     "microphoneAccessError": "Mikrofona erişim hatası: {message}",
     "voiceInputTranscribing": "Çevriliyor...",
     "ttsRightClickHint": "Ses seçenekleri için sağ tıklayın",
-    "mediaRecorderNotSupported": "Ses kaydı bu tarayıcıda desteklenmiyor."
+    "mediaRecorderNotSupported": "Ses kaydı bu tarayıcıda desteklenmiyor.",
+    "microphoneNotDetected": "Mikrofon algılanmadı",
+    "microphoneBlocked": "Mikrofon engellendi. Tarayıcı ayarlarını kontrol edin.",
+    "voiceTranscriptionFailed": "Ses transkripsiyonu başarısız oldu. Lütfen tekrar deneyin."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",

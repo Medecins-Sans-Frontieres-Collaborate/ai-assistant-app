@@ -679,7 +679,10 @@
     "microphoneAccessError": "Błąd dostępu do mikrofonu: {message}",
     "voiceInputTranscribing": "Transkrypcja...",
     "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu",
-    "mediaRecorderNotSupported": "Nagrywanie dźwięku nie jest obsługiwane w tej przeglądarce."
+    "mediaRecorderNotSupported": "Nagrywanie dźwięku nie jest obsługiwane w tej przeglądarce.",
+    "microphoneNotDetected": "Nie wykryto mikrofonu",
+    "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",
+    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",

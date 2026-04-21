@@ -740,7 +740,10 @@
       "audioVideo": "аудио/видео",
       "empty": "холӣ"
     },
-    "mediaRecorderNotSupported": "Сабти аудио дар ин браузер дастгирӣ намешавад."
+    "mediaRecorderNotSupported": "Сабти аудио дар ин браузер дастгирӣ намешавад.",
+    "microphoneNotDetected": "Микрофон муайян нашуд",
+    "microphoneBlocked": "Микрофон маҳкам шудааст. Танзимоти браузерро санҷед.",
+    "voiceTranscriptionFailed": "Транскрипсияи овоз нобарор шуд. Лутфан боз кӯшиш кунед."
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",

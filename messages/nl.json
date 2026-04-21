@@ -647,7 +647,10 @@
     "microphoneAccessError": "Microfoontoegangsprobleem: {message}",
     "voiceInputTranscribing": "Transcriberen...",
     "ttsRightClickHint": "Klik met de rechtermuisknop voor stemopties",
-    "mediaRecorderNotSupported": "Audiorecording wordt niet ondersteund in deze browser."
+    "mediaRecorderNotSupported": "Audiorecording wordt niet ondersteund in deze browser.",
+    "microphoneNotDetected": "Geen microfoon gedetecteerd",
+    "microphoneBlocked": "Microfoon geblokkeerd. Controleer de browserinstellingen.",
+    "voiceTranscriptionFailed": "Spraaktranscriptie mislukt. Probeer het opnieuw."
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",

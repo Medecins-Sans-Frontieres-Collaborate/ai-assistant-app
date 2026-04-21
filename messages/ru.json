@@ -682,7 +682,10 @@
     "microphoneAccessError": "Ошибка доступа к микрофону: {message}",
     "voiceInputTranscribing": "Распознавание речи...",
     "ttsRightClickHint": "Щёлкните правой кнопкой мыши для выбора голосовых опций",
-    "mediaRecorderNotSupported": "Запись аудио не поддерживается в этом браузере."
+    "mediaRecorderNotSupported": "Запись аудио не поддерживается в этом браузере.",
+    "microphoneNotDetected": "Микрофон не обнаружен",
+    "microphoneBlocked": "Микрофон заблокирован. Проверьте настройки браузера.",
+    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте еще раз."
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",

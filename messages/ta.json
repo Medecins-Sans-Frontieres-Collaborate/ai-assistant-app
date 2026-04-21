@@ -740,7 +740,10 @@
       "audioVideo": "ஒலி/காணொலி",
       "empty": "காலியானது"
     },
-    "mediaRecorderNotSupported": "இந்த உலாவியில் ஒலித் தொகுப்பு ஆதாரமில்லை."
+    "mediaRecorderNotSupported": "இந்த உலாவியில் ஒலித் தொகுப்பு ஆதாரமில்லை.",
+    "microphoneNotDetected": "மைக் கண்டறியப்படவில்லை",
+    "microphoneBlocked": "மைக் தடைசெய்யப்பட்டுள்ளது. உலாவி அமைப்ப들을 பரிசோதிக்கவும்.",
+    "voiceTranscriptionFailed": "குரல் எழுத்தாக்கம் தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்."
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",

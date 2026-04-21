@@ -740,7 +740,10 @@
       "audioVideo": "amajwi/amashusho",
       "empty": "biravuye"
     },
-    "mediaRecorderNotSupported": "Ifatabuguzi ukoresha ntiyemera gufata amajwi."
+    "mediaRecorderNotSupported": "Ifatabuguzi ukoresha ntiyemera gufata amajwi.",
+    "microphoneNotDetected": "Nta mikorofoni yabonetse",
+    "microphoneBlocked": "Mikorofoni yarakingiwe. Raba ingene utunganya isakoshi ya porogarama.",
+    "voiceTranscriptionFailed": "Guhindura amajwi mu nyandiko ntivyagenze neza. Gerageza gusubira."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",

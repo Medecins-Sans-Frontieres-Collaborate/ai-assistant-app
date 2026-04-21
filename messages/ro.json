@@ -680,7 +680,10 @@
     "microphoneAccessError": "Eroare de acces la microfon: {message}",
     "voiceInputTranscribing": "Transcriere în curs...",
     "ttsRightClickHint": "Faceți clic dreapta pentru opțiuni de voce",
-    "mediaRecorderNotSupported": "Înregistrarea audio nu este suportată în acest browser."
+    "mediaRecorderNotSupported": "Înregistrarea audio nu este suportată în acest browser.",
+    "microphoneNotDetected": "Nu a fost detectat niciun microfon",
+    "microphoneBlocked": "Microfon blocat. Verificați setările browserului.",
+    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou."
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
