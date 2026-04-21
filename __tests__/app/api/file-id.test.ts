@@ -86,11 +86,21 @@ describe('/api/file/[id]', () => {
       expect(response.status).toBe(200);
     });
 
-    it('accepts extension up to 4 characters', async () => {
+    it('accepts typical file extensions', async () => {
       const idWithExtension = `${validSha256}.jpeg`;
       const request = createRequest(idWithExtension, 'file');
       const response = await GET(request, {
         params: Promise.resolve({ id: idWithExtension }),
+      });
+
+      expect(response.status).toBe(200);
+    });
+
+    it('accepts longer legitimate extensions (e.g. jsonld, webp)', async () => {
+      const idWithLongExtension = `${validSha256}.jsonld`;
+      const request = createRequest(idWithLongExtension, 'file');
+      const response = await GET(request, {
+        params: Promise.resolve({ id: idWithLongExtension }),
       });
 
       expect(response.status).toBe(200);
