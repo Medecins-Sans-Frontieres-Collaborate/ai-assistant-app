@@ -95,11 +95,7 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     // Prevents construction failures on Safari where webm is unsupported.
     const format = pickRecorderFormat();
     if (!format) {
-      alert(
-        t('chat.microphoneAccessError', {
-          message: 'MediaRecorder not supported',
-        }),
-      );
+      alert(t('chat.mediaRecorderNotSupported'));
       return;
     }
 

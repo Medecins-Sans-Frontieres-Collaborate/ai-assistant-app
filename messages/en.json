@@ -674,6 +674,7 @@
     "voiceInput": "Voice Input",
     "microphoneAccessDenied": "Microphone access is denied. Please enable it in your browser settings.",
     "microphoneAccessError": "Microphone access error: {message}",
+    "mediaRecorderNotSupported": "Audio recording is not supported in this browser.",
     "swapLanguages": "Swap languages",
     "typeLanguagePlaceholder": "Type a language",
     "enterTextToTranslate": "Enter text to translate",
