@@ -12,6 +12,7 @@ vi.mock('@/lib/constants/ui', () => ({
   UI_CONSTANTS: {
     SCROLL: {
       AUTO_SCROLL_THRESHOLD: 200,
+      BOTTOM_THRESHOLD: 100,
     },
   },
 }));
@@ -231,6 +232,106 @@ describe('useChatScrolling', () => {
 
       // Completion scroll should NOT have been called
       expect(mockContainer.scrollTo).not.toHaveBeenCalled();
+    });
+
+    it('pauses auto-scroll on wheel even when scrollTop still reads as bottom (stale-read race)', () => {
+      // Regression test for the bug where `wheel` fires before the browser
+      // applies the user's scroll, so reading scrollTop in the wheel handler
+      // saw the bottom position RAF had just snapped to, and the handler
+      // failed to pause — letting the next RAF frame undo the user's scroll.
+      const scrollHeight = 2000;
+      const clientHeight = 500;
+      const mockContainer = createMockContainer({
+        scrollHeight,
+        clientHeight,
+        // Container is still reporting "at bottom" at the moment the wheel
+        // handler fires, because the browser hasn't applied the scroll yet.
+        scrollTop: scrollHeight - clientHeight,
+      });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      rerender({ isStreaming: true });
+
+      const wheelHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'wheel',
+      )?.[1];
+      expect(wheelHandler).toBeDefined();
+
+      act(() => {
+        wheelHandler!();
+      });
+      expect(result.current.showScrollDownButton).toBe(true);
+
+      // Now simulate the browser applying the user's wheel scroll, and a RAF
+      // tick that should NOT re-snap to bottom because pause already happened.
+      mockContainer.scrollTop = 1200; // user scrolled up 300px
+      act(() => {
+        rafCallbacks.forEach((cb) => cb());
+      });
+      // scrollTop must stay where the user scrolled to — not get snapped back.
+      expect(mockContainer.scrollTop).toBe(1200);
+    });
+
+    it('resumes auto-scroll when user scrolls back near the bottom', () => {
+      const scrollHeight = 2000;
+      const clientHeight = 500;
+      const mockContainer = createMockContainer({
+        scrollHeight,
+        clientHeight,
+        scrollTop: scrollHeight - clientHeight,
+      });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      rerender({ isStreaming: true });
+
+      const wheelHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'wheel',
+      )?.[1];
+      const scrollHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'scroll',
+      )?.[1];
+      expect(scrollHandler).toBeDefined();
+
+      // Pause.
+      act(() => {
+        wheelHandler!();
+      });
+      expect(result.current.showScrollDownButton).toBe(true);
+
+      // User scrolls back to within BOTTOM_THRESHOLD of the bottom.
+      mockContainer.scrollTop = scrollHeight - clientHeight - 50;
+      act(() => {
+        scrollHandler!();
+      });
+      expect(result.current.showScrollDownButton).toBe(false);
+
+      // Next RAF tick should resume snapping to bottom.
+      act(() => {
+        rafCallbacks.forEach((cb) => cb());
+      });
+      expect(mockContainer.scrollTop).toBe(scrollHeight - clientHeight);
     });
   });
 
