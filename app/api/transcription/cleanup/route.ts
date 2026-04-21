@@ -102,10 +102,11 @@ export async function POST(request: NextRequest) {
       try {
         await cleanupChunks(ownedChunkedJob.chunkPaths);
       } catch (error) {
+        // Error may surface user-derived paths; sanitize before logging.
         console.warn(
           '[TranscriptionCleanup] Failed to remove chunks for job',
           sanitizeForLog(jobId),
-          error,
+          sanitizeForLog(error),
         );
       }
     }

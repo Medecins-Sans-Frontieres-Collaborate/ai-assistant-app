@@ -5,6 +5,7 @@ import { FileProcessingService } from '@/lib/services/chat/FileProcessingService
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { loadDocumentFromPath } from '@/lib/utils/server/file/fileHandling';
 import { getContentType } from '@/lib/utils/server/file/mimeTypes';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { auth } from '@/auth';
 
@@ -127,7 +128,9 @@ export async function POST(req: NextRequest): Promise<Response> {
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   } catch (e) {
-    console.error('[api/file/process] Processing failed:', e);
+    // Error message can surface user-provided URLs / filenames from blob
+    // download failures — sanitize before logging to prevent log forging.
+    console.error('[api/file/process] Processing failed:', sanitizeForLog(e));
     const message = e instanceof Error ? e.message : 'Processing failed';
     return NextResponse.json(
       { error: message, code: 'PROCESSING_FAILED' },
