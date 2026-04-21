@@ -134,32 +134,6 @@ function convertDocumentTranslationUrlsToPlaceholders(
 }
 
 /**
- * Unified Chat Service
- *
- * Simple client-side service that routes ALL chat requests to the unified
- * /api/chat endpoint. The server pipeline handles all routing decisions.
- *
- * Features supported (through server-side pipeline):
- * - Text conversations
- * - Image conversations (vision models)
- * - File analysis (documents)
- * - Audio/video transcription
- * - Mixed content (files + images)
- * - RAG with knowledge bases
- * - Intelligent search (tool routing)
- * - AI Foundry agents
- * - ANY combination of the above
- *
- * Usage:
- * ```typescript
- * const stream = await chatService.chat(model, messages, {
- *   botId: 'my-bot',        // Enable RAG
- *   searchMode: 'intelligent', // Enable search
- *   temperature: 0.7,
- * });
- * ```
- */
-/**
  * Normalize + transform messages for any `/api/chat` request. Applied in both
  * the streaming and non-streaming paths so the server always sees the same
  * preprocessing pipeline and corruption events are logged the same way.
@@ -188,6 +162,32 @@ async function prepareMessagesForAPI(messages: Message[]): Promise<Message[]> {
   return convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
 }
 
+/**
+ * Unified Chat Service
+ *
+ * Simple client-side service that routes ALL chat requests to the unified
+ * /api/chat endpoint. The server pipeline handles all routing decisions.
+ *
+ * Features supported (through server-side pipeline):
+ * - Text conversations
+ * - Image conversations (vision models)
+ * - File analysis (documents)
+ * - Audio/video transcription
+ * - Mixed content (files + images)
+ * - RAG with knowledge bases
+ * - Intelligent search (tool routing)
+ * - AI Foundry agents
+ * - ANY combination of the above
+ *
+ * Usage:
+ * ```typescript
+ * const stream = await chatService.chat(model, messages, {
+ *   botId: 'my-bot',        // Enable RAG
+ *   searchMode: 'intelligent', // Enable search
+ *   temperature: 0.7,
+ * });
+ * ```
+ */
 export class ChatService {
   /**
    * Sends a chat request to the unified endpoint.
