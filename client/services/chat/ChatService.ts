@@ -2,6 +2,8 @@
 
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
+import { normalizeMessagesForAPI } from '@/lib/utils/shared/chat/messageNormalization';
+
 import {
   ActiveFile,
   FileMessageContent,
@@ -199,9 +201,16 @@ export class ChatService {
       activeFilesTokensUsed?: number;
     },
   ): Promise<ReadableStream<Uint8Array>> {
+    // Normalize content shape first — older conversations in localStorage
+    // can contain messages whose content is null or a bare TextMessageContent
+    // object; those would fail server-side Zod validation with
+    // "messages.N.content: Invalid input".
+    const normalizedMessages = normalizeMessagesForAPI(messages);
+
     // Convert image file references to base64 at API call time
     // This keeps localStorage small (file refs only) while sending base64 to server
-    const messagesWithBase64Images = await convertImagesToBase64(messages);
+    const messagesWithBase64Images =
+      await convertImagesToBase64(normalizedMessages);
 
     // Convert document translation URLs to text placeholders
     // Regular file URLs (/api/file/*) pass through for server-side processing
@@ -267,8 +276,12 @@ export class ChatService {
       customDisplayName?: string;
     },
   ): Promise<{ text: string; metadata?: any }> {
+    // Normalize content shape before hitting the server (see chat() for details)
+    const normalizedMessages = normalizeMessagesForAPI(messages);
+
     // Convert image file references to base64 at API call time
-    const messagesWithBase64Images = await convertImagesToBase64(messages);
+    const messagesWithBase64Images =
+      await convertImagesToBase64(normalizedMessages);
 
     // Convert document translation URLs to text placeholders
     const messagesWithPlaceholders =
