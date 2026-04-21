@@ -763,7 +763,7 @@ function migrateFromLegacyBlob(): {
  */
 export const perConversationStorage: StateStorage = {
   getItem(name: string): string | null {
-    if (typeof window === 'undefined') return null;
+    if (typeof localStorage === 'undefined') return null;
     try {
       // Check for per-conversation index first, with rebuild fallback
       let index = readIndex();
@@ -903,7 +903,7 @@ export const perConversationStorage: StateStorage = {
   },
 
   setItem(_name: string, value: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof localStorage === 'undefined') return;
     try {
       const parsed = tryParseJSON<{
         state: {
@@ -1020,7 +1020,7 @@ export const perConversationStorage: StateStorage = {
   },
 
   removeItem(_name: string): void {
-    if (typeof window === 'undefined') return;
+    if (typeof localStorage === 'undefined') return;
     try {
       const index = readIndex();
       if (index) {
