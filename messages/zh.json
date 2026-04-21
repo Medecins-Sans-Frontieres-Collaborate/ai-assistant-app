@@ -712,7 +712,8 @@
     "microphoneAccessDenied": "麦克风访问被拒绝，请在浏览器设置中启用。",
     "microphoneAccessError": "麦克风访问错误：{message}",
     "voiceInputTranscribing": "正在转录…",
-    "ttsRightClickHint": "右键点击以选择语音选项"
+    "ttsRightClickHint": "右键点击以选择语音选项",
+    "mediaRecorderNotSupported": "此浏览器不支持音频录制。"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1002,7 +1003,14 @@
     "activeFiles": {
       "autoPinUploads": "自动固定已上传文件",
       "autoPinUploadsDescription": "上传文件时自动固定，以防被移出"
-    }
+    },
+    "Quarantined Data": "隔离数据",
+    "quarantineDataDescription": "您有 {count} 个隔离{count, plural, one {项目} other {项目}}（{size}），由于数据问题无法正常加载。",
+    "Review & Recover": "查看与恢复",
+    "Export Quarantined Data": "导出隔离数据",
+    "Delete Quarantined Data": "删除隔离数据",
+    "deleteQuarantineConfirm": "确定要删除所有隔离数据吗？此操作无法撤销。",
+    "quarantineDeleteSuccess": "所有隔离数据已成功删除。"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1461,7 +1469,8 @@
     "openInEditor": "在编辑器中打开",
     "failedToUpload": "上传失败",
     "attachment": "附件",
-    "attachments": "附件"
+    "attachments": "附件",
+    "transcriptionCancelled": "已取消"
   },
   "transcript": {
     "originalTranscript": "原始文本",
@@ -1635,7 +1644,20 @@
     "fetchError": "加载转录文本失败。请重试。",
     "transcriptExpired": "{filename} 的转录文本已过期。为保障隐私，转录文本会在 {days} 天后自动删除。",
     "expirationWarning": "{filename} 的转录文本将在 {days} 天后过期。如需保存，请及时复制内容。",
-    "elapsedTime": "已用时间：{time}"
+    "elapsedTime": "已用时间：{time}",
+    "cancel": "取消转录",
+    "reconnecting": "正在重新连接…",
+    "stillProcessing": "仍在处理中——本段处理时间较长",
+    "chunkProgress": "分段进度 {completed}/{total}",
+    "transientToast": "转录失败：{filename} — 请重试",
+    "authFailedToast": "转录失败：{filename} — 请重新登录",
+    "rateLimitedToast": "转录已暂停：{filename} — 服务繁忙，请稍后重试",
+    "permanentToast": "转录失败：{filename}{error}",
+    "cancelledToast": "转录已取消：{filename}",
+    "cancelledBody": "用户已取消",
+    "transientBody": "请重试",
+    "authFailedBody": "请重新登录",
+    "rateLimitedBody": "服务繁忙，请稍后重试"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "添加您的个性化指令，以自定义 AI 的回应方式。这些将与核心行为准则结合，以确保回应的有用性、准确性和安全性。",
   "Tip: Type \"/\" to select from saved prompt templates_": "提示：输入 “/” 以选择已保存的提示模板。",

@@ -739,7 +739,8 @@
       "filesCount": "{count} ፋይል(ታት)",
       "audioVideo": "ድምጺ/ቪድዮ",
       "empty": "ባዶ"
-    }
+    },
+    "mediaRecorderNotSupported": "ድምጺ መቅዳን እዚ ብራውዘር አይግበርን።"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
       "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
-    }
+    },
+    "Quarantined Data": "ዳታ ናብ ኳራንቲን ዝተሰናኸተ",
+    "quarantineDataDescription": "{count} ብቁጽሪ ኳራንቲን ዳታ ({size}) ብጉድእ ዝተሰናኸቱ ኣብዚ አይተጽዓነን።",
+    "Review & Recover": "ኣቐምጣን ምምሕዳርን",
+    "Export Quarantined Data": "ዳታ ኳራንቲን መልእኽት",
+    "Delete Quarantined Data": "ዳታ ኳራንቲን ምድማር",
+    "deleteQuarantineConfirm": "ኩሉ ዳታ ኳራንቲን ደምሳስ ተደሊኻን? እዚ ተግባር ኣይተመለስን።",
+    "quarantineDeleteSuccess": "ኩሉ ዳታ ኳራንቲን ብትሕቲኡ ተደምሲሱ።"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "ኣብ ኤዲተር ክፈት",
     "failedToUpload": "ምጽዓን ኣይተኻእለን",
     "attachment": "ተወሳኺ",
-    "attachments": "ተወሰኽቲ"
+    "attachments": "ተወሰኽቲ",
+    "transcriptionCancelled": "ተድምሰቶ"
   },
   "userMessage": {
     "open": "ክፈት",
@@ -1670,7 +1679,20 @@
       "urdu": "ኡርዱ",
       "vietnamese": "ቬትናምኛ",
       "welsh": "ዌልሽ"
-    }
+    },
+    "cancel": "መቅረፅ ምቅናጽ",
+    "reconnecting": "እደጊሙ ኣብ ምምላስ…",
+    "stillProcessing": "እንተዛዚ ኣብ ምትብጣል ኣሎ — ዝኾነ ክፋል ንዝሓለፈው ቆይቦ ይገብር።",
+    "chunkProgress": "ክፋል {completed}/{total}",
+    "transientToast": "ትርጓም ኣይሃለወን: {filename} — ኣዲምካ ጽየው",
+    "authFailedToast": "ትርጓም ኣይሃለወን: {filename} — እቲ ኣድሓን እንደጊም ኣብ ምምልኣኽ",
+    "rateLimitedToast": "ትርጓም ተዓጺበ፡ {filename} — ኣገልግሎት ብዙሕ ሰብ ኣለዎ፣ ኣዲምካ ጽየው",
+    "permanentToast": "ትርጓም ኣይሃለወን: {filename}{error}",
+    "cancelledToast": "ትርጓም ተተወ፡ {filename}",
+    "cancelledBody": "ብተጠቃሚ ተተወ",
+    "transientBody": "ኣዲምኻ ጽየው",
+    "authFailedBody": "እቲ ኣድሓን እንደጊም ኣብ ምምልኣኽ",
+    "rateLimitedBody": "ኣገልግሎት ብብዙሕ ሰብ ይተበዝብዙ፣ ኣዲምኻ ጽየው"
   },
   "documentTranslation": {
     "title": "ናይ ሰነድ ትርጉም",

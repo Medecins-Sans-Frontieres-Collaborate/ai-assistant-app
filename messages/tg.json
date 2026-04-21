@@ -739,7 +739,8 @@
       "filesCount": "{count} файл",
       "audioVideo": "аудио/видео",
       "empty": "холӣ"
-    }
+    },
+    "mediaRecorderNotSupported": "Сабти аудио дар ин браузер дастгирӣ намешавад."
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Файлҳои боршударо худкор пайваст кардан",
       "autoPinUploadsDescription": "Файлҳоро ҳангоми боркунӣ худкор пайваст кунед, то онҳо нест шаванд"
-    }
+    },
+    "Quarantined Data": "Маълумоти карантиншуда",
+    "quarantineDataDescription": "Шумо {count} {count, plural, one {маълумот} other {маълумотҳо}}-и карантиншуда ({size}) доред, ки мушкили дода доранд ва наметавонанд муқаррарӣ бор карда шаванд.",
+    "Review & Recover": "Баррасӣ ва барқарор кардан",
+    "Export Quarantined Data": "Содироти маълумоти карантиншуда",
+    "Delete Quarantined Data": "Нест кардани маълумоти карантиншуда",
+    "deleteQuarantineConfirm": "Шумо мутмаин ҳастед, ки мехоҳед тамоми маълумоти карантиншударо нест кунед? Ин амал бекор карда намешавад.",
+    "quarantineDeleteSuccess": "Тамоми маълумоти карантиншуда бо муваффақият нест карда шуд."
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Дар Муҳаррир кушоед",
     "failedToUpload": "Боргузорӣ анҷом нашуд",
     "attachment": "замима",
-    "attachments": "замимаҳо"
+    "attachments": "замимаҳо",
+    "transcriptionCancelled": "Бекор карда шуд"
   },
   "userMessage": {
     "open": "Кушодан",
@@ -1670,7 +1679,20 @@
       "urdu": "Урду",
       "vietnamese": "Ветнамӣ",
       "welsh": "Уэлсӣ"
-    }
+    },
+    "cancel": "Бекор кардани транскрипсия",
+    "reconnecting": "Пайвастшавӣ дубора…",
+    "stillProcessing": "Ҳанӯз дар коркард — ин сегмент аз одат зиёд вақт мегирад",
+    "chunkProgress": "Қисм {completed}/{total}",
+    "transientToast": "Транскрипсия иҷро нашуд: {filename} — лутфан дубора кӯшиш кунед",
+    "authFailedToast": "Транскрипсия иҷро нашуд: {filename} — лутфан дубора ворид шавед",
+    "rateLimitedToast": "Транскрипсия муваққатан боздошта шуд: {filename} — хизматрасонӣ пурра аст, лутфан баъдтар дубора кӯшиш кунед",
+    "permanentToast": "Транскрипсия иҷро нашуд: {filename}{error}",
+    "cancelledToast": "Транскрипсия бекор шуд: {filename}",
+    "cancelledBody": "Аз ҷониби корбар бекор шуд",
+    "transientBody": "Лутфан дубора кӯшиш кунед",
+    "authFailedBody": "Лутфан дубора ворид шавед",
+    "rateLimitedBody": "Хизматрасонӣ пурра аст, лутфан баъдтар дубора кӯшиш кунед"
   },
   "documentTranslation": {
     "title": "Тарҷумаи ҳуҷҷат",

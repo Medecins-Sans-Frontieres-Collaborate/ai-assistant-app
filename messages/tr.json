@@ -681,7 +681,8 @@
     "microphoneAccessDenied": "Mikrofona erişim reddedildi. Lütfen tarayıcı ayarlarından etkinleştirin.",
     "microphoneAccessError": "Mikrofona erişim hatası: {message}",
     "voiceInputTranscribing": "Çevriliyor...",
-    "ttsRightClickHint": "Ses seçenekleri için sağ tıklayın"
+    "ttsRightClickHint": "Ses seçenekleri için sağ tıklayın",
+    "mediaRecorderNotSupported": "Ses kaydı bu tarayıcıda desteklenmiyor."
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -971,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Yüklenen dosyaları otomatik olarak sabitle",
       "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir"
-    }
+    },
+    "Quarantined Data": "Karantinaya Alınan Veriler",
+    "quarantineDataDescription": "Yüklenemeyen veri sorunlarıyla ilgili {count} karantinaya alınan {count, plural, one {öğe} other {öğe}} ({size}) bulunuyor.",
+    "Review & Recover": "İncele ve Kurtar",
+    "Export Quarantined Data": "Karantinaya Alınan Verileri Dışa Aktar",
+    "Delete Quarantined Data": "Karantinaya Alınan Verileri Sil",
+    "deleteQuarantineConfirm": "Tüm karantinaya alınan verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "quarantineDeleteSuccess": "Tüm karantinaya alınan veriler başarıyla silindi."
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1309,7 +1317,20 @@
     "fetchError": "Transkript yüklenemedi. Lütfen tekrar deneyin.",
     "transcriptExpired": "{filename} dosyasının transkriptinin süresi doldu. Gizlilik nedeniyle transkriptler {days} gün sonra otomatik olarak silinir.",
     "expirationWarning": "{filename} dosyasının transkripti {days} gün içinde silinecek. Saklamak istiyorsanız içeriği kopyalayın.",
-    "elapsedTime": "Geçen süre: {time}"
+    "elapsedTime": "Geçen süre: {time}",
+    "cancel": "Yazıyı iptal et",
+    "reconnecting": "Yeniden bağlanıyor…",
+    "stillProcessing": "Hâlâ işleniyor — bu bölüm normalden uzun sürüyor",
+    "chunkProgress": "Parça {completed}/{total}",
+    "transientToast": "Yazı aktarma başarısız: {filename} — lütfen tekrar deneyin",
+    "authFailedToast": "Yazı aktarma başarısız: {filename} — lütfen tekrar oturum açın",
+    "rateLimitedToast": "Yazı aktarma duraklatıldı: {filename} — servis kapasitesinde, lütfen kısa süre sonra tekrar deneyin",
+    "permanentToast": "Yazı aktarma başarısız: {filename}{error}",
+    "cancelledToast": "Yazı aktarma iptal edildi: {filename}",
+    "cancelledBody": "Kullanıcı tarafından iptal edildi",
+    "transientBody": "Lütfen tekrar deneyin",
+    "authFailedBody": "Lütfen tekrar oturum açın",
+    "rateLimitedBody": "Servis kapasitesinde, lütfen kısa süre sonra tekrar deneyin"
   },
   "migration": {
     "status": {
@@ -1514,7 +1535,8 @@
     "openInEditor": "Editörde Aç",
     "failedToUpload": "Yükleme başarısız oldu",
     "attachment": "ek",
-    "attachments": "ekler"
+    "attachments": "ekler",
+    "transcriptionCancelled": "İptal edildi"
   },
   "transcript": {
     "originalTranscript": "Orijinal Transkript",

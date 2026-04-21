@@ -739,7 +739,8 @@
       "filesCount": "{count} கோப்பு(கள்)",
       "audioVideo": "ஒலி/காணொலி",
       "empty": "காலியானது"
-    }
+    },
+    "mediaRecorderNotSupported": "இந்த உலாவியில் ஒலித் தொகுப்பு ஆதாரமில்லை."
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "தானாகவே பதிவேற்றப்பட்ட கோப்புகளை பின் செய்யவும்",
       "autoPinUploadsDescription": "பதிவேற்றும் போது கோப்புகளை தானாகவே பின் செய்து அவை நீக்கப்படாமல் இருப்பதை உறுதி செய்க"
-    }
+    },
+    "Quarantined Data": "தனிமைப்படுத்தப்பட்ட தரவு",
+    "quarantineDataDescription": "உங்களிடம் தரவு சிக்கல்கள் உள்ள {count} தனிமைப்படுத்தப்பட்ட {count, plural, one {item} other {items}} ({size}) உள்ளது, அவை வழக்கமாக ஏற்ற முடியவில்லை.",
+    "Review & Recover": "மறாய்வு & மீட்பு",
+    "Export Quarantined Data": "தனிமைப்படுத்தப்பட்ட தரவை ஏற்றுமதி செய்க",
+    "Delete Quarantined Data": "தனிமைப்படுத்தப்பட்ட தரவை அழி",
+    "deleteQuarantineConfirm": "அனைத்து தனிமைப்படுத்தப்பட்ட தரவையும் நிஜமாகவே அழிக்க விரும்புகிறீர்களா? இந்த செயலை மீட்டமைக்க முடியாது.",
+    "quarantineDeleteSuccess": "அனைத்து தனிமைப்படுத்தப்பட்ட தரவு வெற்றிகரமாக அழிக்கப்பட்டது."
   },
   "emptyState": {
     "greeting": "நான் எவ்வாறு உதவ முடியும்?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "திருத்தியில் திற",
     "failedToUpload": "பதிவேற்றுவது தோல்வியடைந்தது",
     "attachment": "இணைப்பு",
-    "attachments": "இணைப்புகள்"
+    "attachments": "இணைப்புகள்",
+    "transcriptionCancelled": "ரத்து செய்யப்பட்டது"
   },
   "userMessage": {
     "open": "திற",
@@ -1670,7 +1679,20 @@
       "urdu": "உருது",
       "vietnamese": "வியட்நாமியம்",
       "welsh": "வெல்ஷ்"
-    }
+    },
+    "cancel": "உரைமாற்றத்தை நிறுத்து",
+    "reconnecting": "மீண்டும் இணைகிறது…",
+    "stillProcessing": "இன்னும் செயலாக்கத்தில் உள்ளது — இந்த பகுதி சாதாரணமாகவைக் காட்டிலும் மிக அதிக நேரம் எடுக்கிறது",
+    "chunkProgress": "பகுதி {completed}/{total}",
+    "transientToast": "உரைமாற்றம் தோல்வி: {filename} — தயவு செய்து மீண்டும் முயற்சிக்கவும்",
+    "authFailedToast": "உரைமாற்றம் தோல்வி: {filename} — தயவு செய்து மீண்டும் உள்நுழையவும்",
+    "rateLimitedToast": "உரைமாற்றம் இடைநிறுத்தப்பட்டது: {filename} — சேவை பூரணமாக உள்ளது, தயவுசெய்து விரைவில் மறுபார்வை செய்யவும்",
+    "permanentToast": "உரைமாற்றம் தோல்வி: {filename}{error}",
+    "cancelledToast": "உரைமாற்றம் ரத்து செய்யப்பட்டது: {filename}",
+    "cancelledBody": "பயனர் மூலம் ரத்து செய்யப்பட்டது",
+    "transientBody": "மீண்டும் முயற்சிக்கவும்",
+    "authFailedBody": "மீண்டும் உள்நுழையவும்",
+    "rateLimitedBody": "சேவை பூர்த்தியாக உள்ளது, தயவு செய்து விரைவில் முயற்சிக்கவும்"
   },
   "documentTranslation": {
     "title": "ஆவண மொழிபெயர்ப்பு",

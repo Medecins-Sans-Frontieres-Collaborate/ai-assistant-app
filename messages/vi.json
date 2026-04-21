@@ -682,7 +682,8 @@
     "microphoneAccessDenied": "Truy cập micro đã bị từ chối. Vui lòng cho phép trong cài đặt trình duyệt của bạn.",
     "microphoneAccessError": "Lỗi truy cập micro: {message}",
     "voiceInputTranscribing": "Đang chuyển thành văn bản...",
-    "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói"
+    "ttsRightClickHint": "Nhấn chuột phải để chọn tùy chọn giọng nói",
+    "mediaRecorderNotSupported": "Trình duyệt này không hỗ trợ ghi âm."
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -972,7 +973,14 @@
     "activeFiles": {
       "autoPinUploads": "Tự động ghim tệp đã tải lên",
       "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách"
-    }
+    },
+    "Quarantined Data": "Dữ liệu bị cách ly",
+    "quarantineDataDescription": "Bạn có {count} {count, plural, one {mục} other {mục}} bị cách ly ({size}) với sự cố dữ liệu không thể tải bình thường.",
+    "Review & Recover": "Xem xét & Khôi phục",
+    "Export Quarantined Data": "Xuất dữ liệu bị cách ly",
+    "Delete Quarantined Data": "Xóa dữ liệu bị cách ly",
+    "deleteQuarantineConfirm": "Bạn có chắc muốn xóa tất cả dữ liệu bị cách ly không? Hành động này không thể hoàn tác.",
+    "quarantineDeleteSuccess": "Đã xóa thành công tất cả dữ liệu bị cách ly."
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1087,7 +1095,20 @@
     "fetchError": "Tải bản ghi không thành công. Vui lòng thử lại.",
     "transcriptExpired": "Bản ghi cho {filename} đã hết hạn. Bản ghi sẽ tự động bị xóa sau {days} ngày để đảm bảo quyền riêng tư.",
     "expirationWarning": "Bản ghi cho {filename} sẽ hết hạn trong {days} ngày nữa. Hãy sao chép nội dung nếu bạn muốn lưu lại.",
-    "elapsedTime": "Đã trôi qua: {time}"
+    "elapsedTime": "Đã trôi qua: {time}",
+    "cancel": "Hủy phiên âm",
+    "reconnecting": "Đang kết nối lại…",
+    "stillProcessing": "Vẫn đang xử lý — phân đoạn này mất nhiều thời gian hơn bình thường",
+    "chunkProgress": "Phân đoạn {completed}/{total}",
+    "transientToast": "Phiên âm thất bại: {filename} — vui lòng thử lại",
+    "authFailedToast": "Phiên âm thất bại: {filename} — vui lòng đăng nhập lại",
+    "rateLimitedToast": "Đã tạm dừng phiên âm: {filename} — dịch vụ đang quá tải, vui lòng thử lại sau",
+    "permanentToast": "Phiên âm thất bại: {filename}{error}",
+    "cancelledToast": "Phiên âm đã hủy: {filename}",
+    "cancelledBody": "Đã hủy bởi người dùng",
+    "transientBody": "Vui lòng thử lại",
+    "authFailedBody": "Vui lòng đăng nhập lại",
+    "rateLimitedBody": "Dịch vụ đang quá tải, vui lòng thử lại sau"
   },
   "transcriptionComplete": "Phiên âm hoàn tất! Văn bản đã được thêm vào ô nhập trò chuyện.",
   "importBackupParseError": "Không thể phân tích tệp sao lưu. Vui lòng đảm bảo tệp ở định dạng JSON hợp lệ.",
@@ -1545,7 +1566,8 @@
     "openInEditor": "Mở trong trình chỉnh sửa",
     "failedToUpload": "Tải lên thất bại",
     "attachment": "tệp đính kèm",
-    "attachments": "các tệp đính kèm"
+    "attachments": "các tệp đính kèm",
+    "transcriptionCancelled": "Đã hủy"
   },
   "transcript": {
     "originalTranscript": "Bản ghi gốc",

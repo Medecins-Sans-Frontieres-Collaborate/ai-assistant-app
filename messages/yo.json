@@ -739,7 +739,8 @@
       "filesCount": "fáìlì {count}",
       "audioVideo": "ohùn/fídíò",
       "empty": "òfo"
-    }
+    },
+    "mediaRecorderNotSupported": "Kíkópọ̀ ohun kò wà láàyè lórí aṣàwákiri yìí."
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1124,7 +1125,14 @@
     "activeFiles": {
       "autoPinUploads": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ",
       "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà"
-    }
+    },
+    "Quarantined Data": "Àmúkọ́ Data",
+    "quarantineDataDescription": "O ní {count} {count, plural, one {kókó} other {àwọn kókó}} tìkára rẹ̀ nínú àmúkọ́ ({size}) pẹ̀lú ìṣòro data tí a kò lè kó wọlé dáradára.",
+    "Review & Recover": "Ṣàyẹ̀wò & Gba padà",
+    "Export Quarantined Data": "Gbé Data Àmúkọ́ jáde",
+    "Delete Quarantined Data": "Pa Data Àmúkọ́ rẹ́",
+    "deleteQuarantineConfirm": "Ṣe o dájú pé o fẹ́ pa gbogbo data àmúkọ́ rẹ́? Ìgbésẹ̀ yìí kò le yí padà.",
+    "quarantineDeleteSuccess": "Gbogbo data àmúkọ́ ti parí pípà."
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1512,7 +1520,8 @@
     "openInEditor": "Ṣí Nínú Olóòtú",
     "failedToUpload": "Kò le gbe sókè",
     "attachment": "ìsopọ̀",
-    "attachments": "àwọn ìsopọ̀"
+    "attachments": "àwọn ìsopọ̀",
+    "transcriptionCancelled": "Fagilé"
   },
   "userMessage": {
     "open": "Ṣí",
@@ -1670,7 +1679,20 @@
       "urdu": "Èdè Urdu",
       "vietnamese": "Èdè Vietnam",
       "welsh": "Èdè Welsh"
-    }
+    },
+    "cancel": "Fagilé ìtúmọ̀",
+    "reconnecting": "Náyá padà…",
+    "stillProcessing": "Ṣíṣàyẹ̀wò títí kan – apá yìí ń gba àkókò tó ju bó ṣe yẹ lọ",
+    "chunkProgress": "Apá {completed}/{total}",
+    "transientToast": "Ìtúmọ̀ ṣìjẹ́ kíkọ: {filename} — jọwọ gbìyànjú lẹ́ẹkàn síi",
+    "authFailedToast": "Ìtúmọ̀ ṣìjẹ́ kíkọ: {filename} — jọwọ wọlé lẹ́ẹkàn síi",
+    "rateLimitedToast": "Ìtúmọ̀ dá dúró: {filename} — iṣẹ́ kún, jọwọ gbìyànjú lẹ́ẹkàn síi",
+    "permanentToast": "Ìtúmọ̀ ṣìjẹ́ kíkọ: {filename}{error}",
+    "cancelledToast": "A fagilé ìtúmọ̀: {filename}",
+    "cancelledBody": "A fagilé nípasẹ̀ olùlò",
+    "transientBody": "Jọwọ gbìyànjú lẹ́ẹkàn síi",
+    "authFailedBody": "Jọwọ wọlé lẹ́ẹkàn síi",
+    "rateLimitedBody": "Iṣẹ́ kún, jọwọ gbìyànjú lẹ́ẹkàn síi"
   },
   "documentTranslation": {
     "title": "Ìtúmọ̀ Ìwé",
