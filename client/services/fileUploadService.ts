@@ -11,6 +11,10 @@ import {
   uploadFileAction,
 } from '@/lib/actions/fileUpload';
 import {
+  DISALLOWED_EXTENSIONS,
+  DISALLOWED_MIME_TYPES,
+} from '@/lib/constants/disallowedFileTypes';
+import {
   getMaxSizeForFile,
   validateFileSize,
 } from '@/lib/constants/fileLimits';
@@ -37,34 +41,6 @@ export interface UploadResult {
   originalFilename: string;
   type: 'image' | 'file' | 'audio' | 'video';
 }
-
-const DISALLOWED_EXTENSIONS = [
-  '.exe',
-  '.dll',
-  '.cmd',
-  '.msi',
-  '.zip',
-  '.rar',
-  '.7z',
-  '.tar',
-  '.gz',
-  '.iso',
-];
-
-const DISALLOWED_MIME_TYPES = [
-  'application/x-msdownload',
-  'application/x-executable',
-  'application/x-dosexec',
-  'application/x-msdos-program',
-  'application/x-msi',
-  'application/zip',
-  'application/x-rar-compressed',
-  'application/x-7z-compressed',
-  'application/x-tar',
-  'application/gzip',
-  'application/x-iso9660-image',
-  'application/octet-stream',
-];
 
 export class FileUploadService {
   /**
