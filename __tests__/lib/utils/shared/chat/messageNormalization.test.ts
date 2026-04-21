@@ -68,12 +68,63 @@ describe('normalizeMessagesForAPI', () => {
       },
     ];
 
-    const result = normalizeMessagesForAPI(messages);
+    const { messages: result, report } = normalizeMessagesForAPI(messages);
 
+    expect(result).toHaveLength(3);
     expect(result[0].content).toBe('hello');
     expect(result[1].content).toBe('');
     expect(result[2].content).toBe('legacy-bare-object');
     expect(result[2].citations).toEqual([]);
+    expect(report.repairedCount).toBe(2);
+    expect(report.droppedCount).toBe(0);
+  });
+
+  it('drops messages with invalid role and reports them', () => {
+    const messages = [
+      {
+        role: 'user' as const,
+        content: 'ok',
+        messageType: MessageType.TEXT,
+      },
+      // Missing role entirely
+      {
+        content: 'orphan',
+        messageType: MessageType.TEXT,
+      } as unknown as Parameters<typeof normalizeMessagesForAPI>[0][number],
+      // Invalid role value
+      {
+        role: 'narrator' as unknown as 'user',
+        content: 'never',
+        messageType: MessageType.TEXT,
+      },
+    ];
+
+    const { messages: result, report } = normalizeMessagesForAPI(messages);
+
+    expect(result).toHaveLength(1);
+    expect(result[0].content).toBe('ok');
+    expect(report.droppedCount).toBe(2);
+    expect(report.repairedCount).toBe(0);
+  });
+
+  it('reports 0 repairs when content is a valid array that needs no filtering', () => {
+    const messages = [
+      {
+        role: 'user' as const,
+        content: [
+          { type: 'text' as const, text: 'hi' },
+          {
+            type: 'image_url' as const,
+            image_url: { url: 'https://x', detail: 'auto' as const },
+          },
+        ],
+        messageType: MessageType.TEXT,
+      },
+    ];
+
+    const { report } = normalizeMessagesForAPI(messages);
+    expect(report.repairedCount).toBe(0);
+    expect(report.droppedCount).toBe(0);
   });
 
   it('does not mutate the input array', () => {
@@ -84,7 +135,7 @@ describe('normalizeMessagesForAPI', () => {
         messageType: MessageType.TEXT,
       },
     ];
-    const result = normalizeMessagesForAPI(messages);
+    const { messages: result } = normalizeMessagesForAPI(messages);
     expect(messages[0].content).toBeNull();
     expect(result[0].content).toBe('');
   });
