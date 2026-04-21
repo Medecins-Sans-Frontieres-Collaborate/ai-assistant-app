@@ -183,4 +183,123 @@ describe('InputValidator', () => {
       ).resolves.not.toThrow();
     });
   });
+
+  describe('validateChatRequest - file_url metadata', () => {
+    const baseModel = { id: 'gpt-5', name: 'gpt-5' };
+    const requestWith = (fileBlock: unknown) => ({
+      model: baseModel,
+      messages: [
+        {
+          role: 'user' as const,
+          content: [fileBlock],
+        },
+      ],
+    });
+
+    it('preserves originalFilename, transcriptionLanguage, transcriptionPrompt through validation', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: 'Q1 Report.xlsx',
+          transcriptionLanguage: 'es',
+          transcriptionPrompt: 'Medical terminology',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBe('Q1 Report.xlsx');
+      expect(block.transcriptionLanguage).toBe('es');
+      expect(block.transcriptionPrompt).toBe('Medical terminology');
+    });
+
+    it('accepts file_url without any optional metadata', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+          }),
+        ),
+      ).not.toThrow();
+    });
+
+    it('rejects filenames containing path separators', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            originalFilename: '../etc/passwd',
+          }),
+        ),
+      ).toThrow(PipelineError);
+    });
+
+    it('rejects ".." filenames', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            originalFilename: '..',
+          }),
+        ),
+      ).toThrow(PipelineError);
+    });
+
+    it('rejects invalid transcription language codes', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            transcriptionLanguage: 'english',
+          }),
+        ),
+      ).toThrow(PipelineError);
+    });
+
+    it('accepts ISO-639-1 language codes with optional region', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            transcriptionLanguage: 'es',
+          }),
+        ),
+      ).not.toThrow();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            transcriptionLanguage: 'pt-BR',
+          }),
+        ),
+      ).not.toThrow();
+    });
+
+    it('rejects transcription prompts over 2000 chars', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+            transcriptionPrompt: 'x'.repeat(2001),
+          }),
+        ),
+      ).toThrow(PipelineError);
+    });
+  });
 });
