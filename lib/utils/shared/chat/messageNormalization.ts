@@ -3,28 +3,40 @@ import {
   ImageMessageContent,
   Message,
   TextMessageContent,
-  ThinkingContent,
 } from '@/types/chat';
 
+/**
+ * Content blocks the client expects to see inside `Message.content` arrays.
+ * Kept as a strict subset of `Message.content`'s widest array variant so
+ * {@link normalizeMessageContent}'s output is assignable to `Message.content`
+ * without a widening `as` cast.
+ *
+ * `thinking` blocks are intentionally excluded: the client stores thinking at
+ * `Message.thinking` (top-level), never inside the content array.
+ */
 type ValidContentBlock =
   | TextMessageContent
   | ImageMessageContent
-  | FileMessageContent
-  | ThinkingContent;
+  | FileMessageContent;
 
-const VALID_BLOCK_TYPES = new Set<string>([
+/** Narrowed output type; verifiable-assignable to `Message['content']`. */
+type NormalizedContent = string | ValidContentBlock[];
+
+const VALID_BLOCK_TYPES = new Set<ValidContentBlock['type']>([
   'text',
   'image_url',
   'file_url',
-  'thinking',
 ]);
 
-const VALID_ROLES = new Set<string>(['user', 'assistant', 'system']);
+const VALID_ROLES = new Set<Message['role']>(['user', 'assistant', 'system']);
 
 function isValidContentBlock(item: unknown): item is ValidContentBlock {
   if (!item || typeof item !== 'object') return false;
   const type = (item as { type?: unknown }).type;
-  return typeof type === 'string' && VALID_BLOCK_TYPES.has(type);
+  return (
+    typeof type === 'string' &&
+    VALID_BLOCK_TYPES.has(type as ValidContentBlock['type'])
+  );
 }
 
 /**
@@ -42,9 +54,7 @@ function isValidContentBlock(item: unknown): item is ValidContentBlock {
  * This normalizer is applied at the API-call boundary so the server receives
  * only valid shapes, without touching UI render paths.
  */
-export function normalizeMessageContent(
-  content: unknown,
-): string | ValidContentBlock[] {
+export function normalizeMessageContent(content: unknown): NormalizedContent {
   if (typeof content === 'string') return content;
 
   if (Array.isArray(content)) {
@@ -100,7 +110,7 @@ export function normalizeMessagesForAPI(
       !message ||
       typeof message !== 'object' ||
       typeof (message as { role?: unknown }).role !== 'string' ||
-      !VALID_ROLES.has((message as { role: string }).role)
+      !VALID_ROLES.has((message as { role: Message['role'] }).role)
     ) {
       droppedCount++;
       continue;
@@ -113,9 +123,11 @@ export function normalizeMessagesForAPI(
       repairedCount++;
     }
 
+    // `NormalizedContent` is a strict subset of `Message['content']`, so
+    // TypeScript accepts this assignment without a widening cast.
     out.push({
       ...(message as Message),
-      content: normalizedContent as Message['content'],
+      content: normalizedContent,
     });
   }
 
