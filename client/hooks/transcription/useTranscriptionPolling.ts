@@ -297,6 +297,11 @@ export function useTranscriptionPolling(): void {
   // Lazily create the AbortController the first time we need it; keep the same
   // controller for the lifetime of the mounted hook and abort on unmount. All
   // in-flight fetches share it so unmount cancels every pending request.
+  //
+  // Callers must not invoke this after the unmount cleanup has run — the ref
+  // is nulled as a safety net, but a post-unmount call would silently create a
+  // fresh (non-aborted) controller. React's effect-cleanup guarantees hold for
+  // all current call sites; this note exists so future call sites don't drift.
   const getAbortSignal = useCallback((): AbortSignal => {
     if (!abortControllerRef.current) {
       abortControllerRef.current = new AbortController();
