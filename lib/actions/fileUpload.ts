@@ -21,6 +21,13 @@ import {
   getCachedTextPath,
   shouldCacheText,
 } from '@/lib/utils/server/file/textCacheUtils';
+import {
+  MAX_CHUNK_SIZE_BYTES,
+  MAX_TOTAL_CHUNKS,
+  MAX_TOTAL_SIZE_BYTES,
+  signChunkedSession,
+  verifyChunkedSession,
+} from '@/lib/utils/server/upload/chunkedSessionSigning';
 
 import type {
   ChunkUploadResult,
@@ -194,7 +201,7 @@ async function uploadFileToBlobStorage(
   const blobStorageClient: BlobStorage = createBlobStorageClient(session);
 
   // Hash buffer directly - avoids base64 string length limit for large files
-  const hashedFileContents = Hasher.sha256(data).slice(0, 200);
+  const hashedFileContents = Hasher.sha256(data);
   const extension: string | undefined = filename.split('.').pop();
 
   // Determine content type
@@ -272,6 +279,21 @@ export async function initChunkedUploadAction(
       return { success: false, error: executableValidation.error };
     }
 
+    // Absolute bounds independent of the category-based size check below, so
+    // a pathological chunkSize/totalSize can't slip through a future refactor.
+    if (!Number.isInteger(chunkSize) || chunkSize <= 0) {
+      return { success: false, error: 'Invalid chunk size' };
+    }
+    if (chunkSize > MAX_CHUNK_SIZE_BYTES) {
+      return { success: false, error: 'Chunk size exceeds maximum' };
+    }
+    if (!Number.isInteger(totalSize) || totalSize <= 0) {
+      return { success: false, error: 'Invalid total size' };
+    }
+    if (totalSize > MAX_TOTAL_SIZE_BYTES) {
+      return { success: false, error: 'Total size exceeds maximum' };
+    }
+
     // Validate file size using category-based limits
     const sizeValidation = validateFileSizeRaw(filename, totalSize, mimeType);
     if (!sizeValidation.valid) {
@@ -287,8 +309,11 @@ export async function initChunkedUploadAction(
     const blobPath = `${userId}/uploads/${uploadLocation}/${uploadId}.${extension}`;
 
     const totalChunks = Math.ceil(totalSize / chunkSize);
+    if (totalChunks > MAX_TOTAL_CHUNKS) {
+      return { success: false, error: 'Too many chunks for this upload' };
+    }
 
-    const uploadSession: ChunkedUploadSession = {
+    const unsignedSession: ChunkedUploadSession = {
       uploadId,
       filename,
       filetype,
@@ -298,6 +323,8 @@ export async function initChunkedUploadAction(
       chunkSize,
       blobPath,
     };
+
+    const uploadSession = signChunkedSession(unsignedSession, userId);
 
     return { success: true, session: uploadSession };
   } catch (error) {
@@ -345,6 +372,12 @@ export async function uploadChunkAction(
       return { success: false, chunkIndex, error: 'Unauthorized' };
     }
 
+    const authedUserId = getUserIdFromSession(authSession);
+    const verification = verifyChunkedSession(session, authedUserId);
+    if (!verification.valid) {
+      return { success: false, chunkIndex, error: verification.reason };
+    }
+
     // Reject chunks beyond the expected range
     if (chunkIndex < 0 || chunkIndex >= session.totalChunks) {
       return {
@@ -363,9 +396,16 @@ export async function uploadChunkAction(
     const arrayBuffer = await chunk.arrayBuffer();
     const chunkBuffer = Buffer.from(arrayBuffer);
 
-    // Reject oversized chunks to prevent cumulative size abuse
+    // Reject oversized chunks to prevent cumulative size abuse. We enforce
+    // BOTH the per-session chunkSize (within a small tolerance for the last
+    // chunk) AND the absolute cap, since the HMAC guarantees chunkSize is
+    // what the server set at init — but a future bug in signing shouldn't
+    // unlock unbounded growth.
     const expectedMaxChunkSize = session.chunkSize + 1024;
-    if (chunkBuffer.length > expectedMaxChunkSize) {
+    if (
+      chunkBuffer.length > expectedMaxChunkSize ||
+      chunkBuffer.length > MAX_CHUNK_SIZE_BYTES
+    ) {
       return {
         success: false,
         chunkIndex,
@@ -420,6 +460,12 @@ export async function finalizeChunkedUploadAction(
     const authSession = await auth();
     if (!authSession) {
       return { success: false, error: 'Unauthorized' };
+    }
+
+    const authedUserId = getUserIdFromSession(authSession);
+    const verification = verifyChunkedSession(session, authedUserId);
+    if (!verification.valid) {
+      return { success: false, error: verification.reason };
     }
 
     // Get blob storage client
