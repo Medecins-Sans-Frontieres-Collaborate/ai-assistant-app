@@ -347,14 +347,9 @@ async function xlsxToText(inputPath: string): Promise<string> {
     let result = '';
     let totalBytes = 0;
     let truncatedSheets = 0;
-    let hitLimit = false;
 
     for (let i = 0; i < indexed.length; i++) {
       const { index, file } = indexed[i];
-      if (hitLimit) {
-        truncatedSheets++;
-        continue;
-      }
       const sheetName = sheetNames[index] ?? `Sheet ${index + 1}`;
       const content = await fs.promises.readFile(
         path.join(tempDir, file),
@@ -364,7 +359,6 @@ async function xlsxToText(inputPath: string): Promise<string> {
       const block = `\n\n--- START OF SHEET: ${sheetName} ---\n\n${content}\n\n--- END OF SHEET: ${sheetName} ---\n\n`;
       const blockBytes = Buffer.byteLength(block, 'utf8');
       if (totalBytes + blockBytes > MAX_EXTRACTED_TEXT_BYTES) {
-        hitLimit = true;
         truncatedSheets = indexed.length - i;
         break;
       }
@@ -372,7 +366,7 @@ async function xlsxToText(inputPath: string): Promise<string> {
       totalBytes += blockBytes;
     }
 
-    if (hitLimit && truncatedSheets > 0) {
+    if (truncatedSheets > 0) {
       const mb = Math.round(MAX_EXTRACTED_TEXT_BYTES / (1024 * 1024));
       result += `\n\n[… truncated at ${mb}MB; ${truncatedSheets} remaining sheet(s) not shown …]\n\n`;
     }
