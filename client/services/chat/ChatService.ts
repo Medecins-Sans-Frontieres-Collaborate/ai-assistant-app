@@ -284,7 +284,7 @@ export class ChatService {
     },
   ): Promise<{ text: string; metadata?: any }> {
     // Normalize content shape before hitting the server (see chat() for details)
-    const normalizedMessages = normalizeMessagesForAPI(messages);
+    const { messages: normalizedMessages } = normalizeMessagesForAPI(messages);
 
     // Convert image file references to base64 at API call time
     const messagesWithBase64Images =
