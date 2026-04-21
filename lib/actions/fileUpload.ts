@@ -287,7 +287,7 @@ export async function initChunkedUploadAction(
     if (chunkSize > MAX_CHUNK_SIZE_BYTES) {
       return { success: false, error: 'Chunk size exceeds maximum' };
     }
-    if (!Number.isInteger(totalSize) || totalSize <= 0) {
+    if (!Number.isInteger(totalSize) || totalSize < 0) {
       return { success: false, error: 'Invalid total size' };
     }
     if (totalSize > MAX_TOTAL_SIZE_BYTES) {
