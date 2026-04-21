@@ -103,7 +103,8 @@ export async function POST(request: NextRequest) {
         await cleanupChunks(ownedChunkedJob.chunkPaths);
       } catch (error) {
         console.warn(
-          `[TranscriptionCleanup] Failed to remove chunks for job ${sanitizeForLog(jobId)}:`,
+          '[TranscriptionCleanup] Failed to remove chunks for job',
+          sanitizeForLog(jobId),
           error,
         );
       }
