@@ -1635,7 +1635,6 @@
     "permanentToast": "Transcription failed: {filename}{error}",
     "cancelledToast": "Transcription cancelled: {filename}",
     "cancelledBody": "Cancelled by user",
-    "restartedBody": "Job interrupted by server restart — please try again",
     "transientBody": "Please try again",
     "authFailedBody": "Please sign in again",
     "rateLimitedBody": "Service at capacity, please retry shortly",
