@@ -154,11 +154,23 @@ describe('/api/file/[id]', () => {
       expect(data.error).toBe('Invalid file identifier');
     });
 
-    it('rejects extension longer than 4 characters', async () => {
-      const idWithLongExtension = `${validSha256}.jsonld`;
-      const request = createRequest(idWithLongExtension);
+    it('rejects executable extensions even with valid hash shape', async () => {
+      const idWithExecExtension = `${validSha256}.exe`;
+      const request = createRequest(idWithExecExtension);
       const response = await GET(request, {
-        params: Promise.resolve({ id: idWithLongExtension }),
+        params: Promise.resolve({ id: idWithExecExtension }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('Invalid file identifier');
+    });
+
+    it('rejects unreasonably long extensions', async () => {
+      const idWithAbsurdExtension = `${validSha256}.${'x'.repeat(50)}`;
+      const request = createRequest(idWithAbsurdExtension);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: idWithAbsurdExtension }),
       });
       const data = await parseJsonResponse(response);
 
