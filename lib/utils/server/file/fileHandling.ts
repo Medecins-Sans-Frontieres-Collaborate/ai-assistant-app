@@ -24,10 +24,12 @@ const execFileAsync = promisify(execFile);
  * Converter execution options applied to every external-tool invocation
  * (pandoc, pdftotext, ssconvert, libreoffice). Bounds wall-clock and output
  * buffer so a malformed input cannot pin a worker indefinitely or exhaust
- * memory with unbounded stdout.
+ * memory with unbounded stdout. The timeout matches the outer
+ * ChatPipeline.EXECUTION_TIMEOUT_MS so legitimate large conversions don't
+ * fail here when they would otherwise succeed at the pipeline level.
  */
 const CONVERTER_EXEC_OPTS = {
-  timeout: 60_000,
+  timeout: 180_000,
   killSignal: 'SIGKILL' as const,
   maxBuffer: 100 * 1024 * 1024,
 };
