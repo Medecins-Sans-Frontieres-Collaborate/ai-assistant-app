@@ -12,6 +12,57 @@ import {
 
 import { auth } from '@/auth';
 
+// Allowlist of extensions that may appear on a stored blob. Derived from the
+// supported upload categories (images, documents, audio, video, common text).
+// Anything not in this list is rejected up-front so attackers can't probe
+// blob storage with crafted extensions like `.exe`, `.bat`, etc.
+const ALLOWED_BLOB_EXTENSIONS = new Set([
+  // images
+  'jpg',
+  'jpeg',
+  'png',
+  'gif',
+  'webp',
+  'svg',
+  'bmp',
+  'ico',
+  // documents
+  'pdf',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'ppt',
+  'pptx',
+  'epub',
+  // text
+  'txt',
+  'md',
+  'json',
+  'xml',
+  'csv',
+  'tex',
+  'py',
+  'sql',
+  // audio
+  'mp3',
+  'wav',
+  'm4a',
+  'mpga',
+  'ogg',
+  'flac',
+  'aac',
+  'mpeg',
+  // video
+  'mp4',
+  'webm',
+  'mkv',
+  'mov',
+  'avi',
+  'flv',
+  'wmv',
+]);
+
 const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
   if (typeof id !== 'string' || id.length < 1) {
     console.error(
@@ -23,7 +74,9 @@ const isValidSha256Hash = (id: string | string[] | undefined): boolean => {
   if (idParts.length > 2) return false;
 
   const [idHash, idExtension] = idParts;
-  if (idExtension && idExtension.length > 4) return false;
+  if (idExtension !== undefined) {
+    if (!ALLOWED_BLOB_EXTENSIONS.has(idExtension.toLowerCase())) return false;
+  }
 
   const SHA256_HASH_LENGTH: number = 64;
   const VALID_HASH_REGEX: RegExp = /^[0-9a-f]{64}$/;
