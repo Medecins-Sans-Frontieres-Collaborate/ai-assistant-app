@@ -36,6 +36,7 @@ export function useChat() {
       originalModelId: s.originalModelId,
       showModelSwitchPrompt: s.showModelSwitchPrompt,
       failedConversation: s.failedConversation,
+      errorIsRecoverable: s.errorIsRecoverable,
     })),
   );
 

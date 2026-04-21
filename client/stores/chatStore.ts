@@ -51,6 +51,13 @@ interface ChatStore {
   failedConversation: Conversation | null;
   failedSearchMode: SearchMode | undefined;
   successfulRetryConversationId: string | null;
+  /**
+   * False when the current error is not safely retriable (e.g. the server
+   * rejected the request because a message in this conversation's history
+   * is corrupted — regenerating would fail the same way). The UI uses this
+   * to hide the Regenerate button.
+   */
+  errorIsRecoverable: boolean;
 
   // Regeneration state for message versioning
   regeneratingIndex: number | null;
@@ -194,6 +201,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   failedConversation: null,
   failedSearchMode: undefined,
   successfulRetryConversationId: null,
+  errorIsRecoverable: true,
 
   // Regeneration initial state
   regeneratingIndex: null,
@@ -253,6 +261,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       failedConversation: null,
       failedSearchMode: undefined,
       successfulRetryConversationId: null,
+      errorIsRecoverable: true,
       // Reset regeneration state
       regeneratingIndex: null,
       // Reset pending transcription state
@@ -791,8 +800,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
+    let errorIsRecoverable = true;
     if (error instanceof ApiError) {
       errorMessage = error.getUserMessage();
+      errorIsRecoverable = !error.isCorruptedHistoryError();
       console.error('API Error:', {
         status: error.status,
         message: error.message,
@@ -813,6 +824,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       isRetrying: false,
       failedConversation: conversation || null,
       failedSearchMode: searchMode,
+      errorIsRecoverable,
     });
   },
 
