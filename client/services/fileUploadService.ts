@@ -21,7 +21,12 @@ const SERVER_ACTION_THRESHOLD = 10 * 1024 * 1024; // 10MB
 // Chunked upload configuration
 const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
 const CHUNK_CONCURRENCY = 4; // Parallel in-flight chunk uploads
-const MAX_CHUNK_RETRIES = 3; // Maximum retries for a single chunk
+/**
+ * Total attempts per chunk (1 initial call + additional retries on transient
+ * failure). Mirrors the `MAX_CHUNK_ATTEMPTS` naming used in
+ * chunkedTranscriptionService so both chunked pipelines speak the same vocab.
+ */
+const MAX_CHUNK_ATTEMPTS = 3;
 
 export interface UploadProgress {
   [fileName: string]: number;
@@ -323,7 +328,7 @@ export class FileUploadService {
   ): Promise<{ success: boolean; error?: string }> {
     let lastError: string | undefined;
 
-    for (let attempt = 0; attempt < MAX_CHUNK_RETRIES; attempt++) {
+    for (let attempt = 0; attempt < MAX_CHUNK_ATTEMPTS; attempt++) {
       const chunkData = new FormData();
       chunkData.append('chunk', chunk);
 
@@ -335,14 +340,17 @@ export class FileUploadService {
 
       lastError = result.error;
 
-      // Exponential backoff: 1s, 2s, 4s
-      if (attempt < MAX_CHUNK_RETRIES - 1) {
+      // Exponential backoff between retries: 1s, 2s, …
+      if (attempt < MAX_CHUNK_ATTEMPTS - 1) {
         const delayMs = Math.pow(2, attempt) * 1000;
         await this.delay(delayMs);
       }
     }
 
-    return { success: false, error: lastError || 'Max retries exceeded' };
+    return {
+      success: false,
+      error: lastError || `Chunk failed after ${MAX_CHUNK_ATTEMPTS} attempts`,
+    };
   }
 
   /**
