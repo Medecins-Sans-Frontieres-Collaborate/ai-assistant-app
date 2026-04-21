@@ -172,11 +172,7 @@ export class FileProcessingService {
    * @returns File contents as Buffer
    */
   async readFile(filePath: string, maxRetries: number = 2): Promise<Buffer> {
-    return retryAsync(
-      () => Promise.resolve(fs.readFileSync(filePath)),
-      maxRetries,
-      1000,
-    );
+    return retryAsync(() => fs.promises.readFile(filePath), maxRetries, 1000);
   }
 
   /**
@@ -186,13 +182,11 @@ export class FileProcessingService {
    */
   async cleanupFile(filePath: string): Promise<void> {
     try {
-      fs.unlinkSync(filePath);
+      await fs.promises.unlink(filePath);
     } catch (fileUnlinkError) {
       if (
         fileUnlinkError instanceof Error &&
-        fileUnlinkError.message.startsWith(
-          'ENOENT: no such file or directory, unlink',
-        )
+        (fileUnlinkError as NodeJS.ErrnoException).code === 'ENOENT'
       ) {
         console.warn('File not found during cleanup, but this is acceptable.');
       } else {
