@@ -315,7 +315,7 @@ export class ChunkedTranscriptionService {
     totalChunks: number,
     options?: TranscriptionOptions,
   ): Promise<string> {
-    let lastError: Error = new Error('Unknown chunk transcription error');
+    let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_CHUNK_ATTEMPTS; attempt++) {
       try {
@@ -359,10 +359,15 @@ export class ChunkedTranscriptionService {
       }
     }
 
+    // `lastError` is always assigned on any iteration that takes the catch
+    // branch, and the loop runs at least once (MAX_CHUNK_ATTEMPTS ≥ 1 is
+    // enforced via TRANSCRIPTION_RETRIES = Math.max(0, …)). If the loop
+    // returns successfully on the first try we never reach here.
+    const tagged = lastError as TranscriptionError | undefined;
     const err = new Error(
-      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_ATTEMPTS} attempts: ${lastError.message}`,
+      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_ATTEMPTS} attempts: ${tagged?.message ?? 'unknown error'}`,
     ) as TranscriptionError;
-    err.errorClass = (lastError as TranscriptionError).errorClass ?? 'unknown';
+    err.errorClass = tagged?.errorClass ?? 'unknown';
     throw err;
   }
 
