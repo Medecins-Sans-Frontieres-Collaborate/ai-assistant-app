@@ -159,6 +159,35 @@ function convertDocumentTranslationUrlsToPlaceholders(
  * });
  * ```
  */
+/**
+ * Normalize + transform messages for any `/api/chat` request. Applied in both
+ * the streaming and non-streaming paths so the server always sees the same
+ * preprocessing pipeline and corruption events are logged the same way.
+ */
+async function prepareMessagesForAPI(messages: Message[]): Promise<Message[]> {
+  // Normalize content shape first — older conversations in localStorage can
+  // contain messages whose content is null or a bare TextMessageContent
+  // object; those would fail server-side Zod validation with
+  // "messages.N.content: Invalid input".
+  const { messages: normalizedMessages, report } =
+    normalizeMessagesForAPI(messages);
+  if (report.repairedCount > 0 || report.droppedCount > 0) {
+    console.warn(
+      `[ChatService] Normalized conversation history before send: ` +
+        `repaired=${report.repairedCount}, dropped=${report.droppedCount}`,
+    );
+  }
+
+  // Convert image file references to base64 at API call time. This keeps
+  // localStorage small (file refs only) while sending base64 to the server.
+  const messagesWithBase64Images =
+    await convertImagesToBase64(normalizedMessages);
+
+  // Convert document translation URLs to text placeholders. Regular file
+  // URLs (/api/file/*) pass through for server-side processing.
+  return convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
+}
+
 export class ChatService {
   /**
    * Sends a chat request to the unified endpoint.
