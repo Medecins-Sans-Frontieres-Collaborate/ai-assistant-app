@@ -343,8 +343,11 @@ export async function splitAudioFile(
   // Cap chunk count so pathologically long audio doesn't spray hundreds of
   // chunks into tmpdir and the Whisper queue. If we'd exceed the cap, grow
   // segmentDuration so the whole file fits in MAX_CHUNKS segments. The
-  // trade-off is chunks can exceed targetChunkSizeBytes, but the transcription
-  // service will re-split/retry if Whisper rejects one for size.
+  // trade-off is individual chunks can then exceed targetChunkSizeBytes; if
+  // any chunk grows past Whisper's 25MB cap, transcription of that chunk
+  // will fail permanently. There is no re-split-on-size retry today — if
+  // that becomes a real problem in practice, add one in chunkedTranscription-
+  // Service or lower MAX_CHUNKS.
   const MAX_CHUNKS = 60;
   if (estimatedChunks > MAX_CHUNKS) {
     segmentDuration = Math.ceil(totalDuration / MAX_CHUNKS);
