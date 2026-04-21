@@ -19,6 +19,8 @@ const VALID_BLOCK_TYPES = new Set<string>([
   'thinking',
 ]);
 
+const VALID_ROLES = new Set<string>(['user', 'assistant', 'system']);
+
 function isValidContentBlock(item: unknown): item is ValidContentBlock {
   if (!item || typeof item !== 'object') return false;
   const type = (item as { type?: unknown }).type;
@@ -56,13 +58,69 @@ export function normalizeMessageContent(
   return '';
 }
 
+/** Detail about what the normalizer changed while processing a message array. */
+export interface NormalizationReport {
+  /** Messages whose content shape was coerced (e.g., null → "", bare object → string, array items filtered). */
+  repairedCount: number;
+  /** Messages dropped because they were structurally unsalvageable (e.g., invalid role). */
+  droppedCount: number;
+}
+
+/** Result of {@link normalizeMessagesForAPI}. */
+export interface NormalizationResult {
+  messages: Message[];
+  report: NormalizationReport;
+}
+
+function contentWasCoerced(original: unknown, normalized: unknown): boolean {
+  if (typeof original === 'string') return false;
+  if (Array.isArray(original) && Array.isArray(normalized)) {
+    return original.length !== normalized.length;
+  }
+  // Any non-string/non-array original that reached a string/array output was coerced.
+  return true;
+}
+
 /**
- * Apply {@link normalizeMessageContent} to every message in an array.
- * Returns a new array; input is not mutated.
+ * Apply {@link normalizeMessageContent} to every message in an array, and
+ * drop entries that are structurally unsalvageable (e.g., `role` missing or
+ * not one of `user`/`assistant`/`system`). Returns a new array plus a report
+ * so callers can warn the user / log telemetry when corruption is detected.
+ * Input is not mutated.
  */
-export function normalizeMessagesForAPI(messages: Message[]): Message[] {
-  return messages.map((message) => ({
-    ...message,
-    content: normalizeMessageContent(message.content) as Message['content'],
-  }));
+export function normalizeMessagesForAPI(
+  messages: Message[],
+): NormalizationResult {
+  let repairedCount = 0;
+  let droppedCount = 0;
+
+  const out: Message[] = [];
+  for (const message of messages) {
+    if (
+      !message ||
+      typeof message !== 'object' ||
+      typeof (message as { role?: unknown }).role !== 'string' ||
+      !VALID_ROLES.has((message as { role: string }).role)
+    ) {
+      droppedCount++;
+      continue;
+    }
+
+    const originalContent = (message as Message).content;
+    const normalizedContent = normalizeMessageContent(originalContent);
+
+    if (contentWasCoerced(originalContent, normalizedContent)) {
+      repairedCount++;
+    }
+
+    out.push({
+      ...(message as Message),
+      content: normalizedContent as Message['content'],
+    });
+  }
+
+  return {
+    messages: out,
+    report: { repairedCount, droppedCount },
+  };
 }
