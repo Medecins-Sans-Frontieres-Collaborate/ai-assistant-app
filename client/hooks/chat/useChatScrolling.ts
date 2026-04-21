@@ -2,8 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { scrollToBottom } from '@/lib/utils/app/scrolling';
 
-import { UI_CONSTANTS } from '@/lib/constants/ui';
-
 type ScrollPhase = 'idle' | 'streaming' | 'completing';
 
 interface UseChatScrollingProps {
