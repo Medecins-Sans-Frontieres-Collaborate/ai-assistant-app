@@ -73,28 +73,30 @@ const MessageContentSchema = z.union([
       z.object({
         type: z.literal('file_url'),
         url: urlOrDataUrl('Invalid file URL'),
+        // Optional client-supplied metadata. We validate defensively but use
+        // `.catch(undefined)` so a weird-but-non-malicious value doesn't
+        // reject the whole chat request — downstream code treats these as
+        // optional and falls back sensibly (blobId, Whisper auto-detect, no
+        // prompt hint). Path separators and control chars are still rejected
+        // for originalFilename because loadDocument uses its extension.
         originalFilename: z
           .string()
           .min(1)
-          .max(255, 'Filename too long (max 255 chars)')
-          .refine(isSafeFilename, {
-            message: 'Filename contains invalid characters',
-          })
-          .refine((s) => s !== '.' && s !== '..' && !s.includes('..'), {
-            message: 'Invalid filename',
-          })
-          .optional(),
+          .max(255)
+          .refine(isSafeFilename)
+          .refine((s) => s !== '.' && s !== '..')
+          .optional()
+          .catch(undefined),
+        // Whisper accepts ISO-639-1 (2-letter). Accept optional region (en-US,
+        // pt-BR) and normalize case. Anything else is dropped.
         transcriptionLanguage: z
           .string()
-          .regex(
-            /^[a-z]{2}(-[A-Z]{2})?$/,
-            'Invalid transcription language code',
-          )
-          .optional(),
-        transcriptionPrompt: z
-          .string()
-          .max(2000, 'Transcription prompt too long (max 2,000 chars)')
-          .optional(),
+          .trim()
+          .transform((s) => s.toLowerCase().replace('_', '-'))
+          .pipe(z.string().regex(/^[a-z]{2}(-[a-z]{2})?$/))
+          .optional()
+          .catch(undefined),
+        transcriptionPrompt: z.string().max(2000).optional().catch(undefined),
       }),
       z.object({
         type: z.literal('thinking'),
