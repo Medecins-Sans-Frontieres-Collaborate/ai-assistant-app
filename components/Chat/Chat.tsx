@@ -113,6 +113,7 @@ export function Chat({
     originalModelId,
     dismissModelSwitchPrompt,
     acceptModelSwitch,
+    errorIsRecoverable,
   } = useChat();
 
   const {
@@ -408,7 +409,7 @@ export function Chat({
 
   // Only auto-dismiss errors that can't be regenerated (e.g., during retry)
   // When regenerate is available, let the user decide when to dismiss
-  const canRegenerate = !!error && !isRetrying;
+  const canRegenerate = !!error && !isRetrying && errorIsRecoverable;
   useAutoDismissError(canRegenerate ? null : error, clearError, 10000);
 
   const messages = selectedConversation?.messages || [];
