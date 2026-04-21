@@ -1020,6 +1020,7 @@ export const perConversationStorage: StateStorage = {
   },
 
   removeItem(_name: string): void {
+    if (typeof window === 'undefined') return;
     try {
       const index = readIndex();
       if (index) {
