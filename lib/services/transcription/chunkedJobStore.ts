@@ -116,7 +116,11 @@ function getJobFilePath(jobId: string): string {
 function saveJob(job: ChunkedJob): void {
   ensureStoreDir();
   const filePath = getJobFilePath(job.jobId);
-  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+  // PID + timestamp + small random suffix — the random chunk covers the
+  // otherwise-possible collision of two writes for the same job in the same
+  // millisecond inside the same process.
+  const randomSuffix = Math.random().toString(36).slice(2, 10);
+  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.${randomSuffix}.tmp`;
   fs.writeFileSync(tmpPath, JSON.stringify(job, null, 2), {
     encoding: 'utf-8',
     mode: 0o600,

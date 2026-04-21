@@ -1,6 +1,6 @@
 /**
- * Pure helpers for parsing the blob-transcript reference marker used to
- * embed large transcripts by reference in message content.
+ * Helpers for parsing the blob-transcript reference marker used to embed
+ * large transcripts by reference in message content.
  *
  * Format: `[Transcript: filename | blob:jobId | expires:ISO_TIMESTAMP]`
  *
