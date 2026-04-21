@@ -19,7 +19,8 @@ import {
 const SERVER_ACTION_THRESHOLD = 10 * 1024 * 1024; // 10MB
 
 // Chunked upload configuration
-const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB per chunk
+const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
+const CHUNK_CONCURRENCY = 4; // Parallel in-flight chunk uploads
 const MAX_CHUNK_RETRIES = 3; // Maximum retries for a single chunk
 
 export interface UploadProgress {
@@ -241,26 +242,51 @@ export class FileUploadService {
     const session = initResult.session;
     if (onProgress) onProgress(5);
 
-    // 2. Upload each chunk with retry logic
-    for (let i = 0; i < totalChunks; i++) {
-      const start = i * CHUNK_SIZE;
-      const end = Math.min(start + CHUNK_SIZE, file.size);
-      const chunk = file.slice(start, end);
+    // 2. Upload chunks in parallel via a bounded worker pool.
+    //
+    // Azure block staging is unordered — `commitBlockList` assembles the blob
+    // in the caller-provided block-id order, not the order blocks were staged.
+    // So parallel `stageBlock` calls are safe, and fewer serialized round
+    // trips means less per-chunk overhead (proxy, Server Action, auth, RTT).
+    let nextIndex = 0;
+    let completedChunks = 0;
+    let firstError: Error | null = null;
 
-      const chunkResult = await this.uploadChunkWithRetry(chunk, session, i);
+    const worker = async (): Promise<void> => {
+      while (firstError === null) {
+        const i = nextIndex++;
+        if (i >= totalChunks) return;
 
-      if (!chunkResult.success) {
-        throw new Error(
-          chunkResult.error ||
-            `Failed to upload chunk ${i + 1} of ${totalChunks}`,
-        );
+        const start = i * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, file.size);
+        const chunk = file.slice(start, end);
+
+        const chunkResult = await this.uploadChunkWithRetry(chunk, session, i);
+
+        if (!chunkResult.success) {
+          if (firstError === null) {
+            firstError = new Error(
+              chunkResult.error ||
+                `Failed to upload chunk ${i + 1} of ${totalChunks}`,
+            );
+          }
+          return;
+        }
+
+        completedChunks++;
+        if (onProgress) {
+          const progressPercent =
+            5 + Math.round((completedChunks / totalChunks) * 90);
+          onProgress(progressPercent);
+        }
       }
+    };
 
-      // Report progress after each chunk (5% - 95% range)
-      if (onProgress) {
-        const progressPercent = 5 + Math.round(((i + 1) / totalChunks) * 90);
-        onProgress(progressPercent);
-      }
+    const workerCount = Math.min(CHUNK_CONCURRENCY, totalChunks);
+    await Promise.all(Array.from({ length: workerCount }, () => worker()));
+
+    if (firstError) {
+      throw firstError;
     }
 
     // 3. Finalize the upload (commit all blocks)
