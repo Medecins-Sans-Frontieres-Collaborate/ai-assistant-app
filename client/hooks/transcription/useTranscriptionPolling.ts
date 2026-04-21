@@ -33,9 +33,22 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 
+/** Display durations for transcription-related toasts. */
+const TOAST_DURATION_MS = {
+  /** Failure / warning toasts — linger a bit longer so users can read. */
+  failure: 5000,
+  /** Success toasts — dismiss a little quicker. */
+  success: 4000,
+};
+
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === 'AbortError';
 }
+
+/** Translator scoped to the `transcription` namespace. */
+type TranscriptionTranslator = ReturnType<
+  typeof useTranslations<'transcription'>
+>;
 
 /**
  * Picks localized copy and the right `react-hot-toast` variant for a failure
@@ -43,13 +56,13 @@ function isAbortError(error: unknown): boolean {
  * toast string, the message-body string, and the file-preview state stay in
  * sync across cancellation, timeout, and the various error classes.
  */
-type FailureCopy = {
+interface FailureCopy {
   toastMessage: string;
   body: string;
   previewStatus: 'failed' | 'cancelled';
-  /** True → `toast()`; false → `toast.error()`. */
-  neutral: boolean;
-};
+  /** `neutral` → `toast()`; `error` → `toast.error()`. */
+  variant: 'error' | 'neutral';
+}
 
 function pickFailureCopy(
   data: Pick<
@@ -57,14 +70,14 @@ function pickFailureCopy(
     'error' | 'errorClass' | 'cancelled'
   >,
   filename: string,
-  t: (key: string, values?: Record<string, string | number>) => string,
+  t: TranscriptionTranslator,
 ): FailureCopy {
   if (data.cancelled) {
     return {
       toastMessage: t('cancelledToast', { filename }),
       body: `[${t('cancelledBody')}]`,
       previewStatus: 'cancelled',
-      neutral: true,
+      variant: 'neutral',
     };
   }
   switch (data.errorClass) {
@@ -73,21 +86,21 @@ function pickFailureCopy(
         toastMessage: t('rateLimitedToast', { filename }),
         body: `[${t('rateLimitedBody')}]`,
         previewStatus: 'failed',
-        neutral: false,
+        variant: 'error',
       };
     case 'auth':
       return {
         toastMessage: t('authFailedToast', { filename }),
         body: `[${t('authFailedBody')}]`,
         previewStatus: 'failed',
-        neutral: false,
+        variant: 'error',
       };
     case 'transient':
       return {
         toastMessage: t('transientToast', { filename }),
         body: `[${t('transientBody')}]`,
         previewStatus: 'failed',
-        neutral: false,
+        variant: 'error',
       };
     case 'permanent':
       return {
@@ -97,23 +110,24 @@ function pickFailureCopy(
         }),
         body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
         previewStatus: 'failed',
-        neutral: false,
+        variant: 'error',
       };
     default:
       return {
         toastMessage: t('failedToast', { filename }),
         body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
         previewStatus: 'failed',
-        neutral: false,
+        variant: 'error',
       };
   }
 }
 
 function showFailureToast(copy: FailureCopy): void {
-  if (copy.neutral) {
-    toast(copy.toastMessage, { duration: 5000 });
+  const opts = { duration: TOAST_DURATION_MS.failure };
+  if (copy.variant === 'neutral') {
+    toast(copy.toastMessage, opts);
   } else {
-    toast.error(copy.toastMessage, { duration: 5000 });
+    toast.error(copy.toastMessage, opts);
   }
 }
 
@@ -351,7 +365,7 @@ export function useTranscriptionPolling(): void {
       setConversationTranscriptionPending(null);
 
       toast.error(t('timedOutToast', { filename }), {
-        duration: 5000,
+        duration: TOAST_DURATION_MS.failure,
       });
 
       scheduleCleanup({ jobId, blobPath });
@@ -497,7 +511,7 @@ export function useTranscriptionPolling(): void {
         setConversationTranscriptionPending(null);
 
         toast.success(t('completedToast', { filename }), {
-          duration: 4000,
+          duration: TOAST_DURATION_MS.success,
         });
 
         // Generate AI title now that transcription is complete
@@ -526,7 +540,7 @@ export function useTranscriptionPolling(): void {
       // server reports as `status: 'Failed'` with `cancelled: true`).
       else if (data.status === 'Failed') {
         const copy = pickFailureCopy(data, filename, t);
-        console[copy.neutral ? 'log' : 'error'](
+        console[copy.variant === 'neutral' ? 'log' : 'error'](
           `[useTranscriptionPolling] Conversation transcription ${
             copy.previewStatus
           }: ${filename}${data.errorClass ? ` (${data.errorClass})` : ''}`,
@@ -654,7 +668,7 @@ export function useTranscriptionPolling(): void {
             );
 
             toast.success(t('completedToast', { filename: job.filename }), {
-              duration: 4000,
+              duration: TOAST_DURATION_MS.success,
             });
 
             // Remove from pending after a short delay
