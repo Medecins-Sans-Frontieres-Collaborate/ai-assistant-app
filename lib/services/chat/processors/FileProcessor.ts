@@ -316,12 +316,15 @@ export class FileProcessor extends BasePipelineStage {
                   );
 
                   if (audioSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
-                    const capGB = (
-                      FILE_SIZE_LIMITS.VIDEO_MAX_BYTES /
-                      (1024 * 1024 * 1024)
-                    ).toFixed(1);
+                    // VIDEO_MAX_BYTES (1.5GB) is the defense-in-depth upper
+                    // bound for this path — the upload route applies the
+                    // per-type caps (1GB audio / 1.5GB video) before we get
+                    // here. Hitting this branch means either pre-upload
+                    // validation was bypassed or extracted audio unexpectedly
+                    // exceeded the ceiling; either way, the user-facing
+                    // message stays generic.
                     throw new Error(
-                      `Audio file "${filename}" (${audioSizeMB}MB) exceeds the ${capGB}GB transcription limit.`,
+                      `File "${filename}" (${audioSizeMB}MB) is too large to transcribe.`,
                     );
                   }
 
