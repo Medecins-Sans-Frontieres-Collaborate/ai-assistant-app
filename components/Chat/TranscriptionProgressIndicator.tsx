@@ -5,7 +5,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { computeTimeoutMs } from '@/client/hooks/transcription/useTranscriptionPolling';
+import {
+  BASE_TRANSCRIPTION_TIMEOUT_MS,
+  computeTimeoutMs,
+} from '@/client/hooks/transcription/useTranscriptionPolling';
 
 /** Idle threshold before a chunked job's progress bar switches to the
  * "still processing" hint + muted pulse. */
@@ -61,13 +64,13 @@ export function TranscriptionProgressIndicator({
   isReconnecting,
 }: Props) {
   // Honest ceiling: prefer the chunk-count-scaled timeout from the polling
-  // hook over a hardcoded 10 minutes. Fall back to the 10-min default only
-  // when neither signal is available.
+  // hook over the base fallback. Only use `maxDurationMs`/base when there's
+  // no chunk-count signal to scale with.
   const effectiveMaxDurationMs =
     maxDurationMs ??
     (totalChunks !== undefined
       ? computeTimeoutMs(totalChunks)
-      : 10 * 60 * 1000);
+      : BASE_TRANSCRIPTION_TIMEOUT_MS);
   const t = useTranslations('transcription');
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
