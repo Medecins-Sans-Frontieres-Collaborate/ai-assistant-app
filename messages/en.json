@@ -1545,6 +1545,8 @@
     "open": "Open",
     "showFullMessage": "Show full message",
     "collapse": "Collapse",
+    "showMore": "Show more",
+    "showLess": "Show less",
     "customTone": "Custom Tone"
   },
   "codeBlock": {
