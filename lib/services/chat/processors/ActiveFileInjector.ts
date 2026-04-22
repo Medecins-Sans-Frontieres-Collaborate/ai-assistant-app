@@ -1,5 +1,6 @@
 import {
   buildActiveFileTextBlock,
+  computeActiveFilePerTurnBudget,
   selectFilesForBudget,
 } from '@/lib/utils/server/chat/activeFiles';
 
@@ -50,8 +51,10 @@ export class ActiveFileInjector extends BasePipelineStage {
       return { ...context, activeFilesTokensConsumedThisTurn: 0 };
     }
 
-    // Apply budget selection with session quota cap
-    const budgetTokens = 2000;
+    // Apply budget selection with session quota cap. The per-turn ceiling
+    // scales with the model's context window so modern 128k/200k models get
+    // the headroom they can support, while legacy models stay at the floor.
+    const budgetTokens = computeActiveFilePerTurnBudget(context.model);
     const effectiveBudget = Math.min(budgetTokens, remaining);
     const selected = selectFilesForBudget(sanitizedFiles, effectiveBudget);
 
