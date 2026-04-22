@@ -189,30 +189,35 @@ export const ChatMessage: FC<Props> = ({
 
     if (message.role === 'user') {
       return (
-        <UserMessage
-          message={message}
-          messageContent={textContent}
-          setMessageContent={setMessageContent}
-          isEditing={isEditing}
-          textareaRef={textareaRef}
-          handleInputChange={handleInputChange}
-          handlePressEnter={handlePressEnter}
-          setIsTyping={setIsTyping}
-          setIsEditing={setIsEditing}
-          toggleEditing={toggleEditing}
-          handleDeleteMessage={handleDeleteMessage}
-          onEdit={onEdit || (() => {})}
-          selectedConversation={selectedConversation}
-          onRegenerate={onRegenerate}
-          onSaveAsPrompt={handleSaveAsPromptClick}
+        <div
+          className="group text-gray-800 dark:text-gray-100"
+          style={{ overflowWrap: 'anywhere' }}
         >
-          <FileContent
-            files={files}
-            images={images}
-            parentMessage={message}
-            parentMessageIndex={messageIndex}
-          />
-        </UserMessage>
+          <UserMessage
+            message={message}
+            messageContent={textContent}
+            setMessageContent={setMessageContent}
+            isEditing={isEditing}
+            textareaRef={textareaRef}
+            handleInputChange={handleInputChange}
+            handlePressEnter={handlePressEnter}
+            setIsTyping={setIsTyping}
+            setIsEditing={setIsEditing}
+            toggleEditing={toggleEditing}
+            handleDeleteMessage={handleDeleteMessage}
+            onEdit={onEdit || (() => {})}
+            selectedConversation={selectedConversation}
+            onRegenerate={onRegenerate}
+            onSaveAsPrompt={handleSaveAsPromptClick}
+          >
+            <FileContent
+              files={files}
+              images={images}
+              parentMessage={message}
+              parentMessageIndex={messageIndex}
+            />
+          </UserMessage>
+        </div>
       );
     } else {
       return (
