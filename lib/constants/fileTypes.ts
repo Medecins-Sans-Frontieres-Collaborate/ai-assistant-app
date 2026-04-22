@@ -72,6 +72,31 @@ export const TRANSCRIPTION_ACCEPT_TYPES =
   'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.mkv,.mov,.avi,.flv,.wmv';
 
 /**
+ * Accept attribute value for image file inputs.
+ */
+export const IMAGE_ACCEPT_TYPES = 'image/*';
+
+/**
+ * Accept attribute value for document + code file inputs (everything we parse
+ * server-side that isn't an image or A/V file).
+ */
+export const DOCUMENT_AND_CODE_ACCEPT_TYPES =
+  '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.csv,.json,.xml,.yaml,.yml,' +
+  '.py,.js,.ts,.jsx,.tsx,.java,.c,.cpp,.cs,.go,.rb,.php,.sql,.sh,.bash,.ps1,.r,' +
+  '.swift,.kt,.rs,.scala,.env,.config,.ini,.toml';
+
+/**
+ * Accept attribute value for the generic "attach any file" inputs. By
+ * construction a superset of {@link TRANSCRIPTION_ACCEPT_TYPES} — attaching
+ * should always offer at least every format the transcribe flow accepts.
+ */
+export const ATTACH_ACCEPT_TYPES = [
+  IMAGE_ACCEPT_TYPES,
+  DOCUMENT_AND_CODE_ACCEPT_TYPES,
+  TRANSCRIPTION_ACCEPT_TYPES,
+].join(',');
+
+/**
  * Document file extensions supported for Azure Document Translation.
  * These formats support synchronous single-file translation.
  */
