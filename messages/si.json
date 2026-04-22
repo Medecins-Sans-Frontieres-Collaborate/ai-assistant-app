@@ -648,7 +648,11 @@
     "microphoneAccessDenied": "මයික්රොෆෝන් ප්‍රවේශය ප්‍රතික්ෂේප වී ඇත. කරුණාකර ඔබේ බ්‍රව්සරයේ සැකසුම්වලදී එය සක්‍රිය කරන්න.",
     "microphoneAccessError": "මයික්රොෆෝන් ප්‍රවේශ දෝෂය: {message}",
     "voiceInputTranscribing": "පරිවර්තනය වෙමින්...",
-    "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න"
+    "ttsRightClickHint": "ශ්‍රව්‍ය විකල්ප සඳහා දකුණට ක්ලික් කරන්න",
+    "mediaRecorderNotSupported": "මෙම බ්‍රව්සායේ ශ්‍රව්‍ය රැඳවීම සහය නොදක්වයි.",
+    "microphoneNotDetected": "මයික්‍රෝෆෝනය හඳුනාගෙන නොමැත",
+    "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර කර ඇත. අතිරේකයන්ගේ සැකසුම් සොයා බලන්න.",
+    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න."
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -938,7 +942,14 @@
     "activeFiles": {
       "autoPinUploads": "ඉදිරිප්‍රවේශ ගොනු ස්වයංක්‍රීයව පිහිටුවන්න",
       "autoPinUploadsDescription": "ඉදිරිප්‍රවේශගත වන විට ගොනු ස්වයංක්‍රීයව පිහිටීම, ඒවා ඉවත් නොවන ලෙස"
-    }
+    },
+    "Quarantined Data": "අන්තර්ගත කිරීමේ තාවකාලික දත්ත",
+    "quarantineDataDescription": "ඔබ සතුව දත්ත ගැටළු නිසා සාමාන්‍ය ලෙස පූරණය කළ නොහැකි {count} අන්තර්ගත කිරීමේ {count, plural, one {අයිතමය} other {අයිතම}} ({size}) ඇත.",
+    "Review & Recover": "සමාලෝචනය කරන්න සහ ප්‍රතිසාධනය කරන්න",
+    "Export Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත එක්ස්පෝර්ට් කරන්න",
+    "Delete Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත මකන්න",
+    "deleteQuarantineConfirm": "සියළු අන්තර්ගත කිරීමේ දත්ත මැකීමට ඔබට විශ්වාසද? මෙම ක්‍රියාව ප්‍රතික්ෂේප කළ නොහැක.",
+    "quarantineDeleteSuccess": "සියළු අන්තර්ගත කිරීමේ දත්ත සාර්ථකව මකාදමා ඇත."
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1053,7 +1064,20 @@
     "fetchError": "පරිවර්තනය ලෝඩ් කිරීම අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.",
     "transcriptExpired": "{filename} සඳහා පරිවර්තනය කල් ඉකුත් වී ඇත. පෞද්ගලිකත්වය සඳහා පරිවර්තන ස්වයංක්‍රීයව දින {days} කට පසු මකා දැමේ.",
     "expirationWarning": "{filename} සඳහා පරිවර්තනය දින {days}ක් ඇතුළත කල් ඉකුත් වේ. ඔබට ඒවා තබා ගන්න අවශ්‍ය නම් අන්තර්ගතය පිටපත් කර ගන්න.",
-    "elapsedTime": "ගිය කාලය: {time}"
+    "elapsedTime": "ගිය කාලය: {time}",
+    "cancel": "ප්‍රතිලේඛනය අවලංගු කරන්න",
+    "reconnecting": "ආපසු සම්බන්ධ වෙමින්…",
+    "stillProcessing": "තවම පිරික්සමින් — මෙම කොටස සාමාන්‍යයට වඩා වැඩි කාලයක් ගනිමින් පවතී",
+    "chunkProgress": "කොටස {completed}/{total}",
+    "transientToast": "ප්‍රතිලේඛනය අසාර්ථකයි: {filename} — කරුණාකර නැවත උත්සාහ කරන්න",
+    "authFailedToast": "ප්‍රතිලේඛනය අසාර්ථකයි: {filename} — කරුණාකර නැවත පුරනය වන්න",
+    "rateLimitedToast": "ප්‍රතිලේඛනය තාවකාලිකව නවතා ඇත: {filename} — සේවාව සීමාවට පැමිණ ඇත, එවක්කට පසුව නැවත උත්සාහ කරන්න",
+    "permanentToast": "ප්‍රතිලේඛනය අසාර්ථකයි: {filename}{error}",
+    "cancelledToast": "ප්‍රතිලේඛනය අවලංගු කරන ලදි: {filename}",
+    "cancelledBody": "පරිශීලකයා විසින් අවලංගු කරන ලදි",
+    "transientBody": "කරුණාකර නැවත උත්සාහ කරන්න",
+    "authFailedBody": "කරුණාකර නැවත පුරනය වන්න",
+    "rateLimitedBody": "සේවාව සීමාවට පැමිණ ඇත, කරුණාකර ඉක්මනින් නැවත උත්සාහ කරන්න"
   },
   "transcriptionComplete": "ප්‍රතිලේඛනය සම්පූර්ණයි! පෙළ සංවාදයට එක් වී ඇත.",
   "No prompts found": "ප්‍රේරණ කිසිවක් හමු නොවිණි",
@@ -1514,7 +1538,8 @@
     "openInEditor": "සකසන මෙවලමෙන් විවෘත කරන්න",
     "failedToUpload": "උඩුගත කිරීම අසාර්ථකයි",
     "attachment": "අමුණුම",
-    "attachments": "අමුණුම්"
+    "attachments": "අමුණුම්",
+    "transcriptionCancelled": "අවලංගු කරන ලදි"
   },
   "transcript": {
     "originalTranscript": "මුල් කිරීමේ ලිපිය",
@@ -1536,7 +1561,9 @@
     "open": "විවෘත කරන්න",
     "showFullMessage": "සම්පූර්ණ පණිවිඩය පෙන්වන්න",
     "collapse": "හකුලා ගන්න",
-    "customTone": "අභිරුචි ස්වරය"
+    "customTone": "අභිරුචි ස්වරය",
+    "showMore": "තව දැක්වන්න",
+    "showLess": "අඩු දැක්වන්න"
   },
   "codeBlock": {
     "openInEditor": "සකසන මෙවලමෙන් විවෘත කරන්න"

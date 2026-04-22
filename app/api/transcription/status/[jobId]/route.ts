@@ -13,7 +13,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
-import { getJob } from '@/lib/services/transcription/chunkedJobStore';
+import {
+  JOB_CANCELLED_MESSAGE,
+  JOB_ID_REGEX,
+  getJobForUser,
+} from '@/lib/services/transcription/chunkedJobStore';
 
 import {
   errorResponse,
@@ -29,7 +33,7 @@ export async function GET(
 ) {
   // Verify authentication
   const session = await auth();
-  if (!session) {
+  if (!session?.user?.id) {
     return unauthorizedResponse();
   }
 
@@ -39,10 +43,23 @@ export async function GET(
     return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
   }
 
-  // First, check if this is a chunked transcription job (in-memory)
-  const chunkedJob = getJob(jobId);
+  // Distinguish "malformed jobId" from "not found / not yours" — they mean
+  // different things for the client.
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return NextResponse.json(
+      { error: 'Invalid jobId format', code: 'INVALID_JOB_ID' },
+      { status: 400 },
+    );
+  }
+
+  // First, check if this is a chunked transcription job owned by this user.
+  // getJobForUser returns undefined on ownership mismatch, which is
+  // indistinguishable from "not found" — prevents jobId enumeration.
+  const chunkedJob = getJobForUser(jobId, session.user.id);
   if (chunkedJob) {
-    // Map internal status to API status
+    // Map internal status to API status. Cancelled collapses into Failed
+    // for the wire format so existing clients don't need to learn a new
+    // status literal; the message carries the distinction.
     let status: 'NotStarted' | 'Running' | 'Succeeded' | 'Failed';
     switch (chunkedJob.status) {
       case 'pending':
@@ -55,14 +72,20 @@ export async function GET(
         status = 'Succeeded';
         break;
       case 'failed':
+      case 'cancelled':
         status = 'Failed';
         break;
     }
 
+    const cancelled = chunkedJob.status === 'cancelled';
     return successResponse({
       status,
       transcript: chunkedJob.transcript,
-      error: chunkedJob.error,
+      error: cancelled ? JOB_CANCELLED_MESSAGE : chunkedJob.error,
+      // Expose classification so the client can pick appropriate recovery UX
+      // (retry vs re-auth vs "try a different file"). Absent for non-failures.
+      errorClass: cancelled ? undefined : chunkedJob.errorClass,
+      cancelled: cancelled || undefined,
       progress: {
         completed: chunkedJob.completedChunks,
         total: chunkedJob.totalChunks,

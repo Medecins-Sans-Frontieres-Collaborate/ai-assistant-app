@@ -682,7 +682,11 @@
     "microphoneAccessDenied": "مائیکروفون تک رسائی مسترد کر دی گئی ہے۔ براہ کرم اپنے براؤزر سیٹنگز میں اسے فعال کریں۔",
     "microphoneAccessError": "مائیکروفون تک رسائی میں خرابی: {message}",
     "voiceInputTranscribing": "ٹرانسکرائب کیا جا رہا ہے...",
-    "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں"
+    "ttsRightClickHint": "آواز کے اختیارات کے لیے رائٹ کلک کریں",
+    "mediaRecorderNotSupported": "اس براؤزر میں آڈیو ریکارڈنگ سپورٹ نہیں کرتی۔",
+    "microphoneNotDetected": "کوئی مائیکروفون نہیں ملا",
+    "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی سیٹنگز چیک کریں۔",
+    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -972,7 +976,14 @@
     "activeFiles": {
       "autoPinUploads": "اپ لوڈ شدہ فائلز کو خودکار طور پر پن کریں",
       "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں"
-    }
+    },
+    "Quarantined Data": "قرنطینہ شدہ ڈیٹا",
+    "quarantineDataDescription": "آپ کے پاس {count} قرنطینہ شدہ {count, plural, one {آئٹم} other {آئٹمز}} ({size}) ہیں جن میں ڈیٹا کے مسائل ہیں اور وہ معمول کے مطابق لوڈ نہیں ہو سکے۔",
+    "Review & Recover": "دیکھیں اور بازیاب کریں",
+    "Export Quarantined Data": "قرنطینہ شدہ ڈیٹا ایکسپورٹ کریں",
+    "Delete Quarantined Data": "قرنطینہ شدہ ڈیٹا حذف کریں",
+    "deleteQuarantineConfirm": "کیا آپ واقعی تمام قرنطینہ شدہ ڈیٹا حذف کرنا چاہتے ہیں؟ اس عمل کو واپس نہیں لیا جا سکتا۔",
+    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف کر دیا گیا۔"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1059,7 +1070,20 @@
     "fetchError": "ٹرانسکرپٹ لوڈ کرنے میں ناکامی۔ براہ مہربانی دوبارہ کوشش کریں۔",
     "transcriptExpired": "{filename} کے لیے ٹرانسکرپٹ کی میعاد ختم ہو چکی ہے۔ رازداری کے لیے ٹرانسکرپٹس {days} دن بعد خود بخود حذف ہو جاتے ہیں۔",
     "expirationWarning": "{filename} کے لیے ٹرانسکرپٹ {days} دن میں ختم ہو جائے گا۔ اگر آپ کو اس کو محفوظ کرنا ہے تو اس کا مواد نقل کر لیں۔",
-    "elapsedTime": "گزرا ہوا وقت: {time}"
+    "elapsedTime": "گزرا ہوا وقت: {time}",
+    "cancel": "تدوین کی منسوخی",
+    "reconnecting": "دوبارہ کنیکٹ کیا جا رہا ہے…",
+    "stillProcessing": "ابھی عمل جاری ہے — اس حصے کو معمول سے زیادہ وقت لگ رہا ہے",
+    "chunkProgress": "چنک {completed}/{total}",
+    "transientToast": "تدوین ناکام رہی: {filename} — براہ کرم دوبارہ کوشش کریں",
+    "authFailedToast": "تدوین ناکام رہی: {filename} — براہ کرم دوبارہ سائن ان کریں",
+    "rateLimitedToast": "تدوین روکی گئی: {filename} — سروس اپنی حد کر چکی ہے، براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں",
+    "permanentToast": "تدوین ناکام رہی: {filename}{error}",
+    "cancelledToast": "تدوین منسوخ ہوئی: {filename}",
+    "cancelledBody": "صارف نے منسوخ کی",
+    "transientBody": "براہ کرم دوبارہ کوشش کریں",
+    "authFailedBody": "براہ کرم دوبارہ سائن ان کریں",
+    "rateLimitedBody": "سروس اپنی حد پر ہے، براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں"
   },
   "importBackupParseError": "بیک اپ فائل پارس کرنے میں ناکام۔ براہ کرم یقینی بنائیں کہ یہ درست JSON ہے۔",
   "emptyState": {
@@ -1516,7 +1540,8 @@
     "openInEditor": "ایڈیٹر میں کھولیں",
     "failedToUpload": "اپ لوڈ ناکام",
     "attachment": "اٹیچمنٹ",
-    "attachments": "اٹیچمنٹس"
+    "attachments": "اٹیچمنٹس",
+    "transcriptionCancelled": "منسوخ کر دیا گیا"
   },
   "transcript": {
     "originalTranscript": "اصل نقل",
@@ -1538,7 +1563,9 @@
     "open": "کھولیں",
     "showFullMessage": "مکمل پیغام دکھائیں",
     "collapse": "سمیٹیں",
-    "customTone": "حسب منشا انداز"
+    "customTone": "حسب منشا انداز",
+    "showMore": "مزید دکھائیں",
+    "showLess": "کم دکھائیں"
   },
   "codeBlock": {
     "openInEditor": "ایڈیٹر میں کھولیں"

@@ -48,6 +48,18 @@ export class ApiError extends Error {
   }
 
   /**
+   * Detects server-side validation failures whose path points into the
+   * `messages[N]` array — these indicate a corrupted message record in the
+   * current conversation's history (e.g., legacy `content` shape that the
+   * server Zod schema rejects) rather than a problem with what the user
+   * just typed.
+   */
+  public isCorruptedHistoryError(): boolean {
+    if (this.status !== 400) return false;
+    return /validation failed:\s*messages\.\d+\./i.test(this.message);
+  }
+
+  /**
    * Returns a user-friendly error message.
    */
   public getUserMessage(): string {
@@ -57,6 +69,13 @@ export class ApiError extends Error {
 
     if (this.isServerError()) {
       return 'Server error. Please try again later.';
+    }
+
+    if (this.isCorruptedHistoryError()) {
+      return (
+        "This conversation's history couldn't be validated and the message " +
+        'could not be sent. Please start a new conversation to continue.'
+      );
     }
 
     return this.message || 'An error occurred. Please try again.';

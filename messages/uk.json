@@ -598,7 +598,11 @@
     "microphoneAccessDenied": "Доступ до мікрофона заборонено. Будь ласка, увімкніть його в налаштуваннях браузера.",
     "microphoneAccessError": "Помилка доступу до мікрофона: {message}",
     "voiceInputTranscribing": "Транскрибування...",
-    "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування"
+    "ttsRightClickHint": "Клацніть правою кнопкою для параметрів озвучування",
+    "mediaRecorderNotSupported": "Аудіозапис не підтримується у цьому браузері.",
+    "microphoneNotDetected": "Мікрофон не знайдено",
+    "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",
+    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз."
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -888,7 +892,14 @@
     "activeFiles": {
       "autoPinUploads": "Автоматичне закріплення завантажених файлів",
       "autoPinUploadsDescription": "Автоматично закріплювати файли при завантаженні, щоб їх не було видалено з активних"
-    }
+    },
+    "Quarantined Data": "Карантиновані дані",
+    "quarantineDataDescription": "У вас {count} карантинован{count, plural, one {ий елемент} few {і елементи} many {их елементів} other {их елементів}} ({size}) з проблемами даних, які не вдалося завантажити звичайним способом.",
+    "Review & Recover": "Переглянути й відновити",
+    "Export Quarantined Data": "Експортувати карантиновані дані",
+    "Delete Quarantined Data": "Видалити карантиновані дані",
+    "deleteQuarantineConfirm": "Ви впевнені, що хочете видалити всі карантиновані дані? Цю дію неможливо скасувати.",
+    "quarantineDeleteSuccess": "Усі карантиновані дані успішно видалено."
   },
   "notFound": {
     "lostDog": "Загублений пес"
@@ -1053,7 +1064,20 @@
     "fetchError": "Не вдалося завантажити транскрипт. Спробуйте ще раз.",
     "transcriptExpired": "Транскрипт для {filename} протермінований. Транскрипти автоматично видаляються через {days} днів для захисту конфіденційності.",
     "expirationWarning": "Транскрипт для {filename} протермінує через {days} дн(ів). Скопіюйте вміст, якщо вам потрібно його зберегти.",
-    "elapsedTime": "Минулий час: {time}"
+    "elapsedTime": "Минулий час: {time}",
+    "cancel": "Скасувати транскрипцію",
+    "reconnecting": "Відновлення з'єднання…",
+    "stillProcessing": "Обробка триває — цей сегмент займає більше часу, ніж зазвичай",
+    "chunkProgress": "Частина {completed}/{total}",
+    "transientToast": "Не вдалося транскрибувати: {filename} — спробуйте ще раз",
+    "authFailedToast": "Не вдалося транскрибувати: {filename} — будь ласка, увійдіть знову",
+    "rateLimitedToast": "Транскрипція призупинена: {filename} — сервіс перевантажений, спробуйте пізніше",
+    "permanentToast": "Не вдалося транскрибувати: {filename}{error}",
+    "cancelledToast": "Транскрипцію скасовано: {filename}",
+    "cancelledBody": "Скасовано користувачем",
+    "transientBody": "Спробуйте ще раз",
+    "authFailedBody": "Будь ласка, увійдіть знову",
+    "rateLimitedBody": "Сервіс перевантажений, спробуйте ще раз пізніше"
   },
   "transcriptionComplete": "Транскрибування завершено! Текст додано до поля введення чату.",
   "No prompts found": "Підказок не знайдено",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Відкрити в редакторі",
     "failedToUpload": "Не вдалося завантажити",
     "attachment": "вкладення",
-    "attachments": "вкладення"
+    "attachments": "вкладення",
+    "transcriptionCancelled": "Скасовано"
   },
   "transcript": {
     "originalTranscript": "Оригінал стенограми",
@@ -1536,7 +1561,9 @@
     "open": "Відкрити",
     "showFullMessage": "Показати повне повідомлення",
     "collapse": "Згорнути",
-    "customTone": "Власний тон"
+    "customTone": "Власний тон",
+    "showMore": "Показати більше",
+    "showLess": "Показати менше"
   },
   "codeBlock": {
     "openInEditor": "Відкрити в редакторі"

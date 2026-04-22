@@ -12,15 +12,20 @@ import React, {
   FC,
   MouseEvent,
   SetStateAction,
+  useMemo,
+  useRef,
   useState,
 } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { LanguageOption } from '@/lib/utils/app/languagePickerHelpers';
+
 import { ChatInputSubmitTypes, FilePreview } from '@/types/chat';
 
 import { XIcon } from '@/components/Icons/cancel';
 import FileIcon from '@/components/Icons/file';
+import { LanguagePicker } from '@/components/UI/LanguagePicker';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { TRANSCRIPTION_LANGUAGES } from '@/lib/constants/transcriptionLanguages';
@@ -76,8 +81,18 @@ interface ChatFileUploadPreviewProps {
 }
 
 /**
- * Helper function to check if a file is a code file based on extension
+ * Format a byte count into a short human-readable string (e.g., "3.2 MB").
+ * Unit suffixes are SI-style and intentionally unlocalized — they are
+ * recognized across languages and keep this indicator zero-i18n.
  */
+const formatBytes = (bytes: number): string => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes < 1024 * 1024 * 1024)
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+};
+
 const isCodeFile = (extension: string): boolean => {
   const codeExtensions = [
     'py',
@@ -137,6 +152,8 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
   const [showPromptInput, setShowPromptInput] = useState(
     !!filePreview.transcriptionPrompt,
   );
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const updateFilePreview = (updates: Partial<FilePreview>) => {
     setFilePreviews((prevPreviews) =>
@@ -148,10 +165,9 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
     );
   };
 
-  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
+  const handleSelectLanguage = (code: string | null) => {
     updateFilePreview({
-      transcriptionLanguage: value || undefined,
+      transcriptionLanguage: code ?? undefined,
     });
   };
 
@@ -162,12 +178,28 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
     });
   };
 
+  // Skip the first `code: ''` entry — it's modeled as the clearOption row.
+  const languageOptions = useMemo<LanguageOption[]>(
+    () =>
+      TRANSCRIPTION_LANGUAGES.filter((lang) => lang.code !== '').map(
+        (lang) => ({
+          code: lang.code,
+          label: t(lang.labelKey),
+          sublabel: lang.autonym,
+          supported: lang.officiallySupported,
+        }),
+      ),
+    [t],
+  );
+
   const selectedLanguage = TRANSCRIPTION_LANGUAGES.find(
     (lang) => lang.code === filePreview.transcriptionLanguage,
   );
-  const selectedLanguageLabel = selectedLanguage
-    ? t(selectedLanguage.labelKey)
-    : t('transcription.languages.autoDetect');
+  const selectedLanguageLabel =
+    selectedLanguage && selectedLanguage.code
+      ? t(selectedLanguage.labelKey)
+      : t('transcription.languages.autoDetect');
+  const selectedLanguageSublabel = selectedLanguage?.autonym || '';
 
   return (
     <div className="space-y-1.5">
@@ -179,29 +211,39 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
 
       {/* Language selector */}
       <div className="relative">
-        <select
-          value={filePreview.transcriptionLanguage || ''}
-          onChange={handleLanguageChange}
-          className="w-full text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500"
-          onClick={(e) => e.stopPropagation()}
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsPickerOpen((v) => !v);
+          }}
+          className="w-full text-xs px-2 py-1 pr-6 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 text-left truncate"
+          aria-haspopup="listbox"
+          aria-expanded={isPickerOpen}
         >
-          {TRANSCRIPTION_LANGUAGES.map((lang) => (
-            <option
-              key={lang.code}
-              value={lang.code}
-              className={
-                lang.officiallySupported
-                  ? 'text-gray-700 dark:text-gray-200'
-                  : 'text-gray-400 dark:text-gray-500'
-              }
-            >
-              {t(lang.labelKey)}
-            </option>
-          ))}
-        </select>
+          <span className="truncate">
+            {selectedLanguageLabel}
+            {selectedLanguageSublabel &&
+              selectedLanguageSublabel !== selectedLanguageLabel && (
+                <span className="text-gray-500 dark:text-gray-400 ml-1">
+                  ({selectedLanguageSublabel})
+                </span>
+              )}
+          </span>
+        </button>
         <IconChevronDown
           size={12}
           className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
+        />
+        <LanguagePicker
+          triggerRef={triggerRef}
+          isOpen={isPickerOpen}
+          onClose={() => setIsPickerOpen(false)}
+          options={languageOptions}
+          value={filePreview.transcriptionLanguage ?? null}
+          onSelect={handleSelectLanguage}
+          clearOption={{ label: t('transcription.languages.autoDetect') }}
         />
       </div>
 
@@ -552,6 +594,13 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
               >
                 {filename}
               </div>
+              {filePreview.file && (
+                <div className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 tabular-nums">
+                  {status === 'uploading' && progress !== undefined
+                    ? `${formatBytes((progress / 100) * filePreview.file.size)} / ${formatBytes(filePreview.file.size)}`
+                    : formatBytes(filePreview.file.size)}
+                </div>
+              )}
               {/* Upload progress bar */}
               {status === 'uploading' && progress !== undefined && (
                 <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mt-1.5">
@@ -602,6 +651,12 @@ const ChatFileUploadPreview: FC<ChatFileUploadPreviewProps> = ({
                 <div className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400">
                   <IconX size={12} className="flex-shrink-0" />
                   <span>{t('fileUpload.transcriptionFailed')}</span>
+                </div>
+              )}
+              {filePreview.transcriptionStatus === 'cancelled' && (
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                  <IconX size={12} className="flex-shrink-0" />
+                  <span>{t('fileUpload.transcriptionCancelled')}</span>
                 </div>
               )}
               {/* Extracted from video indicator */}

@@ -14,18 +14,28 @@ import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
+import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 
 import { TranscriptionResponse } from '@/types/transcription';
 
 import { auth } from '@/auth';
+import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { promisify } from 'util';
 
 const unlinkAsync = promisify(fs.unlink);
+
+/**
+ * Blob IDs are expected to be opaque tokens — reject anything path-shaped.
+ * Must start with an alphanumeric (so `..`, `.env`, `-rf` etc. are rejected
+ * as whole IDs) and is bounded to avoid pathological-length inputs.
+ */
+const BLOB_ID_REGEX = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
 
 export async function GET(
   request: NextRequest,
@@ -38,6 +48,13 @@ export async function GET(
 
   const { id } = await params;
 
+  if (!BLOB_ID_REGEX.test(id)) {
+    return NextResponse.json(
+      { message: 'Invalid file id', error: 'INVALID_FILE_ID' },
+      { status: 400 },
+    );
+  }
+
   let transcript: string | undefined;
 
   try {
@@ -48,8 +65,23 @@ export async function GET(
     const blockBlobClient = blobStorageClient.getBlockBlobClient(filePath);
 
     // Get file size to determine which service to use
-    const properties = await blockBlobClient.getProperties();
+    const properties = await withAzureRetry(
+      () => blockBlobClient.getProperties(),
+      { label: 'getProperties' },
+    );
     const fileSize = properties.contentLength || 0;
+
+    if (fileSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
+      return NextResponse.json(
+        {
+          message: `File exceeds the ${Math.round(
+            FILE_SIZE_LIMITS.VIDEO_MAX_BYTES / (1024 * 1024 * 1024),
+          )}GB transcription limit`,
+          error: 'PAYLOAD_TOO_LARGE',
+        },
+        { status: 413 },
+      );
+    }
 
     // Determine which transcription service to use based on file size
     const serviceType =
@@ -57,17 +89,38 @@ export async function GET(
 
     if (serviceType === 'whisper') {
       // Synchronous transcription for small files (≤25MB)
-      const tmpFilePath = join(tmpdir(), `${Date.now()}_${id}`);
-      await blockBlobClient.downloadToFile(tmpFilePath);
+      const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
+      try {
+        await withAzureRetry(
+          () => blockBlobClient.downloadToFile(tmpFilePath),
+          {
+            label: 'downloadToFile',
+          },
+        );
 
-      const transcriptionService =
-        TranscriptionServiceFactory.getTranscriptionService('whisper');
+        const transcriptionService =
+          TranscriptionServiceFactory.getTranscriptionService('whisper');
 
-      transcript = await transcriptionService.transcribe(tmpFilePath);
-
-      await unlinkAsync(tmpFilePath);
-      // Delete the blob after successful transcription
-      await blockBlobClient.delete();
+        transcript = await transcriptionService.transcribe(tmpFilePath);
+      } finally {
+        // Always clean up the temp file, even if transcription throws.
+        await unlinkAsync(tmpFilePath).catch(() => {});
+      }
+      // Delete the blob after successful transcription. Retry on transient
+      // Azure failures; if the blob is already gone (404), treat as success.
+      try {
+        await withAzureRetry(() => blockBlobClient.delete(), {
+          label: 'blobDelete',
+        });
+      } catch (deleteErr) {
+        const status = (deleteErr as { statusCode?: number })?.statusCode;
+        if (status !== 404) {
+          console.warn(
+            `[Transcribe] Failed to delete source blob after transcription:`,
+            deleteErr,
+          );
+        }
+      }
 
       const response: TranscriptionResponse = {
         async: false,
@@ -92,10 +145,16 @@ export async function GET(
       }
 
       // Generate a SAS URL for the blob (batch API needs public access)
-      const sasUrl = await blobStorageClient.generateSasUrl(filePath, 24);
+      const sasUrl = await withAzureRetry(
+        () => blobStorageClient.generateSasUrl(filePath, 24),
+        { label: 'generateSasUrl' },
+      );
 
       // Submit the batch transcription job
-      const jobId = await batchService.submitTranscription(sasUrl);
+      const jobId = await withAzureRetry(
+        () => batchService.submitTranscription(sasUrl),
+        { label: 'submitTranscription' },
+      );
 
       // Note: We don't delete the blob yet - it will be deleted after
       // the batch job completes and the transcript is retrieved

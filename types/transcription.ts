@@ -66,6 +66,19 @@ export interface BatchTranscriptionStatusResponse {
   transcript?: string;
   /** Error message (only when status is 'Failed') */
   error?: string;
+  /**
+   * Classification of the failure so clients can pick the right recovery UX
+   * (retry vs re-auth vs unsupported-format). Only set when the server has
+   * a confident classification; absent for unknown errors or non-failure states.
+   */
+  errorClass?: TranscriptionErrorClass;
+  /**
+   * True when the server-side job was cancelled by the user. The top-level
+   * `status` is still mapped to `'Failed'` for backwards compatibility, but
+   * clients that care should branch on this flag before rendering a generic
+   * "failed" message.
+   */
+  cancelled?: boolean;
   /** Progress for chunked transcription jobs */
   progress?: TranscriptionProgress;
   /** Type of job ('chunked' or 'batch') */
@@ -100,3 +113,22 @@ export const TRANSCRIPT_BLOB_THRESHOLD = 10 * 1024;
 
 /** Number of days before transcript expires */
 export const TRANSCRIPT_EXPIRY_DAYS = 7;
+
+/**
+ * How transcription errors classify for retry decisions.
+ * - `auth`: credential expired or invalid — re-init credentials and retry.
+ * - `rate_limit`: backoff and retry.
+ * - `transient`: 5xx / network — backoff and retry.
+ * - `permanent`: 4xx (not 401/403/429) — don't retry.
+ * - `unknown`: unclassified — treat as transient once.
+ */
+export type TranscriptionErrorClass =
+  | 'auth'
+  | 'rate_limit'
+  | 'transient'
+  | 'permanent'
+  | 'unknown';
+
+export interface TranscriptionError extends Error {
+  errorClass: TranscriptionErrorClass;
+}

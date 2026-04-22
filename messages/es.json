@@ -627,7 +627,11 @@
     "microphoneAccessDenied": "El acceso al micrófono está denegado. Por favor, actívelo en la configuración de su navegador.",
     "microphoneAccessError": "Error de acceso al micrófono: {message}",
     "voiceInputTranscribing": "Transcribiendo...",
-    "ttsRightClickHint": "Haz clic derecho para opciones de voz"
+    "ttsRightClickHint": "Haz clic derecho para opciones de voz",
+    "mediaRecorderNotSupported": "La grabación de audio no es compatible con este navegador.",
+    "microphoneNotDetected": "No se detectó ningún micrófono",
+    "microphoneBlocked": "Micrófono bloqueado. Verifique la configuración del navegador.",
+    "voiceTranscriptionFailed": "Error en la transcripción de voz. Por favor, inténtelo de nuevo."
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -971,7 +975,14 @@
     "activeFiles": {
       "autoPinUploads": "Fijar archivos subidos automáticamente",
       "autoPinUploadsDescription": "Fija automáticamente los archivos al subirlos para evitar que se eliminen del contexto"
-    }
+    },
+    "Quarantined Data": "Datos en cuarentena",
+    "quarantineDataDescription": "Tiene {count} {count, plural, one {elemento en cuarentena} other {elementos en cuarentena}} ({size}) con problemas de datos que no se pudieron cargar normalmente.",
+    "Review & Recover": "Revisar y recuperar",
+    "Export Quarantined Data": "Exportar datos en cuarentena",
+    "Delete Quarantined Data": "Eliminar datos en cuarentena",
+    "deleteQuarantineConfirm": "¿Está seguro de que desea eliminar todos los datos en cuarentena? Esta acción no se puede deshacer.",
+    "quarantineDeleteSuccess": "Se eliminaron correctamente todos los datos en cuarentena."
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -1430,7 +1441,8 @@
     "openInEditor": "Abrir en el editor",
     "failedToUpload": "Error al cargar",
     "attachment": "adjunto",
-    "attachments": "adjuntos"
+    "attachments": "adjuntos",
+    "transcriptionCancelled": "Cancelado"
   },
   "transcript": {
     "originalTranscript": "Transcripción original",
@@ -1452,7 +1464,9 @@
     "open": "Abrir",
     "showFullMessage": "Mostrar mensaje completo",
     "collapse": "Colapsar",
-    "customTone": "Tono personalizado"
+    "customTone": "Tono personalizado",
+    "showMore": "Mostrar más",
+    "showLess": "Mostrar menos"
   },
   "codeBlock": {
     "openInEditor": "Abrir en el editor"
@@ -1604,7 +1618,20 @@
     "fetchError": "No se pudo cargar la transcripción. Por favor, inténtelo de nuevo.",
     "transcriptExpired": "La transcripción de {filename} ha expirado. Las transcripciones se eliminan automáticamente después de {days} días por motivos de privacidad.",
     "expirationWarning": "La transcripción de {filename} expirará en {days} día(s). Copie el contenido si necesita conservarlo.",
-    "elapsedTime": "Transcurrido: {time}"
+    "elapsedTime": "Transcurrido: {time}",
+    "cancel": "Cancelar transcripción",
+    "reconnecting": "Reconectando…",
+    "stillProcessing": "Aún en proceso — este segmento está tardando más de lo habitual",
+    "chunkProgress": "Fragmento {completed}/{total}",
+    "transientToast": "La transcripción falló: {filename} — intente nuevamente",
+    "authFailedToast": "La transcripción falló: {filename} — por favor, vuelva a iniciar sesión",
+    "rateLimitedToast": "Transcripción pausada: {filename} — el servicio está al máximo de capacidad, inténtelo en breve",
+    "permanentToast": "La transcripción falló: {filename}{error}",
+    "cancelledToast": "Transcripción cancelada: {filename}",
+    "cancelledBody": "Cancelado por el usuario",
+    "transientBody": "Por favor, intente nuevamente",
+    "authFailedBody": "Por favor, vuelva a iniciar sesión",
+    "rateLimitedBody": "El servicio está al máximo de capacidad, inténtelo en breve"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Agregue sus instrucciones personales para personalizar cómo responde la IA. Estas se combinan con las pautas principales de comportamiento que garantizan respuestas útiles, precisas y seguras.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consejo: Escriba \"/\" para seleccionar entre las plantillas de mensajes guardadas.",

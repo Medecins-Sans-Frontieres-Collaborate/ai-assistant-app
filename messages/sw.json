@@ -681,7 +681,11 @@
     "microphoneAccessDenied": "Ufikiaji wa kipaza sauti umekataliwa. Tafadhali wezesha kwenye mipangilio ya kivinjari chako.",
     "microphoneAccessError": "Hitilafu ya ufikiaji wa kipaza sauti: {message}",
     "voiceInputTranscribing": "Inatambua...",
-    "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti"
+    "ttsRightClickHint": "Bonyeza kulia kwa chaguo za sauti",
+    "mediaRecorderNotSupported": "Rekodi ya sauti haiwezi kufanywa katika kivinjari hiki.",
+    "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
+    "microphoneBlocked": "Kipaza sauti kimezuiliwa. Angalia mipangilio ya kivinjari.",
+    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena."
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -971,7 +975,14 @@
     "activeFiles": {
       "autoPinUploads": "Funga faili zilizopakiwa moja kwa moja",
       "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe"
-    }
+    },
+    "Quarantined Data": "Data Zilizowekwa Karantini",
+    "quarantineDataDescription": "Una {count} {count, plural, one {kipengele} other {vipengele}} ({size}) zilizo karantini zenye matatizo ya data ambazo haziwezi kupakiwa kawaida.",
+    "Review & Recover": "Kagua na Rejesha",
+    "Export Quarantined Data": "Hamisha Data Zilizowekwa Karantini",
+    "Delete Quarantined Data": "Futa Data Zilizowekwa Karantini",
+    "deleteQuarantineConfirm": "Una uhakika unataka kufuta data zote zilizowekwa karantini? Hatua hii haiwezi kubatilishwa.",
+    "quarantineDeleteSuccess": "Umefanikiwa kufuta data zote zilizowekwa karantini."
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1309,7 +1320,20 @@
     "fetchError": "Imeshindikana kupakia tafsiri. Tafadhali jaribu tena.",
     "transcriptExpired": "Tafsiri ya {filename} imeisha muda wake. Tafsiri huondolewa moja kwa moja baada ya siku {days} kwa sababu za faragha.",
     "expirationWarning": "Tafsiri ya {filename} itaisha muda wake ndani ya siku {days}. Nakili yaliyomo ikiwa unahitaji kuyahifadhi.",
-    "elapsedTime": "Imepita: {time}"
+    "elapsedTime": "Imepita: {time}",
+    "cancel": "Sitisha uandishi wa maandishi",
+    "reconnecting": "Inaunganisha tena…",
+    "stillProcessing": "Inachakata bado — sehemu hii inachukua muda mrefu kuliko kawaida",
+    "chunkProgress": "Sehemu {completed}/{total}",
+    "transientToast": "Uandishi wa maandishi umeshindikana: {filename} — tafadhali jaribu tena",
+    "authFailedToast": "Uandishi wa maandishi umeshindikana: {filename} — tafadhali ingia tena",
+    "rateLimitedToast": "Uandishi wa maandishi umesitishwa: {filename} — huduma imejaa, tafadhali jaribu tena baada ya muda mfupi",
+    "permanentToast": "Uandishi wa maandishi umeshindikana: {filename}{error}",
+    "cancelledToast": "Uandishi wa maandishi umesitishwa: {filename}",
+    "cancelledBody": "Imesitishwa na mtumiaji",
+    "transientBody": "Tafadhali jaribu tena",
+    "authFailedBody": "Tafadhali ingia tena",
+    "rateLimitedBody": "Huduma imejaa, tafadhali jaribu tena baada ya muda mfupi"
   },
   "migration": {
     "status": {
@@ -1514,7 +1538,8 @@
     "openInEditor": "Fungua kwenye Mhariri",
     "failedToUpload": "Imeshindwa kupakia",
     "attachment": "kiambatisho",
-    "attachments": "viambatisho"
+    "attachments": "viambatisho",
+    "transcriptionCancelled": "Imesitishwa"
   },
   "transcript": {
     "originalTranscript": "Mwandiko Asili",
@@ -1536,7 +1561,9 @@
     "open": "Fungua",
     "showFullMessage": "Onyesha ujumbe wote",
     "collapse": "Fupisha",
-    "customTone": "Sauti Iliyobinafsishwa"
+    "customTone": "Sauti Iliyobinafsishwa",
+    "showMore": "Onyesha zaidi",
+    "showLess": "Onyesha kidogo"
   },
   "codeBlock": {
     "openInEditor": "Fungua kwenye mhariri"

@@ -602,7 +602,11 @@
     "microphoneAccessDenied": "Accesso al microfono negato. Abilitalo nelle impostazioni del browser.",
     "microphoneAccessError": "Errore di accesso al microfono: {message}",
     "voiceInputTranscribing": "Trascrizione in corso...",
-    "ttsRightClickHint": "Click destro per opzioni vocali"
+    "ttsRightClickHint": "Click destro per opzioni vocali",
+    "mediaRecorderNotSupported": "La registrazione audio non è supportata in questo browser.",
+    "microphoneNotDetected": "Nessun microfono rilevato",
+    "microphoneBlocked": "Microfono bloccato. Controlla le impostazioni del browser.",
+    "voiceTranscriptionFailed": "Trascrizione vocale non riuscita. Riprova."
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -946,7 +950,14 @@
     "activeFiles": {
       "autoPinUploads": "Fissa automaticamente i file caricati",
       "autoPinUploadsDescription": "Fissa automaticamente i file quando vengono caricati per evitare che vengano rimossi"
-    }
+    },
+    "Quarantined Data": "Dati in quarantena",
+    "quarantineDataDescription": "Hai {count} {count, plural, one {elemento} other {elementi}} in quarantena ({size}) con problemi nei dati che non è stato possibile caricare normalmente.",
+    "Review & Recover": "Esamina e recupera",
+    "Export Quarantined Data": "Esporta dati in quarantena",
+    "Delete Quarantined Data": "Elimina dati in quarantena",
+    "deleteQuarantineConfirm": "Sei sicuro di voler eliminare tutti i dati in quarantena? Questa azione non può essere annullata.",
+    "quarantineDeleteSuccess": "Tutti i dati in quarantena eliminati con successo."
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -1053,7 +1064,20 @@
     "fetchError": "Impossibile caricare la trascrizione. Riprova.",
     "transcriptExpired": "La trascrizione per {filename} è scaduta. Le trascrizioni vengono eliminate automaticamente dopo {days} giorni per motivi di privacy.",
     "expirationWarning": "La trascrizione per {filename} scadrà tra {days} giorno(i). Copia il contenuto se desideri conservarlo.",
-    "elapsedTime": "Trascorso: {time}"
+    "elapsedTime": "Trascorso: {time}",
+    "cancel": "Annulla trascrizione",
+    "reconnecting": "Riconnessione…",
+    "stillProcessing": "In elaborazione — questo segmento richiede più tempo del solito",
+    "chunkProgress": "Blocco {completed}/{total}",
+    "transientToast": "Trascrizione non riuscita: {filename} — riprova",
+    "authFailedToast": "Trascrizione non riuscita: {filename} — accedi di nuovo",
+    "rateLimitedToast": "Trascrizione in pausa: {filename} — il servizio è al limite, riprova a breve",
+    "permanentToast": "Trascrizione non riuscita: {filename}{error}",
+    "cancelledToast": "Trascrizione annullata: {filename}",
+    "cancelledBody": "Annullato dall’utente",
+    "transientBody": "Riprova",
+    "authFailedBody": "Accedi di nuovo",
+    "rateLimitedBody": "Servizio al limite, riprova a breve"
   },
   "transcriptionComplete": "Trascrizione completata! Testo aggiunto al campo di input.",
   "No prompts found": "Nessun prompt trovato",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Apri nell’Editor",
     "failedToUpload": "Caricamento non riuscito",
     "attachment": "allegato",
-    "attachments": "allegati"
+    "attachments": "allegati",
+    "transcriptionCancelled": "Annullato"
   },
   "transcript": {
     "originalTranscript": "Trascrizione originale",
@@ -1536,7 +1561,9 @@
     "open": "Apri",
     "showFullMessage": "Mostra messaggio completo",
     "collapse": "Comprimi",
-    "customTone": "Tono personalizzato"
+    "customTone": "Tono personalizzato",
+    "showMore": "Mostra altro",
+    "showLess": "Mostra meno"
   },
   "codeBlock": {
     "openInEditor": "Apri nell’editor"

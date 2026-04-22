@@ -1,5 +1,6 @@
 import {
   buildActiveFileTextBlock,
+  computeActiveFilePerTurnBudget,
   selectFilesForBudget,
 } from '@/lib/utils/server/chat/activeFiles';
 
@@ -50,8 +51,10 @@ export class ActiveFileInjector extends BasePipelineStage {
       return { ...context, activeFilesTokensConsumedThisTurn: 0 };
     }
 
-    // Apply budget selection with session quota cap
-    const budgetTokens = 2000;
+    // Apply budget selection with session quota cap. The per-turn ceiling
+    // scales with the model's context window so modern 128k/200k models get
+    // the headroom they can support, while legacy models stay at the floor.
+    const budgetTokens = computeActiveFilePerTurnBudget(context.model);
     const effectiveBudget = Math.min(budgetTokens, remaining);
     const selected = selectFilesForBudget(sanitizedFiles, effectiveBudget);
 
@@ -81,6 +84,7 @@ export class ActiveFileInjector extends BasePipelineStage {
 
     // Add indicator if model likely lacks vision support
     let enrichedMessages = context.messages;
+    let messagesModified = false;
     const isVisionModel = Object.values(OpenAIVisionModelID).includes(
       context.modelId as OpenAIVisionModelID,
     );
@@ -92,18 +96,23 @@ export class ActiveFileInjector extends BasePipelineStage {
           ...last,
           content: `${last.content}\n\n${indicator}`,
         });
+        messagesModified = true;
       } else if (Array.isArray(last.content)) {
         enrichedMessages = enrichedMessages.slice(0, -1).concat({
           ...last,
           content: [...last.content, { type: 'text', text: indicator } as any],
         } as any);
+        messagesModified = true;
       }
     }
 
     return {
       ...context,
       systemPrompt: enrichedSystemPrompt,
-      enrichedMessages,
+      // Only overwrite enrichedMessages when we actually modified them;
+      // otherwise downstream stages would treat an unchanged pass-through as
+      // "enrichers wrote messages" and skip processedContent injection.
+      ...(messagesModified ? { enrichedMessages } : {}),
       activeFilesTokensConsumedThisTurn: tokensConsumedThisTurn,
     };
   }

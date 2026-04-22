@@ -739,7 +739,11 @@
       "filesCount": "{count} fayil/fayiloli",
       "audioVideo": "sauti/bidio",
       "empty": "babu"
-    }
+    },
+    "mediaRecorderNotSupported": "Ba a goyon bayan yin rikodin sauti a wannan burauza.",
+    "microphoneNotDetected": "Ba a gano maƙarƙashiyar murya ba",
+    "microphoneBlocked": "An toshe maƙarƙashiyar murya. Duba saitunan burauza.",
+    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa."
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Naɗe fayilolin da aka ɗora ta atomatik",
       "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani"
-    }
+    },
+    "Quarantined Data": "Bayanan da aka killace",
+    "quarantineDataDescription": "Kana da {count} bayanan da aka killace {count, plural, one {abu} other {abubuwa}} ({size}) masu matsalar bayanai da ba a iya lodawa yadda ya kamata.",
+    "Review & Recover": "Duba & Dawo da su",
+    "Export Quarantined Data": "Fitar da bayanan da aka killace",
+    "Delete Quarantined Data": "Goge bayanan da aka killace",
+    "deleteQuarantineConfirm": "Ka tabbata kana son gogewa duk bayanan da aka killace? Ba za a iya dawowa da wannan aiki ba.",
+    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara."
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Buɗe a Edita",
     "failedToUpload": "An kasa loda",
     "attachment": "ɓangare",
-    "attachments": "ɓangarori"
+    "attachments": "ɓangarori",
+    "transcriptionCancelled": "An soke"
   },
   "userMessage": {
     "open": "Buɗe",
     "showFullMessage": "Nuna cikakken saƙo",
     "collapse": "Rufe",
-    "customTone": "Sauti na musamman"
+    "customTone": "Sauti na musamman",
+    "showMore": "Nuna ƙari",
+    "showLess": "Nuna ƙasa"
   },
   "codeBlock": {
     "openInEditor": "Buɗe a edita"
@@ -1670,7 +1684,20 @@
       "urdu": "Urdu",
       "vietnamese": "Vietnamese",
       "welsh": "Welsh"
-    }
+    },
+    "cancel": "Soke fassara",
+    "reconnecting": "Ana maido da haɗi…",
+    "stillProcessing": "Ana ci gaba da sarrafawa — wannan ɓangare na ɗaukar lokaci fiye da yadda aka saba",
+    "chunkProgress": "Sashe {completed}/{total}",
+    "transientToast": "Fassara ta kasa: {filename} — don Allah a sake gwadawa",
+    "authFailedToast": "Fassara ta kasa: {filename} — don Allah ka sake shiga",
+    "rateLimitedToast": "Fassara ta tsaya: {filename} — ayyukan sun cika, don Allah a sake gwadawa bayan dan lokaci",
+    "permanentToast": "Fassara ta kasa: {filename}{error}",
+    "cancelledToast": "An soke fassara: {filename}",
+    "cancelledBody": "An soke ta mai amfani",
+    "transientBody": "Don Allah sake gwadawa",
+    "authFailedBody": "Don Allah ka sake shiga",
+    "rateLimitedBody": "Ayyuka sun cika, don Allah sake gwadawa bayan dan lokaci"
   },
   "documentTranslation": {
     "title": "Fassarar Takardu",

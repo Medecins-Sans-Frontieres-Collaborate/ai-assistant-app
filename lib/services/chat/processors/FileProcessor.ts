@@ -1,7 +1,7 @@
 import { FileProcessingService } from '@/lib/services/chat';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 
-import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 import {
   calculateChunkConfig,
   estimateCharsPerToken,
@@ -315,6 +315,19 @@ export class FileProcessor extends BasePipelineStage {
                     `[FileProcessor] File to transcribe size: ${audioSizeMB}MB${extractedAudioPath ? ' (extracted audio)' : ' (original file)'}`,
                   );
 
+                  if (audioSize > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
+                    // VIDEO_MAX_BYTES (1.5GB) is the defense-in-depth upper
+                    // bound for this path — the upload route applies the
+                    // per-type caps (1GB audio / 1.5GB video) before we get
+                    // here. Hitting this branch means either pre-upload
+                    // validation was bypassed or extracted audio unexpectedly
+                    // exceeded the ceiling; either way, the user-facing
+                    // message stays generic.
+                    throw new Error(
+                      `File "${filename}" (${audioSizeMB}MB) is too large to transcribe.`,
+                    );
+                  }
+
                   let transcript: string;
 
                   // Route based on file size: ≤25MB → Whisper, >25MB → Batch
@@ -384,6 +397,7 @@ export class FileProcessor extends BasePipelineStage {
                       await chunkedService.startJob(
                         fileToTranscribe,
                         filename,
+                        context.user.id,
                         {
                           language: file.transcriptionLanguage,
                           prompt: file.transcriptionPrompt,

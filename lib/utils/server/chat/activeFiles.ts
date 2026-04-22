@@ -1,4 +1,11 @@
 import { ActiveFile } from '@/types/chat';
+import { OpenAIModel } from '@/types/openai';
+
+import {
+  ACTIVE_FILE_PER_TURN_FRACTION,
+  ACTIVE_FILE_PER_TURN_MAX,
+  ACTIVE_FILE_PER_TURN_MIN,
+} from '@/lib/constants/activeFileQuotas';
 
 /**
  * Build a deterministic, injection-ready text block from active files.
@@ -45,6 +52,30 @@ export function buildActiveFileTextBlock(
 }
 
 /**
+ * Per-turn token budget for active-file injection, derived from the model's
+ * input context window minus its reserved output. Keeps the remaining 75%
+ * of input headroom for the system prompt, conversation history, and the
+ * user's current message. Clamped to [MIN, MAX].
+ */
+export function computeActiveFilePerTurnBudget(
+  model: Pick<OpenAIModel, 'maxLength' | 'tokenLimit'> | undefined | null,
+): number {
+  const maxLength = model?.maxLength ?? 0;
+  const tokenLimit = model?.tokenLimit ?? 0;
+  const availableForInput = maxLength - tokenLimit;
+
+  if (availableForInput <= 0) {
+    return ACTIVE_FILE_PER_TURN_MIN;
+  }
+
+  const derived = Math.floor(availableForInput * ACTIVE_FILE_PER_TURN_FRACTION);
+  return Math.max(
+    ACTIVE_FILE_PER_TURN_MIN,
+    Math.min(ACTIVE_FILE_PER_TURN_MAX, derived),
+  );
+}
+
+/**
  * Simple budget selection (placeholder). Returns files unchanged.
  * Can be extended to apply token budgets and policies.
  */
@@ -54,7 +85,7 @@ export function isPinned(f: ActiveFile) {
 
 export function selectFilesForBudget(
   files: ActiveFile[],
-  budgetTokens: number = 2000,
+  budgetTokens: number,
   policy: 'recent' | 'pinned' | 'sizeAsc' = 'recent',
 ): ActiveFile[] {
   // Estimation using processed tokenEstimate or fallback to rough heuristic

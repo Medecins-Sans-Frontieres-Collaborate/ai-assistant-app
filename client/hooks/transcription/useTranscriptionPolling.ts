@@ -18,6 +18,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { useTranslations } from 'next-intl';
+
 import { generateConversationTitle } from '@/client/services/titleService';
 
 import { ActiveFile } from '@/types/chat';
@@ -31,6 +33,104 @@ import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 
+/** Display durations for transcription-related toasts. */
+const TOAST_DURATION_MS = {
+  /** Failure / warning toasts — linger a bit longer so users can read. */
+  failure: 5000,
+  /** Success toasts — dismiss a little quicker. */
+  success: 4000,
+};
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'AbortError';
+}
+
+/** Translator scoped to the `transcription` namespace. */
+type TranscriptionTranslator = ReturnType<
+  typeof useTranslations<'transcription'>
+>;
+
+/**
+ * Picks localized copy and the right `react-hot-toast` variant for a failure
+ * based on the server's classification. Keeping this in one place ensures the
+ * toast string, the message-body string, and the file-preview state stay in
+ * sync across cancellation, timeout, and the various error classes.
+ */
+interface FailureCopy {
+  toastMessage: string;
+  body: string;
+  previewStatus: 'failed' | 'cancelled';
+  /** `neutral` → `toast()`; `error` → `toast.error()`. */
+  variant: 'error' | 'neutral';
+}
+
+function pickFailureCopy(
+  data: Pick<
+    BatchTranscriptionStatusResponse,
+    'error' | 'errorClass' | 'cancelled'
+  >,
+  filename: string,
+  t: TranscriptionTranslator,
+): FailureCopy {
+  if (data.cancelled) {
+    return {
+      toastMessage: t('cancelledToast', { filename }),
+      body: `[${t('cancelledBody')}]`,
+      previewStatus: 'cancelled',
+      variant: 'neutral',
+    };
+  }
+  switch (data.errorClass) {
+    case 'rate_limit':
+      return {
+        toastMessage: t('rateLimitedToast', { filename }),
+        body: `[${t('rateLimitedBody')}]`,
+        previewStatus: 'failed',
+        variant: 'error',
+      };
+    case 'auth':
+      return {
+        toastMessage: t('authFailedToast', { filename }),
+        body: `[${t('authFailedBody')}]`,
+        previewStatus: 'failed',
+        variant: 'error',
+      };
+    case 'transient':
+      return {
+        toastMessage: t('transientToast', { filename }),
+        body: `[${t('transientBody')}]`,
+        previewStatus: 'failed',
+        variant: 'error',
+      };
+    case 'permanent':
+      return {
+        toastMessage: t('permanentToast', {
+          filename,
+          error: data.error ? ` — ${data.error}` : '',
+        }),
+        body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
+        previewStatus: 'failed',
+        variant: 'error',
+      };
+    default:
+      return {
+        toastMessage: t('failedToast', { filename }),
+        body: `[${t('failed', { error: data.error ?? t('unknownError') })}]`,
+        previewStatus: 'failed',
+        variant: 'error',
+      };
+  }
+}
+
+function showFailureToast(copy: FailureCopy): void {
+  const opts = { duration: TOAST_DURATION_MS.failure };
+  if (copy.variant === 'neutral') {
+    toast(copy.toastMessage, opts);
+  } else {
+    toast.error(copy.toastMessage, opts);
+  }
+}
+
 /**
  * Stores a large transcript in blob storage and returns a reference.
  * Returns null if storage fails (caller should fall back to inline storage).
@@ -39,12 +139,14 @@ async function storeTranscriptInBlob(
   jobId: string,
   transcript: string,
   filename: string,
+  signal?: AbortSignal,
 ): Promise<TranscriptReference | null> {
   try {
     const response = await fetch('/api/transcription/store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ jobId, transcript, filename }),
+      signal,
     });
 
     if (!response.ok) {
@@ -58,6 +160,9 @@ async function storeTranscriptInBlob(
     const data = responseBody.data || responseBody;
     return data as TranscriptReference;
   } catch (error) {
+    if (isAbortError(error)) {
+      return null;
+    }
     console.warn(
       '[useTranscriptionPolling] Error storing transcript in blob:',
       error,
@@ -107,10 +212,45 @@ function getPollingInterval(elapsedMs: number): number {
  * It will automatically start polling when there are pending jobs and stop
  * when all jobs are complete or failed.
  */
-/** Maximum time to wait for transcription (10 minutes) */
-const MAX_TRANSCRIPTION_TIME_MS = 10 * 60 * 1000;
+/** Base client-side timeout; scales up for chunked jobs with many chunks. */
+export const BASE_TRANSCRIPTION_TIMEOUT_MS = 10 * 60 * 1000; // 10 min floor
+export const PER_CHUNK_TIMEOUT_MS = 2 * 60 * 1000; // 2 min per chunk
+export const MAX_TRANSCRIPTION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 h ceiling
+
+/**
+ * Maximum consecutive polling failures before we give up and mark the job
+ * as failed client-side. Raised from 5 to 15 so brief network blips don't
+ * tear down jobs that are still running server-side — at the medium polling
+ * cadence (5 s), 15 failures ≈ 75 s of connectivity loss.
+ */
+export const MAX_CONSECUTIVE_FAILURES = 15;
+
+/**
+ * Failure count at which the UI starts showing a subtle "Reconnecting…"
+ * hint — well before the hard give-up at `MAX_CONSECUTIVE_FAILURES`. Keeps
+ * users informed during transient blips without prematurely declaring
+ * failure.
+ */
+export const RECONNECTING_THRESHOLD = 3;
+
+/**
+ * Computes the per-job client-side timeout. Exported so UI components (e.g.
+ * `TranscriptionProgressIndicator`'s "may take up to N minutes" note) stay
+ * in sync with the polling hook's abort window.
+ */
+export function computeTimeoutMs(totalChunks?: number): number {
+  if (!totalChunks || totalChunks <= 1) {
+    return BASE_TRANSCRIPTION_TIMEOUT_MS;
+  }
+  return Math.min(
+    MAX_TRANSCRIPTION_TIMEOUT_MS,
+    Math.max(BASE_TRANSCRIPTION_TIMEOUT_MS, totalChunks * PER_CHUNK_TIMEOUT_MS),
+  );
+}
 
 export function useTranscriptionPolling(): void {
+  const t = useTranslations('transcription');
+
   // Pre-submit transcription tracking (chatInputStore)
   const pendingTranscriptions = useChatInputStore(
     (state) => state.pendingTranscriptions,
@@ -136,6 +276,9 @@ export function useTranscriptionPolling(): void {
   const updateTranscriptionProgress = useChatStore(
     (state) => state.updateTranscriptionProgress,
   );
+  const setTranscriptionReconnecting = useChatStore(
+    (state) => state.setTranscriptionReconnecting,
+  );
 
   // Conversation store for updating messages
   const updateMessageWithTranscript = useConversationStore(
@@ -149,9 +292,42 @@ export function useTranscriptionPolling(): void {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isPollingRef = useRef(false);
   const consecutiveFailuresRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  /** Maximum consecutive failures before giving up and clearing state */
-  const MAX_CONSECUTIVE_FAILURES = 5;
+  // Lazily create the AbortController the first time we need it; keep the same
+  // controller for the lifetime of the mounted hook and abort on unmount. All
+  // in-flight fetches share it so unmount cancels every pending request.
+  //
+  // Callers must not invoke this after the unmount cleanup has run — the ref
+  // is nulled as a safety net, but a post-unmount call would silently create a
+  // fresh (non-aborted) controller. React's effect-cleanup guarantees hold for
+  // all current call sites; this note exists so future call sites don't drift.
+  const getAbortSignal = useCallback((): AbortSignal => {
+    if (!abortControllerRef.current) {
+      abortControllerRef.current = new AbortController();
+    }
+    return abortControllerRef.current.signal;
+  }, []);
+
+  /**
+   * Fire-and-forget request to release Azure resources for a finished job
+   * (batch-service record + temp blob). Every failure/cancellation/timeout
+   * path ends the same way, so this helper keeps those call sites aligned
+   * and ensures we consistently attach the hook's abort signal.
+   */
+  const scheduleCleanup = useCallback(
+    (payload: { jobId: string; blobPath?: string }) => {
+      fetch('/api/transcription/cleanup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: getAbortSignal(),
+      }).catch((err) => {
+        if (!isAbortError(err)) console.warn(err);
+      });
+    },
+    [getAbortSignal],
+  );
 
   /**
    * Polls the status of a post-submit conversation transcription job.
@@ -168,20 +344,24 @@ export function useTranscriptionPolling(): void {
       startedAt,
       conversationId,
       messageIndex,
+      totalChunks,
     } = pendingConversationTranscription;
 
-    // Check for timeout (10 minutes)
+    // Scale the client-side timeout by chunk count so long-but-healthy
+    // chunked jobs don't get killed before the server finishes.
+    const timeoutMs = computeTimeoutMs(totalChunks);
     const elapsedMs = Date.now() - startedAt;
-    if (elapsedMs > MAX_TRANSCRIPTION_TIME_MS) {
+    if (elapsedMs > timeoutMs) {
+      const timeoutMinutes = Math.round(timeoutMs / 60000);
       console.warn(
-        `[useTranscriptionPolling] Transcription timed out for ${filename}`,
+        `[useTranscriptionPolling] Transcription timed out for ${filename} (${timeoutMinutes}m)`,
       );
 
       // Update message with timeout error
       updateMessageWithTranscript(
         conversationId,
         messageIndex,
-        '[Transcription timed out after 10 minutes]',
+        `[${t('timedOut', { minutes: timeoutMinutes })}]`,
         filename,
         jobId, // Pass jobId for reliable message matching
       );
@@ -189,22 +369,19 @@ export function useTranscriptionPolling(): void {
       // Clear pending state
       setConversationTranscriptionPending(null);
 
-      toast.error(`Transcription timed out: ${filename}`, {
-        duration: 5000,
+      toast.error(t('timedOutToast', { filename }), {
+        duration: TOAST_DURATION_MS.failure,
       });
 
-      // Cleanup Azure resources
-      fetch('/api/transcription/cleanup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobId, blobPath }),
-      }).catch(console.warn);
+      scheduleCleanup({ jobId, blobPath });
 
       return;
     }
 
     try {
-      const response = await fetch(`/api/transcription/status/${jobId}`);
+      const response = await fetch(`/api/transcription/status/${jobId}`, {
+        signal: getAbortSignal(),
+      });
 
       if (!response.ok) {
         consecutiveFailuresRef.current++;
@@ -213,27 +390,30 @@ export function useTranscriptionPolling(): void {
             `(failure ${consecutiveFailuresRef.current}/${MAX_CONSECUTIVE_FAILURES})`,
         );
 
-        // After N consecutive failures, assume job is dead and clear state
+        if (consecutiveFailuresRef.current >= RECONNECTING_THRESHOLD) {
+          setTranscriptionReconnecting(true);
+        }
+
+        // After N consecutive failures, assume the status channel is dead
+        // and clear state. Treat as transient so the user sees "please try
+        // again" rather than a generic permanent-failure message.
         if (consecutiveFailuresRef.current >= MAX_CONSECUTIVE_FAILURES) {
+          const copy = pickFailureCopy(
+            { errorClass: 'transient' },
+            filename,
+            t,
+          );
           updateMessageWithTranscript(
             conversationId,
             messageIndex,
-            `[Transcription failed: Unable to retrieve status after ${MAX_CONSECUTIVE_FAILURES} attempts]`,
+            copy.body,
             filename,
-            jobId, // Pass jobId for reliable message matching
+            jobId,
           );
           setConversationTranscriptionPending(null);
-          toast.error(
-            `Transcription failed: ${filename} - Unable to retrieve status`,
-            { duration: 5000 },
-          );
+          showFailureToast(copy);
 
-          // Cleanup Azure resources
-          fetch('/api/transcription/cleanup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ jobId, blobPath }),
-          }).catch(console.warn);
+          scheduleCleanup({ jobId, blobPath });
 
           consecutiveFailuresRef.current = 0;
         }
@@ -242,6 +422,7 @@ export function useTranscriptionPolling(): void {
 
       // Reset failure counter on successful response
       consecutiveFailuresRef.current = 0;
+      setTranscriptionReconnecting(false);
 
       const responseBody = await response.json();
       // Unwrap API response envelope (successResponse wraps data in { success, data })
@@ -280,6 +461,7 @@ export function useTranscriptionPolling(): void {
             jobId,
             data.transcript,
             filename,
+            getAbortSignal(),
           );
 
           if (blobRef) {
@@ -333,8 +515,8 @@ export function useTranscriptionPolling(): void {
         // Clear pending state
         setConversationTranscriptionPending(null);
 
-        toast.success(`Transcription complete: ${filename}`, {
-          duration: 4000,
+        toast.success(t('completedToast', { filename }), {
+          duration: TOAST_DURATION_MS.success,
         });
 
         // Generate AI title now that transcription is complete
@@ -357,45 +539,37 @@ export function useTranscriptionPolling(): void {
             });
         }
 
-        // Cleanup Azure resources (batch job + temp blob)
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
       }
-      // Handle failure case
+      // Handle failure case (including user-initiated cancel, which the
+      // server reports as `status: 'Failed'` with `cancelled: true`).
       else if (data.status === 'Failed') {
-        console.error(
-          `[useTranscriptionPolling] Conversation transcription failed: ${filename}`,
+        const copy = pickFailureCopy(data, filename, t);
+        console[copy.variant === 'neutral' ? 'log' : 'error'](
+          `[useTranscriptionPolling] Conversation transcription ${
+            copy.previewStatus
+          }: ${filename}${data.errorClass ? ` (${data.errorClass})` : ''}`,
         );
 
-        // Update message with failure error
         updateMessageWithTranscript(
           conversationId,
           messageIndex,
-          `[Transcription failed${data.error ? `: ${data.error}` : ''}]`,
+          copy.body,
           filename,
-          jobId, // Pass jobId for reliable message matching
+          jobId,
         );
 
-        // Clear pending state
         setConversationTranscriptionPending(null);
+        showFailureToast(copy);
 
-        toast.error(
-          `Transcription failed: ${filename}${data.error ? ` - ${data.error}` : ''}`,
-          { duration: 5000 },
-        );
-
-        // Cleanup Azure resources
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
       }
       // Running or NotStarted - continue polling
     } catch (error) {
+      if (isAbortError(error)) {
+        // Hook unmounted while fetch was in flight; stop quietly.
+        return;
+      }
       consecutiveFailuresRef.current++;
       console.error(
         `[useTranscriptionPolling] Error polling conversation job ${jobId} ` +
@@ -403,37 +577,40 @@ export function useTranscriptionPolling(): void {
         error,
       );
 
-      // After N consecutive failures, assume job is dead and clear state
+      if (consecutiveFailuresRef.current >= RECONNECTING_THRESHOLD) {
+        setTranscriptionReconnecting(true);
+      }
+
+      // After N consecutive failures, the status channel is effectively dead.
+      // Treat as transient so the user sees "please try again" copy.
       if (consecutiveFailuresRef.current >= MAX_CONSECUTIVE_FAILURES) {
+        const copy = pickFailureCopy({ errorClass: 'transient' }, filename, t);
         updateMessageWithTranscript(
           conversationId,
           messageIndex,
-          `[Transcription failed: Network error after ${MAX_CONSECUTIVE_FAILURES} attempts]`,
+          copy.body,
           filename,
-          jobId, // Pass jobId for reliable message matching
+          jobId,
         );
         setConversationTranscriptionPending(null);
-        toast.error(`Transcription failed: ${filename} - Network error`, {
-          duration: 5000,
-        });
+        showFailureToast(copy);
 
-        // Cleanup Azure resources
-        fetch('/api/transcription/cleanup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jobId, blobPath }),
-        }).catch(console.warn);
+        scheduleCleanup({ jobId, blobPath });
 
         consecutiveFailuresRef.current = 0;
       }
     }
   }, [
     pendingConversationTranscription,
+    t,
     updateMessageWithTranscript,
     setConversationTranscriptionPending,
     updateTranscriptionProgress,
     conversations,
     updateConversation,
+    getAbortSignal,
+    scheduleCleanup,
+    setTranscriptionReconnecting,
   ]);
 
   /**
@@ -460,6 +637,7 @@ export function useTranscriptionPolling(): void {
         try {
           const response = await fetch(
             `/api/transcription/status/${job.jobId}`,
+            { signal: getAbortSignal() },
           );
 
           if (!response.ok) {
@@ -494,8 +672,8 @@ export function useTranscriptionPolling(): void {
                 : data.transcript || '',
             );
 
-            toast.success(`Transcription complete: ${job.filename}`, {
-              duration: 4000,
+            toast.success(t('completedToast', { filename: job.filename }), {
+              duration: TOAST_DURATION_MS.success,
             });
 
             // Remove from pending after a short delay
@@ -503,23 +681,21 @@ export function useTranscriptionPolling(): void {
               removePendingTranscription(fileId);
             }, 1000);
           }
-          // Handle failure case
+          // Handle failure case (including user-initiated cancel).
           else if (data.status === 'Failed') {
-            updateTranscriptionStatus(fileId, 'failed');
+            const copy = pickFailureCopy(data, job.filename, t);
+            updateTranscriptionStatus(fileId, copy.previewStatus);
 
-            // Update file preview status
+            // Update file preview status — neutral 'cancelled' or red 'failed'.
             setFilePreviews((prev) =>
               prev.map((p) =>
                 p.transcriptionJobId === job.jobId
-                  ? { ...p, transcriptionStatus: 'failed' }
+                  ? { ...p, transcriptionStatus: copy.previewStatus }
                   : p,
               ),
             );
 
-            toast.error(
-              `Transcription failed: ${job.filename}${data.error ? ` - ${data.error}` : ''}`,
-              { duration: 5000 },
-            );
+            showFailureToast(copy);
           }
           // Handle running case - update to processing if not already
           else if (data.status === 'Running' && job.status === 'pending') {
@@ -535,6 +711,7 @@ export function useTranscriptionPolling(): void {
             );
           }
         } catch (error) {
+          if (isAbortError(error)) return;
           console.error(`Error polling job ${job.jobId}:`, error);
         }
       }
@@ -569,10 +746,12 @@ export function useTranscriptionPolling(): void {
     pendingTranscriptions,
     pendingConversationTranscription,
     pollConversationTranscription,
+    t,
     updateTranscriptionStatus,
     removePendingTranscription,
     setTextFieldValue,
     setFilePreviews,
+    getAbortSignal,
   ]);
 
   // Start/stop polling based on pending transcriptions (pre-submit or post-submit)
@@ -599,6 +778,16 @@ export function useTranscriptionPolling(): void {
       }
     };
   }, [pendingTranscriptions, pendingConversationTranscription, pollJobs]);
+
+  // Separate effect for unmount-only abort. Runs once per hook lifetime so
+  // in-flight fetches are only canceled when the consumer unmounts — not when
+  // pendingTranscriptions changes.
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+      abortControllerRef.current = null;
+    };
+  }, []);
 }
 
 export default useTranscriptionPolling;

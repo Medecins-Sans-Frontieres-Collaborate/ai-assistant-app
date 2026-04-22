@@ -739,7 +739,11 @@
       "filesCount": "fiilde(en) {count}",
       "audioVideo": "nanndol/wideyoo",
       "empty": "mehol"
-    }
+    },
+    "mediaRecorderNotSupported": "Ndaɓɓitan moftugol audiyo waawaniima e lowre nde.",
+    "microphoneNotDetected": "Curkuleeri mikirofoonuu maa jogii",
+    "microphoneBlocked": "Mikirofoonuu ndiyalanii. Hoolu yaaɓe browser.",
+    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit."
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Paɗtol fayliiji ɓeydii jaasi",
       "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa"
-    }
+    },
+    "Quarantined Data": "Bayanko kala data rewtaama",
+    "quarantineDataDescription": "A jogii {count} {count, plural, one {farilla} other {farilli}} rewtaama ({size}) e jokkondiral data woni mooftugol caɗeele.",
+    "Review & Recover": "Yiylo e Artina",
+    "Export Quarantined Data": "Jaltin Bayanko Data rewtaama",
+    "Delete Quarantined Data": "Momtu Bayanko Data rewtaama",
+    "deleteQuarantineConfirm": "A sureɗaa yiɗde momtude data rewtaama fow? Ndeen yeeso waawaa artan.",
+    "quarantineDeleteSuccess": "Data rewtaama fow momtiima e jam."
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Uddit e Taƴtoowo",
     "failedToUpload": "Nuldude woorii",
     "attachment": "ɓoornirgal",
-    "attachments": "ɓoornirɗe"
+    "attachments": "ɓoornirɗe",
+    "transcriptionCancelled": "Laɓɓitaama"
   },
   "userMessage": {
     "open": "Uddit",
     "showFullMessage": "Hollu neldol timmuɗo",
     "collapse": "Ñiƴƴu",
-    "customTone": "Daande Keeriɗɗo"
+    "customTone": "Daande Keeriɗɗo",
+    "showMore": "Holl eɓɓe",
+    "showLess": "Holl ɗiɗi"
   },
   "codeBlock": {
     "openInEditor": "Uddit e taƴtoowo"
@@ -1670,7 +1684,20 @@
       "urdu": "Urduure",
       "vietnamese": "Wiyetnameere",
       "welsh": "Galeere"
-    }
+    },
+    "cancel": "Laɓɓita caatgol",
+    "reconnecting": "Namdalan kañum…",
+    "stillProcessing": "Ndeen caatol mawnataa—hoodi caatol bonanii waawaa.",
+    "chunkProgress": "Farral {completed}/{total}",
+    "transientToast": "Caatgol waawaniima: {filename} — waawi eɗa fuɗɗa.",
+    "authFailedToast": "Caatgol waawaniima: {filename} — teeŋ eɗa seŋo kadi.",
+    "rateLimitedToast": "Caatgol daɓɓiima: {filename} — hol ko ɓurnde, waawi eɗa fuɗɗa to anndirde.",
+    "permanentToast": "Caatgol waawaniima: {filename}{error}",
+    "cancelledToast": "Caatgol laɓɓitaama: {filename}",
+    "cancelledBody": "Laɓɓitaama gollal e janngina",
+    "transientBody": "Hiɗa waawi fuɗɗa",
+    "authFailedBody": "Teeŋ eɗa seŋo kadi",
+    "rateLimitedBody": "Hol ko ɓurnde, waawi eɗa fuɗɗa to anndirde"
   },
   "documentTranslation": {
     "title": "Firgol Ɗerewol",

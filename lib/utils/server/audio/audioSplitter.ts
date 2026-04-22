@@ -8,6 +8,7 @@
 import { execSync } from 'child_process';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
+import { tmpdir } from 'os';
 import path from 'path';
 import { promisify } from 'util';
 
@@ -150,8 +151,17 @@ export interface SplitOptions {
   targetChunkSizeBytes?: number;
   /** Output format for chunks. Default: mp3 */
   outputFormat?: 'mp3' | 'wav' | 'm4a';
-  /** Output directory for chunks. Default: same as input file */
+  /**
+   * Output directory for chunks. Default: a per-job subdir under `os.tmpdir()`
+   * if `jobId` is set, otherwise same dir as the input file.
+   */
   outputDir?: string;
+  /**
+   * Job identifier. If provided, chunks are written into a dedicated
+   * `os.tmpdir()/chunked-transcription/<jobId>/` directory so concurrent jobs
+   * don't interleave chunk files and cleanup can simply remove the subdir.
+   */
+  jobId?: string;
 }
 
 /** Default target chunk size: 20MB (safety margin from 25MB Whisper limit) */
@@ -258,6 +268,10 @@ async function calculateSegmentDuration(
 
   const duration = await getAudioDuration(inputPath);
 
+  if (!Number.isFinite(duration) || duration <= 0) {
+    throw new Error('Audio has unusable duration');
+  }
+
   // Calculate bytes per second
   const bytesPerSecond = fileSize / duration;
 
@@ -294,12 +308,17 @@ export async function splitAudioFile(
     targetChunkSizeBytes = DEFAULT_TARGET_CHUNK_SIZE,
     outputFormat = 'mp3',
     outputDir,
+    jobId,
   } = options;
 
   // Get file info
   const stats = await stat(inputPath);
   const fileSize = stats.size;
   const totalDuration = await getAudioDuration(inputPath);
+
+  if (!Number.isFinite(totalDuration) || totalDuration <= 0) {
+    throw new Error('Audio has unusable duration');
+  }
 
   // If file is small enough, no splitting needed
   if (fileSize <= targetChunkSizeBytes) {
@@ -315,20 +334,46 @@ export async function splitAudioFile(
   }
 
   // Calculate segment duration
-  const segmentDuration = await calculateSegmentDuration(
+  let segmentDuration = await calculateSegmentDuration(
     inputPath,
     targetChunkSizeBytes,
   );
-  const estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+  let estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+
+  // Cap chunk count so pathologically long audio doesn't spray hundreds of
+  // chunks into tmpdir and the Whisper queue. If we'd exceed the cap, grow
+  // segmentDuration so the whole file fits in MAX_CHUNKS segments. The
+  // trade-off is individual chunks can then exceed targetChunkSizeBytes; if
+  // any chunk grows past Whisper's 25MB cap, transcription of that chunk
+  // will fail permanently. There is no re-split-on-size retry today — if
+  // that becomes a real problem in practice, add one in chunkedTranscription-
+  // Service or lower MAX_CHUNKS.
+  const MAX_CHUNKS = 60;
+  if (estimatedChunks > MAX_CHUNKS) {
+    segmentDuration = Math.ceil(totalDuration / MAX_CHUNKS);
+    estimatedChunks = Math.ceil(totalDuration / segmentDuration);
+    console.warn(
+      `[AudioSplitter] Chunk count exceeded cap; growing segment duration to ${segmentDuration}s (~${estimatedChunks} chunks)`,
+    );
+  }
 
   console.log(
     `[AudioSplitter] Splitting ${(fileSize / 1024 / 1024).toFixed(1)}MB file ` +
       `(${totalDuration.toFixed(0)}s) into ~${estimatedChunks} chunks of ~${segmentDuration}s each`,
   );
 
-  // Prepare output path pattern
+  // Prepare output path pattern.
+  // Prefer a per-job subdir under tmpdir when jobId is provided so parallel
+  // jobs don't share a directory and cleanup can rm-rf the whole subdir.
   const inputBasename = path.basename(inputPath, path.extname(inputPath));
-  const outputDirectory = outputDir || path.dirname(inputPath);
+  const outputDirectory =
+    outputDir ||
+    (jobId
+      ? path.join(tmpdir(), 'chunked-transcription', jobId)
+      : path.dirname(inputPath));
+  if (jobId && !outputDir) {
+    await fs.promises.mkdir(outputDirectory, { recursive: true });
+  }
   const outputPattern = path.join(
     outputDirectory,
     `${inputBasename}_chunk_%03d.${outputFormat}`,
@@ -367,6 +412,10 @@ export async function splitAudioFile(
 
 /**
  * Runs FFmpeg segmentation command.
+ *
+ * Captures the last 20 stderr lines so a failure's error message includes the
+ * actual ffmpeg diagnostic tail rather than a generic "exit code 1". Client-
+ * facing errors only get the short message; full stderr goes to server logs.
  */
 async function runSegmentation(
   inputPath: string,
@@ -375,6 +424,12 @@ async function runSegmentation(
   outputFormat: string,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    // Ring buffer: newest ffmpeg stderr line pushes the oldest out once the
+    // buffer is full. The tail is surfaced in server logs on failure so the
+    // operator can tell e.g. "unsupported codec" from "disk full".
+    const stderrTail: string[] = [];
+    const STDERR_TAIL_CAPACITY = 20;
+
     const command = ffmpeg(inputPath)
       .outputOptions([
         '-f',
@@ -405,11 +460,18 @@ async function runSegmentation(
       .on('start', (cmdLine) => {
         console.log(`[AudioSplitter] Running: ${cmdLine}`);
       })
+      .on('stderr', (line: string) => {
+        stderrTail.push(line);
+        if (stderrTail.length > STDERR_TAIL_CAPACITY) stderrTail.shift();
+      })
       .on('end', () => {
         resolve();
       })
       .on('error', (err: Error) => {
-        console.error(`[AudioSplitter] Segmentation failed:`, err.message);
+        console.error(
+          `[AudioSplitter] Segmentation failed: ${err.message}\n` +
+            `--- ffmpeg stderr tail ---\n${stderrTail.join('\n')}`,
+        );
         reject(new Error(`Audio segmentation failed: ${err.message}`));
       })
       .run();
@@ -453,6 +515,21 @@ export async function cleanupChunks(chunkPaths: string[]): Promise<void> {
   console.log(
     `[AudioSplitter] Cleaned up ${deleted}/${chunkPaths.length} chunk files`,
   );
+
+  // If all chunks lived in the same per-job subdir under tmpdir/chunked-
+  // transcription/, remove the now-empty parent dir too.
+  const perJobRoot = path.join(tmpdir(), 'chunked-transcription');
+  const parents = new Set(chunkPaths.map((p) => path.dirname(p)));
+  for (const parent of parents) {
+    if (parent.startsWith(perJobRoot + path.sep)) {
+      await fs.promises
+        .rm(parent, { recursive: true, force: true })
+        .catch(() => {
+          // Best-effort; if the dir contained other work or is already gone
+          // there's nothing useful to report.
+        });
+    }
+  }
 }
 
 /**

@@ -681,7 +681,11 @@
     "microphoneAccessDenied": "Mikrofonåtkomst nekad. Aktivera det i webbläsarens inställningar.",
     "microphoneAccessError": "Fel vid mikrofonåtkomst: {message}",
     "voiceInputTranscribing": "Transkriberar...",
-    "ttsRightClickHint": "Högerklicka för röstalternativ"
+    "ttsRightClickHint": "Högerklicka för röstalternativ",
+    "mediaRecorderNotSupported": "Ljudinspelning stöds inte i denna webbläsare.",
+    "microphoneNotDetected": "Ingen mikrofon hittades",
+    "microphoneBlocked": "Mikrofonen är blockerad. Kontrollera webbläsarinställningarna.",
+    "voiceTranscriptionFailed": "Rösttranskribering misslyckades. Försök igen."
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -971,7 +975,14 @@
     "activeFiles": {
       "autoPinUploads": "Fäst uppladdade filer automatiskt",
       "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort"
-    }
+    },
+    "Quarantined Data": "Karantändata",
+    "quarantineDataDescription": "Du har {count} karantänlagda {count, plural, one {objekt} other {objekt}} ({size}) med datafel som inte kunde läsas in normalt.",
+    "Review & Recover": "Granska & återställ",
+    "Export Quarantined Data": "Exportera karantändata",
+    "Delete Quarantined Data": "Radera karantändata",
+    "deleteQuarantineConfirm": "Är du säker på att du vill radera all karantändata? Denna åtgärd kan inte ångras.",
+    "quarantineDeleteSuccess": "All karantändata har raderats."
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1309,7 +1320,20 @@
     "fetchError": "Kunde inte ladda transkriptionen. Försök igen.",
     "transcriptExpired": "Transkriptionen för {filename} har gått ut. Transkriptioner tas automatiskt bort efter {days} dagar av integritetsskäl.",
     "expirationWarning": "Transkriptionen för {filename} går ut om {days} dag(ar). Kopiera innehållet om du behöver spara det.",
-    "elapsedTime": "Förfluten tid: {time}"
+    "elapsedTime": "Förfluten tid: {time}",
+    "cancel": "Avbryt transkribering",
+    "reconnecting": "Återansluter…",
+    "stillProcessing": "Bearbetar fortfarande – denna del tar längre tid än vanligt",
+    "chunkProgress": "Del {completed}/{total}",
+    "transientToast": "Transkribering misslyckades: {filename} – försök igen",
+    "authFailedToast": "Transkribering misslyckades: {filename} – logga in igen",
+    "rateLimitedToast": "Transkribering pausad: {filename} – tjänsten är fullbelagd, försök igen om en stund",
+    "permanentToast": "Transkribering misslyckades: {filename}{error}",
+    "cancelledToast": "Transkribering avbröts: {filename}",
+    "cancelledBody": "Avbruten av användare",
+    "transientBody": "Försök igen",
+    "authFailedBody": "Logga in igen",
+    "rateLimitedBody": "Tjänsten är fullbelagd, försök igen om en stund"
   },
   "migration": {
     "status": {
@@ -1514,7 +1538,8 @@
     "openInEditor": "Öppna i redigerare",
     "failedToUpload": "Uppladdning misslyckades",
     "attachment": "bilaga",
-    "attachments": "bilagor"
+    "attachments": "bilagor",
+    "transcriptionCancelled": "Avbruten"
   },
   "transcript": {
     "originalTranscript": "Originaltranskript",
@@ -1536,7 +1561,9 @@
     "open": "Öppna",
     "showFullMessage": "Visa hela meddelandet",
     "collapse": "Fäll ihop",
-    "customTone": "Anpassad ton"
+    "customTone": "Anpassad ton",
+    "showMore": "Visa mer",
+    "showLess": "Visa mindre"
   },
   "codeBlock": {
     "openInEditor": "Öppna i redigerare"

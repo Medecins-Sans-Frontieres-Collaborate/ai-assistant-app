@@ -739,7 +739,11 @@
       "filesCount": "{count} αρχείο(-α)",
       "audioVideo": "ήχος/βίντεο",
       "empty": "κενό"
-    }
+    },
+    "mediaRecorderNotSupported": "Η καταγραφή ήχου δεν υποστηρίζεται σε αυτόν τον περιηγητή.",
+    "microphoneNotDetected": "Δεν εντοπίστηκε μικρόφωνο",
+    "microphoneBlocked": "Το μικρόφωνο είναι μπλοκαρισμένο. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης.",
+    "voiceTranscriptionFailed": "Η μετατροπή φωνής σε κείμενο απέτυχε. Παρακαλώ δοκιμάστε ξανά."
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Αυτόματη καρφίτσωμα των ανεβασμένων αρχείων",
       "autoPinUploadsDescription": "Αυτόματο καρφίτσωμα των αρχείων κατά το ανέβασμα για να αποτρέπεται η διαγραφή τους από τη λίστα"
-    }
+    },
+    "Quarantined Data": "Δεδομένα σε καραντίνα",
+    "quarantineDataDescription": "Έχετε {count} δεδομένα σε καραντίνα {count, plural, one {αντικείμενο} other {αντικείμενα}} ({size}) με προβλήματα που δεν ήταν δυνατή η κανονική φόρτωσή τους.",
+    "Review & Recover": "Επισκόπηση & Ανάκτηση",
+    "Export Quarantined Data": "Εξαγωγή Δεδομένων σε Καραντίνα",
+    "Delete Quarantined Data": "Διαγραφή Δεδομένων σε Καραντίνα",
+    "deleteQuarantineConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε όλα τα δεδομένα σε καραντίνα; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
+    "quarantineDeleteSuccess": "Η διαγραφή όλων των δεδομένων σε καραντίνα ολοκληρώθηκε με επιτυχία."
   },
   "emptyState": {
     "greeting": "Πώς μπορώ να βοηθήσω;",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Άνοιγμα σε Επεξεργαστή",
     "failedToUpload": "Αποτυχία μεταφόρτωσης",
     "attachment": "συνημμένο",
-    "attachments": "συνημμένα"
+    "attachments": "συνημμένα",
+    "transcriptionCancelled": "Ακυρώθηκε"
   },
   "userMessage": {
     "open": "Άνοιγμα",
     "showFullMessage": "Εμφάνιση πλήρους μηνύματος",
     "collapse": "Σύμπτυξη",
-    "customTone": "Προσαρμοσμένος Τόνος"
+    "customTone": "Προσαρμοσμένος Τόνος",
+    "showMore": "Εμφάνιση περισσότερων",
+    "showLess": "Εμφάνιση λιγότερων"
   },
   "codeBlock": {
     "openInEditor": "Άνοιγμα σε επεξεργαστή"
@@ -1670,7 +1684,20 @@
       "urdu": "Ουρντού",
       "vietnamese": "Βιετναμέζικα",
       "welsh": "Ουαλικά"
-    }
+    },
+    "cancel": "Ακύρωση απομαγνητοφώνησης",
+    "reconnecting": "Επανασύνδεση…",
+    "stillProcessing": "Εξακολουθεί η επεξεργασία — αυτό το τμήμα διαρκεί περισσότερο από το συνηθισμένο",
+    "chunkProgress": "Τμήμα {completed}/{total}",
+    "transientToast": "Αποτυχία απομαγνητοφώνησης: {filename} — δοκιμάστε ξανά",
+    "authFailedToast": "Αποτυχία απομαγνητοφώνησης: {filename} — συνδεθείτε ξανά",
+    "rateLimitedToast": "Η απομαγνητοφώνηση διακόπηκε: {filename} — το σύστημα είναι υπερφορτωμένο, δοκιμάστε σύντομα ξανά",
+    "permanentToast": "Αποτυχία απομαγνητοφώνησης: {filename}{error}",
+    "cancelledToast": "Η απομαγνητοφώνηση ακυρώθηκε: {filename}",
+    "cancelledBody": "Ακυρώθηκε από τον χρήστη",
+    "transientBody": "Παρακαλώ δοκιμάστε ξανά",
+    "authFailedBody": "Παρακαλώ συνδεθείτε ξανά",
+    "rateLimitedBody": "Το σύστημα είναι υπερφορτωμένο, δοκιμάστε σύντομα ξανά"
   },
   "documentTranslation": {
     "title": "Μετάφραση Εγγράφου",

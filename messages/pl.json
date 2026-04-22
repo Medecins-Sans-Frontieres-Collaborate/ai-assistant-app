@@ -678,7 +678,11 @@
     "microphoneAccessDenied": "Dostęp do mikrofonu został zablokowany. Proszę włączyć go w ustawieniach przeglądarki.",
     "microphoneAccessError": "Błąd dostępu do mikrofonu: {message}",
     "voiceInputTranscribing": "Transkrypcja...",
-    "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu"
+    "ttsRightClickHint": "Kliknij prawym przyciskiem myszy, aby wybrać opcje głosu",
+    "mediaRecorderNotSupported": "Nagrywanie dźwięku nie jest obsługiwane w tej przeglądarce.",
+    "microphoneNotDetected": "Nie wykryto mikrofonu",
+    "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",
+    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie."
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -968,7 +972,14 @@
     "activeFiles": {
       "autoPinUploads": "Automatyczne przypinanie przesłanych plików",
       "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu"
-    }
+    },
+    "Quarantined Data": "Dane poddane kwarantannie",
+    "quarantineDataDescription": "Masz {count} poddane kwarantannie {count, plural, one {element} other {elementy}} ({size}) z problemami z danymi, których nie można było wczytać w normalny sposób.",
+    "Review & Recover": "Przejrzyj i odzyskaj",
+    "Export Quarantined Data": "Eksportuj dane z kwarantanny",
+    "Delete Quarantined Data": "Usuń dane z kwarantanny",
+    "deleteQuarantineConfirm": "Czy na pewno chcesz usunąć wszystkie dane z kwarantanny? Tej operacji nie można cofnąć.",
+    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane z kwarantanny."
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1057,7 +1068,20 @@
     "fetchError": "Nie udało się załadować transkrypcji. Spróbuj ponownie.",
     "transcriptExpired": "Transkrypcja dla pliku {filename} wygasła. Transkrypcje są automatycznie usuwane po {days} dniach w celu ochrony prywatności.",
     "expirationWarning": "Transkrypcja dla pliku {filename} wygaśnie za {days} dni. Skopiuj treść, jeśli chcesz ją zachować.",
-    "elapsedTime": "Upłynęło: {time}"
+    "elapsedTime": "Upłynęło: {time}",
+    "cancel": "Anuluj transkrypcję",
+    "reconnecting": "Ponowne łączenie…",
+    "stillProcessing": "Wciąż przetwarzane — ten segment trwa dłużej niż zwykle",
+    "chunkProgress": "Fragment {completed}/{total}",
+    "transientToast": "Transkrypcja nie powiodła się: {filename} — spróbuj ponownie",
+    "authFailedToast": "Transkrypcja nie powiodła się: {filename} — zaloguj się ponownie",
+    "rateLimitedToast": "Transkrypcja wstrzymana: {filename} — usługa jest przeciążona, spróbuj ponownie za chwilę",
+    "permanentToast": "Transkrypcja nie powiodła się: {filename}{error}",
+    "cancelledToast": "Transkrypcja anulowana: {filename}",
+    "cancelledBody": "Anulowano przez użytkownika",
+    "transientBody": "Spróbuj ponownie",
+    "authFailedBody": "Zaloguj się ponownie",
+    "rateLimitedBody": "Usługa przeciążona, spróbuj ponownie za chwilę"
   },
   "importBackupParseError": "Nie udało się przetworzyć pliku kopii zapasowej. Upewnij się, że jest to poprawny plik JSON.",
   "emptyState": {
@@ -1514,7 +1538,8 @@
     "openInEditor": "Otwórz w edytorze",
     "failedToUpload": "Nie udało się przesłać",
     "attachment": "załącznik",
-    "attachments": "załączniki"
+    "attachments": "załączniki",
+    "transcriptionCancelled": "Anulowano"
   },
   "transcript": {
     "originalTranscript": "Oryginalna transkrypcja",
@@ -1536,7 +1561,9 @@
     "open": "Otwórz",
     "showFullMessage": "Pokaż pełną wiadomość",
     "collapse": "Zwiń",
-    "customTone": "Niestandardowy ton"
+    "customTone": "Niestandardowy ton",
+    "showMore": "Pokaż więcej",
+    "showLess": "Pokaż mniej"
   },
   "codeBlock": {
     "openInEditor": "Otwórz w edytorze"

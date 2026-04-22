@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     // Hash data directly - Hasher accepts both Buffer and string
     // For buffers, this avoids base64 string length limit for large files
-    const hashedFileContents = Hasher.sha256(data).slice(0, 200);
+    const hashedFileContents = Hasher.sha256(data);
     const extension: string | undefined = filename.split('.').pop();
 
     let contentType;
@@ -120,13 +120,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Early rejection: check Content-Length before consuming the request body.
-    // This is advisory only — the authoritative check runs against actual
-    // buffer length after the body is read, so a spoofed Content-Length
-    // header cannot bypass validation.
+    // Advisory only — a lying Content-Length is caught by the authoritative
+    // buffer-length check further down, and Next.js buffers the body in
+    // `formData()` regardless.
+    //
+    // TODO(file-upload-stream): pipe `request.body` through a size-bounded
+    // transform so an honest-size-header-but-oversized-body request never
+    // reaches `formData()`. Blocked on reworking the multipart path to
+    // accept a pre-bounded buffer.
     const contentLength = request.headers.get('content-length');
     if (contentLength) {
       const declaredSize = parseInt(contentLength, 10);
-      if (!isNaN(declaredSize)) {
+      if (Number.isInteger(declaredSize) && declaredSize >= 0) {
         const earlyCheck = validateFileSizeRaw(
           filename,
           declaredSize,

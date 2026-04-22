@@ -295,9 +295,19 @@ export async function extractAudioFromVideo(
     command.audioCodec(getAudioCodec(outputFormat));
     command.audioBitrate(audioBitrate);
 
+    // Ring buffer for the last N ffmpeg stderr lines. Surfaced in server logs
+    // on failure so an operator can distinguish "no audio track" / "unsupported
+    // codec" / "disk full" from a generic exit code.
+    const stderrTail: string[] = [];
+    const STDERR_TAIL_CAPACITY = 20;
+
     command
       .on('start', (cmdLine) => {
         console.log(`[AudioExtractor] Running: ${cmdLine}`);
+      })
+      .on('stderr', (line: string) => {
+        stderrTail.push(line);
+        if (stderrTail.length > STDERR_TAIL_CAPACITY) stderrTail.shift();
       })
       .on('end', () => {
         console.log(
@@ -306,7 +316,10 @@ export async function extractAudioFromVideo(
         resolve({ outputPath });
       })
       .on('error', (err: Error) => {
-        console.error(`[AudioExtractor] Extraction failed:`, err.message);
+        console.error(
+          `[AudioExtractor] Extraction failed: ${err.message}\n` +
+            `--- ffmpeg stderr tail ---\n${stderrTail.join('\n')}`,
+        );
         reject(new Error(`Audio extraction failed: ${err.message}`));
       })
       .run();

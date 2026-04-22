@@ -192,14 +192,15 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // maxCompletionTokens = min(5000, 100000/4) = 5000
-      // availableInputTokens = 200000 - 5000 - 300 = 194700
-      // rawChunkSize = 194700 * 4 = 778800, capped at MAX_CHUNK_CHARS
+      // maxCompletionTokens = min(16000, 100000/4) = 16000 (ceiling)
+      // availableInputTokens = 200000 - 16000 - 300 = 183700
+      // rawChunkSize = 183700 * 4 = 734800, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
       // 200000 / 50000 = 4
       expect(config.batchSize).toBe(4);
-      // min(5000, 100000 / 4) = 5000
-      expect(config.maxCompletionTokens).toBe(5000);
+      expect(config.maxCompletionTokens).toBe(
+        CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
+      );
       // 100000 * 2 = 200000, capped at MAX_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MAX_SUMMARY_LENGTH);
     });
@@ -254,14 +255,15 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // maxCompletionTokens = min(5000, 64000/4) = 5000
-      // availableInputTokens = 200000 - 5000 - 300 = 194700
-      // rawChunkSize = 194700 * 4 = 778800, capped at MAX_CHUNK_CHARS
+      // maxCompletionTokens = min(16000, 64000/4) = 16000 (both equal)
+      // availableInputTokens = 200000 - 16000 - 300 = 183700
+      // rawChunkSize = 183700 * 4 = 734800, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
       // 200000 / 50000 = 4
       expect(config.batchSize).toBe(4);
-      // min(5000, 64000 / 4) = 5000
-      expect(config.maxCompletionTokens).toBe(5000);
+      expect(config.maxCompletionTokens).toBe(
+        CHUNK_CONFIG.DEFAULT_MAX_COMPLETION_TOKENS,
+      );
       // 64000 * 2 = 128000, capped at MAX_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MAX_SUMMARY_LENGTH);
     });
@@ -276,13 +278,13 @@ describe('Document Summary Utilities', () => {
 
       const config = calculateChunkConfig(model);
 
-      // maxCompletionTokens = min(5000, 32768/4) = 5000
-      // availableInputTokens = 128000 - 5000 - 300 = 122700
-      // rawChunkSize = 122700 * 4 = 490800, capped at MAX_CHUNK_CHARS
+      // maxCompletionTokens = min(16000, 32768/4) = 8192 (scaled)
+      // availableInputTokens = 128000 - 8192 - 300 = 119508
+      // rawChunkSize = 119508 * 4 = 478032, capped at MAX_CHUNK_CHARS
       expect(config.chunkSize).toBe(CHUNK_CONFIG.MAX_CHUNK_CHARS);
       // 128000 / 50000 = 2.56 → 2, clamped to MIN_BATCH_SIZE
       expect(config.batchSize).toBe(CHUNK_CONFIG.MIN_BATCH_SIZE);
-      expect(config.maxCompletionTokens).toBe(5000);
+      expect(config.maxCompletionTokens).toBe(8192);
       // 32768 * 2 = 65536, capped at MAX_SUMMARY_LENGTH
       expect(config.maxSummaryLength).toBe(CHUNK_CONFIG.MAX_SUMMARY_LENGTH);
     });

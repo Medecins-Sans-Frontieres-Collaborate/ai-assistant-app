@@ -12,6 +12,7 @@ vi.mock('@/lib/constants/ui', () => ({
   UI_CONSTANTS: {
     SCROLL: {
       AUTO_SCROLL_THRESHOLD: 200,
+      BOTTOM_THRESHOLD: 100,
     },
   },
 }));
@@ -231,6 +232,110 @@ describe('useChatScrolling', () => {
 
       // Completion scroll should NOT have been called
       expect(mockContainer.scrollTo).not.toHaveBeenCalled();
+    });
+
+    it('pauses auto-scroll on wheel even when scrollTop still reads as bottom (stale-read race)', () => {
+      // Regression test for the bug where `wheel` fires before the browser
+      // applies the user's scroll, so reading scrollTop in the wheel handler
+      // saw the bottom position RAF had just snapped to, and the handler
+      // failed to pause — letting the next RAF frame undo the user's scroll.
+      const scrollHeight = 2000;
+      const clientHeight = 500;
+      const mockContainer = createMockContainer({
+        scrollHeight,
+        clientHeight,
+        // Container is still reporting "at bottom" at the moment the wheel
+        // handler fires, because the browser hasn't applied the scroll yet.
+        scrollTop: scrollHeight - clientHeight,
+      });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      rerender({ isStreaming: true });
+
+      const wheelHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'wheel',
+      )?.[1];
+      expect(wheelHandler).toBeDefined();
+
+      act(() => {
+        wheelHandler!();
+      });
+      expect(result.current.showScrollDownButton).toBe(true);
+
+      // Now simulate the browser applying the user's wheel scroll, and a RAF
+      // tick that should NOT re-snap to bottom because pause already happened.
+      mockContainer.scrollTop = 1200; // user scrolled up 300px
+      act(() => {
+        rafCallbacks.forEach((cb) => cb());
+      });
+      // scrollTop must stay where the user scrolled to — not get snapped back.
+      expect(mockContainer.scrollTop).toBe(1200);
+    });
+
+    it('does NOT auto-resume when user drifts back within bottom threshold', () => {
+      // Regression: previously we auto-resumed on any scroll event when the
+      // user was within BOTTOM_THRESHOLD of the bottom. A small wheel tick
+      // (especially on a trackpad) left the user just inside that threshold,
+      // the scroll handler re-enabled the pin, and RAF's next frame snapped
+      // them back — user scroll never became visible, especially during
+      // in-flight when scrollHeight isn't growing to pull them past the
+      // threshold naturally.
+      const scrollHeight = 2000;
+      const clientHeight = 500;
+      const mockContainer = createMockContainer({
+        scrollHeight,
+        clientHeight,
+        scrollTop: scrollHeight - clientHeight,
+      });
+
+      const { result, rerender } = renderHook(
+        ({ isStreaming }) =>
+          useChatScrolling({
+            selectedConversationId: 'conv-1',
+            messageCount: 1,
+            isStreaming,
+            isDraining: false,
+          }),
+        { initialProps: { isStreaming: false } },
+      );
+
+      (result.current.chatContainerRef as any).current = mockContainer;
+      rerender({ isStreaming: true });
+
+      const wheelHandler = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'wheel',
+      )?.[1];
+
+      // Small wheel. Pause kicks in.
+      act(() => {
+        wheelHandler!();
+      });
+      mockContainer.scrollTop = scrollHeight - clientHeight - 50; // 50px up
+
+      // No `scroll` listener is attached by the hook anymore — explicit
+      // resume via `handleScrollDown` is the only path back.
+      const scrollListener = mockContainer.addEventListener.mock.calls.find(
+        (call: any) => call[0] === 'scroll',
+      );
+      expect(scrollListener).toBeUndefined();
+
+      // RAF tick must not undo the user's small scroll even though they're
+      // well within BOTTOM_THRESHOLD of the bottom.
+      act(() => {
+        rafCallbacks.forEach((cb) => cb());
+      });
+      expect(mockContainer.scrollTop).toBe(scrollHeight - clientHeight - 50);
     });
   });
 

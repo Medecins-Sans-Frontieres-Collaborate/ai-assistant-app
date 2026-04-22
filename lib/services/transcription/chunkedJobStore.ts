@@ -8,6 +8,8 @@
  *
  * Jobs are tracked from submission through completion.
  */
+import { TranscriptionErrorClass } from '@/types/transcription';
+
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -15,11 +17,14 @@ export type ChunkedJobStatus =
   | 'pending'
   | 'processing'
   | 'succeeded'
-  | 'failed';
+  | 'failed'
+  | 'cancelled';
 
 export interface ChunkedJob {
   /** Unique job identifier */
   jobId: string;
+  /** ID of the user who owns this job */
+  userId: string;
   /** Current job status */
   status: ChunkedJobStatus;
   /** Total number of chunks to process */
@@ -32,6 +37,12 @@ export interface ChunkedJob {
   transcript?: string;
   /** Error message (only set when failed) */
   error?: string;
+  /**
+   * Classification of the failure cause — clients use this to pick recovery
+   * UX (retry vs re-auth vs format error). Absent for unknown errors or
+   * non-failure states.
+   */
+  errorClass?: TranscriptionErrorClass;
   /** Paths to chunk files (for cleanup) */
   chunkPaths: string[];
   /** Path to original audio file (for cleanup) */
@@ -57,10 +68,17 @@ const JOB_RETENTION_MS = 60 * 60 * 1000;
  * @param jobId - The job ID to validate
  * @throws Error if the job ID format is invalid
  */
+/** UUID format for transcription job IDs. Shared across every route. */
+export const JOB_ID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** User-visible error text recorded on a cancelled chunked job. */
+export const JOB_CANCELLED_MESSAGE = 'Cancelled by user';
+
 function validateJobId(jobId: string): void {
-  // Job IDs should be alphanumeric with hyphens and underscores only
-  // This prevents path traversal (e.g., "../../../etc/passwd")
-  if (!/^[a-zA-Z0-9_-]+$/.test(jobId)) {
+  // Job IDs must be UUIDs. Strict format blocks path traversal and
+  // any accidental filesystem-unsafe characters.
+  if (!JOB_ID_REGEX.test(jobId)) {
     throw new Error('Invalid job ID format');
   }
 }
@@ -91,20 +109,30 @@ function getJobFilePath(jobId: string): string {
 /**
  * Saves a job to the file system with secure permissions.
  * Files are created with mode 0o600 (owner read/write only).
+ *
+ * Uses a tmp-then-rename pattern so concurrent readers never observe
+ * a partially written file. `rename` is atomic on the same filesystem.
  */
 function saveJob(job: ChunkedJob): void {
   ensureStoreDir();
   const filePath = getJobFilePath(job.jobId);
-  fs.writeFileSync(filePath, JSON.stringify(job, null, 2), {
+  // PID + timestamp + small random suffix — the random chunk covers the
+  // otherwise-possible collision of two writes for the same job in the same
+  // millisecond inside the same process.
+  const randomSuffix = Math.random().toString(36).slice(2, 10);
+  const tmpPath = `${filePath}.${process.pid}.${Date.now()}.${randomSuffix}.tmp`;
+  fs.writeFileSync(tmpPath, JSON.stringify(job, null, 2), {
     encoding: 'utf-8',
     mode: 0o600,
   });
+  fs.renameSync(tmpPath, filePath);
 }
 
 /**
  * Creates a new chunked transcription job.
  *
  * @param jobId - Unique job identifier
+ * @param userId - ID of the user who owns this job
  * @param totalChunks - Total number of chunks to process
  * @param chunkPaths - Paths to the chunk files
  * @param filename - Original filename for display
@@ -112,6 +140,7 @@ function saveJob(job: ChunkedJob): void {
  */
 export function createJob(
   jobId: string,
+  userId: string,
   totalChunks: number,
   chunkPaths: string[],
   filename: string,
@@ -121,6 +150,7 @@ export function createJob(
 
   const job: ChunkedJob = {
     jobId,
+    userId,
     status: 'pending',
     totalChunks,
     completedChunks: 0,
@@ -146,8 +176,10 @@ export function createJob(
  * Updates job progress.
  *
  * @param jobId - Job identifier
- * @param completedChunks - Number of chunks completed
- * @param currentChunk - Index of chunk currently being processed
+ * @param completedChunks - Number of chunks completed so far
+ * @param currentChunk - 0-based index of the chunk currently being processed
+ *   (i.e., the chunk that has just been started, not yet completed)
+ * @throws Error when no job record exists for `jobId`.
  */
 export function updateProgress(
   jobId: string,
@@ -156,7 +188,14 @@ export function updateProgress(
 ): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] updateProgress: Job ${jobId} not found`);
+    throw new Error(`Job ${jobId} not found`);
+  }
+
+  // Bail if the job is already terminal — a background chunk that finishes
+  // after the user cancelled (or after a failure was recorded) must not
+  // clobber the terminal status back to 'processing'. Racing writes are
+  // otherwise resolved last-writer-wins by the tmp+rename save path.
+  if (job.status !== 'pending' && job.status !== 'processing') {
     return;
   }
 
@@ -179,11 +218,19 @@ export function updateProgress(
  *
  * @param jobId - Job identifier
  * @param transcript - Combined transcript text
+ * @throws Error when no job record exists for `jobId`.
  */
 export function completeJob(jobId: string, transcript: string): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] completeJob: Job ${jobId} not found`);
+    throw new Error(`Job ${jobId} not found`);
+  }
+
+  // Preserve terminal status. If the user cancelled while the final batch
+  // was in flight, the combined-transcript write must not flip the job
+  // back to 'succeeded'. The transcript is discarded by design — cancelled
+  // means the user doesn't want it.
+  if (job.status !== 'pending' && job.status !== 'processing') {
     return;
   }
 
@@ -203,22 +250,39 @@ export function completeJob(jobId: string, transcript: string): void {
  * Marks a job as failed.
  *
  * @param jobId - Job identifier
- * @param error - Error message
+ * @param error - Human-readable error message
+ * @param errorClass - Optional classification so clients can branch on
+ *   recovery UX (e.g. auto-retry vs re-auth vs permanent).
+ * @throws Error when no job record exists for `jobId`.
  */
-export function failJob(jobId: string, error: string): void {
+export function failJob(
+  jobId: string,
+  error: string,
+  errorClass?: TranscriptionErrorClass,
+): void {
   const job = getJob(jobId);
   if (!job) {
-    console.warn(`[ChunkedJobStore] failJob: Job ${jobId} not found`);
+    throw new Error(`Job ${jobId} not found`);
+  }
+
+  // Preserve terminal status. A background chunk that errors after the user
+  // cancelled (or after a different branch already recorded success/failure)
+  // must not flip the stored outcome — cancelled must stay cancelled, a
+  // succeeded job must not revert to failed.
+  if (job.status !== 'pending' && job.status !== 'processing') {
     return;
   }
 
   job.status = 'failed';
   job.error = error;
+  job.errorClass = errorClass;
   job.updatedAt = Date.now();
 
   saveJob(job);
 
-  console.error(`[ChunkedJobStore] Job ${jobId} failed: ${error}`);
+  console.error(
+    `[ChunkedJobStore] Job ${jobId} failed (${errorClass ?? 'unclassified'}): ${error}`,
+  );
 }
 
 /**
@@ -240,6 +304,22 @@ export function getJob(jobId: string): ChunkedJob | undefined {
     console.warn(`[ChunkedJobStore] Error reading job ${jobId}:`, error);
     return undefined;
   }
+}
+
+/**
+ * Gets a job by ID, but only if it belongs to the given user.
+ * Returns undefined on mismatch so callers can't distinguish
+ * "not yours" from "not found" (prevents enumeration).
+ */
+export function getJobForUser(
+  jobId: string,
+  userId: string,
+): ChunkedJob | undefined {
+  const job = getJob(jobId);
+  if (!job || job.userId !== userId) {
+    return undefined;
+  }
+  return job;
 }
 
 /**
@@ -300,6 +380,65 @@ export function getActiveJobCount(): number {
   ).length;
 }
 
+/**
+ * Marks any job that was mid-flight (pending or processing) when the server
+ * was last stopped as failed with a recognizable reason. Intended to be
+ * called once at server startup so clients polling such jobs see a clean
+ * failure rather than a permanent 404.
+ *
+ * @returns The job IDs that were marked failed.
+ */
+export function markInterruptedJobsFailed(): string[] {
+  const marked: string[] = [];
+  const jobs = listJobs();
+  for (const job of jobs) {
+    if (job.status !== 'pending' && job.status !== 'processing') continue;
+    try {
+      // Classify as transient so clients render a "please try again" message
+      // instead of treating a restart as a permanent failure.
+      failJob(job.jobId, 'Job interrupted by server restart', 'transient');
+      marked.push(job.jobId);
+    } catch (err) {
+      console.warn(
+        `[ChunkedJobStore] Could not mark interrupted job ${job.jobId}:`,
+        err,
+      );
+    }
+  }
+  if (marked.length > 0) {
+    console.log(
+      `[ChunkedJobStore] Marked ${marked.length} interrupted job(s) as failed on startup`,
+    );
+  }
+  return marked;
+}
+
+/**
+ * Marks a job as cancelled by the user. Cooperative — the background chunk
+ * processor polls job status between batches and aborts when it sees this.
+ *
+ * @throws Error when no job record exists for `jobId`.
+ */
+export function cancelJob(jobId: string): void {
+  const job = getJob(jobId);
+  if (!job) {
+    throw new Error(`Job ${jobId} not found`);
+  }
+  // Already terminal — no-op.
+  if (
+    job.status === 'succeeded' ||
+    job.status === 'failed' ||
+    job.status === 'cancelled'
+  ) {
+    return;
+  }
+  job.status = 'cancelled';
+  job.error = JOB_CANCELLED_MESSAGE;
+  job.updatedAt = Date.now();
+  saveJob(job);
+  console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
+}
+
 // Cleanup timer reference
 let cleanupTimer: NodeJS.Timeout | null = null;
 
@@ -325,6 +464,8 @@ function scheduleCleanup(): void {
     },
     10 * 60 * 1000,
   ); // 10 minutes
+  // Don't block Node from exiting just because the cleanup timer is pending.
+  cleanupTimer.unref?.();
 }
 
 /**
@@ -337,8 +478,12 @@ function runCleanup(): void {
   const jobs = listJobs();
 
   for (const job of jobs) {
-    // Only clean up completed or failed jobs
-    if (job.status !== 'succeeded' && job.status !== 'failed') {
+    // Only clean up jobs in a terminal state.
+    if (
+      job.status !== 'succeeded' &&
+      job.status !== 'failed' &&
+      job.status !== 'cancelled'
+    ) {
       continue;
     }
 

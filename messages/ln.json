@@ -739,7 +739,11 @@
       "filesCount": "{count} fichier",
       "audioVideo": "audio/video",
       "empty": "pamba"
-    }
+    },
+    "mediaRecorderNotSupported": "Kokanga mongongo epesami te na browser oyo.",
+    "microphoneNotDetected": "Mikrofone emonani te",
+    "microphoneBlocked": "Mikrofone ekangami. Tala mindule ya browser.",
+    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu."
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Kangisa ndenge ya kokangisa mafayile nyonso oyo ebakisami",
       "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te"
-    }
+    },
+    "Quarantined Data": "Donnee ya quarantine",
+    "quarantineDataDescription": "Ozali na {count} {count, plural, one {élément} other {baélément}} ya quarantine ({size}) oyo ezalaki na mitungisi ya donnee mpe ekoki kozala te na ndenge ya malamu.",
+    "Review & Recover": "Talela & Kobongisa",
+    "Export Quarantined Data": "Exporter ba donnee ya quarantine",
+    "Delete Quarantined Data": "Kolongola ba donnee ya quarantine",
+    "deleteQuarantineConfirm": "Okomi naino kolongola ba donnee nyonso ya quarantine? Likambo oyo ekoki kozongisama te.",
+    "quarantineDeleteSuccess": "Kolongola ba donnee nyonso ya quarantine esalami malamu."
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Fungola na Editor",
     "failedToUpload": "Kotelema na kotinda",
     "attachment": "ekangi",
-    "attachments": "bikangi"
+    "attachments": "bikangi",
+    "transcriptionCancelled": "Baboyi"
   },
   "userMessage": {
     "open": "Fungola",
     "showFullMessage": "Lakisa nsango mobimba",
     "collapse": "Kokanga",
-    "customTone": "Ndenge ya mongongo moko"
+    "customTone": "Ndenge ya mongongo moko",
+    "showMore": "Lakisa mosusu",
+    "showLess": "Lakisa moke"
   },
   "codeBlock": {
     "openInEditor": "Fungola na editor"
@@ -1670,7 +1684,20 @@
       "urdu": "Ourdou",
       "vietnamese": "Vietnamien",
       "welsh": "Gallois"
-    }
+    },
+    "cancel": "Kofanda transcription",
+    "reconnecting": "Kokende lisusu na connexion…",
+    "stillProcessing": "Ezali kokoba kosala—segment oyo ezali kozwa ntango mingi koleka",
+    "chunkProgress": "Esika {completed}/{total}",
+    "transientToast": "Transcription efandi: {filename} — zala kindoki, meka lisusu",
+    "authFailedToast": "Transcription efandi: {filename} — sala login lisusu, nabondeli yo",
+    "rateLimitedToast": "Transcription epai: {filename} — service ezali kotonda, meka sima",
+    "permanentToast": "Transcription efandi: {filename}{error}",
+    "cancelledToast": "Transcription eboyi: {filename}",
+    "cancelledBody": "Mo'utilisateur aboyi",
+    "transientBody": "Meka lisusu",
+    "authFailedBody": "S'il te plaît, sala login lisusu",
+    "rateLimitedBody": "Service ezali kotonda, meka lisusu na mwa mwa ntango"
   },
   "documentTranslation": {
     "title": "Kokufa ya mikanda ya dokumente",

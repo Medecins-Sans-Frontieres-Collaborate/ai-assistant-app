@@ -739,7 +739,11 @@
       "filesCount": "{count} fichier",
       "audioVideo": "audio/vidéo",
       "empty": "pepe"
-    }
+    },
+    "mediaRecorderNotSupported": "Ködörö tî zo nginza tî audio ape na browser ôko.",
+    "microphoneNotDetected": "A yékwa microphone",
+    "microphoneBlocked": "Microphone azui. Gbegë na réglage ti navigateur mo.",
+    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava."
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Fânga ti yângâ nî tî kodro wüngö",
       "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô"
-    }
+    },
+    "Quarantined Data": "Donnés tî quarantiné",
+    "quarantineDataDescription": "Oko yeke {count} {count, plural, one {mbeti} other {mbeti}} tî quarantiné ({size}) mbi donnés azo so alingbi köda wala köda mbido na mbênî.",
+    "Review & Recover": "Kamba na kömba",
+    "Export Quarantined Data": "Ganza donnés tî quarantiné",
+    "Delete Quarantined Data": "Pese donnés tî quarantiné",
+    "deleteQuarantineConfirm": "O yeke sûr na pése touts donnés tî quarantiné? Ebio ape ndö tî sangana.",
+    "quarantineDeleteSuccess": "Ködörö tî pèse touts donnés tî quarantiné a la mû."
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Open in Editor",
     "failedToUpload": "Failed to upload",
     "attachment": "attachment",
-    "attachments": "attachments"
+    "attachments": "attachments",
+    "transcriptionCancelled": "Abandonné"
   },
   "userMessage": {
     "open": "Open",
     "showFullMessage": "Show full message",
     "collapse": "Collapse",
-    "customTone": "Custom Tone"
+    "customTone": "Custom Tone",
+    "showMore": "Wana mingi",
+    "showLess": "Wana peke"
   },
   "codeBlock": {
     "openInEditor": "Open in editor"
@@ -1670,7 +1684,20 @@
       "urdu": "Urdu",
       "vietnamese": "Vietnamese",
       "welsh": "Welsh"
-    }
+    },
+    "cancel": "Kebe transcription",
+    "reconnecting": "Beti na ndö yângâ…",
+    "stillProcessing": "Ködörö tî sîngî — segment ôko ate mbi tî siriri",
+    "chunkProgress": "Mboko {completed}/{total}",
+    "transientToast": "Transcription a kau: {filename} — tala na mbênî",
+    "authFailedToast": "Transcription a kau: {filename} — tala köda login na mbênî",
+    "rateLimitedToast": "Transcription a dika: {filename} — service akpoko, tala na mbênî",
+    "permanentToast": "Transcription a kau: {filename}{error}",
+    "cancelledToast": "Transcription a kebè: {filename}",
+    "cancelledBody": "Abandonné na moto",
+    "transientBody": "Tala na mbênî",
+    "authFailedBody": "Tala köda login na mbênî",
+    "rateLimitedBody": "Service akpoko, tala na mbênî"
   },
   "documentTranslation": {
     "title": "Document Translation",

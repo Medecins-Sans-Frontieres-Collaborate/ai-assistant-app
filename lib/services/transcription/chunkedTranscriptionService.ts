@@ -16,7 +16,11 @@ import {
   splitAudioFile,
 } from '@/lib/utils/server/audio/audioSplitter';
 
-import { TranscriptionOptions } from '@/types/transcription';
+import {
+  TranscriptionError,
+  TranscriptionErrorClass,
+  TranscriptionOptions,
+} from '@/types/transcription';
 
 import {
   ChunkedJob,
@@ -30,11 +34,26 @@ import { WhisperTranscriptionService } from './whisperTranscriptionService';
 
 import { v4 as uuidv4 } from 'uuid';
 
-/** Maximum number of chunks to process in parallel */
-const MAX_CONCURRENT_CHUNKS = 3;
+/**
+ * Number of chunks to process in parallel. Tunable at deploy time via
+ * TRANSCRIPTION_CONCURRENCY — higher if your Whisper deployment has more
+ * throughput, lower if you're hitting 429s.
+ */
+const MAX_CONCURRENT_CHUNKS = Math.max(
+  1,
+  Number(process.env.TRANSCRIPTION_CONCURRENCY) || 3,
+);
 
-/** Maximum retries for a single chunk */
-const MAX_CHUNK_RETRIES = 2;
+/**
+ * Total attempts per chunk (1 initial call + additional retries on transient
+ * failure). Tunable via TRANSCRIPTION_RETRIES, which expresses *retries* for
+ * legacy compatibility; the loop uses ATTEMPTS = retries + 1.
+ */
+const TRANSCRIPTION_RETRIES = Math.max(
+  0,
+  Number(process.env.TRANSCRIPTION_RETRIES) || 2,
+);
+const MAX_CHUNK_ATTEMPTS = TRANSCRIPTION_RETRIES + 1;
 
 /** Delay before retry after failure (ms) */
 const RETRY_DELAY_MS = 2000;
@@ -85,12 +104,14 @@ export class ChunkedTranscriptionService {
    *
    * @param audioPath - Path to the audio file to transcribe
    * @param filename - Original filename for display
+   * @param userId - ID of the user who owns this job (for authorization)
    * @param options - Transcription options (language, etc.)
    * @returns Job ID and total chunk count
    */
   async startJob(
     audioPath: string,
     filename: string,
+    userId: string,
     options?: ChunkedTranscriptionOptions,
   ): Promise<ChunkedJobStartResult> {
     // Verify FFmpeg is available
@@ -100,14 +121,21 @@ export class ChunkedTranscriptionService {
       );
     }
 
+    // Generate the jobId first so chunk files can live in a per-job
+    // subdir — makes cleanup atomic (rm-rf the subdir) and prevents parallel
+    // jobs from interleaving their chunk files.
+    const jobId = uuidv4();
+
     // Split the audio file into chunks
-    console.log(`[ChunkedTranscription] Splitting audio file: ${audioPath}`);
+    console.log(
+      `[ChunkedTranscription] Splitting audio file for job ${jobId}: ${audioPath}`,
+    );
     const splitResult = await splitAudioFile(audioPath, {
       targetChunkSizeBytes: 20 * 1024 * 1024, // 20MB chunks
       outputFormat: 'mp3',
+      jobId,
     });
 
-    const jobId = uuidv4();
     const { chunkPaths, chunkCount, totalDurationSecs, chunkDurationSecs } =
       splitResult;
 
@@ -117,7 +145,7 @@ export class ChunkedTranscriptionService {
     );
 
     // Create job in store
-    createJob(jobId, chunkCount, chunkPaths, filename, audioPath);
+    createJob(jobId, userId, chunkCount, chunkPaths, filename, audioPath);
 
     // Start async processing (don't await - runs in background)
     this.processChunksAsync(jobId, chunkPaths, filename, options).catch(
@@ -126,7 +154,15 @@ export class ChunkedTranscriptionService {
           `[ChunkedTranscription] Background processing error for ${jobId}:`,
           error,
         );
-        failJob(jobId, error.message || 'Unknown error');
+        try {
+          const errorClass = (error as TranscriptionError)?.errorClass;
+          failJob(jobId, error.message || 'Unknown error', errorClass);
+        } catch (failError) {
+          console.error(
+            `[ChunkedTranscription] Could not mark job ${jobId} failed:`,
+            failError,
+          );
+        }
       },
     );
 
@@ -176,6 +212,16 @@ export class ChunkedTranscriptionService {
         batchStart < totalChunks;
         batchStart += MAX_CONCURRENT_CHUNKS
       ) {
+        // Cooperative cancel check between batches — if the user cancelled
+        // or the job was externally terminated, stop burning Whisper calls.
+        const current = getJob(jobId);
+        if (!current || current.status === 'cancelled') {
+          console.log(
+            `[ChunkedTranscription] Job ${jobId} cancelled; aborting remaining chunks`,
+          );
+          return;
+        }
+
         const batchEnd = Math.min(
           batchStart + MAX_CONCURRENT_CHUNKS,
           totalChunks,
@@ -240,11 +286,12 @@ export class ChunkedTranscriptionService {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
+      const errorClass = (error as TranscriptionError)?.errorClass;
       console.error(
-        `[ChunkedTranscription] Job ${jobId} failed:`,
+        `[ChunkedTranscription] Job ${jobId} failed (${errorClass ?? 'unclassified'}):`,
         errorMessage,
       );
-      failJob(jobId, errorMessage);
+      failJob(jobId, errorMessage, errorClass);
       throw error;
     } finally {
       // Always clean up chunk files
@@ -254,7 +301,13 @@ export class ChunkedTranscriptionService {
   }
 
   /**
-   * Transcribes a single chunk with retry logic.
+   * Transcribes a single chunk with retry logic that respects error class.
+   *
+   * - `permanent`: don't retry (user error — bad codec, oversized, etc.).
+   * - `auth`: rebuild the Whisper client once (handles token expiry on long jobs)
+   *           and retry.
+   * - `rate_limit`: retry with doubled backoff.
+   * - `transient` / `unknown`: retry with normal backoff.
    */
   private async transcribeChunkWithRetry(
     chunkPath: string,
@@ -262,9 +315,9 @@ export class ChunkedTranscriptionService {
     totalChunks: number,
     options?: TranscriptionOptions,
   ): Promise<string> {
-    let lastError: Error | null = null;
+    let lastError: Error | undefined;
 
-    for (let attempt = 1; attempt <= MAX_CHUNK_RETRIES + 1; attempt++) {
+    for (let attempt = 1; attempt <= MAX_CHUNK_ATTEMPTS; attempt++) {
       try {
         const transcript = await this.whisperService.transcribe(
           chunkPath,
@@ -274,28 +327,48 @@ export class ChunkedTranscriptionService {
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
 
-        // Check if it's a rate limit error
-        const isRateLimit =
-          lastError.message.includes('rate limit') ||
-          lastError.message.includes('capacity') ||
-          lastError.message.includes('429');
+        const errorClass: TranscriptionErrorClass =
+          (lastError as TranscriptionError).errorClass ?? 'unknown';
 
-        if (attempt <= MAX_CHUNK_RETRIES) {
-          const waitTime = isRateLimit ? RETRY_DELAY_MS * 2 : RETRY_DELAY_MS;
-
-          console.warn(
-            `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed ` +
-              `(attempt ${attempt}/${MAX_CHUNK_RETRIES + 1}), retrying in ${waitTime}ms...`,
-          );
-
-          await delay(waitTime);
+        if (errorClass === 'permanent') {
+          // User-visible error (bad codec, oversize, etc.); don't waste retries.
+          throw lastError;
         }
+
+        if (attempt >= MAX_CHUNK_ATTEMPTS) break;
+
+        if (errorClass === 'auth') {
+          // Token likely expired during a long job — rebuild the client.
+          console.warn(
+            `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} hit auth error; re-initializing Whisper client`,
+          );
+          this.whisperService = new WhisperTranscriptionService();
+          await delay(RETRY_DELAY_MS);
+          continue;
+        }
+
+        const waitTime =
+          errorClass === 'rate_limit' ? RETRY_DELAY_MS * 2 : RETRY_DELAY_MS;
+
+        console.warn(
+          `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed (${errorClass}, ` +
+            `attempt ${attempt}/${MAX_CHUNK_ATTEMPTS}), retrying in ${waitTime}ms...`,
+        );
+
+        await delay(waitTime);
       }
     }
 
-    throw new Error(
-      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_RETRIES + 1} attempts: ${lastError?.message}`,
-    );
+    // `lastError` is always assigned on any iteration that takes the catch
+    // branch, and the loop runs at least once (MAX_CHUNK_ATTEMPTS ≥ 1 is
+    // enforced via TRANSCRIPTION_RETRIES = Math.max(0, …)). If the loop
+    // returns successfully on the first try we never reach here.
+    const tagged = lastError as TranscriptionError | undefined;
+    const err = new Error(
+      `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_ATTEMPTS} attempts: ${tagged?.message ?? 'unknown error'}`,
+    ) as TranscriptionError;
+    err.errorClass = tagged?.errorClass ?? 'unknown';
+    throw err;
   }
 
   /**
@@ -313,12 +386,19 @@ export class ChunkedTranscriptionService {
       return transcripts[0] || '';
     }
 
-    // Multiple chunks - add markers for transparency
+    // Multiple chunks - add markers for transparency. If a chunk was silent
+    // and came back empty, emit a placeholder so users don't read an empty
+    // marker as "the system broke" — they can see that transcription ran
+    // and deliberately found no speech in that segment.
     return transcripts
       .map((text, i) => {
         const chunkNum = i + 1;
         const trimmedText = text.trim();
-        return `[Chunk ${chunkNum}/${totalChunks}]\n${trimmedText}`;
+        const body =
+          trimmedText.length > 0
+            ? trimmedText
+            : '(no speech detected in this segment)';
+        return `[Chunk ${chunkNum}/${totalChunks}]\n${body}`;
       })
       .join('\n\n');
   }

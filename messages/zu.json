@@ -739,7 +739,11 @@
       "filesCount": "Amafayela angu-{count}",
       "audioVideo": "umsindo/ividiyo",
       "empty": "akunalutho"
-    }
+    },
+    "mediaRecorderNotSupported": "Ukurekhoda umsindo akuxhaswanga kulesi siphequluli.",
+    "microphoneNotDetected": "Ayikho imakrofoni etholakele",
+    "microphoneBlocked": "Imakrofoni ivinjiwe. Hlola izilungiselelo zesiphequluli.",
+    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi."
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Beka othomathikhi amafayela alayishiwe esicongweni",
       "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi"
-    }
+    },
+    "Quarantined Data": "Idatha Egodliwe",
+    "quarantineDataDescription": "Unayo {count} {count, plural, one {into} other {izinto}} ezigodliwe ({size}) ezinenkinga yedatha ezingalayishwanga ngendlela ejwayelekile.",
+    "Review & Recover": "Bheka & Buyisela",
+    "Export Quarantined Data": "Thumela Idatha Egodliwe",
+    "Delete Quarantined Data": "Susa Idatha Egodliwe",
+    "deleteQuarantineConfirm": "Uqinisekile ukuthi ufuna ukususa yonke idatha egodliwe? Lesi senzo asikwazi ukubuyiselwa emuva.",
+    "quarantineDeleteSuccess": "Idatha egodliwe isusiwe ngempumelelo."
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Vula Kumhleli",
     "failedToUpload": "Kuhlulekile ukulayisha",
     "attachment": "isithasiselo",
-    "attachments": "izithasiselo"
+    "attachments": "izithasiselo",
+    "transcriptionCancelled": "Kukhanseliwe"
   },
   "userMessage": {
     "open": "Vula",
     "showFullMessage": "Bonisa umlayezo ophelele",
     "collapse": "Goqa",
-    "customTone": "Ithoni Yakho"
+    "customTone": "Ithoni Yakho",
+    "showMore": "Khombisa okuningi",
+    "showLess": "Khombisa okuncane"
   },
   "codeBlock": {
     "openInEditor": "Vula kumhleli"
@@ -1670,7 +1684,20 @@
       "urdu": "Isi-Urdu",
       "vietnamese": "Isi-Vietnamese",
       "welsh": "Isi-Welsh"
-    }
+    },
+    "cancel": "Khansela ukuguqulela umbhalo",
+    "reconnecting": "Uxhumana kabusha…",
+    "stillProcessing": "Kusacubungulwa — lesi sigaba sithatha isikhathi eside kunokuvamile",
+    "chunkProgress": "Ingxenye {completed}/{total}",
+    "transientToast": "Ukuguqulwa kombhalo kwehlulekile: {filename} — sicela uzame futhi",
+    "authFailedToast": "Ukuguqulwa kombhalo kwehlulekile: {filename} — ngicela ungene ngemvume futhi",
+    "rateLimitedToast": "Ukuguqulwa kombhalo kumisiwe: {filename} — insizakalo igcwele, sicela uzame futhi manje",
+    "permanentToast": "Ukuguqulwa kombhalo kwehlulekile: {filename}{error}",
+    "cancelledToast": "Ukuguqulwa kombhalo kumisiwe: {filename}",
+    "cancelledBody": "Kukhanselwe ngumsebenzisi",
+    "transientBody": "Sicela uzame futhi",
+    "authFailedBody": "Sicela ungene ngemvume futhi",
+    "rateLimitedBody": "Insizakalo igcwele, sicela uzame futhi manje"
   },
   "documentTranslation": {
     "title": "Ukuhumusha Idokhumenti",

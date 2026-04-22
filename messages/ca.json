@@ -656,7 +656,11 @@
     "microphoneAccessDenied": "L'accés al micròfon està denegat. Activeu-lo a la configuració del vostre navegador.",
     "microphoneAccessError": "Error d'accés al micròfon: {message}",
     "voiceInputTranscribing": "Transcripció en curs...",
-    "ttsRightClickHint": "Clic dret per opcions de veu"
+    "ttsRightClickHint": "Clic dret per opcions de veu",
+    "mediaRecorderNotSupported": "L’enregistrament d’àudio no és compatible amb aquest navegador.",
+    "microphoneNotDetected": "No s'ha detectat cap micròfon",
+    "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",
+    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar."
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -946,7 +950,14 @@
     "activeFiles": {
       "autoPinUploads": "Fixa automàticament els fitxers pujats",
       "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin"
-    }
+    },
+    "Quarantined Data": "Dades en quarantena",
+    "quarantineDataDescription": "Teniu {count} {count, plural, one {element} other {elements}} en quarantena ({size}) amb problemes de dades que no s’han pogut carregar normalment.",
+    "Review & Recover": "Revisar i recuperar",
+    "Export Quarantined Data": "Exporta dades en quarantena",
+    "Delete Quarantined Data": "Elimina dades en quarantena",
+    "deleteQuarantineConfirm": "Esteu segur que voleu eliminar totes les dades en quarantena? Aquesta acció no es pot desfer.",
+    "quarantineDeleteSuccess": "S’han eliminat correctament totes les dades en quarantena."
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1053,7 +1064,20 @@
     "fetchError": "No s'ha pogut carregar la transcripció. Torna-ho a intentar.",
     "transcriptExpired": "La transcripció de {filename} ha caducat. Les transcripcions s'eliminen automàticament després de {days} dies per motius de privadesa.",
     "expirationWarning": "La transcripció de {filename} caducarà en {days} dia(es). Copia el contingut si el vols conservar.",
-    "elapsedTime": "Temps transcorregut: {time}"
+    "elapsedTime": "Temps transcorregut: {time}",
+    "cancel": "Cancel·la la transcripció",
+    "reconnecting": "Tornant a connectar…",
+    "stillProcessing": "Encara s’està processant — aquest segment triga més del normal",
+    "chunkProgress": "Fragment {completed}/{total}",
+    "transientToast": "La transcripció ha fallat: {filename} — torneu-ho a intentar",
+    "authFailedToast": "La transcripció ha fallat: {filename} — torneu a iniciar sessió",
+    "rateLimitedToast": "Transcripció en pausa: {filename} — el servei està al límit de capacitat, torneu-ho a provar aviat",
+    "permanentToast": "La transcripció ha fallat: {filename}{error}",
+    "cancelledToast": "Transcripció cancel·lada: {filename}",
+    "cancelledBody": "Cancel·lat per l’usuari",
+    "transientBody": "Torneu-ho a intentar",
+    "authFailedBody": "Torneu a iniciar sessió",
+    "rateLimitedBody": "Servei al límit de capacitat, torneu-ho a provar aviat"
   },
   "transcriptionComplete": "Transcripció completa! Text afegit a l'entrada del xat.",
   "No prompts found": "No s'ha trobat cap prompt",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Obre a l'editor",
     "failedToUpload": "No s'ha pogut pujar",
     "attachment": "adjunt",
-    "attachments": "adjunts"
+    "attachments": "adjunts",
+    "transcriptionCancelled": "Cancel·lat"
   },
   "transcript": {
     "originalTranscript": "Transcripció original",
@@ -1536,7 +1561,9 @@
     "open": "Obre",
     "showFullMessage": "Mostra el missatge complet",
     "collapse": "Redueix",
-    "customTone": "To personalitzat"
+    "customTone": "To personalitzat",
+    "showMore": "Mostra'n més",
+    "showLess": "Mostra'n menys"
   },
   "codeBlock": {
     "openInEditor": "Obre a l'editor"

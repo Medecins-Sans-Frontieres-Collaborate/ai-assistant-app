@@ -230,13 +230,16 @@ export type UploadStatus =
   | 'failed';
 
 /**
- * Status of async transcription jobs (batch API)
+ * Status of async transcription jobs (batch API).
+ * `cancelled` is distinct from `failed` so the UI can render a neutral tile
+ * instead of the red "failed" state when the user aborted the job.
  */
 export type TranscriptionJobStatus =
   | 'pending'
   | 'processing'
   | 'completed'
-  | 'failed';
+  | 'failed'
+  | 'cancelled';
 
 export interface FilePreview {
   name: string;

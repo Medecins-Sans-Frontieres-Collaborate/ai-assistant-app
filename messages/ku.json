@@ -739,7 +739,11 @@
       "filesCount": "{count} pel",
       "audioVideo": "deng/vîdyo",
       "empty": "vala"
-    }
+    },
+    "mediaRecorderNotSupported": "پەیوەستکردنی دەنگ پشتیوانی ناکرێت لە ئەم بەراوزە.",
+    "microphoneNotDetected": "میکروفۆن نەدۆزرایەوە",
+    "microphoneBlocked": "میکروفۆن بلۆککراوە. تکایە ڕێکخستنی وێبگەڕ بپشکنە.",
+    "voiceTranscriptionFailed": "وەرگێڕانی دەنگ سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە."
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "خۆکارانە پەیوەستکردنی پەڕگە بارکراوەکان",
       "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە"
-    }
+    },
+    "Quarantined Data": "داتای قەرەنتینکراو",
+    "quarantineDataDescription": "تۆ {count} {count, plural, one {دانە} other {دانە}} داتای قەرەنتینکراو هەیە ({size}) کە کێشەی داتایان هەیە و ناتوانرێت بە شێوەی ئاسایی بار بکرێن.",
+    "Review & Recover": "پیشاندان و گرتنەوە",
+    "Export Quarantined Data": "هەناردەکردنی داتای قەرەنتینکراو",
+    "Delete Quarantined Data": "سڕینەوەی داتای قەرەنتینکراو",
+    "deleteQuarantineConfirm": "دڵنیایت دەتەوێت هەموو داتای قەرەنتینکراو بسڕیتەوە؟ ئەم کردارە ناتوانرێت پاشگەز بکرێت.",
+    "quarantineDeleteSuccess": "هەموو داتای قەرەنتینکراو سەرکەوتووانە سڕایەوە."
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Di Edîtorê de Veke",
     "failedToUpload": "Barkirin bi ser neket",
     "attachment": "pêvek",
-    "attachments": "pêvek"
+    "attachments": "pêvek",
+    "transcriptionCancelled": "هەڵوەشاوە"
   },
   "userMessage": {
     "open": "Veke",
     "showFullMessage": "Peyama tevahî nîşan bide",
     "collapse": "Bicivîne",
-    "customTone": "Tona Taybet"
+    "customTone": "Tona Taybet",
+    "showMore": "زیاتر پیشان بدە",
+    "showLess": "کەمتر پیشان بدە"
   },
   "codeBlock": {
     "openInEditor": "Di edîtorê de veke"
@@ -1670,7 +1684,20 @@
       "urdu": "Urdûyî",
       "vietnamese": "Viyetnamî",
       "welsh": "Welşî"
-    }
+    },
+    "cancel": "وەستاندنی وەرگێڕانی دەنگ",
+    "reconnecting": "پەیوەندی نوێ دەکرێت…",
+    "stillProcessing": "هێشتا بەردەوامە — ئەم بەشە زیاتر لە هەرکاتێک خەریکی پڕۆسەکردنە",
+    "chunkProgress": "بەش {completed}/{total}",
+    "transientToast": "شکستی وەرگێڕان: {filename} — تکایە دووبارە هەوڵ بدە",
+    "authFailedToast": "شکستی وەرگێڕان: {filename} — تکایە دووبارە چوونەژوورەوە بکە",
+    "rateLimitedToast": "وەرگێڕان وەستاندرا: {filename} — خزمەتگوزاری پڕە، تکایە کەمێک دوایتر هەوڵ بدە",
+    "permanentToast": "شکستی وەرگێڕان: {filename}{error}",
+    "cancelledToast": "وەرگێڕان هەڵوەشاوە: {filename}",
+    "cancelledBody": "لەلایەن بەکارهێنەرەوە هەڵوەشاوە",
+    "transientBody": "تکایە دووبارە هەوڵ بدە",
+    "authFailedBody": "تکایە دووبارە چوونەژوورەوە بکە",
+    "rateLimitedBody": "خزمەتگوزاری پڕە، تکایە کەمێک دوایتر هەوڵ بدە"
   },
   "documentTranslation": {
     "title": "Wergera Belgeyê",

@@ -624,7 +624,11 @@
     "microphoneAccessDenied": "የማይክሮፎን መዳረሻ ተከልክሏል። እባክዎ በአሳሽዎ ቅንብሮች ውስጥ ያንቁ።",
     "microphoneAccessError": "የማይክሮፎን መዳረሻ ስህተት፡ {message}",
     "voiceInputTranscribing": "በመቅዳት ላይ...",
-    "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ"
+    "ttsRightClickHint": "ድምፅ ምርጫዎችን ለማየት ቀኝ ይጫኑ",
+    "mediaRecorderNotSupported": "የድምፅ መቅዳት በዚህ ብራውዘር አአይደለም።",
+    "microphoneNotDetected": "ማድረግ የለም፡ ማድረግ አልተገኘም",
+    "microphoneBlocked": "ማድረግ ታግዷል። የመቃኘት ቅንብሮችዎን ያረጋግጡ።",
+    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -914,7 +918,14 @@
     "activeFiles": {
       "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
       "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
-    }
+    },
+    "Quarantined Data": "በመለያየት ውስጥ ያለ ውሂብ",
+    "quarantineDataDescription": "በመደበኛ መንገድ መጫን አልተቻለም ምክንያት ያለው {count} በመለያየት ውስጥ ያለ {count, plural, one {ነገር} other {ነገሮች}} አሉ ({size})።",
+    "Review & Recover": "ይገምግሙ እና ይውጡ",
+    "Export Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ወደ ውጭ ላክ",
+    "Delete Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት",
+    "deleteQuarantineConfirm": "ሁሉንም በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት እንደምትፈልጉ እርግጠኛ ያሉበት? ይህ ድርጊት ማቃጠል አይቻልም።",
+    "quarantineDeleteSuccess": "ሁሉንም በመለያየት ውስጥ ያለው ውሂብ በተሳካ ሁኔታ ተወግዷል።"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1430,7 +1441,8 @@
     "openInEditor": "በአርታዒ ውስጥ ክፈት",
     "failedToUpload": "ማስገባት አልተሳካም",
     "attachment": "አባሪ",
-    "attachments": "አባሪዎች"
+    "attachments": "አባሪዎች",
+    "transcriptionCancelled": "ተሰርዟል"
   },
   "transcript": {
     "originalTranscript": "የመጀመሪያ የቃለ መጠይቅ ቅጽ",
@@ -1452,7 +1464,9 @@
     "open": "ክፈት",
     "showFullMessage": "ሙሉ መልኩን አሳይ",
     "collapse": "ሰብስብ",
-    "customTone": "ብጁ ቃና"
+    "customTone": "ብጁ ቃና",
+    "showMore": "ተጨማሪ አሳይ",
+    "showLess": "ቀጥል አታሳይ"
   },
   "codeBlock": {
     "openInEditor": "በአርታዒ ውስጥ ክፈት"
@@ -1604,7 +1618,20 @@
     "fetchError": "ትርጓሜውን ማግኘት አልተሳካም። እባክዎ ደግመው ይሞክሩ።",
     "transcriptExpired": "የ {filename} ትርጓሜ ጊዜው አልፏል። ለግላዊነት ትርጓሜዎች በራስ-ሰር ከ {days} ቀናት በኋላ ይሰረዳሉ።",
     "expirationWarning": "የ {filename} ትርጓሜ በ {days} ቀን(ዎች) ውስጥ ይያያዝ። ያስፈልጋችሁ ከሆነ ይውሰዱት።",
-    "elapsedTime": "የወጣው ጊዜ፡ {time}"
+    "elapsedTime": "የወጣው ጊዜ፡ {time}",
+    "cancel": "ንባብን ሰርዝ",
+    "reconnecting": "በድጋሚ በመገናኘት ላይ…",
+    "stillProcessing": "በሂደት ላይ ነው — ይህ ክፍል ከተለመደው የበለጠ ጊዜ እየወሰደ ነው",
+    "chunkProgress": "ክፍል {completed}/{total}",
+    "transientToast": "ንባብ አልተሳካም፡ {filename} — እባክዎ ደግመው ይሞክሩ",
+    "authFailedToast": "ንባብ አልተሳካም፡ {filename} — እባክዎ እንደገና ይግቡ",
+    "rateLimitedToast": "ንባብ ቆሟል፡ {filename} — አገልግሎቱ ሞልቷል፣ እባክዎ በቅርቡ ደግመው ይሞክሩ",
+    "permanentToast": "ንባብ አልተሳካም፡ {filename}{error}",
+    "cancelledToast": "ንባብ ተሰርዟል፡ {filename}",
+    "cancelledBody": "በተጠቃሚው ተሰርዟል",
+    "transientBody": "እባክዎ ደግሞ ይሞክሩ",
+    "authFailedBody": "እባክዎ እንደገና ይግቡ",
+    "rateLimitedBody": "አገልግሎቱ ሞልቷል፣ እባክዎ በቅርቡ ደግመው ይሞክሩ"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "የእርስዎን የግል መመሪያዎች ያክሉ እና የAI ምላሽን ያስተካክሉ። እነዚህ ጥሩ፣ ትክክለኛ እና ደህና የሆኑ ምላሾችን ለመስጠት ከመሠረታዊ መመሪያዎች ጋር ይጣፉ።",
   "Tip: Type \"/\" to select from saved prompt templates_": "ምክር፦ \"/\" በመተግበር ከተቀመጡት ማስጠንቀቂያ አብነቶች ይምረጡ።",

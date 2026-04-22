@@ -627,7 +627,11 @@
     "microphoneAccessDenied": "تم رفض الوصول إلى الميكروفون. يرجى تفعيله في إعدادات المتصفح.",
     "microphoneAccessError": "خطأ في الوصول إلى الميكروفون: {message}",
     "voiceInputTranscribing": "جارٍ التحويل إلى نص...",
-    "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت"
+    "ttsRightClickHint": "انقر بزر الماوس الأيمن لاختيار خيارات الصوت",
+    "mediaRecorderNotSupported": "تسجيل الصوت غير مدعوم في هذا المتصفح.",
+    "microphoneNotDetected": "لم يتم اكتشاف ميكروفون",
+    "microphoneBlocked": "تم حظر الميكروفون. تحقق من إعدادات المتصفح.",
+    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى."
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -917,7 +921,14 @@
     "activeFiles": {
       "autoPinUploads": "تثبيت الملفات المرفوعة تلقائيًا",
       "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها"
-    }
+    },
+    "Quarantined Data": "البيانات المحجوزة",
+    "quarantineDataDescription": "لديك {count} ‏{count, plural, one {عنصر} other {عناصر}} محجوزة ({size}) بها مشكلات في البيانات تعذر تحميلها بشكل طبيعي.",
+    "Review & Recover": "مراجعة واستعادة",
+    "Export Quarantined Data": "تصدير البيانات المحجوزة",
+    "Delete Quarantined Data": "حذف البيانات المحجوزة",
+    "deleteQuarantineConfirm": "هل أنت متأكد من رغبتك في حذف جميع البيانات المحجوزة؟ لا يمكن التراجع عن هذا الإجراء.",
+    "quarantineDeleteSuccess": "تم حذف جميع البيانات المحجوزة بنجاح."
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1430,7 +1441,8 @@
     "openInEditor": "افتح في المحرر",
     "failedToUpload": "فشل في الرفع",
     "attachment": "مرفق",
-    "attachments": "مرفقات"
+    "attachments": "مرفقات",
+    "transcriptionCancelled": "تم الإلغاء"
   },
   "transcript": {
     "originalTranscript": "النص الأصلي",
@@ -1452,7 +1464,9 @@
     "open": "فتح",
     "showFullMessage": "عرض الرسالة كاملة",
     "collapse": "طي",
-    "customTone": "نغمة مخصصة"
+    "customTone": "نغمة مخصصة",
+    "showMore": "إظهار المزيد",
+    "showLess": "إظهار أقل"
   },
   "codeBlock": {
     "openInEditor": "افتح في المحرر"
@@ -1604,7 +1618,20 @@
     "fetchError": "فشل في تحميل النص. يرجى المحاولة مرة أخرى.",
     "transcriptExpired": "انتهت صلاحية النص لـ {filename}. يتم حذف النصوص تلقائيًا بعد {days} يومًا حفاظًا على الخصوصية.",
     "expirationWarning": "ستنتهي صلاحية النص لـ {filename} خلال {days} يوم/أيام. يُرجى نسخ المحتوى إذا كنت بحاجة للاحتفاظ به.",
-    "elapsedTime": "المنقضي: {time}"
+    "elapsedTime": "المنقضي: {time}",
+    "cancel": "إلغاء النسخ",
+    "reconnecting": "إعادة الاتصال…",
+    "stillProcessing": "لا يزال قيد المعالجة — يستغرق هذا الجزء وقتاً أطول من المعتاد",
+    "chunkProgress": "جزء {completed}/{total}",
+    "transientToast": "فشل النسخ: {filename} — الرجاء المحاولة مرة أخرى",
+    "authFailedToast": "فشل النسخ: {filename} — الرجاء تسجيل الدخول مجددًا",
+    "rateLimitedToast": "تم إيقاف النسخ مؤقتًا: {filename} — الخدمة ممتلئة حالياً، يرجى المحاولة بعد قليل",
+    "permanentToast": "فشل النسخ: {filename}{error}",
+    "cancelledToast": "تم إلغاء النسخ: {filename}",
+    "cancelledBody": "تم الإلغاء بواسطة المستخدم",
+    "transientBody": "يرجى المحاولة مرة أخرى",
+    "authFailedBody": "يرجى تسجيل الدخول مجددًا",
+    "rateLimitedBody": "الخدمة ممتلئة حالياً، يرجى المحاولة بعد قليل"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "أضف تعليماتك الشخصية لتخصيص كيفية استجابة الذكاء الاصطناعي. يتم دمج هذه التعليمات مع إرشادات السلوك الأساسية لضمان استجابات مفيدة ودقيقة وآمنة.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نصيحة: اكتب \"/\" لاختيار قالب طلب محفوظ.",

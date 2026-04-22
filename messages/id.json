@@ -648,7 +648,11 @@
     "microphoneAccessDenied": "Akses mikrofon ditolak. Silakan aktifkan di pengaturan browser Anda.",
     "microphoneAccessError": "Kesalahan akses mikrofon: {message}",
     "voiceInputTranscribing": "Sedang mentranskripsikan...",
-    "ttsRightClickHint": "Klik kanan untuk opsi suara"
+    "ttsRightClickHint": "Klik kanan untuk opsi suara",
+    "mediaRecorderNotSupported": "Perekaman audio tidak didukung di browser ini.",
+    "microphoneNotDetected": "Mikrofon tidak terdeteksi",
+    "microphoneBlocked": "Mikrofon diblokir. Periksa pengaturan browser.",
+    "voiceTranscriptionFailed": "Transkripsi suara gagal. Silakan coba lagi."
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -938,7 +942,14 @@
     "activeFiles": {
       "autoPinUploads": "Pin otomatis file yang diunggah",
       "autoPinUploadsDescription": "Secara otomatis pin file yang diunggah agar tidak dihapus dari daftar"
-    }
+    },
+    "Quarantined Data": "Data Dikarantina",
+    "quarantineDataDescription": "Anda memiliki {count} {count, plural, one {item} other {item}} dikarantina ({size}) dengan masalah data yang tidak dapat dimuat secara normal.",
+    "Review & Recover": "Tinjau & Pulihkan",
+    "Export Quarantined Data": "Ekspor Data Dikarantina",
+    "Delete Quarantined Data": "Hapus Data Dikarantina",
+    "deleteQuarantineConfirm": "Apakah Anda yakin ingin menghapus semua data yang dikarantina? Tindakan ini tidak dapat dibatalkan.",
+    "quarantineDeleteSuccess": "Berhasil menghapus semua data yang dikarantina."
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1025,7 +1036,20 @@
     "fetchError": "Gagal memuat transkrip. Silakan coba lagi.",
     "transcriptExpired": "Transkrip untuk {filename} telah kedaluwarsa. Transkrip akan dihapus secara otomatis setelah {days} hari demi privasi.",
     "expirationWarning": "Transkrip untuk {filename} akan kedaluwarsa dalam {days} hari. Salin kontennya jika Anda ingin menyimpannya.",
-    "elapsedTime": "Waktu berlalu: {time}"
+    "elapsedTime": "Waktu berlalu: {time}",
+    "cancel": "Batalkan transkripsi",
+    "reconnecting": "Menyambung kembali…",
+    "stillProcessing": "Masih memproses — segmen ini membutuhkan waktu lebih lama dari biasanya",
+    "chunkProgress": "Bagian {completed}/{total}",
+    "transientToast": "Transkripsi gagal: {filename} — silakan coba lagi",
+    "authFailedToast": "Transkripsi gagal: {filename} — silakan masuk kembali",
+    "rateLimitedToast": "Transkripsi dijeda: {filename} — layanan penuh, silakan coba sebentar lagi",
+    "permanentToast": "Transkripsi gagal: {filename}{error}",
+    "cancelledToast": "Transkripsi dibatalkan: {filename}",
+    "cancelledBody": "Dibatalkan oleh pengguna",
+    "transientBody": "Silakan coba lagi",
+    "authFailedBody": "Silakan masuk kembali",
+    "rateLimitedBody": "Layanan penuh, silakan coba sebentar lagi"
   },
   "transcriptionComplete": "Transkripsi selesai! Teks telah ditambahkan ke input chat.",
   "importBackupParseError": "Gagal mengurai file cadangan. Pastikan itu adalah JSON yang valid.",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Buka di Editor",
     "failedToUpload": "Gagal mengunggah",
     "attachment": "lampiran",
-    "attachments": "lampiran"
+    "attachments": "lampiran",
+    "transcriptionCancelled": "Dibatalkan"
   },
   "transcript": {
     "originalTranscript": "Transkrip Asli",
@@ -1536,7 +1561,9 @@
     "open": "Buka",
     "showFullMessage": "Tampilkan pesan lengkap",
     "collapse": "Tutup",
-    "customTone": "Nada Khusus"
+    "customTone": "Nada Khusus",
+    "showMore": "Tampilkan lebih banyak",
+    "showLess": "Tampilkan lebih sedikit"
   },
   "codeBlock": {
     "openInEditor": "Buka di editor"

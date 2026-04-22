@@ -598,7 +598,11 @@
     "microphoneAccessDenied": "ไม่สามารถเข้าถึงไมโครโฟน กรุณาเปิดใช้งานในตั้งค่าเบราว์เซอร์ของคุณ",
     "microphoneAccessError": "เกิดข้อผิดพลาดในการเข้าถึงไมโครโฟน: {message}",
     "voiceInputTranscribing": "กำลังถอดเสียง...",
-    "ttsRightClickHint": "คลิกขวาเพื่อดูตัวเลือกเสียง"
+    "ttsRightClickHint": "คลิกขวาเพื่อดูตัวเลือกเสียง",
+    "mediaRecorderNotSupported": "เบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง",
+    "microphoneNotDetected": "ไม่พบไมโครโฟน",
+    "microphoneBlocked": "ไมโครโฟนถูกบล็อก กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์",
+    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -888,7 +892,14 @@
     "activeFiles": {
       "autoPinUploads": "ปักหมุดไฟล์ที่อัปโหลดโดยอัตโนมัติ",
       "autoPinUploadsDescription": "ปักหมุดไฟล์โดยอัตโนมัติเมื่ออัปโหลดเพื่อป้องกันไม่ให้ไฟล์ถูกลบออก"
-    }
+    },
+    "Quarantined Data": "ข้อมูลที่ถูกกักกัน",
+    "quarantineDataDescription": "คุณมีข้อมูลที่ถูกกักกัน {count} รายการ ({size}) ที่มีปัญหาในการโหลดข้อมูลตามปกติ",
+    "Review & Recover": "ตรวจสอบและกู้คืน",
+    "Export Quarantined Data": "ส่งออกข้อมูลที่ถูกกักกัน",
+    "Delete Quarantined Data": "ลบข้อมูลที่ถูกกักกัน",
+    "deleteQuarantineConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลที่ถูกกักกันทั้งหมด? การกระทำนี้ไม่สามารถย้อนคืนได้",
+    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -1053,7 +1064,20 @@
     "fetchError": "ไม่สามารถโหลดข้อความถอดเสียงได้ กรุณาลองใหม่อีกครั้ง",
     "transcriptExpired": "ข้อความถอดเสียงสำหรับ {filename} หมดอายุแล้ว ข้อความถอดเสียงจะถูกลบโดยอัตโนมัติหลังจาก {days} วันเพื่อความเป็นส่วนตัว",
     "expirationWarning": "ข้อความถอดเสียงสำหรับ {filename} จะหมดอายุในอีก {days} วัน โปรดคัดลอกเนื้อหาหากต้องการเก็บไว้",
-    "elapsedTime": "เวลาที่ผ่านไป: {time}"
+    "elapsedTime": "เวลาที่ผ่านไป: {time}",
+    "cancel": "ยกเลิกการถอดความ",
+    "reconnecting": "กำลังเชื่อมต่อใหม่…",
+    "stillProcessing": "กำลังประมวลผล — ส่วนนี้ใช้เวลานานกว่าปกติ",
+    "chunkProgress": "ส่วน {completed}/{total}",
+    "transientToast": "ถอดความไม่สำเร็จ: {filename} — กรุณาลองใหม่อีกครั้ง",
+    "authFailedToast": "ถอดความไม่สำเร็จ: {filename} — กรุณาเข้าสู่ระบบใหม่อีกครั้ง",
+    "rateLimitedToast": "หยุดถอดความชั่วคราว: {filename} — บริการเต็มความจุ กรุณาลองใหม่ในภายหลัง",
+    "permanentToast": "ถอดความไม่สำเร็จ: {filename}{error}",
+    "cancelledToast": "ยกเลิกการถอดความ: {filename}",
+    "cancelledBody": "ผู้ใช้เป็นผู้ยกเลิก",
+    "transientBody": "กรุณาลองใหม่อีกครั้ง",
+    "authFailedBody": "กรุณาเข้าสู่ระบบใหม่อีกครั้ง",
+    "rateLimitedBody": "บริการเต็มความจุ กรุณาลองใหม่ในภายหลัง"
   },
   "transcriptionComplete": "ถอดเสียงเสร็จสิ้น! ข้อความถูกเพิ่มในช่องแชทแล้ว",
   "No prompts found": "ไม่พบพรอมต์",
@@ -1514,7 +1538,8 @@
     "openInEditor": "เปิดใน Editor",
     "failedToUpload": "อัปโหลดไม่สำเร็จ",
     "attachment": "ไฟล์แนบ",
-    "attachments": "ไฟล์แนบหลายรายการ"
+    "attachments": "ไฟล์แนบหลายรายการ",
+    "transcriptionCancelled": "ยกเลิกแล้ว"
   },
   "transcript": {
     "originalTranscript": "ถอดความต้นฉบับ",
@@ -1536,7 +1561,9 @@
     "open": "เปิด",
     "showFullMessage": "แสดงข้อความทั้งหมด",
     "collapse": "ย่อ",
-    "customTone": "กำหนดโทนเอง"
+    "customTone": "กำหนดโทนเอง",
+    "showMore": "แสดงเพิ่มเติม",
+    "showLess": "แสดงน้อยลง"
   },
   "codeBlock": {
     "openInEditor": "เปิดใน editor"

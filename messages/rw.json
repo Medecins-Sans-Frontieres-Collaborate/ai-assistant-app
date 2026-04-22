@@ -739,7 +739,11 @@
       "filesCount": "Amadosiye {count}",
       "audioVideo": "amajwi/videwo",
       "empty": "ubusa"
-    }
+    },
+    "mediaRecorderNotSupported": "Gufata amajwi ntibishyigikiwe muri ubu busa.",
+    "microphoneNotDetected": "Mikorofofone ntiyabonetse",
+    "microphoneBlocked": "Mikorofofone yafunzwe. Reba imyanya y'uburyo wifashisha gukoresha urubuga.",
+    "voiceTranscriptionFailed": "Guhindura ijwi mu nyandiko byanze. Gerageza kongera."
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Kufungira mu buryo bwikora amadosiye ashyizweho",
       "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo"
-    }
+    },
+    "Quarantined Data": "Amakuru yafungiwe",
+    "quarantineDataDescription": "Ufite {count} {count, plural, one {ikintu} other {ibintu}} byafungiwe ({size}) bifite ibibazo by’amakuru bitashoboye gufungurwa bisanzwe.",
+    "Review & Recover": "Genzura & Subizaho",
+    "Export Quarantined Data": "Ohereza hanze amakuru yafungiwe",
+    "Delete Quarantined Data": "Siba amakuru yafungiwe",
+    "deleteQuarantineConfirm": "Urabyizeye neza ko ushaka gusiba amakuru yose yafungiwe? Ibi ntabwo bizasubirwaho.",
+    "quarantineDeleteSuccess": "Amakuru yose yafungiwe yasibwe neza."
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Fungura mu Guhindura",
     "failedToUpload": "Kohereza byanze",
     "attachment": "umugereka",
-    "attachments": "imigereka"
+    "attachments": "imigereka",
+    "transcriptionCancelled": "Byahagaritswe"
   },
   "userMessage": {
     "open": "Fungura",
     "showFullMessage": "Erekana ubutumwa bwuzuye",
     "collapse": "Funga",
-    "customTone": "Ijwi Ryihariye"
+    "customTone": "Ijwi Ryihariye",
+    "showMore": "Erekana byinshi",
+    "showLess": "Erekana bike"
   },
   "codeBlock": {
     "openInEditor": "Fungura mu guhindura"
@@ -1670,7 +1684,20 @@
       "urdu": "Ikirudu",
       "vietnamese": "Ikinyaviyetinamu",
       "welsh": "Ikigaluwa"
-    }
+    },
+    "cancel": "Hagarika igisobanuro cy’ijwi",
+    "reconnecting": "Ugerageza kongera kwihuza…",
+    "stillProcessing": "Biracyakorwaho — iki gice kiratinda kurusha bisanzwe",
+    "chunkProgress": "Igice {completed}/{total}",
+    "transientToast": "Gusobanura ijwi byanze: {filename} — gerageza kongera",
+    "authFailedToast": "Gusobanura ijwi byanze: {filename} — nyamuneka winjiremo wongere",
+    "rateLimitedToast": "Gusobanura ijwi byahagaritswe: {filename} — serivisi yuzuye, gerageza nyuma akanya gato",
+    "permanentToast": "Gusobanura ijwi byanze: {filename}{error}",
+    "cancelledToast": "Gusobanura ijwi byahagaritswe: {filename}",
+    "cancelledBody": "Byahagaritswe n’umukoresha",
+    "transientBody": "Gerageza kongera",
+    "authFailedBody": "Winjiremo wongere",
+    "rateLimitedBody": "Serivisi yuzuye, gerageza nyuma akanya gato"
   },
   "documentTranslation": {
     "title": "Ubuhinduzi bw'Inyandiko",

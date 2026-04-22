@@ -739,7 +739,11 @@
       "filesCount": "{count} idosiye (amadosiye)",
       "audioVideo": "amajwi/amashusho",
       "empty": "biravuye"
-    }
+    },
+    "mediaRecorderNotSupported": "Ifatabuguzi ukoresha ntiyemera gufata amajwi.",
+    "microphoneNotDetected": "Nta mikorofoni yabonetse",
+    "microphoneBlocked": "Mikorofoni yarakingiwe. Raba ingene utunganya isakoshi ya porogarama.",
+    "voiceTranscriptionFailed": "Guhindura amajwi mu nyandiko ntivyagenze neza. Gerageza gusubira."
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1124,7 +1128,14 @@
     "activeFiles": {
       "autoPinUploads": "Kwishingira ku buryo bwikora amadosiye yashizweho",
       "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa"
-    }
+    },
+    "Quarantined Data": "Ibipimo vyabitswe ukwabigenewe",
+    "quarantineDataDescription": "Ufise {count} {count, plural, one {kintu} other {ibintu}} vyabitswe ukwabigenewe ({size}) bifise ibibazo vyatuma bitashoboye kwugururwa neza.",
+    "Review & Recover": "Suzuma & Subira uronka",
+    "Export Quarantined Data": "Sohora ibipimo vyabitswe ukwabigenewe",
+    "Delete Quarantined Data": "Siba ibipimo vyabitswe ukwabigenewe",
+    "deleteQuarantineConfirm": "Uravyemera koko ko ushaka gusiba ibipimo vyose vyabitswe ukwabigenewe? Iyi ngingo ntiyoshobora gusubirwamwo.",
+    "quarantineDeleteSuccess": "Ubusibwe neza ibipimo vyose vyabitswe ukwabigenewe."
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -1512,13 +1523,16 @@
     "openInEditor": "Gura mu Kihindurira",
     "failedToUpload": "Gushiriza ntibyakunze",
     "attachment": "idosiye yomatswe",
-    "attachments": "amadosiye yomatswe"
+    "attachments": "amadosiye yomatswe",
+    "transcriptionCancelled": "Vyahagaritswe"
   },
   "userMessage": {
     "open": "Gura",
     "showFullMessage": "Erekana ubutumwa bwose",
     "collapse": "Funza",
-    "customTone": "Ijwi Ryihariye"
+    "customTone": "Ijwi Ryihariye",
+    "showMore": "Erekana vyinshi",
+    "showLess": "Erekana bike"
   },
   "codeBlock": {
     "openInEditor": "Gura mu kihindurira"
@@ -1670,7 +1684,20 @@
       "urdu": "Ikiuridu",
       "vietnamese": "Ikiviyetiname",
       "welsh": "Ikigaluwa"
-    }
+    },
+    "cancel": "Hagarika isubiramwo",
+    "reconnecting": "Turiko dusubira kwihuza...",
+    "stillProcessing": "Biracari mu bikorwa — iki gice kirafashe umwanya urenze isanzwe",
+    "chunkProgress": "Igice {completed}/{total}",
+    "transientToast": "Isubiramwo yaradutse: {filename} — gerageza gusubira",
+    "authFailedToast": "Isubiramwo yaradutse: {filename} — winjire neza kandi wongere",
+    "rateLimitedToast": "Isubiramwo yarahagaze: {filename} — serivisi yuzuye, gerageza gusubira vuba",
+    "permanentToast": "Isubiramwo yaradutse: {filename}{error}",
+    "cancelledToast": "Isubiramwo ryahagaritswe: {filename}",
+    "cancelledBody": "Vyahagaritswe n'umukoresha",
+    "transientBody": "Gerageza gusubira",
+    "authFailedBody": "Saba kwinjira neza kandi wongere",
+    "rateLimitedBody": "Serivisi yuzuye, gerageza gusubira vuba"
   },
   "documentTranslation": {
     "title": "Guhindura Inyandiko",

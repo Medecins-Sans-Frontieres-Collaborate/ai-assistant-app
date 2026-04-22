@@ -2,6 +2,8 @@
 
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
+import { normalizeMessagesForAPI } from '@/lib/utils/shared/chat/messageNormalization';
+
 import {
   ActiveFile,
   FileMessageContent,
@@ -132,6 +134,35 @@ function convertDocumentTranslationUrlsToPlaceholders(
 }
 
 /**
+ * Normalize + transform messages for any `/api/chat` request. Applied in both
+ * the streaming and non-streaming paths so the server always sees the same
+ * preprocessing pipeline and corruption events are logged the same way.
+ */
+async function prepareMessagesForAPI(messages: Message[]): Promise<Message[]> {
+  // Normalize content shape first — older conversations in localStorage can
+  // contain messages whose content is null or a bare TextMessageContent
+  // object; those would fail server-side Zod validation with
+  // "messages.N.content: Invalid input".
+  const { messages: normalizedMessages, report } =
+    normalizeMessagesForAPI(messages);
+  if (report.repairedCount > 0 || report.droppedCount > 0) {
+    console.warn(
+      `[ChatService] Normalized conversation history before send: ` +
+        `repaired=${report.repairedCount}, dropped=${report.droppedCount}`,
+    );
+  }
+
+  // Convert image file references to base64 at API call time. This keeps
+  // localStorage small (file refs only) while sending base64 to the server.
+  const messagesWithBase64Images =
+    await convertImagesToBase64(normalizedMessages);
+
+  // Convert document translation URLs to text placeholders. Regular file
+  // URLs (/api/file/*) pass through for server-side processing.
+  return convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
+}
+
+/**
  * Unified Chat Service
  *
  * Simple client-side service that routes ALL chat requests to the unified
@@ -199,14 +230,7 @@ export class ChatService {
       activeFilesTokensUsed?: number;
     },
   ): Promise<ReadableStream<Uint8Array>> {
-    // Convert image file references to base64 at API call time
-    // This keeps localStorage small (file refs only) while sending base64 to server
-    const messagesWithBase64Images = await convertImagesToBase64(messages);
-
-    // Convert document translation URLs to text placeholders
-    // Regular file URLs (/api/file/*) pass through for server-side processing
-    const messagesWithPlaceholders =
-      convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
+    const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
 
     return apiClient.postStream(
       '/api/chat',
@@ -267,12 +291,7 @@ export class ChatService {
       customDisplayName?: string;
     },
   ): Promise<{ text: string; metadata?: any }> {
-    // Convert image file references to base64 at API call time
-    const messagesWithBase64Images = await convertImagesToBase64(messages);
-
-    // Convert document translation URLs to text placeholders
-    const messagesWithPlaceholders =
-      convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
+    const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
 
     return apiClient.post('/api/chat', {
       model,

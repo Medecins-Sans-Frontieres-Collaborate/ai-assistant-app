@@ -9,14 +9,37 @@ import {
   requiresContentValidation,
   validateDocumentContent,
 } from '@/lib/constants/fileLimits';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
+import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { lookup } from 'mime-types';
+import os from 'os';
 import path from 'path';
 import { performance } from 'perf_hooks';
 import { promisify } from 'util';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
+
+/**
+ * Converter execution options applied to every external-tool invocation
+ * (pandoc, pdftotext, ssconvert, libreoffice). Bounds wall-clock and output
+ * buffer so a malformed input cannot pin a worker indefinitely or exhaust
+ * memory with unbounded stdout. The timeout matches the outer
+ * ChatPipeline.EXECUTION_TIMEOUT_MS so legitimate large conversions don't
+ * fail here when they would otherwise succeed at the pipeline level.
+ */
+const CONVERTER_EXEC_OPTS = {
+  timeout: 180_000,
+  killSignal: 'SIGKILL' as const,
+  maxBuffer: 100 * 1024 * 1024,
+};
+
+/**
+ * Upper bound on extracted text size across every converter path.
+ * Decompressed CSV from an XLSX can balloon orders of magnitude past the
+ * compressed upload limit; this prevents unbounded string growth.
+ */
+const MAX_EXTRACTED_TEXT_BYTES = 20 * 1024 * 1024;
 
 /**
  * Configure pdfjs-dist for server-side use.
@@ -68,6 +91,39 @@ async function retryRemoveFile(
   }
 }
 
+async function removeTempDir(dir: string): Promise<void> {
+  try {
+    await fs.promises.rm(dir, { recursive: true, force: true });
+  } catch (error) {
+    console.warn(
+      `[fileHandling] Failed to remove temp dir ${dir}:`,
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+function buildTempFilePath(originalFilename: string): string {
+  // Derive a safe temp file path. Preserve only the extension from the
+  // user-supplied filename so downstream format detection (MIME lookup,
+  // `.endsWith('.xlsx')` checks, pandoc output naming) still works. The
+  // rest of the filename is replaced with a random UUID to close
+  // path-traversal and shell-injection vectors via `file.name`.
+  const ext = path.extname(originalFilename || '');
+  return path.join(os.tmpdir(), `${randomUUID()}${ext}`);
+}
+
+function truncateToBudget(text: string): string {
+  const byteLength = Buffer.byteLength(text, 'utf8');
+  if (byteLength <= MAX_EXTRACTED_TEXT_BYTES) return text;
+  // Truncate from the end in UTF-8 safe units. `Buffer.from(text).slice()` on
+  // byte count may split a codepoint; decode with fatal=false to drop the
+  // trailing partial char.
+  const buf = Buffer.from(text, 'utf8').subarray(0, MAX_EXTRACTED_TEXT_BYTES);
+  const truncated = new TextDecoder('utf-8', { fatal: false }).decode(buf);
+  const mb = Math.round(MAX_EXTRACTED_TEXT_BYTES / (1024 * 1024));
+  return `${truncated}\n\n[… truncated at ${mb}MB …]\n`;
+}
+
 /**
  * Converts a file using Pandoc.
  *
@@ -81,16 +137,19 @@ export async function convertWithPandoc(
   outputFormat: string,
 ): Promise<string> {
   const outputPath = `${inputPath}.${outputFormat}`;
-  const command = `pandoc "${inputPath}" -o "${outputPath}"`;
   const perfStart = performance.now();
 
   try {
-    await execAsync(command);
-    const { stdout } = await execAsync(`cat "${outputPath}"`);
+    await execFileAsync(
+      'pandoc',
+      [inputPath, '-o', outputPath],
+      CONVERTER_EXEC_OPTS,
+    );
+    const stdout = await fs.promises.readFile(outputPath, 'utf8');
     console.log(
       `[Perf] convertWithPandoc: ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
-    return stdout;
+    return truncateToBudget(stdout);
   } catch (error) {
     console.error(`Error converting file with Pandoc: ${error}`);
     throw error;
@@ -157,7 +216,11 @@ async function extractTextWithPdfJs(filePath: string): Promise<string> {
  * @returns Extracted text content
  */
 async function extractTextWithPdfToTextCli(inputPath: string): Promise<string> {
-  const { stdout } = await execAsync(`pdftotext "${inputPath}" -`);
+  const { stdout } = await execFileAsync(
+    'pdftotext',
+    [inputPath, '-'],
+    CONVERTER_EXEC_OPTS,
+  );
   return stdout;
 }
 
@@ -183,7 +246,7 @@ async function pdfToText(inputPath: string): Promise<string> {
       console.log(
         `[Perf] pdfToText (pdfjs-dist): ${(performance.now() - perfStart).toFixed(1)}ms`,
       );
-      return text;
+      return truncateToBudget(text);
     }
     console.warn(
       '[pdfToText] pdfjs-dist returned empty text, trying CLI fallback',
@@ -207,7 +270,7 @@ async function pdfToText(inputPath: string): Promise<string> {
       console.log(
         `[Perf] pdfToText (CLI fallback): ${(performance.now() - perfStart).toFixed(1)}ms`,
       );
-      return stdout;
+      return truncateToBudget(stdout);
     }
     console.warn('[pdfToText] pdftotext CLI returned empty text');
   } catch (cliError) {
@@ -222,36 +285,90 @@ async function pdfToText(inputPath: string): Promise<string> {
   );
 }
 
+/**
+ * Reads real sheet names from an XLSX via `ssconvert --list-sheets`.
+ * Output is one sheet name per line, preceded by a header line we filter.
+ * Sheet order in the output matches workbook order, which is what
+ * `--export-file-per-sheet` uses to index its numbered outputs.
+ */
+async function listXlsxSheets(inputPath: string): Promise<string[]> {
+  try {
+    const { stdout } = await execFileAsync(
+      'ssconvert',
+      ['--list-sheets', inputPath],
+      CONVERTER_EXEC_OPTS,
+    );
+    return stdout
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !/^Sheet names? in /i.test(line));
+  } catch (error) {
+    console.warn(
+      '[xlsxToText] ssconvert --list-sheets failed; falling back to numeric sheet labels:',
+      error instanceof Error ? error.message : error,
+    );
+    return [];
+  }
+}
+
 async function xlsxToText(inputPath: string): Promise<string> {
   const perfStart = performance.now();
-  const tempDir = await fs.promises.mkdtemp('/tmp/xlsx-');
+  const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'xlsx-'));
   const baseName = path.basename(inputPath, path.extname(inputPath));
   const outputPattern = path.join(tempDir, `${baseName}_.csv`);
 
   try {
-    // Convert XLSX to multiple CSV files (one per sheet)
-    await execAsync(
-      `ssconvert --export-file-per-sheet "${inputPath}" "${outputPattern}"`,
+    // Read real sheet names first so we can label the numbered ssconvert
+    // outputs with actual workbook sheet names instead of ".0", ".1", ...
+    const sheetNames = await listXlsxSheets(inputPath);
+
+    // Convert XLSX to one CSV per sheet. Output files are named
+    // `<outputPattern>.0`, `.1`, ... in workbook order.
+    await execFileAsync(
+      'ssconvert',
+      ['--export-file-per-sheet', inputPath, outputPattern],
+      CONVERTER_EXEC_OPTS,
     );
 
-    // Read all generated CSV files
     const files = await fs.promises.readdir(tempDir);
-    let result = '';
-
-    const filePattern: string | undefined = outputPattern.split('/').pop();
-
+    const patternPrefix = path.basename(outputPattern); // "<baseName>_.csv"
+    const indexed: Array<{ index: number; file: string }> = [];
     for (const file of files) {
-      if (filePattern && file.indexOf(filePattern) > -1) {
-        const sheetName = file.replace(`${baseName}_`, '').replace('.csv', '');
-        const content = await fs.promises.readFile(
-          path.join(tempDir, file),
-          'utf8',
-        );
-
-        result += `\n\n--- START OF SHEET: ${sheetName} ---\n\n`;
-        result += content;
-        result += `\n\n--- END OF SHEET: ${sheetName} ---\n\n`;
+      if (!file.startsWith(`${patternPrefix}.`)) continue;
+      const suffix = file.slice(patternPrefix.length + 1);
+      const idx = Number.parseInt(suffix, 10);
+      if (Number.isInteger(idx) && String(idx) === suffix) {
+        indexed.push({ index: idx, file });
       }
+    }
+    // Numeric sort: `.2` must come before `.10`.
+    indexed.sort((a, b) => a.index - b.index);
+
+    let result = '';
+    let totalBytes = 0;
+    let truncatedSheets = 0;
+
+    for (let i = 0; i < indexed.length; i++) {
+      const { index, file } = indexed[i];
+      const sheetName = sheetNames[index] ?? `Sheet ${index + 1}`;
+      const content = await fs.promises.readFile(
+        path.join(tempDir, file),
+        'utf8',
+      );
+
+      const block = `\n\n--- START OF SHEET: ${sheetName} ---\n\n${content}\n\n--- END OF SHEET: ${sheetName} ---\n\n`;
+      const blockBytes = Buffer.byteLength(block, 'utf8');
+      if (totalBytes + blockBytes > MAX_EXTRACTED_TEXT_BYTES) {
+        truncatedSheets = indexed.length - i;
+        break;
+      }
+      result += block;
+      totalBytes += blockBytes;
+    }
+
+    if (truncatedSheets > 0) {
+      const mb = Math.round(MAX_EXTRACTED_TEXT_BYTES / (1024 * 1024));
+      result += `\n\n[… truncated at ${mb}MB; ${truncatedSheets} remaining sheet(s) not shown …]\n\n`;
     }
 
     console.log(
@@ -259,25 +376,33 @@ async function xlsxToText(inputPath: string): Promise<string> {
     );
     return result;
   } finally {
-    // Clean up temporary directory and files
-    const files = await fs.promises.readdir(tempDir);
-    for (const file of files) {
-      await retryRemoveFile(path.join(tempDir, file));
-    }
-    await fs.promises.rmdir(tempDir);
+    await removeTempDir(tempDir);
   }
 }
 
 async function pptToText(inputPath: string): Promise<string> {
   const perfStart = performance.now();
   // TODO: Possibly find a way to do this without converting to PDF first
-  const outputDir = await fs.promises.mkdtemp('/tmp/ppt-');
+  const outputDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'ppt-'));
+  // Per-invocation LibreOffice profile so concurrent calls on the same OS
+  // user don't collide on the shared default profile lock.
+  const profileDir = path.join(outputDir, 'lo-profile');
   const baseName = path.basename(inputPath, path.extname(inputPath));
   const pdfPath = path.join(outputDir, `${baseName}.pdf`);
 
   try {
-    const { stdout, stderr } = await execAsync(
-      `libreoffice --headless --convert-to pdf --outdir "${outputDir}" "${inputPath}"`,
+    const { stdout, stderr } = await execFileAsync(
+      'libreoffice',
+      [
+        `-env:UserInstallation=file://${profileDir}`,
+        '--headless',
+        '--convert-to',
+        'pdf',
+        '--outdir',
+        outputDir,
+        inputPath,
+      ],
+      CONVERTER_EXEC_OPTS,
     );
     console.log('LibreOffice stdout:', stdout);
     if (stderr) {
@@ -304,10 +429,7 @@ async function pptToText(inputPath: string): Promise<string> {
     );
     throw error;
   } finally {
-    // Clean up temporary files
-    retryRemoveFile(pdfPath).catch((error) => {
-      console.error(`Failed to remove temporary file ${pdfPath}:`, error);
-    });
+    await removeTempDir(outputDir);
   }
 }
 
@@ -359,7 +481,7 @@ export async function loadDocumentFromPath(
       mimeType.startsWith('application/xhtml+xml') ||
       originalFilename.endsWith('.tex'):
     default:
-      text = await fs.promises.readFile(filePath, 'utf8');
+      text = truncateToBudget(await fs.promises.readFile(filePath, 'utf8'));
   }
 
   perfLog(
@@ -373,7 +495,7 @@ export async function loadDocumentFromPath(
 export async function loadDocument(file: File): Promise<string> {
   const mimeType = lookup(file.name) || 'application/octet-stream';
   const perfStart = performance.now();
-  const tempFilePath = `/tmp/${file.name}`;
+  const tempFilePath = buildTempFilePath(file.name);
 
   // Write the file to a temporary location with secure permissions (0o600 = read/write for owner only)
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -412,7 +534,7 @@ export async function loadDocumentWithValidation(
   file: File,
 ): Promise<LoadDocumentResult> {
   const mimeType = lookup(file.name) || 'application/octet-stream';
-  const tempFilePath = `/tmp/${file.name}`;
+  const tempFilePath = buildTempFilePath(file.name);
 
   // Write the file to a temporary location with secure permissions
   const buffer = Buffer.from(await file.arrayBuffer());

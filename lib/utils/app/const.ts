@@ -198,6 +198,9 @@ export const CHUNK_CONFIG = {
   MAX_SUMMARY_LENGTH: 64000,
   DEFAULT_SUMMARY_LENGTH: 16000,
 
-  // Default max completion tokens for summarization
-  DEFAULT_MAX_COMPLETION_TOKENS: 5000,
+  // Ceiling for per-chunk summary tokens. Paired with a tokenLimit/4 scale
+  // in calculateChunkConfig: small models stay proportionate, modern models
+  // (64k-100k output) now get up to 16k per chunk instead of being pinned
+  // at 5k. Doubles as the fallback when no model is available.
+  DEFAULT_MAX_COMPLETION_TOKENS: 16_000,
 } as const;

@@ -116,6 +116,9 @@ export const ChatInput = ({
   const pendingConversationTranscription = useChatStore(
     (state) => state.pendingConversationTranscription,
   );
+  const setConversationTranscriptionPending = useChatStore(
+    (state) => state.setConversationTranscriptionPending,
+  );
   const isTranscriptionLocked = pendingConversationTranscription !== null;
 
   // Chat input store
@@ -539,6 +542,10 @@ export const ChatInput = ({
               startedAt={pendingConversationTranscription.startedAt}
               filename={pendingConversationTranscription.filename}
               progress={pendingConversationTranscription.progress}
+              totalChunks={pendingConversationTranscription.totalChunks}
+              jobId={pendingConversationTranscription.jobId}
+              isReconnecting={pendingConversationTranscription.isReconnecting}
+              onCancel={() => setConversationTranscriptionPending(null)}
             />
           </div>
         )}

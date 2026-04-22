@@ -606,7 +606,11 @@
     "microphoneAccessDenied": "دسترسی به میکروفون رد شده است. لطفاً این دسترسی را در تنظیمات مرورگر فعال کنید.",
     "microphoneAccessError": "خطا در دسترسی به میکروفون: {message}",
     "voiceInputTranscribing": "در حال تبدیل گفتار به متن...",
-    "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید"
+    "ttsRightClickHint": "برای گزینه‌های صوتی کلیک راست کنید",
+    "mediaRecorderNotSupported": "ضبط صدا در این مرورگر پشتیبانی نمی‌شود.",
+    "microphoneNotDetected": "میکروفون شناسایی نشد",
+    "microphoneBlocked": "میکروفون مسدود شده است. تنظیمات مرورگر را بررسی کنید.",
+    "voiceTranscriptionFailed": "تبدیل صدا به متن انجام نشد. لطفاً دوباره تلاش کنید."
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -896,7 +900,14 @@
     "activeFiles": {
       "autoPinUploads": "سنجاق خودکار فایل‌های آپلودشده",
       "autoPinUploadsDescription": "فایل‌ها را هنگام بارگذاری به‌صورت خودکار سنجاق کنید تا حذف نشوند."
-    }
+    },
+    "Quarantined Data": "داده‌های قرنطینه‌شده",
+    "quarantineDataDescription": "شما دارای {count} {count, plural, one {آیتم قرنطینه‌شده} other {آیتم قرنطینه‌شده}} ({size}) با مشکلات داده هستید که به‌طور عادی بارگذاری نشدند.",
+    "Review & Recover": "بررسی و بازیابی",
+    "Export Quarantined Data": "خروجی گرفتن از داده‌های قرنطینه‌شده",
+    "Delete Quarantined Data": "حذف داده‌های قرنطینه‌شده",
+    "deleteQuarantineConfirm": "آیا مطمئن هستید که می‌خواهید همه داده‌های قرنطینه‌شده را حذف کنید؟ این اقدام قابل بازگشت نیست.",
+    "quarantineDeleteSuccess": "همه داده‌های قرنطینه‌شده با موفقیت حذف شدند."
   },
   "notFound": {
     "lostDog": "سگ گمشده"
@@ -1053,7 +1064,20 @@
     "fetchError": "بارگذاری متن پیاده‌سازی انجام نشد. لطفاً دوباره تلاش کنید.",
     "transcriptExpired": "متن پیاده‌سازی برای {filename} منقضی شده است. برای حفظ حریم خصوصی، متون پیاده‌سازی پس از {days} روز به‌صورت خودکار حذف می‌شوند.",
     "expirationWarning": "متن پیاده‌سازی برای {filename} در {days} روز آینده منقضی می‌شود. اگر نیاز به نگهداری دارید، محتوا را کپی کنید.",
-    "elapsedTime": "زمان سپری‌شده: {time}"
+    "elapsedTime": "زمان سپری‌شده: {time}",
+    "cancel": "لغو رونویسی",
+    "reconnecting": "در حال اتصال مجدد…",
+    "stillProcessing": "در حال پردازش — این بخش بیش از حد معمول طول کشیده است",
+    "chunkProgress": "بخش {completed}/{total}",
+    "transientToast": "رونویسی ناموفق بود: {filename} — لطفاً دوباره تلاش کنید",
+    "authFailedToast": "رونویسی ناموفق بود: {filename} — لطفاً دوباره وارد شوید",
+    "rateLimitedToast": "رونویسی متوقف شد: {filename} — سرویس در ظرفیت کامل است، لطفاً کمی بعد دوباره امتحان کنید",
+    "permanentToast": "رونویسی ناموفق بود: {filename}{error}",
+    "cancelledToast": "رونویسی لغو شد: {filename}",
+    "cancelledBody": "توسط کاربر لغو شد",
+    "transientBody": "لطفاً دوباره تلاش کنید",
+    "authFailedBody": "لطفاً دوباره وارد شوید",
+    "rateLimitedBody": "ظرفیت سرویس پر است، لطفاً کمی بعد دوباره امتحان کنید"
   },
   "transcriptionComplete": "تبدیل گفتار کامل شد! متن به ورودی چت اضافه شد.",
   "No prompts found": "هیچ پرامپتی یافت نشد",
@@ -1514,7 +1538,8 @@
     "openInEditor": "باز کردن در ویرایشگر",
     "failedToUpload": "بارگذاری ناموفق بود",
     "attachment": "پیوست",
-    "attachments": "پیوست‌ها"
+    "attachments": "پیوست‌ها",
+    "transcriptionCancelled": "لغو شد"
   },
   "transcript": {
     "originalTranscript": "رونویس اصلی",
@@ -1536,7 +1561,9 @@
     "open": "باز کردن",
     "showFullMessage": "نمایش پیام کامل",
     "collapse": "جمع کردن",
-    "customTone": "لحن سفارشی"
+    "customTone": "لحن سفارشی",
+    "showMore": "نمایش بیشتر",
+    "showLess": "نمایش کمتر"
   },
   "codeBlock": {
     "openInEditor": "باز کردن در ویرایشگر"

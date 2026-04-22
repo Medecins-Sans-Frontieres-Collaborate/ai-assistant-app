@@ -48,6 +48,7 @@ import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import {
+  ATTACH_ACCEPT_TYPES,
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
@@ -590,7 +591,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.csv,.json,.xml,.yaml,.yml,.py,.js,.ts,.jsx,.tsx,.java,.c,.cpp,.cs,.go,.rb,.php,.sql,.sh,.bash,.ps1,.r,.swift,.kt,.rs,.scala,.env,.config,.ini,.toml,.mp3,.mp4,.wav,.webm,.m4a,.mpeg,.mpga"
+        accept={ATTACH_ACCEPT_TYPES}
         onChange={async (e) => {
           if (e.target.files) {
             await handleFileUpload(Array.from(e.target.files));

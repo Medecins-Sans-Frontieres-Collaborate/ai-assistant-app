@@ -17,6 +17,8 @@ import {
   ReactNode,
   SetStateAction,
   useEffect,
+  useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -73,23 +75,25 @@ export const UserMessage: FC<UserMessageProps> = ({
   const { openArtifact, openDocument } = useArtifactStore();
   const {
     role,
-    content,
     messageType,
     toneId,
     promptId,
     promptVariables,
     artifactContext,
   } = message;
-  const [localMessageContent, setLocalMessageContent] = useState<string>(
-    content as string,
-  );
+  const [localMessageContent, setLocalMessageContent] =
+    useState<string>(messageContent);
   const [isPromptExpanded, setIsPromptExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+  const COLLAPSED_MAX_HEIGHT_PX = 320;
 
   // Find the used prompt
   const usedPrompt = promptId ? prompts.find((p) => p.id === promptId) : null;
 
   const handleEditMessage = () => {
-    if (localMessageContent !== content) {
+    if (localMessageContent !== messageContent) {
       if (selectedConversation && onEdit) {
         onEdit({ ...message, content: localMessageContent });
         setMessageContent(localMessageContent);
@@ -99,18 +103,15 @@ export const UserMessage: FC<UserMessageProps> = ({
   };
 
   useEffect(() => {
-    setLocalMessageContent(content as string);
-  }, [content]);
+    setLocalMessageContent(messageContent);
+  }, [messageContent]);
 
-  useEffect(() => {
-    if (
-      message.content !== messageContent &&
-      typeof message.content === 'string'
-    ) {
-      setMessageContent(message.content);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.content, messageContent]);
+  useLayoutEffect(() => {
+    if (isEditing) return;
+    const el = textRef.current;
+    if (!el) return;
+    setIsOverflowing(el.scrollHeight > COLLAPSED_MAX_HEIGHT_PX + 1);
+  }, [localMessageContent, isEditing, children]);
 
   // Check if message has attachments
   const hasAttachments = !!children;
@@ -151,7 +152,7 @@ export const UserMessage: FC<UserMessageProps> = ({
               <button
                 className="h-[40px] rounded-md border border-neutral-300 px-4 py-1 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
                 onClick={() => {
-                  setLocalMessageContent(content as string);
+                  setLocalMessageContent(messageContent);
                   setIsEditing(false);
                 }}
               >
@@ -316,14 +317,51 @@ export const UserMessage: FC<UserMessageProps> = ({
               </div>
             ) : (
               <>
-                {children || (
-                  <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none">
-                    <Streamdown
-                      controls={true}
-                      shikiTheme={['github-light', 'github-dark']}
+                {children}
+                {localMessageContent && (
+                  <div className="relative">
+                    <div
+                      ref={textRef}
+                      className={`prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none ${children ? 'mt-2' : ''} ${
+                        isOverflowing && !isExpanded ? 'overflow-hidden' : ''
+                      }`}
+                      style={
+                        isOverflowing && !isExpanded
+                          ? { maxHeight: `${COLLAPSED_MAX_HEIGHT_PX}px` }
+                          : undefined
+                      }
                     >
-                      {localMessageContent}
-                    </Streamdown>
+                      <Streamdown
+                        controls={true}
+                        shikiTheme={['github-light', 'github-dark']}
+                      >
+                        {localMessageContent}
+                      </Streamdown>
+                    </div>
+                    {isOverflowing && !isExpanded && (
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-200 dark:from-[#323537] to-transparent"
+                      />
+                    )}
+                    {isOverflowing && (
+                      <button
+                        onClick={() => setIsExpanded((v) => !v)}
+                        className="mt-1 flex items-center gap-1 text-xs text-gray-600 hover:text-gray-800 dark:text-white/60 dark:hover:text-white/90"
+                      >
+                        {isExpanded ? (
+                          <>
+                            <IconChevronUp size={14} />
+                            {t('userMessage.showLess')}
+                          </>
+                        ) : (
+                          <>
+                            <IconChevronDown size={14} />
+                            {t('userMessage.showMore')}
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 )}
                 {toneId && (

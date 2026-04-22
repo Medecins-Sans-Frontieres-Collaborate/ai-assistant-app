@@ -656,7 +656,11 @@
     "microphoneAccessDenied": "Mikrofonin käyttö estetty. Ota käyttöön selaimen asetuksista.",
     "microphoneAccessError": "Virhe mikrofonin käytössä: {message}",
     "voiceInputTranscribing": "Muunnetaan puhetta tekstiksi...",
-    "ttsRightClickHint": "Napsauta hiiren oikealla valitaksesi äänivaihtoehdot"
+    "ttsRightClickHint": "Napsauta hiiren oikealla valitaksesi äänivaihtoehdot",
+    "mediaRecorderNotSupported": "Äänitallennus ei ole tuettu tässä selaimessa.",
+    "microphoneNotDetected": "Mikrofonia ei havaittu",
+    "microphoneBlocked": "Mikrofoni on estetty. Tarkista selaimen asetukset.",
+    "voiceTranscriptionFailed": "Puheen transkriptio epäonnistui. Yritä uudelleen."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -946,7 +950,14 @@
     "activeFiles": {
       "autoPinUploads": "Kiinnitä ladatut tiedostot automaattisesti",
       "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä"
-    }
+    },
+    "Quarantined Data": "Karanteeniin asetetut tiedot",
+    "quarantineDataDescription": "Sinulla on {count} karanteeniin asetettua {count, plural, one {tietue} other {tietuetta}} ({size}), joissa on tietoon liittyviä ongelmia, eikä niitä voitu ladata normaalisti.",
+    "Review & Recover": "Tarkastele ja palauta",
+    "Export Quarantined Data": "Vie karanteeniin asetetut tiedot",
+    "Delete Quarantined Data": "Poista karanteeniin asetetut tiedot",
+    "deleteQuarantineConfirm": "Haluatko varmasti poistaa kaikki karanteeniin asetetut tiedot? Tätä toimintoa ei voi peruuttaa.",
+    "quarantineDeleteSuccess": "Kaikki karanteeniin asetetut tiedot poistettiin onnistuneesti."
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1053,7 +1064,20 @@
     "fetchError": "Transkription lataaminen epäonnistui. Yritä uudelleen.",
     "transcriptExpired": "Tiedoston {filename} transkriptio on vanhentunut. Transkriptiot poistetaan automaattisesti {days} päivän kuluttua yksityisyyden suojaamiseksi.",
     "expirationWarning": "Tiedoston {filename} transkriptio vanhenee {days} päivän kuluttua. Kopioi sisältö, jos tarvitset sitä jatkossa.",
-    "elapsedTime": "Kulunut aika: {time}"
+    "elapsedTime": "Kulunut aika: {time}",
+    "cancel": "Peru transkriptio",
+    "reconnecting": "Yhdistetään uudelleen…",
+    "stillProcessing": "Edelleen käsittelee — tämän osan käsittely kestää tavallista kauemmin",
+    "chunkProgress": "Osio {completed}/{total}",
+    "transientToast": "Transkriptio epäonnistui: {filename} — yritä uudelleen",
+    "authFailedToast": "Transkriptio epäonnistui: {filename} — kirjaudu sisään uudelleen",
+    "rateLimitedToast": "Transkriptio keskeytetty: {filename} — palvelu on tilapäisesti ruuhkautunut, yritä pian uudelleen",
+    "permanentToast": "Transkriptio epäonnistui: {filename}{error}",
+    "cancelledToast": "Transkriptio peruttu: {filename}",
+    "cancelledBody": "Käyttäjä perui",
+    "transientBody": "Yritä uudelleen",
+    "authFailedBody": "Kirjaudu sisään uudelleen",
+    "rateLimitedBody": "Palvelu on tilapäisesti ruuhkautunut, yritä pian uudelleen"
   },
   "transcriptionComplete": "Puhtaaksikirjoitus valmis! Teksti lisätty keskusteluun.",
   "No prompts found": "Kehotteita ei löytynyt",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Avaa editorissa",
     "failedToUpload": "Lataus epäonnistui",
     "attachment": "liite",
-    "attachments": "liitteet"
+    "attachments": "liitteet",
+    "transcriptionCancelled": "Peruttu"
   },
   "transcript": {
     "originalTranscript": "Alkuperäinen transkriptio",
@@ -1536,7 +1561,9 @@
     "open": "Avaa",
     "showFullMessage": "Näytä koko viesti",
     "collapse": "Pienennä",
-    "customTone": "Mukautettu sävy"
+    "customTone": "Mukautettu sävy",
+    "showMore": "Näytä lisää",
+    "showLess": "Näytä vähemmän"
   },
   "codeBlock": {
     "openInEditor": "Avaa editorissa"

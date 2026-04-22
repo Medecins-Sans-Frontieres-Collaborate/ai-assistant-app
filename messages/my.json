@@ -656,7 +656,11 @@
     "microphoneAccessDenied": "မိုက်ခရိုဖုန်း လက်ခံခွင့် ပျောက်နေပါသည်။ သင်၏ browser settings တွင် ဖွင့်ပေးပါ။",
     "microphoneAccessError": "မိုက်ခရိုဖုန်း လက်ခံခွင့်အမှား: {message}",
     "voiceInputTranscribing": "စာသားသို့ ပြောင်းလဲနေသည်...",
-    "ttsRightClickHint": "အသံရွေးချယ်ရန် ညာဘက်နှိပ်ပါ"
+    "ttsRightClickHint": "အသံရွေးချယ်ရန် ညာဘက်နှိပ်ပါ",
+    "mediaRecorderNotSupported": "ဤ browser တွင် အသံမှတ်တမ်းအလုပ်မလုပ်နိုင်ပါ။",
+    "microphoneNotDetected": "မိုက်ခရိုဖုန်း ရှာမတွေ့ပါ",
+    "microphoneBlocked": "မိုက်ခရိုဖုန်း ကို ပိတ်ထားပါတယ်။ ဘရောက်ဇာ ဆက်တင်များကို စစ်ပါ။",
+    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -946,7 +950,14 @@
     "activeFiles": {
       "autoPinUploads": "တင်ပို့သောဖိုင်များကို အလိုအလျောက် pin ပြုလုပ်ပါ",
       "autoPinUploadsDescription": "တင်ပို့သောဖိုင်များကို စင်ကရက်ထဲမှ ပျောက်သွားမှုကို ကာကွယ်ရန် အလိုအလျောက် pin ပြုလုပ်ပေးပါသည်"
-    }
+    },
+    "Quarantined Data": "သီးခြားထားသောဒေတာ",
+    "quarantineDataDescription": "သင်တွင် {count} ခု၏သီးခြားထားသော {count, plural, one {item} other {items}} ({size}) ရှိပြီး ဒေတာပြဿနာများကြောင့်သာမန်အတိုင်း မဖွင့်နိုင်ပါ။",
+    "Review & Recover": "သုံးသပ်ပြီး ပြန်ယူပါ",
+    "Export Quarantined Data": "သီးခြားထားသောဒေတာတင်ပို့ရန်",
+    "Delete Quarantined Data": "သီးခြားထားသောဒေတာဖျက်ရန်",
+    "deleteQuarantineConfirm": "သီးခြားထားသောဒေတာအားလုံးကိုဖျက်မည်မှာ သေချာပါသလား? ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရနိုင်ပါ။",
+    "quarantineDeleteSuccess": "သီးခြားထားသောဒေတာအားလုံးကို အောင်မြင်စွာ ဖျက်လိုက်ပြီးပါပြီ။"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -1053,7 +1064,20 @@
     "fetchError": "စာတမ်းတင်ရန်မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
     "transcriptExpired": "{filename} ၏စာတမ်းသည် သက်တမ်းကုန်သွားပါပြီ။ ကိုယ်ရေးကိုယ်တာကာကွယ်ရေးအတွက် စာတမ်းများကို ရက်{days}ကြာရန်အလိုအလျောက်ဖျက်ပစ်ပါသည်။",
     "expirationWarning": "{filename} ၏စာတမ်းသည် ရက်{days}အတွင်း သက်တမ်းကုန်သွားမည်။ လိုအပ်လျှင် အကြောင်းအရာကိုမိတ္တူယူထားပါ။",
-    "elapsedTime": "ကုန်ကျခဲ့သောအချိန် - {time}"
+    "elapsedTime": "ကုန်ကျခဲ့သောအချိန် - {time}",
+    "cancel": "သံသွင်းဖော်ပြခြင်းကို ပယ်ဖျက်မည်",
+    "reconnecting": "ပြန်တပ်ဆင်နေသည်…",
+    "stillProcessing": "အလုပ်လည်နေသည် — ဤအစိတ်အပိုင်းမှာ ပုံမှန်ထက်ပိုကြာနေသည်",
+    "chunkProgress": "အပိုင်း {completed}/{total}",
+    "transientToast": "သံသွင်းဖော်ပြခြင်း မအောင်မြင်ပါ: {filename} — ထပ်မံကြိုးစားပါ",
+    "authFailedToast": "သံသွင်းဖော်ပြခြင်း မအောင်မြင်ပါ: {filename} — ထပ်မံကြှက်ဝင်ပါ",
+    "rateLimitedToast": "သံသွင်းဖော်ပြခြင်းရပ်ထားသည်: {filename} — ဝန်ဆောင်မှုပြည့်နက်နေပါသည်၊ ခဏလောက်အကြာ ထပ်မံကြိုးစားပါ",
+    "permanentToast": "သံသွင်းဖော်ပြခြင်း မအောင်မြင်ပါ: {filename}{error}",
+    "cancelledToast": "သံသွင်းဖော်ပြခြင်း ပယ်ဖျက်ခဲ့သည်: {filename}",
+    "cancelledBody": "အသုံးပြုသူက ပယ်ဖျက်ခဲ့သည်",
+    "transientBody": "ထပ်မံကြိုးစားပါ",
+    "authFailedBody": "ထပ်မံဝင်ရောက်ပါ",
+    "rateLimitedBody": "ဝန်ဆောင်မှု ပြည့်နက်နေသည်၊ ခဏလောက်အကြာ ထပ်မံကြိုးစားပါ"
   },
   "transcriptionComplete": "စာရိုက်ဖြစ်ပြီးပါပြီ! စာသားကို ချတ်ထဲသို့ ထည့်ပြီးပါပြီ။",
   "No prompts found": "Prompt မတွေ့ရပါ",
@@ -1514,7 +1538,8 @@
     "openInEditor": "Editor တွင် ဖွင့်ရန်",
     "failedToUpload": "လွှတ်တင်၍ မအောင်မြင်ပါ",
     "attachment": "ဖိုင်တွဲ",
-    "attachments": "ဖိုင်တွဲများ"
+    "attachments": "ဖိုင်တွဲများ",
+    "transcriptionCancelled": "ဖျက်သိမ်းထားသည်"
   },
   "transcript": {
     "originalTranscript": "မူရင်းစာတမ်း",
@@ -1536,7 +1561,9 @@
     "open": "ဖွင့်ရန်",
     "showFullMessage": "မက်ဆေ့ချ်လုံးဝ ပြပါ",
     "collapse": "ဖျက်ပုံချရန်",
-    "customTone": "စိတ်ကြိုက်အသံအလုံးအရင်း"
+    "customTone": "စိတ်ကြိုက်အသံအလုံးအရင်း",
+    "showMore": "ပိုမိုပြသရန်",
+    "showLess": "အနည်းပြရန်"
   },
   "codeBlock": {
     "openInEditor": "Editor တွင် ဖွင့်ရန်"

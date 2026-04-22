@@ -51,6 +51,13 @@ interface ChatStore {
   failedConversation: Conversation | null;
   failedSearchMode: SearchMode | undefined;
   successfulRetryConversationId: string | null;
+  /**
+   * False when the current error is not safely retriable (e.g. the server
+   * rejected the request because a message in this conversation's history
+   * is corrupted — regenerating would fail the same way). The UI uses this
+   * to hide the Regenerate button.
+   */
+  errorIsRecoverable: boolean;
 
   // Regeneration state for message versioning
   regeneratingIndex: number | null;
@@ -147,10 +154,18 @@ interface ChatStore {
     filename: string;
     blobPath?: string; // Only for batch jobs
     startedAt: number;
+    /** Total chunks, if this is a chunked job — used to scale client timeout. */
+    totalChunks?: number;
     progress?: {
       completed: number;
       total: number;
     };
+    /**
+     * True when the status channel has had several consecutive failures but
+     * hasn't yet given up — surfaced as a "Reconnecting…" hint in the UI so
+     * the user knows we're still trying, rather than silently spinning.
+     */
+    isReconnecting?: boolean;
   } | null;
   setConversationTranscriptionPending: (
     info: {
@@ -159,9 +174,11 @@ interface ChatStore {
       messageIndex: number;
       filename: string;
       blobPath?: string;
+      totalChunks?: number;
     } | null,
   ) => void;
   updateTranscriptionProgress: (completed: number, total: number) => void;
+  setTranscriptionReconnecting: (isReconnecting: boolean) => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -184,6 +201,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   failedConversation: null,
   failedSearchMode: undefined,
   successfulRetryConversationId: null,
+  errorIsRecoverable: true,
 
   // Regeneration initial state
   regeneratingIndex: null,
@@ -243,6 +261,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       failedConversation: null,
       failedSearchMode: undefined,
       successfulRetryConversationId: null,
+      errorIsRecoverable: true,
       // Reset regeneration state
       regeneratingIndex: null,
       // Reset pending transcription state
@@ -263,6 +282,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             ...state.pendingConversationTranscription,
             progress: { completed, total },
           }
+        : null,
+    })),
+
+  setTranscriptionReconnecting: (isReconnecting) =>
+    set((state) => ({
+      pendingConversationTranscription: state.pendingConversationTranscription
+        ? { ...state.pendingConversationTranscription, isReconnecting }
         : null,
     })),
 
@@ -774,8 +800,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
+    let errorIsRecoverable = true;
     if (error instanceof ApiError) {
       errorMessage = error.getUserMessage();
+      errorIsRecoverable = !error.isCorruptedHistoryError();
       console.error('API Error:', {
         status: error.status,
         message: error.message,
@@ -796,6 +824,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       isRetrying: false,
       failedConversation: conversation || null,
       failedSearchMode: searchMode,
+      errorIsRecoverable,
     });
   },
 

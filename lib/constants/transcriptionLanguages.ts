@@ -54,7 +54,7 @@ export const TRANSCRIPTION_LANGUAGES: TranscriptionLanguage[] = [
   {
     code: 'hy',
     labelKey: 'transcription.languages.armenian',
-    autonym: 'Հdelays',
+    autonym: 'Հայերեն',
     officiallySupported: true,
   },
   {
