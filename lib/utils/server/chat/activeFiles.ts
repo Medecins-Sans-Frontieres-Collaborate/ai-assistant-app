@@ -85,7 +85,7 @@ export function isPinned(f: ActiveFile) {
 
 export function selectFilesForBudget(
   files: ActiveFile[],
-  budgetTokens: number = 2000,
+  budgetTokens: number,
   policy: 'recent' | 'pinned' | 'sizeAsc' = 'recent',
 ): ActiveFile[] {
   // Estimation using processed tokenEstimate or fallback to rough heuristic
