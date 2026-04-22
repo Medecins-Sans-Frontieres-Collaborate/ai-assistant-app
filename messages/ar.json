@@ -1464,7 +1464,9 @@
     "open": "فتح",
     "showFullMessage": "عرض الرسالة كاملة",
     "collapse": "طي",
-    "customTone": "نغمة مخصصة"
+    "customTone": "نغمة مخصصة",
+    "showMore": "إظهار المزيد",
+    "showLess": "إظهار أقل"
   },
   "codeBlock": {
     "openInEditor": "افتح في المحرر"

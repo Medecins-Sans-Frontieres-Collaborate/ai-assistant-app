@@ -1495,7 +1495,9 @@
     "open": "打开",
     "showFullMessage": "显示完整消息",
     "collapse": "收起",
-    "customTone": "自定义语气"
+    "customTone": "自定义语气",
+    "showMore": "显示更多",
+    "showLess": "显示更少"
   },
   "codeBlock": {
     "openInEditor": "在编辑器中打开"

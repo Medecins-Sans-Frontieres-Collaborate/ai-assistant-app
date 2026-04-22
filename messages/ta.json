@@ -1530,7 +1530,9 @@
     "open": "திற",
     "showFullMessage": "முழு செய்தியைக் காட்டு",
     "collapse": "சுருக்கு",
-    "customTone": "தனிப்பயன் தொனி"
+    "customTone": "தனிப்பயன் தொனி",
+    "showMore": "மேலும் காண்பது",
+    "showLess": "குறைவாக காண்பது"
   },
   "codeBlock": {
     "openInEditor": "திருத்தியில் திற"

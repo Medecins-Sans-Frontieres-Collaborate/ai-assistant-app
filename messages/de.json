@@ -1561,7 +1561,9 @@
     "open": "Öffnen",
     "showFullMessage": "Komplette Nachricht anzeigen",
     "collapse": "Einklappen",
-    "customTone": "Benutzerdefinierter Ton"
+    "customTone": "Benutzerdefinierter Ton",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen"
   },
   "codeBlock": {
     "openInEditor": "Im Editor öffnen"

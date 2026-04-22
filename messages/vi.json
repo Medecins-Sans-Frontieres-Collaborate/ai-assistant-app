@@ -1592,7 +1592,9 @@
     "open": "Mở",
     "showFullMessage": "Hiển thị toàn bộ tin nhắn",
     "collapse": "Thu gọn",
-    "customTone": "Tông tùy chỉnh"
+    "customTone": "Tông tùy chỉnh",
+    "showMore": "Hiển thị thêm",
+    "showLess": "Ẩn bớt"
   },
   "codeBlock": {
     "openInEditor": "Mở trong trình chỉnh sửa"

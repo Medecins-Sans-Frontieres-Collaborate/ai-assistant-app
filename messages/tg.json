@@ -1530,7 +1530,9 @@
     "open": "Кушодан",
     "showFullMessage": "Пайёми пурраро нишон диҳед",
     "collapse": "Пинҳон кардан",
-    "customTone": "Лаҳҷаи фармоишӣ"
+    "customTone": "Лаҳҷаи фармоишӣ",
+    "showMore": "Нишон додани бештар",
+    "showLess": "Нишон додани камтар"
   },
   "codeBlock": {
     "openInEditor": "Дар муҳаррир кушоед"

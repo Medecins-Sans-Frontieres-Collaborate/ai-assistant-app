@@ -1561,7 +1561,9 @@
     "open": "Deschide",
     "showFullMessage": "Afișează mesajul complet",
     "collapse": "Restrânge",
-    "customTone": "Ton personalizat"
+    "customTone": "Ton personalizat",
+    "showMore": "Afișează mai mult",
+    "showLess": "Afișează mai puțin"
   },
   "codeBlock": {
     "openInEditor": "Deschide în editor"

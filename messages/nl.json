@@ -1561,7 +1561,9 @@
     "open": "Openen",
     "showFullMessage": "Toon volledige bericht",
     "collapse": "Samenvouwen",
-    "customTone": "Aangepaste toon"
+    "customTone": "Aangepaste toon",
+    "showMore": "Meer weergeven",
+    "showLess": "Minder weergeven"
   },
   "codeBlock": {
     "openInEditor": "Openen in editor"

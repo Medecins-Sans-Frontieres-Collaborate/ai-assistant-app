@@ -1530,7 +1530,9 @@
     "open": "Tsegulani",
     "showFullMessage": "Onetsani uthenga wonse",
     "collapse": "Pangani Wachidule",
-    "customTone": "Mawu Apadera"
+    "customTone": "Mawu Apadera",
+    "showMore": "Onetsani zambiri",
+    "showLess": "Onetsani zochepa"
   },
   "codeBlock": {
     "openInEditor": "Tsegulani mu wosintha"

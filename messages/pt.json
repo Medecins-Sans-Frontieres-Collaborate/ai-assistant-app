@@ -1464,7 +1464,9 @@
     "open": "Abrir",
     "showFullMessage": "Mostrar mensagem completa",
     "collapse": "Recolher",
-    "customTone": "Tom personalizado"
+    "customTone": "Tom personalizado",
+    "showMore": "Mostrar mais",
+    "showLess": "Mostrar menos"
   },
   "codeBlock": {
     "openInEditor": "Abrir no editor"

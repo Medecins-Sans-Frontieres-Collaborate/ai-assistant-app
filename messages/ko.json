@@ -1561,7 +1561,9 @@
     "open": "열기",
     "showFullMessage": "전체 메시지 보기",
     "collapse": "접기",
-    "customTone": "맞춤 톤"
+    "customTone": "맞춤 톤",
+    "showMore": "더 보기",
+    "showLess": "간단히 보기"
   },
   "codeBlock": {
     "openInEditor": "에디터에서 열기"

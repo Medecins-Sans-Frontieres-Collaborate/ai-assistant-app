@@ -1530,7 +1530,9 @@
     "open": "បើក",
     "showFullMessage": "បង្ហាញសារទាំងមូល",
     "collapse": "បង្រួម",
-    "customTone": "ប្តូរទ្រនិចសំឡេងផ្ទាល់"
+    "customTone": "ប្តូរទ្រនិចសំឡេងផ្ទាល់",
+    "showMore": "បង្ហាញបន្ថែម",
+    "showLess": "បង្ហាញតិច"
   },
   "codeBlock": {
     "openInEditor": "បើក​ក្នុង​កម្មវិធី​កូដ"

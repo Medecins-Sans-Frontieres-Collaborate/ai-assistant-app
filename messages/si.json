@@ -1561,7 +1561,9 @@
     "open": "විවෘත කරන්න",
     "showFullMessage": "සම්පූර්ණ පණිවිඩය පෙන්වන්න",
     "collapse": "හකුලා ගන්න",
-    "customTone": "අභිරුචි ස්වරය"
+    "customTone": "අභිරුචි ස්වරය",
+    "showMore": "තව දැක්වන්න",
+    "showLess": "අඩු දැක්වන්න"
   },
   "codeBlock": {
     "openInEditor": "සකසන මෙවලමෙන් විවෘත කරන්න"

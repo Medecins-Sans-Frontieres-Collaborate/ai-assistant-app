@@ -1530,7 +1530,9 @@
     "open": "Gura",
     "showFullMessage": "Erekana ubutumwa bwose",
     "collapse": "Funza",
-    "customTone": "Ijwi Ryihariye"
+    "customTone": "Ijwi Ryihariye",
+    "showMore": "Erekana vyinshi",
+    "showLess": "Erekana bike"
   },
   "codeBlock": {
     "openInEditor": "Gura mu kihindurira"

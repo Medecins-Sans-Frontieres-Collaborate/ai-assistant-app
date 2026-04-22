@@ -1530,7 +1530,9 @@
     "open": "Open",
     "showFullMessage": "Show full message",
     "collapse": "Collapse",
-    "customTone": "Custom Tone"
+    "customTone": "Custom Tone",
+    "showMore": "Wana mingi",
+    "showLess": "Wana peke"
   },
   "codeBlock": {
     "openInEditor": "Open in editor"

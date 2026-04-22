@@ -1530,7 +1530,9 @@
     "open": "Отвори",
     "showFullMessage": "Прикажи целу поруку",
     "collapse": "Скупи",
-    "customTone": "Прилагођени тон"
+    "customTone": "Прилагођени тон",
+    "showMore": "Prikaži više",
+    "showLess": "Prikaži manje"
   },
   "codeBlock": {
     "openInEditor": "Отвори у уређивачу"

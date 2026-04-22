@@ -1464,7 +1464,9 @@
     "open": "Otevřít",
     "showFullMessage": "Zobrazit celou zprávu",
     "collapse": "Sbalit",
-    "customTone": "Vlastní tón"
+    "customTone": "Vlastní tón",
+    "showMore": "Zobrazit více",
+    "showLess": "Zobrazit méně"
   },
   "codeBlock": {
     "openInEditor": "Otevřít v editoru"

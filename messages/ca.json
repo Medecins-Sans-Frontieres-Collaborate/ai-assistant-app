@@ -1561,7 +1561,9 @@
     "open": "Obre",
     "showFullMessage": "Mostra el missatge complet",
     "collapse": "Redueix",
-    "customTone": "To personalitzat"
+    "customTone": "To personalitzat",
+    "showMore": "Mostra'n més",
+    "showLess": "Mostra'n menys"
   },
   "codeBlock": {
     "openInEditor": "Obre a l'editor"

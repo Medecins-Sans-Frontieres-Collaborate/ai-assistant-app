@@ -1561,7 +1561,9 @@
     "open": "Fungua",
     "showFullMessage": "Onyesha ujumbe wote",
     "collapse": "Fupisha",
-    "customTone": "Sauti Iliyobinafsishwa"
+    "customTone": "Sauti Iliyobinafsishwa",
+    "showMore": "Onyesha zaidi",
+    "showLess": "Onyesha kidogo"
   },
   "codeBlock": {
     "openInEditor": "Fungua kwenye mhariri"

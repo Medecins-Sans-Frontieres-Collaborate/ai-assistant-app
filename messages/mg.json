@@ -1530,7 +1530,9 @@
     "open": "Sokafy",
     "showFullMessage": "Asehoy ny hafatra feno",
     "collapse": "Ahitsio",
-    "customTone": "Feo Manokana"
+    "customTone": "Feo Manokana",
+    "showMore": "Asehoy bebe kokoa",
+    "showLess": "Asehoy kely kokoa"
   },
   "codeBlock": {
     "openInEditor": "Sokafy ao amin'ny mpanova"

@@ -1530,7 +1530,9 @@
     "open": "Fungura",
     "showFullMessage": "Erekana ubutumwa bwuzuye",
     "collapse": "Funga",
-    "customTone": "Ijwi Ryihariye"
+    "customTone": "Ijwi Ryihariye",
+    "showMore": "Erekana byinshi",
+    "showLess": "Erekana bike"
   },
   "codeBlock": {
     "openInEditor": "Fungura mu guhindura"

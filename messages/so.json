@@ -1530,7 +1530,9 @@
     "open": "Fur",
     "showFullMessage": "Tus fariinta oo dhan",
     "collapse": "Laab",
-    "customTone": "Dhawaaq Gaar ah"
+    "customTone": "Dhawaaq Gaar ah",
+    "showMore": "Muuji wax badan",
+    "showLess": "Muuji wax yar"
   },
   "codeBlock": {
     "openInEditor": "Ku fur tifaftiraha"

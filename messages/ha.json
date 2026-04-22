@@ -1530,7 +1530,9 @@
     "open": "Buɗe",
     "showFullMessage": "Nuna cikakken saƙo",
     "collapse": "Rufe",
-    "customTone": "Sauti na musamman"
+    "customTone": "Sauti na musamman",
+    "showMore": "Nuna ƙari",
+    "showLess": "Nuna ƙasa"
   },
   "codeBlock": {
     "openInEditor": "Buɗe a edita"

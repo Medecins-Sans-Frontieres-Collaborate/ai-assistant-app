@@ -1561,7 +1561,9 @@
     "open": "Buka",
     "showFullMessage": "Tampilkan pesan lengkap",
     "collapse": "Tutup",
-    "customTone": "Nada Khusus"
+    "customTone": "Nada Khusus",
+    "showMore": "Tampilkan lebih banyak",
+    "showLess": "Tampilkan lebih sedikit"
   },
   "codeBlock": {
     "openInEditor": "Buka di editor"

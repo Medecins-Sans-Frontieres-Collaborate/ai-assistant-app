@@ -1561,7 +1561,9 @@
     "open": "פתח",
     "showFullMessage": "הצג הודעה מלאה",
     "collapse": "צמצם",
-    "customTone": "טון מותאם אישית"
+    "customTone": "טון מותאם אישית",
+    "showMore": "הצג עוד",
+    "showLess": "הצג פחות"
   },
   "codeBlock": {
     "openInEditor": "פתח בעורך"

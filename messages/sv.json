@@ -1561,7 +1561,9 @@
     "open": "Öppna",
     "showFullMessage": "Visa hela meddelandet",
     "collapse": "Fäll ihop",
-    "customTone": "Anpassad ton"
+    "customTone": "Anpassad ton",
+    "showMore": "Visa mer",
+    "showLess": "Visa mindre"
   },
   "codeBlock": {
     "openInEditor": "Öppna i redigerare"

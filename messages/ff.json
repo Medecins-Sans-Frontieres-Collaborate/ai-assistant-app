@@ -1530,7 +1530,9 @@
     "open": "Uddit",
     "showFullMessage": "Hollu neldol timmuɗo",
     "collapse": "Ñiƴƴu",
-    "customTone": "Daande Keeriɗɗo"
+    "customTone": "Daande Keeriɗɗo",
+    "showMore": "Holl eɓɓe",
+    "showLess": "Holl ɗiɗi"
   },
   "codeBlock": {
     "openInEditor": "Uddit e taƴtoowo"

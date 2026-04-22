@@ -1561,7 +1561,9 @@
     "open": "Avaa",
     "showFullMessage": "Näytä koko viesti",
     "collapse": "Pienennä",
-    "customTone": "Mukautettu sävy"
+    "customTone": "Mukautettu sävy",
+    "showMore": "Näytä lisää",
+    "showLess": "Näytä vähemmän"
   },
   "codeBlock": {
     "openInEditor": "Avaa editorissa"

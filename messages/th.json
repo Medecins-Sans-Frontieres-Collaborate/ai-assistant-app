@@ -1561,7 +1561,9 @@
     "open": "เปิด",
     "showFullMessage": "แสดงข้อความทั้งหมด",
     "collapse": "ย่อ",
-    "customTone": "กำหนดโทนเอง"
+    "customTone": "กำหนดโทนเอง",
+    "showMore": "แสดงเพิ่มเติม",
+    "showLess": "แสดงน้อยลง"
   },
   "codeBlock": {
     "openInEditor": "เปิดใน editor"

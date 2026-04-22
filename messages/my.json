@@ -1561,7 +1561,9 @@
     "open": "ဖွင့်ရန်",
     "showFullMessage": "မက်ဆေ့ချ်လုံးဝ ပြပါ",
     "collapse": "ဖျက်ပုံချရန်",
-    "customTone": "စိတ်ကြိုက်အသံအလုံးအရင်း"
+    "customTone": "စိတ်ကြိုက်အသံအလုံးအရင်း",
+    "showMore": "ပိုမိုပြသရန်",
+    "showLess": "အနည်းပြရန်"
   },
   "codeBlock": {
     "openInEditor": "Editor တွင် ဖွင့်ရန်"

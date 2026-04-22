@@ -1561,7 +1561,9 @@
     "open": "Otwórz",
     "showFullMessage": "Pokaż pełną wiadomość",
     "collapse": "Zwiń",
-    "customTone": "Niestandardowy ton"
+    "customTone": "Niestandardowy ton",
+    "showMore": "Pokaż więcej",
+    "showLess": "Pokaż mniej"
   },
   "codeBlock": {
     "openInEditor": "Otwórz w edytorze"

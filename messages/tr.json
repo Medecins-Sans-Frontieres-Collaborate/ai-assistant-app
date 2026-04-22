@@ -1561,7 +1561,9 @@
     "open": "Aç",
     "showFullMessage": "Tüm mesajı göster",
     "collapse": "Daralt",
-    "customTone": "Özel Ton"
+    "customTone": "Özel Ton",
+    "showMore": "Daha fazla göster",
+    "showLess": "Daha az göster"
   },
   "codeBlock": {
     "openInEditor": "Editörde aç"

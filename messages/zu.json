@@ -1530,7 +1530,9 @@
     "open": "Vula",
     "showFullMessage": "Bonisa umlayezo ophelele",
     "collapse": "Goqa",
-    "customTone": "Ithoni Yakho"
+    "customTone": "Ithoni Yakho",
+    "showMore": "Khombisa okuningi",
+    "showLess": "Khombisa okuncane"
   },
   "codeBlock": {
     "openInEditor": "Vula kumhleli"

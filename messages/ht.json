@@ -1530,7 +1530,9 @@
     "open": "Ouvri",
     "showFullMessage": "Montre mesaj konplè",
     "collapse": "Ratresi",
-    "customTone": "Ton Pèsonalize"
+    "customTone": "Ton Pèsonalize",
+    "showMore": "Montre plis",
+    "showLess": "Montre mwens"
   },
   "codeBlock": {
     "openInEditor": "Ouvri nan editè"

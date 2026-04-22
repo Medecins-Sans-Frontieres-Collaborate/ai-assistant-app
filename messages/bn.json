@@ -1464,7 +1464,9 @@
     "open": "খুলুন",
     "showFullMessage": "সম্পূর্ণ বার্তা দেখান",
     "collapse": "সঙ্কুচিত করুন",
-    "customTone": "কাস্টম টোন"
+    "customTone": "কাস্টম টোন",
+    "showMore": "আরও দেখান",
+    "showLess": "কম দেখান"
   },
   "codeBlock": {
     "openInEditor": "এডিটরে খুলুন"

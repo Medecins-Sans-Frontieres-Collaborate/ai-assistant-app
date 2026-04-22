@@ -1530,7 +1530,9 @@
     "open": "खोल्नुहोस्",
     "showFullMessage": "पूर्ण सन्देश देखाउनुहोस्",
     "collapse": "सङ्कुचित",
-    "customTone": "कस्टम टोन"
+    "customTone": "कस्टम टोन",
+    "showMore": "थप देखाउनुहोस्",
+    "showLess": "कम देखाउनुहोस्"
   },
   "codeBlock": {
     "openInEditor": "सम्पादकमा खोल्नुहोस्"

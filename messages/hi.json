@@ -1464,7 +1464,9 @@
     "open": "खोलें",
     "showFullMessage": "पूरा संदेश दिखाएँ",
     "collapse": "संक्षिप्त करें",
-    "customTone": "कस्टम टोन"
+    "customTone": "कस्टम टोन",
+    "showMore": "और दिखाएँ",
+    "showLess": "कम दिखाएँ"
   },
   "codeBlock": {
     "openInEditor": "संपादक में खोलें"

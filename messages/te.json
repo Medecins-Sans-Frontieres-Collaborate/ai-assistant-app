@@ -1561,7 +1561,9 @@
     "open": "తెరవండి",
     "showFullMessage": "పూర్తి సందేశాన్ని చూపించండి",
     "collapse": "కుదించండి",
-    "customTone": "అనుకూల టోన్"
+    "customTone": "అనుకూల టోన్",
+    "showMore": "మరింత చూపించు",
+    "showLess": "తక్కువ చూపించు"
   },
   "codeBlock": {
     "openInEditor": "ఎడిటర్‌లో తెరవండి"

@@ -1561,7 +1561,9 @@
     "open": "باز کردن",
     "showFullMessage": "نمایش پیام کامل",
     "collapse": "جمع کردن",
-    "customTone": "لحن سفارشی"
+    "customTone": "لحن سفارشی",
+    "showMore": "نمایش بیشتر",
+    "showLess": "نمایش کمتر"
   },
   "codeBlock": {
     "openInEditor": "باز کردن در ویرایشگر"

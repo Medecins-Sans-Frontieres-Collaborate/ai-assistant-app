@@ -1530,7 +1530,9 @@
     "open": "ክፈት",
     "showFullMessage": "ምሉእ መልእኽቲ ኣርኢ",
     "collapse": "ጽብብ",
-    "customTone": "ብሕታዊ ቃና"
+    "customTone": "ብሕታዊ ቃና",
+    "showMore": "ተወሳኺ ሓውሳኽ ራኣ",
+    "showLess": "ድሓን ምስራዕ"
   },
   "codeBlock": {
     "openInEditor": "ኣብ ኤዲተር ክፈት"

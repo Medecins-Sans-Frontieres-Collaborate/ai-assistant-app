@@ -1561,7 +1561,9 @@
     "open": "開く",
     "showFullMessage": "全文を表示",
     "collapse": "折りたたむ",
-    "customTone": "カスタムトーン"
+    "customTone": "カスタムトーン",
+    "showMore": "さらに表示",
+    "showLess": "表示を減らす"
   },
   "codeBlock": {
     "openInEditor": "エディタで開く"

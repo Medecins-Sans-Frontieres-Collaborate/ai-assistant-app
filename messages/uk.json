@@ -1561,7 +1561,9 @@
     "open": "Відкрити",
     "showFullMessage": "Показати повне повідомлення",
     "collapse": "Згорнути",
-    "customTone": "Власний тон"
+    "customTone": "Власний тон",
+    "showMore": "Показати більше",
+    "showLess": "Показати менше"
   },
   "codeBlock": {
     "openInEditor": "Відкрити в редакторі"

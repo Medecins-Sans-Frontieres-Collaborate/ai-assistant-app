@@ -1530,7 +1530,9 @@
     "open": "خلاص کړئ",
     "showFullMessage": "پوره پیغام وښایئ",
     "collapse": "ټول کړئ",
-    "customTone": "خپل ځانګړی انداز"
+    "customTone": "خپل ځانګړی انداز",
+    "showMore": "نور ښکاره کړئ",
+    "showLess": "کم ښکاره کړئ"
   },
   "codeBlock": {
     "openInEditor": "په ایډیټر کې خلاص کړئ"

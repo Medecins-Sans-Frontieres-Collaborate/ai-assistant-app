@@ -1530,7 +1530,9 @@
     "open": "Veke",
     "showFullMessage": "Peyama tevahî nîşan bide",
     "collapse": "Bicivîne",
-    "customTone": "Tona Taybet"
+    "customTone": "Tona Taybet",
+    "showMore": "زیاتر پیشان بدە",
+    "showLess": "کەمتر پیشان بدە"
   },
   "codeBlock": {
     "openInEditor": "Di edîtorê de veke"

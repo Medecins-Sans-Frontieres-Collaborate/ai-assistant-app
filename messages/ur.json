@@ -1563,7 +1563,9 @@
     "open": "کھولیں",
     "showFullMessage": "مکمل پیغام دکھائیں",
     "collapse": "سمیٹیں",
-    "customTone": "حسب منشا انداز"
+    "customTone": "حسب منشا انداز",
+    "showMore": "مزید دکھائیں",
+    "showLess": "کم دکھائیں"
   },
   "codeBlock": {
     "openInEditor": "ایڈیٹر میں کھولیں"

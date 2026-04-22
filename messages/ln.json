@@ -1530,7 +1530,9 @@
     "open": "Fungola",
     "showFullMessage": "Lakisa nsango mobimba",
     "collapse": "Kokanga",
-    "customTone": "Ndenge ya mongongo moko"
+    "customTone": "Ndenge ya mongongo moko",
+    "showMore": "Lakisa mosusu",
+    "showLess": "Lakisa moke"
   },
   "codeBlock": {
     "openInEditor": "Fungola na editor"

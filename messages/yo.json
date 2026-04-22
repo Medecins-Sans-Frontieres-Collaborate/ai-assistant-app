@@ -1530,7 +1530,9 @@
     "open": "Ṣí",
     "showFullMessage": "Fi ìfiránṣẹ́ kíkún hàn",
     "collapse": "Dé parí",
-    "customTone": "Ohùn Àdánidá"
+    "customTone": "Ohùn Àdánidá",
+    "showMore": "Fi diẹ sii han",
+    "showLess": "Fi diẹ kere han"
   },
   "codeBlock": {
     "openInEditor": "Ṣí nínú olóòtú"
