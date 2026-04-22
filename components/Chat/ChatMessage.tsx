@@ -255,30 +255,30 @@ export const ChatMessage: FC<Props> = ({
 
     if (message.role === 'user') {
       return (
-        <UserMessage
-          message={message}
-          messageContent={textContent}
-          setMessageContent={setMessageContent}
-          isEditing={isEditing}
-          textareaRef={textareaRef}
-          handleInputChange={handleInputChange}
-          handlePressEnter={handlePressEnter}
-          setIsTyping={setIsTyping}
-          setIsEditing={setIsEditing}
-          toggleEditing={toggleEditing}
-          handleDeleteMessage={handleDeleteMessage}
-          onEdit={onEdit || (() => {})}
-          selectedConversation={selectedConversation}
-          onRegenerate={onRegenerate}
-          onSaveAsPrompt={handleSaveAsPromptClick}
+        <div
+          className="group text-gray-800 dark:text-gray-100"
+          style={{ overflowWrap: 'anywhere' }}
         >
-          <ImageContent images={images} />
-          {text && (
-            <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none mt-2">
-              {text.text}
-            </div>
-          )}
-        </UserMessage>
+          <UserMessage
+            message={message}
+            messageContent={textContent}
+            setMessageContent={setMessageContent}
+            isEditing={isEditing}
+            textareaRef={textareaRef}
+            handleInputChange={handleInputChange}
+            handlePressEnter={handlePressEnter}
+            setIsTyping={setIsTyping}
+            setIsEditing={setIsEditing}
+            toggleEditing={toggleEditing}
+            handleDeleteMessage={handleDeleteMessage}
+            onEdit={onEdit || (() => {})}
+            selectedConversation={selectedConversation}
+            onRegenerate={onRegenerate}
+            onSaveAsPrompt={handleSaveAsPromptClick}
+          >
+            <ImageContent images={images} />
+          </UserMessage>
+        </div>
       );
     } else {
       return (
