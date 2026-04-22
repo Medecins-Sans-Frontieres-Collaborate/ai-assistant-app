@@ -445,128 +445,127 @@ export class StandardChatHandler extends BasePipelineStage {
   /**
    * Builds the final messages array from processed content and enrichments.
    *
-   * Priority:
-   * 1. Use enrichedMessages if available (from enrichers)
-   * 2. Use processed content + original messages (from processors)
-   * 3. Use original messages (if no processing)
+   * Enricher output (context.enrichedMessages) and processor output
+   * (context.processedContent) compose: enrichedMessages is the base, and
+   * processedContent — file summaries, inline files, transcripts, converted
+   * images — is injected into the last message on top of it. Both paths
+   * supply different things (search context vs. uploaded-file content) and
+   * both should reach the model when both are present.
    */
   private buildFinalMessages(context: ChatContext): Message[] {
-    // If enrichers modified messages, use those (but still sanitize)
-    if (context.enrichedMessages) {
-      return this.stripUnsupportedContentTypes(context.enrichedMessages);
+    const baseMessages = context.enrichedMessages ?? context.messages;
+
+    if (!context.processedContent) {
+      return this.stripUnsupportedContentTypes(baseMessages);
     }
 
-    // If we have processed content, inject it into messages
-    if (context.processedContent) {
-      const { fileSummaries, inlineFiles, transcripts, images } =
-        context.processedContent;
+    const { fileSummaries, inlineFiles, transcripts, images } =
+      context.processedContent;
 
-      // Start with original messages
-      let messages = [...context.messages];
+    const processedTextParts: string[] = [];
 
-      // Add processed content to the last message
-      const lastMessage = messages[messages.length - 1];
+    if (fileSummaries && fileSummaries.length > 0) {
+      processedTextParts.push(
+        fileSummaries
+          .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
+          .join('\n\n'),
+      );
+    }
 
-      if (Array.isArray(lastMessage.content)) {
-        const enrichedContent = [...lastMessage.content];
+    if (inlineFiles && inlineFiles.length > 0) {
+      processedTextParts.push(
+        inlineFiles
+          .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
+          .join('\n\n'),
+      );
+    }
 
-        // Collect all text parts (existing + processed content)
-        const textParts: string[] = [];
+    if (transcripts && transcripts.length > 0) {
+      processedTextParts.push(
+        transcripts
+          .map((t) => `[Audio/Video: ${t.filename}]\n${t.transcript}`)
+          .join('\n\n'),
+      );
+    }
 
-        // Extract existing text content
-        enrichedContent.forEach((c) => {
-          if (c.type === 'text' && c.text) {
-            textParts.push(c.text);
+    const hasImagesToInject = !!(images && images.length > 0);
+
+    if (processedTextParts.length === 0 && !hasImagesToInject) {
+      return this.stripUnsupportedContentTypes(baseMessages);
+    }
+
+    const messages = [...baseMessages];
+    const lastMessage = messages[messages.length - 1];
+
+    if (typeof lastMessage.content === 'string') {
+      const merged =
+        processedTextParts.length > 0
+          ? `${lastMessage.content}\n\n${processedTextParts.join('\n\n')}`
+          : lastMessage.content;
+      messages[messages.length - 1] = { ...lastMessage, content: merged };
+    } else if (Array.isArray(lastMessage.content)) {
+      const enrichedContent = [...lastMessage.content];
+
+      const textParts: string[] = [];
+      enrichedContent.forEach((c) => {
+        if (c.type === 'text' && c.text) {
+          textParts.push(c.text);
+        }
+      });
+      textParts.push(...processedTextParts);
+
+      const nonTextContent = enrichedContent.filter(
+        (c) => c.type !== 'file_url' && c.type !== 'text',
+      );
+
+      // Replace image URLs with converted base64 from context.processedContent.images
+      // The processors convert blob storage URLs to base64 data URLs for LLM consumption
+      if (hasImagesToInject) {
+        let imageIndex = 0;
+        for (const item of nonTextContent) {
+          if (
+            item.type === 'image_url' &&
+            'image_url' in item &&
+            imageIndex < images!.length
+          ) {
+            (
+              item as {
+                type: 'image_url';
+                image_url: { url: string; detail?: string };
+              }
+            ).image_url.url = images![imageIndex].url;
+            (
+              item as {
+                type: 'image_url';
+                image_url: { url: string; detail?: string };
+              }
+            ).image_url.detail = images![imageIndex].detail;
+            imageIndex++;
           }
-        });
-
-        // Add file summaries (extracted content from large files)
-        if (fileSummaries && fileSummaries.length > 0) {
-          const summaryText = fileSummaries
-            .map((f) => `[Document summary: ${f.filename}]\n${f.summary}`)
-            .join('\n\n');
-          textParts.push(summaryText);
         }
-
-        // Add inline file content (small files included as-is)
-        if (inlineFiles && inlineFiles.length > 0) {
-          const inlineText = inlineFiles
-            .map((f) => '```' + f.filename + '\n' + f.content + '\n```')
-            .join('\n\n');
-          textParts.push(inlineText);
-        }
-
-        // Add transcripts
-        if (transcripts && transcripts.length > 0) {
-          const transcriptText = transcripts
-            .map((t) => `[Audio/Video: ${t.filename}]\n${t.transcript}`)
-            .join('\n\n');
-          textParts.push(transcriptText);
-        }
-
-        // Filter out text and file_url content (will be replaced with merged text)
-        const nonTextContent = enrichedContent.filter(
-          (c) => c.type !== 'file_url' && c.type !== 'text',
-        );
-
-        // Replace image URLs with converted base64 from context.processedContent.images
-        // The processors convert blob storage URLs to base64 data URLs for LLM consumption
-        if (images && images.length > 0) {
-          let imageIndex = 0;
-          for (const item of nonTextContent) {
-            if (
-              item.type === 'image_url' &&
-              'image_url' in item &&
-              imageIndex < images.length
-            ) {
-              // Replace with converted base64 URL
-              (
-                item as {
-                  type: 'image_url';
-                  image_url: { url: string; detail?: string };
-                }
-              ).image_url.url = images[imageIndex].url;
-              (
-                item as {
-                  type: 'image_url';
-                  image_url: { url: string; detail?: string };
-                }
-              ).image_url.detail = images[imageIndex].detail;
-              imageIndex++;
-            }
-          }
-        }
-
-        // Build final content array
-        const finalContent: typeof enrichedContent = [];
-
-        // Add merged text content as first item
-        if (textParts.length > 0) {
-          finalContent.push({
-            type: 'text',
-            text: textParts.join('\n\n'),
-          });
-        }
-
-        // Add non-text content (e.g., images with base64 URLs)
-        finalContent.push(...nonTextContent);
-
-        // Replace last message with enriched content
-        messages[messages.length - 1] = {
-          ...lastMessage,
-          content:
-            finalContent.length === 1 && finalContent[0].type === 'text'
-              ? finalContent[0].text // Convert to string if only text
-              : finalContent,
-        };
       }
 
-      // Sanitize all messages before returning (defensive measure)
-      return this.stripUnsupportedContentTypes(messages);
+      const finalContent: typeof enrichedContent = [];
+
+      if (textParts.length > 0) {
+        finalContent.push({
+          type: 'text',
+          text: textParts.join('\n\n'),
+        });
+      }
+
+      finalContent.push(...nonTextContent);
+
+      messages[messages.length - 1] = {
+        ...lastMessage,
+        content:
+          finalContent.length === 1 && finalContent[0].type === 'text'
+            ? finalContent[0].text
+            : finalContent,
+      };
     }
 
-    // No processing, return original messages with file_url filtered out
-    return this.stripUnsupportedContentTypes(context.messages);
+    return this.stripUnsupportedContentTypes(messages);
   }
 
   /**
