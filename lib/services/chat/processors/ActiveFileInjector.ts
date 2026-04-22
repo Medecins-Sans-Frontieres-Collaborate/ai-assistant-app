@@ -81,6 +81,7 @@ export class ActiveFileInjector extends BasePipelineStage {
 
     // Add indicator if model likely lacks vision support
     let enrichedMessages = context.messages;
+    let messagesModified = false;
     const isVisionModel = Object.values(OpenAIVisionModelID).includes(
       context.modelId as OpenAIVisionModelID,
     );
@@ -92,18 +93,23 @@ export class ActiveFileInjector extends BasePipelineStage {
           ...last,
           content: `${last.content}\n\n${indicator}`,
         });
+        messagesModified = true;
       } else if (Array.isArray(last.content)) {
         enrichedMessages = enrichedMessages.slice(0, -1).concat({
           ...last,
           content: [...last.content, { type: 'text', text: indicator } as any],
         } as any);
+        messagesModified = true;
       }
     }
 
     return {
       ...context,
       systemPrompt: enrichedSystemPrompt,
-      enrichedMessages,
+      // Only overwrite enrichedMessages when we actually modified them;
+      // otherwise downstream stages would treat an unchanged pass-through as
+      // "enrichers wrote messages" and skip processedContent injection.
+      ...(messagesModified ? { enrichedMessages } : {}),
       activeFilesTokensConsumedThisTurn: tokensConsumedThisTurn,
     };
   }
