@@ -82,9 +82,8 @@ export const UserMessage: FC<UserMessageProps> = ({
     promptVariables,
     artifactContext,
   } = message;
-  const [localMessageContent, setLocalMessageContent] = useState<string>(
-    content as string,
-  );
+  const [localMessageContent, setLocalMessageContent] =
+    useState<string>(messageContent);
   const [isPromptExpanded, setIsPromptExpanded] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
@@ -105,18 +104,8 @@ export const UserMessage: FC<UserMessageProps> = ({
   };
 
   useEffect(() => {
-    setLocalMessageContent(content as string);
-  }, [content]);
-
-  useEffect(() => {
-    if (
-      message.content !== messageContent &&
-      typeof message.content === 'string'
-    ) {
-      setMessageContent(message.content);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message.content, messageContent]);
+    setLocalMessageContent(messageContent);
+  }, [messageContent]);
 
   useLayoutEffect(() => {
     if (isEditing) return;
