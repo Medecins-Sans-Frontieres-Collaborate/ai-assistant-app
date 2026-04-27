@@ -9,10 +9,7 @@ import { OpenAIVisionModelID } from '@/types/openai';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
-import {
-  ACTIVE_FILE_PIN_TOKEN_LIMIT,
-  ACTIVE_FILE_SESSION_QUOTA,
-} from '@/lib/constants/activeFileQuotas';
+import { getActiveFileBudgets } from '@/lib/constants/activeFileQuotas';
 
 /**
  * Injects active file content into the system prompt and/or messages.
@@ -26,13 +23,16 @@ export class ActiveFileInjector extends BasePipelineStage {
 
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     const activeFiles = context.activeFiles ?? [];
+    const budgets = getActiveFileBudgets(context.model);
 
-    // Server backstop: strip pinned flag from files exceeding pin token limit
+    // Server backstop: strip pinned flag from files exceeding the tier's
+    // pin token limit. The client may have pinned at upload time under a
+    // different model selection.
     const sanitizedFiles = activeFiles.map((f) => {
       if (
         f.pinned &&
         f.processedContent?.tokenEstimate &&
-        f.processedContent.tokenEstimate > ACTIVE_FILE_PIN_TOKEN_LIMIT
+        f.processedContent.tokenEstimate > budgets.pinLimit
       ) {
         return { ...f, pinned: false };
       }
@@ -41,14 +41,18 @@ export class ActiveFileInjector extends BasePipelineStage {
 
     // Session quota enforcement
     const usedSoFar = context.activeFilesTokensUsed ?? 0;
-    const quota = context.activeFilesSessionQuota ?? ACTIVE_FILE_SESSION_QUOTA;
+    const quota = context.activeFilesSessionQuota ?? budgets.sessionQuota;
     const remaining = quota - usedSoFar;
 
     if (remaining <= 0) {
       console.warn(
         '[ActiveFileInjector] Session quota exhausted, skipping file injection',
       );
-      return { ...context, activeFilesTokensConsumedThisTurn: 0 };
+      return {
+        ...context,
+        activeFilesTokensConsumedThisTurn: 0,
+        activeFilesDroppedThisTurn: sanitizedFiles.map((f) => f.id),
+      };
     }
 
     // Apply budget selection with session quota cap. The per-turn ceiling
@@ -56,12 +60,26 @@ export class ActiveFileInjector extends BasePipelineStage {
     // the headroom they can support, while legacy models stay at the floor.
     const budgetTokens = computeActiveFilePerTurnBudget(context.model);
     const effectiveBudget = Math.min(budgetTokens, remaining);
-    const selected = selectFilesForBudget(sanitizedFiles, effectiveBudget);
+    const { selected, dropped } = selectFilesForBudget(
+      sanitizedFiles,
+      effectiveBudget,
+    );
 
     // Calculate tokens consumed this turn
     const tokensConsumedThisTurn = selected.reduce(
       (sum, f) => sum + (f.processedContent?.tokenEstimate ?? 0),
       0,
+    );
+
+    // Stamp lastUsedAt on selected files so the next turn's selection sort
+    // reflects actual usage. Without this, lastUsedAt is only ever set at
+    // first processing and selection order is permanently locked to upload
+    // order — which silently freezes the same files in context turn after
+    // turn and never lets a dropped file rotate back in.
+    const nowIso = new Date().toISOString();
+    const selectedIds = new Set(selected.map((f) => f.id));
+    const updatedActiveFiles = sanitizedFiles.map((f) =>
+      selectedIds.has(f.id) ? { ...f, lastUsedAt: nowIso } : f,
     );
 
     // Separate images from text-like files
@@ -108,12 +126,14 @@ export class ActiveFileInjector extends BasePipelineStage {
 
     return {
       ...context,
+      activeFiles: updatedActiveFiles,
       systemPrompt: enrichedSystemPrompt,
       // Only overwrite enrichedMessages when we actually modified them;
       // otherwise downstream stages would treat an unchanged pass-through as
       // "enrichers wrote messages" and skip processedContent injection.
       ...(messagesModified ? { enrichedMessages } : {}),
       activeFilesTokensConsumedThisTurn: tokensConsumedThisTurn,
+      activeFilesDroppedThisTurn: dropped.map((f) => f.id),
     };
   }
 }
