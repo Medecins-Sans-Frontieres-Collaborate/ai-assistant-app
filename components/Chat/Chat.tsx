@@ -22,6 +22,7 @@ import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
+import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
