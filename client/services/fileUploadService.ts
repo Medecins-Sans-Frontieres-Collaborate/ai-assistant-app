@@ -26,12 +26,12 @@ const SERVER_ACTION_THRESHOLD = 10 * 1024 * 1024; // 10MB
 // Chunked upload configuration
 const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
 const CHUNK_CONCURRENCY = 4; // Parallel in-flight chunk uploads
+
 /**
- * Total attempts per chunk (1 initial call + additional retries on transient
- * failure). Mirrors the `MAX_CHUNK_ATTEMPTS` naming used in
+ * Total attempts per chunk (initial + retries). Mirrors the naming used in
  * chunkedTranscriptionService so both chunked pipelines speak the same vocab.
  */
-const MAX_CHUNK_ATTEMPTS = 3;
+const CHUNK_TOTAL_ATTEMPTS = 3;
 
 /**
  * Per-request XHR timeout in ms. Long enough for a single 10MB chunk on a
@@ -42,7 +42,7 @@ const MAX_CHUNK_ATTEMPTS = 3;
 const XHR_TIMEOUT_MS = 120_000;
 
 /** Total attempts for the small-file XHR path (initial + retries). */
-const XHR_MAX_ATTEMPTS = 3;
+const XHR_TOTAL_ATTEMPTS = 3;
 
 /**
  * Upload error carrying a transience hint. Permanent errors (4xx) skip the
@@ -67,9 +67,55 @@ class UploadAbortedError extends Error {
   }
 }
 
-function backoffWithJitter(attempt: number): number {
+/**
+ * Returns the jittered exponential-backoff delay (in ms) for a given retry
+ * attempt. Capped at 8s base; jitter is the standard 0.5–1.0× multiplier to
+ * desynchronize clients recovering from a shared outage.
+ */
+function jitteredBackoffMs(attempt: number): number {
   const base = Math.min(8_000, Math.pow(2, attempt) * 500);
   return Math.round(base * (0.5 + Math.random() * 0.5));
+}
+
+/** Sleep for the jittered backoff appropriate to this retry attempt. */
+function sleepBackoff(attempt: number): Promise<void> {
+  return new Promise((resolve) =>
+    setTimeout(resolve, jitteredBackoffMs(attempt)),
+  );
+}
+
+/**
+ * Retry an async operation with jittered backoff between attempts.
+ *
+ * Honors an optional `signal` (throws `UploadAbortedError(filename)` between
+ * attempts when aborted) and a `shouldRetry` classifier that decides whether
+ * a thrown error is eligible for retry. The loop always either returns the
+ * operation's result or throws the last error.
+ */
+async function withClientRetry<T>(
+  operation: (attempt: number) => Promise<T>,
+  opts: {
+    totalAttempts: number;
+    shouldRetry: (error: unknown) => boolean;
+    signal?: AbortSignal;
+    abortFilename: string;
+  },
+): Promise<T> {
+  for (let attempt = 0; attempt < opts.totalAttempts; attempt++) {
+    if (opts.signal?.aborted) {
+      throw new UploadAbortedError(opts.abortFilename);
+    }
+    try {
+      return await operation(attempt);
+    } catch (error) {
+      if (error instanceof UploadAbortedError) throw error;
+      const isLastAttempt = attempt === opts.totalAttempts - 1;
+      if (isLastAttempt || !opts.shouldRetry(error)) throw error;
+      await sleepBackoff(attempt);
+    }
+  }
+  // Unreachable: the loop above either returns or throws on every attempt.
+  throw new Error(`withClientRetry: exhausted ${opts.totalAttempts} attempts`);
 }
 
 export interface UploadProgress {
