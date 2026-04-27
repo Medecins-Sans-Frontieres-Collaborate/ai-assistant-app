@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Tento prohlížeč nepodporuje nahrávání zvuku.",
     "microphoneNotDetected": "Mikrofon nebyl detekován",
     "microphoneBlocked": "Mikrofon je zablokován. Zkontrolujte nastavení prohlížeče.",
-    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu."
+    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu.",
+    "stopGenerationTitle": "Zastavit generování?",
+    "stopGenerationMessage": "Opravdu chcete zastavit generování této odpovědi? Právě vytvářená odpověď bude zrušena.",
+    "stopGenerationConfirm": "Zastavit",
+    "stopGenerationDontAskAgainButton": "Při zastavení tlačítkem se již neptat",
+    "stopGenerationDontAskAgainKeyboard": "Při zastavení klávesnicí se již neptat",
+    "generateResponseButton": "Vygenerovat odpověď"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Exportovat karanténní data",
     "Delete Quarantined Data": "Smazat karanténní data",
     "deleteQuarantineConfirm": "Opravdu chcete smazat všechna karanténní data? Tuto akci nelze vrátit zpět.",
-    "quarantineDeleteSuccess": "Všechna karanténní data byla úspěšně smazána."
+    "quarantineDeleteSuccess": "Všechna karanténní data byla úspěšně smazána.",
+    "confirmations": {
+      "title": "Potvrzení",
+      "confirmStopFromButton": "Potvrdit před zastavením tlačítkem",
+      "confirmStopFromButtonDescription": "Zobrazit potvrzovací dialog při kliknutí na tlačítko pro zastavení během generování odpovědi",
+      "confirmStopFromKeyboard": "Potvrdit před zastavením klávesnicí",
+      "confirmStopFromKeyboardDescription": "Zobrazit potvrzovací dialog při stisknutí Escape během generování odpovědi"
+    }
   },
   "notFound": {
     "lostDog": "Ztracený pes"

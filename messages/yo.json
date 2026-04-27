@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Kíkópọ̀ ohun kò wà láàyè lórí aṣàwákiri yìí.",
     "microphoneNotDetected": "Ko ri mikrófónù",
     "microphoneBlocked": "Mikrófónù ti di. Ṣayẹwo eto aṣàwákiri rẹ.",
-    "voiceTranscriptionFailed": "Itumọ ohùn kuna. Jọwọ gbìyànjú lẹẹkansi."
+    "voiceTranscriptionFailed": "Itumọ ohùn kuna. Jọwọ gbìyànjú lẹẹkansi.",
+    "stopGenerationTitle": "Dákẹ́ àkọsílẹ̀?",
+    "stopGenerationMessage": "Ṣé dájú pé o fẹ́ dá àkọsílẹ̀ ìdáhùn yìí dúró? Gbogbo ìdáhùn tí ń bọ̀ yóò parí nìkan.",
+    "stopGenerationConfirm": "Dákẹ́",
+    "stopGenerationDontAskAgainButton": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì",
+    "stopGenerationDontAskAgainKeyboard": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
+    "generateResponseButton": "Ṣẹdá ìdáhùn"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Gbé Data Àmúkọ́ jáde",
     "Delete Quarantined Data": "Pa Data Àmúkọ́ rẹ́",
     "deleteQuarantineConfirm": "Ṣe o dájú pé o fẹ́ pa gbogbo data àmúkọ́ rẹ́? Ìgbésẹ̀ yìí kò le yí padà.",
-    "quarantineDeleteSuccess": "Gbogbo data àmúkọ́ ti parí pípà."
+    "quarantineDeleteSuccess": "Gbogbo data àmúkọ́ ti parí pípà.",
+    "confirmations": {
+      "title": "Ìmúlòlùfẹ́",
+      "confirmStopFromButton": "Jẹ́ kó dájú kí o tó dákẹ́ pẹ̀lú bọtìnì",
+      "confirmStopFromButtonDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ bọtìnì dákẹ́ nígbà tí a ń ṣètò ìdáhùn",
+      "confirmStopFromKeyboard": "Jẹ́ kó dájú kí o tó dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
+      "confirmStopFromKeyboardDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ Escape nígbà tí a ń ṣètò ìdáhùn"
+    }
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",

@@ -682,7 +682,13 @@
     "mediaRecorderNotSupported": "Nagrywanie dźwięku nie jest obsługiwane w tej przeglądarce.",
     "microphoneNotDetected": "Nie wykryto mikrofonu",
     "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",
-    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie."
+    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie.",
+    "stopGenerationTitle": "Zatrzymać generowanie?",
+    "stopGenerationMessage": "Czy na pewno chcesz zatrzymać generowanie tej odpowiedzi? Trwająca odpowiedź zostanie odrzucona.",
+    "stopGenerationConfirm": "Zatrzymaj",
+    "stopGenerationDontAskAgainButton": "Nie pytaj ponownie przy zatrzymywaniu przyciskiem",
+    "stopGenerationDontAskAgainKeyboard": "Nie pytaj ponownie przy zatrzymywaniu klawiaturą",
+    "generateResponseButton": "Wygeneruj odpowiedź"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -979,7 +985,14 @@
     "Export Quarantined Data": "Eksportuj dane z kwarantanny",
     "Delete Quarantined Data": "Usuń dane z kwarantanny",
     "deleteQuarantineConfirm": "Czy na pewno chcesz usunąć wszystkie dane z kwarantanny? Tej operacji nie można cofnąć.",
-    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane z kwarantanny."
+    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane z kwarantanny.",
+    "confirmations": {
+      "title": "Potwierdzenia",
+      "confirmStopFromButton": "Potwierdzaj przed zatrzymaniem przyciskiem",
+      "confirmStopFromButtonDescription": "Pokaż okno potwierdzenia po kliknięciu przycisku zatrzymania podczas generowania odpowiedzi",
+      "confirmStopFromKeyboard": "Potwierdzaj przed zatrzymaniem klawiaturą",
+      "confirmStopFromKeyboardDescription": "Pokaż okno potwierdzenia po naciśnięciu Escape podczas generowania odpowiedzi"
+    }
   },
   "notFound": {
     "lostDog": "Zagubiony pies"

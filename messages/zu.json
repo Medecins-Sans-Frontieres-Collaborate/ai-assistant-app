@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ukurekhoda umsindo akuxhaswanga kulesi siphequluli.",
     "microphoneNotDetected": "Ayikho imakrofoni etholakele",
     "microphoneBlocked": "Imakrofoni ivinjiwe. Hlola izilungiselelo zesiphequluli.",
-    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi."
+    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi.",
+    "stopGenerationTitle": "Misa ukukhiqiza?",
+    "stopGenerationMessage": "Uqinisekile ukuthi ufuna ukumisa lo mpendulo okhiqizwayo? Yonke impendulo eqhubekayo izosuswa.",
+    "stopGenerationConfirm": "Misa",
+    "stopGenerationDontAskAgainButton": "Ungabuzi futhi uma umisa ngebhathini",
+    "stopGenerationDontAskAgainKeyboard": "Ungabuzi futhi uma umisa ngesinqamuleli sekhibhodi",
+    "generateResponseButton": "Khiqiza impendulo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Thumela Idatha Egodliwe",
     "Delete Quarantined Data": "Susa Idatha Egodliwe",
     "deleteQuarantineConfirm": "Uqinisekile ukuthi ufuna ukususa yonke idatha egodliwe? Lesi senzo asikwazi ukubuyiselwa emuva.",
-    "quarantineDeleteSuccess": "Idatha egodliwe isusiwe ngempumelelo."
+    "quarantineDeleteSuccess": "Idatha egodliwe isusiwe ngempumelelo.",
+    "confirmations": {
+      "title": "Ukuqinisekisa",
+      "confirmStopFromButton": "Qinisekisa ngaphambi kokumisa ngebhathini",
+      "confirmStopFromButtonDescription": "Khombisa ifasitela lokuqiikisha uma uchofoza inkinobho yokumisa ngesikhathi impendulo ikhiqizwa",
+      "confirmStopFromKeyboard": "Qinisekisa ngaphambi kokumisa ngesinqamuleli sekhibhodi",
+      "confirmStopFromKeyboardDescription": "Khombisa ifasitela lokuqiikisha uma ucindezela u-Escape ngesikhathi impendulo ikhiqizwa"
+    }
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",

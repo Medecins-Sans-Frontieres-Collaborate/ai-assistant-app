@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "Äänitallennus ei ole tuettu tässä selaimessa.",
     "microphoneNotDetected": "Mikrofonia ei havaittu",
     "microphoneBlocked": "Mikrofoni on estetty. Tarkista selaimen asetukset.",
-    "voiceTranscriptionFailed": "Puheen transkriptio epäonnistui. Yritä uudelleen."
+    "voiceTranscriptionFailed": "Puheen transkriptio epäonnistui. Yritä uudelleen.",
+    "stopGenerationTitle": "Lopetetaanko generointi?",
+    "stopGenerationMessage": "Haluatko varmasti lopettaa tämän vastauksen generoinnin? Kaikki keskeneräiset vastaukset poistetaan.",
+    "stopGenerationConfirm": "Lopeta",
+    "stopGenerationDontAskAgainButton": "Älä kysy uudestaan, kun lopetetaan painikkeella",
+    "stopGenerationDontAskAgainKeyboard": "Älä kysy uudestaan, kun lopetetaan näppäimistöllä",
+    "generateResponseButton": "Luo vastaus"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -957,7 +963,14 @@
     "Export Quarantined Data": "Vie karanteeniin asetetut tiedot",
     "Delete Quarantined Data": "Poista karanteeniin asetetut tiedot",
     "deleteQuarantineConfirm": "Haluatko varmasti poistaa kaikki karanteeniin asetetut tiedot? Tätä toimintoa ei voi peruuttaa.",
-    "quarantineDeleteSuccess": "Kaikki karanteeniin asetetut tiedot poistettiin onnistuneesti."
+    "quarantineDeleteSuccess": "Kaikki karanteeniin asetetut tiedot poistettiin onnistuneesti.",
+    "confirmations": {
+      "title": "Vahvistukset",
+      "confirmStopFromButton": "Vahvista ennen lopetusta painikkeella",
+      "confirmStopFromButtonDescription": "Näytä vahvistusikkuna, kun napsautat lopeta-painiketta vastauksen generoinnin aikana",
+      "confirmStopFromKeyboard": "Vahvista ennen lopetusta näppäimistöllä",
+      "confirmStopFromKeyboardDescription": "Näytä vahvistusikkuna, kun painat Esc-vastauksen generoinnin aikana"
+    }
   },
   "notFound": {
     "lostDog": "Kadonnut koira"

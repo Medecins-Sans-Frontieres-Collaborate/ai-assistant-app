@@ -683,7 +683,13 @@
     "mediaRecorderNotSupported": "Înregistrarea audio nu este suportată în acest browser.",
     "microphoneNotDetected": "Nu a fost detectat niciun microfon",
     "microphoneBlocked": "Microfon blocat. Verificați setările browserului.",
-    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou."
+    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou.",
+    "stopGenerationTitle": "Opriți generarea?",
+    "stopGenerationMessage": "Sunteți sigur că doriți să opriți generarea acestui răspuns? Orice răspuns în curs va fi anulat.",
+    "stopGenerationConfirm": "Oprește",
+    "stopGenerationDontAskAgainButton": "Nu mai întreba când opresc cu butonul",
+    "stopGenerationDontAskAgainKeyboard": "Nu mai întreba când opresc cu tastatura",
+    "generateResponseButton": "Generează răspuns"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -980,7 +986,14 @@
     "Export Quarantined Data": "Exportă datele în carantină",
     "Delete Quarantined Data": "Șterge datele în carantină",
     "deleteQuarantineConfirm": "Sunteți sigur că doriți să ștergeți toate datele aflate în carantină? Această acțiune nu poate fi anulată.",
-    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes."
+    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes.",
+    "confirmations": {
+      "title": "Confirmări",
+      "confirmStopFromButton": "Confirmare înainte de oprire cu butonul",
+      "confirmStopFromButtonDescription": "Afișează o confirmare când faci clic pe butonul de oprire în timpul generării unui răspuns",
+      "confirmStopFromKeyboard": "Confirmare înainte de oprire cu tastatura",
+      "confirmStopFromKeyboardDescription": "Afișează o confirmare când apeși Escape în timpul generării unui răspuns"
+    }
   },
   "notFound": {
     "lostDog": "Câine pierdut"

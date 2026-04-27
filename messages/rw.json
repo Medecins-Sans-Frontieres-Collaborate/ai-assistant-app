@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Gufata amajwi ntibishyigikiwe muri ubu busa.",
     "microphoneNotDetected": "Mikorofofone ntiyabonetse",
     "microphoneBlocked": "Mikorofofone yafunzwe. Reba imyanya y'uburyo wifashisha gukoresha urubuga.",
-    "voiceTranscriptionFailed": "Guhindura ijwi mu nyandiko byanze. Gerageza kongera."
+    "voiceTranscriptionFailed": "Guhindura ijwi mu nyandiko byanze. Gerageza kongera.",
+    "stopGenerationTitle": "Uhagarike gutanga igisubizo?",
+    "stopGenerationMessage": "Urizeye ko ushaka guhagarika itangwa ry'iki gisubizo? Igisubizo cyari kirimo gutangwa kizateshwa agaciro.",
+    "stopGenerationConfirm": "Hagarika",
+    "stopGenerationDontAskAgainButton": "Ntuzongere kubaza igihe ukoresheje buto yo guhagarika",
+    "stopGenerationDontAskAgainKeyboard": "Ntuzongere kubaza igihe ukoresheje keyboard yo guhagarika",
+    "generateResponseButton": "Tanga igisubizo"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Ohereza hanze amakuru yafungiwe",
     "Delete Quarantined Data": "Siba amakuru yafungiwe",
     "deleteQuarantineConfirm": "Urabyizeye neza ko ushaka gusiba amakuru yose yafungiwe? Ibi ntabwo bizasubirwaho.",
-    "quarantineDeleteSuccess": "Amakuru yose yafungiwe yasibwe neza."
+    "quarantineDeleteSuccess": "Amakuru yose yafungiwe yasibwe neza.",
+    "confirmations": {
+      "title": "Kwemeza",
+      "confirmStopFromButton": "Emeza mbere yo guhagarika ukoresheje buto",
+      "confirmStopFromButtonDescription": "Erekana idirishya ryo kwemeza iyo ukanda buto ihagarika mu gihe igisubizo kirimo gitangwa",
+      "confirmStopFromKeyboard": "Emeza mbere yo guhagarika ukoresheje keyboard",
+      "confirmStopFromKeyboardDescription": "Erekana idirishya ryo kwemeza iyo ukanda Escape mu gihe igisubizo kirimo gitangwa"
+    }
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",

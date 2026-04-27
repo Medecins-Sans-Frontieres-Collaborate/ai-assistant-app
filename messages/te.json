@@ -683,7 +683,13 @@
     "mediaRecorderNotSupported": "ఈ బ్రౌజర్‌లో ఆడియో రికార్డింగ్‌కు మద్దతు లేదు.",
     "microphoneNotDetected": "మైక్రోఫోన్ కనిపించలేదు",
     "microphoneBlocked": "మైక్రోఫోన్ నిరోధించబడింది. బ్రౌజర్ సెట్టింగులు పరిశీలించండి.",
-    "voiceTranscriptionFailed": "వాయిస్ లిప్యంతరీకరణ విఫలమైంది. దయచేసి మరలా ప్రయత్నించండి."
+    "voiceTranscriptionFailed": "వాయిస్ లిప్యంతరీకరణ విఫలమైంది. దయచేసి మరలా ప్రయత్నించండి.",
+    "stopGenerationTitle": "సృష్టించడాన్ని ఆపాలా?",
+    "stopGenerationMessage": "ఈ പ്രതികరణను సృష్టించడం ఆపాలనుకుంటున్నారా? ప్రస్తుతంలో కొనసాగుతున్న ప్రతిస్పందన తొలగించబడుతుంది.",
+    "stopGenerationConfirm": "ఆపు",
+    "stopGenerationDontAskAgainButton": "బటన్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
+    "stopGenerationDontAskAgainKeyboard": "కీబోర్డ్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
+    "generateResponseButton": "ప్రతిస్పందన సృష్టించు"
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",
@@ -980,7 +986,14 @@
     "Export Quarantined Data": "క్వారంటైన్ డేటాను ఎక్స్‌పోర్ట్ చేయండి",
     "Delete Quarantined Data": "క్వారంటైన్ డేటాను తొలగించండి",
     "deleteQuarantineConfirm": "మీరు అన్ని క్వారంటైన్ చేయబడిన డేటాను తొలగించాలని నమ్మకంగా ఉన్నారా? ఈ చర్యని రద్దు చేయలేరు.",
-    "quarantineDeleteSuccess": "అన్ని క్వారంటైన్ చేయబడిన డేటాను విజయవంతంగా తొలగించారు."
+    "quarantineDeleteSuccess": "అన్ని క్వారంటైన్ చేయబడిన డేటాను విజయవంతంగా తొలగించారు.",
+    "confirmations": {
+      "title": "నిర్ధారణలు",
+      "confirmStopFromButton": "బటన్‌తో ఆపడాన్ని ముందు నిర్ధారించు",
+      "confirmStopFromButtonDescription": "ప్రతిస్పందన సృష్టిస్తున్నప్పుడు స్టాప్ బటన్ నొక్కినపుడు నిర్ధారణ డైలాగ్ చూపించు",
+      "confirmStopFromKeyboard": "కీబోర్డ్‌తో ఆపడాన్ని ముందు నిర్ధారించు",
+      "confirmStopFromKeyboardDescription": "ప్రతిస్పందన సృష్టిస్తున్నప్పుడు Escape నొక్కినపుడు నిర్ధారణ డైలాగ్ చూపించు"
+    }
   },
   "notFound": {
     "lostDog": "కోల్పోయిన కుక్క"

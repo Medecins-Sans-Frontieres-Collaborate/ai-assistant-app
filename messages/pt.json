@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "A gravação de áudio não é suportada neste navegador.",
     "microphoneNotDetected": "Nenhum microfone detectado",
     "microphoneBlocked": "Microfone bloqueado. Verifique as configurações do navegador.",
-    "voiceTranscriptionFailed": "Falha na transcrição de voz. Por favor, tente novamente."
+    "voiceTranscriptionFailed": "Falha na transcrição de voz. Por favor, tente novamente.",
+    "stopGenerationTitle": "Parar geração?",
+    "stopGenerationMessage": "Tem certeza de que deseja parar a geração desta resposta? Qualquer resposta em andamento será descartada.",
+    "stopGenerationConfirm": "Parar",
+    "stopGenerationDontAskAgainButton": "Não perguntar novamente ao parar com o botão",
+    "stopGenerationDontAskAgainKeyboard": "Não perguntar novamente ao parar com o teclado",
+    "generateResponseButton": "Gerar resposta"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Exportar dados em quarentena",
     "Delete Quarantined Data": "Excluir dados em quarentena",
     "deleteQuarantineConfirm": "Tem certeza de que deseja excluir todos os dados em quarentena? Esta ação não pode ser desfeita.",
-    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso."
+    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso.",
+    "confirmations": {
+      "title": "Confirmações",
+      "confirmStopFromButton": "Confirmar antes de parar com o botão",
+      "confirmStopFromButtonDescription": "Exibir um diálogo de confirmação ao clicar no botão de parar enquanto uma resposta está sendo gerada",
+      "confirmStopFromKeyboard": "Confirmar antes de parar com o teclado",
+      "confirmStopFromKeyboardDescription": "Exibir um diálogo de confirmação ao pressionar Escape enquanto uma resposta está sendo gerada"
+    }
   },
   "notFound": {
     "lostDog": "Cão perdido"

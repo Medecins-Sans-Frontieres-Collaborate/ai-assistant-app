@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Запись аудио не поддерживается в этом браузере.",
     "microphoneNotDetected": "Микрофон не обнаружен",
     "microphoneBlocked": "Микрофон заблокирован. Проверьте настройки браузера.",
-    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте еще раз."
+    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте еще раз.",
+    "stopGenerationTitle": "Остановить генерацию?",
+    "stopGenerationMessage": "Вы уверены, что хотите остановить генерацию этого ответа? Текущий ответ будет удалён.",
+    "stopGenerationConfirm": "Остановить",
+    "stopGenerationDontAskAgainButton": "Больше не спрашивать при остановке через кнопку",
+    "stopGenerationDontAskAgainKeyboard": "Больше не спрашивать при остановке с помощью клавиатуры",
+    "generateResponseButton": "Сгенерировать ответ"
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Экспортировать изолированные данные",
     "Delete Quarantined Data": "Удалить изолированные данные",
     "deleteQuarantineConfirm": "Вы уверены, что хотите удалить все изолированные данные? Это действие необратимо.",
-    "quarantineDeleteSuccess": "Все изолированные данные успешно удалены."
+    "quarantineDeleteSuccess": "Все изолированные данные успешно удалены.",
+    "confirmations": {
+      "title": "Подтверждения",
+      "confirmStopFromButton": "Подтверждать перед остановкой через кнопку",
+      "confirmStopFromButtonDescription": "Показывать диалог подтверждения при нажатии кнопки остановки во время генерации ответа",
+      "confirmStopFromKeyboard": "Подтверждать перед остановкой с помощью клавиатуры",
+      "confirmStopFromKeyboardDescription": "Показывать диалог подтверждения при нажатии Escape во время генерации ответа"
+    }
   },
   "notFound": {
     "lostDog": "Потерянная собака"

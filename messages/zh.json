@@ -716,7 +716,13 @@
     "mediaRecorderNotSupported": "此浏览器不支持音频录制。",
     "microphoneNotDetected": "未检测到麦克风",
     "microphoneBlocked": "麦克风被阻止。请检查浏览器设置。",
-    "voiceTranscriptionFailed": "语音转录失败。请重试。"
+    "voiceTranscriptionFailed": "语音转录失败。请重试。",
+    "stopGenerationTitle": "停止生成？",
+    "stopGenerationMessage": "确定要停止生成此回复吗？所有正在进行的回复将被丢弃。",
+    "stopGenerationConfirm": "停止",
+    "stopGenerationDontAskAgainButton": "使用按钮停止时不再询问",
+    "stopGenerationDontAskAgainKeyboard": "使用键盘停止时不再询问",
+    "generateResponseButton": "生成回复"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1013,7 +1019,14 @@
     "Export Quarantined Data": "导出隔离数据",
     "Delete Quarantined Data": "删除隔离数据",
     "deleteQuarantineConfirm": "确定要删除所有隔离数据吗？此操作无法撤销。",
-    "quarantineDeleteSuccess": "所有隔离数据已成功删除。"
+    "quarantineDeleteSuccess": "所有隔离数据已成功删除。",
+    "confirmations": {
+      "title": "确认",
+      "confirmStopFromButton": "使用按钮停止前进行确认",
+      "confirmStopFromButtonDescription": "在生成回复时点击停止按钮，显示确认对话框",
+      "confirmStopFromKeyboard": "使用键盘停止前进行确认",
+      "confirmStopFromKeyboardDescription": "在生成回复时按下 Escape，显示确认对话框"
+    }
   },
   "notFound": {
     "lostDog": "迷路的狗"

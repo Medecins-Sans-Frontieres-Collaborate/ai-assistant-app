@@ -686,7 +686,13 @@
     "mediaRecorderNotSupported": "Trình duyệt này không hỗ trợ ghi âm.",
     "microphoneNotDetected": "Không phát hiện micro",
     "microphoneBlocked": "Micro đã bị chặn. Vui lòng kiểm tra cài đặt trình duyệt.",
-    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại."
+    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại.",
+    "stopGenerationTitle": "Dừng tạo nội dung?",
+    "stopGenerationMessage": "Bạn có chắc chắn muốn dừng tạo phản hồi này không? Mọi phản hồi đang thực hiện sẽ bị hủy.",
+    "stopGenerationConfirm": "Dừng",
+    "stopGenerationDontAskAgainButton": "Không hỏi lại khi dừng bằng nút",
+    "stopGenerationDontAskAgainKeyboard": "Không hỏi lại khi dừng bằng bàn phím",
+    "generateResponseButton": "Tạo phản hồi"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -983,7 +989,14 @@
     "Export Quarantined Data": "Xuất dữ liệu bị cách ly",
     "Delete Quarantined Data": "Xóa dữ liệu bị cách ly",
     "deleteQuarantineConfirm": "Bạn có chắc muốn xóa tất cả dữ liệu bị cách ly không? Hành động này không thể hoàn tác.",
-    "quarantineDeleteSuccess": "Đã xóa thành công tất cả dữ liệu bị cách ly."
+    "quarantineDeleteSuccess": "Đã xóa thành công tất cả dữ liệu bị cách ly.",
+    "confirmations": {
+      "title": "Xác nhận",
+      "confirmStopFromButton": "Xác nhận trước khi dừng bằng nút",
+      "confirmStopFromButtonDescription": "Hiển thị hộp thoại xác nhận khi bạn nhấn nút dừng trong lúc đang tạo phản hồi",
+      "confirmStopFromKeyboard": "Xác nhận trước khi dừng bằng bàn phím",
+      "confirmStopFromKeyboardDescription": "Hiển thị hộp thoại xác nhận khi bạn nhấn Escape trong lúc đang tạo phản hồi"
+    }
   },
   "notFound": {
     "lostDog": "Chó bị lạc"

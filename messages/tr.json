@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Ses kaydı bu tarayıcıda desteklenmiyor.",
     "microphoneNotDetected": "Mikrofon algılanmadı",
     "microphoneBlocked": "Mikrofon engellendi. Tarayıcı ayarlarını kontrol edin.",
-    "voiceTranscriptionFailed": "Ses transkripsiyonu başarısız oldu. Lütfen tekrar deneyin."
+    "voiceTranscriptionFailed": "Ses transkripsiyonu başarısız oldu. Lütfen tekrar deneyin.",
+    "stopGenerationTitle": "Oluşturmayı durdurulsun mu?",
+    "stopGenerationMessage": "Bu yanıtın oluşturulmasını durdurmak istediğinizden emin misiniz? Devam eden yanıt iptal edilecektir.",
+    "stopGenerationConfirm": "Durdur",
+    "stopGenerationDontAskAgainButton": "Durdurma butonunda tekrar sorma",
+    "stopGenerationDontAskAgainKeyboard": "Klavye ile durdururken tekrar sorma",
+    "generateResponseButton": "Yanıt oluştur"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Karantinaya Alınan Verileri Dışa Aktar",
     "Delete Quarantined Data": "Karantinaya Alınan Verileri Sil",
     "deleteQuarantineConfirm": "Tüm karantinaya alınan verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-    "quarantineDeleteSuccess": "Tüm karantinaya alınan veriler başarıyla silindi."
+    "quarantineDeleteSuccess": "Tüm karantinaya alınan veriler başarıyla silindi.",
+    "confirmations": {
+      "title": "Onaylar",
+      "confirmStopFromButton": "Buton ile durdurmadan önce onay iste",
+      "confirmStopFromButtonDescription": "Yanıt oluşturulurken durdur butonuna tıkladığınızda onay penceresi göster",
+      "confirmStopFromKeyboard": "Klavye ile durdurmadan önce onay iste",
+      "confirmStopFromKeyboardDescription": "Yanıt oluşturulurken Escape tuşuna bastığınızda onay penceresi göster"
+    }
   },
   "notFound": {
     "lostDog": "Kayıp köpek"

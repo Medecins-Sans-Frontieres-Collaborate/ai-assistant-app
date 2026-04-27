@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Kokanga mongongo epesami te na browser oyo.",
     "microphoneNotDetected": "Mikrofone emonani te",
     "microphoneBlocked": "Mikrofone ekangami. Tala mindule ya browser.",
-    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu."
+    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu.",
+    "stopGenerationTitle": "Kolakisa kotika kobimisa?",
+    "stopGenerationMessage": "Ozali nakanisi kolongola kosala eyano oyo? Eyano nyonso ezosalama sik’oyo ekoboyama.",
+    "stopGenerationConfirm": "Tika",
+    "stopGenerationDontAskAgainButton": "Kotuna lisusu te soki natiki na bouton",
+    "stopGenerationDontAskAgainKeyboard": "Kotuna lisusu te soki natiki na clavier",
+    "generateResponseButton": "Bimisa eyano"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Exporter ba donnee ya quarantine",
     "Delete Quarantined Data": "Kolongola ba donnee ya quarantine",
     "deleteQuarantineConfirm": "Okomi naino kolongola ba donnee nyonso ya quarantine? Likambo oyo ekoki kozongisama te.",
-    "quarantineDeleteSuccess": "Kolongola ba donnee nyonso ya quarantine esalami malamu."
+    "quarantineDeleteSuccess": "Kolongola ba donnee nyonso ya quarantine esalami malamu.",
+    "confirmations": {
+      "title": "Ba asiransi",
+      "confirmStopFromButton": "Kondima liboso ya kotika na bouton",
+      "confirmStopFromButtonDescription": "Pokisa esika ya kondima soki opesi bouton ya kotika tango eyano ezali kobimisa",
+      "confirmStopFromKeyboard": "Kondima liboso ya kotika na clavier",
+      "confirmStopFromKeyboardDescription": "Pokisa esika ya kondima soki opesi Escape tango eyano ezali kobimisa"
+    }
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",

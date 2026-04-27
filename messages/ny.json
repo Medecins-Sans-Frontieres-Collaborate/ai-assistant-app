@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Browser iyi silola kujambula mawu.",
     "microphoneNotDetected": "Palibe maikolofoni yomwe yapezeka",
     "microphoneBlocked": "Maikolofoni yatsekedwa. Chongani makonda a msakatuli.",
-    "voiceTranscriptionFailed": "Kulemba mawu kwalephera. Chonde yesani kachiwiri."
+    "voiceTranscriptionFailed": "Kulemba mawu kwalephera. Chonde yesani kachiwiri.",
+    "stopGenerationTitle": "Mulepheretse kupanga?",
+    "stopGenerationMessage": "Ndinu otsimikiza kuti mukufuna kuletsa kupanga yankho ili? Yankho lililonse lomwe likupangidwa lidzachotsedwa.",
+    "stopGenerationConfirm": "Letsa",
+    "stopGenerationDontAskAgainButton": "Musandifunse kachiwiri poletsa pogwiritsa ntchito batani",
+    "stopGenerationDontAskAgainKeyboard": "Musandifunse kachiwiri poletsa pogwiritsa ntchito kiyibodi",
+    "generateResponseButton": "Panga yankho"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Tumizani Deta Yosungidwa M'kati",
     "Delete Quarantined Data": "Chotsani Deta Yosungidwa M'kati",
     "deleteQuarantineConfirm": "Kodi mukutsimikiza kuti mukufuna kuchotsa deta yonse yosungidwa m'kati? Zochitikazi sizingabwezedwe.",
-    "quarantineDeleteSuccess": "Deta yonse yosungidwa m'kati yachotsedwa bwinobwino."
+    "quarantineDeleteSuccess": "Deta yonse yosungidwa m'kati yachotsedwa bwinobwino.",
+    "confirmations": {
+      "title": "Zotsimikizira",
+      "confirmStopFromButton": "Tsimikizani musanaletse pogwiritsa batani",
+      "confirmStopFromButtonDescription": "Onetsani zotsimikizira mukadina batani loletsa pamene yankho likupangidwa",
+      "confirmStopFromKeyboard": "Tsimikizani musanaletse pogwiritsa kiyibodi",
+      "confirmStopFromKeyboardDescription": "Onetsani zotsimikizira mukakanikiza Escape pamene yankho likupangidwa"
+    }
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",

@@ -602,7 +602,13 @@
     "mediaRecorderNotSupported": "เบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง",
     "microphoneNotDetected": "ไม่พบไมโครโฟน",
     "microphoneBlocked": "ไมโครโฟนถูกบล็อก กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์",
-    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง"
+    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง",
+    "stopGenerationTitle": "หยุดการสร้างหรือไม่",
+    "stopGenerationMessage": "คุณแน่ใจหรือว่าต้องการหยุดการสร้างคำตอบนี้? ข้อความที่กำลังส่งจะถูกยกเลิกทั้งหมด",
+    "stopGenerationConfirm": "หยุด",
+    "stopGenerationDontAskAgainButton": "อย่าถามอีกเมื่อหยุดด้วยปุ่ม",
+    "stopGenerationDontAskAgainKeyboard": "อย่าถามอีกเมื่อหยุดด้วยแป้นพิมพ์",
+    "generateResponseButton": "สร้างคำตอบ"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -899,7 +905,14 @@
     "Export Quarantined Data": "ส่งออกข้อมูลที่ถูกกักกัน",
     "Delete Quarantined Data": "ลบข้อมูลที่ถูกกักกัน",
     "deleteQuarantineConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลที่ถูกกักกันทั้งหมด? การกระทำนี้ไม่สามารถย้อนคืนได้",
-    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว"
+    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว",
+    "confirmations": {
+      "title": "การยืนยัน",
+      "confirmStopFromButton": "ยืนยันก่อนหยุดด้วยปุ่ม",
+      "confirmStopFromButtonDescription": "แสดงกล่องยืนยันเมื่อคุณคลิกปุ่มหยุดขณะระบบกำลังสร้างคำตอบ",
+      "confirmStopFromKeyboard": "ยืนยันก่อนหยุดด้วยแป้นพิมพ์",
+      "confirmStopFromKeyboardDescription": "แสดงกล่องยืนยันเมื่อคุณกด Escape ขณะระบบกำลังสร้างคำตอบ"
+    }
   },
   "notFound": {
     "lostDog": "สุนัขหาย"

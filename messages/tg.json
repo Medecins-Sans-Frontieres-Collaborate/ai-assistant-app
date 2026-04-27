@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Сабти аудио дар ин браузер дастгирӣ намешавад.",
     "microphoneNotDetected": "Микрофон муайян нашуд",
     "microphoneBlocked": "Микрофон маҳкам шудааст. Танзимоти браузерро санҷед.",
-    "voiceTranscriptionFailed": "Транскрипсияи овоз нобарор шуд. Лутфан боз кӯшиш кунед."
+    "voiceTranscriptionFailed": "Транскрипсияи овоз нобарор шуд. Лутфан боз кӯшиш кунед.",
+    "stopGenerationTitle": "Генерасияро қатъ мекунед?",
+    "stopGenerationMessage": "Шумо мутмаин ҳастед, ки мехоҳед генерасияи ин ҷавобро қатъ кунед? Ҳар ҷавобе, ки ҳоло омода мешавад, бекор карда мешавад.",
+    "stopGenerationConfirm": "Қатъ кардан",
+    "stopGenerationDontAskAgainButton": "Ҳангоми қатъ кардан бо тугма дигар напурсед",
+    "stopGenerationDontAskAgainKeyboard": "Ҳангоми қатъ кардан бо клавиатура дигар напурсед",
+    "generateResponseButton": "Генерасияи ҷавоб"
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Содироти маълумоти карантиншуда",
     "Delete Quarantined Data": "Нест кардани маълумоти карантиншуда",
     "deleteQuarantineConfirm": "Шумо мутмаин ҳастед, ки мехоҳед тамоми маълумоти карантиншударо нест кунед? Ин амал бекор карда намешавад.",
-    "quarantineDeleteSuccess": "Тамоми маълумоти карантиншуда бо муваффақият нест карда шуд."
+    "quarantineDeleteSuccess": "Тамоми маълумоти карантиншуда бо муваффақият нест карда шуд.",
+    "confirmations": {
+      "title": "Тасдиқҳо",
+      "confirmStopFromButton": "Пеш аз қатъ кардан бо тугма тасдиқ кунед",
+      "confirmStopFromButtonDescription": "Ҳангоми пахш кардани тугмаи қатъ кардан дар вақти генерасияи ҷавоб, равзанаи тасдиқро нишон диҳед",
+      "confirmStopFromKeyboard": "Пеш аз қатъ кардан бо клавиатура тасдиқ кунед",
+      "confirmStopFromKeyboardDescription": "Ҳангоми пахш кардани Escape дар вақти генерасияи ҷавоб, равзанаи тасдиқро нишон диҳед"
+    }
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",

@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "Audioaufzeichnung wird in diesem Browser nicht unterstützt.",
     "microphoneNotDetected": "Kein Mikrofon erkannt",
     "microphoneBlocked": "Mikrofon blockiert. Bitte überprüfen Sie die Browser-Einstellungen.",
-    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut."
+    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "stopGenerationTitle": "Generierung stoppen?",
+    "stopGenerationMessage": "Sind Sie sicher, dass Sie die Generierung dieser Antwort stoppen möchten? Jede laufende Antwort wird verworfen.",
+    "stopGenerationConfirm": "Stoppen",
+    "stopGenerationDontAskAgainButton": "Beim Stoppen über den Button nicht mehr nachfragen",
+    "stopGenerationDontAskAgainKeyboard": "Beim Stoppen mit der Tastatur nicht mehr nachfragen",
+    "generateResponseButton": "Antwort generieren"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Quarantänedaten exportieren",
     "Delete Quarantined Data": "Quarantänedaten löschen",
     "deleteQuarantineConfirm": "Sind Sie sicher, dass Sie alle Quarantänedaten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht."
+    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht.",
+    "confirmations": {
+      "title": "Bestätigungen",
+      "confirmStopFromButton": "Vor dem Stoppen mit dem Button bestätigen",
+      "confirmStopFromButtonDescription": "Beim Klicken auf den Stop-Button während einer Antwortgenerierung einen Bestätigungsdialog anzeigen",
+      "confirmStopFromKeyboard": "Vor dem Stoppen mit der Tastatur bestätigen",
+      "confirmStopFromKeyboardDescription": "Beim Drücken von Escape während einer Antwortgenerierung einen Bestätigungsdialog anzeigen"
+    }
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",

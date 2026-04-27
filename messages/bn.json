@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "এই ব্রাউজারে অডিও রেকর্ডিং সমর্থিত নয়।",
     "microphoneNotDetected": "মাইক্রোফোন শনাক্ত করা যায়নি",
     "microphoneBlocked": "মাইক্রোফোন ব্লক করা হয়েছে। ব্রাউজারের সেটিংস পরীক্ষা করুন।",
-    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "stopGenerationTitle": "উৎপাদন বন্ধ করবেন?",
+    "stopGenerationMessage": "আপনি কি নিশ্চিত যে আপনি এই উত্তর উৎপাদন বন্ধ করতে চান? চলমান কোনো উত্তর বাতিল হয়ে যাবে।",
+    "stopGenerationConfirm": "বন্ধ করুন",
+    "stopGenerationDontAskAgainButton": "বাটন ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
+    "stopGenerationDontAskAgainKeyboard": "কীবোর্ড ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
+    "generateResponseButton": "উত্তর দিন"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "কোয়ারেন্টাইন করা ডেটা এক্সপোর্ট করুন",
     "Delete Quarantined Data": "কোয়ারেন্টাইন করা ডেটা মুছুন",
     "deleteQuarantineConfirm": "আপনি কি নিশ্চিতভাবে সব কোয়ারেন্টাইন করা ডেটা মুছে ফেলতে চান? এই কার্যক্রম বাতিল করা যাবে না।",
-    "quarantineDeleteSuccess": "সব কোয়ারেন্টাইন করা ডেটা সফলভাবে মুছে ফেলা হয়েছে।"
+    "quarantineDeleteSuccess": "সব কোয়ারেন্টাইন করা ডেটা সফলভাবে মুছে ফেলা হয়েছে।",
+    "confirmations": {
+      "title": "নিশ্চিতকরণ",
+      "confirmStopFromButton": "বাটন দিয়ে বন্ধ করার আগে নিশ্চিত করুন",
+      "confirmStopFromButtonDescription": "উত্তর উৎপাদনের সময় বন্ধ বাটনে ক্লিক করলে নিশ্চিতকরণ ডায়ালগ দেখান",
+      "confirmStopFromKeyboard": "কীবোর্ড দিয়ে বন্ধ করার আগে নিশ্চিত করুন",
+      "confirmStopFromKeyboardDescription": "উত্তর উৎপাদনের সময় Escape চাপলে নিশ্চিতকরণ ডায়ালগ দেখান"
+    }
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"

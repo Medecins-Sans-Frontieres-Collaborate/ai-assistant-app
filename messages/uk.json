@@ -602,7 +602,13 @@
     "mediaRecorderNotSupported": "Аудіозапис не підтримується у цьому браузері.",
     "microphoneNotDetected": "Мікрофон не знайдено",
     "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",
-    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз."
+    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз.",
+    "stopGenerationTitle": "Зупинити генерацію?",
+    "stopGenerationMessage": "Ви впевнені, що хочете зупинити генерацію цієї відповіді? Будь-яку відповідь, що зараз формується, буде скасовано.",
+    "stopGenerationConfirm": "Зупинити",
+    "stopGenerationDontAskAgainButton": "Більше не запитувати під час зупинки кнопкою",
+    "stopGenerationDontAskAgainKeyboard": "Більше не запитувати під час зупинки з клавіатури",
+    "generateResponseButton": "Згенерувати відповідь"
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -899,7 +905,14 @@
     "Export Quarantined Data": "Експортувати карантиновані дані",
     "Delete Quarantined Data": "Видалити карантиновані дані",
     "deleteQuarantineConfirm": "Ви впевнені, що хочете видалити всі карантиновані дані? Цю дію неможливо скасувати.",
-    "quarantineDeleteSuccess": "Усі карантиновані дані успішно видалено."
+    "quarantineDeleteSuccess": "Усі карантиновані дані успішно видалено.",
+    "confirmations": {
+      "title": "Підтвердження",
+      "confirmStopFromButton": "Підтверджувати перед зупинкою кнопкою",
+      "confirmStopFromButtonDescription": "Показувати діалог підтвердження під час натискання кнопки зупинки, коли відповідь генерується",
+      "confirmStopFromKeyboard": "Підтверджувати перед зупинкою з клавіатури",
+      "confirmStopFromKeyboardDescription": "Показувати діалог підтвердження під час натискання Escape, коли відповідь генерується"
+    }
   },
   "notFound": {
     "lostDog": "Загублений пес"

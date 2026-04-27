@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "यो ब्राउजरमा अडियो रेकर्डिङ समर्थन गरिएको छैन।",
     "microphoneNotDetected": "माइक्रोफोन भेटिएन",
     "microphoneBlocked": "माइक्रोफोन रोकिएको छ। कृपया ब्राउजर सेटिङहरू जाँच गर्नुहोस्।",
-    "voiceTranscriptionFailed": "आवाज ट्रान्सक्रिप्सन असफल भयो। फेरि प्रयास गर्नुहोस्।"
+    "voiceTranscriptionFailed": "आवाज ट्रान्सक्रिप्सन असफल भयो। फेरि प्रयास गर्नुहोस्।",
+    "stopGenerationTitle": "जेनरेट गर्न रोक्नुहुन्छ?",
+    "stopGenerationMessage": "के तपाईं यो प्रतिक्रिया जेनरेट गर्ने प्रक्रिया रोक्न चाहनुहुन्छ? कुनै पनि प्रक्रियामा रहेको जवाफ हटाइनेछ।",
+    "stopGenerationConfirm": "रोक्नुहोस्",
+    "stopGenerationDontAskAgainButton": "बटनबाट रोक्दा फेरि नसोध्नुहोस्",
+    "stopGenerationDontAskAgainKeyboard": "किबोर्डबाट रोक्दा फेरि नसोध्नुहोस्",
+    "generateResponseButton": "प्रतिक्रिया जेनरेट गर्नुहोस्"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "क्वारेन्टाइन डेटा निर्यात गर्नुहोस्",
     "Delete Quarantined Data": "क्वारेन्टाइन डेटा मेटाउनुहोस्",
     "deleteQuarantineConfirm": "के तपाईं सबै क्वारेन्टाइन डेटा मेटाउन चाहनुहुन्छ? यो कार्य फर्काउन सकिँदैन।",
-    "quarantineDeleteSuccess": "सबै क्वारेन्टाइन डेटा सफलतापूर्वक मेटाइयो।"
+    "quarantineDeleteSuccess": "सबै क्वारेन्टाइन डेटा सफलतापूर्वक मेटाइयो।",
+    "confirmations": {
+      "title": "पुष्टिकरणहरू",
+      "confirmStopFromButton": "बटनबाट रोक्नुअघि पुष्टि गर्नुहोस्",
+      "confirmStopFromButtonDescription": "कुनै प्रतिक्रिया जेनरेट भइरहेका बेला रोक्ने बटन थिच्दा पुष्टि संवाद देखाउनुहोस्",
+      "confirmStopFromKeyboard": "किबोर्डबाट रोक्नुअघि पुष्टि गर्नुहोस्",
+      "confirmStopFromKeyboardDescription": "कुनै प्रतिक्रिया जेनरेट भइरहेका बेला Escape थिच्दा पुष्टि संवाद देखाउनुहोस्"
+    }
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",

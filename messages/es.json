@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "La grabación de audio no es compatible con este navegador.",
     "microphoneNotDetected": "No se detectó ningún micrófono",
     "microphoneBlocked": "Micrófono bloqueado. Verifique la configuración del navegador.",
-    "voiceTranscriptionFailed": "Error en la transcripción de voz. Por favor, inténtelo de nuevo."
+    "voiceTranscriptionFailed": "Error en la transcripción de voz. Por favor, inténtelo de nuevo.",
+    "stopGenerationTitle": "¿Detener la generación?",
+    "stopGenerationMessage": "¿Está seguro de que desea detener la generación de esta respuesta? Se descartará cualquier respuesta en curso.",
+    "stopGenerationConfirm": "Detener",
+    "stopGenerationDontAskAgainButton": "No volver a preguntar al detener con el botón",
+    "stopGenerationDontAskAgainKeyboard": "No volver a preguntar al detener con el teclado",
+    "generateResponseButton": "Generar respuesta"
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Exportar datos en cuarentena",
     "Delete Quarantined Data": "Eliminar datos en cuarentena",
     "deleteQuarantineConfirm": "¿Está seguro de que desea eliminar todos los datos en cuarentena? Esta acción no se puede deshacer.",
-    "quarantineDeleteSuccess": "Se eliminaron correctamente todos los datos en cuarentena."
+    "quarantineDeleteSuccess": "Se eliminaron correctamente todos los datos en cuarentena.",
+    "confirmations": {
+      "title": "Confirmaciones",
+      "confirmStopFromButton": "Confirmar antes de detener con el botón",
+      "confirmStopFromButtonDescription": "Mostrar un cuadro de confirmación al hacer clic en el botón de detener mientras se genera una respuesta",
+      "confirmStopFromKeyboard": "Confirmar antes de detener con el teclado",
+      "confirmStopFromKeyboardDescription": "Mostrar un cuadro de confirmación al presionar Escape mientras se genera una respuesta"
+    }
   },
   "notFound": {
     "lostDog": "Perro perdido"

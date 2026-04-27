@@ -652,7 +652,13 @@
     "mediaRecorderNotSupported": "මෙම බ්‍රව්සායේ ශ්‍රව්‍ය රැඳවීම සහය නොදක්වයි.",
     "microphoneNotDetected": "මයික්‍රෝෆෝනය හඳුනාගෙන නොමැත",
     "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර කර ඇත. අතිරේකයන්ගේ සැකසුම් සොයා බලන්න.",
-    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න."
+    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.",
+    "stopGenerationTitle": "නිපදවීම නවත්වන්නද?",
+    "stopGenerationMessage": "මෙම පිළිතුර නිපදවීම නවත්වීමට ඔබට විශ්වාසද? දැනට නිපදවමින් පවතින පිළිතුර ඉවත දැමෙනු ඇත.",
+    "stopGenerationConfirm": "නවත්වන්න",
+    "stopGenerationDontAskAgainButton": "බොත්තමෙන් නවත්වන විට නැවත අහන්න එපා",
+    "stopGenerationDontAskAgainKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට නැවත අහන්න එපා",
+    "generateResponseButton": "පිළිතුර නිපදවන්න"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -949,7 +955,14 @@
     "Export Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත එක්ස්පෝර්ට් කරන්න",
     "Delete Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත මකන්න",
     "deleteQuarantineConfirm": "සියළු අන්තර්ගත කිරීමේ දත්ත මැකීමට ඔබට විශ්වාසද? මෙම ක්‍රියාව ප්‍රතික්ෂේප කළ නොහැක.",
-    "quarantineDeleteSuccess": "සියළු අන්තර්ගත කිරීමේ දත්ත සාර්ථකව මකාදමා ඇත."
+    "quarantineDeleteSuccess": "සියළු අන්තර්ගත කිරීමේ දත්ත සාර්ථකව මකාදමා ඇත.",
+    "confirmations": {
+      "title": "තහවුරු කිරීම්",
+      "confirmStopFromButton": "බොත්තමෙන් නවත්වන විට තහවුරු කරන්න",
+      "confirmStopFromButtonDescription": "පිළිතුරක් නිපදවමින් සිටින විට නවත්වන්න බොත්තම ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න",
+      "confirmStopFromKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට තහවුරු කරන්න",
+      "confirmStopFromKeyboardDescription": "පිළිතුරක් නිපදවමින් සිටින විට Escape යතුර ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න"
+    }
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"

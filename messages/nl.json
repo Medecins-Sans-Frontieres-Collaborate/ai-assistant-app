@@ -650,7 +650,13 @@
     "mediaRecorderNotSupported": "Audiorecording wordt niet ondersteund in deze browser.",
     "microphoneNotDetected": "Geen microfoon gedetecteerd",
     "microphoneBlocked": "Microfoon geblokkeerd. Controleer de browserinstellingen.",
-    "voiceTranscriptionFailed": "Spraaktranscriptie mislukt. Probeer het opnieuw."
+    "voiceTranscriptionFailed": "Spraaktranscriptie mislukt. Probeer het opnieuw.",
+    "stopGenerationTitle": "Genereren stoppen?",
+    "stopGenerationMessage": "Weet u zeker dat u het genereren van dit antwoord wilt stoppen? Elk lopend antwoord wordt verwijderd.",
+    "stopGenerationConfirm": "Stoppen",
+    "stopGenerationDontAskAgainButton": "Niet meer vragen bij stoppen via de knop",
+    "stopGenerationDontAskAgainKeyboard": "Niet meer vragen bij stoppen via het toetsenbord",
+    "generateResponseButton": "Antwoord genereren"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -947,7 +953,14 @@
     "Export Quarantined Data": "Gekwartetineerde gegevens exporteren",
     "Delete Quarantined Data": "Gekwartetineerde gegevens verwijderen",
     "deleteQuarantineConfirm": "Weet u zeker dat u alle gekwartetineerde gegevens wilt verwijderen? Deze handeling kan niet ongedaan worden gemaakt.",
-    "quarantineDeleteSuccess": "Alle gekwartetineerde gegevens succesvol verwijderd."
+    "quarantineDeleteSuccess": "Alle gekwartetineerde gegevens succesvol verwijderd.",
+    "confirmations": {
+      "title": "Bevestigingen",
+      "confirmStopFromButton": "Bevestigen voor stoppen via de knop",
+      "confirmStopFromButtonDescription": "Toon een bevestigingsvenster wanneer u op de stopknop klikt terwijl er een antwoord wordt gegenereerd",
+      "confirmStopFromKeyboard": "Bevestigen voor stoppen via het toetsenbord",
+      "confirmStopFromKeyboardDescription": "Toon een bevestigingsvenster wanneer u Escape indrukt terwijl er een antwoord wordt gegenereerd"
+    }
   },
   "notFound": {
     "lostDog": "Verloren hond"

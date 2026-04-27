@@ -652,7 +652,13 @@
     "mediaRecorderNotSupported": "Perekaman audio tidak didukung di browser ini.",
     "microphoneNotDetected": "Mikrofon tidak terdeteksi",
     "microphoneBlocked": "Mikrofon diblokir. Periksa pengaturan browser.",
-    "voiceTranscriptionFailed": "Transkripsi suara gagal. Silakan coba lagi."
+    "voiceTranscriptionFailed": "Transkripsi suara gagal. Silakan coba lagi.",
+    "stopGenerationTitle": "Hentikan pembuatan?",
+    "stopGenerationMessage": "Anda yakin ingin menghentikan pembuatan respons ini? Balasan yang sedang diproses akan dihapus.",
+    "stopGenerationConfirm": "Hentikan",
+    "stopGenerationDontAskAgainButton": "Jangan tanyakan lagi saat menghentikan dengan tombol",
+    "stopGenerationDontAskAgainKeyboard": "Jangan tanyakan lagi saat menghentikan dengan keyboard",
+    "generateResponseButton": "Buat respons"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -949,7 +955,14 @@
     "Export Quarantined Data": "Ekspor Data Dikarantina",
     "Delete Quarantined Data": "Hapus Data Dikarantina",
     "deleteQuarantineConfirm": "Apakah Anda yakin ingin menghapus semua data yang dikarantina? Tindakan ini tidak dapat dibatalkan.",
-    "quarantineDeleteSuccess": "Berhasil menghapus semua data yang dikarantina."
+    "quarantineDeleteSuccess": "Berhasil menghapus semua data yang dikarantina.",
+    "confirmations": {
+      "title": "Konfirmasi",
+      "confirmStopFromButton": "Konfirmasi sebelum menghentikan dengan tombol",
+      "confirmStopFromButtonDescription": "Tampilkan dialog konfirmasi saat Anda mengklik tombol hentikan ketika respons sedang dibuat",
+      "confirmStopFromKeyboard": "Konfirmasi sebelum menghentikan dengan keyboard",
+      "confirmStopFromKeyboardDescription": "Tampilkan dialog konfirmasi saat Anda menekan Escape ketika respons sedang dibuat"
+    }
   },
   "notFound": {
     "lostDog": "Anjing hilang"

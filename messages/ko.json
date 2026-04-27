@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "이 브라우저에서는 오디오 녹음이 지원되지 않습니다.",
     "microphoneNotDetected": "마이크가 감지되지 않았습니다.",
     "microphoneBlocked": "마이크가 차단되었습니다. 브라우저 설정을 확인하세요.",
-    "voiceTranscriptionFailed": "음성 전사가 실패했습니다. 다시 시도해주세요."
+    "voiceTranscriptionFailed": "음성 전사가 실패했습니다. 다시 시도해주세요.",
+    "stopGenerationTitle": "생성 중단하시겠습니까?",
+    "stopGenerationMessage": "이 응답 생성을 정말 중단하시겠습니까? 진행 중인 답변이 모두 삭제됩니다.",
+    "stopGenerationConfirm": "중단",
+    "stopGenerationDontAskAgainButton": "버튼으로 중단 시 다시 묻지 않기",
+    "stopGenerationDontAskAgainKeyboard": "키보드로 중단 시 다시 묻지 않기",
+    "generateResponseButton": "응답 생성"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "격리된 데이터 내보내기",
     "Delete Quarantined Data": "격리된 데이터 삭제",
     "deleteQuarantineConfirm": "모든 격리된 데이터를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
-    "quarantineDeleteSuccess": "모든 격리된 데이터가 성공적으로 삭제되었습니다."
+    "quarantineDeleteSuccess": "모든 격리된 데이터가 성공적으로 삭제되었습니다.",
+    "confirmations": {
+      "title": "확인",
+      "confirmStopFromButton": "버튼 중단 전에 확인",
+      "confirmStopFromButtonDescription": "응답이 생성되는 중에 중단 버튼을 클릭하면 확인 대화창을 표시합니다.",
+      "confirmStopFromKeyboard": "키보드 중단 전에 확인",
+      "confirmStopFromKeyboardDescription": "응답이 생성되는 중에 Escape 키를 누르면 확인 대화창을 표시합니다."
+    }
   },
   "notFound": {
     "lostDog": "잃어버린 개"

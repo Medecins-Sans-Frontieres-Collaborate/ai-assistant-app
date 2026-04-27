@@ -628,7 +628,13 @@
     "mediaRecorderNotSupported": "የድምፅ መቅዳት በዚህ ብራውዘር አአይደለም።",
     "microphoneNotDetected": "ማድረግ የለም፡ ማድረግ አልተገኘም",
     "microphoneBlocked": "ማድረግ ታግዷል። የመቃኘት ቅንብሮችዎን ያረጋግጡ።",
-    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።"
+    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።",
+    "stopGenerationTitle": "መፍጠር እንቁም?",
+    "stopGenerationMessage": "ይህን ምላሽ መፍጠር መውቀት እንደሚፈልጉ በእርግጥ ነው? በመካከለኛ ያለው ምላሽ ይጥፋል።",
+    "stopGenerationConfirm": "አቁም",
+    "stopGenerationDontAskAgainButton": "በቁልፍ ሲቆም ዳግም አትጠይቅ",
+    "stopGenerationDontAskAgainKeyboard": "በዴስክቶፕ ሲቆም ዳግም አትጠይቅ",
+    "generateResponseButton": "ምላሽ ፍጠር"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -925,7 +931,14 @@
     "Export Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ወደ ውጭ ላክ",
     "Delete Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት",
     "deleteQuarantineConfirm": "ሁሉንም በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት እንደምትፈልጉ እርግጠኛ ያሉበት? ይህ ድርጊት ማቃጠል አይቻልም።",
-    "quarantineDeleteSuccess": "ሁሉንም በመለያየት ውስጥ ያለው ውሂብ በተሳካ ሁኔታ ተወግዷል።"
+    "quarantineDeleteSuccess": "ሁሉንም በመለያየት ውስጥ ያለው ውሂብ በተሳካ ሁኔታ ተወግዷል።",
+    "confirmations": {
+      "title": "ማረጋገጫዎች",
+      "confirmStopFromButton": "በቁልፍ ሲቆም በፊት ያረጋግጡ",
+      "confirmStopFromButtonDescription": "ምላሽ ሲፈጠር ቁልፉን በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ",
+      "confirmStopFromKeyboard": "በዴስክቶፕ ሲቆም በፊት ያረጋግጡ",
+      "confirmStopFromKeyboardDescription": "ምላሽ ሲዘጋጅ Escape በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ"
+    }
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"

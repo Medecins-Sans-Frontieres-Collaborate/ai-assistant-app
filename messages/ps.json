@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "ستاسو براوزر کې د آډیو ثبتول نه‌ ملاتړ کیږي.",
     "microphoneNotDetected": "مایکروفون ونه پېژندل شو",
     "microphoneBlocked": "مایکروفون بند شوی دی. د براوزر تنظیمات وګورئ.",
-    "voiceTranscriptionFailed": "د غږ لیکل ناکام شو. مهرباني وکړئ بیا هڅه وکړئ."
+    "voiceTranscriptionFailed": "د غږ لیکل ناکام شو. مهرباني وکړئ بیا هڅه وکړئ.",
+    "stopGenerationTitle": "تولید درول غواړئ؟",
+    "stopGenerationMessage": "یقیني یاست چې غواړئ دا ځواب تولیدول ودروئ؟ روان ځواب به حذف شي.",
+    "stopGenerationConfirm": "درول",
+    "stopGenerationDontAskAgainButton": "د تڼۍ له لارې درولو پر مهال بیا مه پوښتئ",
+    "stopGenerationDontAskAgainKeyboard": "د کیبورډ له لارې درولو پر مهال بیا مه پوښتئ",
+    "generateResponseButton": "ځواب تولید کړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "قرنطین شوي معلومات صادر کړئ",
     "Delete Quarantined Data": "قرنطین شوي معلومات ړنګ کړئ",
     "deleteQuarantineConfirm": "ایا تاسې ډاډه یاست چې ټول قرنطین شوي معلومات ړنګول غواړئ؟ دا عمل بېرته نه‌شي راوګرځېدلی.",
-    "quarantineDeleteSuccess": "ټول قرنطین شوي معلومات په بریالیتوب سره ړنګ شول."
+    "quarantineDeleteSuccess": "ټول قرنطین شوي معلومات په بریالیتوب سره ړنګ شول.",
+    "confirmations": {
+      "title": "تاییدونه",
+      "confirmStopFromButton": "د تڼۍ له لارې درولو مخکې تایید وکړئ",
+      "confirmStopFromButtonDescription": "کله چې ځواب تولیدېږي او تاسې د درولو تڼۍ کلیک کوئ، د تایید کړکۍ ښکاره کړئ",
+      "confirmStopFromKeyboard": "د کیبورډ له لارې درولو مخکې تایید وکړئ",
+      "confirmStopFromKeyboardDescription": "کله چې ځواب تولیدېږي او تاسې Escape کلیک کوئ، د تایید کړکۍ ښکاره کړئ"
+    }
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",

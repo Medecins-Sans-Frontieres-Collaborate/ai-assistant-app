@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "تسجيل الصوت غير مدعوم في هذا المتصفح.",
     "microphoneNotDetected": "لم يتم اكتشاف ميكروفون",
     "microphoneBlocked": "تم حظر الميكروفون. تحقق من إعدادات المتصفح.",
-    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى."
+    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى.",
+    "stopGenerationTitle": "إيقاف التوليد؟",
+    "stopGenerationMessage": "هل أنت متأكد أنك تريد إيقاف توليد هذه الاستجابة؟ سيتم تجاهل أي رد قيد المعالجة.",
+    "stopGenerationConfirm": "إيقاف",
+    "stopGenerationDontAskAgainButton": "عدم السؤال مرة أخرى عند الإيقاف بواسطة الزر",
+    "stopGenerationDontAskAgainKeyboard": "عدم السؤال مرة أخرى عند الإيقاف بواسطة لوحة المفاتيح",
+    "generateResponseButton": "توليد استجابة"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -928,7 +934,14 @@
     "Export Quarantined Data": "تصدير البيانات المحجوزة",
     "Delete Quarantined Data": "حذف البيانات المحجوزة",
     "deleteQuarantineConfirm": "هل أنت متأكد من رغبتك في حذف جميع البيانات المحجوزة؟ لا يمكن التراجع عن هذا الإجراء.",
-    "quarantineDeleteSuccess": "تم حذف جميع البيانات المحجوزة بنجاح."
+    "quarantineDeleteSuccess": "تم حذف جميع البيانات المحجوزة بنجاح.",
+    "confirmations": {
+      "title": "التأكيدات",
+      "confirmStopFromButton": "تأكيد قبل الإيقاف بواسطة الزر",
+      "confirmStopFromButtonDescription": "عرض مربع تأكيد عند النقر على زر الإيقاف أثناء توليد الاستجابة",
+      "confirmStopFromKeyboard": "تأكيد قبل الإيقاف بواسطة لوحة المفاتيح",
+      "confirmStopFromKeyboardDescription": "عرض مربع تأكيد عند الضغط على Escape أثناء توليد الاستجابة"
+    }
   },
   "notFound": {
     "lostDog": "كلب ضائع"

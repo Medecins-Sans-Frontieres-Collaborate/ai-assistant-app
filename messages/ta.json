@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "இந்த உலாவியில் ஒலித் தொகுப்பு ஆதாரமில்லை.",
     "microphoneNotDetected": "மைக் கண்டறியப்படவில்லை",
     "microphoneBlocked": "மைக் தடைசெய்யப்பட்டுள்ளது. உலாவி அமைப்ப들을 பரிசோதிக்கவும்.",
-    "voiceTranscriptionFailed": "குரல் எழுத்தாக்கம் தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்."
+    "voiceTranscriptionFailed": "குரல் எழுத்தாக்கம் தோல்வியடைந்தது. மீண்டும் முயற்சிக்கவும்.",
+    "stopGenerationTitle": "உருவாக்குவதை நிறுத்தவா?",
+    "stopGenerationMessage": "இந்த பதிலை உருவாக்குவதை நிறுத்த விரும்புகிறீர்களா? தற்போது நடந்து கொண்டிருக்கும் பதில் நீக்கப்படும்.",
+    "stopGenerationConfirm": "நிறுத்து",
+    "stopGenerationDontAskAgainButton": "பொத்தானை அழுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
+    "stopGenerationDontAskAgainKeyboard": "கீபோர்டைப் பயன்படுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
+    "generateResponseButton": "பதில் உருவாக்கு"
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "தனிமைப்படுத்தப்பட்ட தரவை ஏற்றுமதி செய்க",
     "Delete Quarantined Data": "தனிமைப்படுத்தப்பட்ட தரவை அழி",
     "deleteQuarantineConfirm": "அனைத்து தனிமைப்படுத்தப்பட்ட தரவையும் நிஜமாகவே அழிக்க விரும்புகிறீர்களா? இந்த செயலை மீட்டமைக்க முடியாது.",
-    "quarantineDeleteSuccess": "அனைத்து தனிமைப்படுத்தப்பட்ட தரவு வெற்றிகரமாக அழிக்கப்பட்டது."
+    "quarantineDeleteSuccess": "அனைத்து தனிமைப்படுத்தப்பட்ட தரவு வெற்றிகரமாக அழிக்கப்பட்டது.",
+    "confirmations": {
+      "title": "உறுதிப்படுத்தல்கள்",
+      "confirmStopFromButton": "பொத்தானை அழுத்தி நிறுத்தும் முன் உறுதி அளிக்கவும்",
+      "confirmStopFromButtonDescription": "பதில் உருவாகிக் கொண்டிருக்கும்போது நிறுத்து பொத்தானை கிளிக் செய்யும் போது உறுதிப்படுத்தும் संवाद பெட்டி காட்டவும்",
+      "confirmStopFromKeyboard": "கீபோர்டை பயன்படுத்தி நிறுத்தும் முன் உறுதி அளிக்கவும்",
+      "confirmStopFromKeyboardDescription": "பதில் உருவாகிக் கொண்டிருக்கும்போது Escape அழுத்தினால் உறுதிப்படுத்தும் संवाद பெட்டி காட்டவும்"
+    }
   },
   "emptyState": {
     "greeting": "நான் எவ்வாறு உதவ முடியும்?",

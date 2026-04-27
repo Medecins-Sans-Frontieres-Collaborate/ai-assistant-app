@@ -610,7 +610,13 @@
     "mediaRecorderNotSupported": "ضبط صدا در این مرورگر پشتیبانی نمی‌شود.",
     "microphoneNotDetected": "میکروفون شناسایی نشد",
     "microphoneBlocked": "میکروفون مسدود شده است. تنظیمات مرورگر را بررسی کنید.",
-    "voiceTranscriptionFailed": "تبدیل صدا به متن انجام نشد. لطفاً دوباره تلاش کنید."
+    "voiceTranscriptionFailed": "تبدیل صدا به متن انجام نشد. لطفاً دوباره تلاش کنید.",
+    "stopGenerationTitle": "تولید پاسخ را متوقف کنید؟",
+    "stopGenerationMessage": "آیا مطمئن هستید که می‌خواهید تولید این پاسخ را متوقف کنید؟ هر پاسخ در حال انجام حذف خواهد شد.",
+    "stopGenerationConfirm": "توقف",
+    "stopGenerationDontAskAgainButton": "هنگام توقف با دکمه دوباره سوال نکن",
+    "stopGenerationDontAskAgainKeyboard": "هنگام توقف با صفحه‌کلید دوباره سوال نکن",
+    "generateResponseButton": "تولید پاسخ"
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -907,7 +913,14 @@
     "Export Quarantined Data": "خروجی گرفتن از داده‌های قرنطینه‌شده",
     "Delete Quarantined Data": "حذف داده‌های قرنطینه‌شده",
     "deleteQuarantineConfirm": "آیا مطمئن هستید که می‌خواهید همه داده‌های قرنطینه‌شده را حذف کنید؟ این اقدام قابل بازگشت نیست.",
-    "quarantineDeleteSuccess": "همه داده‌های قرنطینه‌شده با موفقیت حذف شدند."
+    "quarantineDeleteSuccess": "همه داده‌های قرنطینه‌شده با موفقیت حذف شدند.",
+    "confirmations": {
+      "title": "تأییدها",
+      "confirmStopFromButton": "قبل از توقف با دکمه تأیید بگیر",
+      "confirmStopFromButtonDescription": "هنگامی که در حال تولید پاسخ هستید و روی دکمه توقف کلیک می‌کنید، یک گفت‌وگوی تأیید نمایش بده",
+      "confirmStopFromKeyboard": "قبل از توقف با صفحه‌کلید تأیید بگیر",
+      "confirmStopFromKeyboardDescription": "هنگامی که در حال تولید پاسخ هستید و کلید Escape را فشار می‌دهید، یک گفت‌وگوی تأیید نمایش بده"
+    }
   },
   "notFound": {
     "lostDog": "سگ گمشده"

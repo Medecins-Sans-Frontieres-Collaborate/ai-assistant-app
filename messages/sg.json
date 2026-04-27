@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ködörö tî zo nginza tî audio ape na browser ôko.",
     "microphoneNotDetected": "A yékwa microphone",
     "microphoneBlocked": "Microphone azui. Gbegë na réglage ti navigateur mo.",
-    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava."
+    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava.",
+    "stopGenerationTitle": "Kê sô siriri?",
+    "stopGenerationMessage": "O kêtâ na wè yê kê sô siriri wa mo? Siriri ayeke na waka lo, lo yângâ mo.",
+    "stopGenerationConfirm": "Kê sô",
+    "stopGenerationDontAskAgainButton": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na boutton",
+    "stopGenerationDontAskAgainKeyboard": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na klavier",
+    "generateResponseButton": "Sûrû siriri"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Ganza donnés tî quarantiné",
     "Delete Quarantined Data": "Pese donnés tî quarantiné",
     "deleteQuarantineConfirm": "O yeke sûr na pése touts donnés tî quarantiné? Ebio ape ndö tî sangana.",
-    "quarantineDeleteSuccess": "Ködörö tî pèse touts donnés tî quarantiné a la mû."
+    "quarantineDeleteSuccess": "Ködörö tî pèse touts donnés tî quarantiné a la mû.",
+    "confirmations": {
+      "title": "Kûé dâbâna",
+      "confirmStopFromButton": "Kêtê na dâbâ na mû kê sô na boutton",
+      "confirmStopFromButtonDescription": "Fâ dâbâna gbèngbè ti sô lâ boutton ti kê sô tâ lo sûrû siriri",
+      "confirmStopFromKeyboard": "Kêtê na dâbâ na mû kê sô na klavier",
+      "confirmStopFromKeyboardDescription": "Fâ dâbâna gbèngbè ti sô lâ Escape tâ lo sûrû siriri"
+    }
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",

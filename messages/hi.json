@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "इस ब्राउज़र में ऑडियो रिकॉर्डिंग समर्थित नहीं है।",
     "microphoneNotDetected": "माइक्रोफ़ोन नहीं मिला",
     "microphoneBlocked": "माइक्रोफ़ोन ब्लॉक है। ब्राउज़र सेटिंग्स जांचें।",
-    "voiceTranscriptionFailed": "आवाज़ ट्रांसक्रिप्शन असफल रहा। कृपया पुनः प्रयास करें।"
+    "voiceTranscriptionFailed": "आवाज़ ट्रांसक्रिप्शन असफल रहा। कृपया पुनः प्रयास करें।",
+    "stopGenerationTitle": "जेनरेशन रोकें?",
+    "stopGenerationMessage": "क्या आप वाकई इस उत्तर का जेनरेशन रोकना चाहते हैं? कोई भी चल रही प्रतिक्रिया रद्द कर दी जाएगी।",
+    "stopGenerationConfirm": "रोकें",
+    "stopGenerationDontAskAgainButton": "बटन से रोकते समय दोबारा न पूछें",
+    "stopGenerationDontAskAgainKeyboard": "कीबोर्ड से रोकते समय दोबारा न पूछें",
+    "generateResponseButton": "उत्तर जनरेट करें"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "क्वारंटीन डेटा निर्यात करें",
     "Delete Quarantined Data": "क्वारंटीन डेटा हटाएँ",
     "deleteQuarantineConfirm": "क्या आप वाकई सभी क्वारंटीन डेटा हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती।",
-    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटा दिए गए।"
+    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटा दिए गए।",
+    "confirmations": {
+      "title": "पुष्टिकरण",
+      "confirmStopFromButton": "बटन से रोकने से पहले पुष्टि करें",
+      "confirmStopFromButtonDescription": "उत्तर जनरेट होने के दौरान स्टॉप बटन दबाने पर पुष्टि संवाद दिखाएं",
+      "confirmStopFromKeyboard": "कीबोर्ड से रोकने से पहले पुष्टि करें",
+      "confirmStopFromKeyboardDescription": "उत्तर जनरेट होने के दौरान Escape दबाने पर पुष्टि संवाद दिखाएं"
+    }
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"

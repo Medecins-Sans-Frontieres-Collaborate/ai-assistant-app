@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "ဤ browser တွင် အသံမှတ်တမ်းအလုပ်မလုပ်နိုင်ပါ။",
     "microphoneNotDetected": "မိုက်ခရိုဖုန်း ရှာမတွေ့ပါ",
     "microphoneBlocked": "မိုက်ခရိုဖုန်း ကို ပိတ်ထားပါတယ်။ ဘရောက်ဇာ ဆက်တင်များကို စစ်ပါ။",
-    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
+    "stopGenerationTitle": "လုပ်ဆောင်ခြင်းကိုရပ်မလား။",
+    "stopGenerationMessage": "ဤအဖြေထုတ်လုပ်မှုကိုရပ်မည်မှာသေချာပါသလား။ လတ်တလောထုတ်လုပ်နေသောအဖြေများအားလုံး ပယ်ဖျက်ခြင်းခံရမည်။",
+    "stopGenerationConfirm": "ရပ်မည်",
+    "stopGenerationDontAskAgainButton": "ခလုတ်နှိပ်၍ ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
+    "stopGenerationDontAskAgainKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
+    "generateResponseButton": "အဖြေထုတ်လုပ်ပါ"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -957,7 +963,14 @@
     "Export Quarantined Data": "သီးခြားထားသောဒေတာတင်ပို့ရန်",
     "Delete Quarantined Data": "သီးခြားထားသောဒေတာဖျက်ရန်",
     "deleteQuarantineConfirm": "သီးခြားထားသောဒေတာအားလုံးကိုဖျက်မည်မှာ သေချာပါသလား? ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရနိုင်ပါ။",
-    "quarantineDeleteSuccess": "သီးခြားထားသောဒေတာအားလုံးကို အောင်မြင်စွာ ဖျက်လိုက်ပြီးပါပြီ။"
+    "quarantineDeleteSuccess": "သီးခြားထားသောဒေတာအားလုံးကို အောင်မြင်စွာ ဖျက်လိုက်ပြီးပါပြီ။",
+    "confirmations": {
+      "title": "အတည်ပြုခြင်းများ",
+      "confirmStopFromButton": "ခလုတ်နှိပ်၍ ရပ်စဲရန် မလုပ်မီ အတည်ပြုပါ",
+      "confirmStopFromButtonDescription": "အဖြေထုတ်လုပ်နေစဉ် ရပ်စဲခလုတ်ကိုနှိပ်ပါက အတည်ပြုစာပြောင် ပြပါမည်",
+      "confirmStopFromKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲရန် မလုပ်မီ အတည်ပြုပါ",
+      "confirmStopFromKeyboardDescription": "အဖြေထုတ်လုပ်နေစဉ် Escape ကိုနှိပ်သောအခါ အတည်ပြုစာပြောင် ပြပါမည်"
+    }
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"

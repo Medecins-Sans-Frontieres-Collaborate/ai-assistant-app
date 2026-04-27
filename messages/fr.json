@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "L’enregistrement audio n’est pas pris en charge dans ce navigateur.",
     "microphoneNotDetected": "Aucun microphone détecté",
     "microphoneBlocked": "Microphone bloqué. Vérifiez les paramètres du navigateur.",
-    "voiceTranscriptionFailed": "Échec de la transcription vocale. Veuillez réessayer."
+    "voiceTranscriptionFailed": "Échec de la transcription vocale. Veuillez réessayer.",
+    "stopGenerationTitle": "Arrêter la génération ?",
+    "stopGenerationMessage": "Êtes-vous sûr de vouloir arrêter la génération de cette réponse ? Toute réponse en cours sera abandonnée.",
+    "stopGenerationConfirm": "Arrêter",
+    "stopGenerationDontAskAgainButton": "Ne plus demander lors de l'arrêt avec le bouton",
+    "stopGenerationDontAskAgainKeyboard": "Ne plus demander lors de l'arrêt avec le clavier",
+    "generateResponseButton": "Générer une réponse"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Exporter les données en quarantaine",
     "Delete Quarantined Data": "Supprimer les données en quarantaine",
     "deleteQuarantineConfirm": "Êtes-vous sûr de vouloir supprimer toutes les données en quarantaine ? Cette action est irréversible.",
-    "quarantineDeleteSuccess": "Toutes les données en quarantaine ont été supprimées avec succès."
+    "quarantineDeleteSuccess": "Toutes les données en quarantaine ont été supprimées avec succès.",
+    "confirmations": {
+      "title": "Confirmations",
+      "confirmStopFromButton": "Confirmer avant d'arrêter avec le bouton",
+      "confirmStopFromButtonDescription": "Afficher une boîte de confirmation lorsque vous cliquez sur le bouton d’arrêt pendant la génération d’une réponse",
+      "confirmStopFromKeyboard": "Confirmer avant d'arrêter avec le clavier",
+      "confirmStopFromKeyboardDescription": "Afficher une boîte de confirmation lorsque vous appuyez sur Échap pendant la génération d’une réponse"
+    }
   },
   "notFound": {
     "lostDog": "Chien perdu"

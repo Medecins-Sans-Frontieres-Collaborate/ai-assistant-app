@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Η καταγραφή ήχου δεν υποστηρίζεται σε αυτόν τον περιηγητή.",
     "microphoneNotDetected": "Δεν εντοπίστηκε μικρόφωνο",
     "microphoneBlocked": "Το μικρόφωνο είναι μπλοκαρισμένο. Ελέγξτε τις ρυθμίσεις του προγράμματος περιήγησης.",
-    "voiceTranscriptionFailed": "Η μετατροπή φωνής σε κείμενο απέτυχε. Παρακαλώ δοκιμάστε ξανά."
+    "voiceTranscriptionFailed": "Η μετατροπή φωνής σε κείμενο απέτυχε. Παρακαλώ δοκιμάστε ξανά.",
+    "stopGenerationTitle": "Διακοπή δημιουργίας;",
+    "stopGenerationMessage": "Είστε βέβαιοι ότι θέλετε να σταματήσετε τη δημιουργία αυτής της απάντησης; Οποιαδήποτε απάντηση βρίσκεται σε εξέλιξη θα απορριφθεί.",
+    "stopGenerationConfirm": "Διακοπή",
+    "stopGenerationDontAskAgainButton": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το κουμπί",
+    "stopGenerationDontAskAgainKeyboard": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το πληκτρολόγιο",
+    "generateResponseButton": "Δημιουργία απάντησης"
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Εξαγωγή Δεδομένων σε Καραντίνα",
     "Delete Quarantined Data": "Διαγραφή Δεδομένων σε Καραντίνα",
     "deleteQuarantineConfirm": "Είστε σίγουροι ότι θέλετε να διαγράψετε όλα τα δεδομένα σε καραντίνα; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.",
-    "quarantineDeleteSuccess": "Η διαγραφή όλων των δεδομένων σε καραντίνα ολοκληρώθηκε με επιτυχία."
+    "quarantineDeleteSuccess": "Η διαγραφή όλων των δεδομένων σε καραντίνα ολοκληρώθηκε με επιτυχία.",
+    "confirmations": {
+      "title": "Επιβεβαιώσεις",
+      "confirmStopFromButton": "Επιβεβαίωση πριν τη διακοπή με το κουμπί",
+      "confirmStopFromButtonDescription": "Εμφάνιση διαλόγου επιβεβαίωσης όταν κάνετε κλικ στο κουμπί διακοπής ενώ δημιουργείται απάντηση",
+      "confirmStopFromKeyboard": "Επιβεβαίωση πριν τη διακοπή με το πληκτρολόγιο",
+      "confirmStopFromKeyboardDescription": "Εμφάνιση διαλόγου επιβεβαίωσης όταν πατάτε Escape ενώ δημιουργείται απάντηση"
+    }
   },
   "emptyState": {
     "greeting": "Πώς μπορώ να βοηθήσω;",

@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Qalabkan browzar ma taageero duubista codka.",
     "microphoneNotDetected": "Mikrofoon lama helin",
     "microphoneBlocked": "Mikrofoon waa la xannibay. Fadlan hubi dejimaha bog furaha.",
-    "voiceTranscriptionFailed": "Qoraalka codka wuu fashilmay. Fadlan isku day mar kale."
+    "voiceTranscriptionFailed": "Qoraalka codka wuu fashilmay. Fadlan isku day mar kale.",
+    "stopGenerationTitle": "Jooji abuuridda?",
+    "stopGenerationMessage": "Ma hubtaa inaad rabto inaad joojiso abuurista jawaabtan? Jawaab kasta oo socota waa la tirtiri doonaa.",
+    "stopGenerationConfirm": "Jooji",
+    "stopGenerationDontAskAgainButton": "Ha la iga weydiin mar kale markaan joojinayo batoonka",
+    "stopGenerationDontAskAgainKeyboard": "Ha la iga weydiin mar kale markaan joojinayo kumbuyuutarka",
+    "generateResponseButton": "Abuur jawaab"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Dhoofso Xogta la Karantiilay",
     "Delete Quarantined Data": "Tirtir Xogta la Karantiilay",
     "deleteQuarantineConfirm": "Ma hubtaa inaad rabto inaad tirtirto dhammaan xogta la karantiilay? Ficilkan lama soo celin karo.",
-    "quarantineDeleteSuccess": "Si guul leh ayaa loo tirtiray dhammaan xogta la karantiilay."
+    "quarantineDeleteSuccess": "Si guul leh ayaa loo tirtiray dhammaan xogta la karantiilay.",
+    "confirmations": {
+      "title": "Xaqiijinta",
+      "confirmStopFromButton": "Xaqiiji ka hor intaadan joojin batoonka",
+      "confirmStopFromButtonDescription": "Tus sanduuqa xaqiijinta marka aad gujiso batoonka joojinta inta jawaab la abuurayo",
+      "confirmStopFromKeyboard": "Xaqiiji ka hor intaadan joojin kumbuyuutarka",
+      "confirmStopFromKeyboardDescription": "Tus sanduuqa xaqiijinta marka aad riixdo Escape inta jawaab la abuurayo"
+    }
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",

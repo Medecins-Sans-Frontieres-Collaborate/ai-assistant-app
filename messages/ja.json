@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "このブラウザでは音声録音がサポートされていません。",
     "microphoneNotDetected": "マイクが検出されません",
     "microphoneBlocked": "マイクがブロックされています。ブラウザの設定を確認してください。",
-    "voiceTranscriptionFailed": "音声の文字起こしに失敗しました。もう一度お試しください。"
+    "voiceTranscriptionFailed": "音声の文字起こしに失敗しました。もう一度お試しください。",
+    "stopGenerationTitle": "生成を停止しますか？",
+    "stopGenerationMessage": "この回答の生成を停止してもよろしいですか？進行中の返信は破棄されます。",
+    "stopGenerationConfirm": "停止",
+    "stopGenerationDontAskAgainButton": "ボタンで停止する際は今後確認しない",
+    "stopGenerationDontAskAgainKeyboard": "キーボードで停止する際は今後確認しない",
+    "generateResponseButton": "回答を生成"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "隔離データをエクスポート",
     "Delete Quarantined Data": "隔離データを削除",
     "deleteQuarantineConfirm": "本当にすべての隔離データを削除しますか？この操作は元に戻せません。",
-    "quarantineDeleteSuccess": "すべての隔離データを正常に削除しました。"
+    "quarantineDeleteSuccess": "すべての隔離データを正常に削除しました。",
+    "confirmations": {
+      "title": "確認",
+      "confirmStopFromButton": "ボタンで停止する前に確認",
+      "confirmStopFromButtonDescription": "回答生成中に停止ボタンをクリックした際、確認ダイアログを表示します。",
+      "confirmStopFromKeyboard": "キーボードで停止する前に確認",
+      "confirmStopFromKeyboardDescription": "回答生成中にEscapeキーを押した際、確認ダイアログを表示します。"
+    }
   },
   "notFound": {
     "lostDog": "迷子の犬"

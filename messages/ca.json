@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "L’enregistrament d’àudio no és compatible amb aquest navegador.",
     "microphoneNotDetected": "No s'ha detectat cap micròfon",
     "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",
-    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar."
+    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar.",
+    "stopGenerationTitle": "Aturar la generació?",
+    "stopGenerationMessage": "Esteu segur que voleu aturar la generació d'aquesta resposta? Es descartarà qualsevol resposta en curs.",
+    "stopGenerationConfirm": "Atura",
+    "stopGenerationDontAskAgainButton": "No tornis a preguntar quan s'aturi amb el botó",
+    "stopGenerationDontAskAgainKeyboard": "No tornis a preguntar quan s'aturi amb el teclat",
+    "generateResponseButton": "Genera resposta"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -957,7 +963,14 @@
     "Export Quarantined Data": "Exporta dades en quarantena",
     "Delete Quarantined Data": "Elimina dades en quarantena",
     "deleteQuarantineConfirm": "Esteu segur que voleu eliminar totes les dades en quarantena? Aquesta acció no es pot desfer.",
-    "quarantineDeleteSuccess": "S’han eliminat correctament totes les dades en quarantena."
+    "quarantineDeleteSuccess": "S’han eliminat correctament totes les dades en quarantena.",
+    "confirmations": {
+      "title": "Confirmacions",
+      "confirmStopFromButton": "Confirma abans d'aturar amb el botó",
+      "confirmStopFromButtonDescription": "Mostra un diàleg de confirmació quan premis el botó d'aturar mentre s'està generant una resposta",
+      "confirmStopFromKeyboard": "Confirma abans d'aturar amb el teclat",
+      "confirmStopFromKeyboardDescription": "Mostra un diàleg de confirmació quan premis Escape mentre s'està generant una resposta"
+    }
   },
   "notFound": {
     "lostDog": "Gos perdut"

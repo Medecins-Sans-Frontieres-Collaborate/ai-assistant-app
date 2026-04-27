@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "הקלטת שמע אינה נתמכת בדפדפן זה.",
     "microphoneNotDetected": "לא זוהה מיקרופון",
     "microphoneBlocked": "המיקרופון חסום. נא לבדוק את הגדרות הדפדפן.",
-    "voiceTranscriptionFailed": "המרת הדיבור לטקסט נכשלה. אנא נסו שוב."
+    "voiceTranscriptionFailed": "המרת הדיבור לטקסט נכשלה. אנא נסו שוב.",
+    "stopGenerationTitle": "להפסיק את ההפקה?",
+    "stopGenerationMessage": "האם אתה בטוח שברצונך להפסיק את יצירת התגובה הזו? כל תגובה שנמצאת בתהליך תימחק.",
+    "stopGenerationConfirm": "הפסק",
+    "stopGenerationDontAskAgainButton": "אל תשאל שוב בעת עצירה באמצעות הכפתור",
+    "stopGenerationDontAskAgainKeyboard": "אל תשאל שוב בעת עצירה באמצעות המקלדת",
+    "generateResponseButton": "צור תגובה"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -957,7 +963,14 @@
     "Export Quarantined Data": "ייצוא נתונים בהסגר",
     "Delete Quarantined Data": "מחיקת נתונים בהסגר",
     "deleteQuarantineConfirm": "האם אתה בטוח שברצונך למחוק את כל הנתונים שבהסגר? לא ניתן לבטל פעולה זו.",
-    "quarantineDeleteSuccess": "כל הנתונים שבהסגר נמחקו בהצלחה."
+    "quarantineDeleteSuccess": "כל הנתונים שבהסגר נמחקו בהצלחה.",
+    "confirmations": {
+      "title": "אישורים",
+      "confirmStopFromButton": "אשר לפני עצירה באמצעות הכפתור",
+      "confirmStopFromButtonDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על כפתור העצירה בזמן שהתגובה נוצרת",
+      "confirmStopFromKeyboard": "אשר לפני עצירה באמצעות המקלדת",
+      "confirmStopFromKeyboardDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על Escape בזמן שהתגובה נוצרת"
+    }
   },
   "notFound": {
     "lostDog": "כלב אבוד"

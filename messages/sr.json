@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Audio snimanje nije podržano u ovom pregledaču.",
     "microphoneNotDetected": "Mikrofon nije detektovan",
     "microphoneBlocked": "Mikrofon je blokiran. Proverite podešavanja pregledača.",
-    "voiceTranscriptionFailed": "Transkripcija glasa nije uspela. Pokušajte ponovo."
+    "voiceTranscriptionFailed": "Transkripcija glasa nije uspela. Pokušajte ponovo.",
+    "stopGenerationTitle": "Zaustaviti generisanje?",
+    "stopGenerationMessage": "Da li ste sigurni da želite da zaustavite generisanje ovog odgovora? Svaki odgovor u toku biće odbačen.",
+    "stopGenerationConfirm": "Zaustavi",
+    "stopGenerationDontAskAgainButton": "Ne pitaj ponovo prilikom zaustavljanja preko dugmeta",
+    "stopGenerationDontAskAgainKeyboard": "Ne pitaj ponovo prilikom zaustavljanja putem tastature",
+    "generateResponseButton": "Generiši odgovor"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Izvezi karantinske podatke",
     "Delete Quarantined Data": "Obriši karantinske podatke",
     "deleteQuarantineConfirm": "Da li ste sigurni da želite da obrišete sve karantinske podatke? Ova radnja je nepovratna.",
-    "quarantineDeleteSuccess": "Uspešno su obrisani svi karantinski podaci."
+    "quarantineDeleteSuccess": "Uspešno su obrisani svi karantinski podaci.",
+    "confirmations": {
+      "title": "Potvrde",
+      "confirmStopFromButton": "Potvrdi pre zaustavljanja preko dugmeta",
+      "confirmStopFromButtonDescription": "Prikaži dijalog za potvrdu kada kliknete na dugme zaustavi dok se generiše odgovor",
+      "confirmStopFromKeyboard": "Potvrdi pre zaustavljanja putem tastature",
+      "confirmStopFromKeyboardDescription": "Prikaži dijalog za potvrdu kada pritisnete Escape dok se generiše odgovor"
+    }
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",

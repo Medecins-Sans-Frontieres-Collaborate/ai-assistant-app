@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Rekodi ya sauti haiwezi kufanywa katika kivinjari hiki.",
     "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
     "microphoneBlocked": "Kipaza sauti kimezuiliwa. Angalia mipangilio ya kivinjari.",
-    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena."
+    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena.",
+    "stopGenerationTitle": "Usitishe utayarishaji?",
+    "stopGenerationMessage": "Je, una uhakika unataka kusitisha utayarishaji wa jibu hili? Jibu lolote linaloendelea kutayarishwa litatupiliwa mbali.",
+    "stopGenerationConfirm": "Sitisha",
+    "stopGenerationDontAskAgainButton": "Usiulize tena unapositisha kwa kutumia kitufe",
+    "stopGenerationDontAskAgainKeyboard": "Usiulize tena unapositisha kwa kutumia kibodi",
+    "generateResponseButton": "Tengeneza jibu"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -982,7 +988,14 @@
     "Export Quarantined Data": "Hamisha Data Zilizowekwa Karantini",
     "Delete Quarantined Data": "Futa Data Zilizowekwa Karantini",
     "deleteQuarantineConfirm": "Una uhakika unataka kufuta data zote zilizowekwa karantini? Hatua hii haiwezi kubatilishwa.",
-    "quarantineDeleteSuccess": "Umefanikiwa kufuta data zote zilizowekwa karantini."
+    "quarantineDeleteSuccess": "Umefanikiwa kufuta data zote zilizowekwa karantini.",
+    "confirmations": {
+      "title": "Uthibitisho",
+      "confirmStopFromButton": "Thibitisha kabla ya kusitisha kwa kutumia kitufe",
+      "confirmStopFromButtonDescription": "Onyesha kisanduku cha uthibitisho unapobofya kitufe cha kusitisha wakati jibu linaandaliwa",
+      "confirmStopFromKeyboard": "Thibitisha kabla ya kusitisha kwa kutumia kibodi",
+      "confirmStopFromKeyboardDescription": "Onyesha kisanduku cha uthibitisho unapobofya Esc wakati jibu linaandaliwa"
+    }
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"

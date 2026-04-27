@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "ድምጺ መቅዳን እዚ ብራውዘር አይግበርን።",
     "microphoneNotDetected": "ማይክሮፎን ኣይተረኽበን",
     "microphoneBlocked": "ማይክሮፎን ተጹጉዑ ኣሎ። ቅንዛዕ ናይ መተንቀሳቐሲ መእተዊ ርኸቡ።",
-    "voiceTranscriptionFailed": "ቃላት ድምጺ ጽሑፍ ምቅዳሕ ኣይሳነበሩን። እቲ ሓደ ግዜ ደጊም ፈትኑ።"
+    "voiceTranscriptionFailed": "ቃላት ድምጺ ጽሑፍ ምቅዳሕ ኣይሳነበሩን። እቲ ሓደ ግዜ ደጊም ፈትኑ።",
+    "stopGenerationTitle": "ኣብ ምስራት ኣብርሃ? ",
+    "stopGenerationMessage": "ናብዚ ምስራት ክትቁም ትደሊ? ኣብ ምስራት ዘሎ መልሲ ይወግድ።",
+    "stopGenerationConfirm": "ኣቁም",
+    "stopGenerationDontAskAgainButton": "ብኣዝዩ ኣቁም ብዝተፈለጠ ደጊምካ ኣይሕበን",
+    "stopGenerationDontAskAgainKeyboard": "ብኪቦርድ ምቁም ደጊምካ ኣይሕበን",
+    "generateResponseButton": "መልሲ ምፍላጥ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "ዳታ ኳራንቲን መልእኽት",
     "Delete Quarantined Data": "ዳታ ኳራንቲን ምድማር",
     "deleteQuarantineConfirm": "ኩሉ ዳታ ኳራንቲን ደምሳስ ተደሊኻን? እዚ ተግባር ኣይተመለስን።",
-    "quarantineDeleteSuccess": "ኩሉ ዳታ ኳራንቲን ብትሕቲኡ ተደምሲሱ።"
+    "quarantineDeleteSuccess": "ኩሉ ዳታ ኳራንቲን ብትሕቲኡ ተደምሲሱ።",
+    "confirmations": {
+      "title": "ረጋገጽታት",
+      "confirmStopFromButton": "ብኣዝዩ ኣቁም ቅድሚ ምቁም ረጋግጽ",
+      "confirmStopFromButtonDescription": "ኣብ ምስራት ተኣሚኑ ናይ ረጋገጽ ገጽታ ኣርእይ ካብቲ ቁም ንኣዝዩ ዝተመዓሸሸ።",
+      "confirmStopFromKeyboard": "ብኪቦርድ ምቁም ቅድሚ ምቁም ረጋግጽ",
+      "confirmStopFromKeyboardDescription": "ኣብ ምስራት ተኣሚኑ ካብ ኪቦርድ Escape ምግባር ናይ ረጋገጽ ገጽታ ኣርእይ።"
+    }
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",

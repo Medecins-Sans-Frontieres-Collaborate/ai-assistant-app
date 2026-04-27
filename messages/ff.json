@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ndaɓɓitan moftugol audiyo waawaniima e lowre nde.",
     "microphoneNotDetected": "Curkuleeri mikirofoonuu maa jogii",
     "microphoneBlocked": "Mikirofoonuu ndiyalanii. Hoolu yaaɓe browser.",
-    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit."
+    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit.",
+    "stopGenerationTitle": "Aɗa yiɗi anndude seɗa?",
+    "stopGenerationMessage": "Aɗa waawi huli e jam? Nettino ngal jangirde maa. Ko dum naamni e keftingol kono.",
+    "stopGenerationConfirm": "Hul",
+    "stopGenerationDontAskAgainButton": "Hoto welta anndude so a huli e batiindi",
+    "stopGenerationDontAskAgainKeyboard": "Hoto welta anndude so a huli e dillere",
+    "generateResponseButton": "Naatnu jangirde"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Jaltin Bayanko Data rewtaama",
     "Delete Quarantined Data": "Momtu Bayanko Data rewtaama",
     "deleteQuarantineConfirm": "A sureɗaa yiɗde momtude data rewtaama fow? Ndeen yeeso waawaa artan.",
-    "quarantineDeleteSuccess": "Data rewtaama fow momtiima e jam."
+    "quarantineDeleteSuccess": "Data rewtaama fow momtiima e jam.",
+    "confirmations": {
+      "title": "Annditugol",
+      "confirmStopFromButton": "Anndu seɗa gollal e batiindi",
+      "confirmStopFromButtonDescription": "Hollu nastoraa annditugol so a nodo batiindi huli ka jangirde ɗi naatnata",
+      "confirmStopFromKeyboard": "Anndu seɗa gollal e dillere",
+      "confirmStopFromKeyboardDescription": "Hollu nastoraa annditugol so a woni no Escapi fayde e naatnugol jangirde"
+    }
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",

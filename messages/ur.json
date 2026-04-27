@@ -686,7 +686,13 @@
     "mediaRecorderNotSupported": "اس براؤزر میں آڈیو ریکارڈنگ سپورٹ نہیں کرتی۔",
     "microphoneNotDetected": "کوئی مائیکروفون نہیں ملا",
     "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی سیٹنگز چیک کریں۔",
-    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔"
+    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔",
+    "stopGenerationTitle": "کیا جنریشن روکیں؟",
+    "stopGenerationMessage": "کیا آپ واقعی اس جواب کی جنریشن روکنا چاہتے ہیں؟ جو جواب جاری ہے وہ ضائع ہو جائے گا۔",
+    "stopGenerationConfirm": "روکیں",
+    "stopGenerationDontAskAgainButton": "بٹن سے روکنے پر دوبارہ نہ پوچھیں",
+    "stopGenerationDontAskAgainKeyboard": "کی بورڈ سے روکنے پر دوبارہ نہ پوچھیں",
+    "generateResponseButton": "جواب تیار کریں"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -983,7 +989,14 @@
     "Export Quarantined Data": "قرنطینہ شدہ ڈیٹا ایکسپورٹ کریں",
     "Delete Quarantined Data": "قرنطینہ شدہ ڈیٹا حذف کریں",
     "deleteQuarantineConfirm": "کیا آپ واقعی تمام قرنطینہ شدہ ڈیٹا حذف کرنا چاہتے ہیں؟ اس عمل کو واپس نہیں لیا جا سکتا۔",
-    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف کر دیا گیا۔"
+    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف کر دیا گیا۔",
+    "confirmations": {
+      "title": "تصدیقات",
+      "confirmStopFromButton": "بٹن سے روکنے سے پہلے تصدیق کریں",
+      "confirmStopFromButtonDescription": "جب جواب تیار ہو رہا ہو اور آپ اسٹاپ بٹن پر کلک کریں تو تصدیق کا ڈائیلاگ دکھائیں",
+      "confirmStopFromKeyboard": "کی بورڈ سے روکنے سے پہلے تصدیق کریں",
+      "confirmStopFromKeyboardDescription": "جب جواب تیار ہو رہا ہو اور آپ Escape دبائیں تو تصدیق کا ڈائیلاگ دکھائیں"
+    }
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"

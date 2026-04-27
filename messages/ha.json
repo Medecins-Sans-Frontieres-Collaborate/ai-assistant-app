@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ba a goyon bayan yin rikodin sauti a wannan burauza.",
     "microphoneNotDetected": "Ba a gano maƙarƙashiyar murya ba",
     "microphoneBlocked": "An toshe maƙarƙashiyar murya. Duba saitunan burauza.",
-    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa."
+    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa.",
+    "stopGenerationTitle": "A dakatar da ƙirƙira?",
+    "stopGenerationMessage": "Ka tabbata kana son dakatar da wannan amsar? Duk martani da ake ci gaba da ƙirƙira za a soke shi.",
+    "stopGenerationConfirm": "Dakatar",
+    "stopGenerationDontAskAgainButton": "Kada a sake tambayata idan an dakatar ta maɓalli",
+    "stopGenerationDontAskAgainKeyboard": "Kada a sake tambayata idan an dakatar ta kibodi",
+    "generateResponseButton": "Ƙirƙiri amsa"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1135,7 +1141,14 @@
     "Export Quarantined Data": "Fitar da bayanan da aka killace",
     "Delete Quarantined Data": "Goge bayanan da aka killace",
     "deleteQuarantineConfirm": "Ka tabbata kana son gogewa duk bayanan da aka killace? Ba za a iya dawowa da wannan aiki ba.",
-    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara."
+    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara.",
+    "confirmations": {
+      "title": "Tabbatarwa",
+      "confirmStopFromButton": "Tabbatar kafin dakatarwa ta maɓalli",
+      "confirmStopFromButtonDescription": "Nuna taga tabbatarwa idan ka danna maɓallin dakatarwa yayin ƙirƙirar amsa",
+      "confirmStopFromKeyboard": "Tabbatar kafin dakatarwa ta kibodi",
+      "confirmStopFromKeyboardDescription": "Nuna taga tabbatarwa idan ka danna Escape yayin ƙirƙirar amsa"
+    }
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
