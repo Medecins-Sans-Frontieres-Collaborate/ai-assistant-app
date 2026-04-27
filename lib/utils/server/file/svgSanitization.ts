@@ -102,9 +102,10 @@ export async function sanitizeSvgBuffer(
   const dompurify = await getDOMPurify();
   const sanitized = dompurify.sanitize(svgString, {
     USE_PROFILES: { svg: true, svgFilters: true },
-    // The svg profile already strips scripts and on* handlers; these are
-    // belt-and-braces in case a future DOMPurify default loosens. They
-    // also document intent for code readers.
+    // The svg profile already strips every `on*` handler and `<script>`,
+    // so these explicit lists aren't exhaustive — they're documentation
+    // of intent and a hedge against a future DOMPurify default loosening.
+    // Don't try to enumerate every event handler here; trust the profile.
     FORBID_TAGS: ['script', 'foreignObject'],
     FORBID_ATTR: ['onload', 'onclick', 'onerror', 'onmouseover'],
     KEEP_CONTENT: false,
