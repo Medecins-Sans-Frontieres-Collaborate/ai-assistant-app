@@ -147,6 +147,12 @@ interface SettingsStore {
   autoPinActiveFiles: boolean;
   setAutoPinActiveFiles: (enabled: boolean) => void;
 
+  // Stop-generation confirmation preferences
+  confirmStopFromButton: boolean;
+  confirmStopFromKeyboard: boolean;
+  setConfirmStopFromButton: (enabled: boolean) => void;
+  setConfirmStopFromKeyboard: (enabled: boolean) => void;
+
   // Reset
   resetSettings: () => void;
 }
@@ -197,6 +203,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Active files settings
       autoPinActiveFiles: true, // Auto-pin uploaded files by default
+
+      // Stop-generation confirmation preferences (both default ON)
+      confirmStopFromButton: true,
+      confirmStopFromKeyboard: true,
 
       // Actions
       setTemperature: (temperature) => set({ temperature }),
@@ -406,6 +416,12 @@ export const useSettingsStore = create<SettingsStore>()(
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
 
+      // Stop-generation confirmation actions
+      setConfirmStopFromButton: (enabled) =>
+        set({ confirmStopFromButton: enabled }),
+      setConfirmStopFromKeyboard: (enabled) =>
+        set({ confirmStopFromKeyboard: enabled }),
+
       resetSettings: () =>
         set({
           temperature: DEFAULT_TEMPERATURE,
@@ -430,11 +446,13 @@ export const useSettingsStore = create<SettingsStore>()(
           verbosity: undefined,
           slashMenuUsageCounts: {},
           autoPinActiveFiles: true,
+          confirmStopFromButton: true,
+          confirmStopFromKeyboard: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 15, // Increment this when schema changes to trigger migrations
+      version: 16, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -461,6 +479,8 @@ export const useSettingsStore = create<SettingsStore>()(
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
         autoPinActiveFiles: state.autoPinActiveFiles,
+        confirmStopFromButton: state.confirmStopFromButton,
+        confirmStopFromKeyboard: state.confirmStopFromKeyboard,
       }),
       migrate: (persistedState, version) => {
         const state = persistedState as Record<string, unknown>;
@@ -552,6 +572,16 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 15) {
           if (state.slashMenuUsageCounts === undefined) {
             state.slashMenuUsageCounts = {};
+          }
+        }
+
+        // Version 15 → 16: Add stop-generation confirmation preferences
+        if (version < 16) {
+          if (state.confirmStopFromButton === undefined) {
+            state.confirmStopFromButton = true;
+          }
+          if (state.confirmStopFromKeyboard === undefined) {
+            state.confirmStopFromKeyboard = true;
           }
         }
 
