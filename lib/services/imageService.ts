@@ -11,8 +11,9 @@ import { ImageMessageContent } from '@/types/chat';
 const IMAGE_CACHE_MAX_ENTRIES = 30;
 
 // LRU-by-insertion-order cache for image base64 data. We rely on Map
-// preserving insertion order: re-inserting on read moves the entry to the
-// most-recent position; the oldest entry is evicted first when full.
+// preserving insertion order: every read of a cached entry calls
+// `touchRecency`, which deletes-then-reinserts the entry to bump it to
+// the most-recent position. When full, the oldest entry is evicted first.
 const imageCache = new Map<string, string>();
 
 function touchRecency(url: string, value: string): void {
