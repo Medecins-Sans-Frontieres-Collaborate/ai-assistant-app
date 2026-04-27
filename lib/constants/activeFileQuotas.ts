@@ -39,6 +39,14 @@ export interface ActiveFileBudgets {
   sessionQuota: number;
 }
 
+/**
+ * Mid tier: mainstream 128k-context models (e.g. GPT-4o, Claude Sonnet
+ * pre-200k). Reserves ~70% of input headroom for the system prompt,
+ * conversation history, and the user's current message. Per-turn cap and
+ * activation limit are tight enough that two mid-sized files (~25k each)
+ * generally rotate cleanly through the fairness selector rather than
+ * one of them sitting permanently in context.
+ */
 const MID_TIER: ActiveFileBudgets = {
   pinLimit: ACTIVE_FILE_PIN_TOKEN_LIMIT,
   activationLimit: ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
@@ -47,6 +55,13 @@ const MID_TIER: ActiveFileBudgets = {
   sessionQuota: ACTIVE_FILE_SESSION_QUOTA,
 };
 
+/**
+ * Large tier: 200k+-context models (Claude Sonnet 4.x extended, future
+ * 1M-context models). Same 35% input fraction across the board, but each
+ * limit is scaled up so a 200k window actually carries proportionally more
+ * file context. The session quota grows with the per-turn cap so a long
+ * conversation on a big model doesn't exhaust quota in 5 turns.
+ */
 const LARGE_TIER: ActiveFileBudgets = {
   pinLimit: 75_000,
   activationLimit: 120_000,
