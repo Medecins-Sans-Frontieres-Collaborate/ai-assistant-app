@@ -47,6 +47,11 @@ interface ChatInputState {
   imageFieldValue: ImageFieldValue;
   uploadProgress: { [key: string]: number };
   submitType: ChatInputSubmitTypes;
+  // Cancels the in-flight upload batch. Lives outside React state so that
+  // aborting it doesn't trigger a re-render. Per-batch (not per-file): when
+  // the user removes any file from a batch, the still-queued and in-flight
+  // uploads are cancelled together. Already-completed uploads are unaffected.
+  uploadAbortController: AbortController | null;
 
   // Prompt state
   usedPromptId: string | null;
@@ -137,6 +142,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
   imageFieldValue: null,
   uploadProgress: {},
   submitType: 'TEXT',
+  uploadAbortController: null,
 
   // Initial state - Prompt
   usedPromptId: null,
@@ -215,14 +221,30 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       submitType: typeof type === 'function' ? type(state.submitType) : type,
     })),
   handleFileUpload: async (event) => {
-    await onFileUpload(
-      event,
-      get().setSubmitType,
-      get().setFilePreviews,
-      get().setFileFieldValue,
-      get().setImageFieldValue,
-      get().setUploadProgress,
-    );
+    // Abort any prior in-flight batch — onFileUpload starts a fresh batch.
+    const prior = get().uploadAbortController;
+    if (prior && !prior.signal.aborted) {
+      prior.abort();
+    }
+    const controller = new AbortController();
+    set({ uploadAbortController: controller });
+    try {
+      await onFileUpload(
+        event,
+        get().setSubmitType,
+        get().setFilePreviews,
+        get().setFileFieldValue,
+        get().setImageFieldValue,
+        get().setUploadProgress,
+        controller.signal,
+      );
+    } finally {
+      // Only clear if this is still the current controller — a newer batch
+      // may have started before this one finished.
+      if (get().uploadAbortController === controller) {
+        set({ uploadAbortController: null });
+      }
+    }
   },
 
   removeFile: (filePreview) =>
