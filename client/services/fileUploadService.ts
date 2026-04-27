@@ -141,18 +141,20 @@ export class FileUploadService {
     file: File,
     onProgress?: (progress: number) => void,
   ): Promise<UploadResult> {
-    const result = await this.uploadFileViaXHR(file, onProgress, 'image');
+    // Best-effort base64 read for the in-memory cache, run in parallel with
+    // the upload — neither depends on the other. The cache lets the first
+    // chat send in this session skip the /api/file/{id} refetch. A failure
+    // here must not fail the upload.
+    const [result, dataUrl] = await Promise.all([
+      this.uploadFileViaXHR(file, onProgress, 'image'),
+      this.readFileAsDataURL(file).catch((cacheError) => {
+        console.warn('Failed to read image for cache:', cacheError);
+        return null;
+      }),
+    ]);
 
-    // Best-effort: warm the in-memory base64 cache so the first chat send in
-    // this session can skip the /api/file/{id} refetch. Failures must not
-    // fail the upload.
-    try {
-      if (result.url) {
-        const dataUrl = await this.readFileAsDataURL(file);
-        cacheImageBase64(result.url, dataUrl);
-      }
-    } catch (cacheError) {
-      console.warn('Failed to cache image:', cacheError);
+    if (result.url && dataUrl) {
+      cacheImageBase64(result.url, dataUrl);
     }
 
     return result;
