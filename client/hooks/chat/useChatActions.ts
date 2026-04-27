@@ -246,10 +246,45 @@ export function useChatActions({
     [sendMessage],
   );
 
+  /**
+   * Generates an assistant response when the conversation ends with a user
+   * message that has no assistant follow-up (e.g., generation was stopped or
+   * never streamed). Appends a new assistant message group rather than versioning.
+   */
+  const handleGenerateResponse = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const currentConversation = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+
+    if (!currentConversation || currentConversation.messages.length === 0)
+      return;
+
+    const lastEntry =
+      currentConversation.messages[currentConversation.messages.length - 1];
+    if (!isLegacyMessage(lastEntry) || lastEntry.role !== 'user') return;
+
+    const userMessage = entryToDisplayMessage(lastEntry);
+
+    // Include the entire conversation in the API window (the trailing user
+    // message is the prompt to respond to).
+    const messagesForAPI = windowMessagesForAPI(
+      flattenEntriesForAPI(currentConversation.messages),
+    );
+
+    const apiConversation = {
+      ...currentConversation,
+      messages: messagesForAPI,
+    };
+
+    sendMessage?.(userMessage, apiConversation, undefined);
+  }, [sendMessage]);
+
   return {
     handleEditMessage,
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   };
 }
