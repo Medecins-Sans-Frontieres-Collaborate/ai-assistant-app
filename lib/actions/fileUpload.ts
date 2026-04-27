@@ -19,6 +19,10 @@ import {
   validateFileNotExecutable,
 } from '@/lib/utils/server/file/mimeTypes';
 import {
+  isSvgBuffer,
+  sanitizeSvgBuffer,
+} from '@/lib/utils/server/file/svgSanitization';
+import {
   getCachedTextPath,
   shouldCacheText,
 } from '@/lib/utils/server/file/textCacheUtils';
@@ -239,9 +243,20 @@ async function uploadFileToBlobStorage(
   const isImage =
     (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
   if (isImage) {
-    const imageSig = validateImageSignature(data);
-    if (!imageSig.isValid) {
-      throw new Error(imageSig.error ?? 'Invalid image content');
+    // SVG is XML and bypasses binary magic-byte validation. Sanitise it
+    // through DOMPurify first; the cleaned bytes replace the original so
+    // any scripts or event handlers are gone before storage.
+    if (isSvgBuffer(data)) {
+      const svgResult = await sanitizeSvgBuffer(data);
+      if (!svgResult.ok) {
+        throw new Error(svgResult.error);
+      }
+      data = svgResult.sanitized;
+    } else {
+      const imageSig = validateImageSignature(data);
+      if (!imageSig.isValid) {
+        throw new Error(imageSig.error ?? 'Invalid image content');
+      }
     }
   }
 
