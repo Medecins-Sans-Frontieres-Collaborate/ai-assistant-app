@@ -66,22 +66,23 @@ describe('ActiveFileInjector', () => {
     const fileA = result.activeFiles!.find((f) => f.id === 'a')!;
     const fileB = result.activeFiles!.find((f) => f.id === 'b')!;
 
-    // The more-recent file (B) is selected; its lastUsedAt is bumped to ~now.
-    // The dropped file (A) keeps its original timestamp so the next turn's
-    // sort can rotate it back into context.
-    expect(fileA.lastUsedAt).toBe(fileAOriginal);
-
-    const fileBTime = new Date(fileB.lastUsedAt!).getTime();
-    expect(fileBTime).toBeGreaterThanOrEqual(before);
-    expect(fileBTime).toBeLessThanOrEqual(after + 1);
-    expect(result.activeFilesDroppedThisTurn).toEqual(['a']);
+    // Equal-size files tie in `recent` and `sizeAsc` (1 file each); the
+    // selector picks `sizeAsc` on ties, and its LRU tie-break picks the
+    // older-stamped file (A) so the previously-dropped file rotates in.
+    // A's stamp is bumped to ~now; B keeps its original timestamp so it
+    // can rotate back next turn.
+    const fileATime = new Date(fileA.lastUsedAt!).getTime();
+    expect(fileATime).toBeGreaterThanOrEqual(before);
+    expect(fileATime).toBeLessThanOrEqual(after + 1);
+    expect(fileB.lastUsedAt).toBe(fileBOriginal);
+    expect(result.activeFilesDroppedThisTurn).toEqual(['b']);
   });
 
   it('rotates dropped files back into context on the next turn', async () => {
     // The headline regression this whole feature exists to fix: without
-    // lastUsedAt being updated on injection, the first-uploaded file sorts
-    // last forever and is dropped every single turn. With the stamp, turn
-    // N+1 sees the previously-dropped file as more recent and selects it.
+    // lastUsedAt being updated on injection, the same file is dropped every
+    // turn forever. With the stamp + LRU tie-break in sizeAsc, the file that
+    // was dropped on turn N gets a turn in context on turn N+1.
     const context = createTestChatContext({
       messages: [{ role: 'user', content: 'hello' }],
     });
@@ -90,9 +91,9 @@ describe('ActiveFileInjector', () => {
       makeFile('b', 20_000, { lastUsedAt: '2026-01-02T00:00:00.000Z' }),
     ];
 
-    // Turn 1: B is more recent → B selected, A dropped.
+    // Turn 1: sizeAsc tie + LRU picks A (older stamp). B is dropped.
     const turn1 = await new ActiveFileInjector().execute(context);
-    expect(turn1.activeFilesDroppedThisTurn).toEqual(['a']);
+    expect(turn1.activeFilesDroppedThisTurn).toEqual(['b']);
 
     // Feed turn 1's updated activeFiles back in for turn 2 (matches the
     // real flow where the client persists the stamps via SSE updates).
@@ -101,11 +102,10 @@ describe('ActiveFileInjector', () => {
       activeFiles: turn1.activeFiles,
     };
 
-    // Turn 2: B was just stamped, so A's original timestamp is now older
-    // than B's stamped timestamp. A sorts first by recency, so A is
-    // selected and B becomes the dropped file. Rotation works.
+    // Turn 2: A was just stamped, so B's original timestamp is now older
+    // than A's stamped timestamp. sizeAsc + LRU picks B; rotation works.
     const turn2 = await new ActiveFileInjector().execute(turn2Context);
-    expect(turn2.activeFilesDroppedThisTurn).toEqual(['b']);
+    expect(turn2.activeFilesDroppedThisTurn).toEqual(['a']);
     expect(turn2.activeFilesTokensConsumedThisTurn).toBe(20_000);
   });
 
