@@ -72,6 +72,7 @@ import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
@@ -82,7 +83,6 @@ interface Props {
   ) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
-  stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
   showDisclaimer?: boolean;
@@ -93,7 +93,6 @@ export const ChatInput = ({
   onSend,
   onRegenerate,
   onScrollDownClick,
-  stopConversationRef,
   textareaRef,
   showScrollDownButton,
   showDisclaimer = true,
