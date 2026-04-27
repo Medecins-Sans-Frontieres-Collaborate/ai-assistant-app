@@ -330,17 +330,16 @@ export class FileUploadService {
     await Promise.all(Array.from({ length: workerCount }, () => worker()));
 
     if (firstError) {
-      // Best-effort: release any committed-blob remnants. Uncommitted blocks
-      // are GC'd by Azure after 7 days; explicit cancel makes the common
-      // user-removed-file case clean up immediately.
-      try {
-        await cancelChunkedUploadAction(session);
-      } catch (cancelErr) {
+      // Best-effort fire-and-forget: release any committed-blob remnants.
+      // Uncommitted blocks are GC'd by Azure after 7 days, so the user
+      // shouldn't have to wait on a network round-trip just to see the
+      // error toast. We log on rejection but don't block the throw.
+      void cancelChunkedUploadAction(session).catch((cancelErr) =>
         console.warn(
           `Failed to cancel chunked upload for ${file.name}:`,
           cancelErr,
-        );
-      }
+        ),
+      );
       throw firstError;
     }
 
