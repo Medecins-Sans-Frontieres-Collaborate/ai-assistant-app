@@ -47,6 +47,12 @@ export interface StreamMetadata {
     };
   }>;
   activeFilesTokensConsumed?: number;
+  /**
+   * IDs of active files that were excluded from this turn because they
+   * didn't fit the per-turn token budget. Surfaced so the UI can flag
+   * which pinned/active files are not visible to the model right now.
+   */
+  activeFilesDropped?: string[];
 }
 
 /**
@@ -62,6 +68,7 @@ export interface ParsedMetadata {
   pendingTranscriptions?: PendingTranscriptionInfo[];
   fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   activeFilesTokensConsumed?: number;
+  activeFilesDropped?: string[];
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -82,6 +89,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
   let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
   let activeFilesTokensConsumed: number | undefined;
+  let activeFilesDropped: string[] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -123,6 +131,11 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (typeof anyData.activeFilesTokensConsumed === 'number') {
         activeFilesTokensConsumed = anyData.activeFilesTokensConsumed;
       }
+      if (Array.isArray(anyData.activeFilesDropped)) {
+        activeFilesDropped = anyData.activeFilesDropped.filter(
+          (id: unknown): id is string => typeof id === 'string',
+        );
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -142,6 +155,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     pendingTranscriptions,
     fileCacheUpdates,
     activeFilesTokensConsumed,
+    activeFilesDropped,
     extractionMethod,
   };
 }
