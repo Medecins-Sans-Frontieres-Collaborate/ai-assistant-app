@@ -108,8 +108,10 @@ export function useKeyboardShortcuts({
   const isTermsModalOpen = useUIStore((state) => state.isTermsModalOpen);
 
   // Get actions from stores
-  const requestStop = useChatStore((state) => state.requestStop);
   const setIsSettingsOpen = useUIStore((state) => state.setIsSettingsOpen);
+  const setStopGenerationConfirmOpen = useUIStore(
+    (state) => state.setStopGenerationConfirmOpen,
+  );
 
   // Compute context state
   const contextState: ShortcutContextState = useMemo(() => {
@@ -151,7 +153,7 @@ export function useKeyboardShortcuts({
           return false;
 
         case 'stopGeneration':
-          requestStop();
+          setStopGenerationConfirmOpen(true);
           return true;
 
         case 'toggleSidebar':
@@ -226,7 +228,7 @@ export function useKeyboardShortcuts({
     },
     [
       onNewConversation,
-      requestStop,
+      setStopGenerationConfirmOpen,
       setIsSettingsOpen,
       onOpenModelSelector,
       onScrollToBottom,
