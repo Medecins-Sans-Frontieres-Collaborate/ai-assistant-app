@@ -191,6 +191,12 @@ export interface ChatContext {
   activeFilesSessionQuota?: number;
   /** Output: tokens injected this turn */
   activeFilesTokensConsumedThisTurn?: number;
+  /**
+   * Output: file IDs that were excluded from this turn's context because
+   * they did not fit the per-turn budget. Surfaced to the client via SSE
+   * so users see which files are not visible to the model this turn.
+   */
+  activeFilesDroppedThisTurn?: string[];
 
   /** Execution strategy (standard or agent) */
   executionStrategy?: 'standard' | 'agent';
