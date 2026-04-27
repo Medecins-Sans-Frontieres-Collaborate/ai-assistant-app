@@ -158,6 +158,20 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
         );
       })}
 
+      {/* Generate response affordance — appears when the conversation is
+          stuck on a trailing user message or an errored assistant turn */}
+      {showGenerateResponse && (
+        <div className="flex justify-center my-4">
+          <button
+            type="button"
+            onClick={onGenerateResponse}
+            className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition-colors"
+          >
+            {t('chat.generateResponseButton')}
+          </button>
+        </div>
+      )}
+
       {/* Transcription status indicator */}
       {transcriptionStatus && (
         <div className="relative flex p-4 text-base md:py-6 lg:px-0 w-full">
