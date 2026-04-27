@@ -538,6 +538,41 @@ export default class BlobStorageFactory {
 
 type BlobType = 'files' | 'images' | 'audio' | 'video';
 
+/**
+ * Heuristic: does this buffer look like a legacy raw-base64-encoded image
+ * blob (i.e. the bytes are all ASCII characters from the base64 alphabet,
+ * with no `data:` prefix)? Used by `getBlobBase64String` to distinguish
+ * legacy data-URL-string-stored blobs from binary blobs.
+ *
+ * The earlier heuristic only sniffed the first 100 bytes, which gave false
+ * positives for binary files whose headers happened to start with base64-
+ * alphabet characters. We scan a larger prefix and reject on any non-base64
+ * byte (which a real binary header would contain). A minimum length of 256
+ * bytes filters out short binaries that coincidentally look like base64.
+ */
+function isLikelyRawBase64Blob(blob: Buffer): boolean {
+  const MIN_BASE64_LENGTH = 256;
+  const SCAN_BYTES = Math.min(blob.length, 4096);
+  if (blob.length < MIN_BASE64_LENGTH) return false;
+  for (let i = 0; i < SCAN_BYTES; i++) {
+    const b = blob[i];
+    // ASCII base64 alphabet + padding + whitespace (CR/LF/space/tab)
+    const isBase64Char =
+      (b >= 0x41 && b <= 0x5a) || // A-Z
+      (b >= 0x61 && b <= 0x7a) || // a-z
+      (b >= 0x30 && b <= 0x39) || // 0-9
+      b === 0x2b || // +
+      b === 0x2f || // /
+      b === 0x3d || // =
+      b === 0x09 ||
+      b === 0x0a ||
+      b === 0x0d ||
+      b === 0x20;
+    if (!isBase64Char) return false;
+  }
+  return true;
+}
+
 export const getBlobBase64String = async (
   userId: string,
   id: string,
@@ -566,37 +601,7 @@ export const getBlobBase64String = async (
     return contentString;
   }
 
-  // Check if it's raw base64 (legacy format - stored without data: prefix).
-  // The earlier heuristic only sniffed the first 100 bytes, which gave
-  // false positives for binary files whose headers happened to start with
-  // base64-alphabet characters. A stricter check: scan a larger prefix
-  // for any non-base64 byte (which a real binary header would contain).
-  // We also require a minimum length, since legacy base64 image blobs are
-  // always many KB long.
-  const SCAN_BYTES = Math.min(blob.length, 4096);
-  const MIN_BASE64_LENGTH = 256;
-  const isLikelyRawBase64 = (() => {
-    if (blob.length < MIN_BASE64_LENGTH) return false;
-    for (let i = 0; i < SCAN_BYTES; i++) {
-      const b = blob[i];
-      // ASCII base64 alphabet + padding + whitespace (CR/LF/space/tab)
-      const isBase64Char =
-        (b >= 0x41 && b <= 0x5a) || // A-Z
-        (b >= 0x61 && b <= 0x7a) || // a-z
-        (b >= 0x30 && b <= 0x39) || // 0-9
-        b === 0x2b || // +
-        b === 0x2f || // /
-        b === 0x3d || // =
-        b === 0x09 ||
-        b === 0x0a ||
-        b === 0x0d ||
-        b === 0x20;
-      if (!isBase64Char) return false;
-    }
-    return true;
-  })();
-
-  if (isLikelyRawBase64) {
+  if (isLikelyRawBase64Blob(blob)) {
     const extension = blobLocation.split('.').pop() || '';
     const mimeType = lookup(extension);
     if (mimeType) {
