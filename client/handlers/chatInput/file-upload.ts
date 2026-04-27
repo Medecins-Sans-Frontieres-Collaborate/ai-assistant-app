@@ -340,11 +340,13 @@ export async function onFileUpload(
       });
     }
 
-    // Update preview status to completed
+    // Update preview status to completed and remember the server URL so
+    // removeFile can match this preview against entries in the field-value
+    // arrays (which carry the server URL, not the blob: previewUrl).
     setFilePreviews((prevPreviews) =>
       prevPreviews.map((preview) =>
         preview.name === result.originalFilename
-          ? { ...preview, status: 'completed' }
+          ? { ...preview, status: 'completed', uploadedUrl: result.url }
           : preview,
       ),
     );
