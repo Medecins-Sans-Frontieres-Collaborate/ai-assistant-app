@@ -569,6 +569,12 @@ export async function finalizeChunkedUploadAction(
  * at the session's blobPath. Uncommitted staged blocks are garbage collected
  * by Azure after 7 days, so a failure here is recoverable.
  *
+ * Refuses to cancel a session whose blob has already been finalized (i.e.
+ * `commitBlockList` ran and the blob is now visible). Without this guard, a
+ * UI cancel button that survives finalize completion could destroy the
+ * user's just-uploaded file. Pre-finalize blobs only have uncommitted
+ * blocks, which Azure does not surface via `blobExists`.
+ *
  * Idempotent — safe to call multiple times for the same session.
  */
 export async function cancelChunkedUploadAction(
@@ -594,6 +600,18 @@ export async function cancelChunkedUploadAction(
       };
     }
 
+    if (await blobStorageClient.blobExists(session.blobPath)) {
+      // The blob exists as a committed blob — finalize already ran. Refuse
+      // to delete a successfully-uploaded file.
+      return {
+        success: false,
+        error: 'Upload already finalized; cancel is no longer applicable',
+      };
+    }
+
+    // No committed blob exists; uncommitted blocks (if any) fall to Azure's
+    // 7-day GC. The deleteIfExists call is a no-op in the typical case and
+    // a safety-net otherwise.
     await blobStorageClient.deleteIfExists(session.blobPath);
     return { success: true };
   } catch (error) {
