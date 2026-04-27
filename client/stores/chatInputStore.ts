@@ -350,8 +350,13 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     });
   },
 
-  resetForNewConversation: (defaultSearchMode = SearchMode.OFF) =>
+  resetForNewConversation: (defaultSearchMode = SearchMode.OFF) => {
+    const prior = get().uploadAbortController;
+    if (prior && !prior.signal.aborted) {
+      prior.abort();
+    }
     set({
+      uploadAbortController: null,
       textFieldValue: '',
       searchMode: defaultSearchMode,
       selectedToneId: null,
@@ -363,5 +368,6 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       usedPromptId: null,
       usedPromptVariables: null,
       pendingTranscriptions: new Map(),
-    }),
+    });
+  },
 }));
