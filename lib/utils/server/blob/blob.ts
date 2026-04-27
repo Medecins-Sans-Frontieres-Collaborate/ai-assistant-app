@@ -65,6 +65,13 @@ export interface BlobStorage {
   getBlockBlobClient(blobName: string): BlockBlobClient;
   getBlobSize(blobName: string): Promise<number>;
   /**
+   * Deletes a blob if it exists. Idempotent — returns false when the blob
+   * was already absent. Used to clean up after failed or cancelled chunked
+   * uploads. Uncommitted blocks (staged but never committed) are garbage
+   * collected by Azure after 7 days regardless of this call.
+   */
+  deleteIfExists(blobName: string): Promise<boolean>;
+  /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
    *
@@ -292,6 +299,18 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       `[Perf] AzureBlobStorage.blobExists: ${(performance.now() - perfStart).toFixed(1)}ms (${result})`,
     );
     return result;
+  }
+
+  async deleteIfExists(blobName: string): Promise<boolean> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const result = await withAzureRetry(
+      () => blockBlobClient.deleteIfExists(),
+      { label: 'blob.deleteIfExists' },
+    );
+    return result.succeeded;
   }
 
   async getBlobSize(blobName: string): Promise<number> {
