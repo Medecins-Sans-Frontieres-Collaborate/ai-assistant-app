@@ -569,6 +569,7 @@ export class FileUploadService {
   static async uploadSingleFile(
     file: File,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
     const validation = this.validateFile(file);
     if (!validation.valid) {
@@ -576,18 +577,20 @@ export class FileUploadService {
     }
 
     if (this.isImage(file)) {
-      return this.uploadImage(file, onProgress);
+      return this.uploadImage(file, onProgress, signal);
     } else {
-      return this.uploadFile(file, onProgress);
+      return this.uploadFile(file, onProgress, signal);
     }
   }
 
   /**
-   * Upload multiple files
+   * Upload multiple files. The optional `signal` aborts the in-flight upload
+   * and prevents subsequent files in the batch from starting.
    */
   static async uploadMultipleFiles(
     files: File[],
     onProgressUpdate?: (progress: UploadProgress) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult[]> {
     const results: UploadResult[] = [];
     const progressMap: UploadProgress = {};
@@ -598,15 +601,24 @@ export class FileUploadService {
     });
 
     for (const file of files) {
+      if (signal?.aborted) break;
       try {
-        const result = await this.uploadSingleFile(file, (progress) => {
-          progressMap[file.name] = progress;
-          if (onProgressUpdate) {
-            onProgressUpdate({ ...progressMap });
-          }
-        });
+        const result = await this.uploadSingleFile(
+          file,
+          (progress) => {
+            progressMap[file.name] = progress;
+            if (onProgressUpdate) {
+              onProgressUpdate({ ...progressMap });
+            }
+          },
+          signal,
+        );
         results.push(result);
       } catch (error) {
+        if (error instanceof UploadAbortedError) {
+          // User-initiated cancel — silent, the UI already removed the file.
+          continue;
+        }
         console.error(`Failed to upload ${file.name}:`, error);
         toast.error(
           error instanceof Error
