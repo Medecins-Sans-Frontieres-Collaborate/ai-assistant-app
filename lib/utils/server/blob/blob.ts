@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 
 import { env } from '@/config/environment';
 import { DefaultAzureCredential } from '@azure/identity';
@@ -198,7 +199,10 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       );
     }
 
-    await blockBlobClient.upload(uploadContent, contentLength, options);
+    await withAzureRetry(
+      () => blockBlobClient.upload(uploadContent, contentLength, options),
+      { label: 'blob.upload' },
+    );
     console.log(
       `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
@@ -221,11 +225,15 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       return blockBlobClient.url;
     }
 
-    await blockBlobClient.uploadStream(
-      contentStream,
-      bufferSize,
-      maxConcurrency,
-      options,
+    await withAzureRetry(
+      () =>
+        blockBlobClient.uploadStream(
+          contentStream,
+          bufferSize,
+          maxConcurrency,
+          options,
+        ),
+      { label: 'blob.uploadStream' },
     );
     return blockBlobClient.url;
   }
@@ -403,7 +411,10 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    await blockBlobClient.stageBlock(blockId, content, content.length);
+    await withAzureRetry(
+      () => blockBlobClient.stageBlock(blockId, content, content.length),
+      { label: 'blob.stageBlock' },
+    );
   }
 
   /**
@@ -424,7 +435,10 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    await blockBlobClient.commitBlockList(blockIds, options);
+    await withAzureRetry(
+      () => blockBlobClient.commitBlockList(blockIds, options),
+      { label: 'blob.commitBlockList' },
+    );
     return blockBlobClient.url;
   }
 
