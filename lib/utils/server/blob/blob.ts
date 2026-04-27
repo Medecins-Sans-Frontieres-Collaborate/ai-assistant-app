@@ -566,12 +566,35 @@ export const getBlobBase64String = async (
     return contentString;
   }
 
-  // Check if it's raw base64 (legacy format - stored without data: prefix)
-  // Raw base64 starts with valid base64 chars and contains no null bytes
-  const isLikelyRawBase64 =
-    /^[A-Za-z0-9+/]/.test(contentString) &&
-    !contentString.includes('\x00') &&
-    /^[A-Za-z0-9+/=\s]+$/.test(contentString.slice(0, 100));
+  // Check if it's raw base64 (legacy format - stored without data: prefix).
+  // The earlier heuristic only sniffed the first 100 bytes, which gave
+  // false positives for binary files whose headers happened to start with
+  // base64-alphabet characters. A stricter check: scan a larger prefix
+  // for any non-base64 byte (which a real binary header would contain).
+  // We also require a minimum length, since legacy base64 image blobs are
+  // always many KB long.
+  const SCAN_BYTES = Math.min(blob.length, 4096);
+  const MIN_BASE64_LENGTH = 256;
+  const isLikelyRawBase64 = (() => {
+    if (blob.length < MIN_BASE64_LENGTH) return false;
+    for (let i = 0; i < SCAN_BYTES; i++) {
+      const b = blob[i];
+      // ASCII base64 alphabet + padding + whitespace (CR/LF/space/tab)
+      const isBase64Char =
+        (b >= 0x41 && b <= 0x5a) || // A-Z
+        (b >= 0x61 && b <= 0x7a) || // a-z
+        (b >= 0x30 && b <= 0x39) || // 0-9
+        b === 0x2b || // +
+        b === 0x2f || // /
+        b === 0x3d || // =
+        b === 0x09 ||
+        b === 0x0a ||
+        b === 0x0d ||
+        b === 0x20;
+      if (!isBase64Char) return false;
+    }
+    return true;
+  })();
 
   if (isLikelyRawBase64) {
     const extension = blobLocation.split('.').pop() || '';
