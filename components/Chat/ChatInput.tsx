@@ -105,11 +105,11 @@ export const ChatInput = ({
 
   // Zustand hooks
   const { selectedConversation, folders } = useConversations();
-  const { isStreaming } = useChat();
-  const setStopGenerationConfirmOpen = useUIStore(
-    (state) => state.setStopGenerationConfirmOpen,
+  const { isStreaming, requestStop } = useChat();
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
   );
-  const { prompts } = useSettings();
+  const { prompts, confirmStopFromButton } = useSettings();
   const { tones } = useTones();
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
@@ -307,7 +307,11 @@ export const ChatInput = ({
   };
 
   const handleStopConversation = () => {
-    setStopGenerationConfirmOpen(true);
+    if (confirmStopFromButton) {
+      setStopGenerationConfirmSource('button');
+    } else {
+      requestStop();
+    }
   };
 
   const isMobile = isMobileDevice;
