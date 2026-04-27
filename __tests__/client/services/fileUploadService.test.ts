@@ -40,6 +40,7 @@ vi.mock('@/lib/actions/fileUpload', () => ({
   initChunkedUploadAction: (...args: unknown[]) => initMock(...args),
   uploadChunkAction: (...args: unknown[]) => chunkMock(...args),
   finalizeChunkedUploadAction: (...args: unknown[]) => finalizeMock(...args),
+  cancelChunkedUploadAction: vi.fn(async () => ({ success: true })),
   uploadFileAction: vi.fn(),
 }));
 
@@ -163,6 +164,7 @@ describe('FileUploadService.uploadImage', () => {
   }
 
   let lastXhr: FakeXhr | null = null;
+  let xhrConstructorCalls = 0;
   const originalXhr = global.XMLHttpRequest;
 
   function makeFakeXhr({
@@ -207,8 +209,10 @@ describe('FileUploadService.uploadImage', () => {
   beforeEach(() => {
     cacheImageBase64Mock.mockClear();
     lastXhr = null;
+    xhrConstructorCalls = 0;
     (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
       function (this: unknown) {
+        xhrConstructorCalls++;
         lastXhr = makeFakeXhr();
         return lastXhr;
       } as unknown as typeof XMLHttpRequest;
@@ -259,17 +263,32 @@ describe('FileUploadService.uploadImage', () => {
     );
   });
 
-  it('rejects when the upload fails and does not warm the cache', async () => {
+  it('retries transient upload failures and rejects after exhausting attempts', async () => {
+    // 500 is classified transient by the upload service, so the wrapper
+    // should retry up to XHR_MAX_ATTEMPTS (=3) times before giving up.
     (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
       function (this: unknown) {
+        xhrConstructorCalls++;
         lastXhr = makeFakeXhr({ succeed: false });
         return lastXhr;
       } as unknown as typeof XMLHttpRequest;
 
-    await expect(FileUploadService.uploadImage(fakePngFile())).rejects.toThrow(
-      /photo\.png/,
-    );
+    // Pin Math.random to the smallest jitter multiplier (0.5) so the
+    // backoff sleeps are short but predictable: 250ms + 500ms ≈ 750ms.
+    // Faster than real-world worst case but still real-timer based — fake
+    // timers don't interact cleanly with the awaited Promise.all here.
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0);
+    try {
+      await expect(
+        FileUploadService.uploadImage(fakePngFile()),
+      ).rejects.toThrow(/photo\.png/);
+    } finally {
+      randomSpy.mockRestore();
+    }
 
+    // 3 XHRs were created — initial + 2 retries — proving the retry loop
+    // actually ran rather than failing on first attempt.
+    expect(xhrConstructorCalls).toBe(3);
     expect(cacheImageBase64Mock).not.toHaveBeenCalled();
   });
 
