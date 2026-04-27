@@ -492,16 +492,31 @@ export async function finalizeChunkedUploadAction(
       contentType = getContentType(extension);
     }
 
-    // Commit the block list
-    const uri = await blobStorageClient.commitBlockList(
-      session.blobPath,
-      blockIds,
-      {
-        blobHTTPHeaders: {
-          blobContentType: contentType,
+    // Commit the block list. On failure, best-effort cleanup so any
+    // partially-committed blob is removed; uncommitted blocks fall to
+    // Azure's 7-day GC.
+    let uri: string;
+    try {
+      uri = await blobStorageClient.commitBlockList(
+        session.blobPath,
+        blockIds,
+        {
+          blobHTTPHeaders: {
+            blobContentType: contentType,
+          },
         },
-      },
-    );
+      );
+    } catch (commitError) {
+      try {
+        await blobStorageClient.deleteIfExists(session.blobPath);
+      } catch (cleanupError) {
+        console.error(
+          '[finalizeChunkedUploadAction] cleanup after commit failure threw:',
+          cleanupError instanceof Error ? cleanupError.message : cleanupError,
+        );
+      }
+      throw commitError;
+    }
 
     // Fire-and-forget: download committed blob and cache text
     if (shouldCacheText(session.filename)) {
@@ -533,6 +548,47 @@ export async function finalizeChunkedUploadAction(
       success: false,
       error:
         error instanceof Error ? error.message : 'Failed to finalize upload',
+    };
+  }
+}
+
+/**
+ * Cancel a chunked upload session and best-effort delete any committed blob
+ * at the session's blobPath. Uncommitted staged blocks are garbage collected
+ * by Azure after 7 days, so a failure here is recoverable.
+ *
+ * Idempotent — safe to call multiple times for the same session.
+ */
+export async function cancelChunkedUploadAction(
+  session: ChunkedUploadSession,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const authSession = await auth();
+    if (!authSession) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const authedUserId = getUserIdFromSession(authSession);
+    const verification = verifyChunkedSession(session, authedUserId);
+    if (!verification.valid) {
+      return { success: false, error: verification.reason };
+    }
+
+    const blobStorageClient = createBlobStorageClient(authSession);
+    if (!(blobStorageClient instanceof AzureBlobStorage)) {
+      return {
+        success: false,
+        error: 'Chunked upload requires Azure Blob Storage',
+      };
+    }
+
+    await blobStorageClient.deleteIfExists(session.blobPath);
+    return { success: true };
+  } catch (error) {
+    console.error('[cancelChunkedUploadAction] Error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to cancel upload',
     };
   }
 }
