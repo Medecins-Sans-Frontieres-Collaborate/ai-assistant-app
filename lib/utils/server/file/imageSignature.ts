@@ -7,8 +7,14 @@
  * Without this check, the server would accept arbitrary binary content under
  * an image filename + `filetype=image` and store it without any validation.
  *
- * Supports the formats listed in `IMAGE_EXTENSIONS` (lib/constants/fileLimits):
- * PNG, JPEG, GIF, WebP, BMP, ICO, SVG.
+ * Supports binary image formats: PNG, JPEG, GIF, WebP, BMP, ICO. SVG is
+ * deliberately *not* validated as an image here: it is XML-based and can
+ * carry executable content (`<script>`, `on*` handlers, foreign objects).
+ * Magic-byte sniffing cannot detect that, and serving an unsanitised SVG
+ * with `Content-Type: image/svg+xml` from our origin would be a stored
+ * XSS vector. Reject SVG at this gate; if SVG support is needed later it
+ * must go through a sanitiser (e.g. DOMPurify with svg profile) and be
+ * served with `Content-Disposition: attachment` or from a sandboxed origin.
  */
 
 export interface ImageSignatureResult {
@@ -77,31 +83,6 @@ function isIco(b: Buffer): boolean {
   );
 }
 
-function isSvg(b: Buffer): boolean {
-  // SVG is text/XML — skip an optional UTF-8 BOM and leading whitespace,
-  // then look for `<?xml` or `<svg` (case-insensitive on the tag name).
-  // Real-world SVGs sometimes have a BOM or leading whitespace before the
-  // XML prolog, so simple byte-prefix matching isn't enough.
-  if (b.length < 5) return false;
-  let offset = 0;
-  if (b[0] === 0xef && b[1] === 0xbb && b[2] === 0xbf) offset = 3;
-  while (
-    offset < b.length &&
-    (b[offset] === 0x20 ||
-      b[offset] === 0x09 ||
-      b[offset] === 0x0a ||
-      b[offset] === 0x0d)
-  ) {
-    offset++;
-  }
-  if (b.length - offset < 5) return false;
-  const head = b
-    .slice(offset, offset + 5)
-    .toString('ascii')
-    .toLowerCase();
-  return head === '<?xml' || head.startsWith('<svg');
-}
-
 const IMAGE_SIGNATURES: SignatureCheck[] = [
   isPng,
   isJpeg,
@@ -109,7 +90,6 @@ const IMAGE_SIGNATURES: SignatureCheck[] = [
   isWebp,
   isBmp,
   isIco,
-  isSvg,
 ];
 
 /**
