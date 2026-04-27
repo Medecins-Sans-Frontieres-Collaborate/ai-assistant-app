@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
+
+import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
 
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -83,6 +86,23 @@ export function AppInitializer() {
       useConversationStore.getState().setIsLoaded(true);
     }
   }, []); // Empty deps - only run once
+
+  // Surface localStorage quota exhaustion as a toast so the user knows when
+  // the persistence layer is silently dropping writes. The storage layer
+  // dispatches this event (throttled to once per 30s) instead of importing
+  // `toast` directly to keep that layer UI-agnostic.
+  useEffect(() => {
+    const onQuotaExceeded = () => {
+      toast.error(
+        'Browser storage is full. Recent changes may not be saved. Consider deleting old conversations.',
+        { duration: 8000 },
+      );
+    };
+    window.addEventListener(STORAGE_QUOTA_EXCEEDED_EVENT, onQuotaExceeded);
+    return () => {
+      window.removeEventListener(STORAGE_QUOTA_EXCEEDED_EVENT, onQuotaExceeded);
+    };
+  }, []);
 
   return null; // This component doesn't render anything
 }
