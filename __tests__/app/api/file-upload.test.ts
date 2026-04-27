@@ -255,12 +255,9 @@ describe('/api/file/upload', () => {
       expect(data.error).toBe('Invalid image data URL format');
     });
 
-    it('rejects SVG uploads to prevent stored-XSS via embedded scripts', async () => {
-      // SVG is XML and can carry executable content; magic-byte sniffing
-      // cannot detect that. The image signature validator rejects SVG so
-      // a hostile <svg onload="..."> cannot be served from our origin.
+    it('accepts a benign SVG via legacy data URL path', async () => {
       const svgBytes = Buffer.from(
-        '<?xml version="1.0"?><svg onload="alert(1)"/>',
+        '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3"/></svg>',
       );
       const svgDataUrl =
         'data:image/svg+xml;base64,' + svgBytes.toString('base64');
@@ -271,7 +268,47 @@ describe('/api/file/upload', () => {
         body: svgDataUrl,
       });
       const svgResponse = await POST(svgRequest);
-      expect(svgResponse.status).toBe(400);
+      expect(svgResponse.status).toBe(200);
+    });
+
+    it('sanitises malicious SVG content before storage', async () => {
+      // The hostile parts (<script>, onload, javascript: href) must be
+      // stripped before the SVG ever reaches blob storage. The benign
+      // <circle> element should survive so the upload still represents
+      // a useful image.
+      const svgBytes = Buffer.from(
+        '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)">' +
+          '<script>alert(2)</script>' +
+          '<a href="javascript:alert(3)"><circle cx="5" cy="5" r="3"/></a>' +
+          '</svg>',
+      );
+      const svgDataUrl =
+        'data:image/svg+xml;base64,' + svgBytes.toString('base64');
+      const svgRequest = createRequest({
+        filename: 'malicious.svg',
+        filetype: 'image',
+        mime: 'image/svg+xml',
+        body: svgDataUrl,
+      });
+
+      mockBlobClient.upload.mockClear();
+      const svgResponse = await POST(svgRequest);
+      expect(svgResponse.status).toBe(200);
+
+      // Inspect what was handed to blob storage. The legacy path stores a
+      // data URL string; decode it and assert the dangerous bits are gone.
+      expect(mockBlobClient.upload).toHaveBeenCalledTimes(1);
+      const stored = mockBlobClient.upload.mock.calls[0][1];
+      expect(typeof stored).toBe('string');
+      const dataUrl = stored as string;
+      const base64 = dataUrl.split(',')[1];
+      const cleaned = Buffer.from(base64, 'base64').toString('utf8');
+      expect(cleaned).not.toMatch(/onload/i);
+      expect(cleaned).not.toMatch(/<script/i);
+      expect(cleaned).not.toMatch(/javascript:/i);
+      expect(cleaned).not.toMatch(/alert/);
+      // Benign content survives.
+      expect(cleaned).toMatch(/<circle/i);
     });
 
     it('accepts ICO via legacy data URL path', async () => {
