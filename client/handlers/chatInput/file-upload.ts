@@ -240,7 +240,14 @@ export async function onFileUpload(
           );
           toast.dismiss(`extract-${file.name}`);
           // Bare `toast()` call is intentional info-level (not error/success).
-          toast(`Uploading ${file.name} as-is`, { duration: 4000 });
+          // Differentiate the message by reason so the user understands why
+          // they're paying full upload cost: a memory cap is permanent for
+          // their device + this file, while CDN/browser issues are transient.
+          const fallbackMessage =
+            error.reason === 'memory'
+              ? `${file.name} is too large for in-browser compression — uploading raw`
+              : `Uploading ${file.name} as-is`;
+          toast(fallbackMessage, { duration: 4000 });
           setFilePreviews((prev) =>
             prev.map((p) =>
               p.name === file.name ? { ...p, status: 'uploading' } : p,
