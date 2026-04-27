@@ -304,15 +304,18 @@ export class StandardChatHandler extends BasePipelineStage {
             streamingSpeed: context.streamingSpeed,
           });
 
-          // If we have active file cache updates or token consumption and streaming, append as metadata at end of stream
+          // If we have active file cache updates, token consumption, or
+          // dropped files this turn, append as metadata at end of stream.
           let finalResponse = response;
           const hasFileUpdates =
             (context.activeFilesCacheUpdates?.length ?? 0) > 0;
           const hasTokensConsumed =
             (context.activeFilesTokensConsumedThisTurn ?? 0) > 0;
+          const hasDroppedFiles =
+            (context.activeFilesDroppedThisTurn?.length ?? 0) > 0;
           if (
             context.stream &&
-            (hasFileUpdates || hasTokensConsumed) &&
+            (hasFileUpdates || hasTokensConsumed || hasDroppedFiles) &&
             response.body
           ) {
             const encoder = new TextEncoder();
@@ -343,6 +346,11 @@ export class StandardChatHandler extends BasePipelineStage {
                   if (hasTokensConsumed) {
                     metadataPayload.activeFilesTokensConsumed =
                       context.activeFilesTokensConsumedThisTurn;
+                  }
+
+                  if (hasDroppedFiles) {
+                    metadataPayload.activeFilesDropped =
+                      context.activeFilesDroppedThisTurn;
                   }
 
                   const metadata = `\n\n<<<METADATA_START>>>${JSON.stringify(metadataPayload)}<<<METADATA_END>>>`;
