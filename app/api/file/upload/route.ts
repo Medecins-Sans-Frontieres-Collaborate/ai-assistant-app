@@ -51,20 +51,9 @@ export const maxDuration = 300;
 const MULTIPART_OVERHEAD_BYTES = 4 * 1024;
 
 /**
- * Buffers the request body into an `ArrayBuffer` and rejects when the size
- * exceeds `maxBytes`. The body is consumed via `arrayBuffer()` (undici-
- * internal consumption) rather than a manual reader to avoid races with the
- * test environment's synthetic body source. The size check still runs before
- * `formData()` parses fields and allocates `File` objects, so an oversized
- * payload is rejected before the expensive multipart parse.
- *
- * Returns the raw ArrayBuffer rather than a Buffer so callers can pass it
- * straight into `new Response(arrayBuffer)` without an intermediate copy —
- * `Buffer.from(arrayBuffer)` is zero-copy but `new Uint8Array(buffer)`
- * isn't, so going through Buffer adds an unnecessary materialization for
- * large bodies.
- *
- * Returns null when the cap is exceeded; the caller should respond 413.
+ * Buffers the request body and returns null if it exceeds `maxBytes`, so
+ * the caller can reject oversized uploads before the expensive multipart
+ * parse. Caller maps null to 413.
  */
 async function readBoundedBody(
   request: NextRequest,
