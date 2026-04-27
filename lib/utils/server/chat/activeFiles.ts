@@ -92,7 +92,18 @@ const SORTERS: Record<
 > = {
   recent: (a, b) =>
     (b.lastUsedAt ?? b.addedAt).localeCompare(a.lastUsedAt ?? a.addedAt),
-  sizeAsc: (a, b) => estimateTokens(a) - estimateTokens(b),
+  // Smallest first; on size ties, least-recently-used first so that two
+  // equally-sized files rotate across turns instead of locking to whichever
+  // appeared first in the input order. Without this tiebreak, the stable-
+  // sort behaviour means turn N+1 picks the same file turn N did, defeating
+  // the lastUsedAt rotation that the injector stamps.
+  sizeAsc: (a, b) => {
+    const sizeDelta = estimateTokens(a) - estimateTokens(b);
+    if (sizeDelta !== 0) return sizeDelta;
+    const aTime = a.lastUsedAt ?? a.addedAt;
+    const bTime = b.lastUsedAt ?? b.addedAt;
+    return aTime.localeCompare(bTime);
+  },
 };
 
 function greedySelect(
