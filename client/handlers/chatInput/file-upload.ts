@@ -5,6 +5,7 @@ import { FileUploadService } from '@/client/services/fileUploadService';
 
 import { FILE_COUNT_LIMITS, FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import {
+  AudioExtractionUnavailableError,
   extractAudioFromVideo,
   isAudioExtractionSupported,
 } from '@/lib/utils/client/audio/audioExtractor';
@@ -130,16 +131,16 @@ export async function onFileUpload(
       isAudioVideoFileByTypeOrName(file.name, file.type) &&
       (await isVideoFile(file))
     ) {
-      // Check if extraction is supported in this browser
-      if (!isAudioExtractionSupported()) {
-        toast.error(
-          'Video extraction not supported in this browser. Please upload audio files directly.',
+      // Check if extraction is supported in this browser AND that the file
+      // is small enough to safely buffer in memory. Files that fail this
+      // check fall through to direct video upload — the server-side
+      // transcription pipeline (real ffmpeg binary) handles them.
+      if (!isAudioExtractionSupported(file)) {
+        toast(
+          `Uploading ${file.name} as-is (client-side extraction unavailable)`,
+          { duration: 4000 },
         );
-        setFilePreviews((prev) =>
-          prev.map((p) =>
-            p.name === file.name ? { ...p, status: 'failed' } : p,
-          ),
-        );
+        filesToUpload.push(file);
         continue;
       }
 
@@ -225,6 +226,23 @@ export async function onFileUpload(
         // Add extracted audio file to upload queue
         filesToUpload.push(result.audioFile);
       } catch (error) {
+        // For recoverable extraction failures (CDN blocked, file too large,
+        // browser missing capabilities), fall back to uploading the raw
+        // video — the server-side transcription pipeline handles it.
+        if (error instanceof AudioExtractionUnavailableError) {
+          console.warn(
+            `Client-side extraction unavailable for ${file.name} (${error.reason}); uploading raw video`,
+          );
+          toast.dismiss(`extract-${file.name}`);
+          toast(`Uploading ${file.name} as-is`, { duration: 4000 });
+          setFilePreviews((prev) =>
+            prev.map((p) =>
+              p.name === file.name ? { ...p, status: 'uploading' } : p,
+            ),
+          );
+          filesToUpload.push(file);
+          continue;
+        }
         console.error('Audio extraction failed:', error);
         toast.error(
           error instanceof Error
