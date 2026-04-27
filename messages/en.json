@@ -655,6 +655,10 @@
   "chat": {
     "discardChanges": "Discard Changes",
     "discardChangesMessage": "You have unsaved changes. Are you sure you want to discard them?",
+    "stopGenerationTitle": "Stop generating?",
+    "stopGenerationMessage": "Are you sure you want to stop generating this response? Any in-progress reply will be discarded.",
+    "stopGenerationConfirm": "Stop",
+    "generateResponseButton": "Generate response",
     "downloadAudio": "Download audio",
     "closeAudioPlayer": "Close audio player",
     "downloadTranscript": "Download transcript",
