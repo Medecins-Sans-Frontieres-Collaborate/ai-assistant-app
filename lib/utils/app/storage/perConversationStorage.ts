@@ -56,6 +56,16 @@ export const STORAGE_QUOTA_EXCEEDED_EVENT =
   'conversation-storage-quota-exceeded';
 
 /**
+ * Detail payload carried by the `STORAGE_QUOTA_EXCEEDED_EVENT` CustomEvent.
+ * Exported so listeners can type their handlers (e.g.
+ * `(e: CustomEvent<StorageQuotaExceededDetail>) => void`).
+ */
+export interface StorageQuotaExceededDetail {
+  scope: 'conversation' | 'folder';
+  id?: string;
+}
+
+/**
  * Throttle so a chatty failure mode (e.g., every keystroke triggering a
  * write that fails) only surfaces one toast per window. 30 seconds is long
  * enough that the user sees one warning per "session of failures" rather
@@ -65,10 +75,7 @@ export const STORAGE_QUOTA_EXCEEDED_EVENT =
 let lastQuotaToastAt = 0;
 const QUOTA_TOAST_THROTTLE_MS = 30_000;
 
-function notifyQuotaExceeded(detail: {
-  scope: 'conversation' | 'folder';
-  id?: string;
-}): void {
+function notifyQuotaExceeded(detail: StorageQuotaExceededDetail): void {
   if (typeof window === 'undefined') return;
   const now = Date.now();
   if (now - lastQuotaToastAt < QUOTA_TOAST_THROTTLE_MS) return;
