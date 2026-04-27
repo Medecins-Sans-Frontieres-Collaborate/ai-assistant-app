@@ -57,13 +57,14 @@ const FFMPEG_WASM_LOAD_TIMEOUT_MS = 30_000;
 
 /**
  * Thrown when client-side extraction is unavailable for a recoverable
- * reason (CDN blocked, file too large, browser missing capabilities).
- * Callers should fall back to uploading the raw video.
+ * reason. Callers should fall back to uploading the raw video. The
+ * "unsupported browser" case is signalled via `isAudioExtractionSupported`
+ * returning false rather than a thrown error, so it doesn't appear here.
  */
 export class AudioExtractionUnavailableError extends Error {
   constructor(
     message: string,
-    public readonly reason: 'cdn' | 'memory' | 'unsupported',
+    public readonly reason: 'cdn' | 'memory',
   ) {
     super(message);
     this.name = 'AudioExtractionUnavailableError';
