@@ -377,8 +377,17 @@ async function xlsxToText(inputPath: string): Promise<string> {
       // The downstream token estimator (countTokens) runs on this returned
       // string, so appending a clear truncation notice both keeps the
       // estimate honest about what's actually included and tells the
-      // model which sheets it cannot see.
-      const list = droppedSheetNames.map((n) => `"${n}"`).join(', ');
+      // model which sheets it cannot see. Cap the listed names so a
+      // workbook with hundreds of dropped sheets doesn't produce a
+      // multi-kilobyte marker that itself eats into the token budget.
+      const SHEET_LIST_CAP = 5;
+      const visibleNames = droppedSheetNames
+        .slice(0, SHEET_LIST_CAP)
+        .map((n) => `"${n}"`)
+        .join(', ');
+      const overflow = droppedSheetNames.length - SHEET_LIST_CAP;
+      const list =
+        overflow > 0 ? `${visibleNames}, and ${overflow} more` : visibleNames;
       result += `\n\n[… extraction truncated at ${mb}MB; ${droppedSheetNames.length} sheet(s) not shown to the model: ${list} …]\n\n`;
     }
 
