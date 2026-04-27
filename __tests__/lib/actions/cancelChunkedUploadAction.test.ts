@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const authMock = vi.fn();
 const verifyChunkedSessionMock = vi.fn();
 const deleteIfExistsMock = vi.fn();
+const blobExistsMock = vi.fn();
 
 vi.mock('@/auth', () => ({
   auth: () => authMock(),
@@ -32,6 +33,7 @@ vi.mock('@/lib/utils/server/blob/blob', () => {
   // expose a class that the factory below can instantiate.
   class FakeAzureBlobStorage {
     deleteIfExists = (path: string) => deleteIfExistsMock(path);
+    blobExists = (path: string) => blobExistsMock(path);
   }
   return {
     AzureBlobStorage: FakeAzureBlobStorage,
@@ -66,6 +68,9 @@ describe('cancelChunkedUploadAction', () => {
     authMock.mockReset();
     verifyChunkedSessionMock.mockReset();
     deleteIfExistsMock.mockReset();
+    blobExistsMock.mockReset();
+    // Default to "not finalized" so existing tests keep their semantics.
+    blobExistsMock.mockResolvedValue(false);
   });
 
   afterEach(() => {
