@@ -479,16 +479,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessage: null, // Start with null, will be set after delay
       stopRequested: false,
       abortController,
-      // NB: do NOT clear lastTurnDroppedActiveFileIds here — if this stream
-      // fails (network, abort) we want the previous turn's badges to remain
-      // visible so the user keeps an accurate picture. The setter is
-      // called explicitly on successful stream completion below.
     });
 
-    // Dismiss any open stop-generation confirmation modal — a new send is
-    // in flight, so a stale "stop the previous stream?" dialog hovering
-    // over this fresh stream is confusing and could cause the user to
-    // accidentally cancel the wrong request.
+    // Dismiss any open stop-generation confirmation modal — a stale dialog
+    // for the prior stream could otherwise be confirmed and accidentally
+    // cancel the new request.
     useUIStore.getState().setStopGenerationConfirmSource(null);
   },
 
