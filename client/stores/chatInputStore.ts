@@ -359,6 +359,9 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     if (prior && !prior.signal.aborted) {
       prior.abort();
     }
+    for (const preview of get().filePreviews) {
+      revokeIfBlobUrl(preview.previewUrl);
+    }
     set({
       uploadAbortController: null,
       filePreviews: [],
@@ -374,6 +377,9 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     const prior = get().uploadAbortController;
     if (prior && !prior.signal.aborted) {
       prior.abort();
+    }
+    for (const preview of get().filePreviews) {
+      revokeIfBlobUrl(preview.previewUrl);
     }
     set({
       uploadAbortController: null,
