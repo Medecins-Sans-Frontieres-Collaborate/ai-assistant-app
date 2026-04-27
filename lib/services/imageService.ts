@@ -1,13 +1,35 @@
 import { ImageMessageContent } from '@/types/chat';
 
-// In-memory cache for image base64 data to avoid re-fetching from server
+/**
+ * Maximum entries kept in the in-memory image cache. Each entry stores a
+ * full base64 data URL, which is roughly 1.33× the original image bytes
+ * (5MB image → ~6.7MB string). With the 5MB image cap, 30 entries is
+ * ~200MB worst case — high enough that typical sessions never evict, but
+ * bounded so a long session full of unique images can't grow tab memory
+ * unbounded.
+ */
+const IMAGE_CACHE_MAX_ENTRIES = 30;
+
+// LRU-by-insertion-order cache for image base64 data. We rely on Map
+// preserving insertion order: re-inserting on read moves the entry to the
+// most-recent position; the oldest entry is evicted first when full.
 const imageCache = new Map<string, string>();
 
+function touchRecency(url: string, value: string): void {
+  imageCache.delete(url);
+  imageCache.set(url, value);
+  while (imageCache.size > IMAGE_CACHE_MAX_ENTRIES) {
+    const oldest = imageCache.keys().next().value;
+    if (oldest === undefined) break;
+    imageCache.delete(oldest);
+  }
+}
+
 /**
- * Cache base64 image data to avoid re-fetching from server
+ * Cache base64 image data to avoid re-fetching from server.
  */
 export const cacheImageBase64 = (url: string, base64: string): void => {
-  imageCache.set(url, base64);
+  touchRecency(url, base64);
 };
 
 /**
@@ -26,9 +48,11 @@ export const fetchImageBase64FromMessageContent = async (
 ): Promise<string> => {
   try {
     if (image?.image_url?.url) {
-      // Check cache first (for recently uploaded images)
+      // Check cache first (for recently uploaded images). Re-touch on hit
+      // so frequently-used entries stay warm under the LRU bound.
       const cached = imageCache.get(image.image_url.url);
       if (cached) {
+        touchRecency(image.image_url.url, cached);
         return cached;
       }
 
@@ -44,7 +68,7 @@ export const fetchImageBase64FromMessageContent = async (
 
       // Cache the fetched data for future use
       if (resp.base64Url) {
-        imageCache.set(image.image_url.url, resp.base64Url);
+        touchRecency(image.image_url.url, resp.base64Url);
       }
 
       return resp.base64Url;
