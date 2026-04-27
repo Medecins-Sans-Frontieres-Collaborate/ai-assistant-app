@@ -5,6 +5,7 @@ import { cacheImageBase64 } from '@/lib/services/imageService';
 import type { ChunkedUploadSession } from '@/lib/types/chunkedUpload';
 
 import {
+  cancelChunkedUploadAction,
   finalizeChunkedUploadAction,
   initChunkedUploadAction,
   uploadChunkAction,
@@ -31,6 +32,45 @@ const CHUNK_CONCURRENCY = 4; // Parallel in-flight chunk uploads
  * chunkedTranscriptionService so both chunked pipelines speak the same vocab.
  */
 const MAX_CHUNK_ATTEMPTS = 3;
+
+/**
+ * Per-request XHR timeout in ms. Long enough for a single 10MB chunk on a
+ * slow cellular connection (~80s at 1 Mbps), with margin for proxy delay.
+ * A stalled connection beyond this is almost certainly broken — better to
+ * fail fast and let the retry loop try again.
+ */
+const XHR_TIMEOUT_MS = 120_000;
+
+/** Total attempts for the small-file XHR path (initial + retries). */
+const XHR_MAX_ATTEMPTS = 3;
+
+/**
+ * Upload error carrying a transience hint. Permanent errors (4xx) skip the
+ * retry loop; transient errors (network, timeout, 5xx) are eligible for
+ * retry with backoff.
+ */
+class UploadError extends Error {
+  constructor(
+    message: string,
+    public readonly transient: boolean,
+    public readonly status?: number,
+  ) {
+    super(message);
+    this.name = 'UploadError';
+  }
+}
+
+class UploadAbortedError extends Error {
+  constructor(filename: string) {
+    super(`Upload cancelled: ${filename}`);
+    this.name = 'UploadAbortedError';
+  }
+}
+
+function backoffWithJitter(attempt: number): number {
+  const base = Math.min(8_000, Math.pow(2, attempt) * 500);
+  return Math.round(base * (0.5 + Math.random() * 0.5));
+}
 
 export interface UploadProgress {
   [fileName: string]: number;
@@ -140,13 +180,14 @@ export class FileUploadService {
   static async uploadImage(
     file: File,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
     // Best-effort base64 read for the in-memory cache, run in parallel with
     // the upload — neither depends on the other. The cache lets the first
     // chat send in this session skip the /api/file/{id} refetch. A failure
     // here must not fail the upload.
     const [result, dataUrl] = await Promise.all([
-      this.uploadFileViaXHR(file, onProgress, 'image'),
+      this.uploadXhrWithRetry(file, onProgress, 'image', signal),
       this.readFileAsDataURL(file).catch((cacheError) => {
         console.warn('Failed to read image for cache:', cacheError);
         return null;
@@ -174,14 +215,15 @@ export class FileUploadService {
   static async uploadFile(
     file: File,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
     // Use Server Action for large files to bypass Route Handler body size limit
     if (file.size > SERVER_ACTION_THRESHOLD) {
-      return this.uploadFileViaServerAction(file, onProgress);
+      return this.uploadFileViaServerAction(file, onProgress, signal);
     }
 
     // Use XHR for smaller files (better progress tracking)
-    return this.uploadFileViaXHR(file, onProgress);
+    return this.uploadXhrWithRetry(file, onProgress, 'file', signal);
   }
 
   /**
@@ -191,9 +233,10 @@ export class FileUploadService {
   private static async uploadFileViaServerAction(
     file: File,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
     // Use chunked upload for large files to get real progress
-    return this.uploadFileChunked(file, onProgress);
+    return this.uploadFileChunked(file, onProgress, signal);
   }
 
   /**
@@ -208,7 +251,9 @@ export class FileUploadService {
   private static async uploadFileChunked(
     file: File,
     onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
+    if (signal?.aborted) throw new UploadAbortedError(file.name);
     const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 
     // 1. Initialize chunked upload session
@@ -243,6 +288,11 @@ export class FileUploadService {
 
     const worker = async (): Promise<void> => {
       while (firstError === null) {
+        if (signal?.aborted) {
+          if (firstError === null)
+            firstError = new UploadAbortedError(file.name);
+          return;
+        }
         const i = nextIndex++;
         if (i >= totalChunks) return;
 
@@ -250,7 +300,12 @@ export class FileUploadService {
         const end = Math.min(start + CHUNK_SIZE, file.size);
         const chunk = file.slice(start, end);
 
-        const chunkResult = await this.uploadChunkWithRetry(chunk, session, i);
+        const chunkResult = await this.uploadChunkWithRetry(
+          chunk,
+          session,
+          i,
+          signal,
+        );
 
         if (!chunkResult.success) {
           if (firstError === null) {
@@ -275,6 +330,17 @@ export class FileUploadService {
     await Promise.all(Array.from({ length: workerCount }, () => worker()));
 
     if (firstError) {
+      // Best-effort: release any committed-blob remnants. Uncommitted blocks
+      // are GC'd by Azure after 7 days; explicit cancel makes the common
+      // user-removed-file case clean up immediately.
+      try {
+        await cancelChunkedUploadAction(session);
+      } catch (cancelErr) {
+        console.warn(
+          `Failed to cancel chunked upload for ${file.name}:`,
+          cancelErr,
+        );
+      }
       throw firstError;
     }
 
@@ -309,10 +375,14 @@ export class FileUploadService {
     chunk: Blob,
     session: ChunkedUploadSession,
     chunkIndex: number,
+    signal?: AbortSignal,
   ): Promise<{ success: boolean; error?: string }> {
     let lastError: string | undefined;
 
     for (let attempt = 0; attempt < MAX_CHUNK_ATTEMPTS; attempt++) {
+      if (signal?.aborted) {
+        return { success: false, error: 'cancelled' };
+      }
       const chunkData = new FormData();
       chunkData.append('chunk', chunk);
 
@@ -324,10 +394,10 @@ export class FileUploadService {
 
       lastError = result.error;
 
-      // Exponential backoff between retries: 1s, 2s, …
+      // Backoff with jitter between retries to avoid thundering-herd
+      // synchronization when many clients recover from a shared outage.
       if (attempt < MAX_CHUNK_ATTEMPTS - 1) {
-        const delayMs = Math.pow(2, attempt) * 1000;
-        await this.delay(delayMs);
+        await this.delay(backoffWithJitter(attempt));
       }
     }
 
@@ -345,28 +415,92 @@ export class FileUploadService {
   }
 
   /**
+   * Retry wrapper around the small-file XHR path. Retries network errors,
+   * timeouts, and 5xx responses with jittered backoff. Does NOT retry 4xx
+   * responses (validation, auth, content blocked) — those won't resolve by
+   * trying again. Honors an optional AbortSignal at every attempt boundary.
+   */
+  private static async uploadXhrWithRetry(
+    file: File,
+    onProgress?: (progress: number) => void,
+    filetype: 'file' | 'image' = 'file',
+    signal?: AbortSignal,
+  ): Promise<UploadResult> {
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt < XHR_MAX_ATTEMPTS; attempt++) {
+      if (signal?.aborted) throw new UploadAbortedError(file.name);
+
+      try {
+        return await this.uploadFileViaXHR(file, onProgress, filetype, signal);
+      } catch (error) {
+        lastError = error;
+
+        if (error instanceof UploadAbortedError) {
+          throw error;
+        }
+        if (
+          !(error instanceof UploadError) ||
+          !error.transient ||
+          attempt === XHR_MAX_ATTEMPTS - 1
+        ) {
+          throw error;
+        }
+
+        await this.delay(backoffWithJitter(attempt));
+      }
+    }
+
+    throw lastError instanceof Error
+      ? lastError
+      : new Error(`Upload failed: ${file.name}`);
+  }
+
+  /**
    * Upload file via XMLHttpRequest (supports progress tracking).
    * Used for smaller files that fit within Route Handler body size limits.
+   *
+   * Throws `UploadError` (with transience hint) on HTTP/network failures and
+   * `UploadAbortedError` when the caller's signal is aborted. Wrapped by
+   * `uploadXhrWithRetry`.
    */
   private static uploadFileViaXHR(
     file: File,
     onProgress?: (progress: number) => void,
     filetype: 'file' | 'image' = 'file',
+    signal?: AbortSignal,
   ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
+      if (signal?.aborted) {
+        reject(new UploadAbortedError(file.name));
+        return;
+      }
+
       const xhr = new XMLHttpRequest();
+      // Without a timeout, a stalled proxy or stuck connection hangs forever.
+      xhr.timeout = XHR_TIMEOUT_MS;
+
       const formData = new FormData();
       formData.append('file', file);
 
-      // Track upload progress
+      const onAbort = () => {
+        try {
+          xhr.abort();
+        } catch {
+          /* ignore — abort on a finished XHR is a noop in spec */
+        }
+      };
+      signal?.addEventListener('abort', onAbort, { once: true });
+      const cleanup = () => signal?.removeEventListener('abort', onAbort);
+
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable && onProgress) {
           onProgress((e.loaded / e.total) * 100);
         }
       });
 
-      // Handle successful completion
       xhr.addEventListener('load', () => {
+        cleanup();
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const data = JSON.parse(xhr.responseText);
@@ -376,27 +510,50 @@ export class FileUploadService {
               originalFilename: file.name,
               type: this.getFileType(file),
             });
-          } catch (parseError) {
-            reject(new Error(`Failed to parse upload response: ${file.name}`));
+          } catch {
+            // 2xx with unparseable body is almost always a proxy/WAF
+            // returning HTML at status 200. Treat as transient.
+            reject(
+              new UploadError(
+                `Failed to parse upload response: ${file.name}`,
+                true,
+                xhr.status,
+              ),
+            );
           }
         } else {
+          // 5xx → transient (server hiccup); 4xx → permanent (won't fix
+          // itself); other (e.g. status 0) → transient.
+          const transient = xhr.status === 0 || xhr.status >= 500;
           reject(
-            new Error(
+            new UploadError(
               `File upload failed: ${file.name} - ${xhr.status} ${xhr.statusText}`,
+              transient,
+              xhr.status,
             ),
           );
         }
       });
 
-      // Handle network errors
-      xhr.addEventListener('error', () =>
-        reject(new Error(`Upload failed: ${file.name}`)),
-      );
-      xhr.addEventListener('abort', () =>
-        reject(new Error(`Upload aborted: ${file.name}`)),
-      );
+      xhr.addEventListener('error', () => {
+        cleanup();
+        reject(new UploadError(`Upload failed: ${file.name}`, true));
+      });
+      xhr.addEventListener('timeout', () => {
+        cleanup();
+        reject(new UploadError(`Upload timed out: ${file.name}`, true));
+      });
+      xhr.addEventListener('abort', () => {
+        cleanup();
+        // Distinguish caller-initiated abort from other abort sources
+        // (browser cancellation, refresh) — both surface here.
+        reject(
+          signal?.aborted
+            ? new UploadAbortedError(file.name)
+            : new UploadError(`Upload aborted: ${file.name}`, true),
+        );
+      });
 
-      // Build URL with query parameters
       const encodedFileName = encodeURIComponent(file.name);
       const encodedMimeType = encodeURIComponent(file.type);
       const url = `/api/file/upload?filename=${encodedFileName}&filetype=${filetype}&mime=${encodedMimeType}`;
