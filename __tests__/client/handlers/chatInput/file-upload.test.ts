@@ -1,3 +1,7 @@
+// The mocked AudioExtractionUnavailableError class — vi.mock replaces the
+// real export with the inline class declared in the factory below.
+import { AudioExtractionUnavailableError } from '@/lib/utils/client/audio/audioExtractor';
+
 import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -83,7 +87,7 @@ describe('onFileUpload AudioExtractionUnavailableError fallback', () => {
 
   it('uploads the raw video when extraction throws AudioExtractionUnavailableError', async () => {
     extractAudioFromVideoMock.mockRejectedValue(
-      new AudioExtractionUnavailableErrorMock('cdn blocked', 'cdn'),
+      new AudioExtractionUnavailableError('cdn blocked', 'cdn'),
     );
 
     await onFileUpload(
