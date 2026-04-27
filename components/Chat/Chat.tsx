@@ -120,11 +120,11 @@ export function Chat({
     requestStop,
   } = useChat();
 
-  const stopGenerationConfirmOpen = useUIStore(
-    (state) => state.stopGenerationConfirmOpen,
+  const stopGenerationConfirmSource = useUIStore(
+    (state) => state.stopGenerationConfirmSource,
   );
-  const setStopGenerationConfirmOpen = useUIStore(
-    (state) => state.setStopGenerationConfirmOpen,
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
   );
 
   const {
@@ -144,6 +144,8 @@ export function Chat({
     customDisplayName,
     addPrompt,
     streamingSpeed,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
   } = useSettings();
 
   const { content: smoothedContent, isDraining } = useSmoothStreaming({
@@ -172,22 +174,53 @@ export function Chat({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const stopConversationRef = useRef<boolean>(false);
 
+  // "Don't ask again" state for the stop-generation dialog. Reset every time
+  // a new dialog opens so prior toggling never silently disables confirmation.
+  const [stopDontAskAgain, setStopDontAskAgain] = useState(false);
+  useEffect(() => {
+    if (stopGenerationConfirmSource !== null) {
+      setStopDontAskAgain(false);
+    }
+  }, [stopGenerationConfirmSource]);
+
+  const closeStopDialogAndApplyToggle = useCallback(() => {
+    if (stopDontAskAgain && stopGenerationConfirmSource) {
+      if (stopGenerationConfirmSource === 'keyboard') {
+        setConfirmStopFromKeyboard(false);
+      } else {
+        setConfirmStopFromButton(false);
+      }
+    }
+    setStopGenerationConfirmSource(null);
+  }, [
+    stopDontAskAgain,
+    stopGenerationConfirmSource,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
+    setStopGenerationConfirmSource,
+  ]);
+
   const handleConfirmStopGeneration = useCallback(() => {
     stopConversationRef.current = true;
     requestStop();
-    setStopGenerationConfirmOpen(false);
-  }, [requestStop, setStopGenerationConfirmOpen]);
+    closeStopDialogAndApplyToggle();
+  }, [requestStop, closeStopDialogAndApplyToggle]);
 
   const handleCancelStopGeneration = useCallback(() => {
-    setStopGenerationConfirmOpen(false);
-  }, [setStopGenerationConfirmOpen]);
+    closeStopDialogAndApplyToggle();
+  }, [closeStopDialogAndApplyToggle]);
 
-  // Auto-close the stop-generation dialog if streaming finishes naturally
+  // Auto-close the stop-generation dialog if streaming finishes naturally.
+  // Don't apply the toggle here — the user neither confirmed nor cancelled.
   useEffect(() => {
-    if (!isStreaming && stopGenerationConfirmOpen) {
-      setStopGenerationConfirmOpen(false);
+    if (!isStreaming && stopGenerationConfirmSource !== null) {
+      setStopGenerationConfirmSource(null);
     }
-  }, [isStreaming, stopGenerationConfirmOpen, setStopGenerationConfirmOpen]);
+  }, [
+    isStreaming,
+    stopGenerationConfirmSource,
+    setStopGenerationConfirmSource,
+  ]);
 
   // Resizing handlers for split view
   const handleMouseDown = useCallback(() => {
@@ -669,12 +702,27 @@ export function Chat({
 
         {/* Stop Generation Confirmation Dialog */}
         <ConfirmDialog
-          isOpen={stopGenerationConfirmOpen}
+          isOpen={stopGenerationConfirmSource !== null}
           title={t('chat.stopGenerationTitle')}
           message={t('chat.stopGenerationMessage')}
           confirmLabel={t('chat.stopGenerationConfirm')}
           cancelLabel={t('common.cancel')}
           confirmVariant="danger"
+          extraContent={
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-neutral-600 dark:text-neutral-300">
+              <input
+                type="checkbox"
+                className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                checked={stopDontAskAgain}
+                onChange={(e) => setStopDontAskAgain(e.target.checked)}
+              />
+              <span>
+                {stopGenerationConfirmSource === 'keyboard'
+                  ? t('chat.stopGenerationDontAskAgainKeyboard')
+                  : t('chat.stopGenerationDontAskAgainButton')}
+              </span>
+            </label>
+          }
           onConfirm={handleConfirmStopGeneration}
           onCancel={handleCancelStopGeneration}
         />
