@@ -465,23 +465,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Create new AbortController for this request
     const abortController = new AbortController();
 
-    set((state) => {
-      // Clear last-turn dropped IDs for this conversation so we don't
-      // show stale "not in context" badges from the previous turn while
-      // the new request is in flight.
-      const nextDropped = { ...state.lastTurnDroppedActiveFileIds };
-      delete nextDropped[conversationId];
-      return {
-        isStreaming: true,
-        streamingContent: '',
-        streamingConversationId: conversationId,
-        error: null,
-        citations: [],
-        loadingMessage: null, // Start with null, will be set after delay
-        stopRequested: false,
-        abortController,
-        lastTurnDroppedActiveFileIds: nextDropped,
-      };
+    set({
+      isStreaming: true,
+      streamingContent: '',
+      streamingConversationId: conversationId,
+      error: null,
+      citations: [],
+      loadingMessage: null, // Start with null, will be set after delay
+      stopRequested: false,
+      abortController,
+      // NB: do NOT clear lastTurnDroppedActiveFileIds here — if this stream
+      // fails (network, abort) we want the previous turn's badges to remain
+      // visible so the user keeps an accurate picture. The setter is
+      // called explicitly on successful stream completion below.
     });
   },
 
