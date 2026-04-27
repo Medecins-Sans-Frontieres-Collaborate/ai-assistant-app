@@ -255,8 +255,13 @@ describe('/api/file/upload', () => {
       expect(data.error).toBe('Invalid image data URL format');
     });
 
-    it('accepts SVG and ICO via legacy data URL path', async () => {
-      const svgBytes = Buffer.from('<?xml version="1.0"?><svg/>');
+    it('rejects SVG uploads to prevent stored-XSS via embedded scripts', async () => {
+      // SVG is XML and can carry executable content; magic-byte sniffing
+      // cannot detect that. The image signature validator rejects SVG so
+      // a hostile <svg onload="..."> cannot be served from our origin.
+      const svgBytes = Buffer.from(
+        '<?xml version="1.0"?><svg onload="alert(1)"/>',
+      );
       const svgDataUrl =
         'data:image/svg+xml;base64,' + svgBytes.toString('base64');
       const svgRequest = createRequest({
@@ -266,8 +271,10 @@ describe('/api/file/upload', () => {
         body: svgDataUrl,
       });
       const svgResponse = await POST(svgRequest);
-      expect(svgResponse.status).toBe(200);
+      expect(svgResponse.status).toBe(400);
+    });
 
+    it('accepts ICO via legacy data URL path', async () => {
       const icoBytes = Buffer.from([
         0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x10, 0x10,
       ]);
