@@ -121,4 +121,16 @@ describe('cancelChunkedUploadAction', () => {
     expect(result.success).toBe(false);
     expect(result.error).toBe('Azure 503');
   });
+
+  it('refuses to cancel after finalize (committed blob exists)', async () => {
+    authMock.mockResolvedValue({ user: { id: 'user-1' } });
+    verifyChunkedSessionMock.mockReturnValue({ valid: true });
+    blobExistsMock.mockResolvedValue(true);
+
+    const result = await cancelChunkedUploadAction(baseSession);
+
+    expect(result.success).toBe(false);
+    expect(result.error).toMatch(/already finalized/i);
+    expect(deleteIfExistsMock).not.toHaveBeenCalled();
+  });
 });
