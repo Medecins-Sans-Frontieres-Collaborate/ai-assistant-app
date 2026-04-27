@@ -297,7 +297,29 @@ export async function POST(request: NextRequest) {
         (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
 
       if (isImage) {
-        // Images are stored as base64 data URL strings
+        // Decode the base64 data URL so we can run the image content check
+        // before storing. Without this decode, this branch would skip
+        // signature validation entirely and store any string the client sent.
+        // Storage shape is preserved (the data URL string) for backward
+        // compat with existing blobs that getBlobBase64String reads via its
+        // data:-prefix branch.
+        const dataUrlMatch = rawData.match(
+          /^data:([a-zA-Z0-9!#$&^_.+/-]+);base64,([\s\S]+)$/,
+        );
+        if (!dataUrlMatch) {
+          return badRequestResponse('Invalid image data URL format');
+        }
+        let decoded: Buffer;
+        try {
+          decoded = Buffer.from(dataUrlMatch[2], 'base64');
+        } catch {
+          return badRequestResponse('Invalid base64 in image data URL');
+        }
+        if (!looksLikeImage(decoded)) {
+          return badRequestResponse(
+            'File content does not match a recognized image format',
+          );
+        }
         fileData = rawData;
       } else {
         // Decode base64 to binary for non-image files
