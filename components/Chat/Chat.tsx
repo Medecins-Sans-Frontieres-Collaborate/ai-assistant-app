@@ -27,6 +27,7 @@ import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
+import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
@@ -40,6 +41,7 @@ import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
 /** Retries a dynamic import once after 1.5 s on failure. */
@@ -114,7 +116,15 @@ export function Chat({
     dismissModelSwitchPrompt,
     acceptModelSwitch,
     errorIsRecoverable,
+    requestStop,
   } = useChat();
+
+  const stopGenerationConfirmOpen = useUIStore(
+    (state) => state.stopGenerationConfirmOpen,
+  );
+  const setStopGenerationConfirmOpen = useUIStore(
+    (state) => state.setStopGenerationConfirmOpen,
+  );
 
   const {
     isSettingsOpen,
@@ -160,6 +170,23 @@ export function Chat({
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const stopConversationRef = useRef<boolean>(false);
+
+  const handleConfirmStopGeneration = useCallback(() => {
+    stopConversationRef.current = true;
+    requestStop();
+    setStopGenerationConfirmOpen(false);
+  }, [requestStop, setStopGenerationConfirmOpen]);
+
+  const handleCancelStopGeneration = useCallback(() => {
+    setStopGenerationConfirmOpen(false);
+  }, [setStopGenerationConfirmOpen]);
+
+  // Auto-close the stop-generation dialog if streaming finishes naturally
+  useEffect(() => {
+    if (!isStreaming && stopGenerationConfirmOpen) {
+      setStopGenerationConfirmOpen(false);
+    }
+  }, [isStreaming, stopGenerationConfirmOpen, setStopGenerationConfirmOpen]);
 
   // Resizing handlers for split view
   const handleMouseDown = useCallback(() => {
@@ -619,6 +646,18 @@ export function Chat({
         <KeyboardShortcutsModal
           isOpen={isShortcutsHelpOpen}
           onClose={() => setIsShortcutsHelpOpen(false)}
+        />
+
+        {/* Stop Generation Confirmation Dialog */}
+        <ConfirmDialog
+          isOpen={stopGenerationConfirmOpen}
+          title={t('chat.stopGenerationTitle')}
+          message={t('chat.stopGenerationMessage')}
+          confirmLabel={t('chat.stopGenerationConfirm')}
+          cancelLabel={t('common.cancel')}
+          confirmVariant="danger"
+          onConfirm={handleConfirmStopGeneration}
+          onCancel={handleCancelStopGeneration}
         />
       </div>
 
