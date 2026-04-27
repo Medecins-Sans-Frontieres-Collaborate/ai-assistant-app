@@ -163,8 +163,14 @@ export function selectFilesForBudget(
   if (winner.selected.length > 0) return winner;
 
   // Nothing fit: include the single smallest file as a degraded fallback
-  // so the user is not left with zero context.
-  const sorted = files.slice().sort(SORTERS.sizeAsc);
+  // so the user is not left with zero context. Pinned files take priority
+  // over unpinned even in this degraded mode — a user-pinned 60k file is
+  // never silently demoted in favour of a smaller unpinned one.
+  const sorted = files.slice().sort((a, b) => {
+    const pinnedDelta = Number(b.pinned ?? false) - Number(a.pinned ?? false);
+    if (pinnedDelta !== 0) return pinnedDelta;
+    return SORTERS.sizeAsc(a, b);
+  });
   const [smallest, ...rest] = sorted;
   return { selected: [smallest], dropped: rest };
 }
