@@ -658,6 +658,8 @@
     "stopGenerationTitle": "Stop generating?",
     "stopGenerationMessage": "Are you sure you want to stop generating this response? Any in-progress reply will be discarded.",
     "stopGenerationConfirm": "Stop",
+    "stopGenerationDontAskAgainButton": "Don't ask again when stopping with the button",
+    "stopGenerationDontAskAgainKeyboard": "Don't ask again when stopping with the keyboard",
     "generateResponseButton": "Generate response",
     "downloadAudio": "Download audio",
     "closeAudioPlayer": "Close audio player",
@@ -1154,6 +1156,13 @@
     "activeFiles": {
       "autoPinUploads": "Auto-pin uploaded files",
       "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out"
+    },
+    "confirmations": {
+      "title": "Confirmations",
+      "confirmStopFromButton": "Confirm before stopping with the button",
+      "confirmStopFromButtonDescription": "Show a confirmation dialog when you click the stop button while a response is being generated",
+      "confirmStopFromKeyboard": "Confirm before stopping with the keyboard",
+      "confirmStopFromKeyboardDescription": "Show a confirmation dialog when you press Escape while a response is being generated"
     }
   },
   "emptyState": {
