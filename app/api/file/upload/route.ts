@@ -215,22 +215,17 @@ async function validateLegacyImageDataUrl(
     return { ok: false, error: 'Invalid base64 in image data URL' };
   }
 
-  // SVG is XML; bypass binary magic-byte validation and sanitise instead.
-  // We re-encode the cleaned SVG back into a data URL so the storage
-  // payload — which downstream consumers expect to look like a data: URL
-  // — stays in the same shape.
-  if (isSvgBuffer(decoded)) {
-    const svgResult = await sanitizeSvgBuffer(decoded);
-    if (!svgResult.ok) {
-      return { ok: false, error: svgResult.error };
-    }
-    const cleanBase64 = svgResult.sanitized.toString('base64');
-    return { ok: true, storage: `data:${declaredMime};base64,${cleanBase64}` };
-  }
+  const result = await validateOrSanitizeImageBytes(decoded);
+  if (!result.ok) return { ok: false, error: result.error };
 
-  const sigCheck = validateImageSignature(decoded);
-  if (!sigCheck.isValid) {
-    return { ok: false, error: sigCheck.error ?? 'Invalid image content' };
+  // For SVG the sanitiser returns cleaned bytes; re-encode them as a data
+  // URL so the storage payload — which downstream consumers expect to look
+  // like a `data:` URL — keeps its shape. Binary formats hand back the
+  // original buffer unchanged, so the original `rawData` is still the
+  // canonical representation.
+  if (result.data !== decoded) {
+    const cleanBase64 = result.data.toString('base64');
+    return { ok: true, storage: `data:${declaredMime};base64,${cleanBase64}` };
   }
   return { ok: true, storage: rawData };
 }
