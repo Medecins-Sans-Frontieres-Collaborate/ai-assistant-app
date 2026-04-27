@@ -191,6 +191,9 @@ export function appendMetadataToStream(
   )
     (cleanMetadata as Record<string, unknown>).activeFilesTokensConsumed =
       metadata.activeFilesTokensConsumed;
+  if (metadata.activeFilesDropped && metadata.activeFilesDropped.length > 0)
+    (cleanMetadata as Record<string, unknown>).activeFilesDropped =
+      metadata.activeFilesDropped;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {
