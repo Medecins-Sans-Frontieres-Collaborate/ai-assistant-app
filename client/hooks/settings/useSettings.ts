@@ -45,5 +45,11 @@ export function useSettings() {
     // Active Files Settings
     autoPinActiveFiles: store.autoPinActiveFiles,
     setAutoPinActiveFiles: store.setAutoPinActiveFiles,
+
+    // Stop-generation confirmation preferences
+    confirmStopFromButton: store.confirmStopFromButton,
+    confirmStopFromKeyboard: store.confirmStopFromKeyboard,
+    setConfirmStopFromButton: store.setConfirmStopFromButton,
+    setConfirmStopFromKeyboard: store.setConfirmStopFromKeyboard,
   };
 }
