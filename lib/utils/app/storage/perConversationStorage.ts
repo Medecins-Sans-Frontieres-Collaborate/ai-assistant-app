@@ -66,7 +66,7 @@ let lastQuotaToastAt = 0;
 const QUOTA_TOAST_THROTTLE_MS = 30_000;
 
 function notifyQuotaExceeded(detail: {
-  scope: 'conversation' | 'folder' | 'index';
+  scope: 'conversation' | 'folder';
   id?: string;
 }): void {
   if (typeof window === 'undefined') return;
