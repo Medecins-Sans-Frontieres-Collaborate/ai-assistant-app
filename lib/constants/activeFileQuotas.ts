@@ -19,3 +19,12 @@ export const ACTIVE_FILE_PER_TURN_MAX = 40_000;
  * headroom for the system prompt, conversation history, and the user's
  * current message. */
 export const ACTIVE_FILE_PER_TURN_FRACTION = 0.25;
+
+/**
+ * Hard byte cap on the per-file `processedContent.content` we will persist.
+ * Belt-and-suspenders alongside `ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT` — the
+ * token estimate can be missing or wrong, but the byte length cannot lie.
+ * 1MB per file × ≤5 files per conversation keeps active-file content under
+ * the localStorage budget for a typical browser even on a heavy session.
+ */
+export const ACTIVE_FILE_CONTENT_MAX_BYTES = 1_000_000;
