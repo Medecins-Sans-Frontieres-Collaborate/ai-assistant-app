@@ -3,6 +3,8 @@
  * Extracts audio tracks from video files in the browser to reduce upload size
  * for transcription workflows.
  */
+import { formatBytes } from '@/lib/utils/app/const';
+
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
@@ -36,6 +38,55 @@ export interface ExtractionOptions {
   outputFormat?: 'mp3' | 'wav' | 'm4a';
   quality?: 'low' | 'medium' | 'high';
   onProgress?: ExtractionProgressCallback;
+}
+
+/**
+ * Hard memory ceiling for client-side extraction. ffmpeg.wasm holds the full
+ * input file in JS memory (`fetchFile` materializes the bytes, `writeFile`
+ * copies them into the WASM filesystem). On low-RAM devices that crashes
+ * the tab. Files above this threshold get uploaded as-is and the server-side
+ * transcription pipeline (which uses a real ffmpeg binary) handles them.
+ */
+const MAX_CLIENT_EXTRACTION_BYTES = 200 * 1024 * 1024;
+
+/**
+ * Timeout for the FFmpeg WASM CDN fetch. Corporate networks often block
+ * unpkg / third-party CDNs, in which case the browser eventually times out
+ * but very slowly (default ~5min in some browsers). Failing fast lets us
+ * fall back to direct video upload before the user gives up.
+ */
+const FFMPEG_WASM_LOAD_TIMEOUT_MS = 30_000;
+
+/**
+ * Thrown when client-side extraction is unavailable for a recoverable
+ * reason. Callers should fall back to uploading the raw video. The
+ * "unsupported browser" case is signalled via `isAudioExtractionSupported`
+ * returning false rather than a thrown error, so it doesn't appear here.
+ */
+export class AudioExtractionUnavailableError extends Error {
+  constructor(
+    message: string,
+    public readonly reason: 'cdn' | 'memory',
+  ) {
+    super(message);
+    this.name = 'AudioExtractionUnavailableError';
+  }
+}
+
+/**
+ * Race a promise against a timeout. On timeout, rejects with the error built
+ * by `errorFactory`. Used to fail fast when the FFmpeg WASM CDN is blocked
+ * or very slow.
+ */
+function raceWithTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  errorFactory: () => Error,
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(errorFactory()), ms)),
+  ]);
 }
 
 // Singleton FFmpeg instance
@@ -85,20 +136,35 @@ async function getFFmpeg(
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
 
     try {
-      await ffmpeg.load({
-        coreURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.js`,
-          'text/javascript',
+      const cdnTimeout = () =>
+        new AudioExtractionUnavailableError(
+          'Timed out fetching FFmpeg WASM from CDN',
+          'cdn',
+        );
+      const [coreURL, wasmURL] = await Promise.all([
+        raceWithTimeout(
+          toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+          FFMPEG_WASM_LOAD_TIMEOUT_MS,
+          cdnTimeout,
         ),
-        wasmURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
-          'application/wasm',
+        raceWithTimeout(
+          toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+          FFMPEG_WASM_LOAD_TIMEOUT_MS,
+          cdnTimeout,
         ),
-      });
+      ]);
+      await ffmpeg.load({ coreURL, wasmURL });
     } catch (error) {
-      console.error('Failed to load FFmpeg from CDN:', error);
-      throw new Error(
-        'Failed to load audio extraction engine. Please try again.',
+      console.error('[AudioExtractor] Failed to load FFmpeg from CDN:', error);
+      // Reset so the next call retries from scratch instead of awaiting the
+      // already-rejected promise.
+      ffmpegLoading = null;
+      if (error instanceof AudioExtractionUnavailableError) {
+        throw error;
+      }
+      throw new AudioExtractionUnavailableError(
+        'Failed to load audio extraction engine',
+        'cdn',
       );
     }
 
@@ -161,6 +227,15 @@ export async function extractAudioFromVideo(
   // Validate input
   if (!videoFile || videoFile.size === 0) {
     throw new Error('Invalid video file');
+  }
+
+  // Bail out for files too large to safely buffer in JS heap. The server-
+  // side transcription pipeline handles these natively.
+  if (videoFile.size > MAX_CLIENT_EXTRACTION_BYTES) {
+    throw new AudioExtractionUnavailableError(
+      `Video too large for client-side extraction (${formatBytes(videoFile.size)} > ${formatBytes(MAX_CLIENT_EXTRACTION_BYTES)})`,
+      'memory',
+    );
   }
 
   const ffmpeg = await getFFmpeg(onProgress);
@@ -244,7 +319,7 @@ export async function extractAudioFromVideo(
     onProgress?.({
       stage: 'complete',
       percent: 100,
-      message: `Extracted ${formatFileSize(audioBlob.size)} audio from ${formatFileSize(videoFile.size)} video`,
+      message: `Extracted ${formatBytes(audioBlob.size)} audio from ${formatBytes(videoFile.size)} video`,
     });
 
     return {
@@ -269,7 +344,7 @@ export async function extractAudioFromVideo(
       // Ignore cleanup errors
     }
 
-    console.error('Audio extraction failed:', error);
+    console.error('[AudioExtractor] Audio extraction failed:', error);
     throw new Error(
       error instanceof Error
         ? `Audio extraction failed: ${error.message}`
@@ -279,27 +354,37 @@ export async function extractAudioFromVideo(
 }
 
 /**
- * Formats file size in human-readable format
+ * Whether the current browser exposes the APIs needed for client-side audio
+ * extraction (WebAssembly, SharedArrayBuffer, Blob, File). Independent of
+ * any specific file's properties.
  */
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
-}
-
-/**
- * Checks if audio extraction is supported in the current browser
- */
-export function isAudioExtractionSupported(): boolean {
-  // Check for required browser APIs
+export function browserSupportsAudioExtraction(): boolean {
   return (
     typeof WebAssembly !== 'undefined' &&
     typeof SharedArrayBuffer !== 'undefined' &&
     typeof Blob !== 'undefined' &&
     typeof File !== 'undefined'
   );
+}
+
+/**
+ * Whether a specific file can be extracted client-side: the browser must
+ * support the APIs AND the file must fit in the JS-heap memory budget.
+ * Files above the threshold should be uploaded as-is and let the server-
+ * side transcription pipeline (real ffmpeg binary) handle them.
+ */
+export function canExtractAudioFromFile(file: File): boolean {
+  if (!browserSupportsAudioExtraction()) return false;
+  return file.size <= MAX_CLIENT_EXTRACTION_BYTES;
+}
+
+/**
+ * Combined check kept for backward compat with existing callers. Prefer the
+ * two narrower functions above for new code.
+ */
+export function isAudioExtractionSupported(file?: File): boolean {
+  if (!browserSupportsAudioExtraction()) return false;
+  return file ? canExtractAudioFromFile(file) : true;
 }
 
 /**

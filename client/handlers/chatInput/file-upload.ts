@@ -5,6 +5,7 @@ import { FileUploadService } from '@/client/services/fileUploadService';
 
 import { FILE_COUNT_LIMITS, FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import {
+  AudioExtractionUnavailableError,
   extractAudioFromVideo,
   isAudioExtractionSupported,
 } from '@/lib/utils/client/audio/audioExtractor';
@@ -29,6 +30,7 @@ export async function onFileUpload(
   setFileFieldValue: Dispatch<SetStateAction<FileFieldValue>>,
   setImageFieldValue: Dispatch<SetStateAction<ImageFieldValue>>,
   setUploadProgress: Dispatch<SetStateAction<{ [key: string]: number }>>,
+  signal?: AbortSignal,
 ) {
   let files: FileList | File[];
   if (isChangeEvent(event)) {
@@ -129,16 +131,17 @@ export async function onFileUpload(
       isAudioVideoFileByTypeOrName(file.name, file.type) &&
       (await isVideoFile(file))
     ) {
-      // Check if extraction is supported in this browser
-      if (!isAudioExtractionSupported()) {
-        toast.error(
-          'Video extraction not supported in this browser. Please upload audio files directly.',
+      // Check if extraction is supported in this browser AND that the file
+      // is small enough to safely buffer in memory. Files that fail this
+      // check fall through to direct video upload — the server-side
+      // transcription pipeline (real ffmpeg binary) handles them.
+      if (!isAudioExtractionSupported(file)) {
+        // Bare `toast()` call is intentional info-level (not error/success).
+        toast(
+          `Uploading ${file.name} as-is (client-side extraction unavailable)`,
+          { duration: 4000 },
         );
-        setFilePreviews((prev) =>
-          prev.map((p) =>
-            p.name === file.name ? { ...p, status: 'failed' } : p,
-          ),
-        );
+        filesToUpload.push(file);
         continue;
       }
 
@@ -156,6 +159,26 @@ export async function onFileUpload(
         continue;
       }
 
+      // Extraction occupies the 0-50% slice of the progress bar; upload
+      // takes 50-100% later in the pipeline.
+      const handleExtractionProgress = (progress: {
+        stage: 'loading' | 'extracting' | 'encoding' | 'complete';
+        percent: number;
+        message: string;
+      }) => {
+        setUploadProgress((prev) => ({
+          ...prev,
+          [file.name]: progress.percent * 0.5,
+        }));
+        if (progress.stage === 'loading' && progress.percent === 0) {
+          toast.loading('Loading audio extraction engine...', {
+            id: `extract-${file.name}`,
+          });
+        } else if (progress.stage === 'complete') {
+          toast.dismiss(`extract-${file.name}`);
+        }
+      };
+
       try {
         // Update preview to show extraction in progress
         setFilePreviews((prev) =>
@@ -164,26 +187,10 @@ export async function onFileUpload(
           ),
         );
 
-        // Extract audio from video
         const result = await extractAudioFromVideo(file, {
           outputFormat: 'mp3',
           quality: 'medium',
-          onProgress: (progress) => {
-            // Update progress (extraction is 0-50%, upload is 50-100%)
-            setUploadProgress((prev) => ({
-              ...prev,
-              [file.name]: progress.percent * 0.5,
-            }));
-
-            // Show progress toast for loading stage
-            if (progress.stage === 'loading' && progress.percent === 0) {
-              toast.loading('Loading audio extraction engine...', {
-                id: `extract-${file.name}`,
-              });
-            } else if (progress.stage === 'complete') {
-              toast.dismiss(`extract-${file.name}`);
-            }
-          },
+          onProgress: handleExtractionProgress,
         });
 
         // Store extraction info for the preview update
@@ -224,7 +231,25 @@ export async function onFileUpload(
         // Add extracted audio file to upload queue
         filesToUpload.push(result.audioFile);
       } catch (error) {
-        console.error('Audio extraction failed:', error);
+        // For recoverable extraction failures (CDN blocked, file too large,
+        // browser missing capabilities), fall back to uploading the raw
+        // video — the server-side transcription pipeline handles it.
+        if (error instanceof AudioExtractionUnavailableError) {
+          console.warn(
+            `[FileUpload] Client-side extraction unavailable for ${file.name} (${error.reason}); uploading raw video`,
+          );
+          toast.dismiss(`extract-${file.name}`);
+          // Bare `toast()` call is intentional info-level (not error/success).
+          toast(`Uploading ${file.name} as-is`, { duration: 4000 });
+          setFilePreviews((prev) =>
+            prev.map((p) =>
+              p.name === file.name ? { ...p, status: 'uploading' } : p,
+            ),
+          );
+          filesToUpload.push(file);
+          continue;
+        }
+        console.error('[FileUpload] Audio extraction failed:', error);
         toast.error(
           error instanceof Error
             ? error.message
@@ -258,6 +283,7 @@ export async function onFileUpload(
       }
       setUploadProgress(adjustedProgress);
     },
+    signal,
   );
 
   // Process successful uploads and update state
@@ -320,11 +346,13 @@ export async function onFileUpload(
       });
     }
 
-    // Update preview status to completed
+    // Update preview status to completed and remember the server URL so
+    // removeFile can match this preview against entries in the field-value
+    // arrays (which carry the server URL, not the blob: previewUrl).
     setFilePreviews((prevPreviews) =>
       prevPreviews.map((preview) =>
         preview.name === result.originalFilename
-          ? { ...preview, status: 'completed' }
+          ? { ...preview, status: 'completed', uploadedUrl: result.url }
           : preview,
       ),
     );

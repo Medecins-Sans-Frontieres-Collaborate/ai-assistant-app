@@ -12,6 +12,7 @@ import {
   BlobStorage,
 } from '@/lib/utils/server/blob/blob';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
+import { validateImageSignature } from '@/lib/utils/server/file/imageSignature';
 import {
   getContentType,
   validateBufferSignature,
@@ -230,6 +231,17 @@ async function uploadFileToBlobStorage(
         signatureValidation.error ||
           'File content does not match expected audio/video format',
       );
+    }
+  }
+
+  // Image content check — parity with the route handler so this entrypoint
+  // can't accept arbitrary binary under filetype=image.
+  const isImage =
+    (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
+  if (isImage) {
+    const imageSig = validateImageSignature(data);
+    if (!imageSig.isValid) {
+      throw new Error(imageSig.error ?? 'Invalid image content');
     }
   }
 
@@ -492,16 +504,31 @@ export async function finalizeChunkedUploadAction(
       contentType = getContentType(extension);
     }
 
-    // Commit the block list
-    const uri = await blobStorageClient.commitBlockList(
-      session.blobPath,
-      blockIds,
-      {
-        blobHTTPHeaders: {
-          blobContentType: contentType,
+    // Commit the block list. On failure, best-effort cleanup so any
+    // partially-committed blob is removed; uncommitted blocks fall to
+    // Azure's 7-day GC.
+    let uri: string;
+    try {
+      uri = await blobStorageClient.commitBlockList(
+        session.blobPath,
+        blockIds,
+        {
+          blobHTTPHeaders: {
+            blobContentType: contentType,
+          },
         },
-      },
-    );
+      );
+    } catch (commitError) {
+      try {
+        await blobStorageClient.deleteIfExists(session.blobPath);
+      } catch (cleanupError) {
+        console.error(
+          '[finalizeChunkedUploadAction] cleanup after commit failure threw:',
+          cleanupError instanceof Error ? cleanupError.message : cleanupError,
+        );
+      }
+      throw commitError;
+    }
 
     // Fire-and-forget: download committed blob and cache text
     if (shouldCacheText(session.filename)) {
@@ -533,6 +560,65 @@ export async function finalizeChunkedUploadAction(
       success: false,
       error:
         error instanceof Error ? error.message : 'Failed to finalize upload',
+    };
+  }
+}
+
+/**
+ * Cancel a chunked upload session and best-effort delete any committed blob
+ * at the session's blobPath. Uncommitted staged blocks are garbage collected
+ * by Azure after 7 days, so a failure here is recoverable.
+ *
+ * Refuses to cancel a session whose blob has already been finalized (i.e.
+ * `commitBlockList` ran and the blob is now visible). Without this guard, a
+ * UI cancel button that survives finalize completion could destroy the
+ * user's just-uploaded file. Pre-finalize blobs only have uncommitted
+ * blocks, which Azure does not surface via `blobExists`.
+ *
+ * Idempotent — safe to call multiple times for the same session.
+ */
+export async function cancelChunkedUploadAction(
+  session: ChunkedUploadSession,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const authSession = await auth();
+    if (!authSession) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const authedUserId = getUserIdFromSession(authSession);
+    const verification = verifyChunkedSession(session, authedUserId);
+    if (!verification.valid) {
+      return { success: false, error: verification.reason };
+    }
+
+    const blobStorageClient = createBlobStorageClient(authSession);
+    if (!(blobStorageClient instanceof AzureBlobStorage)) {
+      return {
+        success: false,
+        error: 'Chunked upload requires Azure Blob Storage',
+      };
+    }
+
+    if (await blobStorageClient.blobExists(session.blobPath)) {
+      // The blob exists as a committed blob — finalize already ran. Refuse
+      // to delete a successfully-uploaded file.
+      return {
+        success: false,
+        error: 'Upload already finalized; cancel is no longer applicable',
+      };
+    }
+
+    // No committed blob exists; uncommitted blocks (if any) fall to Azure's
+    // 7-day GC. The deleteIfExists call is a no-op in the typical case and
+    // a safety-net otherwise.
+    await blobStorageClient.deleteIfExists(session.blobPath);
+    return { success: true };
+  } catch (error) {
+    console.error('[cancelChunkedUploadAction] Error:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to cancel upload',
     };
   }
 }

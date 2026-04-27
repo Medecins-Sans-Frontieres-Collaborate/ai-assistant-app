@@ -18,6 +18,7 @@ import { FolderInterface } from '@/types/folder';
 
 import {
   ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
+  ACTIVE_FILE_CONTENT_MAX_BYTES,
   ACTIVE_FILE_PIN_TOKEN_LIMIT,
   ACTIVE_FILE_SESSION_QUOTA,
 } from '@/lib/constants/activeFileQuotas';
@@ -326,6 +327,18 @@ export const useConversationStore = create<ConversationStore>()(
         ) {
           toast.error(
             `File too large for active context (${file.processedContent.tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT.toLocaleString()})`,
+          );
+          return;
+        }
+
+        // Byte-size guard — the token estimate can be missing or inaccurate,
+        // but `content.length` cannot. Without this, a large PDF whose token
+        // estimate failed to compute could blow past the 5MB localStorage
+        // budget when persisted into the conversation.
+        const contentBytes = file.processedContent?.content?.length ?? 0;
+        if (contentBytes > ACTIVE_FILE_CONTENT_MAX_BYTES) {
+          toast.error(
+            `File too large for active context (${(contentBytes / 1_000_000).toFixed(1)}MB extracted, limit: ${(ACTIVE_FILE_CONTENT_MAX_BYTES / 1_000_000).toFixed(0)}MB)`,
           );
           return;
         }

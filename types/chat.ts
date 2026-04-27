@@ -246,6 +246,13 @@ export interface FilePreview {
   type: string;
   status: UploadStatus;
   previewUrl: string;
+  /**
+   * Server-side URL set after a successful upload (e.g. `/api/file/{hash}.{ext}`).
+   * Used by `removeFile` to match a preview against entries in `imageFieldValue`
+   * — `previewUrl` is a `blob:` URL and never equals the server URL stored on
+   * `ImageMessageContent.image_url.url`.
+   */
+  uploadedUrl?: string;
   file?: File; // Optional: Store the original File object for local operations (e.g., opening in code editor)
   // Transcription tracking for batch jobs
   transcriptionJobId?: string;
