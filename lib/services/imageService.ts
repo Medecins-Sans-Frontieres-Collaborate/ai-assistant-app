@@ -11,8 +11,15 @@ export const cacheImageBase64 = (url: string, base64: string): void => {
 };
 
 /**
- * Fetch image base64 from cache or server
- * For images just uploaded, uses cached base64 to avoid unnecessary API calls
+ * Fetch image base64 from cache or server.
+ * For images just uploaded, uses cached base64 to avoid unnecessary API calls.
+ *
+ * This client-side refetch exists because the chat handlers expect base64
+ * data URLs in `image_url.url` when the request reaches `/api/chat`. A future
+ * cleanup could resolve `/api/file/{id}` references server-side and drop this
+ * step; doing so requires updating each model handler (Anthropic, Azure
+ * OpenAI, AI Foundry) to accept reference URLs and call `getBlobBase64String`
+ * during message preparation.
  */
 export const fetchImageBase64FromMessageContent = async (
   image: ImageMessageContent,
