@@ -29,6 +29,7 @@ export async function onFileUpload(
   setFileFieldValue: Dispatch<SetStateAction<FileFieldValue>>,
   setImageFieldValue: Dispatch<SetStateAction<ImageFieldValue>>,
   setUploadProgress: Dispatch<SetStateAction<{ [key: string]: number }>>,
+  signal?: AbortSignal,
 ) {
   let files: FileList | File[];
   if (isChangeEvent(event)) {
@@ -258,6 +259,7 @@ export async function onFileUpload(
       }
       setUploadProgress(adjustedProgress);
     },
+    signal,
   );
 
   // Process successful uploads and update state
