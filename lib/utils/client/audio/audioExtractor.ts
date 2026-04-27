@@ -355,16 +355,20 @@ function formatFileSize(bytes: number): string {
 }
 
 /**
- * Checks if audio extraction is supported in the current browser
+ * Checks if audio extraction is supported in the current browser. When a
+ * `file` is provided, also checks the file is small enough to buffer in the
+ * JS heap — otherwise client-side extraction would risk crashing the tab.
  */
-export function isAudioExtractionSupported(): boolean {
+export function isAudioExtractionSupported(file?: File): boolean {
   // Check for required browser APIs
-  return (
+  const hasApis =
     typeof WebAssembly !== 'undefined' &&
     typeof SharedArrayBuffer !== 'undefined' &&
     typeof Blob !== 'undefined' &&
-    typeof File !== 'undefined'
-  );
+    typeof File !== 'undefined';
+  if (!hasApis) return false;
+  if (file && file.size > MAX_CLIENT_EXTRACTION_BYTES) return false;
+  return true;
 }
 
 /**
