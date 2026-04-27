@@ -80,9 +80,29 @@ export function isPinned(f: ActiveFile) {
   return !!f.pinned;
 }
 
+/**
+ * Heuristic constants for token estimation when `processedContent.tokenEstimate`
+ * is missing (typically because the file failed to process or the worker
+ * hasn't run yet). The heuristic is `bytes / 4` (≈ English-prose tokenizer
+ * density) clamped to a 200-token floor so a tiny placeholder file isn't
+ * estimated as zero. The 50KB byte default reflects a "we don't know but
+ * assume it's something" fallback — large enough to discourage the selector
+ * from over-admitting unknown files into a tight budget, small enough that
+ * a missing-metadata file isn't treated as catastrophic.
+ */
+const TOKEN_ESTIMATE_BYTES_PER_TOKEN = 4;
+const TOKEN_ESTIMATE_MIN = 200;
+const TOKEN_ESTIMATE_DEFAULT_BYTES = 50_000;
+
 const estimateTokens = (f: ActiveFile) =>
   f.processedContent?.tokenEstimate ??
-  Math.max(200, Math.floor((f.sizeBytes ?? 50_000) / 4));
+  Math.max(
+    TOKEN_ESTIMATE_MIN,
+    Math.floor(
+      (f.sizeBytes ?? TOKEN_ESTIMATE_DEFAULT_BYTES) /
+        TOKEN_ESTIMATE_BYTES_PER_TOKEN,
+    ),
+  );
 
 type SelectionPolicy = 'recent' | 'sizeAsc';
 
