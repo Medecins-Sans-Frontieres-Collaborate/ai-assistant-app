@@ -206,6 +206,82 @@ describe('/api/file/upload', () => {
       // 51MB document files should be rejected (limit is 50MB)
       expect(response.status).toBe(413);
     });
+
+    it('returns 400 for malformed mime query param', async () => {
+      const request = createRequest({
+        filename: 'test.txt',
+        mime: '<script>alert(1)</script>',
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('Invalid MIME type');
+    });
+
+    it('returns 400 when image data URL is not actually an image', async () => {
+      // Looks like a data URL but the bytes are plain text, not an image.
+      const fakeDataUrl =
+        'data:image/png;base64,' +
+        Buffer.from('not an image').toString('base64');
+      const request = createRequest({
+        filename: 'fake.png',
+        filetype: 'image',
+        mime: 'image/png',
+        body: fakeDataUrl,
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe(
+        'File content does not match a recognized image format',
+      );
+    });
+
+    it('returns 400 when legacy image body is not a data URL', async () => {
+      const request = createRequest({
+        filename: 'test.png',
+        filetype: 'image',
+        body: 'not-a-data-url',
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('Invalid image data URL format');
+    });
+
+    it('accepts SVG and ICO via legacy data URL path', async () => {
+      const svgBytes = Buffer.from('<?xml version="1.0"?><svg/>');
+      const svgDataUrl =
+        'data:image/svg+xml;base64,' + svgBytes.toString('base64');
+      const svgRequest = createRequest({
+        filename: 'icon.svg',
+        filetype: 'image',
+        mime: 'image/svg+xml',
+        body: svgDataUrl,
+      });
+      const svgResponse = await POST(svgRequest);
+      expect(svgResponse.status).toBe(200);
+
+      const icoBytes = Buffer.from([
+        0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x10, 0x10,
+      ]);
+      const icoDataUrl =
+        'data:image/x-icon;base64,' + icoBytes.toString('base64');
+      const icoRequest = createRequest({
+        filename: 'favicon.ico',
+        filetype: 'image',
+        mime: 'image/x-icon',
+        body: icoDataUrl,
+      });
+      const icoResponse = await POST(icoRequest);
+      expect(icoResponse.status).toBe(200);
+    });
   });
 
   describe('File Type Handling', () => {
