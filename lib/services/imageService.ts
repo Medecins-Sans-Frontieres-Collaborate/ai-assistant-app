@@ -1,30 +1,86 @@
 import { ImageMessageContent } from '@/types/chat';
 
 /**
- * Maximum entries kept in the in-memory image cache. Each entry stores a
- * full base64 data URL, which is roughly 1.33× the original image bytes
- * (5MB image → ~6.7MB string). With the 5MB image cap, 30 entries is
- * ~200MB worst case — high enough that typical sessions never evict, but
- * bounded so a long session full of unique images can't grow tab memory
- * unbounded.
+ * Soft byte ceiling for the in-memory image cache. Entries are evicted
+ * (oldest-first) until total cached bytes fall back under this limit.
+ *
+ * String length is used as a proxy for byte size: a base64 data URL stores
+ * roughly 1 byte per character (ASCII), and even worst-case multi-byte
+ * sequences would only modestly underestimate. The base64 expansion factor
+ * (~1.33×) is already baked into the stored string itself, so length is the
+ * right thing to bound rather than the original image's binary size.
+ *
+ * Held in a `let` so tests can dial the cap down via `_setImageCacheMaxBytes`
+ * without having to allocate hundreds of MB of strings to drive eviction.
  */
-const IMAGE_CACHE_MAX_ENTRIES = 30;
+const DEFAULT_IMAGE_CACHE_MAX_BYTES = 200 * 1024 * 1024; // 200MB
+let imageCacheMaxBytes = DEFAULT_IMAGE_CACHE_MAX_BYTES;
 
-// LRU-by-insertion-order cache for image base64 data. We rely on Map
-// preserving insertion order: every read of a cached entry calls
-// `touchRecency`, which deletes-then-reinserts the entry to bump it to
-// the most-recent position. When full, the oldest entry is evicted first.
+/**
+ * Test-only: override the byte cap to drive eviction with small strings.
+ * Pass `null` to restore the production default.
+ */
+export const _setImageCacheMaxBytes = (bytes: number | null): void => {
+  imageCacheMaxBytes = bytes ?? DEFAULT_IMAGE_CACHE_MAX_BYTES;
+};
+
+// LRU-by-insertion-order cache. We rely on Map preserving insertion order:
+// every read of a cached entry calls `touchRecency`, which deletes-then-
+// reinserts the entry to bump it to the most-recent position. When the
+// cumulative byte budget is exceeded, oldest entries are evicted until the
+// budget is satisfied. This avoids the previous entry-count cap, which
+// gave only an approximate memory bound and could be wildly off for
+// caches dominated by unusually large or small images.
 const imageCache = new Map<string, string>();
+let imageCacheBytes = 0;
 
-function touchRecency(url: string, value: string): void {
-  imageCache.delete(url);
-  imageCache.set(url, value);
-  while (imageCache.size > IMAGE_CACHE_MAX_ENTRIES) {
-    const oldest = imageCache.keys().next().value;
-    if (oldest === undefined) break;
-    imageCache.delete(oldest);
+function evictOne(): void {
+  const oldest = imageCache.keys().next().value;
+  if (oldest === undefined) return;
+  const value = imageCache.get(oldest);
+  imageCache.delete(oldest);
+  if (value !== undefined) {
+    imageCacheBytes -= value.length;
+    if (imageCacheBytes < 0) imageCacheBytes = 0;
   }
 }
+
+function touchRecency(url: string, value: string): void {
+  const previous = imageCache.get(url);
+  if (previous !== undefined) {
+    imageCacheBytes -= previous.length;
+    if (imageCacheBytes < 0) imageCacheBytes = 0;
+  }
+  imageCache.delete(url);
+  imageCache.set(url, value);
+  imageCacheBytes += value.length;
+
+  // A single entry larger than the cap should still be served on a hit —
+  // evict it on the *next* insertion rather than refusing to cache it now.
+  // The loop terminates either when we're under budget or there's only one
+  // entry left (which we keep so the just-inserted value survives).
+  while (imageCacheBytes > imageCacheMaxBytes && imageCache.size > 1) {
+    evictOne();
+  }
+}
+
+/**
+ * Test-only: drop all entries and reset the byte counter.
+ */
+export const _clearImageCache = (): void => {
+  imageCache.clear();
+  imageCacheBytes = 0;
+};
+
+/**
+ * Test/debug helper: returns current cache occupancy. Not part of the
+ * public hot path — exported so unit tests can assert eviction without
+ * peeking into module-private state.
+ */
+export const _imageCacheStats = () => ({
+  entries: imageCache.size,
+  bytes: imageCacheBytes,
+});
 
 /**
  * Cache base64 image data to avoid re-fetching from server.
