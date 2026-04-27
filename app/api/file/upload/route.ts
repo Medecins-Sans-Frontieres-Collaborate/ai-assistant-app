@@ -13,16 +13,12 @@ import {
   successResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
-import { validateImageSignature } from '@/lib/utils/server/file/imageSignature';
 import {
   getContentType,
   validateBufferSignature,
   validateFileNotExecutable,
 } from '@/lib/utils/server/file/mimeTypes';
-import {
-  isSvgBuffer,
-  sanitizeSvgBuffer,
-} from '@/lib/utils/server/file/svgSanitization';
+import { validateOrSanitizeImageBytes } from '@/lib/utils/server/file/svgSanitization';
 
 import { auth } from '@/auth';
 import {
@@ -177,23 +173,12 @@ async function storeFile(
 
   // Image content check on the binary path. The legacy text path validated
   // its own bytes at decode time and passes a string here, which we don't
-  // re-validate (re-decoding would be wasteful).
+  // re-validate (re-decoding would be wasteful). For SVG, the helper
+  // returns sanitised bytes that replace the original buffer.
   if (ctx.isImage && Buffer.isBuffer(data)) {
-    // SVG is XML and bypasses binary magic-byte validation. Sanitise it
-    // through DOMPurify first; the cleaned bytes replace the original so
-    // any scripts or event handlers are gone before storage.
-    if (isSvgBuffer(data)) {
-      const svgResult = await sanitizeSvgBuffer(data);
-      if (!svgResult.ok) {
-        return { ok: false, error: svgResult.error };
-      }
-      data = svgResult.sanitized;
-    } else {
-      const result = validateImageSignature(data);
-      if (!result.isValid) {
-        return { ok: false, error: result.error ?? 'Invalid image content' };
-      }
-    }
+    const result = await validateOrSanitizeImageBytes(data);
+    if (!result.ok) return { ok: false, error: result.error };
+    data = result.data;
   }
 
   const uri = await blobStorageClient.upload(
