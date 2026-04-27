@@ -59,11 +59,33 @@ async function readBoundedBody(
  */
 export const maxDuration = 300;
 
+/**
+ * Validates a MIME type from a query parameter against `type/subtype` shape.
+ * The MIME is set as `blobContentType` on the stored blob and echoed in
+ * `Content-Type` when the blob is served — without this, an attacker could
+ * pass `mime=text/html` (or worse) and influence how downstream clients
+ * render their content. We accept ASCII letters, digits, and a small set
+ * of well-known MIME punctuation. Reject anything else.
+ */
+function isValidMimeType(value: string): boolean {
+  if (value.length > 127) return false;
+  return /^[a-zA-Z0-9!#$&^_.+-]+\/[a-zA-Z0-9!#$&^_.+-]+(?:;[ \t]*[a-zA-Z0-9!#$&^_.+-]+=[a-zA-Z0-9!#$&^_.+-]+)*$/.test(
+    value,
+  );
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const filename: string = searchParams.get('filename') as string;
   const filetype: string = searchParams.get('filetype') ?? 'file';
-  const mimeType: string | null = searchParams.get('mime');
+  const rawMimeType: string | null = searchParams.get('mime');
+  // Reject malformed or oversized MIME up front. An attacker controls this
+  // query param, and it ends up on the blob's Content-Type header; we don't
+  // want it carrying script tags or arbitrary bytes.
+  if (rawMimeType && !isValidMimeType(rawMimeType)) {
+    return badRequestResponse('Invalid MIME type');
+  }
+  const mimeType: string | null = rawMimeType;
 
   if (!filename) {
     return badRequestResponse('Filename is required');
