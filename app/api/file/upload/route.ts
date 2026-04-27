@@ -74,6 +74,57 @@ function isValidMimeType(value: string): boolean {
   );
 }
 
+/**
+ * Verifies that a buffer begins with a known image format's magic bytes.
+ * The audio/video signature validator (`validateBufferSignature`) doesn't
+ * cover image formats, so we maintain a small inline list here. Without
+ * this, an attacker could send arbitrary binary content under an image
+ * filename and `filetype=image` and we'd store it without any content check.
+ */
+function looksLikeImage(buffer: Buffer): boolean {
+  if (buffer.length < 8) return false;
+  // PNG: 89 50 4E 47 0D 0A 1A 0A
+  if (
+    buffer[0] === 0x89 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x4e &&
+    buffer[3] === 0x47
+  ) {
+    return true;
+  }
+  // JPEG: FF D8 FF
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+    return true;
+  }
+  // GIF87a / GIF89a
+  if (
+    buffer[0] === 0x47 &&
+    buffer[1] === 0x49 &&
+    buffer[2] === 0x46 &&
+    buffer[3] === 0x38
+  ) {
+    return true;
+  }
+  // WebP: RIFF....WEBP
+  if (
+    buffer[0] === 0x52 &&
+    buffer[1] === 0x49 &&
+    buffer[2] === 0x46 &&
+    buffer[3] === 0x46 &&
+    buffer[8] === 0x57 &&
+    buffer[9] === 0x45 &&
+    buffer[10] === 0x42 &&
+    buffer[11] === 0x50
+  ) {
+    return true;
+  }
+  // BMP
+  if (buffer[0] === 0x42 && buffer[1] === 0x4d) {
+    return true;
+  }
+  return false;
+}
+
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const filename: string = searchParams.get('filename') as string;
@@ -148,6 +199,17 @@ export async function POST(request: NextRequest) {
             'File content does not match expected audio/video format',
         );
       }
+    }
+
+    // Image content check. The audio/video validator doesn't cover images,
+    // and without this the route would accept arbitrary binary content
+    // under an image filename + `filetype=image`. Buffer-only path: the
+    // legacy text body may still be a base64 data URL string for very old
+    // clients during deploy — those are checked at decode time below.
+    const isImage =
+      (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
+    if (isImage && Buffer.isBuffer(data) && !looksLikeImage(data)) {
+      throw new Error('File content does not match a recognized image format');
     }
 
     return await blobStorageClient.upload(
