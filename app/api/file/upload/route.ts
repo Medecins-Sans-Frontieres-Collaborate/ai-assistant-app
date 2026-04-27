@@ -19,6 +19,10 @@ import {
   validateBufferSignature,
   validateFileNotExecutable,
 } from '@/lib/utils/server/file/mimeTypes';
+import {
+  isSvgBuffer,
+  sanitizeSvgBuffer,
+} from '@/lib/utils/server/file/svgSanitization';
 
 import { auth } from '@/auth';
 import {
@@ -175,9 +179,20 @@ async function storeFile(
   // its own bytes at decode time and passes a string here, which we don't
   // re-validate (re-decoding would be wasteful).
   if (ctx.isImage && Buffer.isBuffer(data)) {
-    const result = validateImageSignature(data);
-    if (!result.isValid) {
-      return { ok: false, error: result.error ?? 'Invalid image content' };
+    // SVG is XML and bypasses binary magic-byte validation. Sanitise it
+    // through DOMPurify first; the cleaned bytes replace the original so
+    // any scripts or event handlers are gone before storage.
+    if (isSvgBuffer(data)) {
+      const svgResult = await sanitizeSvgBuffer(data);
+      if (!svgResult.ok) {
+        return { ok: false, error: svgResult.error };
+      }
+      data = svgResult.sanitized;
+    } else {
+      const result = validateImageSignature(data);
+      if (!result.isValid) {
+        return { ok: false, error: result.error ?? 'Invalid image content' };
+      }
     }
   }
 
@@ -198,21 +213,36 @@ async function storeFile(
  * branch). Returns the error string when the body isn't a valid image data
  * URL — caller converts to 400.
  */
-function validateLegacyImageDataUrl(
+async function validateLegacyImageDataUrl(
   rawData: string,
-): { ok: true; storage: string } | { ok: false; error: string } {
+): Promise<{ ok: true; storage: string } | { ok: false; error: string }> {
   const dataUrlMatch = rawData.match(
     /^data:([a-zA-Z0-9!#$&^_.+/-]+);base64,([\s\S]+)$/,
   );
   if (!dataUrlMatch) {
     return { ok: false, error: 'Invalid image data URL format' };
   }
+  const declaredMime = dataUrlMatch[1];
   let decoded: Buffer;
   try {
     decoded = Buffer.from(dataUrlMatch[2], 'base64');
   } catch {
     return { ok: false, error: 'Invalid base64 in image data URL' };
   }
+
+  // SVG is XML; bypass binary magic-byte validation and sanitise instead.
+  // We re-encode the cleaned SVG back into a data URL so the storage
+  // payload — which downstream consumers expect to look like a data: URL
+  // — stays in the same shape.
+  if (isSvgBuffer(decoded)) {
+    const svgResult = await sanitizeSvgBuffer(decoded);
+    if (!svgResult.ok) {
+      return { ok: false, error: svgResult.error };
+    }
+    const cleanBase64 = svgResult.sanitized.toString('base64');
+    return { ok: true, storage: `data:${declaredMime};base64,${cleanBase64}` };
+  }
+
   const sigCheck = validateImageSignature(decoded);
   if (!sigCheck.isValid) {
     return { ok: false, error: sigCheck.error ?? 'Invalid image content' };
@@ -313,7 +343,7 @@ export async function POST(request: NextRequest) {
       const rawData = Buffer.from(buffered).toString('utf8');
 
       if (ctx.isImage) {
-        const result = validateLegacyImageDataUrl(rawData);
+        const result = await validateLegacyImageDataUrl(rawData);
         if (!result.ok) return badRequestResponse(result.error);
         fileData = result.storage;
       } else {
