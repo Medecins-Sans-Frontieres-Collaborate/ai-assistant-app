@@ -132,24 +132,30 @@ export class FileUploadService {
   }
 
   /**
-   * Upload image file
+   * Upload image file via multipart/form-data, matching the file upload
+   * transport. Sending raw base64 strings as the request body (the previous
+   * approach) was unreliable in some Chrome+Windows environments — likely
+   * mangled by corporate proxies that don't expect multi-MB plain-text bodies.
    */
   static async uploadImage(
     file: File,
     onProgress?: (progress: number) => void,
   ): Promise<UploadResult> {
-    const base64String = await this.readFileAsDataURL(file);
+    const result = await this.uploadFileViaXHR(file, onProgress, 'image');
 
-    // Simulated progress for base64 encoding
-    if (onProgress) onProgress(50);
+    // Best-effort: warm the in-memory base64 cache so the first chat send in
+    // this session can skip the /api/file/{id} refetch. Failures must not
+    // fail the upload.
+    try {
+      if (result.url) {
+        const dataUrl = await this.readFileAsDataURL(file);
+        cacheImageBase64(result.url, dataUrl);
+      }
+    } catch (cacheError) {
+      console.warn('Failed to cache image:', cacheError);
+    }
 
-    const data = await uploadImageToAPI(file.name, base64String, onProgress);
-
-    return {
-      url: data.uri ?? data.filename ?? '',
-      originalFilename: file.name,
-      type: 'image',
-    };
+    return result;
   }
 
   /**
@@ -343,6 +349,7 @@ export class FileUploadService {
   private static uploadFileViaXHR(
     file: File,
     onProgress?: (progress: number) => void,
+    filetype: 'file' | 'image' = 'file',
   ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -390,7 +397,7 @@ export class FileUploadService {
       // Build URL with query parameters
       const encodedFileName = encodeURIComponent(file.name);
       const encodedMimeType = encodeURIComponent(file.type);
-      const url = `/api/file/upload?filename=${encodedFileName}&filetype=file&mime=${encodedMimeType}`;
+      const url = `/api/file/upload?filename=${encodedFileName}&filetype=${filetype}&mime=${encodedMimeType}`;
 
       xhr.open('POST', url);
       xhr.send(formData);
@@ -452,45 +459,4 @@ export class FileUploadService {
 
     return results;
   }
-}
-
-/**
- * Helper function to upload image to API (extracted from original code)
- */
-async function uploadImageToAPI(
-  filename: string,
-  base64String: string,
-  onProgress?: (progress: number) => void,
-): Promise<{ uri?: string; filename?: string }> {
-  const encodedFileName = encodeURIComponent(filename);
-  const response = await fetch(
-    `/api/file/upload?filename=${encodedFileName}&filetype=image`,
-    {
-      method: 'POST',
-      // Send full data URL (including "data:image/...;base64," prefix)
-      // so getBlobBase64String() can detect and return it correctly
-      body: base64String,
-      headers: {
-        'x-file-name': encodedFileName,
-      },
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error('Image upload failed');
-  }
-
-  if (onProgress) onProgress(100);
-
-  const response_data = await response.json();
-  const data = response_data.data || response_data;
-
-  // Cache the image for offline use
-  try {
-    await cacheImageBase64(data.uri ?? data.filename, base64String);
-  } catch (cacheError) {
-    console.warn('Failed to cache image:', cacheError);
-  }
-
-  return data;
 }
