@@ -27,45 +27,45 @@ import {
 } from '@/lib/constants/fileLimits';
 
 /**
- * Streams the request body into a Buffer, aborting early if the byte count
- * exceeds `maxBytes`. This is the authoritative defense against a lying
- * Content-Length: a client claiming 1MB but sending 1GB will be cut off here
- * rather than buffered into memory by `formData()`.
+ * Marker error thrown by the size-bounding TransformStream when the body
+ * exceeds the cap. Caught by the caller which converts it to a 413 response.
+ */
+const PAYLOAD_TOO_LARGE = Symbol('PAYLOAD_TOO_LARGE');
+
+/**
+ * Pipes the request body through a size-bounded TransformStream and reads
+ * the result into a Buffer. The transform errors the stream as soon as the
+ * byte count exceeds `maxBytes`, so a lying Content-Length cannot push
+ * arbitrary bytes into `formData()` memory.
  *
- * Returns null when the cap is exceeded; the caller should respond 413.
+ * Returns null when the cap is tripped; the caller should respond 413.
  */
 async function readBoundedBody(
   request: NextRequest,
   maxBytes: number,
 ): Promise<Buffer | null> {
-  const reader = request.body?.getReader();
-  if (!reader) return Buffer.alloc(0);
+  if (!request.body) return Buffer.alloc(0);
 
-  const chunks: Uint8Array[] = [];
   let total = 0;
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      total += value.byteLength;
+  const limiter = new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      total += chunk.byteLength;
       if (total > maxBytes) {
-        try {
-          await reader.cancel();
-        } catch {
-          /* reader may already be in a terminal state */
-        }
-        return null;
+        controller.error(PAYLOAD_TOO_LARGE);
+        return;
       }
-      chunks.push(value);
-    }
-  } finally {
-    try {
-      reader.releaseLock();
-    } catch {
-      /* lock may be auto-released after cancel/done */
-    }
+      controller.enqueue(chunk);
+    },
+  });
+
+  try {
+    const bounded = request.body.pipeThrough(limiter);
+    const arrayBuffer = await new Response(bounded).arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  } catch (error) {
+    if (error === PAYLOAD_TOO_LARGE) return null;
+    throw error;
   }
-  return Buffer.concat(chunks);
 }
 
 /**
