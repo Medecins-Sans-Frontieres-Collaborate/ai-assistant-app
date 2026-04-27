@@ -3,6 +3,8 @@
  * Extracts audio tracks from video files in the browser to reduce upload size
  * for transcription workflows.
  */
+import { formatBytes } from '@/lib/utils/app/const';
+
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
@@ -71,6 +73,22 @@ export class AudioExtractionUnavailableError extends Error {
   }
 }
 
+/**
+ * Race a promise against a timeout. On timeout, rejects with the error built
+ * by `errorFactory`. Used to fail fast when the FFmpeg WASM CDN is blocked
+ * or very slow.
+ */
+function raceWithTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  errorFactory: () => Error,
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => setTimeout(() => reject(errorFactory()), ms)),
+  ]);
+}
+
 // Singleton FFmpeg instance
 let ffmpegInstance: FFmpeg | null = null;
 let ffmpegLoading: Promise<FFmpeg> | null = null;
@@ -118,37 +136,28 @@ async function getFFmpeg(
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
 
     try {
-      // Race the CDN fetch against a timeout so a blocked or very slow
-      // network fails fast rather than hanging for minutes.
-      const withTimeout = <T>(p: Promise<T>): Promise<T> =>
-        Promise.race([
-          p,
-          new Promise<T>((_, reject) =>
-            setTimeout(
-              () =>
-                reject(
-                  new AudioExtractionUnavailableError(
-                    'Timed out fetching FFmpeg WASM from CDN',
-                    'cdn',
-                  ),
-                ),
-              FFMPEG_WASM_LOAD_TIMEOUT_MS,
-            ),
-          ),
-        ]);
-
+      const cdnTimeout = () =>
+        new AudioExtractionUnavailableError(
+          'Timed out fetching FFmpeg WASM from CDN',
+          'cdn',
+        );
       const [coreURL, wasmURL] = await Promise.all([
-        withTimeout(toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript')),
-        withTimeout(
+        raceWithTimeout(
+          toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+          FFMPEG_WASM_LOAD_TIMEOUT_MS,
+          cdnTimeout,
+        ),
+        raceWithTimeout(
           toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+          FFMPEG_WASM_LOAD_TIMEOUT_MS,
+          cdnTimeout,
         ),
       ]);
       await ffmpeg.load({ coreURL, wasmURL });
     } catch (error) {
-      console.error('Failed to load FFmpeg from CDN:', error);
-      // Reset the loading promise so a retry (e.g., after the user
-      // changes networks) gets a fresh attempt rather than the
-      // already-rejected one.
+      console.error('[AudioExtractor] Failed to load FFmpeg from CDN:', error);
+      // Reset so the next call retries from scratch instead of awaiting the
+      // already-rejected promise.
       ffmpegLoading = null;
       if (error instanceof AudioExtractionUnavailableError) {
         throw error;
@@ -224,7 +233,7 @@ export async function extractAudioFromVideo(
   // side transcription pipeline handles these natively.
   if (videoFile.size > MAX_CLIENT_EXTRACTION_BYTES) {
     throw new AudioExtractionUnavailableError(
-      `Video too large for client-side extraction (${formatFileSize(videoFile.size)} > ${formatFileSize(MAX_CLIENT_EXTRACTION_BYTES)})`,
+      `Video too large for client-side extraction (${formatBytes(videoFile.size)} > ${formatBytes(MAX_CLIENT_EXTRACTION_BYTES)})`,
       'memory',
     );
   }
@@ -310,7 +319,7 @@ export async function extractAudioFromVideo(
     onProgress?.({
       stage: 'complete',
       percent: 100,
-      message: `Extracted ${formatFileSize(audioBlob.size)} audio from ${formatFileSize(videoFile.size)} video`,
+      message: `Extracted ${formatBytes(audioBlob.size)} audio from ${formatBytes(videoFile.size)} video`,
     });
 
     return {
@@ -335,24 +344,13 @@ export async function extractAudioFromVideo(
       // Ignore cleanup errors
     }
 
-    console.error('Audio extraction failed:', error);
+    console.error('[AudioExtractor] Audio extraction failed:', error);
     throw new Error(
       error instanceof Error
         ? `Audio extraction failed: ${error.message}`
         : 'Audio extraction failed unexpectedly',
     );
   }
-}
-
-/**
- * Formats file size in human-readable format
- */
-function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
 /**
