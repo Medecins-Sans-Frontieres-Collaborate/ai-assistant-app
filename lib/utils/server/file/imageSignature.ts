@@ -7,14 +7,13 @@
  * Without this check, the server would accept arbitrary binary content under
  * an image filename + `filetype=image` and store it without any validation.
  *
- * Supports binary image formats: PNG, JPEG, GIF, WebP, BMP, ICO. SVG is
- * deliberately *not* validated as an image here: it is XML-based and can
- * carry executable content (`<script>`, `on*` handlers, foreign objects).
- * Magic-byte sniffing cannot detect that, and serving an unsanitised SVG
- * with `Content-Type: image/svg+xml` from our origin would be a stored
- * XSS vector. Reject SVG at this gate; if SVG support is needed later it
- * must go through a sanitiser (e.g. DOMPurify with svg profile) and be
- * served with `Content-Disposition: attachment` or from a sandboxed origin.
+ * Validates the binary image formats: PNG, JPEG, GIF, WebP, BMP, ICO.
+ *
+ * SVG is *not* validated here. SVG is XML and can carry executable content,
+ * which magic-byte sniffing cannot detect. Callers that accept SVG must
+ * route those bytes through `./svgSanitization.ts` (DOMPurify with the SVG
+ * profile) before storage; that module is the single source of truth for
+ * SVG safety.
  */
 
 export interface ImageSignatureResult {
