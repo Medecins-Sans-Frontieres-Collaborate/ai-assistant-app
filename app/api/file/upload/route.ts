@@ -13,6 +13,7 @@ import {
   successResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
+import { validateImageSignature } from '@/lib/utils/server/file/imageSignature';
 import {
   getContentType,
   validateBufferSignature,
@@ -21,10 +22,33 @@ import {
 
 import { auth } from '@/auth';
 import {
+  FileCategory,
   getFileCategory,
   getFileSizeLimit,
   validateFileSizeRaw,
 } from '@/lib/constants/fileLimits';
+
+/**
+ * Route segment config to allow large file uploads.
+ * Next.js App Router defaults to 1MB body size limit.
+ * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+ *
+ * 60s was too tight for legitimate slow uploads — a 50MB file on a 1Mbps
+ * cellular connection takes ~7 minutes, and the route handler timed out
+ * mid-stream with no resumability. 300s covers the worst plausible
+ * small-file (≤10MB) upload at very low bandwidth and stays well within
+ * the Azure Container Apps deployment's request timeout. Files >10MB go
+ * via the chunked Server Action path and are not affected by this.
+ */
+export const maxDuration = 300;
+
+/**
+ * Margin above the per-category size cap to allow for multipart envelope
+ * overhead (boundaries, Content-Disposition headers per field). 4KB is
+ * generous for a single-field upload — actual overhead is closer to
+ * ~200 bytes — but cheap to allow.
+ */
+const MULTIPART_OVERHEAD_BYTES = 4 * 1024;
 
 /**
  * Buffers the request body into an `ArrayBuffer` and rejects when the size
@@ -52,20 +76,6 @@ async function readBoundedBody(
 }
 
 /**
- * Route segment config to allow large file uploads.
- * Next.js App Router defaults to 1MB body size limit.
- * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
- *
- * 60s was too tight for legitimate slow uploads — a 50MB file on a 1Mbps
- * cellular connection takes ~7 minutes, and the route handler timed out
- * mid-stream with no resumability. 300s covers the worst plausible
- * small-file (≤10MB) upload at very low bandwidth and stays well within
- * the Azure Container Apps deployment's request timeout. Files >10MB go
- * via the chunked Server Action path and are not affected by this.
- */
-export const maxDuration = 300;
-
-/**
  * Validates a MIME type from a query parameter against `type/subtype` shape.
  * The MIME is set as `blobContentType` on the stored blob and echoed in
  * `Content-Type` when the blob is served — without this, an attacker could
@@ -81,102 +91,133 @@ function isValidMimeType(value: string): boolean {
 }
 
 /**
- * Verifies that a buffer begins with a known image format's magic bytes.
- * The audio/video signature validator (`validateBufferSignature`) doesn't
- * cover image formats, so we maintain a small inline list here. Without
- * this, an attacker could send arbitrary binary content under an image
- * filename and `filetype=image` and we'd store it without any content check.
+ * The body-size cap to enforce for the streaming bound.
  *
- * Supports the formats listed in `IMAGE_EXTENSIONS` (lib/constants/fileLimits):
- * PNG, JPEG, GIF, WebP, BMP, ICO, SVG.
+ * Multipart bodies pay a small envelope overhead (boundaries, headers); the
+ * legacy text-body path is base64-encoded so it's ~33% larger than the raw
+ * bytes. A 5MB image base64-encoded is ~6.7MB, so we allow `1.4× cap` for
+ * the legacy path.
  */
-function looksLikeImage(buffer: Buffer): boolean {
-  if (buffer.length < 4) return false;
+function computeStreamCap(
+  category: FileCategory,
+  isMultipart: boolean,
+): number {
+  const rawCap = getFileSizeLimit(category);
+  return isMultipart
+    ? rawCap + MULTIPART_OVERHEAD_BYTES
+    : Math.ceil(rawCap * 1.4) + MULTIPART_OVERHEAD_BYTES;
+}
 
-  // ICO: 00 00 01 00 (icon) / 00 00 02 00 (cursor)
-  if (
-    buffer[0] === 0x00 &&
-    buffer[1] === 0x00 &&
-    (buffer[2] === 0x01 || buffer[2] === 0x02) &&
-    buffer[3] === 0x00
-  ) {
-    return true;
-  }
+/**
+ * Per-request inputs derived from query params + content-type. Lifted from
+ * the POST handler so the helper functions below can take a single
+ * parameter instead of closing over named locals.
+ */
+interface UploadContext {
+  filename: string;
+  filetype: string;
+  mimeType: string | null;
+  isImage: boolean;
+}
 
-  // BMP: 42 4D
-  if (buffer[0] === 0x42 && buffer[1] === 0x4d) {
-    return true;
-  }
+/**
+ * Stores the validated file at the user's hashed blob path. Image-content
+ * validation runs here for the multipart binary path; the legacy text path
+ * validates earlier at decode time and feeds in the data-URL string.
+ *
+ * Throws `Error` on internal storage failure; returns the badRequest reason
+ * string when the data fails content validation (caller converts to 400).
+ */
+async function storeFile(
+  data: Buffer | string,
+  ctx: UploadContext,
+  session: Session,
+): Promise<{ ok: true; uri: string } | { ok: false; error: string }> {
+  const userId = getUserIdFromSession(session);
+  const blobStorageClient: BlobStorage = createBlobStorageClient(session);
 
-  // Most other formats need ≥8 bytes.
-  if (buffer.length < 8) return false;
+  // Hash data directly — Hasher accepts both Buffer and string. For buffers,
+  // this avoids the base64 string length limit for large files.
+  const hashedFileContents = Hasher.sha256(data);
+  const extension: string | undefined = ctx.filename.split('.').pop();
 
-  // PNG: 89 50 4E 47 0D 0A 1A 0A
-  if (
-    buffer[0] === 0x89 &&
-    buffer[1] === 0x50 &&
-    buffer[2] === 0x4e &&
-    buffer[3] === 0x47
-  ) {
-    return true;
-  }
-  // JPEG: FF D8 FF
-  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
-    return true;
-  }
-  // GIF87a / GIF89a
-  if (
-    buffer[0] === 0x47 &&
-    buffer[1] === 0x49 &&
-    buffer[2] === 0x46 &&
-    buffer[3] === 0x38
-  ) {
-    return true;
-  }
-  // WebP: RIFF....WEBP (needs ≥12 bytes)
-  if (
-    buffer.length >= 12 &&
-    buffer[0] === 0x52 &&
-    buffer[1] === 0x49 &&
-    buffer[2] === 0x46 &&
-    buffer[3] === 0x46 &&
-    buffer[8] === 0x57 &&
-    buffer[9] === 0x45 &&
-    buffer[10] === 0x42 &&
-    buffer[11] === 0x50
-  ) {
-    return true;
+  let contentType: string;
+  if (ctx.mimeType) {
+    contentType = ctx.mimeType;
+  } else if (extension) {
+    contentType = getContentType(extension);
+  } else {
+    contentType = 'application/octet-stream';
   }
 
-  // SVG: text/XML. Skip an optional UTF-8 BOM, then look for `<?xml` or
-  // `<svg` at the start, case-insensitive on the tag name. We don't try to
-  // validate the SVG document structure — magic-byte parity with the binary
-  // formats is the goal.
-  let offset = 0;
-  if (buffer[0] === 0xef && buffer[1] === 0xbb && buffer[2] === 0xbf) {
-    offset = 3;
-  }
-  // Skip leading ASCII whitespace
-  while (
-    offset < buffer.length &&
-    (buffer[offset] === 0x20 ||
-      buffer[offset] === 0x09 ||
-      buffer[offset] === 0x0a ||
-      buffer[offset] === 0x0d)
-  ) {
-    offset++;
-  }
-  if (buffer.length - offset >= 5) {
-    const head = buffer
-      .slice(offset, offset + 5)
-      .toString('ascii')
-      .toLowerCase();
-    if (head === '<?xml' || head.startsWith('<svg')) {
-      return true;
+  const uploadLocation = ctx.filetype === 'image' ? 'images' : 'files';
+
+  const isAudioVideo =
+    (ctx.mimeType &&
+      (ctx.mimeType.startsWith('audio/') ||
+        ctx.mimeType.startsWith('video/'))) ||
+    ctx.filetype === 'audio' ||
+    ctx.filetype === 'video';
+
+  if (isAudioVideo && Buffer.isBuffer(data)) {
+    const result = validateBufferSignature(data, 'any', ctx.filename);
+    if (!result.isValid) {
+      return {
+        ok: false,
+        error:
+          result.error ??
+          'File content does not match expected audio/video format',
+      };
     }
   }
 
-  return false;
+  // Image content check on the binary path. The legacy text path validated
+  // its own bytes at decode time and passes a string here, which we don't
+  // re-validate (re-decoding would be wasteful).
+  if (ctx.isImage && Buffer.isBuffer(data)) {
+    const result = validateImageSignature(data);
+    if (!result.isValid) {
+      return { ok: false, error: result.error ?? 'Invalid image content' };
+    }
+  }
+
+  const uri = await blobStorageClient.upload(
+    `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`,
+    data,
+    {
+      blobHTTPHeaders: { blobContentType: contentType },
+    },
+  );
+  return { ok: true, uri };
+}
+
+/**
+ * Decodes the legacy `data:image/...;base64,...` body into a Buffer for
+ * content validation, then returns the original data URL string for storage
+ * (preserving backward compat with `getBlobBase64String`'s data:-prefix
+ * branch). Returns the error string when the body isn't a valid image data
+ * URL — caller converts to 400.
+ */
+function validateLegacyImageDataUrl(
+  rawData: string,
+): { ok: true; storage: string } | { ok: false; error: string } {
+  const dataUrlMatch = rawData.match(
+    /^data:([a-zA-Z0-9!#$&^_.+/-]+);base64,([\s\S]+)$/,
+  );
+  if (!dataUrlMatch) {
+    return { ok: false, error: 'Invalid image data URL format' };
+  }
+  let decoded: Buffer;
+  try {
+    decoded = Buffer.from(dataUrlMatch[2], 'base64');
+  } catch {
+    return { ok: false, error: 'Invalid base64 in image data URL' };
+  }
+  const sigCheck = validateImageSignature(decoded);
+  if (!sigCheck.isValid) {
+    return { ok: false, error: sigCheck.error ?? 'Invalid image content' };
+  }
+  return { ok: true, storage: rawData };
 }
 
 export async function POST(request: NextRequest) {
@@ -196,7 +237,6 @@ export async function POST(request: NextRequest) {
     return badRequestResponse('Filename is required');
   }
 
-  // Validate file is not executable
   if (filetype) {
     const validation = validateFileNotExecutable(filename, mimeType);
     if (!validation.isValid) {
@@ -204,77 +244,12 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  /**
-   * Uploads file data to blob storage with content-based naming.
-   *
-   * @param data - The file data as Buffer (binary) or string (base64/image data URL)
-   * @param session - User session for authentication
-   * @returns The blob storage URL
-   */
-  const uploadFileToBlobStorage = async (
-    data: Buffer | string,
-    session: Session,
-  ) => {
-    const userId = getUserIdFromSession(session);
-    const blobStorageClient: BlobStorage = createBlobStorageClient(session);
-
-    // Hash data directly - Hasher accepts both Buffer and string
-    // For buffers, this avoids base64 string length limit for large files
-    const hashedFileContents = Hasher.sha256(data);
-    const extension: string | undefined = filename.split('.').pop();
-
-    let contentType;
-    if (mimeType) {
-      contentType = mimeType;
-    } else if (extension) {
-      contentType = getContentType(extension);
-    } else {
-      contentType = 'application/octet-stream';
-    }
-
-    const uploadLocation = filetype === 'image' ? 'images' : 'files';
-
-    // Validate magic bytes for audio/video files to prevent spoofing
-    const isAudioVideo =
-      (mimeType &&
-        (mimeType.startsWith('audio/') || mimeType.startsWith('video/'))) ||
-      filetype === 'audio' ||
-      filetype === 'video';
-
-    if (isAudioVideo && Buffer.isBuffer(data)) {
-      const signatureValidation = validateBufferSignature(
-        data,
-        'any',
-        filename,
-      );
-      if (!signatureValidation.isValid) {
-        throw new Error(
-          signatureValidation.error ||
-            'File content does not match expected audio/video format',
-        );
-      }
-    }
-
-    // Image content check. The audio/video validator doesn't cover images,
-    // and without this the route would accept arbitrary binary content
-    // under an image filename + `filetype=image`. Buffer-only path: the
-    // legacy text body may still be a base64 data URL string for very old
-    // clients during deploy — those are checked at decode time below.
-    const isImage =
-      (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
-    if (isImage && Buffer.isBuffer(data) && !looksLikeImage(data)) {
-      throw new Error('File content does not match a recognized image format');
-    }
-
-    return await blobStorageClient.upload(
-      `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`,
-      data,
-      {
-        blobHTTPHeaders: {
-          blobContentType: contentType,
-        },
-      },
-    );
+  const ctx: UploadContext = {
+    filename,
+    filetype,
+    mimeType,
+    isImage:
+      (mimeType && mimeType.startsWith('image/')) || filetype === 'image',
   };
 
   // Hoist session to outer scope so catch block can reuse it
@@ -287,15 +262,8 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
-    // Compute the per-category cap. We add a small margin to allow for
-    // multipart envelope overhead (boundaries, Content-Disposition headers).
-    // The base64 path adds ~33% overhead — bound that path against the
-    // base64-equivalent of the cap.
-    const category = getFileCategory(filename, mimeType ?? undefined);
-    const rawCap = getFileSizeLimit(category);
-    const MULTIPART_OVERHEAD_BYTES = 4 * 1024;
-
-    // Advisory early rejection from Content-Length. Cheap and pre-buffer.
+    // Advisory early rejection from Content-Length — cheap and pre-buffer.
+    // The authoritative check happens via `readBoundedBody` below.
     const contentLength = request.headers.get('content-length');
     if (contentLength) {
       const declaredSize = parseInt(contentLength, 10);
@@ -311,20 +279,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check Content-Type to determine upload format
     const contentTypeHeader = request.headers.get('content-type') || '';
     const isMultipart = contentTypeHeader.includes('multipart/form-data');
 
-    // Authoritative streaming bound: if Content-Length lied (or was absent)
-    // and the body actually exceeds the cap, we stop reading and reject
-    // before `formData()` or `text()` buffer the full payload into memory.
-    // Use a slightly higher cap for multipart due to envelope overhead and
-    // ~33% larger for the base64 text path.
-    const streamCap = isMultipart
-      ? rawCap + MULTIPART_OVERHEAD_BYTES
-      : Math.ceil(rawCap * 1.4) + MULTIPART_OVERHEAD_BYTES;
-
-    const buffered = await readBoundedBody(request, streamCap);
+    const category = getFileCategory(filename, mimeType ?? undefined);
+    const buffered = await readBoundedBody(
+      request,
+      computeStreamCap(category, isMultipart),
+    );
     if (buffered === null) {
       return payloadTooLargeResponse('Request body exceeds file size limit');
     }
@@ -346,44 +308,19 @@ export async function POST(request: NextRequest) {
       }
       fileData = Buffer.from(await file.arrayBuffer());
     } else {
-      // Legacy base64 upload (backward compatibility). Materialize a Buffer
-      // here so we can decode the UTF-8 text — Buffer.from(arrayBuffer) is
-      // zero-copy.
+      // Legacy base64 upload (backward compatibility). Buffer.from(arrayBuffer)
+      // is zero-copy; we only need the materialization to decode UTF-8.
       const rawData = Buffer.from(buffered).toString('utf8');
-      const isImage =
-        (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
 
-      if (isImage) {
-        // Decode the base64 data URL so we can run the image content check
-        // before storing. Without this decode, this branch would skip
-        // signature validation entirely and store any string the client sent.
-        // Storage shape is preserved (the data URL string) for backward
-        // compat with existing blobs that getBlobBase64String reads via its
-        // data:-prefix branch.
-        const dataUrlMatch = rawData.match(
-          /^data:([a-zA-Z0-9!#$&^_.+/-]+);base64,([\s\S]+)$/,
-        );
-        if (!dataUrlMatch) {
-          return badRequestResponse('Invalid image data URL format');
-        }
-        let decoded: Buffer;
-        try {
-          decoded = Buffer.from(dataUrlMatch[2], 'base64');
-        } catch {
-          return badRequestResponse('Invalid base64 in image data URL');
-        }
-        if (!looksLikeImage(decoded)) {
-          return badRequestResponse(
-            'File content does not match a recognized image format',
-          );
-        }
-        fileData = rawData;
+      if (ctx.isImage) {
+        const result = validateLegacyImageDataUrl(rawData);
+        if (!result.ok) return badRequestResponse(result.error);
+        fileData = result.storage;
       } else {
-        // Decode base64 to binary for non-image files
         try {
           fileData = Buffer.from(rawData, 'base64');
         } catch (decodeError) {
-          console.error('Error decoding file data:', decodeError);
+          console.error('[FileUploadRoute] base64 decode failed:', decodeError);
           return badRequestResponse(
             'Invalid file data format - expected base64 encoding',
           );
@@ -391,7 +328,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check file size using category-based limits
+    // Authoritative size check on the actual buffered content.
     const fileSize = Buffer.isBuffer(fileData)
       ? fileData.length
       : Buffer.byteLength(fileData);
@@ -405,36 +342,39 @@ export async function POST(request: NextRequest) {
     }
 
     const startTime = Date.now();
-    const fileURI: string = await uploadFileToBlobStorage(fileData, session);
+    const stored = await storeFile(fileData, ctx, session);
+    if (!stored.ok) {
+      return badRequestResponse(stored.error);
+    }
     const duration = Date.now() - startTime;
 
     // Log successful file upload (fire-and-forget)
     const logger = getAzureMonitorLogger();
     void logger.logFileSuccess({
       user: session.user,
-      filename: filename,
-      fileSize: fileSize,
+      filename,
+      fileSize,
       fileType: mimeType || filetype,
       duration,
     });
 
     // Return a reference path instead of the full blob URL
-    const blobFilename = fileURI.split('/').pop();
+    const blobFilename = stored.uri.split('/').pop();
     return successResponse(
       { uri: `/api/file/${blobFilename}` },
       'File uploaded successfully',
     );
   } catch (error) {
-    console.error('Error uploading file:', error);
+    console.error('[FileUploadRoute] Error uploading file:', error);
 
-    // Log file upload error (fire-and-forget) using hoisted session
-    // Note: If error occurred before auth() completed, session will be null
-    // and we skip logging (pre-auth errors are rare validation failures)
+    // Log file upload error (fire-and-forget) using hoisted session.
+    // If the error occurred before auth() completed, session is null and we
+    // skip logging — pre-auth errors are rare validation failures.
     if (session) {
       const logger = getAzureMonitorLogger();
       void logger.logFileError({
         user: session.user,
-        filename: filename,
+        filename,
         fileType: mimeType || filetype,
         errorCode: 'FILE_UPLOAD_FAILED',
         errorMessage: error instanceof Error ? error.message : String(error),
