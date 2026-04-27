@@ -27,22 +27,28 @@ import {
 } from '@/lib/constants/fileLimits';
 
 /**
- * Buffers the request body into a `Buffer` and rejects when the size exceeds
- * `maxBytes`. The body is consumed via `arrayBuffer()` (undici-internal
- * consumption) rather than a manual reader to avoid races with the test
- * environment's synthetic body source. The size check still runs before
+ * Buffers the request body into an `ArrayBuffer` and rejects when the size
+ * exceeds `maxBytes`. The body is consumed via `arrayBuffer()` (undici-
+ * internal consumption) rather than a manual reader to avoid races with the
+ * test environment's synthetic body source. The size check still runs before
  * `formData()` parses fields and allocates `File` objects, so an oversized
  * payload is rejected before the expensive multipart parse.
+ *
+ * Returns the raw ArrayBuffer rather than a Buffer so callers can pass it
+ * straight into `new Response(arrayBuffer)` without an intermediate copy —
+ * `Buffer.from(arrayBuffer)` is zero-copy but `new Uint8Array(buffer)`
+ * isn't, so going through Buffer adds an unnecessary materialization for
+ * large bodies.
  *
  * Returns null when the cap is exceeded; the caller should respond 413.
  */
 async function readBoundedBody(
   request: NextRequest,
   maxBytes: number,
-): Promise<Buffer | null> {
+): Promise<ArrayBuffer | null> {
   const arrayBuffer = await request.arrayBuffer();
   if (arrayBuffer.byteLength > maxBytes) return null;
-  return Buffer.from(arrayBuffer);
+  return arrayBuffer;
 }
 
 /**
@@ -80,9 +86,31 @@ function isValidMimeType(value: string): boolean {
  * cover image formats, so we maintain a small inline list here. Without
  * this, an attacker could send arbitrary binary content under an image
  * filename and `filetype=image` and we'd store it without any content check.
+ *
+ * Supports the formats listed in `IMAGE_EXTENSIONS` (lib/constants/fileLimits):
+ * PNG, JPEG, GIF, WebP, BMP, ICO, SVG.
  */
 function looksLikeImage(buffer: Buffer): boolean {
+  if (buffer.length < 4) return false;
+
+  // ICO: 00 00 01 00 (icon) / 00 00 02 00 (cursor)
+  if (
+    buffer[0] === 0x00 &&
+    buffer[1] === 0x00 &&
+    (buffer[2] === 0x01 || buffer[2] === 0x02) &&
+    buffer[3] === 0x00
+  ) {
+    return true;
+  }
+
+  // BMP: 42 4D
+  if (buffer[0] === 0x42 && buffer[1] === 0x4d) {
+    return true;
+  }
+
+  // Most other formats need ≥8 bytes.
   if (buffer.length < 8) return false;
+
   // PNG: 89 50 4E 47 0D 0A 1A 0A
   if (
     buffer[0] === 0x89 &&
@@ -105,8 +133,9 @@ function looksLikeImage(buffer: Buffer): boolean {
   ) {
     return true;
   }
-  // WebP: RIFF....WEBP
+  // WebP: RIFF....WEBP (needs ≥12 bytes)
   if (
+    buffer.length >= 12 &&
     buffer[0] === 0x52 &&
     buffer[1] === 0x49 &&
     buffer[2] === 0x46 &&
@@ -118,10 +147,35 @@ function looksLikeImage(buffer: Buffer): boolean {
   ) {
     return true;
   }
-  // BMP
-  if (buffer[0] === 0x42 && buffer[1] === 0x4d) {
-    return true;
+
+  // SVG: text/XML. Skip an optional UTF-8 BOM, then look for `<?xml` or
+  // `<svg` at the start, case-insensitive on the tag name. We don't try to
+  // validate the SVG document structure — magic-byte parity with the binary
+  // formats is the goal.
+  let offset = 0;
+  if (buffer[0] === 0xef && buffer[1] === 0xbb && buffer[2] === 0xbf) {
+    offset = 3;
   }
+  // Skip leading ASCII whitespace
+  while (
+    offset < buffer.length &&
+    (buffer[offset] === 0x20 ||
+      buffer[offset] === 0x09 ||
+      buffer[offset] === 0x0a ||
+      buffer[offset] === 0x0d)
+  ) {
+    offset++;
+  }
+  if (buffer.length - offset >= 5) {
+    const head = buffer
+      .slice(offset, offset + 5)
+      .toString('ascii')
+      .toLowerCase();
+    if (head === '<?xml' || head.startsWith('<svg')) {
+      return true;
+    }
+  }
+
   return false;
 }
 
@@ -278,10 +332,11 @@ export async function POST(request: NextRequest) {
     let fileData: Buffer | string;
 
     if (isMultipart) {
-      // Re-parse the bounded buffer as multipart. Response accepts a
-      // Uint8Array body (Buffer at runtime is a Uint8Array, but TS narrows
-      // BodyInit more strictly) and inherits the Content-Type with boundary.
-      const parsed = new Response(new Uint8Array(buffered), {
+      // Re-parse the bounded ArrayBuffer as multipart. Passing the
+      // ArrayBuffer directly to Response avoids an extra full-body copy
+      // through `new Uint8Array(buffer)`, which matters for documents at
+      // the 50MB cap and especially for video at 1.5GB.
+      const parsed = new Response(buffered, {
         headers: { 'content-type': contentTypeHeader },
       });
       const formData = await parsed.formData();
@@ -291,8 +346,10 @@ export async function POST(request: NextRequest) {
       }
       fileData = Buffer.from(await file.arrayBuffer());
     } else {
-      // Legacy base64 upload (backward compatibility)
-      const rawData = buffered.toString('utf8');
+      // Legacy base64 upload (backward compatibility). Materialize a Buffer
+      // here so we can decode the UTF-8 text — Buffer.from(arrayBuffer) is
+      // zero-copy.
+      const rawData = Buffer.from(buffered).toString('utf8');
       const isImage =
         (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
 
