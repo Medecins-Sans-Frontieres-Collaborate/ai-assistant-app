@@ -1836,7 +1836,9 @@
     "pinBlockedTooLarge": "File too large to pin ({tokens} tokens, limit: {limit})",
     "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})",
     "sessionQuotaWarning": "Session quota running low — {remaining} tokens remaining",
-    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included"
+    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included",
+    "notInContext": "Not in context",
+    "notInContextTooltip": "This file did not fit the per-turn token budget on the last response, so the model could not see it. It will be reconsidered on your next message."
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
