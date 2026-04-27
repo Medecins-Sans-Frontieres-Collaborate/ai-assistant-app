@@ -354,20 +354,37 @@ export async function extractAudioFromVideo(
 }
 
 /**
- * Checks if audio extraction is supported in the current browser. When a
- * `file` is provided, also checks the file is small enough to buffer in the
- * JS heap — otherwise client-side extraction would risk crashing the tab.
+ * Whether the current browser exposes the APIs needed for client-side audio
+ * extraction (WebAssembly, SharedArrayBuffer, Blob, File). Independent of
+ * any specific file's properties.
  */
-export function isAudioExtractionSupported(file?: File): boolean {
-  // Check for required browser APIs
-  const hasApis =
+export function browserSupportsAudioExtraction(): boolean {
+  return (
     typeof WebAssembly !== 'undefined' &&
     typeof SharedArrayBuffer !== 'undefined' &&
     typeof Blob !== 'undefined' &&
-    typeof File !== 'undefined';
-  if (!hasApis) return false;
-  if (file && file.size > MAX_CLIENT_EXTRACTION_BYTES) return false;
-  return true;
+    typeof File !== 'undefined'
+  );
+}
+
+/**
+ * Whether a specific file can be extracted client-side: the browser must
+ * support the APIs AND the file must fit in the JS-heap memory budget.
+ * Files above the threshold should be uploaded as-is and let the server-
+ * side transcription pipeline (real ffmpeg binary) handle them.
+ */
+export function canExtractAudioFromFile(file: File): boolean {
+  if (!browserSupportsAudioExtraction()) return false;
+  return file.size <= MAX_CLIENT_EXTRACTION_BYTES;
+}
+
+/**
+ * Combined check kept for backward compat with existing callers. Prefer the
+ * two narrower functions above for new code.
+ */
+export function isAudioExtractionSupported(file?: File): boolean {
+  if (!browserSupportsAudioExtraction()) return false;
+  return file ? canExtractAudioFromFile(file) : true;
 }
 
 /**
