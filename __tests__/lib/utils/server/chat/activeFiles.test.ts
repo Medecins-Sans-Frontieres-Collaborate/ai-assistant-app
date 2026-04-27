@@ -117,6 +117,17 @@ describe('getActiveFileBudgets', () => {
     expect(getActiveFileBudgets(null).pinLimit).toBe(50_000);
     expect(getActiveFileBudgets({ maxLength: 0 }).pinLimit).toBe(50_000);
   });
+
+  it('boundary: maxLength === 160_000 promotes to large tier', () => {
+    // The tier check is `>= 160_000`. Pin this so an off-by-one regression
+    // (e.g. someone changing it to `> 160_000`) is caught immediately.
+    expect(getActiveFileBudgets({ maxLength: 160_000 }).perTurnCap).toBe(
+      80_000,
+    );
+    expect(getActiveFileBudgets({ maxLength: 159_999 }).perTurnCap).toBe(
+      55_000,
+    );
+  });
 });
 
 describe('selectFilesForBudget', () => {
