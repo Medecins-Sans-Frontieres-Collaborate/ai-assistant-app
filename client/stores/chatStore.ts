@@ -27,6 +27,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useConversationStore } from './conversationStore';
 import { useSettingsStore } from './settingsStore';
+import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
 import { create } from 'zustand';
@@ -479,6 +480,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // visible so the user keeps an accurate picture. The setter is
       // called explicitly on successful stream completion below.
     });
+
+    // Dismiss any open stop-generation confirmation modal — a new send is
+    // in flight, so a stale "stop the previous stream?" dialog hovering
+    // over this fresh stream is confusing and could cause the user to
+    // accidentally cancel the wrong request.
+    useUIStore.getState().setStopGenerationConfirmSource(null);
   },
 
   scheduleLoadingMessage: (loadingMessage: string): NodeJS.Timeout => {
