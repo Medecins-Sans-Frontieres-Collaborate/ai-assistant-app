@@ -12,6 +12,7 @@ import {
   BlobStorage,
 } from '@/lib/utils/server/blob/blob';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
+import { validateImageSignature } from '@/lib/utils/server/file/imageSignature';
 import {
   getContentType,
   validateBufferSignature,
@@ -230,6 +231,17 @@ async function uploadFileToBlobStorage(
         signatureValidation.error ||
           'File content does not match expected audio/video format',
       );
+    }
+  }
+
+  // Image content check — parity with the route handler so this entrypoint
+  // can't accept arbitrary binary under filetype=image.
+  const isImage =
+    (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
+  if (isImage) {
+    const imageSig = validateImageSignature(data);
+    if (!imageSig.isValid) {
+      throw new Error(imageSig.error ?? 'Invalid image content');
     }
   }
 
