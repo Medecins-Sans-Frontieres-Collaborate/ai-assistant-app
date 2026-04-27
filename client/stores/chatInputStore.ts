@@ -11,6 +11,21 @@ import { onFileUpload } from '@/client/handlers/chatInput/file-upload';
 import { create } from 'zustand';
 
 /**
+ * Revoke an object URL created via URL.createObjectURL. Safe to call on
+ * non-blob URLs (no-op for http/https refs from completed uploads). Wrapped
+ * in try/catch because revoke can throw on browsers that have already GC'd
+ * the underlying Blob.
+ */
+function revokeIfBlobUrl(url: string | undefined | null): void {
+  if (!url || !url.startsWith('blob:')) return;
+  try {
+    URL.revokeObjectURL(url);
+  } catch {
+    /* already revoked or unsupported — nothing to do */
+  }
+}
+
+/**
  * Represents a pending batch transcription job
  */
 export interface PendingTranscription {
@@ -262,6 +277,11 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       ) {
         state.uploadAbortController.abort();
       }
+
+      // Release the preview's object URL — `URL.createObjectURL` retains the
+      // underlying Blob until revoked, so without this each removed image
+      // leaks its full bytes for the rest of the session.
+      revokeIfBlobUrl(filePreview.previewUrl);
 
       // Remove from filePreviews
       const newPreviews = state.filePreviews.filter((fp) => fp !== filePreview);
