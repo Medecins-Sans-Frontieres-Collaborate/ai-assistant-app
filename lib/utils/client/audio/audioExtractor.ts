@@ -38,6 +38,38 @@ export interface ExtractionOptions {
   onProgress?: ExtractionProgressCallback;
 }
 
+/**
+ * Hard memory ceiling for client-side extraction. ffmpeg.wasm holds the full
+ * input file in JS memory (`fetchFile` materializes the bytes, `writeFile`
+ * copies them into the WASM filesystem). On low-RAM devices that crashes
+ * the tab. Files above this threshold get uploaded as-is and the server-side
+ * transcription pipeline (which uses a real ffmpeg binary) handles them.
+ */
+const MAX_CLIENT_EXTRACTION_BYTES = 200 * 1024 * 1024;
+
+/**
+ * Timeout for the FFmpeg WASM CDN fetch. Corporate networks often block
+ * unpkg / third-party CDNs, in which case the browser eventually times out
+ * but very slowly (default ~5min in some browsers). Failing fast lets us
+ * fall back to direct video upload before the user gives up.
+ */
+const FFMPEG_WASM_LOAD_TIMEOUT_MS = 30_000;
+
+/**
+ * Thrown when client-side extraction is unavailable for a recoverable
+ * reason (CDN blocked, file too large, browser missing capabilities).
+ * Callers should fall back to uploading the raw video.
+ */
+export class AudioExtractionUnavailableError extends Error {
+  constructor(
+    message: string,
+    public readonly reason: 'cdn' | 'memory' | 'unsupported',
+  ) {
+    super(message);
+    this.name = 'AudioExtractionUnavailableError';
+  }
+}
+
 // Singleton FFmpeg instance
 let ffmpegInstance: FFmpeg | null = null;
 let ffmpegLoading: Promise<FFmpeg> | null = null;
@@ -85,20 +117,44 @@ async function getFFmpeg(
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
 
     try {
-      await ffmpeg.load({
-        coreURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.js`,
-          'text/javascript',
+      // Race the CDN fetch against a timeout so a blocked or very slow
+      // network fails fast rather than hanging for minutes.
+      const withTimeout = <T>(p: Promise<T>): Promise<T> =>
+        Promise.race([
+          p,
+          new Promise<T>((_, reject) =>
+            setTimeout(
+              () =>
+                reject(
+                  new AudioExtractionUnavailableError(
+                    'Timed out fetching FFmpeg WASM from CDN',
+                    'cdn',
+                  ),
+                ),
+              FFMPEG_WASM_LOAD_TIMEOUT_MS,
+            ),
+          ),
+        ]);
+
+      const [coreURL, wasmURL] = await Promise.all([
+        withTimeout(toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript')),
+        withTimeout(
+          toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
         ),
-        wasmURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
-          'application/wasm',
-        ),
-      });
+      ]);
+      await ffmpeg.load({ coreURL, wasmURL });
     } catch (error) {
       console.error('Failed to load FFmpeg from CDN:', error);
-      throw new Error(
-        'Failed to load audio extraction engine. Please try again.',
+      // Reset the loading promise so a retry (e.g., after the user
+      // changes networks) gets a fresh attempt rather than the
+      // already-rejected one.
+      ffmpegLoading = null;
+      if (error instanceof AudioExtractionUnavailableError) {
+        throw error;
+      }
+      throw new AudioExtractionUnavailableError(
+        'Failed to load audio extraction engine',
+        'cdn',
       );
     }
 
@@ -161,6 +217,15 @@ export async function extractAudioFromVideo(
   // Validate input
   if (!videoFile || videoFile.size === 0) {
     throw new Error('Invalid video file');
+  }
+
+  // Bail out for files too large to safely buffer in JS heap. The server-
+  // side transcription pipeline handles these natively.
+  if (videoFile.size > MAX_CLIENT_EXTRACTION_BYTES) {
+    throw new AudioExtractionUnavailableError(
+      `Video too large for client-side extraction (${formatFileSize(videoFile.size)} > ${formatFileSize(MAX_CLIENT_EXTRACTION_BYTES)})`,
+      'memory',
+    );
   }
 
   const ffmpeg = await getFFmpeg(onProgress);
