@@ -3,6 +3,7 @@ import {
   FileFieldValue,
   FilePreview,
   ImageFieldValue,
+  ImageMessageContent,
   TranscriptionJobStatus,
 } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
@@ -22,6 +23,13 @@ function revokeIfBlobUrl(url: string | undefined | null): void {
     URL.revokeObjectURL(url);
   } catch {
     /* already revoked or unsupported — nothing to do */
+  }
+}
+
+/** Revoke every blob: preview URL in the array (no-op for non-blob URLs). */
+function revokeAllPreviewUrls(previews: FilePreview[]): void {
+  for (const preview of previews) {
+    revokeIfBlobUrl(preview.previewUrl);
   }
 }
 
@@ -264,10 +272,14 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
 
   removeFile: (filePreview) =>
     set((state) => {
-      // If the file being removed is still in flight, cancel the batch so
-      // we don't waste bandwidth and we can clean up server-side state
-      // (cancelChunkedUploadAction releases any committed remnants).
+      // If the file being removed isn't already in a terminal state, cancel
+      // the batch so we don't waste bandwidth and so server-side cleanup can
+      // run (cancelChunkedUploadAction releases any committed remnants).
+      // Includes 'pending' — a queued file whose preview is removed should
+      // not silently land in imageFieldValue/fileFieldValue when its turn
+      // comes up in the upload loop.
       const wasInFlight =
+        filePreview.status === 'pending' ||
         filePreview.status === 'uploading' ||
         filePreview.status === 'extracting';
       if (
@@ -286,6 +298,14 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       // Remove from filePreviews
       const newPreviews = state.filePreviews.filter((fp) => fp !== filePreview);
 
+      // Match an image-field entry to this preview by the server URL we
+      // stored on completion. `previewUrl` is a `blob:` URL and never
+      // equals `image_url.url` (which is `/api/file/{hash}.{ext}`), so the
+      // earlier comparison silently never matched.
+      const matchesImageEntry = (img: ImageMessageContent): boolean =>
+        !!filePreview.uploadedUrl &&
+        img.image_url.url === filePreview.uploadedUrl;
+
       // Remove from fileFieldValue by matching originalFilename or image URL
       let newFileFieldValue = state.fileFieldValue;
       if (newFileFieldValue) {
@@ -295,7 +315,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
               return file.originalFilename !== filePreview.name;
             }
             if ('image_url' in file) {
-              return file.image_url.url !== filePreview.previewUrl;
+              return !matchesImageEntry(file);
             }
             return true;
           });
@@ -307,23 +327,21 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
           newFileFieldValue = null;
         } else if (
           'image_url' in newFileFieldValue &&
-          newFileFieldValue.image_url.url === filePreview.previewUrl
+          matchesImageEntry(newFileFieldValue)
         ) {
           newFileFieldValue = null;
         }
       }
 
-      // Remove from imageFieldValue by matching URL
+      // Remove from imageFieldValue by matching server URL
       let newImageFieldValue = state.imageFieldValue;
       if (newImageFieldValue) {
         if (Array.isArray(newImageFieldValue)) {
           newImageFieldValue = newImageFieldValue.filter(
-            (img) => img.image_url.url !== filePreview.previewUrl,
+            (img) => !matchesImageEntry(img),
           );
           if (newImageFieldValue.length === 0) newImageFieldValue = null;
-        } else if (
-          newImageFieldValue.image_url.url === filePreview.previewUrl
-        ) {
+        } else if (matchesImageEntry(newImageFieldValue)) {
           newImageFieldValue = null;
         }
       }
@@ -359,9 +377,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     if (prior && !prior.signal.aborted) {
       prior.abort();
     }
-    for (const preview of get().filePreviews) {
-      revokeIfBlobUrl(preview.previewUrl);
-    }
+    revokeAllPreviewUrls(get().filePreviews);
     set({
       uploadAbortController: null,
       filePreviews: [],
@@ -378,9 +394,7 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
     if (prior && !prior.signal.aborted) {
       prior.abort();
     }
-    for (const preview of get().filePreviews) {
-      revokeIfBlobUrl(preview.previewUrl);
-    }
+    revokeAllPreviewUrls(get().filePreviews);
     set({
       uploadAbortController: null,
       textFieldValue: '',
