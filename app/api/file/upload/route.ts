@@ -20,7 +20,53 @@ import {
 } from '@/lib/utils/server/file/mimeTypes';
 
 import { auth } from '@/auth';
-import { validateFileSizeRaw } from '@/lib/constants/fileLimits';
+import {
+  getFileCategory,
+  getFileSizeLimit,
+  validateFileSizeRaw,
+} from '@/lib/constants/fileLimits';
+
+/**
+ * Streams the request body into a Buffer, aborting early if the byte count
+ * exceeds `maxBytes`. This is the authoritative defense against a lying
+ * Content-Length: a client claiming 1MB but sending 1GB will be cut off here
+ * rather than buffered into memory by `formData()`.
+ *
+ * Returns null when the cap is exceeded; the caller should respond 413.
+ */
+async function readBoundedBody(
+  request: NextRequest,
+  maxBytes: number,
+): Promise<Buffer | null> {
+  const reader = request.body?.getReader();
+  if (!reader) return Buffer.alloc(0);
+
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        try {
+          await reader.cancel();
+        } catch {
+          /* reader may already be in a terminal state */
+        }
+        return null;
+      }
+      chunks.push(value);
+    }
+  } finally {
+    try {
+      reader.releaseLock();
+    } catch {
+      /* lock may be auto-released after cancel/done */
+    }
+  }
+  return Buffer.concat(chunks);
+}
 
 /**
  * Route segment config to allow large file uploads.
@@ -119,15 +165,15 @@ export async function POST(request: NextRequest) {
       return errorResponse('Unauthorized', 401);
     }
 
-    // Early rejection: check Content-Length before consuming the request body.
-    // Advisory only — a lying Content-Length is caught by the authoritative
-    // buffer-length check further down, and Next.js buffers the body in
-    // `formData()` regardless.
-    //
-    // TODO(file-upload-stream): pipe `request.body` through a size-bounded
-    // transform so an honest-size-header-but-oversized-body request never
-    // reaches `formData()`. Blocked on reworking the multipart path to
-    // accept a pre-bounded buffer.
+    // Compute the per-category cap. We add a small margin to allow for
+    // multipart envelope overhead (boundaries, Content-Disposition headers).
+    // The base64 path adds ~33% overhead — bound that path against the
+    // base64-equivalent of the cap.
+    const category = getFileCategory(filename, mimeType ?? undefined);
+    const rawCap = getFileSizeLimit(category);
+    const MULTIPART_OVERHEAD_BYTES = 4 * 1024;
+
+    // Advisory early rejection from Content-Length. Cheap and pre-buffer.
     const contentLength = request.headers.get('content-length');
     if (contentLength) {
       const declaredSize = parseInt(contentLength, 10);
@@ -145,12 +191,32 @@ export async function POST(request: NextRequest) {
 
     // Check Content-Type to determine upload format
     const contentTypeHeader = request.headers.get('content-type') || '';
+    const isMultipart = contentTypeHeader.includes('multipart/form-data');
+
+    // Authoritative streaming bound: if Content-Length lied (or was absent)
+    // and the body actually exceeds the cap, we stop reading and reject
+    // before `formData()` or `text()` buffer the full payload into memory.
+    // Use a slightly higher cap for multipart due to envelope overhead and
+    // ~33% larger for the base64 text path.
+    const streamCap = isMultipart
+      ? rawCap + MULTIPART_OVERHEAD_BYTES
+      : Math.ceil(rawCap * 1.4) + MULTIPART_OVERHEAD_BYTES;
+
+    const buffered = await readBoundedBody(request, streamCap);
+    if (buffered === null) {
+      return payloadTooLargeResponse('Request body exceeds file size limit');
+    }
 
     let fileData: Buffer | string;
 
-    if (contentTypeHeader.includes('multipart/form-data')) {
-      // FormData upload (binary - new approach)
-      const formData = await request.formData();
+    if (isMultipart) {
+      // Re-parse the bounded buffer as multipart. Response accepts a
+      // Uint8Array body (Buffer at runtime is a Uint8Array, but TS narrows
+      // BodyInit more strictly) and inherits the Content-Type with boundary.
+      const parsed = new Response(new Uint8Array(buffered), {
+        headers: { 'content-type': contentTypeHeader },
+      });
+      const formData = await parsed.formData();
       const file = formData.get('file') as File | null;
       if (!file) {
         return badRequestResponse('No file provided in form data');
@@ -158,7 +224,7 @@ export async function POST(request: NextRequest) {
       fileData = Buffer.from(await file.arrayBuffer());
     } else {
       // Legacy base64 upload (backward compatibility)
-      const rawData = await request.text();
+      const rawData = buffered.toString('utf8');
       const isImage =
         (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
 
