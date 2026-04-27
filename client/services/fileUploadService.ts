@@ -235,7 +235,10 @@ export class FileUploadService {
     const [result, dataUrl] = await Promise.all([
       this.uploadXhrWithRetry(file, onProgress, 'image', signal),
       this.readFileAsDataURL(file).catch((cacheError) => {
-        console.warn('Failed to read image for cache:', cacheError);
+        console.warn(
+          '[FileUploadService] Failed to read image for cache:',
+          cacheError,
+        );
         return null;
       }),
     ]);
@@ -300,11 +303,42 @@ export class FileUploadService {
     signal?: AbortSignal,
   ): Promise<UploadResult> {
     if (signal?.aborted) throw new UploadAbortedError(file.name);
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
 
-    // 1. Initialize chunked upload session
+    const session = await this.initChunkedSession(file, onProgress);
+
+    const uploadError = await this.uploadAllChunks(
+      file,
+      session,
+      onProgress,
+      signal,
+    );
+
+    if (uploadError) {
+      // Best-effort fire-and-forget: release any committed-blob remnants.
+      // Uncommitted blocks are GC'd by Azure after 7 days, so the user
+      // shouldn't have to wait on a network round-trip just to see the
+      // error toast. We log on rejection but don't block the throw.
+      void cancelChunkedUploadAction(session).catch((cancelErr) =>
+        console.warn(
+          `[FileUploadService] Failed to cancel chunked upload for ${file.name}:`,
+          cancelErr,
+        ),
+      );
+      throw uploadError;
+    }
+
+    return this.commitChunkedUpload(file, session, onProgress);
+  }
+
+  /**
+   * Phase 1: ask the server to provision a chunked-upload session.
+   * Reports 2% progress (init) → 5% (ready for chunks).
+   */
+  private static async initChunkedSession(
+    file: File,
+    onProgress?: (progress: number) => void,
+  ): Promise<ChunkedUploadSession> {
     if (onProgress) onProgress(2);
-
     const initResult = await initChunkedUploadAction({
       filename: file.name,
       filetype: this.getFileType(file),
@@ -312,22 +346,32 @@ export class FileUploadService {
       totalSize: file.size,
       chunkSize: CHUNK_SIZE,
     });
-
     if (!initResult.success || !initResult.session) {
       throw new Error(
         initResult.error || `Failed to initialize upload for ${file.name}`,
       );
     }
-
-    const session = initResult.session;
     if (onProgress) onProgress(5);
+    return initResult.session;
+  }
 
-    // 2. Upload chunks in parallel via a bounded worker pool.
-    //
-    // Azure block staging is unordered — `commitBlockList` assembles the blob
-    // in the caller-provided block-id order, not the order blocks were staged.
-    // So parallel `stageBlock` calls are safe, and fewer serialized round
-    // trips means less per-chunk overhead (proxy, Server Action, auth, RTT).
+  /**
+   * Phase 2: upload chunks in parallel via a bounded worker pool. Returns
+   * the first error encountered, or null on success.
+   *
+   * Azure block staging is unordered — `commitBlockList` assembles the blob
+   * in the caller-provided block-id order, not the order blocks were
+   * staged. So parallel `stageBlock` calls are safe, and fewer serialized
+   * round trips means less per-chunk overhead (proxy, Server Action, auth,
+   * RTT).
+   */
+  private static async uploadAllChunks(
+    file: File,
+    session: ChunkedUploadSession,
+    onProgress?: (progress: number) => void,
+    signal?: AbortSignal,
+  ): Promise<Error | null> {
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
     let nextIndex = 0;
     let completedChunks = 0;
     let firstError: Error | null = null;
@@ -335,8 +379,9 @@ export class FileUploadService {
     const worker = async (): Promise<void> => {
       while (firstError === null) {
         if (signal?.aborted) {
-          if (firstError === null)
+          if (firstError === null) {
             firstError = new UploadAbortedError(file.name);
+          }
           return;
         }
         const i = nextIndex++;
@@ -365,41 +410,32 @@ export class FileUploadService {
 
         completedChunks++;
         if (onProgress) {
-          const progressPercent =
-            5 + Math.round((completedChunks / totalChunks) * 90);
-          onProgress(progressPercent);
+          onProgress(5 + Math.round((completedChunks / totalChunks) * 90));
         }
       }
     };
 
     const workerCount = Math.min(CHUNK_CONCURRENCY, totalChunks);
     await Promise.all(Array.from({ length: workerCount }, () => worker()));
+    return firstError;
+  }
 
-    if (firstError) {
-      // Best-effort fire-and-forget: release any committed-blob remnants.
-      // Uncommitted blocks are GC'd by Azure after 7 days, so the user
-      // shouldn't have to wait on a network round-trip just to see the
-      // error toast. We log on rejection but don't block the throw.
-      void cancelChunkedUploadAction(session).catch((cancelErr) =>
-        console.warn(
-          `Failed to cancel chunked upload for ${file.name}:`,
-          cancelErr,
-        ),
-      );
-      throw firstError;
-    }
-
-    // 3. Finalize the upload (commit all blocks)
+  /**
+   * Phase 3: ask the server to commit all staged blocks into the final blob.
+   * Reports 100% on success.
+   */
+  private static async commitChunkedUpload(
+    file: File,
+    session: ChunkedUploadSession,
+    onProgress?: (progress: number) => void,
+  ): Promise<UploadResult> {
     const finalResult = await finalizeChunkedUploadAction(session);
-
     if (!finalResult.success || !finalResult.uri) {
       throw new Error(
         finalResult.error || `Failed to finalize upload for ${file.name}`,
       );
     }
-
     if (onProgress) onProgress(100);
-
     return {
       url: finalResult.uri,
       originalFilename: file.name,
@@ -408,13 +444,11 @@ export class FileUploadService {
   }
 
   /**
-   * Upload a single chunk with retry logic.
-   * Retries up to MAX_CHUNK_RETRIES times with exponential backoff.
-   *
-   * @param chunk - The chunk blob to upload
-   * @param session - The chunked upload session
-   * @param chunkIndex - Zero-based index of this chunk
-   * @returns Chunk upload result
+   * Upload a single chunk with retry logic. Retries every error (the chunked
+   * Server Action returns errors as data rather than throwing, so we don't
+   * have transience classification at this layer — the inner Azure SDK call
+   * is wrapped in `withAzureRetry` server-side which already filters 5xx vs
+   * 4xx).
    */
   private static async uploadChunkWithRetry(
     chunk: Blob,
@@ -422,41 +456,41 @@ export class FileUploadService {
     chunkIndex: number,
     signal?: AbortSignal,
   ): Promise<{ success: boolean; error?: string }> {
-    let lastError: string | undefined;
-
-    for (let attempt = 0; attempt < MAX_CHUNK_ATTEMPTS; attempt++) {
-      if (signal?.aborted) {
+    try {
+      return await withClientRetry(
+        async () => {
+          const chunkData = new FormData();
+          chunkData.append('chunk', chunk);
+          const result = await uploadChunkAction(
+            session,
+            chunkIndex,
+            chunkData,
+          );
+          if (!result.success) {
+            // Throw so withClientRetry can decide whether to retry.
+            throw new Error(result.error || 'chunk upload failed');
+          }
+          return { success: true as const };
+        },
+        {
+          totalAttempts: CHUNK_TOTAL_ATTEMPTS,
+          shouldRetry: () => true,
+          signal,
+          abortFilename: `chunk ${chunkIndex}`,
+        },
+      );
+    } catch (error) {
+      if (error instanceof UploadAbortedError) {
         return { success: false, error: 'cancelled' };
       }
-      const chunkData = new FormData();
-      chunkData.append('chunk', chunk);
-
-      const result = await uploadChunkAction(session, chunkIndex, chunkData);
-
-      if (result.success) {
-        return { success: true };
-      }
-
-      lastError = result.error;
-
-      // Backoff with jitter between retries to avoid thundering-herd
-      // synchronization when many clients recover from a shared outage.
-      if (attempt < MAX_CHUNK_ATTEMPTS - 1) {
-        await this.delay(backoffWithJitter(attempt));
-      }
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : `Chunk failed after ${CHUNK_TOTAL_ATTEMPTS} attempts`,
+      };
     }
-
-    return {
-      success: false,
-      error: lastError || `Chunk failed after ${MAX_CHUNK_ATTEMPTS} attempts`,
-    };
-  }
-
-  /**
-   * Helper to delay execution for retry logic.
-   */
-  private static delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
@@ -465,40 +499,21 @@ export class FileUploadService {
    * responses (validation, auth, content blocked) — those won't resolve by
    * trying again. Honors an optional AbortSignal at every attempt boundary.
    */
-  private static async uploadXhrWithRetry(
+  private static uploadXhrWithRetry(
     file: File,
     onProgress?: (progress: number) => void,
     filetype: 'file' | 'image' = 'file',
     signal?: AbortSignal,
   ): Promise<UploadResult> {
-    let lastError: unknown;
-
-    for (let attempt = 0; attempt < XHR_MAX_ATTEMPTS; attempt++) {
-      if (signal?.aborted) throw new UploadAbortedError(file.name);
-
-      try {
-        return await this.uploadFileViaXHR(file, onProgress, filetype, signal);
-      } catch (error) {
-        lastError = error;
-
-        if (error instanceof UploadAbortedError) {
-          throw error;
-        }
-        if (
-          !(error instanceof UploadError) ||
-          !error.transient ||
-          attempt === XHR_MAX_ATTEMPTS - 1
-        ) {
-          throw error;
-        }
-
-        await this.delay(backoffWithJitter(attempt));
-      }
-    }
-
-    throw lastError instanceof Error
-      ? lastError
-      : new Error(`Upload failed: ${file.name}`);
+    return withClientRetry(
+      () => this.uploadFileViaXHR(file, onProgress, filetype, signal),
+      {
+        totalAttempts: XHR_TOTAL_ATTEMPTS,
+        shouldRetry: (error) => error instanceof UploadError && error.transient,
+        signal,
+        abortFilename: file.name,
+      },
+    );
   }
 
   /**
@@ -664,7 +679,10 @@ export class FileUploadService {
           // User-initiated cancel — silent, the UI already removed the file.
           continue;
         }
-        console.error(`Failed to upload ${file.name}:`, error);
+        console.error(
+          `[FileUploadService] Failed to upload ${file.name}:`,
+          error,
+        );
         toast.error(
           error instanceof Error
             ? error.message
