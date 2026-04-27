@@ -12,16 +12,12 @@ import {
   BlobStorage,
 } from '@/lib/utils/server/blob/blob';
 import { loadDocument } from '@/lib/utils/server/file/fileHandling';
-import { validateImageSignature } from '@/lib/utils/server/file/imageSignature';
 import {
   getContentType,
   validateBufferSignature,
   validateFileNotExecutable,
 } from '@/lib/utils/server/file/mimeTypes';
-import {
-  isSvgBuffer,
-  sanitizeSvgBuffer,
-} from '@/lib/utils/server/file/svgSanitization';
+import { validateOrSanitizeImageBytes } from '@/lib/utils/server/file/svgSanitization';
 import {
   getCachedTextPath,
   shouldCacheText,
@@ -239,25 +235,14 @@ async function uploadFileToBlobStorage(
   }
 
   // Image content check — parity with the route handler so this entrypoint
-  // can't accept arbitrary binary under filetype=image.
+  // can't accept arbitrary binary under filetype=image. For SVG the helper
+  // returns sanitised bytes that replace the original buffer.
   const isImage =
     (mimeType && mimeType.startsWith('image/')) || filetype === 'image';
   if (isImage) {
-    // SVG is XML and bypasses binary magic-byte validation. Sanitise it
-    // through DOMPurify first; the cleaned bytes replace the original so
-    // any scripts or event handlers are gone before storage.
-    if (isSvgBuffer(data)) {
-      const svgResult = await sanitizeSvgBuffer(data);
-      if (!svgResult.ok) {
-        throw new Error(svgResult.error);
-      }
-      data = svgResult.sanitized;
-    } else {
-      const imageSig = validateImageSignature(data);
-      if (!imageSig.isValid) {
-        throw new Error(imageSig.error ?? 'Invalid image content');
-      }
-    }
+    const result = await validateOrSanitizeImageBytes(data);
+    if (!result.ok) throw new Error(result.error);
+    data = result.data;
   }
 
   const blobPath = `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`;
