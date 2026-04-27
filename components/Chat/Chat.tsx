@@ -506,7 +506,6 @@ export function Chat({
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
                     onScrollDownClick={handleScrollDown}
-                    stopConversationRef={stopConversationRef}
                     textareaRef={textareaRef}
                     showScrollDownButton={false}
                     showDisclaimer={false}
@@ -584,7 +583,6 @@ export function Chat({
             onSend={handleSend}
             onRegenerate={handleRegenerate}
             onScrollDownClick={handleScrollDown}
-            stopConversationRef={stopConversationRef}
             textareaRef={textareaRef}
             showScrollDownButton={showScrollDownButton}
             onTranscriptionStatusChange={setTranscriptionStatus}
