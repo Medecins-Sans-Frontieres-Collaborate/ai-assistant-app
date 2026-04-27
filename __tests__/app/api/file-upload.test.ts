@@ -92,6 +92,21 @@ describe('/api/file/upload', () => {
     });
   };
 
+  // Minimal valid PNG (1x1 transparent) wrapped in a data URL. Used by the
+  // legacy text-body image path, which now validates that the body is a
+  // real base64 data URL with recognizable image magic bytes.
+  const VALID_PNG_DATA_URL = (() => {
+    const png = Buffer.from([
+      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
+      0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+      0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4, 0x89, 0x00, 0x00, 0x00,
+      0x0d, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9c, 0x62, 0x00, 0x01, 0x00, 0x00,
+      0x05, 0x00, 0x01, 0x0d, 0x0a, 0x2d, 0xb4, 0x00, 0x00, 0x00, 0x00, 0x49,
+      0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
+    ]);
+    return `data:image/png;base64,${png.toString('base64')}`;
+  })();
+
   describe('Request Validation', () => {
     it('returns 400 when filename is missing', async () => {
       const request = createRequest({ filename: '' });
@@ -209,8 +224,9 @@ describe('/api/file/upload', () => {
 
     it('uploads images to images folder', async () => {
       const request = createRequest({
-        filename: 'test.jpg',
+        filename: 'test.png',
         filetype: 'image',
+        body: VALID_PNG_DATA_URL,
       });
 
       await POST(request);
@@ -221,9 +237,10 @@ describe('/api/file/upload', () => {
 
     it('handles images with mime type (but still needs filetype for folder)', async () => {
       const request = createRequest({
-        filename: 'test.jpg',
+        filename: 'test.png',
         filetype: 'image',
-        mime: 'image/jpeg',
+        mime: 'image/png',
+        body: VALID_PNG_DATA_URL,
       });
 
       await POST(request);
@@ -248,19 +265,20 @@ describe('/api/file/upload', () => {
       expect(Buffer.isBuffer(uploadData)).toBe(true);
     });
 
-    it('does not base64 decode image data', async () => {
-      const imageData = 'raw-image-data';
+    it('stores image data URL as a string (legacy path)', async () => {
       const request = createRequest({
-        filename: 'test.jpg',
+        filename: 'test.png',
         filetype: 'image',
-        mime: 'image/jpeg',
-        body: imageData,
+        mime: 'image/png',
+        body: VALID_PNG_DATA_URL,
       });
 
       await POST(request);
 
+      // The legacy image path stores the data URL string verbatim so existing
+      // getBlobBase64String readers can return it via the data:-prefix branch.
       const uploadData = mockBlobClient.upload.mock.calls[0][1];
-      expect(uploadData).toBe(imageData);
+      expect(uploadData).toBe(VALID_PNG_DATA_URL);
     });
   });
 
