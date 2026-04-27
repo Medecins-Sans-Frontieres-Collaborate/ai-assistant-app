@@ -23,6 +23,7 @@ export class StreamParser {
     processedContent: any;
   }>;
   private extractedActiveFilesTokensConsumed?: number;
+  private extractedActiveFilesDropped?: string[];
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -89,6 +90,14 @@ export class StreamParser {
       this.extractedActiveFilesTokensConsumed = (
         parsed as any
       ).activeFilesTokensConsumed;
+    }
+
+    // Capture dropped active file IDs if present
+    if (
+      (parsed as any).activeFilesDropped &&
+      this.extractedActiveFilesDropped == null
+    ) {
+      this.extractedActiveFilesDropped = (parsed as any).activeFilesDropped;
     }
 
     // Check if we've received actual content (not just metadata)
@@ -192,6 +201,14 @@ export class StreamParser {
    */
   getActiveFilesTokensConsumed(): number | undefined {
     return this.extractedActiveFilesTokensConsumed;
+  }
+
+  /**
+   * Get the active file IDs that were excluded from this turn's context
+   * because they didn't fit the per-turn budget (from SSE metadata).
+   */
+  getActiveFilesDropped(): string[] | undefined {
+    return this.extractedActiveFilesDropped;
   }
 
   /**
