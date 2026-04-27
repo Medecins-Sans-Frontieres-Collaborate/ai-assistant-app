@@ -45,6 +45,19 @@ export function ConfirmDialog({
       if (!isOpen) return;
 
       if (event.key === 'Enter') {
+        // Don't trigger confirm if the user is typing in an editable field
+        // inside the dialog body (e.g. a future textarea passed via
+        // `extraContent`). Without this guard, pressing Enter to add a
+        // newline in such a field would instead fire the confirm action.
+        const target = event.target as HTMLElement | null;
+        const tag = target?.tagName;
+        const isEditable =
+          tag === 'TEXTAREA' ||
+          tag === 'INPUT' ||
+          tag === 'SELECT' ||
+          target?.isContentEditable === true;
+        if (isEditable) return;
+
         event.preventDefault();
         onConfirm();
       }
