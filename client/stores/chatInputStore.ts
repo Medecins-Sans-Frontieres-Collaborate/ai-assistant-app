@@ -34,6 +34,24 @@ function revokeAllPreviewUrls(previews: FilePreview[]): void {
 }
 
 /**
+ * Remove items matching `predicate` from a value that's either a single
+ * item, an array of items, or null. Returns the same shape, collapsing
+ * empty arrays to null. Used by `removeFile` to prune the file/image
+ * field-value containers without four near-identical branches.
+ */
+function removeMatching<T>(
+  value: T | T[] | null,
+  predicate: (item: T) => boolean,
+): T | T[] | null {
+  if (value === null) return null;
+  if (Array.isArray(value)) {
+    const next = value.filter((item) => !predicate(item));
+    return next.length === 0 ? null : next;
+  }
+  return predicate(value) ? null : value;
+}
+
+/**
  * Represents a pending batch transcription job
  */
 export interface PendingTranscription {
@@ -278,12 +296,12 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       // Includes 'pending' — a queued file whose preview is removed should
       // not silently land in imageFieldValue/fileFieldValue when its turn
       // comes up in the upload loop.
-      const wasInFlight =
+      const shouldCancelBatch =
         filePreview.status === 'pending' ||
         filePreview.status === 'uploading' ||
         filePreview.status === 'extracting';
       if (
-        wasInFlight &&
+        shouldCancelBatch &&
         state.uploadAbortController &&
         !state.uploadAbortController.signal.aborted
       ) {
@@ -295,7 +313,6 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       // leaks its full bytes for the rest of the session.
       revokeIfBlobUrl(filePreview.previewUrl);
 
-      // Remove from filePreviews
       const newPreviews = state.filePreviews.filter((fp) => fp !== filePreview);
 
       // Match an image-field entry to this preview by the server URL we
@@ -306,45 +323,25 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
         !!filePreview.uploadedUrl &&
         img.image_url.url === filePreview.uploadedUrl;
 
-      // Remove from fileFieldValue by matching originalFilename or image URL
-      let newFileFieldValue = state.fileFieldValue;
-      if (newFileFieldValue) {
-        if (Array.isArray(newFileFieldValue)) {
-          newFileFieldValue = newFileFieldValue.filter((file) => {
-            if ('originalFilename' in file) {
-              return file.originalFilename !== filePreview.name;
-            }
-            if ('image_url' in file) {
-              return !matchesImageEntry(file);
-            }
-            return true;
-          });
-          if (newFileFieldValue.length === 0) newFileFieldValue = null;
-        } else if (
-          'originalFilename' in newFileFieldValue &&
-          newFileFieldValue.originalFilename === filePreview.name
-        ) {
-          newFileFieldValue = null;
-        } else if (
-          'image_url' in newFileFieldValue &&
-          matchesImageEntry(newFileFieldValue)
-        ) {
-          newFileFieldValue = null;
-        }
-      }
+      // fileFieldValue holds a mix: file entries are matched by filename;
+      // image entries (when files+images are mixed) by the server URL.
+      const newFileFieldValue = removeMatching(
+        state.fileFieldValue,
+        (entry) => {
+          if ('originalFilename' in entry) {
+            return entry.originalFilename === filePreview.name;
+          }
+          if ('image_url' in entry) {
+            return matchesImageEntry(entry);
+          }
+          return false;
+        },
+      );
 
-      // Remove from imageFieldValue by matching server URL
-      let newImageFieldValue = state.imageFieldValue;
-      if (newImageFieldValue) {
-        if (Array.isArray(newImageFieldValue)) {
-          newImageFieldValue = newImageFieldValue.filter(
-            (img) => !matchesImageEntry(img),
-          );
-          if (newImageFieldValue.length === 0) newImageFieldValue = null;
-        } else if (matchesImageEntry(newImageFieldValue)) {
-          newImageFieldValue = null;
-        }
-      }
+      const newImageFieldValue = removeMatching(
+        state.imageFieldValue,
+        matchesImageEntry,
+      );
 
       // Clean up uploadProgress for this file
       const { [filePreview.name]: _, ...newProgress } = state.uploadProgress;
