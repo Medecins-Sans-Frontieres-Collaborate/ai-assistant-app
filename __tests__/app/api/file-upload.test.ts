@@ -535,7 +535,7 @@ describe('/api/file/upload', () => {
       await POST(request);
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error uploading file:',
+        '[FileUploadRoute] Error uploading file:',
         expect.any(Error),
       );
 
