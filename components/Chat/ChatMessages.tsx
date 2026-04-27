@@ -69,6 +69,7 @@ interface ChatMessagesProps {
   onEditMessage: (message: Message) => void;
   onSelectPrompt: (prompt: string) => void;
   onRegenerate: (messageIndex?: number) => void;
+  onGenerateResponse: () => void;
   onSaveAsPrompt: (content: string) => void;
   onNavigateVersion: (messageIndex: number, direction: 'prev' | 'next') => void;
 }
@@ -92,6 +93,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   onEditMessage,
   onSelectPrompt,
   onRegenerate,
+  onGenerateResponse,
   onSaveAsPrompt,
   onNavigateVersion,
 }) => {
@@ -104,6 +106,19 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   // During drain, hide the last message to avoid duplicate content
   // (the finalized message is already in the list, but we're still animating it)
   const displayMessages = isDraining ? messages.slice(0, -1) : messages;
+
+  const lastEntry =
+    displayMessages.length > 0
+      ? displayMessages[displayMessages.length - 1]
+      : null;
+  const lastDisplayMessage = lastEntry
+    ? entryToDisplayMessage(lastEntry)
+    : null;
+  const showGenerateResponse =
+    !showStreamingDiv &&
+    !!lastDisplayMessage &&
+    (lastDisplayMessage.role === 'user' ||
+      (lastDisplayMessage.role === 'assistant' && !!lastDisplayMessage.error));
 
   return (
     <>
