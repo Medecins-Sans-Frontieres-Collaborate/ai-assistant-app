@@ -74,8 +74,12 @@ function notifyQuotaExceeded(detail: {
   if (now - lastQuotaToastAt < QUOTA_TOAST_THROTTLE_MS) return;
   lastQuotaToastAt = now;
   try {
+    // Reference via window to avoid ESLint env-globals confusion: this
+    // module is shared between server and client tooling, but the early
+    // `typeof window === 'undefined'` guard ensures we're in a browser
+    // when this line runs.
     window.dispatchEvent(
-      new CustomEvent(STORAGE_QUOTA_EXCEEDED_EVENT, { detail }),
+      new window.CustomEvent(STORAGE_QUOTA_EXCEEDED_EVENT, { detail }),
     );
   } catch {
     /* CustomEvent unsupported in some test environments — already logged
