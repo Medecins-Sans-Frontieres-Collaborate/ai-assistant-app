@@ -13,12 +13,14 @@ interface UIStore {
   isSettingsOpen: boolean;
   isBotModalOpen: boolean;
   isTermsModalOpen: boolean;
+  stopGenerationConfirmOpen: boolean;
   loading: boolean;
 
   // Actions
   setIsSettingsOpen: (isOpen: boolean) => void;
   setIsBotModalOpen: (isOpen: boolean) => void;
   setIsTermsModalOpen: (isOpen: boolean) => void;
+  setStopGenerationConfirmOpen: (isOpen: boolean) => void;
   setLoading: (loading: boolean) => void;
 }
 
@@ -27,11 +29,14 @@ export const useUIStore = create<UIStore>((set) => ({
   isSettingsOpen: false,
   isBotModalOpen: false,
   isTermsModalOpen: false,
+  stopGenerationConfirmOpen: false,
   loading: false,
 
   // Actions
   setIsSettingsOpen: (isOpen) => set({ isSettingsOpen: isOpen }),
   setIsBotModalOpen: (isOpen) => set({ isBotModalOpen: isOpen }),
   setIsTermsModalOpen: (isOpen) => set({ isTermsModalOpen: isOpen }),
+  setStopGenerationConfirmOpen: (isOpen) =>
+    set({ stopGenerationConfirmOpen: isOpen }),
   setLoading: (loading) => set({ loading }),
 }));
