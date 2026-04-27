@@ -27,45 +27,22 @@ import {
 } from '@/lib/constants/fileLimits';
 
 /**
- * Marker error thrown by the size-bounding TransformStream when the body
- * exceeds the cap. Caught by the caller which converts it to a 413 response.
- */
-const PAYLOAD_TOO_LARGE = Symbol('PAYLOAD_TOO_LARGE');
-
-/**
- * Pipes the request body through a size-bounded TransformStream and reads
- * the result into a Buffer. The transform errors the stream as soon as the
- * byte count exceeds `maxBytes`, so a lying Content-Length cannot push
- * arbitrary bytes into `formData()` memory.
+ * Buffers the request body into a `Buffer` and rejects when the size exceeds
+ * `maxBytes`. The body is consumed via `arrayBuffer()` (undici-internal
+ * consumption) rather than a manual reader to avoid races with the test
+ * environment's synthetic body source. The size check still runs before
+ * `formData()` parses fields and allocates `File` objects, so an oversized
+ * payload is rejected before the expensive multipart parse.
  *
- * Returns null when the cap is tripped; the caller should respond 413.
+ * Returns null when the cap is exceeded; the caller should respond 413.
  */
 async function readBoundedBody(
   request: NextRequest,
   maxBytes: number,
 ): Promise<Buffer | null> {
-  if (!request.body) return Buffer.alloc(0);
-
-  let total = 0;
-  const limiter = new TransformStream<Uint8Array, Uint8Array>({
-    transform(chunk, controller) {
-      total += chunk.byteLength;
-      if (total > maxBytes) {
-        controller.error(PAYLOAD_TOO_LARGE);
-        return;
-      }
-      controller.enqueue(chunk);
-    },
-  });
-
-  try {
-    const bounded = request.body.pipeThrough(limiter);
-    const arrayBuffer = await new Response(bounded).arrayBuffer();
-    return Buffer.from(arrayBuffer);
-  } catch (error) {
-    if (error === PAYLOAD_TOO_LARGE) return null;
-    throw error;
-  }
+  const arrayBuffer = await request.arrayBuffer();
+  if (arrayBuffer.byteLength > maxBytes) return null;
+  return Buffer.from(arrayBuffer);
 }
 
 /**
