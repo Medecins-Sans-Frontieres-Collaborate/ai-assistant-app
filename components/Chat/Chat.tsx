@@ -354,10 +354,27 @@ export function Chat({
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   } = useChatActions({
     updateConversation,
     sendMessage,
   });
+
+  const handleGenerateOrRetry = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const conv = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+    if (!conv?.messages.length) return;
+    const lastIndex = conv.messages.length - 1;
+    const lastEntry = conv.messages[lastIndex];
+    const display = entryToDisplayMessage(lastEntry);
+    if (display.role === 'assistant' && display.error) {
+      handleRegenerate(lastIndex);
+    } else if (display.role === 'user') {
+      handleGenerateResponse();
+    }
+  }, [handleRegenerate, handleGenerateResponse]);
 
   useKeyboardShortcuts({
     enabled: true,
@@ -570,6 +587,7 @@ export function Chat({
                 onEditMessage={handleEditMessage}
                 onSelectPrompt={handleSelectPrompt}
                 onRegenerate={handleRegenerate}
+                onGenerateResponse={handleGenerateOrRetry}
                 onSaveAsPrompt={handleOpenSavePromptModal}
                 onNavigateVersion={handleNavigateVersion}
               />
