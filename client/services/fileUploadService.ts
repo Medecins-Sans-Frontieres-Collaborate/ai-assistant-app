@@ -28,8 +28,13 @@ const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
 const CHUNK_CONCURRENCY = 4; // Parallel in-flight chunk uploads
 
 /**
- * Total attempts per chunk (initial + retries). Mirrors the naming used in
- * chunkedTranscriptionService so both chunked pipelines speak the same vocab.
+ * Total attempts per chunk (initial + retries). Three is the empirically
+ * tuned sweet spot: enough to ride out a single transient blip on a flaky
+ * link, few enough that a genuinely broken upload fails inside ~30s of
+ * jittered backoff rather than dragging on for minutes. Mirrors the
+ * naming used in `chunkedTranscriptionService` so both chunked pipelines
+ * speak the same vocab; safe to tune up if a client class regularly
+ * needs more retries — no hidden coupling to that number.
  */
 const CHUNK_TOTAL_ATTEMPTS = 3;
 
@@ -69,8 +74,11 @@ class UploadAbortedError extends Error {
 
 /**
  * Returns the jittered exponential-backoff delay (in ms) for a given retry
- * attempt. Capped at 8s base; jitter is the standard 0.5–1.0× multiplier to
- * desynchronize clients recovering from a shared outage.
+ * attempt. Doubling base of 500ms (so attempts 0..2 → 500ms, 1s, 2s) capped
+ * at 8s prevents pathological waits on a misconfigured retry budget. The
+ * 0.5–1.0× jitter is the standard countermeasure to desynchronise clients
+ * recovering from a shared outage; without it a thundering herd retries in
+ * lockstep.
  */
 function jitteredBackoffMs(attempt: number): number {
   const base = Math.min(8_000, Math.pow(2, attempt) * 500);
