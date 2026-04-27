@@ -64,10 +64,14 @@ interface ChatStore {
   regeneratingIndex: number | null;
 
   /**
-   * IDs of active files that were not injected on the most recent turn for
-   * each conversation, keyed by conversation ID. Populated from the SSE
-   * metadata at end-of-turn and cleared at the start of the next send so
-   * the UI only flags drops from the current turn.
+   * IDs of active files that were not injected on the most recent turn,
+   * keyed by conversation ID. The `last` in the name is from the *next*
+   * send's perspective: the server emits these as
+   * `ChatContext.activeFilesDroppedThisTurn` on completion, this store
+   * keeps them around as "last turn" until the *next* successful turn
+   * populates them again. They are intentionally NOT cleared on send
+   * start — if a stream fails mid-flight, the previous turn's badges
+   * stay visible so the user keeps an accurate picture.
    */
   lastTurnDroppedActiveFileIds: Record<string, string[]>;
 
