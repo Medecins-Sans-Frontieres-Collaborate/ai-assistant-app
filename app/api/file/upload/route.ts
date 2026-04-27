@@ -49,8 +49,15 @@ async function readBoundedBody(
  * Route segment config to allow large file uploads.
  * Next.js App Router defaults to 1MB body size limit.
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+ *
+ * 60s was too tight for legitimate slow uploads — a 50MB file on a 1Mbps
+ * cellular connection takes ~7 minutes, and the route handler timed out
+ * mid-stream with no resumability. 300s covers the worst plausible
+ * small-file (≤10MB) upload at very low bandwidth and stays well within
+ * the Azure Container Apps deployment's request timeout. Files >10MB go
+ * via the chunked Server Action path and are not affected by this.
  */
-export const maxDuration = 60; // Allow up to 60 seconds for large uploads
+export const maxDuration = 300;
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
