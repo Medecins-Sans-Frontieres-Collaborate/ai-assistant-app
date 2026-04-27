@@ -13,6 +13,8 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   confirmVariant?: 'danger' | 'primary';
+  /** Optional content rendered between the message and the action buttons. */
+  extraContent?: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -28,6 +30,7 @@ export function ConfirmDialog({
   confirmLabel,
   cancelLabel,
   confirmVariant = 'primary',
+  extraContent,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -85,6 +88,7 @@ export function ConfirmDialog({
       }
     >
       <p className="text-neutral-700 dark:text-neutral-300">{message}</p>
+      {extraContent && <div className="mt-4">{extraContent}</div>}
     </Modal>
   );
 }
