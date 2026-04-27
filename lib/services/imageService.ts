@@ -16,14 +16,6 @@ import { ImageMessageContent } from '@/types/chat';
 const DEFAULT_IMAGE_CACHE_MAX_BYTES = 200 * 1024 * 1024; // 200MB
 let imageCacheMaxBytes = DEFAULT_IMAGE_CACHE_MAX_BYTES;
 
-/**
- * Test-only: override the byte cap to drive eviction with small strings.
- * Pass `null` to restore the production default.
- */
-export const _setImageCacheMaxBytes = (bytes: number | null): void => {
-  imageCacheMaxBytes = bytes ?? DEFAULT_IMAGE_CACHE_MAX_BYTES;
-};
-
 // LRU-by-insertion-order cache. We rely on Map preserving insertion order:
 // every read of a cached entry calls `touchRecency`, which deletes-then-
 // reinserts the entry to bump it to the most-recent position. When the
@@ -63,24 +55,6 @@ function touchRecency(url: string, value: string): void {
     evictOne();
   }
 }
-
-/**
- * Test-only: drop all entries and reset the byte counter.
- */
-export const _clearImageCache = (): void => {
-  imageCache.clear();
-  imageCacheBytes = 0;
-};
-
-/**
- * Test/debug helper: returns current cache occupancy. Not part of the
- * public hot path — exported so unit tests can assert eviction without
- * peeking into module-private state.
- */
-export const _imageCacheStats = () => ({
-  entries: imageCache.size,
-  bytes: imageCacheBytes,
-});
 
 /**
  * Cache base64 image data to avoid re-fetching from server.
@@ -140,3 +114,27 @@ export const fetchImageBase64FromMessageContent = async (
     return '';
   }
 };
+
+// ---------------------------------------------------------------------------
+// Test-only helpers below this line. Underscore prefix marks them as
+// non-public; production code MUST NOT import these. They exist solely so
+// the cache eviction tests can drive the LRU without having to allocate
+// hundreds of MB of strings.
+// ---------------------------------------------------------------------------
+
+/** Test-only: override the byte cap. Pass `null` to restore the default. */
+export const _setImageCacheMaxBytes = (bytes: number | null): void => {
+  imageCacheMaxBytes = bytes ?? DEFAULT_IMAGE_CACHE_MAX_BYTES;
+};
+
+/** Test-only: drop all entries and reset the byte counter. */
+export const _clearImageCache = (): void => {
+  imageCache.clear();
+  imageCacheBytes = 0;
+};
+
+/** Test-only: returns current cache occupancy `{ entries, bytes }`. */
+export const _imageCacheStats = () => ({
+  entries: imageCache.size,
+  bytes: imageCacheBytes,
+});
