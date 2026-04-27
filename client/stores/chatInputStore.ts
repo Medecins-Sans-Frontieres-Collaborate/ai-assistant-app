@@ -249,6 +249,20 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
 
   removeFile: (filePreview) =>
     set((state) => {
+      // If the file being removed is still in flight, cancel the batch so
+      // we don't waste bandwidth and we can clean up server-side state
+      // (cancelChunkedUploadAction releases any committed remnants).
+      const wasInFlight =
+        filePreview.status === 'uploading' ||
+        filePreview.status === 'extracting';
+      if (
+        wasInFlight &&
+        state.uploadAbortController &&
+        !state.uploadAbortController.signal.aborted
+      ) {
+        state.uploadAbortController.abort();
+      }
+
       // Remove from filePreviews
       const newPreviews = state.filePreviews.filter((fp) => fp !== filePreview);
 
@@ -320,15 +334,21 @@ export const useChatInputStore = create<ChatInputState>((set, get) => ({
       usedPromptVariables: null,
     }),
 
-  clearUploadState: () =>
+  clearUploadState: () => {
+    const prior = get().uploadAbortController;
+    if (prior && !prior.signal.aborted) {
+      prior.abort();
+    }
     set({
+      uploadAbortController: null,
       filePreviews: [],
       fileFieldValue: null,
       imageFieldValue: null,
       uploadProgress: {},
       submitType: 'TEXT',
       pendingTranscriptions: new Map(),
-    }),
+    });
+  },
 
   resetForNewConversation: (defaultSearchMode = SearchMode.OFF) =>
     set({
