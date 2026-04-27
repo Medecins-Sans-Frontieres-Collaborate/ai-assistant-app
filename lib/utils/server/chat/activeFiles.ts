@@ -2,9 +2,9 @@ import { ActiveFile } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
 import {
-  ACTIVE_FILE_PER_TURN_FRACTION,
   ACTIVE_FILE_PER_TURN_MAX,
   ACTIVE_FILE_PER_TURN_MIN,
+  getActiveFileBudgets,
 } from '@/lib/constants/activeFileQuotas';
 
 /**
@@ -53,9 +53,9 @@ export function buildActiveFileTextBlock(
 
 /**
  * Per-turn token budget for active-file injection, derived from the model's
- * input context window minus its reserved output. Keeps the remaining 75%
- * of input headroom for the system prompt, conversation history, and the
- * user's current message. Clamped to [MIN, MAX].
+ * input context window minus its reserved output. The fraction and ceiling
+ * are tiered by model context window via `getActiveFileBudgets`. Clamped to
+ * [ACTIVE_FILE_PER_TURN_MIN, ACTIVE_FILE_PER_TURN_MAX].
  */
 export function computeActiveFilePerTurnBudget(
   model: Pick<OpenAIModel, 'maxLength' | 'tokenLimit'> | undefined | null,
@@ -68,31 +68,38 @@ export function computeActiveFilePerTurnBudget(
     return ACTIVE_FILE_PER_TURN_MIN;
   }
 
-  const derived = Math.floor(availableForInput * ACTIVE_FILE_PER_TURN_FRACTION);
+  const { fraction, perTurnCap } = getActiveFileBudgets(model);
+  const derived = Math.floor(availableForInput * fraction);
   return Math.max(
     ACTIVE_FILE_PER_TURN_MIN,
-    Math.min(ACTIVE_FILE_PER_TURN_MAX, derived),
+    Math.min(ACTIVE_FILE_PER_TURN_MAX, perTurnCap, derived),
   );
 }
 
-/**
- * Simple budget selection (placeholder). Returns files unchanged.
- * Can be extended to apply token budgets and policies.
- */
 export function isPinned(f: ActiveFile) {
   return !!f.pinned;
 }
 
-export function selectFilesForBudget(
+const estimateTokens = (f: ActiveFile) =>
+  f.processedContent?.tokenEstimate ??
+  Math.max(200, Math.floor((f.sizeBytes ?? 50_000) / 4));
+
+type SelectionPolicy = 'recent' | 'sizeAsc';
+
+const SORTERS: Record<
+  SelectionPolicy,
+  (a: ActiveFile, b: ActiveFile) => number
+> = {
+  recent: (a, b) =>
+    (b.lastUsedAt ?? b.addedAt).localeCompare(a.lastUsedAt ?? a.addedAt),
+  sizeAsc: (a, b) => estimateTokens(a) - estimateTokens(b),
+};
+
+function greedySelect(
   files: ActiveFile[],
   budgetTokens: number,
-  policy: 'recent' | 'pinned' | 'sizeAsc' = 'recent',
-): ActiveFile[] {
-  // Estimation using processed tokenEstimate or fallback to rough heuristic
-  const estimate = (f: ActiveFile) =>
-    f.processedContent?.tokenEstimate ??
-    Math.max(200, Math.floor((f.sizeBytes ?? 50_000) / 4));
-
+  policy: SelectionPolicy,
+): { selected: ActiveFile[]; dropped: ActiveFile[] } {
   const partition = (arr: ActiveFile[], pred: (f: ActiveFile) => boolean) => {
     const a: ActiveFile[] = [];
     const b: ActiveFile[] = [];
@@ -101,27 +108,65 @@ export function selectFilesForBudget(
   };
 
   const [pinned, rest] = partition(files, isPinned);
-  const sorters = {
-    recent: (a: ActiveFile, b: ActiveFile) =>
-      (b.lastUsedAt ?? b.addedAt).localeCompare(a.lastUsedAt ?? a.addedAt),
-    sizeAsc: (a: ActiveFile, b: ActiveFile) => estimate(a) - estimate(b),
-  } as const;
-
-  const sorter = policy === 'sizeAsc' ? sorters.sizeAsc : sorters.recent;
-  pinned.sort(sorter);
-  rest.sort(sorter);
+  // Pinned files always sort by recency so the most-recently-used pinned
+  // file wins when pin tonnage alone exceeds budget; only the unpinned
+  // tier varies by the fairness policy.
+  pinned.sort(SORTERS.recent);
+  rest.sort(SORTERS[policy]);
 
   const selected: ActiveFile[] = [];
+  const dropped: ActiveFile[] = [];
   let used = 0;
   for (const f of [...pinned, ...rest]) {
-    const est = estimate(f);
+    const est = estimateTokens(f);
     if (used + est <= budgetTokens) {
       selected.push(f);
       used += est;
+    } else {
+      dropped.push(f);
     }
   }
-  if (selected.length > 0) return selected;
-  return budgetTokens > 0 ? files.slice(0, 1) : [];
+  return { selected, dropped };
+}
+
+/**
+ * Fairness-aware budget selection. Returns the files that fit within
+ * `budgetTokens` and the files that were dropped so callers can surface
+ * the exclusion to the user.
+ *
+ * Strategy: try greedy by `recent` first. If anything was dropped, retry
+ * with `sizeAsc` (smallest-first) to see if more files can fit. Pick
+ * whichever variant included more files — preferring `sizeAsc` on ties so
+ * smaller files don't get starved by a single large recent upload.
+ *
+ * If nothing fits at all (every file is bigger than the budget), fall
+ * back to including the single smallest file so the user gets *something*
+ * rather than a silent total-exclusion.
+ */
+export function selectFilesForBudget(
+  files: ActiveFile[],
+  budgetTokens: number,
+): { selected: ActiveFile[]; dropped: ActiveFile[] } {
+  if (files.length === 0 || budgetTokens <= 0) {
+    return { selected: [], dropped: files.slice() };
+  }
+
+  const recentResult = greedySelect(files, budgetTokens, 'recent');
+  if (recentResult.dropped.length === 0) return recentResult;
+
+  const sizeAscResult = greedySelect(files, budgetTokens, 'sizeAsc');
+  const winner =
+    sizeAscResult.selected.length >= recentResult.selected.length
+      ? sizeAscResult
+      : recentResult;
+
+  if (winner.selected.length > 0) return winner;
+
+  // Nothing fit: include the single smallest file as a degraded fallback
+  // so the user is not left with zero context.
+  const sorted = files.slice().sort(SORTERS.sizeAsc);
+  const [smallest, ...rest] = sorted;
+  return { selected: [smallest], dropped: rest };
 }
 
 /**
