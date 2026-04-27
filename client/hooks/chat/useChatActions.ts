@@ -247,9 +247,15 @@ export function useChatActions({
   );
 
   /**
-   * Generates an assistant response when the conversation ends with a user
-   * message that has no assistant follow-up (e.g., generation was stopped or
-   * never streamed). Appends a new assistant message group rather than versioning.
+   * Re-submits the conversation's trailing user message through the
+   * standard `sendMessage` pipeline. Used after a stopped or failed
+   * generation, where the trailing entry is a user message with no
+   * assistant follow-up — this gets the user a fresh assistant response
+   * for that exact prompt without forming a new user turn.
+   *
+   * No-op if the conversation is empty or doesn't end with a user
+   * message. The result is appended as a new assistant message group
+   * (not a regeneration of an existing one).
    */
   const handleGenerateResponse = useCallback(() => {
     const conversationState = useConversationStore.getState();
