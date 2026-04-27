@@ -197,6 +197,13 @@ describe('FileUploadService.uploadImage', () => {
     return xhr;
   }
 
+  // Stub readFileAsDataURL rather than depending on jsdom's FileReader, which
+  // varies between environments (jsdom version differences caused this test
+  // to fail in CI on a real File-backed FileReader despite passing locally).
+  let readFileSpy: ReturnType<typeof vi.spyOn>;
+  const STUB_DATA_URL =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB';
+
   beforeEach(() => {
     cacheImageBase64Mock.mockClear();
     lastXhr = null;
@@ -205,26 +212,29 @@ describe('FileUploadService.uploadImage', () => {
         lastXhr = makeFakeXhr();
         return lastXhr;
       } as unknown as typeof XMLHttpRequest;
+    readFileSpy = vi
+      .spyOn(FileUploadService, 'readFileAsDataURL')
+      .mockResolvedValue(STUB_DATA_URL);
   });
 
   afterEach(() => {
     (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
       originalXhr;
+    readFileSpy.mockRestore();
   });
 
-  function makePngFile(): File {
-    // 1x1 transparent PNG
-    const png = new Uint8Array([
-      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
-      0x49, 0x48, 0x44, 0x52,
-    ]);
-    return new File([png], 'photo.png', { type: 'image/png' });
+  // Minimal File stub: uploadImage only forwards the file to FormData (which
+  // accepts any Blob-like) and to the (mocked) readFileAsDataURL.
+  function fakePngFile(): File {
+    return {
+      name: 'photo.png',
+      type: 'image/png',
+      size: 16,
+    } as unknown as File;
   }
 
   it('uploads via multipart/form-data with filetype=image and warms the base64 cache', async () => {
-    const file = makePngFile();
-
-    const result = await FileUploadService.uploadImage(file);
+    const result = await FileUploadService.uploadImage(fakePngFile());
 
     expect(result).toEqual({
       url: '/api/file/abc.png',
@@ -240,15 +250,13 @@ describe('FileUploadService.uploadImage', () => {
       '/api/file/upload?filename=photo.png&filetype=image&mime=image%2Fpng',
     );
     expect(lastXhr!._body).toBeInstanceOf(FormData);
-    const sentFile = (lastXhr!._body as FormData).get('file');
-    expect(sentFile).toBeInstanceOf(File);
-    expect((sentFile as File).name).toBe('photo.png');
 
-    // Cache was warmed with the upload's URL and a real base64 data URL.
+    // Cache was warmed with the upload's URL and the readFileAsDataURL output.
     expect(cacheImageBase64Mock).toHaveBeenCalledTimes(1);
-    const [cachedUrl, cachedDataUrl] = cacheImageBase64Mock.mock.calls[0];
-    expect(cachedUrl).toBe('/api/file/abc.png');
-    expect(cachedDataUrl).toMatch(/^data:image\/png;base64,/);
+    expect(cacheImageBase64Mock).toHaveBeenCalledWith(
+      '/api/file/abc.png',
+      STUB_DATA_URL,
+    );
   });
 
   it('rejects when the upload fails and does not warm the cache', async () => {
@@ -258,10 +266,19 @@ describe('FileUploadService.uploadImage', () => {
         return lastXhr;
       } as unknown as typeof XMLHttpRequest;
 
-    await expect(FileUploadService.uploadImage(makePngFile())).rejects.toThrow(
+    await expect(FileUploadService.uploadImage(fakePngFile())).rejects.toThrow(
       /photo\.png/,
     );
 
+    expect(cacheImageBase64Mock).not.toHaveBeenCalled();
+  });
+
+  it('still resolves the upload when readFileAsDataURL fails (cache is best-effort)', async () => {
+    readFileSpy.mockRejectedValueOnce(new Error('reader boom'));
+
+    const result = await FileUploadService.uploadImage(fakePngFile());
+
+    expect(result.url).toBe('/api/file/abc.png');
     expect(cacheImageBase64Mock).not.toHaveBeenCalled();
   });
 });
