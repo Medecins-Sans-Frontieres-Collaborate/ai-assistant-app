@@ -176,7 +176,13 @@ export interface ChatContext {
   /** Enriched messages (populated by feature enrichers) */
   enrichedMessages?: Message[];
 
-  /** Active files to include in context (from client) */
+  /**
+   * Active files to include in context (from client). The injector mutates
+   * this collection in-place: selected files get their `lastUsedAt` bumped
+   * to the current turn so they round-trip back to the client via the
+   * normal SSE persistence path. The next turn's selection sort then sees
+   * the updated timestamps and rotates files fairly across turns.
+   */
   activeFiles?: ActiveFile[];
 
   /** Cache updates for active files (emitted as SSE events) */
@@ -194,7 +200,14 @@ export interface ChatContext {
   /**
    * Output: file IDs that were excluded from this turn's context because
    * they did not fit the per-turn budget. Surfaced to the client via SSE
-   * so users see which files are not visible to the model this turn.
+   * (`StreamMetadata.activeFilesDropped`) and stored there as
+   * `chatStore.lastTurnDroppedActiveFileIds[conversationId]`. The asymmetric
+   * naming is deliberate: from this stage's perspective the exclusion is
+   * happening "this turn", while the client only sees the result *after*
+   * the turn completes — by then it's the "last turn" relative to the
+   * next user send. Clear on successful population of the next turn's
+   * dropped IDs (so a stream that fails mid-flight keeps the previous
+   * badges visible).
    */
   activeFilesDroppedThisTurn?: string[];
 
