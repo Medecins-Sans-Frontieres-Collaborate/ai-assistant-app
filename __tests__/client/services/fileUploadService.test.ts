@@ -2,7 +2,12 @@ import { FileUploadService } from '@/client/services/fileUploadService';
 
 import type { ChunkedUploadSession } from '@/lib/types/chunkedUpload';
 
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const cacheImageBase64Mock = vi.fn();
+vi.mock('@/lib/services/imageService', () => ({
+  cacheImageBase64: (...args: unknown[]) => cacheImageBase64Mock(...args),
+}));
 
 const session: ChunkedUploadSession = {
   sessionId: 'sess-1',
@@ -136,5 +141,127 @@ describe('FileUploadService chunked parallel upload', () => {
     await FileUploadService.uploadFile(fakeVideoFile(FIVE_CHUNKS_50MB));
 
     expect(maxInFlight).toBeLessThanOrEqual(4);
+  });
+});
+
+describe('FileUploadService.uploadImage', () => {
+  type XhrHandlers = Record<string, ((event?: unknown) => void)[]>;
+
+  interface FakeXhr {
+    upload: { addEventListener: ReturnType<typeof vi.fn> };
+    status: number;
+    statusText: string;
+    responseText: string;
+    open: ReturnType<typeof vi.fn>;
+    send: ReturnType<typeof vi.fn>;
+    addEventListener: (
+      event: string,
+      callback: (event?: unknown) => void,
+    ) => void;
+    _handlers: XhrHandlers;
+    _body?: unknown;
+  }
+
+  let lastXhr: FakeXhr | null = null;
+  const originalXhr = global.XMLHttpRequest;
+
+  function makeFakeXhr({
+    succeed = true,
+    responseBody = JSON.stringify({ data: { uri: '/api/file/abc.png' } }),
+  }: { succeed?: boolean; responseBody?: string } = {}): FakeXhr {
+    const handlers: XhrHandlers = {};
+    const xhr: FakeXhr = {
+      upload: { addEventListener: vi.fn() },
+      status: 0,
+      statusText: '',
+      responseText: '',
+      open: vi.fn(),
+      send: vi.fn(function (this: FakeXhr, body: unknown) {
+        this._body = body;
+        if (succeed) {
+          this.status = 200;
+          this.responseText = responseBody;
+          handlers.load?.forEach((cb) => cb());
+        } else {
+          this.status = 500;
+          this.statusText = 'Internal Server Error';
+          handlers.load?.forEach((cb) => cb());
+        }
+      }),
+      addEventListener: (event, callback) => {
+        handlers[event] ??= [];
+        handlers[event].push(callback);
+      },
+      _handlers: handlers,
+    };
+    return xhr;
+  }
+
+  beforeEach(() => {
+    cacheImageBase64Mock.mockClear();
+    lastXhr = null;
+    (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
+      function (this: unknown) {
+        lastXhr = makeFakeXhr();
+        return lastXhr;
+      } as unknown as typeof XMLHttpRequest;
+  });
+
+  afterEach(() => {
+    (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
+      originalXhr;
+  });
+
+  function makePngFile(): File {
+    // 1x1 transparent PNG
+    const png = new Uint8Array([
+      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d,
+      0x49, 0x48, 0x44, 0x52,
+    ]);
+    return new File([png], 'photo.png', { type: 'image/png' });
+  }
+
+  it('uploads via multipart/form-data with filetype=image and warms the base64 cache', async () => {
+    const file = makePngFile();
+
+    const result = await FileUploadService.uploadImage(file);
+
+    expect(result).toEqual({
+      url: '/api/file/abc.png',
+      originalFilename: 'photo.png',
+      type: 'image',
+    });
+
+    // Verify the request shape: POST to upload route with image filetype
+    // and the file MIME type, sending FormData (not a base64 text body).
+    expect(lastXhr).not.toBeNull();
+    expect(lastXhr!.open).toHaveBeenCalledWith(
+      'POST',
+      '/api/file/upload?filename=photo.png&filetype=image&mime=image%2Fpng',
+    );
+    expect(lastXhr!._body).toBeInstanceOf(FormData);
+    const sentFile = (lastXhr!._body as FormData).get('file');
+    expect(sentFile).toBeInstanceOf(File);
+    expect((sentFile as File).name).toBe('photo.png');
+
+    // Cache was warmed with the upload's URL and a real base64 data URL.
+    expect(cacheImageBase64Mock).toHaveBeenCalledTimes(1);
+    const [cachedUrl, cachedDataUrl] = cacheImageBase64Mock.mock.calls[0];
+    expect(cachedUrl).toBe('/api/file/abc.png');
+    expect(cachedDataUrl).toMatch(/^data:image\/png;base64,/);
+  });
+
+  it('rejects when the upload fails and does not warm the cache', async () => {
+    (global as unknown as { XMLHttpRequest: unknown }).XMLHttpRequest =
+      function (this: unknown) {
+        lastXhr = makeFakeXhr({ succeed: false });
+        return lastXhr;
+      } as unknown as typeof XMLHttpRequest;
+
+    await expect(FileUploadService.uploadImage(makePngFile())).rejects.toThrow(
+      /photo\.png/,
+    );
+
+    expect(cacheImageBase64Mock).not.toHaveBeenCalled();
   });
 });
