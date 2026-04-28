@@ -1155,7 +1155,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Auto-pin uploaded files",
-      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out"
+      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out",
+      "autoInjectPinnedImages": "Re-inject pinned images each turn",
+      "autoInjectPinnedImagesDescription": "When on, pinned images are sent to vision-capable models every turn so they stay in context (estimated cost ≈765 tokens per pinned image per turn). When off, pinned images stay visible in the panel but are only sent when you re-attach them. Has no effect on Anthropic models, which currently don't receive image content."
     },
     "confirmations": {
       "title": "Confirmations",
@@ -1838,7 +1840,9 @@
     "sessionQuotaWarning": "Session quota running low — {remaining} tokens remaining",
     "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included",
     "notInContext": "Not in context",
-    "notInContextTooltip": "This file did not fit the per-turn token budget on the last response, so the model could not see it. It will be reconsidered on your next message."
+    "notInContextTooltip": "This file did not fit the per-turn token budget on the last response, so the model could not see it. It will be reconsidered on your next message.",
+    "notInjected": "Not injected",
+    "notInjectedTooltip": "Image re-injection is disabled in settings. This pinned image stays visible here but is not sent to the model unless you re-attach it."
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
