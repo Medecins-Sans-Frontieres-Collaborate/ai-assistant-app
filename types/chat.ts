@@ -181,6 +181,13 @@ export interface ChatBody {
   // Active files to include in context (optional)
   activeFiles?: ActiveFile[];
   activeFilesTokensUsed?: number; // Cumulative tokens consumed by active files
+  /**
+   * Whether pinned-image active files should be re-injected into this turn's
+   * last user message. Defaults to `true` server-side if absent. See
+   * `lib/services/chat/processors/ActiveFileInjector.ts` for the injection
+   * branch and the AnthropicHandler caveat.
+   */
+  autoInjectPinnedImages?: boolean;
 }
 
 export interface Conversation {
