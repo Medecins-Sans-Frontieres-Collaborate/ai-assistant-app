@@ -228,6 +228,7 @@ export class ChatService {
       customDisplayName?: string;
       activeFiles?: ActiveFile[];
       activeFilesTokensUsed?: number;
+      autoInjectPinnedImages?: boolean;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -256,6 +257,7 @@ export class ChatService {
         customDisplayName: options?.customDisplayName,
         activeFiles: options?.activeFiles,
         activeFilesTokensUsed: options?.activeFilesTokensUsed,
+        autoInjectPinnedImages: options?.autoInjectPinnedImages,
       },
       {
         signal: options?.signal,
