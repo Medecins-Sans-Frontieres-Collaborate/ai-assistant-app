@@ -18,6 +18,7 @@ import { Tooltip } from '@/components/UI/Tooltip';
 
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   ACTIVE_FILE_PIN_TOKEN_LIMIT,
   ACTIVE_FILE_SESSION_QUOTA,
@@ -75,6 +76,10 @@ export function ActiveFilesPanel() {
       EMPTY_DROPPED_IDS
     );
   });
+
+  const autoInjectPinnedImages = useSettingsStore(
+    (state) => state.autoInjectPinnedImages,
+  );
 
   // SAFE: Action selectors are stable function references
   const deactivateFile = useConversationStore((state) => state.deactivateFile);
@@ -244,6 +249,15 @@ export function ActiveFilesPanel() {
                     </span>
                   </Tooltip>
                 )}
+                {f.processedContent?.type === 'image' &&
+                  f.pinned &&
+                  !autoInjectPinnedImages && (
+                    <Tooltip content={t('notInjectedTooltip')} position="top">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                        {t('notInjected')}
+                      </span>
+                    </Tooltip>
+                  )}
                 {f.status === 'error' && (
                   <>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">
