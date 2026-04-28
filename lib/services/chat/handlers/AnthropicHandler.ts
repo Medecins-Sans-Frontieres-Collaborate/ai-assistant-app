@@ -84,6 +84,16 @@ export class AnthropicHandler extends ModelHandler {
 
       // Only include user and assistant messages
       if (msg.role === 'user' || msg.role === 'assistant') {
+        // NOTE: this strips ALL non-text content (image_url, file_url) before
+        // forwarding. Side effects worth knowing about:
+        //   - Anthropic image support is currently a no-op here, even though
+        //     Claude Sonnet/Haiku are listed in OpenAIVisionModelID.
+        //   - Pinned-image re-injection from ActiveFileInjector reaches this
+        //     stage and is dropped (the injector's blocks look just like any
+        //     other image_url to this filter).
+        // Reviving Anthropic image support means converting image_url blocks
+        // into Anthropic's content-block schema (`{type: 'image', source:
+        // {type: 'base64', media_type, data}}`), not relaxing this filter.
         const content =
           typeof msg.content === 'string'
             ? msg.content
