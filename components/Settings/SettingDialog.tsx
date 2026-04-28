@@ -74,6 +74,10 @@ export function SettingDialog() {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
   const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
+  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
+  // Snapshot of last-saved reducer state. Anything that diverges from this
+  // is "dirty" and triggers the discard-confirm guard on close.
+  const savedSnapshotRef = useRef<Settings | null>(null);
 
   // Load settings and storage on client side only
   useEffect(() => {
@@ -84,24 +88,58 @@ export function SettingDialog() {
         value: loadedSettings[key as keyof Settings],
       });
     });
+    savedSnapshotRef.current = { ...state, ...loadedSettings } as Settings;
     setStorageData(getStorageUsage());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const isDirty = useCallback(() => {
+    const snap = savedSnapshotRef.current;
+    if (!snap) return false;
+    return (Object.keys(state) as (keyof Settings)[]).some((k) => {
+      const a = state[k];
+      const b = snap[k];
+      if (Object.is(a, b)) return false;
+      // streamingSpeed is the only object-shaped field; compare by JSON.
+      if (typeof a === 'object' || typeof b === 'object') {
+        return JSON.stringify(a) !== JSON.stringify(b);
+      }
+      return true;
+    });
+  }, [state]);
+
+  const requestClose = useCallback(() => {
+    if (isDirty()) {
+      setShowDiscardConfirm(true);
+      return;
+    }
+    setIsSettingsOpen(false);
+  }, [isDirty, setIsSettingsOpen]);
+
+  const handleDiscardConfirm = () => {
+    setShowDiscardConfirm(false);
+    setIsSettingsOpen(false);
+  };
+
+  const handleDiscardCancel = () => {
+    setShowDiscardConfirm(false);
+  };
 
   // Close on click outside
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
       // Don't close if a nested dialog is open - they're rendered outside modalRef
-      if (showMigrationDialog || showQuarantineDialog) return;
+      if (showMigrationDialog || showQuarantineDialog || showDiscardConfirm)
+        return;
 
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         window.addEventListener('mouseup', handleMouseUp);
       }
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
+    const handleMouseUp = () => {
       window.removeEventListener('mouseup', handleMouseUp);
-      setIsSettingsOpen(false);
+      requestClose();
     };
 
     if (isSettingsOpen) {
@@ -113,9 +151,10 @@ export function SettingDialog() {
     };
   }, [
     isSettingsOpen,
-    setIsSettingsOpen,
+    requestClose,
     showMigrationDialog,
     showQuarantineDialog,
+    showDiscardConfirm,
   ]);
 
   // Update storage data when dialog opens
@@ -180,7 +219,11 @@ export function SettingDialog() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsSettingsOpen(false);
+        if (showDiscardConfirm) {
+          setShowDiscardConfirm(false);
+          return;
+        }
+        requestClose();
       }
     };
 
@@ -191,13 +234,14 @@ export function SettingDialog() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isSettingsOpen, setIsSettingsOpen]);
+  }, [isSettingsOpen, requestClose, showDiscardConfirm]);
 
   const handleSave = () => {
     setTheme(state.theme);
     setTemperature(state.temperature);
     setSystemPrompt(state.systemPrompt);
     saveSettings(state);
+    savedSnapshotRef.current = { ...state };
   };
 
   const handleReset = () => {
@@ -223,6 +267,7 @@ export function SettingDialog() {
     setTemperature(0.5);
     setSystemPrompt(process.env.NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT || '');
     saveSettings(defaultSettings);
+    savedSnapshotRef.current = { ...defaultSettings };
   };
 
   const handleClearConversations = () => {
@@ -287,7 +332,7 @@ export function SettingDialog() {
                 activeSection={activeSection}
                 setActiveSection={setActiveSection}
                 handleReset={handleReset}
-                onClose={() => setIsSettingsOpen(false)}
+                onClose={requestClose}
                 user={session?.user}
                 state={state}
                 dispatch={dispatch}
@@ -310,7 +355,7 @@ export function SettingDialog() {
                     dispatch={dispatch}
                     user={session?.user}
                     onSave={handleSave}
-                    onClose={() => setIsSettingsOpen(false)}
+                    onClose={requestClose}
                     prefetchedProfile={fullProfile}
                   />
                 )}
@@ -322,7 +367,7 @@ export function SettingDialog() {
                     homeState={homeState}
                     user={session?.user}
                     onSave={handleSave}
-                    onClose={() => setIsSettingsOpen(false)}
+                    onClose={requestClose}
                   />
                 )}
 
@@ -332,7 +377,7 @@ export function SettingDialog() {
                     handleImportConversations={handleImportConversations}
                     handleExportData={handleExportData}
                     handleReset={handleReset}
-                    onClose={() => setIsSettingsOpen(false)}
+                    onClose={requestClose}
                     checkStorage={checkStorage}
                     onOpenMigration={() => setShowMigrationDialog(true)}
                     onOpenQuarantine={() => setShowQuarantineDialog(true)}
@@ -363,6 +408,44 @@ export function SettingDialog() {
         isOpen={showQuarantineDialog}
         onClose={() => setShowQuarantineDialog(false)}
       />
+
+      {/* Discard-changes confirmation when closing with unsaved edits */}
+      {showDiscardConfirm && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 dark:bg-black/70">
+          <div
+            className="mx-4 w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-700 dark:bg-[#1c1c1c]"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="discard-changes-title"
+          >
+            <h3
+              id="discard-changes-title"
+              className="mb-2 text-lg font-semibold text-black dark:text-white"
+            >
+              {t('settings.unsavedChanges')}
+            </h3>
+            <p className="mb-5 text-sm text-gray-700 dark:text-gray-300">
+              {t('settings.unsavedChangesMessage')}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={handleDiscardCancel}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-100 dark:hover:bg-gray-800"
+              >
+                {t('common.keepEditing')}
+              </button>
+              <button
+                type="button"
+                onClick={handleDiscardConfirm}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
+              >
+                {t('common.discard')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
