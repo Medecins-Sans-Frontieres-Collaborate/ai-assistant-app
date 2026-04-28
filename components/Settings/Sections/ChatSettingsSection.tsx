@@ -61,6 +61,8 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
     setVerbosity,
     autoPinActiveFiles,
     setAutoPinActiveFiles,
+    autoInjectPinnedImages,
+    setAutoInjectPinnedImages,
     confirmStopFromButton,
     confirmStopFromKeyboard,
     setConfirmStopFromButton,
@@ -374,6 +376,22 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               </label>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
                 {t('settings.activeFiles.autoPinUploadsDescription')}
+              </p>
+
+              {/* Auto-inject pinned images toggle */}
+              <label className="flex items-center gap-3 mt-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                  checked={autoInjectPinnedImages}
+                  onChange={(e) => setAutoInjectPinnedImages(e.target.checked)}
+                />
+                <span className="text-sm text-black dark:text-neutral-200">
+                  {t('settings.activeFiles.autoInjectPinnedImages')}
+                </span>
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
+                {t('settings.activeFiles.autoInjectPinnedImagesDescription')}
               </p>
             </div>
           )}
