@@ -146,6 +146,21 @@ interface SettingsStore {
   // Active Files Settings
   autoPinActiveFiles: boolean;
   setAutoPinActiveFiles: (enabled: boolean) => void;
+  /**
+   * When ON (default): pinned images are re-injected into every turn's last
+   * user message so vision models keep "seeing" them. Costs ~765 tokens per
+   * pinned image per turn (IMAGE_TOKENS_HIGH_DETAIL estimate; actual cost is
+   * dimension-dependent).
+   *
+   * When OFF: pinned images survive eviction and stay in the panel, but the
+   * model only sees them on turns where the user re-attaches them.
+   *
+   * Anthropic models currently strip image content at the handler level —
+   * see lib/services/chat/handlers/AnthropicHandler.ts. Re-injection is a
+   * no-op there until the handler grows a real Anthropic message converter.
+   */
+  autoInjectPinnedImages: boolean;
+  setAutoInjectPinnedImages: (enabled: boolean) => void;
 
   // Stop-generation confirmation preferences
   confirmStopFromButton: boolean;
@@ -203,6 +218,7 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Active files settings
       autoPinActiveFiles: true, // Auto-pin uploaded files by default
+      autoInjectPinnedImages: true, // Re-inject pinned images each turn by default
 
       // Stop-generation confirmation preferences (both default ON)
       confirmStopFromButton: true,
@@ -415,6 +431,8 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
+      setAutoInjectPinnedImages: (enabled) =>
+        set({ autoInjectPinnedImages: enabled }),
 
       // Stop-generation confirmation actions
       setConfirmStopFromButton: (enabled) =>
@@ -446,13 +464,14 @@ export const useSettingsStore = create<SettingsStore>()(
           verbosity: undefined,
           slashMenuUsageCounts: {},
           autoPinActiveFiles: true,
+          autoInjectPinnedImages: true,
           confirmStopFromButton: true,
           confirmStopFromKeyboard: true,
         }),
     }),
     {
       name: 'settings-storage',
-      version: 16, // Increment this when schema changes to trigger migrations
+      version: 17, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -479,6 +498,7 @@ export const useSettingsStore = create<SettingsStore>()(
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
         autoPinActiveFiles: state.autoPinActiveFiles,
+        autoInjectPinnedImages: state.autoInjectPinnedImages,
         confirmStopFromButton: state.confirmStopFromButton,
         confirmStopFromKeyboard: state.confirmStopFromKeyboard,
       }),
@@ -582,6 +602,14 @@ export const useSettingsStore = create<SettingsStore>()(
           }
           if (state.confirmStopFromKeyboard === undefined) {
             state.confirmStopFromKeyboard = true;
+          }
+        }
+
+        // Version 16 → 17: Add autoInjectPinnedImages (default ON to preserve
+        // current "pinned images stay visible to vision models" intuition)
+        if (version < 17) {
+          if (state.autoInjectPinnedImages === undefined) {
+            state.autoInjectPinnedImages = true;
           }
         }
 
