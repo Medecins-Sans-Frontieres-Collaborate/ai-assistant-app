@@ -45,6 +45,8 @@ export function useSettings() {
     // Active Files Settings
     autoPinActiveFiles: store.autoPinActiveFiles,
     setAutoPinActiveFiles: store.setAutoPinActiveFiles,
+    autoInjectPinnedImages: store.autoInjectPinnedImages,
+    setAutoInjectPinnedImages: store.setAutoInjectPinnedImages,
 
     // Stop-generation confirmation preferences
     confirmStopFromButton: store.confirmStopFromButton,
