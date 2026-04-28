@@ -583,6 +583,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       customDisplayName: settings.customDisplayName,
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
+      autoInjectPinnedImages: settings.autoInjectPinnedImages,
     });
   },
 
