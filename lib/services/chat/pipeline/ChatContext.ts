@@ -195,6 +195,15 @@ export interface ChatContext {
   activeFilesTokensUsed?: number;
   /** Session quota for active files (from client, or default constant) */
   activeFilesSessionQuota?: number;
+  /**
+   * Whether pinned-image active files should be re-injected into this turn's
+   * last user message. Default `true` if absent (set in InputValidator). When
+   * `false`, pinned images still survive eviction (so they remain visible in
+   * the active-files panel) but are not appended to the outgoing user
+   * message — the model only sees them on turns where the user re-attaches
+   * them. See `ActiveFileInjector` for the branch.
+   */
+  autoInjectPinnedImages?: boolean;
   /** Output: tokens injected this turn */
   activeFilesTokensConsumedThisTurn?: number;
   /**
