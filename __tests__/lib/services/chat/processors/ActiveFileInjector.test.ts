@@ -1,10 +1,19 @@
 import { ActiveFileInjector } from '@/lib/services/chat/processors/ActiveFileInjector';
 
-import { ActiveFile } from '@/types/chat';
+import { IMAGE_TOKENS_HIGH_DETAIL } from '@/lib/utils/server/chat/chat';
+
+import { ActiveFile, ImageMessageContent } from '@/types/chat';
+import { OpenAIModelID } from '@/types/openai';
 
 import { createTestChatContext } from '../testUtils';
 
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/lib/utils/server/blob/blob', () => ({
+  getBlobBase64String: vi.fn(
+    async (_userId, filename) => `data:image/png;base64,STUB_${filename}`,
+  ),
+}));
 
 const NOW = '2026-01-01T00:00:00.000Z';
 
@@ -25,6 +34,25 @@ const makeFile = (
     type: 'document',
     content: 'x'.repeat(tokens * 4),
     tokenEstimate: tokens,
+    processedAt: NOW,
+  },
+});
+
+const makeImage = (
+  id: string,
+  opts: { pinned?: boolean } = {},
+): ActiveFile => ({
+  id,
+  url: `/api/file/${id}.png`,
+  originalFilename: `${id}.png`,
+  addedAt: NOW,
+  sourceMessageId: 'msg-1',
+  status: 'ready',
+  pinned: opts.pinned ?? true,
+  processedContent: {
+    type: 'image',
+    content: '',
+    tokenEstimate: 0,
     processedAt: NOW,
   },
 });
@@ -118,5 +146,179 @@ describe('ActiveFileInjector', () => {
     const result = await new ActiveFileInjector().execute(context);
     expect(result.activeFilesDroppedThisTurn).toEqual([]);
     expect(result.activeFilesTokensConsumedThisTurn).toBe(10_000);
+  });
+
+  describe('pinned image re-injection', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    const visionContext = (overrides: Partial<{ messages: any[] }> = {}) => {
+      const ctx = createTestChatContext({
+        model: { id: OpenAIModelID.GPT_5_2, maxLength: 128_000 },
+        messages: overrides.messages ?? [
+          {
+            role: 'user',
+            content: [{ type: 'text', text: 'describe this' }],
+          },
+        ],
+      });
+      ctx.modelId = OpenAIModelID.GPT_5_2;
+      return ctx;
+    };
+
+    it('appends image_url block + adds 765 tokens when vision + setting on', async () => {
+      const ctx = visionContext();
+      ctx.autoInjectPinnedImages = true;
+      ctx.activeFiles = [makeImage('img1', { pinned: true })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(
+        IMAGE_TOKENS_HIGH_DETAIL,
+      );
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(Array.isArray(last.content)).toBe(true);
+      const imageBlocks = (last.content as any[]).filter(
+        (c) => c.type === 'image_url',
+      ) as ImageMessageContent[];
+      expect(imageBlocks).toHaveLength(1);
+      expect(imageBlocks[0].image_url.url).toMatch(/^data:image\/png;base64,/);
+      expect(imageBlocks[0].image_url.detail).toBe('auto');
+    });
+
+    it('skips injection + charges nothing when setting off', async () => {
+      const ctx = visionContext();
+      ctx.autoInjectPinnedImages = false;
+      ctx.activeFiles = [makeImage('img1', { pinned: true })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(0);
+      // No enrichedMessages mutation since nothing was added
+      expect(result.enrichedMessages).toBeUndefined();
+    });
+
+    it('skips injection for unpinned images even on vision models', async () => {
+      const ctx = visionContext();
+      ctx.autoInjectPinnedImages = true;
+      ctx.activeFiles = [makeImage('img1', { pinned: false })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(0);
+      expect(result.enrichedMessages).toBeUndefined();
+    });
+
+    it('preserves text-indicator path for non-vision models regardless of setting', async () => {
+      const ctx = createTestChatContext({
+        model: { id: OpenAIModelID.DEEPSEEK_V3_1, maxLength: 128_000 },
+        messages: [{ role: 'user', content: 'analyse this' }],
+      });
+      ctx.modelId = OpenAIModelID.DEEPSEEK_V3_1;
+      ctx.autoInjectPinnedImages = false; // setting off — indicator still appears
+      ctx.activeFiles = [makeImage('img1', { pinned: true })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(typeof last.content).toBe('string');
+      expect(last.content as string).toContain('Active images referenced');
+      // Indicator is text only — no image-token cost
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(0);
+    });
+
+    it('upgrades string-content user message to array on injection', async () => {
+      const ctx = visionContext({
+        messages: [{ role: 'user', content: 'plain string content' }],
+      });
+      ctx.autoInjectPinnedImages = true;
+      ctx.activeFiles = [makeImage('img1', { pinned: true })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      expect(Array.isArray(last.content)).toBe(true);
+      const arr = last.content as any[];
+      expect(arr[0]).toEqual({ type: 'text', text: 'plain string content' });
+      expect(arr[arr.length - 1].type).toBe('image_url');
+    });
+
+    it('combines pinned image injection with pinned text file in same turn', async () => {
+      const ctx = visionContext();
+      ctx.autoInjectPinnedImages = true;
+      ctx.activeFiles = [
+        makeFile('doc', 10_000, { pinned: true }),
+        makeImage('img1', { pinned: true }),
+      ];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      // Text file goes to system prompt; image goes to last user message.
+      expect(result.systemPrompt).toContain('Active Files Context');
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(
+        10_000 + IMAGE_TOKENS_HIGH_DETAIL,
+      );
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const imageBlocks = (last.content as any[]).filter(
+        (c) => c.type === 'image_url',
+      );
+      expect(imageBlocks).toHaveLength(1);
+    });
+
+    it('still injects on Anthropic vision models — handler-level filter is a separate concern', async () => {
+      // Documenting current behavior: the injector treats Anthropic vision
+      // models the same as any other vision model. AnthropicHandler will
+      // strip the image content downstream, but that's not the injector's
+      // job to know about. If/when AnthropicHandler grows real image
+      // support, this test stays green; if Anthropic ever needs to be
+      // skipped at the injector level, this test will guide that change.
+      const ctx = createTestChatContext({
+        model: {
+          id: OpenAIModelID.CLAUDE_SONNET_4_5,
+          maxLength: 200_000,
+          provider: 'anthropic',
+        },
+        messages: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }],
+      });
+      ctx.modelId = OpenAIModelID.CLAUDE_SONNET_4_5;
+      ctx.autoInjectPinnedImages = true;
+      ctx.activeFiles = [makeImage('img1', { pinned: true })];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      expect(result.activeFilesTokensConsumedThisTurn).toBe(
+        IMAGE_TOKENS_HIGH_DETAIL,
+      );
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const imageBlocks = (last.content as any[]).filter(
+        (c) => c.type === 'image_url',
+      );
+      expect(imageBlocks).toHaveLength(1);
+    });
+
+    it('passes through data: URLs without re-fetching', async () => {
+      const ctx = visionContext();
+      ctx.autoInjectPinnedImages = true;
+      const file = makeImage('img1', { pinned: true });
+      file.url = 'data:image/png;base64,ALREADY_INLINED';
+      ctx.activeFiles = [file];
+
+      const result = await new ActiveFileInjector().execute(ctx);
+
+      const last =
+        result.enrichedMessages![result.enrichedMessages!.length - 1];
+      const imageBlocks = (last.content as any[]).filter(
+        (c) => c.type === 'image_url',
+      ) as ImageMessageContent[];
+      expect(imageBlocks[0].image_url.url).toBe(
+        'data:image/png;base64,ALREADY_INLINED',
+      );
+    });
   });
 });
