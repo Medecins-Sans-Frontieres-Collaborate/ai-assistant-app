@@ -129,17 +129,25 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         <RecentSourcesSection agentId={organizationAgent.id} />
       )}
 
-      {/* Hide search mode section for organization agents that don't allow web search */}
-      {!(organizationAgent && organizationAgent.allowWebSearch === false) && (
-        <SearchModeSection
-          searchModeEnabled={searchModeEnabled}
-          displaySearchMode={displaySearchMode}
-          agentAvailable={agentAvailable}
-          modelConfig={modelConfig}
-          handleToggleSearchMode={handleToggleSearchMode}
-          handleSetSearchMode={handleSetSearchMode}
-        />
-      )}
+      {/* Hide search mode section for Foundry agents (they decide on their
+          own via web_search_call) and for org agents that explicitly
+          disallow web search. RAG bots keep the section because the
+          pre-router controls their search behavior. */}
+      {!(
+        organizationAgent &&
+        (organizationAgent.type === 'foundry' ||
+          organizationAgent.allowWebSearch === false)
+      ) &&
+        !selectedModel?.id?.startsWith('foundry-') && (
+          <SearchModeSection
+            searchModeEnabled={searchModeEnabled}
+            displaySearchMode={displaySearchMode}
+            agentAvailable={agentAvailable}
+            modelConfig={modelConfig}
+            handleToggleSearchMode={handleToggleSearchMode}
+            handleSetSearchMode={handleSetSearchMode}
+          />
+        )}
 
       {displaySearchMode !== SearchMode.AGENT &&
         selectedConversation &&

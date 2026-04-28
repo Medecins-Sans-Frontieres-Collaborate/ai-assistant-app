@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 
+import {
+  isValidAccountName,
+  isValidResourceGroup,
+  isValidSubscriptionId,
+} from '@/lib/utils/shared/armPath';
+
 import { auth, getAccessTokenForOBO } from '@/auth';
 
 const ARM_BASE = 'https://management.azure.com';
@@ -82,9 +88,9 @@ export async function GET(request: NextRequest) {
 
     if (level === 'accounts') {
       const subscriptionId = request.nextUrl.searchParams.get('subscriptionId');
-      if (!subscriptionId) {
+      if (!subscriptionId || !isValidSubscriptionId(subscriptionId)) {
         return NextResponse.json(
-          { error: 'subscriptionId required' },
+          { error: 'valid subscriptionId required' },
           { status: 400 },
         );
       }
@@ -108,9 +114,18 @@ export async function GET(request: NextRequest) {
       const subscriptionId = request.nextUrl.searchParams.get('subscriptionId');
       const resourceGroup = request.nextUrl.searchParams.get('resourceGroup');
       const accountName = request.nextUrl.searchParams.get('accountName');
-      if (!subscriptionId || !resourceGroup || !accountName) {
+      if (
+        !subscriptionId ||
+        !resourceGroup ||
+        !accountName ||
+        !isValidSubscriptionId(subscriptionId) ||
+        !isValidResourceGroup(resourceGroup) ||
+        !isValidAccountName(accountName)
+      ) {
         return NextResponse.json(
-          { error: 'subscriptionId, resourceGroup, accountName required' },
+          {
+            error: 'valid subscriptionId, resourceGroup, accountName required',
+          },
           { status: 400 },
         );
       }

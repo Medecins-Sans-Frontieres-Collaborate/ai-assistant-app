@@ -6,6 +6,7 @@ import {
 } from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
+import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import {
   FileMessageContent,
@@ -17,9 +18,11 @@ import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import { activityKeyForEvent, outputItemToMarker } from './foundryEventMappers';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
+import { emitAgentActivity, emitConsentRequest } from '@/lib/streamMarkers';
 import { TokenCredential } from '@azure/identity';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
@@ -85,6 +88,16 @@ export class AIFoundryAgentHandler {
           if (!resolvedEndpoint || !agentId) {
             throw new Error(
               'Azure AI Foundry endpoint or Agent ID not configured',
+            );
+          }
+
+          // Defense-in-depth: refuse to bind any credential to a host outside
+          // the Foundry/Cognitive Services allow-list. The middleware already
+          // validates this; checking again here protects any non-pipeline
+          // caller that constructs the handler directly.
+          if (!isAllowedFoundryHost(resolvedEndpoint)) {
+            throw new Error(
+              `Refusing to invoke Foundry against disallowed host: ${resolvedEndpoint}`,
             );
           }
 
@@ -262,6 +275,11 @@ export class AIFoundryAgentHandler {
               // markerBuffer: Accumulates text to handle citation markers split across chunks
               let markerBuffer = '';
               let controllerClosed = false;
+              // Dedupe output-item emissions — Foundry fires both
+              // `output_item.added` AND `output_item.done` for the same item,
+              // and we only want to surface each item once (consent prompt,
+              // approval prompt, MCP tool call, etc.).
+              const emittedItemIds = new Set<string>();
 
               try {
                 for await (const event of streamEventMessages) {
@@ -329,25 +347,64 @@ export class AIFoundryAgentHandler {
                       });
                     }
                   } else if (
-                    event.type === 'response.mcp_call_arguments.done' ||
-                    event.type === 'response.output_item.added'
+                    event.type === 'response.output_item.added' ||
+                    event.type === 'response.output_item.done'
                   ) {
-                    // Handle MCP tool OAuth consent requests
-                    // When a Foundry MCP tool requires user auth (e.g., NetSuite),
-                    // the agent returns an oauth_consent_request with a consent URL.
-                    // We surface this to the user so they can authorize, then the
-                    // agent can be re-invoked with previous_response_id to resume.
-                    const item = (event as any).item || (event as any);
-                    if (
-                      item?.type === 'mcp_approval_request' ||
-                      item?.oauth_consent_url
-                    ) {
-                      const consentUrl =
-                        item.oauth_consent_url || item.url || '';
-                      if (consentUrl) {
-                        const consentMessage = `\n\n---\n**Authorization Required**: This tool needs your permission to access a secure resource. [Click here to authorize](${consentUrl})\n\nAfter authorizing, send your message again to continue.\n---\n\n`;
-                        controller.enqueue(encoder.encode(consentMessage));
+                    // Output-item events carry persistent agent prompts
+                    // (OAuth consent, tool approval) and transient tool
+                    // calls (mcp_call). Foundry fires both `.added` AND
+                    // `.done` for the same item — dedupe by item.id.
+                    //
+                    // Authoritative shapes (learn.microsoft.com/.../agents):
+                    //   oauth_consent_request: { id, type, consent_link, server_label? }
+                    //   mcp_approval_request:  { id, type, name, arguments, server_label }
+                    //   mcp_call:              { id, type, name, server_label, arguments }
+                    const evt = event as any;
+                    const item = evt.item;
+                    if (item?.id && !emittedItemIds.has(item.id)) {
+                      const marker = outputItemToMarker(item);
+                      if (marker !== null) {
+                        emittedItemIds.add(item.id);
+                        controller.enqueue(encoder.encode(marker));
                       }
+                    }
+                  } else if (
+                    // Raw SSE OAuth fallback — some Foundry SDK versions emit
+                    // this instead of (or alongside) an output_item.
+                    (event as { type?: string }).type ===
+                    'response.oauth_consent_requested'
+                  ) {
+                    const evt = event as unknown as {
+                      id?: string;
+                      consent_link?: string;
+                      server_label?: string;
+                    };
+                    const id = evt.id || evt.consent_link;
+                    if (id && !emittedItemIds.has(id) && evt.consent_link) {
+                      emittedItemIds.add(id);
+                      controller.enqueue(
+                        encoder.encode(
+                          emitConsentRequest({
+                            kind: 'oauth',
+                            consent_url: evt.consent_link,
+                            server_label: evt.server_label || null,
+                          }),
+                        ),
+                      );
+                    }
+                  } else if (
+                    activityKeyForEvent((event as { type?: string }).type)
+                  ) {
+                    // Transient built-in tool lifecycle events update the
+                    // chat loading text. Each kind maps to a translation key
+                    // surfaced via the streamParser → loadingMessage channel.
+                    const activityKey = activityKeyForEvent(
+                      (event as { type?: string }).type,
+                    );
+                    if (activityKey) {
+                      controller.enqueue(
+                        encoder.encode(emitAgentActivity(activityKey)),
+                      );
                     }
                   } else if (event.type === 'response.completed') {
                     // Flush any remaining marker buffer

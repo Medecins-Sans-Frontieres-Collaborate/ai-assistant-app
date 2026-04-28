@@ -1,4 +1,8 @@
-import { isLegacyAgentId, isValidAgentId } from '@/lib/utils/app/agentId';
+import {
+  isLegacyAgentId,
+  isValidAgentId,
+  shortSourceHash,
+} from '@/lib/utils/app/agentId';
 
 import { describe, expect, it } from 'vitest';
 
@@ -50,6 +54,34 @@ describe('agentId utilities', () => {
       expect(isValidAgentId('has spaces')).toBe(false);
       expect(isValidAgentId('has@special')).toBe(false);
       expect(isValidAgentId('has.dots')).toBe(false);
+    });
+  });
+
+  describe('shortSourceHash', () => {
+    it('returns "0" for empty/null source', () => {
+      expect(shortSourceHash('')).toBe('0');
+      expect(shortSourceHash(null)).toBe('0');
+      expect(shortSourceHash(undefined)).toBe('0');
+    });
+
+    it('is deterministic', () => {
+      const path =
+        '/subscriptions/abc/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/x';
+      expect(shortSourceHash(path)).toBe(shortSourceHash(path));
+    });
+
+    it('produces different hashes for different paths', () => {
+      const a =
+        '/subscriptions/aaa/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/x';
+      const b =
+        '/subscriptions/bbb/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/x';
+      expect(shortSourceHash(a)).not.toBe(shortSourceHash(b));
+    });
+
+    it('returns at most 6 base36 chars', () => {
+      const hash = shortSourceHash('/subscriptions/x/resourceGroups/y');
+      expect(hash.length).toBeLessThanOrEqual(6);
+      expect(hash).toMatch(/^[0-9a-z]+$/);
     });
   });
 });

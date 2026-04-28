@@ -1,6 +1,7 @@
 import { IconX } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
@@ -9,6 +10,8 @@ import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
+
+import { shortSourceHash } from '@/lib/utils/app/agentId';
 
 import { Conversation } from '@/types/chat';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -22,7 +25,6 @@ import { AgentsTab } from './ModelSelect/AgentsTab';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
-import { ModelTypeIcon } from './ModelSelect/ModelTypeIcon';
 
 import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
@@ -49,8 +51,13 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const isBotsEnabled = exploreBots !== false;
 
   // Dynamically discovered Foundry agents (RBAC-filtered per user)
-  const { foundryAgents, isLoadingFoundryAgents, refetchFoundryAgents } =
-    useFoundryAgents();
+  const {
+    foundryAgents,
+    regionalPath,
+    officePaths,
+    isLoadingFoundryAgents,
+    refetchFoundryAgents,
+  } = useFoundryAgents();
 
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
@@ -156,17 +163,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       };
     });
 
-    // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user)
+    // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
+    // Model ID includes a short hash of the source path so the same-named agent
+    // discovered from two different Foundry projects produces two distinct models
+    // (otherwise React key collisions + ambiguous selection).
     const dynamicModels = foundryAgents.map((agent) => {
       const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
+      const sourceHash = shortSourceHash(agent.source);
       return {
         ...baseModel,
-        id: `foundry-${agent.id}`,
+        id: `foundry-${sourceHash}-${agent.id}`,
         name: agent.name,
         description: agent.description,
         modelType: 'agent' as const,
         agentId: agent.agentName,
         foundryEndpoint: agent.foundryEndpoint,
+        agentSource: agent.source,
         isOrganizationAgent: true,
       };
     });
@@ -182,7 +194,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   }, [isBotsEnabled, foundryAgents]);
 
   // Combine base models and organization/discovered agents
-  const availableModels = [...baseModels, ...organizationAgentModels];
+  const availableModels = useMemo(
+    () => [...baseModels, ...organizationAgentModels],
+    [baseModels, organizationAgentModels],
+  );
 
   const selectedModel =
     availableModels.find((m) => m.id === selectedModelId) || availableModels[0];
@@ -402,9 +417,56 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
   const handleDeleteAgentSource = useCallback(
     (sourceId: string) => {
+      const source = customAgentSources.find((s) => s.id === sourceId);
+      if (!source) return;
+
+      // Reset every conversation whose active model points at this source.
+      // Match by account name parsed from the ARM path — endpoint format is
+      // `https://<account>.<region>.cognitiveservices.azure.com/...`, so the
+      // account name is a stable, collision-resistant key.
+      const accountFromPath = source.resourcePath
+        .split('/accounts/')[1]
+        ?.split('/')[0];
+      const fallbackModel = baseModels[0];
+      if (accountFromPath && fallbackModel) {
+        const accountHostPrefix = `://${accountFromPath}.`;
+        for (const conv of conversations) {
+          const endpoint = conv.model?.foundryEndpoint;
+          if (endpoint && endpoint.includes(accountHostPrefix)) {
+            updateConversation(conv.id, { model: fallbackModel });
+          }
+        }
+      }
+
       deleteCustomAgentSource(sourceId);
+
+      // Show undo toast — restore the source if user changes their mind
+      toast(
+        (toastInstance) => (
+          <div className="flex items-center gap-3">
+            <span>Disconnected {source.name}</span>
+            <button
+              onClick={() => {
+                addCustomAgentSource(source);
+                toast.dismiss(toastInstance.id);
+              }}
+              className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            >
+              Undo
+            </button>
+          </div>
+        ),
+        { duration: 8000 },
+      );
     },
-    [deleteCustomAgentSource],
+    [
+      deleteCustomAgentSource,
+      addCustomAgentSource,
+      customAgentSources,
+      conversations,
+      baseModels,
+      updateConversation,
+    ],
   );
 
   return (
@@ -444,49 +506,74 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'details' ? 'hidden md:block' : 'block'
               } w-full md:w-80 flex-shrink-0 overflow-y-auto md:border-e border-gray-200 dark:border-gray-700 md:pe-4`}
             >
-              <div className="space-y-3">
-                {/* Base Models */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-                      {t('modelSelect.sections.baseModels')}
-                    </h4>
-                    <ModelOrderControls
-                      orderMode={orderMode}
-                      onOrderModeChange={setOrderMode}
-                      onReset={resetOrder}
-                      isEditing={isEditingOrder}
-                      onToggleEdit={handleToggleEditOrder}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    {orderedModels.map((model) => {
-                      const config = OpenAIModels[model.id as OpenAIModelID];
-                      const isSelected = selectedModelId === model.id;
+              <div>
+                {(() => {
+                  // Anchor recommended models at the top so first-time users
+                  // get an obvious "start here" signal. Distinct taglines
+                  // (e.g. "Best for tasks" vs "Best for chatting") let users
+                  // pick between them without reading details. Everything
+                  // else stays visible below a thin divider, in user-defined
+                  // order. While reordering, collapse the distinction.
+                  const recommendedModels = orderedModels.filter(
+                    (m) => OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+                  );
+                  const otherModels = orderedModels.filter(
+                    (m) => !OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+                  );
+                  const renderModelCard = (model: OpenAIModel) => {
+                    const config = OpenAIModels[model.id as OpenAIModelID];
+                    const isSelected = selectedModelId === model.id;
+                    return (
+                      <ModelCard
+                        key={model.id}
+                        id={model.id}
+                        name={model.name}
+                        tagline={config?.tagline}
+                        isSelected={isSelected}
+                        onClick={() => handleModelSelect(model)}
+                        icon={<ModelProviderIcon provider={config?.provider} />}
+                        showReorderControls={isEditingOrder}
+                        canMoveUp={canMoveUp(model.id)}
+                        canMoveDown={canMoveDown(model.id)}
+                        onMoveUp={() => moveModel(model.id, 'up')}
+                        onMoveDown={() => moveModel(model.id, 'down')}
+                      />
+                    );
+                  };
 
-                      return (
-                        <ModelCard
-                          key={model.id}
-                          id={model.id}
-                          name={model.name}
-                          isSelected={isSelected}
-                          onClick={() => handleModelSelect(model)}
-                          icon={
-                            <ModelProviderIcon provider={config?.provider} />
-                          }
-                          typeIcon={
-                            <ModelTypeIcon modelType={config?.modelType} />
-                          }
-                          showReorderControls={isEditingOrder}
-                          canMoveUp={canMoveUp(model.id)}
-                          canMoveDown={canMoveDown(model.id)}
-                          onMoveUp={() => moveModel(model.id, 'up')}
-                          onMoveDown={() => moveModel(model.id, 'down')}
+                  return (
+                    <div>
+                      <div className="flex justify-end mb-1.5">
+                        <ModelOrderControls
+                          orderMode={orderMode}
+                          onOrderModeChange={setOrderMode}
+                          onReset={resetOrder}
+                          isEditing={isEditingOrder}
+                          onToggleEdit={handleToggleEditOrder}
                         />
-                      );
-                    })}
-                  </div>
-                </div>
+                      </div>
+                      {isEditingOrder || recommendedModels.length === 0 ? (
+                        <div className="space-y-1">
+                          {orderedModels.map(renderModelCard)}
+                        </div>
+                      ) : (
+                        <>
+                          <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                            {t('modelSelect.recommended')}
+                          </h4>
+                          <div className="space-y-1">
+                            {recommendedModels.map(renderModelCard)}
+                          </div>
+                          {otherModels.length > 0 && (
+                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1">
+                              {otherModels.map(renderModelCard)}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
@@ -529,6 +616,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           handleModelSelect={handleModelSelect}
           organizationAgentModels={organizationAgentModels}
           foundryAgents={foundryAgents}
+          regionalPath={regionalPath}
+          officePaths={officePaths}
           selectedModelId={selectedModelId}
           isLoadingFoundryAgents={isLoadingFoundryAgents}
           onRefreshAgents={() => refetchFoundryAgents()}

@@ -39,6 +39,10 @@ import { MessageTranslationState } from '@/types/translation';
 import { TTSSettings } from '@/types/tts';
 
 import AudioPlayer from '@/components/Chat/AudioPlayer';
+import {
+  ConsentCard,
+  ConsentRequest,
+} from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
@@ -50,6 +54,10 @@ import { CitationStreamdown } from '@/components/Markdown/CitationStreamdown';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import {
+  extractConsentRequests,
+  stripIncompleteStreamMarkers,
+} from '@/lib/streamMarkers';
 import type { MermaidConfig } from 'mermaid';
 
 /**
@@ -105,6 +113,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [processedContent, setProcessedContent] = useState('');
     const [citations, setCitations] = useState<Citation[]>([]);
     const [thinking, setThinking] = useState<string>('');
+    const [consentRequests, setConsentRequests] = useState<ConsentRequest[]>(
+      [],
+    );
     const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [audioSourceLocale, setAudioSourceLocale] = useState<string | null>(
@@ -253,9 +264,40 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       const finalThinking =
         message?.thinking || metadataThinking || inlineThinking || '';
 
+      // Lift persistent consent / approval prompts out of the stream into
+      // structured cards. Then strip transient activity markers (the
+      // streamParser already extracted the latest one to drive the loader).
+      // Marker protocol is centralized in `lib/streamMarkers/`.
+      const { requests: parsedConsentsRaw, cleaned: consentCleaned } =
+        extractConsentRequests(mainContent);
+      mainContent = consentCleaned.replace(
+        /\n*<<<AGENT_ACTIVITY>>>[\s\S]*?<<<END_AGENT_ACTIVITY>>>\n*/g,
+        '',
+      );
+
+      // Dedupe consent prompts by their meaningful identity (so re-renders
+      // and Foundry's `.added` + `.done` double-fires don't render twice).
+      const parsedConsents: ConsentRequest[] = [];
+      const seenConsentKeys = new Set<string>();
+      for (const request of parsedConsentsRaw) {
+        const dedupeKey =
+          request.kind === 'oauth'
+            ? `oauth:${request.consent_url ?? ''}`
+            : `approval:${request.approval_request_id ?? request.tool_name ?? ''}`;
+        if (!seenConsentKeys.has(dedupeKey)) {
+          seenConsentKeys.add(dedupeKey);
+          parsedConsents.push(request);
+        }
+      }
+
+      // Hide partially-streamed markers so users don't briefly see raw
+      // sentinel tokens before the matching close tag arrives.
+      mainContent = stripIncompleteStreamMarkers(mainContent);
+
       setProcessedContent(mainContent);
       setThinking(finalThinking);
       setCitations(citationsData);
+      setConsentRequests(parsedConsents);
     }, [
       content,
       message,
@@ -585,6 +627,20 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                 </div>
               )}
             </div>
+
+            {/* Consent / approval cards — rendered after the markdown body
+                so they appear at the point in the message where the agent
+                surfaced the prompt. */}
+            {consentRequests.map((req, i) => (
+              <ConsentCard
+                key={
+                  req.kind === 'oauth'
+                    ? `oauth:${req.consent_url ?? i}`
+                    : `approval:${req.approval_request_id ?? i}`
+                }
+                request={req}
+              />
+            ))}
 
             {/* Citations - shown after content but before action buttons */}
             {citations.length > 0 && <CitationList citations={citations} />}

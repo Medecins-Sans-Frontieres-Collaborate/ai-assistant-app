@@ -427,6 +427,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
+    // Forward the source path of the Foundry project hosting this agent so
+    // the server can disambiguate same-named agents across projects in its
+    // cache and lazily discover (just that one path) on cache miss. Server
+    // validates the path; invalid → ignored, regional fallback applies.
+    const agentSourcePath = modelToSend.agentSource;
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -445,6 +451,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       userContext: settings.userContext,
       displayNamePreference: settings.displayNamePreference,
       customDisplayName: settings.customDisplayName,
+      agentSourcePath,
     });
   },
 

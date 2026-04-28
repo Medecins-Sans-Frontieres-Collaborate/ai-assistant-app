@@ -2,6 +2,8 @@ import NextAuth, { Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
 
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
+
 declare module 'next-auth' {
   interface User {
     id: string;
@@ -13,6 +15,10 @@ declare module 'next-auth' {
     department?: string;
     companyName?: string;
     region?: 'US' | 'EU';
+    /** ID of the user's office, e.g. 'msf-usa'. Null if no office matched. */
+    officeId?: string | null;
+    /** Human-readable office name, e.g. 'MSF USA'. */
+    officeName?: string | null;
   }
 
   interface Session {
@@ -37,6 +43,8 @@ declare module 'next-auth/jwt' {
     userDepartment?: string;
     userCompanyName?: string;
     userRegion?: 'US' | 'EU';
+    userOfficeId?: string | null;
+    userOfficeName?: string | null;
   }
 }
 
@@ -207,11 +215,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // Fetch full user profile for logging/analytics
           const userData = await fetchUserData(account.access_token);
 
-          // Determine region based on email
+          // Resolve office (and region) from email domain
+          const office = OfficeResolver.findOfficeByEmail(userData.mail);
           const userRegion: 'US' | 'EU' =
-            userData.mail && userData.mail.toLowerCase().includes('newyork')
-              ? 'US'
-              : 'EU';
+            office?.region ?? OfficeResolver.getRegionForUser(userData.mail);
 
           return {
             ...token,
@@ -232,15 +239,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userDepartment: userData.department,
             userCompanyName: userData.companyName,
             userRegion,
+            userOfficeId: office?.id ?? null,
+            userOfficeName: office?.displayName ?? null,
           };
         } catch (error) {
           console.error('Error fetching user data during login:', error);
           // Fallback to OAuth token data if Graph API fails
           const fallbackEmail = token.email || undefined;
+          const fallbackOffice =
+            OfficeResolver.findOfficeByEmail(fallbackEmail);
           const userRegion: 'US' | 'EU' =
-            fallbackEmail && fallbackEmail.toLowerCase().includes('newyork')
-              ? 'US'
-              : 'EU';
+            fallbackOffice?.region ??
+            OfficeResolver.getRegionForUser(fallbackEmail);
 
           return {
             ...token,
@@ -253,6 +263,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userDisplayName: token.name || '',
             userMail: fallbackEmail,
             userRegion,
+            userOfficeId: fallbackOffice?.id ?? null,
+            userOfficeName: fallbackOffice?.displayName ?? null,
           };
         }
       }
@@ -275,11 +287,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const userDisplayName = token.userDisplayName || token.name || '';
       const userMail = token.userMail || token.email || undefined;
 
-      // Determine region from email if not set in token (for old tokens)
-      let userRegion = token.userRegion;
-      if (!userRegion && userMail) {
-        userRegion = userMail.toLowerCase().includes('newyork') ? 'US' : 'EU';
-      }
+      // Determine region/office from email if not set in token (for old tokens)
+      const officeFromEmail = OfficeResolver.findOfficeByEmail(userMail);
+      const userRegion =
+        token.userRegion ??
+        officeFromEmail?.region ??
+        OfficeResolver.getRegionForUser(userMail);
+      const userOfficeId = token.userOfficeId ?? officeFromEmail?.id ?? null;
+      const userOfficeName =
+        token.userOfficeName ?? officeFromEmail?.displayName ?? null;
 
       return {
         ...session,
@@ -293,6 +309,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           department: token.userDepartment,
           companyName: token.userCompanyName,
           region: userRegion,
+          officeId: userOfficeId,
+          officeName: userOfficeName,
         } as Session['user'],
         error: token.error,
         refreshToken: token.refreshToken, // Expose refresh token for on-demand profile refresh if needed

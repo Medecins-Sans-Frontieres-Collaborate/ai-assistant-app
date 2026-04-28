@@ -553,11 +553,6 @@
   "enterPromptNamePlaceholder": "e.g., Email Response",
   "enterPromptDescriptionPlaceholder": "What is this prompt for?",
   "enterPromptContentPlaceholder": "Write your prompt here. Use '{{variable}}' for dynamic content.",
-  "welcomeBanner": {
-    "title": "Welcome to AI Assistant V2",
-    "whatsNew": "What's New",
-    "whatsNewQuestion": "What's New?"
-  },
   "updateBanner": {
     "title": "A new version is available",
     "refresh": "Refresh",
@@ -686,6 +681,30 @@
     "selectLanguage": "Select language"
   },
   "chat": {
+    "activity": {
+      "callingTool": "Calling tool…",
+      "callingService": "Calling external service…",
+      "searchingWeb": "Searching the web…",
+      "searchingFiles": "Searching files…",
+      "runningCode": "Running code…",
+      "generatingImage": "Generating image…",
+      "listingTools": "Looking up available tools…",
+      "analyzingFiles": "Analyzing your files…",
+      "searchingKnowledge": "Searching the knowledge base…"
+    },
+    "consent": {
+      "authorizeRequired": "Authorization required",
+      "authorizeService": "Authorize {service}",
+      "descriptionGeneric": "This agent needs your permission to access a secure resource.",
+      "descriptionWithService": "This agent needs your permission to access {service}.",
+      "authorizeButton": "Authorize",
+      "resendHint": "After authorizing, send your message again to continue.",
+      "approvalRequired": "Tool approval required",
+      "approvalForService": "Approve tool for {service}",
+      "approvalDescriptionGeneric": "The agent wants to run a tool that requires your approval before continuing.",
+      "approvalDescriptionWithTool": "The agent wants to run the {tool} tool, which requires your approval before continuing.",
+      "approvalNotImplementedHint": "Approval flow is not yet supported in this UI — contact your admin to configure the agent without manual approval, or use the Foundry portal to approve."
+    },
     "discardChanges": "Discard Changes",
     "discardChangesMessage": "You have unsaved changes. Are you sure you want to discard them?",
     "downloadAudio": "Download audio",
@@ -1214,8 +1233,10 @@
     },
     "modelsDescription": "Choose an AI model for your conversation. Each model has different strengths — select one to see details.",
     "sections": {
-      "baseModels": "Base Models"
+      "baseModels": "Base Models",
+      "allModels": "All models ({count})"
     },
+    "recommended": "Recommended",
     "maintainedBy": "Maintained by",
     "agents": {
       "advancedFeatureBadge": "Advanced Feature",
@@ -1293,67 +1314,67 @@
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
-      "description": "AI model powered by GPT-4.1 with real-time web search via Bing. Provides up-to-date information, fact-checking, and current event awareness. Best for research requiring recent information, news analysis, and fact verification.",
-      "knowledgeCutoff": "Real-time web search"
+      "description": "OpenAI's previous-generation model. Still capable for everyday writing, summaries, and Q&A.",
+      "knowledgeCutoff": "Mar 2024"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
-      "description": "OpenAI's most advanced model, excelling at complex reasoning, code generation, and technical problem-solving. Best for analytical tasks, programming challenges, research, and detailed explanations. Supports adjustable reasoning effort and response verbosity.",
+      "description": "A capable everyday model for most kinds of work — writing, research, coding, and thinking through complex problems.",
       "knowledgeCutoff": "Dec 2025"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
-      "description": "Faster and more cost-effective variant of GPT-5, optimized for speed while maintaining high quality. Perfect for everyday tasks, quick queries, tool routing, and applications requiring fast response times. Excellent balance of performance and efficiency.",
+      "description": "A faster, lighter model for quick questions and everyday tasks where you don't need maximum power.",
       "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
-      "description": "Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, mental health support, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.",
+      "description": "A friendlier version of GPT-5.2 tuned for conversation. Good for casual chats, brainstorming, and supportive discussions.",
       "knowledgeCutoff": "Dec 2025"
     },
     "o3": {
       "name": "o3",
-      "description": "OpenAI's most advanced reasoning model with breakthrough problem-solving capabilities. Excels at complex mathematics, scientific reasoning, coding challenges, and multi-step logical tasks. Extended 200K context window. Supports reasoning effort control.",
+      "description": "Made for hard reasoning. Use it when a problem needs careful, step-by-step thinking — math, science, tricky logic.",
       "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
-      "description": "Fast and cost-effective model from Meta. Great for everyday tasks like writing, summarization, and basic coding help. Good balance of speed and quality for routine work.",
+      "description": "An open-source model from Meta. Solid for writing, summaries, and quick questions.",
       "knowledgeCutoff": "May 7, 2025 7:11 AM"
     },
     "deepseek_r1": {
       "name": "DeepSeek-R1",
-      "description": "Reasoning specialist that shows its work step-by-step. Excellent for math problems, logic puzzles, and understanding complex concepts. See how it thinks through problems in real-time.",
+      "description": "Shows its thinking step-by-step. Useful when you want to see how the model reaches its answer.",
       "knowledgeCutoff": "Jan 20, 2025"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
-      "description": "Strong all-around model especially good at coding and technical writing. Great for debugging code, writing documentation, and explaining technical concepts. Fast and reliable for development work.",
+      "description": "An open-source model from DeepSeek. Reliable for general writing and technical questions.",
       "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
     },
     "grok_3": {
       "name": "Grok 3",
-      "description": "Versatile model from xAI known for nuanced responses. Great for open-ended discussions, creative projects, and tackling complex problems.",
+      "description": "xAI's chat model. Good for open-ended discussions and creative projects.",
       "knowledgeCutoff": "May 13, 2025 12:16 AM"
     },
-    "claude_opus_4_5": {
-      "name": "Claude Opus 4.5",
-      "description": "Anthropic's most capable model with exceptional reasoning, coding, and creative abilities. Best for complex analysis, research, and tasks requiring deep understanding.",
-      "knowledgeCutoff": "January 2025"
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic's strongest model. Good for long writing, research, and tasks that need careful thinking.",
+      "knowledgeCutoff": "Feb 2026"
     },
-    "claude_sonnet_4_5": {
-      "name": "Claude Sonnet 4.5",
-      "description": "Balanced Claude model offering excellent performance across coding, analysis, and creative tasks. Great for everyday use with fast response times.",
-      "knowledgeCutoff": "January 2025"
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "A balanced Claude model. Good for everyday writing, analysis, and coding with quick responses.",
+      "knowledgeCutoff": "Feb 2026"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
-      "description": "Previous generation Claude Opus model. Excellent for complex coding tasks, detailed analysis, and nuanced understanding.",
+      "description": "Previous-generation Opus. Still strong for coding and detailed analysis.",
       "knowledgeCutoff": "January 2025"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
-      "description": "Fast and cost-effective Claude model optimized for quick tasks. Great for simple queries, summarization, and high-volume applications.",
+      "description": "The fastest Claude. Good for quick tasks where speed matters more than depth.",
       "knowledgeCutoff": "January 2025"
     }
   },
@@ -1741,6 +1762,14 @@
     "organizationAgents": {
       "title": "Base Agents"
     },
+    "regionAgents": {
+      "us": "US Region Agents",
+      "eu": "EU Region Agents",
+      "default": "Region Agents"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
     "customAgents": {
       "title": "Custom Agents",
       "advancedBadge": "Advanced",
@@ -1760,7 +1789,18 @@
       "sourceConnected": "custom source connected",
       "sourcesConnected": "custom sources connected",
       "backToAgents": "Back",
-      "discoveredAgents": "Discovered Agents"
+      "discoveredAgents": "Discovered Agents",
+      "viewConnection": "View connection details",
+      "edit": "Edit",
+      "noAgentsPublished": "No agents published",
+      "connectedOn": "Connected {date}",
+      "disconnectSource": "Disconnect this source",
+      "confirmDisconnect": "Click again to confirm",
+      "loadingAgents": "Loading agents...",
+      "noAgentsFound": "No agents found in this project",
+      "noAgentsFoundHint": "Make sure agents are published and you have the Azure AI User role on this project.",
+      "refresh": "Refresh",
+      "refreshAgents": "Refresh agents"
     },
     "selectAgentPrompt": "Select an agent to view details"
   },

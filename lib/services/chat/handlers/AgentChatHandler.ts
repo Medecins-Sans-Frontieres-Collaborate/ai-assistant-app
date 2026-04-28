@@ -45,10 +45,12 @@ export class AgentChatHandler extends BasePipelineStage {
     console.log('[AgentChatHandler] Message count:', messagesToSend.length);
 
     try {
-      // Execute agent chat — pass OBO credential + endpoint
-      // Use context.foundryEndpoint (from OBO/region resolver) or model's own endpoint (from discovery)
-      const agentEndpoint =
-        context.foundryEndpoint || context.model?.foundryEndpoint;
+      // Execute agent chat — endpoint comes ONLY from `context.foundryEndpoint`,
+      // which the credential middleware resolves server-side from the
+      // per-user discovery cache (or the regional fallback). The request
+      // body's `model.foundryEndpoint` is never trusted — it would let a
+      // client redirect their OBO bearer token to an attacker-controlled host.
+      const agentEndpoint = context.foundryEndpoint;
       const response = await this.aiFoundryAgentHandler.handleAgentChat(
         context.modelId,
         context.model,

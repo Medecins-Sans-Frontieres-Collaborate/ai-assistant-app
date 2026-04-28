@@ -7,6 +7,8 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface FoundryAgentsResponse {
   agents: DiscoveredAgent[];
+  regionalPath: string | null;
+  officePaths: string[];
 }
 
 /**
@@ -54,22 +56,38 @@ export function useFoundryAgents() {
   const refreshAgents = useCallback(async () => {
     setIsRefreshing(true);
     try {
+      // Bust the server-side discovery cache and refetch in a single round-trip.
+      // We mark the cached query stale (via a one-shot `refresh=1` query key
+      // adjustment isn't possible in TanStack Query — so we rely on the route's
+      // `refresh` query param to clear the server cache) then invalidate, which
+      // triggers React Query's normal fetch path against the unparameterized URL.
       const params = new URLSearchParams();
       if (sourcePaths.length > 0) {
         params.set('sources', sourcePaths.join(','));
       }
       params.set('refresh', '1');
-      // 15s timeout to prevent UI getting stuck
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
       try {
-        await fetch(`/api/agents?${params.toString()}`, {
+        const response = await fetch(`/api/agents?${params.toString()}`, {
           signal: controller.signal,
         });
+        if (response.ok) {
+          // Seed the React Query cache directly with the fresh response so
+          // the hook's data updates without issuing a second network request.
+          const fresh = await response.json();
+          queryClient.setQueryData(['foundry-agents', ...sourcePaths], fresh);
+        } else {
+          // Fallback: invalidate and let the query refetch.
+          await queryClient.invalidateQueries({
+            queryKey: ['foundry-agents'],
+          });
+        }
+      } catch {
+        await queryClient.invalidateQueries({ queryKey: ['foundry-agents'] });
       } finally {
         clearTimeout(timeout);
       }
-      await queryClient.invalidateQueries({ queryKey: ['foundry-agents'] });
     } finally {
       setIsRefreshing(false);
     }
@@ -77,6 +95,8 @@ export function useFoundryAgents() {
 
   return {
     foundryAgents: isRefreshing ? [] : (data?.agents ?? []),
+    regionalPath: data?.regionalPath ?? null,
+    officePaths: data?.officePaths ?? [],
     isLoadingFoundryAgents: isLoadingFoundryAgents || isRefreshing,
     foundryAgentsError,
     refetchFoundryAgents: refreshAgents,

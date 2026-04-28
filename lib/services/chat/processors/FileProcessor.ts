@@ -77,6 +77,11 @@ export class FileProcessor extends BasePipelineStage {
       async (span) => {
         try {
           const perfStart = performance.now();
+          // Tell the client we're working on files so the loader updates
+          // away from generic "Thinking…" while download/extract/summarize
+          // runs (can take 30s+ for big videos).
+          await context.emitActivity?.('chat.activity.analyzingFiles');
+
           const lastMessage = context.messages[context.messages.length - 1];
 
           if (!Array.isArray(lastMessage.content)) {

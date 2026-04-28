@@ -8,6 +8,8 @@ import {
 import { Message, MessageType } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
+import { extractLatestAgentActivity } from '@/lib/streamMarkers';
+
 /**
  * Handles parsing of streaming chat responses
  * Extracts metadata (citations, transcripts, actions) and display content
@@ -43,7 +45,12 @@ export class StreamParser {
     this.text += chunk;
 
     const parsed = parseMetadataFromContent(this.text);
-    const displayText = parsed.content;
+    // Pull the latest transient agent-activity marker (drives the loading
+    // text) and strip all of them from the visible content. Marker
+    // protocol is centralized in `lib/streamMarkers/`.
+    const { latest: latestActivity, cleaned: displayText } =
+      extractLatestAgentActivity(parsed.content);
+    const latestActivityKey = latestActivity?.key;
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -83,7 +90,9 @@ export class StreamParser {
       displayText,
       citations: this.extractedCitations,
       hasReceivedContent: this.hasReceivedContent,
-      action: parsed.action,
+      // The transient activity key (if any) takes precedence over a
+      // metadata-channel `action` field; both feed the same loading text.
+      action: latestActivityKey ?? parsed.action,
       contentChanged,
       citationsChanged,
     };

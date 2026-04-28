@@ -5,6 +5,8 @@ import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { colorForAgent } from '@/lib/utils/app/agentColor';
+
 import { OrganizationAgent } from '@/types/organizationAgent';
 
 import {
@@ -18,6 +20,8 @@ interface FoundryAgentDisplay {
   description?: string;
   icon?: string;
   color?: string;
+  /** Pre-computed model ID for selection comparison — prefer this over reconstructing on every render. */
+  matchId?: string;
 }
 
 interface OrganizationAgentListProps {
@@ -68,11 +72,13 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
     <div className="space-y-1">
       {allAgents.map((agent) => {
         const agentIcon = 'icon' in agent ? agent.icon : undefined;
-        const agentColor = ('color' in agent ? agent.color : null) || '#60a5fa';
+        const agentColor =
+          ('color' in agent ? agent.color : null) || colorForAgent(agent.name);
         const IconComp = agentIcon ? getIconComponent(agentIcon) : IconHexagon;
-        const isSelected =
-          selectedAgentId === `org-${agent.id}` ||
-          selectedAgentId === `foundry-${agent.id}`;
+        const explicitMatchId = 'matchId' in agent ? agent.matchId : undefined;
+        const isSelected = explicitMatchId
+          ? selectedAgentId === explicitMatchId
+          : selectedAgentId === `org-${agent.id}`;
 
         return (
           <button
@@ -90,7 +96,7 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
           >
             <div className="flex items-center gap-2.5">
               <IconComp
-                size={agentIcon ? 22 : 18}
+                size={18}
                 className="flex-shrink-0"
                 style={{ color: agentColor }}
               />

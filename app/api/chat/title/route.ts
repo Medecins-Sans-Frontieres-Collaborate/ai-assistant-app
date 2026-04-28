@@ -189,7 +189,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const content = response.choices[0]?.message?.content;
     if (!content) {
-      throw new Error('No response from model');
+      // Common when the assistant turn is a non-text event (e.g. an OAuth
+      // consent prompt for an agent tool). Title generation is non-essential —
+      // return a soft fallback rather than 500 so the chat UI keeps working.
+      return NextResponse.json(
+        { title: 'New Conversation', fullTitle: 'New Conversation' },
+        { status: 200 },
+      );
     }
 
     const titleResponse: ChatTitleResponse = JSON.parse(content);
@@ -202,10 +208,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 200 },
     );
   } catch (error) {
+    // Title generation is best-effort — a failure here must not break the chat.
+    // Log and return a soft fallback so the client doesn't surface a 500.
     console.error('[Title Generation] Error:', error);
     return NextResponse.json(
-      { error: 'Failed to generate title' },
-      { status: 500 },
+      { title: 'New Conversation', fullTitle: 'New Conversation' },
+      { status: 200 },
     );
   }
 }

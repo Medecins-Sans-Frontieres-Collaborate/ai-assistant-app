@@ -4,8 +4,10 @@ import {
   AgentDiscoveryService,
   DiscoveredAgent,
 } from '@/lib/services/agents/AgentDiscoveryService';
-import { RegionResolver } from '@/lib/services/auth/RegionResolver';
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+
+import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
 
@@ -32,23 +34,43 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Get ARM resource path for user's region
-    const userRegion = session.user.region || 'EU';
-    const defaultResourcePath = RegionResolver.getArmResourcePath(userRegion);
+    // Office-scoped discovery returns three buckets:
+    //   - regionalPath: global default for the user's region (always shown)
+    //   - officePaths: extra paths for the user's office (e.g. MSF USA)
+    //   - customSourcePaths: user's manually added connections
+    const { regionalPath, officePaths } =
+      OfficeResolver.getDiscoveryPathsForUser(session.user.mail);
 
-    // Parse optional custom source paths from query param
+    // Parse optional custom source paths from query param. Each must match
+    // the strict Foundry ARM resource-path shape — invalid entries are dropped
+    // (silently) to prevent path-injection / SSRF against management.azure.com.
     const sourcesParam = request.nextUrl.searchParams.get('sources');
-    const customSourcePaths = sourcesParam
+    const requestedSources = sourcesParam
       ? sourcesParam.split(',').filter(Boolean)
       : [];
-
-    // Build list of all resource paths to query
-    const allPaths = [defaultResourcePath, ...customSourcePaths].filter(
-      (p): p is string => !!p,
+    const customSourcePaths = requestedSources.filter((p) =>
+      isValidFoundryResourcePath(p),
     );
+    if (customSourcePaths.length !== requestedSources.length) {
+      console.warn(
+        `[/api/agents] Dropped ${requestedSources.length - customSourcePaths.length} invalid source path(s)`,
+      );
+    }
+
+    // Build a single deduplicated list of all paths to discover
+    const orderedPaths = [
+      ...(regionalPath ? [regionalPath] : []),
+      ...officePaths,
+      ...customSourcePaths,
+    ];
+    const allPaths = Array.from(new Set(orderedPaths));
 
     if (allPaths.length === 0) {
-      return NextResponse.json({ agents: [] });
+      return NextResponse.json({
+        agents: [],
+        regionalPath: null,
+        officePaths: [],
+      });
     }
 
     // Clear server-side discovery cache on refresh
@@ -57,7 +79,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Acquire ARM token via OBO (per-user RBAC filtering).
-    // Falls back to ManagedIdentity/AzureCLI if OBO fails (no per-user filtering).
+    // In production, if OBO fails we return empty rather than falling back to
+    // the app's identity — the app identity has broader RBAC than any single
+    // user, so a silent fallback would leak the union of all agents to every
+    // user. In dev, we allow fallback so local devs without OBO setup can
+    // exercise the discovery path.
+    const isProd = process.env.NODE_ENV === 'production';
     let armToken: string;
 
     try {
@@ -66,9 +93,19 @@ export async function GET(request: NextRequest) {
       const tokenProvider = UserTokenProvider.getInstance();
       armToken = await tokenProvider.getArmToken(appAccessToken);
     } catch (e) {
+      const errMsg = e instanceof Error ? e.message : String(e);
+      if (isProd) {
+        console.error(
+          `[/api/agents] OBO failed for ${session.user.mail ?? 'unknown'}: ${errMsg}`,
+        );
+        return NextResponse.json({
+          agents: [],
+          regionalPath,
+          officePaths,
+        });
+      }
       console.warn(
-        '[/api/agents] OBO failed, using fallback credential:',
-        e instanceof Error ? e.message : e,
+        `[/api/agents] OBO failed (dev), using fallback credential: ${errMsg}`,
       );
       const {
         ChainedTokenCredential,
@@ -101,9 +138,12 @@ export async function GET(request: NextRequest) {
     for (const result of results) {
       if (result.status === 'fulfilled') {
         for (const agent of result.value) {
-          // Deduplicate by agentName across sources
-          if (!seenAgentNames.has(agent.agentName)) {
-            seenAgentNames.add(agent.agentName);
+          // Guard against rare cases where the same source path is requested twice
+          // through aliasing (e.g. same project added as both office + custom).
+          // Within a single project, ARM already returns each agent once.
+          const key = `${agent.source ?? 'default'}:${agent.agentName}`;
+          if (!seenAgentNames.has(key)) {
+            seenAgentNames.add(key);
             allAgents.push(agent);
           }
         }
@@ -115,9 +155,34 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ agents: allAgents });
+    // Cache each discovered agent's endpoint for this specific user AND
+    // source path. This is the trust anchor for the chat pipeline — the
+    // user has just passed RBAC against ARM, so we know they're authorized
+    // for these endpoints. The chat middleware reads from this cache
+    // instead of trusting the request body's `foundryEndpoint` field.
+    const userMail = session.user.mail;
+    if (userMail) {
+      for (const agent of allAgents) {
+        discoveryService.cacheUserAgentEndpoint(
+          userMail,
+          agent.agentName,
+          agent.source,
+          agent.foundryEndpoint,
+        );
+      }
+    }
+
+    return NextResponse.json({
+      agents: allAgents,
+      regionalPath,
+      officePaths,
+    });
   } catch (error) {
     console.error('[/api/agents] Error discovering agents:', error);
-    return NextResponse.json({ agents: [] });
+    return NextResponse.json({
+      agents: [],
+      regionalPath: null,
+      officePaths: [],
+    });
   }
 }

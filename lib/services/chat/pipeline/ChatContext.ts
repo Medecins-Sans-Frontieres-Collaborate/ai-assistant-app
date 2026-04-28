@@ -121,6 +121,13 @@ export interface ChatContext {
   /** Custom display name from General Settings */
   customDisplayName?: string;
 
+  /**
+   * ARM resource path of the Foundry project hosting the agent being invoked,
+   * forwarded from the request body. Validated against
+   * `isValidFoundryResourcePath` before use; invalid → ignored.
+   */
+  agentSourcePath?: string;
+
   // ========================================
   // FEATURE FLAGS
   // ========================================
@@ -178,6 +185,16 @@ export interface ChatContext {
   /** Regional Foundry endpoint resolved from user's region (GDPR routing) */
   foundryEndpoint?: string;
 
+  /**
+   * Optional async helper that pipeline stages can call to update the
+   * client-visible loading text in real time (e.g. "Searching the knowledge
+   * base…"). Each call writes a single AGENT_ACTIVITY marker into the
+   * response stream. The route handler installs this when it sets up the
+   * streaming response; stages that don't need to emit anything ignore it.
+   * The argument is a translation key from `messages/en.json#chat.activity`.
+   */
+  emitActivity?: (translationKey: string) => Promise<void>;
+
   // ========================================
   // PIPELINE STATE (Modified by stages)
   // ========================================
@@ -212,4 +229,25 @@ export interface ChatContext {
     resetTime: number;
     retryAfter?: number;
   };
+}
+
+/**
+ * Single source of truth for "is this request going to run as a Foundry
+ * agent?" — used by AgentEnricher (to set executionStrategy='agent') and
+ * by ToolRouterEnricher (to skip pre-routing when the agent will decide
+ * for itself via its own tool calls). Keeping the predicate in one place
+ * prevents the two enrichers from drifting apart.
+ *
+ * Currently agent mode requires text-only input — files/images fall back
+ * to the standard handler path which still wants pre-routing.
+ */
+export function shouldExecuteAsAgent(
+  context: Pick<ChatContext, 'agentMode' | 'model' | 'hasFiles' | 'hasImages'>,
+): boolean {
+  return (
+    !!context.agentMode &&
+    !!context.model?.agentId &&
+    !context.hasFiles &&
+    !context.hasImages
+  );
 }

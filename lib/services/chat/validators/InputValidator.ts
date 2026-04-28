@@ -99,6 +99,12 @@ const MessageSchema = z.object({
 
 /**
  * Zod schema for OpenAI model configuration.
+ *
+ * NOTE: `foundryEndpoint` is intentionally NOT validated here even though it
+ * exists on the OpenAIModel type. Anything the client sends in that field is
+ * stripped at the schema boundary; the chat pipeline resolves the endpoint
+ * server-side from the per-user discovery cache (AgentDiscoveryService) so
+ * the OBO bearer token can never be redirected to an attacker-controlled host.
  */
 const OpenAIModelSchema = z.object({
   id: z.string().min(1, 'Model ID is required'),
@@ -110,7 +116,6 @@ const OpenAIModelSchema = z.object({
   isCustomAgent: z.boolean().optional(),
   isOrganizationAgent: z.boolean().optional(),
   agentId: z.string().optional(),
-  foundryEndpoint: z.string().optional(),
   // Add other fields as needed but keep them optional
   // to avoid breaking existing code
 }) as z.ZodType<OpenAIModel>;
@@ -186,6 +191,11 @@ const ChatBodySchema = z
       .string()
       .max(100, 'Custom display name too long (max 100 chars)')
       .optional(),
+    // ARM resource path of the Foundry project for the agent being invoked.
+    // Server validates against `isValidFoundryResourcePath` in the chat
+    // middleware before using it as a cache key disambiguator or discovery
+    // scope. RBAC is enforced by ARM via the user's own OBO token.
+    agentSourcePath: z.string().max(512).optional(),
   })
   .strict(); // Reject unknown properties
 

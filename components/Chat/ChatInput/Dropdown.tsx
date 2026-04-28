@@ -97,14 +97,24 @@ const Dropdown: React.FC<DropdownProps> = ({
   const filePreviews = useChatInputStore((state) => state.filePreviews);
   const { selectedConversation, updateConversation } = useConversations();
 
-  // Check if the selected org agent allows web search
+  // Hide the web-search toggle for Foundry agents — they have their own
+  // web_search_call tool and decide for themselves when to use it. The
+  // toggle would either duplicate (force) or contradict (disable) that
+  // built-in decision, neither of which matches the user's mental model.
+  // RAG bots (org agents with type='rag') keep the toggle since they
+  // depend on the pre-router for search behavior. Regular models keep it
+  // because they need it. The escape hatch for "force search on this
+  // agent" is to switch to a regular model with web search enabled.
   const hideWebSearch = useMemo(() => {
     const modelId = selectedConversation?.model?.id;
     if (!modelId) return false;
+    if (modelId.startsWith('foundry-')) return true;
     const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
     if (!orgAgentId) return false;
     const agent = getOrganizationAgentById(orgAgentId);
-    return agent?.allowWebSearch === false;
+    if (!agent) return false;
+    if (agent.type === 'foundry') return true;
+    return agent.allowWebSearch === false;
   }, [selectedConversation?.model?.id]);
 
   const [isOpen, setIsOpen] = useState(false);

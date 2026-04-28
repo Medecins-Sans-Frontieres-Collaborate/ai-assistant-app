@@ -176,6 +176,14 @@ export interface ChatBody {
   userContext?: string; // Additional user context for the AI
   displayNamePreference?: DisplayNamePreference; // For deriving name fallback
   customDisplayName?: string; // Custom display name from General Settings
+  /**
+   * ARM resource path of the Foundry project that hosts the agent being
+   * invoked. Disambiguates same-named agents across projects in the server
+   * cache and scopes lazy discovery to a single ARM call on cache miss.
+   * Server validates against `isValidFoundryResourcePath` before use; an
+   * invalid or absent value falls back to the regional default.
+   */
+  agentSourcePath?: string;
 }
 
 export interface Conversation {

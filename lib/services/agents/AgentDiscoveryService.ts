@@ -9,7 +9,6 @@
  */
 
 const ARM_API_VERSION = '2025-10-01-preview';
-// const FOUNDRY_AGENTS_API_VERSION = '2025-05-15-preview';
 
 interface FoundryAgentApp {
   /** Agent Application resource name (ARM name) */
@@ -60,11 +59,22 @@ interface CachedAgentList {
   expiresAt: number;
 }
 
+interface CachedEndpoint {
+  endpoint: string;
+  expiresAt: number;
+}
+
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const ENDPOINT_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h, matches client useFoundryAgents staleTime
 
 export class AgentDiscoveryService {
   private static instance: AgentDiscoveryService | null = null;
   private cache = new Map<string, CachedAgentList>();
+  // Per-user cache mapping (userMail, agentName) → resolved Foundry endpoint.
+  // Populated whenever /api/agents discovery succeeds for a user. The chat path
+  // reads from this so the host the OBO token gets attached to is never
+  // attacker-controlled.
+  private userAgentEndpoints = new Map<string, CachedEndpoint>();
 
   static getInstance(): AgentDiscoveryService {
     if (!AgentDiscoveryService.instance) {
@@ -232,6 +242,7 @@ export class AgentDiscoveryService {
    */
   clearCache(): void {
     this.cache.clear();
+    this.userAgentEndpoints.clear();
   }
 
   /**
@@ -244,6 +255,74 @@ export class AgentDiscoveryService {
         this.cache.delete(key);
       }
     }
+    for (const [key, value] of this.userAgentEndpoints) {
+      if (now >= value.expiresAt) {
+        this.userAgentEndpoints.delete(key);
+      }
+    }
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // Per-user agent endpoint resolution
+  //
+  // The chat pipeline must NEVER trust a `foundryEndpoint` field from the
+  // request body — that would let an attacker redirect the user's OBO bearer
+  // token to a host they control. Instead, /api/agents populates this cache
+  // at discovery time (after RBAC-filtered ARM list), and the chat middleware
+  // looks the endpoint up here keyed by (userMail, agentName).
+  // ───────────────────────────────────────────────────────────────────
+
+  private endpointCacheKey(
+    userMail: string,
+    agentName: string,
+    sourcePath: string,
+  ): string {
+    return `${userMail.toLowerCase()}:${sourcePath}:${agentName}`;
+  }
+
+  /**
+   * Records the discovered endpoint for an agent, scoped to a single user
+   * AND source path. Including source path in the key prevents same-named
+   * agents from different Foundry projects from overwriting each other.
+   * The user must have already passed RBAC at discovery time for this
+   * entry to exist — that's the trust boundary.
+   */
+  cacheUserAgentEndpoint(
+    userMail: string | undefined | null,
+    agentName: string | undefined | null,
+    sourcePath: string | undefined | null,
+    endpoint: string | undefined | null,
+  ): void {
+    if (!userMail || !agentName || !sourcePath || !endpoint) return;
+    this.userAgentEndpoints.set(
+      this.endpointCacheKey(userMail, agentName, sourcePath),
+      {
+        endpoint,
+        expiresAt: Date.now() + ENDPOINT_CACHE_TTL_MS,
+      },
+    );
+  }
+
+  /**
+   * Looks up the discovered endpoint for an agent the given user has
+   * accessed within a specific source. Returns null if no cached entry
+   * exists or it has expired — caller must fall back to a known-good
+   * default and validate the result against the host allow-list.
+   */
+  lookupUserAgentEndpoint(
+    userMail: string | undefined | null,
+    agentName: string | undefined | null,
+    sourcePath: string | undefined | null,
+  ): string | null {
+    if (!userMail || !agentName || !sourcePath) return null;
+    const key = this.endpointCacheKey(userMail, agentName, sourcePath);
+    const entry = this.userAgentEndpoints.get(key);
+    if (!entry) return null;
+    if (Date.now() >= entry.expiresAt) {
+      this.userAgentEndpoints.delete(key);
+      return null;
+    }
+    return entry.endpoint;
   }
 
   static reset(): void {

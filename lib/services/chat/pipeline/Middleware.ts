@@ -1,7 +1,8 @@
 import { Session } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-import { RegionResolver } from '@/lib/services/auth/RegionResolver';
+import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
@@ -12,6 +13,8 @@ import {
 } from '@/lib/utils/app/systemPrompt';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { getMessageContentTypes } from '@/lib/utils/server/chat/chat';
+import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
+import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { ChatBody } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
@@ -148,6 +151,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       userContext,
       displayNamePreference,
       customDisplayName,
+      agentSourcePath,
     } = body;
 
     if (tone) {
@@ -169,6 +173,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       userContext,
       displayNamePreference,
       customDisplayName,
+      agentSourcePath,
       temperature,
       stream,
       reasoningEffort,
@@ -301,11 +306,84 @@ export const createCredentialMiddleware = async (
   }
 
   try {
-    // Use agent-specific endpoint if available (for custom source agents),
-    // otherwise resolve from user region (for default project agents)
-    const foundryEndpoint =
-      context.model?.foundryEndpoint ||
-      RegionResolver.getFoundryEndpoint(context.user?.region || 'EU');
+    // Resolve the Foundry endpoint server-side. The request body's
+    // `model.foundryEndpoint` is NEVER trusted — using it would let a client
+    // redirect their own (or another user's) OBO bearer token to an
+    // attacker-controlled host. Instead, we look up the endpoint that was
+    // recorded for this specific user when /api/agents discovery succeeded
+    // (where ARM RBAC is the trust boundary). Static org agents and the
+    // discovery cache fall back to the office/regional default.
+    const userMail = context.user?.mail;
+    const agentName = context.model?.agentId;
+    const region = context.user?.region || 'EU';
+
+    // Validate the body-supplied source-path hint before any use. An invalid
+    // path is silently ignored; the resolver falls back to regional default.
+    const sourcePath =
+      context.agentSourcePath &&
+      isValidFoundryResourcePath(context.agentSourcePath)
+        ? context.agentSourcePath
+        : null;
+
+    const discoveryService = AgentDiscoveryService.getInstance();
+    let resolvedEndpoint =
+      userMail && agentName && sourcePath
+        ? discoveryService.lookupUserAgentEndpoint(
+            userMail,
+            agentName,
+            sourcePath,
+          )
+        : null;
+
+    // Cache miss path — likely a server restart, or first chat with an agent
+    // discovered on another instance. Discover JUST the one source path the
+    // client supplied (RBAC enforced by ARM via the user's OBO token). On
+    // success we populate cache + retry the lookup; on failure we fall
+    // through to the regional default.
+    if (!resolvedEndpoint && userMail && agentName && sourcePath) {
+      try {
+        const appAccessToken = await getAccessTokenForOBO(context.session);
+        if (appAccessToken) {
+          const armToken =
+            await UserTokenProvider.getInstance().getArmToken(appAccessToken);
+          const agents = await discoveryService.listUserAgents(
+            armToken,
+            sourcePath,
+          );
+          for (const agent of agents) {
+            discoveryService.cacheUserAgentEndpoint(
+              userMail,
+              agent.agentName,
+              sourcePath,
+              agent.foundryEndpoint,
+            );
+          }
+          resolvedEndpoint = discoveryService.lookupUserAgentEndpoint(
+            userMail,
+            agentName,
+            sourcePath,
+          );
+        }
+      } catch (e) {
+        console.warn(
+          '[CredentialMiddleware] Lazy discovery failed:',
+          e instanceof Error ? e.message : e,
+        );
+      }
+    }
+
+    const fallbackEndpoint = OfficeResolver.getFoundryEndpoint(region);
+    const foundryEndpoint = resolvedEndpoint ?? fallbackEndpoint;
+
+    // Defense-in-depth: even though we never source the endpoint from the
+    // request body, the discovered endpoint comes from an ARM API response —
+    // enforce a strict host allow-list before binding the OBO credential.
+    if (!isAllowedFoundryHost(foundryEndpoint)) {
+      console.error(
+        `[CredentialMiddleware] Refusing to bind OBO credential to disallowed host: ${foundryEndpoint}`,
+      );
+      return {};
+    }
 
     // Try OBO first for per-user Foundry access, fall back to DefaultAzureCredential
     let userCredential: TokenCredential | undefined;
@@ -318,11 +396,27 @@ export const createCredentialMiddleware = async (
       const foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
 
       userCredential = {
-        getToken: async () =>
-          ({
+        // Honor the SDK-requested scope so we don't blindly hand the Foundry
+        // token to any audience the SDK happens to ask for. Foundry data-plane
+        // scopes are `https://ai.azure.com/...`; refuse anything else.
+        getToken: async (scopes) => {
+          const requested = Array.isArray(scopes) ? scopes : [scopes];
+          const ok = requested.some(
+            (s) =>
+              typeof s === 'string' &&
+              (s.startsWith('https://ai.azure.com/') ||
+                s.startsWith('https://cognitiveservices.azure.com/')),
+          );
+          if (!ok) {
+            throw new Error(
+              `[CredentialMiddleware] Refusing to issue Foundry token for scope: ${requested.join(',')}`,
+            );
+          }
+          return {
             token: foundryToken,
             expiresOnTimestamp: Date.now() + 55 * 60 * 1000,
-          }) as AccessToken,
+          } as AccessToken;
+        },
       };
 
       console.log(

@@ -3,6 +3,7 @@
 import {
   IconAlertCircle,
   IconCheck,
+  IconInfoCircle,
   IconLoader2,
   IconPlus,
   IconX,
@@ -378,8 +379,13 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             <>
               {/* Subscription */}
               <div>
-                <label className="mb-1 block text-xs text-gray-500 dark:text-gray-400">
+                <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
                   Subscription
+                  <IconInfoCircle
+                    size={14}
+                    className="text-gray-400 dark:text-gray-500 cursor-help"
+                    title="The Azure subscription that contains the Foundry account. If you're unsure, ask your admin which subscription your team uses."
+                  />
                 </label>
                 {loadingSubs ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
@@ -413,8 +419,13 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {/* Account */}
               {subscriptionId && (
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
                     Foundry Account
+                    <IconInfoCircle
+                      size={14}
+                      className="text-gray-400 dark:text-gray-500 cursor-help"
+                      title="The Azure AI Services account where the Foundry project lives. Each office or team typically has its own."
+                    />
                   </label>
                   {loadingAccounts ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
@@ -461,8 +472,13 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {/* Project */}
               {accountName && (
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
+                  <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
                     Project
+                    <IconInfoCircle
+                      size={14}
+                      className="text-gray-400 dark:text-gray-500 cursor-help"
+                      title="A project organizes agents within an account. Most accounts have a single 'default' project."
+                    />
                   </label>
                   {loadingProjects ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">

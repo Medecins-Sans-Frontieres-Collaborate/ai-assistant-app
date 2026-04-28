@@ -12,7 +12,6 @@ import { OrganizationAgent } from '@/types/organizationAgent';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { ModelProviderIcon } from './ModelProviderIcon';
-import { ModelTypeIcon } from './ModelTypeIcon';
 
 import { getIconComponent } from '@/lib/organizationAgents';
 
@@ -63,10 +62,6 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   }
 
   // Get localized model type
-  const modelType = modelConfig?.modelType || 'foundational';
-  const localizedModelType = t.has(`modelSelect.modelTypes.${modelType}`)
-    ? t(`modelSelect.modelTypes.${modelType}`)
-    : modelType;
 
   // Text styles based on whether there's a background image
   const textShadow = hasBackgroundImage
@@ -103,7 +98,9 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
             return (
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: organizationAgent.color + '20' }}
+                style={{
+                  backgroundColor: `color-mix(in oklab, ${organizationAgent.color} 14%, transparent)`,
+                }}
               >
                 <IconComp
                   size={24}
@@ -125,12 +122,37 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           {localizedName}
         </h2>
       </div>
-      <p
-        className={`text-sm md:text-base ${organizationAgent?.maintainedBy ? 'mb-2' : 'mb-3'} ${descriptionClass} ${hasBackgroundImage ? 'max-w-lg' : ''}`}
-        style={textShadow}
-      >
-        {localizedDescription}
-      </p>
+      {(() => {
+        // Bold the first sentence of the description so users get the
+        // headline takeaway at a glance without reading the whole block.
+        const desc = localizedDescription || '';
+        const match = desc.match(/^([^.!?]+[.!?])(\s+)?(.*)$/s);
+        const lead = match?.[1]?.trim();
+        const rest = match?.[3]?.trim();
+        return (
+          <p
+            className={`text-sm md:text-base ${organizationAgent?.maintainedBy ? 'mb-2' : 'mb-3'} ${descriptionClass} ${hasBackgroundImage ? 'max-w-lg' : ''}`}
+            style={textShadow}
+          >
+            {lead && rest ? (
+              <>
+                <span
+                  className={
+                    hasBackgroundImage
+                      ? 'font-semibold text-white'
+                      : 'font-semibold text-gray-900 dark:text-white'
+                  }
+                >
+                  {lead}
+                </span>{' '}
+                {rest}
+              </>
+            ) : (
+              desc
+            )}
+          </p>
+        );
+      })()}
 
       {organizationAgent?.maintainedBy && (
         <p
@@ -150,30 +172,18 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         </p>
       )}
 
-      {showModelTypeBadge && (
+      {/* The modelType badge ("omni", "reasoning", etc.) was removed — it
+          was jargon that didn't communicate to users. Tagline + description
+          carry that meaning now. Knowledge cutoff stays because dates are
+          concrete and useful for research / news use cases. */}
+      {showModelTypeBadge && knowledgeCutoffDisplay && (
         <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium ${
-              modelConfig?.modelType === 'reasoning'
-                ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
-                : modelConfig?.modelType === 'omni'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                  : modelConfig?.modelType === 'agent'
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
-                    : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300'
-            }`}
-          >
-            <ModelTypeIcon modelType={modelConfig?.modelType} />
-            {localizedModelType}
-          </span>
-          {knowledgeCutoffDisplay && (
-            <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
-              <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
-                <IconCalendar size={14} />
-                {knowledgeCutoffDisplay}
-              </span>
-            </Tooltip>
-          )}
+          <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
+            <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+              <IconCalendar size={14} />
+              {knowledgeCutoffDisplay}
+            </span>
+          </Tooltip>
         </div>
       )}
     </div>

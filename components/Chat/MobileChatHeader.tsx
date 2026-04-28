@@ -26,17 +26,13 @@ import {
 
 interface MobileHeaderProps {
   onModelSelectChange: (open: boolean) => void;
-  bannerVisible?: boolean;
 }
 
 /**
  * Mobile chat header with menu button, model selector, and clear button
  * Client component - uses hooks for interactivity
  */
-export function MobileChatHeader({
-  onModelSelectChange,
-  bannerVisible = false,
-}: MobileHeaderProps) {
+export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
   const t = useTranslations();
   const { toggleChatbar } = useUI();
   const { selectedConversation, isLoaded } = useConversations();
@@ -72,9 +68,7 @@ export function MobileChatHeader({
   };
 
   return (
-    <div
-      className={`md:hidden fixed ${bannerVisible ? 'top-8' : 'top-0'} left-0 right-0 z-40 h-14 bg-white dark:bg-surface-dark border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4 transition-all duration-300`}
-    >
+    <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-white dark:bg-surface-dark border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4">
       <div className="flex items-center flex-1 min-w-0">
         <button
           onClick={toggleChatbar}

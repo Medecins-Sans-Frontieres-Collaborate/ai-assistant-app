@@ -54,39 +54,6 @@ export class RAGEnricher extends BasePipelineStage {
     return !!context.botId;
   }
 
-  /**
-   * Extracts the user's query from the last user message.
-   * Used for logging the search query.
-   *
-   * @deprecated This method is unused and will be removed when switching to the new logging system.
-   * Query content is intentionally omitted from logs for user privacy.
-   */
-  private extractQueryFromMessages(messages: Message[]): string {
-    // Find the last user message
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const message = messages[i];
-      if (message.role === 'user') {
-        if (typeof message.content === 'string') {
-          return message.content.slice(0, 500);
-        } else if (Array.isArray(message.content)) {
-          const textContent = message.content.find((c) => c.type === 'text');
-          if (textContent && 'text' in textContent) {
-            return textContent.text.slice(0, 500);
-          }
-        } else if (
-          typeof message.content === 'object' &&
-          message.content !== null &&
-          'type' in message.content &&
-          message.content.type === 'text'
-        ) {
-          // Handle single TextMessageContent object
-          return message.content.text.slice(0, 500);
-        }
-      }
-    }
-    return '';
-  }
-
   protected async executeStage(context: ChatContext): Promise<ChatContext> {
     return await this.tracer.startActiveSpan(
       'rag.enrich',
@@ -117,6 +84,10 @@ export class RAGEnricher extends BasePipelineStage {
             span.setStatus({ code: SpanStatusCode.OK });
             return context;
           }
+
+          // Tell the client we're about to hit the knowledge base — Azure
+          // Search round-trips can take several seconds for large indices.
+          await context.emitActivity?.('chat.activity.searchingKnowledge');
 
           console.log(`[RAGEnricher] Found organization agent: ${agent.name}`);
 
