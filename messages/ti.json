@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "ኣብ ምስራት ተኣሚኑ ናይ ረጋገጽ ገጽታ ኣርእይ ካብቲ ቁም ንኣዝዩ ዝተመዓሸሸ።",
       "confirmStopFromKeyboard": "ብኪቦርድ ምቁም ቅድሚ ምቁም ረጋግጽ",
       "confirmStopFromKeyboardDescription": "ኣብ ምስራት ተኣሚኑ ካብ ኪቦርድ Escape ምግባር ናይ ረጋገጽ ገጽታ ኣርእይ።"
-    }
+    },
+    "appliesToNewConversations": "ንሓደሽቲ ውዕልታት ብብሉ።",
+    "useModelDefault": "ናይ ናይሕና ኣብ ሞዴል እተሓሳበ እዩ።",
+    "fromGeneralSettings": "ካብ ናይ ሓፈሻዊ ቅንጽብታት",
+    "preferredNameInheritedFromGeneral": "ስም ናይ ሓፈሻዊ ቅንጽብታት እተረኽበ እዩ። ምስናይ ምትርዓይ ጻፍ።",
+    "savedConfirmation": "ተኣካይዑ",
+    "unsavedChanges": "ዘይተኣካዩ ለውጦታት",
+    "unsavedChangesMessage": "ዘይተኣካዩ ለውጦታት ኣሎካ። ንምውዳእ ትደሊ?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "ውሁድ ናይ ጽሕፈት ዘይቲ ተጠቐም",
     "noTonesCreated": "ክሳብ ሕጂ ቃናታት ኣይተፈጥሩን",
     "createTonesHint": "ኣብ ቅልጡፍ ተግባራት ቃናታት ፍጠር",
-    "translateDocumentTooltip": "ሰነዳት ናብ ካልእ ቋንቋ ተርጉም።\n\nዝተደገፉ ቅርጽታት: Word, Excel, PowerPoint, PDF, HTML, TXT\nዝለዓለ ዓቐን: 40MB\n\nምስ ኣማራጺ ናይ ቃላት ፋይላት 80+ ቋንቋታት ይድግፍ።"
+    "translateDocumentTooltip": "መዝገብታት ናብ ካልእ ቋንቋ ትርጉም።\n\nዝደገፉ ፎርማታት: Word, Excel, PowerPoint, HTML, TXT\nኣብዚ ኣብሓተ ዝርከብ መጠን: 40MB\n\n80+ ቋንቋታት ንግብሪ ካብ ግብሪ ግሩካይ ፋይልታት ግን ይደግፉ።"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",

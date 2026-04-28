@@ -943,7 +943,15 @@
       "confirmStopFromButtonDescription": "عرض مربع تأكيد عند النقر على زر الإيقاف أثناء توليد الاستجابة",
       "confirmStopFromKeyboard": "تأكيد قبل الإيقاف بواسطة لوحة المفاتيح",
       "confirmStopFromKeyboardDescription": "عرض مربع تأكيد عند الضغط على Escape أثناء توليد الاستجابة"
-    }
+    },
+    "appliesToNewConversations": "ينطبق فقط على المحادثات الجديدة.",
+    "useModelDefault": "يتم استخدام الإعداد الافتراضي للنموذج.",
+    "fromGeneralSettings": "من الإعدادات العامة",
+    "preferredNameInheritedFromGeneral": "يتم استخدام اسم العرض من الإعدادات العامة. اكتب لتعديله.",
+    "savedConfirmation": "تم الحفظ",
+    "unsavedChanges": "تغييرات غير محفوظة",
+    "unsavedChangesMessage": "لديك تغييرات غير محفوظة. هل تريد تجاهلها؟",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "استخدم أسلوب الكتابة الافتراضي",
     "noTonesCreated": "لم يتم إنشاء أي نبرة بعد",
     "createTonesHint": "أنشئ النبرات من الإجراءات السريعة",
-    "translateDocumentTooltip": "ترجم المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، PDF، HTML، TXT\nالحجم الأقصى: 40 ميغابايت\n\nيدعم أكثر من 80 لغة مع ملفات المصطلحات الاختيارية."
+    "translateDocumentTooltip": "ترجمة المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، HTML، TXT\nالحد الأقصى للحجم: 40 ميجابايت\n\nيدعم أكثر من 80 لغة مع إمكانية استخدام ملفات القاموس."
   },
   "transcription": {
     "addInstructions": "إضافة تعليمات",

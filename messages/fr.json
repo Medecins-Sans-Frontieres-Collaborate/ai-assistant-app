@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Afficher une boîte de confirmation lorsque vous cliquez sur le bouton d’arrêt pendant la génération d’une réponse",
       "confirmStopFromKeyboard": "Confirmer avant d'arrêter avec le clavier",
       "confirmStopFromKeyboardDescription": "Afficher une boîte de confirmation lorsque vous appuyez sur Échap pendant la génération d’une réponse"
-    }
+    },
+    "appliesToNewConversations": "S’applique uniquement aux nouvelles conversations.",
+    "useModelDefault": "Utilisation de la valeur par défaut du modèle.",
+    "fromGeneralSettings": "Depuis les paramètres généraux",
+    "preferredNameInheritedFromGeneral": "Nom d’affichage hérité des paramètres généraux. Saisissez pour remplacer.",
+    "savedConfirmation": "Enregistré",
+    "unsavedChanges": "Modifications non enregistrées",
+    "unsavedChangesMessage": "Vous avez des modifications non enregistrées. Les annuler ?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "Utiliser le style d’écriture par défaut",
     "noTonesCreated": "Aucun ton créé pour le moment",
     "createTonesHint": "Créez des tons dans Actions rapides",
-    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, PDF, HTML, TXT\nTaille maximale : 40 Mo\n\nPrend en charge plus de 80 langues avec fichiers de glossaire optionnels."
+    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, HTML, TXT\nTaille maximale : 40 Mo\n\nPlus de 80 langues prises en charge, avec fichiers de glossaire optionnels."
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",

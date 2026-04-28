@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "응답이 생성되는 중에 중단 버튼을 클릭하면 확인 대화창을 표시합니다.",
       "confirmStopFromKeyboard": "키보드 중단 전에 확인",
       "confirmStopFromKeyboardDescription": "응답이 생성되는 중에 Escape 키를 누르면 확인 대화창을 표시합니다."
-    }
+    },
+    "appliesToNewConversations": "새로운 대화에만 적용됩니다.",
+    "useModelDefault": "모델 기본값 사용 중입니다.",
+    "fromGeneralSettings": "일반 설정에서 가져옴",
+    "preferredNameInheritedFromGeneral": "일반 설정의 표시 이름을 상속받았습니다. 직접 입력하여 변경할 수 있습니다.",
+    "savedConfirmation": "저장됨",
+    "unsavedChanges": "저장되지 않은 변경 사항",
+    "unsavedChangesMessage": "저장하지 않은 변경 사항이 있습니다. 삭제하시겠습니까?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "기본 작성 스타일 사용",
     "noTonesCreated": "아직 생성된 톤이 없습니다",
     "createTonesHint": "빠른 작업에서 톤을 생성하세요",
-    "translateDocumentTooltip": "문서를 다른 언어로 번역합니다.\n\n지원 형식: Word, Excel, PowerPoint, PDF, HTML, TXT\n최대 크기: 40MB\n\n80개 이상의 언어와 선택적 용어집 파일을 지원합니다."
+    "translateDocumentTooltip": "문서를 다른 언어로 번역합니다.\n\n지원 형식: Word, Excel, PowerPoint, HTML, TXT\n최대 크기: 40MB\n\n용어집 파일을 선택적으로 적용하여 80개 이상의 언어를 지원합니다."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI의 응답 방식을 맞춤화하려면 개인 지침을 추가하세요. 이는 유용하고 정확하며 안전한 응답을 보장하는 기본 행동 지침과 함께 적용됩니다.",
   "Tip: Type \"/\" to select from saved prompt templates_": "팁: \"/\"를 입력하면 저장된 프롬프트 템플릿을 선택할 수 있습니다.",

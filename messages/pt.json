@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Exibir um diálogo de confirmação ao clicar no botão de parar enquanto uma resposta está sendo gerada",
       "confirmStopFromKeyboard": "Confirmar antes de parar com o teclado",
       "confirmStopFromKeyboardDescription": "Exibir um diálogo de confirmação ao pressionar Escape enquanto uma resposta está sendo gerada"
-    }
+    },
+    "appliesToNewConversations": "Aplica-se apenas a novas conversas.",
+    "useModelDefault": "Usando o padrão do modelo.",
+    "fromGeneralSettings": "Das Configurações Gerais",
+    "preferredNameInheritedFromGeneral": "Utilizando o nome de exibição das Configurações Gerais. Digite para substituir.",
+    "savedConfirmation": "Salvo",
+    "unsavedChanges": "Alterações não salvas",
+    "unsavedChangesMessage": "Você tem alterações não salvas. Deseja descartá-las?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "Usar estilo de escrita padrão",
     "noTonesCreated": "Nenhum tom criado ainda",
     "createTonesHint": "Crie tons em Ações Rápidas",
-    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos suportados: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamanho máximo: 40 MB\n\nSuporta mais de 80 idiomas e arquivos de glossário opcionais."
+    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos compatíveis: Word, Excel, PowerPoint, HTML, TXT\nTamanho máximo: 40MB\n\nSuporta mais de 80 idiomas com arquivos de glossário opcionais."
   },
   "transcription": {
     "transcribesOnSend": "Transcreve ao enviar",

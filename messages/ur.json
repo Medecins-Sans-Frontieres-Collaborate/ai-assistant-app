@@ -998,7 +998,15 @@
       "confirmStopFromButtonDescription": "جب جواب تیار ہو رہا ہو اور آپ اسٹاپ بٹن پر کلک کریں تو تصدیق کا ڈائیلاگ دکھائیں",
       "confirmStopFromKeyboard": "کی بورڈ سے روکنے سے پہلے تصدیق کریں",
       "confirmStopFromKeyboardDescription": "جب جواب تیار ہو رہا ہو اور آپ Escape دبائیں تو تصدیق کا ڈائیلاگ دکھائیں"
-    }
+    },
+    "appliesToNewConversations": "صرف نئی گفتگوؤں پر لاگو ہوتا ہے۔",
+    "useModelDefault": "ماڈل کا ڈیفالٹ استعمال ہو رہا ہے۔",
+    "fromGeneralSettings": "عمومی ترتیبات سے",
+    "preferredNameInheritedFromGeneral": "آپ کے عمومی ترتیبات کا ڈسپلے نام لیا جا رہا ہے۔ اوور رائیڈ کرنے کے لیے ٹائپ کریں۔",
+    "savedConfirmation": "محفوظ ہوگیا",
+    "unsavedChanges": "غیر محفوظ تبدیلیاں",
+    "unsavedChangesMessage": "آپ کی کچھ تبدیلیاں غیر محفوظ ہیں۔ کیا ان کو مسترد کرنا ہے؟",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1648,7 +1656,7 @@
     "useDefaultStyle": "ڈیفالٹ لکھنے کا انداز استعمال کریں",
     "noTonesCreated": "ابھی تک کوئی ٹونز نہیں بنائی گئی ہیں",
     "createTonesHint": "کوئیک ایکشنز میں ٹونز بنائیں",
-    "translateDocumentTooltip": "دستاویزات کا ترجمہ کسی دوسری زبان میں کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, PDF, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی معاونت، اختیاری glossary فائلز کے ساتھ۔"
+    "translateDocumentTooltip": "دستاویزات کو دوسری زبان میں ترجمہ کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی حمایت کے ساتھ اختیاری glossary فائلیں بھی استعمال کی جا سکتی ہیں۔"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",

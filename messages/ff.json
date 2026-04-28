@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Hollu nastoraa annditugol so a nodo batiindi huli ka jangirde ɗi naatnata",
       "confirmStopFromKeyboard": "Anndu seɗa gollal e dillere",
       "confirmStopFromKeyboardDescription": "Hollu nastoraa annditugol so a woni no Escapi fayde e naatnugol jangirde"
-    }
+    },
+    "appliesToNewConversations": "Teeŋtorii e junndugol weero e nder majje cuɓoraaɗi.",
+    "useModelDefault": "Naɗan e model juumre.",
+    "fromGeneralSettings": "E ɗee Tiiɗɗungal Majjuɗi",
+    "preferredNameInheritedFromGeneral": "Naŋnii innde njoɓdi e Tiiɗɗungal Majjuɗi. Winndu kadi kadi woni laaɓtu.",
+    "savedConfirmation": "Dangay",
+    "unsavedChanges": "Waylotoo waɗii suɓaaki",
+    "unsavedChangesMessage": "A jabii waylotoo waɗii suɓaaki. Mbarri ɗee?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Huutoro mbaydi winndiyankaagal goowɗo",
     "noTonesCreated": "Alaa daande sosaade taawo",
     "createTonesHint": "Sos daande e Golle Jaawɗe",
-    "translateDocumentTooltip": "Fir ɗereeji to ɗemngal goɗngal.\n\nMbaydiiji ballitaaɗi: Word, Excel, PowerPoint, PDF, HTML, TXT\nMawngu ɓurngal: 40MB\n\nEna walliita ɗemɗe 80+ e piilde helmere suɓtanaaɗe."
+    "translateDocumentTooltip": "Momta dokkal e ɗemngal gooto.\n\nDow heɓtugol: Word, Excel, PowerPoint, HTML, TXT\nJokkondirde max: 40MB\n\nMoƴƴi ɓe 80+ ɗemngal e fayli glossary seŋii."
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",

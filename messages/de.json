@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Beim Klicken auf den Stop-Button während einer Antwortgenerierung einen Bestätigungsdialog anzeigen",
       "confirmStopFromKeyboard": "Vor dem Stoppen mit der Tastatur bestätigen",
       "confirmStopFromKeyboardDescription": "Beim Drücken von Escape während einer Antwortgenerierung einen Bestätigungsdialog anzeigen"
-    }
+    },
+    "appliesToNewConversations": "Gilt nur für neue Unterhaltungen.",
+    "useModelDefault": "Modellstandard wird verwendet.",
+    "fromGeneralSettings": "Aus den allgemeinen Einstellungen",
+    "preferredNameInheritedFromGeneral": "Anzeigename wird aus den allgemeinen Einstellungen übernommen. Zum Überschreiben eingeben.",
+    "savedConfirmation": "Gespeichert",
+    "unsavedChanges": "Ungespeicherte Änderungen",
+    "unsavedChangesMessage": "Sie haben ungespeicherte Änderungen. Möchten Sie diese verwerfen?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Standard-Schreibstil verwenden",
     "noTonesCreated": "Noch keine Tonfälle erstellt",
     "createTonesHint": "Tonfälle in den Schnellaktionen erstellen",
-    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
+    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",

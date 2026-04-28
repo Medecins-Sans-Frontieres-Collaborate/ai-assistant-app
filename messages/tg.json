@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Ҳангоми пахш кардани тугмаи қатъ кардан дар вақти генерасияи ҷавоб, равзанаи тасдиқро нишон диҳед",
       "confirmStopFromKeyboard": "Пеш аз қатъ кардан бо клавиатура тасдиқ кунед",
       "confirmStopFromKeyboardDescription": "Ҳангоми пахш кардани Escape дар вақти генерасияи ҷавоб, равзанаи тасдиқро нишон диҳед"
-    }
+    },
+    "appliesToNewConversations": "Танҳо ба сӯҳбатҳои нав татбиқ мешавад.",
+    "useModelDefault": "Истифодаи арзиши пешфарзи модел.",
+    "fromGeneralSettings": "Аз Танзимоти Умумӣ",
+    "preferredNameInheritedFromGeneral": "Номи нишондиҳандаи шумо аз Танзимоти Умумӣ гирифта мешавад. Барои иваз кардан нависед.",
+    "savedConfirmation": "Захира шуд",
+    "unsavedChanges": "Тағйироти захиранашуда",
+    "unsavedChangesMessage": "Шумо тағйироти захиранашуда доред. Онҳо бекор карда шаванд?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Услуби навишти пешфарзро истифода баред",
     "noTonesCreated": "Ҳанӯз ягон услуб эҷод нашудааст",
     "createTonesHint": "Услубҳоро дар Амалҳои зуд эҷод кунед",
-    "translateDocumentTooltip": "Ҳуҷҷатҳоро ба забони дигар тарҷума кунед.\n\nФорматҳои дастгириёфта: Word, Excel, PowerPoint, PDF, HTML, TXT\nҲаҷми максималӣ: 40MB\n\nЗиёда аз 80 забон бо файли луғатии иловагӣ дастгирӣ мешавад."
+    "translateDocumentTooltip": "Муҳуҷҷатҳоро ба забони дигар тарҷума кунед.\n\nФорматҳои дастгиришаванда: Word, Excel, PowerPoint, HTML, TXT\nАндозаи баландтарин: 40MB\n\nДастгирии зиёда аз 80 забон бо файлҳои луғат (ихтиёрӣ)."
   },
   "transcription": {
     "transcribesOnSend": "Ҳангоми фиристодан транскрипсия мешавад",

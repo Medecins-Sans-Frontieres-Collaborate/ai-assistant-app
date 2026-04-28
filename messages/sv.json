@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Visa en bekräftelsedialog när du klickar på stoppknappen medan ett svar genereras",
       "confirmStopFromKeyboard": "Bekräfta innan stopp via tangentbord",
       "confirmStopFromKeyboardDescription": "Visa en bekräftelsedialog när du trycker på Escape medan ett svar genereras"
-    }
+    },
+    "appliesToNewConversations": "Gäller endast nya konversationer.",
+    "useModelDefault": "Använder modellens standardinställning.",
+    "fromGeneralSettings": "Från allmänna inställningar",
+    "preferredNameInheritedFromGeneral": "Använder visningsnamnet från dina allmänna inställningar. Skriv för att skriva över.",
+    "savedConfirmation": "Sparad",
+    "unsavedChanges": "Osparade ändringar",
+    "unsavedChangesMessage": "Du har osparade ändringar. Vill du kasta dem?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Använd standardstil",
     "noTonesCreated": "Inga toner har skapats ännu",
     "createTonesHint": "Skapa toner i Snabbåtgärder",
-    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaxstorlek: 40 MB\n\nStöder 80+ språk med valfria ordlistor."
+    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, HTML, TXT\nMaxstorlek: 40 MB\n\nStöd för 80+ språk med valfria ordlistor."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",

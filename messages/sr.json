@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Prikaži dijalog za potvrdu kada kliknete na dugme zaustavi dok se generiše odgovor",
       "confirmStopFromKeyboard": "Potvrdi pre zaustavljanja putem tastature",
       "confirmStopFromKeyboardDescription": "Prikaži dijalog za potvrdu kada pritisnete Escape dok se generiše odgovor"
-    }
+    },
+    "appliesToNewConversations": "Primjenjuje se samo na nove razgovore.",
+    "useModelDefault": "Koristi podrazumevana podešavanja modela.",
+    "fromGeneralSettings": "Iz Opštih podešavanja",
+    "preferredNameInheritedFromGeneral": "Koristi prikazano ime iz Opštih podešavanja. Unesite novo za zamenu.",
+    "savedConfirmation": "Sačuvano",
+    "unsavedChanges": "Nesačuvane izmene",
+    "unsavedChangesMessage": "Imate nesačuvane izmene. Odbaciti ih?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Користи подразумевани стил писања",
     "noTonesCreated": "Још нема направљених тонова",
     "createTonesHint": "Направите тонове у Брзим акцијама",
-    "translateDocumentTooltip": "Преведите документе на други језик.\n\nПодржани формати: Word, Excel, PowerPoint, PDF, HTML, TXT\nМакс величина: 40MB\n\nПодржава 80+ језика са опционалним фајловима речника."
+    "translateDocumentTooltip": "Prevedite dokumente na drugi jezik.\n\nPodržani formati: Word, Excel, PowerPoint, HTML, TXT\nMaksimalna veličina: 40MB\n\nPodržava više od 80 jezika uz opcione glosare."
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",

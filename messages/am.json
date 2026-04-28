@@ -940,7 +940,15 @@
       "confirmStopFromButtonDescription": "ምላሽ ሲፈጠር ቁልፉን በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ",
       "confirmStopFromKeyboard": "በዴስክቶፕ ሲቆም በፊት ያረጋግጡ",
       "confirmStopFromKeyboardDescription": "ምላሽ ሲዘጋጅ Escape በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ"
-    }
+    },
+    "appliesToNewConversations": "ለአዲስ ውይይቶች ብቻ ይተገበራል።",
+    "useModelDefault": "የሞዴል ነባሪነትን ተጠቅመን ነው።",
+    "fromGeneralSettings": "ከአጠቃላይ ቅንብሮች",
+    "preferredNameInheritedFromGeneral": "የመሰረታዊ ቅንብሮችዎን ስም በማውረድ ነው። ለመቀየር ይጻፉ።",
+    "savedConfirmation": "ተቀመጠ",
+    "unsavedChanges": "ያልተቀመጡ ለውጦች",
+    "unsavedChangesMessage": "ያልተቀመጡ ለውጦች አሉዎት። ልትተዉአቸው?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "ነባሪ የመጻፍ ዘዴ ይጠቀሙ",
     "noTonesCreated": "ምንም ድምፅ አልተፈጠረም",
     "createTonesHint": "ድምፆችን በፈጣን ተግባራት ውስጥ ይፍጠሩ",
-    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ይተርጉሙ፡፡\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, PDF, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80+ ቋንቋዎችን በአማራጭ glossary ፋይሎች ይደግፋል።"
+    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ትርጉም ያድርጉ።\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80 በላይ ቋንቋዎችን ማግኘት እና ምርጥ ቅርጸ-ቃላት ፋይሎችን ይደግፋል።"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",

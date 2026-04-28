@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Onetsani zotsimikizira mukadina batani loletsa pamene yankho likupangidwa",
       "confirmStopFromKeyboard": "Tsimikizani musanaletse pogwiritsa kiyibodi",
       "confirmStopFromKeyboardDescription": "Onetsani zotsimikizira mukakanikiza Escape pamene yankho likupangidwa"
-    }
+    },
+    "appliesToNewConversations": "Zikugwira ntchito pa zokambirana zatsopano zokha.",
+    "useModelDefault": "Akugwiritsa ntchito zosakira za model.",
+    "fromGeneralSettings": "Kuchokera pa Makonda Anu Akulu",
+    "preferredNameInheritedFromGeneral": "Mukugwiritsa ntchito dzina lochokera pa Makonda Anu Akulu. Lembani kuti musinthe.",
+    "savedConfirmation": "Zasungidwa",
+    "unsavedChanges": "Zosinthidwa zosasungidwa",
+    "unsavedChangesMessage": "Muli ndi zosintha zosasungidwa. Mukufuna kuzichotsa?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Gwiritsani ntchito kalemba woyamba",
     "noTonesCreated": "Palibe mawu opangidwa pakadali pano",
     "createTonesHint": "Pangani mawu mu Zochitika Mwachangu",
-    "translateDocumentTooltip": "Masulani zikalata ku chilankhulo china.\n\nMitundu yothandizidwa: Word, Excel, PowerPoint, PDF, HTML, TXT\nKukula kwambiri: 40MB\n\nImathandizira zilankhulo 80+ ndi mafayilo a mawu osankha."
+    "translateDocumentTooltip": "Kumasulira zikalata m'chinenero china.\n\nMitundu imene ikuthandizidwa: Word, Excel, PowerPoint, HTML, TXT\nKukula kwakukulu: 40MB\n\nImathandiza m'zinenero zoposa 80 ndi mwayi wa ma glossary owonjezera."
   },
   "transcription": {
     "transcribesOnSend": "Imalemba potumiza",

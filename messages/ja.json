@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "回答生成中に停止ボタンをクリックした際、確認ダイアログを表示します。",
       "confirmStopFromKeyboard": "キーボードで停止する前に確認",
       "confirmStopFromKeyboardDescription": "回答生成中にEscapeキーを押した際、確認ダイアログを表示します。"
-    }
+    },
+    "appliesToNewConversations": "新しい会話にのみ適用されます。",
+    "useModelDefault": "モデルのデフォルトを使用します。",
+    "fromGeneralSettings": "一般設定より",
+    "preferredNameInheritedFromGeneral": "一般設定の表示名を引き継いでいます。上書きするには入力してください。",
+    "savedConfirmation": "保存しました",
+    "unsavedChanges": "未保存の変更",
+    "unsavedChangesMessage": "未保存の変更があります。破棄しますか？",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "デフォルトの文体を使用",
     "noTonesCreated": "トーンはまだ作成されていません",
     "createTonesHint": "クイックアクションでトーンを作成",
-    "translateDocumentTooltip": "ドキュメントを他の言語に翻訳します。\n\n対応フォーマット：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応し、用語集ファイルの利用も可能です。"
+    "translateDocumentTooltip": "ドキュメントを他言語に翻訳します。\n\n対応形式：Word、Excel、PowerPoint、HTML、TXT\n最大サイズ：40MB\n\n80以上の言語に対応、オプショングロッサリーファイルも利用可能です。"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AIの応答をカスタマイズするための個別指示を追加できます。これらは、役立つ・正確・安全な応答を保証するための基本的なガイドラインと組み合わされます。",
   "Tip: Type \"/\" to select from saved prompt templates_": "ヒント：「/」を入力すると保存されたプロンプトテンプレートから選択できます。",

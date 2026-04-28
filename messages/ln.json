@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Pokisa esika ya kondima soki opesi bouton ya kotika tango eyano ezali kobimisa",
       "confirmStopFromKeyboard": "Kondima liboso ya kotika na clavier",
       "confirmStopFromKeyboardDescription": "Pokisa esika ya kondima soki opesi Escape tango eyano ezali kobimisa"
-    }
+    },
+    "appliesToNewConversations": "Ekokosala kaka na masolo ya sika.",
+    "useModelDefault": "Eza na ndenge ya model nyonso.",
+    "fromGeneralSettings": "Kolongwa na Bitinda ya General",
+    "preferredNameInheritedFromGeneral": "Kombo ya monguna euti na Bitinda ya General. Kokota kombo sika mpo na kolongola.",
+    "savedConfirmation": "Ebombami",
+    "unsavedChanges": "Bambongwana ebombami te",
+    "unsavedChangesMessage": "Ozali na bambongwana ebombami te. Olingi kolongola yango?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Salela style ya ekomeli ya liboso",
     "noTonesCreated": "Okó moko esalámá te",
     "createTonesHint": "Salá okó na Quick Actions",
-    "translateDocumentTooltip": "Bongolá bazulunalo na lokótá mosusu.\n\nBamodèle : Word, Excel, PowerPoint, PDF, HTML, TXT\nNdé mbóte: 40MB\n\nEbongi na balokótá 80+ na posibolité ya kofandisa glossary."
+    "translateDocumentTooltip": "Kokota makomi na lokota mosusu.\n\nFormats esepelisami: Word, Excel, PowerPoint, HTML, TXT\nSize maksimum: 40MB\n\nEsungi lokota koleka 80 na ba fichiers ya glossary soki esengeli."
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",

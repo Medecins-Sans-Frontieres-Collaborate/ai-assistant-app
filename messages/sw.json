@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Onyesha kisanduku cha uthibitisho unapobofya kitufe cha kusitisha wakati jibu linaandaliwa",
       "confirmStopFromKeyboard": "Thibitisha kabla ya kusitisha kwa kutumia kibodi",
       "confirmStopFromKeyboardDescription": "Onyesha kisanduku cha uthibitisho unapobofya Esc wakati jibu linaandaliwa"
-    }
+    },
+    "appliesToNewConversations": "Inatumika kwa mazungumzo mapya pekee.",
+    "useModelDefault": "Inatumia chaguo msingi la mfano.",
+    "fromGeneralSettings": "Kutoka kwenye Mipangilio ya Jumla",
+    "preferredNameInheritedFromGeneral": "Inatumia jina la onyesho kutoka Mipangilio ya Jumla. Andika kubadilisha.",
+    "savedConfirmation": "Imehifadhiwa",
+    "unsavedChanges": "Mabadiliko ambayo hayajahifadhiwa",
+    "unsavedChangesMessage": "Una mabadiliko ambayo hayajahifadhiwa. Uyaache?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Tumia mtindo wa uandishi chaguomsingi",
     "noTonesCreated": "Hakuna tono lililoundwa bado",
     "createTonesHint": "Unda matono kwenye Vitendo vya Haraka",
-    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia zaidi ya lugha 80 na faili za kamusi (glossary) kwa hiari."
+    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia lugha 80+ na faili za hiari za kamusi."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",

@@ -972,7 +972,15 @@
       "confirmStopFromButtonDescription": "အဖြေထုတ်လုပ်နေစဉ် ရပ်စဲခလုတ်ကိုနှိပ်ပါက အတည်ပြုစာပြောင် ပြပါမည်",
       "confirmStopFromKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲရန် မလုပ်မီ အတည်ပြုပါ",
       "confirmStopFromKeyboardDescription": "အဖြေထုတ်လုပ်နေစဉ် Escape ကိုနှိပ်သောအခါ အတည်ပြုစာပြောင် ပြပါမည်"
-    }
+    },
+    "appliesToNewConversations": "ယခု သတ်မှတ်ချက်သည် စတင်မည့် စကားပြောချက်အသစ်များတွင်သာအသုံးပြုပါသည်။",
+    "useModelDefault": "မော်ဒယ်၏ ပုံမှန်သတ်မှတ်ချက်ကိုအသုံးပြုနေသည်။",
+    "fromGeneralSettings": "အထွေထွေ ဆက်တင်များမှ",
+    "preferredNameInheritedFromGeneral": "သင့်အထွေထွေဆက်တင်များမှ ပြသမည့်အမည် အလိုအလျောက် ယူသည်။ ပြင်လိုပါက ရိုက်ထည့်ပါ။",
+    "savedConfirmation": "သိမ်းဆည်းပြီးပါပြီ",
+    "unsavedChanges": "မသိမ်းရသေးသော ပြင်ဆင်မှုများ",
+    "unsavedChangesMessage": "သင့်တွင် မသိမ်းရသေးသော ပြင်ဆင်မှုများရှိပါသည်။ လူမသိမ်းဘဲ ပယ်ဖျက်မလား။",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "မူလရေးသားပုံကိုအသုံးပြုပါ",
     "noTonesCreated": "အသံသွင်းပုံ မရှိသေးပါ",
     "createTonesHint": "Quick Actions တွင် အသံသွင်းပုံများ တည်ဆောက်နိုင်သည်",
-    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားထဲသို့ ဘာသာပြန်ပါ။\n\nထောက်ပံ့သော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, PDF, HTML, TXT\nအကြီးဆုံးဖိုင်အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်များပါဝင်၍ ဘာသာစကား ၈၀+ ကိုထောက်ပံ့သည်။"
+    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားသို့ ဘာသာပြန်ပါ။\n\nပံ့ပိုးထားသော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, HTML, TXT\nအမြင့်ဆုံး အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်ရွေးချယ်နိုင်ပြီး ဘာသာစကား ၈၀ ကျော် ပံ့ပိုးထားသည်။"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ရဲ့ တုန့်ပြန်မှုကို ပြင်ဆင်နိုင်ရန် ကိုယ်ပိုင်ညွှန်ကြားချက်များ ထည့်ပါ။ ဤညွှန်ကြားချက်များကို အထောက်အကူပြု၊ တိကျမှန်ကန်ပြီး လုံခြုံစိတ်ချသော တုန့်ပြန်မှုများ ရရှိစေရန် မူဝါဒအညွှန်းနှင့် တွဲဖက်အသုံးပြုပါသည်။",
   "Tip: Type \"/\" to select from saved prompt templates_": "အကြံပြုချက် - သိမ်းထားသော prompt template များကို ရွေးချယ်ရန် \"/\" ကို ရိုက်ထည့်ပါ။",

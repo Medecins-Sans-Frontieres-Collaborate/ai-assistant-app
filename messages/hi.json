@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "उत्तर जनरेट होने के दौरान स्टॉप बटन दबाने पर पुष्टि संवाद दिखाएं",
       "confirmStopFromKeyboard": "कीबोर्ड से रोकने से पहले पुष्टि करें",
       "confirmStopFromKeyboardDescription": "उत्तर जनरेट होने के दौरान Escape दबाने पर पुष्टि संवाद दिखाएं"
-    }
+    },
+    "appliesToNewConversations": "केवल नई वार्तालापों पर लागू होता है।",
+    "useModelDefault": "मॉडल डिफ़ॉल्ट का उपयोग कर रहे हैं।",
+    "fromGeneralSettings": "सामान्य सेटिंग्स से",
+    "preferredNameInheritedFromGeneral": "आपका डिस्प्ले नाम सामान्य सेटिंग्स से लिया गया है। बदलने के लिए टाइप करें।",
+    "savedConfirmation": "सहेजा गया",
+    "unsavedChanges": "अपुष्ट परिवर्तन",
+    "unsavedChangesMessage": "आपके पास अपुष्ट परिवर्तन हैं। क्या इन्हें हटाना है?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "डिफ़ॉल्ट लेखन शैली का उपयोग करें",
     "noTonesCreated": "अभी तक कोई टोन नहीं बनाई गई",
     "createTonesHint": "त्वरित क्रियाओं में टोन बनाएं",
-    "translateDocumentTooltip": "दस्तावेज़ों का अनुवाद दूसरी भाषा में करें।\n\nसमर्थित फॉर्मेट: Word, Excel, PowerPoint, PDF, HTML, TXT\nअधिकतम आकार: 40MB\n\n80+ भाषाओं के लिए समर्थन, वैकल्पिक glossary फ़ाइल के साथ।"
+    "translateDocumentTooltip": "दस्तावेज़ों का अनुवाद अन्य भाषा में करें।\n\nसमर्थित प्रारूप: Word, Excel, PowerPoint, HTML, TXT\nअधिकतम आकार: 40MB\n\n80+ भाषाओं का समर्थन, वैकल्पिक glossary फ़ाइल के साथ।"
   },
   "transcription": {
     "addInstructions": "निर्देश जोड़ें",

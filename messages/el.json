@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Εμφάνιση διαλόγου επιβεβαίωσης όταν κάνετε κλικ στο κουμπί διακοπής ενώ δημιουργείται απάντηση",
       "confirmStopFromKeyboard": "Επιβεβαίωση πριν τη διακοπή με το πληκτρολόγιο",
       "confirmStopFromKeyboardDescription": "Εμφάνιση διαλόγου επιβεβαίωσης όταν πατάτε Escape ενώ δημιουργείται απάντηση"
-    }
+    },
+    "appliesToNewConversations": "Ισχύει μόνο για νέες συνομιλίες.",
+    "useModelDefault": "Χρήση προεπιλογής μοντέλου.",
+    "fromGeneralSettings": "Από τις Γενικές Ρυθμίσεις",
+    "preferredNameInheritedFromGeneral": "Κληρονομείται το εμφανιζόμενο όνομα από τις Γενικές Ρυθμίσεις. Πληκτρολογήστε για να το αλλάξετε.",
+    "savedConfirmation": "Αποθηκεύτηκε",
+    "unsavedChanges": "Μη αποθηκευμένες αλλαγές",
+    "unsavedChangesMessage": "Έχετε μη αποθηκευμένες αλλαγές. Θέλετε να τις απορρίψετε;",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Πώς μπορώ να βοηθήσω;",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Χρήση προεπιλεγμένου ύφους γραφής",
     "noTonesCreated": "Δεν έχουν δημιουργηθεί τόνοι ακόμα",
     "createTonesHint": "Δημιουργήστε τόνους στις Γρήγορες Ενέργειες",
-    "translateDocumentTooltip": "Μετάφραση εγγράφων σε άλλη γλώσσα.\n\nΥποστηριζόμενες μορφές: Word, Excel, PowerPoint, PDF, HTML, TXT\nΜέγ. μέγεθος: 40MB\n\nΥποστηρίζει 80+ γλώσσες με προαιρετικά αρχεία γλωσσαρίου."
+    "translateDocumentTooltip": "Μετάφραση εγγράφων σε άλλη γλώσσα.\n\nΥποστηριζόμενες μορφές: Word, Excel, PowerPoint, HTML, TXT\nΜέγιστο μέγεθος: 40MB\n\nΥποστηρίζει 80+ γλώσσες με προαιρετικά αρχεία γλωσσαρίου."
   },
   "transcription": {
     "transcribesOnSend": "Μεταγράφεται κατά την αποστολή",

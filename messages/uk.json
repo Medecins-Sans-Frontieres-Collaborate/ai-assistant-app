@@ -914,7 +914,15 @@
       "confirmStopFromButtonDescription": "Показувати діалог підтвердження під час натискання кнопки зупинки, коли відповідь генерується",
       "confirmStopFromKeyboard": "Підтверджувати перед зупинкою з клавіатури",
       "confirmStopFromKeyboardDescription": "Показувати діалог підтвердження під час натискання Escape, коли відповідь генерується"
-    }
+    },
+    "appliesToNewConversations": "Застосовується лише до нових розмов.",
+    "useModelDefault": "Використовується стандартне значення моделі.",
+    "fromGeneralSettings": "Загальні налаштування",
+    "preferredNameInheritedFromGeneral": "Ім’я відображається згідно з вашими Загальними налаштуваннями. Щоб змінити, введіть нове.",
+    "savedConfirmation": "Збережено",
+    "unsavedChanges": "Незбережені зміни",
+    "unsavedChangesMessage": "У вас є незбережені зміни. Відхилити їх?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Загублений пес"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Використовувати стиль за замовчуванням",
     "noTonesCreated": "Ще не створено жодного тону",
     "createTonesHint": "Створюйте тони у Швидких діях",
-    "translateDocumentTooltip": "Перекладайте документи іншою мовою.\n\nПідтримувані формати: Word, Excel, PowerPoint, PDF, HTML, TXT\nМаксимальний розмір: 40 MB\n\nПідтримує 80+ мов і додаткові глосарії."
+    "translateDocumentTooltip": "Перекладіть документи іншою мовою.\n\nПідтримувані формати: Word, Excel, PowerPoint, HTML, TXT\nМаксимальний розмір: 40 МБ\n\nПідтримка понад 80 мов із додатковими файлами глосаріїв."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Додайте особисті інструкції, щоб налаштувати відповіді ШІ. Вони поєднуються з основними правилами, які забезпечують корисні, точні та безпечні відповіді.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Порада: введіть \"/\", щоб вибрати із збережених шаблонів підказок.",

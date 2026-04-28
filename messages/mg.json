@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Asehoy ny varavarankely fanamafisana rehefa tsindrina ny bokotra fijanonana raha mbola mamokatra valiny",
       "confirmStopFromKeyboard": "Manamarina alohan'ny hijanonana amin'ny klavier",
       "confirmStopFromKeyboardDescription": "Asehoy ny varavarankely fanamafisana rehefa tsindrina ny Escape raha mbola mamokatra valiny"
-    }
+    },
+    "appliesToNewConversations": "Manan-kery amin'ny resaka vaovao ihany.",
+    "useModelDefault": "Mampiasa ny modely mahazatra.",
+    "fromGeneralSettings": "Avy amin'ny Fikirana Ankapobeny",
+    "preferredNameInheritedFromGeneral": "Mandova ny anarana aseho amin'ny Fikirana Ankapobeny. Soraty raha te hanova.",
+    "savedConfirmation": "Voavonjy",
+    "unsavedChanges": "Fiovana tsy voavonjy",
+    "unsavedChangesMessage": "Misy fiovana tsy voavonjy. Foanana ve ireo?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Ampiasao ny fomba fanoratana tsy miovaova",
     "noTonesCreated": "Tsy mbola misy feo noforonina",
     "createTonesHint": "Mamorona feo ao amin'ny Hetsika Haingana",
-    "translateDocumentTooltip": "Dikai tahirin-kevitra amin'ny fiteny hafa.\n\nEndrika tohanana: Word, Excel, PowerPoint, PDF, HTML, TXT\nHabe max: 40MB\n\nManohana fiteny 80+ miaraka amin'ny rakitra fiteny tsy voatery."
+    "translateDocumentTooltip": "Adikao amin'ny fiteny hafa ny antontan-taratasy.\n\nEndrika tohanana: Word, Excel, PowerPoint, HTML, TXT\nHabe ambony indrindra: 40MB\n\nMitsinjara fiteny 80+ miaraka amin’ny rakitra voambolana safidy."
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",

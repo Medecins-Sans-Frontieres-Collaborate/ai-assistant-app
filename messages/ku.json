@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "پەنجەرەی دڵنیابوون پیشان بدە کاتێک دوگمەی وەستانەوە دەتکەیت لە کاتی دروستکردنی وەڵامدا",
       "confirmStopFromKeyboard": "دڵنیابوون پێش وەستانەوە بە کیبۆرد",
       "confirmStopFromKeyboardDescription": "پەنجەرەی دڵنیابوون پیشان بدە کاتێک Escape دەتەکەیت لەکاتی دروستکردنی وەڵامدا"
-    }
+    },
+    "appliesToNewConversations": "تەنها بۆ گفتوگۆی نوێ جێبەجێ دەبێت.",
+    "useModelDefault": "پێشفرضی مۆدێڵ بەکاردهێنرێت.",
+    "fromGeneralSettings": "لە دانەبەزاندنی گشتییەوە",
+    "preferredNameInheritedFromGeneral": "ناوی پیشاندەر لە دانەبەزاندنی گشتی وەرگیرا. بۆ گۆڕان نووسین بنوسە.",
+    "savedConfirmation": "پاشەکەوت کرا",
+    "unsavedChanges": "گۆڕانکارییە نەپاشەکەوتکراوەکان",
+    "unsavedChangesMessage": "هەندێک گۆڕانکاری نەپاشەکەوتت هەیە. دەتەوێت بسڕیتەوە؟",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Şêwaza nivîsandinê ya standard bikar bîne",
     "noTonesCreated": "Hîn tu ton nehatine çêkirin",
     "createTonesHint": "Di Kiryarên Bilez de tonan çêke",
-    "translateDocumentTooltip": "Belgeyan bi zimanekî din wergerîne.\n\nFormatên piştgirîkirî: Word, Excel, PowerPoint, PDF, HTML, TXT\nHerî zêde: 40MB\n\n80+ zimanan bi pelên ferhengê yên bijarte piştgirî dike."
+    "translateDocumentTooltip": "بەڵگەنامەکان بۆ زمانێکی تر وەرگێڕە.\n\nفۆرماتە پاڵپشتی کراوەکان: Word, Excel, PowerPoint, HTML, TXT\nلە زۆرترین قەبارە: ٤٠MB\n\nزۆرتر لە ٨٠ زمان پاڵپشتی دەکات بە فایلە گڵۆساری کە هەلبژێردراون."
   },
   "transcription": {
     "transcribesOnSend": "Dema bişîne tê nivîsandin",

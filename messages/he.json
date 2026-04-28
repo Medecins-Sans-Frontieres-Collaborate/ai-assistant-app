@@ -972,7 +972,15 @@
       "confirmStopFromButtonDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על כפתור העצירה בזמן שהתגובה נוצרת",
       "confirmStopFromKeyboard": "אשר לפני עצירה באמצעות המקלדת",
       "confirmStopFromKeyboardDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על Escape בזמן שהתגובה נוצרת"
-    }
+    },
+    "appliesToNewConversations": "חל רק על שיחות חדשות.",
+    "useModelDefault": "משתמש בברירת המחדל של המודל.",
+    "fromGeneralSettings": "מ'הגדרות כלליות'",
+    "preferredNameInheritedFromGeneral": "שם התצוגה נלקח מהגדרות כלליות. ניתן להקליד כדי לעקוף.",
+    "savedConfirmation": "נשמר",
+    "unsavedChanges": "שינויים שלא נשמרו",
+    "unsavedChangesMessage": "יש לך שינויים שלא נשמרו. האם למחוק אותם?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "השתמש בסגנון כתיבה ברירת מחדל",
     "noTonesCreated": "לא נוצרו טונים עדיין",
     "createTonesHint": "צור טונים בפעולות מהירות",
-    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, PDF, HTML, TXT\nגודל מירבי: 40MB\n\nתמיכה ב-80+ שפות עם קבצי מילון אופציונליים."
+    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, HTML, TXT\nגודל מקסימלי: 40MB\n\nתמיכה בלמעלה מ-80 שפות עם אפשרות לקבצי מילון."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",

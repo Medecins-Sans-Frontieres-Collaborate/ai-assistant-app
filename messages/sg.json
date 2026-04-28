@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Fâ dâbâna gbèngbè ti sô lâ boutton ti kê sô tâ lo sûrû siriri",
       "confirmStopFromKeyboard": "Kêtê na dâbâ na mû kê sô na klavier",
       "confirmStopFromKeyboardDescription": "Fâ dâbâna gbèngbè ti sô lâ Escape tâ lo sûrû siriri"
-    }
+    },
+    "appliesToNewConversations": "E sô kɛ na butûa mingbi tî gbangabange mo.",
+    "useModelDefault": "Mo na model tî tenɛ.",
+    "fromGeneralSettings": "Wüngö tî General Settings",
+    "preferredNameInheritedFromGeneral": "Nzo tî General Settings ayeke na yângbêtî. Sêngê sô mo yeke zu ködörö.",
+    "savedConfirmation": "Abê ti mongo",
+    "unsavedChanges": "Ködörö so ayeke na mongo",
+    "unsavedChangesMessage": "Ködörö so ayeke ayeke na mongo. Oko mo langbï?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, PDF, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Këtï hülë dokument na lingbi so asi.\n\nFormats so asumbâ: Word, Excel, PowerPoint, HTML, TXT\nMax. sïze: 40MB\n\nLengbi 80+ lingbi na possibilité tî glossary file."
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",

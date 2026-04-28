@@ -972,7 +972,15 @@
       "confirmStopFromButtonDescription": "Näytä vahvistusikkuna, kun napsautat lopeta-painiketta vastauksen generoinnin aikana",
       "confirmStopFromKeyboard": "Vahvista ennen lopetusta näppäimistöllä",
       "confirmStopFromKeyboardDescription": "Näytä vahvistusikkuna, kun painat Esc-vastauksen generoinnin aikana"
-    }
+    },
+    "appliesToNewConversations": "Koskee vain uusia keskusteluja.",
+    "useModelDefault": "Käytetään mallin oletusta.",
+    "fromGeneralSettings": "Yleisasetuksista",
+    "preferredNameInheritedFromGeneral": "Näyttönimi peritään yleisasetuksista. Kirjoita muuttaaksesi.",
+    "savedConfirmation": "Tallennettu",
+    "unsavedChanges": "Tallentamattomat muutokset",
+    "unsavedChangesMessage": "Sinulla on tallentamattomia muutoksia. Hylätäänkö ne?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Käytä oletuskirjoitustyyliä",
     "noTonesCreated": "Äänensävyjä ei ole vielä luotu",
     "createTonesHint": "Luo äänensävyjä Pikatoiminnoissa",
-    "translateDocumentTooltip": "Käännä asiakirjoja toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, PDF, HTML, TXT\nEnimmäiskoko: 40 Mt\n\nTukee yli 80 kieltä sekä valinnaisia sanastotiedostoja."
+    "translateDocumentTooltip": "Käännä asiakirjat toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, HTML, TXT\nMaksimikoko: 40 Mt\n\nYli 80 kielitukea ja mahdollisuus käyttää sanastotiedostoja."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",

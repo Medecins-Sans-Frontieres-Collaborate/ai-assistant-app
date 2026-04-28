@@ -1028,7 +1028,15 @@
       "confirmStopFromButtonDescription": "在生成回复时点击停止按钮，显示确认对话框",
       "confirmStopFromKeyboard": "使用键盘停止前进行确认",
       "confirmStopFromKeyboardDescription": "在生成回复时按下 Escape，显示确认对话框"
-    }
+    },
+    "appliesToNewConversations": "仅适用于新对话。",
+    "useModelDefault": "使用模型默认值。",
+    "fromGeneralSettings": "来自通用设置",
+    "preferredNameInheritedFromGeneral": "正在继承您的通用设置显示名称。输入以覆盖。",
+    "savedConfirmation": "已保存",
+    "unsavedChanges": "未保存的更改",
+    "unsavedChangesMessage": "您有未保存的更改。要放弃吗？",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1580,7 +1588,7 @@
     "useDefaultStyle": "使用默认写作风格",
     "noTonesCreated": "尚未创建语气",
     "createTonesHint": "可在快捷操作中创建语气",
-    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。"
+    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、HTML、TXT\n最大文件大小：40MB\n\n支持80多种语言，可选用术语表文件。"
   },
   "transcription": {
     "addInstructions": "添加说明",

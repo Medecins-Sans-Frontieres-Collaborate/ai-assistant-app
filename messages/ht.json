@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Montre yon fenèt konfimasyon lè w klike sou bouton sispann pandan repons lan ap jenere",
       "confirmStopFromKeyboard": "Konfime anvan w sispann ak klavye a",
       "confirmStopFromKeyboardDescription": "Montre yon fenèt konfimasyon lè w peze Escape pandan repons lan ap jenere"
-    }
+    },
+    "appliesToNewConversations": "Sa aplike sèlman pou nouvo konvèsasyon yo.",
+    "useModelDefault": "Ap itilize valè predefini modèl la.",
+    "fromGeneralSettings": "Soti nan Anviwònman Jeneral",
+    "preferredNameInheritedFromGeneral": "Ap itilize non afichaj ki soti nan Anviwònman Jeneral ou. Tape pou modifye.",
+    "savedConfirmation": "Sove",
+    "unsavedChanges": "Chanjman ki pa sove",
+    "unsavedChangesMessage": "Ou gen chanjman ki pa sove. Anile yo?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Itilize estil ekriti pa defo",
     "noTonesCreated": "Pa gen ton kreye ankò",
     "createTonesHint": "Kreye ton nan Aksyon Rapid",
-    "translateDocumentTooltip": "Tradui dokiman nan yon lòt lang.\n\nFòma sipòte: Word, Excel, PowerPoint, PDF, HTML, TXT\nGwosè maks: 40MB\n\nSipòte 80+ lang ak fichye glosè opsyonèl."
+    "translateDocumentTooltip": "Tradui dokiman yo nan yon lòt lang.\n\nFòma sipòte: Word, Excel, PowerPoint, HTML, TXT\nGwosè maksimòm: 40MB\n\nSipòte plis pase 80 lang ak dosye glosè opsyonèl."
   },
   "transcription": {
     "transcribesOnSend": "Transkri lè voye",

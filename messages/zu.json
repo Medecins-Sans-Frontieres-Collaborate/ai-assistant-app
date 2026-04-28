@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Khombisa ifasitela lokuqiikisha uma uchofoza inkinobho yokumisa ngesikhathi impendulo ikhiqizwa",
       "confirmStopFromKeyboard": "Qinisekisa ngaphambi kokumisa ngesinqamuleli sekhibhodi",
       "confirmStopFromKeyboardDescription": "Khombisa ifasitela lokuqiikisha uma ucindezela u-Escape ngesikhathi impendulo ikhiqizwa"
-    }
+    },
+    "appliesToNewConversations": "Kusebenzela izingxoxo ezintsha kuphela.",
+    "useModelDefault": "Kusetshenziswa okukhethiwe kwemodeli.",
+    "fromGeneralSettings": "Kusuka kuzilungiselelo Jikelele",
+    "preferredNameInheritedFromGeneral": "Igama lakho likhombiswa ngokulandela Izilungiselelo Jikelele. Bhala ukuze ushintshe.",
+    "savedConfirmation": "Kugcinwe",
+    "unsavedChanges": "Izinguquko ezingagcinwanga",
+    "unsavedChangesMessage": "Unezinguquko ezingagcinwanga. Uyafuna ukuzilahla?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Sebenzisa isitayela sokubhala esijwayelekile",
     "noTonesCreated": "Azikho izithoni ezidaliwe okwamanje",
     "createTonesHint": "Dala izithoni ku-Izenzo Ezisheshayo",
-    "translateDocumentTooltip": "Humusha amadokhumenti kolunye ulimi.\n\nAmafomathi asekelwayo: Word, Excel, PowerPoint, PDF, HTML, TXT\nUbukhulu obukhulu: 40MB\n\nKusekela izilimi ezingu-80+ namafayela ezichazamazwi angakhethwa."
+    "translateDocumentTooltip": "Humusha imibhalo kolunye ulimi.\n\nAmafomethi asekwayo: Word, Excel, PowerPoint, HTML, TXT\nUsayizi omkhulu: 40MB\n\nIsekela izilimi ezingaphezu kuka-80 ngamafayela egama eliyisichazamazwi (glossary) ozithandayo."
   },
   "transcription": {
     "transcribesOnSend": "Kubhalwa phansi uma kuthunyelwa",

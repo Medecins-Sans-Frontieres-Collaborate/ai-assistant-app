@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Nuna taga tabbatarwa idan ka danna maɓallin dakatarwa yayin ƙirƙirar amsa",
       "confirmStopFromKeyboard": "Tabbatar kafin dakatarwa ta kibodi",
       "confirmStopFromKeyboardDescription": "Nuna taga tabbatarwa idan ka danna Escape yayin ƙirƙirar amsa"
-    }
+    },
+    "appliesToNewConversations": "Yana aiki ne ga sabbin tattaunawa kawai.",
+    "useModelDefault": "Ana amfani da daidaiton samfurin.",
+    "fromGeneralSettings": "Daga Saitunan Gabaɗaya",
+    "preferredNameInheritedFromGeneral": "Ana gado sunan da za a nuna daga Saitunan Gabaɗaya. Rubuta don canjawa.",
+    "savedConfirmation": "An ajiye",
+    "unsavedChanges": "Canje-canje ba a ajiye ba",
+    "unsavedChangesMessage": "Kana da canje-canje da ba a ajiye ba. Ka soke su?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Yi amfani da salon rubutu na asali",
     "noTonesCreated": "Ba a ƙirƙiri yanayi ba tukuna",
     "createTonesHint": "Ƙirƙiri yanayi a Cikakken Ayyuka",
-    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nNau'in da ake goyon baya: Word, Excel, PowerPoint, PDF, HTML, TXT\nMafi girman fayil: 40MB\n\nYana tallafawa harsuna 80+ da misalin fayilolin ƙamus."
+    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nTsaruka masu goyan baya: Word, Excel, PowerPoint, HTML, TXT\nMafi girma: 40MB\n\nYana goyan bayan harsuna sama da 80 tare da fayilolin kundin kalmomi na zaɓi."
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",

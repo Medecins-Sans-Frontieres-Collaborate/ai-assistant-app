@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "បង្ហាញប្រអប់បញ្ជាក់ នៅពេលអ្នកចុចប៊ូតុងបញ្ឈប់ ខណៈកំពុងបង្កើតចម្លើយ",
       "confirmStopFromKeyboard": "បញ្ជាក់មុនពេលបញ្ឈប់ដោយក្ដារចុច",
       "confirmStopFromKeyboardDescription": "បង្ហាញប្រអប់បញ្ជាក់ នៅពេលអ្នកចុច Escape ខណៈកំពុងបង្កើតចម្លើយ"
-    }
+    },
+    "appliesToNewConversations": "អនុវត្តសម្រាប់សំនួរថ្មីប៉ុណ្ណោះ។",
+    "useModelDefault": "ប្រើលំហូរទុកដើមរបស់ម៉ូដែល។",
+    "fromGeneralSettings": "ពីការកំណត់ទូទៅ",
+    "preferredNameInheritedFromGeneral": "កំពុងប្រើឈ្មោះបង្ហាញពីការកំណត់ទូទៅ។ សូមវាយបញ្ចូលដើម្បីបដិសេធ។",
+    "savedConfirmation": "បានរក្សាទុក",
+    "unsavedChanges": "មានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក",
+    "unsavedChangesMessage": "អ្នកមានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក។ ចង់ចោលទេ?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "ប្រើស្ទីលសរសេរ​លំនាំដើម",
     "noTonesCreated": "មិនទាន់បង្កើតសម្លេងនៅឡើយ",
     "createTonesHint": "បង្កើតសម្លេងក្នុង Quick Actions",
-    "translateDocumentTooltip": "បកប្រែឯកសារទៅភាសាផ្សេង។\n\nទ្រទ្រង់៖ Word, Excel, PowerPoint, PDF, HTML, TXT\nអតិបរមា៖ 40MB\n\nគាំទ្រភាសាជាង ៨០ជាមួយឯកសារ glossary ជាជម្រើស។"
+    "translateDocumentTooltip": "បកប្រែឯកសារទៅភាសាផ្សេងទៀត។\n\nទ្រទ្រង់ទម្រង់៖ Word, Excel, PowerPoint, HTML, TXT\nទំហំអតិបរមា៖ 40MB\n\nគាំទ្រភាសា ៨០+ ជាមួយឯកសារពន្យល់ (glossary) ជាជម្រើស។"
   },
   "transcription": {
     "transcribesOnSend": "បម្លែងអក្សរចេញត្រូវបានអនុវត្តពេលបញ្ជូន",

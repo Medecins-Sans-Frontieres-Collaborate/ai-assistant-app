@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "উত্তর উৎপাদনের সময় বন্ধ বাটনে ক্লিক করলে নিশ্চিতকরণ ডায়ালগ দেখান",
       "confirmStopFromKeyboard": "কীবোর্ড দিয়ে বন্ধ করার আগে নিশ্চিত করুন",
       "confirmStopFromKeyboardDescription": "উত্তর উৎপাদনের সময় Escape চাপলে নিশ্চিতকরণ ডায়ালগ দেখান"
-    }
+    },
+    "appliesToNewConversations": "শুধুমাত্র নতুন কথোপকথনের ক্ষেত্রে প্রযোজ্য।",
+    "useModelDefault": "মডেল ডিফল্ট ব্যবহার করা হচ্ছে।",
+    "fromGeneralSettings": "সাধারণ সেটিংস থেকে",
+    "preferredNameInheritedFromGeneral": "আপনার সাধারণ সেটিংসের প্রদর্শন নাম নেওয়া হয়েছে। বাতিল করতে টাইপ করুন।",
+    "savedConfirmation": "সংরক্ষিত",
+    "unsavedChanges": "সংরক্ষণ না করা পরিবর্তনসমূহ",
+    "unsavedChangesMessage": "আপনার কিছু পরিবর্তন সংরক্ষণ করা হয়নি। বাতিল করতে চান?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "ডিফল্ট লেখার শৈলী ব্যবহার করুন",
     "noTonesCreated": "এখনও কোনো টোন তৈরি করা হয়নি",
     "createTonesHint": "Quick Actions-এ টোন তৈরি করুন",
-    "translateDocumentTooltip": "ডকুমেন্ট অন্য ভাষায় অনুবাদ করুন।\n\nসমর্থিত ফরম্যাট: Word, Excel, PowerPoint, PDF, HTML, TXT\nসর্বাধিক আকার: ৪০MB\n\n৮০+ ভাষা সমর্থিত, এবং ঐচ্ছিক গ্লোসারি ফাইল ব্যবহার করা যায়।"
+    "translateDocumentTooltip": "নথি অন্য ভাষায় অনুবাদ করুন।\n\nসমর্থিত ফরম্যাট: Word, Excel, PowerPoint, HTML, TXT\nসর্বোচ্চ আকার: ৪০MB\n\nঐচ্ছিক শব্দকোষ ফাইলসহ ৮০+ ভাষা সমর্থিত।"
   },
   "transcription": {
     "transcribesOnSend": "পাঠানোর সময় লিপিবদ্ধ করুন",

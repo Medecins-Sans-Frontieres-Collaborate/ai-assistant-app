@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Zobrazit potvrzovací dialog při kliknutí na tlačítko pro zastavení během generování odpovědi",
       "confirmStopFromKeyboard": "Potvrdit před zastavením klávesnicí",
       "confirmStopFromKeyboardDescription": "Zobrazit potvrzovací dialog při stisknutí Escape během generování odpovědi"
-    }
+    },
+    "appliesToNewConversations": "Platí pouze pro nové konverzace.",
+    "useModelDefault": "Používá se výchozí nastavení modelu.",
+    "fromGeneralSettings": "Z Obecných nastavení",
+    "preferredNameInheritedFromGeneral": "Zobrazované jméno je převzato z Obecných nastavení. Pro přepsání napište nové.",
+    "savedConfirmation": "Uloženo",
+    "unsavedChanges": "Neuložené změny",
+    "unsavedChangesMessage": "Máte neuložené změny. Zahodit je?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "Použít výchozí styl psaní",
     "noTonesCreated": "Zatím nebyly vytvořeny žádné tóny",
     "createTonesHint": "Vytvořte tóny v Rychlých akcích",
-    "translateDocumentTooltip": "Překládejte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximální velikost: 40 MB\n\nPodporuje více než 80 jazyků s volitelnými soubory glosáře."
+    "translateDocumentTooltip": "Přeložte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, HTML, TXT\nMax. velikost: 40 MB\n\nPodpora více než 80 jazyků a volitelných slovníků."
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",

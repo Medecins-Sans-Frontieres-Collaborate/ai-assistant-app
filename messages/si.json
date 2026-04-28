@@ -964,7 +964,15 @@
       "confirmStopFromButtonDescription": "පිළිතුරක් නිපදවමින් සිටින විට නවත්වන්න බොත්තම ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න",
       "confirmStopFromKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට තහවුරු කරන්න",
       "confirmStopFromKeyboardDescription": "පිළිතුරක් නිපදවමින් සිටින විට Escape යතුර ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න"
-    }
+    },
+    "appliesToNewConversations": "නව සංවාද සඳහා පමණක් අදාල වේ.",
+    "useModelDefault": "ආදර්ශයේ පෙරනිමි භාවිතා වේ.",
+    "fromGeneralSettings": "සාමාන්‍ය සැකසුම්වලින්",
+    "preferredNameInheritedFromGeneral": "ඔබගේ සාමාන්‍ය සැකසුම් සංදර්ශන නාමය උරුම කරයි. අහඹුකිරීමට යතුරු ලියන්න.",
+    "savedConfirmation": "සුරකිණි",
+    "unsavedChanges": "සුරැකුම් නොකළ වෙනස්කම්",
+    "unsavedChangesMessage": "ඔබට සුරැකුම් නොකළ වෙනස්කම් ඇත. ඒවා ඉවත් කරන්නද?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "පෙරනිමි ලිවීමේ විලාසය භාවිතා කරන්න",
     "noTonesCreated": "තවම සුරැස්සු නිර්මාණය කර නැත",
     "createTonesHint": "Quick Actions තුළ සුරැස්සු නිර්මාණය කරන්න",
-    "translateDocumentTooltip": "ප්‍රලේඛ පරිවර්තනය වෙනත් භාෂාවකට.\n\nසහාය වන හැඳුනුම්පත්: Word, Excel, PowerPoint, PDF, HTML, TXT\nඋපරිම ප්‍රමාණය: 40MB\n\nවිකල්ප ශබ්ද කෝෂ ගොනු සමඟ භාෂා 80+කට සහය දක්වයි."
+    "translateDocumentTooltip": "ප්‍රළේඛන වෙනත් භාෂාවකට පරිවර්තන කරන්න.\n\nඇදහැලිය හැකි ආකාර: Word, Excel, PowerPoint, HTML, TXT\nඋපරිම ප්‍රමාණය: 40MB\n\nවිකල්ප ග්ලොසරී ගොනු සමඟ භාෂා 80කට වැඩි සංඛ්‍යාවක් සහය දරයි."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",

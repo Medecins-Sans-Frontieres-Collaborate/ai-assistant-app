@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Показывать диалог подтверждения при нажатии кнопки остановки во время генерации ответа",
       "confirmStopFromKeyboard": "Подтверждать перед остановкой с помощью клавиатуры",
       "confirmStopFromKeyboardDescription": "Показывать диалог подтверждения при нажатии Escape во время генерации ответа"
-    }
+    },
+    "appliesToNewConversations": "Применяется только к новым беседам.",
+    "useModelDefault": "Используется значение модели по умолчанию.",
+    "fromGeneralSettings": "Из Общих настроек",
+    "preferredNameInheritedFromGeneral": "Используется отображаемое имя из Общих настроек. Введите другое, чтобы изменить.",
+    "savedConfirmation": "Сохранено",
+    "unsavedChanges": "Несохранённые изменения",
+    "unsavedChangesMessage": "У вас есть несохранённые изменения. Отменить их?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -1549,7 +1557,7 @@
     "useDefaultStyle": "Использовать стиль по умолчанию",
     "noTonesCreated": "Тональности ещё не созданы",
     "createTonesHint": "Создайте тональности в Быстрых действиях",
-    "translateDocumentTooltip": "Переводите документы на другие языки.\n\nПоддерживаемые форматы: Word, Excel, PowerPoint, PDF, HTML, TXT\nМаксимальный размер: 40 МБ\n\nПоддерживается более 80 языков, возможна загрузка глоссариев."
+    "translateDocumentTooltip": "Перевести документы на другой язык.\n\nПоддерживаемые форматы: Word, Excel, PowerPoint, HTML, TXT\nМаксимальный размер: 40 МБ\n\nПоддерживается более 80 языков с возможностью использования глоссариев."
   },
   "transcription": {
     "addInstructions": "Добавить инструкции",

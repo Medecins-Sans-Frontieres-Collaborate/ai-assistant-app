@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Erekana idialogi yo kwemeza igihe ukomanze buto yo guhagarika igihe igisubizo kiriko kirakorwa",
       "confirmStopFromKeyboard": "Emeza imbere yo guhagarika ukoresheje klaviyo",
       "confirmStopFromKeyboardDescription": "Erekana idialogi yo kwemeza igihe uhamvye Escape igihe igisubizo kiriko kirakorwa"
-    }
+    },
+    "appliesToNewConversations": "Bikora gusa ku biganiro bishasha.",
+    "useModelDefault": "Uriko ukoresha ibipimo vya model bisanzwe.",
+    "fromGeneralSettings": "Biva mu Gishirakamwo rusangi",
+    "preferredNameInheritedFromGeneral": "Uriko ukoresha izina ryo kwerekana ryo mu Gishirakamwo rusangi. Andika kugira uhindure.",
+    "savedConfirmation": "Birabitswe",
+    "unsavedChanges": "Impinduka zitabitswe",
+    "unsavedChangesMessage": "Ufise impinduka utarabika. Urashaka kuzikuraho?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Koresha uburyo bw'ukwandika busanzwe",
     "noTonesCreated": "Nta majwi yakozwe",
     "createTonesHint": "Kora amajwi mu Bikorwa vya Vuba",
-    "translateDocumentTooltip": "Hindura inyandiko mu rurimi rwundi.\n\nImiterere yemewe: Word, Excel, PowerPoint, PDF, HTML, TXT\nIngano ntarengwa: 40MB\n\nBishigikira indimi 80+ hamwe n'amadosiye y'amajambo."
+    "translateDocumentTooltip": "Hindura inyandiko mu rundi rurimi.\n\nUbwoko bushigikiwe: Word, Excel, PowerPoint, HTML, TXT\nUbugari ntarengwa: 40MB\n\nIshigikira indimi zirenga 80 hamwe n’ivyo gushirako glossary ku bushake."
   },
   "transcription": {
     "transcribesOnSend": "Bihindurwa mu nyandiko igihe bitumwe",

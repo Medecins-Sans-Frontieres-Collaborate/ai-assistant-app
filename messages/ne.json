@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "कुनै प्रतिक्रिया जेनरेट भइरहेका बेला रोक्ने बटन थिच्दा पुष्टि संवाद देखाउनुहोस्",
       "confirmStopFromKeyboard": "किबोर्डबाट रोक्नुअघि पुष्टि गर्नुहोस्",
       "confirmStopFromKeyboardDescription": "कुनै प्रतिक्रिया जेनरेट भइरहेका बेला Escape थिच्दा पुष्टि संवाद देखाउनुहोस्"
-    }
+    },
+    "appliesToNewConversations": "यो नयाँ संवादहरूमा मात्र लागू हुन्छ।",
+    "useModelDefault": "मोडेलको पूर्वनिर्धारित मान प्रयोग गरिँदैछ।",
+    "fromGeneralSettings": "सामान्य सेटिङहरूबाट",
+    "preferredNameInheritedFromGeneral": "तपाईंको प्रदर्शन नाम सामान्य सेटिङहरूबाट लिइँदैछ। परिवर्तन गर्न टाइप गर्नुहोस्।",
+    "savedConfirmation": "सेभ गरियो",
+    "unsavedChanges": "सेभ नगरिएका परिवर्तनहरू",
+    "unsavedChangesMessage": "तपाईंसँग सेभ नगरिएका परिवर्तनहरू छन्। तिनीहरू हटाउने हो?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "पूर्वनिर्धारित लेखन शैली प्रयोग गर्नुहोस्",
     "noTonesCreated": "अहिलेसम्म कुनै टोन बनाइएको छैन",
     "createTonesHint": "द्रुत कार्यहरूमा टोनहरू बनाउनुहोस्",
-    "translateDocumentTooltip": "कागजातहरूलाई अर्को भाषामा अनुवाद गर्नुहोस्।\n\nसमर्थित ढाँचाहरू: Word, Excel, PowerPoint, PDF, HTML, TXT\nअधिकतम आकार: 40MB\n\nऐच्छिक शब्दावली फाइलहरूसहित ८०+ भाषाहरू समर्थन गर्दछ।"
+    "translateDocumentTooltip": "कागजातहरूलाई अर्को भाषामा अनुवाद गर्नुहोस्।\n\nसमर्थित फर्म्याटहरू: Word, Excel, PowerPoint, HTML, TXT\nअधिकतम साइज: ४०MB\n\n८०+ भाषाहरूमा समर्थन, आवश्यक परे शब्दकोश फाइल पनि प्रयोग गर्न सकिन्छ।"
   },
   "transcription": {
     "transcribesOnSend": "पठाउँदा ट्रान्सक्राइब हुन्छ",

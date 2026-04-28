@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Tus sanduuqa xaqiijinta marka aad gujiso batoonka joojinta inta jawaab la abuurayo",
       "confirmStopFromKeyboard": "Xaqiiji ka hor intaadan joojin kumbuyuutarka",
       "confirmStopFromKeyboardDescription": "Tus sanduuqa xaqiijinta marka aad riixdo Escape inta jawaab la abuurayo"
-    }
+    },
+    "appliesToNewConversations": "Waxay khuseysaa wada sheekaysiyada cusub oo kaliya.",
+    "useModelDefault": "Waxa la isticmaalayaa dejinta caadiga ah ee moodelka.",
+    "fromGeneralSettings": "Ka socota Dejinta Guud",
+    "preferredNameInheritedFromGeneral": "Magaca muuqda waxa laga dhaxlay Dejinta Guud. Qor si aad ugu badasho.",
+    "savedConfirmation": "La keydiyay",
+    "unsavedChanges": "Isbedelo aan la kaydin",
+    "unsavedChangesMessage": "Waxaad leedahay isbedelo aan la kaydin. Ma doonaysaa inaad tirtirto?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Isticmaal qaabka qoraalka caadiga ah",
     "noTonesCreated": "Wali dhawaaq lama samayn",
     "createTonesHint": "Samee dhawaaq Ficilada Degdegga ah",
-    "translateDocumentTooltip": "U turjum dukumentiyo luqad kale.\n\nQaababka la taageerayo: Word, Excel, PowerPoint, PDF, HTML, TXT\nCabbirka ugu badan: 40MB\n\nWuxuu taageeraa 80+ luqadood oo leh faylal erayga ikhtiyaariga ah."
+    "translateDocumentTooltip": "U tarjum dukumentiyada luqad kale.\n\nFoomamka la taageero: Word, Excel, PowerPoint, HTML, TXT\nCabbirka ugu badan: 40MB\n\nWuxuu taageeraa in ka badan 80 luqadood iyo feylal glossary doorasho ah."
   },
   "transcription": {
     "transcribesOnSend": "Wuxuu qoraa marka la diro",

@@ -922,7 +922,15 @@
       "confirmStopFromButtonDescription": "هنگامی که در حال تولید پاسخ هستید و روی دکمه توقف کلیک می‌کنید، یک گفت‌وگوی تأیید نمایش بده",
       "confirmStopFromKeyboard": "قبل از توقف با صفحه‌کلید تأیید بگیر",
       "confirmStopFromKeyboardDescription": "هنگامی که در حال تولید پاسخ هستید و کلید Escape را فشار می‌دهید، یک گفت‌وگوی تأیید نمایش بده"
-    }
+    },
+    "appliesToNewConversations": "فقط برای گفتگوهای جدید اعمال می‌شود.",
+    "useModelDefault": "استفاده از تنظیم پیش‌فرض مدل.",
+    "fromGeneralSettings": "از تنظیمات عمومی",
+    "preferredNameInheritedFromGeneral": "نام نمایشی شما از تنظیمات عمومی گرفته شده است. برای تغییر، تایپ کنید.",
+    "savedConfirmation": "ذخیره شد",
+    "unsavedChanges": "تغییرات ذخیره‌نشده",
+    "unsavedChangesMessage": "شما تغییرات ذخیره‌نشده دارید. آیا می‌خواهید آن‌ها را حذف کنید؟",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "سگ گمشده"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "استفاده از سبک نوشتاری پیش‌فرض",
     "noTonesCreated": "هنوز لحنی ایجاد نشده است",
     "createTonesHint": "می‌توانید لحن را در عملیات سریع ایجاد کنید",
-    "translateDocumentTooltip": "ترجمه اسناد به زبان دیگر.\n\nفرمت‌های پشتیبانی‌شده: Word، Excel، PowerPoint، PDF، HTML، TXT\nحداکثر اندازه: ۴۰ مگابایت\n\nپشتیبانی از بیش از ۸۰ زبان همراه با فایل واژه‌نامه انتخابی."
+    "translateDocumentTooltip": "اسناد را به زبان دیگر ترجمه کنید.\n\nفرمت‌های پشتیبانی‌شده: Word، Excel، PowerPoint، HTML، TXT\nحداکثر اندازه: ۴۰ مگابایت\n\nپشتیبانی از بیش از ۸۰ زبان با امکان استفاده از فایل واژه‌نامه."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "دستورالعمل‌های شخصی خود را برای سفارشی‌سازی نحوه پاسخ‌دهی هوش مصنوعی اضافه کنید. این دستورالعمل‌ها همراه با راهنماهای اصلی رفتاری برای تضمین پاسخ‌های مفید، دقیق و ایمن ترکیب می‌شوند.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نکته: با وارد کردن \"/\" می‌توانید از قالب‌های ذخیره‌شده راهنما انتخاب کنید.",

@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "کله چې ځواب تولیدېږي او تاسې د درولو تڼۍ کلیک کوئ، د تایید کړکۍ ښکاره کړئ",
       "confirmStopFromKeyboard": "د کیبورډ له لارې درولو مخکې تایید وکړئ",
       "confirmStopFromKeyboardDescription": "کله چې ځواب تولیدېږي او تاسې Escape کلیک کوئ، د تایید کړکۍ ښکاره کړئ"
-    }
+    },
+    "appliesToNewConversations": "یوازې نوو خبرو اترو ته تطبیق کېږي.",
+    "useModelDefault": "د ماډل اصلي ترتیب کارول کېږي.",
+    "fromGeneralSettings": "د عمومي تنظیماتو څخه",
+    "preferredNameInheritedFromGeneral": "ستاسو د عمومي تنظیماتو ښودل شوی نوم اخیستل شوی. د بدلولو لپاره ولیکئ.",
+    "savedConfirmation": "ثبت شو",
+    "unsavedChanges": "خوندي نه شوي بدلونونه",
+    "unsavedChangesMessage": "تاسو خوندي نه شوي بدلونونه لرئ. آیا لغوه یې کړئ؟",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "اصلي لیکدود وکاروئ",
     "noTonesCreated": "تر اوسه هیڅ ټون نه دی جوړ شوی",
     "createTonesHint": "ټونونه د چټکو عملیاتو له لارې جوړ کړئ",
-    "translateDocumentTooltip": "اسناد بله ژبه ته وژباړئ.\n\nمناسب ډولونه: Word، Excel، PowerPoint، PDF، HTML، TXT\nاعظمي کچه: ۴۰MB\n\nله ۸۰ څخه ډېرو ژبو څخه ملاتړ لري او اختیاري ګلاسري فایلونه لري."
+    "translateDocumentTooltip": "اسناد نورو ژبو ته وژباړئ.\n\nمنل شوي فورمټونه: Word, Excel, PowerPoint, HTML, TXT\nاعظمي اندازه: 40MB\n\nد ۸۰ څخه زیاتو ژبو ملاتړ، د glossary فایلونو اختیاري ملاتړ."
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",

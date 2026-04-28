@@ -997,7 +997,15 @@
       "confirmStopFromButtonDescription": "Yanıt oluşturulurken durdur butonuna tıkladığınızda onay penceresi göster",
       "confirmStopFromKeyboard": "Klavye ile durdurmadan önce onay iste",
       "confirmStopFromKeyboardDescription": "Yanıt oluşturulurken Escape tuşuna bastığınızda onay penceresi göster"
-    }
+    },
+    "appliesToNewConversations": "Yalnızca yeni sohbetler için geçerlidir.",
+    "useModelDefault": "Model varsayılanı kullanılıyor.",
+    "fromGeneralSettings": "Genel Ayarlardan",
+    "preferredNameInheritedFromGeneral": "Genel Ayarlardaki görünen adınız devralındı. Üzerine yazmak için yazın.",
+    "savedConfirmation": "Kaydedildi",
+    "unsavedChanges": "Kaydedilmemiş değişiklikler",
+    "unsavedChangesMessage": "Kaydedilmemiş değişiklikleriniz var. İptal etmek istiyor musunuz?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Varsayılan yazı stilini kullan",
     "noTonesCreated": "Henüz ton oluşturulmadı",
     "createTonesHint": "Hızlı Eylemler'de tonlar oluşturun",
-    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaksimum boyut: 40MB\n\n80'den fazla dili, isteğe bağlı sözlük dosyalarıyla destekler."
+    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, HTML, TXT\nMaksimum boyut: 40MB\n\nOpsiyonel sözlük dosyaları ile 80+ dil desteklenir."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",

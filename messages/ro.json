@@ -995,7 +995,15 @@
       "confirmStopFromButtonDescription": "Afișează o confirmare când faci clic pe butonul de oprire în timpul generării unui răspuns",
       "confirmStopFromKeyboard": "Confirmare înainte de oprire cu tastatura",
       "confirmStopFromKeyboardDescription": "Afișează o confirmare când apeși Escape în timpul generării unui răspuns"
-    }
+    },
+    "appliesToNewConversations": "Se aplică doar conversațiilor noi.",
+    "useModelDefault": "Se folosește valoarea implicită a modelului.",
+    "fromGeneralSettings": "Din Setările Generale",
+    "preferredNameInheritedFromGeneral": "Se preia numele afișat din Setările Generale. Tastați pentru a suprascrie.",
+    "savedConfirmation": "Salvat",
+    "unsavedChanges": "Modificări nesalvate",
+    "unsavedChangesMessage": "Aveți modificări nesalvate. Renunțați la ele?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "Folosiți stilul de scriere implicit",
     "noTonesCreated": "Nu au fost create tonuri încă",
     "createTonesHint": "Creați tonuri în Acțiuni rapide",
-    "translateDocumentTooltip": "Tradu documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi, cu fișiere glosar opționale."
+    "translateDocumentTooltip": "Traduceți documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi și fișiere de glosar opționale."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",

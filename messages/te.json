@@ -995,7 +995,15 @@
       "confirmStopFromButtonDescription": "ప్రతిస్పందన సృష్టిస్తున్నప్పుడు స్టాప్ బటన్ నొక్కినపుడు నిర్ధారణ డైలాగ్ చూపించు",
       "confirmStopFromKeyboard": "కీబోర్డ్‌తో ఆపడాన్ని ముందు నిర్ధారించు",
       "confirmStopFromKeyboardDescription": "ప్రతిస్పందన సృష్టిస్తున్నప్పుడు Escape నొక్కినపుడు నిర్ధారణ డైలాగ్ చూపించు"
-    }
+    },
+    "appliesToNewConversations": "కొత్త సంభాషణలకు మాత్రమే వర్తిస్తుంది.",
+    "useModelDefault": "మోడల్ డిఫాల్ట్‌ను ఉపయోగిస్తోంది.",
+    "fromGeneralSettings": "సాధారణ సెట్టింగుల నుండి",
+    "preferredNameInheritedFromGeneral": "మీ డిస్‌ప్లే పేరు సాధారణ సెట్టింగుల నుండి స్వీకరించబడింది. మార్చాలంటే టైప్ చేయండి.",
+    "savedConfirmation": "సేవ్ చేయబడింది",
+    "unsavedChanges": "సేవ్ చేయని మార్పులు",
+    "unsavedChangesMessage": "మీరు సేవ్ చేయని మార్పులు ఉన్నాయి. వాటిని తొలగించాలా?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "కోల్పోయిన కుక్క"
@@ -1646,7 +1654,7 @@
     "useDefaultStyle": "డిఫాల్ట్ రైటింగ్ స్టైల్లు వినియోగించండి",
     "noTonesCreated": "ఇంకా ఎలాంటి శైలులు సృష్టించలేదు",
     "createTonesHint": "త్వరిత చర్యల్లో శైల్లను సృష్టించండి",
-    "translateDocumentTooltip": "డాక్యుమెంట్లను ఇతర భాషలకు అనువదించండి.\n\nఅనుమతించబడిన ఫార్మాట్‌లు: Word, Excel, PowerPoint, PDF, HTML, TXT\nగరిష్ఠ పరిమాణం: 40MB\n\nఐచ్ఛిక గ్లోస్సరీ ఫైళ్లతో పాటు 80+ భాషలకు మద్దతు."
+    "translateDocumentTooltip": "పత్రాలను మరొక భాషలోకి అనువదించండి.\n\nఆధారిత ఫార్మాట్లు: Word, Excel, PowerPoint, HTML, TXT\nగరిష్ఠ పరిమాణం: 40MB\n\nఐచ్ఛిక glossary ఫైళ్లతో 80+ భాషలకు మద్దతు."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ఎలా స్పందించాలో అనుకూలీకరించడానికి మీ వ్యక్తిగత సూచనలను జత చేయండి. ఇవి సహాయకరమైన, ఖచ్చితమైన మరియు సురక్షితమైన స్పందనలను నిర్ధారించే ప్రాథమిక ప్రవర్తనా మార్గదర్శకాలతో కలిపి ఉపయోగించబడతాయి.",
   "Tip: Type \"/\" to select from saved prompt templates_": "సూచన: సేవ్ చేయబడిన ప్రాంప్ట్ టెంప్లేట్లను ఎంచుకోవడానికి \"/\" టైప్ చేయండి.",

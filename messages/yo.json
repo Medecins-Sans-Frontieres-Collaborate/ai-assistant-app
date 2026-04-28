@@ -1150,7 +1150,15 @@
       "confirmStopFromButtonDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ bọtìnì dákẹ́ nígbà tí a ń ṣètò ìdáhùn",
       "confirmStopFromKeyboard": "Jẹ́ kó dájú kí o tó dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
       "confirmStopFromKeyboardDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ Escape nígbà tí a ń ṣètò ìdáhùn"
-    }
+    },
+    "appliesToNewConversations": "Ó kan ìbànújẹ tuntun nìkan.",
+    "useModelDefault": "Lílo àfẹ́yà míìràn tí àpẹẹrẹ.",
+    "fromGeneralSettings": "Láti Ìtòsọ́nà Gbogbogbo",
+    "preferredNameInheritedFromGeneral": "N gba orúkọ ìfihàn rẹ láti Ìtòsọ́nà Gbogbogbo. Tẹ̀ sílẹ̀ láti yípadà.",
+    "savedConfirmation": "Ti fipamọ́",
+    "unsavedChanges": "Àyípadà tí kò tíì fipamọ́",
+    "unsavedChangesMessage": "O ní àyípadà tí kò tíì fipamọ́. Ṣe o fẹ́ sọ wọn di asán?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1615,7 +1623,7 @@
     "useDefaultStyle": "Lo àṣà kíkọ̀wé ìbẹ̀rẹ̀",
     "noTonesCreated": "A kò tíì ṣẹ̀dá ohùn kankan",
     "createTonesHint": "Ṣẹ̀dá àwọn ohùn nínú Àwọn Ìgbésẹ̀ Kíákíá",
-    "translateDocumentTooltip": "Túmọ̀ àwọn ìwé sí èdè mìíràn.\n\nÀwọn ọ̀nà tí a ṣe àtìlẹ́yìn fún: Word, Excel, PowerPoint, PDF, HTML, TXT\nÌwọ̀n pọ̀ jù: 40MB\n\nÓ ṣe àtìlẹ́yìn fún àwọn èdè 80+ pẹ̀lú àwọn fáìlì ìtúmọ̀-ọ̀rọ̀ àṣàyàn."
+    "translateDocumentTooltip": "Ṣe túmọ̀ àwọn dọ́kíúmẹ́ntì sí èdè míràn.\n\nÀwọn àkópọ̀ tí a gbà: Word, Excel, PowerPoint, HTML, TXT\nÌwọn tó pọ̀jù: 40MB\n\nṢe àtìlẹ́yìn fún èdè méjìlélọ́gọ́rin (80+) pẹ̀lú àṣàyàn fáìlì glossary."
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
