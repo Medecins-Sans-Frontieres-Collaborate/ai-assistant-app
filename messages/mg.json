@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
-      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
+      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa",
+      "autoInjectPinnedImages": "Averina alefa isan-dalana ny sary napetraka",
+      "autoInjectPinnedImagesDescription": "Rehefa alefa ity safidy ity, dia halefa amin'ny modely mahay mamaky sary isan-dalana ny sary napetraka mba hijanona ao anaty lahatsoratra (vidiny tombanana ≈765 token isaky ny sary napetraka isaky ny mandeha). Raha tsy alefa, dia mbola hita amin'ny tabilao ny sary napetraka fa tsy alefa amin'ny modely raha tsy averina apetaka indray. Tsy manan-kery amin'ny modely Anthropic izany, izay tsy mandray votoaty sary amin'izao fotoana izao."
     },
     "Quarantined Data": "Angona natao anaty karantina",
     "quarantineDataDescription": "Manana {count} {count, plural, one {singan-javatra} other {singa}} natao anaty karantina ianao ({size}) misy olana amin'ny angona ka tsy afaka nentina amin'ny fomba mahazatra.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Lehibe loatra ny rakitra hikambana ({tokens} token, fetra: {limit})",
     "activationRejectedTooLarge": "Lehibe loatra ny rakitra ho an'ny tontolo iainana mavitrika ({tokens} token, fetra: {limit})",
     "sessionQuotaWarning": "Efa ho lany ny fetra amin'ny fivoriana — {remaining} token sisa",
-    "sessionQuotaNearlyExhausted": "Efa ho voafetra ny fivoriana — mety tsy ho tafiditra ny rakitra mavitrika"
+    "sessionQuotaNearlyExhausted": "Efa ho voafetra ny fivoriana — mety tsy ho tafiditra ny rakitra mavitrika",
+    "notInContext": "Tsy ao anatin'ny lahatsoratra",
+    "notInContextTooltip": "Tsy tafiditra tao amin'ny tokonam-bolan'ny token isaky ny mandeha ity rakitra ity tamin'ny valiny farany, ka tsy afaka nahita azy ny modely. Haverina hodinihina amin'ny hafatrao manaraka izany.",
+    "notInjected": "Tsy nalefa",
+    "notInjectedTooltip": "Tsy alefa amin'ny toerana fikirakirana ny famerenana mandefa sary. Mijanona ho hita eto ity sary napetraka ity fa tsy alefa amin'ny modely raha tsy apetaka indray."
   },
   "shortcuts": {
     "title": "Fanalahidin-tsoratra haingana",

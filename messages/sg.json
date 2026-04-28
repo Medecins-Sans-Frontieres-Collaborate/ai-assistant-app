@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Fânga ti yângâ nî tî kodro wüngö",
-      "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô"
+      "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô",
+      "autoInjectPinnedImages": "Zinga sô inji-file na image tî gbê na yângâ-yângâ",
+      "autoInjectPinnedImagesDescription": "Sô àla, image tî gbê a yeke bô tî yâ tî model na vision-mbeni na yângâ-yângâ, ngâ a yové na contexte (kulu tî tokens ≈765 sôkô image tî gbê kubeti na yângâ-yângâ). Sô à ko, image tî gbê a yéké yâ lê na panel, mbênî a bô na model sô mo yângä-ä ti ji. A köda na model Anthropic, mingi tî yeke hila tî image sôngö na model tî o."
     },
     "Quarantined Data": "Donnés tî quarantiné",
     "quarantineDataDescription": "Oko yeke {count} {count, plural, one {mbeti} other {mbeti}} tî quarantiné ({size}) mbi donnés azo so alingbi köda wala köda mbido na mbênî.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Ape so ale ti kängbi sô ndro lo ({tokens} tokens, ngbanga: {limit})",
     "activationRejectedTooLarge": "Ape so ale ti active context ({tokens} tokens, ngbanga: {limit})",
     "sessionQuotaWarning": "Quota tî session yeke pada— {remaining} tokens yeke kûè",
-    "sessionQuotaNearlyExhausted": "Quota tî session yeke ndro sô lise— ape active lô tî kete ana mo"
+    "sessionQuotaNearlyExhausted": "Quota tî session yeke ndro sô lise— ape active lô tî kete ana mo",
+    "notInContext": "A yeke hila na contexte",
+    "notInContextTooltip": "Fi file a köda na tendê tî tokens sô yângâ, so model a hila å. A yeke zara sô mo sèngöra na kêtêmbè tî mo.",
+    "notInjected": "A hila inji",
+    "notInjectedTooltip": "Inji image zo a köda na settings. Image tî gbê a yeke hila yô kêtêngö, mbênî a hila tî bô na model sô mo yângä-ä ti ji na yângâ."
   },
   "shortcuts": {
     "title": "Káfù tî kobanga-lêko",

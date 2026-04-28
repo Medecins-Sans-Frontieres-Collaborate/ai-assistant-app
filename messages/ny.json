@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
-      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
+      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo",
+      "autoInjectPinnedImages": "Bwezeretsani zithunzi zomwe zabweretsedwa nthawi iliyonse",
+      "autoInjectPinnedImagesDescription": "Zikayatsidwa, zithunzi zomwe mwapachika zimatumizidwa ku ma model omwe amawona zithunzi nthawi iliyonse kuti zikhale mu nkhani (mtengo wokwana ≈765 tokens pa chithunzi chilichonse pa nthawi iliyonse). Zikazimitsidwa, zithunzizo zimakhalabe zikuonekera mu paneli koma zimatumizidwa pokhapokha mutazibwezeretsanso. Sizigwira ntchito pa ma model a Anthropic, omwe panopa sadalandila zithunzi."
     },
     "Quarantined Data": "Deta Yosungidwa M'kati",
     "quarantineDataDescription": "Muli ndi {count} deta yosungidwa m'kati {count, plural, one {item} other {items}} ({size}) yokhala ndi mavuto omwe sangathe kutsegulidwa bwinobwino.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Fayilo ndi yayikulu kwambiri kuyikako ({tokens} matoken, malire: {limit})",
     "activationRejectedTooLarge": "Fayilo ndi yayikulu kwambiri pa gawo lamoyo ({tokens} matoken, malire: {limit})",
     "sessionQuotaWarning": "Malinga ndi nthawi yatsala pang’ono kutha — {remaining} matoken atsala",
-    "sessionQuotaNearlyExhausted": "Malinga ndi nthawi pafupifupi kutha — mafayilo akhanga sakhoza kuphatikizidwa"
+    "sessionQuotaNearlyExhausted": "Malinga ndi nthawi pafupifupi kutha — mafayilo akhanga sakhoza kuphatikizidwa",
+    "notInContext": "Sili mu nkhani",
+    "notInContextTooltip": "Fayiloyi sinalowe mu chiwerengero cha ma token nthawi yapitayi, kotero model sanathe kuyiona. Izi zidzaganizidwanso pa uthenga wanu wotsatira.",
+    "notInjected": "Sinatumizidwe",
+    "notInjectedTooltip": "Kutumiza zithunzi kwabwereranso kwazimitsidwa mu makonda. Chithunzi ichi chikhalabe pamenepa koma sichitumizidwa kwa model pokhapokha mutachibwezeretsanso."
   },
   "shortcuts": {
     "title": "Njira Zachidule pa Kiyibodi",

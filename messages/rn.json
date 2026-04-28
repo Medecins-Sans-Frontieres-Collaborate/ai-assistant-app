@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Kwishingira ku buryo bwikora amadosiye yashizweho",
-      "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa"
+      "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa",
+      "autoInjectPinnedImages": "Sangira amasanamu yafatiriwe kuri buri gira",
+      "autoInjectPinnedImagesDescription": "Igihe iri kuri, amasanamu yafatiriwe arasangirwa na models zishobora kubona ishusho kuri buri gira kugira bigume mw'ijambo. (ikiguzi c'ibiharuro ≈765 tokens ku shusho imwe yose). Niba bibaye vyaratosewe, amasanamu araguma ari muri panel ariko ntashikirizwa kuri model tutariko turayasubiza. Ntibigira ico bikoze kuri models za Anthropic kuko ntizakira amasanamu."
     },
     "Quarantined Data": "Ibipimo vyabitswe ukwabigenewe",
     "quarantineDataDescription": "Ufise {count} {count, plural, one {kintu} other {ibintu}} vyabitswe ukwabigenewe ({size}) bifise ibibazo vyatuma bitashoboye kwugururwa neza.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Idosiye nini cane kugira yemezwe ({tokens} tokens, ntarengwa: {limit})",
     "activationRejectedTooLarge": "Idosiye nini cane ku bisanzwe bikoreshwa ({tokens} tokens, ntarengwa: {limit})",
     "sessionQuotaWarning": "Nkigereranyo ca session kiriko kirashira — hasigaye {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Nkigereranyo ca session kirashira — amadosiye ashobora kutarimwo"
+    "sessionQuotaNearlyExhausted": "Nkigereranyo ca session kirashira — amadosiye ashobora kutarimwo",
+    "notInContext": "Ntiri mu ntumbero",
+    "notInContextTooltip": "Iyi dosiye ntiyashoboye kwinjira mu mubare w'inyuguti zemewe muri iyi gira, vyatumye model itayibona. Izokwisuzumwa mu butumwa bwawe bukurikira.",
+    "notInjected": "Ntirashizwe",
+    "notInjectedTooltip": "Gusubira gushira ishusho ntabwo vyemewe muri settings. Iyi shusho yafatiriwe iraguma igaragara hano ariko ntishikirizwa ku model tutarayisubiza."
   },
   "shortcuts": {
     "title": "Uburyo bwo gukoresha urufunguruzo rwa klaviyeri",

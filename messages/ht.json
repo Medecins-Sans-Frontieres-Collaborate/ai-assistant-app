@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Pine otomatikman fichye w telechaje yo",
-      "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la"
+      "autoPinUploadsDescription": "Pine fichye otomatikman lè yo telechaje pou anpeche yo sòti nan lis la",
+      "autoInjectPinnedImages": "Re-enjekte imaj fikse yo chak fwa",
+      "autoInjectPinnedImagesDescription": "Lè opsyon sa a limen, imaj fikse yo voye bay modèl ki ka wè chak fwa pou yo rete nan kontèks la (pri estime ≈765 senbòl pa imaj fikse pa fwa). Lè li etenn, imaj fikse yo ap vizib nan panèl la men yo sèlman voye lè ou re-atache yo. Pa gen okenn efè sou modèl Anthropic yo, ki pa resevwa kontni imaj pou kounye a."
     },
     "Quarantined Data": "Done karantèn",
     "quarantineDataDescription": "Ou gen {count} {count, plural, one {atik} other {atik yo}} karantèn ({size}) ki gen pwoblèm done epi ki pa ka chaje nòmalman.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Fichye twò gwo pou fikse ({tokens} tokens, limit: {limit})",
     "activationRejectedTooLarge": "Fichye twò gwo pou kontèks aktif ({tokens} tokens, limit: {limit})",
     "sessionQuotaWarning": "Kouta sesyon ap fin itilize — {remaining} tokens rete",
-    "sessionQuotaNearlyExhausted": "Kouta sesyon prè pou fini — fichye aktif yo ka pa enkli"
+    "sessionQuotaNearlyExhausted": "Kouta sesyon prè pou fini — fichye aktif yo ka pa enkli",
+    "notInContext": "Pa nan kontèks la",
+    "notInContextTooltip": "Fichye sa a pa te rantre nan limit senbòl pou dènye repons lan, kidonk modèl la pa te ka wè li. Lap pran an konsiderasyon nan pwochen mesaj ou.",
+    "notInjected": "Pa re-enjekte",
+    "notInjectedTooltip": "Re-enjeksyon imaj dezaktive nan paramèt yo. Imaj sa a ap rete vizib isit la men li pap voye bay modèl la sòf si ou re-atache li."
   },
   "shortcuts": {
     "title": "Koutchemen Klavye",

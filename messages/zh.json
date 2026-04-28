@@ -1011,7 +1011,9 @@
     "verbosityDescription": "控制GPT-5模型响应的详细程度。",
     "activeFiles": {
       "autoPinUploads": "自动固定已上传文件",
-      "autoPinUploadsDescription": "上传文件时自动固定，以防被移出"
+      "autoPinUploadsDescription": "上传文件时自动固定，以防被移出",
+      "autoInjectPinnedImages": "每轮自动重新注入置顶图片",
+      "autoInjectPinnedImagesDescription": "开启后，置顶图片将在每轮对话时发送到支持视觉的模型中，以便保持上下文（预计每张置顶图片每轮消耗约765个tokens）。关闭后，图片仍会在面板中显示，但只会在您重新附加时发送。不影响Anthropic模型，当前该模型不接收图片内容。"
     },
     "Quarantined Data": "隔离数据",
     "quarantineDataDescription": "您有 {count} 个隔离{count, plural, one {项目} other {项目}}（{size}），由于数据问题无法正常加载。",
@@ -1876,7 +1878,11 @@
     "pinBlockedTooLarge": "文件过大，无法固定（{tokens} 令牌，限制：{limit}）",
     "activationRejectedTooLarge": "文件过大，无法添加至活动上下文（{tokens} 令牌，限制：{limit}）",
     "sessionQuotaWarning": "会话额度不足 — 剩余 {remaining} 令牌",
-    "sessionQuotaNearlyExhausted": "会话额度即将用尽 — 活动文件可能无法被包含"
+    "sessionQuotaNearlyExhausted": "会话额度即将用尽 — 活动文件可能无法被包含",
+    "notInContext": "未在上下文中",
+    "notInContextTooltip": "此文件在上次回复时未能满足每轮token限额，因此模型无法读取。下次发送消息时会重新考虑。",
+    "notInjected": "未注入",
+    "notInjectedTooltip": "已在设置中禁用图片自动注入。该置顶图片会在此处显示，但除非您重新附加，否则不会发送给模型。"
   },
   "shortcuts": {
     "title": "键盘快捷键",

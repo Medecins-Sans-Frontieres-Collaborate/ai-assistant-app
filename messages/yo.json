@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ",
-      "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà"
+      "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà",
+      "autoInjectPinnedImages": "Tun fi awọn aworan amuṣiṣẹpọ sii ni gbogbo iyipo",
+      "autoInjectPinnedImagesDescription": "Nigbati o ba wa lọwọ, awọn aworan ti a muṣe yoo fi ranṣẹ si awọn awoṣe ti o le ri aworan ni gbogbo iyipo lati jẹ ki wọn wa ninu akori ọrọ (iye idiyele to ṣee ṣe ≈765 tokens fun aworan kọọkan ni iyipo kọọkan). Ti o ba jẹ pipa, awọn aworan naa yoo han ni panẹli nikan ṣugbọn a o fi ranṣẹ nigba ti o tun so pọ. Ko ni ipa lori awọn awoṣe Anthropic, eyiti ko gba akoonu aworan lọwọlọwọ."
     },
     "Quarantined Data": "Àmúkọ́ Data",
     "quarantineDataDescription": "O ní {count} {count, plural, one {kókó} other {àwọn kókó}} tìkára rẹ̀ nínú àmúkọ́ ({size}) pẹ̀lú ìṣòro data tí a kò lè kó wọlé dáradára.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Faili tobi ju lati so mọ ({tokens} tọọki, aala: {limit})",
     "activationRejectedTooLarge": "Faili tobi ju fun ipo lilo gangan ({tokens} tọọki, aala: {limit})",
     "sessionQuotaWarning": "Iye akoko igba n lọ silẹ — {remaining} tọọki ku",
-    "sessionQuotaNearlyExhausted": "Iye akoko igba fẹrẹ parí — awọn faili to n ṣiṣẹ le ma wa"
+    "sessionQuotaNearlyExhausted": "Iye akoko igba fẹrẹ parí — awọn faili to n ṣiṣẹ le ma wa",
+    "notInContext": "Ko wa ninu akori ọrọ",
+    "notInContextTooltip": "Faili yii ko le ba iye tokens to wa fun iyipo to kọja mu, nítorí náà awoṣe ko ri i. Yoo tun jẹ ayẹwo lori ifiranṣẹ rẹ tó tẹle.",
+    "notInjected": "A ko fi sii",
+    "notInjectedTooltip": "A ti mu ki atun-fi aworan sii ṣiṣẹ ni eto. Aworan ti a muṣe yii maa han nibi ṣugbọn a kii yoo fi ranṣẹ si awoṣe ayafi ti o tun so pọ."
   },
   "shortcuts": {
     "title": "Awọn ọna abuja bọtini",

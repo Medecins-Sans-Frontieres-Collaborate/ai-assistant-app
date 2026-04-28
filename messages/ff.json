@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Paɗtol fayliiji ɓeydii jaasi",
-      "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa"
+      "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa",
+      "autoInjectPinnedImages": "Salutoraa doggol e kulol her turn",
+      "autoInjectPinnedImagesDescription": "So nyaltii, doggol kulol maa sendude e modelji moƴƴi yiɗde vision kala turn, ko honɗun ɓe ngaddi e kulol (so ɓuri balɗe gite ≈765 tokens doggol maa turn). So nyaltii, doggol kulol maa waɗi ndiman e panel, kono sendaniyo asoto amɓe laataa ka gaɗa. Waa hinaa ballal e modelji Anthropic, ɗum tigi ndariima doggol kulol."
     },
     "Quarantined Data": "Bayanko kala data rewtaama",
     "quarantineDataDescription": "A jogii {count} {count, plural, one {farilla} other {farilli}} rewtaama ({size}) e jokkondiral data woni mooftugol caɗeele.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Bisinooki suuɗi loowdi nannitde ({tokens} tokens, dencaa: {limit})",
     "activationRejectedTooLarge": "Bisinooki suuɗi loowdi e ɗum doole active context ({tokens} tokens, dencaa: {limit})",
     "sessionQuotaWarning": "Qoota roundu yakin — {remaining} tokens ñalli",
-    "sessionQuotaNearlyExhausted": "Qoota roundu ngalaa — bisinooki active waawi walaa"
+    "sessionQuotaNearlyExhausted": "Qoota roundu ngalaa — bisinooki active waawi walaa",
+    "notInContext": "Ko waawaa e kontekst",
+    "notInContextTooltip": "Fiildeede anndaani e token budget for turn nder javni woɗnde, kono model ngoni yidii. Ko si tawii on artaama wonde e bayyani maa juulnde.",
+    "notInjected": "Salaa doggol",
+    "notInjectedTooltip": "Salutoraa doggol kulol tapputi e settings. Doggol kulol ɗin ndarata fewndo, kono sentaani amɓe laataa so tawii a rewti doggol e fiilde. "
   },
   "shortcuts": {
     "title": "Teene dulnde keyboard",

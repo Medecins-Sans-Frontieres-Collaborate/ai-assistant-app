@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Kufungira mu buryo bwikora amadosiye ashyizweho",
-      "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo"
+      "autoPinUploadsDescription": "Fungira amadosiye mu buryo bwikora igihe ushyizweho kugira ngo atagirwa imfunguzo",
+      "autoInjectPinnedImages": "Ongera wohereze amashusho yafashwe buri nshuro",
+      "autoInjectPinnedImagesDescription": "Iyo iri kuri, amashusho yafashwe ahita yoherezwa kuri za moderi zishobora kureba buri nshuro kugira ngo agume mu bisobanuro (ikiguzi gipimwe ≈765 tokens kuri buri shusho yafashwe kuri buri nshuro). Iyo biri kuzimije, amashusho yafashwe agaragara kuri panel ariko yoherezwa gusa iyo wongeye kuyashyiraho. Ntibikora kuri moderi za Anthropic, kuko ubu ntabwo zishobora kwakira amashusho."
     },
     "Quarantined Data": "Amakuru yafungiwe",
     "quarantineDataDescription": "Ufite {count} {count, plural, one {ikintu} other {ibintu}} byafungiwe ({size}) bifite ibibazo by’amakuru bitashoboye gufungurwa bisanzwe.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Fayili nini cyane ngo bibikwe burundu ({tokens} tokens, ntarengwa: {limit})",
     "activationRejectedTooLarge": "Fayili nini cyane ku ishyirwa mu bikorwa ({tokens} tokens, ntarengwa: {limit})",
     "sessionQuotaWarning": "Umubare ntarengwa wa session uragabanutse — hasigaye {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Umubare ntarengwa wa session ugiye kurangira — amafayili akora ashobora kutarimo"
+    "sessionQuotaNearlyExhausted": "Umubare ntarengwa wa session ugiye kurangira — amafayili akora ashobora kutarimo",
+    "notInContext": "Ntiri mu bisobanuro",
+    "notInContextTooltip": "Iyi fayi ntiyashoboraga kujya mu bipimo bya tokens byemerewe kuri iyi nshuro ishize, bityo imodoka ntiyabashije kuyireba. Izasuzumwa uburombeho ubutaha wanditse.",
+    "notInjected": "Ntabwo yoherejwe",
+    "notInjectedTooltip": "Gusubira kohereza amashusho byazimijwe muri settings. Iyi shusho yafashwe iguma igaragara hano ariko ntiyoherezwa kuri moderi keretse wongereye kuyifatisha."
   },
   "shortcuts": {
     "title": "Inyunganirangingo za klavieri",

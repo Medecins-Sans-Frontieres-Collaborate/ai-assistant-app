@@ -955,7 +955,9 @@
     "verbosityDescription": "Säätää GPT-5-mallien vastausten yksityiskohtaisuutta.",
     "activeFiles": {
       "autoPinUploads": "Kiinnitä ladatut tiedostot automaattisesti",
-      "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä"
+      "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä",
+      "autoInjectPinnedImages": "Lisää kiinnitetyt kuvat uudelleen jokaisella vuorolla",
+      "autoInjectPinnedImagesDescription": "Kun tämä asetus on käytössä, kiinnitetyt kuvat lähetetään visioon kykeneville malleille jokaisella vuorolla, jotta ne pysyvät kontekstissa (arvioitu kustannus ≈765 tokenia kiinnitettyä kuvaa kohti per vuoro). Kun asetus on pois päältä, kiinnitetyt kuvat näkyvät paneelissa, mutta lähetetään vain uudelleen liittäessäsi ne. Ei vaikuta Anthropic-malleihin, jotka eivät tällä hetkellä vastaanota kuvasisältöä."
     },
     "Quarantined Data": "Karanteeniin asetetut tiedot",
     "quarantineDataDescription": "Sinulla on {count} karanteeniin asetettua {count, plural, one {tietue} other {tietuetta}} ({size}), joissa on tietoon liittyviä ongelmia, eikä niitä voitu ladata normaalisti.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Tiedosto liian suuri kiinnitettäväksi ({tokens} tokenia, raja: {limit})",
     "activationRejectedTooLarge": "Tiedosto liian suuri aktiiviseen kontekstiin ({tokens} tokenia, raja: {limit})",
     "sessionQuotaWarning": "Istuntokiintiö vähissä — {remaining} tokenia jäljellä",
-    "sessionQuotaNearlyExhausted": "Istuntokiintiö lähes käytetty — aktiivisia tiedostoja ei ehkä sisällytetä"
+    "sessionQuotaNearlyExhausted": "Istuntokiintiö lähes käytetty — aktiivisia tiedostoja ei ehkä sisällytetä",
+    "notInContext": "Ei kontekstissa",
+    "notInContextTooltip": "Tämä tiedosto ei mahtunut viimeisimmän vastauksen vuorokohtaiseen token-budjettiin, joten malli ei nähnyt sitä. Se otetaan huomioon seuraavassa viestissäsi.",
+    "notInjected": "Ei injektoitu",
+    "notInjectedTooltip": "Kuvien uudelleenlisäys on poistettu käytöstä asetuksissa. Tämä kiinnitetty kuva pysyy näkyvissä täällä, mutta sitä ei lähetetä mallille, ellei sitä liitetä uudelleen."
   },
   "shortcuts": {
     "title": "Pikanäppäimet",

@@ -955,7 +955,9 @@
     "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5.",
     "activeFiles": {
       "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
-      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
+      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה",
+      "autoInjectPinnedImages": "הזרק מחדש תמונות מוצמדות בכל סבב",
+      "autoInjectPinnedImagesDescription": "כאשר מופעל, תמונות מוצמדות נשלחות לדגמים עם יכולות ראייה בכל סבב כדי להישאר בהקשר (עלות משוערת ≈765 טוקנים לכל תמונה מוצמדת בכל סבב). כאשר מבוטל, התמונות נשארות גלויות בפאנל אך נשלחות רק כאשר מצרפים אותן מחדש. לא משפיע על דגמים של Anthropic, שאינם תומכים כרגע בתוכן תמונה."
     },
     "Quarantined Data": "נתונים בהסגר",
     "quarantineDataDescription": "יש לך {count} {count, plural, one {פריט} other {פריטים}} בהסגר ({size}) עם בעיות נתונים שלא ניתן היה לטעון כרגיל.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "הקובץ גדול מדי להצמדה ({tokens} טוקנים, מגבלה: {limit})",
     "activationRejectedTooLarge": "הקובץ גדול מדי להקשר אקטיבי ({tokens} טוקנים, מגבלה: {limit})",
     "sessionQuotaWarning": "המכסה לסשן קרובה לסיום — נותרו {remaining} טוקנים",
-    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו"
+    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו",
+    "notInContext": "לא בהקשר",
+    "notInContextTooltip": "קובץ זה לא נכנס לתקציב הטוקנים לסבב האחרון, ולכן הדגם לא יכול היה לראות אותו. הוא יישקל מחדש בהודעה הבאה שלך.",
+    "notInjected": "לא הוזרק",
+    "notInjectedTooltip": "הזרקת תמונות מחדש מבוטלת בהגדרות. תמונה מוצמדת זו נשארת גלויה כאן אך לא נשלחת לדגם אלא אם אתה מצרף אותה מחדש."
   },
   "shortcuts": {
     "title": "קיצורי מקלדת",

@@ -945,7 +945,9 @@
     "verbosityDescription": "Bepaalt het detailniveau van antwoorden voor GPT-5-modellen.",
     "activeFiles": {
       "autoPinUploads": "Geüploade bestanden automatisch vastzetten",
-      "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd"
+      "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd",
+      "autoInjectPinnedImages": "Vastgezette afbeeldingen elke beurt opnieuw injecteren",
+      "autoInjectPinnedImagesDescription": "Indien ingeschakeld worden vastgezette afbeeldingen bij elke beurt naar modellen met visuele mogelijkheden gestuurd, zodat ze in de context blijven (geschatte kosten ≈765 tokens per vastgezette afbeelding per beurt). Indien uitgeschakeld, blijven ze zichtbaar in het paneel maar worden alleen gestuurd als u ze opnieuw toevoegt. Heeft geen effect op Anthropic-modellen, die momenteel geen afbeeldingsinhoud ontvangen."
     },
     "Quarantined Data": "Gekwartetineerde gegevens",
     "quarantineDataDescription": "U heeft {count} gekwartetineerde {count, plural, one {item} other {items}} ({size}) met gegevensproblemen die niet normaal konden worden geladen.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Bestand te groot om vast te zetten ({tokens} tokens, limiet: {limit})",
     "activationRejectedTooLarge": "Bestand te groot voor actieve context ({tokens} tokens, limiet: {limit})",
     "sessionQuotaWarning": "Sessielimiet bijna bereikt — {remaining} tokens resterend",
-    "sessionQuotaNearlyExhausted": "Sessielimiet vrijwel bereikt — actieve bestanden worden mogelijk niet opgenomen"
+    "sessionQuotaNearlyExhausted": "Sessielimiet vrijwel bereikt — actieve bestanden worden mogelijk niet opgenomen",
+    "notInContext": "Niet in context",
+    "notInContextTooltip": "Dit bestand paste niet in het tokenbudget per beurt bij de laatste reactie, waardoor het model het niet kon zien. Het wordt bij uw volgende bericht opnieuw overwogen.",
+    "notInjected": "Niet geïnjecteerd",
+    "notInjectedTooltip": "Het opnieuw injecteren van afbeeldingen is uitgeschakeld in de instellingen. Deze vastgezette afbeelding blijft hier zichtbaar maar wordt niet naar het model gestuurd, tenzij u deze opnieuw toevoegt."
   },
   "shortcuts": {
     "title": "Toetsenbord­shortcuts",

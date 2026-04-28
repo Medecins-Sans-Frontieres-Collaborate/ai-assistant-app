@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Si toos ah ugu xiro faylasha la soo geliyay",
-      "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro"
+      "autoPinUploadsDescription": "Si otomaatig ah u xiro faylasha marka la soo geliyo si looga hortago in la tirtiro",
+      "autoInjectPinnedImages": "Soo geli sawirrada la suuqay mar kasta oo la gaadho wareeg",
+      "autoInjectPinnedImagesDescription": "Marka la dhaafiyo, sawirrada la suuqay ayaa loo diraa moodooyinka aragga fahmaya wareeg kasta si ay had iyo jeer u sii joogaan xasuusta (qiimaha la qiyaasay waa ≈765 tokens sawir kasta wareeg walba). Marka la damiyo, sawirrada la suuqay way muuqanayaan barxadda laakiin waxaa loo diraa moodelka oo keliya marka aad mar kale ku xidhid. Wax saameyn ah kuma laha moodooyinka Anthropic, kuwaas oo hadda aan helin waxyaabaha sawirka ah."
     },
     "Quarantined Data": "Xog la Karantiilay",
     "quarantineDataDescription": "Waxaad haysataa {count} xog la karantiilay {count, plural, one {shay} other {shayaal}} ({size}) oo leh dhibaatooyin xogeed aan caadiyan la soo rogi karin.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Faylka aad buu u weyn yahay in la xiro ({tokens} tokens, xadka: {limit})",
     "activationRejectedTooLarge": "Fayl aad u weyn in la geliyo macnaha firfircoon ({tokens} tokens, xadka: {limit})",
     "sessionQuotaWarning": "Xadiga fadhiga oo sii dhammaanaya — {remaining} tokens ayaa ka harsan",
-    "sessionQuotaNearlyExhausted": "Xadiga fadhiga ayaa dhowyahay inuu dhammaado — fayllada firfircoon lama dari karo"
+    "sessionQuotaNearlyExhausted": "Xadiga fadhiga ayaa dhowyahay inuu dhammaado — fayllada firfircoon lama dari karo",
+    "notInContext": "Ma jiro xidhiidh",
+    "notInContextTooltip": "Faylkani kuma filna tirada tokens-ka ee la ogolyahay wareegii ugu dambeeyay, sidaas darteed moodelku ma arki karin. Waxaa dib loo tixgelin doonaa farriintaada xigta.",
+    "notInjected": "Lama gelin",
+    "notInjectedTooltip": "Soo gelinta sawirrada waa laga damiyay goobaha. Sawirkan la suuqay wuu muuqanayaa halkan laakiin lama diro moodelka ilaa aad dib ugu xidhid."
   },
   "shortcuts": {
     "title": "Furayaasha Fududeynta Kumbuyuutarka",

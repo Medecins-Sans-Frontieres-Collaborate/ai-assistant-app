@@ -955,7 +955,9 @@
     "verbosityDescription": "Controlla il livello di dettaglio delle risposte per i modelli GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fissa automaticamente i file caricati",
-      "autoPinUploadsDescription": "Fissa automaticamente i file quando vengono caricati per evitare che vengano rimossi"
+      "autoPinUploadsDescription": "Fissa automaticamente i file quando vengono caricati per evitare che vengano rimossi",
+      "autoInjectPinnedImages": "Reinserisci le immagini fissate a ogni turno",
+      "autoInjectPinnedImagesDescription": "Se attivata, le immagini fissate vengono inviate ai modelli compatibili con la visione a ogni turno per rimanere nel contesto (costo stimato ≈765 token per immagine fissata per turno). Se disattivata, le immagini fissate restano visibili nel pannello ma vengono inviate solo quando le ri-allegas. Non ha effetto sui modelli Anthropic, che attualmente non ricevono contenuti immagini."
     },
     "Quarantined Data": "Dati in quarantena",
     "quarantineDataDescription": "Hai {count} {count, plural, one {elemento} other {elementi}} in quarantena ({size}) con problemi nei dati che non è stato possibile caricare normalmente.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "File troppo grande per essere fissato ({tokens} token, limite: {limit})",
     "activationRejectedTooLarge": "File troppo grande per il contesto attivo ({tokens} token, limite: {limit})",
     "sessionQuotaWarning": "Quota sessione quasi esaurita — {remaining} token rimasti",
-    "sessionQuotaNearlyExhausted": "Quota sessione quasi esaurita — i file attivi potrebbero non essere inclusi"
+    "sessionQuotaNearlyExhausted": "Quota sessione quasi esaurita — i file attivi potrebbero non essere inclusi",
+    "notInContext": "Non nel contesto",
+    "notInContextTooltip": "Questo file non è rientrato nel limite di token per turno nell'ultima risposta e quindi il modello non ha potuto visualizzarlo. Sarà rivalutato al tuo prossimo messaggio.",
+    "notInjected": "Non inviato",
+    "notInjectedTooltip": "Il reinvio delle immagini è disattivato nelle impostazioni. Questa immagine fissata resta visibile qui, ma non viene inviata al modello a meno che tu non la ri-allegga."
   },
   "shortcuts": {
     "title": "Scorciatoie da tastiera",

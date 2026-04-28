@@ -980,7 +980,9 @@
     "verbosityDescription": "Určuje úroveň detailu odpovědí u modelů GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Automaticky připnout nahrané soubory",
-      "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění"
+      "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění",
+      "autoInjectPinnedImages": "Znovu vkládat připnuté obrázky při každém kroku",
+      "autoInjectPinnedImagesDescription": "Pokud je tato možnost zapnutá, připnuté obrázky jsou při každém kroku odesílány modelům s podporou vizuálních vstupů, aby zůstaly v kontextu (odhadovaná cena ≈765 tokenů za připnutý obrázek na krok). Pokud je vypnutá, obrázky zůstávají viditelné v panelu, ale jsou odeslány pouze při jejich opětovném připojení. Nemá žádný vliv na modely Anthropic, které aktuálně nepřijímají obrázkový obsah."
     },
     "Quarantined Data": "Karanténní data",
     "quarantineDataDescription": "Máte {count} karanténních {count, plural, one {položku} other {položek}} ({size}) s chybnými daty, které nebylo možné běžně načíst.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Soubor je příliš velký na připnutí ({tokens} tokenů, limit: {limit})",
     "activationRejectedTooLarge": "Soubor je příliš velký pro aktivní kontext ({tokens} tokenů, limit: {limit})",
     "sessionQuotaWarning": "Limit relace se blíží vyčerpání — zbývá {remaining} tokenů",
-    "sessionQuotaNearlyExhausted": "Limit relace je téměř vyčerpán — aktivní soubory nemusí být zahrnuty"
+    "sessionQuotaNearlyExhausted": "Limit relace je téměř vyčerpán — aktivní soubory nemusí být zahrnuty",
+    "notInContext": "Není v kontextu",
+    "notInContextTooltip": "Tento soubor se nevešel do rozpočtu tokenů pro poslední odpověď, proto ho model nemohl použít. Při Vaší další zprávě bude znovu zvážen.",
+    "notInjected": "Nevloženo",
+    "notInjectedTooltip": "Opětovné vložení obrázku je v nastavení vypnuté. Tento připnutý obrázek zde zůstává viditelný, ale modelu je odeslán pouze, pokud jej znovu připojíte."
   },
   "shortcuts": {
     "title": "Klávesové zkratky",

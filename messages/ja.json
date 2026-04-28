@@ -980,7 +980,9 @@
     "verbosityDescription": "GPT-5モデルの応答の詳細度を調整します。",
     "activeFiles": {
       "autoPinUploads": "アップロードファイルを自動でピン留め",
-      "autoPinUploadsDescription": "アップロード時にファイルを自動的にピン留めし、循環から除外します"
+      "autoPinUploadsDescription": "アップロード時にファイルを自動的にピン留めし、循環から除外します",
+      "autoInjectPinnedImages": "ピン留めした画像を毎ターン再挿入する",
+      "autoInjectPinnedImagesDescription": "オンの場合、ピン留めした画像は毎ターン視覚対応モデルに送信され、コンテキスト内に保持されます（推定コスト：約765トークン／画像・ターン）。オフの場合、画像はパネルに表示されますが、再度添付しない限りモデルには送信されません。Anthropic モデルには効果がありません（現在画像コンテンツは受信しません）。"
     },
     "Quarantined Data": "隔離データ",
     "quarantineDataDescription": "データの問題により通常通り読み込めなかった {count} 件の隔離{count, plural, one {アイテム} other {アイテム}}（{size}）があります。",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "ファイルが大きすぎてピン留めできません（{tokens} トークン、上限：{limit}）",
     "activationRejectedTooLarge": "アクティブコンテキストにはファイルが大きすぎます（{tokens} トークン、上限：{limit}）",
     "sessionQuotaWarning": "セッション上限が残り少なくなっています — 残り {remaining} トークン",
-    "sessionQuotaNearlyExhausted": "セッション上限がほぼ尽きかけています — アクティブファイルが含まれない可能性があります"
+    "sessionQuotaNearlyExhausted": "セッション上限がほぼ尽きかけています — アクティブファイルが含まれない可能性があります",
+    "notInContext": "コンテキスト外",
+    "notInContextTooltip": "このファイルは前回の応答時にトークン数の上限を超えたため、モデルが参照できませんでした。次回のメッセージで再度検討されます。",
+    "notInjected": "未挿入",
+    "notInjectedTooltip": "画像の再挿入は設定で無効になっています。このピン留め画像はここに表示されますが、再添付しない限りモデルには送信されません。"
   },
   "shortcuts": {
     "title": "キーボードショートカット",

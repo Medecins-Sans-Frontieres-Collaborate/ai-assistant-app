@@ -980,7 +980,9 @@
     "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Épingler automatiquement les fichiers téléchargés",
-      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés"
+      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés",
+      "autoInjectPinnedImages": "Réinjecter les images épinglées à chaque tour",
+      "autoInjectPinnedImagesDescription": "Lorsque cette option est activée, les images épinglées sont envoyées à chaque tour aux modèles compatibles avec la vision afin de rester dans le contexte (coût estimé ≈765 tokens par image épinglée et par tour). Lorsqu'elle est désactivée, les images restent visibles dans le panneau mais ne sont envoyées que si vous les rattachez. Aucun effet sur les modèles Anthropic, qui ne reçoivent actuellement pas de contenu image."
     },
     "Quarantined Data": "Données en quarantaine",
     "quarantineDataDescription": "Vous avez {count} {count, plural, one {élément} other {éléments}} en quarantaine ({size}) contenant des problèmes de données empêchant leur chargement normal.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Fichier trop volumineux pour être épinglé ({tokens} jetons, limite : {limit})",
     "activationRejectedTooLarge": "Fichier trop volumineux pour le contexte actif ({tokens} jetons, limite : {limit})",
     "sessionQuotaWarning": "Quota de session bientôt atteint — {remaining} jetons restants",
-    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus"
+    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus",
+    "notInContext": "Hors contexte",
+    "notInContextTooltip": "Ce fichier n'entrait pas dans la limite de tokens par tour lors de la dernière réponse, le modèle n'a donc pas pu le voir. Il sera réévalué lors de votre prochain message.",
+    "notInjected": "Non injecté",
+    "notInjectedTooltip": "La réinjection d'image est désactivée dans les paramètres. Cette image épinglée reste visible ici mais n'est pas envoyée au modèle sauf si vous la rattachez."
   },
   "shortcuts": {
     "title": "Raccourcis clavier",

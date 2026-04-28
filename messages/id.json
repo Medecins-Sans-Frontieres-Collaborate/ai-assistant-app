@@ -947,7 +947,9 @@
     "verbosityDescription": "Mengatur tingkat detail respons untuk model GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Pin otomatis file yang diunggah",
-      "autoPinUploadsDescription": "Secara otomatis pin file yang diunggah agar tidak dihapus dari daftar"
+      "autoPinUploadsDescription": "Secara otomatis pin file yang diunggah agar tidak dihapus dari daftar",
+      "autoInjectPinnedImages": "Suntik ulang gambar yang dipin setiap giliran",
+      "autoInjectPinnedImagesDescription": "Jika diaktifkan, gambar yang dipin akan dikirim ke model yang mendukung visi setiap giliran agar tetap masuk dalam konteks (perkiraan biaya ≈765 token per gambar yang dipin per giliran). Jika dimatikan, gambar yang dipin tetap terlihat di panel namun hanya akan dikirim jika Anda melampirkannya kembali. Tidak berpengaruh pada model Anthropic, yang saat ini tidak menerima konten gambar."
     },
     "Quarantined Data": "Data Dikarantina",
     "quarantineDataDescription": "Anda memiliki {count} {count, plural, one {item} other {item}} dikarantina ({size}) dengan masalah data yang tidak dapat dimuat secara normal.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "File terlalu besar untuk disematkan ({tokens} token, batas: {limit})",
     "activationRejectedTooLarge": "File terlalu besar untuk konteks aktif ({tokens} token, batas: {limit})",
     "sessionQuotaWarning": "Kuota sesi hampir habis — {remaining} token tersisa",
-    "sessionQuotaNearlyExhausted": "Kuota sesi hampir habis — file aktif mungkin tidak akan disertakan"
+    "sessionQuotaNearlyExhausted": "Kuota sesi hampir habis — file aktif mungkin tidak akan disertakan",
+    "notInContext": "Tidak dalam konteks",
+    "notInContextTooltip": "File ini tidak masuk dalam batas token per giliran pada respons terakhir, sehingga model tidak dapat melihatnya. File ini akan dipertimbangkan kembali pada pesan Anda berikutnya.",
+    "notInjected": "Tidak disuntikkan",
+    "notInjectedTooltip": "Penyuntikan ulang gambar dinonaktifkan di pengaturan. Gambar yang dipin ini tetap terlihat di sini namun tidak dikirim ke model kecuali Anda melampirkannya kembali."
   },
   "shortcuts": {
     "title": "Pintasan Keyboard",

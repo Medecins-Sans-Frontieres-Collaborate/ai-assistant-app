@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Beka othomathikhi amafayela alayishiwe esicongweni",
-      "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi"
+      "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi",
+      "autoInjectPinnedImages": "Faka izithombe ezipinwe kabusha njalo ngesikhathi ngasinye",
+      "autoInjectPinnedImagesDescription": "Uma kuvuliwe, izithombe ezipinwe zithunyelwa kumamodeli akwazi ukubona njalo ngesikhathi ukuze zihlale zingaphakathi kokuqukethwe (izindleko ezilinganisiwe ≈765 tokens ngesithombe esipinwe ngesikhathi ngasinye). Uma kuvaliwe, izithombe ezipinwe zihlala zibonakala kuphaneli kodwa zithunyelwa kuphela uma uziphinda uzinamathisela. Akuthinti amamodeli e-Anthropic, okwamanje angatholi okuqukethwe kwezithombe."
     },
     "Quarantined Data": "Idatha Egodliwe",
     "quarantineDataDescription": "Unayo {count} {count, plural, one {into} other {izinto}} ezigodliwe ({size}) ezinenkinga yedatha ezingalayishwanga ngendlela ejwayelekile.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Ifayela likhulu kakhulu ukubekwa phezulu ({tokens} amathokheni, umkhawulo: {limit})",
     "activationRejectedTooLarge": "Ifayela likhulu kakhulu kunesimo esisebenzayo ({tokens} amathokheni, umkhawulo: {limit})",
     "sessionQuotaWarning": "Isabelo seseshini siphelile — kusele amathokheni angu-{remaining}",
-    "sessionQuotaNearlyExhausted": "Isabelo seseshini cishe siphelile — amafayela asebenzayo angahle angafakwa"
+    "sessionQuotaNearlyExhausted": "Isabelo seseshini cishe siphelile — amafayela asebenzayo angahle angafakwa",
+    "notInContext": "Akukhona ngaphakathi kokuqukethwe",
+    "notInContextTooltip": "Leli fayela alikwazanga ukufakwa kuseshini yokugcina ngenxa yemingcele yama-token, ngakho imodeli ayikwazanga ukulibona. Lizophinde licatshangelwe emlayeni wakho olandelayo.",
+    "notInjected": "Akwafakwanga",
+    "notInjectedTooltip": "Ukufakwa kabusha kwezithombe kukhawulwe kuzilungiselelo. Lesi sithombe esipinwe sihlala sikhona lapha kodwa asithunyelwa kwimodeli ngaphandle kokuthi usiphinda usanamathela."
   },
   "shortcuts": {
     "title": "Izinqamuleli Zekhibhodi",

@@ -980,7 +980,9 @@
     "verbosityDescription": "Steuert das Detaillierungsniveau der Antworten für GPT-5-Modelle.",
     "activeFiles": {
       "autoPinUploads": "Hochgeladene Dateien automatisch anheften",
-      "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden"
+      "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden",
+      "autoInjectPinnedImages": "Angeheftete Bilder in jeder Runde erneut einfügen",
+      "autoInjectPinnedImagesDescription": "Wenn aktiviert, werden angeheftete Bilder bei jeder Runde an Modelle mit Bildverarbeitung gesendet, damit sie im Kontext bleiben (geschätzte Kosten ≈765 Token pro angeheftetem Bild und Runde). Wenn deaktiviert, bleiben angeheftete Bilder im Panel sichtbar, werden aber nur gesendet, wenn Sie sie erneut anhängen. Hat keine Auswirkung auf Anthropic-Modelle, die derzeit keine Bildinhalte erhalten."
     },
     "Quarantined Data": "Quarantänedaten",
     "quarantineDataDescription": "Sie haben {count} in Quarantäne befindliche {count, plural, one {Datei} other {Dateien}} ({size}) mit Datenproblemen, die nicht normal geladen werden konnten.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Datei zu groß zum Anheften ({tokens} Token, Limit: {limit})",
     "activationRejectedTooLarge": "Datei zu groß für aktiven Kontext ({tokens} Token, Limit: {limit})",
     "sessionQuotaWarning": "Sitzungskontingent fast aufgebraucht — {remaining} Token verbleibend",
-    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen"
+    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen",
+    "notInContext": "Nicht im Kontext",
+    "notInContextTooltip": "Diese Datei passte bei der letzten Antwort nicht in das Token-Budget pro Runde, daher konnte das Modell sie nicht sehen. Sie wird bei Ihrer nächsten Nachricht erneut berücksichtigt.",
+    "notInjected": "Nicht eingefügt",
+    "notInjectedTooltip": "Das erneute Einfügen von Bildern ist in den Einstellungen deaktiviert. Dieses angeheftete Bild bleibt hier sichtbar, wird aber nur an das Modell gesendet, wenn Sie es erneut anhängen."
   },
   "shortcuts": {
     "title": "Tastenkombinationen",

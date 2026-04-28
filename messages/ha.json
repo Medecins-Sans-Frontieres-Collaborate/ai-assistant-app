@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Naɗe fayilolin da aka ɗora ta atomatik",
-      "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani"
+      "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani",
+      "autoInjectPinnedImages": "Sake tura hotunan da aka dasa duk zagaye",
+      "autoInjectPinnedImagesDescription": "Idan an kunna, ana aika hotunan da aka dasa zuwa samfurorin da ke iya gani a kowane zagaye don su ci gaba suna cikin gani (kimanin kudi ≈765 tokens kowanne hoto a kowane zagaye). Idan an kashe, hotunan da aka dasa za su ci gaba da bayyana a panel amma ba za a tura su ba sai ka sake danna su. Ba ya aiki ga samfurorin Anthropic, wadanda a halin yanzu ba su karɓar abun cikin hoto."
     },
     "Quarantined Data": "Bayanan da aka killace",
     "quarantineDataDescription": "Kana da {count} bayanan da aka killace {count, plural, one {abu} other {abubuwa}} ({size}) masu matsalar bayanai da ba a iya lodawa yadda ya kamata.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Fayil ya yi girma sosai don ɗaurewa ({tokens} tokens, iyaka: {limit})",
     "activationRejectedTooLarge": "Fayil ya yi girma sosai don mahallin aiki ({tokens} tokens, iyaka: {limit})",
     "sessionQuotaWarning": "Iyakar zama na ƙarewa — {remaining} tokens saura",
-    "sessionQuotaNearlyExhausted": "Iyakar zama na kusan ƙarewa — wani fayil mai aiki na iya rasa haɗuwa"
+    "sessionQuotaNearlyExhausted": "Iyakar zama na kusan ƙarewa — wani fayil mai aiki na iya rasa haɗuwa",
+    "notInContext": "Baya cikin yanayi",
+    "notInContextTooltip": "Wannan fayil ɗin bai dace da adadin tokens da aka ware a karshe ba, don haka samfurin bai gani ba. Za a sake dubawa a sakonka na gaba.",
+    "notInjected": "Ba a tura ba",
+    "notInjectedTooltip": "An kashe maido da hoto a cikin saituna. Wannan hoton da aka dasa zai tsaya nan amma ba za a tura shi ga samfurin ba sai ka sake makala shi."
   },
   "shortcuts": {
     "title": "Gajerun hanyoyin madanni",

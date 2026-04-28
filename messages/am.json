@@ -923,7 +923,9 @@
     "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።",
     "activeFiles": {
       "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
-      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
+      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ",
+      "autoInjectPinnedImages": "ተሰኩኑ ምስሎችን በእያንዳንዱ ትዕዛዝ እንደገና ላክ",
+      "autoInjectPinnedImagesDescription": "ይህ ሲታይ, ተሰኩኑ ምስሎች ለአይነት የሚችሉ ሞዴሎች በእያንዳንዱ ስርዓት ይላካሉ፣ ስለዚህ በእያንዳንዱ አይታገሱም (ተነጃጅቷል ወጪ ≈765 ቶኩን ለአንዱ ተሰኩኗ ምስል በእያንዳንዱ ስርዓት)። ሲጠፋ፣ ተሰኩኑ ምስሎች በፓነሉ ላይ ይቀጥላሉ ነገር ግን እኛ እንደገና ሲያጠፉት ብቻ ለሞዴሉ ይላካሉ። በአንትሮፒክ ሞዴሎች ላይ ምንም ተጽእኖ የለውም፤ በአሁኑ ወቅት ምስል ይዘት አይቀበሉም።"
     },
     "Quarantined Data": "በመለያየት ውስጥ ያለ ውሂብ",
     "quarantineDataDescription": "በመደበኛ መንገድ መጫን አልተቻለም ምክንያት ያለው {count} በመለያየት ውስጥ ያለ {count, plural, one {ነገር} other {ነገሮች}} አሉ ({size})።",
@@ -1866,7 +1868,11 @@
     "pinBlockedTooLarge": "ፋይሉ ለመሰቀል በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
     "activationRejectedTooLarge": "ፋይሉ ለአክቲቭ ኮንቴክስት በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
     "sessionQuotaWarning": "የስብሰባ አቅም ማቅረብ ነው — {remaining} ቶክኖች ቀርበዋል",
-    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም"
+    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም",
+    "notInContext": "በአይነት አይደለም",
+    "notInContextTooltip": "ይህ ፋይል በመጨረሻው ምላሽ የቶኩን ገደብ ውስጥ አልገባም፣ ስለዚህ ሞዴሉ ማየት አልችለውም። በሚቀጥለው መልእክትዎ ውስጥ እንደገና ይታወካል።",
+    "notInjected": "አልተጨመረም",
+    "notInjectedTooltip": "የምስል እንደገና መጨመር በቅኝት ማስተካከያዎች አልተፈቀደም። ይህ ተሰኩኗ ምስል እዚህ ይታያል ነገር ግን እናንተ እንደገና ሳታጠፉት ለሞዴሉ አይላከውም።"
   },
   "quarantine": {
     "title": "በመለጠፍ የተለየ ውይይቶች",

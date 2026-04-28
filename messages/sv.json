@@ -980,7 +980,9 @@
     "verbosityDescription": "Styr detaljnivån för svar från GPT-5-modeller.",
     "activeFiles": {
       "autoPinUploads": "Fäst uppladdade filer automatiskt",
-      "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort"
+      "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort",
+      "autoInjectPinnedImages": "Återinfoga fästa bilder varje tur",
+      "autoInjectPinnedImagesDescription": "När detta är aktiverat skickas fästa bilder till bildtolkande modeller varje tur så att de förblir i kontexten (uppskattad kostnad ≈765 tokens per fäst bild och tur). När detta är avstängt förblir fästa bilder synliga i panelen men skickas bara när du återfäster dem. Detta påverkar inte Anthropic-modeller, som för närvarande inte tar emot bildinnehåll."
     },
     "Quarantined Data": "Karantändata",
     "quarantineDataDescription": "Du har {count} karantänlagda {count, plural, one {objekt} other {objekt}} ({size}) med datafel som inte kunde läsas in normalt.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Filen är för stor för att fastnålas ({tokens} tokens, gräns: {limit})",
     "activationRejectedTooLarge": "Filen är för stor för aktiv kontext ({tokens} tokens, gräns: {limit})",
     "sessionQuotaWarning": "Sessionskvoten nästan slut — {remaining} tokens kvar",
-    "sessionQuotaNearlyExhausted": "Sessionskvoten är nästan slut — aktiva filer kan uteslutas"
+    "sessionQuotaNearlyExhausted": "Sessionskvoten är nästan slut — aktiva filer kan uteslutas",
+    "notInContext": "Inte i kontext",
+    "notInContextTooltip": "Denna fil fick inte plats inom den tillåtna token-gränsen förra gången, så modellen kunde inte se den. Den kommer att övervägas igen vid ditt nästa meddelande.",
+    "notInjected": "Ej infogad",
+    "notInjectedTooltip": "Återinfogning av bilder är avaktiverad i inställningarna. Denna fästa bild förblir synlig här men skickas inte till modellen om du inte återfäster den."
   },
   "shortcuts": {
     "title": "Kortkommandon",

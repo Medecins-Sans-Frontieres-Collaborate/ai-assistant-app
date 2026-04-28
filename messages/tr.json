@@ -980,7 +980,9 @@
     "verbosityDescription": "GPT-5 modelleri için yanıt detay seviyesini kontrol eder.",
     "activeFiles": {
       "autoPinUploads": "Yüklenen dosyaları otomatik olarak sabitle",
-      "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir"
+      "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir",
+      "autoInjectPinnedImages": "Sabitlenen görselleri her turda tekrar ekle",
+      "autoInjectPinnedImagesDescription": "Açık olduğunda, sabitlenen görseller her turda görsel algılayabilen modellere gönderilir, böylece bağlamda kalırlar (tahmini maliyet ≈ her sabit görüntü için tur başına 765 token). Kapalıysa, sabitlenen resimler panelde görünür kalır ancak yalnızca tekrar eklediğinizde gönderilir. Anthropic modelleri için geçerli değildir; bu modeller şu anda görsel içeriği alamaz."
     },
     "Quarantined Data": "Karantinaya Alınan Veriler",
     "quarantineDataDescription": "Yüklenemeyen veri sorunlarıyla ilgili {count} karantinaya alınan {count, plural, one {öğe} other {öğe}} ({size}) bulunuyor.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Dosya sabitlemek için çok büyük ({tokens} token, limit: {limit})",
     "activationRejectedTooLarge": "Dosya aktif bağlam için çok büyük ({tokens} token, limit: {limit})",
     "sessionQuotaWarning": "Oturum kotası azalıyor — {remaining} token kaldı",
-    "sessionQuotaNearlyExhausted": "Oturum kotası neredeyse tükendi — aktif dosyalar dahil edilmeyebilir"
+    "sessionQuotaNearlyExhausted": "Oturum kotası neredeyse tükendi — aktif dosyalar dahil edilmeyebilir",
+    "notInContext": "Bağlamda değil",
+    "notInContextTooltip": "Bu dosya son yanıtta tur başı token sınırına sığmadığı için model tarafından görülmedi. Bir sonraki mesajınızda tekrar değerlendirilecek.",
+    "notInjected": "Eklenmedi",
+    "notInjectedTooltip": "Ayarlar bölümünde görselin yeniden eklenmesi devre dışı. Bu sabit görsel burada görünür durumda kalır ancak tekrar eklemedikçe modele gönderilmez."
   },
   "shortcuts": {
     "title": "Klavye Kısayolları",

@@ -955,7 +955,9 @@
     "verbosityDescription": "Controla el nivell de detall de la resposta per als models GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixa automàticament els fitxers pujats",
-      "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin"
+      "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin",
+      "autoInjectPinnedImages": "Torna a injectar les imatges fixades cada torn",
+      "autoInjectPinnedImagesDescription": "Si està activat, les imatges fixades s'envien als models amb capacitat de visió en cada torn per tal que es mantinguin en context (cost estimat ≈765 tokens per imatge fixada i torn). Si està desactivat, les imatges continuen visibles al panell però només s'envien quan les tornes a adjuntar. No té efecte en els models d'Anthropic, que actualment no reben contingut d'imatge."
     },
     "Quarantined Data": "Dades en quarantena",
     "quarantineDataDescription": "Teniu {count} {count, plural, one {element} other {elements}} en quarantena ({size}) amb problemes de dades que no s’han pogut carregar normalment.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Fitxer massa gran per fixar ({tokens} tokens, límit: {limit})",
     "activationRejectedTooLarge": "Fitxer massa gran per al context actiu ({tokens} tokens, límit: {limit})",
     "sessionQuotaWarning": "Quota de sessió baixa — resten {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Quota de sessió gairebé esgotada — potser no s'inclouran fitxers actius"
+    "sessionQuotaNearlyExhausted": "Quota de sessió gairebé esgotada — potser no s'inclouran fitxers actius",
+    "notInContext": "Fora de context",
+    "notInContextTooltip": "Aquest fitxer no ha entrat dins del límit de tokens per torn en l'última resposta, així que el model no l'ha pogut veure. Es tornarà a considerar en el teu proper missatge.",
+    "notInjected": "No injectat",
+    "notInjectedTooltip": "La reinjecció d’imatges està desactivada a la configuració. Aquesta imatge fixada es manté visible aquí però no s’envia al model llevat que la tornis a adjuntar."
   },
   "shortcuts": {
     "title": "Dreceres de teclat",

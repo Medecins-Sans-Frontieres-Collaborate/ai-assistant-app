@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Automatski zakači otpremljene fajlove",
-      "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje"
+      "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje",
+      "autoInjectPinnedImages": "Ponovo ubaci zakačene slike pri svakom koraku",
+      "autoInjectPinnedImagesDescription": "Kada je uključeno, zakačene slike se šalju modelima sa podrškom za slike pri svakom koraku kako bi ostale u kontekstu (procena troška ≈765 tokena po zakačenoj slici po koraku). Kada je isključeno, slike ostaju vidljive u panelu, ali se šalju samo kada ih ponovo priložite. Nema uticaja na Anthropic modele, koji trenutno ne primaju sadržaj slika."
     },
     "Quarantined Data": "Karantinski podaci",
     "quarantineDataDescription": "Imate {count} karantinskih {count, plural, one {stavku} other {stavki}} ({size}) sa podacima koji nisu mogli biti učitani na uobičajen način.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Datoteka je prevelika za priključivanje ({tokens} tokena, ograničenje: {limit})",
     "activationRejectedTooLarge": "Datoteka je prevelika za aktivni kontekst ({tokens} tokena, ograničenje: {limit})",
     "sessionQuotaWarning": "Kvota sesije je pri kraju — preostalo {remaining} tokena",
-    "sessionQuotaNearlyExhausted": "Kvota sesije je skoro potrošena — aktivne datoteke možda neće biti uključene"
+    "sessionQuotaNearlyExhausted": "Kvota sesije je skoro potrošena — aktivne datoteke možda neće biti uključene",
+    "notInContext": "Nije u kontekstu",
+    "notInContextTooltip": "Ova datoteka nije stala u budžet tokena za poslednji odgovor, pa model nije mogao da je vidi. Biće ponovo uzeta u obzir pri Vašoj sledećoj poruci.",
+    "notInjected": "Nije ubačeno",
+    "notInjectedTooltip": "Ponovno ubacivanje slike je onemogućeno u podešavanjima. Ova zakačena slika ostaje vidljiva ovde, ali se ne šalje modelu osim ako je ponovo ne priložite."
   },
   "shortcuts": {
     "title": "Prečice na tastaturi",

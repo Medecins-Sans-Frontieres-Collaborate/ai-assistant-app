@@ -978,7 +978,9 @@
     "verbosityDescription": "Controlează nivelul de detaliere al răspunsurilor pentru modelele GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixează automat fișierele încărcate",
-      "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor"
+      "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor",
+      "autoInjectPinnedImages": "Re-injectează imaginile fixate la fiecare tură",
+      "autoInjectPinnedImagesDescription": "Când este activată, imaginile fixate sunt trimise modelelor care pot procesa imagini la fiecare tură, astfel încât să rămână în context (cost estimat ≈765 de tokeni per imagine fixată per tură). Când este dezactivată, imaginile fixate rămân vizibile în panou, dar sunt trimise doar când le reatașați. Nu are efect asupra modelelor Anthropic, care momentan nu primesc conținut de imagine."
     },
     "Quarantined Data": "Date în carantină",
     "quarantineDataDescription": "Aveți {count} {count, plural, one {element} other {elemente}} în carantină ({size}) cu probleme de date care nu au putut fi încărcate normal.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Fișier prea mare pentru a fi fixat ({tokens} tokenuri, limită: {limit})",
     "activationRejectedTooLarge": "Fișier prea mare pentru contextul activ ({tokens} tokenuri, limită: {limit})",
     "sessionQuotaWarning": "Cota pentru sesiune este aproape de final — au rămas {remaining} tokenuri",
-    "sessionQuotaNearlyExhausted": "Cota pentru sesiune este aproape epuizată — fișierele active ar putea să nu fie incluse"
+    "sessionQuotaNearlyExhausted": "Cota pentru sesiune este aproape epuizată — fișierele active ar putea să nu fie incluse",
+    "notInContext": "Nu este în context",
+    "notInContextTooltip": "Acest fișier nu s-a încadrat în bugetul de tokeni per tură la ultimul răspuns, astfel că modelul nu l-a putut vedea. Va fi reevaluat la următorul mesaj.",
+    "notInjected": "Neinjectat",
+    "notInjectedTooltip": "Re-injectarea imaginilor este dezactivată din setări. Această imagine fixată rămâne vizibilă aici, dar nu este trimisă modelului decât dacă o reatașați."
   },
   "shortcuts": {
     "title": "Scurtături de la tastatură",

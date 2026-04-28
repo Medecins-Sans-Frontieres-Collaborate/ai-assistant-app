@@ -981,7 +981,9 @@
     "verbosityDescription": "Điều chỉnh mức độ chi tiết của phản hồi cho các mô hình GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Tự động ghim tệp đã tải lên",
-      "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách"
+      "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách",
+      "autoInjectPinnedImages": "Tự động gửi lại hình ảnh được ghim mỗi lượt",
+      "autoInjectPinnedImagesDescription": "Khi bật, hình ảnh được ghim sẽ được gửi đến các mô hình có khả năng xử lý hình ảnh ở mỗi lượt để giữ chúng trong ngữ cảnh (ước tính tốn ≈765 token cho mỗi ảnh ghim mỗi lượt). Khi tắt, hình ảnh được ghim vẫn hiển thị ở bảng điều khiển nhưng chỉ được gửi khi bạn đính kèm lại. Không ảnh hưởng tới các mô hình Anthropic, hiện tại không nhận được nội dung hình ảnh."
     },
     "Quarantined Data": "Dữ liệu bị cách ly",
     "quarantineDataDescription": "Bạn có {count} {count, plural, one {mục} other {mục}} bị cách ly ({size}) với sự cố dữ liệu không thể tải bình thường.",
@@ -1876,7 +1878,11 @@
     "pinBlockedTooLarge": "Tệp quá lớn để ghim ({tokens} token, giới hạn: {limit})",
     "activationRejectedTooLarge": "Tệp quá lớn cho ngữ cảnh hoạt động ({tokens} token, giới hạn: {limit})",
     "sessionQuotaWarning": "Hạn mức phiên sắp hết — còn lại {remaining} token",
-    "sessionQuotaNearlyExhausted": "Hạn mức phiên gần hết — các tệp đang hoạt động có thể không được bao gồm"
+    "sessionQuotaNearlyExhausted": "Hạn mức phiên gần hết — các tệp đang hoạt động có thể không được bao gồm",
+    "notInContext": "Không trong ngữ cảnh",
+    "notInContextTooltip": "Tệp này đã vượt quá giới hạn token cho mỗi lượt ở phản hồi trước, nên mô hình không thể truy cập. Tệp sẽ được xem xét lại ở tin nhắn tiếp theo của bạn.",
+    "notInjected": "Chưa được gửi",
+    "notInjectedTooltip": "Tùy chọn gửi lại hình ảnh đang tắt trong phần cài đặt. Hình ảnh ghim này vẫn hiển thị ở đây nhưng sẽ không được gửi cho mô hình trừ khi bạn đính kèm lại."
   },
   "shortcuts": {
     "title": "Phím tắt bàn phím",

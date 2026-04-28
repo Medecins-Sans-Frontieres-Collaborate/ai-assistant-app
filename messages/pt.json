@@ -980,7 +980,9 @@
     "verbosityDescription": "Controla o nível de detalhamento das respostas dos modelos GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixar automaticamente arquivos enviados",
-      "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos"
+      "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos",
+      "autoInjectPinnedImages": "Reinserir imagens fixadas a cada turno",
+      "autoInjectPinnedImagesDescription": "Quando ativado, imagens fixadas são enviadas aos modelos com capacidade de visão a cada turno, mantendo-as no contexto (custo estimado ≈765 tokens por imagem fixada por turno). Quando desativado, as imagens fixadas permanecem visíveis no painel, mas só são enviadas quando você as reinsere. Não afeta modelos Anthropic, que atualmente não recebem conteúdo de imagem."
     },
     "Quarantined Data": "Dados em quarentena",
     "quarantineDataDescription": "Você tem {count} {count, plural, one {item} other {itens}} em quarentena ({size}) com problemas de dados que não puderam ser carregados normalmente.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Arquivo muito grande para fixar ({tokens} tokens, limite: {limit})",
     "activationRejectedTooLarge": "Arquivo muito grande para o contexto ativo ({tokens} tokens, limite: {limit})",
     "sessionQuotaWarning": "Cota da sessão quase no fim — {remaining} tokens restantes",
-    "sessionQuotaNearlyExhausted": "Cota da sessão quase esgotada — arquivos ativos podem não ser incluídos"
+    "sessionQuotaNearlyExhausted": "Cota da sessão quase esgotada — arquivos ativos podem não ser incluídos",
+    "notInContext": "Fora do contexto",
+    "notInContextTooltip": "Este arquivo não coube no orçamento de tokens do último turno, portanto o modelo não pôde visualizá-lo. Ele será reconsiderado na sua próxima mensagem.",
+    "notInjected": "Não injetado",
+    "notInjectedTooltip": "A reinjeção de imagem está desativada nas configurações. Esta imagem fixada continua visível aqui, mas não é enviada ao modelo a menos que você a reinsira."
   },
   "shortcuts": {
     "title": "Atalhos de Teclado",

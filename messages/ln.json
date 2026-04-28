@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Kangisa ndenge ya kokangisa mafayile nyonso oyo ebakisami",
-      "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te"
+      "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te",
+      "autoInjectPinnedImages": "Kotinda lisusu bandimi basi kaka na makanisi nyonso",
+      "autoInjectPinnedImagesDescription": "Soki ekomi marche, bandimi basi ekozala kotindama na ba model ezali komona bililingi na makanisi nyonso mpo etikalaka na contexte (motuya mingi ezali pene na 765 tokens pona ndimi moko na makanisi moko). Soki ekomi te, bandimi basi ekotikala komonana na panel kasi ekotindama kaka soki ozweli lisusu yango. Ezangeli ndenge na Anthropic models, oyo sik’oyo ezwi te bililingi."
     },
     "Quarantined Data": "Donnee ya quarantine",
     "quarantineDataDescription": "Ozali na {count} {count, plural, one {élément} other {baélément}} ya quarantine ({size}) oyo ezalaki na mitungisi ya donnee mpe ekoki kozala te na ndenge ya malamu.",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "Fichier eleki monene mpo na koépingué ({tokens} tokens, limite: {limit})",
     "activationRejectedTooLarge": "Fichier eleki monene mpo na contexte active ({tokens} tokens, limite: {limit})",
     "sessionQuotaWarning": "Limite ya session ekómi pene kokokisama — {remaining} tokens ezali",
-    "sessionQuotaNearlyExhausted": "Limite ya session ekómi pene — ba fichiers actifs ekoki kozanga komonana"
+    "sessionQuotaNearlyExhausted": "Limite ya session ekómi pene — ba fichiers actifs ekoki kozanga komonana",
+    "notInContext": "Ezali na contexte te",
+    "notInContextTooltip": "Dosie oyo elongaki te kokota na token budget ya makambo eleki na eyano eleki, yango wana model emonaki yango te. Ekozongisama na makanisi ya sika okeyi kokoma.",
+    "notInjected": "Etindami te",
+    "notInjectedTooltip": "Kotinda lisusu bililingi ekangami na ba paramètres. Elilingi oyo ekotikali komonana awa kasi ekotindama te epai ya model soki te ozongisi yango lisusu."
   },
   "shortcuts": {
     "title": "Bansango ya minzoto ya kelasi",

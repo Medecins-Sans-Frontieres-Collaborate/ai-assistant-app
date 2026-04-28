@@ -1133,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
-      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
+      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ",
+      "autoInjectPinnedImages": "ምስታት ዝተጠቑሙ ምስ ክኸዱ ኣብ እቶም ሓሳባት ክልቲ ግዜ ኣውጹ",
+      "autoInjectPinnedImagesDescription": "ካብቲ ዝሰርሕ እንተኾነ፣ ዝተጠቑሙ ምስታት ክልቲ ግዜ ኣብ ትኵሳት ኣብ ስራሕ ኣብ ዘተኸፉ ሞዴሎም ይተላእኩም። (ወሰን ውሳነ ወፃኢ ≈ 765 tokens ንኩሎም ዝተጠቑሙ ምስታት ኣብ ክልቲ ግዜ)። እንተዘይሰርሕ ዝተጠቑሙ ምስታት ኣብ ፓነሉ ኩሉ ግዜ ክቕልጡ እዮም፣ ግና ከምኡ ካብ ግዜ ናብ ሞዴል ኣይሰደሉን እንተንካዕካይ ድማ የተላእኹን። ኣብ Anthropic models ክዳ ተጽኒና የለን፣ ምስት ምዃኑ ካብፍሉይ ሞዴል ዝሰርሑ ምስታት ኣይተቐበሉን።"
     },
     "Quarantined Data": "ዳታ ናብ ኳራንቲን ዝተሰናኸተ",
     "quarantineDataDescription": "{count} ብቁጽሪ ኳራንቲን ዳታ ({size}) ብጉድእ ዝተሰናኸቱ ኣብዚ አይተጽዓነን።",
@@ -1821,7 +1823,11 @@
     "pinBlockedTooLarge": "ፋይል ውሕሳኵ እዩ ንምሰቅል ({tokens} token, ዎለታ: {limit})",
     "activationRejectedTooLarge": "ፋይል ውሕሳኵ እዩ ንኣብ ንጥፈት context ({tokens} token, ዎለታ: {limit})",
     "sessionQuotaWarning": "ደረጃ ዕዳእ ብትንኩር ኣሎ – {remaining} token ኣሎ።",
-    "sessionQuotaNearlyExhausted": "ደረጃ ዕዳእ በጃኹም ንሃይልኦ – ኣብ አካባቢ ፋይል ክወድቕ ይኽእል።"
+    "sessionQuotaNearlyExhausted": "ደረጃ ዕዳእ በጃኹም ንሃይልኦ – ኣብ አካባቢ ፋይል ክወድቕ ይኽእል።",
+    "notInContext": "ኣብ ጽንተ ሓሳብ ውሽጢ ኣይኮነን",
+    "notInContextTooltip": "እዚ ፋይል ኣብ መጨረሻ ምላሽ ምሳ ውሳነ ቶከኖም ዘለዎ ገይሩ ኣይተገበረን። ንቐፃሊ መልእኽትካ ደጊምኩም ክተመሪኦ ይኸውን።",
+    "notInjected": "ኣይወስነን",
+    "notInjectedTooltip": "ምስ መመላእኽቲ ዝተጠቑሙ ምስታት ፍሉይ ኣብ ተሰኪ ተቐጽሉ እዮም፣ ግና ካብ ሞዴል ክርከቡ ኣይተላእኹን፣ እንተንካዕካይ ድማ እዮም ዝተላእኹሞም።"
   },
   "shortcuts": {
     "title": "ናይ ቁልፊ ብግሪ ጽሑፋት",

@@ -980,7 +980,9 @@
     "verbosityDescription": "Hudhibiti kiwango cha undani wa majibu kwa modeli za GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Funga faili zilizopakiwa moja kwa moja",
-      "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe"
+      "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe",
+      "autoInjectPinnedImages": "Weka tena picha zilizogandishwa kila mzunguko",
+      "autoInjectPinnedImagesDescription": "Ikiwa imewashwa, picha zilizogandishwa zitatumwa kwa mifano inayoweza kuona kila mzunguko ili zibaki kwenye muktadha (gharama inayokadiriwa ≈ tokeni 765 kwa kila picha iliyogandishwa kwa mzunguko). Ikiwa imezimwa, picha hizo zitaendelea kuonekana kwenye paneli lakini zitatumwa tu unapozigandisha tena. Haina athari kwa mifano ya Anthropic, ambayo kwa sasa haipokei maudhui ya picha."
     },
     "Quarantined Data": "Data Zilizowekwa Karantini",
     "quarantineDataDescription": "Una {count} {count, plural, one {kipengele} other {vipengele}} ({size}) zilizo karantini zenye matatizo ya data ambazo haziwezi kupakiwa kawaida.",
@@ -1845,7 +1847,11 @@
     "pinBlockedTooLarge": "Faili ni kubwa mno kupachikwa ({tokens} tokeni, kikomo: {limit})",
     "activationRejectedTooLarge": "Faili ni kubwa mno kwa muktadha unaotumika ({tokens} tokeni, kikomo: {limit})",
     "sessionQuotaWarning": "Kikomo cha kikao kinakaribia kuisha — tokeni {remaining} zimesalia",
-    "sessionQuotaNearlyExhausted": "Kikomo cha kikao kinakaribia kuisha — faili zinazotumika huenda zisiwepo"
+    "sessionQuotaNearlyExhausted": "Kikomo cha kikao kinakaribia kuisha — faili zinazotumika huenda zisiwepo",
+    "notInContext": "Haipo kwenye muktadha",
+    "notInContextTooltip": "Faili hii haikuweza kutoshea bajeti ya tokeni ya mzunguko uliopita, kwa hivyo mfano haukuweza kuiona. Itazingatiwa tena kwenye ujumbe wako ujao.",
+    "notInjected": "Haijachomekwa",
+    "notInjectedTooltip": "Uwekaji upya wa picha umezimwa kwenye mipangilio. Picha hii iliyogandishwa itaendelea kuonekana hapa lakini haitatumwa kwa mfano isipokuwa uigandishe tena."
   },
   "shortcuts": {
     "title": "Vifupisho vya Kibodi",
