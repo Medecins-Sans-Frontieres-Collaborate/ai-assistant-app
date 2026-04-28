@@ -1021,6 +1021,14 @@
     "Reset Settings": "Reset Settings",
     "Confirm Reset": "Confirm Reset",
     "Reset Confirmation Message": "Are you sure you want to reset all settings? This will restore default values for temperature, theme, and other preferences. Your conversations, prompts, and tones will not be affected.",
+    "appliesToNewConversations": "Applies to new conversations only.",
+    "useModelDefault": "Using model default.",
+    "fromGeneralSettings": "From General Settings",
+    "preferredNameInheritedFromGeneral": "Inheriting your General Settings display name. Type to override.",
+    "savedConfirmation": "Saved",
+    "unsavedChanges": "Unsaved changes",
+    "unsavedChangesMessage": "You have unsaved changes. Discard them?",
+    "characterCount": "{current}/{max}",
     "Storage Information": "Storage Information",
     "Storage Usage": "Storage Usage",
     "storageAlmostFull": "Storage almost full! Consider clearing old conversations.",
@@ -1630,7 +1638,7 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, PDF, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
