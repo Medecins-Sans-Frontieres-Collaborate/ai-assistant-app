@@ -110,6 +110,25 @@ describe('AzureBlobStorage.upload', () => {
     warnSpy.mockRestore();
   });
 
+  it('sanitizes the blob name in the poisoned-cache warning (no CRLF / control chars)', async () => {
+    // CodeQL flagged this warn for log injection because blobName carries a
+    // user-controlled extension. Verify sanitizeForLog strips the danger.
+    const taintedName = 'u/uploads/files/abc.\r\nFAKE LOG ENTRY\x1b[31m.txt';
+    mockBlobClient.exists.mockResolvedValue(true);
+    mockBlobClient.getProperties.mockResolvedValue({ contentLength: 3 });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    await storage.upload(taintedName, content);
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    const logged = warnSpy.mock.calls[0][0] as string;
+    expect(logged).not.toMatch(/[\r\n]/);
+    expect(logged).not.toMatch(/\x1b/);
+    expect(logged).toContain('FAKE LOG ENTRY');
+
+    warnSpy.mockRestore();
+  });
+
   it('uploads via stage + commit when no cached blob exists', async () => {
     mockBlobClient.exists.mockResolvedValue(false);
 
