@@ -19,12 +19,20 @@ export const validateMessageSubmission = (
   filePreviews: FilePreview[],
   uploadProgress: { [key: string]: number },
 ): ValidationResult => {
-  // Check if any files are still uploading
-  const isUploading = Object.values(uploadProgress).some(
+  // Files in `pending` or `extracting` may have no `uploadProgress` entry yet,
+  // so a progress-only check lets the user send before extraction completes
+  // and the attachment is silently dropped from the turn.
+  const hasInFlightFile = filePreviews.some(
+    (p) =>
+      p.status === 'pending' ||
+      p.status === 'uploading' ||
+      p.status === 'extracting',
+  );
+  const hasIncompleteProgress = Object.values(uploadProgress).some(
     (progress) => progress < 100,
   );
 
-  if (isUploading) {
+  if (hasInFlightFile || hasIncompleteProgress) {
     return {
       valid: false,
       error: 'Please wait for files to finish uploading',
@@ -58,9 +66,14 @@ export const shouldPreventSubmission = (
   filePreviews: FilePreview[],
   uploadProgress: { [key: string]: number },
 ): boolean => {
-  // Check if any files are still uploading
-  const hasUploadingFiles = filePreviews.some(
-    (preview) => preview.status === 'uploading',
+  // Match every non-terminal upload status, not just `uploading`. `pending`
+  // and `extracting` files have no progress entry yet and would otherwise
+  // slip through.
+  const hasInFlightFile = filePreviews.some(
+    (preview) =>
+      preview.status === 'pending' ||
+      preview.status === 'uploading' ||
+      preview.status === 'extracting',
   );
 
   const hasIncompleteUploads = Object.values(uploadProgress).some(
@@ -68,6 +81,6 @@ export const shouldPreventSubmission = (
   );
 
   return (
-    isTranscribing || isStreaming || hasUploadingFiles || hasIncompleteUploads
+    isTranscribing || isStreaming || hasInFlightFile || hasIncompleteUploads
   );
 };
