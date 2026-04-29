@@ -94,6 +94,16 @@ let ffmpegInstance: FFmpeg | null = null;
 let ffmpegLoading: Promise<FFmpeg> | null = null;
 
 /**
+ * The progress callback for the *currently running* extraction. The FFmpeg
+ * `on('progress', ...)` listener is attached once when the singleton is
+ * created and would otherwise capture the first caller's `onProgress`
+ * forever, causing a second extraction in the same session to emit progress
+ * to the first file's UI. The listener reads from this mutable instead, and
+ * `extractAudioFromVideo` sets/clears it around its run.
+ */
+let currentOnProgress: ExtractionProgressCallback | undefined;
+
+/**
  * Gets or creates the FFmpeg instance.
  * Uses lazy loading to only load the ~25MB WASM bundle when needed.
  */
@@ -111,9 +121,11 @@ async function getFFmpeg(
   ffmpegLoading = (async () => {
     const ffmpeg = new FFmpeg();
 
-    // Set up progress handler
+    // Set up progress handler. Reads `currentOnProgress` (set by the active
+    // `extractAudioFromVideo` call) instead of the captured `onProgress`,
+    // because this listener outlives the singleton's first caller.
     ffmpeg.on('progress', ({ progress }: { progress: number }) => {
-      onProgress?.({
+      currentOnProgress?.({
         stage: 'extracting',
         percent: Math.round(progress * 100),
         message: `Extracting audio: ${Math.round(progress * 100)}%`,
@@ -238,6 +250,9 @@ export async function extractAudioFromVideo(
     );
   }
 
+  // Bind progress to this call before loading the singleton, so loading-stage
+  // events on the first call are routed correctly.
+  currentOnProgress = onProgress;
   const ffmpeg = await getFFmpeg(onProgress);
 
   // Generate filenames
@@ -350,6 +365,12 @@ export async function extractAudioFromVideo(
         ? `Audio extraction failed: ${error.message}`
         : 'Audio extraction failed unexpectedly',
     );
+  } finally {
+    // Avoid leaking this caller's closure into a later extraction that runs
+    // before the singleton's listener fires again.
+    if (currentOnProgress === onProgress) {
+      currentOnProgress = undefined;
+    }
   }
 }
 
