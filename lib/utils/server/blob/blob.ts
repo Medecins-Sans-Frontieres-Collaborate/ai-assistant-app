@@ -595,18 +595,18 @@ export const getBlobBase64String = async (
     BlobProperty.BLOB,
   ) as Promise<Buffer>);
 
-  // Check if content is already a data URL string (images are stored this way)
-  const contentString = blob.toString('utf8');
-  if (contentString.startsWith('data:')) {
-    return contentString;
+  // Sniff the first 5 bytes only. Stringifying the full blob just to check
+  // a 5-char prefix can allocate hundreds of MB on large downloads.
+  const prefix = blob.subarray(0, 5).toString('utf8');
+  if (prefix === 'data:') {
+    return blob.toString('utf8');
   }
 
   if (isLikelyRawBase64Blob(blob)) {
     const extension = blobLocation.split('.').pop() || '';
     const mimeType = lookup(extension);
     if (mimeType) {
-      // Wrap the raw base64 with the data URL prefix
-      return `data:${mimeType};base64,${contentString}`;
+      return `data:${mimeType};base64,${blob.toString('utf8')}`;
     }
   }
 
