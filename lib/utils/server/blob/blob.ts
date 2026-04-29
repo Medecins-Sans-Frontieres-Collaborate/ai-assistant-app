@@ -2,6 +2,7 @@ import { Session } from 'next-auth';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
 import { DefaultAzureCredential } from '@azure/identity';
@@ -212,7 +213,7 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       // upload payload (see app/api/file/upload/route.ts), so a length
       // mismatch is by definition not legitimate. Replace it.
       console.warn(
-        `[blob.upload] poisoned cache at ${blobName}: expected ${contentLength} bytes, found ${actualSize}. Replacing.`,
+        `[blob.upload] poisoned cache at ${sanitizeForLog(blobName)}: expected ${contentLength} bytes, found ${actualSize}. Replacing.`,
       );
       await this.deleteIfExists(blobName);
     }
