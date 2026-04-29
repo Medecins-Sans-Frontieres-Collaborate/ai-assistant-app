@@ -114,6 +114,10 @@ interface UploadContext {
  * validation runs here for the multipart binary path; the legacy text path
  * validates earlier at decode time and feeds in the data-URL string.
  *
+ * The hash is always computed over canonical bytes (`hashSource` if provided,
+ * otherwise the buffer in `data`), so the same SVG uploaded via multipart and
+ * via legacy data-URL produces the same blob name and dedup works.
+ *
  * Throws `Error` on internal storage failure; returns the badRequest reason
  * string when the data fails content validation (caller converts to 400).
  */
@@ -121,13 +125,17 @@ async function storeFile(
   data: Buffer | string,
   ctx: UploadContext,
   session: Session,
+  hashSource?: Buffer,
 ): Promise<{ ok: true; uri: string } | { ok: false; error: string }> {
   const userId = getUserIdFromSession(session);
   const blobStorageClient: BlobStorage = createBlobStorageClient(session);
 
-  // Hash data directly — Hasher accepts both Buffer and string. For buffers,
-  // this avoids the base64 string length limit for large files.
-  const hashedFileContents = Hasher.sha256(data);
+  // Hash canonical bytes when provided (legacy data-URL path), otherwise
+  // hash `data` directly. Hashing the data-URL string would make the same
+  // SVG hash differently across the two paths and break dedup.
+  const hashedFileContents = Hasher.sha256(
+    hashSource ?? (Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8')),
+  );
   const extension: string | undefined = ctx.filename.split('.').pop();
 
   let contentType: string;
@@ -189,7 +197,9 @@ async function storeFile(
  */
 async function validateLegacyImageDataUrl(
   rawData: string,
-): Promise<{ ok: true; storage: string } | { ok: false; error: string }> {
+): Promise<
+  { ok: true; storage: string; bytes: Buffer } | { ok: false; error: string }
+> {
   const dataUrlMatch = rawData.match(
     /^data:([a-zA-Z0-9!#$&^_.+/-]+);base64,([\s\S]+)$/,
   );
@@ -211,12 +221,17 @@ async function validateLegacyImageDataUrl(
   // URL so the storage payload — which downstream consumers expect to look
   // like a `data:` URL — keeps its shape. Binary formats hand back the
   // original buffer unchanged, so the original `rawData` is still the
-  // canonical representation.
+  // canonical representation. `bytes` is the canonical pre-encoding form
+  // used for hashing, so dedup matches the multipart path.
   if (result.data !== decoded) {
     const cleanBase64 = result.data.toString('base64');
-    return { ok: true, storage: `data:${declaredMime};base64,${cleanBase64}` };
+    return {
+      ok: true,
+      storage: `data:${declaredMime};base64,${cleanBase64}`,
+      bytes: result.data,
+    };
   }
-  return { ok: true, storage: rawData };
+  return { ok: true, storage: rawData, bytes: decoded };
 }
 
 export async function POST(request: NextRequest) {
@@ -264,9 +279,9 @@ export async function POST(request: NextRequest) {
     // Advisory early rejection from Content-Length — cheap and pre-buffer.
     // The authoritative check happens via `readBoundedBody` below.
     const contentLength = request.headers.get('content-length');
-    if (contentLength) {
-      const declaredSize = parseInt(contentLength, 10);
-      if (Number.isInteger(declaredSize) && declaredSize >= 0) {
+    if (contentLength && /^\d+$/.test(contentLength)) {
+      const declaredSize = Number(contentLength);
+      if (Number.isFinite(declaredSize) && declaredSize >= 0) {
         const earlyCheck = validateFileSizeRaw(
           filename,
           declaredSize,
@@ -279,7 +294,10 @@ export async function POST(request: NextRequest) {
     }
 
     const contentTypeHeader = request.headers.get('content-type') || '';
-    const isMultipart = contentTypeHeader.includes('multipart/form-data');
+    // Strict: must START with "multipart/form-data;" — prevents spoofed
+    // prefixes/suffixes that would flip into the legacy base64 branch with
+    // attacker-controlled MIME.
+    const isMultipart = /^multipart\/form-data\s*;/i.test(contentTypeHeader);
 
     const category = getFileCategory(filename, mimeType ?? undefined);
     const buffered = await readBoundedBody(
@@ -291,6 +309,9 @@ export async function POST(request: NextRequest) {
     }
 
     let fileData: Buffer | string;
+    // Canonical bytes used for hashing on the legacy SVG path, so the same
+    // SVG via multipart and via legacy data-URL hashes the same.
+    let hashSource: Buffer | undefined;
 
     if (isMultipart) {
       // Re-parse the bounded ArrayBuffer as multipart. Passing the
@@ -315,6 +336,7 @@ export async function POST(request: NextRequest) {
         const result = await validateLegacyImageDataUrl(rawData);
         if (!result.ok) return badRequestResponse(result.error);
         fileData = result.storage;
+        hashSource = result.bytes;
       } else {
         try {
           fileData = Buffer.from(rawData, 'base64');
@@ -341,7 +363,7 @@ export async function POST(request: NextRequest) {
     }
 
     const startTime = Date.now();
-    const stored = await storeFile(fileData, ctx, session);
+    const stored = await storeFile(fileData, ctx, session, hashSource);
     if (!stored.ok) {
       return badRequestResponse(stored.error);
     }
