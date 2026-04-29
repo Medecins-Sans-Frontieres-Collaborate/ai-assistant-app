@@ -18,6 +18,7 @@ import {
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { revokeAllPreviewUrls } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { isAudioVideoFile } from '@/lib/constants/fileTypes';
 import { v4 as uuidv4 } from 'uuid';
@@ -239,6 +240,7 @@ export function useMessageSender({
     setUsedPromptVariables(null);
 
     if (filePreviews.length > 0) {
+      revokeAllPreviewUrls(filePreviews);
       setFilePreviews([]);
     }
   }, [
