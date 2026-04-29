@@ -99,9 +99,20 @@ let ffmpegLoading: Promise<FFmpeg> | null = null;
  * created and would otherwise capture the first caller's `onProgress`
  * forever, causing a second extraction in the same session to emit progress
  * to the first file's UI. The listener reads from this mutable instead, and
- * `extractAudioFromVideo` sets/clears it around its run.
+ * the queued body in `extractAudioFromVideo` sets/clears it around its run.
  */
 let currentOnProgress: ExtractionProgressCallback | undefined;
+
+/**
+ * Serializes overlapping `extractAudioFromVideo` calls. Two callers can
+ * legitimately race (e.g. user pastes-then-drops two videos triggering two
+ * separate batches), and without serialization the second call's
+ * `currentOnProgress` assignment overwrites the first's mid-flight, routing
+ * the first's progress events to the second's UI. FFmpeg's WASM exec is
+ * serial inside the singleton anyway, so a queue costs nothing real and
+ * keeps the progress lifecycle bulletproof.
+ */
+let extractionQueue: Promise<unknown> = Promise.resolve();
 
 /**
  * Gets or creates the FFmpeg instance.
@@ -236,13 +247,10 @@ export async function extractAudioFromVideo(
 ): Promise<AudioExtractionResult> {
   const { outputFormat = 'mp3', quality = 'medium', onProgress } = options;
 
-  // Validate input
+  // Validate input — synchronous; cheaper to fail before queueing.
   if (!videoFile || videoFile.size === 0) {
     throw new Error('Invalid video file');
   }
-
-  // Bail out for files too large to safely buffer in JS heap. The server-
-  // side transcription pipeline handles these natively.
   if (videoFile.size > MAX_CLIENT_EXTRACTION_BYTES) {
     throw new AudioExtractionUnavailableError(
       `Video too large for client-side extraction (${formatBytes(videoFile.size)} > ${formatBytes(MAX_CLIENT_EXTRACTION_BYTES)})`,
@@ -250,8 +258,25 @@ export async function extractAudioFromVideo(
     );
   }
 
-  // Bind progress to this call before loading the singleton, so loading-stage
-  // events on the first call are routed correctly.
+  const run = extractionQueue.then(() =>
+    runExtraction(videoFile, outputFormat, quality, onProgress),
+  );
+  // Don't let one rejection block the next caller. The original `run`
+  // promise still rejects to its own caller; only the queue continues.
+  extractionQueue = run.catch(() => {});
+  return run;
+}
+
+async function runExtraction(
+  videoFile: File,
+  outputFormat: 'mp3' | 'wav' | 'm4a',
+  quality: 'low' | 'medium' | 'high',
+  onProgress: ExtractionProgressCallback | undefined,
+): Promise<AudioExtractionResult> {
+  // Bind progress to this call before loading the singleton, so loading-
+  // stage events on the first call are routed correctly. The queue
+  // guarantees no other extraction's body runs between this assignment
+  // and the matching clear in `finally`.
   currentOnProgress = onProgress;
   const ffmpeg = await getFFmpeg(onProgress);
 
