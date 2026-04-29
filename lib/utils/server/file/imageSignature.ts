@@ -52,18 +52,26 @@ function isGif(b: Buffer): boolean {
 }
 
 function isWebp(b: Buffer): boolean {
-  // RIFF....WEBP
-  return (
-    b.length >= 12 &&
-    b[0] === 0x52 &&
-    b[1] === 0x49 &&
-    b[2] === 0x46 &&
-    b[3] === 0x46 &&
-    b[8] === 0x57 &&
-    b[9] === 0x45 &&
-    b[10] === 0x42 &&
-    b[11] === 0x50
-  );
+  // RIFF....WEBPVP8(' '|'L'|'X'). The chunk type at offset 12-14 is required;
+  // without it `RIFF\0\0\0\0WEBP<garbage>` polyglots pass.
+  if (
+    b.length < 16 ||
+    b[0] !== 0x52 ||
+    b[1] !== 0x49 ||
+    b[2] !== 0x46 ||
+    b[3] !== 0x46 ||
+    b[8] !== 0x57 ||
+    b[9] !== 0x45 ||
+    b[10] !== 0x42 ||
+    b[11] !== 0x50 ||
+    b[12] !== 0x56 ||
+    b[13] !== 0x50 ||
+    b[14] !== 0x38
+  ) {
+    return false;
+  }
+  // VP8 (lossy, space), VP8L (lossless), VP8X (extended)
+  return b[15] === 0x20 || b[15] === 0x4c || b[15] === 0x58;
 }
 
 function isBmp(b: Buffer): boolean {
