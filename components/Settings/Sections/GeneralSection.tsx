@@ -46,7 +46,6 @@ interface GeneralSectionProps {
     value: any;
   }>;
   user?: Session['user'];
-  onSave: () => void;
   onClose: () => void;
   prefetchedProfile?: FullUserProfile | null;
 }
@@ -55,7 +54,6 @@ export const GeneralSection: FC<GeneralSectionProps> = ({
   state,
   dispatch,
   user,
-  onSave,
   onClose,
   prefetchedProfile,
 }) => {
