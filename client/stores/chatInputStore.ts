@@ -27,7 +27,7 @@ function revokeIfBlobUrl(url: string | undefined | null): void {
 }
 
 /** Revoke every blob: preview URL in the array (no-op for non-blob URLs). */
-function revokeAllPreviewUrls(previews: FilePreview[]): void {
+export function revokeAllPreviewUrls(previews: FilePreview[]): void {
   for (const preview of previews) {
     revokeIfBlobUrl(preview.previewUrl);
   }
