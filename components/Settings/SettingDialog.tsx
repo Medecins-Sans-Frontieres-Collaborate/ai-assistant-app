@@ -3,11 +3,10 @@
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
-
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
+import { useDebounce } from '@/client/hooks/ui/useDebounce';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { exportData, importData } from '@/lib/utils/app/export/importExport';
@@ -37,7 +36,6 @@ const env = process.env.NEXT_PUBLIC_ENV || 'development';
  * SettingDialog component adapted for Zustand stores
  */
 export function SettingDialog() {
-  const t = useTranslations();
   const { data: session } = useSession();
   const { isSettingsOpen, setIsSettingsOpen, theme, setTheme } = useUI();
   const {
@@ -74,10 +72,7 @@ export function SettingDialog() {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
   const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
-  const [showDiscardConfirm, setShowDiscardConfirm] = useState(false);
-  // Snapshot of last-saved reducer state. Anything that diverges from this
-  // is "dirty" and triggers the discard-confirm guard on close.
-  const savedSnapshotRef = useRef<Settings | null>(null);
+  const hasInitialLoadedRef = useRef(false);
 
   // Load settings and storage on client side only
   useEffect(() => {
@@ -88,49 +83,51 @@ export function SettingDialog() {
         value: loadedSettings[key as keyof Settings],
       });
     });
-    savedSnapshotRef.current = { ...state, ...loadedSettings } as Settings;
+    hasInitialLoadedRef.current = true;
     setStorageData(getStorageUsage());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isDirty = useCallback(() => {
-    const snap = savedSnapshotRef.current;
-    if (!snap) return false;
-    return (Object.keys(state) as (keyof Settings)[]).some((k) => {
-      const a = state[k];
-      const b = snap[k];
-      if (Object.is(a, b)) return false;
-      // streamingSpeed is the only object-shaped field; compare by JSON.
-      if (typeof a === 'object' || typeof b === 'object') {
-        return JSON.stringify(a) !== JSON.stringify(b);
-      }
-      return true;
-    });
-  }, [state]);
+  // Autosave: persist state changes after a short debounce so text inputs
+  // don't write to localStorage on every keystroke. Toggles still feel
+  // instant because their UI is driven by reducer state, not the persist.
+  // Provider setters are stable by construction, so they're safe in the
+  // dep array.
+  const debouncedState = useDebounce(state, 300);
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  });
+  useEffect(() => {
+    if (!hasInitialLoadedRef.current) return;
+    saveSettings(debouncedState);
+    setTheme(debouncedState.theme);
+    setTemperature(debouncedState.temperature);
+    setSystemPrompt(debouncedState.systemPrompt);
+  }, [debouncedState, setTheme, setTemperature, setSystemPrompt]);
 
-  const requestClose = useCallback(() => {
-    if (isDirty()) {
-      setShowDiscardConfirm(true);
-      return;
-    }
-    setIsSettingsOpen(false);
-  }, [isDirty, setIsSettingsOpen]);
-
-  const handleDiscardConfirm = () => {
-    setShowDiscardConfirm(false);
-    setIsSettingsOpen(false);
-  };
-
-  const handleDiscardCancel = () => {
-    setShowDiscardConfirm(false);
-  };
+  // Flush the latest state on unmount so a final keystroke (especially one
+  // that empties a field, like deleting the last character of Custom
+  // Instructions) doesn't get dropped by the 300ms debounce when the user
+  // closes the modal immediately.
+  useEffect(() => {
+    return () => {
+      if (!hasInitialLoadedRef.current) return;
+      const final = stateRef.current;
+      saveSettings(final);
+      setTheme(final.theme);
+      setTemperature(final.temperature);
+      setSystemPrompt(final.systemPrompt);
+    };
+    // Setters are stable; capturing them once at mount is correct.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Close on click outside
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
       // Don't close if a nested dialog is open - they're rendered outside modalRef
-      if (showMigrationDialog || showQuarantineDialog || showDiscardConfirm)
-        return;
+      if (showMigrationDialog || showQuarantineDialog) return;
 
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         window.addEventListener('mouseup', handleMouseUp);
@@ -139,7 +136,7 @@ export function SettingDialog() {
 
     const handleMouseUp = () => {
       window.removeEventListener('mouseup', handleMouseUp);
-      requestClose();
+      setIsSettingsOpen(false);
     };
 
     if (isSettingsOpen) {
@@ -151,10 +148,9 @@ export function SettingDialog() {
     };
   }, [
     isSettingsOpen,
-    requestClose,
+    setIsSettingsOpen,
     showMigrationDialog,
     showQuarantineDialog,
-    showDiscardConfirm,
   ]);
 
   // Update storage data when dialog opens
@@ -219,11 +215,7 @@ export function SettingDialog() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (showDiscardConfirm) {
-          setShowDiscardConfirm(false);
-          return;
-        }
-        requestClose();
+        setIsSettingsOpen(false);
       }
     };
 
@@ -234,15 +226,7 @@ export function SettingDialog() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isSettingsOpen, requestClose, showDiscardConfirm]);
-
-  const handleSave = () => {
-    setTheme(state.theme);
-    setTemperature(state.temperature);
-    setSystemPrompt(state.systemPrompt);
-    saveSettings(state);
-    savedSnapshotRef.current = { ...state };
-  };
+  }, [isSettingsOpen, setIsSettingsOpen]);
 
   const handleReset = () => {
     const defaultTheme: 'light' | 'dark' = window.matchMedia(
@@ -267,7 +251,6 @@ export function SettingDialog() {
     setTemperature(0.5);
     setSystemPrompt(process.env.NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT || '');
     saveSettings(defaultSettings);
-    savedSnapshotRef.current = { ...defaultSettings };
   };
 
   const handleClearConversations = () => {
@@ -313,7 +296,7 @@ export function SettingDialog() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 animate-fade-in-fast">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-950/60 backdrop-blur-sm z-50 animate-fade-in-fast">
       <div className="fixed inset-0 z-10 overflow-hidden">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <div
@@ -323,7 +306,7 @@ export function SettingDialog() {
 
           <div
             ref={modalRef}
-            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl transition-all dark:bg-[#171717] sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
+            className="inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl dark:border-gray-700 dark:bg-[#171717] sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
             role="dialog"
           >
             <div className="flex flex-col md:flex-row h-[550px] md:h-[700px]">
@@ -332,7 +315,7 @@ export function SettingDialog() {
                 activeSection={activeSection}
                 setActiveSection={setActiveSection}
                 handleReset={handleReset}
-                onClose={requestClose}
+                onClose={() => setIsSettingsOpen(false)}
                 user={session?.user}
                 state={state}
                 dispatch={dispatch}
@@ -354,8 +337,7 @@ export function SettingDialog() {
                     state={state}
                     dispatch={dispatch}
                     user={session?.user}
-                    onSave={handleSave}
-                    onClose={requestClose}
+                    onClose={() => setIsSettingsOpen(false)}
                     prefetchedProfile={fullProfile}
                   />
                 )}
@@ -366,8 +348,7 @@ export function SettingDialog() {
                     dispatch={dispatch}
                     homeState={homeState}
                     user={session?.user}
-                    onSave={handleSave}
-                    onClose={requestClose}
+                    onClose={() => setIsSettingsOpen(false)}
                   />
                 )}
 
@@ -377,7 +358,7 @@ export function SettingDialog() {
                     handleImportConversations={handleImportConversations}
                     handleExportData={handleExportData}
                     handleReset={handleReset}
-                    onClose={requestClose}
+                    onClose={() => setIsSettingsOpen(false)}
                     checkStorage={checkStorage}
                     onOpenMigration={() => setShowMigrationDialog(true)}
                     onOpenQuarantine={() => setShowQuarantineDialog(true)}
@@ -408,44 +389,6 @@ export function SettingDialog() {
         isOpen={showQuarantineDialog}
         onClose={() => setShowQuarantineDialog(false)}
       />
-
-      {/* Discard-changes confirmation when closing with unsaved edits */}
-      {showDiscardConfirm && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 dark:bg-black/70">
-          <div
-            className="mx-4 w-full max-w-md rounded-xl border border-gray-200 bg-white p-6 shadow-xl dark:border-gray-700 dark:bg-[#1c1c1c]"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="discard-changes-title"
-          >
-            <h3
-              id="discard-changes-title"
-              className="mb-2 text-lg font-semibold text-black dark:text-white"
-            >
-              {t('settings.unsavedChanges')}
-            </h3>
-            <p className="mb-5 text-sm text-gray-700 dark:text-gray-300">
-              {t('settings.unsavedChangesMessage')}
-            </p>
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={handleDiscardCancel}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-100 dark:hover:bg-gray-800"
-              >
-                {t('common.keepEditing')}
-              </button>
-              <button
-                type="button"
-                onClick={handleDiscardConfirm}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
-              >
-                {t('common.discard')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
