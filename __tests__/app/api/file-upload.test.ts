@@ -326,6 +326,131 @@ describe('/api/file/upload', () => {
       const icoResponse = await POST(icoRequest);
       expect(icoResponse.status).toBe(200);
     });
+
+    // WebP polyglot rejection. Without the chunk-type check at offset 12-15,
+    // an attacker could ship `RIFF\0\0\0\0WEBP<arbitrary bytes>` past magic-
+    // byte validation; the server would store it under image/webp and serve
+    // it back with that Content-Type.
+    it('rejects WebP polyglot (RIFF/WEBP header without VP8 chunk type)', async () => {
+      const polyglot = Buffer.from([
+        0x52,
+        0x49,
+        0x46,
+        0x46, // "RIFF"
+        0x00,
+        0x00,
+        0x00,
+        0x00, // size (any)
+        0x57,
+        0x45,
+        0x42,
+        0x50, // "WEBP"
+        0x00,
+        0x00,
+        0x00,
+        0x00, // chunk type — invalid (not VP8/VP8L/VP8X)
+        0x41,
+        0x41,
+        0x41,
+        0x41, // payload garbage
+      ]);
+      const dataUrl = 'data:image/webp;base64,' + polyglot.toString('base64');
+      const request = createRequest({
+        filename: 'evil.webp',
+        filetype: 'image',
+        mime: 'image/webp',
+        body: dataUrl,
+      });
+      const response = await POST(request);
+      expect(response.status).toBe(400);
+    });
+
+    it.each([
+      ['VP8', 0x20],
+      ['VP8L', 0x4c],
+      ['VP8X', 0x58],
+    ])('accepts valid WebP variant %s', async (_label, variantByte) => {
+      const webp = Buffer.from([
+        0x52,
+        0x49,
+        0x46,
+        0x46, // "RIFF"
+        0x14,
+        0x00,
+        0x00,
+        0x00, // size
+        0x57,
+        0x45,
+        0x42,
+        0x50, // "WEBP"
+        0x56,
+        0x50,
+        0x38, // "VP8" prefix
+        variantByte, // ' ' / 'L' / 'X'
+        0x00,
+        0x00,
+        0x00,
+        0x00, // chunk size (any)
+      ]);
+      const dataUrl = 'data:image/webp;base64,' + webp.toString('base64');
+      const request = createRequest({
+        filename: 'photo.webp',
+        filetype: 'image',
+        mime: 'image/webp',
+        body: dataUrl,
+      });
+      const response = await POST(request);
+      expect(response.status).toBe(200);
+    });
+
+    // The same SVG bytes uploaded via multipart and via legacy data-URL must
+    // hash to the same blob name. Before this fix, the legacy path hashed
+    // the data-URL string and multipart hashed the raw bytes, so the same
+    // SVG produced two different blobs and dedup never fired.
+    it('hashes the same SVG to the same canonical bytes across legacy and multipart paths', async () => {
+      const svg = Buffer.from(
+        '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3"/></svg>',
+      );
+
+      // Legacy data-URL path
+      const legacyRequest = createRequest({
+        filename: 'icon.svg',
+        filetype: 'image',
+        mime: 'image/svg+xml',
+        body: 'data:image/svg+xml;base64,' + svg.toString('base64'),
+      });
+      vi.mocked(Hasher.sha256).mockClear();
+      const legacyResponse = await POST(legacyRequest);
+      expect(legacyResponse.status).toBe(200);
+      const legacyHashInput = vi.mocked(Hasher.sha256).mock.calls[0][0];
+
+      // Multipart path
+      const file = new File([svg], 'icon.svg', { type: 'image/svg+xml' });
+      const formData = new FormData();
+      formData.append('file', file);
+      const params = new URLSearchParams({
+        filename: 'icon.svg',
+        filetype: 'image',
+        mime: 'image/svg+xml',
+      });
+      const multipartRequest = new NextRequest(
+        `http://localhost:3000/api/file/upload?${params.toString()}`,
+        { method: 'POST', body: formData },
+      );
+      vi.mocked(Hasher.sha256).mockClear();
+      const multipartResponse = await POST(multipartRequest);
+      expect(multipartResponse.status).toBe(200);
+      const multipartHashInput = vi.mocked(Hasher.sha256).mock.calls[0][0];
+
+      // Both paths must hash a Buffer (canonical bytes), not the data-URL
+      // string, and the canonical bytes must be byte-equal — that's what
+      // makes content-based dedup work across paths.
+      expect(Buffer.isBuffer(legacyHashInput)).toBe(true);
+      expect(Buffer.isBuffer(multipartHashInput)).toBe(true);
+      expect(
+        (legacyHashInput as Buffer).equals(multipartHashInput as Buffer),
+      ).toBe(true);
+    });
   });
 
   describe('File Type Handling', () => {
