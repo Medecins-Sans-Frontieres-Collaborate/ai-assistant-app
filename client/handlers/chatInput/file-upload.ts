@@ -257,6 +257,7 @@ export async function onFileUpload(
           continue;
         }
         console.error('[FileUpload] Audio extraction failed:', error);
+        toast.dismiss(`extract-${file.name}`);
         toast.error(
           error instanceof Error
             ? error.message
