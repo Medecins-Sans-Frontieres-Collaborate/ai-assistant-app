@@ -129,13 +129,6 @@ async function storeFile(
 ): Promise<{ ok: true; uri: string } | { ok: false; error: string }> {
   const userId = getUserIdFromSession(session);
   const blobStorageClient: BlobStorage = createBlobStorageClient(session);
-
-  // Hash canonical bytes when provided (legacy data-URL path), otherwise
-  // hash `data` directly. Hashing the data-URL string would make the same
-  // SVG hash differently across the two paths and break dedup.
-  const hashedFileContents = Hasher.sha256(
-    hashSource ?? (Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8')),
-  );
   const extension: string | undefined = ctx.filename.split('.').pop();
 
   let contentType: string;
@@ -168,15 +161,21 @@ async function storeFile(
     }
   }
 
-  // Image content check on the binary path. The legacy text path validated
-  // its own bytes at decode time and passes a string here, which we don't
-  // re-validate (re-decoding would be wasteful). For SVG, the helper
-  // returns sanitised bytes that replace the original buffer.
+  // Image content check + SVG sanitisation runs BEFORE the hash. The legacy
+  // text path already sanitised its bytes in `validateLegacyImageDataUrl`
+  // and passes the canonical bytes via `hashSource`; the multipart path
+  // sanitises in place here so the bytes that get hashed are the same
+  // canonical post-sanitisation bytes the legacy path produced. Without
+  // this ordering, the same SVG via two paths would hash differently.
   if (ctx.isImage && Buffer.isBuffer(data)) {
     const result = await validateOrSanitizeImageBytes(data);
     if (!result.ok) return { ok: false, error: result.error };
     data = result.data;
   }
+
+  const hashedFileContents = Hasher.sha256(
+    hashSource ?? (Buffer.isBuffer(data) ? data : Buffer.from(data, 'utf8')),
+  );
 
   const uri = await blobStorageClient.upload(
     `${userId}/uploads/${uploadLocation}/${hashedFileContents}.${extension}`,
