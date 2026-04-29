@@ -181,13 +181,6 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const perfStart = performance.now();
 
-    if (await this.blobExists(blobName)) {
-      console.log(
-        `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
-      );
-      return blockBlobClient.url;
-    }
-
     let uploadContent: string | Buffer;
     let contentLength: number;
 
@@ -206,9 +199,36 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       );
     }
 
+    if (await this.blobExists(blobName)) {
+      const actualSize = await this.getBlobSize(blobName);
+      if (actualSize === contentLength) {
+        console.log(
+          `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
+        );
+        return blockBlobClient.url;
+      }
+      // Same hash, different stored size ⇒ poisoned cache from a prior
+      // failed/corrupt write. Hashes are computed over the canonical
+      // upload payload (see app/api/file/upload/route.ts), so a length
+      // mismatch is by definition not legitimate. Replace it.
+      console.warn(
+        `[blob.upload] poisoned cache at ${blobName}: expected ${contentLength} bytes, found ${actualSize}. Replacing.`,
+      );
+      await this.deleteIfExists(blobName);
+    }
+
+    // Stage as a single block, then commit. The blob is invisible at
+    // `blobName` until commitBlockList succeeds, so a failure between
+    // stageBlock and commit cannot leave a partial blob at the hash-named
+    // slot. Uncommitted blocks are GC'd by Azure after 7 days.
+    const blockId = Buffer.from('block-00000000').toString('base64');
     await withAzureRetry(
-      () => blockBlobClient.upload(uploadContent, contentLength, options),
-      { label: 'blob.upload' },
+      () => blockBlobClient.stageBlock(blockId, uploadContent, contentLength),
+      { label: 'blob.upload.stageBlock' },
+    );
+    await withAzureRetry(
+      () => blockBlobClient.commitBlockList([blockId], options),
+      { label: 'blob.upload.commitBlockList' },
     );
     console.log(
       `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
