@@ -8,7 +8,11 @@ import {
 import { Message, MessageType } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
-import { extractLatestAgentActivity } from '@/lib/streamMarkers';
+import {
+  ConsentOutcomePayload,
+  extractConsentOutcomes,
+  extractLatestAgentActivity,
+} from '@/lib/streamMarkers';
 
 /**
  * Handles parsing of streaming chat responses
@@ -23,6 +27,12 @@ export class StreamParser {
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
+  // CONSENT_OUTCOME markers are side-effect-only. We track which ones we've
+  // already surfaced so processChunk only returns newly-arrived outcomes.
+  // Lifetime: instance-scoped — every chat send constructs a fresh
+  // StreamParser, so this Set never persists across streams. Within one
+  // stream, a duplicate id is treated as already-handled.
+  private seenOutcomeIds: Set<string> = new Set();
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -40,16 +50,30 @@ export class StreamParser {
     action?: string;
     contentChanged: boolean;
     citationsChanged: boolean;
+    /** Newly-arrived approval outcomes since the previous chunk. */
+    newOutcomes: ConsentOutcomePayload[];
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
 
     const parsed = parseMetadataFromContent(this.text);
+    // Pull all `CONSENT_OUTCOME` markers, dedupe against ones we've already
+    // surfaced, and strip them so they never reach the rendered content.
+    const { outcomes, cleaned: outcomeStripped } = extractConsentOutcomes(
+      parsed.content,
+    );
+    const newOutcomes: ConsentOutcomePayload[] = [];
+    for (const o of outcomes) {
+      if (!this.seenOutcomeIds.has(o.approval_request_id)) {
+        this.seenOutcomeIds.add(o.approval_request_id);
+        newOutcomes.push(o);
+      }
+    }
     // Pull the latest transient agent-activity marker (drives the loading
     // text) and strip all of them from the visible content. Marker
     // protocol is centralized in `lib/streamMarkers/`.
     const { latest: latestActivity, cleaned: displayText } =
-      extractLatestAgentActivity(parsed.content);
+      extractLatestAgentActivity(outcomeStripped);
     const latestActivityKey = latestActivity?.key;
 
     // Update citations if found and different from previous
@@ -95,6 +119,7 @@ export class StreamParser {
       action: latestActivityKey ?? parsed.action,
       contentChanged,
       citationsChanged,
+      newOutcomes,
     };
   }
 

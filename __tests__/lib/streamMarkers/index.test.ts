@@ -1,10 +1,14 @@
 import {
   AGENT_ACTIVITY_CLOSE,
   AGENT_ACTIVITY_OPEN,
+  CONSENT_OUTCOME_CLOSE,
+  CONSENT_OUTCOME_OPEN,
   CONSENT_REQUEST_CLOSE,
   CONSENT_REQUEST_OPEN,
   emitAgentActivity,
+  emitConsentOutcome,
   emitConsentRequest,
+  extractConsentOutcomes,
   extractConsentRequests,
   extractLatestAgentActivity,
   stripIncompleteStreamMarkers,
@@ -157,6 +161,72 @@ describe('extractConsentRequests', () => {
   });
 });
 
+describe('emitConsentOutcome / extractConsentOutcomes', () => {
+  it('roundtrips a single approve outcome', () => {
+    const emitted = emitConsentOutcome({
+      approval_request_id: 'mcpr_abc',
+      approve: true,
+    });
+    expect(emitted).toContain(CONSENT_OUTCOME_OPEN);
+    expect(emitted).toContain(CONSENT_OUTCOME_CLOSE);
+    const { outcomes, cleaned } = extractConsentOutcomes(`pre${emitted}post`);
+    expect(outcomes).toEqual([
+      { approval_request_id: 'mcpr_abc', approve: true },
+    ]);
+    expect(cleaned).not.toContain(CONSENT_OUTCOME_OPEN);
+    expect(cleaned).toContain('pre');
+    expect(cleaned).toContain('post');
+  });
+
+  it('roundtrips a deny outcome', () => {
+    const emitted = emitConsentOutcome({
+      approval_request_id: 'mcpr_xyz',
+      approve: false,
+    });
+    const { outcomes } = extractConsentOutcomes(emitted);
+    expect(outcomes).toEqual([
+      { approval_request_id: 'mcpr_xyz', approve: false },
+    ]);
+  });
+
+  it('extracts multiple outcomes in stream order', () => {
+    const content =
+      emitConsentOutcome({ approval_request_id: 'a', approve: true }) +
+      'mid' +
+      emitConsentOutcome({ approval_request_id: 'b', approve: false });
+    const { outcomes, cleaned } = extractConsentOutcomes(content);
+    expect(outcomes).toHaveLength(2);
+    expect(outcomes[0].approval_request_id).toBe('a');
+    expect(outcomes[0].approve).toBe(true);
+    expect(outcomes[1].approval_request_id).toBe('b');
+    expect(outcomes[1].approve).toBe(false);
+    expect(cleaned).toContain('mid');
+    expect(cleaned).not.toContain(CONSENT_OUTCOME_OPEN);
+  });
+
+  it('drops malformed JSON silently and still strips the marker', () => {
+    const content = `${CONSENT_OUTCOME_OPEN}not json${CONSENT_OUTCOME_CLOSE}`;
+    const { outcomes, cleaned } = extractConsentOutcomes(content);
+    expect(outcomes).toEqual([]);
+    expect(cleaned).not.toContain(CONSENT_OUTCOME_OPEN);
+  });
+
+  it('drops payloads missing required fields', () => {
+    const noId = `${CONSENT_OUTCOME_OPEN}{"approve":true}${CONSENT_OUTCOME_CLOSE}`;
+    const noBool = `${CONSENT_OUTCOME_OPEN}{"approval_request_id":"a"}${CONSENT_OUTCOME_CLOSE}`;
+    const wrongTypes = `${CONSENT_OUTCOME_OPEN}{"approval_request_id":123,"approve":"yes"}${CONSENT_OUTCOME_CLOSE}`;
+    expect(extractConsentOutcomes(noId).outcomes).toEqual([]);
+    expect(extractConsentOutcomes(noBool).outcomes).toEqual([]);
+    expect(extractConsentOutcomes(wrongTypes).outcomes).toEqual([]);
+  });
+
+  it('returns empty array and unchanged content when no markers present', () => {
+    const { outcomes, cleaned } = extractConsentOutcomes('plain text');
+    expect(outcomes).toEqual([]);
+    expect(cleaned).toBe('plain text');
+  });
+});
+
 describe('stripIncompleteStreamMarkers', () => {
   it('returns content unchanged when there are no markers', () => {
     expect(stripIncompleteStreamMarkers('hello world')).toBe('hello world');
@@ -180,6 +250,11 @@ describe('stripIncompleteStreamMarkers', () => {
 
   it('hides a partial CONSENT_REQUEST (open without close)', () => {
     const content = `visible${CONSENT_REQUEST_OPEN}{"kind":"oa`;
+    expect(stripIncompleteStreamMarkers(content)).toBe('visible');
+  });
+
+  it('hides a partial CONSENT_OUTCOME (open without close)', () => {
+    const content = `visible${CONSENT_OUTCOME_OPEN}{"approval_re`;
     expect(stripIncompleteStreamMarkers(content)).toBe('visible');
   });
 

@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
   createMessageGroup,
@@ -14,7 +15,12 @@ import {
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { Conversation, Message, MessageType } from '@/types/chat';
+import {
+  ApprovalResponse,
+  Conversation,
+  Message,
+  MessageType,
+} from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -54,6 +60,13 @@ interface ChatStore {
   // Regeneration state for message versioning
   regeneratingIndex: number | null;
 
+  // MCP tool-approval tracking. The Set holds approval_request_ids the user
+  // has already submitted from a ConsentCard in the current session, so the
+  // card freezes its buttons after a click. Map values track in-flight vs.
+  // resolved (true=approve, false=deny). Reset per page load.
+  submittedApprovals: Map<string, boolean>;
+  submittingApprovals: Set<string>;
+
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
   setCurrentMessage: (message: Message | undefined) => void;
@@ -73,6 +86,21 @@ interface ChatStore {
     searchMode?: SearchMode,
   ) => Promise<void>;
 
+  /**
+   * Submits a tool-approval response for a pending mcp_approval_request,
+   * then streams the agent's resumed response into a new assistant message.
+   * No new user message is created — the approval IS the next conversation
+   * turn. Tracks the request id so the card's buttons freeze immediately,
+   * and (when messageIndex is provided) persists the outcome on the source
+   * message so reload doesn't re-prompt.
+   */
+  submitApproval: (
+    approvalRequestId: string,
+    approve: boolean,
+    conversation: Conversation,
+    sourceMessageIndex?: number,
+  ) => Promise<void>;
+
   // Helper methods for sendMessage
   initializeStreamingState: (
     conversationId: string,
@@ -82,6 +110,7 @@ interface ChatStore {
   sendChatRequest: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ) => Promise<ReadableStream<Uint8Array>>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -174,6 +203,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Regeneration initial state
   regeneratingIndex: null,
+
+  // Approval tracking initial state
+  submittedApprovals: new Map<string, boolean>(),
+  submittingApprovals: new Set<string>(),
 
   // Pending transcription initial state
   pendingConversationTranscription: null,
@@ -332,6 +365,106 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  submitApproval: async (
+    approvalRequestId,
+    approve,
+    conversation,
+    sourceMessageIndex,
+  ) => {
+    // Mark as submitting so the card freezes immediately, even before the
+    // network round-trip completes.
+    //
+    // Rollback semantics on failure:
+    // - The `submittingApprovals` flag is rolled back so the user can retry.
+    // - The persisted outcome on the source message (`recordApprovalOutcome`)
+    //   is only written AFTER the stream finalizes successfully, so partial
+    //   failures don't leave a phantom "Approved" card.
+    // - If the stream emitted a server-side `CONSENT_OUTCOME` marker before
+    //   throwing (e.g. mid-stream auto-deny then network drop), processStream
+    //   already persisted that outcome — and that's correct, because Foundry
+    //   actually applied it. The rollback here only undoes the optimistic
+    //   "this user click is in flight" state.
+    set((state) => {
+      const next = new Set(state.submittingApprovals);
+      next.add(approvalRequestId);
+      return { submittingApprovals: next };
+    });
+
+    let showLoadingTimeout: NodeJS.Timeout | null = null;
+
+    try {
+      const loadingMessage = approve
+        ? 'chat.consent.submittingApproval'
+        : 'chat.consent.submittingDenial';
+
+      get().initializeStreamingState(conversation.id, loadingMessage);
+      showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
+
+      const stream = await get().sendChatRequest(conversation, undefined, [
+        { approval_request_id: approvalRequestId, approve },
+      ]);
+
+      const streamParser = new StreamParser();
+      const { finalContent, threadId, pendingTranscriptions } =
+        await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      const assistantMessage = streamParser.toMessage(finalContent);
+
+      await get().finalizeMessage(
+        assistantMessage,
+        conversation,
+        threadId,
+        pendingTranscriptions,
+      );
+
+      // Promote from "submitting" to "submitted" with the resolved decision.
+      set((state) => {
+        const submitted = new Map(state.submittedApprovals);
+        submitted.set(approvalRequestId, approve);
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        return {
+          submittedApprovals: submitted,
+          submittingApprovals: submitting,
+        };
+      });
+
+      // Persist the outcome on the source message so reload sees the
+      // resolved state instead of re-prompting.
+      if (sourceMessageIndex !== undefined) {
+        useConversationStore
+          .getState()
+          .recordApprovalOutcome(
+            conversation.id,
+            sourceMessageIndex,
+            approvalRequestId,
+            approve,
+          );
+      }
+
+      get().clearStreamingState();
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+    } catch (error) {
+      console.error('submitApproval error:', error);
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+
+      // Roll back the submitting marker so the user can retry.
+      set((state) => {
+        const next = new Set(state.submittingApprovals);
+        next.delete(approvalRequestId);
+        return { submittingApprovals: next };
+      });
+
+      get().handleSendError(error, conversation);
+    }
+  },
+
   // Helper methods for sendMessage
 
   initializeStreamingState: (
@@ -366,15 +499,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   sendChatRequest: async (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ): Promise<ReadableStream<Uint8Array>> => {
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
 
-    // Get latest model config - if model no longer exists, use fallback
-    // Organization agents (org-*) and custom agents (custom-*) are dynamically created
-    // and won't be in the static OpenAIModels map - use the conversation model directly
+    // Dynamic agent models (org-*, foundry-*, custom-*) are not in the static
+    // OpenAIModels map — use the conversation's stored model directly. Without
+    // the foundry- check the request would fall through to the fallback model
+    // (gpt-5.2) and silently bypass the agent.
     const isOrganizationAgent =
       conversation.model.id.startsWith('org-') ||
+      conversation.model.id.startsWith('foundry-') ||
       conversation.model.isOrganizationAgent;
     const isCustomAgent =
       conversation.model.id.startsWith('custom-') ||
@@ -452,6 +588,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       displayNamePreference: settings.displayNamePreference,
       customDisplayName: settings.customDisplayName,
       agentSourcePath,
+      approvalResponses,
     });
   },
 
@@ -481,6 +618,50 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       // Process chunk
       const result = streamParser.processChunk(value, { stream: true });
+
+      // Apply server-emitted CONSENT_OUTCOME markers (e.g. auto-denied
+      // approvals). Update in-memory state for the live card and persist
+      // on the source message so reload reflects the same outcome.
+      if (result.newOutcomes.length > 0) {
+        const conv = useConversationStore
+          .getState()
+          .conversations.find(
+            (c) =>
+              c.id ===
+              (get().streamingConversationId ??
+                useConversationStore.getState().selectedConversationId),
+          );
+        set((state) => {
+          const submitted = new Map(state.submittedApprovals);
+          const submitting = new Set(state.submittingApprovals);
+          for (const o of result.newOutcomes) {
+            submitted.set(o.approval_request_id, o.approve);
+            submitting.delete(o.approval_request_id);
+          }
+          return {
+            submittedApprovals: submitted,
+            submittingApprovals: submitting,
+          };
+        });
+        if (conv) {
+          for (const o of result.newOutcomes) {
+            const idx = findMessageIndexForApprovalId(
+              conv,
+              o.approval_request_id,
+            );
+            if (idx !== null) {
+              useConversationStore
+                .getState()
+                .recordApprovalOutcome(
+                  conv.id,
+                  idx,
+                  o.approval_request_id,
+                  o.approve,
+                );
+            }
+          }
+        }
+      }
 
       // Update action message if found (e.g., "Searching the web...")
       if (result.action && !result.hasReceivedContent) {
@@ -669,14 +850,24 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
-    // Check if we should attempt auto-retry with fallback model
+    // Check if we should attempt auto-retry with fallback model. Agent
+    // models (custom-, org-, foundry-) must NEVER fall back to a base model
+    // — the agent's instructions, tool list, and identity are gone if we
+    // swap. Users would silently get GPT-5.2 answers attributed to the
+    // agent, which is what the user reported.
     const { isRetrying } = get();
     const isAuthError = error instanceof ApiError && error.isAuthError();
-    const isCustomAgent = conversation?.model?.id?.startsWith('custom-');
-    const isAlreadyOnFallback = conversation?.model?.id === fallbackModelID;
+    const modelId = conversation?.model?.id ?? '';
+    const isAgentModel =
+      modelId.startsWith('custom-') ||
+      modelId.startsWith('org-') ||
+      modelId.startsWith('foundry-') ||
+      conversation?.model?.isCustomAgent ||
+      conversation?.model?.isOrganizationAgent;
+    const isAlreadyOnFallback = modelId === fallbackModelID;
     const canRetry =
       !isAuthError &&
-      !isCustomAgent &&
+      !isAgentModel &&
       !isAlreadyOnFallback &&
       !isRetrying &&
       conversation;

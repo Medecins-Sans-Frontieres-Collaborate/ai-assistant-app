@@ -152,6 +152,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       displayNamePreference,
       customDisplayName,
       agentSourcePath,
+      approvalResponses,
     } = body;
 
     if (tone) {
@@ -174,6 +175,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       displayNamePreference,
       customDisplayName,
       agentSourcePath,
+      approvalResponses,
       temperature,
       stream,
       reasoningEffort,

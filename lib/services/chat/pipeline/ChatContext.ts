@@ -2,7 +2,7 @@ import { Session } from 'next-auth';
 
 import { ModelSelector } from '@/lib/services/shared';
 
-import { Message } from '@/types/chat';
+import { ApprovalResponse, Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -127,6 +127,14 @@ export interface ChatContext {
    * `isValidFoundryResourcePath` before use; invalid → ignored.
    */
   agentSourcePath?: string;
+
+  /**
+   * MCP tool-approval responses to submit alongside (or in lieu of) the
+   * user's new message. When present, the Foundry agent handler skips
+   * creating a new user-message conversation item and instead posts
+   * `mcp_approval_response` items to resume the agent.
+   */
+  approvalResponses?: ApprovalResponse[];
 
   // ========================================
   // FEATURE FLAGS

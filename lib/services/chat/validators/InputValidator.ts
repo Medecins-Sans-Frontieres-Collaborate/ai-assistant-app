@@ -196,6 +196,19 @@ const ChatBodySchema = z
     // middleware before using it as a cache key disambiguator or discovery
     // scope. RBAC is enforced by ARM via the user's own OBO token.
     agentSourcePath: z.string().max(512).optional(),
+    // MCP tool-approval decisions for in-flight `mcp_approval_request` items
+    // the agent surfaced. Each entry maps `approval_request_id` to a boolean
+    // approve/deny. Capped at 16 to avoid pathological payloads — Foundry
+    // typically emits one approval at a time.
+    approvalResponses: z
+      .array(
+        z.object({
+          approval_request_id: z.string().min(1).max(256),
+          approve: z.boolean(),
+        }),
+      )
+      .max(16)
+      .optional(),
   })
   .strict(); // Reject unknown properties
 

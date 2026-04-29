@@ -5,10 +5,12 @@ import {
   createStreamEncoder,
 } from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
+import { extractPendingApprovalIds } from '@/lib/utils/server/foundryErrors';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import {
+  ApprovalResponse,
   FileMessageContent,
   ImageMessageContent,
   Message,
@@ -22,9 +24,35 @@ import { activityKeyForEvent, outputItemToMarker } from './foundryEventMappers';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
-import { emitAgentActivity, emitConsentRequest } from '@/lib/streamMarkers';
+import {
+  emitAgentActivity,
+  emitConsentOutcome,
+  emitConsentRequest,
+} from '@/lib/streamMarkers';
 import { TokenCredential } from '@azure/identity';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
+
+/**
+ * Shape of an MCP approval-response conversation item, matching Foundry's
+ * Responses API. Centralized here because the `@azure/ai-projects` SDK
+ * doesn't yet export a public type for this shape — keeps the cast
+ * narrowed to one place.
+ */
+interface McpApprovalResponseItem {
+  type: 'mcp_approval_response';
+  approval_request_id: string;
+  approve: boolean;
+}
+
+function buildApprovalResponseItems(
+  decisions: ReadonlyArray<{ approval_request_id: string; approve: boolean }>,
+): McpApprovalResponseItem[] {
+  return decisions.map((r) => ({
+    type: 'mcp_approval_response',
+    approval_request_id: r.approval_request_id,
+    approve: r.approve,
+  }));
+}
 
 /**
  * Handles Azure AI Foundry Agent-based chat completions
@@ -53,6 +81,7 @@ export class AIFoundryAgentHandler {
     threadId?: string,
     credential?: TokenCredential,
     endpoint?: string,
+    approvalResponses?: ApprovalResponse[],
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -109,118 +138,141 @@ export class AIFoundryAgentHandler {
           );
           const openAIClient = await project.getOpenAIClient();
 
-          // Process messages to inject artifactContext and handle token limits
-          const encoding = await getGlobalTiktoken();
-          const processedMessages = await getMessagesToSend(
-            messages,
-            encoding,
-            0, // No system prompt for agents (they have built-in instructions)
-            modelConfig.tokenLimit,
-            user,
-          );
+          // Approval-resume path: when approvalResponses are present, the user
+          // clicked Approve/Deny on a pending mcp_approval_request. We post
+          // mcp_approval_response items to the existing conversation instead
+          // of creating a new user message — Foundry will resume the agent
+          // and stream the rest of its response.
+          const hasApprovals =
+            !!approvalResponses && approvalResponses.length > 0;
 
-          console.log('[AIFoundryAgentHandler] Messages processed:', {
-            originalCount: messages.length,
-            processedCount: processedMessages.length,
-            hasArtifactContext: messages.some((m) => m.artifactContext),
-          });
-
-          // Build the last user message content
-          const lastMessage = processedMessages[processedMessages.length - 1];
-          let messageContent: string;
-
-          if (typeof lastMessage.content === 'string') {
-            messageContent = lastMessage.content;
-          } else if (Array.isArray(lastMessage.content)) {
-            // For multimodal content, concatenate text parts
-            // The new API handles images differently - extract text for now
-            messageContent = lastMessage.content
-              .map(
-                (
-                  item:
-                    | TextMessageContent
-                    | ImageMessageContent
-                    | FileMessageContent,
-                ) => {
-                  if (item.type === 'text') {
-                    return item.text;
-                  } else if (item.type === 'image_url') {
-                    return '[Image attached]';
-                  } else if (item.type === 'file_url') {
-                    return `[File attached: ${item.originalFilename || 'file'}]`;
-                  }
-                  return '';
-                },
-              )
-              .filter(Boolean)
-              .join('\n');
-          } else if (
-            typeof lastMessage.content === 'object' &&
-            'text' in lastMessage.content
-          ) {
-            messageContent = (lastMessage.content as TextMessageContent).text;
-          } else {
-            messageContent = String(lastMessage.content);
+          if (hasApprovals && !threadId) {
+            throw new Error(
+              'Cannot submit tool approval without an active conversation (threadId is required for approvalResponses)',
+            );
           }
 
           let conversationId: string;
           let isNewConversation = false;
 
-          try {
-            if (threadId) {
-              // Reuse existing conversation
-              conversationId = threadId;
-            } else {
-              // Create a new conversation with the first message
-              const conversation = await openAIClient.conversations.create({
-                items: [
-                  {
-                    type: 'message',
-                    role: 'user',
-                    content: messageContent,
-                  },
-                ],
-              });
-              conversationId = conversation.id;
-              isNewConversation = true;
-            }
-          } catch (convError) {
-            console.error('Error with conversation:', convError);
-            throw convError;
-          }
-
-          // If reusing an existing conversation, add the new message
-          if (!isNewConversation) {
+          if (hasApprovals) {
+            // No new user message; just append approval responses.
+            conversationId = threadId as string;
             try {
               await openAIClient.conversations.items.create(conversationId, {
-                items: [
-                  {
-                    type: 'message',
-                    role: 'user',
-                    content: messageContent,
-                  },
-                ],
+                items: buildApprovalResponseItems(approvalResponses!) as any,
               });
-            } catch (messageError) {
+              console.log('[AIFoundryAgentHandler] Submitted approvals:', {
+                conversationId,
+                count: approvalResponses!.length,
+              });
+            } catch (approvalError) {
               console.error(
-                'Error adding message to conversation:',
-                messageError,
+                'Error adding approval responses to conversation:',
+                approvalError,
               );
-              throw messageError;
+              throw approvalError;
+            }
+          } else {
+            // Standard new-message path.
+            // Process messages to inject artifactContext and handle token limits
+            const encoding = await getGlobalTiktoken();
+            const processedMessages = await getMessagesToSend(
+              messages,
+              encoding,
+              0, // No system prompt for agents (they have built-in instructions)
+              modelConfig.tokenLimit,
+              user,
+            );
+
+            console.log('[AIFoundryAgentHandler] Messages processed:', {
+              originalCount: messages.length,
+              processedCount: processedMessages.length,
+              hasArtifactContext: messages.some((m) => m.artifactContext),
+            });
+
+            // Build the last user message content
+            const lastMessage = processedMessages[processedMessages.length - 1];
+            let messageContent: string;
+
+            if (typeof lastMessage.content === 'string') {
+              messageContent = lastMessage.content;
+            } else if (Array.isArray(lastMessage.content)) {
+              // For multimodal content, concatenate text parts
+              messageContent = lastMessage.content
+                .map(
+                  (
+                    item:
+                      | TextMessageContent
+                      | ImageMessageContent
+                      | FileMessageContent,
+                  ) => {
+                    if (item.type === 'text') {
+                      return item.text;
+                    } else if (item.type === 'image_url') {
+                      return '[Image attached]';
+                    } else if (item.type === 'file_url') {
+                      return `[File attached: ${item.originalFilename || 'file'}]`;
+                    }
+                    return '';
+                  },
+                )
+                .filter(Boolean)
+                .join('\n');
+            } else if (
+              typeof lastMessage.content === 'object' &&
+              'text' in lastMessage.content
+            ) {
+              messageContent = (lastMessage.content as TextMessageContent).text;
+            } else {
+              messageContent = String(lastMessage.content);
+            }
+
+            try {
+              if (threadId) {
+                conversationId = threadId;
+              } else {
+                const conversation = await openAIClient.conversations.create({
+                  items: [
+                    {
+                      type: 'message',
+                      role: 'user',
+                      content: messageContent,
+                    },
+                  ],
+                });
+                conversationId = conversation.id;
+                isNewConversation = true;
+              }
+            } catch (convError) {
+              console.error('Error with conversation:', convError);
+              throw convError;
+            }
+
+            if (!isNewConversation) {
+              try {
+                await openAIClient.conversations.items.create(conversationId, {
+                  items: [
+                    {
+                      type: 'message',
+                      role: 'user',
+                      content: messageContent,
+                    },
+                  ],
+                });
+              } catch (messageError) {
+                console.error(
+                  'Error adding message to conversation:',
+                  messageError,
+                );
+                throw messageError;
+              }
             }
           }
 
           // Create a response (replaces runs.create)
-          let streamEventMessages;
-          try {
-            console.log('Creating response with:', {
-              conversationId,
-              agentName: String(agentId),
-              endpoint: resolvedEndpoint,
-              usingOBO: !!credential,
-            });
-
-            const stream = await openAIClient.responses.create(
+          const createStream = () =>
+            openAIClient.responses.create(
               {
                 conversation: conversationId,
                 stream: true,
@@ -235,7 +287,41 @@ export class AIFoundryAgentHandler {
               },
             );
 
-            streamEventMessages = stream;
+          let streamEventMessages;
+          let autoDeniedApprovalIds: string[] = [];
+          try {
+            console.log('Creating response with:', {
+              conversationId,
+              agentName: String(agentId),
+              endpoint: resolvedEndpoint,
+              usingOBO: !!credential,
+            });
+
+            try {
+              streamEventMessages = await createStream();
+            } catch (firstAttempt: any) {
+              // Foundry rejects new turns when prior mcp_approval_requests
+              // are still unanswered. The error message lists the
+              // approval_request_ids verbatim. Auto-deny those (the user
+              // signaled "move on" by sending a new message) and retry.
+              const pendingIds = extractPendingApprovalIds(firstAttempt);
+              if (pendingIds.length === 0) throw firstAttempt;
+
+              console.log(
+                '[AIFoundryAgentHandler] Auto-denying pending approvals before retry:',
+                pendingIds,
+              );
+              await openAIClient.conversations.items.create(conversationId, {
+                items: buildApprovalResponseItems(
+                  pendingIds.map((id) => ({
+                    approval_request_id: id,
+                    approve: false,
+                  })),
+                ) as any,
+              });
+              autoDeniedApprovalIds = pendingIds;
+              streamEventMessages = await createStream();
+            }
           } catch (streamError: any) {
             console.error('Error creating stream:', streamError);
             if (streamError instanceof Error) {
@@ -261,6 +347,20 @@ export class AIFoundryAgentHandler {
           const stream = new ReadableStream({
             async start(controller) {
               const encoder = createStreamEncoder();
+
+              // Surface any auto-denied approvals up-front so the client UI
+              // flips matching consent cards out of "pending" before the
+              // agent starts streaming new content.
+              for (const deniedId of autoDeniedApprovalIds) {
+                controller.enqueue(
+                  encoder.encode(
+                    emitConsentOutcome({
+                      approval_request_id: deniedId,
+                      approve: false,
+                    }),
+                  ),
+                );
+              }
               let citations: Array<{
                 number: number;
                 title: string;

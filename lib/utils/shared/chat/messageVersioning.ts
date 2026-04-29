@@ -28,6 +28,7 @@ export function entryToDisplayMessage(entry: ConversationEntry): Message {
       thinking: activeVersion.thinking,
       transcript: activeVersion.transcript,
       error: activeVersion.error,
+      approvalOutcomes: activeVersion.approvalOutcomes,
     };
   }
   return entry;
@@ -48,6 +49,7 @@ export function messageToVersion(message: Message): AssistantMessageVersion {
     thinking: message.thinking,
     transcript: message.transcript,
     error: message.error,
+    approvalOutcomes: message.approvalOutcomes,
     createdAt: new Date().toISOString(),
   };
 }

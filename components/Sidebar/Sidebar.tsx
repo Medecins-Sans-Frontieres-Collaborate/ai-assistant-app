@@ -44,6 +44,7 @@ import {
   readFolderFile,
   validateAndPrepareFolderImport,
 } from '@/lib/utils/app/export/folderExport';
+import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
@@ -67,6 +68,7 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export const Sidebar = memo(function Sidebar() {
   const t = useTranslations();
+  const modifierLabel = usePlatformModifier();
   const params = useParams();
   const locale = params?.locale || 'en';
   const { data: session } = useSession();
@@ -552,7 +554,7 @@ export const Sidebar = memo(function Sidebar() {
             </span>
             {showChatbar && (
               <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                ⌘K
+                {modifierLabel}+K
               </span>
             )}
             {!showChatbar && (

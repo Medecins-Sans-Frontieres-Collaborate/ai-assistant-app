@@ -61,6 +61,7 @@ export class AgentChatHandler extends BasePipelineStage {
         context.threadId,
         context.userCredential,
         agentEndpoint,
+        context.approvalResponses,
       );
 
       const duration = Date.now() - startTime;

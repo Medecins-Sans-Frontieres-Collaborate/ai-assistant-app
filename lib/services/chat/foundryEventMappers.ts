@@ -66,11 +66,22 @@ export function outputItemToMarker(
   }
 
   if (item.type === 'mcp_approval_request') {
+    // Foundry emits `arguments` as a JSON string on this item. We forward
+    // it verbatim for display only — the agent has already constructed the
+    // call and will execute it once the user approves.
+    const rawArgs = item.arguments;
+    const tool_arguments =
+      typeof rawArgs === 'string'
+        ? rawArgs
+        : rawArgs != null
+          ? JSON.stringify(rawArgs)
+          : null;
     return emitConsentRequest({
       kind: 'approval',
       approval_request_id: item.id,
       server_label: (item.server_label as string | null | undefined) ?? null,
       tool_name: (item.name as string | null | undefined) ?? null,
+      tool_arguments,
     });
   }
 

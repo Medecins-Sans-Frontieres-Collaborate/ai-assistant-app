@@ -2,7 +2,12 @@
 
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
-import { FileMessageContent, ImageMessageContent, Message } from '@/types/chat';
+import {
+  ApprovalResponse,
+  FileMessageContent,
+  ImageMessageContent,
+  Message,
+} from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
@@ -191,6 +196,7 @@ export class ChatService {
       displayNamePreference?: DisplayNamePreference;
       customDisplayName?: string;
       agentSourcePath?: string;
+      approvalResponses?: ApprovalResponse[];
     },
   ): Promise<ReadableStream<Uint8Array>> {
     // Convert image file references to base64 at API call time
@@ -225,6 +231,7 @@ export class ChatService {
         displayNamePreference: options?.displayNamePreference,
         customDisplayName: options?.customDisplayName,
         agentSourcePath: options?.agentSourcePath,
+        approvalResponses: options?.approvalResponses,
       },
       {
         signal: options?.signal,

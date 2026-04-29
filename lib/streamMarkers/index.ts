@@ -30,6 +30,8 @@ export const AGENT_ACTIVITY_OPEN = '<<<AGENT_ACTIVITY>>>';
 export const AGENT_ACTIVITY_CLOSE = '<<<END_AGENT_ACTIVITY>>>';
 export const CONSENT_REQUEST_OPEN = '<<<CONSENT_REQUEST>>>';
 export const CONSENT_REQUEST_CLOSE = '<<<END_CONSENT_REQUEST>>>';
+export const CONSENT_OUTCOME_OPEN = '<<<CONSENT_OUTCOME>>>';
+export const CONSENT_OUTCOME_CLOSE = '<<<END_CONSENT_OUTCOME>>>';
 
 // ───────────────────────────────────────────────────────────────────
 // Payload shapes
@@ -60,7 +62,24 @@ export type ConsentRequestPayload =
       approval_request_id: string;
       server_label?: string | null;
       tool_name?: string | null;
+      /**
+       * JSON-serialized arguments the tool will be invoked with, as Foundry
+       * emits them on the `mcp_approval_request` item. Pre-rendered for
+       * display; the client should NOT use this for dispatch.
+       */
+      tool_arguments?: string | null;
     };
+
+/**
+ * Server-side resolution of a consent prompt — used when the server auto-
+ * denies pending approvals (e.g. user sent a new message instead of acting
+ * on the card). The client records this so the affected card's UI flips
+ * out of "pending" without waiting for a reload.
+ */
+export interface ConsentOutcomePayload {
+  approval_request_id: string;
+  approve: boolean;
+}
 
 // ───────────────────────────────────────────────────────────────────
 // Emit helpers (server-side)
@@ -74,6 +93,10 @@ export function emitConsentRequest(payload: ConsentRequestPayload): string {
   return `\n\n${CONSENT_REQUEST_OPEN}${JSON.stringify(payload)}${CONSENT_REQUEST_CLOSE}\n\n`;
 }
 
+export function emitConsentOutcome(payload: ConsentOutcomePayload): string {
+  return `\n\n${CONSENT_OUTCOME_OPEN}${JSON.stringify(payload)}${CONSENT_OUTCOME_CLOSE}\n\n`;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // Parse helpers (client-side)
 // ───────────────────────────────────────────────────────────────────
@@ -85,6 +108,11 @@ const AGENT_ACTIVITY_STRIP_RE =
 
 const CONSENT_REQUEST_RE =
   /<<<CONSENT_REQUEST>>>([\s\S]*?)<<<END_CONSENT_REQUEST>>>/g;
+
+const CONSENT_OUTCOME_RE =
+  /<<<CONSENT_OUTCOME>>>([\s\S]*?)<<<END_CONSENT_OUTCOME>>>/g;
+const CONSENT_OUTCOME_STRIP_RE =
+  /\n*<<<CONSENT_OUTCOME>>>[\s\S]*?<<<END_CONSENT_OUTCOME>>>\n*/g;
 
 /**
  * Pulls the latest `AGENT_ACTIVITY` payload out of the stream content
@@ -140,6 +168,38 @@ export function extractConsentRequests(content: string): {
 }
 
 /**
+ * Pulls every `CONSENT_OUTCOME` payload from the content and returns a
+ * cleaned copy with all outcome markers removed. Outcomes are side-effect
+ * only — they trigger client-side state updates and never render.
+ */
+export function extractConsentOutcomes(content: string): {
+  outcomes: ConsentOutcomePayload[];
+  cleaned: string;
+} {
+  const outcomes: ConsentOutcomePayload[] = [];
+  let cleaned = content;
+  cleaned = cleaned.replace(CONSENT_OUTCOME_RE, (_match, json) => {
+    try {
+      const parsed = JSON.parse(json);
+      if (
+        parsed &&
+        typeof parsed.approval_request_id === 'string' &&
+        typeof parsed.approve === 'boolean'
+      ) {
+        outcomes.push(parsed as ConsentOutcomePayload);
+      }
+    } catch {
+      // ignore malformed payload
+    }
+    return '';
+  });
+  // Belt-and-suspenders: also strip via the dedicated regex in case the
+  // payload-parse path missed a malformed marker.
+  cleaned = cleaned.replace(CONSENT_OUTCOME_STRIP_RE, '');
+  return { outcomes, cleaned };
+}
+
+/**
  * Hides partially-streamed sentinel markers from the rendered text. When
  * the open tag has arrived but the close tag hasn't yet, slice everything
  * from the open onward off the displayed content. The next render (after
@@ -150,6 +210,7 @@ export function extractConsentRequests(content: string): {
  */
 const MARKER_PAIRS: ReadonlyArray<readonly [string, string]> = [
   [CONSENT_REQUEST_OPEN, CONSENT_REQUEST_CLOSE],
+  [CONSENT_OUTCOME_OPEN, CONSENT_OUTCOME_CLOSE],
   [AGENT_ACTIVITY_OPEN, AGENT_ACTIVITY_CLOSE],
 ];
 

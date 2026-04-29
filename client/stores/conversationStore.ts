@@ -79,6 +79,29 @@ interface ConversationStore {
     filename: string,
     jobId?: string,
   ) => void;
+
+  /**
+   * Records an MCP tool-approval outcome on the assistant message that
+   * surfaced the prompt. Stored on the active version when the entry is a
+   * MessageGroup. Survives reload so the consent card doesn't re-prompt.
+   */
+  recordApprovalOutcome: (
+    conversationId: string,
+    messageIndex: number,
+    approvalRequestId: string,
+    approve: boolean,
+  ) => void;
+
+  /**
+   * Sets the conversation's auto-approve scope. `mode: 'tool'` adds toolName
+   * to the per-tool allowlist; `mode: 'all'` enables blanket auto-approval
+   * for every MCP tool prompt in the conversation.
+   */
+  setAutoApprove: (
+    conversationId: string,
+    mode: 'tool' | 'all',
+    toolName?: string,
+  ) => void;
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -286,6 +309,71 @@ export const useConversationStore = create<ConversationStore>()(
               messages[messageIndex] = {
                 ...entry,
                 versions: updatedVersions,
+              };
+            }
+
+            return { ...c, messages, updatedAt: new Date().toISOString() };
+          }),
+        })),
+
+      setAutoApprove: (conversationId, mode, toolName) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            if (mode === 'all') {
+              return {
+                ...c,
+                alwaysApproveAllTools: true,
+                updatedAt: new Date().toISOString(),
+              };
+            }
+            if (mode === 'tool' && toolName) {
+              const existing = c.alwaysApproveTools ?? [];
+              if (existing.includes(toolName)) return c;
+              return {
+                ...c,
+                alwaysApproveTools: [...existing, toolName],
+                updatedAt: new Date().toISOString(),
+              };
+            }
+            return c;
+          }),
+        })),
+
+      recordApprovalOutcome: (
+        conversationId,
+        messageIndex,
+        approvalRequestId,
+        approve,
+      ) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+
+            const messages = [...c.messages];
+            const entry = messages[messageIndex];
+            if (!entry) return c;
+
+            if (isAssistantMessageGroup(entry)) {
+              const versions = [...entry.versions];
+              const active = versions[entry.activeIndex];
+              if (active) {
+                versions[entry.activeIndex] = {
+                  ...active,
+                  approvalOutcomes: {
+                    ...(active.approvalOutcomes ?? {}),
+                    [approvalRequestId]: approve,
+                  },
+                };
+                messages[messageIndex] = { ...entry, versions };
+              }
+            } else {
+              messages[messageIndex] = {
+                ...entry,
+                approvalOutcomes: {
+                  ...(entry.approvalOutcomes ?? {}),
+                  [approvalRequestId]: approve,
+                },
               };
             }
 

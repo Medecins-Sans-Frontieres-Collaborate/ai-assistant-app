@@ -105,6 +105,50 @@ describe('outputItemToMarker', () => {
       expect(marker).toContain('"server_label":null');
       expect(marker).toContain('"tool_name":null');
     });
+
+    it('forwards arguments verbatim when Foundry sends them as a JSON string', () => {
+      const marker = outputItemToMarker({
+        id: 'req_args',
+        type: 'mcp_approval_request',
+        name: 'list_bills',
+        server_label: 'NetSuite',
+        arguments: '{"query":"microsoft"}',
+      });
+      expect(marker).toContain(
+        '"tool_arguments":"{\\"query\\":\\"microsoft\\"}"',
+      );
+    });
+
+    it('serializes arguments when Foundry sends them as an object', () => {
+      const marker = outputItemToMarker({
+        id: 'req_args',
+        type: 'mcp_approval_request',
+        name: 'list_bills',
+        arguments: { query: 'apple', limit: 5 },
+      });
+      expect(marker).not.toBeNull();
+      // The marker is "\n\n<<<CONSENT_REQUEST>>>{...}<<<END_CONSENT_REQUEST>>>\n\n".
+      // Pull out the JSON payload and assert that tool_arguments is a
+      // JSON-encoded STRING (not an object) and that it round-trips cleanly.
+      const payloadJson = marker!.match(
+        /<<<CONSENT_REQUEST>>>([\s\S]*?)<<<END_CONSENT_REQUEST>>>/,
+      )![1];
+      const payload = JSON.parse(payloadJson);
+      expect(typeof payload.tool_arguments).toBe('string');
+      expect(JSON.parse(payload.tool_arguments)).toEqual({
+        query: 'apple',
+        limit: 5,
+      });
+    });
+
+    it('emits null tool_arguments when arguments are missing', () => {
+      const marker = outputItemToMarker({
+        id: 'req_no_args',
+        type: 'mcp_approval_request',
+        name: 'no_args_tool',
+      });
+      expect(marker).toContain('"tool_arguments":null');
+    });
   });
 
   describe('mcp_call', () => {

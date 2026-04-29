@@ -420,24 +420,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       const source = customAgentSources.find((s) => s.id === sourceId);
       if (!source) return;
 
-      // Reset every conversation whose active model points at this source.
-      // Match by account name parsed from the ARM path — endpoint format is
-      // `https://<account>.<region>.cognitiveservices.azure.com/...`, so the
-      // account name is a stable, collision-resistant key.
-      const accountFromPath = source.resourcePath
-        .split('/accounts/')[1]
-        ?.split('/')[0];
-      const fallbackModel = baseModels[0];
-      if (accountFromPath && fallbackModel) {
-        const accountHostPrefix = `://${accountFromPath}.`;
-        for (const conv of conversations) {
-          const endpoint = conv.model?.foundryEndpoint;
-          if (endpoint && endpoint.includes(accountHostPrefix)) {
-            updateConversation(conv.id, { model: fallbackModel });
-          }
-        }
-      }
-
+      // Disconnecting only removes the source registration; existing
+      // conversations keep their agent model intact (history, topbar label,
+      // metadata). If the user later tries to send in one of those, the
+      // request surfaces a clear "agent unavailable" error from the server
+      // and they can pick a new model from the picker. Silently rewriting
+      // the model to GPT-5.2 made the topbar lie about who answered.
       deleteCustomAgentSource(sourceId);
 
       // Show undo toast — restore the source if user changes their mind
@@ -459,14 +447,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         { duration: 8000 },
       );
     },
-    [
-      deleteCustomAgentSource,
-      addCustomAgentSource,
-      customAgentSources,
-      conversations,
-      baseModels,
-      updateConversation,
-    ],
+    [deleteCustomAgentSource, addCustomAgentSource, customAgentSources],
   );
 
   return (

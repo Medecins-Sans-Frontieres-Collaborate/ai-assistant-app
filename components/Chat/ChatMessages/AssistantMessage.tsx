@@ -631,16 +631,24 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             {/* Consent / approval cards — rendered after the markdown body
                 so they appear at the point in the message where the agent
                 surfaced the prompt. */}
-            {consentRequests.map((req, i) => (
-              <ConsentCard
-                key={
-                  req.kind === 'oauth'
-                    ? `oauth:${req.consent_url ?? i}`
-                    : `approval:${req.approval_request_id ?? i}`
-                }
-                request={req}
-              />
-            ))}
+            {consentRequests.map((req, i) => {
+              const persistedOutcome =
+                req.kind === 'approval' && req.approval_request_id
+                  ? message?.approvalOutcomes?.[req.approval_request_id]
+                  : undefined;
+              return (
+                <ConsentCard
+                  key={
+                    req.kind === 'oauth'
+                      ? `oauth:${req.consent_url ?? i}`
+                      : `approval:${req.approval_request_id ?? i}`
+                  }
+                  request={req}
+                  messageIndex={messageIndex}
+                  persistedOutcome={persistedOutcome}
+                />
+              );
+            })}
 
             {/* Citations - shown after content but before action buttons */}
             {citations.length > 0 && <CitationList citations={citations} />}

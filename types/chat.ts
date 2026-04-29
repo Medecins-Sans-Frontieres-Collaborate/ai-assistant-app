@@ -85,6 +85,13 @@ export interface Message {
   pendingTranscriptionFilename?: string;
   /** Blob path for cleanup after transcription completes */
   pendingTranscriptionBlobPath?: string;
+  /**
+   * Outcomes for MCP tool-approval prompts that originated in this message.
+   * Keyed by `approval_request_id`; value is the user's decision (true=approve,
+   * false=deny). Persisted so reloading the conversation doesn't show the
+   * card in pending state again.
+   */
+  approvalOutcomes?: Record<string, boolean>;
 }
 
 export type Role = 'system' | 'assistant' | 'user';
@@ -108,6 +115,11 @@ export interface AssistantMessageVersion {
   transcript?: TranscriptMetadata;
   error?: boolean;
   createdAt: string; // ISO timestamp for when this version was generated
+  /**
+   * Outcomes for MCP tool-approval prompts that originated in this version.
+   * Keyed by `approval_request_id`.
+   */
+  approvalOutcomes?: Record<string, boolean>;
 }
 
 /**
@@ -184,6 +196,23 @@ export interface ChatBody {
    * invalid or absent value falls back to the regional default.
    */
   agentSourcePath?: string;
+  /**
+   * MCP tool-approval responses to submit alongside (or in lieu of) a new
+   * user message. When this is non-empty the server skips creating a new
+   * user-message conversation item and instead posts `mcp_approval_response`
+   * items, then resumes the agent's response stream. See AIFoundryAgentHandler.
+   */
+  approvalResponses?: ApprovalResponse[];
+}
+
+/**
+ * One MCP tool-approval decision the user has submitted from the consent
+ * card. The id is the `approval_request_id` Foundry surfaced when it
+ * emitted the `mcp_approval_request` output item.
+ */
+export interface ApprovalResponse {
+  approval_request_id: string;
+  approve: boolean;
 }
 
 export interface Conversation {
@@ -201,6 +230,16 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  /**
+   * Tool names this conversation auto-approves on sight (no card prompt).
+   * Set when the user picks "Always approve this tool" from a consent card.
+   */
+  alwaysApproveTools?: string[];
+  /**
+   * If true, every MCP tool-approval prompt in this conversation auto-approves
+   * without surfacing a card. Set via "Always approve all tools".
+   */
+  alwaysApproveAllTools?: boolean;
 }
 
 export type FileFieldValue =
