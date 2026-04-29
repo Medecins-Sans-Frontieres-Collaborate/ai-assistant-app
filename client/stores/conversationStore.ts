@@ -393,7 +393,23 @@ export const useConversationStore = create<ConversationStore>()(
           }),
         })),
 
-      updateFileProcessedContent: (conversationId, fileId, content) =>
+      updateFileProcessedContent: (conversationId, fileId, content) => {
+        // Server-extracted content is unbounded; without this guard a large
+        // document instantly trips QuotaExceededError on the next persist.
+        // Mirrors the byte-cap that `activateFile` enforces up-front.
+        let safeContent = content;
+        const contentBytes = content.content?.length ?? 0;
+        if (contentBytes > ACTIVE_FILE_CONTENT_MAX_BYTES) {
+          safeContent = {
+            ...content,
+            content:
+              (content.content ?? '').slice(0, ACTIVE_FILE_CONTENT_MAX_BYTES) +
+              '\n\n[Content truncated to fit storage budget]',
+          };
+          toast.error(
+            `Extracted content exceeds ${(ACTIVE_FILE_CONTENT_MAX_BYTES / 1_000_000).toFixed(0)}MB; truncated for storage.`,
+          );
+        }
         set((state) => ({
           conversations: state.conversations.map((c) => {
             if (c.id !== conversationId) return c;
@@ -404,7 +420,7 @@ export const useConversationStore = create<ConversationStore>()(
                   ? ({
                       ...f,
                       status: 'ready',
-                      processedContent: content,
+                      processedContent: safeContent,
                       lastUsedAt: new Date().toISOString(),
                     } as ActiveFile)
                   : (f as ActiveFile),
@@ -415,7 +431,8 @@ export const useConversationStore = create<ConversationStore>()(
               updatedAt: new Date().toISOString(),
             };
           }),
-        })),
+        }));
+      },
 
       clearAllActiveFiles: (conversationId) =>
         set((state) => ({
