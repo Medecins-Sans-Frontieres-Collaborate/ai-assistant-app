@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { revokeAllPreviewUrls } from '@/lib/utils/client/file/blobUrl';
 import { buildMessageContent } from '@/lib/utils/shared/chat/contentBuilder';
 import { validateMessageSubmission } from '@/lib/utils/shared/chat/validation';
 
@@ -18,7 +19,6 @@ import {
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { revokeAllPreviewUrls } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { isAudioVideoFile } from '@/lib/constants/fileTypes';
 import { v4 as uuidv4 } from 'uuid';
