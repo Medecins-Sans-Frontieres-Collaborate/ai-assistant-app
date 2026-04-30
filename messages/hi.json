@@ -637,10 +637,10 @@
     "errorFetchingUrl": "URL सामग्री प्राप्त करते समय एक त्रुटि हुई",
     "errorInitiatingSearch": "वेब खोज शुरू करते समय एक त्रुटि हुई",
     "regenerate": "पुनः उत्पन्न करें",
-    "modelSwitchPrompt": "{original} विफल रहा लेकिन {fallback} सफल रहा। क्या आप मॉडल बदलना चाहते हैं?",
-    "keepOriginalModel": "{model} रखें",
+    "modelSwitchPrompt": "{original} उपलब्ध नहीं था, इसलिए {fallback} ने इसका उत्तर दिया।",
+    "keepOriginalModel": "{model} पर बने रहें",
     "switchToModel": "{model} पर स्विच करें",
-    "alwaysSwitchToModel": "हमेशा स्वचालित रूप से स्विच करें",
+    "alwaysSwitchToModel": "जब {original} उपलब्ध न हो तो हमेशा स्विच करें",
     "translateMessage": "संदेश का अनुवाद करें",
     "translating": "अनुवाद हो रहा है...",
     "translationError": "अनुवाद विफल रहा",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "इस ब्राउज़र में ऑडियो रिकॉर्डिंग समर्थित नहीं है।",
     "microphoneNotDetected": "माइक्रोफ़ोन नहीं मिला",
     "microphoneBlocked": "माइक्रोफ़ोन ब्लॉक है। ब्राउज़र सेटिंग्स जांचें।",
-    "voiceTranscriptionFailed": "आवाज़ ट्रांसक्रिप्शन असफल रहा। कृपया पुनः प्रयास करें।"
+    "voiceTranscriptionFailed": "आवाज़ ट्रांसक्रिप्शन असफल रहा। कृपया पुनः प्रयास करें।",
+    "stopGenerationTitle": "जेनरेशन रोकें?",
+    "stopGenerationMessage": "क्या आप वाकई इस उत्तर का जेनरेशन रोकना चाहते हैं? कोई भी चल रही प्रतिक्रिया रद्द कर दी जाएगी।",
+    "stopGenerationConfirm": "रोकें",
+    "stopGenerationDontAskAgainButton": "बटन से रोकते समय दोबारा न पूछें",
+    "stopGenerationDontAskAgainKeyboard": "कीबोर्ड से रोकते समय दोबारा न पूछें",
+    "generateResponseButton": "उत्तर जनरेट करें"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -974,7 +980,9 @@
     "verbosityDescription": "GPT-5 मॉडलों के लिए प्रतिक्रिया का विस्तार स्तर नियंत्रित करता है।",
     "activeFiles": {
       "autoPinUploads": "अपलोड की गई फ़ाइलें स्वतः पिन करें",
-      "autoPinUploadsDescription": "फ़ाइलों को अपलोड करते समय उन्हें स्वतः पिन करें ताकि वे हटाई न जाएं"
+      "autoPinUploadsDescription": "फ़ाइलों को अपलोड करते समय उन्हें स्वतः पिन करें ताकि वे हटाई न जाएं",
+      "autoInjectPinnedImages": "हर बार पिन की गई छवियों को फिर से जोड़ें",
+      "autoInjectPinnedImagesDescription": "अगर यह चालू है, तो हर बार पिन की गई छवियां vision-समर्थित मॉडल को भेजी जाती हैं ताकि वे संदर्भ में बनी रहें (अनुमानित लागत ≈765 टोकन प्रति पिन की गई छवि प्रति बार)। बंद होने पर, पिन की गई छवियां पैनल में दिखती रहेंगी, लेकिन केवल तब भेजी जाएंगी जब आप उन्हें फिर से संलग्न करेंगे। इसका Anthropic मॉडल्स पर कोई प्रभाव नहीं पड़ता, क्योंकि वे अभी छवि सामग्री प्राप्त नहीं करते।"
     },
     "Quarantined Data": "क्वारंटीन किया गया डेटा",
     "quarantineDataDescription": "आपके पास {count} क्वारंटीन {count, plural, one {आइटम} other {आइटम्स}} ({size}) हैं, जिनमें डेटा समस्याएँ हैं और जिन्हें सामान्य रूप से लोड नहीं किया जा सका।",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "क्वारंटीन डेटा निर्यात करें",
     "Delete Quarantined Data": "क्वारंटीन डेटा हटाएँ",
     "deleteQuarantineConfirm": "क्या आप वाकई सभी क्वारंटीन डेटा हटाना चाहते हैं? यह क्रिया वापस नहीं की जा सकती।",
-    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटा दिए गए।"
+    "quarantineDeleteSuccess": "सभी क्वारंटीन डेटा सफलतापूर्वक हटा दिए गए।",
+    "confirmations": {
+      "title": "पुष्टिकरण",
+      "confirmStopFromButton": "बटन से रोकने से पहले पुष्टि करें",
+      "confirmStopFromButtonDescription": "उत्तर जनरेट होने के दौरान स्टॉप बटन दबाने पर पुष्टि संवाद दिखाएं",
+      "confirmStopFromKeyboard": "कीबोर्ड से रोकने से पहले पुष्टि करें",
+      "confirmStopFromKeyboardDescription": "उत्तर जनरेट होने के दौरान Escape दबाने पर पुष्टि संवाद दिखाएं"
+    },
+    "appliesToNewConversations": "केवल नई वार्तालापों पर लागू होता है।",
+    "useModelDefault": "मॉडल डिफ़ॉल्ट का उपयोग कर रहे हैं।",
+    "fromGeneralSettings": "सामान्य सेटिंग्स से",
+    "preferredNameInheritedFromGeneral": "आपका डिस्प्ले नाम सामान्य सेटिंग्स से लिया गया है। बदलने के लिए टाइप करें।",
+    "savedConfirmation": "सहेजा गया",
+    "unsavedChanges": "अपुष्ट परिवर्तन",
+    "unsavedChangesMessage": "आपके पास अपुष्ट परिवर्तन हैं। क्या इन्हें हटाना है?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "डिफ़ॉल्ट लेखन शैली का उपयोग करें",
     "noTonesCreated": "अभी तक कोई टोन नहीं बनाई गई",
     "createTonesHint": "त्वरित क्रियाओं में टोन बनाएं",
-    "translateDocumentTooltip": "दस्तावेज़ों का अनुवाद दूसरी भाषा में करें।\n\nसमर्थित फॉर्मेट: Word, Excel, PowerPoint, PDF, HTML, TXT\nअधिकतम आकार: 40MB\n\n80+ भाषाओं के लिए समर्थन, वैकल्पिक glossary फ़ाइल के साथ।"
+    "translateDocumentTooltip": "दस्तावेज़ों का अनुवाद अन्य भाषा में करें।\n\nसमर्थित प्रारूप: Word, Excel, PowerPoint, HTML, TXT\nअधिकतम आकार: 40MB\n\n80+ भाषाओं का समर्थन, वैकल्पिक glossary फ़ाइल के साथ।"
   },
   "transcription": {
     "addInstructions": "निर्देश जोड़ें",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "फ़ाइल पिन करने के लिए बहुत बड़ी है ({tokens} टोकन, सीमा: {limit})",
     "activationRejectedTooLarge": "सक्रिय संदर्भ के लिए फ़ाइल बहुत बड़ी है ({tokens} टोकन, सीमा: {limit})",
     "sessionQuotaWarning": "सत्र कोटा कम हो रहा है — {remaining} टोकन बचे हैं",
-    "sessionQuotaNearlyExhausted": "सत्र कोटा लगभग समाप्त — सक्रिय फ़ाइलें शामिल नहीं हो सकती हैं"
+    "sessionQuotaNearlyExhausted": "सत्र कोटा लगभग समाप्त — सक्रिय फ़ाइलें शामिल नहीं हो सकती हैं",
+    "notInContext": "संदर्भ में नहीं",
+    "notInContextTooltip": "यह फ़ाइल अंतिम उत्तर में प्रति टर्न टोकन बजट में नहीं आ पाई, इसलिए मॉडल ने इसे नहीं देखा। यह आपकी अगली संदेश पर दोबारा विचार की जाएगी।",
+    "notInjected": "सम्मिलित नहीं किया गया",
+    "notInjectedTooltip": "सेटिंग्स में छवि री-इंजेक्शन अक्षम है। यह पिन की गई छवि यहाँ दिखती रहेगी, लेकिन जब तक आप इसे फिर से संलग्न नहीं करते, मॉडल को नहीं भेजी जाएगी।"
   },
   "shortcuts": {
     "title": "कीबोर्ड शॉर्टकट्स",

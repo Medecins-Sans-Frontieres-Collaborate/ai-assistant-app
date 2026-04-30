@@ -612,10 +612,10 @@
     "errorFetchingUrl": "URL အကြောင်းအရာကို ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်",
     "errorInitiatingSearch": "ဝဘ်ရှာဖွေမှု စတင်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်",
     "regenerate": "ပြန်လည်ထုတ်လုပ်မည်",
-    "modelSwitchPrompt": "{original} အောင်မြင်မည် မဟုတ်သော်လည်း {fallback} မှ အောင်မြင်ပါသည်။ မော်ဒယ်ပြောင်းရန် လိုပါသလား။",
-    "keepOriginalModel": "မူရင်း {model} ကိုထားရှိမည်",
+    "modelSwitchPrompt": "{original} မရရှိသဖြင့် {fallback} ကဤအဖြေကိုပေးပါသည်။",
+    "keepOriginalModel": "{model} ကိုဆက်လက်အသုံးပြုပါ",
     "switchToModel": "{model} သို့ပြောင်းရန်",
-    "alwaysSwitchToModel": "အလိုအလျောက် အမြဲပြောင်းရန်",
+    "alwaysSwitchToModel": "{original} မရရှိပါက အမြဲတမ်းအလိုအလျောက်ပြောင်းပါ",
     "translateMessage": "စာကိုဘာသာပြန်ရန်",
     "translating": "ဘာသာပြန်နေသည်...",
     "translationError": "ဘာသာပြန်မှု မအောင်မြင်ပါ",
@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "ဤ browser တွင် အသံမှတ်တမ်းအလုပ်မလုပ်နိုင်ပါ။",
     "microphoneNotDetected": "မိုက်ခရိုဖုန်း ရှာမတွေ့ပါ",
     "microphoneBlocked": "မိုက်ခရိုဖုန်း ကို ပိတ်ထားပါတယ်။ ဘရောက်ဇာ ဆက်တင်များကို စစ်ပါ။",
-    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။"
+    "voiceTranscriptionFailed": "အသံ ဖော်ပြမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။",
+    "stopGenerationTitle": "လုပ်ဆောင်ခြင်းကိုရပ်မလား။",
+    "stopGenerationMessage": "ဤအဖြေထုတ်လုပ်မှုကိုရပ်မည်မှာသေချာပါသလား။ လတ်တလောထုတ်လုပ်နေသောအဖြေများအားလုံး ပယ်ဖျက်ခြင်းခံရမည်။",
+    "stopGenerationConfirm": "ရပ်မည်",
+    "stopGenerationDontAskAgainButton": "ခလုတ်နှိပ်၍ ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
+    "stopGenerationDontAskAgainKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
+    "generateResponseButton": "အဖြေထုတ်လုပ်ပါ"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -949,7 +955,9 @@
     "verbosityDescription": "GPT-5 မော်ဒယ်များအတွက် တုံ့ပြန်ချက်အသေးစိတ်အဆင့်ကို ထိန်းချုပ်ပါသည်။",
     "activeFiles": {
       "autoPinUploads": "တင်ပို့သောဖိုင်များကို အလိုအလျောက် pin ပြုလုပ်ပါ",
-      "autoPinUploadsDescription": "တင်ပို့သောဖိုင်များကို စင်ကရက်ထဲမှ ပျောက်သွားမှုကို ကာကွယ်ရန် အလိုအလျောက် pin ပြုလုပ်ပေးပါသည်"
+      "autoPinUploadsDescription": "တင်ပို့သောဖိုင်များကို စင်ကရက်ထဲမှ ပျောက်သွားမှုကို ကာကွယ်ရန် အလိုအလျောက် pin ပြုလုပ်ပေးပါသည်",
+      "autoInjectPinnedImages": "Attachment လုပ်ထားသည့် ပုံများကို လည်ပတ်ရာတိုင်း ပြန်လည်ထည့်သွင်းပါ။",
+      "autoInjectPinnedImagesDescription": "ဤအချက် ဖြင့် ဖွင့်ထားလျှင် attachment လုပ်ထားသော ပုံများကို vision-capable မော်ဒယ်များသို့ လည်ပတ်မှုတိုင်းပို့ပေးမည်ဖြစ်ပြီး မူလအကြောင်းအရပ်တွင် အဆက်မပြတ် ပါဝင်နေစေရန် ဖြစ်သည် (ခန့်မှန်းထားသည့် သုံးစွဲမှု ≈765 token တစ်ပုံလျှင် တစ်ပတ်လည်လိုက်လျှင်။) ပိတ်ထားပါက ပုံများသည် panel ထဲတွင်သာ မျှော်မြင်နိုင်သော်လည်း သင်ပြန်လည်တွဲပါပေးသည်အထိ မော်ဒယ်သို့ မပို့ပါ။ ဤရွေးချယ်မှုသည် ယခုအခါတွင် ပုံအကြောင်းအရာကို မပံ့ပိုးသည့် Anthropic မော်ဒယ်များအတွက် သက်ရောက်မှု မရှိပါ။"
     },
     "Quarantined Data": "သီးခြားထားသောဒေတာ",
     "quarantineDataDescription": "သင်တွင် {count} ခု၏သီးခြားထားသော {count, plural, one {item} other {items}} ({size}) ရှိပြီး ဒေတာပြဿနာများကြောင့်သာမန်အတိုင်း မဖွင့်နိုင်ပါ။",
@@ -957,7 +965,22 @@
     "Export Quarantined Data": "သီးခြားထားသောဒေတာတင်ပို့ရန်",
     "Delete Quarantined Data": "သီးခြားထားသောဒေတာဖျက်ရန်",
     "deleteQuarantineConfirm": "သီးခြားထားသောဒေတာအားလုံးကိုဖျက်မည်မှာ သေချာပါသလား? ဤလုပ်ဆောင်မှုကို ပြန်ပြင်၍မရနိုင်ပါ။",
-    "quarantineDeleteSuccess": "သီးခြားထားသောဒေတာအားလုံးကို အောင်မြင်စွာ ဖျက်လိုက်ပြီးပါပြီ။"
+    "quarantineDeleteSuccess": "သီးခြားထားသောဒေတာအားလုံးကို အောင်မြင်စွာ ဖျက်လိုက်ပြီးပါပြီ။",
+    "confirmations": {
+      "title": "အတည်ပြုခြင်းများ",
+      "confirmStopFromButton": "ခလုတ်နှိပ်၍ ရပ်စဲရန် မလုပ်မီ အတည်ပြုပါ",
+      "confirmStopFromButtonDescription": "အဖြေထုတ်လုပ်နေစဉ် ရပ်စဲခလုတ်ကိုနှိပ်ပါက အတည်ပြုစာပြောင် ပြပါမည်",
+      "confirmStopFromKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲရန် မလုပ်မီ အတည်ပြုပါ",
+      "confirmStopFromKeyboardDescription": "အဖြေထုတ်လုပ်နေစဉ် Escape ကိုနှိပ်သောအခါ အတည်ပြုစာပြောင် ပြပါမည်"
+    },
+    "appliesToNewConversations": "ယခု သတ်မှတ်ချက်သည် စတင်မည့် စကားပြောချက်အသစ်များတွင်သာအသုံးပြုပါသည်။",
+    "useModelDefault": "မော်ဒယ်၏ ပုံမှန်သတ်မှတ်ချက်ကိုအသုံးပြုနေသည်။",
+    "fromGeneralSettings": "အထွေထွေ ဆက်တင်များမှ",
+    "preferredNameInheritedFromGeneral": "သင့်အထွေထွေဆက်တင်များမှ ပြသမည့်အမည် အလိုအလျောက် ယူသည်။ ပြင်လိုပါက ရိုက်ထည့်ပါ။",
+    "savedConfirmation": "သိမ်းဆည်းပြီးပါပြီ",
+    "unsavedChanges": "မသိမ်းရသေးသော ပြင်ဆင်မှုများ",
+    "unsavedChangesMessage": "သင့်တွင် မသိမ်းရသေးသော ပြင်ဆင်မှုများရှိပါသည်။ လူမသိမ်းဘဲ ပယ်ဖျက်မလား။",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "မူလရေးသားပုံကိုအသုံးပြုပါ",
     "noTonesCreated": "အသံသွင်းပုံ မရှိသေးပါ",
     "createTonesHint": "Quick Actions တွင် အသံသွင်းပုံများ တည်ဆောက်နိုင်သည်",
-    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားထဲသို့ ဘာသာပြန်ပါ။\n\nထောက်ပံ့သော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, PDF, HTML, TXT\nအကြီးဆုံးဖိုင်အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်များပါဝင်၍ ဘာသာစကား ၈၀+ ကိုထောက်ပံ့သည်။"
+    "translateDocumentTooltip": "စာရွက်စာတမ်းများကို အခြားဘာသာစကားသို့ ဘာသာပြန်ပါ။\n\nပံ့ပိုးထားသော ဖိုင်အမျိုးအစားများ- Word, Excel, PowerPoint, HTML, TXT\nအမြင့်ဆုံး အရွယ်အစား- ၄၀MB\n\nGlossary ဖိုင်ရွေးချယ်နိုင်ပြီး ဘာသာစကား ၈၀ ကျော် ပံ့ပိုးထားသည်။"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI ရဲ့ တုန့်ပြန်မှုကို ပြင်ဆင်နိုင်ရန် ကိုယ်ပိုင်ညွှန်ကြားချက်များ ထည့်ပါ။ ဤညွှန်ကြားချက်များကို အထောက်အကူပြု၊ တိကျမှန်ကန်ပြီး လုံခြုံစိတ်ချသော တုန့်ပြန်မှုများ ရရှိစေရန် မူဝါဒအညွှန်းနှင့် တွဲဖက်အသုံးပြုပါသည်။",
   "Tip: Type \"/\" to select from saved prompt templates_": "အကြံပြုချက် - သိမ်းထားသော prompt template များကို ရွေးချယ်ရန် \"/\" ကို ရိုက်ထည့်ပါ။",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "File သည် အရွယ်အစားကြီးနေသဖြင့် pin မလုပ်နိုင်ပါ ({tokens} tokens, ကန့်သတ်ချက်: {limit})",
     "activationRejectedTooLarge": "File သည် active context အတွက် အရွယ်ကြီးလွန်းနေသည် ({tokens} tokens, ကန့်သတ်ချက်: {limit})",
     "sessionQuotaWarning": "Session quota ကိုအသုံးပြုနေပြီး - လက်ကျန် {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Session quota နီးပါးကုန်ဆုံးပြီ — active files မပါဝင်နိုင်ကြောင်း သတိပေးသည်"
+    "sessionQuotaNearlyExhausted": "Session quota နီးပါးကုန်ဆုံးပြီ — active files မပါဝင်နိုင်ကြောင်း သတိပေးသည်",
+    "notInContext": "အကြောင်းအရပ်တွင် မပါဝင်ပါ",
+    "notInContextTooltip": "ဤဖိုင်သည် နောက်ဆုံးတုန့်ပြန်မှုအတွက် တစ်လှည့်လျှင် သတ်မှတ်ထားသည့် token ပမာဏအတွင်း မတန်သဖြင့် မော်ဒယ်မှ မမြင်နိုင်ခဲ့ပါ။ သင်၏နောက်ထပ်မက်ဆေ့ချ်တွင် ပြန်လည်ရှိနိုင်ပါသည်။",
+    "notInjected": "မထည့်သွင်းထားရှိပါ",
+    "notInjectedTooltip": "Image re-injection ကို ဆက်တင်အတွင်း ပိတ်ထားပါသည်။ ဤ attachment ပုံသည် ဤနေရာတွင်သာ မြင်နိုင်သော်လည်း သင်ပြန်တွဲပါပေးသည်အထိ မော်ဒယ်သို့ မပို့ပါ။"
   },
   "shortcuts": {
     "title": "ကီးဘုဒ် အနုတ်လမ်းများ",

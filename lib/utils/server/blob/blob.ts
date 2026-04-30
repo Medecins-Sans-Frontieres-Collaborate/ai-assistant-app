@@ -1,6 +1,8 @@
 import { Session } from 'next-auth';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
+import { withAzureRetry } from '@/lib/utils/server/azure/retry';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { env } from '@/config/environment';
 import { DefaultAzureCredential } from '@azure/identity';
@@ -63,6 +65,13 @@ export interface BlobStorage {
   blobExists(blobName: string): Promise<boolean>;
   getBlockBlobClient(blobName: string): BlockBlobClient;
   getBlobSize(blobName: string): Promise<number>;
+  /**
+   * Deletes a blob if it exists. Idempotent — returns false when the blob
+   * was already absent. Used to clean up after failed or cancelled chunked
+   * uploads. Uncommitted blocks (staged but never committed) are garbage
+   * collected by Azure after 7 days regardless of this call.
+   */
+  deleteIfExists(blobName: string): Promise<boolean>;
   /**
    * Generates a SAS URL for accessing the blob with read permissions.
    * Used for batch transcription API which requires a publicly accessible URL.
@@ -173,13 +182,6 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const perfStart = performance.now();
 
-    if (await this.blobExists(blobName)) {
-      console.log(
-        `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
-      );
-      return blockBlobClient.url;
-    }
-
     let uploadContent: string | Buffer;
     let contentLength: number;
 
@@ -198,7 +200,37 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       );
     }
 
-    await blockBlobClient.upload(uploadContent, contentLength, options);
+    if (await this.blobExists(blobName)) {
+      const actualSize = await this.getBlobSize(blobName);
+      if (actualSize === contentLength) {
+        console.log(
+          `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
+        );
+        return blockBlobClient.url;
+      }
+      // Same hash, different stored size ⇒ poisoned cache from a prior
+      // failed/corrupt write. Hashes are computed over the canonical
+      // upload payload (see app/api/file/upload/route.ts), so a length
+      // mismatch is by definition not legitimate. Replace it.
+      console.warn(
+        `[blob.upload] poisoned cache at ${sanitizeForLog(blobName)}: expected ${contentLength} bytes, found ${actualSize}. Replacing.`,
+      );
+      await this.deleteIfExists(blobName);
+    }
+
+    // Stage as a single block, then commit. The blob is invisible at
+    // `blobName` until commitBlockList succeeds, so a failure between
+    // stageBlock and commit cannot leave a partial blob at the hash-named
+    // slot. Uncommitted blocks are GC'd by Azure after 7 days.
+    const blockId = Buffer.from('block-00000000').toString('base64');
+    await withAzureRetry(
+      () => blockBlobClient.stageBlock(blockId, uploadContent, contentLength),
+      { label: 'blob.upload.stageBlock' },
+    );
+    await withAzureRetry(
+      () => blockBlobClient.commitBlockList([blockId], options),
+      { label: 'blob.upload.commitBlockList' },
+    );
     console.log(
       `[Perf] AzureBlobStorage.upload: ${(performance.now() - perfStart).toFixed(1)}ms`,
     );
@@ -221,11 +253,15 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       return blockBlobClient.url;
     }
 
-    await blockBlobClient.uploadStream(
-      contentStream,
-      bufferSize,
-      maxConcurrency,
-      options,
+    await withAzureRetry(
+      () =>
+        blockBlobClient.uploadStream(
+          contentStream,
+          bufferSize,
+          maxConcurrency,
+          options,
+        ),
+      { label: 'blob.uploadStream' },
     );
     return blockBlobClient.url;
   }
@@ -284,6 +320,18 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       `[Perf] AzureBlobStorage.blobExists: ${(performance.now() - perfStart).toFixed(1)}ms (${result})`,
     );
     return result;
+  }
+
+  async deleteIfExists(blobName: string): Promise<boolean> {
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    const result = await withAzureRetry(
+      () => blockBlobClient.deleteIfExists(),
+      { label: 'blob.deleteIfExists' },
+    );
+    return result.succeeded;
   }
 
   async getBlobSize(blobName: string): Promise<number> {
@@ -403,7 +451,10 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    await blockBlobClient.stageBlock(blockId, content, content.length);
+    await withAzureRetry(
+      () => blockBlobClient.stageBlock(blockId, content, content.length),
+      { label: 'blob.stageBlock' },
+    );
   }
 
   /**
@@ -424,7 +475,10 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       this.containerName as string,
     );
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    await blockBlobClient.commitBlockList(blockIds, options);
+    await withAzureRetry(
+      () => blockBlobClient.commitBlockList(blockIds, options),
+      { label: 'blob.commitBlockList' },
+    );
     return blockBlobClient.url;
   }
 
@@ -505,6 +559,41 @@ export default class BlobStorageFactory {
 
 type BlobType = 'files' | 'images' | 'audio' | 'video';
 
+/**
+ * Heuristic: does this buffer look like a legacy raw-base64-encoded image
+ * blob (i.e. the bytes are all ASCII characters from the base64 alphabet,
+ * with no `data:` prefix)? Used by `getBlobBase64String` to distinguish
+ * legacy data-URL-string-stored blobs from binary blobs.
+ *
+ * The earlier heuristic only sniffed the first 100 bytes, which gave false
+ * positives for binary files whose headers happened to start with base64-
+ * alphabet characters. We scan a larger prefix and reject on any non-base64
+ * byte (which a real binary header would contain). A minimum length of 256
+ * bytes filters out short binaries that coincidentally look like base64.
+ */
+function isLikelyRawBase64Blob(blob: Buffer): boolean {
+  const MIN_BASE64_LENGTH = 256;
+  const SCAN_BYTES = Math.min(blob.length, 4096);
+  if (blob.length < MIN_BASE64_LENGTH) return false;
+  for (let i = 0; i < SCAN_BYTES; i++) {
+    const b = blob[i];
+    // ASCII base64 alphabet + padding + whitespace (CR/LF/space/tab)
+    const isBase64Char =
+      (b >= 0x41 && b <= 0x5a) || // A-Z
+      (b >= 0x61 && b <= 0x7a) || // a-z
+      (b >= 0x30 && b <= 0x39) || // 0-9
+      b === 0x2b || // +
+      b === 0x2f || // /
+      b === 0x3d || // =
+      b === 0x09 ||
+      b === 0x0a ||
+      b === 0x0d ||
+      b === 0x20;
+    if (!isBase64Char) return false;
+  }
+  return true;
+}
+
 export const getBlobBase64String = async (
   userId: string,
   id: string,
@@ -527,25 +616,18 @@ export const getBlobBase64String = async (
     BlobProperty.BLOB,
   ) as Promise<Buffer>);
 
-  // Check if content is already a data URL string (images are stored this way)
-  const contentString = blob.toString('utf8');
-  if (contentString.startsWith('data:')) {
-    return contentString;
+  // Sniff the first 5 bytes only. Stringifying the full blob just to check
+  // a 5-char prefix can allocate hundreds of MB on large downloads.
+  const prefix = blob.subarray(0, 5).toString('utf8');
+  if (prefix === 'data:') {
+    return blob.toString('utf8');
   }
 
-  // Check if it's raw base64 (legacy format - stored without data: prefix)
-  // Raw base64 starts with valid base64 chars and contains no null bytes
-  const isLikelyRawBase64 =
-    /^[A-Za-z0-9+/]/.test(contentString) &&
-    !contentString.includes('\x00') &&
-    /^[A-Za-z0-9+/=\s]+$/.test(contentString.slice(0, 100));
-
-  if (isLikelyRawBase64) {
+  if (isLikelyRawBase64Blob(blob)) {
     const extension = blobLocation.split('.').pop() || '';
     const mimeType = lookup(extension);
     if (mimeType) {
-      // Wrap the raw base64 with the data URL prefix
-      return `data:${mimeType};base64,${contentString}`;
+      return `data:${mimeType};base64,${blob.toString('utf8')}`;
     }
   }
 

@@ -14,6 +14,7 @@ import {
 } from '@/lib/services/chat/processors';
 import { FileProcessor } from '@/lib/services/chat/processors/FileProcessor';
 import { ImageProcessor } from '@/lib/services/chat/processors/ImageProcessor';
+import { ImageReferenceInflator } from '@/lib/services/chat/processors/ImageReferenceInflator';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
@@ -120,6 +121,11 @@ export async function POST(req: NextRequest): Promise<Response> {
       // Get Foundry OpenAI client for RAG service (uses gpt-5-mini for query reformulation)
       const foundryOpenAIClient = container.getOpenAIClient();
       const pipeline = new ChatPipeline([
+        // Inflate /api/file/{id} → data:base64 across ALL messages (not just
+        // the last). Lets the client send small URL refs in the request body
+        // — keeping JSON payloads under the 10 MB cap — while still giving
+        // the model the full base64 it needs.
+        new ImageReferenceInflator(),
         // Content processors
         new FileProcessor(
           fileProcessingService,

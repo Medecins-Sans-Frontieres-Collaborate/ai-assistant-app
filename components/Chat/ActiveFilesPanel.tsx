@@ -16,11 +16,15 @@ import { ActiveFile } from '@/types/chat';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
+import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   ACTIVE_FILE_PIN_TOKEN_LIMIT,
   ACTIVE_FILE_SESSION_QUOTA,
 } from '@/lib/constants/activeFileQuotas';
+
+const EMPTY_DROPPED_IDS: string[] = [];
 
 /**
  * CRITICAL: Stable reference for empty state.
@@ -61,6 +65,21 @@ export function ActiveFilesPanel() {
     );
     return conv?.activeFilesTokensUsed ?? 0;
   });
+
+  // Stable reference to the dropped IDs for this conversation. Returning
+  // EMPTY_DROPPED_IDS when absent avoids producing a fresh `[]` on every
+  // render, which would defeat the strict-equality bail-out.
+  const droppedFileIds = useChatStore((state) => {
+    if (!selectedConversationId) return EMPTY_DROPPED_IDS;
+    return (
+      state.lastTurnDroppedActiveFileIds[selectedConversationId] ??
+      EMPTY_DROPPED_IDS
+    );
+  });
+
+  const autoInjectPinnedImages = useSettingsStore(
+    (state) => state.autoInjectPinnedImages,
+  );
 
   // SAFE: Action selectors are stable function references
   const deactivateFile = useConversationStore((state) => state.deactivateFile);
@@ -223,6 +242,22 @@ export function ActiveFilesPanel() {
                     {t('ready')}
                   </span>
                 )}
+                {droppedFileIds.includes(f.id) && (
+                  <Tooltip content={t('notInContextTooltip')} position="top">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300">
+                      {t('notInContext')}
+                    </span>
+                  </Tooltip>
+                )}
+                {f.processedContent?.type === 'image' &&
+                  f.pinned &&
+                  !autoInjectPinnedImages && (
+                    <Tooltip content={t('notInjectedTooltip')} position="top">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                        {t('notInjected')}
+                      </span>
+                    </Tooltip>
+                  )}
                 {f.status === 'error' && (
                   <>
                     <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">

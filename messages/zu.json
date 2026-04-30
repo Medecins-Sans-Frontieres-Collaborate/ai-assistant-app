@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Kwenzeke iphutha ngesikhathi kulandwa okuqukethwe kwe-URL",
     "errorInitiatingSearch": "Kwenzeke iphutha ngesikhathi kuqalwa ukusesha kwewebhu",
     "regenerate": "Phinda Wenze",
-    "modelSwitchPrompt": "{original} yehlulekile kodwa {fallback} iphumelele. Ungathanda ukushintsha amamodeli?",
-    "keepOriginalModel": "Gcina {model}",
+    "modelSwitchPrompt": "U-{fallback} uphendule lokhu ngoba u-{original} ubengatholakali.",
+    "keepOriginalModel": "Hlala ku-{model}",
     "switchToModel": "Shintshela ku-{model}",
-    "alwaysSwitchToModel": "Hlala ushintsha ngokuzenzakalelayo",
+    "alwaysSwitchToModel": "Shintsha njalo uma u-{original} ungatholakali",
     "translateMessage": "Humusha umlayezo",
     "translating": "Kuyahunyushwa...",
     "translationError": "Ukuhumusha kwehlulekile",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ukurekhoda umsindo akuxhaswanga kulesi siphequluli.",
     "microphoneNotDetected": "Ayikho imakrofoni etholakele",
     "microphoneBlocked": "Imakrofoni ivinjiwe. Hlola izilungiselelo zesiphequluli.",
-    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi."
+    "voiceTranscriptionFailed": "Ukuhumusha izwi kwehlulekile. Zama futhi.",
+    "stopGenerationTitle": "Misa ukukhiqiza?",
+    "stopGenerationMessage": "Uqinisekile ukuthi ufuna ukumisa lo mpendulo okhiqizwayo? Yonke impendulo eqhubekayo izosuswa.",
+    "stopGenerationConfirm": "Misa",
+    "stopGenerationDontAskAgainButton": "Ungabuzi futhi uma umisa ngebhathini",
+    "stopGenerationDontAskAgainKeyboard": "Ungabuzi futhi uma umisa ngesinqamuleli sekhibhodi",
+    "generateResponseButton": "Khiqiza impendulo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Beka othomathikhi amafayela alayishiwe esicongweni",
-      "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi"
+      "autoPinUploadsDescription": "Beka amafayela othomathikhi esicongweni lapho elayishiwe ukuze angasuswa ngengozi",
+      "autoInjectPinnedImages": "Faka izithombe ezipinwe kabusha njalo ngesikhathi ngasinye",
+      "autoInjectPinnedImagesDescription": "Uma kuvuliwe, izithombe ezipinwe zithunyelwa kumamodeli akwazi ukubona njalo ngesikhathi ukuze zihlale zingaphakathi kokuqukethwe (izindleko ezilinganisiwe ≈765 tokens ngesithombe esipinwe ngesikhathi ngasinye). Uma kuvaliwe, izithombe ezipinwe zihlala zibonakala kuphaneli kodwa zithunyelwa kuphela uma uziphinda uzinamathisela. Akuthinti amamodeli e-Anthropic, okwamanje angatholi okuqukethwe kwezithombe."
     },
     "Quarantined Data": "Idatha Egodliwe",
     "quarantineDataDescription": "Unayo {count} {count, plural, one {into} other {izinto}} ezigodliwe ({size}) ezinenkinga yedatha ezingalayishwanga ngendlela ejwayelekile.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Thumela Idatha Egodliwe",
     "Delete Quarantined Data": "Susa Idatha Egodliwe",
     "deleteQuarantineConfirm": "Uqinisekile ukuthi ufuna ukususa yonke idatha egodliwe? Lesi senzo asikwazi ukubuyiselwa emuva.",
-    "quarantineDeleteSuccess": "Idatha egodliwe isusiwe ngempumelelo."
+    "quarantineDeleteSuccess": "Idatha egodliwe isusiwe ngempumelelo.",
+    "confirmations": {
+      "title": "Ukuqinisekisa",
+      "confirmStopFromButton": "Qinisekisa ngaphambi kokumisa ngebhathini",
+      "confirmStopFromButtonDescription": "Khombisa ifasitela lokuqiikisha uma uchofoza inkinobho yokumisa ngesikhathi impendulo ikhiqizwa",
+      "confirmStopFromKeyboard": "Qinisekisa ngaphambi kokumisa ngesinqamuleli sekhibhodi",
+      "confirmStopFromKeyboardDescription": "Khombisa ifasitela lokuqiikisha uma ucindezela u-Escape ngesikhathi impendulo ikhiqizwa"
+    },
+    "appliesToNewConversations": "Kusebenzela izingxoxo ezintsha kuphela.",
+    "useModelDefault": "Kusetshenziswa okukhethiwe kwemodeli.",
+    "fromGeneralSettings": "Kusuka kuzilungiselelo Jikelele",
+    "preferredNameInheritedFromGeneral": "Igama lakho likhombiswa ngokulandela Izilungiselelo Jikelele. Bhala ukuze ushintshe.",
+    "savedConfirmation": "Kugcinwe",
+    "unsavedChanges": "Izinguquko ezingagcinwanga",
+    "unsavedChangesMessage": "Unezinguquko ezingagcinwanga. Uyafuna ukuzilahla?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Sebenzisa isitayela sokubhala esijwayelekile",
     "noTonesCreated": "Azikho izithoni ezidaliwe okwamanje",
     "createTonesHint": "Dala izithoni ku-Izenzo Ezisheshayo",
-    "translateDocumentTooltip": "Humusha amadokhumenti kolunye ulimi.\n\nAmafomathi asekelwayo: Word, Excel, PowerPoint, PDF, HTML, TXT\nUbukhulu obukhulu: 40MB\n\nKusekela izilimi ezingu-80+ namafayela ezichazamazwi angakhethwa."
+    "translateDocumentTooltip": "Humusha imibhalo kolunye ulimi.\n\nAmafomethi asekwayo: Word, Excel, PowerPoint, HTML, TXT\nUsayizi omkhulu: 40MB\n\nIsekela izilimi ezingaphezu kuka-80 ngamafayela egama eliyisichazamazwi (glossary) ozithandayo."
   },
   "transcription": {
     "transcribesOnSend": "Kubhalwa phansi uma kuthunyelwa",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Ifayela likhulu kakhulu ukubekwa phezulu ({tokens} amathokheni, umkhawulo: {limit})",
     "activationRejectedTooLarge": "Ifayela likhulu kakhulu kunesimo esisebenzayo ({tokens} amathokheni, umkhawulo: {limit})",
     "sessionQuotaWarning": "Isabelo seseshini siphelile — kusele amathokheni angu-{remaining}",
-    "sessionQuotaNearlyExhausted": "Isabelo seseshini cishe siphelile — amafayela asebenzayo angahle angafakwa"
+    "sessionQuotaNearlyExhausted": "Isabelo seseshini cishe siphelile — amafayela asebenzayo angahle angafakwa",
+    "notInContext": "Akukhona ngaphakathi kokuqukethwe",
+    "notInContextTooltip": "Leli fayela alikwazanga ukufakwa kuseshini yokugcina ngenxa yemingcele yama-token, ngakho imodeli ayikwazanga ukulibona. Lizophinde licatshangelwe emlayeni wakho olandelayo.",
+    "notInjected": "Akwafakwanga",
+    "notInjectedTooltip": "Ukufakwa kabusha kwezithombe kukhawulwe kuzilungiselelo. Lesi sithombe esipinwe sihlala sikhona lapha kodwa asithunyelwa kwimodeli ngaphandle kokuthi usiphinda usanamathela."
   },
   "shortcuts": {
     "title": "Izinqamuleli Zekhibhodi",

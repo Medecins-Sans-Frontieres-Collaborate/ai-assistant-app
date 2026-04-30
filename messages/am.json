@@ -580,10 +580,10 @@
     "errorFetchingUrl": "የዩአርኤል ይዘት በማግኘት ጊዜ ስህተት ተከስቷል",
     "errorInitiatingSearch": "የድር ፍለጋን በማስጀመር ጊዜ ስህተት ተከስቷል",
     "regenerate": "እንደገና አመንጭ",
-    "modelSwitchPrompt": "{original} አልተሳካም ነገር ግን {fallback} ተሳክቷል። ሞዴል መቀየር ይፈልጋሉ?",
-    "keepOriginalModel": "{model} ቀጥል",
+    "modelSwitchPrompt": "{original} አልታወቀም ስለሆነ {fallback} ይህን መልስ ሰጠ።",
+    "keepOriginalModel": "በ{model} ላይ ቆይ",
     "switchToModel": "ወደ {model} ቀይር",
-    "alwaysSwitchToModel": "ሁልጊዜ ራስ-ሰር ቀይር",
+    "alwaysSwitchToModel": "{original} ሳይገኝ ሁልጊዜ ቀይር",
     "translateMessage": "መልእክትን ተርጉም",
     "translating": "በመተርጎም ላይ...",
     "translationError": "ትርጉም አልተሳካም",
@@ -628,7 +628,13 @@
     "mediaRecorderNotSupported": "የድምፅ መቅዳት በዚህ ብራውዘር አአይደለም።",
     "microphoneNotDetected": "ማድረግ የለም፡ ማድረግ አልተገኘም",
     "microphoneBlocked": "ማድረግ ታግዷል። የመቃኘት ቅንብሮችዎን ያረጋግጡ።",
-    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።"
+    "voiceTranscriptionFailed": "የድምፅ ግልጽ መተርጎም አልተሳካም። እባክዎ ድጋሚ ይሞክሩ።",
+    "stopGenerationTitle": "መፍጠር እንቁም?",
+    "stopGenerationMessage": "ይህን ምላሽ መፍጠር መውቀት እንደሚፈልጉ በእርግጥ ነው? በመካከለኛ ያለው ምላሽ ይጥፋል።",
+    "stopGenerationConfirm": "አቁም",
+    "stopGenerationDontAskAgainButton": "በቁልፍ ሲቆም ዳግም አትጠይቅ",
+    "stopGenerationDontAskAgainKeyboard": "በዴስክቶፕ ሲቆም ዳግም አትጠይቅ",
+    "generateResponseButton": "ምላሽ ፍጠር"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -917,7 +923,9 @@
     "verbosityDescription": "ለGPT-5 ሞዴል የምላሽ ዝርዝር ደረጃን ይቆጣጠራል።",
     "activeFiles": {
       "autoPinUploads": "የተጫኑ ፋይሎችን በራስ-ሰር መያዣ አድርግ",
-      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ"
+      "autoPinUploadsDescription": "ፋይሎች በሚጫኑበት ጊዜ በራስ-ሰር መያዣ ተያይዞ እንዲቆይ ያድርግ",
+      "autoInjectPinnedImages": "ተሰኩኑ ምስሎችን በእያንዳንዱ ትዕዛዝ እንደገና ላክ",
+      "autoInjectPinnedImagesDescription": "ይህ ሲታይ, ተሰኩኑ ምስሎች ለአይነት የሚችሉ ሞዴሎች በእያንዳንዱ ስርዓት ይላካሉ፣ ስለዚህ በእያንዳንዱ አይታገሱም (ተነጃጅቷል ወጪ ≈765 ቶኩን ለአንዱ ተሰኩኗ ምስል በእያንዳንዱ ስርዓት)። ሲጠፋ፣ ተሰኩኑ ምስሎች በፓነሉ ላይ ይቀጥላሉ ነገር ግን እኛ እንደገና ሲያጠፉት ብቻ ለሞዴሉ ይላካሉ። በአንትሮፒክ ሞዴሎች ላይ ምንም ተጽእኖ የለውም፤ በአሁኑ ወቅት ምስል ይዘት አይቀበሉም።"
     },
     "Quarantined Data": "በመለያየት ውስጥ ያለ ውሂብ",
     "quarantineDataDescription": "በመደበኛ መንገድ መጫን አልተቻለም ምክንያት ያለው {count} በመለያየት ውስጥ ያለ {count, plural, one {ነገር} other {ነገሮች}} አሉ ({size})።",
@@ -925,7 +933,22 @@
     "Export Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ወደ ውጭ ላክ",
     "Delete Quarantined Data": "በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት",
     "deleteQuarantineConfirm": "ሁሉንም በመለያየት ውስጥ ያለውን ውሂብ ማጥፋት እንደምትፈልጉ እርግጠኛ ያሉበት? ይህ ድርጊት ማቃጠል አይቻልም።",
-    "quarantineDeleteSuccess": "ሁሉንም በመለያየት ውስጥ ያለው ውሂብ በተሳካ ሁኔታ ተወግዷል።"
+    "quarantineDeleteSuccess": "ሁሉንም በመለያየት ውስጥ ያለው ውሂብ በተሳካ ሁኔታ ተወግዷል።",
+    "confirmations": {
+      "title": "ማረጋገጫዎች",
+      "confirmStopFromButton": "በቁልፍ ሲቆም በፊት ያረጋግጡ",
+      "confirmStopFromButtonDescription": "ምላሽ ሲፈጠር ቁልፉን በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ",
+      "confirmStopFromKeyboard": "በዴስክቶፕ ሲቆም በፊት ያረጋግጡ",
+      "confirmStopFromKeyboardDescription": "ምላሽ ሲዘጋጅ Escape በመጫን ሲቆም ማረጋገጫ ንግግር አሳይ"
+    },
+    "appliesToNewConversations": "ለአዲስ ውይይቶች ብቻ ይተገበራል።",
+    "useModelDefault": "የሞዴል ነባሪነትን ተጠቅመን ነው።",
+    "fromGeneralSettings": "ከአጠቃላይ ቅንብሮች",
+    "preferredNameInheritedFromGeneral": "የመሰረታዊ ቅንብሮችዎን ስም በማውረድ ነው። ለመቀየር ይጻፉ።",
+    "savedConfirmation": "ተቀመጠ",
+    "unsavedChanges": "ያልተቀመጡ ለውጦች",
+    "unsavedChangesMessage": "ያልተቀመጡ ለውጦች አሉዎት። ልትተዉአቸው?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "ነባሪ የመጻፍ ዘዴ ይጠቀሙ",
     "noTonesCreated": "ምንም ድምፅ አልተፈጠረም",
     "createTonesHint": "ድምፆችን በፈጣን ተግባራት ውስጥ ይፍጠሩ",
-    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ይተርጉሙ፡፡\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, PDF, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80+ ቋንቋዎችን በአማራጭ glossary ፋይሎች ይደግፋል።"
+    "translateDocumentTooltip": "ሰነዶችን ወደ ሌላ ቋንቋ ትርጉም ያድርጉ።\n\nየሚደገፉ ፎርማቶች፡ Word, Excel, PowerPoint, HTML, TXT\nከፍተኛ መጠን፡ 40MB\n\n80 በላይ ቋንቋዎችን ማግኘት እና ምርጥ ቅርጸ-ቃላት ፋይሎችን ይደግፋል።"
   },
   "transcription": {
     "transcribesOnSend": "በመላክ ጊዜ ይቀዳል",
@@ -1853,7 +1876,11 @@
     "pinBlockedTooLarge": "ፋይሉ ለመሰቀል በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
     "activationRejectedTooLarge": "ፋይሉ ለአክቲቭ ኮንቴክስት በጣም ትልቅ ነው ({tokens} ቶክኖች፣ ገደብ: {limit})",
     "sessionQuotaWarning": "የስብሰባ አቅም ማቅረብ ነው — {remaining} ቶክኖች ቀርበዋል",
-    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም"
+    "sessionQuotaNearlyExhausted": "የስብሰባ አቅም ማቅረብ ነው — አባል ፋይሎች ሊካተቱ አይችሉም",
+    "notInContext": "በአይነት አይደለም",
+    "notInContextTooltip": "ይህ ፋይል በመጨረሻው ምላሽ የቶኩን ገደብ ውስጥ አልገባም፣ ስለዚህ ሞዴሉ ማየት አልችለውም። በሚቀጥለው መልእክትዎ ውስጥ እንደገና ይታወካል።",
+    "notInjected": "አልተጨመረም",
+    "notInjectedTooltip": "የምስል እንደገና መጨመር በቅኝት ማስተካከያዎች አልተፈቀደም። ይህ ተሰኩኗ ምስል እዚህ ይታያል ነገር ግን እናንተ እንደገና ሳታጠፉት ለሞዴሉ አይላከውም።"
   },
   "quarantine": {
     "title": "በመለጠፍ የተለየ ውይይቶች",

@@ -22,11 +22,13 @@ import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
+import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
 import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
+import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
@@ -40,6 +42,7 @@ import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
 /** Retries a dynamic import once after 1.5 s on failure. */
@@ -114,7 +117,15 @@ export function Chat({
     dismissModelSwitchPrompt,
     acceptModelSwitch,
     errorIsRecoverable,
+    requestStop,
   } = useChat();
+
+  const stopGenerationConfirmSource = useUIStore(
+    (state) => state.stopGenerationConfirmSource,
+  );
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
+  );
 
   const {
     isSettingsOpen,
@@ -133,6 +144,8 @@ export function Chat({
     customDisplayName,
     addPrompt,
     streamingSpeed,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
   } = useSettings();
 
   const { content: smoothedContent, isDraining } = useSmoothStreaming({
@@ -160,6 +173,54 @@ export function Chat({
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const stopConversationRef = useRef<boolean>(false);
+
+  // "Don't ask again" state for the stop-generation dialog. Reset every time
+  // a new dialog opens so prior toggling never silently disables confirmation.
+  const [stopDontAskAgain, setStopDontAskAgain] = useState(false);
+  useEffect(() => {
+    if (stopGenerationConfirmSource !== null) {
+      setStopDontAskAgain(false);
+    }
+  }, [stopGenerationConfirmSource]);
+
+  const closeStopDialogAndApplyToggle = useCallback(() => {
+    if (stopDontAskAgain && stopGenerationConfirmSource) {
+      if (stopGenerationConfirmSource === 'keyboard') {
+        setConfirmStopFromKeyboard(false);
+      } else {
+        setConfirmStopFromButton(false);
+      }
+    }
+    setStopGenerationConfirmSource(null);
+  }, [
+    stopDontAskAgain,
+    stopGenerationConfirmSource,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
+    setStopGenerationConfirmSource,
+  ]);
+
+  const handleConfirmStopGeneration = useCallback(() => {
+    stopConversationRef.current = true;
+    requestStop();
+    closeStopDialogAndApplyToggle();
+  }, [requestStop, closeStopDialogAndApplyToggle]);
+
+  const handleCancelStopGeneration = useCallback(() => {
+    closeStopDialogAndApplyToggle();
+  }, [closeStopDialogAndApplyToggle]);
+
+  // Auto-close the stop-generation dialog if streaming finishes naturally.
+  // Don't apply the toggle here — the user neither confirmed nor cancelled.
+  useEffect(() => {
+    if (!isStreaming && stopGenerationConfirmSource !== null) {
+      setStopGenerationConfirmSource(null);
+    }
+  }, [
+    isStreaming,
+    stopGenerationConfirmSource,
+    setStopGenerationConfirmSource,
+  ]);
 
   // Resizing handlers for split view
   const handleMouseDown = useCallback(() => {
@@ -327,10 +388,27 @@ export function Chat({
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   } = useChatActions({
     updateConversation,
     sendMessage,
   });
+
+  const handleGenerateOrRetry = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const conv = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+    if (!conv?.messages.length) return;
+    const lastIndex = conv.messages.length - 1;
+    const lastEntry = conv.messages[lastIndex];
+    const display = entryToDisplayMessage(lastEntry);
+    if (display.role === 'assistant' && display.error) {
+      handleRegenerate(lastIndex);
+    } else if (display.role === 'user') {
+      handleGenerateResponse();
+    }
+  }, [handleRegenerate, handleGenerateResponse]);
 
   useKeyboardShortcuts({
     enabled: true,
@@ -506,7 +584,6 @@ export function Chat({
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
                     onScrollDownClick={handleScrollDown}
-                    stopConversationRef={stopConversationRef}
                     textareaRef={textareaRef}
                     showScrollDownButton={false}
                     showDisclaimer={false}
@@ -544,6 +621,7 @@ export function Chat({
                 onEditMessage={handleEditMessage}
                 onSelectPrompt={handleSelectPrompt}
                 onRegenerate={handleRegenerate}
+                onGenerateResponse={handleGenerateOrRetry}
                 onSaveAsPrompt={handleOpenSavePromptModal}
                 onNavigateVersion={handleNavigateVersion}
               />
@@ -584,7 +662,6 @@ export function Chat({
             onSend={handleSend}
             onRegenerate={handleRegenerate}
             onScrollDownClick={handleScrollDown}
-            stopConversationRef={stopConversationRef}
             textareaRef={textareaRef}
             showScrollDownButton={showScrollDownButton}
             onTranscriptionStatusChange={setTranscriptionStatus}
@@ -621,6 +698,33 @@ export function Chat({
         <KeyboardShortcutsModal
           isOpen={isShortcutsHelpOpen}
           onClose={() => setIsShortcutsHelpOpen(false)}
+        />
+
+        {/* Stop Generation Confirmation Dialog */}
+        <ConfirmDialog
+          isOpen={stopGenerationConfirmSource !== null}
+          title={t('chat.stopGenerationTitle')}
+          message={t('chat.stopGenerationMessage')}
+          confirmLabel={t('chat.stopGenerationConfirm')}
+          cancelLabel={t('common.cancel')}
+          confirmVariant="danger"
+          extraContent={
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-neutral-600 dark:text-neutral-300">
+              <input
+                type="checkbox"
+                className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                checked={stopDontAskAgain}
+                onChange={(e) => setStopDontAskAgain(e.target.checked)}
+              />
+              <span>
+                {stopGenerationConfirmSource === 'keyboard'
+                  ? t('chat.stopGenerationDontAskAgainKeyboard')
+                  : t('chat.stopGenerationDontAskAgainButton')}
+              </span>
+            </label>
+          }
+          onConfirm={handleConfirmStopGeneration}
+          onCancel={handleCancelStopGeneration}
         />
       </div>
 

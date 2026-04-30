@@ -637,10 +637,10 @@
     "errorFetchingUrl": "Při načítání obsahu URL došlo k chybě",
     "errorInitiatingSearch": "Při zahájení webového vyhledávání došlo k chybě",
     "regenerate": "Regenerovat",
-    "modelSwitchPrompt": "{original} selhal, ale {fallback} uspěl. Chcete přepnout modely?",
-    "keepOriginalModel": "Ponechat {model}",
+    "modelSwitchPrompt": "Na tuto otázku odpověděl {fallback}, protože {original} nebyl dostupný.",
+    "keepOriginalModel": "Zůstat na {model}",
     "switchToModel": "Přepnout na {model}",
-    "alwaysSwitchToModel": "Vždy automaticky přepnout",
+    "alwaysSwitchToModel": "Vždy přepnout, když {original} není dostupný",
     "translateMessage": "Přeložit zprávu",
     "translating": "Překládání...",
     "translationError": "Překlad se nezdařil",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Tento prohlížeč nepodporuje nahrávání zvuku.",
     "microphoneNotDetected": "Mikrofon nebyl detekován",
     "microphoneBlocked": "Mikrofon je zablokován. Zkontrolujte nastavení prohlížeče.",
-    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu."
+    "voiceTranscriptionFailed": "Přepis hlasu se nezdařil. Zkuste to prosím znovu.",
+    "stopGenerationTitle": "Zastavit generování?",
+    "stopGenerationMessage": "Opravdu chcete zastavit generování této odpovědi? Právě vytvářená odpověď bude zrušena.",
+    "stopGenerationConfirm": "Zastavit",
+    "stopGenerationDontAskAgainButton": "Při zastavení tlačítkem se již neptat",
+    "stopGenerationDontAskAgainKeyboard": "Při zastavení klávesnicí se již neptat",
+    "generateResponseButton": "Vygenerovat odpověď"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Určuje úroveň detailu odpovědí u modelů GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Automaticky připnout nahrané soubory",
-      "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění"
+      "autoPinUploadsDescription": "Automaticky připne soubory při nahrání, aby se zabránilo jejich odstranění",
+      "autoInjectPinnedImages": "Znovu vkládat připnuté obrázky při každém kroku",
+      "autoInjectPinnedImagesDescription": "Pokud je tato možnost zapnutá, připnuté obrázky jsou při každém kroku odesílány modelům s podporou vizuálních vstupů, aby zůstaly v kontextu (odhadovaná cena ≈765 tokenů za připnutý obrázek na krok). Pokud je vypnutá, obrázky zůstávají viditelné v panelu, ale jsou odeslány pouze při jejich opětovném připojení. Nemá žádný vliv na modely Anthropic, které aktuálně nepřijímají obrázkový obsah."
     },
     "Quarantined Data": "Karanténní data",
     "quarantineDataDescription": "Máte {count} karanténních {count, plural, one {položku} other {položek}} ({size}) s chybnými daty, které nebylo možné běžně načíst.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Exportovat karanténní data",
     "Delete Quarantined Data": "Smazat karanténní data",
     "deleteQuarantineConfirm": "Opravdu chcete smazat všechna karanténní data? Tuto akci nelze vrátit zpět.",
-    "quarantineDeleteSuccess": "Všechna karanténní data byla úspěšně smazána."
+    "quarantineDeleteSuccess": "Všechna karanténní data byla úspěšně smazána.",
+    "confirmations": {
+      "title": "Potvrzení",
+      "confirmStopFromButton": "Potvrdit před zastavením tlačítkem",
+      "confirmStopFromButtonDescription": "Zobrazit potvrzovací dialog při kliknutí na tlačítko pro zastavení během generování odpovědi",
+      "confirmStopFromKeyboard": "Potvrdit před zastavením klávesnicí",
+      "confirmStopFromKeyboardDescription": "Zobrazit potvrzovací dialog při stisknutí Escape během generování odpovědi"
+    },
+    "appliesToNewConversations": "Platí pouze pro nové konverzace.",
+    "useModelDefault": "Používá se výchozí nastavení modelu.",
+    "fromGeneralSettings": "Z Obecných nastavení",
+    "preferredNameInheritedFromGeneral": "Zobrazované jméno je převzato z Obecných nastavení. Pro přepsání napište nové.",
+    "savedConfirmation": "Uloženo",
+    "unsavedChanges": "Neuložené změny",
+    "unsavedChangesMessage": "Máte neuložené změny. Zahodit je?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "Použít výchozí styl psaní",
     "noTonesCreated": "Zatím nebyly vytvořeny žádné tóny",
     "createTonesHint": "Vytvořte tóny v Rychlých akcích",
-    "translateDocumentTooltip": "Překládejte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximální velikost: 40 MB\n\nPodporuje více než 80 jazyků s volitelnými soubory glosáře."
+    "translateDocumentTooltip": "Přeložte dokumenty do jiného jazyka.\n\nPodporované formáty: Word, Excel, PowerPoint, HTML, TXT\nMax. velikost: 40 MB\n\nPodpora více než 80 jazyků a volitelných slovníků."
   },
   "transcription": {
     "addInstructions": "Přidat pokyny",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Soubor je příliš velký na připnutí ({tokens} tokenů, limit: {limit})",
     "activationRejectedTooLarge": "Soubor je příliš velký pro aktivní kontext ({tokens} tokenů, limit: {limit})",
     "sessionQuotaWarning": "Limit relace se blíží vyčerpání — zbývá {remaining} tokenů",
-    "sessionQuotaNearlyExhausted": "Limit relace je téměř vyčerpán — aktivní soubory nemusí být zahrnuty"
+    "sessionQuotaNearlyExhausted": "Limit relace je téměř vyčerpán — aktivní soubory nemusí být zahrnuty",
+    "notInContext": "Není v kontextu",
+    "notInContextTooltip": "Tento soubor se nevešel do rozpočtu tokenů pro poslední odpověď, proto ho model nemohl použít. Při Vaší další zprávě bude znovu zvážen.",
+    "notInjected": "Nevloženo",
+    "notInjectedTooltip": "Opětovné vložení obrázku je v nastavení vypnuté. Tento připnutý obrázek zde zůstává viditelný, ale modelu je odeslán pouze, pokud jej znovu připojíte."
   },
   "shortcuts": {
     "title": "Klávesové zkratky",

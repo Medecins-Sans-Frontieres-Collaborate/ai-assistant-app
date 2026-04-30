@@ -612,10 +612,10 @@
     "errorFetchingUrl": "Virhe URL-sisällön hakemisessa",
     "errorInitiatingSearch": "Virhe verkkohaun aloittamisessa",
     "regenerate": "Luo uudelleen",
-    "modelSwitchPrompt": "{original} epäonnistui, mutta {fallback} onnistui. Haluatko vaihtaa mallia?",
-    "keepOriginalModel": "Pidä {model}",
+    "modelSwitchPrompt": "{fallback} vastasi tähän, koska {original} ei ollut käytettävissä.",
+    "keepOriginalModel": "Pysy mallissa {model}",
     "switchToModel": "Vaihda malliin {model}",
-    "alwaysSwitchToModel": "Vaihda aina automaattisesti",
+    "alwaysSwitchToModel": "Vaihda aina, kun {original} ei ole käytettävissä",
     "translateMessage": "Käännä viesti",
     "translating": "Käännetään...",
     "translationError": "Käännös epäonnistui",
@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "Äänitallennus ei ole tuettu tässä selaimessa.",
     "microphoneNotDetected": "Mikrofonia ei havaittu",
     "microphoneBlocked": "Mikrofoni on estetty. Tarkista selaimen asetukset.",
-    "voiceTranscriptionFailed": "Puheen transkriptio epäonnistui. Yritä uudelleen."
+    "voiceTranscriptionFailed": "Puheen transkriptio epäonnistui. Yritä uudelleen.",
+    "stopGenerationTitle": "Lopetetaanko generointi?",
+    "stopGenerationMessage": "Haluatko varmasti lopettaa tämän vastauksen generoinnin? Kaikki keskeneräiset vastaukset poistetaan.",
+    "stopGenerationConfirm": "Lopeta",
+    "stopGenerationDontAskAgainButton": "Älä kysy uudestaan, kun lopetetaan painikkeella",
+    "stopGenerationDontAskAgainKeyboard": "Älä kysy uudestaan, kun lopetetaan näppäimistöllä",
+    "generateResponseButton": "Luo vastaus"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -949,7 +955,9 @@
     "verbosityDescription": "Säätää GPT-5-mallien vastausten yksityiskohtaisuutta.",
     "activeFiles": {
       "autoPinUploads": "Kiinnitä ladatut tiedostot automaattisesti",
-      "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä"
+      "autoPinUploadsDescription": "Kiinnitä tiedostot automaattisesti latauksen yhteydessä, jotta ne eivät poistu käytöstä",
+      "autoInjectPinnedImages": "Lisää kiinnitetyt kuvat uudelleen jokaisella vuorolla",
+      "autoInjectPinnedImagesDescription": "Kun tämä asetus on käytössä, kiinnitetyt kuvat lähetetään visioon kykeneville malleille jokaisella vuorolla, jotta ne pysyvät kontekstissa (arvioitu kustannus ≈765 tokenia kiinnitettyä kuvaa kohti per vuoro). Kun asetus on pois päältä, kiinnitetyt kuvat näkyvät paneelissa, mutta lähetetään vain uudelleen liittäessäsi ne. Ei vaikuta Anthropic-malleihin, jotka eivät tällä hetkellä vastaanota kuvasisältöä."
     },
     "Quarantined Data": "Karanteeniin asetetut tiedot",
     "quarantineDataDescription": "Sinulla on {count} karanteeniin asetettua {count, plural, one {tietue} other {tietuetta}} ({size}), joissa on tietoon liittyviä ongelmia, eikä niitä voitu ladata normaalisti.",
@@ -957,7 +965,22 @@
     "Export Quarantined Data": "Vie karanteeniin asetetut tiedot",
     "Delete Quarantined Data": "Poista karanteeniin asetetut tiedot",
     "deleteQuarantineConfirm": "Haluatko varmasti poistaa kaikki karanteeniin asetetut tiedot? Tätä toimintoa ei voi peruuttaa.",
-    "quarantineDeleteSuccess": "Kaikki karanteeniin asetetut tiedot poistettiin onnistuneesti."
+    "quarantineDeleteSuccess": "Kaikki karanteeniin asetetut tiedot poistettiin onnistuneesti.",
+    "confirmations": {
+      "title": "Vahvistukset",
+      "confirmStopFromButton": "Vahvista ennen lopetusta painikkeella",
+      "confirmStopFromButtonDescription": "Näytä vahvistusikkuna, kun napsautat lopeta-painiketta vastauksen generoinnin aikana",
+      "confirmStopFromKeyboard": "Vahvista ennen lopetusta näppäimistöllä",
+      "confirmStopFromKeyboardDescription": "Näytä vahvistusikkuna, kun painat Esc-vastauksen generoinnin aikana"
+    },
+    "appliesToNewConversations": "Koskee vain uusia keskusteluja.",
+    "useModelDefault": "Käytetään mallin oletusta.",
+    "fromGeneralSettings": "Yleisasetuksista",
+    "preferredNameInheritedFromGeneral": "Näyttönimi peritään yleisasetuksista. Kirjoita muuttaaksesi.",
+    "savedConfirmation": "Tallennettu",
+    "unsavedChanges": "Tallentamattomat muutokset",
+    "unsavedChangesMessage": "Sinulla on tallentamattomia muutoksia. Hylätäänkö ne?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Käytä oletuskirjoitustyyliä",
     "noTonesCreated": "Äänensävyjä ei ole vielä luotu",
     "createTonesHint": "Luo äänensävyjä Pikatoiminnoissa",
-    "translateDocumentTooltip": "Käännä asiakirjoja toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, PDF, HTML, TXT\nEnimmäiskoko: 40 Mt\n\nTukee yli 80 kieltä sekä valinnaisia sanastotiedostoja."
+    "translateDocumentTooltip": "Käännä asiakirjat toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, HTML, TXT\nMaksimikoko: 40 Mt\n\nYli 80 kielitukea ja mahdollisuus käyttää sanastotiedostoja."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Tiedosto liian suuri kiinnitettäväksi ({tokens} tokenia, raja: {limit})",
     "activationRejectedTooLarge": "Tiedosto liian suuri aktiiviseen kontekstiin ({tokens} tokenia, raja: {limit})",
     "sessionQuotaWarning": "Istuntokiintiö vähissä — {remaining} tokenia jäljellä",
-    "sessionQuotaNearlyExhausted": "Istuntokiintiö lähes käytetty — aktiivisia tiedostoja ei ehkä sisällytetä"
+    "sessionQuotaNearlyExhausted": "Istuntokiintiö lähes käytetty — aktiivisia tiedostoja ei ehkä sisällytetä",
+    "notInContext": "Ei kontekstissa",
+    "notInContextTooltip": "Tämä tiedosto ei mahtunut viimeisimmän vastauksen vuorokohtaiseen token-budjettiin, joten malli ei nähnyt sitä. Se otetaan huomioon seuraavassa viestissäsi.",
+    "notInjected": "Ei injektoitu",
+    "notInjectedTooltip": "Kuvien uudelleenlisäys on poistettu käytöstä asetuksissa. Tämä kiinnitetty kuva pysyy näkyvissä täällä, mutta sitä ei lähetetä mallille, ellei sitä liitetä uudelleen."
   },
   "shortcuts": {
     "title": "Pikanäppäimet",

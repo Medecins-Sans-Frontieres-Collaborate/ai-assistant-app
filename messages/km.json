@@ -705,10 +705,10 @@
     "errorFetchingUrl": "មានកំហុសពេលទាញយកមាតិកា URL",
     "errorInitiatingSearch": "មានកំហុសពេលចាប់ផ្តើមការស្វែងរកគេហទំព័រ",
     "regenerate": "បង្កើតឡើងវិញ",
-    "modelSwitchPrompt": "{original} បរាជ័យ ប៉ុន្តែ {fallback} បានជោគជ័យ។ តើអ្នកចង់ប្តូរម៉ូដែលទេ?",
-    "keepOriginalModel": "រក្សា {model}",
+    "modelSwitchPrompt": "{fallback} បានឆ្លើយសំណួរនេះ ព្រោះ {original} មិនមានស្រាប់ទេ។",
+    "keepOriginalModel": "បន្តប្រើ {model}",
     "switchToModel": "ប្តូរទៅ {model}",
-    "alwaysSwitchToModel": "ប្តូរដោយស្វ័យប្រវត្តិជានិច្ច",
+    "alwaysSwitchToModel": "ប្តូរម៉ូឌែលជានិច្ច នៅពេល {original} មិនមានស្រាប់",
     "translateMessage": "បកប្រែសារ",
     "translating": "កំពុងបកប្រែ...",
     "translationError": "ការបកប្រែបរាជ័យ",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "កម្មវិធីរុករកនេះមិនគាំទ្រការថតសម្លេងទេ។",
     "microphoneNotDetected": "រកមិនឃើញមីក្រូហ្វូន",
     "microphoneBlocked": "មីក្រូហ្វូនត្រូវបានទប់ស្កាត់។ សូមពិនិត្យការកំណត់កម្មវិធីរុករក។",
-    "voiceTranscriptionFailed": "បរាជ័យក្នុងការបម្លែងសំលេង។ សូម ព្យាយាមម្ដងទៀត។"
+    "voiceTranscriptionFailed": "បរាជ័យក្នុងការបម្លែងសំលេង។ សូម ព្យាយាមម្ដងទៀត។",
+    "stopGenerationTitle": "បញ្ឈប់ការបង្កើត?",
+    "stopGenerationMessage": "តើ​អ្នក​ប្រាកដ​ជា​ចង់​បញ្ឈប់ការបង្កើតចម្លើយនេះមែនទេ? ចម្លើយកំពុងបង្កើត នឹងត្រូវបានលុបចោល។",
+    "stopGenerationConfirm": "បញ្ឈប់",
+    "stopGenerationDontAskAgainButton": "កុំសួរឡើងវិញ នៅពេលបញ្ឈប់ដោយប៊ូតុង",
+    "stopGenerationDontAskAgainKeyboard": "កុំសួរឡើងវិញ នៅពេលបញ្ឈប់ដោយក្ដារចុច",
+    "generateResponseButton": "បង្កើតចម្លើយ"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "ដាក់​ថ្មី​ស្វ័យប្រវត្តិ​ឯកសារ​ដែលបានផ្ទុកឡើង",
-      "autoPinUploadsDescription": "ខ្ចាប់ឯកសារដែលបានផ្ទុកឡើងស្វ័យប្រវត្តិ ដើម្បីទប់ស្កាត់ឲ្យកំពុងត្រូវដកចេញ"
+      "autoPinUploadsDescription": "ខ្ចាប់ឯកសារដែលបានផ្ទុកឡើងស្វ័យប្រវត្តិ ដើម្បីទប់ស្កាត់ឲ្យកំពុងត្រូវដកចេញ",
+      "autoInjectPinnedImages": "បញ្ចូលរូបភាពដែលបានម៉ាត់ច្រកឡើងវិញរៀងរាល់វេន",
+      "autoInjectPinnedImagesDescription": "នៅពេលបើក រូបភាពដែលបានម៉ាត់ច្រកនឹងត្រូវផ្ញើទៅម៉ូដែលដែលអាចមើលឃើញរៀងរាល់វេន ដើម្បីឲ្យវានៅក្នុងបរិបទ (ថ្លៃស្មានប្រមាណ ≈765 token សម្រាប់មួយរូបភាពក្នុងមួយវេន)។ បើបិទ រូបភាពដែលបានម៉ាត់ច្រកនឹងនៅតែនៅផ្ទាំងនេះ ប៉ុន្តែនឹងត្រូវផ្ញើពេលអ្នកភ្ជាប់វាឡើងវិញប៉ុណ្ណោះ។ មិនមានប្រសិទ្ធភាពលើ Anthropic model ទេ ព្រោះបច្ចុប្បន្នគាំទ្ររូបភាពមិនមាន។"
     },
     "Quarantined Data": "ទិន្នន័យដាក់វាំងញាក់",
     "quarantineDataDescription": "អ្នកមាន {count} {count, plural, one {ធាតុ} other {ធាតុ}} ដែលបានដាក់វាំងញាក់ ({size}) មានបញ្ហាទិន្នន័យដែលមិនអាចផ្ទុកបានតាមធម្មតា។",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "នាំចេញទិន្នន័យដាក់វាំងញាក់",
     "Delete Quarantined Data": "លុបទិន្នន័យដាក់វាំងញាក់",
     "deleteQuarantineConfirm": "តើអ្នកប្រាកដជាចង់លុបទិន្នន័យដាក់វាំងញាក់ទាំងអស់មែនទេ? សកម្មភាពនេះមិនអាចមកវិញបានទេ។",
-    "quarantineDeleteSuccess": "លុបទិន្នន័យដាក់វាំងញាក់ទាំងអស់បានជោគជ័យ។"
+    "quarantineDeleteSuccess": "លុបទិន្នន័យដាក់វាំងញាក់ទាំងអស់បានជោគជ័យ។",
+    "confirmations": {
+      "title": "ការបញ្ជាក់",
+      "confirmStopFromButton": "បញ្ជាក់មុនពេលបញ្ឈប់ដោយប៊ូតុង",
+      "confirmStopFromButtonDescription": "បង្ហាញប្រអប់បញ្ជាក់ នៅពេលអ្នកចុចប៊ូតុងបញ្ឈប់ ខណៈកំពុងបង្កើតចម្លើយ",
+      "confirmStopFromKeyboard": "បញ្ជាក់មុនពេលបញ្ឈប់ដោយក្ដារចុច",
+      "confirmStopFromKeyboardDescription": "បង្ហាញប្រអប់បញ្ជាក់ នៅពេលអ្នកចុច Escape ខណៈកំពុងបង្កើតចម្លើយ"
+    },
+    "appliesToNewConversations": "អនុវត្តសម្រាប់សំនួរថ្មីប៉ុណ្ណោះ។",
+    "useModelDefault": "ប្រើលំហូរទុកដើមរបស់ម៉ូដែល។",
+    "fromGeneralSettings": "ពីការកំណត់ទូទៅ",
+    "preferredNameInheritedFromGeneral": "កំពុងប្រើឈ្មោះបង្ហាញពីការកំណត់ទូទៅ។ សូមវាយបញ្ចូលដើម្បីបដិសេធ។",
+    "savedConfirmation": "បានរក្សាទុក",
+    "unsavedChanges": "មានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក",
+    "unsavedChangesMessage": "អ្នកមានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក។ ចង់ចោលទេ?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "ប្រើស្ទីលសរសេរ​លំនាំដើម",
     "noTonesCreated": "មិនទាន់បង្កើតសម្លេងនៅឡើយ",
     "createTonesHint": "បង្កើតសម្លេងក្នុង Quick Actions",
-    "translateDocumentTooltip": "បកប្រែឯកសារទៅភាសាផ្សេង។\n\nទ្រទ្រង់៖ Word, Excel, PowerPoint, PDF, HTML, TXT\nអតិបរមា៖ 40MB\n\nគាំទ្រភាសាជាង ៨០ជាមួយឯកសារ glossary ជាជម្រើស។"
+    "translateDocumentTooltip": "បកប្រែឯកសារទៅភាសាផ្សេងទៀត។\n\nទ្រទ្រង់ទម្រង់៖ Word, Excel, PowerPoint, HTML, TXT\nទំហំអតិបរមា៖ 40MB\n\nគាំទ្រភាសា ៨០+ ជាមួយឯកសារពន្យល់ (glossary) ជាជម្រើស។"
   },
   "transcription": {
     "transcribesOnSend": "បម្លែងអក្សរចេញត្រូវបានអនុវត្តពេលបញ្ជូន",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "ឯកសារធំពេកសម្រាប់បិទភ្ជាប់ ({tokens} token, ឧបមា៖ {limit})",
     "activationRejectedTooLarge": "ឯកសារធំពេកសម្រាប់បរិបទសកម្ម ({tokens} token, ឧបមា៖ {limit})",
     "sessionQuotaWarning": "កូតាសម័យប្រើប្រាស់ជិតអស់ — នៅសល់ {remaining} token",
-    "sessionQuotaNearlyExhausted": "កូតាសម័យប្រើប្រាស់ជិតអស់ — ឯកសារសកម្មអាចមិនត្រូវរួមបញ្ចូល"
+    "sessionQuotaNearlyExhausted": "កូតាសម័យប្រើប្រាស់ជិតអស់ — ឯកសារសកម្មអាចមិនត្រូវរួមបញ្ចូល",
+    "notInContext": "មិននៅក្នុងបរិបទ",
+    "notInContextTooltip": "ឯកសារនេះមិនអាចដាក់បញ្ចូលក្នុងកូត token ប្រចាំវេននៃការឆ្លើយចុងក្រោយបានទេ ដូច្នេះម៉ូដែលមិនអាចមើលឃើញវា។ វានឹងត្រូវពិចារណារបស់ម៉ូដែលនៅសារបន្ទាប់របស់អ្នក។",
+    "notInjected": "មិនបានបញ្ចូល",
+    "notInjectedTooltip": "ការបញ្ចូលរូបភាពឡើងវិញត្រូវបានបិទនៅក្នុងការកំណត់។ រូបភាពដែលបានម៉ាត់ច្រកនេះនឹងនៅតែបង្ហាញនៅទីនេះ ប៉ុន្តែមិនត្រូវផ្ញើទៅម៉ូដែលទេ លុះត្រាតែអ្នកភ្ជាប់វាឡើងវិញ។"
   },
   "shortcuts": {
     "title": "ផ្លូវកាត់​ក្ដារចុច",

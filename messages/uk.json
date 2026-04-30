@@ -554,10 +554,10 @@
     "errorFetchingUrl": "Сталася помилка під час отримання вмісту URL",
     "errorInitiatingSearch": "Сталася помилка під час ініціювання веб-пошуку",
     "regenerate": "Перегенерувати",
-    "modelSwitchPrompt": "{original} не вдалося, але {fallback} спрацював. Бажаєте змінити модель?",
-    "keepOriginalModel": "Залишити {model}",
+    "modelSwitchPrompt": "{fallback} дав відповідь, оскільки {original} був недоступний.",
+    "keepOriginalModel": "Залишитися на {model}",
     "switchToModel": "Перейти на {model}",
-    "alwaysSwitchToModel": "Завжди перемикати автоматично",
+    "alwaysSwitchToModel": "Завжди перемикатися, коли {original} недоступний",
     "translateMessage": "Перекласти повідомлення",
     "translating": "Перекладення...",
     "translationError": "Не вдалося перекласти",
@@ -602,7 +602,13 @@
     "mediaRecorderNotSupported": "Аудіозапис не підтримується у цьому браузері.",
     "microphoneNotDetected": "Мікрофон не знайдено",
     "microphoneBlocked": "Мікрофон заблоковано. Перевірте налаштування браузера.",
-    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз."
+    "voiceTranscriptionFailed": "Не вдалося розпізнати голос. Спробуйте ще раз.",
+    "stopGenerationTitle": "Зупинити генерацію?",
+    "stopGenerationMessage": "Ви впевнені, що хочете зупинити генерацію цієї відповіді? Будь-яку відповідь, що зараз формується, буде скасовано.",
+    "stopGenerationConfirm": "Зупинити",
+    "stopGenerationDontAskAgainButton": "Більше не запитувати під час зупинки кнопкою",
+    "stopGenerationDontAskAgainKeyboard": "Більше не запитувати під час зупинки з клавіатури",
+    "generateResponseButton": "Згенерувати відповідь"
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -891,7 +897,9 @@
     "verbosityDescription": "Визначає рівень деталізації відповіді для моделей GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Автоматичне закріплення завантажених файлів",
-      "autoPinUploadsDescription": "Автоматично закріплювати файли при завантаженні, щоб їх не було видалено з активних"
+      "autoPinUploadsDescription": "Автоматично закріплювати файли при завантаженні, щоб їх не було видалено з активних",
+      "autoInjectPinnedImages": "Повторно додавати закріплені зображення щоразу",
+      "autoInjectPinnedImagesDescription": "Якщо увімкнено, закріплені зображення надсилаються моделям, що підтримують розпізнавання зображень, при кожному запиті, щоб зберігати їх у контексті (орієнтовна вартість ≈765 токенів за одне зображення за запит). Якщо вимкнено, зображення залишаються видимими у панелі, але надсилаються лише при повторному прикріпленні. Не впливає на моделі Anthropic, які наразі не отримують зображень."
     },
     "Quarantined Data": "Карантиновані дані",
     "quarantineDataDescription": "У вас {count} карантинован{count, plural, one {ий елемент} few {і елементи} many {их елементів} other {их елементів}} ({size}) з проблемами даних, які не вдалося завантажити звичайним способом.",
@@ -899,7 +907,22 @@
     "Export Quarantined Data": "Експортувати карантиновані дані",
     "Delete Quarantined Data": "Видалити карантиновані дані",
     "deleteQuarantineConfirm": "Ви впевнені, що хочете видалити всі карантиновані дані? Цю дію неможливо скасувати.",
-    "quarantineDeleteSuccess": "Усі карантиновані дані успішно видалено."
+    "quarantineDeleteSuccess": "Усі карантиновані дані успішно видалено.",
+    "confirmations": {
+      "title": "Підтвердження",
+      "confirmStopFromButton": "Підтверджувати перед зупинкою кнопкою",
+      "confirmStopFromButtonDescription": "Показувати діалог підтвердження під час натискання кнопки зупинки, коли відповідь генерується",
+      "confirmStopFromKeyboard": "Підтверджувати перед зупинкою з клавіатури",
+      "confirmStopFromKeyboardDescription": "Показувати діалог підтвердження під час натискання Escape, коли відповідь генерується"
+    },
+    "appliesToNewConversations": "Застосовується лише до нових розмов.",
+    "useModelDefault": "Використовується стандартне значення моделі.",
+    "fromGeneralSettings": "Загальні налаштування",
+    "preferredNameInheritedFromGeneral": "Ім’я відображається згідно з вашими Загальними налаштуваннями. Щоб змінити, введіть нове.",
+    "savedConfirmation": "Збережено",
+    "unsavedChanges": "Незбережені зміни",
+    "unsavedChangesMessage": "У вас є незбережені зміни. Відхилити їх?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Загублений пес"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Використовувати стиль за замовчуванням",
     "noTonesCreated": "Ще не створено жодного тону",
     "createTonesHint": "Створюйте тони у Швидких діях",
-    "translateDocumentTooltip": "Перекладайте документи іншою мовою.\n\nПідтримувані формати: Word, Excel, PowerPoint, PDF, HTML, TXT\nМаксимальний розмір: 40 MB\n\nПідтримує 80+ мов і додаткові глосарії."
+    "translateDocumentTooltip": "Перекладіть документи іншою мовою.\n\nПідтримувані формати: Word, Excel, PowerPoint, HTML, TXT\nМаксимальний розмір: 40 МБ\n\nПідтримка понад 80 мов із додатковими файлами глосаріїв."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Додайте особисті інструкції, щоб налаштувати відповіді ШІ. Вони поєднуються з основними правилами, які забезпечують корисні, точні та безпечні відповіді.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Порада: введіть \"/\", щоб вибрати із збережених шаблонів підказок.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Файл занадто великий для закріплення ({tokens} токенів, ліміт: {limit})",
     "activationRejectedTooLarge": "Файл занадто великий для активного контексту ({tokens} токенів, ліміт: {limit})",
     "sessionQuotaWarning": "Квота сесії майже вичерпана — залишилося {remaining} токенів",
-    "sessionQuotaNearlyExhausted": "Квота сесії майже вичерпана — активні файли можуть не включатися"
+    "sessionQuotaNearlyExhausted": "Квота сесії майже вичерпана — активні файли можуть не включатися",
+    "notInContext": "Поза контекстом",
+    "notInContextTooltip": "Цей файл не помістився в ліміт токенів на останню відповідь, тому модель не мала доступу до нього. Файл буде повторно розглянутий при вашому наступному повідомленні.",
+    "notInjected": "Не додано",
+    "notInjectedTooltip": "Повторне додавання зображень вимкнене в налаштуваннях. Це закріплене зображення залишається тут видимим, але не надсилається моделі, якщо ви не прикріпите його повторно."
   },
   "shortcuts": {
     "title": "Клавіатурні скорочення",

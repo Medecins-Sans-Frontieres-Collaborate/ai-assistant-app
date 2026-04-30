@@ -583,10 +583,10 @@
     "errorFetchingUrl": "URL বিষয়বস্তু আনার সময় একটি ত্রুটি ঘটেছে",
     "errorInitiatingSearch": "ওয়েব অনুসন্ধান শুরু করার সময় একটি ত্রুটি ঘটেছে",
     "regenerate": "পুনঃজন্ম করুন",
-    "modelSwitchPrompt": "{original} ব্যর্থ হয়েছে কিন্তু {fallback} কাজ করেছে। আপনি কি মডেল পরিবর্তন করতে চান?",
-    "keepOriginalModel": "{model} রাখুন",
+    "modelSwitchPrompt": "{original} উপলব্ধ না থাকায় {fallback} এটি উত্তর দিয়েছে।",
+    "keepOriginalModel": "{model} এ থাকুন",
     "switchToModel": "{model}-এ পরিবর্তন করুন",
-    "alwaysSwitchToModel": "সবসময় স্বয়ংক্রিয়ভাবে পরিবর্তন করুন",
+    "alwaysSwitchToModel": "{original} উপলব্ধ না থাকলে সবসময় পরিবর্তন করুন",
     "translateMessage": "বার্তা অনুবাদ করুন",
     "translating": "অনুবাদ করা হচ্ছে...",
     "translationError": "অনুবাদ ব্যর্থ হয়েছে",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "এই ব্রাউজারে অডিও রেকর্ডিং সমর্থিত নয়।",
     "microphoneNotDetected": "মাইক্রোফোন শনাক্ত করা যায়নি",
     "microphoneBlocked": "মাইক্রোফোন ব্লক করা হয়েছে। ব্রাউজারের সেটিংস পরীক্ষা করুন।",
-    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+    "voiceTranscriptionFailed": "ভয়েস ট্রান্সক্রিপশন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "stopGenerationTitle": "উৎপাদন বন্ধ করবেন?",
+    "stopGenerationMessage": "আপনি কি নিশ্চিত যে আপনি এই উত্তর উৎপাদন বন্ধ করতে চান? চলমান কোনো উত্তর বাতিল হয়ে যাবে।",
+    "stopGenerationConfirm": "বন্ধ করুন",
+    "stopGenerationDontAskAgainButton": "বাটন ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
+    "stopGenerationDontAskAgainKeyboard": "কীবোর্ড ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
+    "generateResponseButton": "উত্তর দিন"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -974,7 +980,9 @@
     "verbosityDescription": "GPT-5 মডেলের জন্য প্রতিক্রিয়ার বিস্তারিততার স্তর নিয়ন্ত্রণ করে।",
     "activeFiles": {
       "autoPinUploads": "আপলোড করা ফাইলগুলি স্বয়ংক্রিয়ভাবে পিন করুন",
-      "autoPinUploadsDescription": "আপলোড করার পর ফাইলগুলো স্বয়ংক্রিয়ভাবে পিন করুন যাতে এগুলো মুছে না যায়"
+      "autoPinUploadsDescription": "আপলোড করার পর ফাইলগুলো স্বয়ংক্রিয়ভাবে পিন করুন যাতে এগুলো মুছে না যায়",
+      "autoInjectPinnedImages": "প্রতিটি টার্নে পিন করা ছবিগুলি পুনরায় ইনজেক্ট করুন",
+      "autoInjectPinnedImagesDescription": "চালু থাকলে, পিন করা ছবিগুলি প্রতি টার্নে ভিশন-সমর্থিত মডেলগুলোতে পাঠানো হয় যাতে তারা প্রসঙ্গে থাকে (আনুমানিক খরচ ≈ প্রতি পিনকৃত ছবি প্রতি টার্নে ৭৬৫ টোকেন)। বন্ধ থাকলে, পিনকৃত ছবিগুলি প্যানেলে দেখা যাবে, কিন্তু শুধুমাত্র পুনরায় সংযুক্ত করলে পাঠানো হবে। এটি Anthropic মডেলগুলির ক্ষেত্রে প্রযোজ্য নয়, যেগুলো বর্তমানে ছবি বিষয়বস্তু গ্রহণ করে না।"
     },
     "Quarantined Data": "কোয়ারেন্টাইন করা ডেটা",
     "quarantineDataDescription": "আপনার কাছে {count} টি কোয়ারেন্টাইন করা {count, plural, one {আইটেম} other {আইটেমসমূহ}} রয়েছে ({size}), যেগুলোর ডেটা সমস্যার কারণে স্বাভাবিকভাবে লোড করা যায়নি।",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "কোয়ারেন্টাইন করা ডেটা এক্সপোর্ট করুন",
     "Delete Quarantined Data": "কোয়ারেন্টাইন করা ডেটা মুছুন",
     "deleteQuarantineConfirm": "আপনি কি নিশ্চিতভাবে সব কোয়ারেন্টাইন করা ডেটা মুছে ফেলতে চান? এই কার্যক্রম বাতিল করা যাবে না।",
-    "quarantineDeleteSuccess": "সব কোয়ারেন্টাইন করা ডেটা সফলভাবে মুছে ফেলা হয়েছে।"
+    "quarantineDeleteSuccess": "সব কোয়ারেন্টাইন করা ডেটা সফলভাবে মুছে ফেলা হয়েছে।",
+    "confirmations": {
+      "title": "নিশ্চিতকরণ",
+      "confirmStopFromButton": "বাটন দিয়ে বন্ধ করার আগে নিশ্চিত করুন",
+      "confirmStopFromButtonDescription": "উত্তর উৎপাদনের সময় বন্ধ বাটনে ক্লিক করলে নিশ্চিতকরণ ডায়ালগ দেখান",
+      "confirmStopFromKeyboard": "কীবোর্ড দিয়ে বন্ধ করার আগে নিশ্চিত করুন",
+      "confirmStopFromKeyboardDescription": "উত্তর উৎপাদনের সময় Escape চাপলে নিশ্চিতকরণ ডায়ালগ দেখান"
+    },
+    "appliesToNewConversations": "শুধুমাত্র নতুন কথোপকথনের ক্ষেত্রে প্রযোজ্য।",
+    "useModelDefault": "মডেল ডিফল্ট ব্যবহার করা হচ্ছে।",
+    "fromGeneralSettings": "সাধারণ সেটিংস থেকে",
+    "preferredNameInheritedFromGeneral": "আপনার সাধারণ সেটিংসের প্রদর্শন নাম নেওয়া হয়েছে। বাতিল করতে টাইপ করুন।",
+    "savedConfirmation": "সংরক্ষিত",
+    "unsavedChanges": "সংরক্ষণ না করা পরিবর্তনসমূহ",
+    "unsavedChangesMessage": "আপনার কিছু পরিবর্তন সংরক্ষণ করা হয়নি। বাতিল করতে চান?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "ডিফল্ট লেখার শৈলী ব্যবহার করুন",
     "noTonesCreated": "এখনও কোনো টোন তৈরি করা হয়নি",
     "createTonesHint": "Quick Actions-এ টোন তৈরি করুন",
-    "translateDocumentTooltip": "ডকুমেন্ট অন্য ভাষায় অনুবাদ করুন।\n\nসমর্থিত ফরম্যাট: Word, Excel, PowerPoint, PDF, HTML, TXT\nসর্বাধিক আকার: ৪০MB\n\n৮০+ ভাষা সমর্থিত, এবং ঐচ্ছিক গ্লোসারি ফাইল ব্যবহার করা যায়।"
+    "translateDocumentTooltip": "নথি অন্য ভাষায় অনুবাদ করুন।\n\nসমর্থিত ফরম্যাট: Word, Excel, PowerPoint, HTML, TXT\nসর্বোচ্চ আকার: ৪০MB\n\nঐচ্ছিক শব্দকোষ ফাইলসহ ৮০+ ভাষা সমর্থিত।"
   },
   "transcription": {
     "transcribesOnSend": "পাঠানোর সময় লিপিবদ্ধ করুন",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "ফাইলটি পিন করার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
     "activationRejectedTooLarge": "সক্রিয় কনটেক্সটে ফাইলটি রাখার জন্য বড় ({tokens} টোকেন, সীমা: {limit})",
     "sessionQuotaWarning": "সেশনের সীমা প্রায় শেষ — {remaining} টোকেন বাকি",
-    "sessionQuotaNearlyExhausted": "সেশনের সীমা প্রায় শেষ — সক্রিয় ফাইলগুলি অন্তর্ভুক্ত নাও হতে পারে"
+    "sessionQuotaNearlyExhausted": "সেশনের সীমা প্রায় শেষ — সক্রিয় ফাইলগুলি অন্তর্ভুক্ত নাও হতে পারে",
+    "notInContext": "প্রসঙ্গে নেই",
+    "notInContextTooltip": "শেষ প্রতিক্রিয়ার সময় এই ফাইলটি প্রতি-টার্ন টোকেন সীমার মধ্যে আসেনি, তাই মডেলটি এটি দেখতে পারেনি। আপনার পরবর্তী বার্তায় এটি আবার বিবেচনা করা হবে।",
+    "notInjected": "ইনজেক্ট করা হয়নি",
+    "notInjectedTooltip": "সেটিংসে ছবির পুনরায় ইনজেকশন নিষ্ক্রিয় আছে। এই পিনকৃত ছবিটি এখানে দৃশ্যমান থাকবে কিন্তু আপনি পুনরায় সংযুক্ত না করা পর্যন্ত মডেলে পাঠানো হবে না।"
   },
   "shortcuts": {
     "title": "কী-বোর্ড শর্টকাট",

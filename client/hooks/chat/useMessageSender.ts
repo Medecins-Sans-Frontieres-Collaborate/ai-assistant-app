@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { revokeAllPreviewUrls } from '@/lib/utils/client/file/blobUrl';
 import { buildMessageContent } from '@/lib/utils/shared/chat/contentBuilder';
 import { validateMessageSubmission } from '@/lib/utils/shared/chat/validation';
 
@@ -239,6 +240,7 @@ export function useMessageSender({
     setUsedPromptVariables(null);
 
     if (filePreviews.length > 0) {
+      revokeAllPreviewUrls(filePreviews);
       setFilePreviews([]);
     }
   }, [

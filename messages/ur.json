@@ -649,10 +649,10 @@
     "expandThinking": "سوچ کو پھیلائیں",
     "collapseThinking": "سوچ کو سمیٹیں",
     "viewReasoningProcess": "استدلال کا عمل دیکھیں",
-    "modelSwitchPrompt": "{original} ناکام ہوا لیکن {fallback} کامیاب ہوا۔ کیا آپ ماڈل تبدیل کرنا چاہیں گے؟",
+    "modelSwitchPrompt": "یہ جواب {fallback} نے دیا کیونکہ {original} دستیاب نہیں تھا۔",
     "switchToModel": "ماڈل پر سوئچ کریں",
-    "keepOriginalModel": "اصل ماڈل رکھیں",
-    "alwaysSwitchToModel": "ہمیشہ اس ماڈل پر سوئچ کریں",
+    "keepOriginalModel": "{model} پر ہی رہیں",
+    "alwaysSwitchToModel": "جب {original} دستیاب نہ ہو تو ہمیشہ تبدیل کریں",
     "audioFromOriginal": "اصل سے آڈیو",
     "audioFromTranslation": "ترجمے سے آڈیو",
     "actionsDisabledForEmbed": "اوپر شامل کردہ مواد میں کنٹرولز استعمال کریں",
@@ -686,7 +686,13 @@
     "mediaRecorderNotSupported": "اس براؤزر میں آڈیو ریکارڈنگ سپورٹ نہیں کرتی۔",
     "microphoneNotDetected": "کوئی مائیکروفون نہیں ملا",
     "microphoneBlocked": "مائیکروفون بلاک ہے۔ براہ کرم براؤزر کی سیٹنگز چیک کریں۔",
-    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔"
+    "voiceTranscriptionFailed": "وائس ٹرانسکرپشن ناکام ہو گئی۔ براہ کرم دوبارہ کوشش کریں۔",
+    "stopGenerationTitle": "کیا جنریشن روکیں؟",
+    "stopGenerationMessage": "کیا آپ واقعی اس جواب کی جنریشن روکنا چاہتے ہیں؟ جو جواب جاری ہے وہ ضائع ہو جائے گا۔",
+    "stopGenerationConfirm": "روکیں",
+    "stopGenerationDontAskAgainButton": "بٹن سے روکنے پر دوبارہ نہ پوچھیں",
+    "stopGenerationDontAskAgainKeyboard": "کی بورڈ سے روکنے پر دوبارہ نہ پوچھیں",
+    "generateResponseButton": "جواب تیار کریں"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -975,7 +981,9 @@
     "verbosityDescription": "GPT-5 ماڈلز کے لیے جواب کی تفصیل کا درجہ کنٹرول کرتا ہے۔",
     "activeFiles": {
       "autoPinUploads": "اپ لوڈ شدہ فائلز کو خودکار طور پر پن کریں",
-      "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں"
+      "autoPinUploadsDescription": "فائلز کو اپ لوڈ کرتے وقت خود بخود پن کریں تاکہ وہ سائیکل سے باہر نہ ہوں",
+      "autoInjectPinnedImages": "ہر بار پن کی گئی تصاویر دوبارہ شامل کریں",
+      "autoInjectPinnedImagesDescription": "اگر یہ اختیار فعال ہو تو پن کی گئی تصاویر ہر بار vision-capable ماڈلز کو بھیجی جاتی ہیں تاکہ وہ سیاق و سباق میں رہیں (تخمینی لاگت ≈765 ٹوکن فی پن کی گئی تصویر فی باری)۔ اگر غیر فعال ہو تو پن کی گئی تصاویر پینل میں تو نظر آتی رہیں گی، لیکن صرف اس وقت بھیجی جائیں گی جب آپ انہیں دوبارہ منسلک کریں۔ اس کا Anthropic ماڈلز پر کوئی اثر نہیں، جو اس وقت تصویر کا مواد وصول نہیں کرتے۔"
     },
     "Quarantined Data": "قرنطینہ شدہ ڈیٹا",
     "quarantineDataDescription": "آپ کے پاس {count} قرنطینہ شدہ {count, plural, one {آئٹم} other {آئٹمز}} ({size}) ہیں جن میں ڈیٹا کے مسائل ہیں اور وہ معمول کے مطابق لوڈ نہیں ہو سکے۔",
@@ -983,7 +991,22 @@
     "Export Quarantined Data": "قرنطینہ شدہ ڈیٹا ایکسپورٹ کریں",
     "Delete Quarantined Data": "قرنطینہ شدہ ڈیٹا حذف کریں",
     "deleteQuarantineConfirm": "کیا آپ واقعی تمام قرنطینہ شدہ ڈیٹا حذف کرنا چاہتے ہیں؟ اس عمل کو واپس نہیں لیا جا سکتا۔",
-    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف کر دیا گیا۔"
+    "quarantineDeleteSuccess": "تمام قرنطینہ شدہ ڈیٹا کامیابی سے حذف کر دیا گیا۔",
+    "confirmations": {
+      "title": "تصدیقات",
+      "confirmStopFromButton": "بٹن سے روکنے سے پہلے تصدیق کریں",
+      "confirmStopFromButtonDescription": "جب جواب تیار ہو رہا ہو اور آپ اسٹاپ بٹن پر کلک کریں تو تصدیق کا ڈائیلاگ دکھائیں",
+      "confirmStopFromKeyboard": "کی بورڈ سے روکنے سے پہلے تصدیق کریں",
+      "confirmStopFromKeyboardDescription": "جب جواب تیار ہو رہا ہو اور آپ Escape دبائیں تو تصدیق کا ڈائیلاگ دکھائیں"
+    },
+    "appliesToNewConversations": "صرف نئی گفتگوؤں پر لاگو ہوتا ہے۔",
+    "useModelDefault": "ماڈل کا ڈیفالٹ استعمال ہو رہا ہے۔",
+    "fromGeneralSettings": "عمومی ترتیبات سے",
+    "preferredNameInheritedFromGeneral": "آپ کے عمومی ترتیبات کا ڈسپلے نام لیا جا رہا ہے۔ اوور رائیڈ کرنے کے لیے ٹائپ کریں۔",
+    "savedConfirmation": "محفوظ ہوگیا",
+    "unsavedChanges": "غیر محفوظ تبدیلیاں",
+    "unsavedChangesMessage": "آپ کی کچھ تبدیلیاں غیر محفوظ ہیں۔ کیا ان کو مسترد کرنا ہے؟",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1633,7 +1656,7 @@
     "useDefaultStyle": "ڈیفالٹ لکھنے کا انداز استعمال کریں",
     "noTonesCreated": "ابھی تک کوئی ٹونز نہیں بنائی گئی ہیں",
     "createTonesHint": "کوئیک ایکشنز میں ٹونز بنائیں",
-    "translateDocumentTooltip": "دستاویزات کا ترجمہ کسی دوسری زبان میں کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, PDF, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی معاونت، اختیاری glossary فائلز کے ساتھ۔"
+    "translateDocumentTooltip": "دستاویزات کو دوسری زبان میں ترجمہ کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی حمایت کے ساتھ اختیاری glossary فائلیں بھی استعمال کی جا سکتی ہیں۔"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -1862,7 +1885,11 @@
     "pinBlockedTooLarge": "فائل بہت بڑی ہے پن کرنے کے لیے ({tokens} ٹوکنز، حد: {limit})",
     "activationRejectedTooLarge": "فعال تناظر کے لیے فائل بہت بڑی ہے ({tokens} ٹوکنز، حد: {limit})",
     "sessionQuotaWarning": "سیشن کوٹا کم رہ گیا ہے — {remaining} ٹوکنز باقی",
-    "sessionQuotaNearlyExhausted": "سیشن کوٹا تقریباً ختم ہو چکا ہے — فعال فائلز شامل نہیں ہو سکتیں"
+    "sessionQuotaNearlyExhausted": "سیشن کوٹا تقریباً ختم ہو چکا ہے — فعال فائلز شامل نہیں ہو سکتیں",
+    "notInContext": "سیاق و سباق میں نہیں",
+    "notInContextTooltip": "یہ فائل پچھلے جواب میں فی باری ٹوکن بجٹ میں نہیں آئی، اس لیے ماڈل اسے دیکھ نہیں سکا۔ اسے آپ کے اگلے پیغام پر دوبارہ شامل کرنے پر غور کیا جائے گا۔",
+    "notInjected": "شامل نہیں کی گئی",
+    "notInjectedTooltip": "تصاویر دوبارہ شامل کرنے کا آپشن سیٹنگز میں غیر فعال ہے۔ یہ پن کی گئی تصویر یہاں نظر تو آئے گی لیکن ماڈل کو نہیں بھیجی جائے گی جب تک آپ اسے دوبارہ منسلک نہ کریں۔"
   },
   "shortcuts": {
     "title": "کی بورڈ شارٹ کٹس",

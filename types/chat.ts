@@ -181,6 +181,13 @@ export interface ChatBody {
   // Active files to include in context (optional)
   activeFiles?: ActiveFile[];
   activeFilesTokensUsed?: number; // Cumulative tokens consumed by active files
+  /**
+   * Whether pinned-image active files should be re-injected into this turn's
+   * last user message. Defaults to `true` server-side if absent. See
+   * `lib/services/chat/processors/ActiveFileInjector.ts` for the injection
+   * branch and the AnthropicHandler caveat.
+   */
+  autoInjectPinnedImages?: boolean;
 }
 
 export interface Conversation {
@@ -246,6 +253,13 @@ export interface FilePreview {
   type: string;
   status: UploadStatus;
   previewUrl: string;
+  /**
+   * Server-side URL set after a successful upload (e.g. `/api/file/{hash}.{ext}`).
+   * Used by `removeFile` to match a preview against entries in `imageFieldValue`
+   * — `previewUrl` is a `blob:` URL and never equals the server URL stored on
+   * `ImageMessageContent.image_url.url`.
+   */
+  uploadedUrl?: string;
   file?: File; // Optional: Store the original File object for local operations (e.g., opening in code editor)
   // Transcription tracking for batch jobs
   transcriptionJobId?: string;

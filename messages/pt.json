@@ -583,10 +583,10 @@
     "errorFetchingUrl": "Ocorreu um erro ao buscar o conteúdo da URL",
     "errorInitiatingSearch": "Ocorreu um erro ao iniciar a pesquisa na web",
     "regenerate": "Regenerar",
-    "modelSwitchPrompt": "{original} falhou mas {fallback} funcionou. Gostaria de trocar de modelo?",
-    "keepOriginalModel": "Manter {model}",
+    "modelSwitchPrompt": "{fallback} respondeu porque {original} não estava disponível.",
+    "keepOriginalModel": "Permanecer em {model}",
     "switchToModel": "Trocar para {model}",
-    "alwaysSwitchToModel": "Sempre trocar automaticamente",
+    "alwaysSwitchToModel": "Sempre alternar quando {original} não estiver disponível",
     "translateMessage": "Traduzir mensagem",
     "translating": "Traduzindo...",
     "translationError": "Falha na tradução",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "A gravação de áudio não é suportada neste navegador.",
     "microphoneNotDetected": "Nenhum microfone detectado",
     "microphoneBlocked": "Microfone bloqueado. Verifique as configurações do navegador.",
-    "voiceTranscriptionFailed": "Falha na transcrição de voz. Por favor, tente novamente."
+    "voiceTranscriptionFailed": "Falha na transcrição de voz. Por favor, tente novamente.",
+    "stopGenerationTitle": "Parar geração?",
+    "stopGenerationMessage": "Tem certeza de que deseja parar a geração desta resposta? Qualquer resposta em andamento será descartada.",
+    "stopGenerationConfirm": "Parar",
+    "stopGenerationDontAskAgainButton": "Não perguntar novamente ao parar com o botão",
+    "stopGenerationDontAskAgainKeyboard": "Não perguntar novamente ao parar com o teclado",
+    "generateResponseButton": "Gerar resposta"
   },
   "sidebar": {
     "collapseSidebar": "Recolher barra lateral",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Controla o nível de detalhamento das respostas dos modelos GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixar automaticamente arquivos enviados",
-      "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos"
+      "autoPinUploadsDescription": "Fixar automaticamente os arquivos enviados para evitar que sejam removidos",
+      "autoInjectPinnedImages": "Reinserir imagens fixadas a cada turno",
+      "autoInjectPinnedImagesDescription": "Quando ativado, imagens fixadas são enviadas aos modelos com capacidade de visão a cada turno, mantendo-as no contexto (custo estimado ≈765 tokens por imagem fixada por turno). Quando desativado, as imagens fixadas permanecem visíveis no painel, mas só são enviadas quando você as reinsere. Não afeta modelos Anthropic, que atualmente não recebem conteúdo de imagem."
     },
     "Quarantined Data": "Dados em quarentena",
     "quarantineDataDescription": "Você tem {count} {count, plural, one {item} other {itens}} em quarentena ({size}) com problemas de dados que não puderam ser carregados normalmente.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Exportar dados em quarentena",
     "Delete Quarantined Data": "Excluir dados em quarentena",
     "deleteQuarantineConfirm": "Tem certeza de que deseja excluir todos os dados em quarentena? Esta ação não pode ser desfeita.",
-    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso."
+    "quarantineDeleteSuccess": "Todos os dados em quarentena foram excluídos com sucesso.",
+    "confirmations": {
+      "title": "Confirmações",
+      "confirmStopFromButton": "Confirmar antes de parar com o botão",
+      "confirmStopFromButtonDescription": "Exibir um diálogo de confirmação ao clicar no botão de parar enquanto uma resposta está sendo gerada",
+      "confirmStopFromKeyboard": "Confirmar antes de parar com o teclado",
+      "confirmStopFromKeyboardDescription": "Exibir um diálogo de confirmação ao pressionar Escape enquanto uma resposta está sendo gerada"
+    },
+    "appliesToNewConversations": "Aplica-se apenas a novas conversas.",
+    "useModelDefault": "Usando o padrão do modelo.",
+    "fromGeneralSettings": "Das Configurações Gerais",
+    "preferredNameInheritedFromGeneral": "Utilizando o nome de exibição das Configurações Gerais. Digite para substituir.",
+    "savedConfirmation": "Salvo",
+    "unsavedChanges": "Alterações não salvas",
+    "unsavedChangesMessage": "Você tem alterações não salvas. Deseja descartá-las?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Cão perdido"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "Usar estilo de escrita padrão",
     "noTonesCreated": "Nenhum tom criado ainda",
     "createTonesHint": "Crie tons em Ações Rápidas",
-    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos suportados: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamanho máximo: 40 MB\n\nSuporta mais de 80 idiomas e arquivos de glossário opcionais."
+    "translateDocumentTooltip": "Traduza documentos para outro idioma.\n\nFormatos compatíveis: Word, Excel, PowerPoint, HTML, TXT\nTamanho máximo: 40MB\n\nSuporta mais de 80 idiomas com arquivos de glossário opcionais."
   },
   "transcription": {
     "transcribesOnSend": "Transcreve ao enviar",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Arquivo muito grande para fixar ({tokens} tokens, limite: {limit})",
     "activationRejectedTooLarge": "Arquivo muito grande para o contexto ativo ({tokens} tokens, limite: {limit})",
     "sessionQuotaWarning": "Cota da sessão quase no fim — {remaining} tokens restantes",
-    "sessionQuotaNearlyExhausted": "Cota da sessão quase esgotada — arquivos ativos podem não ser incluídos"
+    "sessionQuotaNearlyExhausted": "Cota da sessão quase esgotada — arquivos ativos podem não ser incluídos",
+    "notInContext": "Fora do contexto",
+    "notInContextTooltip": "Este arquivo não coube no orçamento de tokens do último turno, portanto o modelo não pôde visualizá-lo. Ele será reconsiderado na sua próxima mensagem.",
+    "notInjected": "Não injetado",
+    "notInjectedTooltip": "A reinjeção de imagem está desativada nas configurações. Esta imagem fixada continua visível aqui, mas não é enviada ao modelo a menos que você a reinsira."
   },
   "shortcuts": {
     "title": "Atalhos de Teclado",

@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Дошло је до грешке при преузимању садржаја URL-а",
     "errorInitiatingSearch": "Дошло је до грешке при покретању веб претраге",
     "regenerate": "Поново генериши",
-    "modelSwitchPrompt": "{original} није успео али је {fallback} успео. Да ли желите да промените модел?",
-    "keepOriginalModel": "Задржи {model}",
+    "modelSwitchPrompt": "{fallback} je dao odgovor zato što {original} nije bio dostupan.",
+    "keepOriginalModel": "Ostani na {model}",
     "switchToModel": "Пребаци на {model}",
-    "alwaysSwitchToModel": "Увек аутоматски пребаци",
+    "alwaysSwitchToModel": "Uvek pređi kada {original} nije dostupan",
     "translateMessage": "Преведи поруку",
     "translating": "Превођење...",
     "translationError": "Превод није успео",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Audio snimanje nije podržano u ovom pregledaču.",
     "microphoneNotDetected": "Mikrofon nije detektovan",
     "microphoneBlocked": "Mikrofon je blokiran. Proverite podešavanja pregledača.",
-    "voiceTranscriptionFailed": "Transkripcija glasa nije uspela. Pokušajte ponovo."
+    "voiceTranscriptionFailed": "Transkripcija glasa nije uspela. Pokušajte ponovo.",
+    "stopGenerationTitle": "Zaustaviti generisanje?",
+    "stopGenerationMessage": "Da li ste sigurni da želite da zaustavite generisanje ovog odgovora? Svaki odgovor u toku biće odbačen.",
+    "stopGenerationConfirm": "Zaustavi",
+    "stopGenerationDontAskAgainButton": "Ne pitaj ponovo prilikom zaustavljanja preko dugmeta",
+    "stopGenerationDontAskAgainKeyboard": "Ne pitaj ponovo prilikom zaustavljanja putem tastature",
+    "generateResponseButton": "Generiši odgovor"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Automatski zakači otpremljene fajlove",
-      "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje"
+      "autoPinUploadsDescription": "Automatski zakači fajlove prilikom otpremanja kako bi se sprečilo njihovo uklanjanje",
+      "autoInjectPinnedImages": "Ponovo ubaci zakačene slike pri svakom koraku",
+      "autoInjectPinnedImagesDescription": "Kada je uključeno, zakačene slike se šalju modelima sa podrškom za slike pri svakom koraku kako bi ostale u kontekstu (procena troška ≈765 tokena po zakačenoj slici po koraku). Kada je isključeno, slike ostaju vidljive u panelu, ali se šalju samo kada ih ponovo priložite. Nema uticaja na Anthropic modele, koji trenutno ne primaju sadržaj slika."
     },
     "Quarantined Data": "Karantinski podaci",
     "quarantineDataDescription": "Imate {count} karantinskih {count, plural, one {stavku} other {stavki}} ({size}) sa podacima koji nisu mogli biti učitani na uobičajen način.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Izvezi karantinske podatke",
     "Delete Quarantined Data": "Obriši karantinske podatke",
     "deleteQuarantineConfirm": "Da li ste sigurni da želite da obrišete sve karantinske podatke? Ova radnja je nepovratna.",
-    "quarantineDeleteSuccess": "Uspešno su obrisani svi karantinski podaci."
+    "quarantineDeleteSuccess": "Uspešno su obrisani svi karantinski podaci.",
+    "confirmations": {
+      "title": "Potvrde",
+      "confirmStopFromButton": "Potvrdi pre zaustavljanja preko dugmeta",
+      "confirmStopFromButtonDescription": "Prikaži dijalog za potvrdu kada kliknete na dugme zaustavi dok se generiše odgovor",
+      "confirmStopFromKeyboard": "Potvrdi pre zaustavljanja putem tastature",
+      "confirmStopFromKeyboardDescription": "Prikaži dijalog za potvrdu kada pritisnete Escape dok se generiše odgovor"
+    },
+    "appliesToNewConversations": "Primjenjuje se samo na nove razgovore.",
+    "useModelDefault": "Koristi podrazumevana podešavanja modela.",
+    "fromGeneralSettings": "Iz Opštih podešavanja",
+    "preferredNameInheritedFromGeneral": "Koristi prikazano ime iz Opštih podešavanja. Unesite novo za zamenu.",
+    "savedConfirmation": "Sačuvano",
+    "unsavedChanges": "Nesačuvane izmene",
+    "unsavedChangesMessage": "Imate nesačuvane izmene. Odbaciti ih?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Користи подразумевани стил писања",
     "noTonesCreated": "Још нема направљених тонова",
     "createTonesHint": "Направите тонове у Брзим акцијама",
-    "translateDocumentTooltip": "Преведите документе на други језик.\n\nПодржани формати: Word, Excel, PowerPoint, PDF, HTML, TXT\nМакс величина: 40MB\n\nПодржава 80+ језика са опционалним фајловима речника."
+    "translateDocumentTooltip": "Prevedite dokumente na drugi jezik.\n\nPodržani formati: Word, Excel, PowerPoint, HTML, TXT\nMaksimalna veličina: 40MB\n\nPodržava više od 80 jezika uz opcione glosare."
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Datoteka je prevelika za priključivanje ({tokens} tokena, ograničenje: {limit})",
     "activationRejectedTooLarge": "Datoteka je prevelika za aktivni kontekst ({tokens} tokena, ograničenje: {limit})",
     "sessionQuotaWarning": "Kvota sesije je pri kraju — preostalo {remaining} tokena",
-    "sessionQuotaNearlyExhausted": "Kvota sesije je skoro potrošena — aktivne datoteke možda neće biti uključene"
+    "sessionQuotaNearlyExhausted": "Kvota sesije je skoro potrošena — aktivne datoteke možda neće biti uključene",
+    "notInContext": "Nije u kontekstu",
+    "notInContextTooltip": "Ova datoteka nije stala u budžet tokena za poslednji odgovor, pa model nije mogao da je vidi. Biće ponovo uzeta u obzir pri Vašoj sledećoj poruci.",
+    "notInjected": "Nije ubačeno",
+    "notInjectedTooltip": "Ponovno ubacivanje slike je onemogućeno u podešavanjima. Ova zakačena slika ostaje vidljiva ovde, ali se ne šalje modelu osim ako je ponovo ne priložite."
   },
   "shortcuts": {
     "title": "Prečice na tastaturi",

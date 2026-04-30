@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Habaye ikosa mu gufata ibiri muri URL",
     "errorInitiatingSearch": "Habaye ikosa mu gutangura kurondera kuri interineti",
     "regenerate": "Subira ukore",
-    "modelSwitchPrompt": "{original} ntibyakunze ariko {fallback} byakunze. Urashaka guhindura modeli?",
-    "keepOriginalModel": "Gumana {model}",
+    "modelSwitchPrompt": "{fallback} yasubije ibi kuko {original} itaboneka.",
+    "keepOriginalModel": "Guma kuri {model}",
     "switchToModel": "Hindura uje kuri {model}",
-    "alwaysSwitchToModel": "Guhindura bwite buri gihe",
+    "alwaysSwitchToModel": "Igihe cose {original} itaboneka, himbarwa.",
     "translateMessage": "Hindura ubutumwa",
     "translating": "Biriko birahindurwa...",
     "translationError": "Guhindura ntibyakunze",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ifatabuguzi ukoresha ntiyemera gufata amajwi.",
     "microphoneNotDetected": "Nta mikorofoni yabonetse",
     "microphoneBlocked": "Mikorofoni yarakingiwe. Raba ingene utunganya isakoshi ya porogarama.",
-    "voiceTranscriptionFailed": "Guhindura amajwi mu nyandiko ntivyagenze neza. Gerageza gusubira."
+    "voiceTranscriptionFailed": "Guhindura amajwi mu nyandiko ntivyagenze neza. Gerageza gusubira.",
+    "stopGenerationTitle": "Uhagarike gukora?",
+    "stopGenerationMessage": "Urizeye ko ushaka guhagarika gukora iyi nyishu? Iyo igisubizo kirimwo kirakozwe kizoca giteshwa.",
+    "stopGenerationConfirm": "Hagarika",
+    "stopGenerationDontAskAgainButton": "Ntuzongere kumbaza igihe uhagaritse ukoresheje buto",
+    "stopGenerationDontAskAgainKeyboard": "Ntuzongere kumbaza igihe uhagaritse ukoresheje klaviyo",
+    "generateResponseButton": "Kora inyishu"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Kwishingira ku buryo bwikora amadosiye yashizweho",
-      "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa"
+      "autoPinUploadsDescription": "Kwishingira amadosiye mu buryo bwikora kugira ntacezurwa",
+      "autoInjectPinnedImages": "Sangira amasanamu yafatiriwe kuri buri gira",
+      "autoInjectPinnedImagesDescription": "Igihe iri kuri, amasanamu yafatiriwe arasangirwa na models zishobora kubona ishusho kuri buri gira kugira bigume mw'ijambo. (ikiguzi c'ibiharuro ≈765 tokens ku shusho imwe yose). Niba bibaye vyaratosewe, amasanamu araguma ari muri panel ariko ntashikirizwa kuri model tutariko turayasubiza. Ntibigira ico bikoze kuri models za Anthropic kuko ntizakira amasanamu."
     },
     "Quarantined Data": "Ibipimo vyabitswe ukwabigenewe",
     "quarantineDataDescription": "Ufise {count} {count, plural, one {kintu} other {ibintu}} vyabitswe ukwabigenewe ({size}) bifise ibibazo vyatuma bitashoboye kwugururwa neza.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Sohora ibipimo vyabitswe ukwabigenewe",
     "Delete Quarantined Data": "Siba ibipimo vyabitswe ukwabigenewe",
     "deleteQuarantineConfirm": "Uravyemera koko ko ushaka gusiba ibipimo vyose vyabitswe ukwabigenewe? Iyi ngingo ntiyoshobora gusubirwamwo.",
-    "quarantineDeleteSuccess": "Ubusibwe neza ibipimo vyose vyabitswe ukwabigenewe."
+    "quarantineDeleteSuccess": "Ubusibwe neza ibipimo vyose vyabitswe ukwabigenewe.",
+    "confirmations": {
+      "title": "Kwemeza",
+      "confirmStopFromButton": "Emeza imbere yo guhagarika ukoresheje buto",
+      "confirmStopFromButtonDescription": "Erekana idialogi yo kwemeza igihe ukomanze buto yo guhagarika igihe igisubizo kiriko kirakorwa",
+      "confirmStopFromKeyboard": "Emeza imbere yo guhagarika ukoresheje klaviyo",
+      "confirmStopFromKeyboardDescription": "Erekana idialogi yo kwemeza igihe uhamvye Escape igihe igisubizo kiriko kirakorwa"
+    },
+    "appliesToNewConversations": "Bikora gusa ku biganiro bishasha.",
+    "useModelDefault": "Uriko ukoresha ibipimo vya model bisanzwe.",
+    "fromGeneralSettings": "Biva mu Gishirakamwo rusangi",
+    "preferredNameInheritedFromGeneral": "Uriko ukoresha izina ryo kwerekana ryo mu Gishirakamwo rusangi. Andika kugira uhindure.",
+    "savedConfirmation": "Birabitswe",
+    "unsavedChanges": "Impinduka zitabitswe",
+    "unsavedChangesMessage": "Ufise impinduka utarabika. Urashaka kuzikuraho?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Koresha uburyo bw'ukwandika busanzwe",
     "noTonesCreated": "Nta majwi yakozwe",
     "createTonesHint": "Kora amajwi mu Bikorwa vya Vuba",
-    "translateDocumentTooltip": "Hindura inyandiko mu rurimi rwundi.\n\nImiterere yemewe: Word, Excel, PowerPoint, PDF, HTML, TXT\nIngano ntarengwa: 40MB\n\nBishigikira indimi 80+ hamwe n'amadosiye y'amajambo."
+    "translateDocumentTooltip": "Hindura inyandiko mu rundi rurimi.\n\nUbwoko bushigikiwe: Word, Excel, PowerPoint, HTML, TXT\nUbugari ntarengwa: 40MB\n\nIshigikira indimi zirenga 80 hamwe n’ivyo gushirako glossary ku bushake."
   },
   "transcription": {
     "transcribesOnSend": "Bihindurwa mu nyandiko igihe bitumwe",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Idosiye nini cane kugira yemezwe ({tokens} tokens, ntarengwa: {limit})",
     "activationRejectedTooLarge": "Idosiye nini cane ku bisanzwe bikoreshwa ({tokens} tokens, ntarengwa: {limit})",
     "sessionQuotaWarning": "Nkigereranyo ca session kiriko kirashira — hasigaye {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Nkigereranyo ca session kirashira — amadosiye ashobora kutarimwo"
+    "sessionQuotaNearlyExhausted": "Nkigereranyo ca session kirashira — amadosiye ashobora kutarimwo",
+    "notInContext": "Ntiri mu ntumbero",
+    "notInContextTooltip": "Iyi dosiye ntiyashoboye kwinjira mu mubare w'inyuguti zemewe muri iyi gira, vyatumye model itayibona. Izokwisuzumwa mu butumwa bwawe bukurikira.",
+    "notInjected": "Ntirashizwe",
+    "notInjectedTooltip": "Gusubira gushira ishusho ntabwo vyemewe muri settings. Iyi shusho yafatiriwe iraguma igaragara hano ariko ntishikirizwa ku model tutarayisubiza."
   },
   "shortcuts": {
     "title": "Uburyo bwo gukoresha urufunguruzo rwa klaviyeri",

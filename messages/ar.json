@@ -583,10 +583,10 @@
     "errorFetchingUrl": "حدث خطأ أثناء جلب محتوى عنوان URL",
     "errorInitiatingSearch": "حدث خطأ أثناء بدء بحث الويب",
     "regenerate": "إعادة التوليد",
-    "modelSwitchPrompt": "فشل {original} لكن نجح {fallback}. هل ترغب في تغيير النموذج؟",
-    "keepOriginalModel": "الاحتفاظ بـ {model}",
+    "modelSwitchPrompt": "أجاب {fallback} لأن {original} لم يكن متوفراً.",
+    "keepOriginalModel": "البقاء على {model}",
     "switchToModel": "التبديل إلى {model}",
-    "alwaysSwitchToModel": "التبديل التلقائي دائمًا",
+    "alwaysSwitchToModel": "دوماً التحويل عندما لا يتوفر {original}",
     "translateMessage": "ترجمة الرسالة",
     "translating": "جارٍ الترجمة...",
     "translationError": "فشلت الترجمة",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "تسجيل الصوت غير مدعوم في هذا المتصفح.",
     "microphoneNotDetected": "لم يتم اكتشاف ميكروفون",
     "microphoneBlocked": "تم حظر الميكروفون. تحقق من إعدادات المتصفح.",
-    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى."
+    "voiceTranscriptionFailed": "فشل تحويل الصوت إلى نص. يرجى المحاولة مرة أخرى.",
+    "stopGenerationTitle": "إيقاف التوليد؟",
+    "stopGenerationMessage": "هل أنت متأكد أنك تريد إيقاف توليد هذه الاستجابة؟ سيتم تجاهل أي رد قيد المعالجة.",
+    "stopGenerationConfirm": "إيقاف",
+    "stopGenerationDontAskAgainButton": "عدم السؤال مرة أخرى عند الإيقاف بواسطة الزر",
+    "stopGenerationDontAskAgainKeyboard": "عدم السؤال مرة أخرى عند الإيقاف بواسطة لوحة المفاتيح",
+    "generateResponseButton": "توليد استجابة"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -920,7 +926,9 @@
     "verbosityDescription": "يتحكم في مستوى تفاصيل الاستجابة لنماذج GPT-5.",
     "activeFiles": {
       "autoPinUploads": "تثبيت الملفات المرفوعة تلقائيًا",
-      "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها"
+      "autoPinUploadsDescription": "تثبيت الملفات تلقائيًا عند رفعها لمنع استبعادها",
+      "autoInjectPinnedImages": "إعادة إرسال الصور المثبتة في كل دورة",
+      "autoInjectPinnedImagesDescription": "عند التفعيل، يتم إرسال الصور المثبتة إلى النماذج التي تدعم الرؤية في كل دورة لتبقى ضمن السياق (التكلفة التقديرية ≈765 رمزًا لكل صورة مثبتة في كل دورة). عند الإيقاف، تبقى الصور المثبتة مرئية في اللوحة ولكن تُرسل فقط عند إعادة إرفاقها. لا يؤثر ذلك على نماذج Anthropic، التي لا تستقبل محتوى الصور حاليًا."
     },
     "Quarantined Data": "البيانات المحجوزة",
     "quarantineDataDescription": "لديك {count} ‏{count, plural, one {عنصر} other {عناصر}} محجوزة ({size}) بها مشكلات في البيانات تعذر تحميلها بشكل طبيعي.",
@@ -928,7 +936,22 @@
     "Export Quarantined Data": "تصدير البيانات المحجوزة",
     "Delete Quarantined Data": "حذف البيانات المحجوزة",
     "deleteQuarantineConfirm": "هل أنت متأكد من رغبتك في حذف جميع البيانات المحجوزة؟ لا يمكن التراجع عن هذا الإجراء.",
-    "quarantineDeleteSuccess": "تم حذف جميع البيانات المحجوزة بنجاح."
+    "quarantineDeleteSuccess": "تم حذف جميع البيانات المحجوزة بنجاح.",
+    "confirmations": {
+      "title": "التأكيدات",
+      "confirmStopFromButton": "تأكيد قبل الإيقاف بواسطة الزر",
+      "confirmStopFromButtonDescription": "عرض مربع تأكيد عند النقر على زر الإيقاف أثناء توليد الاستجابة",
+      "confirmStopFromKeyboard": "تأكيد قبل الإيقاف بواسطة لوحة المفاتيح",
+      "confirmStopFromKeyboardDescription": "عرض مربع تأكيد عند الضغط على Escape أثناء توليد الاستجابة"
+    },
+    "appliesToNewConversations": "ينطبق فقط على المحادثات الجديدة.",
+    "useModelDefault": "يتم استخدام الإعداد الافتراضي للنموذج.",
+    "fromGeneralSettings": "من الإعدادات العامة",
+    "preferredNameInheritedFromGeneral": "يتم استخدام اسم العرض من الإعدادات العامة. اكتب لتعديله.",
+    "savedConfirmation": "تم الحفظ",
+    "unsavedChanges": "تغييرات غير محفوظة",
+    "unsavedChangesMessage": "لديك تغييرات غير محفوظة. هل تريد تجاهلها؟",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "استخدم أسلوب الكتابة الافتراضي",
     "noTonesCreated": "لم يتم إنشاء أي نبرة بعد",
     "createTonesHint": "أنشئ النبرات من الإجراءات السريعة",
-    "translateDocumentTooltip": "ترجم المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، PDF، HTML، TXT\nالحجم الأقصى: 40 ميغابايت\n\nيدعم أكثر من 80 لغة مع ملفات المصطلحات الاختيارية."
+    "translateDocumentTooltip": "ترجمة المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، HTML، TXT\nالحد الأقصى للحجم: 40 ميجابايت\n\nيدعم أكثر من 80 لغة مع إمكانية استخدام ملفات القاموس."
   },
   "transcription": {
     "addInstructions": "إضافة تعليمات",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "الملف كبير جداً للتثبيت ({tokens} رمز، الحد: {limit})",
     "activationRejectedTooLarge": "الملف كبير جداً للسياق النشط ({tokens} رمز، الحد: {limit})",
     "sessionQuotaWarning": "حصة الجلسة منخفضة — متبقي {remaining} رمز",
-    "sessionQuotaNearlyExhausted": "حصة الجلسة أوشكت على النفاد — قد لا يتم تضمين الملفات النشطة"
+    "sessionQuotaNearlyExhausted": "حصة الجلسة أوشكت على النفاد — قد لا يتم تضمين الملفات النشطة",
+    "notInContext": "خارج السياق",
+    "notInContextTooltip": "لم يتم تضمين هذا الملف ضمن ميزانية الرموز في الاستجابة الأخيرة، لذلك لم يتمكن النموذج من رؤيته. سيُعاد النظر فيه في رسالتك التالية.",
+    "notInjected": "غير مرسل",
+    "notInjectedTooltip": "إعادة إرسال الصور مُعطلة في الإعدادات. تبقى هذه الصورة المثبتة مرئية هنا لكنها لن تُرسل إلى النموذج إلا إذا أعدتَ إرفاقها."
   },
   "shortcuts": {
     "title": "اختصارات لوحة المفاتيح",

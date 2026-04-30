@@ -637,10 +637,10 @@
     "errorFetchingUrl": "Ett fel uppstod vid hämtning av URL-innehåll",
     "errorInitiatingSearch": "Ett fel uppstod vid initiering av webbsökning",
     "regenerate": "Återskapa",
-    "modelSwitchPrompt": "{original} misslyckades men {fallback} lyckades. Byta modell?",
-    "keepOriginalModel": "Behåll som {model}",
+    "modelSwitchPrompt": "{fallback} svarade på detta eftersom {original} inte var tillgänglig.",
+    "keepOriginalModel": "Stanna kvar på {model}",
     "switchToModel": "Byt till {model}",
-    "alwaysSwitchToModel": "Byt alltid automatiskt",
+    "alwaysSwitchToModel": "Byt alltid när {original} inte är tillgänglig",
     "translateMessage": "Översätt meddelande",
     "translating": "Översätter...",
     "translationError": "Översättning misslyckades",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Ljudinspelning stöds inte i denna webbläsare.",
     "microphoneNotDetected": "Ingen mikrofon hittades",
     "microphoneBlocked": "Mikrofonen är blockerad. Kontrollera webbläsarinställningarna.",
-    "voiceTranscriptionFailed": "Rösttranskribering misslyckades. Försök igen."
+    "voiceTranscriptionFailed": "Rösttranskribering misslyckades. Försök igen.",
+    "stopGenerationTitle": "Sluta generera?",
+    "stopGenerationMessage": "Är du säker på att du vill sluta generera detta svar? Alla pågående svar kommer att tas bort.",
+    "stopGenerationConfirm": "Stoppa",
+    "stopGenerationDontAskAgainButton": "Fråga inte igen när du stoppar med knappen",
+    "stopGenerationDontAskAgainKeyboard": "Fråga inte igen när du stoppar med tangentbordet",
+    "generateResponseButton": "Generera svar"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Styr detaljnivån för svar från GPT-5-modeller.",
     "activeFiles": {
       "autoPinUploads": "Fäst uppladdade filer automatiskt",
-      "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort"
+      "autoPinUploadsDescription": "Fäst filer automatiskt vid uppladdning för att förhindra att de tas bort",
+      "autoInjectPinnedImages": "Återinfoga fästa bilder varje tur",
+      "autoInjectPinnedImagesDescription": "När detta är aktiverat skickas fästa bilder till bildtolkande modeller varje tur så att de förblir i kontexten (uppskattad kostnad ≈765 tokens per fäst bild och tur). När detta är avstängt förblir fästa bilder synliga i panelen men skickas bara när du återfäster dem. Detta påverkar inte Anthropic-modeller, som för närvarande inte tar emot bildinnehåll."
     },
     "Quarantined Data": "Karantändata",
     "quarantineDataDescription": "Du har {count} karantänlagda {count, plural, one {objekt} other {objekt}} ({size}) med datafel som inte kunde läsas in normalt.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Exportera karantändata",
     "Delete Quarantined Data": "Radera karantändata",
     "deleteQuarantineConfirm": "Är du säker på att du vill radera all karantändata? Denna åtgärd kan inte ångras.",
-    "quarantineDeleteSuccess": "All karantändata har raderats."
+    "quarantineDeleteSuccess": "All karantändata har raderats.",
+    "confirmations": {
+      "title": "Bekräftelser",
+      "confirmStopFromButton": "Bekräfta innan stopp via knapp",
+      "confirmStopFromButtonDescription": "Visa en bekräftelsedialog när du klickar på stoppknappen medan ett svar genereras",
+      "confirmStopFromKeyboard": "Bekräfta innan stopp via tangentbord",
+      "confirmStopFromKeyboardDescription": "Visa en bekräftelsedialog när du trycker på Escape medan ett svar genereras"
+    },
+    "appliesToNewConversations": "Gäller endast nya konversationer.",
+    "useModelDefault": "Använder modellens standardinställning.",
+    "fromGeneralSettings": "Från allmänna inställningar",
+    "preferredNameInheritedFromGeneral": "Använder visningsnamnet från dina allmänna inställningar. Skriv för att skriva över.",
+    "savedConfirmation": "Sparad",
+    "unsavedChanges": "Osparade ändringar",
+    "unsavedChangesMessage": "Du har osparade ändringar. Vill du kasta dem?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Använd standardstil",
     "noTonesCreated": "Inga toner har skapats ännu",
     "createTonesHint": "Skapa toner i Snabbåtgärder",
-    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaxstorlek: 40 MB\n\nStöder 80+ språk med valfria ordlistor."
+    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, HTML, TXT\nMaxstorlek: 40 MB\n\nStöd för 80+ språk med valfria ordlistor."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Filen är för stor för att fastnålas ({tokens} tokens, gräns: {limit})",
     "activationRejectedTooLarge": "Filen är för stor för aktiv kontext ({tokens} tokens, gräns: {limit})",
     "sessionQuotaWarning": "Sessionskvoten nästan slut — {remaining} tokens kvar",
-    "sessionQuotaNearlyExhausted": "Sessionskvoten är nästan slut — aktiva filer kan uteslutas"
+    "sessionQuotaNearlyExhausted": "Sessionskvoten är nästan slut — aktiva filer kan uteslutas",
+    "notInContext": "Inte i kontext",
+    "notInContextTooltip": "Denna fil fick inte plats inom den tillåtna token-gränsen förra gången, så modellen kunde inte se den. Den kommer att övervägas igen vid ditt nästa meddelande.",
+    "notInjected": "Ej infogad",
+    "notInjectedTooltip": "Återinfogning av bilder är avaktiverad i inställningarna. Denna fästa bild förblir synlig här men skickas inte till modellen om du inte återfäster den."
   },
   "shortcuts": {
     "title": "Kortkommandon",

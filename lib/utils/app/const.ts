@@ -138,6 +138,9 @@ export const MAX_API_FILE_SIZE = FILE_SIZE_LIMITS.VIDEO_MAX_BYTES;
 export const VALIDATION_LIMITS = {
   // Maximum size for JSON request body (chat messages + metadata)
   REQUEST_BODY_MAX_BYTES: 10 * 1024 * 1024, // 10MB
+  // Client-side trim target — leaves headroom under REQUEST_BODY_MAX_BYTES so
+  // older inlined images / dropped turns get pruned before the server rejects.
+  CLIENT_BODY_TRIM_BUDGET_BYTES: 9 * 1024 * 1024, // 9MB
   // Maximum file size for pre-download validation (matches largest file type)
   FILE_DOWNLOAD_MAX_BYTES: FILE_SIZE_LIMITS.VIDEO_MAX_BYTES, // 1.5GB
   // Server-side safety net for message count (only API-bypass attempts should hit this)

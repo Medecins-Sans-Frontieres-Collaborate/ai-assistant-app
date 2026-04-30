@@ -612,10 +612,10 @@
     "errorFetchingUrl": "S'ha produït un error en recuperar el contingut de l'URL",
     "errorInitiatingSearch": "S'ha produït un error en iniciar la cerca web",
     "regenerate": "Regenera",
-    "modelSwitchPrompt": "{original} ha fallat, però {fallback} ha tingut èxit. Voleu canviar de model?",
-    "keepOriginalModel": "Mantén {model}",
+    "modelSwitchPrompt": "{fallback} ha respost això perquè {original} no estava disponible.",
+    "keepOriginalModel": "Mantenir {model}",
     "switchToModel": "Canvia a {model}",
-    "alwaysSwitchToModel": "Canvia automàticament sempre",
+    "alwaysSwitchToModel": "Canviar sempre quan {original} no estigui disponible",
     "translateMessage": "Traduir missatge",
     "translating": "Traducció...",
     "translationError": "La traducció ha fallat",
@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "L’enregistrament d’àudio no és compatible amb aquest navegador.",
     "microphoneNotDetected": "No s'ha detectat cap micròfon",
     "microphoneBlocked": "Micròfon bloquejat. Comproveu la configuració del navegador.",
-    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar."
+    "voiceTranscriptionFailed": "La transcripció de veu ha fallat. Torneu-ho a intentar.",
+    "stopGenerationTitle": "Aturar la generació?",
+    "stopGenerationMessage": "Esteu segur que voleu aturar la generació d'aquesta resposta? Es descartarà qualsevol resposta en curs.",
+    "stopGenerationConfirm": "Atura",
+    "stopGenerationDontAskAgainButton": "No tornis a preguntar quan s'aturi amb el botó",
+    "stopGenerationDontAskAgainKeyboard": "No tornis a preguntar quan s'aturi amb el teclat",
+    "generateResponseButton": "Genera resposta"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -949,7 +955,9 @@
     "verbosityDescription": "Controla el nivell de detall de la resposta per als models GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixa automàticament els fitxers pujats",
-      "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin"
+      "autoPinUploadsDescription": "Fixa automàticament els fitxers quan es pugen per evitar que se substitueixin",
+      "autoInjectPinnedImages": "Torna a injectar les imatges fixades cada torn",
+      "autoInjectPinnedImagesDescription": "Si està activat, les imatges fixades s'envien als models amb capacitat de visió en cada torn per tal que es mantinguin en context (cost estimat ≈765 tokens per imatge fixada i torn). Si està desactivat, les imatges continuen visibles al panell però només s'envien quan les tornes a adjuntar. No té efecte en els models d'Anthropic, que actualment no reben contingut d'imatge."
     },
     "Quarantined Data": "Dades en quarantena",
     "quarantineDataDescription": "Teniu {count} {count, plural, one {element} other {elements}} en quarantena ({size}) amb problemes de dades que no s’han pogut carregar normalment.",
@@ -957,7 +965,22 @@
     "Export Quarantined Data": "Exporta dades en quarantena",
     "Delete Quarantined Data": "Elimina dades en quarantena",
     "deleteQuarantineConfirm": "Esteu segur que voleu eliminar totes les dades en quarantena? Aquesta acció no es pot desfer.",
-    "quarantineDeleteSuccess": "S’han eliminat correctament totes les dades en quarantena."
+    "quarantineDeleteSuccess": "S’han eliminat correctament totes les dades en quarantena.",
+    "confirmations": {
+      "title": "Confirmacions",
+      "confirmStopFromButton": "Confirma abans d'aturar amb el botó",
+      "confirmStopFromButtonDescription": "Mostra un diàleg de confirmació quan premis el botó d'aturar mentre s'està generant una resposta",
+      "confirmStopFromKeyboard": "Confirma abans d'aturar amb el teclat",
+      "confirmStopFromKeyboardDescription": "Mostra un diàleg de confirmació quan premis Escape mentre s'està generant una resposta"
+    },
+    "appliesToNewConversations": "S’aplica només a les converses noves.",
+    "useModelDefault": "S’està utilitzant el valor per defecte del model.",
+    "fromGeneralSettings": "Des de la configuració general",
+    "preferredNameInheritedFromGeneral": "S’està heretant el nom públic de la configuració general. Escriviu per sobreescriure.",
+    "savedConfirmation": "Desat",
+    "unsavedChanges": "Canvis sense desar",
+    "unsavedChangesMessage": "Teniu canvis sense desar. Voleu descartar-los?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Fes servir l'estil d'escriptura per defecte",
     "noTonesCreated": "Encara no s'ha creat cap to",
     "createTonesHint": "Crea tons a Accions Ràpides",
-    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, PDF, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb arxius de glossari opcionals."
+    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb fitxers de glossari opcionals."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Fitxer massa gran per fixar ({tokens} tokens, límit: {limit})",
     "activationRejectedTooLarge": "Fitxer massa gran per al context actiu ({tokens} tokens, límit: {limit})",
     "sessionQuotaWarning": "Quota de sessió baixa — resten {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "Quota de sessió gairebé esgotada — potser no s'inclouran fitxers actius"
+    "sessionQuotaNearlyExhausted": "Quota de sessió gairebé esgotada — potser no s'inclouran fitxers actius",
+    "notInContext": "Fora de context",
+    "notInContextTooltip": "Aquest fitxer no ha entrat dins del límit de tokens per torn en l'última resposta, així que el model no l'ha pogut veure. Es tornarà a considerar en el teu proper missatge.",
+    "notInjected": "No injectat",
+    "notInjectedTooltip": "La reinjecció d’imatges està desactivada a la configuració. Aquesta imatge fixada es manté visible aquí però no s’envia al model llevat que la tornis a adjuntar."
   },
   "shortcuts": {
     "title": "Dreceres de teclat",

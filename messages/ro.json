@@ -635,10 +635,10 @@
     "errorFetchingUrl": "A apărut o eroare la preluarea conținutului URL",
     "errorInitiatingSearch": "A apărut o eroare la inițierea căutării web",
     "regenerate": "Regenerare",
-    "modelSwitchPrompt": "{original} a eșuat, dar {fallback} a reușit. Doriți să schimbați modelul?",
-    "keepOriginalModel": "Păstrează {model}",
+    "modelSwitchPrompt": "{fallback} a răspuns deoarece {original} nu era disponibil.",
+    "keepOriginalModel": "Rămâi pe {model}",
     "switchToModel": "Comută la {model}",
-    "alwaysSwitchToModel": "Comută automat întotdeauna",
+    "alwaysSwitchToModel": "Comută întotdeauna când {original} nu este disponibil",
     "translateMessage": "Tradu mesajul",
     "translating": "Se traduce...",
     "translationError": "Traducerea a eșuat",
@@ -683,7 +683,13 @@
     "mediaRecorderNotSupported": "Înregistrarea audio nu este suportată în acest browser.",
     "microphoneNotDetected": "Nu a fost detectat niciun microfon",
     "microphoneBlocked": "Microfon blocat. Verificați setările browserului.",
-    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou."
+    "voiceTranscriptionFailed": "Transcrierea vocii a eșuat. Vă rugăm să încercați din nou.",
+    "stopGenerationTitle": "Opriți generarea?",
+    "stopGenerationMessage": "Sunteți sigur că doriți să opriți generarea acestui răspuns? Orice răspuns în curs va fi anulat.",
+    "stopGenerationConfirm": "Oprește",
+    "stopGenerationDontAskAgainButton": "Nu mai întreba când opresc cu butonul",
+    "stopGenerationDontAskAgainKeyboard": "Nu mai întreba când opresc cu tastatura",
+    "generateResponseButton": "Generează răspuns"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -972,7 +978,9 @@
     "verbosityDescription": "Controlează nivelul de detaliere al răspunsurilor pentru modelele GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fixează automat fișierele încărcate",
-      "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor"
+      "autoPinUploadsDescription": "Fixează automat fișierele la încărcare pentru a preveni eliminarea lor",
+      "autoInjectPinnedImages": "Re-injectează imaginile fixate la fiecare tură",
+      "autoInjectPinnedImagesDescription": "Când este activată, imaginile fixate sunt trimise modelelor care pot procesa imagini la fiecare tură, astfel încât să rămână în context (cost estimat ≈765 de tokeni per imagine fixată per tură). Când este dezactivată, imaginile fixate rămân vizibile în panou, dar sunt trimise doar când le reatașați. Nu are efect asupra modelelor Anthropic, care momentan nu primesc conținut de imagine."
     },
     "Quarantined Data": "Date în carantină",
     "quarantineDataDescription": "Aveți {count} {count, plural, one {element} other {elemente}} în carantină ({size}) cu probleme de date care nu au putut fi încărcate normal.",
@@ -980,7 +988,22 @@
     "Export Quarantined Data": "Exportă datele în carantină",
     "Delete Quarantined Data": "Șterge datele în carantină",
     "deleteQuarantineConfirm": "Sunteți sigur că doriți să ștergeți toate datele aflate în carantină? Această acțiune nu poate fi anulată.",
-    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes."
+    "quarantineDeleteSuccess": "Toate datele din carantină au fost șterse cu succes.",
+    "confirmations": {
+      "title": "Confirmări",
+      "confirmStopFromButton": "Confirmare înainte de oprire cu butonul",
+      "confirmStopFromButtonDescription": "Afișează o confirmare când faci clic pe butonul de oprire în timpul generării unui răspuns",
+      "confirmStopFromKeyboard": "Confirmare înainte de oprire cu tastatura",
+      "confirmStopFromKeyboardDescription": "Afișează o confirmare când apeși Escape în timpul generării unui răspuns"
+    },
+    "appliesToNewConversations": "Se aplică doar conversațiilor noi.",
+    "useModelDefault": "Se folosește valoarea implicită a modelului.",
+    "fromGeneralSettings": "Din Setările Generale",
+    "preferredNameInheritedFromGeneral": "Se preia numele afișat din Setările Generale. Tastați pentru a suprascrie.",
+    "savedConfirmation": "Salvat",
+    "unsavedChanges": "Modificări nesalvate",
+    "unsavedChangesMessage": "Aveți modificări nesalvate. Renunțați la ele?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Folosiți stilul de scriere implicit",
     "noTonesCreated": "Nu au fost create tonuri încă",
     "createTonesHint": "Creați tonuri în Acțiuni rapide",
-    "translateDocumentTooltip": "Tradu documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, PDF, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi, cu fișiere glosar opționale."
+    "translateDocumentTooltip": "Traduceți documente în altă limbă.\n\nFormate acceptate: Word, Excel, PowerPoint, HTML, TXT\nDimensiune maximă: 40MB\n\nSuportă peste 80 de limbi și fișiere de glosar opționale."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Adăugați instrucțiunile personale pentru a personaliza modul în care răspunde AI. Acestea sunt combinate cu liniile directoare de bază care asigură răspunsuri utile, corecte și sigure.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Sfat: Tastați \"/\" pentru a selecta dintre șabloanele de prompt salvate.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Fișier prea mare pentru a fi fixat ({tokens} tokenuri, limită: {limit})",
     "activationRejectedTooLarge": "Fișier prea mare pentru contextul activ ({tokens} tokenuri, limită: {limit})",
     "sessionQuotaWarning": "Cota pentru sesiune este aproape de final — au rămas {remaining} tokenuri",
-    "sessionQuotaNearlyExhausted": "Cota pentru sesiune este aproape epuizată — fișierele active ar putea să nu fie incluse"
+    "sessionQuotaNearlyExhausted": "Cota pentru sesiune este aproape epuizată — fișierele active ar putea să nu fie incluse",
+    "notInContext": "Nu este în context",
+    "notInContextTooltip": "Acest fișier nu s-a încadrat în bugetul de tokeni per tură la ultimul răspuns, astfel că modelul nu l-a putut vedea. Va fi reevaluat la următorul mesaj.",
+    "notInjected": "Neinjectat",
+    "notInjectedTooltip": "Re-injectarea imaginilor este dezactivată din setări. Această imagine fixată rămâne vizibilă aici, dar nu este trimisă modelului decât dacă o reatașați."
   },
   "shortcuts": {
     "title": "Scurtături de la tastatură",

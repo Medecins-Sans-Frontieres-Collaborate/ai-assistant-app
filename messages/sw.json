@@ -637,10 +637,10 @@
     "errorFetchingUrl": "Hitilafu ilitokea wakati wa kuleta maudhui ya URL",
     "errorInitiatingSearch": "Hitilafu ilitokea wakati wa kuanzisha utaftaji wa wavuti",
     "regenerate": "Tengeneza upya",
-    "modelSwitchPrompt": "{original} imeshindwa lakini {fallback} imefanikiwa. Ungependa kubadilisha modeli?",
-    "keepOriginalModel": "Weka {model}",
+    "modelSwitchPrompt": "{fallback} imejibu hii kwa sababu {original} haikupatikana.",
+    "keepOriginalModel": "Baki kwenye {model}",
     "switchToModel": "Badilisha hadi {model}",
-    "alwaysSwitchToModel": "Badilisha kiotomatiki kila wakati",
+    "alwaysSwitchToModel": "Badilisha kila wakati {original} haipatikani",
     "translateMessage": "Tafsiri ujumbe",
     "translating": "Inatafsiri...",
     "translationError": "Tafsiri imeshindwa",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Rekodi ya sauti haiwezi kufanywa katika kivinjari hiki.",
     "microphoneNotDetected": "Hakuna kipaza sauti kilichogunduliwa",
     "microphoneBlocked": "Kipaza sauti kimezuiliwa. Angalia mipangilio ya kivinjari.",
-    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena."
+    "voiceTranscriptionFailed": "Utafiti wa sauti umeshindikana. Tafadhali jaribu tena.",
+    "stopGenerationTitle": "Usitishe utayarishaji?",
+    "stopGenerationMessage": "Je, una uhakika unataka kusitisha utayarishaji wa jibu hili? Jibu lolote linaloendelea kutayarishwa litatupiliwa mbali.",
+    "stopGenerationConfirm": "Sitisha",
+    "stopGenerationDontAskAgainButton": "Usiulize tena unapositisha kwa kutumia kitufe",
+    "stopGenerationDontAskAgainKeyboard": "Usiulize tena unapositisha kwa kutumia kibodi",
+    "generateResponseButton": "Tengeneza jibu"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Hudhibiti kiwango cha undani wa majibu kwa modeli za GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Funga faili zilizopakiwa moja kwa moja",
-      "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe"
+      "autoPinUploadsDescription": "Funga faili moja kwa moja zinapopakiwa ili zisiondolewe",
+      "autoInjectPinnedImages": "Weka tena picha zilizogandishwa kila mzunguko",
+      "autoInjectPinnedImagesDescription": "Ikiwa imewashwa, picha zilizogandishwa zitatumwa kwa mifano inayoweza kuona kila mzunguko ili zibaki kwenye muktadha (gharama inayokadiriwa ≈ tokeni 765 kwa kila picha iliyogandishwa kwa mzunguko). Ikiwa imezimwa, picha hizo zitaendelea kuonekana kwenye paneli lakini zitatumwa tu unapozigandisha tena. Haina athari kwa mifano ya Anthropic, ambayo kwa sasa haipokei maudhui ya picha."
     },
     "Quarantined Data": "Data Zilizowekwa Karantini",
     "quarantineDataDescription": "Una {count} {count, plural, one {kipengele} other {vipengele}} ({size}) zilizo karantini zenye matatizo ya data ambazo haziwezi kupakiwa kawaida.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Hamisha Data Zilizowekwa Karantini",
     "Delete Quarantined Data": "Futa Data Zilizowekwa Karantini",
     "deleteQuarantineConfirm": "Una uhakika unataka kufuta data zote zilizowekwa karantini? Hatua hii haiwezi kubatilishwa.",
-    "quarantineDeleteSuccess": "Umefanikiwa kufuta data zote zilizowekwa karantini."
+    "quarantineDeleteSuccess": "Umefanikiwa kufuta data zote zilizowekwa karantini.",
+    "confirmations": {
+      "title": "Uthibitisho",
+      "confirmStopFromButton": "Thibitisha kabla ya kusitisha kwa kutumia kitufe",
+      "confirmStopFromButtonDescription": "Onyesha kisanduku cha uthibitisho unapobofya kitufe cha kusitisha wakati jibu linaandaliwa",
+      "confirmStopFromKeyboard": "Thibitisha kabla ya kusitisha kwa kutumia kibodi",
+      "confirmStopFromKeyboardDescription": "Onyesha kisanduku cha uthibitisho unapobofya Esc wakati jibu linaandaliwa"
+    },
+    "appliesToNewConversations": "Inatumika kwa mazungumzo mapya pekee.",
+    "useModelDefault": "Inatumia chaguo msingi la mfano.",
+    "fromGeneralSettings": "Kutoka kwenye Mipangilio ya Jumla",
+    "preferredNameInheritedFromGeneral": "Inatumia jina la onyesho kutoka Mipangilio ya Jumla. Andika kubadilisha.",
+    "savedConfirmation": "Imehifadhiwa",
+    "unsavedChanges": "Mabadiliko ambayo hayajahifadhiwa",
+    "unsavedChangesMessage": "Una mabadiliko ambayo hayajahifadhiwa. Uyaache?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Tumia mtindo wa uandishi chaguomsingi",
     "noTonesCreated": "Hakuna tono lililoundwa bado",
     "createTonesHint": "Unda matono kwenye Vitendo vya Haraka",
-    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, PDF, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia zaidi ya lugha 80 na faili za kamusi (glossary) kwa hiari."
+    "translateDocumentTooltip": "Tafsiri hati kwa lugha nyingine.\n\nMiundo inayoungwa mkono: Word, Excel, PowerPoint, HTML, TXT\nUkubwa wa juu: 40MB\n\nInasaidia lugha 80+ na faili za hiari za kamusi."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Ongeza maelekezo yako binafsi kubinafsisha jinsi AI inavyojibu. Haya yanaunganishwa na miongozo ya msingi ili kuhakikisha majibu ni ya msaada, sahihi na salama.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Dokezo: Andika \"/\" kuchagua kutoka kwenye templeti za maelekezo zilizohifadhiwa.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Faili ni kubwa mno kupachikwa ({tokens} tokeni, kikomo: {limit})",
     "activationRejectedTooLarge": "Faili ni kubwa mno kwa muktadha unaotumika ({tokens} tokeni, kikomo: {limit})",
     "sessionQuotaWarning": "Kikomo cha kikao kinakaribia kuisha — tokeni {remaining} zimesalia",
-    "sessionQuotaNearlyExhausted": "Kikomo cha kikao kinakaribia kuisha — faili zinazotumika huenda zisiwepo"
+    "sessionQuotaNearlyExhausted": "Kikomo cha kikao kinakaribia kuisha — faili zinazotumika huenda zisiwepo",
+    "notInContext": "Haipo kwenye muktadha",
+    "notInContextTooltip": "Faili hii haikuweza kutoshea bajeti ya tokeni ya mzunguko uliopita, kwa hivyo mfano haukuweza kuiona. Itazingatiwa tena kwenye ujumbe wako ujao.",
+    "notInjected": "Haijachomekwa",
+    "notInjectedTooltip": "Uwekaji upya wa picha umezimwa kwenye mipangilio. Picha hii iliyogandishwa itaendelea kuonekana hapa lakini haitatumwa kwa mfano isipokuwa uigandishe tena."
   },
   "shortcuts": {
     "title": "Vifupisho vya Kibodi",

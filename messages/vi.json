@@ -638,10 +638,10 @@
     "errorFetchingUrl": "Đã xảy ra lỗi khi tải nội dung URL",
     "errorInitiatingSearch": "Đã xảy ra lỗi khi bắt đầu tìm kiếm web",
     "regenerate": "Tạo lại",
-    "modelSwitchPrompt": "{original} thất bại nhưng {fallback} thành công. Bạn có muốn chuyển mô hình không?",
-    "keepOriginalModel": "Giữ {model}",
+    "modelSwitchPrompt": "{fallback} đã trả lời vì {original} không khả dụng.",
+    "keepOriginalModel": "Giữ nguyên {model}",
     "switchToModel": "Chuyển sang {model}",
-    "alwaysSwitchToModel": "Luôn tự động chuyển",
+    "alwaysSwitchToModel": "Luôn chuyển đổi khi {original} không khả dụng",
     "translateMessage": "Dịch tin nhắn",
     "translating": "Đang dịch...",
     "translationError": "Dịch không thành công",
@@ -686,7 +686,13 @@
     "mediaRecorderNotSupported": "Trình duyệt này không hỗ trợ ghi âm.",
     "microphoneNotDetected": "Không phát hiện micro",
     "microphoneBlocked": "Micro đã bị chặn. Vui lòng kiểm tra cài đặt trình duyệt.",
-    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại."
+    "voiceTranscriptionFailed": "Chuyển đổi giọng nói thất bại. Vui lòng thử lại.",
+    "stopGenerationTitle": "Dừng tạo nội dung?",
+    "stopGenerationMessage": "Bạn có chắc chắn muốn dừng tạo phản hồi này không? Mọi phản hồi đang thực hiện sẽ bị hủy.",
+    "stopGenerationConfirm": "Dừng",
+    "stopGenerationDontAskAgainButton": "Không hỏi lại khi dừng bằng nút",
+    "stopGenerationDontAskAgainKeyboard": "Không hỏi lại khi dừng bằng bàn phím",
+    "generateResponseButton": "Tạo phản hồi"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -975,7 +981,9 @@
     "verbosityDescription": "Điều chỉnh mức độ chi tiết của phản hồi cho các mô hình GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Tự động ghim tệp đã tải lên",
-      "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách"
+      "autoPinUploadsDescription": "Tự động ghim tệp khi tải lên để tránh bị loại khỏi danh sách",
+      "autoInjectPinnedImages": "Tự động gửi lại hình ảnh được ghim mỗi lượt",
+      "autoInjectPinnedImagesDescription": "Khi bật, hình ảnh được ghim sẽ được gửi đến các mô hình có khả năng xử lý hình ảnh ở mỗi lượt để giữ chúng trong ngữ cảnh (ước tính tốn ≈765 token cho mỗi ảnh ghim mỗi lượt). Khi tắt, hình ảnh được ghim vẫn hiển thị ở bảng điều khiển nhưng chỉ được gửi khi bạn đính kèm lại. Không ảnh hưởng tới các mô hình Anthropic, hiện tại không nhận được nội dung hình ảnh."
     },
     "Quarantined Data": "Dữ liệu bị cách ly",
     "quarantineDataDescription": "Bạn có {count} {count, plural, one {mục} other {mục}} bị cách ly ({size}) với sự cố dữ liệu không thể tải bình thường.",
@@ -983,7 +991,22 @@
     "Export Quarantined Data": "Xuất dữ liệu bị cách ly",
     "Delete Quarantined Data": "Xóa dữ liệu bị cách ly",
     "deleteQuarantineConfirm": "Bạn có chắc muốn xóa tất cả dữ liệu bị cách ly không? Hành động này không thể hoàn tác.",
-    "quarantineDeleteSuccess": "Đã xóa thành công tất cả dữ liệu bị cách ly."
+    "quarantineDeleteSuccess": "Đã xóa thành công tất cả dữ liệu bị cách ly.",
+    "confirmations": {
+      "title": "Xác nhận",
+      "confirmStopFromButton": "Xác nhận trước khi dừng bằng nút",
+      "confirmStopFromButtonDescription": "Hiển thị hộp thoại xác nhận khi bạn nhấn nút dừng trong lúc đang tạo phản hồi",
+      "confirmStopFromKeyboard": "Xác nhận trước khi dừng bằng bàn phím",
+      "confirmStopFromKeyboardDescription": "Hiển thị hộp thoại xác nhận khi bạn nhấn Escape trong lúc đang tạo phản hồi"
+    },
+    "appliesToNewConversations": "Chỉ áp dụng cho các hội thoại mới.",
+    "useModelDefault": "Đang sử dụng mặc định của mô hình.",
+    "fromGeneralSettings": "Từ Cài đặt Chung",
+    "preferredNameInheritedFromGeneral": "Đang kế thừa tên hiển thị từ Cài đặt Chung của bạn. Nhập để ghi đè.",
+    "savedConfirmation": "Đã lưu",
+    "unsavedChanges": "Thay đổi chưa được lưu",
+    "unsavedChangesMessage": "Bạn có thay đổi chưa được lưu. Hủy bỏ chúng?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1662,7 +1685,7 @@
     "useDefaultStyle": "Sử dụng phong cách viết mặc định",
     "noTonesCreated": "Chưa tạo giọng điệu nào",
     "createTonesHint": "Tạo giọng điệu trong Quick Actions",
-    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, PDF, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn."
+    "translateDocumentTooltip": "Dịch tài liệu sang ngôn ngữ khác.\n\nĐịnh dạng hỗ trợ: Word, Excel, PowerPoint, HTML, TXT\nKích thước tối đa: 40MB\n\nHỗ trợ hơn 80 ngôn ngữ với file thuật ngữ tùy chọn."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Thêm hướng dẫn cá nhân của bạn để tùy chỉnh cách AI phản hồi. Các hướng dẫn này sẽ được kết hợp với các quy tắc hành vi cốt lõi nhằm đảm bảo phản hồi hữu ích, chính xác và an toàn.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Mẹo: Gõ \"/\" để chọn từ các mẫu gợi ý đã lưu.",
@@ -1863,7 +1886,11 @@
     "pinBlockedTooLarge": "Tệp quá lớn để ghim ({tokens} token, giới hạn: {limit})",
     "activationRejectedTooLarge": "Tệp quá lớn cho ngữ cảnh hoạt động ({tokens} token, giới hạn: {limit})",
     "sessionQuotaWarning": "Hạn mức phiên sắp hết — còn lại {remaining} token",
-    "sessionQuotaNearlyExhausted": "Hạn mức phiên gần hết — các tệp đang hoạt động có thể không được bao gồm"
+    "sessionQuotaNearlyExhausted": "Hạn mức phiên gần hết — các tệp đang hoạt động có thể không được bao gồm",
+    "notInContext": "Không trong ngữ cảnh",
+    "notInContextTooltip": "Tệp này đã vượt quá giới hạn token cho mỗi lượt ở phản hồi trước, nên mô hình không thể truy cập. Tệp sẽ được xem xét lại ở tin nhắn tiếp theo của bạn.",
+    "notInjected": "Chưa được gửi",
+    "notInjectedTooltip": "Tùy chọn gửi lại hình ảnh đang tắt trong phần cài đặt. Hình ảnh ghim này vẫn hiển thị ở đây nhưng sẽ không được gửi cho mô hình trừ khi bạn đính kèm lại."
   },
   "shortcuts": {
     "title": "Phím tắt bàn phím",

@@ -246,10 +246,51 @@ export function useChatActions({
     [sendMessage],
   );
 
+  /**
+   * Re-submits the conversation's trailing user message through the
+   * standard `sendMessage` pipeline. Used after a stopped or failed
+   * generation, where the trailing entry is a user message with no
+   * assistant follow-up — this gets the user a fresh assistant response
+   * for that exact prompt without forming a new user turn.
+   *
+   * No-op if the conversation is empty or doesn't end with a user
+   * message. The result is appended as a new assistant message group
+   * (not a regeneration of an existing one).
+   */
+  const handleGenerateResponse = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const currentConversation = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+
+    if (!currentConversation || currentConversation.messages.length === 0)
+      return;
+
+    const lastEntry =
+      currentConversation.messages[currentConversation.messages.length - 1];
+    if (!isLegacyMessage(lastEntry) || lastEntry.role !== 'user') return;
+
+    const userMessage = entryToDisplayMessage(lastEntry);
+
+    // Include the entire conversation in the API window (the trailing user
+    // message is the prompt to respond to).
+    const messagesForAPI = windowMessagesForAPI(
+      flattenEntriesForAPI(currentConversation.messages),
+    );
+
+    const apiConversation = {
+      ...currentConversation,
+      messages: messagesForAPI,
+    };
+
+    sendMessage?.(userMessage, apiConversation, undefined);
+  }, [sendMessage]);
+
   return {
     handleEditMessage,
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   };
 }

@@ -27,6 +27,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useConversationStore } from './conversationStore';
 import { useSettingsStore } from './settingsStore';
+import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
 import { create } from 'zustand';
@@ -62,8 +63,24 @@ interface ChatStore {
   // Regeneration state for message versioning
   regeneratingIndex: number | null;
 
+  /**
+   * IDs of active files that were not injected on the most recent turn,
+   * keyed by conversation ID. The `last` in the name is from the *next*
+   * send's perspective: the server emits these as
+   * `ChatContext.activeFilesDroppedThisTurn` on completion, this store
+   * keeps them around as "last turn" until the *next* successful turn
+   * populates them again. They are intentionally NOT cleared on send
+   * start — if a stream fails mid-flight, the previous turn's badges
+   * stay visible so the user keeps an accurate picture.
+   */
+  lastTurnDroppedActiveFileIds: Record<string, string[]>;
+
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
+  setLastTurnDroppedActiveFileIds: (
+    conversationId: string,
+    fileIds: string[],
+  ) => void;
   setCurrentMessage: (message: Message | undefined) => void;
   setIsStreaming: (isStreaming: boolean) => void;
   setStreamingContent: (content: string) => void;
@@ -117,6 +134,7 @@ interface ChatStore {
       };
     }>;
     activeFilesTokensConsumed?: number;
+    activeFilesDropped?: string[];
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -209,8 +227,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   // Pending transcription initial state
   pendingConversationTranscription: null,
 
+  // Dropped active file IDs by conversation (most recent turn only)
+  lastTurnDroppedActiveFileIds: {},
+
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
+  setLastTurnDroppedActiveFileIds: (conversationId, fileIds) =>
+    set((state) => {
+      const next = { ...state.lastTurnDroppedActiveFileIds };
+      if (fileIds.length === 0) delete next[conversationId];
+      else next[conversationId] = fileIds;
+      return { lastTurnDroppedActiveFileIds: next };
+    }),
 
   setCurrentMessage: (message) => set({ currentMessage: message }),
 
@@ -325,10 +353,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
         fileCacheUpdates,
         activeFilesTokensConsumed,
+        activeFilesDropped,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+
+      // Surface files that were excluded from this turn's context so the
+      // ActiveFilesPanel can flag them — without this the user has no
+      // way to tell that an active file silently fell out of context.
+      get().setLastTurnDroppedActiveFileIds(
+        conversation.id,
+        activeFilesDropped ?? [],
+      );
 
       // Handle pending transcriptions (async batch jobs for large files)
       if (pendingTranscriptions && pendingTranscriptions.length > 0) {
@@ -443,6 +480,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       stopRequested: false,
       abortController,
     });
+
+    // Dismiss any open stop-generation confirmation modal — a stale dialog
+    // for the prior stream could otherwise be confirmed and accidentally
+    // cancel the new request.
+    useUIStore.getState().setStopGenerationConfirmSource(null);
   },
 
   scheduleLoadingMessage: (loadingMessage: string): NodeJS.Timeout => {
@@ -541,6 +583,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       customDisplayName: settings.customDisplayName,
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
+      autoInjectPinnedImages: settings.autoInjectPinnedImages,
     });
   },
 
@@ -570,6 +613,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       };
     }>;
     activeFilesTokensConsumed?: number;
+    activeFilesDropped?: string[];
   }> => {
     const reader = stream.getReader();
 
@@ -631,6 +675,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       pendingTranscriptions: streamParser.getPendingTranscriptions(),
       fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
+      activeFilesDropped: streamParser.getActiveFilesDropped?.(),
     };
   },
 
@@ -895,10 +940,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
         fileCacheUpdates,
         activeFilesTokensConsumed,
+        activeFilesDropped,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+
+      // Surface dropped files (see send path for context).
+      get().setLastTurnDroppedActiveFileIds(
+        conversation.id,
+        activeFilesDropped ?? [],
+      );
 
       // Handle pending transcriptions (async batch jobs for large files)
       if (pendingTranscriptions && pendingTranscriptions.length > 0) {

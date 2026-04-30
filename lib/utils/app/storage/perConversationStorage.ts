@@ -47,6 +47,53 @@ function isQuotaError(e: unknown): boolean {
   return (e as { name?: string })?.name === 'QuotaExceededError';
 }
 
+/**
+ * Custom event name dispatched when localStorage runs out of room. UI code
+ * subscribes to this on `window` and shows a toast — we keep this storage
+ * layer UI-agnostic by going through an event rather than importing toast.
+ */
+export const STORAGE_QUOTA_EXCEEDED_EVENT =
+  'conversation-storage-quota-exceeded';
+
+/**
+ * Detail payload carried by the `STORAGE_QUOTA_EXCEEDED_EVENT` CustomEvent.
+ * Exported so listeners can type their handlers (e.g.
+ * `(e: CustomEvent<StorageQuotaExceededDetail>) => void`).
+ */
+export interface StorageQuotaExceededDetail {
+  scope: 'conversation' | 'folder';
+  id?: string;
+}
+
+/**
+ * Throttle so a chatty failure mode (e.g., every keystroke triggering a
+ * write that fails) only surfaces one toast per window. 30 seconds is long
+ * enough that the user sees one warning per "session of failures" rather
+ * than a spam, but short enough that they get a reminder if they keep
+ * trying after dismissing.
+ */
+let lastQuotaToastAt = 0;
+const QUOTA_TOAST_THROTTLE_MS = 30_000;
+
+function notifyQuotaExceeded(detail: StorageQuotaExceededDetail): void {
+  if (typeof window === 'undefined') return;
+  const now = Date.now();
+  if (now - lastQuotaToastAt < QUOTA_TOAST_THROTTLE_MS) return;
+  lastQuotaToastAt = now;
+  try {
+    // Reference via window to avoid ESLint env-globals confusion: this
+    // module is shared between server and client tooling, but the early
+    // `typeof window === 'undefined'` guard ensures we're in a browser
+    // when this line runs.
+    window.dispatchEvent(
+      new window.CustomEvent(STORAGE_QUOTA_EXCEEDED_EVENT, { detail }),
+    );
+  } catch {
+    /* CustomEvent unsupported in some test environments — already logged
+     * via console.error at the call site, so silent here is acceptable */
+  }
+}
+
 // Cache of last-written updatedAt per conversation, used for diffing in setItem
 const lastWrittenTimestamps = new Map<string, string | undefined>();
 
@@ -946,6 +993,7 @@ export const perConversationStorage: StateStorage = {
               console.error(
                 `[PerConvStorage] QuotaExceededError writing ${conv.id}`,
               );
+              notifyQuotaExceeded({ scope: 'conversation', id: conv.id });
               if (isNew) {
                 // New conversation with no prior stored copy — remove from index
                 newConvIds.delete(conv.id);
@@ -971,6 +1019,7 @@ export const perConversationStorage: StateStorage = {
             console.error(
               `[PerConvStorage] QuotaExceededError writing folder ${folder.id}`,
             );
+            notifyQuotaExceeded({ scope: 'folder', id: folder.id });
             if (!currentFolderIds.has(folder.id)) {
               newFolderIds.delete(folder.id);
             }

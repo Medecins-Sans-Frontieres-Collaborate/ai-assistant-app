@@ -72,6 +72,7 @@ import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
@@ -82,7 +83,6 @@ interface Props {
   ) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
-  stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
   showDisclaimer?: boolean;
@@ -93,7 +93,6 @@ export const ChatInput = ({
   onSend,
   onRegenerate,
   onScrollDownClick,
-  stopConversationRef,
   textareaRef,
   showScrollDownButton,
   showDisclaimer = true,
@@ -107,7 +106,10 @@ export const ChatInput = ({
   // Zustand hooks
   const { selectedConversation, folders } = useConversations();
   const { isStreaming, requestStop } = useChat();
-  const { prompts } = useSettings();
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
+  );
+  const { prompts, confirmStopFromButton } = useSettings();
   const { tones } = useTones();
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
@@ -305,8 +307,11 @@ export const ChatInput = ({
   };
 
   const handleStopConversation = () => {
-    stopConversationRef.current = true;
-    requestStop();
+    if (confirmStopFromButton) {
+      setStopGenerationConfirmSource('button');
+    } else {
+      requestStop();
+    }
   };
 
   const isMobile = isMobileDevice;

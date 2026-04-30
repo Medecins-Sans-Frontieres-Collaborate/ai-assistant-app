@@ -583,10 +583,10 @@
     "errorFetchingUrl": "Ocurrió un error al obtener el contenido de la URL",
     "errorInitiatingSearch": "Ocurrió un error al iniciar la búsqueda web",
     "regenerate": "Regenerar",
-    "modelSwitchPrompt": "{original} falló pero {fallback} funcionó. ¿Deseas cambiar de modelo?",
-    "keepOriginalModel": "Mantener {model}",
+    "modelSwitchPrompt": "{fallback} respondió esto porque {original} no estaba disponible.",
+    "keepOriginalModel": "Permanecer en {model}",
     "switchToModel": "Cambiar a {model}",
-    "alwaysSwitchToModel": "Siempre cambiar automáticamente",
+    "alwaysSwitchToModel": "Cambiar siempre cuando {original} no esté disponible",
     "translateMessage": "Traducir mensaje",
     "translating": "Traduciendo...",
     "translationError": "Error en la traducción",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "La grabación de audio no es compatible con este navegador.",
     "microphoneNotDetected": "No se detectó ningún micrófono",
     "microphoneBlocked": "Micrófono bloqueado. Verifique la configuración del navegador.",
-    "voiceTranscriptionFailed": "Error en la transcripción de voz. Por favor, inténtelo de nuevo."
+    "voiceTranscriptionFailed": "Error en la transcripción de voz. Por favor, inténtelo de nuevo.",
+    "stopGenerationTitle": "¿Detener la generación?",
+    "stopGenerationMessage": "¿Está seguro de que desea detener la generación de esta respuesta? Se descartará cualquier respuesta en curso.",
+    "stopGenerationConfirm": "Detener",
+    "stopGenerationDontAskAgainButton": "No volver a preguntar al detener con el botón",
+    "stopGenerationDontAskAgainKeyboard": "No volver a preguntar al detener con el teclado",
+    "generateResponseButton": "Generar respuesta"
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Controla el nivel de detalle de las respuestas para los modelos GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Fijar archivos subidos automáticamente",
-      "autoPinUploadsDescription": "Fija automáticamente los archivos al subirlos para evitar que se eliminen del contexto"
+      "autoPinUploadsDescription": "Fija automáticamente los archivos al subirlos para evitar que se eliminen del contexto",
+      "autoInjectPinnedImages": "Reinyectar imágenes ancladas en cada turno",
+      "autoInjectPinnedImagesDescription": "Cuando está activado, las imágenes ancladas se envían a los modelos con capacidad de visión en cada turno para que permanezcan en el contexto (costo estimado ≈765 tokens por imagen anclada y turno). Cuando está desactivado, las imágenes ancladas siguen visibles en el panel pero solo se envían cuando las vuelves a adjuntar. No afecta a los modelos de Anthropic, que actualmente no reciben contenido de imagen."
     },
     "Quarantined Data": "Datos en cuarentena",
     "quarantineDataDescription": "Tiene {count} {count, plural, one {elemento en cuarentena} other {elementos en cuarentena}} ({size}) con problemas de datos que no se pudieron cargar normalmente.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Exportar datos en cuarentena",
     "Delete Quarantined Data": "Eliminar datos en cuarentena",
     "deleteQuarantineConfirm": "¿Está seguro de que desea eliminar todos los datos en cuarentena? Esta acción no se puede deshacer.",
-    "quarantineDeleteSuccess": "Se eliminaron correctamente todos los datos en cuarentena."
+    "quarantineDeleteSuccess": "Se eliminaron correctamente todos los datos en cuarentena.",
+    "confirmations": {
+      "title": "Confirmaciones",
+      "confirmStopFromButton": "Confirmar antes de detener con el botón",
+      "confirmStopFromButtonDescription": "Mostrar un cuadro de confirmación al hacer clic en el botón de detener mientras se genera una respuesta",
+      "confirmStopFromKeyboard": "Confirmar antes de detener con el teclado",
+      "confirmStopFromKeyboardDescription": "Mostrar un cuadro de confirmación al presionar Escape mientras se genera una respuesta"
+    },
+    "appliesToNewConversations": "Se aplica solo a nuevas conversaciones.",
+    "useModelDefault": "Usando el valor predeterminado del modelo.",
+    "fromGeneralSettings": "Desde Configuración general",
+    "preferredNameInheritedFromGeneral": "Usando el nombre mostrado de su Configuración general. Escriba para sobrescribir.",
+    "savedConfirmation": "Guardado",
+    "unsavedChanges": "Cambios no guardados",
+    "unsavedChangesMessage": "Tiene cambios sin guardar. ¿Desea descartarlos?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "Usar estilo de escritura predeterminado",
     "noTonesCreated": "Aún no se han creado tonos",
     "createTonesHint": "Cree tonos en Acciones rápidas",
-    "translateDocumentTooltip": "Traduce documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, PDF, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales."
+    "translateDocumentTooltip": "Traduzca documentos a otro idioma.\n\nFormatos compatibles: Word, Excel, PowerPoint, HTML, TXT\nTamaño máximo: 40 MB\n\nCompatible con más de 80 idiomas y archivos de glosario opcionales."
   },
   "transcription": {
     "transcribesOnSend": "Transcribe al enviar",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Archivo demasiado grande para fijar ({tokens} tokens, límite: {limit})",
     "activationRejectedTooLarge": "Archivo demasiado grande para el contexto activo ({tokens} tokens, límite: {limit})",
     "sessionQuotaWarning": "La cuota de sesión está baja — quedan {remaining} tokens",
-    "sessionQuotaNearlyExhausted": "La cuota de sesión está casi agotada — es posible que no se incluyan archivos activos"
+    "sessionQuotaNearlyExhausted": "La cuota de sesión está casi agotada — es posible que no se incluyan archivos activos",
+    "notInContext": "Fuera de contexto",
+    "notInContextTooltip": "Este archivo no entró en el presupuesto de tokens del último turno, por lo que el modelo no pudo verlo. Se reconsiderará en tu próximo mensaje.",
+    "notInjected": "No inyectado",
+    "notInjectedTooltip": "La reinyección de imágenes está desactivada en la configuración. Esta imagen anclada permanece visible aquí, pero no se envía al modelo a menos que la vuelvas a adjuntar."
   },
   "shortcuts": {
     "title": "Atajos de teclado",

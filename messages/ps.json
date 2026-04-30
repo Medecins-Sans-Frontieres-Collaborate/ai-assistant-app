@@ -705,10 +705,10 @@
     "errorFetchingUrl": "د URL منځپانګې اخیستلو پر مهال تېروتنه وشوه",
     "errorInitiatingSearch": "د ویب لټون پیل کولو پر مهال تېروتنه وشوه",
     "regenerate": "بیا جوړ کړئ",
-    "modelSwitchPrompt": "{original} ناکام شو خو {fallback} بریالی شو. غواړئ ماډل بدل کړئ؟",
-    "keepOriginalModel": "{model} وساتئ",
+    "modelSwitchPrompt": "دا ځواب د {fallback} لخوا ورکړل شو ځکه چې {original} شتون نه درلود.",
+    "keepOriginalModel": "په {model} پاتې شئ",
     "switchToModel": "{model} ته واوړئ",
-    "alwaysSwitchToModel": "تل اتومات بدلول",
+    "alwaysSwitchToModel": "تل بدل کړئ کله چې {original} شتون ونلري",
     "translateMessage": "پیغام ژباړئ",
     "translating": "ژباړه روانه ده...",
     "translationError": "ژباړه ناکامه شوه",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "ستاسو براوزر کې د آډیو ثبتول نه‌ ملاتړ کیږي.",
     "microphoneNotDetected": "مایکروفون ونه پېژندل شو",
     "microphoneBlocked": "مایکروفون بند شوی دی. د براوزر تنظیمات وګورئ.",
-    "voiceTranscriptionFailed": "د غږ لیکل ناکام شو. مهرباني وکړئ بیا هڅه وکړئ."
+    "voiceTranscriptionFailed": "د غږ لیکل ناکام شو. مهرباني وکړئ بیا هڅه وکړئ.",
+    "stopGenerationTitle": "تولید درول غواړئ؟",
+    "stopGenerationMessage": "یقیني یاست چې غواړئ دا ځواب تولیدول ودروئ؟ روان ځواب به حذف شي.",
+    "stopGenerationConfirm": "درول",
+    "stopGenerationDontAskAgainButton": "د تڼۍ له لارې درولو پر مهال بیا مه پوښتئ",
+    "stopGenerationDontAskAgainKeyboard": "د کیبورډ له لارې درولو پر مهال بیا مه پوښتئ",
+    "generateResponseButton": "ځواب تولید کړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "خپل‌شخصه اپلوډ شوې فایلونه پن کړئ",
-      "autoPinUploadsDescription": "د فایلونو اپلوډ کېدو سره سم یې په اتومات ډول پن کړئ تر څو له لیست څخه ونه لیري شي"
+      "autoPinUploadsDescription": "د فایلونو اپلوډ کېدو سره سم یې په اتومات ډول پن کړئ تر څو له لیست څخه ونه لیري شي",
+      "autoInjectPinnedImages": "هر وارې نښلول شوې انځورونه بيا ولېږدئ",
+      "autoInjectPinnedImagesDescription": "که دا ځانګړنه فعاله وي، نښلول شوي انځورونه هر وار هغو موډلونو ته چې لېدو وړتيا لري استول کېږي، څو په متن کې پاتې شي (اټکلي لګښت: شاوخوا ۷۶۵ توکنه د هر نښلول شوي انځور لپاره هر وار). که بنده وي، انځورونه يوازې په پینل کې ښکاري او يوازې هغه وخت استول کېږي چې بيا يې ونښلوئ. په Anthropic موډلونو هېڅ اغېز نه لري، ځکه دا موډلونه اوس مهال انځوريز منځپانګه نه ترلاسه کوي."
     },
     "Quarantined Data": "قرنطین شوي معلومات",
     "quarantineDataDescription": "تاسو {count} قرنطین شوي {count, plural, one {توکی} other {توکي}} ({size}) لرئ چې د معلوماتو ستونزې لري او عادي ډول نشي بار کېدلی.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "قرنطین شوي معلومات صادر کړئ",
     "Delete Quarantined Data": "قرنطین شوي معلومات ړنګ کړئ",
     "deleteQuarantineConfirm": "ایا تاسې ډاډه یاست چې ټول قرنطین شوي معلومات ړنګول غواړئ؟ دا عمل بېرته نه‌شي راوګرځېدلی.",
-    "quarantineDeleteSuccess": "ټول قرنطین شوي معلومات په بریالیتوب سره ړنګ شول."
+    "quarantineDeleteSuccess": "ټول قرنطین شوي معلومات په بریالیتوب سره ړنګ شول.",
+    "confirmations": {
+      "title": "تاییدونه",
+      "confirmStopFromButton": "د تڼۍ له لارې درولو مخکې تایید وکړئ",
+      "confirmStopFromButtonDescription": "کله چې ځواب تولیدېږي او تاسې د درولو تڼۍ کلیک کوئ، د تایید کړکۍ ښکاره کړئ",
+      "confirmStopFromKeyboard": "د کیبورډ له لارې درولو مخکې تایید وکړئ",
+      "confirmStopFromKeyboardDescription": "کله چې ځواب تولیدېږي او تاسې Escape کلیک کوئ، د تایید کړکۍ ښکاره کړئ"
+    },
+    "appliesToNewConversations": "یوازې نوو خبرو اترو ته تطبیق کېږي.",
+    "useModelDefault": "د ماډل اصلي ترتیب کارول کېږي.",
+    "fromGeneralSettings": "د عمومي تنظیماتو څخه",
+    "preferredNameInheritedFromGeneral": "ستاسو د عمومي تنظیماتو ښودل شوی نوم اخیستل شوی. د بدلولو لپاره ولیکئ.",
+    "savedConfirmation": "ثبت شو",
+    "unsavedChanges": "خوندي نه شوي بدلونونه",
+    "unsavedChangesMessage": "تاسو خوندي نه شوي بدلونونه لرئ. آیا لغوه یې کړئ؟",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "اصلي لیکدود وکاروئ",
     "noTonesCreated": "تر اوسه هیڅ ټون نه دی جوړ شوی",
     "createTonesHint": "ټونونه د چټکو عملیاتو له لارې جوړ کړئ",
-    "translateDocumentTooltip": "اسناد بله ژبه ته وژباړئ.\n\nمناسب ډولونه: Word، Excel، PowerPoint، PDF، HTML، TXT\nاعظمي کچه: ۴۰MB\n\nله ۸۰ څخه ډېرو ژبو څخه ملاتړ لري او اختیاري ګلاسري فایلونه لري."
+    "translateDocumentTooltip": "اسناد نورو ژبو ته وژباړئ.\n\nمنل شوي فورمټونه: Word, Excel, PowerPoint, HTML, TXT\nاعظمي اندازه: 40MB\n\nد ۸۰ څخه زیاتو ژبو ملاتړ، د glossary فایلونو اختیاري ملاتړ."
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "فایل د ټومبل لپاره ډېر لوی دی ({tokens} ټوکنونه، حد: {limit})",
     "activationRejectedTooLarge": "فایل د فعاله کانتېکټ لپاره ډېر لوی دی ({tokens} ټوکنونه، حد: {limit})",
     "sessionQuotaWarning": "د غونډې کوټه کمېږي — {remaining} ټوکنونه پاتې دي",
-    "sessionQuotaNearlyExhausted": "د غونډې کوټه نږدې خلاصه ده — ښايي فعاله فایلونه شامل نه شي"
+    "sessionQuotaNearlyExhausted": "د غونډې کوټه نږدې خلاصه ده — ښايي فعاله فایلونه شامل نه شي",
+    "notInContext": "په متن کې نشته",
+    "notInContextTooltip": "دا فایل په تېره ځواب کې د هر وار ټوکن د تخصیص محدودیت ته نه و داخل شوی، نو موډل نشو کولی دا وګوري. دا به ستاسو د بل پیغام سره بیا وارزوو.",
+    "notInjected": "نه دی استول شوی",
+    "notInjectedTooltip": "د انځور بيا استول د ترتیباتو له مخې بند دي. دا نښلول شوی انځور دلته ښکاري خو تر هغې موډل ته نه استول کېږي، ترڅو چې تاسې بيا ونښلوئ."
   },
   "shortcuts": {
     "title": "د کيبورډ شارټکټونه",

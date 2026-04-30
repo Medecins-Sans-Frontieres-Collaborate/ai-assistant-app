@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Juumre waɗii tuma heɓgol loowdi URL",
     "errorInitiatingSearch": "Juumre waɗii tuma fuɗɗagol yiylaango geese",
     "regenerate": "Hesɗitin",
-    "modelSwitchPrompt": "{original} woorii kono {fallback} yottii. Aɗa yiɗi waylude masiŋaaji?",
-    "keepOriginalModel": "Jogito {model}",
+    "modelSwitchPrompt": "{fallback} anndii ɗee kono {original} alaa.",
+    "keepOriginalModel": "Nguuɗo e {model}",
     "switchToModel": "Waylu to {model}",
-    "alwaysSwitchToModel": "Waylu e hoore mum sahaa kala",
+    "alwaysSwitchToModel": "Sappo to {original} alaa",
     "translateMessage": "Fir neldol",
     "translating": "Ina fira...",
     "translationError": "Firde woorii",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ndaɓɓitan moftugol audiyo waawaniima e lowre nde.",
     "microphoneNotDetected": "Curkuleeri mikirofoonuu maa jogii",
     "microphoneBlocked": "Mikirofoonuu ndiyalanii. Hoolu yaaɓe browser.",
-    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit."
+    "voiceTranscriptionFailed": "Horiino ɗow nguurndu ndaarataa. Ndeeŋ cuɓit.",
+    "stopGenerationTitle": "Aɗa yiɗi anndude seɗa?",
+    "stopGenerationMessage": "Aɗa waawi huli e jam? Nettino ngal jangirde maa. Ko dum naamni e keftingol kono.",
+    "stopGenerationConfirm": "Hul",
+    "stopGenerationDontAskAgainButton": "Hoto welta anndude so a huli e batiindi",
+    "stopGenerationDontAskAgainKeyboard": "Hoto welta anndude so a huli e dillere",
+    "generateResponseButton": "Naatnu jangirde"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Paɗtol fayliiji ɓeydii jaasi",
-      "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa"
+      "autoPinUploadsDescription": "Paɗlo fayliiji ɓeydii jaasi haɗi ɓe waawan seerude e konteks maa",
+      "autoInjectPinnedImages": "Salutoraa doggol e kulol her turn",
+      "autoInjectPinnedImagesDescription": "So nyaltii, doggol kulol maa sendude e modelji moƴƴi yiɗde vision kala turn, ko honɗun ɓe ngaddi e kulol (so ɓuri balɗe gite ≈765 tokens doggol maa turn). So nyaltii, doggol kulol maa waɗi ndiman e panel, kono sendaniyo asoto amɓe laataa ka gaɗa. Waa hinaa ballal e modelji Anthropic, ɗum tigi ndariima doggol kulol."
     },
     "Quarantined Data": "Bayanko kala data rewtaama",
     "quarantineDataDescription": "A jogii {count} {count, plural, one {farilla} other {farilli}} rewtaama ({size}) e jokkondiral data woni mooftugol caɗeele.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Jaltin Bayanko Data rewtaama",
     "Delete Quarantined Data": "Momtu Bayanko Data rewtaama",
     "deleteQuarantineConfirm": "A sureɗaa yiɗde momtude data rewtaama fow? Ndeen yeeso waawaa artan.",
-    "quarantineDeleteSuccess": "Data rewtaama fow momtiima e jam."
+    "quarantineDeleteSuccess": "Data rewtaama fow momtiima e jam.",
+    "confirmations": {
+      "title": "Annditugol",
+      "confirmStopFromButton": "Anndu seɗa gollal e batiindi",
+      "confirmStopFromButtonDescription": "Hollu nastoraa annditugol so a nodo batiindi huli ka jangirde ɗi naatnata",
+      "confirmStopFromKeyboard": "Anndu seɗa gollal e dillere",
+      "confirmStopFromKeyboardDescription": "Hollu nastoraa annditugol so a woni no Escapi fayde e naatnugol jangirde"
+    },
+    "appliesToNewConversations": "Teeŋtorii e junndugol weero e nder majje cuɓoraaɗi.",
+    "useModelDefault": "Naɗan e model juumre.",
+    "fromGeneralSettings": "E ɗee Tiiɗɗungal Majjuɗi",
+    "preferredNameInheritedFromGeneral": "Naŋnii innde njoɓdi e Tiiɗɗungal Majjuɗi. Winndu kadi kadi woni laaɓtu.",
+    "savedConfirmation": "Dangay",
+    "unsavedChanges": "Waylotoo waɗii suɓaaki",
+    "unsavedChangesMessage": "A jabii waylotoo waɗii suɓaaki. Mbarri ɗee?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Huutoro mbaydi winndiyankaagal goowɗo",
     "noTonesCreated": "Alaa daande sosaade taawo",
     "createTonesHint": "Sos daande e Golle Jaawɗe",
-    "translateDocumentTooltip": "Fir ɗereeji to ɗemngal goɗngal.\n\nMbaydiiji ballitaaɗi: Word, Excel, PowerPoint, PDF, HTML, TXT\nMawngu ɓurngal: 40MB\n\nEna walliita ɗemɗe 80+ e piilde helmere suɓtanaaɗe."
+    "translateDocumentTooltip": "Momta dokkal e ɗemngal gooto.\n\nDow heɓtugol: Word, Excel, PowerPoint, HTML, TXT\nJokkondirde max: 40MB\n\nMoƴƴi ɓe 80+ ɗemngal e fayli glossary seŋii."
   },
   "transcription": {
     "transcribesOnSend": "Ina winndita nde neldaa",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Bisinooki suuɗi loowdi nannitde ({tokens} tokens, dencaa: {limit})",
     "activationRejectedTooLarge": "Bisinooki suuɗi loowdi e ɗum doole active context ({tokens} tokens, dencaa: {limit})",
     "sessionQuotaWarning": "Qoota roundu yakin — {remaining} tokens ñalli",
-    "sessionQuotaNearlyExhausted": "Qoota roundu ngalaa — bisinooki active waawi walaa"
+    "sessionQuotaNearlyExhausted": "Qoota roundu ngalaa — bisinooki active waawi walaa",
+    "notInContext": "Ko waawaa e kontekst",
+    "notInContextTooltip": "Fiildeede anndaani e token budget for turn nder javni woɗnde, kono model ngoni yidii. Ko si tawii on artaama wonde e bayyani maa juulnde.",
+    "notInjected": "Salaa doggol",
+    "notInjectedTooltip": "Salutoraa doggol kulol tapputi e settings. Doggol kulol ɗin ndarata fewndo, kono sentaani amɓe laataa so tawii a rewti doggol e fiilde. "
   },
   "shortcuts": {
     "title": "Teene dulnde keyboard",

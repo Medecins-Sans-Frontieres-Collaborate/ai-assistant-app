@@ -634,10 +634,10 @@
     "errorFetchingUrl": "Wystąpił błąd podczas pobierania zawartości adresu URL",
     "errorInitiatingSearch": "Wystąpił błąd podczas inicjowania wyszukiwania w sieci",
     "regenerate": "Wygeneruj ponownie",
-    "modelSwitchPrompt": "{original} nie powiodło się, ale {fallback} zakończyło się sukcesem. Czy chcesz przełączyć model?",
+    "modelSwitchPrompt": "Odpowiedź została udzielona przez {fallback}, ponieważ {original} był niedostępny.",
     "keepOriginalModel": "Pozostań przy {model}",
     "switchToModel": "Przełącz na {model}",
-    "alwaysSwitchToModel": "Zawsze automatycznie przełączaj",
+    "alwaysSwitchToModel": "Zawsze przełączaj, gdy {original} jest niedostępny",
     "translateMessage": "Przetłumacz wiadomość",
     "translating": "Tłumaczenie...",
     "translationError": "Nie udało się przetłumaczyć",
@@ -682,7 +682,13 @@
     "mediaRecorderNotSupported": "Nagrywanie dźwięku nie jest obsługiwane w tej przeglądarce.",
     "microphoneNotDetected": "Nie wykryto mikrofonu",
     "microphoneBlocked": "Mikrofon zablokowany. Sprawdź ustawienia przeglądarki.",
-    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie."
+    "voiceTranscriptionFailed": "Transkrypcja głosowa nie powiodła się. Spróbuj ponownie.",
+    "stopGenerationTitle": "Zatrzymać generowanie?",
+    "stopGenerationMessage": "Czy na pewno chcesz zatrzymać generowanie tej odpowiedzi? Trwająca odpowiedź zostanie odrzucona.",
+    "stopGenerationConfirm": "Zatrzymaj",
+    "stopGenerationDontAskAgainButton": "Nie pytaj ponownie przy zatrzymywaniu przyciskiem",
+    "stopGenerationDontAskAgainKeyboard": "Nie pytaj ponownie przy zatrzymywaniu klawiaturą",
+    "generateResponseButton": "Wygeneruj odpowiedź"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -971,7 +977,9 @@
     "verbosityDescription": "Określa poziom szczegółowości odpowiedzi dla modeli GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Automatyczne przypinanie przesłanych plików",
-      "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu"
+      "autoPinUploadsDescription": "Automatycznie przypinaj pliki po przesłaniu, aby zapobiec ich usunięciu",
+      "autoInjectPinnedImages": "Ponownie dołączaj przypięte obrazy w każdej turze",
+      "autoInjectPinnedImagesDescription": "Gdy opcja jest włączona, przypięte obrazy są wysyłane do modeli obsługujących wizję w każdej turze, aby pozostały w kontekście (szacowany koszt ≈765 tokenów za przypięty obraz na turę). Gdy wyłączona, obrazy pozostają widoczne w panelu, ale są wysyłane tylko po ponownym dołączeniu. Brak wpływu na modele Anthropic, które obecnie nie otrzymują obrazów."
     },
     "Quarantined Data": "Dane poddane kwarantannie",
     "quarantineDataDescription": "Masz {count} poddane kwarantannie {count, plural, one {element} other {elementy}} ({size}) z problemami z danymi, których nie można było wczytać w normalny sposób.",
@@ -979,7 +987,22 @@
     "Export Quarantined Data": "Eksportuj dane z kwarantanny",
     "Delete Quarantined Data": "Usuń dane z kwarantanny",
     "deleteQuarantineConfirm": "Czy na pewno chcesz usunąć wszystkie dane z kwarantanny? Tej operacji nie można cofnąć.",
-    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane z kwarantanny."
+    "quarantineDeleteSuccess": "Pomyślnie usunięto wszystkie dane z kwarantanny.",
+    "confirmations": {
+      "title": "Potwierdzenia",
+      "confirmStopFromButton": "Potwierdzaj przed zatrzymaniem przyciskiem",
+      "confirmStopFromButtonDescription": "Pokaż okno potwierdzenia po kliknięciu przycisku zatrzymania podczas generowania odpowiedzi",
+      "confirmStopFromKeyboard": "Potwierdzaj przed zatrzymaniem klawiaturą",
+      "confirmStopFromKeyboardDescription": "Pokaż okno potwierdzenia po naciśnięciu Escape podczas generowania odpowiedzi"
+    },
+    "appliesToNewConversations": "Dotyczy tylko nowych rozmów.",
+    "useModelDefault": "Używany domyślny model.",
+    "fromGeneralSettings": "Z Ustawień ogólnych",
+    "preferredNameInheritedFromGeneral": "Nazwa wyświetlana została przejęta z Ustawień ogólnych. Wpisz, aby zastąpić.",
+    "savedConfirmation": "Zapisano",
+    "unsavedChanges": "Niezapisane zmiany",
+    "unsavedChangesMessage": "Masz niezapisane zmiany. Odrzucić je?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Użyj domyślnego stylu pisania",
     "noTonesCreated": "Nie utworzono jeszcze tonów",
     "createTonesHint": "Utwórz tony w Szybkich działaniach",
-    "translateDocumentTooltip": "Tłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaks. rozmiar: 40 MB\n\nObsługa ponad 80 języków z opcjonalnymi plikami glosariusza."
+    "translateDocumentTooltip": "Przetłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, HTML, TXT\nMaks. rozmiar: 40 MB\n\nPonad 80 obsługiwanych języków. Możliwe użycie plików glosariusza."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Plik zbyt duży do przypięcia ({tokens} tokenów, limit: {limit})",
     "activationRejectedTooLarge": "Plik zbyt duży dla aktywnego kontekstu ({tokens} tokenów, limit: {limit})",
     "sessionQuotaWarning": "Limit sesji się kończy — pozostało {remaining} tokenów",
-    "sessionQuotaNearlyExhausted": "Limit sesji prawie wyczerpany — aktywne pliki mogą nie zostać uwzględnione"
+    "sessionQuotaNearlyExhausted": "Limit sesji prawie wyczerpany — aktywne pliki mogą nie zostać uwzględnione",
+    "notInContext": "Poza kontekstem",
+    "notInContextTooltip": "Ten plik nie zmieścił się w budżecie tokenów na ostatnią odpowiedź, więc model nie miał do niego dostępu. Zostanie wzięty pod uwagę przy Twojej następnej wiadomości.",
+    "notInjected": "Nie dołączono",
+    "notInjectedTooltip": "Ponowne dołączanie obrazów jest wyłączone w ustawieniach. Ten przypięty obraz nadal jest tutaj widoczny, ale nie jest wysyłany do modelu, dopóki go nie dołączysz ponownie."
   },
   "shortcuts": {
     "title": "Skróty klawiaturowe",

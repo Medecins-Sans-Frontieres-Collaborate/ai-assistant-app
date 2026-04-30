@@ -637,10 +637,10 @@
     "errorFetchingUrl": "URL içeriği alınırken bir hata oluştu",
     "errorInitiatingSearch": "Web araması başlatılırken bir hata oluştu",
     "regenerate": "Yeniden oluştur",
-    "modelSwitchPrompt": "{original} başarısız oldu ama {fallback} başarılı oldu. Model değiştirilsin mi?",
-    "keepOriginalModel": "{model} olarak kalsın",
+    "modelSwitchPrompt": "{original} kullanılamadığında {fallback} yanıtladı.",
+    "keepOriginalModel": "{model} üzerinde kal",
     "switchToModel": "{model}'e geç",
-    "alwaysSwitchToModel": "Her zaman otomatik geç",
+    "alwaysSwitchToModel": "{original} kullanılamadığında her zaman değiştir",
     "translateMessage": "Mesajı çevir",
     "translating": "Çevriliyor...",
     "translationError": "Çeviri başarısız oldu",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Ses kaydı bu tarayıcıda desteklenmiyor.",
     "microphoneNotDetected": "Mikrofon algılanmadı",
     "microphoneBlocked": "Mikrofon engellendi. Tarayıcı ayarlarını kontrol edin.",
-    "voiceTranscriptionFailed": "Ses transkripsiyonu başarısız oldu. Lütfen tekrar deneyin."
+    "voiceTranscriptionFailed": "Ses transkripsiyonu başarısız oldu. Lütfen tekrar deneyin.",
+    "stopGenerationTitle": "Oluşturmayı durdurulsun mu?",
+    "stopGenerationMessage": "Bu yanıtın oluşturulmasını durdurmak istediğinizden emin misiniz? Devam eden yanıt iptal edilecektir.",
+    "stopGenerationConfirm": "Durdur",
+    "stopGenerationDontAskAgainButton": "Durdurma butonunda tekrar sorma",
+    "stopGenerationDontAskAgainKeyboard": "Klavye ile durdururken tekrar sorma",
+    "generateResponseButton": "Yanıt oluştur"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -974,7 +980,9 @@
     "verbosityDescription": "GPT-5 modelleri için yanıt detay seviyesini kontrol eder.",
     "activeFiles": {
       "autoPinUploads": "Yüklenen dosyaları otomatik olarak sabitle",
-      "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir"
+      "autoPinUploadsDescription": "Yüklenen dosyalar, döngüden çıkarılmamaları için otomatik olarak sabitlenir",
+      "autoInjectPinnedImages": "Sabitlenen görselleri her turda tekrar ekle",
+      "autoInjectPinnedImagesDescription": "Açık olduğunda, sabitlenen görseller her turda görsel algılayabilen modellere gönderilir, böylece bağlamda kalırlar (tahmini maliyet ≈ her sabit görüntü için tur başına 765 token). Kapalıysa, sabitlenen resimler panelde görünür kalır ancak yalnızca tekrar eklediğinizde gönderilir. Anthropic modelleri için geçerli değildir; bu modeller şu anda görsel içeriği alamaz."
     },
     "Quarantined Data": "Karantinaya Alınan Veriler",
     "quarantineDataDescription": "Yüklenemeyen veri sorunlarıyla ilgili {count} karantinaya alınan {count, plural, one {öğe} other {öğe}} ({size}) bulunuyor.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Karantinaya Alınan Verileri Dışa Aktar",
     "Delete Quarantined Data": "Karantinaya Alınan Verileri Sil",
     "deleteQuarantineConfirm": "Tüm karantinaya alınan verileri silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-    "quarantineDeleteSuccess": "Tüm karantinaya alınan veriler başarıyla silindi."
+    "quarantineDeleteSuccess": "Tüm karantinaya alınan veriler başarıyla silindi.",
+    "confirmations": {
+      "title": "Onaylar",
+      "confirmStopFromButton": "Buton ile durdurmadan önce onay iste",
+      "confirmStopFromButtonDescription": "Yanıt oluşturulurken durdur butonuna tıkladığınızda onay penceresi göster",
+      "confirmStopFromKeyboard": "Klavye ile durdurmadan önce onay iste",
+      "confirmStopFromKeyboardDescription": "Yanıt oluşturulurken Escape tuşuna bastığınızda onay penceresi göster"
+    },
+    "appliesToNewConversations": "Yalnızca yeni sohbetler için geçerlidir.",
+    "useModelDefault": "Model varsayılanı kullanılıyor.",
+    "fromGeneralSettings": "Genel Ayarlardan",
+    "preferredNameInheritedFromGeneral": "Genel Ayarlardaki görünen adınız devralındı. Üzerine yazmak için yazın.",
+    "savedConfirmation": "Kaydedildi",
+    "unsavedChanges": "Kaydedilmemiş değişiklikler",
+    "unsavedChangesMessage": "Kaydedilmemiş değişiklikleriniz var. İptal etmek istiyor musunuz?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Varsayılan yazı stilini kullan",
     "noTonesCreated": "Henüz ton oluşturulmadı",
     "createTonesHint": "Hızlı Eylemler'de tonlar oluşturun",
-    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaksimum boyut: 40MB\n\n80'den fazla dili, isteğe bağlı sözlük dosyalarıyla destekler."
+    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, HTML, TXT\nMaksimum boyut: 40MB\n\nOpsiyonel sözlük dosyaları ile 80+ dil desteklenir."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Dosya sabitlemek için çok büyük ({tokens} token, limit: {limit})",
     "activationRejectedTooLarge": "Dosya aktif bağlam için çok büyük ({tokens} token, limit: {limit})",
     "sessionQuotaWarning": "Oturum kotası azalıyor — {remaining} token kaldı",
-    "sessionQuotaNearlyExhausted": "Oturum kotası neredeyse tükendi — aktif dosyalar dahil edilmeyebilir"
+    "sessionQuotaNearlyExhausted": "Oturum kotası neredeyse tükendi — aktif dosyalar dahil edilmeyebilir",
+    "notInContext": "Bağlamda değil",
+    "notInContextTooltip": "Bu dosya son yanıtta tur başı token sınırına sığmadığı için model tarafından görülmedi. Bir sonraki mesajınızda tekrar değerlendirilecek.",
+    "notInjected": "Eklenmedi",
+    "notInjectedTooltip": "Ayarlar bölümünde görselin yeniden eklenmesi devre dışı. Bu sabit görsel burada görünür durumda kalır ancak tekrar eklemedikçe modele gönderilmez."
   },
   "shortcuts": {
     "title": "Klavye Kısayolları",

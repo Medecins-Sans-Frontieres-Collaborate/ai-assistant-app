@@ -3,11 +3,10 @@
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
-
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
+import { useDebounce } from '@/client/hooks/ui/useDebounce';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { exportData, importData } from '@/lib/utils/app/export/importExport';
@@ -37,7 +36,6 @@ const env = process.env.NEXT_PUBLIC_ENV || 'development';
  * SettingDialog component adapted for Zustand stores
  */
 export function SettingDialog() {
-  const t = useTranslations();
   const { data: session } = useSession();
   const { isSettingsOpen, setIsSettingsOpen, theme, setTheme } = useUI();
   const {
@@ -74,6 +72,7 @@ export function SettingDialog() {
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [showMigrationDialog, setShowMigrationDialog] = useState(false);
   const [showQuarantineDialog, setShowQuarantineDialog] = useState(false);
+  const hasInitialLoadedRef = useRef(false);
 
   // Load settings and storage on client side only
   useEffect(() => {
@@ -84,7 +83,43 @@ export function SettingDialog() {
         value: loadedSettings[key as keyof Settings],
       });
     });
+    hasInitialLoadedRef.current = true;
     setStorageData(getStorageUsage());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Autosave: persist state changes after a short debounce so text inputs
+  // don't write to localStorage on every keystroke. Toggles still feel
+  // instant because their UI is driven by reducer state, not the persist.
+  // Provider setters are stable by construction, so they're safe in the
+  // dep array.
+  const debouncedState = useDebounce(state, 300);
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  });
+  useEffect(() => {
+    if (!hasInitialLoadedRef.current) return;
+    saveSettings(debouncedState);
+    setTheme(debouncedState.theme);
+    setTemperature(debouncedState.temperature);
+    setSystemPrompt(debouncedState.systemPrompt);
+  }, [debouncedState, setTheme, setTemperature, setSystemPrompt]);
+
+  // Flush the latest state on unmount so a final keystroke (especially one
+  // that empties a field, like deleting the last character of Custom
+  // Instructions) doesn't get dropped by the 300ms debounce when the user
+  // closes the modal immediately.
+  useEffect(() => {
+    return () => {
+      if (!hasInitialLoadedRef.current) return;
+      const final = stateRef.current;
+      saveSettings(final);
+      setTheme(final.theme);
+      setTemperature(final.temperature);
+      setSystemPrompt(final.systemPrompt);
+    };
+    // Setters are stable; capturing them once at mount is correct.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -99,7 +134,7 @@ export function SettingDialog() {
       }
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
+    const handleMouseUp = () => {
       window.removeEventListener('mouseup', handleMouseUp);
       setIsSettingsOpen(false);
     };
@@ -193,13 +228,6 @@ export function SettingDialog() {
     };
   }, [isSettingsOpen, setIsSettingsOpen]);
 
-  const handleSave = () => {
-    setTheme(state.theme);
-    setTemperature(state.temperature);
-    setSystemPrompt(state.systemPrompt);
-    saveSettings(state);
-  };
-
   const handleReset = () => {
     const defaultTheme: 'light' | 'dark' = window.matchMedia(
       '(prefers-color-scheme: dark)',
@@ -268,7 +296,7 @@ export function SettingDialog() {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 animate-fade-in-fast">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-950/60 backdrop-blur-sm z-50 animate-fade-in-fast">
       <div className="fixed inset-0 z-10 overflow-hidden">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
           <div
@@ -278,7 +306,7 @@ export function SettingDialog() {
 
           <div
             ref={modalRef}
-            className="dark:border-netural-400 inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl transition-all dark:bg-[#171717] sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
+            className="inline-block transform rounded-lg border border-gray-300 bg-white text-left align-bottom shadow-xl dark:border-gray-700 dark:bg-[#171717] sm:my-8 w-full md:max-w-[800px] lg:max-w-[900px] xl:max-w-[1000px] sm:align-middle animate-modal-in"
             role="dialog"
           >
             <div className="flex flex-col md:flex-row h-[550px] md:h-[700px]">
@@ -309,7 +337,6 @@ export function SettingDialog() {
                     state={state}
                     dispatch={dispatch}
                     user={session?.user}
-                    onSave={handleSave}
                     onClose={() => setIsSettingsOpen(false)}
                     prefetchedProfile={fullProfile}
                   />
@@ -321,7 +348,6 @@ export function SettingDialog() {
                     dispatch={dispatch}
                     homeState={homeState}
                     user={session?.user}
-                    onSave={handleSave}
                     onClose={() => setIsSettingsOpen(false)}
                   />
                 )}

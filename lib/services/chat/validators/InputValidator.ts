@@ -256,6 +256,7 @@ const ChatBodySchema = z
       .optional(),
     activeFiles: z.array(ActiveFileSchema).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
+    autoInjectPinnedImages: z.boolean().optional(),
   })
   .strict(); // Reject unknown properties
 

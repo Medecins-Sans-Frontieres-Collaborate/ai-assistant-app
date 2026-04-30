@@ -705,10 +705,10 @@
     "errorFetchingUrl": "An sami kuskure yayin samo abun cikin URL",
     "errorInitiatingSearch": "An samu kuskure yayin fara binciken yanar gizo",
     "regenerate": "Sake ƙirƙira",
-    "modelSwitchPrompt": "{original} ta kasa amma {fallback} ta yi nasara. Kuna son canza tsarin?",
+    "modelSwitchPrompt": "{fallback} ne ya amsa wannan saboda {original} bai samu ba.",
     "keepOriginalModel": "Ci gaba da amfani da {model}",
     "switchToModel": "Canza zuwa {model}",
-    "alwaysSwitchToModel": "Kullum a riƙa sauyawa ta atomatik",
+    "alwaysSwitchToModel": "Koyaushe sauya idan {original} bai samu ba",
     "translateMessage": "Fassara saƙo",
     "translating": "Ana fassara...",
     "translationError": "Fassarar ta gaza",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ba a goyon bayan yin rikodin sauti a wannan burauza.",
     "microphoneNotDetected": "Ba a gano maƙarƙashiyar murya ba",
     "microphoneBlocked": "An toshe maƙarƙashiyar murya. Duba saitunan burauza.",
-    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa."
+    "voiceTranscriptionFailed": "Fassarar murya ta gaza. Da fatan za a sake gwadawa.",
+    "stopGenerationTitle": "A dakatar da ƙirƙira?",
+    "stopGenerationMessage": "Ka tabbata kana son dakatar da wannan amsar? Duk martani da ake ci gaba da ƙirƙira za a soke shi.",
+    "stopGenerationConfirm": "Dakatar",
+    "stopGenerationDontAskAgainButton": "Kada a sake tambayata idan an dakatar ta maɓalli",
+    "stopGenerationDontAskAgainKeyboard": "Kada a sake tambayata idan an dakatar ta kibodi",
+    "generateResponseButton": "Ƙirƙiri amsa"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Naɗe fayilolin da aka ɗora ta atomatik",
-      "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani"
+      "autoPinUploadsDescription": "Naɗe fayiloli da aka ɗora ta atomatik don hana cire su daga amfani",
+      "autoInjectPinnedImages": "Sake tura hotunan da aka dasa duk zagaye",
+      "autoInjectPinnedImagesDescription": "Idan an kunna, ana aika hotunan da aka dasa zuwa samfurorin da ke iya gani a kowane zagaye don su ci gaba suna cikin gani (kimanin kudi ≈765 tokens kowanne hoto a kowane zagaye). Idan an kashe, hotunan da aka dasa za su ci gaba da bayyana a panel amma ba za a tura su ba sai ka sake danna su. Ba ya aiki ga samfurorin Anthropic, wadanda a halin yanzu ba su karɓar abun cikin hoto."
     },
     "Quarantined Data": "Bayanan da aka killace",
     "quarantineDataDescription": "Kana da {count} bayanan da aka killace {count, plural, one {abu} other {abubuwa}} ({size}) masu matsalar bayanai da ba a iya lodawa yadda ya kamata.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Fitar da bayanan da aka killace",
     "Delete Quarantined Data": "Goge bayanan da aka killace",
     "deleteQuarantineConfirm": "Ka tabbata kana son gogewa duk bayanan da aka killace? Ba za a iya dawowa da wannan aiki ba.",
-    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara."
+    "quarantineDeleteSuccess": "An goge duk bayanan da aka killace cikin nasara.",
+    "confirmations": {
+      "title": "Tabbatarwa",
+      "confirmStopFromButton": "Tabbatar kafin dakatarwa ta maɓalli",
+      "confirmStopFromButtonDescription": "Nuna taga tabbatarwa idan ka danna maɓallin dakatarwa yayin ƙirƙirar amsa",
+      "confirmStopFromKeyboard": "Tabbatar kafin dakatarwa ta kibodi",
+      "confirmStopFromKeyboardDescription": "Nuna taga tabbatarwa idan ka danna Escape yayin ƙirƙirar amsa"
+    },
+    "appliesToNewConversations": "Yana aiki ne ga sabbin tattaunawa kawai.",
+    "useModelDefault": "Ana amfani da daidaiton samfurin.",
+    "fromGeneralSettings": "Daga Saitunan Gabaɗaya",
+    "preferredNameInheritedFromGeneral": "Ana gado sunan da za a nuna daga Saitunan Gabaɗaya. Rubuta don canjawa.",
+    "savedConfirmation": "An ajiye",
+    "unsavedChanges": "Canje-canje ba a ajiye ba",
+    "unsavedChangesMessage": "Kana da canje-canje da ba a ajiye ba. Ka soke su?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Yi amfani da salon rubutu na asali",
     "noTonesCreated": "Ba a ƙirƙiri yanayi ba tukuna",
     "createTonesHint": "Ƙirƙiri yanayi a Cikakken Ayyuka",
-    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nNau'in da ake goyon baya: Word, Excel, PowerPoint, PDF, HTML, TXT\nMafi girman fayil: 40MB\n\nYana tallafawa harsuna 80+ da misalin fayilolin ƙamus."
+    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nTsaruka masu goyan baya: Word, Excel, PowerPoint, HTML, TXT\nMafi girma: 40MB\n\nYana goyan bayan harsuna sama da 80 tare da fayilolin kundin kalmomi na zaɓi."
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Fayil ya yi girma sosai don ɗaurewa ({tokens} tokens, iyaka: {limit})",
     "activationRejectedTooLarge": "Fayil ya yi girma sosai don mahallin aiki ({tokens} tokens, iyaka: {limit})",
     "sessionQuotaWarning": "Iyakar zama na ƙarewa — {remaining} tokens saura",
-    "sessionQuotaNearlyExhausted": "Iyakar zama na kusan ƙarewa — wani fayil mai aiki na iya rasa haɗuwa"
+    "sessionQuotaNearlyExhausted": "Iyakar zama na kusan ƙarewa — wani fayil mai aiki na iya rasa haɗuwa",
+    "notInContext": "Baya cikin yanayi",
+    "notInContextTooltip": "Wannan fayil ɗin bai dace da adadin tokens da aka ware a karshe ba, don haka samfurin bai gani ba. Za a sake dubawa a sakonka na gaba.",
+    "notInjected": "Ba a tura ba",
+    "notInjectedTooltip": "An kashe maido da hoto a cikin saituna. Wannan hoton da aka dasa zai tsaya nan amma ba za a tura shi ga samfurin ba sai ka sake makala shi."
   },
   "shortcuts": {
     "title": "Gajerun hanyoyin madanni",

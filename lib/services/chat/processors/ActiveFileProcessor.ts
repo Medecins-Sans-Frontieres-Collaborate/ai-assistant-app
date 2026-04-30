@@ -9,7 +9,7 @@ import { ActiveFile } from '@/types/chat';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
-import { ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT } from '@/lib/constants/activeFileQuotas';
+import { getActiveFileBudgets } from '@/lib/constants/activeFileQuotas';
 import { isAudioVideoFileByTypeOrName } from '@/lib/constants/fileTypes';
 
 /**
@@ -32,6 +32,7 @@ export class ActiveFileProcessor extends BasePipelineStage {
 
     const container = ServiceContainer.getInstance();
     const fileService = container.getFileProcessingService();
+    const { activationLimit } = getActiveFileBudgets(context.model);
 
     // Concurrency limiter
     const limit = 3;
@@ -92,14 +93,15 @@ export class ActiveFileProcessor extends BasePipelineStage {
 
         const tokenEstimate = await countTokens(text);
 
-        // Reject files exceeding activation token limit
-        if (tokenEstimate > ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT) {
+        // Reject files exceeding the activation token limit for this
+        // tier (mid vs large model).
+        if (tokenEstimate > activationLimit) {
           const idx = updatedFiles.findIndex((f) => f.id === file.id);
           if (idx !== -1) {
             updatedFiles[idx] = {
               ...updatedFiles[idx],
               status: 'error',
-              errorMessage: `File too large for active context (${tokenEstimate.toLocaleString()} tokens, limit: ${ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT.toLocaleString()})`,
+              errorMessage: `File too large for active context (${tokenEstimate.toLocaleString()} tokens, limit: ${activationLimit.toLocaleString()})`,
             };
           }
           await fileService.cleanupFile(tempPath);

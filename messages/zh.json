@@ -668,10 +668,10 @@
     "errorFetchingUrl": "获取URL内容时出错",
     "errorInitiatingSearch": "启动网页搜索时出错",
     "regenerate": "重新生成",
-    "modelSwitchPrompt": "{original} 失败但 {fallback} 成功。您要切换模型吗？",
-    "keepOriginalModel": "保留 {model}",
+    "modelSwitchPrompt": "由于 {original} 不可用，{fallback} 回答了此问题。",
+    "keepOriginalModel": "保持使用 {model}",
     "switchToModel": "切换到 {model}",
-    "alwaysSwitchToModel": "始终自动切换",
+    "alwaysSwitchToModel": "当 {original} 不可用时始终切换",
     "translateMessage": "翻译消息",
     "translating": "正在翻译...",
     "translationError": "翻译失败",
@@ -716,7 +716,13 @@
     "mediaRecorderNotSupported": "此浏览器不支持音频录制。",
     "microphoneNotDetected": "未检测到麦克风",
     "microphoneBlocked": "麦克风被阻止。请检查浏览器设置。",
-    "voiceTranscriptionFailed": "语音转录失败。请重试。"
+    "voiceTranscriptionFailed": "语音转录失败。请重试。",
+    "stopGenerationTitle": "停止生成？",
+    "stopGenerationMessage": "确定要停止生成此回复吗？所有正在进行的回复将被丢弃。",
+    "stopGenerationConfirm": "停止",
+    "stopGenerationDontAskAgainButton": "使用按钮停止时不再询问",
+    "stopGenerationDontAskAgainKeyboard": "使用键盘停止时不再询问",
+    "generateResponseButton": "生成回复"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1005,7 +1011,9 @@
     "verbosityDescription": "控制GPT-5模型响应的详细程度。",
     "activeFiles": {
       "autoPinUploads": "自动固定已上传文件",
-      "autoPinUploadsDescription": "上传文件时自动固定，以防被移出"
+      "autoPinUploadsDescription": "上传文件时自动固定，以防被移出",
+      "autoInjectPinnedImages": "每轮自动重新注入置顶图片",
+      "autoInjectPinnedImagesDescription": "开启后，置顶图片将在每轮对话时发送到支持视觉的模型中，以便保持上下文（预计每张置顶图片每轮消耗约765个tokens）。关闭后，图片仍会在面板中显示，但只会在您重新附加时发送。不影响Anthropic模型，当前该模型不接收图片内容。"
     },
     "Quarantined Data": "隔离数据",
     "quarantineDataDescription": "您有 {count} 个隔离{count, plural, one {项目} other {项目}}（{size}），由于数据问题无法正常加载。",
@@ -1013,7 +1021,22 @@
     "Export Quarantined Data": "导出隔离数据",
     "Delete Quarantined Data": "删除隔离数据",
     "deleteQuarantineConfirm": "确定要删除所有隔离数据吗？此操作无法撤销。",
-    "quarantineDeleteSuccess": "所有隔离数据已成功删除。"
+    "quarantineDeleteSuccess": "所有隔离数据已成功删除。",
+    "confirmations": {
+      "title": "确认",
+      "confirmStopFromButton": "使用按钮停止前进行确认",
+      "confirmStopFromButtonDescription": "在生成回复时点击停止按钮，显示确认对话框",
+      "confirmStopFromKeyboard": "使用键盘停止前进行确认",
+      "confirmStopFromKeyboardDescription": "在生成回复时按下 Escape，显示确认对话框"
+    },
+    "appliesToNewConversations": "仅适用于新对话。",
+    "useModelDefault": "使用模型默认值。",
+    "fromGeneralSettings": "来自通用设置",
+    "preferredNameInheritedFromGeneral": "正在继承您的通用设置显示名称。输入以覆盖。",
+    "savedConfirmation": "已保存",
+    "unsavedChanges": "未保存的更改",
+    "unsavedChangesMessage": "您有未保存的更改。要放弃吗？",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1565,7 +1588,7 @@
     "useDefaultStyle": "使用默认写作风格",
     "noTonesCreated": "尚未创建语气",
     "createTonesHint": "可在快捷操作中创建语气",
-    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、PDF、HTML、TXT\n最大文件大小：40MB\n\n支持 80 多种语言，并可选用术语表文件。"
+    "translateDocumentTooltip": "将文档翻译为其他语言。\n\n支持格式：Word、Excel、PowerPoint、HTML、TXT\n最大文件大小：40MB\n\n支持80多种语言，可选用术语表文件。"
   },
   "transcription": {
     "addInstructions": "添加说明",
@@ -1863,7 +1886,11 @@
     "pinBlockedTooLarge": "文件过大，无法固定（{tokens} 令牌，限制：{limit}）",
     "activationRejectedTooLarge": "文件过大，无法添加至活动上下文（{tokens} 令牌，限制：{limit}）",
     "sessionQuotaWarning": "会话额度不足 — 剩余 {remaining} 令牌",
-    "sessionQuotaNearlyExhausted": "会话额度即将用尽 — 活动文件可能无法被包含"
+    "sessionQuotaNearlyExhausted": "会话额度即将用尽 — 活动文件可能无法被包含",
+    "notInContext": "未在上下文中",
+    "notInContextTooltip": "此文件在上次回复时未能满足每轮token限额，因此模型无法读取。下次发送消息时会重新考虑。",
+    "notInjected": "未注入",
+    "notInjectedTooltip": "已在设置中禁用图片自动注入。该置顶图片会在此处显示，但除非您重新附加，否则不会发送给模型。"
   },
   "shortcuts": {
     "title": "键盘快捷键",

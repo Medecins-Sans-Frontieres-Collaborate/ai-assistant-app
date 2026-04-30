@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Di dema anîna naveroka URL-yê de çewtî çêbû",
     "errorInitiatingSearch": "Di dema destpêkirina lêgerîna webê de çewtî çêbû",
     "regenerate": "Ji nû ve çêke",
-    "modelSwitchPrompt": "{original} bi ser neket lê {fallback} bi ser ket. Ma tu dixwazî modelan biguherînî?",
-    "keepOriginalModel": "{model} bihêle",
+    "modelSwitchPrompt": "{fallback} وەڵامی ئەمە دەدا چونکە {original} بەردەست نەبوو.",
+    "keepOriginalModel": "لەسەر {model} بمەوە",
     "switchToModel": "Veguheze {model}",
-    "alwaysSwitchToModel": "Her dem xwe-biguherîne",
+    "alwaysSwitchToModel": "هەموو کات گۆڕانکاری بکە کاتێك {original} بەردەست نییە",
     "translateMessage": "Peyamê wergerîne",
     "translating": "Tê wergerandin...",
     "translationError": "Wergerandin bi ser neket",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "پەیوەستکردنی دەنگ پشتیوانی ناکرێت لە ئەم بەراوزە.",
     "microphoneNotDetected": "میکروفۆن نەدۆزرایەوە",
     "microphoneBlocked": "میکروفۆن بلۆککراوە. تکایە ڕێکخستنی وێبگەڕ بپشکنە.",
-    "voiceTranscriptionFailed": "وەرگێڕانی دەنگ سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە."
+    "voiceTranscriptionFailed": "وەرگێڕانی دەنگ سەرکەوتوو نەبوو. تکایە دووبارە هەوڵ بدە.",
+    "stopGenerationTitle": "وەستانێ؟",
+    "stopGenerationMessage": "دڵنیایت دەتەوێت وەستانی ئەم وەڵامە بکەیت؟ هەر وەڵامی لەناوپڕدا بسڕدرێتەوە.",
+    "stopGenerationConfirm": "وەستان",
+    "stopGenerationDontAskAgainButton": "دووبارە پرسیار مەکە لەکات وەستانەوە بە دوگمە",
+    "stopGenerationDontAskAgainKeyboard": "دووبارە پرسیار مەکە لەکات وەستانەوە بە کیبۆرد",
+    "generateResponseButton": "وەڵام دروست بکە"
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "خۆکارانە پەیوەستکردنی پەڕگە بارکراوەکان",
-      "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە"
+      "autoPinUploadsDescription": "پەڕگەکان بە خۆکار پەیوەست بکە کاتێک بار دەکرێن بۆ ئەوەی لە لیستەکە نەچنە دەرەوە",
+      "autoInjectPinnedImages": "وێنەی داپێکراو هەریەک لەهەر گەڕانێکەوە دووبارە بنێرە",
+      "autoInjectPinnedImagesDescription": "کاتێک ئامادەکراوە، وێنەی داپێکراو هەریەک لەگەڵ هەر گەڕانێک بۆ مۆدێلە ڕوون‌بین نێردە دەکرێن بۆ ئەوەی ناو مەتنەکە بمێنن (تێچوونی تۆکەن نزیکەی ≈765 بۆ هەر وێنەی داپێکراو لەهەر گەڕانێک). کاتێک ناچارکراوە، وێنەکان لە پەینەلدا دەرکەون بەڵام تەنها کاتی دووبارە هاوپێکردن نێردە دەکرێن. ئامانج نەدەت بۆ مۆدێلەکانی Anthropic، کە ئێستا وێنە وەردەگرن."
     },
     "Quarantined Data": "داتای قەرەنتینکراو",
     "quarantineDataDescription": "تۆ {count} {count, plural, one {دانە} other {دانە}} داتای قەرەنتینکراو هەیە ({size}) کە کێشەی داتایان هەیە و ناتوانرێت بە شێوەی ئاسایی بار بکرێن.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "هەناردەکردنی داتای قەرەنتینکراو",
     "Delete Quarantined Data": "سڕینەوەی داتای قەرەنتینکراو",
     "deleteQuarantineConfirm": "دڵنیایت دەتەوێت هەموو داتای قەرەنتینکراو بسڕیتەوە؟ ئەم کردارە ناتوانرێت پاشگەز بکرێت.",
-    "quarantineDeleteSuccess": "هەموو داتای قەرەنتینکراو سەرکەوتووانە سڕایەوە."
+    "quarantineDeleteSuccess": "هەموو داتای قەرەنتینکراو سەرکەوتووانە سڕایەوە.",
+    "confirmations": {
+      "title": "دڵنیابوونەکان",
+      "confirmStopFromButton": "دڵنیابوون پێش وەستانەوە بە دوگمە",
+      "confirmStopFromButtonDescription": "پەنجەرەی دڵنیابوون پیشان بدە کاتێک دوگمەی وەستانەوە دەتکەیت لە کاتی دروستکردنی وەڵامدا",
+      "confirmStopFromKeyboard": "دڵنیابوون پێش وەستانەوە بە کیبۆرد",
+      "confirmStopFromKeyboardDescription": "پەنجەرەی دڵنیابوون پیشان بدە کاتێک Escape دەتەکەیت لەکاتی دروستکردنی وەڵامدا"
+    },
+    "appliesToNewConversations": "تەنها بۆ گفتوگۆی نوێ جێبەجێ دەبێت.",
+    "useModelDefault": "پێشفرضی مۆدێڵ بەکاردهێنرێت.",
+    "fromGeneralSettings": "لە دانەبەزاندنی گشتییەوە",
+    "preferredNameInheritedFromGeneral": "ناوی پیشاندەر لە دانەبەزاندنی گشتی وەرگیرا. بۆ گۆڕان نووسین بنوسە.",
+    "savedConfirmation": "پاشەکەوت کرا",
+    "unsavedChanges": "گۆڕانکارییە نەپاشەکەوتکراوەکان",
+    "unsavedChangesMessage": "هەندێک گۆڕانکاری نەپاشەکەوتت هەیە. دەتەوێت بسڕیتەوە؟",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Şêwaza nivîsandinê ya standard bikar bîne",
     "noTonesCreated": "Hîn tu ton nehatine çêkirin",
     "createTonesHint": "Di Kiryarên Bilez de tonan çêke",
-    "translateDocumentTooltip": "Belgeyan bi zimanekî din wergerîne.\n\nFormatên piştgirîkirî: Word, Excel, PowerPoint, PDF, HTML, TXT\nHerî zêde: 40MB\n\n80+ zimanan bi pelên ferhengê yên bijarte piştgirî dike."
+    "translateDocumentTooltip": "بەڵگەنامەکان بۆ زمانێکی تر وەرگێڕە.\n\nفۆرماتە پاڵپشتی کراوەکان: Word, Excel, PowerPoint, HTML, TXT\nلە زۆرترین قەبارە: ٤٠MB\n\nزۆرتر لە ٨٠ زمان پاڵپشتی دەکات بە فایلە گڵۆساری کە هەلبژێردراون."
   },
   "transcription": {
     "transcribesOnSend": "Dema bişîne tê nivîsandin",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "فایل زۆر گەورەیە بۆ پەیوەستن ({tokens} تۆکەن، سنوور: {limit})",
     "activationRejectedTooLarge": "فایل زۆر گەورەیە بۆ بەرزکردنەوە لە ناوەڕاست ({tokens} تۆکەن، سنوور: {limit})",
     "sessionQuotaWarning": "بریتی دانیشتان کەم دەبێت — {remaining} تۆکەن ماوە",
-    "sessionQuotaNearlyExhausted": "بریتی دانیشتان نزیکە تەواوکردنەوەیە — فایلە چالاکەکان ڕەنگە بکرێنەوە"
+    "sessionQuotaNearlyExhausted": "بریتی دانیشتان نزیکە تەواوکردنەوەیە — فایلە چالاکەکان ڕەنگە بکرێنەوە",
+    "notInContext": "لە ناو مەتنەدا نیە",
+    "notInContextTooltip": "ئەم پەڕگەیە نەگونجایە لە بودجەی تۆکەنی گەڕاندا لە دوایین وەڵام، بۆیە مۆدێلەکە یانینەیدی. لە نامەی داهاتوودا دووبارە پێدانەوە دەکرێت.",
+    "notInjected": "نەنێردراوە",
+    "notInjectedTooltip": "دووبارە ناردنی وێنە لە ڕێکخستنەکان ناچارکراوە. ئەم وێنەی داپێکراوە لێرە دەرکەوتووە بەڵام بۆ مۆدەڵ نەنێردرێت مەگەر دووبارە هاوپێی بکەیت."
   },
   "shortcuts": {
     "title": "کورتەکاری کلید",

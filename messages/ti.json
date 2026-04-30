@@ -705,10 +705,10 @@
     "errorFetchingUrl": "ናይ URL ትሕዝቶ ኣብ ምምጻእ ጌጋ ተፈጢሩ",
     "errorInitiatingSearch": "ናይ ወብ ድልያ ኣብ ምጅማር ጌጋ ተፈጢሩ",
     "regenerate": "ዳግም ፍጠር",
-    "modelSwitchPrompt": "{original} ኣይሰለጠን ግን {fallback} ሰሊጡ። ሞዴላት ክትቅይር ትደሊ?",
-    "keepOriginalModel": "{model} ዓቅብ",
+    "modelSwitchPrompt": "ብምኽንያት {original} ዝወደአ ኣይሰርሕንን ነቲ {fallback} ሓተመ.",
+    "keepOriginalModel": "ብ {model} ምቑም",
     "switchToModel": "ናብ {model} ቐይር",
-    "alwaysSwitchToModel": "ኩሉ ግዜ ባዕሉ ቐይር",
+    "alwaysSwitchToModel": "ካብ {original} ዘይረኣየ ግዜ ምቕያር ምስደገም",
     "translateMessage": "መልእኽቲ ተርጉም",
     "translating": "ይትርጎም ኣሎ...",
     "translationError": "ትርጉም ኣይሰለጠን",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "ድምጺ መቅዳን እዚ ብራውዘር አይግበርን።",
     "microphoneNotDetected": "ማይክሮፎን ኣይተረኽበን",
     "microphoneBlocked": "ማይክሮፎን ተጹጉዑ ኣሎ። ቅንዛዕ ናይ መተንቀሳቐሲ መእተዊ ርኸቡ።",
-    "voiceTranscriptionFailed": "ቃላት ድምጺ ጽሑፍ ምቅዳሕ ኣይሳነበሩን። እቲ ሓደ ግዜ ደጊም ፈትኑ።"
+    "voiceTranscriptionFailed": "ቃላት ድምጺ ጽሑፍ ምቅዳሕ ኣይሳነበሩን። እቲ ሓደ ግዜ ደጊም ፈትኑ።",
+    "stopGenerationTitle": "ኣብ ምስራት ኣብርሃ? ",
+    "stopGenerationMessage": "ናብዚ ምስራት ክትቁም ትደሊ? ኣብ ምስራት ዘሎ መልሲ ይወግድ።",
+    "stopGenerationConfirm": "ኣቁም",
+    "stopGenerationDontAskAgainButton": "ብኣዝዩ ኣቁም ብዝተፈለጠ ደጊምካ ኣይሕበን",
+    "stopGenerationDontAskAgainKeyboard": "ብኪቦርድ ምቁም ደጊምካ ኣይሕበን",
+    "generateResponseButton": "መልሲ ምፍላጥ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "ዝተሰቐመ ፋይል ብሓላፍነት ኣጣልፉ",
-      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ"
+      "autoPinUploadsDescription": "ፋይልታት ኣብ ምድሕና እንዳይተቐየሩ ብሓላፍነት ኣጣልፉ",
+      "autoInjectPinnedImages": "ምስታት ዝተጠቑሙ ምስ ክኸዱ ኣብ እቶም ሓሳባት ክልቲ ግዜ ኣውጹ",
+      "autoInjectPinnedImagesDescription": "ካብቲ ዝሰርሕ እንተኾነ፣ ዝተጠቑሙ ምስታት ክልቲ ግዜ ኣብ ትኵሳት ኣብ ስራሕ ኣብ ዘተኸፉ ሞዴሎም ይተላእኩም። (ወሰን ውሳነ ወፃኢ ≈ 765 tokens ንኩሎም ዝተጠቑሙ ምስታት ኣብ ክልቲ ግዜ)። እንተዘይሰርሕ ዝተጠቑሙ ምስታት ኣብ ፓነሉ ኩሉ ግዜ ክቕልጡ እዮም፣ ግና ከምኡ ካብ ግዜ ናብ ሞዴል ኣይሰደሉን እንተንካዕካይ ድማ የተላእኹን። ኣብ Anthropic models ክዳ ተጽኒና የለን፣ ምስት ምዃኑ ካብፍሉይ ሞዴል ዝሰርሑ ምስታት ኣይተቐበሉን።"
     },
     "Quarantined Data": "ዳታ ናብ ኳራንቲን ዝተሰናኸተ",
     "quarantineDataDescription": "{count} ብቁጽሪ ኳራንቲን ዳታ ({size}) ብጉድእ ዝተሰናኸቱ ኣብዚ አይተጽዓነን።",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "ዳታ ኳራንቲን መልእኽት",
     "Delete Quarantined Data": "ዳታ ኳራንቲን ምድማር",
     "deleteQuarantineConfirm": "ኩሉ ዳታ ኳራንቲን ደምሳስ ተደሊኻን? እዚ ተግባር ኣይተመለስን።",
-    "quarantineDeleteSuccess": "ኩሉ ዳታ ኳራንቲን ብትሕቲኡ ተደምሲሱ።"
+    "quarantineDeleteSuccess": "ኩሉ ዳታ ኳራንቲን ብትሕቲኡ ተደምሲሱ።",
+    "confirmations": {
+      "title": "ረጋገጽታት",
+      "confirmStopFromButton": "ብኣዝዩ ኣቁም ቅድሚ ምቁም ረጋግጽ",
+      "confirmStopFromButtonDescription": "ኣብ ምስራት ተኣሚኑ ናይ ረጋገጽ ገጽታ ኣርእይ ካብቲ ቁም ንኣዝዩ ዝተመዓሸሸ።",
+      "confirmStopFromKeyboard": "ብኪቦርድ ምቁም ቅድሚ ምቁም ረጋግጽ",
+      "confirmStopFromKeyboardDescription": "ኣብ ምስራት ተኣሚኑ ካብ ኪቦርድ Escape ምግባር ናይ ረጋገጽ ገጽታ ኣርእይ።"
+    },
+    "appliesToNewConversations": "ንሓደሽቲ ውዕልታት ብብሉ።",
+    "useModelDefault": "ናይ ናይሕና ኣብ ሞዴል እተሓሳበ እዩ።",
+    "fromGeneralSettings": "ካብ ናይ ሓፈሻዊ ቅንጽብታት",
+    "preferredNameInheritedFromGeneral": "ስም ናይ ሓፈሻዊ ቅንጽብታት እተረኽበ እዩ። ምስናይ ምትርዓይ ጻፍ።",
+    "savedConfirmation": "ተኣካይዑ",
+    "unsavedChanges": "ዘይተኣካዩ ለውጦታት",
+    "unsavedChangesMessage": "ዘይተኣካዩ ለውጦታት ኣሎካ። ንምውዳእ ትደሊ?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "ውሁድ ናይ ጽሕፈት ዘይቲ ተጠቐም",
     "noTonesCreated": "ክሳብ ሕጂ ቃናታት ኣይተፈጥሩን",
     "createTonesHint": "ኣብ ቅልጡፍ ተግባራት ቃናታት ፍጠር",
-    "translateDocumentTooltip": "ሰነዳት ናብ ካልእ ቋንቋ ተርጉም።\n\nዝተደገፉ ቅርጽታት: Word, Excel, PowerPoint, PDF, HTML, TXT\nዝለዓለ ዓቐን: 40MB\n\nምስ ኣማራጺ ናይ ቃላት ፋይላት 80+ ቋንቋታት ይድግፍ።"
+    "translateDocumentTooltip": "መዝገብታት ናብ ካልእ ቋንቋ ትርጉም።\n\nዝደገፉ ፎርማታት: Word, Excel, PowerPoint, HTML, TXT\nኣብዚ ኣብሓተ ዝርከብ መጠን: 40MB\n\n80+ ቋንቋታት ንግብሪ ካብ ግብሪ ግሩካይ ፋይልታት ግን ይደግፉ።"
   },
   "transcription": {
     "transcribesOnSend": "ኣብ ምልኣኽ ይጸሓፍ",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "ፋይል ውሕሳኵ እዩ ንምሰቅል ({tokens} token, ዎለታ: {limit})",
     "activationRejectedTooLarge": "ፋይል ውሕሳኵ እዩ ንኣብ ንጥፈት context ({tokens} token, ዎለታ: {limit})",
     "sessionQuotaWarning": "ደረጃ ዕዳእ ብትንኩር ኣሎ – {remaining} token ኣሎ።",
-    "sessionQuotaNearlyExhausted": "ደረጃ ዕዳእ በጃኹም ንሃይልኦ – ኣብ አካባቢ ፋይል ክወድቕ ይኽእል።"
+    "sessionQuotaNearlyExhausted": "ደረጃ ዕዳእ በጃኹም ንሃይልኦ – ኣብ አካባቢ ፋይል ክወድቕ ይኽእል።",
+    "notInContext": "ኣብ ጽንተ ሓሳብ ውሽጢ ኣይኮነን",
+    "notInContextTooltip": "እዚ ፋይል ኣብ መጨረሻ ምላሽ ምሳ ውሳነ ቶከኖም ዘለዎ ገይሩ ኣይተገበረን። ንቐፃሊ መልእኽትካ ደጊምኩም ክተመሪኦ ይኸውን።",
+    "notInjected": "ኣይወስነን",
+    "notInjectedTooltip": "ምስ መመላእኽቲ ዝተጠቑሙ ምስታት ፍሉይ ኣብ ተሰኪ ተቐጽሉ እዮም፣ ግና ካብ ሞዴል ክርከቡ ኣይተላእኹን፣ እንተንካዕካይ ድማ እዮም ዝተላእኹሞም።"
   },
   "shortcuts": {
     "title": "ናይ ቁልፊ ብግሪ ጽሑፋት",

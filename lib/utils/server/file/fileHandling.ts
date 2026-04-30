@@ -346,7 +346,7 @@ async function xlsxToText(inputPath: string): Promise<string> {
 
     let result = '';
     let totalBytes = 0;
-    let truncatedSheets = 0;
+    const droppedSheetNames: string[] = [];
 
     for (let i = 0; i < indexed.length; i++) {
       const { index, file } = indexed[i];
@@ -359,16 +359,36 @@ async function xlsxToText(inputPath: string): Promise<string> {
       const block = `\n\n--- START OF SHEET: ${sheetName} ---\n\n${content}\n\n--- END OF SHEET: ${sheetName} ---\n\n`;
       const blockBytes = Buffer.byteLength(block, 'utf8');
       if (totalBytes + blockBytes > MAX_EXTRACTED_TEXT_BYTES) {
-        truncatedSheets = indexed.length - i;
+        // Record every remaining sheet (the current one and the rest) so
+        // the marker names *exactly* what the model can't see, instead of
+        // just saying "N sheets truncated".
+        for (let j = i; j < indexed.length; j++) {
+          const { index: dropIdx } = indexed[j];
+          droppedSheetNames.push(sheetNames[dropIdx] ?? `Sheet ${dropIdx + 1}`);
+        }
         break;
       }
       result += block;
       totalBytes += blockBytes;
     }
 
-    if (truncatedSheets > 0) {
+    if (droppedSheetNames.length > 0) {
       const mb = Math.round(MAX_EXTRACTED_TEXT_BYTES / (1024 * 1024));
-      result += `\n\n[… truncated at ${mb}MB; ${truncatedSheets} remaining sheet(s) not shown …]\n\n`;
+      // The downstream token estimator (countTokens) runs on this returned
+      // string, so appending a clear truncation notice both keeps the
+      // estimate honest about what's actually included and tells the
+      // model which sheets it cannot see. Cap the listed names so a
+      // workbook with hundreds of dropped sheets doesn't produce a
+      // multi-kilobyte marker that itself eats into the token budget.
+      const SHEET_LIST_CAP = 5;
+      const visibleNames = droppedSheetNames
+        .slice(0, SHEET_LIST_CAP)
+        .map((n) => `"${n}"`)
+        .join(', ');
+      const overflow = droppedSheetNames.length - SHEET_LIST_CAP;
+      const list =
+        overflow > 0 ? `${visibleNames}, and ${overflow} more` : visibleNames;
+      result += `\n\n[… extraction truncated at ${mb}MB; ${droppedSheetNames.length} sheet(s) not shown to the model: ${list} …]\n\n`;
     }
 
     console.log(

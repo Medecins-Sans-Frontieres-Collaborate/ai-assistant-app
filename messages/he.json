@@ -612,10 +612,10 @@
     "errorFetchingUrl": "אירעה שגיאה באחזור תוכן כתובת האתר",
     "errorInitiatingSearch": "אירעה שגיאה בהתחלת חיפוש באינטרנט",
     "regenerate": "צור מחדש",
-    "modelSwitchPrompt": "‏{original} נכשל אך ‏{fallback} הצליח. האם ברצונך להחליף מודל?",
-    "keepOriginalModel": "השאר את {model}",
+    "modelSwitchPrompt": "‏{fallback} ענה על כך משום ש־{original} לא היה זמין.",
+    "keepOriginalModel": "הישאר ב־{model}",
     "switchToModel": "עבור ל-{model}",
-    "alwaysSwitchToModel": "החלף אוטומטית תמיד",
+    "alwaysSwitchToModel": "תמיד לעבור כאשר {original} לא זמין",
     "translateMessage": "תרגם הודעה",
     "translating": "מתרגם...",
     "translationError": "התרגום נכשל",
@@ -660,7 +660,13 @@
     "mediaRecorderNotSupported": "הקלטת שמע אינה נתמכת בדפדפן זה.",
     "microphoneNotDetected": "לא זוהה מיקרופון",
     "microphoneBlocked": "המיקרופון חסום. נא לבדוק את הגדרות הדפדפן.",
-    "voiceTranscriptionFailed": "המרת הדיבור לטקסט נכשלה. אנא נסו שוב."
+    "voiceTranscriptionFailed": "המרת הדיבור לטקסט נכשלה. אנא נסו שוב.",
+    "stopGenerationTitle": "להפסיק את ההפקה?",
+    "stopGenerationMessage": "האם אתה בטוח שברצונך להפסיק את יצירת התגובה הזו? כל תגובה שנמצאת בתהליך תימחק.",
+    "stopGenerationConfirm": "הפסק",
+    "stopGenerationDontAskAgainButton": "אל תשאל שוב בעת עצירה באמצעות הכפתור",
+    "stopGenerationDontAskAgainKeyboard": "אל תשאל שוב בעת עצירה באמצעות המקלדת",
+    "generateResponseButton": "צור תגובה"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -949,7 +955,9 @@
     "verbosityDescription": "שולט ברמת הפירוט של התשובות במודלים מסוג GPT-5.",
     "activeFiles": {
       "autoPinUploads": "נעיצה אוטומטית של קבצים שהועלו",
-      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה"
+      "autoPinUploadsDescription": "נעץ קבצים שהועלו באופן אוטומטי כדי למנוע מהם לצאת מהרשימה",
+      "autoInjectPinnedImages": "הזרק מחדש תמונות מוצמדות בכל סבב",
+      "autoInjectPinnedImagesDescription": "כאשר מופעל, תמונות מוצמדות נשלחות לדגמים עם יכולות ראייה בכל סבב כדי להישאר בהקשר (עלות משוערת ≈765 טוקנים לכל תמונה מוצמדת בכל סבב). כאשר מבוטל, התמונות נשארות גלויות בפאנל אך נשלחות רק כאשר מצרפים אותן מחדש. לא משפיע על דגמים של Anthropic, שאינם תומכים כרגע בתוכן תמונה."
     },
     "Quarantined Data": "נתונים בהסגר",
     "quarantineDataDescription": "יש לך {count} {count, plural, one {פריט} other {פריטים}} בהסגר ({size}) עם בעיות נתונים שלא ניתן היה לטעון כרגיל.",
@@ -957,7 +965,22 @@
     "Export Quarantined Data": "ייצוא נתונים בהסגר",
     "Delete Quarantined Data": "מחיקת נתונים בהסגר",
     "deleteQuarantineConfirm": "האם אתה בטוח שברצונך למחוק את כל הנתונים שבהסגר? לא ניתן לבטל פעולה זו.",
-    "quarantineDeleteSuccess": "כל הנתונים שבהסגר נמחקו בהצלחה."
+    "quarantineDeleteSuccess": "כל הנתונים שבהסגר נמחקו בהצלחה.",
+    "confirmations": {
+      "title": "אישורים",
+      "confirmStopFromButton": "אשר לפני עצירה באמצעות הכפתור",
+      "confirmStopFromButtonDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על כפתור העצירה בזמן שהתגובה נוצרת",
+      "confirmStopFromKeyboard": "אשר לפני עצירה באמצעות המקלדת",
+      "confirmStopFromKeyboardDescription": "הצג דו-שיח אישור כאשר אתה לוחץ על Escape בזמן שהתגובה נוצרת"
+    },
+    "appliesToNewConversations": "חל רק על שיחות חדשות.",
+    "useModelDefault": "משתמש בברירת המחדל של המודל.",
+    "fromGeneralSettings": "מ'הגדרות כלליות'",
+    "preferredNameInheritedFromGeneral": "שם התצוגה נלקח מהגדרות כלליות. ניתן להקליד כדי לעקוף.",
+    "savedConfirmation": "נשמר",
+    "unsavedChanges": "שינויים שלא נשמרו",
+    "unsavedChangesMessage": "יש לך שינויים שלא נשמרו. האם למחוק אותם?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "השתמש בסגנון כתיבה ברירת מחדל",
     "noTonesCreated": "לא נוצרו טונים עדיין",
     "createTonesHint": "צור טונים בפעולות מהירות",
-    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, PDF, HTML, TXT\nגודל מירבי: 40MB\n\nתמיכה ב-80+ שפות עם קבצי מילון אופציונליים."
+    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, HTML, TXT\nגודל מקסימלי: 40MB\n\nתמיכה בלמעלה מ-80 שפות עם אפשרות לקבצי מילון."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "הקובץ גדול מדי להצמדה ({tokens} טוקנים, מגבלה: {limit})",
     "activationRejectedTooLarge": "הקובץ גדול מדי להקשר אקטיבי ({tokens} טוקנים, מגבלה: {limit})",
     "sessionQuotaWarning": "המכסה לסשן קרובה לסיום — נותרו {remaining} טוקנים",
-    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו"
+    "sessionQuotaNearlyExhausted": "המכסה לסשן כמעט נגמרה — ייתכן שקבצים אקטיביים לא ייכללו",
+    "notInContext": "לא בהקשר",
+    "notInContextTooltip": "קובץ זה לא נכנס לתקציב הטוקנים לסבב האחרון, ולכן הדגם לא יכול היה לראות אותו. הוא יישקל מחדש בהודעה הבאה שלך.",
+    "notInjected": "לא הוזרק",
+    "notInjectedTooltip": "הזרקת תמונות מחדש מבוטלת בהגדרות. תמונה מוצמדת זו נשארת גלויה כאן אך לא נשלחת לדגם אלא אם אתה מצרף אותה מחדש."
   },
   "shortcuts": {
     "title": "קיצורי מקלדת",

@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Nisy hadisoana nandritra ny fakàna ny votoatin'ny URL",
     "errorInitiatingSearch": "Nisy hadisoana nandritra ny fanombohana ny fikarohana aterineto",
     "regenerate": "Avereno",
-    "modelSwitchPrompt": "{original} tsy nahomby fa {fallback} nahomby. Te hanova modely ve ianao?",
-    "keepOriginalModel": "Tazonina {model}",
+    "modelSwitchPrompt": "{fallback} no namaly satria tsy nisy {original}.",
+    "keepOriginalModel": "Mijanòna amin'ny {model}",
     "switchToModel": "Ovay ho {model}",
-    "alwaysSwitchToModel": "Avadio ho azy foana",
+    "alwaysSwitchToModel": "Mifindra ho azy raha tsy misy {original}",
     "translateMessage": "Dikai ny hafatra",
     "translating": "Mandika...",
     "translationError": "Tsy nahomby ny fandikana",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Tsy tohanana amin'ity navigateur ity ny firaketana feo.",
     "microphoneNotDetected": "Tsy hita ny mikrô",
     "microphoneBlocked": "Voasakana ny mikrô. Azafady, jereo ny fikirakiran'ny navigateur.",
-    "voiceTranscriptionFailed": "Tsy nahomby ny fandikana feo. Azafady andramo indray."
+    "voiceTranscriptionFailed": "Tsy nahomby ny fandikana feo. Azafady andramo indray.",
+    "stopGenerationTitle": "Ajana ve ny famoronana?",
+    "stopGenerationMessage": "Azonao antoka ve fa hijanona amin'ny famoronana ity valiny ity ianao? Tsy ho voatahiry ny valiny mbola eo am-panaovana.",
+    "stopGenerationConfirm": "Atsaharo",
+    "stopGenerationDontAskAgainButton": "Aza manontany intsony rehefa mampiasa ny bokotra hijanona",
+    "stopGenerationDontAskAgainKeyboard": "Aza manontany intsony rehefa mampiasa klavier hijanona",
+    "generateResponseButton": "Mamokatra valiny"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Afatory ho azy ireo rakitra nampakarina",
-      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa"
+      "autoPinUploadsDescription": "Afatory ho azy ireo rakitra rehefa nampakarina mba hisorohana azy tsy ho voafafa",
+      "autoInjectPinnedImages": "Averina alefa isan-dalana ny sary napetraka",
+      "autoInjectPinnedImagesDescription": "Rehefa alefa ity safidy ity, dia halefa amin'ny modely mahay mamaky sary isan-dalana ny sary napetraka mba hijanona ao anaty lahatsoratra (vidiny tombanana ≈765 token isaky ny sary napetraka isaky ny mandeha). Raha tsy alefa, dia mbola hita amin'ny tabilao ny sary napetraka fa tsy alefa amin'ny modely raha tsy averina apetaka indray. Tsy manan-kery amin'ny modely Anthropic izany, izay tsy mandray votoaty sary amin'izao fotoana izao."
     },
     "Quarantined Data": "Angona natao anaty karantina",
     "quarantineDataDescription": "Manana {count} {count, plural, one {singan-javatra} other {singa}} natao anaty karantina ianao ({size}) misy olana amin'ny angona ka tsy afaka nentina amin'ny fomba mahazatra.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Aondrana ny angona anaty karantina",
     "Delete Quarantined Data": "Fafao ny angona anaty karantina",
     "deleteQuarantineConfirm": "Tena tianao ho fafana ve ny angona rehetra anaty karantina? Tsy azo averina ity hetsika ity.",
-    "quarantineDeleteSuccess": "Vita soa aman-tsara ny famafana ny angona rehetra anaty karantina."
+    "quarantineDeleteSuccess": "Vita soa aman-tsara ny famafana ny angona rehetra anaty karantina.",
+    "confirmations": {
+      "title": "Fanamafisana",
+      "confirmStopFromButton": "Manamarina alohan'ny hijanonana amin'ny bokotra",
+      "confirmStopFromButtonDescription": "Asehoy ny varavarankely fanamafisana rehefa tsindrina ny bokotra fijanonana raha mbola mamokatra valiny",
+      "confirmStopFromKeyboard": "Manamarina alohan'ny hijanonana amin'ny klavier",
+      "confirmStopFromKeyboardDescription": "Asehoy ny varavarankely fanamafisana rehefa tsindrina ny Escape raha mbola mamokatra valiny"
+    },
+    "appliesToNewConversations": "Manan-kery amin'ny resaka vaovao ihany.",
+    "useModelDefault": "Mampiasa ny modely mahazatra.",
+    "fromGeneralSettings": "Avy amin'ny Fikirana Ankapobeny",
+    "preferredNameInheritedFromGeneral": "Mandova ny anarana aseho amin'ny Fikirana Ankapobeny. Soraty raha te hanova.",
+    "savedConfirmation": "Voavonjy",
+    "unsavedChanges": "Fiovana tsy voavonjy",
+    "unsavedChangesMessage": "Misy fiovana tsy voavonjy. Foanana ve ireo?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Ampiasao ny fomba fanoratana tsy miovaova",
     "noTonesCreated": "Tsy mbola misy feo noforonina",
     "createTonesHint": "Mamorona feo ao amin'ny Hetsika Haingana",
-    "translateDocumentTooltip": "Dikai tahirin-kevitra amin'ny fiteny hafa.\n\nEndrika tohanana: Word, Excel, PowerPoint, PDF, HTML, TXT\nHabe max: 40MB\n\nManohana fiteny 80+ miaraka amin'ny rakitra fiteny tsy voatery."
+    "translateDocumentTooltip": "Adikao amin'ny fiteny hafa ny antontan-taratasy.\n\nEndrika tohanana: Word, Excel, PowerPoint, HTML, TXT\nHabe ambony indrindra: 40MB\n\nMitsinjara fiteny 80+ miaraka amin’ny rakitra voambolana safidy."
   },
   "transcription": {
     "transcribesOnSend": "Mandika rehefa alefa",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Lehibe loatra ny rakitra hikambana ({tokens} token, fetra: {limit})",
     "activationRejectedTooLarge": "Lehibe loatra ny rakitra ho an'ny tontolo iainana mavitrika ({tokens} token, fetra: {limit})",
     "sessionQuotaWarning": "Efa ho lany ny fetra amin'ny fivoriana — {remaining} token sisa",
-    "sessionQuotaNearlyExhausted": "Efa ho voafetra ny fivoriana — mety tsy ho tafiditra ny rakitra mavitrika"
+    "sessionQuotaNearlyExhausted": "Efa ho voafetra ny fivoriana — mety tsy ho tafiditra ny rakitra mavitrika",
+    "notInContext": "Tsy ao anatin'ny lahatsoratra",
+    "notInContextTooltip": "Tsy tafiditra tao amin'ny tokonam-bolan'ny token isaky ny mandeha ity rakitra ity tamin'ny valiny farany, ka tsy afaka nahita azy ny modely. Haverina hodinihina amin'ny hafatrao manaraka izany.",
+    "notInjected": "Tsy nalefa",
+    "notInjectedTooltip": "Tsy alefa amin'ny toerana fikirakirana ny famerenana mandefa sary. Mijanona ho hita eto ity sary napetraka ity fa tsy alefa amin'ny modely raha tsy apetaka indray."
   },
   "shortcuts": {
     "title": "Fanalahidin-tsoratra haingana",

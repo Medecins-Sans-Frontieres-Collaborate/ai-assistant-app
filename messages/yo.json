@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Àṣìṣe kan ṣẹlẹ̀ nígbà tí a ń gba àkóónú URL",
     "errorInitiatingSearch": "Àṣìṣe kan ṣẹlẹ̀ nígbà tí a ń bẹ̀rẹ̀ àwárí ayélujára",
     "regenerate": "Tún ṣe",
-    "modelSwitchPrompt": "{original} kùnà ṣùgbọ́n {fallback} ṣe dáadáa. Ṣé o fẹ́ yí àwọn àwòṣe padà?",
-    "keepOriginalModel": "Pa {model} mọ́",
+    "modelSwitchPrompt": "{fallback} dahun eyi nítorí {original} kò sí lọ́wọ́.",
+    "keepOriginalModel": "Dúró lori {model}",
     "switchToModel": "Yí padà sí {model}",
-    "alwaysSwitchToModel": "Máa yí padà fúnraarẹ̀ nígbàgbogbo",
+    "alwaysSwitchToModel": "Máa yí padà sí i nigbakugba tí {original} kò bá sí",
     "translateMessage": "Túmọ̀ ìránṣẹ́",
     "translating": "Ń túmọ̀...",
     "translationError": "Ìtúmọ̀ kùnà",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Kíkópọ̀ ohun kò wà láàyè lórí aṣàwákiri yìí.",
     "microphoneNotDetected": "Ko ri mikrófónù",
     "microphoneBlocked": "Mikrófónù ti di. Ṣayẹwo eto aṣàwákiri rẹ.",
-    "voiceTranscriptionFailed": "Itumọ ohùn kuna. Jọwọ gbìyànjú lẹẹkansi."
+    "voiceTranscriptionFailed": "Itumọ ohùn kuna. Jọwọ gbìyànjú lẹẹkansi.",
+    "stopGenerationTitle": "Dákẹ́ àkọsílẹ̀?",
+    "stopGenerationMessage": "Ṣé dájú pé o fẹ́ dá àkọsílẹ̀ ìdáhùn yìí dúró? Gbogbo ìdáhùn tí ń bọ̀ yóò parí nìkan.",
+    "stopGenerationConfirm": "Dákẹ́",
+    "stopGenerationDontAskAgainButton": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì",
+    "stopGenerationDontAskAgainKeyboard": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
+    "generateResponseButton": "Ṣẹdá ìdáhùn"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ",
-      "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà"
+      "autoPinUploadsDescription": "Fi awọn faili tó gbé kalẹ laifọwọyi si àkójọ kí wọ́n má bà a yà",
+      "autoInjectPinnedImages": "Tun fi awọn aworan amuṣiṣẹpọ sii ni gbogbo iyipo",
+      "autoInjectPinnedImagesDescription": "Nigbati o ba wa lọwọ, awọn aworan ti a muṣe yoo fi ranṣẹ si awọn awoṣe ti o le ri aworan ni gbogbo iyipo lati jẹ ki wọn wa ninu akori ọrọ (iye idiyele to ṣee ṣe ≈765 tokens fun aworan kọọkan ni iyipo kọọkan). Ti o ba jẹ pipa, awọn aworan naa yoo han ni panẹli nikan ṣugbọn a o fi ranṣẹ nigba ti o tun so pọ. Ko ni ipa lori awọn awoṣe Anthropic, eyiti ko gba akoonu aworan lọwọlọwọ."
     },
     "Quarantined Data": "Àmúkọ́ Data",
     "quarantineDataDescription": "O ní {count} {count, plural, one {kókó} other {àwọn kókó}} tìkára rẹ̀ nínú àmúkọ́ ({size}) pẹ̀lú ìṣòro data tí a kò lè kó wọlé dáradára.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Gbé Data Àmúkọ́ jáde",
     "Delete Quarantined Data": "Pa Data Àmúkọ́ rẹ́",
     "deleteQuarantineConfirm": "Ṣe o dájú pé o fẹ́ pa gbogbo data àmúkọ́ rẹ́? Ìgbésẹ̀ yìí kò le yí padà.",
-    "quarantineDeleteSuccess": "Gbogbo data àmúkọ́ ti parí pípà."
+    "quarantineDeleteSuccess": "Gbogbo data àmúkọ́ ti parí pípà.",
+    "confirmations": {
+      "title": "Ìmúlòlùfẹ́",
+      "confirmStopFromButton": "Jẹ́ kó dájú kí o tó dákẹ́ pẹ̀lú bọtìnì",
+      "confirmStopFromButtonDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ bọtìnì dákẹ́ nígbà tí a ń ṣètò ìdáhùn",
+      "confirmStopFromKeyboard": "Jẹ́ kó dájú kí o tó dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
+      "confirmStopFromKeyboardDescription": "Fi àpẹrẹ ìmúlòrúkọ han nígbà tí o ba tẹ Escape nígbà tí a ń ṣètò ìdáhùn"
+    },
+    "appliesToNewConversations": "Ó kan ìbànújẹ tuntun nìkan.",
+    "useModelDefault": "Lílo àfẹ́yà míìràn tí àpẹẹrẹ.",
+    "fromGeneralSettings": "Láti Ìtòsọ́nà Gbogbogbo",
+    "preferredNameInheritedFromGeneral": "N gba orúkọ ìfihàn rẹ láti Ìtòsọ́nà Gbogbogbo. Tẹ̀ sílẹ̀ láti yípadà.",
+    "savedConfirmation": "Ti fipamọ́",
+    "unsavedChanges": "Àyípadà tí kò tíì fipamọ́",
+    "unsavedChangesMessage": "O ní àyípadà tí kò tíì fipamọ́. Ṣe o fẹ́ sọ wọn di asán?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Lo àṣà kíkọ̀wé ìbẹ̀rẹ̀",
     "noTonesCreated": "A kò tíì ṣẹ̀dá ohùn kankan",
     "createTonesHint": "Ṣẹ̀dá àwọn ohùn nínú Àwọn Ìgbésẹ̀ Kíákíá",
-    "translateDocumentTooltip": "Túmọ̀ àwọn ìwé sí èdè mìíràn.\n\nÀwọn ọ̀nà tí a ṣe àtìlẹ́yìn fún: Word, Excel, PowerPoint, PDF, HTML, TXT\nÌwọ̀n pọ̀ jù: 40MB\n\nÓ ṣe àtìlẹ́yìn fún àwọn èdè 80+ pẹ̀lú àwọn fáìlì ìtúmọ̀-ọ̀rọ̀ àṣàyàn."
+    "translateDocumentTooltip": "Ṣe túmọ̀ àwọn dọ́kíúmẹ́ntì sí èdè míràn.\n\nÀwọn àkópọ̀ tí a gbà: Word, Excel, PowerPoint, HTML, TXT\nÌwọn tó pọ̀jù: 40MB\n\nṢe àtìlẹ́yìn fún èdè méjìlélọ́gọ́rin (80+) pẹ̀lú àṣàyàn fáìlì glossary."
   },
   "transcription": {
     "transcribesOnSend": "Ó ń kọ sí ọ̀rọ̀ nígbà fífiránṣẹ́",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Faili tobi ju lati so mọ ({tokens} tọọki, aala: {limit})",
     "activationRejectedTooLarge": "Faili tobi ju fun ipo lilo gangan ({tokens} tọọki, aala: {limit})",
     "sessionQuotaWarning": "Iye akoko igba n lọ silẹ — {remaining} tọọki ku",
-    "sessionQuotaNearlyExhausted": "Iye akoko igba fẹrẹ parí — awọn faili to n ṣiṣẹ le ma wa"
+    "sessionQuotaNearlyExhausted": "Iye akoko igba fẹrẹ parí — awọn faili to n ṣiṣẹ le ma wa",
+    "notInContext": "Ko wa ninu akori ọrọ",
+    "notInContextTooltip": "Faili yii ko le ba iye tokens to wa fun iyipo to kọja mu, nítorí náà awoṣe ko ri i. Yoo tun jẹ ayẹwo lori ifiranṣẹ rẹ tó tẹle.",
+    "notInjected": "A ko fi sii",
+    "notInjectedTooltip": "A ti mu ki atun-fi aworan sii ṣiṣẹ ni eto. Aworan ti a muṣe yii maa han nibi ṣugbọn a kii yoo fi ranṣẹ si awoṣe ayafi ti o tun so pọ."
   },
   "shortcuts": {
     "title": "Awọn ọna abuja bọtini",

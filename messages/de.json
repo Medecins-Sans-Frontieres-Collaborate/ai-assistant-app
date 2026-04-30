@@ -583,10 +583,10 @@
     "errorFetchingUrl": "Beim Abrufen des URL-Inhalts ist ein Fehler aufgetreten",
     "errorInitiatingSearch": "Beim Starten der Websuche ist ein Fehler aufgetreten",
     "regenerate": "Neu generieren",
-    "modelSwitchPrompt": "{original} ist fehlgeschlagen, aber {fallback} war erfolgreich. Möchten Sie das Modell wechseln?",
-    "keepOriginalModel": "{model} beibehalten",
+    "modelSwitchPrompt": "{fallback} hat diese Antwort gegeben, weil {original} nicht verfügbar war.",
+    "keepOriginalModel": "Bei {model} bleiben",
     "switchToModel": "Zu {model} wechseln",
-    "alwaysSwitchToModel": "Immer automatisch wechseln",
+    "alwaysSwitchToModel": "Immer wechseln, wenn {original} nicht verfügbar ist",
     "translateMessage": "Nachricht übersetzen",
     "translating": "Übersetzen...",
     "translationError": "Übersetzung fehlgeschlagen",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "Audioaufzeichnung wird in diesem Browser nicht unterstützt.",
     "microphoneNotDetected": "Kein Mikrofon erkannt",
     "microphoneBlocked": "Mikrofon blockiert. Bitte überprüfen Sie die Browser-Einstellungen.",
-    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut."
+    "voiceTranscriptionFailed": "Sprachtranskription fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "stopGenerationTitle": "Generierung stoppen?",
+    "stopGenerationMessage": "Sind Sie sicher, dass Sie die Generierung dieser Antwort stoppen möchten? Jede laufende Antwort wird verworfen.",
+    "stopGenerationConfirm": "Stoppen",
+    "stopGenerationDontAskAgainButton": "Beim Stoppen über den Button nicht mehr nachfragen",
+    "stopGenerationDontAskAgainKeyboard": "Beim Stoppen mit der Tastatur nicht mehr nachfragen",
+    "generateResponseButton": "Antwort generieren"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Steuert das Detaillierungsniveau der Antworten für GPT-5-Modelle.",
     "activeFiles": {
       "autoPinUploads": "Hochgeladene Dateien automatisch anheften",
-      "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden"
+      "autoPinUploadsDescription": "Dateien beim Hochladen automatisch anheften, um zu verhindern, dass sie entfernt werden",
+      "autoInjectPinnedImages": "Angeheftete Bilder in jeder Runde erneut einfügen",
+      "autoInjectPinnedImagesDescription": "Wenn aktiviert, werden angeheftete Bilder bei jeder Runde an Modelle mit Bildverarbeitung gesendet, damit sie im Kontext bleiben (geschätzte Kosten ≈765 Token pro angeheftetem Bild und Runde). Wenn deaktiviert, bleiben angeheftete Bilder im Panel sichtbar, werden aber nur gesendet, wenn Sie sie erneut anhängen. Hat keine Auswirkung auf Anthropic-Modelle, die derzeit keine Bildinhalte erhalten."
     },
     "Quarantined Data": "Quarantänedaten",
     "quarantineDataDescription": "Sie haben {count} in Quarantäne befindliche {count, plural, one {Datei} other {Dateien}} ({size}) mit Datenproblemen, die nicht normal geladen werden konnten.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Quarantänedaten exportieren",
     "Delete Quarantined Data": "Quarantänedaten löschen",
     "deleteQuarantineConfirm": "Sind Sie sicher, dass Sie alle Quarantänedaten löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht."
+    "quarantineDeleteSuccess": "Alle Quarantänedaten wurden erfolgreich gelöscht.",
+    "confirmations": {
+      "title": "Bestätigungen",
+      "confirmStopFromButton": "Vor dem Stoppen mit dem Button bestätigen",
+      "confirmStopFromButtonDescription": "Beim Klicken auf den Stop-Button während einer Antwortgenerierung einen Bestätigungsdialog anzeigen",
+      "confirmStopFromKeyboard": "Vor dem Stoppen mit der Tastatur bestätigen",
+      "confirmStopFromKeyboardDescription": "Beim Drücken von Escape während einer Antwortgenerierung einen Bestätigungsdialog anzeigen"
+    },
+    "appliesToNewConversations": "Gilt nur für neue Unterhaltungen.",
+    "useModelDefault": "Modellstandard wird verwendet.",
+    "fromGeneralSettings": "Aus den allgemeinen Einstellungen",
+    "preferredNameInheritedFromGeneral": "Anzeigename wird aus den allgemeinen Einstellungen übernommen. Zum Überschreiben eingeben.",
+    "savedConfirmation": "Gespeichert",
+    "unsavedChanges": "Ungespeicherte Änderungen",
+    "unsavedChangesMessage": "Sie haben ungespeicherte Änderungen. Möchten Sie diese verwerfen?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Standard-Schreibstil verwenden",
     "noTonesCreated": "Noch keine Tonfälle erstellt",
     "createTonesHint": "Tonfälle in den Schnellaktionen erstellen",
-    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
+    "translateDocumentTooltip": "Dokumente in eine andere Sprache übersetzen.\n\nUnterstützte Formate: Word, Excel, PowerPoint, HTML, TXT\nMaximale Größe: 40 MB\n\nUnterstützt über 80 Sprachen mit optionalen Glossardateien."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Fügen Sie persönliche Anweisungen hinzu, um die Antworten der KI anzupassen. Diese werden mit den zentralen Verhaltensrichtlinien kombiniert, um hilfreiche, genaue und sichere Antworten zu gewährleisten.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tipp: Geben Sie \"/\" ein, um gespeicherte Vorlagen auszuwählen.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Datei zu groß zum Anheften ({tokens} Token, Limit: {limit})",
     "activationRejectedTooLarge": "Datei zu groß für aktiven Kontext ({tokens} Token, Limit: {limit})",
     "sessionQuotaWarning": "Sitzungskontingent fast aufgebraucht — {remaining} Token verbleibend",
-    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen"
+    "sessionQuotaNearlyExhausted": "Sitzungskontingent fast erschöpft — aktive Dateien werden möglicherweise nicht einbezogen",
+    "notInContext": "Nicht im Kontext",
+    "notInContextTooltip": "Diese Datei passte bei der letzten Antwort nicht in das Token-Budget pro Runde, daher konnte das Modell sie nicht sehen. Sie wird bei Ihrer nächsten Nachricht erneut berücksichtigt.",
+    "notInjected": "Nicht eingefügt",
+    "notInjectedTooltip": "Das erneute Einfügen von Bildern ist in den Einstellungen deaktiviert. Dieses angeheftete Bild bleibt hier sichtbar, wird aber nur an das Modell gesendet, wenn Sie es erneut anhängen."
   },
   "shortcuts": {
     "title": "Tastenkombinationen",

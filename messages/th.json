@@ -554,10 +554,10 @@
     "errorFetchingUrl": "เกิดข้อผิดพลาดในการดึงเนื้อหา URL",
     "errorInitiatingSearch": "เกิดข้อผิดพลาดในการเริ่มการค้นหาเว็บ",
     "regenerate": "สร้างใหม่",
-    "modelSwitchPrompt": "{original} ล้มเหลวแต่ {fallback} สำเร็จ ต้องการเปลี่ยนโมเดลหรือไม่?",
-    "keepOriginalModel": "ใช้ {model} ต่อ",
+    "modelSwitchPrompt": "{fallback} ตอบคำถามนี้เนื่องจาก {original} ไม่พร้อมใช้งาน",
+    "keepOriginalModel": "ใช้ {model} ต่อไป",
     "switchToModel": "เปลี่ยนเป็น {model}",
-    "alwaysSwitchToModel": "สลับอัตโนมัติเสมอ",
+    "alwaysSwitchToModel": "สลับโดยอัตโนมัติเมื่อ {original} ไม่พร้อมใช้งาน",
     "translateMessage": "แปลข้อความ",
     "translating": "กำลังแปล...",
     "translationError": "แปลไม่สำเร็จ",
@@ -602,7 +602,13 @@
     "mediaRecorderNotSupported": "เบราว์เซอร์นี้ไม่รองรับการบันทึกเสียง",
     "microphoneNotDetected": "ไม่พบไมโครโฟน",
     "microphoneBlocked": "ไมโครโฟนถูกบล็อก กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์",
-    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง"
+    "voiceTranscriptionFailed": "การถอดเสียงล้มเหลว กรุณาลองอีกครั้ง",
+    "stopGenerationTitle": "หยุดการสร้างหรือไม่",
+    "stopGenerationMessage": "คุณแน่ใจหรือว่าต้องการหยุดการสร้างคำตอบนี้? ข้อความที่กำลังส่งจะถูกยกเลิกทั้งหมด",
+    "stopGenerationConfirm": "หยุด",
+    "stopGenerationDontAskAgainButton": "อย่าถามอีกเมื่อหยุดด้วยปุ่ม",
+    "stopGenerationDontAskAgainKeyboard": "อย่าถามอีกเมื่อหยุดด้วยแป้นพิมพ์",
+    "generateResponseButton": "สร้างคำตอบ"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -891,7 +897,9 @@
     "verbosityDescription": "ควบคุมระดับรายละเอียดของคำตอบสำหรับโมเดล GPT-5",
     "activeFiles": {
       "autoPinUploads": "ปักหมุดไฟล์ที่อัปโหลดโดยอัตโนมัติ",
-      "autoPinUploadsDescription": "ปักหมุดไฟล์โดยอัตโนมัติเมื่ออัปโหลดเพื่อป้องกันไม่ให้ไฟล์ถูกลบออก"
+      "autoPinUploadsDescription": "ปักหมุดไฟล์โดยอัตโนมัติเมื่ออัปโหลดเพื่อป้องกันไม่ให้ไฟล์ถูกลบออก",
+      "autoInjectPinnedImages": "แทรกรูปภาพที่ปักหมุดใหม่ในทุกเทิร์น",
+      "autoInjectPinnedImagesDescription": "หากเปิดใช้งาน รูปภาพที่ปักหมุดจะถูกส่งไปยังโมเดลที่รองรับภาพในทุกเทิร์นเพื่อคงบริบทไว้ (ต้นทุนโดยประมาณ ≈765 โทเค่นต่อภาพที่ปักหมุดต่อเทิร์น) หากปิดใช้งาน รูปภาพที่ปักหมุดจะยังแสดงในแผงนี้ แต่จะถูกส่งเมื่อคุณแนบใหม่เท่านั้น ไม่มีผลกับโมเดล Anthropic ซึ่งขณะนี้ยังไม่รองรับเนื้อหารูปภาพ"
     },
     "Quarantined Data": "ข้อมูลที่ถูกกักกัน",
     "quarantineDataDescription": "คุณมีข้อมูลที่ถูกกักกัน {count} รายการ ({size}) ที่มีปัญหาในการโหลดข้อมูลตามปกติ",
@@ -899,7 +907,22 @@
     "Export Quarantined Data": "ส่งออกข้อมูลที่ถูกกักกัน",
     "Delete Quarantined Data": "ลบข้อมูลที่ถูกกักกัน",
     "deleteQuarantineConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลที่ถูกกักกันทั้งหมด? การกระทำนี้ไม่สามารถย้อนคืนได้",
-    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว"
+    "quarantineDeleteSuccess": "ลบข้อมูลที่ถูกกักกันทั้งหมดเรียบร้อยแล้ว",
+    "confirmations": {
+      "title": "การยืนยัน",
+      "confirmStopFromButton": "ยืนยันก่อนหยุดด้วยปุ่ม",
+      "confirmStopFromButtonDescription": "แสดงกล่องยืนยันเมื่อคุณคลิกปุ่มหยุดขณะระบบกำลังสร้างคำตอบ",
+      "confirmStopFromKeyboard": "ยืนยันก่อนหยุดด้วยแป้นพิมพ์",
+      "confirmStopFromKeyboardDescription": "แสดงกล่องยืนยันเมื่อคุณกด Escape ขณะระบบกำลังสร้างคำตอบ"
+    },
+    "appliesToNewConversations": "มีผลกับการสนทนาใหม่เท่านั้น",
+    "useModelDefault": "ใช้ค่าเริ่มต้นของโมเดล",
+    "fromGeneralSettings": "จากการตั้งค่าทั่วไป",
+    "preferredNameInheritedFromGeneral": "ใช้ชื่อแสดงผลจากการตั้งค่าทั่วไปของคุณ พิมพ์เพื่อแก้ไข",
+    "savedConfirmation": "บันทึกแล้ว",
+    "unsavedChanges": "มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก",
+    "unsavedChangesMessage": "คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก ต้องการละทิ้งหรือไม่?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "ใช้รูปแบบการเขียนค่าเริ่มต้น",
     "noTonesCreated": "ยังไม่ได้สร้างโทนเสียง",
     "createTonesHint": "สร้างโทนเสียงใน Quick Actions",
-    "translateDocumentTooltip": "แปลเอกสารเป็นภาษาอื่น\n\nรูปแบบที่รองรับ: Word, Excel, PowerPoint, PDF, HTML, TXT\nขนาดสูงสุด: 40MB\n\nรองรับมากกว่า 80 ภาษา พร้อมไฟล์อภิธานศัพท์เสริม"
+    "translateDocumentTooltip": "แปลเอกสารเป็นภาษาอื่น\n\nรูปแบบที่รองรับ: Word, Excel, PowerPoint, HTML, TXT\nขนาดสูงสุด: 40MB\n\nรองรับมากกว่า 80 ภาษา พร้อมไฟล์ glossary เสริม"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "เพิ่มคำแนะนำส่วนตัวเพื่อปรับแต่งการตอบสนองของ AI โดยข้อมูลเหล่านี้จะถูกรวมกับแนวทางหลักเพื่อให้มั่นใจว่าการตอบสนองมีประโยชน์ ถูกต้อง และปลอดภัย",
   "Tip: Type \"/\" to select from saved prompt templates_": "เคล็ดลับ: พิมพ์ \"/\" เพื่อเลือกจากเทมเพลตพรอมต์ที่บันทึกไว้",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "ไฟล์ใหญ่เกินไปที่จะปักหมุด ({tokens} โทเค็น, ขีดจำกัด: {limit})",
     "activationRejectedTooLarge": "ไฟล์ใหญ่เกินไปสำหรับบริบทที่ใช้งาน ({tokens} โทเค็น, ขีดจำกัด: {limit})",
     "sessionQuotaWarning": "โควตาเซสชันเหลือน้อย — เหลือ {remaining} โทเค็น",
-    "sessionQuotaNearlyExhausted": "โควตาเซสชันใกล้หมด — อาจไม่รวมไฟล์ที่ใช้งานอยู่"
+    "sessionQuotaNearlyExhausted": "โควตาเซสชันใกล้หมด — อาจไม่รวมไฟล์ที่ใช้งานอยู่",
+    "notInContext": "ไม่ได้อยู่ในบริบท",
+    "notInContextTooltip": "ไฟล์นี้ใช้โทเค่นเกินงบประมาณต่อเทิร์นในการตอบครั้งล่าสุด โมเดลจึงไม่สามารถเห็นไฟล์นี้ได้ ไฟล์นี้จะได้รับการพิจารณาในการส่งข้อความครั้งถัดไปของคุณ",
+    "notInjected": "ไม่ได้แทรก",
+    "notInjectedTooltip": "การแทรกรูปภาพใหม่ถูกปิดใช้งานในตั้งค่า รูปภาพที่ปักหมุดนี้จะแสดงที่นี่แต่จะไม่ถูกส่งไปยังโมเดล เว้นแต่คุณจะแนบใหม่"
   },
   "shortcuts": {
     "title": "คีย์ลัดบนแป้นพิมพ์",

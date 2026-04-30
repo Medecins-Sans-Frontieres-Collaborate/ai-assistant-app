@@ -604,10 +604,10 @@
     "errorFetchingUrl": "URL අන්තර්ගතය ලබා ගැනීමේ දී දෝෂයක් සිදු විය",
     "errorInitiatingSearch": "වෙබ් සෙවීම ආරම්භ කිරීමේ දී දෝෂයක් සිදු විය",
     "regenerate": "නැවත ජනනය කරන්න",
-    "modelSwitchPrompt": "{original} අසාර්ථක වුණත් {fallback} සාර්ථකයි. ඔබට ආකෘතිය මාරු කිරීමට අවශ්‍යද?",
-    "keepOriginalModel": "{model} තබා ගන්න",
+    "modelSwitchPrompt": "{original} ලබා ගත නොහැකි බැවින් {fallback} මේ සඳහා පිළිතුරු දුන්නේය.",
+    "keepOriginalModel": "{model} මත තබා ගන්න",
     "switchToModel": "{model} වෙත මාරු වෙන්න",
-    "alwaysSwitchToModel": "සැමවිටම ස්වයංක්‍රීයව මාරු කරන්න",
+    "alwaysSwitchToModel": "{original} ලබා ගත නොහැකි විට හැම විටම මාරු වන්න",
     "translateMessage": "පණිවිඩය පරිවර්තනය කරන්න",
     "translating": "පරිවර්තනය වෙමින්...",
     "translationError": "පරිවර්තනය අසාර්ථක විය",
@@ -652,7 +652,13 @@
     "mediaRecorderNotSupported": "මෙම බ්‍රව්සායේ ශ්‍රව්‍ය රැඳවීම සහය නොදක්වයි.",
     "microphoneNotDetected": "මයික්‍රෝෆෝනය හඳුනාගෙන නොමැත",
     "microphoneBlocked": "මයික්‍රෝෆෝනය අවහිර කර ඇත. අතිරේකයන්ගේ සැකසුම් සොයා බලන්න.",
-    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න."
+    "voiceTranscriptionFailed": "වෝයිස් පරිවර්තනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.",
+    "stopGenerationTitle": "නිපදවීම නවත්වන්නද?",
+    "stopGenerationMessage": "මෙම පිළිතුර නිපදවීම නවත්වීමට ඔබට විශ්වාසද? දැනට නිපදවමින් පවතින පිළිතුර ඉවත දැමෙනු ඇත.",
+    "stopGenerationConfirm": "නවත්වන්න",
+    "stopGenerationDontAskAgainButton": "බොත්තමෙන් නවත්වන විට නැවත අහන්න එපා",
+    "stopGenerationDontAskAgainKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට නැවත අහන්න එපා",
+    "generateResponseButton": "පිළිතුර නිපදවන්න"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -941,7 +947,9 @@
     "verbosityDescription": "GPT-5 ආදර්ශ සඳහා පිළිතුරු විස්තර මට්ටම පාලනය කරයි.",
     "activeFiles": {
       "autoPinUploads": "ඉදිරිප්‍රවේශ ගොනු ස්වයංක්‍රීයව පිහිටුවන්න",
-      "autoPinUploadsDescription": "ඉදිරිප්‍රවේශගත වන විට ගොනු ස්වයංක්‍රීයව පිහිටීම, ඒවා ඉවත් නොවන ලෙස"
+      "autoPinUploadsDescription": "ඉදිරිප්‍රවේශගත වන විට ගොනු ස්වයංක්‍රීයව පිහිටීම, ඒවා ඉවත් නොවන ලෙස",
+      "autoInjectPinnedImages": "ප්‍රමාදිත රූප සෑම වතාවකම නැවත ඇතුළත් කරන්න",
+      "autoInjectPinnedImagesDescription": "මෙය ක්‍රියාත්මක කළ විට, ප්‍රමාදිත රූප දෘශ්‍යතාව සඳහා හැකියාව ඇති මොඩලවලට සෑම වතාවකම යවනු ලබයි, ඒවා සැසි ප්‍රසංගය තුළ රඳවා ගැනීමට (ඒක එක් සටහන් රූපයකට එක් වතාවකට හෝමාන පිරිවැය ≈765 ටෝකන්). ක්‍රියා විරහිත කර ඇත්නම්, ප්‍රමාදිත රූප පැනලයේ පමණක් පෙනී සිටී, එහෙත් ඔබ නැවත සම්බන්ධ කරන තුරු මොඩලයට යවන නොහැක. මෙය Anthropic මොඩලවලට බලපාන්නේ නැත, ඒවාට දැනට රූප අන්තර්ගතය ලබාදෙන්නේ නැත."
     },
     "Quarantined Data": "අන්තර්ගත කිරීමේ තාවකාලික දත්ත",
     "quarantineDataDescription": "ඔබ සතුව දත්ත ගැටළු නිසා සාමාන්‍ය ලෙස පූරණය කළ නොහැකි {count} අන්තර්ගත කිරීමේ {count, plural, one {අයිතමය} other {අයිතම}} ({size}) ඇත.",
@@ -949,7 +957,22 @@
     "Export Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත එක්ස්පෝර්ට් කරන්න",
     "Delete Quarantined Data": "අන්තර්ගත කිරීමේ දත්ත මකන්න",
     "deleteQuarantineConfirm": "සියළු අන්තර්ගත කිරීමේ දත්ත මැකීමට ඔබට විශ්වාසද? මෙම ක්‍රියාව ප්‍රතික්ෂේප කළ නොහැක.",
-    "quarantineDeleteSuccess": "සියළු අන්තර්ගත කිරීමේ දත්ත සාර්ථකව මකාදමා ඇත."
+    "quarantineDeleteSuccess": "සියළු අන්තර්ගත කිරීමේ දත්ත සාර්ථකව මකාදමා ඇත.",
+    "confirmations": {
+      "title": "තහවුරු කිරීම්",
+      "confirmStopFromButton": "බොත්තමෙන් නවත්වන විට තහවුරු කරන්න",
+      "confirmStopFromButtonDescription": "පිළිතුරක් නිපදවමින් සිටින විට නවත්වන්න බොත්තම ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න",
+      "confirmStopFromKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට තහවුරු කරන්න",
+      "confirmStopFromKeyboardDescription": "පිළිතුරක් නිපදවමින් සිටින විට Escape යතුර ඔබන විට තහවුරු කිරීමේ ඕවානයක් පෙන්වන්න"
+    },
+    "appliesToNewConversations": "නව සංවාද සඳහා පමණක් අදාල වේ.",
+    "useModelDefault": "ආදර්ශයේ පෙරනිමි භාවිතා වේ.",
+    "fromGeneralSettings": "සාමාන්‍ය සැකසුම්වලින්",
+    "preferredNameInheritedFromGeneral": "ඔබගේ සාමාන්‍ය සැකසුම් සංදර්ශන නාමය උරුම කරයි. අහඹුකිරීමට යතුරු ලියන්න.",
+    "savedConfirmation": "සුරකිණි",
+    "unsavedChanges": "සුරැකුම් නොකළ වෙනස්කම්",
+    "unsavedChangesMessage": "ඔබට සුරැකුම් නොකළ වෙනස්කම් ඇත. ඒවා ඉවත් කරන්නද?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "පෙරනිමි ලිවීමේ විලාසය භාවිතා කරන්න",
     "noTonesCreated": "තවම සුරැස්සු නිර්මාණය කර නැත",
     "createTonesHint": "Quick Actions තුළ සුරැස්සු නිර්මාණය කරන්න",
-    "translateDocumentTooltip": "ප්‍රලේඛ පරිවර්තනය වෙනත් භාෂාවකට.\n\nසහාය වන හැඳුනුම්පත්: Word, Excel, PowerPoint, PDF, HTML, TXT\nඋපරිම ප්‍රමාණය: 40MB\n\nවිකල්ප ශබ්ද කෝෂ ගොනු සමඟ භාෂා 80+කට සහය දක්වයි."
+    "translateDocumentTooltip": "ප්‍රළේඛන වෙනත් භාෂාවකට පරිවර්තන කරන්න.\n\nඇදහැලිය හැකි ආකාර: Word, Excel, PowerPoint, HTML, TXT\nඋපරිම ප්‍රමාණය: 40MB\n\nවිකල්ප ග්ලොසරී ගොනු සමඟ භාෂා 80කට වැඩි සංඛ්‍යාවක් සහය දරයි."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI එකේ ප්‍රතිචාර ගැලපෙන්න ඔබගේ පුද්ගලික උපදෙස් එක් කරන්න. මෙවා උදව්कारी, නිවැරදි සහ නිසි ආරක්ෂාවක් ඇති ප්‍රතිචාර ගෙදීමට වන මූලික හැසිරීම් මාර්ගෝපදේශ සමඟ ඒකාබද්ධ වේ.",
   "Tip: Type \"/\" to select from saved prompt templates_": "ඉඟිය: සුරක්ෂිත උත්ප්‍රේරණ සැදීම් තෝරා ගැනීමට \"/\" ටයිප් කරන්න.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "ගොනුව සවිස්ථිර කිරීමට විශාල වැඩිවේ ({tokens} ටෝකන, සීමාව: {limit})",
     "activationRejectedTooLarge": "සක්‍රීය පරිදිය සඳහා ගොනුව විශාල වැඩිවේ ({tokens} ටෝකන, සීමාව: {limit})",
     "sessionQuotaWarning": "සැසියක ප්‍රමාණය අවසන් වීමට නුදුරයි — ඉතිරිව ඇති {remaining} ටෝකන",
-    "sessionQuotaNearlyExhausted": "සැසියක ප්‍රමාණය අවසන් වීමට ආසන්නයි — සක්‍රීය ගොනු ඇතුළත් නොවිය හැක"
+    "sessionQuotaNearlyExhausted": "සැසියක ප්‍රමාණය අවසන් වීමට ආසන්නයි — සක්‍රීය ගොනු ඇතුළත් නොවිය හැක",
+    "notInContext": "ප්‍රසංගය තුළ නොමැත",
+    "notInContextTooltip": "අවසන් ප්‍රතිචාරයේදී මෙම ගොනුව එක් වතාවක ටෝකන් සීමාවට ගැළපී නොතිබු නිසා, මොඩලය එය දැකීමට නොහැකිවිය. ඔබගේ ඊළඟ පණිවුඩයේදී එය නැවත සලකා බලනු ඇත.",
+    "notInjected": "ඇතුළත් කර නැත",
+    "notInjectedTooltip": "රූප නැවත ඇතුළත් කිරීම සැකසුම්වල අක්‍රියයි. මෙම ප්‍රමාදිත රූපය මෙහි පමණක් පෙනේ, ඔබ නැවත සම්බන්ධ කරන තුරු මොඩලයට යැවෙන්නේ නැහැ."
   },
   "shortcuts": {
     "title": "යතුරුපුවරු කෙටි මාර්ග",

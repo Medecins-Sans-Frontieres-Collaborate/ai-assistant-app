@@ -7,6 +7,7 @@ import {
 
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import {
   DEFAULT_SHORTCUTS,
@@ -110,6 +111,12 @@ export function useKeyboardShortcuts({
   // Get actions from stores
   const requestStop = useChatStore((state) => state.requestStop);
   const setIsSettingsOpen = useUIStore((state) => state.setIsSettingsOpen);
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
+  );
+  const confirmStopFromKeyboard = useSettingsStore(
+    (state) => state.confirmStopFromKeyboard,
+  );
 
   // Compute context state
   const contextState: ShortcutContextState = useMemo(() => {
@@ -151,7 +158,11 @@ export function useKeyboardShortcuts({
           return false;
 
         case 'stopGeneration':
-          requestStop();
+          if (confirmStopFromKeyboard) {
+            setStopGenerationConfirmSource('keyboard');
+          } else {
+            requestStop();
+          }
           return true;
 
         case 'toggleSidebar':
@@ -226,7 +237,9 @@ export function useKeyboardShortcuts({
     },
     [
       onNewConversation,
+      confirmStopFromKeyboard,
       requestStop,
+      setStopGenerationConfirmSource,
       setIsSettingsOpen,
       onOpenModelSelector,
       onScrollToBottom,

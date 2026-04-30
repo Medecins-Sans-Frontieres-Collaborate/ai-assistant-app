@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Esalemaki mokakatano ntango bazwaki contenu ya URL",
     "errorInitiatingSearch": "Esalemaki mokakatano na kobanda recherche ya Internet",
     "regenerate": "Kopesa lisusu",
-    "modelSwitchPrompt": "{original} esalaki te kasi {fallback} esalaki. Olingi koleka na modèle mosusu?",
-    "keepOriginalModel": "Tika na {model}",
+    "modelSwitchPrompt": "{fallback} azongisaki mpo na ete {original} ezalaki te.",
+    "keepOriginalModel": "Koba na {model}",
     "switchToModel": "Koleka na {model}",
-    "alwaysSwitchToModel": "Kotambola na automatique seko",
+    "alwaysSwitchToModel": "Tombola ntango nyonso soki {original} ezalaki te",
     "translateMessage": "Kokota nsango na lokota mosusu",
     "translating": "Ezali kokasela...",
     "translationError": "Traduction esalaki te",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Kokanga mongongo epesami te na browser oyo.",
     "microphoneNotDetected": "Mikrofone emonani te",
     "microphoneBlocked": "Mikrofone ekangami. Tala mindule ya browser.",
-    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu."
+    "voiceTranscriptionFailed": "Kokoma mongongo na mokanda eboyaki. Senga mosusu.",
+    "stopGenerationTitle": "Kolakisa kotika kobimisa?",
+    "stopGenerationMessage": "Ozali nakanisi kolongola kosala eyano oyo? Eyano nyonso ezosalama sik’oyo ekoboyama.",
+    "stopGenerationConfirm": "Tika",
+    "stopGenerationDontAskAgainButton": "Kotuna lisusu te soki natiki na bouton",
+    "stopGenerationDontAskAgainKeyboard": "Kotuna lisusu te soki natiki na clavier",
+    "generateResponseButton": "Bimisa eyano"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Kangisa ndenge ya kokangisa mafayile nyonso oyo ebakisami",
-      "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te"
+      "autoPinUploadsDescription": "Ekokangisa mafayile na ndenge ya kokokisa, epesi nzela ete ekima te",
+      "autoInjectPinnedImages": "Kotinda lisusu bandimi basi kaka na makanisi nyonso",
+      "autoInjectPinnedImagesDescription": "Soki ekomi marche, bandimi basi ekozala kotindama na ba model ezali komona bililingi na makanisi nyonso mpo etikalaka na contexte (motuya mingi ezali pene na 765 tokens pona ndimi moko na makanisi moko). Soki ekomi te, bandimi basi ekotikala komonana na panel kasi ekotindama kaka soki ozweli lisusu yango. Ezangeli ndenge na Anthropic models, oyo sik’oyo ezwi te bililingi."
     },
     "Quarantined Data": "Donnee ya quarantine",
     "quarantineDataDescription": "Ozali na {count} {count, plural, one {élément} other {baélément}} ya quarantine ({size}) oyo ezalaki na mitungisi ya donnee mpe ekoki kozala te na ndenge ya malamu.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Exporter ba donnee ya quarantine",
     "Delete Quarantined Data": "Kolongola ba donnee ya quarantine",
     "deleteQuarantineConfirm": "Okomi naino kolongola ba donnee nyonso ya quarantine? Likambo oyo ekoki kozongisama te.",
-    "quarantineDeleteSuccess": "Kolongola ba donnee nyonso ya quarantine esalami malamu."
+    "quarantineDeleteSuccess": "Kolongola ba donnee nyonso ya quarantine esalami malamu.",
+    "confirmations": {
+      "title": "Ba asiransi",
+      "confirmStopFromButton": "Kondima liboso ya kotika na bouton",
+      "confirmStopFromButtonDescription": "Pokisa esika ya kondima soki opesi bouton ya kotika tango eyano ezali kobimisa",
+      "confirmStopFromKeyboard": "Kondima liboso ya kotika na clavier",
+      "confirmStopFromKeyboardDescription": "Pokisa esika ya kondima soki opesi Escape tango eyano ezali kobimisa"
+    },
+    "appliesToNewConversations": "Ekokosala kaka na masolo ya sika.",
+    "useModelDefault": "Eza na ndenge ya model nyonso.",
+    "fromGeneralSettings": "Kolongwa na Bitinda ya General",
+    "preferredNameInheritedFromGeneral": "Kombo ya monguna euti na Bitinda ya General. Kokota kombo sika mpo na kolongola.",
+    "savedConfirmation": "Ebombami",
+    "unsavedChanges": "Bambongwana ebombami te",
+    "unsavedChangesMessage": "Ozali na bambongwana ebombami te. Olingi kolongola yango?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Salela style ya ekomeli ya liboso",
     "noTonesCreated": "Okó moko esalámá te",
     "createTonesHint": "Salá okó na Quick Actions",
-    "translateDocumentTooltip": "Bongolá bazulunalo na lokótá mosusu.\n\nBamodèle : Word, Excel, PowerPoint, PDF, HTML, TXT\nNdé mbóte: 40MB\n\nEbongi na balokótá 80+ na posibolité ya kofandisa glossary."
+    "translateDocumentTooltip": "Kokota makomi na lokota mosusu.\n\nFormats esepelisami: Word, Excel, PowerPoint, HTML, TXT\nSize maksimum: 40MB\n\nEsungi lokota koleka 80 na ba fichiers ya glossary soki esengeli."
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Fichier eleki monene mpo na koépingué ({tokens} tokens, limite: {limit})",
     "activationRejectedTooLarge": "Fichier eleki monene mpo na contexte active ({tokens} tokens, limite: {limit})",
     "sessionQuotaWarning": "Limite ya session ekómi pene kokokisama — {remaining} tokens ezali",
-    "sessionQuotaNearlyExhausted": "Limite ya session ekómi pene — ba fichiers actifs ekoki kozanga komonana"
+    "sessionQuotaNearlyExhausted": "Limite ya session ekómi pene — ba fichiers actifs ekoki kozanga komonana",
+    "notInContext": "Ezali na contexte te",
+    "notInContextTooltip": "Dosie oyo elongaki te kokota na token budget ya makambo eleki na eyano eleki, yango wana model emonaki yango te. Ekozongisama na makanisi ya sika okeyi kokoma.",
+    "notInjected": "Etindami te",
+    "notInjectedTooltip": "Kotinda lisusu bililingi ekangami na ba paramètres. Elilingi oyo ekotikali komonana awa kasi ekotindama te epai ya model soki te ozongisi yango lisusu."
   },
   "shortcuts": {
     "title": "Bansango ya minzoto ya kelasi",

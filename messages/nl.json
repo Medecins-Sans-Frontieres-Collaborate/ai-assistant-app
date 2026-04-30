@@ -604,10 +604,10 @@
     "errorFetchingUrl": "Er is een fout opgetreden bij het ophalen van de URL-inhoud",
     "errorInitiatingSearch": "Er is een fout opgetreden bij het starten van webzoeken",
     "regenerate": "Opnieuw genereren",
-    "modelSwitchPrompt": "{original} is mislukt maar {fallback} is geslaagd. Wilt u van model wisselen?",
-    "keepOriginalModel": "Behoud {model}",
+    "modelSwitchPrompt": "{fallback} heeft dit beantwoord omdat {original} niet beschikbaar was.",
+    "keepOriginalModel": "Blijf op {model}",
     "switchToModel": "Overschakelen naar {model}",
-    "alwaysSwitchToModel": "Altijd automatisch overschakelen",
+    "alwaysSwitchToModel": "Altijd overschakelen wanneer {original} niet beschikbaar is",
     "translateMessage": "Bericht vertalen",
     "translating": "Vertalen...",
     "translationError": "Vertaling mislukt",
@@ -650,7 +650,13 @@
     "mediaRecorderNotSupported": "Audiorecording wordt niet ondersteund in deze browser.",
     "microphoneNotDetected": "Geen microfoon gedetecteerd",
     "microphoneBlocked": "Microfoon geblokkeerd. Controleer de browserinstellingen.",
-    "voiceTranscriptionFailed": "Spraaktranscriptie mislukt. Probeer het opnieuw."
+    "voiceTranscriptionFailed": "Spraaktranscriptie mislukt. Probeer het opnieuw.",
+    "stopGenerationTitle": "Genereren stoppen?",
+    "stopGenerationMessage": "Weet u zeker dat u het genereren van dit antwoord wilt stoppen? Elk lopend antwoord wordt verwijderd.",
+    "stopGenerationConfirm": "Stoppen",
+    "stopGenerationDontAskAgainButton": "Niet meer vragen bij stoppen via de knop",
+    "stopGenerationDontAskAgainKeyboard": "Niet meer vragen bij stoppen via het toetsenbord",
+    "generateResponseButton": "Antwoord genereren"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -939,7 +945,9 @@
     "verbosityDescription": "Bepaalt het detailniveau van antwoorden voor GPT-5-modellen.",
     "activeFiles": {
       "autoPinUploads": "Geüploade bestanden automatisch vastzetten",
-      "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd"
+      "autoPinUploadsDescription": "Bestanden automatisch vastzetten bij uploaden om te voorkomen dat ze worden verwijderd",
+      "autoInjectPinnedImages": "Vastgezette afbeeldingen elke beurt opnieuw injecteren",
+      "autoInjectPinnedImagesDescription": "Indien ingeschakeld worden vastgezette afbeeldingen bij elke beurt naar modellen met visuele mogelijkheden gestuurd, zodat ze in de context blijven (geschatte kosten ≈765 tokens per vastgezette afbeelding per beurt). Indien uitgeschakeld, blijven ze zichtbaar in het paneel maar worden alleen gestuurd als u ze opnieuw toevoegt. Heeft geen effect op Anthropic-modellen, die momenteel geen afbeeldingsinhoud ontvangen."
     },
     "Quarantined Data": "Gekwartetineerde gegevens",
     "quarantineDataDescription": "U heeft {count} gekwartetineerde {count, plural, one {item} other {items}} ({size}) met gegevensproblemen die niet normaal konden worden geladen.",
@@ -947,7 +955,22 @@
     "Export Quarantined Data": "Gekwartetineerde gegevens exporteren",
     "Delete Quarantined Data": "Gekwartetineerde gegevens verwijderen",
     "deleteQuarantineConfirm": "Weet u zeker dat u alle gekwartetineerde gegevens wilt verwijderen? Deze handeling kan niet ongedaan worden gemaakt.",
-    "quarantineDeleteSuccess": "Alle gekwartetineerde gegevens succesvol verwijderd."
+    "quarantineDeleteSuccess": "Alle gekwartetineerde gegevens succesvol verwijderd.",
+    "confirmations": {
+      "title": "Bevestigingen",
+      "confirmStopFromButton": "Bevestigen voor stoppen via de knop",
+      "confirmStopFromButtonDescription": "Toon een bevestigingsvenster wanneer u op de stopknop klikt terwijl er een antwoord wordt gegenereerd",
+      "confirmStopFromKeyboard": "Bevestigen voor stoppen via het toetsenbord",
+      "confirmStopFromKeyboardDescription": "Toon een bevestigingsvenster wanneer u Escape indrukt terwijl er een antwoord wordt gegenereerd"
+    },
+    "appliesToNewConversations": "Alleen van toepassing op nieuwe gesprekken.",
+    "useModelDefault": "Standaardinstelling van het model wordt gebruikt.",
+    "fromGeneralSettings": "Uit Algemene Instellingen",
+    "preferredNameInheritedFromGeneral": "Je weergavenaam uit de Algemene Instellingen wordt overgenomen. Typ om deze te overschrijven.",
+    "savedConfirmation": "Opgeslagen",
+    "unsavedChanges": "Niet-opgeslagen wijzigingen",
+    "unsavedChangesMessage": "Je hebt niet-opgeslagen wijzigingen. Wil je deze negeren?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1631,7 +1654,7 @@
     "useDefaultStyle": "Standaard schrijfstijl gebruiken",
     "noTonesCreated": "Nog geen tonen aangemaakt",
     "createTonesHint": "Maak tonen aan in Snelle acties",
-    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, PDF, HTML, TXT\nMaximale grootte: 40MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden."
+    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, HTML, TXT\nMaximale grootte: 40 MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden."
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Bestand te groot om vast te zetten ({tokens} tokens, limiet: {limit})",
     "activationRejectedTooLarge": "Bestand te groot voor actieve context ({tokens} tokens, limiet: {limit})",
     "sessionQuotaWarning": "Sessielimiet bijna bereikt — {remaining} tokens resterend",
-    "sessionQuotaNearlyExhausted": "Sessielimiet vrijwel bereikt — actieve bestanden worden mogelijk niet opgenomen"
+    "sessionQuotaNearlyExhausted": "Sessielimiet vrijwel bereikt — actieve bestanden worden mogelijk niet opgenomen",
+    "notInContext": "Niet in context",
+    "notInContextTooltip": "Dit bestand paste niet in het tokenbudget per beurt bij de laatste reactie, waardoor het model het niet kon zien. Het wordt bij uw volgende bericht opnieuw overwogen.",
+    "notInjected": "Niet geïnjecteerd",
+    "notInjectedTooltip": "Het opnieuw injecteren van afbeeldingen is uitgeschakeld in de instellingen. Deze vastgezette afbeelding blijft hier zichtbaar maar wordt niet naar het model gestuurd, tenzij u deze opnieuw toevoegt."
   },
   "shortcuts": {
     "title": "Toetsenbord­shortcuts",

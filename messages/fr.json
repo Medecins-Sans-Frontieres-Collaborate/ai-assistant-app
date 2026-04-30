@@ -583,10 +583,10 @@
     "errorFetchingUrl": "Une erreur s'est produite lors de la récupération du contenu de l'URL",
     "errorInitiatingSearch": "Une erreur s'est produite lors du lancement de la recherche web",
     "regenerate": "Régénérer",
-    "modelSwitchPrompt": "{original} a échoué mais {fallback} a réussi. Voulez-vous changer de modèle?",
-    "keepOriginalModel": "Garder {model}",
+    "modelSwitchPrompt": "{fallback} a répondu car {original} n'était pas disponible.",
+    "keepOriginalModel": "Rester sur {model}",
     "switchToModel": "Passer à {model}",
-    "alwaysSwitchToModel": "Toujours changer automatiquement",
+    "alwaysSwitchToModel": "Toujours passer à un autre modèle lorsque {original} n'est pas disponible",
     "translateMessage": "Traduire le message",
     "translating": "Traduction en cours...",
     "translationError": "Échec de la traduction",
@@ -631,7 +631,13 @@
     "mediaRecorderNotSupported": "L’enregistrement audio n’est pas pris en charge dans ce navigateur.",
     "microphoneNotDetected": "Aucun microphone détecté",
     "microphoneBlocked": "Microphone bloqué. Vérifiez les paramètres du navigateur.",
-    "voiceTranscriptionFailed": "Échec de la transcription vocale. Veuillez réessayer."
+    "voiceTranscriptionFailed": "Échec de la transcription vocale. Veuillez réessayer.",
+    "stopGenerationTitle": "Arrêter la génération ?",
+    "stopGenerationMessage": "Êtes-vous sûr de vouloir arrêter la génération de cette réponse ? Toute réponse en cours sera abandonnée.",
+    "stopGenerationConfirm": "Arrêter",
+    "stopGenerationDontAskAgainButton": "Ne plus demander lors de l'arrêt avec le bouton",
+    "stopGenerationDontAskAgainKeyboard": "Ne plus demander lors de l'arrêt avec le clavier",
+    "generateResponseButton": "Générer une réponse"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Contrôle le niveau de détail des réponses pour les modèles GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Épingler automatiquement les fichiers téléchargés",
-      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés"
+      "autoPinUploadsDescription": "Épingler automatiquement les fichiers lors du téléchargement pour éviter qu'ils ne soient supprimés",
+      "autoInjectPinnedImages": "Réinjecter les images épinglées à chaque tour",
+      "autoInjectPinnedImagesDescription": "Lorsque cette option est activée, les images épinglées sont envoyées à chaque tour aux modèles compatibles avec la vision afin de rester dans le contexte (coût estimé ≈765 tokens par image épinglée et par tour). Lorsqu'elle est désactivée, les images restent visibles dans le panneau mais ne sont envoyées que si vous les rattachez. Aucun effet sur les modèles Anthropic, qui ne reçoivent actuellement pas de contenu image."
     },
     "Quarantined Data": "Données en quarantaine",
     "quarantineDataDescription": "Vous avez {count} {count, plural, one {élément} other {éléments}} en quarantaine ({size}) contenant des problèmes de données empêchant leur chargement normal.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Exporter les données en quarantaine",
     "Delete Quarantined Data": "Supprimer les données en quarantaine",
     "deleteQuarantineConfirm": "Êtes-vous sûr de vouloir supprimer toutes les données en quarantaine ? Cette action est irréversible.",
-    "quarantineDeleteSuccess": "Toutes les données en quarantaine ont été supprimées avec succès."
+    "quarantineDeleteSuccess": "Toutes les données en quarantaine ont été supprimées avec succès.",
+    "confirmations": {
+      "title": "Confirmations",
+      "confirmStopFromButton": "Confirmer avant d'arrêter avec le bouton",
+      "confirmStopFromButtonDescription": "Afficher une boîte de confirmation lorsque vous cliquez sur le bouton d’arrêt pendant la génération d’une réponse",
+      "confirmStopFromKeyboard": "Confirmer avant d'arrêter avec le clavier",
+      "confirmStopFromKeyboardDescription": "Afficher une boîte de confirmation lorsque vous appuyez sur Échap pendant la génération d’une réponse"
+    },
+    "appliesToNewConversations": "S’applique uniquement aux nouvelles conversations.",
+    "useModelDefault": "Utilisation de la valeur par défaut du modèle.",
+    "fromGeneralSettings": "Depuis les paramètres généraux",
+    "preferredNameInheritedFromGeneral": "Nom d’affichage hérité des paramètres généraux. Saisissez pour remplacer.",
+    "savedConfirmation": "Enregistré",
+    "unsavedChanges": "Modifications non enregistrées",
+    "unsavedChangesMessage": "Vous avez des modifications non enregistrées. Les annuler ?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "Utiliser le style d’écriture par défaut",
     "noTonesCreated": "Aucun ton créé pour le moment",
     "createTonesHint": "Créez des tons dans Actions rapides",
-    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, PDF, HTML, TXT\nTaille maximale : 40 Mo\n\nPrend en charge plus de 80 langues avec fichiers de glossaire optionnels."
+    "translateDocumentTooltip": "Traduisez des documents dans une autre langue.\n\nFormats pris en charge : Word, Excel, PowerPoint, HTML, TXT\nTaille maximale : 40 Mo\n\nPlus de 80 langues prises en charge, avec fichiers de glossaire optionnels."
   },
   "transcription": {
     "addInstructions": "Ajouter des instructions",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Fichier trop volumineux pour être épinglé ({tokens} jetons, limite : {limit})",
     "activationRejectedTooLarge": "Fichier trop volumineux pour le contexte actif ({tokens} jetons, limite : {limit})",
     "sessionQuotaWarning": "Quota de session bientôt atteint — {remaining} jetons restants",
-    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus"
+    "sessionQuotaNearlyExhausted": "Quota de session presque épuisé — les fichiers actifs pourraient ne pas être inclus",
+    "notInContext": "Hors contexte",
+    "notInContextTooltip": "Ce fichier n'entrait pas dans la limite de tokens par tour lors de la dernière réponse, le modèle n'a donc pas pu le voir. Il sera réévalué lors de votre prochain message.",
+    "notInjected": "Non injecté",
+    "notInjectedTooltip": "La réinjection d'image est désactivée dans les paramètres. Cette image épinglée reste visible ici mais n'est pas envoyée au modèle sauf si vous la rattachez."
   },
   "shortcuts": {
     "title": "Raccourcis clavier",

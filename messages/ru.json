@@ -637,10 +637,10 @@
     "errorFetchingUrl": "Произошла ошибка при получении содержимого URL",
     "errorInitiatingSearch": "Произошла ошибка при инициировании веб-поиска",
     "regenerate": "Перегенерировать",
-    "modelSwitchPrompt": "{original} не сработал, но {fallback} сработал. Хотите переключить модель?",
-    "keepOriginalModel": "Оставить {model}",
+    "modelSwitchPrompt": "{fallback} ответил на этот вопрос, потому что {original} был недоступен.",
+    "keepOriginalModel": "Оставаться на {model}",
     "switchToModel": "Переключиться на {model}",
-    "alwaysSwitchToModel": "Всегда переключаться автоматически",
+    "alwaysSwitchToModel": "Всегда переключаться, когда {original} недоступен",
     "translateMessage": "Перевести сообщение",
     "translating": "Перевод...",
     "translationError": "Ошибка перевода",
@@ -685,7 +685,13 @@
     "mediaRecorderNotSupported": "Запись аудио не поддерживается в этом браузере.",
     "microphoneNotDetected": "Микрофон не обнаружен",
     "microphoneBlocked": "Микрофон заблокирован. Проверьте настройки браузера.",
-    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте еще раз."
+    "voiceTranscriptionFailed": "Не удалось распознать голос. Пожалуйста, попробуйте еще раз.",
+    "stopGenerationTitle": "Остановить генерацию?",
+    "stopGenerationMessage": "Вы уверены, что хотите остановить генерацию этого ответа? Текущий ответ будет удалён.",
+    "stopGenerationConfirm": "Остановить",
+    "stopGenerationDontAskAgainButton": "Больше не спрашивать при остановке через кнопку",
+    "stopGenerationDontAskAgainKeyboard": "Больше не спрашивать при остановке с помощью клавиатуры",
+    "generateResponseButton": "Сгенерировать ответ"
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -974,7 +980,9 @@
     "verbosityDescription": "Управляет уровнем детализации ответов для моделей GPT-5.",
     "activeFiles": {
       "autoPinUploads": "Автоматически закреплять загружаемые файлы",
-      "autoPinUploadsDescription": "Автоматически закреплять файлы при загрузке, чтобы они не удалялись"
+      "autoPinUploadsDescription": "Автоматически закреплять файлы при загрузке, чтобы они не удалялись",
+      "autoInjectPinnedImages": "Переотправлять закрепленные изображения каждый ход",
+      "autoInjectPinnedImagesDescription": "Если включено, закрепленные изображения отправляются моделям с поддержкой vision при каждом ходе, чтобы оставаться в контексте (примерная стоимость ≈765 токенов за закрепленное изображение за ход). Если выключено, закрепленные изображения остаются видимыми в панели, но отправляются только при повторном прикреплении. Не влияет на модели Anthropic, которые сейчас не принимают изображения."
     },
     "Quarantined Data": "Изолированные данные",
     "quarantineDataDescription": "У вас {count} изолированных {count, plural, one {элемент} few {элемента} many {элементов} other {элементов}} ({size}) с проблемами данных, которые не удалось загрузить.",
@@ -982,7 +990,22 @@
     "Export Quarantined Data": "Экспортировать изолированные данные",
     "Delete Quarantined Data": "Удалить изолированные данные",
     "deleteQuarantineConfirm": "Вы уверены, что хотите удалить все изолированные данные? Это действие необратимо.",
-    "quarantineDeleteSuccess": "Все изолированные данные успешно удалены."
+    "quarantineDeleteSuccess": "Все изолированные данные успешно удалены.",
+    "confirmations": {
+      "title": "Подтверждения",
+      "confirmStopFromButton": "Подтверждать перед остановкой через кнопку",
+      "confirmStopFromButtonDescription": "Показывать диалог подтверждения при нажатии кнопки остановки во время генерации ответа",
+      "confirmStopFromKeyboard": "Подтверждать перед остановкой с помощью клавиатуры",
+      "confirmStopFromKeyboardDescription": "Показывать диалог подтверждения при нажатии Escape во время генерации ответа"
+    },
+    "appliesToNewConversations": "Применяется только к новым беседам.",
+    "useModelDefault": "Используется значение модели по умолчанию.",
+    "fromGeneralSettings": "Из Общих настроек",
+    "preferredNameInheritedFromGeneral": "Используется отображаемое имя из Общих настроек. Введите другое, чтобы изменить.",
+    "savedConfirmation": "Сохранено",
+    "unsavedChanges": "Несохранённые изменения",
+    "unsavedChangesMessage": "У вас есть несохранённые изменения. Отменить их?",
+    "characterCount": "{current}/{max}"
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -1534,7 +1557,7 @@
     "useDefaultStyle": "Использовать стиль по умолчанию",
     "noTonesCreated": "Тональности ещё не созданы",
     "createTonesHint": "Создайте тональности в Быстрых действиях",
-    "translateDocumentTooltip": "Переводите документы на другие языки.\n\nПоддерживаемые форматы: Word, Excel, PowerPoint, PDF, HTML, TXT\nМаксимальный размер: 40 МБ\n\nПоддерживается более 80 языков, возможна загрузка глоссариев."
+    "translateDocumentTooltip": "Перевести документы на другой язык.\n\nПоддерживаемые форматы: Word, Excel, PowerPoint, HTML, TXT\nМаксимальный размер: 40 МБ\n\nПоддерживается более 80 языков с возможностью использования глоссариев."
   },
   "transcription": {
     "addInstructions": "Добавить инструкции",
@@ -1832,7 +1855,11 @@
     "pinBlockedTooLarge": "Файл слишком большой для закрепления ({tokens} токенов, лимит: {limit})",
     "activationRejectedTooLarge": "Файл слишком большой для активного контекста ({tokens} токенов, лимит: {limit})",
     "sessionQuotaWarning": "Лимит сессии на исходе — осталось {remaining} токенов",
-    "sessionQuotaNearlyExhausted": "Лимит сессии почти исчерпан — активные файлы могут быть не включены"
+    "sessionQuotaNearlyExhausted": "Лимит сессии почти исчерпан — активные файлы могут быть не включены",
+    "notInContext": "Вне контекста",
+    "notInContextTooltip": "Этот файл не поместился в лимит токенов за ход при последнем ответе, поэтому модель не видела его. Он будет учтен при следующем сообщении.",
+    "notInjected": "Не отправлено",
+    "notInjectedTooltip": "Переотправка изображений отключена в настройках. Это закрепленное изображение видно здесь, но не отправляется модели, пока вы не прикрепите его снова."
   },
   "shortcuts": {
     "title": "Горячие клавиши",

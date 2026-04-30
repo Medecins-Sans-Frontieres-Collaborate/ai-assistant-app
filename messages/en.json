@@ -655,6 +655,12 @@
   "chat": {
     "discardChanges": "Discard Changes",
     "discardChangesMessage": "You have unsaved changes. Are you sure you want to discard them?",
+    "stopGenerationTitle": "Stop generating?",
+    "stopGenerationMessage": "Are you sure you want to stop generating this response? Any in-progress reply will be discarded.",
+    "stopGenerationConfirm": "Stop",
+    "stopGenerationDontAskAgainButton": "Don't ask again when stopping with the button",
+    "stopGenerationDontAskAgainKeyboard": "Don't ask again when stopping with the keyboard",
+    "generateResponseButton": "Generate response",
     "downloadAudio": "Download audio",
     "closeAudioPlayer": "Close audio player",
     "downloadTranscript": "Download transcript",
@@ -708,10 +714,10 @@
     "errorFetchingUrl": "An error occurred while fetching the URL content",
     "errorInitiatingSearch": "An error occurred while initiating web search",
     "regenerate": "Regenerate",
-    "modelSwitchPrompt": "{original} failed but {fallback} succeeded. Would you like to switch models?",
-    "keepOriginalModel": "Keep {model}",
+    "modelSwitchPrompt": "{fallback} answered this because {original} wasn't available.",
+    "keepOriginalModel": "Stay on {model}",
     "switchToModel": "Switch to {model}",
-    "alwaysSwitchToModel": "Always auto-switch",
+    "alwaysSwitchToModel": "Always switch when {original} isn't available",
     "translateMessage": "Translate message",
     "translating": "Translating...",
     "translationError": "Translation failed",
@@ -1015,6 +1021,19 @@
     "Reset Settings": "Reset Settings",
     "Confirm Reset": "Confirm Reset",
     "Reset Confirmation Message": "Are you sure you want to reset all settings? This will restore default values for temperature, theme, and other preferences. Your conversations, prompts, and tones will not be affected.",
+    "appliesToNewConversations": "Applies to new conversations only.",
+    "useModelDefault": "Using model default.",
+    "fromGeneralSettings": "From General Settings",
+    "preferredNameInheritedFromGeneral": "Inheriting your General Settings display name. Type to override.",
+    "characterCount": "{current}/{max}",
+    "clearField": "Clear field",
+    "autosaveNote": "Changes save automatically.",
+    "responseSection": "Response",
+    "voiceSection": "Voice",
+    "behaviorSection": "Behavior",
+    "resetChatSettings": "Reset chat settings",
+    "resetChatSettingsConfirmTitle": "Reset chat settings?",
+    "resetChatSettingsConfirmMessage": "This restores defaults for everything in this panel: temperature, custom instructions, About You, model response, streaming speed, text-to-speech, active files, and confirmations. It does not affect your conversations.",
     "Storage Information": "Storage Information",
     "Storage Usage": "Storage Usage",
     "storageAlmostFull": "Storage almost full! Consider clearing old conversations.",
@@ -1149,7 +1168,16 @@
     },
     "activeFiles": {
       "autoPinUploads": "Auto-pin uploaded files",
-      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out"
+      "autoPinUploadsDescription": "Automatically pin files when uploaded to prevent them from being cycled out",
+      "autoInjectPinnedImages": "Re-inject pinned images each turn",
+      "autoInjectPinnedImagesDescription": "When on, pinned images are sent to vision-capable models every turn so they stay in context (estimated cost ≈765 tokens per pinned image per turn). When off, pinned images stay visible in the panel but are only sent when you re-attach them. Has no effect on Anthropic models, which currently don't receive image content."
+    },
+    "confirmations": {
+      "title": "Confirmations",
+      "confirmStopFromButton": "Confirm before stopping with the button",
+      "confirmStopFromButtonDescription": "Show a confirmation dialog when you click the stop button while a response is being generated",
+      "confirmStopFromKeyboard": "Confirm before stopping with the keyboard",
+      "confirmStopFromKeyboardDescription": "Show a confirmation dialog when you press Escape while a response is being generated"
     }
   },
   "emptyState": {
@@ -1615,7 +1643,7 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, PDF, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -1823,7 +1851,11 @@
     "pinBlockedTooLarge": "File too large to pin ({tokens} tokens, limit: {limit})",
     "activationRejectedTooLarge": "File too large for active context ({tokens} tokens, limit: {limit})",
     "sessionQuotaWarning": "Session quota running low — {remaining} tokens remaining",
-    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included"
+    "sessionQuotaNearlyExhausted": "Session quota nearly exhausted — active files may not be included",
+    "notInContext": "Not in context",
+    "notInContextTooltip": "This file did not fit the per-turn token budget on the last response, so the model could not see it. It will be reconsidered on your next message.",
+    "notInjected": "Not injected",
+    "notInjectedTooltip": "Image re-injection is disabled in settings. This pinned image stays visible here but is not sent to the model unless you re-attach it."
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",

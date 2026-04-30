@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Problème a yeke na gïngö tî mëngö tî URL",
     "errorInitiatingSearch": "Problème a yeke na dûti gïngö na web",
     "regenerate": "Sara ngâ",
-    "modelSwitchPrompt": "{original} a hën pepe ndo {fallback} a hën. Mo yê tî kîri modèle?",
-    "keepOriginalModel": "Dû na {model}",
+    "modelSwitchPrompt": "{fallback} ayeke azongbâ na wa {original} agbenî mo.",
+    "keepOriginalModel": "Dökö na {model}",
     "switchToModel": "Kîri na {model}",
-    "alwaysSwitchToModel": "Kîri na nzönî tî ë ôke awe",
+    "alwaysSwitchToModel": "Léké ti köngö sô {original} agbenî lo.",
     "translateMessage": "Kîri mëngö",
     "translating": "Kîrïngö...",
     "translationError": "Kîrïngö a hën pepe",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Ködörö tî zo nginza tî audio ape na browser ôko.",
     "microphoneNotDetected": "A yékwa microphone",
     "microphoneBlocked": "Microphone azui. Gbegë na réglage ti navigateur mo.",
-    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava."
+    "voiceTranscriptionFailed": "Ködörö tî voix ayéké. Sésé tî bêtï ndö ava.",
+    "stopGenerationTitle": "Kê sô siriri?",
+    "stopGenerationMessage": "O kêtâ na wè yê kê sô siriri wa mo? Siriri ayeke na waka lo, lo yângâ mo.",
+    "stopGenerationConfirm": "Kê sô",
+    "stopGenerationDontAskAgainButton": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na boutton",
+    "stopGenerationDontAskAgainKeyboard": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na klavier",
+    "generateResponseButton": "Sûrû siriri"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Fânga ti yângâ nî tî kodro wüngö",
-      "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô"
+      "autoPinUploadsDescription": "Mbeni kodro nî tî yângâ na wa lô tî lölengö tî yeke ye ké wa tî yeke faô",
+      "autoInjectPinnedImages": "Zinga sô inji-file na image tî gbê na yângâ-yângâ",
+      "autoInjectPinnedImagesDescription": "Sô àla, image tî gbê a yeke bô tî yâ tî model na vision-mbeni na yângâ-yângâ, ngâ a yové na contexte (kulu tî tokens ≈765 sôkô image tî gbê kubeti na yângâ-yângâ). Sô à ko, image tî gbê a yéké yâ lê na panel, mbênî a bô na model sô mo yângä-ä ti ji. A köda na model Anthropic, mingi tî yeke hila tî image sôngö na model tî o."
     },
     "Quarantined Data": "Donnés tî quarantiné",
     "quarantineDataDescription": "Oko yeke {count} {count, plural, one {mbeti} other {mbeti}} tî quarantiné ({size}) mbi donnés azo so alingbi köda wala köda mbido na mbênî.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Ganza donnés tî quarantiné",
     "Delete Quarantined Data": "Pese donnés tî quarantiné",
     "deleteQuarantineConfirm": "O yeke sûr na pése touts donnés tî quarantiné? Ebio ape ndö tî sangana.",
-    "quarantineDeleteSuccess": "Ködörö tî pèse touts donnés tî quarantiné a la mû."
+    "quarantineDeleteSuccess": "Ködörö tî pèse touts donnés tî quarantiné a la mû.",
+    "confirmations": {
+      "title": "Kûé dâbâna",
+      "confirmStopFromButton": "Kêtê na dâbâ na mû kê sô na boutton",
+      "confirmStopFromButtonDescription": "Fâ dâbâna gbèngbè ti sô lâ boutton ti kê sô tâ lo sûrû siriri",
+      "confirmStopFromKeyboard": "Kêtê na dâbâ na mû kê sô na klavier",
+      "confirmStopFromKeyboardDescription": "Fâ dâbâna gbèngbè ti sô lâ Escape tâ lo sûrû siriri"
+    },
+    "appliesToNewConversations": "E sô kɛ na butûa mingbi tî gbangabange mo.",
+    "useModelDefault": "Mo na model tî tenɛ.",
+    "fromGeneralSettings": "Wüngö tî General Settings",
+    "preferredNameInheritedFromGeneral": "Nzo tî General Settings ayeke na yângbêtî. Sêngê sô mo yeke zu ködörö.",
+    "savedConfirmation": "Abê ti mongo",
+    "unsavedChanges": "Ködörö so ayeke na mongo",
+    "unsavedChangesMessage": "Ködörö so ayeke ayeke na mongo. Oko mo langbï?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, PDF, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Këtï hülë dokument na lingbi so asi.\n\nFormats so asumbâ: Word, Excel, PowerPoint, HTML, TXT\nMax. sïze: 40MB\n\nLengbi 80+ lingbi na possibilité tî glossary file."
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Ape so ale ti kängbi sô ndro lo ({tokens} tokens, ngbanga: {limit})",
     "activationRejectedTooLarge": "Ape so ale ti active context ({tokens} tokens, ngbanga: {limit})",
     "sessionQuotaWarning": "Quota tî session yeke pada— {remaining} tokens yeke kûè",
-    "sessionQuotaNearlyExhausted": "Quota tî session yeke ndro sô lise— ape active lô tî kete ana mo"
+    "sessionQuotaNearlyExhausted": "Quota tî session yeke ndro sô lise— ape active lô tî kete ana mo",
+    "notInContext": "A yeke hila na contexte",
+    "notInContextTooltip": "Fi file a köda na tendê tî tokens sô yângâ, so model a hila å. A yeke zara sô mo sèngöra na kêtêmbè tî mo.",
+    "notInjected": "A hila inji",
+    "notInjectedTooltip": "Inji image zo a köda na settings. Image tî gbê a yeke hila yô kêtêngö, mbênî a hila tî bô na model sô mo yângä-ä ti ji na yângâ."
   },
   "shortcuts": {
     "title": "Káfù tî kobanga-lêko",

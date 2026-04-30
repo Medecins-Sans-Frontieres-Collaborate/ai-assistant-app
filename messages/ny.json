@@ -705,10 +705,10 @@
     "errorFetchingUrl": "Panali cholakwika potenga zomwe zili pa URL",
     "errorInitiatingSearch": "Panali cholakwika poyamba kusakira pa intaneti",
     "regenerate": "Pangani kwatsopano",
-    "modelSwitchPrompt": "{original} yalephera koma {fallback} yatheka. Kodi mukufuna kusintha mitundu?",
-    "keepOriginalModel": "Sungani {model}",
+    "modelSwitchPrompt": "{fallback} anayankha izi chifukwa {original} sinalipo.",
+    "keepOriginalModel": "Khalani pa {model}",
     "switchToModel": "Sinthani kukhala {model}",
-    "alwaysSwitchToModel": "Sinthani modzidzimutsa nthawi zonse",
+    "alwaysSwitchToModel": "Sinthani nthawi zonse zikakhala kuti {original} kulibe",
     "translateMessage": "Masulani uthenga",
     "translating": "Kumasulira...",
     "translationError": "Kumasulira kwalephera",
@@ -743,7 +743,13 @@
     "mediaRecorderNotSupported": "Browser iyi silola kujambula mawu.",
     "microphoneNotDetected": "Palibe maikolofoni yomwe yapezeka",
     "microphoneBlocked": "Maikolofoni yatsekedwa. Chongani makonda a msakatuli.",
-    "voiceTranscriptionFailed": "Kulemba mawu kwalephera. Chonde yesani kachiwiri."
+    "voiceTranscriptionFailed": "Kulemba mawu kwalephera. Chonde yesani kachiwiri.",
+    "stopGenerationTitle": "Mulepheretse kupanga?",
+    "stopGenerationMessage": "Ndinu otsimikiza kuti mukufuna kuletsa kupanga yankho ili? Yankho lililonse lomwe likupangidwa lidzachotsedwa.",
+    "stopGenerationConfirm": "Letsa",
+    "stopGenerationDontAskAgainButton": "Musandifunse kachiwiri poletsa pogwiritsa ntchito batani",
+    "stopGenerationDontAskAgainKeyboard": "Musandifunse kachiwiri poletsa pogwiritsa ntchito kiyibodi",
+    "generateResponseButton": "Panga yankho"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1127,7 +1133,9 @@
     },
     "activeFiles": {
       "autoPinUploads": "Ikani mafayilo omwe akukwezedwa okhaokha",
-      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo"
+      "autoPinUploadsDescription": "Ikani mafayilo basi akangokwezedwa kuti asachotsedwe pompopompo",
+      "autoInjectPinnedImages": "Bwezeretsani zithunzi zomwe zabweretsedwa nthawi iliyonse",
+      "autoInjectPinnedImagesDescription": "Zikayatsidwa, zithunzi zomwe mwapachika zimatumizidwa ku ma model omwe amawona zithunzi nthawi iliyonse kuti zikhale mu nkhani (mtengo wokwana ≈765 tokens pa chithunzi chilichonse pa nthawi iliyonse). Zikazimitsidwa, zithunzizo zimakhalabe zikuonekera mu paneli koma zimatumizidwa pokhapokha mutazibwezeretsanso. Sizigwira ntchito pa ma model a Anthropic, omwe panopa sadalandila zithunzi."
     },
     "Quarantined Data": "Deta Yosungidwa M'kati",
     "quarantineDataDescription": "Muli ndi {count} deta yosungidwa m'kati {count, plural, one {item} other {items}} ({size}) yokhala ndi mavuto omwe sangathe kutsegulidwa bwinobwino.",
@@ -1135,7 +1143,22 @@
     "Export Quarantined Data": "Tumizani Deta Yosungidwa M'kati",
     "Delete Quarantined Data": "Chotsani Deta Yosungidwa M'kati",
     "deleteQuarantineConfirm": "Kodi mukutsimikiza kuti mukufuna kuchotsa deta yonse yosungidwa m'kati? Zochitikazi sizingabwezedwe.",
-    "quarantineDeleteSuccess": "Deta yonse yosungidwa m'kati yachotsedwa bwinobwino."
+    "quarantineDeleteSuccess": "Deta yonse yosungidwa m'kati yachotsedwa bwinobwino.",
+    "confirmations": {
+      "title": "Zotsimikizira",
+      "confirmStopFromButton": "Tsimikizani musanaletse pogwiritsa batani",
+      "confirmStopFromButtonDescription": "Onetsani zotsimikizira mukadina batani loletsa pamene yankho likupangidwa",
+      "confirmStopFromKeyboard": "Tsimikizani musanaletse pogwiritsa kiyibodi",
+      "confirmStopFromKeyboardDescription": "Onetsani zotsimikizira mukakanikiza Escape pamene yankho likupangidwa"
+    },
+    "appliesToNewConversations": "Zikugwira ntchito pa zokambirana zatsopano zokha.",
+    "useModelDefault": "Akugwiritsa ntchito zosakira za model.",
+    "fromGeneralSettings": "Kuchokera pa Makonda Anu Akulu",
+    "preferredNameInheritedFromGeneral": "Mukugwiritsa ntchito dzina lochokera pa Makonda Anu Akulu. Lembani kuti musinthe.",
+    "savedConfirmation": "Zasungidwa",
+    "unsavedChanges": "Zosinthidwa zosasungidwa",
+    "unsavedChangesMessage": "Muli ndi zosintha zosasungidwa. Mukufuna kuzichotsa?",
+    "characterCount": "{current}/{max}"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1600,7 +1623,7 @@
     "useDefaultStyle": "Gwiritsani ntchito kalemba woyamba",
     "noTonesCreated": "Palibe mawu opangidwa pakadali pano",
     "createTonesHint": "Pangani mawu mu Zochitika Mwachangu",
-    "translateDocumentTooltip": "Masulani zikalata ku chilankhulo china.\n\nMitundu yothandizidwa: Word, Excel, PowerPoint, PDF, HTML, TXT\nKukula kwambiri: 40MB\n\nImathandizira zilankhulo 80+ ndi mafayilo a mawu osankha."
+    "translateDocumentTooltip": "Kumasulira zikalata m'chinenero china.\n\nMitundu imene ikuthandizidwa: Word, Excel, PowerPoint, HTML, TXT\nKukula kwakukulu: 40MB\n\nImathandiza m'zinenero zoposa 80 ndi mwayi wa ma glossary owonjezera."
   },
   "transcription": {
     "transcribesOnSend": "Imalemba potumiza",
@@ -1808,7 +1831,11 @@
     "pinBlockedTooLarge": "Fayilo ndi yayikulu kwambiri kuyikako ({tokens} matoken, malire: {limit})",
     "activationRejectedTooLarge": "Fayilo ndi yayikulu kwambiri pa gawo lamoyo ({tokens} matoken, malire: {limit})",
     "sessionQuotaWarning": "Malinga ndi nthawi yatsala pang’ono kutha — {remaining} matoken atsala",
-    "sessionQuotaNearlyExhausted": "Malinga ndi nthawi pafupifupi kutha — mafayilo akhanga sakhoza kuphatikizidwa"
+    "sessionQuotaNearlyExhausted": "Malinga ndi nthawi pafupifupi kutha — mafayilo akhanga sakhoza kuphatikizidwa",
+    "notInContext": "Sili mu nkhani",
+    "notInContextTooltip": "Fayiloyi sinalowe mu chiwerengero cha ma token nthawi yapitayi, kotero model sanathe kuyiona. Izi zidzaganizidwanso pa uthenga wanu wotsatira.",
+    "notInjected": "Sinatumizidwe",
+    "notInjectedTooltip": "Kutumiza zithunzi kwabwereranso kwazimitsidwa mu makonda. Chithunzi ichi chikhalabe pamenepa koma sichitumizidwa kwa model pokhapokha mutachibwezeretsanso."
   },
   "shortcuts": {
     "title": "Njira Zachidule pa Kiyibodi",
