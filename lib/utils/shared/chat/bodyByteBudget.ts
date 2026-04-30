@@ -147,9 +147,14 @@ export function trimBodyToByteBudget<T extends TrimmableBody>(
     messagesDropped++;
   }
 
-  // Avoid sending an orphaned assistant at the new boundary (mirrors the
-  // windowMessagesForAPI guard).
-  if (messages.length >= 2 && messages[1]?.role === 'assistant') {
+  // If phase 2 dropped messages, the message now at index 1 may be an
+  // assistant whose paired user turn was just removed. Drop it too so the
+  // model isn't seeing an orphaned reply (mirrors windowMessagesForAPI).
+  if (
+    messagesDropped > 0 &&
+    messages.length >= 2 &&
+    messages[1]?.role === 'assistant'
+  ) {
     messages.splice(1, 1);
     messagesDropped++;
   }
