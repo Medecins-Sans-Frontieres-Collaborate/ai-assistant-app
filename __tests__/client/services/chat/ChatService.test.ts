@@ -5,13 +5,6 @@ import { OpenAIModel } from '@/types/openai';
 
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock the image base64 conversion so it doesn't fire a real fetch.
-vi.mock('@/lib/services/imageService', () => ({
-  fetchImageBase64FromMessageContent: vi.fn(
-    async () => 'data:image/png;base64,aaaa',
-  ),
-}));
-
 // Capture the body posted by ChatService so we can assert on it without a real
 // network call.
 const postStreamMock = vi.fn(async () => new ReadableStream<Uint8Array>());
