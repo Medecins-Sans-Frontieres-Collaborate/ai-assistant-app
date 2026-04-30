@@ -1,84 +1,15 @@
 'use client';
 
-import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
-
 import { trimBodyToByteBudget } from '@/lib/utils/shared/chat/bodyByteBudget';
 import { normalizeMessagesForAPI } from '@/lib/utils/shared/chat/messageNormalization';
 
-import {
-  ActiveFile,
-  FileMessageContent,
-  ImageMessageContent,
-  Message,
-} from '@/types/chat';
+import { ActiveFile, FileMessageContent, Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
 import { Tone } from '@/types/tone';
 
 import { apiClient } from '../api';
-
-/**
- * Converts image URL references in messages to base64 data URLs.
- * This is necessary because the LLM API cannot access our internal URLs.
- * The conversion happens at API call time, not at storage time, so
- * localStorage keeps the small file references.
- *
- * @param messages - Array of messages potentially containing image references
- * @returns Messages with image URLs converted to base64
- */
-async function convertImagesToBase64(messages: Message[]): Promise<Message[]> {
-  return Promise.all(
-    messages.map(async (message) => {
-      // Only process array content (images are in array format)
-      if (!Array.isArray(message.content)) {
-        return message;
-      }
-
-      // Process each content block
-      const convertedContent = await Promise.all(
-        message.content.map(async (item) => {
-          // Only convert image_url items
-          if (item.type !== 'image_url') {
-            return item;
-          }
-
-          const imageItem = item as ImageMessageContent;
-
-          // Already base64 - no conversion needed
-          if (imageItem.image_url.url.startsWith('data:')) {
-            return imageItem;
-          }
-
-          // Fetch base64 from server
-          try {
-            const base64Url =
-              await fetchImageBase64FromMessageContent(imageItem);
-            return {
-              ...imageItem,
-              image_url: {
-                ...imageItem.image_url,
-                url: base64Url,
-              },
-            };
-          } catch (error) {
-            console.error(
-              '[ChatService] Failed to convert image to base64:',
-              error,
-            );
-            // Return original on error - server will fail with clear error
-            return imageItem;
-          }
-        }),
-      );
-
-      return {
-        ...message,
-        content: convertedContent,
-      };
-    }),
-  );
-}
 
 /**
  * Converts document translation file URL references into text placeholders.
@@ -153,14 +84,13 @@ async function prepareMessagesForAPI(messages: Message[]): Promise<Message[]> {
     );
   }
 
-  // Convert image file references to base64 at API call time. This keeps
-  // localStorage small (file refs only) while sending base64 to the server.
-  const messagesWithBase64Images =
-    await convertImagesToBase64(normalizedMessages);
-
   // Convert document translation URLs to text placeholders. Regular file
   // URLs (/api/file/*) pass through for server-side processing.
-  return convertDocumentTranslationUrlsToPlaceholders(messagesWithBase64Images);
+  // Image URLs (/api/file/{id}) are also passed through verbatim — the
+  // server's ImageReferenceInflator stage walks every message and inflates
+  // them to base64 before model handlers run. Sending URLs (not base64)
+  // keeps the request body well under the 10 MB cap.
+  return convertDocumentTranslationUrlsToPlaceholders(normalizedMessages);
 }
 
 /**
