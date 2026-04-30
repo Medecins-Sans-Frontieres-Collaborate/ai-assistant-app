@@ -2,6 +2,7 @@
 
 import { fetchImageBase64FromMessageContent } from '@/lib/services/imageService';
 
+import { trimBodyToByteBudget } from '@/lib/utils/shared/chat/bodyByteBudget';
 import { normalizeMessagesForAPI } from '@/lib/utils/shared/chat/messageNormalization';
 
 import {
@@ -233,36 +234,45 @@ export class ChatService {
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
 
-    return apiClient.postStream(
-      '/api/chat',
-      {
-        model,
-        messages: messagesWithPlaceholders,
-        prompt: options?.prompt,
-        temperature: options?.temperature,
-        stream: options?.stream ?? true,
-        reasoningEffort: options?.reasoningEffort,
-        verbosity: options?.verbosity,
-        botId: options?.botId,
-        threadId: options?.threadId,
-        searchMode: options?.searchMode,
-        forcedAgentType: options?.forcedAgentType,
-        isEditorOpen: options?.isEditorOpen,
-        tone: options?.tone,
-        streamingSpeed: options?.streamingSpeed,
-        includeUserInfoInPrompt: options?.includeUserInfoInPrompt,
-        preferredName: options?.preferredName,
-        userContext: options?.userContext,
-        displayNamePreference: options?.displayNamePreference,
-        customDisplayName: options?.customDisplayName,
-        activeFiles: options?.activeFiles,
-        activeFilesTokensUsed: options?.activeFilesTokensUsed,
-        autoInjectPinnedImages: options?.autoInjectPinnedImages,
-      },
-      {
-        signal: options?.signal,
-      },
-    );
+    const rawBody = {
+      model,
+      messages: messagesWithPlaceholders,
+      prompt: options?.prompt,
+      temperature: options?.temperature,
+      stream: options?.stream ?? true,
+      reasoningEffort: options?.reasoningEffort,
+      verbosity: options?.verbosity,
+      botId: options?.botId,
+      threadId: options?.threadId,
+      searchMode: options?.searchMode,
+      forcedAgentType: options?.forcedAgentType,
+      isEditorOpen: options?.isEditorOpen,
+      tone: options?.tone,
+      streamingSpeed: options?.streamingSpeed,
+      includeUserInfoInPrompt: options?.includeUserInfoInPrompt,
+      preferredName: options?.preferredName,
+      userContext: options?.userContext,
+      displayNamePreference: options?.displayNamePreference,
+      customDisplayName: options?.customDisplayName,
+      activeFiles: options?.activeFiles,
+      activeFilesTokensUsed: options?.activeFilesTokensUsed,
+      autoInjectPinnedImages: options?.autoInjectPinnedImages,
+    };
+
+    const { body, report } = trimBodyToByteBudget(rawBody);
+    if (report.imagesStripped > 0 || report.messagesDropped > 0) {
+      console.warn(
+        `[ChatService] Trimmed chat body to fit byte budget: ` +
+          `${report.originalBytes} → ${report.finalBytes} bytes ` +
+          `(stripped ${report.imagesStripped} image(s), ` +
+          `dropped ${report.messagesDropped} message(s)` +
+          `${report.exceededBudget ? ', still over budget' : ''})`,
+      );
+    }
+
+    return apiClient.postStream('/api/chat', body, {
+      signal: options?.signal,
+    });
   }
 
   /**
@@ -295,7 +305,7 @@ export class ChatService {
   ): Promise<{ text: string; metadata?: any }> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
 
-    return apiClient.post('/api/chat', {
+    const rawBody = {
       model,
       messages: messagesWithPlaceholders,
       prompt: options?.prompt,
@@ -313,7 +323,20 @@ export class ChatService {
       userContext: options?.userContext,
       displayNamePreference: options?.displayNamePreference,
       customDisplayName: options?.customDisplayName,
-    });
+    };
+
+    const { body, report } = trimBodyToByteBudget(rawBody);
+    if (report.imagesStripped > 0 || report.messagesDropped > 0) {
+      console.warn(
+        `[ChatService] Trimmed chat body to fit byte budget: ` +
+          `${report.originalBytes} → ${report.finalBytes} bytes ` +
+          `(stripped ${report.imagesStripped} image(s), ` +
+          `dropped ${report.messagesDropped} message(s)` +
+          `${report.exceededBudget ? ', still over budget' : ''})`,
+      );
+    }
+
+    return apiClient.post('/api/chat', body);
   }
 }
 
