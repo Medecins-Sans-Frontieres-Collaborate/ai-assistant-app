@@ -123,7 +123,7 @@ describe('AzureBlobStorage.upload', () => {
     expect(warnSpy).toHaveBeenCalledTimes(1);
     const logged = warnSpy.mock.calls[0][0] as string;
     expect(logged).not.toMatch(/[\r\n]/);
-    expect(logged).not.toMatch(/\x1b/);
+    expect(logged).not.toContain('\x1b');
     expect(logged).toContain('FAKE LOG ENTRY');
 
     warnSpy.mockRestore();
