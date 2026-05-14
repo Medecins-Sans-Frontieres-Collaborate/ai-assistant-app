@@ -4,6 +4,7 @@ import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 
 import { ChatBody, Message } from '@/types/chat';
 import { ErrorCode, PipelineError } from '@/types/errors';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
@@ -194,6 +195,69 @@ const ActiveFileProcessedContentSchema = z
   })
   .partial({ summary: true, tokenEstimateEncoding: true });
 
+/**
+ * Zod schemas for structured data extraction. Mirrors the types in
+ * `@/types/extractionRecipe`. Caps:
+ *  - Up to 3 recipes per request (UI enforces this too).
+ *  - Up to 30 fields per recipe (defensive — typical recipes have 4-8).
+ *  - Recipe `name`/`instructions` capped at 200 / 4000 chars to keep
+ *    system-prompt growth bounded.
+ */
+const RecipeFieldSchema = z.object({
+  id: z.string().min(1).max(100),
+  name: z
+    .string()
+    .min(1, 'Field name is required')
+    .max(64, 'Field name too long (max 64 chars)')
+    .regex(
+      /^[a-z][a-z0-9_]*$/,
+      'Field name must be snake_case (start with letter, lowercase + digits + underscore)',
+    ),
+  label: z.string().max(120).optional(),
+  type: z.enum([
+    'text',
+    'number',
+    'date',
+    'boolean',
+    'enum',
+    'list<text>',
+    'list<number>',
+  ]),
+  description: z.string().max(500).optional(),
+  required: z.boolean().optional(),
+  enumValues: z.array(z.string().min(1).max(120)).max(50).optional(),
+});
+
+const ExtractionRecipeSchema = z.object({
+  id: z.string().min(1).max(100),
+  name: z.string().min(1, 'Recipe name is required').max(200),
+  description: z.string().max(500).optional(),
+  instructions: z.string().min(1, 'Instructions are required').max(4000),
+  fields: z
+    .array(RecipeFieldSchema)
+    .max(30, 'Too many fields (max 30 per recipe)'),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  sourceHint: z
+    .enum(['pdf', 'transcript', 'spreadsheet', 'web', 'any'])
+    .optional(),
+  templateId: z.string().optional(),
+  templateName: z.string().optional(),
+  importedAt: z.string().optional(),
+});
+
+const ExtractionRequestSchema = z
+  .object({
+    recipeIds: z.array(z.string().min(1).max(100)).max(3),
+    recipes: z
+      .array(ExtractionRecipeSchema)
+      .max(3, 'Up to 3 recipes per extraction'),
+    autoMode: z.boolean().optional(),
+  })
+  .refine((v) => v.autoMode === true || v.recipes.length > 0, {
+    message: 'extraction must include at least one recipe or set autoMode=true',
+  });
+
 const ActiveFileSchema = z.object({
   id: z.string(),
   url: urlOrDataUrl('Invalid file URL'),
@@ -257,6 +321,7 @@ const ChatBodySchema = z
     activeFiles: z.array(ActiveFileSchema).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
     autoInjectPinnedImages: z.boolean().optional(),
+    extraction: ExtractionRequestSchema.optional(),
   })
   .strict(); // Reject unknown properties
 
@@ -283,6 +348,7 @@ export class InputValidator {
     threadId?: string;
     forcedAgentType?: string;
     tone?: Tone;
+    extraction?: ExtractionRequest;
   } {
     try {
       const result = ChatBodySchema.safeParse(body);
@@ -307,6 +373,7 @@ export class InputValidator {
         searchMode?: SearchMode;
         threadId?: string;
         forcedAgentType?: string;
+        extraction?: ExtractionRequest;
       };
     } catch (error) {
       if (error instanceof PipelineError) {
