@@ -11,10 +11,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import {
-  ExportFormat,
-  useDocumentExport,
-} from '@/client/hooks/document/useDocumentExport';
+import { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
 import { useTheme } from '@/client/hooks/ui/useTheme';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
