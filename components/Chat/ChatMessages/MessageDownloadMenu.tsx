@@ -1,7 +1,7 @@
 'use client';
 
 import { IconDownload } from '@tabler/icons-react';
-import { FC, useRef, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
@@ -23,16 +23,36 @@ interface MessageDownloadMenuProps {
   fileName?: string;
 }
 
+// Derives a default filename from the first words of the message. Preserves
+// Unicode so non-Latin responses still get a meaningful name. Falls back to
+// "message" if nothing usable remains after stripping markdown chrome.
+function deriveFilename(content: string): string {
+  const stripped = content
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/[*_`~]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!stripped) return 'message';
+  const candidate = stripped.slice(0, 60).trim();
+  const safe = candidate.replace(/[\\/:*?"<>|]/g, '').trim();
+  return safe || 'message';
+}
+
 export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
   content,
   disabled = false,
   disabledTitle,
-  fileName = 'message',
+  fileName,
 }) => {
   const t = useTranslations();
   const exportAs = useDocumentExport();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [showMenu, setShowMenu] = useState(false);
+
+  const resolvedFileName = useMemo(
+    () => fileName ?? deriveFilename(content),
+    [fileName, content],
+  );
 
   const handleDownload = async (format: ExportFormat) => {
     setShowMenu(false);
@@ -42,15 +62,14 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
       return;
     }
 
-    // Markdown is the source of truth in chat messages; no HTML round-trip needed.
     if (format === 'md') {
-      downloadFile(content, `${fileName}.md`, 'text/markdown');
+      downloadFile(content, `${resolvedFileName}.md`, 'text/markdown');
       toast.success(t('artifact.exportedAsMarkdown'));
       return;
     }
 
     const html = markdownToHtml(content);
-    await exportAs(format, html, fileName);
+    await exportAs(format, html, resolvedFileName);
   };
 
   const triggerClass = disabled
@@ -64,14 +83,10 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
       <button
         ref={triggerRef}
         className={`transition-colors ${triggerClass}`}
-        onClick={
-          disabled
-            ? undefined
-            : (e) => {
-                e.stopPropagation();
-                setShowMenu((prev) => !prev);
-              }
-        }
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowMenu((prev) => !prev);
+        }}
         disabled={disabled}
         aria-label={downloadLabel}
         aria-haspopup="menu"
