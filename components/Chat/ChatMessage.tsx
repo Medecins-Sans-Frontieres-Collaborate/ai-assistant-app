@@ -18,6 +18,7 @@ import {
 
 import { AssistantMessage } from '@/components/Chat/ChatMessages/AssistantMessage';
 import ChatMessageText from '@/components/Chat/ChatMessages/ChatMessageText';
+import { ExtractionResultRenderer } from '@/components/Chat/ChatMessages/ExtractionResultRenderer';
 import { FileContent } from '@/components/Chat/ChatMessages/FileContent';
 import { ImageContent } from '@/components/Chat/ChatMessages/ImageContent';
 import { UserMessage } from '@/components/Chat/ChatMessages/UserMessage';
@@ -302,6 +303,36 @@ export const ChatMessage: FC<Props> = ({
         </div>
       );
     }
+  }
+
+  // Render structured-data extraction result (assistant messages only)
+  if (
+    message.content &&
+    typeof message.content === 'object' &&
+    !Array.isArray(message.content) &&
+    (message.content as { type?: string }).type === 'extraction_result'
+  ) {
+    return (
+      <div className="group text-gray-800 dark:text-gray-100">
+        <AssistantMessage
+          content=""
+          message={message}
+          messageIsStreaming={messageIsStreaming}
+          messageIndex={messageIndex}
+          selectedConversation={selectedConversation}
+          onRegenerate={onRegenerate}
+          versionInfo={versionInfo}
+          onPreviousVersion={onPreviousVersion}
+          onNextVersion={onNextVersion}
+        >
+          <ExtractionResultRenderer
+            content={
+              message.content as import('@/types/chat').ExtractionResultContent
+            }
+          />
+        </AssistantMessage>
+      </div>
+    );
   }
 
   // Render text-only messages
