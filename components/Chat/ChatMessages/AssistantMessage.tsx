@@ -742,10 +742,17 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
                 <IconFileText size={18} />
               </button>
 
-              {/* Download response button */}
+              {/* Download response button. Reference-format messages
+                  (blob transcripts / document translations) render their own
+                  inline UI from the content string itself, so the raw content
+                  isn't a useful download — disable in those cases too. */}
               <MessageDownloadMenu
                 content={displayedContent}
-                disabled={hasEmbeddedContent}
+                disabled={
+                  hasEmbeddedContent ||
+                  isBlobTranscriptReference(displayedContent) ||
+                  isDocumentTranslationReference(displayedContent)
+                }
                 disabledTitle={t('chat.actionsDisabledForEmbed')}
               />
             </div>
