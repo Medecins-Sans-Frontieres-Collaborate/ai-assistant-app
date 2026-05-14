@@ -11,7 +11,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
+import {
+  ExportFormat,
+  useDocumentExport,
+} from '@/client/hooks/document/useDocumentExport';
 import { useTheme } from '@/client/hooks/ui/useTheme';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -55,11 +58,9 @@ export default function DocumentArtifact({
     return fileName.replace(/\.[^/.]+$/, '');
   };
 
-  const handleExport = async (
-    format: 'html' | 'md' | 'txt' | 'pdf' | 'docx',
-  ) => {
-    await exportAs(format, modifiedCode, getBaseFileName());
+  const handleExport = async (format: ExportFormat) => {
     setShowExportMenu(false);
+    await exportAs(format, modifiedCode, getBaseFileName());
   };
 
   return (
