@@ -146,6 +146,7 @@ export function DropdownPortal({
   return createPortal(
     <div
       ref={dropdownRef}
+      data-dropdown-portal=""
       className="fixed z-[100]"
       style={{
         top: `${position.top}px`,
