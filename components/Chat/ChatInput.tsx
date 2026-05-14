@@ -29,6 +29,7 @@ import { useSlashMenuSelection } from '@/client/hooks/ui/useSlashMenuSelection';
 
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
+import { getExtractionMaterialState } from '@/lib/utils/shared/chat/extractionMaterial';
 import {
   shouldPreventSubmission,
   validateMessageSubmission,
@@ -60,6 +61,7 @@ import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImageCapture, {
   ChatInputImageCaptureRef,
 } from '@/components/Chat/ChatInput/ChatInputImageCapture';
+import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
@@ -72,6 +74,7 @@ import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
@@ -111,6 +114,11 @@ export const ChatInput = ({
   );
   const { prompts, confirmStopFromButton } = useSettings();
   const { tones } = useTones();
+  const extractionRecipes = useSettingsStore((s) => s.extractionRecipes);
+  const setExtractionMode = useChatInputStore((s) => s.setExtractionMode);
+  const addExtractionRecipeId = useChatInputStore(
+    (s) => s.addExtractionRecipeId,
+  );
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
 
@@ -156,6 +164,7 @@ export const ChatInput = ({
   );
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const extractionMode = useChatInputStore((state) => state.extractionMode);
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const setSelectedToneId = useChatInputStore(
     (state) => state.setSelectedToneId,
@@ -242,6 +251,7 @@ export const ChatInput = ({
   } = useSlashMenuSelection({
     prompts,
     tones,
+    recipes: extractionRecipes,
     onPromptSelect: (prompt, parsedVariables, hasVariables) => {
       setVariables(parsedVariables);
 
@@ -258,6 +268,14 @@ export const ChatInput = ({
     },
     onToneSelect: (tone) => {
       setSelectedToneId(tone.id);
+      setTextFieldValue((prev) => prev.replace(/\/\w*$/, ''));
+    },
+    onRecipeSelect: (recipe) => {
+      // Selecting a recipe from /recipe-name turns on extraction mode
+      // (so the tray renders) and adds the recipe as a chip. Strip the
+      // slash fragment from the textarea.
+      setExtractionMode(true);
+      addExtractionRecipeId(recipe.id);
       setTextFieldValue((prev) => prev.replace(/\/\w*$/, ''));
     },
     onResetInputState: () => {
@@ -483,14 +501,31 @@ export const ChatInput = ({
     noKeyboard: true, // Don't trigger on keyboard
   });
 
-  const preventSubmission = (): boolean =>
-    isTranscriptionLocked ||
-    shouldPreventSubmission(
-      isTranscribing,
-      isStreaming,
-      filePreviews,
-      uploadProgress,
-    );
+  const preventSubmission = (): boolean => {
+    if (isTranscriptionLocked) return true;
+    if (
+      shouldPreventSubmission(
+        isTranscribing,
+        isStreaming,
+        filePreviews,
+        uploadProgress,
+      )
+    ) {
+      return true;
+    }
+    // Extraction mode requires material — text, a composer file, or an
+    // active file from a prior turn. Block send until at least one is
+    // available; the tray surfaces the warning above the textarea.
+    if (extractionMode) {
+      const material = getExtractionMaterialState({
+        textFieldValue,
+        filePreviewCount: filePreviews.length,
+        activeFileCount: selectedConversation?.activeFiles?.length ?? 0,
+      });
+      if (!material.hasAny) return true;
+    }
+    return false;
+  };
 
   const inputPlaceholder = isTranscribing
     ? t('transcribingChatPlaceholder')
@@ -563,6 +598,9 @@ export const ChatInput = ({
             onClose={closeArtifact}
           />
         )}
+
+        {/* Structured Extraction Tray — recipe chip row above the composer */}
+        {extractionMode && <ExtractionTray />}
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">
