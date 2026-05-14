@@ -8,19 +8,11 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
 import { useTheme } from '@/client/hooks/ui/useTheme';
-
-import {
-  downloadFile as downloadFileUtil,
-  exportToDOCX,
-  exportToPDF,
-  htmlToMarkdown,
-  htmlToPlainText,
-} from '@/lib/utils/shared/document/exportUtils';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 
@@ -47,6 +39,7 @@ export default function DocumentArtifact({
   const theme = useTheme();
   const { fileName, modifiedCode, setFileName, setIsEditorOpen } =
     useArtifactStore();
+  const exportAs = useDocumentExport();
 
   const [isEditing, setIsEditing] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
@@ -65,56 +58,8 @@ export default function DocumentArtifact({
   const handleExport = async (
     format: 'html' | 'md' | 'txt' | 'pdf' | 'docx',
   ) => {
-    if (!modifiedCode) {
-      toast.error(t('artifact.noContentToExport'));
-      return;
-    }
-
-    try {
-      const baseFileName = getBaseFileName();
-
-      switch (format) {
-        case 'html':
-          downloadFileUtil(modifiedCode, `${baseFileName}.html`, 'text/html');
-          toast.success(t('artifact.exportedAsHtml'));
-          break;
-
-        case 'md': {
-          const markdown = htmlToMarkdown(modifiedCode);
-          downloadFileUtil(markdown, `${baseFileName}.md`, 'text/markdown');
-          toast.success(t('artifact.exportedAsMarkdown'));
-          break;
-        }
-
-        case 'txt': {
-          const plainText = await htmlToPlainText(modifiedCode);
-          downloadFileUtil(plainText, `${baseFileName}.txt`, 'text/plain');
-          toast.success(t('artifact.exportedAsText'));
-          break;
-        }
-
-        case 'pdf':
-          toast.loading(t('artifact.generatingPdf'));
-          await exportToPDF(modifiedCode, `${baseFileName}.pdf`);
-          toast.dismiss();
-          toast.success(t('artifact.exportedAsPdf'));
-          break;
-
-        case 'docx':
-          toast.loading(t('artifact.generatingDocx'));
-          await exportToDOCX(modifiedCode, `${baseFileName}.docx`);
-          toast.dismiss();
-          toast.success(t('artifact.exportedAsDocx'));
-          break;
-      }
-
-      setShowExportMenu(false);
-    } catch (error) {
-      console.error('Export error:', error);
-      toast.error(
-        t('artifact.failedToExportAs', { format: format.toUpperCase() }),
-      );
-    }
+    await exportAs(format, modifiedCode, getBaseFileName());
+    setShowExportMenu(false);
   };
 
   return (
