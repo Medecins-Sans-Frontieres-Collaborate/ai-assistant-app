@@ -5,7 +5,7 @@ import {
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
 
-import { Message, MessageType } from '@/types/chat';
+import { ExtractionResultContent, Message, MessageType } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 /**
@@ -24,6 +24,7 @@ export class StreamParser {
   }>;
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
+  private extractedExtractionResult?: ExtractionResultContent;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -100,6 +101,14 @@ export class StreamParser {
       this.extractedActiveFilesDropped = (parsed as any).activeFilesDropped;
     }
 
+    // Capture structured-extraction result if present. When set, this
+    // replaces the assistant message's `content` — text-body is empty on
+    // an extraction turn, so the message renders entirely from the
+    // datasets carried here.
+    if (parsed.extractionResult && !this.extractedExtractionResult) {
+      this.extractedExtractionResult = parsed.extractionResult;
+    }
+
     // Check if we've received actual content (not just metadata)
     if (displayText && displayText.trim().length > 0) {
       this.hasReceivedContent = true;
@@ -147,6 +156,16 @@ export class StreamParser {
    * Convert parsed stream to a complete assistant message
    */
   toMessage(content: string): Message {
+    // If an extraction result was emitted, the assistant message is the
+    // structured payload itself — not the streamed text body.
+    if (this.extractedExtractionResult) {
+      return {
+        role: 'assistant',
+        content: this.extractedExtractionResult,
+        messageType: MessageType.TEXT,
+      };
+    }
+
     return {
       role: 'assistant',
       content,
@@ -157,6 +176,13 @@ export class StreamParser {
           : undefined,
       transcript: this.extractedTranscript,
     };
+  }
+
+  /**
+   * Get the extraction result if one was emitted on the stream.
+   */
+  getExtractionResult(): ExtractionResultContent | undefined {
+    return this.extractedExtractionResult;
   }
 
   /**
