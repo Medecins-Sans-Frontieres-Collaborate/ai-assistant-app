@@ -1,13 +1,12 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React, { useRef } from 'react';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 
 import '@testing-library/jest-dom';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const VIEWPORT_HEIGHT = 800;
-const VIEWPORT_WIDTH = 1200;
 const MENU_HEIGHT = 200;
 const MENU_WIDTH = 160;
 
@@ -32,14 +31,19 @@ interface HarnessProps {
   triggerRect: DOMRect;
   align?: 'left' | 'right';
   isOpen?: boolean;
+  onClose?: () => void;
 }
 
-function Harness({ triggerRect, align = 'left', isOpen = true }: HarnessProps) {
+function Harness({
+  triggerRect,
+  align = 'left',
+  isOpen = true,
+  onClose = () => {},
+}: HarnessProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   return (
     <>
       <button
-        data-testid="trigger"
         ref={(el) => {
           triggerRef.current = el;
           if (el) {
@@ -52,7 +56,7 @@ function Harness({ triggerRect, align = 'left', isOpen = true }: HarnessProps) {
       <DropdownPortal
         triggerRef={triggerRef}
         isOpen={isOpen}
-        onClose={() => {}}
+        onClose={onClose}
         align={align}
       >
         <div data-testid="menu">menu content</div>
@@ -61,46 +65,44 @@ function Harness({ triggerRect, align = 'left', isOpen = true }: HarnessProps) {
   );
 }
 
+// The portal's outer wrapper is the parent of the rendered menu children.
+// Walking up from a test-id avoids coupling tests to the wrapper's class name
+// or z-index.
 function getPortalElement(): HTMLElement {
-  const el = document.body.querySelector<HTMLElement>('div.fixed.z-\\[100\\]');
-  if (!el) throw new Error('Portal element not found');
-  return el;
+  const menu = screen.getByTestId('menu');
+  const portal = menu.parentElement;
+  if (!portal) throw new Error('Portal element not found');
+  return portal;
 }
 
 describe('DropdownPortal placement', () => {
-  let originalRect: typeof Element.prototype.getBoundingClientRect;
-
   beforeEach(() => {
     Object.defineProperty(window, 'innerHeight', {
       configurable: true,
       value: VIEWPORT_HEIGHT,
     });
-    Object.defineProperty(window, 'innerWidth', {
-      configurable: true,
-      value: VIEWPORT_WIDTH,
-    });
 
-    originalRect = Element.prototype.getBoundingClientRect;
-    // Patch the portal element (class "fixed z-[100]") so it reports a known
-    // menu height. Individual elements with their own getBoundingClientRect
-    // overrides (the trigger) keep their per-instance behavior.
-    Element.prototype.getBoundingClientRect = function () {
-      if (this instanceof HTMLElement && this.classList.contains('fixed')) {
-        return makeRect({
-          top: 0,
-          bottom: MENU_HEIGHT,
-          left: 0,
-          right: MENU_WIDTH,
-          width: MENU_WIDTH,
-          height: MENU_HEIGHT,
-        });
-      }
-      return originalRect.call(this);
-    };
-  });
-
-  afterEach(() => {
-    Element.prototype.getBoundingClientRect = originalRect;
+    // Patch only the portal wrapper's rect — child of a fixed-position element
+    // is the menu we render in the harness, so we can identify the wrapper as
+    // any element that *contains* an element with `data-testid="menu"`.
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
+      function (this: Element) {
+        const hasMenuChild =
+          this instanceof HTMLElement &&
+          this.querySelector?.('[data-testid="menu"]') !== null;
+        if (hasMenuChild) {
+          return makeRect({
+            top: 0,
+            bottom: MENU_HEIGHT,
+            left: 0,
+            right: MENU_WIDTH,
+            width: MENU_WIDTH,
+            height: MENU_HEIGHT,
+          });
+        }
+        return makeRect({});
+      },
+    );
   });
 
   it('places the menu below the trigger when there is room', () => {
@@ -117,10 +119,9 @@ describe('DropdownPortal placement', () => {
       />,
     );
 
-    const portal = getPortalElement();
     // spaceBelow = 800 - 120 = 680; menuHeight+4 = 204 ≤ 680 → bottom placement
     // top = triggerBottom + 4 = 124
-    expect(portal.style.top).toBe('124px');
+    expect(getPortalElement().style.top).toBe('124px');
   });
 
   it('flips above the trigger when there is not enough room below', () => {
@@ -137,11 +138,10 @@ describe('DropdownPortal placement', () => {
       />,
     );
 
-    const portal = getPortalElement();
     // spaceBelow = 800 - 720 = 80; menuHeight+4 = 204 > 80
     // spaceAbove = 700 > 80 → top placement
     // top = triggerTop - menuHeight - 4 = 700 - 200 - 4 = 496
-    expect(portal.style.top).toBe('496px');
+    expect(getPortalElement().style.top).toBe('496px');
   });
 
   it('clamps top to keep the menu inside the viewport on very short screens', () => {
@@ -163,11 +163,8 @@ describe('DropdownPortal placement', () => {
       />,
     );
 
-    const portal = getPortalElement();
-    const top = parseFloat(portal.style.top);
-    // Clamp: [8, max(8, 150 - 200 - 8)] → [8, max(8, -58)] → [8, 8]
-    // Whatever the placement chose, it must be clamped to ≥ 8.
-    expect(top).toBeGreaterThanOrEqual(8);
+    // Clamp: [8, max(8, 150 - 200 - 8)] → [8, 8]. Top must be ≥ 8 regardless.
+    expect(parseFloat(getPortalElement().style.top)).toBeGreaterThanOrEqual(8);
   });
 
   it('does not render when isOpen is false', () => {
@@ -178,22 +175,21 @@ describe('DropdownPortal placement', () => {
       />,
     );
 
-    expect(document.body.querySelector('div.fixed.z-\\[100\\]')).toBeNull();
+    expect(screen.queryByTestId('menu')).toBeNull();
   });
 
   it('calls onClose when the window is resized', () => {
     const onClose = vi.fn();
-    const triggerRef = React.createRef<HTMLButtonElement>();
-
     render(
-      <>
-        <button data-testid="trigger" ref={triggerRef}>
-          trigger
-        </button>
-        <DropdownPortal triggerRef={triggerRef} isOpen={true} onClose={onClose}>
-          <div>menu</div>
-        </DropdownPortal>
-      </>,
+      <Harness
+        triggerRect={makeRect({
+          top: 100,
+          bottom: 120,
+          width: 20,
+          height: 20,
+        })}
+        onClose={onClose}
+      />,
     );
 
     window.dispatchEvent(new Event('resize'));
