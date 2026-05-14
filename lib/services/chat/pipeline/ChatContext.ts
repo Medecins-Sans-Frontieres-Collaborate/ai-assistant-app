@@ -3,6 +3,10 @@ import { Session } from 'next-auth';
 import { ModelSelector } from '@/lib/services/shared';
 
 import { ActiveFile, Message } from '@/types/chat';
+import {
+  ExtractionRequest,
+  ExtractionResponseFormat,
+} from '@/types/extractionRecipe';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
@@ -219,6 +223,21 @@ export interface ChatContext {
    * badges visible).
    */
   activeFilesDroppedThisTurn?: string[];
+
+  /**
+   * Structured data extraction request, set by `InputValidator` from the
+   * client's `extraction` payload. Triggers `ExtractionEnricher` to compose
+   * the response format and route URLs through the existing WebSearchTool.
+   */
+  extraction?: ExtractionRequest;
+
+  /**
+   * Strict JSON-Schema response format, written by `ExtractionEnricher` and
+   * consumed by `StandardChatHandler`. When present, the handler issues a
+   * structured-output call (`response_format: { type: 'json_schema', ... }`)
+   * and parses the JSON result into an `ExtractionResultContent` message.
+   */
+  responseFormat?: ExtractionResponseFormat;
 
   /** Execution strategy (standard or agent) */
   executionStrategy?: 'standard' | 'agent';
