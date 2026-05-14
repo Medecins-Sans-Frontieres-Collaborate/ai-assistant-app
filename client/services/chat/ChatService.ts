@@ -4,6 +4,7 @@ import { trimBodyToByteBudget } from '@/lib/utils/shared/chat/bodyByteBudget';
 import { normalizeMessagesForAPI } from '@/lib/utils/shared/chat/messageNormalization';
 
 import { ActiveFile, FileMessageContent, Message } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
@@ -160,6 +161,7 @@ export class ChatService {
       activeFiles?: ActiveFile[];
       activeFilesTokensUsed?: number;
       autoInjectPinnedImages?: boolean;
+      extraction?: ExtractionRequest;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -187,6 +189,7 @@ export class ChatService {
       activeFiles: options?.activeFiles,
       activeFilesTokensUsed: options?.activeFilesTokensUsed,
       autoInjectPinnedImages: options?.autoInjectPinnedImages,
+      extraction: options?.extraction,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
