@@ -37,7 +37,7 @@ ENV NODE_OPTIONS="--max-http-header-size=65536"
 RUN apk add --no-cache poppler poppler-dev poppler-utils libxml2 libxslt zlib fontconfig ttf-dejavu \
     shared-mime-info libc6-compat glib zip unzip ghostscript curl gnumeric libreoffice
 
-RUN curl -L "https://github.com/jgm/pandoc/releases/download/3.2.1/pandoc-3.2.1-linux-amd64.tar.gz" | tar xz --strip-components 1 -C /usr/local
+RUN curl -L "https://github.com/jgm/pandoc/releases/download/3.9.0.2/pandoc-3.9.0.2-linux-amd64.tar.gz" | tar xz --strip-components 1 -C /usr/local
 
 RUN chmod 1777 /tmp
 
