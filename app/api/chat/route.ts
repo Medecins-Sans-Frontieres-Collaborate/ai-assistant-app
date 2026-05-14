@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
@@ -144,6 +145,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           foundryOpenAIClient,
         ),
         new ToolRouterEnricher(toolRouterService, agentChatService),
+        new ExtractionEnricher(agentChatService),
         new AgentEnricher(),
 
         // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
