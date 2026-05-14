@@ -383,7 +383,9 @@ describe('DocumentArtifact', () => {
       fireEvent.click(pdfButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to export as PDF');
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to export as PDF (.pdf)',
+        );
       });
     });
 
