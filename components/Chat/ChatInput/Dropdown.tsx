@@ -1,4 +1,5 @@
 import {
+  IconBraces,
   IconCamera,
   IconCirclePlus,
   IconFile,
@@ -84,6 +85,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   const textFieldValue = useChatInputStore((state) => state.textFieldValue);
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const extractionMode = useChatInputStore((state) => state.extractionMode);
+  const setExtractionMode = useChatInputStore(
+    (state) => state.setExtractionMode,
+  );
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -345,6 +350,19 @@ const Dropdown: React.FC<DropdownProps> = ({
         category: 'transform',
       },
       {
+        id: 'extract',
+        icon: <IconBraces size={18} className="text-blue-500 flex-shrink-0" />,
+        label: extractionMode
+          ? `✓ ${t('extraction.toggleLabel')}`
+          : t('extraction.toggleLabel'),
+        infoTooltip: t('extraction.trayInfo'),
+        onClick: () => {
+          setExtractionMode(!extractionMode);
+          closeDropdown();
+        },
+        category: 'transform',
+      },
+      {
         id: 'translateDocument',
         icon: (
           <IconFileText size={18} className="text-indigo-500 flex-shrink-0" />
@@ -377,6 +395,8 @@ const Dropdown: React.FC<DropdownProps> = ({
       selectedToneId,
       tones,
       hasCameraSupport,
+      extractionMode,
+      setExtractionMode,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
