@@ -6,35 +6,6 @@ import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownl
 import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string, params?: Record<string, string>) => {
-    const messages: Record<string, string> = {
-      'chat.downloadResponse': 'Download response',
-      'artifact.formatMarkdown': 'Markdown (.md)',
-      'artifact.formatHtml': 'HTML (.html)',
-      'artifact.formatDocx': 'Word (.docx)',
-      'artifact.formatText': 'Plain Text (.txt)',
-      'artifact.formatPdf': 'PDF (.pdf)',
-      'artifact.exportedAsMarkdown': 'Exported as Markdown',
-      'artifact.exportedAsHtml': 'Exported as HTML',
-      'artifact.exportedAsText': 'Exported as Text',
-      'artifact.exportedAsPdf': 'Exported as PDF',
-      'artifact.exportedAsDocx': 'Exported as DOCX',
-      'artifact.generatingPdf': 'Generating PDF...',
-      'artifact.generatingDocx': 'Generating DOCX...',
-      'artifact.noContentToExport': 'No content to export',
-      'artifact.failedToExportAs': 'Failed to export as {format}',
-    };
-    let message = messages[key] || key;
-    if (params) {
-      Object.entries(params).forEach(([k, v]) => {
-        message = message.replace(`{${k}}`, v);
-      });
-    }
-    return message;
-  },
-}));
-
 const {
   toastMock,
   downloadFileMock,
@@ -64,7 +35,6 @@ vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   downloadFile: (...args: unknown[]) => downloadFileMock(...args),
   exportToPDF: (...args: unknown[]) => exportToPDFMock(...args),
   exportToDOCX: (...args: unknown[]) => exportToDOCXMock(...args),
-  htmlToMarkdown: (html: string) => html,
   htmlToPlainText: (html: string) => htmlToPlainTextMock(html),
 }));
 
