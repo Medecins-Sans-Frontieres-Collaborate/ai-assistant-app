@@ -34,15 +34,15 @@ vi.mock('react-hot-toast', () => ({
 }));
 
 vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
-  downloadFile: (...args: unknown[]) => downloadFileMock(...args),
-  exportToPDF: (...args: unknown[]) => exportToPDFMock(...args),
-  exportToDOCX: (...args: unknown[]) => exportToDOCXMock(...args),
-  htmlToPlainText: (html: string) => htmlToPlainTextMock(html),
-  sanitizeHtmlForExport: (html: string) => sanitizeHtmlForExportMock(html),
+  downloadFile: downloadFileMock,
+  exportToPDF: exportToPDFMock,
+  exportToDOCX: exportToDOCXMock,
+  htmlToPlainText: htmlToPlainTextMock,
+  sanitizeHtmlForExport: sanitizeHtmlForExportMock,
 }));
 
 vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
-  markdownToHtml: (md: string) => markdownToHtmlMock(md),
+  markdownToHtml: markdownToHtmlMock,
 }));
 
 describe('MessageDownloadMenu', () => {
