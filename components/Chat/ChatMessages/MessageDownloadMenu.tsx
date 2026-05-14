@@ -34,8 +34,15 @@ function deriveFilename(content: string): string {
     .replace(/\s+/g, ' ')
     .trim();
   if (!stripped) return 'message';
-  const candidate = stripped.slice(0, 60).trim();
-  const safe = candidate.replace(/[\\/:*?"<>|]/g, '').trim();
+  // Slice by code points (not UTF-16 units) so emoji / non-BMP CJK don't get
+  // cut mid-surrogate-pair and render as U+FFFD in the filename.
+  const candidate = Array.from(stripped).slice(0, 60).join('').trim();
+  // Strip Windows-reserved chars, plus trailing dots/spaces so a heading
+  // ending in "." doesn't produce "Title..md".
+  const safe = candidate
+    .replace(/[\\/:*?"<>|]/g, '')
+    .replace(/[.\s]+$/, '')
+    .trim();
   return safe || 'message';
 }
 
@@ -92,7 +99,7 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
         aria-label={downloadLabel}
         aria-haspopup="menu"
         aria-expanded={showMenu}
-        title={disabled ? disabledTitle : downloadLabel}
+        title={disabled ? disabledTitle : undefined}
       >
         <IconDownload size={18} />
       </button>
