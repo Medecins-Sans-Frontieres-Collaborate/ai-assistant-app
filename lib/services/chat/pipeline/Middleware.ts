@@ -145,6 +145,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       userContext,
       displayNamePreference,
       customDisplayName,
+      extraction,
     } = body;
 
     if (tone) {
@@ -180,6 +181,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       activeFiles: (body as any).activeFiles,
       activeFilesTokensUsed: (body as any).activeFilesTokensUsed,
       autoInjectPinnedImages: (body as any).autoInjectPinnedImages,
+      // Structured extraction payload (optional). Up to 3 recipes; the
+      // ExtractionEnricher composes the JSON-schema response format.
+      extraction,
     };
   } catch (error) {
     if (error instanceof PipelineError) {
