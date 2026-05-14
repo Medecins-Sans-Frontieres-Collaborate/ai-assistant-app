@@ -25,6 +25,7 @@ vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   exportToPDF: vi.fn().mockResolvedValue(undefined),
   exportToDOCX: vi.fn().mockResolvedValue(undefined),
   downloadFile: vi.fn(),
+  sanitizeHtmlForExport: vi.fn(async (html: string) => html),
 }));
 
 describe('DocumentArtifact', () => {
