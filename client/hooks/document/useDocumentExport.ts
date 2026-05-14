@@ -13,31 +13,50 @@ import {
   htmlToPlainText,
 } from '@/lib/utils/shared/document/exportUtils';
 
-export type ExportFormat = 'html' | 'md' | 'txt' | 'pdf' | 'docx';
+export const EXPORT_FORMATS = [
+  { format: 'md', labelKey: 'artifact.formatMarkdown' },
+  { format: 'html', labelKey: 'artifact.formatHtml' },
+  { format: 'docx', labelKey: 'artifact.formatDocx' },
+  { format: 'txt', labelKey: 'artifact.formatText' },
+  { format: 'pdf', labelKey: 'artifact.formatPdf' },
+] as const;
 
-export type ExportAs = (
+export type ExportFormat = (typeof EXPORT_FORMATS)[number]['format'];
+
+const LABEL_KEY_BY_FORMAT: Record<ExportFormat, string> = Object.fromEntries(
+  EXPORT_FORMATS.map(({ format, labelKey }) => [format, labelKey]),
+) as Record<ExportFormat, string>;
+
+type ExportFn = (
   format: ExportFormat,
   html: string,
   baseFileName: string,
 ) => Promise<void>;
 
-const FORMAT_LABEL_KEY: Record<ExportFormat, string> = {
-  md: 'artifact.formatMarkdown',
-  html: 'artifact.formatHtml',
-  docx: 'artifact.formatDocx',
-  txt: 'artifact.formatText',
-  pdf: 'artifact.formatPdf',
-};
+async function withLoadingToast<T>(
+  loadingMessage: string,
+  successMessage: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const loadingId = toast.loading(loadingMessage);
+  try {
+    const result = await fn();
+    toast.success(successMessage);
+    return result;
+  } finally {
+    toast.dismiss(loadingId);
+  }
+}
 
 /**
  * Shared document-export logic used by the DocumentArtifact panel and the
  * per-message Download menu. Takes HTML content and writes a file in the
  * requested format using utilities from `lib/utils/shared/document/exportUtils`.
  */
-export function useDocumentExport(): ExportAs {
+export function useDocumentExport(): ExportFn {
   const t = useTranslations();
 
-  return useCallback<ExportAs>(
+  return useCallback<ExportFn>(
     async (format, html, baseFileName) => {
       if (!html) {
         toast.error(t('artifact.noContentToExport'));
@@ -65,27 +84,21 @@ export function useDocumentExport(): ExportAs {
             break;
           }
 
-          case 'pdf': {
-            const loadingId = toast.loading(t('artifact.generatingPdf'));
-            try {
-              await exportToPDF(html, `${baseFileName}.pdf`);
-              toast.success(t('artifact.exportedAsPdf'));
-            } finally {
-              toast.dismiss(loadingId);
-            }
+          case 'pdf':
+            await withLoadingToast(
+              t('artifact.generatingPdf'),
+              t('artifact.exportedAsPdf'),
+              () => exportToPDF(html, `${baseFileName}.pdf`),
+            );
             break;
-          }
 
-          case 'docx': {
-            const loadingId = toast.loading(t('artifact.generatingDocx'));
-            try {
-              await exportToDOCX(html, `${baseFileName}.docx`);
-              toast.success(t('artifact.exportedAsDocx'));
-            } finally {
-              toast.dismiss(loadingId);
-            }
+          case 'docx':
+            await withLoadingToast(
+              t('artifact.generatingDocx'),
+              t('artifact.exportedAsDocx'),
+              () => exportToDOCX(html, `${baseFileName}.docx`),
+            );
             break;
-          }
 
           default: {
             const exhaustive: never = format;
@@ -94,10 +107,9 @@ export function useDocumentExport(): ExportAs {
         }
       } catch (error) {
         console.error('Export error:', error);
-        const formatLabel = t(FORMAT_LABEL_KEY[format] ?? '');
         toast.error(
           t('artifact.failedToExportAs', {
-            format: formatLabel || format.toUpperCase(),
+            format: t(LABEL_KEY_BY_FORMAT[format]),
           }),
         );
       }
