@@ -13,9 +13,14 @@ interface DropdownPortalProps {
 
 type Placement = 'bottom' | 'top';
 
+// `anchorX` stores a horizontal coordinate whose meaning depends on `align`:
+//   align="left"  → x position of the dropdown's LEFT edge
+//   align="right" → x position of the dropdown's RIGHT edge (the trigger's right
+//                   edge by default, since the dropdown is rendered with
+//                   `right: window.innerWidth - anchorX`).
 interface PortalPosition {
   top: number;
-  left: number;
+  anchorX: number;
   width: number;
   placement: Placement;
 }
@@ -44,7 +49,7 @@ export function DropdownPortal({
 }: DropdownPortalProps) {
   const [position, setPosition] = useState<PortalPosition>({
     top: 0,
-    left: 0,
+    anchorX: 0,
     width: 0,
     placement: 'bottom',
   });
@@ -81,24 +86,28 @@ export function DropdownPortal({
     );
     const top = Math.min(Math.max(rawTop, VIEWPORT_INSET_PX), maxTop);
 
-    let left = align === 'left' ? triggerRect.left : triggerRect.right;
+    let anchorX = align === 'left' ? triggerRect.left : triggerRect.right;
 
-    if (align === 'right' && left - menuRect.width < VIEWPORT_INSET_PX) {
-      left = Math.min(
+    if (align === 'right' && anchorX - menuRect.width < VIEWPORT_INSET_PX) {
+      // Dropdown would clip the viewport's left edge — slide it right by
+      // setting its right edge such that the left edge sits at VIEWPORT_INSET_PX.
+      anchorX = Math.min(
         menuRect.width + VIEWPORT_INSET_PX,
         viewportWidth - VIEWPORT_INSET_PX,
       );
     } else if (
       align === 'left' &&
-      left + menuRect.width > viewportWidth - VIEWPORT_INSET_PX
+      anchorX + menuRect.width > viewportWidth - VIEWPORT_INSET_PX
     ) {
-      left = Math.max(
+      // Dropdown would clip the viewport's right edge — pull it back so its
+      // right edge sits at viewportWidth - VIEWPORT_INSET_PX.
+      anchorX = Math.max(
         VIEWPORT_INSET_PX,
         viewportWidth - menuRect.width - VIEWPORT_INSET_PX,
       );
     }
 
-    setPosition({ top, left, width: triggerRect.width, placement });
+    setPosition({ top, anchorX, width: triggerRect.width, placement });
   }, [isOpen, triggerRef, align]);
 
   // Close on click outside
@@ -127,16 +136,18 @@ export function DropdownPortal({
     };
   }, [isOpen, onClose, triggerRef]);
 
-  // Close on scroll
+  // Close on scroll or viewport resize — the cached position would otherwise
+  // strand the menu away from its trigger.
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleScroll = () => {
-      onClose();
+    const handleClose = () => onClose();
+    window.addEventListener('scroll', handleClose, true);
+    window.addEventListener('resize', handleClose);
+    return () => {
+      window.removeEventListener('scroll', handleClose, true);
+      window.removeEventListener('resize', handleClose);
     };
-
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll, true);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
@@ -144,14 +155,13 @@ export function DropdownPortal({
   return createPortal(
     <div
       ref={dropdownRef}
-      data-placement={position.placement}
       className="fixed z-[100]"
       style={{
         top: `${position.top}px`,
-        left: align === 'left' ? `${position.left}px` : undefined,
+        left: align === 'left' ? `${position.anchorX}px` : undefined,
         right:
           align === 'right'
-            ? `${window.innerWidth - position.left}px`
+            ? `${window.innerWidth - position.anchorX}px`
             : undefined,
         width: `${position.width}px`,
       }}
