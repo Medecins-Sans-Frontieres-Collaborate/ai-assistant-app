@@ -35,21 +35,30 @@ vi.mock('next-intl', () => ({
   },
 }));
 
-const toastMock = {
-  success: vi.fn(),
-  error: vi.fn(),
-  loading: vi.fn().mockReturnValue('toast-id'),
-  dismiss: vi.fn(),
-};
+const {
+  toastMock,
+  downloadFileMock,
+  exportToPDFMock,
+  exportToDOCXMock,
+  htmlToPlainTextMock,
+  markdownToHtmlMock,
+} = vi.hoisted(() => ({
+  toastMock: {
+    success: vi.fn(),
+    error: vi.fn(),
+    loading: vi.fn().mockReturnValue('toast-id'),
+    dismiss: vi.fn(),
+  },
+  downloadFileMock: vi.fn(),
+  exportToPDFMock: vi.fn().mockResolvedValue(undefined),
+  exportToDOCXMock: vi.fn().mockResolvedValue(undefined),
+  htmlToPlainTextMock: vi.fn(async (html: string) => `plain:${html}`),
+  markdownToHtmlMock: vi.fn((md: string) => `<p>${md}</p>`),
+}));
 
 vi.mock('react-hot-toast', () => ({
   default: toastMock,
 }));
-
-const downloadFileMock = vi.fn();
-const exportToPDFMock = vi.fn().mockResolvedValue(undefined);
-const exportToDOCXMock = vi.fn().mockResolvedValue(undefined);
-const htmlToPlainTextMock = vi.fn(async (html: string) => `plain:${html}`);
 
 vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   downloadFile: (...args: unknown[]) => downloadFileMock(...args),
@@ -58,8 +67,6 @@ vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   htmlToMarkdown: (html: string) => html,
   htmlToPlainText: (html: string) => htmlToPlainTextMock(html),
 }));
-
-const markdownToHtmlMock = vi.fn((md: string) => `<p>${md}</p>`);
 
 vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
   markdownToHtml: (md: string) => markdownToHtmlMock(md),
