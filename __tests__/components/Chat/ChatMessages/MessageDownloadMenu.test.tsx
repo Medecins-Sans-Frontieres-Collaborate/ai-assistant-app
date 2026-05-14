@@ -12,6 +12,7 @@ const {
   exportToPDFMock,
   exportToDOCXMock,
   htmlToPlainTextMock,
+  sanitizeHtmlForExportMock,
   markdownToHtmlMock,
 } = vi.hoisted(() => ({
   toastMock: {
@@ -24,6 +25,7 @@ const {
   exportToPDFMock: vi.fn().mockResolvedValue(undefined),
   exportToDOCXMock: vi.fn().mockResolvedValue(undefined),
   htmlToPlainTextMock: vi.fn(async (html: string) => `plain:${html}`),
+  sanitizeHtmlForExportMock: vi.fn(async (html: string) => `safe:${html}`),
   markdownToHtmlMock: vi.fn((md: string) => `<p>${md}</p>`),
 }));
 
@@ -36,6 +38,7 @@ vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   exportToPDF: (...args: unknown[]) => exportToPDFMock(...args),
   exportToDOCX: (...args: unknown[]) => exportToDOCXMock(...args),
   htmlToPlainText: (html: string) => htmlToPlainTextMock(html),
+  sanitizeHtmlForExport: (html: string) => sanitizeHtmlForExportMock(html),
 }));
 
 vi.mock('@/lib/utils/shared/document/formatConverter', () => ({
@@ -51,6 +54,10 @@ describe('MessageDownloadMenu', () => {
     exportToDOCXMock.mockResolvedValue(undefined);
     markdownToHtmlMock.mockClear();
     htmlToPlainTextMock.mockClear();
+    sanitizeHtmlForExportMock.mockClear();
+    sanitizeHtmlForExportMock.mockImplementation(
+      async (html: string) => `safe:${html}`,
+    );
     toastMock.success.mockClear();
     toastMock.error.mockClear();
     toastMock.loading.mockClear();
@@ -98,19 +105,20 @@ describe('MessageDownloadMenu', () => {
     );
   });
 
-  it('exports HTML through the markdown→HTML pipeline', async () => {
+  it('exports HTML through the markdown→HTML pipeline and sanitizes before write', async () => {
     render(<MessageDownloadMenu content="# hi" fileName="response" />);
     openMenu();
     fireEvent.click(screen.getByText('HTML (.html)'));
 
     await waitFor(() => {
       expect(downloadFileMock).toHaveBeenCalledWith(
-        '<p># hi</p>',
+        'safe:<p># hi</p>',
         'response.html',
         'text/html',
       );
     });
     expect(markdownToHtmlMock).toHaveBeenCalledWith('# hi');
+    expect(sanitizeHtmlForExportMock).toHaveBeenCalledWith('<p># hi</p>');
   });
 
   it('exports plain text by stripping HTML', async () => {
@@ -142,17 +150,18 @@ describe('MessageDownloadMenu', () => {
     expect(markdownToHtmlMock).toHaveBeenCalledWith('# hi');
   });
 
-  it('exports PDF and dismisses its loading toast on success', async () => {
+  it('exports PDF (from sanitized HTML) and dismisses its loading toast on success', async () => {
     render(<MessageDownloadMenu content="# hi" fileName="response" />);
     openMenu();
     fireEvent.click(screen.getByText('PDF (.pdf)'));
 
     await waitFor(() => {
       expect(exportToPDFMock).toHaveBeenCalledWith(
-        '<p># hi</p>',
+        'safe:<p># hi</p>',
         'response.pdf',
       );
     });
+    expect(sanitizeHtmlForExportMock).toHaveBeenCalledWith('<p># hi</p>');
     expect(toastMock.loading).toHaveBeenCalledWith('Generating PDF...');
     expect(toastMock.dismiss).toHaveBeenCalledWith('toast-id');
     expect(toastMock.success).toHaveBeenCalledWith('Exported as PDF');
@@ -191,6 +200,15 @@ describe('MessageDownloadMenu', () => {
     const [, downloadedName] = downloadFileMock.mock.calls[0];
     expect(downloadedName).toMatch(/^Project status report/);
     expect(downloadedName).toMatch(/\.md$/);
+  });
+
+  it('does not leave a trailing dot before the extension when the heading ends in a period', () => {
+    render(<MessageDownloadMenu content="# Status." />);
+    openMenu();
+    fireEvent.click(screen.getByText('Markdown (.md)'));
+
+    const [, downloadedName] = downloadFileMock.mock.calls[0];
+    expect(downloadedName).toBe('Status.md');
   });
 
   it('falls back to "message" when content has no usable characters', () => {
