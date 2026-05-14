@@ -11,8 +11,6 @@ interface DropdownPortalProps {
   align?: 'left' | 'right';
 }
 
-type Placement = 'bottom' | 'top';
-
 // `anchorX` stores a horizontal coordinate whose meaning depends on `align`:
 //   align="left"  → x position of the dropdown's LEFT edge
 //   align="right" → x position of the dropdown's RIGHT edge (the trigger's right
@@ -21,8 +19,6 @@ type Placement = 'bottom' | 'top';
 interface PortalPosition {
   top: number;
   anchorX: number;
-  width: number;
-  placement: Placement;
 }
 
 const VIEWPORT_INSET_PX = 8;
@@ -50,8 +46,6 @@ export function DropdownPortal({
   const [position, setPosition] = useState<PortalPosition>({
     top: 0,
     anchorX: 0,
-    width: 0,
-    placement: 'bottom',
   });
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -70,15 +64,12 @@ export function DropdownPortal({
 
     const spaceBelow = viewportHeight - triggerRect.bottom;
     const spaceAbove = triggerRect.top;
-    const placement: Placement =
-      menuRect.height + TRIGGER_GAP_PX > spaceBelow && spaceAbove > spaceBelow
-        ? 'top'
-        : 'bottom';
+    const placeAbove =
+      menuRect.height + TRIGGER_GAP_PX > spaceBelow && spaceAbove > spaceBelow;
 
-    const rawTop =
-      placement === 'bottom'
-        ? triggerRect.bottom + TRIGGER_GAP_PX
-        : triggerRect.top - menuRect.height - TRIGGER_GAP_PX;
+    const rawTop = placeAbove
+      ? triggerRect.top - menuRect.height - TRIGGER_GAP_PX
+      : triggerRect.bottom + TRIGGER_GAP_PX;
 
     const maxTop = Math.max(
       VIEWPORT_INSET_PX,
@@ -107,7 +98,7 @@ export function DropdownPortal({
       );
     }
 
-    setPosition({ top, anchorX, width: triggerRect.width, placement });
+    setPosition({ top, anchorX });
   }, [isOpen, triggerRef, align]);
 
   // Close on click outside
@@ -163,7 +154,6 @@ export function DropdownPortal({
           align === 'right'
             ? `${window.innerWidth - position.anchorX}px`
             : undefined,
-        width: `${position.width}px`,
       }}
     >
       {children}
