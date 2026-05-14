@@ -132,12 +132,11 @@ export function DropdownPortal({
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleClose = () => onClose();
-    window.addEventListener('scroll', handleClose, true);
-    window.addEventListener('resize', handleClose);
+    window.addEventListener('scroll', onClose, true);
+    window.addEventListener('resize', onClose);
     return () => {
-      window.removeEventListener('scroll', handleClose, true);
-      window.removeEventListener('resize', handleClose);
+      window.removeEventListener('scroll', onClose, true);
+      window.removeEventListener('resize', onClose);
     };
   }, [isOpen, onClose]);
 
@@ -146,7 +145,7 @@ export function DropdownPortal({
   return createPortal(
     <div
       ref={dropdownRef}
-      data-dropdown-portal=""
+      data-dropdown-portal
       className="fixed z-[100]"
       style={{
         top: `${position.top}px`,
