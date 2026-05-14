@@ -1,3 +1,4 @@
+import { ExtractionResultContent } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 /**
@@ -53,6 +54,12 @@ export interface StreamMetadata {
    * which pinned/active files are not visible to the model right now.
    */
   activeFilesDropped?: string[];
+  /**
+   * Structured-data extraction result. When present, the chat surface
+   * replaces the assistant message's `content` with this payload and
+   * renders it as a download card instead of a text body.
+   */
+  extractionResult?: ExtractionResultContent;
 }
 
 /**
@@ -69,6 +76,7 @@ export interface ParsedMetadata {
   fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   activeFilesTokensConsumed?: number;
   activeFilesDropped?: string[];
+  extractionResult?: ExtractionResultContent;
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -90,16 +98,20 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
   let activeFilesTokensConsumed: number | undefined;
   let activeFilesDropped: string[] | undefined;
+  let extractionResult: ExtractionResultContent | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
-  // Check for metadata format
+  // Check for metadata format. We tolerate either the canonical `\n\n`
+  // prefix (regular streamed responses where metadata follows the model
+  // body) or no prefix (extraction turns, where the entire response IS
+  // the metadata block).
   const metadataMatch = content.match(
-    /\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
+    /(?:\n\n)?<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
   );
   if (metadataMatch) {
     extractionMethod = 'metadata';
     mainContent = content.replace(
-      /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
+      /(?:\n\n)?<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
       '',
     );
 
@@ -136,6 +148,13 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
           (id: unknown): id is string => typeof id === 'string',
         );
       }
+      if (
+        anyData.extractionResult &&
+        typeof anyData.extractionResult === 'object' &&
+        anyData.extractionResult.type === 'extraction_result'
+      ) {
+        extractionResult = anyData.extractionResult as ExtractionResultContent;
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -156,6 +175,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     fileCacheUpdates,
     activeFilesTokensConsumed,
     activeFilesDropped,
+    extractionResult,
     extractionMethod,
   };
 }
