@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import {
   EXPORT_FORMATS,
   ExportFormat,
-} from '@/client/hooks/document/useDocumentExport';
+} from '@/client/hooks/document/exportFormats';
 
 interface ExportFormatMenuProps {
   onSelect: (format: ExportFormat) => void;

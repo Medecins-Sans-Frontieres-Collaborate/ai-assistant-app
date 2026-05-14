@@ -2,16 +2,12 @@
 
 import { IconDownload } from '@tabler/icons-react';
 import { FC, useMemo, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
-import {
-  ExportFormat,
-  useDocumentExport,
-} from '@/client/hooks/document/useDocumentExport';
+import { ExportFormat } from '@/client/hooks/document/exportFormats';
+import { useDocumentExport } from '@/client/hooks/document/useDocumentExport';
 
-import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
@@ -64,20 +60,11 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
 
   const handleDownload = async (format: ExportFormat) => {
     setShowMenu(false);
-
-    if (!content || !content.trim()) {
-      toast.error(t('artifact.noContentToExport'));
-      return;
-    }
-
-    if (format === 'md') {
-      downloadFile(content, `${resolvedFileName}.md`, 'text/markdown');
-      toast.success(t('artifact.exportedAsMarkdown'));
-      return;
-    }
-
-    const html = markdownToHtml(content);
-    await exportAs(format, html, resolvedFileName);
+    // For non-md formats we precompute HTML from the markdown source. For md
+    // we pass an empty `html` and let the hook write the markdown source
+    // directly — keeping the empty-content check in one place (the hook).
+    const html = format === 'md' ? '' : markdownToHtml(content);
+    await exportAs(format, html, resolvedFileName, content);
   };
 
   const triggerClass = disabled
