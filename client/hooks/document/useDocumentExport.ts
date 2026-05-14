@@ -14,24 +14,18 @@ import {
   sanitizeHtmlForExport,
 } from '@/lib/utils/shared/document/exportUtils';
 
-export const EXPORT_FORMATS = [
-  { format: 'md', labelKey: 'artifact.formatMarkdown' },
-  { format: 'html', labelKey: 'artifact.formatHtml' },
-  { format: 'docx', labelKey: 'artifact.formatDocx' },
-  { format: 'txt', labelKey: 'artifact.formatText' },
-  { format: 'pdf', labelKey: 'artifact.formatPdf' },
-] as const;
-
-export type ExportFormat = (typeof EXPORT_FORMATS)[number]['format'];
-
-const LABEL_KEY_BY_FORMAT: Record<ExportFormat, string> = Object.fromEntries(
-  EXPORT_FORMATS.map(({ format, labelKey }) => [format, labelKey]),
-) as Record<ExportFormat, string>;
+import { EXPORT_FORMATS, ExportFormat } from './exportFormats';
 
 type ExportFn = (
   format: ExportFormat,
   html: string,
   baseFileName: string,
+  /**
+   * Original markdown source, when the caller has it. Used to bypass the
+   * markdown → HTML → markdown round-trip for the `md` export and to validate
+   * non-empty input even when `html` was produced from whitespace-only source.
+   */
+  markdownSource?: string,
 ) => Promise<void>;
 
 async function withLoadingToast<T>(
@@ -54,6 +48,10 @@ async function withLoadingToast<T>(
   }
 }
 
+function labelKeyForFormat(format: ExportFormat): string {
+  return EXPORT_FORMATS.find((f) => f.format === format)!.labelKey;
+}
+
 /**
  * Shared document-export logic used by the DocumentArtifact panel and the
  * per-message Download menu. Takes HTML content and writes a file in the
@@ -63,8 +61,9 @@ export function useDocumentExport(): ExportFn {
   const t = useTranslations();
 
   return useCallback<ExportFn>(
-    async (format, html, baseFileName) => {
-      if (!html) {
+    async (format, html, baseFileName, markdownSource) => {
+      const source = markdownSource ?? html;
+      if (!source.trim()) {
         toast.error(t('artifact.noContentToExport'));
         return;
       }
@@ -82,7 +81,9 @@ export function useDocumentExport(): ExportFn {
           }
 
           case 'md': {
-            const markdown = htmlToMarkdown(html);
+            // Use the caller's markdown source verbatim when provided —
+            // converting via htmlToMarkdown round-trips and loses formatting.
+            const markdown = markdownSource ?? htmlToMarkdown(html);
             downloadFile(markdown, `${baseFileName}.md`, 'text/markdown');
             toast.success(t('artifact.exportedAsMarkdown'));
             break;
@@ -107,13 +108,14 @@ export function useDocumentExport(): ExportFn {
             break;
           }
 
-          case 'docx':
+          case 'docx': {
             await withLoadingToast(
               t('artifact.generatingDocx'),
               t('artifact.exportedAsDocx'),
               () => exportToDOCX(html, `${baseFileName}.docx`),
             );
             break;
+          }
 
           default: {
             const exhaustive: never = format;
@@ -124,7 +126,7 @@ export function useDocumentExport(): ExportFn {
         console.error('Export error:', error);
         toast.error(
           t('artifact.failedToExportAs', {
-            format: t(LABEL_KEY_BY_FORMAT[format]),
+            format: t(labelKeyForFormat(format)),
           }),
         );
       }
