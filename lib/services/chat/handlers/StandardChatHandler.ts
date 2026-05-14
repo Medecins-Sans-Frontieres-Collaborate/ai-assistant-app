@@ -1,23 +1,35 @@
+import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import {
   MetricsService,
   getAzureMonitorLogger,
 } from '@/lib/services/observability';
 
+import { composeExtractionPrompt } from '@/lib/utils/server/extraction/composeExtractionPrompt';
+import { proposeFlatSchema } from '@/lib/utils/server/extraction/proposeFlatSchema';
+import { recipesToResponseFormat } from '@/lib/utils/server/extraction/recipeToJsonSchema';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import {
+  ExtractionDataset,
+  ExtractionResultContent,
   FileMessageContent,
   ImageMessageContent,
   Message,
   TextMessageContent,
 } from '@/types/chat';
+import {
+  ExtractionRecipe,
+  ExtractionRequest,
+  ExtractionResponseFormat,
+  RecipeField,
+} from '@/types/extractionRecipe';
 
 import { StandardChatService } from '../StandardChatService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
-import { SpanStatusCode, trace } from '@opentelemetry/api';
+import { Span, SpanStatusCode, trace } from '@opentelemetry/api';
 
 /** Union of all possible message content types */
 type MessageContent =
@@ -251,6 +263,23 @@ export class StandardChatHandler extends BasePipelineStage {
             '[StandardChatHandler] Stream:',
             sanitizeForLog(context.stream),
           );
+
+          // Extraction branch — ExtractionEnricher set `context.extraction`.
+          // Bypass the streaming chat path; run the structured-output flow
+          // (single call for recipe mode, two-stage for auto mode) and
+          // surface the parsed result as `ExtractionResultContent` in the
+          // stream's metadata payload.
+          if (context.extraction) {
+            const extractionResponse = await this.executeExtraction(
+              context,
+              messagesToSend,
+              context.extraction,
+              context.responseFormat,
+              startTime,
+              span,
+            );
+            return { ...context, response: extractionResponse };
+          }
 
           // Check if RAG is enabled
           const ragConfig = context.processedContent?.metadata?.ragConfig;
@@ -574,6 +603,262 @@ export class StandardChatHandler extends BasePipelineStage {
     }
 
     return this.stripUnsupportedContentTypes(messages);
+  }
+
+  /**
+   * Executes a structured-data-extraction turn.
+   *
+   * Recipe mode is one call: the strict `json_schema` extraction emitted
+   * by `ExtractionEnricher` runs against the user's model.
+   *
+   * Auto mode is two stages:
+   *   1. Propose a flat schema via `proposeFlatSchema` (gpt-5-mini
+   *      structured-output call). The result is synthesised into a
+   *      transient `ExtractionRecipe` (id `auto`) so Stage 2 reuses the
+   *      same code path as recipe mode.
+   *   2. Run the strict `json_schema` extraction with the synthesised
+   *      recipe.
+   *
+   * The non-streaming result is surfaced through the SSE metadata
+   * channel (`extractionResult` key) so the client's existing stream
+   * consumer picks it up alongside transcripts and active-file updates.
+   */
+  private async executeExtraction(
+    context: ChatContext,
+    messagesToSend: Message[],
+    extraction: ExtractionRequest,
+    responseFormat: ExtractionResponseFormat | undefined,
+    startTime: number,
+    span: Span,
+  ): Promise<Response> {
+    let effectiveExtraction = extraction;
+    let effectiveResponseFormat = responseFormat;
+    let effectiveSystemPrompt = context.systemPrompt;
+    let proposedFields: RecipeField[] | undefined;
+
+    if (extraction.recipes.length === 0) {
+      // Stage 1: propose a flat schema from the source material.
+      console.log(
+        '[StandardChatHandler] Auto-mode stage 1: proposing flat schema',
+      );
+
+      const openAIClient = ServiceContainer.getInstance().getOpenAIClient();
+      const promptParts = this.messagesToPromptParts(messagesToSend);
+      proposedFields = await proposeFlatSchema(openAIClient, promptParts);
+
+      // Synthesise a transient recipe so Stage 2 reuses recipe mode.
+      const now = new Date().toISOString();
+      const syntheticRecipe: ExtractionRecipe = {
+        id: 'auto',
+        name: 'Auto-extracted',
+        instructions:
+          'Extract every record described in the material below using the fields defined for this recipe.',
+        fields: proposedFields,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      effectiveExtraction = {
+        recipeIds: ['auto'],
+        recipes: [syntheticRecipe],
+        autoMode: true,
+      };
+
+      const composed = recipesToResponseFormat([syntheticRecipe]);
+      effectiveResponseFormat = {
+        name: composed.name,
+        schema: composed.schema,
+        strict: composed.strict,
+        recipeOrder: composed.recipeOrder,
+        keyByRecipeId: composed.keyByRecipeId,
+      };
+
+      // ExtractionEnricher skipped the prompt addendum for auto-mode; add
+      // it now that we have a real recipe to describe.
+      const addendum = composeExtractionPrompt([syntheticRecipe]);
+      effectiveSystemPrompt = context.systemPrompt
+        ? `${context.systemPrompt}\n\n${addendum}`
+        : addendum;
+
+      console.log(
+        `[StandardChatHandler] Auto-mode stage 2: extracting against proposed schema (${proposedFields.length} fields)`,
+      );
+    }
+
+    if (!effectiveResponseFormat) {
+      throw new Error(
+        'executeExtraction reached extraction call without a response format (recipe mode expected ExtractionEnricher to set one)',
+      );
+    }
+
+    const { parsed } = await this.standardChatService.handleExtraction({
+      messages: this.stripUnsupportedContentTypes(messagesToSend),
+      model: context.model,
+      user: context.user,
+      systemPrompt: effectiveSystemPrompt,
+      responseFormat: effectiveResponseFormat,
+    });
+
+    const extractionResult = this.buildExtractionResultContent(
+      parsed,
+      effectiveExtraction,
+      effectiveResponseFormat,
+    );
+
+    // Auto mode: stamp the proposed schema onto the dataset so the
+    // renderer can offer "Save as recipe".
+    if (proposedFields && extractionResult.datasets.length > 0) {
+      extractionResult.datasets[0] = {
+        ...extractionResult.datasets[0],
+        proposedSchema: {
+          instructions: effectiveExtraction.recipes[0].instructions,
+          fields: proposedFields.map((f) => ({
+            name: f.name,
+            label: f.label,
+            type: f.type,
+            required: f.required,
+            description: f.description,
+          })),
+        },
+      };
+    }
+
+    const totalRows = extractionResult.datasets.reduce(
+      (sum, d) => sum + d.rows.length,
+      0,
+    );
+
+    console.log(
+      `[StandardChatHandler] Extraction complete: ${extractionResult.datasets.length} dataset(s), ${totalRows} total row(s)`,
+    );
+
+    const duration = Date.now() - startTime;
+    MetricsService.recordRequest('chat', duration, {
+      user: context.user,
+      success: true,
+      model: context.modelId,
+    });
+    span.setAttribute(
+      'chat.extraction.dataset_count',
+      extractionResult.datasets.length,
+    );
+    span.setAttribute('chat.extraction.row_count', totalRows);
+    span.setAttribute('chat.duration_ms', duration);
+    span.setStatus({ code: SpanStatusCode.OK });
+
+    const metadataPayload: Record<string, unknown> = { extractionResult };
+
+    // Include the same active-file passthrough fields the streaming branch
+    // emits, so pinning / token-consumption updates round-trip correctly
+    // even on an extraction turn.
+    if ((context.activeFilesCacheUpdates?.length ?? 0) > 0) {
+      metadataPayload.fileCacheUpdates = (
+        context.activeFilesCacheUpdates ?? []
+      ).map((u) => ({
+        fileId: u.fileId,
+        processedContent: u.processedContent,
+      }));
+    }
+    if ((context.activeFilesTokensConsumedThisTurn ?? 0) > 0) {
+      metadataPayload.activeFilesTokensConsumed =
+        context.activeFilesTokensConsumedThisTurn;
+    }
+    if ((context.activeFilesDroppedThisTurn?.length ?? 0) > 0) {
+      metadataPayload.activeFilesDropped = context.activeFilesDroppedThisTurn;
+    }
+
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        // No text body — the client's stream consumer recognises the
+        // `extractionResult` field in the metadata and replaces the
+        // assistant message's `content` with it. Leading `\n\n` matches
+        // the canonical metadata-block prefix used elsewhere in the
+        // pipeline (transcript path, active-file passthrough).
+        const metadataStr = `\n\n<<<METADATA_START>>>${JSON.stringify(metadataPayload)}<<<METADATA_END>>>`;
+        controller.enqueue(encoder.encode(metadataStr));
+        controller.close();
+      },
+    });
+
+    return new Response(stream, { headers: STREAMING_RESPONSE_HEADERS });
+  }
+
+  /**
+   * Maps the parsed JSON output of the structured-output call to an
+   * `ExtractionResultContent`. One dataset per recipe; auto-mode hits
+   * this same path with the synthesised recipe from Stage 1.
+   */
+  private buildExtractionResultContent(
+    parsed: Record<string, unknown>,
+    extraction: ExtractionRequest,
+    responseFormat: ExtractionResponseFormat,
+  ): ExtractionResultContent {
+    // One dataset per recipe.
+    const keyByRecipeId = responseFormat.keyByRecipeId ?? {};
+    const datasets: ExtractionDataset[] = extraction.recipes.map((recipe) => {
+      const key = keyByRecipeId[recipe.id];
+      const rawRows = key ? parsed[key] : undefined;
+      const rows = Array.isArray(rawRows)
+        ? (rawRows.filter(
+            (r) => r !== null && typeof r === 'object' && !Array.isArray(r),
+          ) as Array<Record<string, unknown>>)
+        : [];
+      return {
+        recipeId: recipe.id,
+        recipeName: recipe.name,
+        fields: recipe.fields.map((f) => ({
+          name: f.name,
+          label: f.label,
+          type: f.type,
+          required: f.required,
+        })),
+        rows,
+      };
+    });
+
+    return { type: 'extraction_result', datasets };
+  }
+
+  /**
+   * Flattens chat messages into plain-text fragments for the auto-mode
+   * Stage 1 propose call. Each non-empty message becomes one fragment;
+   * the caller joins them with blank lines. File content has already
+   * been inlined by `FileProcessor` upstream, so this captures the
+   * material the user actually wants extracted.
+   */
+  private messagesToPromptParts(messages: Message[]): string[] {
+    const parts: string[] = [];
+    for (const message of messages) {
+      const text = this.extractTextFromMessage(message);
+      if (text.trim().length > 0) {
+        parts.push(text);
+      }
+    }
+    return parts;
+  }
+
+  private extractTextFromMessage(message: Message): string {
+    const content = message.content;
+    if (typeof content === 'string') return content;
+    if (Array.isArray(content)) {
+      const texts: string[] = [];
+      for (const part of content) {
+        if (part.type === 'text') {
+          texts.push((part as TextMessageContent).text);
+        }
+      }
+      return texts.join('\n');
+    }
+    if (
+      content &&
+      typeof content === 'object' &&
+      'type' in content &&
+      content.type === 'text'
+    ) {
+      return (content as TextMessageContent).text;
+    }
+    return '';
   }
 
   /**
