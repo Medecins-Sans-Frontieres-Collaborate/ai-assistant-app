@@ -57,7 +57,7 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
   const handleDownload = async (format: ExportFormat) => {
     setShowMenu(false);
 
-    if (!content) {
+    if (!content || !content.trim()) {
       toast.error(t('artifact.noContentToExport'));
       return;
     }
