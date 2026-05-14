@@ -21,6 +21,14 @@ export type ExportAs = (
   baseFileName: string,
 ) => Promise<void>;
 
+const FORMAT_LABEL_KEY: Record<ExportFormat, string> = {
+  md: 'artifact.formatMarkdown',
+  html: 'artifact.formatHtml',
+  docx: 'artifact.formatDocx',
+  txt: 'artifact.formatText',
+  pdf: 'artifact.formatPdf',
+};
+
 /**
  * Shared document-export logic used by the DocumentArtifact panel and the
  * per-message Download menu. Takes HTML content and writes a file in the
@@ -57,24 +65,40 @@ export function useDocumentExport(): ExportAs {
             break;
           }
 
-          case 'pdf':
-            toast.loading(t('artifact.generatingPdf'));
-            await exportToPDF(html, `${baseFileName}.pdf`);
-            toast.dismiss();
-            toast.success(t('artifact.exportedAsPdf'));
+          case 'pdf': {
+            const loadingId = toast.loading(t('artifact.generatingPdf'));
+            try {
+              await exportToPDF(html, `${baseFileName}.pdf`);
+              toast.success(t('artifact.exportedAsPdf'));
+            } finally {
+              toast.dismiss(loadingId);
+            }
             break;
+          }
 
-          case 'docx':
-            toast.loading(t('artifact.generatingDocx'));
-            await exportToDOCX(html, `${baseFileName}.docx`);
-            toast.dismiss();
-            toast.success(t('artifact.exportedAsDocx'));
+          case 'docx': {
+            const loadingId = toast.loading(t('artifact.generatingDocx'));
+            try {
+              await exportToDOCX(html, `${baseFileName}.docx`);
+              toast.success(t('artifact.exportedAsDocx'));
+            } finally {
+              toast.dismiss(loadingId);
+            }
             break;
+          }
+
+          default: {
+            const exhaustive: never = format;
+            throw new Error(`Unhandled export format: ${String(exhaustive)}`);
+          }
         }
       } catch (error) {
         console.error('Export error:', error);
+        const formatLabel = t(FORMAT_LABEL_KEY[format] ?? '');
         toast.error(
-          t('artifact.failedToExportAs', { format: format.toUpperCase() }),
+          t('artifact.failedToExportAs', {
+            format: formatLabel || format.toUpperCase(),
+          }),
         );
       }
     },
