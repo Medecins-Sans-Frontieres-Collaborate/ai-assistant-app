@@ -27,6 +27,17 @@ export function htmlToMarkdown(html: string): string {
 }
 
 /**
+ * Strip script tags, inline event handlers, and javascript: URLs from HTML
+ * before writing it to disk or rendering it into a PDF. Assistant output and
+ * document-editor content can contain raw HTML; DOMPurify's defaults remove
+ * the executable surface while keeping the visible markup intact.
+ */
+export async function sanitizeHtmlForExport(html: string): Promise<string> {
+  const DOMPurify = await getDOMPurify();
+  return DOMPurify.sanitize(html);
+}
+
+/**
  * Convert HTML to plain text
  */
 export async function htmlToPlainText(html: string): Promise<string> {
