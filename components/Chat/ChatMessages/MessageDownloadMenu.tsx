@@ -15,6 +15,7 @@ import { downloadFile } from '@/lib/utils/shared/document/exportUtils';
 import { markdownToHtml } from '@/lib/utils/shared/document/formatConverter';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
+import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
 interface MessageDownloadMenuProps {
   content: string;
@@ -102,46 +103,7 @@ export const MessageDownloadMenu: FC<MessageDownloadMenuProps> = ({
         onClose={() => setShowMenu(false)}
         align="right"
       >
-        <div
-          role="menu"
-          className="w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg overflow-hidden"
-        >
-          <button
-            role="menuitem"
-            onClick={() => handleDownload('md')}
-            className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
-            {t('artifact.formatMarkdown')}
-          </button>
-          <button
-            role="menuitem"
-            onClick={() => handleDownload('html')}
-            className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
-            {t('artifact.formatHtml')}
-          </button>
-          <button
-            role="menuitem"
-            onClick={() => handleDownload('docx')}
-            className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
-            {t('artifact.formatDocx')}
-          </button>
-          <button
-            role="menuitem"
-            onClick={() => handleDownload('txt')}
-            className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
-            {t('artifact.formatText')}
-          </button>
-          <button
-            role="menuitem"
-            onClick={() => handleDownload('pdf')}
-            className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-          >
-            {t('artifact.formatPdf')}
-          </button>
-        </div>
+        <ExportFormatMenu onSelect={handleDownload} />
       </DropdownPortal>
     </>
   );
