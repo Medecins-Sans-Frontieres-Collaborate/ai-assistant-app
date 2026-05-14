@@ -1,5 +1,6 @@
 'use client';
 
+import { ExtractionRecipe } from '@/types/extractionRecipe';
 import {
   DEFAULT_MODEL_ORDER,
   OpenAIModel,
@@ -59,6 +60,7 @@ interface SettingsStore {
   prompts: Prompt[];
   tones: Tone[];
   customAgents: CustomAgent[];
+  extractionRecipes: ExtractionRecipe[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -118,6 +120,15 @@ interface SettingsStore {
   addCustomAgent: (agent: CustomAgent) => void;
   updateCustomAgent: (id: string, updates: Partial<CustomAgent>) => void;
   deleteCustomAgent: (id: string) => void;
+
+  // Extraction Recipe Actions
+  setExtractionRecipes: (recipes: ExtractionRecipe[]) => void;
+  addExtractionRecipe: (recipe: ExtractionRecipe) => void;
+  updateExtractionRecipe: (
+    id: string,
+    updates: Partial<ExtractionRecipe>,
+  ) => void;
+  deleteExtractionRecipe: (id: string) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -192,6 +203,7 @@ export const useSettingsStore = create<SettingsStore>()(
       prompts: [],
       tones: [],
       customAgents: [],
+      extractionRecipes: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -309,6 +321,26 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteCustomAgent: (id) =>
         set((state) => ({
           customAgents: state.customAgents.filter((a) => a.id !== id),
+        })),
+
+      // Extraction Recipe Actions
+      setExtractionRecipes: (recipes) => set({ extractionRecipes: recipes }),
+
+      addExtractionRecipe: (recipe) =>
+        set((state) => ({
+          extractionRecipes: [...state.extractionRecipes, recipe],
+        })),
+
+      updateExtractionRecipe: (id, updates) =>
+        set((state) => ({
+          extractionRecipes: state.extractionRecipes.map((r) =>
+            r.id === id ? { ...r, ...updates } : r,
+          ),
+        })),
+
+      deleteExtractionRecipe: (id) =>
+        set((state) => ({
+          extractionRecipes: state.extractionRecipes.filter((r) => r.id !== id),
         })),
 
       // Model Ordering Actions
@@ -450,6 +482,7 @@ export const useSettingsStore = create<SettingsStore>()(
           prompts: [],
           tones: [],
           customAgents: [],
+          extractionRecipes: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -471,7 +504,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 17, // Increment this when schema changes to trigger migrations
+      version: 18, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -484,6 +517,7 @@ export const useSettingsStore = create<SettingsStore>()(
         prompts: state.prompts,
         tones: state.tones,
         customAgents: state.customAgents,
+        extractionRecipes: state.extractionRecipes,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -610,6 +644,13 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 17) {
           if (state.autoInjectPinnedImages === undefined) {
             state.autoInjectPinnedImages = true;
+          }
+        }
+
+        // Version 17 → 18: Add extractionRecipes (structured data extraction)
+        if (version < 18) {
+          if (state.extractionRecipes === undefined) {
+            state.extractionRecipes = [];
           }
         }
 
