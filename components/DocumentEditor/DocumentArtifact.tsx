@@ -18,6 +18,7 @@ import {
 import { useTheme } from '@/client/hooks/ui/useTheme';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
+import { ExportFormatMenu } from '@/components/UI/ExportFormatMenu';
 
 import DocumentEditor from './DocumentEditor';
 
@@ -125,38 +126,7 @@ export default function DocumentArtifact({
             onClose={() => setShowExportMenu(false)}
             align="right"
           >
-            <div className="w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg overflow-hidden">
-              <button
-                onClick={() => handleExport('md')}
-                className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-              >
-                {t('artifact.formatMarkdown')}
-              </button>
-              <button
-                onClick={() => handleExport('html')}
-                className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-              >
-                {t('artifact.formatHtml')}
-              </button>
-              <button
-                onClick={() => handleExport('docx')}
-                className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-              >
-                {t('artifact.formatDocx')}
-              </button>
-              <button
-                onClick={() => handleExport('txt')}
-                className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-              >
-                {t('artifact.formatText')}
-              </button>
-              <button
-                onClick={() => handleExport('pdf')}
-                className="w-full px-4 py-2 text-left text-sm text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
-              >
-                {t('artifact.formatPdf')}
-              </button>
-            </div>
+            <ExportFormatMenu onSelect={handleExport} />
           </DropdownPortal>
 
           <div className="w-px h-5 bg-neutral-300 dark:bg-neutral-700 mx-1" />
