@@ -16,6 +16,7 @@ import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
 import { ActiveFile, Conversation, Message } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -25,6 +26,7 @@ import {
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
 
+import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
 import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
@@ -563,6 +565,29 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
+    // Resolve extraction payload from the chat-input store + the persisted
+    // recipes. Extraction mode is ephemeral (per-conversation) and recipes
+    // travel inline because the server has no recipe store.
+    const inputState = useChatInputStore.getState();
+    let extraction: ExtractionRequest | undefined;
+    if (inputState.extractionMode) {
+      const selectedRecipes = settings.extractionRecipes.filter((r) =>
+        inputState.extractionRecipeIds.includes(r.id),
+      );
+      if (selectedRecipes.length > 0) {
+        extraction = {
+          recipeIds: selectedRecipes.map((r) => r.id),
+          recipes: selectedRecipes,
+        };
+      } else {
+        extraction = {
+          recipeIds: [],
+          recipes: [],
+          autoMode: true,
+        };
+      }
+    }
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -584,6 +609,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
+      extraction,
     });
   },
 
