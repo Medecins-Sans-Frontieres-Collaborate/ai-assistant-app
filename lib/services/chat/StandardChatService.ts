@@ -14,6 +14,7 @@ import {
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
 
 import { Message } from '@/types/chat';
+import { ExtractionResponseFormat } from '@/types/extractionRecipe';
 import { OpenAIModel } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
@@ -90,6 +91,91 @@ export class StandardChatService {
     this.modelSelector = modelSelector;
     this.toneService = toneService;
     this.streamingService = streamingService;
+  }
+
+  /**
+   * Handles a structured-data-extraction request. Bypasses the streaming /
+   * tone / token-budget machinery in `handleChat` — extraction is always a
+   * single non-streaming call (v1 doesn't stream partial JSON) and the
+   * system prompt was already composed upstream by `ExtractionEnricher`.
+   *
+   * Strict mode passes `response_format: { type: 'json_schema', json_schema: { name, strict, schema } }`.
+   * Auto mode (no schema, just a propose-your-own-structure prompt) uses
+   * `response_format: { type: 'json_object' }` instead.
+   *
+   * @returns Parsed JSON object emitted by the model (untyped — caller maps
+   *          it to `ExtractionDataset[]` using the recipe metadata).
+   */
+  public async handleExtraction(request: {
+    messages: Message[];
+    model: OpenAIModel;
+    user: Session['user'];
+    systemPrompt: string;
+    responseFormat: ExtractionResponseFormat;
+  }): Promise<{ parsed: Record<string, unknown>; raw: string }> {
+    const { modelId, modelConfig } = this.modelSelector.selectModel(
+      request.model,
+      request.messages,
+    );
+
+    console.log(
+      `[StandardChatService] Extraction call: model=${sanitizeForLog(modelId)} strict=${request.responseFormat.strict} keys=${Object.keys(
+        (
+          request.responseFormat.schema as {
+            properties?: Record<string, unknown>;
+          }
+        )?.properties ?? {},
+      ).join(',')}`,
+    );
+
+    const apiMessages = [
+      { role: 'system' as const, content: request.systemPrompt },
+      ...request.messages.map((m) => ({
+        role: m.role as 'user' | 'assistant' | 'system',
+        content:
+          typeof m.content === 'string'
+            ? m.content
+            : Array.isArray(m.content)
+              ? m.content
+                  .filter((c) => c.type === 'text')
+                  .map((c) => (c as { text: string }).text)
+                  .join('\n\n')
+              : '',
+      })),
+    ];
+
+    const responseFormat = request.responseFormat.strict
+      ? ({
+          type: 'json_schema',
+          json_schema: {
+            name: request.responseFormat.name,
+            strict: true,
+            schema: request.responseFormat.schema,
+          },
+        } as const)
+      : ({ type: 'json_object' } as const);
+
+    const response = await this.openAIClient.chat.completions.create({
+      model: modelConfig.id,
+      messages: apiMessages,
+      response_format: responseFormat,
+    });
+
+    const raw = response.choices[0]?.message?.content ?? '{}';
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(raw);
+    } catch (err) {
+      console.error(
+        '[StandardChatService] Extraction JSON parse failed:',
+        err,
+        'raw:',
+        sanitizeForLog(raw.slice(0, 500)),
+      );
+      throw new Error('Failed to parse structured extraction output as JSON');
+    }
+
+    return { parsed, raw };
   }
 
   /**
