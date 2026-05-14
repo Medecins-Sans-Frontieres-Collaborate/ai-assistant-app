@@ -59,6 +59,7 @@ import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -96,7 +97,13 @@ export function Sidebar() {
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [isCustomizationsOpen, setIsCustomizationsOpen] = useState(false);
+  // Quick Actions modal state lives in uiStore so other surfaces (e.g. the
+  // extraction recipe picker) can open it on a specific tab.
+  const isCustomizationsOpen = useUIStore((s) => s.isCustomizationsOpen);
+  const setIsCustomizationsOpen = useUIStore((s) => s.setIsCustomizationsOpen);
+  const setCustomizationsInitialTab = useUIStore(
+    (s) => s.setCustomizationsInitialTab,
+  );
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
   const [isLoadingPhoto, setIsLoadingPhoto] = useState(true);
   const [showNewChatMenu, setShowNewChatMenu] = useState(false);
@@ -583,7 +590,10 @@ export function Sidebar() {
           {/* Quick Actions button - visible in both states */}
           <button
             className={`group relative flex items-center w-full rounded-lg text-sm text-neutral-900 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
-            onClick={() => setIsCustomizationsOpen(true)}
+            onClick={() => {
+              setCustomizationsInitialTab('prompts');
+              setIsCustomizationsOpen(true);
+            }}
             title={t('sidebar.quickActionsTitle')}
           >
             <IconBolt size={showChatbar ? 16 : 20} className="shrink-0" />
