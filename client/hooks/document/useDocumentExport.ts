@@ -11,6 +11,7 @@ import {
   exportToPDF,
   htmlToMarkdown,
   htmlToPlainText,
+  sanitizeHtmlForExport,
 } from '@/lib/utils/shared/document/exportUtils';
 
 export const EXPORT_FORMATS = [
@@ -39,12 +40,17 @@ async function withLoadingToast<T>(
   fn: () => Promise<T>,
 ): Promise<T> {
   const loadingId = toast.loading(loadingMessage);
+  let settled = false;
   try {
     const result = await fn();
+    // Dismiss the loading toast before showing success so users don't see two
+    // toasts stacked momentarily. The error path still dismisses via finally.
+    toast.dismiss(loadingId);
+    settled = true;
     toast.success(successMessage);
     return result;
   } finally {
-    toast.dismiss(loadingId);
+    if (!settled) toast.dismiss(loadingId);
   }
 }
 
@@ -65,10 +71,15 @@ export function useDocumentExport(): ExportFn {
 
       try {
         switch (format) {
-          case 'html':
-            downloadFile(html, `${baseFileName}.html`, 'text/html');
+          case 'html': {
+            // The exported file will be opened in a browser. Strip scripts and
+            // event handlers so a prompt-injected `<script>` / `onerror` in the
+            // assistant's response can't execute on the user's machine.
+            const safeHtml = await sanitizeHtmlForExport(html);
+            downloadFile(safeHtml, `${baseFileName}.html`, 'text/html');
             toast.success(t('artifact.exportedAsHtml'));
             break;
+          }
 
           case 'md': {
             const markdown = htmlToMarkdown(html);
@@ -84,13 +95,17 @@ export function useDocumentExport(): ExportFn {
             break;
           }
 
-          case 'pdf':
+          case 'pdf': {
+            // html2pdf renders the HTML in a transient DOM; sanitize first so
+            // injected scripts can't run during the render pass.
+            const safePdfHtml = await sanitizeHtmlForExport(html);
             await withLoadingToast(
               t('artifact.generatingPdf'),
               t('artifact.exportedAsPdf'),
-              () => exportToPDF(html, `${baseFileName}.pdf`),
+              () => exportToPDF(safePdfHtml, `${baseFileName}.pdf`),
             );
             break;
+          }
 
           case 'docx':
             await withLoadingToast(
