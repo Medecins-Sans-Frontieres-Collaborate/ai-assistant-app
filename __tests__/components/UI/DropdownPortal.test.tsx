@@ -7,6 +7,7 @@ import '@testing-library/jest-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const VIEWPORT_HEIGHT = 800;
+const VIEWPORT_WIDTH = 1024;
 const MENU_HEIGHT = 200;
 const MENU_WIDTH = 160;
 
@@ -65,12 +66,10 @@ function Harness({
   );
 }
 
-// The portal's outer wrapper is the parent of the rendered menu children.
-// Walking up from a test-id avoids coupling tests to the wrapper's class name
-// or z-index.
+// The portal's outer wrapper is marked with `data-dropdown-portal` so tests
+// can find it without coupling to className or relying on parentElement walks.
 function getPortalElement(): HTMLElement {
-  const menu = screen.getByTestId('menu');
-  const portal = menu.parentElement;
+  const portal = document.querySelector<HTMLElement>('[data-dropdown-portal]');
   if (!portal) throw new Error('Portal element not found');
   return portal;
 }
@@ -81,16 +80,21 @@ describe('DropdownPortal placement', () => {
       configurable: true,
       value: VIEWPORT_HEIGHT,
     });
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: VIEWPORT_WIDTH,
+    });
 
-    // Patch only the portal wrapper's rect — child of a fixed-position element
-    // is the menu we render in the harness, so we can identify the wrapper as
-    // any element that *contains* an element with `data-testid="menu"`.
+    // Patch only the portal wrapper's rect, identified by the
+    // `data-dropdown-portal` marker the component sets on its outer div.
+    // Other elements (body, harness wrappers) fall through to a zero rect so
+    // their measurements don't accidentally satisfy the menu's expected size.
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(
       function (this: Element) {
-        const hasMenuChild =
+        if (
           this instanceof HTMLElement &&
-          this.querySelector?.('[data-testid="menu"]') !== null;
-        if (hasMenuChild) {
+          this.hasAttribute('data-dropdown-portal')
+        ) {
           return makeRect({
             top: 0,
             bottom: MENU_HEIGHT,
@@ -176,6 +180,89 @@ describe('DropdownPortal placement', () => {
     );
 
     expect(screen.queryByTestId('menu')).toBeNull();
+  });
+
+  it('left-align: anchors the menu at the trigger left when there is room', () => {
+    render(
+      <Harness
+        align="left"
+        triggerRect={makeRect({
+          top: 100,
+          bottom: 120,
+          left: 200,
+          right: 220,
+          width: 20,
+          height: 20,
+        })}
+      />,
+    );
+
+    // anchorX = triggerRect.left = 200; menu doesn't clip the right edge
+    // (200 + 160 = 360 < 1024 - 8 = 1016) so no adjustment.
+    expect(getPortalElement().style.left).toBe('200px');
+    expect(getPortalElement().style.right).toBe('');
+  });
+
+  it('left-align: pulls the menu in when its right edge would clip the viewport', () => {
+    render(
+      <Harness
+        align="left"
+        triggerRect={makeRect({
+          // trigger.left = 950 → 950 + 160 = 1110 > 1024 - 8 = 1016, clips right
+          top: 100,
+          bottom: 120,
+          left: 950,
+          right: 970,
+          width: 20,
+          height: 20,
+        })}
+      />,
+    );
+
+    // anchorX is adjusted to viewportWidth - menuWidth - inset = 1024-160-8 = 856
+    expect(getPortalElement().style.left).toBe('856px');
+  });
+
+  it('right-align: anchors the menu at the trigger right when there is room', () => {
+    render(
+      <Harness
+        align="right"
+        triggerRect={makeRect({
+          top: 100,
+          bottom: 120,
+          left: 800,
+          right: 820,
+          width: 20,
+          height: 20,
+        })}
+      />,
+    );
+
+    // anchorX = triggerRect.right = 820; left edge = 820 - 160 = 660 > 8, no adjust.
+    // right css = window.innerWidth - anchorX = 1024 - 820 = 204
+    expect(getPortalElement().style.right).toBe('204px');
+    expect(getPortalElement().style.left).toBe('');
+  });
+
+  it('right-align: slides the menu right when its left edge would clip the viewport', () => {
+    render(
+      <Harness
+        align="right"
+        triggerRect={makeRect({
+          // trigger.right = 100; left edge of menu = 100 - 160 = -60 < 8, clips left.
+          top: 100,
+          bottom: 120,
+          left: 80,
+          right: 100,
+          width: 20,
+          height: 20,
+        })}
+      />,
+    );
+
+    // anchorX adjusted to menuWidth + inset = 160 + 8 = 168
+    // right css = 1024 - 168 = 856
+    expect(getPortalElement().style.right).toBe('856px');
   });
 
   it('calls onClose when the window is resized', () => {
