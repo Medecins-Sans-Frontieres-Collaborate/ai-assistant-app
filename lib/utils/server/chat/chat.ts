@@ -34,12 +34,7 @@ export const IMAGE_TOKENS_HIGH_DETAIL = 765;
  * Now uses MessageContentAnalyzer for centralized logic.
  */
 export const getMessageContentTypes = (
-  content:
-    | string
-    | TextMessageContent
-    | (TextMessageContent | FileMessageContent)[]
-    | (TextMessageContent | ImageMessageContent)[]
-    | (TextMessageContent | FileMessageContent | ImageMessageContent)[],
+  content: Message['content'],
 ): Set<ContentType> => {
   const analyzer = new MessageContentAnalyzer(content);
   return analyzer.getContentTypes();
@@ -47,25 +42,20 @@ export const getMessageContentTypes = (
 
 /**
  * Get primary content type for a message (for backward compatibility)
- * For mixed content, returns priority: file > audio > image > text
+ * For mixed content, returns priority: file > audio > image > text.
+ * Falls back to 'text' for content variants the analyzer doesn't tag
+ * (e.g., extraction_result on assistant messages).
  */
-const getPrimaryContentType = (
-  content:
-    | string
-    | TextMessageContent
-    | (TextMessageContent | FileMessageContent)[]
-    | (TextMessageContent | ImageMessageContent)[]
-    | (TextMessageContent | FileMessageContent | ImageMessageContent)[],
-): ContentType => {
+const getPrimaryContentType = (content: Message['content']): ContentType => {
   const types = getMessageContentTypes(content);
 
   // Priority: file > audio > image > text
   if (types.has('file')) return 'file';
   if (types.has('audio')) return 'audio';
   if (types.has('image')) return 'image';
-  if (types.has('text')) return 'text';
-
-  throw new Error('Invalid content type or structure');
+  // Untagged variants (e.g. extraction_result) fall through as text — they
+  // were emitted by the assistant and downstream code treats them as such.
+  return 'text';
 };
 
 /**
