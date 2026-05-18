@@ -72,15 +72,20 @@ export async function exportToPDF(
     // Dynamically import html2pdf only when needed (client-side only)
     const html2pdf = (await import('html2pdf.js')).default;
 
+    // Trailing padding keeps the last line of content off the page-slice
+    // boundary; without it html2pdf's rasterizer can crop the final glyph row.
+    const wrapped = `<div style="padding-bottom:24mm">${html}</div>`;
+
     const options = {
       margin: 10,
       filename: fileName,
       image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] as const },
     };
 
-    await html2pdf().set(options).from(html).save();
+    await html2pdf().set(options).from(wrapped).save();
   } catch (error) {
     console.error('Error exporting to PDF:', error);
     throw new Error('Failed to export PDF. Please try again.');
