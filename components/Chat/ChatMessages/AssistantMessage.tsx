@@ -40,6 +40,7 @@ import { TTSSettings } from '@/types/tts';
 
 import AudioPlayer from '@/components/Chat/AudioPlayer';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
+import { MessageDownloadMenu } from '@/components/Chat/ChatMessages/MessageDownloadMenu';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
@@ -270,6 +271,13 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
     }
     return processedContent;
   }, [translationState, processedContent]);
+
+  // Reference-format messages render their own inline UI from the content
+  // string, so the raw markdown isn't a useful download.
+  const isDownloadDisabled =
+    hasEmbeddedContent ||
+    isBlobTranscriptReference(displayedContent) ||
+    isDocumentTranslationReference(displayedContent);
 
   // Generate contextual filename for audio downloads (1-indexed for human readability)
   const audioDownloadFilename = useMemo(() => {
@@ -740,6 +748,12 @@ export const AssistantMessage: FC<AssistantMessageProps> = ({
               >
                 <IconFileText size={18} />
               </button>
+
+              <MessageDownloadMenu
+                content={displayedContent}
+                disabled={isDownloadDisabled}
+                disabledTitle={t('chat.actionsDisabledForEmbed')}
+              />
             </div>
           )}
 

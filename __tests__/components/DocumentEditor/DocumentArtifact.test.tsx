@@ -25,6 +25,7 @@ vi.mock('@/lib/utils/shared/document/exportUtils', () => ({
   exportToPDF: vi.fn().mockResolvedValue(undefined),
   exportToDOCX: vi.fn().mockResolvedValue(undefined),
   downloadFile: vi.fn(),
+  sanitizeHtmlForExport: vi.fn(async (html: string) => html),
 }));
 
 describe('DocumentArtifact', () => {
@@ -383,7 +384,9 @@ describe('DocumentArtifact', () => {
       fireEvent.click(pdfButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to export as PDF');
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to export as PDF (.pdf)',
+        );
       });
     });
 
