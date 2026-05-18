@@ -84,6 +84,7 @@ export default [
         AudioContext: "readonly",
         AnalyserNode: "readonly",
         DOMException: "readonly",
+        DOMRect: "readonly",
         MutationObserver: "readonly",
         RequestInit: "readonly",
         HeadersInit: "readonly",
