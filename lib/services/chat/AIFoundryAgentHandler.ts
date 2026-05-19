@@ -41,6 +41,11 @@ export class AIFoundryAgentHandler {
 
   /**
    * Handles chat completion using Azure AI Foundry Agents
+   *
+   * When options.ephemeral is true and the handler creates a new thread,
+   * the thread is deleted from Azure once the response stream finishes
+   * (happy path, error, or client cancel). Used for web search where each
+   * query is independent and the thread should not be retained.
    */
   async handleAgentChat(
     modelId: string,
@@ -50,6 +55,7 @@ export class AIFoundryAgentHandler {
     user: Session['user'],
     botId: string | undefined,
     threadId?: string,
+    options?: { ephemeral?: boolean },
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -130,6 +136,60 @@ export class AIFoundryAgentHandler {
             throw threadError;
           }
 
+          // Ephemeral thread cleanup — delete the Azure thread once we're
+          // done with it. Only meaningful when the caller asked for ephemeral
+          // behavior AND we created the thread (we never delete reused threads).
+          // Idempotent via cleanupDone; safe to call from multiple exit points.
+          const shouldDeleteThread = options?.ephemeral === true && isNewThread;
+          let cleanupDone = false;
+          const createdThreadId = thread.id;
+          if (isNewThread) {
+            span.setAttribute('thread.id_created', createdThreadId);
+          }
+          const cleanupEphemeralThread = async (): Promise<void> => {
+            if (!shouldDeleteThread || cleanupDone) return;
+            cleanupDone = true;
+            try {
+              const result = await client.threads.delete(createdThreadId);
+              if (result?.deleted === true) {
+                console.log(
+                  '[AIFoundryAgentHandler] Deleted ephemeral thread',
+                  createdThreadId,
+                );
+                span.addEvent('ephemeral_thread.deleted', {
+                  threadId: createdThreadId,
+                });
+              } else {
+                console.warn(
+                  '[AIFoundryAgentHandler] Ephemeral thread delete returned deleted=false',
+                  createdThreadId,
+                );
+                span.addEvent('ephemeral_thread.delete_unconfirmed', {
+                  threadId: createdThreadId,
+                });
+              }
+            } catch (err) {
+              // 404 means the thread is already gone — that's the desired end state.
+              const statusCode = (err as { statusCode?: number })?.statusCode;
+              const code = (err as { code?: string })?.code;
+              if (statusCode === 404 || code === 'NotFound') {
+                span.addEvent('ephemeral_thread.delete_404', {
+                  threadId: createdThreadId,
+                });
+                return;
+              }
+              console.error(
+                '[AIFoundryAgentHandler] Failed to delete ephemeral thread',
+                createdThreadId,
+                err,
+              );
+              span.addEvent('ephemeral_thread.delete_failed', {
+                threadId: createdThreadId,
+                error: err instanceof Error ? err.message : String(err),
+              });
+            }
+          };
+
           try {
             // The SDK expects parameters to be passed separately: (threadId, role, content)
             // For multimodal content (images, files), convert to SDK format
@@ -195,6 +255,7 @@ export class AIFoundryAgentHandler {
               'Full error object:',
               JSON.stringify(messageError, null, 2),
             );
+            void cleanupEphemeralThread();
             throw messageError;
           }
 
@@ -244,6 +305,7 @@ export class AIFoundryAgentHandler {
                 JSON.stringify(streamError.details, null, 2),
               );
             }
+            void cleanupEphemeralThread();
             throw streamError;
           }
 
@@ -427,12 +489,19 @@ export class AIFoundryAgentHandler {
 
                     // Append metadata at the very end using utility function
                     // No need to deduplicate - citationMap already ensured uniqueness
+                    // For ephemeral threads, don't surface the thread id — it
+                    // will be deleted in a moment and is not safe to reuse.
                     appendMetadataToStream(controller, {
                       citations: citations.length > 0 ? citations : undefined,
-                      threadId: isNewThread ? thread.id : undefined,
+                      threadId:
+                        isNewThread && !shouldDeleteThread
+                          ? thread.id
+                          : undefined,
                     });
+                    void cleanupEphemeralThread();
                   } else if (eventMessage.event === 'error') {
                     controllerClosed = true;
+                    void cleanupEphemeralThread();
                     controller.error(
                       new Error(
                         `Agent error: ${JSON.stringify(eventMessage.data)}`,
@@ -441,13 +510,20 @@ export class AIFoundryAgentHandler {
                   } else if (eventMessage.event === 'done') {
                     // Stop the smooth streaming loop and close
                     controllerClosed = true;
+                    void cleanupEphemeralThread();
                     controller.close();
                   }
                 }
               } catch (error) {
                 controllerClosed = true;
+                void cleanupEphemeralThread();
                 controller.error(error);
               }
+            },
+            async cancel() {
+              // Consumer (client) disconnected before the stream finished —
+              // make sure the ephemeral thread still gets cleaned up.
+              await cleanupEphemeralThread();
             },
           });
 
