@@ -25,6 +25,29 @@ import {
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+/**
+ * Fire-and-forget cleanup of Azure AI Foundry threads tied to deleted
+ * conversations. Server is best-effort: a network blip must never block
+ * the local state mutation that calls us.
+ */
+function deleteAzureThreads(threadIds: (string | undefined)[]): void {
+  const ids = Array.from(
+    new Set(
+      threadIds.filter(
+        (id): id is string => typeof id === 'string' && id.length > 0,
+      ),
+    ),
+  );
+  if (ids.length === 0) return;
+  void fetch('/api/chat/agents/threads', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ threadIds: ids }),
+  }).catch((err) => {
+    console.warn('[ConversationStore] Thread cleanup request failed', err);
+  });
+}
+
 interface ConversationStore {
   // State
   conversations: Conversation[];
@@ -132,14 +155,19 @@ export const useConversationStore = create<ConversationStore>()(
           ),
         })),
 
-      deleteConversation: (id) =>
+      deleteConversation: (id) => {
+        const target = get().conversations.find((c) => c.id === id);
+        if (target?.threadId) {
+          deleteAzureThreads([target.threadId]);
+        }
         set((state) => ({
           conversations: state.conversations.filter((c) => c.id !== id),
           selectedConversationId:
             state.selectedConversationId === id
               ? null
               : state.selectedConversationId,
-        })),
+        }));
+      },
 
       selectConversation: (id) => set({ selectedConversationId: id }),
 
@@ -173,13 +201,16 @@ export const useConversationStore = create<ConversationStore>()(
       setSearchTerm: (term) => set({ searchTerm: term }),
 
       // Bulk operations
-      clearAll: () =>
+      clearAll: () => {
+        const threadIds = get().conversations.map((c) => c.threadId);
+        deleteAzureThreads(threadIds);
         set({
           conversations: [],
           selectedConversationId: null,
           folders: [],
           searchTerm: '',
-        }),
+        });
+      },
 
       // Version navigation actions
       setActiveVersion: (conversationId, messageIndex, versionIndex) =>
