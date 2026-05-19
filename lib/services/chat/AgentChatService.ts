@@ -95,6 +95,7 @@ export class AgentChatService {
             user,
             undefined, // No botId for search
             undefined, // No threadId - each search is independent
+            { ephemeral: true }, // Delete the Azure thread after the search.
           );
 
           // Parse the streaming response to extract text and citations
