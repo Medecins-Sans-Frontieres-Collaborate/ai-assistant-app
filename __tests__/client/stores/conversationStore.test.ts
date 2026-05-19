@@ -2,7 +2,7 @@ import { Conversation } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('conversationStore', () => {
   beforeEach(() => {
@@ -823,6 +823,119 @@ describe('conversationStore', () => {
 
         expect(useConversationStore.getState().isLoaded).toBe(true);
       });
+    });
+  });
+
+  describe('Azure thread cleanup on delete', () => {
+    let fetchMock: ReturnType<typeof vi.fn>;
+    const originalFetch = global.fetch;
+
+    const makeConversationWithThread = (
+      id: string,
+      threadId?: string,
+    ): Conversation =>
+      ({
+        id,
+        name: `Conv ${id}`,
+        messages: [],
+        model: {
+          id: 'gpt-4',
+          name: 'GPT-4',
+          maxLength: 4000,
+          tokenLimit: 4000,
+        },
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+        ...(threadId ? { threadId } : {}),
+      }) as Conversation;
+
+    beforeEach(() => {
+      fetchMock = vi.fn(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({ deleted: 1, notFound: 0, failed: [] }),
+            {
+              status: 200,
+            },
+          ),
+        ),
+      );
+      global.fetch = fetchMock as unknown as typeof fetch;
+    });
+
+    afterEach(() => {
+      global.fetch = originalFetch;
+    });
+
+    it('deleteConversation calls the threads endpoint with the conversation threadId', () => {
+      useConversationStore
+        .getState()
+        .setConversations([makeConversationWithThread('1', 'thread_alpha')]);
+
+      useConversationStore.getState().deleteConversation('1');
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const [url, init] = fetchMock.mock.calls[0];
+      expect(url).toBe('/api/chat/agents/threads');
+      expect(init?.method).toBe('DELETE');
+      const body = JSON.parse(init?.body as string);
+      expect(body).toEqual({ threadIds: ['thread_alpha'] });
+    });
+
+    it('deleteConversation does NOT call the endpoint when threadId is absent', () => {
+      useConversationStore
+        .getState()
+        .setConversations([makeConversationWithThread('1')]);
+
+      useConversationStore.getState().deleteConversation('1');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('clearAll calls the endpoint with every conversation threadId', () => {
+      useConversationStore.getState().setConversations([
+        makeConversationWithThread('1', 'thread_a'),
+        makeConversationWithThread('2'), // no threadId — should be filtered out
+        makeConversationWithThread('3', 'thread_b'),
+      ]);
+
+      useConversationStore.getState().clearAll();
+
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+      const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+      expect(body.threadIds).toEqual(
+        expect.arrayContaining(['thread_a', 'thread_b']),
+      );
+      expect(body.threadIds).toHaveLength(2);
+    });
+
+    it('clearAll skips fetch entirely when no conversation has a threadId', () => {
+      useConversationStore
+        .getState()
+        .setConversations([
+          makeConversationWithThread('1'),
+          makeConversationWithThread('2'),
+        ]);
+
+      useConversationStore.getState().clearAll();
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('fetch rejection does not block local state mutation', async () => {
+      fetchMock.mockReturnValueOnce(Promise.reject(new Error('network down')));
+      useConversationStore
+        .getState()
+        .setConversations([makeConversationWithThread('1', 'thread_alpha')]);
+
+      useConversationStore.getState().deleteConversation('1');
+
+      // Local state must already be cleared, regardless of fetch outcome.
+      expect(useConversationStore.getState().conversations).toEqual([]);
+
+      // Let the fire-and-forget catch handler run so vitest sees it as handled.
+      await new Promise((r) => setTimeout(r, 0));
     });
   });
 
