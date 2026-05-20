@@ -2,13 +2,10 @@ import {
   IconBraces,
   IconCamera,
   IconCirclePlus,
-  IconFile,
   IconFileMusic,
   IconFileText,
   IconLanguage,
-  IconLink,
   IconPaperclip,
-  IconSearch,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
@@ -19,12 +16,16 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
+import { useIsMobile } from '@/client/hooks/ui/useIsMobile';
+
+import { normalizeForSearch } from '@/lib/utils/app/localeSearch';
 
 import {
   AssistantMessageGroup,
@@ -39,6 +40,7 @@ import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDoc
 import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
+import { DropdownSearchInput } from '@/components/Chat/ChatInput/DropdownSearchInput';
 import { formatTranslationReference } from '@/components/Chat/DocumentTranslationViewer';
 import Modal from '@/components/UI/Modal';
 
@@ -105,8 +107,13 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [isToneOpen, setIsToneOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [query, setQuery] = useState('');
   const [hasCameraSupport, setHasCameraSupport] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const locale = useLocale();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const checkCameraSupport = async () => {
@@ -133,6 +140,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
     setSelectedIndex(-1);
+    setQuery('');
   }, []);
 
   const t = useTranslations();
@@ -400,10 +408,32 @@ const Dropdown: React.FC<DropdownProps> = ({
     ],
   );
 
-  // Use keyboard navigation hook
+  // Filter items by label, locale-aware (case- and diacritic-insensitive)
+  const filteredItems = useMemo(() => {
+    const normalizedQuery = normalizeForSearch(query, locale);
+    if (!normalizedQuery) return menuItems;
+    return menuItems.filter((item) =>
+      normalizeForSearch(item.label, locale).includes(normalizedQuery),
+    );
+  }, [menuItems, query, locale]);
+
+  // Keep the highlight on the first match as the filtered list changes
+  useEffect(() => {
+    setSelectedIndex(filteredItems.length ? 0 : -1);
+  }, [query, filteredItems.length]);
+
+  // Focus the search box on open (desktop only — on mobile this would pop the
+  // keyboard over the sheet before the user has chosen to filter)
+  useEffect(() => {
+    if (isOpen && !isMobile) {
+      searchInputRef.current?.focus();
+    }
+  }, [isOpen, isMobile]);
+
+  // Use keyboard navigation hook (operates on the filtered list)
   const { handleKeyDown } = useDropdownKeyboardNav({
     isOpen,
-    items: menuItems,
+    items: filteredItems,
     selectedIndex,
     setSelectedIndex,
     closeDropdown,
@@ -414,6 +444,25 @@ const Dropdown: React.FC<DropdownProps> = ({
       setIsToneOpen(false);
     },
   });
+
+  // Escape clears the query first (if any), then closes on the next press
+  const handleMenuKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === 'Escape' && query) {
+        event.preventDefault();
+        event.stopPropagation();
+        setQuery('');
+        return;
+      }
+      handleKeyDown(event);
+    },
+    [query, handleKeyDown],
+  );
+
+  const activeDescendantId =
+    selectedIndex >= 0 && filteredItems[selectedIndex]
+      ? `dropdown-item-${filteredItems[selectedIndex].id}`
+      : undefined;
 
   // Logic to handle clicks outside the Dropdown Menu
   useEnhancedOutsideClick(dropdownRef, closeDropdown, isOpen, true);
@@ -439,29 +488,83 @@ const Dropdown: React.FC<DropdownProps> = ({
         <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 text-black dark:text-white" />
       </button>
 
-      {/* Enhanced Dropdown Menu */}
-      {isOpen && (
-        <div
-          ref={dropdownRef}
-          className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 outline-none overflow-hidden ${
-            openDownward ? 'animate-slide-down-reverse' : 'animate-slide-up'
-          }`}
-          tabIndex={-1}
-          role="menu"
-          onKeyDown={handleKeyDown}
-        >
-          <div className="max-h-80 overflow-y-auto custom-scrollbar p-1">
-            {/* eslint-disable-next-line react-hooks/refs */}
-            {menuItems.map((item, index) => (
-              <DropdownMenuItem
-                key={item.id}
-                item={item}
-                isSelected={index === selectedIndex}
+      {/* Search box + item list, shared by the desktop menu and the mobile sheet */}
+      {(() => {
+        const menuBody = (scrollClassName: string) => (
+          <>
+            <DropdownSearchInput
+              value={query}
+              onChange={setQuery}
+              onClear={() => setQuery('')}
+              inputRef={searchInputRef}
+              placeholder={t('chat.searchFeatures')}
+            />
+            <div
+              className={`${scrollClassName} overflow-y-auto custom-scrollbar p-1`}
+            >
+              {filteredItems.length === 0 ? (
+                <div className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                  {t('dropdown.noResults')}
+                </div>
+              ) : (
+                filteredItems.map((item, index) => (
+                  <DropdownMenuItem
+                    key={item.id}
+                    item={item}
+                    isSelected={index === selectedIndex}
+                  />
+                ))
+              )}
+            </div>
+          </>
+        );
+
+        // Desktop: anchored menu, capped to the viewport so it never overflows
+        if (isOpen && !isMobile) {
+          return (
+            <div
+              ref={dropdownRef}
+              className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 outline-none overflow-hidden ${
+                openDownward ? 'animate-slide-down-reverse' : 'animate-slide-up'
+              }`}
+              tabIndex={-1}
+              role="menu"
+              aria-activedescendant={activeDescendantId}
+              onKeyDown={handleMenuKeyDown}
+            >
+              {/* eslint-disable-next-line react-hooks/refs -- forwards searchInputRef as a prop, not a render-time .current read */}
+              {menuBody('max-h-[min(20rem,70dvh)]')}
+            </div>
+          );
+        }
+
+        // Mobile: bottom sheet portaled to the body, with a tap-to-dismiss scrim
+        if (isOpen && isMobile && typeof document !== 'undefined') {
+          return createPortal(
+            <>
+              <div
+                className="fixed inset-0 z-[10000] bg-black/40 backdrop-blur-sm animate-fade-in-fast"
+                aria-hidden="true"
+                onClick={closeDropdown}
               />
-            ))}
-          </div>
-        </div>
-      )}
+              <div
+                ref={dropdownRef}
+                className="fixed inset-x-0 bottom-0 z-[10001] flex max-h-[75dvh] flex-col rounded-t-2xl border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg outline-none animate-slide-up pb-[env(safe-area-inset-bottom)]"
+                tabIndex={-1}
+                role="menu"
+                aria-activedescendant={activeDescendantId}
+                onKeyDown={handleMenuKeyDown}
+              >
+                {/* eslint-disable-next-line react-hooks/refs -- forwards searchInputRef as a prop, not a render-time .current read */}
+                {menuBody('flex-1')}
+              </div>
+            </>,
+            document.body,
+          );
+        }
+
+        return null;
+      })()}
 
       {/* Chat Input Image Capture Modal */}
       {isImageOpen && (
