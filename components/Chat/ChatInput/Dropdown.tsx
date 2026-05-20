@@ -13,15 +13,12 @@ import {
   IconWorld,
 } from '@tabler/icons-react';
 import React, {
-  Dispatch,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 
 import { useTranslations } from 'next-intl';
 
@@ -43,7 +40,7 @@ import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
 import { formatTranslationReference } from '@/components/Chat/DocumentTranslationViewer';
-import ImageIcon from '@/components/Icons/image';
+import Modal from '@/components/UI/Modal';
 
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 
@@ -100,7 +97,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   const { selectedConversation, updateConversation } = useConversations();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [isTranslateOpen, setIsTranslateOpen] = useState(false);
   const [isDocumentTranslateOpen, setIsDocumentTranslateOpen] = useState(false);
   const [documentToTranslate, setDocumentToTranslate] = useState<File | null>(
@@ -120,21 +116,14 @@ const Dropdown: React.FC<DropdownProps> = ({
           const hasCamera = devices.some(
             (device) => device.kind === 'videoinput',
           );
-          // console.log('Camera support detected:', hasCamera, devices);
-          setTimeout(() => {
-            setHasCameraSupport(hasCamera);
-          }, 0);
+          setHasCameraSupport(hasCamera);
         } else {
           console.error('MediaDevices API not supported');
-          setTimeout(() => {
-            setHasCameraSupport(false);
-          }, 0);
+          setHasCameraSupport(false);
         }
       } catch (error) {
         console.error('Error checking camera support:', error);
-        setTimeout(() => {
-          setHasCameraSupport(false);
-        }, 0);
+        setHasCameraSupport(false);
       }
     };
 
@@ -142,13 +131,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   const closeDropdown = useCallback(() => {
-    setIsClosing(true);
-    // Wait for slide-down animation to complete before removing from DOM
-    setTimeout(() => {
-      setIsOpen(false);
-      setIsClosing(false);
-      setSelectedIndex(-1);
-    }, 200); // Match animation duration
+    setIsOpen(false);
+    setSelectedIndex(-1);
   }, []);
 
   const t = useTranslations();
@@ -275,22 +259,26 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
-  // Define menu items - memoized to avoid ref access issues during render
+  // Per-item icon color is a deliberate carve-out: this menu is scanned often
+  // and the hue helps locate actions at a glance. Each color matches its
+  // canonical use elsewhere in the app (search/extract: signal-blue,
+  // tone: purple, transcribe: caution-amber-ish orange, translate-doc: indigo,
+  // camera: red). Color is always paired with an icon shape and a label so it
+  // is never the only distinguishing factor.
   const menuItems: MenuItem[] = useMemo(
     () => [
       {
         id: 'search',
         icon: <IconWorld size={18} className="text-blue-500 flex-shrink-0" />,
-        label:
-          searchMode === SearchMode.ALWAYS
-            ? `✓ ${t('webSearchDropdown')}`
-            : t('webSearchDropdown'),
+        label: t('webSearchDropdown'),
         infoTooltip: t('dropdown.searchTooltip'),
         onClick: () => {
           toggleSearchMode();
           closeDropdown();
         },
         category: 'web',
+        toggle: true,
+        checked: searchMode === SearchMode.ALWAYS,
       },
       {
         id: 'tone',
@@ -301,7 +289,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           />
         ),
         label: selectedToneId
-          ? `✓ ${t('toneDropdown')}: ${tones.find((tone) => tone.id === selectedToneId)?.name || t('dropdown.selected')}`
+          ? `${t('toneDropdown')}: ${tones.find((tone) => tone.id === selectedToneId)?.name || t('dropdown.selected')}`
           : t('toneDropdown'),
         infoTooltip:
           tones.length === 0
@@ -313,6 +301,8 @@ const Dropdown: React.FC<DropdownProps> = ({
         },
         category: 'web',
         disabled: tones.length === 0,
+        toggle: true,
+        checked: Boolean(selectedToneId),
       },
       {
         id: 'attach',
@@ -343,6 +333,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           <IconLanguage size={18} className="text-teal-500 flex-shrink-0" />
         ),
         label: t('translateTextDropdown'),
+        infoTooltip: t('dropdown.translateTooltip'),
         onClick: () => {
           setIsTranslateOpen(true);
           closeDropdown();
@@ -352,15 +343,15 @@ const Dropdown: React.FC<DropdownProps> = ({
       {
         id: 'extract',
         icon: <IconBraces size={18} className="text-blue-500 flex-shrink-0" />,
-        label: extractionMode
-          ? `✓ ${t('extraction.toggleLabel')}`
-          : t('extraction.toggleLabel'),
+        label: t('extraction.toggleLabel'),
         infoTooltip: t('extraction.trayInfo'),
         onClick: () => {
           setExtractionMode(!extractionMode);
           closeDropdown();
         },
         category: 'transform',
+        toggle: true,
+        checked: extractionMode,
       },
       {
         id: 'translateDocument',
@@ -380,6 +371,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 <IconCamera size={18} className="text-red-500 flex-shrink-0" />
               ),
               label: t('cameraDropdown'),
+              infoTooltip: t('dropdown.cameraTooltip'),
               onClick: () => {
                 onCameraClick();
                 closeDropdown();
@@ -428,32 +420,27 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div className="relative">
-      {/* Toggle Dropdown Button */}
-      <div className="group">
-        <button
-          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-            event.preventDefault();
-            event.stopPropagation();
-            if (isOpen) {
-              closeDropdown();
-            } else {
-              setIsOpen(true);
-            }
-          }}
-          aria-haspopup="true"
-          aria-expanded={isOpen}
-          aria-label={t('common.toggleDropdownMenu')}
-          className="focus:outline-none flex"
-        >
-          <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 mr-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200" />
-          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md">
-            {t('dropdown.expandActions')}
-          </div>
-        </button>
-      </div>
+      {/* Toggle Dropdown Button — 44x44 hit area per AAA touch target */}
+      <button
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (isOpen) {
+            closeDropdown();
+          } else {
+            setIsOpen(true);
+          }
+        }}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        aria-label={t('common.toggleDropdownMenu')}
+        className="focus:outline-none inline-flex items-center justify-center min-h-11 px-2.5 -ml-2.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+      >
+        <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 text-black dark:text-white" />
+      </button>
 
       {/* Enhanced Dropdown Menu */}
-      {isOpen && !isClosing && (
+      {isOpen && (
         <div
           ref={dropdownRef}
           className={`absolute ${openDownward ? 'top-full mt-2 z-[10000]' : 'bottom-full mb-2 z-[9999]'} left-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-64 outline-none overflow-hidden ${
@@ -501,97 +488,82 @@ const Dropdown: React.FC<DropdownProps> = ({
       )}
 
       {/* Tone Selector Modal */}
-      {isToneOpen &&
-        typeof window !== 'undefined' &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={() => setIsToneOpen(false)}
+      <Modal
+        isOpen={isToneOpen}
+        onClose={() => setIsToneOpen(false)}
+        title={t('dropdown.selectTone')}
+        size="md"
+        className="z-[10000]"
+      >
+        <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2 mb-4">
+          {t('dropdown.selectToneDescription')}
+        </p>
+        <div className="max-h-96 overflow-y-auto -mx-2 px-2">
+          <button
+            onClick={() => {
+              setSelectedToneId(null);
+              setIsToneOpen(false);
+            }}
+            className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
+              !selectedToneId
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+            }`}
           >
-            <div
-              className="relative w-full max-w-md bg-white dark:bg-[#212121] rounded-xl shadow-2xl overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {t('dropdown.selectTone')}
-                </h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {t('dropdown.selectToneDescription')}
-                </p>
-              </div>
-
-              <div className="max-h-96 overflow-y-auto p-4">
-                <button
-                  onClick={() => {
-                    setSelectedToneId(null);
-                    setIsToneOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
-                    !selectedToneId
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`}
-                >
-                  <div className="font-medium text-gray-900 dark:text-white">
-                    {t('dropdown.noToneDefault')}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {t('dropdown.useDefaultStyle')}
-                  </div>
-                </button>
-
-                {tones.map((tone) => (
-                  <button
-                    key={tone.id}
-                    onClick={() => {
-                      setSelectedToneId(tone.id);
-                      setIsToneOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
-                      selectedToneId === tone.id
-                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                    }`}
-                  >
-                    <div className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
-                      <IconVolume size={16} className="text-purple-500" />
-                      {tone.name}
-                    </div>
-                    {tone.description && (
-                      <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        {tone.description}
-                      </div>
-                    )}
-                    {tone.tags && tone.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {tone.tags.slice(0, 3).map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </button>
-                ))}
-
-                {tones.length === 0 && (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    <IconVolume size={48} className="mx-auto mb-3 opacity-50" />
-                    <p className="text-sm">{t('dropdown.noTonesCreated')}</p>
-                    <p className="text-xs mt-1">
-                      {t('dropdown.createTonesHint')}
-                    </p>
-                  </div>
-                )}
-              </div>
+            <div className="font-medium text-gray-900 dark:text-white">
+              {t('dropdown.noToneDefault')}
             </div>
-          </div>,
-          document.body,
-        )}
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {t('dropdown.useDefaultStyle')}
+            </div>
+          </button>
+
+          {tones.map((tone) => (
+            <button
+              key={tone.id}
+              onClick={() => {
+                setSelectedToneId(tone.id);
+                setIsToneOpen(false);
+              }}
+              className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all mb-2 ${
+                selectedToneId === tone.id
+                  ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              <div className="font-medium text-gray-900 dark:text-white flex items-center gap-2">
+                <IconVolume size={16} className="text-purple-500" />
+                {tone.name}
+              </div>
+              {tone.description && (
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {tone.description}
+                </div>
+              )}
+              {tone.tags && tone.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {tone.tags.slice(0, 3).map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </button>
+          ))}
+
+          {tones.length === 0 && (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <IconVolume size={48} className="mx-auto mb-3 opacity-50" />
+              <p className="text-sm">{t('dropdown.noTonesCreated')}</p>
+              <p className="text-xs mt-1">{t('dropdown.createTonesHint')}</p>
+            </div>
+          )}
+        </div>
+      </Modal>
 
       {/* Chat Input Image Component (hidden) */}
       <ChatInputImage
@@ -616,6 +588,8 @@ const Dropdown: React.FC<DropdownProps> = ({
           if (e.target.files) {
             await handleFileUpload(Array.from(e.target.files));
           }
+          // Reset so the same file can be selected again
+          e.target.value = '';
         }}
         className="hidden"
         multiple
@@ -630,6 +604,8 @@ const Dropdown: React.FC<DropdownProps> = ({
           if (e.target.files) {
             await handleFileUpload(Array.from(e.target.files));
           }
+          // Reset so the same file can be selected again
+          e.target.value = '';
         }}
         className="hidden"
       />
