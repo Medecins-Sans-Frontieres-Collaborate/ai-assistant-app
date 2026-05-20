@@ -34,6 +34,9 @@ export function getModifierLabel(): string {
 export function usePlatformModifier(): string {
   const [label, setLabel] = useState('Ctrl');
   useEffect(() => {
+    // SSR-safe hydration: server can't know platform, so first render is Ctrl
+    // and we update once the client mounts. setState-in-effect is intentional here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLabel(getModifierLabel());
   }, []);
   return label;

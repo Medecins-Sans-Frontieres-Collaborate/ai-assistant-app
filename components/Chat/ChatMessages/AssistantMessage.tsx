@@ -898,4 +898,6 @@ function isValidJSON(jsonStr: string): boolean {
   return openBraces === closeBraces;
 }
 
+AssistantMessage.displayName = 'AssistantMessage';
+
 export default AssistantMessage;

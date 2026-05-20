@@ -388,4 +388,6 @@ export const UserMessage: FC<UserMessageProps> = memo(
   },
 );
 
+UserMessage.displayName = 'UserMessage';
+
 export default UserMessage;

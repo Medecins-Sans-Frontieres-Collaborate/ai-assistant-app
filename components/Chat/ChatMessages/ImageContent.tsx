@@ -209,4 +209,6 @@ export const ImageContent: FC<ImageContentProps> = React.memo(({ images }) => {
   );
 });
 
+ImageContent.displayName = 'ImageContent';
+
 export default ImageContent;

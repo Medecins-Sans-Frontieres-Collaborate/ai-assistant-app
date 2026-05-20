@@ -548,4 +548,6 @@ export const FileContent: FC<FileContentProps> = React.memo(
   },
 );
 
+FileContent.displayName = 'FileContent';
+
 export default FileContent;

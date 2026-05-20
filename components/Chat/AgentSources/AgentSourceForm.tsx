@@ -207,7 +207,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     if (!isValid) return;
 
     const source: AgentSource = {
-      id: existingSource?.id || crypto.randomUUID(),
+      id: existingSource?.id || globalThis.crypto.randomUUID(),
       name: name.trim(),
       resourcePath: finalPath.trim(),
       createdAt: existingSource?.createdAt || new Date().toISOString(),

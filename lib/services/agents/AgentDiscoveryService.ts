@@ -7,8 +7,14 @@
  * The ARM API naturally filters by RBAC — the user's OBO token ensures they only
  * see Agent Applications they're authorized to use.
  */
+import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 
 const ARM_API_VERSION = '2025-10-01-preview';
+
+// ARM Application resource names follow the same naming constraint as account
+// names — alphanumeric + hyphens, 2-64 chars. Anchored to prevent path traversal
+// or injection of additional URL segments / query params.
+const ARM_APP_NAME_REGEX = /^[a-zA-Z0-9-]{2,64}$/;
 
 interface FoundryAgentApp {
   /** Agent Application resource name (ARM name) */
@@ -94,6 +100,13 @@ export class AgentDiscoveryService {
     armToken: string,
     resourcePath: string,
   ): Promise<DiscoveredAgent[]> {
+    // Defense-in-depth: callers already validate resourcePath, but re-check
+    // here so the ARM URL construction has a locally explicit dataflow guard
+    // (and so CodeQL doesn't have to trace through every caller).
+    if (!isValidFoundryResourcePath(resourcePath)) {
+      throw new Error('Invalid Foundry resource path');
+    }
+
     // Check cache
     const cacheKey = `${this.hashKey(armToken)}:${resourcePath}`;
     const cached = this.cache.get(cacheKey);
@@ -160,6 +173,13 @@ export class AgentDiscoveryService {
     resourcePath: string,
     appName: string,
   ): Promise<DiscoveredAgent | null> {
+    // See listUserAgents — explicit local validation for both path components.
+    if (!isValidFoundryResourcePath(resourcePath)) {
+      throw new Error('Invalid Foundry resource path');
+    }
+    if (!ARM_APP_NAME_REGEX.test(appName)) {
+      throw new Error('Invalid agent application name');
+    }
     const url = `https://management.azure.com${resourcePath}/applications/${appName}?api-version=${ARM_API_VERSION}`;
 
     const response = await fetch(url, {

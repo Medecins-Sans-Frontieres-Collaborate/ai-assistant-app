@@ -73,15 +73,16 @@ vi.mock('@/config/organization-agents.json', () => ({
   },
 }));
 
-// Mock Tabler Icons
+// Mock Tabler Icons — Proxy returns the same stub for any icon name so the
+// test stays robust as ICON_REGISTRY grows.
 vi.mock('@tabler/icons-react', () => {
   const mockIcon = () => null;
-  return {
-    IconNews: mockIcon,
-    IconRobot: mockIcon,
-    IconBan: mockIcon,
-    IconQuestion: mockIcon,
-  };
+  return new Proxy(
+    {},
+    {
+      get: (_t, prop) => (prop === '__esModule' ? true : mockIcon),
+    },
+  );
 });
 
 describe('organizationAgents', () => {
