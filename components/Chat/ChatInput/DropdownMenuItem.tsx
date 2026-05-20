@@ -63,8 +63,9 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   return (
     <div className="group relative">
       <button
+        id={`dropdown-item-${item.id}`}
         data-item-id={item.id}
-        className={`flex items-center justify-between px-3 py-2 w-full text-left rounded-md transition-colors duration-150 text-sm ${
+        className={`flex items-center justify-between min-h-11 px-3 py-2 w-full text-left rounded-md transition-colors duration-150 text-sm ${
           item.disabled
             ? 'opacity-50 cursor-not-allowed text-gray-500 dark:text-gray-500'
             : isSelected
