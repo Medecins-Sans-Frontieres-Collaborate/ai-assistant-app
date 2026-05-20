@@ -1,7 +1,17 @@
-import { Message } from '@/types/chat';
+import {
+  FileMessageContent,
+  ImageMessageContent,
+  Message,
+  TextMessageContent,
+} from '@/types/chat';
 import { OpenAIModelID } from '@/types/openai';
 
 import { isAudioVideoFile } from '@/lib/constants/fileTypes';
+
+type MessageContentItem =
+  | TextMessageContent
+  | FileMessageContent
+  | ImageMessageContent;
 
 /**
  * Checks if any message contains audio or video files that need transcription
@@ -10,7 +20,7 @@ export const isAudioVideoConversation = (messages: Message[]): boolean => {
   return messages.some((message) => {
     if (!Array.isArray(message.content)) return false;
 
-    return message.content.some((content: any) => {
+    return message.content.some((content: MessageContentItem) => {
       if (content.type !== 'file_url') return false;
 
       // Check both URL and originalFilename for extension
@@ -41,7 +51,7 @@ export const isImageConversation = (messages: Message[]): boolean => {
   const lastMessage = messages[messages.length - 1];
   if (Array.isArray(lastMessage.content)) {
     return lastMessage.content.some(
-      (content: any) => content.type === 'image_url',
+      (content: MessageContentItem) => content.type === 'image_url',
     );
   }
   return false;
@@ -56,7 +66,7 @@ export const isFileConversation = (messages: Message[]): boolean => {
   const lastMessage = messages[messages.length - 1];
   if (Array.isArray(lastMessage.content)) {
     return lastMessage.content.some(
-      (content: any) => content.type === 'file_url',
+      (content: MessageContentItem) => content.type === 'file_url',
     );
   }
   return false;

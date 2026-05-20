@@ -35,6 +35,24 @@ export interface StreamMetadata {
   transcript?: TranscriptMetadata;
   action?: string; // Current action being performed (e.g., "searching_web", "processing")
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
+  fileCacheUpdates?: Array<{
+    fileId: string;
+    processedContent: {
+      type: 'document' | 'transcript' | 'image';
+      content: string;
+      summary?: string;
+      tokenEstimate: number;
+      tokenEstimateEncoding?: string;
+      processedAt: string;
+    };
+  }>;
+  activeFilesTokensConsumed?: number;
+  /**
+   * IDs of active files that were excluded from this turn because they
+   * didn't fit the per-turn token budget. Surfaced so the UI can flag
+   * which pinned/active files are not visible to the model right now.
+   */
+  activeFilesDropped?: string[];
 }
 
 /**
@@ -48,6 +66,9 @@ export interface ParsedMetadata {
   transcript?: TranscriptMetadata;
   action?: string;
   pendingTranscriptions?: PendingTranscriptionInfo[];
+  fileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
+  activeFilesTokensConsumed?: number;
+  activeFilesDropped?: string[];
   extractionMethod: 'metadata' | 'none';
 }
 
@@ -66,6 +87,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let transcript: TranscriptMetadata | undefined;
   let action: string | undefined;
   let pendingTranscriptions: PendingTranscriptionInfo[] | undefined;
+  let fileCacheUpdates: StreamMetadata['fileCacheUpdates'] | undefined;
+  let activeFilesTokensConsumed: number | undefined;
+  let activeFilesDropped: string[] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
 
   // Check for metadata format
@@ -80,7 +104,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     );
 
     try {
-      const parsedData = JSON.parse(metadataMatch[1]);
+      const parsedData = JSON.parse(
+        metadataMatch[1],
+      ) as Partial<StreamMetadata>;
       if (parsedData.citations) {
         citations = parsedData.citations;
       }
@@ -99,6 +125,17 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (parsedData.pendingTranscriptions) {
         pendingTranscriptions = parsedData.pendingTranscriptions;
       }
+      if (parsedData.fileCacheUpdates) {
+        fileCacheUpdates = parsedData.fileCacheUpdates;
+      }
+      if (typeof parsedData.activeFilesTokensConsumed === 'number') {
+        activeFilesTokensConsumed = parsedData.activeFilesTokensConsumed;
+      }
+      if (Array.isArray(parsedData.activeFilesDropped)) {
+        activeFilesDropped = parsedData.activeFilesDropped.filter(
+          (id: unknown): id is string => typeof id === 'string',
+        );
+      }
     } catch (error) {
       console.error('Error parsing metadata JSON:', error);
     }
@@ -116,6 +153,9 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     transcript,
     action,
     pendingTranscriptions,
+    fileCacheUpdates,
+    activeFilesTokensConsumed,
+    activeFilesDropped,
     extractionMethod,
   };
 }

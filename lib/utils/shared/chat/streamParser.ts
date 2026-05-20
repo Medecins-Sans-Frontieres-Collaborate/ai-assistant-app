@@ -1,6 +1,7 @@
 import {
-  ParsedMetadata,
   PendingTranscriptionInfo,
+  StreamMetadata,
+  TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
@@ -22,12 +23,9 @@ export class StreamParser {
   private text: string = '';
   private extractedCitations: Citation[] = [];
   private extractedThreadId?: string;
-  private extractedTranscript?: any;
+  private extractedTranscript?: TranscriptMetadata;
   private extractedPendingTranscriptions?: PendingTranscriptionInfo[];
-  private extractedFileCacheUpdates?: Array<{
-    fileId: string;
-    processedContent: any;
-  }>;
+  private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
   private hasReceivedContent: boolean = false;
@@ -108,26 +106,22 @@ export class StreamParser {
     }
 
     // Capture file cache updates if present
-    if ((parsed as any).fileCacheUpdates && !this.extractedFileCacheUpdates) {
-      this.extractedFileCacheUpdates = (parsed as any).fileCacheUpdates;
+    if (parsed.fileCacheUpdates && !this.extractedFileCacheUpdates) {
+      this.extractedFileCacheUpdates = parsed.fileCacheUpdates;
     }
 
     // Capture active files tokens consumed if present
     if (
-      (parsed as any).activeFilesTokensConsumed != null &&
+      parsed.activeFilesTokensConsumed != null &&
       this.extractedActiveFilesTokensConsumed == null
     ) {
-      this.extractedActiveFilesTokensConsumed = (
-        parsed as any
-      ).activeFilesTokensConsumed;
+      this.extractedActiveFilesTokensConsumed =
+        parsed.activeFilesTokensConsumed;
     }
 
     // Capture dropped active file IDs if present
-    if (
-      (parsed as any).activeFilesDropped &&
-      this.extractedActiveFilesDropped == null
-    ) {
-      this.extractedActiveFilesDropped = (parsed as any).activeFilesDropped;
+    if (parsed.activeFilesDropped && this.extractedActiveFilesDropped == null) {
+      this.extractedActiveFilesDropped = parsed.activeFilesDropped;
     }
 
     // Check if we've received actual content (not just metadata)
@@ -209,7 +203,7 @@ export class StreamParser {
   /**
    * Get the transcript if extracted
    */
-  getTranscript(): any | undefined {
+  getTranscript(): TranscriptMetadata | undefined {
     return this.extractedTranscript;
   }
 
@@ -223,9 +217,7 @@ export class StreamParser {
   /**
    * Get any file cache updates sent via SSE metadata
    */
-  getFileCacheUpdates():
-    | Array<{ fileId: string; processedContent: any }>
-    | undefined {
+  getFileCacheUpdates(): StreamMetadata['fileCacheUpdates'] | undefined {
     return this.extractedFileCacheUpdates;
   }
 

@@ -16,24 +16,42 @@ import { Tone } from '@/types/tone';
 
 import { cleanConversationHistory } from '../clean';
 
-export function isExportFormatV1(obj: any): obj is ExportFormatV1 {
+export function isExportFormatV1(obj: unknown): obj is ExportFormatV1 {
   return Array.isArray(obj);
 }
 
-export function isExportFormatV2(obj: any): obj is ExportFormatV2 {
-  return !('version' in obj) && 'folders' in obj && 'history' in obj;
+export function isExportFormatV2(obj: unknown): obj is ExportFormatV2 {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    !('version' in obj) &&
+    'folders' in obj &&
+    'history' in obj
+  );
 }
 
-export function isExportFormatV3(obj: any): obj is ExportFormatV3 {
-  return obj.version === 3;
+export function isExportFormatV3(obj: unknown): obj is ExportFormatV3 {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    (obj as { version?: unknown }).version === 3
+  );
 }
 
-export function isExportFormatV4(obj: any): obj is ExportFormatV4 {
-  return obj.version === 4;
+export function isExportFormatV4(obj: unknown): obj is ExportFormatV4 {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    (obj as { version?: unknown }).version === 4
+  );
 }
 
-export function isExportFormatV5(obj: any): obj is ExportFormatV5 {
-  return obj.version === 5;
+export function isExportFormatV5(obj: unknown): obj is ExportFormatV5 {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    (obj as { version?: unknown }).version === 5
+  );
 }
 
 export const isLatestExportFormat = isExportFormatV5;
