@@ -1644,7 +1644,10 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files.",
+    "translateTooltip": "Translate a snippet of text into another language.\n\nFor whole files (Word, Excel, PowerPoint, HTML, TXT), use Translate Document instead.",
+    "cameraTooltip": "Take a photo with your device camera and attach it to the message.",
+    "noResults": "No matching actions"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
