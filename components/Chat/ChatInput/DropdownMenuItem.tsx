@@ -1,4 +1,4 @@
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -11,6 +11,8 @@ export interface MenuItem {
   onClick: () => void;
   category: 'web' | 'media' | 'transform';
   disabled?: boolean;
+  toggle?: boolean;
+  checked?: boolean;
 }
 
 interface DropdownMenuItemProps {
@@ -70,8 +72,9 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
               : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200'
         }`}
         onClick={item.disabled ? undefined : item.onClick}
-        role="menuitem"
+        role={item.toggle ? 'menuitemcheckbox' : 'menuitem'}
         aria-current={isSelected ? 'true' : undefined}
+        aria-checked={item.toggle ? Boolean(item.checked) : undefined}
         aria-disabled={item.disabled ? 'true' : undefined}
         tabIndex={isSelected ? 0 : -1}
         disabled={item.disabled}
@@ -80,6 +83,13 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
           {item.icon}
           <span>{item.label}</span>
         </div>
+        {item.toggle && item.checked && (
+          <IconCheck
+            size={16}
+            className="text-blue-500 flex-shrink-0 mr-1"
+            aria-hidden="true"
+          />
+        )}
         {item.infoTooltip && (
           <div
             ref={infoIconRef}
