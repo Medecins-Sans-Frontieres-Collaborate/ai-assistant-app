@@ -134,11 +134,13 @@ describe('PlaybackButton', () => {
       expect(button).toHaveClass('dark:hover:bg-gray-700');
     });
 
-    it('has focus outline removed', () => {
+    it('has focus styles', () => {
       render(<PlaybackButton isPlaying={false} onToggle={vi.fn()} />);
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('focus:outline-none');
+      expect(button).toHaveClass('focus:ring-2');
+      expect(button).toHaveClass('focus:ring-blue-500');
     });
 
     it('icon has correct size when playing', () => {

@@ -48,10 +48,13 @@ import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import {
-  ATTACH_ACCEPT_TYPES,
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
+import {
+  getOrganizationAgentById,
+  getOrganizationAgentIdFromModelId,
+} from '@/lib/organizationAgents';
 
 interface DropdownProps {
   onCameraClick: () => void;
@@ -93,6 +96,26 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
   const filePreviews = useChatInputStore((state) => state.filePreviews);
   const { selectedConversation, updateConversation } = useConversations();
+
+  // Hide the web-search toggle for Foundry agents — they have their own
+  // web_search_call tool and decide for themselves when to use it. The
+  // toggle would either duplicate (force) or contradict (disable) that
+  // built-in decision, neither of which matches the user's mental model.
+  // RAG bots (org agents with type='rag') keep the toggle since they
+  // depend on the pre-router for search behavior. Regular models keep it
+  // because they need it. The escape hatch for "force search on this
+  // agent" is to switch to a regular model with web search enabled.
+  const hideWebSearch = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    if (!modelId) return false;
+    if (modelId.startsWith('foundry-')) return true;
+    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
+    if (!orgAgentId) return false;
+    const agent = getOrganizationAgentById(orgAgentId);
+    if (!agent) return false;
+    if (agent.type === 'foundry') return true;
+    return agent.allowWebSearch === false;
+  }, [selectedConversation?.model?.id]);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -158,21 +181,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     closeDropdown();
     fileInputRef.current?.click();
   }, [closeDropdown]);
-
-  // Listen for keyboard shortcut to attach file (Ctrl+Shift+U)
-  useEffect(() => {
-    const handleKeyboardAttach = () => {
-      fileInputRef.current?.click();
-    };
-
-    document.addEventListener('keyboard-attach-file', handleKeyboardAttach);
-    return () => {
-      document.removeEventListener(
-        'keyboard-attach-file',
-        handleKeyboardAttach,
-      );
-    };
-  }, []);
 
   // Handler for transcribe audio/video file selection
   const handleTranscribeClick = useCallback(() => {
@@ -273,20 +281,27 @@ const Dropdown: React.FC<DropdownProps> = ({
   // Define menu items - memoized to avoid ref access issues during render
   const menuItems: MenuItem[] = useMemo(
     () => [
-      {
-        id: 'search',
-        icon: <IconWorld size={18} className="text-blue-500 flex-shrink-0" />,
-        label:
-          searchMode === SearchMode.ALWAYS
-            ? `✓ ${t('webSearchDropdown')}`
-            : t('webSearchDropdown'),
-        infoTooltip: t('dropdown.searchTooltip'),
-        onClick: () => {
-          toggleSearchMode();
-          closeDropdown();
-        },
-        category: 'web',
-      },
+      // Hide web search toggle for organization agents with allowWebSearch: false
+      ...(hideWebSearch
+        ? []
+        : [
+            {
+              id: 'search',
+              icon: (
+                <IconWorld size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label:
+                searchMode === SearchMode.ALWAYS
+                  ? `✓ ${t('webSearchDropdown')}`
+                  : t('webSearchDropdown'),
+              infoTooltip: t('dropdown.searchTooltip'),
+              onClick: () => {
+                toggleSearchMode();
+                closeDropdown();
+              },
+              category: 'web' as const,
+            },
+          ]),
       {
         id: 'tone',
         icon: (
@@ -377,6 +392,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       selectedToneId,
       tones,
       hasCameraSupport,
+      hideWebSearch,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,
@@ -423,9 +439,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           aria-haspopup="true"
           aria-expanded={isOpen}
           aria-label={t('common.toggleDropdownMenu')}
-          className="focus:outline-none flex"
+          className="focus:outline-none group/btn rounded flex"
         >
-          <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 mr-2 text-black dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200" />
+          <IconCirclePlus className="w-7 h-7 md:w-6 md:h-6 mr-2 text-black dark:text-white group-focus-visible/btn:text-blue-500 dark:group-focus-visible/btn:text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200" />
           <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md">
             {t('dropdown.expandActions')}
           </div>
@@ -485,11 +501,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         typeof window !== 'undefined' &&
         createPortal(
           <div
-            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 p-4"
             onClick={() => setIsToneOpen(false)}
           >
             <div
-              className="relative w-full max-w-md bg-white dark:bg-[#212121] rounded-xl shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
@@ -591,7 +607,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       <input
         ref={fileInputRef}
         type="file"
-        accept={ATTACH_ACCEPT_TYPES}
+        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.md,.csv,.json,.xml,.yaml,.yml,.py,.js,.ts,.jsx,.tsx,.java,.c,.cpp,.cs,.go,.rb,.php,.sql,.sh,.bash,.ps1,.r,.swift,.kt,.rs,.scala,.env,.config,.ini,.toml,.mp3,.mp4,.wav,.webm,.m4a,.mpeg,.mpga"
         onChange={async (e) => {
           if (e.target.files) {
             await handleFileUpload(Array.from(e.target.files));

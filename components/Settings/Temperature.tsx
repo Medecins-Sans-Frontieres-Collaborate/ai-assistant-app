@@ -21,10 +21,10 @@ export const TemperatureSlider: FC<Props> = ({
 
   return (
     <div className="flex flex-col mt-5">
-      <span className="text-[12px] text-black/50 dark:text-white/50 text-sm">
+      <span className="text-[12px] text-black/50 dark:text-white/60 text-sm">
         {t('temperatureDescription')}
       </span>
-      <span className="mt-2 mb-1 text-center text-neutral-900 dark:text-neutral-100">
+      <span className="mt-2 mb-1 text-center text-gray-900 dark:text-gray-100">
         {temperature.toFixed(1)}
       </span>
       <input
@@ -36,7 +36,7 @@ export const TemperatureSlider: FC<Props> = ({
         value={temperature}
         onChange={handleChange}
       />
-      <ul className="mt-2 pb-8 flex justify-between px-[5px] text-neutral-900 dark:text-neutral-100">
+      <ul className="mt-2 pb-8 flex justify-between px-[5px] text-gray-900 dark:text-gray-100">
         <li className="flex justify-start w-1/3">
           <span>{t('Precise')}</span>
         </li>

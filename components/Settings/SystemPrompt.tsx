@@ -1,4 +1,3 @@
-import { IconX } from '@tabler/icons-react';
 import {
   FC,
   KeyboardEvent,
@@ -49,26 +48,26 @@ export const SystemPrompt: FC<Props> = ({
     prompt.name.toLowerCase().includes(promptInputValue.toLowerCase()),
   );
 
-  const maxLength = Number(process.env.systemPromptmaxLength) || 500;
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // Hard cap is enforced by the textarea's maxLength attribute, so we
-    // don't need a runtime alert. The character counter below the field
-    // tells the user how close they are to the limit.
     const value = e.target.value;
+    const maxLength = Number(process.env.systemPromptmaxLength) || 500;
+
+    if (value.length > maxLength) {
+      alert(
+        t(
+          `Prompt limit is {{maxLength}} characters_ You have entered {{valueLength}} characters_`,
+          { maxLength, valueLength: value.length },
+        ),
+      );
+      return;
+    }
+
     setValue(value);
     updatePromptListVisibility(value);
-    // Always propagate, including the empty string. Skipping value.length === 0
-    // here would mean the reducer never sees the cleared field, and the change
-    // would silently revert on the next mount.
-    onChangePrompt(value);
-  };
 
-  const handleClear = () => {
-    setValue('');
-    onChangePrompt('');
-    updatePromptListVisibility('');
-    textareaRef.current?.focus();
+    if (value.length > 0) {
+      onChangePrompt(value);
+    }
   };
 
   const handleInitModal = () => {
@@ -189,54 +188,33 @@ export const SystemPrompt: FC<Props> = ({
     };
   }, []);
 
-  const valueLength = value?.length ?? 0;
-
   return (
     <div className="flex flex-col">
-      <span className="mb-2 text-xs text-gray-600 dark:text-gray-400">
+      <span className="mb-2 text-[12px] text-black/50 dark:text-white/60 text-sm">
         {t(
           'Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_',
         )}
       </span>
-      <span className="mb-4 text-xs text-gray-500 dark:text-gray-500">
+      <span className="mb-4 text-[11px] text-black/40 dark:text-white/40">
         {t('Tip: Type "/" to select from saved prompt templates_')}
       </span>
-      <div className="relative">
-        <textarea
-          ref={textareaRef}
-          className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 pr-12 text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:border-gray-600 dark:text-gray-100"
-          style={{
-            resize: 'none',
-            maxHeight: '300px',
-            overflow: textareaScrollHeight > 300 ? 'auto' : 'hidden',
-          }}
-          placeholder={
-            t(`Enter a prompt or type "/" to select a prompt...`) || ''
-          }
-          value={value ?? ''}
-          rows={1}
-          maxLength={maxLength}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-        />
-        {valueLength > 0 && (
-          <button
-            type="button"
-            onClick={handleClear}
-            aria-label={t('settings.clearField')}
-            title={t('settings.clearField')}
-            className="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-md text-gray-500 hover:text-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 dark:text-gray-400 dark:hover:text-gray-100"
-          >
-            <IconX size={16} aria-hidden="true" />
-          </button>
-        )}
-      </div>
-      <div className="mt-1 text-right text-xs text-gray-500 dark:text-gray-400 tabular-nums">
-        {t('settings.characterCount', {
-          current: valueLength,
-          max: maxLength,
-        })}
-      </div>
+      <textarea
+        ref={textareaRef}
+        className="w-full rounded-lg border border-gray-200 bg-transparent px-4 py-3 text-gray-900 dark:border-gray-600 dark:text-gray-100"
+        style={{
+          resize: 'none',
+          bottom: `${textareaScrollHeight}px`,
+          maxHeight: '300px',
+          overflow: `${textareaScrollHeight > 400 ? 'auto' : 'hidden'}`,
+        }}
+        placeholder={
+          t(`Enter a prompt or type "/" to select a prompt...`) || ''
+        }
+        value={t(value) || ''}
+        rows={1}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
 
       {showPromptList && filteredPrompts.length > 0 && (
         <div>

@@ -127,14 +127,14 @@ export const VoiceBrowser: FC<VoiceBrowserProps> = ({
     <div className="space-y-4">
       {/* Language Selector */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-neutral-200 mb-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-gray-200 mb-2">
           <IconLanguage size={16} />
           {t('settings.tts.language')}
         </label>
         <select
           value={selectedLanguage}
           onChange={handleLanguageChange}
-          className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
         >
           {TTS_BASE_LANGUAGES.map((lang) => (
             <option key={lang.code} value={lang.code}>
@@ -146,20 +146,20 @@ export const VoiceBrowser: FC<VoiceBrowserProps> = ({
 
       {/* Voice Selector */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-neutral-200 mb-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-black dark:text-gray-200 mb-2">
           <IconVolume size={16} />
           {t('settings.tts.voice')}
         </label>
 
         {/* Voice List */}
-        <div className="max-h-64 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-600">
+        <div className="max-h-64 overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-600">
           {/* Multilingual Voices Section */}
           {multilingualVoices.length > 0 && (
             <>
               <div className="px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 text-xs font-medium text-purple-700 dark:text-purple-300 sticky top-0">
                 {t('settings.tts.multilingualVoices')}
               </div>
-              <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {multilingualVoices.map((voice) => (
                   <VoiceRow
                     key={voice.name}
@@ -178,11 +178,11 @@ export const VoiceBrowser: FC<VoiceBrowserProps> = ({
           {/* Language-Specific Voices Section */}
           {languageVoices.length > 0 && (
             <>
-              <div className="px-3 py-1.5 bg-neutral-50 dark:bg-neutral-800 text-xs font-medium text-neutral-600 dark:text-neutral-400 sticky top-0 border-t border-neutral-200 dark:border-neutral-700">
+              <div className="px-3 py-1.5 bg-gray-50 dark:bg-gray-800 text-xs font-medium text-gray-600 dark:text-gray-400 sticky top-0 border-t border-gray-200 dark:border-gray-700">
                 {selectedLanguageInfo?.displayName || selectedLanguage}{' '}
                 {t('settings.tts.voices')}
               </div>
-              <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {languageVoices.map((voice) => (
                   <VoiceRow
                     key={voice.name}

@@ -238,7 +238,6 @@ describe('useMessageSender', () => {
       expect(onSend).toHaveBeenCalledWith(
         expect.any(Object),
         SearchMode.INTELLIGENT,
-        undefined,
       );
     });
 
@@ -287,97 +286,6 @@ describe('useMessageSender', () => {
       await handleSend();
 
       expect(onSend).not.toHaveBeenCalled();
-    });
-  });
-
-  // Regression coverage for the post-send blob-URL leak — without
-  // `revokeAllPreviewUrls` the previewUrl of every attached image stayed
-  // pinned in memory for the rest of the session.
-  describe('blob URL revocation on send', () => {
-    it('revokes blob: previewUrls for each attached file on send', async () => {
-      const revoke = vi.fn();
-      const originalURL = globalThis.URL;
-      globalThis.URL = {
-        ...originalURL,
-        revokeObjectURL: revoke,
-      } as typeof URL;
-
-      try {
-        const props = createDefaultProps({
-          filePreviews: [
-            {
-              name: 'a.png',
-              type: 'image/png',
-              previewUrl: 'blob:https://x/abc',
-              status: 'completed',
-            },
-            {
-              name: 'b.pdf',
-              type: 'application/pdf',
-              previewUrl: 'blob:https://x/def',
-              status: 'completed',
-            },
-          ],
-        });
-
-        const { handleSend } = useMessageSender(props);
-        await handleSend();
-
-        expect(revoke).toHaveBeenCalledTimes(2);
-        expect(revoke).toHaveBeenCalledWith('blob:https://x/abc');
-        expect(revoke).toHaveBeenCalledWith('blob:https://x/def');
-      } finally {
-        globalThis.URL = originalURL;
-      }
-    });
-
-    it('does not revoke non-blob previewUrls (server URLs from completed uploads)', async () => {
-      const revoke = vi.fn();
-      const originalURL = globalThis.URL;
-      globalThis.URL = {
-        ...originalURL,
-        revokeObjectURL: revoke,
-      } as typeof URL;
-
-      try {
-        const props = createDefaultProps({
-          filePreviews: [
-            {
-              name: 'a.png',
-              type: 'image/png',
-              previewUrl: '/api/file/abc.png',
-              status: 'completed',
-            },
-          ],
-        });
-
-        const { handleSend } = useMessageSender(props);
-        await handleSend();
-
-        expect(revoke).not.toHaveBeenCalled();
-      } finally {
-        globalThis.URL = originalURL;
-      }
-    });
-
-    it('clears the preview list on send', async () => {
-      const setFilePreviews = vi.fn();
-      const props = createDefaultProps({
-        filePreviews: [
-          {
-            name: 'a.png',
-            type: 'image/png',
-            previewUrl: 'blob:https://x/abc',
-            status: 'completed',
-          },
-        ],
-        setFilePreviews,
-      });
-
-      const { handleSend } = useMessageSender(props);
-      await handleSend();
-
-      expect(setFilePreviews).toHaveBeenCalledWith([]);
     });
   });
 });

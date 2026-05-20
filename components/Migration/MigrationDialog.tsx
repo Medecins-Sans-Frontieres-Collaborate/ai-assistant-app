@@ -237,8 +237,8 @@ export const MigrationDialog: FC<MigrationDialogProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
-      <div className="bg-white dark:bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-300 dark:border-gray-600">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+      <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-300 dark:border-gray-600">
         {/* Checking State - Analyzing quota */}
         {status === 'checking' && (
           <div className="px-6 py-8">

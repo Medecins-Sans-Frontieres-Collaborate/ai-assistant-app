@@ -7,8 +7,8 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-white dark:bg-[#212121] p-4">
-      <div className="relative rounded-xl bg-white dark:bg-[#171717] p-8 shadow-xl border border-gray-200 dark:border-gray-700 w-full max-w-xl">
+    <div className="flex h-screen w-full items-center justify-center bg-white dark:bg-surface-dark p-4">
+      <div className="relative rounded-xl bg-white dark:bg-surface-dark-base p-8 shadow-xl border border-gray-200 dark:border-gray-700 w-full max-w-xl">
         {/* Dog Image */}
         <div className="flex justify-center mb-6">
           <div className="relative w-32 h-32">

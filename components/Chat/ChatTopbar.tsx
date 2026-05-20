@@ -2,8 +2,7 @@ import {
   IconChevronDown,
   IconClearAll,
   IconDots,
-  IconNews,
-  IconRobot,
+  IconHexagon,
   IconWorld,
 } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
@@ -23,22 +22,7 @@ import {
   XAIIcon,
 } from '../Icons/providers';
 
-// Static map of icon names used in organization-agents config.
-// When adding new org agent icons, import them above and add to this map.
-const AGENT_ICON_MAP: Record<
-  string,
-  React.ComponentType<{
-    size?: number;
-    className?: string;
-    style?: React.CSSProperties;
-  }>
-> = {
-  IconNews,
-  IconRobot,
-};
-
-const getTablerIcon = (iconName: string) =>
-  AGENT_ICON_MAP[iconName] || IconRobot;
+import { getIconComponent } from '@/lib/organizationAgents';
 
 interface Props {
   botInfo: {
@@ -53,6 +37,7 @@ interface Props {
   isOrganizationAgent?: boolean;
   organizationAgentIcon?: string;
   organizationAgentColor?: string;
+  organizationAgentAllowWebSearch?: boolean;
   showSettings: boolean;
   onSettingsClick: () => void;
   onModelClick?: () => void;
@@ -72,6 +57,7 @@ export const ChatTopbar = ({
   isOrganizationAgent = false,
   organizationAgentIcon,
   organizationAgentColor,
+  organizationAgentAllowWebSearch,
   showSettings,
   onSettingsClick,
   onModelClick,
@@ -105,7 +91,7 @@ export const ChatTopbar = ({
   const getProviderIcon = (provider?: string) => {
     // For organization agents, show their custom icon
     if (isOrganizationAgent && organizationAgentIcon) {
-      const OrgIcon = getTablerIcon(organizationAgentIcon);
+      const OrgIcon = getIconComponent(organizationAgentIcon);
       return (
         <OrgIcon
           size={16}
@@ -115,6 +101,16 @@ export const ChatTopbar = ({
               ? { color: organizationAgentColor }
               : undefined
           }
+        />
+      );
+    }
+
+    // For Foundry agents without a custom icon, show hexagon
+    if (isOrganizationAgent && !organizationAgentIcon) {
+      return (
+        <IconHexagon
+          size={16}
+          className="w-4 h-4 flex-shrink-0 text-blue-400"
         />
       );
     }
@@ -137,7 +133,7 @@ export const ChatTopbar = ({
   };
 
   return (
-    <div className="sticky top-0 z-20 py-2 text-sm text-neutral-500 dark:text-neutral-200 transition-all duration-300 ease-in-out bg-white dark:bg-[#212121]">
+    <div className="sticky top-0 z-20 py-2 text-sm text-gray-500 dark:text-gray-200 transition-all duration-300 ease-in-out bg-white dark:bg-surface-dark">
       <div className="mr-8 px-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 transition-all duration-300">
         {/* Bot/Model Info */}
         <div className="flex items-center min-w-0 justify-center sm:justify-start">
@@ -155,7 +151,7 @@ export const ChatTopbar = ({
           )}
           <div className="truncate min-w-0">
             <button
-              className="flex items-center justify-center rounded-md transition-colors px-2 py-1 hover:bg-neutral-200 dark:hover:bg-neutral-700 border border-transparent hover:border-neutral-300 dark:hover:border-neutral-600"
+              className="flex items-center justify-center rounded-md transition-colors px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-700 border border-transparent hover:border-gray-300 dark:hover:border-gray-600"
               onClick={onModelClick || onSettingsClick}
               aria-label={t('chat.selectModel')}
               title={t('chat.selectModel')}
@@ -167,19 +163,29 @@ export const ChatTopbar = ({
               >
                 {selectedModelName || t('chat.selectModel')}
               </span>
-              {!isCustomAgent && searchMode === SearchMode.INTELLIGENT && (
-                <IconWorld
-                  size={14}
-                  className="ml-1.5 text-blue-600 dark:text-blue-400"
-                  title={t('chat.privacyFocusedSearch')}
-                />
-              )}
-              {!isCustomAgent && searchMode === SearchMode.AGENT && (
-                <AzureAIIcon
-                  className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
-                  aria-label={t('chat.azureAIAgentMode')}
-                />
-              )}
+              {!isCustomAgent &&
+                !(
+                  isOrganizationAgent &&
+                  organizationAgentAllowWebSearch === false
+                ) &&
+                searchMode === SearchMode.INTELLIGENT && (
+                  <IconWorld
+                    size={14}
+                    className="ml-1.5 text-blue-600 dark:text-blue-400"
+                    title={t('chat.privacyFocusedSearch')}
+                  />
+                )}
+              {!isCustomAgent &&
+                !(
+                  isOrganizationAgent &&
+                  organizationAgentAllowWebSearch === false
+                ) &&
+                searchMode === SearchMode.AGENT && (
+                  <AzureAIIcon
+                    className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                    aria-label={t('chat.azureAIAgentMode')}
+                  />
+                )}
               {isCustomAgent && (
                 <AzureAIIcon
                   className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
@@ -199,7 +205,7 @@ export const ChatTopbar = ({
           <div className="flex items-center justify-center" ref={menuRef}>
             <div className="relative">
               <button
-                className="p-1.5 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                className="p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 onClick={() => setShowMenu(!showMenu)}
                 aria-label={t('common.menu')}
                 title={t('common.menu')}
@@ -209,11 +215,11 @@ export const ChatTopbar = ({
 
               {/* Dropdown menu */}
               {showMenu && (
-                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
+                <div className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
                   <div className="p-1">
                     {/* Clear option */}
                     <button
-                      className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                      className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                       onClick={() => {
                         onClearAll?.();
                         setShowMenu(false);
@@ -221,9 +227,9 @@ export const ChatTopbar = ({
                     >
                       <IconClearAll
                         size={16}
-                        className="text-neutral-600 dark:text-neutral-400 shrink-0"
+                        className="text-gray-600 dark:text-gray-400 shrink-0"
                       />
-                      Clear
+                      {t('common.clear')}
                     </button>
                   </div>
                 </div>

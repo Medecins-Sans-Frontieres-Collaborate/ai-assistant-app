@@ -69,7 +69,6 @@ interface ChatMessagesProps {
   onEditMessage: (message: Message) => void;
   onSelectPrompt: (prompt: string) => void;
   onRegenerate: (messageIndex?: number) => void;
-  onGenerateResponse: () => void;
   onSaveAsPrompt: (content: string) => void;
   onNavigateVersion: (messageIndex: number, direction: 'prev' | 'next') => void;
 }
@@ -93,7 +92,6 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   onEditMessage,
   onSelectPrompt,
   onRegenerate,
-  onGenerateResponse,
   onSaveAsPrompt,
   onNavigateVersion,
 }) => {
@@ -106,19 +104,6 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   // During drain, hide the last message to avoid duplicate content
   // (the finalized message is already in the list, but we're still animating it)
   const displayMessages = isDraining ? messages.slice(0, -1) : messages;
-
-  const lastEntry =
-    displayMessages.length > 0
-      ? displayMessages[displayMessages.length - 1]
-      : null;
-  const lastDisplayMessage = lastEntry
-    ? entryToDisplayMessage(lastEntry)
-    : null;
-  const showGenerateResponse =
-    !showStreamingDiv &&
-    !!lastDisplayMessage &&
-    (lastDisplayMessage.role === 'user' ||
-      (lastDisplayMessage.role === 'assistant' && !!lastDisplayMessage.error));
 
   return (
     <>
@@ -157,20 +142,6 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
           </div>
         );
       })}
-
-      {/* Generate response affordance — appears when the conversation is
-          stuck on a trailing user message or an errored assistant turn */}
-      {showGenerateResponse && (
-        <div className="flex justify-center my-4">
-          <button
-            type="button"
-            onClick={onGenerateResponse}
-            className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition-colors"
-          >
-            {t('chat.generateResponseButton')}
-          </button>
-        </div>
-      )}
 
       {/* Transcription status indicator */}
       {transcriptionStatus && (

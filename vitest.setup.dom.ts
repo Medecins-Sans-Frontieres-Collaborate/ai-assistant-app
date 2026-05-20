@@ -56,7 +56,6 @@ const mockMessages: Record<string, unknown> = {
     failedToLoadImage: 'Failed to load image',
     loadingImage: 'Loading image...',
     download: 'Download',
-    downloadResponse: 'Download response',
     openAsDocument: 'Open as Document',
     openInCodeEditor: 'Open in Code Editor',
     failedToOpenCodeEditor:

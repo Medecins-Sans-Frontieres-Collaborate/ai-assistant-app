@@ -8,6 +8,12 @@ import {
 import { Message, MessageType } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
+import {
+  ConsentOutcomePayload,
+  extractConsentOutcomes,
+  extractLatestAgentActivity,
+} from '@/lib/streamMarkers';
+
 /**
  * Handles parsing of streaming chat responses
  * Extracts metadata (citations, transcripts, actions) and display content
@@ -27,6 +33,11 @@ export class StreamParser {
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
+  // CONSENT_OUTCOME markers are side-effect-only. Track which ones we've
+  // already surfaced so processChunk only returns newly-arrived outcomes.
+  // Lifetime: instance-scoped — every chat send constructs a fresh
+  // StreamParser, so this Set never persists across streams.
+  private seenOutcomeIds: Set<string> = new Set();
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -44,12 +55,31 @@ export class StreamParser {
     action?: string;
     contentChanged: boolean;
     citationsChanged: boolean;
+    /** Newly-arrived approval outcomes since the previous chunk. */
+    newOutcomes: ConsentOutcomePayload[];
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
 
     const parsed = parseMetadataFromContent(this.text);
-    const displayText = parsed.content;
+
+    // Pull all CONSENT_OUTCOME markers, dedupe against ones we've already
+    // surfaced, and strip them so they never reach the rendered content.
+    const { outcomes, cleaned: outcomeStripped } = extractConsentOutcomes(
+      parsed.content,
+    );
+    const newOutcomes: ConsentOutcomePayload[] = [];
+    for (const o of outcomes) {
+      if (!this.seenOutcomeIds.has(o.approval_request_id)) {
+        this.seenOutcomeIds.add(o.approval_request_id);
+        newOutcomes.push(o);
+      }
+    }
+    // Pull the latest transient agent-activity marker (drives the loading
+    // text) and strip all of them from the visible content.
+    const { latest: latestActivity, cleaned: displayText } =
+      extractLatestAgentActivity(outcomeStripped);
+    const latestActivityKey = latestActivity?.key;
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -112,9 +142,12 @@ export class StreamParser {
       displayText,
       citations: this.extractedCitations,
       hasReceivedContent: this.hasReceivedContent,
-      action: parsed.action,
+      // Transient activity key (if any) takes precedence over a
+      // metadata-channel `action` field; both feed the same loading text.
+      action: latestActivityKey ?? parsed.action,
       contentChanged,
       citationsChanged,
+      newOutcomes,
     };
   }
 

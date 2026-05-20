@@ -78,14 +78,24 @@ export function ConversationItem({
     <div
       draggable={!isEditing}
       onDragStart={handleDragStart}
-      className={`group flex items-center gap-2 rounded p-2 cursor-pointer transition-all duration-200 ${
+      role="button"
+      tabIndex={0}
+      aria-selected={selectedConversation?.id === conversation.id}
+      className={`group flex items-center gap-2 rounded p-2 cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
         selectedConversation?.id === conversation.id
-          ? 'bg-neutral-200 dark:bg-neutral-700'
-          : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:shadow-sm'
+          ? 'bg-gray-200 dark:bg-gray-700'
+          : 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-sm'
       }`}
       onClick={() =>
         !isEditing && !showMenu && handleSelectConversation(conversation.id)
       }
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (!isEditing && !showMenu)
+            handleSelectConversation(conversation.id);
+        }
+      }}
     >
       {isEditing ? (
         <input
@@ -103,10 +113,10 @@ export function ConversationItem({
           }}
           autoFocus
           onClick={(e) => e.stopPropagation()}
-          className="flex-1 rounded border border-neutral-300 bg-white px-2 py-1 text-sm text-neutral-900 focus:border-neutral-500 focus:outline-none dark:border-neutral-600 dark:bg-[#212121] dark:text-neutral-100"
+          className="flex-1 rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-surface-dark dark:text-gray-100"
         />
       ) : (
-        <span className="flex-1 truncate text-sm text-neutral-900 dark:text-neutral-100">
+        <span className="flex-1 truncate text-sm text-gray-900 dark:text-gray-100">
           {conversation.name || t('New Conversation')}
         </span>
       )}
@@ -117,16 +127,17 @@ export function ConversationItem({
         {!isEditing && (
           <>
             <button
-              className="rounded p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+              className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowMenu(!showMenu);
               }}
               title={t('Options')}
+              aria-label={t('Options')}
             >
               <IconDots
                 size={14}
-                className="text-neutral-600 dark:text-neutral-400"
+                className="text-gray-600 dark:text-gray-400"
               />
             </button>
           </>
@@ -135,13 +146,13 @@ export function ConversationItem({
         {/* Dropdown menu */}
         {showMenu && (
           <div
-            className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]"
+            className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-1">
               {/* Rename option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowMenu(false);
@@ -151,7 +162,7 @@ export function ConversationItem({
               >
                 <IconEdit
                   size={14}
-                  className="text-neutral-600 dark:text-neutral-400"
+                  className="text-gray-600 dark:text-gray-400"
                 />
                 {t('Rename')}
               </button>
@@ -159,7 +170,7 @@ export function ConversationItem({
               {/* Move to folder option with submenu */}
               <div>
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowFolderSubmenu(!showFolderSubmenu);
@@ -168,19 +179,19 @@ export function ConversationItem({
                   <span className="flex items-center gap-2">
                     <IconFolder
                       size={14}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                     {t('Move to folder')}
                   </span>
                   {showFolderSubmenu ? (
                     <IconChevronDown
                       size={14}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                   ) : (
                     <IconChevronRight
                       size={14}
-                      className="text-neutral-600 dark:text-neutral-400"
+                      className="text-gray-600 dark:text-gray-400"
                     />
                   )}
                 </button>
@@ -189,7 +200,7 @@ export function ConversationItem({
                 {showFolderSubmenu && (
                   <div className="pl-4 mt-1">
                     <button
-                      className="w-full text-left px-3 py-2 text-xs text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                      className="w-full text-left px-3 py-2 text-xs text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleMoveToFolder(conversation.id, null);
@@ -205,7 +216,7 @@ export function ConversationItem({
                     {folders.map((folder) => (
                       <button
                         key={folder.id}
-                        className="w-full text-left px-3 py-2 text-xs text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center justify-between"
+                        className="w-full text-left px-3 py-2 text-xs text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center justify-between"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleMoveToFolder(conversation.id, folder.id);
@@ -225,7 +236,7 @@ export function ConversationItem({
 
               {/* Export option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowMenu(false);
@@ -234,14 +245,14 @@ export function ConversationItem({
               >
                 <IconDownload
                   size={14}
-                  className="text-neutral-600 dark:text-neutral-400"
+                  className="text-gray-600 dark:text-gray-400"
                 />
                 {t('Export')}
               </button>
 
               {/* Delete option */}
               <button
-                className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-neutral-100 dark:text-red-400 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowMenu(false);

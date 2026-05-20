@@ -77,8 +77,9 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
                 src={organizationAgent.image!}
                 alt=""
                 fill
+                sizes="(min-width: 768px) 50vw, 100vw"
                 className="object-cover object-right"
-                priority={false}
+                priority
               />
               {/* Gradient overlay for text readability */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/95 via-black/75 to-black/60" />
@@ -128,14 +129,25 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         <RecentSourcesSection agentId={organizationAgent.id} />
       )}
 
-      <SearchModeSection
-        searchModeEnabled={searchModeEnabled}
-        displaySearchMode={displaySearchMode}
-        agentAvailable={agentAvailable}
-        modelConfig={modelConfig}
-        handleToggleSearchMode={handleToggleSearchMode}
-        handleSetSearchMode={handleSetSearchMode}
-      />
+      {/* Hide search mode section for Foundry agents (they decide on their
+          own via web_search_call) and for org agents that explicitly
+          disallow web search. RAG bots keep the section because the
+          pre-router controls their search behavior. */}
+      {!(
+        organizationAgent &&
+        (organizationAgent.type === 'foundry' ||
+          organizationAgent.allowWebSearch === false)
+      ) &&
+        !selectedModel?.id?.startsWith('foundry-') && (
+          <SearchModeSection
+            searchModeEnabled={searchModeEnabled}
+            displaySearchMode={displaySearchMode}
+            agentAvailable={agentAvailable}
+            modelConfig={modelConfig}
+            handleToggleSearchMode={handleToggleSearchMode}
+            handleSetSearchMode={handleSetSearchMode}
+          />
+        )}
 
       {displaySearchMode !== SearchMode.AGENT &&
         selectedConversation &&

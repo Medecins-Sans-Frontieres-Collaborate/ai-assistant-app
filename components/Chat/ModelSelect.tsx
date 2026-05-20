@@ -1,14 +1,17 @@
 import { IconX } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
-import { useAgentManagement } from '@/client/hooks/settings/useAgentManagement';
+import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
+
+import { shortSourceHash } from '@/lib/utils/app/agentId';
 
 import { Conversation } from '@/types/chat';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
@@ -16,18 +19,19 @@ import { SearchMode } from '@/types/searchMode';
 
 import { AzureAIIcon, AzureOpenAIIcon } from '../Icons/providers';
 import { TabNavigation } from '../UI/TabNavigation';
-import { CustomAgentForm } from './CustomAgents/CustomAgentForm';
+import { AgentSourceForm } from './AgentSources/AgentSourceForm';
 import { ModelCard } from './ModelCard';
 import { AgentsTab } from './ModelSelect/AgentsTab';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
-import { ModelTypeIcon } from './ModelSelect/ModelTypeIcon';
 
-import { CustomAgent } from '@/client/stores/settingsStore';
+import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
   getOrganizationAgentIdFromModelId,
   getOrganizationAgents,
+  getRAGAgents,
+  isFoundryAgentId,
 } from '@/lib/organizationAgents';
 
 interface ModelSelectProps {
@@ -36,7 +40,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots } = useFlags();
+  const { exploreBots, enableClaudeModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -46,17 +50,28 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   // Default to true if LaunchDarkly is not configured (for local development)
   const isBotsEnabled = exploreBots !== false;
 
+  // Dynamically discovered Foundry agents (RBAC-filtered per user)
+  const {
+    foundryAgents,
+    regionalPath,
+    officePaths,
+    isLoadingFoundryAgents,
+    refetchFoundryAgents,
+  } = useFoundryAgents();
+
   const selectedModelId = selectedConversation?.model?.id || defaultModelId;
 
-  // Check if the currently selected model is a custom agent
-  const isSelectedModelAgent = selectedModelId?.startsWith('custom-') ?? false;
+  // Check if the currently selected model is a custom/foundry agent
+  const isSelectedModelAgent =
+    selectedModelId?.startsWith('custom-') ||
+    selectedModelId?.startsWith('foundry-') ||
+    false;
 
   // Custom hooks for state management
   const {
     activeTab,
     setActiveTab,
     showAgentForm,
-    editingAgent,
     openAgentForm,
     closeAgentForm,
     showModelAdvanced,
@@ -67,12 +82,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setShowAgentWarning,
   } = useModelSelectState(isSelectedModelAgent);
 
-  // Agent management
-  const {
-    customAgents,
-    handleSaveAgent: saveAgentToStore,
-    handleDeleteAgent: deleteAgentFromStore,
-  } = useAgentManagement();
+  // Agent source management
+  const customAgentSources = useSettingsStore((s) => s.customAgentSources);
+  const addCustomAgentSource = useSettingsStore((s) => s.addCustomAgentSource);
+  const updateCustomAgentSource = useSettingsStore(
+    (s) => s.updateCustomAgentSource,
+  );
+  const deleteCustomAgentSource = useSettingsStore(
+    (s) => s.deleteCustomAgentSource,
+  );
+  const [editingSource, setEditingSource] = useState<AgentSource | undefined>();
+
+  // Feature flag: Control Claude models visibility via LaunchDarkly
+  // Default to true if LaunchDarkly is not configured (for local development)
+  const isClaudeEnabled = enableClaudeModels !== false;
 
   // Filter out disabled models and custom agents (custom agents should only appear in Agents tab)
   const baseModels = useMemo(
@@ -81,9 +104,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         (m) =>
           !OpenAIModels[m.id as OpenAIModelID]?.isDisabled &&
           !m.id.startsWith('custom-') &&
-          !m.isCustomAgent,
+          !m.isCustomAgent &&
+          (OpenAIModels[m.id as OpenAIModelID]?.provider !== 'anthropic' ||
+            isClaudeEnabled),
       ),
-    [models],
+    [models, isClaudeEnabled],
   );
 
   // Use the model ordering hook for sorting and reordering
@@ -112,47 +137,17 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     setIsEditingOrder(!isEditingOrder);
   };
 
-  // Track which agents have defunct base models (deprecated/removed)
-  // These agents are shown in the UI but cannot be selected
-  const defunctAgentIds = useMemo(() => {
-    return new Set(
-      customAgents
-        .filter((agent) => !OpenAIModels[agent.baseModelId])
-        .map((agent) => agent.id),
-    );
-  }, [customAgents]);
-
-  // Convert custom agents to OpenAIModel format (only valid ones)
-  // Agents with defunct base models are filtered out here but displayed separately in AgentsTab
-  const customAgentModels: OpenAIModel[] = useMemo(() => {
-    return customAgents
-      .filter((agent) => !defunctAgentIds.has(agent.id))
-      .map((agent) => {
-        const baseModel = OpenAIModels[agent.baseModelId];
-        return {
-          ...baseModel,
-          id: `custom-${agent.id}`,
-          name: agent.name,
-          agentId: agent.agentId,
-          description:
-            agent.description || `Custom agent based on ${baseModel.name}`,
-          modelType: 'agent' as const,
-          isCustomAgent: true,
-        };
-      });
-  }, [customAgents, defunctAgentIds]);
-
   // Convert organization agents to OpenAIModel format
-  // Only include organization agents if the exploreBots feature flag is enabled
+  // Combines static RAG agents (from JSON config) with dynamically discovered Foundry agents
   const organizationAgentModels: OpenAIModel[] = useMemo(() => {
     // Feature flag check: Skip organization agents if disabled in LaunchDarkly
     if (!isBotsEnabled) {
       return [];
     }
 
-    const orgAgents = getOrganizationAgents();
-    return orgAgents.map((agent) => {
-      // Use gpt-4.1 as default base model for RAG agents, or specified baseModelId
+    // Static agents from organization-agents.json (RAG agents + any static Foundry agents)
+    const staticAgents = getOrganizationAgents();
+    const staticModels = staticAgents.map((agent) => {
       const baseModelId =
         (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
       const baseModel =
@@ -163,18 +158,46 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         name: agent.name,
         description: agent.description,
         modelType: agent.type === 'foundry' ? ('agent' as const) : undefined,
-        agentId: agent.agentId, // For foundry agents
+        agentId: agent.agentId,
         isOrganizationAgent: true,
       };
     });
-  }, [isBotsEnabled]);
 
-  // Combine base models, custom agents, and organization agents
-  const availableModels = [
-    ...baseModels,
-    ...customAgentModels,
-    ...organizationAgentModels,
-  ];
+    // Dynamically discovered Foundry agents from ARM API (RBAC-filtered per user).
+    // Model ID includes a short hash of the source path so the same-named agent
+    // discovered from two different Foundry projects produces two distinct models
+    // (otherwise React key collisions + ambiguous selection).
+    const dynamicModels = foundryAgents.map((agent) => {
+      const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
+      const sourceHash = shortSourceHash(agent.source);
+      return {
+        ...baseModel,
+        id: `foundry-${sourceHash}-${agent.id}`,
+        name: agent.name,
+        description: agent.description,
+        modelType: 'agent' as const,
+        agentId: agent.agentName,
+        foundryEndpoint: agent.foundryEndpoint,
+        agentSource: agent.source,
+        isOrganizationAgent: true,
+      };
+    });
+
+    // Deduplicate: if a Foundry agent exists in both static config and dynamic discovery,
+    // prefer the dynamic version (it has RBAC validation)
+    const dynamicAgentNames = new Set(foundryAgents.map((a) => a.agentName));
+    const deduplicatedStatic = staticModels.filter(
+      (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
+    );
+
+    return [...deduplicatedStatic, ...dynamicModels];
+  }, [isBotsEnabled, foundryAgents]);
+
+  // Combine base models and organization/discovered agents
+  const availableModels = useMemo(
+    () => [...baseModels, ...organizationAgentModels],
+    [baseModels, organizationAgentModels],
+  );
 
   const selectedModel =
     availableModels.find((m) => m.id === selectedModelId) || availableModels[0];
@@ -183,7 +206,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
   const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
-  const agentAvailable = modelConfig?.agentId !== undefined;
+  // Check agentId on both modelConfig (for base models) and selectedModel (for org/custom agents)
+  const agentAvailable =
+    modelConfig?.agentId !== undefined || selectedModel?.agentId !== undefined;
 
   // Get current search mode from conversation (default to INTELLIGENT for privacy)
   const currentSearchMode =
@@ -222,83 +247,101 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     updateConversation,
   ]);
 
-  const handleModelSelect = (model: OpenAIModel) => {
-    if (!selectedConversation) {
-      console.warn(
-        '[ModelSelect] No conversation selected, cannot update model',
-      );
-      return;
-    }
+  const handleModelSelect = useCallback(
+    (model: OpenAIModel) => {
+      if (!selectedConversation) {
+        console.warn(
+          '[ModelSelect] No conversation selected, cannot update model',
+        );
+        return;
+      }
 
-    // Validate that the model exists in available models
-    if (!availableModels.find((m) => m.id === model.id)) {
-      console.error(
-        '[ModelSelect] Selected model not found in available models:',
-        model.id,
-      );
-      return;
-    }
+      // Validate that the model exists in available models
+      if (!availableModels.find((m) => m.id === model.id)) {
+        console.error(
+          '[ModelSelect] Selected model not found in available models:',
+          model.id,
+        );
+        return;
+      }
 
-    // Switch to details view on mobile when a model is selected
-    setMobileView('details');
+      // Switch to details view on mobile when a model is selected
+      setMobileView('details');
 
-    // Set as default model for future conversations
-    console.log(
-      `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
-    );
-    setDefaultModelId(model.id as OpenAIModelID);
-
-    // Update conversation with selected model
-    // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
-    const updates: Partial<Conversation> = {
-      model: model,
-    };
-
-    // Set bot ID for organization agents (enables RAG)
-    const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
-    if (orgAgentId) {
-      updates.bot = orgAgentId;
+      // Set as default model for future conversations
       console.log(
-        `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+        `[ModelSelect] Setting default model to: ${model.id} (${model.name})`,
       );
-    } else if (selectedConversation.bot) {
-      // Clear bot if switching away from an organization agent
-      updates.bot = undefined;
-      console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
-    }
+      setDefaultModelId(model.id as OpenAIModelID);
 
-    // Check if the new model supports agents
-    const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
-    const newModelHasAgent = newModelConfig?.agentId !== undefined;
+      // Update conversation with selected model
+      // Initialize defaultSearchMode to INTELLIGENT (privacy-focused) if not already set
+      const updates: Partial<Conversation> = {
+        model: model,
+      };
 
-    // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
-    if (
-      !newModelHasAgent &&
-      selectedConversation.defaultSearchMode === SearchMode.AGENT
-    ) {
-      updates.defaultSearchMode = SearchMode.INTELLIGENT;
+      // Set bot ID for organization agents (enables RAG) or Foundry agents
+      const orgAgentId = getOrganizationAgentIdFromModelId(model.id);
+      const foundryAgentId = isFoundryAgentId(model.id);
+      if (orgAgentId) {
+        updates.bot = orgAgentId;
+        console.log(
+          `[ModelSelect] Setting bot to organization agent: ${orgAgentId}`,
+        );
+      } else if (foundryAgentId) {
+        // Dynamic Foundry agents don't use bot ID — agent routing is via agentId
+        // Clear any previous bot setting
+        updates.bot = undefined;
+        console.log(
+          `[ModelSelect] Selected dynamic Foundry agent: ${model.id}`,
+        );
+      } else if (selectedConversation.bot) {
+        // Clear bot if switching away from an organization agent
+        updates.bot = undefined;
+        console.log(`[ModelSelect] Clearing bot (switched to non-org agent)`);
+      }
+
+      // Check if the new model supports agents (check both static config and model object for org agents)
+      const newModelConfig = OpenAIModels[model.id as OpenAIModelID];
+      const newModelHasAgent =
+        newModelConfig?.agentId !== undefined || model.agentId !== undefined;
+
+      // If switching to a model without agent support and current mode is AGENT, reset to INTELLIGENT
+      if (
+        !newModelHasAgent &&
+        selectedConversation.defaultSearchMode === SearchMode.AGENT
+      ) {
+        updates.defaultSearchMode = SearchMode.INTELLIGENT;
+        console.log(
+          `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+        );
+      }
+
+      // Only set defaultSearchMode if it's not already set on the conversation
+      if (selectedConversation.defaultSearchMode === undefined) {
+        updates.defaultSearchMode = SearchMode.INTELLIGENT;
+        console.log(
+          `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
+        );
+      }
+
       console.log(
-        `[ModelSelect] Resetting AGENT mode to INTELLIGENT for non-agent model`,
+        `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
       );
-    }
+      updateConversation(selectedConversation.id, updates);
 
-    // Only set defaultSearchMode if it's not already set on the conversation
-    if (selectedConversation.defaultSearchMode === undefined) {
-      updates.defaultSearchMode = SearchMode.INTELLIGENT;
-      console.log(
-        `[ModelSelect] Initializing defaultSearchMode to INTELLIGENT`,
-      );
-    }
+      // Don't auto-close - let user review settings and close manually
+    },
+    [
+      selectedConversation,
+      availableModels,
+      setMobileView,
+      setDefaultModelId,
+      updateConversation,
+    ],
+  );
 
-    console.log(
-      `[ModelSelect] Updating conversation ${selectedConversation.id} with model: ${model.id}`,
-    );
-    updateConversation(selectedConversation.id, updates);
-
-    // Don't auto-close - let user review settings and close manually
-  };
-
-  const handleToggleSearchMode = () => {
+  const handleToggleSearchMode = useCallback(() => {
     if (!selectedConversation) return;
 
     const newMode = searchModeEnabled ? SearchMode.OFF : SearchMode.INTELLIGENT;
@@ -314,54 +357,98 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
     // Set as default search mode for future conversations
     setDefaultSearchMode(newMode);
-  };
+  }, [
+    selectedConversation,
+    searchModeEnabled,
+    currentSearchMode,
+    updateConversation,
+    setDefaultSearchMode,
+  ]);
 
-  const handleSetSearchMode = (mode: SearchMode) => {
-    if (!selectedConversation) return;
+  const handleSetSearchMode = useCallback(
+    (mode: SearchMode) => {
+      if (!selectedConversation) return;
 
-    console.log(
-      `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
-    );
+      console.log(
+        `[ModelSelect] Setting Search Mode: ${currentSearchMode} → ${mode}`,
+      );
 
-    // Update current conversation
-    updateConversation(selectedConversation.id, {
-      defaultSearchMode: mode,
-    });
-
-    // Set as default search mode for future conversations
-    setDefaultSearchMode(mode);
-  };
-
-  const handleSaveAgent = (agent: CustomAgent) => {
-    saveAgentToStore(agent);
-    closeAgentForm();
-  };
-
-  const handleEditAgent = (agent: CustomAgent) => {
-    openAgentForm(agent);
-  };
-
-  const handleImportAgents = (agents: CustomAgent[]) => {
-    agents.forEach((agent) => {
-      saveAgentToStore(agent);
-    });
-  };
-
-  const handleDeleteAgent = (agentId: string) => {
-    deleteAgentFromStore(agentId);
-
-    // If currently selected model is the deleted agent, switch to default
-    if (
-      selectedConversation &&
-      selectedConversation.model?.id === `custom-${agentId}`
-    ) {
-      const defaultModel = baseModels[0];
-      // Only update the model field to avoid overwriting other conversation properties
+      // Update current conversation
       updateConversation(selectedConversation.id, {
-        model: defaultModel,
+        defaultSearchMode: mode,
       });
-    }
-  };
+
+      // Set as default search mode for future conversations
+      setDefaultSearchMode(mode);
+    },
+    [
+      selectedConversation,
+      currentSearchMode,
+      updateConversation,
+      setDefaultSearchMode,
+    ],
+  );
+
+  const handleSaveAgentSource = useCallback(
+    (source: AgentSource) => {
+      if (editingSource) {
+        updateCustomAgentSource(source);
+      } else {
+        addCustomAgentSource(source);
+      }
+      setEditingSource(undefined);
+      closeAgentForm();
+    },
+    [
+      editingSource,
+      addCustomAgentSource,
+      updateCustomAgentSource,
+      closeAgentForm,
+    ],
+  );
+
+  const handleEditSource = useCallback(
+    (source: AgentSource) => {
+      setEditingSource(source);
+      openAgentForm();
+    },
+    [openAgentForm],
+  );
+
+  const handleDeleteAgentSource = useCallback(
+    (sourceId: string) => {
+      const source = customAgentSources.find((s) => s.id === sourceId);
+      if (!source) return;
+
+      // Disconnecting only removes the source registration; existing
+      // conversations keep their agent model intact (history, topbar label,
+      // metadata). If the user later tries to send in one of those, the
+      // request surfaces a clear "agent unavailable" error from the server
+      // and they can pick a new model from the picker. Silently rewriting
+      // the model to GPT-5.2 made the topbar lie about who answered.
+      deleteCustomAgentSource(sourceId);
+
+      // Show undo toast — restore the source if user changes their mind
+      toast(
+        (toastInstance) => (
+          <div className="flex items-center gap-3">
+            <span>Disconnected {source.name}</span>
+            <button
+              onClick={() => {
+                addCustomAgentSource(source);
+                toast.dismiss(toastInstance.id);
+              }}
+              className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            >
+              Undo
+            </button>
+          </div>
+        ),
+        { duration: 8000 },
+      );
+    },
+    [deleteCustomAgentSource, addCustomAgentSource, customAgentSources],
+  );
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -372,7 +459,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             id: 'models',
             label: t('modelSelect.tabs.models'),
             icon: <AzureOpenAIIcon className="w-5 h-5" />,
-            width: '110px',
+            width: '115px',
           },
           {
             id: 'agents',
@@ -400,49 +487,74 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'details' ? 'hidden md:block' : 'block'
               } w-full md:w-80 flex-shrink-0 overflow-y-auto md:border-e border-gray-200 dark:border-gray-700 md:pe-4`}
             >
-              <div className="space-y-4">
-                {/* Base Models */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
-                      {t('modelSelect.sections.baseModels')}
-                    </h4>
-                    <ModelOrderControls
-                      orderMode={orderMode}
-                      onOrderModeChange={setOrderMode}
-                      onReset={resetOrder}
-                      isEditing={isEditingOrder}
-                      onToggleEdit={handleToggleEditOrder}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    {orderedModels.map((model) => {
-                      const config = OpenAIModels[model.id as OpenAIModelID];
-                      const isSelected = selectedModelId === model.id;
+              <div>
+                {(() => {
+                  // Anchor recommended models at the top so first-time users
+                  // get an obvious "start here" signal. Distinct taglines
+                  // (e.g. "Best for tasks" vs "Best for chatting") let users
+                  // pick between them without reading details. Everything
+                  // else stays visible below a thin divider, in user-defined
+                  // order. While reordering, collapse the distinction.
+                  const recommendedModels = orderedModels.filter(
+                    (m) => OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+                  );
+                  const otherModels = orderedModels.filter(
+                    (m) => !OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+                  );
+                  const renderModelCard = (model: OpenAIModel) => {
+                    const config = OpenAIModels[model.id as OpenAIModelID];
+                    const isSelected = selectedModelId === model.id;
+                    return (
+                      <ModelCard
+                        key={model.id}
+                        id={model.id}
+                        name={model.name}
+                        tagline={config?.tagline}
+                        isSelected={isSelected}
+                        onClick={() => handleModelSelect(model)}
+                        icon={<ModelProviderIcon provider={config?.provider} />}
+                        showReorderControls={isEditingOrder}
+                        canMoveUp={canMoveUp(model.id)}
+                        canMoveDown={canMoveDown(model.id)}
+                        onMoveUp={() => moveModel(model.id, 'up')}
+                        onMoveDown={() => moveModel(model.id, 'down')}
+                      />
+                    );
+                  };
 
-                      return (
-                        <ModelCard
-                          key={model.id}
-                          id={model.id}
-                          name={model.name}
-                          isSelected={isSelected}
-                          onClick={() => handleModelSelect(model)}
-                          icon={
-                            <ModelProviderIcon provider={config?.provider} />
-                          }
-                          typeIcon={
-                            <ModelTypeIcon modelType={config?.modelType} />
-                          }
-                          showReorderControls={isEditingOrder}
-                          canMoveUp={canMoveUp(model.id)}
-                          canMoveDown={canMoveDown(model.id)}
-                          onMoveUp={() => moveModel(model.id, 'up')}
-                          onMoveDown={() => moveModel(model.id, 'down')}
+                  return (
+                    <div>
+                      <div className="flex justify-end mb-1.5">
+                        <ModelOrderControls
+                          orderMode={orderMode}
+                          onOrderModeChange={setOrderMode}
+                          onReset={resetOrder}
+                          isEditing={isEditingOrder}
+                          onToggleEdit={handleToggleEditOrder}
                         />
-                      );
-                    })}
-                  </div>
-                </div>
+                      </div>
+                      {isEditingOrder || recommendedModels.length === 0 ? (
+                        <div className="space-y-1">
+                          {orderedModels.map(renderModelCard)}
+                        </div>
+                      ) : (
+                        <>
+                          <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                            {t('modelSelect.recommended')}
+                          </h4>
+                          <div className="space-y-1">
+                            {recommendedModels.map(renderModelCard)}
+                          </div>
+                          {otherModels.length > 0 && (
+                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1">
+                              {otherModels.map(renderModelCard)}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
@@ -452,7 +564,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'list' ? 'hidden md:block' : 'block'
               } flex-1 overflow-y-auto`}
             >
-              {selectedModel && (modelConfig || isCustomAgent) && (
+              {selectedModel && (modelConfig || isCustomAgent) ? (
                 <ModelDetailsPanel
                   selectedModel={selectedModel}
                   modelConfig={modelConfig}
@@ -468,6 +580,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   setShowModelAdvanced={setShowModelAdvanced}
                   updateConversation={updateConversation}
                 />
+              ) : (
+                <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
+                  <p className="text-sm">
+                    {t('modelSelect.modelsDescription')}
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -476,15 +594,21 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
       {activeTab === 'agents' && (
         <AgentsTab
-          openAgentForm={openAgentForm}
-          customAgents={customAgents}
-          handleEditAgent={handleEditAgent}
-          handleDeleteAgent={handleDeleteAgent}
           handleModelSelect={handleModelSelect}
-          customAgentModels={customAgentModels}
           organizationAgentModels={organizationAgentModels}
+          foundryAgents={foundryAgents}
+          regionalPath={regionalPath}
+          officePaths={officePaths}
           selectedModelId={selectedModelId}
-          defunctAgentIds={defunctAgentIds}
+          isLoadingFoundryAgents={isLoadingFoundryAgents}
+          onRefreshAgents={() => refetchFoundryAgents()}
+          agentSources={customAgentSources}
+          onAddSource={() => {
+            setEditingSource(undefined);
+            openAgentForm();
+          }}
+          onEditSource={handleEditSource}
+          onDeleteSource={handleDeleteAgentSource}
           // Props for details panel
           selectedModel={selectedModel}
           modelConfig={modelConfig}
@@ -503,13 +627,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         />
       )}
 
-      {/* Custom Agent Form Modal */}
+      {/* Agent Source Form Modal */}
       {showAgentForm && (
-        <CustomAgentForm
-          onSave={handleSaveAgent}
-          onClose={closeAgentForm}
-          existingAgent={editingAgent}
-          existingAgents={customAgents}
+        <AgentSourceForm
+          onSave={handleSaveAgentSource}
+          onClose={() => {
+            setEditingSource(undefined);
+            closeAgentForm();
+          }}
+          existingSource={editingSource}
         />
       )}
     </div>

@@ -3,36 +3,65 @@ import { Session } from 'next-auth';
 import {
   appendMetadataToStream,
   createStreamEncoder,
-  deduplicateCitations,
 } from '@/lib/utils/app/metadata';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
+import { extractPendingApprovalIds } from '@/lib/utils/server/foundryErrors';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
+import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import {
+  ApprovalResponse,
   FileMessageContent,
   ImageMessageContent,
   Message,
   TextMessageContent,
 } from '@/types/chat';
+import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
+import { activityKeyForEvent, outputItemToMarker } from './foundryEventMappers';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
+import {
+  emitAgentActivity,
+  emitConsentOutcome,
+  emitConsentRequest,
+} from '@/lib/streamMarkers';
+import { TokenCredential } from '@azure/identity';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
 /**
- * Handles Azure AI Foundry Agent-based chat completions with Bing grounding
+ * Shape of an MCP approval-response conversation item, matching Foundry's
+ * Responses API. Centralized here because the `@azure/ai-projects` SDK
+ * doesn't yet export a public type for this shape — keeps the cast
+ * narrowed to one place.
+ */
+interface McpApprovalResponseItem {
+  type: 'mcp_approval_response';
+  approval_request_id: string;
+  approve: boolean;
+}
+
+function buildApprovalResponseItems(
+  decisions: ReadonlyArray<{ approval_request_id: string; approve: boolean }>,
+): McpApprovalResponseItem[] {
+  return decisions.map((r) => ({
+    type: 'mcp_approval_response',
+    approval_request_id: r.approval_request_id,
+    approve: r.approve,
+  }));
+}
+
+/**
+ * Handles Azure AI Foundry Agent-based chat completions
  *
- * Package structure:
- * - Uses @azure/ai-agents (AgentsClient) for streaming support
- *
- * API structure:
- * - client.threads.create() - creates a new thread
- * - client.messages.create(threadId, role, content) - adds a message
- * - client.runs.create(threadId, agentId) - returns run object with stream() method (DO NOT await!)
- * - run.stream() - returns async iterator of streaming events
+ * Uses @azure/ai-projects (AIProjectClient) with the Foundry Agent Service API:
+ * - project.getOpenAIClient() → openAIClient for conversations and responses
+ * - openAIClient.conversations.create({items}) - creates a new conversation
+ * - openAIClient.conversations.items.create(conversationId, {items}) - adds items
+ * - openAIClient.responses.create({conversation, agent_reference}) - gets response stream
  */
 export class AIFoundryAgentHandler {
   private tracer = trace.getTracer('ai-foundry-agent-handler');
@@ -50,6 +79,9 @@ export class AIFoundryAgentHandler {
     user: Session['user'],
     botId: string | undefined,
     threadId?: string,
+    credential?: TokenCredential,
+    endpoint?: string,
+    approvalResponses?: ApprovalResponse[],
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -74,163 +106,227 @@ export class AIFoundryAgentHandler {
       },
       async (span) => {
         try {
-          // Use Azure AI Agents SDK for streaming support
-          const aiAgents = await import('@azure/ai-agents');
+          const aiProjects = await import('@azure/ai-projects');
           const { DefaultAzureCredential } = await import('@azure/identity');
 
-          // AI Foundry uses a separate project endpoint (services.ai.azure.com)
-          const endpoint = env.AZURE_AI_FOUNDRY_ENDPOINT;
+          // Use per-request endpoint/credential if provided (OBO + GDPR routing),
+          // otherwise fall back to default service-level auth
+          const resolvedEndpoint = endpoint || env.AZURE_AI_FOUNDRY_ENDPOINT;
           const agentId = modelConfig.agentId;
 
-          if (!endpoint || !agentId) {
+          if (!resolvedEndpoint || !agentId) {
             throw new Error(
               'Azure AI Foundry endpoint or Agent ID not configured',
             );
           }
 
-          const client = new aiAgents.AgentsClient(
-            endpoint,
-            new DefaultAzureCredential(),
-          );
-
-          // Process messages to inject artifactContext and handle token limits
-          const encoding = await getGlobalTiktoken();
-          const processedMessages = await getMessagesToSend(
-            messages,
-            encoding,
-            0, // No system prompt for agents (they have built-in instructions)
-            modelConfig.maxLength - modelConfig.tokenLimit,
-            user,
-          );
-
-          console.log('[AIFoundryAgentHandler] Messages processed:', {
-            originalCount: messages.length,
-            processedCount: processedMessages.length,
-            hasArtifactContext: messages.some((m) => m.artifactContext),
-          });
-
-          // Create a thread and run for this conversation with streaming
-          const lastMessage = processedMessages[processedMessages.length - 1];
-
-          let thread;
-          let isNewThread = false;
-
-          try {
-            if (threadId) {
-              // For existing thread, just reuse it
-              // The thread already has all previous messages persisted
-              thread = { id: threadId };
-            } else {
-              // Create a new thread for the first message
-              thread = await client.threads.create();
-              isNewThread = true;
-            }
-          } catch (threadError) {
-            console.error('Error with thread:', threadError);
-            throw threadError;
+          // Defense-in-depth: refuse to bind any credential to a host outside
+          // the Foundry/Cognitive Services allow-list. The middleware already
+          // validates this; checking again here protects any non-pipeline
+          // caller that constructs the handler directly.
+          if (!isAllowedFoundryHost(resolvedEndpoint)) {
+            throw new Error(
+              `Refusing to invoke Foundry against disallowed host: ${resolvedEndpoint}`,
+            );
           }
 
-          try {
-            // The SDK expects parameters to be passed separately: (threadId, role, content)
-            // For multimodal content (images, files), convert to SDK format
-            let messageContent:
-              | string
-              | Array<
-                  | { type: 'text'; text: string }
-                  | {
-                      type: 'image_url';
-                      imageUrl: { url: string; detail: string };
-                    }
-                >;
+          const resolvedCredential = credential || new DefaultAzureCredential();
+
+          const project = new aiProjects.AIProjectClient(
+            resolvedEndpoint,
+            resolvedCredential,
+          );
+          const openAIClient = await project.getOpenAIClient();
+
+          // Approval-resume path: when approvalResponses are present, the user
+          // clicked Approve/Deny on a pending mcp_approval_request. We post
+          // mcp_approval_response items to the existing conversation instead
+          // of creating a new user message — Foundry will resume the agent
+          // and stream the rest of its response.
+          const hasApprovals =
+            !!approvalResponses && approvalResponses.length > 0;
+
+          if (hasApprovals && !threadId) {
+            throw new Error(
+              'Cannot submit tool approval without an active conversation (threadId is required for approvalResponses)',
+            );
+          }
+
+          let conversationId: string;
+          let isNewConversation = false;
+
+          if (hasApprovals) {
+            // No new user message; just append approval responses.
+            conversationId = threadId as string;
+            try {
+              await openAIClient.conversations.items.create(conversationId, {
+                items: buildApprovalResponseItems(approvalResponses!) as any,
+              });
+              console.log('[AIFoundryAgentHandler] Submitted approvals:', {
+                conversationId,
+                count: approvalResponses!.length,
+              });
+            } catch (approvalError) {
+              console.error(
+                'Error adding approval responses to conversation:',
+                approvalError,
+              );
+              throw approvalError;
+            }
+          } else {
+            // Standard new-message path.
+            // Process messages to inject artifactContext and handle token limits
+            const encoding = await getGlobalTiktoken();
+            const processedMessages = await getMessagesToSend(
+              messages,
+              encoding,
+              0, // No system prompt for agents (they have built-in instructions)
+              modelConfig.tokenLimit,
+              user,
+            );
+
+            console.log('[AIFoundryAgentHandler] Messages processed:', {
+              originalCount: messages.length,
+              processedCount: processedMessages.length,
+              hasArtifactContext: messages.some((m) => m.artifactContext),
+            });
+
+            // Build the last user message content
+            const lastMessage = processedMessages[processedMessages.length - 1];
+            let messageContent: string;
 
             if (typeof lastMessage.content === 'string') {
-              // Simple text message
               messageContent = lastMessage.content;
             } else if (Array.isArray(lastMessage.content)) {
-              // Multimodal content - convert to Azure SDK format
-              messageContent = lastMessage.content.map(
-                (
-                  item:
-                    | TextMessageContent
-                    | ImageMessageContent
-                    | FileMessageContent,
-                ) => {
-                  if (item.type === 'text') {
-                    return { type: 'text', text: item.text };
-                  } else if (item.type === 'image_url') {
-                    // Convert image_url to imageUrl (Azure SDK uses camelCase)
-                    return {
-                      type: 'image_url',
-                      imageUrl: {
-                        url: item.image_url.url,
-                        detail: item.image_url.detail || 'auto',
-                      },
-                    };
-                  } else if (item.type === 'file_url') {
-                    // For non-image files, add as text with context
-                    // Note: Azure AI Agents SDK handles files via file search tool
-                    return {
-                      type: 'text',
-                      text: `[File attached: ${item.originalFilename || 'file'}]`,
-                    };
-                  }
-                  return item;
-                },
-              );
+              // For multimodal content, concatenate text parts
+              messageContent = lastMessage.content
+                .map(
+                  (
+                    item:
+                      | TextMessageContent
+                      | ImageMessageContent
+                      | FileMessageContent,
+                  ) => {
+                    if (item.type === 'text') {
+                      return item.text;
+                    } else if (item.type === 'image_url') {
+                      return '[Image attached]';
+                    } else if (item.type === 'file_url') {
+                      return `[File attached: ${item.originalFilename || 'file'}]`;
+                    }
+                    return '';
+                  },
+                )
+                .filter(Boolean)
+                .join('\n');
             } else if (
               typeof lastMessage.content === 'object' &&
               'text' in lastMessage.content
             ) {
-              // Single TextMessageContent object
               messageContent = (lastMessage.content as TextMessageContent).text;
             } else {
-              // Fallback
               messageContent = String(lastMessage.content);
             }
 
-            await client.messages.create(thread.id, 'user', messageContent);
-          } catch (messageError) {
-            console.error('Error creating message:', messageError);
-            console.error(
-              'Full error object:',
-              JSON.stringify(messageError, null, 2),
-            );
-            throw messageError;
-          }
-
-          // Create a run and get the stream
-          let streamEventMessages;
-          try {
-            // Debug logging
-            console.log('Creating run with:', {
-              threadId: thread.id,
-              agentId: String(agentId),
-              endpoint: endpoint,
-            });
-
-            // Check if client.runs exists
-            if (!client.runs) {
-              console.error(
-                'client.runs is undefined. Client structure:',
-                Object.keys(client),
-              );
-              throw new Error(
-                'AgentsClient does not have runs property - check SDK version',
-              );
+            try {
+              if (threadId) {
+                conversationId = threadId;
+              } else {
+                const conversation = await openAIClient.conversations.create({
+                  items: [
+                    {
+                      type: 'message',
+                      role: 'user',
+                      content: messageContent,
+                    },
+                  ],
+                });
+                conversationId = conversation.id;
+                isNewConversation = true;
+              }
+            } catch (convError) {
+              console.error('Error with conversation:', convError);
+              throw convError;
             }
 
-            // The Azure AI Agents SDK expects the agentId as the second parameter
-            // and returns an object with a stream() method (DO NOT await the create call!)
-            const run = client.runs.create(thread.id, String(agentId));
+            if (!isNewConversation) {
+              try {
+                await openAIClient.conversations.items.create(conversationId, {
+                  items: [
+                    {
+                      type: 'message',
+                      role: 'user',
+                      content: messageContent,
+                    },
+                  ],
+                });
+              } catch (messageError) {
+                console.error(
+                  'Error adding message to conversation:',
+                  messageError,
+                );
+                throw messageError;
+              }
+            }
+          }
 
-            // Call stream() on the run object
-            streamEventMessages = await run.stream();
+          // Create a response (replaces runs.create)
+          const createStream = () =>
+            openAIClient.responses.create(
+              {
+                conversation: conversationId,
+                stream: true,
+              },
+              {
+                body: {
+                  agent: {
+                    name: String(agentId),
+                    type: 'agent_reference',
+                  },
+                },
+              },
+            );
+
+          let streamEventMessages;
+          let autoDeniedApprovalIds: string[] = [];
+          try {
+            console.log('Creating response with:', {
+              conversationId,
+              agentName: String(agentId),
+              endpoint: resolvedEndpoint,
+              usingOBO: !!credential,
+            });
+
+            try {
+              streamEventMessages = await createStream();
+            } catch (firstAttempt: any) {
+              // Foundry rejects new turns when prior mcp_approval_requests
+              // are still unanswered. The error message lists the
+              // approval_request_ids verbatim. Auto-deny those (the user
+              // signaled "move on" by sending a new message) and retry.
+              const pendingIds = extractPendingApprovalIds(firstAttempt);
+              if (pendingIds.length === 0) throw firstAttempt;
+
+              console.log(
+                '[AIFoundryAgentHandler] Auto-denying pending approvals before retry:',
+                pendingIds,
+              );
+              await openAIClient.conversations.items.create(conversationId, {
+                items: buildApprovalResponseItems(
+                  pendingIds.map((id) => ({
+                    approval_request_id: id,
+                    approve: false,
+                  })),
+                ) as any,
+              });
+              autoDeniedApprovalIds = pendingIds;
+              streamEventMessages = await createStream();
+            }
           } catch (streamError: any) {
             console.error('Error creating stream:', streamError);
             if (streamError instanceof Error) {
               console.error('Error stack:', streamError.stack);
             }
-            // Log the full error details including response body if available
             if (streamError.response) {
               console.error(
                 'Error response status:',
@@ -251,174 +347,166 @@ export class AIFoundryAgentHandler {
           const stream = new ReadableStream({
             async start(controller) {
               const encoder = createStreamEncoder();
+
+              // Surface any auto-denied approvals up-front so the client UI
+              // flips matching consent cards out of "pending" before the
+              // agent starts streaming new content.
+              for (const deniedId of autoDeniedApprovalIds) {
+                controller.enqueue(
+                  encoder.encode(
+                    emitConsentOutcome({
+                      approval_request_id: deniedId,
+                      approve: false,
+                    }),
+                  ),
+                );
+              }
               let citations: Array<{
                 number: number;
                 title: string;
                 url: string;
                 date: string;
               }> = [];
-              let citationIndex = 1;
+              // Separate counters for marker-based and annotation-based citations
+              // to avoid numbering conflicts between the two systems
+              let markerCitationIndex = 1;
               const citationMap = new Map<string, number>();
-              let hasCompletedMessage = false;
 
               // markerBuffer: Accumulates text to handle citation markers split across chunks
               let markerBuffer = '';
               let controllerClosed = false;
+              // Dedupe output-item emissions — Foundry fires both
+              // `output_item.added` AND `output_item.done` for the same item,
+              // and we only want to surface each item once (consent prompt,
+              // approval prompt, MCP tool call, etc.).
+              const emittedItemIds = new Set<string>();
 
               try {
-                for await (const eventMessage of streamEventMessages) {
-                  // Handle different event types
-                  if (eventMessage.event === 'thread.message.delta') {
-                    const messageData = eventMessage.data as {
-                      delta?: {
-                        content?: Array<{
-                          type: string;
-                          text?: { value: string };
-                        }>;
-                      };
-                    };
+                for await (const event of streamEventMessages) {
+                  // Handle Responses API stream events
+                  // Events use 'type' field, not 'event'
+                  if (event.type === 'response.output_text.delta') {
+                    const textChunk = event.delta;
+
+                    // Stage 1: Accumulate text in marker buffer
+                    markerBuffer += textChunk;
+
+                    // Stage 2: Process complete citation markers in accumulated buffer
+                    //
+                    // Azure agents may return inline citation markers:
+                    // - Short: 【3:0†source】 (just the word "source")
+                    // - Long:  【3:0†Title†URL】 (embedded title and URL)
+                    const processedBuffer = markerBuffer.replace(
+                      /【(\d+):(\d+)†[^】]+】/g,
+                      (match: string) => {
+                        if (!citationMap.has(match)) {
+                          citationMap.set(match, markerCitationIndex);
+                          markerCitationIndex++;
+                        }
+                        return `[${citationMap.get(match)}]`;
+                      },
+                    );
+
+                    // Stage 3: Check for incomplete markers at end of buffer
+                    const lastOpenBracket = processedBuffer.lastIndexOf('【');
+                    const lastCloseBracket = processedBuffer.lastIndexOf('】');
+
+                    if (lastOpenBracket > lastCloseBracket) {
+                      // Incomplete marker at end - keep it in buffer, send the rest
+                      const completeText = processedBuffer.slice(
+                        0,
+                        lastOpenBracket,
+                      );
+                      if (completeText) {
+                        controller.enqueue(encoder.encode(completeText));
+                      }
+                      markerBuffer = processedBuffer.slice(lastOpenBracket);
+                    } else {
+                      // All markers complete - send everything
+                      controller.enqueue(encoder.encode(processedBuffer));
+                      markerBuffer = '';
+                    }
+                  } else if (
+                    event.type === 'response.output_text.annotation.added'
+                  ) {
+                    // Collect citation annotations as they arrive
+                    // These provide structured citation data (URL, title)
+                    // numbered independently from inline markers
+                    const annotation = event as any;
                     if (
-                      messageData?.delta?.content &&
-                      Array.isArray(messageData.delta.content)
+                      annotation.annotation?.type === 'url_citation' &&
+                      annotation.annotation?.url
                     ) {
-                      messageData.delta.content.forEach(
-                        (contentPart: {
-                          type: string;
-                          text?: { value: string };
-                        }) => {
-                          if (
-                            contentPart.type === 'text' &&
-                            contentPart.text?.value
-                          ) {
-                            const textChunk = contentPart.text.value;
-
-                            // Stage 1: Accumulate text in marker buffer
-                            markerBuffer += textChunk;
-
-                            // Stage 2: Process complete citation markers in accumulated buffer
-                            //
-                            // Azure agents return citations in two formats:
-                            // - Short: 【3:0†source】 (just the word "source")
-                            // - Long:  【3:0†Title†URL】 (embedded title and URL)
-                            //
-                            // Regex breakdown: /【(\d+):(\d+)†[^】]+】/g
-                            // - 【        : Opening bracket (Chinese left lenticular bracket)
-                            // - (\d+)    : First number (source index)
-                            // - :        : Literal colon
-                            // - (\d+)    : Second number (sub-index)
-                            // - †        : Dagger symbol separator
-                            // - [^】]+   : Any characters except closing bracket
-                            // - 】       : Closing bracket (Chinese right lenticular bracket)
-                            //
-                            // Each unique marker gets a sequential number [1], [2], etc.
-                            const processedBuffer = markerBuffer.replace(
-                              /【(\d+):(\d+)†[^】]+】/g,
-                              (match: string) => {
-                                if (!citationMap.has(match)) {
-                                  citationMap.set(match, citationIndex);
-                                  citationIndex++;
-                                }
-                                return `[${citationMap.get(match)}]`;
-                              },
-                            );
-
-                            // Stage 3: Check for incomplete markers at end of buffer
-                            // If there's an opening bracket without a closing one, keep it
-                            const lastOpenBracket =
-                              processedBuffer.lastIndexOf('【');
-                            const lastCloseBracket =
-                              processedBuffer.lastIndexOf('】');
-
-                            if (lastOpenBracket > lastCloseBracket) {
-                              // Incomplete marker at end - keep it in buffer, send the rest
-                              const completeText = processedBuffer.slice(
-                                0,
-                                lastOpenBracket,
-                              );
-                              if (completeText) {
-                                controller.enqueue(
-                                  encoder.encode(completeText),
-                                );
-                              }
-                              markerBuffer =
-                                processedBuffer.slice(lastOpenBracket);
-                            } else {
-                              // All markers complete - send everything
-                              controller.enqueue(
-                                encoder.encode(processedBuffer),
-                              );
-                              markerBuffer = '';
-                            }
-                          }
-                        },
+                      citations.push({
+                        number: citations.length + 1,
+                        title:
+                          annotation.annotation.title ||
+                          `Source ${citations.length + 1}`,
+                        url: annotation.annotation.url,
+                        date: '',
+                      });
+                    }
+                  } else if (
+                    event.type === 'response.output_item.added' ||
+                    event.type === 'response.output_item.done'
+                  ) {
+                    // Output-item events carry persistent agent prompts
+                    // (OAuth consent, tool approval) and transient tool
+                    // calls (mcp_call). Foundry fires both `.added` AND
+                    // `.done` for the same item — dedupe by item.id.
+                    //
+                    // Authoritative shapes (learn.microsoft.com/.../agents):
+                    //   oauth_consent_request: { id, type, consent_link, server_label? }
+                    //   mcp_approval_request:  { id, type, name, arguments, server_label }
+                    //   mcp_call:              { id, type, name, server_label, arguments }
+                    const evt = event as any;
+                    const item = evt.item;
+                    if (item?.id && !emittedItemIds.has(item.id)) {
+                      const marker = outputItemToMarker(item);
+                      if (marker !== null) {
+                        emittedItemIds.add(item.id);
+                        controller.enqueue(encoder.encode(marker));
+                      }
+                    }
+                  } else if (
+                    // Raw SSE OAuth fallback — some Foundry SDK versions emit
+                    // this instead of (or alongside) an output_item.
+                    (event as { type?: string }).type ===
+                    'response.oauth_consent_requested'
+                  ) {
+                    const evt = event as unknown as {
+                      id?: string;
+                      consent_link?: string;
+                      server_label?: string;
+                    };
+                    const id = evt.id || evt.consent_link;
+                    if (id && !emittedItemIds.has(id) && evt.consent_link) {
+                      emittedItemIds.add(id);
+                      controller.enqueue(
+                        encoder.encode(
+                          emitConsentRequest({
+                            kind: 'oauth',
+                            consent_url: evt.consent_link,
+                            server_label: evt.server_label || null,
+                          }),
+                        ),
                       );
                     }
                   } else if (
-                    eventMessage.event === 'thread.message.completed'
+                    activityKeyForEvent((event as { type?: string }).type)
                   ) {
-                    hasCompletedMessage = true;
-
-                    // Extract citations from annotations
-                    const messageData = eventMessage.data as {
-                      content?: Array<{
-                        text?: {
-                          annotations?: Array<{
-                            type: string;
-                            text?: string;
-                            urlCitation?: { title?: string; url?: string };
-                          }>;
-                        };
-                      }>;
-                    };
-                    if (messageData?.content?.[0]?.text?.annotations) {
-                      const annotations =
-                        messageData.content[0].text.annotations;
-
-                      // Build a map from citation marker to annotation
-                      const markerToAnnotation = new Map<
-                        string,
-                        { title?: string; url?: string }
-                      >();
-                      annotations.forEach(
-                        (annotation: {
-                          type: string;
-                          text?: string;
-                          urlCitation?: { title?: string; url?: string };
-                        }) => {
-                          if (
-                            annotation.type === 'url_citation' &&
-                            annotation.text &&
-                            annotation.urlCitation
-                          ) {
-                            markerToAnnotation.set(
-                              annotation.text,
-                              annotation.urlCitation,
-                            );
-                          }
-                        },
+                    // Transient built-in tool lifecycle events update the
+                    // chat loading text. Each kind maps to a translation key
+                    // surfaced via the streamParser → loadingMessage channel.
+                    const activityKey = activityKeyForEvent(
+                      (event as { type?: string }).type,
+                    );
+                    if (activityKey) {
+                      controller.enqueue(
+                        encoder.encode(emitAgentActivity(activityKey)),
                       );
-
-                      // Build citations list based on citationMap order
-                      // This ensures inline numbers match the citation list
-                      citations = [];
-                      for (const [marker, number] of citationMap.entries()) {
-                        const urlCitation = markerToAnnotation.get(marker);
-                        // Always add citation even if annotation is missing
-                        citations.push({
-                          number: number,
-                          title: urlCitation?.title || `Source ${number}`,
-                          url: urlCitation?.url || '',
-                          date: '',
-                        });
-
-                        if (!urlCitation) {
-                          console.warn(
-                            `[AIFoundryAgentHandler] No annotation found for marker ${marker}, using placeholder`,
-                          );
-                        }
-                      }
                     }
-                  } else if (eventMessage.event === 'thread.run.completed') {
+                  } else if (event.type === 'response.completed') {
                     // Flush any remaining marker buffer
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
@@ -426,26 +514,37 @@ export class AIFoundryAgentHandler {
                     }
 
                     // Append metadata at the very end using utility function
-                    // No need to deduplicate - citationMap already ensured uniqueness
+                    // Keep metadata field name as threadId to avoid client-side breakage
                     appendMetadataToStream(controller, {
                       citations: citations.length > 0 ? citations : undefined,
-                      threadId: isNewThread ? thread.id : undefined,
+                      threadId: isNewConversation ? conversationId : undefined,
                     });
-                  } else if (eventMessage.event === 'error') {
+
+                    controllerClosed = true;
+                    controller.close();
+                  } else if (event.type === 'response.failed') {
+                    const errorEvent = event as any;
                     controllerClosed = true;
                     controller.error(
                       new Error(
-                        `Agent error: ${JSON.stringify(eventMessage.data)}`,
+                        `Agent error: ${errorEvent.response?.error?.message || 'Unknown error'}`,
                       ),
                     );
-                  } else if (eventMessage.event === 'done') {
-                    // Stop the smooth streaming loop and close
-                    controllerClosed = true;
-                    controller.close();
                   }
                 }
+
+                // If stream ended without response.completed, close gracefully
+                if (!controllerClosed) {
+                  if (markerBuffer) {
+                    controller.enqueue(encoder.encode(markerBuffer));
+                  }
+                  appendMetadataToStream(controller, {
+                    citations: citations.length > 0 ? citations : undefined,
+                    threadId: isNewConversation ? conversationId : undefined,
+                  });
+                  controller.close();
+                }
               } catch (error) {
-                controllerClosed = true;
                 controller.error(error);
               }
             },
@@ -460,9 +559,6 @@ export class AIFoundryAgentHandler {
             botId,
           });
 
-          // TODO: Extract token usage from agent response and record
-          // MetricsService.recordTokenUsage({ total: tokens }, { user, model: modelId, operation: 'agent', botId });
-
           span.setStatus({ code: SpanStatusCode.OK });
           span.setAttribute('response.stream', true);
           span.setAttribute('agent.duration_ms', duration);
@@ -470,7 +566,32 @@ export class AIFoundryAgentHandler {
           return new Response(stream, {
             headers: STREAMING_RESPONSE_HEADERS,
           });
-        } catch (error) {
+        } catch (error: any) {
+          // Handle 403 Forbidden — user doesn't have RBAC access to this agent
+          const statusCode =
+            error?.statusCode || error?.status || error?.response?.status;
+          if (statusCode === 403) {
+            span.setAttribute('error.type', 'authorization_denied');
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: 'User not authorized for this agent',
+            });
+
+            MetricsService.recordError('agent_authorization_denied', {
+              user,
+              operation: 'agent',
+              model: modelId,
+              message: 'User does not have access to this agent',
+            });
+
+            throw PipelineError.error(
+              ErrorCode.AUTH_UNAUTHORIZED,
+              "You don't have access to this agent. Contact your IT admin to request the Azure AI User role.",
+              { agentId: modelConfig.agentId, model: modelId },
+              error instanceof Error ? error : undefined,
+            );
+          }
+
           // Record exception in span
           span.recordException(error as Error);
           span.setStatus({

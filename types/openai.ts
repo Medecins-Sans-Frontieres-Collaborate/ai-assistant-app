@@ -7,11 +7,31 @@ export interface OpenAIModel {
   stream?: boolean;
   modelType?: 'foundational' | 'omni' | 'reasoning' | 'agent';
   description?: string;
+  /**
+   * Short, user-facing one-liner shown in the model list (e.g. "Best for
+   * most tasks", "Faster and lower cost"). Helps users decide without
+   * opening the details panel. Aim for ≤6 words.
+   */
+  tagline?: string;
+  /**
+   * Marks the model as the recommended default. Pinned to the top of the
+   * list and rendered with a "Recommended" pill so first-time users have
+   * a clear "start here" signal. Exactly one model should be flagged.
+   */
+  isRecommended?: boolean;
   isDisabled?: boolean;
   isAgent?: boolean;
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
-  agentId?: string; // Azure AI Agent ID for this model
+  agentId?: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
+  foundryEndpoint?: string; // Foundry project endpoint for this agent (for custom sources)
+  /**
+   * ARM resource path of the Foundry project this agent was discovered from.
+   * Used as a cache disambiguator + lazy-discovery scope at chat time so the
+   * same agent name from different projects routes to the right endpoint.
+   * Server validates against `isValidFoundryResourcePath` before any use.
+   */
+  agentSource?: string;
   provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic'; // Model provider
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires
@@ -38,8 +58,8 @@ export enum OpenAIModelID {
   GPT_5_MINI = 'gpt-5-mini',
   GPT_4_1 = 'gpt-4.1',
   // Anthropic Claude models (via Azure AI Foundry)
-  CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
-  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
+  CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
+  CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
   CLAUDE_OPUS_4_1 = 'claude-opus-4-1',
   CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
   // Other providers
@@ -55,7 +75,8 @@ export enum OpenAIVisionModelID {
   GPT_5_MINI = 'gpt-5-mini',
   GPT_5_2_CHAT = 'gpt-5.2-chat',
   GROK_3 = 'grok-3',
-  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
+  CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
+  CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
   CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
 }
 
@@ -73,8 +94,8 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_o3,
   OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1,
-  OpenAIModelID.CLAUDE_OPUS_4_5,
-  OpenAIModelID.CLAUDE_SONNET_4_5,
+  OpenAIModelID.CLAUDE_OPUS_4_6,
+  OpenAIModelID.CLAUDE_SONNET_4_6,
   OpenAIModelID.CLAUDE_OPUS_4_1,
   OpenAIModelID.CLAUDE_HAIKU_4_5,
   OpenAIModelID.LLAMA_4_MAVERICK,
@@ -84,52 +105,35 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
 ];
 
 /**
- * Environment-specific configuration for models
- * Only includes values that differ between environments
+ * Agent names for built-in agent-backed models.
+ * Agent names are the same across environments (different Foundry endpoints differentiate them).
  */
-interface EnvironmentConfig {
-  agentId: string;
-}
-
-const ENVIRONMENT_CONFIGS: Record<
-  'dev' | 'prod',
-  Record<string, EnvironmentConfig>
-> = {
-  dev: {
-    [OpenAIModelID.GPT_4_1]: {
-      agentId: 'asst_sbddkxz8DLyCXATINdB10pys', // Agent145 - dev
-    },
-  },
-  prod: {
-    [OpenAIModelID.GPT_4_1]: {
-      agentId: 'asst_31ffIP2JhFb9iJmeauwV82X5', // Agent312 - gpt-4.1
-    },
-  },
+const AGENT_NAMES: Partial<Record<OpenAIModelID, string>> = {
+  [OpenAIModelID.GPT_4_1]: 'gpt-41',
+  [OpenAIModelID.GPT_5_2]: 'gpt-52',
+  [OpenAIModelID.GPT_5_2_CHAT]: 'gpt-52-chat',
+  [OpenAIModelID.CLAUDE_OPUS_4_6]: 'claude-opus-46',
+  [OpenAIModelID.CLAUDE_SONNET_4_6]: 'claude-sonnet-46',
+  [OpenAIModelID.CLAUDE_HAIKU_4_5]: 'claude-haiku-45',
 };
 
 /**
  * Factory function to create model configurations
- * Eliminates duplication between dev and prod configs
  */
-function createModelConfigs(
-  isProduction: boolean,
-): Record<OpenAIModelID, OpenAIModel> {
-  const envConfig = isProduction
-    ? ENVIRONMENT_CONFIGS.prod
-    : ENVIRONMENT_CONFIGS.dev;
-
+function createModelConfigs(): Record<OpenAIModelID, OpenAIModel> {
   return {
     [OpenAIModelID.GPT_4_1]: {
       id: OpenAIModelID.GPT_4_1,
       name: 'GPT-4.1',
       maxLength: 128000,
       tokenLimit: 16000,
-      modelType: 'agent',
+      modelType: 'omni',
+      tagline: "OpenAI's previous generation",
       description:
-        'AI model powered by GPT-4.1 with real-time web search via Bing. Provides up-to-date information, fact-checking, and current event awareness. Best for research requiring recent information, news analysis, and fact verification.',
+        "OpenAI's previous-generation model. Still capable for everyday writing, summaries, and Q&A.",
       isDisabled: false,
       isAgent: true,
-      agentId: envConfig[OpenAIModelID.GPT_4_1].agentId,
+      agentId: AGENT_NAMES[OpenAIModelID.GPT_4_1],
       provider: 'openai',
       knowledgeCutoffDate: '', // Empty - uses translation key for "Real-time web search"
       sdk: 'azure-openai',
@@ -143,9 +147,13 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
+      tagline: 'Code, analysis, research',
+      isRecommended: true,
       description:
-        "OpenAI's most advanced model, excelling at complex reasoning, code generation, and technical problem-solving. Best for analytical tasks, programming challenges, research, and detailed explanations. Supports adjustable reasoning effort and response verbosity.",
+        'A capable everyday model for most kinds of work — writing, research, coding, and thinking through complex problems.',
       isDisabled: false,
+      isAgent: true,
+      agentId: AGENT_NAMES[OpenAIModelID.GPT_5_2],
       provider: 'openai',
       knowledgeCutoffDate: '2025-12',
       sdk: 'azure-openai',
@@ -162,8 +170,9 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
+      tagline: 'Faster and lower cost',
       description:
-        'Faster and more cost-effective variant of GPT-5, optimized for speed while maintaining high quality. Perfect for everyday tasks, quick queries, tool routing, and applications requiring fast response times. Excellent balance of performance and efficiency.',
+        "A faster, lighter model for quick questions and everyday tasks where you don't need maximum power.",
       isDisabled: false,
       provider: 'openai',
       knowledgeCutoffDate: '2025-08-06T20:00',
@@ -181,9 +190,13 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
+      tagline: 'Conversations, brainstorming',
+      isRecommended: true,
       description:
-        'Specialized variant of GPT-5.2 optimized for conversational interactions and emotional intelligence. Excels at empathetic communication, creative writing, brainstorming, and natural dialogue. Best for casual conversations, counseling scenarios, and tasks requiring emotional awareness.',
+        'A friendlier version of GPT-5.2 tuned for conversation. Good for casual chats, brainstorming, and supportive discussions.',
       isDisabled: false,
+      isAgent: true,
+      agentId: AGENT_NAMES[OpenAIModelID.GPT_5_2_CHAT],
       provider: 'openai',
       knowledgeCutoffDate: '2025-12',
       sdk: 'azure-openai',
@@ -199,8 +212,9 @@ function createModelConfigs(
       stream: false,
       temperature: 1,
       modelType: 'reasoning',
+      tagline: 'Deep step-by-step reasoning',
       description:
-        "OpenAI's most advanced reasoning model with breakthrough problem-solving capabilities. Excels at complex mathematics, scientific reasoning, coding challenges, and multi-step logical tasks. Extended 200K context window. Supports reasoning effort control.",
+        'Made for hard reasoning. Use it when a problem needs careful, step-by-step thinking — math, science, tricky logic.',
       isDisabled: false,
       provider: 'openai',
       knowledgeCutoffDate: '2025-04-08T20:00',
@@ -217,8 +231,9 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'foundational',
+      tagline: 'Open-source alternative',
       description:
-        'Fast and cost-effective model from Meta. Great for everyday tasks like writing, summarization, and basic coding help. Good balance of speed and quality for routine work.',
+        'An open-source model from Meta. Solid for writing, summaries, and quick questions.',
       isDisabled: false,
       provider: 'meta',
       knowledgeCutoffDate: '2025-05-07T07:11',
@@ -234,8 +249,9 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 32768,
       modelType: 'reasoning',
+      tagline: 'Shows reasoning step-by-step',
       description:
-        'Reasoning specialist that shows its work step-by-step. Excellent for math problems, logic puzzles, and understanding complex concepts. See how it thinks through problems in real-time.',
+        'Shows its thinking step-by-step. Useful when you want to see how the model reaches its answer.',
       isDisabled: false,
       provider: 'deepseek',
       knowledgeCutoffDate: '2025-01-20',
@@ -252,8 +268,9 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 32768,
       modelType: 'foundational',
+      tagline: 'Open-source alternative',
       description:
-        'Strong all-around model especially good at coding and technical writing. Great for debugging code, writing documentation, and explaining technical concepts. Fast and reliable for development work.',
+        'An open-source model from DeepSeek. Reliable for general writing and technical questions.',
       isDisabled: false,
       provider: 'deepseek',
       knowledgeCutoffDate: '2025-04-16T00:45',
@@ -270,8 +287,9 @@ function createModelConfigs(
       maxLength: 128000,
       tokenLimit: 16000,
       modelType: 'omni',
+      tagline: 'xAI alternative',
       description:
-        'Versatile model from xAI known for nuanced responses. Great for open-ended discussions, creative projects, and tackling complex problems.',
+        "xAI's chat model. Good for open-ended discussions and creative projects.",
       isDisabled: true, // Disabled temporarily
       provider: 'xai',
       knowledgeCutoffDate: '2025-05-13T00:16',
@@ -281,37 +299,43 @@ function createModelConfigs(
       supportsVerbosity: false,
     },
     // Anthropic Claude models (via Azure AI Foundry)
-    [OpenAIModelID.CLAUDE_OPUS_4_5]: {
-      id: OpenAIModelID.CLAUDE_OPUS_4_5,
-      name: 'Claude Opus 4.5',
+    [OpenAIModelID.CLAUDE_OPUS_4_6]: {
+      id: OpenAIModelID.CLAUDE_OPUS_4_6,
+      name: 'Claude Opus 4.6',
       maxLength: 200000,
       tokenLimit: 64000,
       modelType: 'omni',
+      tagline: 'Long-form writing and analysis',
       description:
-        "Anthropic's most capable model with exceptional reasoning, coding, and creative abilities. Best for complex analysis, research, and tasks requiring deep understanding.",
-      isDisabled: true,
+        "Anthropic's strongest model. Good for long writing, research, and tasks that need careful thinking.",
+      isDisabled: false,
+      isAgent: true,
+      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_OPUS_4_6],
       provider: 'anthropic',
-      knowledgeCutoffDate: '2025-01',
+      knowledgeCutoffDate: '2026-02-02T19:00',
       sdk: 'anthropic-foundry',
       supportsTemperature: true,
-      deploymentName: 'claude-opus-4-5',
+      deploymentName: 'claude-opus-4-6',
       supportsReasoningEffort: false,
       supportsVerbosity: false,
     },
-    [OpenAIModelID.CLAUDE_SONNET_4_5]: {
-      id: OpenAIModelID.CLAUDE_SONNET_4_5,
-      name: 'Claude Sonnet 4.5',
+    [OpenAIModelID.CLAUDE_SONNET_4_6]: {
+      id: OpenAIModelID.CLAUDE_SONNET_4_6,
+      name: 'Claude Sonnet 4.6',
       maxLength: 200000,
       tokenLimit: 64000,
       modelType: 'omni',
+      tagline: 'Balanced everyday Claude',
       description:
-        'Balanced Claude model offering excellent performance across coding, analysis, and creative tasks. Great for everyday use with fast response times.',
-      isDisabled: true,
+        'A balanced Claude model. Good for everyday writing, analysis, and coding with quick responses.',
+      isDisabled: false,
+      isAgent: true,
+      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_SONNET_4_6],
       provider: 'anthropic',
-      knowledgeCutoffDate: '2025-01',
+      knowledgeCutoffDate: '2026-02-11T19:00',
       sdk: 'anthropic-foundry',
       supportsTemperature: true,
-      deploymentName: 'claude-sonnet-4-5',
+      deploymentName: 'claude-sonnet-4-6',
       supportsReasoningEffort: false,
       supportsVerbosity: false,
     },
@@ -321,8 +345,9 @@ function createModelConfigs(
       maxLength: 200000,
       tokenLimit: 32000,
       modelType: 'omni',
+      tagline: 'Previous-generation Opus',
       description:
-        'Previous generation Claude Opus model. Excellent for complex coding tasks, detailed analysis, and nuanced understanding.',
+        'Previous-generation Opus. Still strong for coding and detailed analysis.',
       isDisabled: true,
       provider: 'anthropic',
       knowledgeCutoffDate: '2025-01',
@@ -338,9 +363,12 @@ function createModelConfigs(
       maxLength: 200000,
       tokenLimit: 64000,
       modelType: 'foundational',
+      tagline: 'Fast Claude variant',
       description:
-        'Fast and cost-effective Claude model optimized for quick tasks. Great for simple queries, summarization, and high-volume applications.',
-      isDisabled: true,
+        'The fastest Claude. Good for quick tasks where speed matters more than depth.',
+      isDisabled: false,
+      isAgent: true,
+      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_HAIKU_4_5],
       provider: 'anthropic',
       knowledgeCutoffDate: '2025-01',
       sdk: 'anthropic-foundry',
@@ -352,11 +380,5 @@ function createModelConfigs(
   };
 }
 
-// Select the appropriate configuration based on environment
-// NEXT_PUBLIC_ENV is set in .env files: 'localhost', 'dev', 'staging', 'beta', 'live', 'prod'
-const environment = process.env.NEXT_PUBLIC_ENV || 'localhost';
-const isProduction =
-  environment === 'prod' || environment === 'live' || environment === 'beta';
-
 export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> =
-  createModelConfigs(isProduction);
+  createModelConfigs();

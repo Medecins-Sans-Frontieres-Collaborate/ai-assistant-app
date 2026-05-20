@@ -4,6 +4,7 @@
 
 - `components/Chat/ChatInput/ChatInputVoiceCapture.tsx`: The main UI component for recording voice and triggering transcription.
 - `client/hooks/transcription/useTranscriptionPolling.ts`: React hook that manages polling for asynchronous transcription jobs.
+- `components/Chat/ChatInput/ChatInputTranscribe.tsx`: UI for transcribing already uploaded files.
 
 #### API Routes
 

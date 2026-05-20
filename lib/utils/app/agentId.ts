@@ -1,0 +1,40 @@
+/**
+ * Agent ID validation utilities
+ *
+ * Supports two formats:
+ * - Legacy: asst_xxxxx (Azure AI Assistants API)
+ * - New: agent-name (Azure AI Foundry Agent Service)
+ */
+
+const LEGACY_AGENT_ID_PATTERN = /^asst_[A-Za-z0-9_-]+$/;
+const NEW_AGENT_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+
+/**
+ * Check if a string is a valid legacy agent ID (asst_xxxxx format)
+ */
+export function isLegacyAgentId(id: string): boolean {
+  return LEGACY_AGENT_ID_PATTERN.test(id);
+}
+
+/**
+ * Check if a string is a valid agent ID in either legacy or new format.
+ * - Legacy: asst_xxxxx
+ * - New: alphanumeric name with hyphens/underscores (no asst_ prefix)
+ */
+export function isValidAgentId(id: string): boolean {
+  return LEGACY_AGENT_ID_PATTERN.test(id) || NEW_AGENT_NAME_PATTERN.test(id);
+}
+
+/**
+ * Short, stable, base36 hash of a source path. Used to disambiguate Foundry
+ * model IDs when the same agent name exists in multiple Foundry projects —
+ * without it, `foundry-${agentId}` would collide and break React keys + routing.
+ */
+export function shortSourceHash(source: string | undefined | null): string {
+  if (!source) return '0';
+  let hash = 0;
+  for (let i = 0; i < source.length; i++) {
+    hash = (hash * 31 + source.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash).toString(36).slice(0, 6);
+}

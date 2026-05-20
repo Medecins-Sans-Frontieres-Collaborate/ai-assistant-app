@@ -70,25 +70,6 @@ export const getAutonym = (locale: string): string => {
 };
 
 /**
- * Map of official terms language codes to their display names
- * These are the languages for which official translations of terms documents exist
- */
-const officialTermsLocales: Record<string, string> = {
-  en: 'English',
-  fr: 'Français',
-  es: 'Español',
-};
-
-/**
- * Get the display name for an official terms language
- * @param locale - ISO 639-1 language code
- * @returns The display name for the locale, or the locale code if not an official terms language
- */
-export const getOfficialTermsLanguageName = (locale: string): string => {
-  return officialTermsLocales[locale] || locale;
-};
-
-/**
  * Get all supported locales
  * @returns Array of supported locale codes
  */
@@ -107,7 +88,7 @@ export const getSupportedLocales = (): string[] => {
  * @example
  * modelIdToLocaleKey('gpt-4.1') // 'gpt_4_1'
  * modelIdToLocaleKey('DeepSeek-R1') // 'deepseek_r1'
- * modelIdToLocaleKey('claude-opus-4-5') // 'claude_opus_4_5'
+ * modelIdToLocaleKey('claude-opus-4-6') // 'claude_opus_4_6'
  */
 export const modelIdToLocaleKey = (modelId: string): string => {
   return modelId.toLowerCase().replace(/[.-]/g, '_');

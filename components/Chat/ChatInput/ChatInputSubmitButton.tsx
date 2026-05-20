@@ -32,7 +32,7 @@ const ChatInputSubmitButton: FC<ChatInputSubmitButtonProps> = ({
         isStreaming ? (
           <button
             className="flex items-center justify-center w-10 h-10 md:w-9 md:h-9 rounded-full
-                      bg-gray-300 text-black hover:bg-gray-400 dark:bg-[#171717] dark:text-white dark:hover:bg-[#252525]
+                      bg-gray-300 text-black hover:bg-gray-400 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-recessed
                       transition-colors duration-200"
             onClick={handleStopConversation}
             disabled={!isStreaming}
@@ -49,7 +49,7 @@ const ChatInputSubmitButton: FC<ChatInputSubmitButtonProps> = ({
         <button
           onClick={handleSend}
           className="flex items-center justify-center w-10 h-10 md:w-9 md:h-9 rounded-full
-                    bg-gray-300 text-black hover:bg-gray-400 dark:bg-[#171717] dark:text-white dark:hover:bg-[#252525]
+                    bg-gray-300 text-black hover:bg-gray-400 dark:bg-surface-dark-base dark:text-white dark:hover:bg-surface-dark-recessed
                     transition-colors duration-200"
           aria-label={t('chat.sendMessage')}
         >

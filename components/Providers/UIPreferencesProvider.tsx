@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { CookieService } from '@/lib/services/cookieService';
 
@@ -28,9 +22,6 @@ const UIPreferencesContext = createContext<UIPreferencesContextValue | null>(
 /**
  * Provider for UI preferences using cookies as single source of truth
  * Server reads cookies for SSR, client updates cookies when preferences change
- *
- * All setters are stable across renders so consumers can put them in
- * useEffect dep arrays without triggering refire loops.
  */
 export function UIPreferencesProvider({
   children,
@@ -39,93 +30,53 @@ export function UIPreferencesProvider({
   children: React.ReactNode;
   initialPreferences?: UIPreferences;
 }) {
+  // Use server-provided initial preferences (from cookie)
   const [preferences, setPreferences] =
     useState<UIPreferences>(initialPreferences);
 
-  const updatePreferences = useCallback(
-    (
-      updates:
-        | Partial<UIPreferences>
-        | ((prev: UIPreferences) => Partial<UIPreferences>),
-    ) => {
-      setPreferences((prev) => {
-        const resolved =
-          typeof updates === 'function' ? updates(prev) : updates;
-        const next = { ...prev, ...resolved };
+  // Save to cookie whenever preferences change
+  const updatePreferences = (updates: Partial<UIPreferences>) => {
+    const newPreferences = { ...preferences, ...updates };
+    setPreferences(newPreferences);
 
-        try {
-          CookieService.setJSONCookie('ui-prefs', next);
-        } catch (e) {
-          console.error('Failed to save UI preferences to cookie:', e);
-        }
+    // Write to cookie (single source of truth)
+    try {
+      CookieService.setJSONCookie('ui-prefs', newPreferences);
+    } catch (e) {
+      console.error('Failed to save UI preferences to cookie:', e);
+    }
 
-        if (resolved.theme !== undefined) {
-          const isDark =
-            resolved.theme === 'dark' ||
-            (resolved.theme === 'system' &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches);
+    // Update DOM for theme
+    if (updates.theme !== undefined) {
+      // Apply dark mode based on theme preference
+      const isDark =
+        updates.theme === 'dark' ||
+        (updates.theme === 'system' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-          if (isDark) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-        }
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  };
 
-        return next;
-      });
-    },
-    [],
-  );
-
-  const setShowChatbar = useCallback(
-    (show: boolean) => updatePreferences({ showChatbar: show }),
-    [updatePreferences],
-  );
-  const toggleChatbar = useCallback(
-    () => updatePreferences((prev) => ({ showChatbar: !prev.showChatbar })),
-    [updatePreferences],
-  );
-  const setShowPromptbar = useCallback(
-    (show: boolean) => updatePreferences({ showPromptbar: show }),
-    [updatePreferences],
-  );
-  const togglePromptbar = useCallback(
-    () => updatePreferences((prev) => ({ showPromptbar: !prev.showPromptbar })),
-    [updatePreferences],
-  );
-  const setTheme = useCallback(
-    (theme: ThemeMode) => updatePreferences({ theme }),
-    [updatePreferences],
-  );
-  const toggleTheme = useCallback(
-    () =>
-      updatePreferences((prev) => ({
-        theme: prev.theme === 'dark' ? 'light' : 'dark',
-      })),
-    [updatePreferences],
-  );
-
-  const value = useMemo<UIPreferencesContextValue>(
-    () => ({
-      ...preferences,
-      setShowChatbar,
-      toggleChatbar,
-      setShowPromptbar,
-      togglePromptbar,
-      setTheme,
-      toggleTheme,
-    }),
-    [
-      preferences,
-      setShowChatbar,
-      toggleChatbar,
-      setShowPromptbar,
-      togglePromptbar,
-      setTheme,
-      toggleTheme,
-    ],
-  );
+  const value: UIPreferencesContextValue = {
+    ...preferences,
+    setShowChatbar: (show: boolean) => updatePreferences({ showChatbar: show }),
+    toggleChatbar: () =>
+      updatePreferences({ showChatbar: !preferences.showChatbar }),
+    setShowPromptbar: (show: boolean) =>
+      updatePreferences({ showPromptbar: show }),
+    togglePromptbar: () =>
+      updatePreferences({ showPromptbar: !preferences.showPromptbar }),
+    setTheme: (theme: ThemeMode) => updatePreferences({ theme }),
+    toggleTheme: () =>
+      updatePreferences({
+        theme: preferences.theme === 'dark' ? 'light' : 'dark',
+      }),
+  };
 
   return (
     <UIPreferencesContext.Provider value={value}>

@@ -191,7 +191,7 @@ export const CitationList: FC<{ citations: Citation[] }> = ({ citations }) => {
       }}
     >
       <div
-        className="flex items-center cursor-pointer group rounded-lg px-3.5 py-2 dark:bg-[#1a1a1a] bg-gray-50/80 border border-gray-200/60 dark:border-gray-700/40 transition-all duration-200 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-gray-100/80 dark:hover:bg-[#222222]"
+        className="flex items-center cursor-pointer group rounded-lg px-3.5 py-2 dark:bg-surface-dark-recessed bg-gray-50/80 border border-gray-200/60 dark:border-gray-700/40 transition-all duration-200 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-gray-100/80 dark:hover:bg-surface-dark"
         onClick={toggleExpand}
       >
         <div className="flex items-center gap-2">

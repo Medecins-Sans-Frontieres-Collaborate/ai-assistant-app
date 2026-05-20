@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 
-export interface TextareaInputProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   id?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -33,7 +32,7 @@ export const TextareaInput = forwardRef<
     ref,
   ) => {
     const baseClassName =
-      'block w-full px-4 py-3 bg-white dark:bg-[#2D3748] border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all disabled:opacity-50 disabled:cursor-not-allowed';
+      'block w-full px-4 py-3 bg-white dark:bg-surface-dark-input border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all disabled:opacity-50 disabled:cursor-not-allowed';
 
     return (
       <div>

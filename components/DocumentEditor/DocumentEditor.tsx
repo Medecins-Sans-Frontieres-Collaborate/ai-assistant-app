@@ -98,16 +98,18 @@ export default function DocumentEditor({
   return (
     <div className="h-full w-full flex flex-col overflow-hidden min-w-0">
       {/* Toolbar */}
-      <div className="flex flex-wrap gap-1 p-2 border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
+      <div className="flex flex-wrap gap-1 p-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         {/* Text Formatting */}
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('bold')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.bold')}
+          aria-label={t('artifact.toolbar.bold')}
+          aria-pressed={editor.isActive('bold')}
         >
           <strong>B</strong>
         </button>
@@ -116,9 +118,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('italic')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.italic')}
+          aria-label={t('artifact.toolbar.italic')}
+          aria-pressed={editor.isActive('italic')}
         >
           <em>I</em>
         </button>
@@ -127,9 +131,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('underline')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.underline')}
+          aria-label={t('artifact.toolbar.underline')}
+          aria-pressed={editor.isActive('underline')}
         >
           <u>U</u>
         </button>
@@ -138,14 +144,16 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('strike')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.strikethrough')}
+          aria-label={t('artifact.toolbar.strikethrough')}
+          aria-pressed={editor.isActive('strike')}
         >
           <s>S</s>
         </button>
 
-        <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
         {/* Headings */}
         <button
@@ -155,9 +163,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('heading', { level: 1 })
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.heading1')}
+          aria-label={t('artifact.toolbar.heading1')}
+          aria-pressed={editor.isActive('heading', { level: 1 })}
         >
           H1
         </button>
@@ -168,9 +178,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('heading', { level: 2 })
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.heading2')}
+          aria-label={t('artifact.toolbar.heading2')}
+          aria-pressed={editor.isActive('heading', { level: 2 })}
         >
           H2
         </button>
@@ -181,14 +193,16 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('heading', { level: 3 })
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.heading3')}
+          aria-label={t('artifact.toolbar.heading3')}
+          aria-pressed={editor.isActive('heading', { level: 3 })}
         >
           H3
         </button>
 
-        <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
         {/* Lists */}
         <button
@@ -196,9 +210,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('bulletList')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.bulletList')}
+          aria-label={t('artifact.toolbar.bulletList')}
+          aria-pressed={editor.isActive('bulletList')}
         >
           •
         </button>
@@ -207,14 +223,16 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('orderedList')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.numberedList')}
+          aria-label={t('artifact.toolbar.numberedList')}
+          aria-pressed={editor.isActive('orderedList')}
         >
           1.
         </button>
 
-        <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
         {/* Code & Quote */}
         <button
@@ -222,9 +240,11 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('codeBlock')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.codeBlock')}
+          aria-label={t('artifact.toolbar.codeBlock')}
+          aria-pressed={editor.isActive('codeBlock')}
         >
           {'</>'}
         </button>
@@ -233,14 +253,16 @@ export default function DocumentEditor({
           className={`px-3 py-1 text-sm rounded transition-colors ${
             editor.isActive('blockquote')
               ? 'bg-blue-500 text-white'
-              : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           title={t('artifact.toolbar.quote')}
+          aria-label={t('artifact.toolbar.quote')}
+          aria-pressed={editor.isActive('blockquote')}
         >
           "
         </button>
 
-        <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
         {/* Table */}
         <button
@@ -251,35 +273,38 @@ export default function DocumentEditor({
               .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
               .run()
           }
-          className="px-3 py-1 text-sm rounded transition-colors bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+          className="px-3 py-1 text-sm rounded transition-colors bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
           title={t('artifact.toolbar.insertTable')}
+          aria-label={t('artifact.toolbar.insertTable')}
         >
           {t('artifact.toolbar.table')}
         </button>
 
-        <div className="w-px h-6 bg-neutral-300 dark:bg-neutral-600 mx-1" />
+        <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
 
         {/* Undo/Redo */}
         <button
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-          className="px-3 py-1 text-sm rounded transition-colors bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-sm rounded transition-colors bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
           title={t('artifact.toolbar.undo')}
+          aria-label={t('artifact.toolbar.undo')}
         >
           ↶
         </button>
         <button
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
-          className="px-3 py-1 text-sm rounded transition-colors bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-3 py-1 text-sm rounded transition-colors bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
           title={t('artifact.toolbar.redo')}
+          aria-label={t('artifact.toolbar.redo')}
         >
           ↷
         </button>
       </div>
 
       {/* Editor */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-white dark:bg-neutral-900 min-w-0">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden bg-white dark:bg-gray-900 min-w-0">
         <EditorContent editor={editor} />
       </div>
     </div>

@@ -1,5 +1,3 @@
-import { useShallow } from 'zustand/react/shallow';
-
 import { useConversationStore } from '@/client/stores/conversationStore';
 
 /**
@@ -7,15 +5,12 @@ import { useConversationStore } from '@/client/stores/conversationStore';
  * Persistence is handled automatically by Zustand persist middleware
  */
 export function useConversations() {
-  // FIXED: useShallow prevents re-render when array content is same but reference differs
-  const conversations = useConversationStore(
-    useShallow((state) => state.conversations),
-  );
+  // Subscribe to the underlying state that affects selectedConversation
+  const conversations = useConversationStore((state) => state.conversations);
   const selectedConversationId = useConversationStore(
     (state) => state.selectedConversationId,
   );
-  // FIXED: useShallow for arrays
-  const folders = useConversationStore(useShallow((state) => state.folders));
+  const folders = useConversationStore((state) => state.folders);
   const searchTerm = useConversationStore((state) => state.searchTerm);
   const isLoaded = useConversationStore((state) => state.isLoaded);
 

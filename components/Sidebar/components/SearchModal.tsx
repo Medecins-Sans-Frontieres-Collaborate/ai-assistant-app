@@ -1,5 +1,5 @@
 import { IconMessage, IconSearch } from '@tabler/icons-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import { Conversation } from '@/types/chat';
 
@@ -24,49 +24,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   selectConversation,
   t,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeItemRef = useRef<HTMLButtonElement>(null);
-
-  // Auto-scroll active item into view
-  useEffect(() => {
-    activeItemRef.current?.scrollIntoView({ block: 'nearest' });
-  });
-
-  const handleSelectConversation = useCallback(
-    (id: string) => {
-      selectConversation(id);
-      onClose();
-      setSearchTerm('');
-    },
-    [selectConversation, onClose, setSearchTerm],
-  );
-
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(e.target.value);
-      setActiveIndex(0);
-    },
-    [setSearchTerm],
-  );
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      const count = filteredConversations.length;
-      if (count === 0) return;
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setActiveIndex((prev) => (prev + 1) % count);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setActiveIndex((prev) => (prev - 1 + count) % count);
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        handleSelectConversation(filteredConversations[activeIndex].id);
-      }
-    },
-    [filteredConversations, activeIndex, handleSelectConversation],
-  );
+  const handleSelectConversation = (id: string) => {
+    selectConversation(id);
+    onClose();
+    setSearchTerm('');
+  };
 
   return (
     <Modal
@@ -80,47 +42,37 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       size="lg"
       contentClassName="-m-6"
     >
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-neutral-300 dark:border-neutral-700">
-        <IconSearch
-          size={20}
-          className="text-neutral-500 dark:text-neutral-400"
-        />
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-300 dark:border-gray-700">
+        <IconSearch size={20} className="text-gray-500 dark:text-gray-400" />
         <input
           type="text"
           placeholder={t('Search_ellipsis')}
           value={searchTerm}
-          onChange={handleSearchChange}
-          onKeyDown={handleKeyDown}
+          onChange={(e) => setSearchTerm(e.target.value)}
           autoFocus
-          className="flex-1 bg-transparent text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:outline-none"
+          className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-0"
         />
       </div>
 
       <div className="max-h-[60vh] overflow-y-auto">
         {filteredConversations.length === 0 && searchTerm && (
-          <div className="p-8 text-center text-neutral-500 dark:text-neutral-400">
+          <div className="p-8 text-center text-gray-500 dark:text-gray-400">
             {t('No conversations found')}
           </div>
         )}
         {filteredConversations.length > 0 && (
           <div className="py-2">
-            {filteredConversations.map((conversation, index) => (
+            {filteredConversations.map((conversation) => (
               <button
                 key={conversation.id}
-                ref={index === activeIndex ? activeItemRef : undefined}
-                className={`w-full flex items-center gap-3 px-6 py-3 transition-colors text-left ${
-                  index === activeIndex
-                    ? 'bg-neutral-100 dark:bg-neutral-800'
-                    : ''
-                }`}
-                onMouseEnter={() => setActiveIndex(index)}
+                className="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
                 onClick={() => handleSelectConversation(conversation.id)}
               >
                 <IconMessage
                   size={16}
-                  className="text-neutral-600 dark:text-neutral-400 shrink-0"
+                  className="text-gray-600 dark:text-gray-400 shrink-0"
                 />
-                <span className="flex-1 truncate text-sm text-neutral-900 dark:text-neutral-100">
+                <span className="flex-1 truncate text-sm text-gray-900 dark:text-gray-100">
                   {conversation.name || t('New Conversation')}
                 </span>
               </button>

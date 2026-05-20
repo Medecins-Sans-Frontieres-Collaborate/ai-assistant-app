@@ -40,7 +40,7 @@ describe('LoadingScreen', () => {
 
     const wrapper = container.firstChild;
     expect(wrapper).toHaveClass('bg-white');
-    expect(wrapper).toHaveClass('dark:bg-[#212121]');
+    expect(wrapper).toHaveClass('dark:bg-surface-dark');
   });
 
   it('breathing circle has correct styling', () => {

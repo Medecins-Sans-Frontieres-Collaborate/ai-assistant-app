@@ -25,7 +25,7 @@ import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useTones } from '@/client/hooks/settings/useTones';
 import { useTranscriptionPolling } from '@/client/hooks/transcription/useTranscriptionPolling';
-import { useSlashMenuSelection } from '@/client/hooks/ui/useSlashMenuSelection';
+import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
@@ -40,7 +40,6 @@ import {
 
 import { AgentType } from '@/types/agent';
 import {
-  ActiveFile,
   ChatInputSubmitTypes,
   FileFieldValue,
   FileMessageContent,
@@ -65,24 +64,20 @@ import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
 import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 
-import { SlashMenu } from './ChatInput/SlashMenu';
+import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
 import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useChatStore } from '@/client/stores/chatStore';
-import { useUIStore } from '@/client/stores/uiStore';
 import { UI_CONSTANTS } from '@/lib/constants/ui';
 
 interface Props {
-  onSend: (
-    message: Message,
-    searchMode?: SearchMode,
-    initialActiveFiles?: ActiveFile[],
-  ) => void;
+  onSend: (message: Message, searchMode?: SearchMode) => void;
   onRegenerate: () => void;
   onScrollDownClick: () => void;
+  stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
   showDisclaimer?: boolean;
@@ -93,6 +88,7 @@ export const ChatInput = ({
   onSend,
   onRegenerate,
   onScrollDownClick,
+  stopConversationRef,
   textareaRef,
   showScrollDownButton,
   showDisclaimer = true,
@@ -106,10 +102,7 @@ export const ChatInput = ({
   // Zustand hooks
   const { selectedConversation, folders } = useConversations();
   const { isStreaming, requestStop } = useChat();
-  const setStopGenerationConfirmSource = useUIStore(
-    (state) => state.setStopGenerationConfirmSource,
-  );
-  const { prompts, confirmStopFromButton } = useSettings();
+  const { prompts } = useSettings();
   const { tones } = useTones();
   const { isArtifactOpen, fileName, language, closeArtifact } =
     useArtifactStore();
@@ -117,9 +110,6 @@ export const ChatInput = ({
   // Pending conversation transcription (for large files >25MB)
   const pendingConversationTranscription = useChatStore(
     (state) => state.pendingConversationTranscription,
-  );
-  const setConversationTranscriptionPending = useChatStore(
-    (state) => state.setConversationTranscriptionPending,
   );
   const isTranscriptionLocked = pendingConversationTranscription !== null;
 
@@ -178,7 +168,6 @@ export const ChatInput = ({
   const submitType = useChatInputStore((state) => state.submitType);
   const setSubmitType = useChatInputStore((state) => state.setSubmitType);
   const handleFileUpload = useChatInputStore((state) => state.handleFileUpload);
-  const removeFile = useChatInputStore((state) => state.removeFile);
   const usedPromptId = useChatInputStore((state) => state.usedPromptId);
   const setUsedPromptId = useChatInputStore((state) => state.setUsedPromptId);
   const usedPromptVariables = useChatInputStore(
@@ -230,18 +219,20 @@ export const ChatInput = ({
   ]);
 
   const {
-    showSlashMenu,
-    setShowSlashMenu,
-    activeItemIndex,
-    setActiveItemIndex,
-    filteredItems,
-    slashMenuRef,
-    handleItemSelect,
-    handleKeyDownSlashMenu,
-    updateSlashMenuVisibility,
-  } = useSlashMenuSelection({
+    showPromptList,
+    setShowPromptList,
+    activePromptIndex,
+    setActivePromptIndex,
+    promptInputValue,
+    filteredPrompts,
+    promptListRef,
+    handlePromptSelect: handlePromptSelectFromHook,
+    handleKeyDownPromptList,
+    handleInitModal,
+    updatePromptListVisibilityCallback,
+    findAndSelectMatchingPrompt,
+  } = usePromptSelection({
     prompts,
-    tones,
     onPromptSelect: (prompt, parsedVariables, hasVariables) => {
       setVariables(parsedVariables);
 
@@ -253,12 +244,8 @@ export const ChatInput = ({
           const updatedContent = prevContent?.replace(/\/\w*$/, prompt.content);
           return updatedContent;
         });
-        updateSlashMenuVisibility(prompt.content);
+        updatePromptListVisibilityCallback(prompt.content);
       }
-    },
-    onToneSelect: (tone) => {
-      setSelectedToneId(tone.id);
-      setTextFieldValue((prev) => prev.replace(/\/\w*$/, ''));
     },
     onResetInputState: () => {
       if (submitType !== 'TEXT') {
@@ -286,6 +273,7 @@ export const ChatInput = ({
     }
 
     setTextFieldValue(value);
+    updatePromptListVisibilityCallback(value);
   };
 
   const handleSend = () => {
@@ -307,11 +295,8 @@ export const ChatInput = ({
   };
 
   const handleStopConversation = () => {
-    if (confirmStopFromButton) {
-      setStopGenerationConfirmSource('button');
-    } else {
-      requestStop();
-    }
+    stopConversationRef.current = true;
+    requestStop();
   };
 
   const isMobile = isMobileDevice;
@@ -339,8 +324,8 @@ export const ChatInput = ({
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (showSlashMenu) {
-      handleKeyDownSlashMenu(e);
+    if (showPromptList) {
+      handleKeyDownPromptList(e);
     } else {
       handleKeyDownInput(e.key, e);
     }
@@ -375,25 +360,25 @@ export const ChatInput = ({
   };
 
   useEffect(() => {
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.style.height = 'inherit';
-      textareaRef.current.style.height = `${textareaRef.current?.scrollHeight}px`;
-      textareaRef.current.style.overflow = `${
-        textareaRef?.current?.scrollHeight > UI_CONSTANTS.TEXTAREA.MAX_HEIGHT
-          ? 'auto'
-          : 'hidden'
-      }`;
+    const textarea = textareaRef?.current;
+    if (!textarea) return;
 
-      // Store scroll height in state for use in render
-      setTextareaScrollHeight(textareaRef.current.scrollHeight);
+    // Batch layout read/write in a single rAF to avoid layout thrashing
+    const rafId = requestAnimationFrame(() => {
+      // Write: reset height to measure natural scrollHeight
+      textarea.style.height = 'inherit';
+      // Read: measure once
+      const scrollHeight = textarea.scrollHeight;
+      // Write: apply measured values
+      textarea.style.height = `${scrollHeight}px`;
+      textarea.style.overflow =
+        scrollHeight > UI_CONSTANTS.TEXTAREA.MAX_HEIGHT ? 'auto' : 'hidden';
 
-      // Check if textarea is multiline - single line is typically ~44px or less
-      // Only consider it multiline if scrollHeight exceeds threshold to avoid false positives
-      setIsMultiline(
-        textareaRef.current.scrollHeight >
-          UI_CONSTANTS.TEXTAREA.MULTILINE_THRESHOLD,
-      );
-    }
+      setTextareaScrollHeight(scrollHeight);
+      setIsMultiline(scrollHeight > UI_CONSTANTS.TEXTAREA.MULTILINE_THRESHOLD);
+    });
+
+    return () => cancelAnimationFrame(rafId);
   }, [
     textFieldValue,
     searchMode,
@@ -404,16 +389,12 @@ export const ChatInput = ({
   ]);
 
   useEffect(() => {
-    updateSlashMenuVisibility(textFieldValue);
-  }, [textFieldValue, updateSlashMenuVisibility]);
-
-  useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (
-        slashMenuRef.current &&
-        !slashMenuRef.current.contains(e.target as Node)
+        promptListRef.current &&
+        !promptListRef.current.contains(e.target as Node)
       ) {
-        setShowSlashMenu(false);
+        setShowPromptList(false);
       }
     };
 
@@ -501,7 +482,7 @@ export const ChatInput = ({
   return (
     <div
       {...getRootProps()}
-      className={`bg-white dark:bg-[#212121] transition-colors ${isDragActive ? 'bg-blue-50 dark:bg-blue-900/30 border-t border-blue-300 dark:border-blue-700' : ''}`}
+      className={`bg-white dark:bg-surface-dark transition-colors ${isDragActive ? 'bg-blue-50 dark:bg-blue-900/30 border-t border-blue-300 dark:border-blue-700' : ''}`}
     >
       <input {...getInputProps()} />
       {isDragActive && (
@@ -527,7 +508,7 @@ export const ChatInput = ({
         </div>
       )}
 
-      <div className="sticky bottom-0 bg-white dark:bg-[#212121]">
+      <div className="sticky bottom-0 bg-white dark:bg-surface-dark">
         {filePreviews.length > 0 && (
           <div className="max-h-52 overflow-y-auto">
             <ChatFileUploadPreviews
@@ -535,7 +516,6 @@ export const ChatInput = ({
               setFilePreviews={setFilePreviews}
               setSubmitType={setSubmitType}
               uploadProgress={uploadProgress}
-              removeFile={removeFile}
             />
           </div>
         )}
@@ -547,10 +527,6 @@ export const ChatInput = ({
               startedAt={pendingConversationTranscription.startedAt}
               filename={pendingConversationTranscription.filename}
               progress={pendingConversationTranscription.progress}
-              totalChunks={pendingConversationTranscription.totalChunks}
-              jobId={pendingConversationTranscription.jobId}
-              isReconnecting={pendingConversationTranscription.isReconnecting}
-              onCancel={() => setConversationTranscriptionPending(null)}
             />
           </div>
         )}
@@ -580,7 +556,7 @@ export const ChatInput = ({
 
             <div className="relative mx-auto w-full max-w-3xl flex-grow px-2 sm:px-4">
               <div
-                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-[#40414F] dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
+                className={`relative flex w-full flex-col rounded-full border border-gray-300 bg-white dark:border-0 dark:bg-surface-dark-input dark:text-white focus-within:outline-none focus-within:ring-0 z-0 ${searchMode === SearchMode.ALWAYS || selectedToneId ? 'min-h-[80px] !rounded-3xl' : ''} ${isMultiline && searchMode !== SearchMode.ALWAYS && !selectedToneId ? '!rounded-2xl' : ''}`}
               >
                 <MessageTextarea
                   textareaRef={textareaRef}
@@ -661,7 +637,7 @@ export const ChatInput = ({
                   }`}
                 >
                   <button
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-300 text-gray-800 shadow-md hover:shadow-lg focus:outline-none dark:bg-gray-700 dark:text-neutral-200 transition-shadow"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-300 text-gray-800 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-offset-gray-900 transition-shadow"
                     onClick={(e) => {
                       onScrollDownClick();
                       e.currentTarget.blur(); // Remove focus after click
@@ -672,14 +648,15 @@ export const ChatInput = ({
                   </button>
                 </div>
 
-                {showSlashMenu && filteredItems.length > 0 && (
+                {showPromptList && filteredPrompts.length > 0 && (
                   <div className="absolute bottom-12 w-full">
-                    <SlashMenu
-                      activeItemIndex={activeItemIndex}
-                      items={filteredItems}
-                      onSelect={handleItemSelect}
-                      onMouseOver={setActiveItemIndex}
-                      slashMenuRef={slashMenuRef}
+                    <PromptList
+                      activePromptIndex={activePromptIndex}
+                      prompts={filteredPrompts}
+                      onSelect={handleInitModal}
+                      onMouseOver={setActivePromptIndex}
+                      promptListRef={promptListRef}
+                      folders={folders}
                     />
                   </div>
                 )}
@@ -701,7 +678,7 @@ export const ChatInput = ({
         </div>
       </div>
       {showDisclaimer && (
-        <div className="px-3 pt-1 pb-3 text-center items-center text-[12px] text-black/50 dark:text-white/50 md:px-4 md:pt-1 md:pb-3">
+        <div className="px-3 pt-1 pb-3 text-center items-center text-[12px] text-black/50 dark:text-white/60 md:px-4 md:pt-1 md:pb-3">
           {t('chatDisclaimer')}
         </div>
       )}

@@ -37,21 +37,6 @@ const urlOrDataUrl = (errorMessage: string) =>
   );
 
 /**
- * Filename charset guard. Rejects control characters (C0 + DEL) and path
- * separators. Keeps Unicode letters, marks, digits, punctuation, spaces — so
- * international filenames like "Q1 Revenue (Español).xlsx" are accepted.
- */
-const isSafeFilename = (s: string): boolean => {
-  for (let i = 0; i < s.length; i++) {
-    const code = s.charCodeAt(i);
-    if (code < 0x20 || code === 0x7f) return false;
-    const ch = s[i];
-    if (ch === '/' || ch === '\\') return false;
-  }
-  return true;
-};
-
-/**
  * Zod schema for message content blocks.
  * Uses a lenient schema to support various content formats.
  */
@@ -73,30 +58,6 @@ const MessageContentSchema = z.union([
       z.object({
         type: z.literal('file_url'),
         url: urlOrDataUrl('Invalid file URL'),
-        // Optional client-supplied metadata. We validate defensively but use
-        // `.catch(undefined)` so a weird-but-non-malicious value doesn't
-        // reject the whole chat request — downstream code treats these as
-        // optional and falls back sensibly (blobId, Whisper auto-detect, no
-        // prompt hint). Path separators and control chars are still rejected
-        // for originalFilename because loadDocument uses its extension.
-        originalFilename: z
-          .string()
-          .min(1)
-          .max(255)
-          .refine(isSafeFilename)
-          .refine((s) => s !== '.' && s !== '..')
-          .optional()
-          .catch(undefined),
-        // Whisper accepts ISO-639-1 (2-letter). Accept optional region (en-US,
-        // pt-BR) and normalize case. Anything else is dropped.
-        transcriptionLanguage: z
-          .string()
-          .trim()
-          .transform((s) => s.toLowerCase().replace('_', '-'))
-          .pipe(z.string().regex(/^[a-z]{2}(-[a-z]{2})?$/))
-          .optional()
-          .catch(undefined),
-        transcriptionPrompt: z.string().max(2000).optional().catch(undefined),
       }),
       z.object({
         type: z.literal('thinking'),
@@ -138,6 +99,12 @@ const MessageSchema = z.object({
 
 /**
  * Zod schema for OpenAI model configuration.
+ *
+ * NOTE: `foundryEndpoint` is intentionally NOT validated here even though it
+ * exists on the OpenAIModel type. Anything the client sends in that field is
+ * stripped at the schema boundary; the chat pipeline resolves the endpoint
+ * server-side from the per-user discovery cache (AgentDiscoveryService) so
+ * the OBO bearer token can never be redirected to an attacker-controlled host.
  */
 const OpenAIModelSchema = z.object({
   id: z.string().min(1, 'Model ID is required'),
@@ -147,6 +114,7 @@ const OpenAIModelSchema = z.object({
   // Agent-specific fields (for custom agents and built-in agents)
   isAgent: z.boolean().optional(),
   isCustomAgent: z.boolean().optional(),
+  isOrganizationAgent: z.boolean().optional(),
   agentId: z.string().optional(),
   // Add other fields as needed but keep them optional
   // to avoid breaking existing code
@@ -182,44 +150,13 @@ const StreamingSpeedSchema = z.object({
 /**
  * Zod schema for the main chat request body.
  */
-// Minimal schema for ActiveFile to allow optional validation
-const ActiveFileProcessedContentSchema = z
-  .object({
-    type: z.enum(['document', 'transcript', 'image']),
-    content: z.string(),
-    summary: z.string().optional(),
-    tokenEstimate: z.number().int().nonnegative(),
-    tokenEstimateEncoding: z.string().optional(),
-    processedAt: z.string(),
-  })
-  .partial({ summary: true, tokenEstimateEncoding: true });
-
-const ActiveFileSchema = z.object({
-  id: z.string(),
-  url: urlOrDataUrl('Invalid file URL'),
-  originalFilename: z.string(),
-  addedAt: z.string(),
-  sourceMessageId: z.string(),
-  status: z.enum(['idle', 'processing', 'ready', 'error']),
-  lastUsedAt: z.string().optional(),
-  errorMessage: z.string().optional(),
-  pinned: z.boolean().optional(),
-  processedContent: ActiveFileProcessedContentSchema.optional(),
-  mimeType: z.string().optional(),
-  sizeBytes: z.number().int().nonnegative().optional(),
-  sha256: z.string().optional(),
-});
-
 const ChatBodySchema = z
   .object({
     model: OpenAIModelSchema,
     messages: z
       .array(MessageSchema)
       .min(1, 'At least one message is required')
-      .max(
-        VALIDATION_LIMITS.MAX_API_MESSAGES,
-        `Too many messages (max ${VALIDATION_LIMITS.MAX_API_MESSAGES})`,
-      ),
+      .max(100, 'Too many messages (max 100)'),
     prompt: z
       .string()
       .max(10000, 'System prompt too long (max 10,000 chars)')
@@ -254,9 +191,24 @@ const ChatBodySchema = z
       .string()
       .max(100, 'Custom display name too long (max 100 chars)')
       .optional(),
-    activeFiles: z.array(ActiveFileSchema).optional(),
-    activeFilesTokensUsed: z.number().int().min(0).optional(),
-    autoInjectPinnedImages: z.boolean().optional(),
+    // ARM resource path of the Foundry project for the agent being invoked.
+    // Server validates against `isValidFoundryResourcePath` in the chat
+    // middleware before using it as a cache key disambiguator or discovery
+    // scope. RBAC is enforced by ARM via the user's own OBO token.
+    agentSourcePath: z.string().max(512).optional(),
+    // MCP tool-approval decisions for in-flight `mcp_approval_request` items
+    // the agent surfaced. Each entry maps `approval_request_id` to a boolean
+    // approve/deny. Capped at 16 to avoid pathological payloads — Foundry
+    // typically emits one approval at a time.
+    approvalResponses: z
+      .array(
+        z.object({
+          approval_request_id: z.string().min(1).max(256),
+          approve: z.boolean(),
+        }),
+      )
+      .max(16)
+      .optional(),
   })
   .strict(); // Reject unknown properties
 

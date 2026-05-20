@@ -10,10 +10,6 @@
 import { NextRequest } from 'next/server';
 
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
-import {
-  JOB_ID_REGEX,
-  getJobForUser,
-} from '@/lib/services/transcription/chunkedJobStore';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -22,7 +18,6 @@ import {
   successResponse,
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
-import { cleanupChunks } from '@/lib/utils/server/audio/audioSplitter';
 import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
@@ -34,28 +29,10 @@ interface CleanupRequest {
   blobPath?: string;
 }
 
-/**
- * Ensures the blob path is shaped like `${userId}/transcripts/${uuid}.txt`
- * and the prefix matches the authenticated user. Blocks arbitrary-delete
- * attacks via crafted paths (including other users' blobs).
- */
-function isValidTranscriptBlobPath(blobPath: string, userId: string): boolean {
-  const prefix = `${userId}/transcripts/`;
-  if (!blobPath.startsWith(prefix)) {
-    return false;
-  }
-  const filename = blobPath.slice(prefix.length);
-  if (!filename.endsWith('.txt')) {
-    return false;
-  }
-  const basename = filename.slice(0, -'.txt'.length);
-  return JOB_ID_REGEX.test(basename);
-}
-
 export async function POST(request: NextRequest) {
   // Verify authentication
   const session = await auth();
-  if (!session?.user?.id) {
+  if (!session) {
     return unauthorizedResponse();
   }
 
@@ -75,17 +52,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (jobId !== undefined && !JOB_ID_REGEX.test(jobId)) {
-    return badRequestResponse('Invalid jobId format', 'INVALID_JOB_ID');
-  }
-
-  if (
-    blobPath !== undefined &&
-    !isValidTranscriptBlobPath(blobPath, session.user.id)
-  ) {
-    return badRequestResponse('Invalid blobPath', 'INVALID_BLOB_PATH');
-  }
-
   const results: {
     jobDeleted?: boolean;
     blobDeleted?: boolean;
@@ -94,23 +60,6 @@ export async function POST(request: NextRequest) {
 
   // Delete transcription job if jobId provided
   if (jobId) {
-    // If this jobId matches a known chunked job owned by the user, also
-    // remove the local chunk files so aborted/timed-out jobs don't leave
-    // their chunks behind in tmpdir.
-    const ownedChunkedJob = getJobForUser(jobId, session.user.id);
-    if (ownedChunkedJob && ownedChunkedJob.chunkPaths.length > 0) {
-      try {
-        await cleanupChunks(ownedChunkedJob.chunkPaths);
-      } catch (error) {
-        // Error may surface user-derived paths; sanitize before logging.
-        console.warn(
-          '[TranscriptionCleanup] Failed to remove chunks for job',
-          sanitizeForLog(jobId),
-          sanitizeForLog(error),
-        );
-      }
-    }
-
     try {
       const batchService = new BatchTranscriptionService();
       if (batchService.isConfigured()) {
@@ -120,13 +69,7 @@ export async function POST(request: NextRequest) {
           `[TranscriptionCleanup] Deleted transcription job: ${sanitizeForLog(jobId)}`,
         );
       } else {
-        // For chunked jobs there's no remote batch service to call; treat
-        // chunk cleanup above as the successful path.
-        if (ownedChunkedJob) {
-          results.jobDeleted = true;
-        } else {
-          results.errors?.push('Batch transcription service not configured');
-        }
+        results.errors?.push('Batch transcription service not configured');
       }
     } catch (error) {
       const errorMessage =

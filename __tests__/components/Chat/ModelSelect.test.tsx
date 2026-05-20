@@ -22,20 +22,6 @@ const mockUseSettings = {
   setDefaultModelId: vi.fn(),
 };
 
-const mockUseCustomAgents = {
-  customAgents: [] as Array<{
-    id: string;
-    name: string;
-    agentId: string;
-    baseModelId: string;
-    description?: string;
-    createdAt: string;
-  }>,
-  addCustomAgent: vi.fn(),
-  updateCustomAgent: vi.fn(),
-  deleteCustomAgent: vi.fn(),
-};
-
 vi.mock('@/client/hooks/conversation/useConversations', () => ({
   useConversations: () => mockUseConversations,
 }));
@@ -44,8 +30,17 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => mockUseSettings,
 }));
 
-vi.mock('@/client/hooks/settings/useCustomAgents', () => ({
-  useCustomAgents: () => mockUseCustomAgents,
+// Stub out the Foundry agent discovery hook so tests don't need a TanStack
+// Query provider (the hook calls `useQuery` internally).
+vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
+  useFoundryAgents: () => ({
+    foundryAgents: [],
+    regionalPath: null,
+    officePaths: [],
+    isLoadingFoundryAgents: false,
+    foundryAgentsError: null,
+    refetchFoundryAgents: vi.fn(),
+  }),
 }));
 
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
@@ -320,7 +315,7 @@ describe('ModelSelect', () => {
   });
 
   describe('Model Details Panel', () => {
-    it('displays model type badge', () => {
+    it('displays the model name and tagline (no jargon type badge)', () => {
       mockUseConversations.selectedConversation = {
         id: 'conv-1',
         name: 'Test',
@@ -333,7 +328,10 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      expect(screen.getByText('omni')).toBeInTheDocument();
+      // The "omni" type badge was intentionally removed — it was jargon.
+      expect(screen.queryByText('omni')).not.toBeInTheDocument();
+      // Name + tagline carry the meaning now.
+      expect(screen.getAllByText('GPT-5.2').length).toBeGreaterThan(0);
     });
 
     it('displays knowledge cutoff date', () => {
@@ -372,7 +370,9 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      expect(screen.getByText(/most advanced model/)).toBeInTheDocument();
+      // Description was rewritten in plain English; assert on a stable
+      // phrase from the new copy.
+      expect(screen.getByText(/A capable everyday model/)).toBeInTheDocument();
     });
   });
 
@@ -410,30 +410,6 @@ describe('ModelSelect', () => {
         expect(
           screen.getByText(/This model uses fixed temperature values/),
         ).toBeInTheDocument();
-      });
-    });
-
-    it('displays custom agents in agents tab when present', () => {
-      mockUseCustomAgents.customAgents = [
-        {
-          id: 'agent-1',
-          name: 'My Custom Agent',
-          agentId: 'asst_custom123',
-          baseModelId: OpenAIModelID.GPT_5_2,
-          description: 'Custom agent for testing',
-          createdAt: new Date().toISOString(),
-        },
-      ];
-
-      render(<ModelSelect />);
-
-      // Click on Agents tab
-      const agentsTab = screen.getByText('Agents').closest('button');
-      fireEvent.click(agentsTab!);
-
-      // Custom agent should be visible in the agents tab
-      waitFor(() => {
-        expect(screen.getByText('My Custom Agent')).toBeInTheDocument();
       });
     });
   });

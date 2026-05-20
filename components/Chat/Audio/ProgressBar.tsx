@@ -8,7 +8,10 @@ interface ProgressBarProps {
 /**
  * Seekable audio progress bar
  */
-export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, onSeek }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  progress,
+  onSeek,
+}) => {
   return (
     <div
       className="relative h-2 rounded-full bg-gray-200 dark:bg-gray-700 cursor-pointer"
@@ -20,8 +23,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, onSeek }) =>
       aria-label="Audio progress"
     >
       <div
-        className="absolute top-0 left-0 h-2 rounded-full bg-blue-500 dark:bg-blue-600 transition-all duration-100"
-        style={{ width: `${progress}%` }}
+        className="absolute top-0 left-0 h-2 w-full origin-left rounded-full bg-blue-500 dark:bg-blue-600 transition-transform duration-100"
+        style={{ transform: `scaleX(${progress / 100})` }}
       />
     </div>
   );

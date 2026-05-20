@@ -86,21 +86,11 @@ describe('/api/file/[id]', () => {
       expect(response.status).toBe(200);
     });
 
-    it('accepts typical file extensions', async () => {
+    it('accepts extension up to 4 characters', async () => {
       const idWithExtension = `${validSha256}.jpeg`;
       const request = createRequest(idWithExtension, 'file');
       const response = await GET(request, {
         params: Promise.resolve({ id: idWithExtension }),
-      });
-
-      expect(response.status).toBe(200);
-    });
-
-    it('accepts longer legitimate extensions (e.g. jsonld, webp)', async () => {
-      const idWithLongExtension = `${validSha256}.jsonld`;
-      const request = createRequest(idWithLongExtension, 'file');
-      const response = await GET(request, {
-        params: Promise.resolve({ id: idWithLongExtension }),
       });
 
       expect(response.status).toBe(200);
@@ -154,23 +144,11 @@ describe('/api/file/[id]', () => {
       expect(data.error).toBe('Invalid file identifier');
     });
 
-    it('rejects executable extensions even with valid hash shape', async () => {
-      const idWithExecExtension = `${validSha256}.exe`;
-      const request = createRequest(idWithExecExtension);
+    it('rejects extension longer than 4 characters', async () => {
+      const idWithLongExtension = `${validSha256}.jsonld`;
+      const request = createRequest(idWithLongExtension);
       const response = await GET(request, {
-        params: Promise.resolve({ id: idWithExecExtension }),
-      });
-      const data = await parseJsonResponse(response);
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Invalid file identifier');
-    });
-
-    it('rejects unreasonably long extensions', async () => {
-      const idWithAbsurdExtension = `${validSha256}.${'x'.repeat(50)}`;
-      const request = createRequest(idWithAbsurdExtension);
-      const response = await GET(request, {
-        params: Promise.resolve({ id: idWithAbsurdExtension }),
+        params: Promise.resolve({ id: idWithLongExtension }),
       });
       const data = await parseJsonResponse(response);
 

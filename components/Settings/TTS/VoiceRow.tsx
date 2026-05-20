@@ -72,8 +72,8 @@ export const VoiceRow: FC<VoiceRowProps> = ({
       onClick={onSelect}
       className={`w-full flex items-center gap-2 px-3 py-2 text-left transition-colors ${
         isSelected
-          ? 'bg-neutral-100 dark:bg-neutral-700'
-          : 'hover:bg-neutral-50 dark:hover:bg-neutral-800/50'
+          ? 'bg-gray-100 dark:bg-gray-700'
+          : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
       }`}
       aria-pressed={isSelected}
     >
@@ -83,7 +83,7 @@ export const VoiceRow: FC<VoiceRowProps> = ({
       </div>
 
       {/* Voice name */}
-      <span className="flex-1 text-sm text-neutral-900 dark:text-neutral-100 truncate">
+      <span className="flex-1 text-sm text-gray-900 dark:text-gray-100 truncate">
         {voice.displayName}
       </span>
 
@@ -108,16 +108,16 @@ export const VoiceRow: FC<VoiceRowProps> = ({
       <button
         onClick={handlePreviewClick}
         disabled={isPreviewing}
-        className="p-1.5 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors disabled:opacity-50 flex-shrink-0"
+        className="p-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 flex-shrink-0"
         aria-label={`Preview ${voice.displayName}`}
         title={`Preview ${voice.displayName}`}
       >
         {isPreviewing ? (
-          <IconLoader2 size={16} className="animate-spin text-neutral-500" />
+          <IconLoader2 size={16} className="animate-spin text-gray-500" />
         ) : (
           <IconPlayerPlay
             size={16}
-            className="text-neutral-600 dark:text-neutral-300"
+            className="text-gray-600 dark:text-gray-300"
           />
         )}
       </button>

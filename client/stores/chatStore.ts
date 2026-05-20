@@ -15,7 +15,12 @@ import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { ActiveFile, Conversation, Message } from '@/types/chat';
+import {
+  ActiveFile,
+  ApprovalResponse,
+  Conversation,
+  Message,
+} from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -75,6 +80,16 @@ interface ChatStore {
    */
   lastTurnDroppedActiveFileIds: Record<string, string[]>;
 
+  /**
+   * Map of MCP approval_request_id → user decision (true=approve). Resolved
+   * approvals are stored here so the consent card can render its "Approved"
+   * / "Denied" terminal state without re-prompting. Reset per page load —
+   * the durable copy lives on the source message in the conversation store.
+   */
+  submittedApprovals: Map<string, boolean>;
+  /** Set of approval_request_id currently in flight (card UI shows spinner). */
+  submittingApprovals: Set<string>;
+
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
   setLastTurnDroppedActiveFileIds: (
@@ -107,7 +122,22 @@ interface ChatStore {
   sendChatRequest: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ) => Promise<ReadableStream<Uint8Array>>;
+
+  /**
+   * Submits a user decision for an MCP tool-approval prompt. Sends the
+   * approval response back through the chat pipeline so the server can
+   * resume the agent's response stream. The conversation's source message
+   * is updated via `recordApprovalOutcome` on the conversation store after
+   * the stream finalizes successfully.
+   */
+  submitApproval: (
+    approvalRequestId: string,
+    approve: boolean,
+    conversation: Conversation,
+    sourceMessageIndex?: number,
+  ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
     streamParser: StreamParser,
@@ -229,6 +259,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Dropped active file IDs by conversation (most recent turn only)
   lastTurnDroppedActiveFileIds: {},
+  submittedApprovals: new Map<string, boolean>(),
+  submittingApprovals: new Set<string>(),
 
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
@@ -500,6 +532,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   sendChatRequest: async (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ): Promise<ReadableStream<Uint8Array>> => {
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
@@ -584,6 +617,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
+      approvalResponses,
     });
   },
 
@@ -627,9 +661,26 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Process chunk
       const result = streamParser.processChunk(value, { stream: true });
 
-      // Update action message if found (e.g., "Searching the web...")
+      // Update action message if found (e.g., "Searching the web...").
+      // The activity key from AGENT_ACTIVITY markers takes precedence over
+      // any metadata-channel `action` field — both feed the same loading
+      // text. We update unconditionally while content hasn't started
+      // streaming yet so the loader reflects the most recent stage.
       if (result.action && !result.hasReceivedContent) {
         set({ loadingMessage: result.action });
+      }
+
+      // Surface any newly-arrived CONSENT_OUTCOME markers to the global
+      // submittedApprovals map. Server-side auto-resolutions (e.g. tools
+      // in alwaysApproveTools) arrive this way without a user click.
+      if (result.newOutcomes.length > 0) {
+        set((state) => {
+          const next = new Map(state.submittedApprovals);
+          for (const o of result.newOutcomes) {
+            next.set(o.approval_request_id, o.approve);
+          }
+          return { submittedApprovals: next };
+        });
       }
 
       // Clear loading timeout once content arrives
@@ -1118,5 +1169,94 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       retryWithFallback: false,
       successfulRetryConversationId: null,
     });
+  },
+
+  submitApproval: async (
+    approvalRequestId,
+    approve,
+    conversation,
+    sourceMessageIndex,
+  ) => {
+    // Mark as submitting so the card freezes immediately, even before the
+    // network round-trip completes. Rollback on failure so the user can retry.
+    set((state) => {
+      const next = new Set(state.submittingApprovals);
+      next.add(approvalRequestId);
+      return { submittingApprovals: next };
+    });
+
+    let showLoadingTimeout: NodeJS.Timeout | null = null;
+
+    try {
+      const loadingMessage = approve
+        ? 'chat.consent.submittingApproval'
+        : 'chat.consent.submittingDenial';
+
+      get().initializeStreamingState(conversation.id, loadingMessage);
+      showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
+
+      const stream = await get().sendChatRequest(conversation, undefined, [
+        { approval_request_id: approvalRequestId, approve },
+      ]);
+
+      const streamParser = new StreamParser();
+      const { finalContent, threadId, pendingTranscriptions } =
+        await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      const assistantMessage = streamParser.toMessage(finalContent);
+
+      await get().finalizeMessage(
+        assistantMessage,
+        conversation,
+        threadId,
+        pendingTranscriptions,
+      );
+
+      // Promote from "submitting" to "submitted" with the resolved decision.
+      set((state) => {
+        const submitted = new Map(state.submittedApprovals);
+        submitted.set(approvalRequestId, approve);
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        return {
+          submittedApprovals: submitted,
+          submittingApprovals: submitting,
+        };
+      });
+
+      // Persist the outcome on the source message so reload sees the
+      // resolved state instead of re-prompting.
+      if (sourceMessageIndex !== undefined) {
+        useConversationStore
+          .getState()
+          .recordApprovalOutcome(
+            conversation.id,
+            sourceMessageIndex,
+            approvalRequestId,
+            approve,
+          );
+      }
+
+      get().clearStreamingState();
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+    } catch (error) {
+      console.error('submitApproval error:', error);
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+
+      // Roll back the submitting marker so the user can retry.
+      set((state) => {
+        const next = new Set(state.submittingApprovals);
+        next.delete(approvalRequestId);
+        return { submittingApprovals: next };
+      });
+
+      get().handleSendError(error, conversation);
+    }
   },
 }));

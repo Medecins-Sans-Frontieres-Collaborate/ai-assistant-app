@@ -17,8 +17,6 @@ import {
 
 import FileIcon from '@/components/Icons/file';
 
-import { ATTACH_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
-
 interface ChatInputFileProps {
   onFileUpload: (
     event: React.ChangeEvent<any>,
@@ -68,7 +66,6 @@ const ChatInputFile = ({
       <input
         type="file"
         multiple
-        accept={ATTACH_ACCEPT_TYPES}
         ref={fileInputRef}
         className="opacity-0 absolute w-px h-px overflow-hidden"
         aria-hidden="true"

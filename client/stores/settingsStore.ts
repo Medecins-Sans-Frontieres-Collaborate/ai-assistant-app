@@ -32,6 +32,14 @@ export interface ConsecutiveModelUsage {
   count: number;
 }
 
+/** A Foundry project endpoint that the app discovers agents from */
+export interface AgentSource {
+  id: string;
+  name: string; // User-friendly label: "Amsterdam Office", "Geneva Hub"
+  resourcePath: string; // ARM resource path to Foundry project
+  createdAt: string; // ISO timestamp
+}
+
 export interface CustomAgent {
   id: string;
   name: string;
@@ -59,6 +67,7 @@ interface SettingsStore {
   prompts: Prompt[];
   tones: Tone[];
   customAgents: CustomAgent[];
+  customAgentSources: AgentSource[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -118,6 +127,11 @@ interface SettingsStore {
   addCustomAgent: (agent: CustomAgent) => void;
   updateCustomAgent: (id: string, updates: Partial<CustomAgent>) => void;
   deleteCustomAgent: (id: string) => void;
+
+  // Agent Source Actions
+  addCustomAgentSource: (source: AgentSource) => void;
+  updateCustomAgentSource: (source: AgentSource) => void;
+  deleteCustomAgentSource: (id: string) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -192,6 +206,7 @@ export const useSettingsStore = create<SettingsStore>()(
       prompts: [],
       tones: [],
       customAgents: [],
+      customAgentSources: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -309,6 +324,26 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteCustomAgent: (id) =>
         set((state) => ({
           customAgents: state.customAgents.filter((a) => a.id !== id),
+        })),
+
+      // Agent Source Actions
+      addCustomAgentSource: (source) =>
+        set((state) => ({
+          customAgentSources: [...state.customAgentSources, source],
+        })),
+
+      updateCustomAgentSource: (source) =>
+        set((state) => ({
+          customAgentSources: state.customAgentSources.map((s) =>
+            s.id === source.id ? source : s,
+          ),
+        })),
+
+      deleteCustomAgentSource: (id) =>
+        set((state) => ({
+          customAgentSources: state.customAgentSources.filter(
+            (s) => s.id !== id,
+          ),
         })),
 
       // Model Ordering Actions
@@ -484,6 +519,7 @@ export const useSettingsStore = create<SettingsStore>()(
         prompts: state.prompts,
         tones: state.tones,
         customAgents: state.customAgents,
+        customAgentSources: state.customAgentSources,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,

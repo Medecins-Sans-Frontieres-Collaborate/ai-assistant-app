@@ -1,6 +1,5 @@
 import { IconPlayerRecordFilled } from '@tabler/icons-react';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -9,37 +8,8 @@ import MicIcon from '@/components/Icons/mic';
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 
 const SILENCE_THRESHOLD = -50;
-const SILENCE_AUTO_STOP_MS = 10_000; // Auto-stop after this much continuous silence
-const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
-const WARMUP_REQUIRED_FRAMES = 3; // Consecutive above-threshold frames (~300ms) to confirm signal
-const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
-
-// Ordered by preference; first supported wins. Azure Whisper accepts all of these.
-const PREFERRED_MIME_TYPES = [
-  'audio/webm;codecs=opus',
-  'audio/webm',
-  'audio/mp4;codecs=mp4a.40.2',
-  'audio/mp4',
-  'audio/ogg;codecs=opus',
-  'audio/ogg',
-];
-
-const filenameForMime = (mimeType: string): string => {
-  if (mimeType.startsWith('audio/webm')) return 'audio.webm';
-  if (mimeType.startsWith('audio/mp4')) return 'audio.mp4';
-  if (mimeType.startsWith('audio/ogg')) return 'audio.ogg';
-  return 'audio.webm';
-};
-
-const pickSupportedMimeType = (): string => {
-  if (typeof MediaRecorder === 'undefined') return '';
-  for (const candidate of PREFERRED_MIME_TYPES) {
-    if (MediaRecorder.isTypeSupported(candidate)) return candidate;
-  }
-  return '';
-};
-
-type MicStatus = 'unknown' | 'available' | 'unavailable' | 'denied';
+const TRANSCRIBE_SILENCE_DURATION = 2000; // 2 seconds of silence triggers transcription
+const MAX_SILENT_DURATION = 6000; // 6 seconds of silence stops recording
 
 const ChatInputVoiceCapture: FC = React.memo(() => {
   const setTextFieldValue = useChatInputStore(
@@ -49,222 +19,36 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
     (state) => state.setIsTranscribing,
   );
   const t = useTranslations();
-  const [micStatus, setMicStatus] = useState<MicStatus>('unknown');
+  const [hasMicrophone, setHasMicrophone] = useState(false);
   const [isInitializing, setIsInitializing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
-  const [audioLevel, setAudioLevel] = useState(0);
+  const [isTranscribingSegment, setIsTranscribingSegment] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
-  const recorderMimeTypeRef = useRef<string>('');
+  const audioChunksRef = useRef<BlobPart[]>([]);
+  const lastTranscribedChunkIndexRef = useRef<number>(0);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const silenceStartTimeRef = useRef<number | null>(null);
   const checkSilenceIntervalRef = useRef<number | null>(null);
-  const isWarmedUpRef = useRef(false);
-  const warmupStartTimeRef = useRef<number>(0);
-  const warmupSignalFramesRef = useRef<number>(0);
-  const lastAudioLevelUpdateRef = useRef<number>(0);
-  const isStartingRef = useRef(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const isMountedRef = useRef(true);
 
   useEffect(() => {
-    isMountedRef.current = true;
-
-    const refreshDevices = () => {
-      navigator.mediaDevices
-        .enumerateDevices()
-        .then((devices) => {
-          if (!isMountedRef.current) return;
-          const hasMic = devices.some((device) => device.kind === 'audioinput');
-          const hasAnyDevice = devices.length > 0;
-          if (hasMic) {
-            setMicStatus('available');
-          } else if (hasAnyDevice) {
-            // API is working and explicitly reports no audioinput devices
-            setMicStatus('unavailable');
-          }
-          // else: zero devices returned (e.g. Firefox before permission grant) — keep 'unknown', show button
-        })
-        .catch((err) => {
-          console.error('[VoiceCapture] Error accessing media devices:', err);
-          // Keep current status — don't hide the button on enumeration failure
-        });
-    };
-
-    refreshDevices();
-    navigator.mediaDevices.addEventListener('devicechange', refreshDevices);
-
-    // Listen for permission changes to recover from 'denied' state
-    // eslint-disable-next-line no-undef
-    let permissionStatus: PermissionStatus | null = null;
-    let handleChange: (() => void) | null = null;
-
-    navigator.permissions
-      .query({ name: 'microphone' as PermissionName })
-      .then((status) => {
-        if (!isMountedRef.current) return;
-        permissionStatus = status;
-        handleChange = () => {
-          if (!isMountedRef.current) return;
-          if (status.state === 'granted' || status.state === 'prompt') {
-            setMicStatus('available');
-          } else if (status.state === 'denied') {
-            setMicStatus('denied');
-          }
-        };
-        status.addEventListener('change', handleChange);
+    // Check for microphone availability
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        const hasMic = devices.some((device) => device.kind === 'audioinput');
+        setHasMicrophone(hasMic);
       })
-      .catch(() => {
-        // Permissions API not supported in this browser
+      .catch((err) => {
+        console.error('[VoiceCapture] Error accessing media devices:', err);
+        setHasMicrophone(false);
       });
-
-    return () => {
-      isMountedRef.current = false;
-      navigator.mediaDevices.removeEventListener(
-        'devicechange',
-        refreshDevices,
-      );
-      if (permissionStatus && handleChange) {
-        permissionStatus.removeEventListener('change', handleChange);
-      }
-    };
   }, []);
-
-  const stopRecording = useCallback(() => {
-    if (
-      mediaRecorderRef.current &&
-      mediaRecorderRef.current.state !== 'inactive'
-    ) {
-      mediaRecorderRef.current.stop();
-    }
-    mediaRecorderRef.current = null;
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
-    }
-    mediaStreamRef.current = null;
-    if (checkSilenceIntervalRef.current) {
-      clearInterval(checkSilenceIntervalRef.current);
-      checkSilenceIntervalRef.current = null;
-    }
-    if (audioContextRef.current) {
-      audioContextRef.current.close();
-      audioContextRef.current = null;
-    }
-    silenceStartTimeRef.current = null;
-    isWarmedUpRef.current = false;
-    warmupSignalFramesRef.current = 0;
-    isStartingRef.current = false;
-    setIsInitializing(false);
-    setIsRecording(false);
-    setAudioLevel(0);
-  }, []);
-
-  // Cleanup recording resources and abort any in-flight transcription on unmount.
-  useEffect(() => {
-    return () => {
-      stopRecording();
-      abortControllerRef.current?.abort();
-      // Ensure the global isTranscribing flag does not stick if we unmount mid-request.
-      setIsTranscribing(false);
-    };
-  }, [stopRecording, setIsTranscribing]);
-
-  const transcribeAudio = useCallback(
-    async (audioBlob: Blob) => {
-      const controller = new AbortController();
-      abortControllerRef.current?.abort();
-      abortControllerRef.current = controller;
-      setIsTranscribing(true);
-      try {
-        const mimeType =
-          audioBlob.type || recorderMimeTypeRef.current || 'audio/webm';
-        const filename = filenameForMime(mimeType);
-
-        const encodedFileName = encodeURIComponent(filename);
-        const encodedMimeType = encodeURIComponent(mimeType);
-
-        // Upload using FormData (binary, not base64)
-        const formData = new FormData();
-        formData.append('file', audioBlob, filename);
-
-        const uploadResponse = await fetch(
-          `/api/file/upload?filename=${encodedFileName}&filetype=file&mime=${encodedMimeType}`,
-          {
-            method: 'POST',
-            body: formData,
-            signal: controller.signal,
-          },
-        );
-
-        if (!uploadResponse.ok) {
-          const errorData = await uploadResponse.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Failed to upload audio');
-        }
-
-        const uploadResult = await uploadResponse.json();
-        const fileURI = uploadResult.data?.uri;
-
-        if (!fileURI) {
-          throw new Error('Failed to get file URI from upload response');
-        }
-
-        const fileID = encodeURIComponent(fileURI.split('/').pop()!);
-
-        // Call the transcribe endpoint
-        const transcribeResponse = await fetch(
-          `/api/file/${fileID}/transcribe`,
-          {
-            method: 'GET',
-            signal: controller.signal,
-          },
-        );
-
-        if (!transcribeResponse.ok) {
-          const errorData = await transcribeResponse.json().catch(() => ({}));
-          throw new Error(errorData.error || 'Failed to transcribe audio');
-        }
-
-        const transcribeResult = await transcribeResponse.json();
-
-        // Voice capture audio is always small enough for synchronous transcription
-        if (transcribeResult.async) {
-          throw new Error(
-            'Audio file too large for voice capture. Please use the file upload option for large audio files.',
-          );
-        }
-
-        const transcript = transcribeResult.transcript;
-
-        if (!isMountedRef.current) return;
-        setTextFieldValue((prevText) =>
-          prevText?.length ? prevText + ' ' + transcript : transcript,
-        );
-      } catch (error) {
-        if (controller.signal.aborted) return;
-        console.error('[VoiceCapture] Error during transcription:', error);
-        if (isMountedRef.current) {
-          toast.error(t('chat.voiceTranscriptionFailed'));
-        }
-      } finally {
-        if (abortControllerRef.current === controller) {
-          abortControllerRef.current = null;
-        }
-        if (isMountedRef.current) {
-          setIsTranscribing(false);
-        }
-      }
-    },
-    [setIsTranscribing, setTextFieldValue, t],
-  );
 
   const startRecording = async () => {
-    // Guard against double-invocation while getUserMedia is awaiting.
-    if (isStartingRef.current || isRecording || isInitializing) return;
-    isStartingRef.current = true;
-
     // Check current permission status
     try {
       const permissionStatus = await navigator.permissions.query({
@@ -272,71 +56,52 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
       });
 
       if (permissionStatus.state === 'denied') {
-        setMicStatus('denied');
-        toast.error(t('chat.microphoneAccessDenied'));
-        isStartingRef.current = false;
+        alert(t('chat.microphoneAccessDenied'));
         return;
       }
-    } catch {
+    } catch (permErr) {
       // Permissions API not supported, continue anyway
     }
 
-    let acquiredStream: MediaStream | null = null;
     try {
-      acquiredStream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
-
-      // If we got here, mic is available
-      setMicStatus('available');
-
-      mediaStreamRef.current = acquiredStream;
-      const mimeType = pickSupportedMimeType();
-      const mediaRecorder = mimeType
-        ? new MediaRecorder(acquiredStream, { mimeType })
-        : new MediaRecorder(acquiredStream);
-      recorderMimeTypeRef.current = mediaRecorder.mimeType || mimeType;
+      mediaStreamRef.current = stream;
+      const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
 
-      // Per-recording chunks: avoids races when a new recording starts before
-      // the previous recorder's onstop fires.
-      const chunks: Blob[] = [];
+      // Empty the chunks and reset transcription index
+      audioChunksRef.current = [];
+      lastTranscribedChunkIndexRef.current = 0;
 
       mediaRecorder.ondataavailable = (event) => {
-        if (event.data && event.data.size > 0) {
-          chunks.push(event.data);
-        }
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstart = () => {
+        console.log(
+          '[VoiceCapture] Recording initialized - audio capture active',
+        );
       };
 
       mediaRecorder.onstop = () => {
-        if (!isMountedRef.current) return;
-        if (chunks.length === 0) return;
-        const finalBlob = new Blob(chunks, {
-          type: recorderMimeTypeRef.current || 'audio/webm',
-        });
-        transcribeAudio(finalBlob);
-      };
-
-      mediaRecorder.onerror = (event: Event) => {
-        const err = (
-          event as unknown as { error?: { name?: string; message?: string } }
-        ).error;
-        const message = err?.message || err?.name || 'unknown';
-        console.error('[VoiceCapture] MediaRecorder error:', err || event);
-        stopRecording();
-        if (isMountedRef.current) {
-          toast.error(t('chat.microphoneAccessError', { message }));
+        // Only transcribe remaining chunks that haven't been transcribed yet
+        const remainingChunks = audioChunksRef.current.slice(
+          lastTranscribedChunkIndexRef.current,
+        );
+        if (remainingChunks.length > 0) {
+          const finalBlob = new Blob(remainingChunks, { type: 'audio/webm' });
+          transcribeAudio(finalBlob);
         }
       };
-
-      mediaRecorder.start(100); // Capture data every 100ms to prevent audio cutoff
 
       // Set up audio context for silence detection
       audioContextRef.current = new (
         window.AudioContext || (window as any).webkitAudioContext
       )();
-      const source =
-        audioContextRef.current.createMediaStreamSource(acquiredStream);
+      const source = audioContextRef.current.createMediaStreamSource(stream);
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.minDecibels = -90;
       analyserRef.current.maxDecibels = -10;
@@ -346,122 +111,189 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
 
       // Show initializing state immediately
       setIsInitializing(true);
-      isWarmedUpRef.current = false;
-      warmupStartTimeRef.current = Date.now();
-      warmupSignalFramesRef.current = 0;
 
-      // Successful setup — clear the starting guard; warmup takes over from here.
-      isStartingRef.current = false;
-
-      // Start checking for audio signal / silence
+      // Start checking for silence
       silenceStartTimeRef.current = null;
       checkSilenceIntervalRef.current = window.setInterval(() => {
-        if (!analyserRef.current) return;
+        if (analyserRef.current) {
+          const dataArray = new Uint8Array(analyserRef.current.fftSize);
+          analyserRef.current.getByteTimeDomainData(dataArray);
 
-        const dataArray = new Uint8Array(analyserRef.current.fftSize);
-        analyserRef.current.getByteTimeDomainData(dataArray);
+          // Calculate RMS (Root Mean Square) to get volume level
+          let sum = 0;
+          for (const amplitude of dataArray) {
+            const normalized = amplitude / 128 - 1;
+            sum += normalized * normalized;
+          }
+          const rms = Math.sqrt(sum / dataArray.length);
+          const db = 20 * Math.log10(rms);
 
-        // Calculate RMS (Root Mean Square) to get volume level
-        let sum = 0;
-        for (const amplitude of dataArray) {
-          const normalized = amplitude / 128 - 1;
-          sum += normalized * normalized;
-        }
-        const rms = Math.sqrt(sum / dataArray.length);
-        const db = 20 * Math.log10(rms);
-        const dbFinite = Number.isFinite(db);
+          if (db < SILENCE_THRESHOLD || isNaN(db)) {
+            if (silenceStartTimeRef.current === null) {
+              silenceStartTimeRef.current = Date.now();
+            } else {
+              const silentDuration = Date.now() - silenceStartTimeRef.current;
 
-        // Normalize audio level to 0-1 range for the visual indicator
-        // Map from roughly -60dB..0dB to 0..1
-        const normalizedLevel = dbFinite
-          ? Math.max(0, Math.min(1, (db + 60) / 60))
-          : 0;
+              // Trigger transcription on shorter silence (while continuing to record)
+              if (
+                silentDuration > TRANSCRIBE_SILENCE_DURATION &&
+                !isTranscribingSegment
+              ) {
+                const hasUntranscribedChunks =
+                  audioChunksRef.current.length >
+                  lastTranscribedChunkIndexRef.current;
 
-        // Throttle audio level state updates
-        const now = Date.now();
-        if (now - lastAudioLevelUpdateRef.current > AUDIO_LEVEL_THROTTLE_MS) {
-          lastAudioLevelUpdateRef.current = now;
-          setAudioLevel(normalizedLevel);
-        }
+                if (hasUntranscribedChunks) {
+                  transcribeSegment();
+                  silenceStartTimeRef.current = Date.now(); // Reset timer after triggering
+                }
+              }
 
-        const isSignal = dbFinite && db > SILENCE_THRESHOLD;
-
-        // Warmup: require sustained signal so a single-frame transient
-        // (mic click, pop, door slam) does not flip the state. Fall back
-        // to a time budget so a genuinely silent start still proceeds.
-        if (!isWarmedUpRef.current) {
-          if (isSignal) {
-            warmupSignalFramesRef.current += 1;
+              // Stop recording on longer silence
+              if (silentDuration > MAX_SILENT_DURATION) {
+                stopRecording();
+              }
+            }
           } else {
-            warmupSignalFramesRef.current = 0;
+            silenceStartTimeRef.current = null;
           }
-          const elapsed = now - warmupStartTimeRef.current;
-          const sustained =
-            warmupSignalFramesRef.current >= WARMUP_REQUIRED_FRAMES;
-          if (sustained || elapsed >= WARMUP_FALLBACK_MS) {
-            isWarmedUpRef.current = true;
-            setIsInitializing(false);
-            setIsRecording(true);
-          }
-          return; // Don't run silence detection until warmed up
-        }
-
-        // Silence detection (only runs after warmup)
-        if (!isSignal) {
-          if (silenceStartTimeRef.current === null) {
-            silenceStartTimeRef.current = now;
-          } else if (now - silenceStartTimeRef.current > SILENCE_AUTO_STOP_MS) {
-            stopRecording();
-          }
-        } else {
-          silenceStartTimeRef.current = null;
         }
       }, 100);
-    } catch (err: unknown) {
-      isStartingRef.current = false;
-      // If getUserMedia succeeded but a downstream step (MediaRecorder
-      // construction, AudioContext creation, etc.) threw, the mic stream is
-      // still live. Release it directly in case it wasn't assigned to the ref.
-      if (acquiredStream) {
-        acquiredStream.getTracks().forEach((track) => track.stop());
-      }
-      stopRecording();
-      const error = err instanceof Error ? err : new Error(String(err));
-      console.error('[VoiceCapture] Error getting user media:', error);
 
-      if (error.name === 'NotAllowedError') {
-        setMicStatus('denied');
-        toast.error(t('chat.microphoneAccessDenied'));
-      } else {
-        toast.error(
-          t('chat.microphoneAccessError', { message: error.message }),
-        );
-      }
+      // TODO: detect stream readiness rather than using a hardcoded delay
+      // Wait for stream warmup before signaling ready to record
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      setIsInitializing(false);
+      setIsRecording(true);
+    } catch (err: any) {
+      console.error('[VoiceCapture] Error getting user media:', err);
+      console.error('[VoiceCapture] Error name:', err.name);
+      console.error('[VoiceCapture] Error message:', err.message);
+      alert(t('chat.microphoneAccessError', { message: err.message }));
     }
   };
 
-  // Always show button unless we're certain no mic exists (and it's not a permission issue)
-  if (micStatus === 'unavailable' || micStatus === 'denied') {
-    const messageKey =
-      micStatus === 'denied'
-        ? 'chat.microphoneBlocked'
-        : 'chat.microphoneNotDetected';
-    return (
-      <div className="voice-capture">
-        <div className="group relative">
-          <button
-            className="flex items-center justify-center w-11 h-11 md:w-10 md:h-10 rounded-full text-gray-400 dark:text-gray-600 opacity-40 cursor-not-allowed"
-            disabled
-            aria-label={t(messageKey)}
-          >
-            <MicIcon className="h-5 w-5 md:h-4 md:w-4" />
-          </button>
-          <div className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs py-1 px-2 rounded shadow-md whitespace-nowrap z-50">
-            {t(messageKey)}
-          </div>
-        </div>
-      </div>
-    );
+  const stopRecording = () => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== 'inactive'
+    ) {
+      mediaRecorderRef.current.stop();
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+    if (checkSilenceIntervalRef.current) {
+      clearInterval(checkSilenceIntervalRef.current);
+      checkSilenceIntervalRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+    silenceStartTimeRef.current = null;
+    setIsInitializing(false);
+    setIsRecording(false);
+  };
+
+  /**
+   * Transcribe a segment of audio while continuing to record.
+   * Takes chunks from lastTranscribedChunkIndex to current length.
+   */
+  const transcribeSegment = async () => {
+    const startIndex = lastTranscribedChunkIndexRef.current;
+    const endIndex = audioChunksRef.current.length;
+
+    // Skip if no new chunks
+    if (endIndex <= startIndex) return;
+
+    // Get pending chunks
+    const pendingChunks = audioChunksRef.current.slice(startIndex, endIndex);
+
+    // Update index before async operation to prevent re-processing
+    lastTranscribedChunkIndexRef.current = endIndex;
+
+    // Create blob from pending chunks
+    const segmentBlob = new Blob(pendingChunks, { type: 'audio/webm' });
+
+    // Transcribe with UI indicator
+    setIsTranscribingSegment(true);
+    try {
+      await transcribeAudio(segmentBlob);
+    } finally {
+      setIsTranscribingSegment(false);
+    }
+  };
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    setIsTranscribing(true);
+    try {
+      const filename = 'audio.webm';
+      const mimeType = audioBlob.type || 'audio/webm';
+
+      const encodedFileName = encodeURIComponent(filename);
+      const encodedMimeType = encodeURIComponent(mimeType);
+
+      // Upload using FormData (binary, not base64)
+      const formData = new FormData();
+      formData.append('file', audioBlob, filename);
+
+      const uploadResponse = await fetch(
+        `/api/file/upload?filename=${encodedFileName}&filetype=file&mime=${encodedMimeType}`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      );
+
+      if (!uploadResponse.ok) {
+        const errorData = await uploadResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to upload audio');
+      }
+
+      const uploadResult = await uploadResponse.json();
+      const fileURI = uploadResult.data?.uri;
+
+      if (!fileURI) {
+        throw new Error('Failed to get file URI from upload response');
+      }
+
+      const fileID = encodeURIComponent(fileURI.split('/').pop()!);
+
+      // Call the transcribe endpoint
+      const transcribeResponse = await fetch(`/api/file/${fileID}/transcribe`, {
+        method: 'GET',
+      });
+
+      if (!transcribeResponse.ok) {
+        const errorData = await transcribeResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to transcribe audio');
+      }
+
+      const transcribeResult = await transcribeResponse.json();
+
+      // Voice capture audio is always small enough for synchronous transcription
+      if (transcribeResult.async) {
+        throw new Error(
+          'Audio file too large for voice capture. Please use the file upload option for large audio files.',
+        );
+      }
+
+      const transcript = transcribeResult.transcript;
+
+      setTextFieldValue((prevText) =>
+        prevText?.length ? prevText + ' ' + transcript : transcript,
+      );
+    } catch (error) {
+      console.error('Error during transcription:', error);
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
+  if (!hasMicrophone) {
+    return null; // Don't display the component if no microphones are available
   }
 
   return (
@@ -489,18 +321,13 @@ const ChatInputVoiceCapture: FC = React.memo(() => {
           <IconPlayerRecordFilled className="h-5 w-5 animate-pulse text-red-500" />
           <div className="flex flex-col items-start">
             <span className="text-sm font-medium text-red-600 dark:text-red-400 whitespace-nowrap">
-              {t('chat.voiceInputRecording')}
+              {isTranscribingSegment
+                ? t('chat.voiceInputTranscribing')
+                : t('chat.voiceInputRecording')}
             </span>
             <span className="text-xs text-red-500 dark:text-red-400/70 whitespace-nowrap">
               {t('chat.voiceInputTapToStop')}
             </span>
-            {/* Audio level indicator */}
-            <div className="w-full h-1 bg-red-200 dark:bg-red-900/40 rounded-full mt-0.5 overflow-hidden">
-              <div
-                className="h-full bg-red-500 rounded-full transition-all duration-100"
-                style={{ width: `${Math.max(audioLevel * 100, 3)}%` }}
-              />
-            </div>
           </div>
         </button>
       ) : (

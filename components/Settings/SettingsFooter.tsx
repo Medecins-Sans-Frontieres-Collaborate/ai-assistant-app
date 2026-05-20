@@ -27,11 +27,11 @@ export const SettingsFooter: FC<SettingsFooterProps> = ({
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col px-4 py-3 border-t border-gray-300 dark:border-neutral-700 rounded-b-lg">
+    <div className="flex flex-col px-4 py-3 border-t border-gray-300 dark:border-gray-700 rounded-b-lg">
       {/* Reset settings button - only visible on mobile */}
       {handleReset && onClose && (
         <button
-          className="md:hidden w-full mb-3 p-2 border rounded-lg shadow border-neutral-500 text-neutral-900 hover:bg-neutral-100 focus:outline-none dark:border-neutral-800 dark:border-opacity-50 dark:bg-white dark:text-black dark:hover:bg-neutral-300"
+          className="md:hidden w-full mb-3 p-2 border rounded-lg shadow border-gray-500 text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-800 dark:border-opacity-50 dark:bg-white dark:text-black dark:hover:bg-gray-300"
           onClick={() => {
             handleReset();
             onClose();

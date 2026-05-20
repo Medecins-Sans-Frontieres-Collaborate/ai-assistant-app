@@ -99,12 +99,18 @@ IMPORTANT: Always provide searchQuery in your response:
               lastMessage: currentMessage.substring(0, 100),
             });
 
-            // Use gpt-5-mini for efficient tool routing decisions
-            // This works with any OpenAI-compatible endpoint
-            // Note: gpt-5-mini only supports default temperature (1), custom values not allowed
+            // gpt-5-mini for efficient tool routing decisions. Latency-tuned:
+            //   - reasoning_effort: 'minimal' — this is a routing decision,
+            //     not deep analysis; saves several seconds per call.
+            //   - max_completion_tokens: 80 — output is bounded (a boolean
+            //     plus a short search query), so cap to prevent runaway.
+            //   - dropped the `reasoning` field from the schema; it was
+            //     only used for debug logging and added output tokens.
             const response = await this.openAIClient.chat.completions.create({
               model: 'gpt-5-mini',
               messages: conversationMessages,
+              reasoning_effort: 'minimal',
+              max_completion_tokens: 80,
               response_format: {
                 type: 'json_schema',
                 json_schema: {
@@ -123,12 +129,8 @@ IMPORTANT: Always provide searchQuery in your response:
                         description:
                           'Optimized search query if web search is needed, empty string otherwise',
                       },
-                      reasoning: {
-                        type: 'string',
-                        description: 'Brief explanation of the decision',
-                      },
                     },
-                    required: ['needsWebSearch', 'searchQuery', 'reasoning'],
+                    required: ['needsWebSearch', 'searchQuery'],
                     additionalProperties: false,
                   },
                 },
@@ -145,7 +147,6 @@ IMPORTANT: Always provide searchQuery in your response:
               'tool_router.needs_web_search',
               result.needsWebSearch,
             );
-            span.setAttribute('tool_router.reasoning', result.reasoning);
             span.setStatus({ code: SpanStatusCode.OK });
 
             if (result.needsWebSearch) {
@@ -153,18 +154,29 @@ IMPORTANT: Always provide searchQuery in your response:
               return {
                 tools: ['web_search'] as ToolType[],
                 searchQuery: result.searchQuery || currentMessage,
-                reasoning: result.reasoning || 'Web search recommended by AI',
+                reasoning: 'Web search recommended by AI',
               };
             }
 
             return {
               tools: [] as ToolType[],
-              reasoning: result.reasoning || 'No tools needed',
+              reasoning: 'No tools needed',
             };
           } catch (error) {
-            console.error('[ToolRouterService] Error determining tool:', error);
+            // Make the silent-degradation path loud. If gpt-5-mini ever
+            // rejects `reasoning_effort: 'minimal'` or the JSON schema
+            // changes shape, every routing decision falls back to "no
+            // search" — which is a real regression, not just a transient
+            // failure. Mark it on the span so it surfaces in telemetry,
+            // and log with enough detail to diagnose without re-running.
+            const errMessage =
+              error instanceof Error ? error.message : String(error);
+            console.error(
+              `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
+            );
             span.recordException(error as Error);
-            // Fail gracefully - no tools
+            span.setAttribute('tool_router.fallback', 'error');
+            span.setAttribute('tool_router.fallback_reason', errMessage);
             return {
               tools: [],
               reasoning: 'Error determining tools, proceeding without search',

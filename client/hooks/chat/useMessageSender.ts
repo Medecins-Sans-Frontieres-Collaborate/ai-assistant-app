@@ -2,12 +2,10 @@ import { useCallback } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import { revokeAllPreviewUrls } from '@/lib/utils/client/file/blobUrl';
 import { buildMessageContent } from '@/lib/utils/shared/chat/contentBuilder';
 import { validateMessageSubmission } from '@/lib/utils/shared/chat/validation';
 
 import {
-  ActiveFile,
   ChatInputSubmitTypes,
   FileFieldValue,
   FileMessageContent,
@@ -19,9 +17,6 @@ import {
 import { SearchMode } from '@/types/searchMode';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
-import { useSettingsStore } from '@/client/stores/settingsStore';
-import { isAudioVideoFile } from '@/lib/constants/fileTypes';
-import { v4 as uuidv4 } from 'uuid';
 
 interface UseMessageSenderProps {
   textFieldValue: string;
@@ -34,11 +29,7 @@ interface UseMessageSenderProps {
   usedPromptId: string | null;
   usedPromptVariables: { [key: string]: string } | null;
   searchMode: SearchMode;
-  onSend: (
-    message: Message,
-    searchMode?: SearchMode,
-    initialActiveFiles?: ActiveFile[],
-  ) => void;
+  onSend: (message: Message, searchMode?: SearchMode) => void;
   onClearInput: () => void;
   setSubmitType: React.Dispatch<React.SetStateAction<ChatInputSubmitTypes>>;
   setImageFieldValue: React.Dispatch<React.SetStateAction<ImageFieldValue>>;
@@ -186,39 +177,8 @@ export function useMessageSender({
       null,
     );
 
-    // Generate message ID before sending so we can reference it for active files
-    const messageId = uuidv4();
-
-    // Build ActiveFile[] from uploaded files to pass through the send chain.
-    // This ensures files are activated even when no conversation exists yet.
-    let initialActiveFiles: ActiveFile[] = [];
-    if (filteredFileFieldValue) {
-      const filesToActivate = Array.isArray(filteredFileFieldValue)
-        ? filteredFileFieldValue
-        : [filteredFileFieldValue];
-
-      for (const file of filesToActivate) {
-        if (file.type === 'file_url') {
-          const filename =
-            file.originalFilename || file.url.split('/').pop() || '';
-          if (isAudioVideoFile(filename)) continue; // Transcript activated separately
-          initialActiveFiles.push({
-            id: `${file.url}-${Date.now()}`,
-            url: file.url,
-            originalFilename:
-              file.originalFilename || file.url.split('/').pop() || 'file',
-            addedAt: new Date().toISOString(),
-            sourceMessageId: messageId,
-            status: 'idle',
-            pinned: useSettingsStore.getState().autoPinActiveFiles,
-          });
-        }
-      }
-    }
-
     onSend(
       {
-        id: messageId,
         role: 'user',
         content,
         messageType: mapSubmitTypeToMessageType(submitType ?? 'TEXT'),
@@ -228,7 +188,6 @@ export function useMessageSender({
         artifactContext: artifactContext || undefined,
       },
       searchMode,
-      initialActiveFiles.length > 0 ? initialActiveFiles : undefined,
     );
 
     // Clear input state
@@ -240,7 +199,6 @@ export function useMessageSender({
     setUsedPromptVariables(null);
 
     if (filePreviews.length > 0) {
-      revokeAllPreviewUrls(filePreviews);
       setFilePreviews([]);
     }
   }, [

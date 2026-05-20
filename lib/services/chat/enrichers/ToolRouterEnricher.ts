@@ -4,7 +4,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { AgentChatService } from '../AgentChatService';
 import { ToolRouterService } from '../ToolRouterService';
-import { ChatContext } from '../pipeline/ChatContext';
+import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { WebSearchTool } from '../tools/WebSearchTool';
 
@@ -106,8 +106,20 @@ export class ToolRouterEnricher extends BasePipelineStage {
       }
     }
 
-    // Determine which tools are needed
+    // Skip routing when the chat is going to run as a Foundry agent —
+    // agents have their own `web_search_call` tool and decide for themselves
+    // when to use it. Pre-routing duplicates work and adds ~5s of latency
+    // per request. Predicate is shared with AgentEnricher to prevent the
+    // two enrichers from drifting apart.
     const forceWebSearch = context.searchMode === SearchMode.ALWAYS;
+    if (shouldExecuteAsAgent(context) && !forceWebSearch) {
+      console.log(
+        '[ToolRouterEnricher] Skipping pre-routing — agent will decide via its own tools',
+      );
+      return context;
+    }
+
+    // Determine which tools are needed
     const toolRouterRequest: ToolRouterRequest = {
       messages: baseMessages,
       currentMessage,
@@ -140,6 +152,10 @@ export class ToolRouterEnricher extends BasePipelineStage {
           );
           return context;
         }
+
+        // Tell the client what we're doing — web search round-trips through
+        // a Foundry agent and can take several seconds.
+        await context.emitActivity?.('chat.activity.searchingWeb');
 
         const searchResult = await this.webSearchTool.execute({
           searchQuery: toolResponse.searchQuery || currentMessage,

@@ -41,17 +41,5 @@ export function useSettings() {
     setReasoningEffort: store.setReasoningEffort,
     setVerbosity: store.setVerbosity,
     resetSettings: store.resetSettings,
-
-    // Active Files Settings
-    autoPinActiveFiles: store.autoPinActiveFiles,
-    setAutoPinActiveFiles: store.setAutoPinActiveFiles,
-    autoInjectPinnedImages: store.autoInjectPinnedImages,
-    setAutoInjectPinnedImages: store.setAutoInjectPinnedImages,
-
-    // Stop-generation confirmation preferences
-    confirmStopFromButton: store.confirmStopFromButton,
-    confirmStopFromKeyboard: store.confirmStopFromKeyboard,
-    setConfirmStopFromButton: store.setConfirmStopFromButton,
-    setConfirmStopFromKeyboard: store.setConfirmStopFromKeyboard,
   };
 }
