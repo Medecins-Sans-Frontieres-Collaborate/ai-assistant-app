@@ -84,6 +84,10 @@ interface SettingsStore {
   // Slash menu usage tracking
   slashMenuUsageCounts: Record<string, number>;
 
+  // Chat input "+" dropdown tool personalization
+  pinnedToolIds: string[];
+  toolUsageCounts: Record<string, number>;
+
   // Text-to-Speech settings
   ttsSettings: TTSSettings;
 
@@ -154,6 +158,10 @@ interface SettingsStore {
   // Slash Menu Usage Actions
   incrementSlashMenuUsage: (itemId: string) => void;
 
+  // Chat input "+" dropdown tool actions
+  togglePinnedTool: (toolId: string) => void;
+  incrementToolUsage: (toolId: string) => void;
+
   // Active Files Settings
   autoPinActiveFiles: boolean;
   setAutoPinActiveFiles: (enabled: boolean) => void;
@@ -217,6 +225,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Slash menu usage tracking
       slashMenuUsageCounts: {},
+
+      // Chat input "+" dropdown tool personalization
+      pinnedToolIds: [],
+      toolUsageCounts: {},
 
       // Organization preference (null = auto-detect from email)
       organizationPreference: null,
@@ -461,6 +473,21 @@ export const useSettingsStore = create<SettingsStore>()(
           },
         })),
 
+      // Chat input "+" dropdown tool actions
+      togglePinnedTool: (toolId) =>
+        set((state) => ({
+          pinnedToolIds: state.pinnedToolIds.includes(toolId)
+            ? state.pinnedToolIds.filter((id) => id !== toolId)
+            : [...state.pinnedToolIds, toolId],
+        })),
+      incrementToolUsage: (toolId) =>
+        set((state) => ({
+          toolUsageCounts: {
+            ...state.toolUsageCounts,
+            [toolId]: (state.toolUsageCounts[toolId] ?? 0) + 1,
+          },
+        })),
+
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
       setAutoInjectPinnedImages: (enabled) =>
@@ -496,6 +523,8 @@ export const useSettingsStore = create<SettingsStore>()(
           reasoningEffort: undefined,
           verbosity: undefined,
           slashMenuUsageCounts: {},
+          pinnedToolIds: [],
+          toolUsageCounts: {},
           autoPinActiveFiles: true,
           autoInjectPinnedImages: true,
           confirmStopFromButton: true,
@@ -504,7 +533,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 18, // Increment this when schema changes to trigger migrations
+      version: 19, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -531,6 +560,8 @@ export const useSettingsStore = create<SettingsStore>()(
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
+        pinnedToolIds: state.pinnedToolIds,
+        toolUsageCounts: state.toolUsageCounts,
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         confirmStopFromButton: state.confirmStopFromButton,
@@ -651,6 +682,16 @@ export const useSettingsStore = create<SettingsStore>()(
         if (version < 18) {
           if (state.extractionRecipes === undefined) {
             state.extractionRecipes = [];
+          }
+        }
+
+        // Version 18 → 19: Add chat-input tool personalization (pin + usage)
+        if (version < 19) {
+          if (state.pinnedToolIds === undefined) {
+            state.pinnedToolIds = [];
+          }
+          if (state.toolUsageCounts === undefined) {
+            state.toolUsageCounts = {};
           }
         }
 
