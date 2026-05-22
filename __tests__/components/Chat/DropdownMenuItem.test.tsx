@@ -51,19 +51,20 @@ describe('DropdownMenuItem', () => {
       const item = createMenuItem();
       render(<DropdownMenuItem item={item} isSelected={true} />);
 
-      const button = screen.getByRole('menuitem');
-      expect(button).toHaveClass('bg-gray-100');
-      expect(button).toHaveClass('dark:bg-gray-700');
+      // Row state styling lives on the flex container that wraps the button
+      const row = screen.getByRole('menuitem').parentElement as HTMLElement;
+      expect(row).toHaveClass('bg-gray-100');
+      expect(row).toHaveClass('dark:bg-gray-700');
     });
 
     it('applies unselected styling when isSelected is false', () => {
       const item = createMenuItem();
       render(<DropdownMenuItem item={item} isSelected={false} />);
 
-      const button = screen.getByRole('menuitem');
-      expect(button).toHaveClass('hover:bg-gray-100');
-      expect(button).toHaveClass('dark:hover:bg-gray-700');
-      expect(button).not.toHaveClass('bg-gray-100');
+      const row = screen.getByRole('menuitem').parentElement as HTMLElement;
+      expect(row).toHaveClass('hover:bg-gray-100');
+      expect(row).toHaveClass('dark:hover:bg-gray-700');
+      expect(row).not.toHaveClass('bg-gray-100');
     });
 
     it('sets aria-current when selected', () => {
@@ -157,18 +158,19 @@ describe('DropdownMenuItem', () => {
       const button = screen.getByRole('menuitem');
       expect(button).toHaveClass('flex');
       expect(button).toHaveClass('items-center');
-      expect(button).toHaveClass('w-full');
       expect(button).toHaveClass('text-left');
-      expect(button).toHaveClass('rounded-md');
+      // The rounded row affordance is on the wrapping container
+      const row = button.parentElement as HTMLElement;
+      expect(row).toHaveClass('rounded-md');
     });
 
     it('has transition classes', () => {
       const item = createMenuItem();
       render(<DropdownMenuItem item={item} isSelected={false} />);
 
-      const button = screen.getByRole('menuitem');
-      expect(button).toHaveClass('transition-colors');
-      expect(button).toHaveClass('duration-150');
+      const row = screen.getByRole('menuitem').parentElement as HTMLElement;
+      expect(row).toHaveClass('transition-colors');
+      expect(row).toHaveClass('duration-150');
     });
   });
 
