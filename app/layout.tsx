@@ -11,6 +11,16 @@ export const metadata: Metadata = {
   title: 'MSF AI Assistant',
   description: 'AI Assistant for MSF Staff - Internal Use Only',
   applicationName: 'MSF AI Assistant',
+  // Internal-only application: instruct search engines not to index or follow.
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
