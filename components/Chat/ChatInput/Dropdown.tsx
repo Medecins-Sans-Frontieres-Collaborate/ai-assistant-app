@@ -44,9 +44,11 @@ import { DropdownSearchInput } from '@/components/Chat/ChatInput/DropdownSearchI
 import { formatTranslationReference } from '@/components/Chat/DocumentTranslationViewer';
 import Modal from '@/components/UI/Modal';
 
+import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import {
   ATTACH_ACCEPT_TYPES,
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
@@ -96,6 +98,12 @@ const Dropdown: React.FC<DropdownProps> = ({
     (state) => state.setSelectedToneId,
   );
   const filePreviews = useChatInputStore((state) => state.filePreviews);
+  const pinnedToolIds = useSettingsStore((state) => state.pinnedToolIds);
+  const toolUsageCounts = useSettingsStore((state) => state.toolUsageCounts);
+  const togglePinnedTool = useSettingsStore((state) => state.togglePinnedTool);
+  const incrementToolUsage = useSettingsStore(
+    (state) => state.incrementToolUsage,
+  );
   const { selectedConversation, updateConversation } = useConversations();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -309,8 +317,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         },
         category: 'web',
         disabled: tones.length === 0,
-        toggle: true,
-        checked: Boolean(selectedToneId),
+        opensDialog: true,
       },
       {
         id: 'attach',
@@ -347,6 +354,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           closeDropdown();
         },
         category: 'transform',
+        opensDialog: true,
       },
       {
         id: 'extract',
@@ -370,6 +378,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         infoTooltip: t('dropdown.translateDocumentTooltip'),
         onClick: handleDocumentTranslateClick,
         category: 'transform',
+        opensDialog: true,
       },
       ...(hasCameraSupport
         ? [
@@ -385,6 +394,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 closeDropdown();
               },
               category: 'media' as 'web' | 'media' | 'transform',
+              opensDialog: true,
             },
           ]
         : []),
@@ -408,19 +418,98 @@ const Dropdown: React.FC<DropdownProps> = ({
     ],
   );
 
-  // Filter items by label, locale-aware (case- and diacritic-insensitive)
-  const filteredItems = useMemo(() => {
-    const normalizedQuery = normalizeForSearch(query, locale);
-    if (!normalizedQuery) return menuItems;
-    return menuItems.filter((item) =>
-      normalizeForSearch(item.label, locale).includes(normalizedQuery),
-    );
-  }, [menuItems, query, locale]);
+  // Wrap each action so activating it records usage (drives "Frequently used").
+  // Pinning does not count — it's a separate control on the row.
+  const trackedItems = useMemo(
+    () =>
+      // eslint-disable-next-line react-hooks/refs -- onClick handlers reference refs only when invoked, not during render
+      menuItems.map((item) => ({
+        ...item,
+        onClick: () => {
+          incrementToolUsage(item.id);
+          item.onClick();
+        },
+      })),
+    [menuItems, incrementToolUsage],
+  );
 
-  // Keep the highlight on the first match as the filtered list changes
+  const normalizedQuery = normalizeForSearch(query, locale);
+  const isFiltering = normalizedQuery.length > 0;
+
+  // Build the sectioned view (unfiltered) or a flat filtered list. Each item
+  // appears exactly once: Pinned, else Frequently used, else its category.
+  const { sections, flatVisibleItems } = useMemo(() => {
+    if (isFiltering) {
+      const filtered = trackedItems.filter((item) =>
+        normalizeForSearch(item.label, locale).includes(normalizedQuery),
+      );
+      return { sections: [], flatVisibleItems: filtered };
+    }
+
+    const pinnedSet = new Set(pinnedToolIds);
+    const pinned = pinnedToolIds
+      .map((id) => trackedItems.find((item) => item.id === id))
+      .filter((item): item is (typeof trackedItems)[number] => Boolean(item));
+
+    const frequent = trackedItems
+      .filter(
+        (item) =>
+          !pinnedSet.has(item.id) && (toolUsageCounts[item.id] ?? 0) >= 2,
+      )
+      .sort(
+        (a, b) => (toolUsageCounts[b.id] ?? 0) - (toolUsageCounts[a.id] ?? 0),
+      )
+      .slice(0, 3);
+    const frequentSet = new Set(frequent.map((item) => item.id));
+
+    const remaining = trackedItems.filter(
+      (item) => !pinnedSet.has(item.id) && !frequentSet.has(item.id),
+    );
+    const byCategory = (category: MenuItem['category']) =>
+      remaining.filter((item) => item.category === category);
+
+    const built = [
+      { key: 'pinned', label: t('dropdown.sectionPinned'), items: pinned },
+      {
+        key: 'frequent',
+        label: t('dropdown.sectionFrequent'),
+        items: frequent,
+      },
+      {
+        key: 'web',
+        label: t('dropdown.categoryWeb'),
+        items: byCategory('web'),
+      },
+      {
+        key: 'media',
+        label: t('dropdown.categoryMedia'),
+        items: byCategory('media'),
+      },
+      {
+        key: 'transform',
+        label: t('dropdown.categoryTransform'),
+        items: byCategory('transform'),
+      },
+    ].filter((section) => section.items.length > 0);
+
+    return {
+      sections: built,
+      flatVisibleItems: built.flatMap((section) => section.items),
+    };
+  }, [
+    isFiltering,
+    normalizedQuery,
+    trackedItems,
+    locale,
+    pinnedToolIds,
+    toolUsageCounts,
+    t,
+  ]);
+
+  // Keep the highlight on the first item as the visible list changes
   useEffect(() => {
-    setSelectedIndex(filteredItems.length ? 0 : -1);
-  }, [query, filteredItems.length]);
+    setSelectedIndex(flatVisibleItems.length ? 0 : -1);
+  }, [query, flatVisibleItems.length]);
 
   // Focus the search box on open (desktop only — on mobile this would pop the
   // keyboard over the sheet before the user has chosen to filter)
@@ -430,10 +519,10 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [isOpen, isMobile]);
 
-  // Use keyboard navigation hook (operates on the filtered list)
+  // Use keyboard navigation hook (operates on the visible list, in render order)
   const { handleKeyDown } = useDropdownKeyboardNav({
     isOpen,
-    items: filteredItems,
+    items: flatVisibleItems,
     selectedIndex,
     setSelectedIndex,
     closeDropdown,
@@ -460,8 +549,8 @@ const Dropdown: React.FC<DropdownProps> = ({
   );
 
   const activeDescendantId =
-    selectedIndex >= 0 && filteredItems[selectedIndex]
-      ? `dropdown-item-${filteredItems[selectedIndex].id}`
+    selectedIndex >= 0 && flatVisibleItems[selectedIndex]
+      ? `dropdown-item-${flatVisibleItems[selectedIndex].id}`
       : undefined;
 
   // Logic to handle clicks outside the Dropdown Menu
@@ -502,16 +591,31 @@ const Dropdown: React.FC<DropdownProps> = ({
             <div
               className={`${scrollClassName} overflow-y-auto custom-scrollbar p-1`}
             >
-              {filteredItems.length === 0 ? (
+              {flatVisibleItems.length === 0 ? (
                 <div className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                   {t('dropdown.noResults')}
                 </div>
-              ) : (
-                filteredItems.map((item, index) => (
+              ) : isFiltering ? (
+                flatVisibleItems.map((item, index) => (
                   <DropdownMenuItem
                     key={item.id}
                     item={item}
                     isSelected={index === selectedIndex}
+                    pinnable
+                    pinned={pinnedToolIds.includes(item.id)}
+                    onTogglePin={() => togglePinnedTool(item.id)}
+                  />
+                ))
+              ) : (
+                sections.map((section) => (
+                  <DropdownCategoryGroup
+                    key={section.key}
+                    label={section.label}
+                    items={section.items}
+                    flattenedItems={flatVisibleItems}
+                    selectedIndex={selectedIndex}
+                    pinnedToolIds={pinnedToolIds}
+                    onTogglePin={togglePinnedTool}
                   />
                 ))
               )}
@@ -532,7 +636,6 @@ const Dropdown: React.FC<DropdownProps> = ({
               aria-activedescendant={activeDescendantId}
               onKeyDown={handleMenuKeyDown}
             >
-              {/* eslint-disable-next-line react-hooks/refs -- forwards searchInputRef as a prop, not a render-time .current read */}
               {menuBody('max-h-[min(20rem,70dvh)]')}
             </div>
           );
@@ -555,7 +658,6 @@ const Dropdown: React.FC<DropdownProps> = ({
                 aria-activedescendant={activeDescendantId}
                 onKeyDown={handleMenuKeyDown}
               >
-                {/* eslint-disable-next-line react-hooks/refs -- forwards searchInputRef as a prop, not a render-time .current read */}
                 {menuBody('flex-1')}
               </div>
             </>,
