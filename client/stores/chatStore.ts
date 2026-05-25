@@ -877,6 +877,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessage: null,
       abortController: null,
       stopRequested: false,
+      // Mounted OAuthConsentCards snapshot pendingOAuthResume on first
+      // render, so clearing here is safe and prevents stale state from
+      // leaking into the next chat turn.
+      pendingOAuthResume: null,
     });
   },
 

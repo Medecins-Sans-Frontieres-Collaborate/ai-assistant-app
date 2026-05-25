@@ -40,15 +40,16 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
       : null,
   );
 
-  // If this card appeared right after the user clicked Continue on a
-  // previous OAuth card for the same server, the upstream sign-in didn't
-  // complete. Show that framing instead of repeating the "Authorize" CTA.
-  // Window: 60s — long enough for a slow OAuth round-trip, short enough
-  // that a new chat (genuinely fresh OAuth) won't mistakenly inherit it.
-  const incompleteSignIn =
-    !!pendingOAuthResume &&
-    Date.now() - pendingOAuthResume.at < 60_000 &&
-    (pendingOAuthResume.serverLabel ?? null) === serverLabel;
+  // Capture once on mount: if this card mounts while a pendingOAuthResume
+  // matches its server, the user's last Continue didn't complete an upstream
+  // sign-in. Render the "incomplete" framing. Snapshotted via useState so
+  // a later clear of the store value doesn't flip the card back; explicit
+  // clear happens in chatStore.clearStreamingState to age out stale state.
+  const [incompleteSignIn] = useState(
+    () =>
+      !!pendingOAuthResume &&
+      (pendingOAuthResume.serverLabel ?? null) === serverLabel,
+  );
 
   const [oauthClicked, setOauthClicked] = useState(false);
   const [resuming, setResuming] = useState(false);

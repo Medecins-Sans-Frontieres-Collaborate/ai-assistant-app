@@ -307,15 +307,21 @@ describe('/api/chat/agents/validate', () => {
   });
 
   describe('Agent Validation', () => {
-    it('creates AIProjectClient with correct endpoint and credentials', async () => {
+    it('creates AIProjectClient with correct endpoint and a user credential', async () => {
       const request = createValidateRequest({});
       await POST(request);
 
       expect(mockAIProjectClient).toHaveBeenCalledWith(
         'https://test-foundry.services.ai.azure.com',
-        expect.any(Object),
+        expect.objectContaining({ getToken: expect.any(Function) }),
       );
-      expect(mockDefaultAzureCredential).toHaveBeenCalled();
+      // OBO path is the prod default; DefaultAzureCredential is only the
+      // dev fallback when getAccessTokenForOBO fails. With OBO mocked
+      // successful, we expect the OBO-derived credential (a TokenCredential
+      // wrapper) to be passed, NOT DefaultAzureCredential.
+      expect(mockGetAccessTokenForOBO).toHaveBeenCalled();
+      expect(mockGetFoundryToken).toHaveBeenCalledWith('mock-app-access-token');
+      expect(mockDefaultAzureCredential).not.toHaveBeenCalled();
     });
 
     it('calls agents.getAgent with provided agentId', async () => {

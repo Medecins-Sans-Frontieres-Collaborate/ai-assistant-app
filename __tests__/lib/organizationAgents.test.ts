@@ -73,23 +73,33 @@ vi.mock('@/config/organization-agents.json', () => ({
   },
 }));
 
-// Mock Tabler Icons — Proxy returns the same stub for any icon name so the
-// test stays robust as ICON_REGISTRY grows. `then` and symbol probes must
-// return undefined: vitest's ESM loader awaits the module namespace, and a
-// function returned for `then` makes the namespace look like an unresolved
-// thenable, hanging the worker forever.
+// Mock Tabler Icons — vitest's strict namespace validation requires every
+// import name to have an explicit export on the mock object, so we enumerate
+// the icons `lib/organizationAgents.ts` imports. Returning a Proxy makes
+// vitest's ESM loader treat the namespace as a thenable (it probes `then`)
+// and hangs the worker, which is what caused the 6-hour CI timeout.
 vi.mock('@tabler/icons-react', () => {
   const mockIcon = () => null;
-  return new Proxy(
-    {},
-    {
-      get: (_t, prop) => {
-        if (prop === '__esModule') return true;
-        if (prop === 'then' || typeof prop === 'symbol') return undefined;
-        return mockIcon;
-      },
-    },
-  );
+  return {
+    IconBriefcase: mockIcon,
+    IconBuildingBank: mockIcon,
+    IconCalculator: mockIcon,
+    IconChartBar: mockIcon,
+    IconCode: mockIcon,
+    IconCurrencyDollar: mockIcon,
+    IconDatabase: mockIcon,
+    IconFileText: mockIcon,
+    IconHeartbeat: mockIcon,
+    IconHexagon: mockIcon,
+    IconMail: mockIcon,
+    IconMessage: mockIcon,
+    IconNews: mockIcon,
+    IconRobot: mockIcon,
+    IconSearch: mockIcon,
+    IconShield: mockIcon,
+    IconUsers: mockIcon,
+    IconWorld: mockIcon,
+  };
 });
 
 describe('organizationAgents', () => {
