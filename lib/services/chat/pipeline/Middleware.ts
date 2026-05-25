@@ -424,11 +424,30 @@ export const createCredentialMiddleware = async (
       console.log(
         `[CredentialMiddleware] OBO credential acquired, endpoint: ${foundryEndpoint}`,
       );
-    } catch {
-      // OBO failed — use DefaultAzureCredential (managed identity or az login)
-      console.log(
-        `[CredentialMiddleware] OBO unavailable, using default credential for ${foundryEndpoint}`,
-      );
+    } catch (e) {
+      // In production, install a credential that throws on use rather than
+      // letting the handler silently fall back to its own DefaultAzureCredential.
+      // The handler's fallback runs under the app's identity, which has broader
+      // RBAC than any individual user — bypassing the per-user RBAC guarantee
+      // in AGENT_ACCESS_MANAGEMENT.md §2. Surface as an auth error to the user.
+      // Dev leaves userCredential undefined so the handler's fallback works.
+      if (process.env.NODE_ENV === 'production') {
+        console.error(
+          `[CredentialMiddleware] OBO failed in prod for ${foundryEndpoint}; refusing app-identity fallback:`,
+          e instanceof Error ? e.message : e,
+        );
+        userCredential = {
+          getToken: async () => {
+            throw new Error(
+              'User identity required: unable to acquire OBO token. Sign out and back in, then try again.',
+            );
+          },
+        };
+      } else {
+        console.log(
+          `[CredentialMiddleware] OBO unavailable (dev), using default credential for ${foundryEndpoint}`,
+        );
+      }
     }
 
     return {

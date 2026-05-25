@@ -99,15 +99,10 @@ IMPORTANT: Always provide searchQuery in your response:
               lastMessage: currentMessage.substring(0, 100),
             });
 
-            // gpt-5-mini for efficient tool routing decisions. Latency-tuned:
-            //   - reasoning_effort: 'minimal' — this is a routing decision,
-            //     not deep analysis; saves several seconds per call.
-            //   - max_completion_tokens: 80 — output is bounded (a boolean
-            //     plus a short search query), so cap to prevent runaway.
-            //   - dropped the `reasoning` field from the schema; it was
-            //     only used for debug logging and added output tokens.
+            // gpt-5.4-nano: cheapest/fastest tier for the routing decision.
+            // reasoning_effort minimal + 80-token cap keeps latency low.
             const response = await this.openAIClient.chat.completions.create({
-              model: 'gpt-5-mini',
+              model: 'gpt-5.4-nano',
               messages: conversationMessages,
               reasoning_effort: 'minimal',
               max_completion_tokens: 80,
@@ -163,7 +158,7 @@ IMPORTANT: Always provide searchQuery in your response:
               reasoning: 'No tools needed',
             };
           } catch (error) {
-            // Make the silent-degradation path loud. If gpt-5-mini ever
+            // Make the silent-degradation path loud. If gpt-5.4-nano ever
             // rejects `reasoning_effort: 'minimal'` or the JSON schema
             // changes shape, every routing decision falls back to "no
             // search" — which is a real regression, not just a transient

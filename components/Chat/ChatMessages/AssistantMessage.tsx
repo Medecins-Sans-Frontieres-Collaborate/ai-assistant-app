@@ -384,7 +384,7 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
           setTimeout(() => setLoadingMessage(null), 6000);
         }
       },
-      [displayedContent, ttsSettings, translationState.currentLocale],
+      [displayedContent, ttsSettings, translationState.currentLocale, t],
     );
 
     // Close audio player and clean up resources

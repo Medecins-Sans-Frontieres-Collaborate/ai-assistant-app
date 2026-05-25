@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+
 import { isValidAgentId } from '@/lib/utils/app/agentId';
 
-import { auth } from '@/auth';
+import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
 import { AIProjectClient } from '@azure/ai-projects';
-import { DefaultAzureCredential } from '@azure/identity';
+import type { AccessToken, TokenCredential } from '@azure/identity';
 
 /**
  * Validates that an Azure AI Foundry agent is accessible
@@ -53,12 +55,53 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Acquire a Foundry-scoped credential for the signed-in user. Validation
+    // must run under the user's identity so the answer reflects the user's
+    // RBAC — using the app's identity would let any user probe agent IDs and
+    // confirm the existence of agents they have no access to.
+    //
+    // In production, OBO failure aborts the validation (503). Dev falls back
+    // to DefaultAzureCredential so local devs without OBO consent can still
+    // exercise the validation path.
+    let credential: TokenCredential;
+    try {
+      const appAccessToken = await getAccessTokenForOBO(session);
+      if (!appAccessToken) throw new Error('No OBO token');
+      const foundryToken =
+        await UserTokenProvider.getInstance().getFoundryToken(appAccessToken);
+      credential = {
+        getToken: async () =>
+          ({
+            token: foundryToken,
+            expiresOnTimestamp: Date.now() + 55 * 60 * 1000,
+          }) as AccessToken,
+      };
+    } catch (e) {
+      if (process.env.NODE_ENV === 'production') {
+        console.error(
+          '[/api/chat/agents/validate] OBO failed:',
+          e instanceof Error ? e.message : e,
+        );
+        return NextResponse.json(
+          {
+            error: 'Authentication unavailable',
+            details:
+              'Unable to validate the agent as your user. Please sign out and back in, then try again.',
+          },
+          { status: 503 },
+        );
+      }
+      console.warn(
+        '[/api/chat/agents/validate] OBO failed (dev), using fallback credential:',
+        e instanceof Error ? e.message : e,
+      );
+      const { DefaultAzureCredential } = await import('@azure/identity');
+      credential = new DefaultAzureCredential();
+    }
+
     // Test connection to the agent
     try {
-      const project = new AIProjectClient(
-        endpoint,
-        new DefaultAzureCredential(),
-      );
+      const project = new AIProjectClient(endpoint, credential);
 
       // Try to retrieve the agent to verify it exists and is accessible
       const agent = await project.agents.get(agentId);

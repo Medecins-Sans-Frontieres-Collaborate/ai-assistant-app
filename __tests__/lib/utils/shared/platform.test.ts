@@ -1,6 +1,6 @@
 import { getModifierLabel, isMacPlatform } from '@/lib/utils/shared/platform';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 const originalNavigator = globalThis.navigator;
 

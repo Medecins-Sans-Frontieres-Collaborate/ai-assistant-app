@@ -380,12 +380,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {/* Subscription */}
               <div>
                 <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                  Subscription
-                  <IconInfoCircle
-                    size={14}
-                    className="text-gray-400 dark:text-gray-500 cursor-help"
-                    title="The Azure subscription that contains the Foundry account. If you're unsure, ask your admin which subscription your team uses."
-                  />
+                  {t('labelSubscription')}
+                  <span className="group/tt relative inline-flex items-center">
+                    <IconInfoCircle
+                      size={14}
+                      className="text-gray-400 dark:text-gray-500 cursor-help"
+                    />
+                    <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 w-64 rounded bg-gray-900 px-2 py-1 text-xs font-normal text-white opacity-0 shadow-lg transition-opacity group-hover/tt:opacity-100 dark:bg-gray-700">
+                      {t('tooltipSubscription')}
+                    </span>
+                  </span>
                 </label>
                 {loadingSubs ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
@@ -420,12 +424,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {subscriptionId && (
                 <div>
                   <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                    Foundry Account
-                    <IconInfoCircle
-                      size={14}
-                      className="text-gray-400 dark:text-gray-500 cursor-help"
-                      title="The Azure AI Services account where the Foundry project lives. Each office or team typically has its own."
-                    />
+                    {t('labelFoundryAccount')}
+                    <span className="group/tt relative inline-flex items-center">
+                      <IconInfoCircle
+                        size={14}
+                        className="text-gray-400 dark:text-gray-500 cursor-help"
+                      />
+                      <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 w-64 rounded bg-gray-900 px-2 py-1 text-xs font-normal text-white opacity-0 shadow-lg transition-opacity group-hover/tt:opacity-100 dark:bg-gray-700">
+                        {t('tooltipFoundryAccount')}
+                      </span>
+                    </span>
                   </label>
                   {loadingAccounts ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
@@ -473,12 +481,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {accountName && (
                 <div>
                   <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                    Project
-                    <IconInfoCircle
-                      size={14}
-                      className="text-gray-400 dark:text-gray-500 cursor-help"
-                      title="A project organizes agents within an account. Most accounts have a single 'default' project."
-                    />
+                    {t('labelProject')}
+                    <span className="group/tt relative inline-flex items-center">
+                      <IconInfoCircle
+                        size={14}
+                        className="text-gray-400 dark:text-gray-500 cursor-help"
+                      />
+                      <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 w-64 rounded bg-gray-900 px-2 py-1 text-xs font-normal text-white opacity-0 shadow-lg transition-opacity group-hover/tt:opacity-100 dark:bg-gray-700">
+                        {t('tooltipProject')}
+                      </span>
+                    </span>
                   </label>
                   {loadingProjects ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">

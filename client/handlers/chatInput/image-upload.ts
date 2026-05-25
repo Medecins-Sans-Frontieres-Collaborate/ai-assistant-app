@@ -83,11 +83,14 @@ export const onImageUpload = async (
       ),
     );
   } catch (error) {
+    // Strip CR/LF from file.name before logging so a filename can't forge log
+    // lines (CodeQL log-injection rule). Truncate too — names can be long.
+    const safeName = file.name.replace(/[\r\n]+/g, ' ').slice(0, 200);
     console.error('Image upload failed:', error);
     toast.error(
       error instanceof Error
         ? error.message
-        : `Failed to upload image: ${file.name}`,
+        : `Failed to upload image: ${safeName}`,
     );
 
     // Update status to failed

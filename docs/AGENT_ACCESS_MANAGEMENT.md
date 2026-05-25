@@ -10,7 +10,7 @@ How MSF staff access AI Foundry agents through the AI Assistant app, how MSF off
 
 ## The one rule that applies to all three layers
 
-> **Every agent shown to a user is RBAC-filtered server-side using that user's own Entra identity.** A user must be assigned the **Azure AI User** role (or higher) on the relevant Foundry project — or on the specific Agent Application — to see and invoke the agent. There is no exception. This applies equally to the AI Assistant's regional default project, an office's project, and any custom Foundry source a user pastes in themselves.
+> **Every agent shown to a user is RBAC-filtered server-side using that user's own Entra identity.** A user must be assigned the **Foundry User** role (formerly _Azure AI User_ — same role ID `53ca6127-db72-4b80-b1b0-d745d6d5456d`) on the relevant Foundry project — or on the specific Agent Application — to see and invoke the agent. There is no exception. This applies equally to the AI Assistant's regional default project, an office's project, and any custom Foundry source a user pastes in themselves.
 
 The three "layers" below differ only in **which projects the app asks ARM about for a given user**. RBAC decides which agents come back from each.
 
@@ -25,7 +25,7 @@ flowchart LR
     User(["MSF staff signs in<br/>Entra ID"]) --> Regional["Regional default<br/>(AI Assistant app's own<br/>Foundry project, by GDPR region)"]
     User --> Office["Office layer<br/>(dynamic, by offices.json<br/>matched to email domain)"]
     User --> Custom["Custom sources<br/>(browser-stored,<br/>user-pasted ARM ID)"]
-    Regional --> RBAC{"User has<br/>Azure AI User role<br/>on the project?"}
+    Regional --> RBAC{"User has<br/>Foundry User role<br/>on the project?"}
     Office --> RBAC
     Custom --> RBAC
     RBAC -->|yes| Show["Agent appears in<br/>the Agents tab"]
@@ -36,7 +36,7 @@ flowchart LR
 
 This is the platform team's Foundry project that ships with the AI Assistant app itself. Every signed-in user gets it as their baseline. There are two: one in the EU and one in the US, and the user is routed to one or the other **by GDPR region** (derived from their MSF email — see [§7 Data residency](#7-data-residency)). The agents the platform team builds for general MSF use live here.
 
-The user still needs Azure AI User on that regional project to see anything. In practice the platform team grants this broadly via an Entra group covering all MSF staff using the app.
+The user still needs Foundry User on that regional project to see anything. In practice the platform team grants this broadly via an Entra group covering all MSF staff using the app.
 
 ### Office layer — dynamic, per-office Foundry projects
 
@@ -46,19 +46,19 @@ When an MSF office (e.g. OCA Amsterdam, MSF USA, OCG Geneva) wants its own Found
 2. Finds the matching office entry (most-specific suffix wins).
 3. Asks ARM for the agents in that office's Foundry project — **using the user's own Entra token**, so ARM only returns agents the user is authorized for in that office.
 
-Crucially, an office showing up in `offices.json` does **not** grant access — it just makes the office's project a candidate for discovery. The office still controls who actually sees its agents through Azure AI User role assignments on its Foundry project.
+Crucially, an office showing up in `offices.json` does **not** grant access — it just makes the office's project a candidate for discovery. The office still controls who actually sees its agents through Foundry User role assignments on its Foundry project.
 
 ### Custom sources — browser-stored, per-user
 
 Any user can manually paste an ARM resource ID for a Foundry project they want to see in their picker (e.g. a colleague at another OC sharing their project, or a sandbox project for a working group). These connections are stored **only in the user's own browser** (in the settings store) and are never shared or synced server-side.
 
-The same Entra-driven RBAC check still runs: a user can paste any path they like, but if they're not Azure AI User on that project, ARM returns nothing and they see an empty connection.
+The same Entra-driven RBAC check still runs: a user can paste any path they like, but if they're not Foundry User on that project, ARM returns nothing and they see an empty connection.
 
-| Layer                | Who configures it        | Where it's stored                                           | Who is offered it                           | Who actually sees agents                              |
-| -------------------- | ------------------------ | ----------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------- |
-| **Regional default** | Platform team            | `AZURE_AI_FOUNDRY_RESOURCE_ID_US` / `_EU` env vars          | Every signed-in user (one region)           | Anyone with Azure AI User on that regional project    |
-| **Office**           | Office IT (PR + env var) | `config/offices.json` + `OFFICE_<NAME>_FOUNDRY_PROJECT_IDS` | Users whose email domain matches the office | Anyone with Azure AI User on that office's project    |
-| **Custom**           | The user themselves      | Their browser (`settingsStore`)                             | Only the user who added it                  | The same user, if Azure AI User on the pasted project |
+| Layer                | Who configures it        | Where it's stored                                           | Who is offered it                           | Who actually sees agents                             |
+| -------------------- | ------------------------ | ----------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------- |
+| **Regional default** | Platform team            | `AZURE_AI_FOUNDRY_RESOURCE_ID_US` / `_EU` env vars          | Every signed-in user (one region)           | Anyone with Foundry User on that regional project    |
+| **Office**           | Office IT (PR + env var) | `config/offices.json` + `OFFICE_<NAME>_FOUNDRY_PROJECT_IDS` | Users whose email domain matches the office | Anyone with Foundry User on that office's project    |
+| **Custom**           | The user themselves      | Their browser (`settingsStore`)                             | Only the user who added it                  | The same user, if Foundry User on the pasted project |
 
 ---
 
@@ -115,7 +115,7 @@ In your office's Azure subscription, in the region that matches your GDPR declar
    ```
 
 3. Create your Agent Applications inside the project (see Microsoft's Foundry docs for the agent-authoring side).
-4. Add ARM resource tags on each Agent Application for UI metadata — see [§6 Agent metadata via tags](#6-agent-metadata-via-tags).
+4. Add ARM resource tags on each Agent Application for UI metadata — see [§6 Agent metadata](#6-agent-metadata).
 
 ### 3.3 Wire the office into the AI Assistant — two PRs
 
@@ -190,17 +190,23 @@ ai_foundry_project_resource_id_ocg_geneva = "/subscriptions/.../projects/ocg-age
 
 > **Why the split between two repos?** The app code needs to know an office _exists_ so the UI can render its section header, but the actual ARM resource ID is environment-specific (different in dev vs live) and contains subscription IDs we manage as Terraform state rather than as committed JSON. Same pattern the regional defaults already use.
 
-### 3.4 Grant the "Azure AI User" role on the Foundry project
+### 3.4 Grant the "Foundry User" role on the Foundry project
 
 This is what actually lets users see agents. Without this, your staff will sign in, see the "OCG Geneva Agents" header, and find it empty.
 
 ```bash
-# Minimum role for an end user to discover and invoke agents
+# Minimum role for an end user to discover and invoke agents at the
+# project scope (everyone in the office sees every Application in the project).
+# Use the role definition ID rather than the display name since the role was
+# recently renamed from "Azure AI User" to "Foundry User" and some tooling
+# still surfaces the old name during the rollout.
 az role assignment create \
   --assignee <entra-group-or-user-object-id> \
-  --role "Azure AI User" \
+  --role "53ca6127-db72-4b80-b1b0-d745d6d5456d" \
   --scope <office-foundry-project-arm-path>
 ```
+
+For finer-grained access (one Application at a time, not the whole project), see [§4 Granting per-Application access via Terraform](#granting-per-application-access-via-terraform-recommended).
 
 **Best practice:** create one Entra group per office (e.g. `msf-ai-users-ocg-geneva`), assign the role to the group at the project scope, manage membership in Entra. Avoid per-user role assignments — they don't scale across hundreds of staff and they're easy to forget on offboarding.
 
@@ -224,15 +230,15 @@ You have two scopes for granting access. Pick the one that matches your governan
 ```mermaid
 flowchart TD
     A["New MSF staff member"] --> Q{"Should they see everything<br/>in the office's Foundry project?"}
-    Q -->|yes| Project["Grant 'Azure AI User'<br/>at the PROJECT scope"]
-    Q -->|"no — only some agents"| App["Grant 'Azure AI User' per<br/>Agent Application scope"]
+    Q -->|yes| Project["Grant 'Foundry User'<br/>at the PROJECT scope"]
+    Q -->|"no — only some agents"| App["Grant 'Foundry User' per<br/>Agent Application scope"]
     Project --> Done["User signs in, agents appear<br/>within ~5 min (RBAC propagation)"]
     App --> Done
 ```
 
 **Project-scope grant** is appropriate when an office's Foundry project is curated and everyone in the office should see everything in it. Simplest to manage; this is what most offices use.
 
-**Agent-Application-scope grant** is appropriate when a single project hosts agents owned by different teams (Finance, HR, Legal) and each team's agents should only be visible to that team. The role can be assigned at the child Agent Application resource — the ARM list call honors that and only returns the apps the user can read.
+**Agent-Application-scope grant** is appropriate when a single project hosts Applications owned by different teams (Finance, HR, Legal) and each team's Application should only be visible to that team. Assign the role at the child Agent Application ARM resource — the ARM list call only returns Applications the user can read. (Verified empirically in dev: granting Foundry User on one Application caused the user's `/api/agents` response to contain only that Application.)
 
 Either way, the user does **not** need any role on the regional default project — they're only ever shown agents the office decides to expose to them, plus regional defaults granted by the platform team.
 
@@ -240,12 +246,53 @@ Either way, the user does **not** need any role on the regional default project 
 
 Create one Entra group per logical access tier:
 
-| Group                   | Scope                       | Role          |
-| ----------------------- | --------------------------- | ------------- |
-| `msf-ai-users-<office>` | Office Foundry project      | Azure AI User |
-| `msf-ai-team-<team>`    | Specific Agent Applications | Azure AI User |
+| Group                   | Scope                       | Role         |
+| ----------------------- | --------------------------- | ------------ |
+| `msf-ai-users-<office>` | Office Foundry project      | Foundry User |
+| `msf-ai-team-<team>`    | Specific Agent Applications | Foundry User |
 
 Add and remove members in Entra. New members see access propagate within Azure's normal RBAC propagation window (typically <5 minutes). Use the Refresh button in the Agents tab if a user needs to see a change immediately.
+
+### Granting per-Application access via Terraform (recommended)
+
+There is no Azure portal blade for IAM on individual Agent Applications, and Foundry portal doesn't expose role management at all — per-Application RBAC is managed via Azure CLI, REST API, or Terraform. At MSF scale, Terraform is the right answer: assignments are reviewed in code, can't drift between environments, and are auditable.
+
+In your office's Terraform module, add an `azurerm_role_assignment` per (group, Application) pair you want to expose:
+
+```hcl
+# Foundry User role — id is constant across tenants.
+locals {
+  foundry_user_role_id = "53ca6127-db72-4b80-b1b0-d745d6d5456d"
+}
+
+# Grant the finance team access to the finance bot only.
+resource "azurerm_role_assignment" "ocg_finance_finance_bot" {
+  scope                = "/subscriptions/${var.sub_id}/resourceGroups/${var.rg}/providers/Microsoft.CognitiveServices/accounts/${var.foundry_account}/projects/${var.project}/applications/finance-bot"
+  role_definition_id   = "/subscriptions/${var.sub_id}/providers/Microsoft.Authorization/roleDefinitions/${local.foundry_user_role_id}"
+  principal_id         = data.azuread_group.ocg_finance.object_id
+}
+
+# Grant the broader office access to multiple Applications via for_each.
+resource "azurerm_role_assignment" "ocg_general_apps" {
+  for_each             = toset(["weekly-digest", "ocg-handbook", "policy-lookup"])
+  scope                = "/subscriptions/${var.sub_id}/resourceGroups/${var.rg}/providers/Microsoft.CognitiveServices/accounts/${var.foundry_account}/projects/${var.project}/applications/${each.value}"
+  role_definition_id   = "/subscriptions/${var.sub_id}/providers/Microsoft.Authorization/roleDefinitions/${local.foundry_user_role_id}"
+  principal_id         = data.azuread_group.ocg_general.object_id
+}
+```
+
+Equivalent CLI for ad-hoc / break-glass grants:
+
+```bash
+az role assignment create \
+  --assignee <entra-group-object-id> \
+  --role "53ca6127-db72-4b80-b1b0-d745d6d5456d" \
+  --scope "/subscriptions/.../accounts/<account>/projects/<project>/applications/<application-name>"
+```
+
+The publish gesture becomes: `terraform apply`. Unpublish: remove the resource block and apply again.
+
+> **Browse-cascade caveat.** Users granted Foundry User _only_ at the per-Application scope cannot use the picker's browse-by-subscription cascade to discover their own project. Browse requires Reader at the account scope to enumerate Foundry accounts — per-Application RBAC explicitly does _not_ inherit upward. Office onboarding should communicate the resource path so users can paste it manually (or distribute it in a shared note). This is correct security isolation, but call it out in the office's onboarding instructions so users aren't confused when they don't see anything in the browse dropdown.
 
 ---
 
@@ -258,7 +305,7 @@ End users with the right permissions in another Foundry project can connect that
 3. Give it a display name.
 4. Save.
 
-The path is validated against the strict regex described in §2. The connection is stored in the user's local settings only — it is not shared with other users and not synced server-side. RBAC still applies: if the user doesn't have Azure AI User on that project, the connection will succeed but the agent list will be empty.
+The path is validated against the strict regex described in §2. The connection is stored in the user's local settings only — it is not shared with other users and not synced server-side. RBAC still applies: if the user doesn't have Foundry User on that project, the connection will succeed but the agent list will be empty.
 
 This is the right tool for ad-hoc cross-office collaboration ("show me the Geneva office's agents in my picker") and for proof-of-concept Foundry projects that aren't ready to be a permanent office config entry yet.
 
@@ -266,7 +313,11 @@ This is the right tool for ad-hoc cross-office collaboration ("show me the Genev
 
 ---
 
-## 6. Agent metadata via tags
+## 6. Agent metadata
+
+UI metadata for each agent comes from two places: **ARM resource tags** on the Agent Application (for icons, colors, categories, ownership) and the **Foundry data plane** (for description and version).
+
+### ARM tags (icon, color, category, owner)
 
 The UI pulls icons, colors, categories, and ownership labels from **ARM resource tags** on each Agent Application. Set these in the Foundry portal (or via Terraform / `az tag`) when you publish an agent.
 
@@ -281,6 +332,18 @@ The UI pulls icons, colors, categories, and ownership labels from **ARM resource
 Missing tags fall back to the default outline-hexagon icon and the default blue. There's no validation pass — typos give you defaults silently, so double-check the Tabler icon names against [tabler.io/icons](https://tabler.io/icons).
 
 > **Note:** Cover images currently must be committed to this repo under `public/images/agents/` and shipped with the app. If you need a new image, add it in a PR.
+
+### Description and version (data-plane enrichment)
+
+The agent's **description** and **version** shown in the picker do NOT come from ARM tags. They come from the Foundry data plane (`GET {project-endpoint}/agents/{agentName}?api-version=v1`) — the same place the Foundry portal stores the agent's description and version selector. Concretely:
+
+- **Picker display name:** the Application's ARM resource name (slug), prettified (`style-guide` → `Style Guide`). The picker has no separate "display name" field because Foundry doesn't expose one.
+- **Description in the details panel:** `versions.latest.description` from the data plane (set in the Foundry agent designer). Falls back to the Application's ARM `properties.description` if the data-plane call fails.
+- **Version pill (`v6`, etc.):** `versions.latest.version` from the data plane — the latest published version of the agent.
+
+If you update an agent's description in the Foundry portal, it shows up after the next discovery refresh (5-min server cache, or click Refresh).
+
+The data-plane enrichment is **best-effort**: if the Foundry OBO token can't be acquired or the data-plane call fails, discovery still succeeds with ARM-only fields. You'll see a log like `[/api/agents] Foundry OBO unavailable, skipping data-plane enrichment` in that case.
 
 ---
 
@@ -305,7 +368,7 @@ flowchart TD
 
 **What region does NOT control:**
 
-- RBAC (that's per-resource, region-agnostic — an OCA user can have Azure AI User on a US-hosted office project and use those agents)
+- RBAC (that's per-resource, region-agnostic — an OCA user can have Foundry User on a US-hosted office project and use those agents)
 - Office-scoped agents (OCA could register a project hosted in the US, though we strongly recommend matching to keep GDPR audits simple)
 - Custom user sources (added by the user; they choose where their data goes)
 
@@ -321,7 +384,7 @@ Walk down this list in order:
 
 1. **Did the user actually sign in to the right tenant?** Check `session.user.mail` is populated. No mail → no office match → empty list.
 2. **Is the regional default env var set?** `AZURE_AI_FOUNDRY_RESOURCE_ID_US` / `_EU` for the user's region. Empty → that bucket of agents doesn't show.
-3. **Does the user have Azure AI User on the project?** Without RBAC, ARM returns nothing. Test in the Azure portal: the user should be able to load the project's Applications blade.
+3. **Does the user have Foundry User on the project?** Without RBAC, ARM returns nothing. Test in the Azure portal: the user should be able to load the project's Applications blade.
 4. **Is OBO working?** In dev, the server logs `[/api/agents] OBO failed (dev), using fallback credential`. In prod, OBO failure returns an empty list silently — check `[/api/agents] OBO failed for <user>` in container logs. Fix: confirm the app registration has admin-consented permissions for the Azure AI Foundry and Azure Service Management APIs.
 5. **Click Refresh.** Server-side cache is 5 min; a recent RBAC grant may not have flushed yet.
 
@@ -332,14 +395,14 @@ Walk down this list in order:
 
 ### "User got a 403 from chat"
 
-- They have RBAC for _discovery_ (Azure AI User on the project / app) but not for _invocation_. Confirm the role is Azure AI User and not a read-only built-in role.
+- They have RBAC for _discovery_ (Foundry User on the project / app) but not for _invocation_. Confirm the role is Foundry User and not a read-only built-in role.
 - The OBO token may be stale. Sign out and back in.
 
 ### "I added an agent but the icon is wrong / there's no description"
 
-- Tags only sync at discovery time. Click Refresh.
-- Check that tags are on the **Agent Application** resource, not on the parent project or account.
-- Check the Tabler icon name capitalization. `IconCurrencyDollar` works; `iconcurrencydollar` does not.
+- Both ARM tags and data-plane description only sync at discovery time. Click Refresh.
+- **Icons / colors / category** come from ARM tags on the **Agent Application** resource, not on the parent project or account. Tabler icon name capitalization matters — `IconCurrencyDollar` works; `iconcurrencydollar` does not.
+- **Description and version** come from the data-plane agent (set in the Foundry portal's agent designer). If description is blank, check that the Foundry OBO token is being acquired — look for `[/api/agents] Foundry OBO unavailable, skipping data-plane enrichment` in container logs.
 
 ### "I added an office to `offices.json` but nothing shows up"
 
@@ -366,9 +429,9 @@ Walk down this list in order:
 
 **Add an office** → PR to `config/offices.json` + env var `OFFICE_<NAME>_FOUNDRY_PROJECT_IDS` + RBAC grant on the Foundry project.
 
-**Add a user to an office's agents** → Add to the office's Entra group (which has Azure AI User on the Foundry project).
+**Add a user to an office's agents** → Add to the office's Entra group (which has Foundry User on the Foundry project).
 
-**Restrict a user to specific agents** → Grant Azure AI User at the **Agent Application** scope, not the project scope.
+**Restrict a user to specific agents** → Grant Foundry User at the **Agent Application** scope, not the project scope.
 
 **Force a user's agent list to refresh** → Refresh button in the Agents tab, or sign out + back in.
 

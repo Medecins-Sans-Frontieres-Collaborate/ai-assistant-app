@@ -24,6 +24,9 @@ export interface OpenAIModel {
   isCustomAgent?: boolean; // User-created custom agent (vs built-in agent)
   isOrganizationAgent?: boolean; // Organization-defined agent (e.g., MSF Communications bot)
   agentId?: string; // Azure AI Foundry agent name (or legacy asst_xxx ID)
+  /** Agent version the Application's deployment routes to. Required in the
+   * agent_reference body when invoking via the project endpoint. */
+  agentVersion?: string;
   foundryEndpoint?: string; // Foundry project endpoint for this agent (for custom sources)
   /**
    * ARM resource path of the Foundry project this agent was discovered from.

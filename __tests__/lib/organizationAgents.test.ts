@@ -74,13 +74,20 @@ vi.mock('@/config/organization-agents.json', () => ({
 }));
 
 // Mock Tabler Icons — Proxy returns the same stub for any icon name so the
-// test stays robust as ICON_REGISTRY grows.
+// test stays robust as ICON_REGISTRY grows. `then` and symbol probes must
+// return undefined: vitest's ESM loader awaits the module namespace, and a
+// function returned for `then` makes the namespace look like an unresolved
+// thenable, hanging the worker forever.
 vi.mock('@tabler/icons-react', () => {
   const mockIcon = () => null;
   return new Proxy(
     {},
     {
-      get: (_t, prop) => (prop === '__esModule' ? true : mockIcon),
+      get: (_t, prop) => {
+        if (prop === '__esModule') return true;
+        if (prop === 'then' || typeof prop === 'symbol') return undefined;
+        return mockIcon;
+      },
     },
   );
 });

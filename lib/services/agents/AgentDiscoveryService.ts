@@ -25,6 +25,8 @@ interface FoundryAgentApp {
   description: string;
   /** The agent name used for invocation */
   agentName: string;
+  /** Version of the agent the Application deployment pins to */
+  agentVersion?: string;
   /** Whether the agent is enabled */
   isEnabled: boolean;
   /** Base URL for the agent (Foundry endpoint) */
@@ -42,6 +44,8 @@ interface DiscoveredAgent {
   description: string;
   /** The agent name for invocation */
   agentName: string;
+  /** Agent version pinned by the Application's deployment */
+  agentVersion?: string;
   /** Source type */
   type: 'foundry';
   /** ARM resource path this agent was discovered from */
@@ -99,6 +103,7 @@ export class AgentDiscoveryService {
   async listUserAgents(
     armToken: string,
     resourcePath: string,
+    foundryToken?: string | null,
   ): Promise<DiscoveredAgent[]> {
     // Defense-in-depth: callers already validate resourcePath, but re-check
     // here so the ARM URL construction has a locally explicit dataflow guard
@@ -140,17 +145,32 @@ export class AgentDiscoveryService {
         id: app.name,
         name: app.properties?.displayName || app.name,
         description: app.properties?.description || '',
-        agentName: app.properties?.agentName || app.name,
+        agentName:
+          app.properties?.agents?.[0]?.agentName ||
+          app.properties?.agentName ||
+          app.name,
+        agentVersion: app.properties?.agents?.[0]?.agentVersion,
         isEnabled: app.properties?.isEnabled !== false,
         baseUrl: app.properties?.baseUrl,
         tags: app.tags || {},
       }),
     );
 
-    // Map to discovered agents with UI metadata from tags
-    const agents: DiscoveredAgent[] = applications
-      .filter((app) => app.isEnabled)
-      .map((app) => this.mapToDiscoveredAgent(app));
+    const enabledApps = applications.filter((app) => app.isEnabled);
+
+    // Best-effort enrichment from the Foundry data plane: each Application
+    // wraps a project-level agent that owns the real name and description.
+    // ARM only exposes the Application's slug and (often null) description.
+    const enriched = await Promise.all(
+      enabledApps.map(async (app) => {
+        const dp = foundryToken
+          ? await this.fetchDataPlaneAgent(foundryToken, app).catch(() => null)
+          : null;
+        return this.mapToDiscoveredAgent(app, dp);
+      }),
+    );
+
+    const agents: DiscoveredAgent[] = enriched;
 
     // Cache results
     this.cache.set(cacheKey, {
@@ -210,7 +230,7 @@ export class AgentDiscoveryService {
       tags: app.tags || {},
     };
 
-    return this.mapToDiscoveredAgent(foundryApp);
+    return this.mapToDiscoveredAgent(foundryApp, null);
   }
 
   /**
@@ -224,19 +244,32 @@ export class AgentDiscoveryService {
    *   ui-image: "/images/agents/netsuite.jpg" (cover image path)
    *   ui-maintained-by: "Finance Team" (maintainer info)
    */
-  private mapToDiscoveredAgent(app: FoundryAgentApp): DiscoveredAgent {
-    // Derive project endpoint from baseUrl:
-    // baseUrl: https://account.services.ai.azure.com/api/projects/default/applications/name
-    // endpoint: https://account.services.ai.azure.com/api/projects/default
+  private mapToDiscoveredAgent(
+    app: FoundryAgentApp,
+    dataPlane: {
+      name?: string;
+      description?: string;
+      version?: string;
+    } | null,
+  ): DiscoveredAgent {
     const foundryEndpoint = app.baseUrl
       ? app.baseUrl.split('/applications/')[0]
       : undefined;
 
+    // Foundry has no display-name field separate from the slug, so prettify
+    // the slug for the picker. Hyphens/underscores → spaces, title-case.
+    // The raw slug is preserved on `id` for the subtitle.
+    const rawName = dataPlane?.name?.trim() || app.name;
+    const prettified = rawName
+      .replace(/[-_]+/g, ' ')
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+
     return {
       id: app.id,
-      name: app.name,
-      description: app.description,
+      name: prettified,
+      description: dataPlane?.description?.trim() || app.description,
       agentName: app.agentName,
+      agentVersion: dataPlane?.version || app.agentVersion,
       type: 'foundry',
       foundryEndpoint,
       icon: app.tags['ui-icon'] || undefined,
@@ -245,6 +278,46 @@ export class AgentDiscoveryService {
       category: app.tags['ui-category'] || undefined,
       maintainedBy: app.tags['ui-maintained-by'] || undefined,
     };
+  }
+
+  private async fetchDataPlaneAgent(
+    foundryToken: string,
+    app: FoundryAgentApp,
+  ): Promise<{
+    name?: string;
+    description?: string;
+    version?: string;
+  } | null> {
+    if (!app.baseUrl || !app.agentName) return null;
+    const projectEndpoint = app.baseUrl.split('/applications/')[0];
+    if (!projectEndpoint) return null;
+    if (!/^[a-zA-Z0-9-]{2,64}$/.test(app.agentName)) return null;
+
+    try {
+      const res = await fetch(
+        `${projectEndpoint}/agents/${app.agentName}?api-version=v1`,
+        {
+          headers: {
+            Authorization: `Bearer ${foundryToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      if (!res.ok) return null;
+      const body = await res.json();
+      const latest = body?.versions?.latest;
+      // `versions.latest.version` is the latest published version. The
+      // Application's deployment may pin to an older version; getting the
+      // pinned version exactly requires a separate /agentdeployments call.
+      // Latest covers the common case where the Application auto-deploys.
+      return {
+        name: latest?.name || body?.name,
+        description: latest?.description,
+        version: latest?.version,
+      };
+    } catch {
+      return null;
+    }
   }
 
   private hashKey(token: string): string {

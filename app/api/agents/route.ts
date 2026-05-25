@@ -86,12 +86,24 @@ export async function GET(request: NextRequest) {
     // exercise the discovery path.
     const isProd = process.env.NODE_ENV === 'production';
     let armToken: string;
+    let foundryToken: string | null = null;
 
     try {
       const appAccessToken = await getAccessTokenForOBO(session);
       if (!appAccessToken) throw new Error('No OBO token');
       const tokenProvider = UserTokenProvider.getInstance();
       armToken = await tokenProvider.getArmToken(appAccessToken);
+      // Foundry token is used to enrich each Application with the data
+      // plane agent's name + description. Best-effort: discovery still
+      // works without it (returns ARM-only fields).
+      try {
+        foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
+      } catch (enrichErr) {
+        console.warn(
+          '[/api/agents] Foundry OBO unavailable, skipping data-plane enrichment:',
+          enrichErr instanceof Error ? enrichErr.message : enrichErr,
+        );
+      }
     } catch (e) {
       const errMsg = e instanceof Error ? e.message : String(e);
       if (isProd) {
@@ -120,13 +132,22 @@ export async function GET(request: NextRequest) {
         'https://management.azure.com/.default',
       );
       armToken = tokenResponse.token;
+      try {
+        const fTok = await credential.getToken('https://ai.azure.com/.default');
+        foundryToken = fTok.token;
+      } catch {
+        // Best-effort enrichment only.
+      }
     }
 
-    // Discover agents from all sources in parallel
     const discoveryService = AgentDiscoveryService.getInstance();
     const results = await Promise.allSettled(
       allPaths.map(async (path) => {
-        const agents = await discoveryService.listUserAgents(armToken, path);
+        const agents = await discoveryService.listUserAgents(
+          armToken,
+          path,
+          foundryToken,
+        );
         return agents.map((agent) => ({ ...agent, source: path }));
       }),
     );

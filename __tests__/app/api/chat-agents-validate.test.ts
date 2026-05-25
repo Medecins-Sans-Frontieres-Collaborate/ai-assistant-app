@@ -12,6 +12,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Hoist mocks before imports
 const mockAuth = vi.hoisted(() => vi.fn());
+const mockGetAccessTokenForOBO = vi.hoisted(() =>
+  vi.fn().mockResolvedValue('mock-app-access-token'),
+);
+const mockGetFoundryToken = vi.hoisted(() =>
+  vi.fn().mockResolvedValue('mock-foundry-obo-token'),
+);
 const mockDefaultAzureCredential = vi.hoisted(() => vi.fn());
 const mockAIProjectClient = vi.hoisted(() => vi.fn());
 const mockGetAgent = vi.hoisted(() => vi.fn());
@@ -22,6 +28,13 @@ const mockEnv = vi.hoisted(() => ({
 // Mock dependencies
 vi.mock('@/auth', () => ({
   auth: mockAuth,
+  getAccessTokenForOBO: mockGetAccessTokenForOBO,
+}));
+
+vi.mock('@/lib/services/auth/UserTokenProvider', () => ({
+  UserTokenProvider: {
+    getInstance: () => ({ getFoundryToken: mockGetFoundryToken }),
+  },
 }));
 
 vi.mock('@azure/identity', () => ({

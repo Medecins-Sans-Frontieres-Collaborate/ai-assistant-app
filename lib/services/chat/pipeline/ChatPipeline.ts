@@ -121,10 +121,12 @@ export class ChatPipeline {
           `[Pipeline] Running stage: ${stage.name} (timeout: ${timeout}ms)`,
         );
 
+        const { promise: timeoutPromise, cancel: cancelTimeout } =
+          this.createTimeoutPromise(timeout, stage.name);
         try {
           context = await Promise.race([
             stage.execute(context),
-            this.createTimeoutPromise(timeout, stage.name),
+            timeoutPromise,
           ]);
         } catch (error) {
           // Check if this is a timeout error
@@ -147,6 +149,8 @@ export class ChatPipeline {
 
           // Re-throw non-timeout errors
           throw error;
+        } finally {
+          cancelTimeout();
         }
 
         // Check for critical errors that should stop the pipeline
@@ -238,9 +242,10 @@ export class ChatPipeline {
   private createTimeoutPromise(
     timeoutMs: number,
     stageName: string,
-  ): Promise<never> {
-    return new Promise((_, reject) => {
-      setTimeout(() => {
+  ): { promise: Promise<never>; cancel: () => void } {
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const promise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
         reject(
           PipelineError.warning(
             ErrorCode.PIPELINE_TIMEOUT,
@@ -253,6 +258,13 @@ export class ChatPipeline {
         );
       }, timeoutMs);
     });
+    const cancel = () => {
+      if (timer !== null) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+    return { promise, cancel };
   }
 
   /**

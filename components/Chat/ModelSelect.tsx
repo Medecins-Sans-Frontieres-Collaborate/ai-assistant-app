@@ -177,6 +177,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         description: agent.description,
         modelType: 'agent' as const,
         agentId: agent.agentName,
+        agentVersion: agent.agentVersion,
         foundryEndpoint: agent.foundryEndpoint,
         agentSource: agent.source,
         isOrganizationAgent: true,

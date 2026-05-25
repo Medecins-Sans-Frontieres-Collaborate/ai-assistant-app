@@ -160,13 +160,6 @@ const TranscriptionOptions: FC<TranscriptionOptionsProps> = ({
     });
   };
 
-  const selectedLanguage = TRANSCRIPTION_LANGUAGES.find(
-    (lang) => lang.code === filePreview.transcriptionLanguage,
-  );
-  const selectedLanguageLabel = selectedLanguage
-    ? t(selectedLanguage.labelKey)
-    : t('transcription.languages.autoDetect');
-
   return (
     <div className="space-y-1.5">
       {/* Info text */}

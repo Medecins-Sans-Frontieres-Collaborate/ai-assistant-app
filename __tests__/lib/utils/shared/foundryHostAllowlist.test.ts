@@ -1,6 +1,6 @@
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/config/environment', () => ({
   env: {

@@ -1,4 +1,9 @@
-import { IconCalendar, IconChevronLeft } from '@tabler/icons-react';
+import {
+  IconCalendar,
+  IconChevronLeft,
+  IconHash,
+  IconTag,
+} from '@tabler/icons-react';
 import React, { FC } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
@@ -171,6 +176,37 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           </span>
         </p>
       )}
+
+      {(selectedModel.agentId || selectedModel.agentVersion) &&
+        (selectedModel.isOrganizationAgent ||
+          selectedModel.id?.startsWith('foundry-')) && (
+          <div className="flex flex-wrap items-center gap-1.5 mb-3">
+            {selectedModel.agentId && (
+              <span
+                className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs ${
+                  hasBackgroundImage
+                    ? 'bg-white/15 text-white/90'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                <IconHash size={11} aria-hidden="true" />
+                <span className="font-mono">{selectedModel.agentId}</span>
+              </span>
+            )}
+            {selectedModel.agentVersion && (
+              <span
+                className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs ${
+                  hasBackgroundImage
+                    ? 'bg-white/15 text-white/90'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                }`}
+              >
+                <IconTag size={11} aria-hidden="true" />
+                <span className="font-mono">v{selectedModel.agentVersion}</span>
+              </span>
+            )}
+          </div>
+        )}
 
       {/* The modelType badge ("omni", "reasoning", etc.) was removed — it
           was jargon that didn't communicate to users. Tagline + description

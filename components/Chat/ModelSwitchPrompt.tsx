@@ -58,7 +58,7 @@ export const ModelSwitchPrompt: React.FC<ModelSwitchPromptProps> = ({
           onClick={onAlwaysSwitch}
           className="px-3 py-1.5 text-sm bg-blue-800 text-white rounded hover:bg-blue-900 transition-colors"
         >
-          {t('chat.alwaysSwitchToModel', { model: fallbackModelName })}
+          {t('chat.alwaysSwitchToModel', { original: originalModelName })}
         </button>
       </div>
     </div>

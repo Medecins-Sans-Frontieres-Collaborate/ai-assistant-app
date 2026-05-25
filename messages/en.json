@@ -414,7 +414,13 @@
     "sourceValidatedEmpty": "Valid source, but no agents found. You may not have access to agents in this project.",
     "invalidSource": "Could not access this resource path. Verify the path and your permissions.",
     "addSource": "Add Source",
-    "removeSource": "Remove Source"
+    "removeSource": "Remove Source",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "The Azure subscription that contains the Foundry account. If you're unsure, ask your admin which subscription your team uses.",
+    "tooltipFoundryAccount": "The Azure AI Services account where the Foundry project lives. Each office or team typically has its own.",
+    "tooltipProject": "A project organizes agents within an account. Most accounts have a single 'default' project."
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",

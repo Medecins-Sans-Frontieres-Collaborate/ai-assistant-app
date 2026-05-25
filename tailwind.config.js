@@ -9,6 +9,16 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        surface: {
+          DEFAULT: '#ffffff',
+          dark: '#212121',
+          'dark-elevated': '#2a2a2a',
+          'dark-base': '#171717',
+          'dark-recessed': '#1a1a1a',
+          'dark-input': '#2D3748',
+        },
+      },
       fontFamily: {
         sans: [
           'system-ui',

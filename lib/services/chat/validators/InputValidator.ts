@@ -116,6 +116,7 @@ const OpenAIModelSchema = z.object({
   isCustomAgent: z.boolean().optional(),
   isOrganizationAgent: z.boolean().optional(),
   agentId: z.string().optional(),
+  agentVersion: z.string().optional(),
   // Add other fields as needed but keep them optional
   // to avoid breaking existing code
 }) as z.ZodType<OpenAIModel>;
@@ -209,8 +210,33 @@ const ChatBodySchema = z
       )
       .max(16)
       .optional(),
+    isEditorOpen: z.boolean().optional(),
+    activeFiles: z
+      .array(
+        z
+          .object({
+            id: z.string(),
+            url: z.string(),
+            originalFilename: z.string(),
+            addedAt: z.string(),
+            sourceMessageId: z.string(),
+            status: z.enum(['idle', 'processing', 'ready', 'error']),
+            lastUsedAt: z.string().optional(),
+            errorMessage: z.string().optional(),
+            pinned: z.boolean().optional(),
+            processedContent: z.any().optional(),
+            mimeType: z.string().optional(),
+            sizeBytes: z.number().optional(),
+            sha256: z.string().optional(),
+          })
+          .passthrough(),
+      )
+      .max(50)
+      .optional(),
+    activeFilesTokensUsed: z.number().int().min(0).optional(),
+    autoInjectPinnedImages: z.boolean().optional(),
   })
-  .strict(); // Reject unknown properties
+  .strict();
 
 /**
  * InputValidator validates and sanitizes incoming chat requests.

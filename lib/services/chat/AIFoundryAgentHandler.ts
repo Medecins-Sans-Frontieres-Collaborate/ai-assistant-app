@@ -270,7 +270,14 @@ export class AIFoundryAgentHandler {
             }
           }
 
-          // Create a response (replaces runs.create)
+          // Foundry's preview runtime requires `agent_reference` as the
+          // wrapper key (the legacy `agent` key now returns "deprecated"),
+          // with `type` nested inside, and `version` matching a published
+          // agent version. Version comes from the data-plane enrichment
+          // during discovery — falling back to the SDK default if absent.
+          // The OpenAI SDK's options.body REPLACES the params body, so
+          // conversation + stream must be restated here.
+          const agentVersion = modelConfig.agentVersion;
           const createStream = () =>
             openAIClient.responses.create(
               {
@@ -279,9 +286,12 @@ export class AIFoundryAgentHandler {
               },
               {
                 body: {
-                  agent: {
-                    name: String(agentId),
+                  conversation: conversationId,
+                  stream: true,
+                  agent_reference: {
                     type: 'agent_reference',
+                    name: String(agentId),
+                    ...(agentVersion ? { version: agentVersion } : {}),
                   },
                 },
               },

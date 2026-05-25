@@ -223,7 +223,6 @@ export const ChatInput = ({
     setShowPromptList,
     activePromptIndex,
     setActivePromptIndex,
-    promptInputValue,
     filteredPrompts,
     promptListRef,
     handlePromptSelect: handlePromptSelectFromHook,

@@ -35,6 +35,7 @@ import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { create } from 'zustand';
 
 interface ChatStore {
@@ -596,6 +597,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
+    const orgAgentSearchAllowed =
+      isOrganizationAgent && conversation.model.id.startsWith('org-')
+        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+            ?.allowWebSearch === true
+        : false;
+    const isAgentInvocation = isOrganizationAgent || isCustomAgent;
+    const effectiveSearchMode =
+      isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -605,7 +615,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
-      searchMode,
+      searchMode: effectiveSearchMode,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
       streamingSpeed: settings.streamingSpeed, // Pass streaming speed configuration
@@ -617,6 +627,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
+      agentSourcePath: modelToSend.agentSource,
       approvalResponses,
     });
   },

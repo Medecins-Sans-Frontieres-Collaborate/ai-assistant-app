@@ -244,7 +244,7 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as markdown', async () => {
-      const { htmlToMarkdown, downloadFile } =
+      const { htmlToMarkdown } =
         await import('@/lib/utils/shared/document/exportUtils');
 
       render(
@@ -267,8 +267,7 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as HTML', async () => {
-      const { downloadFile } =
-        await import('@/lib/utils/shared/document/exportUtils');
+      await import('@/lib/utils/shared/document/exportUtils');
 
       render(
         <DocumentArtifact
@@ -289,7 +288,7 @@ describe('DocumentArtifact', () => {
     });
 
     it('should export as plain text', async () => {
-      const { htmlToPlainText, downloadFile } =
+      const { htmlToPlainText } =
         await import('@/lib/utils/shared/document/exportUtils');
 
       render(
