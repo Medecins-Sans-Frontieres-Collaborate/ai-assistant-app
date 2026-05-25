@@ -121,6 +121,7 @@ export class ChatPipeline {
           `[Pipeline] Running stage: ${stage.name} (timeout: ${timeout}ms)`,
         );
 
+        const errorCountBefore = context.errors?.length ?? 0;
         const { promise: timeoutPromise, cancel: cancelTimeout } =
           this.createTimeoutPromise(timeout, stage.name);
         try {
@@ -143,6 +144,13 @@ export class ChatPipeline {
             errors.push(error);
             context = { ...context, errors };
 
+            if (stage.name === 'FileProcessor') {
+              console.warn(
+                '[Pipeline] FileProcessor timed out, sanitizing file_url content from messages',
+              );
+              context = this.sanitizeFileUrlsOnError(context);
+            }
+
             // Continue to next stage (graceful degradation)
             continue;
           }
@@ -151,6 +159,16 @@ export class ChatPipeline {
           throw error;
         } finally {
           cancelTimeout();
+        }
+
+        if (
+          stage.name === 'FileProcessor' &&
+          (context.errors?.length ?? 0) > errorCountBefore
+        ) {
+          console.warn(
+            '[Pipeline] FileProcessor failed, sanitizing file_url content from messages',
+          );
+          context = this.sanitizeFileUrlsOnError(context);
         }
 
         // Check for critical errors that should stop the pipeline
