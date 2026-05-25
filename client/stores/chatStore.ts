@@ -91,6 +91,20 @@ interface ChatStore {
   /** Set of approval_request_id currently in flight (card UI shows spinner). */
   submittingApprovals: Set<string>;
 
+  /**
+   * Signal that the user just clicked "Continue" on an OAuth consent card
+   * to resume after an upstream sign-in. The next assistant message will
+   * either contain real content (sign-in succeeded — clear this) or another
+   * `oauth_consent_request` (sign-in didn't complete — that card uses this
+   * to render an "incomplete sign-in" framing instead of repeating the
+   * original "Authorize" prompt).
+   *
+   * Cleared when streaming finalizes or after a 60s timeout (set on write).
+   */
+  pendingOAuthResume: { serverLabel: string | null; at: number } | null;
+
+  setPendingOAuthResume: (info: { serverLabel: string | null } | null) => void;
+
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
   setLastTurnDroppedActiveFileIds: (
@@ -262,6 +276,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   lastTurnDroppedActiveFileIds: {},
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
+  pendingOAuthResume: null,
+
+  setPendingOAuthResume: (info) =>
+    set({
+      pendingOAuthResume: info
+        ? { serverLabel: info.serverLabel, at: Date.now() }
+        : null,
+    }),
 
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
@@ -879,14 +901,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
-    // Check if we should attempt auto-retry with fallback model
+    // Check if we should attempt auto-retry with fallback model.
+    // Curated/custom agents are NEVER retried — the agent's tools,
+    // instructions, and connections are the whole point of choosing it.
+    // Standard models that happen to be invoked via Foundry's agent service
+    // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
+    // deployment-mechanism marker, not "user picked a curated agent".
     const { isRetrying } = get();
     const isAuthError = error instanceof ApiError && error.isAuthError();
-    const isCustomAgent = conversation?.model?.id?.startsWith('custom-');
-    const isAlreadyOnFallback = conversation?.model?.id === fallbackModelID;
+    const modelId = conversation?.model?.id ?? '';
+    const isCuratedAgent =
+      conversation?.model?.isOrganizationAgent ||
+      conversation?.model?.isCustomAgent ||
+      modelId.startsWith('org-') ||
+      modelId.startsWith('foundry-') ||
+      modelId.startsWith('custom-');
+    const isAlreadyOnFallback = modelId === fallbackModelID;
     const canRetry =
       !isAuthError &&
-      !isCustomAgent &&
+      !isCuratedAgent &&
       !isAlreadyOnFallback &&
       !isRetrying &&
       conversation;

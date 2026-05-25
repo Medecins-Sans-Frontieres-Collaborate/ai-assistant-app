@@ -32,11 +32,23 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
   const serverLabel = request.server_label?.trim() || null;
   const sendMessage = useChatStore((s) => s.sendMessage);
   const isStreaming = useChatStore((s) => s.isStreaming);
+  const pendingOAuthResume = useChatStore((s) => s.pendingOAuthResume);
+  const setPendingOAuthResume = useChatStore((s) => s.setPendingOAuthResume);
   const selectedConversation = useConversationStore((s) =>
     s.selectedConversationId
       ? (s.conversations.find((c) => c.id === s.selectedConversationId) ?? null)
       : null,
   );
+
+  // If this card appeared right after the user clicked Continue on a
+  // previous OAuth card for the same server, the upstream sign-in didn't
+  // complete. Show that framing instead of repeating the "Authorize" CTA.
+  // Window: 60s — long enough for a slow OAuth round-trip, short enough
+  // that a new chat (genuinely fresh OAuth) won't mistakenly inherit it.
+  const incompleteSignIn =
+    !!pendingOAuthResume &&
+    Date.now() - pendingOAuthResume.at < 60_000 &&
+    (pendingOAuthResume.serverLabel ?? null) === serverLabel;
 
   const [oauthClicked, setOauthClicked] = useState(false);
   const [resuming, setResuming] = useState(false);
@@ -46,6 +58,10 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
     const flat = flattenEntriesForAPI(selectedConversation.messages);
     const lastUser = [...flat].reverse().find((m) => m.role === 'user');
     if (!lastUser) return;
+    // Mark a resume in flight so a follow-up OAuth card for the same
+    // server can render the "didn't complete" message instead of the
+    // original prompt.
+    setPendingOAuthResume({ serverLabel });
     setResuming(true);
     void sendMessage(lastUser, selectedConversation).finally(() => {
       setResuming(false);
@@ -66,14 +82,22 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
         </div>
         <div className="min-w-0 flex-1">
           <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-            {serverLabel
-              ? t('authorizeService', { service: serverLabel })
-              : t('authorizeRequired')}
+            {incompleteSignIn
+              ? serverLabel
+                ? t('signInIncompleteForService', { service: serverLabel })
+                : t('signInIncompleteGeneric')
+              : serverLabel
+                ? t('authorizeService', { service: serverLabel })
+                : t('authorizeRequired')}
           </h4>
           <p className="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-            {serverLabel
-              ? t('descriptionWithService', { service: serverLabel })
-              : t('descriptionGeneric')}
+            {incompleteSignIn
+              ? serverLabel
+                ? t('signInIncompleteDescription', { service: serverLabel })
+                : t('signInIncompleteDescriptionGeneric')
+              : serverLabel
+                ? t('descriptionWithService', { service: serverLabel })
+                : t('descriptionGeneric')}
           </p>
 
           <div className="mt-3 flex flex-wrap items-center gap-2">
