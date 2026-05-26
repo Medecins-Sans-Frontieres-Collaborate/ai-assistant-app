@@ -92,16 +92,16 @@ interface ChatStore {
   submittingApprovals: Set<string>;
 
   /**
-   * Signal that the user just clicked "Continue" on an OAuth consent card
-   * to resume after an upstream sign-in. The next assistant message will
-   * either contain real content (sign-in succeeded — clear this) or another
-   * `oauth_consent_request` (sign-in didn't complete — that card uses this
-   * to render an "incomplete sign-in" framing instead of repeating the
-   * original "Authorize" prompt).
-   *
-   * Cleared when streaming finalizes or after a 60s timeout (set on write).
+   * Per-server "Continue in flight" markers, keyed by server label
+   * (empty string for null/unknown server). The next assistant message
+   * for a given server either contains real content (sign-in succeeded
+   * — clear the key) or another `oauth_consent_request` (sign-in didn't
+   * complete — the card uses the matching key to switch to "incomplete
+   * sign-in" framing). Keyed by server so a multi-server chat (e.g.
+   * NetSuite + Salesforce) doesn't lose state when one in-flight resume
+   * overwrites another.
    */
-  pendingOAuthResume: { serverLabel: string | null; at: number } | null;
+  pendingOAuthResume: Record<string, { at: number }>;
 
   setPendingOAuthResume: (info: { serverLabel: string | null } | null) => void;
 
@@ -276,13 +276,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   lastTurnDroppedActiveFileIds: {},
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
-  pendingOAuthResume: null,
+  pendingOAuthResume: {},
 
   setPendingOAuthResume: (info) =>
-    set({
-      pendingOAuthResume: info
-        ? { serverLabel: info.serverLabel, at: Date.now() }
-        : null,
+    set((state) => {
+      if (info === null) return { pendingOAuthResume: {} };
+      const key = info.serverLabel ?? '';
+      return {
+        pendingOAuthResume: {
+          ...state.pendingOAuthResume,
+          [key]: { at: Date.now() },
+        },
+      };
     }),
 
   // Actions
@@ -877,10 +882,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       loadingMessage: null,
       abortController: null,
       stopRequested: false,
-      // Mounted OAuthConsentCards snapshot pendingOAuthResume on first
-      // render, so clearing here is safe and prevents stale state from
-      // leaking into the next chat turn.
-      pendingOAuthResume: null,
+      pendingOAuthResume: {},
     });
   },
 

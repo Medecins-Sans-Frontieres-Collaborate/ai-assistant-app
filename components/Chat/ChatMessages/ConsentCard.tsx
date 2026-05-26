@@ -48,6 +48,7 @@ export const ConsentCard: FC<ConsentCardProps> = ({
             consent_url: string;
           }
         }
+        messageIndex={messageIndex}
       />
     );
   }

@@ -796,7 +796,8 @@
       "generatingImage": "Generating image…",
       "listingTools": "Looking up available tools…",
       "analyzingFiles": "Analyzing your files…",
-      "searchingKnowledge": "Searching the knowledge base…"
+      "searchingKnowledge": "Searching the knowledge base…",
+      "cancellingPriorTool": "Cancelling previous tool request…"
     },
     "consent": {
       "authorizeRequired": "Authorization required",
@@ -810,8 +811,10 @@
       "authorizeButton": "Authorize",
       "reauthorizeButton": "Re-authorize",
       "continueButton": "Continue",
+      "confirmingButton": "Confirming…",
       "authorizeHint": "Authorize, then return here and click Continue.",
       "continueHint": "Once authorization finishes in the other tab, click Continue.",
+      "confirmingHint": "Confirming authorization and resuming your request…",
       "resendHint": "After authorizing, send your message again to continue.",
       "approvalRequired": "Tool approval required",
       "approvalForService": "Approve tool for {service}",

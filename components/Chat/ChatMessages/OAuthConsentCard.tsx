@@ -12,6 +12,8 @@ import { useTranslations } from 'next-intl';
 
 import { flattenEntriesForAPI } from '@/lib/utils/shared/chat/messageVersioning';
 
+import type { Message } from '@/types/chat';
+
 import type { ConsentRequest } from './ConsentCard';
 
 import { useChatStore } from '@/client/stores/chatStore';
@@ -19,20 +21,22 @@ import { useConversationStore } from '@/client/stores/conversationStore';
 
 interface OAuthConsentCardProps {
   request: ConsentRequest & { kind: 'oauth' };
+  messageIndex?: number;
 }
 
-/**
- * Consent card for the MCP OAuth flow. After the user clicks Authorize the
- * card surfaces a Continue button that re-sends the last user message
- * verbatim — the message is replayed unchanged because the user already
- * authored it; no pre-processing or input-bar normalization is needed.
- */
-export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
+const OAUTH_SETTLE_MS = 1500;
+
+export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({
+  request,
+  messageIndex,
+}) => {
   const t = useTranslations('chat.consent');
   const serverLabel = request.server_label?.trim() || null;
   const sendMessage = useChatStore((s) => s.sendMessage);
   const isStreaming = useChatStore((s) => s.isStreaming);
-  const pendingOAuthResume = useChatStore((s) => s.pendingOAuthResume);
+  const pendingForThisServer = useChatStore(
+    (s) => !!s.pendingOAuthResume[serverLabel ?? ''],
+  );
   const setPendingOAuthResume = useChatStore((s) => s.setPendingOAuthResume);
   const selectedConversation = useConversationStore((s) =>
     s.selectedConversationId
@@ -40,39 +44,46 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
       : null,
   );
 
-  // Capture once on mount: if this card mounts while a pendingOAuthResume
-  // matches its server, the user's last Continue didn't complete an upstream
-  // sign-in. Render the "incomplete" framing. Snapshotted via useState so
-  // a later clear of the store value doesn't flip the card back; explicit
-  // clear happens in chatStore.clearStreamingState to age out stale state.
-  const [incompleteSignIn] = useState(
-    () =>
-      !!pendingOAuthResume &&
-      (pendingOAuthResume.serverLabel ?? null) === serverLabel,
-  );
+  const [incompleteSignIn] = useState(() => pendingForThisServer);
 
   const [oauthClicked, setOauthClicked] = useState(false);
-  const [resuming, setResuming] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'settling'>('idle');
 
   const handleContinue = () => {
-    if (!selectedConversation || resuming || isStreaming) return;
+    if (!selectedConversation || phase !== 'idle' || isStreaming) return;
+
     const flat = flattenEntriesForAPI(selectedConversation.messages);
-    const lastUser = [...flat].reverse().find((m) => m.role === 'user');
-    if (!lastUser) return;
-    // Mark a resume in flight so a follow-up OAuth card for the same
-    // server can render the "didn't complete" message instead of the
-    // original prompt.
+
+    let triggeringUser: Message | undefined;
+    if (typeof messageIndex === 'number') {
+      if (messageIndex > 0) {
+        for (let i = Math.min(messageIndex - 1, flat.length - 1); i >= 0; i--) {
+          if (flat[i].role === 'user') {
+            triggeringUser = flat[i];
+            break;
+          }
+        }
+      }
+    } else {
+      triggeringUser = [...flat].reverse().find((m) => m.role === 'user');
+    }
+    if (!triggeringUser) return;
+
     setPendingOAuthResume({ serverLabel });
-    setResuming(true);
-    void sendMessage(lastUser, selectedConversation).finally(() => {
-      setResuming(false);
-    });
+    setPhase('settling');
+
+    window.setTimeout(() => {
+      void sendMessage(triggeringUser!, selectedConversation).finally(() => {
+        setPhase('idle');
+      });
+    }, OAUTH_SETTLE_MS);
   };
 
-  const continueDisabled = !selectedConversation || resuming || isStreaming;
+  const settling = phase === 'settling';
+  const continueDisabled = !selectedConversation || settling || isStreaming;
 
   return (
-    <div className="my-3 max-w-prose rounded-xl border border-amber-200/80 bg-amber-50/60 p-4 not-prose dark:border-amber-700/40 dark:bg-amber-900/15">
+    <div className="my-3 max-w-prose rounded-xl border border-amber-200/80 bg-amber-50/60 p-4 not-prose dark:border-amber-700/40 dark:bg-amber-900/15 transition-opacity">
       <div className="flex items-start gap-3">
         <div className="shrink-0 rounded-lg bg-amber-100 p-2 dark:bg-amber-900/40">
           <IconKey
@@ -107,6 +118,7 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
               target="_blank"
               rel="noreferrer noopener"
               onClick={() => setOauthClicked(true)}
+              aria-disabled={settling || undefined}
               className={
                 oauthClicked
                   ? 'inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-sm font-medium text-amber-800 transition-colors hover:bg-amber-50 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-900/40'
@@ -122,9 +134,10 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
                 type="button"
                 onClick={handleContinue}
                 disabled={continueDisabled}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-amber-700 dark:hover:bg-amber-600"
+                aria-busy={settling || undefined}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-amber-700 dark:hover:bg-amber-600"
               >
-                {resuming ? (
+                {settling ? (
                   <IconLoader2
                     size={14}
                     className="animate-spin"
@@ -133,12 +146,22 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({ request }) => {
                 ) : (
                   <IconArrowRight size={14} aria-hidden="true" />
                 )}
-                {t('continueButton')}
+                {settling ? t('confirmingButton') : t('continueButton')}
               </button>
             )}
           </div>
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-            {oauthClicked ? t('continueHint') : t('authorizeHint')}
+          <p
+            className={`mt-2 text-xs transition-colors ${
+              settling
+                ? 'text-amber-700 dark:text-amber-300'
+                : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            {settling
+              ? t('confirmingHint')
+              : oauthClicked
+                ? t('continueHint')
+                : t('authorizeHint')}
           </p>
         </div>
       </div>

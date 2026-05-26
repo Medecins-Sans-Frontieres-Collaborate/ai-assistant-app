@@ -270,6 +270,13 @@ export class AIFoundryAgentHandler {
             }
           }
 
+          if (isNewConversation) {
+            // Foundry's runtime sometimes hasn't indexed a brand-new
+            // conversation by the time responses.create fires, which
+            // produces an empty turn.
+            await new Promise((r) => setTimeout(r, 600));
+          }
+
           // Foundry's preview runtime requires `agent_reference` as the
           // wrapper key (the legacy `agent` key now returns "deprecated"),
           // with `type` nested inside, and `version` matching a published
@@ -361,15 +368,22 @@ export class AIFoundryAgentHandler {
               // Surface any auto-denied approvals up-front so the client UI
               // flips matching consent cards out of "pending" before the
               // agent starts streaming new content.
-              for (const deniedId of autoDeniedApprovalIds) {
+              if (autoDeniedApprovalIds.length > 0) {
                 controller.enqueue(
                   encoder.encode(
-                    emitConsentOutcome({
-                      approval_request_id: deniedId,
-                      approve: false,
-                    }),
+                    emitAgentActivity('chat.activity.cancellingPriorTool'),
                   ),
                 );
+                for (const deniedId of autoDeniedApprovalIds) {
+                  controller.enqueue(
+                    encoder.encode(
+                      emitConsentOutcome({
+                        approval_request_id: deniedId,
+                        approve: false,
+                      }),
+                    ),
+                  );
+                }
               }
               let citations: Array<{
                 number: number;
@@ -385,6 +399,7 @@ export class AIFoundryAgentHandler {
               // markerBuffer: Accumulates text to handle citation markers split across chunks
               let markerBuffer = '';
               let controllerClosed = false;
+              let sawMeaningfulOutput = false;
               // Dedupe output-item emissions — Foundry fires both
               // `output_item.added` AND `output_item.done` for the same item,
               // and we only want to surface each item once (consent prompt,
@@ -397,6 +412,7 @@ export class AIFoundryAgentHandler {
                   // Events use 'type' field, not 'event'
                   if (event.type === 'response.output_text.delta') {
                     const textChunk = event.delta;
+                    if (textChunk) sawMeaningfulOutput = true;
 
                     // Stage 1: Accumulate text in marker buffer
                     markerBuffer += textChunk;
@@ -475,6 +491,7 @@ export class AIFoundryAgentHandler {
                       const marker = outputItemToMarker(item);
                       if (marker !== null) {
                         emittedItemIds.add(item.id);
+                        sawMeaningfulOutput = true;
                         controller.enqueue(encoder.encode(marker));
                       }
                     }
@@ -492,6 +509,7 @@ export class AIFoundryAgentHandler {
                     const id = evt.id || evt.consent_link;
                     if (id && !emittedItemIds.has(id) && evt.consent_link) {
                       emittedItemIds.add(id);
+                      sawMeaningfulOutput = true;
                       controller.enqueue(
                         encoder.encode(
                           emitConsentRequest({
@@ -521,6 +539,24 @@ export class AIFoundryAgentHandler {
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
                       markerBuffer = '';
+                    }
+
+                    if (!sawMeaningfulOutput) {
+                      console.error(
+                        '[AIFoundryAgentHandler] response.completed with no output',
+                        {
+                          conversationId,
+                          isNewConversation,
+                          agentName: String(agentId),
+                        },
+                      );
+                      controllerClosed = true;
+                      controller.error(
+                        new Error(
+                          'Agent returned an empty response. Please try again.',
+                        ),
+                      );
+                      return;
                     }
 
                     // Append metadata at the very end using utility function
