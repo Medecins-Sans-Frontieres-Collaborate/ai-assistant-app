@@ -1,9 +1,19 @@
 'use client';
 
-import { IconAlertTriangle, IconCopy, IconRefresh } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconCopy,
+  IconDownload,
+  IconRefresh,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
+
+import {
+  clearAllConversationStorage,
+  exportRawConversationData,
+} from '@/lib/utils/app/storage/perConversationStorage';
 
 import { FEEDBACK_EMAIL } from '@/types/contact';
 
@@ -14,6 +24,10 @@ interface ErrorDisplayProps {
   onRetry?: () => void;
   retryLabel?: string;
   showSupportInfo?: boolean;
+  /** Show "Export data" link for saving raw conversation data before recovery */
+  showDataExport?: boolean;
+  /** Show "Reset storage" escape hatch for unrecoverable storage corruption */
+  showStorageReset?: boolean;
 }
 
 export function ErrorDisplay({
@@ -23,9 +37,13 @@ export function ErrorDisplay({
   onRetry,
   retryLabel,
   showSupportInfo = true,
+  showDataExport = false,
+  showStorageReset = false,
 }: ErrorDisplayProps) {
   const t = useTranslations();
   const [copied, setCopied] = useState(false);
+  const [exported, setExported] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Use default feedback email - error contexts may not have session providers
   const supportEmail = FEEDBACK_EMAIL;
@@ -37,9 +55,30 @@ export function ErrorDisplay({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleExportData = () => {
+    try {
+      const data = exportRawConversationData();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `conversation-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      setExported(true);
+    } catch (e) {
+      console.error('Failed to export data:', e);
+    }
+  };
+
+  const handleResetStorage = () => {
+    clearAllConversationStorage();
+    window.location.reload();
+  };
+
   return (
-    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-surface-dark p-4">
-      <div className="relative rounded-xl bg-white dark:bg-surface-dark-base p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
+    <div className="flex h-full w-full items-center justify-center bg-white dark:bg-[#212121] p-4">
+      <div className="relative rounded-xl bg-white dark:bg-[#171717] p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header with Icon and Title */}
         <div className="flex items-center gap-4 mb-6">
           <div className="rounded-full bg-red-100 dark:bg-red-900/30 p-3 flex-shrink-0">
@@ -93,7 +132,7 @@ export function ErrorDisplay({
         {onRetry && (
           <button
             onClick={onRetry}
-            className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 px-4 py-2 text-white text-sm font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group mb-5"
+            className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-4 py-2 text-white text-sm font-medium shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 group mb-5"
           >
             <IconRefresh
               size={16}
@@ -115,6 +154,69 @@ export function ErrorDisplay({
                 {supportEmail}
               </a>
             </p>
+          </div>
+        )}
+
+        {/* Data Export */}
+        {showDataExport && (
+          <div className="mt-3 text-center">
+            <button
+              onClick={handleExportData}
+              className="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              <IconDownload size={13} />
+              {exported
+                ? t('errors.dataExported')
+                : t('errors.exportDataForRecovery')}
+            </button>
+            {exported && (
+              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+                {t('errors.exportDataDescription')}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Storage Reset */}
+        {showStorageReset && (
+          <div className="mt-3 text-center">
+            {!showResetConfirm ? (
+              <button
+                onClick={() => setShowResetConfirm(true)}
+                className="text-xs text-gray-500 dark:text-gray-400 hover:underline"
+              >
+                {t('errors.resetStoragePrompt')}
+              </button>
+            ) : (
+              <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/10 px-4 py-3 space-y-3">
+                <p className="text-xs text-red-700 dark:text-red-300">
+                  {t('errors.resetStorageWarning')}
+                </p>
+                <div className="flex gap-2 justify-center flex-wrap">
+                  <button
+                    onClick={handleExportData}
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                  >
+                    <IconDownload size={13} />
+                    {exported
+                      ? t('errors.dataExported')
+                      : t('errors.exportDataForRecovery')}
+                  </button>
+                  <button
+                    onClick={handleResetStorage}
+                    className="px-3 py-1.5 text-xs rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  >
+                    {t('errors.resetStorage')}
+                  </button>
+                  <button
+                    onClick={() => setShowResetConfirm(false)}
+                    className="px-3 py-1.5 text-xs rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    {t('common.cancel')}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

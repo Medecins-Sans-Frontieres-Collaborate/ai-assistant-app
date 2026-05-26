@@ -183,4 +183,146 @@ describe('InputValidator', () => {
       ).resolves.not.toThrow();
     });
   });
+
+  describe('validateChatRequest - file_url metadata', () => {
+    const baseModel = { id: 'gpt-5', name: 'gpt-5' };
+    const requestWith = (fileBlock: unknown) => ({
+      model: baseModel,
+      messages: [
+        {
+          role: 'user' as const,
+          content: [fileBlock],
+        },
+      ],
+    });
+
+    it('preserves originalFilename, transcriptionLanguage, transcriptionPrompt through validation', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: 'Q1 Report.xlsx',
+          transcriptionLanguage: 'es',
+          transcriptionPrompt: 'Medical terminology',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBe('Q1 Report.xlsx');
+      expect(block.transcriptionLanguage).toBe('es');
+      expect(block.transcriptionPrompt).toBe('Medical terminology');
+    });
+
+    it('accepts file_url without any optional metadata', () => {
+      const validator = new InputValidator();
+      expect(() =>
+        validator.validateChatRequest(
+          requestWith({
+            type: 'file_url',
+            url: 'https://blob.core.windows.net/container/f.xlsx',
+          }),
+        ),
+      ).not.toThrow();
+    });
+
+    it('drops filenames containing path separators but keeps the request valid', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: '../etc/passwd',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBeUndefined();
+      expect(block.url).toBe('https://blob.core.windows.net/container/f.xlsx');
+    });
+
+    it('drops bare ".." filenames but keeps the request valid', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: '..',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBeUndefined();
+    });
+
+    it('accepts legitimate filenames containing dots (e.g. "archive.tar.gz")', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          originalFilename: 'archive.tar.gz',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.originalFilename).toBe('archive.tar.gz');
+    });
+
+    it('drops invalid transcription language codes instead of rejecting the request', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionLanguage: 'english',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionLanguage).toBeUndefined();
+    });
+
+    it('accepts ISO-639-1 codes with optional region and normalizes case', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionLanguage: 'PT-BR',
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionLanguage).toBe('pt-br');
+    });
+
+    it('drops transcription prompts over 2000 chars rather than rejecting', () => {
+      const validator = new InputValidator();
+      const result = validator.validateChatRequest(
+        requestWith({
+          type: 'file_url',
+          url: 'https://blob.core.windows.net/container/f.xlsx',
+          transcriptionPrompt: 'x'.repeat(2001),
+        }),
+      );
+      const block = (result.messages[0].content as unknown[])[0] as Record<
+        string,
+        unknown
+      >;
+      expect(block.transcriptionPrompt).toBeUndefined();
+    });
+  });
 });

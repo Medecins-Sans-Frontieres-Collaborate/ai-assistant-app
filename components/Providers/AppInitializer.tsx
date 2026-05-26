@@ -1,7 +1,9 @@
 'use client';
 
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
+
+import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
 
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -14,7 +16,7 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  *
  * With Zustand persist middleware, localStorage hydration is automatic.
  * This component handles:
- * 1. Model filtering (based on environment config and feature flags)
+ * 1. Model filtering (based on environment config)
  * 2. Default model selection (from environment if not persisted)
  * 3. Selected conversation validation
  *
@@ -23,29 +25,16 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  */
 export function AppInitializer() {
   const hasLoadedRef = useRef(false);
-  const { enableClaudeModels } = useFlags();
 
-  // Model filtering: re-runs when enableClaudeModels flag changes
   useEffect(() => {
-    const { setModels } = useSettingsStore.getState();
-
-    // enableClaudeModels: defaults to true when LD is not configured (undefined !== false)
-    const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
-      (m) =>
-        !m.isDisabled &&
-        !isModelDisabled(m.id) &&
-        (m.provider !== 'anthropic' || enableClaudeModels !== false),
-    );
-    setModels(models);
-  }, [enableClaudeModels]);
-
-  // One-time initialization
-  useEffect(() => {
+    // Ensure we only initialize once, even in React StrictMode
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
 
     try {
-      const { defaultModelId, setDefaultModelId } = useSettingsStore.getState();
+      // Access stores directly for one-time initialization
+      const { setModels, defaultModelId, setDefaultModelId } =
+        useSettingsStore.getState();
       const {
         conversations,
         selectedConversationId,
@@ -53,10 +42,13 @@ export function AppInitializer() {
         setIsLoaded,
       } = useConversationStore.getState();
 
-      // Get current models (already set by the model filtering effect above)
-      const models = useSettingsStore.getState().models;
+      // 1. Initialize models list (filtered by environment)
+      const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
+        (m) => !m.isDisabled && !isModelDisabled(m.id),
+      );
+      setModels(models);
 
-      // Set default model if not already persisted
+      // 2. Set default model if not already persisted
       if (!defaultModelId && models.length > 0) {
         const envDefaultModelId = getDefaultModel();
         const defaultModel =
@@ -73,11 +65,12 @@ export function AppInitializer() {
         );
       }
 
-      // Validate selected conversation exists
+      // 3. Validate selected conversation exists
       if (
         selectedConversationId &&
         !conversations.find((c) => c.id === selectedConversationId)
       ) {
+        // Selected conversation no longer exists, select first available
         if (conversations.length > 0) {
           selectConversation(conversations[0].id);
         } else {
@@ -89,9 +82,27 @@ export function AppInitializer() {
       setIsLoaded(true);
     } catch (error) {
       console.error('Error initializing app state:', error);
+      // On error, mark as loaded anyway to prevent blocking the app
       useConversationStore.getState().setIsLoaded(true);
     }
   }, []); // Empty deps - only run once
+
+  // Surface localStorage quota exhaustion as a toast so the user knows when
+  // the persistence layer is silently dropping writes. The storage layer
+  // dispatches this event (throttled to once per 30s) instead of importing
+  // `toast` directly to keep that layer UI-agnostic.
+  useEffect(() => {
+    const onQuotaExceeded = () => {
+      toast.error(
+        'Browser storage is full. Recent changes may not be saved. Consider deleting old conversations.',
+        { duration: 8000 },
+      );
+    };
+    window.addEventListener(STORAGE_QUOTA_EXCEEDED_EVENT, onQuotaExceeded);
+    return () => {
+      window.removeEventListener(STORAGE_QUOTA_EXCEEDED_EVENT, onQuotaExceeded);
+    };
+  }, []);
 
   return null; // This component doesn't render anything
 }

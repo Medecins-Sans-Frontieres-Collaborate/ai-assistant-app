@@ -6,8 +6,10 @@ import {
   findPrecedingUserMessageIndex,
   flattenEntriesForAPI,
 } from '@/lib/utils/shared/chat/messageVersioning';
+import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 
 import {
+  ActiveFile,
   Message,
   MessageType,
   isAssistantMessageGroup,
@@ -18,6 +20,7 @@ import { SearchMode } from '@/types/searchMode';
 import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { v4 as uuidv4 } from 'uuid';
 
 interface UseChatActionsProps {
   updateConversation: (id: string, updates: any) => void;
@@ -84,7 +87,11 @@ export function useChatActions({
   );
 
   const handleSend = useCallback(
-    (message: Message, searchMode?: SearchMode) => {
+    (
+      message: Message,
+      searchMode?: SearchMode,
+      initialActiveFiles?: ActiveFile[],
+    ) => {
       const conversationState = useConversationStore.getState();
       const settingsState = useSettingsStore.getState();
 
@@ -107,7 +114,7 @@ export function useChatActions({
           return;
         }
 
-        // Create a new conversation with the user's message
+        // Create a new conversation with the user's message and active files
         const newConversation = createDefaultConversation(
           models,
           defaultModelId,
@@ -119,6 +126,7 @@ export function useChatActions({
         const conversationWithMessage = {
           ...newConversation,
           messages: [message],
+          activeFiles: (initialActiveFiles ?? []).slice(0, 5),
         };
 
         // Add and select the new conversation
@@ -129,7 +137,17 @@ export function useChatActions({
         return;
       }
 
-      // Existing conversation flow
+      // Existing conversation flow — activate files in the store first
+      if (initialActiveFiles?.length) {
+        for (const file of initialActiveFiles) {
+          conversationState.activateFile(currentConversation.id, file);
+        }
+        // Re-read to get updated activeFiles
+        currentConversation = useConversationStore
+          .getState()
+          .conversations.find((c) => c.id === currentConversation!.id)!;
+      }
+
       const updatedMessages = [...currentConversation.messages, message];
 
       updateConversation(currentConversation.id, { messages: updatedMessages });
@@ -146,6 +164,7 @@ export function useChatActions({
   const handleSelectPrompt = useCallback(
     (prompt: string) => {
       handleSend({
+        id: uuidv4(),
         role: 'user',
         content: prompt,
         messageType: MessageType.TEXT,
@@ -210,9 +229,11 @@ export function useChatActions({
       chatState.setRegeneratingIndex(targetIndex);
 
       // Create a flattened conversation snapshot for the API call
-      // Only include messages up to and including the user message
-      const messagesForAPI = flattenEntriesForAPI(
-        currentConversation.messages.slice(0, userMessageIndex + 1),
+      // Only include messages up to and including the user message, with windowing
+      const messagesForAPI = windowMessagesForAPI(
+        flattenEntriesForAPI(
+          currentConversation.messages.slice(0, userMessageIndex + 1),
+        ),
       );
 
       const apiConversation = {
@@ -225,10 +246,51 @@ export function useChatActions({
     [sendMessage],
   );
 
+  /**
+   * Re-submits the conversation's trailing user message through the
+   * standard `sendMessage` pipeline. Used after a stopped or failed
+   * generation, where the trailing entry is a user message with no
+   * assistant follow-up — this gets the user a fresh assistant response
+   * for that exact prompt without forming a new user turn.
+   *
+   * No-op if the conversation is empty or doesn't end with a user
+   * message. The result is appended as a new assistant message group
+   * (not a regeneration of an existing one).
+   */
+  const handleGenerateResponse = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const currentConversation = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+
+    if (!currentConversation || currentConversation.messages.length === 0)
+      return;
+
+    const lastEntry =
+      currentConversation.messages[currentConversation.messages.length - 1];
+    if (!isLegacyMessage(lastEntry) || lastEntry.role !== 'user') return;
+
+    const userMessage = entryToDisplayMessage(lastEntry);
+
+    // Include the entire conversation in the API window (the trailing user
+    // message is the prompt to respond to).
+    const messagesForAPI = windowMessagesForAPI(
+      flattenEntriesForAPI(currentConversation.messages),
+    );
+
+    const apiConversation = {
+      ...currentConversation,
+      messages: messagesForAPI,
+    };
+
+    sendMessage?.(userMessage, apiConversation, undefined);
+  }, [sendMessage]);
+
   return {
     handleEditMessage,
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   };
 }

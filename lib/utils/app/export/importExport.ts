@@ -1,5 +1,3 @@
-import { LocalStorageService } from '@/client/services/storage/localStorageService';
-
 import { Conversation } from '@/types/chat';
 import {
   ExportFormatV1,
@@ -16,42 +14,27 @@ import { Tone } from '@/types/tone';
 
 import { cleanConversationHistory } from '../clean';
 
-export function isExportFormatV1(obj: unknown): obj is ExportFormatV1 {
+import { useConversationStore } from '@/client/stores/conversationStore';
+import { useSettingsStore } from '@/client/stores/settingsStore';
+
+export function isExportFormatV1(obj: any): obj is ExportFormatV1 {
   return Array.isArray(obj);
 }
 
-export function isExportFormatV2(obj: unknown): obj is ExportFormatV2 {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    !('version' in obj) &&
-    'folders' in obj &&
-    'history' in obj
-  );
+export function isExportFormatV2(obj: any): obj is ExportFormatV2 {
+  return !('version' in obj) && 'folders' in obj && 'history' in obj;
 }
 
-export function isExportFormatV3(obj: unknown): obj is ExportFormatV3 {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    (obj as { version?: unknown }).version === 3
-  );
+export function isExportFormatV3(obj: any): obj is ExportFormatV3 {
+  return obj.version === 3;
 }
 
-export function isExportFormatV4(obj: unknown): obj is ExportFormatV4 {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    (obj as { version?: unknown }).version === 4
-  );
+export function isExportFormatV4(obj: any): obj is ExportFormatV4 {
+  return obj.version === 4;
 }
 
-export function isExportFormatV5(obj: unknown): obj is ExportFormatV5 {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    (obj as { version?: unknown }).version === 5
-  );
+export function isExportFormatV5(obj: any): obj is ExportFormatV5 {
+  return obj.version === 5;
 }
 
 export const isLatestExportFormat = isExportFormatV5;
@@ -123,32 +106,16 @@ function currentDate() {
 }
 
 export const exportData = () => {
-  // Migrate any legacy data to Zustand format first
-  LocalStorageService.migrateFromLegacy();
+  // Read from Zustand stores directly (works with both v4 blob and v5 per-conversation keys)
+  // Stores are already hydrated by the time the user can trigger export
+  const conversationState = useConversationStore.getState();
+  const historyArray: Conversation[] = conversationState.conversations || [];
+  const foldersArray: FolderInterface[] = conversationState.folders || [];
 
-  // Read from Zustand storage keys
-  const conversationStorage = localStorage.getItem('conversation-storage');
-  const settingsStorage = localStorage.getItem('settings-storage');
-
-  // Extract conversations and folders from conversation-storage
-  let historyArray: Conversation[] = [];
-  let foldersArray: FolderInterface[] = [];
-  if (conversationStorage) {
-    const conversationData = JSON.parse(conversationStorage);
-    historyArray = conversationData?.state?.conversations || [];
-    foldersArray = conversationData?.state?.folders || [];
-  }
-
-  // Extract prompts, tones, and customAgents from settings-storage
-  let promptsArray: Prompt[] = [];
-  let tonesArray: Tone[] = [];
-  let customAgentsArray: any[] = [];
-  if (settingsStorage) {
-    const settingsData = JSON.parse(settingsStorage);
-    promptsArray = settingsData?.state?.prompts || [];
-    tonesArray = settingsData?.state?.tones || [];
-    customAgentsArray = settingsData?.state?.customAgents || [];
-  }
+  const settingsState = useSettingsStore.getState();
+  const promptsArray: Prompt[] = settingsState.prompts || [];
+  const tonesArray: Tone[] = settingsState.tones || [];
+  const customAgentsArray = settingsState.customAgents || [];
 
   const data = {
     version: 5,
@@ -176,22 +143,12 @@ export const exportData = () => {
 export const importData = (
   data: SupportedExportFormats,
 ): LatestExportFormat => {
-  // Migrate any legacy data to Zustand format first
-  LocalStorageService.migrateFromLegacy();
-
   const { history, folders, prompts, tones, customAgents } = cleanData(data);
 
-  // Read existing data from Zustand conversation-storage
-  const conversationStorage = localStorage.getItem('conversation-storage');
-  const existingConvData = conversationStorage
-    ? JSON.parse(conversationStorage)
-    : {
-        state: { conversations: [], folders: [], selectedConversationId: null },
-        version: 1,
-      };
-
-  const oldConversationsParsed = existingConvData?.state?.conversations || [];
-  const oldFoldersParsed = existingConvData?.state?.folders || [];
+  // Read existing data from Zustand store (works with v5 per-conversation keys)
+  const conversationState = useConversationStore.getState();
+  const oldConversationsParsed = conversationState.conversations || [];
+  const oldFoldersParsed = conversationState.folders || [];
 
   // Merge conversations (dedupe by id)
   const newHistory: Conversation[] = [
@@ -211,54 +168,39 @@ export const importData = (
       index === self.findIndex((f) => f.id === folder.id),
   );
 
-  // Write to Zustand conversation-storage
-  const newConversationData = {
-    state: {
-      conversations: newHistory,
-      folders: newFolders,
-      selectedConversationId:
-        newHistory.length > 0 ? newHistory[newHistory.length - 1].id : null,
-    },
-    version: 2, // Must match conversationStore persist version
-  };
-  localStorage.setItem(
-    'conversation-storage',
-    JSON.stringify(newConversationData),
-  );
+  // Update Zustand store (auto-persists via v5 per-conversation storage adapter)
+  conversationState.setConversations(newHistory);
+  conversationState.setFolders(newFolders);
+  if (newHistory.length > 0) {
+    conversationState.selectConversation(newHistory[newHistory.length - 1].id);
+  }
 
-  // Read existing data from Zustand settings-storage
-  const settingsStorage = localStorage.getItem('settings-storage');
-  const settingsData = settingsStorage
-    ? JSON.parse(settingsStorage)
-    : { state: {}, version: 1 };
+  // Read existing data from Zustand settings store
+  const settingsState = useSettingsStore.getState();
 
   // Merge prompts (dedupe by id)
-  const oldPromptsParsed = settingsData?.state?.prompts || [];
+  const oldPromptsParsed = settingsState.prompts || [];
   const newPrompts: Prompt[] = [...oldPromptsParsed, ...prompts].filter(
     (prompt, index, self) =>
       index === self.findIndex((p) => p.id === prompt.id),
   );
 
   // Merge tones (dedupe by id)
-  const oldTones = settingsData?.state?.tones || [];
+  const oldTones = settingsState.tones || [];
   const newTones: Tone[] = [...oldTones, ...tones].filter(
     (tone, index, self) => index === self.findIndex((t) => t.id === tone.id),
   );
 
   // Merge custom agents (dedupe by id)
-  const oldCustomAgents = settingsData?.state?.customAgents || [];
+  const oldCustomAgents = settingsState.customAgents || [];
   const newCustomAgents = [...oldCustomAgents, ...customAgents].filter(
     (agent, index, self) => index === self.findIndex((a) => a.id === agent.id),
   );
 
-  // Write to Zustand settings-storage
-  settingsData.state = {
-    ...settingsData.state,
-    prompts: newPrompts,
-    tones: newTones,
-    customAgents: newCustomAgents,
-  };
-  localStorage.setItem('settings-storage', JSON.stringify(settingsData));
+  // Update Zustand settings store (auto-persists)
+  settingsState.setPrompts(newPrompts);
+  settingsState.setTones(newTones);
+  settingsState.setCustomAgents(newCustomAgents);
 
   return {
     version: 5,

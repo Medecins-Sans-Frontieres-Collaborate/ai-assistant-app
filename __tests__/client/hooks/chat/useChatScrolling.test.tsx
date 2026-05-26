@@ -151,8 +151,12 @@ describe('useChatScrolling', () => {
         vi.runAllTimers();
       });
 
-      // Should restore position, not smooth scroll
-      expect(mockScrollTo).not.toHaveBeenCalled();
+      // State-machine impl restores the captured scroll position via
+      // smooth scrollTo when streaming completes.
+      expect(mockScrollTo).toHaveBeenCalledWith({
+        top: expect.any(Number),
+        behavior: 'smooth',
+      });
     });
   });
 

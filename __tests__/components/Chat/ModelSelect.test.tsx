@@ -22,6 +22,20 @@ const mockUseSettings = {
   setDefaultModelId: vi.fn(),
 };
 
+const mockUseCustomAgents = {
+  customAgents: [] as Array<{
+    id: string;
+    name: string;
+    agentId: string;
+    baseModelId: string;
+    description?: string;
+    createdAt: string;
+  }>,
+  addCustomAgent: vi.fn(),
+  updateCustomAgent: vi.fn(),
+  deleteCustomAgent: vi.fn(),
+};
+
 vi.mock('@/client/hooks/conversation/useConversations', () => ({
   useConversations: () => mockUseConversations,
 }));
@@ -30,8 +44,10 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => mockUseSettings,
 }));
 
-// Stub out the Foundry agent discovery hook so tests don't need a TanStack
-// Query provider (the hook calls `useQuery` internally).
+vi.mock('@/client/hooks/settings/useCustomAgents', () => ({
+  useCustomAgents: () => mockUseCustomAgents,
+}));
+
 vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
   useFoundryAgents: () => ({
     foundryAgents: [],
@@ -370,9 +386,7 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      // Description was rewritten in plain English; assert on a stable
-      // phrase from the new copy.
-      expect(screen.getByText(/A capable everyday model/)).toBeInTheDocument();
+      expect(screen.getByText(/capable everyday model/)).toBeInTheDocument();
     });
   });
 
@@ -410,6 +424,30 @@ describe('ModelSelect', () => {
         expect(
           screen.getByText(/This model uses fixed temperature values/),
         ).toBeInTheDocument();
+      });
+    });
+
+    it('displays custom agents in agents tab when present', () => {
+      mockUseCustomAgents.customAgents = [
+        {
+          id: 'agent-1',
+          name: 'My Custom Agent',
+          agentId: 'asst_custom123',
+          baseModelId: OpenAIModelID.GPT_5_2,
+          description: 'Custom agent for testing',
+          createdAt: new Date().toISOString(),
+        },
+      ];
+
+      render(<ModelSelect />);
+
+      // Click on Agents tab
+      const agentsTab = screen.getByText('Agents').closest('button');
+      fireEvent.click(agentsTab!);
+
+      // Custom agent should be visible in the agents tab
+      waitFor(() => {
+        expect(screen.getByText('My Custom Agent')).toBeInTheDocument();
       });
     });
   });

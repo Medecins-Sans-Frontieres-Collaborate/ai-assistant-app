@@ -27,6 +27,10 @@ export interface ChunkedUploadSession {
   chunkSize: number;
   /** Path where the blob will be stored */
   blobPath: string;
+  /** Unix epoch ms at which this session stops being accepted */
+  expiresAt?: number;
+  /** HMAC signature binding the above fields to the authenticated user */
+  signature?: string;
 }
 
 /**

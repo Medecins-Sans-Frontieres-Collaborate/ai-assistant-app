@@ -177,6 +177,51 @@ describe('chat validation', () => {
       const result = validateMessageSubmission('Hello 世界 🌍', [], {});
       expect(result.valid).toBe(true);
     });
+
+    // Status-gating regression: previously the validation only checked
+    // `uploadProgress < 100`. Files in `pending` or `extracting` have no
+    // entry in `uploadProgress` yet, so the user could hit Send while a
+    // video was mid-extraction and the message would go without it.
+    it('should prevent submission when a file is pending', () => {
+      const files: FilePreview[] = [
+        {
+          name: 'queued.pdf',
+          type: 'application/pdf',
+          previewUrl: 'blob:...',
+          status: 'pending',
+        },
+      ];
+      const result = validateMessageSubmission('Process', files, {});
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Please wait for files to finish uploading');
+    });
+
+    it('should prevent submission when a file is extracting', () => {
+      const files: FilePreview[] = [
+        {
+          name: 'video.mp4',
+          type: 'video/mp4',
+          previewUrl: 'blob:...',
+          status: 'extracting',
+        },
+      ];
+      const result = validateMessageSubmission('Transcribe', files, {});
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Please wait for files to finish uploading');
+    });
+
+    it('should allow submission when a file is failed (terminal, not blocking)', () => {
+      const files: FilePreview[] = [
+        {
+          name: 'broken.pdf',
+          type: 'application/pdf',
+          previewUrl: 'blob:...',
+          status: 'failed',
+        },
+      ];
+      const result = validateMessageSubmission('Send anyway', files, {});
+      expect(result.valid).toBe(true);
+    });
   });
 
   describe('shouldPreventSubmission', () => {
@@ -355,6 +400,36 @@ describe('chat validation', () => {
       };
       const result = shouldPreventSubmission(false, false, [], uploadProgress);
       expect(result).toBe(false);
+    });
+
+    // pending/extracting statuses don't have uploadProgress entries yet, so
+    // shouldPreventSubmission must gate on status as well — otherwise the
+    // submit button stays enabled while a file is queued or mid-extraction.
+    it('should prevent submission when a file is pending', () => {
+      const pendingFile: FilePreview = {
+        name: 'queued.pdf',
+        type: 'application/pdf',
+        previewUrl: 'blob:...',
+        status: 'pending',
+      };
+      const result = shouldPreventSubmission(false, false, [pendingFile], {});
+      expect(result).toBe(true);
+    });
+
+    it('should prevent submission when a file is extracting', () => {
+      const extractingFile: FilePreview = {
+        name: 'video.mp4',
+        type: 'video/mp4',
+        previewUrl: 'blob:...',
+        status: 'extracting',
+      };
+      const result = shouldPreventSubmission(
+        false,
+        false,
+        [extractingFile],
+        {},
+      );
+      expect(result).toBe(true);
     });
   });
 

@@ -131,6 +131,14 @@ export const Sidebar = memo(function Sidebar() {
     items: displayConversations,
   });
 
+  // Open search modal from keyboard shortcut event.
+  useEffect(() => {
+    const handler = () => setIsSearchModalOpen(true);
+    document.addEventListener('keyboard-search-conversations', handler);
+    return () =>
+      document.removeEventListener('keyboard-search-conversations', handler);
+  }, []);
+
   // Fetch user photo on mount (with localStorage caching)
   useEffect(() => {
     const fetchUserPhoto = async () => {
@@ -269,6 +277,17 @@ export const Sidebar = memo(function Sidebar() {
     addConversation(newConversation);
     selectConversation(newConversation.id);
   };
+
+  // Trigger new-conversation from keyboard shortcut event.
+  useEffect(() => {
+    const handler = () => handleNewConversation();
+    document.addEventListener('keyboard-new-conversation', handler);
+    return () => {
+      document.removeEventListener('keyboard-new-conversation', handler);
+    };
+    // handleNewConversation depends on many values, but we want to always use the latest version
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSelectConversation = (conversationId: string) => {
     // Skip if already selected

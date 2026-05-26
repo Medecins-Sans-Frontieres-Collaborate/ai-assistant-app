@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { scrollToBottom } from '@/lib/utils/app/scrolling';
 
-import { UI_CONSTANTS } from '@/lib/constants/ui';
+type ScrollPhase = 'idle' | 'streaming' | 'completing';
 
 interface UseChatScrollingProps {
   selectedConversationId?: string;
@@ -13,8 +13,12 @@ interface UseChatScrollingProps {
 }
 
 /**
- * Custom hook to manage all chat scrolling behavior
- * Handles auto-scroll, manual scroll detection, scroll button, and refs
+ * State-machine-based chat scrolling hook.
+ *
+ * Phase transitions: idle → streaming → completing → idle
+ *
+ * The phaseRef acts as a synchronous kill switch — RAF callbacks check it
+ * before touching scrollTop, eliminating ghost-frame races.
  */
 export function useChatScrolling({
   selectedConversationId,
@@ -23,256 +27,225 @@ export function useChatScrolling({
   streamingContent,
   isDraining = false,
 }: UseChatScrollingProps) {
-  // Content is still being produced (streaming or drain animation)
   const isActive = isStreaming || isDraining;
 
-  // Scroll-related state
   const [showScrollDownButton, setShowScrollDownButton] = useState(false);
 
   // DOM refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
-  const scrollPositionBeforeStreamEndRef = useRef<number>(0);
+  const bottomSpacerRef = useRef<HTMLDivElement>(null);
 
-  // Tracking refs
-  const previousMessageCountRef = useRef<number>(0);
-  const wasActiveRef = useRef(false);
-  const isInitialRenderRef = useRef(true);
+  // State machine refs
+  const phaseRef = useRef<ScrollPhase>('idle');
   const shouldAutoScrollRef = useRef(true);
-  const hasScrolledToContentRef = useRef(false);
+  const rafIdRef = useRef(0);
+  const prevMessageCountRef = useRef(0);
 
-  // Reset scroll state when conversation changes
+  // Effect 1 — Reset on conversation change
   useEffect(() => {
-    isInitialRenderRef.current = true;
-    previousMessageCountRef.current = 0;
-    wasActiveRef.current = false;
+    phaseRef.current = 'idle';
+    shouldAutoScrollRef.current = true;
+    prevMessageCountRef.current = 0;
   }, [selectedConversationId]);
 
-  // Smooth scroll to bottom on new messages (NOT during or after streaming/drain)
-  useEffect(() => {
-    const currentMessageCount = messageCount;
-    const previousCount = previousMessageCountRef.current;
-
-    const activeJustCompleted = wasActiveRef.current === true && !isActive;
-
-    // Only scroll to bottom for new messages when:
-    // 1. Message count increased (new message added)
-    // 2. Not currently active (streaming or draining)
-    // 3. Active cycle didn't just complete (let it stay where it is)
-    // 4. Should auto scroll (user hasn't manually scrolled away)
-    if (
-      currentMessageCount > previousCount &&
-      !isActive &&
-      !activeJustCompleted &&
-      shouldAutoScrollRef.current &&
-      chatContainerRef.current
-    ) {
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTo({
-            top: chatContainerRef.current.scrollHeight,
-            behavior: 'smooth',
-          });
-        }
-      }, 0);
-    }
-
-    previousMessageCountRef.current = currentMessageCount;
-    wasActiveRef.current = isActive;
-    isInitialRenderRef.current = false;
-  }, [messageCount, isActive]);
-
-  // When streaming starts, scroll to bottom and enable auto-scroll
-  useEffect(() => {
-    if (isStreaming) {
+  // Effect 2 — Phase transitions (useLayoutEffect for synchronous phase updates)
+  useLayoutEffect(() => {
+    if (isActive && phaseRef.current === 'idle') {
+      // idle → streaming
+      phaseRef.current = 'streaming';
       shouldAutoScrollRef.current = true;
-      hasScrolledToContentRef.current = false;
 
-      // Immediately scroll to bottom when streaming starts
+      if (bottomSpacerRef.current) {
+        bottomSpacerRef.current.style.height = '0px';
+      }
+
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTo({
           top: chatContainerRef.current.scrollHeight,
           behavior: 'instant',
         });
-        // Follow-up scroll after DOM settles (catches loading indicator)
-        requestAnimationFrame(() => {
-          if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop =
-              chatContainerRef.current.scrollHeight;
-          }
-        });
       }
-    }
-  }, [isStreaming]);
+    } else if (!isActive && phaseRef.current === 'streaming') {
+      // streaming → completing → idle
+      phaseRef.current = 'completing';
 
-  // Scroll immediately when streaming content first appears (one time only)
-  useEffect(() => {
-    if (
-      isStreaming &&
-      streamingContent &&
-      !hasScrolledToContentRef.current &&
-      shouldAutoScrollRef.current &&
-      chatContainerRef.current
-    ) {
-      hasScrolledToContentRef.current = true;
-      chatContainerRef.current.scrollTo({
-        top: chatContainerRef.current.scrollHeight,
-        behavior: 'instant',
-      });
-    }
-  }, [isStreaming, streamingContent]);
+      const container = chatContainerRef.current;
+      const lastMsg = lastMessageRef.current;
 
-  // Detect manual scroll during streaming or drain
-  useEffect(() => {
-    const handleScrollDuringStream = () => {
-      if (isActive && chatContainerRef.current) {
-        const container = chatContainerRef.current;
-        const distanceFromBottom =
-          container.scrollHeight - container.scrollTop - container.clientHeight;
+      if (shouldAutoScrollRef.current && container) {
+        if (lastMsg) {
+          const containerRect = container.getBoundingClientRect();
+          const msgRect = lastMsg.getBoundingClientRect();
+          const relativeTop =
+            msgRect.top - containerRect.top + container.scrollTop;
+          const contextMargin = 60;
 
-        if (distanceFromBottom > UI_CONSTANTS.SCROLL.AUTO_SCROLL_THRESHOLD) {
-          shouldAutoScrollRef.current = false;
-          setShowScrollDownButton(true);
+          const desiredScroll = Math.max(0, relativeTop - contextMargin);
+          const maxScroll = container.scrollHeight - container.clientHeight;
+          if (desiredScroll > maxScroll && bottomSpacerRef.current) {
+            bottomSpacerRef.current.style.height = `${desiredScroll - maxScroll}px`;
+          }
+          container.scrollTo({
+            top: desiredScroll,
+            behavior: 'instant',
+          });
+        } else {
+          container.scrollTop = container.scrollHeight;
         }
       }
-    };
+
+      phaseRef.current = 'idle';
+    }
+  }, [isActive]);
+
+  // Effect 3 — RAF loop + manual scroll detection during streaming
+  useEffect(() => {
+    if (!isActive) return;
 
     const container = chatContainerRef.current;
-    if (container) {
-      container.addEventListener('wheel', handleScrollDuringStream, {
-        passive: true,
-      });
-      container.addEventListener('touchmove', handleScrollDuringStream, {
-        passive: true,
-      });
-      return () => {
-        container.removeEventListener('wheel', handleScrollDuringStream);
-        container.removeEventListener('touchmove', handleScrollDuringStream);
-      };
-    }
-  }, [isActive]);
+    if (!container) return;
 
-  // Capture scroll position before streaming/drain ends
-  useEffect(() => {
-    if (isActive && chatContainerRef.current) {
-      // Continuously save scroll position during streaming/drain
-      const interval = setInterval(() => {
-        if (chatContainerRef.current) {
-          scrollPositionBeforeStreamEndRef.current =
-            chatContainerRef.current.scrollTop;
-        }
-      }, 100);
-
-      return () => clearInterval(interval);
-    }
-  }, [isActive]);
-
-  // Smooth auto-scroll during streaming/drain - stops when both end
-  useEffect(() => {
-    if (!isActive || !shouldAutoScrollRef.current) {
-      return;
-    }
-
-    let animationFrameId: number;
-    let lastScrollHeight = 0;
-
-    const smoothScroll = () => {
-      const container = chatContainerRef.current;
-      if (!container || !shouldAutoScrollRef.current || !isActive) return;
-
-      const targetScroll = container.scrollHeight - container.clientHeight;
-      const currentScroll = container.scrollTop;
-
-      // Only scroll if content actually grew
-      if (container.scrollHeight > lastScrollHeight) {
-        lastScrollHeight = container.scrollHeight;
-        const diff = targetScroll - currentScroll;
-
-        if (Math.abs(diff) > 0.5) {
-          container.scrollTop = currentScroll + diff * 0.2;
-        } else {
-          container.scrollTop = targetScroll;
-        }
+    // RAF loop: snap to bottom each frame while streaming, unless the user
+    // has taken control. The loop keeps rearming through the whole streaming
+    // phase so auto-scroll can resume when the user returns to the bottom.
+    const tick = () => {
+      if (phaseRef.current !== 'streaming') return;
+      const c = chatContainerRef.current;
+      if (c && shouldAutoScrollRef.current) {
+        c.scrollTop = c.scrollHeight - c.clientHeight;
       }
-
-      animationFrameId = requestAnimationFrame(smoothScroll);
+      rafIdRef.current = requestAnimationFrame(tick);
     };
+    rafIdRef.current = requestAnimationFrame(tick);
 
-    animationFrameId = requestAnimationFrame(smoothScroll);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
+    // Any user-initiated interaction = intent to take control. We can't
+    // consult `scrollTop` here because `wheel` / `touchmove` fire before the
+    // browser applies the scroll — at this moment scrollTop is still the
+    // bottom that RAF just snapped it to, so a position-based check reports
+    // "at bottom" and the next RAF tick undoes the user's scroll. Trust the
+    // interaction itself instead.
+    //
+    // Resume is handled explicitly by the scroll-down button
+    // (`handleScrollDown`) and, in-flight specifically, is a cheap single
+    // click. We deliberately do NOT auto-resume on `scroll` event when the
+    // user drifts back near the bottom — a small wheel tick (especially on
+    // a trackpad) would leave them just within the bottom threshold, the
+    // scroll handler would re-enable the pin, and the next RAF frame would
+    // snap them to the actual bottom. The user would see their small scroll
+    // undone. Explicit resume is friendlier.
+    const pauseAutoScroll = () => {
+      if (shouldAutoScrollRef.current) {
+        shouldAutoScrollRef.current = false;
+        setShowScrollDownButton(true);
       }
     };
-  }, [isActive]);
 
-  // Restore scroll position after streaming/drain ends
-  // Double-RAF ensures the DOM has fully settled after the
-  // streaming-div → normal-message swap (action buttons appear, etc.)
-  useEffect(() => {
-    if (isActive) return;
-
-    let cancelled = false;
-    let outerRafId = 0;
-    let innerRafId = 0;
-
-    outerRafId = requestAnimationFrame(() => {
-      innerRafId = requestAnimationFrame(() => {
-        const container = chatContainerRef.current;
-        if (cancelled || !container) return;
-
-        if (shouldAutoScrollRef.current) {
-          // User was following along — scroll to the very bottom
-          container.scrollTop = container.scrollHeight;
-        } else if (scrollPositionBeforeStreamEndRef.current > 0) {
-          // User scrolled away — restore their position
-          container.scrollTop = scrollPositionBeforeStreamEndRef.current;
+    container.addEventListener('wheel', pauseAutoScroll, { passive: true });
+    container.addEventListener('touchmove', pauseAutoScroll, { passive: true });
+    // Keyboard scrolling (PageUp/PageDown/arrows/Home/End/Space) on the
+    // container. Listener is on `window` because the scroll container
+    // typically isn't focused — the text input is.
+    const handleKeyScroll = (e: KeyboardEvent) => {
+      if (
+        e.key === 'ArrowUp' ||
+        e.key === 'ArrowDown' ||
+        e.key === 'PageUp' ||
+        e.key === 'PageDown' ||
+        e.key === 'Home' ||
+        e.key === 'End'
+      ) {
+        // Only pause if the event target isn't an input/textarea — those
+        // have their own cursor movement semantics and aren't scrolling
+        // the message list.
+        const target = e.target as HTMLElement | null;
+        const tag = target?.tagName;
+        if (
+          tag === 'INPUT' ||
+          tag === 'TEXTAREA' ||
+          target?.isContentEditable
+        ) {
+          return;
         }
-      });
-    });
+        pauseAutoScroll();
+      }
+    };
+    window.addEventListener('keydown', handleKeyScroll);
 
     return () => {
-      cancelled = true;
-      cancelAnimationFrame(outerRafId);
-      cancelAnimationFrame(innerRafId);
+      cancelAnimationFrame(rafIdRef.current);
+      container.removeEventListener('wheel', pauseAutoScroll);
+      container.removeEventListener('touchmove', pauseAutoScroll);
+      window.removeEventListener('keydown', handleKeyScroll);
     };
-  }, [isActive, messageCount]);
+  }, [isActive]);
 
-  // Handle scroll detection for scroll-down button
+  // Effect 4 — Scroll button visibility + idle new-message scroll
   useEffect(() => {
+    const container = chatContainerRef.current;
+
+    // Scroll button visibility
     const handleScroll = () => {
-      const container = chatContainerRef.current;
       if (!container) return;
-
       const isAtBottom =
         container.scrollHeight - container.scrollTop - container.clientHeight <
         100;
-
       const hasContent = messageCount > 0 || !!streamingContent;
       setShowScrollDownButton(!isAtBottom && hasContent);
+
+      // Progressively shrink spacer so user can't scroll into whitespace
+      const spacer = bottomSpacerRef.current;
+      if (spacer && phaseRef.current === 'idle') {
+        const spacerHeight = spacer.offsetHeight;
+        if (spacerHeight > 0) {
+          const realContentHeight = container.scrollHeight - spacerHeight;
+          const maxRealScroll = realContentHeight - container.clientHeight;
+          const neededSpacer = Math.max(0, container.scrollTop - maxRealScroll);
+          if (neededSpacer < spacerHeight) {
+            spacer.style.height = `${neededSpacer}px`;
+          }
+        }
+      }
     };
 
-    const container = chatContainerRef.current;
     if (container) {
       container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
     }
+
+    // Idle new-message scroll
+    if (
+      phaseRef.current === 'idle' &&
+      messageCount > prevMessageCountRef.current &&
+      shouldAutoScrollRef.current &&
+      container
+    ) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+
+    prevMessageCountRef.current = messageCount;
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, [messageCount, streamingContent]);
 
   const handleScrollDown = () => {
+    shouldAutoScrollRef.current = true;
     scrollToBottom(messagesEndRef, 'smooth');
   };
 
   return {
-    // Refs for DOM
     messagesEndRef,
     chatContainerRef,
     lastMessageRef,
-    // State
+    bottomSpacerRef,
     showScrollDownButton,
-    // Handlers
     handleScrollDown,
   };
 }

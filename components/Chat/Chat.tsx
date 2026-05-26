@@ -16,14 +16,19 @@ import { useClearConversation } from '@/client/hooks/conversation/useClearConver
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
+import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
+import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
 import { useModalState } from '@/client/hooks/ui/useModalSync';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
+import { entryToDisplayMessage } from '@/lib/utils/shared/chat/messageVersioning';
 
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 
+import { KeyboardShortcutsModal } from '@/components/KeyboardShortcuts';
 import { PromptModal } from '@/components/Prompts/PromptModal';
+import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 
 import { ChatError } from './ChatError';
 import { ChatInput } from './ChatInput';
@@ -37,20 +42,42 @@ import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 
+/** Retries a dynamic import once after 1.5 s on failure. */
+function retryImport<T>(importFn: () => Promise<T>): Promise<T> {
+  return importFn().catch(
+    () =>
+      new Promise<T>((resolve, reject) =>
+        setTimeout(() => importFn().then(resolve, reject), 1500),
+      ),
+  );
+}
+
+function ArtifactLoadingSpinner() {
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-300 border-t-neutral-600 dark:border-neutral-600 dark:border-t-neutral-300" />
+    </div>
+  );
+}
+
 const CodeArtifact = dynamic(
-  () => import('@/components/CodeEditor/CodeArtifact'),
-  {
-    ssr: false,
-  },
+  () => retryImport(() => import('@/components/CodeEditor/CodeArtifact')),
+  { ssr: false, loading: ArtifactLoadingSpinner },
 );
 
 const DocumentArtifact = dynamic(
-  () => import('@/components/DocumentEditor/DocumentArtifact'),
-  {
-    ssr: false,
-  },
+  () =>
+    retryImport(() => import('@/components/DocumentEditor/DocumentArtifact')),
+  { ssr: false, loading: ArtifactLoadingSpinner },
+);
+
+// Dynamic import to avoid HMR issues with this specific file
+const ActiveFilesPanel = dynamic(
+  () => import('./ActiveFilesPanel').then((mod) => mod.ActiveFilesPanel),
+  { ssr: false },
 );
 
 interface ChatProps {
@@ -89,9 +116,24 @@ export function Chat({
     originalModelId,
     dismissModelSwitchPrompt,
     acceptModelSwitch,
+    errorIsRecoverable,
+    requestStop,
   } = useChat();
 
-  const { isSettingsOpen, setIsSettingsOpen, showChatbar } = useUI();
+  const stopGenerationConfirmSource = useUIStore(
+    (state) => state.stopGenerationConfirmSource,
+  );
+  const setStopGenerationConfirmSource = useUIStore(
+    (state) => state.setStopGenerationConfirmSource,
+  );
+
+  const {
+    isSettingsOpen,
+    setIsSettingsOpen,
+    showChatbar,
+    toggleChatbar,
+    toggleTheme,
+  } = useUI();
   const {
     models,
     defaultModelId,
@@ -102,6 +144,8 @@ export function Chat({
     customDisplayName,
     addPrompt,
     streamingSpeed,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
   } = useSettings();
 
   const { content: smoothedContent, isDraining } = useSmoothStreaming({
@@ -129,6 +173,54 @@ export function Chat({
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const stopConversationRef = useRef<boolean>(false);
+
+  // "Don't ask again" state for the stop-generation dialog. Reset every time
+  // a new dialog opens so prior toggling never silently disables confirmation.
+  const [stopDontAskAgain, setStopDontAskAgain] = useState(false);
+  useEffect(() => {
+    if (stopGenerationConfirmSource !== null) {
+      setStopDontAskAgain(false);
+    }
+  }, [stopGenerationConfirmSource]);
+
+  const closeStopDialogAndApplyToggle = useCallback(() => {
+    if (stopDontAskAgain && stopGenerationConfirmSource) {
+      if (stopGenerationConfirmSource === 'keyboard') {
+        setConfirmStopFromKeyboard(false);
+      } else {
+        setConfirmStopFromButton(false);
+      }
+    }
+    setStopGenerationConfirmSource(null);
+  }, [
+    stopDontAskAgain,
+    stopGenerationConfirmSource,
+    setConfirmStopFromButton,
+    setConfirmStopFromKeyboard,
+    setStopGenerationConfirmSource,
+  ]);
+
+  const handleConfirmStopGeneration = useCallback(() => {
+    stopConversationRef.current = true;
+    requestStop();
+    closeStopDialogAndApplyToggle();
+  }, [requestStop, closeStopDialogAndApplyToggle]);
+
+  const handleCancelStopGeneration = useCallback(() => {
+    closeStopDialogAndApplyToggle();
+  }, [closeStopDialogAndApplyToggle]);
+
+  // Auto-close the stop-generation dialog if streaming finishes naturally.
+  // Don't apply the toggle here — the user neither confirmed nor cancelled.
+  useEffect(() => {
+    if (!isStreaming && stopGenerationConfirmSource !== null) {
+      setStopGenerationConfirmSource(null);
+    }
+  }, [
+    isStreaming,
+    stopGenerationConfirmSource,
+    setStopGenerationConfirmSource,
+  ]);
 
   // Resizing handlers for split view
   const handleMouseDown = useCallback(() => {
@@ -182,12 +274,14 @@ export function Chat({
     false,
     onMobileModelSelectChange,
   );
+  const [isShortcutsHelpOpen, setIsShortcutsHelpOpen] = useState(false);
 
   // Custom hooks for state management
   const {
     messagesEndRef,
     chatContainerRef,
     lastMessageRef,
+    bottomSpacerRef,
     showScrollDownButton,
     handleScrollDown,
   } = useChatScrolling({
@@ -198,27 +292,152 @@ export function Chat({
     isDraining,
   });
 
+  // Keyboard shortcuts
+  const handleShowShortcutsHelp = useCallback(
+    () => setIsShortcutsHelpOpen(true),
+    [],
+  );
+  const handleOpenModelSelector = useCallback(
+    () => setIsModelSelectOpen(true),
+    // setIsModelSelectOpen is a stable setState function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const handleNewConversation = useCallback(() => {
+    // Dispatch custom event for sidebar to handle new conversation
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-new-conversation'));
+    }
+  }, []);
+
+  const handleAttachFile = useCallback(() => {
+    // Dispatch custom event for Dropdown to handle file attachment
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-attach-file'));
+    }
+  }, []);
+
+  const handleSearchConversations = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      document.dispatchEvent(new Event('keyboard-search-conversations'));
+    }
+  }, []);
+
+  const handleToggleTheme = useCallback(() => {
+    toggleTheme();
+  }, [toggleTheme]);
+
+  const handleCopyLastResponse = useCallback(() => {
+    if (!selectedConversation?.messages?.length) return;
+
+    const extractText = (
+      content:
+        | string
+        | Array<{ type: string; text?: string; [key: string]: unknown }>
+        | { type: string; text?: string },
+    ): string => {
+      if (typeof content === 'string') return content;
+      if (Array.isArray(content)) {
+        return content
+          .filter((c) => c.type === 'text' && c.text)
+          .map((c) => c.text as string)
+          .join('\n');
+      }
+      return '';
+    };
+
+    // Find the last assistant entry (could be a Message or AssistantMessageGroup)
+    const entries = selectedConversation.messages;
+    let lastContent: string | undefined;
+    for (let i = entries.length - 1; i >= 0; i--) {
+      const entry = entries[i];
+      if ('type' in entry && entry.type === 'assistant_group') {
+        const version = entry.versions[entry.activeIndex];
+        if (version) {
+          lastContent = extractText(
+            version.content as Parameters<typeof extractText>[0],
+          );
+        }
+        break;
+      } else if ('role' in entry && entry.role === 'assistant') {
+        lastContent = extractText(
+          entry.content as Parameters<typeof extractText>[0],
+        );
+        break;
+      }
+    }
+    if (lastContent) {
+      navigator.clipboard.writeText(lastContent);
+    }
+  }, [selectedConversation?.messages]);
+
+  // Listen for toggle sidebar event from keyboard shortcuts
+  useEffect(() => {
+    const handleToggleSidebar = () => toggleChatbar();
+    document.addEventListener('keyboard-toggle-sidebar', handleToggleSidebar);
+    return () => {
+      document.removeEventListener(
+        'keyboard-toggle-sidebar',
+        handleToggleSidebar,
+      );
+    };
+  }, [toggleChatbar]);
+
   const {
     handleEditMessage,
     handleSend,
     handleSelectPrompt,
     handleRegenerate,
+    handleGenerateResponse,
   } = useChatActions({
     updateConversation,
     sendMessage,
   });
 
+  const handleGenerateOrRetry = useCallback(() => {
+    const conversationState = useConversationStore.getState();
+    const conv = conversationState.conversations.find(
+      (c) => c.id === conversationState.selectedConversationId,
+    );
+    if (!conv?.messages.length) return;
+    const lastIndex = conv.messages.length - 1;
+    const lastEntry = conv.messages[lastIndex];
+    const display = entryToDisplayMessage(lastEntry);
+    if (display.role === 'assistant' && display.error) {
+      handleRegenerate(lastIndex);
+    } else if (display.role === 'user') {
+      handleGenerateResponse();
+    }
+  }, [handleRegenerate, handleGenerateResponse]);
+
+  useKeyboardShortcuts({
+    enabled: true,
+    onShowHelp: handleShowShortcutsHelp,
+    onOpenModelSelector: handleOpenModelSelector,
+    onScrollToBottom: handleScrollDown,
+    onNewConversation: handleNewConversation,
+    onAttachFile: handleAttachFile,
+    onSearchConversations: handleSearchConversations,
+    onToggleTheme: handleToggleTheme,
+    onRegenerateResponse: handleRegenerate,
+    onCopyLastResponse: handleCopyLastResponse,
+  });
+
+  useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
+
   const { clearConversation } = useClearConversation();
 
   // Version navigation callback for message versioning
+  // FIXED: Use getState() to avoid dependency on selectedConversation object
   const handleNavigateVersion = useCallback(
     (messageIndex: number, direction: 'prev' | 'next') => {
-      if (!selectedConversation) return;
+      const convId = useConversationStore.getState().selectedConversationId;
+      if (!convId) return;
       useConversationStore
         .getState()
-        .navigateVersion(selectedConversation.id, messageIndex, direction);
+        .navigateVersion(convId, messageIndex, direction);
     },
-    [selectedConversation],
+    [],
   );
 
   const {
@@ -268,7 +487,7 @@ export function Chat({
 
   // Only auto-dismiss errors that can't be regenerated (e.g., during retry)
   // When regenerate is available, let the user decide when to dismiss
-  const canRegenerate = !!error && !isRetrying;
+  const canRegenerate = !!error && !isRetrying && errorIsRecoverable;
   useAutoDismissError(canRegenerate ? null : error, clearError, 10000);
 
   const messages = selectedConversation?.messages || [];
@@ -291,8 +510,8 @@ export function Chat({
       isFoundryAgent ||
       selectedConversation?.model?.isOrganizationAgent;
 
-    // For Foundry agents without a static config, create a minimal agent info
-    // so the topbar can render correctly (no web search, no specific icon)
+    // Foundry agents without a static config get a minimal placeholder so the
+    // topbar can render (no web search, no specific icon).
     if (isFoundryAgent && !orgAgent) {
       return {
         orgAgent: {
@@ -387,11 +606,11 @@ export function Chat({
                     onSend={handleSend}
                     onRegenerate={handleRegenerate}
                     onScrollDownClick={handleScrollDown}
-                    stopConversationRef={stopConversationRef}
                     textareaRef={textareaRef}
                     showScrollDownButton={false}
                     showDisclaimer={false}
                     onTranscriptionStatusChange={setTranscriptionStatus}
+                    stopConversationRef={stopConversationRef}
                   />
                 </div>
 
@@ -425,9 +644,11 @@ export function Chat({
                 onEditMessage={handleEditMessage}
                 onSelectPrompt={handleSelectPrompt}
                 onRegenerate={handleRegenerate}
+                onGenerateResponse={handleGenerateOrRetry}
                 onSaveAsPrompt={handleOpenSavePromptModal}
                 onNavigateVersion={handleNavigateVersion}
               />
+              <div ref={bottomSpacerRef} />
             </div>
           )}
         </div>
@@ -455,33 +676,30 @@ export function Chat({
           />
         )}
 
+        {/* Active Files Panel */}
+        <ActiveFilesPanel />
+
         {/* Chat Input - Bottom position (hidden in empty state) */}
         {hasMessages && (
           <ChatInput
             onSend={handleSend}
             onRegenerate={handleRegenerate}
             onScrollDownClick={handleScrollDown}
-            stopConversationRef={stopConversationRef}
             textareaRef={textareaRef}
             showScrollDownButton={showScrollDownButton}
             onTranscriptionStatusChange={setTranscriptionStatus}
+            stopConversationRef={stopConversationRef}
           />
         )}
 
         {/* Model Selection Modal */}
         {isModelSelectOpen && (
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 z-[150] animate-fade-in-fast"
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-[150] animate-fade-in-fast"
             onClick={() => setIsModelSelectOpen(false)}
-            onKeyDown={(e) => {
-              if (e.key === 'Escape') setIsModelSelectOpen(false);
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-label={t('modelSelect.title')}
           >
             <div
-              className="max-w-4xl w-full h-[80vh] max-h-[80vh] overflow-hidden mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in flex flex-col"
+              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in"
               onClick={(e) => e.stopPropagation()}
             >
               <ModelSelect onClose={() => setIsModelSelectOpen(false)} />
@@ -498,6 +716,39 @@ export function Chat({
           initialDescription={savePromptDescription}
           initialContent={savePromptContent}
           title={t('Save as prompt')}
+        />
+
+        {/* Keyboard Shortcuts Help Modal */}
+        <KeyboardShortcutsModal
+          isOpen={isShortcutsHelpOpen}
+          onClose={() => setIsShortcutsHelpOpen(false)}
+        />
+
+        {/* Stop Generation Confirmation Dialog */}
+        <ConfirmDialog
+          isOpen={stopGenerationConfirmSource !== null}
+          title={t('chat.stopGenerationTitle')}
+          message={t('chat.stopGenerationMessage')}
+          confirmLabel={t('chat.stopGenerationConfirm')}
+          cancelLabel={t('common.cancel')}
+          confirmVariant="danger"
+          extraContent={
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-neutral-600 dark:text-neutral-300">
+              <input
+                type="checkbox"
+                className="w-4 h-4 accent-neutral-600 dark:accent-neutral-400"
+                checked={stopDontAskAgain}
+                onChange={(e) => setStopDontAskAgain(e.target.checked)}
+              />
+              <span>
+                {stopGenerationConfirmSource === 'keyboard'
+                  ? t('chat.stopGenerationDontAskAgainKeyboard')
+                  : t('chat.stopGenerationDontAskAgainButton')}
+              </span>
+            </label>
+          }
+          onConfirm={handleConfirmStopGeneration}
+          onCancel={handleCancelStopGeneration}
         />
       </div>
 

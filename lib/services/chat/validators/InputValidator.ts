@@ -37,9 +37,19 @@ const urlOrDataUrl = (errorMessage: string) =>
   );
 
 /**
- * Zod schema for message content blocks.
- * Uses a lenient schema to support various content formats.
+ * Filename charset guard. Rejects control characters (C0 + DEL) and path
+ * separators. Keeps Unicode letters, marks, digits, punctuation, spaces.
  */
+const isSafeFilename = (s: string): boolean => {
+  for (let i = 0; i < s.length; i++) {
+    const code = s.charCodeAt(i);
+    if (code < 0x20 || code === 0x7f) return false;
+    const ch = s[i];
+    if (ch === '/' || ch === '\\') return false;
+  }
+  return true;
+};
+
 const MessageContentSchema = z.union([
   z.string().max(100000, 'Message content too long'),
   z.array(
@@ -58,6 +68,22 @@ const MessageContentSchema = z.union([
       z.object({
         type: z.literal('file_url'),
         url: urlOrDataUrl('Invalid file URL'),
+        originalFilename: z
+          .string()
+          .min(1)
+          .max(255)
+          .refine(isSafeFilename)
+          .refine((s) => s !== '.' && s !== '..')
+          .optional()
+          .catch(undefined),
+        transcriptionLanguage: z
+          .string()
+          .trim()
+          .transform((s) => s.toLowerCase().replace('_', '-'))
+          .pipe(z.string().regex(/^[a-z]{2}(-[a-z]{2})?$/))
+          .optional()
+          .catch(undefined),
+        transcriptionPrompt: z.string().max(2000).optional().catch(undefined),
       }),
       z.object({
         type: z.literal('thinking'),

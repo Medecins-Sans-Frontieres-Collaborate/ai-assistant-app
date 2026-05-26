@@ -158,13 +158,12 @@ describe('/api/file/[id]/transcribe', () => {
       expect(tmpPath).toContain(fileId);
     });
 
-    it('uses timestamp in temp filename', async () => {
+    it('uses a unique prefix in temp filename', async () => {
       const request = createRequest(fileId);
       await GET(request, { params: Promise.resolve({ id: fileId }) });
 
       const tmpPath = mockBlockBlobClient.downloadToFile.mock.calls[0][0];
-      // Should contain Date.now() timestamp
-      expect(tmpPath).toMatch(/\/tmp\/\d+_audio-file-123\.mp3/);
+      expect(tmpPath).toMatch(/\/tmp\/[A-Za-z0-9-]+_audio-file-123\.mp3/);
     });
 
     it('handles different file IDs', async () => {
@@ -458,14 +457,15 @@ describe('/api/file/[id]/transcribe', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles file IDs with special characters', async () => {
+    it('rejects file IDs with disallowed characters', async () => {
       const specialId = 'file-with-special_chars@123.mp3';
       const request = createRequest(specialId);
-      await GET(request, { params: Promise.resolve({ id: specialId }) });
+      const response = await GET(request, {
+        params: Promise.resolve({ id: specialId }),
+      });
 
-      expect(mockBlobStorageClient.getBlockBlobClient).toHaveBeenCalledWith(
-        `test-user-id/uploads/files/${specialId}`,
-      );
+      expect(response.status).toBe(400);
+      expect(mockBlobStorageClient.getBlockBlobClient).not.toHaveBeenCalled();
     });
 
     it('handles file IDs without extension', async () => {
