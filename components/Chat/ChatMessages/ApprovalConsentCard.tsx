@@ -49,6 +49,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
 
   const submittedApprovals = useChatStore((s) => s.submittedApprovals);
   const submittingApprovals = useChatStore((s) => s.submittingApprovals);
+  const failedApprovals = useChatStore((s) => s.failedApprovals);
   const submitApproval = useChatStore((s) => s.submitApproval);
   const isStreaming = useChatStore((s) => s.isStreaming);
   const selectedConversation = useConversationStore((s) =>
@@ -146,7 +147,6 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     }
   };
 
-  // Auto-approve when this conversation has opted in for this tool or for all.
   const autoApproveMatch =
     selectedConversation &&
     (selectedConversation.alwaysApproveAllTools ||
@@ -156,6 +156,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     if (!autoApproveMatch) return;
     if (approvalState !== 'idle') return;
     if (!approvalId || !selectedConversation) return;
+    if (failedApprovals.has(approvalId)) return;
     void submitApproval(approvalId, true, selectedConversation, messageIndex);
   }, [
     autoApproveMatch,
@@ -164,6 +165,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     selectedConversation,
     submitApproval,
     messageIndex,
+    failedApprovals,
   ]);
 
   // Keyboard shortcuts: Cmd/Ctrl-Enter approves, Esc denies. Listener

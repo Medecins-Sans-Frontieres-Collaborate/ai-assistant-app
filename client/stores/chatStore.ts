@@ -90,6 +90,9 @@ interface ChatStore {
   submittedApprovals: Map<string, boolean>;
   /** Set of approval_request_id currently in flight (card UI shows spinner). */
   submittingApprovals: Set<string>;
+  /** Approval ids that errored or were aborted. Prevents the auto-approve
+   *  effect from retrying the same id indefinitely after a failure. */
+  failedApprovals: Set<string>;
 
   /**
    * Per-server "Continue in flight" markers, keyed by server label
@@ -276,6 +279,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   lastTurnDroppedActiveFileIds: {},
   submittedApprovals: new Map<string, boolean>(),
   submittingApprovals: new Set<string>(),
+  failedApprovals: new Set<string>(),
   pendingOAuthResume: {},
 
   setPendingOAuthResume: (info) =>
@@ -1299,11 +1303,47 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         clearTimeout(showLoadingTimeout);
       }
 
-      // Roll back the submitting marker so the user can retry.
+      // Foundry says the approval is already recorded. From our side that's
+      // effectively a success — promote to "submitted" and persist, so the
+      // auto-approve effect doesn't re-fire in a loop on the same id.
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      const isDuplicate = /Duplicate MCP approval response/i.test(errorMessage);
+
+      if (isDuplicate) {
+        set((state) => {
+          const submitted = new Map(state.submittedApprovals);
+          submitted.set(approvalRequestId, approve);
+          const submitting = new Set(state.submittingApprovals);
+          submitting.delete(approvalRequestId);
+          return {
+            submittedApprovals: submitted,
+            submittingApprovals: submitting,
+          };
+        });
+        if (sourceMessageIndex !== undefined) {
+          useConversationStore
+            .getState()
+            .recordApprovalOutcome(
+              conversation.id,
+              sourceMessageIndex,
+              approvalRequestId,
+              approve,
+            );
+        }
+        get().clearStreamingState();
+        return;
+      }
+
+      // Real failure (network, abort, server error): record it so the
+      // auto-approve effect doesn't keep retrying the same id, and clear
+      // the submitting marker so the user can manually retry from the card.
       set((state) => {
-        const next = new Set(state.submittingApprovals);
-        next.delete(approvalRequestId);
-        return { submittingApprovals: next };
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        const failed = new Set(state.failedApprovals);
+        failed.add(approvalRequestId);
+        return { submittingApprovals: submitting, failedApprovals: failed };
       });
 
       get().handleSendError(error, conversation);

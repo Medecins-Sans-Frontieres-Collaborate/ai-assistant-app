@@ -126,7 +126,7 @@ export default function DocumentArtifact({
   return (
     <div className="flex flex-col h-full w-full min-w-0">
       {/* Toolbar */}
-      <div className="relative flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex-shrink-0 min-w-0 overflow-hidden">
+      <div className="relative flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 flex-shrink-0 min-w-0 overflow-x-hidden">
         {/* Left: Filename and Mode */}
         <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
           {isEditing ? (
