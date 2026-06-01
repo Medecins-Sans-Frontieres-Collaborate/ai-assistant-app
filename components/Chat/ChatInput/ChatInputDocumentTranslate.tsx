@@ -60,26 +60,6 @@ import { GLOSSARY_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
  * - Custom output filename
  */
 
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
   isOpen: boolean;

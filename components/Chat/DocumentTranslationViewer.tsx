@@ -36,15 +36,6 @@ import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTr
  */
 
 /**
- * Document Translation Viewer Component
- *
- * Displays translated document reference with download capability.
- * Shows expiration warning and language information.
- *
- * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
- */
-
-/**
  * Regex to match document translation blob references.
  * Format: [Translation: filename | lang:code | blob:jobId | ext:extension | expires:ISO_TIMESTAMP]
  */
