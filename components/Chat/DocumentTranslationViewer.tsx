@@ -22,7 +22,21 @@ import { useTranslations } from 'next-intl';
 
 import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
 
-import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
+import { Tooltip } from '@/components/UI/Tooltip';
+
+import {
+  getDocumentTranslationLanguageByCode,
+  isOfficiallySupportedDocumentTranslationLanguage,
+} from '@/lib/constants/documentTranslationLanguages';
+
+/**
+ * Document Translation Viewer Component
+ *
+ * Displays translated document reference with download capability.
+ * Shows expiration warning and language information.
+ *
+ * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
+ */
 
 /**
  * Document Translation Viewer Component
@@ -152,6 +166,10 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
   const languageDisplay = languageInfo
     ? `${languageInfo.nativeName} (${languageInfo.englishName})`
     : reference?.languageCode || 'Unknown';
+  const isUnofficialLanguage =
+    reference !== null &&
+    languageInfo !== null &&
+    !isOfficiallySupportedDocumentTranslationLanguage(reference.languageCode);
 
   // Handle download
   const handleDownload = useCallback(async () => {
@@ -223,6 +241,19 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
                     language: languageDisplay,
                   })}
                 </span>
+                {isUnofficialLanguage && (
+                  <Tooltip
+                    content={t('documentTranslation.unofficialLanguageWarning')}
+                    position="top"
+                    multiline
+                  >
+                    <IconAlertTriangle
+                      size={14}
+                      className="text-amber-600 dark:text-amber-400"
+                      aria-label={t('documentTranslation.unofficialBadgeLabel')}
+                    />
+                  </Tooltip>
+                )}
               </div>
             </div>
           </div>
