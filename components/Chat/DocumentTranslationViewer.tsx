@@ -24,10 +24,7 @@ import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
-import {
-  getDocumentTranslationLanguageByCode,
-  isOfficiallySupportedDocumentTranslationLanguage,
-} from '@/lib/constants/documentTranslationLanguages';
+import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
 
 /**
  * Document Translation Viewer Component
@@ -167,9 +164,7 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
     ? `${languageInfo.nativeName} (${languageInfo.englishName})`
     : reference?.languageCode || 'Unknown';
   const isUnofficialLanguage =
-    reference !== null &&
-    languageInfo !== null &&
-    !isOfficiallySupportedDocumentTranslationLanguage(reference.languageCode);
+    !!languageInfo && !languageInfo.officiallySupported;
 
   // Handle download
   const handleDownload = useCallback(async () => {
@@ -244,7 +239,7 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
                 {isUnofficialLanguage && (
                   <Tooltip
                     content={t('documentTranslation.unofficialLanguageWarning')}
-                    position="top"
+                    position="bottom"
                     multiline
                   >
                     <IconAlertTriangle
