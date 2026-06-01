@@ -658,7 +658,8 @@
     "stopGenerationConfirm": "නවත්වන්න",
     "stopGenerationDontAskAgainButton": "බොත්තමෙන් නවත්වන විට නැවත අහන්න එපා",
     "stopGenerationDontAskAgainKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට නැවත අහන්න එපා",
-    "generateResponseButton": "පිළිතුර නිපදවන්න"
+    "generateResponseButton": "පිළිතුර නිපදවන්න",
+    "downloadResponse": "ප්‍රතිචාරය බාගන්න"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
@@ -972,7 +973,15 @@
     "savedConfirmation": "සුරකිණි",
     "unsavedChanges": "සුරැකුම් නොකළ වෙනස්කම්",
     "unsavedChangesMessage": "ඔබට සුරැකුම් නොකළ වෙනස්කම් ඇත. ඒවා ඉවත් කරන්නද?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "ක්ෂේත්‍රය හිස් කරන්න",
+    "autosaveNote": "වෙනස්කම් ස්වයංක්‍රීයව සුරකිනු ලැබේ.",
+    "responseSection": "ප්‍රතිචාරය",
+    "voiceSection": "හඬ",
+    "behaviorSection": "ප්‍රවෘත්තිය",
+    "resetChatSettings": "චැට් සැකසුම් යළි සකසන්න",
+    "resetChatSettingsConfirmTitle": "චැට් සැකසුම් යළි සකසන්නද?",
+    "resetChatSettingsConfirmMessage": "මෙය මෙම පැනලයේ සියලුම පෙරනිමි ගැන්වීම් යථා තත්ත්වයට පත් කරයි: උෂ්ණත්වය, අභිරුචි උපදෙස්, ඔබ පිළිබඳ, නියැදි ප්‍රතිචාර, ප්‍රවාහන වේගය, පෙළ-හඬට, සක්‍රීය ගොනු සහ තහවුරු කිරීම්. මෙය ඔබේ සංවාද වලට බලපාන්නේ නැත."
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "දින {days}ක් ඇතුළත කල් ඉකුත් වේ - ඉක්මනින් බාගත කරන්න",
     "expires": "දින {days}ක් සඳහා ලැබෙනු ඇත",
     "learnMore": "තව දැනගන්න",
-    "advancedOptions": "වැඩිදියුණු විකල්ප"
+    "advancedOptions": "වැඩිදියුණු විකල්ප",
+    "unofficialBadgeLabel": "නිල නොවේ",
+    "unofficialLanguageWarning": "මෙම භාෂාව නිල වශයෙන් සහාය නොදක්වයි. පරිවර්තන තත්ත්වය සනාථ කර නොමැත. කරුණාකර ප්‍රතිඵලය බෙදා ගැනීමට පෙර පළපුරුදු හෝ දේශීය කතාන පුද්ගලයෙකු විසින් සමාලෝචනය කොට බලන්න."
   },
   "terms": {
     "officialLanguages": "නිළ අනුවාදය:",

@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "रोकें",
     "stopGenerationDontAskAgainButton": "बटन से रोकते समय दोबारा न पूछें",
     "stopGenerationDontAskAgainKeyboard": "कीबोर्ड से रोकते समय दोबारा न पूछें",
-    "generateResponseButton": "उत्तर जनरेट करें"
+    "generateResponseButton": "उत्तर जनरेट करें",
+    "downloadResponse": "जवाब डाउनलोड करें"
   },
   "sidebar": {
     "collapseSidebar": "साइडबार संक्षिप्त करें",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "सहेजा गया",
     "unsavedChanges": "अपुष्ट परिवर्तन",
     "unsavedChangesMessage": "आपके पास अपुष्ट परिवर्तन हैं। क्या इन्हें हटाना है?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "फ़ील्ड साफ़ करें",
+    "autosaveNote": "परिवर्तन अपने आप सहेज लिए जाते हैं।",
+    "responseSection": "जवाब",
+    "voiceSection": "आवाज़",
+    "behaviorSection": "व्यवहार",
+    "resetChatSettings": "चैट सेटिंग्स रीसेट करें",
+    "resetChatSettingsConfirmTitle": "चैट सेटिंग्स रीसेट करें?",
+    "resetChatSettingsConfirmMessage": "यह इस पैनल की सभी सेटिंग्स को डिफ़ॉल्ट पर पुनर्स्थापित कर देगा: टेम्परेचर, कस्टम निर्देश, आपके बारे में, मॉडल जवाब, स्ट्रीमिंग स्पीड, टेक्स्ट-टू-स्पीच, सक्रिय फ़ाइलें, और पुष्टिकरण। इससे आपकी वार्तालापों पर कोई असर नहीं पड़ेगा।"
   },
   "notFound": {
     "lostDog": "खोया हुआ कुत्ता"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "{days} दिन में समाप्त होगा - शीघ्र डाउनलोड करें",
     "expires": "{days} दिन तक उपलब्ध",
     "learnMore": "और जानें",
-    "advancedOptions": "उन्नत विकल्प"
+    "advancedOptions": "उन्नत विकल्प",
+    "unofficialBadgeLabel": "ग़ैर-आधिकारिक",
+    "unofficialLanguageWarning": "यह भाषा आधिकारिक रूप से समर्थित नहीं है। अनुवाद की गुणवत्ता सत्यापित नहीं है। कृपया साझा करने से पहले परिणाम को किसी प्रवाह या मूल वक्ता से जाँच लें।"
   },
   "terms": {
     "officialLanguages": "आधिकारिक संस्करण:",

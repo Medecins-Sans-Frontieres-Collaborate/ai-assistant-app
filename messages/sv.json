@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "Stoppa",
     "stopGenerationDontAskAgainButton": "Fråga inte igen när du stoppar med knappen",
     "stopGenerationDontAskAgainKeyboard": "Fråga inte igen när du stoppar med tangentbordet",
-    "generateResponseButton": "Generera svar"
+    "generateResponseButton": "Generera svar",
+    "downloadResponse": "Ladda ner svar"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Sparad",
     "unsavedChanges": "Osparade ändringar",
     "unsavedChangesMessage": "Du har osparade ändringar. Vill du kasta dem?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Rensa fält",
+    "autosaveNote": "Ändringar sparas automatiskt.",
+    "responseSection": "Svar",
+    "voiceSection": "Röst",
+    "behaviorSection": "Beteende",
+    "resetChatSettings": "Återställ chattinställningar",
+    "resetChatSettingsConfirmTitle": "Återställ chattinställningar?",
+    "resetChatSettingsConfirmMessage": "Detta återställer standardvärden för allt i denna panel: temperatur, anpassade instruktioner, Om dig, modellsvar, strömmande hastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina konversationer."
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Utgår om {days} dag(ar) – ladda ner snart",
     "expires": "Tillgänglig i {days} dagar",
     "learnMore": "Läs mer",
-    "advancedOptions": "Avancerade alternativ"
+    "advancedOptions": "Avancerade alternativ",
+    "unofficialBadgeLabel": "Inofficiell",
+    "unofficialLanguageWarning": "Detta språk stöds inte officiellt. Kvaliteten på översättningen har inte verifierats. Låt resultatet granskas av en flytande eller infödd talare innan det delas."
   },
   "terms": {
     "officialLanguages": "Officiell version:",

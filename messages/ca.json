@@ -666,7 +666,8 @@
     "stopGenerationConfirm": "Atura",
     "stopGenerationDontAskAgainButton": "No tornis a preguntar quan s'aturi amb el botó",
     "stopGenerationDontAskAgainKeyboard": "No tornis a preguntar quan s'aturi amb el teclat",
-    "generateResponseButton": "Genera resposta"
+    "generateResponseButton": "Genera resposta",
+    "downloadResponse": "Descarrega la resposta"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -980,7 +981,15 @@
     "savedConfirmation": "Desat",
     "unsavedChanges": "Canvis sense desar",
     "unsavedChangesMessage": "Teniu canvis sense desar. Voleu descartar-los?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Neteja el camp",
+    "autosaveNote": "Els canvis es desen automàticament.",
+    "responseSection": "Resposta",
+    "voiceSection": "Veu",
+    "behaviorSection": "Comportament",
+    "resetChatSettings": "Restableix la configuració del xat",
+    "resetChatSettingsConfirmTitle": "Voleu restablir la configuració del xat?",
+    "resetChatSettingsConfirmMessage": "Això restablirà els valors per defecte de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les vostres converses."
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Caduca en {days} dia(es) - descarregueu aviat",
     "expires": "Disponible durant {days} dies",
     "learnMore": "Més informació",
-    "advancedOptions": "Opcions avançades"
+    "advancedOptions": "Opcions avançades",
+    "unofficialBadgeLabel": "No oficial",
+    "unofficialLanguageWarning": "Aquesta llengua no està oficialment suportada. La qualitat de la traducció no ha estat verificada. Si us plau, feu revisar el resultat per una persona nadiua o amb un nivell alt abans de compartir-lo."
   },
   "terms": {
     "officialLanguages": "Versió oficial:",

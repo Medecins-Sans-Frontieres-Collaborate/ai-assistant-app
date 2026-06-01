@@ -688,7 +688,8 @@
     "stopGenerationConfirm": "Zatrzymaj",
     "stopGenerationDontAskAgainButton": "Nie pytaj ponownie przy zatrzymywaniu przyciskiem",
     "stopGenerationDontAskAgainKeyboard": "Nie pytaj ponownie przy zatrzymywaniu klawiaturą",
-    "generateResponseButton": "Wygeneruj odpowiedź"
+    "generateResponseButton": "Wygeneruj odpowiedź",
+    "downloadResponse": "Pobierz odpowiedź"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1002,7 +1003,15 @@
     "savedConfirmation": "Zapisano",
     "unsavedChanges": "Niezapisane zmiany",
     "unsavedChangesMessage": "Masz niezapisane zmiany. Odrzucić je?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Wyczyść pole",
+    "autosaveNote": "Zmiany są zapisywane automatycznie.",
+    "responseSection": "Odpowiedź",
+    "voiceSection": "Głos",
+    "behaviorSection": "Zachowanie",
+    "resetChatSettings": "Przywróć domyślne ustawienia czatu",
+    "resetChatSettingsConfirmTitle": "Przywrócić domyślne ustawienia czatu?",
+    "resetChatSettingsConfirmMessage": "To przywróci domyślne ustawienia w tym panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, prędkość przesyłania, zamiana tekstu na mowę, aktywne pliki oraz potwierdzenia. Twoje rozmowy nie zostaną zmienione."
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Wygasa za {days} dni – pobierz wkrótce",
     "expires": "Dostępne przez {days} dni",
     "learnMore": "Dowiedz się więcej",
-    "advancedOptions": "Zaawansowane opcje"
+    "advancedOptions": "Zaawansowane opcje",
+    "unofficialBadgeLabel": "Nieoficjalne",
+    "unofficialLanguageWarning": "Ten język nie jest oficjalnie wspierany. Jakość tłumaczenia nie została zweryfikowana. Przed udostępnieniem prosimy o weryfikację wyniku przez osobę biegłą lub native speakera."
   },
   "terms": {
     "officialLanguages": "Wersja oficjalna:",

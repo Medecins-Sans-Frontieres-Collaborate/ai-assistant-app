@@ -608,7 +608,8 @@
     "stopGenerationConfirm": "Зупинити",
     "stopGenerationDontAskAgainButton": "Більше не запитувати під час зупинки кнопкою",
     "stopGenerationDontAskAgainKeyboard": "Більше не запитувати під час зупинки з клавіатури",
-    "generateResponseButton": "Згенерувати відповідь"
+    "generateResponseButton": "Згенерувати відповідь",
+    "downloadResponse": "Завантажити відповідь"
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
@@ -922,7 +923,15 @@
     "savedConfirmation": "Збережено",
     "unsavedChanges": "Незбережені зміни",
     "unsavedChangesMessage": "У вас є незбережені зміни. Відхилити їх?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Очистити поле",
+    "autosaveNote": "Зміни зберігаються автоматично.",
+    "responseSection": "Відповідь",
+    "voiceSection": "Голос",
+    "behaviorSection": "Поведінка",
+    "resetChatSettings": "Скинути налаштування чату",
+    "resetChatSettingsConfirmTitle": "Скинути налаштування чату?",
+    "resetChatSettingsConfirmMessage": "Це відновить типові налаштування всього в цій панелі: температура, власні інструкції, інформація про вас, відповідь моделі, швидкість трансляції, текст у мовлення, активні файли та підтвердження. Це не впливає на ваші розмови."
   },
   "notFound": {
     "lostDog": "Загублений пес"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Термін дії закінчується через {days} днi(в) — завантажте найближчим часом",
     "expires": "Доступно протягом {days} днiв",
     "learnMore": "Дізнатися більше",
-    "advancedOptions": "Додаткові параметри"
+    "advancedOptions": "Додаткові параметри",
+    "unofficialBadgeLabel": "Неофіційний",
+    "unofficialLanguageWarning": "Ця мова не підтримується офіційно. Якість перекладу не перевірялася. Будь ласка, перегляньте результат з носієм мови або особою, що вільно володіє нею, перед розповсюдженням."
   },
   "terms": {
     "officialLanguages": "Офіційна версія:",

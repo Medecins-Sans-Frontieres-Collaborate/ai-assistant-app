@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "បញ្ឈប់",
     "stopGenerationDontAskAgainButton": "កុំសួរឡើងវិញ នៅពេលបញ្ឈប់ដោយប៊ូតុង",
     "stopGenerationDontAskAgainKeyboard": "កុំសួរឡើងវិញ នៅពេលបញ្ឈប់ដោយក្ដារចុច",
-    "generateResponseButton": "បង្កើតចម្លើយ"
+    "generateResponseButton": "បង្កើតចម្លើយ",
+    "downloadResponse": "ទាញយកចម្លើយ"
   },
   "transcript": {
     "originalTranscript": "អត្ថបទសម្រង់ដើម",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "បានរក្សាទុក",
     "unsavedChanges": "មានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក",
     "unsavedChangesMessage": "អ្នកមានការផ្លាស់ប្ដូរដែលមិនទាន់បានរក្សាទុក។ ចង់ចោលទេ?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "សម្អាតវាល",
+    "autosaveNote": "ការផ្លាស់ប្ដូរត្រូវបានរក្សាទុកដោយស្វ័យប្រវត្តិ។",
+    "responseSection": "ចម្លើយ",
+    "voiceSection": "សំលេង",
+    "behaviorSection": "ឥរិយាបថ",
+    "resetChatSettings": "កំណត់ការជជែកឡើងវិញជាមុនដើម",
+    "resetChatSettingsConfirmTitle": "កំណត់ការជជែកឡើងវិញជាមុនដើម?",
+    "resetChatSettingsConfirmMessage": "នេះនឹងស្ដារទីតាំងដើមសម្រាប់ធាតុនៅក្នុងផ្ទាំងនេះទាំងអស់៖ សីតុណ្ហភាព, សេចក្ដីណែនាំផ្ទាល់ខ្លួន, អំពីអ្នក, ចម្លើយរបស់ម៉ូឌែល, ល្បឿនបញ្ចូល, អត្ថបទ-ទៅ-សំលេង, ឯកសារដែលកំពុងប្រើ, និងការបញ្ជាក់។ វាមិនប៉ះពាល់ដល់ការជជែករបស់អ្នកទេ។"
   },
   "emptyState": {
     "greeting": "តើយើងអាចជួយអ្វីបានខ្លះ?",
@@ -1753,7 +1762,9 @@
     "downloading": "កំពុងទាញយក...",
     "expired": "ការបកប្រែនេះបានផុតកំណត់ និងមិនអាចប្រើបានទៀតទេ",
     "expiresSoon": "នឹងផុតកំណត់ក្នុងរយៈពេល {days} ថ្ងៃ - សូមទាញយកឯកសារឬ",
-    "expires": "អាចប្រើបានក្នុងរយៈ {days} ថ្ងៃ"
+    "expires": "អាចប្រើបានក្នុងរយៈ {days} ថ្ងៃ",
+    "unofficialBadgeLabel": "មិនផ្លូវការ",
+    "unofficialLanguageWarning": "ភាសានេះមិនត្រូវបានគាំទ្រផ្លូវការទេ។ គុណភាពការប្រែមិនទាន់ធានា។ សូមឲ្យអ្នកស្ទាត់ភាសា ឬអ្នកដើមជាតិពិនិត្យមើលលទ្ធផលមុននឹងចែករំលែក។"
   },
   "agentsTab": {
     "organizationAgents": {

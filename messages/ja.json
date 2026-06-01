@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "停止",
     "stopGenerationDontAskAgainButton": "ボタンで停止する際は今後確認しない",
     "stopGenerationDontAskAgainKeyboard": "キーボードで停止する際は今後確認しない",
-    "generateResponseButton": "回答を生成"
+    "generateResponseButton": "回答を生成",
+    "downloadResponse": "応答をダウンロード"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "保存しました",
     "unsavedChanges": "未保存の変更",
     "unsavedChangesMessage": "未保存の変更があります。破棄しますか？",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "フィールドをクリア",
+    "autosaveNote": "変更内容は自動的に保存されます。",
+    "responseSection": "応答",
+    "voiceSection": "音声",
+    "behaviorSection": "挙動",
+    "resetChatSettings": "チャット設定をリセット",
+    "resetChatSettingsConfirmTitle": "チャット設定をリセットしますか？",
+    "resetChatSettingsConfirmMessage": "このパネル内のすべてが初期設定に戻ります：温度、カスタムインストラクション、About You、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認画面。ただし、会話内容には影響しません。"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "残り{days}日で失効します。お早めにダウンロードしてください",
     "expires": "{days}日間利用可能",
     "learnMore": "詳細はこちら",
-    "advancedOptions": "詳細オプション"
+    "advancedOptions": "詳細オプション",
+    "unofficialBadgeLabel": "非公式",
+    "unofficialLanguageWarning": "この言語は正式にサポートされていません。翻訳品質は確認されていません。共有前に流暢な話者またはネイティブスピーカーによる確認をお願いします。"
   },
   "terms": {
     "officialLanguages": "公式版：",

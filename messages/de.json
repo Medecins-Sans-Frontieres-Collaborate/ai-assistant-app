@@ -637,7 +637,8 @@
     "stopGenerationConfirm": "Stoppen",
     "stopGenerationDontAskAgainButton": "Beim Stoppen über den Button nicht mehr nachfragen",
     "stopGenerationDontAskAgainKeyboard": "Beim Stoppen mit der Tastatur nicht mehr nachfragen",
-    "generateResponseButton": "Antwort generieren"
+    "generateResponseButton": "Antwort generieren",
+    "downloadResponse": "Antwort herunterladen"
   },
   "sidebar": {
     "collapseSidebar": "Seitenleiste einklappen",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Gespeichert",
     "unsavedChanges": "Ungespeicherte Änderungen",
     "unsavedChangesMessage": "Sie haben ungespeicherte Änderungen. Möchten Sie diese verwerfen?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Feld leeren",
+    "autosaveNote": "Änderungen werden automatisch gespeichert.",
+    "responseSection": "Antwort",
+    "voiceSection": "Sprache",
+    "behaviorSection": "Verhalten",
+    "resetChatSettings": "Chat-Einstellungen zurücksetzen",
+    "resetChatSettingsConfirmTitle": "Chat-Einstellungen zurücksetzen?",
+    "resetChatSettingsConfirmMessage": "Dies stellt die Standardeinstellungen für alle Optionen in diesem Bereich wieder her: Temperatur, benutzerdefinierte Anweisungen, Über Sie, Modellantwort, Streaming-Geschwindigkeit, Text-to-Speech, aktive Dateien und Bestätigungen. Ihre Unterhaltungen bleiben unberührt."
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Läuft in {days} Tag(en) ab – bitte bald herunterladen",
     "expires": "Verfügbar für {days} Tag(e)",
     "learnMore": "Mehr erfahren",
-    "advancedOptions": "Erweiterte Optionen"
+    "advancedOptions": "Erweiterte Optionen",
+    "unofficialBadgeLabel": "Inoffiziell",
+    "unofficialLanguageWarning": "Diese Sprache wird nicht offiziell unterstützt. Die Übersetzungsqualität wurde nicht überprüft. Lassen Sie das Ergebnis bitte von einer fließend sprechenden oder muttersprachlichen Person prüfen, bevor Sie es weitergeben."
   },
   "terms": {
     "officialLanguages": "Offizielle Version:",

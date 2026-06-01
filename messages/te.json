@@ -689,7 +689,8 @@
     "stopGenerationConfirm": "ఆపు",
     "stopGenerationDontAskAgainButton": "బటన్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
     "stopGenerationDontAskAgainKeyboard": "కీబోర్డ్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
-    "generateResponseButton": "ప్రతిస్పందన సృష్టించు"
+    "generateResponseButton": "ప్రతిస్పందన సృష్టించు",
+    "downloadResponse": "ప్రత్యుత్తరాన్ని డౌన్‌లోడ్ చేయండి"
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",
@@ -1003,7 +1004,15 @@
     "savedConfirmation": "సేవ్ చేయబడింది",
     "unsavedChanges": "సేవ్ చేయని మార్పులు",
     "unsavedChangesMessage": "మీరు సేవ్ చేయని మార్పులు ఉన్నాయి. వాటిని తొలగించాలా?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "ఫీల్డ్ క్లియర్ చేయండి",
+    "autosaveNote": "మార్పులు ఆటోమేటిక్‌గా సేవ్ అవుతాయి.",
+    "responseSection": "ప్రత్యుత్తరం",
+    "voiceSection": "వోయిస్",
+    "behaviorSection": "ప్రవర్తన",
+    "resetChatSettings": "చాట్ సెట్టింగ్స్ రీసెట్ చేయండి",
+    "resetChatSettingsConfirmTitle": "చాట్ సెట్టింగ్స్ రీసెట్ చేయాలా?",
+    "resetChatSettingsConfirmMessage": "ఈ ప్యానెల్‌లో ఉన్న అన్ని సెట్టింగ్స్‌ను డిఫాల్ట్‌కి తీసుకుపోతుంది: టెంపరేచర్, కస్టమ్ సూచనలు, మీ గురించి, మోడల్ ప్రతిస్పందన, స్ట్రీమింగ్ వేగం, టెక్స్ట్-టు-స్పీచ్, యాక్టివ్ ఫైల్స్ మరియు ధృవీకరణలు. ఇది మీ సంభాషణలను ప్రభావితం చేయదు."
   },
   "notFound": {
     "lostDog": "కోల్పోయిన కుక్క"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "{days} రోజు(లు)లో గడువు ముగుస్తుంది - త్వరలో డౌన్‌లోడ్ చేయండి",
     "expires": "{days} రోజులపాటు అందుబాటులో ఉంటుంది",
     "learnMore": "ఇంకా తెలుసుకోండి",
-    "advancedOptions": "ఉన్నత ఎంపికలు"
+    "advancedOptions": "ఉన్నత ఎంపికలు",
+    "unofficialBadgeLabel": "అధికారికం కాదు",
+    "unofficialLanguageWarning": "ఈ భాష అధికారికంగా మద్దతు ఇవ్వబడలేదు. అనువాద నాణ్యతను నిర్ధారించలేదని గమనించండి. దయచేసి ఫలితాన్ని పూర్ణంగా తెలుసుకున్న లేదా మాతృ భాష మాట్లాడే వ్యక్తి ద్వారా రివ్యూ చేయించుకున్న తరువాత మాత్రమే పంచుకోండి."
   },
   "terms": {
     "officialLanguages": "ప్రత్యామ్నాయ అధికారిక భాష:",

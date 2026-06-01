@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Jooji",
     "stopGenerationDontAskAgainButton": "Ha la iga weydiin mar kale markaan joojinayo batoonka",
     "stopGenerationDontAskAgainKeyboard": "Ha la iga weydiin mar kale markaan joojinayo kumbuyuutarka",
-    "generateResponseButton": "Abuur jawaab"
+    "generateResponseButton": "Abuur jawaab",
+    "downloadResponse": "Soo dejiso jawaabta"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "La keydiyay",
     "unsavedChanges": "Isbedelo aan la kaydin",
     "unsavedChangesMessage": "Waxaad leedahay isbedelo aan la kaydin. Ma doonaysaa inaad tirtirto?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Tirtir goobta",
+    "autosaveNote": "Isbeddellada si toos ah ayaa loo kaydiyaa.",
+    "responseSection": "Jawaab",
+    "voiceSection": "Codka",
+    "behaviorSection": "Dhaqan",
+    "resetChatSettings": "Soo celi dejinta sheekada",
+    "resetChatSettingsConfirmTitle": "Ma doonaysaa inaad soo celiso dejinta sheekada?",
+    "resetChatSettingsConfirmMessage": "Tani waxay soo celinaysaa dhammaan default-yada ku jira qeybtaan: heerkulka, tilmaamaha gaarka ah, Ku Saabsan Adiga, jawaabta moodeelka, xawaaraha socodsiinta, qoraal-u-akhri, faylasha firfircoon, iyo xaqiijinta. Ma saameyneyso sheekaysiyadaada."
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -1753,7 +1762,9 @@
     "downloading": "Waa la soo degsanayaa...",
     "expired": "Turjumaaddani way dhacday oo mar dambe lama heli karo",
     "expiresSoon": "Waxay dhacaysaa {days} maalmood gudahood - dhakhso u soo degso",
-    "expires": "Waa la heli karaa {days} maalmood"
+    "expires": "Waa la heli karaa {days} maalmood",
+    "unofficialBadgeLabel": "Aan rasmi ahayn",
+    "unofficialLanguageWarning": "Luuqaddan si rasmi ah looma taageero. Tayada tarjumaadda lama xaqiijin. Fadlan hubi in natiijada uu dib u eego qof si fiican ama u dhashay luuqaddan ka hor intaadan la wadaagin."
   },
   "agentsTab": {
     "organizationAgents": {

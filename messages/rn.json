@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Hagarika",
     "stopGenerationDontAskAgainButton": "Ntuzongere kumbaza igihe uhagaritse ukoresheje buto",
     "stopGenerationDontAskAgainKeyboard": "Ntuzongere kumbaza igihe uhagaritse ukoresheje klaviyo",
-    "generateResponseButton": "Kora inyishu"
+    "generateResponseButton": "Kora inyishu",
+    "downloadResponse": "Kurura inyishu"
   },
   "transcript": {
     "originalTranscript": "Inyandiko y'intango",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Birabitswe",
     "unsavedChanges": "Impinduka zitabitswe",
     "unsavedChangesMessage": "Ufise impinduka utarabika. Urashaka kuzikuraho?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Hakuraho",
+    "autosaveNote": "Impinduka zirazigamwa ku buryo bwikora.",
+    "responseSection": "Inyishu",
+    "voiceSection": "Ijwi",
+    "behaviorSection": "Importement",
+    "resetChatSettings": "Subira ku bisanzwe ivyo wahinduye ku kiganiro",
+    "resetChatSettingsConfirmTitle": "Subira ku bisanzwe ivyo wahinduye ku kiganiro?",
+    "resetChatSettingsConfirmMessage": "Ibi bizosubiza ku bisanzwe vyose biri kuri pane iyi: ubushuhe (temperature), amategeko wahinduye, Ivyerekeye Wewe, inyishu ya modele, umuvuduko wa streaming, text-to-speech, amadosiye akora, n’ukwemeza. Ntibizokora ku biganiro vyawe."
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -1753,7 +1762,9 @@
     "downloading": "Biriko birakururwa...",
     "expired": "Iyi nyandiko yahindutse yararangiye kandi ntikiri guhari",
     "expiresSoon": "Birarangira mu minsi {days} - kurura vuba",
-    "expires": "Bihari ku minsi {days}"
+    "expires": "Bihari ku minsi {days}",
+    "unofficialBadgeLabel": "Si vyemewe",
+    "unofficialLanguageWarning": "Uyu rurimi ntirwashigikiwe ku mugaragaro. Ubwiza bw’inyiguro ntibwigeze bugenzurwa. Turagusavye urondere uwuvuga ururimi neza aze kurusuzuma imbere yo gusangira."
   },
   "agentsTab": {
     "organizationAgents": {

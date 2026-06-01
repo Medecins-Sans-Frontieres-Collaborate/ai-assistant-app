@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "درول",
     "stopGenerationDontAskAgainButton": "د تڼۍ له لارې درولو پر مهال بیا مه پوښتئ",
     "stopGenerationDontAskAgainKeyboard": "د کیبورډ له لارې درولو پر مهال بیا مه پوښتئ",
-    "generateResponseButton": "ځواب تولید کړئ"
+    "generateResponseButton": "ځواب تولید کړئ",
+    "downloadResponse": "ځواب ډاونلوډ کړئ"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "ثبت شو",
     "unsavedChanges": "خوندي نه شوي بدلونونه",
     "unsavedChangesMessage": "تاسو خوندي نه شوي بدلونونه لرئ. آیا لغوه یې کړئ؟",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "فیلډ پاک کړئ",
+    "autosaveNote": "بدلونونه په اوتومات ډول خوندي کېږي.",
+    "responseSection": "ځواب",
+    "voiceSection": "غږ",
+    "behaviorSection": "رفتار",
+    "resetChatSettings": "د چیټ تنظیمات بیا تنظیم کړئ",
+    "resetChatSettingsConfirmTitle": "د چیټ تنظیمات بیا تنظیم شي؟",
+    "resetChatSettingsConfirmMessage": "دا به د دې پینل ټولې تنظیمات اصلي حالت ته راوګرځوي: تودوخه، خپل دودیز لارښوونې، ستاسو معلومات، د ماډل ځواب، د جریان سرعت، له متن نه غږ ته بدلېدل، فعال فایلونه، او تائیدونه. ستاسو پر خبرو اترو به اثر ونه لري."
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1753,7 +1762,9 @@
     "downloading": "د ښکته کولو په حال کې...",
     "expired": "دا ژباړه پای ته رسېدلې او نور نشته",
     "expiresSoon": "په {days} ورځو کې به پای ته ورسېږي - ژر ښکته کړئ",
-    "expires": "{days} ورځو لپاره موجود"
+    "expires": "{days} ورځو لپاره موجود",
+    "unofficialBadgeLabel": "غیر رسمي",
+    "unofficialLanguageWarning": "دا ژبه رسماً نه ده ملاتړ شوې. د ژباړې کیفیت نه دی تائید شوی. مهرباني وکړئ تر شریکولو مخکې پایله له یو روان یا اصلي ویونکي سره بیا وڅېړئ."
   },
   "agentsTab": {
     "organizationAgents": {

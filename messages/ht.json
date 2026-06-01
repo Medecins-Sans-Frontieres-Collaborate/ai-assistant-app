@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Sispann",
     "stopGenerationDontAskAgainButton": "Pa mande ankò lè w ap sispann ak bouton an",
     "stopGenerationDontAskAgainKeyboard": "Pa mande ankò lè w ap sispann ak klavye a",
-    "generateResponseButton": "Jenere repons"
+    "generateResponseButton": "Jenere repons",
+    "downloadResponse": "Telechaje repons lan"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Sove",
     "unsavedChanges": "Chanjman ki pa sove",
     "unsavedChangesMessage": "Ou gen chanjman ki pa sove. Anile yo?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Netwaye chan an",
+    "autosaveNote": "Chanjman yo sove otomatikman.",
+    "responseSection": "Repons",
+    "voiceSection": "Vwa",
+    "behaviorSection": "Konpòtman",
+    "resetChatSettings": "Reyajiste paramèt chat yo",
+    "resetChatSettingsConfirmTitle": "Reyajiste paramèt chat yo?",
+    "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt ki default nan panèl sa a: tanperati, enstriksyon pèsonalize, Enfòmasyon sou ou, repons modèl, vitès difizyon, tèks an vwa, fichye aktif, ak konfimasyon. Sa pap afekte konvèsasyon ou yo."
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1753,7 +1762,9 @@
     "downloading": "Ap telechaje...",
     "expired": "Tradiksyon sa a te ekspire epi li pa disponib ankò",
     "expiresSoon": "Ekspire nan {days} jou - telechaje byento",
-    "expires": "Disponib pou {days} jou"
+    "expires": "Disponib pou {days} jou",
+    "unofficialBadgeLabel": "Pa ofisyèl",
+    "unofficialLanguageWarning": "Lang sa a pa sipòte ofisyèlman. Kalite tradiksyon an pa verifye. Tanpri fè yon moun ki pale lang lan byen oswa natif verifye rezilta a anvan ou pataje li."
   },
   "agentsTab": {
     "organizationAgents": {

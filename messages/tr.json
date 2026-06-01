@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "Durdur",
     "stopGenerationDontAskAgainButton": "Durdurma butonunda tekrar sorma",
     "stopGenerationDontAskAgainKeyboard": "Klavye ile durdururken tekrar sorma",
-    "generateResponseButton": "Yanıt oluştur"
+    "generateResponseButton": "Yanıt oluştur",
+    "downloadResponse": "Yanıtı indir"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Kaydedildi",
     "unsavedChanges": "Kaydedilmemiş değişiklikler",
     "unsavedChangesMessage": "Kaydedilmemiş değişiklikleriniz var. İptal etmek istiyor musunuz?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Alanı temizle",
+    "autosaveNote": "Değişiklikler otomatik olarak kaydedilir.",
+    "responseSection": "Yanıt",
+    "voiceSection": "Ses",
+    "behaviorSection": "Davranış",
+    "resetChatSettings": "Sohbet ayarlarını sıfırla",
+    "resetChatSettingsConfirmTitle": "Sohbet ayarları sıfırlansın mı?",
+    "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Kendiniz Hakkında, model yanıtı, akış hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez."
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "{days} gün içinde süresi dolacak - lütfen yakında indirin",
     "expires": "{days} gün boyunca kullanılabilir",
     "learnMore": "Daha fazla bilgi edinin",
-    "advancedOptions": "Gelişmiş seçenekler"
+    "advancedOptions": "Gelişmiş seçenekler",
+    "unofficialBadgeLabel": "Resmî değil",
+    "unofficialLanguageWarning": "Bu dil resmî olarak desteklenmemektedir. Çeviri kalitesi doğrulanmamıştır. Sonucu paylaşmadan önce akıcı veya ana dili olan birine kontrol ettiriniz."
   },
   "terms": {
     "officialLanguages": "Resmi sürüm:",

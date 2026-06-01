@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Διακοπή",
     "stopGenerationDontAskAgainButton": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το κουμπί",
     "stopGenerationDontAskAgainKeyboard": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το πληκτρολόγιο",
-    "generateResponseButton": "Δημιουργία απάντησης"
+    "generateResponseButton": "Δημιουργία απάντησης",
+    "downloadResponse": "Λήψη απάντησης"
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Αποθηκεύτηκε",
     "unsavedChanges": "Μη αποθηκευμένες αλλαγές",
     "unsavedChangesMessage": "Έχετε μη αποθηκευμένες αλλαγές. Θέλετε να τις απορρίψετε;",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Καθαρισμός πεδίου",
+    "autosaveNote": "Οι αλλαγές αποθηκεύονται αυτόματα.",
+    "responseSection": "Απάντηση",
+    "voiceSection": "Φωνή",
+    "behaviorSection": "Συμπεριφορά",
+    "resetChatSettings": "Επαναφορά ρυθμίσεων συνομιλίας",
+    "resetChatSettingsConfirmTitle": "Να γίνει επαναφορά των ρυθμίσεων συνομιλίας;",
+    "resetChatSettingsConfirmMessage": "Αυτό επαναφέρει τις προεπιλογές για όλα σε αυτό το πάνελ: θερμοκρασία, προσαρμοσμένες οδηγίες, σχετικό με εσάς, απάντηση μοντέλου, ταχύτητα μετάδοσης, μετατροπή κειμένου σε ομιλία, ενεργά αρχεία και επιβεβαιώσεις. Δεν επηρεάζει τις συνομιλίες σας."
   },
   "emptyState": {
     "greeting": "Πώς μπορώ να βοηθήσω;",
@@ -1753,7 +1762,9 @@
     "downloading": "Λήψη...",
     "expired": "Αυτή η μετάφραση έχει λήξει και δεν είναι πλέον διαθέσιμη",
     "expiresSoon": "Λήγει σε {days} ημέρα(-ες) - κατεβάστε σύντομα",
-    "expires": "Διαθέσιμο για {days} ημέρες"
+    "expires": "Διαθέσιμο για {days} ημέρες",
+    "unofficialBadgeLabel": "Ανεπίσημο",
+    "unofficialLanguageWarning": "Αυτή η γλώσσα δεν υποστηρίζεται επίσημα. Η ποιότητα της μετάφρασης δεν έχει επαληθευτεί. Παρακαλώ ζητήστε από άτομο με άριστη γνώση της γλώσσας να ελέγξει το αποτέλεσμα πριν το κοινοποιήσετε."
   },
   "agentsTab": {
     "organizationAgents": {

@@ -608,7 +608,8 @@
     "stopGenerationConfirm": "หยุด",
     "stopGenerationDontAskAgainButton": "อย่าถามอีกเมื่อหยุดด้วยปุ่ม",
     "stopGenerationDontAskAgainKeyboard": "อย่าถามอีกเมื่อหยุดด้วยแป้นพิมพ์",
-    "generateResponseButton": "สร้างคำตอบ"
+    "generateResponseButton": "สร้างคำตอบ",
+    "downloadResponse": "ดาวน์โหลดคำตอบ"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
@@ -922,7 +923,15 @@
     "savedConfirmation": "บันทึกแล้ว",
     "unsavedChanges": "มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก",
     "unsavedChangesMessage": "คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก ต้องการละทิ้งหรือไม่?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "ล้างช่องข้อมูล",
+    "autosaveNote": "ระบบจะบันทึกการเปลี่ยนแปลงโดยอัตโนมัติ",
+    "responseSection": "คำตอบ",
+    "voiceSection": "เสียง",
+    "behaviorSection": "พฤติกรรม",
+    "resetChatSettings": "รีเซ็ตการตั้งค่าแชท",
+    "resetChatSettingsConfirmTitle": "รีเซ็ตการตั้งค่าแชทหรือไม่?",
+    "resetChatSettingsConfirmMessage": "การดำเนินการนี้จะคืนค่าการตั้งค่าทั้งหมดในแผงนี้กลับสู่ค่าเริ่มต้น: temperature, custom instructions, About You, model response, streaming speed, text-to-speech, ไฟล์ที่ใช้งาน และการยืนยันต่างๆ การดำเนินการนี้จะไม่กระทบต่อบทสนทนาของคุณ"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "จะหมดอายุในอีก {days} วัน - กรุณาดาวน์โหลดโดยเร็ว",
     "expires": "สามารถใช้งานได้ {days} วัน",
     "learnMore": "ดูข้อมูลเพิ่มเติม",
-    "advancedOptions": "ตัวเลือกขั้นสูง"
+    "advancedOptions": "ตัวเลือกขั้นสูง",
+    "unofficialBadgeLabel": "ไม่เป็นทางการ",
+    "unofficialLanguageWarning": "ภาษานี้ไม่ได้รับการสนับสนุนอย่างเป็นทางการ คุณภาพการแปลยังไม่ได้รับการตรวจสอบ กรุณาให้ผู้ที่เชี่ยวชาญหรือเจ้าของภาษาตรวจสอบผลลัพธ์ก่อนเผยแพร่"
   },
   "terms": {
     "officialLanguages": "ฉบับทางการ:",
