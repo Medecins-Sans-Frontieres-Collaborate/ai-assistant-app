@@ -46,7 +46,7 @@ export function Tooltip({
       {children}
       {isVisible && (
         <div
-          className={`absolute z-50 ${multiline ? 'whitespace-normal max-w-xs leading-snug' : 'whitespace-nowrap'} px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded shadow-lg pointer-events-none animate-in fade-in zoom-in-95 duration-200 ${positionClasses[position]}`}
+          className={`absolute z-50 ${multiline ? 'whitespace-normal w-max max-w-xs leading-snug' : 'whitespace-nowrap'} px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded shadow-lg pointer-events-none animate-in fade-in zoom-in-95 duration-200 ${positionClasses[position]}`}
         >
           {content}
           <div
