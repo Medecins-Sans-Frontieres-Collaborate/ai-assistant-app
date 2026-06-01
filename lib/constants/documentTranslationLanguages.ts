@@ -4,8 +4,10 @@
  * Full list of languages supported by Azure Translator Document Translation.
  * Source: https://learn.microsoft.com/en-us/azure/ai-services/translator/language-support
  *
- * Note: Only languages that support both source and target translation are included
- * for the best user experience in document translation.
+ * Languages are categorized as either officially supported (curated, verified for
+ * production translation quality) or unofficially supported (accepted by Azure
+ * Translator but not formally verified — users are warned in the UI to have
+ * results reviewed by a fluent or native speaker).
  */
 
 /**
@@ -20,123 +22,441 @@ export interface DocumentTranslationLanguage {
 
   /** Native name (autonym) of the language */
   nativeName: string;
+
+  /**
+   * Whether the language is officially supported and quality-verified.
+   * Unofficial languages are accepted by Azure Translator but the UI surfaces
+   * a warning advising review by a fluent or native speaker.
+   */
+  official: boolean;
 }
 
 /**
  * Languages that support bidirectional document translation (both as source and target).
- * Sorted alphabetically by English name.
+ * Sorted alphabetically by English name within each section.
  */
 export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
-  { code: 'af', englishName: 'Afrikaans', nativeName: 'Afrikaans' },
-  { code: 'sq', englishName: 'Albanian', nativeName: 'Shqip' },
-  { code: 'ar', englishName: 'Arabic', nativeName: 'العربية' },
-  { code: 'az', englishName: 'Azerbaijani', nativeName: 'Azərbaycan' },
-  { code: 'ba', englishName: 'Bashkir', nativeName: 'Башҡорт' },
-  { code: 'eu', englishName: 'Basque', nativeName: 'Euskara' },
-  { code: 'bs', englishName: 'Bosnian', nativeName: 'Bosanski' },
-  { code: 'bg', englishName: 'Bulgarian', nativeName: 'Български' },
-  { code: 'yue', englishName: 'Cantonese (Traditional)', nativeName: '粵語' },
-  { code: 'ca', englishName: 'Catalan', nativeName: 'Català' },
-  { code: 'lzh', englishName: 'Chinese (Literary)', nativeName: '文言文' },
+  // Officially supported languages
+  {
+    code: 'af',
+    englishName: 'Afrikaans',
+    nativeName: 'Afrikaans',
+    official: true,
+  },
+  { code: 'sq', englishName: 'Albanian', nativeName: 'Shqip', official: true },
+  { code: 'ar', englishName: 'Arabic', nativeName: 'العربية', official: true },
+  {
+    code: 'az',
+    englishName: 'Azerbaijani',
+    nativeName: 'Azərbaycan',
+    official: true,
+  },
+  { code: 'ba', englishName: 'Bashkir', nativeName: 'Башҡорт', official: true },
+  { code: 'eu', englishName: 'Basque', nativeName: 'Euskara', official: true },
+  {
+    code: 'bs',
+    englishName: 'Bosnian',
+    nativeName: 'Bosanski',
+    official: true,
+  },
+  {
+    code: 'bg',
+    englishName: 'Bulgarian',
+    nativeName: 'Български',
+    official: true,
+  },
+  {
+    code: 'yue',
+    englishName: 'Cantonese (Traditional)',
+    nativeName: '粵語',
+    official: true,
+  },
+  { code: 'ca', englishName: 'Catalan', nativeName: 'Català', official: true },
+  {
+    code: 'lzh',
+    englishName: 'Chinese (Literary)',
+    nativeName: '文言文',
+    official: true,
+  },
   {
     code: 'zh-Hans',
     englishName: 'Chinese (Simplified)',
     nativeName: '简体中文',
+    official: true,
   },
   {
     code: 'zh-Hant',
     englishName: 'Chinese (Traditional)',
     nativeName: '繁體中文',
+    official: true,
   },
-  { code: 'hr', englishName: 'Croatian', nativeName: 'Hrvatski' },
-  { code: 'cs', englishName: 'Czech', nativeName: 'Čeština' },
-  { code: 'da', englishName: 'Danish', nativeName: 'Dansk' },
-  { code: 'nl', englishName: 'Dutch', nativeName: 'Nederlands' },
-  { code: 'en', englishName: 'English', nativeName: 'English' },
-  { code: 'et', englishName: 'Estonian', nativeName: 'Eesti' },
-  { code: 'fo', englishName: 'Faroese', nativeName: 'Føroyskt' },
-  { code: 'fj', englishName: 'Fijian', nativeName: 'Vosa Vakaviti' },
-  { code: 'fil', englishName: 'Filipino', nativeName: 'Filipino' },
-  { code: 'fi', englishName: 'Finnish', nativeName: 'Suomi' },
-  { code: 'fr', englishName: 'French', nativeName: 'Français' },
+  {
+    code: 'hr',
+    englishName: 'Croatian',
+    nativeName: 'Hrvatski',
+    official: true,
+  },
+  { code: 'cs', englishName: 'Czech', nativeName: 'Čeština', official: true },
+  { code: 'da', englishName: 'Danish', nativeName: 'Dansk', official: true },
+  {
+    code: 'nl',
+    englishName: 'Dutch',
+    nativeName: 'Nederlands',
+    official: true,
+  },
+  { code: 'en', englishName: 'English', nativeName: 'English', official: true },
+  { code: 'et', englishName: 'Estonian', nativeName: 'Eesti', official: true },
+  {
+    code: 'fo',
+    englishName: 'Faroese',
+    nativeName: 'Føroyskt',
+    official: true,
+  },
+  {
+    code: 'fj',
+    englishName: 'Fijian',
+    nativeName: 'Vosa Vakaviti',
+    official: true,
+  },
+  {
+    code: 'fil',
+    englishName: 'Filipino',
+    nativeName: 'Filipino',
+    official: true,
+  },
+  { code: 'fi', englishName: 'Finnish', nativeName: 'Suomi', official: true },
+  { code: 'fr', englishName: 'French', nativeName: 'Français', official: true },
   {
     code: 'fr-ca',
     englishName: 'French (Canada)',
     nativeName: 'Français (Canada)',
+    official: true,
   },
-  { code: 'gl', englishName: 'Galician', nativeName: 'Galego' },
-  { code: 'de', englishName: 'German', nativeName: 'Deutsch' },
-  { code: 'ht', englishName: 'Haitian Creole', nativeName: 'Kreyòl Ayisyen' },
-  { code: 'hi', englishName: 'Hindi', nativeName: 'हिन्दी' },
-  { code: 'mww', englishName: 'Hmong Daw', nativeName: 'Hmoob Daw' },
-  { code: 'hu', englishName: 'Hungarian', nativeName: 'Magyar' },
-  { code: 'is', englishName: 'Icelandic', nativeName: 'Íslenska' },
-  { code: 'id', englishName: 'Indonesian', nativeName: 'Bahasa Indonesia' },
-  { code: 'ia', englishName: 'Interlingua', nativeName: 'Interlingua' },
-  { code: 'ikt', englishName: 'Inuinnaqtun', nativeName: 'Inuinnaqtun' },
+  { code: 'gl', englishName: 'Galician', nativeName: 'Galego', official: true },
+  { code: 'de', englishName: 'German', nativeName: 'Deutsch', official: true },
+  {
+    code: 'ht',
+    englishName: 'Haitian Creole',
+    nativeName: 'Kreyòl Ayisyen',
+    official: true,
+  },
+  { code: 'hi', englishName: 'Hindi', nativeName: 'हिन्दी', official: true },
+  {
+    code: 'mww',
+    englishName: 'Hmong Daw',
+    nativeName: 'Hmoob Daw',
+    official: true,
+  },
+  {
+    code: 'hu',
+    englishName: 'Hungarian',
+    nativeName: 'Magyar',
+    official: true,
+  },
+  {
+    code: 'is',
+    englishName: 'Icelandic',
+    nativeName: 'Íslenska',
+    official: true,
+  },
+  {
+    code: 'id',
+    englishName: 'Indonesian',
+    nativeName: 'Bahasa Indonesia',
+    official: true,
+  },
+  {
+    code: 'ia',
+    englishName: 'Interlingua',
+    nativeName: 'Interlingua',
+    official: true,
+  },
+  {
+    code: 'ikt',
+    englishName: 'Inuinnaqtun',
+    nativeName: 'Inuinnaqtun',
+    official: true,
+  },
   {
     code: 'iu-Latn',
     englishName: 'Inuktitut (Latin)',
     nativeName: 'Inuktitut',
+    official: true,
   },
-  { code: 'ga', englishName: 'Irish', nativeName: 'Gaeilge' },
-  { code: 'it', englishName: 'Italian', nativeName: 'Italiano' },
-  { code: 'ja', englishName: 'Japanese', nativeName: '日本語' },
-  { code: 'kn', englishName: 'Kannada', nativeName: 'ಕನ್ನಡ' },
-  { code: 'kk', englishName: 'Kazakh', nativeName: 'Қазақ' },
-  { code: 'ko', englishName: 'Korean', nativeName: '한국어' },
-  { code: 'ku-latn', englishName: 'Kurdish (Latin)', nativeName: 'Kurdî' },
-  { code: 'ky', englishName: 'Kyrgyz', nativeName: 'Кыргызча' },
-  { code: 'lv', englishName: 'Latvian', nativeName: 'Latviešu' },
-  { code: 'lt', englishName: 'Lithuanian', nativeName: 'Lietuvių' },
-  { code: 'mk', englishName: 'Macedonian', nativeName: 'Македонски' },
-  { code: 'mg', englishName: 'Malagasy', nativeName: 'Malagasy' },
-  { code: 'ms', englishName: 'Malay', nativeName: 'Bahasa Melayu' },
-  { code: 'ml', englishName: 'Malayalam', nativeName: 'മലയാളം' },
-  { code: 'mt', englishName: 'Maltese', nativeName: 'Malti' },
-  { code: 'mi', englishName: 'Maori', nativeName: 'Te Reo Māori' },
-  { code: 'mr', englishName: 'Marathi', nativeName: 'मराठी' },
-  { code: 'mn-Cyrl', englishName: 'Mongolian', nativeName: 'Монгол' },
-  { code: 'ne', englishName: 'Nepali', nativeName: 'नेपाली' },
-  { code: 'nb', englishName: 'Norwegian', nativeName: 'Norsk Bokmål' },
-  { code: 'pl', englishName: 'Polish', nativeName: 'Polski' },
+  { code: 'ga', englishName: 'Irish', nativeName: 'Gaeilge', official: true },
+  {
+    code: 'it',
+    englishName: 'Italian',
+    nativeName: 'Italiano',
+    official: true,
+  },
+  { code: 'ja', englishName: 'Japanese', nativeName: '日本語', official: true },
+  { code: 'kn', englishName: 'Kannada', nativeName: 'ಕನ್ನಡ', official: true },
+  { code: 'kk', englishName: 'Kazakh', nativeName: 'Қазақ', official: true },
+  { code: 'ko', englishName: 'Korean', nativeName: '한국어', official: true },
+  {
+    code: 'ku-latn',
+    englishName: 'Kurdish (Latin)',
+    nativeName: 'Kurdî',
+    official: true,
+  },
+  { code: 'ky', englishName: 'Kyrgyz', nativeName: 'Кыргызча', official: true },
+  {
+    code: 'lv',
+    englishName: 'Latvian',
+    nativeName: 'Latviešu',
+    official: true,
+  },
+  {
+    code: 'lt',
+    englishName: 'Lithuanian',
+    nativeName: 'Lietuvių',
+    official: true,
+  },
+  {
+    code: 'mk',
+    englishName: 'Macedonian',
+    nativeName: 'Македонски',
+    official: true,
+  },
+  {
+    code: 'mg',
+    englishName: 'Malagasy',
+    nativeName: 'Malagasy',
+    official: true,
+  },
+  {
+    code: 'ms',
+    englishName: 'Malay',
+    nativeName: 'Bahasa Melayu',
+    official: true,
+  },
+  {
+    code: 'ml',
+    englishName: 'Malayalam',
+    nativeName: 'മലയാളം',
+    official: true,
+  },
+  { code: 'mt', englishName: 'Maltese', nativeName: 'Malti', official: true },
+  {
+    code: 'mi',
+    englishName: 'Maori',
+    nativeName: 'Te Reo Māori',
+    official: true,
+  },
+  { code: 'mr', englishName: 'Marathi', nativeName: 'मराठी', official: true },
+  {
+    code: 'mn-Cyrl',
+    englishName: 'Mongolian',
+    nativeName: 'Монгол',
+    official: true,
+  },
+  { code: 'ne', englishName: 'Nepali', nativeName: 'नेपाली', official: true },
+  {
+    code: 'nb',
+    englishName: 'Norwegian',
+    nativeName: 'Norsk Bokmål',
+    official: true,
+  },
+  { code: 'pl', englishName: 'Polish', nativeName: 'Polski', official: true },
   {
     code: 'pt',
     englishName: 'Portuguese (Brazil)',
     nativeName: 'Português (Brasil)',
+    official: true,
   },
   {
     code: 'pt-pt',
     englishName: 'Portuguese (Portugal)',
     nativeName: 'Português (Portugal)',
+    official: true,
   },
-  { code: 'pa', englishName: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ' },
-  { code: 'otq', englishName: 'Queretaro Otomi', nativeName: 'Hñähñu' },
-  { code: 'ro', englishName: 'Romanian', nativeName: 'Română' },
-  { code: 'ru', englishName: 'Russian', nativeName: 'Русский' },
-  { code: 'sm', englishName: 'Samoan', nativeName: 'Gagana Sāmoa' },
-  { code: 'sr-Cyrl', englishName: 'Serbian (Cyrillic)', nativeName: 'Српски' },
-  { code: 'sr-Latn', englishName: 'Serbian (Latin)', nativeName: 'Srpski' },
-  { code: 'sk', englishName: 'Slovak', nativeName: 'Slovenčina' },
-  { code: 'sl', englishName: 'Slovenian', nativeName: 'Slovenščina' },
-  { code: 'so', englishName: 'Somali', nativeName: 'Soomaali' },
-  { code: 'es', englishName: 'Spanish', nativeName: 'Español' },
-  { code: 'sw', englishName: 'Swahili', nativeName: 'Kiswahili' },
-  { code: 'sv', englishName: 'Swedish', nativeName: 'Svenska' },
-  { code: 'ty', englishName: 'Tahitian', nativeName: 'Reo Tahiti' },
-  { code: 'ta', englishName: 'Tamil', nativeName: 'தமிழ்' },
-  { code: 'tt', englishName: 'Tatar', nativeName: 'Татар' },
-  { code: 'te', englishName: 'Telugu', nativeName: 'తెలుగు' },
-  { code: 'to', englishName: 'Tongan', nativeName: 'Lea Fakatonga' },
-  { code: 'tr', englishName: 'Turkish', nativeName: 'Türkçe' },
-  { code: 'tk', englishName: 'Turkmen', nativeName: 'Türkmen' },
-  { code: 'uk', englishName: 'Ukrainian', nativeName: 'Українська' },
-  { code: 'hsb', englishName: 'Upper Sorbian', nativeName: 'Hornjoserbšćina' },
-  { code: 'uz', englishName: 'Uzbek', nativeName: "O'zbek" },
-  { code: 'vi', englishName: 'Vietnamese', nativeName: 'Tiếng Việt' },
-  { code: 'cy', englishName: 'Welsh', nativeName: 'Cymraeg' },
-  { code: 'yua', englishName: 'Yucatec Maya', nativeName: "Màaya T'àan" },
-  { code: 'zu', englishName: 'Zulu', nativeName: 'isiZulu' },
+  { code: 'pa', englishName: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', official: true },
+  {
+    code: 'otq',
+    englishName: 'Queretaro Otomi',
+    nativeName: 'Hñähñu',
+    official: true,
+  },
+  { code: 'ro', englishName: 'Romanian', nativeName: 'Română', official: true },
+  { code: 'ru', englishName: 'Russian', nativeName: 'Русский', official: true },
+  {
+    code: 'sm',
+    englishName: 'Samoan',
+    nativeName: 'Gagana Sāmoa',
+    official: true,
+  },
+  {
+    code: 'sr-Cyrl',
+    englishName: 'Serbian (Cyrillic)',
+    nativeName: 'Српски',
+    official: true,
+  },
+  {
+    code: 'sr-Latn',
+    englishName: 'Serbian (Latin)',
+    nativeName: 'Srpski',
+    official: true,
+  },
+  {
+    code: 'sk',
+    englishName: 'Slovak',
+    nativeName: 'Slovenčina',
+    official: true,
+  },
+  {
+    code: 'sl',
+    englishName: 'Slovenian',
+    nativeName: 'Slovenščina',
+    official: true,
+  },
+  { code: 'so', englishName: 'Somali', nativeName: 'Soomaali', official: true },
+  { code: 'es', englishName: 'Spanish', nativeName: 'Español', official: true },
+  {
+    code: 'sw',
+    englishName: 'Swahili',
+    nativeName: 'Kiswahili',
+    official: true,
+  },
+  { code: 'sv', englishName: 'Swedish', nativeName: 'Svenska', official: true },
+  {
+    code: 'ty',
+    englishName: 'Tahitian',
+    nativeName: 'Reo Tahiti',
+    official: true,
+  },
+  { code: 'ta', englishName: 'Tamil', nativeName: 'தமிழ்', official: true },
+  { code: 'tt', englishName: 'Tatar', nativeName: 'Татар', official: true },
+  { code: 'te', englishName: 'Telugu', nativeName: 'తెలుగు', official: true },
+  {
+    code: 'to',
+    englishName: 'Tongan',
+    nativeName: 'Lea Fakatonga',
+    official: true,
+  },
+  { code: 'tr', englishName: 'Turkish', nativeName: 'Türkçe', official: true },
+  { code: 'tk', englishName: 'Turkmen', nativeName: 'Türkmen', official: true },
+  {
+    code: 'uk',
+    englishName: 'Ukrainian',
+    nativeName: 'Українська',
+    official: true,
+  },
+  {
+    code: 'hsb',
+    englishName: 'Upper Sorbian',
+    nativeName: 'Hornjoserbšćina',
+    official: true,
+  },
+  { code: 'uz', englishName: 'Uzbek', nativeName: "O'zbek", official: true },
+  {
+    code: 'vi',
+    englishName: 'Vietnamese',
+    nativeName: 'Tiếng Việt',
+    official: true,
+  },
+  { code: 'cy', englishName: 'Welsh', nativeName: 'Cymraeg', official: true },
+  {
+    code: 'yua',
+    englishName: 'Yucatec Maya',
+    nativeName: "Màaya T'àan",
+    official: true,
+  },
+  { code: 'zu', englishName: 'Zulu', nativeName: 'isiZulu', official: true },
+
+  // Unofficial languages — accepted by Azure Translator but not formally
+  // verified for quality. UI surfaces a warning to have results reviewed by a
+  // fluent or native speaker. Cross-check codes against the current Azure
+  // Translator language list before enabling new entries here.
+  { code: 'am', englishName: 'Amharic', nativeName: 'አማርኛ', official: false },
+  {
+    code: 'hy',
+    englishName: 'Armenian',
+    nativeName: 'Հայերեն',
+    official: false,
+  },
+  {
+    code: 'as',
+    englishName: 'Assamese',
+    nativeName: 'অসমীয়া',
+    official: false,
+  },
+  { code: 'bn', englishName: 'Bengali', nativeName: 'বাংলা', official: false },
+  { code: 'my', englishName: 'Burmese', nativeName: 'မြန်မာ', official: false },
+  { code: 'prs', englishName: 'Dari', nativeName: 'دری', official: false },
+  { code: 'dv', englishName: 'Divehi', nativeName: 'ދިވެހި', official: false },
+  {
+    code: 'ka',
+    englishName: 'Georgian',
+    nativeName: 'ქართული',
+    official: false,
+  },
+  { code: 'el', englishName: 'Greek', nativeName: 'Ελληνικά', official: false },
+  {
+    code: 'gu',
+    englishName: 'Gujarati',
+    nativeName: 'ગુજરાતી',
+    official: false,
+  },
+  { code: 'ha', englishName: 'Hausa', nativeName: 'Hausa', official: false },
+  { code: 'he', englishName: 'Hebrew', nativeName: 'עברית', official: false },
+  { code: 'ig', englishName: 'Igbo', nativeName: 'Igbo', official: false },
+  { code: 'km', englishName: 'Khmer', nativeName: 'ខ្មែរ', official: false },
+  {
+    code: 'rw',
+    englishName: 'Kinyarwanda',
+    nativeName: 'Kinyarwanda',
+    official: false,
+  },
+  {
+    code: 'ku',
+    englishName: 'Kurdish (Central)',
+    nativeName: 'کوردیی ناوەندی',
+    official: false,
+  },
+  { code: 'lo', englishName: 'Lao', nativeName: 'ລາວ', official: false },
+  {
+    code: 'mn-Mong',
+    englishName: 'Mongolian (Traditional)',
+    nativeName: 'ᠮᠣᠩᠭᠣᠯ',
+    official: false,
+  },
+  {
+    code: 'ny',
+    englishName: 'Nyanja',
+    nativeName: 'Chichewa',
+    official: false,
+  },
+  { code: 'or', englishName: 'Odia', nativeName: 'ଓଡ଼ିଆ', official: false },
+  { code: 'ps', englishName: 'Pashto', nativeName: 'پښتو', official: false },
+  { code: 'fa', englishName: 'Persian', nativeName: 'فارسی', official: false },
+  {
+    code: 'st',
+    englishName: 'Sesotho',
+    nativeName: 'Sesotho',
+    official: false,
+  },
+  { code: 'sn', englishName: 'Shona', nativeName: 'chiShona', official: false },
+  { code: 'sd', englishName: 'Sindhi', nativeName: 'سنڌي', official: false },
+  { code: 'si', englishName: 'Sinhala', nativeName: 'සිංහල', official: false },
+  { code: 'tg', englishName: 'Tajik', nativeName: 'Тоҷикӣ', official: false },
+  { code: 'th', englishName: 'Thai', nativeName: 'ไทย', official: false },
+  { code: 'ti', englishName: 'Tigrinya', nativeName: 'ትግርኛ', official: false },
+  {
+    code: 'tn',
+    englishName: 'Tswana',
+    nativeName: 'Setswana',
+    official: false,
+  },
+  { code: 'ur', englishName: 'Urdu', nativeName: 'اردو', official: false },
+  {
+    code: 'ug',
+    englishName: 'Uyghur',
+    nativeName: 'ئۇيغۇرچە',
+    official: false,
+  },
+  { code: 'xh', englishName: 'Xhosa', nativeName: 'isiXhosa', official: false },
+  { code: 'yo', englishName: 'Yoruba', nativeName: 'Yorùbá', official: false },
 ];
 
 /**
@@ -151,6 +471,18 @@ export function getDocumentTranslationLanguageByCode(
   return DOCUMENT_TRANSLATION_LANGUAGES.find(
     (lang) => lang.code.toLowerCase() === code.toLowerCase(),
   );
+}
+
+/**
+ * Returns true if the code maps to an officially supported language.
+ * Unknown codes return false.
+ *
+ * @param code - The language code to check
+ */
+export function isOfficiallySupportedDocumentTranslationLanguage(
+  code: string,
+): boolean {
+  return getDocumentTranslationLanguageByCode(code)?.official ?? false;
 }
 
 /**
