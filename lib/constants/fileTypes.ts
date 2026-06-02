@@ -123,10 +123,39 @@ export const DOCUMENT_TRANSLATION_EXTENSIONS = [
 export const GLOSSARY_EXTENSIONS = ['.csv', '.tsv', '.xlf', '.xliff'] as const;
 
 /**
- * Accept attribute value for file inputs that accept documents for translation.
+ * MIME types recognized as translatable documents. Used both to build the file
+ * input `accept` value and as an OR fallback to the extension check, so an
+ * upload whose extension is missing/unusual but whose MIME type is recognized is
+ * still accepted. Browser-supplied MIME is unreliable for the obscure formats
+ * (`.msg`, `.xlf`, `.tab`, `.mhtml`) — extension remains the primary signal and
+ * this is only an additive safety net.
  */
-export const DOCUMENT_TRANSLATION_ACCEPT_TYPES =
-  '.txt,.html,.htm,.docx,.xlsx,.pptx,.msg,.xlf,.xliff,.csv,.tsv,.tab,.mhtml,.mht';
+export const DOCUMENT_TRANSLATION_MIME_TYPES = [
+  'text/plain',
+  'text/html',
+  'text/csv',
+  'text/tab-separated-values',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+  'application/vnd.ms-outlook', // .msg
+  'application/xliff+xml', // .xlf/.xliff
+  'application/x-xliff+xml', // .xlf/.xliff (legacy)
+] as const;
+
+/**
+ * Accept attribute value for file inputs that accept documents for translation.
+ *
+ * Includes resolvable MIME types alongside the extension tokens. Several of the
+ * supported extensions are obscure (`.msg`, `.tab`, `.mhtml`); an extension-only
+ * `accept` with no MIME types Chrome can map to OS file types has been observed
+ * to make the native file dialog fail to open on macOS Chrome. Pairing them with
+ * real MIME types keeps the dialog reliable while the extensions still filter.
+ */
+export const DOCUMENT_TRANSLATION_ACCEPT_TYPES = [
+  ...DOCUMENT_TRANSLATION_MIME_TYPES,
+  ...DOCUMENT_TRANSLATION_EXTENSIONS,
+].join(',');
 
 /**
  * Accept attribute value for glossary file inputs.
@@ -147,6 +176,28 @@ export function isDocumentTranslatableFile(filename: string): boolean {
 
   const ext = '.' + parts.pop()?.toLowerCase();
   return DOCUMENT_TRANSLATION_EXTENSIONS.includes(ext as any);
+}
+
+/**
+ * Checks whether an uploaded document is translatable by EITHER its extension OR
+ * its MIME type. The extension is the primary (reliable) signal; the MIME type
+ * is an additive fallback for files whose extension is missing or unusual but
+ * whose type is recognized. Never rejects anything {@link isDocumentTranslatableFile}
+ * accepts.
+ *
+ * @param filename - The uploaded file's name
+ * @param mimeType - The uploaded file's MIME type (e.g. `File.type`), if any
+ * @returns True if the file can be translated
+ */
+export function isDocumentTranslatableUpload(
+  filename: string,
+  mimeType?: string | null,
+): boolean {
+  if (isDocumentTranslatableFile(filename)) return true;
+  if (!mimeType) return false;
+  // Strip any `; charset=…` parameter and normalize before comparing.
+  const normalized = mimeType.split(';')[0].trim().toLowerCase();
+  return DOCUMENT_TRANSLATION_MIME_TYPES.includes(normalized as any);
 }
 
 /**
