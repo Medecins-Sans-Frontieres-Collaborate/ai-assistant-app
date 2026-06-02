@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "وەستان",
     "stopGenerationDontAskAgainButton": "دووبارە پرسیار مەکە لەکات وەستانەوە بە دوگمە",
     "stopGenerationDontAskAgainKeyboard": "دووبارە پرسیار مەکە لەکات وەستانەوە بە کیبۆرد",
-    "generateResponseButton": "وەڵام دروست بکە"
+    "generateResponseButton": "وەڵام دروست بکە",
+    "downloadResponse": "وەڵام داگرتن"
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "پاشەکەوت کرا",
     "unsavedChanges": "گۆڕانکارییە نەپاشەکەوتکراوەکان",
     "unsavedChangesMessage": "هەندێک گۆڕانکاری نەپاشەکەوتت هەیە. دەتەوێت بسڕیتەوە؟",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "خانە پاک بکە",
+    "autosaveNote": "گۆڕانکاریەکان خۆکارانە تۆمار دەکرێن.",
+    "responseSection": "وەڵام",
+    "voiceSection": "دەنگ",
+    "behaviorSection": "ڕەفتار",
+    "resetChatSettings": "ڕێکخستنی گۆڤارە چاتەکان ڕێکبخەوە",
+    "resetChatSettingsConfirmTitle": "ڕێکخستنی چاتەکان ڕێکبخەوە؟",
+    "resetChatSettingsConfirmMessage": "ئەمە دیفۆڵتی هەموو شتانە لەم پانێڵە دەگەرێنێتەوە: temperature، ڕێنمایە تایبەتیەکان، زانیاری سەبارەت بە تۆ، وەڵامە مۆدێل، خێرایی streaming، دەق-بۆ-دەنگ، فایلە چالاکەکان، و دڵنیابوونەوەکان. ئامانەتەکەت بۆ گفتوگۆکان دەستنیشان ناکات."
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -1753,7 +1762,9 @@
     "downloading": "Tê daxistin...",
     "expired": "Ev werger qediya û êdî peyda nîne",
     "expiresSoon": "Di {days} rojan de diqede - zû daxîne",
-    "expires": "Ji bo {days} rojan peyda ye"
+    "expires": "Ji bo {days} rojan peyda ye",
+    "unofficialBadgeLabel": "ناڕەسمی",
+    "unofficialLanguageWarning": "ئەم زمانە بە شێوەی ڕەسمی پشتیوانی نەکراوە. کوالێتی وەرگێڕان دڵنیابوو نەکراوە. تکایە پێش بەشکردنەوە، ئەنجامی کارەکە لەلایەن کەسێک کە بە فڵوێنت ئامێن یاخود وڵاتییەکەیە، بکرێتەوە."
   },
   "agentsTab": {
     "organizationAgents": {

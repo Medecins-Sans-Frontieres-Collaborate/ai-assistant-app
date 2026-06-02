@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Hagarika",
     "stopGenerationDontAskAgainButton": "Ntuzongere kubaza igihe ukoresheje buto yo guhagarika",
     "stopGenerationDontAskAgainKeyboard": "Ntuzongere kubaza igihe ukoresheje keyboard yo guhagarika",
-    "generateResponseButton": "Tanga igisubizo"
+    "generateResponseButton": "Tanga igisubizo",
+    "downloadResponse": "Kuramo igisubizo"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Birabitswe",
     "unsavedChanges": "Impinduka zitabitswe",
     "unsavedChangesMessage": "Ufite impinduka utarabika. Ushaka kuzikuraho?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Sukura umurima",
+    "autosaveNote": "Impinduka zibikwa ku buryo bwikora.",
+    "responseSection": "Igisubizo",
+    "voiceSection": "Ijwi",
+    "behaviorSection": "Imyitwarire",
+    "resetChatSettings": "Subiza aho byari bimeze ku biganiro",
+    "resetChatSettingsConfirmTitle": "Subiza aho byari bimeze ku biganiro?",
+    "resetChatSettingsConfirmMessage": "Ibi bizasubiza ku buryo bw'umwimerere ibintu byose biri kuri uru rubaho: temperature, amabwiriza yihariye, 'About You', igisubizo cya model, umuvuduko wo gutanga ibisubizo uko byinjira, text-to-speech, amadosiye akora, ndetse n'ibisabwa byemezwa. Ntibizagira ingaruka ku biganiro byawe."
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",
@@ -1753,7 +1762,9 @@
     "downloading": "Gumanura...",
     "expired": "Ubu buhinduzi bwarangiye kandi ntibukiboneka",
     "expiresSoon": "Birangira mu minsi {days} - manura vuba",
-    "expires": "Biboneka mu minsi {days}"
+    "expires": "Biboneka mu minsi {days}",
+    "unofficialBadgeLabel": "Si ku mugaragaro",
+    "unofficialLanguageWarning": "Ururimi ntirushyigikiwe ku mugaragaro. Ubwiza bw'ubuhindurabutumwa ntibwemejwe. Nyamuneka wemeze ko ibisubizo byasubiwemo n'umuntu w'inzobere cyangwa uvuga uru rurimi neza mbere yo kubisangiza abandi."
   },
   "agentsTab": {
     "organizationAgents": {

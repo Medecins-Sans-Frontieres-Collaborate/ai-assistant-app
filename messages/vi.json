@@ -692,7 +692,8 @@
     "stopGenerationConfirm": "Dừng",
     "stopGenerationDontAskAgainButton": "Không hỏi lại khi dừng bằng nút",
     "stopGenerationDontAskAgainKeyboard": "Không hỏi lại khi dừng bằng bàn phím",
-    "generateResponseButton": "Tạo phản hồi"
+    "generateResponseButton": "Tạo phản hồi",
+    "downloadResponse": "Tải xuống phản hồi"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
@@ -1006,7 +1007,15 @@
     "savedConfirmation": "Đã lưu",
     "unsavedChanges": "Thay đổi chưa được lưu",
     "unsavedChangesMessage": "Bạn có thay đổi chưa được lưu. Hủy bỏ chúng?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Xóa trường",
+    "autosaveNote": "Thay đổi sẽ được lưu tự động.",
+    "responseSection": "Phản hồi",
+    "voiceSection": "Giọng nói",
+    "behaviorSection": "Hành vi",
+    "resetChatSettings": "Đặt lại cài đặt trò chuyện",
+    "resetChatSettingsConfirmTitle": "Đặt lại cài đặt trò chuyện?",
+    "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả mặc định trong bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin về bạn, phản hồi của mô hình, tốc độ truyền, chuyển văn bản thành giọng nói, tệp đang sử dụng và xác nhận. Nội dung cuộc trò chuyện của bạn sẽ không bị ảnh hưởng."
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1794,7 +1803,9 @@
     "expiresSoon": "Sẽ hết hạn trong {days} ngày - hãy tải xuống sớm",
     "expires": "Có thể tải trong {days} ngày",
     "learnMore": "Tìm hiểu thêm",
-    "advancedOptions": "Tùy chọn nâng cao"
+    "advancedOptions": "Tùy chọn nâng cao",
+    "unofficialBadgeLabel": "Không chính thức",
+    "unofficialLanguageWarning": "Ngôn ngữ này không được hỗ trợ chính thức. Chất lượng bản dịch chưa được xác minh. Vui lòng nhờ người thành thạo hoặc bản ngữ kiểm tra lại trước khi chia sẻ."
   },
   "terms": {
     "officialLanguages": "Phiên bản chính thức:",

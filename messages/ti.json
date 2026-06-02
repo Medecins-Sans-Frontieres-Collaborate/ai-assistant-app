@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "ኣቁም",
     "stopGenerationDontAskAgainButton": "ብኣዝዩ ኣቁም ብዝተፈለጠ ደጊምካ ኣይሕበን",
     "stopGenerationDontAskAgainKeyboard": "ብኪቦርድ ምቁም ደጊምካ ኣይሕበን",
-    "generateResponseButton": "መልሲ ምፍላጥ"
+    "generateResponseButton": "መልሲ ምፍላጥ",
+    "downloadResponse": "ምላሽ ውርሻ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "ተኣካይዑ",
     "unsavedChanges": "ዘይተኣካዩ ለውጦታት",
     "unsavedChangesMessage": "ዘይተኣካዩ ለውጦታት ኣሎካ። ንምውዳእ ትደሊ?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "ሜዳ ኣጽዳ",
+    "autosaveNote": "ለውጦታት ብሓላፍነት እየተዓትተን።",
+    "responseSection": "ምላሽ",
+    "voiceSection": "ድምፂ",
+    "behaviorSection": "ውሳነ ኣካላት",
+    "resetChatSettings": "ቅንብሮታት ቻት ኣዳልው",
+    "resetChatSettingsConfirmTitle": "ቅንብሮታት ቻት ኣዳልው?",
+    "resetChatSettingsConfirmMessage": "ዚኣ ቃል ናይቲ ፓኔል ኩሉ ንቅንብሮታት ናይ መደብ መልሲ ፣ ብቑዓት ምትእታው፣ ፍትሒ ናብናብ መላእክቲ፣ ስለ ኣንቲ፣ ሓንደበት ናይ ሞዴል መልሲ፣ ብምፍላጥ ምስናይ፣ ጽሑፍ-ናብ-ድምፂ፣ ኣካባቢ ፋይላትን ምርጫታትን ወይ ናይ ሓበሬታታት ፣ ቃል ንክሳቕ፣ ምርምርን። ንሕዝብ ትምህርትካት ኣይጽሑፉን።"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1753,7 +1762,9 @@
     "downloading": "ይወርድ ኣሎ...",
     "expired": "እዚ ትርጉም ግዜኡ ወዲኡ ድሮ ኣይርከብን",
     "expiresSoon": "ድሕሪ {days} መዓልቲ(ታት) ግዜኡ ይውዳእ - ቀልጢፍካ ኣውርድ",
-    "expires": "ን{days} መዓልትታት ይርከብ"
+    "expires": "ን{days} መዓልትታት ይርከብ",
+    "unofficialBadgeLabel": "ዘይብዙሕ፣ ብፍቓድ ዘይተፈቀደ",
+    "unofficialLanguageWarning": "እዚ ቋንቋ ብደሓን ኣይተሰርሕን። ጥራይ ትርጉም ኣይተረጋገጸን። ኣብ ምስትተሓቀቱ ቃል ብቋንቋ ዝምልከታ ወይ ብነበሳ የለን ንግሓፉ ኣብርሓ።"
   },
   "agentsTab": {
     "organizationAgents": {

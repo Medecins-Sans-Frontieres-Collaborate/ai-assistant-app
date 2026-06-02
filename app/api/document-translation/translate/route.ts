@@ -43,7 +43,7 @@ import { auth } from '@/auth';
 import { env } from '@/config/environment';
 import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
 import {
-  isDocumentTranslatableFile,
+  isDocumentTranslatableUpload,
   isGlossaryFile,
 } from '@/lib/constants/fileTypes';
 import { v4 as uuidv4 } from 'uuid';
@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Validate document format
-  if (!isDocumentTranslatableFile(document.name)) {
+  // Validate document format (by extension, or MIME type as a fallback)
+  if (!isDocumentTranslatableUpload(document.name, document.type)) {
     return badRequestResponse(
       `Unsupported document format. Supported formats: .txt, .html, .docx, .xlsx, .pptx, .pdf, .msg, .xliff, .csv, .tsv, .mhtml`,
       'UNSUPPORTED_FORMAT',

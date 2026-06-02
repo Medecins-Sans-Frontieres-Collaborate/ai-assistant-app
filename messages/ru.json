@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "Остановить",
     "stopGenerationDontAskAgainButton": "Больше не спрашивать при остановке через кнопку",
     "stopGenerationDontAskAgainKeyboard": "Больше не спрашивать при остановке с помощью клавиатуры",
-    "generateResponseButton": "Сгенерировать ответ"
+    "generateResponseButton": "Сгенерировать ответ",
+    "downloadResponse": "Скачать ответ"
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Сохранено",
     "unsavedChanges": "Несохранённые изменения",
     "unsavedChangesMessage": "У вас есть несохранённые изменения. Отменить их?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Очистить поле",
+    "autosaveNote": "Изменения сохраняются автоматически.",
+    "responseSection": "Ответ",
+    "voiceSection": "Голос",
+    "behaviorSection": "Поведение",
+    "resetChatSettings": "Сбросить настройки чата",
+    "resetChatSettingsConfirmTitle": "Сбросить настройки чата?",
+    "resetChatSettingsConfirmMessage": "Будут восстановлены значения по умолчанию для всех параметров этой панели: температура, пользовательские инструкции, информация о вас, параметры ответа, скорость передачи, преобразование текста в речь, активные файлы и подтверждения. Это не повлияет на ваши переписки."
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Истекает через {days} дн. — скачайте заранее",
     "expires": "Доступно {days} дн.",
     "learnMore": "Подробнее",
-    "advancedOptions": "Дополнительные параметры"
+    "advancedOptions": "Дополнительные параметры",
+    "unofficialBadgeLabel": "Неофициально",
+    "unofficialLanguageWarning": "Этот язык не поддерживается официально. Качество перевода не проверено. Пожалуйста, дайте результат на проверку носителю языка или человеку, свободно владеющему им, перед дальнейшим использованием."
   },
   "terms": {
     "officialLanguages": "Официальная версия:",

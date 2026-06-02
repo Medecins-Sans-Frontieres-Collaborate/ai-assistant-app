@@ -1774,7 +1774,9 @@
     "downloading": "Downloading...",
     "expired": "This translation has expired and is no longer available",
     "expiresSoon": "Expires in {days} day(s) - download soon",
-    "expires": "Available for {days} days"
+    "expires": "Available for {days} days",
+    "unofficialBadgeLabel": "Unofficial",
+    "unofficialLanguageWarning": "This language is not officially supported. Translation quality has not been verified. Please have the result reviewed by a fluent or native speaker before sharing."
   },
   "agentsTab": {
     "organizationAgents": {

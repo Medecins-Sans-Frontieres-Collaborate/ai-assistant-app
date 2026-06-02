@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "중단",
     "stopGenerationDontAskAgainButton": "버튼으로 중단 시 다시 묻지 않기",
     "stopGenerationDontAskAgainKeyboard": "키보드로 중단 시 다시 묻지 않기",
-    "generateResponseButton": "응답 생성"
+    "generateResponseButton": "응답 생성",
+    "downloadResponse": "응답 다운로드"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "저장됨",
     "unsavedChanges": "저장되지 않은 변경 사항",
     "unsavedChangesMessage": "저장하지 않은 변경 사항이 있습니다. 삭제하시겠습니까?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "필드 지우기",
+    "autosaveNote": "변경 사항이 자동으로 저장됩니다.",
+    "responseSection": "응답",
+    "voiceSection": "음성",
+    "behaviorSection": "동작",
+    "resetChatSettings": "채팅 설정 초기화",
+    "resetChatSettingsConfirmTitle": "채팅 설정을 초기화하시겠습니까?",
+    "resetChatSettingsConfirmMessage": "이 작업은 이 패널의 모든 값을 기본값으로 복원합니다: 온도, 사용자 지정 지침, About You, 모델 응답, 스트리밍 속도, 음성 출력, 활성 파일 및 확인 메시지. 대화 내용에는 영향을 주지 않습니다."
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "{days}일 후 만료 예정 - 빠른 다운로드 권장",
     "expires": "{days}일간 이용 가능",
     "learnMore": "자세히 알아보기",
-    "advancedOptions": "고급 옵션"
+    "advancedOptions": "고급 옵션",
+    "unofficialBadgeLabel": "비공식",
+    "unofficialLanguageWarning": "이 언어는 공식 지원되지 않습니다. 번역 품질이 검증되지 않았으니, 결과를 공유하기 전에 유창하거나 원어민인 분에게 검토를 받으시기 바랍니다."
   },
   "terms": {
     "officialLanguages": "공식 버전:",

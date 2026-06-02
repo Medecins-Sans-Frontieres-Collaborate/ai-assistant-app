@@ -666,7 +666,8 @@
     "stopGenerationConfirm": "ရပ်မည်",
     "stopGenerationDontAskAgainButton": "ခလုတ်နှိပ်၍ ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
     "stopGenerationDontAskAgainKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
-    "generateResponseButton": "အဖြေထုတ်လုပ်ပါ"
+    "generateResponseButton": "အဖြေထုတ်လုပ်ပါ",
+    "downloadResponse": "တုံ့ပြန်ချက်ကို ယူဆွဲရန်"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
@@ -980,7 +981,15 @@
     "savedConfirmation": "သိမ်းဆည်းပြီးပါပြီ",
     "unsavedChanges": "မသိမ်းရသေးသော ပြင်ဆင်မှုများ",
     "unsavedChangesMessage": "သင့်တွင် မသိမ်းရသေးသော ပြင်ဆင်မှုများရှိပါသည်။ လူမသိမ်းဘဲ ပယ်ဖျက်မလား။",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "အကွက်ရှင်းမည်",
+    "autosaveNote": "ပြောင်းလဲမှုများကို အလိုအလျောက် သိမ်းဆည်းပါသည်။",
+    "responseSection": "တုံ့ပြန်ချက်",
+    "voiceSection": "အသံ",
+    "behaviorSection": "ဖြစ်ပေါ်ဆောင်ရွက်မှု",
+    "resetChatSettings": "စကားပြောဆက်တင်များကို Reset လုပ်မည်",
+    "resetChatSettingsConfirmTitle": "စကားပြောဆက်တင်များကို Reset လုပ်မလား?",
+    "resetChatSettingsConfirmMessage": "ဤအရာသည် ဤပန်နယ်အတွင်းရှိ အားလုံး၏ ပုံသေနည်းကို ပြန်လည်သတ်မှတ်ပါမည် - temperature၊ custom instructions၊ About You၊ model response၊ streaming speed၊ text-to-speech၊ active files နှင့် confirmations။ သင်၏ စကားပြောမှုများကို ထိခိုက်မှု မရှိပါ။"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "သက်တမ်း {days} ရက်အတွင်း ပြီးဆုံးပါမည် - မကြာမီ ဒေါင်းလုဒ်လုပ်ပါ",
     "expires": "{days} ရက်အတွက် သုံးနိုင်ပါသည်",
     "learnMore": "နောက်ထပ်သိရှိရန်",
-    "advancedOptions": "အဆင့်မြင့်ရွေးချယ်စရာများ"
+    "advancedOptions": "အဆင့်မြင့်ရွေးချယ်စရာများ",
+    "unofficialBadgeLabel": "တရားဝင်မဟုတ်ပါ",
+    "unofficialLanguageWarning": "ဤဘာသာစကားကို တရားဝင် ပံ့ပိုးမထားပါ။ ဘာသာပြန်အရည်အသွေးကို အတည်ပြုခြင်း မရှိသေးပါ။ ရလဒ်ကို မျှဝေရန်မပြုမီ စွမ်းရည်ပြည့် သို့မဟုတ် ဒေသခံစကားပြောသူတစ်ဦးဖြင့် ပြန်လည်စစ်ဆေးပေးပါ။"
   },
   "terms": {
     "officialLanguages": "တရားဝင်မူပိုင်ခွင့်ဗားရှင်း:",

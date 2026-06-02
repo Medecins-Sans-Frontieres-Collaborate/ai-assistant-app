@@ -666,7 +666,8 @@
     "stopGenerationConfirm": "Lopeta",
     "stopGenerationDontAskAgainButton": "Älä kysy uudestaan, kun lopetetaan painikkeella",
     "stopGenerationDontAskAgainKeyboard": "Älä kysy uudestaan, kun lopetetaan näppäimistöllä",
-    "generateResponseButton": "Luo vastaus"
+    "generateResponseButton": "Luo vastaus",
+    "downloadResponse": "Lataa vastaus"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -980,7 +981,15 @@
     "savedConfirmation": "Tallennettu",
     "unsavedChanges": "Tallentamattomat muutokset",
     "unsavedChangesMessage": "Sinulla on tallentamattomia muutoksia. Hylätäänkö ne?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Tyhjennä kenttä",
+    "autosaveNote": "Muutokset tallentuvat automaattisesti.",
+    "responseSection": "Vastaus",
+    "voiceSection": "Ääni",
+    "behaviorSection": "Käyttäytyminen",
+    "resetChatSettings": "Palauta keskusteluasetukset",
+    "resetChatSettingsConfirmTitle": "Palautetaanko keskusteluasetukset?",
+    "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin oletusasetukset: temperature, mukautetut ohjeet, About You, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Tämä ei vaikuta keskusteluihisi."
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Vanhenee {days} päivän kuluttua – lataa pian",
     "expires": "Saatavilla {days} päivän ajan",
     "learnMore": "Lue lisää",
-    "advancedOptions": "Lisäasetukset"
+    "advancedOptions": "Lisäasetukset",
+    "unofficialBadgeLabel": "Epävirallinen",
+    "unofficialLanguageWarning": "Tätä kieltä ei tueta virallisesti. Käännöksen laatua ei ole varmennettu. Pyydä tuloksen tarkistusta sujuvalta tai äidinkielenään puhuvalta henkilöltä ennen jakamista."
   },
   "terms": {
     "officialLanguages": "Virallinen versio:",

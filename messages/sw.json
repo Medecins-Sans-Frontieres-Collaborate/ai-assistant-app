@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "Sitisha",
     "stopGenerationDontAskAgainButton": "Usiulize tena unapositisha kwa kutumia kitufe",
     "stopGenerationDontAskAgainKeyboard": "Usiulize tena unapositisha kwa kutumia kibodi",
-    "generateResponseButton": "Tengeneza jibu"
+    "generateResponseButton": "Tengeneza jibu",
+    "downloadResponse": "Pakua majibu"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Imehifadhiwa",
     "unsavedChanges": "Mabadiliko ambayo hayajahifadhiwa",
     "unsavedChangesMessage": "Una mabadiliko ambayo hayajahifadhiwa. Uyaache?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Futa sehemu",
+    "autosaveNote": "Marekebisho yanaifadhiwa moja kwa moja.",
+    "responseSection": "Majibu",
+    "voiceSection": "Sauti",
+    "behaviorSection": "Tabia",
+    "resetChatSettings": "Weka upya mipangilio ya gumzo",
+    "resetChatSettingsConfirmTitle": "Weka upya mipangilio ya gumzo?",
+    "resetChatSettingsConfirmMessage": "Hii itarejesha chaguo-msingi kwa kila kitu kwenye paneli hii: joto, maelekezo maalum, Kuhusu Wewe, majibu ya modeli, kasi ya utiririshaji, maandishi kwenda kwenye hotuba, mafaili yanayotumika, na uthibitisho. Haiathiri mazungumzo yako."
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Inaisha baada ya siku {days} - pakua mapema",
     "expires": "Inapatikana kwa siku {days}",
     "learnMore": "Jifunze zaidi",
-    "advancedOptions": "Chaguo za juu"
+    "advancedOptions": "Chaguo za juu",
+    "unofficialBadgeLabel": "Si rasmi",
+    "unofficialLanguageWarning": "Lugha hii haiungwi mkono rasmi. Ubora wa tafsiri haujathibitishwa. Tafadhali hakikisha matokeo yamepitiwa na mtu anayezungumza lugha hii kwa ufasaha au mzawa kabla ya kushiriki."
   },
   "terms": {
     "officialLanguages": "Toleo rasmi:",

@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Letsa",
     "stopGenerationDontAskAgainButton": "Musandifunse kachiwiri poletsa pogwiritsa ntchito batani",
     "stopGenerationDontAskAgainKeyboard": "Musandifunse kachiwiri poletsa pogwiritsa ntchito kiyibodi",
-    "generateResponseButton": "Panga yankho"
+    "generateResponseButton": "Panga yankho",
+    "downloadResponse": "Tsitsani yankho"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Zasungidwa",
     "unsavedChanges": "Zosinthidwa zosasungidwa",
     "unsavedChangesMessage": "Muli ndi zosintha zosasungidwa. Mukufuna kuzichotsa?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Chotsani m'dera",
+    "autosaveNote": "Zosinthazi zasungidwa zokha.",
+    "responseSection": "Yankho",
+    "voiceSection": "Mawu",
+    "behaviorSection": "Makhalidwe",
+    "resetChatSettings": "Bwezeretsani makonda a macheza",
+    "resetChatSettingsConfirmTitle": "Mubwezeretse makonda a macheza?",
+    "resetChatSettingsConfirmMessage": "Izi zibwezeretsa makonda a pachiyambi pazinthu zonse mu panel iyi: kutentha, malamulo anu, Za Inu, yankho la model, liwiro la kusinja, kutembenuza zolembalemba kukhala mawu, mafayilo ogwira ntchito, ndi zitsimikiziro. Sizisokoneza maulaliki anu."
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1753,7 +1762,9 @@
     "downloading": "Kutsitsa...",
     "expired": "Kumasulira kumeneku kwatha nthawi ndipo sikukupezekanso",
     "expiresSoon": "Kumatha mu masiku {days} - tsitsani msanga",
-    "expires": "Kupezeka kwa masiku {days}"
+    "expires": "Kupezeka kwa masiku {days}",
+    "unofficialBadgeLabel": "Si yovomerezeka",
+    "unofficialLanguageWarning": "Chilankhuli ichi sichithandizidwa mwalamulo. Ubwino wa kumasulira uku sunatsimikizidwe. Chonde mupemphe munthu wodziwa bwino kapena wokha chilankhuli ichi awunikenso musanagawire."
   },
   "agentsTab": {
     "organizationAgents": {

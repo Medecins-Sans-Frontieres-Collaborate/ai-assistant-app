@@ -637,7 +637,8 @@
     "stopGenerationConfirm": "إيقاف",
     "stopGenerationDontAskAgainButton": "عدم السؤال مرة أخرى عند الإيقاف بواسطة الزر",
     "stopGenerationDontAskAgainKeyboard": "عدم السؤال مرة أخرى عند الإيقاف بواسطة لوحة المفاتيح",
-    "generateResponseButton": "توليد استجابة"
+    "generateResponseButton": "توليد استجابة",
+    "downloadResponse": "تنزيل الرد"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -951,7 +952,15 @@
     "savedConfirmation": "تم الحفظ",
     "unsavedChanges": "تغييرات غير محفوظة",
     "unsavedChangesMessage": "لديك تغييرات غير محفوظة. هل تريد تجاهلها؟",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "مسح الحقل",
+    "autosaveNote": "يتم حفظ التغييرات تلقائيًا.",
+    "responseSection": "الرد",
+    "voiceSection": "الصوت",
+    "behaviorSection": "السلوك",
+    "resetChatSettings": "إعادة تعيين إعدادات المحادثة",
+    "resetChatSettingsConfirmTitle": "هل ترغب في إعادة تعيين إعدادات المحادثة؟",
+    "resetChatSettingsConfirmMessage": "سيؤدي ذلك إلى استعادة الإعدادات الافتراضية لكل ما هو موجود في هذه اللوحة: درجة الحرارة، التعليمات المخصصة، عنك، رد النموذج، سرعة البث، تحويل النص إلى كلام، الملفات النشطة، والتأكيدات. لن يؤثر هذا على محادثاتك."
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "تنتهي في غضون {days} يوم(أيام) - يرجى التنزيل قريباً",
     "expires": "متوفر لمدة {days} يوم",
     "learnMore": "اعرف المزيد",
-    "advancedOptions": "خيارات متقدمة"
+    "advancedOptions": "خيارات متقدمة",
+    "unofficialBadgeLabel": "غير رسمي",
+    "unofficialLanguageWarning": "هذه اللغة غير مدعومة رسميًا. لم يتم التحقق من جودة الترجمة. يرجى مراجعة النتيجة من قبل متحدث بطلاقة أو ناطق أصلي قبل مشاركتها."
   },
   "terms": {
     "officialLanguages": "النسخة الرسمية:",

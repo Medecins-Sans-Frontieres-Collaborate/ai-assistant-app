@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Қатъ кардан",
     "stopGenerationDontAskAgainButton": "Ҳангоми қатъ кардан бо тугма дигар напурсед",
     "stopGenerationDontAskAgainKeyboard": "Ҳангоми қатъ кардан бо клавиатура дигар напурсед",
-    "generateResponseButton": "Генерасияи ҷавоб"
+    "generateResponseButton": "Генерасияи ҷавоб",
+    "downloadResponse": "Посухро зеркашӣ кунед"
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Захира шуд",
     "unsavedChanges": "Тағйироти захиранашуда",
     "unsavedChangesMessage": "Шумо тағйироти захиранашуда доред. Онҳо бекор карда шаванд?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Майдонро пок кунед",
+    "autosaveNote": "Тағйирот худкор сабт мешаванд.",
+    "responseSection": "Посух",
+    "voiceSection": "Овоз",
+    "behaviorSection": "Рафтор",
+    "resetChatSettings": "Танзимоти чатро барқарор кунед",
+    "resetChatSettingsConfirmTitle": "Танзимоти чатро барқарор мекунед?",
+    "resetChatSettingsConfirmMessage": "Ин ҳама танзимотҳои ин панелро ба пешфарз бармегардонад: ҳарорат, дастурҳои инфиродӣ, Дар бораи Шумо, ҷавоби модел, суръати ҷараён, матн ба овоз, файлҳои фаъол ва тасдиқҳоро. Ин ба сӯҳбатҳои шумо таъсир намерасонад."
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",
@@ -1753,7 +1762,9 @@
     "downloading": "Дар ҳоли зеркашӣ...",
     "expired": "Ин тарҷума куҳна шудаст ва дигар дастрас нест",
     "expiresSoon": "Муҳлат дар {days} рӯз мебарояд — зудтар зеркашӣ кунед",
-    "expires": "Дар давоми {days} рӯз дастрас"
+    "expires": "Дар давоми {days} рӯз дастрас",
+    "unofficialBadgeLabel": "Ғайрирасмӣ",
+    "unofficialLanguageWarning": "Ин забон расман пуштибонӣ намешавад. Сифати тарҷума санҷида нашудааст. Пеш аз мубодила, натиҷаро аз шахси соҳибзабон ва ё модарӣ тафтиш кунед."
   },
   "agentsTab": {
     "organizationAgents": {
