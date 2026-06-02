@@ -36,6 +36,7 @@ import { Tooltip } from '@/components/UI/Tooltip';
 import {
   DOCUMENT_TRANSLATION_LANGUAGES,
   getLanguageDisplayName,
+  getSecondaryLanguageLabel,
   isOfficiallySupportedDocumentTranslationLanguage,
   searchDocumentTranslationLanguages,
 } from '@/lib/constants/documentTranslationLanguages';
@@ -251,18 +252,24 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   ]);
 
   // Select target language
-  const selectTargetLanguage = useCallback((code: string) => {
-    setTargetLanguage(code);
-    setTargetSearch(getLanguageDisplayName(code));
-    setShowTargetDropdown(false);
-  }, []);
+  const selectTargetLanguage = useCallback(
+    (code: string) => {
+      setTargetLanguage(code);
+      setTargetSearch(getLanguageDisplayName(code, locale));
+      setShowTargetDropdown(false);
+    },
+    [locale],
+  );
 
   // Select source language
-  const selectSourceLanguage = useCallback((code: string) => {
-    setSourceLanguage(code);
-    setSourceSearch(getLanguageDisplayName(code));
-    setShowSourceDropdown(false);
-  }, []);
+  const selectSourceLanguage = useCallback(
+    (code: string) => {
+      setSourceLanguage(code);
+      setSourceSearch(getLanguageDisplayName(code, locale));
+      setShowSourceDropdown(false);
+    },
+    [locale],
+  );
 
   // Clear source language
   const clearSourceLanguage = useCallback(() => {
@@ -341,34 +348,39 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                 {t('documentTranslation.noLanguagesFound')}
               </div>
             ) : (
-              filteredTargetLanguages.map((lang) => (
-                <button
-                  key={lang.code}
-                  type="button"
-                  onClick={() => selectTargetLanguage(lang.code)}
-                  className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                    targetLanguage === lang.code
-                      ? 'bg-blue-50 dark:bg-blue-900/20'
-                      : ''
-                  }`}
-                >
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {lang.nativeName}
-                  </span>
-                  {lang.nativeName !== lang.englishName && (
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      ({lang.englishName})
+              filteredTargetLanguages.map((lang) => {
+                const secondaryLabel = getSecondaryLanguageLabel(lang, locale);
+                return (
+                  <button
+                    key={lang.code}
+                    type="button"
+                    onClick={() => selectTargetLanguage(lang.code)}
+                    className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      targetLanguage === lang.code
+                        ? 'bg-blue-50 dark:bg-blue-900/20'
+                        : ''
+                    }`}
+                  >
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {lang.nativeName}
                     </span>
-                  )}
-                  {!lang.officiallySupported && (
-                    <IconAlertTriangle
-                      size={14}
-                      className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
-                      aria-label={t('documentTranslation.unofficialBadgeLabel')}
-                    />
-                  )}
-                </button>
-              ))
+                    {secondaryLabel && (
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        ({secondaryLabel})
+                      </span>
+                    )}
+                    {!lang.officiallySupported && (
+                      <IconAlertTriangle
+                        size={14}
+                        className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                        aria-label={t(
+                          'documentTranslation.unofficialBadgeLabel',
+                        )}
+                      />
+                    )}
+                  </button>
+                );
+              })
             )}
           </div>
         )}
@@ -462,36 +474,42 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                       {t('documentTranslation.noLanguagesFound')}
                     </div>
                   ) : (
-                    filteredSourceLanguages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        type="button"
-                        onClick={() => selectSourceLanguage(lang.code)}
-                        className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                          sourceLanguage === lang.code
-                            ? 'bg-blue-50 dark:bg-blue-900/20'
-                            : ''
-                        }`}
-                      >
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
-                          {lang.nativeName}
-                        </span>
-                        {lang.nativeName !== lang.englishName && (
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            ({lang.englishName})
+                    filteredSourceLanguages.map((lang) => {
+                      const secondaryLabel = getSecondaryLanguageLabel(
+                        lang,
+                        locale,
+                      );
+                      return (
+                        <button
+                          key={lang.code}
+                          type="button"
+                          onClick={() => selectSourceLanguage(lang.code)}
+                          className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                            sourceLanguage === lang.code
+                              ? 'bg-blue-50 dark:bg-blue-900/20'
+                              : ''
+                          }`}
+                        >
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            {lang.nativeName}
                           </span>
-                        )}
-                        {!lang.officiallySupported && (
-                          <IconAlertTriangle
-                            size={14}
-                            className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
-                            aria-label={t(
-                              'documentTranslation.unofficialBadgeLabel',
-                            )}
-                          />
-                        )}
-                      </button>
-                    ))
+                          {secondaryLabel && (
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              ({secondaryLabel})
+                            </span>
+                          )}
+                          {!lang.officiallySupported && (
+                            <IconAlertTriangle
+                              size={14}
+                              className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                              aria-label={t(
+                                'documentTranslation.unofficialBadgeLabel',
+                              )}
+                            />
+                          )}
+                        </button>
+                      );
+                    })
                   )}
                 </div>
               )}
