@@ -9,6 +9,7 @@
  * Translator but not formally verified — users are warned in the UI to have
  * results reviewed by a fluent or native speaker).
  */
+import { normalizeForSearch } from '@/lib/utils/shared/string/normalizeDiacritics';
 
 /**
  * Represents a language supported by document translation.
@@ -837,7 +838,9 @@ export function getLocalizedLanguageName(code: string, locale: string): string {
 }
 
 /**
- * Searches languages by name (English, native, localized, or ISO code).
+ * Searches languages by name (English, native, alternate/common, localized, or
+ * ISO code). Matching is case- and accent-insensitive, so "espanol" matches
+ * "Español" and "farsi" matches Persian's "Farsi" alias.
  *
  * @param query - Search query string
  * @param locale - Optional locale for searching by localized language names
@@ -847,21 +850,39 @@ export function searchDocumentTranslationLanguages(
   query: string,
   locale?: string,
 ): DocumentTranslationLanguage[] {
-  const lowerQuery = query.toLowerCase();
+  const normalizedQuery = normalizeForSearch(query);
+  if (!normalizedQuery) return DOCUMENT_TRANSLATION_LANGUAGES;
+
+  // Build a single DisplayNames instance per call rather than one per language.
+  let displayNames: Intl.DisplayNames | undefined;
+  if (locale) {
+    try {
+      displayNames = new Intl.DisplayNames([locale], { type: 'language' });
+    } catch {
+      displayNames = undefined;
+    }
+  }
+
   return DOCUMENT_TRANSLATION_LANGUAGES.filter((lang) => {
-    // Check English name, native name, and ISO code
+    // Check English name, native name, alternate names, and ISO code.
     if (
-      lang.englishName.toLowerCase().includes(lowerQuery) ||
-      lang.nativeName.toLowerCase().includes(lowerQuery) ||
-      lang.code.toLowerCase().includes(lowerQuery)
+      normalizeForSearch(lang.englishName).includes(normalizedQuery) ||
+      normalizeForSearch(lang.nativeName).includes(normalizedQuery) ||
+      normalizeForSearch(lang.code).includes(normalizedQuery) ||
+      lang.aliases?.some((alias) =>
+        normalizeForSearch(alias).includes(normalizedQuery),
+      )
     ) {
       return true;
     }
 
-    // Check localized name if locale is provided
-    if (locale) {
-      const localizedName = getLocalizedLanguageName(lang.code, locale);
-      if (localizedName && localizedName.toLowerCase().includes(lowerQuery)) {
+    // Check the name as localized to the user's locale.
+    if (displayNames) {
+      const localizedName = displayNames.of(lang.code) || '';
+      if (
+        localizedName &&
+        normalizeForSearch(localizedName).includes(normalizedQuery)
+      ) {
         return true;
       }
     }
@@ -871,15 +892,36 @@ export function searchDocumentTranslationLanguages(
 }
 
 /**
- * Gets the display name for a language (native name with English fallback).
+ * Builds the secondary label shown alongside a language's autonym — the name in
+ * the user's locale when available, falling back to the English name. Returns an
+ * empty string when it would merely duplicate the autonym.
+ *
+ * @param lang - The language entry
+ * @param locale - Optional UI locale to localize the name into
+ * @returns The secondary label, or empty string if redundant with the autonym
+ */
+export function getSecondaryLanguageLabel(
+  lang: DocumentTranslationLanguage,
+  locale?: string,
+): string {
+  const localized = locale ? getLocalizedLanguageName(lang.code, locale) : '';
+  const secondary = localized || lang.englishName;
+  return secondary.toLowerCase() === lang.nativeName.toLowerCase()
+    ? ''
+    : secondary;
+}
+
+/**
+ * Gets the display name for a language (autonym with a localized/English
+ * secondary name in parentheses when it adds information).
  *
  * @param code - The language code
+ * @param locale - Optional UI locale to localize the secondary name into
  * @returns Display name string
  */
-export function getLanguageDisplayName(code: string): string {
+export function getLanguageDisplayName(code: string, locale?: string): string {
   const lang = getDocumentTranslationLanguageByCode(code);
   if (!lang) return code;
-  return lang.nativeName !== lang.englishName
-    ? `${lang.nativeName} (${lang.englishName})`
-    : lang.englishName;
+  const secondary = getSecondaryLanguageLabel(lang, locale);
+  return secondary ? `${lang.nativeName} (${secondary})` : lang.nativeName;
 }
