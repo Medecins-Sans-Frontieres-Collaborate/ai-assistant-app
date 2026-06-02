@@ -1,12 +1,3 @@
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
 'use client';
 
 import {
@@ -50,16 +41,6 @@ import {
 } from '@/lib/constants/documentTranslationLanguages';
 import { GLOSSARY_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
 
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
   isOpen: boolean;
@@ -73,6 +54,12 @@ interface ChatInputDocumentTranslateProps {
 
 /**
  * Modal for configuring and initiating document translation.
+ *
+ * Provides UI for selecting translation options:
+ * - Target language (searchable dropdown with 80+ languages)
+ * - Optional source language (auto-detect if omitted)
+ * - Optional glossary file upload
+ * - Custom output filename
  */
 const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   isOpen,

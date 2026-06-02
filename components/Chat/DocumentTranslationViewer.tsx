@@ -1,11 +1,3 @@
-/**
- * Document Translation Viewer Component
- *
- * Displays translated document reference with download capability.
- * Shows expiration warning and language information.
- *
- * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
- */
 'use client';
 
 import {
@@ -25,15 +17,6 @@ import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
-
-/**
- * Document Translation Viewer Component
- *
- * Displays translated document reference with download capability.
- * Shows expiration warning and language information.
- *
- * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
- */
 
 /**
  * Regex to match document translation blob references.
