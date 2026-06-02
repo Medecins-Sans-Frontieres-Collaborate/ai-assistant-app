@@ -24,6 +24,13 @@ export interface DocumentTranslationLanguage {
   nativeName: string;
 
   /**
+   * Alternate or common English names this language is also known by (e.g.
+   * "Farsi" for Persian, "Mandarin" for Chinese). Used to broaden search
+   * matching; not displayed in the UI.
+   */
+  aliases?: string[];
+
+  /**
    * Whether the language is officially supported and quality-verified.
    * Unofficial languages are accepted by Azure Translator but the UI surfaces
    * a warning advising review by a fluent or native speaker.
@@ -100,18 +107,21 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'lzh',
     englishName: 'Chinese (Literary)',
+    aliases: ['Classical Chinese', 'Wenyan'],
     nativeName: '文言文',
     officiallySupported: true,
   },
   {
     code: 'zh-Hans',
     englishName: 'Chinese (Simplified)',
+    aliases: ['Mandarin', 'Simplified Chinese', 'Putonghua'],
     nativeName: '简体中文',
     officiallySupported: true,
   },
   {
     code: 'zh-Hant',
     englishName: 'Chinese (Traditional)',
+    aliases: ['Traditional Chinese', 'Mandarin'],
     nativeName: '繁體中文',
     officiallySupported: true,
   },
@@ -136,6 +146,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'nl',
     englishName: 'Dutch',
+    aliases: ['Flemish'],
     nativeName: 'Nederlands',
     officiallySupported: true,
   },
@@ -166,6 +177,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'fil',
     englishName: 'Filipino',
+    aliases: ['Tagalog'],
     nativeName: 'Filipino',
     officiallySupported: true,
   },
@@ -292,6 +304,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'ku-latn',
     englishName: 'Kurdish (Latin)',
+    aliases: ['Kurmanji'],
     nativeName: 'Kurdî',
     officiallySupported: true,
   },
@@ -370,6 +383,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'nb',
     englishName: 'Norwegian',
+    aliases: ['Bokmål', 'Norwegian Bokmål'],
     nativeName: 'Norsk Bokmål',
     officiallySupported: true,
   },
@@ -382,18 +396,21 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'pt',
     englishName: 'Portuguese (Brazil)',
+    aliases: ['Brazilian Portuguese'],
     nativeName: 'Português (Brasil)',
     officiallySupported: true,
   },
   {
     code: 'pt-pt',
     englishName: 'Portuguese (Portugal)',
+    aliases: ['European Portuguese'],
     nativeName: 'Português (Portugal)',
     officiallySupported: true,
   },
   {
     code: 'pa',
     englishName: 'Punjabi',
+    aliases: ['Panjabi'],
     nativeName: 'ਪੰਜਾਬੀ',
     officiallySupported: true,
   },
@@ -454,6 +471,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'es',
     englishName: 'Spanish',
+    aliases: ['Castilian'],
     nativeName: 'Español',
     officiallySupported: true,
   },
@@ -579,18 +597,21 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'bn',
     englishName: 'Bengali',
+    aliases: ['Bangla'],
     nativeName: 'বাংলা',
     officiallySupported: false,
   },
   {
     code: 'my',
     englishName: 'Burmese',
+    aliases: ['Myanmar'],
     nativeName: 'မြန်မာ',
     officiallySupported: false,
   },
   {
     code: 'prs',
     englishName: 'Dari',
+    aliases: ['Afghan Persian'],
     nativeName: 'دری',
     officiallySupported: false,
   },
@@ -609,6 +630,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'el',
     englishName: 'Greek',
+    aliases: ['Hellenic'],
     nativeName: 'Ελληνικά',
     officiallySupported: false,
   },
@@ -639,6 +661,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'km',
     englishName: 'Khmer',
+    aliases: ['Cambodian'],
     nativeName: 'ខ្មែរ',
     officiallySupported: false,
   },
@@ -651,6 +674,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'ku',
     englishName: 'Kurdish (Central)',
+    aliases: ['Sorani'],
     nativeName: 'کوردیی ناوەندی',
     officiallySupported: false,
   },
@@ -675,6 +699,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'or',
     englishName: 'Odia',
+    aliases: ['Oriya'],
     nativeName: 'ଓଡ଼ିଆ',
     officiallySupported: false,
   },
@@ -687,6 +712,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'fa',
     englishName: 'Persian',
+    aliases: ['Farsi'],
     nativeName: 'فارسی',
     officiallySupported: false,
   },
@@ -711,6 +737,7 @@ export const DOCUMENT_TRANSLATION_LANGUAGES: DocumentTranslationLanguage[] = [
   {
     code: 'si',
     englishName: 'Sinhala',
+    aliases: ['Sinhalese'],
     nativeName: 'සිංහල',
     officiallySupported: false,
   },
