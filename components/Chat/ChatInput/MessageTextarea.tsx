@@ -40,6 +40,7 @@ export const MessageTextarea: React.FC<MessageTextareaProps> = ({
   return (
     <textarea
       ref={textareaRef}
+      data-testid="chat-input"
       className={`m-0 w-full resize-none border-0 bg-transparent p-0 pr-24 text-black dark:bg-transparent dark:text-white focus:outline-none focus:ring-0 focus:border-0 ${
         searchMode === SearchMode.ALWAYS || selectedToneId
           ? 'pt-3 pb-[88px] pl-3'
