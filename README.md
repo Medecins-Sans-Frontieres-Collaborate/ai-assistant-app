@@ -108,7 +108,7 @@ For a complete feature list, see [docs/FEATURES.md](./docs/FEATURES.md).
 - **Authentication:** NextAuth.js v5 (beta) with Azure AD
 - **i18n:** next-intl (33 languages)
 - **AI:** Azure OpenAI API + Azure AI Foundry
-- **Testing:** Vitest + Testing Library
+- **Testing:** Vitest + Testing Library; Playwright (E2E)
 
 ### Available Scripts
 
@@ -117,8 +117,26 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run start        # Start production server
 npm run lint         # Run ESLint
-npm run test         # Run all tests
+npm run test         # Run all unit/component tests (Vitest)
+npm run test:e2e     # Run end-to-end tests (Playwright)
 ```
+
+### End-to-end tests (Playwright)
+
+E2E tests live in `e2e/`. They start their own Next dev server on port `3100`
+with a test-only auth secret and no real service endpoints, and authenticate by
+minting a NextAuth session cookie out-of-band — so there is **no real Microsoft
+login / MFA** and **no paid Azure/OpenAI calls**.
+
+Install the browser binary once (the `@playwright/test` package does not ship
+browsers):
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+In CI, the `e2e_pr` job installs the browser and runs this suite on every PR.
 
 ## Deployment
 

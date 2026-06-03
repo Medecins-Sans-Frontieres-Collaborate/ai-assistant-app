@@ -351,7 +351,10 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
+      <div
+        data-testid="terms-modal"
+        className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4"
+      >
         <div className="bg-white dark:bg-[#1f1f1f] p-6 rounded-2xl shadow-2xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 mb-3 rounded-full bg-blue-100 dark:bg-blue-900/30">
@@ -368,7 +371,10 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
 
   if (error) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
+      <div
+        data-testid="terms-modal"
+        className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4"
+      >
         <div className="bg-white dark:bg-[#1f1f1f] p-6 rounded-2xl shadow-2xl max-w-sm w-full border border-gray-300 dark:border-gray-600">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 mb-3 rounded-full bg-red-100 dark:bg-red-900/30">
@@ -412,7 +418,10 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
     .join(', ');
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4">
+    <div
+      data-testid="terms-modal"
+      className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 backdrop-blur-sm p-4"
+    >
       <div className="bg-white dark:bg-[#1f1f1f] rounded-2xl shadow-2xl max-w-xl w-full max-h-[80vh] flex flex-col overflow-hidden border border-gray-300 dark:border-gray-600">
         {/* Header */}
         <div className="px-5 py-4 border-b border-gray-300 dark:border-gray-600">
@@ -665,6 +674,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
         {/* Footer */}
         <div className="px-5 py-4 border-t border-gray-300 dark:border-gray-600">
           <button
+            data-testid="terms-accept-button"
             className="w-full py-2.5 px-5 rounded-lg font-medium text-sm transition-all bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
             onClick={handleAcceptAllTerms}
           >

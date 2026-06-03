@@ -1,3 +1,4 @@
+import { getToken } from 'next-auth/jwt';
 import { NextRequest } from 'next/server';
 
 import { GET } from '@/app/api/user/profile/route';
@@ -6,6 +7,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // Mock auth
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
+}));
+
+// Mock the JWT reader — the route reads the refresh token from the JWT
+// (server-side) instead of the client-visible session.
+vi.mock('next-auth/jwt', () => ({
+  getToken: vi.fn(),
 }));
 
 // Mock global fetch
@@ -17,6 +24,11 @@ describe('GET /api/user/profile', () => {
     process.env.AZURE_TENANT_ID = 'test-tenant-id';
     process.env.AZURE_CLIENT_ID = 'test-client-id';
     process.env.AZURE_CLIENT_SECRET = 'test-client-secret';
+    // Default: a valid refresh token is present in the JWT. Individual tests
+    // override this (e.g. to null) as needed.
+    vi.mocked(getToken).mockResolvedValue({
+      refreshToken: 'test-refresh-token',
+    } as any);
   });
 
   const createMockRequest = () => {
@@ -52,8 +64,9 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: null,
       } as any);
+      // No refresh token in the JWT.
+      vi.mocked(getToken).mockResolvedValue(null);
 
       const request = createMockRequest();
       const response = await GET(request);

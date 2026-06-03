@@ -14,6 +14,7 @@
     "coverage:node": "vitest run --coverage --config ./vitest.config.node.mts",
     "coverage:jsdom": "vitest run --coverage --config ./vitest.config.jsdom.mts",
     "coverage": "npm run coverage:node && npm run coverage:jsdom",
+    "test:e2e": "playwright test",
     "search:config": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts",
     "search:config-downtime": "npx ts-node --project tsconfig.scripts.json scripts/search/index.ts --allow-downtime",
     "prepare": "husky"
@@ -85,6 +86,7 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@secretlint/quick-start": "^11.2.5",
     "@secretlint/secretlint-rule-preset-recommend": "^11.2.5",
     "@tailwindcss/typography": "^0.5.9",

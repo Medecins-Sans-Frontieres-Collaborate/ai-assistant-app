@@ -1,3 +1,4 @@
+import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@/auth';
@@ -16,8 +17,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get refresh token from session (exposed via session callback in auth.ts)
-    if (!session.refreshToken) {
+    // Read the refresh token directly from the JWT (server-side only). It is
+    // deliberately not exposed on the session, so client code can never read
+    // it. getToken derives the cookie name + JWE salt from `secureCookie`, so
+    // we must match how the cookie was issued: prod (https) uses the
+    // __Secure- prefixed cookie, dev (http) uses the unprefixed one. Behind a
+    // TLS-terminating proxy the internal request can be http, so key off the
+    // configured auth URL rather than the request protocol.
+    const secureCookie =
+      (process.env.AUTH_URL || process.env.NEXTAUTH_URL || '').startsWith(
+        'https',
+      ) || process.env.NODE_ENV === 'production';
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+      secureCookie,
+    });
+
+    if (!token?.refreshToken) {
       return NextResponse.json({ error: 'No refresh token' }, { status: 401 });
     }
 
@@ -33,7 +50,7 @@ export async function GET(req: NextRequest) {
             grant_type: 'refresh_token',
             client_id: env.AZURE_CLIENT_ID || '',
             client_secret: env.AZURE_CLIENT_SECRET || '',
-            refresh_token: session.refreshToken,
+            refresh_token: token.refreshToken,
             scope: 'openid User.Read User.ReadBasic.all offline_access',
           }).toString(),
         },
