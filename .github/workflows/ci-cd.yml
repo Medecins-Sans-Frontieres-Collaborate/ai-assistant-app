@@ -115,6 +115,52 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # JOB 1b: E2E tests (runs for ALL PRs - no secrets required)
+  # The Playwright webServer boots its own Next dev server with a test-only auth
+  # secret and no real service endpoints, so nothing dials a paid Azure/OpenAI
+  # service. See playwright.config.ts and e2e/.
+  e2e_pr:
+    if: github.event_name == 'pull_request'
+    needs: lint_and_typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   # JOB 2: Deploy Preview (only for internal PRs against main - requires secrets)
   deploy_preview:
     # Only run for internal PRs (not external forks) targeting main branch
