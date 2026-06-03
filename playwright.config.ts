@@ -35,13 +35,23 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // Plain `next dev` on a dedicated port. process.env is merged in by
-    // Playwright; the overrides below take precedence (Next will not overwrite
-    // an env var that is already set), so the test-only secret wins over any
-    // value in .env files.
-    command: `npx next dev -p ${E2E_PORT}`,
+    // Production build + `next start` on a dedicated port. We deliberately do
+    // NOT use `next dev`: dev compiles routes on demand at first request, so on
+    // a cold CI runner the first authenticated navigation triggers a multi-
+    // second compile of the heavy `[locale]/(auth)/(chat)` route that blows past
+    // the per-test timeout (and `fullyParallel` makes sibling tests race the
+    // same cold compile, producing ERR_ABORTED). A prod build precompiles every
+    // route, so navigation is deterministic.
+    //
+    // process.env is merged in by Playwright; the overrides below take
+    // precedence (Next will not overwrite an env var that is already set), so
+    // the test-only secret wins over any value in .env files. AUTH_URL is http,
+    // so Auth.js keeps the unprefixed `authjs.session-token` cookie even though
+    // `next start` runs in production mode — matching the minted cookie.
+    command: `npm run build && npx next start -p ${E2E_PORT}`,
     url: E2E_BASE_URL,
-    timeout: 120_000,
+    // Generous: a cold prod build on a CI runner can take a few minutes.
+    timeout: 300_000,
     reuseExistingServer: false,
     env: {
       NODE_OPTIONS: '--max-http-header-size=32768',
