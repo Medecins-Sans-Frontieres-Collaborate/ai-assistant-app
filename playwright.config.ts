@@ -55,6 +55,13 @@ export default defineConfig({
     reuseExistingServer: false,
     env: {
       NODE_OPTIONS: '--max-http-header-size=32768',
+      // `next build` runs with NODE_ENV=production and loads `.env.production`,
+      // which sets `NEXT_PUBLIC_ENV=production` — NOT a valid value for the
+      // config/environment.ts enum (localhost|dev|staging|beta|live|prod), so
+      // the build aborts with "Invalid environment variables". Real deploys
+      // override this via Docker build-args; the E2E plain build does it here.
+      // process.env wins over .env files in Next, so this applies to build+start.
+      NEXT_PUBLIC_ENV: 'localhost',
       // Test-only auth secret — MUST match the secret used to mint the cookie.
       AUTH_SECRET: E2E_TEST_SECRET,
       NEXTAUTH_SECRET: E2E_TEST_SECRET,
