@@ -1,12 +1,19 @@
+import { E2E_STORAGE_STATE_US } from './constants';
+
 import { expect, test } from '@playwright/test';
 
 /**
- * With the out-of-band-minted session cookie (the default storage state), the
- * authenticated chat page loads and the message composer is visible. Loading
- * the page renders the client Chat component but fires no paid calls — chat
- * only calls /api/chat on send, which this test does not do.
+ * A US user is exempt from the terms-acceptance gate, so the chat composer must
+ * be usable on first load. We assert *actionability*, not mere visibility: a
+ * terms (or any) modal overlaying the composer would make `fill()` fail, so
+ * typing into it and reading the value back proves it is genuinely interactive.
+ *
+ * No paid calls: loading the page and typing never hits /api/chat (which only
+ * fires on send).
  */
-test('authenticated user lands on the chat page with a visible composer', async ({
+test.use({ storageState: E2E_STORAGE_STATE_US });
+
+test('US user lands on the chat page with an immediately usable composer', async ({
   page,
 }) => {
   await page.goto('/');
@@ -14,6 +21,11 @@ test('authenticated user lands on the chat page with a visible composer', async 
   // Not bounced to sign-in.
   await expect(page).not.toHaveURL(/\/signin/);
 
-  // The message composer textarea is present (locale-independent selector).
-  await expect(page.getByTestId('chat-input')).toBeVisible();
+  // No terms gate for US users.
+  await expect(page.getByTestId('terms-modal')).toHaveCount(0);
+
+  // The composer is actionable (not just present / not covered by an overlay).
+  const composer = page.getByTestId('chat-input');
+  await composer.fill('hello from e2e');
+  await expect(composer).toHaveValue('hello from e2e');
 });
