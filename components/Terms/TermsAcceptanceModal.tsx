@@ -665,6 +665,7 @@ export const TermsAcceptanceModal: FC<TermsAcceptanceModalProps> = ({
         {/* Footer */}
         <div className="px-5 py-4 border-t border-gray-300 dark:border-gray-600">
           <button
+            data-testid="terms-accept-button"
             className="w-full py-2.5 px-5 rounded-lg font-medium text-sm transition-all bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
             onClick={handleAcceptAllTerms}
           >
