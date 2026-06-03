@@ -25,5 +25,10 @@ export const E2E_BASE_URL = `http://localhost:${E2E_PORT}`;
  */
 export const E2E_SESSION_COOKIE = 'authjs.session-token';
 
-/** Where the minted Playwright storage state is written. */
+/**
+ * Where the minted Playwright storage states are written.
+ * - The default (EU) user exercises the terms-acceptance gate.
+ * - The US user is terms-exempt, used to assert the composer is immediately usable.
+ */
 export const E2E_STORAGE_STATE = 'e2e/.auth/state.json';
+export const E2E_STORAGE_STATE_US = 'e2e/.auth/state-us.json';
