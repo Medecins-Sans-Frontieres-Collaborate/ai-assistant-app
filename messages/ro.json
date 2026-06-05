@@ -689,7 +689,8 @@
     "stopGenerationConfirm": "Oprește",
     "stopGenerationDontAskAgainButton": "Nu mai întreba când opresc cu butonul",
     "stopGenerationDontAskAgainKeyboard": "Nu mai întreba când opresc cu tastatura",
-    "generateResponseButton": "Generează răspuns"
+    "generateResponseButton": "Generează răspuns",
+    "downloadResponse": "Descarcă răspunsul"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
@@ -1003,7 +1004,15 @@
     "savedConfirmation": "Salvat",
     "unsavedChanges": "Modificări nesalvate",
     "unsavedChangesMessage": "Aveți modificări nesalvate. Renunțați la ele?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Șterge câmpul",
+    "autosaveNote": "Modificările se salvează automat.",
+    "responseSection": "Răspuns",
+    "voiceSection": "Voce",
+    "behaviorSection": "Comportament",
+    "resetChatSettings": "Resetează setările conversației",
+    "resetChatSettingsConfirmTitle": "Resetați setările conversației?",
+    "resetChatSettingsConfirmMessage": "Aceasta va restabili valorile implicite pentru toate opțiunile din acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspunsul modelului, viteza de redare, conversie text-vorbire, fișiere active și confirmări. Nu va afecta conversațiile dvs."
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Expiră în {days} zi(le) - descărcați cât mai curând",
     "expires": "Disponibil pentru {days} zile",
     "learnMore": "Află mai multe",
-    "advancedOptions": "Opțiuni avansate"
+    "advancedOptions": "Opțiuni avansate",
+    "unofficialBadgeLabel": "Neoficial",
+    "unofficialLanguageWarning": "Această limbă nu este suportată oficial. Calitatea traducerii nu a fost verificată. Vă rugăm să aveți rezultatul revizuit de un vorbitor fluent sau nativ înainte de a-l distribui."
   },
   "terms": {
     "officialLanguages": "Versiune oficială:",

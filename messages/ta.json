@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "நிறுத்து",
     "stopGenerationDontAskAgainButton": "பொத்தானை அழுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
     "stopGenerationDontAskAgainKeyboard": "கீபோர்டைப் பயன்படுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
-    "generateResponseButton": "பதில் உருவாக்கு"
+    "generateResponseButton": "பதில் உருவாக்கு",
+    "downloadResponse": "பதில் பதிவிறக்கு"
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "சேமிக்கப்பட்டது",
     "unsavedChanges": "சேமிக்காத மாற்றங்கள்",
     "unsavedChangesMessage": "சில மாற்றங்கள் இன்னும் சேமிக்கப்படவில்லை. அவற்றை கைவிட விரும்புகின்றீர்களா?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "புலத்தை அழி",
+    "autosaveNote": "மாற்றங்கள் தானாக சேமிக்கப்படும்.",
+    "responseSection": "பதில்",
+    "voiceSection": "குரல்",
+    "behaviorSection": "நடத்தை",
+    "resetChatSettings": "அரட்டை அமைப்புகளை மீட்டமை",
+    "resetChatSettingsConfirmTitle": "அரட்டை அமைப்புகளை மீட்டமைக்கவா?",
+    "resetChatSettingsConfirmMessage": "இந்த குழுவில் உள்ள அனைத்திற்கும் (temperature, custom instructions, About You, model response, streaming speed, text-to-speech, active files, confirmations) இயல்புநிலையை மீட்டமைக்கும். இது உங்கள் உரையாடல்களுக்கு பாதிப்பை ஏற்படுத்தாது."
   },
   "emptyState": {
     "greeting": "நான் எவ்வாறு உதவ முடியும்?",
@@ -1753,7 +1762,9 @@
     "downloading": "பதிவிறக்குகிறது...",
     "expired": "இந்த மொழிபெயர்ப்பு காலாவதியாகிவிட்டது மற்றும் இனி கிடைக்காது",
     "expiresSoon": "{days} நாள்(களில்) காலாவதியாகும் - விரைவில் பதிவிறக்குங்கள்",
-    "expires": "{days} நாட்களுக்கு கிடைக்கும்"
+    "expires": "{days} நாட்களுக்கு கிடைக்கும்",
+    "unofficialBadgeLabel": "தனிப்பட்டது",
+    "unofficialLanguageWarning": "இந்த மொழி அதிகாரப்பூர்வமாக ஆதரிக்கப்படவில்லை. மொழிபெயர்ப்பு தரம் உறுதிப்படுத்தப்படவில்லை. பகிர்வதற்கு முன், தேர்ச்சி பெற்றோராகவோ அல்லது மொழிப்பேராசிரியராகவோ உள்ளவர் மூலம் விளக்கம் பெறுங்கள்."
   },
   "agentsTab": {
     "organizationAgents": {

@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "रोक्नुहोस्",
     "stopGenerationDontAskAgainButton": "बटनबाट रोक्दा फेरि नसोध्नुहोस्",
     "stopGenerationDontAskAgainKeyboard": "किबोर्डबाट रोक्दा फेरि नसोध्नुहोस्",
-    "generateResponseButton": "प्रतिक्रिया जेनरेट गर्नुहोस्"
+    "generateResponseButton": "प्रतिक्रिया जेनरेट गर्नुहोस्",
+    "downloadResponse": "जवाफ डाउनलोड गर्नुहोस्"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "सेभ गरियो",
     "unsavedChanges": "सेभ नगरिएका परिवर्तनहरू",
     "unsavedChangesMessage": "तपाईंसँग सेभ नगरिएका परिवर्तनहरू छन्। तिनीहरू हटाउने हो?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "क्षेत्र खाली गर्नुहोस्",
+    "autosaveNote": "परिवर्तनहरू स्वचालित रूपमा सुरक्षित हुन्छन्।",
+    "responseSection": "जवाफ",
+    "voiceSection": "आवाज",
+    "behaviorSection": "व्यवहार",
+    "resetChatSettings": "क्याट सेटिङहरू पुनःस्थापना गर्नुहोस्",
+    "resetChatSettingsConfirmTitle": "क्याट सेटिङहरू पुनःस्थापना गर्ने?",
+    "resetChatSettingsConfirmMessage": "यसले यस प्यानलका सबै चीजहरूलाई पूर्वनिर्धारित अवस्थामा फर्काउँछ: तापक्रम, अनुकूल आदेशहरू, तपाईंको बारेमा, मोडेलको जवाफ, स्ट्रिमिङ गति, पाठ-देखि-आवाज, सक्रिय फाइलहरू, र पुष्टि। यसले तपाईंका कुराकानीहरूलाई असर गर्दैन।"
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
@@ -1753,7 +1762,9 @@
     "downloading": "डाउनलोड गर्दै...",
     "expired": "यो अनुवादको म्याद सकिएको छ र अब उपलब्ध छैन",
     "expiresSoon": "{days} दिनमा म्याद सकिन्छ - चाँडै डाउनलोड गर्नुहोस्",
-    "expires": "{days} दिनसम्म उपलब्ध"
+    "expires": "{days} दिनसम्म उपलब्ध",
+    "unofficialBadgeLabel": "अनौपचारिक",
+    "unofficialLanguageWarning": "यो भाषा औपचारिक रूपमा समर्थित छैन। अनुवादको गुणस्तर पुष्टि गरिएको छैन। कृपया परिणाम साझा गर्नु अघि दक्ष वा मूलभाषी व्यक्तिबाट समीक्षा गर्न लगाउनुहोस्।"
   },
   "agentsTab": {
     "organizationAgents": {

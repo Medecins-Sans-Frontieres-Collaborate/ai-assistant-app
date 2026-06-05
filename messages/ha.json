@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Dakatar",
     "stopGenerationDontAskAgainButton": "Kada a sake tambayata idan an dakatar ta maɓalli",
     "stopGenerationDontAskAgainKeyboard": "Kada a sake tambayata idan an dakatar ta kibodi",
-    "generateResponseButton": "Ƙirƙiri amsa"
+    "generateResponseButton": "Ƙirƙiri amsa",
+    "downloadResponse": "Zazzage amsa"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "An ajiye",
     "unsavedChanges": "Canje-canje ba a ajiye ba",
     "unsavedChangesMessage": "Kana da canje-canje da ba a ajiye ba. Ka soke su?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Goge filin",
+    "autosaveNote": "Sauye-sauye suna ajiye kansu kai tsaye.",
+    "responseSection": "Amsa",
+    "voiceSection": "Murya",
+    "behaviorSection": "Hali",
+    "resetChatSettings": "Sake saitin tattaunawa",
+    "resetChatSettingsConfirmTitle": "Sake saitin tattaunawa?",
+    "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsoffin saituna ga duk abubuwan wannan shafi: zafin jiki, umarnin da aka keɓance, Bayani game da Kai, amsar samfurin, saurin gudu, karanta rubutu da murya, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarka ba."
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1753,7 +1762,9 @@
     "downloading": "Ana saukewa...",
     "expired": "Fassarar nan ta ƙare kuma ba a sake samun ta ba",
     "expiresSoon": "Zai ƙare cikin {days} rana(ni) - sauke da wuri",
-    "expires": "Za a samu na tsawon {days} rana"
+    "expires": "Za a samu na tsawon {days} rana",
+    "unofficialBadgeLabel": "Ba na hukuma ba",
+    "unofficialLanguageWarning": "Wannan harshe ba ya cikin jerin wadanda ake goyon baya a hukumance. Ba a tabbatar da ingancin fassarar ba. Da fatan za a bari masana ko wadanda suka iya wannan harshe su duba sakon kafin a yada."
   },
   "agentsTab": {
     "organizationAgents": {

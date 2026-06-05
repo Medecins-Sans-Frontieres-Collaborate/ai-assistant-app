@@ -637,7 +637,8 @@
     "stopGenerationConfirm": "Detener",
     "stopGenerationDontAskAgainButton": "No volver a preguntar al detener con el botón",
     "stopGenerationDontAskAgainKeyboard": "No volver a preguntar al detener con el teclado",
-    "generateResponseButton": "Generar respuesta"
+    "generateResponseButton": "Generar respuesta",
+    "downloadResponse": "Descargar respuesta"
   },
   "sidebar": {
     "collapseSidebar": "Contraer barra lateral",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Guardado",
     "unsavedChanges": "Cambios no guardados",
     "unsavedChangesMessage": "Tiene cambios sin guardar. ¿Desea descartarlos?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Limpiar campo",
+    "autosaveNote": "Los cambios se guardan automáticamente.",
+    "responseSection": "Respuesta",
+    "voiceSection": "Voz",
+    "behaviorSection": "Comportamiento",
+    "resetChatSettings": "Restablecer configuración del chat",
+    "resetChatSettingsConfirmTitle": "¿Restablecer configuración del chat?",
+    "resetChatSettingsConfirmMessage": "Esto restablece los valores predeterminados de todo en este panel: temperatura, instrucciones personalizadas, Sobre ti, respuesta del modelo, velocidad de transmisión, texto a voz, archivos activos y confirmaciones. No afecta tus conversaciones."
   },
   "notFound": {
     "lostDog": "Perro perdido"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Expira en {days} día(s); descargue pronto",
     "expires": "Disponible por {days} día(s)",
     "learnMore": "Más información",
-    "advancedOptions": "Opciones avanzadas"
+    "advancedOptions": "Opciones avanzadas",
+    "unofficialBadgeLabel": "No oficial",
+    "unofficialLanguageWarning": "Este idioma no cuenta con soporte oficial. La calidad de la traducción no ha sido verificada. Por favor, haga que el resultado sea revisado por una persona nativa o fluida antes de compartirlo."
   },
   "terms": {
     "officialLanguages": "Versión oficial:",

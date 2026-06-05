@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Misa",
     "stopGenerationDontAskAgainButton": "Ungabuzi futhi uma umisa ngebhathini",
     "stopGenerationDontAskAgainKeyboard": "Ungabuzi futhi uma umisa ngesinqamuleli sekhibhodi",
-    "generateResponseButton": "Khiqiza impendulo"
+    "generateResponseButton": "Khiqiza impendulo",
+    "downloadResponse": "Landa impendulo"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Kugcinwe",
     "unsavedChanges": "Izinguquko ezingagcinwanga",
     "unsavedChangesMessage": "Unezinguquko ezingagcinwanga. Uyafuna ukuzilahla?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Sula inkambu",
+    "autosaveNote": "Izinguquko zigcinwa ngokuzenzakalelayo.",
+    "responseSection": "Impendulo",
+    "voiceSection": "Izwi",
+    "behaviorSection": "Ukuziphatha",
+    "resetChatSettings": "Setha kabusha izilungiselelo zenkulumo",
+    "resetChatSettingsConfirmTitle": "Usufuna ukusetha kabusha izilungiselelo zenkulumo?",
+    "resetChatSettingsConfirmMessage": "Lokhu kuzobuyisela konke okuzenzakalelayo kulawa masethingi: izinga lokushisa, imiyalelo eyenziwe ngezifiso, Mayelana Nawe, impendulo yemodeli, ijubane lokusakaza, umbhalo-ukuya-kwizwi, amafayela asebenzayo, nokuqinisekiswa. Akuthinti izingxoxo zakho."
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -1753,7 +1762,9 @@
     "downloading": "Kuyalandwa...",
     "expired": "Lokhu kuhumusha kuphelelwe yisikhathi futhi akusatholakali",
     "expiresSoon": "Kuphelelwa yisikhathi ngezinsuku ezingu-{days} - landa masinyane",
-    "expires": "Kutholakala izinsuku ezingu-{days}"
+    "expires": "Kutholakala izinsuku ezingu-{days}",
+    "unofficialBadgeLabel": "Akusemthethweni",
+    "unofficialLanguageWarning": "Lolu limi alusekelwa ngokusemthethweni. Ikhwalithi yokuhumusha ayikaze iqinisekiswe. Sicela umphumela uhlolwe umuntu okhuluma kahle noma ongumthonyama ngaphambi kokuwabelana."
   },
   "agentsTab": {
     "organizationAgents": {

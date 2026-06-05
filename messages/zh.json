@@ -722,7 +722,8 @@
     "stopGenerationConfirm": "停止",
     "stopGenerationDontAskAgainButton": "使用按钮停止时不再询问",
     "stopGenerationDontAskAgainKeyboard": "使用键盘停止时不再询问",
-    "generateResponseButton": "生成回复"
+    "generateResponseButton": "生成回复",
+    "downloadResponse": "下载回复"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
@@ -1036,7 +1037,15 @@
     "savedConfirmation": "已保存",
     "unsavedChanges": "未保存的更改",
     "unsavedChangesMessage": "您有未保存的更改。要放弃吗？",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "清除字段",
+    "autosaveNote": "更改会自动保存。",
+    "responseSection": "回复",
+    "voiceSection": "语音",
+    "behaviorSection": "行为",
+    "resetChatSettings": "重置聊天设置",
+    "resetChatSettingsConfirmTitle": "重置聊天设置？",
+    "resetChatSettingsConfirmMessage": "这将恢复本面板中所有内容为默认值：温度、自定义指令、关于你、模型回复、流式速度、语音合成、活动文件和确认设置。不会影响您的对话内容。"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1794,7 +1803,9 @@
     "expiresSoon": "将在{days}天后过期，请尽快下载",
     "expires": "可用{days}天",
     "learnMore": "了解更多",
-    "advancedOptions": "高级选项"
+    "advancedOptions": "高级选项",
+    "unofficialBadgeLabel": "非官方",
+    "unofficialLanguageWarning": "此语言尚未获得官方支持。翻译质量未经验证。请在分享之前让流利或母语者进行审阅。"
   },
   "terms": {
     "officialLanguages": "官方版本：",

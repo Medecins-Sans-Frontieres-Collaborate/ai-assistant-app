@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Kê sô",
     "stopGenerationDontAskAgainButton": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na boutton",
     "stopGenerationDontAskAgainKeyboard": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na klavier",
-    "generateResponseButton": "Sûrû siriri"
+    "generateResponseButton": "Sûrû siriri",
+    "downloadResponse": "Doko na ndapî"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Abê ti mongo",
     "unsavedChanges": "Ködörö so ayeke na mongo",
     "unsavedChangesMessage": "Ködörö so ayeke ayeke na mongo. Oko mo langbï?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Kôlo lo kuti",
+    "autosaveNote": "Mbênîngâ na abûta na mbênî.",
+    "responseSection": "Ndapî",
+    "voiceSection": "Ndimi",
+    "behaviorSection": "Kûtû",
+    "resetChatSettings": "Zîngo paramètre ti bângâ so",
+    "resetChatSettingsConfirmTitle": "Zîngo paramètre ti bângâ so?",
+    "resetChatSettingsConfirmMessage": "Iko yeke zîngô paramètre na mbênî so: température, ndemële ti tîngbî, Sô tî mo, ndapî ti model, vitesse ti streaming, ndimi ti timbî, fichiers ti bêtî, na bingâ ti vêrîngö. Ala yeke nâ kô ti bâa mbênî so mo kêtê na bângâ so."
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1753,7 +1762,9 @@
     "downloading": "Downloading...",
     "expired": "This translation has expired and is no longer available",
     "expiresSoon": "Expires in {days} day(s) - download soon",
-    "expires": "Available for {days} days"
+    "expires": "Available for {days} days",
+    "unofficialBadgeLabel": "Mbeni tî ndurusu",
+    "unofficialLanguageWarning": "Ngâ tî li ala na ndurusu. Kîrî tî mbênîngâ alï mbi vêrî. Sîngînga, bêrê na ôko gbanga tî ndimi oba orî na ngâ tî yângâ ti titî so bâa."
   },
   "agentsTab": {
     "organizationAgents": {

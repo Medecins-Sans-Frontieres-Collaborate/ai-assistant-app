@@ -666,7 +666,8 @@
     "stopGenerationConfirm": "הפסק",
     "stopGenerationDontAskAgainButton": "אל תשאל שוב בעת עצירה באמצעות הכפתור",
     "stopGenerationDontAskAgainKeyboard": "אל תשאל שוב בעת עצירה באמצעות המקלדת",
-    "generateResponseButton": "צור תגובה"
+    "generateResponseButton": "צור תגובה",
+    "downloadResponse": "הורד תגובה"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -980,7 +981,15 @@
     "savedConfirmation": "נשמר",
     "unsavedChanges": "שינויים שלא נשמרו",
     "unsavedChangesMessage": "יש לך שינויים שלא נשמרו. האם למחוק אותם?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "נקה שדה",
+    "autosaveNote": "השינויים נשמרים אוטומטית.",
+    "responseSection": "תגובה",
+    "voiceSection": "קול",
+    "behaviorSection": "התנהגות",
+    "resetChatSettings": "אפס הגדרות צ'אט",
+    "resetChatSettingsConfirmTitle": "לאפס הגדרות צ'אט?",
+    "resetChatSettingsConfirmMessage": "פעולה זו תחזיר לברירת המחדל את כל ההגדרות בלוח זה: טמפרטורה, הנחיות מותאמות, אודותיך, תגובת המודל, מהירות הסטרימינג, טקסט לדיבור, קבצים פעילים ואישורים. אין בכך כדי להשפיע על השיחות שלך."
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "פג בעוד {days} יום/ימים - מומלץ להוריד בהקדם",
     "expires": "זמין למשך {days} ימים",
     "learnMore": "למידע נוסף",
-    "advancedOptions": "אפשרויות מתקדמות"
+    "advancedOptions": "אפשרויות מתקדמות",
+    "unofficialBadgeLabel": "לא רשמי",
+    "unofficialLanguageWarning": "שפה זו אינה נתמכת רשמית. איכות התרגום לא אומתה. מומלץ שמי ששולט בשפה או דובר שפת אם יעבור על התוצאה לפני שיתוף."
   },
   "terms": {
     "officialLanguages": "גרסה רשמית:",

@@ -691,7 +691,8 @@
     "stopGenerationConfirm": "Zastavit",
     "stopGenerationDontAskAgainButton": "Při zastavení tlačítkem se již neptat",
     "stopGenerationDontAskAgainKeyboard": "Při zastavení klávesnicí se již neptat",
-    "generateResponseButton": "Vygenerovat odpověď"
+    "generateResponseButton": "Vygenerovat odpověď",
+    "downloadResponse": "Stáhnout odpověď"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Uloženo",
     "unsavedChanges": "Neuložené změny",
     "unsavedChangesMessage": "Máte neuložené změny. Zahodit je?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Vymazat pole",
+    "autosaveNote": "Změny se ukládají automaticky.",
+    "responseSection": "Odpověď",
+    "voiceSection": "Hlas",
+    "behaviorSection": "Chování",
+    "resetChatSettings": "Obnovit nastavení chatu",
+    "resetChatSettingsConfirmTitle": "Obnovit nastavení chatu?",
+    "resetChatSettingsConfirmMessage": "Tímto obnovíte výchozí nastavení všech položek v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nedotkne se to vašich konverzací."
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Vyprší za {days} den/dnů – stáhněte brzy",
     "expires": "K dispozici {days} dní",
     "learnMore": "Zjistit více",
-    "advancedOptions": "Pokročilé možnosti"
+    "advancedOptions": "Pokročilé možnosti",
+    "unofficialBadgeLabel": "Neoficiální",
+    "unofficialLanguageWarning": "Tento jazyk není oficiálně podporován. Kvalita překladu nebyla ověřena. Nechte výsledek před sdílením zkontrolovat rodilým či plynulým mluvčím."
   },
   "terms": {
     "officialLanguages": "Oficiální verze:",

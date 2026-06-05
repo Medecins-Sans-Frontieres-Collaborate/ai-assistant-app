@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Atsaharo",
     "stopGenerationDontAskAgainButton": "Aza manontany intsony rehefa mampiasa ny bokotra hijanona",
     "stopGenerationDontAskAgainKeyboard": "Aza manontany intsony rehefa mampiasa klavier hijanona",
-    "generateResponseButton": "Mamokatra valiny"
+    "generateResponseButton": "Mamokatra valiny",
+    "downloadResponse": "Alaivo ny valiny"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Voavonjy",
     "unsavedChanges": "Fiovana tsy voavonjy",
     "unsavedChangesMessage": "Misy fiovana tsy voavonjy. Foanana ve ireo?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Fafao ny saha",
+    "autosaveNote": "Mitehirizina ho azy ny fanovàna.",
+    "responseSection": "Valiny",
+    "voiceSection": "Feo",
+    "behaviorSection": "Fitondran-tena",
+    "resetChatSettings": "Avereno amin'ny voalohany ny fanovàna amin'ny chat",
+    "resetChatSettingsConfirmTitle": "Avereno amin'ny voalohany ny fanovàna amin'ny chat?",
+    "resetChatSettingsConfirmMessage": "Averina amin'ny masontsivana fototra eto amin'ity tabilao ity: temperature, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny streaming, fanovàna lahatsoratra ho feo, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany."
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1753,7 +1762,9 @@
     "downloading": "Mampidina...",
     "expired": "Ity fandikana ity dia lany daty ary tsy azo ampiasaina intsony",
     "expiresSoon": "Lany daty ao anatin'ny {days} andro - ampidino haingana",
-    "expires": "Azo ampiasaina mandritra ny {days} andro"
+    "expires": "Azo ampiasaina mandritra ny {days} andro",
+    "unofficialBadgeLabel": "Tsy ofisialy",
+    "unofficialLanguageWarning": "Tsy tohanana amin'ny fomba ofisialy ity fiteny ity. Tsy nankatoavina ny kalitaon'ny fandikan-teny. Azafady mba ampanaovy olona mahay na teratany hijery ny vokatra alohan'ny hizara izany."
   },
   "agentsTab": {
     "organizationAgents": {

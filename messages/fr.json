@@ -637,7 +637,8 @@
     "stopGenerationConfirm": "Arrêter",
     "stopGenerationDontAskAgainButton": "Ne plus demander lors de l'arrêt avec le bouton",
     "stopGenerationDontAskAgainKeyboard": "Ne plus demander lors de l'arrêt avec le clavier",
-    "generateResponseButton": "Générer une réponse"
+    "generateResponseButton": "Générer une réponse",
+    "downloadResponse": "Télécharger la réponse"
   },
   "sidebar": {
     "collapseSidebar": "Réduire la barre latérale",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "Enregistré",
     "unsavedChanges": "Modifications non enregistrées",
     "unsavedChangesMessage": "Vous avez des modifications non enregistrées. Les annuler ?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Effacer le champ",
+    "autosaveNote": "Les modifications sont enregistrées automatiquement.",
+    "responseSection": "Réponse",
+    "voiceSection": "Voix",
+    "behaviorSection": "Comportement",
+    "resetChatSettings": "Réinitialiser les paramètres du chat",
+    "resetChatSettingsConfirmTitle": "Réinitialiser les paramètres du chat ?",
+    "resetChatSettingsConfirmMessage": "Cela rétablira les paramètres par défaut pour tous les éléments de ce panneau : température, instructions personnalisées, À propos de vous, réponse du modèle, vitesse de diffusion, synthèse vocale, fichiers actifs et confirmations. Cela n'affecte pas vos conversations."
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Expire dans {days} jour(s) - téléchargez bientôt",
     "expires": "Disponible pendant {days} jours",
     "learnMore": "En savoir plus",
-    "advancedOptions": "Options avancées"
+    "advancedOptions": "Options avancées",
+    "unofficialBadgeLabel": "Non officiel",
+    "unofficialLanguageWarning": "Cette langue n'est pas officiellement prise en charge. La qualité de la traduction n'a pas été vérifiée. Veuillez faire relire le résultat par une personne compétente ou native avant de le partager."
   },
   "terms": {
     "officialLanguages": "Version officielle :",

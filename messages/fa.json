@@ -616,7 +616,8 @@
     "stopGenerationConfirm": "توقف",
     "stopGenerationDontAskAgainButton": "هنگام توقف با دکمه دوباره سوال نکن",
     "stopGenerationDontAskAgainKeyboard": "هنگام توقف با صفحه‌کلید دوباره سوال نکن",
-    "generateResponseButton": "تولید پاسخ"
+    "generateResponseButton": "تولید پاسخ",
+    "downloadResponse": "دانلود پاسخ"
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
@@ -930,7 +931,15 @@
     "savedConfirmation": "ذخیره شد",
     "unsavedChanges": "تغییرات ذخیره‌نشده",
     "unsavedChangesMessage": "شما تغییرات ذخیره‌نشده دارید. آیا می‌خواهید آن‌ها را حذف کنید؟",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "پاک کردن فیلد",
+    "autosaveNote": "تغییرات به‌صورت خودکار ذخیره می‌شوند.",
+    "responseSection": "پاسخ",
+    "voiceSection": "صدا",
+    "behaviorSection": "رفتار",
+    "resetChatSettings": "بازنشانی تنظیمات چت",
+    "resetChatSettingsConfirmTitle": "آیا تنظیمات چت بازنشانی شود؟",
+    "resetChatSettingsConfirmMessage": "این کار همه مقادیر پیش‌فرض این پنل را بازیابی می‌کند: دما، دستورالعمل‌های سفارشی، اطلاعات درباره شما، پاسخ مدل، سرعت پخش، تبدیل متن به گفتار، فایل‌های فعال و تأییدیه‌ها. این کار تاثیری بر مکالمات شما ندارد."
   },
   "notFound": {
     "lostDog": "سگ گمشده"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "تا {days} روز دیگر منقضی می‌شود - هرچه زودتر دانلود کنید",
     "expires": "به مدت {days} روز در دسترس است",
     "learnMore": "بیشتر بدانید",
-    "advancedOptions": "گزینه‌های پیشرفته"
+    "advancedOptions": "گزینه‌های پیشرفته",
+    "unofficialBadgeLabel": "غیررسمی",
+    "unofficialLanguageWarning": "این زبان به صورت رسمی پشتیبانی نمی‌شود. کیفیت ترجمه تأیید نشده است. لطفاً قبل از به اشتراک‌گذاری، نتیجه را توسط یک فرد مسلط یا بومی بررسی کنید."
   },
   "terms": {
     "officialLanguages": "نسخه رسمی:",

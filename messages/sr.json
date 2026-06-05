@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Zaustavi",
     "stopGenerationDontAskAgainButton": "Ne pitaj ponovo prilikom zaustavljanja preko dugmeta",
     "stopGenerationDontAskAgainKeyboard": "Ne pitaj ponovo prilikom zaustavljanja putem tastature",
-    "generateResponseButton": "Generiši odgovor"
+    "generateResponseButton": "Generiši odgovor",
+    "downloadResponse": "Preuzmi odgovor"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Sačuvano",
     "unsavedChanges": "Nesačuvane izmene",
     "unsavedChangesMessage": "Imate nesačuvane izmene. Odbaciti ih?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Obriši polje",
+    "autosaveNote": "Izmene se automatski čuvaju.",
+    "responseSection": "Odgovor",
+    "voiceSection": "Glas",
+    "behaviorSection": "Ponašanje",
+    "resetChatSettings": "Vrati podešavanja ćaskanja na podrazumevana",
+    "resetChatSettingsConfirmTitle": "Vratiti podešavanja ćaskanja na podrazumevana?",
+    "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O Vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ovo ne utiče na vaše razgovore."
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1753,7 +1762,9 @@
     "downloading": "Преузимање...",
     "expired": "Овај превод је истекао и више није доступан",
     "expiresSoon": "Истиче за {days} дан(а) - преузмите ускоро",
-    "expires": "Доступно за {days} дана"
+    "expires": "Доступно за {days} дана",
+    "unofficialBadgeLabel": "Neslužbeno",
+    "unofficialLanguageWarning": "Ovaj jezik nije zvanično podržan. Kvalitet prevoda nije verifikovan. Molimo da rezultat proveri osoba koja tečno govori ili je izvorni govornik pre deljenja."
   },
   "agentsTab": {
     "organizationAgents": {

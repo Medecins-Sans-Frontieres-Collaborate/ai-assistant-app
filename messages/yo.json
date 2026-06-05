@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Dákẹ́",
     "stopGenerationDontAskAgainButton": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì",
     "stopGenerationDontAskAgainKeyboard": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
-    "generateResponseButton": "Ṣẹdá ìdáhùn"
+    "generateResponseButton": "Ṣẹdá ìdáhùn",
+    "downloadResponse": "Gba idahun silẹ"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Ti fipamọ́",
     "unsavedChanges": "Àyípadà tí kò tíì fipamọ́",
     "unsavedChangesMessage": "O ní àyípadà tí kò tíì fipamọ́. Ṣe o fẹ́ sọ wọn di asán?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Nu aaye",
+    "autosaveNote": "Ayipada n ṣe fipamọ laifọwọyi.",
+    "responseSection": "Idahun",
+    "voiceSection": "Ohùn",
+    "behaviorSection": "Ihuwasi",
+    "resetChatSettings": "Tun eto iwiregbe ṣe",
+    "resetChatSettingsConfirmTitle": "Ṣe tun eto iwiregbe ṣe?",
+    "resetChatSettingsConfirmMessage": "Eleyi yoo mu gbogbo eto apakan yii pada si aiyipada: iwọn otutu, ilana ara rẹ, Nipa Rẹ, idahun awoṣe, iyara ṣiṣanwọle, ọrọ-sí-ohùn, awọn faili to ṣiṣẹ, ati ìmúlòlùú. Kò ní kan ìjíròrò rẹ."
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1753,7 +1762,9 @@
     "downloading": "Ń ṣe ìgbasílẹ̀...",
     "expired": "Ìtúmọ̀ yìí ti parí àti pé kò sí mọ́",
     "expiresSoon": "Ó parí ní ọjọ́ {days} - ṣe ìgbasílẹ̀ láìpẹ́",
-    "expires": "Ó wà fún ọjọ́ {days}"
+    "expires": "Ó wà fún ọjọ́ {days}",
+    "unofficialBadgeLabel": "Kì í ṣe ìsọfúnni",
+    "unofficialLanguageWarning": "Ede yi kò ní ìtẹwọgba lásìkò. Didarí itumọ naa kò tii ni idaniloju. Jọ̀wọ̀, jẹ́ kí amoye tabi ẹni to mọ ede yi dájú kí o tó pin."
   },
   "agentsTab": {
     "organizationAgents": {

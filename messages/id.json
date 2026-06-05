@@ -658,7 +658,8 @@
     "stopGenerationConfirm": "Hentikan",
     "stopGenerationDontAskAgainButton": "Jangan tanyakan lagi saat menghentikan dengan tombol",
     "stopGenerationDontAskAgainKeyboard": "Jangan tanyakan lagi saat menghentikan dengan keyboard",
-    "generateResponseButton": "Buat respons"
+    "generateResponseButton": "Buat respons",
+    "downloadResponse": "Unduh respons"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -972,7 +973,15 @@
     "savedConfirmation": "Tersimpan",
     "unsavedChanges": "Perubahan belum disimpan",
     "unsavedChangesMessage": "Anda memiliki perubahan yang belum disimpan. Buang perubahan?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Bersihkan kolom",
+    "autosaveNote": "Perubahan disimpan otomatis.",
+    "responseSection": "Respons",
+    "voiceSection": "Suara",
+    "behaviorSection": "Perilaku",
+    "resetChatSettings": "Reset pengaturan chat",
+    "resetChatSettingsConfirmTitle": "Reset pengaturan chat?",
+    "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak memengaruhi percakapan Anda."
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Akan kedaluwarsa dalam {days} hari - segera unduh",
     "expires": "Tersedia selama {days} hari",
     "learnMore": "Pelajari lebih lanjut",
-    "advancedOptions": "Opsi lanjutan"
+    "advancedOptions": "Opsi lanjutan",
+    "unofficialBadgeLabel": "Tidak Resmi",
+    "unofficialLanguageWarning": "Bahasa ini tidak didukung secara resmi. Kualitas terjemahan belum diverifikasi. Mohon hasilnya diperiksa oleh penutur lancar atau penutur asli sebelum dibagikan."
   },
   "terms": {
     "officialLanguages": "Versi resmi:",

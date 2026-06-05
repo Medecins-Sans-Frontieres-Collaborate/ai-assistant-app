@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Hul",
     "stopGenerationDontAskAgainButton": "Hoto welta anndude so a huli e batiindi",
     "stopGenerationDontAskAgainKeyboard": "Hoto welta anndude so a huli e dillere",
-    "generateResponseButton": "Naatnu jangirde"
+    "generateResponseButton": "Naatnu jangirde",
+    "downloadResponse": "Aawto jaɓɓorgo"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Dangay",
     "unsavedChanges": "Waylotoo waɗii suɓaaki",
     "unsavedChangesMessage": "A jabii waylotoo waɗii suɓaaki. Mbarri ɗee?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Momtu sukkil",
+    "autosaveNote": "Wayli ɗiɗɗo e mum anndaa.",
+    "responseSection": "Jaɓɓorgo",
+    "voiceSection": "Mbayka",
+    "behaviorSection": "Timmunde",
+    "resetChatSettings": "Hurmiti teelte chat",
+    "resetChatSettingsConfirmTitle": "A hurmiti teelte chat?",
+    "resetChatSettingsConfirmMessage": "Ɓeññiti teelte fow e panel goo: taama, keftinirde bayyinirɗe, Eɓɓe En, jaɓɓorgo model, daande ngol, luugal to mbayka, fileji feewi, e caggolnga. Mbele e saareeji maa fayi."
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1753,7 +1762,9 @@
     "downloading": "Ina aawtoo...",
     "expired": "Ngol firgol gasii tee alaa kadi",
     "expiresSoon": "Ena gasoo e balɗe {days} - aawto law",
-    "expires": "Ena woodi ngam balɗe {days}"
+    "expires": "Ena woodi ngam balɗe {days}",
+    "unofficialBadgeLabel": "Enndol fow",
+    "unofficialLanguageWarning": "Ɗemngal tawii ummoraama e jam. Hinaa anndidiri tammbitaako. Fawa, neɗɗo nannde walla e jam ɗemngal fow teddina e caɗeele."
   },
   "agentsTab": {
     "organizationAgents": {

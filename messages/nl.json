@@ -656,7 +656,8 @@
     "stopGenerationConfirm": "Stoppen",
     "stopGenerationDontAskAgainButton": "Niet meer vragen bij stoppen via de knop",
     "stopGenerationDontAskAgainKeyboard": "Niet meer vragen bij stoppen via het toetsenbord",
-    "generateResponseButton": "Antwoord genereren"
+    "generateResponseButton": "Antwoord genereren",
+    "downloadResponse": "Antwoord downloaden"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -970,7 +971,15 @@
     "savedConfirmation": "Opgeslagen",
     "unsavedChanges": "Niet-opgeslagen wijzigingen",
     "unsavedChangesMessage": "Je hebt niet-opgeslagen wijzigingen. Wil je deze negeren?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Veld leegmaken",
+    "autosaveNote": "Wijzigingen worden automatisch opgeslagen.",
+    "responseSection": "Antwoord",
+    "voiceSection": "Stem",
+    "behaviorSection": "Gedrag",
+    "resetChatSettings": "Chats instellingen herstellen",
+    "resetChatSettingsConfirmTitle": "Chats instellingen herstellen?",
+    "resetChatSettingsConfirmMessage": "Dit herstelt de standaardwaarden voor alles in dit paneel: temperature, aangepaste instructies, Over U, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Dit heeft geen invloed op uw gesprekken."
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Verloopt over {days} dag(en) - download snel",
     "expires": "Beschikbaar gedurende {days} dagen",
     "learnMore": "Meer informatie",
-    "advancedOptions": "Geavanceerde opties"
+    "advancedOptions": "Geavanceerde opties",
+    "unofficialBadgeLabel": "Onofficieel",
+    "unofficialLanguageWarning": "Deze taal wordt niet officieel ondersteund. De vertaalkwaliteit is niet gecontroleerd. Laat het resultaat controleren door een vloeiende of moedertaalspreker voordat u het deelt."
   },
   "terms": {
     "officialLanguages": "Officiële versie:",

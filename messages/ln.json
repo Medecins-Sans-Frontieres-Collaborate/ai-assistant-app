@@ -749,7 +749,8 @@
     "stopGenerationConfirm": "Tika",
     "stopGenerationDontAskAgainButton": "Kotuna lisusu te soki natiki na bouton",
     "stopGenerationDontAskAgainKeyboard": "Kotuna lisusu te soki natiki na clavier",
-    "generateResponseButton": "Bimisa eyano"
+    "generateResponseButton": "Bimisa eyano",
+    "downloadResponse": "Télémá eyano"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1158,7 +1159,15 @@
     "savedConfirmation": "Ebombami",
     "unsavedChanges": "Bambongwana ebombami te",
     "unsavedChangesMessage": "Ozali na bambongwana ebombami te. Olingi kolongola yango?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Kolongola esika",
+    "autosaveNote": "Mabongoli ezali kokangama na ndenge oyo etikali.",
+    "responseSection": "Eyano",
+    "voiceSection": "Mongongo",
+    "behaviorSection": "Mibeko",
+    "resetChatSettings": "Zwisa malamu ya lotomo ya lisolo",
+    "resetChatSettingsConfirmTitle": "Olingi kozongisa malamu ya lotomo ya lisolo?",
+    "resetChatSettingsConfirmMessage": "Ekosilisa matambwisi ya liboso mpo na biloko nyonso awa: temperature, mabongisi ya moko, Soki Oyo Ozali, eyano ya model, vitesse ya ebimiseli, koleka maloba na mongongo, bafichiers actives, mpe makokisami. Ikosalela na ndenge te makambo na misolo ya bino."
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1753,7 +1762,9 @@
     "downloading": "Ezali kopikola...",
     "expired": "Kobongola oyo ekosili kosala mpe ezalaka lisusu te",
     "expiresSoon": "Ekokosila na mikolo {days} - pikola nokinoki",
-    "expires": "Ekosangama mikolo {days}"
+    "expires": "Ekosangama mikolo {days}",
+    "unofficialBadgeLabel": "Ya libanda",
+    "unofficialLanguageWarning": "Lokota oyo ezali na kati ya basungi te. Koki ya kobongola elakisami te. Svp, tika ete moto ayebaka malamu lokota oyo atala liboso otindela moto mosusu."
   },
   "agentsTab": {
     "organizationAgents": {

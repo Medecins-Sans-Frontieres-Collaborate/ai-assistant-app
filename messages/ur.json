@@ -692,7 +692,8 @@
     "stopGenerationConfirm": "روکیں",
     "stopGenerationDontAskAgainButton": "بٹن سے روکنے پر دوبارہ نہ پوچھیں",
     "stopGenerationDontAskAgainKeyboard": "کی بورڈ سے روکنے پر دوبارہ نہ پوچھیں",
-    "generateResponseButton": "جواب تیار کریں"
+    "generateResponseButton": "جواب تیار کریں",
+    "downloadResponse": "جواب ڈاؤن لوڈ کریں"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -1006,7 +1007,15 @@
     "savedConfirmation": "محفوظ ہوگیا",
     "unsavedChanges": "غیر محفوظ تبدیلیاں",
     "unsavedChangesMessage": "آپ کی کچھ تبدیلیاں غیر محفوظ ہیں۔ کیا ان کو مسترد کرنا ہے؟",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "فیلڈ صاف کریں",
+    "autosaveNote": "تبدیلیاں خودکار طور پر محفوظ ہوتی ہیں۔",
+    "responseSection": "جواب",
+    "voiceSection": "آواز",
+    "behaviorSection": "رویّہ",
+    "resetChatSettings": "چیٹ سیٹنگز ری سیٹ کریں",
+    "resetChatSettingsConfirmTitle": "کیا آپ چیٹ سیٹنگز ری سیٹ کرنا چاہتے ہیں؟",
+    "resetChatSettingsConfirmMessage": "یہ اس پینل کی تمام سیٹنگز کو ڈیفالٹ پر بحال کر دے گا: درجہ حرارت، حسب منشا ہدایات، آپ کے بارے میں، ماڈل کا جواب، اسٹریمنگ کی رفتار، ٹیکسٹ ٹو اسپیچ، ایکٹو فائلز اور تصدیقات۔ یہ آپ کی گفتگوؤں پر اثر انداز نہیں ہوگا۔"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1765,7 +1774,9 @@
     "expiresSoon": "{days} دن میں مدت ختم ہو جائے گی - جلدی ڈاؤن لوڈ کریں",
     "expires": "{days} دن تک دستیاب",
     "learnMore": "مزید جانیں",
-    "advancedOptions": "جدید اختیارات"
+    "advancedOptions": "جدید اختیارات",
+    "unofficialBadgeLabel": "غیر سرکاری",
+    "unofficialLanguageWarning": "یہ زبان سرکاری طور پر سپورٹ نہیں کی جاتی۔ ترجمے کے معیار کی تصدیق نہیں ہوئی۔ براہ کرم نتیجے کو شیئر کرنے سے پہلے کسی ماہر یا مقامی بولنے والے سے چیک کروائیں۔"
   },
   "terms": {
     "officialLanguages": "سرکاری نسخہ:",

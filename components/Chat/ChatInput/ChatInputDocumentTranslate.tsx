@@ -1,15 +1,7 @@
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
 'use client';
 
 import {
+  IconAlertTriangle,
   IconChevronDown,
   IconExternalLink,
   IconFileText,
@@ -39,63 +31,16 @@ import {
 } from '@/types/documentTranslation';
 
 import Modal from '@/components/UI/Modal';
+import { Tooltip } from '@/components/UI/Tooltip';
 
 import {
   DOCUMENT_TRANSLATION_LANGUAGES,
   getLanguageDisplayName,
+  getSecondaryLanguageLabel,
+  isOfficiallySupportedDocumentTranslationLanguage,
   searchDocumentTranslationLanguages,
 } from '@/lib/constants/documentTranslationLanguages';
 import { GLOSSARY_ACCEPT_TYPES } from '@/lib/constants/fileTypes';
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
-
-/**
- * Document Translation Modal Component
- *
- * Provides UI for selecting translation options:
- * - Target language (searchable dropdown with 80+ languages)
- * - Optional source language (auto-detect if omitted)
- * - Optional glossary file upload
- * - Custom output filename
- */
 
 interface ChatInputDocumentTranslateProps {
   /** Whether the modal is open */
@@ -110,6 +55,12 @@ interface ChatInputDocumentTranslateProps {
 
 /**
  * Modal for configuring and initiating document translation.
+ *
+ * Provides UI for selecting translation options:
+ * - Target language (searchable dropdown with 80+ languages)
+ * - Optional source language (auto-detect if omitted)
+ * - Optional glossary file upload
+ * - Custom output filename
  */
 const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   isOpen,
@@ -301,18 +252,24 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   ]);
 
   // Select target language
-  const selectTargetLanguage = useCallback((code: string) => {
-    setTargetLanguage(code);
-    setTargetSearch(getLanguageDisplayName(code));
-    setShowTargetDropdown(false);
-  }, []);
+  const selectTargetLanguage = useCallback(
+    (code: string) => {
+      setTargetLanguage(code);
+      setTargetSearch(getLanguageDisplayName(code, locale));
+      setShowTargetDropdown(false);
+    },
+    [locale],
+  );
 
   // Select source language
-  const selectSourceLanguage = useCallback((code: string) => {
-    setSourceLanguage(code);
-    setSourceSearch(getLanguageDisplayName(code));
-    setShowSourceDropdown(false);
-  }, []);
+  const selectSourceLanguage = useCallback(
+    (code: string) => {
+      setSourceLanguage(code);
+      setSourceSearch(getLanguageDisplayName(code, locale));
+      setShowSourceDropdown(false);
+    },
+    [locale],
+  );
 
   // Clear source language
   const clearSourceLanguage = useCallback(() => {
@@ -341,9 +298,25 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       <div className="relative">
         <label
           htmlFor="target-language"
-          className="block text-sm font-semibold mb-2 text-gray-900 dark:text-white"
+          className="flex items-center gap-2 text-sm font-semibold mb-2 text-gray-900 dark:text-white"
         >
-          {t('documentTranslation.targetLanguage')} *
+          <span>{t('documentTranslation.targetLanguage')} *</span>
+          {targetLanguage &&
+            !isOfficiallySupportedDocumentTranslationLanguage(
+              targetLanguage,
+            ) && (
+              <Tooltip
+                content={t('documentTranslation.unofficialLanguageWarning')}
+                position="right"
+                multiline
+              >
+                <IconAlertTriangle
+                  size={16}
+                  className="text-amber-500 dark:text-amber-400"
+                  aria-label={t('documentTranslation.unofficialBadgeLabel')}
+                />
+              </Tooltip>
+            )}
         </label>
         <div className="relative">
           <input
@@ -375,27 +348,39 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                 {t('documentTranslation.noLanguagesFound')}
               </div>
             ) : (
-              filteredTargetLanguages.map((lang) => (
-                <button
-                  key={lang.code}
-                  type="button"
-                  onClick={() => selectTargetLanguage(lang.code)}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                    targetLanguage === lang.code
-                      ? 'bg-blue-50 dark:bg-blue-900/20'
-                      : ''
-                  }`}
-                >
-                  <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    {lang.nativeName}
-                  </span>
-                  {lang.nativeName !== lang.englishName && (
-                    <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
-                      ({lang.englishName})
+              filteredTargetLanguages.map((lang) => {
+                const secondaryLabel = getSecondaryLanguageLabel(lang, locale);
+                return (
+                  <button
+                    key={lang.code}
+                    type="button"
+                    onClick={() => selectTargetLanguage(lang.code)}
+                    className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                      targetLanguage === lang.code
+                        ? 'bg-blue-50 dark:bg-blue-900/20'
+                        : ''
+                    }`}
+                  >
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {lang.nativeName}
                     </span>
-                  )}
-                </button>
-              ))
+                    {secondaryLabel && (
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        ({secondaryLabel})
+                      </span>
+                    )}
+                    {!lang.officiallySupported && (
+                      <IconAlertTriangle
+                        size={14}
+                        className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                        aria-label={t(
+                          'documentTranslation.unofficialBadgeLabel',
+                        )}
+                      />
+                    )}
+                  </button>
+                );
+              })
             )}
           </div>
         )}
@@ -421,12 +406,34 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
             <div className="relative">
               <label
                 htmlFor="source-language"
-                className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+                className="flex items-center gap-2 text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
               >
-                {t('documentTranslation.sourceLanguage')}
-                <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
-                  ({t('documentTranslation.autoDetect')})
+                <span>
+                  {t('documentTranslation.sourceLanguage')}
+                  <span className="ml-2 text-xs font-normal text-gray-500 dark:text-gray-400">
+                    ({t('documentTranslation.autoDetect')})
+                  </span>
                 </span>
+                {sourceLanguage &&
+                  !isOfficiallySupportedDocumentTranslationLanguage(
+                    sourceLanguage,
+                  ) && (
+                    <Tooltip
+                      content={t(
+                        'documentTranslation.unofficialLanguageWarning',
+                      )}
+                      position="right"
+                      multiline
+                    >
+                      <IconAlertTriangle
+                        size={16}
+                        className="text-amber-500 dark:text-amber-400"
+                        aria-label={t(
+                          'documentTranslation.unofficialBadgeLabel',
+                        )}
+                      />
+                    </Tooltip>
+                  )}
               </label>
               <div className="relative">
                 <input
@@ -467,27 +474,42 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
                       {t('documentTranslation.noLanguagesFound')}
                     </div>
                   ) : (
-                    filteredSourceLanguages.map((lang) => (
-                      <button
-                        key={lang.code}
-                        type="button"
-                        onClick={() => selectSourceLanguage(lang.code)}
-                        className={`w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                          sourceLanguage === lang.code
-                            ? 'bg-blue-50 dark:bg-blue-900/20'
-                            : ''
-                        }`}
-                      >
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
-                          {lang.nativeName}
-                        </span>
-                        {lang.nativeName !== lang.englishName && (
-                          <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
-                            ({lang.englishName})
+                    filteredSourceLanguages.map((lang) => {
+                      const secondaryLabel = getSecondaryLanguageLabel(
+                        lang,
+                        locale,
+                      );
+                      return (
+                        <button
+                          key={lang.code}
+                          type="button"
+                          onClick={() => selectSourceLanguage(lang.code)}
+                          className={`w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                            sourceLanguage === lang.code
+                              ? 'bg-blue-50 dark:bg-blue-900/20'
+                              : ''
+                          }`}
+                        >
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">
+                            {lang.nativeName}
                           </span>
-                        )}
-                      </button>
-                    ))
+                          {secondaryLabel && (
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                              ({secondaryLabel})
+                            </span>
+                          )}
+                          {!lang.officiallySupported && (
+                            <IconAlertTriangle
+                              size={14}
+                              className="ml-auto text-amber-500 dark:text-amber-400 flex-shrink-0"
+                              aria-label={t(
+                                'documentTranslation.unofficialBadgeLabel',
+                              )}
+                            />
+                          )}
+                        </button>
+                      );
+                    })
                   )}
                 </div>
               )}

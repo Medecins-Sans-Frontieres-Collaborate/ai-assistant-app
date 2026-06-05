@@ -612,7 +612,8 @@
     "stopGenerationConfirm": "Interrompi",
     "stopGenerationDontAskAgainButton": "Non chiedere più quando si interrompe con il pulsante",
     "stopGenerationDontAskAgainKeyboard": "Non chiedere più quando si interrompe con la tastiera",
-    "generateResponseButton": "Genera risposta"
+    "generateResponseButton": "Genera risposta",
+    "downloadResponse": "Scarica risposta"
   },
   "sidebar": {
     "collapseSidebar": "Comprimi barra laterale",
@@ -980,7 +981,15 @@
     "savedConfirmation": "Salvato",
     "unsavedChanges": "Modifiche non salvate",
     "unsavedChangesMessage": "Hai modifiche non salvate. Vuoi scartarle?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "Cancella campo",
+    "autosaveNote": "Le modifiche vengono salvate automaticamente.",
+    "responseSection": "Risposta",
+    "voiceSection": "Voce",
+    "behaviorSection": "Comportamento",
+    "resetChatSettings": "Reimposta impostazioni chat",
+    "resetChatSettingsConfirmTitle": "Reimpostare le impostazioni della chat?",
+    "resetChatSettingsConfirmMessage": "Questa operazione ripristina i valori predefiniti per tutto in questo pannello: temperatura, istruzioni personalizzate, Informazioni su di te, risposta del modello, velocità di streaming, sintesi vocale, file attivi e conferme. Non influisce sulle conversazioni."
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "Scade tra {days} giorno/i - scarica presto",
     "expires": "Disponibile per {days} giorni",
     "learnMore": "Scopri di più",
-    "advancedOptions": "Opzioni avanzate"
+    "advancedOptions": "Opzioni avanzate",
+    "unofficialBadgeLabel": "Non ufficiale",
+    "unofficialLanguageWarning": "Questa lingua non è ufficialmente supportata. La qualità della traduzione non è stata verificata. Si prega di far revisionare il risultato da una persona fluente o madrelingua prima di condividerlo."
   },
   "terms": {
     "officialLanguages": "Versione ufficiale:",

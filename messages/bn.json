@@ -637,7 +637,8 @@
     "stopGenerationConfirm": "বন্ধ করুন",
     "stopGenerationDontAskAgainButton": "বাটন ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
     "stopGenerationDontAskAgainKeyboard": "কীবোর্ড ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
-    "generateResponseButton": "উত্তর দিন"
+    "generateResponseButton": "উত্তর দিন",
+    "downloadResponse": "উত্তর ডাউনলোড করুন"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
@@ -1005,7 +1006,15 @@
     "savedConfirmation": "সংরক্ষিত",
     "unsavedChanges": "সংরক্ষণ না করা পরিবর্তনসমূহ",
     "unsavedChangesMessage": "আপনার কিছু পরিবর্তন সংরক্ষণ করা হয়নি। বাতিল করতে চান?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "ক্ষেত্র পরিষ্কার করুন",
+    "autosaveNote": "পরিবর্তনগুলো স্বয়ংক্রিয়ভাবে সংরক্ষিত হয়।",
+    "responseSection": "উত্তর",
+    "voiceSection": "ভয়েস",
+    "behaviorSection": "আচরণ",
+    "resetChatSettings": "চ্যাট সেটিংস রিসেট করুন",
+    "resetChatSettingsConfirmTitle": "চ্যাট সেটিংস রিসেট করবেন?",
+    "resetChatSettingsConfirmMessage": "এটি এই প্যানেলের সকল সেটিংস ডিফল্টে ফেরত নিয়ে যাবে: টেম্পারেচার, কাস্টম নির্দেশনা, আপনার পরিচিতি, মডেল উত্তর, স্ট্রিমিং স্পিড, টেক্সট-টু-স্পিচ, সক্রিয় ফাইল এবং নিশ্চিতকরণ। আপনার কথোপকথনগুলো এতে প্রভাবিত হবে না।"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "{days} দিন পর মেয়াদ শেষ হবে - দ্রুত ডাউনলোড করুন",
     "expires": "{days} দিন পর্যন্ত উপলব্ধ",
     "learnMore": "আরও জানুন",
-    "advancedOptions": "উন্নত অপশন"
+    "advancedOptions": "উন্নত অপশন",
+    "unofficialBadgeLabel": "অফিসিয়াল নয়",
+    "unofficialLanguageWarning": "এই ভাষাটি আনুষ্ঠানিকভাবে সমর্থিত নয়। অনুবাদের মান যাচাই করা হয়নি। অনুগ্রহ করে ফলাফল শেয়ার করার পূর্বে একজন দক্ষ বা স্থানীয় বক্তার দ্বারা এটি পর্যালোচনা করান।"
   },
   "terms": {
     "officialLanguages": "সরকারি সংস্করণ:",

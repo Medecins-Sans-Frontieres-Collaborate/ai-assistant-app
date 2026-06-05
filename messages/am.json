@@ -634,7 +634,8 @@
     "stopGenerationConfirm": "አቁም",
     "stopGenerationDontAskAgainButton": "በቁልፍ ሲቆም ዳግም አትጠይቅ",
     "stopGenerationDontAskAgainKeyboard": "በዴስክቶፕ ሲቆም ዳግም አትጠይቅ",
-    "generateResponseButton": "ምላሽ ፍጠር"
+    "generateResponseButton": "ምላሽ ፍጠር",
+    "downloadResponse": "ምላሹን ያውርዱ"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
@@ -948,7 +949,15 @@
     "savedConfirmation": "ተቀመጠ",
     "unsavedChanges": "ያልተቀመጡ ለውጦች",
     "unsavedChangesMessage": "ያልተቀመጡ ለውጦች አሉዎት። ልትተዉአቸው?",
-    "characterCount": "{current}/{max}"
+    "characterCount": "{current}/{max}",
+    "clearField": "መስኩን ማጽጃ",
+    "autosaveNote": "ለውጦቹ በራስ-ሰር ይቀመጣሉ።",
+    "responseSection": "ምላሽ",
+    "voiceSection": "ድምጽ",
+    "behaviorSection": "አኗኗር",
+    "resetChatSettings": "የቻት ቅንብሮችን ወደ መደበኛ አውጣ",
+    "resetChatSettingsConfirmTitle": "የቻት ቅንብሮችን ወደ መደበኛ መመለስ?",
+    "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ያሉትን ሁሉ ወደ መደበኛ ነባር ይመልሳል፡ ሙቀት, ባለብዙ አመለካከቶች፣ ስለ እርስዎ፣ የሞዴል ምላሽ፣ የመስተንግዶ ፍጥነት፣ ከጽሑፍ ወደ ድምፅ፣ አንደኛ የሆኑ ፋይሎች፣ እና ማረጋገጫዎች። ውይይቶቻችሁን ግን አያስተካክልም።"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1763,7 +1772,9 @@
     "expiresSoon": "በ{days} ቀን(ች) ውስጥ ይያዛል - አሁን በፍጥነት ያውርዱ",
     "expires": "ለ{days} ቀናት ይገኛል",
     "learnMore": "ተጨማሪ ያስሱ",
-    "advancedOptions": "የቀላል አማራጮች"
+    "advancedOptions": "የቀላል አማራጮች",
+    "unofficialBadgeLabel": "ያልተፈቀደ",
+    "unofficialLanguageWarning": "ይህ ቋንቋ በመደበኛ ሁኔታ አልተደገፈም። የትርጉም ጥራት አልተረጋገጠም። ውጤቱን ከመካፈልዎ በፊት በቋንቋው በተለመዱ ወይም በተፈጥሯ ተናጋሪ ይግለጹት።"
   },
   "terms": {
     "officialLanguages": "አካባቢ ትክክለኛ ቅጽ:",
