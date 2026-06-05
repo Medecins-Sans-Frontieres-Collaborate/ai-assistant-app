@@ -172,6 +172,9 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     if (approvalState !== 'idle') return;
     if (!approvalId || !selectedConversation) return;
     if (failedApprovals.has(approvalId)) return;
+    // Wait for the original stream to settle — submitApproval starts its
+    // own stream and would clobber the live one.
+    if (isStreaming) return;
     void submitApproval(
       approvalId,
       true,
@@ -187,6 +190,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     submitApproval,
     messageIndex,
     failedApprovals,
+    isStreaming,
   ]);
 
   // Keyboard shortcuts: Cmd/Ctrl-Enter approves, Esc denies. Listener

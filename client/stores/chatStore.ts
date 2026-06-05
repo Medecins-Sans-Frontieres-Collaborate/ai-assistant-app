@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
   createMessageGroup,
@@ -119,6 +120,10 @@ interface ChatStore {
   pendingOAuthResume: Record<string, { at: number }>;
 
   setPendingOAuthResume: (info: { serverLabel: string | null } | null) => void;
+  clearPendingOAuthResumeFor: (serverLabel: string | null) => void;
+  /** Drops the failed-approval guard set. Called on conversation switch so
+   *  prior failures don't persistently block auto-approve on the same id. */
+  clearFailedApprovals: () => void;
 
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
@@ -206,6 +211,9 @@ interface ChatStore {
     activeFilesDropped?: string[];
     /** MCP tool calls observed in the stream, for the post-stream summary. */
     toolCalls?: import('@/types/chat').ToolCallRecord[];
+    /** Consent prompts emitted in the stream — persisted onto the assistant
+     *  message so a card-only turn still renders after finalization. */
+    consentRequests?: import('@/types/chat').ConsentRequest[];
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -318,13 +326,30 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   setPendingOAuthResume: (info) =>
     set((state) => {
       if (info === null) return { pendingOAuthResume: {} };
-      const key = info.serverLabel ?? '';
+      // Sentinel for the null-serverLabel case so two unrelated flows
+      // without a label can't collide on the empty-string key.
+      const key = info.serverLabel ?? '__no_label__';
       return {
         pendingOAuthResume: {
           ...state.pendingOAuthResume,
           [key]: { at: Date.now() },
         },
       };
+    }),
+
+  clearPendingOAuthResumeFor: (serverLabel) =>
+    set((state) => {
+      const key = serverLabel ?? '__no_label__';
+      if (!state.pendingOAuthResume[key]) return state;
+      const next = { ...state.pendingOAuthResume };
+      delete next[key];
+      return { pendingOAuthResume: next };
+    }),
+
+  clearFailedApprovals: () =>
+    set((state) => {
+      if (state.failedApprovals.size === 0) return state;
+      return { failedApprovals: new Set() };
     }),
 
   // Actions
@@ -456,12 +481,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         activeFilesTokensConsumed,
         activeFilesDropped,
         toolCalls,
+        consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
       if (toolCalls && toolCalls.length > 0) {
         assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
       }
 
       // Surface files that were excluded from this turn's context so the
@@ -649,10 +678,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
-    // Flatten messages for API call and apply sliding window to stay within limits
-    const messagesForAPI = windowMessagesForAPI(
-      flattenEntriesForAPI(conversation.messages),
-    );
+    // Approval-resume: the server only uses the approval items; skip the
+    // (otherwise unused) message windowing pass and send just the trailing
+    // entry to satisfy non-empty-array validators downstream.
+    const messagesForAPI = approvalResponses?.length
+      ? flattenEntriesForAPI(conversation.messages).slice(-1)
+      : windowMessagesForAPI(flattenEntriesForAPI(conversation.messages));
 
     // Get the toneId from the latest user message and look up the full tone object
     const latestUserMessage = messagesForAPI
@@ -736,6 +767,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
     toolCalls?: import('@/types/chat').ToolCallRecord[];
+    consentRequests?: import('@/types/chat').ConsentRequest[];
   }> => {
     const reader = stream.getReader();
 
@@ -792,8 +824,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         });
       }
 
-      // Server-side auto-resolutions (alwaysApprove* matches) arrive as
-      // CONSENT_OUTCOME markers without a user click — promote them here.
+      // Server-emitted outcomes (today: auto-denies on a new turn). Write
+      // to the in-memory map and to the source message so reload doesn't
+      // re-prompt.
       if (result.newOutcomes.length > 0) {
         set((state) => {
           const next = new Map(state.submittedApprovals);
@@ -802,6 +835,31 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           }
           return { submittedApprovals: next };
         });
+
+        const conversationId = get().streamingConversationId;
+        if (conversationId) {
+          const conversationStore = useConversationStore.getState();
+          const conv = conversationStore.conversations.find(
+            (c) => c.id === conversationId,
+          );
+          if (conv) {
+            for (const o of result.newOutcomes) {
+              const idx = findMessageIndexForApprovalId(
+                conv,
+                o.approval_request_id,
+              );
+              if (idx !== null) {
+                conversationStore.recordApprovalOutcome(
+                  conversationId,
+                  idx,
+                  o.approval_request_id,
+                  o.approve,
+                  o.approve ? 'auto-approved' : 'auto-denied',
+                );
+              }
+            }
+          }
+        }
       }
 
       // Separate slices so consent + tool-call subtrees don't re-render
@@ -867,6 +925,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
       activeFilesDropped: streamParser.getActiveFilesDropped?.(),
       toolCalls: streamParser.getToolCallRecords?.(),
+      consentRequests: streamParser.getConsentRequests?.(),
     };
   },
 
@@ -977,6 +1036,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   clearStreamingState: () => {
+    // `pendingOAuthResume` outlives this — the next OAuthConsentCard reads
+    // it to render "sign-in incomplete" framing, then clears its own entry.
     set({
       isStreaming: false,
       streamingContent: '',
@@ -987,7 +1048,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingToolCalls: [],
       abortController: null,
       stopRequested: false,
-      pendingOAuthResume: {},
     });
   },
 
@@ -1148,12 +1208,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         activeFilesTokensConsumed,
         activeFilesDropped,
         toolCalls,
+        consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
       if (toolCalls && toolCalls.length > 0) {
         assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
       }
 
       // Surface dropped files (see send path for context).
@@ -1386,12 +1450,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       ]);
 
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions, toolCalls } =
-        await get().processStream(stream, streamParser, showLoadingTimeout);
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        toolCalls,
+        consentRequests,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       const assistantMessage = streamParser.toMessage(finalContent);
       if (toolCalls && toolCalls.length > 0) {
         assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
       }
 
       await get().finalizeMessage(
@@ -1401,15 +1473,24 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
       );
 
-      // Promote from "submitting" to "submitted" with the resolved decision.
+      // Promote submitting → submitted. A successful retry also clears
+      // any prior `failedApprovals` entry so auto-approve unblocks.
       set((state) => {
         const submitted = new Map(state.submittedApprovals);
         submitted.set(approvalRequestId, approve);
         const submitting = new Set(state.submittingApprovals);
         submitting.delete(approvalRequestId);
+        const failed = state.failedApprovals.has(approvalRequestId)
+          ? (() => {
+              const f = new Set(state.failedApprovals);
+              f.delete(approvalRequestId);
+              return f;
+            })()
+          : state.failedApprovals;
         return {
           submittedApprovals: submitted,
           submittingApprovals: submitting,
+          failedApprovals: failed,
         };
       });
 

@@ -344,9 +344,11 @@ export class AIFoundryAgentHandler {
           const stream = new ReadableStream({
             async start(controller) {
               const encoder = createStreamEncoder();
+              let sawMeaningfulOutput = false;
 
               // Flip matching consent cards out of "pending" before the
-              // new content streams in.
+              // new content streams. Counts as meaningful output so an
+              // otherwise-empty retried stream doesn't trip the empty check.
               if (autoDeniedApprovalIds.length > 0) {
                 controller.enqueue(
                   encoder.encode(
@@ -363,6 +365,7 @@ export class AIFoundryAgentHandler {
                     ),
                   );
                 }
+                sawMeaningfulOutput = true;
               }
               let citations: Array<{
                 number: number;
@@ -379,7 +382,6 @@ export class AIFoundryAgentHandler {
               // that arrive split.
               let markerBuffer = '';
               let controllerClosed = false;
-              let sawMeaningfulOutput = false;
               // Dedupe output items — Foundry fires both `.added` and
               // `.done` for the same item.
               const emittedItemIds = new Set<string>();

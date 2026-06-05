@@ -284,11 +284,21 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       const finalThinking =
         message?.thinking || metadataThinking || inlineThinking || '';
 
-      // During streaming, cards come from streamParser via chatStore —
-      // here we just strip the marker text. On reload, parse from
-      // persisted content (the fallback path for legacy/persisted data).
+      // During streaming, cards come from streamParser via chatStore — just
+      // strip the marker text here. After streaming, prefer the persisted
+      // `message.consentRequests` (new flow); fall back to regex extraction
+      // for legacy messages saved before that field existed.
       let parsedConsents: ConsentRequest[] = [];
       if (messageIsStreaming) {
+        mainContent = mainContent.replace(
+          /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g,
+          '',
+        );
+      } else if (
+        message?.consentRequests &&
+        message.consentRequests.length > 0
+      ) {
+        parsedConsents = message.consentRequests as ConsentRequest[];
         mainContent = mainContent.replace(
           /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g,
           '',
@@ -663,13 +673,13 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               )}
             </div>
 
-            {/* Consent / approval cards — during streaming, read the live
-                list off chatStore (already extracted by streamParser);
-                after stream completion, fall back to the regex-extracted
-                values from the persisted message content. */}
-            {(messageIsStreaming
-              ? (streamingConsentRequests as ConsentRequest[])
-              : consentRequests
+            {/* Prefer persisted; fall back to live stream; legacy regex
+                extraction is the last resort. */}
+            {(message?.consentRequests && message.consentRequests.length > 0
+              ? (message.consentRequests as ConsentRequest[])
+              : messageIsStreaming
+                ? (streamingConsentRequests as ConsentRequest[])
+                : consentRequests
             ).map((req, i) => {
               const persistedOutcome =
                 req.kind === 'approval' && req.approval_request_id
@@ -694,12 +704,14 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               );
             })}
 
-            {/* Tool usage summary — collapsed retrospective view of MCP
-                tool calls. Live during streaming, persisted after. */}
+            {/* MCP tool usage summary — prefer persisted, live if mid-stream. */}
             {(() => {
-              const liveCalls = messageIsStreaming
-                ? streamingToolCalls
-                : message?.toolCalls;
+              const liveCalls =
+                message?.toolCalls && message.toolCalls.length > 0
+                  ? message.toolCalls
+                  : messageIsStreaming
+                    ? streamingToolCalls
+                    : message?.toolCalls;
               if (!liveCalls || liveCalls.length === 0) return null;
               return (
                 <ToolCallSummary

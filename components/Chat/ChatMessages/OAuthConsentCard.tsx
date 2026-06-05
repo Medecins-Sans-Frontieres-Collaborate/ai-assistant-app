@@ -6,7 +6,7 @@ import {
   IconKey,
   IconLoader2,
 } from '@tabler/icons-react';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -35,16 +35,28 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({
   const sendMessage = useChatStore((s) => s.sendMessage);
   const isStreaming = useChatStore((s) => s.isStreaming);
   const pendingForThisServer = useChatStore(
-    (s) => !!s.pendingOAuthResume[serverLabel ?? ''],
+    (s) => !!s.pendingOAuthResume[serverLabel ?? '__no_label__'],
   );
   const setPendingOAuthResume = useChatStore((s) => s.setPendingOAuthResume);
+  const clearPendingOAuthResumeFor = useChatStore(
+    (s) => s.clearPendingOAuthResumeFor,
+  );
   const selectedConversation = useConversationStore((s) =>
     s.selectedConversationId
       ? (s.conversations.find((c) => c.id === s.selectedConversationId) ?? null)
       : null,
   );
+  const updateConversation = useConversationStore((s) => s.updateConversation);
 
   const [incompleteSignIn] = useState(() => pendingForThisServer);
+
+  // Capture the pending-resume flag once, then drop it so a later card
+  // for this server doesn't read a stale signal.
+  useEffect(() => {
+    if (incompleteSignIn) {
+      clearPendingOAuthResumeFor(serverLabel);
+    }
+  }, [incompleteSignIn, serverLabel, clearPendingOAuthResumeFor]);
 
   const [oauthClicked, setOauthClicked] = useState(false);
   const [phase, setPhase] = useState<'idle' | 'settling'>('idle');
@@ -72,8 +84,19 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({
     setPendingOAuthResume({ serverLabel });
     setPhase('settling');
 
+    // Append the triggering user message as a new turn before sending —
+    // otherwise the backend extracts the trailing assistant content and
+    // posts it back as the new user message.
+    const resumedConversation = {
+      ...selectedConversation,
+      messages: [...selectedConversation.messages, triggeringUser],
+    };
+    updateConversation(selectedConversation.id, {
+      messages: resumedConversation.messages,
+    });
+
     window.setTimeout(() => {
-      void sendMessage(triggeringUser!, selectedConversation).finally(() => {
+      void sendMessage(triggeringUser!, resumedConversation).finally(() => {
         setPhase('idle');
       });
     }, OAUTH_SETTLE_MS);

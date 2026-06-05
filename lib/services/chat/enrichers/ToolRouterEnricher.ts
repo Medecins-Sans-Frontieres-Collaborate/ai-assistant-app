@@ -31,6 +31,10 @@ import { getOrganizationAgentById } from '@/lib/organizationAgents';
 export class ToolRouterEnricher extends BasePipelineStage {
   readonly name = 'ToolRouterEnricher';
 
+  // Just under the 180s stage budget so a slow search degrades via the catch
+  // below instead of being killed silently by the stage timeout.
+  private static readonly SEARCH_TIMEOUT_MS = 175000;
+
   private toolRouterService: ToolRouterService;
   private webSearchTool: WebSearchTool;
 
@@ -180,10 +184,22 @@ export class ToolRouterEnricher extends BasePipelineStage {
         // a Foundry agent and can take several seconds.
         await context.emitActivity?.('chat.activity.searchingWeb');
 
-        const searchResult = await this.webSearchTool.execute({
-          searchQuery: toolResponse.searchQuery || currentMessage,
-          model: searchModel,
-          user: context.user,
+        let searchTimer: ReturnType<typeof setTimeout> | undefined;
+        const searchResult = await Promise.race([
+          this.webSearchTool.execute({
+            searchQuery: toolResponse.searchQuery || currentMessage,
+            model: searchModel,
+            user: context.user,
+          }),
+          new Promise<never>((_, reject) => {
+            searchTimer = setTimeout(() => {
+              const err = new Error('Web search timed out');
+              (err as { isSearchTimeout?: boolean }).isSearchTimeout = true;
+              reject(err);
+            }, ToolRouterEnricher.SEARCH_TIMEOUT_MS);
+          }),
+        ]).finally(() => {
+          if (searchTimer) clearTimeout(searchTimer);
         });
 
         console.log(
@@ -294,9 +310,28 @@ export class ToolRouterEnricher extends BasePipelineStage {
           },
         };
       } catch (error) {
-        console.error('[ToolRouterEnricher] Web search failed:', error);
-        // Continue without search results on error
-        return context;
+        const timedOut =
+          (error as { isSearchTimeout?: boolean })?.isSearchTimeout === true;
+        console.error(
+          `[ToolRouterEnricher] Web search ${timedOut ? 'timed out' : 'failed'}:`,
+          error,
+        );
+        // Still answer, but tell the model the search didn't return.
+        const failureNotice =
+          `Note: a web search was attempted to answer this but it ${timedOut ? 'timed out' : 'failed'}, so no live results are available. ` +
+          `Answer from your own knowledge and clearly tell the user you could not retrieve up-to-date web results, ` +
+          `so anything time-sensitive may be out of date.`;
+
+        const lastMsg = baseMessages[baseMessages.length - 1];
+        const enrichedLastMessage = this.prependContextToMessage(
+          lastMsg,
+          failureNotice,
+        );
+
+        return {
+          ...context,
+          enrichedMessages: [...baseMessages.slice(0, -1), enrichedLastMessage],
+        };
       }
     }
 
@@ -366,14 +401,14 @@ export class ToolRouterEnricher extends BasePipelineStage {
 
   /**
    * Gets a model with agentId for search (fallback if context model doesn't have one).
-   * Uses GPT-4.1 as the default search agent.
+   * Uses GPT-5.2 (agent name 'gpt-52') as the default search agent.
    */
   private getAgentModelForSearch(): any {
-    const defaultSearchModel = OpenAIModels[OpenAIModelID.GPT_4_1];
+    const defaultSearchModel = OpenAIModels[OpenAIModelID.GPT_5_2];
 
     if (!defaultSearchModel || !defaultSearchModel.agentId) {
       console.warn(
-        '[ToolRouterEnricher] Default search agent (GPT-4.1) not available or missing agentId',
+        '[ToolRouterEnricher] Default search agent (GPT-5.2) not available or missing agentId',
       );
       return null;
     }

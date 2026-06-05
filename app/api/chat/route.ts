@@ -105,13 +105,13 @@ export async function POST(req: NextRequest): Promise<Response> {
       const activityEncoder = new TextEncoder();
       let pipedThrough = false;
       const emitActivity = async (key: string): Promise<void> => {
-        try {
-          await streamWriter.write(
-            activityEncoder.encode(emitAgentActivity(key)),
-          );
-        } catch {
-          // Writer may have been closed by an error path.
-        }
+        // Don't await: the readable side isn't drained until after
+        // pipeline.execute(), so awaiting would block on backpressure.
+        void streamWriter
+          .write(activityEncoder.encode(emitAgentActivity(key)))
+          .catch(() => {
+            // Writer may have been closed by an error path.
+          });
       };
 
       try {

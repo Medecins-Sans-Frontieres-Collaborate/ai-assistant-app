@@ -106,6 +106,12 @@ export interface Message {
    * assistant text.
    */
   toolCalls?: ToolCallRecord[];
+  /**
+   * Persisted consent / OAuth prompts emitted during this message. Saved so
+   * a turn that contained only a consent card (no assistant text) still
+   * renders its card after the stream finalizes and on conversation reload.
+   */
+  consentRequests?: ConsentRequest[];
 }
 
 /**
@@ -123,6 +129,19 @@ export interface ToolCallRecord {
   error: string | null;
   duration_ms?: number;
   approval_request_id?: string | null;
+}
+
+/**
+ * Persisted shape of a consent / approval prompt. Flat (not discriminated)
+ * so the existing ConsentCard prop shape can satisfy it directly.
+ */
+export interface ConsentRequest {
+  kind: 'oauth' | 'approval';
+  consent_url?: string;
+  approval_request_id?: string;
+  server_label?: string | null;
+  tool_name?: string | null;
+  tool_arguments?: string | null;
 }
 
 export type Role = 'system' | 'assistant' | 'user';
@@ -154,6 +173,8 @@ export interface AssistantMessageVersion {
   approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
   /** Tool calls that ran while generating this version. */
   toolCalls?: ToolCallRecord[];
+  /** Consent / OAuth prompts emitted while generating this version. */
+  consentRequests?: ConsentRequest[];
 }
 
 /**

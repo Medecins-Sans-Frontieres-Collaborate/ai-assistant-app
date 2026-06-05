@@ -12,6 +12,8 @@ import { Citation } from '@/types/rag';
 
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
+import { useChatStore } from '@/client/stores/chatStore';
+
 /**
  * AnimatedLoadingText - Fades in/out when text changes
  */
@@ -106,6 +108,24 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
     (isStreaming && streamingConversationId === selectedConversationId) ||
     isDraining;
 
+  // Side-channel state — when a turn emits only a consent card or tool
+  // record (no text), smoothedContent is empty but we still need to mount
+  // the assistant message for the card to render.
+  const streamingConsentCount = useChatStore(
+    (s) => s.streamingConsentRequests.length,
+  );
+  const streamingToolCallCount = useChatStore(
+    (s) => s.streamingToolCalls.length,
+  );
+  const hasStreamingSideChannel =
+    streamingConsentCount > 0 || streamingToolCallCount > 0;
+
+  // During regenerate the new version replaces an existing index; otherwise
+  // it appends, so the live card targets messages.length.
+  const regeneratingIndex = useChatStore((s) => s.regeneratingIndex);
+  const streamingMessageIndex =
+    regeneratingIndex !== null ? regeneratingIndex : messages.length;
+
   // During drain, hide the last message to avoid duplicate content
   // (the finalized message is already in the list, but we're still animating it)
   const displayMessages = isDraining ? messages.slice(0, -1) : messages;
@@ -195,7 +215,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
       {/* Streaming message or loading indicator */}
       {showStreamingDiv && (
         <>
-          {smoothedContent ? (
+          {smoothedContent.trim() || hasStreamingSideChannel ? (
             <MemoizedChatMessage
               message={{
                 role: 'assistant',
@@ -203,7 +223,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
                 messageType: MessageType.TEXT,
                 citations,
               }}
-              messageIndex={messages.length}
+              messageIndex={streamingMessageIndex}
               onEdit={() => {}}
               onQuestionClick={onSelectPrompt}
             />

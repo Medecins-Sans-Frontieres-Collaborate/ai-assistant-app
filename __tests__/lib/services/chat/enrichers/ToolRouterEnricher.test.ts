@@ -352,7 +352,7 @@ describe('ToolRouter Enricher', () => {
     });
 
     describe('error handling', () => {
-      it('should continue without search if web search fails', async () => {
+      it('should degrade with a notice when web search fails', async () => {
         mockToolRouterService.determineTool.mockResolvedValue({
           tools: ['web_search'],
           searchQuery: 'test',
@@ -371,9 +371,48 @@ describe('ToolRouter Enricher', () => {
 
         const result = await enricher.execute(context);
 
-        // Should return context unchanged (without enrichedMessages)
-        expect(result).toEqual(context);
-        expect(result.enrichedMessages).toBeUndefined();
+        // The turn still proceeds (no errors), but the model is told the
+        // search failed via a notice merged into the last message.
+        expect(result.errors ?? []).toHaveLength(0);
+        expect(result.enrichedMessages).toBeDefined();
+        const lastMessage =
+          result.enrichedMessages![result.enrichedMessages!.length - 1];
+        const lastText =
+          typeof lastMessage.content === 'string'
+            ? lastMessage.content
+            : JSON.stringify(lastMessage.content);
+        expect(lastText).toContain('web search was attempted');
+        expect(lastText).toContain('Test query');
+      });
+
+      it('should say timed out when web search times out', async () => {
+        mockToolRouterService.determineTool.mockResolvedValue({
+          tools: ['web_search'],
+          searchQuery: 'test',
+          reasoning: 'Test',
+        });
+
+        const timeoutError = Object.assign(new Error('Web search timed out'), {
+          isSearchTimeout: true,
+        });
+        (enricher as any).webSearchTool.execute.mockRejectedValue(timeoutError);
+
+        const context = createTestChatContext({
+          searchMode: SearchMode.INTELLIGENT,
+          messages: [createTestMessage({ content: 'Test query' })],
+          model: { agentId: 'test-agent' },
+        });
+
+        const result = await enricher.execute(context);
+
+        expect(result.enrichedMessages).toBeDefined();
+        const lastMessage =
+          result.enrichedMessages![result.enrichedMessages!.length - 1];
+        const lastText =
+          typeof lastMessage.content === 'string'
+            ? lastMessage.content
+            : JSON.stringify(lastMessage.content);
+        expect(lastText).toContain('timed out');
       });
 
       it('should handle tool router errors gracefully', async () => {
