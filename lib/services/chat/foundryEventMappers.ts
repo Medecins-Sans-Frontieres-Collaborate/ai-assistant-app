@@ -1,10 +1,15 @@
-import { emitAgentActivity, emitConsentRequest } from '@/lib/streamMarkers';
+import {
+  ToolCallRecordPayload,
+  emitAgentActivity,
+  emitConsentRequest,
+  emitToolCallRecord,
+} from '@/lib/streamMarkers';
 
 /**
  * Pure mappers from Foundry Responses-API stream events to our internal
- * AGENT_ACTIVITY / CONSENT_REQUEST sentinel markers. Extracted from
- * AIFoundryAgentHandler so the event → marker logic can be unit-tested
- * without spinning up the full handler + Azure SDK.
+ * AGENT_ACTIVITY / CONSENT_REQUEST / TOOL_CALL_RECORD sentinel markers.
+ * Extracted from AIFoundryAgentHandler so the event → marker logic can be
+ * unit-tested without spinning up the full handler + Azure SDK.
  *
  * Event shapes are documented at
  *   https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication
@@ -86,14 +91,81 @@ export function outputItemToMarker(
   }
 
   if (item.type === 'mcp_call') {
-    // MCP tool calls produce a transient "Calling tool…" / "Calling
-    // {service}…" loader update rather than a persistent card.
+    // MCP tool calls produce a transient activity loader update. When we
+    // know the tool name (we do here), use a named variant so the loader
+    // can say "Using {tool}…" rather than a generic "Calling tool…".
+    const toolName = typeof item.name === 'string' ? item.name : null;
+    const serverLabel =
+      typeof item.server_label === 'string' ? item.server_label : null;
+    if (toolName && serverLabel) {
+      return emitAgentActivity('chat.activity.usingNamedToolWithService', {
+        tool: toolName,
+        service: serverLabel,
+      });
+    }
+    if (toolName) {
+      return emitAgentActivity('chat.activity.usingNamedTool', {
+        tool: toolName,
+      });
+    }
     return emitAgentActivity(
-      item.server_label
+      serverLabel
         ? 'chat.activity.callingService'
         : 'chat.activity.callingTool',
     );
   }
 
   return null;
+}
+
+/**
+ * Maps a Foundry `output_item` payload to a persistent TOOL_CALL_RECORD
+ * marker for the post-stream summary. Returns null for items that aren't
+ * MCP calls. Caller dedupes via item.id.
+ *
+ * Foundry's `output_item.done` for an `mcp_call` item includes the final
+ * `output`, `error`, and `status` fields — that's where this should be
+ * called (not on `.added`, which fires before the call has run).
+ */
+export function mcpCallItemToRecord(
+  item: { id?: string; type?: string } & Record<string, unknown>,
+  options: { duration_ms?: number } = {},
+): string | null {
+  if (!item || !item.id || item.type !== 'mcp_call') return null;
+
+  const rawArgs = item.arguments;
+  const args =
+    typeof rawArgs === 'string'
+      ? rawArgs
+      : rawArgs != null
+        ? JSON.stringify(rawArgs)
+        : null;
+
+  // Status defaults to `completed` when Foundry omits it on success.
+  const rawStatus = item.status;
+  const status: ToolCallRecordPayload['status'] =
+    rawStatus === 'failed' ||
+    rawStatus === 'incomplete' ||
+    rawStatus === 'in_progress' ||
+    rawStatus === 'completed'
+      ? rawStatus
+      : typeof item.error === 'string' && item.error.length > 0
+        ? 'failed'
+        : 'completed';
+
+  return emitToolCallRecord({
+    id: item.id,
+    name: typeof item.name === 'string' ? item.name : 'tool',
+    server_label:
+      typeof item.server_label === 'string' ? item.server_label : null,
+    arguments: args,
+    status,
+    output: typeof item.output === 'string' ? item.output : null,
+    error: typeof item.error === 'string' ? item.error : null,
+    duration_ms: options.duration_ms,
+    approval_request_id:
+      typeof item.approval_request_id === 'string'
+        ? item.approval_request_id
+        : null,
+  });
 }

@@ -826,6 +826,117 @@ describe('conversationStore', () => {
     });
   });
 
+  describe('MCP auto-approve + tool calls', () => {
+    const baseConv = (id = 'c1'): Conversation =>
+      ({
+        id,
+        name: 'Test',
+        messages: [
+          { role: 'user', content: 'hi', messageType: undefined },
+          {
+            type: 'assistant_group',
+            activeIndex: 0,
+            versions: [
+              {
+                content: 'ok',
+                messageType: undefined,
+                createdAt: new Date().toISOString(),
+              },
+            ],
+          },
+        ],
+        model: {
+          id: 'gpt-4',
+          name: 'GPT-4',
+          maxLength: 4000,
+          tokenLimit: 4000,
+        },
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+      }) as Conversation;
+
+    it('setAutoApprove("tool", name) appends to alwaysApproveTools', () => {
+      useConversationStore.setState({ conversations: [baseConv()] });
+      useConversationStore.getState().setAutoApprove('c1', 'tool', 'fetch_x');
+      const c = useConversationStore.getState().conversations[0];
+      expect(c.alwaysApproveTools).toEqual(['fetch_x']);
+    });
+
+    it('setAutoApprove("all") sets alwaysApproveAllTools', () => {
+      useConversationStore.setState({ conversations: [baseConv()] });
+      useConversationStore.getState().setAutoApprove('c1', 'all');
+      const c = useConversationStore.getState().conversations[0];
+      expect(c.alwaysApproveAllTools).toBe(true);
+    });
+
+    it('resetAutoApprove clears both per-tool list and the all-tools flag', () => {
+      const conv = baseConv();
+      conv.alwaysApproveTools = ['a', 'b'];
+      conv.alwaysApproveAllTools = true;
+      useConversationStore.setState({ conversations: [conv] });
+
+      useConversationStore.getState().resetAutoApprove('c1');
+
+      const c = useConversationStore.getState().conversations[0];
+      expect(c.alwaysApproveAllTools).toBe(false);
+      expect(c.alwaysApproveTools).toEqual([]);
+    });
+
+    it('resetAutoApprove is a no-op when there is no state to clear', () => {
+      const before = baseConv();
+      useConversationStore.setState({ conversations: [before] });
+      const beforeRef = useConversationStore.getState().conversations[0];
+
+      useConversationStore.getState().resetAutoApprove('c1');
+
+      // Identity check: nothing should have changed.
+      expect(useConversationStore.getState().conversations[0]).toBe(beforeRef);
+    });
+
+    it('recordApprovalOutcome with source persists approvalSources on the active version', () => {
+      useConversationStore.setState({ conversations: [baseConv()] });
+      useConversationStore
+        .getState()
+        .recordApprovalOutcome('c1', 1, 'mcpr_x', true, 'auto-approved');
+
+      const c = useConversationStore.getState().conversations[0];
+      const entry = c.messages[1] as any;
+      expect(entry.versions[0].approvalOutcomes).toEqual({ mcpr_x: true });
+      expect(entry.versions[0].approvalSources).toEqual({
+        mcpr_x: 'auto-approved',
+      });
+    });
+
+    it('recordToolCalls writes the array onto the active version', () => {
+      useConversationStore.setState({ conversations: [baseConv()] });
+      useConversationStore.getState().recordToolCalls('c1', 1, [
+        {
+          id: 'call_1',
+          name: 'fetch',
+          server_label: 'NetSuite',
+          arguments: '{"q":"x"}',
+          status: 'completed',
+          output: '{}',
+          error: null,
+          duration_ms: 42,
+        },
+      ]);
+
+      const c = useConversationStore.getState().conversations[0];
+      const entry = c.messages[1] as any;
+      expect(entry.versions[0].toolCalls).toHaveLength(1);
+      expect(entry.versions[0].toolCalls[0].name).toBe('fetch');
+    });
+
+    it('recordToolCalls is a no-op for an empty array', () => {
+      useConversationStore.setState({ conversations: [baseConv()] });
+      const before = useConversationStore.getState().conversations[0];
+      useConversationStore.getState().recordToolCalls('c1', 1, []);
+      expect(useConversationStore.getState().conversations[0]).toBe(before);
+    });
+  });
+
   describe('State Isolation', () => {
     it('changes do not affect subsequent tests', () => {
       const conversation = { id: '1', name: 'Test' } as Conversation;

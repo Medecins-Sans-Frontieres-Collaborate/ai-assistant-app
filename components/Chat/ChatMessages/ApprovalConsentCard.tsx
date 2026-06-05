@@ -25,6 +25,13 @@ interface ApprovalConsentCardProps {
   messageIndex?: number;
   /** Pre-recorded outcome from message metadata; survives reload. */
   persistedOutcome?: boolean;
+  /**
+   * Pre-recorded source from message metadata; tells us whether the
+   * approval was a manual click or an auto-approve match. When the
+   * source is `'auto-approved'` the card hides itself — those calls
+   * appear in the tool usage summary instead.
+   */
+  persistedSource?: 'manual' | 'auto-approved' | 'auto-denied';
 }
 
 /**
@@ -42,6 +49,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
   request,
   messageIndex,
   persistedOutcome,
+  persistedSource,
 }) => {
   const t = useTranslations('chat.consent');
   const serverLabel = request.server_label?.trim() || null;
@@ -84,6 +92,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
       approve,
       selectedConversation,
       messageIndex,
+      'manual',
     );
   };
 
@@ -143,7 +152,13 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     }
     setMenuOpen(false);
     if (approvalState === 'idle') {
-      void submitApproval(approvalId, true, selectedConversation, messageIndex);
+      void submitApproval(
+        approvalId,
+        true,
+        selectedConversation,
+        messageIndex,
+        'manual',
+      );
     }
   };
 
@@ -157,7 +172,13 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     if (approvalState !== 'idle') return;
     if (!approvalId || !selectedConversation) return;
     if (failedApprovals.has(approvalId)) return;
-    void submitApproval(approvalId, true, selectedConversation, messageIndex);
+    void submitApproval(
+      approvalId,
+      true,
+      selectedConversation,
+      messageIndex,
+      'auto-approved',
+    );
   }, [
     autoApproveMatch,
     approvalState,
@@ -216,6 +237,16 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
 
   const buttonsDisabled =
     approvalState !== 'idle' || isStreaming || !selectedConversation;
+
+  // Suppress display when the approval was resolved via auto-approve — the
+  // tool usage summary below the message surfaces these instead. Hides both
+  // the live flash during streaming AND historical cards in reloaded
+  // conversations (where `persistedSource === 'auto-approved'`). Placed
+  // after all hooks so hook order stays stable across renders.
+  const isAutoApproved =
+    persistedSource === 'auto-approved' ||
+    (autoApproveMatch && approvalState !== 'denied');
+  if (isAutoApproved) return null;
 
   const prettyArgs = (() => {
     const raw = request.tool_arguments;

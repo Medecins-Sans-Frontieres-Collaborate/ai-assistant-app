@@ -3,6 +3,7 @@ import {
   IconClearAll,
   IconDots,
   IconHexagon,
+  IconShieldCheck,
   IconWorld,
 } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
@@ -46,6 +47,16 @@ interface Props {
   hasMessages?: boolean;
   searchMode?: SearchMode;
   showChatbar?: boolean;
+  /**
+   * Number of auto-approve entries on the current conversation (per-tool
+   * allowlist + 1 for `alwaysApproveAllTools`). When > 0 we show a small
+   * shield indicator + a "Reset tool permissions" affordance. When 0 the
+   * UI stays hidden.
+   */
+  autoApproveCount?: number;
+  /** Whether the conversation has the blanket "approve all" flag set. */
+  autoApproveAll?: boolean;
+  onResetAutoApprove?: () => void;
 }
 
 export const ChatTopbar = ({
@@ -66,6 +77,9 @@ export const ChatTopbar = ({
   hasMessages = false,
   searchMode,
   showChatbar = false,
+  autoApproveCount = 0,
+  autoApproveAll = false,
+  onResetAutoApprove,
 }: Props) => {
   const t = useTranslations();
   const [showMenu, setShowMenu] = useState(false);
@@ -198,6 +212,30 @@ export const ChatTopbar = ({
               />
             </button>
           </div>
+
+          {/* Auto-approve indicator + reset. Only visible when the
+              conversation has any auto-approve state — keeps the topbar
+              calm otherwise. Click clears every auto-approve entry. */}
+          {(autoApproveCount > 0 || autoApproveAll) && onResetAutoApprove && (
+            <button
+              type="button"
+              onClick={onResetAutoApprove}
+              className="ml-2 inline-flex items-center gap-1 rounded-md border border-blue-300 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-100 dark:border-blue-700/60 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
+              title={t('chat.consent.resetTooltip')}
+              aria-label={t('chat.consent.resetTooltip')}
+            >
+              <IconShieldCheck size={12} aria-hidden="true" />
+              <span>
+                {autoApproveAll
+                  ? t('chat.consent.autoApproveAllIndicator')
+                  : t('chat.consent.autoApproveCountIndicator', {
+                      count: autoApproveCount,
+                    })}
+              </span>
+              <span className="ml-1 opacity-70">·</span>
+              <span className="opacity-90">{t('chat.consent.resetShort')}</span>
+            </button>
+          )}
         </div>
 
         {/* Controls - 3-dot menu - only show when there are options */}

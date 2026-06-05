@@ -94,6 +94,35 @@ export interface Message {
    * card in pending state again.
    */
   approvalOutcomes?: Record<string, boolean>;
+  /**
+   * How each approval was resolved. Parallel to `approvalOutcomes` and used
+   * by the consent card to suppress display for auto-approved tools (those
+   * already appear in the tool usage summary instead).
+   */
+  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
+  /**
+   * Persisted records of MCP tool calls that ran while generating this
+   * message. Renders as the collapsed "Used N tools" summary below the
+   * assistant text.
+   */
+  toolCalls?: ToolCallRecord[];
+}
+
+/**
+ * Subset of `ToolCallRecordPayload` we persist on a message. Mirrors the
+ * marker shape but lives in `@/types/chat` so client code doesn't have to
+ * reach into `lib/streamMarkers` for the type alone.
+ */
+export interface ToolCallRecord {
+  id: string;
+  name: string;
+  server_label: string | null;
+  arguments: string | null;
+  status: 'completed' | 'failed' | 'incomplete' | 'in_progress';
+  output: string | null;
+  error: string | null;
+  duration_ms?: number;
+  approval_request_id?: string | null;
 }
 
 export type Role = 'system' | 'assistant' | 'user';
@@ -122,6 +151,9 @@ export interface AssistantMessageVersion {
    * Keyed by `approval_request_id`.
    */
   approvalOutcomes?: Record<string, boolean>;
+  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
+  /** Tool calls that ran while generating this version. */
+  toolCalls?: ToolCallRecord[];
 }
 
 /**

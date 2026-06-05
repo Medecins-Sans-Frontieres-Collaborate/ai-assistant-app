@@ -31,6 +31,7 @@ export function useChat() {
       error: s.error,
       stopRequested: s.stopRequested,
       loadingMessage: s.loadingMessage,
+      loadingMessageParams: s.loadingMessageParams,
       isRetrying: s.isRetrying,
       retryWithFallback: s.retryWithFallback,
       originalModelId: s.originalModelId,

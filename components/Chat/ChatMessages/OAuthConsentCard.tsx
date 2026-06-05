@@ -161,7 +161,9 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({
               ? t('confirmingHint')
               : oauthClicked
                 ? t('continueHint')
-                : t('authorizeHint')}
+                : serverLabel
+                  ? t('authorizeHint', { service: serverLabel })
+                  : t('authorizeHintGeneric')}
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import {
   activityKeyForEvent,
+  mcpCallItemToRecord,
   outputItemToMarker,
 } from '@/lib/services/chat/foundryEventMappers';
 
@@ -152,7 +153,7 @@ describe('outputItemToMarker', () => {
   });
 
   describe('mcp_call', () => {
-    it('emits a transient activity with callingService when server_label is set', () => {
+    it('emits a named-tool activity with tool + service params when both are set', () => {
       const marker = outputItemToMarker({
         id: 'call_1',
         type: 'mcp_call',
@@ -161,10 +162,33 @@ describe('outputItemToMarker', () => {
       });
       expect(marker).not.toBeNull();
       expect(marker).toContain('<<<AGENT_ACTIVITY>>>');
+      expect(marker).toContain(
+        '"key":"chat.activity.usingNamedToolWithService"',
+      );
+      expect(marker).toContain('"tool":"fetch_data"');
+      expect(marker).toContain('"service":"NetSuite"');
+    });
+
+    it('uses tool-only named activity when server_label is missing', () => {
+      const marker = outputItemToMarker({
+        id: 'call_1',
+        type: 'mcp_call',
+        name: 'fetch_data',
+      });
+      expect(marker).toContain('"key":"chat.activity.usingNamedTool"');
+      expect(marker).toContain('"tool":"fetch_data"');
+    });
+
+    it('falls back to callingService when only server_label is known', () => {
+      const marker = outputItemToMarker({
+        id: 'call_1',
+        type: 'mcp_call',
+        server_label: 'NetSuite',
+      });
       expect(marker).toContain('"key":"chat.activity.callingService"');
     });
 
-    it('falls back to callingTool when server_label is missing', () => {
+    it('falls back to callingTool when neither name nor server_label is known', () => {
       const marker = outputItemToMarker({
         id: 'call_1',
         type: 'mcp_call',
@@ -178,6 +202,76 @@ describe('outputItemToMarker', () => {
       expect(outputItemToMarker({ id: 'msg_1', type: 'message' })).toBeNull();
       expect(outputItemToMarker({ id: 'rs_1', type: 'reasoning' })).toBeNull();
     });
+  });
+});
+
+describe('mcpCallItemToRecord', () => {
+  it('returns null for non-mcp_call items', () => {
+    expect(
+      mcpCallItemToRecord({ id: 'x', type: 'mcp_approval_request' }),
+    ).toBeNull();
+    expect(mcpCallItemToRecord({ id: 'x' })).toBeNull();
+  });
+
+  it('returns null when the item is missing an id', () => {
+    expect(mcpCallItemToRecord({ type: 'mcp_call' })).toBeNull();
+  });
+
+  it('produces a record with the tool fields surfaced for display', () => {
+    const marker = mcpCallItemToRecord(
+      {
+        id: 'call_1',
+        type: 'mcp_call',
+        name: 'fetch_data',
+        server_label: 'NetSuite',
+        arguments: '{"q":"acme"}',
+        status: 'completed',
+        output: '{"hits":3}',
+      },
+      { duration_ms: 815 },
+    );
+    expect(marker).not.toBeNull();
+    expect(marker).toContain('<<<TOOL_CALL_RECORD>>>');
+    expect(marker).toContain('"name":"fetch_data"');
+    expect(marker).toContain('"server_label":"NetSuite"');
+    expect(marker).toContain('"status":"completed"');
+    expect(marker).toContain('"output":"{\\"hits\\":3}"');
+    expect(marker).toContain('"duration_ms":815');
+  });
+
+  it('infers status=failed when error is set but no status is provided', () => {
+    const marker = mcpCallItemToRecord({
+      id: 'call_2',
+      type: 'mcp_call',
+      name: 'fetch_data',
+      error: 'permission denied',
+    });
+    expect(marker).toContain('"status":"failed"');
+    expect(marker).toContain('"error":"permission denied"');
+  });
+
+  it('defaults missing status to completed when no error is present', () => {
+    const marker = mcpCallItemToRecord({
+      id: 'call_3',
+      type: 'mcp_call',
+      name: 'fetch_data',
+    });
+    expect(marker).toContain('"status":"completed"');
+  });
+
+  it('serializes object arguments to a JSON string', () => {
+    const marker = mcpCallItemToRecord({
+      id: 'call_4',
+      type: 'mcp_call',
+      name: 'fetch_data',
+      arguments: { q: 'apple', limit: 5 },
+    });
+    const payloadJson = marker!.match(
+      /<<<TOOL_CALL_RECORD>>>([\s\S]*?)<<<END_TOOL_CALL_RECORD>>>/,
+    )![1];
+    const payload = JSON.parse(payloadJson);
+    expect(typeof payload.arguments).toBe('string');
+    expect(JSON.parse(payload.arguments)).toEqual({ q: 'apple', limit: 5 });
   });
 });
 

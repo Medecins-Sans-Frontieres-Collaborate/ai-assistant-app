@@ -48,6 +48,12 @@ interface ChatStore {
   error: string | null;
   stopRequested: boolean;
   loadingMessage: string | null;
+  /**
+   * Interpolation params for `loadingMessage` when the translation key has
+   * placeholders (e.g. {tool} for "Using {tool}…"). Set alongside
+   * `loadingMessage` from live agent-activity markers carrying params.
+   */
+  loadingMessageParams: Record<string, string> | undefined;
   abortController: AbortController | null;
 
   // Retry-related state
@@ -124,7 +130,10 @@ interface ChatStore {
   requestStop: () => void;
   resetStop: () => void;
   resetChat: () => void;
-  setLoadingMessage: (message: string | null) => void;
+  setLoadingMessage: (
+    message: string | null,
+    params?: Record<string, string>,
+  ) => void;
   sendMessage: (
     message: Message,
     conversation: Conversation,
@@ -149,12 +158,18 @@ interface ChatStore {
    * resume the agent's response stream. The conversation's source message
    * is updated via `recordApprovalOutcome` on the conversation store after
    * the stream finalizes successfully.
+   *
+   * `source` records *how* the approval resolved — manual click vs an
+   * `alwaysApprove*` match — so the tool usage summary can label
+   * auto-approved calls accordingly and the consent card can suppress
+   * its display when the user never had a choice.
    */
   submitApproval: (
     approvalRequestId: string,
     approve: boolean,
     conversation: Conversation,
     sourceMessageIndex?: number,
+    source?: 'manual' | 'auto-approved' | 'auto-denied',
   ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
@@ -183,6 +198,8 @@ interface ChatStore {
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    /** MCP tool calls observed in the stream, for the post-stream summary. */
+    toolCalls?: import('@/types/chat').ToolCallRecord[];
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -257,6 +274,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   error: null,
   stopRequested: false,
   loadingMessage: null,
+  loadingMessageParams: undefined,
   abortController: null,
 
   // Retry-related initial state
@@ -332,7 +350,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   resetStop: () => set({ stopRequested: false }),
 
-  setLoadingMessage: (message) => set({ loadingMessage: message }),
+  setLoadingMessage: (message, params) =>
+    set({ loadingMessage: message, loadingMessageParams: params }),
 
   resetChat: () =>
     set({
@@ -344,6 +363,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       error: null,
       stopRequested: false,
       loadingMessage: null,
+      loadingMessageParams: undefined,
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -418,10 +438,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        toolCalls,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
 
       // Surface files that were excluded from this turn's context so the
       // ActiveFilesPanel can flag them — without this the user has no
@@ -541,6 +565,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       error: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
+      loadingMessageParams: undefined,
       stopRequested: false,
       abortController,
     });
@@ -690,6 +715,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    toolCalls?: import('@/types/chat').ToolCallRecord[];
   }> => {
     const reader = stream.getReader();
 
@@ -709,7 +735,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // text. We update unconditionally while content hasn't started
       // streaming yet so the loader reflects the most recent stage.
       if (result.action && !result.hasReceivedContent) {
-        set({ loadingMessage: result.action });
+        set({
+          loadingMessage: result.action,
+          loadingMessageParams: result.actionParams,
+        });
       }
 
       // Surface any newly-arrived CONSENT_OUTCOME markers to the global
@@ -745,11 +774,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
           streamingContent: string;
           citations?: Citation[];
           loadingMessage: string | null;
+          loadingMessageParams?: Record<string, string>;
         } = {
           streamingContent: result.displayText,
           loadingMessage: result.hasReceivedContent
             ? null
             : currentState.loadingMessage,
+          loadingMessageParams: result.hasReceivedContent
+            ? undefined
+            : currentState.loadingMessageParams,
         };
 
         if (result.citationsChanged) {
@@ -769,6 +802,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
       activeFilesDropped: streamParser.getActiveFilesDropped?.(),
+      toolCalls: streamParser.getToolCallRecords?.(),
     };
   },
 
@@ -884,6 +918,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingContent: '',
       streamingConversationId: null,
       loadingMessage: null,
+      loadingMessageParams: undefined,
       abortController: null,
       stopRequested: false,
       pendingOAuthResume: {},
@@ -1046,10 +1081,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        toolCalls,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
 
       // Surface dropped files (see send path for context).
       get().setLastTurnDroppedActiveFileIds(
@@ -1230,6 +1269,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     approve,
     conversation,
     sourceMessageIndex,
+    source,
   ) => {
     // Mark as submitting so the card freezes immediately, even before the
     // network round-trip completes. Rollback on failure so the user can retry.
@@ -1254,10 +1294,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       ]);
 
       const streamParser = new StreamParser();
-      const { finalContent, threadId, pendingTranscriptions } =
+      const { finalContent, threadId, pendingTranscriptions, toolCalls } =
         await get().processStream(stream, streamParser, showLoadingTimeout);
 
       const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
 
       await get().finalizeMessage(
         assistantMessage,
@@ -1288,6 +1331,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             sourceMessageIndex,
             approvalRequestId,
             approve,
+            source,
           );
       }
 
@@ -1329,6 +1373,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
               sourceMessageIndex,
               approvalRequestId,
               approve,
+              source,
             );
         }
         get().clearStreamingState();

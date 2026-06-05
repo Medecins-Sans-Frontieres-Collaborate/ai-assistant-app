@@ -20,7 +20,11 @@ import { ErrorCode, PipelineError } from '@/types/errors';
 import { OpenAIModel } from '@/types/openai';
 
 import { MetricsService } from '../observability/MetricsService';
-import { activityKeyForEvent, outputItemToMarker } from './foundryEventMappers';
+import {
+  activityKeyForEvent,
+  mcpCallItemToRecord,
+  outputItemToMarker,
+} from './foundryEventMappers';
 
 import { env } from '@/config/environment';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
@@ -405,6 +409,13 @@ export class AIFoundryAgentHandler {
               // and we only want to surface each item once (consent prompt,
               // approval prompt, MCP tool call, etc.).
               const emittedItemIds = new Set<string>();
+              // Track mcp_call item ids that have already had a final
+              // TOOL_CALL_RECORD marker emitted, so the redundant `.added`
+              // + `.done` pair doesn't double-emit.
+              const emittedToolRecordIds = new Set<string>();
+              // mcp_call item.id → epoch ms when we first saw the call. Used
+              // to compute duration_ms when the matching `.done` fires.
+              const mcpCallStartTimes = new Map<string, number>();
 
               try {
                 for await (const event of streamEventMessages) {
@@ -484,7 +495,8 @@ export class AIFoundryAgentHandler {
                     // Authoritative shapes (learn.microsoft.com/.../agents):
                     //   oauth_consent_request: { id, type, consent_link, server_label? }
                     //   mcp_approval_request:  { id, type, name, arguments, server_label }
-                    //   mcp_call:              { id, type, name, server_label, arguments }
+                    //   mcp_call:              { id, type, name, server_label, arguments,
+                    //                            output?, error?, status? }
                     const evt = event as any;
                     const item = evt.item;
                     if (item?.id && !emittedItemIds.has(item.id)) {
@@ -493,6 +505,40 @@ export class AIFoundryAgentHandler {
                         emittedItemIds.add(item.id);
                         sawMeaningfulOutput = true;
                         controller.enqueue(encoder.encode(marker));
+                      }
+                    }
+                    // Capture mcp_call start time on first sight (`.added`)
+                    // so the matching `.done` can compute duration_ms.
+                    if (
+                      item?.id &&
+                      item?.type === 'mcp_call' &&
+                      event.type === 'response.output_item.added' &&
+                      !mcpCallStartTimes.has(item.id)
+                    ) {
+                      mcpCallStartTimes.set(item.id, Date.now());
+                    }
+                    // On `.done` for an mcp_call, emit a persistent
+                    // TOOL_CALL_RECORD so the client can render it in the
+                    // tool usage summary. Foundry's `.done` carries the
+                    // final `output`, `error`, and `status` fields.
+                    if (
+                      item?.id &&
+                      item?.type === 'mcp_call' &&
+                      event.type === 'response.output_item.done' &&
+                      !emittedToolRecordIds.has(item.id)
+                    ) {
+                      const startedAt = mcpCallStartTimes.get(item.id);
+                      const duration_ms =
+                        typeof startedAt === 'number'
+                          ? Date.now() - startedAt
+                          : undefined;
+                      const record = mcpCallItemToRecord(item, {
+                        duration_ms,
+                      });
+                      if (record !== null) {
+                        emittedToolRecordIds.add(item.id);
+                        sawMeaningfulOutput = true;
+                        controller.enqueue(encoder.encode(record));
                       }
                     }
                   } else if (

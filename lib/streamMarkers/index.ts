@@ -32,6 +32,8 @@ export const CONSENT_REQUEST_OPEN = '<<<CONSENT_REQUEST>>>';
 export const CONSENT_REQUEST_CLOSE = '<<<END_CONSENT_REQUEST>>>';
 export const CONSENT_OUTCOME_OPEN = '<<<CONSENT_OUTCOME>>>';
 export const CONSENT_OUTCOME_CLOSE = '<<<END_CONSENT_OUTCOME>>>';
+export const TOOL_CALL_RECORD_OPEN = '<<<TOOL_CALL_RECORD>>>';
+export const TOOL_CALL_RECORD_CLOSE = '<<<END_TOOL_CALL_RECORD>>>';
 
 // ───────────────────────────────────────────────────────────────────
 // Payload shapes
@@ -42,9 +44,35 @@ export const CONSENT_OUTCOME_CLOSE = '<<<END_CONSENT_OUTCOME>>>';
  * latest one in the stream is shown; previous ones are stripped.
  *
  * `key` is a translation key from `messages/en.json#chat.activity.*`.
+ * `params` is optional interpolation data for the translation (e.g.
+ * `{ tool: 'get_invoice' }` so the loader can say "Using get_invoice").
  */
 export interface AgentActivityPayload {
   key: string;
+  params?: Record<string, string>;
+}
+
+/**
+ * Persistent record of an MCP tool call that ran during this turn. Emitted
+ * when Foundry's `output_item.done` fires for an `mcp_call` item, so the
+ * client can render a "Used N tools" summary below the assistant message
+ * (and surface tool errors that would otherwise be invisible).
+ */
+export interface ToolCallRecordPayload {
+  id: string;
+  name: string;
+  server_label: string | null;
+  /** JSON-serialized arguments the tool was called with. Display only. */
+  arguments: string | null;
+  status: 'completed' | 'failed' | 'incomplete' | 'in_progress';
+  /** Raw output returned by the tool, if Foundry surfaced it on the item. */
+  output: string | null;
+  /** Error message if the tool call failed. */
+  error: string | null;
+  /** Wall-clock duration in milliseconds, if we observed both start + end. */
+  duration_ms?: number;
+  /** Whether this call required user approval, and if so, how it resolved. */
+  approval_request_id?: string | null;
 }
 
 /**
@@ -85,8 +113,12 @@ export interface ConsentOutcomePayload {
 // Emit helpers (server-side)
 // ───────────────────────────────────────────────────────────────────
 
-export function emitAgentActivity(key: string): string {
-  return `\n\n${AGENT_ACTIVITY_OPEN}${JSON.stringify({ key })}${AGENT_ACTIVITY_CLOSE}\n\n`;
+export function emitAgentActivity(
+  key: string,
+  params?: Record<string, string>,
+): string {
+  const payload: AgentActivityPayload = params ? { key, params } : { key };
+  return `\n\n${AGENT_ACTIVITY_OPEN}${JSON.stringify(payload)}${AGENT_ACTIVITY_CLOSE}\n\n`;
 }
 
 export function emitConsentRequest(payload: ConsentRequestPayload): string {
@@ -95,6 +127,10 @@ export function emitConsentRequest(payload: ConsentRequestPayload): string {
 
 export function emitConsentOutcome(payload: ConsentOutcomePayload): string {
   return `\n\n${CONSENT_OUTCOME_OPEN}${JSON.stringify(payload)}${CONSENT_OUTCOME_CLOSE}\n\n`;
+}
+
+export function emitToolCallRecord(payload: ToolCallRecordPayload): string {
+  return `\n\n${TOOL_CALL_RECORD_OPEN}${JSON.stringify(payload)}${TOOL_CALL_RECORD_CLOSE}\n\n`;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -113,6 +149,9 @@ const CONSENT_OUTCOME_RE =
   /<<<CONSENT_OUTCOME>>>([\s\S]*?)<<<END_CONSENT_OUTCOME>>>/g;
 const CONSENT_OUTCOME_STRIP_RE =
   /\n*<<<CONSENT_OUTCOME>>>[\s\S]*?<<<END_CONSENT_OUTCOME>>>\n*/g;
+
+const TOOL_CALL_RECORD_RE =
+  /<<<TOOL_CALL_RECORD>>>([\s\S]*?)<<<END_TOOL_CALL_RECORD>>>/g;
 
 /**
  * Pulls the latest `AGENT_ACTIVITY` payload out of the stream content
@@ -133,6 +172,21 @@ export function extractLatestAgentActivity(content: string): {
       const parsed = JSON.parse(lastJson);
       if (parsed && typeof parsed.key === 'string') {
         latest = { key: parsed.key };
+        if (
+          parsed.params &&
+          typeof parsed.params === 'object' &&
+          !Array.isArray(parsed.params)
+        ) {
+          // Coerce all param values to string so the renderer can hand them
+          // to next-intl without runtime type errors.
+          const safeParams: Record<string, string> = {};
+          for (const [k, v] of Object.entries(parsed.params)) {
+            if (v != null) safeParams[k] = String(v);
+          }
+          if (Object.keys(safeParams).length > 0) {
+            latest.params = safeParams;
+          }
+        }
       }
     } catch {
       // ignore malformed payload
@@ -200,6 +254,35 @@ export function extractConsentOutcomes(content: string): {
 }
 
 /**
+ * Pulls every `TOOL_CALL_RECORD` payload from content and returns it
+ * stripped. Records are display-only metadata for the tool usage summary;
+ * they never appear inline in the rendered markdown.
+ */
+export function extractToolCallRecords(content: string): {
+  records: ToolCallRecordPayload[];
+  cleaned: string;
+} {
+  const records: ToolCallRecordPayload[] = [];
+  const cleaned = content.replace(TOOL_CALL_RECORD_RE, (_match, json) => {
+    try {
+      const parsed = JSON.parse(json);
+      if (
+        parsed &&
+        typeof parsed.id === 'string' &&
+        typeof parsed.name === 'string' &&
+        typeof parsed.status === 'string'
+      ) {
+        records.push(parsed as ToolCallRecordPayload);
+      }
+    } catch {
+      // ignore malformed payload
+    }
+    return '';
+  });
+  return { records, cleaned };
+}
+
+/**
  * Hides partially-streamed sentinel markers from the rendered text. When
  * the open tag has arrived but the close tag hasn't yet, slice everything
  * from the open onward off the displayed content. The next render (after
@@ -212,6 +295,7 @@ const MARKER_PAIRS: ReadonlyArray<readonly [string, string]> = [
   [CONSENT_REQUEST_OPEN, CONSENT_REQUEST_CLOSE],
   [CONSENT_OUTCOME_OPEN, CONSENT_OUTCOME_CLOSE],
   [AGENT_ACTIVITY_OPEN, AGENT_ACTIVITY_CLOSE],
+  [TOOL_CALL_RECORD_OPEN, TOOL_CALL_RECORD_CLOSE],
 ];
 
 export function stripIncompleteStreamMarkers(content: string): string {

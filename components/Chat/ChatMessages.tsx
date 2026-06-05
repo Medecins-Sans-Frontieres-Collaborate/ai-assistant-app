@@ -63,6 +63,8 @@ interface ChatMessagesProps {
   isDraining: boolean;
   citations?: Citation[];
   loadingMessage?: string | null;
+  /** Interpolation params for `loadingMessage` (e.g. {tool: 'get_invoice'}). */
+  loadingMessageParams?: Record<string, string>;
   transcriptionStatus: string | null;
   lastMessageRef: React.RefObject<HTMLDivElement | null>;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
@@ -87,6 +89,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   isDraining,
   citations,
   loadingMessage,
+  loadingMessageParams,
   transcriptionStatus,
   lastMessageRef,
   messagesEndRef,
@@ -209,7 +212,10 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-gray-500 dark:bg-gray-400 rounded-full animate-breathing flex-shrink-0"></div>
                 <AnimatedLoadingText
-                  text={t(loadingMessage || 'chat.thinking')}
+                  text={t(
+                    loadingMessage || 'chat.thinking',
+                    loadingMessageParams,
+                  )}
                 />
               </div>
             </div>

@@ -45,6 +45,7 @@ import {
 } from '@/components/Chat/ChatMessages/ConsentCard';
 import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import { ThinkingBlock } from '@/components/Chat/ChatMessages/ThinkingBlock';
+import { ToolCallSummary } from '@/components/Chat/ChatMessages/ToolCallSummary';
 import { TranscriptContent } from '@/components/Chat/ChatMessages/TranscriptContent';
 import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationDropdown';
 import { VersionNavigation } from '@/components/Chat/ChatMessages/VersionNavigation';
@@ -636,6 +637,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                 req.kind === 'approval' && req.approval_request_id
                   ? message?.approvalOutcomes?.[req.approval_request_id]
                   : undefined;
+              const persistedSource =
+                req.kind === 'approval' && req.approval_request_id
+                  ? message?.approvalSources?.[req.approval_request_id]
+                  : undefined;
               return (
                 <ConsentCard
                   key={
@@ -646,9 +651,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                   request={req}
                   messageIndex={messageIndex}
                   persistedOutcome={persistedOutcome}
+                  persistedSource={persistedSource}
                 />
               );
             })}
+
+            {/* Tool usage summary — collapsed retrospective view of MCP
+                tool calls that ran while this message was generated. */}
+            {message?.toolCalls && message.toolCalls.length > 0 && (
+              <ToolCallSummary
+                toolCalls={message.toolCalls}
+                approvalSources={message.approvalSources}
+              />
+            )}
 
             {/* Citations - shown after content but before action buttons */}
             {citations.length > 0 && <CitationList citations={citations} />}

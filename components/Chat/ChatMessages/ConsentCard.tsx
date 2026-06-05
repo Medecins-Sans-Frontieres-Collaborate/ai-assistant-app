@@ -26,6 +26,8 @@ interface ConsentCardProps {
   messageIndex?: number;
   /** Pre-recorded outcome from message metadata; survives reload. */
   persistedOutcome?: boolean;
+  /** Pre-recorded source (manual vs auto). Drives card suppression. */
+  persistedSource?: 'manual' | 'auto-approved' | 'auto-denied';
 }
 
 /**
@@ -38,6 +40,7 @@ export const ConsentCard: FC<ConsentCardProps> = ({
   request,
   messageIndex,
   persistedOutcome,
+  persistedSource,
 }) => {
   if (request.kind === 'oauth' && request.consent_url) {
     return (
@@ -58,6 +61,7 @@ export const ConsentCard: FC<ConsentCardProps> = ({
         request={request as ConsentRequest & { kind: 'approval' }}
         messageIndex={messageIndex}
         persistedOutcome={persistedOutcome}
+        persistedSource={persistedSource}
       />
     );
   }

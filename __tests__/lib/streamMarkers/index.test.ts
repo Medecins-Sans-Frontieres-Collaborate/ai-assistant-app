@@ -5,12 +5,16 @@ import {
   CONSENT_OUTCOME_OPEN,
   CONSENT_REQUEST_CLOSE,
   CONSENT_REQUEST_OPEN,
+  TOOL_CALL_RECORD_CLOSE,
+  TOOL_CALL_RECORD_OPEN,
   emitAgentActivity,
   emitConsentOutcome,
   emitConsentRequest,
+  emitToolCallRecord,
   extractConsentOutcomes,
   extractConsentRequests,
   extractLatestAgentActivity,
+  extractToolCallRecords,
   stripIncompleteStreamMarkers,
 } from '@/lib/streamMarkers';
 import { describe, expect, it } from 'vitest';
@@ -27,6 +31,18 @@ describe('emitAgentActivity', () => {
     const out = emitAgentActivity('x');
     expect(out.startsWith('\n\n')).toBe(true);
     expect(out.endsWith('\n\n')).toBe(true);
+  });
+
+  it('embeds params when provided', () => {
+    const out = emitAgentActivity('chat.activity.usingNamedTool', {
+      tool: 'get_invoice',
+    });
+    expect(out).toContain('"params":{"tool":"get_invoice"}');
+  });
+
+  it('omits the params field when none are passed', () => {
+    const out = emitAgentActivity('x');
+    expect(out).not.toContain('"params"');
   });
 });
 
@@ -105,6 +121,29 @@ describe('extractLatestAgentActivity', () => {
     const content = `${AGENT_ACTIVITY_OPEN}{"foo":"bar"}${AGENT_ACTIVITY_CLOSE}`;
     const result = extractLatestAgentActivity(content);
     expect(result.latest).toBeNull();
+  });
+
+  it('round-trips params through the latest activity', () => {
+    const content = emitAgentActivity('chat.activity.usingNamedTool', {
+      tool: 'get_invoice',
+    });
+    const result = extractLatestAgentActivity(content);
+    expect(result.latest).toEqual({
+      key: 'chat.activity.usingNamedTool',
+      params: { tool: 'get_invoice' },
+    });
+  });
+
+  it('coerces non-string param values into strings', () => {
+    const content = `${AGENT_ACTIVITY_OPEN}{"key":"x","params":{"count":3,"active":true}}${AGENT_ACTIVITY_CLOSE}`;
+    const result = extractLatestAgentActivity(content);
+    expect(result.latest?.params).toEqual({ count: '3', active: 'true' });
+  });
+
+  it('drops invalid params (non-object) without dropping the key', () => {
+    const content = `${AGENT_ACTIVITY_OPEN}{"key":"x","params":"oops"}${AGENT_ACTIVITY_CLOSE}`;
+    const result = extractLatestAgentActivity(content);
+    expect(result.latest).toEqual({ key: 'x' });
   });
 });
 
@@ -227,6 +266,56 @@ describe('emitConsentOutcome / extractConsentOutcomes', () => {
   });
 });
 
+describe('emitToolCallRecord / extractToolCallRecords', () => {
+  const sampleRecord = {
+    id: 'call_1',
+    name: 'get_invoice',
+    server_label: 'NetSuite',
+    arguments: '{"id":"INV-1"}',
+    status: 'completed' as const,
+    output: '{"total":42}',
+    error: null,
+    duration_ms: 1234,
+    approval_request_id: 'mcpr_abc',
+  };
+
+  it('roundtrips a completed record', () => {
+    const emitted = emitToolCallRecord(sampleRecord);
+    expect(emitted).toContain(TOOL_CALL_RECORD_OPEN);
+    expect(emitted).toContain(TOOL_CALL_RECORD_CLOSE);
+    const { records, cleaned } = extractToolCallRecords(`pre${emitted}post`);
+    expect(records).toEqual([sampleRecord]);
+    expect(cleaned).toContain('pre');
+    expect(cleaned).toContain('post');
+    expect(cleaned).not.toContain(TOOL_CALL_RECORD_OPEN);
+  });
+
+  it('extracts multiple records preserving order', () => {
+    const content =
+      emitToolCallRecord({ ...sampleRecord, id: 'a' }) +
+      emitToolCallRecord({ ...sampleRecord, id: 'b', status: 'failed' });
+    const { records } = extractToolCallRecords(content);
+    expect(records).toHaveLength(2);
+    expect(records[0].id).toBe('a');
+    expect(records[1].id).toBe('b');
+    expect(records[1].status).toBe('failed');
+  });
+
+  it('drops malformed JSON silently', () => {
+    const content = `${TOOL_CALL_RECORD_OPEN}not json${TOOL_CALL_RECORD_CLOSE}`;
+    const { records, cleaned } = extractToolCallRecords(content);
+    expect(records).toEqual([]);
+    expect(cleaned).not.toContain(TOOL_CALL_RECORD_OPEN);
+  });
+
+  it('drops payloads missing required fields', () => {
+    const noName = `${TOOL_CALL_RECORD_OPEN}{"id":"a","status":"completed"}${TOOL_CALL_RECORD_CLOSE}`;
+    const noStatus = `${TOOL_CALL_RECORD_OPEN}{"id":"a","name":"t"}${TOOL_CALL_RECORD_CLOSE}`;
+    expect(extractToolCallRecords(noName).records).toEqual([]);
+    expect(extractToolCallRecords(noStatus).records).toEqual([]);
+  });
+});
+
 describe('stripIncompleteStreamMarkers', () => {
   it('returns content unchanged when there are no markers', () => {
     expect(stripIncompleteStreamMarkers('hello world')).toBe('hello world');
@@ -255,6 +344,11 @@ describe('stripIncompleteStreamMarkers', () => {
 
   it('hides a partial CONSENT_OUTCOME (open without close)', () => {
     const content = `visible${CONSENT_OUTCOME_OPEN}{"approval_re`;
+    expect(stripIncompleteStreamMarkers(content)).toBe('visible');
+  });
+
+  it('hides a partial TOOL_CALL_RECORD (open without close)', () => {
+    const content = `visible${TOOL_CALL_RECORD_OPEN}{"id":"a","name":"`;
     expect(stripIncompleteStreamMarkers(content)).toBe('visible');
   });
 

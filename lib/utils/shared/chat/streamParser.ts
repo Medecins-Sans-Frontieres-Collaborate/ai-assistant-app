@@ -6,13 +6,15 @@ import {
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
 
-import { Message, MessageType } from '@/types/chat';
+import { Message, MessageType, ToolCallRecord } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 import {
   ConsentOutcomePayload,
+  ToolCallRecordPayload,
   extractConsentOutcomes,
   extractLatestAgentActivity,
+  extractToolCallRecords,
 } from '@/lib/streamMarkers';
 
 /**
@@ -36,6 +38,10 @@ export class StreamParser {
   // Lifetime: instance-scoped — every chat send constructs a fresh
   // StreamParser, so this Set never persists across streams.
   private seenOutcomeIds: Set<string> = new Set();
+  // TOOL_CALL_RECORD markers are accumulated for the post-stream summary.
+  // Keyed by record id to handle Foundry's redundant `.added` + `.done`
+  // delivery (the handler dedupes too, but defense in depth).
+  private toolCallRecords: Map<string, ToolCallRecordPayload> = new Map();
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -55,6 +61,8 @@ export class StreamParser {
     citationsChanged: boolean;
     /** Newly-arrived approval outcomes since the previous chunk. */
     newOutcomes: ConsentOutcomePayload[];
+    /** Optional interpolation params for the latest activity translation. */
+    actionParams?: Record<string, string>;
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
@@ -73,11 +81,20 @@ export class StreamParser {
         newOutcomes.push(o);
       }
     }
+    // Pull all TOOL_CALL_RECORD markers, accumulate them by id, and strip
+    // them from the visible content. `.added` and `.done` for the same
+    // call may both flow through; latest write wins.
+    const { records: toolRecords, cleaned: recordsStripped } =
+      extractToolCallRecords(outcomeStripped);
+    for (const r of toolRecords) {
+      this.toolCallRecords.set(r.id, r);
+    }
     // Pull the latest transient agent-activity marker (drives the loading
     // text) and strip all of them from the visible content.
     const { latest: latestActivity, cleaned: displayText } =
-      extractLatestAgentActivity(outcomeStripped);
+      extractLatestAgentActivity(recordsStripped);
     const latestActivityKey = latestActivity?.key;
+    const latestActivityParams = latestActivity?.params;
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -142,6 +159,7 @@ export class StreamParser {
       contentChanged,
       citationsChanged,
       newOutcomes,
+      actionParams: latestActivityParams,
     };
   }
 
@@ -241,5 +259,25 @@ export class StreamParser {
    */
   getHasReceivedContent(): boolean {
     return this.hasReceivedContent;
+  }
+
+  /**
+   * All tool-call records accumulated during the stream, in the order they
+   * arrived (Map preserves insertion order). Empty array when the agent
+   * didn't invoke any MCP tools.
+   */
+  getToolCallRecords(): ToolCallRecord[] {
+    if (this.toolCallRecords.size === 0) return [];
+    return Array.from(this.toolCallRecords.values()).map((r) => ({
+      id: r.id,
+      name: r.name,
+      server_label: r.server_label,
+      arguments: r.arguments,
+      status: r.status,
+      output: r.output,
+      error: r.error,
+      duration_ms: r.duration_ms,
+      approval_request_id: r.approval_request_id,
+    }));
   }
 }

@@ -111,6 +111,7 @@ export function Chat({
     citations,
     clearError,
     loadingMessage,
+    loadingMessageParams,
     isRetrying,
     showModelSwitchPrompt,
     originalModelId,
@@ -578,6 +579,19 @@ export function Chat({
             hasMessages={hasMessages}
             searchMode={selectedConversation?.defaultSearchMode}
             showChatbar={showChatbar}
+            autoApproveAll={!!selectedConversation?.alwaysApproveAllTools}
+            autoApproveCount={
+              selectedConversation?.alwaysApproveTools?.length ?? 0
+            }
+            onResetAutoApprove={
+              selectedConversation
+                ? () => {
+                    useConversationStore
+                      .getState()
+                      .resetAutoApprove(selectedConversation.id);
+                  }
+                : undefined
+            }
           />
         </div>
 
@@ -638,6 +652,7 @@ export function Chat({
                 isDraining={isDraining}
                 citations={citations}
                 loadingMessage={loadingMessage}
+                loadingMessageParams={loadingMessageParams}
                 transcriptionStatus={transcriptionStatus}
                 lastMessageRef={lastMessageRef}
                 messagesEndRef={messagesEndRef}
