@@ -216,17 +216,33 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
       {showStreamingDiv && (
         <>
           {smoothedContent.trim() || hasStreamingSideChannel ? (
-            <MemoizedChatMessage
-              message={{
-                role: 'assistant',
-                content: smoothedContent,
-                messageType: MessageType.TEXT,
-                citations,
-              }}
-              messageIndex={streamingMessageIndex}
-              onEdit={() => {}}
-              onQuestionClick={onSelectPrompt}
-            />
+            <>
+              {/* Activity indicator on top — what the agent is doing right
+                  now. The MemoizedChatMessage below renders the text, the
+                  tool summary, and the consent cards as they become known. */}
+              <div className="px-4 pt-2 lg:px-0">
+                <div className="mx-auto max-w-3xl flex items-center gap-3">
+                  <div className="w-3 h-3 bg-gray-500 dark:bg-gray-400 rounded-full animate-breathing flex-shrink-0" />
+                  <AnimatedLoadingText
+                    text={t(
+                      loadingMessage || 'chat.thinking',
+                      loadingMessageParams,
+                    )}
+                  />
+                </div>
+              </div>
+              <MemoizedChatMessage
+                message={{
+                  role: 'assistant',
+                  content: smoothedContent,
+                  messageType: MessageType.TEXT,
+                  citations,
+                }}
+                messageIndex={streamingMessageIndex}
+                onEdit={() => {}}
+                onQuestionClick={onSelectPrompt}
+              />
+            </>
           ) : (
             <div className="relative flex p-4 text-base md:py-6 lg:px-0 w-full">
               <div className="flex items-center gap-3">

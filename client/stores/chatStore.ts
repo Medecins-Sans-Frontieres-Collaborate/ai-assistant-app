@@ -21,6 +21,7 @@ import {
   ApprovalResponse,
   Conversation,
   Message,
+  MessageType,
   ToolCallRecord,
 } from '@/types/chat';
 import {
@@ -1109,6 +1110,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
+    // Capture partial stream state before we wipe it — tool calls and
+    // consent prompts that completed before the failure should still be
+    // shown to the user so the failure has context.
+    const {
+      streamingToolCalls: partialToolCalls,
+      streamingConsentRequests: partialConsentRequests,
+      streamingContent: partialContent,
+    } = get();
+    const hasPartialState =
+      partialToolCalls.length > 0 ||
+      partialConsentRequests.length > 0 ||
+      partialContent.trim().length > 0;
+
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
     let errorIsRecoverable = true;
@@ -1123,6 +1137,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorMessage = error.message;
     }
 
+    // Reword opaque "network error"-style messages when we have partial
+    // state — most useful for mid-stream agent failures (Foundry tool
+    // timeouts, upstream connectors going down). The card below carries the
+    // tool details.
+    if (hasPartialState && /network error|fetch failed/i.test(errorMessage)) {
+      errorMessage =
+        'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.';
+    }
+
+    // Persist the partial assistant message so the tool summary survives
+    // the failure, instead of vanishing with the streaming slices.
+    if (hasPartialState && conversation) {
+      const partialMessage: Message = {
+        role: 'assistant',
+        content: partialContent,
+        messageType: MessageType.TEXT,
+        error: true,
+        toolCalls: partialToolCalls.length > 0 ? partialToolCalls : undefined,
+        consentRequests:
+          partialConsentRequests.length > 0
+            ? (partialConsentRequests as Message['consentRequests'])
+            : undefined,
+      };
+      void get().finalizeMessage(partialMessage, conversation);
+    }
+
     // Show error and store conversation for regenerate
     set({
       error: errorMessage,
@@ -1130,6 +1170,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingContent: '',
       streamingConversationId: null,
       loadingMessage: null,
+      streamingToolCalls: [],
+      streamingConsentRequests: [],
       abortController: null,
       stopRequested: false,
       isRetrying: false,

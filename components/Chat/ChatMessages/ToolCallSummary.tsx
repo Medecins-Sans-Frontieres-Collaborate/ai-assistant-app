@@ -37,11 +37,12 @@ export const ToolCallSummary: FC<ToolCallSummaryProps> = ({
   approvalSources,
 }) => {
   const t = useTranslations('chat.toolSummary');
-  const [expanded, setExpanded] = useState(false);
+  const failureCount = toolCalls.filter((c) => c.status === 'failed').length;
+  // Auto-expand when something failed so the error rows are visible
+  // without an extra click.
+  const [expanded, setExpanded] = useState(failureCount > 0);
 
   if (toolCalls.length === 0) return null;
-
-  const failureCount = toolCalls.filter((c) => c.status === 'failed').length;
 
   return (
     <div className="my-3 max-w-prose not-prose">
@@ -93,9 +94,9 @@ interface ToolCallRowProps {
 
 const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
   const t = useTranslations('chat.toolSummary');
-  const [detailsOpen, setDetailsOpen] = useState(false);
-
   const failed = call.status === 'failed';
+  // Failed rows open by default so the error text shows without a click.
+  const [detailsOpen, setDetailsOpen] = useState(failed);
   const incomplete = call.status === 'incomplete';
   const succeeded = call.status === 'completed';
 
