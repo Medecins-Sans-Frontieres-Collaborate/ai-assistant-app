@@ -1,11 +1,16 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
+
 import { useConversationStore } from '@/client/stores/conversationStore';
 
+/** Debounce window for the search input — caps the O(N×M) filter rate. */
+const SEARCH_DEBOUNCE_MS = 250;
+
 /**
- * Hook that manages conversations
- * Persistence is handled automatically by Zustand persist middleware
+ * Hook that manages conversations. Persistence is handled by Zustand's
+ * `persist` middleware on the store.
  */
 export function useConversations() {
-  // Subscribe to the underlying state that affects selectedConversation
   const conversations = useConversationStore((state) => state.conversations);
   const selectedConversationId = useConversationStore(
     (state) => state.selectedConversationId,
@@ -14,58 +19,62 @@ export function useConversations() {
   const searchTerm = useConversationStore((state) => state.searchTerm);
   const isLoaded = useConversationStore((state) => state.isLoaded);
 
-  // Get actions
-  const addConversation = useConversationStore(
-    (state) => state.addConversation,
+  // useShallow so this hook doesn't re-run when other store slices change.
+  const actions = useConversationStore(
+    useShallow((state) => ({
+      addConversation: state.addConversation,
+      updateConversation: state.updateConversation,
+      deleteConversation: state.deleteConversation,
+      selectConversation: state.selectConversation,
+      setConversations: state.setConversations,
+      setIsLoaded: state.setIsLoaded,
+      addFolder: state.addFolder,
+      updateFolder: state.updateFolder,
+      deleteFolder: state.deleteFolder,
+      setFolders: state.setFolders,
+      setSearchTerm: state.setSearchTerm,
+      clearAll: state.clearAll,
+    })),
   );
-  const updateConversation = useConversationStore(
-    (state) => state.updateConversation,
-  );
-  const deleteConversation = useConversationStore(
-    (state) => state.deleteConversation,
-  );
-  const selectConversation = useConversationStore(
-    (state) => state.selectConversation,
-  );
-  const setConversations = useConversationStore(
-    (state) => state.setConversations,
-  );
-  const setIsLoaded = useConversationStore((state) => state.setIsLoaded);
-  const addFolder = useConversationStore((state) => state.addFolder);
-  const updateFolder = useConversationStore((state) => state.updateFolder);
-  const deleteFolder = useConversationStore((state) => state.deleteFolder);
-  const setFolders = useConversationStore((state) => state.setFolders);
-  const setSearchTerm = useConversationStore((state) => state.setSearchTerm);
-  const clearAll = useConversationStore((state) => state.clearAll);
 
-  // Compute selected conversation from state
-  const selectedConversation =
-    conversations.find((c) => c.id === selectedConversationId) || null;
+  const selectedConversation = useMemo(() => {
+    if (!selectedConversationId) return null;
+    return conversations.find((c) => c.id === selectedConversationId) ?? null;
+  }, [conversations, selectedConversationId]);
 
-  // Compute filtered conversations
-  const filteredConversations = !searchTerm
-    ? conversations
-    : conversations.filter((c) => {
-        const searchLower = searchTerm.toLowerCase();
-        if (c.name?.toLowerCase().includes(searchLower)) return true;
+  // Debounced copy of searchTerm — the store keeps the raw value for the
+  // input; the filter below reads this. Empty-term clear uses 0ms so the
+  // setState happens after the effect body (lint-clean) but still feels
+  // instant to the user.
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+  useEffect(() => {
+    const handle = setTimeout(
+      () => setDebouncedSearch(searchTerm),
+      searchTerm ? SEARCH_DEBOUNCE_MS : 0,
+    );
+    return () => clearTimeout(handle);
+  }, [searchTerm]);
 
-        // Search in message content
-        return c.messages.some((entry) => {
-          // For assistant message groups, search in active version's content
-          if ('type' in entry && entry.type === 'assistant_group') {
-            const activeVersion = entry.versions[entry.activeIndex];
-            return activeVersion.content
-              .toString()
-              .toLowerCase()
-              .includes(searchLower);
-          }
-          // For legacy messages (type guard)
-          if ('content' in entry) {
-            return entry.content.toString().toLowerCase().includes(searchLower);
-          }
-          return false;
-        });
+  const filteredConversations = useMemo(() => {
+    if (!debouncedSearch) return conversations;
+    const searchLower = debouncedSearch.toLowerCase();
+    return conversations.filter((c) => {
+      if (c.name?.toLowerCase().includes(searchLower)) return true;
+      return c.messages.some((entry) => {
+        if ('type' in entry && entry.type === 'assistant_group') {
+          const activeVersion = entry.versions[entry.activeIndex];
+          return activeVersion.content
+            .toString()
+            .toLowerCase()
+            .includes(searchLower);
+        }
+        if ('content' in entry) {
+          return entry.content.toString().toLowerCase().includes(searchLower);
+        }
+        return false;
       });
+    });
+  }, [conversations, debouncedSearch]);
 
   return {
     // State
@@ -77,22 +86,22 @@ export function useConversations() {
     isLoaded,
 
     // Actions
-    addConversation,
-    updateConversation,
-    deleteConversation,
-    selectConversation,
-    setConversations,
+    addConversation: actions.addConversation,
+    updateConversation: actions.updateConversation,
+    deleteConversation: actions.deleteConversation,
+    selectConversation: actions.selectConversation,
+    setConversations: actions.setConversations,
 
     // Folder actions
-    addFolder,
-    updateFolder,
-    deleteFolder,
-    setFolders,
+    addFolder: actions.addFolder,
+    updateFolder: actions.updateFolder,
+    deleteFolder: actions.deleteFolder,
+    setFolders: actions.setFolders,
 
     // Search
-    setSearchTerm,
+    setSearchTerm: actions.setSearchTerm,
 
     // Bulk
-    clearAll,
+    clearAll: actions.clearAll,
   };
 }

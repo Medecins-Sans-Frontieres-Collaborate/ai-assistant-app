@@ -18,6 +18,12 @@ const nextConfig = {
       bodySizeLimit: '1600mb',
     },
     proxyClientMaxBodySize: '1600mb',
+    // Tree-shake big icon / utility packages so unused exports don't bloat
+    // the first-load JS bundle. @tabler/icons-react has 108+ import sites
+    // and re-exports thousands of icons; without this every page pulls the
+    // full registry. Verified safe for these packages — they use named
+    // exports throughout.
+    optimizePackageImports: ['@tabler/icons-react', '@tanstack/react-query'],
   },
 
   // Remove X-Powered-By header for security

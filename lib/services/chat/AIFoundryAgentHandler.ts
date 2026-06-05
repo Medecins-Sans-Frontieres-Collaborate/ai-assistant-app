@@ -36,12 +36,7 @@ import {
 import { TokenCredential } from '@azure/identity';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
-/**
- * Shape of an MCP approval-response conversation item, matching Foundry's
- * Responses API. Centralized here because the `@azure/ai-projects` SDK
- * doesn't yet export a public type for this shape — keeps the cast
- * narrowed to one place.
- */
+/** MCP approval-response item shape — `@azure/ai-projects` doesn't export this yet. */
 interface McpApprovalResponseItem {
   type: 'mcp_approval_response';
   approval_request_id: string;
@@ -59,22 +54,15 @@ function buildApprovalResponseItems(
 }
 
 /**
- * Handles Azure AI Foundry Agent-based chat completions
- *
- * Uses @azure/ai-projects (AIProjectClient) with the Foundry Agent Service API:
- * - project.getOpenAIClient() → openAIClient for conversations and responses
- * - openAIClient.conversations.create({items}) - creates a new conversation
- * - openAIClient.conversations.items.create(conversationId, {items}) - adds items
- * - openAIClient.responses.create({conversation, agent_reference}) - gets response stream
+ * Handles Azure AI Foundry Agent-based chat via @azure/ai-projects.
+ * The Foundry Agent Service exposes its API through the OpenAI Responses
+ * SDK (project.getOpenAIClient → conversations + responses).
  */
 export class AIFoundryAgentHandler {
   private tracer = trace.getTracer('ai-foundry-agent-handler');
 
   constructor() {}
 
-  /**
-   * Handles chat completion using Azure AI Foundry Agents
-   */
   async handleAgentChat(
     modelId: string,
     modelConfig: OpenAIModel,
@@ -113,8 +101,8 @@ export class AIFoundryAgentHandler {
           const aiProjects = await import('@azure/ai-projects');
           const { DefaultAzureCredential } = await import('@azure/identity');
 
-          // Use per-request endpoint/credential if provided (OBO + GDPR routing),
-          // otherwise fall back to default service-level auth
+          // Per-request endpoint/credential (OBO + GDPR routing); default to
+          // service-level auth otherwise.
           const resolvedEndpoint = endpoint || env.AZURE_AI_FOUNDRY_ENDPOINT;
           const agentId = modelConfig.agentId;
 
@@ -124,10 +112,8 @@ export class AIFoundryAgentHandler {
             );
           }
 
-          // Defense-in-depth: refuse to bind any credential to a host outside
-          // the Foundry/Cognitive Services allow-list. The middleware already
-          // validates this; checking again here protects any non-pipeline
-          // caller that constructs the handler directly.
+          // Defense-in-depth host check. The pipeline middleware already
+          // validates this; we re-check here to guard non-pipeline callers.
           if (!isAllowedFoundryHost(resolvedEndpoint)) {
             throw new Error(
               `Refusing to invoke Foundry against disallowed host: ${resolvedEndpoint}`,
@@ -142,11 +128,9 @@ export class AIFoundryAgentHandler {
           );
           const openAIClient = await project.getOpenAIClient();
 
-          // Approval-resume path: when approvalResponses are present, the user
-          // clicked Approve/Deny on a pending mcp_approval_request. We post
-          // mcp_approval_response items to the existing conversation instead
-          // of creating a new user message — Foundry will resume the agent
-          // and stream the rest of its response.
+          // When approvalResponses are present we're resuming a paused
+          // turn — post mcp_approval_response items instead of a new user
+          // message, and Foundry continues the agent stream.
           const hasApprovals =
             !!approvalResponses && approvalResponses.length > 0;
 
@@ -160,7 +144,6 @@ export class AIFoundryAgentHandler {
           let isNewConversation = false;
 
           if (hasApprovals) {
-            // No new user message; just append approval responses.
             conversationId = threadId as string;
             try {
               await openAIClient.conversations.items.create(conversationId, {
@@ -178,8 +161,6 @@ export class AIFoundryAgentHandler {
               throw approvalError;
             }
           } else {
-            // Standard new-message path.
-            // Process messages to inject artifactContext and handle token limits
             const encoding = await getGlobalTiktoken();
             const processedMessages = await getMessagesToSend(
               messages,
@@ -195,14 +176,12 @@ export class AIFoundryAgentHandler {
               hasArtifactContext: messages.some((m) => m.artifactContext),
             });
 
-            // Build the last user message content
             const lastMessage = processedMessages[processedMessages.length - 1];
             let messageContent: string;
 
             if (typeof lastMessage.content === 'string') {
               messageContent = lastMessage.content;
             } else if (Array.isArray(lastMessage.content)) {
-              // For multimodal content, concatenate text parts
               messageContent = lastMessage.content
                 .map(
                   (
@@ -277,17 +256,15 @@ export class AIFoundryAgentHandler {
           if (isNewConversation) {
             // Foundry's runtime sometimes hasn't indexed a brand-new
             // conversation by the time responses.create fires, which
-            // produces an empty turn.
-            await new Promise((r) => setTimeout(r, 600));
+            // produces an empty turn. We pay just enough delay to win the
+            // race in the common case; the empty-response detection at
+            // `response.completed` is the safety net for slow indexing.
+            await new Promise((r) => setTimeout(r, 200));
           }
 
-          // Foundry's preview runtime requires `agent_reference` as the
-          // wrapper key (the legacy `agent` key now returns "deprecated"),
-          // with `type` nested inside, and `version` matching a published
-          // agent version. Version comes from the data-plane enrichment
-          // during discovery — falling back to the SDK default if absent.
-          // The OpenAI SDK's options.body REPLACES the params body, so
-          // conversation + stream must be restated here.
+          // Foundry's preview runtime requires `agent_reference` (the legacy
+          // `agent` key is deprecated). The OpenAI SDK's options.body
+          // REPLACES the params body, so conversation + stream are restated.
           const agentVersion = modelConfig.agentVersion;
           const createStream = () =>
             openAIClient.responses.create(
@@ -321,10 +298,9 @@ export class AIFoundryAgentHandler {
             try {
               streamEventMessages = await createStream();
             } catch (firstAttempt: any) {
-              // Foundry rejects new turns when prior mcp_approval_requests
-              // are still unanswered. The error message lists the
-              // approval_request_ids verbatim. Auto-deny those (the user
-              // signaled "move on" by sending a new message) and retry.
+              // Foundry rejects new turns while approvals are pending.
+              // Treat a new user message as "move on" — auto-deny the
+              // outstanding approvals and retry.
               const pendingIds = extractPendingApprovalIds(firstAttempt);
               if (pendingIds.length === 0) throw firstAttempt;
 
@@ -369,9 +345,8 @@ export class AIFoundryAgentHandler {
             async start(controller) {
               const encoder = createStreamEncoder();
 
-              // Surface any auto-denied approvals up-front so the client UI
-              // flips matching consent cards out of "pending" before the
-              // agent starts streaming new content.
+              // Flip matching consent cards out of "pending" before the
+              // new content streams in.
               if (autoDeniedApprovalIds.length > 0) {
                 controller.enqueue(
                   encoder.encode(
@@ -395,44 +370,34 @@ export class AIFoundryAgentHandler {
                 url: string;
                 date: string;
               }> = [];
-              // Separate counters for marker-based and annotation-based citations
-              // to avoid numbering conflicts between the two systems
+              // Marker-based vs annotation-based citations use separate
+              // counters so their numbering doesn't collide.
               let markerCitationIndex = 1;
               const citationMap = new Map<string, number>();
 
-              // markerBuffer: Accumulates text to handle citation markers split across chunks
+              // Buffers text across chunks to handle citation markers
+              // that arrive split.
               let markerBuffer = '';
               let controllerClosed = false;
               let sawMeaningfulOutput = false;
-              // Dedupe output-item emissions — Foundry fires both
-              // `output_item.added` AND `output_item.done` for the same item,
-              // and we only want to surface each item once (consent prompt,
-              // approval prompt, MCP tool call, etc.).
+              // Dedupe output items — Foundry fires both `.added` and
+              // `.done` for the same item.
               const emittedItemIds = new Set<string>();
-              // Track mcp_call item ids that have already had a final
-              // TOOL_CALL_RECORD marker emitted, so the redundant `.added`
-              // + `.done` pair doesn't double-emit.
               const emittedToolRecordIds = new Set<string>();
-              // mcp_call item.id → epoch ms when we first saw the call. Used
-              // to compute duration_ms when the matching `.done` fires.
+              // item.id → start time, used to compute duration_ms on `.done`.
               const mcpCallStartTimes = new Map<string, number>();
 
               try {
                 for await (const event of streamEventMessages) {
-                  // Handle Responses API stream events
-                  // Events use 'type' field, not 'event'
                   if (event.type === 'response.output_text.delta') {
                     const textChunk = event.delta;
                     if (textChunk) sawMeaningfulOutput = true;
 
-                    // Stage 1: Accumulate text in marker buffer
                     markerBuffer += textChunk;
 
-                    // Stage 2: Process complete citation markers in accumulated buffer
-                    //
-                    // Azure agents may return inline citation markers:
-                    // - Short: 【3:0†source】 (just the word "source")
-                    // - Long:  【3:0†Title†URL】 (embedded title and URL)
+                    // Rewrite Azure inline citation markers — both shapes:
+                    //   short: 【3:0†source】
+                    //   long:  【3:0†Title†URL】
                     const processedBuffer = markerBuffer.replace(
                       /【(\d+):(\d+)†[^】]+】/g,
                       (match: string) => {
@@ -444,12 +409,11 @@ export class AIFoundryAgentHandler {
                       },
                     );
 
-                    // Stage 3: Check for incomplete markers at end of buffer
+                    // Hold back any incomplete marker tail.
                     const lastOpenBracket = processedBuffer.lastIndexOf('【');
                     const lastCloseBracket = processedBuffer.lastIndexOf('】');
 
                     if (lastOpenBracket > lastCloseBracket) {
-                      // Incomplete marker at end - keep it in buffer, send the rest
                       const completeText = processedBuffer.slice(
                         0,
                         lastOpenBracket,
@@ -459,16 +423,14 @@ export class AIFoundryAgentHandler {
                       }
                       markerBuffer = processedBuffer.slice(lastOpenBracket);
                     } else {
-                      // All markers complete - send everything
                       controller.enqueue(encoder.encode(processedBuffer));
                       markerBuffer = '';
                     }
                   } else if (
                     event.type === 'response.output_text.annotation.added'
                   ) {
-                    // Collect citation annotations as they arrive
-                    // These provide structured citation data (URL, title)
-                    // numbered independently from inline markers
+                    // Structured url_citation annotations, separate from
+                    // the inline markers above.
                     const annotation = event as any;
                     if (
                       annotation.annotation?.type === 'url_citation' &&
@@ -487,16 +449,8 @@ export class AIFoundryAgentHandler {
                     event.type === 'response.output_item.added' ||
                     event.type === 'response.output_item.done'
                   ) {
-                    // Output-item events carry persistent agent prompts
-                    // (OAuth consent, tool approval) and transient tool
-                    // calls (mcp_call). Foundry fires both `.added` AND
-                    // `.done` for the same item — dedupe by item.id.
-                    //
-                    // Authoritative shapes (learn.microsoft.com/.../agents):
-                    //   oauth_consent_request: { id, type, consent_link, server_label? }
-                    //   mcp_approval_request:  { id, type, name, arguments, server_label }
-                    //   mcp_call:              { id, type, name, server_label, arguments,
-                    //                            output?, error?, status? }
+                    // Item shapes (oauth_consent_request / mcp_approval_request /
+                    // mcp_call): see learn.microsoft.com/en-us/azure/foundry/agents.
                     const evt = event as any;
                     const item = evt.item;
                     if (item?.id && !emittedItemIds.has(item.id)) {
@@ -507,8 +461,6 @@ export class AIFoundryAgentHandler {
                         controller.enqueue(encoder.encode(marker));
                       }
                     }
-                    // Capture mcp_call start time on first sight (`.added`)
-                    // so the matching `.done` can compute duration_ms.
                     if (
                       item?.id &&
                       item?.type === 'mcp_call' &&
@@ -517,10 +469,8 @@ export class AIFoundryAgentHandler {
                     ) {
                       mcpCallStartTimes.set(item.id, Date.now());
                     }
-                    // On `.done` for an mcp_call, emit a persistent
-                    // TOOL_CALL_RECORD so the client can render it in the
-                    // tool usage summary. Foundry's `.done` carries the
-                    // final `output`, `error`, and `status` fields.
+                    // `.done` carries final output/error/status — emit
+                    // the persistent record for the tool usage summary.
                     if (
                       item?.id &&
                       item?.type === 'mcp_call' &&
@@ -542,8 +492,8 @@ export class AIFoundryAgentHandler {
                       }
                     }
                   } else if (
-                    // Raw SSE OAuth fallback — some Foundry SDK versions emit
-                    // this instead of (or alongside) an output_item.
+                    // Some Foundry SDK versions emit OAuth via a raw event
+                    // instead of an output_item — handle both shapes.
                     (event as { type?: string }).type ===
                     'response.oauth_consent_requested'
                   ) {
@@ -569,9 +519,7 @@ export class AIFoundryAgentHandler {
                   } else if (
                     activityKeyForEvent((event as { type?: string }).type)
                   ) {
-                    // Transient built-in tool lifecycle events update the
-                    // chat loading text. Each kind maps to a translation key
-                    // surfaced via the streamParser → loadingMessage channel.
+                    // Built-in tool lifecycle events drive the loading text.
                     const activityKey = activityKeyForEvent(
                       (event as { type?: string }).type,
                     );
@@ -581,7 +529,6 @@ export class AIFoundryAgentHandler {
                       );
                     }
                   } else if (event.type === 'response.completed') {
-                    // Flush any remaining marker buffer
                     if (markerBuffer) {
                       controller.enqueue(encoder.encode(markerBuffer));
                       markerBuffer = '';
@@ -605,8 +552,7 @@ export class AIFoundryAgentHandler {
                       return;
                     }
 
-                    // Append metadata at the very end using utility function
-                    // Keep metadata field name as threadId to avoid client-side breakage
+                    // `threadId` is the client-side name; don't rename.
                     appendMetadataToStream(controller, {
                       citations: citations.length > 0 ? citations : undefined,
                       threadId: isNewConversation ? conversationId : undefined,

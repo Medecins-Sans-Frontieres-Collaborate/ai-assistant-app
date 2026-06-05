@@ -20,7 +20,7 @@ import {
   IconUpload,
 } from '@tabler/icons-react';
 import { signOut, useSession } from 'next-auth/react';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { PiSidebarSimple } from 'react-icons/pi';
 
@@ -58,6 +58,7 @@ import Modal from '@/components/UI/Modal';
 
 import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
+import { VirtualConversationList } from './VirtualConversationList';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
@@ -289,25 +290,36 @@ export const Sidebar = memo(function Sidebar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSelectConversation = (conversationId: string) => {
-    // Skip if already selected
-    if (conversationId === selectedConversation?.id) return;
+  // useCallback so the memoized ConversationItem doesn't see new function
+  // references and re-render on every Sidebar update.
+  const handleSelectConversation = useCallback(
+    (conversationId: string) => {
+      // Skip if already selected
+      if (conversationId === selectedConversation?.id) return;
 
-    // Check if document viewer is open with unsaved changes
-    if (isArtifactOpen && hasUnsavedChanges()) {
-      // Store the pending conversation and show dialog
-      setPendingConversationId(conversationId);
-      setShowDiscardDialog(true);
-      return;
-    }
+      // Check if document viewer is open with unsaved changes
+      if (isArtifactOpen && hasUnsavedChanges()) {
+        // Store the pending conversation and show dialog
+        setPendingConversationId(conversationId);
+        setShowDiscardDialog(true);
+        return;
+      }
 
-    // If artifact is open but no changes, close it silently
-    if (isArtifactOpen) {
-      closeArtifact();
-    }
+      // If artifact is open but no changes, close it silently
+      if (isArtifactOpen) {
+        closeArtifact();
+      }
 
-    selectConversation(conversationId);
-  };
+      selectConversation(conversationId);
+    },
+    [
+      selectedConversation?.id,
+      isArtifactOpen,
+      hasUnsavedChanges,
+      closeArtifact,
+      selectConversation,
+    ],
+  );
 
   // Handle discard confirmation
   const handleDiscardConfirm = () => {
@@ -325,17 +337,17 @@ export const Sidebar = memo(function Sidebar() {
     setPendingConversationId(null);
   };
 
-  const handleDeleteConversation = (
-    conversationId: string,
-    e: React.MouseEvent,
-  ) => {
-    e.stopPropagation();
-    if (
-      window.confirm(t('Are you sure you want to delete this conversation?'))
-    ) {
-      deleteConversation(conversationId);
-    }
-  };
+  const handleDeleteConversation = useCallback(
+    (conversationId: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (
+        window.confirm(t('Are you sure you want to delete this conversation?'))
+      ) {
+        deleteConversation(conversationId);
+      }
+    },
+    [t, deleteConversation],
+  );
 
   const handleCreateFolder = () => {
     folderManager.handleCreateFolder('chat', t('New folder'), addFolder);
@@ -345,29 +357,32 @@ export const Sidebar = memo(function Sidebar() {
     folderManager.handleCreateFolder('prompt', t('New folder'), addFolder);
   };
 
-  const handleMoveToFolder = (
-    conversationId: string,
-    folderId: string | null,
-  ) => {
-    updateConversation(conversationId, { folderId });
-  };
+  const handleMoveToFolder = useCallback(
+    (conversationId: string, folderId: string | null) => {
+      updateConversation(conversationId, { folderId });
+    },
+    [updateConversation],
+  );
 
-  const handleRenameConversation = (
-    conversationId: string,
-    newName: string,
-  ) => {
-    updateConversation(conversationId, { name: newName });
-  };
+  const handleRenameConversation = useCallback(
+    (conversationId: string, newName: string) => {
+      updateConversation(conversationId, { name: newName });
+    },
+    [updateConversation],
+  );
 
-  const handleExportConversation = (conversation: Conversation) => {
-    try {
-      exportConversation(conversation);
-      toast.success(t('Conversation exported successfully'));
-    } catch (error) {
-      console.error('Error exporting conversation:', error);
-      toast.error(t('Failed to export conversation'));
-    }
-  };
+  const handleExportConversation = useCallback(
+    (conversation: Conversation) => {
+      try {
+        exportConversation(conversation);
+        toast.success(t('Conversation exported successfully'));
+      } catch (error) {
+        console.error('Error exporting conversation:', error);
+        toast.error(t('Failed to export conversation'));
+      }
+    },
+    [t],
+  );
 
   const handleExportFolder = (folderId: string, folderName: string) => {
     try {
@@ -851,20 +866,19 @@ export const Sidebar = memo(function Sidebar() {
                     {/* Folder conversations */}
                     {!folderManager.collapsedFolders.has(folder.id) && (
                       <div className="ml-6 space-y-1 mt-1">
-                        {folderConversations.map((conversation) => (
-                          <ConversationItem
-                            key={conversation.id}
-                            conversation={conversation}
-                            selectedConversation={selectedConversation}
-                            handleSelectConversation={handleSelectConversation}
-                            handleDeleteConversation={handleDeleteConversation}
-                            handleMoveToFolder={handleMoveToFolder}
-                            handleRenameConversation={handleRenameConversation}
-                            handleExportConversation={handleExportConversation}
-                            folders={folders}
-                            t={t}
-                          />
-                        ))}
+                        <VirtualConversationList
+                          conversations={folderConversations}
+                          selectedConversationId={
+                            selectedConversation?.id ?? null
+                          }
+                          handleSelectConversation={handleSelectConversation}
+                          handleDeleteConversation={handleDeleteConversation}
+                          handleMoveToFolder={handleMoveToFolder}
+                          handleRenameConversation={handleRenameConversation}
+                          handleExportConversation={handleExportConversation}
+                          folders={folders}
+                          t={t}
+                        />
                       </div>
                     )}
                   </div>
@@ -885,20 +899,17 @@ export const Sidebar = memo(function Sidebar() {
                   onDragOver={(e) => folderManager.handleDragOver(e, null)}
                   onDragLeave={folderManager.handleDragLeave}
                 >
-                  {conversationsWithoutFolder.map((conversation) => (
-                    <ConversationItem
-                      key={conversation.id}
-                      conversation={conversation}
-                      selectedConversation={selectedConversation}
-                      handleSelectConversation={handleSelectConversation}
-                      handleDeleteConversation={handleDeleteConversation}
-                      handleMoveToFolder={handleMoveToFolder}
-                      handleRenameConversation={handleRenameConversation}
-                      handleExportConversation={handleExportConversation}
-                      folders={folders}
-                      t={t}
-                    />
-                  ))}
+                  <VirtualConversationList
+                    conversations={conversationsWithoutFolder}
+                    selectedConversationId={selectedConversation?.id ?? null}
+                    handleSelectConversation={handleSelectConversation}
+                    handleDeleteConversation={handleDeleteConversation}
+                    handleMoveToFolder={handleMoveToFolder}
+                    handleRenameConversation={handleRenameConversation}
+                    handleExportConversation={handleExportConversation}
+                    folders={folders}
+                    t={t}
+                  />
                 </div>
               )}
             </div>

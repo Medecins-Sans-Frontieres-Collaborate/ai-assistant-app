@@ -74,7 +74,13 @@ interface CachedEndpoint {
   expiresAt: number;
 }
 
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+// 1 hour: agent lists change slowly (admins publish new agents occasionally,
+// not many times per hour), and the user can force-refresh via the explicit
+// reload button on the agent picker. The old 5-min TTL caused asymmetric
+// invalidation against the 24h endpoint cache below — the agent list would
+// refresh 12x more often than the endpoint mapping, with no observable
+// benefit. Cache stampede risk is bounded by `inflightRequests` below.
+const CACHE_TTL_MS = 60 * 60 * 1000;
 const ENDPOINT_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h, matches client useFoundryAgents staleTime
 
 export class AgentDiscoveryService {

@@ -70,6 +70,12 @@ export class ToolRouterEnricher extends BasePipelineStage {
     // Extract the last message text for tool routing decision
     const lastMessage = baseMessages[baseMessages.length - 1];
     let currentMessage = this.extractTextFromContent(lastMessage.content);
+    // Capture the raw user prompt before file/transcript context gets
+    // merged in below. The router LLM benefits from seeing the enriched
+    // context, but a literal web search query should be just what the user
+    // typed — pasting a 50-page document as the search query bloats input
+    // tokens and confuses the search backend.
+    const rawUserPrompt = currentMessage;
 
     // IMPORTANT: Include processed file summaries and transcripts in the analysis
     // This ensures the tool router can see the full context when deciding if web search is needed
@@ -119,15 +125,32 @@ export class ToolRouterEnricher extends BasePipelineStage {
       return context;
     }
 
-    // Determine which tools are needed
-    const toolRouterRequest: ToolRouterRequest = {
-      messages: baseMessages,
-      currentMessage,
-      forceWebSearch,
-    };
-
-    const toolResponse =
-      await this.toolRouterService.determineTool(toolRouterRequest);
+    // When the user explicitly chose ALWAYS search (SearchMode.ALWAYS), we
+    // already know the decision — skip the gpt-5.4-nano router call (saves
+    // ~1-2s of latency on every forced search). Synthesize a minimal
+    // response that satisfies the downstream "execute web_search" branch.
+    let toolResponse;
+    if (forceWebSearch) {
+      console.log(
+        '[ToolRouterEnricher] forceWebSearch=true; skipping router decision',
+      );
+      toolResponse = {
+        tools: ['web_search' as const],
+        // Use the raw user prompt (no merged file/transcript context) so
+        // the search backend gets a clean query. The search tool's own
+        // model can refine it further if needed.
+        searchQuery: rawUserPrompt,
+      };
+    } else {
+      // Determine which tools are needed via the mini-model router.
+      const toolRouterRequest: ToolRouterRequest = {
+        messages: baseMessages,
+        currentMessage,
+        forceWebSearch,
+      };
+      toolResponse =
+        await this.toolRouterService.determineTool(toolRouterRequest);
+    }
 
     // If no tools needed, return unchanged context
     if (toolResponse.tools.length === 0) {
@@ -176,20 +199,53 @@ export class ToolRouterEnricher extends BasePipelineStage {
           context.processedContent?.metadata?.citations || [];
         const citationOffset = existingCitations.length;
 
+        // Cap search result text + citation count before synthesis. Without
+        // this, a long search summary (10KB+) and a citations array of 20+
+        // entries balloon the input prompt — slower synthesis, more cost,
+        // and harder for the model to attend to the actual user question.
+        // The agent's own search tool already summarises; this is a final
+        // guard. Numbers are conservative: 8KB of text + 8 citations is
+        // plenty for a typical question while preventing pathological
+        // cases.
+        const MAX_SEARCH_TEXT_CHARS = 8000;
+        const MAX_SEARCH_CITATIONS = 8;
+        const rawSearchText =
+          searchResult.text.length > MAX_SEARCH_TEXT_CHARS
+            ? searchResult.text.slice(0, MAX_SEARCH_TEXT_CHARS) +
+              '\n\n[…search results truncated for length]'
+            : searchResult.text;
+        const truncatedCitations = (searchResult.citations ?? []).slice(
+          0,
+          MAX_SEARCH_CITATIONS,
+        );
+        // Strip orphaned citation references from the search text when the
+        // citations array was truncated. Without this, the model can see
+        // "[12]" in the body but only have [1]–[8] available in the source
+        // list — it then hallucinates or attributes content to a citation
+        // we dropped. Walk every [N] reference in the text and rewrite
+        // anything past MAX_SEARCH_CITATIONS to remove the bracket entirely
+        // (the surrounding sentence still reads correctly without it).
+        const truncatedSearchText =
+          (searchResult.citations?.length ?? 0) > MAX_SEARCH_CITATIONS
+            ? rawSearchText.replace(/\[(\d+)\]/g, (match, n) =>
+                Number(n) > MAX_SEARCH_CITATIONS ? '' : match,
+              )
+            : rawSearchText;
+
         // Build search context to prepend to the last user message
         // We merge search results INTO the user message instead of using a separate
         // system message, because Anthropic's API only supports 'user' and 'assistant'
         // roles — system messages are stripped by the Anthropic handler.
         // Citation numbers must match the merged citation numbers (RAG first, then web)
-        const citationReferences = searchResult.citations
-          ? searchResult.citations
+        const citationReferences = truncatedCitations.length
+          ? truncatedCitations
               .map(
                 (c, idx) => `[${citationOffset + idx + 1}] ${c.title || c.url}`,
               )
               .join('\n')
           : '';
 
-        const searchContext = `Web Search results:\n\n${searchResult.text}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
+        const searchContext = `Web Search results:\n\n${truncatedSearchText}\n\nAvailable sources:\n${citationReferences}\n\nIMPORTANT: When referencing these sources in your response, use citation markers in SEPARATE brackets like [1][2][3] - never group them like [1,2,3]. Do NOT include source information (URLs, titles, or dates) in your response text. The citation details will be displayed separately to the user.`;
 
         // Merge search context into the last user message so it works with ALL
         // model providers (OpenAI, Anthropic, DeepSeek, Llama, etc.)
@@ -203,7 +259,11 @@ export class ToolRouterEnricher extends BasePipelineStage {
           ...baseMessages.slice(0, -1),
           enrichedLastMessage,
         ];
-        const newCitations = searchResult.citations || [];
+        // Use the truncated citation list so the UI citations match the
+        // numbered references in `citationReferences` above. Extra citations
+        // (beyond the truncation cap) won't have numbered references in the
+        // prompt and would render as orphans.
+        const newCitations = truncatedCitations;
 
         const mergedCitations = [
           ...existingCitations,

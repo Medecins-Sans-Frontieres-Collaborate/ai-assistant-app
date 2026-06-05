@@ -328,13 +328,9 @@ describe('ToolRouter Enricher', () => {
         });
       });
 
-      it('should force web search in ALWAYS mode', async () => {
-        mockToolRouterService.determineTool.mockResolvedValue({
-          tools: ['web_search'],
-          searchQuery: 'forced search',
-          reasoning: 'Forced mode',
-        });
-
+      it('skips the router LLM and runs search directly in ALWAYS mode', async () => {
+        // The router service should NOT be called — we already know the
+        // decision when the user picked ALWAYS, so we save the round-trip.
         (enricher as any).webSearchTool.execute.mockResolvedValue({
           text: 'Results',
           citations: [],
@@ -348,10 +344,9 @@ describe('ToolRouter Enricher', () => {
 
         await enricher.execute(context);
 
-        expect(mockToolRouterService.determineTool).toHaveBeenCalledWith(
-          expect.objectContaining({
-            forceWebSearch: true,
-          }),
+        expect(mockToolRouterService.determineTool).not.toHaveBeenCalled();
+        expect((enricher as any).webSearchTool.execute).toHaveBeenCalledWith(
+          expect.objectContaining({ searchQuery: 'Any query' }),
         );
       });
     });

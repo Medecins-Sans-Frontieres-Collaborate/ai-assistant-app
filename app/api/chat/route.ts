@@ -267,6 +267,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         pipedThrough = true;
         void (async () => {
           const reader = handlerBody.getReader();
+          let pipeError: unknown = null;
           try {
             while (true) {
               const { done, value } = await reader.read();
@@ -274,12 +275,27 @@ export async function POST(req: NextRequest): Promise<Response> {
               await streamWriter.write(value);
             }
           } catch (err) {
+            pipeError = err;
             console.error('[Unified Chat] Stream pipe error:', err);
           } finally {
+            // Propagate handler errors to the client by aborting the
+            // transform — a clean close would make the empty stream look
+            // like a successful response and the UI would silently surface
+            // an empty assistant message. Aborting surfaces the original
+            // error at the client's reader.read() call so handleSendError
+            // can render an error card with a Try Again button.
             try {
-              await streamWriter.close();
+              if (pipeError) {
+                await streamWriter.abort(
+                  pipeError instanceof Error
+                    ? pipeError
+                    : new Error(String(pipeError)),
+                );
+              } else {
+                await streamWriter.close();
+              }
             } catch {
-              // already closed
+              // already closed / errored
             }
           }
         })();

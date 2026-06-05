@@ -1,25 +1,14 @@
 /**
- * Stream marker protocol — single source of truth for the structured
- * sentinel tags we embed inline in chat response streams.
+ * Stream event protocol. Structured events embedded inline in chat
+ * response streams.
  *
- * The chat backend forwards model output (text deltas) interleaved with
- * its own structured events (consent prompts, agent activity updates).
- * Rather than reframing every chunk into SSE, we emit each event as a
- * sentinel-wrapped JSON payload in the same text stream. The client
- * extracts these markers and renders them, leaving the surrounding text
- * untouched for the markdown renderer.
+ * Wire shape: `\n\n<<<KIND>>>{json}<<<END_KIND>>>\n\n`
  *
- * Why a module: the open/close strings used to be duplicated as string
- * literals across the handler, parser, and AssistantMessage component.
- * One typo and a marker silently disappears. Defining them once makes
- * the contract explicit and gives us a place to add escaping or escape
- * sequences if a future model legitimately outputs the literal sentinel.
- *
- * Marker shape:
- *   <<<KIND>>>{json-payload}<<<END_KIND>>>
- *
- * Wrapped in `\n\n` on each side so they don't break paragraphs in the
- * markdown renderer when they slip through stripping (defense-in-depth).
+ * Two parsers consume this format:
+ *   - `scanStreamEvents` is forward-only and used by `StreamParser` on the
+ *     streaming hot path (O(chunk_size) per call).
+ *   - The single-shot `extract*` helpers below scan a full content string.
+ *     Used for reload of persisted message content and test fixtures.
  */
 
 // ───────────────────────────────────────────────────────────────────
@@ -307,4 +296,191 @@ export function stripIncompleteStreamMarkers(content: string): string {
     }
   }
   return result;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// Forward-only single-pass parser (the streaming hot path)
+// ───────────────────────────────────────────────────────────────────
+
+/** Structured event lifted out of the stream. Text deltas return separately. */
+export type StreamEvent =
+  | { type: 'agent_activity'; payload: AgentActivityPayload }
+  | { type: 'consent_request'; payload: ConsentRequestPayload }
+  | { type: 'consent_outcome'; payload: ConsentOutcomePayload }
+  | { type: 'tool_call_record'; payload: ToolCallRecordPayload };
+
+export interface StreamScanResult {
+  /** Events consumed in this scan, in arrival order. */
+  events: StreamEvent[];
+  /** Display text consumed in this scan (text between events, no markers). */
+  displayDelta: string;
+  /** Index in the input text up to which we've consumed. */
+  nextIndex: number;
+}
+
+interface MarkerSpec {
+  open: string;
+  close: string;
+  type: StreamEvent['type'];
+}
+
+const MARKERS: readonly MarkerSpec[] = [
+  {
+    open: AGENT_ACTIVITY_OPEN,
+    close: AGENT_ACTIVITY_CLOSE,
+    type: 'agent_activity',
+  },
+  {
+    open: CONSENT_REQUEST_OPEN,
+    close: CONSENT_REQUEST_CLOSE,
+    type: 'consent_request',
+  },
+  {
+    open: CONSENT_OUTCOME_OPEN,
+    close: CONSENT_OUTCOME_CLOSE,
+    type: 'consent_outcome',
+  },
+  {
+    open: TOOL_CALL_RECORD_OPEN,
+    close: TOOL_CALL_RECORD_CLOSE,
+    type: 'tool_call_record',
+  },
+];
+
+function findNextMarker(
+  text: string,
+  fromIndex: number,
+): { start: number; spec: MarkerSpec } | null {
+  let best: { start: number; spec: MarkerSpec } | null = null;
+  for (const spec of MARKERS) {
+    const idx = text.indexOf(spec.open, fromIndex);
+    if (idx === -1) continue;
+    if (best === null || idx < best.start) {
+      best = { start: idx, spec };
+    }
+  }
+  return best;
+}
+
+function parseEventPayload(spec: MarkerSpec, json: string): StreamEvent | null {
+  try {
+    const parsed = JSON.parse(json) as unknown;
+    if (!parsed || typeof parsed !== 'object') return null;
+    switch (spec.type) {
+      case 'agent_activity': {
+        const p = parsed as { key?: unknown; params?: unknown };
+        if (typeof p.key !== 'string') return null;
+        const payload: AgentActivityPayload = { key: p.key };
+        if (
+          p.params &&
+          typeof p.params === 'object' &&
+          !Array.isArray(p.params)
+        ) {
+          const safeParams: Record<string, string> = {};
+          for (const [k, v] of Object.entries(
+            p.params as Record<string, unknown>,
+          )) {
+            if (v != null) safeParams[k] = String(v);
+          }
+          if (Object.keys(safeParams).length > 0) {
+            payload.params = safeParams;
+          }
+        }
+        return { type: 'agent_activity', payload };
+      }
+      case 'consent_request': {
+        const p = parsed as { kind?: unknown };
+        if (p.kind !== 'oauth' && p.kind !== 'approval') return null;
+        return {
+          type: 'consent_request',
+          payload: parsed as ConsentRequestPayload,
+        };
+      }
+      case 'consent_outcome': {
+        const p = parsed as {
+          approval_request_id?: unknown;
+          approve?: unknown;
+        };
+        if (
+          typeof p.approval_request_id !== 'string' ||
+          typeof p.approve !== 'boolean'
+        ) {
+          return null;
+        }
+        return {
+          type: 'consent_outcome',
+          payload: parsed as ConsentOutcomePayload,
+        };
+      }
+      case 'tool_call_record': {
+        const p = parsed as { id?: unknown; name?: unknown; status?: unknown };
+        if (
+          typeof p.id !== 'string' ||
+          typeof p.name !== 'string' ||
+          typeof p.status !== 'string'
+        ) {
+          return null;
+        }
+        return {
+          type: 'tool_call_record',
+          payload: parsed as ToolCallRecordPayload,
+        };
+      }
+    }
+  } catch {
+    // ignore malformed payload — drop the event, advance past the marker
+  }
+  return null;
+}
+
+/**
+ * Forward-only scan from `fromIndex` to end of input. Returns events,
+ * display text between them, and the new cursor position. Incomplete
+ * markers (open tag, no close yet) leave the cursor at the marker start
+ * so the next call finishes the parse once the tail arrives.
+ */
+export function scanStreamEvents(
+  input: string,
+  fromIndex: number,
+): StreamScanResult {
+  const events: StreamEvent[] = [];
+  let cursor = fromIndex;
+  let displayDelta = '';
+
+  while (cursor < input.length) {
+    const next = findNextMarker(input, cursor);
+    if (next === null) {
+      // No more markers visible. Everything from cursor to end is text;
+      // append it as display and advance.
+      displayDelta += input.slice(cursor);
+      cursor = input.length;
+      break;
+    }
+
+    // Anything between cursor and the marker start is plain text.
+    if (next.start > cursor) {
+      displayDelta += input.slice(cursor, next.start);
+    }
+
+    const closeIdx = input.indexOf(
+      next.spec.close,
+      next.start + next.spec.open.length,
+    );
+    if (closeIdx === -1) {
+      // Incomplete marker — leave the cursor at the marker start so the
+      // next scan finishes the parse after more bytes arrive.
+      cursor = next.start;
+      break;
+    }
+
+    const payloadStart = next.start + next.spec.open.length;
+    const payloadJson = input.slice(payloadStart, closeIdx);
+    const event = parseEventPayload(next.spec, payloadJson);
+    if (event !== null) {
+      events.push(event);
+    }
+    cursor = closeIdx + next.spec.close.length;
+  }
+
+  return { events, displayDelta, nextIndex: cursor };
 }

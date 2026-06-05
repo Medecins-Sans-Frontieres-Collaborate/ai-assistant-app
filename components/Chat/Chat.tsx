@@ -41,6 +41,7 @@ import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
@@ -119,7 +120,9 @@ export function Chat({
     acceptModelSwitch,
     errorIsRecoverable,
     requestStop,
+    retryFailedRequest,
   } = useChat();
+  const failedConversation = useChatStore((s) => s.failedConversation);
 
   const stopGenerationConfirmSource = useUIStore(
     (state) => state.stopGenerationConfirmSource,
@@ -486,10 +489,33 @@ export function Chat({
     clearError();
   }, [selectedConversation?.id, clearError]);
 
-  // Only auto-dismiss errors that can't be regenerated (e.g., during retry)
-  // When regenerate is available, let the user decide when to dismiss
-  const canRegenerate = !!error && !isRetrying && errorIsRecoverable;
-  useAutoDismissError(canRegenerate ? null : error, clearError, 10000);
+  // When the failed turn never produced an assistant message, Regenerate
+  // has nothing to add a version to — offer Retry instead.
+  const failedTrailingIsUser = (() => {
+    if (!failedConversation) return false;
+    const msgs = failedConversation.messages;
+    if (msgs.length === 0) return false;
+    const last = msgs[msgs.length - 1];
+    if (
+      typeof last === 'object' &&
+      last !== null &&
+      'type' in last &&
+      (last as { type?: string }).type === 'assistant_group'
+    ) {
+      return false;
+    }
+    return (last as { role?: string }).role === 'user';
+  })();
+
+  const canRetry = !!error && !isRetrying && failedTrailingIsUser;
+  const canRegenerate =
+    !!error && !isRetrying && errorIsRecoverable && !failedTrailingIsUser;
+  // Only auto-dismiss when there's no Retry/Regenerate button to keep up.
+  useAutoDismissError(
+    canRegenerate || canRetry ? null : error,
+    clearError,
+    10000,
+  );
 
   const messages = selectedConversation?.messages || [];
   const hasMessages =
@@ -673,7 +699,9 @@ export function Chat({
           error={error}
           onClearError={clearError}
           onRegenerate={handleRegenerate}
+          onRetry={retryFailedRequest}
           canRegenerate={canRegenerate}
+          canRetry={canRetry}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}

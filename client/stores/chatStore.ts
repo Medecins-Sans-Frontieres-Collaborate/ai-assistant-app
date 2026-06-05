@@ -20,6 +20,7 @@ import {
   ApprovalResponse,
   Conversation,
   Message,
+  ToolCallRecord,
 } from '@/types/chat';
 import {
   OpenAIModel,
@@ -36,6 +37,7 @@ import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
+import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
 
 interface ChatStore {
@@ -54,6 +56,10 @@ interface ChatStore {
    * `loadingMessage` from live agent-activity markers carrying params.
    */
   loadingMessageParams: Record<string, string> | undefined;
+  /** Live consent prompts during streaming, already extracted from markers. */
+  streamingConsentRequests: ConsentRequestPayload[];
+  /** Live tool call records during streaming; rendered as the summary. */
+  streamingToolCalls: ToolCallRecord[];
   abortController: AbortController | null;
 
   // Retry-related state
@@ -226,6 +232,13 @@ interface ChatStore {
     conversation: Conversation,
     searchMode?: SearchMode,
   ) => Promise<void>;
+  /**
+   * Re-sends the trailing user message of the failed conversation. Used
+   * when the stream errored before any assistant content arrived —
+   * `handleRegenerate` is a no-op in that case because there's no
+   * assistant group to append a version to.
+   */
+  retryFailedRequest: () => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -275,6 +288,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   stopRequested: false,
   loadingMessage: null,
   loadingMessageParams: undefined,
+  streamingConsentRequests: [],
+  streamingToolCalls: [],
   abortController: null,
 
   // Retry-related initial state
@@ -364,6 +379,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       stopRequested: false,
       loadingMessage: null,
       loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -566,6 +583,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
       loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       stopRequested: false,
       abortController,
     });
@@ -577,7 +596,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   scheduleLoadingMessage: (loadingMessage: string): NodeJS.Timeout => {
-    const loadingDelay = 400; // milliseconds
+    // 150ms balances flash-prevention against perceived responsiveness.
+    const loadingDelay = 150;
     return setTimeout(() => {
       const currentState = get();
       if (currentState.isStreaming && !currentState.streamingContent) {
@@ -719,6 +739,42 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   }> => {
     const reader = stream.getReader();
 
+    // Coalesce burst chunks into one paint per frame (~60fps). Falls back
+    // to sync `set` when requestAnimationFrame isn't available (SSR/tests).
+    const canRAF =
+      typeof globalThis !== 'undefined' &&
+      typeof (globalThis as { requestAnimationFrame?: unknown })
+        .requestAnimationFrame === 'function';
+    let pendingFrame = 0;
+    type PendingPatch = {
+      streamingContent?: string;
+      citations?: Citation[];
+      loadingMessage?: string | null;
+      loadingMessageParams?: Record<string, string>;
+    };
+    let pendingPatch: PendingPatch | null = null;
+    const flush = () => {
+      pendingFrame = 0;
+      if (pendingPatch) {
+        const patch = pendingPatch;
+        pendingPatch = null;
+        set(patch);
+      }
+    };
+    const enqueuePatch = (patch: PendingPatch) => {
+      pendingPatch = pendingPatch ? { ...pendingPatch, ...patch } : patch;
+      if (!canRAF) {
+        flush();
+        return;
+      }
+      if (pendingFrame !== 0) return;
+      pendingFrame = (
+        globalThis as unknown as {
+          requestAnimationFrame: (cb: (ts: number) => void) => number;
+        }
+      ).requestAnimationFrame(flush);
+    };
+
     while (true) {
       const { done, value } = await reader.read();
 
@@ -726,14 +782,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         break;
       }
 
-      // Process chunk
       const result = streamParser.processChunk(value, { stream: true });
 
-      // Update action message if found (e.g., "Searching the web...").
-      // The activity key from AGENT_ACTIVITY markers takes precedence over
-      // any metadata-channel `action` field — both feed the same loading
-      // text. We update unconditionally while content hasn't started
-      // streaming yet so the loader reflects the most recent stage.
+      // Activity updates bypass the rAF batch — rare and need to land fast.
       if (result.action && !result.hasReceivedContent) {
         set({
           loadingMessage: result.action,
@@ -741,9 +792,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         });
       }
 
-      // Surface any newly-arrived CONSENT_OUTCOME markers to the global
-      // submittedApprovals map. Server-side auto-resolutions (e.g. tools
-      // in alwaysApproveTools) arrive this way without a user click.
+      // Server-side auto-resolutions (alwaysApprove* matches) arrive as
+      // CONSENT_OUTCOME markers without a user click — promote them here.
       if (result.newOutcomes.length > 0) {
         set((state) => {
           const next = new Map(state.submittedApprovals);
@@ -754,13 +804,21 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         });
       }
 
+      // Separate slices so consent + tool-call subtrees don't re-render
+      // on text chunks. Skipped when nothing changed (Zustand strict eq).
+      if (result.consentChanged) {
+        set({ streamingConsentRequests: streamParser.getConsentRequests() });
+      }
+      if (result.toolCallsChanged) {
+        set({ streamingToolCalls: streamParser.getToolCallRecords?.() ?? [] });
+      }
+
       // Clear loading timeout once content arrives
       if (result.hasReceivedContent && showLoadingTimeout) {
         clearTimeout(showLoadingTimeout);
         showLoadingTimeout = null;
       }
 
-      // Only update state if something changed
       const currentState = get();
       const shouldClearLoading =
         result.hasReceivedContent && currentState.loadingMessage !== null;
@@ -770,12 +828,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         result.citationsChanged ||
         shouldClearLoading
       ) {
-        const update: {
-          streamingContent: string;
-          citations?: Citation[];
-          loadingMessage: string | null;
-          loadingMessageParams?: Record<string, string>;
-        } = {
+        const patch: PendingPatch = {
           streamingContent: result.displayText,
           loadingMessage: result.hasReceivedContent
             ? null
@@ -784,13 +837,24 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             ? undefined
             : currentState.loadingMessageParams,
         };
-
         if (result.citationsChanged) {
-          update.citations = result.citations;
+          patch.citations = result.citations;
         }
-
-        set(update);
+        enqueuePatch(patch);
       }
+    }
+
+    // Flush so we don't drop the last text chunk.
+    if (pendingPatch) {
+      flush();
+    }
+    if (pendingFrame !== 0 && canRAF) {
+      (
+        globalThis as unknown as {
+          cancelAnimationFrame: (h: number) => void;
+        }
+      ).cancelAnimationFrame(pendingFrame);
+      pendingFrame = 0;
     }
 
     // Finalize stream
@@ -919,6 +983,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingConversationId: null,
       loadingMessage: null,
       loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       abortController: null,
       stopRequested: false,
       pendingOAuthResume: {},
@@ -1222,6 +1288,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         originalModelId: null,
       });
     }
+  },
+
+  retryFailedRequest: async () => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+
+    // Walk backwards so we skip any partial assistant entry left from the
+    // failed turn.
+    const flat = flattenEntriesForAPI(failedConversation.messages);
+    let userMessage: Message | undefined;
+    for (let i = flat.length - 1; i >= 0; i--) {
+      if (flat[i].role === 'user') {
+        userMessage = flat[i];
+        break;
+      }
+    }
+    if (!userMessage) return;
+
+    set({
+      error: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, failedConversation, failedSearchMode);
   },
 
   dismissModelSwitchPrompt: () => {

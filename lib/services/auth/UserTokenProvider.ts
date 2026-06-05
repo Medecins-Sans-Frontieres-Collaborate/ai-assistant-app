@@ -68,7 +68,12 @@ export class UserTokenProvider {
     // Create a cache key from a hash of the token + scope
     const cacheKey = `${this.hashToken(userAccessToken)}:${purpose}`;
 
-    // Check cache (with 5-minute safety buffer)
+    // Check cache with a 5-minute safety buffer before token expiry. This
+    // ensures a long downstream call (Foundry agent streams can run 60+
+    // seconds, chained tool calls can run longer) won't fail mid-flight
+    // because the token expired between acquisition and the SDK's last
+    // internal use. Re-acquires hit MSAL (200-400ms) but happen at most
+    // ~12x/hour per user, so perceived impact is negligible.
     const cached = this.tokenCache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt - 5 * 60 * 1000) {
       return cached.token;

@@ -70,6 +70,13 @@ export interface ParsedMetadata {
   activeFilesTokensConsumed?: number;
   activeFilesDropped?: string[];
   extractionMethod: 'metadata' | 'none';
+  /**
+   * Character index in the input string where the terminal
+   * `<<<METADATA_START>>>` marker begins, or null if not present.
+   * The inline-event scanner uses this to cap its scan so it doesn't
+   * walk into the terminal metadata block.
+   */
+  metadataStartIndex: number | null;
 }
 
 /**
@@ -91,13 +98,20 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let activeFilesTokensConsumed: number | undefined;
   let activeFilesDropped: string[] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
+  let metadataStartIndex: number | null = null;
 
-  // Check for metadata format
-  const metadataMatch = content.match(
-    /\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
-  );
+  // Cheap exit when the marker isn't present at all — avoids running the
+  // regex on long streams that have no terminal metadata block yet.
+  const metaIdx = content.indexOf('<<<METADATA_START>>>');
+  const metadataMatch =
+    metaIdx === -1
+      ? null
+      : content.match(/\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s);
   if (metadataMatch) {
     extractionMethod = 'metadata';
+    // Record the start index of the leading `\n\n` so the scanner caps
+    // its inline-event search before the metadata block.
+    metadataStartIndex = metadataMatch.index ?? metaIdx;
     mainContent = content.replace(
       /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
       '',
@@ -157,6 +171,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     activeFilesTokensConsumed,
     activeFilesDropped,
     extractionMethod,
+    metadataStartIndex,
   };
 }
 

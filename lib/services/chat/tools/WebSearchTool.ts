@@ -7,6 +7,12 @@ import { Tool, ToolResult, WebSearchToolParams } from './Tool';
  * Executes web searches using AI Foundry agents.
  * Only the search query is sent to AI Foundry, not the full conversation,
  * preserving user privacy.
+ *
+ * No result caching: each request runs the full search. An in-memory or
+ * cross-request cache would create a window where one user's queries
+ * could be inferred by another via side channels (timing, cache size,
+ * eviction patterns). MSF's privacy posture forbids that trade — the
+ * latency cost is worth the guarantee.
  */
 export class WebSearchTool implements Tool {
   readonly type = 'web_search' as const;

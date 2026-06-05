@@ -10,13 +10,14 @@ import {
   IconFolder,
   IconTrash,
 } from '@tabler/icons-react';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 import { Conversation } from '@/types/chat';
 
 interface ConversationItemProps {
   conversation: Conversation;
-  selectedConversation: Conversation | null;
+  /** Pre-computed in Sidebar so changing selection only re-renders two rows. */
+  isSelected: boolean;
   handleSelectConversation: (id: string) => void;
   handleDeleteConversation: (id: string, e: React.MouseEvent) => void;
   handleMoveToFolder: (conversationId: string, folderId: string | null) => void;
@@ -26,9 +27,9 @@ interface ConversationItemProps {
   t: any;
 }
 
-export function ConversationItem({
+function ConversationItemInner({
   conversation,
-  selectedConversation,
+  isSelected,
   handleSelectConversation,
   handleDeleteConversation,
   handleMoveToFolder,
@@ -80,9 +81,9 @@ export function ConversationItem({
       onDragStart={handleDragStart}
       role="button"
       tabIndex={0}
-      aria-selected={selectedConversation?.id === conversation.id}
+      aria-selected={isSelected}
       className={`group flex items-center gap-2 rounded p-2 cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-        selectedConversation?.id === conversation.id
+        isSelected
           ? 'bg-gray-200 dark:bg-gray-700'
           : 'hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-sm'
       }`}
@@ -269,3 +270,5 @@ export function ConversationItem({
     </div>
   );
 }
+
+export const ConversationItem = memo(ConversationItemInner);

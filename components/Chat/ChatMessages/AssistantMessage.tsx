@@ -19,6 +19,7 @@ import React, {
 } from 'react';
 
 import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
 
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
@@ -51,15 +52,28 @@ import { TranslationDropdown } from '@/components/Chat/ChatMessages/TranslationD
 import { VersionNavigation } from '@/components/Chat/ChatMessages/VersionNavigation';
 import { CitationList } from '@/components/Chat/Citations/CitationList';
 import { TTSContextMenu } from '@/components/Chat/TTS/TTSContextMenu';
-import { CitationStreamdown } from '@/components/Markdown/CitationStreamdown';
 import { StreamdownWithCodeButtons } from '@/components/Markdown/StreamdownWithCodeButtons';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useChatStore } from '@/client/stores/chatStore';
 import {
   extractConsentRequests,
   stripIncompleteStreamMarkers,
 } from '@/lib/streamMarkers';
 import type { MermaidConfig } from 'mermaid';
+
+// Lazy: defers Streamdown + Shiki (~300KB gz) + KaTeX out of the
+// first-load bundle until the first assistant message renders.
+const CitationStreamdown = dynamic(
+  () =>
+    import('@/components/Markdown/CitationStreamdown').then(
+      (mod) => mod.CitationStreamdown,
+    ),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 /**
  * Checks if content is a blob transcript reference that should be loaded from storage.
@@ -117,6 +131,11 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
     const [consentRequests, setConsentRequests] = useState<ConsentRequest[]>(
       [],
     );
+    // Live cards during streaming come pre-extracted from streamParser.
+    const streamingConsentRequests = useChatStore(
+      (s) => s.streamingConsentRequests,
+    );
+    const streamingToolCalls = useChatStore((s) => s.streamingToolCalls);
     const [isGeneratingAudio, setIsGeneratingAudio] = useState<boolean>(false);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
     const [audioSourceLocale, setAudioSourceLocale] = useState<string | null>(
@@ -265,34 +284,41 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       const finalThinking =
         message?.thinking || metadataThinking || inlineThinking || '';
 
-      // Lift persistent consent / approval prompts out of the stream into
-      // structured cards. Then strip transient activity markers (the
-      // streamParser already extracted the latest one to drive the loader).
-      // Marker protocol is centralized in `lib/streamMarkers/`.
-      const { requests: parsedConsentsRaw, cleaned: consentCleaned } =
-        extractConsentRequests(mainContent);
-      mainContent = consentCleaned.replace(
-        /\n*<<<AGENT_ACTIVITY>>>[\s\S]*?<<<END_AGENT_ACTIVITY>>>\n*/g,
-        '',
-      );
+      // During streaming, cards come from streamParser via chatStore —
+      // here we just strip the marker text. On reload, parse from
+      // persisted content (the fallback path for legacy/persisted data).
+      let parsedConsents: ConsentRequest[] = [];
+      if (messageIsStreaming) {
+        mainContent = mainContent.replace(
+          /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g,
+          '',
+        );
+      } else {
+        const { requests: parsedConsentsRaw, cleaned: consentCleaned } =
+          extractConsentRequests(mainContent);
+        mainContent = consentCleaned.replace(
+          /\n*<<<AGENT_ACTIVITY>>>[\s\S]*?<<<END_AGENT_ACTIVITY>>>\n*/g,
+          '',
+        );
 
-      // Dedupe consent prompts by their meaningful identity (so re-renders
-      // and Foundry's `.added` + `.done` double-fires don't render twice).
-      const parsedConsents: ConsentRequest[] = [];
-      const seenConsentKeys = new Set<string>();
-      for (const request of parsedConsentsRaw) {
-        const dedupeKey =
-          request.kind === 'oauth'
-            ? `oauth:${request.consent_url ?? ''}`
-            : `approval:${request.approval_request_id ?? request.tool_name ?? ''}`;
-        if (!seenConsentKeys.has(dedupeKey)) {
-          seenConsentKeys.add(dedupeKey);
-          parsedConsents.push(request);
+        // Dedupe by identity — Foundry fires `.added` + `.done` for each.
+        const seenConsentKeys = new Set<string>();
+        for (const request of parsedConsentsRaw) {
+          const dedupeKey =
+            request.kind === 'oauth'
+              ? `oauth:${request.consent_url ?? ''}`
+              : `approval:${request.approval_request_id ?? request.tool_name ?? ''}`;
+          if (!seenConsentKeys.has(dedupeKey)) {
+            seenConsentKeys.add(dedupeKey);
+            parsedConsents.push(request);
+          }
         }
       }
 
       // Hide partially-streamed markers so users don't briefly see raw
-      // sentinel tokens before the matching close tag arrives.
+      // sentinel tokens before the matching close tag arrives. Cheap on
+      // every render; only does work when an open tag without a close
+      // has arrived in the current chunk.
       mainContent = stripIncompleteStreamMarkers(mainContent);
 
       setProcessedContent(mainContent);
@@ -619,7 +645,15 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                         isAnimating={messageIsStreaming}
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
-                        mermaid={{ config: mermaidConfig }}
+                        // Mermaid is the most expensive parser in the
+                        // pipeline; skip it during streaming and render it
+                        // once at completion. Users don't see diagrams in
+                        // mid-stream text anyway (they scroll past).
+                        mermaid={
+                          messageIsStreaming
+                            ? undefined
+                            : { config: mermaidConfig }
+                        }
                       >
                         {displayedContent}
                       </CitationStreamdown>
@@ -629,10 +663,14 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               )}
             </div>
 
-            {/* Consent / approval cards — rendered after the markdown body
-                so they appear at the point in the message where the agent
-                surfaced the prompt. */}
-            {consentRequests.map((req, i) => {
+            {/* Consent / approval cards — during streaming, read the live
+                list off chatStore (already extracted by streamParser);
+                after stream completion, fall back to the regex-extracted
+                values from the persisted message content. */}
+            {(messageIsStreaming
+              ? (streamingConsentRequests as ConsentRequest[])
+              : consentRequests
+            ).map((req, i) => {
               const persistedOutcome =
                 req.kind === 'approval' && req.approval_request_id
                   ? message?.approvalOutcomes?.[req.approval_request_id]
@@ -657,13 +695,19 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             })}
 
             {/* Tool usage summary — collapsed retrospective view of MCP
-                tool calls that ran while this message was generated. */}
-            {message?.toolCalls && message.toolCalls.length > 0 && (
-              <ToolCallSummary
-                toolCalls={message.toolCalls}
-                approvalSources={message.approvalSources}
-              />
-            )}
+                tool calls. Live during streaming, persisted after. */}
+            {(() => {
+              const liveCalls = messageIsStreaming
+                ? streamingToolCalls
+                : message?.toolCalls;
+              if (!liveCalls || liveCalls.length === 0) return null;
+              return (
+                <ToolCallSummary
+                  toolCalls={liveCalls}
+                  approvalSources={message?.approvalSources}
+                />
+              );
+            })()}
 
             {/* Citations - shown after content but before action buttons */}
             {citations.length > 0 && <CitationList citations={citations} />}

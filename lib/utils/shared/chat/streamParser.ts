@@ -10,19 +10,24 @@ import { Message, MessageType, ToolCallRecord } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 import {
+  AgentActivityPayload,
   ConsentOutcomePayload,
+  ConsentRequestPayload,
   ToolCallRecordPayload,
-  extractConsentOutcomes,
-  extractLatestAgentActivity,
-  extractToolCallRecords,
+  scanStreamEvents,
 } from '@/lib/streamMarkers';
 
 /**
- * Handles parsing of streaming chat responses
- * Extracts metadata (citations, transcripts, actions) and display content
+ * Parses streaming chat responses. Forward-only: each chunk scans only
+ * the suffix past `processedIndex`, so total work is O(stream_size) and
+ * not O(stream_size²).
  */
 export class StreamParser {
   private text: string = '';
+  /** Bytes before this index are either in `displayText` or were events. */
+  private processedIndex: number = 0;
+  /** What the markdown renderer sees. Incomplete marker tails are excluded. */
+  private displayText: string = '';
   private extractedCitations: Citation[] = [];
   private extractedThreadId?: string;
   private extractedTranscript?: TranscriptMetadata;
@@ -33,15 +38,15 @@ export class StreamParser {
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
-  // CONSENT_OUTCOME markers are side-effect-only. Track which ones we've
-  // already surfaced so processChunk only returns newly-arrived outcomes.
-  // Lifetime: instance-scoped — every chat send constructs a fresh
-  // StreamParser, so this Set never persists across streams.
+  // Drives the loading text — only the latest activity is shown.
+  private latestActivity: AgentActivityPayload | null = null;
+  // Outcomes already surfaced; processChunk only returns new ones.
   private seenOutcomeIds: Set<string> = new Set();
-  // TOOL_CALL_RECORD markers are accumulated for the post-stream summary.
-  // Keyed by record id to handle Foundry's redundant `.added` + `.done`
-  // delivery (the handler dedupes too, but defense in depth).
+  // Tool calls keyed by id (defensive dedupe vs Foundry's `.added`/`.done`).
   private toolCallRecords: Map<string, ToolCallRecordPayload> = new Map();
+  // Consent prompts in arrival order, deduped by oauth url / approval id.
+  private consentRequests: ConsentRequestPayload[] = [];
+  private seenConsentKeys: Set<string> = new Set();
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -63,38 +68,76 @@ export class StreamParser {
     newOutcomes: ConsentOutcomePayload[];
     /** Optional interpolation params for the latest activity translation. */
     actionParams?: Record<string, string>;
+    /** Whether the consent-card or tool-call lists changed this chunk. */
+    consentChanged: boolean;
+    toolCallsChanged: boolean;
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
 
+    // Terminal METADATA block (citations, threadId, etc.). Cheap when
+    // the marker isn't present — parseMetadataFromContent short-circuits.
     const parsed = parseMetadataFromContent(this.text);
 
-    // Pull all CONSENT_OUTCOME markers, dedupe against ones we've already
-    // surfaced, and strip them so they never reach the rendered content.
-    const { outcomes, cleaned: outcomeStripped } = extractConsentOutcomes(
-      parsed.content,
-    );
+    // Cap the inline-event scan at the start of the METADATA block once
+    // it appears, so we never walk into it.
+    let scanEnd = this.text.length;
+    if (parsed.metadataStartIndex != null) {
+      scanEnd = Math.min(scanEnd, parsed.metadataStartIndex);
+    }
+    const scanInput =
+      scanEnd === this.text.length ? this.text : this.text.slice(0, scanEnd);
+    const scan = scanStreamEvents(scanInput, this.processedIndex);
+
     const newOutcomes: ConsentOutcomePayload[] = [];
-    for (const o of outcomes) {
-      if (!this.seenOutcomeIds.has(o.approval_request_id)) {
-        this.seenOutcomeIds.add(o.approval_request_id);
-        newOutcomes.push(o);
+    let consentChanged = false;
+    let toolCallsChanged = false;
+    for (const event of scan.events) {
+      switch (event.type) {
+        case 'agent_activity':
+          this.latestActivity = event.payload;
+          break;
+        case 'consent_outcome': {
+          const id = event.payload.approval_request_id;
+          if (!this.seenOutcomeIds.has(id)) {
+            this.seenOutcomeIds.add(id);
+            newOutcomes.push(event.payload);
+          }
+          break;
+        }
+        case 'consent_request': {
+          const req = event.payload;
+          const key =
+            req.kind === 'oauth'
+              ? `oauth:${req.consent_url ?? ''}`
+              : `approval:${req.approval_request_id ?? req.tool_name ?? ''}`;
+          if (!this.seenConsentKeys.has(key)) {
+            this.seenConsentKeys.add(key);
+            this.consentRequests.push(req);
+            consentChanged = true;
+          }
+          break;
+        }
+        case 'tool_call_record': {
+          this.toolCallRecords.set(event.payload.id, event.payload);
+          toolCallsChanged = true;
+          break;
+        }
       }
     }
-    // Pull all TOOL_CALL_RECORD markers, accumulate them by id, and strip
-    // them from the visible content. `.added` and `.done` for the same
-    // call may both flow through; latest write wins.
-    const { records: toolRecords, cleaned: recordsStripped } =
-      extractToolCallRecords(outcomeStripped);
-    for (const r of toolRecords) {
-      this.toolCallRecords.set(r.id, r);
+
+    this.processedIndex = scan.nextIndex;
+    if (scan.displayDelta) {
+      this.displayText += scan.displayDelta;
     }
-    // Pull the latest transient agent-activity marker (drives the loading
-    // text) and strip all of them from the visible content.
-    const { latest: latestActivity, cleaned: displayText } =
-      extractLatestAgentActivity(recordsStripped);
-    const latestActivityKey = latestActivity?.key;
-    const latestActivityParams = latestActivity?.params;
+
+    // Strip dangling "[1] [2]" citation indices at the end so the CitationList
+    // below the message owns citation display. Derived per-render — the raw
+    // accumulator keeps all bytes in case a later chunk extends past them.
+    const renderedDisplayText = this.displayText.replace(
+      /\n*\s*(?:\[\d+\]\s*)+\s*$/g,
+      '',
+    );
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -141,26 +184,36 @@ export class StreamParser {
       this.extractedActiveFilesDropped = parsed.activeFilesDropped;
     }
 
-    // Check if we've received actual content (not just metadata)
-    if (displayText && displayText.trim().length > 0) {
+    // `hasReceivedContent` checks the raw accumulator so a citations-only
+    // response (`[1] [2]`) still clears the loading state. `contentChanged`
+    // compares the rendered text so we don't repaint when only trailing
+    // citation indices changed.
+    if (this.displayText && this.displayText.trim().length > 0) {
       this.hasReceivedContent = true;
     }
 
-    const contentChanged = displayText !== this.prevDisplayText;
-    this.prevDisplayText = displayText;
+    const contentChanged = renderedDisplayText !== this.prevDisplayText;
+    this.prevDisplayText = renderedDisplayText;
 
     return {
-      displayText,
+      displayText: renderedDisplayText,
       citations: this.extractedCitations,
       hasReceivedContent: this.hasReceivedContent,
       // Transient activity key (if any) takes precedence over a
       // metadata-channel `action` field; both feed the same loading text.
-      action: latestActivityKey ?? parsed.action,
+      action: this.latestActivity?.key ?? parsed.action,
       contentChanged,
       citationsChanged,
       newOutcomes,
-      actionParams: latestActivityParams,
+      actionParams: this.latestActivity?.params,
+      consentChanged,
+      toolCallsChanged,
     };
+  }
+
+  /** Consent prompts seen so far, in arrival order. */
+  getConsentRequests(): ConsentRequestPayload[] {
+    return this.consentRequests;
   }
 
   /**
