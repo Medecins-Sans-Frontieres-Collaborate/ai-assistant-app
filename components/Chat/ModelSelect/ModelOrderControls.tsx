@@ -3,6 +3,7 @@
 import {
   IconArrowsSort,
   IconCheck,
+  IconChevronDown,
   IconPencil,
   IconRefresh,
 } from '@tabler/icons-react';
@@ -85,19 +86,10 @@ export const ModelOrderControls: FC<ModelOrderControlsProps> = ({
           >
             <IconArrowsSort size={14} className="flex-shrink-0" />
             <span className="hidden sm:inline">{currentModeLabel}</span>
-            <svg
-              className={`w-3 h-3 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+            <IconChevronDown
+              size={12}
+              className={`transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+            />
           </button>
 
           {isDropdownOpen && (

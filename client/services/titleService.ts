@@ -3,9 +3,7 @@
  *
  * Client-side service for generating AI-powered conversation titles.
  */
-import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { flattenEntriesForAPI } from '@/lib/utils/shared/chat/messageVersioning';
-import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 
 import { ConversationEntry } from '@/types/chat';
 
@@ -26,11 +24,8 @@ export async function generateConversationTitle(
   modelId: string,
 ): Promise<TitleGenerationResult | null> {
   try {
-    // Convert conversation entries to flat messages for API (title only needs a few messages)
-    const messages = windowMessagesForAPI(
-      flattenEntriesForAPI(entries),
-      VALIDATION_LIMITS.TITLE_MAX_MESSAGES,
-    );
+    // Convert conversation entries to flat messages for API
+    const messages = flattenEntriesForAPI(entries);
 
     if (messages.length === 0) {
       return null;

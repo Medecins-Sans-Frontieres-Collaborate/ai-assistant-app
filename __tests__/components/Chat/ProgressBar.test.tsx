@@ -32,7 +32,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '0%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0)' });
     });
 
     it('displays progress at 50%', () => {
@@ -43,7 +43,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '50%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.5)' });
     });
 
     it('displays progress at 100%', () => {
@@ -54,7 +54,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '100%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(1)' });
     });
   });
 
@@ -230,7 +230,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveClass('transition-all');
+      expect(progressFill).toHaveClass('transition-transform');
       expect(progressFill).toHaveClass('duration-100');
     });
   });
@@ -244,7 +244,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '0%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0)' });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '0',
@@ -259,7 +259,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '25%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.25)' });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '25',
@@ -274,7 +274,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '50%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.5)' });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '50',
@@ -289,7 +289,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '75%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.75)' });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '75',
@@ -304,7 +304,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '100%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(1)' });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '100',
@@ -319,7 +319,9 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '33.333%' });
+      expect(progressFill).toHaveStyle({
+        transform: 'scaleX(0.33332999999999996)',
+      });
       expect(screen.getByRole('progressbar')).toHaveAttribute(
         'aria-valuenow',
         '33',
@@ -334,7 +336,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '0.5%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.005)' });
     });
 
     it('handles progress values over 100 (edge case)', () => {
@@ -345,7 +347,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '150%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(1.5)' });
     });
 
     it('handles negative progress values (edge case)', () => {
@@ -356,7 +358,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '-10%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(-0.1)' });
     });
   });
 
@@ -369,13 +371,13 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '0%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0)' });
 
       rerender(<ProgressBar progress={50} onSeek={vi.fn()} />);
-      expect(progressFill).toHaveStyle({ width: '50%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.5)' });
 
       rerender(<ProgressBar progress={100} onSeek={vi.fn()} />);
-      expect(progressFill).toHaveStyle({ width: '100%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(1)' });
     });
 
     it('updates aria-valuenow when progress changes', () => {
@@ -412,7 +414,7 @@ describe('ProgressBar', () => {
 
       for (let i = 0; i <= 100; i += 10) {
         rerender(<ProgressBar progress={i} onSeek={vi.fn()} />);
-        expect(progressFill).toHaveStyle({ width: `${i}%` });
+        expect(progressFill).toHaveStyle({ transform: `scaleX(${i / 100})` });
       }
     });
   });
@@ -466,7 +468,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '0%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0)' });
     });
 
     it('displays mid-playback state', () => {
@@ -477,7 +479,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '47.5%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.475)' });
     });
 
     it('displays near-end state', () => {
@@ -488,7 +490,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '98.5%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(0.985)' });
     });
 
     it('displays completed state', () => {
@@ -499,7 +501,7 @@ describe('ProgressBar', () => {
       const progressFill = container.querySelector(
         '.bg-blue-500',
       ) as HTMLElement;
-      expect(progressFill).toHaveStyle({ width: '100%' });
+      expect(progressFill).toHaveStyle({ transform: 'scaleX(1)' });
     });
   });
 });

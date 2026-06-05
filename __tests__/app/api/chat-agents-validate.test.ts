@@ -12,8 +12,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Hoist mocks before imports
 const mockAuth = vi.hoisted(() => vi.fn());
+const mockGetAccessTokenForOBO = vi.hoisted(() =>
+  vi.fn().mockResolvedValue('mock-app-access-token'),
+);
+const mockGetFoundryToken = vi.hoisted(() =>
+  vi.fn().mockResolvedValue('mock-foundry-obo-token'),
+);
 const mockDefaultAzureCredential = vi.hoisted(() => vi.fn());
-const mockAgentsClient = vi.hoisted(() => vi.fn());
+const mockAIProjectClient = vi.hoisted(() => vi.fn());
 const mockGetAgent = vi.hoisted(() => vi.fn());
 const mockEnv = vi.hoisted(() => ({
   AZURE_AI_FOUNDRY_ENDPOINT: 'https://test-foundry.services.ai.azure.com',
@@ -22,14 +28,21 @@ const mockEnv = vi.hoisted(() => ({
 // Mock dependencies
 vi.mock('@/auth', () => ({
   auth: mockAuth,
+  getAccessTokenForOBO: mockGetAccessTokenForOBO,
+}));
+
+vi.mock('@/lib/services/auth/UserTokenProvider', () => ({
+  UserTokenProvider: {
+    getInstance: () => ({ getFoundryToken: mockGetFoundryToken }),
+  },
 }));
 
 vi.mock('@azure/identity', () => ({
   DefaultAzureCredential: mockDefaultAzureCredential,
 }));
 
-vi.mock('@azure/ai-agents', () => ({
-  AgentsClient: mockAgentsClient,
+vi.mock('@azure/ai-projects', () => ({
+  AIProjectClient: mockAIProjectClient,
 }));
 
 vi.mock('@/config/environment', () => ({
@@ -42,7 +55,8 @@ vi.mock('@/config/environment', () => ({
  */
 describe('/api/chat/agents/validate', () => {
   const mockSession = createMockSession();
-  const validAgentId = 'asst_abc123_test';
+  const validLegacyAgentId = 'asst_abc123_test';
+  const validNewAgentName = 'my-agent-name';
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -55,15 +69,17 @@ describe('/api/chat/agents/validate', () => {
       return {};
     });
 
-    // Setup AgentsClient mock
+    // Setup AIProjectClient mock
     mockGetAgent.mockResolvedValue({
-      id: validAgentId,
+      id: validLegacyAgentId,
       name: 'Test Agent',
     });
 
-    mockAgentsClient.mockImplementation(function (this: any) {
+    mockAIProjectClient.mockImplementation(function (this: any) {
       return {
-        getAgent: mockGetAgent,
+        agents: {
+          get: mockGetAgent,
+        },
       };
     });
 
@@ -78,7 +94,7 @@ describe('/api/chat/agents/validate', () => {
   }): NextRequest => {
     const {
       body = {
-        agentId: validAgentId,
+        agentId: validLegacyAgentId,
       },
       url = 'http://localhost:3000/api/chat/agents/validate',
     } = options;
@@ -151,35 +167,6 @@ describe('/api/chat/agents/validate', () => {
       expect(data.error).toBe('Agent ID is required');
     });
 
-    it('returns 400 when agentId format is invalid (no prefix)', async () => {
-      const request = createValidateRequest({
-        body: {
-          agentId: 'invalid_agent_id',
-        },
-      });
-
-      const response = await POST(request);
-      const data = await parseJsonResponse(response);
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Invalid agent ID format');
-      expect(data.details).toContain('asst_xxxxx');
-    });
-
-    it('returns 400 when agentId format is invalid (wrong prefix)', async () => {
-      const request = createValidateRequest({
-        body: {
-          agentId: 'agent_abc123',
-        },
-      });
-
-      const response = await POST(request);
-      const data = await parseJsonResponse(response);
-
-      expect(response.status).toBe(400);
-      expect(data.error).toBe('Invalid agent ID format');
-    });
-
     it('returns 400 when agentId has invalid characters', async () => {
       const request = createValidateRequest({
         body: {
@@ -194,7 +181,22 @@ describe('/api/chat/agents/validate', () => {
       expect(data.error).toBe('Invalid agent ID format');
     });
 
-    it('accepts valid agentId with underscores', async () => {
+    it('returns 400 when agentId starts with special character', async () => {
+      const request = createValidateRequest({
+        body: {
+          agentId: '-invalid-start',
+        },
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(400);
+      expect(data.error).toBe('Invalid agent ID format');
+      expect(data.details).toContain('agent-name or asst_xxxxx');
+    });
+
+    it('accepts valid legacy agentId with underscores', async () => {
       const request = createValidateRequest({
         body: {
           agentId: 'asst_test_agent_123',
@@ -206,7 +208,7 @@ describe('/api/chat/agents/validate', () => {
       expect(response.status).toBe(200);
     });
 
-    it('accepts valid agentId with hyphens', async () => {
+    it('accepts valid legacy agentId with hyphens', async () => {
       const request = createValidateRequest({
         body: {
           agentId: 'asst_test-agent-123',
@@ -218,10 +220,64 @@ describe('/api/chat/agents/validate', () => {
       expect(response.status).toBe(200);
     });
 
-    it('accepts valid agentId with mixed case', async () => {
+    it('accepts valid legacy agentId with mixed case', async () => {
       const request = createValidateRequest({
         body: {
           agentId: 'asst_TestAgent123',
+        },
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(200);
+    });
+
+    it('accepts new agent name format', async () => {
+      mockGetAgent.mockResolvedValue({
+        id: validNewAgentName,
+        name: 'My Agent',
+      });
+
+      const request = createValidateRequest({
+        body: {
+          agentId: validNewAgentName,
+        },
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.valid).toBe(true);
+      expect(data.agentId).toBe(validNewAgentName);
+    });
+
+    it('accepts new agent name with hyphens', async () => {
+      mockGetAgent.mockResolvedValue({
+        id: 'gpt-41',
+        name: 'GPT 4.1 Agent',
+      });
+
+      const request = createValidateRequest({
+        body: {
+          agentId: 'gpt-41',
+        },
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(200);
+    });
+
+    it('accepts new agent name with underscores', async () => {
+      mockGetAgent.mockResolvedValue({
+        id: 'my_agent_name',
+        name: 'My Agent',
+      });
+
+      const request = createValidateRequest({
+        body: {
+          agentId: 'my_agent_name',
         },
       });
 
@@ -251,18 +307,24 @@ describe('/api/chat/agents/validate', () => {
   });
 
   describe('Agent Validation', () => {
-    it('creates AgentsClient with correct endpoint and credentials', async () => {
+    it('creates AIProjectClient with correct endpoint and a user credential', async () => {
       const request = createValidateRequest({});
       await POST(request);
 
-      expect(mockAgentsClient).toHaveBeenCalledWith(
+      expect(mockAIProjectClient).toHaveBeenCalledWith(
         'https://test-foundry.services.ai.azure.com',
-        expect.any(Object),
+        expect.objectContaining({ getToken: expect.any(Function) }),
       );
-      expect(mockDefaultAzureCredential).toHaveBeenCalled();
+      // OBO path is the prod default; DefaultAzureCredential is only the
+      // dev fallback when getAccessTokenForOBO fails. With OBO mocked
+      // successful, we expect the OBO-derived credential (a TokenCredential
+      // wrapper) to be passed, NOT DefaultAzureCredential.
+      expect(mockGetAccessTokenForOBO).toHaveBeenCalled();
+      expect(mockGetFoundryToken).toHaveBeenCalledWith('mock-app-access-token');
+      expect(mockDefaultAzureCredential).not.toHaveBeenCalled();
     });
 
-    it('calls getAgent with provided agentId', async () => {
+    it('calls agents.getAgent with provided agentId', async () => {
       const request = createValidateRequest({
         body: {
           agentId: 'asst_custom_agent',
@@ -274,9 +336,26 @@ describe('/api/chat/agents/validate', () => {
       expect(mockGetAgent).toHaveBeenCalledWith('asst_custom_agent');
     });
 
+    it('calls agents.getAgent with new-format agent name', async () => {
+      mockGetAgent.mockResolvedValue({
+        id: 'my-custom-agent',
+        name: 'My Custom Agent',
+      });
+
+      const request = createValidateRequest({
+        body: {
+          agentId: 'my-custom-agent',
+        },
+      });
+
+      await POST(request);
+
+      expect(mockGetAgent).toHaveBeenCalledWith('my-custom-agent');
+    });
+
     it('returns success response when agent exists', async () => {
       mockGetAgent.mockResolvedValue({
-        id: validAgentId,
+        id: validLegacyAgentId,
         name: 'Production Agent',
       });
 
@@ -286,14 +365,14 @@ describe('/api/chat/agents/validate', () => {
 
       expect(response.status).toBe(200);
       expect(data.valid).toBe(true);
-      expect(data.agentId).toBe(validAgentId);
+      expect(data.agentId).toBe(validLegacyAgentId);
       expect(data.agentName).toBe('Production Agent');
       expect(data.message).toBe('Agent validated successfully');
     });
 
     it('returns agent name as "Unknown" when name is missing', async () => {
       mockGetAgent.mockResolvedValue({
-        id: validAgentId,
+        id: validLegacyAgentId,
         // name is missing
       });
 
@@ -314,7 +393,7 @@ describe('/api/chat/agents/validate', () => {
 
       expect(response.status).toBe(404);
       expect(data.error).toBe('Agent not found');
-      expect(data.details).toContain(validAgentId);
+      expect(data.details).toContain(validLegacyAgentId);
     });
   });
 
@@ -331,7 +410,7 @@ describe('/api/chat/agents/validate', () => {
 
       expect(response.status).toBe(404);
       expect(data.error).toBe('Agent not found');
-      expect(data.details).toContain(validAgentId);
+      expect(data.details).toContain(validLegacyAgentId);
       expect(data.details).toContain('verify the ID');
     });
 
@@ -441,9 +520,6 @@ describe('/api/chat/agents/validate', () => {
     });
 
     it('handles request body parsing gracefully', async () => {
-      // Note: Request parsing errors are difficult to test with mocks
-      // since the mock request creates a valid request. This test verifies
-      // the endpoint handles invalid/missing body data by returning 400.
       const request = createValidateRequest({
         body: {},
       });
@@ -486,7 +562,7 @@ describe('/api/chat/agents/validate', () => {
   });
 
   describe('Integration Scenarios', () => {
-    it('handles complete validation workflow successfully', async () => {
+    it('handles complete validation workflow with legacy ID', async () => {
       mockGetAgent.mockResolvedValue({
         id: 'asst_production_agent_v2',
         name: 'Production Search Agent',
@@ -510,8 +586,29 @@ describe('/api/chat/agents/validate', () => {
 
       // Verify all required steps
       expect(auth).toHaveBeenCalled();
-      expect(mockAgentsClient).toHaveBeenCalled();
+      expect(mockAIProjectClient).toHaveBeenCalled();
       expect(mockGetAgent).toHaveBeenCalledWith('asst_production_agent_v2');
+    });
+
+    it('handles complete validation workflow with new agent name', async () => {
+      mockGetAgent.mockResolvedValue({
+        id: 'gpt-41',
+        name: 'GPT 4.1 Search Agent',
+      });
+
+      const request = createValidateRequest({
+        body: {
+          agentId: 'gpt-41',
+        },
+      });
+
+      const response = await POST(request);
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.valid).toBe(true);
+      expect(data.agentId).toBe('gpt-41');
+      expect(data.agentName).toBe('GPT 4.1 Search Agent');
     });
 
     it('handles agent not found scenario with clear error message', async () => {
@@ -556,12 +653,15 @@ describe('/api/chat/agents/validate', () => {
       expect(data.details).toContain('contact your administrator');
     });
 
-    it('validates multiple different agent IDs', async () => {
+    it('validates multiple different agent IDs (legacy and new formats)', async () => {
       const testAgents = [
         'asst_agent_1',
         'asst_agent-with-hyphens',
         'asst_Agent_With_Mixed_Case',
         'asst_123456789',
+        'my-agent',
+        'gpt-41',
+        'claude-sonnet-46',
       ];
 
       for (const agentId of testAgents) {
@@ -586,9 +686,11 @@ describe('/api/chat/agents/validate', () => {
         mockDefaultAzureCredential.mockImplementation(function (this: any) {
           return {};
         });
-        mockAgentsClient.mockImplementation(function (this: any) {
+        mockAIProjectClient.mockImplementation(function (this: any) {
           return {
-            getAgent: mockGetAgent,
+            agents: {
+              get: mockGetAgent,
+            },
           };
         });
       }

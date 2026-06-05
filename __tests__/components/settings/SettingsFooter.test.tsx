@@ -208,7 +208,7 @@ describe('SettingsFooter', () => {
       expect(footerDiv).toHaveClass('flex-col');
       expect(footerDiv).toHaveClass('border-t');
       expect(footerDiv).toHaveClass('border-gray-300');
-      expect(footerDiv).toHaveClass('dark:border-neutral-700');
+      expect(footerDiv).toHaveClass('dark:border-gray-700');
     });
 
     it('footer content has responsive layout', () => {

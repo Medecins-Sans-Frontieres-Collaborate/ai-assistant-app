@@ -231,7 +231,7 @@ describe('CitationList', () => {
       const header = container.querySelector('.cursor-pointer');
       expect(header).toBeInTheDocument();
       expect(header).toHaveClass('rounded-lg');
-      expect(header).toHaveClass('dark:bg-[#1a1a1a]');
+      expect(header).toHaveClass('dark:bg-surface-dark-recessed');
       expect(header).toHaveClass('bg-gray-50/80');
     });
 
@@ -240,7 +240,7 @@ describe('CitationList', () => {
 
       const header = container.querySelector('.cursor-pointer');
       expect(header).toHaveClass('hover:bg-gray-100/80');
-      expect(header).toHaveClass('dark:hover:bg-[#222222]');
+      expect(header).toHaveClass('dark:hover:bg-surface-dark');
     });
 
     it('container fades in with transition', () => {

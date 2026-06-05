@@ -27,15 +27,15 @@ describe('AnthropicFoundryHandler', () => {
   let mockClient: AnthropicFoundry;
 
   const mockModelConfig: OpenAIModel = {
-    id: OpenAIModelID.CLAUDE_SONNET_4_5,
-    name: 'Claude Sonnet 4.5',
+    id: OpenAIModelID.CLAUDE_SONNET_4_6,
+    name: 'Claude Sonnet 4.6',
     maxLength: 200000,
     tokenLimit: 64000,
     modelType: 'omni',
     provider: 'anthropic',
     sdk: 'anthropic-foundry',
     supportsTemperature: true,
-    deploymentName: 'claude-sonnet-4-5',
+    deploymentName: 'claude-sonnet-4-6',
   };
 
   beforeEach(() => {
@@ -194,7 +194,7 @@ describe('AnthropicFoundryHandler', () => {
       };
 
       const result = handler.buildNonStreamingRequestParams(
-        'claude-sonnet-4-5',
+        'claude-sonnet-4-6',
         messages,
         'You are a helpful assistant.',
         0.7,
@@ -203,7 +203,7 @@ describe('AnthropicFoundryHandler', () => {
       );
 
       expect(result).toMatchObject({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         messages,
         system: 'You are a helpful assistant.',
         max_tokens: 64000,
@@ -221,7 +221,7 @@ describe('AnthropicFoundryHandler', () => {
       ];
 
       const result = handler.buildNonStreamingRequestParams(
-        'claude-sonnet-4-5',
+        'claude-sonnet-4-6',
         messages,
         'System prompt',
         0.5,
@@ -229,7 +229,7 @@ describe('AnthropicFoundryHandler', () => {
         mockModelConfig,
       );
 
-      expect(result.model).toBe('claude-sonnet-4-5');
+      expect(result.model).toBe('claude-sonnet-4-6');
     });
 
     it('should not include temperature when not supported', () => {
@@ -242,7 +242,7 @@ describe('AnthropicFoundryHandler', () => {
       ];
 
       const result = handler.buildNonStreamingRequestParams(
-        'claude-sonnet-4-5',
+        'claude-sonnet-4-6',
         messages,
         'System prompt',
         0.7,
@@ -261,7 +261,7 @@ describe('AnthropicFoundryHandler', () => {
       ];
 
       const result = handler.buildStreamingRequestParams(
-        'claude-sonnet-4-5',
+        'claude-sonnet-4-6',
         messages,
         'You are helpful.',
         0.8,
@@ -270,7 +270,7 @@ describe('AnthropicFoundryHandler', () => {
       );
 
       expect(result.stream).toBe(true);
-      expect(result.model).toBe('claude-sonnet-4-5');
+      expect(result.model).toBe('claude-sonnet-4-6');
       expect(result.temperature).toBe(0.8);
       expect(result.metadata?.user_id).toBe(hashEmail('user@test.com'));
     });
@@ -279,10 +279,10 @@ describe('AnthropicFoundryHandler', () => {
   describe('getModelIdForRequest', () => {
     it('should return deployment name when available', () => {
       const result = handler.getModelIdForRequest(
-        'claude-sonnet-4-5',
+        'claude-sonnet-4-6',
         mockModelConfig,
       );
-      expect(result).toBe('claude-sonnet-4-5');
+      expect(result).toBe('claude-sonnet-4-6');
     });
 
     it('should fall back to model ID when no deployment name', () => {
@@ -292,10 +292,10 @@ describe('AnthropicFoundryHandler', () => {
       };
 
       const result = handler.getModelIdForRequest(
-        'claude-opus-4-5',
+        'claude-sonnet-4-6',
         configWithoutDeployment,
       );
-      expect(result).toBe('claude-opus-4-5');
+      expect(result).toBe('claude-sonnet-4-6');
     });
   });
 
@@ -309,7 +309,7 @@ describe('AnthropicFoundryHandler', () => {
           { type: 'text', text: 'Hello, ', citations: null },
           { type: 'text', text: 'world!', citations: null },
         ],
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         stop_reason: 'end_turn',
         stop_sequence: null,
         usage: {
@@ -338,7 +338,7 @@ describe('AnthropicFoundryHandler', () => {
             input: { expression: '2+2' },
           },
         ],
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         stop_reason: 'tool_use',
         stop_sequence: null,
         usage: {
@@ -368,7 +368,7 @@ describe('AnthropicFoundryHandler', () => {
           },
           { type: 'text', text: 'The answer is 42.', citations: null },
         ],
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         stop_reason: 'end_turn',
         stop_sequence: null,
         usage: {
@@ -389,7 +389,7 @@ describe('AnthropicFoundryHandler', () => {
         type: 'message',
         role: 'assistant',
         content: [{ type: 'text', text: 'Just a response', citations: null }],
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         stop_reason: 'end_turn',
         stop_sequence: null,
         usage: {
@@ -412,7 +412,7 @@ describe('AnthropicFoundryHandler', () => {
         type: 'message',
         role: 'assistant',
         content: [{ type: 'text', text: 'Response', citations: null }],
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         stop_reason: 'end_turn',
         stop_sequence: null,
         usage: {
@@ -428,7 +428,7 @@ describe('AnthropicFoundryHandler', () => {
       ).mockResolvedValue(mockResponse);
 
       const params: Anthropic.MessageCreateParamsNonStreaming = {
-        model: 'claude-sonnet-4-5',
+        model: 'claude-sonnet-4-6',
         messages: [{ role: 'user', content: 'Hello' }],
         max_tokens: 1024,
         stream: false,

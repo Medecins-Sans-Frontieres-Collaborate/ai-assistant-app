@@ -2,11 +2,13 @@ import { Session } from 'next-auth';
 
 import { ModelSelector } from '@/lib/services/shared';
 
-import { ActiveFile, Message } from '@/types/chat';
+import { ActiveFile, ApprovalResponse, Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference } from '@/types/settings';
 import { Tone } from '@/types/tone';
+
+import { TokenCredential } from '@azure/identity';
 
 /**
  * Processed content from content processors.
@@ -119,6 +121,21 @@ export interface ChatContext {
   /** Custom display name from General Settings */
   customDisplayName?: string;
 
+  /**
+   * ARM resource path of the Foundry project that hosts the agent being
+   * invoked. Set by the client when calling a specific foundry agent; the
+   * server validates against `isValidFoundryResourcePath` before use; invalid → ignored.
+   */
+  agentSourcePath?: string;
+
+  /**
+   * MCP tool-approval responses to submit alongside (or in lieu of) the
+   * user's new message. When present, the Foundry agent handler skips
+   * creating a new user-message conversation item and instead posts
+   * `mcp_approval_response` items to resume the agent.
+   */
+  approvalResponses?: ApprovalResponse[];
+
   // ========================================
   // FEATURE FLAGS
   // ========================================
@@ -166,6 +183,20 @@ export interface ChatContext {
   // ========================================
   /** Model selector instance */
   modelSelector: ModelSelector;
+
+  /** OBO credential for making Foundry calls as the authenticated user */
+  userCredential?: TokenCredential;
+
+  /** Regional Foundry endpoint resolved from user's region (GDPR routing) */
+  foundryEndpoint?: string;
+
+  /**
+   * Optional async helper that pipeline stages can call to update the
+   * client-visible loading text in real time. Each call writes a single
+   * AGENT_ACTIVITY marker into the response stream. The route handler
+   * installs this when it sets up the streaming response.
+   */
+  emitActivity?: (translationKey: string) => Promise<void>;
 
   // ========================================
   // PIPELINE STATE (Modified by stages)
@@ -245,4 +276,20 @@ export interface ChatContext {
     resetTime: number;
     retryAfter?: number;
   };
+}
+
+/**
+ * Decides whether a request should execute via the Foundry-agent code path
+ * (vs. the standard handler path). Centralized so the routing rule is
+ * consistent across enrichers + the final handler dispatch.
+ */
+export function shouldExecuteAsAgent(
+  context: Pick<ChatContext, 'agentMode' | 'model' | 'hasFiles' | 'hasImages'>,
+): boolean {
+  return (
+    !!context.agentMode &&
+    !!context.model?.agentId &&
+    !context.hasFiles &&
+    !context.hasImages
+  );
 }

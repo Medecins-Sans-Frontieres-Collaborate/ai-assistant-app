@@ -3,12 +3,17 @@ import {
   needsMigration,
 } from '@/lib/utils/shared/chat/messageVersioning';
 
-import { Conversation } from '@/types/chat';
+import { Conversation, Message } from '@/types/chat';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from './const';
 
-export const cleanConversationHistory = (history: any[]): Conversation[] => {
+// Input is intentionally `unknown[]` — this runs at localStorage hydration
+// time on user-supplied data that may predate any version of the Conversation
+// schema. Each field is checked and defaulted individually below.
+export const cleanConversationHistory = (
+  history: unknown[],
+): Conversation[] => {
   // added model for each conversation (3/20/23)
   // added system prompt for each conversation (3/21/23)
   // added folders (3/23/23)
@@ -20,7 +25,8 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
     return [];
   }
 
-  return history.reduce((acc: any[], conversation) => {
+  return history.reduce<Conversation[]>((acc, raw) => {
+    const conversation = raw as Partial<Conversation> & Record<string, unknown>;
     try {
       if (
         !conversation.model ||
@@ -45,11 +51,17 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
       if (!conversation.messages) {
         conversation.messages = [];
       } else if (needsMigration(conversation.messages)) {
-        // Migrate legacy assistant messages to AssistantMessageGroup format
-        conversation.messages = migrateLegacyMessages(conversation.messages);
+        // Migrate legacy assistant messages to AssistantMessageGroup format.
+        // The cast is honest: messages reaching this branch predate
+        // AssistantMessageGroup and are guaranteed flat Message[].
+        conversation.messages = migrateLegacyMessages(
+          conversation.messages as Message[],
+        );
       }
 
-      acc.push(conversation);
+      // After defaulting required fields above, this satisfies Conversation
+      // structurally. Cast rather than re-validate each field at runtime.
+      acc.push(conversation as Conversation);
       return acc;
     } catch (error) {
       console.warn(

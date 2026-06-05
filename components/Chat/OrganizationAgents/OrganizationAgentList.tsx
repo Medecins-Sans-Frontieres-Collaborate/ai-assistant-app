@@ -1,9 +1,11 @@
 'use client';
 
-import { IconCheck, IconRobot } from '@tabler/icons-react';
+import { IconCheck, IconHexagon, IconRobot } from '@tabler/icons-react';
 import { FC } from 'react';
 
 import { useTranslations } from 'next-intl';
+
+import { colorForAgent } from '@/lib/utils/app/agentColor';
 
 import { OrganizationAgent } from '@/types/organizationAgent';
 
@@ -12,9 +14,20 @@ import {
   getOrganizationAgents,
 } from '@/lib/organizationAgents';
 
+interface FoundryAgentDisplay {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: string;
+  color?: string;
+  /** Pre-computed model ID for selection comparison — prefer this over reconstructing on every render. */
+  matchId?: string;
+}
+
 interface OrganizationAgentListProps {
-  onSelect: (agent: OrganizationAgent) => void;
+  onSelect: (agent: OrganizationAgent | FoundryAgentDisplay) => void;
   selectedAgentId?: string;
+  discoveredAgents?: FoundryAgentDisplay[];
 }
 
 /**
@@ -25,11 +38,23 @@ interface OrganizationAgentListProps {
 export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
   onSelect,
   selectedAgentId,
+  discoveredAgents = [],
 }) => {
   const t = useTranslations('agents');
-  const agents = getOrganizationAgents();
+  const staticAgents = getOrganizationAgents();
 
-  if (agents.length === 0) {
+  // Merge static + discovered, deduplicate by name
+  const staticNames = new Set(staticAgents.map((a) => a.name));
+  const uniqueDiscovered = discoveredAgents.filter(
+    (a) => !staticNames.has(a.name),
+  );
+
+  const allAgents: (OrganizationAgent | FoundryAgentDisplay)[] = [
+    ...staticAgents,
+    ...uniqueDiscovered,
+  ];
+
+  if (allAgents.length === 0) {
     return (
       <div className="p-8 text-center">
         <IconRobot
@@ -44,10 +69,16 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
   }
 
   return (
-    <div className="space-y-2">
-      {agents.map((agent) => {
-        const IconComp = getIconComponent(agent.icon);
-        const isSelected = selectedAgentId === `org-${agent.id}`;
+    <div className="space-y-1">
+      {allAgents.map((agent) => {
+        const agentIcon = 'icon' in agent ? agent.icon : undefined;
+        const agentColor =
+          ('color' in agent ? agent.color : null) || colorForAgent(agent.name);
+        const IconComp = agentIcon ? getIconComponent(agentIcon) : IconHexagon;
+        const explicitMatchId = 'matchId' in agent ? agent.matchId : undefined;
+        const isSelected = explicitMatchId
+          ? selectedAgentId === explicitMatchId
+          : selectedAgentId === `org-${agent.id}`;
 
         return (
           <button
@@ -55,21 +86,20 @@ export const OrganizationAgentList: FC<OrganizationAgentListProps> = ({
             type="button"
             onClick={() => onSelect(agent)}
             className={`
-              w-full text-left p-3 rounded-lg transition-all duration-150 flex items-center justify-between gap-2
+              w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center justify-between gap-2
               ${
                 isSelected
                   ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                  : 'bg-white dark:bg-[#212121] border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+                  : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
               }
             `}
           >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: agent.color + '20' }}
-              >
-                <IconComp size={16} style={{ color: agent.color }} />
-              </div>
+            <div className="flex items-center gap-2.5">
+              <IconComp
+                size={18}
+                className="flex-shrink-0"
+                style={{ color: agentColor }}
+              />
               <span className="font-medium text-sm text-gray-900 dark:text-white">
                 {agent.name}
               </span>

@@ -57,7 +57,7 @@ export class UserFileHandler {
     try {
       const filePath = path.join(process.cwd(), this.fileData as string);
       return await fs.readFile(filePath, 'utf-8');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error reading text file:', error);
       throw new Error('Failed to read text file');
     }

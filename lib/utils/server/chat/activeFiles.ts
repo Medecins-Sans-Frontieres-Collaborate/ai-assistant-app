@@ -210,6 +210,9 @@ export function selectFilesForBudget(
  * Placeholder for image injection. Currently returns messages unchanged.
  * Images may be added to user messages for vision-capable models.
  */
-export function injectActiveImages(messages: any[], _imageFiles: ActiveFile[]) {
+export function injectActiveImages<T>(
+  messages: T[],
+  _imageFiles: ActiveFile[],
+): T[] {
   return messages;
 }

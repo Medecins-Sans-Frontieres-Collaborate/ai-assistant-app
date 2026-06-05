@@ -279,13 +279,13 @@ describe('ActiveFileInjector', () => {
       // skipped at the injector level, this test will guide that change.
       const ctx = createTestChatContext({
         model: {
-          id: OpenAIModelID.CLAUDE_SONNET_4_5,
+          id: OpenAIModelID.CLAUDE_SONNET_4_6,
           maxLength: 200_000,
           provider: 'anthropic',
         },
         messages: [{ role: 'user', content: [{ type: 'text', text: 'hi' }] }],
       });
-      ctx.modelId = OpenAIModelID.CLAUDE_SONNET_4_5;
+      ctx.modelId = OpenAIModelID.CLAUDE_SONNET_4_6;
       ctx.autoInjectPinnedImages = true;
       ctx.activeFiles = [makeImage('img1', { pinned: true })];
 

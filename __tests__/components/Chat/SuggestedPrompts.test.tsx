@@ -207,9 +207,9 @@ describe('SuggestedPrompts', () => {
     );
 
     const wrapper = container.firstChild;
-    expect(wrapper).toHaveClass('hidden');
-    expect(wrapper).toHaveClass('sm:flex');
-    expect(wrapper).toHaveClass('gap-3');
+    expect(wrapper).toHaveClass('flex');
+    expect(wrapper).toHaveClass('sm:flex-wrap');
+    expect(wrapper).toHaveClass('sm:gap-3');
   });
 
   it('buttons have correct styling', () => {
@@ -223,7 +223,7 @@ describe('SuggestedPrompts', () => {
 
     buttons.forEach((button) => {
       expect(button).toHaveClass('bg-white');
-      expect(button).toHaveClass('dark:bg-[#1F1F1F]');
+      expect(button).toHaveClass('dark:bg-surface-dark');
       expect(button).toHaveClass('border');
       expect(button).toHaveClass('rounded-full');
     });

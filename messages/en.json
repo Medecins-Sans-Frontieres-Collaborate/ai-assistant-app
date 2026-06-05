@@ -385,7 +385,42 @@
     "delete": "Delete",
     "noCustomAgentsYet": "No custom agents yet.",
     "noOrgAgentsConfigured": "No organization agents configured.",
-    "validationFailed": "Validation failed"
+    "validationFailed": "Validation failed",
+    "addAgentSource": "Add Custom Source",
+    "connectFoundryProject": "Connect a Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "Discover agents from another office or team's Azure Foundry project. You'll only see agents you have permission to access.",
+    "foundryProjectPath": "Foundry Project Path",
+    "foundryProjectPathHelp": "Ask your Foundry project administrator, or click 'Enter manually' to fill in each field separately.",
+    "copyFormat": "Format",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Amsterdam Office, Geneva Research",
+    "pathRequired": "Paste the Foundry project resource path.",
+    "pathInvalidFormat": "This doesn't look like a resource path. It should start with /subscriptions/...",
+    "connectionFailed": "Could not reach this project. Check the path is correct and that you have access.",
+    "connectionSuccessAgents": "Connected — {count} agent(s) found",
+    "connectionSuccessEmpty": "Connected, but no agents found. You may need the Azure AI User role on this project to see its agents.",
+    "checkingConnection": "Checking connection...",
+    "connect": "Connect",
+    "save": "Save",
+    "editConnection": "Edit Connection",
+    "sourceName": "Source Name",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Source name is required.",
+    "resourcePath": "Resource Path",
+    "resourcePathRequired": "Resource path is required.",
+    "resourcePathHelp": "The ARM resource path to a Foundry project. Ask your administrator for this value.",
+    "invalidResourcePathFormat": "Resource path must start with /subscriptions/...",
+    "validatingSource": "Discovering agents...",
+    "sourceValidatedEmpty": "Valid source, but no agents found. You may not have access to agents in this project.",
+    "invalidSource": "Could not access this resource path. Verify the path and your permissions.",
+    "addSource": "Add Source",
+    "removeSource": "Remove Source",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "The Azure subscription that contains the Foundry account. If you're unsure, ask your admin which subscription your team uses.",
+    "tooltipFoundryAccount": "The Azure AI Services account where the Foundry project lives. Each office or team typically has its own.",
+    "tooltipProject": "A project organizes agents within an account. Most accounts have a single 'default' project."
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -641,7 +676,9 @@
     "keepEditing": "Keep Editing",
     "yes": "Yes",
     "no": "No",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Copied!",
+    "clear": "Clear"
   },
   "terms": {
     "officialLanguages": "Official version:",
@@ -749,7 +786,82 @@
       "filesCount": "{count} file(s)",
       "audioVideo": "audio/video",
       "empty": "empty"
-    }
+    },
+    "activity": {
+      "callingTool": "Calling tool…",
+      "callingService": "Calling external service…",
+      "usingNamedTool": "Using {tool}…",
+      "usingNamedToolWithService": "Using {tool} on {service}…",
+      "searchingWeb": "Searching the web…",
+      "searchingFiles": "Searching files…",
+      "runningCode": "Running code…",
+      "generatingImage": "Generating image…",
+      "listingTools": "Looking up available tools…",
+      "analyzingFiles": "Analyzing your files…",
+      "searchingKnowledge": "Searching the knowledge base…",
+      "cancellingPriorTool": "Cancelling previous tool request…"
+    },
+    "toolSummary": {
+      "usedTools": "Used {count, plural, one {# tool} other {# tools}}",
+      "failedCount": "{count} failed",
+      "statusApproved": "Approved",
+      "statusAutoApproved": "Auto-approved",
+      "statusAutoDenied": "Auto-denied",
+      "statusFailed": "Failed",
+      "statusIncomplete": "Incomplete",
+      "viaService": "via {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Authorization required",
+      "authorizeService": "Authorize {service}",
+      "descriptionGeneric": "This agent needs your permission to access a secure resource. Your sign-in is managed by the upstream service, not stored here.",
+      "descriptionWithService": "This agent needs your permission to access {service}. Your {service} sign-in is managed by {service} itself, not stored here.",
+      "signInIncompleteGeneric": "Sign-in didn't complete",
+      "signInIncompleteForService": "Sign-in to {service} didn't complete",
+      "signInIncompleteDescriptionGeneric": "It looks like the authorization didn't finish. Make sure you completed sign-in in the other tab, then click Continue again.",
+      "signInIncompleteDescription": "It looks like the authorization to {service} didn't finish. Make sure you completed sign-in in the other tab, then click Continue again.",
+      "authorizeButton": "Authorize",
+      "reauthorizeButton": "Re-authorize",
+      "continueButton": "Continue",
+      "confirmingButton": "Confirming…",
+      "authorizeHint": "Authorize, then return here and click Continue. To revoke later, sign out from {service} directly — we don't hold the token.",
+      "authorizeHintGeneric": "Authorize, then return here and click Continue. To revoke later, sign out from the upstream service directly — we don't hold the token.",
+      "continueHint": "Once authorization finishes in the other tab, click Continue.",
+      "confirmingHint": "Confirming authorization and resuming your request…",
+      "resendHint": "After authorizing, send your message again to continue.",
+      "resetTooltip": "Reset all tool auto-approval preferences for this conversation. Future tool calls will prompt again.",
+      "autoApproveAllIndicator": "Auto-approving all tools",
+      "autoApproveCountIndicator": "{count, plural, one {Auto-approving # tool} other {Auto-approving # tools}}",
+      "resetShort": "Reset",
+      "approvalRequired": "Tool approval required",
+      "approvalForService": "Approve tool for {service}",
+      "approvalDescriptionGeneric": "The agent wants to run a tool that requires your approval before continuing.",
+      "approvalDescriptionWithTool": "The agent wants to run the {tool} tool, which requires your approval before continuing.",
+      "runToolTitle": "Run <code>{tool}</code>?",
+      "runToolGeneric": "Run this tool?",
+      "viaService": "via {service}",
+      "approveButton": "Approve",
+      "approveOptionsLabel": "Approve options",
+      "approveOnce": "Approve once",
+      "alwaysApproveThisTool": "Always approve this tool",
+      "alwaysApproveAllTools": "Always approve all tools",
+      "denyButton": "Deny",
+      "keyboardHint": "{modifier}+⏎ approve · esc deny",
+      "submittingState": "Submitting your decision",
+      "approvedState": "Approved — agent resumed",
+      "deniedState": "Denied",
+      "submittingApproval": "Approving and resuming the agent…",
+      "submittingDenial": "Sending your denial…"
+    },
+    "voiceInputTranscribing": "Transcribing...",
+    "openImage": "Open image",
+    "copyMessage": "Copy message",
+    "stopAudio": "Stop audio",
+    "generatingAudio": "Generating audio...",
+    "listen": "Listen",
+    "processingAudio": "Processing audio...",
+    "ttsError": "Error generating audio. Please try again.",
+    "unsupportedMessageType": "Error rendering message: Unsupported message type"
   },
   "transcript": {
     "originalTranscript": "Original Transcript",
@@ -1238,7 +1350,8 @@
       "agents": "Agents"
     },
     "sections": {
-      "baseModels": "Base Models"
+      "baseModels": "Base Models",
+      "allModels": "All models ({count})"
     },
     "maintainedBy": "Maintained by",
     "agents": {
@@ -1312,7 +1425,10 @@
       "done": "Done",
       "reset": "Reset",
       "resetTooltip": "Reset to default order"
-    }
+    },
+    "title": "Select a model",
+    "modelsDescription": "Choose an AI model for your conversation. Each model has different strengths — select one to see details.",
+    "recommended": "Recommended"
   },
   "models": {
     "gpt_4_1": {
@@ -1379,6 +1495,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Fast and cost-effective Claude model optimized for quick tasks. Great for simple queries, summarization, and high-volume applications.",
       "knowledgeCutoff": "January 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic's strongest model. Good for long writing, research, and tasks that need careful thinking.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "A balanced Claude model. Good for everyday writing, analysis, and coding with quick responses.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1788,7 +1914,42 @@
       "experimentalBlurb": "Experimental — built in direct collaboration with MSF power users. Not for general use.",
       "createButton": "Create Custom Agent"
     },
-    "selectAgentPrompt": "Select an agent to view details"
+    "selectAgentPrompt": "Select an agent to view details",
+    "description": "Specialized AI agents for specific tasks. Default agents are managed centrally; add custom sources to discover agents from other Foundry projects.",
+    "regionAgents": {
+      "us": "US Region Agents",
+      "eu": "EU Region Agents",
+      "default": "Region Agents"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Foundry Connections",
+      "description": "Connect to other Foundry projects to discover their agents.",
+      "connectButton": "Connect a Microsoft Azure Foundry project",
+      "connectButtonShort": "Connect a Foundry project",
+      "addButton": "Add Custom Source",
+      "addAnother": "Add another connection",
+      "noSources": "No custom sources configured.",
+      "removeSource": "Remove source",
+      "confirmRemove": "Remove?",
+      "sourceConnected": "custom source connected",
+      "sourcesConnected": "custom sources connected",
+      "backToAgents": "Back",
+      "discoveredAgents": "Discovered Agents",
+      "viewConnection": "View connection details",
+      "edit": "Edit",
+      "noAgentsPublished": "No agents published",
+      "connectedOn": "Connected {date}",
+      "disconnectSource": "Disconnect this source",
+      "confirmDisconnect": "Click again to confirm",
+      "loadingAgents": "Loading agents...",
+      "noAgentsFound": "No agents found in this project",
+      "noAgentsFoundHint": "Make sure agents are published and you have the Azure AI User role on this project.",
+      "refresh": "Refresh",
+      "refreshAgents": "Refresh agents"
+    }
   },
   "privacy": {
     "policyTitle": "Privacy Policy & Data Protection",

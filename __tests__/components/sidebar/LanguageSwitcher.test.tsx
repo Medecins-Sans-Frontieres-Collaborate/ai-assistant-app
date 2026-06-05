@@ -143,7 +143,7 @@ describe('LanguageSwitcher', () => {
       render(<LanguageSwitcher />);
 
       const select = screen.getByRole('combobox');
-      expect(select).toHaveClass('dark:text-neutral-200');
+      expect(select).toHaveClass('dark:text-gray-200');
     });
 
     it('options have correct background classes', () => {

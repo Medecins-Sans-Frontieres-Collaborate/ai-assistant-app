@@ -48,6 +48,17 @@ vi.mock('@/client/hooks/settings/useCustomAgents', () => ({
   useCustomAgents: () => mockUseCustomAgents,
 }));
 
+vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
+  useFoundryAgents: () => ({
+    foundryAgents: [],
+    regionalPath: null,
+    officePaths: [],
+    isLoadingFoundryAgents: false,
+    foundryAgentsError: null,
+    refetchFoundryAgents: vi.fn(),
+  }),
+}));
+
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
 
 describe('ModelSelect', () => {
@@ -320,7 +331,7 @@ describe('ModelSelect', () => {
   });
 
   describe('Model Details Panel', () => {
-    it('displays model type badge', () => {
+    it('displays the model name and tagline (no jargon type badge)', () => {
       mockUseConversations.selectedConversation = {
         id: 'conv-1',
         name: 'Test',
@@ -333,7 +344,10 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      expect(screen.getByText('omni')).toBeInTheDocument();
+      // The "omni" type badge was intentionally removed — it was jargon.
+      expect(screen.queryByText('omni')).not.toBeInTheDocument();
+      // Name + tagline carry the meaning now.
+      expect(screen.getAllByText('GPT-5.2').length).toBeGreaterThan(0);
     });
 
     it('displays knowledge cutoff date', () => {
@@ -372,7 +386,7 @@ describe('ModelSelect', () => {
 
       render(<ModelSelect />);
 
-      expect(screen.getByText(/most advanced model/)).toBeInTheDocument();
+      expect(screen.getByText(/capable everyday model/)).toBeInTheDocument();
     });
   });
 

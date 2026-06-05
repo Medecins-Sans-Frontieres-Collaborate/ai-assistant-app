@@ -1,7 +1,17 @@
-import { Message } from '@/types/chat';
+import {
+  FileMessageContent,
+  ImageMessageContent,
+  Message,
+  TextMessageContent,
+} from '@/types/chat';
 import { OpenAIModelID } from '@/types/openai';
 
 import { isAudioVideoFile } from '@/lib/constants/fileTypes';
+
+type MessageContentItem =
+  | TextMessageContent
+  | FileMessageContent
+  | ImageMessageContent;
 
 /**
  * Checks if any message contains audio or video files that need transcription
@@ -10,7 +20,7 @@ export const isAudioVideoConversation = (messages: Message[]): boolean => {
   return messages.some((message) => {
     if (!Array.isArray(message.content)) return false;
 
-    return message.content.some((content: any) => {
+    return message.content.some((content: MessageContentItem) => {
       if (content.type !== 'file_url') return false;
 
       // Check both URL and originalFilename for extension
@@ -41,7 +51,7 @@ export const isImageConversation = (messages: Message[]): boolean => {
   const lastMessage = messages[messages.length - 1];
   if (Array.isArray(lastMessage.content)) {
     return lastMessage.content.some(
-      (content: any) => content.type === 'image_url',
+      (content: MessageContentItem) => content.type === 'image_url',
     );
   }
   return false;
@@ -56,7 +66,7 @@ export const isFileConversation = (messages: Message[]): boolean => {
   const lastMessage = messages[messages.length - 1];
   if (Array.isArray(lastMessage.content)) {
     return lastMessage.content.some(
-      (content: any) => content.type === 'file_url',
+      (content: MessageContentItem) => content.type === 'file_url',
     );
   }
   return false;
@@ -72,7 +82,18 @@ export const isCustomAgentModel = (modelId: string | undefined): boolean => {
 };
 
 /**
- * Validates if a model ID exists in the allowed model IDs or is a custom agent
+ * Checks if a model ID represents an organization agent.
+ * Prefer using model.isOrganizationAgent when the full model object is available.
+ */
+export const isOrganizationAgentModel = (
+  modelId: string | undefined,
+): boolean => {
+  if (!modelId) return false;
+  return modelId.startsWith('org-') || modelId.startsWith('foundry-');
+};
+
+/**
+ * Validates if a model ID exists in the allowed model IDs or is a custom/organization agent
  */
 export const checkIsModelValid = (
   modelId: string | undefined,
@@ -81,6 +102,8 @@ export const checkIsModelValid = (
   if (!modelId) return false;
   // Custom agents are always valid
   if (isCustomAgentModel(modelId)) return true;
+  // Organization agents are always valid
+  if (isOrganizationAgentModel(modelId)) return true;
   return Object.values(allowedModelIds).includes(modelId);
 };
 

@@ -41,6 +41,7 @@ import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useChatStore } from '@/client/stores/chatStore';
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
@@ -111,6 +112,7 @@ export function Chat({
     citations,
     clearError,
     loadingMessage,
+    loadingMessageParams,
     isRetrying,
     showModelSwitchPrompt,
     originalModelId,
@@ -118,7 +120,9 @@ export function Chat({
     acceptModelSwitch,
     errorIsRecoverable,
     requestStop,
+    retryFailedRequest,
   } = useChat();
+  const failedConversation = useChatStore((s) => s.failedConversation);
 
   const stopGenerationConfirmSource = useUIStore(
     (state) => state.stopGenerationConfirmSource,
@@ -485,10 +489,33 @@ export function Chat({
     clearError();
   }, [selectedConversation?.id, clearError]);
 
-  // Only auto-dismiss errors that can't be regenerated (e.g., during retry)
-  // When regenerate is available, let the user decide when to dismiss
-  const canRegenerate = !!error && !isRetrying && errorIsRecoverable;
-  useAutoDismissError(canRegenerate ? null : error, clearError, 10000);
+  // When the failed turn never produced an assistant message, Regenerate
+  // has nothing to add a version to — offer Retry instead.
+  const failedTrailingIsUser = (() => {
+    if (!failedConversation) return false;
+    const msgs = failedConversation.messages;
+    if (msgs.length === 0) return false;
+    const last = msgs[msgs.length - 1];
+    if (
+      typeof last === 'object' &&
+      last !== null &&
+      'type' in last &&
+      (last as { type?: string }).type === 'assistant_group'
+    ) {
+      return false;
+    }
+    return (last as { role?: string }).role === 'user';
+  })();
+
+  const canRetry = !!error && !isRetrying && failedTrailingIsUser;
+  const canRegenerate =
+    !!error && !isRetrying && errorIsRecoverable && !failedTrailingIsUser;
+  // Only auto-dismiss when there's no Retry/Regenerate button to keep up.
+  useAutoDismissError(
+    canRegenerate || canRetry ? null : error,
+    clearError,
+    10000,
+  );
 
   const messages = selectedConversation?.messages || [];
   const hasMessages =
@@ -498,6 +525,7 @@ export function Chat({
   // Memoize organization agent lookup to avoid recomputing on every render
   const orgAgentInfo = useMemo(() => {
     const modelId = selectedConversation?.model?.id;
+    const isFoundryAgent = modelId?.startsWith('foundry-');
     const orgAgentId =
       selectedConversation?.bot ||
       (modelId?.startsWith('org-') ? modelId.replace('org-', '') : undefined);
@@ -505,11 +533,29 @@ export function Chat({
       ? getOrganizationAgentById(orgAgentId)
       : undefined;
     const isOrgAgent =
-      !!orgAgent || selectedConversation?.model?.isOrganizationAgent;
+      !!orgAgent ||
+      isFoundryAgent ||
+      selectedConversation?.model?.isOrganizationAgent;
+
+    // Foundry agents without a static config get a minimal placeholder so the
+    // topbar can render (no web search, no specific icon).
+    if (isFoundryAgent && !orgAgent) {
+      return {
+        orgAgent: {
+          icon: undefined,
+          color: undefined,
+          allowWebSearch: false,
+          name: selectedConversation?.model?.name || '',
+        },
+        isOrgAgent: true,
+      };
+    }
+
     return { orgAgent, isOrgAgent };
   }, [
     selectedConversation?.bot,
     selectedConversation?.model?.id,
+    selectedConversation?.model?.name,
     selectedConversation?.model?.isOrganizationAgent,
   ]);
 
@@ -520,7 +566,7 @@ export function Chat({
   }
 
   return (
-    <div className="chat-split-container relative flex h-full w-full overflow-hidden bg-white dark:bg-[#212121]">
+    <div className="chat-split-container relative flex h-full w-full overflow-hidden bg-white dark:bg-surface-dark">
       {/* Main chat area */}
       <div
         className="flex flex-col h-full overflow-hidden min-w-0"
@@ -549,6 +595,9 @@ export function Chat({
             isOrganizationAgent={orgAgentInfo.isOrgAgent}
             organizationAgentIcon={orgAgentInfo.orgAgent?.icon}
             organizationAgentColor={orgAgentInfo.orgAgent?.color}
+            organizationAgentAllowWebSearch={
+              orgAgentInfo.orgAgent?.allowWebSearch
+            }
             showSettings={isSettingsOpen}
             onSettingsClick={() => setIsSettingsOpen(!isSettingsOpen)}
             onModelClick={() => setIsModelSelectOpen(true)}
@@ -556,6 +605,19 @@ export function Chat({
             hasMessages={hasMessages}
             searchMode={selectedConversation?.defaultSearchMode}
             showChatbar={showChatbar}
+            autoApproveAll={!!selectedConversation?.alwaysApproveAllTools}
+            autoApproveCount={
+              selectedConversation?.alwaysApproveTools?.length ?? 0
+            }
+            onResetAutoApprove={
+              selectedConversation
+                ? () => {
+                    useConversationStore
+                      .getState()
+                      .resetAutoApprove(selectedConversation.id);
+                  }
+                : undefined
+            }
           />
         </div>
 
@@ -588,6 +650,7 @@ export function Chat({
                     showScrollDownButton={false}
                     showDisclaimer={false}
                     onTranscriptionStatusChange={setTranscriptionStatus}
+                    stopConversationRef={stopConversationRef}
                   />
                 </div>
 
@@ -615,6 +678,7 @@ export function Chat({
                 isDraining={isDraining}
                 citations={citations}
                 loadingMessage={loadingMessage}
+                loadingMessageParams={loadingMessageParams}
                 transcriptionStatus={transcriptionStatus}
                 lastMessageRef={lastMessageRef}
                 messagesEndRef={messagesEndRef}
@@ -635,7 +699,9 @@ export function Chat({
           error={error}
           onClearError={clearError}
           onRegenerate={handleRegenerate}
+          onRetry={retryFailedRequest}
           canRegenerate={canRegenerate}
+          canRetry={canRetry}
         />
 
         {/* Model Switch Prompt (shown after successful retry) */}
@@ -665,6 +731,7 @@ export function Chat({
             textareaRef={textareaRef}
             showScrollDownButton={showScrollDownButton}
             onTranscriptionStatusChange={setTranscriptionStatus}
+            stopConversationRef={stopConversationRef}
           />
         )}
 
@@ -675,7 +742,7 @@ export function Chat({
             onClick={() => setIsModelSelectOpen(false)}
           >
             <div
-              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-[#212121] p-6 shadow-xl animate-modal-in"
+              className="max-w-4xl w-full max-h-[90vh] overflow-y-auto mx-4 rounded-lg bg-white dark:bg-surface-dark p-6 shadow-xl animate-modal-in"
               onClick={(e) => e.stopPropagation()}
             >
               <ModelSelect onClose={() => setIsModelSelectOpen(false)} />
@@ -733,22 +800,22 @@ export function Chat({
         <>
           <div
             onMouseDown={handleMouseDown}
-            className={`relative w-1.5 bg-neutral-300 dark:bg-neutral-700 hover:bg-blue-500 dark:hover:bg-blue-500 cursor-col-resize transition-colors ${
+            className={`relative w-1.5 bg-gray-300 dark:bg-gray-700 hover:bg-blue-500 dark:hover:bg-blue-500 cursor-col-resize transition-colors ${
               isResizing ? 'bg-blue-500 dark:bg-blue-500' : ''
             }`}
             style={{ flexShrink: 0 }}
           >
             {/* Drag Handle */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-1 pointer-events-none">
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
-              <div className="w-1 h-1 rounded-full bg-neutral-500 dark:bg-neutral-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
+              <div className="w-1 h-1 rounded-full bg-gray-500 dark:bg-gray-400"></div>
             </div>
           </div>
 
           {/* Code/Document Editor Panel */}
           <div
-            className="flex flex-col bg-white dark:bg-neutral-900 h-full overflow-hidden animate-slide-in-right min-w-0"
+            className="flex flex-col bg-white dark:bg-gray-900 h-full overflow-hidden animate-slide-in-right min-w-0"
             style={{
               width: `${editorWidth}%`,
               minWidth: '20%',

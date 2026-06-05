@@ -163,26 +163,26 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 w-72 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 py-2"
+      className="fixed z-50 w-72 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2"
       style={{
         left: adjustedPosition.x,
         top: adjustedPosition.y,
       }}
     >
       {/* Header */}
-      <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-700">
-        <div className="flex items-center gap-2 text-sm font-medium text-neutral-900 dark:text-neutral-100">
+      <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+        <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-gray-100">
           <IconVolume size={16} />
           {t('settings.tts.quickSettings')}
         </div>
-        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
           {t('settings.tts.overrideForThisMessage')}
         </p>
       </div>
 
       {/* Voice Quick Select */}
-      <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-700">
-        <label className="text-xs font-medium text-neutral-600 dark:text-neutral-400 mb-1 block">
+      <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
+        <label className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">
           {t('settings.tts.voice')}
         </label>
         <div className="max-h-32 overflow-y-auto">
@@ -192,12 +192,12 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
               onClick={() => setOverrideVoice(voice.name)}
               className={`w-full flex items-center gap-2 px-2 py-1.5 text-left rounded transition-colors text-sm ${
                 effectiveVoiceName === voice.name
-                  ? 'bg-neutral-100 dark:bg-neutral-700'
-                  : 'hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
+                  ? 'bg-gray-100 dark:bg-gray-700'
+                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
               }`}
             >
               {getGenderIcon(voice.gender)}
-              <span className="flex-1 text-neutral-900 dark:text-neutral-100 truncate">
+              <span className="flex-1 text-gray-900 dark:text-gray-100 truncate">
                 {voice.displayName}
               </span>
               {effectiveVoiceName === voice.name && (
@@ -209,12 +209,12 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
       </div>
 
       {/* Rate Slider */}
-      <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-700">
+      <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+          <label className="text-xs font-medium text-gray-600 dark:text-gray-400">
             {t('settings.tts.rate')}
           </label>
-          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             {formatRate(overrideRate)}
           </span>
         </div>
@@ -225,17 +225,17 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
           step={TTS_CONSTRAINTS.rate.step}
           value={overrideRate}
           onChange={(e) => setOverrideRate(parseFloat(e.target.value))}
-          className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-neutral-600 dark:accent-neutral-400"
+          className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-gray-600 dark:accent-gray-400"
         />
       </div>
 
       {/* Pitch Slider */}
-      <div className="px-3 py-2 border-b border-neutral-100 dark:border-neutral-700">
+      <div className="px-3 py-2 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-1">
-          <label className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+          <label className="text-xs font-medium text-gray-600 dark:text-gray-400">
             {t('settings.tts.pitch')}
           </label>
-          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             {formatPitch(overridePitch)}
           </span>
         </div>
@@ -246,7 +246,7 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
           step={TTS_CONSTRAINTS.pitch.step}
           value={overridePitch}
           onChange={(e) => setOverridePitch(parseInt(e.target.value, 10))}
-          className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-neutral-600 dark:accent-neutral-400"
+          className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-gray-600 dark:accent-gray-400"
         />
       </div>
 
@@ -254,7 +254,7 @@ export const TTSContextMenu: FC<TTSContextMenuProps> = ({
       <div className="px-3 pt-2">
         <button
           onClick={handleSpeak}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-neutral-800 dark:bg-neutral-600 rounded-lg hover:bg-neutral-700 dark:hover:bg-neutral-500 transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-white bg-gray-800 dark:bg-gray-600 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition-colors"
         >
           <IconVolume size={16} />
           {t('settings.tts.speakWithSettings')}

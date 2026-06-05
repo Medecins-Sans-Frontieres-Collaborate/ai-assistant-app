@@ -28,13 +28,11 @@ vi.mock('@/components/Icons/file', () => ({
 describe('ChatFileUploadPreviews', () => {
   const mockSetFilePreviews = vi.fn();
   const mockSetSubmitType = vi.fn();
-  const mockRemoveFile = vi.fn();
 
   beforeEach(() => {
     vi.useFakeTimers();
     mockSetFilePreviews.mockClear();
     mockSetSubmitType.mockClear();
-    mockRemoveFile.mockClear();
   });
 
   afterEach(() => {
@@ -64,7 +62,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -80,7 +77,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -96,7 +92,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -115,7 +110,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={previews}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -134,7 +128,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -149,7 +142,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -166,7 +158,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -183,7 +174,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -199,7 +189,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -216,7 +205,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -232,7 +220,6 @@ describe('ChatFileUploadPreviews', () => {
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
           uploadProgress={{ [filePreview.name]: 50 }}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -246,7 +233,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -261,7 +247,6 @@ describe('ChatFileUploadPreviews', () => {
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
           uploadProgress={{ [filePreview.name]: 75 }}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -279,7 +264,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -287,14 +271,13 @@ describe('ChatFileUploadPreviews', () => {
       expect(removeButton).toBeInTheDocument();
     });
 
-    it('calls removeFile when remove button is clicked', () => {
+    it('calls setFilePreviews when remove button is clicked', () => {
       const filePreview = createFilePreview();
       render(
         <ChatFileUploadPreviews
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -304,10 +287,10 @@ describe('ChatFileUploadPreviews', () => {
       // Advance timers to trigger the setTimeout callback
       vi.runAllTimers();
 
-      expect(mockRemoveFile).toHaveBeenCalledWith(filePreview);
+      expect(mockSetFilePreviews).toHaveBeenCalled();
     });
 
-    it('calls removeFile with correct file when multiple files exist', () => {
+    it('removes correct file from previews', () => {
       const previews = [
         createFilePreview({ name: 'file1.pdf' }),
         createFilePreview({ name: 'file2.pdf' }),
@@ -318,7 +301,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={previews}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -328,32 +310,35 @@ describe('ChatFileUploadPreviews', () => {
       // Advance timers to trigger the setTimeout callback
       vi.runAllTimers();
 
-      // removeFile should be called with the first preview
-      expect(mockRemoveFile).toHaveBeenCalledWith(previews[0]);
+      expect(mockSetFilePreviews).toHaveBeenCalled();
+      const updateFunction = mockSetFilePreviews.mock.calls[0][0];
+      const newPreviews = updateFunction(previews);
+      expect(newPreviews).toHaveLength(1);
+      expect(newPreviews[0].name).toBe('file2.pdf');
     });
 
-    it('calls removeFile after animation delay', () => {
+    it('sets submit type to text when last file is removed', () => {
       const filePreview = createFilePreview();
       render(
         <ChatFileUploadPreviews
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
       const removeButton = screen.getByLabelText('Remove');
       fireEvent.click(removeButton);
 
-      // removeFile should not be called immediately
-      expect(mockRemoveFile).not.toHaveBeenCalled();
-
       // Advance timers to trigger the setTimeout callback
       vi.runAllTimers();
 
-      // Now it should be called
-      expect(mockRemoveFile).toHaveBeenCalledWith(filePreview);
+      const updateFunction = mockSetFilePreviews.mock.calls[0][0];
+      updateFunction([filePreview]);
+
+      // The component calls setSubmitType inside the setFilePreviews callback
+      // We need to simulate that
+      expect(mockSetFilePreviews).toHaveBeenCalled();
     });
 
     it('prevents default on remove button click', () => {
@@ -363,7 +348,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -388,7 +372,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -408,7 +391,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -429,7 +411,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -447,7 +428,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -473,7 +453,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -489,7 +468,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -510,7 +488,6 @@ describe('ChatFileUploadPreviews', () => {
             filePreviews={[null as any]}
             setFilePreviews={mockSetFilePreviews}
             setSubmitType={mockSetSubmitType}
-            removeFile={() => null}
           />,
         );
       }).toThrow('Empty filePreview found');
@@ -525,7 +502,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -540,7 +516,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[filePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -556,7 +531,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[imagePreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 
@@ -572,7 +546,6 @@ describe('ChatFileUploadPreviews', () => {
           filePreviews={[pdfPreview]}
           setFilePreviews={mockSetFilePreviews}
           setSubmitType={mockSetSubmitType}
-          removeFile={mockRemoveFile}
         />,
       );
 

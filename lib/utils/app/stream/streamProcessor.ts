@@ -48,9 +48,13 @@ export function createAzureOpenAIStreamProcessor(
                 controllerClosed = true;
                 try {
                   controller.close();
-                } catch (closeError: any) {
+                } catch (closeError) {
                   // Ignore errors if controller is already closed
-                  if (closeError.code !== 'ERR_INVALID_STATE') {
+                  if (
+                    !(closeError instanceof Error) ||
+                    (closeError as { code?: string }).code !==
+                      'ERR_INVALID_STATE'
+                  ) {
                     console.error('Error closing controller:', closeError);
                   }
                 }
@@ -123,30 +127,35 @@ export function createAzureOpenAIStreamProcessor(
             controllerClosed = true;
             try {
               controller.close();
-            } catch (closeError: any) {
+            } catch (closeError) {
               // Ignore errors if controller is already closed
-              if (closeError.code !== 'ERR_INVALID_STATE') {
+              if (
+                (closeError as { code?: string }).code !== 'ERR_INVALID_STATE'
+              ) {
                 console.error('Error closing controller:', closeError);
               }
             }
           }
-        } catch (error: any) {
+        } catch (error) {
           console.error('Stream processing error:', error);
 
+          const err = error as { name?: string; message?: string };
           if (
-            error.name === 'AbortError' ||
-            error.message === 'Abort error: Fetch is already aborted' ||
-            error.message?.includes('abort') ||
-            error.message?.includes('Abort')
+            err.name === 'AbortError' ||
+            err.message === 'Abort error: Fetch is already aborted' ||
+            err.message?.includes('abort') ||
+            err.message?.includes('Abort')
           ) {
             console.log('Stream aborted by user, closing cleanly');
             if (!controllerClosed) {
               controllerClosed = true;
               try {
                 controller.close();
-              } catch (closeError: any) {
+              } catch (closeError) {
                 // Ignore errors if controller is already closed
-                if (closeError.code !== 'ERR_INVALID_STATE') {
+                if (
+                  (closeError as { code?: string }).code !== 'ERR_INVALID_STATE'
+                ) {
                   console.error('Error closing controller:', closeError);
                 }
               }

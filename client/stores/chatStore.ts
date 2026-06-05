@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
   createMessageGroup,
@@ -15,7 +16,14 @@ import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
 
 import { AgentType } from '@/types/agent';
-import { ActiveFile, Conversation, Message } from '@/types/chat';
+import {
+  ActiveFile,
+  ApprovalResponse,
+  Conversation,
+  Message,
+  MessageType,
+  ToolCallRecord,
+} from '@/types/chat';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -30,6 +38,8 @@ import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
+import { getOrganizationAgentById } from '@/lib/organizationAgents';
+import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
 
 interface ChatStore {
@@ -42,6 +52,16 @@ interface ChatStore {
   error: string | null;
   stopRequested: boolean;
   loadingMessage: string | null;
+  /**
+   * Interpolation params for `loadingMessage` when the translation key has
+   * placeholders (e.g. {tool} for "Using {tool}…"). Set alongside
+   * `loadingMessage` from live agent-activity markers carrying params.
+   */
+  loadingMessageParams: Record<string, string> | undefined;
+  /** Live consent prompts during streaming, already extracted from markers. */
+  streamingConsentRequests: ConsentRequestPayload[];
+  /** Live tool call records during streaming; rendered as the summary. */
+  streamingToolCalls: ToolCallRecord[];
   abortController: AbortController | null;
 
   // Retry-related state
@@ -75,6 +95,37 @@ interface ChatStore {
    */
   lastTurnDroppedActiveFileIds: Record<string, string[]>;
 
+  /**
+   * Map of MCP approval_request_id → user decision (true=approve). Resolved
+   * approvals are stored here so the consent card can render its "Approved"
+   * / "Denied" terminal state without re-prompting. Reset per page load —
+   * the durable copy lives on the source message in the conversation store.
+   */
+  submittedApprovals: Map<string, boolean>;
+  /** Set of approval_request_id currently in flight (card UI shows spinner). */
+  submittingApprovals: Set<string>;
+  /** Approval ids that errored or were aborted. Prevents the auto-approve
+   *  effect from retrying the same id indefinitely after a failure. */
+  failedApprovals: Set<string>;
+
+  /**
+   * Per-server "Continue in flight" markers, keyed by server label
+   * (empty string for null/unknown server). The next assistant message
+   * for a given server either contains real content (sign-in succeeded
+   * — clear the key) or another `oauth_consent_request` (sign-in didn't
+   * complete — the card uses the matching key to switch to "incomplete
+   * sign-in" framing). Keyed by server so a multi-server chat (e.g.
+   * NetSuite + Salesforce) doesn't lose state when one in-flight resume
+   * overwrites another.
+   */
+  pendingOAuthResume: Record<string, { at: number }>;
+
+  setPendingOAuthResume: (info: { serverLabel: string | null } | null) => void;
+  clearPendingOAuthResumeFor: (serverLabel: string | null) => void;
+  /** Drops the failed-approval guard set. Called on conversation switch so
+   *  prior failures don't persistently block auto-approve on the same id. */
+  clearFailedApprovals: () => void;
+
   // Actions
   setRegeneratingIndex: (index: number | null) => void;
   setLastTurnDroppedActiveFileIds: (
@@ -91,7 +142,10 @@ interface ChatStore {
   requestStop: () => void;
   resetStop: () => void;
   resetChat: () => void;
-  setLoadingMessage: (message: string | null) => void;
+  setLoadingMessage: (
+    message: string | null,
+    params?: Record<string, string>,
+  ) => void;
   sendMessage: (
     message: Message,
     conversation: Conversation,
@@ -107,7 +161,28 @@ interface ChatStore {
   sendChatRequest: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ) => Promise<ReadableStream<Uint8Array>>;
+
+  /**
+   * Submits a user decision for an MCP tool-approval prompt. Sends the
+   * approval response back through the chat pipeline so the server can
+   * resume the agent's response stream. The conversation's source message
+   * is updated via `recordApprovalOutcome` on the conversation store after
+   * the stream finalizes successfully.
+   *
+   * `source` records *how* the approval resolved — manual click vs an
+   * `alwaysApprove*` match — so the tool usage summary can label
+   * auto-approved calls accordingly and the consent card can suppress
+   * its display when the user never had a choice.
+   */
+  submitApproval: (
+    approvalRequestId: string,
+    approve: boolean,
+    conversation: Conversation,
+    sourceMessageIndex?: number,
+    source?: 'manual' | 'auto-approved' | 'auto-denied',
+  ) => Promise<void>;
   processStream: (
     stream: ReadableStream<Uint8Array>,
     streamParser: StreamParser,
@@ -135,6 +210,11 @@ interface ChatStore {
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    /** MCP tool calls observed in the stream, for the post-stream summary. */
+    toolCalls?: import('@/types/chat').ToolCallRecord[];
+    /** Consent prompts emitted in the stream — persisted onto the assistant
+     *  message so a card-only turn still renders after finalization. */
+    consentRequests?: import('@/types/chat').ConsentRequest[];
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -161,6 +241,13 @@ interface ChatStore {
     conversation: Conversation,
     searchMode?: SearchMode,
   ) => Promise<void>;
+  /**
+   * Re-sends the trailing user message of the failed conversation. Used
+   * when the stream errored before any assistant content arrived —
+   * `handleRegenerate` is a no-op in that case because there's no
+   * assistant group to append a version to.
+   */
+  retryFailedRequest: () => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
 
@@ -209,6 +296,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   error: null,
   stopRequested: false,
   loadingMessage: null,
+  loadingMessageParams: undefined,
+  streamingConsentRequests: [],
+  streamingToolCalls: [],
   abortController: null,
 
   // Retry-related initial state
@@ -229,6 +319,39 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // Dropped active file IDs by conversation (most recent turn only)
   lastTurnDroppedActiveFileIds: {},
+  submittedApprovals: new Map<string, boolean>(),
+  submittingApprovals: new Set<string>(),
+  failedApprovals: new Set<string>(),
+  pendingOAuthResume: {},
+
+  setPendingOAuthResume: (info) =>
+    set((state) => {
+      if (info === null) return { pendingOAuthResume: {} };
+      // Sentinel for the null-serverLabel case so two unrelated flows
+      // without a label can't collide on the empty-string key.
+      const key = info.serverLabel ?? '__no_label__';
+      return {
+        pendingOAuthResume: {
+          ...state.pendingOAuthResume,
+          [key]: { at: Date.now() },
+        },
+      };
+    }),
+
+  clearPendingOAuthResumeFor: (serverLabel) =>
+    set((state) => {
+      const key = serverLabel ?? '__no_label__';
+      if (!state.pendingOAuthResume[key]) return state;
+      const next = { ...state.pendingOAuthResume };
+      delete next[key];
+      return { pendingOAuthResume: next };
+    }),
+
+  clearFailedApprovals: () =>
+    set((state) => {
+      if (state.failedApprovals.size === 0) return state;
+      return { failedApprovals: new Set() };
+    }),
 
   // Actions
   setRegeneratingIndex: (index) => set({ regeneratingIndex: index }),
@@ -268,7 +391,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   resetStop: () => set({ stopRequested: false }),
 
-  setLoadingMessage: (message) => set({ loadingMessage: message }),
+  setLoadingMessage: (message, params) =>
+    set({ loadingMessage: message, loadingMessageParams: params }),
 
   resetChat: () =>
     set({
@@ -280,6 +404,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       error: null,
       stopRequested: false,
       loadingMessage: null,
+      loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       abortController: null,
       // Reset retry state
       isRetrying: false,
@@ -354,10 +481,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        toolCalls,
+        consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
+      }
 
       // Surface files that were excluded from this turn's context so the
       // ActiveFilesPanel can flag them — without this the user has no
@@ -477,6 +612,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       error: null,
       citations: [],
       loadingMessage: null, // Start with null, will be set after delay
+      loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       stopRequested: false,
       abortController,
     });
@@ -488,7 +626,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   scheduleLoadingMessage: (loadingMessage: string): NodeJS.Timeout => {
-    const loadingDelay = 400; // milliseconds
+    // 150ms balances flash-prevention against perceived responsiveness.
+    const loadingDelay = 150;
     return setTimeout(() => {
       const currentState = get();
       if (currentState.isStreaming && !currentState.streamingContent) {
@@ -500,6 +639,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   sendChatRequest: async (
     conversation: Conversation,
     searchMode?: SearchMode,
+    approvalResponses?: ApprovalResponse[],
   ): Promise<ReadableStream<Uint8Array>> => {
     const settings = useSettingsStore.getState();
     const modelSupportsStreaming = conversation.model.stream !== false;
@@ -539,10 +679,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
-    // Flatten messages for API call and apply sliding window to stay within limits
-    const messagesForAPI = windowMessagesForAPI(
-      flattenEntriesForAPI(conversation.messages),
-    );
+    // Approval-resume: the server only uses the approval items; skip the
+    // (otherwise unused) message windowing pass and send just the trailing
+    // entry to satisfy non-empty-array validators downstream.
+    const messagesForAPI = approvalResponses?.length
+      ? flattenEntriesForAPI(conversation.messages).slice(-1)
+      : windowMessagesForAPI(flattenEntriesForAPI(conversation.messages));
 
     // Get the toneId from the latest user message and look up the full tone object
     const latestUserMessage = messagesForAPI
@@ -563,6 +705,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Get abort signal from store
     const { abortController } = get();
 
+    const orgAgentSearchAllowed =
+      isOrganizationAgent && conversation.model.id.startsWith('org-')
+        ? getOrganizationAgentById(conversation.model.id.slice('org-'.length))
+            ?.allowWebSearch === true
+        : false;
+    const isAgentInvocation = isOrganizationAgent || isCustomAgent;
+    const effectiveSearchMode =
+      isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -572,7 +723,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       reasoningEffort:
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
-      searchMode,
+      searchMode: effectiveSearchMode,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
       streamingSpeed: settings.streamingSpeed, // Pass streaming speed configuration
@@ -584,6 +735,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFiles: conversation.activeFiles,
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
+      agentSourcePath: modelToSend.agentSource,
+      approvalResponses,
     });
   },
 
@@ -614,8 +767,46 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    toolCalls?: import('@/types/chat').ToolCallRecord[];
+    consentRequests?: import('@/types/chat').ConsentRequest[];
   }> => {
     const reader = stream.getReader();
+
+    // Coalesce burst chunks into one paint per frame (~60fps). Falls back
+    // to sync `set` when requestAnimationFrame isn't available (SSR/tests).
+    const canRAF =
+      typeof globalThis !== 'undefined' &&
+      typeof (globalThis as { requestAnimationFrame?: unknown })
+        .requestAnimationFrame === 'function';
+    let pendingFrame = 0;
+    type PendingPatch = {
+      streamingContent?: string;
+      citations?: Citation[];
+      loadingMessage?: string | null;
+      loadingMessageParams?: Record<string, string>;
+    };
+    let pendingPatch: PendingPatch | null = null;
+    const flush = () => {
+      pendingFrame = 0;
+      if (pendingPatch) {
+        const patch = pendingPatch;
+        pendingPatch = null;
+        set(patch);
+      }
+    };
+    const enqueuePatch = (patch: PendingPatch) => {
+      pendingPatch = pendingPatch ? { ...pendingPatch, ...patch } : patch;
+      if (!canRAF) {
+        flush();
+        return;
+      }
+      if (pendingFrame !== 0) return;
+      pendingFrame = (
+        globalThis as unknown as {
+          requestAnimationFrame: (cb: (ts: number) => void) => number;
+        }
+      ).requestAnimationFrame(flush);
+    };
 
     while (true) {
       const { done, value } = await reader.read();
@@ -624,12 +815,61 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         break;
       }
 
-      // Process chunk
       const result = streamParser.processChunk(value, { stream: true });
 
-      // Update action message if found (e.g., "Searching the web...")
+      // Activity updates bypass the rAF batch — rare and need to land fast.
       if (result.action && !result.hasReceivedContent) {
-        set({ loadingMessage: result.action });
+        set({
+          loadingMessage: result.action,
+          loadingMessageParams: result.actionParams,
+        });
+      }
+
+      // Server-emitted outcomes (today: auto-denies on a new turn). Write
+      // to the in-memory map and to the source message so reload doesn't
+      // re-prompt.
+      if (result.newOutcomes.length > 0) {
+        set((state) => {
+          const next = new Map(state.submittedApprovals);
+          for (const o of result.newOutcomes) {
+            next.set(o.approval_request_id, o.approve);
+          }
+          return { submittedApprovals: next };
+        });
+
+        const conversationId = get().streamingConversationId;
+        if (conversationId) {
+          const conversationStore = useConversationStore.getState();
+          const conv = conversationStore.conversations.find(
+            (c) => c.id === conversationId,
+          );
+          if (conv) {
+            for (const o of result.newOutcomes) {
+              const idx = findMessageIndexForApprovalId(
+                conv,
+                o.approval_request_id,
+              );
+              if (idx !== null) {
+                conversationStore.recordApprovalOutcome(
+                  conversationId,
+                  idx,
+                  o.approval_request_id,
+                  o.approve,
+                  o.approve ? 'auto-approved' : 'auto-denied',
+                );
+              }
+            }
+          }
+        }
+      }
+
+      // Separate slices so consent + tool-call subtrees don't re-render
+      // on text chunks. Skipped when nothing changed (Zustand strict eq).
+      if (result.consentChanged) {
+        set({ streamingConsentRequests: streamParser.getConsentRequests() });
+      }
+      if (result.toolCallsChanged) {
+        set({ streamingToolCalls: streamParser.getToolCallRecords?.() ?? [] });
       }
 
       // Clear loading timeout once content arrives
@@ -638,7 +878,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         showLoadingTimeout = null;
       }
 
-      // Only update state if something changed
       const currentState = get();
       const shouldClearLoading =
         result.hasReceivedContent && currentState.loadingMessage !== null;
@@ -648,23 +887,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         result.citationsChanged ||
         shouldClearLoading
       ) {
-        const update: {
-          streamingContent: string;
-          citations?: Citation[];
-          loadingMessage: string | null;
-        } = {
+        const patch: PendingPatch = {
           streamingContent: result.displayText,
           loadingMessage: result.hasReceivedContent
             ? null
             : currentState.loadingMessage,
+          loadingMessageParams: result.hasReceivedContent
+            ? undefined
+            : currentState.loadingMessageParams,
         };
-
         if (result.citationsChanged) {
-          update.citations = result.citations;
+          patch.citations = result.citations;
         }
-
-        set(update);
+        enqueuePatch(patch);
       }
+    }
+
+    // Flush so we don't drop the last text chunk.
+    if (pendingPatch) {
+      flush();
+    }
+    if (pendingFrame !== 0 && canRAF) {
+      (
+        globalThis as unknown as {
+          cancelAnimationFrame: (h: number) => void;
+        }
+      ).cancelAnimationFrame(pendingFrame);
+      pendingFrame = 0;
     }
 
     // Finalize stream
@@ -676,6 +925,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
       activeFilesDropped: streamParser.getActiveFilesDropped?.(),
+      toolCalls: streamParser.getToolCallRecords?.(),
+      consentRequests: streamParser.getConsentRequests?.(),
     };
   },
 
@@ -786,11 +1037,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   clearStreamingState: () => {
+    // `pendingOAuthResume` outlives this — the next OAuthConsentCard reads
+    // it to render "sign-in incomplete" framing, then clears its own entry.
     set({
       isStreaming: false,
       streamingContent: '',
       streamingConversationId: null,
       loadingMessage: null,
+      loadingMessageParams: undefined,
+      streamingConsentRequests: [],
+      streamingToolCalls: [],
       abortController: null,
       stopRequested: false,
     });
@@ -817,14 +1073,25 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
-    // Check if we should attempt auto-retry with fallback model
+    // Check if we should attempt auto-retry with fallback model.
+    // Curated/custom agents are NEVER retried — the agent's tools,
+    // instructions, and connections are the whole point of choosing it.
+    // Standard models that happen to be invoked via Foundry's agent service
+    // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
+    // deployment-mechanism marker, not "user picked a curated agent".
     const { isRetrying } = get();
     const isAuthError = error instanceof ApiError && error.isAuthError();
-    const isCustomAgent = conversation?.model?.id?.startsWith('custom-');
-    const isAlreadyOnFallback = conversation?.model?.id === fallbackModelID;
+    const modelId = conversation?.model?.id ?? '';
+    const isCuratedAgent =
+      conversation?.model?.isOrganizationAgent ||
+      conversation?.model?.isCustomAgent ||
+      modelId.startsWith('org-') ||
+      modelId.startsWith('foundry-') ||
+      modelId.startsWith('custom-');
+    const isAlreadyOnFallback = modelId === fallbackModelID;
     const canRetry =
       !isAuthError &&
-      !isCustomAgent &&
+      !isCuratedAgent &&
       !isAlreadyOnFallback &&
       !isRetrying &&
       conversation;
@@ -843,6 +1110,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
+    // Capture partial stream state before we wipe it — tool calls and
+    // consent prompts that completed before the failure should still be
+    // shown to the user so the failure has context.
+    const {
+      streamingToolCalls: partialToolCalls,
+      streamingConsentRequests: partialConsentRequests,
+      streamingContent: partialContent,
+    } = get();
+    const hasPartialState =
+      partialToolCalls.length > 0 ||
+      partialConsentRequests.length > 0 ||
+      partialContent.trim().length > 0;
+
     // Extract user-friendly error message
     let errorMessage = 'Failed to send message';
     let errorIsRecoverable = true;
@@ -857,6 +1137,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       errorMessage = error.message;
     }
 
+    // Reword opaque "network error"-style messages when we have partial
+    // state — most useful for mid-stream agent failures (Foundry tool
+    // timeouts, upstream connectors going down). The card below carries the
+    // tool details.
+    if (hasPartialState && /network error|fetch failed/i.test(errorMessage)) {
+      errorMessage =
+        'The agent stopped responding before finishing. Some tool calls may have completed — see the partial result.';
+    }
+
+    // Persist the partial assistant message so the tool summary survives
+    // the failure, instead of vanishing with the streaming slices.
+    if (hasPartialState && conversation) {
+      const partialMessage: Message = {
+        role: 'assistant',
+        content: partialContent,
+        messageType: MessageType.TEXT,
+        error: true,
+        toolCalls: partialToolCalls.length > 0 ? partialToolCalls : undefined,
+        consentRequests:
+          partialConsentRequests.length > 0
+            ? (partialConsentRequests as Message['consentRequests'])
+            : undefined,
+      };
+      void get().finalizeMessage(partialMessage, conversation);
+    }
+
     // Show error and store conversation for regenerate
     set({
       error: errorMessage,
@@ -864,6 +1170,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       streamingContent: '',
       streamingConversationId: null,
       loadingMessage: null,
+      streamingToolCalls: [],
+      streamingConsentRequests: [],
       abortController: null,
       stopRequested: false,
       isRetrying: false,
@@ -941,10 +1249,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        toolCalls,
+        consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
       const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
+      }
 
       // Surface dropped files (see send path for context).
       get().setLastTurnDroppedActiveFileIds(
@@ -1080,6 +1396,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
+  retryFailedRequest: async () => {
+    const { failedConversation, failedSearchMode } = get();
+    if (!failedConversation) return;
+
+    // Walk backwards so we skip any partial assistant entry left from the
+    // failed turn.
+    const flat = flattenEntriesForAPI(failedConversation.messages);
+    let userMessage: Message | undefined;
+    for (let i = flat.length - 1; i >= 0; i--) {
+      if (flat[i].role === 'user') {
+        userMessage = flat[i];
+        break;
+      }
+    }
+    if (!userMessage) return;
+
+    set({
+      error: null,
+      failedConversation: null,
+      failedSearchMode: undefined,
+      errorIsRecoverable: true,
+    });
+
+    await get().sendMessage(userMessage, failedConversation, failedSearchMode);
+  },
+
   dismissModelSwitchPrompt: () => {
     set({
       showModelSwitchPrompt: false,
@@ -1118,5 +1460,153 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       retryWithFallback: false,
       successfulRetryConversationId: null,
     });
+  },
+
+  submitApproval: async (
+    approvalRequestId,
+    approve,
+    conversation,
+    sourceMessageIndex,
+    source,
+  ) => {
+    // Mark as submitting so the card freezes immediately, even before the
+    // network round-trip completes. Rollback on failure so the user can retry.
+    set((state) => {
+      const next = new Set(state.submittingApprovals);
+      next.add(approvalRequestId);
+      return { submittingApprovals: next };
+    });
+
+    let showLoadingTimeout: NodeJS.Timeout | null = null;
+
+    try {
+      const loadingMessage = approve
+        ? 'chat.consent.submittingApproval'
+        : 'chat.consent.submittingDenial';
+
+      get().initializeStreamingState(conversation.id, loadingMessage);
+      showLoadingTimeout = get().scheduleLoadingMessage(loadingMessage);
+
+      const stream = await get().sendChatRequest(conversation, undefined, [
+        { approval_request_id: approvalRequestId, approve },
+      ]);
+
+      const streamParser = new StreamParser();
+      const {
+        finalContent,
+        threadId,
+        pendingTranscriptions,
+        toolCalls,
+        consentRequests,
+      } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      const assistantMessage = streamParser.toMessage(finalContent);
+      if (toolCalls && toolCalls.length > 0) {
+        assistantMessage.toolCalls = toolCalls;
+      }
+      if (consentRequests && consentRequests.length > 0) {
+        assistantMessage.consentRequests = consentRequests;
+      }
+
+      await get().finalizeMessage(
+        assistantMessage,
+        conversation,
+        threadId,
+        pendingTranscriptions,
+      );
+
+      // Promote submitting → submitted. A successful retry also clears
+      // any prior `failedApprovals` entry so auto-approve unblocks.
+      set((state) => {
+        const submitted = new Map(state.submittedApprovals);
+        submitted.set(approvalRequestId, approve);
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        const failed = state.failedApprovals.has(approvalRequestId)
+          ? (() => {
+              const f = new Set(state.failedApprovals);
+              f.delete(approvalRequestId);
+              return f;
+            })()
+          : state.failedApprovals;
+        return {
+          submittedApprovals: submitted,
+          submittingApprovals: submitting,
+          failedApprovals: failed,
+        };
+      });
+
+      // Persist the outcome on the source message so reload sees the
+      // resolved state instead of re-prompting.
+      if (sourceMessageIndex !== undefined) {
+        useConversationStore
+          .getState()
+          .recordApprovalOutcome(
+            conversation.id,
+            sourceMessageIndex,
+            approvalRequestId,
+            approve,
+            source,
+          );
+      }
+
+      get().clearStreamingState();
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+    } catch (error) {
+      console.error('submitApproval error:', error);
+
+      if (showLoadingTimeout) {
+        clearTimeout(showLoadingTimeout);
+      }
+
+      // Foundry says the approval is already recorded. From our side that's
+      // effectively a success — promote to "submitted" and persist, so the
+      // auto-approve effect doesn't re-fire in a loop on the same id.
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      const isDuplicate = /Duplicate MCP approval response/i.test(errorMessage);
+
+      if (isDuplicate) {
+        set((state) => {
+          const submitted = new Map(state.submittedApprovals);
+          submitted.set(approvalRequestId, approve);
+          const submitting = new Set(state.submittingApprovals);
+          submitting.delete(approvalRequestId);
+          return {
+            submittedApprovals: submitted,
+            submittingApprovals: submitting,
+          };
+        });
+        if (sourceMessageIndex !== undefined) {
+          useConversationStore
+            .getState()
+            .recordApprovalOutcome(
+              conversation.id,
+              sourceMessageIndex,
+              approvalRequestId,
+              approve,
+              source,
+            );
+        }
+        get().clearStreamingState();
+        return;
+      }
+
+      // Real failure (network, abort, server error): record it so the
+      // auto-approve effect doesn't keep retrying the same id, and clear
+      // the submitting marker so the user can manually retry from the card.
+      set((state) => {
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        const failed = new Set(state.failedApprovals);
+        failed.add(approvalRequestId);
+        return { submittingApprovals: submitting, failedApprovals: failed };
+      });
+
+      get().handleSendError(error, conversation);
+    }
   },
 }));

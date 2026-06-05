@@ -1,0 +1,11 @@
+{
+  "$comment": "Office-scoped agent discovery. The global US/EU default Foundry projects (env vars AZURE_AI_FOUNDRY_RESOURCE_ID_US/EU) are ALWAYS shown as 'US Region Agents' or 'EU Region Agents'. Add an entry here only when an office has ADDITIONAL Foundry projects beyond the regional default — those will show as a separate '{Office Name} Agents' section. To add your office: open a PR adding an entry here and an env var with your project's ARM resource ID.",
+  "$schema": {
+    "id": "Stable identifier (kebab-case)",
+    "displayName": "Shown in the UI as a section header in the Agents tab",
+    "emailDomains": "Email domains that match users to this office (most specific match wins)",
+    "region": "'US' or 'EU' — controls GDPR data residency routing",
+    "foundryProjectsEnv": "Names of env vars holding comma-separated ARM resource paths to your office's additional Foundry projects (beyond the regional default)"
+  },
+  "offices": []
+}

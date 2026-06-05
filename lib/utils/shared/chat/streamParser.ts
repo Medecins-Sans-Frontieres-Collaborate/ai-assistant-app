@@ -1,32 +1,52 @@
 import {
-  ParsedMetadata,
   PendingTranscriptionInfo,
+  StreamMetadata,
+  TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
 
-import { Message, MessageType } from '@/types/chat';
+import { Message, MessageType, ToolCallRecord } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
+import {
+  AgentActivityPayload,
+  ConsentOutcomePayload,
+  ConsentRequestPayload,
+  ToolCallRecordPayload,
+  scanStreamEvents,
+} from '@/lib/streamMarkers';
+
 /**
- * Handles parsing of streaming chat responses
- * Extracts metadata (citations, transcripts, actions) and display content
+ * Parses streaming chat responses. Forward-only: each chunk scans only
+ * the suffix past `processedIndex`, so total work is O(stream_size) and
+ * not O(stream_size²).
  */
 export class StreamParser {
   private text: string = '';
+  /** Bytes before this index are either in `displayText` or were events. */
+  private processedIndex: number = 0;
+  /** What the markdown renderer sees. Incomplete marker tails are excluded. */
+  private displayText: string = '';
   private extractedCitations: Citation[] = [];
   private extractedThreadId?: string;
-  private extractedTranscript?: any;
+  private extractedTranscript?: TranscriptMetadata;
   private extractedPendingTranscriptions?: PendingTranscriptionInfo[];
-  private extractedFileCacheUpdates?: Array<{
-    fileId: string;
-    processedContent: any;
-  }>;
+  private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
+  // Drives the loading text — only the latest activity is shown.
+  private latestActivity: AgentActivityPayload | null = null;
+  // Outcomes already surfaced; processChunk only returns new ones.
+  private seenOutcomeIds: Set<string> = new Set();
+  // Tool calls keyed by id (defensive dedupe vs Foundry's `.added`/`.done`).
+  private toolCallRecords: Map<string, ToolCallRecordPayload> = new Map();
+  // Consent prompts in arrival order, deduped by oauth url / approval id.
+  private consentRequests: ConsentRequestPayload[] = [];
+  private seenConsentKeys: Set<string> = new Set();
 
   constructor(private decoder = createStreamDecoder()) {}
 
@@ -44,12 +64,80 @@ export class StreamParser {
     action?: string;
     contentChanged: boolean;
     citationsChanged: boolean;
+    /** Newly-arrived approval outcomes since the previous chunk. */
+    newOutcomes: ConsentOutcomePayload[];
+    /** Optional interpolation params for the latest activity translation. */
+    actionParams?: Record<string, string>;
+    /** Whether the consent-card or tool-call lists changed this chunk. */
+    consentChanged: boolean;
+    toolCallsChanged: boolean;
   } {
     const chunk = this.decoder.decode(value, options);
     this.text += chunk;
 
+    // Terminal METADATA block (citations, threadId, etc.). Cheap when
+    // the marker isn't present — parseMetadataFromContent short-circuits.
     const parsed = parseMetadataFromContent(this.text);
-    const displayText = parsed.content;
+
+    // Cap the inline-event scan at the start of the METADATA block once
+    // it appears, so we never walk into it.
+    let scanEnd = this.text.length;
+    if (parsed.metadataStartIndex != null) {
+      scanEnd = Math.min(scanEnd, parsed.metadataStartIndex);
+    }
+    const scanInput =
+      scanEnd === this.text.length ? this.text : this.text.slice(0, scanEnd);
+    const scan = scanStreamEvents(scanInput, this.processedIndex);
+
+    const newOutcomes: ConsentOutcomePayload[] = [];
+    let consentChanged = false;
+    let toolCallsChanged = false;
+    for (const event of scan.events) {
+      switch (event.type) {
+        case 'agent_activity':
+          this.latestActivity = event.payload;
+          break;
+        case 'consent_outcome': {
+          const id = event.payload.approval_request_id;
+          if (!this.seenOutcomeIds.has(id)) {
+            this.seenOutcomeIds.add(id);
+            newOutcomes.push(event.payload);
+          }
+          break;
+        }
+        case 'consent_request': {
+          const req = event.payload;
+          const key =
+            req.kind === 'oauth'
+              ? `oauth:${req.consent_url ?? ''}`
+              : `approval:${req.approval_request_id ?? req.tool_name ?? ''}`;
+          if (!this.seenConsentKeys.has(key)) {
+            this.seenConsentKeys.add(key);
+            this.consentRequests.push(req);
+            consentChanged = true;
+          }
+          break;
+        }
+        case 'tool_call_record': {
+          this.toolCallRecords.set(event.payload.id, event.payload);
+          toolCallsChanged = true;
+          break;
+        }
+      }
+    }
+
+    this.processedIndex = scan.nextIndex;
+    if (scan.displayDelta) {
+      this.displayText += scan.displayDelta;
+    }
+
+    // Strip dangling "[1] [2]" citation indices at the end so the CitationList
+    // below the message owns citation display. Derived per-render — the raw
+    // accumulator keeps all bytes in case a later chunk extends past them.
+    const renderedDisplayText = this.displayText.replace(
+      /\n*\s*(?:\[\d+\]\s*)+\s*$/g,
+      '',
+    );
 
     // Update citations if found and different from previous
     const currentCitationsStr = JSON.stringify(parsed.citations);
@@ -78,44 +166,54 @@ export class StreamParser {
     }
 
     // Capture file cache updates if present
-    if ((parsed as any).fileCacheUpdates && !this.extractedFileCacheUpdates) {
-      this.extractedFileCacheUpdates = (parsed as any).fileCacheUpdates;
+    if (parsed.fileCacheUpdates && !this.extractedFileCacheUpdates) {
+      this.extractedFileCacheUpdates = parsed.fileCacheUpdates;
     }
 
     // Capture active files tokens consumed if present
     if (
-      (parsed as any).activeFilesTokensConsumed != null &&
+      parsed.activeFilesTokensConsumed != null &&
       this.extractedActiveFilesTokensConsumed == null
     ) {
-      this.extractedActiveFilesTokensConsumed = (
-        parsed as any
-      ).activeFilesTokensConsumed;
+      this.extractedActiveFilesTokensConsumed =
+        parsed.activeFilesTokensConsumed;
     }
 
     // Capture dropped active file IDs if present
-    if (
-      (parsed as any).activeFilesDropped &&
-      this.extractedActiveFilesDropped == null
-    ) {
-      this.extractedActiveFilesDropped = (parsed as any).activeFilesDropped;
+    if (parsed.activeFilesDropped && this.extractedActiveFilesDropped == null) {
+      this.extractedActiveFilesDropped = parsed.activeFilesDropped;
     }
 
-    // Check if we've received actual content (not just metadata)
-    if (displayText && displayText.trim().length > 0) {
+    // `hasReceivedContent` checks the raw accumulator so a citations-only
+    // response (`[1] [2]`) still clears the loading state. `contentChanged`
+    // compares the rendered text so we don't repaint when only trailing
+    // citation indices changed.
+    if (this.displayText && this.displayText.trim().length > 0) {
       this.hasReceivedContent = true;
     }
 
-    const contentChanged = displayText !== this.prevDisplayText;
-    this.prevDisplayText = displayText;
+    const contentChanged = renderedDisplayText !== this.prevDisplayText;
+    this.prevDisplayText = renderedDisplayText;
 
     return {
-      displayText,
+      displayText: renderedDisplayText,
       citations: this.extractedCitations,
       hasReceivedContent: this.hasReceivedContent,
-      action: parsed.action,
+      // Transient activity key (if any) takes precedence over a
+      // metadata-channel `action` field; both feed the same loading text.
+      action: this.latestActivity?.key ?? parsed.action,
       contentChanged,
       citationsChanged,
+      newOutcomes,
+      actionParams: this.latestActivity?.params,
+      consentChanged,
+      toolCallsChanged,
     };
+  }
+
+  /** Consent prompts seen so far, in arrival order. */
+  getConsentRequests(): ConsentRequestPayload[] {
+    return this.consentRequests;
   }
 
   /**
@@ -176,7 +274,7 @@ export class StreamParser {
   /**
    * Get the transcript if extracted
    */
-  getTranscript(): any | undefined {
+  getTranscript(): TranscriptMetadata | undefined {
     return this.extractedTranscript;
   }
 
@@ -190,9 +288,7 @@ export class StreamParser {
   /**
    * Get any file cache updates sent via SSE metadata
    */
-  getFileCacheUpdates():
-    | Array<{ fileId: string; processedContent: any }>
-    | undefined {
+  getFileCacheUpdates(): StreamMetadata['fileCacheUpdates'] | undefined {
     return this.extractedFileCacheUpdates;
   }
 
@@ -216,5 +312,25 @@ export class StreamParser {
    */
   getHasReceivedContent(): boolean {
     return this.hasReceivedContent;
+  }
+
+  /**
+   * All tool-call records accumulated during the stream, in the order they
+   * arrived (Map preserves insertion order). Empty array when the agent
+   * didn't invoke any MCP tools.
+   */
+  getToolCallRecords(): ToolCallRecord[] {
+    if (this.toolCallRecords.size === 0) return [];
+    return Array.from(this.toolCallRecords.values()).map((r) => ({
+      id: r.id,
+      name: r.name,
+      server_label: r.server_label,
+      arguments: r.arguments,
+      status: r.status,
+      output: r.output,
+      error: r.error,
+      duration_ms: r.duration_ms,
+      approval_request_id: r.approval_request_id,
+    }));
   }
 }
