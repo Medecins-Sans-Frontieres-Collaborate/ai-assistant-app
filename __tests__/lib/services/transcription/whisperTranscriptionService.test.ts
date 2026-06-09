@@ -56,4 +56,28 @@ describe('WhisperTranscriptionService size limit', () => {
     expect(thrown!.errorClass).toBe('permanent');
     expect(thrown!.message).toContain('exceeds the maximum limit');
   });
+
+  // `transcribeSegment` is private, but it owns the size check the chunked
+  // retry loop actually hits — transcribe() rejects first on whole files, so
+  // the test above never reaches it. Same private-access pattern as
+  // chunkedTranscriptionService.test.ts.
+  type SegmentAccess = {
+    transcribeSegment: (segmentPath: string) => Promise<string>;
+  };
+
+  it('tags the segment-level size check as permanent (chunked retry path)', async () => {
+    const service =
+      new WhisperTranscriptionService() as unknown as SegmentAccess;
+
+    let thrown: TranscriptionError | undefined;
+    try {
+      await service.transcribeSegment(oversizedPath);
+    } catch (error) {
+      thrown = error as TranscriptionError;
+    }
+
+    expect(thrown).toBeDefined();
+    expect(thrown!.errorClass).toBe('permanent');
+    expect(thrown!.message).toContain('transcription limit');
+  });
 });
