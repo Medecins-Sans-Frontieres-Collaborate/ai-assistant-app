@@ -168,6 +168,13 @@ export interface SplitOptions {
 const DEFAULT_TARGET_CHUNK_SIZE = 20 * 1024 * 1024;
 
 /**
+ * Bitrate used when re-encoding chunks to mp3/m4a. Shared between the
+ * segment-duration math and the ffmpeg invocation so they cannot drift —
+ * chunk size on disk is a function of THIS rate, not the input file's rate.
+ */
+const CHUNK_AUDIO_BITRATE_KBPS = 128;
+
+/**
  * Gets the duration of an audio file in seconds using ffprobe.
  *
  * @param inputPath - Path to the audio file
@@ -253,29 +260,54 @@ export async function getAudioBitrate(inputPath: string): Promise<number> {
 }
 
 /**
- * Calculates the optimal segment duration to achieve the target chunk size.
+ * Bytes per second of the RE-ENCODED chunks. Chunk size on disk depends only
+ * on the output encoding — using the input file's rate here is wrong: a
+ * low-bitrate input (e.g. a 64 kbps iPhone Voice Memo) re-encoded at 128 kbps
+ * would produce chunks ~2x the target, blowing past the Whisper size limit.
+ */
+async function getOutputBytesPerSecond(
+  outputFormat: 'mp3' | 'wav' | 'm4a',
+  inputPath: string,
+): Promise<number> {
+  if (outputFormat === 'mp3' || outputFormat === 'm4a') {
+    return (CHUNK_AUDIO_BITRATE_KBPS * 1000) / 8;
+  }
+
+  // wav (pcm_s16le): rate is sampleRate * channels * 2 bytes, taken from the
+  // input's audio stream since pcm preserves both.
+  return new Promise((resolve) => {
+    ffmpeg.ffprobe(inputPath, (err, metadata) => {
+      const audioStream = metadata?.streams?.find(
+        (s) => s.codec_type === 'audio',
+      );
+      const sampleRate = Number(audioStream?.sample_rate) || 44100;
+      const channels = Number(audioStream?.channels) || 2;
+      if (err) {
+        resolve(44100 * 2 * 2);
+        return;
+      }
+      resolve(sampleRate * channels * 2);
+    });
+  });
+}
+
+/**
+ * Calculates the optimal segment duration to achieve the target chunk size,
+ * based on the output encoding rate (chunks are re-encoded, so the input
+ * file's bitrate is irrelevant to how large they end up on disk).
  *
  * @param inputPath - Path to the audio file
  * @param targetSizeBytes - Target size for each chunk in bytes
+ * @param outputFormat - Format the chunks will be encoded to
  * @returns Segment duration in seconds
  */
 async function calculateSegmentDuration(
   inputPath: string,
   targetSizeBytes: number,
+  outputFormat: 'mp3' | 'wav' | 'm4a',
 ): Promise<number> {
-  const stats = await stat(inputPath);
-  const fileSize = stats.size;
+  const bytesPerSecond = await getOutputBytesPerSecond(outputFormat, inputPath);
 
-  const duration = await getAudioDuration(inputPath);
-
-  if (!Number.isFinite(duration) || duration <= 0) {
-    throw new Error('Audio has unusable duration');
-  }
-
-  // Calculate bytes per second
-  const bytesPerSecond = fileSize / duration;
-
-  // Calculate segment duration to achieve target size
   // Round down to be conservative (better to have more chunks than exceed size limit)
   const segmentDuration = Math.floor(targetSizeBytes / bytesPerSecond);
 
@@ -286,8 +318,9 @@ async function calculateSegmentDuration(
 /**
  * Splits an audio file into smaller chunks using FFmpeg segment feature.
  *
- * Uses stream copy (-c copy) for fast, lossless splitting when possible.
- * Falls back to re-encoding if stream copy fails.
+ * Chunks are always re-encoded (mp3/m4a at CHUNK_AUDIO_BITRATE_KBPS, wav as
+ * pcm_s16le) — stream copy can't cut at arbitrary points reliably across
+ * input containers.
  *
  * @param inputPath - Path to the input audio file
  * @param options - Split options (target size, format, output directory)
@@ -337,6 +370,7 @@ export async function splitAudioFile(
   let segmentDuration = await calculateSegmentDuration(
     inputPath,
     targetChunkSizeBytes,
+    outputFormat,
   );
   let estimatedChunks = Math.ceil(totalDuration / segmentDuration);
 
@@ -445,14 +479,14 @@ async function runSegmentation(
     switch (outputFormat) {
       case 'mp3':
         command.audioCodec('libmp3lame');
-        command.audioBitrate(128);
+        command.audioBitrate(CHUNK_AUDIO_BITRATE_KBPS);
         break;
       case 'wav':
         command.audioCodec('pcm_s16le');
         break;
       case 'm4a':
         command.audioCodec('aac');
-        command.audioBitrate(128);
+        command.audioBitrate(CHUNK_AUDIO_BITRATE_KBPS);
         break;
     }
 
