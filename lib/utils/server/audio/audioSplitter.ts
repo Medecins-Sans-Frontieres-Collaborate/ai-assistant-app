@@ -5,6 +5,10 @@
  * This module works alongside audioExtractor.ts and uses the same
  * FFmpeg path resolution strategy.
  */
+import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+
+import { TranscriptionError } from '@/types/transcription';
+
 import { execSync } from 'child_process';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
@@ -377,11 +381,11 @@ export async function splitAudioFile(
   // Cap chunk count so pathologically long audio doesn't spray hundreds of
   // chunks into tmpdir and the Whisper queue. If we'd exceed the cap, grow
   // segmentDuration so the whole file fits in MAX_CHUNKS segments. The
-  // trade-off is individual chunks can then exceed targetChunkSizeBytes; if
-  // any chunk grows past Whisper's 25MB cap, transcription of that chunk
-  // will fail permanently. There is no re-split-on-size retry today — if
-  // that becomes a real problem in practice, add one in chunkedTranscription-
-  // Service or lower MAX_CHUNKS.
+  // trade-off is individual chunks can then exceed targetChunkSizeBytes;
+  // the post-split size check below catches any chunk that grew past the
+  // Whisper cap and fails the job with a clear, non-retryable error rather
+  // than letting every chunk bounce off the Whisper API. At 128 kbps this
+  // only triggers past ~21 hours of audio.
   const MAX_CHUNKS = 60;
   if (estimatedChunks > MAX_CHUNKS) {
     segmentDuration = Math.ceil(totalDuration / MAX_CHUNKS);
@@ -430,6 +434,23 @@ export async function splitAudioFile(
 
   if (chunkPaths.length === 0) {
     throw new Error('No chunk files were generated');
+  }
+
+  // Defense in depth: a chunk larger than the Whisper limit can never be
+  // transcribed, so fail the whole job here with an actionable message
+  // instead of letting the API reject chunk after chunk. Only reachable via
+  // the MAX_CHUNKS cap above (extremely long recordings).
+  const chunkStats = await Promise.all(chunkPaths.map((p) => stat(p)));
+  const oversized = chunkStats.find((s) => s.size > WHISPER_MAX_SIZE);
+  if (oversized) {
+    await cleanupChunks(chunkPaths);
+    const totalHours = (totalDuration / 3600).toFixed(1);
+    const error = new Error(
+      `This recording is too long to transcribe (~${totalHours} hours of audio). ` +
+        `Please split it into shorter parts and try again.`,
+    ) as TranscriptionError;
+    error.errorClass = 'permanent';
+    throw error;
   }
 
   console.log(
