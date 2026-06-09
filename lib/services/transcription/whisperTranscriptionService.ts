@@ -81,9 +81,12 @@ export class WhisperTranscriptionService implements ITranscriptionService {
 
       if (fileSize > WHISPER_MAX_SIZE) {
         const maxSizeMB = WHISPER_MAX_SIZE / (1024 * 1024);
-        throw new Error(
+        // Tagged permanent: the file will never shrink, so retrying is futile.
+        const sizeError = new Error(
           `Audio file size (${(fileSize / 1024 / 1024).toFixed(2)}MB) exceeds the maximum limit of ${maxSizeMB}MB. Please upload a shorter audio file.`,
-        );
+        ) as TranscriptionError;
+        sizeError.errorClass = 'permanent';
+        throw sizeError;
       }
 
       // Transcribe the file directly (Whisper supports mp3, mp4, mpeg, mpga, m4a, wav, webm)
@@ -107,9 +110,15 @@ export class WhisperTranscriptionService implements ITranscriptionService {
 
     if (fileSize > WHISPER_MAX_SIZE) {
       const maxSizeMB = WHISPER_MAX_SIZE / (1024 * 1024);
-      throw new Error(
-        `Segment size exceeds the maximum allowed size of ${maxSizeMB}MB.`,
-      );
+      // Tagged permanent so the chunked retry loop fails fast instead of
+      // re-sending a chunk that can never fit under the API limit. Worded
+      // for end users, who never created "segments" themselves.
+      const sizeError = new Error(
+        `Part of this recording came out larger than the ${maxSizeMB}MB transcription limit. ` +
+          `Please try a shorter recording.`,
+      ) as TranscriptionError;
+      sizeError.errorClass = 'permanent';
+      throw sizeError;
     }
 
     try {
