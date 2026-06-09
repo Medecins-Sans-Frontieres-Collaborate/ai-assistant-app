@@ -16,6 +16,7 @@ import {
 } from '@/lib/utils/server/audio/audioSplitter';
 
 import { execFileSync } from 'child_process';
+import { randomUUID } from 'crypto';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -37,6 +38,17 @@ function resolveFfmpegBinary(): string | null {
 
 const ffmpegBinary = resolveFfmpegBinary();
 const canRun = ffmpegBinary !== null && isAudioSplittingAvailable();
+
+// On CI the suite below must actually run — a silent environment skip would
+// leave the chunk-sizing regression unprotected while `npm test` stays green.
+// ffmpeg comes from ffmpeg-static and ffprobe from ffprobe-static, so a
+// failure here means dependency installation broke, not a missing system tool.
+it.runIf(process.env.CI)(
+  'CI provides ffmpeg + ffprobe (regression suite must not skip)',
+  () => {
+    expect(canRun).toBe(true);
+  },
+);
 
 describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
   let workDir: string;
@@ -78,7 +90,9 @@ describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
     const result = await splitAudioFile(fixturePath, {
       targetChunkSizeBytes: TARGET_CHUNK_BYTES,
       outputFormat: 'mp3',
-      jobId: 'audio-splitter-test',
+      // Unique per run: a fixed id would reuse the same tmp dir, and chunks
+      // left by a crashed earlier run match the same filename pattern.
+      jobId: `audio-splitter-test-${randomUUID()}`,
     });
     chunkPaths = result.chunkPaths;
 
@@ -92,6 +106,17 @@ describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
       const { size } = fs.statSync(chunkPath);
       expect(size).toBeLessThanOrEqual(TARGET_CHUNK_BYTES * 1.25);
     }
+
+    // The chunk bitrate is clamped to the input's: re-encoding 32 kbps audio
+    // must not balloon total output to ~4x the source (the 128 kbps ceiling
+    // would). Allow 2x for bitrate-step rounding and container overhead.
+    const totalChunkBytes = result.chunkPaths.reduce(
+      (sum, chunkPath) => sum + fs.statSync(chunkPath).size,
+      0,
+    );
+    expect(totalChunkBytes).toBeLessThanOrEqual(
+      fs.statSync(fixturePath).size * 2,
+    );
 
     // Chunks must come back in playback order for transcript assembly.
     expect(result.chunkPaths).toEqual([...result.chunkPaths].sort());
