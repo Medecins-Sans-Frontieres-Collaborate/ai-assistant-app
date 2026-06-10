@@ -22,7 +22,6 @@ import fs from 'fs';
 import { AzureOpenAI } from 'openai';
 
 export class WhisperTranscriptionService implements ITranscriptionService {
-  private modelName: string = 'whisper-1';
   private deployment: string;
   private client: AzureOpenAI;
 
@@ -101,18 +100,25 @@ export class WhisperTranscriptionService implements ITranscriptionService {
     }
   }
 
-  private async transcribeSegment(
-    segmentPath: string,
+  /**
+   * Transcribes one chunk of a larger recording (the chunked pipeline's
+   * entry point). Has its own size check with chunk-appropriate wording:
+   * the user uploaded a whole recording, not this chunk, so the whole-file
+   * "please upload a shorter audio file" message from transcribe() would
+   * mislead. The splitter's post-split size check makes this a backstop —
+   * reaching it means a chunk slipped through oversized anyway.
+   */
+  async transcribeChunk(
+    chunkPath: string,
     options?: TranscriptionOptions,
   ): Promise<string> {
-    const stats = await fs.promises.stat(segmentPath);
+    const stats = await fs.promises.stat(chunkPath);
     const fileSize = stats.size;
 
     if (fileSize > WHISPER_MAX_SIZE) {
       const maxSizeMB = WHISPER_MAX_SIZE / (1024 * 1024);
       // Tagged permanent so the chunked retry loop fails fast instead of
-      // re-sending a chunk that can never fit under the API limit. Worded
-      // for end users, who never created "segments" themselves.
+      // re-sending a chunk that can never fit under the API limit.
       const sizeError = new Error(
         `Part of this recording came out larger than the ${maxSizeMB}MB transcription limit. ` +
           `Please try a shorter recording.`,
@@ -121,6 +127,13 @@ export class WhisperTranscriptionService implements ITranscriptionService {
       throw sizeError;
     }
 
+    return this.transcribeSegment(chunkPath, options);
+  }
+
+  private async transcribeSegment(
+    segmentPath: string,
+    options?: TranscriptionOptions,
+  ): Promise<string> {
     try {
       // Use OpenAI SDK which handles file streams properly
       const transcription = await this.client.audio.transcriptions.create({
@@ -136,19 +149,23 @@ export class WhisperTranscriptionService implements ITranscriptionService {
 
       return transcription.text || '';
     } catch (error: unknown) {
-      const err = error as { status?: number; code?: string; message?: string };
+      const err = error as {
+        status?: number;
+        code?: string;
+        message?: string;
+        headers?: Record<string, string> | Headers;
+      };
       const status = err.status;
       const code = err.code;
 
       let errorClass: TranscriptionErrorClass = 'unknown';
       let message = err.message || 'Unknown error';
+      let retryAfterSeconds: number | undefined;
 
       if (status === 429 || code === 'rate_limit_exceeded') {
         errorClass = 'rate_limit';
-        const retryAfterMatch = err.message?.match(
-          /retry after (\d+) seconds?/i,
-        );
-        const waitTime = retryAfterMatch ? retryAfterMatch[1] : 'a few';
+        retryAfterSeconds = extractRetryAfterSeconds(err);
+        const waitTime = retryAfterSeconds ?? 'a few';
         message = `The audio transcription service is currently at capacity due to high usage. Please wait ${waitTime} seconds and try again.`;
       } else if (status === 401 || status === 403) {
         errorClass = 'auth';
@@ -168,7 +185,39 @@ export class WhisperTranscriptionService implements ITranscriptionService {
         `Error transcribing segment: ${message}`,
       ) as TranscriptionError;
       tagged.errorClass = errorClass;
+      tagged.retryAfterSeconds = retryAfterSeconds;
       throw tagged;
     }
   }
+}
+
+/**
+ * Pulls the server-suggested retry delay (seconds) out of a rate-limit
+ * error, preferring the Retry-After header over the message text. Returns
+ * undefined when the server didn't say (callers fall back to their own
+ * backoff) or when the value is nonsensical.
+ */
+function extractRetryAfterSeconds(err: {
+  message?: string;
+  headers?: Record<string, string> | Headers;
+}): number | undefined {
+  let headerValue: string | undefined;
+  if (err.headers instanceof Headers) {
+    headerValue = err.headers.get('retry-after') ?? undefined;
+  } else if (err.headers) {
+    headerValue = err.headers['retry-after'] ?? err.headers['Retry-After'];
+  }
+
+  const candidates = [
+    headerValue,
+    err.message?.match(/retry after (\d+) seconds?/i)?.[1],
+  ];
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const parsed = Number(candidate);
+    if (Number.isFinite(parsed) && parsed > 0 && parsed <= 600) {
+      return Math.ceil(parsed);
+    }
+  }
+  return undefined;
 }
