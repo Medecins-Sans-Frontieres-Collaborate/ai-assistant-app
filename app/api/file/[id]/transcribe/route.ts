@@ -11,6 +11,7 @@ import { Session } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { recordBatchJobOwner } from '@/lib/services/transcription/batchJobRegistry';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
@@ -155,6 +156,10 @@ export async function GET(
         () => batchService.submitTranscription(sasUrl),
         { label: 'submitTranscription' },
       );
+
+      // Record ownership so the status/cleanup routes can verify that only
+      // the submitting user polls or deletes this job.
+      recordBatchJobOwner(jobId, userId);
 
       // Note: We don't delete the blob yet - it will be deleted after
       // the batch job completes and the transcript is retrieved
