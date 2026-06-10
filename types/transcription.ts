@@ -131,4 +131,10 @@ export type TranscriptionErrorClass =
 
 export interface TranscriptionError extends Error {
   errorClass: TranscriptionErrorClass;
+  /**
+   * Server-suggested wait before retrying, in seconds. Only set for
+   * `rate_limit` errors where the API communicated a Retry-After; retry
+   * loops should prefer this over their own backoff schedule.
+   */
+  retryAfterSeconds?: number;
 }
