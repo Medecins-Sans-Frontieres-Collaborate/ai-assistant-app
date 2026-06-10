@@ -217,6 +217,18 @@ export interface SplitOptions {
 const DEFAULT_TARGET_CHUNK_SIZE = 20 * 1024 * 1024;
 
 /**
+ * Allowed shape for jobId before it is joined into a tmpdir path. All
+ * current callers pass UUIDs (or UUID-suffixed test ids); enforcing it here
+ * makes path safety a property of this module instead of of its callers.
+ */
+const SAFE_JOB_ID_REGEX = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
+
+/** Escapes regex metacharacters so a filename can be embedded in a RegExp. */
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
  * Ceiling bitrate when re-encoding chunks to mp3/m4a. The actual rate is the
  * input's bitrate clamped to this (see resolveChunkEncoding) and feeds both
  * the segment-duration math and the ffmpeg invocation so they cannot drift —
@@ -439,6 +451,10 @@ export async function splitAudioFile(
     jobId,
   } = options;
 
+  if (jobId && !SAFE_JOB_ID_REGEX.test(jobId)) {
+    throw new Error('Invalid jobId for audio splitting');
+  }
+
   // Get file info
   const stats = await stat(inputPath);
   const fileSize = stats.size;
@@ -448,11 +464,38 @@ export async function splitAudioFile(
     throw new Error('Audio has unusable duration');
   }
 
+  const inputBasename = path.basename(inputPath, path.extname(inputPath));
+
   // If file is small enough, no splitting needed
   if (fileSize <= targetChunkSizeBytes) {
     console.log(
       `[AudioSplitter] File size (${(fileSize / 1024 / 1024).toFixed(1)}MB) is within target, no splitting needed`,
     );
+
+    // When the caller asked for managed output (jobId/outputDir), the single
+    // "chunk" must still be OUR copy: callers treat every returned chunkPath
+    // as disposable (cleanupChunks deletes them), and handing back the
+    // caller's input file would let that cleanup destroy it.
+    if (jobId || outputDir) {
+      const singleChunkDir =
+        outputDir ?? path.join(tmpdir(), 'chunked-transcription', jobId!);
+      await fs.promises.mkdir(singleChunkDir, { recursive: true });
+      const extension = path.extname(inputPath) || `.${outputFormat}`;
+      const singleChunkPath = path.join(
+        singleChunkDir,
+        `${inputBasename}_chunk_000${extension}`,
+      );
+      await fs.promises.copyFile(inputPath, singleChunkPath);
+      return {
+        chunkPaths: [singleChunkPath],
+        chunkCount: 1,
+        totalDurationSecs: totalDuration,
+        chunkDurationSecs: totalDuration,
+      };
+    }
+
+    // Legacy unmanaged mode: the input itself is returned. Callers in this
+    // mode must NOT pass the result to cleanupChunks.
     return {
       chunkPaths: [inputPath],
       chunkCount: 1,
@@ -500,7 +543,6 @@ export async function splitAudioFile(
   // Prepare output path pattern.
   // Prefer a per-job subdir under tmpdir when jobId is provided so parallel
   // jobs don't share a directory and cleanup can rm-rf the whole subdir.
-  const inputBasename = path.basename(inputPath, path.extname(inputPath));
   const outputDirectory =
     outputDir ||
     (jobId
@@ -648,7 +690,11 @@ async function findChunkFiles(
   format: string,
 ): Promise<string[]> {
   const files = await readdir(directory);
-  const pattern = new RegExp(`^${baseName}_chunk_\\d{3}\\.${format}$`);
+  // Escape both interpolated parts: a basename containing regex
+  // metacharacters (e.g. "take.1") must match literally, not as a pattern.
+  const pattern = new RegExp(
+    `^${escapeRegExp(baseName)}_chunk_\\d{3}\\.${escapeRegExp(format)}$`,
+  );
 
   const chunkFiles = files
     .filter((f) => pattern.test(f))
