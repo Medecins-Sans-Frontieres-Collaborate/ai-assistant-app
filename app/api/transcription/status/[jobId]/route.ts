@@ -12,6 +12,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 
+import { userOwnsBatchJob } from '@/lib/services/transcription/batchJobRegistry';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import {
   JOB_CANCELLED_MESSAGE,
@@ -107,6 +108,17 @@ export async function GET(
   // Check if service is configured
   if (!batchService.isConfigured()) {
     // If neither chunked nor batch job found, return not found
+    return errorResponse(
+      'Transcription job not found',
+      404,
+      `Job ${jobId} not found in chunked or batch systems`,
+    );
+  }
+
+  // Batch jobs live in Azure with no per-user scoping of their own; enforce
+  // the locally recorded ownership before touching the Azure API. Denial is
+  // an indistinguishable 404 so jobIds can't be enumerated.
+  if (!userOwnsBatchJob(jobId, session.user.id)) {
     return errorResponse(
       'Transcription job not found',
       404,
