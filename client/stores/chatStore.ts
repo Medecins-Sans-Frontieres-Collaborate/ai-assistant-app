@@ -533,16 +533,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       );
       // Try settings default, then the fallback chain
       const fallbackId = settings.defaultModelId || fallbackModelID;
-      latestModelConfig =
-        OpenAIModels[fallbackId] ??
-        getFallbackModel([conversation.model.id]) ??
-        undefined;
+      const rescuedModel =
+        OpenAIModels[fallbackId] ?? getFallbackModel([conversation.model.id]);
 
-      if (!latestModelConfig) {
+      if (!rescuedModel) {
         throw new Error(
           `No valid model available. Requested: ${conversation.model.id}, Fallback: ${fallbackId}`,
         );
       }
+      latestModelConfig = rescuedModel;
     }
 
     // For organization/custom agents, use the conversation model directly (it already has full config)
@@ -830,22 +829,30 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
-    // Check if we should attempt auto-retry with fallback model
+    // Check if we should attempt auto-retry with a fallback model.
+    // Client errors (4xx) other than 429 would fail identically on any
+    // model — bad payload, auth, corrupted history — so don't fall back.
+    // 5xx, rate limits, and network errors are worth trying another model.
     const { isRetrying } = get();
-    const isAuthError = error instanceof ApiError && error.isAuthError();
+    const isNonRetryableClientError =
+      error instanceof ApiError &&
+      error.isClientError() &&
+      error.status !== 429;
     const isCustomAgent = conversation?.model?.id?.startsWith('custom-');
-    const isAlreadyOnFallback = conversation?.model?.id === fallbackModelID;
+    const nextFallbackModel = conversation
+      ? getFallbackModel([conversation.model.id])
+      : null;
     const canRetry =
-      !isAuthError &&
+      !isNonRetryableClientError &&
       !isCustomAgent &&
-      !isAlreadyOnFallback &&
       !isRetrying &&
-      conversation;
+      conversation &&
+      nextFallbackModel;
 
     if (canRetry) {
       console.log(
         '[chatStore] Attempting auto-retry with fallback model:',
-        fallbackModelID,
+        nextFallbackModel.id,
       );
       // Store failed conversation for regenerate button
       set({
