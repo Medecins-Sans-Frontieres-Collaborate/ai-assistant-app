@@ -56,8 +56,6 @@ export async function GET(
     );
   }
 
-  let transcript: string | undefined;
-
   try {
     const userId = getUserIdFromSession(session);
     const blobStorageClient = createBlobStorageClient(session);
@@ -91,6 +89,7 @@ export async function GET(
     if (serviceType === 'whisper') {
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
+      let transcript: string;
       try {
         await withAzureRetry(
           () => blockBlobClient.downloadToFile(tmpFilePath),
@@ -172,15 +171,6 @@ export async function GET(
     }
   } catch (error) {
     console.error('Error during transcription:', error);
-
-    // If we have a partial transcript (unlikely), return it
-    if (transcript) {
-      const response: TranscriptionResponse = {
-        async: false,
-        transcript,
-      };
-      return NextResponse.json(response);
-    }
 
     return NextResponse.json(
       {
