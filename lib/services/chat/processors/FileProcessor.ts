@@ -75,6 +75,12 @@ export class FileProcessor extends BasePipelineStage {
         },
       },
       async (span) => {
+        // Every downloaded temp file is registered here the moment its path
+        // is reserved (before the download starts), so the finally below can
+        // clean up partial downloads too. Cleanup must not depend on the
+        // happy path: a single failing file used to skip cleanup entirely
+        // and strand multi-GB downloads in /tmp.
+        const tempFilePaths: string[] = [];
         try {
           const perfStart = performance.now();
           const lastMessage = context.messages[context.messages.length - 1];
@@ -160,6 +166,10 @@ export class FileProcessor extends BasePipelineStage {
               const [blobId, filePath] =
                 this.fileProcessingService.getTempFilePath(file.url);
               const filename = file.originalFilename || blobId;
+
+              // Register before downloading so a failed/partial download is
+              // still cleaned up by the finally block.
+              tempFilePaths.push(filePath);
 
               console.log(
                 `[FileProcessor] File data:`,
@@ -573,19 +583,8 @@ export class FileProcessor extends BasePipelineStage {
             }
           }
 
-          // STEP 4: Cleanup all temp files in parallel (I/O bound)
-          console.log(
-            `[FileProcessor] Cleaning up ${downloadedFiles.length} temp file(s)...`,
-          );
-          const perfCleanupStart = performance.now();
-          await Promise.all(
-            downloadedFiles.map(({ filePath }) =>
-              this.fileProcessingService.cleanupFile(filePath),
-            ),
-          );
-          console.log(
-            `[Perf] FileProcessor.cleanupTempFiles: ${(performance.now() - perfCleanupStart).toFixed(1)}ms`,
-          );
+          // STEP 4 (temp-file cleanup) now lives in the finally block below
+          // so it also runs when any file fails processing.
 
           // STEP 5: Convert images to base64 for LLM consumption
           // Uses getBlobBase64String which handles both data URL strings and binary content
@@ -653,6 +652,29 @@ export class FileProcessor extends BasePipelineStage {
           });
           throw error;
         } finally {
+          // Best-effort cleanup of every downloaded temp file — success and
+          // failure paths alike. /tmp also hosts the chunked job store and
+          // chunk dirs, so stranded downloads here can starve the whole
+          // transcription pipeline of disk.
+          if (tempFilePaths.length > 0) {
+            const perfCleanupStart = performance.now();
+            const outcomes = await Promise.allSettled(
+              tempFilePaths.map((p) =>
+                this.fileProcessingService.cleanupFile(p),
+              ),
+            );
+            const failed = outcomes.filter(
+              (o) => o.status === 'rejected',
+            ).length;
+            if (failed > 0) {
+              console.warn(
+                `[FileProcessor] Failed to clean up ${failed}/${tempFilePaths.length} temp file(s)`,
+              );
+            }
+            console.log(
+              `[Perf] FileProcessor.cleanupTempFiles: ${(performance.now() - perfCleanupStart).toFixed(1)}ms (${tempFilePaths.length} files)`,
+            );
+          }
           span.end();
         }
       },

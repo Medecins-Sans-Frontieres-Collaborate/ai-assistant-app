@@ -7,6 +7,7 @@ import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
 
+import { randomUUID } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { performance } from 'perf_hooks';
@@ -199,6 +200,11 @@ export class FileProcessingService {
    * Generates a safe temporary file path using blob ID.
    * Includes sanitization to prevent path traversal attacks.
    *
+   * The path is unique per call (random prefix): blob IDs are content
+   * hashes, so two concurrent requests referencing the same file would
+   * otherwise share one temp path — and one request's cleanup would delete
+   * the file out from under the other mid-transcription.
+   *
    * @param fileUrl - The blob storage URL
    * @returns Tuple of [sanitizedBlobId, resolvedFilePath]
    * @throws Error if blobId is missing, contains unsafe characters, or results in path traversal
@@ -216,7 +222,7 @@ export class FileProcessingService {
       throw new Error('Invalid blob ID: contains unsafe characters');
     }
 
-    const filePath = path.join('/tmp', sanitized);
+    const filePath = path.join('/tmp', `${randomUUID()}_${sanitized}`);
 
     // Defense in depth: verify resolved path stays within /tmp/
     const resolved = path.resolve(filePath);

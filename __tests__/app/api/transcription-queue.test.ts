@@ -46,6 +46,8 @@ describe('/api/transcription/queue', () => {
   const mockQueueClient = {
     peekMessages: vi.fn(),
     receiveMessages: vi.fn(),
+    // Used to restore visibility of scanned non-target messages.
+    updateMessage: vi.fn(),
     exists: vi.fn(),
   };
 
@@ -208,7 +210,7 @@ describe('/api/transcription/queue', () => {
       const data = await parseJsonResponse(response);
 
       expect(response.status).toBe(404);
-      expect(data.error).toContain('Message not found in queue');
+      expect(data.error).toContain('Message not found');
     });
 
     it('returns 403 when message belongs to different user', async () => {
@@ -232,7 +234,10 @@ describe('/api/transcription/queue', () => {
       expect(data.message).toContain('Forbidden');
     });
 
-    it('handles pagination for large queues', async () => {
+    it('peeks the queue exactly once — Azure peek has no pagination cursor', async () => {
+      // Repeated peeks return the same front-of-queue page, so "paging"
+      // with peek would loop over identical data. The route must do a
+      // single deep peek and report a bounded 404 instead.
       const createMessage = (id: string) =>
         Buffer.from(
           JSON.stringify({
@@ -242,38 +247,32 @@ describe('/api/transcription/queue', () => {
           }),
         ).toString('base64');
 
-      // First page: 32 messages
       const firstPage = Array.from({ length: 32 }, (_, i) => ({
         messageText: createMessage(`msg-${i}`),
       }));
 
-      // Second page: target message
-      const secondPage = [
-        {
-          messageText: createMessage('target-msg'),
-        },
-      ];
-
-      mockQueueClient.peekMessages
-        .mockResolvedValueOnce({ peekedMessageItems: firstPage })
-        .mockResolvedValueOnce({ peekedMessageItems: secondPage });
+      mockQueueClient.peekMessages.mockResolvedValue({
+        peekedMessageItems: firstPage,
+      });
 
       const request = createGetRequest('target-msg', 'transcription');
       const response = await GET(request);
       const data = await parseJsonResponse(response);
 
-      expect(data.position).toBe(33); // 32 + 1
+      expect(response.status).toBe(404);
+      expect(data.error).toContain('first 32');
+      expect(mockQueueClient.peekMessages).toHaveBeenCalledTimes(1);
     });
 
-    it('returns 500 when not authenticated', async () => {
+    it('returns 401 when not authenticated', async () => {
       (vi.mocked(auth) as any).mockResolvedValue(null);
 
       const request = createGetRequest('msg-123', 'transcription');
       const response = await GET(request);
       const data = await parseJsonResponse(response);
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Internal Server Error');
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('returns 401 for unauthorized errors', async () => {
@@ -483,7 +482,7 @@ describe('/api/transcription/queue', () => {
       expect(decodedMessage.message).toEqual(complexMessage);
     });
 
-    it('returns 500 when not authenticated', async () => {
+    it('returns 401 when not authenticated', async () => {
       (vi.mocked(auth) as any).mockResolvedValue(null);
 
       const request = createPostRequest({
@@ -493,8 +492,8 @@ describe('/api/transcription/queue', () => {
       const response = await POST(request);
       const data = await parseJsonResponse(response);
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Internal Server Error');
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('returns 500 for queue operation errors', async () => {
@@ -689,7 +688,7 @@ describe('/api/transcription/queue', () => {
       expect(data.error).toBe('Forbidden');
     });
 
-    it('returns 500 when not authenticated', async () => {
+    it('returns 401 when not authenticated', async () => {
       (vi.mocked(auth) as any).mockResolvedValue(null);
 
       const request = createPatchRequest({
@@ -700,8 +699,54 @@ describe('/api/transcription/queue', () => {
       const response = await PATCH(request);
       const data = await parseJsonResponse(response);
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Internal Server Error');
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Unauthorized');
+    });
+
+    it('restores visibility of scanned non-target messages', async () => {
+      const createMessage = (id: string, userId = 'test-user-id') =>
+        Buffer.from(
+          JSON.stringify({ messageId: id, userId, message: `m-${id}` }),
+        ).toString('base64');
+
+      // One page containing two foreign-to-the-search messages + the target.
+      mockQueueClient.receiveMessages.mockResolvedValue({
+        receivedMessageItems: [
+          {
+            messageId: 'azure-1',
+            popReceipt: 'pr-1',
+            messageText: createMessage('other-1'),
+          },
+          {
+            messageId: 'azure-2',
+            popReceipt: 'pr-2',
+            messageText: createMessage('other-2'),
+          },
+          {
+            messageId: 'azure-3',
+            popReceipt: 'pr-3',
+            messageText: createMessage('msg-123'),
+          },
+        ],
+      });
+
+      const request = createPatchRequest({
+        messageId: 'msg-123',
+        category: 'transcription',
+        message: 'Updated',
+      });
+      const response = await PATCH(request);
+
+      expect(response.status).toBe(200);
+      // Both non-target messages must be made visible again (timeout 0) so
+      // real consumers don't stall behind our scan.
+      const restoredIds = mockQueueClient.updateMessage.mock.calls.map(
+        (call) => call[0],
+      );
+      expect(restoredIds.sort()).toEqual(['azure-1', 'azure-2']);
+      for (const call of mockQueueClient.updateMessage.mock.calls) {
+        expect(call[3]).toBe(0); // visibilityTimeout
+      }
     });
   });
 
@@ -819,15 +864,15 @@ describe('/api/transcription/queue', () => {
       expect(data.error).toBe('Forbidden');
     });
 
-    it('returns 500 when not authenticated', async () => {
+    it('returns 401 when not authenticated', async () => {
       (vi.mocked(auth) as any).mockResolvedValue(null);
 
       const request = createDeleteRequest('msg-123', 'transcription');
       const response = await DELETE(request);
       const data = await parseJsonResponse(response);
 
-      expect(response.status).toBe(500);
-      expect(data.error).toBe('Internal Server Error');
+      expect(response.status).toBe(401);
+      expect(data.error).toBe('Unauthorized');
     });
 
     it('returns 500 for queue operation errors', async () => {

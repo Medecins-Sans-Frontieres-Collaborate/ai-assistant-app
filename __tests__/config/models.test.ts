@@ -1,6 +1,10 @@
+import { OpenAIModelID } from '@/types/openai';
+
 import {
   getCurrentEnvironment,
   getDefaultModel,
+  getFallbackChain,
+  getFallbackModel,
   getModelConfig,
   isModelDisabled,
 } from '@/config/models';
@@ -95,6 +99,56 @@ describe('Model Configuration', () => {
     it('handles undefined gracefully', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'localhost');
       expect(isModelDisabled('test-model')).toBe(false);
+    });
+  });
+
+  describe('getFallbackChain', () => {
+    it('starts with the default model', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      expect(getFallbackChain()[0]).toBe(getDefaultModel());
+    });
+
+    it('contains more than one model so default-model outages have a fallback', () => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
+      expect(getFallbackChain().length).toBeGreaterThan(1);
+    });
+  });
+
+  describe('getFallbackModel', () => {
+    beforeEach(() => {
+      vi.stubEnv('NEXT_PUBLIC_ENV', 'localhost');
+    });
+
+    it('returns the first chain model when nothing is excluded', () => {
+      expect(getFallbackModel([])?.id).toBe(OpenAIModelID.GPT_5_2_CHAT);
+    });
+
+    it('skips the model that just failed', () => {
+      const fallback = getFallbackModel([OpenAIModelID.GPT_5_2_CHAT]);
+      expect(fallback).not.toBeNull();
+      expect(fallback?.id).not.toBe(OpenAIModelID.GPT_5_2_CHAT);
+      expect(fallback?.id).toBe(getFallbackChain()[1]);
+    });
+
+    it('walks past every already-attempted model', () => {
+      const chain = getFallbackChain();
+      const attempted = chain.slice(0, chain.length - 1);
+      expect(getFallbackModel(attempted)?.id).toBe(chain[chain.length - 1]);
+    });
+
+    it('returns null when the whole chain has been attempted', () => {
+      expect(getFallbackModel(getFallbackChain())).toBeNull();
+    });
+
+    it('never returns a model from the exclude list', () => {
+      const chain = getFallbackChain();
+      for (let i = 0; i < chain.length; i++) {
+        const excluded = chain.slice(0, i + 1);
+        const fallback = getFallbackModel(excluded);
+        if (fallback) {
+          expect(excluded).not.toContain(fallback.id);
+        }
+      }
     });
   });
 
