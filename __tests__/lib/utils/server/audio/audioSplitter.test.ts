@@ -121,4 +121,37 @@ describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
     // Chunks must come back in playback order for transcript assembly.
     expect(result.chunkPaths).toEqual([...result.chunkPaths].sort());
   }, 120_000);
+
+  it('copies a within-target file into the per-job dir instead of returning the input', async () => {
+    // Callers treat every returned chunkPath as disposable (cleanupChunks
+    // deletes them) — handing back the caller's input file would let that
+    // cleanup destroy it.
+    const result = await splitAudioFile(fixturePath, {
+      // Fixture is ~2.4MB; a 5MB target means "no split needed".
+      targetChunkSizeBytes: 5 * 1024 * 1024,
+      outputFormat: 'mp3',
+      jobId: `audio-splitter-test-${randomUUID()}`,
+    });
+
+    expect(result.chunkCount).toBe(1);
+    expect(result.chunkPaths[0]).not.toBe(fixturePath);
+    expect(fs.existsSync(result.chunkPaths[0])).toBe(true);
+    // The copy is byte-identical (no re-encode for a file already in budget).
+    expect(fs.statSync(result.chunkPaths[0]).size).toBe(
+      fs.statSync(fixturePath).size,
+    );
+
+    // Deleting the "chunk" must leave the caller's input intact.
+    fs.rmSync(path.dirname(result.chunkPaths[0]), {
+      recursive: true,
+      force: true,
+    });
+    expect(fs.existsSync(fixturePath)).toBe(true);
+  }, 60_000);
+
+  it('rejects path-unsafe jobIds before touching the filesystem', async () => {
+    await expect(
+      splitAudioFile(fixturePath, { jobId: '../escape' }),
+    ).rejects.toThrow(/invalid jobid/i);
+  });
 });
