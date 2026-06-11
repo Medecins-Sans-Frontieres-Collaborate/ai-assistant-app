@@ -842,14 +842,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const nextFallbackModel = conversation
       ? getFallbackModel([conversation.model.id])
       : null;
-    const canRetry =
+
+    if (
       !isNonRetryableClientError &&
       !isCustomAgent &&
       !isRetrying &&
       conversation &&
-      nextFallbackModel;
-
-    if (canRetry) {
+      nextFallbackModel
+    ) {
       console.log(
         '[chatStore] Attempting auto-retry with fallback model:',
         nextFallbackModel.id,
