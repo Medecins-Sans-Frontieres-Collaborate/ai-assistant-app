@@ -9,6 +9,8 @@
  * Same persistence model and constraints as chunkedJobStore: JSON files
  * under /tmp, single-replica only.
  */
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -61,8 +63,7 @@ export function recordBatchJobOwner(jobId: string, userId: string): void {
     pruneStaleRecords();
   } catch (err) {
     console.warn(
-      `[BatchJobRegistry] Could not record owner for job ${jobId}:`,
-      err,
+      `[BatchJobRegistry] Could not record owner for job ${sanitizeForLog(jobId)}: ${sanitizeForLog(err)}`,
     );
   }
 }
@@ -84,9 +85,10 @@ export function getBatchJobOwner(jobId: string): string | undefined {
     ) as BatchJobRecord;
     return typeof record.userId === 'string' ? record.userId : undefined;
   } catch (err) {
+    // jobId may have failed GUID validation here — sanitize it, and keep the
+    // log to a single argument so user input can't act as a format string.
     console.warn(
-      `[BatchJobRegistry] Could not read owner for job ${jobId}:`,
-      err,
+      `[BatchJobRegistry] Could not read owner for job ${sanitizeForLog(jobId)}: ${sanitizeForLog(err)}`,
     );
     return undefined;
   }
@@ -104,7 +106,7 @@ export function userOwnsBatchJob(jobId: string, userId: string): boolean {
   const owner = getBatchJobOwner(jobId);
   if (owner === undefined) {
     console.warn(
-      `[BatchJobRegistry] Denying access to unregistered batch job ${jobId}`,
+      `[BatchJobRegistry] Denying access to unregistered batch job ${sanitizeForLog(jobId)}`,
     );
     return false;
   }
@@ -120,8 +122,7 @@ export function deleteBatchJobRecord(jobId: string): void {
     }
   } catch (err) {
     console.warn(
-      `[BatchJobRegistry] Could not delete record for job ${jobId}:`,
-      err,
+      `[BatchJobRegistry] Could not delete record for job ${sanitizeForLog(jobId)}: ${sanitizeForLog(err)}`,
     );
   }
 }
