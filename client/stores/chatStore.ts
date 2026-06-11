@@ -30,6 +30,7 @@ import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
+import { getFallbackModel } from '@/config/models';
 import { create } from 'zustand';
 
 interface ChatStore {
@@ -48,6 +49,12 @@ interface ChatStore {
   isRetrying: boolean;
   retryWithFallback: boolean;
   originalModelId: string | null;
+  /**
+   * The fallback-chain model that actually produced the successful retry —
+   * the switch prompt and acceptModelSwitch must reference this model, not
+   * the first entry of the chain, since the chain may have advanced.
+   */
+  successfulFallbackModelId: string | null;
   showModelSwitchPrompt: boolean;
   failedConversation: Conversation | null;
   failedSearchMode: SearchMode | undefined;
@@ -160,6 +167,7 @@ interface ChatStore {
   retryWithFallbackModel: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    attemptedModelIds?: string[],
   ) => Promise<void>;
   dismissModelSwitchPrompt: () => void;
   acceptModelSwitch: (alwaysSwitch?: boolean) => void;
@@ -215,6 +223,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isRetrying: false,
   retryWithFallback: false,
   originalModelId: null,
+  successfulFallbackModelId: null,
   showModelSwitchPrompt: false,
   failedConversation: null,
   failedSearchMode: undefined,
@@ -285,6 +294,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       isRetrying: false,
       retryWithFallback: false,
       originalModelId: null,
+      successfulFallbackModelId: null,
       showModelSwitchPrompt: false,
       failedConversation: null,
       failedSearchMode: undefined,
@@ -521,9 +531,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
-      // Try settings default, then global fallback
+      // Try settings default, then the fallback chain
       const fallbackId = settings.defaultModelId || fallbackModelID;
-      latestModelConfig = OpenAIModels[fallbackId];
+      latestModelConfig =
+        OpenAIModels[fallbackId] ??
+        getFallbackModel([conversation.model.id]) ??
+        undefined;
 
       if (!latestModelConfig) {
         throw new Error(
