@@ -34,6 +34,7 @@ export function useChat() {
       isRetrying: s.isRetrying,
       retryWithFallback: s.retryWithFallback,
       originalModelId: s.originalModelId,
+      successfulFallbackModelId: s.successfulFallbackModelId,
       showModelSwitchPrompt: s.showModelSwitchPrompt,
       failedConversation: s.failedConversation,
       errorIsRecoverable: s.errorIsRecoverable,
