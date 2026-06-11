@@ -289,6 +289,45 @@ describe('FileProcessor', () => {
       );
     });
 
+    it('cleans up every downloaded temp file when a file fails processing', async () => {
+      // Regression: cleanup used to run only on the happy path, so one
+      // failing file stranded every downloaded temp file (multi-GB for
+      // audio/video) in /tmp.
+      const context = createTestChatContext({
+        hasFiles: true,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'file_url',
+                url: 'https://blob.com/file1.txt',
+                originalFilename: 'file1.txt',
+              },
+              {
+                type: 'file_url',
+                url: 'https://blob.com/file2.txt',
+                originalFilename: 'file2.txt',
+              },
+            ],
+            messageType: MessageType.FILE,
+          },
+        ],
+      });
+
+      // Both files download fine; the first fails during processing.
+      mockLoadDocument.mockRejectedValueOnce(new Error('corrupt document'));
+
+      // BasePipelineStage.execute converts stage failures into context.errors.
+      const result = await fileProcessor.execute(context);
+      expect(result.errors?.length).toBeGreaterThan(0);
+
+      const cleanedPaths = mockFileService.cleanupFile.mock.calls.map(
+        (call: string[]) => call[0],
+      );
+      expect(cleanedPaths.sort()).toEqual(['/tmp/file1.txt', '/tmp/file2.txt']);
+    });
+
     it('should skip stage when no files present', async () => {
       const context = createTestChatContext({
         hasFiles: false,
