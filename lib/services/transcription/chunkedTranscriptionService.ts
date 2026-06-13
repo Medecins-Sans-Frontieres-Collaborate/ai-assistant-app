@@ -35,28 +35,44 @@ import { WhisperTranscriptionService } from './whisperTranscriptionService';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
+ * Parses a non-negative integer env knob. Unlike `Number(x) || fallback`,
+ * an explicit "0" is honored (the || idiom silently turned 0 back into the
+ * fallback). Malformed, negative, or fractional values fall back with a
+ * warning rather than poisoning the math downstream.
+ */
+function parseEnvInt(name: string, fallback: number, min: number): number {
+  const raw = process.env[name];
+  if (raw === undefined || raw === '') return fallback;
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed) || parsed < min) {
+    console.warn(
+      `[ChunkedTranscription] Ignoring invalid ${name}="${raw}" (need integer >= ${min}); using ${fallback}`,
+    );
+    return fallback;
+  }
+  return parsed;
+}
+
+/**
  * Number of chunks to process in parallel. Tunable at deploy time via
  * TRANSCRIPTION_CONCURRENCY — higher if your Whisper deployment has more
  * throughput, lower if you're hitting 429s.
  */
-const MAX_CONCURRENT_CHUNKS = Math.max(
-  1,
-  Number(process.env.TRANSCRIPTION_CONCURRENCY) || 3,
-);
+const MAX_CONCURRENT_CHUNKS = parseEnvInt('TRANSCRIPTION_CONCURRENCY', 3, 1);
 
 /**
  * Total attempts per chunk (1 initial call + additional retries on transient
  * failure). Tunable via TRANSCRIPTION_RETRIES, which expresses *retries* for
- * legacy compatibility; the loop uses ATTEMPTS = retries + 1.
+ * legacy compatibility; the loop uses ATTEMPTS = retries + 1. An explicit
+ * TRANSCRIPTION_RETRIES=0 means "one attempt, no retries".
  */
-const TRANSCRIPTION_RETRIES = Math.max(
-  0,
-  Number(process.env.TRANSCRIPTION_RETRIES) || 2,
-);
+const TRANSCRIPTION_RETRIES = parseEnvInt('TRANSCRIPTION_RETRIES', 2, 0);
 const MAX_CHUNK_ATTEMPTS = TRANSCRIPTION_RETRIES + 1;
 
-/** Delay before retry after failure (ms) */
-const RETRY_DELAY_MS = 2000;
+/** Base delay before the first retry (ms); doubles per attempt. */
+const RETRY_BASE_DELAY_MS = 2000;
+/** Ceiling for computed backoff (server Retry-After may exceed this). */
+const RETRY_MAX_DELAY_MS = 30_000;
 
 export interface ChunkedTranscriptionOptions extends TranscriptionOptions {
   /** Called when progress is updated */
@@ -145,7 +161,7 @@ export class ChunkedTranscriptionService {
     );
 
     // Create job in store
-    createJob(jobId, userId, chunkCount, chunkPaths, filename, audioPath);
+    createJob(jobId, userId, chunkCount, chunkPaths, filename);
 
     // Start async processing (don't await - runs in background)
     this.processChunksAsync(jobId, chunkPaths, filename, options).catch(
@@ -183,13 +199,21 @@ export class ChunkedTranscriptionService {
   }
 
   /**
-   * Processes chunks asynchronously in the background using parallel batches.
+   * Processes chunks asynchronously in the background using a worker pool.
    *
    * This method is called without await from startJob() and runs
    * independently, updating the job store as it progresses.
    *
-   * Chunks are processed in parallel batches of MAX_CONCURRENT_CHUNKS,
-   * but results are sorted by index to maintain original order.
+   * MAX_CONCURRENT_CHUNKS workers pull the next unclaimed chunk as soon as
+   * they finish their current one — unlike lockstep batches, one slow or
+   * retrying chunk never idles the other slots. Results are sorted by index
+   * at the end to restore playback order.
+   *
+   * Workers adapt cooperatively:
+   * - before each chunk they re-check the job store, so a user cancel stops
+   *   new work within one chunk;
+   * - the first fatal chunk error sets an abort flag that stops the other
+   *   workers from claiming new chunks (and aborts their in-flight retries).
    */
   private async processChunksAsync(
     jobId: string,
@@ -205,69 +229,75 @@ export class ChunkedTranscriptionService {
         `(${totalChunks} chunks, max ${MAX_CONCURRENT_CHUNKS} concurrent)`,
     );
 
-    try {
-      // Process chunks in parallel batches
-      for (
-        let batchStart = 0;
-        batchStart < totalChunks;
-        batchStart += MAX_CONCURRENT_CHUNKS
-      ) {
-        // Cooperative cancel check between batches — if the user cancelled
-        // or the job was externally terminated, stop burning Whisper calls.
-        const current = getJob(jobId);
-        if (!current || current.status === 'cancelled') {
-          console.log(
-            `[ChunkedTranscription] Job ${jobId} cancelled; aborting remaining chunks`,
-          );
+    let nextIndex = 0;
+    let cancelled = false;
+    let fatalError: Error | null = null;
+
+    const isJobCancelled = (): boolean => {
+      const current = getJob(jobId);
+      return !current || current.status === 'cancelled';
+    };
+    const shouldAbort = (): boolean => cancelled || fatalError !== null;
+
+    const worker = async (): Promise<void> => {
+      for (;;) {
+        if (shouldAbort()) return;
+
+        const index = nextIndex++;
+        if (index >= totalChunks) return;
+
+        // Cooperative cancel check before claiming Whisper capacity.
+        if (isJobCancelled()) {
+          cancelled = true;
           return;
         }
 
-        const batchEnd = Math.min(
-          batchStart + MAX_CONCURRENT_CHUNKS,
-          totalChunks,
-        );
-        const batchChunkPaths = chunkPaths.slice(batchStart, batchEnd);
-
+        const chunkNum = index + 1;
         console.log(
-          `[ChunkedTranscription] Processing batch: chunks ${batchStart + 1}-${batchEnd} of ${totalChunks}`,
+          `[ChunkedTranscription] Transcribing chunk ${chunkNum}/${totalChunks}: ${chunkPaths[index]}`,
         );
 
-        // Update progress at batch start
-        updateProgress(jobId, results.length, batchStart);
+        try {
+          const transcript = await this.transcribeChunkWithRetry(
+            chunkPaths[index],
+            chunkNum,
+            totalChunks,
+            options,
+            shouldAbort,
+          );
+          results.push({ index, transcript });
+          // updateProgress no-ops once the job is terminal (e.g. cancelled
+          // while this chunk was in flight), so this can't resurrect it.
+          updateProgress(jobId, results.length, index);
+          options?.onProgress?.(results.length, totalChunks);
+        } catch (error) {
+          if (!fatalError) {
+            fatalError =
+              error instanceof Error ? error : new Error(String(error));
+          }
+          return;
+        }
+      }
+    };
 
-        // Process this batch in parallel
-        const batchPromises = batchChunkPaths.map(
-          async (chunkPath, batchIndex) => {
-            const globalIndex = batchStart + batchIndex;
-            const chunkNum = globalIndex + 1;
+    try {
+      updateProgress(jobId, 0, 0);
 
-            console.log(
-              `[ChunkedTranscription] Transcribing chunk ${chunkNum}/${totalChunks}: ${chunkPath}`,
-            );
+      const workerCount = Math.min(MAX_CONCURRENT_CHUNKS, totalChunks);
+      await Promise.all(Array.from({ length: workerCount }, () => worker()));
 
-            const transcript = await this.transcribeChunkWithRetry(
-              chunkPath,
-              chunkNum,
-              totalChunks,
-              options,
-            );
-
-            return { index: globalIndex, transcript };
-          },
+      if (cancelled || isJobCancelled()) {
+        console.log(
+          `[ChunkedTranscription] Job ${jobId} cancelled; aborted remaining chunks`,
         );
-
-        // Wait for all chunks in this batch to complete
-        const batchResults = await Promise.all(batchPromises);
-        results.push(...batchResults);
-
-        // Update progress after batch completes
-        updateProgress(jobId, results.length, batchEnd - 1);
-
-        // Call progress callback if provided
-        options?.onProgress?.(results.length, totalChunks);
+        return;
       }
 
-      // Sort by index to ensure correct order (parallel results may arrive out of order)
+      if (fatalError) {
+        throw fatalError;
+      }
+
+      // Sort by index to ensure correct order (parallel results arrive out of order)
       results.sort((a, b) => a.index - b.index);
       const transcripts = results.map((r) => r.transcript);
 
@@ -306,20 +336,38 @@ export class ChunkedTranscriptionService {
    * - `permanent`: don't retry (user error — bad codec, oversized, etc.).
    * - `auth`: rebuild the Whisper client once (handles token expiry on long jobs)
    *           and retry.
-   * - `rate_limit`: retry with doubled backoff.
-   * - `transient` / `unknown`: retry with normal backoff.
+   * - `rate_limit`: wait for the server's Retry-After when it sent one,
+   *           otherwise exponential backoff at double weight.
+   * - `transient` / `unknown`: exponential backoff with jitter.
+   *
+   * `shouldAbort` is checked before every attempt and after every backoff
+   * sleep so a cancelled job (or a sibling worker's fatal error) stops the
+   * retry sequence instead of burning the full schedule.
    */
   private async transcribeChunkWithRetry(
     chunkPath: string,
     chunkNum: number,
     totalChunks: number,
     options?: TranscriptionOptions,
+    shouldAbort: () => boolean = () => false,
   ): Promise<string> {
     let lastError: Error | undefined;
 
     for (let attempt = 1; attempt <= MAX_CHUNK_ATTEMPTS; attempt++) {
+      if (shouldAbort()) {
+        throw (
+          lastError ??
+          Object.assign(
+            new Error(
+              `Transcription of chunk ${chunkNum}/${totalChunks} aborted`,
+            ) as TranscriptionError,
+            { errorClass: 'transient' as TranscriptionErrorClass },
+          )
+        );
+      }
+
       try {
-        const transcript = await this.whisperService.transcribe(
+        const transcript = await this.whisperService.transcribeChunk(
           chunkPath,
           options,
         );
@@ -327,8 +375,9 @@ export class ChunkedTranscriptionService {
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
 
+        const tagged = lastError as TranscriptionError;
         const errorClass: TranscriptionErrorClass =
-          (lastError as TranscriptionError).errorClass ?? 'unknown';
+          tagged.errorClass ?? 'unknown';
 
         if (errorClass === 'permanent') {
           // User-visible error (bad codec, oversize, etc.); don't waste retries.
@@ -343,12 +392,13 @@ export class ChunkedTranscriptionService {
             `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} hit auth error; re-initializing Whisper client`,
           );
           this.whisperService = new WhisperTranscriptionService();
-          await delay(RETRY_DELAY_MS);
-          continue;
         }
 
-        const waitTime =
-          errorClass === 'rate_limit' ? RETRY_DELAY_MS * 2 : RETRY_DELAY_MS;
+        const waitTime = computeBackoffMs(
+          attempt,
+          errorClass,
+          tagged.retryAfterSeconds,
+        );
 
         console.warn(
           `[ChunkedTranscription] Chunk ${chunkNum}/${totalChunks} failed (${errorClass}, ` +
@@ -360,9 +410,9 @@ export class ChunkedTranscriptionService {
     }
 
     // `lastError` is always assigned on any iteration that takes the catch
-    // branch, and the loop runs at least once (MAX_CHUNK_ATTEMPTS ≥ 1 is
-    // enforced via TRANSCRIPTION_RETRIES = Math.max(0, …)). If the loop
-    // returns successfully on the first try we never reach here.
+    // branch, and the loop runs at least once (MAX_CHUNK_ATTEMPTS ≥ 1 since
+    // parseEnvInt enforces TRANSCRIPTION_RETRIES ≥ 0). If the loop returns
+    // successfully on the first try we never reach here.
     const tagged = lastError as TranscriptionError | undefined;
     const err = new Error(
       `Failed to transcribe chunk ${chunkNum}/${totalChunks} after ${MAX_CHUNK_ATTEMPTS} attempts: ${tagged?.message ?? 'unknown error'}`,
@@ -409,6 +459,34 @@ export class ChunkedTranscriptionService {
  */
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Computes the wait before retry attempt `attempt + 1`.
+ *
+ * Exponential (base doubles per attempt, capped at RETRY_MAX_DELAY_MS) with
+ * full-range jitter so parallel workers that failed together don't retry in
+ * lockstep and re-trigger the same rate limit. When the server sent a
+ * Retry-After, that takes precedence (plus a little jitter) — the server
+ * knows its own capacity better than our schedule does.
+ */
+function computeBackoffMs(
+  attempt: number,
+  errorClass: TranscriptionErrorClass,
+  retryAfterSeconds?: number,
+): number {
+  if (errorClass === 'rate_limit' && retryAfterSeconds) {
+    // Honor the server's wait, with up to +25% jitter to spread workers out.
+    return Math.round(retryAfterSeconds * 1000 * (1 + Math.random() * 0.25));
+  }
+
+  const weight = errorClass === 'rate_limit' ? 2 : 1;
+  const exponential = Math.min(
+    RETRY_BASE_DELAY_MS * weight * 2 ** (attempt - 1),
+    RETRY_MAX_DELAY_MS,
+  );
+  // Jitter across [50%, 100%] of the computed delay.
+  return Math.round(exponential * (0.5 + Math.random() * 0.5));
 }
 
 /**

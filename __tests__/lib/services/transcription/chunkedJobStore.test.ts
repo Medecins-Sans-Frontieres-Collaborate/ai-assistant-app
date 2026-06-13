@@ -7,9 +7,11 @@ import {
   getJob,
   getJobForUser,
   markInterruptedJobsFailed,
+  sweepOrphanedChunkDirs,
   updateProgress,
 } from '@/lib/services/transcription/chunkedJobStore';
 
+import * as os from 'os';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // The store hardcodes its directory; mock fs so each test sees an isolated
@@ -17,9 +19,30 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 const memoryFs = new Map<string, string>();
 
 vi.mock('fs', () => {
-  const mkdirSync = vi.fn();
+  // Lock dirs created by acquireJobLock; tracked so re-acquisition conflicts
+  // behave like the real fs (mkdirSync throws when the dir exists).
+  const dirs = new Set<string>();
+  const mkdirSync = vi.fn((p: string, opts?: { recursive?: boolean }) => {
+    if (dirs.has(p) && !opts?.recursive) {
+      throw new Error(`EEXIST: ${p}`);
+    }
+    dirs.add(p);
+  });
+  const rmdirSync = vi.fn((p: string) => {
+    dirs.delete(p);
+  });
+  const statSync = vi.fn((p: string) => {
+    if (!dirs.has(p) && !memoryFs.has(p)) throw new Error(`ENOENT: ${p}`);
+    return { mtimeMs: Date.now() };
+  });
+  const rmSync = vi.fn((p: string) => {
+    dirs.delete(p);
+    for (const key of [...memoryFs.keys()]) {
+      if (key === p || key.startsWith(p + '/')) memoryFs.delete(key);
+    }
+  });
   const existsSync = (p: string) =>
-    memoryFs.has(p) || p === '/tmp/chunked-transcription-jobs';
+    memoryFs.has(p) || dirs.has(p) || p === '/tmp/chunked-transcription-jobs';
   const writeFileSync = (p: string, data: string) => {
     memoryFs.set(p, data);
   };
@@ -35,15 +58,29 @@ vi.mock('fs', () => {
     return v;
   };
   const unlinkSync = (p: string) => {
-    memoryFs.delete(p);
+    if (!memoryFs.delete(p)) throw new Error(`ENOENT: ${p}`);
   };
-  const readdirSync = (dir: string) =>
-    [...memoryFs.keys()]
-      .filter((k) => k.startsWith(dir + '/'))
-      .map((k) => k.slice(dir.length + 1));
+  const readdirSync = (dir: string, opts?: { withFileTypes?: boolean }) => {
+    const names = new Set<string>();
+    for (const key of [...memoryFs.keys(), ...dirs]) {
+      if (key.startsWith(dir + '/')) {
+        names.add(key.slice(dir.length + 1).split('/')[0]);
+      }
+    }
+    if (!opts?.withFileTypes) return [...names];
+    return [...names].map((name) => ({
+      name,
+      isDirectory: () =>
+        dirs.has(`${dir}/${name}`) ||
+        [...memoryFs.keys()].some((k) => k.startsWith(`${dir}/${name}/`)),
+    }));
+  };
 
   const api = {
     mkdirSync,
+    rmdirSync,
+    statSync,
+    rmSync,
     existsSync,
     writeFileSync,
     renameSync,
@@ -53,6 +90,11 @@ vi.mock('fs', () => {
   };
   return { ...api, default: api };
 });
+
+// Helper: clear the lock-dir registry between tests via rmSync on root paths.
+function seedFile(path: string, content = 'x'): void {
+  memoryFs.set(path, content);
+}
 
 describe('chunkedJobStore', () => {
   const jobId = '11111111-2222-3333-4444-555555555555';
@@ -181,6 +223,49 @@ describe('chunkedJobStore', () => {
 
     it('is a no-op when no jobs exist', () => {
       expect(markInterruptedJobsFailed()).toEqual([]);
+    });
+
+    it('removes the interrupted job’s chunk files and per-job dir', () => {
+      const chunkDir = `${os.tmpdir()}/chunked-transcription/${jobA}`;
+      const chunkPaths = [`${chunkDir}/audio_chunk_000.mp3`];
+      seedFile(chunkPaths[0]);
+      createJob(jobA, ownerId, 1, chunkPaths, 'pending.mp3');
+
+      markInterruptedJobsFailed();
+
+      // Status reconciled AND disk reclaimed — interrupted chunks can never
+      // be consumed by the (now dead) in-process pipeline.
+      expect(getJob(jobA)?.status).toBe('failed');
+      expect(memoryFs.has(chunkPaths[0])).toBe(false);
+    });
+  });
+
+  describe('sweepOrphanedChunkDirs', () => {
+    const activeJob = '11111111-1111-1111-1111-111111111111';
+    const doneJob = '22222222-2222-2222-2222-222222222222';
+
+    it('removes dirs without a live job record, keeps active ones', () => {
+      const root = `${os.tmpdir()}/chunked-transcription`;
+      seedFile(`${root}/${activeJob}/a_chunk_000.mp3`);
+      seedFile(`${root}/${doneJob}/b_chunk_000.mp3`);
+      seedFile(`${root}/no-record-at-all/c_chunk_000.mp3`);
+
+      createJob(activeJob, ownerId, 1, [], 'active.mp3');
+      createJob(doneJob, ownerId, 1, [], 'done.mp3');
+      completeJob(doneJob, 'transcript');
+
+      const removed = sweepOrphanedChunkDirs();
+
+      expect(removed.sort()).toEqual([doneJob, 'no-record-at-all'].sort());
+      expect(memoryFs.has(`${root}/${activeJob}/a_chunk_000.mp3`)).toBe(true);
+      expect(memoryFs.has(`${root}/${doneJob}/b_chunk_000.mp3`)).toBe(false);
+      expect(memoryFs.has(`${root}/no-record-at-all/c_chunk_000.mp3`)).toBe(
+        false,
+      );
+    });
+
+    it('is a no-op when the chunk root does not exist', () => {
+      expect(sweepOrphanedChunkDirs()).toEqual([]);
     });
   });
 

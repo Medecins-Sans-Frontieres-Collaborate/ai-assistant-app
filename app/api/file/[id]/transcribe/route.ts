@@ -11,6 +11,7 @@ import { Session } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
+import { recordBatchJobOwner } from '@/lib/services/transcription/batchJobRegistry';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
@@ -55,8 +56,6 @@ export async function GET(
     );
   }
 
-  let transcript: string | undefined;
-
   try {
     const userId = getUserIdFromSession(session);
     const blobStorageClient = createBlobStorageClient(session);
@@ -90,6 +89,7 @@ export async function GET(
     if (serviceType === 'whisper') {
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
+      let transcript: string;
       try {
         await withAzureRetry(
           () => blockBlobClient.downloadToFile(tmpFilePath),
@@ -156,6 +156,10 @@ export async function GET(
         { label: 'submitTranscription' },
       );
 
+      // Record ownership so the status/cleanup routes can verify that only
+      // the submitting user polls or deletes this job.
+      recordBatchJobOwner(jobId, userId);
+
       // Note: We don't delete the blob yet - it will be deleted after
       // the batch job completes and the transcript is retrieved
 
@@ -167,15 +171,6 @@ export async function GET(
     }
   } catch (error) {
     console.error('Error during transcription:', error);
-
-    // If we have a partial transcript (unlikely), return it
-    if (transcript) {
-      const response: TranscriptionResponse = {
-        async: false,
-        transcript,
-      };
-      return NextResponse.json(response);
-    }
 
     return NextResponse.json(
       {

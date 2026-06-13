@@ -9,8 +9,11 @@
  */
 import { NextRequest } from 'next/server';
 
+import { JOB_ID_REGEX } from '@/lib/services/transcription/chunkedJobStore';
+
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
+  badRequestResponse,
   errorResponse,
   notFoundResponse,
   successResponse,
@@ -36,6 +39,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   if (!jobId) {
     return notFoundResponse('Job ID is required');
+  }
+
+  // Route params arrive URL-decoded, so without this check a crafted jobId
+  // (e.g. containing `../`) would be interpolated straight into the blob
+  // path below. Same validation as the store/cleanup/status routes.
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return badRequestResponse('Invalid jobId format', 'INVALID_JOB_ID');
   }
 
   try {

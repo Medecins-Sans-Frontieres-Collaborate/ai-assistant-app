@@ -148,7 +148,43 @@ function getFfprobePath(): string | null {
     }
   }
 
-  // Strategy 3: Fall back to system ffprobe in PATH
+  // Strategy 3: Try the bundled ffprobe-static binary (per-platform layout;
+  // present wherever `npm ci` ran, so deploys don't silently depend on a
+  // system ffprobe)
+  const ffprobeStaticRelative = path.join(
+    'ffprobe-static',
+    'bin',
+    process.platform,
+    process.arch,
+    process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe',
+  );
+  try {
+    const npmRoot = execSync('npm root', { encoding: 'utf8' }).trim();
+    const staticPath = path.join(npmRoot, ffprobeStaticRelative);
+    if (fs.existsSync(staticPath)) {
+      console.log(
+        `[AudioExtractor] Using FFprobe from ffprobe-static: ${staticPath}`,
+      );
+      resolvedFfprobePath = staticPath;
+      return staticPath;
+    }
+  } catch {
+    // npm root command failed
+  }
+  const cwdStaticPath = path.join(
+    process.cwd(),
+    'node_modules',
+    ffprobeStaticRelative,
+  );
+  if (fs.existsSync(cwdStaticPath)) {
+    console.log(
+      `[AudioExtractor] Using FFprobe from ffprobe-static: ${cwdStaticPath}`,
+    );
+    resolvedFfprobePath = cwdStaticPath;
+    return cwdStaticPath;
+  }
+
+  // Strategy 4: Fall back to system ffprobe in PATH
   try {
     const whichResult = execSync('which ffprobe', { encoding: 'utf8' }).trim();
     if (whichResult) {

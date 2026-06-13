@@ -1775,7 +1775,9 @@
     "expiresSoon": "Expira en {days} día(s); descargue pronto",
     "expires": "Disponible por {days} día(s)",
     "learnMore": "Más información",
-    "advancedOptions": "Opciones avanzadas"
+    "advancedOptions": "Opciones avanzadas",
+    "unofficialBadgeLabel": "No oficial",
+    "unofficialLanguageWarning": "Este idioma no cuenta con soporte oficial. La calidad de la traducción no ha sido verificada. Por favor, haga que el resultado sea revisado por una persona nativa o fluida antes de compartirlo."
   },
   "terms": {
     "officialLanguages": "Versión oficial:",

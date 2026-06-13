@@ -5,6 +5,10 @@
  * This module works alongside audioExtractor.ts and uses the same
  * FFmpeg path resolution strategy.
  */
+import { WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
+
+import { TranscriptionError } from '@/types/transcription';
+
 import { execSync } from 'child_process';
 import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
@@ -82,6 +86,22 @@ function getFfmpegPath(): string | null {
 }
 
 /**
+ * Path of the ffprobe binary inside the ffprobe-static package, relative to
+ * node_modules. ffprobe-static ships per-platform binaries (unlike
+ * ffmpeg-static, which exposes a single top-level binary).
+ */
+function ffprobeStaticRelativePath(): string {
+  const binary = process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe';
+  return path.join(
+    'ffprobe-static',
+    'bin',
+    process.platform,
+    process.arch,
+    binary,
+  );
+}
+
+/**
  * Resolves the FFprobe binary path.
  * FFprobe is used to get audio file metadata (duration, bitrate).
  */
@@ -109,7 +129,36 @@ function getFfprobePath(): string | null {
     }
   }
 
-  // Strategy 3: Fall back to system ffprobe
+  // Strategy 3: Try npm root + ffprobe-static (bundled per-platform binary,
+  // present wherever `npm ci` ran — keeps tests and deploys from silently
+  // depending on a system ffprobe)
+  try {
+    const npmRoot = execSync('npm root', { encoding: 'utf8' }).trim();
+    const staticPath = path.join(npmRoot, ffprobeStaticRelativePath());
+    if (fs.existsSync(staticPath)) {
+      resolvedFfprobePath = staticPath;
+      return staticPath;
+    }
+  } catch {
+    // npm root command failed
+  }
+
+  // Strategy 4: Try process.cwd() based ffprobe-static path
+  try {
+    const cwdPath = path.join(
+      process.cwd(),
+      'node_modules',
+      ffprobeStaticRelativePath(),
+    );
+    if (fs.existsSync(cwdPath)) {
+      resolvedFfprobePath = cwdPath;
+      return cwdPath;
+    }
+  } catch {
+    // cwd approach failed
+  }
+
+  // Strategy 5: Fall back to system ffprobe
   try {
     const whichResult = execSync('which ffprobe', { encoding: 'utf8' }).trim();
     if (whichResult) {
@@ -166,6 +215,26 @@ export interface SplitOptions {
 
 /** Default target chunk size: 20MB (safety margin from 25MB Whisper limit) */
 const DEFAULT_TARGET_CHUNK_SIZE = 20 * 1024 * 1024;
+
+/**
+ * Allowed shape for jobId before it is joined into a tmpdir path. All
+ * current callers pass UUIDs (or UUID-suffixed test ids); enforcing it here
+ * makes path safety a property of this module instead of of its callers.
+ */
+const SAFE_JOB_ID_REGEX = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
+
+/** Escapes regex metacharacters so a filename can be embedded in a RegExp. */
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Ceiling bitrate when re-encoding chunks to mp3/m4a. The actual rate is the
+ * input's bitrate clamped to this (see resolveChunkEncoding) and feeds both
+ * the segment-duration math and the ffmpeg invocation so they cannot drift —
+ * chunk size on disk is a function of the OUTPUT rate, not the input file's.
+ */
+const CHUNK_AUDIO_BITRATE_KBPS = 128;
 
 /**
  * Gets the duration of an audio file in seconds using ffprobe.
@@ -253,29 +322,99 @@ export async function getAudioBitrate(inputPath: string): Promise<number> {
 }
 
 /**
- * Calculates the optimal segment duration to achieve the target chunk size.
- *
- * @param inputPath - Path to the audio file
- * @param targetSizeBytes - Target size for each chunk in bytes
- * @returns Segment duration in seconds
+ * How the chunks will be encoded. Resolved once per split so the
+ * segment-duration math and the ffmpeg invocation use the same numbers.
  */
-async function calculateSegmentDuration(
+interface ChunkEncoding {
+  /** Bytes per second the encoded chunks occupy on disk (drives chunk sizing) */
+  bytesPerSecond: number;
+  /** Bitrate passed to ffmpeg for mp3/m4a chunks; undefined for pcm wav */
+  bitrateKbps?: number;
+}
+
+/**
+ * CBR bitrates libmp3lame actually supports within our clamp range, in kbps.
+ * lame silently rounds other values to this table, so picking from it keeps
+ * the size math in lockstep with what the encoder really produces. AAC has
+ * no such restriction but accepts these values fine.
+ */
+const MP3_CBR_BITRATES_KBPS = [32, 40, 48, 56, 64, 80, 96, 112, 128];
+
+/** Smallest bitrate we'll encode chunks at — Whisper needs intelligible speech. */
+const MIN_CHUNK_AUDIO_BITRATE_KBPS = MP3_CBR_BITRATES_KBPS[0];
+
+/**
+ * Resolves the chunk encoding for a split. Chunk size on disk depends only
+ * on the OUTPUT encoding — sizing segments from the input file's rate was
+ * the issue #57 bug (a 64 kbps iPhone Voice Memo re-encoded at 128 kbps
+ * produced chunks ~2x the target, blowing past the Whisper size limit).
+ *
+ * For mp3/m4a the bitrate is clamped to the input's: re-encoding above the
+ * source rate gains no quality and would double the bytes shipped to Whisper
+ * for low-bitrate sources. The clamped value is rounded UP to a valid CBR
+ * step so the encoder can't outrun the math.
+ */
+async function resolveChunkEncoding(
+  outputFormat: 'mp3' | 'wav' | 'm4a',
   inputPath: string,
-  targetSizeBytes: number,
-): Promise<number> {
-  const stats = await stat(inputPath);
-  const fileSize = stats.size;
+): Promise<ChunkEncoding> {
+  if (outputFormat === 'mp3' || outputFormat === 'm4a') {
+    let inputKbps = CHUNK_AUDIO_BITRATE_KBPS;
+    try {
+      inputKbps = Math.ceil((await getAudioBitrate(inputPath)) / 1000);
+    } catch (error) {
+      console.warn(
+        `[AudioSplitter] Could not probe input bitrate; encoding chunks at ` +
+          `${CHUNK_AUDIO_BITRATE_KBPS} kbps:`,
+        error instanceof Error ? error.message : error,
+      );
+    }
 
-  const duration = await getAudioDuration(inputPath);
+    const clamped = Math.min(
+      CHUNK_AUDIO_BITRATE_KBPS,
+      Math.max(MIN_CHUNK_AUDIO_BITRATE_KBPS, inputKbps),
+    );
+    const bitrateKbps =
+      MP3_CBR_BITRATES_KBPS.find((standard) => standard >= clamped) ??
+      CHUNK_AUDIO_BITRATE_KBPS;
 
-  if (!Number.isFinite(duration) || duration <= 0) {
-    throw new Error('Audio has unusable duration');
+    return { bytesPerSecond: (bitrateKbps * 1000) / 8, bitrateKbps };
   }
 
-  // Calculate bytes per second
-  const bytesPerSecond = fileSize / duration;
+  // wav (pcm_s16le): rate is sampleRate * channels * 2 bytes, taken from the
+  // input's audio stream since pcm preserves both.
+  return new Promise((resolve) => {
+    ffmpeg.ffprobe(inputPath, (err, metadata) => {
+      if (err) {
+        console.warn(
+          `[AudioSplitter] Could not probe input stream for wav chunk sizing; ` +
+            `assuming 44.1kHz stereo: ${err.message}`,
+        );
+        resolve({ bytesPerSecond: 44100 * 2 * 2 });
+        return;
+      }
+      const audioStream = metadata?.streams?.find(
+        (s) => s.codec_type === 'audio',
+      );
+      const sampleRate = Number(audioStream?.sample_rate) || 44100;
+      const channels = Number(audioStream?.channels) || 2;
+      resolve({ bytesPerSecond: sampleRate * channels * 2 });
+    });
+  });
+}
 
-  // Calculate segment duration to achieve target size
+/**
+ * Calculates the optimal segment duration to achieve the target chunk size,
+ * based on the resolved output encoding rate.
+ *
+ * @param targetSizeBytes - Target size for each chunk in bytes
+ * @param bytesPerSecond - On-disk rate of the encoded chunks
+ * @returns Segment duration in seconds
+ */
+function calculateSegmentDuration(
+  targetSizeBytes: number,
+  bytesPerSecond: number,
+): number {
   // Round down to be conservative (better to have more chunks than exceed size limit)
   const segmentDuration = Math.floor(targetSizeBytes / bytesPerSecond);
 
@@ -286,8 +425,9 @@ async function calculateSegmentDuration(
 /**
  * Splits an audio file into smaller chunks using FFmpeg segment feature.
  *
- * Uses stream copy (-c copy) for fast, lossless splitting when possible.
- * Falls back to re-encoding if stream copy fails.
+ * Chunks are always re-encoded (mp3/m4a at the input's bitrate capped at
+ * CHUNK_AUDIO_BITRATE_KBPS, wav as pcm_s16le) — stream copy can't cut at
+ * arbitrary points reliably across input containers.
  *
  * @param inputPath - Path to the input audio file
  * @param options - Split options (target size, format, output directory)
@@ -311,6 +451,10 @@ export async function splitAudioFile(
     jobId,
   } = options;
 
+  if (jobId && !SAFE_JOB_ID_REGEX.test(jobId)) {
+    throw new Error('Invalid jobId for audio splitting');
+  }
+
   // Get file info
   const stats = await stat(inputPath);
   const fileSize = stats.size;
@@ -320,11 +464,38 @@ export async function splitAudioFile(
     throw new Error('Audio has unusable duration');
   }
 
+  const inputBasename = path.basename(inputPath, path.extname(inputPath));
+
   // If file is small enough, no splitting needed
   if (fileSize <= targetChunkSizeBytes) {
     console.log(
       `[AudioSplitter] File size (${(fileSize / 1024 / 1024).toFixed(1)}MB) is within target, no splitting needed`,
     );
+
+    // When the caller asked for managed output (jobId/outputDir), the single
+    // "chunk" must still be OUR copy: callers treat every returned chunkPath
+    // as disposable (cleanupChunks deletes them), and handing back the
+    // caller's input file would let that cleanup destroy it.
+    if (jobId || outputDir) {
+      const singleChunkDir =
+        outputDir ?? path.join(tmpdir(), 'chunked-transcription', jobId!);
+      await fs.promises.mkdir(singleChunkDir, { recursive: true });
+      const extension = path.extname(inputPath) || `.${outputFormat}`;
+      const singleChunkPath = path.join(
+        singleChunkDir,
+        `${inputBasename}_chunk_000${extension}`,
+      );
+      await fs.promises.copyFile(inputPath, singleChunkPath);
+      return {
+        chunkPaths: [singleChunkPath],
+        chunkCount: 1,
+        totalDurationSecs: totalDuration,
+        chunkDurationSecs: totalDuration,
+      };
+    }
+
+    // Legacy unmanaged mode: the input itself is returned. Callers in this
+    // mode must NOT pass the result to cleanupChunks.
     return {
       chunkPaths: [inputPath],
       chunkCount: 1,
@@ -333,23 +504,29 @@ export async function splitAudioFile(
     };
   }
 
+  // Resolve the output encoding once; it drives both the segment-duration
+  // math and the ffmpeg invocation below.
+  const encoding = await resolveChunkEncoding(outputFormat, inputPath);
+
   // Calculate segment duration
-  let segmentDuration = await calculateSegmentDuration(
-    inputPath,
+  let segmentDuration = calculateSegmentDuration(
     targetChunkSizeBytes,
+    encoding.bytesPerSecond,
   );
   let estimatedChunks = Math.ceil(totalDuration / segmentDuration);
 
   // Cap chunk count so pathologically long audio doesn't spray hundreds of
   // chunks into tmpdir and the Whisper queue. If we'd exceed the cap, grow
   // segmentDuration so the whole file fits in MAX_CHUNKS segments. The
-  // trade-off is individual chunks can then exceed targetChunkSizeBytes; if
-  // any chunk grows past Whisper's 25MB cap, transcription of that chunk
-  // will fail permanently. There is no re-split-on-size retry today — if
-  // that becomes a real problem in practice, add one in chunkedTranscription-
-  // Service or lower MAX_CHUNKS.
+  // trade-off is individual chunks can then exceed targetChunkSizeBytes;
+  // the post-split size check below catches any chunk that grew past the
+  // Whisper cap and fails the job with a clear, non-retryable error rather
+  // than letting every chunk bounce off the Whisper API. At the 128 kbps
+  // ceiling this means ~21+ hours of audio; lower-bitrate chunks stretch it
+  // further.
   const MAX_CHUNKS = 60;
-  if (estimatedChunks > MAX_CHUNKS) {
+  const cappedByMaxChunks = estimatedChunks > MAX_CHUNKS;
+  if (cappedByMaxChunks) {
     segmentDuration = Math.ceil(totalDuration / MAX_CHUNKS);
     estimatedChunks = Math.ceil(totalDuration / segmentDuration);
     console.warn(
@@ -359,13 +536,13 @@ export async function splitAudioFile(
 
   console.log(
     `[AudioSplitter] Splitting ${(fileSize / 1024 / 1024).toFixed(1)}MB file ` +
-      `(${totalDuration.toFixed(0)}s) into ~${estimatedChunks} chunks of ~${segmentDuration}s each`,
+      `(${totalDuration.toFixed(0)}s) into ~${estimatedChunks} chunks of ~${segmentDuration}s each` +
+      (encoding.bitrateKbps ? ` at ${encoding.bitrateKbps} kbps` : ''),
   );
 
   // Prepare output path pattern.
   // Prefer a per-job subdir under tmpdir when jobId is provided so parallel
   // jobs don't share a directory and cleanup can rm-rf the whole subdir.
-  const inputBasename = path.basename(inputPath, path.extname(inputPath));
   const outputDirectory =
     outputDir ||
     (jobId
@@ -385,6 +562,7 @@ export async function splitAudioFile(
     outputPattern,
     segmentDuration,
     outputFormat,
+    encoding.bitrateKbps,
   );
 
   // Find all generated chunk files
@@ -396,6 +574,30 @@ export async function splitAudioFile(
 
   if (chunkPaths.length === 0) {
     throw new Error('No chunk files were generated');
+  }
+
+  // Defense in depth: a chunk larger than the Whisper limit can never be
+  // transcribed, so fail the whole job here with an actionable message
+  // instead of letting the API reject chunk after chunk. Reachable via the
+  // MAX_CHUNKS cap above (extremely long recordings) or, for wav output,
+  // via the 60s minimum segment duration on dense pcm streams — so only
+  // diagnose "too long" when the cap is actually what stretched the chunks.
+  const chunkStats = await Promise.all(chunkPaths.map((p) => stat(p)));
+  const oversized = chunkStats.find((s) => s.size > WHISPER_MAX_SIZE);
+  if (oversized) {
+    await cleanupChunks(chunkPaths);
+    const limitMB = Math.floor(WHISPER_MAX_SIZE / (1024 * 1024));
+    const totalHours = (totalDuration / 3600).toFixed(1);
+    const oversizedMB = (oversized.size / (1024 * 1024)).toFixed(1);
+    const message = cappedByMaxChunks
+      ? `This recording is too long to transcribe (~${totalHours} hours of audio). ` +
+        `Please split it into shorter parts and try again.`
+      : `This recording could not be split into pieces small enough to transcribe ` +
+        `(a ${oversizedMB}MB piece exceeds the ${limitMB}MB limit). ` +
+        `Please try a shorter or lower-quality recording.`;
+    const error = new Error(message) as TranscriptionError;
+    error.errorClass = 'permanent';
+    throw error;
   }
 
   console.log(
@@ -422,6 +624,7 @@ async function runSegmentation(
   outputPattern: string,
   segmentDuration: number,
   outputFormat: string,
+  bitrateKbps: number = CHUNK_AUDIO_BITRATE_KBPS,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     // Ring buffer: newest ffmpeg stderr line pushes the oldest out once the
@@ -445,14 +648,14 @@ async function runSegmentation(
     switch (outputFormat) {
       case 'mp3':
         command.audioCodec('libmp3lame');
-        command.audioBitrate(128);
+        command.audioBitrate(bitrateKbps);
         break;
       case 'wav':
         command.audioCodec('pcm_s16le');
         break;
       case 'm4a':
         command.audioCodec('aac');
-        command.audioBitrate(128);
+        command.audioBitrate(bitrateKbps);
         break;
     }
 
@@ -487,7 +690,11 @@ async function findChunkFiles(
   format: string,
 ): Promise<string[]> {
   const files = await readdir(directory);
-  const pattern = new RegExp(`^${baseName}_chunk_\\d{3}\\.${format}$`);
+  // Escape both interpolated parts: a basename containing regex
+  // metacharacters (e.g. "take.1") must match literally, not as a pattern.
+  const pattern = new RegExp(
+    `^${escapeRegExp(baseName)}_chunk_\\d{3}\\.${escapeRegExp(format)}$`,
+  );
 
   const chunkFiles = files
     .filter((f) => pattern.test(f))

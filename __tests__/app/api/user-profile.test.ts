@@ -1,3 +1,4 @@
+import { getToken } from 'next-auth/jwt';
 import { NextRequest } from 'next/server';
 
 import { GET } from '@/app/api/user/profile/route';
@@ -6,6 +7,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // Mock auth
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
+}));
+
+// The route reads the refresh token from the JWT via getToken(), not from
+// the session (it is deliberately never exposed there).
+vi.mock('next-auth/jwt', () => ({
+  getToken: vi.fn(),
 }));
 
 // Mock global fetch
@@ -17,6 +24,10 @@ describe('GET /api/user/profile', () => {
     process.env.AZURE_TENANT_ID = 'test-tenant-id';
     process.env.AZURE_CLIENT_ID = 'test-client-id';
     process.env.AZURE_CLIENT_SECRET = 'test-client-secret';
+    // Default to a JWT carrying a refresh token; individual tests override.
+    vi.mocked(getToken).mockResolvedValue({
+      refreshToken: 'test-refresh-token',
+    } as any);
   });
 
   const createMockRequest = () => {
@@ -52,8 +63,8 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: null,
       } as any);
+      vi.mocked(getToken).mockResolvedValue({ refreshToken: null } as any);
 
       const request = createMockRequest();
       const response = await GET(request);
@@ -69,7 +80,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh response
@@ -109,7 +119,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock failed token refresh
@@ -129,7 +138,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh throwing error
@@ -149,7 +157,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       const mockUserData = {
@@ -194,7 +201,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh
@@ -233,7 +239,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh
@@ -271,7 +276,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh
@@ -300,7 +304,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh
@@ -332,7 +335,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh
@@ -360,7 +362,6 @@ describe('GET /api/user/profile', () => {
       const { auth } = await import('@/auth');
       vi.mocked(auth).mockResolvedValue({
         user: { id: 'test-user' },
-        refreshToken: 'test-refresh-token',
       } as any);
 
       // Mock token refresh

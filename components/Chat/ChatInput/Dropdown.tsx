@@ -187,8 +187,15 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   // Handler for document translation file selection
   const handleDocumentTranslateClick = useCallback(() => {
+    const input = documentTranslateInputRef.current;
+    if (!input) {
+      console.error('[DocumentTranslation] file input ref unavailable');
+      return;
+    }
+    // Open the picker first, while the user gesture is still active, before any
+    // close-related state churn.
+    input.click();
     closeDropdown();
-    documentTranslateInputRef.current?.click();
   }, [closeDropdown]);
 
   // Handle document translation completion - add user message with file + assistant message

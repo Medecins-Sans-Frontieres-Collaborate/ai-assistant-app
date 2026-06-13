@@ -11,6 +11,7 @@
 import { TranscriptionErrorClass } from '@/types/transcription';
 
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 
 export type ChunkedJobStatus =
@@ -45,8 +46,6 @@ export interface ChunkedJob {
   errorClass?: TranscriptionErrorClass;
   /** Paths to chunk files (for cleanup) */
   chunkPaths: string[];
-  /** Path to original audio file (for cleanup) */
-  originalAudioPath?: string;
   /** Original filename for display */
   filename: string;
   /** Job creation timestamp */
@@ -58,8 +57,15 @@ export interface ChunkedJob {
 /** Directory for storing job JSON files */
 const JOB_STORE_DIR = '/tmp/chunked-transcription-jobs';
 
-/** How long to keep completed/failed jobs before cleanup (1 hour) */
-const JOB_RETENTION_MS = 60 * 60 * 1000;
+/**
+ * How long to keep completed/failed jobs before cleanup.
+ *
+ * Must exceed the client's maximum polling window
+ * (MAX_TRANSCRIPTION_TIMEOUT_MS in useTranscriptionPolling.ts, currently 2h),
+ * otherwise a client that reconnects late polls a 404 and a completed
+ * transcript is silently lost. 3h = client ceiling + 1h slack.
+ */
+const JOB_RETENTION_MS = 3 * 60 * 60 * 1000;
 
 /**
  * Validates that a job ID contains only safe characters.
@@ -128,6 +134,112 @@ function saveJob(job: ChunkedJob): void {
   fs.renameSync(tmpPath, filePath);
 }
 
+/** How long a held lock may live before another writer treats it as stale. */
+const LOCK_STALE_MS = 2_000;
+/** Sleep between lock-acquisition attempts. */
+const LOCK_RETRY_DELAY_MS = 5;
+/** Give up acquiring the lock after this long and fall back to lock-free. */
+const LOCK_MAX_WAIT_MS = 250;
+
+// Atomics.wait needs a SharedArrayBuffer-backed view; this one exists solely
+// to implement a synchronous sleep without spinning the CPU.
+const lockSleepBuffer = new Int32Array(new SharedArrayBuffer(4));
+
+function sleepSync(ms: number): void {
+  Atomics.wait(lockSleepBuffer, 0, 0, ms);
+}
+
+/**
+ * Acquires a per-job advisory lock (a lock directory next to the job file).
+ *
+ * Within one Node process the store's synchronous read-modify-write calls
+ * already can't interleave; this lock guards the cross-process case (e.g.
+ * a cluster-mode deployment that violates the documented single-replica
+ * assumption) so a cancel can't be silently clobbered by a concurrent
+ * progress write. Locks held longer than LOCK_STALE_MS are assumed to come
+ * from a crashed process and are broken.
+ *
+ * @returns A release function, or null if the lock could not be acquired
+ *   within LOCK_MAX_WAIT_MS (callers proceed lock-free rather than failing).
+ */
+function acquireJobLock(jobId: string): (() => void) | null {
+  validateJobId(jobId);
+  ensureStoreDir();
+  const lockDir = path.join(JOB_STORE_DIR, `${jobId}.lock`);
+  const deadline = Date.now() + LOCK_MAX_WAIT_MS;
+
+  for (;;) {
+    try {
+      fs.mkdirSync(lockDir);
+      return () => {
+        try {
+          fs.rmdirSync(lockDir);
+        } catch {
+          // Already removed (e.g. broken as stale by another writer).
+        }
+      };
+    } catch {
+      // Lock exists — break it if stale, otherwise wait and retry.
+      try {
+        const lockAge = Date.now() - fs.statSync(lockDir).mtimeMs;
+        if (lockAge > LOCK_STALE_MS) {
+          try {
+            fs.rmdirSync(lockDir);
+          } catch {
+            // Another writer broke it first.
+          }
+          continue;
+        }
+      } catch {
+        // Lock vanished between mkdir and stat — retry immediately.
+        continue;
+      }
+      if (Date.now() >= deadline) {
+        console.warn(
+          `[ChunkedJobStore] Could not acquire lock for job ${jobId} within ${LOCK_MAX_WAIT_MS}ms; proceeding without it`,
+        );
+        return null;
+      }
+      sleepSync(LOCK_RETRY_DELAY_MS);
+    }
+  }
+}
+
+/**
+ * Reads the job, applies `apply` only while the job is still active
+ * (pending/processing), and persists the result — all under the per-job
+ * advisory lock so the freshest state is what gets checked and written.
+ *
+ * This is the single write path for status transitions: terminal states
+ * (succeeded/failed/cancelled) can never be overwritten by a late progress
+ * update or a racing completion.
+ *
+ * @returns true if the mutation was applied; false if the job was already
+ *   terminal and the call was a no-op.
+ * @throws Error when no job record exists for `jobId`.
+ */
+function mutateActiveJob(
+  jobId: string,
+  apply: (job: ChunkedJob) => void,
+): boolean {
+  const release = acquireJobLock(jobId);
+  try {
+    const job = getJob(jobId);
+    if (!job) {
+      throw new Error(`Job ${jobId} not found`);
+    }
+    if (job.status !== 'pending' && job.status !== 'processing') {
+      return false;
+    }
+    apply(job);
+    job.updatedAt = Date.now();
+    saveJob(job);
+    return true;
+  } finally {
+    release?.();
+  }
+}
+
 /**
  * Creates a new chunked transcription job.
  *
@@ -144,7 +256,6 @@ export function createJob(
   totalChunks: number,
   chunkPaths: string[],
   filename: string,
-  originalAudioPath?: string,
 ): void {
   const now = Date.now();
 
@@ -156,7 +267,6 @@ export function createJob(
     completedChunks: 0,
     currentChunk: 0,
     chunkPaths,
-    originalAudioPath,
     filename,
     createdAt: now,
     updatedAt: now,
@@ -186,31 +296,22 @@ export function updateProgress(
   completedChunks: number,
   currentChunk?: number,
 ): void {
-  const job = getJob(jobId);
-  if (!job) {
-    throw new Error(`Job ${jobId} not found`);
+  // mutateActiveJob bails if the job is already terminal — a background
+  // chunk that finishes after the user cancelled (or after a failure was
+  // recorded) must not clobber the terminal status back to 'processing'.
+  const applied = mutateActiveJob(jobId, (job) => {
+    job.status = 'processing';
+    job.completedChunks = completedChunks;
+    if (currentChunk !== undefined) {
+      job.currentChunk = currentChunk;
+    }
+  });
+
+  if (applied) {
+    console.log(
+      `[ChunkedJobStore] Job ${jobId} progress: ${completedChunks} chunks completed`,
+    );
   }
-
-  // Bail if the job is already terminal — a background chunk that finishes
-  // after the user cancelled (or after a failure was recorded) must not
-  // clobber the terminal status back to 'processing'. Racing writes are
-  // otherwise resolved last-writer-wins by the tmp+rename save path.
-  if (job.status !== 'pending' && job.status !== 'processing') {
-    return;
-  }
-
-  job.status = 'processing';
-  job.completedChunks = completedChunks;
-  if (currentChunk !== undefined) {
-    job.currentChunk = currentChunk;
-  }
-  job.updatedAt = Date.now();
-
-  saveJob(job);
-
-  console.log(
-    `[ChunkedJobStore] Job ${jobId} progress: ${completedChunks}/${job.totalChunks} chunks`,
-  );
 }
 
 /**
@@ -221,29 +322,21 @@ export function updateProgress(
  * @throws Error when no job record exists for `jobId`.
  */
 export function completeJob(jobId: string, transcript: string): void {
-  const job = getJob(jobId);
-  if (!job) {
-    throw new Error(`Job ${jobId} not found`);
-  }
-
-  // Preserve terminal status. If the user cancelled while the final batch
-  // was in flight, the combined-transcript write must not flip the job
+  // Preserve terminal status. If the user cancelled while the final chunks
+  // were in flight, the combined-transcript write must not flip the job
   // back to 'succeeded'. The transcript is discarded by design — cancelled
   // means the user doesn't want it.
-  if (job.status !== 'pending' && job.status !== 'processing') {
-    return;
+  const applied = mutateActiveJob(jobId, (job) => {
+    job.status = 'succeeded';
+    job.completedChunks = job.totalChunks;
+    job.transcript = transcript;
+  });
+
+  if (applied) {
+    console.log(
+      `[ChunkedJobStore] Job ${jobId} completed successfully with ${transcript.length} chars`,
+    );
   }
-
-  job.status = 'succeeded';
-  job.completedChunks = job.totalChunks;
-  job.transcript = transcript;
-  job.updatedAt = Date.now();
-
-  saveJob(job);
-
-  console.log(
-    `[ChunkedJobStore] Job ${jobId} completed successfully with ${transcript.length} chars`,
-  );
 }
 
 /**
@@ -260,29 +353,21 @@ export function failJob(
   error: string,
   errorClass?: TranscriptionErrorClass,
 ): void {
-  const job = getJob(jobId);
-  if (!job) {
-    throw new Error(`Job ${jobId} not found`);
-  }
-
   // Preserve terminal status. A background chunk that errors after the user
   // cancelled (or after a different branch already recorded success/failure)
   // must not flip the stored outcome — cancelled must stay cancelled, a
   // succeeded job must not revert to failed.
-  if (job.status !== 'pending' && job.status !== 'processing') {
-    return;
+  const applied = mutateActiveJob(jobId, (job) => {
+    job.status = 'failed';
+    job.error = error;
+    job.errorClass = errorClass;
+  });
+
+  if (applied) {
+    console.error(
+      `[ChunkedJobStore] Job ${jobId} failed (${errorClass ?? 'unclassified'}): ${error}`,
+    );
   }
-
-  job.status = 'failed';
-  job.error = error;
-  job.errorClass = errorClass;
-  job.updatedAt = Date.now();
-
-  saveJob(job);
-
-  console.error(
-    `[ChunkedJobStore] Job ${jobId} failed (${errorClass ?? 'unclassified'}): ${error}`,
-  );
 }
 
 /**
@@ -380,11 +465,42 @@ export function getActiveJobCount(): number {
   ).length;
 }
 
+/** Root directory holding per-job chunk subdirectories. */
+const CHUNK_DIR_ROOT = path.join(os.tmpdir(), 'chunked-transcription');
+
+/**
+ * Best-effort removal of a job's on-disk chunk artifacts: the chunk files
+ * themselves plus any per-job directory under the chunked-transcription
+ * tmpdir root. Never throws — artifact cleanup must not block status
+ * reconciliation.
+ */
+function cleanupJobArtifacts(job: ChunkedJob): void {
+  for (const chunkPath of job.chunkPaths) {
+    try {
+      fs.unlinkSync(chunkPath);
+    } catch {
+      // Already gone or unreadable — nothing useful to do.
+    }
+  }
+  const parents = new Set(job.chunkPaths.map((p) => path.dirname(p)));
+  for (const parent of parents) {
+    if (parent.startsWith(CHUNK_DIR_ROOT + path.sep)) {
+      try {
+        fs.rmSync(parent, { recursive: true, force: true });
+      } catch {
+        // Best-effort.
+      }
+    }
+  }
+}
+
 /**
  * Marks any job that was mid-flight (pending or processing) when the server
- * was last stopped as failed with a recognizable reason. Intended to be
- * called once at server startup so clients polling such jobs see a clean
- * failure rather than a permanent 404.
+ * was last stopped as failed with a recognizable reason, and removes the
+ * job's chunk files — they can never be consumed once the in-process
+ * pipeline that produced them is gone. Intended to be called once at server
+ * startup so clients polling such jobs see a clean failure rather than a
+ * permanent 404.
  *
  * @returns The job IDs that were marked failed.
  */
@@ -404,6 +520,9 @@ export function markInterruptedJobsFailed(): string[] {
         err,
       );
     }
+    // Even if the status write failed, the chunks are unusable — reclaim
+    // the disk either way.
+    cleanupJobArtifacts(job);
   }
   if (marked.length > 0) {
     console.log(
@@ -414,29 +533,71 @@ export function markInterruptedJobsFailed(): string[] {
 }
 
 /**
+ * Removes per-job chunk directories whose job record no longer exists or is
+ * already terminal. Safe to run at startup (no job can be actively writing
+ * chunks yet) — covers dirs orphaned by crashes that predate their job
+ * record, and dirs whose record was already removed by retention cleanup.
+ *
+ * @returns The directory names that were removed.
+ */
+export function sweepOrphanedChunkDirs(): string[] {
+  const removed: string[] = [];
+
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(CHUNK_DIR_ROOT, { withFileTypes: true });
+  } catch {
+    // Root doesn't exist yet — nothing to sweep.
+    return removed;
+  }
+
+  const liveJobIds = new Set(
+    listJobs()
+      .filter((job) => job.status === 'pending' || job.status === 'processing')
+      .map((job) => job.jobId),
+  );
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    if (liveJobIds.has(entry.name)) continue;
+    try {
+      fs.rmSync(path.join(CHUNK_DIR_ROOT, entry.name), {
+        recursive: true,
+        force: true,
+      });
+      removed.push(entry.name);
+    } catch (err) {
+      console.warn(
+        `[ChunkedJobStore] Could not remove orphaned chunk dir ${entry.name}:`,
+        err,
+      );
+    }
+  }
+
+  if (removed.length > 0) {
+    console.log(
+      `[ChunkedJobStore] Swept ${removed.length} orphaned chunk dir(s)`,
+    );
+  }
+  return removed;
+}
+
+/**
  * Marks a job as cancelled by the user. Cooperative — the background chunk
  * processor polls job status between batches and aborts when it sees this.
  *
  * @throws Error when no job record exists for `jobId`.
  */
 export function cancelJob(jobId: string): void {
-  const job = getJob(jobId);
-  if (!job) {
-    throw new Error(`Job ${jobId} not found`);
+  // mutateActiveJob no-ops (returns false) when the job is already terminal.
+  const applied = mutateActiveJob(jobId, (job) => {
+    job.status = 'cancelled';
+    job.error = JOB_CANCELLED_MESSAGE;
+  });
+
+  if (applied) {
+    console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
   }
-  // Already terminal — no-op.
-  if (
-    job.status === 'succeeded' ||
-    job.status === 'failed' ||
-    job.status === 'cancelled'
-  ) {
-    return;
-  }
-  job.status = 'cancelled';
-  job.error = JOB_CANCELLED_MESSAGE;
-  job.updatedAt = Date.now();
-  saveJob(job);
-  console.log(`[ChunkedJobStore] Job ${jobId} cancelled by user`);
 }
 
 // Cleanup timer reference

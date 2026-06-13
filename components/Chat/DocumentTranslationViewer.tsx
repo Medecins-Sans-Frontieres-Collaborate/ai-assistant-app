@@ -1,11 +1,3 @@
-/**
- * Document Translation Viewer Component
- *
- * Displays translated document reference with download capability.
- * Shows expiration warning and language information.
- *
- * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
- */
 'use client';
 
 import {
@@ -22,16 +14,9 @@ import { useTranslations } from 'next-intl';
 
 import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
 
-import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
+import { Tooltip } from '@/components/UI/Tooltip';
 
-/**
- * Document Translation Viewer Component
- *
- * Displays translated document reference with download capability.
- * Shows expiration warning and language information.
- *
- * Reference format: [Translation: filename | lang:code | blob:jobId | expires:ISO_TIMESTAMP]
- */
+import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
 
 /**
  * Regex to match document translation blob references.
@@ -152,6 +137,8 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
   const languageDisplay = languageInfo
     ? `${languageInfo.nativeName} (${languageInfo.englishName})`
     : reference?.languageCode || 'Unknown';
+  const isUnofficialLanguage =
+    !!languageInfo && !languageInfo.officiallySupported;
 
   // Handle download
   const handleDownload = useCallback(async () => {
@@ -223,6 +210,19 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
                     language: languageDisplay,
                   })}
                 </span>
+                {isUnofficialLanguage && (
+                  <Tooltip
+                    content={t('documentTranslation.unofficialLanguageWarning')}
+                    position="bottom"
+                    multiline
+                  >
+                    <IconAlertTriangle
+                      size={14}
+                      className="text-amber-600 dark:text-amber-400"
+                      aria-label={t('documentTranslation.unofficialBadgeLabel')}
+                    />
+                  </Tooltip>
+                )}
               </div>
             </div>
           </div>
