@@ -1,9 +1,14 @@
 // ───────────────────────────────────────────────────────────────────
 // SUT
 // ───────────────────────────────────────────────────────────────────
+import { NextRequest } from 'next/server';
+
 import { createCredentialMiddleware } from '@/lib/services/chat/pipeline/Middleware';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+// getAccessTokenForOBO is mocked, so the request is only forwarded, never read.
+const mockReq = {} as unknown as NextRequest;
 
 // Hoisted mocks — must be declared before module imports below.
 
@@ -89,14 +94,14 @@ describe('createCredentialMiddleware', () => {
         model: { isOrganizationAgent: false, agentId: undefined },
         modelId: 'gpt-5.2',
       });
-      const result = await createCredentialMiddleware(ctx);
+      const result = await createCredentialMiddleware(ctx, mockReq);
       expect(result).toEqual({});
       expect(lookupUserAgentEndpoint).not.toHaveBeenCalled();
     });
 
     it('returns empty when session is missing', async () => {
       const ctx = makeContext({ session: undefined });
-      const result = await createCredentialMiddleware(ctx);
+      const result = await createCredentialMiddleware(ctx, mockReq);
       expect(result).toEqual({});
     });
   });
@@ -105,7 +110,7 @@ describe('createCredentialMiddleware', () => {
     it('uses the cached endpoint without lazy discovery', async () => {
       lookupUserAgentEndpoint.mockReturnValue(ALLOWED_ENDPOINT);
 
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       expect(lookupUserAgentEndpoint).toHaveBeenCalledWith(
         'u@msf.org',
@@ -135,7 +140,7 @@ describe('createCredentialMiddleware', () => {
         },
       ]);
 
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       expect(getAccessTokenForOBO).toHaveBeenCalled();
       expect(getArmToken).toHaveBeenCalledWith('app-access-token');
@@ -154,7 +159,7 @@ describe('createCredentialMiddleware', () => {
       lookupUserAgentEndpoint.mockReturnValue(null);
       listUserAgents.mockRejectedValue(new Error('ARM 403'));
 
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       expect(result.foundryEndpoint).toBe(REGIONAL_FALLBACK);
     });
@@ -163,7 +168,7 @@ describe('createCredentialMiddleware', () => {
       lookupUserAgentEndpoint.mockReturnValue(null);
       getAccessTokenForOBO.mockResolvedValue(null);
 
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       expect(listUserAgents).not.toHaveBeenCalled();
       expect(result.foundryEndpoint).toBe(REGIONAL_FALLBACK);
@@ -178,6 +183,7 @@ describe('createCredentialMiddleware', () => {
         makeContext({
           agentSourcePath: '/etc/passwd', // not an ARM resource path
         }),
+        mockReq,
       );
 
       // Lookup should be called with sourcePath=null OR not at all,
@@ -191,7 +197,7 @@ describe('createCredentialMiddleware', () => {
     it('refuses to bind credential when resolved endpoint fails the allow-list', async () => {
       lookupUserAgentEndpoint.mockReturnValue('https://attacker.example/x');
 
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       // Host outside allow-list → middleware bails out, no credential bound.
       expect(result).toEqual({});
@@ -202,7 +208,7 @@ describe('createCredentialMiddleware', () => {
   describe('scope-checked TokenCredential', () => {
     it('issues the Foundry token for an ai.azure.com scope', async () => {
       lookupUserAgentEndpoint.mockReturnValue(ALLOWED_ENDPOINT);
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       const token = await result.userCredential!.getToken(
         'https://ai.azure.com/user_impersonation',
@@ -213,7 +219,7 @@ describe('createCredentialMiddleware', () => {
 
     it('refuses to issue the Foundry token for an unrelated scope', async () => {
       lookupUserAgentEndpoint.mockReturnValue(ALLOWED_ENDPOINT);
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       await expect(
         result.userCredential!.getToken(
@@ -224,7 +230,7 @@ describe('createCredentialMiddleware', () => {
 
     it('refuses to issue when scope is undefined', async () => {
       lookupUserAgentEndpoint.mockReturnValue(ALLOWED_ENDPOINT);
-      const result = await createCredentialMiddleware(makeContext());
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
 
       await expect(
         // SDK may pass undefined; we should NOT silently issue.
