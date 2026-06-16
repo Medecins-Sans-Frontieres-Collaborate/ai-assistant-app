@@ -7,7 +7,9 @@ import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
 
+import { randomUUID } from 'crypto';
 import fs from 'fs';
+import path from 'path';
 import { performance } from 'perf_hooks';
 
 /**
@@ -201,6 +203,11 @@ export class FileProcessingService {
   /**
    * Generates a safe temporary file path using blob ID.
    *
+   * The path is unique per call (random prefix): blob IDs are content
+   * hashes, so two concurrent requests referencing the same file would
+   * otherwise share one temp path — and one request's cleanup would delete
+   * the file out from under the other mid-transcription.
+   *
    * @param fileUrl - The blob storage URL
    * @returns Tuple of [blobId, filePath]
    */
@@ -208,6 +215,23 @@ export class FileProcessingService {
     const blobId = fileUrl.split('/').pop();
     if (!blobId) throw new Error('Could not parse blob ID from URL!');
 
-    return [blobId, `/tmp/${blobId}`];
+    // Sanitize: strip any path components (e.g., "../" attacks)
+    const sanitized = path.basename(blobId);
+
+    // Validate: only allow alphanumeric, hyphens, underscores, and dots
+    // This matches expected SHA256 hex hashes plus common file extensions
+    if (!/^[\w.-]+$/.test(sanitized)) {
+      throw new Error('Invalid blob ID: contains unsafe characters');
+    }
+
+    const filePath = path.join('/tmp', `${randomUUID()}_${sanitized}`);
+
+    // Defense in depth: verify resolved path stays within /tmp/
+    const resolved = path.resolve(filePath);
+    if (!resolved.startsWith('/tmp/')) {
+      throw new Error('Path traversal detected');
+    }
+
+    return [sanitized, resolved];
   }
 }

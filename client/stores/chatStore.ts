@@ -38,6 +38,7 @@ import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
+import { getFallbackModel } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
@@ -68,6 +69,12 @@ interface ChatStore {
   isRetrying: boolean;
   retryWithFallback: boolean;
   originalModelId: string | null;
+  /**
+   * The fallback-chain model that actually produced the successful retry —
+   * the switch prompt and acceptModelSwitch must reference this model, not
+   * the first entry of the chain, since the chain may have advanced.
+   */
+  successfulFallbackModelId: string | null;
   showModelSwitchPrompt: boolean;
   failedConversation: Conversation | null;
   failedSearchMode: SearchMode | undefined;
@@ -240,6 +247,7 @@ interface ChatStore {
   retryWithFallbackModel: (
     conversation: Conversation,
     searchMode?: SearchMode,
+    attemptedModelIds?: string[],
   ) => Promise<void>;
   /**
    * Re-sends the trailing user message of the failed conversation. Used
@@ -305,6 +313,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isRetrying: false,
   retryWithFallback: false,
   originalModelId: null,
+  successfulFallbackModelId: null,
   showModelSwitchPrompt: false,
   failedConversation: null,
   failedSearchMode: undefined,
@@ -412,6 +421,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       isRetrying: false,
       retryWithFallback: false,
       originalModelId: null,
+      successfulFallbackModelId: null,
       showModelSwitchPrompt: false,
       failedConversation: null,
       failedSearchMode: undefined,
@@ -661,15 +671,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
-      // Try settings default, then global fallback
+      // Try settings default, then the fallback chain
       const fallbackId = settings.defaultModelId || fallbackModelID;
-      latestModelConfig = OpenAIModels[fallbackId];
+      const rescuedModel =
+        OpenAIModels[fallbackId] ?? getFallbackModel([conversation.model.id]);
 
-      if (!latestModelConfig) {
+      if (!rescuedModel) {
         throw new Error(
           `No valid model available. Requested: ${conversation.model.id}, Fallback: ${fallbackId}`,
         );
       }
+      latestModelConfig = rescuedModel;
     }
 
     // For organization/custom agents, use the conversation model directly (it already has full config)
@@ -1073,14 +1085,21 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
-    // Check if we should attempt auto-retry with fallback model.
+    // Check if we should attempt auto-retry with a fallback model.
+    // Client errors (4xx) other than 429 would fail identically on any
+    // model — bad payload, auth, corrupted history — so don't fall back.
+    // 5xx, rate limits, and network errors are worth trying another model.
+    //
     // Curated/custom agents are NEVER retried — the agent's tools,
     // instructions, and connections are the whole point of choosing it.
     // Standard models that happen to be invoked via Foundry's agent service
     // (e.g. GPT-5.2 with `isAgent: true`) DO retry — that flag is just a
     // deployment-mechanism marker, not "user picked a curated agent".
     const { isRetrying } = get();
-    const isAuthError = error instanceof ApiError && error.isAuthError();
+    const isNonRetryableClientError =
+      error instanceof ApiError &&
+      error.isClientError() &&
+      error.status !== 429;
     const modelId = conversation?.model?.id ?? '';
     const isCuratedAgent =
       conversation?.model?.isOrganizationAgent ||
@@ -1088,18 +1107,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       modelId.startsWith('org-') ||
       modelId.startsWith('foundry-') ||
       modelId.startsWith('custom-');
-    const isAlreadyOnFallback = modelId === fallbackModelID;
-    const canRetry =
-      !isAuthError &&
-      !isCuratedAgent &&
-      !isAlreadyOnFallback &&
-      !isRetrying &&
-      conversation;
+    const nextFallbackModel = conversation
+      ? getFallbackModel([conversation.model.id])
+      : null;
 
-    if (canRetry) {
+    if (
+      !isNonRetryableClientError &&
+      !isCuratedAgent &&
+      !isRetrying &&
+      conversation &&
+      nextFallbackModel
+    ) {
       console.log(
         '[chatStore] Attempting auto-retry with fallback model:',
-        fallbackModelID,
+        nextFallbackModel.id,
       );
       // Store failed conversation for regenerate button
       set({
@@ -1184,10 +1205,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   retryWithFallbackModel: async (
     conversation: Conversation,
     searchMode?: SearchMode,
+    attemptedModelIds: string[] = [conversation.model.id],
   ) => {
-    const fallbackModel = OpenAIModels[fallbackModelID];
+    const fallbackModel = getFallbackModel(attemptedModelIds);
     if (!fallbackModel) {
-      console.error('[chatStore] Fallback model not found:', fallbackModelID);
+      console.error(
+        '[chatStore] Fallback chain exhausted, attempted:',
+        attemptedModelIds,
+      );
       set({
         error: 'Failed to send message. Please try again.',
         isStreaming: false,
@@ -1349,6 +1374,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       set({
         isRetrying: false,
         retryWithFallback: true,
+        successfulFallbackModelId: fallbackModel.id,
         showModelSwitchPrompt: true,
         successfulRetryConversationId: conversation.id,
         failedConversation: null,
@@ -1365,6 +1391,31 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       // Clean up timeout
       if (showLoadingTimeout) {
         clearTimeout(showLoadingTimeout);
+      }
+
+      // User clicked stop mid-retry — don't continue the chain or show errors
+      if (retryError instanceof Error && retryError.name === 'AbortError') {
+        toast.dismiss(toastId);
+        get().clearStreamingState();
+        set({ isRetrying: false, error: null });
+        return;
+      }
+
+      // Try the next model in the fallback chain, unless this failure would
+      // hit every model the same way (4xx other than rate limiting)
+      const isNonRetryableClientError =
+        retryError instanceof ApiError &&
+        retryError.isClientError() &&
+        retryError.status !== 429;
+      const nextAttemptedIds = [...attemptedModelIds, fallbackModel.id];
+
+      if (!isNonRetryableClientError && getFallbackModel(nextAttemptedIds)) {
+        toast.dismiss(toastId);
+        return get().retryWithFallbackModel(
+          conversation,
+          searchMode,
+          nextAttemptedIds,
+        );
       }
 
       // Dismiss loading toast
@@ -1426,6 +1477,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({
       showModelSwitchPrompt: false,
       originalModelId: null,
+      successfulFallbackModelId: null,
       retryWithFallback: false,
       successfulRetryConversationId: null,
     });
@@ -1434,10 +1486,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   acceptModelSwitch: (alwaysSwitch?: boolean) => {
     const settings = useSettingsStore.getState();
     const conversationStore = useConversationStore.getState();
-    const { successfulRetryConversationId } = get();
+    const { successfulRetryConversationId, successfulFallbackModelId } = get();
+
+    // Switch to the chain model that actually produced the successful retry
+    const switchedModelId = (successfulFallbackModelId ||
+      fallbackModelID) as OpenAIModelID;
 
     // Set fallback as default model for new conversations
-    settings.setDefaultModelId(fallbackModelID);
+    settings.setDefaultModelId(switchedModelId);
 
     // If alwaysSwitch, persist auto-switch preference for future failures
     if (alwaysSwitch) {
@@ -1446,7 +1502,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Update current conversation model using the stored ID
     if (successfulRetryConversationId) {
-      const fallbackModel = OpenAIModels[fallbackModelID];
+      const fallbackModel = OpenAIModels[switchedModelId];
       if (fallbackModel) {
         conversationStore.updateConversation(successfulRetryConversationId, {
           model: fallbackModel,
@@ -1457,6 +1513,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     set({
       showModelSwitchPrompt: false,
       originalModelId: null,
+      successfulFallbackModelId: null,
       retryWithFallback: false,
       successfulRetryConversationId: null,
     });

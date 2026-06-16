@@ -15,7 +15,11 @@ export type TranscriptionServiceType = 'whisper' | 'batch';
  *
  * Routes transcription requests based on file size:
  * - Files ≤25MB: Whisper (synchronous)
- * - Files >25MB: Azure Speech Batch (asynchronous)
+ * - Files >25MB: Azure Speech Batch (asynchronous) — DEPRECATED, used only
+ *   by the legacy /api/file/[id]/transcribe route. The chat pipeline
+ *   (FileProcessor) handles >25MB files with ChunkedTranscriptionService
+ *   (ffmpeg split → parallel Whisper) instead; see
+ *   lib/services/transcription/chunkedTranscriptionService.ts.
  */
 export class TranscriptionServiceFactory {
   /**

@@ -116,6 +116,7 @@ export function Chat({
     isRetrying,
     showModelSwitchPrompt,
     originalModelId,
+    successfulFallbackModelId,
     dismissModelSwitchPrompt,
     acceptModelSwitch,
     errorIsRecoverable,
@@ -712,7 +713,13 @@ export function Chat({
               originalModelId ||
               'Unknown'
             }
-            fallbackModelName={OpenAIModels[fallbackModelID]?.name || 'GPT-4.1'}
+            fallbackModelName={
+              OpenAIModels[
+                (successfulFallbackModelId || fallbackModelID) as OpenAIModelID
+              ]?.name ||
+              successfulFallbackModelId ||
+              'GPT-4.1'
+            }
             onKeepOriginal={dismissModelSwitchPrompt}
             onSwitchModel={() => acceptModelSwitch(false)}
             onAlwaysSwitch={() => acceptModelSwitch(true)}

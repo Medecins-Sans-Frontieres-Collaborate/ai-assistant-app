@@ -9,6 +9,10 @@
  */
 import { NextRequest } from 'next/server';
 
+import {
+  deleteBatchJobRecord,
+  userOwnsBatchJob,
+} from '@/lib/services/transcription/batchJobRegistry';
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import {
   JOB_ID_REGEX,
@@ -113,20 +117,24 @@ export async function POST(request: NextRequest) {
 
     try {
       const batchService = new BatchTranscriptionService();
-      if (batchService.isConfigured()) {
+      if (ownedChunkedJob) {
+        // Chunked jobs have no remote batch record to delete; the chunk
+        // cleanup above is the whole job-side cleanup.
+        results.jobDeleted = true;
+      } else if (!userOwnsBatchJob(jobId, session.user.id)) {
+        // Unknown or not-owned batch job — same message for both so jobIds
+        // can't be enumerated, and no Azure call is made on the caller's
+        // behalf.
+        results.errors?.push('Transcription job not found');
+      } else if (batchService.isConfigured()) {
         await batchService.deleteTranscription(jobId);
+        deleteBatchJobRecord(jobId);
         results.jobDeleted = true;
         console.log(
           `[TranscriptionCleanup] Deleted transcription job: ${sanitizeForLog(jobId)}`,
         );
       } else {
-        // For chunked jobs there's no remote batch service to call; treat
-        // chunk cleanup above as the successful path.
-        if (ownedChunkedJob) {
-          results.jobDeleted = true;
-        } else {
-          results.errors?.push('Batch transcription service not configured');
-        }
+        results.errors?.push('Batch transcription service not configured');
       }
     } catch (error) {
       const errorMessage =

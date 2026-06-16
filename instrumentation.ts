@@ -13,11 +13,14 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     // Reconcile chunked transcription jobs that were mid-flight when the
     // previous process exited. Without this, clients polling such jobs see a
-    // permanent 404 with no indication the job was lost to a restart.
+    // permanent 404 with no indication the job was lost to a restart. Also
+    // reclaim disk: interrupted jobs' chunk files and any orphaned per-job
+    // chunk directories can never be consumed again.
     try {
-      const { markInterruptedJobsFailed } =
+      const { markInterruptedJobsFailed, sweepOrphanedChunkDirs } =
         await import('@/lib/services/transcription/chunkedJobStore');
       markInterruptedJobsFailed();
+      sweepOrphanedChunkDirs();
     } catch (err) {
       console.warn(
         '[Instrumentation] Could not reconcile interrupted transcription jobs:',

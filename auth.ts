@@ -23,7 +23,10 @@ declare module 'next-auth' {
 
   interface Session {
     error?: string;
-    refreshToken?: string;
+    // Note: the refresh token is intentionally NOT exposed on the Session.
+    // It stays in the JWT only (server-side) and is read via getToken() in
+    // routes that need it, so client code (useSession / /api/auth/session)
+    // can never read it.
   }
 }
 
@@ -313,7 +316,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           officeName: userOfficeName,
         } as Session['user'],
         error: token.error,
-        refreshToken: token.refreshToken, // Expose refresh token for on-demand profile refresh if needed
+        // Refresh token is deliberately omitted here — it must not reach the
+        // client. Server-side consumers read it from the JWT via getToken().
         expires: session.expires,
       };
     },
