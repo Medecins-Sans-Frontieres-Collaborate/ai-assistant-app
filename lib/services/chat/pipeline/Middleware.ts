@@ -289,6 +289,7 @@ export const createSystemPromptMiddleware = (
  */
 export const createCredentialMiddleware = async (
   context: Partial<ChatContext>,
+  req: NextRequest,
 ): Promise<Partial<ChatContext>> => {
   // Only acquire OBO credentials for Foundry agent calls
   const isFoundryAgent =
@@ -344,7 +345,7 @@ export const createCredentialMiddleware = async (
     // through to the regional default.
     if (!resolvedEndpoint && userMail && agentName && sourcePath) {
       try {
-        const appAccessToken = await getAccessTokenForOBO(context.session);
+        const appAccessToken = await getAccessTokenForOBO(req);
         if (appAccessToken) {
           const armToken =
             await UserTokenProvider.getInstance().getArmToken(appAccessToken);
@@ -391,7 +392,7 @@ export const createCredentialMiddleware = async (
     let userCredential: TokenCredential | undefined;
 
     try {
-      const appAccessToken = await getAccessTokenForOBO(context.session);
+      const appAccessToken = await getAccessTokenForOBO(req);
       if (!appAccessToken) throw new Error('No OBO token');
 
       const tokenProvider = UserTokenProvider.getInstance();
@@ -540,7 +541,7 @@ export async function buildChatContext(req: NextRequest): Promise<ChatContext> {
   // Acquire per-user OBO credentials for Foundry agent calls (after model selection)
   context = {
     ...context,
-    ...(await createCredentialMiddleware(context)),
+    ...(await createCredentialMiddleware(context, req)),
   };
 
   // Initialize metrics
