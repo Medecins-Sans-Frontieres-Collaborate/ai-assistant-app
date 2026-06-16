@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
     let foundryToken: string | null = null;
 
     try {
-      const appAccessToken = await getAccessTokenForOBO(session);
+      const appAccessToken = await getAccessTokenForOBO(request);
       if (!appAccessToken) throw new Error('No OBO token');
       const tokenProvider = UserTokenProvider.getInstance();
       armToken = await tokenProvider.getArmToken(appAccessToken);
