@@ -12,9 +12,9 @@ import { auth, getAccessTokenForOBO } from '@/auth';
 
 const ARM_BASE = 'https://management.azure.com';
 
-async function getArmToken(session: any): Promise<string> {
+async function getArmToken(req: NextRequest): Promise<string> {
   try {
-    const appAccessToken = await getAccessTokenForOBO(session);
+    const appAccessToken = await getAccessTokenForOBO(req);
     if (!appAccessToken) throw new Error('No OBO token');
     const tokenProvider = UserTokenProvider.getInstance();
     return await tokenProvider.getArmToken(appAccessToken);
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const armToken = await getArmToken(session);
+    const armToken = await getArmToken(request);
     const level = request.nextUrl.searchParams.get('level');
 
     if (level === 'subscriptions') {
