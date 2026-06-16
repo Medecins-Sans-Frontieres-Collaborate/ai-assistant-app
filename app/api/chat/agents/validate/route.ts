@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     // exercise the validation path.
     let credential: TokenCredential;
     try {
-      const appAccessToken = await getAccessTokenForOBO(session);
+      const appAccessToken = await getAccessTokenForOBO(req);
       if (!appAccessToken) throw new Error('No OBO token');
       const foundryToken =
         await UserTokenProvider.getInstance().getFoundryToken(appAccessToken);
