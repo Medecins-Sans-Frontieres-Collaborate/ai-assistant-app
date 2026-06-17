@@ -81,6 +81,23 @@ describe('outputItemToMarker', () => {
       });
       expect(marker).toContain('"server_label":null');
     });
+
+    it('returns null for a non-https consent_link (no script/phishing scheme)', () => {
+      for (const consent_link of [
+        'javascript:alert(1)',
+        'data:text/html,<script>alert(1)</script>',
+        'http://logic-apis.consent.azure-apim.net/login',
+        'not-a-url',
+      ]) {
+        expect(
+          outputItemToMarker({
+            id: 'oauthreq_1',
+            type: 'oauth_consent_request',
+            consent_link,
+          }),
+        ).toBeNull();
+      }
+    });
   });
 
   describe('mcp_approval_request', () => {
