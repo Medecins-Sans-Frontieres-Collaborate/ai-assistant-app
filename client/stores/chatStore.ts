@@ -19,6 +19,7 @@ import { AgentType } from '@/types/agent';
 import {
   ActiveFile,
   ApprovalResponse,
+  ConsentRequest,
   Conversation,
   Message,
   MessageType,
@@ -42,6 +43,39 @@ import { getFallbackModel } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
+
+/** Sentinel key for OAuth resume state when a server has no label. */
+const NO_SERVER_LABEL = '__no_label__';
+
+/** Returns a new Set without `item`, or the same set when `item` isn't present
+ *  (so an unchanged value keeps its reference and avoids a needless re-render). */
+function setWithout<T>(set: Set<T>, item: T): Set<T> {
+  if (!set.has(item)) return set;
+  const next = new Set(set);
+  next.delete(item);
+  return next;
+}
+
+/**
+ * Builds the finalized assistant message from streamed content, attaching tool
+ * calls and consent requests only when present. Shared by the send, retry, and
+ * approval-resume paths so they stay consistent.
+ */
+function buildAssistantMessage(
+  streamParser: StreamParser,
+  finalContent: string,
+  toolCalls?: ToolCallRecord[],
+  consentRequests?: ConsentRequest[],
+): Message {
+  const assistantMessage = streamParser.toMessage(finalContent);
+  if (toolCalls && toolCalls.length > 0) {
+    assistantMessage.toolCalls = toolCalls;
+  }
+  if (consentRequests && consentRequests.length > 0) {
+    assistantMessage.consentRequests = consentRequests;
+  }
+  return assistantMessage;
+}
 
 interface ChatStore {
   // State
@@ -218,10 +252,10 @@ interface ChatStore {
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
     /** MCP tool calls observed in the stream, for the post-stream summary. */
-    toolCalls?: import('@/types/chat').ToolCallRecord[];
+    toolCalls?: ToolCallRecord[];
     /** Consent prompts emitted in the stream — persisted onto the assistant
      *  message so a card-only turn still renders after finalization. */
-    consentRequests?: import('@/types/chat').ConsentRequest[];
+    consentRequests?: ConsentRequest[];
   }>;
   finalizeMessage: (
     assistantMessage: Message,
@@ -338,7 +372,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       if (info === null) return { pendingOAuthResume: {} };
       // Sentinel for the null-serverLabel case so two unrelated flows
       // without a label can't collide on the empty-string key.
-      const key = info.serverLabel ?? '__no_label__';
+      const key = info.serverLabel ?? NO_SERVER_LABEL;
       return {
         pendingOAuthResume: {
           ...state.pendingOAuthResume,
@@ -349,7 +383,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   clearPendingOAuthResumeFor: (serverLabel) =>
     set((state) => {
-      const key = serverLabel ?? '__no_label__';
+      const key = serverLabel ?? NO_SERVER_LABEL;
       if (!state.pendingOAuthResume[key]) return state;
       const next = { ...state.pendingOAuthResume };
       delete next[key];
@@ -496,13 +530,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
-      const assistantMessage = streamParser.toMessage(finalContent);
-      if (toolCalls && toolCalls.length > 0) {
-        assistantMessage.toolCalls = toolCalls;
-      }
-      if (consentRequests && consentRequests.length > 0) {
-        assistantMessage.consentRequests = consentRequests;
-      }
+      const assistantMessage = buildAssistantMessage(
+        streamParser,
+        finalContent,
+        toolCalls,
+        consentRequests,
+      );
 
       // Surface files that were excluded from this turn's context so the
       // ActiveFilesPanel can flag them — without this the user has no
@@ -779,8 +812,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
-    toolCalls?: import('@/types/chat').ToolCallRecord[];
-    consentRequests?: import('@/types/chat').ConsentRequest[];
+    toolCalls?: ToolCallRecord[];
+    consentRequests?: ConsentRequest[];
   }> => {
     const reader = stream.getReader();
 
@@ -1279,13 +1312,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
       // Create assistant message
-      const assistantMessage = streamParser.toMessage(finalContent);
-      if (toolCalls && toolCalls.length > 0) {
-        assistantMessage.toolCalls = toolCalls;
-      }
-      if (consentRequests && consentRequests.length > 0) {
-        assistantMessage.consentRequests = consentRequests;
-      }
+      const assistantMessage = buildAssistantMessage(
+        streamParser,
+        finalContent,
+        toolCalls,
+        consentRequests,
+      );
 
       // Surface dropped files (see send path for context).
       get().setLastTurnDroppedActiveFileIds(
@@ -1555,6 +1587,35 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       return;
     }
 
+    // Promote submitting → submitted, drop any failed-guard entry, persist the
+    // outcome on the source message, and tear down streaming state. Shared by
+    // the success path and the "duplicate (already recorded)" path.
+    const finalizeSubmitted = () => {
+      set((state) => {
+        const submitted = new Map(state.submittedApprovals);
+        submitted.set(approvalRequestId, approve);
+        const submitting = new Set(state.submittingApprovals);
+        submitting.delete(approvalRequestId);
+        return {
+          submittedApprovals: submitted,
+          submittingApprovals: submitting,
+          failedApprovals: setWithout(state.failedApprovals, approvalRequestId),
+        };
+      });
+      if (sourceMessageIndex !== undefined) {
+        useConversationStore
+          .getState()
+          .recordApprovalOutcome(
+            conversation.id,
+            sourceMessageIndex,
+            approvalRequestId,
+            approve,
+            source,
+          );
+      }
+      get().clearStreamingState();
+    };
+
     let showLoadingTimeout: NodeJS.Timeout | null = null;
 
     try {
@@ -1578,13 +1639,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
 
-      const assistantMessage = streamParser.toMessage(finalContent);
-      if (toolCalls && toolCalls.length > 0) {
-        assistantMessage.toolCalls = toolCalls;
-      }
-      if (consentRequests && consentRequests.length > 0) {
-        assistantMessage.consentRequests = consentRequests;
-      }
+      const assistantMessage = buildAssistantMessage(
+        streamParser,
+        finalContent,
+        toolCalls,
+        consentRequests,
+      );
 
       await get().finalizeMessage(
         assistantMessage,
@@ -1593,42 +1653,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         pendingTranscriptions,
       );
 
-      // Promote submitting → submitted. A successful retry also clears
-      // any prior `failedApprovals` entry so auto-approve unblocks.
-      set((state) => {
-        const submitted = new Map(state.submittedApprovals);
-        submitted.set(approvalRequestId, approve);
-        const submitting = new Set(state.submittingApprovals);
-        submitting.delete(approvalRequestId);
-        const failed = state.failedApprovals.has(approvalRequestId)
-          ? (() => {
-              const f = new Set(state.failedApprovals);
-              f.delete(approvalRequestId);
-              return f;
-            })()
-          : state.failedApprovals;
-        return {
-          submittedApprovals: submitted,
-          submittingApprovals: submitting,
-          failedApprovals: failed,
-        };
-      });
-
-      // Persist the outcome on the source message so reload sees the
-      // resolved state instead of re-prompting.
-      if (sourceMessageIndex !== undefined) {
-        useConversationStore
-          .getState()
-          .recordApprovalOutcome(
-            conversation.id,
-            sourceMessageIndex,
-            approvalRequestId,
-            approve,
-            source,
-          );
-      }
-
-      get().clearStreamingState();
+      // Promote submitting → submitted and persist (a successful retry also
+      // clears any prior `failedApprovals` entry so auto-approve unblocks).
+      finalizeSubmitted();
 
       if (showLoadingTimeout) {
         clearTimeout(showLoadingTimeout);
@@ -1648,28 +1675,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       const isDuplicate = /Duplicate MCP approval response/i.test(errorMessage);
 
       if (isDuplicate) {
-        set((state) => {
-          const submitted = new Map(state.submittedApprovals);
-          submitted.set(approvalRequestId, approve);
-          const submitting = new Set(state.submittingApprovals);
-          submitting.delete(approvalRequestId);
-          return {
-            submittedApprovals: submitted,
-            submittingApprovals: submitting,
-          };
-        });
-        if (sourceMessageIndex !== undefined) {
-          useConversationStore
-            .getState()
-            .recordApprovalOutcome(
-              conversation.id,
-              sourceMessageIndex,
-              approvalRequestId,
-              approve,
-              source,
-            );
-        }
-        get().clearStreamingState();
+        finalizeSubmitted();
         return;
       }
 
