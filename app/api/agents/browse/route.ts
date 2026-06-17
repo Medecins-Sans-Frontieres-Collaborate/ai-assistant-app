@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 
 import {
   isValidAccountName,
@@ -18,16 +19,16 @@ async function getArmToken(req: NextRequest): Promise<string> {
     if (!appAccessToken) throw new Error('No OBO token');
     const tokenProvider = UserTokenProvider.getInstance();
     return await tokenProvider.getArmToken(appAccessToken);
-  } catch {
-    const {
-      ChainedTokenCredential,
-      AzureCliCredential,
-      ManagedIdentityCredential,
-    } = await import('@azure/identity');
-    const credential = new ChainedTokenCredential(
-      new ManagedIdentityCredential(),
-      new AzureCliCredential(),
-    );
+  } catch (e) {
+    // Fail closed in production: browsing must reflect the signed-in user's own
+    // RBAC. The app's managed/CLI identity has broader access than any single
+    // user, so falling back to it would expose resources the user can't see.
+    // This mirrors the policy in /api/agents. The dev fallback is convenience
+    // only (local machines typically lack a usable OBO flow).
+    if (process.env.NODE_ENV === 'production') {
+      throw e;
+    }
+    const credential = await createAppIdentityCredential();
     const tokenResponse = await credential.getToken(
       'https://management.azure.com/.default',
     );
@@ -35,7 +36,23 @@ async function getArmToken(req: NextRequest): Promise<string> {
   }
 }
 
-async function armGet(token: string, url: string) {
+interface ArmSubscription {
+  subscriptionId: string;
+  displayName: string;
+}
+
+interface ArmCognitiveAccount {
+  name: string;
+  kind?: string;
+  id: string;
+  location?: string;
+}
+
+interface ArmProject {
+  name: string;
+}
+
+async function armGet<T>(token: string, url: string): Promise<{ value: T[] }> {
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -50,7 +67,8 @@ async function armGet(token: string, url: string) {
     );
     return { value: [] };
   }
-  return response.json();
+  const data = (await response.json()) as { value?: T[] };
+  return { value: data.value ?? [] };
 }
 
 /**
@@ -75,11 +93,11 @@ export async function GET(request: NextRequest) {
     const level = request.nextUrl.searchParams.get('level');
 
     if (level === 'subscriptions') {
-      const data = await armGet(
+      const data = await armGet<ArmSubscription>(
         armToken,
         `${ARM_BASE}/subscriptions?api-version=2022-01-01`,
       );
-      const subs = (data.value || []).map((s: any) => ({
+      const subs = data.value.map((s) => ({
         id: s.subscriptionId,
         name: s.displayName,
       }));
@@ -95,11 +113,11 @@ export async function GET(request: NextRequest) {
         );
       }
       const url = `${ARM_BASE}/subscriptions/${subscriptionId}/providers/Microsoft.CognitiveServices/accounts?api-version=2025-12-01`;
-      const data = await armGet(armToken, url);
-      const allAccounts = data.value || [];
+      const data = await armGet<ArmCognitiveAccount>(armToken, url);
+      const allAccounts = data.value;
       const accounts = allAccounts
-        .filter((a: any) => a.kind === 'AIServices')
-        .map((a: any) => ({
+        .filter((a) => a.kind === 'AIServices')
+        .map((a) => ({
           name: a.name,
           resourceGroup: a.id.split('/resourceGroups/')[1]?.split('/')[0],
           location: a.location,
@@ -129,11 +147,11 @@ export async function GET(request: NextRequest) {
           { status: 400 },
         );
       }
-      const data = await armGet(
+      const data = await armGet<ArmProject>(
         armToken,
         `${ARM_BASE}/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects?api-version=2025-12-01`,
       );
-      const projects = (data.value || []).map((p: any) => ({
+      const projects = data.value.map((p) => ({
         name: p.name.split('/').pop(),
       }));
       return NextResponse.json({ items: projects });
