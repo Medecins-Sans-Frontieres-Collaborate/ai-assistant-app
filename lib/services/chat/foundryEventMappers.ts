@@ -17,6 +17,17 @@ import {
  */
 
 /**
+ * Normalizes a Foundry `arguments` field to a display string. Foundry usually
+ * emits it as a JSON string but occasionally as a structured object; returns
+ * null when absent.
+ */
+function stringifyToolArguments(rawArgs: unknown): string | null {
+  if (typeof rawArgs === 'string') return rawArgs;
+  if (rawArgs != null) return JSON.stringify(rawArgs);
+  return null;
+}
+
+/**
  * Maps a Foundry stream event type to the translation key the chat loader
  * should display while that event is in progress. Returns null for events
  * that don't map to a user-visible activity (lifecycle, completion, etc.).
@@ -90,13 +101,7 @@ export function outputItemToMarker(
     // Foundry emits `arguments` as a JSON string on this item. We forward
     // it verbatim for display only — the agent has already constructed the
     // call and will execute it once the user approves.
-    const rawArgs = item.arguments;
-    const tool_arguments =
-      typeof rawArgs === 'string'
-        ? rawArgs
-        : rawArgs != null
-          ? JSON.stringify(rawArgs)
-          : null;
+    const tool_arguments = stringifyToolArguments(item.arguments);
     return emitConsentRequest({
       kind: 'approval',
       approval_request_id: item.id,
@@ -149,13 +154,7 @@ export function mcpCallItemToRecord(
 ): string | null {
   if (!item || !item.id || item.type !== 'mcp_call') return null;
 
-  const rawArgs = item.arguments;
-  const args =
-    typeof rawArgs === 'string'
-      ? rawArgs
-      : rawArgs != null
-        ? JSON.stringify(rawArgs)
-        : null;
+  const args = stringifyToolArguments(item.arguments);
 
   // Status defaults to `completed` when Foundry omits it on success.
   const rawStatus = item.status;
