@@ -13,6 +13,7 @@ import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { env } from '@/config/environment';
+import { createHash } from 'crypto';
 
 const ARM_API_VERSION = '2025-10-01-preview';
 
@@ -127,8 +128,12 @@ export class AgentDiscoveryService {
       throw new Error('Invalid Foundry resource path');
     }
 
-    // Check cache
-    const cacheKey = `${this.hashKey(armToken)}:${resourcePath}`;
+    // Check cache. The result set depends on the Foundry token too (it gates
+    // the data-plane union below), so fold its identity into the key — otherwise
+    // an ARM-only list cached on a call without a Foundry token would be served
+    // back on a later call that *does* have one, hiding all new-model agents.
+    const foundryKeyPart = foundryToken ? this.hashKey(foundryToken) : 'none';
+    const cacheKey = `${this.hashKey(armToken)}:${foundryKeyPart}:${resourcePath}`;
     const cached = this.cache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt) {
       return cached.agents;
@@ -430,14 +435,14 @@ export class AgentDiscoveryService {
     return agents;
   }
 
+  /**
+   * Derives a cache-key component from a token. This is a per-user trust
+   * boundary: a collision would serve one user's RBAC-filtered agent list to
+   * another user, so we digest the FULL token with SHA-256 rather than folding
+   * a truncated prefix into a 32-bit integer (which collided in practice).
+   */
   private hashKey(token: string): string {
-    let hash = 0;
-    for (let i = 0; i < Math.min(token.length, 100); i++) {
-      const char = token.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash |= 0;
-    }
-    return hash.toString(36);
+    return createHash('sha256').update(token).digest('hex');
   }
 
   /**
