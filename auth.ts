@@ -63,6 +63,23 @@ interface UserData {
   companyName?: string;
 }
 
+/**
+ * Resolves a user's office and region from their email domain in one lookup,
+ * falling back to the region heuristic when no office matches.
+ */
+function resolveOfficeAndRegion(email: string | undefined): {
+  region: 'US' | 'EU';
+  officeId: string | null;
+  officeName: string | null;
+} {
+  const office = OfficeResolver.findOfficeByEmail(email);
+  return {
+    region: office?.region ?? OfficeResolver.getRegionForUser(email),
+    officeId: office?.id ?? null,
+    officeName: office?.displayName ?? null,
+  };
+}
+
 const refreshAccessToken = async (token: JWT): Promise<JWT> => {
   if (!token.refreshToken) {
     return { ...token, error: 'RefreshTokenMissing' };
@@ -239,9 +256,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const userData = await fetchUserData(account.access_token);
 
           // Resolve office (and region) from email domain
-          const office = OfficeResolver.findOfficeByEmail(userData.mail);
-          const userRegion: 'US' | 'EU' =
-            office?.region ?? OfficeResolver.getRegionForUser(userData.mail);
+          const { region, officeId, officeName } = resolveOfficeAndRegion(
+            userData.mail,
+          );
 
           return {
             ...token,
@@ -261,19 +278,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userJobTitle: userData.jobTitle,
             userDepartment: userData.department,
             userCompanyName: userData.companyName,
-            userRegion,
-            userOfficeId: office?.id ?? null,
-            userOfficeName: office?.displayName ?? null,
+            userRegion: region,
+            userOfficeId: officeId,
+            userOfficeName: officeName,
           };
         } catch (error) {
           console.error('Error fetching user data during login:', error);
           // Fallback to OAuth token data if Graph API fails
           const fallbackEmail = token.email || undefined;
-          const fallbackOffice =
-            OfficeResolver.findOfficeByEmail(fallbackEmail);
-          const userRegion: 'US' | 'EU' =
-            fallbackOffice?.region ??
-            OfficeResolver.getRegionForUser(fallbackEmail);
+          const { region, officeId, officeName } =
+            resolveOfficeAndRegion(fallbackEmail);
 
           return {
             ...token,
@@ -285,9 +299,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userId: token.sub || '',
             userDisplayName: token.name || '',
             userMail: fallbackEmail,
-            userRegion,
-            userOfficeId: fallbackOffice?.id ?? null,
-            userOfficeName: fallbackOffice?.displayName ?? null,
+            userRegion: region,
+            userOfficeId: officeId,
+            userOfficeName: officeName,
           };
         }
       }
@@ -311,14 +325,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const userMail = token.userMail || token.email || undefined;
 
       // Determine region/office from email if not set in token (for old tokens)
-      const officeFromEmail = OfficeResolver.findOfficeByEmail(userMail);
-      const userRegion =
-        token.userRegion ??
-        officeFromEmail?.region ??
-        OfficeResolver.getRegionForUser(userMail);
-      const userOfficeId = token.userOfficeId ?? officeFromEmail?.id ?? null;
-      const userOfficeName =
-        token.userOfficeName ?? officeFromEmail?.displayName ?? null;
+      const resolved = resolveOfficeAndRegion(userMail);
+      const userRegion = token.userRegion ?? resolved.region;
+      const userOfficeId = token.userOfficeId ?? resolved.officeId;
+      const userOfficeName = token.userOfficeName ?? resolved.officeName;
 
       return {
         ...session,
