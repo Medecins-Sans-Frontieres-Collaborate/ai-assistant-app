@@ -24,7 +24,7 @@ interface ConversationItemProps {
   handleRenameConversation: (id: string, currentName: string) => void;
   handleExportConversation: (conversation: Conversation) => void;
   folders: any[];
-  t: any;
+  t: (key: string) => string;
 }
 
 function ConversationItemInner({
