@@ -12,6 +12,7 @@ import {
   ActiveFile,
   AssistantMessageVersion,
   Conversation,
+  MessageToolArtifacts,
   ToolCallRecord,
   isAssistantMessageGroup,
 } from '@/types/chat';
@@ -143,6 +144,40 @@ interface ConversationStore {
     messageIndex: number,
     toolCalls: ToolCallRecord[],
   ) => void;
+}
+
+/**
+ * Applies an artifact update to the addressed message — the active version when
+ * it's a regenerated group, or the entry itself for a legacy message — and
+ * bumps `updatedAt`. Leaves the conversation untouched when it doesn't match or
+ * the index is empty. Shared by `recordApprovalOutcome` and `recordToolCalls`.
+ */
+function applyMessageArtifacts(
+  conversations: Conversation[],
+  conversationId: string,
+  messageIndex: number,
+  update: (current: MessageToolArtifacts) => Partial<MessageToolArtifacts>,
+): Conversation[] {
+  return conversations.map((c) => {
+    if (c.id !== conversationId) return c;
+
+    const messages = [...c.messages];
+    const entry = messages[messageIndex];
+    if (!entry) return c;
+
+    if (isAssistantMessageGroup(entry)) {
+      const versions = [...entry.versions];
+      const active = versions[entry.activeIndex];
+      if (active) {
+        versions[entry.activeIndex] = { ...active, ...update(active) };
+        messages[messageIndex] = { ...entry, versions };
+      }
+    } else {
+      messages[messageIndex] = { ...entry, ...update(entry) };
+    }
+
+    return { ...c, messages, updatedAt: new Date().toISOString() };
+  });
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -579,50 +614,23 @@ export const useConversationStore = create<ConversationStore>()(
         source,
       ) =>
         set((state) => ({
-          conversations: state.conversations.map((c) => {
-            if (c.id !== conversationId) return c;
-
-            const messages = [...c.messages];
-            const entry = messages[messageIndex];
-            if (!entry) return c;
-
-            if (isAssistantMessageGroup(entry)) {
-              const versions = [...entry.versions];
-              const active = versions[entry.activeIndex];
-              if (active) {
-                versions[entry.activeIndex] = {
-                  ...active,
-                  approvalOutcomes: {
-                    ...(active.approvalOutcomes ?? {}),
-                    [approvalRequestId]: approve,
-                  },
-                  approvalSources: source
-                    ? {
-                        ...(active.approvalSources ?? {}),
-                        [approvalRequestId]: source,
-                      }
-                    : active.approvalSources,
-                };
-                messages[messageIndex] = { ...entry, versions };
-              }
-            } else {
-              messages[messageIndex] = {
-                ...entry,
-                approvalOutcomes: {
-                  ...(entry.approvalOutcomes ?? {}),
-                  [approvalRequestId]: approve,
-                },
-                approvalSources: source
-                  ? {
-                      ...(entry.approvalSources ?? {}),
-                      [approvalRequestId]: source,
-                    }
-                  : entry.approvalSources,
-              };
-            }
-
-            return { ...c, messages, updatedAt: new Date().toISOString() };
-          }),
+          conversations: applyMessageArtifacts(
+            state.conversations,
+            conversationId,
+            messageIndex,
+            (current) => ({
+              approvalOutcomes: {
+                ...(current.approvalOutcomes ?? {}),
+                [approvalRequestId]: approve,
+              },
+              approvalSources: source
+                ? {
+                    ...(current.approvalSources ?? {}),
+                    [approvalRequestId]: source,
+                  }
+                : current.approvalSources,
+            }),
+          ),
         })),
 
       resetAutoApprove: (conversationId) =>
@@ -643,32 +651,17 @@ export const useConversationStore = create<ConversationStore>()(
         })),
 
       recordToolCalls: (conversationId, messageIndex, toolCalls) =>
-        set((state) => ({
-          conversations: state.conversations.map((c) => {
-            if (c.id !== conversationId) return c;
-            if (toolCalls.length === 0) return c;
-
-            const messages = [...c.messages];
-            const entry = messages[messageIndex];
-            if (!entry) return c;
-
-            if (isAssistantMessageGroup(entry)) {
-              const versions = [...entry.versions];
-              const active = versions[entry.activeIndex];
-              if (active) {
-                versions[entry.activeIndex] = {
-                  ...active,
-                  toolCalls,
-                };
-                messages[messageIndex] = { ...entry, versions };
-              }
-            } else {
-              messages[messageIndex] = { ...entry, toolCalls };
-            }
-
-            return { ...c, messages, updatedAt: new Date().toISOString() };
-          }),
-        })),
+        set((state) => {
+          if (toolCalls.length === 0) return state;
+          return {
+            conversations: applyMessageArtifacts(
+              state.conversations,
+              conversationId,
+              messageIndex,
+              () => ({ toolCalls }),
+            ),
+          };
+        }),
     }),
     {
       name: 'conversation-storage',
