@@ -24,7 +24,6 @@ import { SearchMode } from '@/types/searchMode';
 import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
-import { env } from '@/config/environment';
 import { TokenCredential } from '@azure/identity';
 
 /**
@@ -210,16 +209,6 @@ export const requestParsingMiddleware: Middleware = async (req) => {
 };
 
 /**
- * Content analysis middleware.
- * Analyzes the messages to determine what types of content are present.
- */
-export const contentAnalysisMiddleware: Middleware = async (req) => {
-  // This middleware needs access to messages from previous middleware
-  // We'll need to make this a factory that accepts the current context
-  return {};
-};
-
-/**
  * Factory for content analysis middleware that needs access to parsed messages.
  */
 export const createContentAnalysisMiddleware = (
@@ -338,6 +327,10 @@ export const createCredentialMiddleware = async (
   }
 
   try {
+    // Acquire the app's OBO access token once — both lazy discovery and the
+    // credential binding below need it, and the fetch is the same either way.
+    const appAccessToken = await getAccessTokenForOBO(req);
+
     // Resolve the Foundry endpoint server-side. The request body's
     // `model.foundryEndpoint` is NEVER trusted — using it would let a client
     // redirect their own (or another user's) OBO bearer token to an
@@ -374,7 +367,6 @@ export const createCredentialMiddleware = async (
     // through to the regional default.
     if (!resolvedEndpoint && userMail && agentName && sourcePath) {
       try {
-        const appAccessToken = await getAccessTokenForOBO(req);
         if (appAccessToken) {
           const armToken =
             await UserTokenProvider.getInstance().getArmToken(appAccessToken);
@@ -423,7 +415,6 @@ export const createCredentialMiddleware = async (
     let userCredential: TokenCredential | undefined;
 
     try {
-      const appAccessToken = await getAccessTokenForOBO(req);
       if (!appAccessToken) throw new Error('No OBO token');
 
       const tokenProvider = UserTokenProvider.getInstance();
