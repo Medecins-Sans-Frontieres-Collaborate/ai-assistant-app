@@ -5,6 +5,10 @@ import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
 import { Tone } from './tone';
 
+// Type-only import: erased at build time, so client bundles don't pull in
+// lib/streamMarkers — but ToolCallRecord stays tied to its marker payload.
+import type { ToolCallRecordPayload } from '@/lib/streamMarkers';
+
 export enum MessageType {
   TEXT = 'TEXT',
   IMAGE = 'IMAGE',
@@ -57,7 +61,7 @@ export interface ThinkingContent {
   thinking: string;
 }
 
-export interface Message {
+export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
   role: Role;
@@ -87,48 +91,44 @@ export interface Message {
   pendingTranscriptionFilename?: string;
   /** Blob path for cleanup after transcription completes */
   pendingTranscriptionBlobPath?: string;
-  /**
-   * Outcomes for MCP tool-approval prompts that originated in this message.
-   * Keyed by `approval_request_id`; value is the user's decision (true=approve,
-   * false=deny). Persisted so reloading the conversation doesn't show the
-   * card in pending state again.
-   */
-  approvalOutcomes?: Record<string, boolean>;
-  /**
-   * How each approval was resolved. Parallel to `approvalOutcomes` and used
-   * by the consent card to suppress display for auto-approved tools (those
-   * already appear in the tool usage summary instead).
-   */
-  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
-  /**
-   * Persisted records of MCP tool calls that ran while generating this
-   * message. Renders as the collapsed "Used N tools" summary below the
-   * assistant text.
-   */
-  toolCalls?: ToolCallRecord[];
-  /**
-   * Persisted consent / OAuth prompts emitted during this message. Saved so
-   * a turn that contained only a consent card (no assistant text) still
-   * renders its card after the stream finalizes and on conversation reload.
-   */
-  consentRequests?: ConsentRequest[];
 }
 
 /**
- * Subset of `ToolCallRecordPayload` we persist on a message. Mirrors the
- * marker shape but lives in `@/types/chat` so client code doesn't have to
- * reach into `lib/streamMarkers` for the type alone.
+ * The shape we persist on a message for a tool call. Identical to the wire
+ * payload — aliased rather than re-declared so the two can't drift.
  */
-export interface ToolCallRecord {
-  id: string;
-  name: string;
-  server_label: string | null;
-  arguments: string | null;
-  status: 'completed' | 'failed' | 'incomplete' | 'in_progress';
-  output: string | null;
-  error: string | null;
-  duration_ms?: number;
-  approval_request_id?: string | null;
+export type ToolCallRecord = ToolCallRecordPayload;
+
+/**
+ * Tool/approval/consent artifacts attached to an assistant turn. Shared by
+ * `Message` (legacy single-message) and `AssistantMessageVersion` (regenerated
+ * versions) so the two stay in lockstep.
+ */
+export interface MessageToolArtifacts {
+  /**
+   * Outcomes for MCP tool-approval prompts that originated in this turn.
+   * Keyed by `approval_request_id`; value is the user's decision (true=approve,
+   * false=deny). Persisted so reloading the conversation doesn't show the card
+   * in pending state again.
+   */
+  approvalOutcomes?: Record<string, boolean>;
+  /**
+   * How each approval was resolved. Parallel to `approvalOutcomes` and used by
+   * the consent card to suppress display for auto-approved tools (those already
+   * appear in the tool usage summary instead).
+   */
+  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
+  /**
+   * Persisted records of MCP tool calls that ran while generating this turn.
+   * Renders as the collapsed "Used N tools" summary below the assistant text.
+   */
+  toolCalls?: ToolCallRecord[];
+  /**
+   * Persisted consent / OAuth prompts emitted during this turn. Saved so a turn
+   * that contained only a consent card (no assistant text) still renders its
+   * card after the stream finalizes and on conversation reload.
+   */
+  consentRequests?: ConsentRequest[];
 }
 
 /**
@@ -152,7 +152,7 @@ export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
  * Represents a single assistant message version.
  * Used when the user regenerates responses - each regeneration creates a new version.
  */
-export interface AssistantMessageVersion {
+export interface AssistantMessageVersion extends MessageToolArtifacts {
   content:
     | string
     | Array<TextMessageContent | FileMessageContent>
@@ -165,16 +165,6 @@ export interface AssistantMessageVersion {
   transcript?: TranscriptMetadata;
   error?: boolean;
   createdAt: string; // ISO timestamp for when this version was generated
-  /**
-   * Outcomes for MCP tool-approval prompts that originated in this version.
-   * Keyed by `approval_request_id`.
-   */
-  approvalOutcomes?: Record<string, boolean>;
-  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
-  /** Tool calls that ran while generating this version. */
-  toolCalls?: ToolCallRecord[];
-  /** Consent / OAuth prompts emitted while generating this version. */
-  consentRequests?: ConsentRequest[];
 }
 
 /**
