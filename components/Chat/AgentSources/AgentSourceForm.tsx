@@ -198,7 +198,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     }
 
     if (!subscriptionId || !resourceGroup || !accountName) {
-      setError('Select a subscription, account, and project.');
+      setError(t('selectAllRequired'));
       return;
     }
 
@@ -235,9 +235,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
         {/* Header */}
         <div className="mb-1 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {existingSource
-              ? t('editConnection') || 'Edit Connection'
-              : t('connectFoundryProject')}
+            {existingSource ? t('editConnection') : t('connectFoundryProject')}
           </h3>
           <button
             onClick={onClose}
@@ -291,7 +289,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
           {/* Mode toggle */}
           <div className="flex items-center justify-between">
             <label className="text-sm font-medium text-gray-900 dark:text-white">
-              Foundry Project
+              {t('foundryProjectLabel')}
             </label>
             <button
               type="button"
@@ -300,7 +298,9 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               }
               className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             >
-              {inputMode === 'browse' ? 'Enter manually' : 'Browse resources'}
+              {inputMode === 'browse'
+                ? t('enterManually')
+                : t('browseResources')}
             </button>
           </div>
 
@@ -309,7 +309,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             <div className="space-y-3">
               <div>
                 <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                  Subscription ID
+                  {t('subscriptionIdLabel')}
                 </label>
                 <input
                   type="text"
@@ -325,7 +325,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               </div>
               <div>
                 <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                  Resource Group
+                  {t('resourceGroupLabel')}
                 </label>
                 <input
                   type="text"
@@ -342,7 +342,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                    Account Name
+                    {t('accountNameLabel')}
                   </label>
                   <input
                     type="text"
@@ -358,7 +358,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                 </div>
                 <div>
                   <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                    Project Name
+                    {t('projectNameLabel')}
                   </label>
                   <input
                     type="text"
@@ -394,7 +394,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                 {loadingSubs ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
                     <IconLoader2 size={14} className="animate-spin" />
-                    Loading subscriptions...
+                    {t('loadingSubscriptions')}
                   </div>
                 ) : (
                   <select
@@ -410,7 +410,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                     }}
                     className={selectClass}
                   >
-                    <option value="">Select a subscription...</option>
+                    <option value="">{t('selectSubscription')}</option>
                     {subscriptions.map((sub) => (
                       <option key={sub.id} value={sub.id}>
                         {sub.name}
@@ -438,11 +438,11 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                   {loadingAccounts ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
                       <IconLoader2 size={14} className="animate-spin" />
-                      Loading accounts...
+                      {t('loadingAccounts')}
                     </div>
                   ) : accounts.length === 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400 py-1.5">
-                      No Foundry accounts found in this subscription.
+                      {t('noAccountsFound')}
                     </p>
                   ) : (
                     <select
@@ -465,7 +465,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                       }}
                       className={selectClass}
                     >
-                      <option value="">Select an account...</option>
+                      <option value="">{t('selectAccount')}</option>
                       {accounts.map((acct) => (
                         <option key={acct.name} value={acct.name}>
                           {acct.name}
@@ -495,11 +495,11 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                   {loadingProjects ? (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 py-1.5">
                       <IconLoader2 size={14} className="animate-spin" />
-                      Loading projects...
+                      {t('loadingProjects')}
                     </div>
                   ) : projects.length === 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400 py-1.5">
-                      No projects found. Using &quot;default&quot;.
+                      {t('noProjectsFound')}
                     </p>
                   ) : (
                     <select
@@ -544,7 +544,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             ) : (
               <>
                 <IconPlus size={16} />
-                {existingSource ? t('save') || 'Save' : t('connect')}
+                {existingSource ? t('save') : t('connect')}
               </>
             )}
           </button>
