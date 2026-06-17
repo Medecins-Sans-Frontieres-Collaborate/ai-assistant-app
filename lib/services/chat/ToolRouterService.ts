@@ -11,7 +11,7 @@ import { OpenAI } from 'openai';
 /**
  * ToolRouterService
  *
- * Determines which tools are needed for a given message using GPT-4.1.
+ * Determines which tools are needed for a given message using gpt-5.4-nano.
  * Uses a lightweight model to intelligently decide when web search is beneficial.
  */
 export class ToolRouterService {
@@ -209,7 +209,7 @@ IMPORTANT: Always provide searchQuery in your response:
    * Extracts text content from complex message content structures.
    * Handles string, array, and object content types.
    */
-  private extractTextContent(content: any): string {
+  private extractTextContent(content: Message['content']): string {
     if (typeof content === 'string') {
       return content;
     }
@@ -217,14 +217,10 @@ IMPORTANT: Always provide searchQuery in your response:
     if (Array.isArray(content)) {
       const textParts = content
         .filter((c) => c.type === 'text')
-        .map((c) => c.text);
+        .map((c) => ('text' in c ? c.text : ''));
       return textParts.join('\n');
     }
 
-    if (content && typeof content === 'object' && 'text' in content) {
-      return content.text;
-    }
-
-    return '[non-text content]';
+    return content.text;
   }
 }
