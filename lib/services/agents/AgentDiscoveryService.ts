@@ -7,9 +7,18 @@
  * The ARM API naturally filters by RBAC — the user's OBO token ensures they only
  * see Agent Applications they're authorized to use.
  */
+import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
+
 import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
+import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
+
+import { env } from '@/config/environment';
 
 const ARM_API_VERSION = '2025-10-01-preview';
+
+// Safety cap on data-plane agent listing so a misbehaving/huge project can't
+// stall discovery. Far above any realistic agent count per project.
+const DATAPLANE_AGENT_LIMIT = 200;
 
 // ARM Application resource names follow the same naming constraint as account
 // names — alphanumeric + hyphens, 2-64 chars. Anchored to prevent path traversal
@@ -178,6 +187,29 @@ export class AgentDiscoveryService {
 
     const agents: DiscoveredAgent[] = enriched;
 
+    // New-model agents (and legacy *unpublished* agents) have no ARM "Agent
+    // Application" resource, so the control-plane call above can't see them.
+    // Union in a best-effort data-plane listing under the user's Foundry OBO
+    // token — RBAC is still enforced (project-scoped 403 => empty). ARM wins on
+    // conflicts because it carries ui-* tags and the deployment-pinned version.
+    if (env.FOUNDRY_DATAPLANE_DISCOVERY && foundryToken) {
+      const projectEndpoint = this.deriveProjectEndpoint(resourcePath);
+      if (projectEndpoint) {
+        const dpAgents = await this.listProjectAgentsDataPlane(
+          foundryToken,
+          projectEndpoint,
+        ).catch(() => [] as DiscoveredAgent[]);
+
+        const seen = new Set(agents.map((a) => a.agentName));
+        for (const dp of dpAgents) {
+          if (!seen.has(dp.agentName)) {
+            seen.add(dp.agentName);
+            agents.push(dp);
+          }
+        }
+      }
+    }
+
     // Cache results
     this.cache.set(cacheKey, {
       agents,
@@ -263,12 +295,10 @@ export class AgentDiscoveryService {
       : undefined;
 
     // Foundry has no display-name field separate from the slug, so prettify
-    // the slug for the picker. Hyphens/underscores → spaces, title-case.
-    // The raw slug is preserved on `id` for the subtitle.
-    const rawName = dataPlane?.name?.trim() || app.name;
-    const prettified = rawName
-      .replace(/[-_]+/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase());
+    // the slug for the picker. The raw slug is preserved on `id` for the subtitle.
+    const prettified = this.prettifyAgentName(
+      dataPlane?.name?.trim() || app.name,
+    );
 
     return {
       id: app.id,
@@ -324,6 +354,80 @@ export class AgentDiscoveryService {
     } catch {
       return null;
     }
+  }
+
+  /**
+   * Prettifies an agent slug for the picker: hyphens/underscores → spaces,
+   * title-cased. Foundry exposes no separate display name from the slug.
+   */
+  private prettifyAgentName(raw: string): string {
+    return raw.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
+
+  /**
+   * Derives the Foundry data-plane PROJECT endpoint for an ARM resource path.
+   *
+   * New-model agents have no ARM "Agent Application" resource to read a baseUrl
+   * from, so we construct the documented project endpoint
+   * (`https://{account}.services.ai.azure.com/api/projects/{project}`) from the
+   * account + project names in the ARM path. Account-only paths (no project
+   * segment) can't be listed per-project and return null. The constructed
+   * endpoint is validated against the Foundry host allow-list before use.
+   */
+  private deriveProjectEndpoint(resourcePath: string): string | null {
+    const account = resourcePath.match(/\/accounts\/([a-zA-Z0-9-]{2,64})/)?.[1];
+    const project = resourcePath.match(/\/projects\/([a-zA-Z0-9-]{2,64})/)?.[1];
+    if (!account || !project) return null;
+    const endpoint = `https://${account}.services.ai.azure.com/api/projects/${project}`;
+    return isAllowedFoundryHost(endpoint) ? endpoint : null;
+  }
+
+  /**
+   * Lists agent objects via the Foundry data plane (new agent object model),
+   * surfacing new-model and legacy *unpublished* agents that the ARM control
+   * plane can't see. Runs under the user's Foundry OBO token, so results are
+   * RBAC-filtered at project scope — an unauthorized user gets a 403, which
+   * throws and is treated as empty by the caller. Best-effort.
+   */
+  private async listProjectAgentsDataPlane(
+    foundryToken: string,
+    projectEndpoint: string,
+  ): Promise<DiscoveredAgent[]> {
+    const { AIProjectClient } = await import('@azure/ai-projects');
+    const project = new AIProjectClient(
+      projectEndpoint,
+      createFoundryTokenCredential(foundryToken),
+    );
+
+    const agents: DiscoveredAgent[] = [];
+    for await (const a of project.agents.list()) {
+      const agentName = a?.name;
+      if (!agentName || typeof agentName !== 'string') continue;
+
+      // `agent_card` carries consumer-facing name/description in the new model
+      // (there are no ARM tags for UI metadata, so icon/color fall back to the
+      // picker's default).
+      const card = (
+        a as { agent_card?: { name?: string; description?: string } }
+      ).agent_card;
+      const latest = a?.versions?.latest as
+        | { version?: string; description?: string }
+        | undefined;
+
+      agents.push({
+        id: agentName,
+        name: this.prettifyAgentName(card?.name?.trim() || agentName),
+        description:
+          card?.description?.trim() || latest?.description?.trim() || '',
+        agentName,
+        agentVersion: latest?.version,
+        type: 'foundry',
+        foundryEndpoint: projectEndpoint,
+      });
+
+      if (agents.length >= DATAPLANE_AGENT_LIMIT) break;
+    }
+    return agents;
   }
 
   private hashKey(token: string): string {
