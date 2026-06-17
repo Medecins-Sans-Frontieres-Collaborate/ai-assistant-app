@@ -146,6 +146,12 @@ export const ChatTopbar = ({
     }
   };
 
+  // Whether to show a search-mode indicator next to the model name. Hidden for
+  // custom agents and for org agents that have web search disabled.
+  const showSearchIndicator =
+    !isCustomAgent &&
+    !(isOrganizationAgent && organizationAgentAllowWebSearch === false);
+
   return (
     <div className="sticky top-0 z-20 py-2 text-sm text-gray-500 dark:text-gray-200 transition-all duration-300 ease-in-out bg-white dark:bg-surface-dark">
       <div className="mr-8 px-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 transition-all duration-300">
@@ -177,29 +183,19 @@ export const ChatTopbar = ({
               >
                 {selectedModelName || t('chat.selectModel')}
               </span>
-              {!isCustomAgent &&
-                !(
-                  isOrganizationAgent &&
-                  organizationAgentAllowWebSearch === false
-                ) &&
-                searchMode === SearchMode.INTELLIGENT && (
-                  <IconWorld
-                    size={14}
-                    className="ml-1.5 text-blue-600 dark:text-blue-400"
-                    title={t('chat.privacyFocusedSearch')}
-                  />
-                )}
-              {!isCustomAgent &&
-                !(
-                  isOrganizationAgent &&
-                  organizationAgentAllowWebSearch === false
-                ) &&
-                searchMode === SearchMode.AGENT && (
-                  <AzureAIIcon
-                    className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
-                    aria-label={t('chat.azureAIAgentMode')}
-                  />
-                )}
+              {showSearchIndicator && searchMode === SearchMode.INTELLIGENT && (
+                <IconWorld
+                  size={14}
+                  className="ml-1.5 text-blue-600 dark:text-blue-400"
+                  title={t('chat.privacyFocusedSearch')}
+                />
+              )}
+              {showSearchIndicator && searchMode === SearchMode.AGENT && (
+                <AzureAIIcon
+                  className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
+                  aria-label={t('chat.azureAIAgentMode')}
+                />
+              )}
               {isCustomAgent && (
                 <AzureAIIcon
                   className="ml-1.5 w-3.5 h-3.5 text-blue-600 dark:text-blue-400"
