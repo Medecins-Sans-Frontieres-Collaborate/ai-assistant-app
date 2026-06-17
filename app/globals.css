@@ -1,5 +1,5 @@
 /* KaTeX CSS for math rendering */
-@import "katex/dist/katex.min.css";
+@import 'katex/dist/katex.min.css';
 
 @tailwind base;
 @tailwind components;
@@ -127,12 +127,12 @@ pre {
 }
 
 /* Ensure Streamdown code blocks respect container bounds */
-[data-streamdown="code-block"] {
+[data-streamdown='code-block'] {
   max-width: 100%;
   overflow: hidden;
 }
 
-[data-streamdown="code-block-body"] {
+[data-streamdown='code-block-body'] {
   max-width: 100%;
   overflow-x: auto;
 }
@@ -254,7 +254,8 @@ select {
 
 /* Breathing animation for streaming indicator */
 @keyframes breathing {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.7;
   }
@@ -349,12 +350,12 @@ select {
 
 /* Shiki dual theme support - Streamdown uses Tailwind v4 syntax that doesn't work in v3 */
 /* This CSS applies the --shiki-dark variables that Shiki sets inline */
-.dark [data-streamdown="code-block-body"] span {
+.dark [data-streamdown='code-block-body'] span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
 
-.dark [data-streamdown="code-block-body"] {
+.dark [data-streamdown='code-block-body'] {
   background-color: var(--shiki-dark-bg) !important;
 }
 
