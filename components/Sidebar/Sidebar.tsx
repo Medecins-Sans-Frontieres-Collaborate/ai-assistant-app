@@ -715,7 +715,11 @@ export const Sidebar = memo(function Sidebar() {
                         aria-expanded={
                           !folderManager.collapsedFolders.has(folder.id)
                         }
-                        aria-label={`${folderManager.collapsedFolders.has(folder.id) ? 'Expand' : 'Collapse'} folder ${folder.name}`}
+                        aria-label={
+                          folderManager.collapsedFolders.has(folder.id)
+                            ? t('sidebar.expandFolder', { name: folder.name })
+                            : t('sidebar.collapseFolder', { name: folder.name })
+                        }
                       >
                         {folderManager.collapsedFolders.has(folder.id) ? (
                           <IconChevronRight
@@ -782,7 +786,9 @@ export const Sidebar = memo(function Sidebar() {
                                 );
                               }}
                               title={t('Options')}
-                              aria-label={`${folder.name} options`}
+                              aria-label={t('sidebar.folderOptions', {
+                                name: folder.name,
+                              })}
                               aria-expanded={showFolderMenuId === folder.id}
                             >
                               <IconDots
