@@ -48,10 +48,11 @@ export const OAuthConsentCard: FC<OAuthConsentCardProps> = ({
   );
   const updateConversation = useConversationStore((s) => s.updateConversation);
 
+  // Capture the pending-resume flag once at mount (lazy initializer runs only
+  // on first render); the effect below then clears it so a subsequent card for
+  // this server doesn't read a stale signal.
   const [incompleteSignIn] = useState(() => pendingForThisServer);
 
-  // Capture the pending-resume flag once, then drop it so a later card
-  // for this server doesn't read a stale signal.
   useEffect(() => {
     if (incompleteSignIn) {
       clearPendingOAuthResumeFor(serverLabel);
