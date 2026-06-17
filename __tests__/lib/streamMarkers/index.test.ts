@@ -15,9 +15,38 @@ import {
   extractConsentRequests,
   extractLatestAgentActivity,
   extractToolCallRecords,
+  scanStreamEvents,
   stripIncompleteStreamMarkers,
 } from '@/lib/streamMarkers';
 import { describe, expect, it } from 'vitest';
+
+/**
+ * Drives scanStreamEvents the way StreamParser.processChunk does: accumulate
+ * the full text, re-scan from the monotonic processedIndex each chunk, and
+ * collect display deltas + events across the whole stream.
+ */
+function runChunks(chunks: string[]): {
+  display: string;
+  events: ReturnType<typeof scanStreamEvents>['events'];
+} {
+  let text = '';
+  let processedIndex = 0;
+  let display = '';
+  const events: ReturnType<typeof scanStreamEvents>['events'] = [];
+  for (const c of chunks) {
+    text += c;
+    const scan = scanStreamEvents(text, processedIndex);
+    processedIndex = scan.nextIndex;
+    display += scan.displayDelta;
+    events.push(...scan.events);
+  }
+  return { display, events };
+}
+
+/** Splits `full` into two chunks at `idx`. */
+function splitAt(full: string, idx: number): [string, string] {
+  return [full.slice(0, idx), full.slice(idx)];
+}
 
 describe('emitAgentActivity', () => {
   it('produces a sentinel-wrapped JSON payload', () => {
@@ -372,5 +401,60 @@ describe('stripIncompleteStreamMarkers', () => {
     expect(out).toContain(CONSENT_REQUEST_OPEN);
     expect(out).not.toContain(AGENT_ACTIVITY_OPEN);
     expect(out).toContain('mid');
+  });
+});
+
+describe('scanStreamEvents — markers split across chunk boundaries', () => {
+  const activity =
+    AGENT_ACTIVITY_OPEN +
+    '{"key":"chat.activity.searchingWeb"}' +
+    AGENT_ACTIVITY_CLOSE;
+  const full = `before${activity}after`;
+
+  it('recovers an event when the OPEN tag is split across chunks', () => {
+    // Split partway through "<<<AGENT_ACTIVITY>>>".
+    const idx = 'before'.length + '<<<AGENT_ACTI'.length;
+    const { display, events } = runChunks(splitAt(full, idx));
+
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      type: 'agent_activity',
+      payload: { key: 'chat.activity.searchingWeb' },
+    });
+    // No marker fragment leaks into display.
+    expect(display).toBe('beforeafter');
+  });
+
+  it('recovers an event when the CLOSE tag is split across chunks', () => {
+    const idx = full.indexOf(AGENT_ACTIVITY_CLOSE) + '<<<END_AGENT'.length;
+    const { display, events } = runChunks(splitAt(full, idx));
+
+    expect(events).toHaveLength(1);
+    expect(display).toBe('beforeafter');
+  });
+
+  it('recovers an event when the JSON payload is split across chunks', () => {
+    const idx = full.indexOf('searchingWeb');
+    const { display, events } = runChunks(splitAt(full, idx));
+
+    expect(events).toHaveLength(1);
+    expect(display).toBe('beforeafter');
+  });
+
+  it('recovers an event streamed one character at a time', () => {
+    const { display, events } = runChunks(full.split(''));
+
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ type: 'agent_activity' });
+    expect(display).toBe('beforeafter');
+  });
+
+  it('does not hold back literal "<<<" that is not a marker prefix', () => {
+    // A chunk ending in "<<<" is held back, but once the next chunk proves it
+    // is not a marker open it must be flushed (no permanent swallow).
+    const { display, events } = runChunks(['a <<<', 'x b']);
+
+    expect(events).toHaveLength(0);
+    expect(display).toBe('a <<<x b');
   });
 });
