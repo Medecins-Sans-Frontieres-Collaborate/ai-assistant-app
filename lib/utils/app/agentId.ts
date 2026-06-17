@@ -5,6 +5,7 @@
  * - Legacy: asst_xxxxx (Azure AI Assistants API)
  * - New: agent-name (Azure AI Foundry Agent Service)
  */
+import { stringHash } from '@/lib/utils/shared/stringHash';
 
 const LEGACY_AGENT_ID_PATTERN = /^asst_[A-Za-z0-9_-]+$/;
 const NEW_AGENT_NAME_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
@@ -32,9 +33,5 @@ export function isValidAgentId(id: string): boolean {
  */
 export function shortSourceHash(source: string | undefined | null): string {
   if (!source) return '0';
-  let hash = 0;
-  for (let i = 0; i < source.length; i++) {
-    hash = (hash * 31 + source.charCodeAt(i)) | 0;
-  }
-  return Math.abs(hash).toString(36).slice(0, 6);
+  return Math.abs(stringHash(source)).toString(36).slice(0, 6);
 }
