@@ -174,6 +174,34 @@ const StreamingSpeedSchema = z.object({
   delayMs: z.number().int().min(1).max(100),
 });
 
+// Minimal schema for ActiveFile to allow optional validation
+const ActiveFileProcessedContentSchema = z
+  .object({
+    type: z.enum(['document', 'transcript', 'image']),
+    content: z.string(),
+    summary: z.string().optional(),
+    tokenEstimate: z.number().int().nonnegative(),
+    tokenEstimateEncoding: z.string().optional(),
+    processedAt: z.string(),
+  })
+  .partial({ summary: true, tokenEstimateEncoding: true });
+
+const ActiveFileSchema = z.object({
+  id: z.string(),
+  url: urlOrDataUrl('Invalid file URL'),
+  originalFilename: z.string(),
+  addedAt: z.string(),
+  sourceMessageId: z.string(),
+  status: z.enum(['idle', 'processing', 'ready', 'error']),
+  lastUsedAt: z.string().optional(),
+  errorMessage: z.string().optional(),
+  pinned: z.boolean().optional(),
+  processedContent: ActiveFileProcessedContentSchema.optional(),
+  mimeType: z.string().optional(),
+  sizeBytes: z.number().int().nonnegative().optional(),
+  sha256: z.string().optional(),
+});
+
 /**
  * Zod schema for the main chat request body.
  */
@@ -183,7 +211,10 @@ const ChatBodySchema = z
     messages: z
       .array(MessageSchema)
       .min(1, 'At least one message is required')
-      .max(100, 'Too many messages (max 100)'),
+      .max(
+        VALIDATION_LIMITS.MAX_API_MESSAGES,
+        `Too many messages (max ${VALIDATION_LIMITS.MAX_API_MESSAGES})`,
+      ),
     prompt: z
       .string()
       .max(10000, 'System prompt too long (max 10,000 chars)')
@@ -237,28 +268,7 @@ const ChatBodySchema = z
       .max(16)
       .optional(),
     isEditorOpen: z.boolean().optional(),
-    activeFiles: z
-      .array(
-        z
-          .object({
-            id: z.string(),
-            url: z.string(),
-            originalFilename: z.string(),
-            addedAt: z.string(),
-            sourceMessageId: z.string(),
-            status: z.enum(['idle', 'processing', 'ready', 'error']),
-            lastUsedAt: z.string().optional(),
-            errorMessage: z.string().optional(),
-            pinned: z.boolean().optional(),
-            processedContent: z.any().optional(),
-            mimeType: z.string().optional(),
-            sizeBytes: z.number().optional(),
-            sha256: z.string().optional(),
-          })
-          .passthrough(),
-      )
-      .max(50)
-      .optional(),
+    activeFiles: z.array(ActiveFileSchema).max(50).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
     autoInjectPinnedImages: z.boolean().optional(),
   })
