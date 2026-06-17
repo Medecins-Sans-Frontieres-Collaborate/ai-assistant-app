@@ -116,7 +116,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               {/* Temperature Setting */}
               <div>
                 <div className="text-sm font-bold mb-3 text-black dark:text-gray-200">
-                  {t('Default') + ' ' + t('Temperature') + '*'}
+                  {t('settings.defaultTemperatureLabel')}
                 </div>
                 <TemperatureSlider
                   temperature={state.temperature}
@@ -212,7 +212,7 @@ export const ChatSettingsSection: FC<ChatSettingsSectionProps> = ({
               {/* Custom Instructions */}
               <div className="mt-3">
                 <div className="text-sm font-bold mb-3 text-black dark:text-gray-200">
-                  {t('settings.Custom Instructions') + '*'}
+                  {t('settings.customInstructionsLabel')}
                 </div>
                 <SystemPrompt
                   prompts={homeState.prompts}
