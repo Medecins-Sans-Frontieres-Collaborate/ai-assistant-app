@@ -1,10 +1,11 @@
 import { Message, ToolRouterRequest } from '@/types/chat';
-import { OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { AgentChatService } from '../AgentChatService';
 import { ToolRouterService } from '../ToolRouterService';
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
+import { STAGE_TIMEOUTS } from '../pipeline/ChatPipeline';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { WebSearchTool } from '../tools/WebSearchTool';
 
@@ -31,9 +32,11 @@ import { getOrganizationAgentById } from '@/lib/organizationAgents';
 export class ToolRouterEnricher extends BasePipelineStage {
   readonly name = 'ToolRouterEnricher';
 
-  // Just under the 180s stage budget so a slow search degrades via the catch
-  // below instead of being killed silently by the stage timeout.
-  private static readonly SEARCH_TIMEOUT_MS = 175000;
+  // Derived to sit just under this stage's pipeline budget so a slow search
+  // degrades via the catch below instead of being killed silently by the stage
+  // timeout. Tied to STAGE_TIMEOUTS so the two can't drift apart.
+  private static readonly SEARCH_TIMEOUT_MS =
+    STAGE_TIMEOUTS.ToolRouterEnricher - 5000;
 
   private toolRouterService: ToolRouterService;
   private webSearchTool: WebSearchTool;
@@ -382,28 +385,26 @@ export class ToolRouterEnricher extends BasePipelineStage {
   /**
    * Extracts text from complex message content.
    */
-  private extractTextFromContent(content: any): string {
+  private extractTextFromContent(content: Message['content']): string {
     if (typeof content === 'string') {
       return content;
     }
 
     if (Array.isArray(content)) {
       const textContent = content.find((c) => c.type === 'text');
-      return textContent?.text || '[non-text content]';
+      return textContent && 'text' in textContent
+        ? textContent.text
+        : '[non-text content]';
     }
 
-    if (content && typeof content === 'object' && 'text' in content) {
-      return content.text;
-    }
-
-    return '[complex content]';
+    return content.text;
   }
 
   /**
    * Gets a model with agentId for search (fallback if context model doesn't have one).
    * Uses GPT-5.2 (agent name 'gpt-52') as the default search agent.
    */
-  private getAgentModelForSearch(): any {
+  private getAgentModelForSearch(): OpenAIModel | null {
     const defaultSearchModel = OpenAIModels[OpenAIModelID.GPT_5_2];
 
     if (!defaultSearchModel || !defaultSearchModel.agentId) {
