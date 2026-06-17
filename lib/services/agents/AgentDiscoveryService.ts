@@ -9,7 +9,11 @@
  */
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 
-import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
+import {
+  ARM_NAME_PATTERN,
+  isValidAccountName,
+  isValidFoundryResourcePath,
+} from '@/lib/utils/shared/armPath';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { env } from '@/config/environment';
@@ -21,10 +25,19 @@ const ARM_API_VERSION = '2025-10-01-preview';
 // stall discovery. Far above any realistic agent count per project.
 const DATAPLANE_AGENT_LIMIT = 200;
 
-// ARM Application resource names follow the same naming constraint as account
-// names — alphanumeric + hyphens, 2-64 chars. Anchored to prevent path traversal
-// or injection of additional URL segments / query params.
-const ARM_APP_NAME_REGEX = /^[a-zA-Z0-9-]{2,64}$/;
+/** Raw shape of an Agent Application as returned by the ARM list endpoint. */
+interface ArmAgentApplication {
+  name: string;
+  properties?: {
+    displayName?: string;
+    description?: string;
+    agentName?: string;
+    agents?: Array<{ agentName?: string; agentVersion?: string }>;
+    isEnabled?: boolean;
+    baseUrl?: string;
+  };
+  tags?: Record<string, string>;
+}
 
 interface FoundryAgentApp {
   /** Agent Application resource name (ARM name) */
@@ -159,29 +172,27 @@ export class AgentDiscoveryService {
       );
     }
 
-    const data = await response.json();
-    const applications: FoundryAgentApp[] = (data.value || []).map(
-      (app: any) => ({
-        id: app.name,
-        name: app.properties?.displayName || app.name,
-        description: app.properties?.description || '',
-        agentName:
-          app.properties?.agents?.[0]?.agentName ||
-          app.properties?.agentName ||
-          app.name,
-        agentVersion: app.properties?.agents?.[0]?.agentVersion,
-        isEnabled: app.properties?.isEnabled !== false,
-        baseUrl: app.properties?.baseUrl,
-        tags: app.tags || {},
-      }),
-    );
+    const data = (await response.json()) as { value?: ArmAgentApplication[] };
+    const applications: FoundryAgentApp[] = (data.value || []).map((app) => ({
+      id: app.name,
+      name: app.properties?.displayName || app.name,
+      description: app.properties?.description || '',
+      agentName:
+        app.properties?.agents?.[0]?.agentName ||
+        app.properties?.agentName ||
+        app.name,
+      agentVersion: app.properties?.agents?.[0]?.agentVersion,
+      isEnabled: app.properties?.isEnabled !== false,
+      baseUrl: app.properties?.baseUrl,
+      tags: app.tags || {},
+    }));
 
     const enabledApps = applications.filter((app) => app.isEnabled);
 
     // Best-effort enrichment from the Foundry data plane: each Application
     // wraps a project-level agent that owns the real name and description.
     // ARM only exposes the Application's slug and (often null) description.
-    const enriched = await Promise.all(
+    const agents: DiscoveredAgent[] = await Promise.all(
       enabledApps.map(async (app) => {
         const dp = foundryToken
           ? await this.fetchDataPlaneAgent(foundryToken, app).catch(() => null)
@@ -189,8 +200,6 @@ export class AgentDiscoveryService {
         return this.mapToDiscoveredAgent(app, dp);
       }),
     );
-
-    const agents: DiscoveredAgent[] = enriched;
 
     // New-model agents (and legacy *unpublished* agents) have no ARM "Agent
     // Application" resource, so the control-plane call above can't see them.
@@ -240,7 +249,8 @@ export class AgentDiscoveryService {
     if (!isValidFoundryResourcePath(resourcePath)) {
       throw new Error('Invalid Foundry resource path');
     }
-    if (!ARM_APP_NAME_REGEX.test(appName)) {
+    // ARM Application names follow the same constraint as account names.
+    if (!isValidAccountName(appName)) {
       throw new Error('Invalid agent application name');
     }
     const url = `https://management.azure.com${resourcePath}/applications/${appName}?api-version=${ARM_API_VERSION}`;
@@ -332,7 +342,7 @@ export class AgentDiscoveryService {
     if (!app.baseUrl || !app.agentName) return null;
     const projectEndpoint = app.baseUrl.split('/applications/')[0];
     if (!projectEndpoint) return null;
-    if (!/^[a-zA-Z0-9-]{2,64}$/.test(app.agentName)) return null;
+    if (!isValidAccountName(app.agentName)) return null;
 
     try {
       const res = await fetch(
@@ -380,8 +390,12 @@ export class AgentDiscoveryService {
    * endpoint is validated against the Foundry host allow-list before use.
    */
   private deriveProjectEndpoint(resourcePath: string): string | null {
-    const account = resourcePath.match(/\/accounts\/([a-zA-Z0-9-]{2,64})/)?.[1];
-    const project = resourcePath.match(/\/projects\/([a-zA-Z0-9-]{2,64})/)?.[1];
+    const account = resourcePath.match(
+      new RegExp(`/accounts/(${ARM_NAME_PATTERN})`),
+    )?.[1];
+    const project = resourcePath.match(
+      new RegExp(`/projects/(${ARM_NAME_PATTERN})`),
+    )?.[1];
     if (!account || !project) return null;
     const endpoint = `https://${account}.services.ai.azure.com/api/projects/${project}`;
     return isAllowedFoundryHost(endpoint) ? endpoint : null;

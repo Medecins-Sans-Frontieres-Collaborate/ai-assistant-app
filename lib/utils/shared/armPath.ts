@@ -15,9 +15,16 @@ export function isValidFoundryResourcePath(path: string): boolean {
   return FOUNDRY_RESOURCE_PATH_REGEX.test(path);
 }
 
+/**
+ * Character/length constraint for ARM account, project, and agent-application
+ * names. Exported as a raw pattern source so callers can embed it in larger
+ * regexes (e.g. extracting an account name from a path) without re-deriving it.
+ */
+export const ARM_NAME_PATTERN = '[a-zA-Z0-9-]{2,64}';
+
 const SUBSCRIPTION_ID_REGEX = /^[a-zA-Z0-9-]{1,64}$/;
 const RESOURCE_GROUP_REGEX = /^[a-zA-Z0-9._()-]{1,90}$/;
-const ACCOUNT_NAME_REGEX = /^[a-zA-Z0-9-]{2,64}$/;
+const ACCOUNT_NAME_REGEX = new RegExp(`^${ARM_NAME_PATTERN}$`);
 
 export function isValidSubscriptionId(id: string): boolean {
   return SUBSCRIPTION_ID_REGEX.test(id);
