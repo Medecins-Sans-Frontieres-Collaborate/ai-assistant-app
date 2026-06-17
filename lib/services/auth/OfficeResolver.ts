@@ -32,25 +32,56 @@ export interface Office {
  * fallback. Custom sources users add manually take precedence over their office defaults.
  */
 export class OfficeResolver {
-  private static officesCache: Office[] | null = null;
+  /**
+   * Resolved offices paired with their (lowercased) email domains, so matching
+   * never relies on positional alignment between the raw config and the
+   * hydrated `Office[]`.
+   */
+  private static officesCache: Array<{
+    office: Office;
+    emailDomains: string[];
+  }> | null = null;
+
+  /**
+   * Resolves all configured offices, hydrating env-var-backed project IDs and
+   * carrying each office's email domains alongside it. Cached after first call.
+   */
+  private static getResolvedOffices(): Array<{
+    office: Office;
+    emailDomains: string[];
+  }> {
+    if (OfficeResolver.officesCache) return OfficeResolver.officesCache;
+
+    const raw = (officesConfig as { offices: RawOffice[] }).offices ?? [];
+    OfficeResolver.officesCache = raw.map((o) => ({
+      office: {
+        id: o.id,
+        displayName: o.displayName,
+        region: o.region,
+        foundryProjects: o.foundryProjectsEnv
+          .flatMap((envName) => (process.env[envName] ?? '').split(','))
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0),
+      },
+      emailDomains: o.emailDomains.map((d) => d.toLowerCase()),
+    }));
+    return OfficeResolver.officesCache;
+  }
 
   /**
    * Resolves all configured offices, hydrating env-var-backed project IDs.
    */
   static getAllOffices(): Office[] {
-    if (OfficeResolver.officesCache) return OfficeResolver.officesCache;
+    return OfficeResolver.getResolvedOffices().map((e) => e.office);
+  }
 
-    const raw = (officesConfig as { offices: RawOffice[] }).offices ?? [];
-    OfficeResolver.officesCache = raw.map((o) => ({
-      id: o.id,
-      displayName: o.displayName,
-      region: o.region,
-      foundryProjects: o.foundryProjectsEnv
-        .flatMap((envName) => (process.env[envName] ?? '').split(','))
-        .map((s) => s.trim())
-        .filter((s) => s.length > 0),
-    }));
-    return OfficeResolver.officesCache;
+  /**
+   * Region fallback when no office matched: the legacy "newyork" email
+   * substring check, then 'EU' as the global default.
+   */
+  private static regionFallback(email: string | undefined | null): UserRegion {
+    if (email && email.toLowerCase().includes('newyork')) return 'US';
+    return 'EU';
   }
 
   /**
@@ -62,19 +93,17 @@ export class OfficeResolver {
     const domain = email.toLowerCase().split('@')[1];
     if (!domain) return null;
 
-    const raw = (officesConfig as { offices: RawOffice[] }).offices ?? [];
-    const offices = OfficeResolver.getAllOffices();
-
     // Score-based: prefer the most specific (longest) domain match
     let best: { office: Office; score: number } | null = null;
-    for (let i = 0; i < raw.length; i++) {
-      const cfg = raw[i];
-      for (const d of cfg.emailDomains) {
-        const dl = d.toLowerCase();
+    for (const {
+      office,
+      emailDomains,
+    } of OfficeResolver.getResolvedOffices()) {
+      for (const dl of emailDomains) {
         if (domain === dl || domain.endsWith('.' + dl)) {
           const score = dl.length;
           if (!best || score > best.score) {
-            best = { office: offices[i], score };
+            best = { office, score };
           }
         }
       }
@@ -89,9 +118,7 @@ export class OfficeResolver {
    */
   static getRegionForUser(email: string | undefined | null): UserRegion {
     const office = OfficeResolver.findOfficeByEmail(email);
-    if (office) return office.region;
-    if (email && email.toLowerCase().includes('newyork')) return 'US';
-    return 'EU';
+    return office?.region ?? OfficeResolver.regionFallback(email);
   }
 
   /**
@@ -127,7 +154,7 @@ export class OfficeResolver {
     officePaths: string[];
   } {
     const office = OfficeResolver.findOfficeByEmail(email);
-    const region = office?.region ?? OfficeResolver.getRegionForUser(email);
+    const region = office?.region ?? OfficeResolver.regionFallback(email);
 
     const regional =
       region === 'US'
