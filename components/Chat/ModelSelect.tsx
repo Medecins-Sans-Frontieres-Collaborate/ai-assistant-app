@@ -432,7 +432,11 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
       toast(
         (toastInstance) => (
           <div className="flex items-center gap-3">
-            <span>Disconnected {source.name}</span>
+            <span>
+              {t('agentsTab.agentSources.disconnectedToast', {
+                name: source.name,
+              })}
+            </span>
             <button
               onClick={() => {
                 addCustomAgentSource(source);
@@ -440,14 +444,14 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
               }}
               className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             >
-              Undo
+              {t('common.undo')}
             </button>
           </div>
         ),
         { duration: 8000 },
       );
     },
-    [deleteCustomAgentSource, addCustomAgentSource, customAgentSources],
+    [deleteCustomAgentSource, addCustomAgentSource, customAgentSources, t],
   );
 
   return (
