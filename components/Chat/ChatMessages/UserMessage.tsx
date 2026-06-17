@@ -311,8 +311,16 @@ export const UserMessage: FC<UserMessageProps> = memo(
                 </div>
               ) : (
                 <>
-                  {children || (
-                    <div className="prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none">
+                  {/* Attachments (images/files) and the typed text are both
+                      rendered: a message can carry an upload AND a caption, so
+                      `children || text` would silently drop the caption. */}
+                  {children}
+                  {localMessageContent && (
+                    <div
+                      className={`prose dark:prose-invert prose-p:my-2 text-gray-800 dark:text-white max-w-none ${
+                        children ? 'mt-2' : ''
+                      }`}
+                    >
                       <Streamdown
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
