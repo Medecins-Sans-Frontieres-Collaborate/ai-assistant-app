@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -80,8 +80,11 @@ export function TranscriptContent({
   const isMountedRef = useRef(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Parse blob reference from content
-  const blobRef = parseBlobReference(content);
+  // Parse blob reference from content. Memoized on `content` so its identity is
+  // stable across renders — otherwise a new object each render would change
+  // `fetchTranscript`'s identity and re-trigger the polling effect on every
+  // (e.g. streaming) re-render, firing fetches outside the POLL_INTERVAL_MS.
+  const blobRef = useMemo(() => parseBlobReference(content), [content]);
 
   // Calculate expiration state
   const isExpired = blobRef
