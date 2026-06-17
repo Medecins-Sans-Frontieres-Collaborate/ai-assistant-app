@@ -1,3 +1,5 @@
+import { stringHash } from '@/lib/utils/shared/stringHash';
+
 const AGENT_COLORS = [
   'oklch(0.78 0.08 25)', // dusty coral
   'oklch(0.82 0.08 90)', // soft amber
@@ -13,9 +15,5 @@ const AGENT_COLORS = [
  * different agents in the same list visually differentiate.
  */
 export function colorForAgent(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = (hash * 31 + name.charCodeAt(i)) | 0;
-  }
-  return AGENT_COLORS[Math.abs(hash) % AGENT_COLORS.length];
+  return AGENT_COLORS[Math.abs(stringHash(name)) % AGENT_COLORS.length];
 }
