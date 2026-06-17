@@ -11,6 +11,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
 import { highlightJsonTokens } from '@/lib/utils/shared/jsonHighlight';
 import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
@@ -73,8 +74,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     approvalId && submittedApprovals.has(approvalId)
       ? submittedApprovals.get(approvalId)
       : undefined;
-  const resolvedDecision =
-    inMemoryDecision !== undefined ? inMemoryDecision : persistedOutcome;
+  const resolvedDecision = inMemoryDecision ?? persistedOutcome;
   const approvalState: 'idle' | 'submitting' | 'approved' | 'denied' =
     approvalId && submittingApprovals.has(approvalId)
       ? 'submitting'
@@ -252,17 +252,7 @@ export const ApprovalConsentCard: FC<ApprovalConsentCardProps> = ({
     (autoApproveMatch && approvalState !== 'denied');
   if (isAutoApproved) return null;
 
-  const prettyArgs = (() => {
-    const raw = request.tool_arguments;
-    if (!raw || typeof raw !== 'string' || raw.trim() === '') return null;
-    try {
-      const parsed = JSON.parse(raw);
-      if (parsed === null || parsed === undefined) return null;
-      return JSON.stringify(parsed, null, 2);
-    } catch {
-      return raw;
-    }
-  })();
+  const prettyArgs = formatToolArguments(request.tool_arguments);
 
   const titleNode = toolName
     ? t.rich('runToolTitle', {
