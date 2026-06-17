@@ -121,11 +121,8 @@ export function TranscriptContent({
       }
 
       if (response.status === 404) {
-        // Not found - could be still uploading
-        console.log(
-          `[TranscriptContent] Blob not found for job ${blobRef.jobId}, will retry`,
-        );
-        return false; // Retry
+        // Not found yet - blob could still be uploading; retry on next poll.
+        return false;
       }
 
       // Other error - stop polling
@@ -205,7 +202,8 @@ export function TranscriptContent({
         <div className="flex items-center gap-2">
           <span className="animate-pulse">
             {t('loadingTranscript', { filename: blobRef.filename })}
-            {pollCount > 0 && ` (attempt ${pollCount + 1})`}
+            {pollCount > 0 &&
+              ` ${t('loadingAttempt', { count: pollCount + 1 })}`}
           </span>
         </div>
       </div>
@@ -239,7 +237,8 @@ export function TranscriptContent({
         </div>
       )}
       <div className="whitespace-pre-wrap">
-        [Transcript: {blobRef.filename}]{'\n'}
+        {t('transcriptLabel', { filename: blobRef.filename })}
+        {'\n'}
         {loadedContent}
       </div>
     </div>
