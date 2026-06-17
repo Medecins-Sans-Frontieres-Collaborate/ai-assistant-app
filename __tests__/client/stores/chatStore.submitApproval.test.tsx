@@ -158,6 +158,61 @@ describe('chatStore.submitApproval', () => {
     expect(state.submittedApprovals.has(approvalId)).toBe(false);
   });
 
+  it('ignores a submit while a stream is already in flight', async () => {
+    const approvalId = 'mcpr_locked';
+    const conv = makeConversationWithApproval(approvalId);
+    useConversationStore.setState({
+      conversations: [conv],
+      selectedConversationId: conv.id,
+    });
+    // A normal chat stream is already running.
+    useChatStore.setState({ isStreaming: true });
+    const chatSpy = vi.spyOn(chatService, 'chat');
+
+    await useChatStore.getState().submitApproval(approvalId, true, conv, 1);
+
+    // No second stream launched, and the lock was never claimed for this id.
+    expect(chatSpy).not.toHaveBeenCalled();
+    expect(useChatStore.getState().submittingApprovals.has(approvalId)).toBe(
+      false,
+    );
+  });
+
+  it('ignores a second concurrent approval while the first is mid-flight', async () => {
+    const idA = 'mcpr_a';
+    const conv = makeConversationWithApproval(idA);
+    useConversationStore.setState({
+      conversations: [conv],
+      selectedConversationId: conv.id,
+    });
+
+    // First submit's stream stays pending until we release it, keeping the
+    // lock held while we attempt a second concurrent submit.
+    let release: () => void = () => {};
+    const pending = new Promise<ReadableStream<Uint8Array>>((res) => {
+      release = () => res(streamFromChunks(['ok']));
+    });
+    const chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockReturnValue(
+        pending as unknown as Promise<ReadableStream<Uint8Array>>,
+      );
+
+    const first = useChatStore.getState().submitApproval(idA, true, conv, 1);
+    // First acquired the lock synchronously.
+    expect(useChatStore.getState().submittingApprovals.has(idA)).toBe(true);
+
+    // A second submit (different id) is ignored while the first is in flight.
+    await useChatStore.getState().submitApproval('mcpr_b', true, conv, 1);
+    expect(useChatStore.getState().submittingApprovals.has('mcpr_b')).toBe(
+      false,
+    );
+    expect(chatSpy).toHaveBeenCalledTimes(1);
+
+    release();
+    await first;
+  });
+
   it('applies a server-emitted CONSENT_OUTCOME marker to in-memory state', async () => {
     const approvalId = 'mcpr_outcome';
     const otherApprovalId = 'mcpr_other';
