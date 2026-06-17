@@ -225,11 +225,9 @@ export const ChatInput = ({
     setActivePromptIndex,
     filteredPrompts,
     promptListRef,
-    handlePromptSelect: handlePromptSelectFromHook,
     handleKeyDownPromptList,
     handleInitModal,
     updatePromptListVisibilityCallback,
-    findAndSelectMatchingPrompt,
   } = usePromptSelection({
     prompts,
     onPromptSelect: (prompt, parsedVariables, hasVariables) => {

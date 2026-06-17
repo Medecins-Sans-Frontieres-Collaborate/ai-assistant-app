@@ -73,15 +73,8 @@ export const UserMessage: FC<UserMessageProps> = memo(
     const { tones } = useTones();
     const { prompts } = useSettings();
     const { openArtifact, openDocument } = useArtifactStore();
-    const {
-      role,
-      content,
-      messageType,
-      toneId,
-      promptId,
-      promptVariables,
-      artifactContext,
-    } = message;
+    const { content, toneId, promptId, promptVariables, artifactContext } =
+      message;
     const [localMessageContent, setLocalMessageContent] = useState<string>(
       content as string,
     );

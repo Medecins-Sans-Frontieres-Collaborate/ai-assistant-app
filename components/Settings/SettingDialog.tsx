@@ -3,8 +3,6 @@
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useTranslations } from 'next-intl';
-
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCreateReducer } from '@/client/hooks/ui/useCreateReducer';
@@ -36,7 +34,6 @@ const env = process.env.NEXT_PUBLIC_ENV || 'development';
  * SettingDialog component adapted for Zustand stores
  */
 export function SettingDialog() {
-  const t = useTranslations();
   const { data: session } = useSession();
   const { isSettingsOpen, setIsSettingsOpen, theme, setTheme } = useUI();
   const {

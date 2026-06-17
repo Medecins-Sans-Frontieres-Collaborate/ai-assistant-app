@@ -29,7 +29,6 @@ export function useFoundryAgents() {
     data,
     isLoading: isLoadingFoundryAgents,
     error: foundryAgentsError,
-    refetch: refetchFoundryAgents,
   } = useQuery<FoundryAgentsResponse>({
     queryKey: ['foundry-agents', ...sourcePaths],
     queryFn: async () => {
