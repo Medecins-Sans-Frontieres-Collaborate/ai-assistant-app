@@ -6,6 +6,7 @@ import {
 } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 
 import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
 
@@ -119,15 +120,7 @@ export async function GET(request: NextRequest) {
       console.warn(
         `[/api/agents] OBO failed (dev), using fallback credential: ${errMsg}`,
       );
-      const {
-        ChainedTokenCredential,
-        AzureCliCredential,
-        ManagedIdentityCredential,
-      } = await import('@azure/identity');
-      const credential = new ChainedTokenCredential(
-        new ManagedIdentityCredential(),
-        new AzureCliCredential(),
-      );
+      const credential = await createAppIdentityCredential();
       const tokenResponse = await credential.getToken(
         'https://management.azure.com/.default',
       );
