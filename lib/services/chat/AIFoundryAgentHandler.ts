@@ -262,6 +262,11 @@ export class AIFoundryAgentHandler {
             await new Promise((r) => setTimeout(r, 200));
           }
 
+          // Aborts the upstream Foundry stream when the client disconnects
+          // (the ReadableStream's `cancel()` fires) so we don't keep draining
+          // — and billing — an abandoned agent run to completion.
+          const upstreamAbort = new AbortController();
+
           // Foundry's preview runtime requires `agent_reference` (the legacy
           // `agent` key is deprecated). The OpenAI SDK's options.body
           // REPLACES the params body, so conversation + stream are restated.
@@ -273,6 +278,7 @@ export class AIFoundryAgentHandler {
                 stream: true,
               },
               {
+                signal: upstreamAbort.signal,
                 body: {
                   conversation: conversationId,
                   stream: true,
@@ -367,16 +373,54 @@ export class AIFoundryAgentHandler {
                 }
                 sawMeaningfulOutput = true;
               }
-              let citations: Array<{
+              const citations: Array<{
                 number: number;
                 title: string;
                 url: string;
                 date: string;
               }> = [];
-              // Marker-based vs annotation-based citations use separate
-              // counters so their numbering doesn't collide.
-              let markerCitationIndex = 1;
-              const citationMap = new Map<string, number>();
+              // Single unified numbering shared by inline `【n:m†…】` markers
+              // (rewritten to `[N]` in the visible text) AND `url_citation`
+              // annotations (the source list). Using one counter + one map
+              // keyed by citation identity guarantees the visible `[N]` always
+              // resolves to an entry in `citations[]` and that the two paths
+              // never collide on the same number.
+              let nextCitationNumber = 1;
+              const citationNumbers = new Map<string, number>();
+
+              /**
+               * Assigns (or reuses) a citation number for `key` and ensures a
+               * matching `citations[]` entry exists. When a later event learns a
+               * better title/url for an already-numbered citation (e.g. an
+               * annotation arrives after a short-form inline marker), it
+               * backfills the existing entry rather than creating a duplicate.
+               */
+              const registerCitation = (
+                key: string,
+                title: string,
+                url: string,
+              ): number => {
+                const existing = citationNumbers.get(key);
+                if (existing !== undefined) {
+                  const entry = citations.find((c) => c.number === existing);
+                  if (entry) {
+                    if (url && !entry.url) entry.url = url;
+                    if (title && entry.title === `Source ${existing}`) {
+                      entry.title = title;
+                    }
+                  }
+                  return existing;
+                }
+                const number = nextCitationNumber++;
+                citationNumbers.set(key, number);
+                citations.push({
+                  number,
+                  title: title || `Source ${number}`,
+                  url,
+                  date: '',
+                });
+                return number;
+              };
 
               // Buffers text across chunks to handle citation markers
               // that arrive split.
@@ -398,16 +442,26 @@ export class AIFoundryAgentHandler {
                     markerBuffer += textChunk;
 
                     // Rewrite Azure inline citation markers — both shapes:
-                    //   short: 【3:0†source】
-                    //   long:  【3:0†Title†URL】
+                    //   short: 【3:0†source】       (label only, no URL)
+                    //   long:  【3:0†Title†URL】    (carries the source)
+                    // Each marker is registered into the unified citation store
+                    // so the `[N]` it becomes matches a `citations[]` entry.
                     const processedBuffer = markerBuffer.replace(
-                      /【(\d+):(\d+)†[^】]+】/g,
-                      (match: string) => {
-                        if (!citationMap.has(match)) {
-                          citationMap.set(match, markerCitationIndex);
-                          markerCitationIndex++;
-                        }
-                        return `[${citationMap.get(match)}]`;
+                      /【(\d+):(\d+)†([^】]+)】/g,
+                      (match: string, _n: string, _m: string, body: string) => {
+                        const parts = body.split('†');
+                        const title = (parts[0] ?? '').trim();
+                        const url =
+                          parts.length >= 2
+                            ? (parts[parts.length - 1] ?? '').trim()
+                            : '';
+                        // Key by URL when known (so an inline marker and an
+                        // annotation for the same source share one number);
+                        // otherwise fall back to the raw marker so identical
+                        // short-form markers still dedupe.
+                        const key = url || match;
+                        const number = registerCitation(key, title, url);
+                        return `[${number}]`;
                       },
                     );
 
@@ -431,21 +485,21 @@ export class AIFoundryAgentHandler {
                   } else if (
                     event.type === 'response.output_text.annotation.added'
                   ) {
-                    // Structured url_citation annotations, separate from
-                    // the inline markers above.
+                    // Structured url_citation annotations. Registered into the
+                    // SAME unified store as the inline markers above (keyed by
+                    // URL) so a source referenced both inline and via annotation
+                    // gets a single number, and annotation-only sources are
+                    // appended after the inline ones without colliding.
                     const annotation = event as any;
                     if (
                       annotation.annotation?.type === 'url_citation' &&
                       annotation.annotation?.url
                     ) {
-                      citations.push({
-                        number: citations.length + 1,
-                        title:
-                          annotation.annotation.title ||
-                          `Source ${citations.length + 1}`,
-                        url: annotation.annotation.url,
-                        date: '',
-                      });
+                      registerCitation(
+                        annotation.annotation.url,
+                        annotation.annotation.title || '',
+                        annotation.annotation.url,
+                      );
                     }
                   } else if (
                     event.type === 'response.output_item.added' ||
@@ -585,8 +639,18 @@ export class AIFoundryAgentHandler {
                   controller.close();
                 }
               } catch (error) {
-                controller.error(error);
+                // If the client disconnected we deliberately aborted the
+                // upstream iterator; the stream is already cancelled, so don't
+                // try to error an again-closed controller.
+                if (!upstreamAbort.signal.aborted && !controllerClosed) {
+                  controller.error(error);
+                }
               }
+            },
+            cancel() {
+              // Client went away (response stream cancelled). Abort the upstream
+              // Foundry stream so we stop draining it.
+              upstreamAbort.abort();
             },
           });
 
