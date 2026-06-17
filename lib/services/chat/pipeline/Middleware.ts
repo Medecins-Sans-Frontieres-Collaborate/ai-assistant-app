@@ -4,6 +4,7 @@ import { NextRequest } from 'next/server';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
@@ -24,7 +25,7 @@ import { ChatContext } from './ChatContext';
 
 import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
-import { AccessToken, TokenCredential } from '@azure/identity';
+import { TokenCredential } from '@azure/identity';
 
 /**
  * Middleware function that processes a request and returns partial ChatContext.
@@ -398,29 +399,7 @@ export const createCredentialMiddleware = async (
       const tokenProvider = UserTokenProvider.getInstance();
       const foundryToken = await tokenProvider.getFoundryToken(appAccessToken);
 
-      userCredential = {
-        // Honor the SDK-requested scope so we don't blindly hand the Foundry
-        // token to any audience the SDK happens to ask for. Foundry data-plane
-        // scopes are `https://ai.azure.com/...`; refuse anything else.
-        getToken: async (scopes) => {
-          const requested = Array.isArray(scopes) ? scopes : [scopes];
-          const ok = requested.some(
-            (s) =>
-              typeof s === 'string' &&
-              (s.startsWith('https://ai.azure.com/') ||
-                s.startsWith('https://cognitiveservices.azure.com/')),
-          );
-          if (!ok) {
-            throw new Error(
-              `[CredentialMiddleware] Refusing to issue Foundry token for scope: ${requested.join(',')}`,
-            );
-          }
-          return {
-            token: foundryToken,
-            expiresOnTimestamp: Date.now() + 55 * 60 * 1000,
-          } as AccessToken;
-        },
-      };
+      userCredential = createFoundryTokenCredential(foundryToken);
 
       console.log(
         `[CredentialMiddleware] OBO credential acquired, endpoint: ${foundryEndpoint}`,
