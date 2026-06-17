@@ -8,9 +8,11 @@
 
 /**
  * Upper bound on how many approval ids we'll extract from a single error.
- * Mirrors the InputValidator's `.max(16)` on the request side. A hostile or
- * misshapen gateway error is capped here so we never enqueue an unbounded
- * batch of `mcp_approval_response` items in the auto-deny retry path.
+ * Independent of the request-side `InputValidator` approvals cap (`.max(16)`)
+ * and deliberately a bit higher: Foundry may list more pending approvals in one
+ * error than a single client request submitted. A hostile or misshapen gateway
+ * error is capped here so we never enqueue an unbounded batch of
+ * `mcp_approval_response` items in the auto-deny retry path.
  */
 const MAX_EXTRACTED_IDS = 32;
 
