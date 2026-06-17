@@ -71,15 +71,6 @@ export function getOrganizationAgents(): OrganizationAgent[] {
 }
 
 /**
- * Get only RAG agents from static config.
- * RAG agents are app-defined with system prompts and search config —
- * they don't exist in Foundry and are always loaded from organization-agents.json.
- */
-export function getRAGAgents(): OrganizationAgent[] {
-  return getOrganizationAgents().filter((agent) => agent.type === 'rag');
-}
-
-/**
  * Get organization agent by ID (searches both static RAG and static Foundry agents)
  */
 export function getOrganizationAgentById(
