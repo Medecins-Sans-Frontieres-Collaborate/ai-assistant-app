@@ -2,6 +2,7 @@ import {
   ConfidentialClientApplication,
   OnBehalfOfRequest,
 } from '@azure/msal-node';
+import { createHash } from 'crypto';
 
 const FOUNDRY_SCOPE = 'https://ai.azure.com/user_impersonation';
 const ARM_SCOPE = 'https://management.azure.com/.default';
@@ -104,16 +105,16 @@ export class UserTokenProvider {
   }
 
   /**
-   * Simple hash for cache key derivation. Not cryptographic — just for map lookups.
+   * Derives a cache key from the full user access token.
+   *
+   * This is a SECURITY boundary, not just a map optimization: a collision here
+   * would serve one user's OBO token to another user. A previous version folded
+   * only the first 100 chars into a 32-bit integer — both the truncation and the
+   * narrow output space made cross-user collisions plausible. We now use a
+   * SHA-256 digest over the entire token so distinct tokens map to distinct keys.
    */
   private hashToken(token: string): string {
-    let hash = 0;
-    for (let i = 0; i < Math.min(token.length, 100); i++) {
-      const char = token.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash |= 0; // Convert to 32-bit integer
-    }
-    return hash.toString(36);
+    return createHash('sha256').update(token).digest('hex');
   }
 
   /**
