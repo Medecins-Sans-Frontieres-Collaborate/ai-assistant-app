@@ -45,10 +45,26 @@ export function activityKeyForEvent(type: string | undefined): string | null {
 }
 
 /**
+ * Consent links come from an MCP connector — i.e. they are attacker-influenced
+ * if a connector is malicious or compromised — and end up as a clickable link
+ * in the OAuth consent card. Only allow absolute `https:` URLs so a connector
+ * can't deliver a `javascript:` / `data:` / `http:` URL (script execution,
+ * phishing, or a downgrade). Anything else yields no consent marker.
+ */
+function isSafeConsentUrl(value: string): boolean {
+  try {
+    return new URL(value).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Maps a Foundry `output_item` payload to a marker string suitable for
  * enqueueing into the response stream. Returns null when the item type
  * isn't one we surface (text content, etc.) OR when required fields are
- * missing (e.g. an `oauth_consent_request` without a `consent_link`).
+ * missing/invalid (e.g. an `oauth_consent_request` without a safe
+ * `consent_link`).
  *
  * The caller is responsible for deduping via item.id — this function
  * does not track state.
@@ -61,7 +77,7 @@ export function outputItemToMarker(
   if (
     item.type === 'oauth_consent_request' &&
     typeof item.consent_link === 'string' &&
-    item.consent_link.length > 0
+    isSafeConsentUrl(item.consent_link)
   ) {
     return emitConsentRequest({
       kind: 'oauth',
