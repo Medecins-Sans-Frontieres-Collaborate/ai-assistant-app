@@ -38,7 +38,8 @@ const urlOrDataUrl = (errorMessage: string) =>
 
 /**
  * Filename charset guard. Rejects control characters (C0 + DEL) and path
- * separators. Keeps Unicode letters, marks, digits, punctuation, spaces.
+ * separators. Keeps Unicode letters, marks, digits, punctuation, spaces — so
+ * international filenames like "Q1 Revenue (Español).xlsx" are accepted.
  */
 const isSafeFilename = (s: string): boolean => {
   for (let i = 0; i < s.length; i++) {
@@ -68,6 +69,12 @@ const MessageContentSchema = z.union([
       z.object({
         type: z.literal('file_url'),
         url: urlOrDataUrl('Invalid file URL'),
+        // Optional client-supplied metadata. We validate defensively but use
+        // `.catch(undefined)` so a weird-but-non-malicious value doesn't
+        // reject the whole chat request — downstream code treats these as
+        // optional and falls back sensibly (blobId, Whisper auto-detect, no
+        // prompt hint). Path separators and control chars are still rejected
+        // for originalFilename because loadDocument uses its extension.
         originalFilename: z
           .string()
           .min(1)
@@ -76,6 +83,8 @@ const MessageContentSchema = z.union([
           .refine((s) => s !== '.' && s !== '..')
           .optional()
           .catch(undefined),
+        // Whisper accepts ISO-639-1 (2-letter). Accept optional region (en-US,
+        // pt-BR) and normalize case. Anything else is dropped.
         transcriptionLanguage: z
           .string()
           .trim()
@@ -272,7 +281,7 @@ const ChatBodySchema = z
     activeFilesTokensUsed: z.number().int().min(0).optional(),
     autoInjectPinnedImages: z.boolean().optional(),
   })
-  .strict();
+  .strict(); // Reject unknown properties
 
 /**
  * InputValidator validates and sanitizes incoming chat requests.
