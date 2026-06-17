@@ -26,7 +26,7 @@ type MessageContent =
  * - The stage is skipped gracefully
  * - Pipeline continues with next stage
  */
-const STAGE_TIMEOUTS: Record<string, number> = {
+export const STAGE_TIMEOUTS: Record<string, number> = {
   FileProcessor: 180000, // 180s (3 min) for large file download + extraction + processing
   ImageProcessor: 5000, // 5s for image validation
   RAGEnricher: 10000, // 10s for knowledge base search
@@ -145,10 +145,7 @@ export class ChatPipeline {
             context = { ...context, errors };
 
             if (stage.name === 'FileProcessor') {
-              console.warn(
-                '[Pipeline] FileProcessor timed out, sanitizing file_url content from messages',
-              );
-              context = this.sanitizeFileUrlsOnError(context);
+              context = this.handleFileProcessorFailure(context, 'timed out');
             }
 
             // Continue to next stage (graceful degradation)
@@ -165,10 +162,7 @@ export class ChatPipeline {
           stage.name === 'FileProcessor' &&
           (context.errors?.length ?? 0) > errorCountBefore
         ) {
-          console.warn(
-            '[Pipeline] FileProcessor failed, sanitizing file_url content from messages',
-          );
-          context = this.sanitizeFileUrlsOnError(context);
+          context = this.handleFileProcessorFailure(context, 'failed');
         }
 
         // Check for critical errors that should stop the pipeline
@@ -205,10 +199,7 @@ export class ChatPipeline {
         // Special handling for FileProcessor failures:
         // Remove file_url content from messages to prevent Azure OpenAI errors
         if (stage.name === 'FileProcessor') {
-          console.warn(
-            '[Pipeline] FileProcessor failed, sanitizing file_url content from messages',
-          );
-          context = this.sanitizeFileUrlsOnError(context);
+          context = this.handleFileProcessorFailure(context, 'failed');
         }
 
         // Continue to next stage
@@ -283,6 +274,21 @@ export class ChatPipeline {
       }
     };
     return { promise, cancel };
+  }
+
+  /**
+   * Logs and sanitizes file_url content after the FileProcessor stage fails
+   * (whether it timed out, errored, or threw). `reason` is folded into the log
+   * line so each failure mode stays distinguishable.
+   */
+  private handleFileProcessorFailure(
+    context: ChatContext,
+    reason: string,
+  ): ChatContext {
+    console.warn(
+      `[Pipeline] FileProcessor ${reason}, sanitizing file_url content from messages`,
+    );
+    return this.sanitizeFileUrlsOnError(context);
   }
 
   /**
