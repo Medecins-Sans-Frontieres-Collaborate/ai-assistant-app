@@ -79,6 +79,14 @@ const CitationStreamdown = dynamic(
  * Checks if content is a blob transcript reference that should be loaded from storage.
  * Format: [Transcript: filename | blob:jobId | expires:ISO_TIMESTAMP]
  */
+/**
+ * Strips complete stream-event marker blocks (activity / consent / outcome /
+ * tool-call records, with surrounding blank lines) from assistant text. Used in
+ * both the streaming and persisted render paths.
+ */
+const STREAM_MARKER_BLOCK_RE =
+  /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g;
+
 function isBlobTranscriptReference(content: string): boolean {
   return /^\[Transcript:\s*.+?\s*\|\s*blob:[a-fA-F0-9-]+\s*\|\s*expires:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z\]$/.test(
     content.trim(),
@@ -241,8 +249,9 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
             if (parsedData.thinking) {
               metadataThinking = parsedData.thinking;
             }
-          } catch (error) {
-            // Silently ignore parsing errors during streaming
+          } catch {
+            // Metadata JSON is often incomplete mid-stream; ignore until the
+            // final chunk arrives and the block parses cleanly.
           }
         }
         // Priority 3: Legacy JSON at end (only when not streaming)
@@ -256,8 +265,10 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
               if (parsedData.citations) {
                 citationsData = deduplicateCitations(parsedData.citations);
               }
-            } catch (error) {
-              // Silently ignore parsing errors
+            } catch {
+              // isValidJSON already gated this branch, so a parse failure here
+              // is unexpected; citations are best-effort, so skip them rather
+              // than break rendering.
             }
           }
         }
@@ -290,19 +301,13 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       // for legacy messages saved before that field existed.
       let parsedConsents: ConsentRequest[] = [];
       if (messageIsStreaming) {
-        mainContent = mainContent.replace(
-          /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g,
-          '',
-        );
+        mainContent = mainContent.replace(STREAM_MARKER_BLOCK_RE, '');
       } else if (
         message?.consentRequests &&
         message.consentRequests.length > 0
       ) {
         parsedConsents = message.consentRequests as ConsentRequest[];
-        mainContent = mainContent.replace(
-          /\n*<<<(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>[\s\S]*?<<<END_(?:AGENT_ACTIVITY|CONSENT_REQUEST|CONSENT_OUTCOME|TOOL_CALL_RECORD)>>>\n*/g,
-          '',
-        );
+        mainContent = mainContent.replace(STREAM_MARKER_BLOCK_RE, '');
       } else {
         const { requests: parsedConsentsRaw, cleaned: consentCleaned } =
           extractConsentRequests(mainContent);
@@ -508,55 +513,55 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
       return new Set(Object.keys(translationState.translations));
     }, [translationState.translations]);
 
-    // Custom components for Streamdown
-    // Note: Streamdown handles code highlighting (Shiki), Mermaid, and math (KaTeX) built-in
-    const customMarkdownComponents = {};
-
-    // Mermaid configuration with dark mode support
-    const mermaidConfig: MermaidConfig = {
-      startOnLoad: false,
-      theme: isDarkMode ? 'dark' : 'default',
-      themeVariables: isDarkMode
-        ? {
-            // Dark mode colors - make everything visible on dark background
-            primaryColor: '#3b82f6',
-            primaryTextColor: '#e5e7eb',
-            primaryBorderColor: '#60a5fa',
-            lineColor: '#9ca3af',
-            secondaryColor: '#1e293b',
-            tertiaryColor: '#0f172a',
-            background: '#1f2937',
-            mainBkg: '#1f2937',
-            secondBkg: '#111827',
-            textColor: '#f3f4f6',
-            border1: '#4b5563',
-            border2: '#6b7280',
-            arrowheadColor: '#e5e7eb', // White arrows
-            fontFamily: 'ui-sans-serif, system-ui, sans-serif',
-            fontSize: '14px',
-            // Sequence diagram specific
-            actorTextColor: '#f3f4f6',
-            actorLineColor: '#9ca3af',
-            signalColor: '#e5e7eb',
-            signalTextColor: '#f3f4f6',
-            labelBoxBkgColor: '#374151',
-            labelBoxBorderColor: '#6b7280',
-            labelTextColor: '#f3f4f6',
-            loopTextColor: '#f3f4f6',
-            activationBorderColor: '#60a5fa',
-            activationBkgColor: '#1e3a8a',
-            sequenceNumberColor: '#ffffff',
-          }
-        : {
-            // Light mode colors
-            primaryColor: '#3b82f6',
-            fontFamily: 'ui-sans-serif, system-ui, sans-serif',
-            fontSize: '14px',
-          },
-      logLevel: 'error', // Only log errors, don't crash
-      securityLevel: 'loose', // More lenient parsing
-      suppressErrorRendering: true, // Hide error messages from UI
-    };
+    // Mermaid configuration with dark mode support. Memoized so this ~45-line
+    // object isn't rebuilt on every render of this heavy component.
+    const mermaidConfig: MermaidConfig = useMemo(
+      () => ({
+        startOnLoad: false,
+        theme: isDarkMode ? 'dark' : 'default',
+        themeVariables: isDarkMode
+          ? {
+              // Dark mode colors - make everything visible on dark background
+              primaryColor: '#3b82f6',
+              primaryTextColor: '#e5e7eb',
+              primaryBorderColor: '#60a5fa',
+              lineColor: '#9ca3af',
+              secondaryColor: '#1e293b',
+              tertiaryColor: '#0f172a',
+              background: '#1f2937',
+              mainBkg: '#1f2937',
+              secondBkg: '#111827',
+              textColor: '#f3f4f6',
+              border1: '#4b5563',
+              border2: '#6b7280',
+              arrowheadColor: '#e5e7eb', // White arrows
+              fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+              fontSize: '14px',
+              // Sequence diagram specific
+              actorTextColor: '#f3f4f6',
+              actorLineColor: '#9ca3af',
+              signalColor: '#e5e7eb',
+              signalTextColor: '#f3f4f6',
+              labelBoxBkgColor: '#374151',
+              labelBoxBorderColor: '#6b7280',
+              labelTextColor: '#f3f4f6',
+              loopTextColor: '#f3f4f6',
+              activationBorderColor: '#60a5fa',
+              activationBkgColor: '#1e3a8a',
+              sequenceNumberColor: '#ffffff',
+            }
+          : {
+              // Light mode colors
+              primaryColor: '#3b82f6',
+              fontFamily: 'ui-sans-serif, system-ui, sans-serif',
+              fontSize: '14px',
+            },
+        logLevel: 'error', // Only log errors, don't crash
+        securityLevel: 'loose', // More lenient parsing
+        suppressErrorRendering: true, // Hide error messages from UI
+      }),
+      [isDarkMode],
+    );
 
     return (
       <div
@@ -651,7 +656,6 @@ export const AssistantMessage: FC<AssistantMessageProps> = React.memo(
                     <StreamdownWithCodeButtons>
                       <CitationStreamdown
                         citations={citations}
-                        components={customMarkdownComponents}
                         isAnimating={messageIsStreaming}
                         controls={true}
                         shikiTheme={['github-light', 'github-dark']}
