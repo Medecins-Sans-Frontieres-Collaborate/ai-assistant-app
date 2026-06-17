@@ -328,9 +328,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   <button
                     onClick={() => setSelectedSourceId(source.id)}
                     className="group flex items-center gap-1.5 -mx-1 px-1 py-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    title={
-                      t('agentSources.viewConnection') || 'View connection'
-                    }
+                    title={t('agentSources.viewConnection')}
                   >
                     <IconPlug
                       size={12}
@@ -342,7 +340,9 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                     </span>
                     <span
                       className={`text-xs font-semibold tabular-nums ${countColor}`}
-                      aria-label={`${sourceAgents.length} agents`}
+                      aria-label={t('agentSources.agentCountLabel', {
+                        count: sourceAgents.length,
+                      })}
                     >
                       ({countLabel})
                     </span>
@@ -428,9 +428,8 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               <IconPlug size={16} className="shrink-0" />
               <span>
                 {agentSources.length === 0
-                  ? t('agentSources.connectButtonShort') ||
-                    'Connect a Foundry project'
-                  : t('agentSources.addAnother') || 'Add another connection'}
+                  ? t('agentSources.connectButtonShort')
+                  : t('agentSources.addAnother')}
               </span>
             </button>
           </div>
@@ -496,8 +495,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   {/* Discovered Agents — primary content */}
                   <div className="mt-5">
                     <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">
-                      {t('agentSources.discoveredAgents') ||
-                        'Discovered Agents'}{' '}
+                      {t('agentSources.discoveredAgents')}{' '}
                       <span className="tabular-nums">
                         ({sourceAgents.length})
                       </span>
@@ -567,7 +565,7 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                       ) : (
                         <IconChevronRight size={12} />
                       )}
-                      <span>Technical details</span>
+                      <span>{t('agentSources.technicalDetails')}</span>
                     </button>
                     {showSourceTechnicalDetails && (
                       <div className="mt-2 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 p-3 text-xs space-y-2">

@@ -66,8 +66,6 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
     knowledgeCutoffDisplay = t('modelSelect.knowledgeCutoff.realtime');
   }
 
-  // Get localized model type
-
   // Text styles based on whether there's a background image
   const textShadow = hasBackgroundImage
     ? { textShadow: '0 2px 4px rgba(0,0,0,0.5)' }
