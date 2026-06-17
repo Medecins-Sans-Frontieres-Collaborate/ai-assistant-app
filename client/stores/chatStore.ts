@@ -1526,13 +1526,34 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     sourceMessageIndex,
     source,
   ) => {
-    // Mark as submitting so the card freezes immediately, even before the
-    // network round-trip completes. Rollback on failure so the user can retry.
+    // Atomic check-and-lock. An approval submit starts a brand-new stream
+    // (initializeStreamingState + sendChatRequest), so only ONE may run at a
+    // time: if a chat is already streaming, or another approval is mid-flight,
+    // launching a second would clobber the shared abortController and double
+    // up finalizeMessage. Multiple idle cards can fire together (shared keydown
+    // listener, or several auto-approve effects in one commit) and each reads
+    // pre-lock state, so the guard must be a single synchronous set() that both
+    // tests and claims the lock. Callers that lose the race are simply ignored;
+    // the user (or the auto-approve effect) can submit the next one once this
+    // stream settles.
+    let acquired = false;
     set((state) => {
+      if (
+        state.isStreaming ||
+        state.submittingApprovals.size > 0 ||
+        state.submittingApprovals.has(approvalRequestId) ||
+        state.submittedApprovals.has(approvalRequestId)
+      ) {
+        return state;
+      }
+      acquired = true;
       const next = new Set(state.submittingApprovals);
       next.add(approvalRequestId);
       return { submittingApprovals: next };
     });
+    if (!acquired) {
+      return;
+    }
 
     let showLoadingTimeout: NodeJS.Timeout | null = null;
 
