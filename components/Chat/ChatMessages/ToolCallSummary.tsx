@@ -12,6 +12,7 @@ import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { formatToolArguments } from '@/lib/utils/shared/chat/formatToolArguments';
 import { highlightJsonTokens } from '@/lib/utils/shared/jsonHighlight';
 
 import type { ToolCallRecord } from '@/types/chat';
@@ -121,15 +122,7 @@ const ToolCallRow: FC<ToolCallRowProps> = ({ call, source }) => {
           ? t('statusAutoDenied')
           : t('statusApproved');
 
-  const prettyArgs = (() => {
-    const raw = call.arguments;
-    if (!raw || typeof raw !== 'string' || raw.trim() === '') return null;
-    try {
-      return JSON.stringify(JSON.parse(raw), null, 2);
-    } catch {
-      return raw;
-    }
-  })();
+  const prettyArgs = formatToolArguments(call.arguments);
 
   const hasDetails = !!prettyArgs || !!call.output || !!call.error;
 
