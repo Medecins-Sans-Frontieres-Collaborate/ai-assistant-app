@@ -32,6 +32,10 @@ interface VirtualConversationListProps {
  */
 const VIRTUALIZE_THRESHOLD = 40;
 
+/** Cap the list height so it scrolls internally instead of pushing the sidebar
+ *  footer off-screen. */
+const LIST_MAX_HEIGHT = '60vh';
+
 export const VirtualConversationList: FC<VirtualConversationListProps> = ({
   conversations,
   selectedConversationId,
@@ -49,6 +53,20 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
 
   const shouldVirtualize = conversations.length > VIRTUALIZE_THRESHOLD;
 
+  const renderItem = (conversation: Conversation) => (
+    <ConversationItem
+      conversation={conversation}
+      isSelected={selectedConversationId === conversation.id}
+      handleSelectConversation={handleSelectConversation}
+      handleDeleteConversation={handleDeleteConversation}
+      handleMoveToFolder={handleMoveToFolder}
+      handleRenameConversation={handleRenameConversation}
+      handleExportConversation={handleExportConversation}
+      folders={folders}
+      t={t}
+    />
+  );
+
   // Disabling the lint: we don't pass virtualizer's imperative methods
   // into memoized children, so the React Compiler warning doesn't apply.
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -65,17 +83,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
       <div role="list">
         {conversations.map((conversation) => (
           <div role="listitem" key={conversation.id}>
-            <ConversationItem
-              conversation={conversation}
-              isSelected={selectedConversationId === conversation.id}
-              handleSelectConversation={handleSelectConversation}
-              handleDeleteConversation={handleDeleteConversation}
-              handleMoveToFolder={handleMoveToFolder}
-              handleRenameConversation={handleRenameConversation}
-              handleExportConversation={handleExportConversation}
-              folders={folders}
-              t={t as any}
-            />
+            {renderItem(conversation)}
           </div>
         ))}
       </div>
@@ -91,7 +99,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
       // Constrained-height container so the list scrolls inside itself
       // instead of pushing the sidebar footer off-screen.
       className="overflow-y-auto"
-      style={{ maxHeight: '60vh' }}
+      style={{ maxHeight: LIST_MAX_HEIGHT }}
     >
       <div
         role="list"
@@ -127,7 +135,7 @@ export const VirtualConversationList: FC<VirtualConversationListProps> = ({
                 handleRenameConversation={handleRenameConversation}
                 handleExportConversation={handleExportConversation}
                 folders={folders}
-                t={t as any}
+                t={t}
               />
             </div>
           );
