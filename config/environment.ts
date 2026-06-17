@@ -52,6 +52,15 @@ const serverEnvSchema = z.object({
   AZURE_AI_FOUNDRY_RESOURCE_ID_EU: z.string().optional(),
   AZURE_AI_FOUNDRY_RESOURCE_ID_US: z.string().optional(),
 
+  // When true, agent discovery also lists new-model agent objects via the
+  // Foundry data plane (in addition to legacy ARM "Agent Application"
+  // resources) and unions the results. Best-effort: failures fall back to
+  // ARM-only discovery. Set to "false" to restore pure legacy behavior.
+  FOUNDRY_DATAPLANE_DISCOVERY: z
+    .string()
+    .default('true')
+    .transform((val) => val === 'true'),
+
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
   AZURE_TRANSLATOR_ENDPOINT: z.string().url().optional(),
 
