@@ -20,6 +20,21 @@ export interface ConsentRequest {
   tool_arguments?: string | null;
 }
 
+/**
+ * Defense-in-depth for the OAuth consent link. The server mapper already only
+ * emits `https:` consent URLs, but a consent_url can also reach this component
+ * from persisted conversation history; never render a link unless it is an
+ * absolute https URL (blocks `javascript:` / `data:` / `http:`).
+ */
+function isSafeConsentUrl(value: string | undefined): value is string {
+  if (!value) return false;
+  try {
+    return new URL(value).protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 interface ConsentCardProps {
   request: ConsentRequest;
   /** Index of the assistant message that emitted this consent request. */
@@ -42,7 +57,7 @@ export const ConsentCard: FC<ConsentCardProps> = ({
   persistedOutcome,
   persistedSource,
 }) => {
-  if (request.kind === 'oauth' && request.consent_url) {
+  if (request.kind === 'oauth' && isSafeConsentUrl(request.consent_url)) {
     return (
       <OAuthConsentCard
         request={
