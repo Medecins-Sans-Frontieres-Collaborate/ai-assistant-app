@@ -420,7 +420,22 @@
     "labelProject": "Project",
     "tooltipSubscription": "The Azure subscription that contains the Foundry account. If you're unsure, ask your admin which subscription your team uses.",
     "tooltipFoundryAccount": "The Azure AI Services account where the Foundry project lives. Each office or team typically has its own.",
-    "tooltipProject": "A project organizes agents within an account. Most accounts have a single 'default' project."
+    "tooltipProject": "A project organizes agents within an account. Most accounts have a single 'default' project.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Enter manually",
+    "browseResources": "Browse resources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Account Name",
+    "projectNameLabel": "Project Name",
+    "loadingSubscriptions": "Loading subscriptions...",
+    "selectSubscription": "Select a subscription...",
+    "loadingAccounts": "Loading accounts...",
+    "noAccountsFound": "No Foundry accounts found in this subscription.",
+    "selectAccount": "Select an account...",
+    "loadingProjects": "Loading projects...",
+    "noProjectsFound": "No projects found. Using \"default\".",
+    "selectAllRequired": "Select a subscription, account, and project."
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -678,7 +693,8 @@
     "no": "No",
     "beta": "Beta",
     "copied": "Copied!",
-    "clear": "Clear"
+    "clear": "Clear",
+    "undo": "Undo"
   },
   "terms": {
     "officialLanguages": "Official version:",
@@ -883,7 +899,10 @@
     "collapseSidebar": "Collapse sidebar",
     "expandSidebar": "Expand sidebar",
     "quickActionsTitle": "Quick Actions",
-    "quickActions": "Quick Actions"
+    "quickActions": "Quick Actions",
+    "expandFolder": "Expand folder {name}",
+    "collapseFolder": "Collapse folder {name}",
+    "folderOptions": "{name} options"
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
@@ -1125,6 +1144,8 @@
     "verbosityDescription": "Controls response detail level for GPT-5 models.",
     "Advanced Settings": "Advanced Settings",
     "Custom Instructions": "Custom Instructions",
+    "customInstructionsLabel": "Custom Instructions*",
+    "defaultTemperatureLabel": "Default Temperature*",
     "Default System Prompt": "Default System Prompt",
     "Streaming Speed": "Streaming Speed",
     "Slow": "Slow",
@@ -1803,6 +1824,8 @@
     "completedToast": "Transcription complete: {filename}",
     "placeholder": "[Transcription in progress: {filename}]",
     "loadingTranscript": "Loading transcript for {filename}...",
+    "loadingAttempt": "(attempt {count})",
+    "transcriptLabel": "[Transcript: {filename}]",
     "expiredOrDeleted": "This transcript has expired or been deleted.",
     "fetchError": "Failed to load transcript. Please try again.",
     "transcriptExpired": "The transcript for {filename} has expired. Transcripts are automatically deleted after {days} days for privacy.",
@@ -1948,7 +1971,10 @@
       "noAgentsFound": "No agents found in this project",
       "noAgentsFoundHint": "Make sure agents are published and you have the Azure AI User role on this project.",
       "refresh": "Refresh",
-      "refreshAgents": "Refresh agents"
+      "refreshAgents": "Refresh agents",
+      "technicalDetails": "Technical details",
+      "agentCountLabel": "{count} agents",
+      "disconnectedToast": "Disconnected {name}"
     }
   },
   "privacy": {
