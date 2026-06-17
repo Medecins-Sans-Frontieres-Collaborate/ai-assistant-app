@@ -18,7 +18,8 @@ interface FoundryAgentsResponse {
  * Includes agents from both default org sources (EU/US) and user-configured
  * custom agent sources. Custom sources are passed as a query parameter.
  *
- * Uses React Query with a 5-minute stale time to match the server-side cache TTL.
+ * Uses React Query with a 24-hour stale time; the list rarely changes within a
+ * session and the user can force a refresh manually.
  * Returns empty array on error (graceful degradation — static RAG agents still work).
  */
 export function useFoundryAgents() {
