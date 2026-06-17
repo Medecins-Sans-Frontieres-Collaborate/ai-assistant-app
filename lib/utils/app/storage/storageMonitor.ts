@@ -418,8 +418,9 @@ export const calculateSpaceFreed = (
     };
     const keptSize = getStringSizeInBytes(JSON.stringify(keptPersistStructure));
 
-    // Calculate space freed
-    const spaceFreed = currentSize - keptSize;
+    // Calculate space freed (clamp to 0: the kept persist wrapper can be
+    // larger than the raw stored size, which would otherwise go negative)
+    const spaceFreed = Math.max(0, currentSize - keptSize);
     const conversationsRemoved = sortedConversations.length - keepCount;
 
     // Calculate percentage of total storage freed
@@ -583,7 +584,7 @@ export const calculateSpaceFreedByDays = (
     }
 
     // Get the current size of Zustand conversation storage
-    const currentSize = getItemSize('conversation-storage');
+    const currentSize = getItemSize(ZUSTAND_STORAGE_KEYS.CONVERSATIONS);
 
     // Calculate what would be kept (need to account for Zustand persist wrapper)
     const keptPersistStructure = {
