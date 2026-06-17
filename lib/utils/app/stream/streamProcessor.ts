@@ -14,6 +14,15 @@ import { UI_CONSTANTS } from '@/lib/constants/ui';
 import OpenAI from 'openai';
 
 /**
+ * True when closing a ReadableStream controller failed only because it was
+ * already closed (Node throws `ERR_INVALID_STATE`). Such errors are benign and
+ * shouldn't be logged.
+ */
+function isControllerAlreadyClosedError(err: unknown): boolean {
+  return (err as { code?: string } | null)?.code === 'ERR_INVALID_STATE';
+}
+
+/**
  * Creates a stream processor for Azure OpenAI completions that handles citation tracking.
  *
  * @param {AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>} response - The streaming response from OpenAI.
@@ -49,12 +58,7 @@ export function createAzureOpenAIStreamProcessor(
                 try {
                   controller.close();
                 } catch (closeError) {
-                  // Ignore errors if controller is already closed
-                  if (
-                    !(closeError instanceof Error) ||
-                    (closeError as { code?: string }).code !==
-                      'ERR_INVALID_STATE'
-                  ) {
+                  if (!isControllerAlreadyClosedError(closeError)) {
                     console.error('Error closing controller:', closeError);
                   }
                 }
@@ -128,10 +132,7 @@ export function createAzureOpenAIStreamProcessor(
             try {
               controller.close();
             } catch (closeError) {
-              // Ignore errors if controller is already closed
-              if (
-                (closeError as { code?: string }).code !== 'ERR_INVALID_STATE'
-              ) {
+              if (!isControllerAlreadyClosedError(closeError)) {
                 console.error('Error closing controller:', closeError);
               }
             }
@@ -152,10 +153,7 @@ export function createAzureOpenAIStreamProcessor(
               try {
                 controller.close();
               } catch (closeError) {
-                // Ignore errors if controller is already closed
-                if (
-                  (closeError as { code?: string }).code !== 'ERR_INVALID_STATE'
-                ) {
+                if (!isControllerAlreadyClosedError(closeError)) {
                   console.error('Error closing controller:', closeError);
                 }
               }
