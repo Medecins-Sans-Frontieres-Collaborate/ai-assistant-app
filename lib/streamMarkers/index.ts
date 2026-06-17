@@ -362,6 +362,33 @@ function findNextMarker(
   return best;
 }
 
+/**
+ * Returns the index (>= fromIndex) at which `text` ends with a non-empty
+ * *proper prefix* of some marker's open tag — i.e. a marker open that was split
+ * across a chunk boundary (e.g. a chunk ending in "<<<AGENT_ACTI"). Returns -1
+ * when the tail can't be the start of any marker. A full open tag is excluded
+ * (findNextMarker already finds those), so we only need prefixes up to
+ * `open.length - 1`. Callers hold this tail back so the next chunk can complete
+ * the marker instead of leaking the fragment into display text and losing the
+ * event.
+ */
+function partialOpenStart(text: string, fromIndex: number): number {
+  let earliest = -1;
+  for (const spec of MARKERS) {
+    const open = spec.open;
+    const maxLen = Math.min(open.length - 1, text.length - fromIndex);
+    for (let k = maxLen; k >= 1; k--) {
+      const startIdx = text.length - k;
+      if (startIdx < fromIndex) continue;
+      if (text.startsWith(open.slice(0, k), startIdx)) {
+        if (earliest === -1 || startIdx < earliest) earliest = startIdx;
+        break; // longest prefix for this spec found
+      }
+    }
+  }
+  return earliest;
+}
+
 function parseEventPayload(spec: MarkerSpec, json: string): StreamEvent | null {
   try {
     const parsed = JSON.parse(json) as unknown;
@@ -450,10 +477,20 @@ export function scanStreamEvents(
   while (cursor < input.length) {
     const next = findNextMarker(input, cursor);
     if (next === null) {
-      // No more markers visible. Everything from cursor to end is text;
-      // append it as display and advance.
-      displayDelta += input.slice(cursor);
-      cursor = input.length;
+      // No complete marker visible. The tail might still be the *start* of one
+      // split across the chunk boundary (e.g. ends with "<<<AGENT_ACTI"). Hold
+      // that partial open back — flush only the text before it — so the next
+      // scan completes the marker once the rest arrives. Without this the
+      // fragment leaks into display text and its event is dropped permanently
+      // (processedIndex is monotonic). Symmetric to the incomplete-close case.
+      const partial = partialOpenStart(input, cursor);
+      if (partial === -1) {
+        displayDelta += input.slice(cursor);
+        cursor = input.length;
+      } else {
+        displayDelta += input.slice(cursor, partial);
+        cursor = partial;
+      }
       break;
     }
 
