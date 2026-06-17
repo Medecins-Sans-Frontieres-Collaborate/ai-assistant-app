@@ -281,6 +281,33 @@ export const createSystemPromptMiddleware = (
 };
 
 /**
+ * A TokenCredential that always throws on use. Installed on fail-closed paths
+ * so the Foundry handler cannot silently fall back to its own
+ * DefaultAzureCredential — the app identity carries broader RBAC than any
+ * individual user and using it would bypass the per-user RBAC guarantee
+ * documented in AGENT_ACCESS_MANAGEMENT.md §2.
+ */
+const createDeniedUserCredential = (): TokenCredential => ({
+  getToken: async () => {
+    throw new Error(
+      'User identity required: unable to acquire OBO token. Sign out and back in, then try again.',
+    );
+  },
+});
+
+/**
+ * Result for a fail-closed exit from credential resolution. In production we
+ * install a throwing credential so a Foundry agent never executes under the app
+ * identity; in development we leave the credential undefined so the handler's
+ * DefaultAzureCredential fallback keeps local workflows working without an OBO
+ * setup. An optional resolved endpoint is passed through for logging/context.
+ */
+const failClosedResult = (foundryEndpoint?: string): Partial<ChatContext> =>
+  process.env.NODE_ENV === 'production'
+    ? { userCredential: createDeniedUserCredential(), foundryEndpoint }
+    : {};
+
+/**
  * Factory for credential middleware that acquires OBO credentials for Foundry agent calls.
  * Only runs when the selected model is a Foundry agent — standard model calls don't need per-user auth.
  *
@@ -306,7 +333,8 @@ export const createCredentialMiddleware = async (
     console.warn(
       '[CredentialMiddleware] No session available for OBO token acquisition',
     );
-    return {};
+    // Fail closed in prod: a Foundry agent must not run under the app identity.
+    return failClosedResult();
   }
 
   try {
@@ -386,7 +414,9 @@ export const createCredentialMiddleware = async (
       console.error(
         `[CredentialMiddleware] Refusing to bind OBO credential to disallowed host: ${foundryEndpoint}`,
       );
-      return {};
+      // Fail closed in prod rather than letting the handler fall back to the
+      // app identity against its own default endpoint.
+      return failClosedResult();
     }
 
     // Try OBO first for per-user Foundry access, fall back to DefaultAzureCredential
@@ -416,13 +446,7 @@ export const createCredentialMiddleware = async (
           `[CredentialMiddleware] OBO failed in prod for ${foundryEndpoint}; refusing app-identity fallback:`,
           e instanceof Error ? e.message : e,
         );
-        userCredential = {
-          getToken: async () => {
-            throw new Error(
-              'User identity required: unable to acquire OBO token. Sign out and back in, then try again.',
-            );
-          },
-        };
+        userCredential = createDeniedUserCredential();
       } else {
         console.log(
           `[CredentialMiddleware] OBO unavailable (dev), using default credential for ${foundryEndpoint}`,
@@ -439,8 +463,10 @@ export const createCredentialMiddleware = async (
       '[CredentialMiddleware] Failed to acquire credential:',
       error,
     );
-    // Don't block the pipeline — let it fall back to DefaultAzureCredential
-    return {};
+    // Fail closed in prod: any unexpected resolution error must not let the
+    // handler fall back to the app identity (per-user RBAC bypass). Dev keeps
+    // the DefaultAzureCredential fallback so local workflows still run.
+    return failClosedResult();
   }
 };
 
