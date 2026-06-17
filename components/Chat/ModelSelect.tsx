@@ -30,7 +30,6 @@ import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
   getOrganizationAgentIdFromModelId,
   getOrganizationAgents,
-  getRAGAgents,
   isFoundryAgentId,
 } from '@/lib/organizationAgents';
 
