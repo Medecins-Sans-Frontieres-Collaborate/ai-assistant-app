@@ -238,4 +238,55 @@ describe('createCredentialMiddleware', () => {
       ).rejects.toThrow(/Refusing to issue Foundry token/);
     });
   });
+
+  // In production, every credential-resolution failure must install a throwing
+  // credential rather than returning {}; an empty result lets the handler fall
+  // back to its own DefaultAzureCredential (app identity) and bypass per-user
+  // RBAC. (Outside prod we keep returning {} so the local dev fallback works —
+  // covered by the cases above, which run under NODE_ENV=test.)
+  describe('fail-closed in production', () => {
+    beforeEach(() => {
+      vi.stubEnv('NODE_ENV', 'production');
+    });
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
+    it('installs a throwing credential when the session is missing', async () => {
+      const result = await createCredentialMiddleware(
+        makeContext({ session: undefined }),
+        mockReq,
+      );
+
+      expect(result.userCredential).toBeDefined();
+      await expect(
+        result.userCredential!.getToken('https://ai.azure.com/.default'),
+      ).rejects.toThrow(/User identity required/);
+    });
+
+    it('installs a throwing credential when the resolved host is disallowed', async () => {
+      lookupUserAgentEndpoint.mockReturnValue('https://attacker.example/x');
+
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
+
+      expect(getFoundryToken).not.toHaveBeenCalled();
+      expect(result.userCredential).toBeDefined();
+      await expect(
+        result.userCredential!.getToken('https://ai.azure.com/.default'),
+      ).rejects.toThrow(/User identity required/);
+    });
+
+    it('installs a throwing credential when OBO acquisition fails', async () => {
+      lookupUserAgentEndpoint.mockReturnValue(ALLOWED_ENDPOINT);
+      getFoundryToken.mockRejectedValue(new Error('OBO down'));
+
+      const result = await createCredentialMiddleware(makeContext(), mockReq);
+
+      expect(result.foundryEndpoint).toBe(ALLOWED_ENDPOINT);
+      expect(result.userCredential).toBeDefined();
+      await expect(
+        result.userCredential!.getToken('https://ai.azure.com/.default'),
+      ).rejects.toThrow(/User identity required/);
+    });
+  });
 });
