@@ -52,8 +52,15 @@ interface ArmProject {
   name: string;
 }
 
-async function armGet<T>(token: string, url: string): Promise<{ value: T[] }> {
-  const response = await fetch(url, {
+async function armGet<T>(token: string, url: URL): Promise<{ value: T[] }> {
+  // Defense-in-depth: callers build URLs from validated query params, but pin
+  // the origin to ARM so a request can never be redirected to another host
+  // (SSRF) even if a validator were later loosened.
+  if (url.origin !== ARM_BASE) {
+    console.error('[/api/agents/browse] Blocked non-ARM URL:', url.toString());
+    return { value: [] };
+  }
+  const response = await fetch(url.toString(), {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -95,7 +102,7 @@ export async function GET(request: NextRequest) {
     if (level === 'subscriptions') {
       const data = await armGet<ArmSubscription>(
         armToken,
-        `${ARM_BASE}/subscriptions?api-version=2022-01-01`,
+        new URL('/subscriptions?api-version=2022-01-01', ARM_BASE),
       );
       const subs = data.value.map((s) => ({
         id: s.subscriptionId,
@@ -112,7 +119,10 @@ export async function GET(request: NextRequest) {
           { status: 400 },
         );
       }
-      const url = `${ARM_BASE}/subscriptions/${subscriptionId}/providers/Microsoft.CognitiveServices/accounts?api-version=2025-12-01`;
+      const url = new URL(
+        `/subscriptions/${encodeURIComponent(subscriptionId)}/providers/Microsoft.CognitiveServices/accounts?api-version=2025-12-01`,
+        ARM_BASE,
+      );
       const data = await armGet<ArmCognitiveAccount>(armToken, url);
       const allAccounts = data.value;
       const accounts = allAccounts
@@ -149,7 +159,10 @@ export async function GET(request: NextRequest) {
       }
       const data = await armGet<ArmProject>(
         armToken,
-        `${ARM_BASE}/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects?api-version=2025-12-01`,
+        new URL(
+          `/subscriptions/${encodeURIComponent(subscriptionId)}/resourceGroups/${encodeURIComponent(resourceGroup)}/providers/Microsoft.CognitiveServices/accounts/${encodeURIComponent(accountName)}/projects?api-version=2025-12-01`,
+          ARM_BASE,
+        ),
       );
       const projects = data.value.map((p) => ({
         name: p.name.split('/').pop(),
