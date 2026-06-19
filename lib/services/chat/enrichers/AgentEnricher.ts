@@ -1,3 +1,4 @@
+import { ErrorCode, PipelineError } from '@/types/errors';
 import { SearchMode } from '@/types/searchMode';
 
 import { ChatContext, shouldExecuteAsAgent } from '../pipeline/ChatContext';
@@ -30,10 +31,14 @@ export class AgentEnricher extends BasePipelineStage {
       `[AgentEnricher] Using AI Foundry agent: ${context.model.agentId}`,
     );
 
-    // Validate that model has agentId
+    // Validate that model has agentId. (shouldRun already gates on this, so
+    // this is defensive — but keep it a clean PipelineError for consistency
+    // with the rest of the agent path.)
     if (!context.model.agentId) {
-      throw new Error(
-        `Model ${context.modelId} does not have an agentId configured`,
+      throw PipelineError.error(
+        ErrorCode.AGENT_UNAVAILABLE,
+        'This agent is no longer available. Please re-select it from the agent list.',
+        { modelId: context.modelId },
       );
     }
 
