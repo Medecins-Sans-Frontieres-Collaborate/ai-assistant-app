@@ -506,7 +506,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 17, // Increment this when schema changes to trigger migrations
+      version: 18, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -649,6 +649,16 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 17 → 18: Add customAgentSources (custom Foundry projects the
+        // user has connected for agent discovery). The field was introduced
+        // without a version bump; without this, pre-existing stores rehydrate
+        // it as undefined and any `.map`/`.find` over it would throw.
+        if (version < 18) {
+          if (!Array.isArray(state.customAgentSources)) {
+            state.customAgentSources = [];
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -675,6 +685,13 @@ export const useSettingsStore = create<SettingsStore>()(
               );
               state.customModelOrder = validModelIds;
             }
+          }
+
+          // Defensive: customAgentSources must always be an array. Guards
+          // against a store persisted at v18+ that somehow lacks the field
+          // (e.g. a partial write) so downstream `.map`/`.find` never throw.
+          if (!Array.isArray(state.customAgentSources)) {
+            state.customAgentSources = [];
           }
         }
       },
