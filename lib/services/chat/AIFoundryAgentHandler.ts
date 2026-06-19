@@ -107,16 +107,28 @@ export class AIFoundryAgentHandler {
           const agentId = modelConfig.agentId;
 
           if (!resolvedEndpoint || !agentId) {
-            throw new Error(
-              'Azure AI Foundry endpoint or Agent ID not configured',
+            // Most commonly a legacy agent (saved before Foundry discovery)
+            // whose persisted config carries no resolvable endpoint/agentId.
+            // Surface a clean 409 so the client tells the user to re-select
+            // the agent instead of rendering an opaque 500.
+            throw PipelineError.error(
+              ErrorCode.AGENT_UNAVAILABLE,
+              'This agent is no longer available. Please re-select it from the agent list.',
+              {
+                agentId: agentId ?? null,
+                model: modelId,
+                hasEndpoint: !!resolvedEndpoint,
+              },
             );
           }
 
           // Defense-in-depth host check. The pipeline middleware already
           // validates this; we re-check here to guard non-pipeline callers.
           if (!isAllowedFoundryHost(resolvedEndpoint)) {
-            throw new Error(
+            throw PipelineError.error(
+              ErrorCode.VALIDATION_FAILED,
               `Refusing to invoke Foundry against disallowed host: ${resolvedEndpoint}`,
+              { model: modelId },
             );
           }
 
@@ -135,8 +147,10 @@ export class AIFoundryAgentHandler {
             !!approvalResponses && approvalResponses.length > 0;
 
           if (hasApprovals && !threadId) {
-            throw new Error(
+            throw PipelineError.error(
+              ErrorCode.VALIDATION_FAILED,
               'Cannot submit tool approval without an active conversation (threadId is required for approvalResponses)',
+              { model: modelId },
             );
           }
 
@@ -671,9 +685,49 @@ export class AIFoundryAgentHandler {
             headers: STREAMING_RESPONSE_HEADERS,
           });
         } catch (error: any) {
+          // A PipelineError raised by our own validation (e.g. AGENT_UNAVAILABLE
+          // for a stale/legacy agent) is already client-mapped — let it through
+          // untouched rather than relabelling it as a generic agent failure.
+          if (error instanceof PipelineError) {
+            span.recordException(error as Error);
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: error.message,
+            });
+            throw error;
+          }
+
           // Handle 403 Forbidden — user doesn't have RBAC access to this agent
           const statusCode =
             error?.statusCode || error?.status || error?.response?.status;
+
+          // 404 / NotFound — the agent no longer exists in the Foundry instance.
+          // This is the classic legacy-conflict symptom: a "style guide bot"
+          // saved before the discovery system that was renamed/removed, or
+          // whose old asst_-style id is no longer resolvable. Surface a clean
+          // 409 telling the user to re-select it, not an opaque 500.
+          if (statusCode === 404 || error?.code === 'NotFound') {
+            span.setAttribute('error.type', 'agent_not_found');
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: 'Agent not found in Foundry instance',
+            });
+
+            MetricsService.recordError('agent_unavailable', {
+              user,
+              operation: 'agent',
+              model: modelId,
+              message: 'Agent not found in Foundry instance',
+            });
+
+            throw PipelineError.error(
+              ErrorCode.AGENT_UNAVAILABLE,
+              'This agent is no longer available. Please re-select it from the agent list.',
+              { agentId: modelConfig.agentId, model: modelId },
+              error instanceof Error ? error : undefined,
+            );
+          }
+
           if (statusCode === 403) {
             span.setAttribute('error.type', 'authorization_denied');
             span.setStatus({
