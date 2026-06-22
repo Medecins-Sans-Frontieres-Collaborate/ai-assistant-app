@@ -435,7 +435,9 @@
     "selectAccount": "Select an account...",
     "loadingProjects": "Loading projects...",
     "noProjectsFound": "No projects found. Using \"default\".",
-    "selectAllRequired": "Select a subscription, account, and project."
+    "selectAllRequired": "Select a subscription, account, and project.",
+    "subscriptionRequired": "Choose a subscription",
+    "accountRequired": "Choose a Foundry account"
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
