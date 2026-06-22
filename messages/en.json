@@ -1370,6 +1370,15 @@
       "models": "Models",
       "agents": "Agents"
     },
+    "hide": "Hide from list",
+    "hideConfirmTitle": "Hide \"{name}\"?",
+    "hideConfirmMessage": "It will be removed from your list but not deleted. You can restore it anytime from the Hidden section.",
+    "hideConfirm": "Hide",
+    "hiddenToast": "Hidden \"{name}\"",
+    "hidden": {
+      "title": "Hidden ({count})",
+      "restore": "Restore"
+    },
     "sections": {
       "baseModels": "Base Models",
       "allModels": "All models ({count})"
