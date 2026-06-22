@@ -40,3 +40,38 @@ describe('settingsStore migration (v17 → v18)', () => {
     expect(result.customAgentSources).toEqual(sources);
   });
 });
+
+/**
+ * `hiddenModelIds` (the per-user list of models/agents hidden from the picker)
+ * was added in v19. Pre-v19 stores rehydrate it as `undefined`; the migration
+ * backfills it to an empty array so downstream filtering never sees undefined.
+ */
+describe('settingsStore migration (v18 → v19)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('initializes hiddenModelIds to [] when migrating from v18', () => {
+    const persisted = {
+      customAgents: [],
+      customAgentSources: [],
+      // hiddenModelIds intentionally absent (pre-v19 shape)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 18) as Record<string, unknown>;
+
+    expect(Array.isArray(result.hiddenModelIds)).toBe(true);
+    expect(result.hiddenModelIds).toEqual([]);
+  });
+
+  it('preserves existing hiddenModelIds on a current-version store', () => {
+    const hidden = ['gpt-4.1', 'org-hr-bot', 'foundry-ab12-xyz'];
+    const persisted = {
+      customAgents: [],
+      customAgentSources: [],
+      hiddenModelIds: hidden,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 19) as Record<string, unknown>;
+
+    expect(result.hiddenModelIds).toEqual(hidden);
+  });
+});
