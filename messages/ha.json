@@ -385,7 +385,59 @@
     "delete": "Share",
     "noCustomAgentsYet": "Babu wakili na musamman tukuna.",
     "noOrgAgentsConfigured": "Ba a saita wakilan ƙungiya ba.",
-    "validationFailed": "Tabbatarwa ta gaza"
+    "validationFailed": "Tabbatarwa ta gaza",
+    "addAgentSource": "Ƙara Tushen Da Aka Kera da Kanka",
+    "connectFoundryProject": "Haɗa da Aikin Microsoft Azure Foundry",
+    "connectFoundryDescription": "Gano wakilai daga ofishi ko aikin tawaga a Azure Foundry. Za ka ga śandalin da kake da izini kawai.",
+    "foundryProjectPath": "Hanyar Aikin Foundry",
+    "foundryProjectPathHelp": "Tambayi mai kula da aikin Foundry, ko danna 'Shigar da hannu' don cikawa kowanne fili dabam.",
+    "copyFormat": "Tsari",
+    "nameLabel": "Suna",
+    "namePlaceholder": "misali: Ofishin Amsterdam, Binciken Geneva",
+    "pathRequired": "Manna hanyar albarkatun aikin Foundry.",
+    "pathInvalidFormat": "Wannan ba kamar hanyar albarkatu ba ce. Ya kamata ya fara da /subscriptions/...",
+    "connectionFailed": "Ba a iya haɗa da wannan aikin ba. Duba hanyar da sahihancinta da izinin shiga.",
+    "connectionSuccessAgents": "An haɗa — an samu {count} wakilai",
+    "connectionSuccessEmpty": "An haɗa, amma babu wakilai. Mai yiyuwa kana buƙatar rawar Azure AI User a wannan aikin don ganin wakilansa.",
+    "checkingConnection": "Ana duba haɗi...",
+    "connect": "Haɗa",
+    "save": "Ajiye",
+    "editConnection": "Gyara Haɗi",
+    "sourceName": "Sunan Tushen",
+    "sourceNamePlaceholder": "Ofishin Amsterdam",
+    "sourceNameRequired": "An buƙaci sunan tushen.",
+    "resourcePath": "Hanyar Albarkatu",
+    "resourcePathRequired": "Hanyar albarkatu tana da mahimmanci.",
+    "resourcePathHelp": "Hanyar ARM zuwa aikin Foundry. Tambayi mai kula da ku don wannan bayanin.",
+    "invalidResourcePathFormat": "Hanyar albarkatu dole ta fara da /subscriptions/...",
+    "validatingSource": "Ana gano wakilai...",
+    "sourceValidatedEmpty": "An tabbatar da tushen, amma babu wakilai. Wataƙila baka da izinin ganin wakilan wannan aikin.",
+    "invalidSource": "Ba a iya samun wannan hanyar albarkatu ba. Tabbatar da hanyar da izinin shiga.",
+    "addSource": "Ƙara Tushen",
+    "removeSource": "Cire Tushen",
+    "labelSubscription": "Rijista",
+    "labelFoundryAccount": "Asusun Foundry",
+    "labelProject": "Aiki",
+    "tooltipSubscription": "Rijistar Azure da ke dauke da asusun Foundry. Idan ba ka tabbatar ba, tambayi admin ɗinku wace rajista tawagarku ke amfani da ita.",
+    "tooltipFoundryAccount": "Asusun Azure AI Services inda aikin Foundry ke. Kowane ofishi ko tawaga yakan sami nasa.",
+    "tooltipProject": "Aiki yana tsara wakilai a cikin asusu. Mafi yawancin asusu suna da aikin 'default' guda.",
+    "foundryProjectLabel": "Aikin Foundry",
+    "enterManually": "Shigar da hannu",
+    "browseResources": "Duba albarkatu",
+    "subscriptionIdLabel": "ID na Rijista",
+    "resourceGroupLabel": "Rukunin Albarkatu",
+    "accountNameLabel": "Sunan Asusun",
+    "projectNameLabel": "Sunan Aiki",
+    "loadingSubscriptions": "Ana loda rijistoci...",
+    "selectSubscription": "Zaɓi rijista...",
+    "loadingAccounts": "Ana loda asusu...",
+    "noAccountsFound": "Ba a samo asusun Foundry a cikin wannan rijista ba.",
+    "selectAccount": "Zaɓi asusu...",
+    "loadingProjects": "Ana loda ayyuka...",
+    "noProjectsFound": "Ba a samo ayyuka ba. Ana amfani da \"default\".",
+    "selectAllRequired": "Zaɓi rijista, asusu, da aiki.",
+    "subscriptionRequired": "Zaɓi biyan kuɗi",
+    "accountRequired": "Zaɓi asusun Foundry"
   },
   "Quick Actions": "Ayyuka Masu Sauri",
   "Type / in chat to access your prompts": "Rubuta / a cikin tattaunawa don samun damar kwatance naka",
@@ -641,7 +693,10 @@
     "keepEditing": "Ci gaba da gyarawa",
     "yes": "Eh",
     "no": "A'a",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "An kwafa!",
+    "clear": "Share",
+    "undo": "Wani lokaci baya"
   },
   "terms": {
     "officialLanguages": "Fassarar hukuma:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Kada a sake tambayata idan an dakatar ta maɓalli",
     "stopGenerationDontAskAgainKeyboard": "Kada a sake tambayata idan an dakatar ta kibodi",
     "generateResponseButton": "Ƙirƙiri amsa",
-    "downloadResponse": "Zazzage amsa"
+    "downloadResponse": "Zazzage amsa",
+    "activity": {
+      "callingTool": "Ana kiran kayan aiki…",
+      "callingService": "Ana kiran sabis na waje…",
+      "usingNamedTool": "Ana amfani da {tool}…",
+      "usingNamedToolWithService": "Ana amfani da {tool} a kan {service}…",
+      "searchingWeb": "Ana binciken yanar gizo…",
+      "searchingFiles": "Ana bincika fayiloli…",
+      "runningCode": "Ana gudanar da lamba…",
+      "generatingImage": "Ana ƙirƙirar hoto…",
+      "listingTools": "Ana duba kayan aiki masu samuwa…",
+      "analyzingFiles": "Ana nazarin fayilolinku…",
+      "searchingKnowledge": "Ana bincike a cikin kundin bayanai…",
+      "cancellingPriorTool": "Ana soke buƙatar kayan aiki ta baya…"
+    },
+    "toolSummary": {
+      "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
+      "failedCount": "{count} ta kasa",
+      "statusApproved": "An amince",
+      "statusAutoApproved": "An amince da kai tsaye",
+      "statusAutoDenied": "An ƙi da kai tsaye",
+      "statusFailed": "Ta kasa",
+      "statusIncomplete": "Bai cika ba",
+      "viaService": "ta {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Ana buƙatar izini",
+      "authorizeService": "Ba da izini ga {service}",
+      "descriptionGeneric": "Wannan wakili yana buƙatar izinin ku don samun damar kayan kariya. Sabis ɗin da ke sama ne ke kula da shiga; ba a ajiye shi a nan ba.",
+      "descriptionWithService": "Wannan wakili yana buƙatar izinin ku don samun damar {service}. Shigarku ta {service} sabis ɗin kansa ke sarrafawa, ba a ajiye shi a nan ba.",
+      "signInIncompleteGeneric": "Shigar bai kammala ba",
+      "signInIncompleteForService": "Shigar zuwa {service} bai kammala ba",
+      "signInIncompleteDescriptionGeneric": "Alama izinin bai kammala ba. Tabbatar ka kammala shiga a ɗayan shafin, sa'an nan danna Ci gaba.",
+      "signInIncompleteDescription": "Alama izinin zuwa {service} bai kammala ba. Tabbatar ka kammala shiga a ɗayan shafin, sa'an nan danna Ci gaba.",
+      "authorizeButton": "Ba da izini",
+      "reauthorizeButton": "Sake ba da izini",
+      "continueButton": "Ci gaba",
+      "confirmingButton": "Ana tabbatarwa…",
+      "authorizeHint": "Ba da izini, sannan koma nan ka danna Ci gaba. Idan kana so ka cire izini daga baya, fita daga {service} kai tsaye — ba mu adana takardar izini ba.",
+      "authorizeHintGeneric": "Ba da izini, sannan koma nan ka danna Ci gaba. Don cire izini daga baya, fita daga sabis ɗin da ke sama kai tsaye — ba mu adana takardar izini ba.",
+      "continueHint": "Bayan izini ya kammala a ɗayan shafin, danna Ci gaba.",
+      "confirmingHint": "Ana tabbatar da izini da ci gaba da buƙatarka…",
+      "resendHint": "Bayan ka ba da izini, sake aiko saƙonka don ci gaba.",
+      "resetTooltip": "Sake saitin duk zabin amincewa ta atomatik na kayan aiki ga wannan tattaunawa. Kiran kayan aiki na gaba zai sake tambaya.",
+      "autoApproveAllIndicator": "Ana amincewa da duk kayan aiki kai tsaye",
+      "autoApproveCountIndicator": "{count, plural, one {Ana amincewa da kayan aiki # kai tsaye} other {Ana amincewa da kayan aiki # kai tsaye}}",
+      "resetShort": "Sake saiti",
+      "approvalRequired": "Ana buƙatar amincewa da kayan aiki",
+      "approvalForService": "Amince da kayan aiki don {service}",
+      "approvalDescriptionGeneric": "Wakili yana so ya gudanar da kayan aiki wanda ke buƙatar aminci daga gare ku kafin ci gaba.",
+      "approvalDescriptionWithTool": "Wakili yana so ya gudanar da kayan aiki na {tool}, wanda ke buƙatar aminci daga gare ku kafin ci gaba.",
+      "runToolTitle": "Gudanar da <code>{tool}</code>?",
+      "runToolGeneric": "Gudanar da wannan kayan aiki?",
+      "viaService": "ta hanyar {service}",
+      "approveButton": "Amince",
+      "approveOptionsLabel": "Zaɓuɓɓukan amincewa",
+      "approveOnce": "Amince sau ɗaya",
+      "alwaysApproveThisTool": "Amince da wannan kayan aiki koyaushe",
+      "alwaysApproveAllTools": "Amince da dukkan kayan aiki koyaushe",
+      "denyButton": "Ki",
+      "keyboardHint": "{modifier}+⏎ amince · esc ki",
+      "submittingState": "Ana tura shawarar ku",
+      "approvedState": "An amince — wakili ya ci gaba",
+      "deniedState": "An ki",
+      "submittingApproval": "Ana amincewa da ci gaba da wakili…",
+      "submittingDenial": "Ana aikawa da ƙin amincewa…"
+    },
+    "openImage": "Buɗe hoto",
+    "copyMessage": "Kwafi saƙo",
+    "stopAudio": "Dakatar da sauti",
+    "generatingAudio": "Ana ƙirƙirar sauti...",
+    "listen": "Saurara",
+    "processingAudio": "Ana sarrafa sauti...",
+    "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
+    "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Lanƙwasa gefe",
     "expandSidebar": "Faɗaɗa gefe",
     "quickActionsTitle": "Ayyuka masu sauri",
-    "quickActions": "Ayyuka masu sauri"
+    "quickActions": "Ayyuka masu sauri",
+    "expandFolder": "Faɗaɗa babban fayil {name}",
+    "collapseFolder": "Rufewa babban fayil {name}",
+    "folderOptions": "Zaɓuɓɓukan {name}"
   },
   "errors": {
     "somethingWentWrong": "Wani abu ya samu matsala",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Hali",
     "resetChatSettings": "Sake saitin tattaunawa",
     "resetChatSettingsConfirmTitle": "Sake saitin tattaunawa?",
-    "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsoffin saituna ga duk abubuwan wannan shafi: zafin jiki, umarnin da aka keɓance, Bayani game da Kai, amsar samfurin, saurin gudu, karanta rubutu da murya, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarka ba."
+    "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsoffin saituna ga duk abubuwan wannan shafi: zafin jiki, umarnin da aka keɓance, Bayani game da Kai, amsar samfurin, saurin gudu, karanta rubutu da murya, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarka ba.",
+    "customInstructionsLabel": "Umarni na musamman*",
+    "defaultTemperatureLabel": "Yanayin Zafi na Asali*"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1226,7 +1360,8 @@
       "agents": "Wakilai"
     },
     "sections": {
-      "baseModels": "Asalin Tsaruka"
+      "baseModels": "Asalin Tsaruka",
+      "allModels": "Dukkan samfura ({count})"
     },
     "maintainedBy": "Ana kula da shi ta",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "An gama",
       "reset": "Sake saita",
       "resetTooltip": "Sake daidaita zuwa tsarin da aka saba"
-    }
+    },
+    "hide": "Boyewa daga jerin",
+    "hideConfirmTitle": "A boye \"{name}\"?",
+    "hideConfirmMessage": "Za a cire shi daga jerinka amma ba za a share ba. Za ka iya mayar da shi duk lokacin da kake so daga sashen Boye.",
+    "hideConfirm": "Boye",
+    "hiddenToast": "An boye \"{name}\"",
+    "hidden": {
+      "title": "Boye ({count})",
+      "restore": "Mayar"
+    },
+    "title": "Zaɓi samfur",
+    "modelsDescription": "Zaɓi samfurin AI don tattaunawar ku. Kowanne samfur yana da ƙwarewa daban — zaɓi guda ɗaya don duba cikakkun bayanai.",
+    "recommended": "An ba da shawarar"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Samfurin Claude mai sauri da araha, an tsara shi domin ayyuka masu sauƙi. Ya dace sosai don tambayoyi ƙanana, taƙaitawa, da aikace-aikace masu yawa.",
       "knowledgeCutoff": "Janairu 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Samfurin mafi ƙarfi daga Anthropic. Ya dace da rubutu mai tsawo, bincike, da abubuwan da ke buƙatar tunani mai zurfi.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Samfurin Claude mai daidaituwa. Ya dace da rubutu na yau da kullum, nazari, da coding da saurin amsawa.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "An soke ta mai amfani",
     "transientBody": "Don Allah sake gwadawa",
     "authFailedBody": "Don Allah ka sake shiga",
-    "rateLimitedBody": "Ayyuka sun cika, don Allah sake gwadawa bayan dan lokaci"
+    "rateLimitedBody": "Ayyuka sun cika, don Allah sake gwadawa bayan dan lokaci",
+    "loadingAttempt": "(ƙoƙari na {count})",
+    "transcriptLabel": "[Rubutun: {filename}]"
   },
   "documentTranslation": {
     "title": "Fassarar Takardu",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Gwani — an kirkira tare da masu amfani da MSF kai tsaye. Ba don amfani da kowa ba.",
       "createButton": "Kirkiri Waka na Musamman"
     },
-    "selectAgentPrompt": "Zaɓi wakili don ganin cikakkun bayanai"
+    "selectAgentPrompt": "Zaɓi wakili don ganin cikakkun bayanai",
+    "description": "Wakilan AI na musamman don ayyuka na musamman. Ana sarrafa wakilan asali a tsakiya; ƙara tushen da kake so don gano wakilai daga wasu ayyukan Foundry.",
+    "regionAgents": {
+      "us": "Wakilan Yankin Amurka",
+      "eu": "Wakilan Yankin Turai",
+      "default": "Wakilan Yanki"
+    },
+    "officeAgents": {
+      "suffix": "Wakilai"
+    },
+    "agentSources": {
+      "title": "Hadin Gwiwar Foundry",
+      "description": "Haɗa da sauran ayyukan Foundry don gano wakilansu.",
+      "connectButton": "Haɗa da aikin Microsoft Azure Foundry",
+      "connectButtonShort": "Haɗa aikin Foundry",
+      "addButton": "Ƙara Tushen Al'ada",
+      "addAnother": "Ƙara wata haɗin kai",
+      "noSources": "Babu tushen al'ada da aka saita.",
+      "removeSource": "Cire tushe",
+      "confirmRemove": "A cire?",
+      "sourceConnected": "an haɗa tushen al'ada",
+      "sourcesConnected": "an haɗa tushen al'ada",
+      "backToAgents": "Komawa",
+      "discoveredAgents": "Wakilan da Aka Gano",
+      "viewConnection": "Duba bayanan haɗin kai",
+      "edit": "Gyara",
+      "noAgentsPublished": "Babu wakilai da aka wallafa",
+      "connectedOn": "An haɗa {date}",
+      "disconnectSource": "Katse wannan tushe",
+      "confirmDisconnect": "Danna sau biyu don tabbatarwa",
+      "loadingAgents": "Ana ɗora wakilai...",
+      "noAgentsFound": "Ba a sami wakilai ba a wannan aikin",
+      "noAgentsFoundHint": "Tabbatar an wallafa wakilai kuma kana da matakin Azure AI User a wannan aikin.",
+      "refresh": "Sabunta",
+      "refreshAgents": "Sabunta wakilai",
+      "technicalDetails": "Cikakkun bayanai na fasaha",
+      "agentCountLabel": "wakilai {count}",
+      "disconnectedToast": "An katse {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Manufofin Sirri & Kare Bayanai",

@@ -298,7 +298,59 @@
     "delete": "Видалити",
     "noCustomAgentsYet": "Користувацьких агентів поки немає.",
     "noOrgAgentsConfigured": "Агентів організації не налаштовано.",
-    "validationFailed": "Перевірка не вдалася"
+    "validationFailed": "Перевірка не вдалася",
+    "addAgentSource": "Додати власне джерело",
+    "connectFoundryProject": "Підключити проект Microsoft Azure Foundry",
+    "connectFoundryDescription": "Знайдіть агентів з проекту Azure Foundry іншого офісу або команди. Ви побачите тільки тих агентів, до яких маєте доступ.",
+    "foundryProjectPath": "Шлях до проекту Foundry",
+    "foundryProjectPathHelp": "Зверніться до адміністратора вашого проекту Foundry, або натисніть 'Ввести вручну', щоб заповнити кожне поле окремо.",
+    "copyFormat": "Формат",
+    "nameLabel": "Назва",
+    "namePlaceholder": "наприклад, Amsterdam Office, Geneva Research",
+    "pathRequired": "Вставте шлях до ресурсу проекту Foundry.",
+    "pathInvalidFormat": "Це не схоже на шлях до ресурсу. Він має починатися з /subscriptions/...",
+    "connectionFailed": "Не вдалося підключитися до цього проекту. Перевірте правильність шляху та наявність доступу.",
+    "connectionSuccessAgents": "Підключено — знайдено агентів: {count}",
+    "connectionSuccessEmpty": "Підключено, але агентів не знайдено. Щоб побачити агентів, вам може знадобитися роль Azure AI User у цьому проекті.",
+    "checkingConnection": "Перевірка підключення...",
+    "connect": "Підключити",
+    "save": "Зберегти",
+    "editConnection": "Редагувати підключення",
+    "sourceName": "Назва джерела",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Потрібна назва джерела.",
+    "resourcePath": "Шлях до ресурсу",
+    "resourcePathRequired": "Потрібен шлях до ресурсу.",
+    "resourcePathHelp": "ARM шлях до проекту Foundry. Зверніться до адміністратора для отримання цього значення.",
+    "invalidResourcePathFormat": "Шлях до ресурсу має починатися з /subscriptions/...",
+    "validatingSource": "Пошук агентів...",
+    "sourceValidatedEmpty": "Джерело дійсне, але агентів не знайдено. Можливо, у вас немає доступу до агентів у цьому проекті.",
+    "invalidSource": "Не вдалося отримати доступ за цим шляхом. Перевірте шлях та свої дозволи.",
+    "addSource": "Додати джерело",
+    "removeSource": "Видалити джерело",
+    "labelSubscription": "Підписка",
+    "labelFoundryAccount": "Обліковий запис Foundry",
+    "labelProject": "Проект",
+    "tooltipSubscription": "Azure-підписка, яка містить обліковий запис Foundry. Якщо не знаєте, зверніться до адміністратора щодо підписки вашої команди.",
+    "tooltipFoundryAccount": "Обліковий запис Azure AI Services, де знаходиться проект Foundry. Зазвичай кожен офіс або команда має власний обліковий запис.",
+    "tooltipProject": "Проект організовує агентів в обліковому записі. У більшості облікових записів є один проект — \"default\".",
+    "foundryProjectLabel": "Проект Foundry",
+    "enterManually": "Ввести вручну",
+    "browseResources": "Переглянути ресурси",
+    "subscriptionIdLabel": "ID підписки",
+    "resourceGroupLabel": "Група ресурсів",
+    "accountNameLabel": "Назва облікового запису",
+    "projectNameLabel": "Назва проекту",
+    "loadingSubscriptions": "Завантаження підписок...",
+    "selectSubscription": "Оберіть підписку...",
+    "loadingAccounts": "Завантаження облікових записів...",
+    "noAccountsFound": "У цій підписці не знайдено облікових записів Foundry.",
+    "selectAccount": "Оберіть обліковий запис...",
+    "loadingProjects": "Завантаження проектів...",
+    "noProjectsFound": "Проекти не знайдено. Використовується \"default\".",
+    "selectAllRequired": "Оберіть підписку, обліковий запис і проект.",
+    "subscriptionRequired": "Оберіть підписку",
+    "accountRequired": "Оберіть акаунт Foundry"
   },
   "Quick Actions": "Швидкі дії",
   "Type / in chat to access your prompts": "Введіть / у чаті для доступу до ваших підказок",
@@ -455,7 +507,10 @@
     "keepEditing": "Продовжити редагування",
     "yes": "Так",
     "no": "Ні",
-    "beta": "Бета"
+    "beta": "Бета",
+    "copied": "Скопійовано!",
+    "clear": "Очистити",
+    "undo": "Скасувати"
   },
   "errors": {
     "unexpectedErrorOccurred": "Сталася неочікувана помилка",
@@ -609,13 +664,90 @@
     "stopGenerationDontAskAgainButton": "Більше не запитувати під час зупинки кнопкою",
     "stopGenerationDontAskAgainKeyboard": "Більше не запитувати під час зупинки з клавіатури",
     "generateResponseButton": "Згенерувати відповідь",
-    "downloadResponse": "Завантажити відповідь"
+    "downloadResponse": "Завантажити відповідь",
+    "activity": {
+      "callingTool": "Викликається інструмент…",
+      "callingService": "Викликається зовнішній сервіс…",
+      "usingNamedTool": "Використовується {tool}…",
+      "usingNamedToolWithService": "Використовується {tool} у {service}…",
+      "searchingWeb": "Пошук в Інтернеті…",
+      "searchingFiles": "Пошук у файлах…",
+      "runningCode": "Виконується код…",
+      "generatingImage": "Генерується зображення…",
+      "listingTools": "Пошук доступних інструментів…",
+      "analyzingFiles": "Аналіз файлів…",
+      "searchingKnowledge": "Пошук у базі знань…",
+      "cancellingPriorTool": "Скасування попереднього запиту до інструменту…"
+    },
+    "toolSummary": {
+      "usedTools": "Використано {count, plural, one {# інструмент} few {# інструменти} many {# інструментів} other {# інструментів}}",
+      "failedCount": "Не вдалося: {count}",
+      "statusApproved": "Схвалено",
+      "statusAutoApproved": "Автоматично схвалено",
+      "statusAutoDenied": "Автоматично відхилено",
+      "statusFailed": "Помилка",
+      "statusIncomplete": "Не завершено",
+      "viaService": "через {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Потрібна авторизація",
+      "authorizeService": "Авторизуйте {service}",
+      "descriptionGeneric": "Цьому агенту потрібен ваш дозвіл для доступу до захищеного ресурсу. Ваш вхід здійснюється через відповідний сервіс і не зберігається тут.",
+      "descriptionWithService": "Цьому агенту потрібен ваш дозвіл для доступу до {service}. Вхід у {service} керується самим {service} і не зберігається тут.",
+      "signInIncompleteGeneric": "Вхід не завершено",
+      "signInIncompleteForService": "Вхід у {service} не завершено",
+      "signInIncompleteDescriptionGeneric": "Схоже, авторизація не завершена. Переконайтеся, що виконали вхід в іншій вкладці, а потім натисніть \"Продовжити\" ще раз.",
+      "signInIncompleteDescription": "Схоже, авторизація в {service} не завершена. Переконайтеся, що виконали вхід в іншій вкладці, а потім натисніть \"Продовжити\" ще раз.",
+      "authorizeButton": "Авторизувати",
+      "reauthorizeButton": "Переавторизація",
+      "continueButton": "Продовжити",
+      "confirmingButton": "Підтвердження…",
+      "authorizeHint": "Авторизуйтеся, потім поверніться сюди й натисніть \"Продовжити\". Щоб відкликати дозвіл, вийдіть напряму з {service} — ми не зберігаємо токен.",
+      "authorizeHintGeneric": "Авторизуйтеся, потім поверніться сюди й натисніть \"Продовжити\". Щоб відкликати дозвіл, вийдіть напряму із сервісу — ми не зберігаємо токен.",
+      "continueHint": "Коли авторизація завершиться в іншій вкладці, натисніть \"Продовжити\".",
+      "confirmingHint": "Підтвердження авторизації та відновлення вашого запиту…",
+      "resendHint": "Після авторизації надішліть ваше повідомлення ще раз, щоб продовжити.",
+      "resetTooltip": "Скинути всі налаштування авто-схвалення інструментів для цієї розмови. У майбутньому виклики інструментів знову потребуватимуть підтвердження.",
+      "autoApproveAllIndicator": "Автоматичне схвалення всіх інструментів",
+      "autoApproveCountIndicator": "{count, plural, one {Автоматично схвалюється # інструмент} few {Автоматично схвалюються # інструменти} many {Автоматично схвалюється # інструментів} other {Автоматично схвалюється # інструментів}}",
+      "resetShort": "Скинути",
+      "approvalRequired": "Потрібне схвалення інструменту",
+      "approvalForService": "Схвалити інструмент для {service}",
+      "approvalDescriptionGeneric": "Агент бажає запустити інструмент, який потребує вашого схвалення.",
+      "approvalDescriptionWithTool": "Агент бажає запустити інструмент {tool}, який потребує вашого схвалення.",
+      "runToolTitle": "Запустити <code>{tool}</code>?",
+      "runToolGeneric": "Запустити цей інструмент?",
+      "viaService": "через {service}",
+      "approveButton": "Схвалити",
+      "approveOptionsLabel": "Опції схвалення",
+      "approveOnce": "Схвалити одноразово",
+      "alwaysApproveThisTool": "Завжди схвалювати цей інструмент",
+      "alwaysApproveAllTools": "Завжди схвалювати всі інструменти",
+      "denyButton": "Відхилити",
+      "keyboardHint": "{modifier}+⏎ схвалити · esc відхилити",
+      "submittingState": "Надсилання вашого рішення",
+      "approvedState": "Схвалено — агент відновлений",
+      "deniedState": "Відхилено",
+      "submittingApproval": "Схвалення та відновлення агента…",
+      "submittingDenial": "Надсилання відмови…"
+    },
+    "openImage": "Відкрити зображення",
+    "copyMessage": "Скопіювати повідомлення",
+    "stopAudio": "Зупинити аудіо",
+    "generatingAudio": "Генерується аудіо...",
+    "listen": "Прослухати",
+    "processingAudio": "Обробка аудіо...",
+    "ttsError": "Помилка генерації аудіо. Спробуйте ще раз.",
+    "unsupportedMessageType": "Помилка відображення повідомлення: Непідтримуваний тип повідомлення"
   },
   "sidebar": {
     "collapseSidebar": "Згорнути бічну панель",
     "expandSidebar": "Розгорнути бічну панель",
     "quickActionsTitle": "Швидкі дії",
-    "quickActions": "Швидкі дії"
+    "quickActions": "Швидкі дії",
+    "expandFolder": "Розгорнути папку {name}",
+    "collapseFolder": "Згорнути папку {name}",
+    "folderOptions": "Опції для {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Створюйте багаторазові підказки з допомогою ШІ",
@@ -931,7 +1063,9 @@
     "behaviorSection": "Поведінка",
     "resetChatSettings": "Скинути налаштування чату",
     "resetChatSettingsConfirmTitle": "Скинути налаштування чату?",
-    "resetChatSettingsConfirmMessage": "Це відновить типові налаштування всього в цій панелі: температура, власні інструкції, інформація про вас, відповідь моделі, швидкість трансляції, текст у мовлення, активні файли та підтвердження. Це не впливає на ваші розмови."
+    "resetChatSettingsConfirmMessage": "Це відновить типові налаштування всього в цій панелі: температура, власні інструкції, інформація про вас, відповідь моделі, швидкість трансляції, текст у мовлення, активні файли та підтвердження. Це не впливає на ваші розмови.",
+    "customInstructionsLabel": "Індивідуальні інструкції*",
+    "defaultTemperatureLabel": "Температура за замовчуванням*"
   },
   "notFound": {
     "lostDog": "Загублений пес"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "Скасовано користувачем",
     "transientBody": "Спробуйте ще раз",
     "authFailedBody": "Будь ласка, увійдіть знову",
-    "rateLimitedBody": "Сервіс перевантажений, спробуйте ще раз пізніше"
+    "rateLimitedBody": "Сервіс перевантажений, спробуйте ще раз пізніше",
+    "loadingAttempt": "(спроба {count})",
+    "transcriptLabel": "[Транскрипт: {filename}]"
   },
   "transcriptionComplete": "Транскрибування завершено! Текст додано до поля введення чату.",
   "No prompts found": "Підказок не знайдено",
@@ -1174,7 +1310,8 @@
       "agents": "Агенти"
     },
     "sections": {
-      "baseModels": "Базові моделі"
+      "baseModels": "Базові моделі",
+      "allModels": "Усі моделі ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Розширена функція",
@@ -1247,7 +1384,19 @@
       "reasoning": "Розширене логічне мислення для складних завдань",
       "omni": "Мультимодальна модель з широкими можливостями",
       "agent": "Агент із засобами реального часу та доступом до вебу"
-    }
+    },
+    "hide": "Приховати зі списку",
+    "hideConfirmTitle": "Приховати \"{name}\"?",
+    "hideConfirmMessage": "Воно буде прибране зі списку, але не видалене. Ви можете відновити його у розділі Приховане.",
+    "hideConfirm": "Приховати",
+    "hiddenToast": "Приховано \"{name}\"",
+    "hidden": {
+      "title": "Приховано ({count})",
+      "restore": "Відновити"
+    },
+    "title": "Оберіть модель",
+    "modelsDescription": "Оберіть AI-модель для своєї бесіди. Кожна модель має свої переваги — виберіть одну, щоб переглянути деталі.",
+    "recommended": "Рекомендовано"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Грудень 2025",
       "description": "Спеціалізований варіант GPT-5.2, оптимізований для ведення розмов і емоційного інтелекту. Відзначається співчутливим спілкуванням, креативним письменництвом, генерацією ідей і природнім діалогом. Найкраще підходить для невимушених бесід, консультування й завдань, що вимагають емоційної обізнаності."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Найпотужніша модель Anthropic. Підходить для довгих текстів, досліджень і завдань, що потребують уважного мислення.",
+      "knowledgeCutoff": "Лют 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Збалансована модель Claude. Підходить для щоденного письма, аналізу та кодування із швидкою відповіддю.",
+      "knowledgeCutoff": "Лют 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Експериментальна функція — створена у прямій співпраці з досвідченими користувачами MSF. Не для загального використання.",
       "createButton": "Створити користувацького агента"
     },
-    "selectAgentPrompt": "Виберіть агента для перегляду деталей"
+    "selectAgentPrompt": "Виберіть агента для перегляду деталей",
+    "description": "Спеціалізовані AI-агенти для конкретних завдань. Типові агенти керуються централізовано; додайте власні джерела, щоб знаходити агентів з інших проектів Foundry.",
+    "regionAgents": {
+      "us": "Агенти регіону США",
+      "eu": "Агенти регіону ЄС",
+      "default": "Агенти регіону"
+    },
+    "officeAgents": {
+      "suffix": "Агенти"
+    },
+    "agentSources": {
+      "title": "Підключення Foundry",
+      "description": "Підключіться до інших проектів Foundry, щоб знаходити їх агентів.",
+      "connectButton": "Підключити проєкт Microsoft Azure Foundry",
+      "connectButtonShort": "Підключити проєкт Foundry",
+      "addButton": "Додати користувацьке джерело",
+      "addAnother": "Додати ще одне підключення",
+      "noSources": "Користувацькі джерела не налаштовано.",
+      "removeSource": "Видалити джерело",
+      "confirmRemove": "Видалити?",
+      "sourceConnected": "користувацьке джерело підключено",
+      "sourcesConnected": "користувацькі джерела підключено",
+      "backToAgents": "Назад",
+      "discoveredAgents": "Виявлені агенти",
+      "viewConnection": "Переглянути деталі підключення",
+      "edit": "Редагувати",
+      "noAgentsPublished": "Агенти не опубліковані",
+      "connectedOn": "Підключено {date}",
+      "disconnectSource": "Відключити це джерело",
+      "confirmDisconnect": "Натисніть ще раз для підтвердження",
+      "loadingAgents": "Завантаження агентів...",
+      "noAgentsFound": "У цьому проєкті агентів не знайдено",
+      "noAgentsFoundHint": "Переконайтесь, що агенти опубліковані, і ви маєте роль Azure AI User у цьому проєкті.",
+      "refresh": "Оновити",
+      "refreshAgents": "Оновити агентів",
+      "technicalDetails": "Технічні деталі",
+      "agentCountLabel": "{count} агентів",
+      "disconnectedToast": "Відключено {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Політика конфіденційності & Захист даних",

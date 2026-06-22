@@ -381,7 +381,59 @@
     "delete": "Sil",
     "noCustomAgentsYet": "Henüz özel ajan yok.",
     "noOrgAgentsConfigured": "Yapılandırılmış kuruluş ajanı yok.",
-    "validationFailed": "Doğrulama başarısız oldu"
+    "validationFailed": "Doğrulama başarısız oldu",
+    "addAgentSource": "Özel Kaynak Ekle",
+    "connectFoundryProject": "Bir Microsoft Azure Foundry Projesi Bağla",
+    "connectFoundryDescription": "Başka bir ofis veya ekibin Azure Foundry projesindeki ajanları keşfedin. Yalnızca erişim izniniz olan ajanları görebilirsiniz.",
+    "foundryProjectPath": "Foundry Proje Yolu",
+    "foundryProjectPathHelp": "Foundry proje yöneticinize danışın veya her alanı ayrı ayrı doldurmak için 'Manuel giriş' seçeneğine tıklayın.",
+    "copyFormat": "Format",
+    "nameLabel": "Ad",
+    "namePlaceholder": "Örn. Amsterdam Ofisi, Cenevre Araştırma",
+    "pathRequired": "Foundry proje kaynak yolunu yapıştırın.",
+    "pathInvalidFormat": "Bu bir kaynak yolu gibi görünmüyor. /subscriptions/... ile başlamalıdır.",
+    "connectionFailed": "Bu projeye ulaşılamadı. Yolun doğru olduğundan ve erişiminizin bulunduğundan emin olun.",
+    "connectionSuccessAgents": "Bağlandı — {count} ajan bulundu",
+    "connectionSuccessEmpty": "Bağlandı, ancak ajan bulunamadı. Projedeki ajanları görmek için Azure AI Kullanıcı rolüne sahip olmanız gerekebilir.",
+    "checkingConnection": "Bağlantı kontrol ediliyor...",
+    "connect": "Bağlan",
+    "save": "Kaydet",
+    "editConnection": "Bağlantıyı Düzenle",
+    "sourceName": "Kaynak Adı",
+    "sourceNamePlaceholder": "Amsterdam Ofisi",
+    "sourceNameRequired": "Kaynak adı gereklidir.",
+    "resourcePath": "Kaynak Yolu",
+    "resourcePathRequired": "Kaynak yolu gereklidir.",
+    "resourcePathHelp": "Bir Foundry projesinin ARM kaynak yolu. Bu değeri yöneticinizden isteyin.",
+    "invalidResourcePathFormat": "Kaynak yolu /subscriptions/... ile başlamalıdır.",
+    "validatingSource": "Ajanlar keşfediliyor...",
+    "sourceValidatedEmpty": "Geçerli kaynak, ancak ajan bulunamadı. Bu projedeki ajanlara erişiminiz olmayabilir.",
+    "invalidSource": "Bu kaynak yoluna erişilemedi. Yolu ve izinlerinizi doğrulayın.",
+    "addSource": "Kaynak Ekle",
+    "removeSource": "Kaynağı Kaldır",
+    "labelSubscription": "Abonelik",
+    "labelFoundryAccount": "Foundry Hesabı",
+    "labelProject": "Proje",
+    "tooltipSubscription": "Foundry hesabının bulunduğu Azure aboneliği. Emin değilseniz, ekibinizin hangi aboneliği kullandığını yöneticinize sorabilirsiniz.",
+    "tooltipFoundryAccount": "Foundry projesinin bulunduğu Azure AI Services hesabı. Genellikle her ofis veya ekibin kendi hesabı vardır.",
+    "tooltipProject": "Bir proje, ajanları bir hesap içinde organize eder. Çoğu hesapta tek bir 'default' proje bulunur.",
+    "foundryProjectLabel": "Foundry Projesi",
+    "enterManually": "Manuel giriş",
+    "browseResources": "Kaynaklara göz at",
+    "subscriptionIdLabel": "Abonelik Kimliği",
+    "resourceGroupLabel": "Kaynak Grubu",
+    "accountNameLabel": "Hesap Adı",
+    "projectNameLabel": "Proje Adı",
+    "loadingSubscriptions": "Abonelikler yükleniyor...",
+    "selectSubscription": "Bir abonelik seçin...",
+    "loadingAccounts": "Hesaplar yükleniyor...",
+    "noAccountsFound": "Bu abonelikte Foundry hesabı bulunamadı.",
+    "selectAccount": "Bir hesap seçin...",
+    "loadingProjects": "Projeler yükleniyor...",
+    "noProjectsFound": "Proje bulunamadı. \"default\" kullanılacak.",
+    "selectAllRequired": "Bir abonelik, hesap ve proje seçin.",
+    "subscriptionRequired": "Bir abonelik seçin",
+    "accountRequired": "Bir Foundry hesabı seçin"
   },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",
@@ -538,7 +590,10 @@
     "keepEditing": "Düzenlemeye devam et",
     "yes": "Evet",
     "no": "Hayır",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Kopyalandı!",
+    "clear": "Temizle",
+    "undo": "Geri al"
   },
   "errors": {
     "unexpectedErrorOccurred": "Beklenmeyen bir hata oluştu",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "Durdurma butonunda tekrar sorma",
     "stopGenerationDontAskAgainKeyboard": "Klavye ile durdururken tekrar sorma",
     "generateResponseButton": "Yanıt oluştur",
-    "downloadResponse": "Yanıtı indir"
+    "downloadResponse": "Yanıtı indir",
+    "activity": {
+      "callingTool": "Araç çağrılıyor…",
+      "callingService": "Harici servis çağrılıyor…",
+      "usingNamedTool": "{tool} kullanılıyor…",
+      "usingNamedToolWithService": "{service} üzerinde {tool} kullanılıyor…",
+      "searchingWeb": "Web'de aranıyor…",
+      "searchingFiles": "Dosyalar aranıyor…",
+      "runningCode": "Kod çalıştırılıyor…",
+      "generatingImage": "Görsel üretiliyor…",
+      "listingTools": "Kullanılabilir araçlar aranıyor…",
+      "analyzingFiles": "Dosyalarınız analiz ediliyor…",
+      "searchingKnowledge": "Bilgi tabanında aranıyor…",
+      "cancellingPriorTool": "Önceki araç isteği iptal ediliyor…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
+      "failedCount": "{count} başarısız oldu",
+      "statusApproved": "Onaylandı",
+      "statusAutoApproved": "Otomatik onaylandı",
+      "statusAutoDenied": "Otomatik reddedildi",
+      "statusFailed": "Başarısız",
+      "statusIncomplete": "Eksik",
+      "viaService": "{service} üzerinden"
+    },
+    "consent": {
+      "authorizeRequired": "Yetkilendirme gerekli",
+      "authorizeService": "{service} için yetkilendir",
+      "descriptionGeneric": "Bu ajan, güvenli bir kaynağa erişmek için izninizi istiyor. Oturum açmanız, hizmet tarafından yönetilir; burada saklanmaz.",
+      "descriptionWithService": "Bu ajan, {service} erişimi için izninizi istiyor. {service} oturum açmanız, doğrudan {service} tarafından yönetilir; burada saklanmaz.",
+      "signInIncompleteGeneric": "Oturum açma tamamlanmadı",
+      "signInIncompleteForService": "{service} oturum açma tamamlanmadı",
+      "signInIncompleteDescriptionGeneric": "Görünüşe göre yetkilendirme tamamlanmadı. Diğer sekmede oturum açmayı bitirdiğinizden emin olun, ardından Yeniden Devam Et'e tıklayın.",
+      "signInIncompleteDescription": "Görünüşe göre {service} için yetkilendirme tamamlanmadı. Diğer sekmede oturum açmayı bitirdiğinizden emin olun, ardından Yeniden Devam Et'e tıklayın.",
+      "authorizeButton": "Yetkilendir",
+      "reauthorizeButton": "Tekrar yetkilendir",
+      "continueButton": "Devam et",
+      "confirmingButton": "Onaylanıyor…",
+      "authorizeHint": "Yetkilendirin, buraya dönüp Devam et'e tıklayın. Daha sonra iptal etmek için doğrudan {service} üzerinden çıkış yapın — token bizde tutulmaz.",
+      "authorizeHintGeneric": "Yetkilendirin, buraya dönüp Devam et'e tıklayın. Daha sonra iptal etmek için doğrudan hizmetten çıkış yapın — token bizde tutulmaz.",
+      "continueHint": "Yetkilendirme diğer sekmede tamamlandıysa Devam et'e tıklayın.",
+      "confirmingHint": "Yetkilendirme onaylanıyor ve talebiniz sürdürülüyor…",
+      "resendHint": "Yetkilendirdikten sonra devam etmek için mesajınızı tekrar gönderin.",
+      "resetTooltip": "Bu sohbet için tüm araç otomatik onay tercihlerini sıfırlayın. Gelecekteki araç çağrılarında tekrar onay istenecektir.",
+      "autoApproveAllIndicator": "Tüm araçlar otomatik onaylanıyor",
+      "autoApproveCountIndicator": "{count, plural, one {# araç otomatik onaylanıyor} other {# araç otomatik onaylanıyor}}",
+      "resetShort": "Sıfırla",
+      "approvalRequired": "Araç onayı gerekli",
+      "approvalForService": "{service} için aracı onayla",
+      "approvalDescriptionGeneric": "Ajan, devam etmeden önce onayınız gereken bir aracı çalıştırmak istiyor.",
+      "approvalDescriptionWithTool": "Ajan, {tool} aracını çalıştırmak istiyor; devam etmeden önce onayınız gereklidir.",
+      "runToolTitle": "<code>{tool}</code> çalıştırılsın mı?",
+      "runToolGeneric": "Bu araç çalıştırılsın mı?",
+      "viaService": "{service} aracılığıyla",
+      "approveButton": "Onayla",
+      "approveOptionsLabel": "Onay seçenekleri",
+      "approveOnce": "Bir kez onayla",
+      "alwaysApproveThisTool": "Bu aracı her zaman onayla",
+      "alwaysApproveAllTools": "Tüm araçları her zaman onayla",
+      "denyButton": "Reddet",
+      "keyboardHint": "{modifier}+⏎ onayla · esc reddet",
+      "submittingState": "Kararınız gönderiliyor",
+      "approvedState": "Onaylandı — ajan devam ediyor",
+      "deniedState": "Reddedildi",
+      "submittingApproval": "Onaylanıyor ve ajan devam ediyor…",
+      "submittingDenial": "Reddiniz gönderiliyor…"
+    },
+    "openImage": "Görseli aç",
+    "copyMessage": "Mesajı kopyala",
+    "stopAudio": "Sesi durdur",
+    "generatingAudio": "Ses oluşturuluyor...",
+    "listen": "Dinle",
+    "processingAudio": "Ses işleniyor...",
+    "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
+    "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
     "expandSidebar": "Kenar çubuğunu genişlet",
     "quickActionsTitle": "Hızlı İşlemler",
-    "quickActions": "Hızlı İşlemler"
+    "quickActions": "Hızlı İşlemler",
+    "expandFolder": "Klasörü genişlet {name}",
+    "collapseFolder": "Klasörü daralt {name}",
+    "folderOptions": "{name} seçenekleri"
   },
   "prompts": {
     "buildReusablePrompts": "AI yardımıyla yeniden kullanılabilir istemler oluşturun",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "Davranış",
     "resetChatSettings": "Sohbet ayarlarını sıfırla",
     "resetChatSettingsConfirmTitle": "Sohbet ayarları sıfırlansın mı?",
-    "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Kendiniz Hakkında, model yanıtı, akış hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez."
+    "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Kendiniz Hakkında, model yanıtı, akış hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez.",
+    "customInstructionsLabel": "Özel Talimatlar*",
+    "defaultTemperatureLabel": "Varsayılan Temperature*"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1077,7 +1211,8 @@
       "agents": "Ajanlar"
     },
     "sections": {
-      "baseModels": "Temel Modeller"
+      "baseModels": "Temel Modeller",
+      "allModels": "Tüm modeller ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Gelişmiş Özellik",
@@ -1150,7 +1285,19 @@
       "reasoning": "Karmaşık sorunlar için gelişmiş akıl yürütme",
       "omni": "Geniş yeteneklere sahip çok modlu model",
       "agent": "Gerçek zamanlı araçlar ve web erişimi olan ajan"
-    }
+    },
+    "hide": "Listeden gizle",
+    "hideConfirmTitle": "\"{name}\" gizlensin mi?",
+    "hideConfirmMessage": "Listeden kaldırılacak ancak silinmeyecek. Dilediğiniz zaman Gizlenenler bölümünden tekrar ekleyebilirsiniz.",
+    "hideConfirm": "Gizle",
+    "hiddenToast": "\"{name}\" gizlendi",
+    "hidden": {
+      "title": "Gizlenenler ({count})",
+      "restore": "Geri yükle"
+    },
+    "title": "Bir model seçin",
+    "modelsDescription": "Sohbetiniz için bir AI modeli seçin. Her modelin güçlü yönleri farklıdır — ayrıntılar için birini seçin.",
+    "recommended": "Tavsiye edilen"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Aralık 2025",
       "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic’in en güçlü modeli. Uzun yazılar, araştırmalar ve özenli düşünme gerektiren işler için uygundur.",
+      "knowledgeCutoff": "Şubat 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Dengeli bir Claude modeli. Günlük yazım, analiz ve hızlı yanıtlar gerektiren kodlama için iyi bir seçenektir.",
+      "knowledgeCutoff": "Şubat 2026"
     }
   },
   "searchMode": {
@@ -1365,7 +1522,9 @@
     "cancelledBody": "Kullanıcı tarafından iptal edildi",
     "transientBody": "Lütfen tekrar deneyin",
     "authFailedBody": "Lütfen tekrar oturum açın",
-    "rateLimitedBody": "Servis kapasitesinde, lütfen kısa süre sonra tekrar deneyin"
+    "rateLimitedBody": "Servis kapasitesinde, lütfen kısa süre sonra tekrar deneyin",
+    "loadingAttempt": "(deneme {count})",
+    "transcriptLabel": "[Transkript: {filename}]"
   },
   "migration": {
     "status": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Deneysel — MSF ileri düzey kullanıcılarıyla doğrudan iş birliği içinde geliştirilmiştir. Genel kullanım için değildir.",
       "createButton": "Özel Ajan Oluştur"
     },
-    "selectAgentPrompt": "Detayları görmek için bir ajan seçin"
+    "selectAgentPrompt": "Detayları görmek için bir ajan seçin",
+    "description": "Belirli görevler için özel AI ajanları. Varsayılan ajanlar merkezi olarak yönetilir; diğer Foundry projelerindeki ajanları keşfetmek için özel kaynaklar ekleyin.",
+    "regionAgents": {
+      "us": "ABD Bölgesi Ajanları",
+      "eu": "AB Bölgesi Ajanları",
+      "default": "Bölge Temsilcileri"
+    },
+    "officeAgents": {
+      "suffix": "Temsilciler"
+    },
+    "agentSources": {
+      "title": "Foundry Bağlantıları",
+      "description": "Diğer Foundry projelerine bağlanarak temsilcilerini keşfedin.",
+      "connectButton": "Bir Microsoft Azure Foundry projesine bağlan",
+      "connectButtonShort": "Bir Foundry projesine bağlan",
+      "addButton": "Özel Kaynak Ekle",
+      "addAnother": "Başka bir bağlantı ekle",
+      "noSources": "Yapılandırılmış özel kaynak yok.",
+      "removeSource": "Kaynağı kaldır",
+      "confirmRemove": "Kaldırılsın mı?",
+      "sourceConnected": "özel kaynak bağlandı",
+      "sourcesConnected": "özel kaynaklar bağlandı",
+      "backToAgents": "Geri",
+      "discoveredAgents": "Keşfedilen Temsilciler",
+      "viewConnection": "Bağlantı ayrıntılarını görüntüle",
+      "edit": "Düzenle",
+      "noAgentsPublished": "Yayınlanmış temsilci yok",
+      "connectedOn": "Bağlandı {date}",
+      "disconnectSource": "Bu kaynağın bağlantısını kes",
+      "confirmDisconnect": "Onaylamak için tekrar tıklayın",
+      "loadingAgents": "Temsilciler yükleniyor...",
+      "noAgentsFound": "Bu projede temsilci bulunamadı",
+      "noAgentsFoundHint": "Temsilcilerin yayınlandığından ve bu projede Azure AI Kullanıcı rolüne sahip olduğunuzdan emin olun.",
+      "refresh": "Yenile",
+      "refreshAgents": "Temsilcileri yenile",
+      "technicalDetails": "Teknik ayrıntılar",
+      "agentCountLabel": "{count} temsilci",
+      "disconnectedToast": "{name} bağlantısı kesildi"
+    }
   },
   "privacy": {
     "policyTitle": "Gizlilik Politikası & Veri Koruma",

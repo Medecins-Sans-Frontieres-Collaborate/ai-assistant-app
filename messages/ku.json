@@ -385,7 +385,59 @@
     "delete": "Jê bibe",
     "noCustomAgentsYet": "Hîn tu ajanên taybet tune.",
     "noOrgAgentsConfigured": "Tu ajanên rêxistinê nehatine mîhengkirin.",
-    "validationFailed": "Piştrastkirin têk çû"
+    "validationFailed": "Piştrastkirin têk çû",
+    "addAgentSource": "سەرچاوەی تایبەتی زیاد بکە",
+    "connectFoundryProject": "پەیوەندیکردن بە پرۆژەی Microsoft Azure Foundry",
+    "connectFoundryDescription": "ئایجەنتەکان لە پرۆژەی Azure Foundry ی فەرمی یان تیمێکی تر بدۆزەرەوە. تەنها ئایجەنتەکان دەبینیت کە مۆڵەتت پێدراوە بۆ بینیان.",
+    "foundryProjectPath": "ڕێچوونی پرۆژەی Foundry",
+    "foundryProjectPathHelp": "لە بەڕێوەبەرەکەی پرۆژەی Foundry پرسیار بکە یان کرتە بکە 'دەستکاریکردن بەدەست' بۆ پڕکردنەوەی هەر بواری جیاواز.",
+    "copyFormat": "فۆرمات",
+    "nameLabel": "ناو",
+    "namePlaceholder": "وەک نموونە: Amsterdam Office، Geneva Research",
+    "pathRequired": "ڕێچوونی سەرچاوەی پرۆژەی Foundry بچە لە ناو.",
+    "pathInvalidFormat": "ئەمە وەک ڕێچوونی سەرچاوە نیە. دەبێت دەست پێ بکات بە /subscriptions/...",
+    "connectionFailed": "نەتوانرا پەیوەندی بە ئەم پرۆژە بکات. دڵنیابە لە ڕاستیی ڕێچوون و دەستگەیشتنەکەت.",
+    "connectionSuccessAgents": "پەیوەندیکرا—{count} ئایجەنت دۆزرایەوە",
+    "connectionSuccessEmpty": "پەیوەندیکرا، بەڵام هیچ ئایجەنتێک نەدۆزرایەوە. تکایە بڕۆڵی Azure AI User لەسەر ئەم پرۆژەیە پێویستە بۆ بینی ئایجەنتەکان.",
+    "checkingConnection": "پشکنینی پەیوەندی...",
+    "connect": "پەیوەندیکردن",
+    "save": "پاشەکەوت",
+    "editConnection": "دەستکاریکردنی پەیوەندی",
+    "sourceName": "ناوی سەرچاوە",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "نووسینی ناوی سەرچاوە پێویستە.",
+    "resourcePath": "ڕێچوونی سەرچاوە",
+    "resourcePathRequired": "ڕێچوونی سەرچاوە پێویستە.",
+    "resourcePathHelp": "ڕێچوونی سەرچاوەی ARM بۆ پرۆژەی Foundry. لە بەڕێوەبەرەکەت داوا بکە بۆ ئەم زانیارییە.",
+    "invalidResourcePathFormat": "ڕێچوونی سەرچاوە دەبێت دەست پێ بکات بە /subscriptions/...",
+    "validatingSource": "ئایجەنتەکان لەگەڵدا دەدۆزرێتەوە...",
+    "sourceValidatedEmpty": "سەرچاوە دروستە، بەڵام هیچ ئایجەنتێک نەدۆزرایەوە. ڕەنگە مۆڵەتت نەهەبێت بۆ ئایجەنتەکانی ئەم پرۆژە.",
+    "invalidSource": "نەتوانرا ئەم ڕێچوونەی سەرچاوە دەسترسی پێبکرێت. ڕاستی ڕێچوون و مۆڵەتەکانت دووبارە بپشکنە.",
+    "addSource": "سەرچاوە زیاد بکە",
+    "removeSource": "سەرچاوە بسڕەوە",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Hesabi Foundry",
+    "labelProject": "پرۆژە",
+    "tooltipSubscription": "Subscription ی Azure کە hesabi Foundry لە ناودا هەیە. ئەگەر دڵنیا نیت، لە بەڕێوەبەرەکەت پرسیار بکە کە تیمەکەت کێشەی subscription ئەستێ.",
+    "tooltipFoundryAccount": "Hesabi Azure AI Services کە پرۆژەی Foundry لە ناودایە. هەر نووسینگە یان تیمێک زۆربەی خۆی هەیە.",
+    "tooltipProject": "پرۆژە ئایجەنتەکان لەناو هەسابەکە ڕێکخستووە. زۆربەی هەسابەکان تەنیا پرۆژەی \"default\"یان هەیە.",
+    "foundryProjectLabel": "پرۆژەی Foundry",
+    "enterManually": "دەستی بنووسە",
+    "browseResources": "سەرچاوەکان بگەڕێ",
+    "subscriptionIdLabel": "ناسەی Subscription",
+    "resourceGroupLabel": "گروپی سەرچاوە",
+    "accountNameLabel": "ناوی هەساب",
+    "projectNameLabel": "ناوی پرۆژە",
+    "loadingSubscriptions": "بەرزنەکردنی subscription-ەکان...",
+    "selectSubscription": "یەک subscription هەڵبژێرە...",
+    "loadingAccounts": "بەرزنەکردنی hesaab-ەکان...",
+    "noAccountsFound": "هیچ hesabi Foundry لەم subscription-ەدا نەدۆزرایەوە.",
+    "selectAccount": "هەسابێک هەڵبژێرە...",
+    "loadingProjects": "بەرزنەکردنی پرۆژەکان...",
+    "noProjectsFound": "هیچ پرۆژەیەک نەدۆزرایەوە. \"default\" بەکاردێت.",
+    "selectAllRequired": "subscription، هەساب و پرۆژەیەک هەڵبژێرە.",
+    "subscriptionRequired": "بەشێکی بڕیاربدە",
+    "accountRequired": "هەژماری Foundry هەلبژێرە"
   },
   "Quick Actions": "Kiryarên Bilez",
   "Type / in chat to access your prompts": "Di sohbetê de / binivîse ku bigihîjî pirsên xwe",
@@ -641,7 +693,10 @@
     "keepEditing": "Biguherînandinê Bidomîne",
     "yes": "Erê",
     "no": "Na",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "کۆپی کرا!",
+    "clear": "پاککردنەوە",
+    "undo": "گەڕاندنەوە"
   },
   "terms": {
     "officialLanguages": "Guhertoya fermî:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "دووبارە پرسیار مەکە لەکات وەستانەوە بە دوگمە",
     "stopGenerationDontAskAgainKeyboard": "دووبارە پرسیار مەکە لەکات وەستانەوە بە کیبۆرد",
     "generateResponseButton": "وەڵام دروست بکە",
-    "downloadResponse": "وەڵام داگرتن"
+    "downloadResponse": "وەڵام داگرتن",
+    "activity": {
+      "callingTool": "ئامرازی دەربڕواندن…",
+      "callingService": "خزمەتی دەرەکی دەربڕێت…",
+      "usingNamedTool": "بەکارهێنانی {tool}…",
+      "usingNamedToolWithService": "بەکارهێنانی {tool} لە {service}…",
+      "searchingWeb": "گەڕان لە وێب…",
+      "searchingFiles": "گەڕان لە فایلەکان…",
+      "runningCode": "کۆدی دەچێتە جێ…",
+      "generatingImage": "وێنە دروست دەکرێت…",
+      "listingTools": "ئامرازە بەردەستەکان دەنووسێت…",
+      "analyzingFiles": "پڕۆسەکردنی فایلەکانت…",
+      "searchingKnowledge": "دەگەڕێت لە بنکەی زانیاری…",
+      "cancellingPriorTool": "داواکردنی پێشوو هەڵوەشێندرێت…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# ئامراز} other {# ئامراز}} بەکارهات",
+      "failedCount": "{count} سەرکەوتوونەبوو",
+      "statusApproved": "پەسەندکرا",
+      "statusAutoApproved": "بەخۆکارەتی پەسەندکرا",
+      "statusAutoDenied": "بەخۆکارەتی ڕەتکرایەوە",
+      "statusFailed": "سەرکەوتوونەبوو",
+      "statusIncomplete": "ناتەواو",
+      "viaService": "لە ڕێگەی {service}"
+    },
+    "consent": {
+      "authorizeRequired": "دەستنیشانکردن پێویستە",
+      "authorizeService": "دەستنیشان بکە بۆ {service}",
+      "descriptionGeneric": "ئەم ئایجەنتە ڕێگەی پێویستە بۆ دەستپێگەیشتن بە سەرچاوەیەکی پارێزراو. چوونەژوورەوە بە خزمەتگوزاری سەرەوە دەبێت و لێرە پاشەکەوت ناکرێت.",
+      "descriptionWithService": "ئەم ئایجەنتە ڕێگەی پێویستە بۆ دەستپێگەیشتن بە {service}. چوونەژوورەوەی {service} بە خۆیەوە پێدراوە و لێرە پاشەکەوت ناکرێت.",
+      "signInIncompleteGeneric": "چوونەژوورەوە تەواو نەبوو",
+      "signInIncompleteForService": "چوونەژوورەوە بۆ {service} تەواو نەبوو",
+      "signInIncompleteDescriptionGeneric": "وایە دەستنیشانکردن تەواو نەبووە. دڵنیابە خۆت تۆمارکردووە لە تابێکی تر، دواتر دووبارە کرتە بکە لەسەر بەردەوامبوون.",
+      "signInIncompleteDescription": "وایە دەستنیشانکردن بۆ {service} تەواو نەبووە. دڵنیابە لە تابەکەی تر تۆمارکردووە، دواتر کرتە بکە لەسەر بەردەوامبوون.",
+      "authorizeButton": "دەستنیشان بکە",
+      "reauthorizeButton": "دووبارە دەستنیشان بکە",
+      "continueButton": "بەردەوامبە",
+      "confirmingButton": "پشتڕاستکردنەوە…",
+      "authorizeHint": "دەستنیشان بکە، پاشان بگەڕێرەوە و کرتە بکە لەسەر بەردەوامبوون. بۆ ڕەتکردنەوەی دواتر، ڕاستەوخۆ لە {service} دەرچوون بکە—تۆکەن لێرە پاشەکەوت ناکرێت.",
+      "authorizeHintGeneric": "دەستنیشان بکە، پاشان بگەڕێرەوە و کرتە بکە لەسەر بەردەوامبوون. بۆ ڕەتکردنەوەی دواتر، ڕاستەوخۆ لە خزمەتگوزاری سەرەوە دەرچوون بکە—تۆکەن لێرە پاشەکەوت ناکرێت.",
+      "continueHint": "کاتێک دەستنیشانکردن لە تابێکی تر تەواو بوو، کرتە بکە لەسەر بەردەوامبوون.",
+      "confirmingHint": "پشتڕاستکردنەوەی دەستنیشانکردن و بەردەوامبوونی داواکەت…",
+      "resendHint": "پاش دەستنیشانکردن، نامەکەت دووبارە بنێرە بۆ بەردەوامبوون.",
+      "resetTooltip": "هەموو ڕێکخستنەکانی پەسەندکردنی خۆکار بۆ ئەم گفتوگۆیە بسڕەوە. داواکاری داهاتووی ئامراز دووبارە دەستپێدەکات.",
+      "autoApproveAllIndicator": "هەموو ئامرازەکان بەخۆکارەتی پەسەند دەکرێن",
+      "autoApproveCountIndicator": "{count, plural, one {# ئامراز بەخۆکارەتی پەسەند دەکرێت} other {# ئامراز بەخۆکارەتی پەسەند دەکرێت}}",
+      "resetShort": "سڕینەوە",
+      "approvalRequired": "پەسەندکردنی ئامراز پێویستە",
+      "approvalForService": "ئامراز پەسەند بە بۆ {service}",
+      "approvalDescriptionGeneric": "ئایجەنت دەھەوێت ئامرازی جێببەخشێت کە پێویست بە پەسەندکردنی تۆیە پێش بەردەوامبوون.",
+      "approvalDescriptionWithTool": "ئایجەنت دەھەوێت ئامرازی {tool} بکات، کە پێویستە پێش بەردەوامبوون پەسەند بێت.",
+      "runToolTitle": "<code>{tool}</code> بدەرێتەوە؟",
+      "runToolGeneric": "ئەم ئامرازە بدەرێتەوە؟",
+      "viaService": "لە ڕێگەی {service}",
+      "approveButton": "پەسەندکردن",
+      "approveOptionsLabel": "هەڵبژاردەکانی پەسەندکردن",
+      "approveOnce": "تەنیا جارێک پەسەند بکە",
+      "alwaysApproveThisTool": "هەمیشە ئەم ئامرازە پەسەند بکە",
+      "alwaysApproveAllTools": "هەمیشە هەموو ئامرازەکان پەسەند بکە",
+      "denyButton": "ڕەتکردنەوە",
+      "keyboardHint": "{modifier}+⏎ پەسەندکردن · esc ڕەتکردنەوە",
+      "submittingState": "بەڵێنی تۆ نێردراوە",
+      "approvedState": "پەسەندکرا — ئایجەنت دووبارە دەستپێکرد",
+      "deniedState": "ڕەتکرا",
+      "submittingApproval": "لە پەسەندکردندا و دووبارە دەستپێکردنی ئایجەنت…",
+      "submittingDenial": "ناردنی ڕەتکردنەوەت…"
+    },
+    "openImage": "وێنە بکەرەوە",
+    "copyMessage": "پەیامەکە لەبەردەست بکە",
+    "stopAudio": "ئودیو وەستان",
+    "generatingAudio": "ئامادەکردنی ئۆدیو...",
+    "listen": "گوێبگرە",
+    "processingAudio": "چاکسازی ئۆدیو...",
+    "ttsError": "هەڵە لە دروستکردنی ئودیووە. تکایە دووبارە هەوڵ بدە.",
+    "unsupportedMessageType": "هەڵە لە پیشاندانی پەیام: جۆری پەیام پشتیوانی ناکرێت"
   },
   "transcript": {
     "originalTranscript": "Transkrîpta Eslî",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Panela kêlekê bicivîne",
     "expandSidebar": "Panela kêlekê veke",
     "quickActionsTitle": "Kiryarên Bilez",
-    "quickActions": "Kiryarên Bilez"
+    "quickActions": "Kiryarên Bilez",
+    "expandFolder": "بوخچە {name} فراوان بکە",
+    "collapseFolder": "بوخچە {name} دادەبەزە",
+    "folderOptions": "هەڵبژاردەکانی {name}"
   },
   "errors": {
     "somethingWentWrong": "Tiştek xelet çûye",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "ڕەفتار",
     "resetChatSettings": "ڕێکخستنی گۆڤارە چاتەکان ڕێکبخەوە",
     "resetChatSettingsConfirmTitle": "ڕێکخستنی چاتەکان ڕێکبخەوە؟",
-    "resetChatSettingsConfirmMessage": "ئەمە دیفۆڵتی هەموو شتانە لەم پانێڵە دەگەرێنێتەوە: temperature، ڕێنمایە تایبەتیەکان، زانیاری سەبارەت بە تۆ، وەڵامە مۆدێل، خێرایی streaming، دەق-بۆ-دەنگ، فایلە چالاکەکان، و دڵنیابوونەوەکان. ئامانەتەکەت بۆ گفتوگۆکان دەستنیشان ناکات."
+    "resetChatSettingsConfirmMessage": "ئەمە دیفۆڵتی هەموو شتانە لەم پانێڵە دەگەرێنێتەوە: temperature، ڕێنمایە تایبەتیەکان، زانیاری سەبارەت بە تۆ، وەڵامە مۆدێل، خێرایی streaming، دەق-بۆ-دەنگ، فایلە چالاکەکان، و دڵنیابوونەوەکان. ئامانەتەکەت بۆ گفتوگۆکان دەستنیشان ناکات.",
+    "customInstructionsLabel": "ڕێنمایی تایبەتی*",
+    "defaultTemperatureLabel": "گەرمایی بنچینەیی*"
   },
   "emptyState": {
     "greeting": "Ez çawa dikarim alîkariya te bikim?",
@@ -1226,7 +1360,8 @@
       "agents": "Ajan"
     },
     "sections": {
-      "baseModels": "Modelên Bingehîn"
+      "baseModels": "Modelên Bingehîn",
+      "allModels": "هەموو مۆدێلەکان ({count})"
     },
     "maintainedBy": "Ji aliyê ve tê rêvebirin",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Qediya",
       "reset": "Vegerîne",
       "resetTooltip": "Ji bo rêza standard vegerîne"
-    }
+    },
+    "hide": "لەلیستەکە بشارەوە",
+    "hideConfirmTitle": "\"{name}\" بشارێتەوە؟",
+    "hideConfirmMessage": "لە لیستەکەت دەسرەوە دەبێت بەڵام سڕدرێتەوە نییە. دەتوانیت هەرکاتێک لە بەشە شاردراوەکانەوە دابگرەوە.",
+    "hideConfirm": "بشارەوە",
+    "hiddenToast": "\"{name}\" شاردرا",
+    "hidden": {
+      "title": "شاردرا ({count})",
+      "restore": "دووبارە بەکاربێنە"
+    },
+    "title": "مۆدێلێک هەڵبژێرە",
+    "modelsDescription": "مۆدێلی AI بۆ گفتوگۆکەت هەڵبژێرە. هەر مۆدێل تایبەتمەندی جیاواز هەیە — یەکێک هەڵبژێرە بۆ بینینی وردەکارییەکان.",
+    "recommended": "پێشنیارکراو"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Modela Claude ya lez û erzantir ku ji bo karên bilez optimize kirî ye. Ji bo pirsên hêsan, kurtkirin, û serlêdanên qelebalix pir baş e.",
       "knowledgeCutoff": "Çile 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "بەهێزترین مۆدێلی Anthropic. گونجاو بۆ نووسینی درێژ، توێژینەوە و ئەرکە پێویست بە بیرکردنەوەی بە باوەڕ.",
+      "knowledgeCutoff": "شوباتی ٢٠٢٦"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "مۆدێلی Claude ی تەوازنە. گونجاو بۆ نووسینی ڕۆژانە، ڕەخنە و کۆدنووسین بە وەڵامدانی خێرا.",
+      "knowledgeCutoff": "شوباتی ٢٠٢٦"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "لەلایەن بەکارهێنەرەوە هەڵوەشاوە",
     "transientBody": "تکایە دووبارە هەوڵ بدە",
     "authFailedBody": "تکایە دووبارە چوونەژوورەوە بکە",
-    "rateLimitedBody": "خزمەتگوزاری پڕە، تکایە کەمێک دوایتر هەوڵ بدە"
+    "rateLimitedBody": "خزمەتگوزاری پڕە، تکایە کەمێک دوایتر هەوڵ بدە",
+    "loadingAttempt": "(هەوڵ {count})",
+    "transcriptLabel": "[دەقنووس: {filename}]"
   },
   "documentTranslation": {
     "title": "Wergera Belgeyê",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Ceribandî — bi hevkariya rasterast bi bikarhênerên hêzdar ên MSF re hatiye avakirin. Ne ji bo bikaranîna giştî.",
       "createButton": "Ajanê Taybet Çêke"
     },
-    "selectAgentPrompt": "Ajanek hilbijêre ku hûrgiliyan bibînî"
+    "selectAgentPrompt": "Ajanek hilbijêre ku hûrgiliyan bibînî",
+    "description": "ئایجەنتە تایبەتکراوەکانی AI بۆ ئەرکە تایبەتیەکان. ئایجەنتی بنچینەیی بە ناوەندرەوە بڕێوەبردران؛ سەرچاوە تایبەتی زیات بکە بۆ دۆزینەوەی ئایجەنت لە پڕۆژەکانی Foundry ی تر.",
+    "regionAgents": {
+      "us": "ئایجەنتەکانی هەرێمی ئەمەریکا",
+      "eu": "ئایجەنتەکانی هەرێمی ئەورووپا",
+      "default": "وەکیلان ناوچە"
+    },
+    "officeAgents": {
+      "suffix": "وەکیلان"
+    },
+    "agentSources": {
+      "title": "پەیوەندیدانی Foundry",
+      "description": "پەیوەندیکردن بە پروژه‌ی Foundry ی تر بۆ دۆزینەوەی وەکیانیان.",
+      "connectButton": "پەیوەندیکردن بە پروژه‌ی Microsoft Azure Foundry",
+      "connectButtonShort": "پەیوەندیکردن بە پروژه‌ی Foundry",
+      "addButton": "زیادکردنی سەرچاوەی تایبەتی",
+      "addAnother": "زیادکردنی پەیوەندێکی تر",
+      "noSources": "هیچ سەرچاوەی تایبەتی دانەنراوە.",
+      "removeSource": "لابردنی سەرچاوە",
+      "confirmRemove": "لاببرێت؟",
+      "sourceConnected": "سەرچاوەی تایبەتی پەیوەندیدا",
+      "sourcesConnected": "سەرچاوە تایبەتی پەیوەندیدا",
+      "backToAgents": "گەڕانەوە",
+      "discoveredAgents": "وەکیلان دۆزرایەوە",
+      "viewConnection": "بینینی وردەکاریی پەیوەندی",
+      "edit": "دەستکاری",
+      "noAgentsPublished": "هیچ وەکیلێک بڵاو نەکراوەتەوە",
+      "connectedOn": "پەیوەندیدرا لە {date}",
+      "disconnectSource": "دوورخستنەوە لە ئەم سەرچاوەیە",
+      "confirmDisconnect": "جارێکی تر کرتە بکە بۆ دڵنیاکردنەوە",
+      "loadingAgents": "وەکیلان دەچێتە بار...",
+      "noAgentsFound": "هیچ وەکیلێک لەم پروژه‌یه‌دا نەدۆزرایەوە",
+      "noAgentsFoundHint": "دڵنیا بە وەکیلان بڵاوکرانەوە و ڕۆڵی Azure AI User لەسەر ئەم پروژه‌یە هەیەیت.",
+      "refresh": "نوێکردنەوە",
+      "refreshAgents": "نوێکردنەوەی وەکیلان",
+      "technicalDetails": "وردەکاریی تەکنیکی",
+      "agentCountLabel": "{count} وەکیل",
+      "disconnectedToast": "دوورکرا لە {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Siyaseta Nepenîtiyê & Parastina Daneyan",

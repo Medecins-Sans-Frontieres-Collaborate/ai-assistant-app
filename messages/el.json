@@ -385,7 +385,59 @@
     "delete": "Διαγραφή",
     "noCustomAgentsYet": "Δεν υπάρχουν προσαρμοσμένοι πράκτορες ακόμα.",
     "noOrgAgentsConfigured": "Δεν έχουν ρυθμιστεί πράκτορες οργανισμού.",
-    "validationFailed": "Η επικύρωση απέτυχε"
+    "validationFailed": "Η επικύρωση απέτυχε",
+    "addAgentSource": "Προσθήκη Προσαρμοσμένης Πηγής",
+    "connectFoundryProject": "Σύνδεση με έργο Microsoft Azure Foundry",
+    "connectFoundryDescription": "Ανακαλύψτε agents από το έργο Azure Foundry άλλου γραφείου ή ομάδας. Θα βλέπετε μόνο agents στους οποίους έχετε άδεια πρόσβασης.",
+    "foundryProjectPath": "Διαδρομή Έργου Foundry",
+    "foundryProjectPathHelp": "Ρωτήστε τον διαχειριστή του έργου σας στο Foundry ή κάντε κλικ στο 'Εισαγωγή χειροκίνητα' για να συμπληρώσετε κάθε πεδίο ξεχωριστά.",
+    "copyFormat": "Μορφή",
+    "nameLabel": "Όνομα",
+    "namePlaceholder": "π.χ. Amsterdam Office, Geneva Research",
+    "pathRequired": "Επικολλήστε τη διαδρομή πόρου του έργου Foundry.",
+    "pathInvalidFormat": "Αυτό δεν φαίνεται διαδρομή πόρου. Θα πρέπει να ξεκινά με /subscriptions/...",
+    "connectionFailed": "Δεν ήταν δυνατή η σύνδεση με αυτό το έργο. Ελέγξτε ότι η διαδρομή είναι σωστή και ότι έχετε πρόσβαση.",
+    "connectionSuccessAgents": "Συνδέθηκε — Βρέθηκαν {count} agent(s)",
+    "connectionSuccessEmpty": "Συνδέθηκε, αλλά δεν βρέθηκαν agents. Ίσως χρειάζεστε το ρόλο Azure AI User σε αυτό το έργο για να δείτε τους agents του.",
+    "checkingConnection": "Έλεγχος σύνδεσης...",
+    "connect": "Σύνδεση",
+    "save": "Αποθήκευση",
+    "editConnection": "Επεξεργασία Σύνδεσης",
+    "sourceName": "Όνομα Πηγής",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Το όνομα πηγής είναι υποχρεωτικό.",
+    "resourcePath": "Διαδρομή Πόρου",
+    "resourcePathRequired": "Η διαδρομή πόρου είναι υποχρεωτική.",
+    "resourcePathHelp": "Η διαδρομή πόρου ARM προς ένα έργο Foundry. Ζητήστε αυτή την τιμή από τον διαχειριστή σας.",
+    "invalidResourcePathFormat": "Η διαδρομή πόρου πρέπει να ξεκινά με /subscriptions/...",
+    "validatingSource": "Αναζήτηση agents...",
+    "sourceValidatedEmpty": "Έγκυρη πηγή, αλλά δεν βρέθηκαν agents. Ίσως δεν έχετε πρόσβαση στους agents αυτού του έργου.",
+    "invalidSource": "Δεν ήταν δυνατή η πρόσβαση σε αυτή τη διαδρομή πόρου. Επαληθεύστε τη διαδρομή και τα δικαιώματά σας.",
+    "addSource": "Προσθήκη Πηγής",
+    "removeSource": "Αφαίρεση Πηγής",
+    "labelSubscription": "Συνδρομή",
+    "labelFoundryAccount": "Λογαριασμός Foundry",
+    "labelProject": "Έργο",
+    "tooltipSubscription": "Η συνδρομή Azure που περιλαμβάνει το λογαριασμό Foundry. Εάν δεν γνωρίζετε, ρωτήστε τον διαχειριστή σας ποια συνδρομή χρησιμοποιεί η ομάδα σας.",
+    "tooltipFoundryAccount": "Ο λογαριασμός Azure AI Services όπου φιλοξενείται το έργο Foundry. Κάθε γραφείο ή ομάδα έχει συνήθως τον δικό της.",
+    "tooltipProject": "Ένα έργο οργανώνει agents εντός λογαριασμού. Τα περισσότερα έχουν ένα μόνο έργο \"default\".",
+    "foundryProjectLabel": "Έργο Foundry",
+    "enterManually": "Εισαγωγή χειροκίνητα",
+    "browseResources": "Περιήγηση σε πόρους",
+    "subscriptionIdLabel": "ID Συνδρομής",
+    "resourceGroupLabel": "Ομάδα Πόρων",
+    "accountNameLabel": "Όνομα Λογαριασμού",
+    "projectNameLabel": "Όνομα Έργου",
+    "loadingSubscriptions": "Φόρτωση συνδρομών...",
+    "selectSubscription": "Επιλέξτε συνδρομή...",
+    "loadingAccounts": "Φόρτωση λογαριασμών...",
+    "noAccountsFound": "Δεν βρέθηκαν λογαριασμοί Foundry σε αυτή τη συνδρομή.",
+    "selectAccount": "Επιλέξτε λογαριασμό...",
+    "loadingProjects": "Φόρτωση έργων...",
+    "noProjectsFound": "Δεν βρέθηκαν έργα. Χρήση \"default\".",
+    "selectAllRequired": "Επιλέξτε συνδρομή, λογαριασμό και έργο.",
+    "subscriptionRequired": "Επιλέξτε συνδρομή",
+    "accountRequired": "Επιλέξτε λογαριασμό Foundry"
   },
   "Quick Actions": "Γρήγορες Ενέργειες",
   "Type / in chat to access your prompts": "Πληκτρολογήστε / στη συνομιλία για πρόσβαση στις προτροπές σας",
@@ -641,7 +693,10 @@
     "keepEditing": "Συνέχεια Επεξεργασίας",
     "yes": "Ναι",
     "no": "Όχι",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Αντιγράφηκε!",
+    "clear": "Εκκαθάριση",
+    "undo": "Αναίρεση"
   },
   "terms": {
     "officialLanguages": "Επίσημη έκδοση:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το κουμπί",
     "stopGenerationDontAskAgainKeyboard": "Να μην εμφανιστεί ξανά η ερώτηση κατά τη διακοπή με το πληκτρολόγιο",
     "generateResponseButton": "Δημιουργία απάντησης",
-    "downloadResponse": "Λήψη απάντησης"
+    "downloadResponse": "Λήψη απάντησης",
+    "activity": {
+      "callingTool": "Κλήση εργαλείου…",
+      "callingService": "Κλήση εξωτερικής υπηρεσίας…",
+      "usingNamedTool": "Χρήση του {tool}…",
+      "usingNamedToolWithService": "Χρήση του {tool} στο {service}…",
+      "searchingWeb": "Αναζήτηση στον ιστό…",
+      "searchingFiles": "Αναζήτηση αρχείων…",
+      "runningCode": "Εκτέλεση κώδικα…",
+      "generatingImage": "Δημιουργία εικόνας…",
+      "listingTools": "Αναζήτηση διαθέσιμων εργαλείων…",
+      "analyzingFiles": "Ανάλυση των αρχείων σας…",
+      "searchingKnowledge": "Αναζήτηση στη βάση γνώσεων…",
+      "cancellingPriorTool": "Ακύρωση προηγούμενου αιτήματος εργαλείου…"
+    },
+    "toolSummary": {
+      "usedTools": "Χρησιμοποιήθηκε {count, plural, one {# εργαλείο} other {# εργαλεία}}",
+      "failedCount": "{count} αποτυχίες",
+      "statusApproved": "Εγκρίθηκε",
+      "statusAutoApproved": "Εγκρίθηκε αυτόματα",
+      "statusAutoDenied": "Απορρίφθηκε αυτόματα",
+      "statusFailed": "Αποτυχία",
+      "statusIncomplete": "Ατελές",
+      "viaService": "μέσω {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Απαιτείται εξουσιοδότηση",
+      "authorizeService": "Εξουσιοδότηση {service}",
+      "descriptionGeneric": "Αυτός ο agent χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση σε ασφαλή πόρο. Η σύνδεσή σας γίνεται μέσω της αντίστοιχης υπηρεσίας και δεν αποθηκεύεται εδώ.",
+      "descriptionWithService": "Αυτός ο agent χρειάζεται την άδειά σας για να αποκτήσει πρόσβαση στο {service}. Η σύνδεσή σας στο {service} διαχειρίζεται από το ίδιο το {service}, δεν αποθηκεύεται εδώ.",
+      "signInIncompleteGeneric": "Η σύνδεση δεν ολοκληρώθηκε",
+      "signInIncompleteForService": "Η σύνδεση στο {service} δεν ολοκληρώθηκε",
+      "signInIncompleteDescriptionGeneric": "Φαίνεται ότι η εξουσιοδότηση δεν ολοκληρώθηκε. Βεβαιωθείτε πως ολοκληρώσατε τη σύνδεση στην άλλη καρτέλα και, στη συνέχεια, κάντε ξανά κλικ στο Συνέχεια.",
+      "signInIncompleteDescription": "Φαίνεται ότι η εξουσιοδότηση στο {service} δεν ολοκληρώθηκε. Βεβαιωθείτε πως ολοκληρώσατε τη σύνδεση στην άλλη καρτέλα και, στη συνέχεια, κάντε ξανά κλικ στο Συνέχεια.",
+      "authorizeButton": "Εξουσιοδότηση",
+      "reauthorizeButton": "Επανα-εξουσιοδότηση",
+      "continueButton": "Συνέχεια",
+      "confirmingButton": "Γίνεται επιβεβαίωση…",
+      "authorizeHint": "Εξουσιοδοτήστε και μετά επιστρέψτε εδώ και πατήστε Συνέχεια. Για ανάκληση αργότερα, αποσυνδεθείτε απευθείας από το {service} — δεν διατηρούμε το διακριτικό.",
+      "authorizeHintGeneric": "Εξουσιοδοτήστε και μετά επιστρέψτε εδώ και πατήστε Συνέχεια. Για ανάκληση αργότερα, αποσυνδεθείτε απευθείας από την αντίστοιχη υπηρεσία — δεν διατηρούμε το διακριτικό.",
+      "continueHint": "Όταν ολοκληρωθεί η εξουσιοδότηση στην άλλη καρτέλα, πατήστε Συνέχεια.",
+      "confirmingHint": "Επιβεβαίωση εξουσιοδότησης και συνέχιση του αιτήματός σας…",
+      "resendHint": "Αφού εξουσιοδοτήσετε, στείλτε ξανά το μήνυμά σας για να συνεχίσετε.",
+      "resetTooltip": "Επαναφορά όλων των προτιμήσεων αυτόματης έγκρισης εργαλείων για αυτή τη συνομιλία. Οι μελλοντικές κλήσεις εργαλείων θα ζητήσουν ξανά έγκριση.",
+      "autoApproveAllIndicator": "Αυτόματη έγκριση όλων των εργαλείων",
+      "autoApproveCountIndicator": "{count, plural, one {Αυτόματη έγκριση # εργαλείου} other {Αυτόματη έγκριση # εργαλείων}}",
+      "resetShort": "Επαναφορά",
+      "approvalRequired": "Απαιτείται έγκριση εργαλείου",
+      "approvalForService": "Έγκριση εργαλείου για το {service}",
+      "approvalDescriptionGeneric": "Ο agent θέλει να εκτελέσει ένα εργαλείο που απαιτεί την έγκρισή σας πριν συνεχίσει.",
+      "approvalDescriptionWithTool": "Ο agent θέλει να εκτελέσει το εργαλείο {tool}, το οποίο απαιτεί την έγκρισή σας πριν συνεχίσει.",
+      "runToolTitle": "Εκτέλεση <code>{tool}</code>;",
+      "runToolGeneric": "Εκτέλεση αυτού του εργαλείου;",
+      "viaService": "μέσω {service}",
+      "approveButton": "Έγκριση",
+      "approveOptionsLabel": "Επιλογές έγκρισης",
+      "approveOnce": "Έγκριση μία φορά",
+      "alwaysApproveThisTool": "Πάντα έγκριση αυτού του εργαλείου",
+      "alwaysApproveAllTools": "Πάντα έγκριση όλων των εργαλείων",
+      "denyButton": "Απόρριψη",
+      "keyboardHint": "{modifier}+⏎ έγκριση · esc απόρριψη",
+      "submittingState": "Υποβολή της απόφασής σας",
+      "approvedState": "Εγκρίθηκε — ο agent συνεχίστηκε",
+      "deniedState": "Απορρίφθηκε",
+      "submittingApproval": "Έγκριση και συνέχιση του agent…",
+      "submittingDenial": "Αποστολή της απόρριψής σας…"
+    },
+    "openImage": "Άνοιγμα εικόνας",
+    "copyMessage": "Αντιγραφή μηνύματος",
+    "stopAudio": "Διακοπή ήχου",
+    "generatingAudio": "Δημιουργία ήχου...",
+    "listen": "Ακρόαση",
+    "processingAudio": "Επεξεργασία ήχου...",
+    "ttsError": "Σφάλμα κατά τη δημιουργία ήχου. Παρακαλώ δοκιμάστε ξανά.",
+    "unsupportedMessageType": "Σφάλμα απόδοσης μηνύματος: Μη υποστηριζόμενος τύπος μηνύματος"
   },
   "transcript": {
     "originalTranscript": "Αρχική Μεταγραφή",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Σύμπτυξη πλαϊνής μπάρας",
     "expandSidebar": "Ανάπτυξη πλαϊνής μπάρας",
     "quickActionsTitle": "Γρήγορες Ενέργειες",
-    "quickActions": "Γρήγορες Ενέργειες"
+    "quickActions": "Γρήγορες Ενέργειες",
+    "expandFolder": "Άνοιγμα φακέλου {name}",
+    "collapseFolder": "Σύμπτυξη φακέλου {name}",
+    "folderOptions": "Επιλογές {name}"
   },
   "errors": {
     "somethingWentWrong": "Κάτι πήγε στραβά",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Συμπεριφορά",
     "resetChatSettings": "Επαναφορά ρυθμίσεων συνομιλίας",
     "resetChatSettingsConfirmTitle": "Να γίνει επαναφορά των ρυθμίσεων συνομιλίας;",
-    "resetChatSettingsConfirmMessage": "Αυτό επαναφέρει τις προεπιλογές για όλα σε αυτό το πάνελ: θερμοκρασία, προσαρμοσμένες οδηγίες, σχετικό με εσάς, απάντηση μοντέλου, ταχύτητα μετάδοσης, μετατροπή κειμένου σε ομιλία, ενεργά αρχεία και επιβεβαιώσεις. Δεν επηρεάζει τις συνομιλίες σας."
+    "resetChatSettingsConfirmMessage": "Αυτό επαναφέρει τις προεπιλογές για όλα σε αυτό το πάνελ: θερμοκρασία, προσαρμοσμένες οδηγίες, σχετικό με εσάς, απάντηση μοντέλου, ταχύτητα μετάδοσης, μετατροπή κειμένου σε ομιλία, ενεργά αρχεία και επιβεβαιώσεις. Δεν επηρεάζει τις συνομιλίες σας.",
+    "customInstructionsLabel": "Προσαρμοσμένες Οδηγίες*",
+    "defaultTemperatureLabel": "Προεπιλεγμένη Θερμοκρασία*"
   },
   "emptyState": {
     "greeting": "Πώς μπορώ να βοηθήσω;",
@@ -1226,7 +1360,8 @@
       "agents": "Πράκτορες"
     },
     "sections": {
-      "baseModels": "Βασικά Μοντέλα"
+      "baseModels": "Βασικά Μοντέλα",
+      "allModels": "Όλα τα μοντέλα ({count})"
     },
     "maintainedBy": "Συντηρείται από",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Τέλος",
       "reset": "Επαναφορά",
       "resetTooltip": "Επαναφορά στην προεπιλεγμένη σειρά"
-    }
+    },
+    "hide": "Απόκρυψη από τη λίστα",
+    "hideConfirmTitle": "Απόκρυψη \"{name}\";",
+    "hideConfirmMessage": "Θα αφαιρεθεί από τη λίστα σας αλλά δεν θα διαγραφεί. Μπορείτε να το επαναφέρετε οποιαδήποτε στιγμή από την ενότητα Κρυφά.",
+    "hideConfirm": "Απόκρυψη",
+    "hiddenToast": "Κρύφτηκε το \"{name}\"",
+    "hidden": {
+      "title": "Κρυφά ({count})",
+      "restore": "Επαναφορά"
+    },
+    "title": "Επιλογή μοντέλου",
+    "modelsDescription": "Επιλέξτε ένα AI μοντέλο για τη συνομιλία σας. Κάθε μοντέλο έχει διαφορετικά πλεονεκτήματα — επιλέξτε για να δείτε λεπτομέρειες.",
+    "recommended": "Προτεινόμενο"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Γρήγορο και οικονομικό μοντέλο Claude βελτιστοποιημένο για γρήγορες εργασίες. Εξαιρετικό για απλά ερωτήματα, σύνοψη και εφαρμογές μεγάλου όγκου.",
       "knowledgeCutoff": "Ιανουάριος 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Το ισχυρότερο μοντέλο της Anthropic. Κατάλληλο για μεγάλες συγγραφές, έρευνα και εργασίες που απαιτούν προσεκτική σκέψη.",
+      "knowledgeCutoff": "Φεβ 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Ένα ισορροπημένο μοντέλο Claude. Κατάλληλο για καθημερινή συγγραφή, ανάλυση και γρήγορες απαντήσεις σε προγραμματισμό.",
+      "knowledgeCutoff": "Φεβ 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Ακυρώθηκε από τον χρήστη",
     "transientBody": "Παρακαλώ δοκιμάστε ξανά",
     "authFailedBody": "Παρακαλώ συνδεθείτε ξανά",
-    "rateLimitedBody": "Το σύστημα είναι υπερφορτωμένο, δοκιμάστε σύντομα ξανά"
+    "rateLimitedBody": "Το σύστημα είναι υπερφορτωμένο, δοκιμάστε σύντομα ξανά",
+    "loadingAttempt": "(προσπάθεια {count})",
+    "transcriptLabel": "[Απομαγνητοφώνηση: {filename}]"
   },
   "documentTranslation": {
     "title": "Μετάφραση Εγγράφου",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Πειραματικό — δημιουργήθηκε σε άμεση συνεργασία με προχωρημένους χρήστες MSF. Δεν προορίζεται για γενική χρήση.",
       "createButton": "Δημιουργία Προσαρμοσμένου Πράκτορα"
     },
-    "selectAgentPrompt": "Επιλέξτε έναν πράκτορα για να δείτε λεπτομέρειες"
+    "selectAgentPrompt": "Επιλέξτε έναν πράκτορα για να δείτε λεπτομέρειες",
+    "description": "Εξειδικευμένοι AI agents για συγκεκριμένες εργασίες. Οι προεπιλεγμένοι agents διαχειρίζονται κεντρικά· προσθέστε προσαρμοσμένες πηγές για να ανακαλύψετε agents και από άλλα Foundry projects.",
+    "regionAgents": {
+      "us": "Agents περιοχής ΗΠΑ",
+      "eu": "Agents περιοχής ΕΕ",
+      "default": "Περιφερειακοί Agents"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Συνδέσεις Foundry",
+      "description": "Συνδεθείτε με άλλα Foundry projects για να ανακαλύψετε τους agents τους.",
+      "connectButton": "Σύνδεση με Microsoft Azure Foundry project",
+      "connectButtonShort": "Σύνδεση με Foundry project",
+      "addButton": "Προσθήκη Προσαρμοσμένης Πηγής",
+      "addAnother": "Προσθήκη ακόμη μίας σύνδεσης",
+      "noSources": "Δεν έχουν ρυθμιστεί προσαρμοσμένες πηγές.",
+      "removeSource": "Αφαίρεση πηγής",
+      "confirmRemove": "Να αφαιρεθεί;",
+      "sourceConnected": "προσαρμοσμένη πηγή συνδέθηκε",
+      "sourcesConnected": "προσαρμοσμένες πηγές συνδέθηκαν",
+      "backToAgents": "Πίσω",
+      "discoveredAgents": "Ανακαλυφθέντες Agents",
+      "viewConnection": "Προβολή λεπτομερειών σύνδεσης",
+      "edit": "Επεξεργασία",
+      "noAgentsPublished": "Κανένας agent δεν έχει δημοσιευτεί",
+      "connectedOn": "Συνδεδεμένο στις {date}",
+      "disconnectSource": "Αποσύνδεση αυτής της πηγής",
+      "confirmDisconnect": "Κάντε ξανά κλικ για επιβεβαίωση",
+      "loadingAgents": "Φόρτωση agents...",
+      "noAgentsFound": "Δεν βρέθηκαν agents σε αυτό το project",
+      "noAgentsFoundHint": "Βεβαιωθείτε ότι οι agents είναι δημοσιευμένοι και ότι έχετε το ρόλο Azure AI User σε αυτό το project.",
+      "refresh": "Ανανέωση",
+      "refreshAgents": "Ανανέωση agents",
+      "technicalDetails": "Τεχνικές λεπτομέρειες",
+      "agentCountLabel": "{count} agents",
+      "disconnectedToast": "Αποσυνδέθηκε το {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Πολιτική Απορρήτου & Προστασία Δεδομένων",

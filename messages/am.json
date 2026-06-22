@@ -377,7 +377,59 @@
     "delete": "ሰርዝ",
     "noCustomAgentsYet": "ገና ብጁ ወኪሎች የሉም።",
     "noOrgAgentsConfigured": "የድርጅት ወኪሎች አልተዋቀሩም።",
-    "validationFailed": "ማረጋገጥ አልተሳካም"
+    "validationFailed": "ማረጋገጥ አልተሳካም",
+    "addAgentSource": "ብጁ ምንጭ ያክሉ",
+    "connectFoundryProject": "Microsoft Azure Foundry ፕሮጀክት ያገናኙ",
+    "connectFoundryDescription": "ከሌላ ጽ/ቤት ወይም ቡድን የAzure Foundry ፕሮጀክት ውስጥ ያሉ ወኪሎችን ያግኙ። ፈቃድ ያለዎበት ወኪል ብቻ ይታያል።",
+    "foundryProjectPath": "የFoundry ፕሮጀክት መንገድ",
+    "foundryProjectPathHelp": "የFoundry ፕሮጀክት አስተዳዳሪዎን ይጠይቁ, ወይም 'እራስዎ ያስገቡ' በማምረጥ እያንዳንዱን ቦታ በተለይ ያስገቡ።",
+    "copyFormat": "ፎርማት",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ለምሳሌ፡ የአምስተርዳም ጽ/ቤት፣ የጄኔቫ ምርምር",
+    "pathRequired": "የFoundry ፕሮጀክት ምንጭ መንገድ ይቅ贴ዉ።",
+    "pathInvalidFormat": "ይህ የምንጭ መንገድ አይመስልም። በ /subscriptions/... መጀመር ይገባዋል።",
+    "connectionFailed": "ወደዚህ ፕሮጀክት ማግኘት አልተቻለም። መንገዱ ትክክል መሆኑን እና ፈቃድ እንዳለዎት ያረጋግጡ።",
+    "connectionSuccessAgents": "ተገናኝቷል — {count} ወኪል(ዎች) ተገኝቷል",
+    "connectionSuccessEmpty": "ተገናኝቷል፣ ነገር ግን ወኪሎች አልተገኙም። እ.ኤ.አ Azure AI User ተሞላ ይሆናል ለዚህ ፕሮጀክት ወኪሎቹን ለማየት።",
+    "checkingConnection": "ትራፊኩን በመመርመር ላይ...",
+    "connect": "ያገናኙ",
+    "save": "ያስቀምጡ",
+    "editConnection": "ግንኙነት ያስተካክሉ",
+    "sourceName": "የምንጭ ስም",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "የምንጭ ስም አስፈላጊ ነው።",
+    "resourcePath": "የምንጭ መንገድ",
+    "resourcePathRequired": "የምንጭ መንገድ አስፈላጊ ነው።",
+    "resourcePathHelp": "ወደ Foundry ፕሮጀክት ARM ምንጭ መንገድ። ይህንን ፋይል ከአስተዳዳሪዎ ይቀበሉ።",
+    "invalidResourcePathFormat": "የምንጭ መንገድ በ /subscriptions/... መጀመር አለበት።",
+    "validatingSource": "ወኪሎችን በመፈለግ ላይ...",
+    "sourceValidatedEmpty": "እውነተኛ ምንጭ ነው፣ ነገር ግን ወኪሎች አልተገኙም። ለዚህ ፕሮጀክት የወኪሎች መግኘት ዓይነቶች አይኖሩም።",
+    "invalidSource": "ወደዚህ ምንጭ መንገድ መድረስ አልተቻለም። መንገዱን እና ፈቃድ እንዳለዎት ያረጋግጡ።",
+    "addSource": "ምንጭ ያክሉ",
+    "removeSource": "ምንጩን ያስወግዱ",
+    "labelSubscription": "ሲሰብስክሪፕሽን",
+    "labelFoundryAccount": "የFoundry አካውንት",
+    "labelProject": "ፕሮጀክት",
+    "tooltipSubscription": "የFoundry አካውንት የያዘው Azure ሲሰብስክሪፕሽን። እርግጠኛ ካይደሉ አስተዳዳሪዎን ይጠይቁ።",
+    "tooltipFoundryAccount": "የFoundry ፕሮጀክት የተያዙት የAzure AI Services አካውንት። እያንዳንዱ ጽ/ቤት ወይም ቡድን የራሱን ያላቸው ይሆንበታል።",
+    "tooltipProject": "ፕሮጀክት የተደራጀ የወኪሎች ስብስብ ነው። ብዙ አካውንቶች አንድ 'default' ፕሮጀክት ይኖራቸዋል።",
+    "foundryProjectLabel": "የFoundry ፕሮጀክት",
+    "enterManually": "እራስዎ ያስገቡ",
+    "browseResources": "ምንጮችን ይመልከቱ",
+    "subscriptionIdLabel": "የሲሰብስክሪፕሽን መለያ",
+    "resourceGroupLabel": "የምንጭ ቡድን",
+    "accountNameLabel": "የአካውንት ስም",
+    "projectNameLabel": "የፕሮጀክት ስም",
+    "loadingSubscriptions": "ሲሰብስክሪፕሽኖችን በመጫን ላይ...",
+    "selectSubscription": "ሲሰብስክሪፕሽን ይምረጡ...",
+    "loadingAccounts": "አካውንቶችን በመጫን ላይ...",
+    "noAccountsFound": "በዚህ ሲሰብስክሪፕሽን ውስጥ የFoundry አካውንቶች አልተገኙም።",
+    "selectAccount": "አካውንት ይምረጡ...",
+    "loadingProjects": "ፕሮጀክቶችን በመጫን ላይ...",
+    "noProjectsFound": "ፕሮጀክቶች አልተገኙም። \"default\" ተጠቅመዋል።",
+    "selectAllRequired": "ሲሰብስክሪፕሽን፣ አካውንትና ፕሮጀክት ይምረጡ።",
+    "subscriptionRequired": "የደንበኝነት አይነት ይምረጡ",
+    "accountRequired": "የFoundry መለያ ይምረጡ"
   },
   "Quick Actions": "ፈጣን ድርጊቶች",
   "Type / in chat to access your prompts": "ጥያቄዎችዎን ለማግኘት በውይይት ውስጥ / ይተይቡ",
@@ -535,7 +587,10 @@
     "keepEditing": "ማርትዕ ቀጥል",
     "yes": "አዎ",
     "no": "አይ",
-    "beta": "ቅድመ-ልቀት"
+    "beta": "ቅድመ-ልቀት",
+    "copied": "ተገልቧል!",
+    "clear": "አጽዳ",
+    "undo": "ተድላ"
   },
   "chat": {
     "downloadAudio": "ድምጽን አውርድ",
@@ -635,13 +690,90 @@
     "stopGenerationDontAskAgainButton": "በቁልፍ ሲቆም ዳግም አትጠይቅ",
     "stopGenerationDontAskAgainKeyboard": "በዴስክቶፕ ሲቆም ዳግም አትጠይቅ",
     "generateResponseButton": "ምላሽ ፍጠር",
-    "downloadResponse": "ምላሹን ያውርዱ"
+    "downloadResponse": "ምላሹን ያውርዱ",
+    "activity": {
+      "callingTool": "መሳሪያን በመጥቀስ…",
+      "callingService": "ውጪ አገልግሎት በመጠራት…",
+      "usingNamedTool": "{tool} በመጠቀም…",
+      "usingNamedToolWithService": "በ{service} ላይ {tool} በመጠቀም…",
+      "searchingWeb": "በድህረ ገፅ በመፈለግ…",
+      "searchingFiles": "ፋይሎችን በመፈለግ…",
+      "runningCode": "ኮድ በማስኬድ…",
+      "generatingImage": "ምስል በመፍጠር…",
+      "listingTools": "የሚገኙ መሳሪያዎችን በመፈለግ…",
+      "analyzingFiles": "ፋይሎችዎን በመተንተን…",
+      "searchingKnowledge": "በዕውቀት መሰብ ውስጥ በመፈለግ…",
+      "cancellingPriorTool": "ያለፈውን መሳሪያ ጥያቄ በማጥፋት…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# መሳሪያ} other {# መሳሪያዎች}} ተጠቅመዋል",
+      "failedCount": "{count} አልተሳካም",
+      "statusApproved": "ተፀድቷል",
+      "statusAutoApproved": "በራሱ ተፀድቷል",
+      "statusAutoDenied": "በራሱ ተጠውኗል",
+      "statusFailed": "አልተሳካም",
+      "statusIncomplete": "አልተሟሟል",
+      "viaService": "በ{service} አገልግሎት"
+    },
+    "consent": {
+      "authorizeRequired": "ፍቃድ ያስፈልጋል",
+      "authorizeService": "{service} ይፍቀዱ",
+      "descriptionGeneric": "ይህ ዌጄንት ደህና የተጠበቀ ሀብት ለመዳሰስ ፍቃዶትዎን ይፈልጋል። የመግቢያዎ አግኝቶች በአንደኛው አገልግሎት ይቆጠባሉ፣ እዚህ አይቀመጡም።",
+      "descriptionWithService": "ይህ ዌጄንት {service} ለመዳሰስ ፍቃድዎን ይፈልጋል። የ{service} መግቢያዎ በ{service} ራሱ ይቆጠባል፣ አይቀመጥም።",
+      "signInIncompleteGeneric": "መግቢያ አልተጠናቀቀም",
+      "signInIncompleteForService": "ወደ {service} መግቢያ አልተጠናቀቀም",
+      "signInIncompleteDescriptionGeneric": "ፍቃዱ አልተጠናቀቀ ይመስላል። በሌላ ታብ መግቢያዎን እንደጨረሱ ያረጋግጡ፣ ከዛ ይቀጥሉን ይጫኑ።",
+      "signInIncompleteDescription": "ወደ {service} ፍቃድ አልተጠናቀቀም ይመስላል። በሌላ ታብ መግቢያዎን እንደጨረሱ ያረጋግጡ፣ ከዛ ይቀጥሉን ይጫኑ።",
+      "authorizeButton": "ይፍቀዱ",
+      "reauthorizeButton": "እንደገና ይፍቀዱ",
+      "continueButton": "ቀጥል",
+      "confirmingButton": "በማረጋገጥ…",
+      "authorizeHint": "ፍቀድ ከዛ ይቀጥሉን ተመልሼ ይጫኑ። በኋላ ለመሰረዝ በቀጥታ ከ{service} ውጡ — ቶከኑን አንደኛ አንደኛ አንደበብም።",
+      "authorizeHintGeneric": "ፍቀድ ከዛ ይቀጥሉን ተመልሼ ይጫኑ። በኋላ ለመሰረዝ በቀጥታ ከአንደኛው አገልግሎት ውጡ — ቶከኑን አንደበብም።",
+      "continueHint": "በሌላ ታብ ፍቃዱ ከተጨረሰ በኋላ፣ ይቀጥሉን ይጫኑ።",
+      "confirmingHint": "ፍቃድን በማረጋገጥ ጥያቄዎን በመቀጠል…",
+      "resendHint": "ከፍቀዱ በኋላ መልኩን እንደገና ይላኩ።",
+      "resetTooltip": "ይህን ንግግር ለሁሉም መሳሪያዎች በራሱ ሥርዓት የሚፈጽሙ ፍቃድ ምርጫዎችን ወደ መነሻ አስመልስ። በወደፊት የሚቀጥሉ መሳሪያ ጥሪዎች በድጋሚ ማረጋገጫ ይቀርባሉ።",
+      "autoApproveAllIndicator": "ሁሉንም መሳሪያዎች በራሱ መፀደቅ ላይ",
+      "autoApproveCountIndicator": "{count, plural, one {# መሳሪያ በራሱ ተፀድቷል} other {# መሳሪያዎች በራሱ ተፀድቷል}}",
+      "resetShort": "ወደ መጀመሪያ አስመልስ",
+      "approvalRequired": "የመሳሪያ ፍቃድ ያስፈልጋል",
+      "approvalForService": "ለ{service} መሳሪያ ይፀድቁ",
+      "approvalDescriptionGeneric": "ዌጄንቱ ቀጥሎ ለመቀጠል ፍቃድዎ የሚፈለግበት መሳሪያ ማስኬድ ይፈልጋል።",
+      "approvalDescriptionWithTool": "ዌጄንቱ {tool} መሳሪያ ይቀጥል ዘንድ ፍቃድዎን የሚፈልግ ማስኬድ ይፈልጋል።",
+      "runToolTitle": "<code>{tool}</code> እንዲሰራ?",
+      "runToolGeneric": "ይህን መሳሪያ እንዲሰራ?",
+      "viaService": "በ{service} ይሇጥፉ",
+      "approveButton": "አጽድቅ",
+      "approveOptionsLabel": "አጽድቅ አማራጮች",
+      "approveOnce": "አንዴ አጽድቅ",
+      "alwaysApproveThisTool": "ይህንኑ መሳሪያ ሁልጊዜ አጽድቅ",
+      "alwaysApproveAllTools": "ሁሉንም መሳሪያዎች ሁልጊዜ አጽድቅ",
+      "denyButton": "አትፈቅድ",
+      "keyboardHint": "{modifier}+⏎ አጽድቅ · esc አትፈቅድ",
+      "submittingState": "ውሳኔዎን በመላክ ላይ",
+      "approvedState": "ተፈቅዷል — ወኪሉ ቀጥሏል",
+      "deniedState": "አልተፈቀደም",
+      "submittingApproval": "በማጽደቅና ወኪሉን በመቀጠል ላይ…",
+      "submittingDenial": "የማትፈቅድዎን መልእክት በመላክ ላይ…"
+    },
+    "openImage": "ምስሉን ክፈት",
+    "copyMessage": "መልእክት ቅዳ",
+    "stopAudio": "ድምፁን አቁም",
+    "generatingAudio": "ድምጽ በመፍጠር ላይ...",
+    "listen": "አድምጥ",
+    "processingAudio": "ድምጹን በመስራት ላይ...",
+    "ttsError": "ድምጽ ለመፍጠር ስህተት አጋጥሟል። እባክዎ ደግመው ይሞክሩ።",
+    "unsupportedMessageType": "መልእክቱን ማሳየት ላይ ስህተት፡ የማይደገፍ ዓይነት"
   },
   "sidebar": {
     "collapseSidebar": "የጎን አሞሌውን ሰብስብ",
     "expandSidebar": "የጎን አሞሌውን አስፋፋ",
     "quickActionsTitle": "ፈጣን ድርጊቶች",
-    "quickActions": "ፈጣን ድርጊቶች"
+    "quickActions": "ፈጣን ድርጊቶች",
+    "expandFolder": "{name} ፎልደሩን ዘርፍ",
+    "collapseFolder": "{name} ፎልደሩን አንሳ",
+    "folderOptions": "የ{name} አማራጮች"
   },
   "prompts": {
     "buildReusablePrompts": "በAI እገዛ እንደገና ሊጠቀሙ የሚችሉ ጥያቄዎችን ይፍጠሩ",
@@ -957,7 +1089,9 @@
     "behaviorSection": "አኗኗር",
     "resetChatSettings": "የቻት ቅንብሮችን ወደ መደበኛ አውጣ",
     "resetChatSettingsConfirmTitle": "የቻት ቅንብሮችን ወደ መደበኛ መመለስ?",
-    "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ያሉትን ሁሉ ወደ መደበኛ ነባር ይመልሳል፡ ሙቀት, ባለብዙ አመለካከቶች፣ ስለ እርስዎ፣ የሞዴል ምላሽ፣ የመስተንግዶ ፍጥነት፣ ከጽሑፍ ወደ ድምፅ፣ አንደኛ የሆኑ ፋይሎች፣ እና ማረጋገጫዎች። ውይይቶቻችሁን ግን አያስተካክልም።"
+    "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ያሉትን ሁሉ ወደ መደበኛ ነባር ይመልሳል፡ ሙቀት, ባለብዙ አመለካከቶች፣ ስለ እርስዎ፣ የሞዴል ምላሽ፣ የመስተንግዶ ፍጥነት፣ ከጽሑፍ ወደ ድምፅ፣ አንደኛ የሆኑ ፋይሎች፣ እና ማረጋገጫዎች። ውይይቶቻችሁን ግን አያስተካክልም።",
+    "customInstructionsLabel": "ብቻውን መመሪያዎች*",
+    "defaultTemperatureLabel": "ነባሪ ቤር*"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -1073,7 +1207,8 @@
       "agents": "ወኪሎች"
     },
     "sections": {
-      "baseModels": "መሰረታዊ ሞዴሎች"
+      "baseModels": "መሰረታዊ ሞዴሎች",
+      "allModels": "ሁሉንም ሞዴሎች ({count})"
     },
     "maintainedBy": "የሚያስተዳድረው",
     "agents": {
@@ -1147,7 +1282,19 @@
       "reasoning": "ለውስብስብ ችግሮች የማመዛዘን ችሎታ ያለው ሞዴል",
       "omni": "ጠቃሚ ችሎታዎች ያሉት የሚታወቀው አይነተኛ ሞዴል",
       "agent": "በእውነተኛ ጊዜ መሳሪያዎችና የድር መዳረሻ ያለው ወኪል"
-    }
+    },
+    "hide": "ከዝርዝሩ ደብቅ",
+    "hideConfirmTitle": "\"{name}\" እንዲደበቅ?",
+    "hideConfirmMessage": "ከዝርዝርዎ ይወገዳል ግን አይሰረዝም። ከደብተው ቦታ በማንኛውም ጊዜ መመለስ ይችላሉ።",
+    "hideConfirm": "ደብቅ",
+    "hiddenToast": "\"{name}\" ተደብቋል",
+    "hidden": {
+      "title": "የተደበቁ ({count})",
+      "restore": "አስመልስ"
+    },
+    "title": "ሞዴል ይምረጡ",
+    "modelsDescription": "ለንግግርዎ AI ሞዴል ይምረጡ። እያንዳንዱ ሞዴል የተለያዩ ጥናቶች አሉት — ዝርዝሩን ለማየት አንድ ይምረጡ።",
+    "recommended": "የሚመከር"
   },
   "models": {
     "gpt_4_1": {
@@ -1224,6 +1371,16 @@
       "name": "GPT-5.2 ውይይት",
       "knowledgeCutoff": "ዲሴምበር 2025",
       "description": "ለውይይት መስክ እና ስሜታዊ ብልጽግና የተሞላ የGPT-5.2 ልዩ እትም ነው። በርካታ አስተማማኝ እና ፈጣን የመግባቢያ ታሪክ ማቅረብ፣ ፈጣን ፅኑ ማስተላለፊያ ስራዎች፣ ፈጣን ፃፊ ሥራዎች፣ የፈጠራ ይዘቶች፣ ፈጣን ምክርና ተፈጥሯዊ ውይይት ላይ በጥሩ ይታያል። ለቀላል ውይይቶች፣ ምክር ስፋት ፣ ስሜታዊ ገንዘብ የሚፈልጉ ሥራዎች በጣም ይገባል።"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "የAnthropic ብርቱ ሞዴል። ለአረፋዊ ጽሁፍ፣ ምርምር፣ ወይም ትንንሽ ትንታኔ የሚፈልጉትን ተግባራት ተስማሚ ነው።",
+      "knowledgeCutoff": "ጥር 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "ሚዛናዊ Claude ሞዴል። ለቀናቸው ጽሁፍ፣ ትንታኔ፣ ማከል እና ፈጣን ምላሾች መረጣ ነው።",
+      "knowledgeCutoff": "ጥር 2026"
     }
   },
   "searchMode": {
@@ -1663,7 +1820,9 @@
     "cancelledBody": "በተጠቃሚው ተሰርዟል",
     "transientBody": "እባክዎ ደግሞ ይሞክሩ",
     "authFailedBody": "እባክዎ እንደገና ይግቡ",
-    "rateLimitedBody": "አገልግሎቱ ሞልቷል፣ እባክዎ በቅርቡ ደግመው ይሞክሩ"
+    "rateLimitedBody": "አገልግሎቱ ሞልቷል፣ እባክዎ በቅርቡ ደግመው ይሞክሩ",
+    "loadingAttempt": "(የ{count} ሙከራ)",
+    "transcriptLabel": "[ግልጽ ቃል፡ {filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "የእርስዎን የግል መመሪያዎች ያክሉ እና የAI ምላሽን ያስተካክሉ። እነዚህ ጥሩ፣ ትክክለኛ እና ደህና የሆኑ ምላሾችን ለመስጠት ከመሠረታዊ መመሪያዎች ጋር ይጣፉ።",
   "Tip: Type \"/\" to select from saved prompt templates_": "ምክር፦ \"/\" በመተግበር ከተቀመጡት ማስጠንቀቂያ አብነቶች ይምረጡ።",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "የሙከራ — ከMSF ቴክኒካል ተጠቃሚዎች ጋር በቀጥታ ትብብር የተሠራ። ለአጠቃላይ አጠቃቀም አይደለም።",
       "createButton": "ብጁ ወኪል ፍጠር"
     },
-    "selectAgentPrompt": "ዝርዝሮችን ለማየት ወኪል ይምረጡ"
+    "selectAgentPrompt": "ዝርዝሮችን ለማየት ወኪል ይምረጡ",
+    "description": "ለተወሰኑ ተግባራት የተሟሉ የAI ወኪሎች። ነባሪ ወኪሎች በመሀከል ይቆጣጠራሉ፤ ከሌሎች Foundry አገናኞች ወኪሎችን ለማግኘት ብቻውን ምንጮች ያክሉ።",
+    "regionAgents": {
+      "us": "የአሜሪካ ክልል ወኪሎች",
+      "eu": "የአውሮፓ ክልል ወኪሎች",
+      "default": "አካባቢ ውስጥ ያሉ ወኪሎች"
+    },
+    "officeAgents": {
+      "suffix": "ወኪሎች"
+    },
+    "agentSources": {
+      "title": "Foundry ግንኙነቶች",
+      "description": "የሌሎች የFoundry ፕሮጀክቶችን ወኪሎች ለማግኘት ተገናኝ።",
+      "connectButton": "Microsoft Azure Foundry ፕሮጀክት አገናኝ",
+      "connectButtonShort": "Foundry ፕሮጀክት አገናኝ",
+      "addButton": "ባህላዊ ምንጭ አክል",
+      "addAnother": "ሌላ ግንኙነት አክል",
+      "noSources": "ምንም ባህላዊ ምንጮች አይተዋል።",
+      "removeSource": "ምንጩን ያስወግዱ",
+      "confirmRemove": "ማስወገድ?",
+      "sourceConnected": "ባህላዊ ምንጭ ተገናኝቷል",
+      "sourcesConnected": "ባህላዊ ምንጮች ተገናኝተዋል",
+      "backToAgents": "ወደ ኋላ",
+      "discoveredAgents": "ተገኙ የተመረጡ ወኪሎች",
+      "viewConnection": "የግንኙነት ዝርዝሮችን ይመልከቱ",
+      "edit": "አርትዕ",
+      "noAgentsPublished": "የታተመ ወኪል የለም",
+      "connectedOn": "ተገናኝቷል {date}",
+      "disconnectSource": "ይህን ምንጭ ቀይረው ያግኙ",
+      "confirmDisconnect": "ለማረጋገጥ ደግመው ይንኩ",
+      "loadingAgents": "ወኪሎችን በመጫን ላይ...",
+      "noAgentsFound": "በዚህ ፕሮጀክት ውስጥ ወኪሎች አልተገኙም",
+      "noAgentsFoundHint": "ወኪሎች እንዲታተመው እና በዚህ ፕሮጀክት Azure AI User ተጠቃሚ ተዋጽዖ እንዳለዎት ያረጋግጡ።",
+      "refresh": "አድስ",
+      "refreshAgents": "ወኪሎችን አድስ",
+      "technicalDetails": "ቴክኒካዊ ዝርዝሮች",
+      "agentCountLabel": "{count} ወኪሎች",
+      "disconnectedToast": "{name} ከተገናኙ ተቋርጧል"
+    }
   },
   "privacy": {
     "policyTitle": "የግላዊነት ፖሊሲ እና የመረጃ ጥበቃ",

@@ -385,7 +385,59 @@
     "delete": "Siba",
     "noCustomAgentsYet": "Nta bahagararizi bihariye barabaho.",
     "noOrgAgentsConfigured": "Nta bahagararizi b'umuryango bashyizweho.",
-    "validationFailed": "Kwemeza byanze"
+    "validationFailed": "Kwemeza byanze",
+    "addAgentSource": "Ongeramo Inkomoko yihariye",
+    "connectFoundryProject": "Hujyaho Umushinga wa Microsoft Azure Foundry",
+    "connectFoundryDescription": "Shakisha abagente baturutse mu bindi biro cyangwa itsinda binyuze kuri Azure Foundry project. Uzabona gusa abagente wemerewe kugeraho.",
+    "foundryProjectPath": "Inzira ya Foundry Project",
+    "foundryProjectPathHelp": "Babaze ushinzwe umushinga wa Foundry, cyangwa kanda kuri 'Injiza intoki' ngo wuzuze buri murima ukwawo.",
+    "copyFormat": "Imiterere",
+    "nameLabel": "Izina",
+    "namePlaceholder": "urugero: Ibiro bya Amsterdam, Ubugenzuzi bwa Geneva",
+    "pathRequired": "Shyiramo inzira y’umushinga wa Foundry.",
+    "pathInvalidFormat": "Ibi ntibisa n'inzira y'umushinga. Bikwiye gutangirana na /subscriptions/...",
+    "connectionFailed": "Ntibishobotse kugera kuri uyu mushinga. Reba neza niba inzira ari yo kandi ufite uburenganzira.",
+    "connectionSuccessAgents": "Ihuze — habonetse {count} agent(s)",
+    "connectionSuccessEmpty": "Ihuze, ariko nta bagente babonetse. Ushobora gukenera uruhare rwa Azure AI User kuri uyu mushinga kugira ngo ubone abagente.",
+    "checkingConnection": "Igenzura irimo guhuza...",
+    "connect": "Huza",
+    "save": "Bika",
+    "editConnection": "Hindura Guhuza",
+    "sourceName": "Izina ry’Inkomoko",
+    "sourceNamePlaceholder": "Ibiro bya Amsterdam",
+    "sourceNameRequired": "Izina ry’inkomoko rirakenewe.",
+    "resourcePath": "Inzira y’Ibirimo",
+    "resourcePathRequired": "Inzira y’ibirimo irakenewe.",
+    "resourcePathHelp": "Inzira ya ARM ijya kuri Foundry project. Saba ushinzwe gahunda iyi ndangaciro.",
+    "invalidResourcePathFormat": "Inzira y’ibirimo igomba gutangirana na /subscriptions/...",
+    "validatingSource": "Irasuzuma abagente...",
+    "sourceValidatedEmpty": "Inkomoko iremerwa, ariko nta bagente babonetse. Ushobora kuba udafite uburenganzira bwo kubona abagente muri uyu mushinga.",
+    "invalidSource": "Ntibishobotse kugera kuri iyi nzira y'ibirimo. Emeza neza inzira na uburenganzira bwawe.",
+    "addSource": "Ongeramo Inkomoko",
+    "removeSource": "Kuraho Inkomoko",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Konto ya Foundry",
+    "labelProject": "Umushinga",
+    "tooltipSubscription": "Subscription ya Azure irimo Foundry account. Niba utabizi neza, saba admin subscription itsinda ryawe rikoresha.",
+    "tooltipFoundryAccount": "Konti ya Azure AI Services irimo umushinga wa Foundry. Buri biro cyangwa itsinda akenshi bigira iyabyo.",
+    "tooltipProject": "Umushinga utegura abagente muri konti. Konti nyinshi zigira umushinga umwe 'default'.",
+    "foundryProjectLabel": "Umushinga wa Foundry",
+    "enterManually": "Injiza intoki",
+    "browseResources": "Rondora ibirimo",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Itsinda ry’Inkomoko",
+    "accountNameLabel": "Izina rya Konto",
+    "projectNameLabel": "Izina ry’Umushinga",
+    "loadingSubscriptions": "Birimo gutwara za subscription...",
+    "selectSubscription": "Hitamo subscription...",
+    "loadingAccounts": "Birimo gutwara konti...",
+    "noAccountsFound": "Nta konti za Foundry zibonywe muri iyi subscription.",
+    "selectAccount": "Hitamo konti...",
+    "loadingProjects": "Birimo gutwara imishinga...",
+    "noProjectsFound": "Nta mishinga yabonetse. Hakoreshwa \"default\".",
+    "selectAllRequired": "Hitamo subscription, konti, n’umushinga.",
+    "subscriptionRequired": "Hitamo serivisi y’ifatabuguzi",
+    "accountRequired": "Hitamo konti ya Foundry"
   },
   "Quick Actions": "Ibikorwa Byihuse",
   "Type / in chat to access your prompts": "Andika / mu kiganiro kugira ngo ugere ku mabwiriza yawe",
@@ -641,7 +693,10 @@
     "keepEditing": "Komeza Guhindura",
     "yes": "Yego",
     "no": "Oya",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Byakoporowe!",
+    "clear": "Siba",
+    "undo": "Subira inyuma"
   },
   "terms": {
     "officialLanguages": "Verisiyo nyayo:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Ntuzongere kubaza igihe ukoresheje buto yo guhagarika",
     "stopGenerationDontAskAgainKeyboard": "Ntuzongere kubaza igihe ukoresheje keyboard yo guhagarika",
     "generateResponseButton": "Tanga igisubizo",
-    "downloadResponse": "Kuramo igisubizo"
+    "downloadResponse": "Kuramo igisubizo",
+    "activity": {
+      "callingTool": "Guhamagara igikoresho…",
+      "callingService": "Guhamagara serivisi yo hanze…",
+      "usingNamedTool": "Ukoresha {tool}…",
+      "usingNamedToolWithService": "Ukoresha {tool} kuri {service}…",
+      "searchingWeb": "Gushakisha kuri interineti…",
+      "searchingFiles": "Gushakisha amadosiye…",
+      "runningCode": "Gukoresha kode…",
+      "generatingImage": "Gutegura ishusho…",
+      "listingTools": "Reba ibikoresho biboneka…",
+      "analyzingFiles": "Gusesengura amadosiye yawe…",
+      "searchingKnowledge": "Gushakisha muri banki y’amakuru…",
+      "cancellingPriorTool": "Kuhagarika icyifuzo cy’igikoresho cyabanje…"
+    },
+    "toolSummary": {
+      "usedTools": "Hakozweho {count, plural, one {igikoresho 1} other {ibikoresho #}}",
+      "failedCount": "{count} ntibyakoze",
+      "statusApproved": "Byemejwe",
+      "statusAutoApproved": "Byemejwe mu buryo bwikora",
+      "statusAutoDenied": "Byanzwe mu buryo bwikora",
+      "statusFailed": "Ntibyakoze",
+      "statusIncomplete": "Ntibyuzuye",
+      "viaService": "binyuze kuri {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Ubusabe bwo kwemerera burakenewe",
+      "authorizeService": "Emerera {service}",
+      "descriptionGeneric": "Uyu mukozi akeneye uburenganzira bwawe ngo abone uko agera ku gikoresho gifunguye. Kwiyandikisha kwawe bikorwa na serivisi yo hanze, ntibibikwa hano.",
+      "descriptionWithService": "Uyu mukozi akeneye uburenganzira bwawe ngo abone uko agera kuri {service}. Kwiyandikisha kuri {service} bikorwa na {service} ubwabyo, ntibibikwa hano.",
+      "signInIncompleteGeneric": "Kwiyandikisha ntikwuzuye",
+      "signInIncompleteForService": "Kwiyandikisha kuri {service} ntikwuzuye",
+      "signInIncompleteDescriptionGeneric": "Bisa nk’aho kwemera bitarangiye. Menya neza ko warangije kwinjira mu rindi idirishya, hanyuma kanda Continue (Komeza) nanone.",
+      "signInIncompleteDescription": "Bisa nk’aho uburenganzira kuri {service} butarangiye. Menya neza ko warangije kwinjira mu rindi idirishya, hanyuma kanda Continue (Komeza) nanone.",
+      "authorizeButton": "Emerera",
+      "reauthorizeButton": "Ongera wemerere",
+      "continueButton": "Komeza",
+      "confirmingButton": "Kwemeza…",
+      "authorizeHint": "Emera, ubone kugaruka hano ugakanda Komeza. Nusaba gukuraho uburenganzira nyuma, sigaho kuri {service} — ntidufite token.",
+      "authorizeHintGeneric": "Emera, ubone kugaruka hano ugakanda Komeza. Nusaba gukuraho uburenganzira nyuma, sigaho kuri serivisi yo hanze — ntidufite token.",
+      "continueHint": "Ukirangiza kwemera mu rindi idirishya, kanda Komeza.",
+      "confirmingHint": "Kwemeza uburenganzira no gukomeza icyifuzo cyawe…",
+      "resendHint": "Umaze kwemera, ohereza ubutumwa bwawe bundi kugira ngo ukomeze.",
+      "resetTooltip": "Subiza ibikoresho byose ku cyemezo cy'ukwemerera byikora kuri iyi nkoranyambaga. Ku bikoresho bizakurikira, uzongera gusabwa.",
+      "autoApproveAllIndicator": "Kwemerera ibikoresho byose byikora",
+      "autoApproveCountIndicator": "{count, plural, one {Kwemerera igikoresho # byikora} other {Kwemerera ibikoresho # byikora}}",
+      "resetShort": "Subiza",
+      "approvalRequired": "Kwemerera igikoresho birakenewe",
+      "approvalForService": "Emerera igikoresho kuri {service}",
+      "approvalDescriptionGeneric": "Ushinzwe arashaka gukoresha igikoresho gikeneye uburenganzira bwawe mbere yo gukomeza.",
+      "approvalDescriptionWithTool": "Ushinzwe arashaka gukoresha igikoresho {tool}, gikeneye uburenganzira bwawe mbere yo gukomeza.",
+      "runToolTitle": "Gukoresha <code>{tool}</code>?",
+      "runToolGeneric": "Gukoresha iri koranabuhanga?",
+      "viaService": "binyuze kuri {service}",
+      "approveButton": "Emeza",
+      "approveOptionsLabel": "Emeza amahitamo",
+      "approveOnce": "Emeza inshuro imwe",
+      "alwaysApproveThisTool": "Emera buri gihe iri koranabuhanga",
+      "alwaysApproveAllTools": "Emera buri gihe ibikoresho byose",
+      "denyButton": "Hakana",
+      "keyboardHint": "{modifier}+⏎ kwemeza · esc guhakanira",
+      "submittingState": "Kohereza umwanzuro wawe",
+      "approvedState": "Byemejwe — agent yakomeje",
+      "deniedState": "Byanzwe",
+      "submittingApproval": "Kwemeza no gukomeza agent...",
+      "submittingDenial": "Kohereza uko wanze..."
+    },
+    "openImage": "Fungura ifoto",
+    "copyMessage": "Gusubiramo ubutumwa",
+    "stopAudio": "Hagarika amajwi",
+    "generatingAudio": "Hategurwa amajwi...",
+    "listen": "Tega amatwi",
+    "processingAudio": "Gutunganya amajwi...",
+    "ttsError": "Habayeho ikosa mu gutunganya amajwi. Ongera ugerageze.",
+    "unsupportedMessageType": "Ikosa mu kugaragaza ubutumwa: Ubwoko bw'ubutumwa butemerewe"
   },
   "transcript": {
     "originalTranscript": "Ubwandiko bwa Mbere",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Funga umurongo w'uruhande",
     "expandSidebar": "Fungura umurongo w'uruhande",
     "quickActionsTitle": "Ibikorwa Byihuse",
-    "quickActions": "Ibikorwa Byihuse"
+    "quickActions": "Ibikorwa Byihuse",
+    "expandFolder": "Gura ubwoko bwa dosiye {name}",
+    "collapseFolder": "Hina dosiye {name}",
+    "folderOptions": "Amahitamo ya {name}"
   },
   "errors": {
     "somethingWentWrong": "Hari ikintu kitagenze neza",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Imyitwarire",
     "resetChatSettings": "Subiza aho byari bimeze ku biganiro",
     "resetChatSettingsConfirmTitle": "Subiza aho byari bimeze ku biganiro?",
-    "resetChatSettingsConfirmMessage": "Ibi bizasubiza ku buryo bw'umwimerere ibintu byose biri kuri uru rubaho: temperature, amabwiriza yihariye, 'About You', igisubizo cya model, umuvuduko wo gutanga ibisubizo uko byinjira, text-to-speech, amadosiye akora, ndetse n'ibisabwa byemezwa. Ntibizagira ingaruka ku biganiro byawe."
+    "resetChatSettingsConfirmMessage": "Ibi bizasubiza ku buryo bw'umwimerere ibintu byose biri kuri uru rubaho: temperature, amabwiriza yihariye, 'About You', igisubizo cya model, umuvuduko wo gutanga ibisubizo uko byinjira, text-to-speech, amadosiye akora, ndetse n'ibisabwa byemezwa. Ntibizagira ingaruka ku biganiro byawe.",
+    "customInstructionsLabel": "Amabwiriza yihariye*",
+    "defaultTemperatureLabel": "Ubushyuhe busanzwe*"
   },
   "emptyState": {
     "greeting": "Nakugufasha nte?",
@@ -1226,7 +1360,8 @@
       "agents": "Abahagararizi"
     },
     "sections": {
-      "baseModels": "Modeli z'Ibanze"
+      "baseModels": "Modeli z'Ibanze",
+      "allModels": "Imiterere zose ({count})"
     },
     "maintainedBy": "Zitunganywa na",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Byarangiye",
       "reset": "Subiza",
       "resetTooltip": "Subiza ku murongo usanzwe"
-    }
+    },
+    "hide": "Hisha mu rutonde",
+    "hideConfirmTitle": "Ehisha \"{name}\"?",
+    "hideConfirmMessage": "Izakurwaho ku rutonde rwawe ariko ntizahanagurwa. Ushobora kongera kuyigarura igihe cyose muri Hidden.",
+    "hideConfirm": "Hisha",
+    "hiddenToast": "\"{name}\" yahishwe",
+    "hidden": {
+      "title": "Byahishwe ({count})",
+      "restore": "Garura"
+    },
+    "title": "Hitamo imiterere",
+    "modelsDescription": "Hitamo AI model ku kiganiro cyawe. Model imwe n'imwe ifite imbaraga zitandukanye — hitamo imwe urebe ibisobanuro.",
+    "recommended": "Byasabwe"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Modeli ya Claude yihuse kandi irimo byinshi yanonosoye ku mirimo yihuse. Nziza ku bibazo byoroheje, gukora incamake, n'iporogaramu z'uburebure bunini.",
       "knowledgeCutoff": "Mutarama 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Model ikomeye kurusha izindi ya Anthropic. Ikwiriye kwandika birebire, ubushakashatsi no ku mirimo isaba gutekereza cyane.",
+      "knowledgeCutoff": "Gashyantare 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Model ya Claude ihagaze neza. Ikwiriye kwandika umunsi ku munsi, isesengura na coding bifite ibisubizo byihuse.",
+      "knowledgeCutoff": "Gashyantare 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Byahagaritswe n’umukoresha",
     "transientBody": "Gerageza kongera",
     "authFailedBody": "Winjiremo wongere",
-    "rateLimitedBody": "Serivisi yuzuye, gerageza nyuma akanya gato"
+    "rateLimitedBody": "Serivisi yuzuye, gerageza nyuma akanya gato",
+    "loadingAttempt": "(igerageza {count})",
+    "transcriptLabel": "[Inyandiko: {filename}]"
   },
   "documentTranslation": {
     "title": "Ubuhinduzi bw'Inyandiko",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Igeragezwa — byubatswe mu gukorana gutaziguye n'abakoresha bakomeye ba MSF. Ntibigenewe gukoresha rusange.",
       "createButton": "Kora Umuhagararizi Wihariye"
     },
-    "selectAgentPrompt": "Hitamo umuhagararizi kugira ngo urebe ibisobanuro"
+    "selectAgentPrompt": "Hitamo umuhagararizi kugira ngo urebe ibisobanuro",
+    "description": "AI agents zabigenewe ku mirimo yihariye. Agents zifite umwihariko zigenzurwa ku rwego rw’umuryango; ongeraho amasoko yihariye kugira ngo ubone agents z’indi mishinga ya Foundry.",
+    "regionAgents": {
+      "us": "Agents zo mu Karere ka US",
+      "eu": "Agents zo mu Karere ka EU",
+      "default": "Abakozi bo mu karere"
+    },
+    "officeAgents": {
+      "suffix": "Abakozi"
+    },
+    "agentSources": {
+      "title": "Imiyoboro ya Foundry",
+      "description": "Korana n’indi mishinga ya Foundry kugira ngo ubone abakozi bayo.",
+      "connectButton": "Jya kuri Microsoft Azure Foundry project",
+      "connectButtonShort": "Jya kuri Foundry project",
+      "addButton": "Ongeraho inkomoko yihariye",
+      "addAnother": "Ongeraho indi miyoboro",
+      "noSources": "Nta makuru yihariye yashyizweho.",
+      "removeSource": "Kuraho inkomoko",
+      "confirmRemove": "Kuraho?",
+      "sourceConnected": "inkomoko yihariye yahuye",
+      "sourcesConnected": "inkomoko zidasanzwe zahujwe",
+      "backToAgents": "Subira inyuma",
+      "discoveredAgents": "Abakozi babonetse",
+      "viewConnection": "Reba ibisobanuro by’ihuzanzira",
+      "edit": "Hindura",
+      "noAgentsPublished": "Nta bakozi basohowe",
+      "connectedOn": "Byahujwe {date}",
+      "disconnectSource": "Guhuza iyi nkomoko",
+      "confirmDisconnect": "Kanda ubundi wemere",
+      "loadingAgents": "Iri kubika abakozi...",
+      "noAgentsFound": "Nta bakozi babonetse muri uyu mushinga",
+      "noAgentsFoundHint": "Menya neza ko abakozi basohowe kandi ufite uruhushya rwa Azure AI User kuri uyu mushinga.",
+      "refresh": "Ongera usubize",
+      "refreshAgents": "Sukurura abakozi",
+      "technicalDetails": "Ibisobanuro bya tekiniki",
+      "agentCountLabel": "Abakozi {count}",
+      "disconnectedToast": "Bikuweho {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Politiki y'Ibanga n'Uburinda bw'Amakuru",

@@ -385,7 +385,59 @@
     "delete": "Обриши",
     "noCustomAgentsYet": "Још нема прилагођених агената.",
     "noOrgAgentsConfigured": "Нису конфигурисани агенти организације.",
-    "validationFailed": "Валидација није успела"
+    "validationFailed": "Валидација није успела",
+    "addAgentSource": "Dodaj prilagođeni izvor",
+    "connectFoundryProject": "Poveži Microsoft Azure Foundry projekat",
+    "connectFoundryDescription": "Pronađite agente iz Azure Foundry projekta druge kancelarije ili tima. Videćete samo agente za koje imate dozvolu pristupa.",
+    "foundryProjectPath": "Putanja Foundry projekta",
+    "foundryProjectPathHelp": "Obratite se administratoru Foundry projekta ili kliknite na 'Unesi ručno' da biste svako polje uneli pojedinačno.",
+    "copyFormat": "Format",
+    "nameLabel": "Naziv",
+    "namePlaceholder": "npr. Amsterdam Office, Geneva Research",
+    "pathRequired": "Nalepite putanju resursa Foundry projekta.",
+    "pathInvalidFormat": "Ovo ne liči na putanju resursa. Trebalo bi da počinje sa /subscriptions/...",
+    "connectionFailed": "Ne može se pristupiti ovom projektu. Proverite da li je putanja tačna i da li imate pristup.",
+    "connectionSuccessAgents": "Povezano — pronađen{count} agent(a)",
+    "connectionSuccessEmpty": "Povezano, ali nisu pronađeni agenti. Možda vam je potrebna Azure AI User uloga u ovom projektu da biste videli agente.",
+    "checkingConnection": "Proverava se veza...",
+    "connect": "Poveži",
+    "save": "Sačuvaj",
+    "editConnection": "Izmeni vezu",
+    "sourceName": "Naziv izvora",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Naziv izvora je obavezan.",
+    "resourcePath": "Putanja resursa",
+    "resourcePathRequired": "Putanja resursa je obavezna.",
+    "resourcePathHelp": "ARM putanja resursa do Foundry projekta. Zamolite administratora za ovu vrednost.",
+    "invalidResourcePathFormat": "Putanja resursa mora počinjati sa /subscriptions/...",
+    "validatingSource": "Pronalaze se agenti...",
+    "sourceValidatedEmpty": "Izvor je važeći, ali nisu pronađeni agenti. Možda nemate pristup agentima u ovom projektu.",
+    "invalidSource": "Nije moguće pristupiti ovoj putanji resursa. Proverite putanju i vaše dozvole.",
+    "addSource": "Dodaj izvor",
+    "removeSource": "Ukloni izvor",
+    "labelSubscription": "Pretplata",
+    "labelFoundryAccount": "Foundry nalog",
+    "labelProject": "Projekat",
+    "tooltipSubscription": "Azure pretplata koja sadrži Foundry nalog. Ako niste sigurni, pitajte administratora koju pretplatu vaš tim koristi.",
+    "tooltipFoundryAccount": "Azure AI Services nalog na kojem se nalaze Foundry projekti. Svaka kancelarija ili tim obično ima svoj.",
+    "tooltipProject": "Projekat organizuje agente unutar naloga. Većina naloga ima jedan \"default\" projekat.",
+    "foundryProjectLabel": "Foundry projekat",
+    "enterManually": "Unesi ručno",
+    "browseResources": "Pretraži resurse",
+    "subscriptionIdLabel": "ID pretplate",
+    "resourceGroupLabel": "Grupa resursa",
+    "accountNameLabel": "Naziv naloga",
+    "projectNameLabel": "Naziv projekta",
+    "loadingSubscriptions": "Učitavanje pretplata...",
+    "selectSubscription": "Izaberite pretplatu...",
+    "loadingAccounts": "Učitavanje naloga...",
+    "noAccountsFound": "Nisu pronađeni Foundry nalozi u ovoj pretplati.",
+    "selectAccount": "Izaberite nalog...",
+    "loadingProjects": "Učitavanje projekata...",
+    "noProjectsFound": "Nisu pronađeni projekti. Koristi se \"default\".",
+    "selectAllRequired": "Izaberite pretplatu, nalog i projekat.",
+    "subscriptionRequired": "Izaberite pretplatu",
+    "accountRequired": "Izaberite Foundry nalog"
   },
   "Quick Actions": "Брзе Акције",
   "Type / in chat to access your prompts": "Откуцајте / у ћаскању за приступ упутствима",
@@ -641,7 +693,10 @@
     "keepEditing": "Настави уређивање",
     "yes": "Да",
     "no": "Не",
-    "beta": "Бета"
+    "beta": "Бета",
+    "copied": "Kopirano!",
+    "clear": "Obriši",
+    "undo": "Poništi"
   },
   "terms": {
     "officialLanguages": "Званична верзија:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Ne pitaj ponovo prilikom zaustavljanja preko dugmeta",
     "stopGenerationDontAskAgainKeyboard": "Ne pitaj ponovo prilikom zaustavljanja putem tastature",
     "generateResponseButton": "Generiši odgovor",
-    "downloadResponse": "Preuzmi odgovor"
+    "downloadResponse": "Preuzmi odgovor",
+    "activity": {
+      "callingTool": "Pozivanje alata…",
+      "callingService": "Pozivanje spoljnog servisa…",
+      "usingNamedTool": "Koristi se {tool}…",
+      "usingNamedToolWithService": "Koristi se {tool} na {service}…",
+      "searchingWeb": "Pretraga interneta…",
+      "searchingFiles": "Pretraga fajlova…",
+      "runningCode": "Pokretanje koda…",
+      "generatingImage": "Generisanje slike…",
+      "listingTools": "Pretraga dostupnih alata…",
+      "analyzingFiles": "Analiza vaših fajlova…",
+      "searchingKnowledge": "Pretraga baze znanja…",
+      "cancellingPriorTool": "Otkazivanje prethodnog zahteva za alat…"
+    },
+    "toolSummary": {
+      "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
+      "failedCount": "{count} neuspešno",
+      "statusApproved": "Odobreno",
+      "statusAutoApproved": "Automatski odobreno",
+      "statusAutoDenied": "Automatski odbijeno",
+      "statusFailed": "Neuspešno",
+      "statusIncomplete": "Nedovršeno",
+      "viaService": "preko {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Potrebna autorizacija",
+      "authorizeService": "Autorizujte {service}",
+      "descriptionGeneric": "Ovaj agent zahteva vašu dozvolu za pristup zaštićenom resursu. Vaša prijava se upravlja od strane izvornog servisa i ovde nije sačuvana.",
+      "descriptionWithService": "Ovaj agent zahteva vašu dozvolu za pristup {service}. Vaša prijava na {service} upravlja se direktno od strane {service}, i ovde nije sačuvana.",
+      "signInIncompleteGeneric": "Prijava nije završena",
+      "signInIncompleteForService": "Prijava na {service} nije završena",
+      "signInIncompleteDescriptionGeneric": "Izgleda da autorizacija nije završena. Proverite da li ste završili prijavu na drugoj kartici, zatim ponovo kliknite na Nastavi.",
+      "signInIncompleteDescription": "Izgleda da autorizacija na {service} nije završena. Proverite da li ste završili prijavu na drugoj kartici, zatim ponovo kliknite na Nastavi.",
+      "authorizeButton": "Autorizujte",
+      "reauthorizeButton": "Ponovo autorizujte",
+      "continueButton": "Nastavi",
+      "confirmingButton": "Potvrđivanje…",
+      "authorizeHint": "Autorizujte, zatim se vratite ovde i kliknite na Nastavi. Da biste kasnije opozvali, odjavite se direktno sa {service} — token nije kod nas.",
+      "authorizeHintGeneric": "Autorizujte, zatim se vratite ovde i kliknite na Nastavi. Da biste kasnije opozvali, odjavite se direktno sa izvornog servisa — token nije kod nas.",
+      "continueHint": "Kada se autorizacija završi na drugoj kartici, kliknite na Nastavi.",
+      "confirmingHint": "Potvrđivanje autorizacije i nastavak vašeg zahteva…",
+      "resendHint": "Nakon autorizacije, pošaljite ponovo poruku da nastavite.",
+      "resetTooltip": "Resetujte sve postavke automatskog odobravanja alata za ovaj razgovor. Budući zahtevi će ponovo tražiti potvrdu.",
+      "autoApproveAllIndicator": "Automatski odobravanje svih alata",
+      "autoApproveCountIndicator": "{count, plural, one {Automatski odobravanje # alata} other {Automatski odobravanje # alata}}",
+      "resetShort": "Resetuj",
+      "approvalRequired": "Potrebno odobrenje alata",
+      "approvalForService": "Odobrite alat za {service}",
+      "approvalDescriptionGeneric": "Agent želi da pokrene alat za koji je potrebno vaše odobrenje pre nastavka.",
+      "approvalDescriptionWithTool": "Agent želi da pokrene alat {tool}, koji zahteva vaše odobrenje pre nastavka.",
+      "runToolTitle": "Pokrenuti <code>{tool}</code>?",
+      "runToolGeneric": "Pokrenuti ovaj alat?",
+      "viaService": "preko {service}",
+      "approveButton": "Odobri",
+      "approveOptionsLabel": "Opcije odobravanja",
+      "approveOnce": "Odobri jednom",
+      "alwaysApproveThisTool": "Uvek odobri ovaj alat",
+      "alwaysApproveAllTools": "Uvek odobri sve alate",
+      "denyButton": "Odbij",
+      "keyboardHint": "{modifier}+⏎ odobri · esc odbij",
+      "submittingState": "Vaša odluka se šalje",
+      "approvedState": "Odobreno — agent nastavljen",
+      "deniedState": "Odbijeno",
+      "submittingApproval": "Odobravanje i nastavak rada agenta…",
+      "submittingDenial": "Šaljem odbijanje…"
+    },
+    "openImage": "Otvori sliku",
+    "copyMessage": "Kopiraj poruku",
+    "stopAudio": "Zaustavi zvuk",
+    "generatingAudio": "Generišem zvuk...",
+    "listen": "Slušaj",
+    "processingAudio": "Obrađujem zvuk...",
+    "ttsError": "Greška pri generisanju zvuka. Pokušajte ponovo.",
+    "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Скупи бочну траку",
     "expandSidebar": "Прошири бочну траку",
     "quickActionsTitle": "Брзе акције",
-    "quickActions": "Брзе акције"
+    "quickActions": "Брзе акције",
+    "expandFolder": "Proširi fasciklu {name}",
+    "collapseFolder": "Sažmi fasciklu {name}",
+    "folderOptions": "Opcije za {name}"
   },
   "errors": {
     "somethingWentWrong": "Нешто је пошло наопако",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Ponašanje",
     "resetChatSettings": "Vrati podešavanja ćaskanja na podrazumevana",
     "resetChatSettingsConfirmTitle": "Vratiti podešavanja ćaskanja na podrazumevana?",
-    "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O Vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ovo ne utiče na vaše razgovore."
+    "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O Vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ovo ne utiče na vaše razgovore.",
+    "customInstructionsLabel": "Prilagođena uputstva*",
+    "defaultTemperatureLabel": "Podrazumevana temperatura*"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1226,7 +1360,8 @@
       "agents": "Агенти"
     },
     "sections": {
-      "baseModels": "Основни модели"
+      "baseModels": "Основни модели",
+      "allModels": "Svi modeli ({count})"
     },
     "maintainedBy": "Одржава",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Готово",
       "reset": "Ресетуј",
       "resetTooltip": "Ресетуј на подразумевани редослед"
-    }
+    },
+    "hide": "Sakrij sa liste",
+    "hideConfirmTitle": "Sakriti \"{name}\"?",
+    "hideConfirmMessage": "Biće uklonjeno sa vaše liste, ali neće biti obrisano. Možete ga vratiti u bilo kom trenutku iz sekcije Sakriveno.",
+    "hideConfirm": "Sakrij",
+    "hiddenToast": "Sakriveno \"{name}\"",
+    "hidden": {
+      "title": "Skriveno ({count})",
+      "restore": "Vrati"
+    },
+    "title": "Izaberite model",
+    "modelsDescription": "Izaberite AI model za vašu konverzaciju. Svaki model ima svoje prednosti — izaberite jedan za više detalja.",
+    "recommended": "Preporučeno"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Брз и економичан Claude модел оптимизован за брзе задатке. Одличан за једноставне упите, сумирање и апликације великог обима.",
       "knowledgeCutoff": "Јануар 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Najmoćniji model kompanije Anthropic. Dobar za duže pisanje, istraživanje i zadatke koji zahtevaju precizno razmišljanje.",
+      "knowledgeCutoff": "Februar 2026."
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Izbalansirani Claude model. Dobar za svakodnevno pisanje, analizu i kodiranje sa brzim odgovorima.",
+      "knowledgeCutoff": "Februar 2026."
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Otkazano od strane korisnika",
     "transientBody": "Pokušajte ponovo",
     "authFailedBody": "Prijavite se ponovo",
-    "rateLimitedBody": "Servis je zauzet, pokušajte uskoro ponovo"
+    "rateLimitedBody": "Servis je zauzet, pokušajte uskoro ponovo",
+    "loadingAttempt": "(pokušaj {count})",
+    "transcriptLabel": "[Transkript: {filename}]"
   },
   "documentTranslation": {
     "title": "Превод документа",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Експериментално — направљено у директној сарадњи са МСФ напредним корисницима. Није за општу употребу.",
       "createButton": "Направи прилагођеног агента"
     },
-    "selectAgentPrompt": "Изаберите агента да видите детаље"
+    "selectAgentPrompt": "Изаберите агента да видите детаље",
+    "description": "Specijalizovani AI agenti za određene zadatke. Podrazumevani agenti su centralno upravljani; dodajte prilagođene izvore za otkrivanje agenata iz drugih Foundry projekata.",
+    "regionAgents": {
+      "us": "Agenti za region SAD",
+      "eu": "Agenti za region EU",
+      "default": "Agenti regiona"
+    },
+    "officeAgents": {
+      "suffix": "Agenti"
+    },
+    "agentSources": {
+      "title": "Foundry konekcije",
+      "description": "Povežite se sa drugim Foundry projektima da biste otkrili njihove agente.",
+      "connectButton": "Povežite Microsoft Azure Foundry projekat",
+      "connectButtonShort": "Povežite Foundry projekat",
+      "addButton": "Dodaj prilagođeni izvor",
+      "addAnother": "Dodaj još jednu konekciju",
+      "noSources": "Nema podešenih prilagođenih izvora.",
+      "removeSource": "Ukloni izvor",
+      "confirmRemove": "Ukloniti?",
+      "sourceConnected": "prilagođeni izvor povezan",
+      "sourcesConnected": "prilagođeni izvori povezani",
+      "backToAgents": "Nazad",
+      "discoveredAgents": "Otkriveni agenti",
+      "viewConnection": "Prikaži detalje konekcije",
+      "edit": "Izmeni",
+      "noAgentsPublished": "Nema objavljenih agenata",
+      "connectedOn": "Povezano {date}",
+      "disconnectSource": "Prekini vezu sa ovim izvorom",
+      "confirmDisconnect": "Kliknite ponovo za potvrdu",
+      "loadingAgents": "Učitavanje agenata...",
+      "noAgentsFound": "Nema agenata u ovom projektu",
+      "noAgentsFoundHint": "Proverite da su agenti objavljeni i da imate Azure AI User ulogu na ovom projektu.",
+      "refresh": "Osveži",
+      "refreshAgents": "Osveži agente",
+      "technicalDetails": "Tehnički detalji",
+      "agentCountLabel": "{count} agenata",
+      "disconnectedToast": "Prekinuta veza sa {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Политика приватности и заштита података",

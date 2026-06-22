@@ -381,7 +381,59 @@
     "delete": "Ta bort",
     "noCustomAgentsYet": "Inga anpassade agenter ännu.",
     "noOrgAgentsConfigured": "Inga organisationsagenter konfigurerade.",
-    "validationFailed": "Validering misslyckades"
+    "validationFailed": "Validering misslyckades",
+    "addAgentSource": "Lägg till anpassad källa",
+    "connectFoundryProject": "Anslut ett Microsoft Azure Foundry-projekt",
+    "connectFoundryDescription": "Upptäck agenter från ett annat kontors eller teams Azure Foundry-projekt. Du ser bara de agenter du har behörighet till.",
+    "foundryProjectPath": "Foundry-projektväg",
+    "foundryProjectPathHelp": "Fråga din Foundry-projektadministratör, eller klicka på 'Ange manuellt' för att fylla i varje fält separat.",
+    "copyFormat": "Format",
+    "nameLabel": "Namn",
+    "namePlaceholder": "t.ex. Amsterdam-kontoret, Genève-forskning",
+    "pathRequired": "Klistra in Foundry-projektets resursväg.",
+    "pathInvalidFormat": "Detta ser inte ut som en resursväg. Den ska börja med /subscriptions/...",
+    "connectionFailed": "Kunde inte ansluta till detta projekt. Kontrollera att vägen är korrekt och att du har behörighet.",
+    "connectionSuccessAgents": "Ansluten — {count} agent(er) hittade",
+    "connectionSuccessEmpty": "Ansluten, men inga agenter hittades. Du kan behöva Azure AI User-rollen i detta projekt för att se dess agenter.",
+    "checkingConnection": "Kontrollerar anslutning...",
+    "connect": "Anslut",
+    "save": "Spara",
+    "editConnection": "Redigera anslutning",
+    "sourceName": "Källnamn",
+    "sourceNamePlaceholder": "Amsterdam-kontoret",
+    "sourceNameRequired": "Källnamn krävs.",
+    "resourcePath": "Resursväg",
+    "resourcePathRequired": "Resursväg krävs.",
+    "resourcePathHelp": "ARM-resursvägen till ett Foundry-projekt. Be din administratör om detta värde.",
+    "invalidResourcePathFormat": "Resursväg måste börja med /subscriptions/...",
+    "validatingSource": "Söker efter agenter...",
+    "sourceValidatedEmpty": "Giltig källa, men inga agenter hittades. Du har kanske inte tillgång till agenter i detta projekt.",
+    "invalidSource": "Kunde inte komma åt denna resursväg. Kontrollera vägen och dina behörigheter.",
+    "addSource": "Lägg till källa",
+    "removeSource": "Ta bort källa",
+    "labelSubscription": "Prenumeration",
+    "labelFoundryAccount": "Foundry-konto",
+    "labelProject": "Projekt",
+    "tooltipSubscription": "Azure-prenumerationen som innehåller Foundry-kontot. Om du är osäker, fråga din administratör vilken prenumeration ert team använder.",
+    "tooltipFoundryAccount": "Azure AI Services-kontot där Foundry-projektet finns. Varje kontor eller team har vanligtvis ett eget.",
+    "tooltipProject": "Ett projekt organiserar agenter inom ett konto. De flesta konton har ett enda 'default'-projekt.",
+    "foundryProjectLabel": "Foundry-projekt",
+    "enterManually": "Ange manuellt",
+    "browseResources": "Bläddra bland resurser",
+    "subscriptionIdLabel": "Prenumerations-ID",
+    "resourceGroupLabel": "Resursgrupp",
+    "accountNameLabel": "Kontonamn",
+    "projectNameLabel": "Projektnamn",
+    "loadingSubscriptions": "Laddar prenumerationer...",
+    "selectSubscription": "Välj en prenumeration...",
+    "loadingAccounts": "Laddar konton...",
+    "noAccountsFound": "Inga Foundry-konton hittades i denna prenumeration.",
+    "selectAccount": "Välj ett konto...",
+    "loadingProjects": "Laddar projekt...",
+    "noProjectsFound": "Inga projekt hittades. Använder \"default\".",
+    "selectAllRequired": "Välj en prenumeration, ett konto och ett projekt.",
+    "subscriptionRequired": "Välj ett abonnemang",
+    "accountRequired": "Välj ett Foundry-konto"
   },
   "Quick Actions": "Snabbåtgärder",
   "Type / in chat to access your prompts": "Skriv / i chatten för att komma åt dina prompter",
@@ -538,7 +590,10 @@
     "keepEditing": "Fortsätt redigera",
     "yes": "Ja",
     "no": "Nej",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Kopierat!",
+    "clear": "Rensa",
+    "undo": "Ångra"
   },
   "errors": {
     "unexpectedErrorOccurred": "Ett oväntat fel uppstod",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "Fråga inte igen när du stoppar med knappen",
     "stopGenerationDontAskAgainKeyboard": "Fråga inte igen när du stoppar med tangentbordet",
     "generateResponseButton": "Generera svar",
-    "downloadResponse": "Ladda ner svar"
+    "downloadResponse": "Ladda ner svar",
+    "activity": {
+      "callingTool": "Ringer upp verktyg…",
+      "callingService": "Anropar extern tjänst…",
+      "usingNamedTool": "Använder {tool}…",
+      "usingNamedToolWithService": "Använder {tool} på {service}…",
+      "searchingWeb": "Söker på webben…",
+      "searchingFiles": "Söker i filer…",
+      "runningCode": "Kör kod…",
+      "generatingImage": "Genererar bild…",
+      "listingTools": "Letar efter tillgängliga verktyg…",
+      "analyzingFiles": "Analyserar dina filer…",
+      "searchingKnowledge": "Söker i kunskapsbasen…",
+      "cancellingPriorTool": "Avbryter föregående verktygsanrop…"
+    },
+    "toolSummary": {
+      "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
+      "failedCount": "{count} misslyckades",
+      "statusApproved": "Godkänd",
+      "statusAutoApproved": "Automatiskt godkänd",
+      "statusAutoDenied": "Automatiskt nekad",
+      "statusFailed": "Misslyckades",
+      "statusIncomplete": "Ofullständig",
+      "viaService": "via {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Behörighet krävs",
+      "authorizeService": "Auktorisera {service}",
+      "descriptionGeneric": "Denna agent behöver din tillåtelse för att få åtkomst till en säker resurs. Din inloggning hanteras av den externa tjänsten, inte lagras här.",
+      "descriptionWithService": "Denna agent behöver din tillåtelse för att få åtkomst till {service}. Din inloggning till {service} hanteras av {service} själv, inte lagras här.",
+      "signInIncompleteGeneric": "Inloggningen slutfördes inte",
+      "signInIncompleteForService": "Inloggningen till {service} slutfördes inte",
+      "signInIncompleteDescriptionGeneric": "Det verkar som att auktoriseringen inte slutfördes. Kontrollera att du loggat in klart i den andra fliken och klicka sedan på Fortsätt igen.",
+      "signInIncompleteDescription": "Det verkar som att auktoriseringen till {service} inte slutfördes. Kontrollera att du loggat in klart i den andra fliken och klicka sedan på Fortsätt igen.",
+      "authorizeButton": "Auktorisera",
+      "reauthorizeButton": "Auktorisera igen",
+      "continueButton": "Fortsätt",
+      "confirmingButton": "Bekräftar…",
+      "authorizeHint": "Auktorisera, återvänd hit och klicka på Fortsätt. Om du vill återkalla senare, logga ut direkt från {service} — vi sparar inte token.",
+      "authorizeHintGeneric": "Auktorisera, återvänd hit och klicka på Fortsätt. Om du vill återkalla senare, logga ut direkt från den externa tjänsten — vi sparar inte token.",
+      "continueHint": "När behörigheten är klar i den andra fliken, klicka på Fortsätt.",
+      "confirmingHint": "Bekräftar behörighet och återupptar din begäran…",
+      "resendHint": "Efter auktorisering, skicka ditt meddelande igen för att fortsätta.",
+      "resetTooltip": "Återställ alla automatiska verktygsval för denna konversation. Framtida verktygsanrop kommer att fråga igen.",
+      "autoApproveAllIndicator": "Godkänner automatiskt alla verktyg",
+      "autoApproveCountIndicator": "{count, plural, one {Godkänner automatiskt # verktyg} other {Godkänner automatiskt # verktyg}}",
+      "resetShort": "Återställ",
+      "approvalRequired": "Godkännande krävs för verktyg",
+      "approvalForService": "Godkänn verktyg för {service}",
+      "approvalDescriptionGeneric": "Agenten vill köra ett verktyg som kräver ditt godkännande innan den fortsätter.",
+      "approvalDescriptionWithTool": "Agenten vill köra verktyget {tool}, vilket kräver ditt godkännande innan den fortsätter.",
+      "runToolTitle": "Kör <code>{tool}</code>?",
+      "runToolGeneric": "Kör detta verktyg?",
+      "viaService": "via {service}",
+      "approveButton": "Godkänn",
+      "approveOptionsLabel": "Godkänn alternativ",
+      "approveOnce": "Godkänn en gång",
+      "alwaysApproveThisTool": "Godkänn alltid detta verktyg",
+      "alwaysApproveAllTools": "Godkänn alltid alla verktyg",
+      "denyButton": "Neka",
+      "keyboardHint": "{modifier}+⏎ godkänn · esc neka",
+      "submittingState": "Skickar ditt beslut",
+      "approvedState": "Godkänt — agenten fortsätter",
+      "deniedState": "Nekad",
+      "submittingApproval": "Godkänner och återupptar agenten…",
+      "submittingDenial": "Skickar din nekning…"
+    },
+    "openImage": "Öppna bild",
+    "copyMessage": "Kopiera meddelande",
+    "stopAudio": "Stoppa ljud",
+    "generatingAudio": "Genererar ljud...",
+    "listen": "Lyssna",
+    "processingAudio": "Bearbetar ljud...",
+    "ttsError": "Fel vid generering av ljud. Försök igen.",
+    "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
     "expandSidebar": "Expandera sidofält",
     "quickActionsTitle": "Snabbåtgärder",
-    "quickActions": "Snabbåtgärder"
+    "quickActions": "Snabbåtgärder",
+    "expandFolder": "Expandera mapp {name}",
+    "collapseFolder": "Komprimera mapp {name}",
+    "folderOptions": "{name}-alternativ"
   },
   "prompts": {
     "buildReusablePrompts": "Bygg återanvändbara prompter med AI-assistans",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "Beteende",
     "resetChatSettings": "Återställ chattinställningar",
     "resetChatSettingsConfirmTitle": "Återställ chattinställningar?",
-    "resetChatSettingsConfirmMessage": "Detta återställer standardvärden för allt i denna panel: temperatur, anpassade instruktioner, Om dig, modellsvar, strömmande hastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina konversationer."
+    "resetChatSettingsConfirmMessage": "Detta återställer standardvärden för allt i denna panel: temperatur, anpassade instruktioner, Om dig, modellsvar, strömmande hastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina konversationer.",
+    "customInstructionsLabel": "Anpassade instruktioner*",
+    "defaultTemperatureLabel": "Standardtemperatur*"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1077,7 +1211,8 @@
       "agents": "Agenter"
     },
     "sections": {
-      "baseModels": "Basmodeller"
+      "baseModels": "Basmodeller",
+      "allModels": "Alla modeller ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Avancerad funktion",
@@ -1150,7 +1285,19 @@
       "reasoning": "Utökat resonemang för komplexa problem",
       "omni": "Multimodal modell med breda möjligheter",
       "agent": "Agent med realtidsverktyg och webbtillgång"
-    }
+    },
+    "hide": "Dölj från listan",
+    "hideConfirmTitle": "Dölj \"{name}\"?",
+    "hideConfirmMessage": "Den tas bort från din lista, men raderas inte. Du kan återställa den när som helst från avsnittet Döljda.",
+    "hideConfirm": "Dölj",
+    "hiddenToast": "Döljde \"{name}\"",
+    "hidden": {
+      "title": "Döljda ({count})",
+      "restore": "Återställ"
+    },
+    "title": "Välj en modell",
+    "modelsDescription": "Välj en AI-modell för din konversation. Varje modell har olika styrkor — välj en för att se detaljer.",
+    "recommended": "Rekommenderad"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dec 2025",
       "description": "Specialiserad variant av GPT-5.2 optimerad för samtal och emotionell intelligens. Utmärker sig inom empatisk kommunikation, kreativt skrivande, idégenerering och naturliga dialoger. Bäst för informella samtal, rådgivningssituationer och uppgifter som kräver emotionell medvetenhet."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropics starkaste modell. Bra för långa texter, forskning och uppgifter som kräver noggrant tänkande.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "En balanserad Claude-modell. Bra för vardagligt skrivande, analys och kodning med snabba svar.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1365,7 +1522,9 @@
     "cancelledBody": "Avbruten av användare",
     "transientBody": "Försök igen",
     "authFailedBody": "Logga in igen",
-    "rateLimitedBody": "Tjänsten är fullbelagd, försök igen om en stund"
+    "rateLimitedBody": "Tjänsten är fullbelagd, försök igen om en stund",
+    "loadingAttempt": "(försök {count})",
+    "transcriptLabel": "[Transkription: {filename}]"
   },
   "migration": {
     "status": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Experimentell — byggd i direkt samarbete med MSF-avancerade användare. Inte avsedd för allmänt bruk.",
       "createButton": "Skapa anpassad agent"
     },
-    "selectAgentPrompt": "Välj en agent för att visa detaljer"
+    "selectAgentPrompt": "Välj en agent för att visa detaljer",
+    "description": "Specialiserade AI-agenter för specifika uppgifter. Standardagenter hanteras centralt; lägg till egna källor för att upptäcka agenter från andra Foundry-projekt.",
+    "regionAgents": {
+      "us": "Agenter för USA-regionen",
+      "eu": "Agenter för EU-regionen",
+      "default": "Regionagenter"
+    },
+    "officeAgents": {
+      "suffix": "Agenter"
+    },
+    "agentSources": {
+      "title": "Foundry-anslutningar",
+      "description": "Anslut till andra Foundry-projekt för att upptäcka deras agenter.",
+      "connectButton": "Anslut ett Microsoft Azure Foundry-projekt",
+      "connectButtonShort": "Anslut ett Foundry-projekt",
+      "addButton": "Lägg till anpassad källa",
+      "addAnother": "Lägg till ytterligare anslutning",
+      "noSources": "Inga anpassade källor konfigurerade.",
+      "removeSource": "Ta bort källa",
+      "confirmRemove": "Ta bort?",
+      "sourceConnected": "anpassad källa ansluten",
+      "sourcesConnected": "anpassade källor anslutna",
+      "backToAgents": "Tillbaka",
+      "discoveredAgents": "Upptäckta agenter",
+      "viewConnection": "Visa anslutningsdetaljer",
+      "edit": "Redigera",
+      "noAgentsPublished": "Inga agenter publicerade",
+      "connectedOn": "Ansluten {date}",
+      "disconnectSource": "Koppla från denna källa",
+      "confirmDisconnect": "Klicka igen för att bekräfta",
+      "loadingAgents": "Laddar agenter...",
+      "noAgentsFound": "Inga agenter hittades i detta projekt",
+      "noAgentsFoundHint": "Se till att agenter är publicerade och att du har rollen Azure AI User i detta projekt.",
+      "refresh": "Uppdatera",
+      "refreshAgents": "Uppdatera agenter",
+      "technicalDetails": "Teknisk information",
+      "agentCountLabel": "{count} agenter",
+      "disconnectedToast": "Kopplade från {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Integritetspolicy & Dataskydd",

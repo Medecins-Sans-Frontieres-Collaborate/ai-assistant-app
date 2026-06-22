@@ -356,7 +356,59 @@
     "delete": "Poista",
     "noCustomAgentsYet": "Ei vielä mukautettuja agentteja.",
     "noOrgAgentsConfigured": "Organisaatioagentteja ei ole määritetty.",
-    "validationFailed": "Vahvistus epäonnistui"
+    "validationFailed": "Vahvistus epäonnistui",
+    "addAgentSource": "Lisää mukautettu lähde",
+    "connectFoundryProject": "Yhdistä Microsoft Azure Foundry -projektiin",
+    "connectFoundryDescription": "Löydä agenteja toisen toimiston tai tiimin Azure Foundry -projektista. Näet vain ne agentit, joihin sinulla on käyttöoikeus.",
+    "foundryProjectPath": "Foundry-projektin polku",
+    "foundryProjectPathHelp": "Kysy Foundry-projektisi ylläpitäjältä tai napsauta 'Syötä manuaalisesti' täyttääksesi kentät erikseen.",
+    "copyFormat": "Muoto",
+    "nameLabel": "Nimi",
+    "namePlaceholder": "esim. Amsterdamin toimisto, Geneven tutkimus",
+    "pathRequired": "Liitä Foundry-projektin resurssipolku.",
+    "pathInvalidFormat": "Tämä ei näytä resurssipolulta. Sen tulisi alkaa /subscriptions/...",
+    "connectionFailed": "Projektia ei voitu tavoittaa. Tarkista, että polku on oikea ja että sinulla on käyttöoikeus.",
+    "connectionSuccessAgents": "Yhdistetty — {count} agenttia löytyi",
+    "connectionSuccessEmpty": "Yhdistetty, mutta agentteja ei löytynyt. Tarvitset mahdollisesti Azure AI User -roolin nähdäksesi tämän projektin agentit.",
+    "checkingConnection": "Tarkistetaan yhteyttä...",
+    "connect": "Yhdistä",
+    "save": "Tallenna",
+    "editConnection": "Muokkaa yhteyttä",
+    "sourceName": "Lähteen nimi",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Lähteen nimi on pakollinen.",
+    "resourcePath": "Resurssipolku",
+    "resourcePathRequired": "Resurssipolku on pakollinen.",
+    "resourcePathHelp": "ARM-resurssipolku Foundry-projektin sijaintiin. Kysy tämä arvo ylläpitäjältäsi.",
+    "invalidResourcePathFormat": "Resurssipolun on alettava /subscriptions/...",
+    "validatingSource": "Etsitään agentteja...",
+    "sourceValidatedEmpty": "Kelvollinen lähde, mutta agentteja ei löytynyt. Sinulla ei ehkä ole pääsyä tämän projektin agentteihin.",
+    "invalidSource": "Resurssipolkuun ei saatu yhteyttä. Tarkista polku ja käyttöoikeutesi.",
+    "addSource": "Lisää lähde",
+    "removeSource": "Poista lähde",
+    "labelSubscription": "Tilaus",
+    "labelFoundryAccount": "Foundry-tili",
+    "labelProject": "Projekti",
+    "tooltipSubscription": "Azure-tilaus, joka sisältää Foundry-tilin. Jos olet epävarma, kysy ylläpitäjältäsi, mitä tilausta tiimisi käyttää.",
+    "tooltipFoundryAccount": "Azure AI Services -tili, jossa Foundry-projekti sijaitsee. Jokaisella toimistolla tai tiimillä on yleensä oma tilinsä.",
+    "tooltipProject": "Projekti järjestää agentit tilin sisällä. Useimmilla tileillä on yksi oletusprojekti ('default').",
+    "foundryProjectLabel": "Foundry-projekti",
+    "enterManually": "Syötä manuaalisesti",
+    "browseResources": "Selaa resursseja",
+    "subscriptionIdLabel": "Tilaustunnus",
+    "resourceGroupLabel": "Resurssiryhmä",
+    "accountNameLabel": "Tilin nimi",
+    "projectNameLabel": "Projektin nimi",
+    "loadingSubscriptions": "Ladataan tilauksia...",
+    "selectSubscription": "Valitse tilaus...",
+    "loadingAccounts": "Ladataan tilejä...",
+    "noAccountsFound": "Tässä tilauksessa ei löytynyt Foundry-tilejä.",
+    "selectAccount": "Valitse tili...",
+    "loadingProjects": "Ladataan projekteja...",
+    "noProjectsFound": "Projekteja ei löytynyt. Käytetään \"default\".",
+    "selectAllRequired": "Valitse tilaus, tili ja projekti.",
+    "subscriptionRequired": "Valitse tilaus",
+    "accountRequired": "Valitse Foundry-tili"
   },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",
@@ -513,7 +565,10 @@
     "keepEditing": "Jatka muokkaamista",
     "yes": "Kyllä",
     "no": "Ei",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Kopioitu!",
+    "clear": "Tyhjennä",
+    "undo": "Kumoa"
   },
   "errors": {
     "unexpectedErrorOccurred": "Odottamaton virhe tapahtui",
@@ -667,13 +722,90 @@
     "stopGenerationDontAskAgainButton": "Älä kysy uudestaan, kun lopetetaan painikkeella",
     "stopGenerationDontAskAgainKeyboard": "Älä kysy uudestaan, kun lopetetaan näppäimistöllä",
     "generateResponseButton": "Luo vastaus",
-    "downloadResponse": "Lataa vastaus"
+    "downloadResponse": "Lataa vastaus",
+    "activity": {
+      "callingTool": "Kutsutaan työkalua…",
+      "callingService": "Kutsutaan ulkoista palvelua…",
+      "usingNamedTool": "Käytetään työkalua {tool}…",
+      "usingNamedToolWithService": "Käytetään työkalua {tool} palvelussa {service}…",
+      "searchingWeb": "Haetaan verkosta…",
+      "searchingFiles": "Haetaan tiedostoista…",
+      "runningCode": "Suoritetaan koodia…",
+      "generatingImage": "Luodaan kuvaa…",
+      "listingTools": "Etsitään saatavilla olevia työkaluja…",
+      "analyzingFiles": "Analysoidaan tiedostojasi…",
+      "searchingKnowledge": "Haetaan tietopankista…",
+      "cancellingPriorTool": "Perutaan aiempi työkalupyyntö…"
+    },
+    "toolSummary": {
+      "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
+      "failedCount": "{count} epäonnistui",
+      "statusApproved": "Hyväksytty",
+      "statusAutoApproved": "Hyväksytty automaattisesti",
+      "statusAutoDenied": "Hylätty automaattisesti",
+      "statusFailed": "Epäonnistui",
+      "statusIncomplete": "Keskeneräinen",
+      "viaService": "palvelun {service} kautta"
+    },
+    "consent": {
+      "authorizeRequired": "Valtuutus vaaditaan",
+      "authorizeService": "Valtuuta {service}",
+      "descriptionGeneric": "Tämä agentti tarvitsee luvan päästäkseen suojattuun resurssiin. Sisäänkirjautuminen hoidetaan ylävirran palvelussa, eikä tietoja tallenneta tänne.",
+      "descriptionWithService": "Tämä agentti tarvitsee luvan päästäkseen palveluun {service}. {service}-kirjautumisesi hallinnoi palvelu itse, eikä tietoja tallenneta tänne.",
+      "signInIncompleteGeneric": "Kirjautuminen ei onnistunut",
+      "signInIncompleteForService": "Kirjautuminen palveluun {service} ei onnistunut",
+      "signInIncompleteDescriptionGeneric": "Näyttää siltä, että valtuutus ei valmistunut. Varmista, että suoritat kirjautumisen toisessa välilehdessä loppuun ja napsauta sitten Jatka uudelleen.",
+      "signInIncompleteDescription": "Näyttää siltä, että valtuutus palveluun {service} ei valmistunut. Varmista, että suoritat kirjautumisen toisessa välilehdessä loppuun ja napsauta sitten Jatka uudelleen.",
+      "authorizeButton": "Valtuuta",
+      "reauthorizeButton": "Valtuuta uudelleen",
+      "continueButton": "Jatka",
+      "confirmingButton": "Vahvistetaan…",
+      "authorizeHint": "Valtuuta, palaa sitten tänne ja napsauta Jatka. Jos haluat myöhemmin perua oikeudet, kirjaudu ulos suoraan palvelusta {service} — emme säilytä tunnusta.",
+      "authorizeHintGeneric": "Valtuuta, palaa sitten tänne ja napsauta Jatka. Jos haluat myöhemmin perua oikeudet, kirjaudu ulos suoraan ylävirran palvelusta — emme säilytä tunnusta.",
+      "continueHint": "Kun valtuutus valmistuu toisessa välilehdessä, napsauta Jatka.",
+      "confirmingHint": "Vahvistetaan valtuutusta ja jatketaan pyyntöäsi…",
+      "resendHint": "Valtuutuksen jälkeen lähetä viestisi uudelleen jatkaaksesi.",
+      "resetTooltip": "Palauta kaikki työkalujen automaattisen hyväksynnän asetukset tässä keskustelussa. Jatkossa työkalujen käyttö vaatii taas vahvistuksen.",
+      "autoApproveAllIndicator": "Kaikki työkalut hyväksytään automaattisesti",
+      "autoApproveCountIndicator": "{count, plural, one {Hyväksytään automaattisesti # työkalu} other {Hyväksytään automaattisesti # työkalua}}",
+      "resetShort": "Palauta",
+      "approvalRequired": "Työkalun hyväksyntä vaaditaan",
+      "approvalForService": "Hyväksy työkalu palvelulle {service}",
+      "approvalDescriptionGeneric": "Agentti haluaa käyttää työkalua, joka vaatii hyväksyntäsi ennen jatkamista.",
+      "approvalDescriptionWithTool": "Agentti haluaa käyttää työkalua {tool}, joka vaatii hyväksyntäsi ennen jatkamista.",
+      "runToolTitle": "Suorita <code>{tool}</code>?",
+      "runToolGeneric": "Suorita tämä työkalu?",
+      "viaService": "palvelun {service} kautta",
+      "approveButton": "Hyväksy",
+      "approveOptionsLabel": "Hyväksyntäasetukset",
+      "approveOnce": "Hyväksy kerran",
+      "alwaysApproveThisTool": "Hyväksy tämä työkalu aina",
+      "alwaysApproveAllTools": "Hyväksy kaikki työkalut aina",
+      "denyButton": "Hylkää",
+      "keyboardHint": "{modifier}+⏎ hyväksy · esc hylkää",
+      "submittingState": "Tallennetaan päätöstäsi",
+      "approvedState": "Hyväksytty — agentti jatkaa",
+      "deniedState": "Hylätty",
+      "submittingApproval": "Hyväksytään ja jatketaan agentin toimintaa…",
+      "submittingDenial": "Lähetetään hylkäys…"
+    },
+    "openImage": "Avaa kuva",
+    "copyMessage": "Kopioi viesti",
+    "stopAudio": "Pysäytä ääni",
+    "generatingAudio": "Luodaan ääntä...",
+    "listen": "Kuuntele",
+    "processingAudio": "Käsitellään ääntä...",
+    "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
+    "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi"
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
     "expandSidebar": "Laajenna sivupalkki",
     "quickActionsTitle": "Pikatoiminnot",
-    "quickActions": "Pikatoiminnot"
+    "quickActions": "Pikatoiminnot",
+    "expandFolder": "Laajenna kansio {name}",
+    "collapseFolder": "Supista kansio {name}",
+    "folderOptions": "{name} asetukset"
   },
   "prompts": {
     "buildReusablePrompts": "Rakenna uudelleenkäytettäviä kehotteita tekoälyn avulla",
@@ -989,7 +1121,9 @@
     "behaviorSection": "Käyttäytyminen",
     "resetChatSettings": "Palauta keskusteluasetukset",
     "resetChatSettingsConfirmTitle": "Palautetaanko keskusteluasetukset?",
-    "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin oletusasetukset: temperature, mukautetut ohjeet, About You, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Tämä ei vaikuta keskusteluihisi."
+    "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin oletusasetukset: temperature, mukautetut ohjeet, About You, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Tämä ei vaikuta keskusteluihisi.",
+    "customInstructionsLabel": "Mukautetut ohjeet*",
+    "defaultTemperatureLabel": "Oletuslämpötila*"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "Käyttäjä perui",
     "transientBody": "Yritä uudelleen",
     "authFailedBody": "Kirjaudu sisään uudelleen",
-    "rateLimitedBody": "Palvelu on tilapäisesti ruuhkautunut, yritä pian uudelleen"
+    "rateLimitedBody": "Palvelu on tilapäisesti ruuhkautunut, yritä pian uudelleen",
+    "loadingAttempt": "(yritys {count})",
+    "transcriptLabel": "[Transkriptio: {filename}]"
   },
   "transcriptionComplete": "Puhtaaksikirjoitus valmis! Teksti lisätty keskusteluun.",
   "No prompts found": "Kehotteita ei löytynyt",
@@ -1173,7 +1309,8 @@
       "agents": "Agentit"
     },
     "sections": {
-      "baseModels": "Perusmallit"
+      "baseModels": "Perusmallit",
+      "allModels": "Kaikki mallit ({count})"
     },
     "maintainedBy": "Ylläpitäjä",
     "agents": {
@@ -1247,7 +1384,19 @@
       "reasoning": "Laajennettu päättely kyseen monimutkaisissa ongelmissa",
       "omni": "Monimuotoinen malli laajalla osaamisella",
       "agent": "Agentti reaaliaikaisilla työkaluilla ja verkkoyhteydellä"
-    }
+    },
+    "hide": "Piilota listalta",
+    "hideConfirmTitle": "Piilota \"{name}\"?",
+    "hideConfirmMessage": "Se poistetaan listaltasi, mutta sitä ei poisteta pysyvästi. Voit palauttaa sen milloin tahansa Piilotetut-osiosta.",
+    "hideConfirm": "Piilota",
+    "hiddenToast": "\"{name}\" piilotettu",
+    "hidden": {
+      "title": "Piilotetut ({count})",
+      "restore": "Palauta"
+    },
+    "title": "Valitse malli",
+    "modelsDescription": "Valitse keskustelullesi AI-malli. Jokaisella mallilla on omat vahvuutensa — valitse nähdäksesi tarkemmat tiedot.",
+    "recommended": "Suositeltu"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "joulukuu 2025",
       "description": "GPT-5.2:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, luovassa kirjoittamisessa, ideoinnissa ja luonnollisissa vuoropuheluissa. Paras rentoihin keskusteluihin, ohjaustilanteisiin ja tehtäviin, jotka vaativat tunneherkkyyttä."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropicin vahvin malli. Sopii pitkille teksteille, tutkimukseen ja tarkkaa ajattelua vaativiin tehtäviin.",
+      "knowledgeCutoff": "helmikuu 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Tasapainoinen Claude-malli. Sopii päivittäiseen kirjoittamiseen, analyysiin ja koodaukseen nopeilla vastauksilla.",
+      "knowledgeCutoff": "helmikuu 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Kokeellinen — rakennettu suorassa yhteistyössä MSF:n tehokäyttäjien kanssa. Ei yleiseen käyttöön.",
       "createButton": "Luo mukautettu agentti"
     },
-    "selectAgentPrompt": "Valitse agentti nähdäksesi tiedot"
+    "selectAgentPrompt": "Valitse agentti nähdäksesi tiedot",
+    "description": "Erikoistuneet AI-agentit tiettyihin tehtäviin. Oletusagentteja hallitaan keskitetysti; lisää omia lähteitä löytääksesi agentteja muista Foundry-projekteista.",
+    "regionAgents": {
+      "us": "US-alueen agentit",
+      "eu": "EU-alueen agentit",
+      "default": "Alueen agentit"
+    },
+    "officeAgents": {
+      "suffix": "Agentit"
+    },
+    "agentSources": {
+      "title": "Foundry-yhteydet",
+      "description": "Yhdistä muihin Foundry-projekteihin löytääksesi niiden agentteja.",
+      "connectButton": "Yhdistä Microsoft Azure Foundry -projektiin",
+      "connectButtonShort": "Yhdistä Foundry-projektiin",
+      "addButton": "Lisää mukautettu lähde",
+      "addAnother": "Lisää toinen yhteys",
+      "noSources": "Ei mukautettuja lähteitä määritetty.",
+      "removeSource": "Poista lähde",
+      "confirmRemove": "Poistetaanko?",
+      "sourceConnected": "mukautettu lähde yhdistetty",
+      "sourcesConnected": "mukautettua lähdettä yhdistetty",
+      "backToAgents": "Takaisin",
+      "discoveredAgents": "Löydetyt agentit",
+      "viewConnection": "Näytä yhteyden tiedot",
+      "edit": "Muokkaa",
+      "noAgentsPublished": "Ei julkaistuja agentteja",
+      "connectedOn": "Yhdistetty {date}",
+      "disconnectSource": "Katkaise tämän lähteen yhteys",
+      "confirmDisconnect": "Vahvista napsauttamalla uudelleen",
+      "loadingAgents": "Ladataan agentteja...",
+      "noAgentsFound": "Tässä projektissa ei ole agentteja",
+      "noAgentsFoundHint": "Varmista, että agentit on julkaistu ja sinulla on Azure AI User -rooli tässä projektissa.",
+      "refresh": "Päivitä",
+      "refreshAgents": "Päivitä agentit",
+      "technicalDetails": "Tekniset tiedot",
+      "agentCountLabel": "{count} agenttia",
+      "disconnectedToast": "Yhteys katkaistu: {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Tietosuojakäytäntö ja tietosuoja",

@@ -379,7 +379,59 @@
     "delete": "తొలగించండి",
     "noCustomAgentsYet": "ఇంకా కస్టమ్ ఏజెంట్లు లేవు.",
     "noOrgAgentsConfigured": "సంస్థ ఏజెంట్లు కాన్ఫిగర్ చేయబడలేదు.",
-    "validationFailed": "ధ్రువీకరణ విఫలమైంది"
+    "validationFailed": "ధ్రువీకరణ విఫలమైంది",
+    "addAgentSource": "కస్టమ్ సోర్స్ జోడించండి",
+    "connectFoundryProject": "Microsoft Azure Foundry ప్రాజెక్ట్‌ను కనెక్ట్ చేయండి",
+    "connectFoundryDescription": "ఇంకొక కార్యాలయం లేదా టీమ్ యొక్క Azure Foundry ప్రాజెక్ట్‌లోని ఏజెంట్లను కనుగొనండి. మీరు యాక్సెస్ హక్కున్న ఏజెంట్లను మాత్రమే చూడగలుగుతారు.",
+    "foundryProjectPath": "Foundry ప్రాజెక్ట్ పaths",
+    "foundryProjectPathHelp": "మీ Foundry ప్రాజెక్ట్ అడ్మినిస్ట్రేటర్‌ను అడగండి లేదా ప్రతి ఫీల్డ్‌ను విడిగా నింపేందుకు 'Enter manually' క్లిక్ చేయండి.",
+    "copyFormat": "ఫార్మాట్",
+    "nameLabel": "పేరు",
+    "namePlaceholder": "ఉదా. ఆమ్స్టర్డామ్ ఆఫీస్, జెనీవా రీసెర్చ్",
+    "pathRequired": "Foundry ప్రాజెక్ట్ రిసోర్స్ పaths ని పేస్ట్ చేయండి.",
+    "pathInvalidFormat": "ఇది రిసోర్స్ పaths లాంటిది అనిపించడం లేదు. ఇది /subscriptions/...తో ప్రారంభించాలి.",
+    "connectionFailed": "ఈ ప్రాజెక్ట్‌ ను చేరుకోలేకపోయాం. పaths సరియైనదో మరియు మీరు యాక్సెస్ ఉన్నదో తనిఖీ చేయండి.",
+    "connectionSuccessAgents": "కనెక్ట్ అయ్యింది — {count} ఏజెంట్(లు) కనుగొనబడ్డారు",
+    "connectionSuccessEmpty": "కనెక్ట్ అయ్యింది, కానీ ఏజెంట్లు కనుగొనబడలేదు. మీరు ఈ ప్రాజెక్ట్‌లో ఏజెంట్లను చూడడానికి Azure AI User పాత్ర అవసరం కావచ్చు.",
+    "checkingConnection": "కనెక్షన్ తనిఖీ జరుగుతోంది...",
+    "connect": "కనెక్ట్ చేయండి",
+    "save": "సేవ్ చేయండి",
+    "editConnection": "కనెక్షన్ సవరించండి",
+    "sourceName": "సోర్స్ పేరు",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "సోర్స్ పేరు అవసరం.",
+    "resourcePath": "రిసోర్స్ పaths",
+    "resourcePathRequired": "రిసోర్స్ పaths అవసరం.",
+    "resourcePathHelp": "Foundry ప్రాజెక్ట్ కు ARM రిసోర్స్ పaths. దయచేసి విలువ కోసం మీ అడ్మినిస్ట్రేటర్‌ను అడగండి.",
+    "invalidResourcePathFormat": "రిసోర్స్ పaths /subscriptions/...తో ప్రారంభించాలి.",
+    "validatingSource": "ఏజెంట్లను ఆవిష్కరించడం జరుగుతోంది...",
+    "sourceValidatedEmpty": "వెల్లడించిన సోర్స్ సరైంది, కానీ ఏజెంట్లు కనుగొనబడలేదు. ఈ ప్రాజెక్ట్ లోని ఏజెంట్లను యాక్సెస్ చేయడానికి మీకు హక్కు ఉండకపోవచ్చు.",
+    "invalidSource": "ఈ రిసోర్స్ పaths ను యాక్సెస్ చేయలేకపోయాం. దయచేసి పaths మరియు మీ అనుమతులను ధృవీకరించండి.",
+    "addSource": "సోర్స్ జోడించండి",
+    "removeSource": "సోర్స్ తొలగించండి",
+    "labelSubscription": "సబ్‌స్క్రిప్షన్",
+    "labelFoundryAccount": "Foundry అకౌంట్",
+    "labelProject": "ప్రాజెక్ట్",
+    "tooltipSubscription": "Foundry అకౌంట్‌ను కలిగి ఉన్న Azure సబ్‌స్క్రిప్షన్. మీకు తెలియకపోతే, మీ టీమ్ ఎలాంటి సబ్‌స్క్రిప్షన్ ను వాడుతోందో అడ్మిన్‌ను అడగండి.",
+    "tooltipFoundryAccount": "Foundry ప్రాజెక్ట్ ఉన్న Azure AI Services అకౌంట్. ప్రతి కార్యాలయం లేదా టీమ్ సాధారణంగా తమదైన అకౌంట్‌ను కలిగి ఉంటుంది.",
+    "tooltipProject": "ఒక ప్రాజెక్ట్ అకౌంట్‌లో ఏజెంట్లను నిర్వహిస్తుంది. ఎక్కువ అకౌంట్లలో ఒకే ఒక్క 'default' ప్రాజెక్ట్ ఉంటుంది.",
+    "foundryProjectLabel": "Foundry ప్రాజెక్ట్",
+    "enterManually": "మాన్యువల్‌గా నమోదు చేయండి",
+    "browseResources": "రిసోర్సులను విహరించండి",
+    "subscriptionIdLabel": "సబ్‌స్క్రిప్షన్ ID",
+    "resourceGroupLabel": "రిసోర్స్ గ్రూప్",
+    "accountNameLabel": "అకౌంట్ పేరు",
+    "projectNameLabel": "ప్రాజెక్ట్ పేరు",
+    "loadingSubscriptions": "సబ్‌స్క్రిప్షన్లు లోడ్ అవుతున్నాయి...",
+    "selectSubscription": "ఒక సబ్‌స్క్రిప్షన్ ఎంచుకోండి...",
+    "loadingAccounts": "అకౌంట్లు లోడ్ అవుతున్నాయి...",
+    "noAccountsFound": "ఈ సబ్‌స్క్రిప్షన్ లో ఎలాంటి Foundry అకౌంట్లు కనిపించలేదు.",
+    "selectAccount": "ఒక అకౌంట్ ఎంచుకోండి...",
+    "loadingProjects": "ప్రాజెక్ట్లు లోడ్ అవుతున్నాయి...",
+    "noProjectsFound": "ఎలాంటి ప్రాజెక్ట్లు కనుగొనబడలేదు. \"default\" వాడబడుతోంది.",
+    "selectAllRequired": "సబ్‌స్క్రిప్షన్, అకౌంట్, మరియు ప్రాజెక్ట్ ఎంచుకోండి.",
+    "subscriptionRequired": "ఒక సబ్‌స్క్రిప్షన్‌ని ఎంచుకోండి",
+    "accountRequired": "ఒక Foundry ఖాతాను ఎంచుకోండి"
   },
   "Quick Actions": "త్వరిత చర్యలు",
   "Type / in chat to access your prompts": "మీ ప్రాంప్ట్‌లను యాక్సెస్ చేయడానికి చాట్‌లో / టైప్ చేయండి",
@@ -536,7 +588,10 @@
     "keepEditing": "మార్పులు చేస్తుండండి",
     "yes": "అవును",
     "no": "కాదు",
-    "beta": "బీటా"
+    "beta": "బీటా",
+    "copied": "పొరపడి కాపీ అయ్యింది!",
+    "clear": "తుడిచివేయు",
+    "undo": "రద్దుచేయి"
   },
   "errors": {
     "unexpectedErrorOccurred": "అనుకోని లోపం సంభవించింది",
@@ -690,13 +745,90 @@
     "stopGenerationDontAskAgainButton": "బటన్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
     "stopGenerationDontAskAgainKeyboard": "కీబోర్డ్‌తో ఆపేటప్పుడు మళ్లీ అడగవద్దు",
     "generateResponseButton": "ప్రతిస్పందన సృష్టించు",
-    "downloadResponse": "ప్రత్యుత్తరాన్ని డౌన్‌లోడ్ చేయండి"
+    "downloadResponse": "ప్రత్యుత్తరాన్ని డౌన్‌లోడ్ చేయండి",
+    "activity": {
+      "callingTool": "టూల్‌ను పిలుస్తోంది…",
+      "callingService": "బయటి సేవను పిలుస్తోంది…",
+      "usingNamedTool": "{tool} ఉపయోగిస్తోంది…",
+      "usingNamedToolWithService": "{service} పై {tool} ఉపయోగిస్తోంది…",
+      "searchingWeb": "వెబ్‌ను అన్వేషిస్తోంది…",
+      "searchingFiles": "ఫైళ్ళను అన్వేషిస్తోంది…",
+      "runningCode": "కోడ్ నడుపుతోంది…",
+      "generatingImage": "చిత్రాన్ని తయారు చేస్తోంది…",
+      "listingTools": "లభ్యమైన టూల్స్‌ను పరిశీలిస్తోంది…",
+      "analyzingFiles": "మీ ఫైళ్లను విశ్లేషిస్తోంది…",
+      "searchingKnowledge": "నాలెడ్జ్ బేస్‌లో అన్వేషిస్తోంది…",
+      "cancellingPriorTool": "మునుపటి టూల్ అభ్యర్థనను రద్దు చేస్తోంది…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# టూల్ వాడింది} other {# టూల్స్ వాడింది}}",
+      "failedCount": "{count} విఫలమైంది",
+      "statusApproved": "అనుమతించింది",
+      "statusAutoApproved": "స్వయంచాలకంగా అనుమతించింది",
+      "statusAutoDenied": "స్వయంచాలకంగా తిరస్కరించబడింది",
+      "statusFailed": "విఫలమైంది",
+      "statusIncomplete": "పూర్తి కాలేదు",
+      "viaService": "{service} ద్వారా"
+    },
+    "consent": {
+      "authorizeRequired": "అనుమతి అవసరం",
+      "authorizeService": "{service} కు అనుమతించండి",
+      "descriptionGeneric": "ఈ ఏజెంట్‌కు సురక్షిత వనరుని యాక్సెస్ చేయడానికి మిమ్మల్ని అనుమతి కోరుతోంది. మీ సైన్-ఇన్‌ను అప్‌స్ట్రీం సేవ నిర్వహిస్తుంది, ఇక్కడ భద్రపరచబడదు.",
+      "descriptionWithService": "ఈ ఏజెంట్ {service} యాక్సెస్ చేయడానికి మీ అనుమతిని కోరుతోంది. మీ {service} సైన్-ఇన్‌ను {service} స్వయంగా నిర్వహిస్తుంది, ఇక్కడ భద్రపరచబడదు.",
+      "signInIncompleteGeneric": "సైన్-ఇన్ పూర్తి కాలేదు",
+      "signInIncompleteForService": "{service} కు సైన్-ఇన్ పూర్తి కాలేదు",
+      "signInIncompleteDescriptionGeneric": "అనుమతిలోపం పూర్తయ్యలేదనిపిస్తుంది. మరో ట్యాబ్‌లో సైన్-ఇన్ పూర్తయిందో లేదో చూసి, మళ్లీ Continue క్లిక్ చేయండి.",
+      "signInIncompleteDescription": "{service} కు అనుమతిలోపం పూర్తయ్యలేదనిపిస్తుంది. మరో ట్యాబ్‌లో సైన్-ఇన్ పూర్తయిందో లేదో చూసి, మళ్లీ Continue క్లిక్ చేయండి.",
+      "authorizeButton": "అనుమతించండి",
+      "reauthorizeButton": "మళ్లీ అనుమతించండి",
+      "continueButton": "కొనసాగించు",
+      "confirmingButton": "నిర్ధారిస్తోంది…",
+      "authorizeHint": "అనుమతించండి, తరువాత ఇక్కడకు తిరిగి వచ్చి Continue క్లిక్ చేయండి. తర్వాత రద్దు చేయాలంటే, {service} నుంచి నేరుగా సైన్ ఆవుట్ అవ్వండి — మేము టోకెన్ కలిగి ఉండము.",
+      "authorizeHintGeneric": "అనుమతించండి, తరువాత ఇక్కడకు తిరిగి వచ్చి Continue క్లిక్ చేయండి. తర్వాత రద్దు చేయాలంటే, అప్‌స్ట్రీం సేవ నుంచి నేరుగా సైన్ ఆవుట్ అవ్వండి — మేము టోకెన్ కలిగి ఉండము.",
+      "continueHint": "మరొక ట్యాబ్‌లో అనుమతిక్రియ ముగిసిన తర్వాత, Continue క్లిక్ చేయండి.",
+      "confirmingHint": "అనుమతిని నిర్ధారిస్తూ, మీ అభ్యర్థనను కొనసాగిస్తోంది…",
+      "resendHint": "అనుమతించిన తర్వాత, కొనసాగించడానికి మళ్ళీ మీ సందేశాన్ని పంపండి.",
+      "resetTooltip": "ఈ సంభాషణలో అన్ని టూల్ స్వయంఅనుమతి అభిరుచులను రీసెట్ చేయండి. భవిష్యత్తులో టూల్ పిలుపులకు మళ్లీ కన్పిస్తుంది.",
+      "autoApproveAllIndicator": "అన్ని టూల్స్‌కి స్వయంగా అనుమతిస్తోంది",
+      "autoApproveCountIndicator": "{count, plural, one {# టూల్‌కు స్వయంఅనుమతి} other {# టూల్స్‌కు స్వయంఅనుమతి}}",
+      "resetShort": "రీసెట్ చేయి",
+      "approvalRequired": "టూల్ అనుమతి అవసరం",
+      "approvalForService": "{service} కోసం టూల్‌ని అనుమతించండి",
+      "approvalDescriptionGeneric": "ఏజెంట్ కొనసాగేముందు మీరు అనుమతించాల్సిన టూల్‌ను నడపాలని కోరుతోంది.",
+      "approvalDescriptionWithTool": "ఏజెంట్ {tool} టూల్‌ను నడపాలని కోరుతోంది, ఇది కొనసాగేముందు మీ అనుమతి అవసరం.",
+      "runToolTitle": "<code>{tool}</code> ని నిర్వర్తించాలా?",
+      "runToolGeneric": "ఈ tool ని నిర్వర్తించాలా?",
+      "viaService": "{service} ద్వారా",
+      "approveButton": "అనుమతించు",
+      "approveOptionsLabel": "అనుమతి ఎంపికలు",
+      "approveOnce": "ఒక్కసారి అనుమతించు",
+      "alwaysApproveThisTool": "ఈ tool కు ఎప్పుడూ అనుమతించు",
+      "alwaysApproveAllTools": "అన్ని tools కు ఎప్పుడూ అనుమతించు",
+      "denyButton": "నిరాకరించు",
+      "keyboardHint": "{modifier}+⏎ అనుమతించు · esc నిరాకరించు",
+      "submittingState": "మీ నిర్ణయాన్ని సమర్పిస్తున్నారు",
+      "approvedState": "అనుమతి ఇవ్వబడింది — ఏజెంట్ కొనసాగించబడింది",
+      "deniedState": "నిరాకరించబడింది",
+      "submittingApproval": "అనుమతిస్తూ, ఏజెంట్ కొనసాగుతోంది…",
+      "submittingDenial": "మీ నిరాకరణ పంపుతోంది…"
+    },
+    "openImage": "చిత్రాన్ని తెరవు",
+    "copyMessage": "సందేశాన్ని కాపీ చేయి",
+    "stopAudio": "ఆడియో ఆపు",
+    "generatingAudio": "ఆడియో సృష్టిస్తోంది...",
+    "listen": "వినండి",
+    "processingAudio": "ఆడియో ప్రాసెసింగ్...",
+    "ttsError": "ఆడియో సృష్టించడంలో లోపం. దయచేసి మళ్లీ ప్రయత్నించండి.",
+    "unsupportedMessageType": "సందేశాన్ని ప్రదర్శించడంలో లోపం: మద్దతులేని సందేశ రకం"
   },
   "sidebar": {
     "collapseSidebar": "సైడ్‌బార్‌ను కుదించండి",
     "expandSidebar": "సైడ్‌బార్‌ను విస్తరించండి",
     "quickActionsTitle": "త్వరిత చర్యలు",
-    "quickActions": "త్వరిత చర్యలు"
+    "quickActions": "త్వరిత చర్యలు",
+    "expandFolder": "ఫోల్డర్ {name} విస్తరించు",
+    "collapseFolder": "ఫోల్డర్ {name} ముగించు",
+    "folderOptions": "{name} ఎంపికలు"
   },
   "prompts": {
     "buildReusablePrompts": "AI సహాయంతో పునర్వినియోగ ప్రాంప్ట్‌లను నిర్మించండి",
@@ -1012,7 +1144,9 @@
     "behaviorSection": "ప్రవర్తన",
     "resetChatSettings": "చాట్ సెట్టింగ్స్ రీసెట్ చేయండి",
     "resetChatSettingsConfirmTitle": "చాట్ సెట్టింగ్స్ రీసెట్ చేయాలా?",
-    "resetChatSettingsConfirmMessage": "ఈ ప్యానెల్‌లో ఉన్న అన్ని సెట్టింగ్స్‌ను డిఫాల్ట్‌కి తీసుకుపోతుంది: టెంపరేచర్, కస్టమ్ సూచనలు, మీ గురించి, మోడల్ ప్రతిస్పందన, స్ట్రీమింగ్ వేగం, టెక్స్ట్-టు-స్పీచ్, యాక్టివ్ ఫైల్స్ మరియు ధృవీకరణలు. ఇది మీ సంభాషణలను ప్రభావితం చేయదు."
+    "resetChatSettingsConfirmMessage": "ఈ ప్యానెల్‌లో ఉన్న అన్ని సెట్టింగ్స్‌ను డిఫాల్ట్‌కి తీసుకుపోతుంది: టెంపరేచర్, కస్టమ్ సూచనలు, మీ గురించి, మోడల్ ప్రతిస్పందన, స్ట్రీమింగ్ వేగం, టెక్స్ట్-టు-స్పీచ్, యాక్టివ్ ఫైల్స్ మరియు ధృవీకరణలు. ఇది మీ సంభాషణలను ప్రభావితం చేయదు.",
+    "customInstructionsLabel": "కస్టమ్ సూచనలు*",
+    "defaultTemperatureLabel": "డిఫాల్ట్ Temperature*"
   },
   "notFound": {
     "lostDog": "కోల్పోయిన కుక్క"
@@ -1113,7 +1247,9 @@
     "cancelledBody": "వాడుకరి ద్వారా రద్దు చేయబడింది",
     "transientBody": "దయచేసి మళ్ళీ ప్రయత్నించండి",
     "authFailedBody": "దయచేసి తిరిగి సైన్ ఇన్ చేయండి",
-    "rateLimitedBody": "సేవ పరిమితికి చేరింది, దయచేసి త్వరలో మళ్లీ ప్రయత్నించండి"
+    "rateLimitedBody": "సేవ పరిమితికి చేరింది, దయచేసి త్వరలో మళ్లీ ప్రయత్నించండి",
+    "loadingAttempt": "(ప్రయత్నం {count})",
+    "transcriptLabel": "[ట్రాన్స్‌క్రిప్ట్: {filename}]"
   },
   "importBackupParseError": "బ్యాకప్ ఫైల్‌ను విశ్లేషించడంలో విఫలమైంది. దయచేసి ఇది సరైన JSON కనుక నిర్ధారించండి.",
   "emptyState": {
@@ -1174,7 +1310,8 @@
       "agents": "ఏజెంట్స్"
     },
     "sections": {
-      "baseModels": "బేస్ మోడల్స్"
+      "baseModels": "బేస్ మోడల్స్",
+      "allModels": "అన్ని నమూనాలు ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "అధునాతన ఫీచర్",
@@ -1247,7 +1384,19 @@
       "reasoning": "సంక్లిష్ట సమస్యలకు విస్తృతమైన తార్కిక విశ్లేషణ",
       "omni": "వివిధ సామర్థ్యాలున్న మల్టీ-మోడల్ మోడల్",
       "agent": "వాస్తవ కాలం సాధనాలు & వెబ్ యాక్సెస్ ఉన్న ఏజెంట్"
-    }
+    },
+    "hide": "జాబితాలో నుండి మరొకటి",
+    "hideConfirmTitle": "\"{name}\" ను మరొకటిగా మార్చాలా?",
+    "hideConfirmMessage": "ఇది మీ జాబితా నుండి తీసివేయబడుతుంది కానీ తొలగించబడదు. మీరు దీనిని Hidden విభాగం నుండి ఎప్పుడైనా పునరుద్ధరించవచ్చు.",
+    "hideConfirm": "మరుగుపరచు",
+    "hiddenToast": "\"{name}\" మరుగుపరిచారు",
+    "hidden": {
+      "title": "మరుగుపడినవి ({count})",
+      "restore": "పునరుద్ధరించు"
+    },
+    "title": "ఒక మోడల్‌ని ఎంచుకోండి",
+    "modelsDescription": "మాట్లాడటానికి AI మోడల్‌ను ఎంచుకోండి. ప్రతీ మోడల్‌కు భిన్నమైన గొప్పతనాలు ఉంటాయి — వివరాల కోసం ఒకదాన్ని ఎంచుకోండి.",
+    "recommended": "సిఫార్సు చేయబడింది"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 చాట్",
       "knowledgeCutoff": "డిసెంబర్ 2025",
       "description": "సంభాషణ పరమైన పరస్పర చర్యలు మరియు భావోద్వేగబలం కోసం ప్రత్యేకంగా రూపొందించబడిన GPT-5.2 వేరియంట్. అనుకూలమైన సంభాషణ, సృజనాత్మక రచన, బ్రెయిన్‌స్టార్మింగ్, సహజ సంభాషణల్లో నిపుణుడు. సాధారణ సంభాషణలు, కౌన్సెలింగ్ సన్నివేశాలు మరియు భావోద్వేగ పారిపక్వత అవసరమయ్యే పనుల కోసం ఉత్తమమైనది."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic యొక్క శక్తివంతమైన మోడల్. పొడవైన రచన, పరిశోధన, మరియు జాగ్రత్తగా ఆలోచన కావలసిన పనులకు అనుకూలం.",
+      "knowledgeCutoff": "ఫెబ్ 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "సమతుల్యత కలిగిన Claude మోడల్. ప్రతిరోజు రచన, విశ్లేషణ, మరియు వేగంగా స్పందించే కోడింగ్‌కు అనుకూలం.",
+      "knowledgeCutoff": "ఫెబ్ 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "ప్రయోగాత్మకం — MSF పవర్ వినియోగదారులతో ప్రత్యక్ష సహకారంతో నిర్మించబడింది. సాధారణ వినియోగం కోసం కాదు.",
       "createButton": "కస్టమ్ ఏజెంట్ సృష్టించండి"
     },
-    "selectAgentPrompt": "వివరాలు చూడటానికి ఏజెంట్‌ను ఎంచుకోండి"
+    "selectAgentPrompt": "వివరాలు చూడటానికి ఏజెంట్‌ను ఎంచుకోండి",
+    "description": "ప్రత్యేక పనులకు ఉద్దేశించిన AI ఏజెంట్లు. అప్రమేయ ఏజెంట్లు కేంద్రంగా నిర్వహించబడతాయి; ఇతర ఫౌండ్రీ ప్రాజెక్టుల నుండి ఏజెంట్లను కనుగొనడానికి కస్టమ్ సోర్సెస్‌ను జోడించండి.",
+    "regionAgents": {
+      "us": "US ప్రాంత ఏజెంట్లు",
+      "eu": "EU ప్రాంత ఏజెంట్లు",
+      "default": "ప్రాంతం ఏజెంట్‌లు"
+    },
+    "officeAgents": {
+      "suffix": "ఏజెంట్‌లు"
+    },
+    "agentSources": {
+      "title": "Foundry కनेक్షన్‌లు",
+      "description": "వేరే Foundry ప్రాజెక్ట్‌లను కనెక్ట్ చేసి వాటి ఏజెంట్‌లను కనుగొనండి.",
+      "connectButton": "Microsoft Azure Foundry ప్రాజెక్ట్‌ని కనెక్ట్ చేయండి",
+      "connectButtonShort": "Foundry ప్రాజెక్ట్‌ని కనెక్ట్ చేయండి",
+      "addButton": "కస్టమ్ సోర్స్‌ను జోడించండి",
+      "addAnother": "మరొక కनेक్షన్ జోడించండి",
+      "noSources": "ఏ కస్టమ్ సోర్స్‌లు కన్ఫిగర్ చేయలేదు.",
+      "removeSource": "సోర్స్‌ను తీసివేయండి",
+      "confirmRemove": "తీసివేయాలా?",
+      "sourceConnected": "కస్టమ్ సోర్స్ కనెక్ట్ అయ్యింది",
+      "sourcesConnected": "కస్టమ్ సోర్స్‌లు కలపబడ్డాయి",
+      "backToAgents": "వెనక్కి",
+      "discoveredAgents": "కనుగొనబడిన ఏజెంట్‌లు",
+      "viewConnection": "కనెక్షన్ వివరాలు చూపు",
+      "edit": "ఎడిట్ చేయండి",
+      "noAgentsPublished": "ఏ ఏజెంట్‌లు ప్రచురించలేదు",
+      "connectedOn": "{date} కనెక్ట్ అయింది",
+      "disconnectSource": "ఈ సోర్స్‌ను డిస్‌కనెక్ట్ చేయండి",
+      "confirmDisconnect": "నిర్ధారించడానికి మళ్లీ క్లిక్ చేయండి",
+      "loadingAgents": "ఏజెంట్‌లు లోడ్ అవుతున్నాయి...",
+      "noAgentsFound": "ఈ ప్రాజెక్ట్‌లో ఏ ఏజెంట్‌లు కనుగొనబడలేదు",
+      "noAgentsFoundHint": "ఏజెంట్‌లు ప్రచురించబడ్డాయో మరియు ఈ ప్రాజెక్ట్‌లో మీకు Azure AI User పాత్ర ఉందో చూసుకోండి.",
+      "refresh": "రిఫ్రెష్ చేయండి",
+      "refreshAgents": "ఏజెంట్‌లను రిఫ్రెష్ చేయండి",
+      "technicalDetails": "టెక్నికల్ వివరాలు",
+      "agentCountLabel": "{count} ఏజెంట్‌లు",
+      "disconnectedToast": "{name} డిస్‌కనెక్ట్ అయింది"
+    }
   },
   "privacy": {
     "policyTitle": "గోప్యతా విధానం & డేటా రక్షణ",

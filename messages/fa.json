@@ -306,7 +306,59 @@
     "delete": "حذف",
     "noCustomAgentsYet": "هنوز عامل سفارشی وجود ندارد.",
     "noOrgAgentsConfigured": "هیچ عامل سازمانی پیکربندی نشده است.",
-    "validationFailed": "اعتبارسنجی ناموفق بود"
+    "validationFailed": "اعتبارسنجی ناموفق بود",
+    "addAgentSource": "افزودن منبع سفارشی",
+    "connectFoundryProject": "اتصال به پروژه Microsoft Azure Foundry",
+    "connectFoundryDescription": "نمایش ایجنت‌ها از پروژه Azure Foundry یک تیم یا دفتر دیگر. فقط ایجنت‌هایی را خواهید دید که اجازه دسترسی به آن‌ها دارید.",
+    "foundryProjectPath": "مسیر پروژه Foundry",
+    "foundryProjectPathHelp": "از مدیر پروژه Foundry خود سوال کنید یا روی «ورود دستی» کلیک کنید تا هر بخش را جداگانه وارد کنید.",
+    "copyFormat": "فرمت",
+    "nameLabel": "نام",
+    "namePlaceholder": "مثلاً دفتر آمستردام، تحقیقات ژنو",
+    "pathRequired": "مسیر منبع پروژه Foundry را جای‌گذاری کنید.",
+    "pathInvalidFormat": "این به نظر مسیر منبع نمی‌آید. باید با ‎/subscriptions/‎ شروع شود...",
+    "connectionFailed": "امکان دسترسی به این پروژه وجود ندارد. مسیر را بررسی کنید و مطمئن شوید دسترسی دارید.",
+    "connectionSuccessAgents": "متصل شد — {count} ایجنت یافت شد",
+    "connectionSuccessEmpty": "متصل شد، اما هیچ ایجنتی یافت نشد. ممکن است برای مشاهده ایجنت‌ها به نقش Azure AI User در این پروژه نیاز داشته باشید.",
+    "checkingConnection": "در حال بررسی اتصال...",
+    "connect": "اتصال",
+    "save": "ذخیره",
+    "editConnection": "ویرایش اتصال",
+    "sourceName": "نام منبع",
+    "sourceNamePlaceholder": "دفتر آمستردام",
+    "sourceNameRequired": "وارد کردن نام منبع الزامی است.",
+    "resourcePath": "مسیر منبع",
+    "resourcePathRequired": "وارد کردن مسیر منبع الزامی است.",
+    "resourcePathHelp": "مسیر ARM به پروژه Foundry. این مقدار را از مدیر خود دریافت کنید.",
+    "invalidResourcePathFormat": "مسیر منبع باید با ‎/subscriptions/‎ شروع شود...",
+    "validatingSource": "در حال جست‌وجوی ایجنت‌ها...",
+    "sourceValidatedEmpty": "منبع معتبر است، اما ایجنتی یافت نشد. ممکن است به ایجنت‌های این پروژه دسترسی نداشته باشید.",
+    "invalidSource": "امکان دسترسی به این مسیر منبع وجود ندارد. مسیر و دسترسی‌های خود را بررسی کنید.",
+    "addSource": "افزودن منبع",
+    "removeSource": "حذف منبع",
+    "labelSubscription": "اشتراک",
+    "labelFoundryAccount": "حساب Foundry",
+    "labelProject": "پروژه",
+    "tooltipSubscription": "اشتراک Azure که حساب Foundry را شامل می‌شود. اگر مطمئن نیستید، از مدیر تیم بپرسید از کدام اشتراک استفاده می‌کنید.",
+    "tooltipFoundryAccount": "حساب Azure AI Services که پروژه Foundry در آن قرار دارد. هر دفتر یا تیم معمولاً حساب جداگانه‌ای دارد.",
+    "tooltipProject": "پروژه، ایجنت‌ها را در یک حساب سازمان‌دهی می‌کند. اکثر حساب‌ها فقط یک پروژه «پیش‌فرض» دارند.",
+    "foundryProjectLabel": "پروژه Foundry",
+    "enterManually": "ورود دستی",
+    "browseResources": "مرور منابع",
+    "subscriptionIdLabel": "شناسه اشتراک",
+    "resourceGroupLabel": "گروه منبع",
+    "accountNameLabel": "نام حساب",
+    "projectNameLabel": "نام پروژه",
+    "loadingSubscriptions": "در حال بارگذاری اشتراک‌ها...",
+    "selectSubscription": "یک اشتراک انتخاب کنید...",
+    "loadingAccounts": "در حال بارگذاری حساب‌ها...",
+    "noAccountsFound": "هیچ حساب Foundry در این اشتراک یافت نشد.",
+    "selectAccount": "یک حساب انتخاب کنید...",
+    "loadingProjects": "در حال بارگذاری پروژه‌ها...",
+    "noProjectsFound": "هیچ پروژه‌ای یافت نشد. از «default» استفاده می‌شود.",
+    "selectAllRequired": "اشتراک، حساب و پروژه را انتخاب کنید.",
+    "subscriptionRequired": "یک اشتراک انتخاب کنید",
+    "accountRequired": "یک حساب Foundry انتخاب کنید"
   },
   "Quick Actions": "اقدامات سریع",
   "Type / in chat to access your prompts": "در چت / را تایپ کنید تا به دستورات خود دسترسی پیدا کنید",
@@ -463,7 +515,10 @@
     "keepEditing": "ادامه ویرایش",
     "yes": "بله",
     "no": "خیر",
-    "beta": "بتا"
+    "beta": "بتا",
+    "copied": "کپی شد!",
+    "clear": "پاک‌سازی",
+    "undo": "برگرداندن"
   },
   "errors": {
     "unexpectedErrorOccurred": "یک خطای غیرمنتظره رخ داد",
@@ -617,13 +672,90 @@
     "stopGenerationDontAskAgainButton": "هنگام توقف با دکمه دوباره سوال نکن",
     "stopGenerationDontAskAgainKeyboard": "هنگام توقف با صفحه‌کلید دوباره سوال نکن",
     "generateResponseButton": "تولید پاسخ",
-    "downloadResponse": "دانلود پاسخ"
+    "downloadResponse": "دانلود پاسخ",
+    "activity": {
+      "callingTool": "در حال فراخوانی ابزار...",
+      "callingService": "در حال فراخوانی سرویس خارجی...",
+      "usingNamedTool": "در حال استفاده از {tool}...",
+      "usingNamedToolWithService": "در حال استفاده از {tool} در {service}...",
+      "searchingWeb": "در حال جستجو در وب...",
+      "searchingFiles": "در حال جستجوی فایل‌ها...",
+      "runningCode": "در حال اجرای کد...",
+      "generatingImage": "در حال تولید تصویر...",
+      "listingTools": "در حال جستجوی ابزارهای موجود...",
+      "analyzingFiles": "در حال تحلیل فایل‌های شما...",
+      "searchingKnowledge": "در حال جستجو در پایگاه دانسته‌ها...",
+      "cancellingPriorTool": "در حال لغو درخواست ابزار قبلی..."
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# ابزار} other {# ابزار}} استفاده شده",
+      "failedCount": "{count} ناموفق",
+      "statusApproved": "تایید شده",
+      "statusAutoApproved": "تایید خودکار",
+      "statusAutoDenied": "رد خودکار",
+      "statusFailed": "ناموفق",
+      "statusIncomplete": "ناقص",
+      "viaService": "از طریق {service}"
+    },
+    "consent": {
+      "authorizeRequired": "احراز هویت لازم است",
+      "authorizeService": "احراز هویت {service}",
+      "descriptionGeneric": "این عامل برای دسترسی به یک منبع امن به اجازه شما نیاز دارد. ورود شما توسط سرویس بالادستی مدیریت می‌شود و اینجا ذخیره نمی‌گردد.",
+      "descriptionWithService": "این عامل برای دسترسی به {service} به اجازه شما نیاز دارد. ورود شما به {service} توسط خود {service} مدیریت می‌شود و اینجا ذخیره نمی‌شود.",
+      "signInIncompleteGeneric": "ورود کامل نشد",
+      "signInIncompleteForService": "ورود به {service} کامل نشد",
+      "signInIncompleteDescriptionGeneric": "به نظر می‌رسد احراز هویت کامل نشده است. مطمئن شوید که ورود را در تب دیگر تمام کرده‌اید، سپس دوباره روی ادامه کلیک کنید.",
+      "signInIncompleteDescription": "به نظر می‌رسد احراز هویت به {service} کامل نشده است. مطمئن شوید که ورود را در تب دیگر تمام کرده‌اید، سپس دوباره روی ادامه کلیک کنید.",
+      "authorizeButton": "احراز هویت",
+      "reauthorizeButton": "احراز هویت مجدد",
+      "continueButton": "ادامه",
+      "confirmingButton": "در حال تایید...",
+      "authorizeHint": "احراز هویت انجام دهید، سپس به اینجا بازگردید و روی ادامه کلیک کنید. برای لغو بعدی، مستقیماً از {service} خارج شوید — ما توکن را نگهداری نمی‌کنیم.",
+      "authorizeHintGeneric": "احراز هویت انجام دهید، سپس اینجا بازگردید و روی ادامه کلیک کنید. برای لغو بعدی، مستقیماً از سرویس بالادستی خارج شوید — ما توکن را نگهداری نمی‌کنیم.",
+      "continueHint": "پس از اتمام احراز هویت در تب دیگر، روی ادامه کلیک کنید.",
+      "confirmingHint": "در حال تایید احراز هویت و ادامه درخواست شما...",
+      "resendHint": "پس از احراز هویت، دوباره پیام خود را ارسال کنید تا ادامه دهید.",
+      "resetTooltip": "همه ترجیحات تایید خودکار ابزار را برای این گفتگو بازنشانی کنید. درخواست ابزارهای بعدی دوباره تایید خواهد خواست.",
+      "autoApproveAllIndicator": "تایید خودکار همه ابزارها",
+      "autoApproveCountIndicator": "{count, plural, one {تایید خودکار # ابزار} other {تایید خودکار # ابزار}}",
+      "resetShort": "بازنشانی",
+      "approvalRequired": "تایید ابزار لازم است",
+      "approvalForService": "تایید ابزار برای {service}",
+      "approvalDescriptionGeneric": "عامل قصد اجرای ابزاری را دارد که پیش از ادامه به تایید شما نیاز دارد.",
+      "approvalDescriptionWithTool": "عامل قصد اجرای ابزار {tool} را دارد که پیش از ادامه به تایید شما نیاز دارد.",
+      "runToolTitle": "اجرای <code>{tool}</code>؟",
+      "runToolGeneric": "این ابزار اجرا شود؟",
+      "viaService": "از طریق {service}",
+      "approveButton": "تایید",
+      "approveOptionsLabel": "گزینه‌های تایید",
+      "approveOnce": "تایید یک‌بار",
+      "alwaysApproveThisTool": "همیشه این ابزار را تایید کن",
+      "alwaysApproveAllTools": "همیشه همه ابزارها را تایید کن",
+      "denyButton": "رد",
+      "keyboardHint": "{modifier}+⏎ تایید · esc رد",
+      "submittingState": "در حال ارسال تصمیم شما",
+      "approvedState": "تایید شد — عامل ادامه یافت",
+      "deniedState": "رد شد",
+      "submittingApproval": "در حال تایید و ادامه عامل…",
+      "submittingDenial": "در حال ارسال رد شما…"
+    },
+    "openImage": "باز کردن تصویر",
+    "copyMessage": "کپی پیام",
+    "stopAudio": "توقف صدا",
+    "generatingAudio": "در حال تولید صدا...",
+    "listen": "گوش دادن",
+    "processingAudio": "در حال پردازش صدا...",
+    "ttsError": "خطا در تولید صدا. لطفاً دوباره تلاش کنید.",
+    "unsupportedMessageType": "خطا در نمایش پیام: نوع پیام پشتیبانی نمی‌شود"
   },
   "sidebar": {
     "collapseSidebar": "بستن نوار کناری",
     "expandSidebar": "گسترش نوار کناری",
     "quickActionsTitle": "اقدامات سریع",
-    "quickActions": "اقدامات سریع"
+    "quickActions": "اقدامات سریع",
+    "expandFolder": "باز کردن پوشه {name}",
+    "collapseFolder": "بستن پوشه {name}",
+    "folderOptions": "گزینه‌های {name}"
   },
   "prompts": {
     "buildReusablePrompts": "ساخت پرامپت‌های قابل استفاده مجدد با کمک هوش مصنوعی",
@@ -939,7 +1071,9 @@
     "behaviorSection": "رفتار",
     "resetChatSettings": "بازنشانی تنظیمات چت",
     "resetChatSettingsConfirmTitle": "آیا تنظیمات چت بازنشانی شود؟",
-    "resetChatSettingsConfirmMessage": "این کار همه مقادیر پیش‌فرض این پنل را بازیابی می‌کند: دما، دستورالعمل‌های سفارشی، اطلاعات درباره شما، پاسخ مدل، سرعت پخش، تبدیل متن به گفتار، فایل‌های فعال و تأییدیه‌ها. این کار تاثیری بر مکالمات شما ندارد."
+    "resetChatSettingsConfirmMessage": "این کار همه مقادیر پیش‌فرض این پنل را بازیابی می‌کند: دما، دستورالعمل‌های سفارشی، اطلاعات درباره شما، پاسخ مدل، سرعت پخش، تبدیل متن به گفتار، فایل‌های فعال و تأییدیه‌ها. این کار تاثیری بر مکالمات شما ندارد.",
+    "customInstructionsLabel": "دستورالعمل‌های سفارشی*",
+    "defaultTemperatureLabel": "دمای پیش‌فرض*"
   },
   "notFound": {
     "lostDog": "سگ گمشده"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "توسط کاربر لغو شد",
     "transientBody": "لطفاً دوباره تلاش کنید",
     "authFailedBody": "لطفاً دوباره وارد شوید",
-    "rateLimitedBody": "ظرفیت سرویس پر است، لطفاً کمی بعد دوباره امتحان کنید"
+    "rateLimitedBody": "ظرفیت سرویس پر است، لطفاً کمی بعد دوباره امتحان کنید",
+    "loadingAttempt": "(تلاش {count})",
+    "transcriptLabel": "[رونویس: {filename}]"
   },
   "transcriptionComplete": "تبدیل گفتار کامل شد! متن به ورودی چت اضافه شد.",
   "No prompts found": "هیچ پرامپتی یافت نشد",
@@ -1173,7 +1309,8 @@
       "agents": "عامل‌ها"
     },
     "sections": {
-      "baseModels": "مدل‌های پایه"
+      "baseModels": "مدل‌های پایه",
+      "allModels": "همه مدل‌ها ({count})"
     },
     "maintainedBy": "نگهداری توسط",
     "agents": {
@@ -1247,7 +1384,19 @@
       "reasoning": "استدلال پیشرفته برای مسائل پیچیده",
       "omni": "مدل چندرسانه‌ای با قابلیت‌های گسترده",
       "agent": "نماینده با ابزارهای لحظه‌ای و دسترسی به وب"
-    }
+    },
+    "hide": "مخفی کردن از لیست",
+    "hideConfirmTitle": "«{name}» مخفی شود؟",
+    "hideConfirmMessage": "این مورد از لیست حذف می‌شود اما پاک نمی‌شود. هر زمان می‌توانید آن را از بخش مخفی بازیابی کنید.",
+    "hideConfirm": "مخفی کن",
+    "hiddenToast": "«{name}» مخفی شد",
+    "hidden": {
+      "title": "مخفی ({count})",
+      "restore": "بازیابی"
+    },
+    "title": "یک مدل را انتخاب کنید",
+    "modelsDescription": "برای گفت‌وگوی خود یک مدل AI انتخاب کنید. هر مدل ویژگی‌های خاص خود را دارد — برای مشاهده جزئیات یک مورد را انتخاب کنید.",
+    "recommended": "پیشنهادی"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "دسامبر ۲۰۲۵",
       "description": "نسخه تخصصی‌شده GPT-5.2 که برای تعاملات گفت‌وگویی و هوش هیجانی بهینه شده است. در ارتباط همدلانه، نگارش خلاق، طوفان فکری و گفت‌وگوهای طبیعی عملکرد برجسته‌ای دارد. بهترین گزینه برای مکالمات غیررسمی، سناریوهای مشاوره و وظایفی است که نیاز به آگاهی هیجانی دارند."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "قوی‌ترین مدل Anthropic. مناسب برای نگارش طولانی، پژوهش و کارهای نیازمند دقت.",
+      "knowledgeCutoff": "فوریه ۲۰۲۶"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "مدل Claude متعادل. مناسب برای نگارش روزمره، تحلیل و برنامه‌نویسی با پاسخ‌های سریع.",
+      "knowledgeCutoff": "فوریه ۲۰۲۶"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "آزمایشی — با همکاری مستقیم کاربران حرفه‌ای MSF ساخته شده است. برای استفاده عمومی نیست.",
       "createButton": "ایجاد عامل سفارشی"
     },
-    "selectAgentPrompt": "برای مشاهده جزئیات یک عامل انتخاب کنید"
+    "selectAgentPrompt": "برای مشاهده جزئیات یک عامل انتخاب کنید",
+    "description": "عامل‌های هوش مصنوعی تخصصی برای وظایف خاص. عامل‌های پیش‌فرض به صورت مرکزی مدیریت می‌شوند؛ با افزودن منابع سفارشی، عامل‌های پروژه‌های دیگر Foundry را کشف کنید.",
+    "regionAgents": {
+      "us": "عامل‌های منطقه آمریکا",
+      "eu": "عامل‌های منطقه اروپا",
+      "default": "نمایندگان منطقه"
+    },
+    "officeAgents": {
+      "suffix": "نمایندگان"
+    },
+    "agentSources": {
+      "title": "اتصالات Foundry",
+      "description": "برای کشف نمایندگان سایر پروژه‌های Foundry متصل شوید.",
+      "connectButton": "اتصال به پروژه Microsoft Azure Foundry",
+      "connectButtonShort": "اتصال به پروژه Foundry",
+      "addButton": "افزودن منبع سفارشی",
+      "addAnother": "افزودن اتصال دیگر",
+      "noSources": "هیچ منبع سفارشی تنظیم نشده است.",
+      "removeSource": "حذف منبع",
+      "confirmRemove": "حذف شود؟",
+      "sourceConnected": "منبع سفارشی متصل شد",
+      "sourcesConnected": "منابع سفارشی متصل شدند",
+      "backToAgents": "بازگشت",
+      "discoveredAgents": "نمایندگان کشف شده",
+      "viewConnection": "مشاهده جزئیات اتصال",
+      "edit": "ویرایش",
+      "noAgentsPublished": "هیچ نماینده‌ای منتشر نشده است",
+      "connectedOn": "متصل در {date}",
+      "disconnectSource": "قطع اتصال این منبع",
+      "confirmDisconnect": "برای تأیید دوباره کلیک کنید",
+      "loadingAgents": "در حال بارگذاری نمایندگان...",
+      "noAgentsFound": "هیچ نماینده‌ای در این پروژه یافت نشد",
+      "noAgentsFoundHint": "اطمینان حاصل کنید که نمایندگان منتشر شده‌اند و شما نقش Azure AI User را در این پروژه دارید.",
+      "refresh": "بازآوری",
+      "refreshAgents": "بازآوری نمایندگان",
+      "technicalDetails": "جزئیات فنی",
+      "agentCountLabel": "{count} نماینده",
+      "disconnectedToast": "{name} قطع اتصال شد"
+    }
   },
   "privacy": {
     "policyTitle": "سیاست حفظ حریم خصوصی و حفاظت از داده‌ها",

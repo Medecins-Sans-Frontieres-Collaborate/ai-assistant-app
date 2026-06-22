@@ -379,7 +379,59 @@
     "delete": "Șterge",
     "noCustomAgentsYet": "Niciun agent personalizat încă.",
     "noOrgAgentsConfigured": "Niciun agent de organizație configurat.",
-    "validationFailed": "Validarea a eșuat"
+    "validationFailed": "Validarea a eșuat",
+    "addAgentSource": "Adaugă sursă personalizată",
+    "connectFoundryProject": "Conectează un proiect Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descoperă agenți dintr-un alt birou sau echipă, dintr-un proiect Azure Foundry. Vei vedea doar agenții la care ai permisiune de acces.",
+    "foundryProjectPath": "Cale proiect Foundry",
+    "foundryProjectPathHelp": "Solicită această informație administratorului de proiect Foundry sau apasă 'Introdu manual' pentru a completa fiecare câmp separat.",
+    "copyFormat": "Format",
+    "nameLabel": "Nume",
+    "namePlaceholder": "ex.: Biroul Amsterdam, Cercetare Geneva",
+    "pathRequired": "Lipește calea resursei proiectului Foundry.",
+    "pathInvalidFormat": "Aceasta nu pare a fi o cale de resursă. Ar trebui să înceapă cu /subscriptions/...",
+    "connectionFailed": "Nu s-a putut accesa acest proiect. Verifică dacă calea este corectă și ai acces.",
+    "connectionSuccessAgents": "Conectat — {count} agent(ți) găsiți",
+    "connectionSuccessEmpty": "Conectat, dar nu au fost găsiți agenți. Este posibil să ai nevoie de rolul Azure AI User pe acest proiect pentru a vedea agenții.",
+    "checkingConnection": "Se verifică conexiunea...",
+    "connect": "Conectează",
+    "save": "Salvează",
+    "editConnection": "Editează conexiunea",
+    "sourceName": "Nume sursă",
+    "sourceNamePlaceholder": "Biroul Amsterdam",
+    "sourceNameRequired": "Numele sursei este obligatoriu.",
+    "resourcePath": "Cale resursă",
+    "resourcePathRequired": "Calea resursei este obligatorie.",
+    "resourcePathHelp": "Calea ARM către un proiect Foundry. Solicitați această valoare de la administrator.",
+    "invalidResourcePathFormat": "Calea resursei trebuie să înceapă cu /subscriptions/...",
+    "validatingSource": "Se caută agenți...",
+    "sourceValidatedEmpty": "Sursa este validă, dar nu au fost găsiți agenți. Este posibil să nu aveți acces la agenții din acest proiect.",
+    "invalidSource": "Nu s-a putut accesa această cale de resursă. Verificați calea și permisiunile.",
+    "addSource": "Adaugă sursă",
+    "removeSource": "Elimină sursa",
+    "labelSubscription": "Abonament",
+    "labelFoundryAccount": "Cont Foundry",
+    "labelProject": "Proiect",
+    "tooltipSubscription": "Abonamentul Azure care conține contul Foundry. Dacă nu sunteți sigur, întrebați administratorul ce abonament folosește echipa voastră.",
+    "tooltipFoundryAccount": "Contul Azure AI Services unde se află proiectul Foundry. Fiecare birou sau echipă are, de obicei, propriul cont.",
+    "tooltipProject": "Un proiect organizează agenții într-un cont. Majoritatea conturilor au un singur proiect \"default\".",
+    "foundryProjectLabel": "Proiect Foundry",
+    "enterManually": "Introdu manual",
+    "browseResources": "Răsfoiește resursele",
+    "subscriptionIdLabel": "ID abonament",
+    "resourceGroupLabel": "Grup de resurse",
+    "accountNameLabel": "Nume cont",
+    "projectNameLabel": "Nume proiect",
+    "loadingSubscriptions": "Se încarcă abonamentele...",
+    "selectSubscription": "Selectează un abonament...",
+    "loadingAccounts": "Se încarcă conturile...",
+    "noAccountsFound": "Nu s-au găsit conturi Foundry în acest abonament.",
+    "selectAccount": "Selectează un cont...",
+    "loadingProjects": "Se încarcă proiectele...",
+    "noProjectsFound": "Nu s-au găsit proiecte. Se folosește „default”.",
+    "selectAllRequired": "Selectați un abonament, un cont și un proiect.",
+    "subscriptionRequired": "Alegeți un abonament",
+    "accountRequired": "Alegeți un cont Foundry"
   },
   "Quick Actions": "Acțiuni rapide",
   "Type / in chat to access your prompts": "Tastați / în chat pentru a accesa solicitările",
@@ -536,7 +588,10 @@
     "keepEditing": "Continuă editarea",
     "yes": "Da",
     "no": "Nu",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Copiat!",
+    "clear": "Șterge",
+    "undo": "Anulare"
   },
   "errors": {
     "unexpectedErrorOccurred": "A apărut o eroare neașteptată",
@@ -690,13 +745,90 @@
     "stopGenerationDontAskAgainButton": "Nu mai întreba când opresc cu butonul",
     "stopGenerationDontAskAgainKeyboard": "Nu mai întreba când opresc cu tastatura",
     "generateResponseButton": "Generează răspuns",
-    "downloadResponse": "Descarcă răspunsul"
+    "downloadResponse": "Descarcă răspunsul",
+    "activity": {
+      "callingTool": "Se apelează instrumentul…",
+      "callingService": "Se apelează serviciul extern…",
+      "usingNamedTool": "Se folosește {tool}…",
+      "usingNamedToolWithService": "Se folosește {tool} pe {service}…",
+      "searchingWeb": "Se caută pe web…",
+      "searchingFiles": "Se caută în fișiere…",
+      "runningCode": "Se rulează codul…",
+      "generatingImage": "Se generează imaginea…",
+      "listingTools": "Se caută instrumentele disponibile…",
+      "analyzingFiles": "Se analizează fișierele dvs.…",
+      "searchingKnowledge": "Se caută în baza de cunoștințe…",
+      "cancellingPriorTool": "Se anulează solicitarea anterioară de instrument…"
+    },
+    "toolSummary": {
+      "usedTools": "Folosit {count, plural, one {# instrument} other {# instrumente}}",
+      "failedCount": "{count} eșuate",
+      "statusApproved": "Aprobat",
+      "statusAutoApproved": "Aprobat automat",
+      "statusAutoDenied": "Respins automat",
+      "statusFailed": "Eșuat",
+      "statusIncomplete": "Incomplet",
+      "viaService": "prin {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Este necesară autorizarea",
+      "authorizeService": "Autorizați {service}",
+      "descriptionGeneric": "Acest agent are nevoie de permisiunea dvs. pentru a accesa o resursă securizată. Autentificarea dvs. este gestionată de serviciul sursă, nu este stocată aici.",
+      "descriptionWithService": "Acest agent are nevoie de permisiunea dvs. pentru a accesa {service}. Autentificarea în {service} este gestionată de {service} însuși, nu este stocată aici.",
+      "signInIncompleteGeneric": "Autentificarea nu s-a finalizat",
+      "signInIncompleteForService": "Autentificarea în {service} nu s-a finalizat",
+      "signInIncompleteDescriptionGeneric": "Se pare că autorizarea nu s-a încheiat. Asigurați-vă că ați finalizat autentificarea în celălalt tab, apoi apăsați din nou pe Continuă.",
+      "signInIncompleteDescription": "Se pare că autorizarea pentru {service} nu s-a încheiat. Asigurați-vă că ați finalizat autentificarea în celălalt tab, apoi apăsați din nou pe Continuă.",
+      "authorizeButton": "Autorizează",
+      "reauthorizeButton": "Reautorizează",
+      "continueButton": "Continuă",
+      "confirmingButton": "Se confirmă…",
+      "authorizeHint": "Autorizați, apoi reveniți aici și apăsați pe Continuă. Pentru a revoca ulterior, deconectați-vă direct din {service} — nu stocăm tokenul.",
+      "authorizeHintGeneric": "Autorizați, apoi reveniți aici și apăsați pe Continuă. Pentru a revoca ulterior, deconectați-vă direct din serviciul sursă — nu stocăm tokenul.",
+      "continueHint": "După ce autorizarea s-a finalizat în celălalt tab, apăsați pe Continuă.",
+      "confirmingHint": "Se confirmă autorizarea și se reia solicitarea…",
+      "resendHint": "După autorizare, trimiteți din nou mesajul pentru a continua.",
+      "resetTooltip": "Resetați toate preferințele de aprobare automată a instrumentelor pentru această conversație. Solicitările viitoare de instrumente vor fi din nou confirmate.",
+      "autoApproveAllIndicator": "Se aprobă automat toate instrumentele",
+      "autoApproveCountIndicator": "{count, plural, one {Se aprobă automat # instrument} other {Se aprobă automat # instrumente}}",
+      "resetShort": "Resetează",
+      "approvalRequired": "Este necesară aprobarea instrumentului",
+      "approvalForService": "Aprobați instrumentul pentru {service}",
+      "approvalDescriptionGeneric": "Agentul dorește să folosească un instrument care necesită aprobarea dvs. înainte de a continua.",
+      "approvalDescriptionWithTool": "Agentul dorește să folosească instrumentul {tool}, care necesită aprobarea dvs. înainte de a continua.",
+      "runToolTitle": "Rulați <code>{tool}</code>?",
+      "runToolGeneric": "Rulați acest instrument?",
+      "viaService": "prin {service}",
+      "approveButton": "Aprobați",
+      "approveOptionsLabel": "Opțiuni de aprobare",
+      "approveOnce": "Aprobă o dată",
+      "alwaysApproveThisTool": "Aprobă întotdeauna acest instrument",
+      "alwaysApproveAllTools": "Aprobă întotdeauna toate instrumentele",
+      "denyButton": "Refuzați",
+      "keyboardHint": "{modifier}+⏎ aprobare · esc refuz",
+      "submittingState": "Se trimite decizia dumneavoastră",
+      "approvedState": "Aprobat — agentul a fost reluat",
+      "deniedState": "Refuzat",
+      "submittingApproval": "Se aprobă și se reia agentul…",
+      "submittingDenial": "Se trimite refuzul…"
+    },
+    "openImage": "Deschide imaginea",
+    "copyMessage": "Copiază mesajul",
+    "stopAudio": "Oprește audio",
+    "generatingAudio": "Se generează audio...",
+    "listen": "Ascultă",
+    "processingAudio": "Se procesează audio...",
+    "ttsError": "Eroare la generarea audio. Vă rugăm să încercați din nou.",
+    "unsupportedMessageType": "Eroare la afișarea mesajului: Tip de mesaj neacceptat"
   },
   "sidebar": {
     "collapseSidebar": "Restrânge bara laterală",
     "expandSidebar": "Extinde bara laterală",
     "quickActionsTitle": "Acțiuni rapide",
-    "quickActions": "Acțiuni rapide"
+    "quickActions": "Acțiuni rapide",
+    "expandFolder": "Extinde folderul {name}",
+    "collapseFolder": "Restrânge folderul {name}",
+    "folderOptions": "Opțiuni {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Construiește prompt-uri reutilizabile cu asistență AI",
@@ -1012,7 +1144,9 @@
     "behaviorSection": "Comportament",
     "resetChatSettings": "Resetează setările conversației",
     "resetChatSettingsConfirmTitle": "Resetați setările conversației?",
-    "resetChatSettingsConfirmMessage": "Aceasta va restabili valorile implicite pentru toate opțiunile din acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspunsul modelului, viteza de redare, conversie text-vorbire, fișiere active și confirmări. Nu va afecta conversațiile dvs."
+    "resetChatSettingsConfirmMessage": "Aceasta va restabili valorile implicite pentru toate opțiunile din acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspunsul modelului, viteza de redare, conversie text-vorbire, fișiere active și confirmări. Nu va afecta conversațiile dvs.",
+    "customInstructionsLabel": "Instrucțiuni personalizate*",
+    "defaultTemperatureLabel": "Temperatură implicită*"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -1113,7 +1247,9 @@
     "cancelledBody": "Anulat de către utilizator",
     "transientBody": "Vă rugăm să încercați din nou",
     "authFailedBody": "Vă rugăm să vă autentificați din nou",
-    "rateLimitedBody": "Serviciul este la capacitate, încercați din nou în scurt timp"
+    "rateLimitedBody": "Serviciul este la capacitate, încercați din nou în scurt timp",
+    "loadingAttempt": "(încercare {count})",
+    "transcriptLabel": "[Transcriere: {filename}]"
   },
   "importBackupParseError": "Nu s-a putut analiza fișierul de backup. Asigurați-vă că este un fișier JSON valid.",
   "emptyState": {
@@ -1174,7 +1310,8 @@
       "agents": "Agenți"
     },
     "sections": {
-      "baseModels": "Modele de bază"
+      "baseModels": "Modele de bază",
+      "allModels": "Toate modelele ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Funcționalitate avansată",
@@ -1247,7 +1384,19 @@
       "reasoning": "Raționament extins pentru probleme complexe",
       "omni": "Model multimodal cu capacități extinse",
       "agent": "Agent cu instrumente în timp real și acces web"
-    }
+    },
+    "hide": "Ascunde din listă",
+    "hideConfirmTitle": "Ascundeți \"{name}\"?",
+    "hideConfirmMessage": "Va fi eliminat din listă, dar nu va fi șters. Îl puteți restaura oricând din secțiunea Ascunse.",
+    "hideConfirm": "Ascunde",
+    "hiddenToast": "\"{name}\" a fost ascuns",
+    "hidden": {
+      "title": "Ascunse ({count})",
+      "restore": "Restaurează"
+    },
+    "title": "Selectați un model",
+    "modelsDescription": "Alegeți un model AI pentru conversație. Fiecare model are puncte forte specifice — selectați unul pentru detalii.",
+    "recommended": "Recomandat"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Decembrie 2025",
       "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Cel mai puternic model de la Anthropic. Potrivit pentru texte lungi, cercetare și sarcini care necesită gândire atentă.",
+      "knowledgeCutoff": "feb. 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Un model Claude echilibrat. Bun pentru scrieri cotidiene, analiză și programare cu răspunsuri rapide.",
+      "knowledgeCutoff": "feb. 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Experimental — construit în colaborare directă cu utilizatorii avansați MSF. Nu este pentru uz general.",
       "createButton": "Creează agent personalizat"
     },
-    "selectAgentPrompt": "Selectați un agent pentru a vedea detaliile"
+    "selectAgentPrompt": "Selectați un agent pentru a vedea detaliile",
+    "description": "Agenți AI specializați pentru sarcini specifice. Agenții implicați în mod implicit sunt gestionați central; adăugați surse personalizate pentru a descoperi agenți din alte proiecte Foundry.",
+    "regionAgents": {
+      "us": "Agenți din regiunea SUA",
+      "eu": "Agenți din regiunea UE",
+      "default": "Agenți regionali"
+    },
+    "officeAgents": {
+      "suffix": "Agenți"
+    },
+    "agentSources": {
+      "title": "Conexiuni Foundry",
+      "description": "Conectați-vă la alte proiecte Foundry pentru a descoperi agenții lor.",
+      "connectButton": "Conectați un proiect Microsoft Azure Foundry",
+      "connectButtonShort": "Conectați un proiect Foundry",
+      "addButton": "Adăugați sursă personalizată",
+      "addAnother": "Adăugați o altă conexiune",
+      "noSources": "Nicio sursă personalizată configurată.",
+      "removeSource": "Eliminați sursa",
+      "confirmRemove": "Eliminați?",
+      "sourceConnected": "sursă personalizată conectată",
+      "sourcesConnected": "surse personalizate conectate",
+      "backToAgents": "Înapoi",
+      "discoveredAgents": "Agenți descoperiți",
+      "viewConnection": "Vizualizați detaliile conexiunii",
+      "edit": "Editați",
+      "noAgentsPublished": "Niciun agent publicat",
+      "connectedOn": "Conectat la {date}",
+      "disconnectSource": "Deconectați această sursă",
+      "confirmDisconnect": "Faceți clic din nou pentru confirmare",
+      "loadingAgents": "Se încarcă agenții...",
+      "noAgentsFound": "Nu s-au găsit agenți în acest proiect",
+      "noAgentsFoundHint": "Asigurați-vă că agenții sunt publicați și că aveți rolul Azure AI User în acest proiect.",
+      "refresh": "Reîmprospătează",
+      "refreshAgents": "Reîmprospătează agenții",
+      "technicalDetails": "Detalii tehnice",
+      "agentCountLabel": "{count} agenți",
+      "disconnectedToast": "{name} deconectat"
+    }
   },
   "privacy": {
     "policyTitle": "Politica de confidențialitate & Protecția datelor",

@@ -385,7 +385,59 @@
     "delete": "நீக்கு",
     "noCustomAgentsYet": "இதுவரை தனிப்பயன் முகவர்கள் இல்லை.",
     "noOrgAgentsConfigured": "நிறுவன முகவர்கள் எதுவும் கட்டமைக்கப்படவில்லை.",
-    "validationFailed": "சரிபார்ப்பு தோல்வியடைந்தது"
+    "validationFailed": "சரிபார்ப்பு தோல்வியடைந்தது",
+    "addAgentSource": "புதிய மூலத்தைச் சேர்க்கவும்",
+    "connectFoundryProject": "Microsoft Azure Foundry திட்டத்தை இணைக்கவும்",
+    "connectFoundryDescription": "மற்றொரு அலுவலகம் அல்லது குழுவின் Azure Foundry திட்டத்தில் உள்ள முகவர்களைத் தேர்வுசெய்யலாம். நீங்கள் அனுமதி பெற்றுள்ள முகவர்கள் மட்டுமே காணப்படுவார்கள்.",
+    "foundryProjectPath": "Foundry திட்டப் பாதை",
+    "foundryProjectPathHelp": "உங்கள் Foundry திட்ட நிர்வாகியிடம் கேட்கவும், அல்லது 'Enter manually' கிளிக் செய்து ஒவ்வொரு புலத்தையும் தனித்தனித்தாக நிரப்பவும்.",
+    "copyFormat": "வடிவமைப்பு",
+    "nameLabel": "பெயர்",
+    "namePlaceholder": "உதாரணம்: Amsterdam அலுவலகம், Geneva ஆராய்ச்சி",
+    "pathRequired": "Foundry திட்ட வள பாதையை ஒட்டி இடுங்கள்.",
+    "pathInvalidFormat": "இது வளப் பாதை என தெரியவில்லை. இது /subscriptions/... என்பதுடன் தொடங்க வேண்டும்.",
+    "connectionFailed": "இந்த திட்டத்தை அணுக முடியவில்லை. பாதை சரியானதா, உங்களுக்கான அணுகல் உள்ளதா என பார்க்கவும்.",
+    "connectionSuccessAgents": "இணைக்கப்பட்டுள்ளது — {count} முகவர்(கள்) கண்டறியப்பட்டன",
+    "connectionSuccessEmpty": "இணைக்கப்பட்டுள்ளது, ஆனால் எந்த முகவரும் இல்லை. இந்த திட்டத்தில் முகவர்களை பார்ப்பதற்கு Azure AI User பங்கு தேவைப்படலாம்.",
+    "checkingConnection": "இணைப்பை சரிபார்த்துக்கொண்டு உள்ளது...",
+    "connect": "இணைக்கவும்",
+    "save": "சேமிக்கவும்",
+    "editConnection": "இணைப்பைத் திருத்தவும்",
+    "sourceName": "மூல பெயர்",
+    "sourceNamePlaceholder": "Amsterdam அலுவலகம்",
+    "sourceNameRequired": "மூல பெயர் அவசியம் தேவை.",
+    "resourcePath": "வள பாதை",
+    "resourcePathRequired": "வள பாதை தேவை.",
+    "resourcePathHelp": "Foundry திட்டத்திற்கு ARM வளப் பாதை. இந்த மதிப்பை நிர்வாகியிடம் கேட்கவும்.",
+    "invalidResourcePathFormat": "வளப் பாதை /subscriptions/... என்பதுடன் தொடங்க வேண்டும்.",
+    "validatingSource": "முகவர்களை கண்டறிகிறது...",
+    "sourceValidatedEmpty": "சரியான மூலம், ஆனால் எந்த முகவரும் இல்லை. இந்த திட்டத்தில் முகவர்களுக்கு நீங்கள் அணுகல் உடையவராக இருக்கவில்லை.",
+    "invalidSource": "இந்த வள பாதையை அணுக முடியாது. பாதையும் அனுமதிகளும் சரிதானா என்பதை உறுதி செய்யவும்.",
+    "addSource": "மூலத்தைச் சேர்க்கவும்",
+    "removeSource": "மூலத்தை நீக்கவும்",
+    "labelSubscription": "சந்தா",
+    "labelFoundryAccount": "Foundry கணக்கு",
+    "labelProject": "திட்டம்",
+    "tooltipSubscription": "Foundry கணக்கு கொண்டுள்ள Azure சந்தா. உங்களுக்கு தேவை என்றால், உங்கள் குழுவின் எந்த சந்தாவை பயன்படுத்துகிறீர்கள் என்று நிர்வாகியிடம் கேளுங்கள்.",
+    "tooltipFoundryAccount": "Foundry திட்டம் இருக்கும் Azure AI Services கணக்கு. ஒவ்வொரு அலுவலகத்திற்கும்/குழுவுக்கும் தனித் தனியானது இருக்கும்.",
+    "tooltipProject": "ஒரு திட்டம் கணக்குக்குள் முகவர்களை ஒழுங்கு படுத்துகிறது. பெரும்பாலான கணக்குகளில் ஒரு 'default' திட்டம் மட்டுமே இருக்கும்.",
+    "foundryProjectLabel": "Foundry திட்டம்",
+    "enterManually": "கைமுறையாக உள்ளிடவும்",
+    "browseResources": "வளங்களைப் பார்க்கவும்",
+    "subscriptionIdLabel": "சந்தா ID",
+    "resourceGroupLabel": "வளக் குழு",
+    "accountNameLabel": "கணக்கு பெயர்",
+    "projectNameLabel": "திட்டப் பெயர்",
+    "loadingSubscriptions": "சந்தாக்களை ஏற்றுகிறது...",
+    "selectSubscription": "சந்தாவைத் தேர்ந்தெடுக்கவும்...",
+    "loadingAccounts": "கணக்குகளை ஏற்றுகிறது...",
+    "noAccountsFound": "இந்த சந்தாவிலே எந்த Foundry கணக்கும் இல்லை.",
+    "selectAccount": "கணக்கைத் தேர்ந்தெடுக்கவும்...",
+    "loadingProjects": "திட்டங்களை ஏற்றுகிறது...",
+    "noProjectsFound": "எந்த திட்டமும் இல்லை. \"default\" பயன்படுத்தப்படுகிறது.",
+    "selectAllRequired": "சந்தா, கணக்கு, திட்டம் ஆகியவற்றைத் தேர்ந்தெடுக்கவும்.",
+    "subscriptionRequired": "சந்தாவைத் தேர்வுசெய்க",
+    "accountRequired": "Foundry கணக்கைத் தேர்வுசெய்க"
   },
   "Quick Actions": "விரைவு செயல்கள்",
   "Type / in chat to access your prompts": "உங்கள் ப்ராம்ப்ட்களை அணுக அரட்டையில் / தட்டச்சு செய்யுங்கள்",
@@ -641,7 +693,10 @@
     "keepEditing": "திருத்தத்தைத் தொடரு",
     "yes": "ஆம்",
     "no": "இல்லை",
-    "beta": "பீட்டா"
+    "beta": "பீட்டா",
+    "copied": "நகலெடுக்கப்பட்டது!",
+    "clear": "அழி",
+    "undo": "மீளமை"
   },
   "terms": {
     "officialLanguages": "அதிகாரப்பூர்வ பதிப்பு:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "பொத்தானை அழுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
     "stopGenerationDontAskAgainKeyboard": "கீபோர்டைப் பயன்படுத்தி நிறுத்தும் போது மீண்டும் கேட்டுக்கொள்ளாதே",
     "generateResponseButton": "பதில் உருவாக்கு",
-    "downloadResponse": "பதில் பதிவிறக்கு"
+    "downloadResponse": "பதில் பதிவிறக்கு",
+    "activity": {
+      "callingTool": "கருவியை அழைக்கிறது...",
+      "callingService": "வெளிப்படைக் சேவையை அழைக்கிறது...",
+      "usingNamedTool": "{tool} பயன்படுத்துகிறது...",
+      "usingNamedToolWithService": "{service} இல் {tool} பயன்படுத்துகிறது...",
+      "searchingWeb": "இணையத்தில் தேடுகிறது...",
+      "searchingFiles": "கோப்புகளைத் தேடுகிறது...",
+      "runningCode": "கோடை இயக்குகிறது...",
+      "generatingImage": "படத்தை உருவாக்குகிறது...",
+      "listingTools": "கிடைக்கும் கருவிகளைப் பார்க்கிறது...",
+      "analyzingFiles": "உங்கள் கோப்புகளை பகுப்பாய்வு செய்கிறது...",
+      "searchingKnowledge": "அறிவுத் தொகுப்பைத் தேடுகிறது...",
+      "cancellingPriorTool": "முந்தைய கருவிக்கான கோரிக்கையை நிறுத்துகிறது..."
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# கருவி பயன்படுத்தப்பட்டது} other {# கருவிகள் பயன்படுத்தப்பட்டன}}",
+      "failedCount": "{count} தோல்வியடைந்தது",
+      "statusApproved": "ஒப்புதல் வழங்கப்பட்டது",
+      "statusAutoApproved": "தானாக ஒப்புதல் வழங்கப்பட்டது",
+      "statusAutoDenied": "தானாக மறுக்கப்பட்டது",
+      "statusFailed": "தோல்வியடைந்தது",
+      "statusIncomplete": "முழுமையடையவில்லை",
+      "viaService": "{service} வழியாக"
+    },
+    "consent": {
+      "authorizeRequired": "அனுமதி தேவை",
+      "authorizeService": "{service} ஐ அனுமதிக்கவும்",
+      "descriptionGeneric": "இந்த முகவர் பாதுகாப்பான வளத்திற்காக உங்கள் அனுமதியை நாடுகின்றார். உங்கள் உள்நுழைவு மேலாண்மையக சேவையால் நிர்வகிக்கப்படுகிறது, இங்கே சேமிக்கப் படாது.",
+      "descriptionWithService": "இந்த முகவர் {service}யை அணுக, உங்கள் அனுமதியை நாடுகின்றார். உங்கள் {service} உள்நுழைவு {service} மூலமாகவே நிர்வகிக்கப்படுகிறது, இங்கே சேமிக்கப்படாது.",
+      "signInIncompleteGeneric": "உள்நுழைவு முடிக்கப்படவில்லை",
+      "signInIncompleteForService": "{service}-க்கு உள்நுழைவு முடிக்கப்படவில்லை",
+      "signInIncompleteDescriptionGeneric": "அனுமதி வழங்கல் முடிக்கப்படாதது போல் தெரிகிறது. மற்ற தாவலில் உள்நுழைவு முடித்ததை உறுதிசெய்து, மீண்டும் தொடருவதை அழுத்தவும்.",
+      "signInIncompleteDescription": "{service}க்கு அனுமதி வழங்கல் முடிக்கப்படாதது போல் தெரிகிறது. மற்ற தாவலில் உள்நுழைவு முடித்ததை உறுதிசெய்து, மீண்டும் தொடருவதை அழுத்தவும்.",
+      "authorizeButton": "அனுமதி வழங்கவும்",
+      "reauthorizeButton": "மீண்டும் அனுமதி வழங்கவும்",
+      "continueButton": "தொடரவும்",
+      "confirmingButton": "உறுதிப்படுத்துகிறது...",
+      "authorizeHint": "அனுமதி வழங்கிவிட்டு, இங்கே திரும்பி, தொடரவும் என்பதைக் கிளிக் செய்யவும். பின்னர் ரத்து செய்ய விரும்பினால், {service}-இல் நேரடியாக வெளியேறு — நம்மிடம் அனுமதி குறியீடு இல்லை.",
+      "authorizeHintGeneric": "அனுமதி வழங்கிவிட்டு, இங்கே திரும்பி, தொடரவும் என்பதைக் கிளிக் செய்யவும். பின்னர் ரத்து செய்ய விரும்பினால், மேலாண்மையக சேவையில் நேரடியாக வெளியேறு — நம்மிடம் அனுமதி குறியீடு இல்லை.",
+      "continueHint": "மற்ற தாவலில் அனுமதி வழங்கல் முடிந்த பிறகு தொடரவும் என்பதைக் கிளிக் செய்யவும்.",
+      "confirmingHint": "அனுமதியை உறுதிப்படுத்தி, உங்கள் கோரிக்கையை மீண்டும் தொடருகிறது...",
+      "resendHint": "அனுமதி வழங்கிய பிறகு, தொடர மீண்டும் உங்கள் செய்தியை அனுப்பவும்.",
+      "resetTooltip": "இந்த உரையாடலுக்கான அனைத்து கருவி தானாக ஒப்புதல் விருப்பங்களை மீட்டமைக்கவும். எதிர்கால கருவி அழைப்புகளில் மீண்டும் ஒப்புதல் கேட்டுக்கொள்வார்கள்.",
+      "autoApproveAllIndicator": "அனைத்து கருவிகளும் தானாக ஒப்புதல்",
+      "autoApproveCountIndicator": "{count, plural, one {# கருவிக்கு தானாக ஒப்புதல்} other {# கருவிகளுக்கு தானாக ஒப்புதல்}}",
+      "resetShort": "மீட்டமை",
+      "approvalRequired": "கருவி ஒப்புதல் தேவை",
+      "approvalForService": "{service}-க்கான கருவியை ஒப்புதல்",
+      "approvalDescriptionGeneric": "முகவர் தொடருவதற்கு முன், ஒரு கருவி இயக்க உங்கள் ஒப்புதலை நாடுகின்றார்.",
+      "approvalDescriptionWithTool": "முகவர் {tool} கருவியை இயக்க, உங்கள் ஒப்புதலை நாடுகின்றார்.",
+      "runToolTitle": "<code>{tool}</code> ஐ இயக்கவா?",
+      "runToolGeneric": "இந்த கருவியை இயக்கவா?",
+      "viaService": "{service} மூலமாக",
+      "approveButton": "ஒப்புதல்",
+      "approveOptionsLabel": "ஒப்புதல் விருப்பங்கள்",
+      "approveOnce": "ஒருமுறை ஒப்புதல்",
+      "alwaysApproveThisTool": "இந்த கருவிக்கு எப்போதும் ஒப்புதல்",
+      "alwaysApproveAllTools": "அனைத்து கருவிகளுக்கும் எப்போதும் ஒப்புதல்",
+      "denyButton": "மறுக்கவும்",
+      "keyboardHint": "{modifier}+⏎ ஒப்புதல் · esc மறுப்பு",
+      "submittingState": "உங்கள் தீர்மானம் அனுப்பப்படுகிறது",
+      "approvedState": "ஒப்புதல் - உறுப்புமை தொடர்கிறது",
+      "deniedState": "மறுக்கப்பட்டது",
+      "submittingApproval": "ஒப்புதல் வழங்கி உறுப்புமையை தொடருகின்றோம்...",
+      "submittingDenial": "உங்கள் மறுப்பை அனுப்புகின்றோம்..."
+    },
+    "openImage": "படத்தை திறக்கவும்",
+    "copyMessage": "செய்தியை நகலெடுக்கவும்",
+    "stopAudio": "ஆடியோ நிறுத்தவும்",
+    "generatingAudio": "ஆடியோ உருவாக்கப்படுகிறது...",
+    "listen": "கேளுங்கள்",
+    "processingAudio": "ஆடியோ செயலாக்கம்...",
+    "ttsError": "ஆடியோ உருவாக்கத்தில் பிழை. தயவு செய்க மீண்டும் முயற்சிக்கவும்.",
+    "unsupportedMessageType": "செய்தி பயன்படுத்த முடியவில்லை: ஆதரிக்கப்படாத செய்தி வகை"
   },
   "transcript": {
     "originalTranscript": "அசல் எழுத்தாக்கம்",
@@ -772,7 +901,10 @@
     "collapseSidebar": "பக்கப்பட்டியைச் சுருக்கு",
     "expandSidebar": "பக்கப்பட்டியை விரி",
     "quickActionsTitle": "விரைவு செயல்கள்",
-    "quickActions": "விரைவு செயல்கள்"
+    "quickActions": "விரைவு செயல்கள்",
+    "expandFolder": "கோப்புறை {name} விரிவாக்கவும்",
+    "collapseFolder": "கோப்புறை {name} சுருக்கவும்",
+    "folderOptions": "{name} விருப்பங்கள்"
   },
   "errors": {
     "somethingWentWrong": "ஏதோ தவறு ஏற்பட்டது",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "நடத்தை",
     "resetChatSettings": "அரட்டை அமைப்புகளை மீட்டமை",
     "resetChatSettingsConfirmTitle": "அரட்டை அமைப்புகளை மீட்டமைக்கவா?",
-    "resetChatSettingsConfirmMessage": "இந்த குழுவில் உள்ள அனைத்திற்கும் (temperature, custom instructions, About You, model response, streaming speed, text-to-speech, active files, confirmations) இயல்புநிலையை மீட்டமைக்கும். இது உங்கள் உரையாடல்களுக்கு பாதிப்பை ஏற்படுத்தாது."
+    "resetChatSettingsConfirmMessage": "இந்த குழுவில் உள்ள அனைத்திற்கும் (temperature, custom instructions, About You, model response, streaming speed, text-to-speech, active files, confirmations) இயல்புநிலையை மீட்டமைக்கும். இது உங்கள் உரையாடல்களுக்கு பாதிப்பை ஏற்படுத்தாது.",
+    "customInstructionsLabel": "தனிப்பயன் வழிமுறைகள்*",
+    "defaultTemperatureLabel": "இயல்புநிலை Temperature*"
   },
   "emptyState": {
     "greeting": "நான் எவ்வாறு உதவ முடியும்?",
@@ -1226,7 +1360,8 @@
       "agents": "முகவர்கள்"
     },
     "sections": {
-      "baseModels": "அடிப்படை மாதிரிகள்"
+      "baseModels": "அடிப்படை மாதிரிகள்",
+      "allModels": "அனைத்து மாதிரிகள் ({count})"
     },
     "maintainedBy": "பராமரிப்பாளர்",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "முடிந்தது",
       "reset": "மீட்டமை",
       "resetTooltip": "இயல்புநிலை வரிசைக்கு மீட்டமை"
-    }
+    },
+    "hide": "பட்டியலிலிருந்து மறைக்கவும்",
+    "hideConfirmTitle": "\"{name}\" ஐ மறைக்கவா?",
+    "hideConfirmMessage": "இது உங்கள் பட்டியலில் இருந்து நீக்கப்படும், ஆனால் அழிக்கப்படாது. மறைந்த பிரிவிலிருந்தும் எப்போது வேண்டுமானாலும் மீட்டெடுக்கலாம்.",
+    "hideConfirm": "மறைக்கவும்",
+    "hiddenToast": "\"{name}\" மறைக்கப்பட்டது",
+    "hidden": {
+      "title": "மறைக்கப்பட்டவை ({count})",
+      "restore": "மீட்டெடுக்கவும்"
+    },
+    "title": "ஒரு மாதிரியை தேர்ந்தெடுக்கவும்",
+    "modelsDescription": "உங்கள் உரையாடலுக்கான AI மாதிரியைத் தேர்வு செய்யவும். ஒவ்வொரு மாதிரிக்கும் விதிவிலக்கான திறன்கள் உள்ளன — விரிவான விவரங்களைப் பார்க்க ஒன்று தேர்ந்தெடுக்கவும்.",
+    "recommended": "பராமரிக்கப்பட்டது"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "விரைவான பணிகளுக்கு மேம்படுத்தப்பட்ட வேகமான மற்றும் செலவு குறைந்த Claude மாதிரி. எளிய வினவல்கள், சுருக்கம் மற்றும் அதிக அளவு பயன்பாடுகளுக்கு சிறந்தது.",
       "knowledgeCutoff": "ஜனவரி 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic இன் மிக வலுவான மாதிரி. நீண்ட எழுதல், ஆராய்ச்சி மற்றும் கவனமான சிந்தனை தேவைப்படும் பணிகளுக்கு சிறந்தது.",
+      "knowledgeCutoff": "பிப் 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "ஒரு சமநிலையமைந்த Claude மாதிரி. தினசரி எழுதும் பணிகள், பகுப்பாய்வு மற்றும் விரைவான பதில்கள் தேவைப்படும் குறியீட்டு பணிகளுக்கு சிறந்தது.",
+      "knowledgeCutoff": "பிப் 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "பயனர் மூலம் ரத்து செய்யப்பட்டது",
     "transientBody": "மீண்டும் முயற்சிக்கவும்",
     "authFailedBody": "மீண்டும் உள்நுழையவும்",
-    "rateLimitedBody": "சேவை பூர்த்தியாக உள்ளது, தயவு செய்து விரைவில் முயற்சிக்கவும்"
+    "rateLimitedBody": "சேவை பூர்த்தியாக உள்ளது, தயவு செய்து விரைவில் முயற்சிக்கவும்",
+    "loadingAttempt": "(முயற்சி {count})",
+    "transcriptLabel": "[மொழிபெயர்ப்பு: {filename}]"
   },
   "documentTranslation": {
     "title": "ஆவண மொழிபெயர்ப்பு",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "பரிசோதனை — MSF சக்தி பயனர்களுடன் நேரடி ஒத்துழைப்பில் உருவாக்கப்பட்டது. பொது பயன்பாட்டிற்கு அல்ல.",
       "createButton": "தனிப்பயன் முகவரை உருவாக்கு"
     },
-    "selectAgentPrompt": "விவரங்களைக் காண முகவரைத் தேர்வுசெய்யுங்கள்"
+    "selectAgentPrompt": "விவரங்களைக் காண முகவரைத் தேர்வுசெய்யுங்கள்",
+    "description": "சிறப்பு பணிகளுக்கான நிபுணர் AI உள்ளடக்கங்கள். இயல்புநிலை உள்ளடக்கங்கள் மையமாக நிருவகிக்கப்படுகின்றன; மற்ற Foundry திட்டங்களிலிருந்து உள்ளடக்கங்களை காண தனிப்பயன் மூலங்களைச் சேர்க்கவும்.",
+    "regionAgents": {
+      "us": "US பகுதி உள்ளடக்கங்கள்",
+      "eu": "EU பகுதி உள்ளடக்கங்கள்",
+      "default": "மண்டல முகவர்கள்"
+    },
+    "officeAgents": {
+      "suffix": "முகவர்கள்"
+    },
+    "agentSources": {
+      "title": "Foundry இணைப்புகள்",
+      "description": "வேறு Foundry திட்டங்களுக்கு இணைந்து அவைகளின் முகவர்களை கண்டறியுங்கள்.",
+      "connectButton": "Microsoft Azure Foundry திட்டத்தை இணைக்கவும்",
+      "connectButtonShort": "Foundry திட்டத்தை இணைக்கவும்",
+      "addButton": "தனிப்பயன் மூலத்தை சேர்",
+      "addAnother": "மற்றொரு இணைப்பை சேர்",
+      "noSources": "தனிப்பயன் மூல்கள் அமைக்கப்படவில்லை.",
+      "removeSource": "மூலத்தை அகற்று",
+      "confirmRemove": "அகற்றவா?",
+      "sourceConnected": "தனிப்பயன் மூலம் இணைக்கப்பட்டது",
+      "sourcesConnected": "தனிப்பயன் மூல்கள் இணைக்கப்பட்டுள்ளன",
+      "backToAgents": "மீண்டும் பின்செல்ல",
+      "discoveredAgents": "கண்டறியப்பட்ட முகவர்கள்",
+      "viewConnection": "இணைப்பு விவரங்களை பார்க்கவும்",
+      "edit": "திருத்து",
+      "noAgentsPublished": "முகவர்கள் வெளியிடப்படவில்லை",
+      "connectedOn": "{date} அன்று இணைக்கப்பட்டது",
+      "disconnectSource": "இந்த மூலத்துடன் இணைப்பை துண்டிக்கவும்",
+      "confirmDisconnect": "உறுதிப்படுத்த மீண்டும் கிளிக் செய்யவும்",
+      "loadingAgents": "முகவர்கள் ஏற்றப்படுகிறது...",
+      "noAgentsFound": "இந்த திட்டத்தில் முகவர்கள் ஏதும் இல்லை",
+      "noAgentsFoundHint": "முகவர்கள் வெளியிடப்பட்டுள்ளன என்றும், இந்த திட்டத்தில் உங்களிடம் Azure AI User வகை உள்ளது என்றும் உறுதிசெய்யுங்கள்.",
+      "refresh": "புதுப்பி",
+      "refreshAgents": "முகவர்களை புதுப்பிக்கவும்",
+      "technicalDetails": "தொழில்நுட்ப விவரங்கள்",
+      "agentCountLabel": "{count} முகவர்கள்",
+      "disconnectedToast": "{name} துண்டிக்கப்பட்டது"
+    }
   },
   "privacy": {
     "policyTitle": "தனியுரிமைக் கொள்கை & தரவுப் பாதுகாப்பு",

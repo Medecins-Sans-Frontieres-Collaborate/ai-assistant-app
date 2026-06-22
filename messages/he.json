@@ -356,7 +356,59 @@
     "delete": "מחיקה",
     "noCustomAgentsYet": "עדיין אין סוכנים מותאמים אישית.",
     "noOrgAgentsConfigured": "לא הוגדרו סוכני ארגון.",
-    "validationFailed": "האימות נכשל"
+    "validationFailed": "האימות נכשל",
+    "addAgentSource": "הוסף מקור מותאם אישית",
+    "connectFoundryProject": "חבר פרויקט Microsoft Azure Foundry",
+    "connectFoundryDescription": "גלה סוכנים מפרויקט Azure Foundry של משרד או צוות אחר. תוכל לראות רק את הסוכנים שיש לך הרשאה לגשת אליהם.",
+    "foundryProjectPath": "נתיב פרויקט Foundry",
+    "foundryProjectPathHelp": "בקשת מידע ממנהל פרויקט ה-Foundry, או לחץ על 'הזן ידנית' כדי למלא כל שדה בנפרד.",
+    "copyFormat": "פורמט",
+    "nameLabel": "שם",
+    "namePlaceholder": "לדוג' משרד אמסטרדם, מחקר ז'נבה",
+    "pathRequired": "הדבק את נתיב המשאב של פרויקט Foundry.",
+    "pathInvalidFormat": "זה לא נראה כמו נתיב משאב. זה צריך להתחיל ב־/subscriptions/...",
+    "connectionFailed": "לא ניתן להתחבר לפרויקט זה. בדוק שהנתיב נכון ושיש לך הרשאה.",
+    "connectionSuccessAgents": "מחובר — נמצאו {count} סוכן/ים",
+    "connectionSuccessEmpty": "החיבור הצליח, אך לא נמצאו סוכנים. ייתכן שעליך תפקיד Azure AI User בפרויקט זה כדי לראות את הסוכנים.",
+    "checkingConnection": "בודק חיבור...",
+    "connect": "חבר",
+    "save": "שמור",
+    "editConnection": "ערוך חיבור",
+    "sourceName": "שם מקור",
+    "sourceNamePlaceholder": "משרד אמסטרדם",
+    "sourceNameRequired": "נדרש לציין שם מקור.",
+    "resourcePath": "נתיב משאב",
+    "resourcePathRequired": "נדרש לציין נתיב משאב.",
+    "resourcePathHelp": "נתיב ARM אל פרויקט Foundry. בקש מהאחראי שלך ערך זה.",
+    "invalidResourcePathFormat": "נתיב המשאב חייב להתחיל ב־/subscriptions/...",
+    "validatingSource": "מאתר סוכנים...",
+    "sourceValidatedEmpty": "המקור תקין, אך לא נמצאו סוכנים. ייתכן שאין לך גישה לסוכנים בפרויקט זה.",
+    "invalidSource": "לא ניתן לגשת לנתיב משאב זה. בדוק את הנתיב ואת ההרשאות שלך.",
+    "addSource": "הוסף מקור",
+    "removeSource": "הסר מקור",
+    "labelSubscription": "מנוי",
+    "labelFoundryAccount": "חשבון Foundry",
+    "labelProject": "פרויקט",
+    "tooltipSubscription": "מנוי ה-Azure שבו נמצא חשבון ה-Foundry. אם אינך בטוח, שאל את המנהל שלך איזה מנוי הצוות שלך משתמש.",
+    "tooltipFoundryAccount": "חשבון Azure AI Services שבו מאוחסן פרויקט ה-Foundry. בדרך כלל לכל משרד או צוות יש חשבון משלו.",
+    "tooltipProject": "פרויקט מארגן סוכנים בתוך החשבון. ברוב החשבונות יש פרויקט 'ברירת מחדל' אחד.",
+    "foundryProjectLabel": "פרויקט Foundry",
+    "enterManually": "הזן ידנית",
+    "browseResources": "עיין במשאבים",
+    "subscriptionIdLabel": "מזהה מנוי",
+    "resourceGroupLabel": "קבוצת משאבים",
+    "accountNameLabel": "שם חשבון",
+    "projectNameLabel": "שם פרויקט",
+    "loadingSubscriptions": "טוען מנויים...",
+    "selectSubscription": "בחר מנוי...",
+    "loadingAccounts": "טוען חשבונות...",
+    "noAccountsFound": "לא נמצאו חשבונות Foundry במנוי זה.",
+    "selectAccount": "בחר חשבון...",
+    "loadingProjects": "טוען פרויקטים...",
+    "noProjectsFound": "לא נמצאו פרויקטים. בשימוש \"default\".",
+    "selectAllRequired": "בחר מנוי, חשבון ופרויקט.",
+    "subscriptionRequired": "בחר מנוי",
+    "accountRequired": "בחר חשבון Foundry"
   },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",
@@ -513,7 +565,10 @@
     "keepEditing": "המשך עריכה",
     "yes": "כן",
     "no": "לא",
-    "beta": "בטא"
+    "beta": "בטא",
+    "copied": "הועתק!",
+    "clear": "נקה",
+    "undo": "בטל"
   },
   "errors": {
     "unexpectedErrorOccurred": "אירעה שגיאה בלתי צפויה",
@@ -667,13 +722,90 @@
     "stopGenerationDontAskAgainButton": "אל תשאל שוב בעת עצירה באמצעות הכפתור",
     "stopGenerationDontAskAgainKeyboard": "אל תשאל שוב בעת עצירה באמצעות המקלדת",
     "generateResponseButton": "צור תגובה",
-    "downloadResponse": "הורד תגובה"
+    "downloadResponse": "הורד תגובה",
+    "activity": {
+      "callingTool": "מפעיל כלי…",
+      "callingService": "מפעיל שירות חיצוני…",
+      "usingNamedTool": "משתמש ב־{tool}…",
+      "usingNamedToolWithService": "משתמש ב־{tool} ב־{service}…",
+      "searchingWeb": "מחפש באינטרנט…",
+      "searchingFiles": "מחפש בקבצים…",
+      "runningCode": "מריץ קוד…",
+      "generatingImage": "יוצר תמונה…",
+      "listingTools": "בודק אילו כלים זמינים…",
+      "analyzingFiles": "מנתח את הקבצים שלך…",
+      "searchingKnowledge": "מחפש בבסיס הידע…",
+      "cancellingPriorTool": "מבטל בקשת כלי קודמת…"
+    },
+    "toolSummary": {
+      "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",
+      "failedCount": "{count} נכשלו",
+      "statusApproved": "אושר",
+      "statusAutoApproved": "אושר אוטומטית",
+      "statusAutoDenied": "נדחה אוטומטית",
+      "statusFailed": "נכשל",
+      "statusIncomplete": "לא הושלם",
+      "viaService": "דרך {service}"
+    },
+    "consent": {
+      "authorizeRequired": "נדרשת הרשאה",
+      "authorizeService": "הסמכת {service}",
+      "descriptionGeneric": "הסוכן צריך את אישורך לגשת למשאב מאובטח. ההתחברות מתבצעת דרך השירות ולא נשמרת כאן.",
+      "descriptionWithService": "הסוכן צריך את אישורך לגשת ל־{service}. ההתחברות ל־{service} מנוהלת על ידי השירות עצמו ולא נשמרת כאן.",
+      "signInIncompleteGeneric": "ההתחברות לא הושלמה",
+      "signInIncompleteForService": "ההתחברות ל־{service} לא הושלמה",
+      "signInIncompleteDescriptionGeneric": "נראה כי האישור לא הושלם. ודא שסיימת את ההתחברות בלשונית האחרת ואז לחץ על המשך שוב.",
+      "signInIncompleteDescription": "נראה כי ההרשאה ל־{service} לא הושלמה. ודא שסיימת את ההתחברות בלשונית האחרת ואז לחץ על המשך שוב.",
+      "authorizeButton": "אשר",
+      "reauthorizeButton": "אשר מחדש",
+      "continueButton": "המשך",
+      "confirmingButton": "מאשר…",
+      "authorizeHint": "אשר, חזור לכאן ולחץ על המשך. לביטול בעתיד, התנתק ישירות מ־{service} — אין לנו גישה לאסימון.",
+      "authorizeHintGeneric": "אשר, חזור לכאן ולחץ על המשך. לביטול בעתיד, התנתק ישירות מהשירות — אין לנו גישה לאסימון.",
+      "continueHint": "לאחר סיום האישור בלשונית השנייה, לחץ על המשך.",
+      "confirmingHint": "מאשר את ההרשאה וממשיך בבקשתך…",
+      "resendHint": "לאחר שתאשר, שלח את ההודעה שוב כדי להמשיך.",
+      "resetTooltip": "אפס את כל העדפות האישור האוטומטי לכלים בשיחה זו. פניות לכלי ישאלו מחדש.",
+      "autoApproveAllIndicator": "מאשר אוטומטית את כל הכלים",
+      "autoApproveCountIndicator": "{count, plural, one {מאשר אוטומטית כלי אחד} other {מאשר אוטומטית # כלים}}",
+      "resetShort": "אפס",
+      "approvalRequired": "נדרשת אישור לכלי",
+      "approvalForService": "אשר כלי עבור {service}",
+      "approvalDescriptionGeneric": "הסוכן מבקש להפעיל כלי שדורש את אישורך לפני המשך הפעולה.",
+      "approvalDescriptionWithTool": "הסוכן מבקש להפעיל את הכלי {tool}, שדורש את אישורך לפני המשך הפעולה.",
+      "runToolTitle": "להפעיל את <code>{tool}</code>?",
+      "runToolGeneric": "להפעיל כלי זה?",
+      "viaService": "באמצעות {service}",
+      "approveButton": "אישור",
+      "approveOptionsLabel": "אפשרויות אישור",
+      "approveOnce": "אישור פעם אחת",
+      "alwaysApproveThisTool": "לאשר תמיד כלי זה",
+      "alwaysApproveAllTools": "לאשר תמיד את כל הכלים",
+      "denyButton": "דחייה",
+      "keyboardHint": "{modifier}+⏎ אישור · esc דחייה",
+      "submittingState": "שולח את ההחלטה שלך",
+      "approvedState": "אושר — הסוכן הופעל מחדש",
+      "deniedState": "נדחה",
+      "submittingApproval": "מאשר ומפעיל את הסוכן…",
+      "submittingDenial": "שולח את הדחייה שלך…"
+    },
+    "openImage": "פתח תמונה",
+    "copyMessage": "העתק הודעה",
+    "stopAudio": "הפסק שמע",
+    "generatingAudio": "יוצר שמע...",
+    "listen": "האזן",
+    "processingAudio": "מעבד שמע...",
+    "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
+    "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
     "expandSidebar": "הרחבת סרגל צד",
     "quickActionsTitle": "פעולות מהירות",
-    "quickActions": "פעולות מהירות"
+    "quickActions": "פעולות מהירות",
+    "expandFolder": "הרחב תיקיה {name}",
+    "collapseFolder": "כווץ תיקיה {name}",
+    "folderOptions": "אפשרויות עבור {name}"
   },
   "prompts": {
     "buildReusablePrompts": "בניית הנחיות לשימוש חוזר בעזרת AI",
@@ -989,7 +1121,9 @@
     "behaviorSection": "התנהגות",
     "resetChatSettings": "אפס הגדרות צ'אט",
     "resetChatSettingsConfirmTitle": "לאפס הגדרות צ'אט?",
-    "resetChatSettingsConfirmMessage": "פעולה זו תחזיר לברירת המחדל את כל ההגדרות בלוח זה: טמפרטורה, הנחיות מותאמות, אודותיך, תגובת המודל, מהירות הסטרימינג, טקסט לדיבור, קבצים פעילים ואישורים. אין בכך כדי להשפיע על השיחות שלך."
+    "resetChatSettingsConfirmMessage": "פעולה זו תחזיר לברירת המחדל את כל ההגדרות בלוח זה: טמפרטורה, הנחיות מותאמות, אודותיך, תגובת המודל, מהירות הסטרימינג, טקסט לדיבור, קבצים פעילים ואישורים. אין בכך כדי להשפיע על השיחות שלך.",
+    "customInstructionsLabel": "הוראות מותאמות אישית*",
+    "defaultTemperatureLabel": "Default Temperature*"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "בוטל על ידי המשתמש",
     "transientBody": "נא נסה שוב",
     "authFailedBody": "נא התחבר מחדש",
-    "rateLimitedBody": "השירות בתפוסה מלאה, נא נסה שוב בקרוב"
+    "rateLimitedBody": "השירות בתפוסה מלאה, נא נסה שוב בקרוב",
+    "loadingAttempt": "(ניסיון {count})",
+    "transcriptLabel": "[תמלול: {filename}]"
   },
   "transcriptionComplete": "התעתוק הושלם! הטקסט התווסף לשדה השיחה.",
   "No prompts found": "לא נמצאו הנחיות",
@@ -1173,7 +1309,8 @@
       "agents": "סוכנים"
     },
     "sections": {
-      "baseModels": "מודלים בסיסיים"
+      "baseModels": "מודלים בסיסיים",
+      "allModels": "כל המודלים ({count})"
     },
     "maintainedBy": "מתוחזק על ידי",
     "agents": {
@@ -1247,7 +1384,19 @@
       "reasoning": "הסקה מורחבת לבעיות מורכבות",
       "omni": "מודל מולטי-מודלי עם יכולות נרחבות",
       "agent": "סוכן עם כלים בזמן אמת וגישה לאינטרנט"
-    }
+    },
+    "hide": "הסתר מהרשימה",
+    "hideConfirmTitle": "להסתיר את \"{name}\"?",
+    "hideConfirmMessage": "הפריט יוסר מהרשימה שלך אך לא יימחק. ניתן לשחזר אותו בכל עת מהקטע המוסתר.",
+    "hideConfirm": "הסתר",
+    "hiddenToast": "\"{name}\" הוסתר",
+    "hidden": {
+      "title": "מוסתרים ({count})",
+      "restore": "שחזור"
+    },
+    "title": "בחר מודל",
+    "modelsDescription": "בחר מודל AI לשיחה שלך. לכל מודל יתרונות שונים — בחר מודל כדי לראות פרטים.",
+    "recommended": "מומלץ"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "דצמבר 2025",
       "description": "גרסה ייעודית של GPT-5.2 המותאמת לאינטראקציות שיחתיות ואינטליגנציה רגשית. מצטיינת בתקשורת אמפתית, כתיבה יצירתית, סיעור מוחות ודיאלוג טבעי. מתאימה במיוחד לשיחות יומיומיות, סיטואציות ייעוץ ומשימות הדורשות מודעות רגשית."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "המודל החזק ביותר של Anthropic. מתאים לכתיבה ארוכה, מחקר ומשימות הדורשות חשיבה מעמיקה.",
+      "knowledgeCutoff": "פברואר 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "מודל Claude מאוזן. מתאים לכתיבה יומיומית, ניתוח ותכנות עם תגובות מהירות.",
+      "knowledgeCutoff": "פברואר 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "ניסיוני — נבנה בשיתוף פעולה ישיר עם משתמשים מתקדמים של MSF. לא מיועד לשימוש כללי.",
       "createButton": "צור סוכן מותאם אישית"
     },
-    "selectAgentPrompt": "בחר סוכן לצפייה בפרטים"
+    "selectAgentPrompt": "בחר סוכן לצפייה בפרטים",
+    "description": "סוכני AI ייעודיים למשימות מסוימות. סוכנים ברירת מחדל מנוהלים מרכזית; ניתן להוסיף מקורות מותאמים כדי לגלות סוכנים מפרויקטי Foundry נוספים.",
+    "regionAgents": {
+      "us": "סוכני אזור ארה\"ב",
+      "eu": "סוכני אזור אירופה",
+      "default": "סוכני אזור"
+    },
+    "officeAgents": {
+      "suffix": "סוכנים"
+    },
+    "agentSources": {
+      "title": "חיבורים ל-Foundry",
+      "description": "התחברו לפרויקטי Foundry אחרים כדי לגלות את הסוכנים שלהם.",
+      "connectButton": "חבר פרויקט Microsoft Azure Foundry",
+      "connectButtonShort": "חבר פרויקט Foundry",
+      "addButton": "הוספת מקור מותאם",
+      "addAnother": "הוספת חיבור נוסף",
+      "noSources": "לא הוגדרו מקורות מותאמים.",
+      "removeSource": "הסרת מקור",
+      "confirmRemove": "להסיר?",
+      "sourceConnected": "מקור מותאם מחובר",
+      "sourcesConnected": "מקורות מותאמים מחוברים",
+      "backToAgents": "חזרה",
+      "discoveredAgents": "סוכנים שהתגלו",
+      "viewConnection": "הצג פרטי חיבור",
+      "edit": "עריכה",
+      "noAgentsPublished": "לא פורסמו סוכנים",
+      "connectedOn": "חובר ב-{date}",
+      "disconnectSource": "ניתוק מקור זה",
+      "confirmDisconnect": "לחצו שוב לאישור",
+      "loadingAgents": "טוען סוכנים...",
+      "noAgentsFound": "לא נמצאו סוכנים בפרויקט זה",
+      "noAgentsFoundHint": "ודאו כי פורסמו סוכנים ויש לכם תפקיד Azure AI User בפרויקט זה.",
+      "refresh": "רענון",
+      "refreshAgents": "רענן סוכנים",
+      "technicalDetails": "פרטים טכניים",
+      "agentCountLabel": "{count} סוכנים",
+      "disconnectedToast": "נותק {name}"
+    }
   },
   "privacy": {
     "policyTitle": "מדיניות פרטיות והגנת מידע",

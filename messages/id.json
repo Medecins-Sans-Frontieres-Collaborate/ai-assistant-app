@@ -348,7 +348,59 @@
     "delete": "Hapus",
     "noCustomAgentsYet": "Belum ada agen kustom.",
     "noOrgAgentsConfigured": "Tidak ada agen organisasi yang dikonfigurasi.",
-    "validationFailed": "Validasi gagal"
+    "validationFailed": "Validasi gagal",
+    "addAgentSource": "Tambah Sumber Kustom",
+    "connectFoundryProject": "Hubungkan Proyek Microsoft Azure Foundry",
+    "connectFoundryDescription": "Temukan agen dari proyek Azure Foundry kantor atau tim lain. Anda hanya dapat melihat agen yang Anda punya izin aksesnya.",
+    "foundryProjectPath": "Path Proyek Foundry",
+    "foundryProjectPathHelp": "Tanyakan pada administrator proyek Foundry Anda, atau klik 'Masukkan manual' untuk mengisi setiap kolom secara terpisah.",
+    "copyFormat": "Format",
+    "nameLabel": "Nama",
+    "namePlaceholder": "misal: Kantor Amsterdam, Penelitian Jenewa",
+    "pathRequired": "Tempelkan path sumber daya proyek Foundry.",
+    "pathInvalidFormat": "Ini tidak terlihat seperti path sumber daya. Path harus diawali dengan /subscriptions/...",
+    "connectionFailed": "Tidak dapat mengakses proyek ini. Periksa apakah path sudah benar dan Anda memiliki akses.",
+    "connectionSuccessAgents": "Tersambung — {count} agen ditemukan",
+    "connectionSuccessEmpty": "Tersambung, tetapi tidak ada agen ditemukan. Anda mungkin perlu peran Azure AI User pada proyek ini untuk melihat agen-agen.",
+    "checkingConnection": "Memeriksa koneksi...",
+    "connect": "Hubungkan",
+    "save": "Simpan",
+    "editConnection": "Ubah Koneksi",
+    "sourceName": "Nama Sumber",
+    "sourceNamePlaceholder": "Kantor Amsterdam",
+    "sourceNameRequired": "Nama sumber wajib diisi.",
+    "resourcePath": "Path Sumber Daya",
+    "resourcePathRequired": "Path sumber daya wajib diisi.",
+    "resourcePathHelp": "Path sumber daya ARM ke proyek Foundry. Tanyakan nilai ini kepada administrator Anda.",
+    "invalidResourcePathFormat": "Path sumber daya harus diawali dengan /subscriptions/...",
+    "validatingSource": "Menemukan agen...",
+    "sourceValidatedEmpty": "Sumber valid, tetapi tidak ada agen ditemukan. Anda mungkin tidak memiliki akses ke agen di proyek ini.",
+    "invalidSource": "Tidak dapat mengakses path sumber daya ini. Verifikasi path dan izin Anda.",
+    "addSource": "Tambah Sumber",
+    "removeSource": "Hapus Sumber",
+    "labelSubscription": "Langganan",
+    "labelFoundryAccount": "Akun Foundry",
+    "labelProject": "Proyek",
+    "tooltipSubscription": "Langganan Azure yang berisi akun Foundry. Jika Anda tidak yakin, tanyakan pada admin langganan mana yang digunakan tim Anda.",
+    "tooltipFoundryAccount": "Akun Azure AI Services tempat proyek Foundry berada. Setiap kantor atau tim biasanya memiliki akun masing-masing.",
+    "tooltipProject": "Proyek mengorganisir agen di dalam akun. Sebagian besar akun memiliki satu proyek 'default'.",
+    "foundryProjectLabel": "Proyek Foundry",
+    "enterManually": "Masukkan manual",
+    "browseResources": "Telusuri sumber daya",
+    "subscriptionIdLabel": "ID Langganan",
+    "resourceGroupLabel": "Grup Sumber Daya",
+    "accountNameLabel": "Nama Akun",
+    "projectNameLabel": "Nama Proyek",
+    "loadingSubscriptions": "Memuat langganan...",
+    "selectSubscription": "Pilih langganan...",
+    "loadingAccounts": "Memuat akun...",
+    "noAccountsFound": "Tidak ada akun Foundry ditemukan dalam langganan ini.",
+    "selectAccount": "Pilih akun...",
+    "loadingProjects": "Memuat proyek...",
+    "noProjectsFound": "Tidak ada proyek ditemukan. Menggunakan \"default\".",
+    "selectAllRequired": "Pilih langganan, akun, dan proyek.",
+    "subscriptionRequired": "Pilih langganan",
+    "accountRequired": "Pilih akun Foundry"
   },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",
@@ -505,7 +557,10 @@
     "no": "Tidak",
     "yes": "Ya",
     "noResults": "Tidak ada hasil",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Disalin!",
+    "clear": "Bersihkan",
+    "undo": "Urungkan"
   },
   "errors": {
     "unexpectedErrorOccurred": "Terjadi kesalahan yang tidak terduga",
@@ -659,13 +714,90 @@
     "stopGenerationDontAskAgainButton": "Jangan tanyakan lagi saat menghentikan dengan tombol",
     "stopGenerationDontAskAgainKeyboard": "Jangan tanyakan lagi saat menghentikan dengan keyboard",
     "generateResponseButton": "Buat respons",
-    "downloadResponse": "Unduh respons"
+    "downloadResponse": "Unduh respons",
+    "activity": {
+      "callingTool": "Memanggil alat…",
+      "callingService": "Memanggil layanan eksternal…",
+      "usingNamedTool": "Menggunakan {tool}…",
+      "usingNamedToolWithService": "Menggunakan {tool} pada {service}…",
+      "searchingWeb": "Mencari di web…",
+      "searchingFiles": "Mencari file…",
+      "runningCode": "Menjalankan kode…",
+      "generatingImage": "Menghasilkan gambar…",
+      "listingTools": "Mencari alat yang tersedia…",
+      "analyzingFiles": "Menganalisis file Anda…",
+      "searchingKnowledge": "Mencari di basis pengetahuan…",
+      "cancellingPriorTool": "Membatalkan permintaan alat sebelumnya…"
+    },
+    "toolSummary": {
+      "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
+      "failedCount": "{count} gagal",
+      "statusApproved": "Disetujui",
+      "statusAutoApproved": "Disetujui otomatis",
+      "statusAutoDenied": "Ditolak otomatis",
+      "statusFailed": "Gagal",
+      "statusIncomplete": "Belum lengkap",
+      "viaService": "melalui {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Otorisasi diperlukan",
+      "authorizeService": "Otorisasi {service}",
+      "descriptionGeneric": "Agen ini memerlukan izin Anda untuk mengakses sumber daya yang aman. Masuk Anda dikelola oleh layanan upstream dan tidak disimpan di sini.",
+      "descriptionWithService": "Agen ini memerlukan izin Anda untuk mengakses {service}. Masuk {service} Anda dikelola oleh {service} langsung dan tidak disimpan di sini.",
+      "signInIncompleteGeneric": "Masuk tidak selesai",
+      "signInIncompleteForService": "Masuk ke {service} tidak selesai",
+      "signInIncompleteDescriptionGeneric": "Sepertinya otorisasi belum selesai. Pastikan Anda sudah masuk di tab lain, lalu klik Lanjutkan lagi.",
+      "signInIncompleteDescription": "Sepertinya otorisasi ke {service} belum selesai. Pastikan Anda sudah masuk di tab lain, lalu klik Lanjutkan lagi.",
+      "authorizeButton": "Otorisasi",
+      "reauthorizeButton": "Otorisasi ulang",
+      "continueButton": "Lanjutkan",
+      "confirmingButton": "Mengonfirmasi…",
+      "authorizeHint": "Otorisasi, lalu kembali ke sini dan klik Lanjutkan. Untuk mencabut di lain waktu, keluar langsung dari {service} — kami tidak menyimpan token.",
+      "authorizeHintGeneric": "Otorisasi, lalu kembali ke sini dan klik Lanjutkan. Untuk mencabut di lain waktu, keluar langsung dari layanan upstream — kami tidak menyimpan token.",
+      "continueHint": "Setelah otorisasi selesai di tab lain, klik Lanjutkan.",
+      "confirmingHint": "Mengonfirmasi otorisasi dan melanjutkan permintaan Anda…",
+      "resendHint": "Setelah otorisasi, kirim pesan Anda lagi untuk melanjutkan.",
+      "resetTooltip": "Setel ulang semua preferensi persetujuan otomatis alat untuk percakapan ini. Panggilan alat berikutnya akan dimintakan lagi.",
+      "autoApproveAllIndicator": "Menyetujui otomatis semua alat",
+      "autoApproveCountIndicator": "{count, plural, one {Menyetujui otomatis # alat} other {Menyetujui otomatis # alat}}",
+      "resetShort": "Setel ulang",
+      "approvalRequired": "Persetujuan alat diperlukan",
+      "approvalForService": "Setujui alat untuk {service}",
+      "approvalDescriptionGeneric": "Agen ingin menjalankan alat yang memerlukan persetujuan Anda sebelum melanjutkan.",
+      "approvalDescriptionWithTool": "Agen ingin menjalankan alat {tool}, yang memerlukan persetujuan Anda sebelum melanjutkan.",
+      "runToolTitle": "Jalankan <code>{tool}</code>?",
+      "runToolGeneric": "Jalankan alat ini?",
+      "viaService": "melalui {service}",
+      "approveButton": "Setujui",
+      "approveOptionsLabel": "Opsi persetujuan",
+      "approveOnce": "Setujui sekali",
+      "alwaysApproveThisTool": "Selalu setujui alat ini",
+      "alwaysApproveAllTools": "Selalu setujui semua alat",
+      "denyButton": "Tolak",
+      "keyboardHint": "{modifier}+⏎ setujui · esc tolak",
+      "submittingState": "Mengirim keputusan Anda",
+      "approvedState": "Disetujui — agen dilanjutkan",
+      "deniedState": "Ditolak",
+      "submittingApproval": "Menyetujui dan melanjutkan agen…",
+      "submittingDenial": "Mengirim penolakan Anda…"
+    },
+    "openImage": "Buka gambar",
+    "copyMessage": "Salin pesan",
+    "stopAudio": "Hentikan audio",
+    "generatingAudio": "Membuat audio...",
+    "listen": "Dengarkan",
+    "processingAudio": "Memproses audio...",
+    "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
+    "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
     "expandSidebar": "Perluas sidebar",
     "quickActionsTitle": "Tindakan Cepat",
-    "quickActions": "Tindakan Cepat"
+    "quickActions": "Tindakan Cepat",
+    "expandFolder": "Perluas folder {name}",
+    "collapseFolder": "Perkecil folder {name}",
+    "folderOptions": "Opsi {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Bangun prompt yang dapat digunakan kembali dengan bantuan AI",
@@ -981,7 +1113,9 @@
     "behaviorSection": "Perilaku",
     "resetChatSettings": "Reset pengaturan chat",
     "resetChatSettingsConfirmTitle": "Reset pengaturan chat?",
-    "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak memengaruhi percakapan Anda."
+    "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak memengaruhi percakapan Anda.",
+    "customInstructionsLabel": "Instruksi Khusus*",
+    "defaultTemperatureLabel": "Suhu Default*"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1081,7 +1215,9 @@
     "cancelledBody": "Dibatalkan oleh pengguna",
     "transientBody": "Silakan coba lagi",
     "authFailedBody": "Silakan masuk kembali",
-    "rateLimitedBody": "Layanan penuh, silakan coba sebentar lagi"
+    "rateLimitedBody": "Layanan penuh, silakan coba sebentar lagi",
+    "loadingAttempt": "(percobaan {count})",
+    "transcriptLabel": "[Transkrip: {filename}]"
   },
   "transcriptionComplete": "Transkripsi selesai! Teks telah ditambahkan ke input chat.",
   "importBackupParseError": "Gagal mengurai file cadangan. Pastikan itu adalah JSON yang valid.",
@@ -1214,7 +1350,8 @@
       "learnPrivacy": "Pelajari bagaimana privasi Anda dilindungi"
     },
     "sections": {
-      "baseModels": "Model Dasar"
+      "baseModels": "Model Dasar",
+      "allModels": "Semua model ({count})"
     },
     "tabs": {
       "models": "Model",
@@ -1239,7 +1376,19 @@
       "reasoning": "Penalaran lanjutan untuk masalah kompleks",
       "omni": "Model multi-modal dengan kemampuan luas",
       "agent": "Agen dengan alat real-time & akses web"
-    }
+    },
+    "hide": "Sembunyikan dari daftar",
+    "hideConfirmTitle": "Sembunyikan \"{name}\"?",
+    "hideConfirmMessage": "Ini akan dihapus dari daftar Anda tetapi tidak dihapus permanen. Anda dapat memulihkannya kapan saja dari bagian Tersembunyi.",
+    "hideConfirm": "Sembunyikan",
+    "hiddenToast": "\"{name}\" disembunyikan",
+    "hidden": {
+      "title": "Tersembunyi ({count})",
+      "restore": "Pulihkan"
+    },
+    "title": "Pilih model",
+    "modelsDescription": "Pilih model AI untuk percakapan Anda. Setiap model memiliki keunggulan berbeda — pilih salah satu untuk melihat detailnya.",
+    "recommended": "Direkomendasikan"
   },
   "models": {
     "gpt_4_1": {
@@ -1316,6 +1465,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
       "description": "Varian khusus dari GPT-5.2 yang dioptimalkan untuk interaksi percakapan dan kecerdasan emosional. Unggul dalam komunikasi empati, penulisan kreatif, brainstorming, dan dialog alami. Paling cocok untuk percakapan santai, skenario konseling, dan tugas yang memerlukan kesadaran emosional."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Model terkuat dari Anthropic. Bagus untuk menulis panjang, riset, dan tugas yang membutuhkan pemikiran mendalam.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Model Claude yang seimbang. Cocok untuk penulisan sehari-hari, analisis, dan pemrograman dengan respons cepat.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Eksperimental — dibuat melalui kolaborasi langsung dengan pengguna mahir MSF. Bukan untuk penggunaan umum.",
       "createButton": "Buat Agen Kustom"
     },
-    "selectAgentPrompt": "Pilih agen untuk melihat detail"
+    "selectAgentPrompt": "Pilih agen untuk melihat detail",
+    "description": "Agen AI khusus untuk tugas-tugas tertentu. Agen default dikelola secara terpusat; tambahkan sumber khusus untuk menemukan agen dari proyek Foundry lain.",
+    "regionAgents": {
+      "us": "Agen Wilayah AS",
+      "eu": "Agen Wilayah EU",
+      "default": "Agen Wilayah"
+    },
+    "officeAgents": {
+      "suffix": "Agen"
+    },
+    "agentSources": {
+      "title": "Koneksi Foundry",
+      "description": "Hubungkan ke proyek Foundry lain untuk menemukan agennya.",
+      "connectButton": "Hubungkan proyek Microsoft Azure Foundry",
+      "connectButtonShort": "Hubungkan proyek Foundry",
+      "addButton": "Tambah Sumber Kustom",
+      "addAnother": "Tambah koneksi lain",
+      "noSources": "Tidak ada sumber kustom yang dikonfigurasi.",
+      "removeSource": "Hapus sumber",
+      "confirmRemove": "Hapus?",
+      "sourceConnected": "sumber kustom terhubung",
+      "sourcesConnected": "sumber kustom terhubung",
+      "backToAgents": "Kembali",
+      "discoveredAgents": "Agen yang Ditemukan",
+      "viewConnection": "Lihat detail koneksi",
+      "edit": "Edit",
+      "noAgentsPublished": "Tidak ada agen yang dipublikasikan",
+      "connectedOn": "Terhubung pada {date}",
+      "disconnectSource": "Putuskan sambungan sumber ini",
+      "confirmDisconnect": "Klik lagi untuk konfirmasi",
+      "loadingAgents": "Memuat agen...",
+      "noAgentsFound": "Tidak ada agen ditemukan di proyek ini",
+      "noAgentsFoundHint": "Pastikan agen sudah dipublikasikan dan Anda memiliki peran Azure AI User di proyek ini.",
+      "refresh": "Muat ulang",
+      "refreshAgents": "Muat ulang agen",
+      "technicalDetails": "Detail teknis",
+      "agentCountLabel": "{count} agen",
+      "disconnectedToast": "Terputus {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Kebijakan Privasi & Perlindungan Data",

@@ -385,7 +385,59 @@
     "delete": "Efase",
     "noCustomAgentsYet": "Pa gen ajan pèsonalize ankò.",
     "noOrgAgentsConfigured": "Pa gen ajan òganizasyon konfigire.",
-    "validationFailed": "Validasyon echwe"
+    "validationFailed": "Validasyon echwe",
+    "addAgentSource": "Ajoute Sous Koutim",
+    "connectFoundryProject": "Konekte yon pwojè Microsoft Azure Foundry",
+    "connectFoundryDescription": "Dekouvri ajan ki soti nan yon lòt biwo oswa pwojè Azure Foundry ekip ou. W ap wè sèlman ajan ou gen pèmisyon pou jwenn.",
+    "foundryProjectPath": "Chimen Pwojè Foundry",
+    "foundryProjectPathHelp": "Mande administratè pwojè Foundry ou, oswa klike sou 'Antre manyèlman' pou ranpli chak chan an separeman.",
+    "copyFormat": "Fòma",
+    "nameLabel": "Non",
+    "namePlaceholder": "eg. Biwo Amsterdam, Rechèch Jenèv",
+    "pathRequired": "Kole chimen resous Foundry pwojè a.",
+    "pathInvalidFormat": "Sa pa sanble ak yon chimen resous. Li ta dwe kòmanse ak /subscriptions/...",
+    "connectionFailed": "Pa ka jwenn pwojè sa a. Verifye chimen an epi asire ou gen aksè.",
+    "connectionSuccessAgents": "Konekte — {count} ajan jwenn",
+    "connectionSuccessEmpty": "Konekte, men pa gen ajan jwenn. Ou ka bezwen wòl Azure AI User sou pwojè sa a pou ou wè ajan li yo.",
+    "checkingConnection": "Nap verifye koneksyon...",
+    "connect": "Konekte",
+    "save": "Sove",
+    "editConnection": "Modifye Koneksyon",
+    "sourceName": "Non Sous",
+    "sourceNamePlaceholder": "Biwo Amsterdam",
+    "sourceNameRequired": "Non sous la obligatwa.",
+    "resourcePath": "Chimen Resous",
+    "resourcePathRequired": "Chimen resous la obligatwa.",
+    "resourcePathHelp": "Chimen resous ARM nan pou yon pwojè Foundry. Mande administratè ou pou valè sa a.",
+    "invalidResourcePathFormat": "Chimen resous la dwe kòmanse ak /subscriptions/...",
+    "validatingSource": "Nap chèche ajan...",
+    "sourceValidatedEmpty": "Sous la valab, men pa gen ajan jwenn. Ou ka pa gen aksè ak ajan ki nan pwojè sa a.",
+    "invalidSource": "Pa ka jwenn aksè ak chimen resous sa a. Verifye chimen an ak pèmisyon ou yo.",
+    "addSource": "Ajoute Sous",
+    "removeSource": "Retire Sous",
+    "labelSubscription": "Abònman",
+    "labelFoundryAccount": "Kont Foundry",
+    "labelProject": "Pwojè",
+    "tooltipSubscription": "Abònman Azure ki genyen kont Foundry a. Si w pa sèten, mande administratè w ki abònman ekip ou itilize.",
+    "tooltipFoundryAccount": "Kont Azure AI Services kote pwojè Foundry a ye. Chak biwo oswa ekip anjeneral gen pa li.",
+    "tooltipProject": "Yon pwojè òganize ajan yo nan yon kont. Pifò kont gen yon sèl pwojè 'default'.",
+    "foundryProjectLabel": "Pwojè Foundry",
+    "enterManually": "Antre manyèlman",
+    "browseResources": "Chèche resous",
+    "subscriptionIdLabel": "ID Abònman",
+    "resourceGroupLabel": "Gwoup Resous",
+    "accountNameLabel": "Non Kont",
+    "projectNameLabel": "Non Pwojè",
+    "loadingSubscriptions": "Nap chaje abònman...",
+    "selectSubscription": "Chwazi yon abònman...",
+    "loadingAccounts": "Nap chaje kont yo...",
+    "noAccountsFound": "Pa gen okenn kont Foundry jwenn nan abònman sa a.",
+    "selectAccount": "Chwazi yon kont...",
+    "loadingProjects": "Nap chaje pwojè yo...",
+    "noProjectsFound": "Pa gen pwojè jwenn. Nap sèvi ak \"default\".",
+    "selectAllRequired": "Chwazi yon abònman, kont, ak pwojè.",
+    "subscriptionRequired": "Chwazi yon abònman",
+    "accountRequired": "Chwazi yon kont Foundry"
   },
   "Quick Actions": "Aksyon Rapid",
   "Type / in chat to access your prompts": "Tape / nan chat pou jwenn aksè nan enstriksyon ou yo",
@@ -641,7 +693,10 @@
     "keepEditing": "Kontinye Modifye",
     "yes": "Wi",
     "no": "Non",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Kopi!",
+    "clear": "Efase",
+    "undo": "Anile"
   },
   "terms": {
     "officialLanguages": "Vèsyon ofisyèl:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Pa mande ankò lè w ap sispann ak bouton an",
     "stopGenerationDontAskAgainKeyboard": "Pa mande ankò lè w ap sispann ak klavye a",
     "generateResponseButton": "Jenere repons",
-    "downloadResponse": "Telechaje repons lan"
+    "downloadResponse": "Telechaje repons lan",
+    "activity": {
+      "callingTool": "Aplike zouti…",
+      "callingService": "Aplike sèvis ekstèn…",
+      "usingNamedTool": "Ap itilize {tool}…",
+      "usingNamedToolWithService": "Ap itilize {tool} sou {service}…",
+      "searchingWeb": "Ap fè rechèch sou entènèt la…",
+      "searchingFiles": "Ap chèche fichye…",
+      "runningCode": "Ap egzekite kòd…",
+      "generatingImage": "Ap jenere imaj…",
+      "listingTools": "Ap chèche zouti ki disponib…",
+      "analyzingFiles": "Ap analize fichye ou yo…",
+      "searchingKnowledge": "Ap chèche nan baz konesans lan…",
+      "cancellingPriorTool": "Ap anile demann zouti anvan…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# zouti itilize} other {# zouti yo itilize}}",
+      "failedCount": "{count} echwe",
+      "statusApproved": "Apwouve",
+      "statusAutoApproved": "Otapwouve",
+      "statusAutoDenied": "Otanile",
+      "statusFailed": "Echwe",
+      "statusIncomplete": "Enkonplè",
+      "viaService": "pa {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Otorizasyon obligatwa",
+      "authorizeService": "Otoryze {service}",
+      "descriptionGeneric": "Ajan sa a bezwen pèmisyon ou pou li gen aksè ak yon resous sekirize. Sèvis anwo a jere koneksyon ou, li pa anrejistre isit la.",
+      "descriptionWithService": "Ajan sa a bezwen pèmisyon ou pou li gen aksè ak {service}. Koneksyon ou ak {service} jere pa {service} li menm; li pa anrejistre isit la.",
+      "signInIncompleteGeneric": "Koneksyon an pa fini",
+      "signInIncompleteForService": "Koneksyon ak {service} pa fini",
+      "signInIncompleteDescriptionGeneric": "Sanble otorizasyon an pa fini. Asire w ou fini konekte nan lòt onglet la, epi klike Kontinye ankò.",
+      "signInIncompleteDescription": "Sanble otorizasyon ak {service} pa fini. Asire w ou fini konekte nan lòt onglet la, epi klike Kontinye ankò.",
+      "authorizeButton": "Otoryze",
+      "reauthorizeButton": "Re-otoryze",
+      "continueButton": "Kontinye",
+      "confirmingButton": "Ap konfime…",
+      "authorizeHint": "Otoryze, epi tounen isit la epi klike Kontinye. Pou anile pita, dekonekte dirèkteman sou {service} — nou pa kenbe token lan.",
+      "authorizeHintGeneric": "Otoryze, epi tounen isit la epi klike Kontinye. Pou anile pita, dekonekte dirèkteman sou sèvis anwo a — nou pa kenbe token lan.",
+      "continueHint": "Lè otorizasyon an fini nan lòt onglet la, klike Kontinye.",
+      "confirmingHint": "Ap konfime otorizasyon epi rekòmanse demann ou an…",
+      "resendHint": "Apre ou fin otoryze, voye mesaj ou ankò pou kontinye.",
+      "resetTooltip": "Reyajiste tout preferans otapwouve pou zouti konvèsasyon sa a. Tout premye apèl zouti nan lavni va mande w otorizasyon ankò.",
+      "autoApproveAllIndicator": "Otapwouve tout zouti yo",
+      "autoApproveCountIndicator": "{count, plural, one {Otapwouve # zouti} other {Otapwouve # zouti yo}}",
+      "resetShort": "Reyajiste",
+      "approvalRequired": "Apwobasyon zouti obligatwa",
+      "approvalForService": "Apwouve zouti pou {service}",
+      "approvalDescriptionGeneric": "Ajan an vle egzekite yon zouti ki mande apwobasyon ou anvan li kontinye.",
+      "approvalDescriptionWithTool": "Ajan an vle egzekite zouti {tool}, ki mande apwobasyon ou anvan li kontinye.",
+      "runToolTitle": "Kouri <code>{tool}</code>?",
+      "runToolGeneric": "Kouri zouti sa a?",
+      "viaService": "pa {service}",
+      "approveButton": "Apwouve",
+      "approveOptionsLabel": "Opsyon apwouve",
+      "approveOnce": "Apwouve yon fwa",
+      "alwaysApproveThisTool": "Toujou apwouve zouti sa a",
+      "alwaysApproveAllTools": "Toujou apwouve tout zouti yo",
+      "denyButton": "Refize",
+      "keyboardHint": "{modifier}+⏎ apwouve · esc refize",
+      "submittingState": "Nap voye desizyon ou an",
+      "approvedState": "Apwouve — ajan an rekòmanse",
+      "deniedState": "Refize",
+      "submittingApproval": "Ap apwouve epi rekòmanse ajan an…",
+      "submittingDenial": "Nap voye refi ou..."
+    },
+    "openImage": "Louvri imaj",
+    "copyMessage": "Kopi mesaj",
+    "stopAudio": "Sispann odyo",
+    "generatingAudio": "Nap kreye odyo...",
+    "listen": "Koute",
+    "processingAudio": "Nap trete odyo...",
+    "ttsError": "Erè pandan kreyasyon odyo. Tanpri eseye ankò.",
+    "unsupportedMessageType": "Erè pandan afichaj mesaj la: Tip mesaj sa a pa sipòte"
   },
   "transcript": {
     "originalTranscript": "Transkripsyon Orijinal",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Fèmen ba lateral",
     "expandSidebar": "Ouvri ba lateral",
     "quickActionsTitle": "Aksyon Rapid",
-    "quickActions": "Aksyon Rapid"
+    "quickActions": "Aksyon Rapid",
+    "expandFolder": "Elaji dosye {name}",
+    "collapseFolder": "Redwi dosye {name}",
+    "folderOptions": "Opsyon {name}"
   },
   "errors": {
     "somethingWentWrong": "Yon bagay mal pase",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Konpòtman",
     "resetChatSettings": "Reyajiste paramèt chat yo",
     "resetChatSettingsConfirmTitle": "Reyajiste paramèt chat yo?",
-    "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt ki default nan panèl sa a: tanperati, enstriksyon pèsonalize, Enfòmasyon sou ou, repons modèl, vitès difizyon, tèks an vwa, fichye aktif, ak konfimasyon. Sa pap afekte konvèsasyon ou yo."
+    "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt ki default nan panèl sa a: tanperati, enstriksyon pèsonalize, Enfòmasyon sou ou, repons modèl, vitès difizyon, tèks an vwa, fichye aktif, ak konfimasyon. Sa pap afekte konvèsasyon ou yo.",
+    "customInstructionsLabel": "Enstriksyon Pèsonalize*",
+    "defaultTemperatureLabel": "Tanperati pa defo*"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -1226,7 +1360,8 @@
       "agents": "Ajan"
     },
     "sections": {
-      "baseModels": "Modèl Debaz"
+      "baseModels": "Modèl Debaz",
+      "allModels": "Tout modèl yo ({count})"
     },
     "maintainedBy": "Jere pa",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Fini",
       "reset": "Reinisyalize",
       "resetTooltip": "Reinisyalize nan lòd pa defo"
-    }
+    },
+    "hide": "Kache nan lis la",
+    "hideConfirmTitle": "Kache \"{name}\"?",
+    "hideConfirmMessage": "Li pral retire nan lis ou, men li pap efase. Ou ka retabli li nenpòt lè nan seksyon Kache.",
+    "hideConfirm": "Kache",
+    "hiddenToast": "\"{name}\" kache",
+    "hidden": {
+      "title": "Kache ({count})",
+      "restore": "Retabli"
+    },
+    "title": "Chwazi yon modèl",
+    "modelsDescription": "Chwazi yon modèl AI pou konvèsasyon ou. Chak modèl gen avantaj li — chwazi youn pou wè detay yo.",
+    "recommended": "Rekòmande"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Modèl Claude rapid ak ekonomik optimize pou travay rapid. Ekselan pou demann senp, rezime, ak aplikasyon gwo volim.",
       "knowledgeCutoff": "Janvye 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Pi fò modèl Anthropic lan. Bon pou ekri long, rechèch, ak travay k ap mande refleksyon.",
+      "knowledgeCutoff": "Fev 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Yon modèl Claude balanse. Bon pou ekri chak jou, analiz, ak kodaj ak repons rapid.",
+      "knowledgeCutoff": "Fev 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Itilizatè a anile",
     "transientBody": "Tanpri eseye ankò",
     "authFailedBody": "Tanpri konekte ankò",
-    "rateLimitedBody": "Sèvis la okipe, tanpri eseye ankò pita"
+    "rateLimitedBody": "Sèvis la okipe, tanpri eseye ankò pita",
+    "loadingAttempt": "(tantativ {count})",
+    "transcriptLabel": "[Transkripsyon: {filename}]"
   },
   "documentTranslation": {
     "title": "Tradiksyon Dokiman",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Eksperimantal — bati an kolaborasyon dirèk ak itilizatè pouvwa MSF. Pa pou itilizasyon jeneral.",
       "createButton": "Kreye Ajan Pèsonalize"
     },
-    "selectAgentPrompt": "Chwazi yon ajan pou wè detay"
+    "selectAgentPrompt": "Chwazi yon ajan pou wè detay",
+    "description": "Ajan AI espesyalize pou travay espesifik. Ajan pa defo jere santralman; ajoute sous pèsonalize pou dekouvri ajan ki soti nan lòt pwojè Foundry.",
+    "regionAgents": {
+      "us": "Ajan Rejyon US",
+      "eu": "Ajan Rejyon EU",
+      "default": "Ajan Rejyon yo"
+    },
+    "officeAgents": {
+      "suffix": "Ajan"
+    },
+    "agentSources": {
+      "title": "Koneksyon Foundry",
+      "description": "Konekte ak lòt pwojè Foundry pou dekouvri ajan yo.",
+      "connectButton": "Konekte yon pwojè Microsoft Azure Foundry",
+      "connectButtonShort": "Konekte yon pwojè Foundry",
+      "addButton": "Ajoute Sous Pèsonalize",
+      "addAnother": "Ajoute yon lòt koneksyon",
+      "noSources": "Pa gen sous pèsonalize ki configuré.",
+      "removeSource": "Retire sous la",
+      "confirmRemove": "Retire?",
+      "sourceConnected": "sous pèsonalize konekte",
+      "sourcesConnected": "sous pèsonalize konekte",
+      "backToAgents": "Retounen",
+      "discoveredAgents": "Ajan yo dekouvri",
+      "viewConnection": "Gade detay koneksyon",
+      "edit": "Modifye",
+      "noAgentsPublished": "Pa gen ajan pibliye",
+      "connectedOn": "Konekte {date}",
+      "disconnectSource": "Dekonekte sous sa",
+      "confirmDisconnect": "Klike ankò pou konfime",
+      "loadingAgents": "Chaje ajan yo...",
+      "noAgentsFound": "Pa jwenn okenn ajan nan pwojè sa a",
+      "noAgentsFoundHint": "Asire ajan yo pibliye epi ou gen wòl Azure AI User sou pwojè sa a.",
+      "refresh": "Rafrechi",
+      "refreshAgents": "Rafrechi ajan yo",
+      "technicalDetails": "Detay teknik",
+      "agentCountLabel": "{count} ajan",
+      "disconnectedToast": "Dekonekte {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Politik Konfidansyalite ak Pwoteksyon Done",

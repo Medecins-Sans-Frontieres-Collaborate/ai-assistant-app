@@ -385,7 +385,59 @@
     "delete": "حذف کړئ",
     "noCustomAgentsYet": "اوسمهال هیڅ دودیز استازی نشته.",
     "noOrgAgentsConfigured": "د سازمان استازي ترتیب شوي نه دي.",
-    "validationFailed": "تایید پاتې راغی"
+    "validationFailed": "تایید پاتې راغی",
+    "addAgentSource": "د ځانګړي سرچینې اضافه کول",
+    "connectFoundryProject": "د Microsoft Azure Foundry پروژه ونښلئ",
+    "connectFoundryDescription": "د بل دفتر یا ډلې له Azure Foundry پروژې څخه agents پیدا کړئ. یوازې هغه agents به وګورئ چې تاسو ته یې اجازه ورکړل شوې ده.",
+    "foundryProjectPath": "د Foundry پروژې لاره",
+    "foundryProjectPathHelp": "د Foundry پروژې له مدیر څخه پوښتنه وکړئ، یا 'Enter manually' کلیک کړئ څو هر ساحه جلا ډکه کړئ.",
+    "copyFormat": "فارمیټ",
+    "nameLabel": "نوم",
+    "namePlaceholder": "لکه: Amsterdam Office, Geneva Research",
+    "pathRequired": "د Foundry پروژې resource path پیسټ کړئ.",
+    "pathInvalidFormat": "دا د resource path په څیر نه ښکاري. باید د /subscriptions/... نه پیل شي.",
+    "connectionFailed": "دې پروژې ته لاسرسی نشته. ډاډ ترلاسه کړئ چې لاره سمه ده او تاسو ته اجازه شته.",
+    "connectionSuccessAgents": "ونښلول شول — {count} agent(s) پیدا شول",
+    "connectionSuccessEmpty": "ونښلول شول، خو هېڅ agents ونه موندل شول. کېدی شي د دې پروژې لپاره د Azure AI User رول ته اړتیا ولرئ.",
+    "checkingConnection": "اتصال تاییدېږي...",
+    "connect": "نښلول",
+    "save": "ثبتول",
+    "editConnection": "اتصال سمول",
+    "sourceName": "د سرچینې نوم",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "د سرچینې نوم ضروري دی.",
+    "resourcePath": "Resource Path",
+    "resourcePathRequired": "Resource path ضروري دی.",
+    "resourcePathHelp": "د Foundry پروژې ARM resource path. دا ارزښت له خپل مدیر څخه ترلاسه کړئ.",
+    "invalidResourcePathFormat": "Resource path باید د /subscriptions/... نه پیل شي.",
+    "validatingSource": "agents معلومېږي...",
+    "sourceValidatedEmpty": "سرچینه سمه ده، خو agents ونه موندل شول. کېدی شي تاسو ته دې پروژې کې د agents لاسرسی نشته.",
+    "invalidSource": "دې resource path ته لاسرسی نشته. لاره او خپل صلاحیتونه تایید کړئ.",
+    "addSource": "سرچینه اضافه کړئ",
+    "removeSource": "سرچینه لیرې کړئ",
+    "labelSubscription": "پېرمښت",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "پروژه",
+    "tooltipSubscription": "هغه Azure subscription چې Foundry account پکې دی. که ډاډه نه یاست، له خپل مدیر څخه پوښتنه وکړئ چې ستاسو ټیم کوم subscription کاروي.",
+    "tooltipFoundryAccount": "هغه Azure AI Services account چې Foundry پروژه پکې ده. هر دفتر یا ډله معمولا خپل حساب لري.",
+    "tooltipProject": "پروژه agents د حساب دننه تنظیموي. زیاتره حسابونه یوه \"default\" پروژه لري.",
+    "foundryProjectLabel": "Foundry پروژه",
+    "enterManually": "په لاسي ډول ولیکئ",
+    "browseResources": "سرچینې وپلټئ",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "د حساب نوم",
+    "projectNameLabel": "د پروژې نوم",
+    "loadingSubscriptions": "پېرمښتونه پورته کېږي...",
+    "selectSubscription": "یوه پېرمښت وټاکئ...",
+    "loadingAccounts": "حسابونه پورته کېږي...",
+    "noAccountsFound": "په دې پېرمښت کې هېڅ Foundry حساب ونه موندل شو.",
+    "selectAccount": "یو حساب وټاکئ...",
+    "loadingProjects": "پروژې پورته کېږي...",
+    "noProjectsFound": "هیڅ پروژه ونه موندل شوه. \"default\" کارول کېږي.",
+    "selectAllRequired": "پېرمښت، حساب، او پروژه وټاکئ.",
+    "subscriptionRequired": "یو ګډون غوره کړئ",
+    "accountRequired": "د Foundry حساب غوره کړئ"
   },
   "Quick Actions": "چټکې کړنې",
   "Type / in chat to access your prompts": "په چټ کې / ولیکئ څو خپلو پیغامونو ته لاسرسی ومومئ",
@@ -641,7 +693,10 @@
     "keepEditing": "ادامه ورکول",
     "yes": "هو",
     "no": "نه",
-    "beta": "بتا"
+    "beta": "بتا",
+    "copied": "کاپي شو!",
+    "clear": "پاک کړئ",
+    "undo": "بیرته واخلئ"
   },
   "terms": {
     "officialLanguages": "رسمي نسخه:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "د تڼۍ له لارې درولو پر مهال بیا مه پوښتئ",
     "stopGenerationDontAskAgainKeyboard": "د کیبورډ له لارې درولو پر مهال بیا مه پوښتئ",
     "generateResponseButton": "ځواب تولید کړئ",
-    "downloadResponse": "ځواب ډاونلوډ کړئ"
+    "downloadResponse": "ځواب ډاونلوډ کړئ",
+    "activity": {
+      "callingTool": "وسیله فعالېږي...",
+      "callingService": "بهرني خدمت ته زنګ وهل...",
+      "usingNamedTool": "{tool} کارول...",
+      "usingNamedToolWithService": "{tool} د {service} له لارې کارول...",
+      "searchingWeb": "په انترنت کې لټون...",
+      "searchingFiles": "د فایلونو لټون...",
+      "runningCode": "کوډ روان دی...",
+      "generatingImage": "انځور جوړېږي...",
+      "listingTools": "شتون لرونکې وسایل لټول...",
+      "analyzingFiles": "ستاسې فایلونه تحلیلېږي...",
+      "searchingKnowledge": "په معلوماتي زېرمه کې لټون...",
+      "cancellingPriorTool": "د مخکیني وسیلې غوښتنه لغوه کېږي..."
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",
+      "failedCount": "{count} ناکام",
+      "statusApproved": "تصویب شو",
+      "statusAutoApproved": "په اوتومات ډول تصویب شو",
+      "statusAutoDenied": "په اوتومات ډول رد شو",
+      "statusFailed": "ناکام شو",
+      "statusIncomplete": "نیمګړی",
+      "viaService": "د {service} له لارې"
+    },
+    "consent": {
+      "authorizeRequired": "اجازه ورکول اړین دي",
+      "authorizeService": "{service} ته اجازه ورکړئ",
+      "descriptionGeneric": "دغه استازی ستاسو اجازې ته اړتیا لري تر څو خوندي سرچینې ته لاسرسی وکړي. ستاسو ننه‌وتل د اصلي خدمت له خوا اداره کېږي، دلته نه ساتل کېږي.",
+      "descriptionWithService": "دغه استازی ستاسو اجازې ته اړتیا لري تر څو {service} ته لاسرسی وکړي. ستاسو {service} ننه‌وتل خپله د {service} له خوا اداره کېږي، دلته نه ساتل کېږي.",
+      "signInIncompleteGeneric": "ننوتل بشپړ نشول",
+      "signInIncompleteForService": "{service} ته ننوتل بشپړ نشول",
+      "signInIncompleteDescriptionGeneric": "ښکاري اجازه ورکول بشپړ شوي نه دي. ډاډ ترلاسه کړئ چې په بل ټب کې ننوتل مو پای ته رسولي، بیا بیا پر دوام کلیک وکړئ.",
+      "signInIncompleteDescription": "ښکاري {service} ته اجازه ورکول بشپړه شوې نه ده. ډاډ ترلاسه کړئ چې په بل ټب کې ننوتل مو بشپړ کړي، بیا بیا پر دوام کلیک وکړئ.",
+      "authorizeButton": "اجازه ورکړئ",
+      "reauthorizeButton": "بیا اجازه ورکړئ",
+      "continueButton": "دوام",
+      "confirmingButton": "تصدیقېږي...",
+      "authorizeHint": "اجازه ورکړئ، بیا دلته راشئ او دوام کلیک کړئ. که وغواړئ وروسته لغوه یې کړئ، له {service} څخه مستقیماً وځي؛ موږ توکن نه ساتو.",
+      "authorizeHintGeneric": "اجازه ورکړئ، بیا دلته راشئ او دوام کلیک کړئ. که وروسته لغوه کول غواړئ، له اصلي خدمت څخه مستقیماً وځي؛ موږ توکن نه ساتو.",
+      "continueHint": "کله چې هلته اجازه ورکول بشپړ شي، دوام کلیک کړئ.",
+      "confirmingHint": "اجازه تصدیقېږي او ستاسو غوښتنه بیا پيلېږي...",
+      "resendHint": "اجازه ورکولو وروسته، خپل پیغام بیا واستوئ تر څو دوام ورکړئ.",
+      "resetTooltip": "د دې خبرو لپاره ټولې د وسیلو د اتومات تصویب تګلارې بیا تنظیم کړئ. راتلونکې وسیلې به بیا اجازه وغواړي.",
+      "autoApproveAllIndicator": "ټولې وسایل په اتومات ډول تصویبېږي",
+      "autoApproveCountIndicator": "{count, plural, one {# وسیله په اتومات ډول تصویبېږي} other {# وسایل په اتومات ډول تصویبېږي}}",
+      "resetShort": "بیا تنظیم کړئ",
+      "approvalRequired": "د وسیلې لپاره تصویب اړین دی",
+      "approvalForService": "د {service} لپاره د وسیلې تصویب",
+      "approvalDescriptionGeneric": "استازی غواړي وسیله فعاله کړي چې ستاسو له تصویب پرته پرمخ نشي تلای.",
+      "approvalDescriptionWithTool": "استازی غواړي {tool} وسیله فعاله کړي، چې ستاسو تصویب ته اړتیا لري مخکې له دې چې دوام ورکړي.",
+      "runToolTitle": "ایا <code>{tool}</code> پرمخ بوځم؟",
+      "runToolGeneric": "آیا دا وسیله پرمخ بوځم؟",
+      "viaService": "د {service} له لارې",
+      "approveButton": "منظورول",
+      "approveOptionsLabel": "منظورې اختیارات",
+      "approveOnce": "یوه ځل منظورول",
+      "alwaysApproveThisTool": "تل دا وسیله منظور کړه",
+      "alwaysApproveAllTools": "تل ټولې وسیلې منظور کړه",
+      "denyButton": "ردول",
+      "keyboardHint": "{modifier}+⏎ منظورول · esc ردول",
+      "submittingState": "ستاسې پرېکړه استول کېږي",
+      "approvedState": "منظور شو — اجنټ بیا پیل شو",
+      "deniedState": "رد شو",
+      "submittingApproval": "منظورېږي او اجنټ بیا پیلېږي…",
+      "submittingDenial": "ستاسې ردول استول کېږي…"
+    },
+    "openImage": "انځور پرانیستل",
+    "copyMessage": "پیغام کاپي کړئ",
+    "stopAudio": "غږ بند کړئ",
+    "generatingAudio": "غږ چمتو کېږي...",
+    "listen": "واورئ",
+    "processingAudio": "غږ پروسس کېږي...",
+    "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
+    "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول"
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -772,7 +901,10 @@
     "collapseSidebar": "خلاص اړخیز پټه راټیټه کړئ",
     "expandSidebar": "خلاص اړخیز پټه پراخه کړئ",
     "quickActionsTitle": "چټک کړنې",
-    "quickActions": "چټک کړنې"
+    "quickActions": "چټک کړنې",
+    "expandFolder": "پوښۍ غځول {name}",
+    "collapseFolder": "پوښۍ ټولول {name}",
+    "folderOptions": "{name} اختیارات"
   },
   "errors": {
     "somethingWentWrong": "یوه ستونزه پېښه شوه",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "رفتار",
     "resetChatSettings": "د چیټ تنظیمات بیا تنظیم کړئ",
     "resetChatSettingsConfirmTitle": "د چیټ تنظیمات بیا تنظیم شي؟",
-    "resetChatSettingsConfirmMessage": "دا به د دې پینل ټولې تنظیمات اصلي حالت ته راوګرځوي: تودوخه، خپل دودیز لارښوونې، ستاسو معلومات، د ماډل ځواب، د جریان سرعت، له متن نه غږ ته بدلېدل، فعال فایلونه، او تائیدونه. ستاسو پر خبرو اترو به اثر ونه لري."
+    "resetChatSettingsConfirmMessage": "دا به د دې پینل ټولې تنظیمات اصلي حالت ته راوګرځوي: تودوخه، خپل دودیز لارښوونې، ستاسو معلومات، د ماډل ځواب، د جریان سرعت، له متن نه غږ ته بدلېدل، فعال فایلونه، او تائیدونه. ستاسو پر خبرو اترو به اثر ونه لري.",
+    "customInstructionsLabel": "دودیز لارښوونې*",
+    "defaultTemperatureLabel": "اصلي تودوخه*"
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1226,7 +1360,8 @@
       "agents": "ایجنټونه"
     },
     "sections": {
-      "baseModels": "اصلي ماډلونه"
+      "baseModels": "اصلي ماډلونه",
+      "allModels": "ټول ماډلونه ({count})"
     },
     "maintainedBy": "ساتل کېږي له خوا",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "خلاص",
       "reset": "بېرته اعیاري ته",
       "resetTooltip": "اعیاري ترتیب ته بېرته ستنول"
-    }
+    },
+    "hide": "له لېست څخه پټول",
+    "hideConfirmTitle": "\"{name}\" پټه کړو؟",
+    "hideConfirmMessage": "دا به له لېست څخه لرې شي خو ړنګ نه‌شي. هر وخت کولای شئ له پټ شوي برخې څخه بېرته راواخلئ.",
+    "hideConfirm": "پټول",
+    "hiddenToast": "\"{name}\" پټه شوه",
+    "hidden": {
+      "title": "پټې ({count})",
+      "restore": "بېرته راګرځول"
+    },
+    "title": "یو ماډل وټاکئ",
+    "modelsDescription": "د خبرو لپاره یو AI ماډل وټاکئ. هر ماډل ځانګړې وړتیاوې لري — تفصیل لپاره یوه انتخاب کړئ.",
+    "recommended": "سپارښتنه شوې"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "چټک او اقتصادي Claude ماډل چې د لنډو کارونو لپاره ښه دی. د ساده پوښتنو، لنډیز او ډېرو کارونو لپاره مناسب.",
       "knowledgeCutoff": "جنوري ۲۰۲۵"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "د Anthropic تر ټولو قوي ماډل. د اوږده لیک، څېړنې او ژور فکر ته اړتیا لرونکو دندو لپاره مناسب.",
+      "knowledgeCutoff": "فبروري ۲۰۲۶"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "متعادل Claude ماډل. د ورځني لیک، تحلیل او پروګرامینګ لپاره ګټور، ژر ځواب ورکوي.",
+      "knowledgeCutoff": "فبروري ۲۰۲۶"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "د کارونکي له‌خوا لغوه‌شوه",
     "transientBody": "مهرباني وکړئ بیا هڅه وکړئ",
     "authFailedBody": "مهرباني وکړئ بیا ننوتنه وکړئ",
-    "rateLimitedBody": "خدمت ډک دی، مهرباني وکړئ لږ وروسته بیا هڅه وکړئ"
+    "rateLimitedBody": "خدمت ډک دی، مهرباني وکړئ لږ وروسته بیا هڅه وکړئ",
+    "loadingAttempt": "(هڅه {count})",
+    "transcriptLabel": "[ټرانسکرېپټ: {filename}]"
   },
   "documentTranslation": {
     "title": "د سند ژباړه",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "تجربي — د MSF له ځانګړو کاروونکو سره په مستقيمه همکارۍ جوړ شوی. د عامې ګټې لپاره نه دی.",
       "createButton": "خپل اجنټ جوړ کړئ"
     },
-    "selectAgentPrompt": "د جزییاتو لیدلو لپاره یو اجنټ وټاکئ"
+    "selectAgentPrompt": "د جزییاتو لیدلو لپاره یو اجنټ وټاکئ",
+    "description": "د ځانګړو دندو لپاره ځانګړي AI اجنټونه. اصلي اجنټونه مرکزي ډول اداره کېږي؛ د نورو Foundry پروژو اجنټونه موندلو لپاره دودیز سرچینې زیاتې کړئ.",
+    "regionAgents": {
+      "us": "د امریکا سیمې اجنټونه",
+      "eu": "د اروپا سیمې اجنټونه",
+      "default": "سیمه ییز اجنټان"
+    },
+    "officeAgents": {
+      "suffix": "اجنټان"
+    },
+    "agentSources": {
+      "title": "Foundry اړیکې",
+      "description": "د نورو Foundry پروژو سره وصل شئ تر څو هلته اجنټان ومومئ.",
+      "connectButton": "د Microsoft Azure Foundry پروژه وصل کړئ",
+      "connectButtonShort": "Foundry پروژه وصل کړئ",
+      "addButton": "خپله منبع اضافه کړئ",
+      "addAnother": "بله اړیکه اضافه کړئ",
+      "noSources": "هیڅ خپله منبع نه ده ترتیب شوې.",
+      "removeSource": "منبع لرې کړئ",
+      "confirmRemove": "لرې کول؟",
+      "sourceConnected": "خپله منبع وصل شوه",
+      "sourcesConnected": "خپلې منابع وصل شوې",
+      "backToAgents": "شاته",
+      "discoveredAgents": "موندل شوي اجنټان",
+      "viewConnection": "د اړیکې جزیات وګورئ",
+      "edit": "سمونه",
+      "noAgentsPublished": "هیڅ اجنټ خپور شوی نه دی",
+      "connectedOn": "وصل شوی {date}",
+      "disconnectSource": "دا منبع بېل کړئ",
+      "confirmDisconnect": "د تایید لپاره بیا کلیک وکړئ",
+      "loadingAgents": "اجنټان درلودل کېږي...",
+      "noAgentsFound": "په دې پروژه کې هیڅ اجنټ ونه موندل شو",
+      "noAgentsFoundHint": "ډاډ ترلاسه کړئ چې اجنټان خپاره شوي او تاسو په دې پروژه کې د Azure AI کارونکي رول لرئ.",
+      "refresh": "تازه کړئ",
+      "refreshAgents": "اجنټان تازه کړئ",
+      "technicalDetails": "تخنیکي جزیات",
+      "agentCountLabel": "{count} اجنټان",
+      "disconnectedToast": "{name} بېل شو"
+    }
   },
   "privacy": {
     "policyTitle": "د محرمیت پاليسي او د معلوماتو ساتنه",

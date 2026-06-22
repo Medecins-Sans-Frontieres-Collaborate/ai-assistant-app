@@ -359,7 +359,59 @@
     "delete": "মুছুন",
     "noCustomAgentsYet": "এখনো কোনো কাস্টম এজেন্ট নেই।",
     "noOrgAgentsConfigured": "কোনো সংস্থা এজেন্ট কনফিগার করা হয়নি।",
-    "validationFailed": "যাচাইকরণ ব্যর্থ হয়েছে"
+    "validationFailed": "যাচাইকরণ ব্যর্থ হয়েছে",
+    "addAgentSource": "কাস্টম সোর্স যোগ করুন",
+    "connectFoundryProject": "Microsoft Azure Foundry প্রকল্প সংযোগ করুন",
+    "connectFoundryDescription": "অন্য অফিস বা টিমের Azure Foundry প্রকল্প থেকে এজেন্টগুলি আবিষ্কার করুন। আপনি শুধুমাত্র যেগুলিতে আপনার অ্যাক্সেস অনুমতি আছে, সেগুলিই দেখতে পারবেন।",
+    "foundryProjectPath": "Foundry প্রকল্প পাথ",
+    "foundryProjectPathHelp": "আপনার Foundry প্রকল্প অ্যাডমিনিস্ট্রেটরের সঙ্গে যোগাযোগ করুন, অথবা 'Enter manually' এ ক্লিক করে প্রতিটি ক্ষেত্র আলাদাভাবে পূরণ করুন।",
+    "copyFormat": "ফরম্যাট",
+    "nameLabel": "নাম",
+    "namePlaceholder": "যেমন- Amsterdam Office, Geneva Research",
+    "pathRequired": "Foundry প্রকল্পের রিসোর্স পাথ পেস্ট করুন।",
+    "pathInvalidFormat": "এটি রিসোর্স পাথের মতো নয়। এটি /subscriptions/... দিয়ে শুরু হওয়া উচিত।",
+    "connectionFailed": "এই প্রকল্পে পৌঁছানো যায়নি। পাথ ঠিক আছে ও আপনার অ্যাক্সেস আছে কিনা যাচাই করুন।",
+    "connectionSuccessAgents": "সংযুক্ত — {count} এজেন্ট পাওয়া গেছে",
+    "connectionSuccessEmpty": "সংযুক্ত, তবে কোনো এজেন্ট পাওয়া যায়নি। এই প্রকল্পে এজেন্ট দেখতে Azure AI User ভূমিকা প্রয়োজন হতে পারে।",
+    "checkingConnection": "সংযোগ পরীক্ষা করা হচ্ছে...",
+    "connect": "সংযোগ করুন",
+    "save": "সংরক্ষণ করুন",
+    "editConnection": "সংযোগ সম্পাদনা করুন",
+    "sourceName": "সোর্সের নাম",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "সোর্সের নাম আবশ্যক।",
+    "resourcePath": "রিসোর্স পাথ",
+    "resourcePathRequired": "রিসোর্স পাথ আবশ্যক।",
+    "resourcePathHelp": "Foundry প্রকল্পের জন্য ARM রিসোর্স পাথ। এই মানের জন্য আপনার অ্যাডমিনিস্ট্রেটরের সঙ্গে যোগাযোগ করুন।",
+    "invalidResourcePathFormat": "রিসোর্স পাথ অবশ্যই /subscriptions/... দিয়ে শুরু হতে হবে।",
+    "validatingSource": "এজেন্টগুলি খোঁজা হচ্ছে...",
+    "sourceValidatedEmpty": "বৈধ সোর্স, কিন্তু কোনো এজেন্ট পাওয়া যায়নি। এই প্রকল্পে এজেন্টের অ্যাক্সেস নাও থাকতে পারে আপনার।",
+    "invalidSource": "এই রিসোর্স পাথে অ্যাক্সেস করা যায়নি। পাথ ও আপনার অনুমতি যাচাই করুন।",
+    "addSource": "সোর্স যোগ করুন",
+    "removeSource": "সোর্স সরান",
+    "labelSubscription": "সাবস্ক্রিপশন",
+    "labelFoundryAccount": "Foundry অ্যাকাউন্ট",
+    "labelProject": "প্রকল্প",
+    "tooltipSubscription": "Azure সাবস্ক্রিপশন যেখানে Foundry অ্যাকাউন্ট রয়েছে। নিশ্চিত না হলে, আপনার টিম কোন সাবস্ক্রিপশন ব্যবহার করে তা অ্যাডমিনকে জিজ্ঞাসা করুন।",
+    "tooltipFoundryAccount": "Azure AI Services অ্যাকাউন্ট যেখানে Foundry প্রকল্প থাকে। সাধারণত প্রতিটি অফিস বা টিমের নিজস্ব একটি থাকে।",
+    "tooltipProject": "একটি প্রকল্প অ্যাকাউন্টের মধ্যে এজেন্টকে সংগঠিত করে। বেশিরভাগ অ্যাকাউন্টে একটি 'default' প্রকল্প থাকে।",
+    "foundryProjectLabel": "Foundry প্রকল্প",
+    "enterManually": "ম্যানুয়ালি লিখুন",
+    "browseResources": "রিসোর্স ব্রাউজ করুন",
+    "subscriptionIdLabel": "সাবস্ক্রিপশন আইডি",
+    "resourceGroupLabel": "রিসোর্স গ্রুপ",
+    "accountNameLabel": "অ্যাকাউন্টের নাম",
+    "projectNameLabel": "প্রকল্পের নাম",
+    "loadingSubscriptions": "সাবস্ক্রিপশন লোড হচ্ছে...",
+    "selectSubscription": "একটি সাবস্ক্রিপশন নির্বাচন করুন...",
+    "loadingAccounts": "অ্যাকাউন্ট লোড হচ্ছে...",
+    "noAccountsFound": "এই সাবস্ক্রিপশনে কোনো Foundry অ্যাকাউন্ট পাওয়া যায়নি।",
+    "selectAccount": "একটি অ্যাকাউন্ট নির্বাচন করুন...",
+    "loadingProjects": "প্রকল্প লোড হচ্ছে...",
+    "noProjectsFound": "কোনো প্রকল্প পাওয়া যায়নি। \"default\" ব্যবহার হচ্ছে।",
+    "selectAllRequired": "একটি সাবস্ক্রিপশন, অ্যাকাউন্ট এবং প্রকল্প নির্বাচন করুন।",
+    "subscriptionRequired": "একটি সাবস্ক্রিপশন বেছে নিন",
+    "accountRequired": "একটি ফাউন্ড্রি অ্যাকাউন্ট বেছে নিন"
   },
   "Quick Actions": "দ্রুত ক্রিয়া",
   "Type / in chat to access your prompts": "আপনার প্রম্পট অ্যাক্সেস করতে চ্যাটে / টাইপ করুন",
@@ -538,7 +590,10 @@
     "keepEditing": "সম্পাদনা চালিয়ে যান",
     "yes": "হ্যাঁ",
     "no": "না",
-    "beta": "বেটা"
+    "beta": "বেটা",
+    "copied": "কপি হয়েছে!",
+    "clear": "পরিষ্কার করুন",
+    "undo": "পূর্বাবস্থায় ফিরুন"
   },
   "chat": {
     "downloadAudio": "অডিও ডাউনলোড করুন",
@@ -638,13 +693,90 @@
     "stopGenerationDontAskAgainButton": "বাটন ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
     "stopGenerationDontAskAgainKeyboard": "কীবোর্ড ব্যবহার করে বন্ধ করলে আবার জিজ্ঞাসা করবেন না",
     "generateResponseButton": "উত্তর দিন",
-    "downloadResponse": "উত্তর ডাউনলোড করুন"
+    "downloadResponse": "উত্তর ডাউনলোড করুন",
+    "activity": {
+      "callingTool": "টুল ডাকা হচ্ছে…",
+      "callingService": "বহিঃসেবায় অনুরোধ পাঠানো হচ্ছে…",
+      "usingNamedTool": "{tool} ব্যবহার করা হচ্ছে…",
+      "usingNamedToolWithService": "{service}-এ {tool} ব্যবহার করা হচ্ছে…",
+      "searchingWeb": "ওয়েবে অনুসন্ধান করা হচ্ছে…",
+      "searchingFiles": "ফাইল খোঁজা হচ্ছে…",
+      "runningCode": "কোড চালানো হচ্ছে…",
+      "generatingImage": "ছবি তৈরি করা হচ্ছে…",
+      "listingTools": "উপলব্ধ টুল লিস্ট করা হচ্ছে…",
+      "analyzingFiles": "আপনার ফাইল বিশ্লেষণ করা হচ্ছে…",
+      "searchingKnowledge": "জ্ঞানভান্ডারে অনুসন্ধান করা হচ্ছে…",
+      "cancellingPriorTool": "পূর্বের টুল অনুরোধ বাতিল করা হচ্ছে…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {#টি টুল ব্যবহৃত} other {#টি টুল ব্যবহৃত}}",
+      "failedCount": "{count}টি ব্যর্থ",
+      "statusApproved": "অনুমোদিত",
+      "statusAutoApproved": "স্বয়ংক্রিয়ভাবে অনুমোদিত",
+      "statusAutoDenied": "স্বয়ংক্রিয়ভাবে বাতিল",
+      "statusFailed": "ব্যর্থ",
+      "statusIncomplete": "অসম্পূর্ণ",
+      "viaService": "{service} এর মাধ্যমে"
+    },
+    "consent": {
+      "authorizeRequired": "অনুমোদন প্রয়োজন",
+      "authorizeService": "{service} অনুমোদন করুন",
+      "descriptionGeneric": "এই এজেন্টটি একটি সুরক্ষিত রিসোর্সে প্রবেশের জন্য আপনার অনুমতি চায়। আপনার সাইন-ইন আপস্ট্রিম সার্ভিস দ্বারা নিয়ন্ত্রিত হয়, এখানে সংরক্ষিত হয় না।",
+      "descriptionWithService": "এই এজেন্টটি {service}-এ প্রবেশের জন্য আপনার অনুমতি চায়। আপনার {service} সাইন-ইন {service} নিজেই নিয়ন্ত্রণ করে, এখানে সংরক্ষিত নয়।",
+      "signInIncompleteGeneric": "সাইন-ইন সম্পূর্ণ হয়নি",
+      "signInIncompleteForService": "{service}-এ সাইন-ইন সম্পূর্ণ হয়নি",
+      "signInIncompleteDescriptionGeneric": "অনুমোদনটি শেষ হয়নি বলে মনে হচ্ছে। অন্য ট্যাবে সাইন-ইন সম্পন্ন করেছেন কি না, দেখে আবার Continue ক্লিক করুন।",
+      "signInIncompleteDescription": "{service}-এ অনুমোদনটি শেষ হয়নি বলে মনে হচ্ছে। অন্য ট্যাবে সাইন-ইন সম্পন্ন করেছেন কি না, দেখে আবার Continue ক্লিক করুন।",
+      "authorizeButton": "অনুমোদন দিন",
+      "reauthorizeButton": "পুনরায় অনুমোদন",
+      "continueButton": "চালিয়ে যান",
+      "confirmingButton": "নিশ্চিত করা হচ্ছে…",
+      "authorizeHint": "অনুমোদন দিন, তারপর এখানে ফিরে এসে Continue ক্লিক করুন। পরে বাতিল করতে {service} থেকে সাইন আউট করুন — আমরা টোকেন সংরক্ষণ করি না।",
+      "authorizeHintGeneric": "অনুমোদন দিন, তারপর এখানে ফিরে এসে Continue ক্লিক করুন। পরে বাতিল করতে সরাসরি আপস্ট্রিম সার্ভিস থেকে সাইন আউট করুন — আমরা টোকেন সংরক্ষণ করি না।",
+      "continueHint": "অন্য ট্যাবে অনুমোদন শেষ হলে Continue ক্লিক করুন।",
+      "confirmingHint": "অনুমোদন নিশ্চিত করা হচ্ছে এবং আপনার অনুরোধ আবার শুরু হচ্ছে…",
+      "resendHint": "অনুমোদন শেষ করার পর চালিয়ে যেতে আপনার বার্তাটি আবার পাঠান।",
+      "resetTooltip": "এই কথোপকথনের সকল টুলের স্বয়ংক্রিয় অনুমোদনের পছন্দ রিসেট করুন। ভবিষ্যতে টুল ব্যবহার হলে আবার জিজ্ঞাসা করা হবে।",
+      "autoApproveAllIndicator": "সব টুল স্বয়ংক্রিয়ভাবে অনুমোদিত হচ্ছে",
+      "autoApproveCountIndicator": "{count, plural, one {#টি টুল স্বয়ংক্রিয়ভাবে অনুমোদিত হচ্ছে} other {#টি টুল স্বয়ংক্রিয়ভাবে অনুমোদিত হচ্ছে}}",
+      "resetShort": "রিসেট",
+      "approvalRequired": "টুল অনুমোদন প্রয়োজন",
+      "approvalForService": "{service} এর জন্য টুল অনুমোদন করুন",
+      "approvalDescriptionGeneric": "এজেন্টটি একটি টুল চালাতে চায়, যা চালানোর আগে আপনার অনুমোদন প্রয়োজন।",
+      "approvalDescriptionWithTool": "এজেন্টটি {tool} টুল চালাতে চায়, যা চালানোর আগে আপনার অনুমোদন প্রয়োজন।",
+      "runToolTitle": "<code>{tool}</code> চালাবেন?",
+      "runToolGeneric": "এই টুল চালাবেন?",
+      "viaService": "{service} এর মাধ্যমে",
+      "approveButton": "অনুমোদন করুন",
+      "approveOptionsLabel": "অনুমোদনের অপশনসমূহ",
+      "approveOnce": "একবার অনুমোদন করুন",
+      "alwaysApproveThisTool": "এই টুলটি সবসময় অনুমোদন করুন",
+      "alwaysApproveAllTools": "সব টুল সবসময় অনুমোদন করুন",
+      "denyButton": "বাতিল করুন",
+      "keyboardHint": "{modifier}+⏎ অনুমোদন · esc বাতিল",
+      "submittingState": "আপনার সিদ্ধান্ত জমা দেওয়া হচ্ছে",
+      "approvedState": "অনুমোদিত — এজেন্ট পুনরায় শুরু হয়েছে",
+      "deniedState": "বাতিল করা হয়েছে",
+      "submittingApproval": "অনুমোদন ও এজেন্ট পুনরায় শুরু করা হচ্ছে…",
+      "submittingDenial": "আপনার বাতিল পাঠানো হচ্ছে…"
+    },
+    "openImage": "ছবি খুলুন",
+    "copyMessage": "বার্তা কপি করুন",
+    "stopAudio": "অডিও বন্ধ করুন",
+    "generatingAudio": "অডিও তৈরি হচ্ছে...",
+    "listen": "শুনুন",
+    "processingAudio": "অডিও প্রসেস করা হচ্ছে...",
+    "ttsError": "অডিও তৈরি করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+    "unsupportedMessageType": "বার্তা দেখাতে সমস্যা: সমর্থিত নয় এমন বার্তা ধরণ"
   },
   "sidebar": {
     "collapseSidebar": "সাইডবার সংকুচিত করুন",
     "expandSidebar": "সাইডবার প্রসারিত করুন",
     "quickActionsTitle": "দ্রুত ক্রিয়া",
-    "quickActions": "দ্রুত ক্রিয়া"
+    "quickActions": "দ্রুত ক্রিয়া",
+    "expandFolder": "ফোল্ডার {name} প্রসারিত করুন",
+    "collapseFolder": "ফোল্ডার {name} সংকুচিত করুন",
+    "folderOptions": "{name} এর অপশনসমূহ"
   },
   "prompts": {
     "buildReusablePrompts": "AI সহায়তায় পুনর্ব্যবহারযোগ্য প্রম্পট তৈরি করুন",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "আচরণ",
     "resetChatSettings": "চ্যাট সেটিংস রিসেট করুন",
     "resetChatSettingsConfirmTitle": "চ্যাট সেটিংস রিসেট করবেন?",
-    "resetChatSettingsConfirmMessage": "এটি এই প্যানেলের সকল সেটিংস ডিফল্টে ফেরত নিয়ে যাবে: টেম্পারেচার, কাস্টম নির্দেশনা, আপনার পরিচিতি, মডেল উত্তর, স্ট্রিমিং স্পিড, টেক্সট-টু-স্পিচ, সক্রিয় ফাইল এবং নিশ্চিতকরণ। আপনার কথোপকথনগুলো এতে প্রভাবিত হবে না।"
+    "resetChatSettingsConfirmMessage": "এটি এই প্যানেলের সকল সেটিংস ডিফল্টে ফেরত নিয়ে যাবে: টেম্পারেচার, কাস্টম নির্দেশনা, আপনার পরিচিতি, মডেল উত্তর, স্ট্রিমিং স্পিড, টেক্সট-টু-স্পিচ, সক্রিয় ফাইল এবং নিশ্চিতকরণ। আপনার কথোপকথনগুলো এতে প্রভাবিত হবে না।",
+    "customInstructionsLabel": "কাস্টম নির্দেশনা*",
+    "defaultTemperatureLabel": "ডিফল্ট টেম্পারেচার*"
   },
   "notFound": {
     "lostDog": "হারানো কুকুর"
@@ -1076,7 +1210,8 @@
       "agents": "এজেন্ট"
     },
     "sections": {
-      "baseModels": "বেস মডেল"
+      "baseModels": "বেস মডেল",
+      "allModels": "সব মডেল ({count})"
     },
     "maintainedBy": "রক্ষণাবেক্ষণকারী",
     "agents": {
@@ -1150,7 +1285,19 @@
       "reasoning": "জটিল সমস্যার জন্য বাড়তি যুক্তি বিশ্লেষণ",
       "omni": "বহুমাত্রিক সক্ষমতা সম্পন্ন মাল্টি-মোডাল মডেল",
       "agent": "রিয়েল-টাইম টুল ও ওয়েব অ্যাক্সেসসহ এজেন্ট"
-    }
+    },
+    "hide": "তালিকা থেকে লুকান",
+    "hideConfirmTitle": "\"{name}\" লুকাবেন?",
+    "hideConfirmMessage": "এটি আপনার তালিকা থেকে সরিয়ে দেওয়া হবে, মুছে ফেলা হবে না। Hidden সেকশন থেকে যেকোনো সময় পুনরুদ্ধার করতে পারবেন।",
+    "hideConfirm": "লুকান",
+    "hiddenToast": "\"{name}\" লুকানো হয়েছে",
+    "hidden": {
+      "title": "লুকানো ({count})",
+      "restore": "পুনরুদ্ধার করুন"
+    },
+    "title": "একটি মডেল নির্বাচন করুন",
+    "modelsDescription": "আপনার কথোপকথনের জন্য একটি AI মডেল নির্বাচন করুন। প্রতিটি মডেলের ভিন্ন বিশেষত্ব আছে — বিস্তারিত দেখতে একটি নির্বাচন করুন।",
+    "recommended": "সুপারিশকৃত"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 চ্যাট",
       "knowledgeCutoff": "ডিসে ২০২৫",
       "description": "সংলাপমূলক পরিবেশ ও মানসিক বুদ্ধিমত্তার জন্য অপ্টিমাইজ করা GPT-5.2-এর একটি বিশেষ সংস্করণ। সহানুভূতিশীল যোগাযোগ, সৃজনশীল লেখা, আইডিয়া তৈরি এবং স্বাভাবিক সংলাপে পারদর্শী। সাধারণ আলোচনার জন্য, কাউন্সেলিং পরিস্থিতিতে এবং মানসিক সচেতনতা প্রয়োজন এমন কাজে সবচেয়ে উপযোগী।"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic-এর সবচেয়ে শক্তিশালী মডেল। দীর্ঘ লেখা, গবেষণা ও গভীর চিন্তায় উপযুক্ত।",
+      "knowledgeCutoff": "ফেব্রুয়ারি ২০২৬"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "একটি ভারসাম্যপূর্ণ Claude মডেল। দৈনন্দিন লেখা, বিশ্লেষণ ও দ্রুত প্রতিক্রিয়ার জন্য কোডিংয়ে ভালো।",
+      "knowledgeCutoff": "ফেব্রুয়ারি ২০২৬"
     }
   },
   "searchMode": {
@@ -1663,7 +1820,9 @@
     "cancelledBody": "ব্যবহারকারী দ্বারা বাতিল করা হয়েছে",
     "transientBody": "অনুগ্রহ করে আবার চেষ্টা করুন",
     "authFailedBody": "অনুগ্রহ করে পুনরায় সাইন ইন করুন",
-    "rateLimitedBody": "পরিষেবা সম্পূর্ণ ব্যস্ত, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন"
+    "rateLimitedBody": "পরিষেবা সম্পূর্ণ ব্যস্ত, অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন",
+    "loadingAttempt": "(চেষ্টা {count})",
+    "transcriptLabel": "[ট্রান্সক্রিপ্ট: {filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "AI কিভাবে প্রতিক্রিয়া জানাবে তা কাস্টমাইজ করতে আপনার ব্যক্তিগত নির্দেশনা যোগ করুন। এগুলো মূল আচরণ নির্দেশিকার সঙ্গে একত্রিত হয়, যা সহায়ক, সঠিক ও নিরাপদ প্রতিক্রিয়া নিশ্চিত করে।",
   "Tip: Type \"/\" to select from saved prompt templates_": "টিপ: সংরক্ষিত প্রম্পট টেমপ্লেট থেকে নির্বাচন করতে \"/\" লিখুন।",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "পরীক্ষামূলক — MSF পাওয়ার ব্যবহারকারীদের সাথে সরাসরি সহযোগিতায় তৈরি। সাধারণ ব্যবহারের জন্য নয়।",
       "createButton": "কাস্টম এজেন্ট তৈরি করুন"
     },
-    "selectAgentPrompt": "বিবরণ দেখতে একটি এজেন্ট নির্বাচন করুন"
+    "selectAgentPrompt": "বিবরণ দেখতে একটি এজেন্ট নির্বাচন করুন",
+    "description": "নির্দিষ্ট কাজের জন্য বিশেষায়িত AI এজেন্ট। ডিফল্ট এজেন্ট কেন্দ্রীয়ভাবে পরিচালিত; অন্যান্য Foundry প্রকল্প থেকে এজেন্ট খুঁজতে কাস্টম সোর্স যোগ করুন।",
+    "regionAgents": {
+      "us": "US অঞ্চল এজেন্ট",
+      "eu": "EU অঞ্চল এজেন্ট",
+      "default": "রিজিয়ন এজেন্টস"
+    },
+    "officeAgents": {
+      "suffix": "এজেন্টস"
+    },
+    "agentSources": {
+      "title": "ফাউন্ড্রি সংযোগ",
+      "description": "অন্যান্য ফাউন্ড্রি প্রকল্পে সংযোগ করুন এবং তাদের এজেন্টস আবিষ্কার করুন।",
+      "connectButton": "একটি Microsoft Azure Foundry প্রকল্প সংযোগ করুন",
+      "connectButtonShort": "একটি ফাউন্ড্রি প্রকল্প সংযোগ করুন",
+      "addButton": "কাস্টম সোর্স যুক্ত করুন",
+      "addAnother": "আরও একটি সংযোগ যুক্ত করুন",
+      "noSources": "কোনো কাস্টম সোর্স কনফিগার করা হয়নি।",
+      "removeSource": "সোর্স অপসারণ করুন",
+      "confirmRemove": "অপসারণ করবেন?",
+      "sourceConnected": "কাস্টম সোর্স সংযুক্ত হয়েছে",
+      "sourcesConnected": "কাস্টম সোর্স সংযুক্ত হয়েছে",
+      "backToAgents": "ফিরে যান",
+      "discoveredAgents": "আবিষ্কৃত এজেন্টস",
+      "viewConnection": "সংযোগের বিস্তারিত দেখুন",
+      "edit": "সম্পাদনা করুন",
+      "noAgentsPublished": "কোনো এজেন্ট প্রকাশিত হয়নি",
+      "connectedOn": "সংযুক্ত হয়েছে {date}",
+      "disconnectSource": "এই সোর্সটি বিচ্ছিন্ন করুন",
+      "confirmDisconnect": "নিশ্চিত করতে আবার ক্লিক করুন",
+      "loadingAgents": "এজেন্ট লোড হচ্ছে...",
+      "noAgentsFound": "এই প্রকল্পে কোনো এজেন্ট পাওয়া যায়নি",
+      "noAgentsFoundHint": "নিশ্চিত করুন এজেন্টস প্রকাশিত আছে এবং এই প্রকল্পে আপনার Azure AI User ভূমিকা রয়েছে।",
+      "refresh": "রিফ্রেশ",
+      "refreshAgents": "এজেন্ট রিফ্রেশ করুন",
+      "technicalDetails": "প্রযুক্তিগত বিবরণ",
+      "agentCountLabel": "{count} এজেন্টস",
+      "disconnectedToast": "{name} বিচ্ছিন্ন করা হয়েছে"
+    }
   },
   "privacy": {
     "policyTitle": "গোপনীয়তা নীতি ও তথ্য সুরক্ষা",

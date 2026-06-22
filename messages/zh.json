@@ -410,7 +410,59 @@
     "edit": "编辑",
     "confirmDelete": "确认",
     "delete": "删除",
-    "noCustomAgentsYet": "暂无自定义代理。"
+    "noCustomAgentsYet": "暂无自定义代理。",
+    "addAgentSource": "添加自定义来源",
+    "connectFoundryProject": "连接 Microsoft Azure Foundry 项目",
+    "connectFoundryDescription": "从其他办公室或团队的 Azure Foundry 项目中发现代理。您只能看到有权限访问的代理。",
+    "foundryProjectPath": "Foundry 项目路径",
+    "foundryProjectPathHelp": "请向您的 Foundry 项目管理员咨询，或点击“手动输入”以分别填写各个字段。",
+    "copyFormat": "格式",
+    "nameLabel": "名称",
+    "namePlaceholder": "如：Amsterdam 办公室，Geneva 研究",
+    "pathRequired": "请粘贴 Foundry 项目资源路径。",
+    "pathInvalidFormat": "这不像是资源路径，应以 /subscriptions/... 开头。",
+    "connectionFailed": "无法连接到该项目。请检查路径是否正确并确认您有访问权限。",
+    "connectionSuccessAgents": "已连接 — 找到 {count} 个代理",
+    "connectionSuccessEmpty": "已连接，但未找到代理。您可能需要该项目的 Azure AI User 角色才能查看其代理。",
+    "checkingConnection": "正在检查连接…",
+    "connect": "连接",
+    "save": "保存",
+    "editConnection": "编辑连接",
+    "sourceName": "来源名称",
+    "sourceNamePlaceholder": "Amsterdam 办公室",
+    "sourceNameRequired": "必须填写来源名称。",
+    "resourcePath": "资源路径",
+    "resourcePathRequired": "必须填写资源路径。",
+    "resourcePathHelp": "指向 Foundry 项目的 ARM 资源路径。请向您的管理员咨询此值。",
+    "invalidResourcePathFormat": "资源路径必须以 /subscriptions/... 开头。",
+    "validatingSource": "正在查找代理…",
+    "sourceValidatedEmpty": "来源有效，但未找到代理。您可能无权访问该项目中的代理。",
+    "invalidSource": "无法访问该资源路径。请核查路径及您的权限。",
+    "addSource": "添加来源",
+    "removeSource": "移除来源",
+    "labelSubscription": "订阅",
+    "labelFoundryAccount": "Foundry 账户",
+    "labelProject": "项目",
+    "tooltipSubscription": "包含 Foundry 账户的 Azure 订阅。如不确定，请向管理员询问团队使用的订阅。",
+    "tooltipFoundryAccount": "Foundry 项目所在的 Azure AI Services 账户。通常每个办公室或团队都有自己的账户。",
+    "tooltipProject": "项目用于在账户下组织代理。大多数账户只有一个“default”项目。",
+    "foundryProjectLabel": "Foundry 项目",
+    "enterManually": "手动输入",
+    "browseResources": "浏览资源",
+    "subscriptionIdLabel": "订阅 ID",
+    "resourceGroupLabel": "资源组",
+    "accountNameLabel": "账户名称",
+    "projectNameLabel": "项目名称",
+    "loadingSubscriptions": "正在加载订阅…",
+    "selectSubscription": "请选择订阅…",
+    "loadingAccounts": "正在加载账户…",
+    "noAccountsFound": "该订阅下未找到 Foundry 账户。",
+    "selectAccount": "请选择账户…",
+    "loadingProjects": "正在加载项目…",
+    "noProjectsFound": "未找到项目，使用“default”。",
+    "selectAllRequired": "请选择订阅、账户和项目。",
+    "subscriptionRequired": "请选择订阅",
+    "accountRequired": "请选择 Foundry 账户"
   },
   "Quick Actions": "快速操作",
   "Type / in chat to access your prompts": "在聊天中输入 / 以访问您的提示",
@@ -567,7 +619,10 @@
     "keepEditing": "继续编辑",
     "yes": "是",
     "no": "否",
-    "beta": "测试版"
+    "beta": "测试版",
+    "copied": "已复制！",
+    "clear": "清除",
+    "undo": "撤销"
   },
   "errors": {
     "unexpectedErrorOccurred": "发生了意外错误",
@@ -723,13 +778,90 @@
     "stopGenerationDontAskAgainButton": "使用按钮停止时不再询问",
     "stopGenerationDontAskAgainKeyboard": "使用键盘停止时不再询问",
     "generateResponseButton": "生成回复",
-    "downloadResponse": "下载回复"
+    "downloadResponse": "下载回复",
+    "activity": {
+      "callingTool": "正在调用工具…",
+      "callingService": "正在调用外部服务…",
+      "usingNamedTool": "正在使用 {tool}…",
+      "usingNamedToolWithService": "正在 {service} 使用 {tool}…",
+      "searchingWeb": "正在搜索网页…",
+      "searchingFiles": "正在搜索文件…",
+      "runningCode": "正在运行代码…",
+      "generatingImage": "正在生成图片…",
+      "listingTools": "正在查找可用工具…",
+      "analyzingFiles": "正在分析您的文件…",
+      "searchingKnowledge": "正在搜索知识库…",
+      "cancellingPriorTool": "正在取消先前的工具请求…"
+    },
+    "toolSummary": {
+      "usedTools": "已用 {count, plural, one {# 个工具} other {# 个工具}}",
+      "failedCount": "{count} 个失败",
+      "statusApproved": "已批准",
+      "statusAutoApproved": "自动批准",
+      "statusAutoDenied": "自动拒绝",
+      "statusFailed": "失败",
+      "statusIncomplete": "未完成",
+      "viaService": "通过 {service}"
+    },
+    "consent": {
+      "authorizeRequired": "需要授权",
+      "authorizeService": "授权 {service}",
+      "descriptionGeneric": "此代理需要您授权访问安全资源。您的登录信息由上游服务管理，不会存储在此。",
+      "descriptionWithService": "此代理需要您授权访问 {service}。您的 {service} 登录由 {service} 本身管理，不会存储在此。",
+      "signInIncompleteGeneric": "登录未完成",
+      "signInIncompleteForService": "{service} 登录未完成",
+      "signInIncompleteDescriptionGeneric": "看起来授权未完成。请确保您在其他标签页完成登录后，再次点击继续。",
+      "signInIncompleteDescription": "看起来对 {service} 的授权未完成。请确保您在其他标签页完成登录后，再次点击继续。",
+      "authorizeButton": "授权",
+      "reauthorizeButton": "重新授权",
+      "continueButton": "继续",
+      "confirmingButton": "正在确认…",
+      "authorizeHint": "授权后返回此处并点击继续。如需撤销，请直接在 {service} 注销 —— 我们不保存令牌。",
+      "authorizeHintGeneric": "授权后返回此处并点击继续。如需撤销，请直接在上游服务中注销 —— 我们不保存令牌。",
+      "continueHint": "在其他标签页完成授权后，点击继续。",
+      "confirmingHint": "正在确认授权并恢复您的请求…",
+      "resendHint": "授权后，请重新发送您的消息以继续。",
+      "resetTooltip": "重置本对话的所有工具自动批准偏好。后续调用工具时将再次提示。",
+      "autoApproveAllIndicator": "正在自动批准所有工具",
+      "autoApproveCountIndicator": "{count, plural, one {自动批准 # 个工具} other {自动批准 # 个工具}}",
+      "resetShort": "重置",
+      "approvalRequired": "需要工具批准",
+      "approvalForService": "批准 {service} 的工具",
+      "approvalDescriptionGeneric": "代理希望运行需要您批准的工具后才能继续。",
+      "approvalDescriptionWithTool": "代理希望运行 {tool} 工具，该操作需您批准后才能继续。",
+      "runToolTitle": "运行 <code>{tool}</code>？",
+      "runToolGeneric": "运行此工具？",
+      "viaService": "通过 {service}",
+      "approveButton": "批准",
+      "approveOptionsLabel": "批准选项",
+      "approveOnce": "仅批准一次",
+      "alwaysApproveThisTool": "始终批准此工具",
+      "alwaysApproveAllTools": "始终批准所有工具",
+      "denyButton": "拒绝",
+      "keyboardHint": "{modifier}+⏎ 批准 · esc 拒绝",
+      "submittingState": "正在提交您的决定",
+      "approvedState": "已批准 — 代理已恢复",
+      "deniedState": "已拒绝",
+      "submittingApproval": "正在批准并恢复代理…",
+      "submittingDenial": "正在发送您的拒绝…"
+    },
+    "openImage": "打开图片",
+    "copyMessage": "复制消息",
+    "stopAudio": "停止音频",
+    "generatingAudio": "音频生成中...",
+    "listen": "收听",
+    "processingAudio": "正在处理音频...",
+    "ttsError": "生成音频时出错。请重试。",
+    "unsupportedMessageType": "消息渲染错误：不支持的消息类型"
   },
   "sidebar": {
     "collapseSidebar": "折叠侧边栏",
     "expandSidebar": "展开侧边栏",
     "quickActionsTitle": "快速操作",
-    "quickActions": "快速操作"
+    "quickActions": "快速操作",
+    "expandFolder": "展开文件夹 {name}",
+    "collapseFolder": "收起文件夹 {name}",
+    "folderOptions": "{name} 选项"
   },
   "prompts": {
     "buildReusablePrompts": "使用 AI 辅助构建可重复使用的提示",
@@ -1045,7 +1177,9 @@
     "behaviorSection": "行为",
     "resetChatSettings": "重置聊天设置",
     "resetChatSettingsConfirmTitle": "重置聊天设置？",
-    "resetChatSettingsConfirmMessage": "这将恢复本面板中所有内容为默认值：温度、自定义指令、关于你、模型回复、流式速度、语音合成、活动文件和确认设置。不会影响您的对话内容。"
+    "resetChatSettingsConfirmMessage": "这将恢复本面板中所有内容为默认值：温度、自定义指令、关于你、模型回复、流式速度、语音合成、活动文件和确认设置。不会影响您的对话内容。",
+    "customInstructionsLabel": "自定义指令*",
+    "defaultTemperatureLabel": "默认 Temperature*"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -1108,7 +1242,8 @@
       "agents": "代理"
     },
     "sections": {
-      "baseModels": "基础模型"
+      "baseModels": "基础模型",
+      "allModels": "全部模型（{count}）"
     },
     "agents": {
       "advancedFeatureBadge": "高级功能",
@@ -1181,7 +1316,19 @@
       "reasoning": "适用于复杂问题的扩展推理能力",
       "omni": "多模态模型，功能广泛",
       "agent": "具备实时工具和网页访问功能的智能体"
-    }
+    },
+    "hide": "从列表中隐藏",
+    "hideConfirmTitle": "隐藏“{name}”？",
+    "hideConfirmMessage": "它将在您的列表中移除但不会被删除。您可随时在已隐藏区域恢复。",
+    "hideConfirm": "隐藏",
+    "hiddenToast": "已隐藏“{name}”",
+    "hidden": {
+      "title": "已隐藏（{count}）",
+      "restore": "恢复"
+    },
+    "title": "选择模型",
+    "modelsDescription": "为您的会话选择一个 AI 模型。每个模型有不同的优势——选择查看详情。",
+    "recommended": "推荐"
   },
   "models": {
     "gpt_4_1": {
@@ -1258,6 +1405,16 @@
       "name": "GPT-5.2 Chat",
       "description": "GPT-5.2 的专用变体，针对对话交互和情感智能进行了优化。擅长共情沟通、心理健康支持、创意写作、头脑风暴和自然对话。非常适合日常交流、咨询场景和需要情感洞察的任务。",
       "knowledgeCutoff": "2025年12月"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic 最强大的模型。适合长篇写作、研究及需要深入思考的任务。",
+      "knowledgeCutoff": "2026年2月"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "一款均衡的 Claude 模型。适合日常写作、分析及快速回应的编程任务。",
+      "knowledgeCutoff": "2026年2月"
     }
   },
   "searchMode": {
@@ -1694,7 +1851,9 @@
     "cancelledBody": "用户已取消",
     "transientBody": "请重试",
     "authFailedBody": "请重新登录",
-    "rateLimitedBody": "服务繁忙，请稍后重试"
+    "rateLimitedBody": "服务繁忙，请稍后重试",
+    "loadingAttempt": "（第 {count} 次尝试）",
+    "transcriptLabel": "[转录：{filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "添加您的个性化指令，以自定义 AI 的回应方式。这些将与核心行为准则结合，以确保回应的有用性、准确性和安全性。",
   "Tip: Type \"/\" to select from saved prompt templates_": "提示：输入 “/” 以选择已保存的提示模板。",
@@ -1831,7 +1990,45 @@
       "createButton": "创建自定义代理",
       "experimentalBlurb": "实验性功能 — 与MSF高级用户直接协作构建。不适用于一般使用。"
     },
-    "selectAgentPrompt": "选择一个代理以开始"
+    "selectAgentPrompt": "选择一个代理以开始",
+    "description": "专用于特定任务的 AI 代理。默认代理由中心管理；添加自定义来源可发现其他 Foundry 项目的代理。",
+    "regionAgents": {
+      "us": "美国区域代理",
+      "eu": "欧洲区域代理",
+      "default": "区域代理"
+    },
+    "officeAgents": {
+      "suffix": "代理"
+    },
+    "agentSources": {
+      "title": "Foundry 连接",
+      "description": "连接到其他 Foundry 项目以发现其代理。",
+      "connectButton": "连接 Microsoft Azure Foundry 项目",
+      "connectButtonShort": "连接 Foundry 项目",
+      "addButton": "添加自定义来源",
+      "addAnother": "添加另一个连接",
+      "noSources": "未配置自定义来源。",
+      "removeSource": "移除来源",
+      "confirmRemove": "确认移除？",
+      "sourceConnected": "自定义来源已连接",
+      "sourcesConnected": "自定义来源已连接",
+      "backToAgents": "返回",
+      "discoveredAgents": "已发现的代理",
+      "viewConnection": "查看连接详情",
+      "edit": "编辑",
+      "noAgentsPublished": "没有已发布的代理",
+      "connectedOn": "已连接于 {date}",
+      "disconnectSource": "断开此来源",
+      "confirmDisconnect": "请再次点击确认",
+      "loadingAgents": "正在加载代理...",
+      "noAgentsFound": "此项目中未找到代理",
+      "noAgentsFoundHint": "请确保代理已发布，且您在本项目中拥有 Azure AI User 角色。",
+      "refresh": "刷新",
+      "refreshAgents": "刷新代理",
+      "technicalDetails": "技术详情",
+      "agentCountLabel": "{count} 个代理",
+      "disconnectedToast": "已断开 {name}"
+    }
   },
   "privacy": {
     "policyTitle": "隐私政策与数据保护",

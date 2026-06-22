@@ -346,7 +346,59 @@
     "delete": "Verwijderen",
     "noCustomAgentsYet": "Nog geen aangepaste agents.",
     "noOrgAgentsConfigured": "Geen organisatie-agents geconfigureerd.",
-    "validationFailed": "Validatie mislukt"
+    "validationFailed": "Validatie mislukt",
+    "addAgentSource": "Aangepaste bron toevoegen",
+    "connectFoundryProject": "Koppel een Microsoft Azure Foundry-project",
+    "connectFoundryDescription": "Ontdek agents uit het Azure Foundry-project van een ander kantoor of team. U ziet alleen agents waarvoor u toegang heeft.",
+    "foundryProjectPath": "Foundry-projectpad",
+    "foundryProjectPathHelp": "Vraag dit aan uw Foundry-projectbeheerder of klik op 'Handmatig invoeren' om ieder veld apart in te vullen.",
+    "copyFormat": "Formaat",
+    "nameLabel": "Naam",
+    "namePlaceholder": "bijv. Amsterdam Office, Geneva Research",
+    "pathRequired": "Plak het Foundry-projectresourcepad.",
+    "pathInvalidFormat": "Dit lijkt geen resourcepad te zijn. Het moet beginnen met /subscriptions/...",
+    "connectionFailed": "Kan geen verbinding maken met dit project. Controleer of het pad juist is en of u toegang heeft.",
+    "connectionSuccessAgents": "Verbonden — {count} agent(s) gevonden",
+    "connectionSuccessEmpty": "Verbonden, maar geen agents gevonden. U heeft mogelijk de Azure AI User-rol nodig op dit project om de agents te zien.",
+    "checkingConnection": "Verbinding wordt gecontroleerd...",
+    "connect": "Verbinden",
+    "save": "Opslaan",
+    "editConnection": "Verbinding bewerken",
+    "sourceName": "Bronnaam",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Bronnaam is verplicht.",
+    "resourcePath": "Resourcepad",
+    "resourcePathRequired": "Resourcepad is verplicht.",
+    "resourcePathHelp": "Het ARM-resourcepad naar een Foundry-project. Vraag deze waarde aan uw beheerder.",
+    "invalidResourcePathFormat": "Resourcepad moet beginnen met /subscriptions/...",
+    "validatingSource": "Agents worden opgezocht...",
+    "sourceValidatedEmpty": "Geldige bron, maar geen agents gevonden. U heeft mogelijk geen toegang tot agents in dit project.",
+    "invalidSource": "Kan dit resourcepad niet benaderen. Controleer het pad en uw rechten.",
+    "addSource": "Bron toevoegen",
+    "removeSource": "Bron verwijderen",
+    "labelSubscription": "Abonnement",
+    "labelFoundryAccount": "Foundry-account",
+    "labelProject": "Project",
+    "tooltipSubscription": "Het Azure-abonnement dat het Foundry-account bevat. Weet u het niet zeker? Vraag uw beheerder welk abonnement uw team gebruikt.",
+    "tooltipFoundryAccount": "Het Azure AI Services-account waarin het Foundry-project zich bevindt. Elk kantoor of team heeft doorgaans een eigen account.",
+    "tooltipProject": "Een project organiseert agents binnen een account. De meeste accounts hebben een enkel 'default'-project.",
+    "foundryProjectLabel": "Foundry-project",
+    "enterManually": "Handmatig invoeren",
+    "browseResources": "Doorzoek resources",
+    "subscriptionIdLabel": "Abonnements-ID",
+    "resourceGroupLabel": "Resourcegroep",
+    "accountNameLabel": "Accountnaam",
+    "projectNameLabel": "Projectnaam",
+    "loadingSubscriptions": "Abonnementen laden...",
+    "selectSubscription": "Selecteer een abonnement...",
+    "loadingAccounts": "Accounts laden...",
+    "noAccountsFound": "Geen Foundry-accounts gevonden in dit abonnement.",
+    "selectAccount": "Selecteer een account...",
+    "loadingProjects": "Projecten laden...",
+    "noProjectsFound": "Geen projecten gevonden. \"default\" wordt gebruikt.",
+    "selectAllRequired": "Selecteer een abonnement, account en project.",
+    "subscriptionRequired": "Kies een abonnement",
+    "accountRequired": "Kies een Foundry-account"
   },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",
@@ -503,7 +555,10 @@
     "keepEditing": "Doorgaan met bewerken",
     "yes": "Ja",
     "no": "Nee",
-    "beta": "Bèta"
+    "beta": "Bèta",
+    "copied": "Gekopieerd!",
+    "clear": "Wissen",
+    "undo": "Ongedaan maken"
   },
   "errors": {
     "somethingWentWrong": "Er is iets misgegaan",
@@ -657,13 +712,90 @@
     "stopGenerationDontAskAgainButton": "Niet meer vragen bij stoppen via de knop",
     "stopGenerationDontAskAgainKeyboard": "Niet meer vragen bij stoppen via het toetsenbord",
     "generateResponseButton": "Antwoord genereren",
-    "downloadResponse": "Antwoord downloaden"
+    "downloadResponse": "Antwoord downloaden",
+    "activity": {
+      "callingTool": "Tool wordt aangeroepen…",
+      "callingService": "Externe service wordt aangeroepen…",
+      "usingNamedTool": "{tool} wordt gebruikt…",
+      "usingNamedToolWithService": "{tool} wordt gebruikt op {service}…",
+      "searchingWeb": "Web wordt doorzocht…",
+      "searchingFiles": "Bestanden worden doorzocht…",
+      "runningCode": "Code wordt uitgevoerd…",
+      "generatingImage": "Afbeelding wordt gegenereerd…",
+      "listingTools": "Beschikbare tools worden opgezocht…",
+      "analyzingFiles": "Bestanden worden geanalyseerd…",
+      "searchingKnowledge": "Kennisbank wordt doorzocht…",
+      "cancellingPriorTool": "Vorige tool-aanvraag wordt geannuleerd…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
+      "failedCount": "{count} mislukt",
+      "statusApproved": "Goedgekeurd",
+      "statusAutoApproved": "Automatisch goedgekeurd",
+      "statusAutoDenied": "Automatisch geweigerd",
+      "statusFailed": "Mislukt",
+      "statusIncomplete": "Onvolledig",
+      "viaService": "via {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Autorisatie vereist",
+      "authorizeService": "Autoriseer {service}",
+      "descriptionGeneric": "Deze agent heeft uw toestemming nodig om toegang te krijgen tot een beveiligde bron. Uw aanmelding wordt beheerd door de achterliggende service en hier niet opgeslagen.",
+      "descriptionWithService": "Deze agent heeft uw toestemming nodig om toegang te krijgen tot {service}. Uw aanmelding bij {service} wordt beheerd door {service} zelf en hier niet opgeslagen.",
+      "signInIncompleteGeneric": "Aanmelding niet voltooid",
+      "signInIncompleteForService": "Aanmelding bij {service} niet voltooid",
+      "signInIncompleteDescriptionGeneric": "Het lijkt erop dat de autorisatie niet is voltooid. Zorg dat u uw aanmelding in het andere tabblad heeft afgerond en klik vervolgens opnieuw op Doorgaan.",
+      "signInIncompleteDescription": "Het lijkt erop dat de autorisatie voor {service} niet is voltooid. Zorg dat u uw aanmelding in het andere tabblad heeft afgerond en klik vervolgens opnieuw op Doorgaan.",
+      "authorizeButton": "Autoriseer",
+      "reauthorizeButton": "Opnieuw autoriseren",
+      "continueButton": "Doorgaan",
+      "confirmingButton": "Bevestigen…",
+      "authorizeHint": "Autoriseer en keer daarna hier terug om op Doorgaan te klikken. Wilt u later intrekken, meld u dan direct bij {service} af — wij bewaren het token niet.",
+      "authorizeHintGeneric": "Autoriseer en keer daarna hier terug om op Doorgaan te klikken. Wilt u later intrekken, meld u dan direct bij de achterliggende service af — wij bewaren het token niet.",
+      "continueHint": "Zodra de autorisatie in het andere tabblad is voltooid, klik op Doorgaan.",
+      "confirmingHint": "Autorisatie wordt bevestigd en uw verzoek wordt hervat…",
+      "resendHint": "Stuur uw bericht opnieuw nadat u heeft geautoriseerd om verder te gaan.",
+      "resetTooltip": "Reset alle tool-instellingen voor automatische goedkeuring in dit gesprek. Toekomstige tool-aanroepen zullen opnieuw om toestemming vragen.",
+      "autoApproveAllIndicator": "Alle tools automatisch goedkeuren",
+      "autoApproveCountIndicator": "{count, plural, one {# tool automatisch goedkeuren} other {# tools automatisch goedkeuren}}",
+      "resetShort": "Resetten",
+      "approvalRequired": "Tool-goedkeuring vereist",
+      "approvalForService": "Tool goedkeuren voor {service}",
+      "approvalDescriptionGeneric": "De agent wil een tool uitvoeren die eerst uw goedkeuring vereist.",
+      "approvalDescriptionWithTool": "De agent wil de {tool}-tool uitvoeren, waarvoor eerst uw goedkeuring vereist is.",
+      "runToolTitle": "<code>{tool}</code> uitvoeren?",
+      "runToolGeneric": "Deze tool uitvoeren?",
+      "viaService": "via {service}",
+      "approveButton": "Goedkeuren",
+      "approveOptionsLabel": "Goedkeuringsopties",
+      "approveOnce": "Eenmalig goedkeuren",
+      "alwaysApproveThisTool": "Deze tool altijd goedkeuren",
+      "alwaysApproveAllTools": "Alle tools altijd goedkeuren",
+      "denyButton": "Weigeren",
+      "keyboardHint": "{modifier}+⏎ goedkeuren · esc weigeren",
+      "submittingState": "Uw keuze wordt verzonden",
+      "approvedState": "Goedgekeurd — agent hervat",
+      "deniedState": "Geweigerd",
+      "submittingApproval": "Goedkeuren en agent hervatten…",
+      "submittingDenial": "Uw weigering wordt verzonden…"
+    },
+    "openImage": "Afbeelding openen",
+    "copyMessage": "Bericht kopiëren",
+    "stopAudio": "Audio stoppen",
+    "generatingAudio": "Audio genereren...",
+    "listen": "Luisteren",
+    "processingAudio": "Audio verwerken...",
+    "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
+    "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
     "expandSidebar": "Zijbalk uitklappen",
     "quickActionsTitle": "Snelle acties",
-    "quickActions": "Snelle acties"
+    "quickActions": "Snelle acties",
+    "expandFolder": "Map {name} uitvouwen",
+    "collapseFolder": "Map {name} samenvouwen",
+    "folderOptions": "Opties voor {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Bouw herbruikbare prompts met AI-assistentie",
@@ -979,7 +1111,9 @@
     "behaviorSection": "Gedrag",
     "resetChatSettings": "Chats instellingen herstellen",
     "resetChatSettingsConfirmTitle": "Chats instellingen herstellen?",
-    "resetChatSettingsConfirmMessage": "Dit herstelt de standaardwaarden voor alles in dit paneel: temperature, aangepaste instructies, Over U, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Dit heeft geen invloed op uw gesprekken."
+    "resetChatSettingsConfirmMessage": "Dit herstelt de standaardwaarden voor alles in dit paneel: temperature, aangepaste instructies, Over U, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Dit heeft geen invloed op uw gesprekken.",
+    "customInstructionsLabel": "Aangepaste instructies*",
+    "defaultTemperatureLabel": "Standaard temperatuur*"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1118,7 +1252,8 @@
       "agents": "Agents"
     },
     "sections": {
-      "baseModels": "Basismodellen"
+      "baseModels": "Basismodellen",
+      "allModels": "Alle modellen ({count})"
     },
     "agents": {
       "description": "Aangepaste agents gebouwd op AI-modellen",
@@ -1191,7 +1326,19 @@
       "reasoning": "Uitgebreid redeneren voor complexe vraagstukken",
       "omni": "Multimodaal model met brede mogelijkheden",
       "agent": "Agent met realtime tools en webtoegang"
-    }
+    },
+    "hide": "Verbergen in lijst",
+    "hideConfirmTitle": "\"{name}\" verbergen?",
+    "hideConfirmMessage": "Het wordt uit uw lijst verwijderd maar niet gewist. U kunt het altijd herstellen via het gedeelte Verborgen.",
+    "hideConfirm": "Verbergen",
+    "hiddenToast": "\"{name}\" verborgen",
+    "hidden": {
+      "title": "Verborgen ({count})",
+      "restore": "Herstellen"
+    },
+    "title": "Selecteer een model",
+    "modelsDescription": "Kies een AI-model voor uw gesprek. Elk model heeft andere sterke punten — selecteer er één voor details.",
+    "recommended": "Aanbevolen"
   },
   "models": {
     "gpt_4_1": {
@@ -1268,6 +1415,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "dec 2025",
       "description": "Gespecialiseerde variant van GPT-5.2, geoptimaliseerd voor conversatie en emotionele intelligentie. Uitstekend in empathische communicatie, creatief schrijven, brainstormen en natuurlijke dialogen. Ideaal voor informele gesprekken, counseling en taken die emotioneel bewustzijn vereisen."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic's krachtigste model. Geschikt voor lang schrijven, onderzoek en taken die zorgvuldigheid vereisen.",
+      "knowledgeCutoff": "feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Een gebalanceerd Claude-model. Goed voor dagelijks schrijven, analyse en coderen met snelle reacties.",
+      "knowledgeCutoff": "feb 2026"
     }
   },
   "transcription": {
@@ -1365,7 +1522,9 @@
     "cancelledBody": "Geannuleerd door gebruiker",
     "transientBody": "Probeer het alstublieft opnieuw",
     "authFailedBody": "Log alstublieft opnieuw in",
-    "rateLimitedBody": "Service is bezet, probeer het zo dadelijk opnieuw"
+    "rateLimitedBody": "Service is bezet, probeer het zo dadelijk opnieuw",
+    "loadingAttempt": "(poging {count})",
+    "transcriptLabel": "[Transcript: {filename}]"
   },
   "migration": {
     "status": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Experimenteel — gebouwd in directe samenwerking met MSF-powerusers. Niet voor algemeen gebruik.",
       "createButton": "Aangepaste agent aanmaken"
     },
-    "selectAgentPrompt": "Selecteer een agent om details te bekijken"
+    "selectAgentPrompt": "Selecteer een agent om details te bekijken",
+    "description": "Gespecialiseerde AI-agenten voor specifieke taken. Standaard agenten worden centraal beheerd; voeg aangepaste bronnen toe om agenten van andere Foundry-projecten te ontdekken.",
+    "regionAgents": {
+      "us": "US-regio agenten",
+      "eu": "EU-regio agenten",
+      "default": "Regio-agenten"
+    },
+    "officeAgents": {
+      "suffix": "Agenten"
+    },
+    "agentSources": {
+      "title": "Foundry-verbindingen",
+      "description": "Maak verbinding met andere Foundry-projecten om hun agenten te ontdekken.",
+      "connectButton": "Verbind een Microsoft Azure Foundry-project",
+      "connectButtonShort": "Verbind een Foundry-project",
+      "addButton": "Aangepaste bron toevoegen",
+      "addAnother": "Nog een verbinding toevoegen",
+      "noSources": "Geen aangepaste bronnen geconfigureerd.",
+      "removeSource": "Bron verwijderen",
+      "confirmRemove": "Verwijderen?",
+      "sourceConnected": "aangepaste bron verbonden",
+      "sourcesConnected": "aangepaste bronnen verbonden",
+      "backToAgents": "Terug",
+      "discoveredAgents": "Ontdekte agenten",
+      "viewConnection": "Bekijk verbindingsdetails",
+      "edit": "Bewerken",
+      "noAgentsPublished": "Geen agenten gepubliceerd",
+      "connectedOn": "Verbonden op {date}",
+      "disconnectSource": "Verbinding met deze bron verbreken",
+      "confirmDisconnect": "Klik nogmaals om te bevestigen",
+      "loadingAgents": "Agenten laden...",
+      "noAgentsFound": "Geen agenten gevonden in dit project",
+      "noAgentsFoundHint": "Zorg ervoor dat agenten zijn gepubliceerd en dat u de Azure AI-gebruikersrol heeft op dit project.",
+      "refresh": "Vernieuwen",
+      "refreshAgents": "Agenten vernieuwen",
+      "technicalDetails": "Technische details",
+      "agentCountLabel": "{count} agenten",
+      "disconnectedToast": "Verbinding met {name} verbroken"
+    }
   },
   "privacy": {
     "policyTitle": "Privacybeleid & Gegevensbescherming",

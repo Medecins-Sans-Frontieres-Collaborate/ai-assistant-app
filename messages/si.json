@@ -348,7 +348,59 @@
     "delete": "මකන්න",
     "noCustomAgentsYet": "තවම අභිරුචි නියෝජිතයින් නැත.",
     "noOrgAgentsConfigured": "සංවිධාන නියෝජිතයින් සකසා නැත.",
-    "validationFailed": "වලංගුකරණය අසාර්ථකයි"
+    "validationFailed": "වලංගුකරණය අසාර්ථකයි",
+    "addAgentSource": "අභිරුචි මූලාශ්රයක් එකතු කරන්න",
+    "connectFoundryProject": "Microsoft Azure Foundry ව්‍යාපෘතියක් සම්බන්ධ කරන්න",
+    "connectFoundryDescription": "තවත් කාර්යාලයක හෝ කණ්ඩායමක Azure Foundry ව්‍යාපෘතියෙන් නියෝජිතයන් සොයාගන්න. ඔබට ප්‍රවේශය ඇති නියෝජිතයන් පමණි දැක්මට හැක්කේ.",
+    "foundryProjectPath": "Foundry ව්‍යාපෘති මාර්ගය",
+    "foundryProjectPathHelp": "ඔබගේ Foundry ව්‍යාපෘති පරිපාලකයාගෙන් සිතන්න, නැතහොත් 'Enter manually' මත ක්ලික් කර එක් එක් ක්ෂේත්‍රය වෙන වෙනම පුරවන්න.",
+    "copyFormat": "ආකෘතිය",
+    "nameLabel": "නාමය",
+    "namePlaceholder": "උදා. Amsterdam කාර්යාලය, Geneva Research",
+    "pathRequired": "Foundry ව්‍යාපෘති සම්පත් මාර්ගය අලවන්න.",
+    "pathInvalidFormat": "මෙය සම්පත් මාර්ගයක් නොපෙනේ. මෙය /subscriptions/ ... ලෙස ආරම්භ විය යුතුය.",
+    "connectionFailed": "මෙම ව්‍යාපෘතියට සම්බන්ධ වී නොහැකි විය. මාර්ගය නිවැරදිද සහ ඔබට ප්‍රවේශය තිබේද පරීක්ෂා කරන්න.",
+    "connectionSuccessAgents": "සම්බන්ධ වී ඇත — නියෝජිතයන් {count} ක් හමු විය",
+    "connectionSuccessEmpty": "සම්බන්ධ විය, නමුත් නියෝජිතයන් හමු නොවිනි. මෙම ව්‍යාපෘතියේ නියෝජිතයන් දැකීමට ඔබට Azure AI User භූමිකාව අවශ්‍ය විය හැක.",
+    "checkingConnection": "සම්බන්ධතාවය පරීක්ෂා කිරීම...",
+    "connect": "සම්බන්ධ කරන්න",
+    "save": "සුරකින්න",
+    "editConnection": "සම්බන්ධතාවය සංස්කරණය කරන්න",
+    "sourceName": "මූලාශ්ර නාමය",
+    "sourceNamePlaceholder": "Amsterdam කාර්යාලය",
+    "sourceNameRequired": "මූලාශ්ර නාමය අවශ්‍යයි.",
+    "resourcePath": "සම්පත් මාර්ගය",
+    "resourcePathRequired": "සම්පත් මාර්ගය අවශ්‍යයි.",
+    "resourcePathHelp": "Foundry ව්‍යාපෘතියකට ARM සම්පත් මාර්ගය. මෙම අගය සඳහා ඔබේ පරිපාලකයාගෙන් අසන්න.",
+    "invalidResourcePathFormat": "සම්පත් මාර්ගය /subscriptions/... ලෙස ආරම්භ විය යුතුය.",
+    "validatingSource": "නියෝජිතයන් සෙවීම...",
+    "sourceValidatedEmpty": "වලංගු මූලාශ්රයයි, නමුත් නියෝජිතයන් හමු නොවිනි. ඔබට මෙම ව්‍යාපෘතියෙහි නියෝජිතයන්ට ප්‍රවේශය නැති විය හැක.",
+    "invalidSource": "මෙම සම්පත් මාර්ගය ප්‍රවේශ කළ නොහැක. මාර්ගය සහ ඔබේ බලතල තහවුරු කරන්න.",
+    "addSource": "මූලාශ්රය එකතු කරන්න",
+    "removeSource": "මූලාශ්රය ඉවත් කරන්න",
+    "labelSubscription": "දායකත්වය",
+    "labelFoundryAccount": "Foundry ගිණුම",
+    "labelProject": "ව්‍යාපෘතිය",
+    "tooltipSubscription": "Foundry ගිණුම අඩංගු Azure දායකත්වයයි. ඔබට විශ්වාස නැත්නම්, ඔබේ කණ්ඩායම භාවිත කරන දායකත්වය කුමක්දැයි පරිපාලකයාගෙන් අසන්න.",
+    "tooltipFoundryAccount": "Foundry ව්‍යාපෘතිය පවත්නා Azure AI Services ගිණුම. සාමාන්‍යයෙන් එක් එක් කාර්යාලයක හෝ කණ්ඩායමේම වෙනම ගිණුමක් ඇත.",
+    "tooltipProject": "ව්‍යාපෘතියක් ගිණුමක් ඇතුළත නියෝජිතයන් සංවිධානය කරයි. බොහෝ ගිණුම්වල එක් 'default' ව්‍යාපෘතියක් පමණි.",
+    "foundryProjectLabel": "Foundry ව්‍යාපෘතිය",
+    "enterManually": "හස්තියෙන් ඇතුළත් කරන්න",
+    "browseResources": "සම්පත් පිරික්සන්න",
+    "subscriptionIdLabel": "දායකත්ව ID",
+    "resourceGroupLabel": "සම්පත් කණ්ඩායම",
+    "accountNameLabel": "ගිණුම් නාමය",
+    "projectNameLabel": "ව්‍යාපෘති නාමය",
+    "loadingSubscriptions": "දායකත්වයන් පූරණය වෙමින්...",
+    "selectSubscription": "දායකත්වයක් තෝරන්න...",
+    "loadingAccounts": "ගිණුම් පූරණය වෙමින්...",
+    "noAccountsFound": "මෙම දායකත්වයේ Foundry ගිණුම් හමු නොවිනි.",
+    "selectAccount": "ගිණුමක් තෝරන්න...",
+    "loadingProjects": "ව්‍යාපෘති පූරණය වෙමින්...",
+    "noProjectsFound": "ව්‍යාපෘති හමු නොවිනි. \"default\" භාවිතා වේ.",
+    "selectAllRequired": "දායකත්වය, ගිණුම, හා ව්‍යාපෘතිය තෝරන්න.",
+    "subscriptionRequired": "දායකතාවයක් තෝරන්න",
+    "accountRequired": "Foundry ගිණුමක් තෝරන්න"
   },
   "Quick Actions": "ඉක්මන් ක්‍රියා",
   "Type / in chat to access your prompts": "ඔබේ ප්‍රේරක වෙත ප්‍රවේශ වීමට චැට් එකේ / ටයිප් කරන්න",
@@ -505,7 +557,10 @@
     "keepEditing": "සැකසුම දිගටම කරයි",
     "yes": "ඔව්",
     "no": "නැහැ",
-    "beta": "බීටා"
+    "beta": "බීටා",
+    "copied": "පිටපත් විය!",
+    "clear": "පිරිසිඳු කරන්න",
+    "undo": "අහෝසි කරන්න"
   },
   "errors": {
     "unexpectedErrorOccurred": "අනපේක්ෂිත දෝෂයක් සිදු විය",
@@ -659,13 +714,90 @@
     "stopGenerationDontAskAgainButton": "බොත්තමෙන් නවත්වන විට නැවත අහන්න එපා",
     "stopGenerationDontAskAgainKeyboard": "යතුරුපුවරුවෙන් නවත්වන විට නැවත අහන්න එපා",
     "generateResponseButton": "පිළිතුර නිපදවන්න",
-    "downloadResponse": "ප්‍රතිචාරය බාගන්න"
+    "downloadResponse": "ප්‍රතිචාරය බාගන්න",
+    "activity": {
+      "callingTool": "මෙවලම ඇමතෙමින්...",
+      "callingService": "බාහිර සේවාව ඇමතෙමින්...",
+      "usingNamedTool": "{tool} භාවිතා කරමින්...",
+      "usingNamedToolWithService": "{service} මත {tool} භාවිතා කරමින්...",
+      "searchingWeb": "ජාලය සොයමින්...",
+      "searchingFiles": "ගොනු සොයමින්...",
+      "runningCode": "කේතය දුවමින්...",
+      "generatingImage": "පිංතූර නිපදවමින්...",
+      "listingTools": "ලබා ගත හැකි මෙවලම් පරික්ෂා කරමින්...",
+      "analyzingFiles": "ඔබගේ ගොනු විශ්ලේෂණය කරමින්...",
+      "searchingKnowledge": "දැනුම් පදනම සොයමින්...",
+      "cancellingPriorTool": "පෙර මෙවලම් ඉල්ලීම අවලංගු කරමින්..."
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {මෙවලමක් භාවිතා විය} other {මෙවලම් # ක් භාවිතා විය}}",
+      "failedCount": "අසාර්ථක වූයේ {count}",
+      "statusApproved": "අනුමත විය",
+      "statusAutoApproved": "දෙයි පදනම්ව අනුමත විය",
+      "statusAutoDenied": "දෙයි පදනම්ව ප්‍රතික්ෂේප විය",
+      "statusFailed": "අසාර්ථක විය",
+      "statusIncomplete": "අසම්පූර්ණයි",
+      "viaService": "{service} හරහා"
+    },
+    "consent": {
+      "authorizeRequired": "අනුවැදි වීම අවශ්‍යයි",
+      "authorizeService": "{service} සඳහා අනුවැදි වන්න",
+      "descriptionGeneric": "මෙම නියෝජිතයාට ආරක්ෂිත සම්පත් වෙත ප්‍රවේශය සදහා ඔබගේ අවසරය අවශ්‍යයි. ඔබගේ පුරනය වීම ඉහළ සේවාව විසින් කළමනාකරණය කරයි, එය මෙහි ගබඩා නොකරයි.",
+      "descriptionWithService": "මෙම නියෝජිතයාට {service} වෙත ප්‍රවේශය සඳහා ඔබගේ අවසරය අවශ්‍යයි. ඔබේ {service} පුරනයීම {service} විසින්ම කළමනාකරණය කෙරෙන අතර මෙහි ගබඩා නොකරයි.",
+      "signInIncompleteGeneric": "පුරනය කිරීම සම්පූර්ණ වී නොමැත",
+      "signInIncompleteForService": "{service} වෙත පුරනය කිරීම සම්පූර්ණ වී නොමැත",
+      "signInIncompleteDescriptionGeneric": "අනුවැදි වීම අවසන් වී නැති බව පේන්නේය. වෙනත් ටැබයේ පුරනය කිරීම සම්පූර්ණ කළ බවට විශ්වාසවන්න, පසුව නැවත 'Continue' ඔබන්න.",
+      "signInIncompleteDescription": "{service} වෙත අනුවැදි වීම අවසන් වී නැති බව පේන්නේය. වෙනත් ටැබයේ පුරනය කිරීම සම්පූර්ණ කළ බවට විශ්වාසවන්න, පසුව නැවත 'Continue' ඔබන්න.",
+      "authorizeButton": "අනුවැදි වන්න",
+      "reauthorizeButton": "නැවත අනුවැදි වන්න",
+      "continueButton": "වැඩිදියුණු කරන්න",
+      "confirmingButton": "තහවුරු වෙමින්...",
+      "authorizeHint": "අනුවැදි වන්න, පසුව මෙයට ආපසු එන්න හා 'Continue' ඔබන්න. පසුව අවලංගු කිරීමට, {service} වෙතින් සෘජුවම පිටවන්න — අපි ටෝකනය සුරකින්නේ නැත.",
+      "authorizeHintGeneric": "අනුවැදි වන්න, පසුව මෙයට ආපසු එන්න හා 'Continue' ඔබන්න. පසුව අවලංගු කිරීමට ඉහළ සේවාවෙන් සෘජුව පිටවන්න — අපි ටෝකනය සුරකින්නේ නැත.",
+      "continueHint": "වෙනත් ටැබයේ අනුවැදි වීම අවසන් වූ පසු, 'Continue' ඔබන්න.",
+      "confirmingHint": "අනුවැදි වීම තහවුරු කරමින් හා ඔබේ ඉල්ලීම නැවත ආරම්භ කරමින්...",
+      "resendHint": "අනුවැදි වූ පසු, ඉදිරියට යාමට ඔබේ පණිවිඩය නැවත යවන්න.",
+      "resetTooltip": "මෙම සංවාදය සඳහා සියළුම මෙවලම් ද්විම පදනම් අනුවැදීමේ අභිරුචීන් යළි සකසන්න. ඉදිරි මෙවලම් ඇමතුම් සඳහා නැවත ඉල්ලීමක් ලැබේ.",
+      "autoApproveAllIndicator": "සියළු මෙවලම් ස්වයංක්‍රීයව අනුමත කරමින්",
+      "autoApproveCountIndicator": "{count, plural, one {මෙවලමක් ස්වයංක්‍රීයව අනුමත කරමින්} other {මෙවලම් # ක් ස්වයංක්‍රීයව අනුමත කරමින්}}",
+      "resetShort": "යළි සකසන්න",
+      "approvalRequired": "මෙවලම සඳහා අනුමැතිය අවශ්‍යයි",
+      "approvalForService": "{service} සඳහා මෙවලම අනුමත කරන්න",
+      "approvalDescriptionGeneric": "මෙම නියෝජිතයාට ඉදිරිපත් වීමට පෙර ඔබගේ අනුමැතිය අවශ්‍ය වන මෙවලමක් ක්‍රියාත්මක කිරීමට අවශ්‍යයි.",
+      "approvalDescriptionWithTool": "මෙම නියෝජිතයාට {tool} මෙවලම ක්‍රියාත්මක කිරීමට අවශ්‍යයි, එය ඉදිරියට යාමට පෙර ඔබගේ අනුමැතිය අවශ්‍යයි.",
+      "runToolTitle": "<code>{tool}</code> ක්‍රියාත්මක කරන්නද?",
+      "runToolGeneric": "මෙම මෙවලම ක්‍රියාත්මක කරන්නද?",
+      "viaService": "{service} හරහා",
+      "approveButton": "අනුමත කරන්න",
+      "approveOptionsLabel": "අනුමත කිරීමේ විකල්ප",
+      "approveOnce": "එක් වරක් අනුමත කරන්න",
+      "alwaysApproveThisTool": "මෙම මෙවලම සදහටම අනුමත කරන්න",
+      "alwaysApproveAllTools": "සියළු මෙවලම් සදහටම අනුමත කරන්න",
+      "denyButton": "ප්‍රතික්ෂේප කරන්න",
+      "keyboardHint": "{modifier}+⏎ අනුමත කරන්න · esc ප්‍රතික්ෂේප කරන්න",
+      "submittingState": "ඔබගේ තීරණය ඉදිරිපත් කරමින්",
+      "approvedState": "අනුමත විය — නියෝජිතයා නැවත ක්‍රියාත්මක විය",
+      "deniedState": "ප්‍රතික්ෂේප විය",
+      "submittingApproval": "අනුමැතිය ලබාදී නියෝජිතයා නැවත ක්‍රියාත්මක කරමින්...",
+      "submittingDenial": "ඔබගේ ප්‍රතික්ෂේපය යොමු කරමින්..."
+    },
+    "openImage": "පින්තූරය විවෘත කරන්න",
+    "copyMessage": "පණිවිඩය පිටපත් කරන්න",
+    "stopAudio": "ධ्वනිය නවත්වන්න",
+    "generatingAudio": "ධ्वනි සකස් වෙමින්...",
+    "listen": "සවන්දෙන්න",
+    "processingAudio": "ධ්වනි සැකසෙමින්...",
+    "ttsError": "ධවනි සකස් කිරීමේ දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.",
+    "unsupportedMessageType": "පණිවිඩය ප්‍රදර්ශනයේ දෝෂය: සහය නොදක්වන පණිවිඩ වර්ගය"
   },
   "sidebar": {
     "collapseSidebar": "පැති තීරුව හකුළන්න",
     "expandSidebar": "පැති තීරුව පුළුල් කරන්න",
     "quickActionsTitle": "ඉක්මන් ක්‍රියාමාර්ග",
-    "quickActions": "ඉක්මන් ක්‍රියාමාර්ග"
+    "quickActions": "ඉක්මන් ක්‍රියාමාර්ග",
+    "expandFolder": "ෆොල්ඩරය විහිදන්න {name}",
+    "collapseFolder": "ෆොල්ඩරය හකුලාගන්න {name}",
+    "folderOptions": "{name} විකල්ප"
   },
   "prompts": {
     "buildReusablePrompts": "AI සහාය ඇතිව නැවත භාවිතා කළ හැකි විමසීම් තනන්න",
@@ -981,7 +1113,9 @@
     "behaviorSection": "ප්‍රවෘත්තිය",
     "resetChatSettings": "චැට් සැකසුම් යළි සකසන්න",
     "resetChatSettingsConfirmTitle": "චැට් සැකසුම් යළි සකසන්නද?",
-    "resetChatSettingsConfirmMessage": "මෙය මෙම පැනලයේ සියලුම පෙරනිමි ගැන්වීම් යථා තත්ත්වයට පත් කරයි: උෂ්ණත්වය, අභිරුචි උපදෙස්, ඔබ පිළිබඳ, නියැදි ප්‍රතිචාර, ප්‍රවාහන වේගය, පෙළ-හඬට, සක්‍රීය ගොනු සහ තහවුරු කිරීම්. මෙය ඔබේ සංවාද වලට බලපාන්නේ නැත."
+    "resetChatSettingsConfirmMessage": "මෙය මෙම පැනලයේ සියලුම පෙරනිමි ගැන්වීම් යථා තත්ත්වයට පත් කරයි: උෂ්ණත්වය, අභිරුචි උපදෙස්, ඔබ පිළිබඳ, නියැදි ප්‍රතිචාර, ප්‍රවාහන වේගය, පෙළ-හඬට, සක්‍රීය ගොනු සහ තහවුරු කිරීම්. මෙය ඔබේ සංවාද වලට බලපාන්නේ නැත.",
+    "customInstructionsLabel": "අභිරුචි උපදෙස්*",
+    "defaultTemperatureLabel": "පෙරනිමි Temperature*"
   },
   "notFound": {
     "lostDog": "අහිමි වූ බල්ලා"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "පරිශීලකයා විසින් අවලංගු කරන ලදි",
     "transientBody": "කරුණාකර නැවත උත්සාහ කරන්න",
     "authFailedBody": "කරුණාකර නැවත පුරනය වන්න",
-    "rateLimitedBody": "සේවාව සීමාවට පැමිණ ඇත, කරුණාකර ඉක්මනින් නැවත උත්සාහ කරන්න"
+    "rateLimitedBody": "සේවාව සීමාවට පැමිණ ඇත, කරුණාකර ඉක්මනින් නැවත උත්සාහ කරන්න",
+    "loadingAttempt": "(උත්සාහය {count})",
+    "transcriptLabel": "[පරිවර්තනය: {filename}]"
   },
   "transcriptionComplete": "ප්‍රතිලේඛනය සම්පූර්ණයි! පෙළ සංවාදයට එක් වී ඇත.",
   "No prompts found": "ප්‍රේරණ කිසිවක් හමු නොවිණි",
@@ -1174,7 +1310,8 @@
       "agents": "එජන්ට්"
     },
     "sections": {
-      "baseModels": "මූලික මාදිලි"
+      "baseModels": "මූලික මාදිලි",
+      "allModels": "සියළු ආදර්ශ ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "උසස් විශේෂාංගය",
@@ -1247,7 +1384,19 @@
       "reasoning": "සංකීර්ණ ගැටළු සඳහා විස්තීර්ණ තර්ක කිරීම",
       "omni": "පුළුල් හැකියාවන් සහිත බහු-මාධ්ය ආදර්ශය",
       "agent": "සජීවි මෙවලම් සහ වෙබ් ප්‍රවේශය සහිත නියෝජිතයෙකි"
-    }
+    },
+    "hide": "ලැයිස්තු වෙතින් සැඟවිය",
+    "hideConfirmTitle": "\"{name}\" සැඟවීය දැයි?",
+    "hideConfirmMessage": "එය ඔබගේ ලැයිස්තුවෙන් ඉවත් කරනු ඇත, නමුත් මකා නොදමනු ඇත. Hidden කොටස තුළින් ඕනෑ වෙලාවක නැවත ලබාගත හැක.",
+    "hideConfirm": "සැඟවීම් කරන්න",
+    "hiddenToast": "\"{name}\" සැඟවිනි",
+    "hidden": {
+      "title": "සැඟවුනු ({count})",
+      "restore": "නැවත ලබාගන්න"
+    },
+    "title": "ආදර්ශයක් තෝරන්න",
+    "modelsDescription": "ඔබගේ සංවාදය සඳහා AI ආදර්ශයක් තෝරන්න. එක් එක් ආදර්ශයේ විවිධ ශක්ති තිබේ — තොරගෙන විස්තර බලන්න.",
+    "recommended": "නිර්දේශිත"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 චැට්",
       "knowledgeCutoff": "දෙසැම්බර් 2025",
       "description": "සංවාද සහ ආවේග ඇඳුම් හැකියාව සඳහා ක්‍රමවත්ව තනිකඩ කර ඇති GPT-5.2 විශේෂ අනුවාදයයි. සංවේදී සන්නිවේදනය, නිර්මාණාත්මක ලිපි ලියීම, අදහස් කැඳවීම සහ ස්වාභාවික සංවාදයන්හි විශිෂ්ට වේ. සාමාන්‍ය සංවාද, උපදේශන අවස්ථා සහ ආවේගික අගෙනීම අවශ්‍ය කාර්ය සඳහා හොඳම වශයෙන් සුදුසුය."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic හි බලවත්ම ආදර්ශයයි. දිගු ලිවීම, පර්යේෂණ සහ සූක්ෂම සිතිවිලියක් අවශ්‍ය කාර්ය සඳහා සුදුසුය.",
+      "knowledgeCutoff": "2026 පෙබ"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "සමතුලිත Claude ආදර්ශයක්. දෛනික ලිවීම, විශ්ලේෂණය සහ වේගයෙන් පිළිතුරු සහිත කේතන සඳහා සුදුසුය.",
+      "knowledgeCutoff": "2026 පෙබ"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "පරීක්ෂණාත්මක — MSF බලශක්ති පරිශීලකයින් සමඟ සෘජු සහයෝගීතාවයෙන් නිර්මාණය කරන ලදී. සාමාන්‍ය භාවිතය සඳහා නොවේ.",
       "createButton": "අභිරුචි නියෝජිතයා සාදන්න"
     },
-    "selectAgentPrompt": "විස්තර බැලීමට නියෝජිතයා තෝරන්න"
+    "selectAgentPrompt": "විස්තර බැලීමට නියෝජිතයා තෝරන්න",
+    "description": "විශේෂිත කාර්ය සඳහා විශේෂ AI නියෝජිතයින්. පෙරනිමි නියෝජිතයන් මධ්‍යස්ථව කළමනාකරණය වේ; වෙනත් Foundry ව්‍යාපෘතිවලින් නියෝජිතයන් සොයා ගැනීමට අභිරුචි මූලාශ්‍ර එකතු කරන්න.",
+    "regionAgents": {
+      "us": "යුඑස් ප්‍රදේශයේ නියෝජිතයින්",
+      "eu": "යුරෝප් ප්‍රදේශයේ නියෝජිතයින්",
+      "default": "ප්‍රදේශ සිටින නියෝජිතයන්"
+    },
+    "officeAgents": {
+      "suffix": "නියෝජිතයන්"
+    },
+    "agentSources": {
+      "title": "Foundry සම්බන්ධතා",
+      "description": "වෙනත් Foundry ව්‍යාපෘතිවලට සම්බන්ධ වී ඒවායේ නියෝජිතයන් සොයා ගන්න.",
+      "connectButton": "Microsoft Azure Foundry ව්‍යාපෘතියක් සම්බන්ධ කරන්න",
+      "connectButtonShort": "Foundry ව්‍යාපෘතියක් සම්බන්ධ කරන්න",
+      "addButton": "අභිරුචි මූලාශ්‍රයක් එක් කරන්න",
+      "addAnother": "තවත් සම්බන්ධතාවයක් එක් කරන්න",
+      "noSources": "අභිරුචි මූලාශ්‍ර කිසිවක් සකසා නැත.",
+      "removeSource": "මූලාශ්‍රය ඉවත් කරන්න",
+      "confirmRemove": "ඉවත් කරන්නද?",
+      "sourceConnected": "අභිරුචි මූලාශ්‍රය සම්බන්ධයි",
+      "sourcesConnected": "අභිරුචි මූලාශ්‍ර සම්බන්ධයි",
+      "backToAgents": "ආපසු",
+      "discoveredAgents": "සොයාගත් නියෝජිතයන්",
+      "viewConnection": "සම්බන්ධතා විස්තර බලන්න",
+      "edit": "සංස්කරණය කරන්න",
+      "noAgentsPublished": "නියෝජිතයන් ප්‍රකාශයට පත් කර නැත",
+      "connectedOn": "සම්බන්ධ වූ දිනය: {date}",
+      "disconnectSource": "මෙම මූලාශ්‍රය අනහිත් කරන්න",
+      "confirmDisconnect": "තහවුරු කිරීමට නැවත ක්ලික් කරන්න",
+      "loadingAgents": "නියෝජිතයන් පූරණය වෙමින්...",
+      "noAgentsFound": "මෙම ව්‍යාපෘතියේ නියෝජිතයන් නොපවතී",
+      "noAgentsFoundHint": "නියෝජිතයන් ප්‍රකාශයට පත් කර ඇතිද හා ඔබට මෙම ව්‍යාපෘතියේ Azure AI User භූමිකාව ඇත්දැයි සහතික කර ගන්න.",
+      "refresh": "නවිකරණය කරන්න",
+      "refreshAgents": "නියෝජිතයන් නවිකරණය කරන්න",
+      "technicalDetails": "තාක්ෂණික විස්තර",
+      "agentCountLabel": "නියෝජිතයන් {count} ක්",
+      "disconnectedToast": "{name} අනහිත් විය"
+    }
   },
   "privacy": {
     "policyTitle": "රහස්‍යතා ප්‍රතිපත්තිය & දත්ත ආරක්ෂාව",

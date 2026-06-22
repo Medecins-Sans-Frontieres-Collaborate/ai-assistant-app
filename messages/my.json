@@ -356,7 +356,59 @@
     "delete": "ဖျက်ရန်",
     "noCustomAgentsYet": "စိတ်ကြိုက် အေးဂျင့် မရှိသေးပါ။",
     "noOrgAgentsConfigured": "အဖွဲ့အစည်း အေးဂျင့်များ သတ်မှတ်ထားခြင်း မရှိပါ။",
-    "validationFailed": "အတည်ပြုခြင်း မအောင်မြင်ပါ"
+    "validationFailed": "အတည်ပြုခြင်း မအောင်မြင်ပါ",
+    "addAgentSource": "စိတ်ကြိုက်အရင်းအမြစ်ထည့်ပါ",
+    "connectFoundryProject": "Microsoft Azure Foundry Project တစ်ခုချိတ်ဆက်ပါ",
+    "connectFoundryDescription": "အခြားရုံး သို့မဟုတ်အဖွဲ့၏ Azure Foundry Project မှ agent များကို ရှာဖွေနိုင်ပါသည်။ သင့်အားခွင့်ပြုထားသော agent များကိုသာမြင်နိုင်ပါသည်။",
+    "foundryProjectPath": "Foundry Project ပaths",
+    "foundryProjectPathHelp": "သင့် Foundry Project အုပ်ချုပ်သူထံမေးပါ၊ သို့မဟုတ် 'Enter manually' ကိုနှိပ်ပြီးလယ်ကွက်များကိုသီးခြားဖြည့်ပါ။",
+    "copyFormat": "ပုံစံ",
+    "nameLabel": "အမည်",
+    "namePlaceholder": "ဥပမာ - Amsterdam Office၊ Geneva Research",
+    "pathRequired": "Foundry project resource path ကို paste လုပ်ပါ။",
+    "pathInvalidFormat": "ဒီဟာမှာ resource path တစ်ခုမလိုက်ညီပါ။ /subscriptions/... ဖြင့်စစေပါ။",
+    "connectionFailed": "ဤ project မှာမချိတ်ဆက်နိုင်ပါ။ path ကိုစစ်ဆေးပြီး သင့်တွင် ခွင့်ပြုချက်ရှိ/မရှိ စစ်ဆေးပါ။",
+    "connectionSuccessAgents": "ချိတ်ဆက်ပြီး — agent {count} ခုတွေ့ရှိပါသည်",
+    "connectionSuccessEmpty": "ချိတ်ဆက်ပြီး၊ သို့သော် agent မရှိပါ။ ဤ project တွင် agent များအား မြင်ရရန် Azure AI User role လိုအပ်နိုင်ပါသည်။",
+    "checkingConnection": "ချိတ်ဆက်မှုစစ်ဆေးနေသည်...",
+    "connect": "ချိတ်ဆက်ပါ",
+    "save": "သိမ်းဆည်းပါ",
+    "editConnection": "ချိတ်ဆက်မှုတည်းဖြတ်ပါ",
+    "sourceName": "အရင်းအမြစ်အမည်",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "အရင်းအမြစ်အမည်ထည့်ရန်လိုအပ်ပါသည်။",
+    "resourcePath": "Resource Path",
+    "resourcePathRequired": "Resource path သည် တိတိကျကျ ထည့်ရန်လိုအပ်ပါသည်။",
+    "resourcePathHelp": "Foundry project ရဲ့ ARM resource path ဖြစ်သည်။ ဤတန်ဖိုးအတွက် အုပ်ချုပ်သူအားမေးပါ။",
+    "invalidResourcePathFormat": "Resource path သည် /subscriptions/... ဖြင့်စရမည်။",
+    "validatingSource": "Agent များရှာဖွေနေသည်...",
+    "sourceValidatedEmpty": "Source မှန်ပါသည်၊ သို့သော် agent မတွေ့ပါ။ ဤ project တွင် agent များအား သင်မကြည့်နိုင်ပါ။",
+    "invalidSource": "ဤ resource path ကို မရရှိနိုင်ပါ။ path နှင့် ခွင့်ပြုချက်အား သေချာစစ်ဆေးပါ။",
+    "addSource": "အရင်းအမြစ်ထည့်ပါ",
+    "removeSource": "အရင်းအမြစ်ဖယ်ရှားပါ",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "Foundry account ပါဝင်သော Azure subscription ဖြစ်သည်။ မသိပါက သင်၏အုပ်ချုပ်သူအား မေးပါ။",
+    "tooltipFoundryAccount": "Foundry project တည်ရှိသည့် Azure AI Services account ဖြစ်သည်။ လုပ်ငန်းရုံးသို့မဟုတ်အဖွဲ့တစ်ခုစီတွင် မိမိ၏အကောင့်ရှိပါသည်။",
+    "tooltipProject": "Project တစ်ခုက agent များကို account အတွင်းစီမံစီစဉ်ပေးသည်။ အများအားဖြင့် account တစ်ခုတွင် 'default' project တစ်ခုသာရှိတတ်သည်။",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "ကိုယ်တိုင်ရိုက်ထည့်ပါ",
+    "browseResources": "အရင်းအမြစ်များကြည့်ရှုပါ",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Account Name",
+    "projectNameLabel": "Project Name",
+    "loadingSubscriptions": "Subscription များတင်နေသည်...",
+    "selectSubscription": "Subscription တစ်ခုရွေးပါ...",
+    "loadingAccounts": "Account များတင်နေသည်...",
+    "noAccountsFound": "ဤ subscription တွင် Foundry account မတွေ့ပါ။",
+    "selectAccount": "Account တစ်ခုရွေးပါ...",
+    "loadingProjects": "Project များတင်နေသည်...",
+    "noProjectsFound": "Project မတွေ့ပါ။ \"default\" ကိုသုံးနေပါသည်။",
+    "selectAllRequired": "Subscription, account နှင့် project တစ်ခုစီရွေးပါ။",
+    "subscriptionRequired": "subscription ကို ရွေးပါ",
+    "accountRequired": "Foundry အကောင့်ကို ရွေးပါ"
   },
   "Quick Actions": "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
   "Type / in chat to access your prompts": "သင့်အညွှန်းများကို ဝင်ရောက်ရန် စကားပြောခန်းတွင် / ရိုက်ပါ",
@@ -513,7 +565,10 @@
     "keepEditing": "ဆက်လက်တည်းဖြတ်ပါ",
     "yes": "ဟုတ်ကဲ့",
     "no": "မဟုတ်ပါ",
-    "beta": "ဘီတာ"
+    "beta": "ဘီတာ",
+    "copied": "ကူးယူပြီး!",
+    "clear": "ရှင်းလင်းပါ",
+    "undo": "ပြန်ဖျက်ပါ"
   },
   "errors": {
     "unexpectedErrorOccurred": "မမျှော်လင့်ထားသော အမှားတစ်ခု ဖြစ်ပွားခဲ့သည်",
@@ -667,13 +722,90 @@
     "stopGenerationDontAskAgainButton": "ခလုတ်နှိပ်၍ ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
     "stopGenerationDontAskAgainKeyboard": "ကီးဘုတ်ဖြင့် ရပ်စဲသည့်အခါ ထပ်မမေးပါနှင့်",
     "generateResponseButton": "အဖြေထုတ်လုပ်ပါ",
-    "downloadResponse": "တုံ့ပြန်ချက်ကို ယူဆွဲရန်"
+    "downloadResponse": "တုံ့ပြန်ချက်ကို ယူဆွဲရန်",
+    "activity": {
+      "callingTool": "ကိရိယာခေါ်နေသည်…",
+      "callingService": "ပြင်ပဝန်ဆောင်မှု ခေါ်နေသည်…",
+      "usingNamedTool": "{tool} ကိုသုံးနေသည်…",
+      "usingNamedToolWithService": "{service} တွင် {tool} ကိုသုံးနေသည်…",
+      "searchingWeb": "ဝက်ဘ်ပေါ်တွင် ရှာနေသည်…",
+      "searchingFiles": "ဖိုင်များကို ရှာနေသည်…",
+      "runningCode": "ကုဒ်ကို အသုံးပြုနေသည်…",
+      "generatingImage": "ပုံထုတ်လုပ်နေသည်…",
+      "listingTools": "အသုံးပြုနိုင်သောကိရိယာများကို ရှာဖွေနေနည်…",
+      "analyzingFiles": "သင့်ဖိုင်များကို ခှဲခြမ်းစိတ်ဖြာနေသည်…",
+      "searchingKnowledge": "Knowledge base တွင် ရှာဖွေနေသည်…",
+      "cancellingPriorTool": "ယခင်ကိရိယာတောင်းဆိုမှုကို ဖယ်ရှားနေသည်…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# ကိရိယာ အသုံးပြုခဲ့သည်} other {# ကိရိယာများ အသုံးပြုခဲ့သည်}}",
+      "failedCount": "{count} မအောင်မြင်ခဲ့ပါ",
+      "statusApproved": "အတည်ပြုပြီး",
+      "statusAutoApproved": "အလိုအလျောက်အတည်ပြုသည်",
+      "statusAutoDenied": "အလိုအလျောက်ငြင်းပြီး",
+      "statusFailed": "မအောင်မြင်ပါ",
+      "statusIncomplete": "မပြည့်စုံသေးပါ",
+      "viaService": "{service} မှတစ်ဆင့်"
+    },
+    "consent": {
+      "authorizeRequired": "ခွင့်ပြုချက်လိုအပ်သည်",
+      "authorizeService": "{service} ကို ခွင့်ပြုပါ",
+      "descriptionGeneric": "ဤ agent သည်လုံခြုံသော resource ကိုဝင်ရောက်ရန် သင့်ခွင့်ပြုချက် လိုအပ်သည်။ သင့် sign-in ကို ဤနေရာတွင် သိမ်းဆည်းခြင်းမရှိဘဲ upstream service မှ စီမံသည်။",
+      "descriptionWithService": "ဤ agent သည် {service} ကိုဝင်ရောက်ရန် သင့်ခွင့်ပြုချက် လိုအပ်သည်။ သင့် {service} sign-in ကို {service} ကိုယ်တိုင်စီမံသည်၊ ဤနေရာတွင် သိမ်းဆည်းခြင်းမရှိပါ။",
+      "signInIncompleteGeneric": "Sign-in မပြီးသေးပါ",
+      "signInIncompleteForService": "{service} သို့ sign-in မပြီးသေးပါ",
+      "signInIncompleteDescriptionGeneric": "ခွင့်ပြုချက်မသွားမလာဖြစ်နေသလိုသိမြင်ရသည်။ အခြား tab တွင် sign-in ပြီးမြောက်မှ ထပ်မံ Continue ကိုနှိပ်ပါ။",
+      "signInIncompleteDescription": "{service} သို့ ခွင့်ပြုချက်မပြီးသေးသည်ဟု သိမြင်ရသည်။ အခြား tab တွင် sign-in ပြီးပါက ထပ်မံ Continue ကိုနှိပ်ပါ။",
+      "authorizeButton": "ခွင့်ပြုပါ",
+      "reauthorizeButton": "ထပ်မံခွင့်ပြုပါ",
+      "continueButton": "ဆက်လက်ဆောင်ရွက်ပါ",
+      "confirmingButton": "အတည်ပြုနေသည်…",
+      "authorizeHint": "ခွင့်ပြုပြီးနောက် ဤနေရာသို့ ပြန်လာ၍ Continue ကိုနှိပ်ပါ။ နောက်ပိုင်း ခွင့်မထားလိုပါက {service} ထဲမှ တိုက်ရိုက် Sign out လုပ်နိုင်သည် — token ကို ဤနေရာ၌ မထားရှိပါ။",
+      "authorizeHintGeneric": "ခွင့်ပြုပြီးနောက် ဤနေရာသို့ ပြန်လာ၍ Continue ကိုနှိပ်ပါ။ နောက်ပိုင်း ခွင့်မထားလိုပါက upstream service ထဲမှ တိုက်ရိုက် Sign out လုပ်နိုင်သည် — token ကို ဤနေရာ၌ မထားရှိပါ။",
+      "continueHint": "အခြား tab တွင် ခွင့်ပြုချက်ပါသွားပြီးသည်နှင့် Continue ကိုနှိပ်ပါ။",
+      "confirmingHint": "ခွင့်ပြုချက်အတည်ပြုပြီး သင့်တောင်းဆိုမှုကို ဆက်လက် ဆောင်ရွက်နေသည်…",
+      "resendHint": "ခွင့်ပြုပြီးနောက် သင့်စာကို ပြန်စေလွှတ်ပါ။",
+      "resetTooltip": "ဤဆွေးနွေးမှုအတွက် auto-approval မူဝါဒများအားလုံး reset ပြုလုပ်ပါ။ နောက်ထပ် ကိရိယာခေါ်မှုများတွင် ထပ်မံတောင်းခံပါမည်။",
+      "autoApproveAllIndicator": "ကိရိယာအားလုံးကို အလိုအလျောက်အတည်ပြုနေသည်",
+      "autoApproveCountIndicator": "{count, plural, one {ကိရိယာ # ကို အလိုအလျောက်အတည်ပြုနေသည်} other {ကိရိယာ # များကို အလိုအလျောက်အတည်ပြုနေသည်}}",
+      "resetShort": "ပြန်ဖွင့်ပါ",
+      "approvalRequired": "ကိရိယာအတည်ပြုချက်လိုအပ်သည်",
+      "approvalForService": "{service} အတွက်ကိရိယာအသုံးပြုခွင့်အတည်ပြုပါ",
+      "approvalDescriptionGeneric": "Agent သည် ဆက်လက်ဖြစ်စေခြင်းအတွက် သင့်အတည်ပြုချက်လိုအပ်သော ကိရိယာတစ်ခုကို အသုံးပြုလိုသည်။",
+      "approvalDescriptionWithTool": "Agent သည် သင့်အတည်ပြုချက်လိုအပ်သော {tool} ကိရိယာကို အသုံးပြုလိုသည်။",
+      "runToolTitle": "<code>{tool}</code> ကို မလုပ်မည်လား?",
+      "runToolGeneric": "ဤ tool ကို မလုပ်မည်လား?",
+      "viaService": "{service} မှတဆင့်",
+      "approveButton": "အတည်ပြုမည်",
+      "approveOptionsLabel": "အတည်ပြု ရွေးချယ်မှုများ",
+      "approveOnce": "တစ်ကြိမ်သာ အတည်ပြုမည်",
+      "alwaysApproveThisTool": "ဤ tool ကို အမြဲတမ်း အတည်ပြုပါ",
+      "alwaysApproveAllTools": "Toolsအားလုံးကို အမြဲတမ်း အတည်ပြုပါ",
+      "denyButton": "ငြင်းပယ်မည်",
+      "keyboardHint": "{modifier}+⏎ အတည်ပြုပေးမည် · esc ငြင်းပယ်မည်",
+      "submittingState": "သင့်ဆုံးဖြတ်ချက်ကို တင်ပြနေသည်",
+      "approvedState": "အတည်ပြုပြီး — agent ပြန်စတင်ပါပြီ",
+      "deniedState": "ငြင်းပယ်ခဲ့သည်",
+      "submittingApproval": "အတည်ပြုနေပြီး agent ပြန်စတင်နေပါသည်...",
+      "submittingDenial": "သင့်ငြင်းပယ်မှုကို တင်ပြနေပါသည်..."
+    },
+    "openImage": "ပုံဖွင့်မည်",
+    "copyMessage": "စာတိုက်နှိပ်ယူမည်",
+    "stopAudio": "အသံရပ်မည်",
+    "generatingAudio": "အသံထုတ်ယူနေသည်...",
+    "listen": "နားထောင်မည်",
+    "processingAudio": "အသံကို ပြုလုပ်နေသည်...",
+    "ttsError": "အသံထုတ်ယူရာတွင် အမှားရှိခဲ့သည်။ ထပ်မံကြိုးစားပါ။",
+    "unsupportedMessageType": "စာတိုက် ဖော်ပြရာတွင် အမှား: မပံ့ပိုးသည့်စာတိုက်အမျိုးအစား"
   },
   "sidebar": {
     "collapseSidebar": "ဘေးဘားကို ကျုံ့ပါ",
     "expandSidebar": "ဘေးဘားကို ချဲ့ပါ",
     "quickActionsTitle": "လျှင်မြန်သော လုပ်ဆောင်ချက်များ",
-    "quickActions": "လျှင်မြန်သော လုပ်ဆောင်ချက်များ"
+    "quickActions": "လျှင်မြန်သော လုပ်ဆောင်ချက်များ",
+    "expandFolder": "ဖိုလ်ဒါ {name} ကိုချဲ့မည်",
+    "collapseFolder": "ဖိုလ်ဒါ {name} ကိုချုပ်မည်",
+    "folderOptions": "{name} ရွေးစရာများ"
   },
   "prompts": {
     "buildReusablePrompts": "AI အကူအညီဖြင့် ပြန်လည်အသုံးပြုနိုင်သော အကြံပြုချက်များကို တည်ဆောက်ပါ",
@@ -989,7 +1121,9 @@
     "behaviorSection": "ဖြစ်ပေါ်ဆောင်ရွက်မှု",
     "resetChatSettings": "စကားပြောဆက်တင်များကို Reset လုပ်မည်",
     "resetChatSettingsConfirmTitle": "စကားပြောဆက်တင်များကို Reset လုပ်မလား?",
-    "resetChatSettingsConfirmMessage": "ဤအရာသည် ဤပန်နယ်အတွင်းရှိ အားလုံး၏ ပုံသေနည်းကို ပြန်လည်သတ်မှတ်ပါမည် - temperature၊ custom instructions၊ About You၊ model response၊ streaming speed၊ text-to-speech၊ active files နှင့် confirmations။ သင်၏ စကားပြောမှုများကို ထိခိုက်မှု မရှိပါ။"
+    "resetChatSettingsConfirmMessage": "ဤအရာသည် ဤပန်နယ်အတွင်းရှိ အားလုံး၏ ပုံသေနည်းကို ပြန်လည်သတ်မှတ်ပါမည် - temperature၊ custom instructions၊ About You၊ model response၊ streaming speed၊ text-to-speech၊ active files နှင့် confirmations။ သင်၏ စကားပြောမှုများကို ထိခိုက်မှု မရှိပါ။",
+    "customInstructionsLabel": "စိတ်ကြိုက်ညွှန်ကြားချက်များ*",
+    "defaultTemperatureLabel": "မူရင်း Temperature*"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "အသုံးပြုသူက ပယ်ဖျက်ခဲ့သည်",
     "transientBody": "ထပ်မံကြိုးစားပါ",
     "authFailedBody": "ထပ်မံဝင်ရောက်ပါ",
-    "rateLimitedBody": "ဝန်ဆောင်မှု ပြည့်နက်နေသည်၊ ခဏလောက်အကြာ ထပ်မံကြိုးစားပါ"
+    "rateLimitedBody": "ဝန်ဆောင်မှု ပြည့်နက်နေသည်၊ ခဏလောက်အကြာ ထပ်မံကြိုးစားပါ",
+    "loadingAttempt": "(ကြိုးစားနေသည် {count})",
+    "transcriptLabel": "[စာတမ်း: {filename}]"
   },
   "transcriptionComplete": "စာရိုက်ဖြစ်ပြီးပါပြီ! စာသားကို ချတ်ထဲသို့ ထည့်ပြီးပါပြီ။",
   "No prompts found": "Prompt မတွေ့ရပါ",
@@ -1174,7 +1310,8 @@
       "agents": "Agent များ"
     },
     "sections": {
-      "baseModels": "အခြေခံပုံစံများ"
+      "baseModels": "အခြေခံပုံစံများ",
+      "allModels": "မော်ဒယ်အားလုံး ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "တိုးတက်သောအင်္ဂါရပ်",
@@ -1247,7 +1384,19 @@
       "reasoning": "ရှုပ်ထွေးသော ပြဿနာများအတွက် ကျယ်ပြန့်သော ဆင်ခြင်နိုင်စွမ်း",
       "omni": "စွမ်းရည်အမျိုးမျိုး ဖြည့်ဆောင်နိုင်သော မော်ဒယ်",
       "agent": "အချိန်နောက်ခံ လုပ်ဆောင်နိုင်သောကိရိယာများနှင့် ဝက်ဘ်သုံးခွင့်ရှိသော Agent"
-    }
+    },
+    "hide": "စာရင်းမှ ဖျောက်မည်",
+    "hideConfirmTitle": "\"{name}\" ကို ဖျောက်မည်လား?",
+    "hideConfirmMessage": "၎င်းသည် သင့်စာရင်းမှ ဖယ်ရှားမည်သာဖြစ်ပြီး ဖျက်သိမ်းခြင်း မရှိပါ။ Hidden အပိုင်းမှ ပြန်လည်ဖော်ပြနိုင်ပါသည်။",
+    "hideConfirm": "ဖျောက်မည်",
+    "hiddenToast": "\"{name}\" ကို ဖျောက်ပြီး",
+    "hidden": {
+      "title": "ဖျောက်ထားသည် ({count})",
+      "restore": "ပြန်လည်ထည့်မည်"
+    },
+    "title": "မော်ဒယ် ရွေးချယ်ပါ",
+    "modelsDescription": "သင့်ဆွေးနွေးမှုအတွက် AI မော်ဒယ် တစ်ခု ရွေးပါ။ မော်ဒယ်တိုင်းမှာ အားသာချက်ဖျာရွေး ဒါ့ကြောင့် အသေးစိတ်ကြည့်ရန် တစ်ခုရွေးပါ။",
+    "recommended": "အကြံပြုထားသည်"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "2025 ဒီဇင်ဘာ",
       "description": "GPT-5.2 ၏ အထူးပြုမျိုးကွဲဖြစ်ပြီး ဆွေးနွေးမှုအပြန်အလှန်နှင့် စိတ်ခံစားမှုနားလည်မှုအတွက် အထူးသင့်လျော်အောင် ပြင်ဆင်ထားသည်။ ကြင်နာလိမ္မာစွာ ဆက်သွယ်ပြောဆိုမှု၊ ဖန်တီးမှုရေးသားမှု၊ စိတ်ကူးပေးခြင်းနှင့် သဘာဝလိုက်လျောညီထွေ ဆွေးနွေးမှုများတွင် ထူးချွန်သည်။ သဘောထားထိတွေ့မှုလိုအပ်သော အလွတ်ပြောခြင်း၊ တိုင်ပင်ဆွေးနွေးမှုများနှင့် ယင်းသော်လည်းသက်ဆိုင်သည့် လုပ်ဆောင်ချက်များအတွက် အကောင်းဆုံးဖြစ်သည်။"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic ၏ အားကြီးဆုံးမော်ဒယ်။ ရှည်လျားသော စာရေးခြင်း၊ သုတေသနနှင့် တခုချင်းစီစဉ်းစားရသည့် အလုပ်များအတွက် သင့်တော်သည်။",
+      "knowledgeCutoff": "ဖေဖော်ဝါရီ ၂၀၂၆"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "ချိန်ညှိထားသည့် Claude မော်ဒယ်။ နေ့စဉ်စာရေးခြင်း၊ လေ့လာသုံးသပ်မှုနှင့် အမြန်တုံ့ပြန်မှုနဲ့ code ရေးရာတွင် သင့်တော်သည်။",
+      "knowledgeCutoff": "ဖေဖော်ဝါရီ ၂၀၂၆"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "စမ်းသပ်ဆဲ — MSF ကျွမ်းကျင်အသုံးပြုသူများနှင့် တိုက်ရိုက်ပူးပေါင်းဆောင်ရွက်၍ တည်ဆောက်ထားသည်။ အထွေထွေအသုံးပြုရန် မဟုတ်ပါ။",
       "createButton": "စိတ်ကြိုက် အေးဂျင့် ဖန်တီးရန်"
     },
-    "selectAgentPrompt": "အသေးစိတ်ကြည့်ရန် အေးဂျင့်ကို ရွေးပါ"
+    "selectAgentPrompt": "အသေးစိတ်ကြည့်ရန် အေးဂျင့်ကို ရွေးပါ",
+    "description": "အထူးပြု AI agents များကို တာဝန်အလိုက် အသုံးပြုပါ။ မူရင်း agents များကို ဗဟုလေ့လာခေါင်းစဉ်ဖြင့် ထိန်းသိမ်းထားသည်။ အခြား Foundry projects မှ agents များ ရှာဖွေရန် စိတ်ကြိုက်ရင်းမြစ်များ ထည့်နိုင်သည်။",
+    "regionAgents": {
+      "us": "US နယ်မြေ agents များ",
+      "eu": "EU နယ်မြေ agents များ",
+      "default": "ဒေသအေဂျင့်များ"
+    },
+    "officeAgents": {
+      "suffix": "အေဂျင့်များ"
+    },
+    "agentSources": {
+      "title": "Foundry ချိတ်ဆက်မှုများ",
+      "description": "အခြား Foundry projects များနှင့်ချိတ်ဆက်ပြီး သူတို့၏အေဂျင့်များကို ရှာဖွေပါ။",
+      "connectButton": "Microsoft Azure Foundry project တစ်ခုချိတ်ဆက်မည်",
+      "connectButtonShort": "Foundry project တစ်ခုချိတ်ဆက်မည်",
+      "addButton": "ထပ်မံကိုယ်ပိုင် Source ထည့်မည်",
+      "addAnother": "ထပ်မံချိတ်ဆက်မှု ထည့်မည်",
+      "noSources": "ကိုယ်ပိုင် source မရှိသေးပါ။",
+      "removeSource": "Source ကိုဖယ်ရှားရန်",
+      "confirmRemove": "ဖယ်ရှားမည်လား?",
+      "sourceConnected": "ကိုယ်ပိုင် source ချိတ်ဆက်ပြီး",
+      "sourcesConnected": "ကိုယ်ပိုင် source များချိတ်ဆက်ပြီး",
+      "backToAgents": "နောက်သို့",
+      "discoveredAgents": "ရှာဖွေတွေ့ရှိထားသောအေဂျင့်များ",
+      "viewConnection": "ချိတ်ဆက်မှုအသေးစိတ်ကြည့်ရှုခြင်း",
+      "edit": "တည်းဖြတ်ရန်",
+      "noAgentsPublished": "အေဂျင့်များ မထုတ်ဝေရသေးပါ",
+      "connectedOn": "ချိတ်ဆက်ပြီးနေ့ {date}",
+      "disconnectSource": "ဤ source ကိုဖြုတ်မည်",
+      "confirmDisconnect": "အတည်ပြုရန် ထပ်နှိပ်ပါ",
+      "loadingAgents": "အေဂျင့်များ တင်နေသည်...",
+      "noAgentsFound": "ဤ project ထဲတွင် အေဂျင့်မတွေ့ရှိပါ",
+      "noAgentsFoundHint": "အေဂျင့်များ ထုတ်ဝေပြီးဖြစ်ကြောင်းနှင့် သင်သည်ဤ project တွင် Azure AI User role ရှိကြောင်း သေချာစေပါ။",
+      "refresh": "ပြန်လည်သွင်းပါ",
+      "refreshAgents": "အေဂျင့်များ ပြန်လည်သွင်းပါ",
+      "technicalDetails": "နည်းပညာအသေးစိတ်",
+      "agentCountLabel": "အေဂျင့် {count} ဦး",
+      "disconnectedToast": "{name} ကိုဖြုတ်ပြီး"
+    }
   },
   "privacy": {
     "policyTitle": "ကိုယ်ရေးအချက်အလက် မူဝါဒ & ဒေတာ ကာကွယ်မှု",

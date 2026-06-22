@@ -381,7 +381,59 @@
     "delete": "삭제",
     "noCustomAgentsYet": "아직 커스텀 에이전트가 없습니다.",
     "noOrgAgentsConfigured": "조직 에이전트가 구성되지 않았습니다.",
-    "validationFailed": "유효성 검사 실패"
+    "validationFailed": "유효성 검사 실패",
+    "addAgentSource": "사용자 지정 소스 추가",
+    "connectFoundryProject": "Microsoft Azure Foundry 프로젝트 연결",
+    "connectFoundryDescription": "다른 사무실이나 팀의 Azure Foundry 프로젝트의 에이전트를 확인할 수 있습니다. 접근 권한이 있는 에이전트만 표시됩니다.",
+    "foundryProjectPath": "Foundry 프로젝트 경로",
+    "foundryProjectPathHelp": "Foundry 프로젝트 관리자에게 문의하거나, '직접 입력'을 클릭하여 각 필드를 따로 입력하세요.",
+    "copyFormat": "포맷",
+    "nameLabel": "이름",
+    "namePlaceholder": "예: Amsterdam Office, Geneva Research",
+    "pathRequired": "Foundry 프로젝트 리소스 경로를 붙여넣으세요.",
+    "pathInvalidFormat": "이 경로는 리소스 경로 형식이 아닙니다. /subscriptions/...로 시작해야 합니다.",
+    "connectionFailed": "이 프로젝트에 연결할 수 없습니다. 경로가 올바른지와 접근 권한이 있는지 확인하세요.",
+    "connectionSuccessAgents": "연결됨 — {count}개의 에이전트 발견",
+    "connectionSuccessEmpty": "연결되었지만 에이전트가 없습니다. 에이전트를 보려면 이 프로젝트의 Azure AI User 역할이 필요할 수 있습니다.",
+    "checkingConnection": "연결 확인 중...",
+    "connect": "연결",
+    "save": "저장",
+    "editConnection": "연결 편집",
+    "sourceName": "소스 이름",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "소스 이름은 필수입니다.",
+    "resourcePath": "리소스 경로",
+    "resourcePathRequired": "리소스 경로는 필수입니다.",
+    "resourcePathHelp": "Foundry 프로젝트의 ARM 리소스 경로입니다. 관리자에게 문의하여 값을 확인하세요.",
+    "invalidResourcePathFormat": "리소스 경로는 /subscriptions/...로 시작해야 합니다.",
+    "validatingSource": "에이전트 검색 중...",
+    "sourceValidatedEmpty": "유효한 소스이지만 에이전트가 없습니다. 이 프로젝트의 에이전트에 대한 접근 권한이 없을 수 있습니다.",
+    "invalidSource": "이 리소스 경로에 접근할 수 없습니다. 경로와 권한을 확인하세요.",
+    "addSource": "소스 추가",
+    "removeSource": "소스 제거",
+    "labelSubscription": "구독",
+    "labelFoundryAccount": "Foundry 계정",
+    "labelProject": "프로젝트",
+    "tooltipSubscription": "Foundry 계정이 포함된 Azure 구독입니다. 확실하지 않은 경우, 팀에서 사용하는 구독을 관리자에게 문의하세요.",
+    "tooltipFoundryAccount": "Foundry 프로젝트가 포함된 Azure AI Services 계정입니다. 일반적으로 각 사무실 또는 팀마다 별도의 계정을 사용합니다.",
+    "tooltipProject": "프로젝트는 계정 내에서 에이전트를 구성합니다. 대부분의 계정에는 하나의 'default' 프로젝트가 있습니다.",
+    "foundryProjectLabel": "Foundry 프로젝트",
+    "enterManually": "직접 입력",
+    "browseResources": "리소스 탐색",
+    "subscriptionIdLabel": "구독 ID",
+    "resourceGroupLabel": "리소스 그룹",
+    "accountNameLabel": "계정 이름",
+    "projectNameLabel": "프로젝트 이름",
+    "loadingSubscriptions": "구독 불러오는 중...",
+    "selectSubscription": "구독을 선택하세요...",
+    "loadingAccounts": "계정 불러오는 중...",
+    "noAccountsFound": "이 구독에 Foundry 계정이 없습니다.",
+    "selectAccount": "계정을 선택하세요...",
+    "loadingProjects": "프로젝트 불러오는 중...",
+    "noProjectsFound": "프로젝트가 없습니다. \"default\"를 사용합니다.",
+    "selectAllRequired": "구독, 계정, 프로젝트를 모두 선택하세요.",
+    "subscriptionRequired": "구독을 선택하세요",
+    "accountRequired": "Foundry 계정을 선택하세요"
   },
   "Quick Actions": "빠른 작업",
   "Type / in chat to access your prompts": "채팅에서 /를 입력하여 프롬프트에 액세스하세요",
@@ -538,7 +590,10 @@
     "keepEditing": "계속 편집",
     "yes": "예",
     "no": "아니오",
-    "beta": "베타"
+    "beta": "베타",
+    "copied": "복사됨!",
+    "clear": "지우기",
+    "undo": "실행 취소"
   },
   "errors": {
     "unexpectedErrorOccurred": "예기치 않은 오류가 발생했습니다",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "버튼으로 중단 시 다시 묻지 않기",
     "stopGenerationDontAskAgainKeyboard": "키보드로 중단 시 다시 묻지 않기",
     "generateResponseButton": "응답 생성",
-    "downloadResponse": "응답 다운로드"
+    "downloadResponse": "응답 다운로드",
+    "activity": {
+      "callingTool": "도구 실행 중…",
+      "callingService": "외부 서비스 호출 중…",
+      "usingNamedTool": "{tool} 사용 중…",
+      "usingNamedToolWithService": "{service}에서 {tool} 사용 중…",
+      "searchingWeb": "웹 검색 중…",
+      "searchingFiles": "파일 검색 중…",
+      "runningCode": "코드 실행 중…",
+      "generatingImage": "이미지 생성 중…",
+      "listingTools": "사용 가능한 도구 조회 중…",
+      "analyzingFiles": "파일 분석 중…",
+      "searchingKnowledge": "지식 베이스 검색 중…",
+      "cancellingPriorTool": "이전 도구 요청 취소 중…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {#개 도구 사용} other {#개 도구 사용}}",
+      "failedCount": "{count}개 실패",
+      "statusApproved": "승인됨",
+      "statusAutoApproved": "자동 승인됨",
+      "statusAutoDenied": "자동 거부됨",
+      "statusFailed": "실패",
+      "statusIncomplete": "미완료",
+      "viaService": "{service}를 통해"
+    },
+    "consent": {
+      "authorizeRequired": "인증 필요",
+      "authorizeService": "{service} 인증",
+      "descriptionGeneric": "이 에이전트는 보안 리소스에 접근할 수 있도록 사용자의 권한이 필요합니다. 로그인 정보는 상위 서비스에서 관리되며, 이곳에는 저장되지 않습니다.",
+      "descriptionWithService": "이 에이전트는 {service}에 접근할 수 있도록 사용자의 권한이 필요합니다. {service} 로그인 정보는 {service}에서 직접 관리되며, 이곳에는 저장되지 않습니다.",
+      "signInIncompleteGeneric": "로그인이 완료되지 않았습니다",
+      "signInIncompleteForService": "{service} 로그인 완료되지 않음",
+      "signInIncompleteDescriptionGeneric": "인증이 완료되지 않은 것 같습니다. 다른 탭에서 로그인 과정을 완료한 후, 다시 '계속'을 눌러주세요.",
+      "signInIncompleteDescription": "{service} 인증이 완료되지 않은 것 같습니다. 다른 탭에서 로그인 과정을 완료한 후, 다시 '계속'을 눌러주세요.",
+      "authorizeButton": "인증",
+      "reauthorizeButton": "다시 인증",
+      "continueButton": "계속",
+      "confirmingButton": "확인 중…",
+      "authorizeHint": "인증 후 이 화면으로 돌아와 '계속'을 클릭하세요. 권한을 해제하려면 {service}에서 직접 로그아웃하세요 — 토큰을 보관하지 않습니다.",
+      "authorizeHintGeneric": "인증 후 이 화면으로 돌아와 '계속'을 클릭하세요. 권한을 해제하려면 해당 상위 서비스에서 직접 로그아웃하세요 — 토큰을 보관하지 않습니다.",
+      "continueHint": "다른 탭에서 인증이 완료되면 '계속'을 클릭하세요.",
+      "confirmingHint": "인증을 확인하고 요청을 재개하는 중…",
+      "resendHint": "인증 완료 후 메시지를 다시 보내면 계속 진행됩니다.",
+      "resetTooltip": "이 대화의 모든 도구 자동 승인 설정을 초기화합니다. 이후 도구 실행 시 다시 알림이 표시됩니다.",
+      "autoApproveAllIndicator": "모든 도구 자동 승인 중",
+      "autoApproveCountIndicator": "{count, plural, one {#개 도구 자동 승인} other {#개 도구 자동 승인}}",
+      "resetShort": "초기화",
+      "approvalRequired": "도구 승인 필요",
+      "approvalForService": "{service}용 도구 승인",
+      "approvalDescriptionGeneric": "이 에이전트가 작업을 계속하기 전, 사용자의 승인이 필요한 도구를 실행하려 합니다.",
+      "approvalDescriptionWithTool": "이 에이전트가 {tool} 도구 실행을 요청하고 있으며, 진행 전 승인이 필요합니다.",
+      "runToolTitle": "<code>{tool}</code> 실행하시겠습니까?",
+      "runToolGeneric": "이 도구를 실행하시겠습니까?",
+      "viaService": "{service}를 통해",
+      "approveButton": "승인",
+      "approveOptionsLabel": "승인 옵션",
+      "approveOnce": "한 번만 승인",
+      "alwaysApproveThisTool": "항상 이 도구 승인",
+      "alwaysApproveAllTools": "모든 도구 항상 승인",
+      "denyButton": "거부",
+      "keyboardHint": "{modifier}+⏎ 승인 · esc 거부",
+      "submittingState": "결정을 보내는 중",
+      "approvedState": "승인됨 — 에이전트가 재개되었습니다",
+      "deniedState": "거부됨",
+      "submittingApproval": "승인 후 에이전트 재개 중…",
+      "submittingDenial": "거부 내용을 보내는 중…"
+    },
+    "openImage": "이미지 열기",
+    "copyMessage": "메시지 복사",
+    "stopAudio": "오디오 중지",
+    "generatingAudio": "오디오 생성 중...",
+    "listen": "듣기",
+    "processingAudio": "오디오 처리 중...",
+    "ttsError": "오디오 생성 오류가 발생했습니다. 다시 시도해 주세요.",
+    "unsupportedMessageType": "메시지 렌더링 오류: 지원되지 않는 메시지 유형"
   },
   "sidebar": {
     "collapseSidebar": "사이드바 축소",
     "expandSidebar": "사이드바 확장",
     "quickActionsTitle": "빠른 작업",
-    "quickActions": "빠른 작업"
+    "quickActions": "빠른 작업",
+    "expandFolder": "폴더 {name} 펼치기",
+    "collapseFolder": "폴더 {name} 접기",
+    "folderOptions": "{name} 옵션"
   },
   "prompts": {
     "buildReusablePrompts": "AI 지원으로 재사용 가능한 프롬프트 구축",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "동작",
     "resetChatSettings": "채팅 설정 초기화",
     "resetChatSettingsConfirmTitle": "채팅 설정을 초기화하시겠습니까?",
-    "resetChatSettingsConfirmMessage": "이 작업은 이 패널의 모든 값을 기본값으로 복원합니다: 온도, 사용자 지정 지침, About You, 모델 응답, 스트리밍 속도, 음성 출력, 활성 파일 및 확인 메시지. 대화 내용에는 영향을 주지 않습니다."
+    "resetChatSettingsConfirmMessage": "이 작업은 이 패널의 모든 값을 기본값으로 복원합니다: 온도, 사용자 지정 지침, About You, 모델 응답, 스트리밍 속도, 음성 출력, 활성 파일 및 확인 메시지. 대화 내용에는 영향을 주지 않습니다.",
+    "customInstructionsLabel": "맞춤 지침*",
+    "defaultTemperatureLabel": "기본 Temperature*"
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -1077,7 +1211,8 @@
       "agents": "에이전트"
     },
     "sections": {
-      "baseModels": "기본 모델"
+      "baseModels": "기본 모델",
+      "allModels": "모든 모델({count})"
     },
     "agents": {
       "advancedFeatureBadge": "고급 기능",
@@ -1150,7 +1285,19 @@
       "reasoning": "복잡한 문제를 위한 확장된 추론",
       "omni": "다양한 기능의 멀티모달 모델",
       "agent": "실시간 도구 및 웹 접근이 가능한 에이전트"
-    }
+    },
+    "hide": "목록에서 숨기기",
+    "hideConfirmTitle": "\"{name}\"을(를) 숨기시겠습니까?",
+    "hideConfirmMessage": "목록에서 제거되지만 삭제되지는 않습니다. 숨김 섹션에서 언제든 복원할 수 있습니다.",
+    "hideConfirm": "숨기기",
+    "hiddenToast": "\"{name}\"이(가) 숨겨졌습니다",
+    "hidden": {
+      "title": "숨김({count})",
+      "restore": "복원"
+    },
+    "title": "모델 선택",
+    "modelsDescription": "대화에 사용할 AI 모델을 선택하세요. 각 모델마다 강점이 다릅니다 — 자세한 내용을 보려면 선택하세요.",
+    "recommended": "추천"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 챗",
       "knowledgeCutoff": "2025년 12월",
       "description": "대화 및 감정 지능에 최적화된 GPT-5.2의 특수 버전입니다. 공감 있는 소통, 창의적 글쓰기, 아이디어 브레인스토밍, 자연스러운 대화에 뛰어납니다. 일상적인 대화, 상담 상황, 감정 인식이 필요한 업무에 가장 적합합니다."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic의 가장 강력한 모델입니다. 긴 글 작성, 연구, 신중한 사고가 필요한 업무에 적합합니다.",
+      "knowledgeCutoff": "2026년 2월"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "균형 잡힌 Claude 모델입니다. 일상적인 글쓰기, 분석, 빠른 반응이 필요한 코딩에 적합합니다.",
+      "knowledgeCutoff": "2026년 2월"
     }
   },
   "searchMode": {
@@ -1365,7 +1522,9 @@
     "cancelledBody": "사용자에 의해 취소됨",
     "transientBody": "다시 시도해 주세요.",
     "authFailedBody": "다시 로그인해 주세요.",
-    "rateLimitedBody": "서비스가 포화 상태입니다. 잠시 후 다시 시도해 주세요."
+    "rateLimitedBody": "서비스가 포화 상태입니다. 잠시 후 다시 시도해 주세요.",
+    "loadingAttempt": "(시도 {count})",
+    "transcriptLabel": "[전사: {filename}]"
   },
   "migration": {
     "status": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "실험적 기능 — MSF 파워 유저와의 직접 협력으로 구축됨. 일반 사용 목적이 아닙니다.",
       "createButton": "커스텀 에이전트 만들기"
     },
-    "selectAgentPrompt": "에이전트를 선택하여 세부정보 보기"
+    "selectAgentPrompt": "에이전트를 선택하여 세부정보 보기",
+    "description": "특정 업무를 위한 전문 AI 에이전트입니다. 기본 에이전트는 중앙에서 관리되며, 다른 Foundry 프로젝트 에이전트를 찾으려면 사용자 지정 소스를 추가하세요.",
+    "regionAgents": {
+      "us": "미국 지역 에이전트",
+      "eu": "EU 지역 에이전트",
+      "default": "지역 에이전트"
+    },
+    "officeAgents": {
+      "suffix": "에이전트"
+    },
+    "agentSources": {
+      "title": "Foundry 연결",
+      "description": "다른 Foundry 프로젝트에 연결하여 그들의 에이전트를 확인하세요.",
+      "connectButton": "Microsoft Azure Foundry 프로젝트 연결",
+      "connectButtonShort": "Foundry 프로젝트 연결",
+      "addButton": "사용자 지정 소스 추가",
+      "addAnother": "연결 추가",
+      "noSources": "구성된 사용자 지정 소스가 없습니다.",
+      "removeSource": "소스 제거",
+      "confirmRemove": "제거하시겠습니까?",
+      "sourceConnected": "사용자 지정 소스 연결됨",
+      "sourcesConnected": "사용자 지정 소스 연결됨",
+      "backToAgents": "뒤로",
+      "discoveredAgents": "발견된 에이전트",
+      "viewConnection": "연결 세부 정보 보기",
+      "edit": "편집",
+      "noAgentsPublished": "게시된 에이전트 없음",
+      "connectedOn": "{date}에 연결됨",
+      "disconnectSource": "이 소스 연결 해제",
+      "confirmDisconnect": "한 번 더 클릭하여 확인",
+      "loadingAgents": "에이전트 불러오는 중...",
+      "noAgentsFound": "이 프로젝트에서 에이전트를 찾을 수 없습니다",
+      "noAgentsFoundHint": "에이전트가 게시되어 있으며 해당 프로젝트의 Azure AI 사용자 역할이 있는지 확인하십시오.",
+      "refresh": "새로고침",
+      "refreshAgents": "에이전트 새로고침",
+      "technicalDetails": "기술 세부 정보",
+      "agentCountLabel": "에이전트 {count}개",
+      "disconnectedToast": "{name} 연결 해제됨"
+    }
   },
   "privacy": {
     "policyTitle": "개인정보 보호정책 & 데이터 보호",

@@ -385,7 +385,59 @@
     "delete": "Tirtir",
     "noCustomAgentsYet": "Wali wakiil gaar ah ma jiro.",
     "noOrgAgentsConfigured": "Wakiilada hay'adda lama habeynin.",
-    "validationFailed": "Xaqiijintu waa fashilantay"
+    "validationFailed": "Xaqiijintu waa fashilantay",
+    "addAgentSource": "Ku dar Ilo Gaar ah",
+    "connectFoundryProject": "Ku xidh Mashruuca Microsoft Azure Foundry",
+    "connectFoundryDescription": "Ka hel wakiillo mashruuca Azure Foundry ee xafiis kale ama koox kale. Kaliya waxaad arki doontaa wakiillada aad u leedahay oggolaansho.",
+    "foundryProjectPath": "Jidka Mashruuca Foundry",
+    "foundryProjectPathHelp": "Weydii maamulaha mashruuca Foundry, ama guji 'Gali gacanta' si aad mid walba uga buuxiso gooni.",
+    "copyFormat": "Qaab",
+    "nameLabel": "Magac",
+    "namePlaceholder": "tusaale ahaan. Amsterdam Office, Geneva Research",
+    "pathRequired": "Ku dheji jidka kheyraadka mashruuca Foundry.",
+    "pathInvalidFormat": "Tani uma eka jid kheyraad. Waa in ay ku bilaabataa /subscriptions/...",
+    "connectionFailed": "Mashruucan lama heli karo. Hubi in jidku sax yahay iyo inaad haysato oggolaansho.",
+    "connectionSuccessAgents": "Waa la xidhay — {count} wakiil waa la helay",
+    "connectionSuccessEmpty": "Waa la xidhay, balse wakiillo lama helin. Waxaa laga yaabaa inaad u baahan tahay doorka Azure AI User si aad u aragto wakiillada.",
+    "checkingConnection": "Xaqiijinaya xiriirka...",
+    "connect": "Ku xidh",
+    "save": "Kaydi",
+    "editConnection": "Tafatir Xiriirka",
+    "sourceName": "Magaca Isha",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Magaca isha waa lama huraan.",
+    "resourcePath": "Jidka Kheyraadka",
+    "resourcePathRequired": "Jidka kheyraadka waa lama huraan.",
+    "resourcePathHelp": "Jidka ARM ee kheyraadka mashruuca Foundry. Weydii maamulahaaga qiimahan.",
+    "invalidResourcePathFormat": "Jidka kheyraadku waa inuu ku bilaabmaa /subscriptions/...",
+    "validatingSource": "Wakiillo la baadhayo...",
+    "sourceValidatedEmpty": "Isha waa sax, balse wakiil lama helin. Waxaa laga yaabaa inaadan u lahayn oggolaansho wakiillada mashruucan.",
+    "invalidSource": "Kheyraadkan lama gali karo. Hubi jidka iyo oggolaanshahaaga.",
+    "addSource": "Ku dar Isha",
+    "removeSource": "Ka saar Isha",
+    "labelSubscription": "Isdiiwaan gelin",
+    "labelFoundryAccount": "Akaawnka Foundry",
+    "labelProject": "Mashruuc",
+    "tooltipSubscription": "Isdiiwaan gelinta Azure ee leh akaawnka Foundry. Haddii aadan hubin, weydii maamulahaaga isdiiwaan gelinta kooxdaada.",
+    "tooltipFoundryAccount": "Akaawnka Azure AI Services ee uu ku jiro mashruuca Foundry. Xafiis kasta ama koox kasta badiyaa waxay leeyihiin mid u gooni ah.",
+    "tooltipProject": "Mashruucu wuxuu abaabulaa wakiillo gudaha akaawnka. Badanaa akaawannada waxay leeyihiin hal mashruuc 'default' ah.",
+    "foundryProjectLabel": "Mashruuca Foundry",
+    "enterManually": "Geli gacanta",
+    "browseResources": "Raadi kheyraadka",
+    "subscriptionIdLabel": "Aqoonsiga Isdiiwaan Gelinta",
+    "resourceGroupLabel": "Kooxda Kheyraadka",
+    "accountNameLabel": "Magaca Akaawnka",
+    "projectNameLabel": "Magaca Mashruuca",
+    "loadingSubscriptions": "Isdiiwaan gelinyooyin la soo rogayaa...",
+    "selectSubscription": "Dooro isdiiwaan gelin...",
+    "loadingAccounts": "Akaawanno la soo rogayaa...",
+    "noAccountsFound": "Akaawanno Foundry lagama helin isdiiwaan gelintan.",
+    "selectAccount": "Dooro akaawn...",
+    "loadingProjects": "Mashruucyo la soo rogayaa...",
+    "noProjectsFound": "Mashruucyo laguma helin. Waxaa la isticmaalayaa \"default\".",
+    "selectAllRequired": "Dooro isdiiwaan gelin, akaawn, iyo mashruuc.",
+    "subscriptionRequired": "Xulo xubinimada",
+    "accountRequired": "Xulo akoonka Foundry"
   },
   "Quick Actions": "Ficilada Degdegga ah",
   "Type / in chat to access your prompts": "Ku qor / sheekada si aad u gasho tilmaamahaaga",
@@ -641,7 +693,10 @@
     "keepEditing": "Sii wad Wax ka beddelka",
     "yes": "Haa",
     "no": "Maya",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "La koobiyeey!",
+    "clear": "Nadiifi",
+    "undo": "Dib u noqosh"
   },
   "terms": {
     "officialLanguages": "Nooca rasmiga ah:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Ha la iga weydiin mar kale markaan joojinayo batoonka",
     "stopGenerationDontAskAgainKeyboard": "Ha la iga weydiin mar kale markaan joojinayo kumbuyuutarka",
     "generateResponseButton": "Abuur jawaab",
-    "downloadResponse": "Soo dejiso jawaabta"
+    "downloadResponse": "Soo dejiso jawaabta",
+    "activity": {
+      "callingTool": "Qalab ayaa la wacayaa…",
+      "callingService": "Adeeg dibadda ah ayaa la wacayaa…",
+      "usingNamedTool": "Waxaa la isticmaalayaa {tool}…",
+      "usingNamedToolWithService": "Waxaa la isticmaalayaa {tool} ee {service}…",
+      "searchingWeb": "Web-ka ayaa la baarayaa…",
+      "searchingFiles": "Faylashaa la baarayaa…",
+      "runningCode": "Code ayaa soconaya…",
+      "generatingImage": "Sawir ayaa la abuurayaa…",
+      "listingTools": "Qalabyada la heli karo ayaa la eegayaa…",
+      "analyzingFiles": "Faylashaada ayaa la falanqeynayaa…",
+      "searchingKnowledge": "Xogta keydka ayaa la baarayaa…",
+      "cancellingPriorTool": "Codsigii hore ee qalabka waa la joojinayaa…"
+    },
+    "toolSummary": {
+      "usedTools": "Waxaa la isticmaalay {count, plural, one {# qalab} other {# qalabyo}}",
+      "failedCount": "{count} waa fashilantay",
+      "statusApproved": "La oggolaaday",
+      "statusAutoApproved": "Si toos ah loo oggolaaday",
+      "statusAutoDenied": "Si toos ah loo diiday",
+      "statusFailed": "Fashil",
+      "statusIncomplete": "Dhameys la'aan",
+      "viaService": "iyadoo loo marayo {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Oggolaansho ayaa loo baahan yahay",
+      "authorizeService": "Oggolow {service}",
+      "descriptionGeneric": "Wakiilkani wuxuu u baahan yahay oggolaanshahaaga si uu u galo ilo ammaan ah. Isdiiwaangelintaada waxa maamula adeegga sare, loogama keydin halkan.",
+      "descriptionWithService": "Wakiilkani wuxuu u baahan yahay oggolaanshahaaga si uu u galo {service}. Galitaankaaga {service} waxa maamula {service} laftiisa, loogama keydin halkan.",
+      "signInIncompleteGeneric": "Galitaanka laguma dhammeystirin",
+      "signInIncompleteForService": "Galitaanka {service} laguma dhammeystirin",
+      "signInIncompleteDescriptionGeneric": "Waxay u muuqataa in oggolaanshuhu dhammaad noqon waayay. Hubi in tab-ka kale aad ku dhammaysatay galitaanka, markaasna halkan dib u riix Continue.",
+      "signInIncompleteDescription": "Waxay u muuqataa in oggolaanshaha {service} uusan dhammaanin. Hubi inaad tab kale ku dhammaysay galitaanka, kadibna dib u riix Continue.",
+      "authorizeButton": "Oggolow",
+      "reauthorizeButton": "Dib u oggolow",
+      "continueButton": "Sii wad",
+      "confirmingButton": "La xaqiijinayo…",
+      "authorizeHint": "Oggolow, ka dibna ku noqo halkan oo guji Sii wad. Si aad mar dambe u ka noqoto, si toos ah uga bax {service} — annagu token-ka ma hayno.",
+      "authorizeHintGeneric": "Oggolow, kadibna ku noqo halkan oo guji Sii wad. Si aad mar dambe u ka noqoto, si toos ah uga bax adeegga sare — annagu token-ka ma hayno.",
+      "continueHint": "Marka oggolaanshuhu ku dhammaado tabka kale, guji Sii wad.",
+      "confirmingHint": "Oggolaanshaha ayaa la xaqiijinayaa, codsigaagana waa la bilaabayaa…",
+      "resendHint": "Markaad oggolaato, fariintaada markale dir si aad u sii waddo.",
+      "resetTooltip": "Dib u daji dhammaan doorashooyinka auto-approval ee wadahadan. Qalabka mustaqbalka waa laga codsan doonaa mar kale.",
+      "autoApproveAllIndicator": "Qalab kasta si toos ah ayaa loo oggolaanayaa",
+      "autoApproveCountIndicator": "{count, plural, one {Hal qalab si toos ah loo oggolaayo} other {# qalab si toos ah loo oggolaayo}}",
+      "resetShort": "Dib u daji",
+      "approvalRequired": "Oggolaansho qalab ayaa loo baahan yahay",
+      "approvalForService": "Oggolow qalabka {service}",
+      "approvalDescriptionGeneric": "Wakiilku wuxuu rabaa inuu adeegsado qalab u baahan oggolaanshahaaga ka hor inta uusan sii wadin.",
+      "approvalDescriptionWithTool": "Wakiilku wuxuu rabaa inuu isticmaalo qalabka {tool}, kaas oo u baahan oggolaanshahaaga ka hor inta aan la sii wadin.",
+      "runToolTitle": "Ma ordaa <code>{tool}</code>?",
+      "runToolGeneric": "Ma ordaa qalabkan?",
+      "viaService": "iyadoo loo marayo {service}",
+      "approveButton": "Ogolaaw",
+      "approveOptionsLabel": "Doorashooyinka oggolaanshaha",
+      "approveOnce": "Hal mar ogolaaw",
+      "alwaysApproveThisTool": "Had iyo jeer u ogolow qalabkan",
+      "alwaysApproveAllTools": "Had iyo jeer u ogolow dhammaan qalabka",
+      "denyButton": "Diid",
+      "keyboardHint": "{modifier}+⏎ ogolow · esc diid",
+      "submittingState": "Go'aankaaga waa la dirayaa",
+      "approvedState": "La ogolaaday — wakiilka waa la bilaabay",
+      "deniedState": "La diiday",
+      "submittingApproval": "Waa la ogolaynayaa oo wakiilka la sii wadayaa…",
+      "submittingDenial": "Diidmadaada waa la dirayaa…"
+    },
+    "openImage": "Fur sawirka",
+    "copyMessage": "Nuqul fariinta",
+    "stopAudio": "Jooji codka",
+    "generatingAudio": "Codka waa la abuuraa...",
+    "listen": "Dhageyso",
+    "processingAudio": "Codka waa la socodsiinayaa...",
+    "ttsError": "Khalad abuurista codka. Fadlan isku day mar kale.",
+    "unsupportedMessageType": "Khalad soo bandhigista fariinta: Nooca fariinta lama taageero"
   },
   "transcript": {
     "originalTranscript": "Qoraalka Aslka ah",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Laab dhinaca bar-ka",
     "expandSidebar": "Ballaadhi dhinaca bar-ka",
     "quickActionsTitle": "Ficilada Degdegga ah",
-    "quickActions": "Ficilada Degdegga ah"
+    "quickActions": "Ficilada Degdegga ah",
+    "expandFolder": "Balaadhi galka {name}",
+    "collapseFolder": "Yaree galka {name}",
+    "folderOptions": "Xulashooyinka {name}"
   },
   "errors": {
     "somethingWentWrong": "Wax baa qalday",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Dhaqan",
     "resetChatSettings": "Soo celi dejinta sheekada",
     "resetChatSettingsConfirmTitle": "Ma doonaysaa inaad soo celiso dejinta sheekada?",
-    "resetChatSettingsConfirmMessage": "Tani waxay soo celinaysaa dhammaan default-yada ku jira qeybtaan: heerkulka, tilmaamaha gaarka ah, Ku Saabsan Adiga, jawaabta moodeelka, xawaaraha socodsiinta, qoraal-u-akhri, faylasha firfircoon, iyo xaqiijinta. Ma saameyneyso sheekaysiyadaada."
+    "resetChatSettingsConfirmMessage": "Tani waxay soo celinaysaa dhammaan default-yada ku jira qeybtaan: heerkulka, tilmaamaha gaarka ah, Ku Saabsan Adiga, jawaabta moodeelka, xawaaraha socodsiinta, qoraal-u-akhri, faylasha firfircoon, iyo xaqiijinta. Ma saameyneyso sheekaysiyadaada.",
+    "customInstructionsLabel": "Tilmaamo Gaar ah*",
+    "defaultTemperatureLabel": "Heerkulka Asal ah*"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -1226,7 +1360,8 @@
       "agents": "Wakiilada"
     },
     "sections": {
-      "baseModels": "Moodooyinka Aasaasiga"
+      "baseModels": "Moodooyinka Aasaasiga",
+      "allModels": "Dhammaan moodooyinka ({count})"
     },
     "maintainedBy": "Waxaa maamula",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Dhammaystir",
       "reset": "Dib u deji",
       "resetTooltip": "Dib u deji kala soocida caadiga ah"
-    }
+    },
+    "hide": "Ka qari liiska",
+    "hideConfirmTitle": "Miyaad rabtaa inaad qariso \"{name}\"?",
+    "hideConfirmMessage": "Waxaa laga saari doonaa liiskaaga balse lama tirtiri doono. Mar walba waad soo celin kartaa adigoo ka helaya qaybta la qariyay.",
+    "hideConfirm": "Qari",
+    "hiddenToast": "\"{name}\" waa la qariyey",
+    "hidden": {
+      "title": "La qariyay ({count})",
+      "restore": "Soo celi"
+    },
+    "title": "Dooro model",
+    "modelsDescription": "Dooro moodel AI ah wada sheekaysigaaga. Moodel kasta wuxuu leeyahay awoodo kala duwan — mid dooro si aad u aragto faahfaahinta.",
+    "recommended": "La taliyay"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Moodel Claude ah oo degdeg ah oo kharash yar ah oo loo hagaajiyey hawlaha dhakhsaha badan. Ku wanaagsan su'aalaha fudud, soo koobidda, iyo codsiyada tiro badan.",
       "knowledgeCutoff": "Janaayo 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Moodelka ugu xooggan ee Anthropic. Ku fiican qoraal dheer, cilmi-baaris, iyo hawlo u baahan fikir taxaddar leh.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Moodel Claude ah oo dheelitiran. Ku fiican qoraal maalinle ah, falanqayn, iyo koodayn jawaab degdeg ah leh.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Waxaa joojiyay isticmaale",
     "transientBody": "Fadlan isku day mar kale",
     "authFailedBody": "Fadlan dib u gal akoonkaaga",
-    "rateLimitedBody": "Adeeggu wuu buuxaa, fadlan isku day wax yar kadib"
+    "rateLimitedBody": "Adeeggu wuu buuxaa, fadlan isku day wax yar kadib",
+    "loadingAttempt": "(isku dayga {count})",
+    "transcriptLabel": "[Qoraal: {filename}]"
   },
   "documentTranslation": {
     "title": "Turjumaadda Dukumentiga",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Tijaabo — waxaa lagu dhisay iskaashi toos ah isticmaalayaasha awooda ee MSF. Maaha isticmaal guud.",
       "createButton": "Samee Wakiil Gaar ah"
     },
-    "selectAgentPrompt": "Dooro wakiil si aad u aragto faahfaahinta"
+    "selectAgentPrompt": "Dooro wakiil si aad u aragto faahfaahinta",
+    "description": "Wakiillo AI khaas ah oo loogu talagalay hawlo gaar ah. Wakiillada asaasiga ah waxaa si dhexe loo maamulaa; ilo gaar ah ku dar si aad u hesho wakiillo kale oo Foundry ah.",
+    "regionAgents": {
+      "us": "Wakiillada Gobolka US",
+      "eu": "Wakiillada Gobolka EU",
+      "default": "Wakiillada Gobollada"
+    },
+    "officeAgents": {
+      "suffix": "Wakiillada"
+    },
+    "agentSources": {
+      "title": "Xiriirrada Foundry",
+      "description": "Ku xidh mashruucyada Foundry kale si aad u hesho wakiilladooda.",
+      "connectButton": "Ku xidh mashruuca Microsoft Azure Foundry",
+      "connectButtonShort": "Ku xidh mashruuca Foundry",
+      "addButton": "Ku dar Il Cusub",
+      "addAnother": "Ku dar xiriir kale",
+      "noSources": "Ilaha gaarka ah lama habeeyn.",
+      "removeSource": "Ka saar il",
+      "confirmRemove": "Ma ka saaraa?",
+      "sourceConnected": "il gaar ah waa la xidhay",
+      "sourcesConnected": "ilo gaar ah ayaa la xidhay",
+      "backToAgents": "Dib ugu noqo",
+      "discoveredAgents": "Wakiillo la helay",
+      "viewConnection": "Eeg faahfaahinta xiriirka",
+      "edit": "Wax ka beddel",
+      "noAgentsPublished": "Wakiillo la daabacay ma jiraan",
+      "connectedOn": "Waxaa la xidhay {date}",
+      "disconnectSource": "Ka xog gooy ilkaan",
+      "confirmDisconnect": "Guji mar kale si aad u xaqiijiso",
+      "loadingAgents": "Wakiillada ayaa soo raranaya...",
+      "noAgentsFound": "Wakiillo looma helin mashruucan",
+      "noAgentsFoundHint": "Hubi in wakiillada la daabacay iyo in aad leedahay doorka Azure AI User mashruucan.",
+      "refresh": "Cusbooneysii",
+      "refreshAgents": "Wakiillada cusbooneysii",
+      "technicalDetails": "Faahfaahin farsamo",
+      "agentCountLabel": "{count} wakiil",
+      "disconnectedToast": "Waxaa la xog gooyay {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Siyaasadda Asturnaanta & Ilaalinta Xogta",

@@ -378,7 +378,59 @@
     "delete": "Usuń",
     "noCustomAgentsYet": "Brak niestandardowych agentów.",
     "noOrgAgentsConfigured": "Brak skonfigurowanych agentów organizacji.",
-    "validationFailed": "Walidacja nie powiodła się"
+    "validationFailed": "Walidacja nie powiodła się",
+    "addAgentSource": "Dodaj niestandardowe źródło",
+    "connectFoundryProject": "Połącz z projektem Microsoft Azure Foundry",
+    "connectFoundryDescription": "Odkrywaj agentów z projektu Azure Foundry innego zespołu lub biura. Zobaczysz tylko tych agentów, do których masz uprawnienia.",
+    "foundryProjectPath": "Ścieżka projektu Foundry",
+    "foundryProjectPathHelp": "Zapytaj administratora projektu Foundry lub kliknij „Wprowadź ręcznie”, aby uzupełnić każde pole osobno.",
+    "copyFormat": "Format",
+    "nameLabel": "Nazwa",
+    "namePlaceholder": "np. Amsterdam Office, Geneva Research",
+    "pathRequired": "Wklej ścieżkę zasobu projektu Foundry.",
+    "pathInvalidFormat": "To nie wygląda na ścieżkę zasobu. Powinna zaczynać się od /subscriptions/...",
+    "connectionFailed": "Nie można połączyć się z tym projektem. Sprawdź poprawność ścieżki i swoje uprawnienia.",
+    "connectionSuccessAgents": "Połączono — znaleziono agentów: {count}",
+    "connectionSuccessEmpty": "Połączono, ale nie znaleziono agentów. Możesz potrzebować roli Azure AI User, aby zobaczyć agentów w tym projekcie.",
+    "checkingConnection": "Sprawdzanie połączenia...",
+    "connect": "Połącz",
+    "save": "Zapisz",
+    "editConnection": "Edytuj połączenie",
+    "sourceName": "Nazwa źródła",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Nazwa źródła jest wymagana.",
+    "resourcePath": "Ścieżka zasobu",
+    "resourcePathRequired": "Ścieżka zasobu jest wymagana.",
+    "resourcePathHelp": "Ścieżka ARM do projektu Foundry. Poproś administratora o tę wartość.",
+    "invalidResourcePathFormat": "Ścieżka zasobu musi zaczynać się od /subscriptions/...",
+    "validatingSource": "Wyszukiwanie agentów...",
+    "sourceValidatedEmpty": "Poprawne źródło, ale nie znaleziono agentów. Możesz nie mieć dostępu do agentów w tym projekcie.",
+    "invalidSource": "Nie można uzyskać dostępu do tej ścieżki zasobu. Sprawdź ścieżkę i swoje uprawnienia.",
+    "addSource": "Dodaj źródło",
+    "removeSource": "Usuń źródło",
+    "labelSubscription": "Subskrypcja",
+    "labelFoundryAccount": "Konto Foundry",
+    "labelProject": "Projekt",
+    "tooltipSubscription": "Subskrypcja Azure zawierająca konto Foundry. Jeśli nie masz pewności, zapytaj administratora, której subskrypcji używa Twój zespół.",
+    "tooltipFoundryAccount": "Konto Azure AI Services, w którym znajduje się projekt Foundry. Każde biuro lub zespół zazwyczaj posiada własne.",
+    "tooltipProject": "Projekt organizuje agentów w ramach konta. Większość kont ma jeden „domyślny” projekt.",
+    "foundryProjectLabel": "Projekt Foundry",
+    "enterManually": "Wprowadź ręcznie",
+    "browseResources": "Przeglądaj zasoby",
+    "subscriptionIdLabel": "ID subskrypcji",
+    "resourceGroupLabel": "Grupa zasobów",
+    "accountNameLabel": "Nazwa konta",
+    "projectNameLabel": "Nazwa projektu",
+    "loadingSubscriptions": "Ładowanie subskrypcji...",
+    "selectSubscription": "Wybierz subskrypcję...",
+    "loadingAccounts": "Ładowanie kont...",
+    "noAccountsFound": "Nie znaleziono kont Foundry w tej subskrypcji.",
+    "selectAccount": "Wybierz konto...",
+    "loadingProjects": "Ładowanie projektów...",
+    "noProjectsFound": "Nie znaleziono projektów. Używany jest „default”.",
+    "selectAllRequired": "Wybierz subskrypcję, konto i projekt.",
+    "subscriptionRequired": "Wybierz subskrypcję",
+    "accountRequired": "Wybierz konto Foundry"
   },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",
@@ -535,7 +587,10 @@
     "keepEditing": "Kontynuuj edycję",
     "yes": "Tak",
     "no": "Nie",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Skopiowano!",
+    "clear": "Wyczyść",
+    "undo": "Cofnij"
   },
   "errors": {
     "unexpectedErrorOccurred": "Wystąpił nieoczekiwany błąd",
@@ -689,13 +744,90 @@
     "stopGenerationDontAskAgainButton": "Nie pytaj ponownie przy zatrzymywaniu przyciskiem",
     "stopGenerationDontAskAgainKeyboard": "Nie pytaj ponownie przy zatrzymywaniu klawiaturą",
     "generateResponseButton": "Wygeneruj odpowiedź",
-    "downloadResponse": "Pobierz odpowiedź"
+    "downloadResponse": "Pobierz odpowiedź",
+    "activity": {
+      "callingTool": "Wywoływanie narzędzia…",
+      "callingService": "Wywoływanie usługi zewnętrznej…",
+      "usingNamedTool": "Używanie {tool}…",
+      "usingNamedToolWithService": "Używanie {tool} na {service}…",
+      "searchingWeb": "Wyszukiwanie w sieci…",
+      "searchingFiles": "Przeszukiwanie plików…",
+      "runningCode": "Wykonywanie kodu…",
+      "generatingImage": "Generowanie obrazu…",
+      "listingTools": "Wyszukiwanie dostępnych narzędzi…",
+      "analyzingFiles": "Analiza Twoich plików…",
+      "searchingKnowledge": "Przeszukiwanie bazy wiedzy…",
+      "cancellingPriorTool": "Anulowanie poprzedniego żądania narzędzia…"
+    },
+    "toolSummary": {
+      "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",
+      "failedCount": "{count} niepowodzeń",
+      "statusApproved": "Zatwierdzone",
+      "statusAutoApproved": "Automatycznie zatwierdzone",
+      "statusAutoDenied": "Automatycznie odrzucone",
+      "statusFailed": "Niepowodzenie",
+      "statusIncomplete": "Niekompletne",
+      "viaService": "przez {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Wymagana autoryzacja",
+      "authorizeService": "Autoryzuj {service}",
+      "descriptionGeneric": "Ten agent potrzebuje Twojej zgody na dostęp do chronionych zasobów. Logowanie odbywa się przez usługę zewnętrzną i nie jest tu przechowywane.",
+      "descriptionWithService": "Ten agent potrzebuje Twojej zgody na dostęp do {service}. Logowanie do {service} jest obsługiwane przez tę usługę i nie jest tu przechowywane.",
+      "signInIncompleteGeneric": "Nie ukończono logowania",
+      "signInIncompleteForService": "Logowanie do {service} nie zostało ukończone",
+      "signInIncompleteDescriptionGeneric": "Wygląda na to, że autoryzacja się nie zakończyła. Upewnij się, że ukończono logowanie w drugiej karcie, a następnie ponownie kliknij Kontynuuj.",
+      "signInIncompleteDescription": "Wygląda na to, że autoryzacja do {service} się nie zakończyła. Upewnij się, że ukończono logowanie w drugiej karcie, a następnie ponownie kliknij Kontynuuj.",
+      "authorizeButton": "Autoryzuj",
+      "reauthorizeButton": "Autoryzuj ponownie",
+      "continueButton": "Kontynuuj",
+      "confirmingButton": "Potwierdzanie…",
+      "authorizeHint": "Autoryzuj, wróć tutaj i kliknij Kontynuuj. Aby cofnąć zgodę później, wyloguj się bezpośrednio z {service} — nie przechowujemy tokena.",
+      "authorizeHintGeneric": "Autoryzuj, wróć tutaj i kliknij Kontynuuj. Aby cofnąć zgodę później, wyloguj się bezpośrednio z usługi zewnętrznej — nie przechowujemy tokena.",
+      "continueHint": "Po zakończeniu autoryzacji w drugiej karcie kliknij Kontynuuj.",
+      "confirmingHint": "Potwierdzanie autoryzacji i kontynuowanie żądania…",
+      "resendHint": "Po autoryzacji wyślij wiadomość ponownie, aby kontynuować.",
+      "resetTooltip": "Zresetuj wszystkie ustawienia automatycznego zatwierdzania narzędzi w tej rozmowie. Kolejne wywołania narzędzi będą ponownie wymagać potwierdzenia.",
+      "autoApproveAllIndicator": "Automatyczne zatwierdzanie wszystkich narzędzi",
+      "autoApproveCountIndicator": "{count, plural, one {Automatycznie zatwierdzam # narzędzie} few {Automatycznie zatwierdzam # narzędzia} many {Automatycznie zatwierdzam # narzędzi} other {Automatycznie zatwierdzam # narzędzi}}",
+      "resetShort": "Resetuj",
+      "approvalRequired": "Wymagane zatwierdzenie narzędzia",
+      "approvalForService": "Zatwierdź narzędzie dla {service}",
+      "approvalDescriptionGeneric": "Agent chce uruchomić narzędzie wymagające Twojego zatwierdzenia przed kontynuacją.",
+      "approvalDescriptionWithTool": "Agent chce uruchomić narzędzie {tool}, które wymaga Twojego zatwierdzenia przed kontynuacją.",
+      "runToolTitle": "Uruchomić <code>{tool}</code>?",
+      "runToolGeneric": "Uruchomić to narzędzie?",
+      "viaService": "przez {service}",
+      "approveButton": "Zatwierdź",
+      "approveOptionsLabel": "Opcje zatwierdzania",
+      "approveOnce": "Zatwierdź jednorazowo",
+      "alwaysApproveThisTool": "Zawsze zatwierdzaj to narzędzie",
+      "alwaysApproveAllTools": "Zawsze zatwierdzaj wszystkie narzędzia",
+      "denyButton": "Odmów",
+      "keyboardHint": "{modifier}+⏎ zatwierdź · esc odmów",
+      "submittingState": "Przesyłanie Twojej decyzji",
+      "approvedState": "Zatwierdzono — agent wznowiony",
+      "deniedState": "Odmówiono",
+      "submittingApproval": "Zatwierdzanie i wznawianie agenta…",
+      "submittingDenial": "Wysyłanie odmowy…"
+    },
+    "openImage": "Otwórz obraz",
+    "copyMessage": "Kopiuj wiadomość",
+    "stopAudio": "Zatrzymaj dźwięk",
+    "generatingAudio": "Generowanie dźwięku...",
+    "listen": "Odsłuchaj",
+    "processingAudio": "Przetwarzanie dźwięku...",
+    "ttsError": "Błąd podczas generowania dźwięku. Spróbuj ponownie.",
+    "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
     "expandSidebar": "Rozwiń pasek boczny",
     "quickActionsTitle": "Szybkie akcje",
-    "quickActions": "Szybkie akcje"
+    "quickActions": "Szybkie akcje",
+    "expandFolder": "Rozwiń folder {name}",
+    "collapseFolder": "Zwiń folder {name}",
+    "folderOptions": "Opcje {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Twórz wielokrotnego użytku podpowiedzi z pomocą AI",
@@ -1011,7 +1143,9 @@
     "behaviorSection": "Zachowanie",
     "resetChatSettings": "Przywróć domyślne ustawienia czatu",
     "resetChatSettingsConfirmTitle": "Przywrócić domyślne ustawienia czatu?",
-    "resetChatSettingsConfirmMessage": "To przywróci domyślne ustawienia w tym panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, prędkość przesyłania, zamiana tekstu na mowę, aktywne pliki oraz potwierdzenia. Twoje rozmowy nie zostaną zmienione."
+    "resetChatSettingsConfirmMessage": "To przywróci domyślne ustawienia w tym panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, prędkość przesyłania, zamiana tekstu na mowę, aktywne pliki oraz potwierdzenia. Twoje rozmowy nie zostaną zmienione.",
+    "customInstructionsLabel": "Niestandardowe instrukcje*",
+    "defaultTemperatureLabel": "Domyślna temperatura*"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1113,7 +1247,9 @@
     "cancelledBody": "Anulowano przez użytkownika",
     "transientBody": "Spróbuj ponownie",
     "authFailedBody": "Zaloguj się ponownie",
-    "rateLimitedBody": "Usługa przeciążona, spróbuj ponownie za chwilę"
+    "rateLimitedBody": "Usługa przeciążona, spróbuj ponownie za chwilę",
+    "loadingAttempt": "(próba {count})",
+    "transcriptLabel": "[Transkrypcja: {filename}]"
   },
   "importBackupParseError": "Nie udało się przetworzyć pliku kopii zapasowej. Upewnij się, że jest to poprawny plik JSON.",
   "emptyState": {
@@ -1174,7 +1310,8 @@
       "agents": "Agentów"
     },
     "sections": {
-      "baseModels": "Modele bazowe"
+      "baseModels": "Modele bazowe",
+      "allModels": "Wszystkie modele ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Funkcja zaawansowana",
@@ -1247,7 +1384,19 @@
       "reasoning": "Rozszerzone rozumowanie dla złożonych problemów",
       "omni": "Model multimodalny o szerokich możliwościach",
       "agent": "Agent z narzędziami w czasie rzeczywistym i dostępem do Internetu"
-    }
+    },
+    "hide": "Ukryj na liście",
+    "hideConfirmTitle": "Ukryć \"{name}\"?",
+    "hideConfirmMessage": "Zostanie usunięty z Twojej listy, ale nie zostanie skasowany. Możesz go przywrócić w dowolnym momencie z sekcji Ukryte.",
+    "hideConfirm": "Ukryj",
+    "hiddenToast": "Ukryto \"{name}\"",
+    "hidden": {
+      "title": "Ukryte ({count})",
+      "restore": "Przywróć"
+    },
+    "title": "Wybierz model",
+    "modelsDescription": "Wybierz model AI do rozmowy. Każdy model ma inne zalety — wybierz, aby zobaczyć szczegóły.",
+    "recommended": "Polecane"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "grudzień 2025",
       "description": "Specjalna wersja GPT-5.2 zoptymalizowana pod kątem interakcji konwersacyjnych i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, kreatywnym pisaniu, burzy mózgów i naturalnym dialogu. Najlepsza do swobodnych rozmów, sytuacji doradczych i zadań wymagających świadomości emocjonalnej."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Najbardziej zaawansowany model Anthropic. Dobry do długich tekstów, badań i zadań wymagających dokładnego namysłu.",
+      "knowledgeCutoff": "luty 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Zrównoważony model Claude. Dobry do codziennego pisania, analiz i programowania z szybkimi odpowiedziami.",
+      "knowledgeCutoff": "luty 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Eksperymentalne — stworzone w bezpośredniej współpracy z zaawansowanymi użytkownikami MSF. Nie do ogólnego użytku.",
       "createButton": "Utwórz niestandardowego agenta"
     },
-    "selectAgentPrompt": "Wybierz agenta, aby wyświetlić szczegóły"
+    "selectAgentPrompt": "Wybierz agenta, aby wyświetlić szczegóły",
+    "description": "Wyspecjalizowane agenty AI do konkretnych zadań. Domyślni agenci są zarządzani centralnie; dodaj własne źródła, aby odkrywać agentów z innych projektów Foundry.",
+    "regionAgents": {
+      "us": "Agenci regionu USA",
+      "eu": "Agenci regionu UE",
+      "default": "Agenci regionu"
+    },
+    "officeAgents": {
+      "suffix": "Agenci"
+    },
+    "agentSources": {
+      "title": "Połączenia Foundry",
+      "description": "Połącz z innymi projektami Foundry, aby odkrywać ich agentów.",
+      "connectButton": "Połącz projekt Microsoft Azure Foundry",
+      "connectButtonShort": "Połącz projekt Foundry",
+      "addButton": "Dodaj niestandardowe źródło",
+      "addAnother": "Dodaj kolejne połączenie",
+      "noSources": "Brak skonfigurowanych niestandardowych źródeł.",
+      "removeSource": "Usuń źródło",
+      "confirmRemove": "Usunąć?",
+      "sourceConnected": "niestandardowe źródło połączone",
+      "sourcesConnected": "niestandardowe źródła połączone",
+      "backToAgents": "Wstecz",
+      "discoveredAgents": "Odkryci agenci",
+      "viewConnection": "Zobacz szczegóły połączenia",
+      "edit": "Edytuj",
+      "noAgentsPublished": "Nie opublikowano agentów",
+      "connectedOn": "Połączono {date}",
+      "disconnectSource": "Odłącz to źródło",
+      "confirmDisconnect": "Kliknij ponownie, aby potwierdzić",
+      "loadingAgents": "Ładowanie agentów...",
+      "noAgentsFound": "Nie znaleziono agentów w tym projekcie",
+      "noAgentsFoundHint": "Upewnij się, że agenci są opublikowani i masz rolę Azure AI User w tym projekcie.",
+      "refresh": "Odśwież",
+      "refreshAgents": "Odśwież agentów",
+      "technicalDetails": "Szczegóły techniczne",
+      "agentCountLabel": "{count} agentów",
+      "disconnectedToast": "Odłączono {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Polityka prywatności & Ochrona danych",

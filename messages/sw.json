@@ -298,7 +298,59 @@
     "delete": "Futa",
     "noCustomAgentsYet": "Hakuna mawakala maalum bado.",
     "noOrgAgentsConfigured": "Hakuna mawakala wa shirika waliosanidiwa.",
-    "validationFailed": "Uthibitishaji umeshindwa"
+    "validationFailed": "Uthibitishaji umeshindwa",
+    "addAgentSource": "Ongeza Chanzo Maalum",
+    "connectFoundryProject": "Unganisha na Mradi wa Microsoft Azure Foundry",
+    "connectFoundryDescription": "Gundua mawakala kutoka ofisi au timu nyingine kwenye mradi wa Azure Foundry. Utaona tu mawakala ambao una ruhusa ya kufikia.",
+    "foundryProjectPath": "Njia ya Mradi wa Foundry",
+    "foundryProjectPathHelp": "Muulize msimamizi wa mradi wa Foundry, au bonyeza 'Weka mwenyewe' kujaza kila sehemu tofauti.",
+    "copyFormat": "Muundo",
+    "nameLabel": "Jina",
+    "namePlaceholder": "mf. Ofisi ya Amsterdam, Utafiti Geneva",
+    "pathRequired": "Bandika njia ya rasilimali ya mradi wa Foundry.",
+    "pathInvalidFormat": "Hii haionekani kama njia ya rasilimali. Inapaswa kuanza na /subscriptions/...",
+    "connectionFailed": "Imeshindikana kufikia mradi huu. Hakikisha njia ni sahihi na una ruhusa.",
+    "connectionSuccessAgents": "Imeunganishwa — mawakala {count} wamepatikana",
+    "connectionSuccessEmpty": "Imeunganishwa, lakini hakuna mawakala waliopatikana. Huenda unahitaji jukumu la Azure AI User kwenye mradi huu ili kuona mawakala wake.",
+    "checkingConnection": "Inakagua muunganisho...",
+    "connect": "Unganisha",
+    "save": "Hifadhi",
+    "editConnection": "Hariri Muunganisho",
+    "sourceName": "Jina la Chanzo",
+    "sourceNamePlaceholder": "Ofisi ya Amsterdam",
+    "sourceNameRequired": "Jina la chanzo linahitajika.",
+    "resourcePath": "Njia ya Rasilimali",
+    "resourcePathRequired": "Njia ya rasilimali inahitajika.",
+    "resourcePathHelp": "Hii ni njia ya ARM ya rasilimali ya mradi wa Foundry. Muulize msimamizi wako kwa maelezo haya.",
+    "invalidResourcePathFormat": "Njia ya rasilimali inapaswa kuanza na /subscriptions/...",
+    "validatingSource": "Inagundua mawakala...",
+    "sourceValidatedEmpty": "Chanzo sahihi, lakini hakuna mawakala waliopatikana. Huenda huna ruhusa ya kuona mawakala katika mradi huu.",
+    "invalidSource": "Imeshindikana kufikia njia hii ya rasilimali. Hakikisha njia na ruhusa zako ni sahihi.",
+    "addSource": "Ongeza Chanzo",
+    "removeSource": "Ondoa Chanzo",
+    "labelSubscription": "Usajili",
+    "labelFoundryAccount": "Akaunti ya Foundry",
+    "labelProject": "Mradi",
+    "tooltipSubscription": "Usajili wa Azure unaobeba akaunti ya Foundry. Ikiwa huna uhakika, muulize msimamizi wako ni usajili upi timu yako inatumia.",
+    "tooltipFoundryAccount": "Akaunti ya Azure AI Services ambako mradi wa Foundry umehifadhiwa. Kila ofisi au timu kwa kawaida ina yake.",
+    "tooltipProject": "Mradi huandaa mawakala ndani ya akaunti. Akaunti nyingi huwa na mradi mmoja 'default'.",
+    "foundryProjectLabel": "Mradi wa Foundry",
+    "enterManually": "Weka mwenyewe",
+    "browseResources": "Vinza rasilimali",
+    "subscriptionIdLabel": "Nambari ya Usajili",
+    "resourceGroupLabel": "Kundi la Rasilimali",
+    "accountNameLabel": "Jina la Akaunti",
+    "projectNameLabel": "Jina la Mradi",
+    "loadingSubscriptions": "Inapakua usajili...",
+    "selectSubscription": "Chagua usajili...",
+    "loadingAccounts": "Inapakua akaunti...",
+    "noAccountsFound": "Hakuna akaunti za Foundry zilizopatikana katika usajili huu.",
+    "selectAccount": "Chagua akaunti...",
+    "loadingProjects": "Inapakua miradi...",
+    "noProjectsFound": "Hakuna miradi iliyopatikana. Inatumia \"default\".",
+    "selectAllRequired": "Chagua usajili, akaunti, na mradi.",
+    "subscriptionRequired": "Chagua usajili",
+    "accountRequired": "Chagua akaunti ya Foundry"
   },
   "Quick Actions": "Vitendo vya Haraka",
   "Type / in chat to access your prompts": "Andika / katika mazungumzo ili kufikia vidokezo vyako",
@@ -538,7 +590,10 @@
     "keepEditing": "Endelea Kuhariri",
     "yes": "Ndiyo",
     "no": "Hapana",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Imenakiliwa!",
+    "clear": "Futa",
+    "undo": "Rudisha"
   },
   "errors": {
     "unexpectedErrorOccurred": "Hitilafu isiyotarajiwa imetokea",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "Usiulize tena unapositisha kwa kutumia kitufe",
     "stopGenerationDontAskAgainKeyboard": "Usiulize tena unapositisha kwa kutumia kibodi",
     "generateResponseButton": "Tengeneza jibu",
-    "downloadResponse": "Pakua majibu"
+    "downloadResponse": "Pakua majibu",
+    "activity": {
+      "callingTool": "Inaita zana…",
+      "callingService": "Inaita huduma ya nje…",
+      "usingNamedTool": "Inatumia {tool}…",
+      "usingNamedToolWithService": "Inatumia {tool} kwenye {service}…",
+      "searchingWeb": "Inatafuta kwenye wavuti…",
+      "searchingFiles": "Inatafuta faili…",
+      "runningCode": "Inakimbiza msimbo…",
+      "generatingImage": "Inatengeneza picha…",
+      "listingTools": "Inaangalia zana zilizopo…",
+      "analyzingFiles": "Inachambua faili zako…",
+      "searchingKnowledge": "Inatafuta kwenye hazina ya maarifa…",
+      "cancellingPriorTool": "Inafuta ombi la zana iliyopita…"
+    },
+    "toolSummary": {
+      "usedTools": "Imetumika {count, plural, one {# zana} other {# zana}}",
+      "failedCount": "{count} zimekosa",
+      "statusApproved": "Imeidhinishwa",
+      "statusAutoApproved": "Imeruhusiwa moja kwa moja",
+      "statusAutoDenied": "Imekataliwa moja kwa moja",
+      "statusFailed": "Imeshindwa",
+      "statusIncomplete": "Haijakamilika",
+      "viaService": "kupitia {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Uidhinishaji unahitajika",
+      "authorizeService": "Idhinisha {service}",
+      "descriptionGeneric": "Ajaneti huyu anahitaji ruhusa yako kupata rasilimali salama. Kuingia kwako kumesimamiwa na huduma husika, hakuhifadhiwi hapa.",
+      "descriptionWithService": "Ajaneti huyu anahitaji ruhusa yako kufikia {service}. Kuingia kwako kwa {service} kumesimamiwa na {service} yenyewe, hakuhifadhiwi hapa.",
+      "signInIncompleteGeneric": "Ingia haijakamilika",
+      "signInIncompleteForService": "Kuingia kwa {service} haijakamilika",
+      "signInIncompleteDescriptionGeneric": "Inaonekana uidhinishaji haujakamilika. Hakikisha umeingia kikamilifu kwenye kidirisha kingine, kisha bonyeza Endelea tena.",
+      "signInIncompleteDescription": "Inaonekana uidhinishaji kwa {service} haujakamilika. Hakikisha umeingia kikamilifu kwenye kidirisha kingine, kisha bonyeza Endelea tena.",
+      "authorizeButton": "Idhinisha",
+      "reauthorizeButton": "Idhinisha tena",
+      "continueButton": "Endelea",
+      "confirmingButton": "Inathibitisha…",
+      "authorizeHint": "Idhinisha, kisha rudi hapa na bonyeza Endelea. Ili kufuta ruhusa baadaye, toka moja kwa moja kwenye {service} — hatuhifadhi tokeni.",
+      "authorizeHintGeneric": "Idhinisha, kisha rudi hapa na bonyeza Endelea. Ili kufuta ruhusa baadaye, toka moja kwa moja kwenye huduma husika — hatuhifadhi tokeni.",
+      "continueHint": "Mara baada ya uidhinishaji kukamilika kwenye kidirisha kingine, bonyeza Endelea.",
+      "confirmingHint": "Inathibitisha uidhinishaji na kuendelea na ombi lako…",
+      "resendHint": "Ukishaidhinisha, tuma ujumbe wako tena ili kuendelea.",
+      "resetTooltip": "Rudisha chaguo zote za uidhinishaji wa zana kwa mazungumzo haya. Mara nyingine utatakiwa kuthibitisha upya.",
+      "autoApproveAllIndicator": "Inaruhusu zana zote moja kwa moja",
+      "autoApproveCountIndicator": "{count, plural, one {Inaruhusu zana # moja kwa moja} other {Inaruhusu zana # moja kwa moja}}",
+      "resetShort": "Rudisha",
+      "approvalRequired": "Uthibitisho wa zana unahitajika",
+      "approvalForService": "Idhinisha zana kwa {service}",
+      "approvalDescriptionGeneric": "Ajaneti anataka kuendesha zana inayohitaji uthibitisho wako kabla ya kuendelea.",
+      "approvalDescriptionWithTool": "Ajaneti anataka kuendesha zana ya {tool}, ambayo inahitaji uthibitisho wako kabla ya kuendelea.",
+      "runToolTitle": "Endesha <code>{tool}</code>?",
+      "runToolGeneric": "Endesha zana hili?",
+      "viaService": "kupitia {service}",
+      "approveButton": "Kubali",
+      "approveOptionsLabel": "Chaguzi za kukubali",
+      "approveOnce": "Kubali mara moja",
+      "alwaysApproveThisTool": "Kubali daima zana hii",
+      "alwaysApproveAllTools": "Kubali daima zana zote",
+      "denyButton": "Kataa",
+      "keyboardHint": "{modifier}+⏎ kubali · esc kataa",
+      "submittingState": "Inatuma uamuzi wako",
+      "approvedState": "Imekubaliwa — wakala ameendelea",
+      "deniedState": "Imekataliwa",
+      "submittingApproval": "Inakubali na kuendeleza wakala…",
+      "submittingDenial": "Inatuma kukataa kwako…"
+    },
+    "openImage": "Fungua picha",
+    "copyMessage": "Nakili ujumbe",
+    "stopAudio": "Simamisha sauti",
+    "generatingAudio": "Inatengeneza sauti...",
+    "listen": "Sikiliza",
+    "processingAudio": "Inachakata sauti...",
+    "ttsError": "Hitilafu kutengeneza sauti. Tafadhali jaribu tena.",
+    "unsupportedMessageType": "Hitilafu kuonesha ujumbe: Aina ya ujumbe haitambuliwi"
   },
   "sidebar": {
     "collapseSidebar": "Kunja upau wa pembeni",
     "expandSidebar": "Panua upau wa pembeni",
     "quickActionsTitle": "Vitendo vya Haraka",
-    "quickActions": "Vitendo vya Haraka"
+    "quickActions": "Vitendo vya Haraka",
+    "expandFolder": "Panua folda {name}",
+    "collapseFolder": "Fupisha folda {name}",
+    "folderOptions": "Chaguzi za {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Jenga vidokezi vinavyoweza kutumika tena kwa msaada wa AI",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "Tabia",
     "resetChatSettings": "Weka upya mipangilio ya gumzo",
     "resetChatSettingsConfirmTitle": "Weka upya mipangilio ya gumzo?",
-    "resetChatSettingsConfirmMessage": "Hii itarejesha chaguo-msingi kwa kila kitu kwenye paneli hii: joto, maelekezo maalum, Kuhusu Wewe, majibu ya modeli, kasi ya utiririshaji, maandishi kwenda kwenye hotuba, mafaili yanayotumika, na uthibitisho. Haiathiri mazungumzo yako."
+    "resetChatSettingsConfirmMessage": "Hii itarejesha chaguo-msingi kwa kila kitu kwenye paneli hii: joto, maelekezo maalum, Kuhusu Wewe, majibu ya modeli, kasi ya utiririshaji, maandishi kwenda kwenye hotuba, mafaili yanayotumika, na uthibitisho. Haiathiri mazungumzo yako.",
+    "customInstructionsLabel": "Maelekezo Maalum*",
+    "defaultTemperatureLabel": "Joto Chaguo-msingi*"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -1077,7 +1211,8 @@
       "agents": "Mawakala"
     },
     "sections": {
-      "baseModels": "Modeli za Msingi"
+      "baseModels": "Modeli za Msingi",
+      "allModels": "Mifano yote ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Kipengele cha Juu",
@@ -1150,7 +1285,19 @@
       "reasoning": "Hoja za kina kwa matatizo changamano",
       "omni": "Mfano wa aina nyingi wenye uwezo mpana",
       "agent": "Wakala mwenye zana za wakati halisi na ufikiaji wa mtandao"
-    }
+    },
+    "hide": "Ficha kwenye orodha",
+    "hideConfirmTitle": "Ficha \"{name}\"?",
+    "hideConfirmMessage": "Itaondolewa kwenye orodha yako lakini haitafutwa. Unaweza kuirejesha wakati wowote kutoka kwenye sehemu ya Vilivyofichwa.",
+    "hideConfirm": "Ficha",
+    "hiddenToast": "Imefichwa \"{name}\"",
+    "hidden": {
+      "title": "Vilivyofichwa ({count})",
+      "restore": "Rejesha"
+    },
+    "title": "Chagua mfano",
+    "modelsDescription": "Chagua mfano wa AI kwa mazungumzo yako. Kila mfano una nguvu tofauti — chagua mmoja kuona maelezo.",
+    "recommended": "Inapendekezwa"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
       "description": "Toleo maalum la GPT-5.2 lililoboreshwa kwa mazungumzo na uelewa wa hisia. Limebobea katika mawasiliano ya huruma, uandishi wa ubunifu, kutafuta mawazo mapya, na mazungumzo ya asili. Linapendekezwa kwa mazungumzo ya kawaida, hali za ushauri, na kazi zinazohitaji uelewa wa kihisia."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Mfano bora zaidi wa Anthropic. Unafaa kwa uandishi mrefu, utafiti, na kazi zinazohitaji fikra makini.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Mfano wa Claude wenye uwiano. Unafaa kwa uandishi wa kila siku, uchambuzi, na usimbaji umeme kwa majibu ya haraka.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1365,7 +1522,9 @@
     "cancelledBody": "Imesitishwa na mtumiaji",
     "transientBody": "Tafadhali jaribu tena",
     "authFailedBody": "Tafadhali ingia tena",
-    "rateLimitedBody": "Huduma imejaa, tafadhali jaribu tena baada ya muda mfupi"
+    "rateLimitedBody": "Huduma imejaa, tafadhali jaribu tena baada ya muda mfupi",
+    "loadingAttempt": "(jaribio {count})",
+    "transcriptLabel": "[Nakala: {filename}]"
   },
   "migration": {
     "status": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Majaribio — imejengwa kwa ushirikiano wa moja kwa moja na watumiaji wa kiwango cha juu wa MSF. Si kwa matumizi ya kawaida.",
       "createButton": "Tengeneza Wakala Maalum"
     },
-    "selectAgentPrompt": "Chagua wakala ili kuona maelezo"
+    "selectAgentPrompt": "Chagua wakala ili kuona maelezo",
+    "description": "Wakala wa AI maalum kwa kazi mahususi. Wakala chaguo-msingi husimamiwa kiuratibu; ongeza vyanzo maalum kugundua wakala kutoka miradi mingine ya Foundry.",
+    "regionAgents": {
+      "us": "Wakala wa Ukanda wa US",
+      "eu": "Wakala wa Ukanda wa EU",
+      "default": "Wakala wa Mkoa"
+    },
+    "officeAgents": {
+      "suffix": "Wakala"
+    },
+    "agentSources": {
+      "title": "Miunganisho ya Foundry",
+      "description": "Unganisha na miradi mingine ya Foundry ili kugundua mawakala wao.",
+      "connectButton": "Unganisha mradi wa Microsoft Azure Foundry",
+      "connectButtonShort": "Unganisha mradi wa Foundry",
+      "addButton": "Ongeza Chanzo Maalum",
+      "addAnother": "Ongeza muunganisho mwingine",
+      "noSources": "Hakuna vyanzo maalum vilivyowekwa.",
+      "removeSource": "Ondoa chanzo",
+      "confirmRemove": "Kuondoa?",
+      "sourceConnected": "chanzo maalum kimeunganishwa",
+      "sourcesConnected": "vyanzo maalum vimeunganishwa",
+      "backToAgents": "Rudi",
+      "discoveredAgents": "Wakala Walioonekana",
+      "viewConnection": "Angalia maelezo ya muunganisho",
+      "edit": "Hariri",
+      "noAgentsPublished": "Hakuna wakala waliosambazwa",
+      "connectedOn": "Imeunganishwa {date}",
+      "disconnectSource": "Katisha chanzo hiki",
+      "confirmDisconnect": "Bonyeza tena kuthibitisha",
+      "loadingAgents": "Inapakia wakala...",
+      "noAgentsFound": "Hakuna wakala waliopatikana kwenye mradi huu",
+      "noAgentsFoundHint": "Hakikisha wakala wamesambazwa na una jukumu la Azure AI User kwenye mradi huu.",
+      "refresh": "Sasisha",
+      "refreshAgents": "Sasisha wakala",
+      "technicalDetails": "Maelezo ya kiufundi",
+      "agentCountLabel": "Wakala {count}",
+      "disconnectedToast": "Imekatishwa {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Sera ya Faragha & Ulinzi wa Data",

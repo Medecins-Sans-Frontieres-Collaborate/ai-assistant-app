@@ -385,7 +385,59 @@
     "delete": "Zïa",
     "noCustomAgentsYet": "Agent tî mo pepe na kötörö.",
     "noOrgAgentsConfigured": "Agent tî organisation pepe a configurer.",
-    "validationFailed": "Vérification a yeke na peko"
+    "validationFailed": "Vérification a yeke na peko",
+    "addAgentSource": "Keté sô mbênî",
+    "connectFoundryProject": "Kobotï ti Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "A pé kundü agents ti ôko na mbi tî teme na Azure Foundry project tî likua tî mbi ë na équipe. A lo kpala agents sô mbi kombâ mbi mê.",
+    "foundryProjectPath": "Nzönî ti Foundry Project",
+    "foundryProjectPathHelp": "Sôkï tî Foundry project administrator, ou bien klika 'Küê na lo' ï lâ nzönî yeke yeke.",
+    "copyFormat": "Format",
+    "nameLabel": "Dö",
+    "namePlaceholder": "tîmbi: Bureau Amsterdam, Recherche Genève",
+    "pathRequired": "Küta nzönî ti Foundry project.",
+    "pathInvalidFormat": "Nzönî aka azo ti resource nzönî. Nzönî a sala na /subscriptions/...",
+    "connectionFailed": "Mbi nîngâ ti songo project so. Kpêtë nzönî a yeke na mbi a yeke mbi gê.",
+    "connectionSuccessAgents": "Songo — {count} agent(s) éve",
+    "connectionSuccessEmpty": "Songo, mbi kâsa agents. A kêtê na mbi wezere rôle Azure AI User na project so na kundû agents na yângâ.",
+    "checkingConnection": "Kuyê ti songo...",
+    "connect": "Kobotï",
+    "save": "Sêda",
+    "editConnection": "Kora songo",
+    "sourceName": "Dö ti sô mbênî",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Dö ti sô mbênî a yeke.",
+    "resourcePath": "Nzönî ti resource",
+    "resourcePathRequired": "Nzönî ti resource a yeke.",
+    "resourcePathHelp": "Nzönî ti resource ARM tî Foundry project. Sôkï tî administrator tî mbi.",
+    "invalidResourcePathFormat": "Nzönî ti resource a sala na /subscriptions/...",
+    "validatingSource": "Kundû agents...",
+    "sourceValidatedEmpty": "Sô mbênî a yeke, mbi kâsa agents. A kêtê na mbi ala gê ti kundû agents na project so.",
+    "invalidSource": "Mbi nîngâ ti songo nzönî ti resource so. Kpêtë nzönî na gê tî mbi.",
+    "addSource": "Keté sô mbênî",
+    "removeSource": "Tîri sô mbênî",
+    "labelSubscription": "Abôna",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "Abôna ti Azure sô Foundry account a nga na mbênî. Sô mbi ala gï, sôkï tî admin abôna ti équipe so a framba.",
+    "tooltipFoundryAccount": "Compte ti Azure AI Services sô Foundry project a zîngû. Likua na équipe ti yângâ yângâ a bî tî mbi.",
+    "tooltipProject": "Project a tene agents na compte. Mbênî ti comptes a bî project “default” sô kwe.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Küê na lo",
+    "browseResources": "Sânga resources",
+    "subscriptionIdLabel": "ID ti abôna",
+    "resourceGroupLabel": "Group ti resource",
+    "accountNameLabel": "Dö ti compte",
+    "projectNameLabel": "Dö ti project",
+    "loadingSubscriptions": "Kügbere abôna...",
+    "selectSubscription": "Zâmbêtî abôna...",
+    "loadingAccounts": "Kügbere comptes...",
+    "noAccountsFound": "Compte Foundry kâsa na abôna so.",
+    "selectAccount": "Zâmbêtî compte...",
+    "loadingProjects": "Kügbere projects...",
+    "noProjectsFound": "Project kâsa. Tî mû tî \"default\".",
+    "selectAllRequired": "Zâmbêtî abôna, compte, na project.",
+    "subscriptionRequired": "Pata abonema",
+    "accountRequired": "Pata mboka Foundry"
   },
   "Quick Actions": "Sâra na hïngângö",
   "Type / in chat to access your prompts": "Sü / na polëngö tî gä na âtene tî mo",
@@ -641,7 +693,10 @@
     "keepEditing": "Dû na sëndä",
     "yes": "Iin",
     "no": "En-en",
-    "beta": "Bêta"
+    "beta": "Bêta",
+    "copied": "Akôta!",
+    "clear": "Küata",
+    "undo": "Zûa na mbênî"
   },
   "terms": {
     "officialLanguages": "Version officiel:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na boutton",
     "stopGenerationDontAskAgainKeyboard": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na klavier",
     "generateResponseButton": "Sûrû siriri",
-    "downloadResponse": "Doko na ndapî"
+    "downloadResponse": "Doko na ndapî",
+    "activity": {
+      "callingTool": "Mbênî tool...",
+      "callingService": "Mbênî service ya kpälä...",
+      "usingNamedTool": "Kötï {tool}...",
+      "usingNamedToolWithService": "Kötï {tool} na {service}...",
+      "searchingWeb": "Købärï na web...",
+      "searchingFiles": "Købärï na fichier...",
+      "runningCode": "Kodü mû...",
+      "generatingImage": "Dessine na image...",
+      "listingTools": "Bê mbênî tool ava...",
+      "analyzingFiles": "Koküa fichier mo...",
+      "searchingKnowledge": "Købärï na base ya sèngö...",
+      "cancellingPriorTool": "Annuler demande ya tool ti mbênî..."
+    },
+    "toolSummary": {
+      "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
+      "failedCount": "{count} a kûngö",
+      "statusApproved": "A bongi",
+      "statusAutoApproved": "A bongi na ngu",
+      "statusAutoDenied": "A pè a bongi na ngu",
+      "statusFailed": "A kûngö",
+      "statusIncomplete": "A hunga nzönî",
+      "viaService": "na {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Besi yeke autorisation",
+      "authorizeService": "Gîzê autorisation {service}",
+      "descriptionGeneric": "Agent ape sèngö ti yeke nzönî mo sô tî zo na ressource ti ndö. Ködörö tî yeke singa ape ti service ti gawö, a pè ti sôpe sô ape.",
+      "descriptionWithService": "Agent ape sèngö tî yeke nzönî mo sô tî zo na {service}. Ködörö tî {service} yeke singa na {service} kêtê.",
+      "signInIncompleteGeneric": "Singa a hunga nzönî",
+      "signInIncompleteForService": "Singa na {service} a hunga nzönî",
+      "signInIncompleteDescriptionGeneric": "Ye ndönî mbï a pè a yeke autorisation na kpôlô. Vérifie singa na tab apiani, pîka Continue na sî.",
+      "signInIncompleteDescription": "Ye ndönî mbï a pè a yeke autorisation na {service} na kpôlô. Vérifie singa na tab apiani, pîka Continue na sî.",
+      "authorizeButton": "Gîzê autorisation",
+      "reauthorizeButton": "Gîzê autorisation na mbênî",
+      "continueButton": "Continue",
+      "confirmingButton": "Kokpülö...",
+      "authorizeHint": "Fâ autorisation, zâra na sôpe, pîka Continue. Sô wä yêkê revoke, zo-fa na {service} na bîa — mbi lônï token tî sô.",
+      "authorizeHintGeneric": "Fâ autorisation, zâra na sôpe, pîka Continue. Sô wä yêkê revoke, zo-fa na service ti gawö — mbi lônï token tî sô.",
+      "continueHint": "Sô autorisation hû na tab kêtê, pîka Continue na sî.",
+      "confirmingHint": "Kokpülö autorisation na zûnü demandë mo...",
+      "resendHint": "Sô autorisation sô gâ, tîla mesaj mo mbênî na continue.",
+      "resetTooltip": "Rénitï préférence auto-approval ti tool avû tî dialogue azo so. Tool sô yeke ti zî yü hû wä bängö wa.",
+      "autoApproveAllIndicator": "Kobongi tool öko na ngu",
+      "autoApproveCountIndicator": "{count, plural, one {Kobongi {count} tool na ngu} other {Kobongi {count} tools na ngu}}",
+      "resetShort": "Rénitï",
+      "approvalRequired": "Tool ape autorisation mo",
+      "approvalForService": "Bongi tool ti {service}",
+      "approvalDescriptionGeneric": "Agent ape ködörö tool sô ape bongi mo vû sô a yeke tî yü.",
+      "approvalDescriptionWithTool": "Agent ape ködörö tool {tool}, sô ape bongi mo vû sô a yeke tî yü.",
+      "runToolTitle": "A ti kôda <code>{tool}</code>?",
+      "runToolGeneric": "A ti kôda tool so ape?",
+      "viaService": "na {service}",
+      "approveButton": "Küè na mbeti",
+      "approveOptionsLabel": "Küè na mbeti so",
+      "approveOnce": "Küè na mbeti mo kâ",
+      "alwaysApproveThisTool": "Küè na mbeti tool so lôsɔ̀",
+      "alwaysApproveAllTools": "Küè na mbeti tool mbïaka lôsɔ̀",
+      "denyButton": "Se",
+      "keyboardHint": "{modifier}+⏎ küè · esc se",
+      "submittingState": "A zîngbä yângâ ködörö",
+      "approvedState": "Mbeti küè — agent a mbïchi",
+      "deniedState": "Sé",
+      "submittingApproval": "A küè na mbeti ti agent…",
+      "submittingDenial": "A zîngbä sé mo…"
+    },
+    "openImage": "Fungbä lo tö",
+    "copyMessage": "Kopi mesajï",
+    "stopAudio": "Küè audio",
+    "generatingAudio": "A kûê audio...",
+    "listen": "Tîngbï",
+    "processingAudio": "A rûngbi audio...",
+    "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
+    "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Zînga bêse-kötä",
     "expandSidebar": "Buka bêse-kötä",
     "quickActionsTitle": "Sâra na hïngângö",
-    "quickActions": "Sâra na hïngângö"
+    "quickActions": "Sâra na hïngângö",
+    "expandFolder": "Ngandë dosi {name}",
+    "collapseFolder": "Kûâ dosi {name}",
+    "folderOptions": "Mbêtï ti {name}"
   },
   "errors": {
     "somethingWentWrong": "Ë a sara nzönî pepe",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Kûtû",
     "resetChatSettings": "Zîngo paramètre ti bângâ so",
     "resetChatSettingsConfirmTitle": "Zîngo paramètre ti bângâ so?",
-    "resetChatSettingsConfirmMessage": "Iko yeke zîngô paramètre na mbênî so: température, ndemële ti tîngbî, Sô tî mo, ndapî ti model, vitesse ti streaming, ndimi ti timbî, fichiers ti bêtî, na bingâ ti vêrîngö. Ala yeke nâ kô ti bâa mbênî so mo kêtê na bângâ so."
+    "resetChatSettingsConfirmMessage": "Iko yeke zîngô paramètre na mbênî so: température, ndemële ti tîngbî, Sô tî mo, ndapî ti model, vitesse ti streaming, ndimi ti timbî, fichiers ti bêtî, na bingâ ti vêrîngö. Ala yeke nâ kô ti bâa mbênî so mo kêtê na bângâ so.",
+    "customInstructionsLabel": "Mbêtï ti tôgbo*",
+    "defaultTemperatureLabel": "Températûrë ti yéké*"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1226,7 +1360,8 @@
       "agents": "Âagent"
     },
     "sections": {
-      "baseModels": "Modèle tî gbegbê"
+      "baseModels": "Modèle tî gbegbê",
+      "allModels": "Model mbïaka ({count})"
     },
     "maintainedBy": "A kömändëmä na",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "A sâra",
       "reset": "Gue na gbegbê",
       "resetTooltip": "Gue na ordre sô a yeke"
-    }
+    },
+    "hide": "Hûndu na lis",
+    "hideConfirmTitle": "Hûndu \"{name}\"?",
+    "hideConfirmMessage": "A yéké hubâ na lis mo tändö a kû le. A yökä ko na Hidden section so.",
+    "hideConfirm": "Hûndu",
+    "hiddenToast": "\"{name}\" hûndu",
+    "hidden": {
+      "title": "A hûndu ({count})",
+      "restore": "Sâra"
+    },
+    "title": "Bênî model",
+    "modelsDescription": "Bênî model AI ti walî mo. Model kété tî kéta siriri. Bênî mo tändö a yênga ndö.",
+    "recommended": "A kete"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Modèle Claude na hïngângö na sô a coûter pepe optimisé tî sâra na hïngängö. Nzönî tî requête tî lêgê, résumé, na application na volume gâ.",
       "knowledgeCutoff": "Janvier 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Model ti Anthropic so a siriri mbiliengo. A yeke ti écrit long, rechèrche, na swâ so yeke gbangabango.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Model Claude so a siriri. A yéké ti écrit ndô, analyse na code, na réponse rapide.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Abandonné na moto",
     "transientBody": "Tala na mbênî",
     "authFailedBody": "Tala köda login na mbênî",
-    "rateLimitedBody": "Service akpoko, tala na mbênî"
+    "rateLimitedBody": "Service akpoko, tala na mbênî",
+    "loadingAttempt": "(kûmâ {count})",
+    "transcriptLabel": "[Transcription: {filename}]"
   },
   "documentTranslation": {
     "title": "Document Translation",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Experimental — built in direct collaboration with MSF power users. Not for general use.",
       "createButton": "Create Custom Agent"
     },
-    "selectAgentPrompt": "Select an agent to view details"
+    "selectAgentPrompt": "Select an agent to view details",
+    "description": "AI agent so a ti siriri ti nä nzönî. Agent ti de a géré na ngangu yeke; ngî na mboka mô tändö agent ti Foundry ngangu mo.",
+    "regionAgents": {
+      "us": "Agent ti US",
+      "eu": "Agent ti EU",
+      "default": "Agents ti région"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Liaison ti Foundry",
+      "description": "Kombété ti Foundry aïnya mpo na ndoyékö agents na bango.",
+      "connectButton": "Kombété projekti Microsoft Azure Foundry",
+      "connectButtonShort": "Kombété projekti Foundry",
+      "addButton": "Gbutü sô akeya",
+      "addAnother": "Gbutü kombété mbï",
+      "noSources": "Sô akeya abéi ndöngö.",
+      "removeSource": "Kpô sô akeya",
+      "confirmRemove": "Kpô?",
+      "sourceConnected": "sô akeya a kombété",
+      "sourcesConnected": "sô akeya a kombété",
+      "backToAgents": "Zia",
+      "discoveredAgents": "Agents abï yékï",
+      "viewConnection": "Gbü detay ti kombété",
+      "edit": "Sûhû",
+      "noAgentsPublished": "Agenti abéi londo",
+      "connectedOn": "Akombété na {date}",
+      "disconnectSource": "Dèkpété sô akeya so",
+      "confirmDisconnect": "Kita mbï na mbï mpo na kagbama",
+      "loadingAgents": "Lodonzi agents...",
+      "noAgentsFound": "Agenti abéi yékï na projekti so",
+      "noAgentsFoundHint": "Sûhû na agent ti londo na projekti so, na azô na rôle ti Azure AI User.",
+      "refresh": "Förö",
+      "refreshAgents": "Förö agents",
+      "technicalDetails": "Detay ti teknik",
+      "agentCountLabel": "{count} agents",
+      "disconnectedToast": "Adèkpété {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Privacy Policy & Data Protection",

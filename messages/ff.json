@@ -385,7 +385,59 @@
     "delete": "Momtu",
     "noCustomAgentsYet": "Alaa wakiiluuji keeriɗɗi taawo.",
     "noOrgAgentsConfigured": "Alaa wakiiluuji fedde teelaaɗi.",
-    "validationFailed": "Tabbital huɓtidingol woorii"
+    "validationFailed": "Tabbital huɓtidingol woorii",
+    "addAgentSource": "Ɓeydu Asal Mum",
+    "connectFoundryProject": "Jokkondir Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "Yiy e jamɗe agentji e project Foundry Azure goɗɗo, dow bureewo walla team. Agentji woni waɗi anndit ngolla ɗiɗi ko, tan so ina waɗi jamɗe to yadiraaɗe.",
+    "foundryProjectPath": "Lolli Project Foundry",
+    "foundryProjectPathHelp": "Nana waawi laawol administrator Foundry maa, walla dud 'Enter manually' so aɗa yiɗi fewnda doggol dum caggal leñol.",
+    "copyFormat": "Dobo",
+    "nameLabel": "Innde",
+    "namePlaceholder": "e.g. Biiro Amsterdam, Geneva Research",
+    "pathRequired": "Nana buɗi hennda lolli resource project Foundry.",
+    "pathInvalidFormat": "Lolli ngol waawi wonde resource path goodan. Ina heɓi e /subscriptions/...",
+    "connectionFailed": "Mbeleenani jamfaare e project ngol. Ɓeydii lolli ɗum ngoodi, e-ɗa ina jogi jamɗe.",
+    "connectionSuccessAgents": "Jamfaare gollu—agent({count}) ñaamii",
+    "connectionSuccessEmpty": "Jamfaare gollu, kono agent walaa. So tawii anndinde agentji, aɗa waawi inna e Azure AI User role e project ngol.",
+    "checkingConnection": "Nana jeyaa jamfaare...",
+    "connect": "Jokkondir",
+    "save": "Danndu",
+    "editConnection": "Taƴto Jamfaare",
+    "sourceName": "Innde Asal",
+    "sourceNamePlaceholder": "Biiro Amsterdam",
+    "sourceNameRequired": "Nana buɗi innde asal.",
+    "resourcePath": "Lolli Resource",
+    "resourcePathRequired": "Nana buɗi lolli resource.",
+    "resourcePathHelp": "ARM resource path goɗɗo pronnde Foundry project. Nana waawi administrator maa gollu.",
+    "invalidResourcePathFormat": "Lolli resource ɗum ina waɗi hurmiti e /subscriptions/...",
+    "validatingSource": "Nana yiyde agentji...",
+    "sourceValidatedEmpty": "Asal jawdi, kono agent walaa. So tawii aɗa waawi jogi jamɗe agentji e project ngol.",
+    "invalidSource": "Mbeleenani heɓde resource lolli ngol. Luttii lolli ɗum e jamɗe maa.",
+    "addSource": "Ɓeydu Asal",
+    "removeSource": "Momtu Asal",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "Azure subscription goɗɗo momtora Foundry account. So tawii a waawi, hokkere admin maa subscription team ma.",
+    "tooltipFoundryAccount": "Azure AI Services account nde Foundry project yehi. Ko woni kala biroo walla team jogi mumen.",
+    "tooltipProject": "Project ina tabita agentji caggal account. Jowitii accountji ko feewi 'default' project.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Dobo battoy",
+    "browseResources": "Warta resourceji",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Innde Account",
+    "projectNameLabel": "Innde Project",
+    "loadingSubscriptions": "Nana ari subscriptionji...",
+    "selectSubscription": "Suɓo subscription...",
+    "loadingAccounts": "Nana ari accountji...",
+    "noAccountsFound": "Walaa Foundry account e subscription ngol.",
+    "selectAccount": "Suɓo account...",
+    "loadingProjects": "Nana ari projectji...",
+    "noProjectsFound": "Walaa project. Ina waɗi \"default\".",
+    "selectAllRequired": "Suɓo subscription, account, e project.",
+    "subscriptionRequired": "Suɓo keñgol",
+    "accountRequired": "Suɓo konto Foundry"
   },
   "Quick Actions": "Golle Jaawɗe",
   "Type / in chat to access your prompts": "Tap / e yeewtere ngam heɓde tinndinooje maa",
@@ -641,7 +693,10 @@
     "keepEditing": "Jokku Taƴtude",
     "yes": "Eey",
     "no": "Alaa",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Koppiiɗo!",
+    "clear": "Momtu",
+    "undo": "Firtu"
   },
   "terms": {
     "officialLanguages": "Yamre laawɗuɗo:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Hoto welta anndude so a huli e batiindi",
     "stopGenerationDontAskAgainKeyboard": "Hoto welta anndude so a huli e dillere",
     "generateResponseButton": "Naatnu jangirde",
-    "downloadResponse": "Aawto jaɓɓorgo"
+    "downloadResponse": "Aawto jaɓɓorgo",
+    "activity": {
+      "callingTool": "Njiɗɗo nguurndam…",
+      "callingService": "Njiɗɗo cuɓoraaɗi janngo…",
+      "usingNamedTool": "Naatnu {tool}…",
+      "usingNamedToolWithService": "Naatnu {tool} e {service}…",
+      "searchingWeb": "Nana yiɗi e web…",
+      "searchingFiles": "Nana yiɗi e fileji…",
+      "runningCode": "Nana hurmin kode…",
+      "generatingImage": "Nana sokli tofto…",
+      "listingTools": "Nana dati nguurndeeji juulirɗe…",
+      "analyzingFiles": "Nana waawi fileji maa…",
+      "searchingKnowledge": "Nana yiɗi e jaŋngol moƴƴi…",
+      "cancellingPriorTool": "Nana haaytu laylaytol nguurndam woɗnde…"
+    },
+    "toolSummary": {
+      "usedTools": "Njoɓɗo {count, plural, one {# nguurndam} other {# nguurndeeji}}",
+      "failedCount": "{count} waawiɓaani",
+      "statusApproved": "Yettinooɗo",
+      "statusAutoApproved": "Yettinooɗo to soodnde",
+      "statusAutoDenied": "Jarrooɗo to soodnde",
+      "statusFailed": "Waawiɓaani",
+      "statusIncomplete": "Wonnaa cewndo",
+      "viaService": "e {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Ndewenire yettinooɗo",
+      "authorizeService": "Yetti {service}",
+      "descriptionGeneric": "Ajen maa soodaani mbutal maa ngol ngoodi walla jogorɗi. Kobborgo maa jogi e cuɓoraaɗo moƴƴi, jokkitaani ɗum debbo.",
+      "descriptionWithService": "Ajen maa soodaani mbutal maa {service}. Kobborgo maa e {service} jogi e {service} ko jokkitaani ɗum debbo.",
+      "signInIncompleteGeneric": "Kobborgol wonaa cewndo",
+      "signInIncompleteForService": "Kobborgol e {service} wonaa cewndo",
+      "signInIncompleteDescriptionGeneric": "Mbel ko ndewenire ngol wonaa heddii. Haa ballal a uddi cewndo e tabbar ngal waɗugol kobborgo, seɗa henan Continue.",
+      "signInIncompleteDescription": "Mbel ko ndewenire {service} ngol wonaa heddii. Haa ballal a uddi cewndo e tabbar ngal {service}, seɗa henan Continue.",
+      "authorizeButton": "Yetti",
+      "reauthorizeButton": "Yetti ɗofta",
+      "continueButton": "Goɗɗin",
+      "confirmingButton": "Nana uddita…",
+      "authorizeHint": "Yetti, so wonaa, arso ɓuri men sey henan Goɗɗin. So a yiɗi haaytugol, sooddin {service} to moƴƴi – min minnjanii token.",
+      "authorizeHintGeneric": "Yetti, so wonaa, arso ɓuri men sey henan Goɗɗin. So a yiɗi haaytugol, sooddin cuɓoraaɗo moƴƴi – min minnjanii token.",
+      "continueHint": "So ndewenire ngol heddii e tabbar ngal, henan Goɗɗin.",
+      "confirmingHint": "Nana uddita ndewenire e gasirgol laawol maa…",
+      "resendHint": "So a yettii, nelda maɓɓe maa njiywataa sey nataa.",
+      "resetTooltip": "Momtu soodnde yettinooɗi nguurndeeji juulirɗe e jawdi ngal. Nda a naati, fo nguurndam men njiɗɗo waawi-umaa.",
+      "autoApproveAllIndicator": "Nana yettina nguurndeeji foti",
+      "autoApproveCountIndicator": "{count, plural, one {Nana yettina # nguurndam to soodnde} other {Nana yettina # nguurndeeji to soodnde}}",
+      "resetShort": "Momtu",
+      "approvalRequired": "Yettinooɗo nguurndam soodaani",
+      "approvalForService": "Yetti nguurndam e {service}",
+      "approvalDescriptionGeneric": "Ajen maa soodaani jogorɗe nguurndam mballo yettinooɗo umma.",
+      "approvalDescriptionWithTool": "Ajen maa soodaani jogorɗe nguurndam {tool}, wanda walla yettinooɗo umma.",
+      "runToolTitle": "Winndito <code>{tool}</code>?",
+      "runToolGeneric": "Winndito golle ngol?",
+      "viaService": "ko {service}",
+      "approveButton": "Teeŋi",
+      "approveOptionsLabel": "Teeŋi cuɓoraaɗi",
+      "approveOnce": "Teeŋi tan",
+      "alwaysApproveThisTool": "Teeŋi golle ngol sahaa kala",
+      "alwaysApproveAllTools": "Teeŋi golle fow sahaa kala",
+      "denyButton": "Fal",
+      "keyboardHint": "{modifier}+⏎ teeŋi · esc fal",
+      "submittingState": "Naatnude goɗngol maa",
+      "approvedState": "Teeŋii — agent ummii",
+      "deniedState": "Falii",
+      "submittingApproval": "Naatnude teeŋngol e ummude agent...",
+      "submittingDenial": "Naatnude falngol maa..."
+    },
+    "openImage": "Uddu njaajeendi",
+    "copyMessage": "Natto ndemgol",
+    "stopAudio": "Afru awdiyo",
+    "generatingAudio": "Winndito awdiyo...",
+    "listen": "Yeewtu",
+    "processingAudio": "Fayda awdiyo...",
+    "ttsError": "Jaɓɓorgo winndito awdiyo. Huumtu e gite.",
+    "unsupportedMessageType": "Jaɓɓorgo njettude ndemgol: No waawani ndemgol ngol"
   },
   "transcript": {
     "originalTranscript": "Winnditagol Goongɗinɗo",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Ñiƴƴu palal",
     "expandSidebar": "Uddit palal",
     "quickActionsTitle": "Golle Jaawɗe",
-    "quickActions": "Golle Jaawɗe"
+    "quickActions": "Golle Jaawɗe",
+    "expandFolder": "Feere bolle {name}",
+    "collapseFolder": "Luudu bolle {name}",
+    "folderOptions": "Cuɓoraaɗi {name}"
   },
   "errors": {
     "somethingWentWrong": "Huunde woorii",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Timmunde",
     "resetChatSettings": "Hurmiti teelte chat",
     "resetChatSettingsConfirmTitle": "A hurmiti teelte chat?",
-    "resetChatSettingsConfirmMessage": "Ɓeññiti teelte fow e panel goo: taama, keftinirde bayyinirɗe, Eɓɓe En, jaɓɓorgo model, daande ngol, luugal to mbayka, fileji feewi, e caggolnga. Mbele e saareeji maa fayi."
+    "resetChatSettingsConfirmMessage": "Ɓeññiti teelte fow e panel goo: taama, keftinirde bayyinirɗe, Eɓɓe En, jaɓɓorgo model, daande ngol, luugal to mbayka, fileji feewi, e caggolnga. Mbele e saareeji maa fayi.",
+    "customInstructionsLabel": "Jaŋtol cuɓal",
+    "defaultTemperatureLabel": "Heewtorgo ndiyam"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -1226,7 +1360,8 @@
       "agents": "Wakiiluuji"
     },
     "sections": {
-      "baseModels": "Masiŋaaji Baasal"
+      "baseModels": "Masiŋaaji Baasal",
+      "allModels": "Models fow ({count})"
     },
     "maintainedBy": "Toppitaa ko",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Gasii",
       "reset": "Firtu",
       "resetTooltip": "Firtu to leelol goowɗo"
-    }
+    },
+    "hide": "Nduurti e leñol",
+    "hideConfirmTitle": "Nduurti \"{name}\"?",
+    "hideConfirmMessage": "Nduurti e leñol maa tee a waɗaaniiti nu. A waawi uumde ɗum tun ɗum e jamfaare Nduurndu.",
+    "hideConfirm": "Nduurti",
+    "hiddenToast": "Nduurndu \"{name}\"",
+    "hidden": {
+      "title": "Nduurndu ({count})",
+      "restore": "Uumtu"
+    },
+    "title": "Suɓo model",
+    "modelsDescription": "Suɓ model AI ngam haasay maa. Model goɗɗo ina daɗi e bannguuji, suɓo ɗam gollu e ɗum.",
+    "recommended": "Mo tawtii"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Masiŋ Claude yaawɗo e lesɗo njaru moƴƴitinɗo ngam golle jaawɗe. Moƴƴo ngam naamne ñeeñɗe, tonngol, e jaaɓnirɗe keewɗe.",
       "knowledgeCutoff": "January 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Model Antropic mo handi. Mo addani e winndude to bannge, jamiroo e faltooji tuma bone.",
+      "knowledgeCutoff": "Fewre 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Model Claude mo feewi. Mo handi e winndude kulle jogii, falde, e codduji e jawdi.",
+      "knowledgeCutoff": "Fewre 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Laɓɓitaama gollal e janngina",
     "transientBody": "Hiɗa waawi fuɗɗa",
     "authFailedBody": "Teeŋ eɗa seŋo kadi",
-    "rateLimitedBody": "Hol ko ɓurnde, waawi eɗa fuɗɗa to anndirde"
+    "rateLimitedBody": "Hol ko ɓurnde, waawi eɗa fuɗɗa to anndirde",
+    "loadingAttempt": "(baafe {count})",
+    "transcriptLabel": "[Jaŋtol: {filename}]"
   },
   "documentTranslation": {
     "title": "Firgol Ɗerewol",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Ƴeewndal — mahaama e jokkondiral perɗo e huutorooɓe MSF semmbe. Wonaa ngam kuutoragol kuuɓɗo.",
       "createButton": "Sos Wakiilu Keeriɗɗo"
     },
-    "selectAgentPrompt": "Suɓo wakiilu ngam ƴeewde humpito"
+    "selectAgentPrompt": "Suɓo wakiilu ngam ƴeewde humpito",
+    "description": "Agents AI waɗɗi no haanande golle mbaɗɗe. Agents heewtorgo ina ngoodi e galle; tiɗno cuɓaaɓe mbaɗɗum e Foundry kala.",
+    "regionAgents": {
+      "us": "Agents Reesii US",
+      "eu": "Agents Reesii EU",
+      "default": "Agents e Deme"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Liggite Foundry",
+      "description": "Liggito eji Foundry fof kono sarndude agent-maako.",
+      "connectButton": "Liggito e Microsoft Azure Foundry project",
+      "connectButtonShort": "Liggito e Foundry project",
+      "addButton": "Naatnu Sarndugol Mawngal",
+      "addAnother": "Naatnu liggital goɗɗo",
+      "noSources": "Sarndugol mawngal walaa.",
+      "removeSource": "Momtu sarndugol",
+      "confirmRemove": "Momtu?",
+      "sourceConnected": "sarndugol mawngal liggite",
+      "sourcesConnected": "sarndugol mawngal e liggite",
+      "backToAgents": "Fowru",
+      "discoveredAgents": "Agents ɗe jiyɗi",
+      "viewConnection": "Hollu ballal liggital",
+      "edit": "Toppu",
+      "noAgentsPublished": "Agent walaa jooɗii",
+      "connectedOn": "Liggiti {date}",
+      "disconnectSource": "Toppu liggital ngal",
+      "confirmDisconnect": "Natto hite konngol toppude",
+      "loadingAgents": "Agent ɗe njaɓataa…",
+      "noAgentsFound": "Agent walaa e project gol",
+      "noAgentsFoundHint": "Ekkita agent ɗe jooɗii, tee a jogii role Azure AI User e project ngol.",
+      "refresh": "Jokkondir",
+      "refreshAgents": "Jokkondir agents",
+      "technicalDetails": "Carii teknikal",
+      "agentCountLabel": "Agent {count}",
+      "disconnectedToast": "Liggital toggo {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Laawol Suturo & Ndeenka Keɓe",
