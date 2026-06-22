@@ -446,48 +446,30 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   </div>
                 ) : sourceAgents.length > 0 ? (
                   <div className="space-y-1">
-                    {sourceAgents.map((agent) => {
-                      const modelId = foundryModelId(agent);
-                      const agentModel = organizationAgentModels.find(
-                        (m) => m.id === modelId,
-                      );
-                      const isSelected = selectedModelId === modelId;
-                      return (
-                        <button
-                          key={modelId}
-                          type="button"
-                          onClick={() => {
-                            if (agentModel) {
-                              handleModelSelect(agentModel);
-                              setSelectedSourceId(null);
-                              setMobileView('details');
-                            }
-                          }}
-                          className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center justify-between gap-2 ${
-                            isSelected
-                              ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                              : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <IconHexagon
-                              size={18}
-                              className="shrink-0"
-                              style={{ color: colorForAgent(agent.name) }}
-                            />
-                            <span className="font-medium text-sm text-gray-900 dark:text-white">
-                              {agent.name}
-                            </span>
-                          </div>
-                          {isSelected && (
-                            <IconCheck
-                              size={16}
-                              className="text-blue-600 dark:text-blue-400 shrink-0"
-                            />
-                          )}
-                        </button>
-                      );
-                    })}
+                    {sourceAgents
+                      .filter((agent) => !hiddenIds.has(foundryModelId(agent)))
+                      .map((agent) => {
+                        const modelId = foundryModelId(agent);
+                        const agentModel = organizationAgentModels.find(
+                          (m) => m.id === modelId,
+                        );
+                        return (
+                          <FoundryAgentRow
+                            key={modelId}
+                            name={agent.name}
+                            isSelected={selectedModelId === modelId}
+                            onClick={() => {
+                              if (agentModel) {
+                                handleModelSelect(agentModel);
+                                setSelectedSourceId(null);
+                                setMobileView('details');
+                              }
+                            }}
+                            onHide={() => onHideAgent(modelId, agent.name)}
+                            hideLabel={hideLabel}
+                          />
+                        );
+                      })}
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400 dark:text-gray-500 italic px-1">
@@ -512,6 +494,12 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               </span>
             </button>
           </div>
+
+          {/* Hidden agents — collapsible, only when something is hidden */}
+          <HiddenItemsSection
+            items={hiddenAgentItems}
+            onRestore={onUnhideAgent}
+          />
         </div>
 
         {/* Right: Agent Details or Connection Details */}
