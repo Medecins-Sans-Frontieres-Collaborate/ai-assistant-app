@@ -385,7 +385,59 @@
     "delete": "Longola",
     "noCustomAgentsYet": "Custom agent ezalaka te.",
     "noOrgAgentsConfigured": "Agents ya organisation bazali configuration te.",
-    "validationFailed": "Validation ebungi"
+    "validationFailed": "Validation ebungi",
+    "addAgentSource": "Kobakisa Ebandeli na yo moko",
+    "connectFoundryProject": "Kokangisa na Foundry Project ya Microsoft Azure",
+    "connectFoundryDescription": "Tala ba agents ya biro mosusu to ya ekipi na Foundry Project ya Azure. Okotalaka kaka ba agents oyo ozali na ndingisa ya kotala.",
+    "foundryProjectPath": "Nzela ya Foundry Project",
+    "foundryProjectPathHelp": "Tuná mokonzi ya Foundry project, to finá 'Kotyá na loboko' mpo na kotála bilembo nyonso moko na moko.",
+    "copyFormat": "Format",
+    "nameLabel": "Kombo",
+    "namePlaceholder": "nd. Biro ya Amsterdam, Genève Recherche",
+    "pathRequired": "Kopesa lícamboleli ya nzela ya Foundry project.",
+    "pathInvalidFormat": "Oyo ezali te lokola nzela ya resource. Eko banda na /subscriptions/...",
+    "connectionFailed": "Tosili te kokota na projet oyo. Talá soki nzela ya kofanda malamu mpe ozali na ndingisa.",
+    "connectionSuccessAgents": "Ekokanaki — {count} agent(s) emonani",
+    "connectionSuccessEmpty": "Ekokanaki, kasi ba agents te. Okoki kozanga role ya Azure AI User na projet oyo mpo na komona ba agents na yango.",
+    "checkingConnection": "Kotalaka boyokani...",
+    "connect": "Kokangisa",
+    "save": "Kobomba",
+    "editConnection": "Kobongisa boyokani",
+    "sourceName": "Kombo ya Ebandeli",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Kombo ya ebandeli esengeli.",
+    "resourcePath": "Nzela ya Resource",
+    "resourcePathRequired": "Nzela ya resource esengeli.",
+    "resourcePathHelp": "ARM resource path ya Foundry project. Tuná mokonzi mpo na motuya oyo.",
+    "invalidResourcePathFormat": "Nzela ya resource esengeli ebandaka na /subscriptions/...",
+    "validatingSource": "Kotalisaka ba agents...",
+    "sourceValidatedEmpty": "Ebandeli ezali malamu, kasi ba agents te. Okoki kozanga ndingisa ya ba agents na projet oyo.",
+    "invalidSource": "Tokoki te kokota na nzela ya resource oyo. Secerner soki nzela ezali malamu mpe ndingisa na yo.",
+    "addSource": "Kobakisa Ebandeli",
+    "removeSource": "Kolongola Ebandeli",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Compte ya Foundry",
+    "labelProject": "Projet",
+    "tooltipSubscription": "Azure subscription oyo ezali na compte ya Foundry. Soki oyebi te, tuná mokonzi subscription nini équipe na bino esalelaka.",
+    "tooltipFoundryAccount": "Azure AI Services account wapi Foundry project eza. Biro to équipe mokomoko ezalaka na compte na yango moko.",
+    "tooltipProject": "Projet epanzi ba agents kati na compte. Ba comptes mingi ezali na projet 'default' moko.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Kotyá na loboko",
+    "browseResources": "Kotalela ba ressources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Groupe ya Ressources",
+    "accountNameLabel": "Kombo ya Compte",
+    "projectNameLabel": "Kombo ya Projet",
+    "loadingSubscriptions": "Kozwa ba subscriptions...",
+    "selectSubscription": "Pona subscription...",
+    "loadingAccounts": "Kozwa ba comptes...",
+    "noAccountsFound": "Ba comptes ya Foundry ezwami te na subscription oyo.",
+    "selectAccount": "Pona compte...",
+    "loadingProjects": "Kozwa ba projets...",
+    "noProjectsFound": "Ba projets ezwami te. Ko salela \"default\".",
+    "selectAllRequired": "Pona subscription, compte, mpe projet.",
+    "subscriptionRequired": "Pona abonnema",
+    "accountRequired": "Pona compte ya Foundry"
   },
   "Quick Actions": "Misala ya noki",
   "Type / in chat to access your prompts": "Koma / na chat mpo kozwa prompts na yo",
@@ -641,7 +693,10 @@
     "keepEditing": "Koba kosala mbongwana",
     "yes": "Ee",
     "no": "Te",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Ekopi!",
+    "clear": "Kolongola",
+    "undo": "Kobongisa lisusu"
   },
   "terms": {
     "officialLanguages": "Version officielle :",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Kotuna lisusu te soki natiki na bouton",
     "stopGenerationDontAskAgainKeyboard": "Kotuna lisusu te soki natiki na clavier",
     "generateResponseButton": "Bimisa eyano",
-    "downloadResponse": "Télémá eyano"
+    "downloadResponse": "Télémá eyano",
+    "activity": {
+      "callingTool": "Kobenga outil…",
+      "callingService": "Kobenga service oyo ezali libanda…",
+      "usingNamedTool": "Nazali kosalela {tool}…",
+      "usingNamedToolWithService": "Nazali kosalela {tool} na {service}…",
+      "searchingWeb": "Kozwa makambo na internet…",
+      "searchingFiles": "Kozwa ba fichiers…",
+      "runningCode": "Kosala code…",
+      "generatingImage": "Kozwisa elilingi…",
+      "listingTools": "Kokanga outils oyo ezali…",
+      "analyzingFiles": "Kotalela ba fichiers na yo…",
+      "searchingKnowledge": "Kozwa makambo na base de connaissance…",
+      "cancellingPriorTool": "Kokanga motindo ya outil ya liboso…"
+    },
+    "toolSummary": {
+      "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
+      "failedCount": "{count} eboyaki kosala",
+      "statusApproved": "Endimami",
+      "statusAutoApproved": "Endimami na ndenge automatique",
+      "statusAutoDenied": "Ebwaki na ndenge automatique",
+      "statusFailed": "Eboyaki kosala",
+      "statusIncomplete": "Ekosili te",
+      "viaService": "na nzela ya {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Autorisation esengeli",
+      "authorizeService": "Sepela {service} epesa ndingisa",
+      "descriptionGeneric": "Agent oyo esengeli ndingisa na yo mpo na kokota na ressource oyo ezali kobatama. Kosala sign-in ekambami na service ya libanda, esimbwamaka awa te.",
+      "descriptionWithService": "Agent oyo esengeli ndingisa na yo mpo na kokota na {service}. Sign-in na {service} ekambami na {service} moko, esimbwamaka awa te.",
+      "signInIncompleteGeneric": "Kosala sign-in ekosilaki te",
+      "signInIncompleteForService": "Kosala sign-in na {service} ekosilaki te",
+      "signInIncompleteDescriptionGeneric": "Emonani lokola ndingisa ekomataki te. Kokakisa sign-in na onglet mosusu, sima pansa Continue lisusu.",
+      "signInIncompleteDescription": "Emonani lokola ndingisa na {service} ekomataki te. Kosa sign-in na onglet mosusu, sima pansa Continue lisusu.",
+      "authorizeButton": "Pesa ndingisa",
+      "reauthorizeButton": "Pesa ndingisa lisusu",
+      "continueButton": "Koba",
+      "confirmingButton": "Kondimisa…",
+      "authorizeHint": "Pesa ndingisa, zonga awa pansa Continue. Soki olingi kokanga ndingisa na sima, bima kaka na {service} – tokangaka token te.",
+      "authorizeHintGeneric": "Pesa ndingisa, zonga awa pansa Continue. Soki olingi kokanga ndingisa na sima, bima kaka na service ya libanda – tokangaka token te.",
+      "continueHint": "Soki ndingisa esili na onglet mosusu, pansa Continue.",
+      "confirmingHint": "Kondimisa ndingisa mpe kokoba na motindo na yo…",
+      "resendHint": "Sima ya ko pesa ndingisa, tinda message na yo lisusu mpo okoba.",
+      "resetTooltip": "Kobongola preferences nyonso ya auto-approval ya outils na conversation oyo. Kobenga tools pona liboso ekosenga lisusu ndingisa.",
+      "autoApproveAllIndicator": "Kondima outils nyonso na ndenge automatique",
+      "autoApproveCountIndicator": "{count, plural, one {Kondima outil # na ndenge automatique} other {Kondima ba outils # na ndenge automatique}}",
+      "resetShort": "Bongola",
+      "approvalRequired": "Ndingisa ya outil esengeli",
+      "approvalForService": "Ndima outil mpo na {service}",
+      "approvalDescriptionGeneric": "Agent alingi kosala outil moko, esengeli ndingisa na yo liboso ya kokoba.",
+      "approvalDescriptionWithTool": "Agent alingi kosala outil {tool}, esengeli ndingisa na yo liboso ya kokoba.",
+      "runToolTitle": "Kokɔtisa <code>{tool}</code>?",
+      "runToolGeneric": "Kokɔtisa outil oyo?",
+      "viaService": "na nzela ya {service}",
+      "approveButton": "Kondima",
+      "approveOptionsLabel": "Bapɔsɔ ya kondima",
+      "approveOnce": "Kondima mbala moko",
+      "alwaysApproveThisTool": "Kondimaka outil oyo tango nyonso",
+      "alwaysApproveAllTools": "Kondimaka ba outils nyonso tango nyonso",
+      "denyButton": "Kolamba",
+      "keyboardHint": "{modifier}+⏎ kondima · esc kolamba",
+      "submittingState": "Kotinda ekateli na yo",
+      "approvedState": "Ekondimi — agent abandi lisusu",
+      "deniedState": "Elambi",
+      "submittingApproval": "Kondima mpe kobandisa agent…",
+      "submittingDenial": "Kotinda ekateli ya kolamba…"
+    },
+    "openImage": "Kofungola elilingi",
+    "copyMessage": "Kokɔpya nsango",
+    "stopAudio": "Kokotisa molangi ya mino",
+    "generatingAudio": "Kosalela molangi ya mino...",
+    "listen": "Koyoka",
+    "processingAudio": "Kobongisa molangi ya mino...",
+    "ttsError": "Kasaleli molangi ya mino esalami malamu te. Meká lisusu.",
+    "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Kokokisa sidebar",
     "expandSidebar": "Kokumbama sidebar",
     "quickActionsTitle": "Misala ya mbangu",
-    "quickActions": "Misala ya mbangu"
+    "quickActions": "Misala ya mbangu",
+    "expandFolder": "Kofungola dossier {name}",
+    "collapseFolder": "Kokanga dossier {name}",
+    "folderOptions": "Bapɔsɔ ya {name}"
   },
   "errors": {
     "somethingWentWrong": "Eloko moko ekende malamu te",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Mibeko",
     "resetChatSettings": "Zwisa malamu ya lotomo ya lisolo",
     "resetChatSettingsConfirmTitle": "Olingi kozongisa malamu ya lotomo ya lisolo?",
-    "resetChatSettingsConfirmMessage": "Ekosilisa matambwisi ya liboso mpo na biloko nyonso awa: temperature, mabongisi ya moko, Soki Oyo Ozali, eyano ya model, vitesse ya ebimiseli, koleka maloba na mongongo, bafichiers actives, mpe makokisami. Ikosalela na ndenge te makambo na misolo ya bino."
+    "resetChatSettingsConfirmMessage": "Ekosilisa matambwisi ya liboso mpo na biloko nyonso awa: temperature, mabongisi ya moko, Soki Oyo Ozali, eyano ya model, vitesse ya ebimiseli, koleka maloba na mongongo, bafichiers actives, mpe makokisami. Ikosalela na ndenge te makambo na misolo ya bino.",
+    "customInstructionsLabel": "Biyetoli na moto moko*",
+    "defaultTemperatureLabel": "Temperature ya kobanda*"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1226,7 +1360,8 @@
       "agents": "Ba Agent"
     },
     "sections": {
-      "baseModels": "Ba Model ya Mibeko"
+      "baseModels": "Ba Model ya Mibeko",
+      "allModels": "Ba modèles nyonso ({count})"
     },
     "maintainedBy": "Ebombami na",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Esili",
       "reset": "Kobongisa lisusu",
       "resetTooltip": "Zongisa na molongo ya liboso"
-    }
+    },
+    "hide": "Kobomba na liste",
+    "hideConfirmTitle": "Kobomba \"{name}\"?",
+    "hideConfirmMessage": "Ekokolongwa na liste na yo kasi ekobangama te. Okoki kozongisa yango tango nyonso na ndambo ya Ebombami.",
+    "hideConfirm": "Kobomba",
+    "hiddenToast": "Ebombami \"{name}\"",
+    "hidden": {
+      "title": "Ebombami ({count})",
+      "restore": "Zongisa"
+    },
+    "title": "Pona modèle",
+    "modelsDescription": "Pona modèle ya AI mpo na lisolo na yo. Nzoka ndambo ya modèles ezali na makasi ekeseni — poná moko mpo omóna bisika na yango.",
+    "recommended": "Eponami"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Model ya Claude ya nokinoki mpe ya motuya ya moke mpo na misala ya nokinoki. Eleki malamu mpo na mituna ya pete, ko zipa makambo, mpe ba application ya mingi.",
       "knowledgeCutoff": "Janvier 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Modèle ya Claude makasi koleka. Malamu mpo na kokoma makasi, masolo ya recherche, mpe misala esengeli kokanisa ndambo.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Modèle ya Claude ya katikati. Malamu mpo na doki ya mokolo na mokolo, kobongola, mpe kotonga na eyano ya mbala moko.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Mo'utilisateur aboyi",
     "transientBody": "Meka lisusu",
     "authFailedBody": "S'il te plaît, sala login lisusu",
-    "rateLimitedBody": "Service ezali kotonda, meka lisusu na mwa mwa ntango"
+    "rateLimitedBody": "Service ezali kotonda, meka lisusu na mwa mwa ntango",
+    "loadingAttempt": "(kobɔta {count})",
+    "transcriptLabel": "[Transcription: {filename}]"
   },
   "documentTranslation": {
     "title": "Kokufa ya mikanda ya dokumente",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Expérimental — esalelami na kosala na bayekoli ya MSF. Ezali mpo na bato nyonso te.",
       "createButton": "Salela Agent ya ndakisa"
     },
-    "selectAgentPrompt": "Pona agent mpo omona ba détails"
+    "selectAgentPrompt": "Pona agent mpo omona ba détails",
+    "description": "Ba agents ya AI oyo basalelaka misala boye-boyebiso. Ba agents ya kobanda ehengelami na kati; yeba sources na yo moko mpo ozwa ba agents ya Foundry misusu.",
+    "regionAgents": {
+      "us": "Ba agents ya eteni ya US",
+      "eu": "Ba agents ya eteni ya EU",
+      "default": "Bato ya eteni ya mboka"
+    },
+    "officeAgents": {
+      "suffix": "Bato"
+    },
+    "agentSources": {
+      "title": "Bokangami ya Foundry",
+      "description": "Kanga na ba projet mosusu ya Foundry mpo na koluka bato na bango.",
+      "connectButton": "Kanga projet ya Microsoft Azure Foundry",
+      "connectButtonShort": "Kanga projet ya Foundry",
+      "addButton": "Bakisa source na yo moko",
+      "addAnother": "Bakisa bokangami mosusu",
+      "noSources": "Source moko te ekangami.",
+      "removeSource": "Longola source",
+      "confirmRemove": "Longola?",
+      "sourceConnected": "source na yo moko ekangami",
+      "sourcesConnected": "ba source na yo moko ekangami",
+      "backToAgents": "Zonga",
+      "discoveredAgents": "Bato bamonani",
+      "viewConnection": "Tala bakangami",
+      "edit": "Bongisa",
+      "noAgentsPublished": "Bato moko te bapanzami",
+      "connectedOn": "Ekangami {date}",
+      "disconnectSource": "Betisa source oyo",
+      "confirmDisconnect": "Pesa lisusu mpo kokanga",
+      "loadingAgents": "Ezemi bato...",
+      "noAgentsFound": "Bato moko te bakomami na projet oyo",
+      "noAgentsFoundHint": "Kangisa bato bapanzi mpe zala na role Azure AI User na projet oyo.",
+      "refresh": "Bongisa",
+      "refreshAgents": "Bongisa bato",
+      "technicalDetails": "Makambo ya tekinike",
+      "agentCountLabel": "{count} bato",
+      "disconnectedToast": "Source {name} ekangi te"
+    }
   },
   "privacy": {
     "policyTitle": "Politiki ya Ebombame & Kobatela Ba Donnée",

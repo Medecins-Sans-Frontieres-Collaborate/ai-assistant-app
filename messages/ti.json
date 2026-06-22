@@ -385,7 +385,59 @@
     "delete": "ደምስስ",
     "noCustomAgentsYet": "ክሳብ ሕጂ ብሕታዊ ወኪላት የለን።",
     "noOrgAgentsConfigured": "ናይ ትካል ወኪላት ኣይተዋቐረን።",
-    "validationFailed": "ማረጋገጺ ኣይተዓወተን"
+    "validationFailed": "ማረጋገጺ ኣይተዓወተን",
+    "addAgentSource": "ብትሕዝቶ ምንጭ ኣኣታ",
+    "connectFoundryProject": "Microsoft Azure Foundry ፕሮጀክት ኣብርክት",
+    "connectFoundryDescription": "ኣገናኦትኩም ዘሎ ፍቓድ ዝበጽሑ ኣገመድታት ካብ ሓሳብ ቤት ወይ ቦታ ወይ ቦታ ኣዚውር Foundry ፕሮጀክት ትረኽቡ።",
+    "foundryProjectPath": "Foundry ፕሮጀክት መገዲ",
+    "foundryProjectPathHelp": "ሓንቲ ኣዚውር ፕሮጀክት ኣስተዳደር ሕቶ፣ ወይ 'ብእግሊ ኣእቱ' ንምምላእ ናይ ሓደ ቀጥታ ናይ መደብ ከም ገጽታ ሞሉ።",
+    "copyFormat": "ኣተኣክልነት",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ለ.ም: Amsterdam Office, Geneva Research",
+    "pathRequired": "መንገዲ ናይ ፕሮጀክት Foundry ምህዳር ኣእቱ።",
+    "pathInvalidFormat": "እዚ መንገዲ ናይ ምህዳር ኣይኮነን። /subscriptions/... ንበዘይ ኣብ መጀመርታ ክመዝገብ ኣለዎ።",
+    "connectionFailed": "ኣብዚ ፕሮጀክት ምምዝራካ ኣይተተኻአን። መንገዲ ናብ ትኽክል እንተማለኾ ኣረጋግጽን፣ ፍቓድካስ እንተሎካ ረጋግጽ።",
+    "connectionSuccessAgents": "ተኣቲትካ — {count} ኣገመድታት ተረኸቡ",
+    "connectionSuccessEmpty": "ተኣቲትካ፣ ግና ኣገመድታት ኣይገኙን። ኣብዚ ፕሮጀክት Azure AI User ሚና ክዕወት ይደሊ።",
+    "checkingConnection": "ኣብ ምምዝራካ ይረጋገጽ...",
+    "connect": "ኣብርክት",
+    "save": "ኣኣት",
+    "editConnection": "ኣብራክቲ ኣስተኻኽል",
+    "sourceName": "ስም ምንጭ",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "ስም ምንጭ ይጠየቕ።",
+    "resourcePath": "መንገዲ ምህዳር",
+    "resourcePathRequired": "መንገዲ ምህዳር ይጠየቕ።",
+    "resourcePathHelp": "ናይ ARM መንገዲ ምህዳር ናብ Foundry ፕሮጀክት። ዝሓለፈ ዝኾነ ኣስተዳደር ሕቶ።",
+    "invalidResourcePathFormat": "መንገዲ ምህዳር /subscriptions/... ክመቐመጥ ኣለዎ።",
+    "validatingSource": "ኣገመድታት ኣብ ምርምራ...",
+    "sourceValidatedEmpty": "ምንጭ ተረጋጊጻ፣ ግና ኣገመድታት ኣይተረኸቡን። ኣብዚ ፕሮጀክት ፍቓድ ኣይከወንካን እዩ ከምስል።",
+    "invalidSource": "ነዚ መንገዲ ምህዳር ምምዝራኻ ኣይተኻአን። መንገዲ ከተኸ እናፍቓድካ መረጋገጽ።",
+    "addSource": "ምንጭ ይኣእቱ",
+    "removeSource": "ምንጭ ይሰርዱ",
+    "labelSubscription": "ኣባልነት",
+    "labelFoundryAccount": "Foundry መለኪያ",
+    "labelProject": "ፕሮጀክት",
+    "tooltipSubscription": "Azure ኣባልነት ናይ Foundry መለኪያ ዘለዎ። ኣልዚአት ሓደ ኣስተዳደር ሕቶ።",
+    "tooltipFoundryAccount": "ኣካውንት Azure AI Services ናብ ዝተወሃብ ፕሮጀክት Foundry። ካልኣይ ቤት ወይ ቡድን ናይ ሓደ ኣካውንት እዩ ክትኾን።",
+    "tooltipProject": "ፕሮጀክት ኣገመድታት ኣብ ኣካውንት ይውዕል። ብዙሓት ኣካውንት ኣብ'ዚ \"default\" ፕሮጀክት ይሓዱ።",
+    "foundryProjectLabel": "Foundry ፕሮጀክት",
+    "enterManually": "ብእግሊ ኣእቱ",
+    "browseResources": "ምህዳርታት ተመልከት",
+    "subscriptionIdLabel": "መለለይ ኣባልነት",
+    "resourceGroupLabel": "ቡድን ምህዳር",
+    "accountNameLabel": "ስም ኣካውንት",
+    "projectNameLabel": "ስም ፕሮጀክት",
+    "loadingSubscriptions": "ኣባልነታት ተጻይቖም...",
+    "selectSubscription": "ኣባልነት ምረፅ...",
+    "loadingAccounts": "ኣካውንታት ተጻይቖም...",
+    "noAccountsFound": "ሓደ ኣካውንት Foundry ኣብነት ኣባል ኣየተገኙን።",
+    "selectAccount": "ኣካውንት ምረፅ...",
+    "loadingProjects": "ፕሮጀክታት ተፈታቅዮም...",
+    "noProjectsFound": "ፕሮጀክታት ኣይተገኙን። \"default\" ትጥቀም።",
+    "selectAllRequired": "ኣባልነት፣ ኣካውንትን ፕሮጀክትን ምረፅ።",
+    "subscriptionRequired": "ምዝገባ ምረፅ",
+    "accountRequired": "መለኪዓ ኣካውንት ይምረፁ"
   },
   "Quick Actions": "ቅልጡፍ ተግባራት",
   "Type / in chat to access your prompts": "ፕሮምፕትታትካ ንምርካብ ኣብ ዕላል / ጸሓፍ",
@@ -641,7 +693,10 @@
     "keepEditing": "ምርማር ቀጽል",
     "yes": "እወ",
     "no": "ኣይፋል",
-    "beta": "ቤታ"
+    "beta": "ቤታ",
+    "copied": "ተቐዲሑ!",
+    "clear": "ኣጽዳቕ",
+    "undo": "ኣቐላጥፍ"
   },
   "terms": {
     "officialLanguages": "ወግዓዊ ሕትመት:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "ብኣዝዩ ኣቁም ብዝተፈለጠ ደጊምካ ኣይሕበን",
     "stopGenerationDontAskAgainKeyboard": "ብኪቦርድ ምቁም ደጊምካ ኣይሕበን",
     "generateResponseButton": "መልሲ ምፍላጥ",
-    "downloadResponse": "ምላሽ ውርሻ"
+    "downloadResponse": "ምላሽ ውርሻ",
+    "activity": {
+      "callingTool": "እተምጥብ መሳርሒ…",
+      "callingService": "ናይ ወጻኢ ባህሪ እተጥርእ…",
+      "usingNamedTool": "{tool} እየምጥበ…",
+      "usingNamedToolWithService": "{service} ላዕለ {tool} እየምጥበ…",
+      "searchingWeb": "ኣብ ድሕሪ መርከቢ እየፈቱ…",
+      "searchingFiles": "ፋይልታት እየፈቱ…",
+      "runningCode": "ኮድ እየፈጢሩ…",
+      "generatingImage": "ስእሊ እየፈጠሩ…",
+      "listingTools": "ተመሳርሒታት እየዝርዝሩ…",
+      "analyzingFiles": "ፋይልታትካ እየተረኽቦም…",
+      "searchingKnowledge": "ኣብ መሰብ ብምረፅ እየፈቱ…",
+      "cancellingPriorTool": "ንቀዳማይ ጥያቄ መሳርሒ እየበሳሐ…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# መሳርሒ} other {# መሳርሒታት} } ተጠቒሙ",
+      "failedCount": "{count} ኣይተሳነን",
+      "statusApproved": "ተፈቐደ",
+      "statusAutoApproved": "ብሓራዊ ተፈቐደ",
+      "statusAutoDenied": "ብሓራዊ ተኣገደ",
+      "statusFailed": "ኣይተሳነን",
+      "statusIncomplete": "ዘይተፈጸመ",
+      "viaService": "ብ {service}"
+    },
+    "consent": {
+      "authorizeRequired": "ሓገዝ ፍቓድ የድልየኒ",
+      "authorizeService": "ፍቓድ ምሃብ {service}",
+      "descriptionGeneric": "እዚ ጀንታ ንሳይ ውልቃዊ ሓበሬታ ምድላው ፈቃድካ የድልወ፡ መእተዊ መግቢ ኣብ ቋሚ ኣብዚ ኣይተቀሚጡን።",
+      "descriptionWithService": "እዚ ጀንታ ን{service} ምድላው ፈቃድካ የድልወ። ኣብ {service} ዚኣተዉ መግቢ ናይ {service} እዩ ዝተመሓየሸ፡ ኣብዚ ኣይተቀሚጡን።",
+      "signInIncompleteGeneric": "መእተዊ መግቢ ኣይተፈጸመን",
+      "signInIncompleteForService": "መእተዊ መግቢ {service} ኣይተፈጸመን",
+      "signInIncompleteDescriptionGeneric": "ፈቓዱ ኣይተዛወረን ይመስል፡ ኣብ ካብ ዝተኣኻበ ታብ መግቢ ኣብቲ ውን ኣድርጉ፡ ቀጸሉ ንፈቲሉ።",
+      "signInIncompleteDescription": "ፈቓድ ናብ {service} ኣይተዛወረን ይመስል፡ ኣብ ካብ ዝተኣኻበ ታብ መግቢ ኣብቲ ውን ኣድርጉ፡ ቀጸሉ ንፈቲሉ።",
+      "authorizeButton": "ፍቓድ ምሃብ",
+      "reauthorizeButton": "ተደጋጋሚ ፍቓድ ምሃብ",
+      "continueButton": "ቀጽል",
+      "confirmingButton": "ኣፍልጦ እዩ…",
+      "authorizeHint": "ፍቓድ ሃበ፡ ናብዚ ተመለስካ ቀጽል ጠይቕ። ሓደ ግዜ ንሕና ቶክን ኣይንዕትውን፡ ኣብ {service} ብቀጥዲ ውጽኢ መተዓትካ ትኽእል።",
+      "authorizeHintGeneric": "ፍቓድ ሃበ፡ ናብዚ ተመለስካ ቀጽል ንፈቲሉ። ሓደ ግዜ ንሕና ቶክን ኣይንዕትውን፡ ናይ ወጻኢ ባህሪ ብቀጥዲ ተዓትና ትኽእሉ።",
+      "continueHint": "ፍቓድ ኣብ ካብ ሓደ ታብ ተዓቢ ኣለዎ፡ ቀጸሉ ጠይቕ።",
+      "confirmingHint": "ፍቓድ ኣፍልጦ እዩ ዝካየዶ፡ ትደለዩ ጥያቄ እየቀጻሉ…",
+      "resendHint": "ፍቓድ ኣብካ ድማ መልእኽቲካ ደጊም ኣብኲ ለኻ.",
+      "resetTooltip": "ኩሉ ናይ ናይዚ መወዳእታ ብሓራዊ ፍቓድ ምምሓዝ። ተቐጺሉ ምጥራይ ይሓትቱ።",
+      "autoApproveAllIndicator": "ኩሉ መሳርሒታት ብሓራዊ እዩ ዝፈቐደ",
+      "autoApproveCountIndicator": "{count, plural, one {# መሳርሒ ብሓራዊ እዩ ዝፈቐደ} other {# መሳርሒታት ብሓራዊ እዮም ዝፈቐዱ} }",
+      "resetShort": "ተመላለሰ",
+      "approvalRequired": "ፍቓድ መሳርሒ የድልየኒ",
+      "approvalForService": "ፍቓድ መሳርሒ ን{service}",
+      "approvalDescriptionGeneric": "ጀንታ መሳርሒ ኽወግን ይፈልጦ፡ ቅድሚ ዝተፈቐደ ኣለዎ።",
+      "approvalDescriptionWithTool": "ጀንታ መሳርሒ {tool} ክወግን ይፈልጦ፡ ቅድሚ ዝተፈቐደ ኣለዎ።",
+      "runToolTitle": "<code>{tool}</code> ኣብኡ ክትኣኽል?",
+      "runToolGeneric": "እዚ መሳርሒ ክትኣኽል?",
+      "viaService": "ብ {service}",
+      "approveButton": "ኣጽዊዕ",
+      "approveOptionsLabel": "ኣማራጮታት ኣጽዊዕ",
+      "approveOnce": "ሓደ ግዜ ኣጽዊዕ",
+      "alwaysApproveThisTool": "ዘይተዋህዶ እዚ መሳርሒ ኣጽዊዕ",
+      "alwaysApproveAllTools": "ዘይተዋህዶ ኩሉ መሳርሒ ኣጽዊዕ",
+      "denyButton": "ኣልቦ",
+      "keyboardHint": "{modifier}+⏎ ኣጽዊዕ · esc ኣልቦ",
+      "submittingState": "ውሳነኻ ክቕመጥ ኣሎ",
+      "approvedState": "ድምር ኣጽዊዑ — agent ዳግመኛ ጀመረ",
+      "deniedState": "ኣተቕሎ",
+      "submittingApproval": "ኣጽዊዖ እናተወሃበ ዳግመኛ agent ክመለስ…",
+      "submittingDenial": "ምስልኣኻ ናይ ኣተቕል ምልኣይ…"
+    },
+    "openImage": "ስእሊ ክፈት",
+    "copyMessage": "መልእኽቲ ቅድሚ",
+    "stopAudio": "ድምጺ ኣቁም",
+    "generatingAudio": "ድምጺ እየ ተዘጋጅኦ...",
+    "listen": "ስማ",
+    "processingAudio": "ድምጺ እየ ተተው...",
+    "ttsError": "ስህተት ኣብ ምፍጣር ድምጺ። እቲ ግዜ ደገ ፈትኑ።",
+    "unsupportedMessageType": "ስህተት ኣብ ምርሕያብ መልእኽቲ፡ ዘይተደገፀ ዓይነት መልእኽቲ"
   },
   "transcript": {
     "originalTranscript": "ኦሪጂናል ጽሕፈት",
@@ -772,7 +901,10 @@
     "collapseSidebar": "ጎድናዊ ባር ጽብብ",
     "expandSidebar": "ጎድናዊ ባር ግፋሕ",
     "quickActionsTitle": "ቅልጡፍ ተግባራት",
-    "quickActions": "ቅልጡፍ ተግባራት"
+    "quickActions": "ቅልጡፍ ተግባራት",
+    "expandFolder": "ፎልደር {name} ፍጽው ኣበልዎ",
+    "collapseFolder": "ፎልደር {name} ሰንካል",
+    "folderOptions": "ኣማራጮታት {name}"
   },
   "errors": {
     "somethingWentWrong": "ገለ ጸገም ተፈጢሩ",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "ውሳነ ኣካላት",
     "resetChatSettings": "ቅንብሮታት ቻት ኣዳልው",
     "resetChatSettingsConfirmTitle": "ቅንብሮታት ቻት ኣዳልው?",
-    "resetChatSettingsConfirmMessage": "ዚኣ ቃል ናይቲ ፓኔል ኩሉ ንቅንብሮታት ናይ መደብ መልሲ ፣ ብቑዓት ምትእታው፣ ፍትሒ ናብናብ መላእክቲ፣ ስለ ኣንቲ፣ ሓንደበት ናይ ሞዴል መልሲ፣ ብምፍላጥ ምስናይ፣ ጽሑፍ-ናብ-ድምፂ፣ ኣካባቢ ፋይላትን ምርጫታትን ወይ ናይ ሓበሬታታት ፣ ቃል ንክሳቕ፣ ምርምርን። ንሕዝብ ትምህርትካት ኣይጽሑፉን።"
+    "resetChatSettingsConfirmMessage": "ዚኣ ቃል ናይቲ ፓኔል ኩሉ ንቅንብሮታት ናይ መደብ መልሲ ፣ ብቑዓት ምትእታው፣ ፍትሒ ናብናብ መላእክቲ፣ ስለ ኣንቲ፣ ሓንደበት ናይ ሞዴል መልሲ፣ ብምፍላጥ ምስናይ፣ ጽሑፍ-ናብ-ድምፂ፣ ኣካባቢ ፋይላትን ምርጫታትን ወይ ናይ ሓበሬታታት ፣ ቃል ንክሳቕ፣ ምርምርን። ንሕዝብ ትምህርትካት ኣይጽሑፉን።",
+    "customInstructionsLabel": "ብኻንያ መመሪያታት*",
+    "defaultTemperatureLabel": "ነቶም መደብ መዓዛ*"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -1226,7 +1360,8 @@
       "agents": "ወኪላት"
     },
     "sections": {
-      "baseModels": "መሰረታዊ ሞዴላት"
+      "baseModels": "መሰረታዊ ሞዴላት",
+      "allModels": "ኩሎም ኣብርሲ ሞዴሎም ({count})"
     },
     "maintainedBy": "ዝሕዞ",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "ተወዲኡ",
       "reset": "ናብ ውሁድ ምለስ",
       "resetTooltip": "ናብ ውሁድ ቅደም-ተኸተል ምለስ"
-    }
+    },
+    "hide": "ካብ ዝርዝር ሰባሕ",
+    "hideConfirmTitle": "\"{name}\" ሰበስባሕ?",
+    "hideConfirmMessage": "ካብ ዝርዝርኻ ይወሰድ እዩ፣ ግና ኣይገድፀን። እቶም ተሰበስበዎ ክትመለስ ክከኣልካ ኣብ ናይ ተሰበስቡ እዩ።",
+    "hideConfirm": "ሰባሕ",
+    "hiddenToast": "\"{name}\" ተሰበስበዎ",
+    "hidden": {
+      "title": "ተሰበስቡ ({count})",
+      "restore": "መልስ"
+    },
+    "title": "ሞዴል ምረፅ",
+    "modelsDescription": "ንውዕልናኻ ኣይ ሞዴል ምረፅ። ተወዳዳሪ ውጻኢታት ኣሎም — መርሓት ናይ መረጻ ተያዩ።",
+    "recommended": "ዝመኽር"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "ንቅልጡፍ ስራሓት ዝተመሓየሸ ቅልጡፍን ዝሓሰረን Claude ሞዴል። ንቐለልቲ ሕቶታት፣ ጽማቝ፣ ከምኡ'ውን ብዙሕ-መጠን ኣፕሊኬሽናት ብሉጽ።",
       "knowledgeCutoff": "ጥሪ 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "ኣብ ኣንፈጽሞ ብAnthropic ዝበለጸ ሞዴል። ርእሰ ጽሑፍ ፣ ምምሃር ንእትውልኹ ብምስቓዕ ዝሓገዝ።",
+      "knowledgeCutoff": "መጋቢት 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "ተምታኻኸሎ ሞዴል፡ ምሉእ ግዜ ምስራሕ፣ ትንታነ፣ ኮዲንግ ኣብ ፈጣን መልሲ ዝሓገዝ።",
+      "knowledgeCutoff": "መጋቢት 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "ብተጠቃሚ ተተወ",
     "transientBody": "ኣዲምኻ ጽየው",
     "authFailedBody": "እቲ ኣድሓን እንደጊም ኣብ ምምልኣኽ",
-    "rateLimitedBody": "ኣገልግሎት ብብዙሕ ሰብ ይተበዝብዙ፣ ኣዲምኻ ጽየው"
+    "rateLimitedBody": "ኣገልግሎት ብብዙሕ ሰብ ይተበዝብዙ፣ ኣዲምኻ ጽየው",
+    "loadingAttempt": "(መወዳእታ {count})",
+    "transcriptLabel": "[ጽሑፍ፡ {filename}]"
   },
   "documentTranslation": {
     "title": "ናይ ሰነድ ትርጉም",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "ፈተነ — ምስ MSF ሓያላት ተጠቀምቲ ብቐጥታ ብምትሕብባር ዝተሃንጸ። ንሓፈሻዊ ኣጠቓቕማ ኣይኮነን።",
       "createButton": "ብሕታዊ ወኪል ፍጠር"
     },
-    "selectAgentPrompt": "ዝርዝር ንምርኣይ ወኪል ምረጽ"
+    "selectAgentPrompt": "ዝርዝር ንምርኣይ ወኪል ምረጽ",
+    "description": "ልዩ ኣይ ኣጀንቶም ንተወሳኺ ስራሕ። ናይ መደብ ኣጀንቶም ክኣኽሉ ብማእከላዊ፣ ንሕቶም ፃዕርቶም ምትኻኻል ካብ ካልኦት Foundry ፕሮጀክት ኣጀንቶም ምርምር ክከኣል።",
+    "regionAgents": {
+      "us": "ኣጀንቶም ኣብ US ክልል",
+      "eu": "ኣጀንቶም ኣብ EU ክልል",
+      "default": "ዞባ ውሳነታት"
+    },
+    "officeAgents": {
+      "suffix": "ውሳነታት"
+    },
+    "agentSources": {
+      "title": "መዋጮ ከፍቲ Foundry",
+      "description": "ውሳነታት ንምርካብ ከለኸ Foundry ፕሮጂክታት ብምባል.",
+      "connectButton": "Microsoft Azure Foundry ፕሮጂክት ኣብራኽ",
+      "connectButtonShort": "Foundry ፕሮጂክት ኣብራኽ",
+      "addButton": "ብግምጃ ምንጪ ኣኣትዉ",
+      "addAnother": "ካልእ መዋጮ ደምስሱ",
+      "noSources": "ምንጪ ብግምጃ ኣይተዘጋጀን።",
+      "removeSource": "ምንጪ ኣወግዱ",
+      "confirmRemove": "ኣወግድ?",
+      "sourceConnected": "ብግምጃ ምንጪ ተቐጥሉ",
+      "sourcesConnected": "ብግምጃ ምንጻቕታት ተቐጥሉ",
+      "backToAgents": "ተው ድሓን",
+      "discoveredAgents": "ዝተረኸቡ ውሳነታት",
+      "viewConnection": "ዝርዝር መዋጮ ርአ",
+      "edit": "ኣርትዑ",
+      "noAgentsPublished": "ውሳነታት ኣይተጸብጹን",
+      "connectedOn": "ተቐጠሉ {date}",
+      "disconnectSource": "ነዚ ምንጪ ኣቁጽጡ",
+      "confirmDisconnect": "ኣረጋግጽ ንብርትዕ ደጊም",
+      "loadingAgents": "ውሳነታት ይጸናን...",
+      "noAgentsFound": "ውሳነታት ኣብዚ ፕሮጂክት ኣይተረኸቡን",
+      "noAgentsFoundHint": "ውሳነታት ክትሰብጥዎም እንተርእዩንን ሓላፍነት Azure AI User ኣብዚ ፕሮጂክት ክህልዉ ኣውጹ።",
+      "refresh": "ኣንጻሩ",
+      "refreshAgents": "ውሳነታት ኣንጻሩ",
+      "technicalDetails": "ዝተኣኽበረ ዝርዝር",
+      "agentCountLabel": "{count} ውሳነታት",
+      "disconnectedToast": "{name} ተቁጺጺ"
+    }
   },
   "privacy": {
     "policyTitle": "ናይ ብሕትና ፖሊሲ ን ዳታ ምሕላው",

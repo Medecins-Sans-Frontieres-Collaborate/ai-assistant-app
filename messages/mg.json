@@ -385,7 +385,59 @@
     "delete": "Fafao",
     "noCustomAgentsYet": "Tsy mbola misy mpandraharaha manokana.",
     "noOrgAgentsConfigured": "Tsy mbola misy mpandraharahan'ny fikambanana voapetraka.",
-    "validationFailed": "Tsy nahomby ny fanamarinana"
+    "validationFailed": "Tsy nahomby ny fanamarinana",
+    "addAgentSource": "Ampio Loharanon-kevitra manokana",
+    "connectFoundryProject": "Ampifandraiso amin'ny Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "Manokàna mpikirakira avy amin'ny birao na ekipan-kafa amin'ny Azure Foundry project. Ny mpikirakira azonao alaina ihany no hiseho eto.",
+    "foundryProjectPath": "Lalan'ny Foundry Project",
+    "foundryProjectPathHelp": "Anontanio ny mpandrindra ny Foundry project anao, na tsindrio 'Ampidiro an-tanana' raha tianao fenoina tsirairay ny saha.",
+    "copyFormat": "Endrika",
+    "nameLabel": "Anarana",
+    "namePlaceholder": "oh: Biraon'i Amsterdam, Fikarohana Geneva",
+    "pathRequired": "Apetraho eto ny lalan'ny loharanon-kevitra Foundry project.",
+    "pathInvalidFormat": "Tsy toa lalan'ny loharanon-kevitra izany. Tokony hanomboka amin'ny /subscriptions/...",
+    "connectionFailed": "Tsy tratra ity tetikasa ity. Hamarino raha marina ny lalana sy fa manana fahazoan-dàlana ianao.",
+    "connectionSuccessAgents": "Tafakambana — {count} mpikirakira hita",
+    "connectionSuccessEmpty": "Tafakambana, saingy tsy nisy mpikirakira hita. Mety mila andraikitra Azure AI User amin'ity tetikasa ity ianao vao afaka mijery ny mpikirakira.",
+    "checkingConnection": "Manamarina ny fifandraisana...",
+    "connect": "Ampifandraiso",
+    "save": "Tehirizo",
+    "editConnection": "Hanova ny fifandraisana",
+    "sourceName": "Anaran'ny Loharanon-kevitra",
+    "sourceNamePlaceholder": "Biraon'i Amsterdam",
+    "sourceNameRequired": "Ilaina ny anaran'ny loharanon-kevitra.",
+    "resourcePath": "Lalan'ny Loharanon-kevitra",
+    "resourcePathRequired": "Ilaina ny lalan'ny loharanon-kevitra.",
+    "resourcePathHelp": "Ny lalan'ny loharano ARM mankany amin'ny Foundry project. Anontanio amin'ny mpandrindranareo.",
+    "invalidResourcePathFormat": "Tokony hanomboka amin'ny /subscriptions/... ny lalan'ny loharanon-kevitra.",
+    "validatingSource": "Mikaroka mpikirakira...",
+    "sourceValidatedEmpty": "Loharanon-kevitra marina, saingy tsy nisy mpikirakira hita. Mety tsy manana fahazoan-dàlana amin'ity tetikasa ity ianao.",
+    "invalidSource": "Tsy afaka miditra amin'ity lalan'ny loharano ity. Hamarino ny lalana sy ny fahazoanao.",
+    "addSource": "Ampio Loharanon-kevitra",
+    "removeSource": "Esory ny Loharanon-kevitra",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Kaonty Foundry",
+    "labelProject": "Tetikasa",
+    "tooltipSubscription": "Ny subscription Azure misy ny kaonty Foundry. Raha tsy azonao antoka, anontanio amin'ny admin-nareo hoe iza no ampiasain'ny ekipa.",
+    "tooltipFoundryAccount": "Ny kaonty Azure AI Services misy ny Foundry project. Matetika dia manam-pahaleovantena isaky ny birao na ekipa.",
+    "tooltipProject": "Tetikasa iray dia manam-pikambanana mpikirakira ao anaty kaonty iray. Ny ankamaroan'ny kaonty dia manana tetikasa 'default' iray.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Ampidiro an-tanana",
+    "browseResources": "Hijery loharano",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Vondron'ny Loharanon-kevitra",
+    "accountNameLabel": "Anaran'ny kaonty",
+    "projectNameLabel": "Anaran'ny Tetikasa",
+    "loadingSubscriptions": "Mampiditra subscription...",
+    "selectSubscription": "Misafidiana subscription...",
+    "loadingAccounts": "Mampiditra kaonty...",
+    "noAccountsFound": "Tsy misy kaonty Foundry hita amin'ity subscription ity.",
+    "selectAccount": "Misafidiana kaonty...",
+    "loadingProjects": "Mampiditra tetikasa...",
+    "noProjectsFound": "Tsy misy tetikasa hita. Mampiasa 'default'.",
+    "selectAllRequired": "Misafidiana subscription, kaonty, ary tetikasa.",
+    "subscriptionRequired": "Misafidiana famandrihana",
+    "accountRequired": "Misafidiana kaonty Foundry"
   },
   "Quick Actions": "Hetsika haingana",
   "Type / in chat to access your prompts": "Soraty / ao amin'ny resadresaka hidirana amin'ny toro-hevitrao",
@@ -641,7 +693,10 @@
     "keepEditing": "Tohizo ny Fanovana",
     "yes": "Eny",
     "no": "Tsia",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Voakopy!",
+    "clear": "Fafao",
+    "undo": "Avereno"
   },
   "terms": {
     "officialLanguages": "Kinova ofisialy:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Aza manontany intsony rehefa mampiasa ny bokotra hijanona",
     "stopGenerationDontAskAgainKeyboard": "Aza manontany intsony rehefa mampiasa klavier hijanona",
     "generateResponseButton": "Mamokatra valiny",
-    "downloadResponse": "Alaivo ny valiny"
+    "downloadResponse": "Alaivo ny valiny",
+    "activity": {
+      "callingTool": "Miantso fitaovana...",
+      "callingService": "Miantso tolotra ivelany...",
+      "usingNamedTool": "Mampiasa {tool}...",
+      "usingNamedToolWithService": "Mampiasa {tool} amin'ny {service}...",
+      "searchingWeb": "Mitady amin'ny web...",
+      "searchingFiles": "Mitady rakitra...",
+      "runningCode": "Manatanteraka kaody...",
+      "generatingImage": "Mamorona sary...",
+      "listingTools": "Mitady fitaovana azo ampiasaina...",
+      "analyzingFiles": "Manadihady ny rakitrao...",
+      "searchingKnowledge": "Mitady ao amin'ny tahiry fahalalana...",
+      "cancellingPriorTool": "Manafoana ny fangatahana fitaovana teo aloha..."
+    },
+    "toolSummary": {
+      "usedTools": "Fitaovana nampiasaina {count, plural, one {#} other {#}}",
+      "failedCount": "{count} tsy nety",
+      "statusApproved": "Voankatoavina",
+      "statusAutoApproved": "Voankatoavina ho azy",
+      "statusAutoDenied": "Nolavina ho azy",
+      "statusFailed": "Tsy nety",
+      "statusIncomplete": "Tsy feno",
+      "viaService": "amin'ny alalan'i {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Tsy maintsy alalana",
+      "authorizeService": "Omeo alalana {service}",
+      "descriptionGeneric": "Ity agent ity dia mila fahazoan-dàlana avy aminao hahazoana loharano arovana. Ny fidirana dia tantanin'ny tolotra ivelany, tsy tehirizina eto.",
+      "descriptionWithService": "Ity agent ity dia mila fahazoan-dàlana hahazoana {service}. Ny fidirana amin'ny {service} dia tantanin'i {service} mihitsy, tsy tehirizina eto.",
+      "signInIncompleteGeneric": "Tsy vita ny fidirana",
+      "signInIncompleteForService": "Tsy vita ny fidirana amin'i {service}",
+      "signInIncompleteDescriptionGeneric": "Toa tsy vita ny fahazoan-dàlana. Ataovy azo antoka fa vita ny fidirana amin’ny tabilao hafa, dia tsindrio ‘Hanohy’ indray.",
+      "signInIncompleteDescription": "Toa tsy vita ny fahazoan-dàlana amin'i {service}. Ataovy azo antoka fa vita ny fidirana amin’ny tabilao hafa, dia tsindrio ‘Hanohy’ indray.",
+      "authorizeButton": "Omeo alalana",
+      "reauthorizeButton": "Omeo alalana indray",
+      "continueButton": "Hanohy",
+      "confirmingButton": "Manamarina...",
+      "authorizeHint": "Omeo alalana, dia miverena eto ary tsindrio ‘Hanohy’. Raha hanala izany amin'ny manaraka dia mivoaha mivantana amin'ny {service} — tsy mitahiry ny token izahay.",
+      "authorizeHintGeneric": "Omeo alalana, dia miverena eto ary tsindrio ‘Hanohy’. Raha hanala izany amin’ny manaraka dia mivoaha mivantana amin’ny tolotra ivelany — tsy mitahiry ny token izahay.",
+      "continueHint": "Rehefa vita ny fahazoan-dàlana amin'ny tabilao hafa, tsindrio ‘Hanohy’.",
+      "confirmingHint": "Manamarina ny fahazoan-dàlana sy manohy ny fangatahanao...",
+      "resendHint": "Aorian’ny fanomezana alalana dia alefaso indray ny hafatrao mba hanohy.",
+      "resetTooltip": "Avereno amin'ny toerany ny safidy fanekena ho azy fitaovana amin'ity resaka ity. Hanontany indray rehefa mampiasa fitaovana amin'ny manaraka.",
+      "autoApproveAllIndicator": "Manaiky ho azy ny fitaovana rehetra",
+      "autoApproveCountIndicator": "{count, plural, one {Manaiky ho azy # fitaovana} other {Manaiky ho azy # fitaovana}}",
+      "resetShort": "Avereno",
+      "approvalRequired": "Tsy maintsy ankatoavina ny fitaovana",
+      "approvalForService": "Ekeko ny fitaovana ho an'i {service}",
+      "approvalDescriptionGeneric": "Te hampiasa fitaovana izay mila fanekenao ny agent alohan'ny hanohizana.",
+      "approvalDescriptionWithTool": "Te hampiasa ny fitaovana {tool} ny agent, izay mila fanekenao alohan'ny hanohizana.",
+      "runToolTitle": "Alefa ny <code>{tool}</code>?",
+      "runToolGeneric": "Alefa ity fitaovana ity?",
+      "viaService": "amin'ny alàlan'ny {service}",
+      "approveButton": "Ekena",
+      "approveOptionsLabel": "Safidy fankatoavana",
+      "approveOnce": "Ekena indray mandeha",
+      "alwaysApproveThisTool": "Ekeko mandrakariva ity fitaovana ity",
+      "alwaysApproveAllTools": "Ekeko mandrakariva ireo fitaovana rehetra",
+      "denyButton": "Lavina",
+      "keyboardHint": "{modifier}+⏎ ekena · esc lavina",
+      "submittingState": "Alefa ny safidinao",
+      "approvedState": "Ekena — napetraka indray ny agent",
+      "deniedState": "Nolavina",
+      "submittingApproval": "Ankatoavina sy averina ny agent...",
+      "submittingDenial": "Alefa ny fandavana..."
+    },
+    "openImage": "Sokafy sary",
+    "copyMessage": "Adikao hafatra",
+    "stopAudio": "Ajanona ny feo",
+    "generatingAudio": "Mamorona feo...",
+    "listen": "Henoy",
+    "processingAudio": "Mikarakara feo...",
+    "ttsError": "Nisy hadisoana tamin'ny famoronana feo. Azafady avereno.",
+    "unsupportedMessageType": "Hadisoana tamin'ny fandefasana hafatra: Tsy tohanana ity karazana hafatra ity"
   },
   "transcript": {
     "originalTranscript": "Dikan-teny Tany Am-boalohany",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Ahitsio ny sisiny",
     "expandSidebar": "Velaro ny sisiny",
     "quickActionsTitle": "Hetsika Haingana",
-    "quickActions": "Hetsika Haingana"
+    "quickActions": "Hetsika Haingana",
+    "expandFolder": "Vakio antontan-taratasy {name}",
+    "collapseFolder": "Akimpio antontan-taratasy {name}",
+    "folderOptions": "Safidin'i {name}"
   },
   "errors": {
     "somethingWentWrong": "Nisy tsy nety",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Fitondran-tena",
     "resetChatSettings": "Avereno amin'ny voalohany ny fanovàna amin'ny chat",
     "resetChatSettingsConfirmTitle": "Avereno amin'ny voalohany ny fanovàna amin'ny chat?",
-    "resetChatSettingsConfirmMessage": "Averina amin'ny masontsivana fototra eto amin'ity tabilao ity: temperature, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny streaming, fanovàna lahatsoratra ho feo, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany."
+    "resetChatSettingsConfirmMessage": "Averina amin'ny masontsivana fototra eto amin'ity tabilao ity: temperature, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny streaming, fanovàna lahatsoratra ho feo, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany.",
+    "customInstructionsLabel": "Toromarika manokana*",
+    "defaultTemperatureLabel": "Mari-pana mahazatra*"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -1226,7 +1360,8 @@
       "agents": "Mpandraharaha"
     },
     "sections": {
-      "baseModels": "Modely Fototra"
+      "baseModels": "Modely Fototra",
+      "allModels": "Modely rehetra ({count})"
     },
     "maintainedBy": "Tantanin'ny",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Vita",
       "reset": "Avereno",
       "resetTooltip": "Avereno amin'ny filaharana tsy miovaova"
-    }
+    },
+    "hide": "Afeno amin'ny lisitra",
+    "hideConfirmTitle": "Afeno \"{name}\"?",
+    "hideConfirmMessage": "Hoesorina amin'ny lisitrao izany fa tsy ho voafafa. Azonao averina amin'ny fizarana Afenina izany amin'ny fotoana rehetra.",
+    "hideConfirm": "Afeno",
+    "hiddenToast": "Nafenina \"{name}\"",
+    "hidden": {
+      "title": "Nafenina ({count})",
+      "restore": "Avereno"
+    },
+    "title": "Misafidiana modely",
+    "modelsDescription": "Safidio ny modely AI amin'ny dininao. Samy manana ny tanjany ny modely tsirairay — mifidiana iray hijerena antsipiriany.",
+    "recommended": "Soso-kevitra"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Modely Claude haingana sy tsy lafo natao ho an'ny asa haingana. Tsara ho an'ny fangatahana tsotra, famintinana, ary rindranasa be fampiasana.",
       "knowledgeCutoff": "Janoary 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Modely matanjaka indrindra an'i Anthropic. Mahasoa amin'ny fanoratana lava, fikarohana, sy asa mitaky fandinihana lalina.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Modely Claude voalanjalanja. Mahafaka amin'ny fanoratana andavanandro, famakafakana, sy kaody miaraka amin'ny valiny haingana.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Nofoanan'ny mpampiasa",
     "transientBody": "Azafady andramo indray",
     "authFailedBody": "Midira indray azafady",
-    "rateLimitedBody": "Feno ny serivisy, andramo vetivety eo"
+    "rateLimitedBody": "Feno ny serivisy, andramo vetivety eo",
+    "loadingAttempt": "(andramana {count})",
+    "transcriptLabel": "[Taratasy: {filename}]"
   },
   "documentTranslation": {
     "title": "Fandikan-tahirin-kevitra",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Andrana — natsangana miaraka amin'ny fiaraha-miasa mivantana amin'ny mpampiasa mandroso MSF. Tsy ho an'ny fampiasana ankapobeny.",
       "createButton": "Mamorona Mpandraharaha Manokana"
     },
-    "selectAgentPrompt": "Fidio mpandraharaha hojerena ny antsipiriany"
+    "selectAgentPrompt": "Fidio mpandraharaha hojerena ny antsipiriany",
+    "description": "Ajan-kenatra AI manokana ho an'ny asa manokana. Atsangana afovoany ny ajan-kenatra mahazatra; ampio loharano manokana hahitana ajan-kenatra amin'ireo tetikasa Foundry hafa.",
+    "regionAgents": {
+      "us": "Ajan-kenatra faritra US",
+      "eu": "Ajan-kenatra faritra EU",
+      "default": "Agents Faritra"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Fifandraisana Foundry",
+      "description": "Ampifandraiso amin’ny tetikasa Foundry hafa mba hahitana ny agents-ny.",
+      "connectButton": "Ampifandraiso amin’ny tetikasa Microsoft Azure Foundry",
+      "connectButtonShort": "Ampifandraiso amin’ny tetikasa Foundry",
+      "addButton": "Ampio Loharanom-baovao manokana",
+      "addAnother": "Ampio fifandraisana iray hafa",
+      "noSources": "Tsy mbola misy loharanom-baovao manokana napetraka.",
+      "removeSource": "Esory ny loharano",
+      "confirmRemove": "Hoesorina?",
+      "sourceConnected": "loharano manokana tafapetraka",
+      "sourcesConnected": "loharano manokana tafapetraka",
+      "backToAgents": "Miverina",
+      "discoveredAgents": "Agents nahitana",
+      "viewConnection": "Jereo ny antsipirian'ny fifandraisana",
+      "edit": "Hanova",
+      "noAgentsPublished": "Tsy misy agents navoaka",
+      "connectedOn": "Nampifandray tamin’ny {date}",
+      "disconnectSource": "Tapaho ity loharano ity",
+      "confirmDisconnect": "Tsindrio indray raha hanamarina",
+      "loadingAgents": "Mampiditra agents...",
+      "noAgentsFound": "Tsy nisy agents hita tao amin’ity tetikasa ity",
+      "noAgentsFoundHint": "Ataovy azo antoka fa efa navoaka ny agents ary manana anjara Azure AI User ao amin'ity tetikasa ity ianao.",
+      "refresh": "Havaozy",
+      "refreshAgents": "Havaozy ny agents",
+      "technicalDetails": "Antsipiriany teknika",
+      "agentCountLabel": "Agents {count}",
+      "disconnectedToast": "Tapatra ny fifandraisana amin'i {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Politika Fiainam-pirenena sy Fiarovana Angona",

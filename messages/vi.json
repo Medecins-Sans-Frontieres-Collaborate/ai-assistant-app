@@ -380,7 +380,59 @@
     "edit": "Chỉnh Sửa",
     "confirmDelete": "Xác Nhận",
     "delete": "Xóa",
-    "noCustomAgentsYet": "Chưa có agent tùy chỉnh nào."
+    "noCustomAgentsYet": "Chưa có agent tùy chỉnh nào.",
+    "addAgentSource": "Thêm nguồn tuỳ chỉnh",
+    "connectFoundryProject": "Kết nối với Dự án Azure Foundry của Microsoft",
+    "connectFoundryDescription": "Khám phá agent từ dự án Azure Foundry của văn phòng hoặc nhóm khác. Bạn chỉ xem được các agent mà mình có quyền truy cập.",
+    "foundryProjectPath": "Đường dẫn dự án Foundry",
+    "foundryProjectPathHelp": "Hỏi quản trị viên dự án Foundry, hoặc nhấp vào 'Nhập thủ công' để điền từng trường.",
+    "copyFormat": "Định dạng",
+    "nameLabel": "Tên",
+    "namePlaceholder": "vd. Văn phòng Amsterdam, Nghiên cứu Geneva",
+    "pathRequired": "Dán đường dẫn tài nguyên dự án Foundry.",
+    "pathInvalidFormat": "Đây không phải là định dạng đường dẫn tài nguyên. Đường dẫn nên bắt đầu bằng /subscriptions/...",
+    "connectionFailed": "Không thể kết nối đến dự án này. Kiểm tra lại đường dẫn và quyền truy cập của bạn.",
+    "connectionSuccessAgents": "Đã kết nối — tìm thấy {count} agent",
+    "connectionSuccessEmpty": "Đã kết nối, nhưng không tìm thấy agent nào. Bạn có thể cần vai trò Azure AI User trên dự án này để xem các agent.",
+    "checkingConnection": "Đang kiểm tra kết nối...",
+    "connect": "Kết nối",
+    "save": "Lưu",
+    "editConnection": "Chỉnh sửa kết nối",
+    "sourceName": "Tên nguồn",
+    "sourceNamePlaceholder": "Văn phòng Amsterdam",
+    "sourceNameRequired": "Cần nhập tên nguồn.",
+    "resourcePath": "Đường dẫn tài nguyên",
+    "resourcePathRequired": "Cần nhập đường dẫn tài nguyên.",
+    "resourcePathHelp": "Đường dẫn tài nguyên ARM đến dự án Foundry. Hỏi quản trị viên để lấy thông tin này.",
+    "invalidResourcePathFormat": "Đường dẫn tài nguyên phải bắt đầu bằng /subscriptions/...",
+    "validatingSource": "Đang kiểm tra agent...",
+    "sourceValidatedEmpty": "Nguồn hợp lệ, nhưng không tìm thấy agent. Bạn có thể chưa có quyền truy cập agent trong dự án này.",
+    "invalidSource": "Không thể truy cập đường dẫn tài nguyên này. Vui lòng kiểm tra lại đường dẫn và quyền của bạn.",
+    "addSource": "Thêm nguồn",
+    "removeSource": "Xoá nguồn",
+    "labelSubscription": "Đăng ký",
+    "labelFoundryAccount": "Tài khoản Foundry",
+    "labelProject": "Dự án",
+    "tooltipSubscription": "Đăng ký Azure chứa tài khoản Foundry. Nếu không rõ, hãy hỏi quản trị viên về đăng ký nhóm bạn sử dụng.",
+    "tooltipFoundryAccount": "Tài khoản Azure AI Services chứa dự án Foundry. Thường mỗi văn phòng hoặc nhóm có tài khoản riêng.",
+    "tooltipProject": "Một dự án quản lý các agent trong tài khoản. Phần lớn tài khoản có dự án 'default'.",
+    "foundryProjectLabel": "Dự án Foundry",
+    "enterManually": "Nhập thủ công",
+    "browseResources": "Duyệt tài nguyên",
+    "subscriptionIdLabel": "ID đăng ký",
+    "resourceGroupLabel": "Nhóm tài nguyên",
+    "accountNameLabel": "Tên tài khoản",
+    "projectNameLabel": "Tên dự án",
+    "loadingSubscriptions": "Đang tải đăng ký...",
+    "selectSubscription": "Chọn đăng ký...",
+    "loadingAccounts": "Đang tải tài khoản...",
+    "noAccountsFound": "Không tìm thấy tài khoản Foundry nào trong đăng ký này.",
+    "selectAccount": "Chọn tài khoản...",
+    "loadingProjects": "Đang tải dự án...",
+    "noProjectsFound": "Không tìm thấy dự án nào. Đang sử dụng \"default\".",
+    "selectAllRequired": "Chọn đăng ký, tài khoản và dự án.",
+    "subscriptionRequired": "Chọn một gói đăng ký",
+    "accountRequired": "Chọn tài khoản Foundry"
   },
   "Quick Actions": "Thao tác nhanh",
   "Type / in chat to access your prompts": "Gõ / trong trò chuyện để truy cập lời nhắc của bạn",
@@ -537,7 +589,10 @@
     "keepEditing": "Tiếp tục chỉnh sửa",
     "yes": "Có",
     "no": "Không",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Đã sao chép!",
+    "clear": "Xóa",
+    "undo": "Hoàn tác"
   },
   "errors": {
     "unexpectedErrorOccurred": "Đã xảy ra lỗi không mong muốn",
@@ -693,13 +748,90 @@
     "stopGenerationDontAskAgainButton": "Không hỏi lại khi dừng bằng nút",
     "stopGenerationDontAskAgainKeyboard": "Không hỏi lại khi dừng bằng bàn phím",
     "generateResponseButton": "Tạo phản hồi",
-    "downloadResponse": "Tải xuống phản hồi"
+    "downloadResponse": "Tải xuống phản hồi",
+    "activity": {
+      "callingTool": "Đang gọi công cụ…",
+      "callingService": "Đang gọi dịch vụ bên ngoài…",
+      "usingNamedTool": "Đang sử dụng {tool}…",
+      "usingNamedToolWithService": "Đang sử dụng {tool} trên {service}…",
+      "searchingWeb": "Đang tìm kiếm trên web…",
+      "searchingFiles": "Đang tìm kiếm tập tin…",
+      "runningCode": "Đang chạy mã…",
+      "generatingImage": "Đang tạo hình ảnh…",
+      "listingTools": "Đang kiểm tra công cụ khả dụng…",
+      "analyzingFiles": "Đang phân tích tập tin của bạn…",
+      "searchingKnowledge": "Đang tìm kiếm trong kho tri thức…",
+      "cancellingPriorTool": "Đang hủy yêu cầu công cụ trước đó…"
+    },
+    "toolSummary": {
+      "usedTools": "Đã sử dụng {count, plural, one {# công cụ} other {# công cụ}}",
+      "failedCount": "{count} thất bại",
+      "statusApproved": "Đã phê duyệt",
+      "statusAutoApproved": "Tự động phê duyệt",
+      "statusAutoDenied": "Tự động từ chối",
+      "statusFailed": "Thất bại",
+      "statusIncomplete": "Chưa hoàn thành",
+      "viaService": "qua {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Yêu cầu xác thực",
+      "authorizeService": "Xác thực {service}",
+      "descriptionGeneric": "Agent này cần bạn cấp quyền truy cập vào một tài nguyên bảo mật. Việc đăng nhập của bạn được quản lý bởi dịch vụ gốc và không được lưu trữ tại đây.",
+      "descriptionWithService": "Agent này cần bạn cấp quyền truy cập vào {service}. Việc đăng nhập {service} của bạn do chính {service} quản lý và không được lưu trữ tại đây.",
+      "signInIncompleteGeneric": "Đăng nhập chưa hoàn tất",
+      "signInIncompleteForService": "Đăng nhập vào {service} chưa hoàn tất",
+      "signInIncompleteDescriptionGeneric": "Có vẻ bạn chưa hoàn tất quá trình xác thực. Hãy đảm bảo bạn đã đăng nhập xong ở tab khác rồi nhấn Tiếp tục lại.",
+      "signInIncompleteDescription": "Có vẻ bạn chưa hoàn tất quá trình xác thực với {service}. Hãy đảm bảo bạn đã đăng nhập xong ở tab khác rồi nhấn Tiếp tục lại.",
+      "authorizeButton": "Xác thực",
+      "reauthorizeButton": "Xác thực lại",
+      "continueButton": "Tiếp tục",
+      "confirmingButton": "Đang xác nhận…",
+      "authorizeHint": "Hãy xác thực, sau đó quay lại trang này và bấm Tiếp tục. Để thu hồi quyền sau này, đăng xuất khỏi {service} trực tiếp — chúng tôi không giữ mã token.",
+      "authorizeHintGeneric": "Hãy xác thực, sau đó quay lại đây và bấm Tiếp tục. Để thu hồi quyền sau này, đăng xuất khỏi dịch vụ gốc trực tiếp — chúng tôi không giữ mã token.",
+      "continueHint": "Khi đã xác thực xong ở tab khác, hãy bấm Tiếp tục.",
+      "confirmingHint": "Đang xác nhận quyền và tiếp tục yêu cầu của bạn…",
+      "resendHint": "Sau khi xác thực, hãy gửi lại tin nhắn để tiếp tục.",
+      "resetTooltip": "Đặt lại tất cả tùy chọn tự động phê duyệt cho công cụ trong hội thoại này. Các lần gọi công cụ sau sẽ hiển thị nhắc lại.",
+      "autoApproveAllIndicator": "Tự động phê duyệt tất cả công cụ",
+      "autoApproveCountIndicator": "{count, plural, one {Tự động phê duyệt # công cụ} other {Tự động phê duyệt # công cụ}}",
+      "resetShort": "Đặt lại",
+      "approvalRequired": "Yêu cầu phê duyệt công cụ",
+      "approvalForService": "Phê duyệt công cụ cho {service}",
+      "approvalDescriptionGeneric": "Agent muốn sử dụng một công cụ cần bạn phê duyệt trước khi tiếp tục.",
+      "approvalDescriptionWithTool": "Agent muốn sử dụng công cụ {tool}, yêu cầu bạn phê duyệt trước khi tiếp tục.",
+      "runToolTitle": "Chạy <code>{tool}</code>?",
+      "runToolGeneric": "Chạy công cụ này?",
+      "viaService": "qua {service}",
+      "approveButton": "Chấp thuận",
+      "approveOptionsLabel": "Tùy chọn chấp thuận",
+      "approveOnce": "Chỉ chấp thuận một lần",
+      "alwaysApproveThisTool": "Luôn chấp thuận công cụ này",
+      "alwaysApproveAllTools": "Luôn chấp thuận tất cả công cụ",
+      "denyButton": "Từ chối",
+      "keyboardHint": "{modifier}+⏎ chấp thuận · esc từ chối",
+      "submittingState": "Đang gửi quyết định của bạn",
+      "approvedState": "Đã chấp thuận — tác vụ được tiếp tục",
+      "deniedState": "Đã từ chối",
+      "submittingApproval": "Đang chấp thuận và tiếp tục tác vụ…",
+      "submittingDenial": "Đang gửi từ chối của bạn…"
+    },
+    "openImage": "Mở hình ảnh",
+    "copyMessage": "Sao chép tin nhắn",
+    "stopAudio": "Dừng âm thanh",
+    "generatingAudio": "Đang tạo âm thanh...",
+    "listen": "Nghe",
+    "processingAudio": "Đang xử lý âm thanh...",
+    "ttsError": "Lỗi tạo âm thanh. Vui lòng thử lại.",
+    "unsupportedMessageType": "Lỗi hiển thị tin nhắn: Loại tin nhắn không được hỗ trợ"
   },
   "sidebar": {
     "collapseSidebar": "Thu gọn thanh bên",
     "expandSidebar": "Mở rộng thanh bên",
     "quickActionsTitle": "Hành động nhanh",
-    "quickActions": "Hành động nhanh"
+    "quickActions": "Hành động nhanh",
+    "expandFolder": "Mở rộng thư mục {name}",
+    "collapseFolder": "Thu gọn thư mục {name}",
+    "folderOptions": "Tùy chọn {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Xây dựng lời nhắc có thể tái sử dụng với sự hỗ trợ của AI",
@@ -1015,7 +1147,9 @@
     "behaviorSection": "Hành vi",
     "resetChatSettings": "Đặt lại cài đặt trò chuyện",
     "resetChatSettingsConfirmTitle": "Đặt lại cài đặt trò chuyện?",
-    "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả mặc định trong bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin về bạn, phản hồi của mô hình, tốc độ truyền, chuyển văn bản thành giọng nói, tệp đang sử dụng và xác nhận. Nội dung cuộc trò chuyện của bạn sẽ không bị ảnh hưởng."
+    "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả mặc định trong bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin về bạn, phản hồi của mô hình, tốc độ truyền, chuyển văn bản thành giọng nói, tệp đang sử dụng và xác nhận. Nội dung cuộc trò chuyện của bạn sẽ không bị ảnh hưởng.",
+    "customInstructionsLabel": "Hướng dẫn tùy chỉnh*",
+    "defaultTemperatureLabel": "Nhiệt độ mặc định*"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -1143,7 +1277,9 @@
     "cancelledBody": "Đã hủy bởi người dùng",
     "transientBody": "Vui lòng thử lại",
     "authFailedBody": "Vui lòng đăng nhập lại",
-    "rateLimitedBody": "Dịch vụ đang quá tải, vui lòng thử lại sau"
+    "rateLimitedBody": "Dịch vụ đang quá tải, vui lòng thử lại sau",
+    "loadingAttempt": "(lần thử {count})",
+    "transcriptLabel": "[Bản ghi: {filename}]"
   },
   "transcriptionComplete": "Phiên âm hoàn tất! Văn bản đã được thêm vào ô nhập trò chuyện.",
   "importBackupParseError": "Không thể phân tích tệp sao lưu. Vui lòng đảm bảo tệp ở định dạng JSON hợp lệ.",
@@ -1205,7 +1341,8 @@
       "agents": "Tác vụ"
     },
     "sections": {
-      "baseModels": "Mô hình nền tảng"
+      "baseModels": "Mô hình nền tảng",
+      "allModels": "Tất cả mô hình ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Tính năng nâng cao",
@@ -1278,7 +1415,19 @@
       "reasoning": "Nâng cao khả năng suy luận cho vấn đề phức tạp",
       "omni": "Mô hình đa phương tiện với khả năng toàn diện",
       "agent": "Tác nhân với công cụ thời gian thực & truy cập web"
-    }
+    },
+    "hide": "Ẩn khỏi danh sách",
+    "hideConfirmTitle": "Ẩn \"{name}\"?",
+    "hideConfirmMessage": "Sẽ được xóa khỏi danh sách của bạn nhưng không bị xóa vĩnh viễn. Bạn có thể khôi phục bất kỳ lúc nào ở mục Ẩn.",
+    "hideConfirm": "Ẩn",
+    "hiddenToast": "Đã ẩn \"{name}\"",
+    "hidden": {
+      "title": "Ẩn ({count})",
+      "restore": "Khôi phục"
+    },
+    "title": "Chọn một mô hình",
+    "modelsDescription": "Chọn một mô hình AI cho cuộc trò chuyện của bạn. Mỗi mô hình có điểm mạnh riêng — chọn để xem chi tiết.",
+    "recommended": "Đề xuất"
   },
   "models": {
     "gpt_4_1": {
@@ -1355,6 +1504,16 @@
       "name": "GPT-5.2 Chat",
       "description": "Biến thể chuyên biệt của GPT-5.2 được tối ưu cho tương tác hội thoại và trí tuệ cảm xúc. Vượt trội về giao tiếp đồng cảm, hỗ trợ sức khỏe tinh thần, sáng tác sáng tạo, động não và đối thoại tự nhiên. Phù hợp cho trò chuyện thân mật, tư vấn và các nhiệm vụ cần sự nhận biết cảm xúc.",
       "knowledgeCutoff": "Tháng 12/2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Mô hình mạnh nhất của Anthropic. Thích hợp cho viết dài, nghiên cứu, và các tác vụ cần tư duy cẩn thận.",
+      "knowledgeCutoff": "Tháng 2/2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Mô hình Claude cân bằng. Phù hợp cho viết hằng ngày, phân tích và lập trình với phản hồi nhanh.",
+      "knowledgeCutoff": "Tháng 2/2026"
     }
   },
   "searchMode": {
@@ -1831,7 +1990,45 @@
       "createButton": "Tạo Agent Tùy chỉnh",
       "experimentalBlurb": "Thử nghiệm — được xây dựng với sự hợp tác trực tiếp từ người dùng nâng cao của MSF. Không dành cho mục đích sử dụng chung."
     },
-    "selectAgentPrompt": "Chọn một agent để bắt đầu"
+    "selectAgentPrompt": "Chọn một agent để bắt đầu",
+    "description": "Tác vụ AI chuyên biệt cho các nhiệm vụ cụ thể. Các tác vụ mặc định được quản lý tập trung; thêm nguồn tùy chỉnh để khám phá tác vụ từ các dự án Foundry khác.",
+    "regionAgents": {
+      "us": "Tác vụ khu vực Mỹ",
+      "eu": "Tác vụ khu vực EU",
+      "default": "Agent khu vực"
+    },
+    "officeAgents": {
+      "suffix": "Agent"
+    },
+    "agentSources": {
+      "title": "Kết nối Foundry",
+      "description": "Kết nối với các dự án Foundry khác để khám phá các agent của họ.",
+      "connectButton": "Kết nối dự án Microsoft Azure Foundry",
+      "connectButtonShort": "Kết nối dự án Foundry",
+      "addButton": "Thêm nguồn tùy chỉnh",
+      "addAnother": "Thêm kết nối khác",
+      "noSources": "Chưa cấu hình nguồn tùy chỉnh nào.",
+      "removeSource": "Xóa nguồn",
+      "confirmRemove": "Xóa?",
+      "sourceConnected": "nguồn tùy chỉnh đã kết nối",
+      "sourcesConnected": "nguồn tùy chỉnh đã kết nối",
+      "backToAgents": "Quay lại",
+      "discoveredAgents": "Agent đã khám phá",
+      "viewConnection": "Xem chi tiết kết nối",
+      "edit": "Chỉnh sửa",
+      "noAgentsPublished": "Chưa có agent nào được xuất bản",
+      "connectedOn": "Đã kết nối {date}",
+      "disconnectSource": "Ngắt kết nối nguồn này",
+      "confirmDisconnect": "Nhấn lại để xác nhận",
+      "loadingAgents": "Đang tải agent...",
+      "noAgentsFound": "Không tìm thấy agent nào trong dự án này",
+      "noAgentsFoundHint": "Hãy đảm bảo các agent đã được xuất bản và bạn có vai trò Azure AI User trên dự án này.",
+      "refresh": "Làm mới",
+      "refreshAgents": "Làm mới agent",
+      "technicalDetails": "Chi tiết kỹ thuật",
+      "agentCountLabel": "{count} agent",
+      "disconnectedToast": "Đã ngắt kết nối {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Chính sách quyền riêng tư & Bảo vệ dữ liệu",

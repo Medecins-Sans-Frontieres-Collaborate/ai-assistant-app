@@ -381,7 +381,59 @@
     "delete": "Удалить",
     "noCustomAgentsYet": "Пользовательских агентов пока нет.",
     "noOrgAgentsConfigured": "Агенты организации не настроены.",
-    "validationFailed": "Проверка не удалась"
+    "validationFailed": "Проверка не удалась",
+    "addAgentSource": "Добавить пользовательский источник",
+    "connectFoundryProject": "Подключить проект Microsoft Azure Foundry",
+    "connectFoundryDescription": "Обнаружьте агентов из другого офиса или проекта Azure Foundry другой команды. Вы увидите только тех агентов, к которым у вас есть доступ.",
+    "foundryProjectPath": "Путь к проекту Foundry",
+    "foundryProjectPathHelp": "Обратитесь к администратору вашего проекта Foundry или нажмите «Ввести вручную», чтобы заполнить поля самостоятельно.",
+    "copyFormat": "Формат",
+    "nameLabel": "Название",
+    "namePlaceholder": "например, Амстердамский офис, Женевские исследования",
+    "pathRequired": "Вставьте путь к ресурсу проекта Foundry.",
+    "pathInvalidFormat": "Это не похоже на путь к ресурсу. Он должен начинаться с /subscriptions/...",
+    "connectionFailed": "Не удалось подключиться к этому проекту. Проверьте правильность пути и наличие доступа.",
+    "connectionSuccessAgents": "Подключено — найдено {count} агент(ов)",
+    "connectionSuccessEmpty": "Подключено, но агенты не найдены. Возможно, вам нужна роль Azure AI User для просмотра агентов в этом проекте.",
+    "checkingConnection": "Проверка соединения...",
+    "connect": "Подключить",
+    "save": "Сохранить",
+    "editConnection": "Редактировать подключение",
+    "sourceName": "Название источника",
+    "sourceNamePlaceholder": "Амстердамский офис",
+    "sourceNameRequired": "Требуется указать название источника.",
+    "resourcePath": "Путь к ресурсу",
+    "resourcePathRequired": "Требуется путь к ресурсу.",
+    "resourcePathHelp": "ARM-путь к ресурсу проекта Foundry. Обратитесь к вашему администратору за этим значением.",
+    "invalidResourcePathFormat": "Путь к ресурсу должен начинаться с /subscriptions/...",
+    "validatingSource": "Идет поиск агентов...",
+    "sourceValidatedEmpty": "Источник валиден, но агенты не найдены. Возможно, у вас нет доступа к агентам в этом проекте.",
+    "invalidSource": "Не удалось получить доступ к этому пути ресурса. Проверьте путь и ваши права доступа.",
+    "addSource": "Добавить источник",
+    "removeSource": "Удалить источник",
+    "labelSubscription": "Подписка",
+    "labelFoundryAccount": "Учетная запись Foundry",
+    "labelProject": "Проект",
+    "tooltipSubscription": "Подписка Azure, содержащая учетную запись Foundry. Если не уверены, спросите у администратора, какую подписку использует ваша команда.",
+    "tooltipFoundryAccount": "Учетная запись Azure AI Services, где размещён проект Foundry. Обычно у каждого офиса или команды своя.",
+    "tooltipProject": "Проект организует агентов внутри учетной записи. В большинстве случаев в учетной записи есть один проект \"default\".",
+    "foundryProjectLabel": "Проект Foundry",
+    "enterManually": "Ввести вручную",
+    "browseResources": "Просмотреть ресурсы",
+    "subscriptionIdLabel": "ID подписки",
+    "resourceGroupLabel": "Группа ресурсов",
+    "accountNameLabel": "Имя учетной записи",
+    "projectNameLabel": "Имя проекта",
+    "loadingSubscriptions": "Загрузка подписок...",
+    "selectSubscription": "Выберите подписку...",
+    "loadingAccounts": "Загрузка учетных записей...",
+    "noAccountsFound": "Учетные записи Foundry не найдены в этой подписке.",
+    "selectAccount": "Выберите учетную запись...",
+    "loadingProjects": "Загрузка проектов...",
+    "noProjectsFound": "Проекты не найдены. Используется \"default\".",
+    "selectAllRequired": "Выберите подписку, учетную запись и проект.",
+    "subscriptionRequired": "Выберите подписку",
+    "accountRequired": "Выберите аккаунт Foundry"
   },
   "Quick Actions": "Быстрые действия",
   "Type / in chat to access your prompts": "Введите / в чате, чтобы получить доступ к вашим подсказкам",
@@ -538,7 +590,10 @@
     "keepEditing": "Продолжить редактирование",
     "yes": "Да",
     "no": "Нет",
-    "beta": "Бета"
+    "beta": "Бета",
+    "copied": "Скопировано!",
+    "clear": "Очистить",
+    "undo": "Отменить"
   },
   "errors": {
     "somethingWentWrong": "Что-то пошло не так",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "Больше не спрашивать при остановке через кнопку",
     "stopGenerationDontAskAgainKeyboard": "Больше не спрашивать при остановке с помощью клавиатуры",
     "generateResponseButton": "Сгенерировать ответ",
-    "downloadResponse": "Скачать ответ"
+    "downloadResponse": "Скачать ответ",
+    "activity": {
+      "callingTool": "Вызов инструмента…",
+      "callingService": "Вызов внешнего сервиса…",
+      "usingNamedTool": "Используется {tool}…",
+      "usingNamedToolWithService": "Используется {tool} в {service}…",
+      "searchingWeb": "Поиск в интернете…",
+      "searchingFiles": "Поиск файлов…",
+      "runningCode": "Выполнение кода…",
+      "generatingImage": "Генерация изображения…",
+      "listingTools": "Поиск доступных инструментов…",
+      "analyzingFiles": "Анализ ваших файлов…",
+      "searchingKnowledge": "Поиск по базе знаний…",
+      "cancellingPriorTool": "Отмена предыдущего запроса к инструменту…"
+    },
+    "toolSummary": {
+      "usedTools": "Использовано {count, plural, one {# инструмент} few {# инструмента} many {# инструментов} other {# инструментов}}",
+      "failedCount": "Ошибок: {count}",
+      "statusApproved": "Одобрено",
+      "statusAutoApproved": "Автоматически одобрено",
+      "statusAutoDenied": "Автоматически отклонено",
+      "statusFailed": "Ошибка",
+      "statusIncomplete": "Не завершено",
+      "viaService": "через {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Требуется авторизация",
+      "authorizeService": "Авторизовать {service}",
+      "descriptionGeneric": "Этому агенту требуется ваша разрешение для доступа к защищенному ресурсу. Вход осуществляется внешним сервисом и не сохраняется здесь.",
+      "descriptionWithService": "Этому агенту требуется ваша разрешение для доступа к {service}. Вход в {service} выполняется самим {service} и не сохраняется здесь.",
+      "signInIncompleteGeneric": "Вход не завершён",
+      "signInIncompleteForService": "Вход в {service} не завершён",
+      "signInIncompleteDescriptionGeneric": "Похоже, авторизация не была завершена. Убедитесь, что вы завершили вход во второй вкладке, затем нажмите «Продолжить» снова.",
+      "signInIncompleteDescription": "Похоже, авторизация в {service} не была завершена. Убедитесь, что вы завершили вход во второй вкладке, затем нажмите «Продолжить» снова.",
+      "authorizeButton": "Авторизовать",
+      "reauthorizeButton": "Повторно авторизовать",
+      "continueButton": "Продолжить",
+      "confirmingButton": "Подтверждение…",
+      "authorizeHint": "Авторизуйтесь, вернитесь сюда и нажмите «Продолжить». Для последующей отмены — выйдите из {service} напрямую — мы не храним токен.",
+      "authorizeHintGeneric": "Авторизуйтесь, вернитесь сюда и нажмите «Продолжить». Для отмены позже — выйдите из внешнего сервиса напрямую — мы не храним токен.",
+      "continueHint": "Когда авторизация завершится во второй вкладке, нажмите «Продолжить».",
+      "confirmingHint": "Подтверждение авторизации и возобновление вашего запроса…",
+      "resendHint": "После авторизации отправьте ваше сообщение снова для продолжения.",
+      "resetTooltip": "Сбросить все настройки автоматического одобрения инструментов для данного разговора. Следующие вызовы инструментов будут снова требовать подтверждения.",
+      "autoApproveAllIndicator": "Все инструменты одобряются автоматически",
+      "autoApproveCountIndicator": "{count, plural, one {Автоодобряется # инструмент} few {Автоодобряется # инструмента} many {Автоодобряется # инструментов} other {Автоодобряется # инструментов}}",
+      "resetShort": "Сбросить",
+      "approvalRequired": "Требуется одобрение инструмента",
+      "approvalForService": "Одобрить инструмент для {service}",
+      "approvalDescriptionGeneric": "Агент хочет запустить инструмент, требующий вашего одобрения для продолжения.",
+      "approvalDescriptionWithTool": "Агент хочет запустить инструмент {tool}, который требует вашего одобрения для продолжения.",
+      "runToolTitle": "Запустить <code>{tool}</code>?",
+      "runToolGeneric": "Запустить этот инструмент?",
+      "viaService": "через {service}",
+      "approveButton": "Разрешить",
+      "approveOptionsLabel": "Параметры разрешения",
+      "approveOnce": "Разрешить один раз",
+      "alwaysApproveThisTool": "Всегда разрешать этот инструмент",
+      "alwaysApproveAllTools": "Всегда разрешать все инструменты",
+      "denyButton": "Отклонить",
+      "keyboardHint": "{modifier}+⏎ — разрешить · esc — отклонить",
+      "submittingState": "Отправка вашего решения",
+      "approvedState": "Разрешено — агент возобновлен",
+      "deniedState": "Отклонено",
+      "submittingApproval": "Разрешение и возобновление агента…",
+      "submittingDenial": "Отправка отклонения…"
+    },
+    "openImage": "Открыть изображение",
+    "copyMessage": "Копировать сообщение",
+    "stopAudio": "Остановить аудио",
+    "generatingAudio": "Генерация аудио...",
+    "listen": "Прослушать",
+    "processingAudio": "Обработка аудио...",
+    "ttsError": "Ошибка при генерации аудио. Пожалуйста, попробуйте ещё раз.",
+    "unsupportedMessageType": "Ошибка отображения: неподдерживаемый тип сообщения"
   },
   "sidebar": {
     "collapseSidebar": "Свернуть боковую панель",
     "expandSidebar": "Развернуть боковую панель",
     "quickActionsTitle": "Быстрые действия",
-    "quickActions": "Быстрые действия"
+    "quickActions": "Быстрые действия",
+    "expandFolder": "Развернуть папку {name}",
+    "collapseFolder": "Свернуть папку {name}",
+    "folderOptions": "Параметры {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Создавайте многоразовые подсказки с помощью ИИ",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "Поведение",
     "resetChatSettings": "Сбросить настройки чата",
     "resetChatSettingsConfirmTitle": "Сбросить настройки чата?",
-    "resetChatSettingsConfirmMessage": "Будут восстановлены значения по умолчанию для всех параметров этой панели: температура, пользовательские инструкции, информация о вас, параметры ответа, скорость передачи, преобразование текста в речь, активные файлы и подтверждения. Это не повлияет на ваши переписки."
+    "resetChatSettingsConfirmMessage": "Будут восстановлены значения по умолчанию для всех параметров этой панели: температура, пользовательские инструкции, информация о вас, параметры ответа, скорость передачи, преобразование текста в речь, активные файлы и подтверждения. Это не повлияет на ваши переписки.",
+    "customInstructionsLabel": "Пользовательские инструкции*",
+    "defaultTemperatureLabel": "Температура по умолчанию*"
   },
   "notFound": {
     "lostDog": "Потерянная собака"
@@ -1077,7 +1211,8 @@
       "agents": "Агенты"
     },
     "sections": {
-      "baseModels": "Базовые модели"
+      "baseModels": "Базовые модели",
+      "allModels": "Все модели ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "Расширенная функция",
@@ -1150,7 +1285,19 @@
       "reasoning": "Расширенное рассуждение для сложных задач",
       "omni": "Мультимодальная модель с широкими возможностями",
       "agent": "Агент с инструментами в реальном времени и доступом к вебу"
-    }
+    },
+    "hide": "Скрыть из списка",
+    "hideConfirmTitle": "Скрыть «{name}»?",
+    "hideConfirmMessage": "Он будет убран из вашего списка, но не удалён. Вы можете восстановить его в разделе «Скрытые» в любое время.",
+    "hideConfirm": "Скрыть",
+    "hiddenToast": "Скрыто: «{name}»",
+    "hidden": {
+      "title": "Скрытые ({count})",
+      "restore": "Восстановить"
+    },
+    "title": "Выберите модель",
+    "modelsDescription": "Выберите AI-модель для вашего диалога. У каждой модели свои преимущества — выберите одну, чтобы узнать подробнее.",
+    "recommended": "Рекомендуется"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Дек 2025",
       "description": "Специализированный вариант GPT-5.2, оптимизированный для ведения диалогов и эмоционального интеллекта. Отличается эмпатичным общением, креативным письмом, генерацией идей и естественным диалогом. Идеален для неформального общения, консультаций и задач, требующих эмоциональной восприимчивости."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Самая мощная модель Anthropic. Подходит для длинных текстов, исследований и задач, требующих внимательного подхода.",
+      "knowledgeCutoff": "Фев 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Сбалансированная модель Claude. Хороша для повседневных заданий, анализа и программирования с быстрыми ответами.",
+      "knowledgeCutoff": "Фев 2026"
     }
   },
   "searchMode": {
@@ -1663,7 +1820,9 @@
     "cancelledBody": "Отменено пользователем",
     "transientBody": "Пожалуйста, попробуйте еще раз",
     "authFailedBody": "Пожалуйста, выполните повторный вход",
-    "rateLimitedBody": "Сервис перегружен, попробуйте позднее"
+    "rateLimitedBody": "Сервис перегружен, попробуйте позднее",
+    "loadingAttempt": "(попытка {count})",
+    "transcriptLabel": "[Транскрипт: {filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Добавьте свои инструкции, чтобы настроить ответы ИИ. Они будут дополнены основными правилами поведения, обеспечивающими полезные, точные и безопасные ответы.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Совет: введите «/», чтобы выбрать из сохранённых шаблонов запросов.",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Экспериментальная функция — создана в прямом сотрудничестве с продвинутыми пользователями MSF. Не для общего использования.",
       "createButton": "Создать пользовательского агента"
     },
-    "selectAgentPrompt": "Выберите агента для просмотра деталей"
+    "selectAgentPrompt": "Выберите агента для просмотра деталей",
+    "description": "Специализированные AI-агенты для конкретных задач. Стандартные агенты управляются централизованно; добавьте собственные источники, чтобы находить агентов из других проектов Foundry.",
+    "regionAgents": {
+      "us": "Агенты региона США",
+      "eu": "Агенты региона ЕС",
+      "default": "Агенты региона"
+    },
+    "officeAgents": {
+      "suffix": "Агенты"
+    },
+    "agentSources": {
+      "title": "Подключения Foundry",
+      "description": "Подключитесь к другим проектам Foundry, чтобы обнаружить их агентов.",
+      "connectButton": "Подключить проект Microsoft Azure Foundry",
+      "connectButtonShort": "Подключить проект Foundry",
+      "addButton": "Добавить собственный источник",
+      "addAnother": "Добавить ещё одно подключение",
+      "noSources": "Нет настроенных собственных источников.",
+      "removeSource": "Удалить источник",
+      "confirmRemove": "Удалить?",
+      "sourceConnected": "собственный источник подключён",
+      "sourcesConnected": "собственных источников подключено",
+      "backToAgents": "Назад",
+      "discoveredAgents": "Обнаруженные агенты",
+      "viewConnection": "Просмотреть детали подключения",
+      "edit": "Редактировать",
+      "noAgentsPublished": "Нет опубликованных агентов",
+      "connectedOn": "Подключено {date}",
+      "disconnectSource": "Отключить этот источник",
+      "confirmDisconnect": "Нажмите ещё раз для подтверждения",
+      "loadingAgents": "Загрузка агентов...",
+      "noAgentsFound": "В этом проекте агентов не найдено",
+      "noAgentsFoundHint": "Убедитесь, что агенты опубликованы, и у вас есть роль Azure AI User в этом проекте.",
+      "refresh": "Обновить",
+      "refreshAgents": "Обновить агентов",
+      "technicalDetails": "Технические детали",
+      "agentCountLabel": "{count} агентов",
+      "disconnectedToast": "Отключено: {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Политика конфиденциальности & Защита данных",

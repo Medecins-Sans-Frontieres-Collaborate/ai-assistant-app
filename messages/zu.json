@@ -385,7 +385,59 @@
     "delete": "Susa",
     "noCustomAgentsYet": "Azikho ama-ejensi angokwezifiso okwamanje.",
     "noOrgAgentsConfigured": "Awekho ama-ejensi enhlangano amiswe.",
-    "validationFailed": "Ukuqinisekisa kuhlulekile"
+    "validationFailed": "Ukuqinisekisa kuhlulekile",
+    "addAgentSource": "Engeza Umthombo Okwenziwe Ngokwezifiso",
+    "connectFoundryProject": "Xhuma Iphrojekthi ye-Microsoft Azure Foundry",
+    "connectFoundryDescription": "Thola ama-agent avela kwamanye amahhovisi noma eqenjini le-Azure Foundry. Uzobona kuphela ama-agent onemvume yokuwafinyelela.",
+    "foundryProjectPath": "Indlela ye-Foundry Project",
+    "foundryProjectPathHelp": "Buza kumphathi wephrojekthi yakho ye-Foundry, noma chofoza 'Faka ngesandla' ukuze ugcwalise kancane kancane.",
+    "copyFormat": "Ifomethi",
+    "nameLabel": "Igama",
+    "namePlaceholder": "isb. Ihhovisi lase-Amsterdam, Ucwaningo lwase-Geneva",
+    "pathRequired": "Namathisela indlela yensiza yephrojekthi ye-Foundry.",
+    "pathInvalidFormat": "Lokhu akubukeki njenge-resource path. Kufanele kuqale ngo /subscriptions/...",
+    "connectionFailed": "Ayikwazanga ukufinyelela le phrojekthi. Hlola ukuthi indlela ilungile futhi unayo imvume yokungena.",
+    "connectionSuccessAgents": "Ixhume — kutholwe u-{count} agent(s)",
+    "connectionSuccessEmpty": "Ixhume, kodwa awekho ama-agent atholakele. Kungenzeka udinga indima ye-Azure AI User kule phrojekthi ukuze ubone ama-agent ayo.",
+    "checkingConnection": "Kuhlolwa ukuxhumana...",
+    "connect": "Xhuma",
+    "save": "Londoloza",
+    "editConnection": "Hlela Ukuxhumeka",
+    "sourceName": "Igama Lomthombo",
+    "sourceNamePlaceholder": "Ihhovisi lase-Amsterdam",
+    "sourceNameRequired": "Igama lomthombo liyadingeka.",
+    "resourcePath": "Indlela Yensiza",
+    "resourcePathRequired": "Indlela yensiza iyadingeka.",
+    "resourcePathHelp": "I-ARM resource path yephrojekthi ye-Foundry. Cela lo mgudu kumphathi wakho.",
+    "invalidResourcePathFormat": "Resource path kumele iqale ngo /subscriptions/...",
+    "validatingSource": "Kutholwa ama-agent...",
+    "sourceValidatedEmpty": "Umthombo ulungile, kodwa awekho ama-agent atholakele. Kungenzeka awunayo imvume yokufinyelela ama-agent kule phrojekthi.",
+    "invalidSource": "Ayikwazanga ukufinyelela le ndlela yensiza. Qinisekisa indlela nemvume yakho.",
+    "addSource": "Engeza Umthombo",
+    "removeSource": "Susa Umthombo",
+    "labelSubscription": "Ubhaliselwe",
+    "labelFoundryAccount": "I-akhawunti ye-Foundry",
+    "labelProject": "Iphrojekthi",
+    "tooltipSubscription": "I-Azure subscription equkethe i-akhawunti ye-Foundry. Uma ungazi, buza kumphathi wakho ukuthi iyiphi subscription esetshenziswa iqembu lakho.",
+    "tooltipFoundryAccount": "I-Azure AI Services account lapho kuhlala khona iphrojekthi ye-Foundry. Imvamisa ihhovisi noma iqembu ngalinye line-akhawunti yalo.",
+    "tooltipProject": "Iphrojekthi ihlela ama-agent ngaphakathi kwe-akhawunti. Amanye ama-akhawunti amaningi abe ne-'default' project eyodwa.",
+    "foundryProjectLabel": "Iphrojekthi ye-Foundry",
+    "enterManually": "Faka ngesandla",
+    "browseResources": "Hlola izinsiza",
+    "subscriptionIdLabel": "I-Subscription ID",
+    "resourceGroupLabel": "Iqembu Lezinsiza",
+    "accountNameLabel": "Igama Le-akhawunti",
+    "projectNameLabel": "Igama Lephrojekthi",
+    "loadingSubscriptions": "Kulayishwa ama-subscriptions...",
+    "selectSubscription": "Khetha i-subscription...",
+    "loadingAccounts": "Kulayishwa ama-akhawunti...",
+    "noAccountsFound": "Awatholakali ama-akhawunti e-Foundry kule subscription.",
+    "selectAccount": "Khetha i-akhawunti...",
+    "loadingProjects": "Kulayishwa amaphrojekthi...",
+    "noProjectsFound": "Awekho amaphrojekthi atholakele. Isetshenziswa \"default\".",
+    "selectAllRequired": "Khetha i-subscription, i-akhawunti, kanye ne-phrojekthi.",
+    "subscriptionRequired": "Khetha ukubhalisa",
+    "accountRequired": "Khetha i-akhawunti ye-Foundry"
   },
   "Quick Actions": "Izenzo Ezisheshayo",
   "Type / in chat to access your prompts": "Thayipha / engxoxweni ukufinyelela iziqondiso zakho",
@@ -641,7 +693,10 @@
     "keepEditing": "Qhubeka Ukuhlela",
     "yes": "Yebo",
     "no": "Cha",
-    "beta": "Ibheta"
+    "beta": "Ibheta",
+    "copied": "Kukopishiwe!",
+    "clear": "Sula",
+    "undo": "Buyisela emuva"
   },
   "terms": {
     "officialLanguages": "Inguqulo esemthethweni:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Ungabuzi futhi uma umisa ngebhathini",
     "stopGenerationDontAskAgainKeyboard": "Ungabuzi futhi uma umisa ngesinqamuleli sekhibhodi",
     "generateResponseButton": "Khiqiza impendulo",
-    "downloadResponse": "Landa impendulo"
+    "downloadResponse": "Landa impendulo",
+    "activity": {
+      "callingTool": "Kushayelwa ithuluzi…",
+      "callingService": "Kushayelwa insiza yangaphandle…",
+      "usingNamedTool": "Kusetshenziswa u-{tool}…",
+      "usingNamedToolWithService": "Kusetshenziswa u-{tool} ku-{service}…",
+      "searchingWeb": "Kuseshwa ku-inthanethi…",
+      "searchingFiles": "Kuseshwa amafayela…",
+      "runningCode": "Kukhishwa ikhodi…",
+      "generatingImage": "Kwakhiwa isithombe…",
+      "listingTools": "Kubonwa amathuluzi akhona…",
+      "analyzingFiles": "Kuhlaziywa amafayela akho…",
+      "searchingKnowledge": "Kuseshwa ulwazi olusemanzini…",
+      "cancellingPriorTool": "Kuyakhanselwa isicelo sangaphambilini sethuluzi…"
+    },
+    "toolSummary": {
+      "usedTools": "Kusetshenzisiwe {count, plural, one {# ithuluzi} other {# amathuluzi}}",
+      "failedCount": "{count} kwehlulekile",
+      "statusApproved": "Kuvunyelwe",
+      "statusAutoApproved": "Kuvunyelwe ngokuzenzakalelayo",
+      "statusAutoDenied": "Kunqatshiwe ngokuzenzakalelayo",
+      "statusFailed": "Kwehlulekile",
+      "statusIncomplete": "Akuqedwanga",
+      "viaService": "ngokusebenzisa u-{service}"
+    },
+    "consent": {
+      "authorizeRequired": "Kudingeka ukugunyazwa",
+      "authorizeService": "Gunyaza u-{service}",
+      "descriptionGeneric": "Leli thuluzi lidinga imvume yakho ukuze lifinyelele kusisetshenziswa esivikelekile. Ukungena kwakho kulawulwa insiza engaphezulu, akugcinwa lapha.",
+      "descriptionWithService": "Leli thuluzi lidinga imvume yakho ukuze lifinyelele ku-{service}. Ukungena kwakho ku-{service} kulawulwa u-{service} uqobo, akugcinwa lapha.",
+      "signInIncompleteGeneric": "Ukungena akukapheleli",
+      "signInIncompleteForService": "Ukungena ku-{service} akukapheleli",
+      "signInIncompleteDescriptionGeneric": "Kubukeka sengathi ukugunyazwa akuphelanga. Qiniseka ukuthi uqedile ukungena kuthebhu le-Internet, bese uchofoza Qhubeka futhi.",
+      "signInIncompleteDescription": "Kubukeka sengathi ukugunyazwa ku-{service} akuphelanga. Qiniseka ukuthi uqedile ukungena kuthebhu le-Internet, bese uchofoza Qhubeka futhi.",
+      "authorizeButton": "Gunyaza",
+      "reauthorizeButton": "Gunyaza futhi",
+      "continueButton": "Qhubeka",
+      "confirmingButton": "Kuyaqinisekiswa…",
+      "authorizeHint": "Gunyaza, bese ubuya lapha bese uchofoza Qhubeka. Ukususa imvume, phuma ngqo ku-{service} — asigcini uphawu.",
+      "authorizeHintGeneric": "Gunyaza, bese ubuya lapha bese uchofoza Qhubeka. Ukususa imvume, phuma ngqo ensizeni engenhla — asigcini uphawu.",
+      "continueHint": "Uma usuphelile ukugunyazwa kuthebhu le-Internet, chofoza Qhubeka.",
+      "confirmingHint": "Kuyaqinisekiswa ukugunyazwa futhi kuqhubekiselwa isicelo sakho…",
+      "resendHint": "Ngemva kokugunyaza, thumela umlayezo wakho futhi ukuze uqhubeke.",
+      "resetTooltip": "Setha kabusha zonke izintandokazi zokuvuma amathuluzi ngokuzenzakalelayo kule ngxoxo. Imincintiswano yesikhathi esizayo izofuna imvume futhi.",
+      "autoApproveAllIndicator": "Kuvunyelwa wonke amathuluzi ngokuzenzakalelayo",
+      "autoApproveCountIndicator": "{count, plural, one {Ithuluzi elivunyelwe ngokuzenzakalelayo elingu-#} other {Amathuluzi avunyelwe ngokuzenzakalelayo angu-#}}",
+      "resetShort": "Setha kabusha",
+      "approvalRequired": "Kudingeka ukuvunyelwa kwethuluzi",
+      "approvalForService": "Vuma ithuluzi lika-{service}",
+      "approvalDescriptionGeneric": "Ithuluzi lifuna ukuqhuba ithuluzi elidinga imvume yakho ngaphambi kokuqhubeka.",
+      "approvalDescriptionWithTool": "Ithuluzi lifuna ukuqhuba ithuluzi elithi {tool}, elidinga imvume yakho ngaphambi kokuqhubeka.",
+      "runToolTitle": "Qalisa <code>{tool}</code>?",
+      "runToolGeneric": "Qalisa leli thuluzi?",
+      "viaService": "nge {service}",
+      "approveButton": "Vuma",
+      "approveOptionsLabel": "Izinketho zokuvuma",
+      "approveOnce": "Vuma kube kanye",
+      "alwaysApproveThisTool": "Vuma njalo leli thuluzi",
+      "alwaysApproveAllTools": "Vuma njalo wonke amathuluzi",
+      "denyButton": "Enqaba",
+      "keyboardHint": "{modifier}+⏎ vuma · esc enqaba",
+      "submittingState": "Kuthunyelwa isinqumo sakho",
+      "approvedState": "Kuvunyiwe — i-ejenti iyaqhubeka",
+      "deniedState": "Kunqatshiwe",
+      "submittingApproval": "Ukuvuma nokubuyisa i-ejenti…",
+      "submittingDenial": "Kuthunyelwa ukunqatshwa kwakho…"
+    },
+    "openImage": "Vula isithombe",
+    "copyMessage": "Kopisha umlayezo",
+    "stopAudio": "Misa umsindo",
+    "generatingAudio": "Kwakhiwa umsindo...",
+    "listen": "Lalela",
+    "processingAudio": "Kucubungulwa umsindo...",
+    "ttsError": "Iphutha ekukhiqizeni umsindo. Zama futhi.",
+    "unsupportedMessageType": "Iphutha ekuboniseni umlayezo: Uhlobo lomlayezo alusekelwa"
   },
   "transcript": {
     "originalTranscript": "Okubhaliwe Kokuqala",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Goqa ibha eceleni",
     "expandSidebar": "Nweba ibha eceleni",
     "quickActionsTitle": "Izenzo Ezisheshayo",
-    "quickActions": "Izenzo Ezisheshayo"
+    "quickActions": "Izenzo Ezisheshayo",
+    "expandFolder": "Nweba ifolda {name}",
+    "collapseFolder": "Songa ifolda {name}",
+    "folderOptions": "Izinketho zika-{name}"
   },
   "errors": {
     "somethingWentWrong": "Kukhona okungahambanga kahle",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Ukuziphatha",
     "resetChatSettings": "Setha kabusha izilungiselelo zenkulumo",
     "resetChatSettingsConfirmTitle": "Usufuna ukusetha kabusha izilungiselelo zenkulumo?",
-    "resetChatSettingsConfirmMessage": "Lokhu kuzobuyisela konke okuzenzakalelayo kulawa masethingi: izinga lokushisa, imiyalelo eyenziwe ngezifiso, Mayelana Nawe, impendulo yemodeli, ijubane lokusakaza, umbhalo-ukuya-kwizwi, amafayela asebenzayo, nokuqinisekiswa. Akuthinti izingxoxo zakho."
+    "resetChatSettingsConfirmMessage": "Lokhu kuzobuyisela konke okuzenzakalelayo kulawa masethingi: izinga lokushisa, imiyalelo eyenziwe ngezifiso, Mayelana Nawe, impendulo yemodeli, ijubane lokusakaza, umbhalo-ukuya-kwizwi, amafayela asebenzayo, nokuqinisekiswa. Akuthinti izingxoxo zakho.",
+    "customInstructionsLabel": "Imiyalelo Yangokwezifiso*",
+    "defaultTemperatureLabel": "Izinga Lokushisa Okuzenzakalelayo*"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -1226,7 +1360,8 @@
       "agents": "Ama-ejensi"
     },
     "sections": {
-      "baseModels": "Amamodeli Eyisisekelo"
+      "baseModels": "Amamodeli Eyisisekelo",
+      "allModels": "Onke amamodeli ({count})"
     },
     "maintainedBy": "Igcinwa yi-",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Kwenziwe",
       "reset": "Setha Kabusha",
       "resetTooltip": "Setha kabusha uhlelo oluzenzakalelayo"
-    }
+    },
+    "hide": "Fihla ohlwini",
+    "hideConfirmTitle": "Fihla \"{name}\"?",
+    "hideConfirmMessage": "Izosuswa ohlwini lwakho kodwa ayisuswanga ngokuphelele. Ungayibuyisela noma kunini ku-Hidden section.",
+    "hideConfirm": "Fihla",
+    "hiddenToast": "Ifihlwe \"{name}\"",
+    "hidden": {
+      "title": "Okufihliwe ({count})",
+      "restore": "Buyisela"
+    },
+    "title": "Khetha imodeli",
+    "modelsDescription": "Khetha imodeli ye-AI yengxoxo yakho. Imodeli ngayinye inokusebenza okuhlukile — khetha eyodwa ukuze ubone imininingwane.",
+    "recommended": "Kunconyiwe"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Imodeli ye-Claude esheshayo neshibhile elungiselelwe imisebenzi esheshayo. Iyinhle emibutweni elula, ukufingqa, nezinhlelo zokusebenza ezinenani eliphezulu.",
       "knowledgeCutoff": "Januwari 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Imodeli eqine kakhulu ka-Anthropic. Ilungele ukubhala okude, ucwaningo, nemisebenzi edinga ukucabanga ngokucophelela.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Imodeli ka-Claude elinganiselayo. Ilungele ukubhala kwansuku zonke, ukuhlaziya, nokuhlela ikhodi ngokushesha.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Kukhanselwe ngumsebenzisi",
     "transientBody": "Sicela uzame futhi",
     "authFailedBody": "Sicela ungene ngemvume futhi",
-    "rateLimitedBody": "Insizakalo igcwele, sicela uzame futhi manje"
+    "rateLimitedBody": "Insizakalo igcwele, sicela uzame futhi manje",
+    "loadingAttempt": "(umzamo {count})",
+    "transcriptLabel": "[Iteskhripthi: {filename}]"
   },
   "documentTranslation": {
     "title": "Ukuhumusha Idokhumenti",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Okuhlolwayo — kwakhiwe ngokubambisana okuqondile nabasebenzisi abakhulu be-MSF. Akukhona okokusetshenziswa jikelele.",
       "createButton": "Dala I-Ejensi Yakho"
     },
-    "selectAgentPrompt": "Khetha i-ejensi ukuze ubone imininingwane"
+    "selectAgentPrompt": "Khetha i-ejensi ukuze ubone imininingwane",
+    "description": "Osebenzisa i-AI abenza imisebenzi ethile. Osebenzisa okuzenzakalelayo baphethwe maphakathi; engeza imithombo ngokwezifiso ukuze uthole osebenzisa abavela kwamanye amaphrojekthi e-Foundry.",
+    "regionAgents": {
+      "us": "Osebenzisa Besifunda Yase-US",
+      "eu": "Osebenzisa Besifunda Yase-EU",
+      "default": "Abameli Besifunda"
+    },
+    "officeAgents": {
+      "suffix": "Abameli"
+    },
+    "agentSources": {
+      "title": "Izixhumanisi ze-Foundry",
+      "description": "Xhumanisa kwamanye amaphrojekthi e-Foundry ukuze uthole abameli bawo.",
+      "connectButton": "Xhumanisa iphrojekthi ye-Microsoft Azure Foundry",
+      "connectButtonShort": "Xhumanisa iphrojekthi ye-Foundry",
+      "addButton": "Engeza Umthombo Oqokiwe",
+      "addAnother": "Engeza esinye isixhumanisi",
+      "noSources": "Awekho imithombo eqokiwe ehleliwe.",
+      "removeSource": "Susa umthombo",
+      "confirmRemove": "Susa?",
+      "sourceConnected": "umthombo oqokiwe uxhunywe",
+      "sourcesConnected": "imithombo eqokiwe ixhunywe",
+      "backToAgents": "Emuva",
+      "discoveredAgents": "Abameli Abatholiwe",
+      "viewConnection": "Buka imininingwane yesixhumanisi",
+      "edit": "Hlela",
+      "noAgentsPublished": "Awekho abameli abashicilelwe",
+      "connectedOn": "Kuxhunyiwe ngo-{date}",
+      "disconnectSource": "Xhuma kude lomthombo",
+      "confirmDisconnect": "Chofoza futhi ukuqinisekisa",
+      "loadingAgents": "Ilayisha abameli...",
+      "noAgentsFound": "Awekho abameli abatholakele kule phrojekthi",
+      "noAgentsFoundHint": "Qiniseka ukuthi abameli bashicilelwe futhi unendima ye-Azure AI User kule phrojekthi.",
+      "refresh": "Buyekeza",
+      "refreshAgents": "Buyekeza abameli",
+      "technicalDetails": "Imininingwane yezobuchwepheshe",
+      "agentCountLabel": "Abameli abangama-{count}",
+      "disconnectedToast": "Kuxhunywe kude no-{name}"
+    }
   },
   "privacy": {
     "policyTitle": "Inqubomgomo Yobumfihlo Nokuvikelwa Kwedatha",

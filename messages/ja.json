@@ -381,7 +381,59 @@
     "delete": "削除",
     "noCustomAgentsYet": "カスタムエージェントはまだありません。",
     "noOrgAgentsConfigured": "組織エージェントが設定されていません。",
-    "validationFailed": "検証に失敗しました"
+    "validationFailed": "検証に失敗しました",
+    "addAgentSource": "カスタムソースを追加",
+    "connectFoundryProject": "Microsoft Azure Foundry プロジェクトに接続",
+    "connectFoundryDescription": "他のオフィスやチームの Azure Foundry プロジェクトからエージェントを検索できます。アクセス権のあるエージェントのみ表示されます。",
+    "foundryProjectPath": "Foundry プロジェクトパス",
+    "foundryProjectPathHelp": "Foundry プロジェクト管理者にお問い合わせいただくか、「手動で入力」をクリックして各項目を個別に入力してください。",
+    "copyFormat": "フォーマット",
+    "nameLabel": "名前",
+    "namePlaceholder": "例：アムステルダムオフィス、ジュネーブリサーチ",
+    "pathRequired": "Foundry プロジェクトのリソースパスを貼り付けてください。",
+    "pathInvalidFormat": "これはリソースパスではないようです。/subscriptions/...で始まる必要があります。",
+    "connectionFailed": "このプロジェクトに接続できませんでした。パスが正しいこと、アクセス権があることをご確認ください。",
+    "connectionSuccessAgents": "接続完了 — {count} 件のエージェントが見つかりました",
+    "connectionSuccessEmpty": "接続完了しましたが、エージェントが見つかりませんでした。このプロジェクトのエージェントを表示するには Azure AI User ロールが必要な場合があります。",
+    "checkingConnection": "接続を確認中...",
+    "connect": "接続",
+    "save": "保存",
+    "editConnection": "接続を編集",
+    "sourceName": "ソース名",
+    "sourceNamePlaceholder": "アムステルダムオフィス",
+    "sourceNameRequired": "ソース名は必須です。",
+    "resourcePath": "リソースパス",
+    "resourcePathRequired": "リソースパスは必須です。",
+    "resourcePathHelp": "Foundry プロジェクトへの ARM リソースパスです。この値は管理者にご確認ください。",
+    "invalidResourcePathFormat": "リソースパスは /subscriptions/... で始まる必要があります。",
+    "validatingSource": "エージェントを検索中...",
+    "sourceValidatedEmpty": "有効なソースですが、エージェントが見つかりませんでした。このプロジェクトのエージェントへのアクセス権がない可能性があります。",
+    "invalidSource": "このリソースパスへアクセスできませんでした。パスと権限をご確認ください。",
+    "addSource": "ソースを追加",
+    "removeSource": "ソースを削除",
+    "labelSubscription": "サブスクリプション",
+    "labelFoundryAccount": "Foundry アカウント",
+    "labelProject": "プロジェクト",
+    "tooltipSubscription": "Foundry アカウントを含む Azure サブスクリプションです。不明な場合は、チームで使用しているサブスクリプションを管理者にご確認ください。",
+    "tooltipFoundryAccount": "Foundry プロジェクトが存在する Azure AI Services アカウントです。各オフィスやチームごとに独自のものがあることが一般的です。",
+    "tooltipProject": "プロジェクトはアカウント内のエージェントを管理します。ほとんどのアカウントには 1 つの「default」プロジェクトがあります。",
+    "foundryProjectLabel": "Foundry プロジェクト",
+    "enterManually": "手動で入力",
+    "browseResources": "リソースを参照",
+    "subscriptionIdLabel": "サブスクリプションID",
+    "resourceGroupLabel": "リソースグループ",
+    "accountNameLabel": "アカウント名",
+    "projectNameLabel": "プロジェクト名",
+    "loadingSubscriptions": "サブスクリプションを読み込み中...",
+    "selectSubscription": "サブスクリプションを選択...",
+    "loadingAccounts": "アカウントを読み込み中...",
+    "noAccountsFound": "このサブスクリプションに Foundry アカウントが見つかりません。",
+    "selectAccount": "アカウントを選択...",
+    "loadingProjects": "プロジェクトを読み込み中...",
+    "noProjectsFound": "プロジェクトが見つかりません。「default」を使用します。",
+    "selectAllRequired": "サブスクリプション、アカウント、プロジェクトを選択してください。",
+    "subscriptionRequired": "サブスクリプションを選択してください",
+    "accountRequired": "Foundryアカウントを選択してください"
   },
   "Quick Actions": "クイックアクション",
   "Type / in chat to access your prompts": "チャットで / を入力してプロンプトにアクセス",
@@ -538,7 +590,10 @@
     "keepEditing": "編集を続ける",
     "yes": "はい",
     "no": "いいえ",
-    "beta": "ベータ"
+    "beta": "ベータ",
+    "copied": "コピーしました！",
+    "clear": "クリア",
+    "undo": "元に戻す"
   },
   "errors": {
     "unexpectedErrorOccurred": "予期しないエラーが発生しました",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "ボタンで停止する際は今後確認しない",
     "stopGenerationDontAskAgainKeyboard": "キーボードで停止する際は今後確認しない",
     "generateResponseButton": "回答を生成",
-    "downloadResponse": "応答をダウンロード"
+    "downloadResponse": "応答をダウンロード",
+    "activity": {
+      "callingTool": "ツールを呼び出しています…",
+      "callingService": "外部サービスを呼び出しています…",
+      "usingNamedTool": "{tool}を使用中…",
+      "usingNamedToolWithService": "{service}で{tool}を使用中…",
+      "searchingWeb": "ウェブを検索中…",
+      "searchingFiles": "ファイルを検索中…",
+      "runningCode": "コードを実行中…",
+      "generatingImage": "画像を生成中…",
+      "listingTools": "利用可能なツールを調査中…",
+      "analyzingFiles": "ファイルを分析中…",
+      "searchingKnowledge": "ナレッジベースを検索中…",
+      "cancellingPriorTool": "前回のツールリクエストをキャンセル中…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# 件のツールを使用} other {# 件のツールを使用}}",
+      "failedCount": "{count} 件失敗",
+      "statusApproved": "承認済み",
+      "statusAutoApproved": "自動承認済み",
+      "statusAutoDenied": "自動却下",
+      "statusFailed": "失敗",
+      "statusIncomplete": "未完了",
+      "viaService": "{service}経由"
+    },
+    "consent": {
+      "authorizeRequired": "認証が必要です",
+      "authorizeService": "{service}を認証",
+      "descriptionGeneric": "このエージェントがセキュアリソースへアクセスするには、許可が必要です。サインイン情報は上流サービス側で管理され、ここには保存されません。",
+      "descriptionWithService": "このエージェントが{service}にアクセスするには、許可が必要です。{service}へのサインイン情報は{service}自体で管理され、ここには保存されません。",
+      "signInIncompleteGeneric": "サインインが完了しませんでした",
+      "signInIncompleteForService": "{service}へのサインインが完了しませんでした",
+      "signInIncompleteDescriptionGeneric": "認証が完了していないようです。他のタブでサインインが完了したことを確認し、再度「続行」をクリックしてください。",
+      "signInIncompleteDescription": "{service}への認証が完了していないようです。他のタブでサインインが完了したことを確認し、再度「続行」をクリックしてください。",
+      "authorizeButton": "認証",
+      "reauthorizeButton": "再認証",
+      "continueButton": "続行",
+      "confirmingButton": "確認中…",
+      "authorizeHint": "認証後、ここに戻って「続行」をクリックしてください。後で権限を取り消す場合は、直接{service}からサインアウトしてください（トークンは保持していません）。",
+      "authorizeHintGeneric": "認証後、ここに戻って「続行」をクリックしてください。後で権限を取り消したい場合は、上流サービスからサインアウトしてください（トークンは保持していません）。",
+      "continueHint": "他のタブで認証が完了したら、「続行」をクリックしてください。",
+      "confirmingHint": "認証を確認し、リクエストを再開しています…",
+      "resendHint": "認証後、もう一度メッセージを送信してください。",
+      "resetTooltip": "この会話のツール自動承認設定をすべてリセットします。今後のツール使用時には再度確認されます。",
+      "autoApproveAllIndicator": "すべてのツールを自動承認中",
+      "autoApproveCountIndicator": "{count, plural, one {# 件のツールを自動承認中} other {# 件のツールを自動承認中}}",
+      "resetShort": "リセット",
+      "approvalRequired": "ツールの承認が必要です",
+      "approvalForService": "{service}用ツールを承認",
+      "approvalDescriptionGeneric": "エージェントが実行したいツールには、続行前に承認が必要です。",
+      "approvalDescriptionWithTool": "エージェントが{tool}ツールを実行しようとしています。続行前に承認が必要です。",
+      "runToolTitle": "<code>{tool}</code>を実行しますか？",
+      "runToolGeneric": "このツールを実行しますか？",
+      "viaService": "{service}経由",
+      "approveButton": "承認",
+      "approveOptionsLabel": "承認オプション",
+      "approveOnce": "一度だけ承認",
+      "alwaysApproveThisTool": "常にこのツールを承認",
+      "alwaysApproveAllTools": "全てのツールを常に承認",
+      "denyButton": "拒否",
+      "keyboardHint": "{modifier}+⏎ 承認 · esc 拒否",
+      "submittingState": "決定内容を送信中",
+      "approvedState": "承認済み — エージェントを再開しました",
+      "deniedState": "拒否しました",
+      "submittingApproval": "承認してエージェントを再開しています…",
+      "submittingDenial": "拒否を送信しています…"
+    },
+    "openImage": "画像を開く",
+    "copyMessage": "メッセージをコピー",
+    "stopAudio": "音声を停止",
+    "generatingAudio": "音声を生成中...",
+    "listen": "再生",
+    "processingAudio": "音声を処理中...",
+    "ttsError": "音声の生成中にエラーが発生しました。再試行してください。",
+    "unsupportedMessageType": "メッセージの表示エラー：サポートされていないメッセージタイプ"
   },
   "sidebar": {
     "collapseSidebar": "サイドバーを折りたたむ",
     "expandSidebar": "サイドバーを展開",
     "quickActionsTitle": "クイックアクション",
-    "quickActions": "クイックアクション"
+    "quickActions": "クイックアクション",
+    "expandFolder": "フォルダー{name}を展開",
+    "collapseFolder": "フォルダー{name}を折りたたみ",
+    "folderOptions": "{name}のオプション"
   },
   "prompts": {
     "buildReusablePrompts": "AIの支援で再利用可能なプロンプトを構築",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "挙動",
     "resetChatSettings": "チャット設定をリセット",
     "resetChatSettingsConfirmTitle": "チャット設定をリセットしますか？",
-    "resetChatSettingsConfirmMessage": "このパネル内のすべてが初期設定に戻ります：温度、カスタムインストラクション、About You、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認画面。ただし、会話内容には影響しません。"
+    "resetChatSettingsConfirmMessage": "このパネル内のすべてが初期設定に戻ります：温度、カスタムインストラクション、About You、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認画面。ただし、会話内容には影響しません。",
+    "customInstructionsLabel": "カスタム指示*",
+    "defaultTemperatureLabel": "デフォルト温度*"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -1077,7 +1211,8 @@
       "agents": "エージェント"
     },
     "sections": {
-      "baseModels": "ベースモデル"
+      "baseModels": "ベースモデル",
+      "allModels": "全モデル（{count}件）"
     },
     "agents": {
       "advancedFeatureBadge": "上級機能",
@@ -1150,7 +1285,19 @@
       "reasoning": "複雑な課題への拡張的な推論",
       "omni": "幅広い機能を持つマルチモーダルモデル",
       "agent": "リアルタイムツールとWebアクセス対応エージェント"
-    }
+    },
+    "hide": "リストから非表示",
+    "hideConfirmTitle": "「{name}」を非表示にしますか？",
+    "hideConfirmMessage": "リストからは削除されますが、削除はされません。非表示セクションからいつでも復元できます。",
+    "hideConfirm": "非表示",
+    "hiddenToast": "「{name}」を非表示にしました",
+    "hidden": {
+      "title": "非表示（{count}件）",
+      "restore": "復元"
+    },
+    "title": "モデルを選択",
+    "modelsDescription": "会話用のAIモデルを選択してください。各モデルには異なる特長があります。選択すると詳細を確認できます。",
+    "recommended": "おすすめ"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "2025年12月",
       "description": "会話や感情知能に最適化されたGPT-5.2の専用バリアントです。共感的なコミュニケーション、クリエイティブな文章作成、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリング、感情への配慮が求められる業務に最適です。"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic社の最強モデル。長文作成、調査、慎重な思考が必要な作業に最適です。",
+      "knowledgeCutoff": "2026年2月"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "バランスの取れたClaudeモデル。日常的なライティング、分析、素早い反応でのコーディングに適しています。",
+      "knowledgeCutoff": "2026年2月"
     }
   },
   "transcription": {
@@ -1324,7 +1481,9 @@
     "cancelledBody": "ユーザーによりキャンセルされました",
     "transientBody": "再度お試しください",
     "authFailedBody": "もう一度サインインしてください",
-    "rateLimitedBody": "サービスが混雑しています。しばらくしてから再試行してください"
+    "rateLimitedBody": "サービスが混雑しています。しばらくしてから再試行してください",
+    "loadingAttempt": "（{count}回目の試行中）",
+    "transcriptLabel": "[書き起こし：{filename}]"
   },
   "searchMode": {
     "backToChat": "チャットに戻る",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "実験的機能 — MSFのパワーユーザーとの直接的な協力により構築。一般利用向けではありません。",
       "createButton": "カスタムエージェントを作成"
     },
-    "selectAgentPrompt": "エージェントを選択して詳細を表示"
+    "selectAgentPrompt": "エージェントを選択して詳細を表示",
+    "description": "特定のタスク向けの専門AIエージェント。標準エージェントは一元管理されています。他のFoundryプロジェクトからエージェントを探すにはカスタムソースを追加してください。",
+    "regionAgents": {
+      "us": "米国リージョンエージェント",
+      "eu": "EUリージョンエージェント",
+      "default": "地域エージェント"
+    },
+    "officeAgents": {
+      "suffix": "エージェント"
+    },
+    "agentSources": {
+      "title": "Foundry接続",
+      "description": "他のFoundryプロジェクトに接続して、そのエージェントを見つけます。",
+      "connectButton": "Microsoft Azure Foundryプロジェクトに接続",
+      "connectButtonShort": "Foundryプロジェクトに接続",
+      "addButton": "カスタムソースを追加",
+      "addAnother": "別の接続を追加",
+      "noSources": "カスタムソースは設定されていません。",
+      "removeSource": "ソースを削除",
+      "confirmRemove": "削除しますか？",
+      "sourceConnected": "カスタムソースが接続されました",
+      "sourcesConnected": "カスタムソースが接続されました",
+      "backToAgents": "戻る",
+      "discoveredAgents": "検出されたエージェント",
+      "viewConnection": "接続の詳細を表示",
+      "edit": "編集",
+      "noAgentsPublished": "公開されたエージェントはありません",
+      "connectedOn": "{date}に接続済み",
+      "disconnectSource": "このソースの接続を解除",
+      "confirmDisconnect": "もう一度クリックして確認",
+      "loadingAgents": "エージェントを読み込み中...",
+      "noAgentsFound": "このプロジェクトでエージェントは見つかりませんでした",
+      "noAgentsFoundHint": "エージェントが公開されていること、およびこのプロジェクトでAzure AI Userロールを持っていることを確認してください。",
+      "refresh": "更新",
+      "refreshAgents": "エージェントを更新",
+      "technicalDetails": "技術詳細",
+      "agentCountLabel": "{count} エージェント",
+      "disconnectedToast": "{name}の接続を解除しました"
+    }
   },
   "privacy": {
     "policyTitle": "プライバシーポリシー & データ保護",

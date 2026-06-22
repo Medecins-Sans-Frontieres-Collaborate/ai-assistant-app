@@ -385,7 +385,59 @@
     "delete": "मेट्नुहोस्",
     "noCustomAgentsYet": "अहिलेसम्म कुनै कस्टम एजेन्ट छैन।",
     "noOrgAgentsConfigured": "कुनै संगठन एजेन्ट कन्फिगर गरिएको छैन।",
-    "validationFailed": "प्रमाणीकरण असफल भयो"
+    "validationFailed": "प्रमाणीकरण असफल भयो",
+    "addAgentSource": "अनुकूल स्रोत थप्नुहोस्",
+    "connectFoundryProject": "Microsoft Azure Foundry परियोजना जडान गर्नुहोस्",
+    "connectFoundryDescription": "अर्को कार्यालय वा टोलीको Azure Foundry परियोजनाबाट एजेन्टहरू पत्ता लगाउनुहोस्। तपाईंलाई पहुँच भएको एजेन्टहरू मात्रै देखिन्छन्।",
+    "foundryProjectPath": "Foundry परियोजना मार्ग",
+    "foundryProjectPathHelp": "आफ्नो Foundry परियोजना प्रशासकलाई सोध्नुहोस्, वा 'Enter manually' क्लिक गरी प्रत्येक फिल्ड छुट्टाछुट्टै भर्नुहोस्।",
+    "copyFormat": "प्रारूप",
+    "nameLabel": "नाम",
+    "namePlaceholder": "जस्तै: Amsterdam Office, Geneva Research",
+    "pathRequired": "Foundry परियोजना स्रोत मार्ग पेस्ट गर्नुहोस्।",
+    "pathInvalidFormat": "यो स्रोत मार्ग जस्तो देखिँदैन। यो /subscriptions/... बाट सुरु हुनुपर्छ।",
+    "connectionFailed": "यो परियोजनासँग जडान हुन सकेन। मार्ग सहि छ कि जाँच्नुहोस् र तपाईंलाई पहुँच छ कि छैन जाँच्नुहोस्।",
+    "connectionSuccessAgents": "जडान भयो — {count} एजेन्ट(हरू) फेला परे",
+    "connectionSuccessEmpty": "जडान भएको छ, तर कुनै एजेन्ट फेला परेनन्। यो परियोजनाका एजेन्टहरू हेर्न तपाईंलाई Azure AI User भूमिका आवश्यक हुन सक्छ।",
+    "checkingConnection": "जडान जाँच्दै...",
+    "connect": "जडान गर्नुहोस्",
+    "save": "सेभ गर्नुहोस्",
+    "editConnection": "जडान सम्पादन गर्नुहोस्",
+    "sourceName": "स्रोत नाम",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "स्रोत नाम आवश्यक छ।",
+    "resourcePath": "स्रोत मार्ग",
+    "resourcePathRequired": "स्रोत मार्ग आवश्यक छ।",
+    "resourcePathHelp": "Foundry परियोजनाको ARM स्रोत मार्ग। यो मानका लागि आफ्नो प्रशासकलाई सोध्नुहोस्।",
+    "invalidResourcePathFormat": "स्रोत मार्ग /subscriptions/... बाट सुरु हुनुपर्छ।",
+    "validatingSource": "एजेन्टहरू पत्ता लगाउँदै...",
+    "sourceValidatedEmpty": "स्रोत मान्य छ, तर कुनै एजेन्ट फेला परेनन्। तपाईंलाई यो परियोजनाका एजेन्टहरूमा पहुँच नहुन सक्छ।",
+    "invalidSource": "यो स्रोत मार्गमा पहुँच गर्न सकिएन। मार्ग र तपाईंको अनुमतिहरू जाँच गर्नुहोस्।",
+    "addSource": "स्रोत थप्नुहोस्",
+    "removeSource": "स्रोत हटाउनुहोस्",
+    "labelSubscription": "सदस्यता",
+    "labelFoundryAccount": "Foundry खाता",
+    "labelProject": "परियोजना",
+    "tooltipSubscription": "Foundry खाता समावेश गरिएको Azure सदस्यता। यदि थाहा छैन भने, तपाईंको टोली कुन सदस्यता प्रयोग गर्छ भनेर प्रशासकलाई सोध्नुहोस्।",
+    "tooltipFoundryAccount": "Foundry परियोजना रहेको Azure AI Services खाता। सामान्यतया प्रत्येक कार्यालय वा टोलीको आफ्नै हुन्छ।",
+    "tooltipProject": "एउटा परियोजनाले खाताभित्रको एजेन्टहरू व्यवस्थित गर्छ। प्रायः खातामा एउटै 'default' परियोजना हुन्छ।",
+    "foundryProjectLabel": "Foundry परियोजना",
+    "enterManually": "म्यानुअली प्रविष्ट गर्नुहोस्",
+    "browseResources": "स्रोतहरू ब्राउज गर्नुहोस्",
+    "subscriptionIdLabel": "सदस्यता आईडी",
+    "resourceGroupLabel": "स्रोत समूह",
+    "accountNameLabel": "खाता नाम",
+    "projectNameLabel": "परियोजना नाम",
+    "loadingSubscriptions": "सदस्यता लोड हुँदैछ...",
+    "selectSubscription": "सदस्यता चयन गर्नुहोस्...",
+    "loadingAccounts": "खाता लोड हुँदैछ...",
+    "noAccountsFound": "यो सदस्यतामा कुनै Foundry खाता फेला परेन।",
+    "selectAccount": "खाता चयन गर्नुहोस्...",
+    "loadingProjects": "परियोजना लोड हुँदैछ...",
+    "noProjectsFound": "कुनै परियोजना फेला परेन। \"default\" प्रयोग गर्दै।",
+    "selectAllRequired": "सदस्यता, खाता, र परियोजना चयन गर्नुहोस्।",
+    "subscriptionRequired": "सदस्यता छान्नुहोस्",
+    "accountRequired": "Foundry खाता छान्नुहोस्"
   },
   "Quick Actions": "द्रुत कार्यहरू",
   "Type / in chat to access your prompts": "आफ्ना प्रम्प्टहरू पहुँच गर्न च्याटमा / टाइप गर्नुहोस्",
@@ -641,7 +693,10 @@
     "keepEditing": "सम्पादन जारी राख्नुहोस्",
     "yes": "हो",
     "no": "होइन",
-    "beta": "बिटा"
+    "beta": "बिटा",
+    "copied": "प्रतिलिपि गरियो!",
+    "clear": "खाली गर्नुहोस्",
+    "undo": "पूर्वस्थितिमा फर्काउनुहोस्"
   },
   "terms": {
     "officialLanguages": "आधिकारिक संस्करण:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "बटनबाट रोक्दा फेरि नसोध्नुहोस्",
     "stopGenerationDontAskAgainKeyboard": "किबोर्डबाट रोक्दा फेरि नसोध्नुहोस्",
     "generateResponseButton": "प्रतिक्रिया जेनरेट गर्नुहोस्",
-    "downloadResponse": "जवाफ डाउनलोड गर्नुहोस्"
+    "downloadResponse": "जवाफ डाउनलोड गर्नुहोस्",
+    "activity": {
+      "callingTool": "उपकरण कल गर्दै…",
+      "callingService": "बाह्य सेवा कल गर्दै…",
+      "usingNamedTool": "{tool} प्रयोग गर्दै…",
+      "usingNamedToolWithService": "{service} मा {tool} प्रयोग गर्दै…",
+      "searchingWeb": "वेब खोज्दै…",
+      "searchingFiles": "फाइलहरू खोज्दै…",
+      "runningCode": "कोड चलाउँदै…",
+      "generatingImage": "छवि सिर्जना गर्दै…",
+      "listingTools": "उपलब्ध उपकरणहरू हेर्दै…",
+      "analyzingFiles": "तपाईंको फाइलहरू विश्लेषण गर्दै…",
+      "searchingKnowledge": "ज्ञान भण्डार खोज्दै…",
+      "cancellingPriorTool": "अघिल्लो उपकरण अनुरोध रद्द गर्दै…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# उपकरण} other {# उपकरणहरू}} प्रयोग गरियो",
+      "failedCount": "{count} असफल भयो",
+      "statusApproved": "स्वीकृत",
+      "statusAutoApproved": "स्वतः-स्वीकृत",
+      "statusAutoDenied": "स्वतः-अस्वीकृत",
+      "statusFailed": "असफल भयो",
+      "statusIncomplete": "अपूर्ण",
+      "viaService": "{service} मार्फत"
+    },
+    "consent": {
+      "authorizeRequired": "अनुमति आवश्यक छ",
+      "authorizeService": "{service} अनुमति दिनुहोस्",
+      "descriptionGeneric": "यस एजेन्टलाई सुरक्षित स्रोत पहुँच गर्न तपाईंको अनुमति आवश्यक छ। तपाईँको साइन-इन माथिल्लो सेवा द्वारा व्यवस्थापन गरिन्छ, यहाँ सङ्ग्रह गरिँदैन।",
+      "descriptionWithService": "यस एजेन्टलाई {service} पहुँच गर्न तपाईंको अनुमति आवश्यक छ। तपाईंको {service} साइन-इन {service} ले नै व्यवस्थापन गर्छ, यहाँ सङ्ग्रह गरिँदैन।",
+      "signInIncompleteGeneric": "साइन-इन सम्पन्न भएन",
+      "signInIncompleteForService": "{service} मा साइन-इन सम्पन्न भएन",
+      "signInIncompleteDescriptionGeneric": "अनुमति प्रक्रिया अपूर्ण देखिन्छ। कृपया अर्को ट्याबमा साइन-इन पुरा गर्नुहोस्, त्यसपछि फेरि जारी राख्नुहोस् क्लिक गर्नुहोस्।",
+      "signInIncompleteDescription": "{service} मा अनुमति प्रक्रिया अपूर्ण देखिन्छ। कृपया अर्को ट्याबमा साइन-इन पुरा गर्नुहोस्, त्यसपछि फेरि जारी राख्नुहोस् क्लिक गर्नुहोस्।",
+      "authorizeButton": "अनुमति दिनुहोस्",
+      "reauthorizeButton": "पुनः अनुमति दिनुहोस्",
+      "continueButton": "जारी राख्नुहोस्",
+      "confirmingButton": "यकीन गर्दै…",
+      "authorizeHint": "अनुमति दिएपछि यहाँ फर्किएर जारी राख्नुहोस् क्लिक गर्नुहोस्। पछि हटाउन, {service} बाट सिधै साइन-आउट गर्नुहोस् — हामीले टोकन राख्दैनौं।",
+      "authorizeHintGeneric": "अनुमति दिएपछि यहाँ फर्किएर जारी राख्नुहोस् क्लिक गर्नुहोस्। पछि हटाउन, माथिल्लो सेवाबाट सिधै साइन-आउट गर्नुहोस् — हामीले टोकन राख्दैनौं।",
+      "continueHint": "अर्को ट्याबमा अनुमति प्रक्रिया पुरा भएपछि, जारी राख्नुहोस् क्लिक गर्नुहोस्।",
+      "confirmingHint": "अनुमतिको पुष्टि गर्दै र तपाईंको अनुरोध पुन: सुरु गर्दै…",
+      "resendHint": "अनुमति दिएपछि, आउनुहोस् तपाईंको सन्देश पुनः पठाउनुहोस्।",
+      "resetTooltip": "यस वार्ताका लागि सबै उपकरण स्वचालित-स्वीकृति प्राथमिकताहरू पुन: सेट गर्नुहोस्। भविष्यमा उपकरण कल गर्दा पुनः पुष्टि मागिनेछ।",
+      "autoApproveAllIndicator": "सबै उपकरणहरू स्वतः स्वीकृति दिइँदै",
+      "autoApproveCountIndicator": "{count, plural, one {# उपकरण स्वतः स्वीकृति दिइँदै} other {# उपकरणहरू स्वतः स्वीकृति दिइँदै}}",
+      "resetShort": "रिसेट गर्नुहोस्",
+      "approvalRequired": "उपकरण स्वीकृति आवश्यक छ",
+      "approvalForService": "{service} का लागि उपकरण स्वीकृति दिनुहोस्",
+      "approvalDescriptionGeneric": "एजेन्टले उपकरण चलाउन चाहन्छ जसका लागि तपाईंको स्वीकृति आवश्यक छ।",
+      "approvalDescriptionWithTool": "एजेन्टले {tool} उपकरण चलाउन चाहन्छ, जसका लागि तपाईंको स्वीकृति आवश्यक छ।",
+      "runToolTitle": "<code>{tool}</code> सञ्चालन गर्नुहुन्छ?",
+      "runToolGeneric": "यो उपकरण सञ्चालन गर्नुहुन्छ?",
+      "viaService": "{service} मार्फत",
+      "approveButton": "स्वीकृत गर्नुहोस्",
+      "approveOptionsLabel": "स्वीकृति विकल्पहरू",
+      "approveOnce": "एक पटक स्वीकृति दिनुहोस्",
+      "alwaysApproveThisTool": "यो उपकरण सधैं स्वीकृत गर्नुहोस्",
+      "alwaysApproveAllTools": "सबै उपकरण सधैं स्वीकृत गर्नुहोस्",
+      "denyButton": "अस्वीकृत गर्नुहोस्",
+      "keyboardHint": "{modifier}+⏎ स्वीकृत गर्नुहोस् · esc अस्वीकृत गर्नुहोस्",
+      "submittingState": "तपाईंको निर्णय पेश गर्दै",
+      "approvedState": "स्वीकृत — एजेन्ट पुनः सुरु भयो",
+      "deniedState": "अस्वीकृत",
+      "submittingApproval": "स्वीकृत गर्दै र एजेन्ट पुनः सुरु गर्दै...",
+      "submittingDenial": "तपाईंको अस्वीकृति पठाउँदै..."
+    },
+    "openImage": "चित्र खोल्नुहोस्",
+    "copyMessage": "सन्देश प्रतिलिपि गर्नुहोस्",
+    "stopAudio": "अडियो रोक्नुहोस्",
+    "generatingAudio": "अडियो तयार गर्दै...",
+    "listen": "सुन्नुहोस्",
+    "processingAudio": "अडियो प्रशोधन गर्दै...",
+    "ttsError": "अडियो तयार गर्दा समस्या आयो। कृपया पुनः प्रयास गर्नुहोस्।",
+    "unsupportedMessageType": "सन्देश देखाउन समस्या: समर्थन नगरिएको सन्देश प्रकार"
   },
   "transcript": {
     "originalTranscript": "मूल ट्रान्सक्रिप्ट",
@@ -772,7 +901,10 @@
     "collapseSidebar": "साइडबार सङ्कुचित गर्नुहोस्",
     "expandSidebar": "साइडबार विस्तार गर्नुहोस्",
     "quickActionsTitle": "द्रुत कार्यहरू",
-    "quickActions": "द्रुत कार्यहरू"
+    "quickActions": "द्रुत कार्यहरू",
+    "expandFolder": "फोल्डर {name} विस्तार गर्नुहोस्",
+    "collapseFolder": "फोल्डर {name} सङ्कुचन गर्नुहोस्",
+    "folderOptions": "{name} का विकल्पहरू"
   },
   "errors": {
     "somethingWentWrong": "केही गलत भयो",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "व्यवहार",
     "resetChatSettings": "क्याट सेटिङहरू पुनःस्थापना गर्नुहोस्",
     "resetChatSettingsConfirmTitle": "क्याट सेटिङहरू पुनःस्थापना गर्ने?",
-    "resetChatSettingsConfirmMessage": "यसले यस प्यानलका सबै चीजहरूलाई पूर्वनिर्धारित अवस्थामा फर्काउँछ: तापक्रम, अनुकूल आदेशहरू, तपाईंको बारेमा, मोडेलको जवाफ, स्ट्रिमिङ गति, पाठ-देखि-आवाज, सक्रिय फाइलहरू, र पुष्टि। यसले तपाईंका कुराकानीहरूलाई असर गर्दैन।"
+    "resetChatSettingsConfirmMessage": "यसले यस प्यानलका सबै चीजहरूलाई पूर्वनिर्धारित अवस्थामा फर्काउँछ: तापक्रम, अनुकूल आदेशहरू, तपाईंको बारेमा, मोडेलको जवाफ, स्ट्रिमिङ गति, पाठ-देखि-आवाज, सक्रिय फाइलहरू, र पुष्टि। यसले तपाईंका कुराकानीहरूलाई असर गर्दैन।",
+    "customInstructionsLabel": "अनुकूल निर्देशनहरू*",
+    "defaultTemperatureLabel": "पूर्वनिर्धारित तापमान*"
   },
   "emptyState": {
     "greeting": "म कसरी मद्दत गर्न सक्छु?",
@@ -1226,7 +1360,8 @@
       "agents": "एजेन्टहरू"
     },
     "sections": {
-      "baseModels": "आधार मोडेलहरू"
+      "baseModels": "आधार मोडेलहरू",
+      "allModels": "सबै मोडलहरू ({count})"
     },
     "maintainedBy": "द्वारा मर्मत गरिएको",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "सम्पन्न",
       "reset": "रिसेट",
       "resetTooltip": "पूर्वनिर्धारित क्रममा रिसेट गर्नुहोस्"
-    }
+    },
+    "hide": "सूचीबाट लुकाउनुहोस्",
+    "hideConfirmTitle": "\"{name}\" लुकाउनुहोस्?",
+    "hideConfirmMessage": "यो तपाईंको सूचीबाट हटाइनेछ तर मेटिइने छैन। लुकेको खण्डबाट जुनसुकै बेला पुनः प्राप्त गर्न सकिन्छ।",
+    "hideConfirm": "लुकाउनुहोस्",
+    "hiddenToast": "\"{name}\" लुकाइयो",
+    "hidden": {
+      "title": "लुकेको ({count})",
+      "restore": "पुनःस्थापना गर्नुहोस्"
+    },
+    "title": "मोडल चयन गर्नुहोस्",
+    "modelsDescription": "आफ्नो संवादका लागि AI मोडल चयन गर्नुहोस्। प्रत्येक मोडलको आ-आफ्नै विशेषता छ — विवरण हेर्न एक मोडल चयन गर्नुहोस्।",
+    "recommended": "सिफारिस गरिएको"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "छिटो कार्यहरूका लागि अनुकूलित छिटो र लागत-प्रभावी Claude मोडेल। साधारण प्रश्नहरू, सारांश, र उच्च-मात्रा अनुप्रयोगहरूका लागि उत्कृष्ट।",
       "knowledgeCutoff": "जनवरी २०२५"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Anthropic को सबैभन्दा सक्षम मोडल। लामो लेखाइ, अनुसन्धान, र विचारपूर्वक सोच्नुपर्ने कार्यका लागि राम्रो।",
+      "knowledgeCutoff": "फेब्रुअरी २०२६"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "सन्तुलित Claude मोडल। दैनिक लेखन, विश्लेषण, र छिटो जवाफ चाहिने कोडिङका लागि राम्रो।",
+      "knowledgeCutoff": "फेब्रुअरी २०२६"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "प्रयोगकर्ताद्वारा रद्द गरियो",
     "transientBody": "कृपया फेरि प्रयास गर्नुहोस्",
     "authFailedBody": "कृपया फेरि साइन इन गर्नुहोस्",
-    "rateLimitedBody": "सेवा हाल व्यस्त छ, छिट्टै पुन: प्रयास गर्नुहोस्"
+    "rateLimitedBody": "सेवा हाल व्यस्त छ, छिट्टै पुन: प्रयास गर्नुहोस्",
+    "loadingAttempt": "(प्रयास {count})",
+    "transcriptLabel": "[प्रतिलिपि: {filename}]"
   },
   "documentTranslation": {
     "title": "कागजात अनुवाद",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "प्रयोगात्मक — MSF पावर प्रयोगकर्ताहरूसँग प्रत्यक्ष सहकार्यमा निर्मित। सामान्य प्रयोगका लागि होइन।",
       "createButton": "कस्टम एजेन्ट बनाउनुहोस्"
     },
-    "selectAgentPrompt": "विवरण हेर्न एजेन्ट छान्नुहोस्"
+    "selectAgentPrompt": "विवरण हेर्न एजेन्ट छान्नुहोस्",
+    "description": "विशिष्ट कार्यहरूको लागि विशेषज्ञ AI एजेन्टहरू। पूर्वनिर्धारित एजेन्टहरू केन्द्रीय रूपमा व्यवस्थापन गरिन्छन्; अन्य Foundry परियोजनाबाट एजेन्टहरू खोज्नका लागि कस्टम स्रोतहरू थप्नुहोस्।",
+    "regionAgents": {
+      "us": "US क्षेत्रका एजेन्टहरू",
+      "eu": "EU क्षेत्रका एजेन्टहरू",
+      "default": "क्षेत्र एजेन्टहरू"
+    },
+    "officeAgents": {
+      "suffix": "एजेन्टहरू"
+    },
+    "agentSources": {
+      "title": "Foundry जडानहरू",
+      "description": "अन्य Foundry परियोजनासँग जडान गरेर तिनीहरूको एजेन्टहरू पत्ता लगाउनुहोस्।",
+      "connectButton": "Microsoft Azure Foundry परियोजनासँग जडान गर्नुहोस्",
+      "connectButtonShort": "Foundry परियोजनासँग जडान गर्नुहोस्",
+      "addButton": "अनुकूल स्रोत थप्नुहोस्",
+      "addAnother": "अर्को जडान थप्नुहोस्",
+      "noSources": "कुनै अनुकूल स्रोतहरू कन्फिगर गरिएको छैन।",
+      "removeSource": "स्रोत हटाउनुहोस्",
+      "confirmRemove": "हटाउन चाहनुहुन्छ?",
+      "sourceConnected": "अनुकूल स्रोत जडान गरिएको छ",
+      "sourcesConnected": "अनुकूल स्रोतहरू जडान गरिएको छन्",
+      "backToAgents": "फिर्ता",
+      "discoveredAgents": "पत्ता लागेका एजेन्टहरू",
+      "viewConnection": "जडान विवरण हेर्नुहोस्",
+      "edit": "सम्पादन गर्नुहोस्",
+      "noAgentsPublished": "कुनै एजेन्टहरू प्रकाशन भएको छैन",
+      "connectedOn": "{date} मा जडान गरिएको",
+      "disconnectSource": "यो स्रोत छुट्याउनुहोस्",
+      "confirmDisconnect": "पुष्टि गर्न फेरि क्लिक गर्नुहोस्",
+      "loadingAgents": "एजेन्टहरू लोड हुँदैछन्...",
+      "noAgentsFound": "यस परियोजनामा कुनै एजेन्ट फेला परेनन्",
+      "noAgentsFoundHint": "एजेन्टहरू प्रकाशित छन् र तपाईंको यस परियोजनामा Azure AI User भूमिका छ भनेर सुनिश्चित गर्नुहोस्।",
+      "refresh": "रिफ्रेश गर्नुहोस्",
+      "refreshAgents": "एजेन्टहरू रिफ्रेश गर्नुहोस्",
+      "technicalDetails": "प्राविधिक विवरणहरू",
+      "agentCountLabel": "{count} एजेन्टहरू",
+      "disconnectedToast": "{name} छुट्यो"
+    }
   },
   "privacy": {
     "policyTitle": "गोपनीयता नीति र डाटा सुरक्षा",

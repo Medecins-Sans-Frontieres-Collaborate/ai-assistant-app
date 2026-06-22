@@ -385,7 +385,59 @@
     "delete": "Chotsani",
     "noCustomAgentsYet": "Palibe ma-ejansi apadera pakadali pano.",
     "noOrgAgentsConfigured": "Palibe ma-ejansi a bungwe okhazikitsidwa.",
-    "validationFailed": "Kutsimikizika kwalephera"
+    "validationFailed": "Kutsimikizika kwalephera",
+    "addAgentSource": "Onjezani Gwero Lanu",
+    "connectFoundryProject": "Lumikizani Ndi Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "Pezani ma agent ochokera mu ofesi ina kapena gulu lina la Azure Foundry project. Mudzangoona ma agent omwe muli ndi chilolezo chowawona.",
+    "foundryProjectPath": "Njira ya Foundry Project",
+    "foundryProjectPathHelp": "Funsani woyang'anira wa Foundry project yanu kapena dinani 'Lowetsani mwamanja' kuti mudzaze minda iliyonse patsogolo.",
+    "copyFormat": "Mawonekedwe",
+    "nameLabel": "Dzina",
+    "namePlaceholder": "mwachitsanzo: Amsterdam Office, Geneva Research",
+    "pathRequired": "Matani njira ya Foundry project resource.",
+    "pathInvalidFormat": "Iyi sikuwoneka ngati njira ya resource. Iyenera kuyamba ndi /subscriptions/...",
+    "connectionFailed": "Sitinathe kulumikiza project iyi. Onetsetsani kuti njira ili yolondola komanso muli ndi chilolezo chowona.",
+    "connectionSuccessAgents": "Yalumikizidwa — apezeka agent(s) {count}",
+    "connectionSuccessEmpty": "Yalumikizidwa, koma palibe ma agent apezeka. Mwina muyenera kukhala ndi Azure AI User role pa project iyi kuti muwone ma agent ake.",
+    "checkingConnection": "Akuyesera kulumikizana...",
+    "connect": "Lumikizani",
+    "save": "Sungani",
+    "editConnection": "Sinthani Kulumikizana",
+    "sourceName": "Dzina la Gwero",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "Dzina la gwero ndilofunika.",
+    "resourcePath": "Njira ya Resource",
+    "resourcePathRequired": "Njira ya resource ili yofunika.",
+    "resourcePathHelp": "ARM resource path ya Foundry project. Funsani woyang'anira kuti akupatseni imeneyi.",
+    "invalidResourcePathFormat": "Resource path iyenera kuyamba ndi /subscriptions/...",
+    "validatingSource": "Akupeza ma agent...",
+    "sourceValidatedEmpty": "Gwero lololedwa, koma palibe ma agent apezeka. Mwina mulibe chilolezo chowona ma agent mu project iyi.",
+    "invalidSource": "Sitinathe kupeza njira iyi ya resource. Onetsetsani njira ndi zilolezo zanu.",
+    "addSource": "Onjezani Gwero",
+    "removeSource": "Chotsani Gwero",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Akaunti ya Foundry",
+    "labelProject": "Project",
+    "tooltipSubscription": "Azure subscription yomwe ili ndi Foundry account. Ngati simukudziwa, funsani admin kuti adziwe subscription yomwe gulu lanu limagwiritsa ntchito.",
+    "tooltipFoundryAccount": "Akaunti ya Azure AI Services komwe Foundry project ili. Ofesi iliyonse kapena gulu nthawi zambiri imakhala ndi akaunti ake.",
+    "tooltipProject": "Project imathandiza kukonza ma agent mu akaunti. Akaunti zambiri zimakhalira ndi project imodzi yokha ya 'default'.",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "Lowetsani mwamanja",
+    "browseResources": "Yang'anani ma resource",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Dzina la Akaunti",
+    "projectNameLabel": "Dzina la Project",
+    "loadingSubscriptions": "Akutsegula ma subscription...",
+    "selectSubscription": "Sankhani subscription...",
+    "loadingAccounts": "Akutsegula ma account...",
+    "noAccountsFound": "Palibe Foundry accounts zomwe zapezeka mu subscription ino.",
+    "selectAccount": "Sankhani akaunti...",
+    "loadingProjects": "Akutsegula ma project...",
+    "noProjectsFound": "Palibe project zapezeka. Akugwiritsa ntchito \"default\".",
+    "selectAllRequired": "Sankhani subscription, akaunti, ndi project.",
+    "subscriptionRequired": "Sankhani kulembetsa",
+    "accountRequired": "Sankhani akaunti ya Foundry"
   },
   "Quick Actions": "Zochitika Mwachangu",
   "Type / in chat to access your prompts": "Lembani / mu kucheza kuti mupeze malamulo anu",
@@ -641,7 +693,10 @@
     "keepEditing": "Pitirizani Kusintha",
     "yes": "Inde",
     "no": "Ayi",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Zalembedwa!",
+    "clear": "Chotsani",
+    "undo": "Bwezerani"
   },
   "terms": {
     "officialLanguages": "Mtundu waumulungu:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Musandifunse kachiwiri poletsa pogwiritsa ntchito batani",
     "stopGenerationDontAskAgainKeyboard": "Musandifunse kachiwiri poletsa pogwiritsa ntchito kiyibodi",
     "generateResponseButton": "Panga yankho",
-    "downloadResponse": "Tsitsani yankho"
+    "downloadResponse": "Tsitsani yankho",
+    "activity": {
+      "callingTool": "Akuyitana chida…",
+      "callingService": "Akuyitana ntchito yakunja…",
+      "usingNamedTool": "Akugwiritsa ntchito {tool}…",
+      "usingNamedToolWithService": "Akugwiritsa ntchito {tool} pa {service}…",
+      "searchingWeb": "Akusaka pa intaneti…",
+      "searchingFiles": "Akusaka mafayilo…",
+      "runningCode": "Akuyendetsa code…",
+      "generatingImage": "Akupanga chithunzi…",
+      "listingTools": "Akufufuza zida zilipo…",
+      "analyzingFiles": "Akusanthula mafayilo anu…",
+      "searchingKnowledge": "Akusaka mu chuma cha chidziwitso…",
+      "cancellingPriorTool": "Akukonza kuchotsa pempho lachida lapitalo…"
+    },
+    "toolSummary": {
+      "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",
+      "failedCount": "{count} zasowa bwino",
+      "statusApproved": "Avomerezedwa",
+      "statusAutoApproved": "Zavomerezedwa zokha",
+      "statusAutoDenied": "Zakana zokha",
+      "statusFailed": "Zalephera",
+      "statusIncomplete": "Sanalize",
+      "viaService": "kudzera {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Chilolezo chafunika",
+      "authorizeService": "Lolani {service}",
+      "descriptionGeneric": "Wothandizayu akufuna chilolezo chanu kuti athe kulowa m'chotetezeka. Kulowa kwanu kukusamaliridwa ndi ntchito yakunja, osati pano.",
+      "descriptionWithService": "Wothandizayu akufuna chilolezo chanu kuti athe kulowa {service}. Kulowa kwanu ku {service} kusamaliridwa ndi {service} yokha, osati pano.",
+      "signInIncompleteGeneric": "Kulowa sikunathe",
+      "signInIncompleteForService": "Kulowa ku {service} sikunathe",
+      "signInIncompleteDescriptionGeneric": "Zikuwoneka kuti chilolezo sichinamalizeke. Onetsetsani kuti mwamaliza kulowa m'tabina ina, ndiye dinani Pitirizani.",
+      "signInIncompleteDescription": "Zikuwoneka kuti chilolezo cholowera ku {service} sichinamalizeke. Onetsetsani kuti mwamaliza kulowa m'tabina ina, ndiye dinani Pitirizani.",
+      "authorizeButton": "Lolani",
+      "reauthorizeButton": "Lolani kachiwiri",
+      "continueButton": "Pitirizani",
+      "confirmingButton": "Akutsimikizira…",
+      "authorizeHint": "Lolani, ndiye bwererani pano ndikudina Pitirizani. Kuti muchotse chilolezo mtsogolo, tulukani pa {service} mwachindunji — sitimasunga token.",
+      "authorizeHintGeneric": "Lolani, ndiye bwererani pano ndikudina Pitirizani. Kuti muchotse chilolezo mtsogolo, tulukani pa ntchito yakunja mwachindunji — sitimasunga token.",
+      "continueHint": "Akangomaliza chilolezo m'tabina ina, dinani Pitirizani.",
+      "confirmingHint": "Akutsimikizira chilolezo ndikupitiriza ndi pempho lanu…",
+      "resendHint": "Atalola, tumizani uthenga wanu kachiwiri kuti mupitirize.",
+      "resetTooltip": "Bwezeretsani zokonda za kuvomereza zokha zida zonse za zokambirana izi. Zida zotsatira zidzafunsa kachiwiri.",
+      "autoApproveAllIndicator": "Kuvomereza zida zonse zokha",
+      "autoApproveCountIndicator": "{count, plural, one {Kuvomereza chida chimodzi chokha} other {Kuvomereza zida # zokha}}",
+      "resetShort": "Bwezeretsani",
+      "approvalRequired": "Kuvomereza chida kwafunika",
+      "approvalForService": "Vomerani chida pa {service}",
+      "approvalDescriptionGeneric": "Wothandizayu akufuna kuyendetsa chida chomwe chifuna kuvomerezedwa musanapitirize.",
+      "approvalDescriptionWithTool": "Wothandizayu akufuna kuyendetsa chida cha {tool}, chomwe chifuna kuvomerezedwa musanapitirize.",
+      "runToolTitle": "Yambitsani <code>{tool}</code>?",
+      "runToolGeneric": "Yambitsa chida ichi?",
+      "viaService": "kudzera mu {service}",
+      "approveButton": "Vomerani",
+      "approveOptionsLabel": "Sankhani njira zovomera",
+      "approveOnce": "Vomerani kamodzi",
+      "alwaysApproveThisTool": "Vomerani nthawi zonse chida ichi",
+      "alwaysApproveAllTools": "Vomerani nthawi zonse zida zonse",
+      "denyButton": "Kana",
+      "keyboardHint": "{modifier}+⏎ vomera · esc kana",
+      "submittingState": "Kutumiza chisankho chanu",
+      "approvedState": "Yavomerezedwa — agent yayambiranso",
+      "deniedState": "Yakanidwa",
+      "submittingApproval": "Kuvomera ndikuyambiranso agent...",
+      "submittingDenial": "Kutumiza kukana kwanu..."
+    },
+    "openImage": "Tsegulani chithunzichi",
+    "copyMessage": "Kopera uthengawu",
+    "stopAudio": "Imitsani mawu",
+    "generatingAudio": "Ikupanga mawu...",
+    "listen": "Mverani",
+    "processingAudio": "Ikukonza mawu...",
+    "ttsError": "Vuto popanga mawu. Chonde yesani kachiwiri.",
+    "unsupportedMessageType": "Vuto pokuonetsera uthenga: Mtundu wa uthenga sunalangizidwe"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Pangani gawo lakumbali laing'ono",
     "expandSidebar": "Kwezani gawo lakumbali",
     "quickActionsTitle": "Zochitika Mwachangu",
-    "quickActions": "Zochitika Mwachangu"
+    "quickActions": "Zochitika Mwachangu",
+    "expandFolder": "Tsegulani chikwatu {name}",
+    "collapseFolder": "Tsekani chikwatu {name}",
+    "folderOptions": "Njira za {name}"
   },
   "errors": {
     "somethingWentWrong": "Chinachake chalakwika",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Makhalidwe",
     "resetChatSettings": "Bwezeretsani makonda a macheza",
     "resetChatSettingsConfirmTitle": "Mubwezeretse makonda a macheza?",
-    "resetChatSettingsConfirmMessage": "Izi zibwezeretsa makonda a pachiyambi pazinthu zonse mu panel iyi: kutentha, malamulo anu, Za Inu, yankho la model, liwiro la kusinja, kutembenuza zolembalemba kukhala mawu, mafayilo ogwira ntchito, ndi zitsimikiziro. Sizisokoneza maulaliki anu."
+    "resetChatSettingsConfirmMessage": "Izi zibwezeretsa makonda a pachiyambi pazinthu zonse mu panel iyi: kutentha, malamulo anu, Za Inu, yankho la model, liwiro la kusinja, kutembenuza zolembalemba kukhala mawu, mafayilo ogwira ntchito, ndi zitsimikiziro. Sizisokoneza maulaliki anu.",
+    "customInstructionsLabel": "Malangizo Anu*",
+    "defaultTemperatureLabel": "Kutentha kwachikwikwi*"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1226,7 +1360,8 @@
       "agents": "Ma-ejansi"
     },
     "sections": {
-      "baseModels": "Mitundu Yoyambirira"
+      "baseModels": "Mitundu Yoyambirira",
+      "allModels": "Mitundu yonse ({count})"
     },
     "maintainedBy": "Oyang'anira ndi",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Kwatheka",
       "reset": "Bwezeretsani",
       "resetTooltip": "Bwezeretsani ku dongosolo loyamba"
-    }
+    },
+    "hide": "Bisani mndandandanda",
+    "hideConfirmTitle": "Mubisire \"{name}\"?",
+    "hideConfirmMessage": "Idzachotsedwa pamndandanda wanu koma sichidzafufutidwa. Mutha kubwezeretsanso nthawi iliyonse kuchokera mugawo lobisidwa.",
+    "hideConfirm": "Bisani",
+    "hiddenToast": "Yabisidwa \"{name}\"",
+    "hidden": {
+      "title": "Zobisidwa ({count})",
+      "restore": "Bwezeretsani"
+    },
+    "title": "Sankhani mtundu",
+    "modelsDescription": "Sankhani mtundu wa AI pa zokambirana zanu. Mtundu uliwonse uli ndi mphamvu zosiyanasiyana — sankhani kuti muwone tsatanetsatane.",
+    "recommended": "Zolangizidwa"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Mtundu wa Claude wachangu ndi wotchipa wokonzedwa pa ntchito zachangu. Wabwino pa mafunso osavuta, kufotokoza mwachidule, ndi mapulogalamu ambiri.",
       "knowledgeCutoff": "January 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Chitsanzo champhamvu cha Anthropic. Chabwino polemba, kafukufuku, ndi ntchito zofunika kuganizira mozama.",
+      "knowledgeCutoff": "Feb 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Chitsanzo cha Claude chapakati. Chabwino polemba tsiku ndi tsiku, kusanthula, ndi ntchito za coding mwachangu.",
+      "knowledgeCutoff": "Feb 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Zasiyidwa ndi wogwiritsa",
     "transientBody": "Chonde yesaninso",
     "authFailedBody": "Chonde lowaninso",
-    "rateLimitedBody": "Utumiki wadzaza, chonde yesaninso posachedwa"
+    "rateLimitedBody": "Utumiki wadzaza, chonde yesaninso posachedwa",
+    "loadingAttempt": "(kuyesa {count})",
+    "transcriptLabel": "[Mavesi: {filename}]"
   },
   "documentTranslation": {
     "title": "Kumasulira Zikalata",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Zoyesera - zopangidwa mogwirizana mwachindunji ndi ogwiritsa ntchito amphamvu a MSF. Osati ogwiritsidwa ntchito ndi aliyense.",
       "createButton": "Pangani Ejansi Yapadera"
     },
-    "selectAgentPrompt": "Sankhani ejansi kuti muone zambiri"
+    "selectAgentPrompt": "Sankhani ejansi kuti muone zambiri",
+    "description": "Othandiza apadera a AI pazinthu zodzikidwa. Othandiza oyambira amathandizidwa pakati; onjezerani magwero anu kuti mupeze othandiza ochokera ku ntchitoyi za Foundry.",
+    "regionAgents": {
+      "us": "Othandiza kuchokera m'chigawo cha US",
+      "eu": "Othandiza kuchokera m'chigawo cha EU",
+      "default": "Oimira M’dera"
+    },
+    "officeAgents": {
+      "suffix": "Oimira"
+    },
+    "agentSources": {
+      "title": "Maulumikizano a Foundry",
+      "description": "Lumikizani ndi ma projekiti ena a Foundry kuti mupeze oimira awo.",
+      "connectButton": "Lumikizani projekiti ya Microsoft Azure Foundry",
+      "connectButtonShort": "Lumikizani projekiti ya Foundry",
+      "addButton": "Onjezerani Gwero Lanu",
+      "addAnother": "Onjezerani kulumikizana kwina",
+      "noSources": "Palibe magwero apadera amene anakonzedwa.",
+      "removeSource": "Chotsani gwero",
+      "confirmRemove": "Chotsani?",
+      "sourceConnected": "gwero lapadera layikidwa",
+      "sourcesConnected": "magwero apadera ayikidwa",
+      "backToAgents": "Bwererani",
+      "discoveredAgents": "Oimira omwe apezeka",
+      "viewConnection": "Onani tsatanetsatane wa kulumikizana",
+      "edit": "Sinthani",
+      "noAgentsPublished": "Palibe oimira olembedwa",
+      "connectedOn": "Yalumikizidwa {date}",
+      "disconnectSource": "Dulani kulumikizako gwero ili",
+      "confirmDisconnect": "Dinani kachiwiri kuti mutsimikize",
+      "loadingAgents": "Oimira akuyikidwa...",
+      "noAgentsFound": "Palibe oimira apezeka mu projekiti iyi",
+      "noAgentsFoundHint": "Onetsetsani kuti oimira alembedwa ndipo muli ndi udindo wa Azure AI User mu projekiti iyi.",
+      "refresh": "Limbikitsani",
+      "refreshAgents": "Limbikitsani oimira",
+      "technicalDetails": "Zambiri zaukadaulo",
+      "agentCountLabel": "Oimira {count}",
+      "disconnectedToast": "Yadulidwa {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Ndondomeko ya Chinsinsi ndi Kuteteza Deta",

@@ -381,7 +381,59 @@
     "delete": "حذف",
     "noCustomAgentsYet": "لا يوجد وكلاء مخصصون بعد.",
     "noOrgAgentsConfigured": "لم يتم تكوين وكلاء المنظمة.",
-    "validationFailed": "فشل التحقق"
+    "validationFailed": "فشل التحقق",
+    "addAgentSource": "إضافة مصدر مخصص",
+    "connectFoundryProject": "ربط مشروع Microsoft Azure Foundry",
+    "connectFoundryDescription": "اكتشف الوكلاء من مشروع Azure Foundry لمكتب أو فريق آخر. ستتمكن فقط من رؤية الوكلاء الذين لديك صلاحية الوصول إليهم.",
+    "foundryProjectPath": "مسار مشروع Foundry",
+    "foundryProjectPathHelp": "اطلب من مسؤول مشروع Foundry الخاص بك، أو انقر على 'الإدخال اليدوي' لملء كل حقل بشكل منفصل.",
+    "copyFormat": "التنسيق",
+    "nameLabel": "الاسم",
+    "namePlaceholder": "مثال: مكتب أمستردام، أبحاث جنيف",
+    "pathRequired": "الصق مسار مورد مشروع Foundry.",
+    "pathInvalidFormat": "هذا لا يبدو كمسار مورد. يجب أن يبدأ بـ /subscriptions/...",
+    "connectionFailed": "تعذر الوصول إلى هذا المشروع. تحقق من صحة المسار وتأكد من أنّ لديك الصلاحية.",
+    "connectionSuccessAgents": "تم الاتصال — تم العثور على {count} وكيل",
+    "connectionSuccessEmpty": "تم الاتصال، لكن لم يتم العثور على أي وكلاء. قد تحتاج إلى دور مستخدم Azure AI على هذا المشروع لرؤية وكلائه.",
+    "checkingConnection": "جارٍ التحقق من الاتصال...",
+    "connect": "اتصال",
+    "save": "حفظ",
+    "editConnection": "تعديل الاتصال",
+    "sourceName": "اسم المصدر",
+    "sourceNamePlaceholder": "مكتب أمستردام",
+    "sourceNameRequired": "اسم المصدر مطلوب.",
+    "resourcePath": "مسار المورد",
+    "resourcePathRequired": "مسار المورد مطلوب.",
+    "resourcePathHelp": "مسار مورد ARM لمشروع Foundry. اطلب هذه القيمة من المسؤول الخاص بك.",
+    "invalidResourcePathFormat": "يجب أن يبدأ مسار المورد بـ /subscriptions/...",
+    "validatingSource": "جاري اكتشاف الوكلاء...",
+    "sourceValidatedEmpty": "المصدر صالح، لكن لم يتم العثور على أي وكلاء. قد لا تملك صلاحية الوصول للوكلاء في هذا المشروع.",
+    "invalidSource": "تعذر الوصول إلى مسار المورد هذا. تحقق من صحة المسار وصلاحياتك.",
+    "addSource": "إضافة مصدر",
+    "removeSource": "إزالة المصدر",
+    "labelSubscription": "الاشتراك",
+    "labelFoundryAccount": "حساب Foundry",
+    "labelProject": "المشروع",
+    "tooltipSubscription": "اشتراك Azure الذي يحتوي على حساب Foundry. إذا لم تكن متأكدًا، اسأل المسؤول عن الاشتراك الذي يستخدمه فريقك.",
+    "tooltipFoundryAccount": "حساب Azure AI Services الذي يوجد به مشروع Foundry. عادةً ما يكون لكل مكتب أو فريق حسابه الخاص.",
+    "tooltipProject": "المشروع ينظم الوكلاء ضمن الحساب. معظم الحسابات تحتوي على مشروع 'افتراضي' واحد.",
+    "foundryProjectLabel": "مشروع Foundry",
+    "enterManually": "الإدخال اليدوي",
+    "browseResources": "تصفح الموارد",
+    "subscriptionIdLabel": "معرف الاشتراك",
+    "resourceGroupLabel": "مجموعة الموارد",
+    "accountNameLabel": "اسم الحساب",
+    "projectNameLabel": "اسم المشروع",
+    "loadingSubscriptions": "جارٍ تحميل الاشتراكات...",
+    "selectSubscription": "اختر اشتراكًا...",
+    "loadingAccounts": "جارٍ تحميل الحسابات...",
+    "noAccountsFound": "لم يتم العثور على أي حسابات Foundry في هذا الاشتراك.",
+    "selectAccount": "اختر حسابًا...",
+    "loadingProjects": "جارٍ تحميل المشاريع...",
+    "noProjectsFound": "لم يتم العثور على مشاريع. سيتم استخدام \"default\".",
+    "selectAllRequired": "يرجى اختيار اشتراك وحساب ومشروع.",
+    "subscriptionRequired": "اختر اشتراكاً",
+    "accountRequired": "اختر حساب Foundry"
   },
   "Quick Actions": "إجراءات سريعة",
   "Type / in chat to access your prompts": "اكتب / في الدردشة للوصول إلى مطالباتك",
@@ -538,7 +590,10 @@
     "keepEditing": "متابعة التحرير",
     "yes": "نعم",
     "no": "لا",
-    "beta": "تجريبي"
+    "beta": "تجريبي",
+    "copied": "تم النسخ!",
+    "clear": "مسح",
+    "undo": "تراجع"
   },
   "chat": {
     "downloadAudio": "تنزيل الصوت",
@@ -638,13 +693,90 @@
     "stopGenerationDontAskAgainButton": "عدم السؤال مرة أخرى عند الإيقاف بواسطة الزر",
     "stopGenerationDontAskAgainKeyboard": "عدم السؤال مرة أخرى عند الإيقاف بواسطة لوحة المفاتيح",
     "generateResponseButton": "توليد استجابة",
-    "downloadResponse": "تنزيل الرد"
+    "downloadResponse": "تنزيل الرد",
+    "activity": {
+      "callingTool": "يتم استدعاء الأداة…",
+      "callingService": "يتم استدعاء الخدمة الخارجية…",
+      "usingNamedTool": "يتم استخدام {tool}…",
+      "usingNamedToolWithService": "يتم استخدام {tool} على {service}…",
+      "searchingWeb": "يتم البحث في الإنترنت…",
+      "searchingFiles": "يتم البحث في الملفات…",
+      "runningCode": "يتم تشغيل الكود…",
+      "generatingImage": "يتم إنشاء الصورة…",
+      "listingTools": "يتم البحث عن الأدوات المتاحة…",
+      "analyzingFiles": "يتم تحليل ملفاتك…",
+      "searchingKnowledge": "يتم البحث في قاعدة المعرفة…",
+      "cancellingPriorTool": "إلغاء طلب الأداة السابق…"
+    },
+    "toolSummary": {
+      "usedTools": "تم استخدام {count, plural, one {أداة واحدة} other {{count} أدوات}}",
+      "failedCount": "{count} فشل",
+      "statusApproved": "تمت الموافقة",
+      "statusAutoApproved": "تمت الموافقة تلقائياً",
+      "statusAutoDenied": "تم الرفض تلقائياً",
+      "statusFailed": "فشل",
+      "statusIncomplete": "غير مكتمل",
+      "viaService": "عبر {service}"
+    },
+    "consent": {
+      "authorizeRequired": "مطلوب التفويض",
+      "authorizeService": "فوِّض {service}",
+      "descriptionGeneric": "يحتاج هذا الوكيل إلى إذنك للوصول إلى مورد محمي. تتم إدارة تسجيل دخولك من خلال الخدمة الأصلية ولا يتم تخزينه هنا.",
+      "descriptionWithService": "يحتاج هذا الوكيل إلى إذنك للوصول إلى {service}. تتم إدارة تسجيل دخولك في {service} من خلال {service} نفسه، ولا يتم تخزينه هنا.",
+      "signInIncompleteGeneric": "لم يكتمل تسجيل الدخول",
+      "signInIncompleteForService": "لم يكتمل تسجيل الدخول إلى {service}",
+      "signInIncompleteDescriptionGeneric": "يبدو أن التفويض لم يكتمل. تأكد من إتمام تسجيل الدخول في النافذة الأخرى، ثم اضغط على متابعة مرة أخرى.",
+      "signInIncompleteDescription": "يبدو أن التفويض لـ {service} لم يكتمل. تأكد من إتمام تسجيل الدخول في النافذة الأخرى، ثم اضغط على متابعة مرة أخرى.",
+      "authorizeButton": "فوِّض",
+      "reauthorizeButton": "فوِّض من جديد",
+      "continueButton": "متابعة",
+      "confirmingButton": "جاري التأكيد…",
+      "authorizeHint": "فوّض، ثم عد إلى هنا واضغط متابعة. لإلغاء التفويض لاحقاً، سجل الخروج من {service} مباشرة — نحن لا نحتفظ بالرمز.",
+      "authorizeHintGeneric": "فوّض، ثم عد إلى هنا واضغط متابعة. لإلغاء التفويض لاحقًا، سجل الخروج من الخدمة الأصلية مباشرة — نحن لا نحتفظ بالرمز.",
+      "continueHint": "عند انتهاء التفويض في النافذة الأخرى، اضغط متابعة.",
+      "confirmingHint": "يتم تأكيد التفويض واستكمال الطلب…",
+      "resendHint": "بعد التفويض، أرسل رسالتك مرة أخرى للمتابعة.",
+      "resetTooltip": "إعادة تعيين جميع تفضيلات الموافقة التلقائية للأدوات في هذه المحادثة. سيتم طلب الموافقة للأدوات مستقبلاً من جديد.",
+      "autoApproveAllIndicator": "الموافقة التلقائية لجميع الأدوات",
+      "autoApproveCountIndicator": "{count, plural, one {جاري الموافقة التلقائية على أداة واحدة} other {جاري الموافقة التلقائية على {count} أدوات}}",
+      "resetShort": "إعادة تعيين",
+      "approvalRequired": "موافقة الأداة مطلوبة",
+      "approvalForService": "الموافقة على الأداة لـ {service}",
+      "approvalDescriptionGeneric": "يرغب الوكيل في تشغيل أداة تتطلب موافقتك قبل المتابعة.",
+      "approvalDescriptionWithTool": "يرغب الوكيل في تشغيل أداة {tool}، والتي تتطلب موافقتك قبل المتابعة.",
+      "runToolTitle": "تشغيل <code>{tool}</code>؟",
+      "runToolGeneric": "تشغيل هذه الأداة؟",
+      "viaService": "عبر {service}",
+      "approveButton": "الموافقة",
+      "approveOptionsLabel": "خيارات الموافقة",
+      "approveOnce": "الموافقة لمرة واحدة",
+      "alwaysApproveThisTool": "الموافقة دائماً على هذه الأداة",
+      "alwaysApproveAllTools": "الموافقة دائماً على جميع الأدوات",
+      "denyButton": "رفض",
+      "keyboardHint": "{modifier}+⏎ للموافقة · esc للرفض",
+      "submittingState": "جاري إرسال قرارك",
+      "approvedState": "تمت الموافقة — تم استئناف الوكيل",
+      "deniedState": "تم الرفض",
+      "submittingApproval": "جاري الموافقة واستئناف الوكيل...",
+      "submittingDenial": "جاري إرسال الرفض..."
+    },
+    "openImage": "فتح الصورة",
+    "copyMessage": "نسخ الرسالة",
+    "stopAudio": "إيقاف الصوت",
+    "generatingAudio": "جاري إنشاء الصوت...",
+    "listen": "استمع",
+    "processingAudio": "جاري معالجة الصوت...",
+    "ttsError": "حدث خطأ أثناء إنشاء الصوت. يرجى المحاولة مرة أخرى.",
+    "unsupportedMessageType": "خطأ في عرض الرسالة: نوع رسالة غير مدعوم"
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
     "expandSidebar": "توسيع الشريط الجانبي",
     "quickActionsTitle": "الإجراءات السريعة",
-    "quickActions": "الإجراءات السريعة"
+    "quickActions": "الإجراءات السريعة",
+    "expandFolder": "توسيع المجلد {name}",
+    "collapseFolder": "طي المجلد {name}",
+    "folderOptions": "خيارات {name}"
   },
   "prompts": {
     "buildReusablePrompts": "بناء موجهات قابلة لإعادة الاستخدام بمساعدة الذكاء الاصطناعي",
@@ -960,7 +1092,9 @@
     "behaviorSection": "السلوك",
     "resetChatSettings": "إعادة تعيين إعدادات المحادثة",
     "resetChatSettingsConfirmTitle": "هل ترغب في إعادة تعيين إعدادات المحادثة؟",
-    "resetChatSettingsConfirmMessage": "سيؤدي ذلك إلى استعادة الإعدادات الافتراضية لكل ما هو موجود في هذه اللوحة: درجة الحرارة، التعليمات المخصصة، عنك، رد النموذج، سرعة البث، تحويل النص إلى كلام، الملفات النشطة، والتأكيدات. لن يؤثر هذا على محادثاتك."
+    "resetChatSettingsConfirmMessage": "سيؤدي ذلك إلى استعادة الإعدادات الافتراضية لكل ما هو موجود في هذه اللوحة: درجة الحرارة، التعليمات المخصصة، عنك، رد النموذج، سرعة البث، تحويل النص إلى كلام، الملفات النشطة، والتأكيدات. لن يؤثر هذا على محادثاتك.",
+    "customInstructionsLabel": "تعليمات مخصصة*",
+    "defaultTemperatureLabel": "درجة الحرارة الافتراضية*"
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1076,7 +1210,8 @@
       "agents": "الوكلاء"
     },
     "sections": {
-      "baseModels": "النماذج الأساسية"
+      "baseModels": "النماذج الأساسية",
+      "allModels": "جميع النماذج ({count})"
     },
     "maintainedBy": "يديره",
     "agents": {
@@ -1150,7 +1285,19 @@
       "reasoning": "قدرات استدلال موسعة للمشكلات المعقدة",
       "omni": "نموذج متعدد الوسائط بقدرات شاملة",
       "agent": "وكيل بأدوات فورية وإمكانية الوصول إلى الويب"
-    }
+    },
+    "hide": "إخفاء من القائمة",
+    "hideConfirmTitle": "إخفاء \"{name}\"؟",
+    "hideConfirmMessage": "سيتم إزالته من قائمتك لكن لن يتم حذفه. يمكنك استعادته في أي وقت من قسم العناصر المخفية.",
+    "hideConfirm": "إخفاء",
+    "hiddenToast": "تم إخفاء \"{name}\"",
+    "hidden": {
+      "title": "العناصر المخفية ({count})",
+      "restore": "استعادة"
+    },
+    "title": "اختر نموذجاً",
+    "modelsDescription": "اختر نموذج ذكاء اصطناعي لمحادثتك. لكل نموذج ميزات مختلفة — اختر واحداً لعرض التفاصيل.",
+    "recommended": "موصى به"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "ديسمبر 2025",
       "description": "نسخة متخصصة من GPT-5.2 محسّنة للتفاعلات الحوارية والذكاء العاطفي. تتفوق في التواصل المتعاطف، والكتابة الإبداعية، وتوليد الأفكار، والحوار الطبيعي. مثالية للمحادثات غير الرسمية، وبيئات الاستشارة، والمهام التي تتطلب وعيًا عاطفيًا."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "أقوى نموذج من Anthropic. مناسب للكتابة المطولة، والبحث، والمهام التي تتطلب تفكيراً دقيقاً.",
+      "knowledgeCutoff": "فبراير 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "نموذج Claude متوازن. مناسب للكتابة اليومية، والتحليل، والبرمجة مع استجابات سريعة.",
+      "knowledgeCutoff": "فبراير 2026"
     }
   },
   "searchMode": {
@@ -1663,7 +1820,9 @@
     "cancelledBody": "تم الإلغاء بواسطة المستخدم",
     "transientBody": "يرجى المحاولة مرة أخرى",
     "authFailedBody": "يرجى تسجيل الدخول مجددًا",
-    "rateLimitedBody": "الخدمة ممتلئة حالياً، يرجى المحاولة بعد قليل"
+    "rateLimitedBody": "الخدمة ممتلئة حالياً، يرجى المحاولة بعد قليل",
+    "loadingAttempt": "(محاولة {count})",
+    "transcriptLabel": "[نص مفرغ: {filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "أضف تعليماتك الشخصية لتخصيص كيفية استجابة الذكاء الاصطناعي. يتم دمج هذه التعليمات مع إرشادات السلوك الأساسية لضمان استجابات مفيدة ودقيقة وآمنة.",
   "Tip: Type \"/\" to select from saved prompt templates_": "نصيحة: اكتب \"/\" لاختيار قالب طلب محفوظ.",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "تجريبي — تم بناؤه بالتعاون المباشر مع المستخدمين المتقدمين في MSF. ليس للاستخدام العام.",
       "createButton": "إنشاء وكيل مخصص"
     },
-    "selectAgentPrompt": "حدد وكيلاً لعرض التفاصيل"
+    "selectAgentPrompt": "حدد وكيلاً لعرض التفاصيل",
+    "description": "وكلاء ذكاء اصطناعي متخصصون لمهام محددة. يتم إدارة الوكلاء الافتراضيين مركزياً؛ أضف مصادر مخصصة لاكتشاف وكلاء من مشاريع Foundry أخرى.",
+    "regionAgents": {
+      "us": "وكلاء منطقة الولايات المتحدة",
+      "eu": "وكلاء منطقة الاتحاد الأوروبي",
+      "default": "وكلاء المنطقة"
+    },
+    "officeAgents": {
+      "suffix": "الوكلاء"
+    },
+    "agentSources": {
+      "title": "اتصالات Foundry",
+      "description": "اتصل بمشاريع Foundry أخرى لاكتشاف وكلائها.",
+      "connectButton": "الاتصال بمشروع Microsoft Azure Foundry",
+      "connectButtonShort": "الاتصال بمشروع Foundry",
+      "addButton": "إضافة مصدر مخصص",
+      "addAnother": "إضافة اتصال آخر",
+      "noSources": "لم يتم إعداد أي مصادر مخصصة.",
+      "removeSource": "إزالة المصدر",
+      "confirmRemove": "إزالة؟",
+      "sourceConnected": "مصدر مخصص متصل",
+      "sourcesConnected": "مصادر مخصصة متصلة",
+      "backToAgents": "عودة",
+      "discoveredAgents": "الوكلاء المكتشفون",
+      "viewConnection": "عرض تفاصيل الاتصال",
+      "edit": "تعديل",
+      "noAgentsPublished": "لم يتم نشر أي وكلاء",
+      "connectedOn": "تم الاتصال في {date}",
+      "disconnectSource": "قطع اتصال هذا المصدر",
+      "confirmDisconnect": "انقر مرة أخرى للتأكيد",
+      "loadingAgents": "جاري تحميل الوكلاء...",
+      "noAgentsFound": "لم يتم العثور على وكلاء في هذا المشروع",
+      "noAgentsFoundHint": "تأكد من أن الوكلاء منشورون ولديك دور Azure AI User في هذا المشروع.",
+      "refresh": "تحديث",
+      "refreshAgents": "تحديث الوكلاء",
+      "technicalDetails": "تفاصيل تقنية",
+      "agentCountLabel": "{count} وكلاء",
+      "disconnectedToast": "تم قطع الاتصال بـ {name}"
+    }
   },
   "privacy": {
     "policyTitle": "سياسة الخصوصية وحماية البيانات",

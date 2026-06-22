@@ -385,7 +385,59 @@
     "delete": "Ҳазф кардан",
     "noCustomAgentsYet": "Ҳоло ягон агенти фармоишӣ нест.",
     "noOrgAgentsConfigured": "Ягон агенти ташкилотӣ танзим нашудааст.",
-    "validationFailed": "Санҷиш ноком шуд"
+    "validationFailed": "Санҷиш ноком шуд",
+    "addAgentSource": "Илова кардани манбаи фармоишӣ",
+    "connectFoundryProject": "Пайваст кардани лоиҳаи Microsoft Azure Foundry",
+    "connectFoundryDescription": "Агентҳоро аз лоиҳаи Azure Foundry-и дафтари дигар ё гурӯҳ пайдо намоед. Танҳо агентҳое намоиш дода мешаванд, ки шумо иҷозати дастрасӣ доред.",
+    "foundryProjectPath": "Роҳи лоиҳаи Foundry",
+    "foundryProjectPathHelp": "Аз маъмури лоиҳаи Foundry пурсед ё 'Дастӣ ворид кардан'-ро зер кунед, то ҳар майдонро ҷудогона пур кунед.",
+    "copyFormat": "Формат",
+    "nameLabel": "Ном",
+    "namePlaceholder": "масалан, идораи Амстердам, Тадкикоти Женева",
+    "pathRequired": "Роҳи манбаи лоиҳаи Foundry-ро ворид намоед.",
+    "pathInvalidFormat": "Ин ба роҳи манбаъ монанд нест. Он бояд бо /subscriptions/... оғоз шавад.",
+    "connectionFailed": "Ин лоиҳа дастнорас аст. Санҷед, ки роҳ дуруст аст ва шумо дастрасӣ доред.",
+    "connectionSuccessAgents": "Пайваст шуд — {count} агент ёфт шуд",
+    "connectionSuccessEmpty": "Пайваст шуд, аммо ягон агент ёфт нашуд. Шояд ба шумо нақши Azure AI User лозим аст, то агентҳоро бинед.",
+    "checkingConnection": "Пайвастшавиро санҷиш дорем...",
+    "connect": "Пайваст кардан",
+    "save": "Захира кардан",
+    "editConnection": "Таҳрири пайвастшавӣ",
+    "sourceName": "Номи манбаъ",
+    "sourceNamePlaceholder": "Идораи Амстердам",
+    "sourceNameRequired": "Номи манбаъ лозим аст.",
+    "resourcePath": "Роҳи манбаъ",
+    "resourcePathRequired": "Роҳи манбаъ лозим аст.",
+    "resourcePathHelp": "Роҳи манбаи ARM ба лоиҳаи Foundry. Аз маъмури худ ин маълумотро пурсед.",
+    "invalidResourcePathFormat": "Роҳи манбаъ бояд бо /subscriptions/... оғоз шавад.",
+    "validatingSource": "Агентҳоро муайян менамоем...",
+    "sourceValidatedEmpty": "Манбаъ дуруст аст, вале ягон агент ёфт нашуд. Шояд шумо ба агентҳои ин лоиҳа дастрасӣ надошта бошед.",
+    "invalidSource": "Ба ин роҳи манбаъ дастрасӣ надорем. Роҳ ва иҷозатҳоро санҷед.",
+    "addSource": "Иловаи манбаъ",
+    "removeSource": "Ҳузфи манбаъ",
+    "labelSubscription": "Обуншавӣ",
+    "labelFoundryAccount": "Ҳисоби Foundry",
+    "labelProject": "Лоиҳа",
+    "tooltipSubscription": "Обуншавии Azure, ки ҳисоби Foundry-ро дар бар мегирад. Агар мутмаин нестед, аз маъмури худ пурсед, кадом обуншавиро истифода мебарад.",
+    "tooltipFoundryAccount": "Ҳисоби Azure AI Services, ки лоиҳаи Foundry дар он ҷойгир шудааст. Одатан ҳар идора ё гурӯҳ ҳисоби худро дорад.",
+    "tooltipProject": "Лоиҳа агентҳоро дар дохили ҳисоб ташкил медиҳад. Аксари ҳисобҳо танҳо як лоиҳаи 'default' доранд.",
+    "foundryProjectLabel": "Лоиҳаи Foundry",
+    "enterManually": "Дастӣ ворид кардан",
+    "browseResources": "Намоиши манбаъҳо",
+    "subscriptionIdLabel": "ID-и обуншавӣ",
+    "resourceGroupLabel": "Гурӯҳи манбаъ",
+    "accountNameLabel": "Номи ҳисоб",
+    "projectNameLabel": "Номи лоиҳа",
+    "loadingSubscriptions": "Боркунии обуншавиҳо...",
+    "selectSubscription": "Обуншавӣ интихоб кунед...",
+    "loadingAccounts": "Боркунии ҳисобҳо...",
+    "noAccountsFound": "Дар ин обуншавӣ ягон ҳисоби Foundry ёфт нашуд.",
+    "selectAccount": "Ҳисоб интихоб кунед...",
+    "loadingProjects": "Лоиҳаҳо бор мешаванд...",
+    "noProjectsFound": "Ягон лоиҳа ёфт нашуд. \"default\" истифода мешавад.",
+    "selectAllRequired": "Обуншавӣ, ҳисоб ва лоиҳа интихоб кунед.",
+    "subscriptionRequired": "Обунаро интихоб кунед",
+    "accountRequired": "Ҳисоби Foundry-ро интихоб кунед"
   },
   "Quick Actions": "Амалиёти зуд",
   "Type / in chat to access your prompts": "Аломати /-ро дар сӯҳбат ворид кунед, то ба фармонҳои худ дастрасӣ пайдо кунед",
@@ -641,7 +693,10 @@
     "keepEditing": "Таҳрирро идома диҳед",
     "yes": "Бале",
     "no": "Не",
-    "beta": "Бета"
+    "beta": "Бета",
+    "copied": "Нусхабардорӣ шуд!",
+    "clear": "Пок кардан",
+    "undo": "Баргардондан"
   },
   "terms": {
     "officialLanguages": "Версияи расмӣ:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Ҳангоми қатъ кардан бо тугма дигар напурсед",
     "stopGenerationDontAskAgainKeyboard": "Ҳангоми қатъ кардан бо клавиатура дигар напурсед",
     "generateResponseButton": "Генерасияи ҷавоб",
-    "downloadResponse": "Посухро зеркашӣ кунед"
+    "downloadResponse": "Посухро зеркашӣ кунед",
+    "activity": {
+      "callingTool": "Асбоб фаъол карда мешавад…",
+      "callingService": "Хизматрасонии берунӣ фаъол карда мешавад…",
+      "usingNamedTool": "Истифодаи {tool}…",
+      "usingNamedToolWithService": "Истифодаи {tool} дар {service}…",
+      "searchingWeb": "Ҷустуҷӯ дар веб…",
+      "searchingFiles": "Ҷустуҷӯ дар файлҳо…",
+      "runningCode": "Иҷрои код…",
+      "generatingImage": "Тасвир сохта мешавад…",
+      "listingTools": "Ҷустуҷӯи асбобҳои мавҷуд…",
+      "analyzingFiles": "Таҳлили файлҳои шумо…",
+      "searchingKnowledge": "Ҷустуҷӯ дар пойгоҳи дониш…",
+      "cancellingPriorTool": "Дархости қаблии асбоб қатъ карда мешавад…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# асбоб} other {# асбоб}} истифода шуд",
+      "failedCount": "{count} иҷро нашуд",
+      "statusApproved": "Тасдиқ шуд",
+      "statusAutoApproved": "Автоматӣ тасдиқ шуд",
+      "statusAutoDenied": "Автоматӣ рад карда шуд",
+      "statusFailed": "Ноком шуд",
+      "statusIncomplete": "Натамом",
+      "viaService": "тавассути {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Иҷозат лозим аст",
+      "authorizeService": "Иҷозат ба {service}",
+      "descriptionGeneric": "Ин агент барои дастрасӣ ба захираи ҳифзшуда иҷозати шуморо талаб мекунад. Воридшавии шумо аз тарафи хизматрасонии дахлдор идора карда мешавад ва дар ин ҷо сабт намешавад.",
+      "descriptionWithService": "Ин агент барои дастрасӣ ба {service} иҷозати шуморо талаб мекунад. Воридшавии шумо ба {service} аз ҷониби худи {service} идора карда мешавад ва дар ин ҷо сабт намешавад.",
+      "signInIncompleteGeneric": "Воридшавӣ анҷом нашуд",
+      "signInIncompleteForService": "Воридшавӣ ба {service} анҷом нашуд",
+      "signInIncompleteDescriptionGeneric": "Чунин ба назар мерасад, ки иҷозат ба охир нарасид. Бовар ҳосил кунед, ки воридшавиро дар ҷадвали дигар анҷом додед, баъд дубора \"Идома\"-ро ангушт занед.",
+      "signInIncompleteDescription": "Чунин ба назар мерасад, ки иҷозат ба {service} ба охир нарасид. Бовар ҳосил кунед, ки воридшавиро дар ҷадвали дигар анҷом додед, баъд дубора \"Идома\"-ро ангушт занед.",
+      "authorizeButton": "Иҷозат додан",
+      "reauthorizeButton": "Иҷозатро навсозӣ кунед",
+      "continueButton": "Идома",
+      "confirmingButton": "Тасдиқ шуда истодааст…",
+      "authorizeHint": "Иҷозат диҳед, баъд баргашта \"Идома\"-ро ангушт занед. Барои бекор кардан, мустақиман аз {service} хориҷ шавед — мо токенро нигоҳ намедорем.",
+      "authorizeHintGeneric": "Иҷозат диҳед, баъд баргашта \"Идома\"-ро ангушт занед. Барои бекор кардан, мустақиман аз хизматрасонии дахлдор хориҷ шавед — мо токенро нигоҳ намедорем.",
+      "continueHint": "Вақте ки иҷозат дар ҷадвали дигар анҷом ёфт, \"Идома\"-ро пахш кунед.",
+      "confirmingHint": "Иҷозатро тасдиқ карда, дархости шуморо идома медиҳем…",
+      "resendHint": "Пас аз иҷозат додан, паёматонро дубора фиристед, то идома диҳед.",
+      "resetTooltip": "Ҳама танзимоти иҷозати худкорро барои ин сӯҳбат барқарор кунед. Истифодаи минбаъдаи асбобҳо боз пуштпурсӣ мешавад.",
+      "autoApproveAllIndicator": "Ҳама асбобҳо худкор тасдиқ мешаванд",
+      "autoApproveCountIndicator": "{count, plural, one {# асбоб худкор тасдиқ мешавад} other {# асбоб худкор тасдиқ мешаванд}}",
+      "resetShort": "Барқарор кардан",
+      "approvalRequired": "Иҷозат барои асбоб лозим аст",
+      "approvalForService": "Иҷозат додан барои асбоб дар {service}",
+      "approvalDescriptionGeneric": "Агент мехоҳад асбоберо иҷро кунад, ки пеш аз идома иҷозати шуморо талаб мекунад.",
+      "approvalDescriptionWithTool": "Агент мехоҳад асбоби {tool}-ро иҷро кунад, ки пеш аз идома иҷозати шуморо талаб мекунад.",
+      "runToolTitle": "Иҷро кардани <code>{tool}</code>?",
+      "runToolGeneric": "Ин воситаро иҷро мекунед?",
+      "viaService": "тавассути {service}",
+      "approveButton": "Тасдиқ кардан",
+      "approveOptionsLabel": "Имконотҳои тасдиқ",
+      "approveOnce": "Як маротиба тасдиқ кунед",
+      "alwaysApproveThisTool": "Ҳамеша ин воситаро тасдиқ кунед",
+      "alwaysApproveAllTools": "Ҳамеша ҳамаи воситаҳоро тасдиқ кунед",
+      "denyButton": "Рад кардан",
+      "keyboardHint": "{modifier}+⏎ тасдиқ · esc рад",
+      "submittingState": "Қарори худро мефиристед",
+      "approvedState": "Тасдиқ шуд — агент идома ёфт",
+      "deniedState": "Рад шуд",
+      "submittingApproval": "Тасдиқ карда, агентро идома медиҳем…",
+      "submittingDenial": "Ради шуморо мефиристем…"
+    },
+    "openImage": "Тасвирро кушоед",
+    "copyMessage": "Паёмро нусхабардорӣ кунед",
+    "stopAudio": "Аудиоро боздоред",
+    "generatingAudio": "Аудио эҷод шуда истодааст...",
+    "listen": "Гӯш кардан",
+    "processingAudio": "Аудио коркард шуда истодааст...",
+    "ttsError": "Ҳангоми эҷоди аудио хато шуд. Лутфан бори дигар кӯшиш кунед.",
+    "unsupportedMessageType": "Хато ҳангоми намоиши паём: Намуди паём дастгирӣ намешавад"
   },
   "transcript": {
     "originalTranscript": "Нусхаи аслӣ",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Пинҳон кардани паҳлӯнов",
     "expandSidebar": "Кушодани паҳлӯнов",
     "quickActionsTitle": "Амалҳои зуд",
-    "quickActions": "Амалҳои зуд"
+    "quickActions": "Амалҳои зуд",
+    "expandFolder": "Папкаи {name}-ро васеъ кунед",
+    "collapseFolder": "Папкаи {name}-ро печонед",
+    "folderOptions": "Имконотҳои {name}"
   },
   "errors": {
     "somethingWentWrong": "Масъалае рӯй дод",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Рафтор",
     "resetChatSettings": "Танзимоти чатро барқарор кунед",
     "resetChatSettingsConfirmTitle": "Танзимоти чатро барқарор мекунед?",
-    "resetChatSettingsConfirmMessage": "Ин ҳама танзимотҳои ин панелро ба пешфарз бармегардонад: ҳарорат, дастурҳои инфиродӣ, Дар бораи Шумо, ҷавоби модел, суръати ҷараён, матн ба овоз, файлҳои фаъол ва тасдиқҳоро. Ин ба сӯҳбатҳои шумо таъсир намерасонад."
+    "resetChatSettingsConfirmMessage": "Ин ҳама танзимотҳои ин панелро ба пешфарз бармегардонад: ҳарорат, дастурҳои инфиродӣ, Дар бораи Шумо, ҷавоби модел, суръати ҷараён, матн ба овоз, файлҳои фаъол ва тасдиқҳоро. Ин ба сӯҳбатҳои шумо таъсир намерасонад.",
+    "customInstructionsLabel": "Дастурҳои фармоишӣ*",
+    "defaultTemperatureLabel": "Ҳарорати пешфарз*"
   },
   "emptyState": {
     "greeting": "Чӣ гуна кӯмак карда метавонам?",
@@ -1226,7 +1360,8 @@
       "agents": "Агентҳо"
     },
     "sections": {
-      "baseModels": "Моделҳои асосӣ"
+      "baseModels": "Моделҳои асосӣ",
+      "allModels": "Ҳама моделҳо ({count})"
     },
     "maintainedBy": "Муҳофизат карда мешавад аз ҷониби",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Тайёр",
       "reset": "Барқарор кардан",
       "resetTooltip": "Барқарор ба тартиби пешфарз"
-    }
+    },
+    "hide": "Аз рӯйхат пинҳон кунед",
+    "hideConfirmTitle": "\"{name}\"-ро пинҳон мекунед?",
+    "hideConfirmMessage": "Он аз рӯйхати шумо хориҷ мешавад, аммо нест намешавад. Шумо метавонед онро аз бахши Пинҳоншуда ҳар вақт барқарор кунед.",
+    "hideConfirm": "Пинҳон кунед",
+    "hiddenToast": "\"{name}\" пинҳон шуд",
+    "hidden": {
+      "title": "Пинҳоншуда ({count})",
+      "restore": "Барқарор кардан"
+    },
+    "title": "Моделро интихоб кунед",
+    "modelsDescription": "Барои сӯҳбати худ модели AI интихоб кунед. Ҳар як модел хусусиятҳои худро дорад — барои дидани тафсилот якеашро интихоб намоед.",
+    "recommended": "Тавсияшаванда"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Модели тези Claude бо арзиши кам, беҳтарин барои супоришҳои зуд. Мос барои пурсишҳои оддӣ, хулосабарорӣ ва барномаҳои ҳаҷми баланд.",
       "knowledgeCutoff": "Январи 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Қавитарин модели Anthropic. Барои навиштани матнҳои тӯлонӣ, тадқиқот ва корҳои фикрии дақиқ мувофиқ аст.",
+      "knowledgeCutoff": "Фев 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Модели Claude бо тавозун. Барои навишти ҳаррӯза, таҳлил ва коднависӣ бо ҷавобҳои зуд мувофиқ аст.",
+      "knowledgeCutoff": "Фев 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "Аз ҷониби корбар бекор шуд",
     "transientBody": "Лутфан дубора кӯшиш кунед",
     "authFailedBody": "Лутфан дубора ворид шавед",
-    "rateLimitedBody": "Хизматрасонӣ пурра аст, лутфан баъдтар дубора кӯшиш кунед"
+    "rateLimitedBody": "Хизматрасонӣ пурра аст, лутфан баъдтар дубора кӯшиш кунед",
+    "loadingAttempt": "(Кӯшиши {count})",
+    "transcriptLabel": "[Матн: {filename}]"
   },
   "documentTranslation": {
     "title": "Тарҷумаи ҳуҷҷат",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Озмоишӣ — ҳамкорӣ бо корбарони фаъол таҳия шудааст. Барои истифодаи умум нест.",
       "createButton": "Эҷод кардани агенти фармоишӣ"
     },
-    "selectAgentPrompt": "Барои дидани тафсилот агентро интихоб кунед"
+    "selectAgentPrompt": "Барои дидани тафсилот агентро интихоб кунед",
+    "description": "Агентҳои AI-и махсус барои вазифаҳои мушаххас. Агентҳои пешфарз мутамарказ идора мешаванд; манбаъҳои фармоишӣ илова кунед, то агентҳоро аз дигар лоиҳаҳои Foundry ёбед.",
+    "regionAgents": {
+      "us": "Агентони минтақаи ИМА",
+      "eu": "Агентони минтақаи ИА",
+      "default": "Агентҳои минтақа"
+    },
+    "officeAgents": {
+      "suffix": "Агентҳо"
+    },
+    "agentSources": {
+      "title": "Пайвастҳои Foundry",
+      "description": "Бо дигар лоиҳаҳои Foundry пайваст шавед, то агентҳояшонро пайдо кунед.",
+      "connectButton": "Лоиҳаи Microsoft Azure Foundry-ро пайваст кунед",
+      "connectButtonShort": "Лоиҳаи Foundry-ро пайваст кунед",
+      "addButton": "Манбаи фармоиширо илова кунед",
+      "addAnother": "Пайвасти дигар илова кунед",
+      "noSources": "Ҳеҷ манбаи фармоишӣ танзим нашудааст.",
+      "removeSource": "Манбаъро хориҷ кунед",
+      "confirmRemove": "Хориҷ мекунед?",
+      "sourceConnected": "манбаи фармоишӣ пайваст шуд",
+      "sourcesConnected": "манбаҳои фармоишӣ пайваст шуданд",
+      "backToAgents": "Бозгашт",
+      "discoveredAgents": "Агентҳои ёфтшуда",
+      "viewConnection": "Тафсилоти пайвастшавӣ",
+      "edit": "Таҳрир",
+      "noAgentsPublished": "Ягон агент нашр нашудааст",
+      "connectedOn": "Пайваст шуд {date}",
+      "disconnectSource": "Ин манбаъро ҷудо кунед",
+      "confirmDisconnect": "Барои тасдиқ боз як маротиба клик кунед",
+      "loadingAgents": "Агентҳо бор шуда истодаанд...",
+      "noAgentsFound": "Дар ин лоиҳа ягон агент ёфт нашуд",
+      "noAgentsFoundHint": "Бовар ҳосил кунед, ки агентҳо нашр шудаанд ва шумо дар ин лоиҳа нақши Azure AI User доред.",
+      "refresh": "Навсозӣ",
+      "refreshAgents": "Навсозии агентҳо",
+      "technicalDetails": "Тафсилоти техникӣ",
+      "agentCountLabel": "{count} агент",
+      "disconnectedToast": "{name} ҷудо шуд"
+    }
   },
   "privacy": {
     "policyTitle": "Сиёсати махфият ва ҳифзи маълумот",

@@ -381,7 +381,59 @@
     "delete": "Smazat",
     "noCustomAgentsYet": "Zatím žádní vlastní agenti.",
     "noOrgAgentsConfigured": "Nejsou nakonfigurováni žádní agenti organizace.",
-    "validationFailed": "Ověření selhalo"
+    "validationFailed": "Ověření selhalo",
+    "addAgentSource": "Přidat vlastní zdroj",
+    "connectFoundryProject": "Připojit projekt Microsoft Azure Foundry",
+    "connectFoundryDescription": "Objevte agenty z Azure Foundry projektu jiné kanceláře nebo týmu. Uvidíte pouze agenty, ke kterým máte oprávnění.",
+    "foundryProjectPath": "Cesta k projektu Foundry",
+    "foundryProjectPathHelp": "Požádejte správce vašeho projektu Foundry nebo klikněte na 'Zadat ručně' pro vyplnění jednotlivých polí.",
+    "copyFormat": "Formát",
+    "nameLabel": "Název",
+    "namePlaceholder": "např. kancelář Amsterdam, Ženeva Výzkum",
+    "pathRequired": "Vložte cestu ke zdroji projektu Foundry.",
+    "pathInvalidFormat": "Toto nevypadá jako cesta ke zdroji. Měla by začínat /subscriptions/...",
+    "connectionFailed": "Nepodařilo se spojit s projektem. Zkontrolujte správnost cesty a svá oprávnění.",
+    "connectionSuccessAgents": "Připojeno — nalezeno {count} agent(ů)",
+    "connectionSuccessEmpty": "Připojeno, ale žádní agenti nenalezeni. Abyste viděli agenty, možná potřebujete roli Azure AI User v tomto projektu.",
+    "checkingConnection": "Kontrola spojení…",
+    "connect": "Připojit",
+    "save": "Uložit",
+    "editConnection": "Upravit připojení",
+    "sourceName": "Název zdroje",
+    "sourceNamePlaceholder": "Kancelář Amsterdam",
+    "sourceNameRequired": "Je vyžadován název zdroje.",
+    "resourcePath": "Cesta ke zdroji",
+    "resourcePathRequired": "Cesta ke zdroji je povinná.",
+    "resourcePathHelp": "ARM cesta ke projektu Foundry. Požádejte o tuto hodnotu svého administrátora.",
+    "invalidResourcePathFormat": "Cesta ke zdroji musí začínat /subscriptions/...",
+    "validatingSource": "Vyhledávání agentů…",
+    "sourceValidatedEmpty": "Platný zdroj, ale žádní agenti nenalezeni. Možná nemáte přístup k agentům v tomto projektu.",
+    "invalidSource": "Nepodařilo se získat přístup k této cestě ke zdroji. Zkontrolujte cestu a svá oprávnění.",
+    "addSource": "Přidat zdroj",
+    "removeSource": "Odebrat zdroj",
+    "labelSubscription": "Předplatné",
+    "labelFoundryAccount": "Foundry účet",
+    "labelProject": "Projekt",
+    "tooltipSubscription": "Azure předplatné, které obsahuje Foundry účet. Pokud si nejste jisti, zeptejte se administrátora, které předplatné využívá váš tým.",
+    "tooltipFoundryAccount": "Azure AI Services účet, kde je umístěn projekt Foundry. Každá kancelář nebo tým má obvykle svůj vlastní.",
+    "tooltipProject": "Projekt organizuje agenty v rámci účtu. Většina účtů má jeden „defaultní“ projekt.",
+    "foundryProjectLabel": "Projekt Foundry",
+    "enterManually": "Zadat ručně",
+    "browseResources": "Procházet zdroje",
+    "subscriptionIdLabel": "ID předplatného",
+    "resourceGroupLabel": "Skupina zdrojů",
+    "accountNameLabel": "Název účtu",
+    "projectNameLabel": "Název projektu",
+    "loadingSubscriptions": "Načítání předplatných…",
+    "selectSubscription": "Vyberte předplatné…",
+    "loadingAccounts": "Načítání účtů…",
+    "noAccountsFound": "V tomto předplatném nebyly nalezeny žádné Foundry účty.",
+    "selectAccount": "Vyberte účet…",
+    "loadingProjects": "Načítání projektů…",
+    "noProjectsFound": "Nebyly nalezeny žádné projekty. Používá se \"defaultní\".",
+    "selectAllRequired": "Vyberte předplatné, účet a projekt.",
+    "subscriptionRequired": "Vyberte předplatné",
+    "accountRequired": "Vyberte účet Foundry"
   },
   "Quick Actions": "Rychlé akce",
   "Type / in chat to access your prompts": "Napište / v chatu pro přístup k vašim výzvám",
@@ -538,7 +590,10 @@
     "keepEditing": "Pokračovat v úpravách",
     "yes": "Ano",
     "no": "Ne",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Zkopírováno!",
+    "clear": "Vymazat",
+    "undo": "Zpět"
   },
   "errors": {
     "unexpectedErrorOccurred": "Došlo k neočekávané chybě",
@@ -692,13 +747,90 @@
     "stopGenerationDontAskAgainButton": "Při zastavení tlačítkem se již neptat",
     "stopGenerationDontAskAgainKeyboard": "Při zastavení klávesnicí se již neptat",
     "generateResponseButton": "Vygenerovat odpověď",
-    "downloadResponse": "Stáhnout odpověď"
+    "downloadResponse": "Stáhnout odpověď",
+    "activity": {
+      "callingTool": "Volání nástroje…",
+      "callingService": "Volání externí služby…",
+      "usingNamedTool": "Používá se {tool}…",
+      "usingNamedToolWithService": "Používá se {tool} na {service}…",
+      "searchingWeb": "Vyhledávání na webu…",
+      "searchingFiles": "Prohledávání souborů…",
+      "runningCode": "Spouštění kódu…",
+      "generatingImage": "Generování obrázku…",
+      "listingTools": "Vyhledávání dostupných nástrojů…",
+      "analyzingFiles": "Analýza vašich souborů…",
+      "searchingKnowledge": "Vyhledávání v znalostní bázi…",
+      "cancellingPriorTool": "Rušení předchozího požadavku na nástroj…"
+    },
+    "toolSummary": {
+      "usedTools": "Použito {count, plural, one {# nástroj} few {# nástroje} other {# nástrojů}}",
+      "failedCount": "{count} selhání",
+      "statusApproved": "Schváleno",
+      "statusAutoApproved": "Automaticky schváleno",
+      "statusAutoDenied": "Automaticky zamítnuto",
+      "statusFailed": "Selhalo",
+      "statusIncomplete": "Nedokončeno",
+      "viaService": "přes {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Vyžadováno ověření",
+      "authorizeService": "Ověřit {service}",
+      "descriptionGeneric": "Tento agent potřebuje vaše povolení k přístupu k zabezpečenému zdroji. Vaše přihlášení je spravováno nadřazenou službou a není uloženo zde.",
+      "descriptionWithService": "Tento agent potřebuje vaše povolení k přístupu ke službě {service}. Vaše přihlášení do {service} je spravováno samotnou službou {service}, nikoli zde.",
+      "signInIncompleteGeneric": "Přihlášení nebylo dokončeno",
+      "signInIncompleteForService": "Přihlášení do {service} nebylo dokončeno",
+      "signInIncompleteDescriptionGeneric": "Zdá se, že autorizace nebyla dokončena. Ujistěte se, že jste dokončili přihlášení v druhé záložce, pak znovu klikněte na Pokračovat.",
+      "signInIncompleteDescription": "Zdá se, že autorizace do {service} nebyla dokončena. Ujistěte se, že jste dokončili přihlášení v druhé záložce, pak znovu klikněte na Pokračovat.",
+      "authorizeButton": "Ověřit",
+      "reauthorizeButton": "Znovu ověřit",
+      "continueButton": "Pokračovat",
+      "confirmingButton": "Potvrzování…",
+      "authorizeHint": "Ověřte se, pak se vraťte sem a klikněte na Pokračovat. Pokud chcete později přístup zrušit, odhlaste se přímo ze služby {service} — token u nás není uložen.",
+      "authorizeHintGeneric": "Ověřte se, pak se vraťte sem a klikněte na Pokračovat. Pokud chcete později přístup zrušit, odhlaste se přímo z nadřazené služby — token u nás není uložen.",
+      "continueHint": "Po dokončení autorizace ve druhé záložce klikněte na Pokračovat.",
+      "confirmingHint": "Potvrzování autorizace a pokračování ve vašem požadavku…",
+      "resendHint": "Po ověření znovu odešlete svoji zprávu, abyste mohli pokračovat.",
+      "resetTooltip": "Obnoví všechna nastavení automatického schvalování nástrojů pro tuto konverzaci. Další použití nástrojů bude znovu vyžadovat schválení.",
+      "autoApproveAllIndicator": "Všechny nástroje jsou schvalovány automaticky",
+      "autoApproveCountIndicator": "{count, plural, one {Automaticky schvalován # nástroj} few {Automaticky schvalovány # nástroje} other {Automaticky schvalováno # nástrojů}}",
+      "resetShort": "Obnovit",
+      "approvalRequired": "Vyžadováno schválení nástroje",
+      "approvalForService": "Schválit nástroj pro {service}",
+      "approvalDescriptionGeneric": "Agent chce spustit nástroj, který vyžaduje vaše schválení před pokračováním.",
+      "approvalDescriptionWithTool": "Agent chce spustit nástroj {tool}, který vyžaduje vaše schválení před pokračováním.",
+      "runToolTitle": "Spustit <code>{tool}</code>?",
+      "runToolGeneric": "Spustit tento nástroj?",
+      "viaService": "přes {service}",
+      "approveButton": "Schválit",
+      "approveOptionsLabel": "Možnosti schválení",
+      "approveOnce": "Schválit jednorázově",
+      "alwaysApproveThisTool": "Vždy schválit tento nástroj",
+      "alwaysApproveAllTools": "Vždy schválit všechny nástroje",
+      "denyButton": "Zamítnout",
+      "keyboardHint": "{modifier}+⏎ schválit · esc zamítnout",
+      "submittingState": "Odesílání vašeho rozhodnutí",
+      "approvedState": "Schváleno — agent pokračuje",
+      "deniedState": "Zamítnuto",
+      "submittingApproval": "Schvaluji a pokračuji v práci agenta…",
+      "submittingDenial": "Odesílám vaše zamítnutí…"
+    },
+    "openImage": "Otevřít obrázek",
+    "copyMessage": "Kopírovat zprávu",
+    "stopAudio": "Zastavit zvuk",
+    "generatingAudio": "Generuji zvuk...",
+    "listen": "Poslechnout",
+    "processingAudio": "Zpracovávám zvuk...",
+    "ttsError": "Chyba při generování zvuku. Zkuste to prosím znovu.",
+    "unsupportedMessageType": "Chyba při zobrazení zprávy: Nepodporovaný typ zprávy"
   },
   "sidebar": {
     "collapseSidebar": "Sbalit postranní panel",
     "expandSidebar": "Rozbalit postranní panel",
     "quickActionsTitle": "Rychlé akce",
-    "quickActions": "Rychlé akce"
+    "quickActions": "Rychlé akce",
+    "expandFolder": "Rozbalit složku {name}",
+    "collapseFolder": "Sbalit složku {name}",
+    "folderOptions": "Možnosti složky {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Vytvářejte opakovaně použitelné výzvy s pomocí AI",
@@ -1014,7 +1146,9 @@
     "behaviorSection": "Chování",
     "resetChatSettings": "Obnovit nastavení chatu",
     "resetChatSettingsConfirmTitle": "Obnovit nastavení chatu?",
-    "resetChatSettingsConfirmMessage": "Tímto obnovíte výchozí nastavení všech položek v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nedotkne se to vašich konverzací."
+    "resetChatSettingsConfirmMessage": "Tímto obnovíte výchozí nastavení všech položek v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nedotkne se to vašich konverzací.",
+    "customInstructionsLabel": "Vlastní pokyny*",
+    "defaultTemperatureLabel": "Výchozí teplota*"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -1076,7 +1210,8 @@
       "agents": "Agenti"
     },
     "sections": {
-      "baseModels": "Základní modely"
+      "baseModels": "Základní modely",
+      "allModels": "Všechny modely ({count})"
     },
     "maintainedBy": "Spravováno",
     "agents": {
@@ -1150,7 +1285,19 @@
       "reasoning": "Rozšířené uvažování pro složité problémy",
       "omni": "Multimodální model se širokými schopnostmi",
       "agent": "Agent s nástroji v reálném čase a přístupem na web"
-    }
+    },
+    "hide": "Skrýt ze seznamu",
+    "hideConfirmTitle": "Skrýt „{name}“?",
+    "hideConfirmMessage": "Bude odstraněn ze seznamu, ale nebude smazán. Můžete jej kdykoli obnovit v sekci Skryté.",
+    "hideConfirm": "Skrýt",
+    "hiddenToast": "Skryto: „{name}“",
+    "hidden": {
+      "title": "Skryté ({count})",
+      "restore": "Obnovit"
+    },
+    "title": "Vyberte model",
+    "modelsDescription": "Vyberte AI model pro svou konverzaci. Každý model má jiné přednosti — vyberte jeden pro zobrazení podrobností.",
+    "recommended": "Doporučeno"
   },
   "models": {
     "gpt_4_1": {
@@ -1227,6 +1374,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Prosinec 2025",
       "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Nejsilnější model od Anthropic. Vhodný pro dlouhé psaní, výzkum a úkoly, které vyžadují pečlivé uvažování.",
+      "knowledgeCutoff": "únor 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Vyvážený model Claude. Vhodný pro každodenní psaní, analýzu a rychlé programování.",
+      "knowledgeCutoff": "únor 2026"
     }
   },
   "searchMode": {
@@ -1663,7 +1820,9 @@
     "cancelledBody": "Zrušeno uživatelem",
     "transientBody": "Zkuste to prosím znovu",
     "authFailedBody": "Přihlaste se prosím znovu",
-    "rateLimitedBody": "Služba je plně vytížena, zkuste to za chvíli znovu"
+    "rateLimitedBody": "Služba je plně vytížena, zkuste to za chvíli znovu",
+    "loadingAttempt": "(pokus {count})",
+    "transcriptLabel": "[Přepis: {filename}]"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Přidejte své vlastní pokyny pro přizpůsobení odpovědí AI. Tyto pokyny se kombinují se základními zásadami chování, které zajišťují užitečné, přesné a bezpečné odpovědi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Napište „/“ pro výběr z uložených šablon zadání.",
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Experimentální — vytvořeno v přímé spolupráci s pokročilými uživateli MSF. Není určeno pro běžné použití.",
       "createButton": "Vytvořit vlastního agenta"
     },
-    "selectAgentPrompt": "Vyberte agenta pro zobrazení podrobností"
+    "selectAgentPrompt": "Vyberte agenta pro zobrazení podrobností",
+    "description": "Specializovaní AI agenti pro konkrétní úkoly. Výchozí agenti jsou spravováni centrálně; přidejte vlastní zdroje a objevte agenty z dalších Foundry projektů.",
+    "regionAgents": {
+      "us": "Agenti pro region USA",
+      "eu": "Agenti pro region EU",
+      "default": "Regionální agenti"
+    },
+    "officeAgents": {
+      "suffix": "Agenti"
+    },
+    "agentSources": {
+      "title": "Připojení Foundry",
+      "description": "Připojte se k dalším projektům Foundry a objevujte jejich agenty.",
+      "connectButton": "Připojit projekt Microsoft Azure Foundry",
+      "connectButtonShort": "Připojit projekt Foundry",
+      "addButton": "Přidat vlastní zdroj",
+      "addAnother": "Přidat další připojení",
+      "noSources": "Žádné vlastní zdroje nejsou nastaveny.",
+      "removeSource": "Odebrat zdroj",
+      "confirmRemove": "Odebrat?",
+      "sourceConnected": "vlastní zdroj připojen",
+      "sourcesConnected": "vlastní zdroje připojeny",
+      "backToAgents": "Zpět",
+      "discoveredAgents": "Nalezení agenti",
+      "viewConnection": "Zobrazit podrobnosti připojení",
+      "edit": "Upravit",
+      "noAgentsPublished": "Žádní agenti nebyli publikováni",
+      "connectedOn": "Připojeno {date}",
+      "disconnectSource": "Odpojit tento zdroj",
+      "confirmDisconnect": "Klikněte znovu pro potvrzení",
+      "loadingAgents": "Načítání agentů...",
+      "noAgentsFound": "V tomto projektu nebyli nalezeni žádní agenti",
+      "noAgentsFoundHint": "Ujistěte se, že agenti jsou publikováni a máte roli Azure AI User v tomto projektu.",
+      "refresh": "Obnovit",
+      "refreshAgents": "Obnovit agenty",
+      "technicalDetails": "Technické detaily",
+      "agentCountLabel": "{count} agentů",
+      "disconnectedToast": "Odpojeno {name}"
+    }
   },
   "privacy": {
     "policyTitle": "Zásady ochrany osobních údajů a ochrana dat",

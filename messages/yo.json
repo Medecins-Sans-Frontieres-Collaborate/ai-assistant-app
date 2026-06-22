@@ -385,7 +385,59 @@
     "delete": "Pa rẹ́",
     "noCustomAgentsYet": "Kò sí aṣojú àdáni títí di ìsinsin yìí.",
     "noOrgAgentsConfigured": "Kò sí aṣojú àjọ tí a ṣètò.",
-    "validationFailed": "Ìfọwọ́sí kùnà"
+    "validationFailed": "Ìfọwọ́sí kùnà",
+    "addAgentSource": "Ṣafikun Orisun Àtọwọdọwọ",
+    "connectFoundryProject": "So Ẹrọ Microsoft Azure Foundry pọ",
+    "connectFoundryDescription": "Ṣawari awọn aṣoju lati ọfiisi tabi egbe miiran lori iṣẹ Azure Foundry. Awọn aṣoju ti o ni igbanilaaye si nikan ni iwọ yoo le ri.",
+    "foundryProjectPath": "Ọna Iṣẹ Foundry",
+    "foundryProjectPathHelp": "Beere lọwọ alabojuto iṣẹ Foundry rẹ, tabi tẹ 'Tẹ ọwọ' lati kun ọkọọkan.",
+    "copyFormat": "Fọmat",
+    "nameLabel": "Orukọ",
+    "namePlaceholder": "àpẹẹrẹ: Ọfiisi Amsterdam, Iwadi Geneva",
+    "pathRequired": "Lẹẹkọkọ ọna orisun iṣẹ Foundry.",
+    "pathInvalidFormat": "Eyi ko dabi ọna orisun. Ó gbọdọ Bẹrẹ pẹlu /subscriptions/...",
+    "connectionFailed": "A ko le wọle si iṣẹ yii. Ṣayẹwo pe ọna dara ati pe o ni iraye.",
+    "connectionSuccessAgents": "Ti sopọ — aṣoju {count} rí",
+    "connectionSuccessEmpty": "Ti sopọ, ṣugbọn ko si aṣoju tí a rí. O le nilo ipa Azure AI User lori iṣẹ yii lati ri awọn aṣoju rẹ.",
+    "checkingConnection": "Ṣayẹwo asopọ...",
+    "connect": "So pọ",
+    "save": "Fipamọ",
+    "editConnection": "Ṣatunkọ Asopọ",
+    "sourceName": "Orukọ Orisun",
+    "sourceNamePlaceholder": "Ọfiisi Amsterdam",
+    "sourceNameRequired": "Orukọ orisun jẹ dandan.",
+    "resourcePath": "Ọna Orisun",
+    "resourcePathRequired": "Ọna orisun jẹ dandan.",
+    "resourcePathHelp": "Ẹrọ ARM resource path si iṣẹ Foundry. Beere lọwọ alabojuto rẹ fun iye yìí.",
+    "invalidResourcePathFormat": "Ọna orisun gbọdọ bẹrẹ pẹlu /subscriptions/...",
+    "validatingSource": "N ṣàwárí awọn aṣoju...",
+    "sourceValidatedEmpty": "Orisun jẹ tọ, ṣugbọn ko si aṣoju tí a rí. O le ma ni iraye si awọn aṣoju inu iṣẹ yii.",
+    "invalidSource": "A ko le wọle si ọna orisun yii. Ṣayẹwo ọna ati awọn igbanilaaye rẹ.",
+    "addSource": "Ṣafikun Orisun",
+    "removeSource": "Yọ Orisun",
+    "labelSubscription": "Alábapin",
+    "labelFoundryAccount": "Akọọlẹ Foundry",
+    "labelProject": "Iṣẹ́",
+    "tooltipSubscription": "Azure subscription tí o ni akọọlẹ Foundry. Ti o ko ba mọ, beere lọwọ adájọ iṣẹ egbe rẹ.",
+    "tooltipFoundryAccount": "Akọọlẹ Azure AI Services níbi tí iṣẹ Foundry wà. Ọfiisi kọọkan tabi egbe ni tirẹ.",
+    "tooltipProject": "Iṣẹ́ ṣe atunto awọn aṣoju ninu akọọlẹ. Pupọ awọn akọọlẹ maa n ní iṣẹ 'default' kan ṣoṣo.",
+    "foundryProjectLabel": "Iṣẹ Foundry",
+    "enterManually": "Tẹ ọwọ",
+    "browseResources": "Ṣàwárí awọn orisun",
+    "subscriptionIdLabel": "ID Alábapin",
+    "resourceGroupLabel": "Ẹgbẹ Orisun",
+    "accountNameLabel": "Orukọ Akọọlẹ",
+    "projectNameLabel": "Orukọ Iṣẹ́",
+    "loadingSubscriptions": "N gba awọn alabapin...",
+    "selectSubscription": "Yan alabapin...",
+    "loadingAccounts": "N gba awọn akọọlẹ...",
+    "noAccountsFound": "Ko si akọọlẹ Foundry tí a rí ninu alabapin yii.",
+    "selectAccount": "Yan akọọlẹ...",
+    "loadingProjects": "N gba awọn iṣẹ́...",
+    "noProjectsFound": "Ko si iṣẹ́ tí a rí. Lilo \"default\".",
+    "selectAllRequired": "Yan alabapin, akọọlẹ, ati iṣẹ́.",
+    "subscriptionRequired": "Yan ìforúkọsílẹ̀ kan",
+    "accountRequired": "Yan àkọọlẹ Foundry kan"
   },
   "Quick Actions": "Àwọn Ìṣe Kíákíá",
   "Type / in chat to access your prompts": "Tẹ / nínú ìfọ̀rọ̀wérọ̀ láti wọlé sí àwọn ìtọ́sọ́nà rẹ",
@@ -641,7 +693,10 @@
     "keepEditing": "Tẹ̀síwájú Ṣíṣàtúnṣe",
     "yes": "Bẹ́ẹ̀ ni",
     "no": "Rárá",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Ti daakọ!",
+    "clear": "Nu kúrò",
+    "undo": "Yí padà"
   },
   "terms": {
     "officialLanguages": "Ẹ̀dà osẹ̀:",
@@ -750,7 +805,81 @@
     "stopGenerationDontAskAgainButton": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì",
     "stopGenerationDontAskAgainKeyboard": "Má ṣe béèrè mọ́ tí mo bá dákẹ́ pẹ̀lú bọtìnì kọ́ńpútà",
     "generateResponseButton": "Ṣẹdá ìdáhùn",
-    "downloadResponse": "Gba idahun silẹ"
+    "downloadResponse": "Gba idahun silẹ",
+    "activity": {
+      "callingTool": "Npe ohun ìṣàkóso…",
+      "callingService": "Npe iṣẹ́ ọ̀fẹ́…",
+      "usingNamedTool": "Nlo {tool}…",
+      "usingNamedToolWithService": "Nlo {tool} lórí {service}…",
+      "searchingWeb": "N wa lórí wẹẹbu…",
+      "searchingFiles": "N wa àwọn fáìlì…",
+      "runningCode": "N ṣiṣẹ́ kóòdù…",
+      "generatingImage": "N ṣẹda àwòrán…",
+      "listingTools": "N ṣàyẹ̀wò àwọn ohun ìṣàkóso tó wà…",
+      "analyzingFiles": "N ṣe àyẹ̀wò fáìlì rẹ…",
+      "searchingKnowledge": "N wa nínú ibi ìmọ̀…",
+      "cancellingPriorTool": "N fagilé ìbéèrè ohun ìṣàkóso tó kọjá…"
+    },
+    "toolSummary": {
+      "usedTools": "Lo {count, plural, one {# ohun ìṣàkóso} other {# àwọn ohun ìṣàkóso}}",
+      "failedCount": "{count} kọ̀",
+      "statusApproved": "Tí wọ̀lé",
+      "statusAutoApproved": "Ti wọ̀lé laifọwọ́si",
+      "statusAutoDenied": "Ti kọ laifọwọ́si",
+      "statusFailed": "Kọ̀",
+      "statusIncomplete": "Kò pé",
+      "viaService": "pẹ̀lú {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Ìfọwọ́si pàtàkì",
+      "authorizeService": "Fọwọ́si {service}",
+      "descriptionGeneric": "Oluranlọwọ yìí nílò àṣẹ rẹ láti wọle sí ohun amúwàṣẹ́. Ìbuwọlu rẹ jẹ́ àbójútó pẹ̀lú iṣẹ́ lókè, a kò pamo síbí.",
+      "descriptionWithService": "Oluranlọwọ yìí nílò àṣẹ rẹ láti wọle sí {service}. Ìbuwọlu {service} rẹ jẹ́ àbójútó pẹ̀lú {service} funra rẹ, a kò pamo síbí.",
+      "signInIncompleteGeneric": "Ìbuwọlu kò pé",
+      "signInIncompleteForService": "Ìbuwọlu sí {service} kò pé",
+      "signInIncompleteDescriptionGeneric": "O dàbí pé ìfọwọ́si kò parí. Rí daju pé o parí ìbuwọlu ní taabu kejì, léyìn náà tẹ Continue lẹ́ẹ̀kansi.",
+      "signInIncompleteDescription": "O dàbí pé ìfọwọ́si sí {service} kò parí. Rí daju pé o parí ìbuwọlu ní taabu kejì, léyìn náà tẹ Continue lẹ́ẹ̀kansi.",
+      "authorizeButton": "Fọwọ́si",
+      "reauthorizeButton": "Fọwọ́si túnún ṣe",
+      "continueButton": "Tẹ̀síwájú",
+      "confirmingButton": "N jẹ́rìí…",
+      "authorizeHint": "Fọwọ́si, padà síbí, kí o si tẹ Continue. Láti fagilé nigbamii, bọ́ sí {service} taara — a kò pamo tikẹ́tì.",
+      "authorizeHintGeneric": "Fọwọ́si, padà síbí, kí o si tẹ Continue. Láti fagilé nigbamii, bọ́ sí iṣẹ́ lókè taara — a kò pamo tikẹ́tì.",
+      "continueHint": "Tí ìfọwọ́si bá parí ní taabu kejì, tẹ Continue.",
+      "confirmingHint": "N jẹ́rìí ìfọwọ́si àti tesiwaju ìbéèrè rẹ…",
+      "resendHint": "Lẹ́yìn ìfọwọ́si, fi ìfiránṣẹ́ rẹ ranṣẹ́ lẹ́ẹ̀kansi láti tẹ̀síwájú.",
+      "resetTooltip": "Tun gbogbo àyípadà ìfọwọ́si ohun ìṣàkóso laifọwọ́si pada fún ìjíròrò yìí. Ìpe ohun ìṣàkóso tó n bọ yóò béèrè lẹẹkansi.",
+      "autoApproveAllIndicator": "N tẹwọ́ gbà gbogbo ohun ìṣàkóso laifọwọ́si",
+      "autoApproveCountIndicator": "{count, plural, one {N tẹwọ́ gbà # ohun ìṣàkóso laifọwọ́si} other {N tẹwọ́ gbà # àwọn ohun ìṣàkóso laifọwọ́si}}",
+      "resetShort": "Tunpadà",
+      "approvalRequired": "Ìfọwọ́si ohun ìṣàkóso pàtàkì",
+      "approvalForService": "Fọwọ́si ohun ìṣàkóso fún {service}",
+      "approvalDescriptionGeneric": "Oluranlọwọ fẹ́ ṣiṣẹ́ ohun ìṣàkóso tí ó fẹ́ ìfọwọ́si rẹ kí o tó tẹ̀síwájú.",
+      "approvalDescriptionWithTool": "Oluranlọwọ fẹ́ ṣiṣẹ́ ohun ìṣàkóso {tool}, tí ó fẹ́ ìfọwọ́si rẹ kí o tó tẹ̀síwájú.",
+      "runToolTitle": "Ṣe <code>{tool}</code>?",
+      "runToolGeneric": "Ṣe irinṣẹ yii?",
+      "viaService": "nipasẹ {service}",
+      "approveButton": "Fọwọsi",
+      "approveOptionsLabel": "Awọn aṣayan ifọwọsi",
+      "approveOnce": "Fọwọsi lẹẹkan",
+      "alwaysApproveThisTool": "Ma fọwọsi irinṣẹ yii nigbagbogbo",
+      "alwaysApproveAllTools": "Ma fọwọsi gbogbo awọn irinṣẹ nigbagbogbo",
+      "denyButton": "Ṣe alainitẹwọgba",
+      "keyboardHint": "{modifier}+⏎ fọwọsi · esc kọ",
+      "submittingState": "Nfi ipinnu rẹ ranṣẹ",
+      "approvedState": "Ti fọwọsi — aṣoju ti tẹsiwaju",
+      "deniedState": "Ti kọ",
+      "submittingApproval": "Nfọwọsi ati tuni aṣoju bẹrẹ…",
+      "submittingDenial": "Nfiranṣẹ ikọ rẹ…"
+    },
+    "openImage": "Ṣí aworan",
+    "copyMessage": "Daakọ ifiranṣẹ",
+    "stopAudio": "Duro ohun",
+    "generatingAudio": "Ṣiṣejade ohun...",
+    "listen": "Gbọ",
+    "processingAudio": "Nṣiṣẹ ohun...",
+    "ttsError": "Asise lakoko iṣejade ohun. Jọwọ gbiyanju lẹẹkansi.",
+    "unsupportedMessageType": "Aṣiṣe ṣiṣi ifiranṣẹ: Iru ifiranṣẹ ti a ko ṣe atilẹyin"
   },
   "transcript": {
     "originalTranscript": "Ìkọsílẹ̀ Àkọ́kọ́",
@@ -772,7 +901,10 @@
     "collapseSidebar": "Pa ẹ̀gbẹ́-ojú jọ",
     "expandSidebar": "Ṣí ẹ̀gbẹ́-ojú sílẹ̀",
     "quickActionsTitle": "Àwọn Ìṣe Kíákíá",
-    "quickActions": "Àwọn Ìṣe Kíákíá"
+    "quickActions": "Àwọn Ìṣe Kíákíá",
+    "expandFolder": "Fa folda {name}",
+    "collapseFolder": "Dín folda {name} ku",
+    "folderOptions": "Aṣayan {name}"
   },
   "errors": {
     "somethingWentWrong": "Nǹkan kan ṣẹlẹ̀",
@@ -1167,7 +1299,9 @@
     "behaviorSection": "Ihuwasi",
     "resetChatSettings": "Tun eto iwiregbe ṣe",
     "resetChatSettingsConfirmTitle": "Ṣe tun eto iwiregbe ṣe?",
-    "resetChatSettingsConfirmMessage": "Eleyi yoo mu gbogbo eto apakan yii pada si aiyipada: iwọn otutu, ilana ara rẹ, Nipa Rẹ, idahun awoṣe, iyara ṣiṣanwọle, ọrọ-sí-ohùn, awọn faili to ṣiṣẹ, ati ìmúlòlùú. Kò ní kan ìjíròrò rẹ."
+    "resetChatSettingsConfirmMessage": "Eleyi yoo mu gbogbo eto apakan yii pada si aiyipada: iwọn otutu, ilana ara rẹ, Nipa Rẹ, idahun awoṣe, iyara ṣiṣanwọle, ọrọ-sí-ohùn, awọn faili to ṣiṣẹ, ati ìmúlòlùú. Kò ní kan ìjíròrò rẹ.",
+    "customInstructionsLabel": "Ìtọsọna àdáṣe*",
+    "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -1226,7 +1360,8 @@
       "agents": "Àwọn Aṣojú"
     },
     "sections": {
-      "baseModels": "Àwọn Àwòṣe Ìpìlẹ̀"
+      "baseModels": "Àwọn Àwòṣe Ìpìlẹ̀",
+      "allModels": "Gbogbo awoṣe ({count})"
     },
     "maintainedBy": "Tí a ń tọ́jú nípasẹ̀",
     "agents": {
@@ -1300,7 +1435,19 @@
       "done": "Parí",
       "reset": "Tún Padà",
       "resetTooltip": "Tún padà sí ìtò ìbẹ̀rẹ̀"
-    }
+    },
+    "hide": "Pa kuro nínú akojọ",
+    "hideConfirmTitle": "Pa \"{name}\" mọ́?",
+    "hideConfirmMessage": "Yóó yọ kúrò nínú àkojọ rẹ ṣugbọn a kò ni pa a. O le mu pada nigbakugba nínú apakan To farapamọ́.",
+    "hideConfirm": "Pa mọ́",
+    "hiddenToast": "Ti pa \"{name}\" mọ́",
+    "hidden": {
+      "title": "Ti farapamọ́ ({count})",
+      "restore": "Mu pada"
+    },
+    "title": "Yan awoṣe",
+    "modelsDescription": "Yan awoṣe AI fun ibaraẹnisọrọ rẹ. Kọọkan ni agbara tirẹ — yan lati wo alaye.",
+    "recommended": "Tí a ṣedáwọ́lé"
   },
   "models": {
     "gpt_4_1": {
@@ -1367,6 +1514,16 @@
       "name": "Claude Haiku 4.5",
       "description": "Àwòṣe Claude tó yára àti tó jẹ́ owó kéré tí a ṣe ìmúdára fún àwọn iṣẹ́ kíákíá. Ó dára fún àwọn ìbéèrè tó rọrùn, ṣíṣe àkópọ̀, àti àwọn ohun èlò tí iye rẹ̀ pọ̀.",
       "knowledgeCutoff": "Oṣù Kínní 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "Awoṣe to lágbára jù lọ ti Anthropic. Dáa fún kikọ gígùn, ìwádìí, àti iṣẹ tí ó fẹ dákẹ́lẹ̀rìn.",
+      "knowledgeCutoff": "Kínni 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Awọṣe Claude ìwontù. Dáa fún kikọ ojoojúmọ́, ìtupalẹ, àti kóòdù pẹ̀lú ìbáṣepọ́ yára.",
+      "knowledgeCutoff": "Kínni 2026"
     }
   },
   "searchMode": {
@@ -1729,7 +1886,9 @@
     "cancelledBody": "A fagilé nípasẹ̀ olùlò",
     "transientBody": "Jọwọ gbìyànjú lẹ́ẹkàn síi",
     "authFailedBody": "Jọwọ wọlé lẹ́ẹkàn síi",
-    "rateLimitedBody": "Iṣẹ́ kún, jọwọ gbìyànjú lẹ́ẹkàn síi"
+    "rateLimitedBody": "Iṣẹ́ kún, jọwọ gbìyànjú lẹ́ẹkàn síi",
+    "loadingAttempt": "(ìgbìyànjú {count})",
+    "transcriptLabel": "[Ìtànkálẹ̀: {filename}]"
   },
   "documentTranslation": {
     "title": "Ìtúmọ̀ Ìwé",
@@ -1776,7 +1935,45 @@
       "experimentalBlurb": "Àdánwò — tí a kọ́ ní ìṣọ̀kan tàárà pẹ̀lú àwọn olùlò MSF tó lágbára. Kìí ṣe fún ìlò gbogbogbòò.",
       "createButton": "Ṣẹ̀dá Aṣojú Àdánidá"
     },
-    "selectAgentPrompt": "Yan aṣojú kan láti wo àwọn àlàyé"
+    "selectAgentPrompt": "Yan aṣojú kan láti wo àwọn àlàyé",
+    "description": "Àwọn aṣoju AI pataki fún iṣẹ-ṣiṣe kan. Awọn aṣoju aiyipada jẹ amojuto lágbà; fi awọn orisun tirẹ kun láti ṣàwárí aṣoju lati Foundry miran.",
+    "regionAgents": {
+      "us": "Àwọn aṣoju agbègbè AMẸRIKA",
+      "eu": "Àwọn aṣoju agbègbè Yúróòpù",
+      "default": "Àgéntì Agbègbè"
+    },
+    "officeAgents": {
+      "suffix": "Àgéntì"
+    },
+    "agentSources": {
+      "title": "Àsopọ Foundry",
+      "description": "Sopọ sí àwọn iṣẹ Foundry míì láti ṣàwárí àwọn àgéntì wọn.",
+      "connectButton": "Sopọ iṣẹ Microsoft Azure Foundry kan",
+      "connectButtonShort": "Sopọ iṣẹ Foundry kan",
+      "addButton": "Fi orísun àdàkọ kun",
+      "addAnother": "Fi àsopọ míì kun",
+      "noSources": "Kò sí orísun àdàkọ tí a ṣe tán.",
+      "removeSource": "Yọ orísun kúrò",
+      "confirmRemove": "Rẹ́múfù?",
+      "sourceConnected": "orísun àdàkọ ti sopọ",
+      "sourcesConnected": "àwọn orísun àdàkọ ti sopọ",
+      "backToAgents": "Pada",
+      "discoveredAgents": "Àgéntì tí a rí",
+      "viewConnection": "Wo alaye àsopọ",
+      "edit": "Ṣàtúnṣe",
+      "noAgentsPublished": "Kò sí àgéntì tó tí ṣe àtẹjade",
+      "connectedOn": "Ti sopọ ní {date}",
+      "disconnectSource": "Yọ orísun yìí kúrò",
+      "confirmDisconnect": "Tẹ lẹẹkansi láti jẹ́rìí",
+      "loadingAgents": "N gbíyànjú àgéntì...",
+      "noAgentsFound": "Kò sí àgéntì tí a rí ninu iṣẹ yìí",
+      "noAgentsFoundHint": "Jẹ́ kó dájú pé àgéntì ti ṣàtẹjáde àti pé o ní ipa Azure AI User lórí iṣẹ yìí.",
+      "refresh": "Túnṣe",
+      "refreshAgents": "Túnṣe àgéntì",
+      "technicalDetails": "Alaye imọ-ẹrọ",
+      "agentCountLabel": "{count} àgéntì",
+      "disconnectedToast": "Ti yọ {name} kúrò"
+    }
   },
   "privacy": {
     "policyTitle": "Ìlànà Àṣírí & Ìdáàbòbo Dátà",

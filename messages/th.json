@@ -298,7 +298,59 @@
     "delete": "ลบ",
     "noCustomAgentsYet": "ยังไม่มีเอเจนต์กำหนดเอง",
     "noOrgAgentsConfigured": "ยังไม่มีเอเจนต์องค์กรที่กำหนดค่าไว้",
-    "validationFailed": "การตรวจสอบล้มเหลว"
+    "validationFailed": "การตรวจสอบล้มเหลว",
+    "addAgentSource": "เพิ่มแหล่งข้อมูลแบบกำหนดเอง",
+    "connectFoundryProject": "เชื่อมต่อ Microsoft Azure Foundry Project",
+    "connectFoundryDescription": "ค้นหาเอเจนต์จากโครงการ Azure Foundry ของออฟฟิศหรือทีมอื่น คุณจะเห็นเฉพาะเอเจนต์ที่คุณมีสิทธิ์เข้าถึงเท่านั้น",
+    "foundryProjectPath": "เส้นทางโครงการ Foundry",
+    "foundryProjectPathHelp": "สอบถามผู้ดูแลโครงการ Foundry ของคุณ หรือคลิก 'กรอกด้วยตนเอง' เพื่อกรอกแต่ละช่องแยกกัน",
+    "copyFormat": "รูปแบบ",
+    "nameLabel": "ชื่อ",
+    "namePlaceholder": "เช่น Amsterdam Office, Geneva Research",
+    "pathRequired": "วางเส้นทาง resource ของโครงการ Foundry",
+    "pathInvalidFormat": "ดูเหมือนไม่ใช่ resource path ควรเริ่มต้นด้วย /subscriptions/...",
+    "connectionFailed": "ไม่สามารถเชื่อมต่อกับโครงการนี้ ตรวจสอบว่าเส้นทางถูกต้องและคุณมีสิทธิ์เข้าถึง",
+    "connectionSuccessAgents": "เชื่อมต่อแล้ว — พบ {count} เอเจนต์",
+    "connectionSuccessEmpty": "เชื่อมต่อแล้ว แต่ไม่พบเอเจนต์ อาจต้องขอบทบาท Azure AI User ในโครงการนี้เพื่อดูเอเจนต์",
+    "checkingConnection": "กำลังตรวจสอบการเชื่อมต่อ...",
+    "connect": "เชื่อมต่อ",
+    "save": "บันทึก",
+    "editConnection": "แก้ไขการเชื่อมต่อ",
+    "sourceName": "ชื่อแหล่งข้อมูล",
+    "sourceNamePlaceholder": "Amsterdam Office",
+    "sourceNameRequired": "จำเป็นต้องระบุชื่อแหล่งข้อมูล",
+    "resourcePath": "เส้นทาง Resource",
+    "resourcePathRequired": "จำเป็นต้องระบุเส้นทาง Resource",
+    "resourcePathHelp": "เส้นทาง ARM resource ไปยังโครงการ Foundry โปรดสอบถามค่าจากผู้ดูแลของคุณ",
+    "invalidResourcePathFormat": "Resource path ต้องขึ้นต้นด้วย /subscriptions/...",
+    "validatingSource": "กำลังค้นหาเอเจนต์...",
+    "sourceValidatedEmpty": "แหล่งข้อมูลถูกต้อง แต่ไม่พบเอเจนต์ คุณอาจไม่มีสิทธิ์เข้าถึงเอเจนต์ในโครงการนี้",
+    "invalidSource": "ไม่สามารถเข้าถึง resource path นี้ กรุณาตรวจสอบเส้นทางและสิทธิ์ของคุณ",
+    "addSource": "เพิ่มแหล่งข้อมูล",
+    "removeSource": "ลบแหล่งข้อมูล",
+    "labelSubscription": "Subscription",
+    "labelFoundryAccount": "Foundry Account",
+    "labelProject": "Project",
+    "tooltipSubscription": "Azure subscription ที่มี Foundry account หากไม่แน่ใจ กรุณาสอบถามผู้ดูแลว่าทีมของคุณใช้งาน subscription ใด",
+    "tooltipFoundryAccount": "บัญชี Azure AI Services ที่มีโครงการ Foundry แต่ละออฟฟิศหรือทีมจะมีของตนเอง",
+    "tooltipProject": "โปรเจกต์จะจัดระเบียบเอเจนต์ภายในบัญชี ส่วนใหญ่จะมีโปรเจกต์ \"default\" เดียว",
+    "foundryProjectLabel": "Foundry Project",
+    "enterManually": "กรอกด้วยตนเอง",
+    "browseResources": "เรียกดู resources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Account Name",
+    "projectNameLabel": "Project Name",
+    "loadingSubscriptions": "กำลังโหลด subscriptions...",
+    "selectSubscription": "เลือก subscription...",
+    "loadingAccounts": "กำลังโหลดบัญชี...",
+    "noAccountsFound": "ไม่พบ Foundry account ใน subscription นี้",
+    "selectAccount": "เลือกบัญชี...",
+    "loadingProjects": "กำลังโหลดโปรเจกต์...",
+    "noProjectsFound": "ไม่พบโปรเจกต์ กำลังใช้ \"default\"",
+    "selectAllRequired": "กรุณาเลือก subscription, account และ project",
+    "subscriptionRequired": "เลือกการสมัครสมาชิก",
+    "accountRequired": "เลือกบัญชี Foundry"
   },
   "Quick Actions": "การดำเนินการด่วน",
   "Type / in chat to access your prompts": "พิมพ์ / ในแชทเพื่อเข้าถึงพรอมต์ของคุณ",
@@ -455,7 +507,10 @@
     "keepEditing": "แก้ไขต่อ",
     "yes": "ใช่",
     "no": "ไม่ใช่",
-    "beta": "เบต้า"
+    "beta": "เบต้า",
+    "copied": "คัดลอกแล้ว!",
+    "clear": "ล้าง",
+    "undo": "ย้อนกลับ"
   },
   "errors": {
     "unexpectedErrorOccurred": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
@@ -609,13 +664,90 @@
     "stopGenerationDontAskAgainButton": "อย่าถามอีกเมื่อหยุดด้วยปุ่ม",
     "stopGenerationDontAskAgainKeyboard": "อย่าถามอีกเมื่อหยุดด้วยแป้นพิมพ์",
     "generateResponseButton": "สร้างคำตอบ",
-    "downloadResponse": "ดาวน์โหลดคำตอบ"
+    "downloadResponse": "ดาวน์โหลดคำตอบ",
+    "activity": {
+      "callingTool": "กำลังเรียกใช้เครื่องมือ…",
+      "callingService": "กำลังเรียกบริการภายนอก…",
+      "usingNamedTool": "กำลังใช้ {tool}…",
+      "usingNamedToolWithService": "กำลังใช้ {tool} กับ {service}…",
+      "searchingWeb": "กำลังค้นหาเว็บ…",
+      "searchingFiles": "กำลังค้นหาไฟล์…",
+      "runningCode": "กำลังรันโค้ด…",
+      "generatingImage": "กำลังสร้างภาพ…",
+      "listingTools": "กำลังค้นหาเครื่องมือที่มี…",
+      "analyzingFiles": "กำลังวิเคราะห์ไฟล์ของคุณ…",
+      "searchingKnowledge": "กำลังค้นหาในฐานข้อมูลความรู้…",
+      "cancellingPriorTool": "กำลังยกเลิกคำขอเครื่องมือก่อนหน้า…"
+    },
+    "toolSummary": {
+      "usedTools": "ใช้แล้ว {count, plural, one {# เครื่องมือ} other {# เครื่องมือ}}",
+      "failedCount": "{count} ล้มเหลว",
+      "statusApproved": "อนุมัติแล้ว",
+      "statusAutoApproved": "อนุมัติโดยอัตโนมัติ",
+      "statusAutoDenied": "ปฏิเสธโดยอัตโนมัติ",
+      "statusFailed": "ล้มเหลว",
+      "statusIncomplete": "ไม่สมบูรณ์",
+      "viaService": "ผ่าน {service}"
+    },
+    "consent": {
+      "authorizeRequired": "ต้องได้รับอนุญาต",
+      "authorizeService": "อนุญาต {service}",
+      "descriptionGeneric": "เอเจนต์นี้ต้องการสิทธิ์ของคุณในการเข้าถึงทรัพยากรที่ปลอดภัย การลงชื่อเข้าใช้ของคุณจะถูกจัดการโดยบริการต้นทาง ไม่ได้จัดเก็บไว้ที่นี่",
+      "descriptionWithService": "เอเจนต์นี้ต้องการสิทธิ์ของคุณในการเข้าถึง {service} การเข้าสู่ระบบ {service} ของคุณจัดการโดย {service} เอง ไม่ได้จัดเก็บไว้ที่นี่",
+      "signInIncompleteGeneric": "การเข้าสู่ระบบไม่สมบูรณ์",
+      "signInIncompleteForService": "การเข้าสู่ระบบ {service} ไม่สมบูรณ์",
+      "signInIncompleteDescriptionGeneric": "ดูเหมือนว่าการอนุญาตยังไม่เสร็จสิ้น กรุณาตรวจสอบให้แน่ใจว่าคุณได้ลงชื่อเข้าใช้ในแท็บอื่นแล้ว จากนั้นคลิก ดำเนินการต่อ อีกครั้ง",
+      "signInIncompleteDescription": "ดูเหมือนว่าการอนุญาตเข้าใช้ {service} ยังไม่เสร็จสิ้น กรุณาตรวจสอบให้แน่ใจว่าคุณได้ลงชื่อเข้าใช้ในแท็บอื่นแล้ว จากนั้นคลิก ดำเนินการต่อ อีกครั้ง",
+      "authorizeButton": "อนุญาต",
+      "reauthorizeButton": "อนุญาตอีกครั้ง",
+      "continueButton": "ดำเนินการต่อ",
+      "confirmingButton": "กำลังยืนยัน…",
+      "authorizeHint": "อนุญาต จากนั้นกลับมาที่นี่และคลิก ดำเนินการต่อ หากต้องการยกเลิกในภายหลัง ให้ออกจากระบบ {service} โดยตรง — เราไม่ได้เก็บโทเค็นไว้",
+      "authorizeHintGeneric": "อนุญาต จากนั้นกลับมาที่นี่และคลิก ดำเนินการต่อ หากต้องการยกเลิกในภายหลัง ให้ออกจากระบบที่บริการต้นทางโดยตรง — เราไม่ได้เก็บโทเค็นไว้",
+      "continueHint": "เมื่อลงชื่อเข้าใช้สำเร็จในแท็บอื่นแล้ว ให้คลิก ดำเนินการต่อ",
+      "confirmingHint": "กำลังยืนยันสิทธิ์และดำเนินการคำขอของคุณต่อ…",
+      "resendHint": "หลังจากอนุญาตแล้ว กรุณาส่งข้อความของคุณอีกครั้งเพื่อดำเนินการต่อ",
+      "resetTooltip": "รีเซ็ตการตั้งค่าอนุมัติเครื่องมืออัตโนมัติทั้งหมดสำหรับการสนทนานี้ ครั้งต่อไปจะมีการแจ้งเตือนอีกครั้งเมื่อใช้งานเครื่องมือ",
+      "autoApproveAllIndicator": "กำลังอนุมัติทุกเครื่องมือโดยอัตโนมัติ",
+      "autoApproveCountIndicator": "{count, plural, one {อนุมัติ # เครื่องมือโดยอัตโนมัติ} other {อนุมัติ # เครื่องมือโดยอัตโนมัติ}}",
+      "resetShort": "รีเซ็ต",
+      "approvalRequired": "ต้องอนุมัติเครื่องมือ",
+      "approvalForService": "อนุมัติเครื่องมือสำหรับ {service}",
+      "approvalDescriptionGeneric": "เอเจนต์ต้องการรันเครื่องมือที่ต้องได้รับการอนุมัติจากคุณก่อนจะดำเนินการต่อ",
+      "approvalDescriptionWithTool": "เอเจนต์ต้องการรันเครื่องมือ {tool} ซึ่งต้องได้รับการอนุมัติจากคุณก่อนจะดำเนินการต่อ",
+      "runToolTitle": "รัน <code>{tool}</code> หรือไม่?",
+      "runToolGeneric": "รันเครื่องมือนี้หรือไม่?",
+      "viaService": "ผ่าน {service}",
+      "approveButton": "อนุมัติ",
+      "approveOptionsLabel": "ตัวเลือกการอนุมัติ",
+      "approveOnce": "อนุมัติครั้งเดียว",
+      "alwaysApproveThisTool": "อนุมัติเครื่องมือนี้เสมอ",
+      "alwaysApproveAllTools": "อนุมัติทุกเครื่องมือเสมอ",
+      "denyButton": "ปฏิเสธ",
+      "keyboardHint": "{modifier}+⏎ อนุมัติ · esc ปฏิเสธ",
+      "submittingState": "กำลังส่งการตัดสินใจของคุณ",
+      "approvedState": "อนุมัติแล้ว — ดำเนินการต่อ",
+      "deniedState": "ปฏิเสธแล้ว",
+      "submittingApproval": "กำลังอนุมัติและดำเนินการต่อ…",
+      "submittingDenial": "กำลังส่งการปฏิเสธของคุณ…"
+    },
+    "openImage": "เปิดภาพ",
+    "copyMessage": "คัดลอกข้อความ",
+    "stopAudio": "หยุดเสียง",
+    "generatingAudio": "กำลังสร้างเสียง...",
+    "listen": "ฟัง",
+    "processingAudio": "กำลังประมวลผลเสียง...",
+    "ttsError": "เกิดข้อผิดพลาดในการสร้างเสียง กรุณาลองอีกครั้ง",
+    "unsupportedMessageType": "เกิดข้อผิดพลาดในการแสดงข้อความ: ประเภทข้อความไม่รองรับ"
   },
   "sidebar": {
     "collapseSidebar": "ยุบแถบด้านข้าง",
     "expandSidebar": "ขยายแถบด้านข้าง",
     "quickActionsTitle": "การดำเนินการด่วน",
-    "quickActions": "การดำเนินการด่วน"
+    "quickActions": "การดำเนินการด่วน",
+    "expandFolder": "ขยายโฟลเดอร์ {name}",
+    "collapseFolder": "ย่อโฟลเดอร์ {name}",
+    "folderOptions": "ตัวเลือกของ {name}"
   },
   "prompts": {
     "buildReusablePrompts": "สร้างพรอมต์ที่ใช้ซ้ำได้ด้วยความช่วยเหลือจาก AI",
@@ -931,7 +1063,9 @@
     "behaviorSection": "พฤติกรรม",
     "resetChatSettings": "รีเซ็ตการตั้งค่าแชท",
     "resetChatSettingsConfirmTitle": "รีเซ็ตการตั้งค่าแชทหรือไม่?",
-    "resetChatSettingsConfirmMessage": "การดำเนินการนี้จะคืนค่าการตั้งค่าทั้งหมดในแผงนี้กลับสู่ค่าเริ่มต้น: temperature, custom instructions, About You, model response, streaming speed, text-to-speech, ไฟล์ที่ใช้งาน และการยืนยันต่างๆ การดำเนินการนี้จะไม่กระทบต่อบทสนทนาของคุณ"
+    "resetChatSettingsConfirmMessage": "การดำเนินการนี้จะคืนค่าการตั้งค่าทั้งหมดในแผงนี้กลับสู่ค่าเริ่มต้น: temperature, custom instructions, About You, model response, streaming speed, text-to-speech, ไฟล์ที่ใช้งาน และการยืนยันต่างๆ การดำเนินการนี้จะไม่กระทบต่อบทสนทนาของคุณ",
+    "customInstructionsLabel": "คำแนะนำเฉพาะ*",
+    "defaultTemperatureLabel": "ค่า Temperature เริ่มต้น*"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "ผู้ใช้เป็นผู้ยกเลิก",
     "transientBody": "กรุณาลองใหม่อีกครั้ง",
     "authFailedBody": "กรุณาเข้าสู่ระบบใหม่อีกครั้ง",
-    "rateLimitedBody": "บริการเต็มความจุ กรุณาลองใหม่ในภายหลัง"
+    "rateLimitedBody": "บริการเต็มความจุ กรุณาลองใหม่ในภายหลัง",
+    "loadingAttempt": "(ความพยายามครั้งที่ {count})",
+    "transcriptLabel": "[ถอดเสียง: {filename}]"
   },
   "transcriptionComplete": "ถอดเสียงเสร็จสิ้น! ข้อความถูกเพิ่มในช่องแชทแล้ว",
   "No prompts found": "ไม่พบพรอมต์",
@@ -1174,7 +1310,8 @@
       "agents": "เอเจนต์"
     },
     "sections": {
-      "baseModels": "โมเดลพื้นฐาน"
+      "baseModels": "โมเดลพื้นฐาน",
+      "allModels": "โมเดลทั้งหมด ({count})"
     },
     "agents": {
       "advancedFeatureBadge": "ฟีเจอร์ขั้นสูง",
@@ -1247,7 +1384,19 @@
       "reasoning": "การให้เหตุผลขั้นสูงสำหรับปัญหาที่ซับซ้อน",
       "omni": "โมเดลมัลติโหมดที่มีความสามารถหลากหลาย",
       "agent": "เอเจนต์พร้อมเครื่องมือเรียลไทม์และเข้าถึงเว็บ"
-    }
+    },
+    "hide": "ซ่อนจากรายการ",
+    "hideConfirmTitle": "ซ่อน \"{name}\" หรือไม่?",
+    "hideConfirmMessage": "รายชื่อนี้จะถูกลบออกจากรายการของคุณแต่จะไม่ถูกลบทิ้ง คุณสามารถกู้คืนได้จากส่วนที่ซ่อนไว้",
+    "hideConfirm": "ซ่อน",
+    "hiddenToast": "ซ่อน \"{name}\" แล้ว",
+    "hidden": {
+      "title": "ซ่อนไว้ ({count})",
+      "restore": "กู้คืน"
+    },
+    "title": "เลือกโมเดล",
+    "modelsDescription": "เลือกโมเดล AI สำหรับการสนทนาของคุณ แต่ละโมเดลมีจุดแข็งต่างกัน เลือกเพื่อดูรายละเอียด.",
+    "recommended": "แนะนำ"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "ธ.ค. 2025",
       "description": "รูปแบบเฉพาะของ GPT-5.2 ที่ปรับให้เหมาะสำหรับการสนทนาและความฉลาดทางอารมณ์ โดดเด่นในด้านการสื่อสารแบบเข้าอกเข้าใจ การเขียนเชิงสร้างสรรค์ การระดมความคิด และบทสนทนาที่เป็นธรรมชาติ เหมาะที่สุดสำหรับการสนทนาแบบไม่เป็นทางการ สถานการณ์ให้คำปรึกษา และงานที่ต้องใช้ความตระหนักทางอารมณ์"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "โมเดลที่แข็งแกร่งที่สุดของ Anthropic เหมาะสำหรับงานเขียนยาว งานวิจัย และงานที่ต้องใช้ความรอบคอบ",
+      "knowledgeCutoff": "ก.พ. 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Claude รุ่นสมดุล เหมาะกับงานเขียนทั่วไป การวิเคราะห์ และเขียนโค้ด ตอบสนองรวดเร็ว",
+      "knowledgeCutoff": "ก.พ. 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "ทดลอง — สร้างขึ้นจากความร่วมมือโดยตรงกับผู้ใช้ระดับสูงของ MSF ไม่ได้มีไว้สำหรับการใช้งานทั่วไป",
       "createButton": "สร้างเอเจนต์กำหนดเอง"
     },
-    "selectAgentPrompt": "เลือกเอเจนต์เพื่อดูรายละเอียด"
+    "selectAgentPrompt": "เลือกเอเจนต์เพื่อดูรายละเอียด",
+    "description": "ตัวแทน AI เฉพาะทางสำหรับงานเฉพาะ ตัวแทนมาตรฐานจะได้รับการจัดการจากศูนย์กลาง เพิ่มแหล่งข้อมูลเองเพื่อค้นหาตัวแทนจากโครงการ Foundry อื่น ๆ",
+    "regionAgents": {
+      "us": "ตัวแทนภูมิภาค US",
+      "eu": "ตัวแทนภูมิภาค EU",
+      "default": "ตัวแทนประจำภูมิภาค"
+    },
+    "officeAgents": {
+      "suffix": "ตัวแทน"
+    },
+    "agentSources": {
+      "title": "การเชื่อมต่อ Foundry",
+      "description": "เชื่อมต่อกับโครงการ Foundry อื่นเพื่อค้นหาตัวแทนของพวกเขา",
+      "connectButton": "เชื่อมต่อโครงการ Microsoft Azure Foundry",
+      "connectButtonShort": "เชื่อมต่อโครงการ Foundry",
+      "addButton": "เพิ่มแหล่งข้อมูลแบบกำหนดเอง",
+      "addAnother": "เพิ่มการเชื่อมต่ออีกครั้ง",
+      "noSources": "ยังไม่ได้ตั้งค่าแหล่งข้อมูลแบบกำหนดเอง",
+      "removeSource": "ลบแหล่งข้อมูล",
+      "confirmRemove": "ลบหรือไม่?",
+      "sourceConnected": "เชื่อมต่อแหล่งข้อมูลแบบกำหนดเองแล้ว",
+      "sourcesConnected": "เชื่อมต่อแหล่งข้อมูลแบบกำหนดเองแล้ว",
+      "backToAgents": "ย้อนกลับ",
+      "discoveredAgents": "ตัวแทนที่ค้นพบ",
+      "viewConnection": "ดูรายละเอียดการเชื่อมต่อ",
+      "edit": "แก้ไข",
+      "noAgentsPublished": "ยังไม่มีการเผยแพร่ตัวแทน",
+      "connectedOn": "เชื่อมต่อเมื่อ {date}",
+      "disconnectSource": "ตัดการเชื่อมต่อแหล่งข้อมูลนี้",
+      "confirmDisconnect": "คลิกอีกครั้งเพื่อยืนยัน",
+      "loadingAgents": "กำลังโหลดตัวแทน...",
+      "noAgentsFound": "ไม่พบตัวแทนในโครงการนี้",
+      "noAgentsFoundHint": "โปรดตรวจสอบว่าตัวแทนถูกเผยแพร่แล้วและคุณมีบทบาท Azure AI User ในโครงการนี้",
+      "refresh": "รีเฟรช",
+      "refreshAgents": "รีเฟรชตัวแทน",
+      "technicalDetails": "รายละเอียดทางเทคนิค",
+      "agentCountLabel": "{count} ตัวแทน",
+      "disconnectedToast": "ตัดการเชื่อมต่อ {name} แล้ว"
+    }
   },
   "privacy": {
     "policyTitle": "นโยบายความเป็นส่วนตัว & การปกป้องข้อมูล",

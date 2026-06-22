@@ -356,7 +356,59 @@
     "delete": "Suprimeix",
     "noCustomAgentsYet": "Encara no hi ha agents personalitzats.",
     "noOrgAgentsConfigured": "No hi ha agents d'organització configurats.",
-    "validationFailed": "La validació ha fallat"
+    "validationFailed": "La validació ha fallat",
+    "addAgentSource": "Afegeix origen personalitzat",
+    "connectFoundryProject": "Connecta un projecte de Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descobreix agents d’una altra oficina o equip al projecte Azure Foundry. Només veuràs els agents als quals tens permís d'accés.",
+    "foundryProjectPath": "Ruta del projecte Foundry",
+    "foundryProjectPathHelp": "Demana aquesta informació a l'administrador del projecte Foundry, o fes clic a «Introdueix manualment» per omplir cada camp per separat.",
+    "copyFormat": "Format",
+    "nameLabel": "Nom",
+    "namePlaceholder": "p. ex., Oficina d’Amsterdam, Recerca de Ginebra",
+    "pathRequired": "Enganxa la ruta del recurs del projecte Foundry.",
+    "pathInvalidFormat": "Això no sembla una ruta de recurs. Hauria de començar per /subscriptions/...",
+    "connectionFailed": "No s’ha pogut accedir al projecte. Comprova que la ruta sigui correcta i que tinguis permisos d'accés.",
+    "connectionSuccessAgents": "Connectat — {count} agent(s) trobats",
+    "connectionSuccessEmpty": "Connectat, però no s’han trobat agents. Pot ser que necessitis el rol Azure AI User en aquest projecte per veure’n els agents.",
+    "checkingConnection": "Comprovant la connexió...",
+    "connect": "Connecta",
+    "save": "Desa",
+    "editConnection": "Edita la connexió",
+    "sourceName": "Nom de l’origen",
+    "sourceNamePlaceholder": "Oficina d’Amsterdam",
+    "sourceNameRequired": "El nom de l’origen és obligatori.",
+    "resourcePath": "Ruta del recurs",
+    "resourcePathRequired": "La ruta del recurs és obligatòria.",
+    "resourcePathHelp": "La ruta ARM del recurs cap a un projecte Foundry. Demana aquesta dada a l’administrador.",
+    "invalidResourcePathFormat": "La ruta del recurs ha de començar per /subscriptions/...",
+    "validatingSource": "Cercant agents...",
+    "sourceValidatedEmpty": "Origen vàlid, però no s’han trobat agents. Pot ser que no tinguis accés als agents d’aquest projecte.",
+    "invalidSource": "No s’ha pogut accedir a aquesta ruta de recurs. Comprova la ruta i els permisos.",
+    "addSource": "Afegeix origen",
+    "removeSource": "Elimina origen",
+    "labelSubscription": "Subscripció",
+    "labelFoundryAccount": "Compte Foundry",
+    "labelProject": "Projecte",
+    "tooltipSubscription": "La subscripció d’Azure que conté el compte Foundry. Si no ho saps, consulta amb l’administrador quina subscripció fa servir el teu equip.",
+    "tooltipFoundryAccount": "El compte Azure AI Services on resideix el projecte Foundry. Normalment, cada oficina o equip en té un de propi.",
+    "tooltipProject": "Un projecte organitza agents dins d’un compte. La majoria de comptes tenen un únic projecte «default».",
+    "foundryProjectLabel": "Projecte Foundry",
+    "enterManually": "Introdueix manualment",
+    "browseResources": "Explora recursos",
+    "subscriptionIdLabel": "ID de subscripció",
+    "resourceGroupLabel": "Grup de recursos",
+    "accountNameLabel": "Nom del compte",
+    "projectNameLabel": "Nom del projecte",
+    "loadingSubscriptions": "Carregant subscripcions...",
+    "selectSubscription": "Selecciona una subscripció...",
+    "loadingAccounts": "Carregant comptes...",
+    "noAccountsFound": "No s’han trobat comptes Foundry en aquesta subscripció.",
+    "selectAccount": "Selecciona un compte...",
+    "loadingProjects": "Carregant projectes...",
+    "noProjectsFound": "No s’han trobat projectes. S'utilitza «default».",
+    "selectAllRequired": "Selecciona una subscripció, un compte i un projecte.",
+    "subscriptionRequired": "Trieu una subscripció",
+    "accountRequired": "Trieu un compte de Foundry"
   },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",
@@ -513,7 +565,10 @@
     "keepEditing": "Continua editant",
     "yes": "Sí",
     "no": "No",
-    "beta": "Beta"
+    "beta": "Beta",
+    "copied": "Copiat!",
+    "clear": "Neteja",
+    "undo": "Desfés"
   },
   "errors": {
     "unexpectedErrorOccurred": "S'ha produït un error inesperat",
@@ -667,13 +722,90 @@
     "stopGenerationDontAskAgainButton": "No tornis a preguntar quan s'aturi amb el botó",
     "stopGenerationDontAskAgainKeyboard": "No tornis a preguntar quan s'aturi amb el teclat",
     "generateResponseButton": "Genera resposta",
-    "downloadResponse": "Descarrega la resposta"
+    "downloadResponse": "Descarrega la resposta",
+    "activity": {
+      "callingTool": "S'està cridant l'eina…",
+      "callingService": "S'està cridant el servei extern…",
+      "usingNamedTool": "S'està utilitzant {tool}…",
+      "usingNamedToolWithService": "S'està utilitzant {tool} amb {service}…",
+      "searchingWeb": "S'està cercant a la web…",
+      "searchingFiles": "S'estan cercant els fitxers…",
+      "runningCode": "S'està executant el codi…",
+      "generatingImage": "S'està generant la imatge…",
+      "listingTools": "S'estan cercant les eines disponibles…",
+      "analyzingFiles": "S'estan analitzant els vostres fitxers…",
+      "searchingKnowledge": "S'està cercant a la base de coneixement…",
+      "cancellingPriorTool": "S'està cancel·lant la sol·licitud d'eina prèvia…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
+      "failedCount": "{count} amb errors",
+      "statusApproved": "Aprovat",
+      "statusAutoApproved": "Aprovat automàticament",
+      "statusAutoDenied": "Denegat automàticament",
+      "statusFailed": "Fallida",
+      "statusIncomplete": "Incomplet",
+      "viaService": "via {service}"
+    },
+    "consent": {
+      "authorizeRequired": "Cal autorització",
+      "authorizeService": "Autoritzeu {service}",
+      "descriptionGeneric": "Aquest agent necessita el vostre permís per accedir a un recurs segur. L'inici de sessió el gestiona el servei extern, no s'emmagatzema aquí.",
+      "descriptionWithService": "Aquest agent necessita el vostre permís per accedir a {service}. L'inici de sessió de {service} el gestiona el mateix {service}, no s'emmagatzema aquí.",
+      "signInIncompleteGeneric": "L'inici de sessió no s'ha completat",
+      "signInIncompleteForService": "L'inici de sessió a {service} no s'ha completat",
+      "signInIncompleteDescriptionGeneric": "Sembla que l'autorització no s'ha completat. Assegureu-vos que heu completat l'inici de sessió a l'altra pestanya i torneu a fer clic a Continua.",
+      "signInIncompleteDescription": "Sembla que l'autorització a {service} no s'ha completat. Assegureu-vos que heu completat l'inici de sessió a l'altra pestanya i torneu a fer clic a Continua.",
+      "authorizeButton": "Autoritza",
+      "reauthorizeButton": "Autoritza de nou",
+      "continueButton": "Continua",
+      "confirmingButton": "S'està confirmant…",
+      "authorizeHint": "Autoritzeu, torneu aquí i feu clic a Continua. Per revocar més endavant, tanqueu la sessió directament a {service} — no tenim el testimoni.",
+      "authorizeHintGeneric": "Autoritzeu, torneu aquí i feu clic a Continua. Per revocar més endavant, tanqueu la sessió directament al servei extern — no tenim el testimoni.",
+      "continueHint": "Quan l'autorització s'hagi completat a l'altra pestanya, feu clic a Continua.",
+      "confirmingHint": "S'està confirmant l'autorització i reprendrem la vostra sol·licitud…",
+      "resendHint": "Després d'autoritzar, envieu el missatge de nou per continuar.",
+      "resetTooltip": "Reinicia totes les preferències d'aprovació automàtica d'eines per a aquesta conversa. Les futures crides d'eines es tornaran a demanar aprovar.",
+      "autoApproveAllIndicator": "S'estan aprovant automàticament totes les eines",
+      "autoApproveCountIndicator": "{count, plural, one {S'aprova automàticament # eina} other {S'aproven automàticament # eines}}",
+      "resetShort": "Reinicia",
+      "approvalRequired": "Cal aprovació de l'eina",
+      "approvalForService": "Aprova l'eina per a {service}",
+      "approvalDescriptionGeneric": "L'agent vol executar una eina que requereix la vostra aprovació abans de continuar.",
+      "approvalDescriptionWithTool": "L'agent vol executar l'eina {tool}, que requereix la vostra aprovació abans de continuar.",
+      "runToolTitle": "Executar <code>{tool}</code>?",
+      "runToolGeneric": "Vol executar aquesta eina?",
+      "viaService": "via {service}",
+      "approveButton": "Aprova",
+      "approveOptionsLabel": "Opcions d'aprovació",
+      "approveOnce": "Aprova una vegada",
+      "alwaysApproveThisTool": "Aprova sempre aquesta eina",
+      "alwaysApproveAllTools": "Aprova sempre totes les eines",
+      "denyButton": "Denega",
+      "keyboardHint": "{modifier}+⏎ aprova · esc denega",
+      "submittingState": "Enviant la seva decisió",
+      "approvedState": "Aprovat — agent reprès",
+      "deniedState": "Denegat",
+      "submittingApproval": "Aprovant i reprenent l'agent…",
+      "submittingDenial": "Enviant la seva denegació…"
+    },
+    "openImage": "Obre la imatge",
+    "copyMessage": "Copia el missatge",
+    "stopAudio": "Atura l'àudio",
+    "generatingAudio": "Generant àudio...",
+    "listen": "Escolta",
+    "processingAudio": "Processant àudio...",
+    "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
+    "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
     "expandSidebar": "Expandir barra lateral",
     "quickActionsTitle": "Accions ràpides",
-    "quickActions": "Accions ràpides"
+    "quickActions": "Accions ràpides",
+    "expandFolder": "Expandeix la carpeta {name}",
+    "collapseFolder": "Redueix la carpeta {name}",
+    "folderOptions": "Opcions de {name}"
   },
   "prompts": {
     "buildReusablePrompts": "Crear indicacions reutilitzables amb assistència d'IA",
@@ -989,7 +1121,9 @@
     "behaviorSection": "Comportament",
     "resetChatSettings": "Restableix la configuració del xat",
     "resetChatSettingsConfirmTitle": "Voleu restablir la configuració del xat?",
-    "resetChatSettingsConfirmMessage": "Això restablirà els valors per defecte de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les vostres converses."
+    "resetChatSettingsConfirmMessage": "Això restablirà els valors per defecte de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les vostres converses.",
+    "customInstructionsLabel": "Instruccions personalitzades*",
+    "defaultTemperatureLabel": "Temperatura predeterminada*"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1109,7 +1243,9 @@
     "cancelledBody": "Cancel·lat per l’usuari",
     "transientBody": "Torneu-ho a intentar",
     "authFailedBody": "Torneu a iniciar sessió",
-    "rateLimitedBody": "Servei al límit de capacitat, torneu-ho a provar aviat"
+    "rateLimitedBody": "Servei al límit de capacitat, torneu-ho a provar aviat",
+    "loadingAttempt": "(intent {count})",
+    "transcriptLabel": "[Transcripció: {filename}]"
   },
   "transcriptionComplete": "Transcripció completa! Text afegit a l'entrada del xat.",
   "No prompts found": "No s'ha trobat cap prompt",
@@ -1173,7 +1309,8 @@
       "agents": "Agents"
     },
     "sections": {
-      "baseModels": "Models base"
+      "baseModels": "Models base",
+      "allModels": "Tots els models ({count})"
     },
     "maintainedBy": "Mantingut per",
     "agents": {
@@ -1247,7 +1384,19 @@
       "reasoning": "Capacitat de raonament ampliada per a problemes complexos",
       "omni": "Model multimodal amb capacitats àmplies",
       "agent": "Agent amb eines en temps real i accés web"
-    }
+    },
+    "hide": "Amaga de la llista",
+    "hideConfirmTitle": "Amagar «{name}»?",
+    "hideConfirmMessage": "S'eliminarà de la seva llista però no se suprimirà. El pot restaurar en qualsevol moment des de la secció Ocults.",
+    "hideConfirm": "Amaga",
+    "hiddenToast": "S'ha amagat «{name}»",
+    "hidden": {
+      "title": "Ocults ({count})",
+      "restore": "Restaura"
+    },
+    "title": "Selecciona un model",
+    "modelsDescription": "Trieu un model d'AI per a la conversa. Cada model té punts forts diferents — seleccioneu-ne un per veure els detalls.",
+    "recommended": "Recomanat"
   },
   "models": {
     "gpt_4_1": {
@@ -1324,6 +1473,16 @@
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "des. 2025",
       "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional."
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "El model més potent d'Anthropic. Bo per a redaccions llargues, recerca i tasques que requereixen pensament acurat.",
+      "knowledgeCutoff": "Febr. 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "Un model Claude equilibrat. Adequat per a redacció diària, anàlisi i programació amb respostes ràpides.",
+      "knowledgeCutoff": "Febr. 2026"
     }
   },
   "searchMode": {
@@ -1800,7 +1959,45 @@
       "experimentalBlurb": "Experimental — creat en col·laboració directa amb usuaris avançats de MSF. No és per a ús general.",
       "createButton": "Crea un agent personalitzat"
     },
-    "selectAgentPrompt": "Seleccioneu un agent per veure'n els detalls"
+    "selectAgentPrompt": "Seleccioneu un agent per veure'n els detalls",
+    "description": "Agents d'AI especialitzats per a tasques específiques. Els agents predeterminats es gestionen centralment; afegiu fonts personalitzades per descobrir agents d'altres projectes Foundry.",
+    "regionAgents": {
+      "us": "Agents de la regió dels EUA",
+      "eu": "Agents de la regió de la UE",
+      "default": "Agents de la regió"
+    },
+    "officeAgents": {
+      "suffix": "Agents"
+    },
+    "agentSources": {
+      "title": "Connexions Foundry",
+      "description": "Connecta't a altres projectes Foundry per descobrir els seus agents.",
+      "connectButton": "Connecta un projecte Microsoft Azure Foundry",
+      "connectButtonShort": "Connecta un projecte Foundry",
+      "addButton": "Afegeix font personalitzada",
+      "addAnother": "Afegeix una altra connexió",
+      "noSources": "No hi ha fonts personalitzades configurades.",
+      "removeSource": "Elimina la font",
+      "confirmRemove": "Vols eliminar?",
+      "sourceConnected": "font personalitzada connectada",
+      "sourcesConnected": "fonts personalitzades connectades",
+      "backToAgents": "Enrere",
+      "discoveredAgents": "Agents descoberts",
+      "viewConnection": "Mostra els detalls de la connexió",
+      "edit": "Edita",
+      "noAgentsPublished": "No hi ha agents publicats",
+      "connectedOn": "Connectat el {date}",
+      "disconnectSource": "Desconnecta aquesta font",
+      "confirmDisconnect": "Fes clic novament per confirmar",
+      "loadingAgents": "Carregant agents...",
+      "noAgentsFound": "No s'han trobat agents en aquest projecte",
+      "noAgentsFoundHint": "Assegura't que els agents estiguin publicats i que tinguis el rol d'usuari Azure AI en aquest projecte.",
+      "refresh": "Actualitza",
+      "refreshAgents": "Actualitza els agents",
+      "technicalDetails": "Detalls tècnics",
+      "agentCountLabel": "{count} agents",
+      "disconnectedToast": "{name} desconnectat/da"
+    }
   },
   "privacy": {
     "policyTitle": "Política de privacitat i protecció de dades",

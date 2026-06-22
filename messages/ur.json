@@ -380,7 +380,59 @@
     "delete": "حذف کریں",
     "noCustomAgentsYet": "ابھی تک کوئی حسب ضرورت ایجنٹ نہیں۔",
     "noOrgAgentsConfigured": "کوئی تنظیمی ایجنٹ ترتیب نہیں دیا گیا۔",
-    "validationFailed": "توثیق ناکام ہوگئی"
+    "validationFailed": "توثیق ناکام ہوگئی",
+    "addAgentSource": "کسٹم سورس شامل کریں",
+    "connectFoundryProject": "Microsoft Azure Foundry پروجیکٹ سے منسلک کریں",
+    "connectFoundryDescription": "کسی دوسرے دفتر یا ٹیم کے Azure Foundry پروجیکٹ سے ایجنٹس دریافت کریں۔ آپ صرف وہی ایجنٹس دیکھیں گے جن تک آپ کو رسائی کی اجازت ہے۔",
+    "foundryProjectPath": "Foundry پروجیکٹ پاتھ",
+    "foundryProjectPathHelp": "اپنے Foundry پروجیکٹ ایڈمنسٹریٹر سے پوچھیں یا 'Enter manually' پر کلک کریں تاکہ ہر فیلڈ الگ الگ پُر کریں۔",
+    "copyFormat": "فارمیٹ",
+    "nameLabel": "نام",
+    "namePlaceholder": "مثلاً: ایمسٹرڈیم آفس، جنیوا ریسرچ",
+    "pathRequired": "Foundry پروجیکٹ ریسورس پاتھ پیسٹ کریں۔",
+    "pathInvalidFormat": "یہ ریسورس پاتھ معلوم نہیں ہوتا۔ یہ /subscriptions/... سے شروع ہونا چاہیے۔",
+    "connectionFailed": "اس پروجیکٹ تک رسائی حاصل نہیں ہو سکی۔ تصدیق کریں کہ پاتھ درست ہے اور آپ کے پاس رسائی ہے۔",
+    "connectionSuccessAgents": "منسلک — {count} ایجنٹ(ز) ملے",
+    "connectionSuccessEmpty": "منسلک ہے، لیکن کوئی ایجنٹ نہیں ملا۔ اس پروجیکٹ کے ایجنٹس دیکھنے کیلئے آپ کو Azure AI User رول درکار ہو سکتا ہے۔",
+    "checkingConnection": "کنکشن چیک کیا جا رہا ہے...",
+    "connect": "منسلک کریں",
+    "save": "محفوظ کریں",
+    "editConnection": "کنکشن میں ترمیم کریں",
+    "sourceName": "سورس کا نام",
+    "sourceNamePlaceholder": "ایمسٹرڈیم آفس",
+    "sourceNameRequired": "سورس کا نام درکار ہے۔",
+    "resourcePath": "ریسورس پاتھ",
+    "resourcePathRequired": "ریسورس پاتھ درکار ہے۔",
+    "resourcePathHelp": "Foundry پروجیکٹ کا ARM ریسورس پاتھ۔ یہ ویلیو اپنے ایڈمنسٹریٹر سے لیں۔",
+    "invalidResourcePathFormat": "ریسورس پاتھ کو /subscriptions/... سے شروع ہونا چاہیے۔",
+    "validatingSource": "ایجنٹس تلاش کیے جا رہے ہیں...",
+    "sourceValidatedEmpty": "سورس درست ہے، لیکن کوئی ایجنٹ نہیں ملا۔ ہو سکتا ہے اس پروجیکٹ میں آپ کو ایجنٹس تک رسائی نہ ہو۔",
+    "invalidSource": "اس ریسورس پاتھ تک رسائی حاصل نہیں ہو سکی۔ پاتھ اور اپنی اجازتیں چیک کریں۔",
+    "addSource": "سورس شامل کریں",
+    "removeSource": "سورس ہٹائیں",
+    "labelSubscription": "سبسکرپشن",
+    "labelFoundryAccount": "Foundry اکاؤنٹ",
+    "labelProject": "پروجیکٹ",
+    "tooltipSubscription": "وہ Azure سبسکرپشن جس میں Foundry اکاؤنٹ شامل ہے۔ اگر آپ کو یقین نہیں ہے تو اپنے ایڈمن سے معلوم کریں کہ آپ کی ٹیم کون سی سبسکرپشن استعمال کرتی ہے۔",
+    "tooltipFoundryAccount": "وہ Azure AI Services اکاؤنٹ جہاں Foundry پروجیکٹ ہے۔ ہر دفتر یا ٹیم کا عموماً اپنا اکاؤنٹ ہوتا ہے۔",
+    "tooltipProject": "ایک پروجیکٹ اکاؤنٹ میں ایجنٹس کو منظم کرتا ہے۔ زیادہ تر اکاؤنٹس میں ایک 'default' پروجیکٹ ہوتا ہے۔",
+    "foundryProjectLabel": "Foundry پروجیکٹ",
+    "enterManually": "دستی طور پر درج کریں",
+    "browseResources": "وسائل تلاش کریں",
+    "subscriptionIdLabel": "سبسکرپشن آئی ڈی",
+    "resourceGroupLabel": "ریسورس گروپ",
+    "accountNameLabel": "اکاؤنٹ کا نام",
+    "projectNameLabel": "پروجیکٹ کا نام",
+    "loadingSubscriptions": "سبسکرپشنز لوڈ ہو رہی ہیں...",
+    "selectSubscription": "سبسکرپشن منتخب کریں...",
+    "loadingAccounts": "اکاؤنٹس لوڈ ہو رہے ہیں...",
+    "noAccountsFound": "اس سبسکرپشن میں کوئی Foundry اکاؤنٹ نہیں ملا۔",
+    "selectAccount": "اکاؤنٹ منتخب کریں...",
+    "loadingProjects": "پروجیکٹس لوڈ ہو رہے ہیں...",
+    "noProjectsFound": "کوئی پروجیکٹ نہیں ملا۔ \"default\" استعمال کیا جا رہا ہے۔",
+    "selectAllRequired": "سبسکرپشن، اکاؤنٹ اور پروجیکٹ منتخب کریں۔",
+    "subscriptionRequired": "سبسکرپشن منتخب کریں",
+    "accountRequired": "Foundry اکاؤنٹ منتخب کریں"
   },
   "Quick Actions": "فوری کارروائیاں",
   "Type / in chat to access your prompts": "اپنے پرامپٹس تک رسائی کے لیے چیٹ میں / ٹائپ کریں",
@@ -537,7 +589,10 @@
     "no": "نہیں",
     "yes": "ہاں",
     "noResults": "کوئی نتائج نہیں",
-    "beta": "بیٹا"
+    "beta": "بیٹا",
+    "copied": "کاپی ہو گیا!",
+    "clear": "صاف کریں",
+    "undo": "واپس لیں"
   },
   "errors": {
     "unexpectedErrorOccurred": "ایک غیر متوقع خرابی پیش آگئی",
@@ -693,13 +748,90 @@
     "stopGenerationDontAskAgainButton": "بٹن سے روکنے پر دوبارہ نہ پوچھیں",
     "stopGenerationDontAskAgainKeyboard": "کی بورڈ سے روکنے پر دوبارہ نہ پوچھیں",
     "generateResponseButton": "جواب تیار کریں",
-    "downloadResponse": "جواب ڈاؤن لوڈ کریں"
+    "downloadResponse": "جواب ڈاؤن لوڈ کریں",
+    "activity": {
+      "callingTool": "ٹول کال کیا جا رہا ہے…",
+      "callingService": "بیرونی سروس کال کی جا رہی ہے…",
+      "usingNamedTool": "{tool} استعمال کیا جا رہا ہے…",
+      "usingNamedToolWithService": "{service} پر {tool} استعمال کیا جا رہا ہے…",
+      "searchingWeb": "ویب تلاش کی جا رہی ہے…",
+      "searchingFiles": "فائلز تلاش کی جا رہی ہیں…",
+      "runningCode": "کوڈ چلایا جا رہا ہے…",
+      "generatingImage": "تصویر بنائی جا رہی ہے…",
+      "listingTools": "دستیاب ٹولز معلوم کیے جا رہے ہیں…",
+      "analyzingFiles": "آپ کی فائلز کا تجزیہ کیا جا رہا ہے…",
+      "searchingKnowledge": "نالج بیس تلاش کی جا رہی ہے…",
+      "cancellingPriorTool": "گزشتہ ٹول کی درخواست منسوخ کی جا رہی ہے…"
+    },
+    "toolSummary": {
+      "usedTools": "{count, plural, one {# ٹول استعمال ہوا} other {# ٹولز استعمال ہوئے}}",
+      "failedCount": "{count} ناکام",
+      "statusApproved": "منظور شدہ",
+      "statusAutoApproved": "خودکار طور پر منظور شدہ",
+      "statusAutoDenied": "خودکار طور پر مسترد شدہ",
+      "statusFailed": "ناکام",
+      "statusIncomplete": "نامکمل",
+      "viaService": "{service} کے ذریعے"
+    },
+    "consent": {
+      "authorizeRequired": "اجازت درکار ہے",
+      "authorizeService": "{service} کی اجازت دیں",
+      "descriptionGeneric": "اس ایجنٹ کو محفوظ وسائل تک رسائی کے لیے آپ کی اجازت چاہیے۔ آپ کا سائن ان اَپ اسٹریم سروس کے ذریعے منظم کیا جاتا ہے، یہاں محفوظ نہیں ہوتا۔",
+      "descriptionWithService": "اس ایجنٹ کو {service} تک رسائی کے لیے آپ کی اجازت چاہیے۔ آپ کا {service} سائن ان خود {service} منظم کرتا ہے، یہاں محفوظ نہیں ہوتا۔",
+      "signInIncompleteGeneric": "سائن ان مکمل نہیں ہوا",
+      "signInIncompleteForService": "{service} پر سائن ان مکمل نہیں ہوا",
+      "signInIncompleteDescriptionGeneric": "ایسا لگتا ہے کہ اجازت مکمل نہیں ہوئی۔ یقینی بنائیں کہ آپ نے دوسرے ٹیب میں سائن ان مکمل کر لیا ہے، پھر دوبارہ Continue پر کلک کریں۔",
+      "signInIncompleteDescription": "ایسا لگتا ہے کہ {service} کی اجازت مکمل نہیں ہوئی۔ یقینی بنائیں کہ آپ نے دوسرے ٹیب میں سائن ان مکمل کر لیا ہے، پھر دوبارہ Continue پر کلک کریں۔",
+      "authorizeButton": "اجازت دیں",
+      "reauthorizeButton": "دوبارہ اجازت دیں",
+      "continueButton": "Continue",
+      "confirmingButton": "تصدیق کی جا رہی ہے…",
+      "authorizeHint": "اجازت دیں، پھر یہاں واپس آئیں اور Continue پر کلک کریں۔ بعد میں اجازت منسوخ کرنے کے لیے براہ راست {service} سے سائن آؤٹ کریں — ہم ٹوکن نہیں رکھتے۔",
+      "authorizeHintGeneric": "اجازت دیں، پھر یہاں واپس آئیں اور Continue پر کلک کریں۔ بعد میں اجازت منسوخ کرنے کے لیے براہ راست اَپ اسٹریم سروس سے سائن آؤٹ کریں — ہم ٹوکن نہیں رکھتے۔",
+      "continueHint": "دوسرے ٹیب میں اجازت مکمل ہونے کے بعد Continue پر کلک کریں۔",
+      "confirmingHint": "اجازت کی تصدیق اور آپ کی درخواست دوبارہ شروع کی جا رہی ہے…",
+      "resendHint": "اجازت دینے کے بعد، جاری رکھنے کے لیے اپنا پیغام دوبارہ بھیجیں۔",
+      "resetTooltip": "اس گفتگو کے لیے تمام ٹول کی خودکار منظوری کی ترجیحات ری سیٹ کریں۔ آئندہ ٹول کال پر دوبارہ اجازت طلب کی جائے گی۔",
+      "autoApproveAllIndicator": "تمام ٹولز خودکار طور پر منظور کیے جا رہے ہیں",
+      "autoApproveCountIndicator": "{count, plural, one {# ٹول خودکار طور پر منظور کیا جا رہا ہے} other {# ٹولز خودکار طور پر منظور کیے جا رہے ہیں}}",
+      "resetShort": "ری سیٹ کریں",
+      "approvalRequired": "ٹول کی منظوری درکار ہے",
+      "approvalForService": "{service} کے لیے ٹول منظور کریں",
+      "approvalDescriptionGeneric": "ایجنٹ کوئی ایسا ٹول چلانا چاہتا ہے جس کے لیے آگے بڑھنے سے پہلے آپ کی منظوری ضروری ہے۔",
+      "approvalDescriptionWithTool": "ایجنٹ {tool} ٹول چلانا چاہتا ہے، جس کے لیے آگے بڑھنے سے پہلے آپ کی منظوری ضروری ہے۔",
+      "runToolTitle": "<code>{tool}</code> چلائیں؟",
+      "runToolGeneric": "یہ ٹول چلائیں؟",
+      "viaService": "{service} کے ذریعے",
+      "approveButton": "منظور کریں",
+      "approveOptionsLabel": "منظوری کے اختیارات",
+      "approveOnce": "صرف ایک بار منظوری دیں",
+      "alwaysApproveThisTool": "ہمیشہ اس ٹول کی منظوری دیں",
+      "alwaysApproveAllTools": "تمام ٹولز کی ہمیشہ منظوری دیں",
+      "denyButton": "منع کریں",
+      "keyboardHint": "{modifier}+⏎ منظور کریں · esc منع کریں",
+      "submittingState": "آپ کا فیصلہ جمع کیا جا رہا ہے",
+      "approvedState": "منظور شدہ — ایجنٹ دوبارہ شروع ہوا",
+      "deniedState": "منع کر دیا گیا",
+      "submittingApproval": "منظور کر کے ایجنٹ دوبارہ شروع کیا جا رہا ہے…",
+      "submittingDenial": "آپ کی ممانعت بھیجی جا رہی ہے…"
+    },
+    "openImage": "تصویر کھولیں",
+    "copyMessage": "پیغام نقل کریں",
+    "stopAudio": "آڈیو روکیں",
+    "generatingAudio": "آڈیو تیار کیا جا رہا ہے...",
+    "listen": "سنیں",
+    "processingAudio": "آڈیو پروسیس ہو رہی ہے...",
+    "ttsError": "آڈیو تیار کرنے میں خرابی۔ براہ کرم دوبارہ کوشش کریں۔",
+    "unsupportedMessageType": "پیغام ظاہر کرنے میں خرابی: غیر معاون پیغام کی قسم"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
     "expandSidebar": "سائیڈ بار کو پھیلائیں",
     "quickActionsTitle": "فوری اقدامات",
-    "quickActions": "فوری اقدامات"
+    "quickActions": "فوری اقدامات",
+    "expandFolder": "فولڈر {name} کھولیں",
+    "collapseFolder": "فولڈر {name} بند کریں",
+    "folderOptions": "{name} کے اختیارات"
   },
   "prompts": {
     "buildReusablePrompts": "AI کی مدد سے دوبارہ قابل استعمال پرامپٹس بنائیں",
@@ -1015,7 +1147,9 @@
     "behaviorSection": "رویّہ",
     "resetChatSettings": "چیٹ سیٹنگز ری سیٹ کریں",
     "resetChatSettingsConfirmTitle": "کیا آپ چیٹ سیٹنگز ری سیٹ کرنا چاہتے ہیں؟",
-    "resetChatSettingsConfirmMessage": "یہ اس پینل کی تمام سیٹنگز کو ڈیفالٹ پر بحال کر دے گا: درجہ حرارت، حسب منشا ہدایات، آپ کے بارے میں، ماڈل کا جواب، اسٹریمنگ کی رفتار، ٹیکسٹ ٹو اسپیچ، ایکٹو فائلز اور تصدیقات۔ یہ آپ کی گفتگوؤں پر اثر انداز نہیں ہوگا۔"
+    "resetChatSettingsConfirmMessage": "یہ اس پینل کی تمام سیٹنگز کو ڈیفالٹ پر بحال کر دے گا: درجہ حرارت، حسب منشا ہدایات، آپ کے بارے میں، ماڈل کا جواب، اسٹریمنگ کی رفتار، ٹیکسٹ ٹو اسپیچ، ایکٹو فائلز اور تصدیقات۔ یہ آپ کی گفتگوؤں پر اثر انداز نہیں ہوگا۔",
+    "customInstructionsLabel": "حسب منشا ہدایات*",
+    "defaultTemperatureLabel": "ڈیفالٹ ٹمپریچر*"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1115,7 +1249,9 @@
     "cancelledBody": "صارف نے منسوخ کی",
     "transientBody": "براہ کرم دوبارہ کوشش کریں",
     "authFailedBody": "براہ کرم دوبارہ سائن ان کریں",
-    "rateLimitedBody": "سروس اپنی حد پر ہے، براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں"
+    "rateLimitedBody": "سروس اپنی حد پر ہے، براہ کرم تھوڑی دیر بعد دوبارہ کوشش کریں",
+    "loadingAttempt": "(کوشش {count})",
+    "transcriptLabel": "[تدوین: {filename}]"
   },
   "importBackupParseError": "بیک اپ فائل پارس کرنے میں ناکام۔ براہ کرم یقینی بنائیں کہ یہ درست JSON ہے۔",
   "emptyState": {
@@ -1224,7 +1360,8 @@
       "learnPrivacy": "جانیے کہ آپ کی رازداری کیسے محفوظ رکھی جاتی ہے"
     },
     "sections": {
-      "baseModels": "بنیادی ماڈلز"
+      "baseModels": "بنیادی ماڈلز",
+      "allModels": "تمام ماڈلز ({count})"
     },
     "tabs": {
       "models": "ماڈلز",
@@ -1249,7 +1386,19 @@
       "reasoning": "پیچیدہ مسائل کے لیے توسیعی تجزیہ",
       "omni": "وسیع صلاحیتوں کے ساتھ کثیر النوع ماڈل",
       "agent": "حقیقی وقت کے ٹولز اور ویب رسائی والا ایجنٹ"
-    }
+    },
+    "hide": "فہرست سے چھپائیں",
+    "hideConfirmTitle": "\"{name}\" کو چھپائیں؟",
+    "hideConfirmMessage": "یہ آپ کی فہرست سے ہٹا دیا جائے گا لیکن حذف نہیں ہوگا۔ آپ اسے کسی بھی وقت Hidden سیکشن سے دوبارہ بحال کر سکتے ہیں۔",
+    "hideConfirm": "چھپائیں",
+    "hiddenToast": "\"{name}\" چھپا دیا گیا",
+    "hidden": {
+      "title": "چھپائے گئے ({count})",
+      "restore": "بحال کریں"
+    },
+    "title": "ماڈل منتخب کریں",
+    "modelsDescription": "اپنی گفتگو کے لیے AI ماڈل منتخب کریں۔ ہر ماڈل کی الگ خصوصیات ہیں — تفصیلات دیکھنے کے لیے کوئی ایک منتخب کریں۔",
+    "recommended": "تجویز کردہ"
   },
   "models": {
     "gpt_4_1": {
@@ -1326,6 +1475,16 @@
       "name": "GPT-5.2 چیٹ",
       "description": "GPT-5.2 کا خصوصی ورژن جو مکالماتی تعامل اور جذباتی فہم کے لیے بہتر بنایا گیا ہے۔ ہمدردانہ گفتگو، ذہنی صحت میں معاونت، تخلیقی تحریر، آئیڈیاز کی تلاش، اور قدرتی مکالمے میں بہترین۔ غیر رسمی بات چیت، رہنمائی، اور اُن کاموں کے لیے بہترین جہاں جذباتی آگاہی درکار ہو۔",
       "knowledgeCutoff": "دسمبر 2025"
+    },
+    "claude_opus_4_6": {
+      "name": "Claude Opus 4.6",
+      "description": "این تھروپک کا سب سے مضبوط ماڈل۔ طویل تحریری، تحقیق اور باریک بینی سے سوچنے کے کاموں کے لیے بہترین۔",
+      "knowledgeCutoff": "فروری 2026"
+    },
+    "claude_sonnet_4_6": {
+      "name": "Claude Sonnet 4.6",
+      "description": "ایک متوازن Claude ماڈل۔ روزمرہ کی تحریر، تجزیہ اور فوری جوابات کے ساتھ کوڈنگ کے لیے عمدہ۔",
+      "knowledgeCutoff": "فروری 2026"
     }
   },
   "searchMode": {
@@ -1802,7 +1961,45 @@
       "createButton": "اپنی مرضی کا ایجنٹ بنائیں",
       "experimentalBlurb": "تجرباتی — MSF کے ماہر صارفین کے ساتھ براہ راست تعاون سے تیار کیا گیا۔ عام استعمال کے لیے نہیں۔"
     },
-    "selectAgentPrompt": "شروع کرنے کے لیے ایک ایجنٹ منتخب کریں"
+    "selectAgentPrompt": "شروع کرنے کے لیے ایک ایجنٹ منتخب کریں",
+    "description": "خصوصی AI ایجنٹس مخصوص کاموں کے لیے۔ ڈیفالٹ ایجنٹس مرکزی طور پر مینیج کیے جاتے ہیں؛ دیگر Foundry پروجیکٹس سے ایجنٹس دریافت کرنے کے لیے حسب منشا ذرائع شامل کریں۔",
+    "regionAgents": {
+      "us": "امریکی خطے کے ایجنٹس",
+      "eu": "یورپی خطے کے ایجنٹس",
+      "default": "ریجن ایجنٹس"
+    },
+    "officeAgents": {
+      "suffix": "ایجنٹس"
+    },
+    "agentSources": {
+      "title": "فاؤنڈری کنکشنز",
+      "description": "دیگر فاؤنڈری پروجیکٹس سے کنیکٹ کریں اور ان کے ایجنٹس دریافت کریں۔",
+      "connectButton": "Microsoft Azure Foundry پروجیکٹ کنیکٹ کریں",
+      "connectButtonShort": "فاؤنڈری پروجیکٹ کنیکٹ کریں",
+      "addButton": "کسٹم سورس شامل کریں",
+      "addAnother": "ایک اور کنکشن شامل کریں",
+      "noSources": "کوئی کسٹم سورس ترتیب نہیں دیا گیا۔",
+      "removeSource": "سورس ہٹائیں",
+      "confirmRemove": "ہٹائیں؟",
+      "sourceConnected": "کسٹم سورس کنیکٹ ہوگیا",
+      "sourcesConnected": "کسٹم سورسز کنیکٹ ہوگئے",
+      "backToAgents": "واپس",
+      "discoveredAgents": "دریافت شدہ ایجنٹس",
+      "viewConnection": "کنکشن کی تفصیلات دیکھیں",
+      "edit": "تدوین کریں",
+      "noAgentsPublished": "کوئی ایجنٹس شائع نہیں ہوئے",
+      "connectedOn": "کنیکٹ ہوا: {date}",
+      "disconnectSource": "یہ سورس ڈسکنیکٹ کریں",
+      "confirmDisconnect": "تصدیق کے لیے دوبارہ کلک کریں",
+      "loadingAgents": "ایجنٹس لوڈ ہو رہے ہیں...",
+      "noAgentsFound": "اس پروجیکٹ میں کوئی ایجنٹس نہیں ملے",
+      "noAgentsFoundHint": "یقینی بنائیں کہ ایجنٹس شائع ہوئے ہیں اور اس پروجیکٹ میں آپ کے پاس Azure AI User رول ہے۔",
+      "refresh": "ریفریش",
+      "refreshAgents": "ایجنٹس ریفریش کریں",
+      "technicalDetails": "تکنیکی تفصیلات",
+      "agentCountLabel": "{count} ایجنٹس",
+      "disconnectedToast": "{name} ڈسکنیکٹ ہوگیا"
+    }
   },
   "privacy": {
     "title": "رازداری",
