@@ -1,8 +1,6 @@
 import { useSession } from 'next-auth/react';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 
-import { useSearchParams } from 'next/navigation';
-
 import { checkUserTermsAcceptance } from '@/lib/utils/app/user/termsAcceptance';
 
 import TermsAcceptanceModal from './TermsAcceptanceModal';
@@ -29,7 +27,6 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
   children,
 }) => {
   const { data: session, status } = useSession();
-  const searchParams = useSearchParams();
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [checkingTerms, setCheckingTerms] = useState<boolean>(true);
 
@@ -38,11 +35,7 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
       if (status === 'loading') return;
 
       // Check for force terms override (useful for testing or forcing re-acceptance)
-      // Can be triggered via environment variable or URL parameter
-      const forceTermsEnv =
-        process.env.NEXT_PUBLIC_FORCE_TERMS_MODAL === 'true';
-      const forceTermsUrl = searchParams?.get('forceShowTerms') === 'true';
-      const forceTerms = forceTermsEnv || forceTermsUrl;
+      const forceTerms = process.env.NEXT_PUBLIC_FORCE_TERMS_MODAL === 'true';
 
       if (forceTerms && status === 'authenticated' && session?.user) {
         // Force show terms for all authenticated users, bypassing region and acceptance checks
@@ -74,7 +67,7 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
     };
 
     checkTermsAcceptance();
-  }, [session, status, searchParams]);
+  }, [session, status]);
 
   /**
    * Handles the acceptance of terms and conditions by the user.

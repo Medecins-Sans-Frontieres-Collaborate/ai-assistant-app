@@ -170,7 +170,10 @@ export function handleApiError(
   console.error('API Error:', error);
 
   if (error instanceof Error) {
-    const status = (error as any).status || (error as any).statusCode || 500;
+    // HTTP-error-shaped Errors carry status under `.status` or `.statusCode`
+    // depending on the library; neither is part of the base Error type.
+    const err = error as Error & { status?: number; statusCode?: number };
+    const status = err.status || err.statusCode || 500;
     return errorResponse(error.message, status);
   }
 

@@ -1,6 +1,9 @@
 import NextAuth, { Session } from 'next-auth';
-import { JWT } from 'next-auth/jwt';
+import { JWT, getToken } from 'next-auth/jwt';
 import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
+import { NextRequest } from 'next/server';
+
+import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 
 declare module 'next-auth' {
   interface User {
@@ -13,6 +16,10 @@ declare module 'next-auth' {
     department?: string;
     companyName?: string;
     region?: 'US' | 'EU';
+    /** ID of the user's office, e.g. 'msf-usa'. Null if no office matched. */
+    officeId?: string | null;
+    /** Human-readable office name, e.g. 'MSF USA'. */
+    officeName?: string | null;
   }
 
   interface Session {
@@ -40,6 +47,8 @@ declare module 'next-auth/jwt' {
     userDepartment?: string;
     userCompanyName?: string;
     userRegion?: 'US' | 'EU';
+    userOfficeId?: string | null;
+    userOfficeName?: string | null;
   }
 }
 
@@ -52,6 +61,23 @@ interface UserData {
   department?: string;
   mail?: string;
   companyName?: string;
+}
+
+/**
+ * Resolves a user's office and region from their email domain in one lookup,
+ * falling back to the region heuristic when no office matches.
+ */
+function resolveOfficeAndRegion(email: string | undefined): {
+  region: 'US' | 'EU';
+  officeId: string | null;
+  officeName: string | null;
+} {
+  const office = OfficeResolver.findOfficeByEmail(email);
+  return {
+    region: office?.region ?? OfficeResolver.getRegionForUser(email),
+    officeId: office?.id ?? null,
+    officeName: office?.displayName ?? null,
+  };
 }
 
 const refreshAccessToken = async (token: JWT): Promise<JWT> => {
@@ -128,6 +154,74 @@ async function fetchUserData(accessToken: string): Promise<UserData> {
   };
 }
 
+/**
+ * Gets a fresh access token for OBO exchange from the user's refresh token.
+ * The returned token is scoped to the app's own audience (api://<client-id>/.default)
+ * and serves as the "user assertion" for OnBehalfOfCredential.
+ *
+ * The refresh token is read from the JWT via getToken() — it is deliberately
+ * never exposed on the Session, so client code can't read it and callers must
+ * pass the incoming request so we can decrypt the server-side cookie.
+ *
+ * Returns null if the token cannot be acquired (e.g., missing refresh token).
+ */
+export async function getAccessTokenForOBO(
+  req: NextRequest,
+): Promise<string | null> {
+  // getToken derives the cookie name + JWE salt from `secureCookie`, so we must
+  // match how the cookie was issued: prod (https) uses the __Secure- prefixed
+  // cookie, dev (http) the unprefixed one. Behind a TLS-terminating proxy the
+  // internal request can be http, so key off the configured auth URL rather
+  // than the request protocol.
+  const secureCookie =
+    (process.env.AUTH_URL || process.env.NEXTAUTH_URL || '').startsWith(
+      'https',
+    ) || process.env.NODE_ENV === 'production';
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+    secureCookie,
+  });
+
+  if (!token?.refreshToken) {
+    console.warn('[Auth] No refresh token available for OBO exchange');
+    return null;
+  }
+
+  try {
+    const url = `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/token`;
+
+    const formData = {
+      grant_type: 'refresh_token',
+      client_id: process.env.AZURE_CLIENT_ID || '',
+      client_secret: process.env.AZURE_CLIENT_SECRET || '',
+      refresh_token: token.refreshToken,
+      scope: `${process.env.AZURE_CLIENT_ID}/.default`,
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(formData).toString(),
+    });
+
+    const tokens = await response.json();
+
+    if (!response.ok) {
+      console.error(
+        '[Auth] OBO token acquisition failed:',
+        tokens.error_description,
+      );
+      return null;
+    }
+
+    return tokens.access_token;
+  } catch (error) {
+    console.error('[Auth] Error acquiring access token for OBO:', error);
+    return null;
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   session: {
@@ -161,11 +255,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // Fetch full user profile for logging/analytics
           const userData = await fetchUserData(account.access_token);
 
-          // Determine region based on email
-          const userRegion: 'US' | 'EU' =
-            userData.mail && userData.mail.toLowerCase().includes('newyork')
-              ? 'US'
-              : 'EU';
+          // Resolve office (and region) from email domain
+          const { region, officeId, officeName } = resolveOfficeAndRegion(
+            userData.mail,
+          );
 
           return {
             ...token,
@@ -185,16 +278,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userJobTitle: userData.jobTitle,
             userDepartment: userData.department,
             userCompanyName: userData.companyName,
-            userRegion,
+            userRegion: region,
+            userOfficeId: officeId,
+            userOfficeName: officeName,
           };
         } catch (error) {
           console.error('Error fetching user data during login:', error);
           // Fallback to OAuth token data if Graph API fails
           const fallbackEmail = token.email || undefined;
-          const userRegion: 'US' | 'EU' =
-            fallbackEmail && fallbackEmail.toLowerCase().includes('newyork')
-              ? 'US'
-              : 'EU';
+          const { region, officeId, officeName } =
+            resolveOfficeAndRegion(fallbackEmail);
 
           return {
             ...token,
@@ -206,7 +299,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             userId: token.sub || '',
             userDisplayName: token.name || '',
             userMail: fallbackEmail,
-            userRegion,
+            userRegion: region,
+            userOfficeId: officeId,
+            userOfficeName: officeName,
           };
         }
       }
@@ -229,11 +324,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const userDisplayName = token.userDisplayName || token.name || '';
       const userMail = token.userMail || token.email || undefined;
 
-      // Determine region from email if not set in token (for old tokens)
-      let userRegion = token.userRegion;
-      if (!userRegion && userMail) {
-        userRegion = userMail.toLowerCase().includes('newyork') ? 'US' : 'EU';
-      }
+      // Determine region/office from email if not set in token (for old tokens)
+      const resolved = resolveOfficeAndRegion(userMail);
+      const userRegion = token.userRegion ?? resolved.region;
+      const userOfficeId = token.userOfficeId ?? resolved.officeId;
+      const userOfficeName = token.userOfficeName ?? resolved.officeName;
 
       return {
         ...session,
@@ -247,6 +342,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           department: token.userDepartment,
           companyName: token.userCompanyName,
           region: userRegion,
+          officeId: userOfficeId,
+          officeName: userOfficeName,
         } as Session['user'],
         error: token.error,
         // Refresh token is deliberately omitted here — it must not reach the

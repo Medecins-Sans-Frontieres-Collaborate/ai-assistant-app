@@ -17,9 +17,13 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '1600mb',
     },
-    // Also increase middleware body buffer limit (defaults to 10MB)
-    // This is needed because middleware buffers the body before passing to Server Actions
-    middlewareClientMaxBodySize: '1600mb',
+    proxyClientMaxBodySize: '1600mb',
+    // Tree-shake big icon / utility packages so unused exports don't bloat
+    // the first-load JS bundle. @tabler/icons-react has 108+ import sites
+    // and re-exports thousands of icons; without this every page pulls the
+    // full registry. Verified safe for these packages — they use named
+    // exports throughout.
+    optimizePackageImports: ['@tabler/icons-react', '@tanstack/react-query'],
   },
 
   // Remove X-Powered-By header for security
@@ -71,18 +75,23 @@ const nextConfig = {
 
   // Security & caching headers
   headers: async () => {
+    const isProd = process.env.NODE_ENV === 'production';
     return [
-      // Hashed static assets — immutable, cache for 1 year (defense-in-depth)
-      {
-        source: '/_next/static/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // HTML pages — always revalidate so browsers fetch the latest chunk manifest
+      // Overriding cache headers on /_next/static/* breaks Turbopack HMR in
+      // dev (module-factory load errors), so only set this in prod.
+      ...(isProd
+        ? [
+            {
+              source: '/_next/static/(.*)',
+              headers: [
+                {
+                  key: 'Cache-Control',
+                  value: 'public, max-age=31536000, immutable',
+                },
+              ],
+            },
+          ]
+        : []),
       {
         source: '/((?!_next|api|icons|favicon).*)',
         headers: [

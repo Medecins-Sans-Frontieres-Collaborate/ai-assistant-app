@@ -7,8 +7,9 @@ interface ModelCardProps {
   isSelected: boolean;
   onClick: () => void;
   icon?: ReactNode;
-  typeIcon?: ReactNode;
   badge?: ReactNode;
+  /** One-liner shown under the name to help users decide. */
+  tagline?: string;
   /** Show up/down reorder controls */
   showReorderControls?: boolean;
   /** Whether the model can be moved up */
@@ -31,8 +32,8 @@ export const ModelCard: FC<ModelCardProps> = ({
   isSelected,
   onClick,
   icon,
-  typeIcon,
   badge,
+  tagline,
   showReorderControls = false,
   canMoveUp = false,
   canMoveDown = false,
@@ -43,11 +44,11 @@ export const ModelCard: FC<ModelCardProps> = ({
     <div
       key={id}
       className={`
-        w-full text-left p-3 rounded-lg transition-all duration-150 flex items-center gap-2
+        w-full text-left px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center gap-2
         ${
           isSelected
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-            : 'bg-white dark:bg-[#212121] border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+            : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
         }
       `}
     >
@@ -61,14 +62,14 @@ export const ModelCard: FC<ModelCardProps> = ({
               onMoveUp?.();
             }}
             disabled={!canMoveUp}
-            className={`p-0.5 rounded transition-colors ${
+            className={`p-1.5 rounded transition-colors ${
               canMoveUp
                 ? 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
             aria-label="Move up"
           >
-            <IconChevronUp size={14} />
+            <IconChevronUp size={16} />
           </button>
           <button
             type="button"
@@ -77,14 +78,14 @@ export const ModelCard: FC<ModelCardProps> = ({
               onMoveDown?.();
             }}
             disabled={!canMoveDown}
-            className={`p-0.5 rounded transition-colors ${
+            className={`p-1.5 rounded transition-colors ${
               canMoveDown
                 ? 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                 : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
             aria-label="Move down"
           >
-            <IconChevronDown size={14} />
+            <IconChevronDown size={16} />
           </button>
         </div>
       )}
@@ -93,17 +94,25 @@ export const ModelCard: FC<ModelCardProps> = ({
       <button
         type="button"
         onClick={onClick}
-        className="flex-1 flex items-center justify-between text-left"
+        className="flex-1 flex items-center justify-between text-left min-h-[40px] gap-2"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           {icon}
-          <span className="font-medium text-sm text-gray-900 dark:text-white">
-            {name}
-          </span>
-          {badge}
+          <div className="flex flex-col min-w-0 leading-tight">
+            <div className="flex items-center gap-1.5">
+              <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
+                {name}
+              </span>
+              {badge}
+            </div>
+            {tagline && (
+              <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                {tagline}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          {typeIcon}
+        <div className="flex items-center gap-2 shrink-0">
           {isSelected && (
             <IconCheck size={16} className="text-blue-600 dark:text-blue-400" />
           )}

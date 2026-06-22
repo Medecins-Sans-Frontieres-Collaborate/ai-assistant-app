@@ -207,7 +207,7 @@ describe('CitationItem', () => {
       const citationDiv = container.firstChild as HTMLElement;
       expect(citationDiv).toHaveClass('relative');
       expect(citationDiv).toHaveClass('bg-gray-200');
-      expect(citationDiv).toHaveClass('dark:bg-[#171717]');
+      expect(citationDiv).toHaveClass('dark:bg-surface-dark-base');
       expect(citationDiv).toHaveClass('rounded-lg');
     });
 

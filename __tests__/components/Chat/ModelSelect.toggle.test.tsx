@@ -28,13 +28,6 @@ const mockUseSettings = {
   setDefaultSearchMode: vi.fn(),
 };
 
-const mockUseCustomAgents = {
-  customAgents: [],
-  addCustomAgent: vi.fn(),
-  updateCustomAgent: vi.fn(),
-  deleteCustomAgent: vi.fn(),
-};
-
 vi.mock('@/client/hooks/conversation/useConversations', () => ({
   useConversations: () => mockUseConversations,
 }));
@@ -43,8 +36,15 @@ vi.mock('@/client/hooks/settings/useSettings', () => ({
   useSettings: () => mockUseSettings,
 }));
 
-vi.mock('@/client/hooks/settings/useCustomAgents', () => ({
-  useCustomAgents: () => mockUseCustomAgents,
+vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
+  useFoundryAgents: () => ({
+    foundryAgents: [],
+    regionalPath: null,
+    officePaths: [],
+    isLoadingFoundryAgents: false,
+    foundryAgentsError: null,
+    refetchFoundryAgents: vi.fn(),
+  }),
 }));
 
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
@@ -268,7 +268,7 @@ describe('ModelSelect - Toggle Functionality', () => {
         id: 'conv-1',
         name: 'Test',
         messages: [],
-        model: OpenAIModels[OpenAIModelID.GPT_5_2], // No agentId
+        model: OpenAIModels[OpenAIModelID.GPT_5_MINI], // No agentId
         prompt: '',
         temperature: 0.7,
         folderId: null,

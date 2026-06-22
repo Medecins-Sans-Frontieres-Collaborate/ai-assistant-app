@@ -26,7 +26,8 @@ export async function generateConversationTitle(
   modelId: string,
 ): Promise<TitleGenerationResult | null> {
   try {
-    // Convert conversation entries to flat messages for API (title only needs a few messages)
+    // Convert conversation entries to flat messages for API (title only needs a
+    // few messages, so window to avoid sending the whole conversation history)
     const messages = windowMessagesForAPI(
       flattenEntriesForAPI(entries),
       VALIDATION_LIMITS.TITLE_MAX_MESSAGES,

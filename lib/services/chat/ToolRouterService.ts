@@ -11,7 +11,7 @@ import { OpenAI } from 'openai';
 /**
  * ToolRouterService
  *
- * Determines which tools are needed for a given message using GPT-4.1.
+ * Determines which tools are needed for a given message using gpt-5.4-nano.
  * Uses a lightweight model to intelligently decide when web search is beneficial.
  */
 export class ToolRouterService {
@@ -99,12 +99,13 @@ IMPORTANT: Always provide searchQuery in your response:
               lastMessage: currentMessage.substring(0, 100),
             });
 
-            // Use gpt-5-mini for efficient tool routing decisions
-            // This works with any OpenAI-compatible endpoint
-            // Note: gpt-5-mini only supports default temperature (1), custom values not allowed
+            // gpt-5.4-nano: cheapest/fastest tier for the routing decision.
+            // reasoning_effort minimal + 80-token cap keeps latency low.
             const response = await this.openAIClient.chat.completions.create({
-              model: 'gpt-5-mini',
+              model: 'gpt-5.4-nano',
               messages: conversationMessages,
+              reasoning_effort: 'minimal',
+              max_completion_tokens: 80,
               response_format: {
                 type: 'json_schema',
                 json_schema: {
@@ -123,12 +124,8 @@ IMPORTANT: Always provide searchQuery in your response:
                         description:
                           'Optimized search query if web search is needed, empty string otherwise',
                       },
-                      reasoning: {
-                        type: 'string',
-                        description: 'Brief explanation of the decision',
-                      },
                     },
-                    required: ['needsWebSearch', 'searchQuery', 'reasoning'],
+                    required: ['needsWebSearch', 'searchQuery'],
                     additionalProperties: false,
                   },
                 },
@@ -145,7 +142,6 @@ IMPORTANT: Always provide searchQuery in your response:
               'tool_router.needs_web_search',
               result.needsWebSearch,
             );
-            span.setAttribute('tool_router.reasoning', result.reasoning);
             span.setStatus({ code: SpanStatusCode.OK });
 
             if (result.needsWebSearch) {
@@ -153,18 +149,29 @@ IMPORTANT: Always provide searchQuery in your response:
               return {
                 tools: ['web_search'] as ToolType[],
                 searchQuery: result.searchQuery || currentMessage,
-                reasoning: result.reasoning || 'Web search recommended by AI',
+                reasoning: 'Web search recommended by AI',
               };
             }
 
             return {
               tools: [] as ToolType[],
-              reasoning: result.reasoning || 'No tools needed',
+              reasoning: 'No tools needed',
             };
           } catch (error) {
-            console.error('[ToolRouterService] Error determining tool:', error);
+            // Make the silent-degradation path loud. If gpt-5.4-nano ever
+            // rejects `reasoning_effort: 'minimal'` or the JSON schema
+            // changes shape, every routing decision falls back to "no
+            // search" — which is a real regression, not just a transient
+            // failure. Mark it on the span so it surfaces in telemetry,
+            // and log with enough detail to diagnose without re-running.
+            const errMessage =
+              error instanceof Error ? error.message : String(error);
+            console.error(
+              `[ToolRouterService] Falling back to no-tools (web_search disabled). Cause: ${errMessage}`,
+            );
             span.recordException(error as Error);
-            // Fail gracefully - no tools
+            span.setAttribute('tool_router.fallback', 'error');
+            span.setAttribute('tool_router.fallback_reason', errMessage);
             return {
               tools: [],
               reasoning: 'Error determining tools, proceeding without search',
@@ -202,7 +209,7 @@ IMPORTANT: Always provide searchQuery in your response:
    * Extracts text content from complex message content structures.
    * Handles string, array, and object content types.
    */
-  private extractTextContent(content: any): string {
+  private extractTextContent(content: Message['content']): string {
     if (typeof content === 'string') {
       return content;
     }
@@ -210,14 +217,10 @@ IMPORTANT: Always provide searchQuery in your response:
     if (Array.isArray(content)) {
       const textParts = content
         .filter((c) => c.type === 'text')
-        .map((c) => c.text);
+        .map((c) => ('text' in c ? c.text : ''));
       return textParts.join('\n');
     }
 
-    if (content && typeof content === 'object' && 'text' in content) {
-      return content.text;
-    }
-
-    return '[non-text content]';
+    return content.text;
   }
 }

@@ -55,7 +55,7 @@ export const CitationListItem: React.FC<CitationListItemProps> = ({
       target="_blank"
       rel="noopener noreferrer"
       title={citation.title}
-      className="flex items-center w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-[#171717] hover:bg-gray-200 dark:hover:bg-[#222222] border border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/40 transition-all duration-200 no-underline group"
+      className="flex items-center w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-surface-dark-base hover:bg-gray-200 dark:hover:bg-surface-dark border border-transparent hover:border-blue-400/50 dark:hover:border-blue-500/40 transition-all duration-200 no-underline group"
     >
       <span className="flex-shrink-0 w-6 text-xs font-semibold text-blue-600 dark:text-blue-400">
         [{citation.number}]

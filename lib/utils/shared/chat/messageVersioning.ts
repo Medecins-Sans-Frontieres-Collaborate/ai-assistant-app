@@ -28,6 +28,10 @@ export function entryToDisplayMessage(entry: ConversationEntry): Message {
       thinking: activeVersion.thinking,
       transcript: activeVersion.transcript,
       error: activeVersion.error,
+      approvalOutcomes: activeVersion.approvalOutcomes,
+      approvalSources: activeVersion.approvalSources,
+      toolCalls: activeVersion.toolCalls,
+      consentRequests: activeVersion.consentRequests,
     };
   }
   return entry;
@@ -48,6 +52,10 @@ export function messageToVersion(message: Message): AssistantMessageVersion {
     thinking: message.thinking,
     transcript: message.transcript,
     error: message.error,
+    approvalOutcomes: message.approvalOutcomes,
+    approvalSources: message.approvalSources,
+    toolCalls: message.toolCalls,
+    consentRequests: message.consentRequests,
     createdAt: new Date().toISOString(),
   };
 }

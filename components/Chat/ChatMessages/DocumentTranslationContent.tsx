@@ -22,6 +22,20 @@ import {
  * in chat messages. Parses the reference and renders the viewer.
  */
 
+/**
+ * Document Translation Content Component
+ *
+ * Lightweight wrapper for displaying document translation references
+ * in chat messages. Parses the reference and renders the viewer.
+ */
+
+/**
+ * Document Translation Content Component
+ *
+ * Lightweight wrapper for displaying document translation references
+ * in chat messages. Parses the reference and renders the viewer.
+ */
+
 interface DocumentTranslationContentProps {
   /** The content containing the translation reference */
   content: string;

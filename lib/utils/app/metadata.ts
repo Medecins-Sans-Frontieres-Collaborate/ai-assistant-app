@@ -70,6 +70,13 @@ export interface ParsedMetadata {
   activeFilesTokensConsumed?: number;
   activeFilesDropped?: string[];
   extractionMethod: 'metadata' | 'none';
+  /**
+   * Character index in the input string where the terminal
+   * `<<<METADATA_START>>>` marker begins, or null if not present.
+   * The inline-event scanner uses this to cap its scan so it doesn't
+   * walk into the terminal metadata block.
+   */
+  metadataStartIndex: number | null;
 }
 
 /**
@@ -91,20 +98,29 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let activeFilesTokensConsumed: number | undefined;
   let activeFilesDropped: string[] | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
+  let metadataStartIndex: number | null = null;
 
-  // Check for metadata format
-  const metadataMatch = content.match(
-    /\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s,
-  );
+  // Cheap exit when the marker isn't present at all — avoids running the
+  // regex on long streams that have no terminal metadata block yet.
+  const metaIdx = content.indexOf('<<<METADATA_START>>>');
+  const metadataMatch =
+    metaIdx === -1
+      ? null
+      : content.match(/\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/s);
   if (metadataMatch) {
     extractionMethod = 'metadata';
+    // Record the start index of the leading `\n\n` so the scanner caps
+    // its inline-event search before the metadata block.
+    metadataStartIndex = metadataMatch.index ?? metaIdx;
     mainContent = content.replace(
       /\n\n<<<METADATA_START>>>.*?<<<METADATA_END>>>/s,
       '',
     );
 
     try {
-      const parsedData = JSON.parse(metadataMatch[1]);
+      const parsedData = JSON.parse(
+        metadataMatch[1],
+      ) as Partial<StreamMetadata>;
       if (parsedData.citations) {
         citations = parsedData.citations;
       }
@@ -123,16 +139,14 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
       if (parsedData.pendingTranscriptions) {
         pendingTranscriptions = parsedData.pendingTranscriptions;
       }
-      const anyData = parsedData as any;
-      if (anyData.fileCacheUpdates) {
-        fileCacheUpdates =
-          anyData.fileCacheUpdates as StreamMetadata['fileCacheUpdates'];
+      if (parsedData.fileCacheUpdates) {
+        fileCacheUpdates = parsedData.fileCacheUpdates;
       }
-      if (typeof anyData.activeFilesTokensConsumed === 'number') {
-        activeFilesTokensConsumed = anyData.activeFilesTokensConsumed;
+      if (typeof parsedData.activeFilesTokensConsumed === 'number') {
+        activeFilesTokensConsumed = parsedData.activeFilesTokensConsumed;
       }
-      if (Array.isArray(anyData.activeFilesDropped)) {
-        activeFilesDropped = anyData.activeFilesDropped.filter(
+      if (Array.isArray(parsedData.activeFilesDropped)) {
+        activeFilesDropped = parsedData.activeFilesDropped.filter(
           (id: unknown): id is string => typeof id === 'string',
         );
       }
@@ -157,6 +171,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     activeFilesTokensConsumed,
     activeFilesDropped,
     extractionMethod,
+    metadataStartIndex,
   };
 }
 
@@ -183,17 +198,6 @@ export function appendMetadataToStream(
   if (metadata.action) cleanMetadata.action = metadata.action;
   if (metadata.pendingTranscriptions)
     cleanMetadata.pendingTranscriptions = metadata.pendingTranscriptions;
-  if (metadata.fileCacheUpdates)
-    cleanMetadata.fileCacheUpdates = metadata.fileCacheUpdates;
-  if (
-    metadata.activeFilesTokensConsumed != null &&
-    metadata.activeFilesTokensConsumed > 0
-  )
-    (cleanMetadata as Record<string, unknown>).activeFilesTokensConsumed =
-      metadata.activeFilesTokensConsumed;
-  if (metadata.activeFilesDropped && metadata.activeFilesDropped.length > 0)
-    (cleanMetadata as Record<string, unknown>).activeFilesDropped =
-      metadata.activeFilesDropped;
 
   // Only append if we have actual metadata
   if (Object.keys(cleanMetadata).length > 0) {

@@ -277,7 +277,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             {/* Download button */}
             <button
               onClick={handleDownload}
-              className="mx-1 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+              className="mx-1 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label={t('chat.downloadAudio')}
               title={t('chat.downloadAudio')}
             >
@@ -287,7 +287,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+              className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label={t('chat.closeAudioPlayer')}
               title={t('chat.closeAudioPlayer')}
             >

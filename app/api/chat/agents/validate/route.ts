@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from '@/auth';
+import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+
+import { isValidAgentId } from '@/lib/utils/app/agentId';
+
+import { auth, getAccessTokenForOBO } from '@/auth';
 import { env } from '@/config/environment';
-import { AgentsClient } from '@azure/ai-agents';
-import { DefaultAzureCredential } from '@azure/identity';
+import { AIProjectClient } from '@azure/ai-projects';
+import type { AccessToken, TokenCredential } from '@azure/identity';
 
 /**
- * Validates that an Azure AI Foundry agent ID is accessible
+ * Validates that an Azure AI Foundry agent is accessible
  * POST /api/chat/agents/validate
+ *
+ * Accepts both legacy (asst_xxxxx) and new (agent-name) formats.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -25,13 +31,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate agent ID format
-    const agentIdPattern = /^asst_[A-Za-z0-9_-]+$/;
-    if (!agentIdPattern.test(agentId)) {
+    // Validate agent ID format (supports both legacy asst_xxx and new agent-name)
+    if (!isValidAgentId(agentId)) {
       return NextResponse.json(
         {
           error: 'Invalid agent ID format',
-          details: 'Agent ID must match format: asst_xxxxx',
+          details: 'Agent ID must match format: agent-name or asst_xxxxx',
         },
         { status: 400 },
       );
@@ -50,18 +55,62 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Acquire a Foundry-scoped credential for the signed-in user. Validation
+    // must run under the user's identity so the answer reflects the user's
+    // RBAC — using the app's identity would let any user probe agent IDs and
+    // confirm the existence of agents they have no access to.
+    //
+    // In production, OBO failure aborts the validation (503). Dev falls back
+    // to DefaultAzureCredential so local devs without OBO consent can still
+    // exercise the validation path.
+    let credential: TokenCredential;
+    try {
+      const appAccessToken = await getAccessTokenForOBO(req);
+      if (!appAccessToken) throw new Error('No OBO token');
+      const foundryToken =
+        await UserTokenProvider.getInstance().getFoundryToken(appAccessToken);
+      credential = {
+        getToken: async () =>
+          ({
+            token: foundryToken,
+            expiresOnTimestamp: Date.now() + 55 * 60 * 1000,
+          }) as AccessToken,
+      };
+    } catch (e) {
+      if (process.env.NODE_ENV === 'production') {
+        console.error(
+          '[/api/chat/agents/validate] OBO failed:',
+          e instanceof Error ? e.message : e,
+        );
+        return NextResponse.json(
+          {
+            error: 'Authentication unavailable',
+            details:
+              'Unable to validate the agent as your user. Please sign out and back in, then try again.',
+          },
+          { status: 503 },
+        );
+      }
+      console.warn(
+        '[/api/chat/agents/validate] OBO failed (dev), using fallback credential:',
+        e instanceof Error ? e.message : e,
+      );
+      const { DefaultAzureCredential } = await import('@azure/identity');
+      credential = new DefaultAzureCredential();
+    }
+
     // Test connection to the agent
     try {
-      const client = new AgentsClient(endpoint, new DefaultAzureCredential());
+      const project = new AIProjectClient(endpoint, credential);
 
       // Try to retrieve the agent to verify it exists and is accessible
-      const agent = await client.getAgent(agentId);
+      const agent = await project.agents.get(agentId);
 
       if (!agent) {
         return NextResponse.json(
           {
             error: 'Agent not found',
-            details: `Agent ID "${agentId}" does not exist in the MSF AI Assistant Foundry instance.`,
+            details: `Agent "${agentId}" does not exist in the MSF AI Assistant Foundry instance.`,
           },
           { status: 404 },
         );
@@ -82,7 +131,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(
           {
             error: 'Agent not found',
-            details: `Agent ID "${agentId}" does not exist in the MSF AI Assistant Foundry instance. Please verify the ID with your administrator.`,
+            details: `Agent "${agentId}" does not exist in the MSF AI Assistant Foundry instance. Please verify the ID with your administrator.`,
           },
           { status: 404 },
         );

@@ -5,6 +5,10 @@ import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
 import { Tone } from './tone';
 
+// Type-only import: erased at build time, so client bundles don't pull in
+// lib/streamMarkers — but ToolCallRecord stays tied to its marker payload.
+import type { ToolCallRecordPayload } from '@/lib/streamMarkers';
+
 export enum MessageType {
   TEXT = 'TEXT',
   IMAGE = 'IMAGE',
@@ -57,7 +61,7 @@ export interface ThinkingContent {
   thinking: string;
 }
 
-export interface Message {
+export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
   role: Role;
@@ -89,6 +93,57 @@ export interface Message {
   pendingTranscriptionBlobPath?: string;
 }
 
+/**
+ * The shape we persist on a message for a tool call. Identical to the wire
+ * payload — aliased rather than re-declared so the two can't drift.
+ */
+export type ToolCallRecord = ToolCallRecordPayload;
+
+/**
+ * Tool/approval/consent artifacts attached to an assistant turn. Shared by
+ * `Message` (legacy single-message) and `AssistantMessageVersion` (regenerated
+ * versions) so the two stay in lockstep.
+ */
+export interface MessageToolArtifacts {
+  /**
+   * Outcomes for MCP tool-approval prompts that originated in this turn.
+   * Keyed by `approval_request_id`; value is the user's decision (true=approve,
+   * false=deny). Persisted so reloading the conversation doesn't show the card
+   * in pending state again.
+   */
+  approvalOutcomes?: Record<string, boolean>;
+  /**
+   * How each approval was resolved. Parallel to `approvalOutcomes` and used by
+   * the consent card to suppress display for auto-approved tools (those already
+   * appear in the tool usage summary instead).
+   */
+  approvalSources?: Record<string, 'manual' | 'auto-approved' | 'auto-denied'>;
+  /**
+   * Persisted records of MCP tool calls that ran while generating this turn.
+   * Renders as the collapsed "Used N tools" summary below the assistant text.
+   */
+  toolCalls?: ToolCallRecord[];
+  /**
+   * Persisted consent / OAuth prompts emitted during this turn. Saved so a turn
+   * that contained only a consent card (no assistant text) still renders its
+   * card after the stream finalizes and on conversation reload.
+   */
+  consentRequests?: ConsentRequest[];
+}
+
+/**
+ * Persisted shape of a consent / approval prompt. Flat (not discriminated)
+ * so the existing ConsentCard prop shape can satisfy it directly.
+ */
+export interface ConsentRequest {
+  kind: 'oauth' | 'approval';
+  consent_url?: string;
+  approval_request_id?: string;
+  server_label?: string | null;
+  tool_name?: string | null;
+  tool_arguments?: string | null;
+}
+
 export type Role = 'system' | 'assistant' | 'user';
 
 export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
@@ -97,7 +152,7 @@ export type ChatInputSubmitTypes = 'TEXT' | 'IMAGE' | 'FILE' | 'MULTI_FILE';
  * Represents a single assistant message version.
  * Used when the user regenerates responses - each regeneration creates a new version.
  */
-export interface AssistantMessageVersion {
+export interface AssistantMessageVersion extends MessageToolArtifacts {
   content:
     | string
     | Array<TextMessageContent | FileMessageContent>
@@ -188,6 +243,31 @@ export interface ChatBody {
    * branch and the AnthropicHandler caveat.
    */
   autoInjectPinnedImages?: boolean;
+  /**
+   * ARM resource path of the Foundry project that hosts the agent being
+   * invoked. Disambiguates same-named agents across projects in the server
+   * cache and scopes lazy discovery to a single ARM call on cache miss.
+   * Server validates against `isValidFoundryResourcePath` before use; an
+   * invalid or absent value falls back to the regional default.
+   */
+  agentSourcePath?: string;
+  /**
+   * MCP tool-approval responses to submit alongside (or in lieu of) a new
+   * user message. When this is non-empty the server skips creating a new
+   * user-message conversation item and instead posts `mcp_approval_response`
+   * items, then resumes the agent's response stream. See AIFoundryAgentHandler.
+   */
+  approvalResponses?: ApprovalResponse[];
+}
+
+/**
+ * One MCP tool-approval decision the user has submitted from the consent
+ * card. The id is the `approval_request_id` Foundry surfaced when it
+ * emitted the `mcp_approval_request` output item.
+ */
+export interface ApprovalResponse {
+  approval_request_id: string;
+  approve: boolean;
 }
 
 export interface Conversation {
@@ -211,6 +291,16 @@ export interface Conversation {
   activeFilesPriority?: 'recent' | 'pinned' | 'sizeAsc';
   activeFilesMaxCount?: number;
   activeFilesTokensUsed?: number; // cumulative tokens consumed, starts at 0
+  /**
+   * Tool names this conversation auto-approves on sight (no card prompt).
+   * Set when the user picks "Always approve this tool" from a consent card.
+   */
+  alwaysApproveTools?: string[];
+  /**
+   * If true, every MCP tool-approval prompt in this conversation auto-approves
+   * without surfacing a card. Set via "Always approve all tools".
+   */
+  alwaysApproveAllTools?: boolean;
 }
 
 export type FileFieldValue =

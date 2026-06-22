@@ -12,6 +12,8 @@ import { Citation } from '@/types/rag';
 
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
+import { useChatStore } from '@/client/stores/chatStore';
+
 /**
  * AnimatedLoadingText - Fades in/out when text changes
  */
@@ -63,6 +65,8 @@ interface ChatMessagesProps {
   isDraining: boolean;
   citations?: Citation[];
   loadingMessage?: string | null;
+  /** Interpolation params for `loadingMessage` (e.g. {tool: 'get_invoice'}). */
+  loadingMessageParams?: Record<string, string>;
   transcriptionStatus: string | null;
   lastMessageRef: React.RefObject<HTMLDivElement | null>;
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
@@ -87,6 +91,7 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   isDraining,
   citations,
   loadingMessage,
+  loadingMessageParams,
   transcriptionStatus,
   lastMessageRef,
   messagesEndRef,
@@ -102,6 +107,24 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
   const showStreamingDiv =
     (isStreaming && streamingConversationId === selectedConversationId) ||
     isDraining;
+
+  // Side-channel state — when a turn emits only a consent card or tool
+  // record (no text), smoothedContent is empty but we still need to mount
+  // the assistant message for the card to render.
+  const streamingConsentCount = useChatStore(
+    (s) => s.streamingConsentRequests.length,
+  );
+  const streamingToolCallCount = useChatStore(
+    (s) => s.streamingToolCalls.length,
+  );
+  const hasStreamingSideChannel =
+    streamingConsentCount > 0 || streamingToolCallCount > 0;
+
+  // During regenerate the new version replaces an existing index; otherwise
+  // it appends, so the live card targets messages.length.
+  const regeneratingIndex = useChatStore((s) => s.regeneratingIndex);
+  const streamingMessageIndex =
+    regeneratingIndex !== null ? regeneratingIndex : messages.length;
 
   // During drain, hide the last message to avoid duplicate content
   // (the finalized message is already in the list, but we're still animating it)
@@ -192,24 +215,43 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
       {/* Streaming message or loading indicator */}
       {showStreamingDiv && (
         <>
-          {smoothedContent ? (
-            <MemoizedChatMessage
-              message={{
-                role: 'assistant',
-                content: smoothedContent,
-                messageType: MessageType.TEXT,
-                citations,
-              }}
-              messageIndex={messages.length}
-              onEdit={() => {}}
-              onQuestionClick={onSelectPrompt}
-            />
+          {smoothedContent.trim() || hasStreamingSideChannel ? (
+            <>
+              {/* Activity indicator on top — what the agent is doing right
+                  now. The MemoizedChatMessage below renders the text, the
+                  tool summary, and the consent cards as they become known. */}
+              <div className="px-4 pt-2 lg:px-0">
+                <div className="mx-auto max-w-3xl flex items-center gap-3">
+                  <div className="w-3 h-3 bg-gray-500 dark:bg-gray-400 rounded-full animate-breathing flex-shrink-0" />
+                  <AnimatedLoadingText
+                    text={t(
+                      loadingMessage || 'chat.thinking',
+                      loadingMessageParams,
+                    )}
+                  />
+                </div>
+              </div>
+              <MemoizedChatMessage
+                message={{
+                  role: 'assistant',
+                  content: smoothedContent,
+                  messageType: MessageType.TEXT,
+                  citations,
+                }}
+                messageIndex={streamingMessageIndex}
+                onEdit={() => {}}
+                onQuestionClick={onSelectPrompt}
+              />
+            </>
           ) : (
             <div className="relative flex p-4 text-base md:py-6 lg:px-0 w-full">
               <div className="flex items-center gap-3">
                 <div className="w-4 h-4 bg-gray-500 dark:bg-gray-400 rounded-full animate-breathing flex-shrink-0"></div>
                 <AnimatedLoadingText
-                  text={t(loadingMessage || 'chat.thinking')}
+                  text={t(
+                    loadingMessage || 'chat.thinking',
+                    loadingMessageParams,
+                  )}
                 />
               </div>
             </div>

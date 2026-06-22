@@ -1,5 +1,5 @@
 /* KaTeX CSS for math rendering */
-@import "katex/dist/katex.min.css";
+@import 'katex/dist/katex.min.css';
 
 @tailwind base;
 @tailwind components;
@@ -40,21 +40,33 @@
 @source "../node_modules/streamdown/dist/index.js";
 */
 
+:root {
+  --scrollbar-thumb: #ccc;
+  --scrollbar-thumb-hover: #aaa;
+  --scrollbar-track-hover: #f2f2f2;
+}
+
+.dark {
+  --scrollbar-thumb: #555;
+  --scrollbar-thumb-hover: #777;
+  --scrollbar-track-hover: #2a2a2a;
+}
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #ccc;
+  background-color: var(--scrollbar-thumb);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #aaa;
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 ::-webkit-scrollbar-track:hover {
-  background-color: #f2f2f2;
+  background-color: var(--scrollbar-track-hover);
 }
 
 ::-webkit-scrollbar-corner {
@@ -77,20 +89,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #666;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #555;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #777;
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 .no-scrollbar {
@@ -123,12 +127,12 @@ pre {
 }
 
 /* Ensure Streamdown code blocks respect container bounds */
-[data-streamdown="code-block"] {
+[data-streamdown='code-block'] {
   max-width: 100%;
   overflow: hidden;
 }
 
-[data-streamdown="code-block-body"] {
+[data-streamdown='code-block-body'] {
   max-width: 100%;
   overflow-x: auto;
 }
@@ -144,13 +148,19 @@ pre:has(div.codeblock) {
 }
 
 select {
-  background: #171717;
-  color: #fff;
-  border: 1px solid #ccc;
+  background: #fff;
+  color: #171717;
+  border: 1px solid #d1d5db;
   border-radius: 5px;
   padding: 5px;
   outline: none;
   margin: 0 5px;
+}
+
+.dark select {
+  background: #171717;
+  color: #fff;
+  border-color: #4b5563;
 }
 
 /* Citation styling - ensure citations are blue and hoverable even in prose */
@@ -244,7 +254,8 @@ select {
 
 /* Breathing animation for streaming indicator */
 @keyframes breathing {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.7;
   }
@@ -339,12 +350,12 @@ select {
 
 /* Shiki dual theme support - Streamdown uses Tailwind v4 syntax that doesn't work in v3 */
 /* This CSS applies the --shiki-dark variables that Shiki sets inline */
-.dark [data-streamdown="code-block-body"] span {
+.dark [data-streamdown='code-block-body'] span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
 }
 
-.dark [data-streamdown="code-block-body"] {
+.dark [data-streamdown='code-block-body'] {
   background-color: var(--shiki-dark-bg) !important;
 }
 

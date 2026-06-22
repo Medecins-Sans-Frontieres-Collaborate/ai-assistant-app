@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  IconDownload,
   IconFileExport,
   IconInfoCircle,
   IconSparkles,
@@ -269,11 +268,11 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in-fast"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in-fast"
       onClick={onClose}
     >
       <div
-        className="relative w-full h-full max-h-[90vh] max-w-[900px] md:h-[85vh] bg-white dark:bg-[#212121] rounded-xl shadow-2xl overflow-hidden flex flex-col animate-modal-in"
+        className="relative w-full h-full max-h-[90vh] max-w-[900px] md:h-[85vh] bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden flex flex-col animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -340,7 +339,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                   value={templateName}
                   onChange={(e) => setTemplateName(e.target.value)}
                   placeholder={t('exampleMarketingTeamEngineering')}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -356,7 +355,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                     'Describe what this template includes and when to use it...',
                   )}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
 
@@ -369,7 +368,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                   {/* Prompts Section */}
                   {prompts.length > 0 && (
                     <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                         <input
                           type="checkbox"
                           checked={includePrompts}
@@ -405,7 +404,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                       {includePrompts &&
                         showPromptSelection &&
                         prompts.length > 0 && (
-                          <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-neutral-900">
+                          <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-gray-900">
                             <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
                               <button
                                 onClick={() =>
@@ -429,7 +428,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                             {prompts.map((prompt) => (
                               <label
                                 key={prompt.id}
-                                className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded cursor-pointer"
+                                className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer"
                               >
                                 <input
                                   type="checkbox"
@@ -465,7 +464,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                   {/* Tones Section */}
                   {tones.length > 0 && (
                     <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                         <input
                           type="checkbox"
                           checked={includeTones}
@@ -501,7 +500,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                       {includeTones &&
                         showToneSelection &&
                         tones.length > 0 && (
-                          <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-neutral-900">
+                          <div className="max-h-48 overflow-y-auto p-3 space-y-2 bg-white dark:bg-gray-900">
                             <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
                               <button
                                 onClick={() =>
@@ -525,7 +524,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                             {tones.map((tone) => (
                               <label
                                 key={tone.id}
-                                className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-neutral-800 rounded cursor-pointer"
+                                className="flex items-center gap-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded cursor-pointer"
                               >
                                 <input
                                   type="checkbox"
@@ -561,7 +560,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                     (f) => f.type === 'prompt' || f.type === 'tone',
                   ).length > 0 && (
                     <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                         <input
                           type="checkbox"
                           checked={includeFolders}
@@ -584,7 +583,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                   {/* Custom Agents Section */}
                   {customAgents && customAgents.length > 0 && (
                     <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-neutral-800/50">
+                      <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50">
                         <input
                           type="checkbox"
                           checked={includeCustomAgents}
@@ -634,7 +633,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
 
               <button
                 onClick={handleImportClick}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800 text-sm font-medium"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium"
               >
                 <IconUpload size={18} />
                 {t('Import Team Template')}
@@ -658,7 +657,7 @@ export function TeamTemplateModal({ isOpen, onClose }: TeamTemplateModalProps) {
                   {importedTemplates.map((template) => (
                     <div
                       key={template.templateId}
-                      className="p-4 rounded-lg bg-gray-50 dark:bg-neutral-800/50 border border-gray-200 dark:border-gray-700"
+                      className="p-4 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">

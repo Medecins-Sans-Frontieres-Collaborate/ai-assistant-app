@@ -77,11 +77,18 @@ export class AgentChatService {
             `[AgentChatService] Executing web search for query: "${searchQuery}"`,
           );
 
-          // Create a minimal message with just the search query
+          // Force a grounded search; a bare query lets the agent answer from
+          // memory or deflect, returning no Bing results or citations.
+          const searchInstruction =
+            `Perform a live web search now to answer the following query, and cite your sources. ` +
+            `Do not ask for confirmation and do not reply that you need to search — search immediately and report what you find. ` +
+            `If information is limited or not yet finalized, report the best current information available with its source.\n\n` +
+            `Query: ${searchQuery}`;
+
           const searchMessages: Message[] = [
             {
               role: 'user' as const,
-              content: searchQuery,
+              content: searchInstruction,
               messageType: undefined,
             },
           ];

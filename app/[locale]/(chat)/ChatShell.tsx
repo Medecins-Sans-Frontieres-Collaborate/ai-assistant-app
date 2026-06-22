@@ -13,7 +13,6 @@ import { MigrationDialog } from '@/components/Migration/MigrationDialog';
 import { AppInitializer } from '@/components/Providers/AppInitializer';
 import { SettingDialog } from '@/components/Settings/SettingDialog';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
-import { QuarantineNotice } from '@/components/Storage/QuarantineNotice';
 import { StorageWarningDialog } from '@/components/Storage/StorageWarningDialog';
 
 /**
@@ -94,11 +93,10 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         <Sidebar />
 
         <div
-          className={`relative flex flex-1 transition-all duration-300 ease-in-out ${
+          className={`flex flex-1 transition-all duration-300 ease-in-out ${
             showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
           }`}
         >
-          <QuarantineNotice />
           {children}
         </div>
 

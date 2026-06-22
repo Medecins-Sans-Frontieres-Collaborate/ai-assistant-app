@@ -74,8 +74,8 @@ async function retryRemoveFile(
       await fs.promises.unlink(filePath);
       console.log(`Successfully removed file: ${filePath}`);
       return;
-    } catch (error: any) {
-      if (error.code === 'ENOENT') {
+    } catch (error) {
+      if ((error as { code?: string }).code === 'ENOENT') {
         console.log(`File not found, considered as removed: ${filePath}`);
         return;
       }

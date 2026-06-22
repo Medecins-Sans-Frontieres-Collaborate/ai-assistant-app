@@ -37,11 +37,11 @@ export function CustomizationsModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in-fast"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in-fast"
       onClick={onClose}
     >
       <div
-        className="relative w-full h-full max-h-[90vh] max-w-[1400px] md:h-[85vh] bg-white dark:bg-[#212121] rounded-xl shadow-2xl overflow-hidden flex flex-col animate-modal-in"
+        className="relative w-full h-full max-h-[90vh] max-w-[1400px] md:h-[85vh] bg-white dark:bg-surface-dark rounded-xl shadow-xl overflow-hidden flex flex-col animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with Tabs */}

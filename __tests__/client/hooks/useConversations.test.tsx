@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 
@@ -168,7 +168,7 @@ describe('useConversations', () => {
       expect(result.current.filteredConversations).toEqual(convs);
     });
 
-    it('filters conversations by name', () => {
+    it('filters conversations by name', async () => {
       const convs = [
         createMockConversation({ id: 'conv-1', name: 'Apple Discussion' }),
         createMockConversation({ id: 'conv-2', name: 'Banana Talk' }),
@@ -181,13 +181,17 @@ describe('useConversations', () => {
         result.current.setSearchTerm('apple');
       });
 
-      expect(result.current.filteredConversations).toHaveLength(1);
+      // Filter is debounced (250ms) so the assertion runs after the
+      // debounce window has elapsed.
+      await waitFor(() =>
+        expect(result.current.filteredConversations).toHaveLength(1),
+      );
       expect(result.current.filteredConversations[0].name).toBe(
         'Apple Discussion',
       );
     });
 
-    it('filters conversations by message content', () => {
+    it('filters conversations by message content', async () => {
       const convs = [
         createMockConversation({
           id: 'conv-1',
@@ -220,7 +224,9 @@ describe('useConversations', () => {
         result.current.setSearchTerm('python');
       });
 
-      expect(result.current.filteredConversations).toHaveLength(1);
+      await waitFor(() =>
+        expect(result.current.filteredConversations).toHaveLength(1),
+      );
       expect(result.current.filteredConversations[0].id).toBe('conv-1');
     });
   });

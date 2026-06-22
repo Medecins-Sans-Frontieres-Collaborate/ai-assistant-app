@@ -252,7 +252,7 @@ const ChatInputSearch = ({
   };
 
   const content = (
-    <div className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden">
+    <div className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden">
       {/* Header with Close Button */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

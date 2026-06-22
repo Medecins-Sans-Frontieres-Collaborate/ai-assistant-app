@@ -24,10 +24,10 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className="bg-white dark:bg-[#212121]">
+      <body className="bg-white dark:bg-surface-dark">
         {/* Simple hardcoded error UI - no providers needed */}
         <div className="flex h-screen w-full items-center justify-center p-4">
-          <div className="rounded-xl bg-white dark:bg-[#171717] p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl">
+          <div className="rounded-xl bg-white dark:bg-surface-dark-base p-6 shadow-xl border border-red-200 dark:border-red-900/50 w-full max-w-xl">
             <div className="flex items-center gap-4 mb-6">
               <div className="rounded-full bg-red-100 dark:bg-red-900/30 p-3">
                 <IconAlertTriangle

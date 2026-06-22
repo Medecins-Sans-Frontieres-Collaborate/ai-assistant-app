@@ -1,4 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
+
 import { routing } from './config/i18n';
 
 export default getRequestConfig(async ({ requestLocale }) => {

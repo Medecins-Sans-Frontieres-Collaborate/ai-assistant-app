@@ -52,6 +52,10 @@ import {
   DOCUMENT_TRANSLATION_ACCEPT_TYPES,
   TRANSCRIPTION_ACCEPT_TYPES,
 } from '@/lib/constants/fileTypes';
+import {
+  getOrganizationAgentById,
+  getOrganizationAgentIdFromModelId,
+} from '@/lib/organizationAgents';
 
 interface DropdownProps {
   onCameraClick: () => void;
@@ -277,23 +281,43 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [searchMode, setSearchMode, selectedConversation?.defaultSearchMode]);
 
+  // Foundry agents and org agents with allowWebSearch:false manage their own
+  // search behavior — hide the toggle so it can't contradict the agent.
+  const hideWebSearch = useMemo(() => {
+    const modelId = selectedConversation?.model?.id;
+    if (!modelId) return false;
+    if (modelId.startsWith('foundry-')) return true;
+    const orgAgentId = getOrganizationAgentIdFromModelId(modelId);
+    if (!orgAgentId) return false;
+    const agent = getOrganizationAgentById(orgAgentId);
+    if (!agent) return false;
+    if (agent.type === 'foundry') return true;
+    return agent.allowWebSearch === false;
+  }, [selectedConversation?.model?.id]);
+
   // Define menu items - memoized to avoid ref access issues during render
   const menuItems: MenuItem[] = useMemo(
     () => [
-      {
-        id: 'search',
-        icon: <IconWorld size={18} className="text-blue-500 flex-shrink-0" />,
-        label:
-          searchMode === SearchMode.ALWAYS
-            ? `✓ ${t('webSearchDropdown')}`
-            : t('webSearchDropdown'),
-        infoTooltip: t('dropdown.searchTooltip'),
-        onClick: () => {
-          toggleSearchMode();
-          closeDropdown();
-        },
-        category: 'web',
-      },
+      ...(hideWebSearch
+        ? []
+        : [
+            {
+              id: 'search',
+              icon: (
+                <IconWorld size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label:
+                searchMode === SearchMode.ALWAYS
+                  ? `✓ ${t('webSearchDropdown')}`
+                  : t('webSearchDropdown'),
+              infoTooltip: t('dropdown.searchTooltip'),
+              onClick: () => {
+                toggleSearchMode();
+                closeDropdown();
+              },
+              category: 'web' as const,
+            },
+          ]),
       {
         id: 'tone',
         icon: (
@@ -384,6 +408,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       selectedToneId,
       tones,
       hasCameraSupport,
+      hideWebSearch,
       closeDropdown,
       setIsToneOpen,
       setIsTranslateOpen,

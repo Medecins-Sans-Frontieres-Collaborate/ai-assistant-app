@@ -136,9 +136,7 @@ export class FileProcessingService {
           BlobProperty.BLOB,
         )) as Buffer;
         await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
-        // Sanitize id for logging to prevent log injection
-        const safeId = id.replace(/[\r\n\t]/g, '');
-        console.log(`[FileProcessingService] Using cached text: ${safeId}`);
+        console.log(`[FileProcessingService] Using cached text: ${id}`);
         console.log(
           `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
         );
@@ -173,7 +171,11 @@ export class FileProcessingService {
    * @returns File contents as Buffer
    */
   async readFile(filePath: string, maxRetries: number = 2): Promise<Buffer> {
-    return retryAsync(() => fs.promises.readFile(filePath), maxRetries, 1000);
+    return retryAsync(
+      () => Promise.resolve(fs.readFileSync(filePath)),
+      maxRetries,
+      1000,
+    );
   }
 
   /**
@@ -183,11 +185,13 @@ export class FileProcessingService {
    */
   async cleanupFile(filePath: string): Promise<void> {
     try {
-      await fs.promises.unlink(filePath);
+      fs.unlinkSync(filePath);
     } catch (fileUnlinkError) {
       if (
         fileUnlinkError instanceof Error &&
-        (fileUnlinkError as NodeJS.ErrnoException).code === 'ENOENT'
+        fileUnlinkError.message.startsWith(
+          'ENOENT: no such file or directory, unlink',
+        )
       ) {
         console.warn('File not found during cleanup, but this is acceptable.');
       } else {
@@ -198,7 +202,6 @@ export class FileProcessingService {
 
   /**
    * Generates a safe temporary file path using blob ID.
-   * Includes sanitization to prevent path traversal attacks.
    *
    * The path is unique per call (random prefix): blob IDs are content
    * hashes, so two concurrent requests referencing the same file would
@@ -206,8 +209,7 @@ export class FileProcessingService {
    * the file out from under the other mid-transcription.
    *
    * @param fileUrl - The blob storage URL
-   * @returns Tuple of [sanitizedBlobId, resolvedFilePath]
-   * @throws Error if blobId is missing, contains unsafe characters, or results in path traversal
+   * @returns Tuple of [blobId, filePath]
    */
   getTempFilePath(fileUrl: string): [string, string] {
     const blobId = fileUrl.split('/').pop();

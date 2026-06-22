@@ -12,6 +12,8 @@ import {
   ActiveFile,
   AssistantMessageVersion,
   Conversation,
+  MessageToolArtifacts,
+  ToolCallRecord,
   isAssistantMessageGroup,
 } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
@@ -101,6 +103,81 @@ interface ConversationStore {
   clearAllActiveFiles: (conversationId: string) => void;
   setPinned: (conversationId: string, fileId: string, pinned: boolean) => void;
   deductActiveFilesTokens: (conversationId: string, tokens: number) => void;
+  /**
+   * Persists an MCP tool-approval outcome on the source message. Index points
+   * at the message that emitted the approval request; we update its
+   * `approvalOutcomes` map so re-render uses the resolved state. The
+   * optional `source` records *how* the approval resolved so the UI can
+   * distinguish a manual click from an auto-approve match (used by the
+   * consent card to suppress display for auto-approved tools).
+   */
+  recordApprovalOutcome: (
+    conversationId: string,
+    messageIndex: number,
+    approvalRequestId: string,
+    approve: boolean,
+    source?: 'manual' | 'auto-approved' | 'auto-denied',
+  ) => void;
+  /**
+   * Sets the conversation's auto-approve scope. `mode: 'tool'` adds toolName
+   * to the per-tool allowlist; `mode: 'all'` enables blanket auto-approval
+   * for every MCP tool prompt in the conversation.
+   */
+  setAutoApprove: (
+    conversationId: string,
+    mode: 'tool' | 'all',
+    toolName?: string,
+  ) => void;
+  /**
+   * Clears every auto-approve flag (per-tool list + "all tools" flag) on
+   * the conversation, returning future approval prompts to manual confirm.
+   * Used by the ChatTopbar "Reset tool permissions" affordance.
+   */
+  resetAutoApprove: (conversationId: string) => void;
+  /**
+   * Persists a batch of MCP tool-call records on the source message so the
+   * tool usage summary survives reload. Replaces any existing records on
+   * the message (records carry their own ids; the stream is authoritative).
+   */
+  recordToolCalls: (
+    conversationId: string,
+    messageIndex: number,
+    toolCalls: ToolCallRecord[],
+  ) => void;
+}
+
+/**
+ * Applies an artifact update to the addressed message — the active version when
+ * it's a regenerated group, or the entry itself for a legacy message — and
+ * bumps `updatedAt`. Leaves the conversation untouched when it doesn't match or
+ * the index is empty. Shared by `recordApprovalOutcome` and `recordToolCalls`.
+ */
+function applyMessageArtifacts(
+  conversations: Conversation[],
+  conversationId: string,
+  messageIndex: number,
+  update: (current: MessageToolArtifacts) => Partial<MessageToolArtifacts>,
+): Conversation[] {
+  return conversations.map((c) => {
+    if (c.id !== conversationId) return c;
+
+    const messages = [...c.messages];
+    const entry = messages[messageIndex];
+    if (!entry) return c;
+
+    if (isAssistantMessageGroup(entry)) {
+      const versions = [...entry.versions];
+      const active = versions[entry.activeIndex];
+      if (active) {
+        versions[entry.activeIndex] = { ...active, ...update(active) };
+        messages[messageIndex] = { ...entry, versions };
+      }
+    } else {
+      messages[messageIndex] = { ...entry, ...update(entry) };
+    }
+
+    return { ...c, messages, updatedAt: new Date().toISOString() };
+  });
 }
 
 export const useConversationStore = create<ConversationStore>()(
@@ -504,6 +581,87 @@ export const useConversationStore = create<ConversationStore>()(
           toast('Active files session quota reached. Files have been cleared.');
         }
       },
+
+      setAutoApprove: (conversationId, mode, toolName) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            if (mode === 'all') {
+              return {
+                ...c,
+                alwaysApproveAllTools: true,
+                updatedAt: new Date().toISOString(),
+              };
+            }
+            if (mode === 'tool' && toolName) {
+              const existing = c.alwaysApproveTools ?? [];
+              if (existing.includes(toolName)) return c;
+              return {
+                ...c,
+                alwaysApproveTools: [...existing, toolName],
+                updatedAt: new Date().toISOString(),
+              };
+            }
+            return c;
+          }),
+        })),
+
+      recordApprovalOutcome: (
+        conversationId,
+        messageIndex,
+        approvalRequestId,
+        approve,
+        source,
+      ) =>
+        set((state) => ({
+          conversations: applyMessageArtifacts(
+            state.conversations,
+            conversationId,
+            messageIndex,
+            (current) => ({
+              approvalOutcomes: {
+                ...(current.approvalOutcomes ?? {}),
+                [approvalRequestId]: approve,
+              },
+              approvalSources: source
+                ? {
+                    ...(current.approvalSources ?? {}),
+                    [approvalRequestId]: source,
+                  }
+                : current.approvalSources,
+            }),
+          ),
+        })),
+
+      resetAutoApprove: (conversationId) =>
+        set((state) => ({
+          conversations: state.conversations.map((c) => {
+            if (c.id !== conversationId) return c;
+            const hadState =
+              !!c.alwaysApproveAllTools ||
+              (c.alwaysApproveTools && c.alwaysApproveTools.length > 0);
+            if (!hadState) return c;
+            return {
+              ...c,
+              alwaysApproveAllTools: false,
+              alwaysApproveTools: [],
+              updatedAt: new Date().toISOString(),
+            };
+          }),
+        })),
+
+      recordToolCalls: (conversationId, messageIndex, toolCalls) =>
+        set((state) => {
+          if (toolCalls.length === 0) return state;
+          return {
+            conversations: applyMessageArtifacts(
+              state.conversations,
+              conversationId,
+              messageIndex,
+              () => ({ toolCalls }),
+            ),
+          };
+        }),
     }),
     {
       name: 'conversation-storage',

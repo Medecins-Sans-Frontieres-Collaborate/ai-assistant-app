@@ -78,11 +78,11 @@ export const UserMenu: FC<UserMenuProps> = ({
   return (
     <div
       ref={userMenuRef}
-      className={`border-t transition-all duration-300 relative ${showChatbar ? 'border-neutral-300 dark:border-neutral-700' : 'border-transparent'}`}
+      className={`border-t transition-all duration-300 relative ${showChatbar ? 'border-gray-300 dark:border-gray-700' : 'border-transparent'}`}
     >
       {/* User button */}
       <button
-        className={`flex w-full items-center p-3 text-sm text-neutral-700 transition-all duration-300 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800 ${showChatbar ? 'gap-3' : 'justify-center'}`}
+        className={`flex w-full items-center p-3 text-sm text-gray-700 transition-all duration-300 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800 ${showChatbar ? 'gap-3' : 'justify-center'}`}
         onClick={() => {
           if (showChatbar) {
             setShowUserMenu(!showUserMenu);
@@ -141,9 +141,9 @@ export const UserMenu: FC<UserMenuProps> = ({
 
       {/* Dropdown menu */}
       {showUserMenu && showChatbar && (
-        <div className="absolute bottom-full left-0 right-0 mb-1 mx-2 rounded-lg border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121] overflow-hidden">
+        <div className="absolute bottom-full left-0 right-0 mb-1 mx-2 rounded-lg border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark overflow-hidden">
           <button
-            className="w-full text-left px-4 py-3 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3"
+            className="w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 flex items-center gap-3"
             onClick={handleSettingsClick}
           >
             <IconSettings size={18} className="shrink-0" />
@@ -151,14 +151,14 @@ export const UserMenu: FC<UserMenuProps> = ({
           </button>
           <Link
             href="/info/help"
-            className="w-full text-left px-4 py-3 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 border-t border-neutral-200 dark:border-neutral-700"
+            className="w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 flex items-center gap-3 border-t border-gray-200 dark:border-gray-700"
             onClick={() => setShowUserMenu(false)}
           >
             <IconHelp size={18} className="shrink-0" />
             <span>{t('Help Center')}</span>
           </Link>
           <button
-            className="w-full text-left px-4 py-3 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 border-t border-neutral-200 dark:border-neutral-700"
+            className="w-full text-left px-4 py-3 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 flex items-center gap-3 border-t border-gray-200 dark:border-gray-700"
             onClick={handleLogout}
           >
             <IconLogout size={18} className="shrink-0" />

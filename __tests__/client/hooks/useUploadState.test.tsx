@@ -177,9 +177,8 @@ describe('useUploadState', () => {
     });
 
     it('calls onFileUpload with correct arguments', async () => {
-      const { onFileUpload } = await import(
-        '@/client/handlers/chatInput/file-upload'
-      );
+      const { onFileUpload } =
+        await import('@/client/handlers/chatInput/file-upload');
       const { result } = renderHook(() => useUploadState());
 
       const mockEvent = { target: { files: [] } } as any;

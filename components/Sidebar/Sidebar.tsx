@@ -20,7 +20,7 @@ import {
   IconUpload,
 } from '@tabler/icons-react';
 import { signOut, useSession } from 'next-auth/react';
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { PiSidebarSimple } from 'react-icons/pi';
 
@@ -44,6 +44,7 @@ import {
   readFolderFile,
   validateAndPrepareFolderImport,
 } from '@/lib/utils/app/export/folderExport';
+import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
@@ -57,6 +58,7 @@ import Modal from '@/components/UI/Modal';
 
 import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
+import { VirtualConversationList } from './VirtualConversationList';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
@@ -65,8 +67,9 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * Sidebar with conversation list - migrated to use Zustand stores
  */
-export function Sidebar() {
+export const Sidebar = memo(function Sidebar() {
   const t = useTranslations();
+  const modifierLabel = usePlatformModifier();
   const params = useParams();
   const locale = params?.locale || 'en';
   const { data: session } = useSession();
@@ -129,6 +132,14 @@ export function Sidebar() {
     items: displayConversations,
   });
 
+  // Open search modal from keyboard shortcut event.
+  useEffect(() => {
+    const handler = () => setIsSearchModalOpen(true);
+    document.addEventListener('keyboard-search-conversations', handler);
+    return () =>
+      document.removeEventListener('keyboard-search-conversations', handler);
+  }, []);
+
   // Fetch user photo on mount (with localStorage caching)
   useEffect(() => {
     const fetchUserPhoto = async () => {
@@ -168,19 +179,17 @@ export function Sidebar() {
     fetchUserPhoto();
   }, [session?.user?.id]);
 
-  // Listen for search conversations event from keyboard shortcuts system
+  // Keyboard shortcut for search (⌘K / Ctrl+K)
   useEffect(() => {
-    const handleSearchConversations = () => setIsSearchModalOpen(true);
-    document.addEventListener(
-      'keyboard-search-conversations',
-      handleSearchConversations,
-    );
-    return () => {
-      document.removeEventListener(
-        'keyboard-search-conversations',
-        handleSearchConversations,
-      );
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchModalOpen(true);
+      }
     };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Close folder menu when clicking outside
@@ -270,7 +279,7 @@ export function Sidebar() {
     selectConversation(newConversation.id);
   };
 
-  // Listen for keyboard shortcut event to create new conversation
+  // Trigger new-conversation from keyboard shortcut event.
   useEffect(() => {
     const handler = () => handleNewConversation();
     document.addEventListener('keyboard-new-conversation', handler);
@@ -279,35 +288,38 @@ export function Sidebar() {
     };
     // handleNewConversation depends on many values, but we want to always use the latest version
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    conversations,
-    selectedConversation,
-    models,
-    defaultModelId,
-    systemPrompt,
-    temperature,
-    defaultSearchMode,
-  ]);
+  }, []);
 
-  const handleSelectConversation = (conversationId: string) => {
-    // Skip if already selected
-    if (conversationId === selectedConversation?.id) return;
+  // useCallback so the memoized ConversationItem doesn't see new function
+  // references and re-render on every Sidebar update.
+  const handleSelectConversation = useCallback(
+    (conversationId: string) => {
+      // Skip if already selected
+      if (conversationId === selectedConversation?.id) return;
 
-    // Check if document viewer is open with unsaved changes
-    if (isArtifactOpen && hasUnsavedChanges()) {
-      // Store the pending conversation and show dialog
-      setPendingConversationId(conversationId);
-      setShowDiscardDialog(true);
-      return;
-    }
+      // Check if document viewer is open with unsaved changes
+      if (isArtifactOpen && hasUnsavedChanges()) {
+        // Store the pending conversation and show dialog
+        setPendingConversationId(conversationId);
+        setShowDiscardDialog(true);
+        return;
+      }
 
-    // If artifact is open but no changes, close it silently
-    if (isArtifactOpen) {
-      closeArtifact();
-    }
+      // If artifact is open but no changes, close it silently
+      if (isArtifactOpen) {
+        closeArtifact();
+      }
 
-    selectConversation(conversationId);
-  };
+      selectConversation(conversationId);
+    },
+    [
+      selectedConversation?.id,
+      isArtifactOpen,
+      hasUnsavedChanges,
+      closeArtifact,
+      selectConversation,
+    ],
+  );
 
   // Handle discard confirmation
   const handleDiscardConfirm = () => {
@@ -325,17 +337,17 @@ export function Sidebar() {
     setPendingConversationId(null);
   };
 
-  const handleDeleteConversation = (
-    conversationId: string,
-    e: React.MouseEvent,
-  ) => {
-    e.stopPropagation();
-    if (
-      window.confirm(t('Are you sure you want to delete this conversation?'))
-    ) {
-      deleteConversation(conversationId);
-    }
-  };
+  const handleDeleteConversation = useCallback(
+    (conversationId: string, e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (
+        window.confirm(t('Are you sure you want to delete this conversation?'))
+      ) {
+        deleteConversation(conversationId);
+      }
+    },
+    [t, deleteConversation],
+  );
 
   const handleCreateFolder = () => {
     folderManager.handleCreateFolder('chat', t('New folder'), addFolder);
@@ -345,29 +357,32 @@ export function Sidebar() {
     folderManager.handleCreateFolder('prompt', t('New folder'), addFolder);
   };
 
-  const handleMoveToFolder = (
-    conversationId: string,
-    folderId: string | null,
-  ) => {
-    updateConversation(conversationId, { folderId });
-  };
+  const handleMoveToFolder = useCallback(
+    (conversationId: string, folderId: string | null) => {
+      updateConversation(conversationId, { folderId });
+    },
+    [updateConversation],
+  );
 
-  const handleRenameConversation = (
-    conversationId: string,
-    newName: string,
-  ) => {
-    updateConversation(conversationId, { name: newName });
-  };
+  const handleRenameConversation = useCallback(
+    (conversationId: string, newName: string) => {
+      updateConversation(conversationId, { name: newName });
+    },
+    [updateConversation],
+  );
 
-  const handleExportConversation = (conversation: Conversation) => {
-    try {
-      exportConversation(conversation);
-      toast.success(t('Conversation exported successfully'));
-    } catch (error) {
-      console.error('Error exporting conversation:', error);
-      toast.error(t('Failed to export conversation'));
-    }
-  };
+  const handleExportConversation = useCallback(
+    (conversation: Conversation) => {
+      try {
+        exportConversation(conversation);
+        toast.success(t('Conversation exported successfully'));
+      } catch (error) {
+        console.error('Error exporting conversation:', error);
+        toast.error(t('Failed to export conversation'));
+      }
+    },
+    [t],
+  );
 
   const handleExportFolder = (folderId: string, folderName: string) => {
     try {
@@ -483,7 +498,7 @@ export function Sidebar() {
 
       {/* Sidebar - hidden on mobile by default, overlay when open */}
       <div
-        className={`fixed left-0 top-0 z-50 h-full flex flex-col border-r border-neutral-300 bg-white dark:border-neutral-700 dark:bg-[#171717] transition-all duration-300 ease-in-out w-[260px] ${
+        className={`fixed left-0 top-0 z-50 h-full flex flex-col border-r border-gray-300 bg-white dark:border-gray-700 dark:bg-surface-dark-base transition-all duration-300 ease-in-out w-[260px] ${
           showChatbar
             ? 'translate-x-0 overflow-hidden'
             : '-translate-x-full md:translate-x-0 md:w-14 overflow-visible'
@@ -498,17 +513,18 @@ export function Sidebar() {
 
         {/* Action buttons */}
         <div
-          className={`border-b transition-all duration-300 ${showChatbar ? 'py-2 px-3 space-y-1 border-neutral-300 dark:border-neutral-700 overflow-hidden' : 'py-3 px-0 space-y-2 border-transparent overflow-visible'}`}
+          className={`border-b transition-all duration-300 ${showChatbar ? 'py-2 px-3 space-y-1 border-gray-300 dark:border-gray-700 overflow-hidden' : 'py-3 px-0 space-y-2 border-transparent overflow-visible'}`}
         >
           {/* New chat with dropdown menu */}
           <div ref={newChatButtonRef} className="relative">
             <div
-              className={`group flex items-center w-full rounded-lg text-sm font-medium text-neutral-900 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
+              className={`group flex items-center w-full rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
             >
               <button
                 className={`flex items-center ${showChatbar ? 'gap-2 flex-1' : ''}`}
                 onClick={handleNewConversation}
                 title={t('New chat')}
+                aria-label={t('New chat')}
               >
                 <IconPlus size={20} stroke={2} className="shrink-0" />
                 <span
@@ -519,18 +535,19 @@ export function Sidebar() {
               </button>
               {showChatbar && (
                 <button
-                  className="p-1 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowNewChatMenu(!showNewChatMenu);
                   }}
                   title={t('Options')}
+                  aria-label={t('Options')}
                 >
                   <IconDots size={16} className="shrink-0" />
                 </button>
               )}
               {!showChatbar && (
-                <span className="absolute left-full ml-2 px-2 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+                <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                   {t('New chat')}
                 </span>
               )}
@@ -543,10 +560,10 @@ export function Sidebar() {
             isOpen={showNewChatMenu && showChatbar}
             onClose={() => setShowNewChatMenu(false)}
           >
-            <div className="rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
+            <div className="rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
               <div className="p-1">
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
                 >
                   <IconUpload size={14} />
@@ -558,9 +575,10 @@ export function Sidebar() {
 
           {/* Search button - visible in both states */}
           <button
-            className={`group relative flex items-center w-full rounded-lg text-sm text-neutral-900 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
+            className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
             onClick={() => setIsSearchModalOpen(true)}
             title={t('Search chats')}
+            aria-label={t('Search chats')}
           >
             <IconSearch size={showChatbar ? 16 : 20} className="shrink-0" />
             <span
@@ -569,12 +587,12 @@ export function Sidebar() {
               {t('Search chats')}
             </span>
             {showChatbar && (
-              <span className="ml-auto text-xs text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
-                ⌘K
+              <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                {modifierLabel}+K
               </span>
             )}
             {!showChatbar && (
-              <span className="absolute left-full ml-2 px-2 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                 {t('Search chats')}
               </span>
             )}
@@ -582,9 +600,10 @@ export function Sidebar() {
 
           {/* Quick Actions button - visible in both states */}
           <button
-            className={`group relative flex items-center w-full rounded-lg text-sm text-neutral-900 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
+            className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
             onClick={() => setIsCustomizationsOpen(true)}
             title={t('sidebar.quickActionsTitle')}
+            aria-label={t('sidebar.quickActions')}
           >
             <IconBolt size={showChatbar ? 16 : 20} className="shrink-0" />
             <span
@@ -593,7 +612,7 @@ export function Sidebar() {
               {t('sidebar.quickActions')}
             </span>
             {!showChatbar && (
-              <span className="absolute left-full ml-2 px-2 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
+              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap z-[100] transition-opacity shadow-lg">
                 {t('sidebar.quickActions')}
               </span>
             )}
@@ -604,22 +623,24 @@ export function Sidebar() {
             className={`transition-all duration-300 ${showChatbar ? 'opacity-100 max-h-[100px]' : 'opacity-0 max-h-0 overflow-hidden'}`}
           >
             <div ref={newFolderButtonRef} className="relative">
-              <div className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800">
+              <div className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800">
                 <button
                   className="flex items-center gap-2 flex-1"
                   onClick={handleCreateFolder}
                   title={t('New folder')}
+                  aria-label={t('New folder')}
                 >
                   <IconFolderPlus size={16} />
                   <span className="whitespace-nowrap">{t('New folder')}</span>
                 </button>
                 <button
-                  className="p-1 rounded hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowNewFolderMenu(!showNewFolderMenu);
                   }}
                   title={t('Options')}
+                  aria-label={t('Options')}
                 >
                   <IconDots size={16} className="shrink-0" />
                 </button>
@@ -633,10 +654,10 @@ export function Sidebar() {
             isOpen={showNewFolderMenu && showChatbar}
             onClose={() => setShowNewFolderMenu(false)}
           >
-            <div className="rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]">
+            <div className="rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
               <div className="p-1">
                 <button
-                  className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
                 >
                   <IconUpload size={14} />
@@ -652,7 +673,7 @@ export function Sidebar() {
           className={`flex-1 overflow-y-auto transition-all duration-300 ${showChatbar ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         >
           {displayConversations.length === 0 ? (
-            <div className="p-4 text-center text-sm text-neutral-500">
+            <div className="p-4 text-center text-sm text-gray-500">
               {searchTerm
                 ? t('No conversations found')
                 : isLoaded
@@ -682,7 +703,7 @@ export function Sidebar() {
                   >
                     {/* Folder header */}
                     <div
-                      className={`group flex items-center gap-2 rounded p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
+                      className={`group flex items-center gap-2 rounded p-2 hover:bg-gray-100 dark:hover:bg-gray-800 ${
                         folderManager.dragOverFolderId === folder.id
                           ? 'bg-blue-100 dark:bg-blue-900/30 ring-2 ring-blue-400'
                           : ''
@@ -691,22 +712,30 @@ export function Sidebar() {
                       <button
                         onClick={() => folderManager.toggleFolder(folder.id)}
                         className="shrink-0"
+                        aria-expanded={
+                          !folderManager.collapsedFolders.has(folder.id)
+                        }
+                        aria-label={
+                          folderManager.collapsedFolders.has(folder.id)
+                            ? t('sidebar.expandFolder', { name: folder.name })
+                            : t('sidebar.collapseFolder', { name: folder.name })
+                        }
                       >
                         {folderManager.collapsedFolders.has(folder.id) ? (
                           <IconChevronRight
                             size={16}
-                            className="text-neutral-600 dark:text-neutral-400"
+                            className="text-gray-600 dark:text-gray-400"
                           />
                         ) : (
                           <IconChevronDown
                             size={16}
-                            className="text-neutral-600 dark:text-neutral-400"
+                            className="text-gray-600 dark:text-gray-400"
                           />
                         )}
                       </button>
                       <IconFolder
                         size={16}
-                        className="shrink-0 text-neutral-600 dark:text-neutral-400"
+                        className="shrink-0 text-gray-600 dark:text-gray-400"
                       />
                       {folderManager.editingFolderId === folder.id &&
                       !isCustomizationsOpen ? (
@@ -729,10 +758,10 @@ export function Sidebar() {
                             }
                           }}
                           autoFocus
-                          className="flex-1 rounded border border-neutral-300 bg-white px-2 py-1 text-sm text-neutral-900 focus:border-neutral-500 focus:outline-none dark:border-neutral-600 dark:bg-[#212121] dark:text-neutral-100"
+                          className="flex-1 rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-surface-dark dark:text-gray-100"
                         />
                       ) : (
-                        <span className="flex-1 truncate text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                        <span className="flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100">
                           {folder.name} ({folderConversations.length})
                         </span>
                       )}
@@ -747,7 +776,7 @@ export function Sidebar() {
                         {folderManager.editingFolderId !== folder.id && (
                           <>
                             <button
-                              className="rounded p-1 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                              className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setShowFolderMenuId(
@@ -757,23 +786,27 @@ export function Sidebar() {
                                 );
                               }}
                               title={t('Options')}
+                              aria-label={t('sidebar.folderOptions', {
+                                name: folder.name,
+                              })}
+                              aria-expanded={showFolderMenuId === folder.id}
                             >
                               <IconDots
                                 size={14}
-                                className="text-neutral-600 dark:text-neutral-400"
+                                className="text-gray-600 dark:text-gray-400"
                               />
                             </button>
 
                             {/* Dropdown menu */}
                             {showFolderMenuId === folder.id && (
                               <div
-                                className="absolute right-0 top-full mt-1 z-50 w-48 rounded-md border border-neutral-300 bg-white shadow-lg dark:border-neutral-600 dark:bg-[#212121]"
+                                className="absolute right-0 top-full mt-1 z-50 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="p-1">
                                   {/* Rename option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -785,14 +818,14 @@ export function Sidebar() {
                                   >
                                     <IconEdit
                                       size={14}
-                                      className="text-neutral-600 dark:text-neutral-400"
+                                      className="text-gray-600 dark:text-gray-400"
                                     />
                                     {t('Rename')}
                                   </button>
 
                                   {/* Export option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-neutral-900 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                                    className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -804,14 +837,14 @@ export function Sidebar() {
                                   >
                                     <IconDownload
                                       size={14}
-                                      className="text-neutral-600 dark:text-neutral-400"
+                                      className="text-gray-600 dark:text-gray-400"
                                     />
                                     {t('Export folder')}
                                   </button>
 
                                   {/* Delete option */}
                                   <button
-                                    className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-neutral-100 dark:text-red-400 dark:hover:bg-neutral-800 rounded flex items-center gap-2"
+                                    className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setShowFolderMenuId(null);
@@ -839,20 +872,19 @@ export function Sidebar() {
                     {/* Folder conversations */}
                     {!folderManager.collapsedFolders.has(folder.id) && (
                       <div className="ml-6 space-y-1 mt-1">
-                        {folderConversations.map((conversation) => (
-                          <ConversationItem
-                            key={conversation.id}
-                            conversation={conversation}
-                            selectedConversation={selectedConversation}
-                            handleSelectConversation={handleSelectConversation}
-                            handleDeleteConversation={handleDeleteConversation}
-                            handleMoveToFolder={handleMoveToFolder}
-                            handleRenameConversation={handleRenameConversation}
-                            handleExportConversation={handleExportConversation}
-                            folders={folders}
-                            t={t}
-                          />
-                        ))}
+                        <VirtualConversationList
+                          conversations={folderConversations}
+                          selectedConversationId={
+                            selectedConversation?.id ?? null
+                          }
+                          handleSelectConversation={handleSelectConversation}
+                          handleDeleteConversation={handleDeleteConversation}
+                          handleMoveToFolder={handleMoveToFolder}
+                          handleRenameConversation={handleRenameConversation}
+                          handleExportConversation={handleExportConversation}
+                          folders={folders}
+                          t={t}
+                        />
                       </div>
                     )}
                   </div>
@@ -873,20 +905,17 @@ export function Sidebar() {
                   onDragOver={(e) => folderManager.handleDragOver(e, null)}
                   onDragLeave={folderManager.handleDragLeave}
                 >
-                  {conversationsWithoutFolder.map((conversation) => (
-                    <ConversationItem
-                      key={conversation.id}
-                      conversation={conversation}
-                      selectedConversation={selectedConversation}
-                      handleSelectConversation={handleSelectConversation}
-                      handleDeleteConversation={handleDeleteConversation}
-                      handleMoveToFolder={handleMoveToFolder}
-                      handleRenameConversation={handleRenameConversation}
-                      handleExportConversation={handleExportConversation}
-                      folders={folders}
-                      t={t}
-                    />
-                  ))}
+                  <VirtualConversationList
+                    conversations={conversationsWithoutFolder}
+                    selectedConversationId={selectedConversation?.id ?? null}
+                    handleSelectConversation={handleSelectConversation}
+                    handleDeleteConversation={handleDeleteConversation}
+                    handleMoveToFolder={handleMoveToFolder}
+                    handleRenameConversation={handleRenameConversation}
+                    handleExportConversation={handleExportConversation}
+                    folders={folders}
+                    t={t}
+                  />
                 </div>
               )}
             </div>
@@ -941,4 +970,4 @@ export function Sidebar() {
       />
     </>
   );
-}
+});

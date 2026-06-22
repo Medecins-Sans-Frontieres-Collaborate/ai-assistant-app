@@ -134,7 +134,9 @@ describe('ToolRouterService', () => {
         expect(result.searchQuery).toBe(
           'latest news about AI developments 2025',
         );
-        expect(result.reasoning).toBe('Query asks for current events');
+        // The `reasoning` field was dropped from the schema (saved tokens);
+        // the service returns a stable internal reason string instead.
+        expect(result.reasoning).toBe('Web search recommended by AI');
         expect(mockOpenAIClient.chat.completions.create).toHaveBeenCalled();
       });
 
@@ -173,9 +175,9 @@ describe('ToolRouterService', () => {
         const result = await service.determineTool(request);
 
         expect(result.tools).toEqual([]);
-        expect(result.reasoning).toBe(
-          'General knowledge question about mathematics, no current data needed',
-        );
+        // `reasoning` is no longer round-tripped from the model; the service
+        // returns a stable internal string instead.
+        expect(result.reasoning).toBe('No tools needed');
       });
 
       it('should determine web search is NOT needed for code questions', async () => {
@@ -527,7 +529,7 @@ describe('ToolRouterService', () => {
     });
 
     describe('model configuration', () => {
-      it('should use gpt-5-mini model for tool routing', async () => {
+      it('should use gpt-5.4-nano model for tool routing', async () => {
         const mockResponse = {
           choices: [
             {
@@ -561,7 +563,7 @@ describe('ToolRouterService', () => {
         await service.determineTool(request);
 
         const callArgs = mockOpenAIClient.chat.completions.create.mock.calls[0];
-        expect(callArgs[0].model).toBe('gpt-5-mini');
+        expect(callArgs[0].model).toBe('gpt-5.4-nano');
       });
 
       it('should use structured JSON output with strict schema', async () => {
@@ -598,6 +600,8 @@ describe('ToolRouterService', () => {
         await service.determineTool(request);
 
         const callArgs = mockOpenAIClient.chat.completions.create.mock.calls[0];
+        // Schema was simplified for latency: `reasoning` field was dropped
+        // (it was only used for debug logging and consumed output tokens).
         expect(callArgs[0].response_format).toEqual({
           type: 'json_schema',
           json_schema: {
@@ -615,16 +619,15 @@ describe('ToolRouterService', () => {
                   description:
                     'Optimized search query if web search is needed, empty string otherwise',
                 },
-                reasoning: {
-                  type: 'string',
-                  description: 'Brief explanation of the decision',
-                },
               },
-              required: ['needsWebSearch', 'searchQuery', 'reasoning'],
+              required: ['needsWebSearch', 'searchQuery'],
               additionalProperties: false,
             },
           },
         });
+        // Latency-tuning params should be present.
+        expect(callArgs[0].reasoning_effort).toBe('minimal');
+        expect(callArgs[0].max_completion_tokens).toBe(80);
       });
     });
 

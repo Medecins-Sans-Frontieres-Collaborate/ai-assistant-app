@@ -14,6 +14,15 @@ import { UI_CONSTANTS } from '@/lib/constants/ui';
 import OpenAI from 'openai';
 
 /**
+ * True when closing a ReadableStream controller failed only because it was
+ * already closed (Node throws `ERR_INVALID_STATE`). Such errors are benign and
+ * shouldn't be logged.
+ */
+function isControllerAlreadyClosedError(err: unknown): boolean {
+  return (err as { code?: string } | null)?.code === 'ERR_INVALID_STATE';
+}
+
+/**
  * Creates a stream processor for Azure OpenAI completions that handles citation tracking.
  *
  * @param {AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>} response - The streaming response from OpenAI.
@@ -48,9 +57,8 @@ export function createAzureOpenAIStreamProcessor(
                 controllerClosed = true;
                 try {
                   controller.close();
-                } catch (closeError: any) {
-                  // Ignore errors if controller is already closed
-                  if (closeError.code !== 'ERR_INVALID_STATE') {
+                } catch (closeError) {
+                  if (!isControllerAlreadyClosedError(closeError)) {
                     console.error('Error closing controller:', closeError);
                   }
                 }
@@ -123,30 +131,29 @@ export function createAzureOpenAIStreamProcessor(
             controllerClosed = true;
             try {
               controller.close();
-            } catch (closeError: any) {
-              // Ignore errors if controller is already closed
-              if (closeError.code !== 'ERR_INVALID_STATE') {
+            } catch (closeError) {
+              if (!isControllerAlreadyClosedError(closeError)) {
                 console.error('Error closing controller:', closeError);
               }
             }
           }
-        } catch (error: any) {
+        } catch (error) {
           console.error('Stream processing error:', error);
 
+          const err = error as { name?: string; message?: string };
           if (
-            error.name === 'AbortError' ||
-            error.message === 'Abort error: Fetch is already aborted' ||
-            error.message?.includes('abort') ||
-            error.message?.includes('Abort')
+            err.name === 'AbortError' ||
+            err.message === 'Abort error: Fetch is already aborted' ||
+            err.message?.includes('abort') ||
+            err.message?.includes('Abort')
           ) {
             console.log('Stream aborted by user, closing cleanly');
             if (!controllerClosed) {
               controllerClosed = true;
               try {
                 controller.close();
-              } catch (closeError: any) {
-                // Ignore errors if controller is already closed
-                if (closeError.code !== 'ERR_INVALID_STATE') {
+              } catch (closeError) {
+                if (!isControllerAlreadyClosedError(closeError)) {
                   console.error('Error closing controller:', closeError);
                 }
               }

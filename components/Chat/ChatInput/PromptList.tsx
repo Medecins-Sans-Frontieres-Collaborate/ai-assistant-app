@@ -280,7 +280,7 @@ export const PromptList: FC<Props> = ({
   return (
     <ul
       ref={promptListRef}
-      className="z-10 max-h-80 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-[#212121] dark:text-white animate-fade-in-fast"
+      className="z-10 max-h-80 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-surface-dark dark:text-white animate-fade-in-fast"
     >
       {showCommands && commands.length > 0 && (
         <>
@@ -320,13 +320,13 @@ export const PromptList: FC<Props> = ({
 
         return (
           <div key={folder.id}>
-            <li className="sticky top-0 z-10 px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-100/95 dark:bg-neutral-800/95 backdrop-blur-sm flex items-center gap-2 border-b border-gray-200 dark:border-neutral-700">
+            <li className="sticky top-0 z-10 px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-100/95 dark:bg-gray-800/95 backdrop-blur-sm flex items-center gap-2 border-b border-gray-200 dark:border-gray-700">
               <IconFolder
                 size={14}
                 className="text-gray-500 dark:text-gray-400"
               />
               <span className="flex-1">{folder.name}</span>
-              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-700 px-2 text-[10px] font-medium text-gray-600 dark:text-gray-300">
+              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 px-2 text-[10px] font-medium text-gray-600 dark:text-gray-300">
                 {folderPrompts.length}
               </span>
             </li>
