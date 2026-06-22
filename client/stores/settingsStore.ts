@@ -68,6 +68,13 @@ interface SettingsStore {
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
+  /**
+   * Model IDs the user has hidden from the picker. Covers base models and
+   * agents alike (everything in the picker is keyed by a string model ID:
+   * `gpt-5.2`, `org-{id}`, `foundry-{sourceHash}-{id}`). Hiding never deletes —
+   * the ID stays here until the user restores it.
+   */
+  hiddenModelIds: string[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -132,6 +139,10 @@ interface SettingsStore {
   addCustomAgentSource: (source: AgentSource) => void;
   updateCustomAgentSource: (source: AgentSource) => void;
   deleteCustomAgentSource: (id: string) => void;
+
+  // Hidden Model/Agent Actions
+  hideModel: (id: string) => void;
+  unhideModel: (id: string) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -207,6 +218,7 @@ export const useSettingsStore = create<SettingsStore>()(
       tones: [],
       customAgents: [],
       customAgentSources: [],
+      hiddenModelIds: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -344,6 +356,19 @@ export const useSettingsStore = create<SettingsStore>()(
           customAgentSources: state.customAgentSources.filter(
             (s) => s.id !== id,
           ),
+        })),
+
+      // Hidden Model/Agent Actions
+      hideModel: (id) =>
+        set((state) =>
+          state.hiddenModelIds.includes(id)
+            ? state
+            : { hiddenModelIds: [...state.hiddenModelIds, id] },
+        ),
+
+      unhideModel: (id) =>
+        set((state) => ({
+          hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
         })),
 
       // Model Ordering Actions
@@ -485,6 +510,7 @@ export const useSettingsStore = create<SettingsStore>()(
           prompts: [],
           tones: [],
           customAgents: [],
+          hiddenModelIds: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -506,7 +532,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 18, // Increment this when schema changes to trigger migrations
+      version: 19, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -520,6 +546,7 @@ export const useSettingsStore = create<SettingsStore>()(
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
+        hiddenModelIds: state.hiddenModelIds,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -659,6 +686,15 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 18 → 19: Add hiddenModelIds (per-user list of models/agents
+        // hidden from the picker). Backfill to [] so downstream filtering never
+        // operates on undefined.
+        if (version < 19) {
+          if (!Array.isArray(state.hiddenModelIds)) {
+            state.hiddenModelIds = [];
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -692,6 +728,15 @@ export const useSettingsStore = create<SettingsStore>()(
           // (e.g. a partial write) so downstream `.map`/`.find` never throw.
           if (!Array.isArray(state.customAgentSources)) {
             state.customAgentSources = [];
+          }
+
+          // Defensive: hiddenModelIds must always be an array. NOTE: do not
+          // prune entries against OpenAIModels here — agent IDs (`org-*`,
+          // `foundry-*`) are not keys in that registry, so validating against
+          // it would wrongly drop hidden agents. Stale base-model IDs are
+          // harmless (they simply never match anything).
+          if (!Array.isArray(state.hiddenModelIds)) {
+            state.hiddenModelIds = [];
           }
         }
       },
