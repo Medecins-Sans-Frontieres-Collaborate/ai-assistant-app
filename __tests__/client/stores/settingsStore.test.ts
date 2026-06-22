@@ -540,6 +540,59 @@ You should be concise.`;
     });
   });
 
+  describe('Hidden Models/Agents', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({ hiddenModelIds: [] });
+    });
+
+    describe('hideModel', () => {
+      it('adds a model/agent id to the hidden list', () => {
+        useSettingsStore.getState().hideModel('gpt-4.1');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['gpt-4.1']);
+      });
+
+      it('works for agent ids too (org-/foundry-)', () => {
+        useSettingsStore.getState().hideModel('org-hr-bot');
+        useSettingsStore.getState().hideModel('foundry-ab12-xyz');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual([
+          'org-hr-bot',
+          'foundry-ab12-xyz',
+        ]);
+      });
+
+      it('does not add duplicates', () => {
+        useSettingsStore.getState().hideModel('gpt-4.1');
+        useSettingsStore.getState().hideModel('gpt-4.1');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['gpt-4.1']);
+      });
+    });
+
+    describe('unhideModel', () => {
+      it('removes a model/agent id from the hidden list', () => {
+        useSettingsStore.setState({
+          hiddenModelIds: ['gpt-4.1', 'org-hr-bot'],
+        });
+
+        useSettingsStore.getState().unhideModel('gpt-4.1');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual([
+          'org-hr-bot',
+        ]);
+      });
+
+      it('is a no-op for an id that is not hidden', () => {
+        useSettingsStore.setState({ hiddenModelIds: ['gpt-4.1'] });
+
+        useSettingsStore.getState().unhideModel('not-hidden');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['gpt-4.1']);
+      });
+    });
+  });
+
   describe('resetSettings', () => {
     it('resets to default values', () => {
       // Set all settings to non-default values
