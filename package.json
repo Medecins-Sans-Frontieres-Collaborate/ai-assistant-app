@@ -128,6 +128,7 @@
     "lodash-es": "4.18.1",
     "fast-xml-parser": "5.7.2",
     "dompurify": ">=3.4.0",
+    "@opentelemetry/core": "^2.7.2",
     "postcss": "^8.5.12"
   }
 }

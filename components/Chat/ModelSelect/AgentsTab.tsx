@@ -6,10 +6,11 @@ import {
   IconPlug,
   IconPlugConnectedX,
   IconRefresh,
+  IconTrash,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSession } from 'next-auth/react';
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -23,10 +24,66 @@ import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { OrganizationAgentList } from '../OrganizationAgents/OrganizationAgentList';
+import { HiddenItemsSection } from './HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelDetailsPanel';
 
 import { AgentSource } from '@/client/stores/settingsStore';
 import { getOrganizationAgents } from '@/lib/organizationAgents';
+
+/**
+ * A single Foundry agent row (office + custom-source lists). Hexagon icon +
+ * name, a selected check, and a hover/focus-revealed trash to hide it.
+ */
+const FoundryAgentRow: FC<{
+  name: string;
+  isSelected: boolean;
+  onClick: () => void;
+  onHide: () => void;
+  hideLabel: string;
+}> = ({ name, isSelected, onClick, onHide, hideLabel }) => (
+  <div
+    className={`group relative w-full rounded-lg transition-all duration-150 flex items-center ${
+      isSelected
+        ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
+        : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
+    }`}
+  >
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex-1 min-w-0 text-left px-3 py-2 flex items-center justify-between gap-2"
+    >
+      <div className="flex items-center gap-2.5 min-w-0">
+        <IconHexagon
+          size={18}
+          className="shrink-0"
+          style={{ color: colorForAgent(name) }}
+        />
+        <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
+          {name}
+        </span>
+      </div>
+      {isSelected && (
+        <IconCheck
+          size={16}
+          className="text-blue-600 dark:text-blue-400 shrink-0"
+        />
+      )}
+    </button>
+    <button
+      type="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        onHide();
+      }}
+      aria-label={hideLabel}
+      title={hideLabel}
+      className="shrink-0 me-2 p-1.5 rounded text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100 transition-opacity"
+    >
+      <IconTrash size={16} />
+    </button>
+  </div>
+);
 
 interface AgentsTabProps {
   handleModelSelect: (model: OpenAIModel) => void;
@@ -44,6 +101,10 @@ interface AgentsTabProps {
   onAddSource: () => void;
   onEditSource?: (source: AgentSource) => void;
   onDeleteSource: (id: string) => void;
+  // Hidden agents
+  hiddenIds: Set<string>;
+  onHideAgent: (modelId: string, name: string) => void;
+  onUnhideAgent: (id: string) => void;
   // Props for details panel
   selectedModel: OpenAIModel | undefined;
   modelConfig: OpenAIModel | null | undefined;
@@ -74,6 +135,9 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   onAddSource,
   onEditSource,
   onDeleteSource,
+  hiddenIds,
+  onHideAgent,
+  onUnhideAgent,
   // Details panel props
   selectedModel,
   modelConfig,
@@ -91,6 +155,8 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   updateConversation,
 }) => {
   const t = useTranslations('agentsTab');
+  const tModel = useTranslations('modelSelect');
+  const hideLabel = tModel('hide');
   const { exploreBots } = useFlags();
   const { data: session } = useSession();
 
@@ -135,6 +201,34 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   // same-named agents from different projects don't collide.
   const foundryModelId = (a: DiscoveredAgent) =>
     `foundry-${shortSourceHash(a.source)}-${a.id}`;
+
+  // Agents the user has hidden — pulled from every section (static org +
+  // all discovered) and deduped by model ID. Surfaced in the collapsible
+  // "Hidden" group at the bottom of the list so they can be restored.
+  const hiddenAgentItems = (() => {
+    const byId = new Map<
+      string,
+      { id: string; name: string; icon: ReactNode }
+    >();
+    const consider = (modelId: string, name: string) => {
+      if (hiddenIds.has(modelId) && !byId.has(modelId)) {
+        byId.set(modelId, {
+          id: modelId,
+          name,
+          icon: (
+            <IconHexagon
+              size={18}
+              className="shrink-0"
+              style={{ color: colorForAgent(name) }}
+            />
+          ),
+        });
+      }
+    };
+    organizationAgents.forEach((a) => consider(`org-${a.id}`, a.name));
+    foundryAgents.forEach((a) => consider(foundryModelId(a), a.name));
+    return Array.from(byId.values());
+  })();
 
   const isAgentSelected =
     selectedModelId?.startsWith('org-') ||
@@ -235,6 +329,9 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   color: a.color,
                   matchId: foundryModelId(a),
                 }))}
+                hiddenIds={hiddenIds}
+                onHide={onHideAgent}
+                hideLabel={hideLabel}
               />
               {isLoadingFoundryAgents && (
                 <div className="space-y-1 mt-1">
@@ -263,47 +360,29 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                 </h4>
               </div>
               <div className="space-y-1">
-                {officeFoundryAgents.map((agent) => {
-                  const modelId = foundryModelId(agent);
-                  const agentModel = organizationAgentModels.find(
-                    (m) => m.id === modelId,
-                  );
-                  const isSelected = selectedModelId === modelId;
-                  return (
-                    <button
-                      key={modelId}
-                      type="button"
-                      onClick={() => {
-                        if (agentModel) {
-                          handleModelSelect(agentModel);
-                          setMobileView('details');
-                        }
-                      }}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center justify-between gap-2 ${
-                        isSelected
-                          ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                          : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <IconHexagon
-                          size={18}
-                          className="shrink-0"
-                          style={{ color: colorForAgent(agent.name) }}
-                        />
-                        <span className="font-medium text-sm text-gray-900 dark:text-white">
-                          {agent.name}
-                        </span>
-                      </div>
-                      {isSelected && (
-                        <IconCheck
-                          size={16}
-                          className="text-blue-600 dark:text-blue-400 shrink-0"
-                        />
-                      )}
-                    </button>
-                  );
-                })}
+                {officeFoundryAgents
+                  .filter((agent) => !hiddenIds.has(foundryModelId(agent)))
+                  .map((agent) => {
+                    const modelId = foundryModelId(agent);
+                    const agentModel = organizationAgentModels.find(
+                      (m) => m.id === modelId,
+                    );
+                    return (
+                      <FoundryAgentRow
+                        key={modelId}
+                        name={agent.name}
+                        isSelected={selectedModelId === modelId}
+                        onClick={() => {
+                          if (agentModel) {
+                            handleModelSelect(agentModel);
+                            setMobileView('details');
+                          }
+                        }}
+                        onHide={() => onHideAgent(modelId, agent.name)}
+                        hideLabel={hideLabel}
+                      />
+                    );
+                  })}
               </div>
             </section>
           )}
@@ -367,48 +446,30 @@ export const AgentsTab: FC<AgentsTabProps> = ({
                   </div>
                 ) : sourceAgents.length > 0 ? (
                   <div className="space-y-1">
-                    {sourceAgents.map((agent) => {
-                      const modelId = foundryModelId(agent);
-                      const agentModel = organizationAgentModels.find(
-                        (m) => m.id === modelId,
-                      );
-                      const isSelected = selectedModelId === modelId;
-                      return (
-                        <button
-                          key={modelId}
-                          type="button"
-                          onClick={() => {
-                            if (agentModel) {
-                              handleModelSelect(agentModel);
-                              setSelectedSourceId(null);
-                              setMobileView('details');
-                            }
-                          }}
-                          className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-150 flex items-center justify-between gap-2 ${
-                            isSelected
-                              ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
-                              : 'bg-white dark:bg-surface-dark border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-700'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <IconHexagon
-                              size={18}
-                              className="shrink-0"
-                              style={{ color: colorForAgent(agent.name) }}
-                            />
-                            <span className="font-medium text-sm text-gray-900 dark:text-white">
-                              {agent.name}
-                            </span>
-                          </div>
-                          {isSelected && (
-                            <IconCheck
-                              size={16}
-                              className="text-blue-600 dark:text-blue-400 shrink-0"
-                            />
-                          )}
-                        </button>
-                      );
-                    })}
+                    {sourceAgents
+                      .filter((agent) => !hiddenIds.has(foundryModelId(agent)))
+                      .map((agent) => {
+                        const modelId = foundryModelId(agent);
+                        const agentModel = organizationAgentModels.find(
+                          (m) => m.id === modelId,
+                        );
+                        return (
+                          <FoundryAgentRow
+                            key={modelId}
+                            name={agent.name}
+                            isSelected={selectedModelId === modelId}
+                            onClick={() => {
+                              if (agentModel) {
+                                handleModelSelect(agentModel);
+                                setSelectedSourceId(null);
+                                setMobileView('details');
+                              }
+                            }}
+                            onHide={() => onHideAgent(modelId, agent.name)}
+                            hideLabel={hideLabel}
+                          />
+                        );
+                      })}
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400 dark:text-gray-500 italic px-1">
@@ -433,6 +494,12 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               </span>
             </button>
           </div>
+
+          {/* Hidden agents — collapsible, only when something is hidden */}
+          <HiddenItemsSection
+            items={hiddenAgentItems}
+            onRestore={onUnhideAgent}
+          />
         </div>
 
         {/* Right: Agent Details or Connection Details */}

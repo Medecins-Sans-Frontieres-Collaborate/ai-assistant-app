@@ -18,10 +18,12 @@ import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { AzureAIIcon, AzureOpenAIIcon } from '../Icons/providers';
+import { ConfirmDialog } from '../UI/ConfirmDialog';
 import { TabNavigation } from '../UI/TabNavigation';
 import { AgentSourceForm } from './AgentSources/AgentSourceForm';
 import { ModelCard } from './ModelCard';
 import { AgentsTab } from './ModelSelect/AgentsTab';
+import { HiddenItemsSection } from './ModelSelect/HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
@@ -91,6 +93,47 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     (s) => s.deleteCustomAgentSource,
   );
   const [editingSource, setEditingSource] = useState<AgentSource | undefined>();
+
+  // Hidden models/agents — one list keyed by model ID covers both.
+  const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
+  const hideModel = useSettingsStore((s) => s.hideModel);
+  const unhideModel = useSettingsStore((s) => s.unhideModel);
+  const hiddenSet = useMemo(() => new Set(hiddenModelIds), [hiddenModelIds]);
+  // Pending hide awaiting confirmation (null = dialog closed).
+  const [hideTarget, setHideTarget] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const requestHide = useCallback((id: string, name: string) => {
+    setHideTarget({ id, name });
+  }, []);
+
+  const confirmHide = useCallback(() => {
+    if (!hideTarget) return;
+    const { id, name } = hideTarget;
+    hideModel(id);
+    setHideTarget(null);
+
+    // Undo toast — mirrors the disconnect-source pattern below.
+    toast(
+      (toastInstance) => (
+        <div className="flex items-center gap-3">
+          <span>{t('modelSelect.hiddenToast', { name })}</span>
+          <button
+            onClick={() => {
+              unhideModel(id);
+              toast.dismiss(toastInstance.id);
+            }}
+            className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+          >
+            {t('common.undo')}
+          </button>
+        </div>
+      ),
+      { duration: 8000 },
+    );
+  }, [hideTarget, hideModel, unhideModel, t]);
 
   // Feature flag: Control Claude models visibility via LaunchDarkly
   // Default to true if LaunchDarkly is not configured (for local development)
@@ -493,16 +536,25 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             >
               <div>
                 {(() => {
+                  // Hidden models drop out of the main list and resurface in
+                  // the collapsible "Hidden" group below.
+                  const visibleModels = orderedModels.filter(
+                    (m) => !hiddenSet.has(m.id),
+                  );
+                  const hiddenModels = orderedModels.filter((m) =>
+                    hiddenSet.has(m.id),
+                  );
+
                   // Anchor recommended models at the top so first-time users
                   // get an obvious "start here" signal. Distinct taglines
                   // (e.g. "Best for tasks" vs "Best for chatting") let users
                   // pick between them without reading details. Everything
                   // else stays visible below a thin divider, in user-defined
                   // order. While reordering, collapse the distinction.
-                  const recommendedModels = orderedModels.filter(
+                  const recommendedModels = visibleModels.filter(
                     (m) => OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
                   );
-                  const otherModels = orderedModels.filter(
+                  const otherModels = visibleModels.filter(
                     (m) => !OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
                   );
                   const renderModelCard = (model: OpenAIModel) => {
@@ -522,6 +574,12 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                         canMoveDown={canMoveDown(model.id)}
                         onMoveUp={() => moveModel(model.id, 'up')}
                         onMoveDown={() => moveModel(model.id, 'down')}
+                        onHide={
+                          isEditingOrder
+                            ? undefined
+                            : () => requestHide(model.id, model.name)
+                        }
+                        hideLabel={t('modelSelect.hide')}
                       />
                     );
                   };
@@ -539,7 +597,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       </div>
                       {isEditingOrder || recommendedModels.length === 0 ? (
                         <div className="space-y-1">
-                          {orderedModels.map(renderModelCard)}
+                          {visibleModels.map(renderModelCard)}
                         </div>
                       ) : (
                         <>
@@ -556,6 +614,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           )}
                         </>
                       )}
+                      <HiddenItemsSection
+                        items={hiddenModels.map((m) => ({
+                          id: m.id,
+                          name: m.name,
+                          icon: (
+                            <ModelProviderIcon
+                              provider={
+                                OpenAIModels[m.id as OpenAIModelID]?.provider
+                              }
+                            />
+                          ),
+                        }))}
+                        onRestore={unhideModel}
+                      />
                     </div>
                   );
                 })()}
@@ -613,6 +685,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           }}
           onEditSource={handleEditSource}
           onDeleteSource={handleDeleteAgentSource}
+          hiddenIds={hiddenSet}
+          onHideAgent={requestHide}
+          onUnhideAgent={unhideModel}
           // Props for details panel
           selectedModel={selectedModel}
           modelConfig={modelConfig}
@@ -642,6 +717,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
           existingSource={editingSource}
         />
       )}
+
+      {/* Hide confirmation — destructive styling, reversible copy */}
+      <ConfirmDialog
+        isOpen={hideTarget !== null}
+        title={t('modelSelect.hideConfirmTitle', {
+          name: hideTarget?.name ?? '',
+        })}
+        message={t('modelSelect.hideConfirmMessage')}
+        confirmLabel={t('modelSelect.hideConfirm')}
+        cancelLabel={t('common.cancel')}
+        confirmVariant="danger"
+        onConfirm={confirmHide}
+        onCancel={() => setHideTarget(null)}
+      />
     </div>
   );
 };

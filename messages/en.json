@@ -435,7 +435,9 @@
     "selectAccount": "Select an account...",
     "loadingProjects": "Loading projects...",
     "noProjectsFound": "No projects found. Using \"default\".",
-    "selectAllRequired": "Select a subscription, account, and project."
+    "selectAllRequired": "Select a subscription, account, and project.",
+    "subscriptionRequired": "Choose a subscription",
+    "accountRequired": "Choose a Foundry account"
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -1369,6 +1371,15 @@
     "tabs": {
       "models": "Models",
       "agents": "Agents"
+    },
+    "hide": "Hide from list",
+    "hideConfirmTitle": "Hide \"{name}\"?",
+    "hideConfirmMessage": "It will be removed from your list but not deleted. You can restore it anytime from the Hidden section.",
+    "hideConfirm": "Hide",
+    "hiddenToast": "Hidden \"{name}\"",
+    "hidden": {
+      "title": "Hidden ({count})",
+      "restore": "Restore"
     },
     "sections": {
       "baseModels": "Base Models",

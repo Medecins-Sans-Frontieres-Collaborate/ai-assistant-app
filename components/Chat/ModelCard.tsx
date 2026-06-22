@@ -1,4 +1,9 @@
-import { IconCheck, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconChevronDown,
+  IconChevronUp,
+  IconTrash,
+} from '@tabler/icons-react';
 import { FC, ReactNode } from 'react';
 
 interface ModelCardProps {
@@ -20,6 +25,10 @@ interface ModelCardProps {
   onMoveUp?: () => void;
   /** Callback when move down is clicked */
   onMoveDown?: () => void;
+  /** When provided, renders a hover/focus-revealed trash button to hide this item. */
+  onHide?: () => void;
+  /** Accessible label for the hide (trash) button. */
+  hideLabel?: string;
 }
 
 /**
@@ -39,12 +48,14 @@ export const ModelCard: FC<ModelCardProps> = ({
   canMoveDown = false,
   onMoveUp,
   onMoveDown,
+  onHide,
+  hideLabel,
 }) => {
   return (
     <div
       key={id}
       className={`
-        w-full text-left px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center gap-2
+        group w-full text-left px-3 py-1.5 rounded-lg transition-all duration-150 flex items-center gap-2
         ${
           isSelected
             ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600'
@@ -118,6 +129,22 @@ export const ModelCard: FC<ModelCardProps> = ({
           )}
         </div>
       </button>
+
+      {/* Hide (trash) — revealed on row hover/focus; tap-reachable on touch */}
+      {onHide && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onHide();
+          }}
+          aria-label={hideLabel}
+          title={hideLabel}
+          className="shrink-0 p-1.5 rounded text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100 transition-opacity"
+        >
+          <IconTrash size={16} />
+        </button>
+      )}
     </div>
   );
 };

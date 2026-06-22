@@ -49,7 +49,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
   const t = useTranslations('agents');
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(existingSource?.name || '');
+  // Treat an existing source's name as user-owned so autofill never clobbers it.
+  const [nameEdited, setNameEdited] = useState(!!existingSource);
   const [error, setError] = useState('');
+  // Per-field validation messages surfaced when the user attempts to submit an
+  // incomplete form (the top `error` banner stays for connection failures).
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string;
+    subscription?: string;
+    account?: string;
+  }>({});
   const [isValidating, setIsValidating] = useState(false);
   const [validationResult, setValidationResult] = useState<{
     valid: boolean;
@@ -160,6 +169,40 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     loadProjects,
   ]);
 
+  // Auto-select the only subscription so single-tenant users don't have to.
+  useEffect(() => {
+    if (subscriptions.length === 1 && !subscriptionId) {
+      const subId = subscriptions[0].id || '';
+      setSubscriptionId(subId);
+      loadAccounts(subId);
+    }
+  }, [subscriptions, subscriptionId, loadAccounts]);
+
+  // Auto-select the only Foundry account; derive its resource group, kick off
+  // project loading, and seed the connection name (until the user edits it).
+  useEffect(() => {
+    if (accounts.length === 1 && !accountName) {
+      const acct = accounts[0];
+      setAccountName(acct.name);
+      setResourceGroup(acct.resourceGroup || '');
+      if (!nameEdited) setName(acct.name);
+      loadProjects(subscriptionId, acct.resourceGroup || '', acct.name);
+    }
+  }, [accounts, accountName, nameEdited, subscriptionId, loadProjects]);
+
+  // Keep the projects <select> honest: it has no placeholder and is controlled
+  // by `projectName` (initial 'default'). If the discovered projects don't
+  // include the current value, the control would show its first option while
+  // state lags behind — so buildPath() could save the wrong project. Sync to
+  // the first real project, and seed the name from a non-default project.
+  useEffect(() => {
+    if (projects.length > 0 && !projects.some((p) => p.name === projectName)) {
+      const first = projects[0].name;
+      setProjectName(first);
+      if (!nameEdited && first !== 'default') setName(first);
+    }
+  }, [projects, projectName, nameEdited]);
+
   const buildPath = () =>
     `/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.CognitiveServices/accounts/${accountName}/projects/${projectName || 'default'}`;
 
@@ -192,12 +235,22 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
   const handleSubmit = async () => {
     setError('');
 
-    if (!name.trim()) {
-      setError(t('nameRequired'));
+    // Surface every missing required field at once, inline, so the user always
+    // learns what's blocking submission instead of facing a dead disabled button.
+    const errors: typeof fieldErrors = {};
+    if (!name.trim()) errors.name = t('nameRequired');
+    if (!subscriptionId) errors.subscription = t('subscriptionRequired');
+    if (!accountName) errors.account = t('accountRequired');
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
+    setFieldErrors({});
 
-    if (!subscriptionId || !resourceGroup || !accountName) {
+    // resourceGroup is derived from the chosen account, so it should always be
+    // present here; guard as a fallback rather than silently building a bad path.
+    if (!resourceGroup) {
       setError(t('selectAllRequired'));
       return;
     }
@@ -216,12 +269,24 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     onSave(source);
   };
 
-  const isFormFilled = !!(subscriptionId && resourceGroup && accountName);
-
   if (!mounted) return null;
 
   const selectClass =
     'w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none appearance-none';
+
+  // Same as selectClass but without a baked-in border color, so callers can pick
+  // gray vs. red via fieldBorder() without two same-property classes fighting.
+  const selectBase =
+    'w-full rounded-lg border bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:border-blue-500 focus:outline-none appearance-none';
+  const fieldBorder = (hasError?: string) =>
+    hasError
+      ? 'border-red-400 dark:border-red-500'
+      : 'border-gray-200 dark:border-gray-700';
+  const fieldErrorText = (message?: string) =>
+    message ? (
+      <p className="mt-1 text-xs text-red-600 dark:text-red-400">{message}</p>
+    ) : null;
+  const requiredMark = <span className="text-red-500">*</span>;
 
   return createPortal(
     <div
@@ -275,15 +340,22 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
           {/* Source Name */}
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-900 dark:text-white">
-              {t('nameLabel')}
+              {t('nameLabel')} {requiredMark}
             </label>
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setNameEdited(true);
+                setFieldErrors((prev) => ({ ...prev, name: undefined }));
+              }}
               placeholder={t('namePlaceholder')}
-              className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+              className={`w-full rounded-lg border ${fieldBorder(
+                fieldErrors.name,
+              )} bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-500 focus:outline-none`}
             />
+            {fieldErrorText(fieldErrors.name)}
           </div>
 
           {/* Mode toggle */}
@@ -309,7 +381,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             <div className="space-y-3">
               <div>
                 <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                  {t('subscriptionIdLabel')}
+                  {t('subscriptionIdLabel')} {requiredMark}
                 </label>
                 <input
                   type="text"
@@ -317,11 +389,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                   onChange={(e) => {
                     setSubscriptionId(e.target.value.trim());
                     setValidationResult(null);
+                    setFieldErrors((prev) => ({
+                      ...prev,
+                      subscription: undefined,
+                    }));
                   }}
                   placeholder="e49ac66c-c18d-4586-b132-8f201de8f2c2"
-                  className={selectClass}
+                  className={`${selectBase} ${fieldBorder(fieldErrors.subscription)}`}
                   spellCheck={false}
                 />
+                {fieldErrorText(fieldErrors.subscription)}
               </div>
               <div>
                 <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
@@ -342,19 +419,26 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
-                    {t('accountNameLabel')}
+                    {t('accountNameLabel')} {requiredMark}
                   </label>
                   <input
                     type="text"
                     value={accountName}
                     onChange={(e) => {
-                      setAccountName(e.target.value.trim());
+                      const acct = e.target.value.trim();
+                      setAccountName(acct);
                       setValidationResult(null);
+                      setFieldErrors((prev) => ({
+                        ...prev,
+                        account: undefined,
+                      }));
+                      if (!nameEdited) setName(acct);
                     }}
                     placeholder="my-foundry-account"
-                    className={selectClass}
+                    className={`${selectBase} ${fieldBorder(fieldErrors.account)}`}
                     spellCheck={false}
                   />
+                  {fieldErrorText(fieldErrors.account)}
                 </div>
                 <div>
                   <label className="mb-0.5 block text-xs text-gray-500 dark:text-gray-400">
@@ -364,8 +448,12 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                     type="text"
                     value={projectName}
                     onChange={(e) => {
-                      setProjectName(e.target.value.trim());
+                      const proj = e.target.value.trim();
+                      setProjectName(proj);
                       setValidationResult(null);
+                      if (!nameEdited && proj && proj !== 'default') {
+                        setName(proj);
+                      }
                     }}
                     placeholder="default"
                     className={selectClass}
@@ -380,7 +468,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
               {/* Subscription */}
               <div>
                 <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                  {t('labelSubscription')}
+                  {t('labelSubscription')} {requiredMark}
                   <span className="group/tt relative inline-flex items-center">
                     <IconInfoCircle
                       size={14}
@@ -406,9 +494,13 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                       setResourceGroup('');
                       setProjectName('default');
                       setValidationResult(null);
+                      setFieldErrors((prev) => ({
+                        ...prev,
+                        subscription: undefined,
+                      }));
                       loadAccounts(subId);
                     }}
-                    className={selectClass}
+                    className={`${selectBase} ${fieldBorder(fieldErrors.subscription)}`}
                   >
                     <option value="">{t('selectSubscription')}</option>
                     {subscriptions.map((sub) => (
@@ -418,13 +510,14 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                     ))}
                   </select>
                 )}
+                {fieldErrorText(fieldErrors.subscription)}
               </div>
 
               {/* Account */}
               {subscriptionId && (
                 <div>
                   <label className="mb-1 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
-                    {t('labelFoundryAccount')}
+                    {t('labelFoundryAccount')} {requiredMark}
                     <span className="group/tt relative inline-flex items-center">
                       <IconInfoCircle
                         size={14}
@@ -455,6 +548,13 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                         setResourceGroup(acct?.resourceGroup || '');
                         setProjectName('default');
                         setValidationResult(null);
+                        setFieldErrors((prev) => ({
+                          ...prev,
+                          account: undefined,
+                        }));
+                        if (!nameEdited && e.target.value) {
+                          setName(e.target.value);
+                        }
                         if (acct) {
                           loadProjects(
                             subscriptionId,
@@ -463,7 +563,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                           );
                         }
                       }}
-                      className={selectClass}
+                      className={`${selectBase} ${fieldBorder(fieldErrors.account)}`}
                     >
                       <option value="">{t('selectAccount')}</option>
                       {accounts.map((acct) => (
@@ -474,6 +574,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                       ))}
                     </select>
                   )}
+                  {fieldErrorText(fieldErrors.account)}
                 </div>
               )}
 
@@ -505,8 +606,12 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
                     <select
                       value={projectName}
                       onChange={(e) => {
-                        setProjectName(e.target.value);
+                        const proj = e.target.value;
+                        setProjectName(proj);
                         setValidationResult(null);
+                        if (!nameEdited && proj && proj !== 'default') {
+                          setName(proj);
+                        }
                       }}
                       className={selectClass}
                     >
@@ -533,7 +638,7 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
           </button>
           <button
             onClick={handleSubmit}
-            disabled={isValidating || !name.trim() || !isFormFilled}
+            disabled={isValidating}
             className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
           >
             {isValidating ? (

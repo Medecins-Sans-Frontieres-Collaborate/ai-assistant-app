@@ -60,6 +60,13 @@ export enum ErrorCode {
   AGENT_EXECUTION_FAILED = 'AGENT_EXECUTION_FAILED',
   AGENT_NOT_FOUND = 'AGENT_NOT_FOUND',
   AGENT_TIMEOUT = 'AGENT_TIMEOUT',
+  /**
+   * The selected agent can no longer be invoked — e.g. a legacy agent saved
+   * before the Foundry discovery system whose config (endpoint/agentId) the
+   * new pipeline cannot resolve. Surfaced as a clean 409 so the client can
+   * tell the user to re-select the agent rather than rendering an opaque 500.
+   */
+  AGENT_UNAVAILABLE = 'AGENT_UNAVAILABLE',
 
   // Pipeline
   PIPELINE_TIMEOUT = 'PIPELINE_TIMEOUT',
