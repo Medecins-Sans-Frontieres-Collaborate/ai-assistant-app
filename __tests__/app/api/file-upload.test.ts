@@ -703,8 +703,10 @@ describe('/api/file/upload', () => {
 
       await POST(request);
 
+      // A generic error classifies as 'unknown' (status 500); the log line
+      // carries the classification for alerting.
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        '[FileUploadRoute] Error uploading file:',
+        '[FileUploadRoute] Error uploading file (class=unknown, status=500):',
         expect.any(Error),
       );
 
