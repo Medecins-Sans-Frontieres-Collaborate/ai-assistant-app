@@ -1376,6 +1376,8 @@
       "models": "Models",
       "agents": "Agents"
     },
+    "familyAll": "All",
+    "familyFilterLabel": "Filter models by family",
     "hide": "Hide from list",
     "hideConfirmTitle": "Hide \"{name}\"?",
     "hideConfirmMessage": "It will be removed from your list but not deleted. You can restore it anytime from the Hidden section.",
