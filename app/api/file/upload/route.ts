@@ -13,6 +13,7 @@ import {
   successResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { BlobStorage } from '@/lib/utils/server/blob/blob';
+import { classifyStorageError } from '@/lib/utils/server/blob/storageErrors';
 import {
   getContentType,
   validateBufferSignature,
@@ -385,7 +386,15 @@ export async function POST(request: NextRequest) {
       'File uploaded successfully',
     );
   } catch (error) {
-    console.error('[FileUploadRoute] Error uploading file:', error);
+    // Distinguish infrastructure faults (storage firewall / unreachable account
+    // / missing container — server-side) from genuinely unknown failures, so we
+    // return an honest status + message and log a stable, alertable errorClass
+    // instead of a blanket 500 that reads like the user's file was at fault.
+    const { errorClass, status, message } = classifyStorageError(error);
+    console.error(
+      `[FileUploadRoute] Error uploading file (class=${errorClass}, status=${status}):`,
+      error,
+    );
 
     // Log file upload error (fire-and-forget) using hoisted session.
     // If the error occurred before auth() completed, session is null and we
@@ -396,15 +405,16 @@ export async function POST(request: NextRequest) {
         user: session.user,
         filename,
         fileType: mimeType || filetype,
-        errorCode: 'FILE_UPLOAD_FAILED',
+        errorCode: errorClass.toUpperCase(),
         errorMessage: error instanceof Error ? error.message : String(error),
       });
     }
 
     return errorResponse(
-      'Failed to upload file',
-      500,
+      message,
+      status,
       error instanceof Error ? error.message : String(error),
+      errorClass.toUpperCase(),
     );
   }
 }
