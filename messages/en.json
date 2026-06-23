@@ -549,6 +549,10 @@
   "Untitled Tone": "Untitled Tone",
   "Failed to analyze tone": "Failed to analyze tone",
   "File upload failed": "File upload failed",
+  "regionOverride": {
+    "warning": "Location override active — your requests are being routed to the {region} data region. This is a manual test override, not your actual location.",
+    "clear": "Clear override"
+  },
   "Untitled prompt": "Untitled prompt",
   "Untitled Prompt": "Untitled Prompt",
   "Please enter prompt content first": "Please enter prompt content first",
