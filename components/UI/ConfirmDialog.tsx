@@ -15,6 +15,13 @@ interface ConfirmDialogProps {
   confirmVariant?: 'danger' | 'primary';
   /** Optional content rendered between the message and the action buttons. */
   extraContent?: React.ReactNode;
+  /**
+   * Forwarded to the underlying Modal. Use this to raise the z-index when the
+   * dialog is opened from within another modal/overlay — Modal defaults to
+   * `z-50`, which renders behind higher-stacked parents (e.g. a `z-[150]`
+   * model-select modal). Pass e.g. `z-[200]` to stack above it.
+   */
+  className?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -31,6 +38,7 @@ export function ConfirmDialog({
   cancelLabel,
   confirmVariant = 'primary',
   extraContent,
+  className,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -82,6 +90,7 @@ export function ConfirmDialog({
       onClose={onCancel}
       title={title}
       size="sm"
+      className={className}
       showCloseButton={false}
       footer={
         <div className="flex justify-end gap-3">
