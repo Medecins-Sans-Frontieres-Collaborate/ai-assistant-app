@@ -718,7 +718,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         />
       )}
 
-      {/* Hide confirmation — destructive styling, reversible copy */}
+      {/* Hide confirmation — destructive styling, reversible copy.
+          z-[200] stacks it above the model-select modal (z-[150]) it opens
+          from; without this the Modal default (z-50) renders behind it. */}
       <ConfirmDialog
         isOpen={hideTarget !== null}
         title={t('modelSelect.hideConfirmTitle', {
@@ -728,6 +730,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
         confirmLabel={t('modelSelect.hideConfirm')}
         cancelLabel={t('common.cancel')}
         confirmVariant="danger"
+        className="z-[200]"
         onConfirm={confirmHide}
         onCancel={() => setHideTarget(null)}
       />
