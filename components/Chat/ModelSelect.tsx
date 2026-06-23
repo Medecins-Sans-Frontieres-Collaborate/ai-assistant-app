@@ -25,6 +25,11 @@ import { ModelCard } from './ModelCard';
 import { AgentsTab } from './ModelSelect/AgentsTab';
 import { HiddenItemsSection } from './ModelSelect/HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
+import {
+  FAMILY_ORDER,
+  ModelFamily,
+  ModelFamilyFilter,
+} from './ModelSelect/ModelFamilyFilter';
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 
@@ -104,6 +109,10 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     id: string;
     name: string;
   } | null>(null);
+
+  // View-only filter narrowing the model list to a single provider family.
+  // 'all' (default) shows every family, exactly as before.
+  const [familyFilter, setFamilyFilter] = useState<ModelFamily>('all');
 
   const requestHide = useCallback((id: string, name: string) => {
     setHideTarget({ id, name });
@@ -545,16 +554,37 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     hiddenSet.has(m.id),
                   );
 
+                  const providerOf = (m: OpenAIModel) =>
+                    OpenAIModels[m.id as OpenAIModelID]?.provider;
+
+                  // Families present in the current list, in canonical order.
+                  // The filter row only appears when there's more than one to
+                  // choose between (and never while reordering).
+                  const availableFamilies = FAMILY_ORDER.filter((f) =>
+                    visibleModels.some((m) => providerOf(m) === f),
+                  );
+                  const showFamilyFilter =
+                    !isEditingOrder && availableFamilies.length >= 2;
+
+                  // Apply the family filter (view-only). 'all' is a no-op, so
+                  // the list below is byte-for-byte the previous behavior.
+                  const familyModels =
+                    familyFilter === 'all'
+                      ? visibleModels
+                      : visibleModels.filter(
+                          (m) => providerOf(m) === familyFilter,
+                        );
+
                   // Anchor recommended models at the top so first-time users
                   // get an obvious "start here" signal. Distinct taglines
                   // (e.g. "Best for tasks" vs "Best for chatting") let users
                   // pick between them without reading details. Everything
                   // else stays visible below a thin divider, in user-defined
                   // order. While reordering, collapse the distinction.
-                  const recommendedModels = visibleModels.filter(
+                  const recommendedModels = familyModels.filter(
                     (m) => OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
                   );
-                  const otherModels = visibleModels.filter(
+                  const otherModels = familyModels.filter(
                     (m) => !OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
                   );
                   const renderModelCard = (model: OpenAIModel) => {
@@ -595,9 +625,18 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           onToggleEdit={handleToggleEditOrder}
                         />
                       </div>
+                      {showFamilyFilter && (
+                        <ModelFamilyFilter
+                          families={availableFamilies}
+                          value={familyFilter}
+                          onChange={setFamilyFilter}
+                        />
+                      )}
                       {isEditingOrder || recommendedModels.length === 0 ? (
                         <div className="space-y-1">
-                          {visibleModels.map(renderModelCard)}
+                          {(isEditingOrder ? visibleModels : familyModels).map(
+                            renderModelCard,
+                          )}
                         </div>
                       ) : (
                         <>
@@ -615,17 +654,23 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                         </>
                       )}
                       <HiddenItemsSection
-                        items={hiddenModels.map((m) => ({
-                          id: m.id,
-                          name: m.name,
-                          icon: (
-                            <ModelProviderIcon
-                              provider={
-                                OpenAIModels[m.id as OpenAIModelID]?.provider
-                              }
-                            />
-                          ),
-                        }))}
+                        items={hiddenModels
+                          .filter(
+                            (m) =>
+                              familyFilter === 'all' ||
+                              providerOf(m) === familyFilter,
+                          )
+                          .map((m) => ({
+                            id: m.id,
+                            name: m.name,
+                            icon: (
+                              <ModelProviderIcon
+                                provider={
+                                  OpenAIModels[m.id as OpenAIModelID]?.provider
+                                }
+                              />
+                            ),
+                          }))}
                         onRestore={unhideModel}
                       />
                     </div>
