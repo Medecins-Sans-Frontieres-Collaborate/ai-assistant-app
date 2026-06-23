@@ -1338,7 +1338,9 @@
     },
     "title": "Selecteer een model",
     "modelsDescription": "Kies een AI-model voor uw gesprek. Elk model heeft andere sterke punten — selecteer er één voor details.",
-    "recommended": "Aanbevolen"
+    "recommended": "Aanbevolen",
+    "familyAll": "Alle",
+    "familyFilterLabel": "Modellen filteren op familie"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Beoordelen",
     "itemId": "ID: {id}",
     "itemSource": "{date} van {source}"
+  },
+  "regionOverride": {
+    "warning": "Locatie-override actief — uw verzoeken worden doorgestuurd naar de {region} dataregio. Dit is een handmatige test-override, niet uw werkelijke locatie.",
+    "clear": "Override wissen"
   }
 }

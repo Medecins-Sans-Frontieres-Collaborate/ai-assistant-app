@@ -1396,7 +1396,9 @@
     },
     "title": "Seleziona un modello",
     "modelsDescription": "Scegli un modello AI per la conversazione. Ogni modello ha punti di forza diversi — selezionane uno per i dettagli.",
-    "recommended": "Consigliato"
+    "recommended": "Consigliato",
+    "familyAll": "Tutte",
+    "familyFilterLabel": "Filtra modelli per famiglia"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Revisiona",
     "itemId": "ID: {id}",
     "itemSource": "{date} da {source}"
+  },
+  "regionOverride": {
+    "warning": "Sostituzione della posizione attiva — le tue richieste vengono indirizzate alla regione dati {region}. Questo è un override manuale di test, non la tua posizione reale.",
+    "clear": "Rimuovi sostituzione"
   }
 }

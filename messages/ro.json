@@ -1396,7 +1396,9 @@
     },
     "title": "Selectați un model",
     "modelsDescription": "Alegeți un model AI pentru conversație. Fiecare model are puncte forte specifice — selectați unul pentru detalii.",
-    "recommended": "Recomandat"
+    "recommended": "Recomandat",
+    "familyAll": "Toate",
+    "familyFilterLabel": "Filtrați modelele după familie"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Revizuiește",
     "itemId": "ID: {id}",
     "itemSource": "{date} de la {source}"
+  },
+  "regionOverride": {
+    "warning": "Suprascrierea locației este activă — solicitările dvs. sunt redirecționate către regiunea de date {region}. Aceasta este o suprascriere manuală de test, nu locația dvs. reală.",
+    "clear": "Ștergeți suprascrierea"
   }
 }

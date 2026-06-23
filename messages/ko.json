@@ -1297,7 +1297,9 @@
     },
     "title": "모델 선택",
     "modelsDescription": "대화에 사용할 AI 모델을 선택하세요. 각 모델마다 강점이 다릅니다 — 자세한 내용을 보려면 선택하세요.",
-    "recommended": "추천"
+    "recommended": "추천",
+    "familyAll": "전체",
+    "familyFilterLabel": "패밀리별 모델 필터링"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "검토",
     "itemId": "ID: {id}",
     "itemSource": "{date} · {source}에서"
+  },
+  "regionOverride": {
+    "warning": "위치 재정의가 활성화되었습니다 — 귀하의 요청이 {region} 데이터 지역으로 라우팅되고 있습니다. 이는 테스트용 수동 재정의이며 실제 위치가 아닙니다.",
+    "clear": "재정의 해제"
   }
 }

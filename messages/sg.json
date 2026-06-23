@@ -1447,7 +1447,9 @@
     },
     "title": "Bênî model",
     "modelsDescription": "Bênî model AI ti walî mo. Model kété tî kéta siriri. Bênî mo tändö a yênga ndö.",
-    "recommended": "A kete"
+    "recommended": "A kete",
+    "familyAll": "Nzonî",
+    "familyFilterLabel": "Séléctionne modèle d'après famille"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Gbé",
     "itemId": "Kode: {id}",
     "itemSource": "{date} tî {source}"
+  },
+  "regionOverride": {
+    "warning": "Ngu ti lo na kodro — mingi mo ape ye sô yeke  na région de données {region}. Ala so lo ape kété ti kodro mo, mbi yeke na kêtê hinga maboko.",
+    "clear": "Kombä ti kodro"
   }
 }

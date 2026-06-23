@@ -1447,7 +1447,9 @@
     },
     "title": "Khetha imodeli",
     "modelsDescription": "Khetha imodeli ye-AI yengxoxo yakho. Imodeli ngayinye inokusebenza okuhlukile — khetha eyodwa ukuze ubone imininingwane.",
-    "recommended": "Kunconyiwe"
+    "recommended": "Kunconyiwe",
+    "familyAll": "Konke",
+    "familyFilterLabel": "Hlunga imodeli ngomndeni"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Bheka kabusha",
     "itemId": "I-ID: {id}",
     "itemSource": "{date} ivela ku-{source}"
+  },
+  "regionOverride": {
+    "warning": "Ukuguqulwa kwendawo kusebenzayo — izicelo zakho zidluliselwa endaweni yedatha ye-{region}. Lokhu ukuvivinya ngesandla, akuyona indawo yakho yangempela.",
+    "clear": "Susa ukuguqulwa"
   }
 }

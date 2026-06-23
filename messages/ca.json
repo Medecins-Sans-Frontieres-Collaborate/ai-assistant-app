@@ -1396,7 +1396,9 @@
     },
     "title": "Selecciona un model",
     "modelsDescription": "Trieu un model d'AI per a la conversa. Cada model té punts forts diferents — seleccioneu-ne un per veure els detalls.",
-    "recommended": "Recomanat"
+    "recommended": "Recomanat",
+    "familyAll": "Totes",
+    "familyFilterLabel": "Filtra els models per família"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Revisa",
     "itemId": "ID: {id}",
     "itemSource": "{date} de {source}"
+  },
+  "regionOverride": {
+    "warning": "Substitució de la localització activa — les vostres sol·licituds s'estan dirigint a la regió de dades de {region}. Això és una substitució manual de prova, no la vostra ubicació real.",
+    "clear": "Esborra la substitució"
   }
 }

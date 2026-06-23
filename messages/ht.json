@@ -1447,7 +1447,9 @@
     },
     "title": "Chwazi yon modèl",
     "modelsDescription": "Chwazi yon modèl AI pou konvèsasyon ou. Chak modèl gen avantaj li — chwazi youn pou wè detay yo.",
-    "recommended": "Rekòmande"
+    "recommended": "Rekòmande",
+    "familyAll": "Tout",
+    "familyFilterLabel": "Filtre modèl pa kategori"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Revize",
     "itemId": "ID: {id}",
     "itemSource": "{date} soti nan {source}"
+  },
+  "regionOverride": {
+    "warning": "Chanjman kote aktive — demann ou yo ap voye bay rejyon done {region}. Sa a se yon chanjman manyèl pou tès, li pa kote ou aktyèlman ye.",
+    "clear": "Retire chanjman"
   }
 }

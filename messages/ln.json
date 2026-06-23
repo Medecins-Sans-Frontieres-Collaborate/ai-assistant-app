@@ -1447,7 +1447,9 @@
     },
     "title": "Pona modèle",
     "modelsDescription": "Pona modèle ya AI mpo na lisolo na yo. Nzoka ndambo ya modèles ezali na makasi ekeseni — poná moko mpo omóna bisika na yango.",
-    "recommended": "Eponami"
+    "recommended": "Eponami",
+    "familyAll": "Nionso",
+    "familyFilterLabel": "Pona bamodelo na libota"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Tala lisusu",
     "itemId": "ID : {id}",
     "itemSource": "{date} uta na {source}"
+  },
+  "regionOverride": {
+    "warning": "Kobongola esika esalemi — basɛngiselami na yo ezali kokende na etúká ya donnes ya {region}. Eyi ezali kobongola ya mitindo mpo na kobakisa, kasi ezali te esika na yo ya solo.",
+    "clear": "Kolongola kobongola"
   }
 }

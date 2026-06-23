@@ -1427,7 +1427,9 @@
     },
     "title": "Chọn một mô hình",
     "modelsDescription": "Chọn một mô hình AI cho cuộc trò chuyện của bạn. Mỗi mô hình có điểm mạnh riêng — chọn để xem chi tiết.",
-    "recommended": "Đề xuất"
+    "recommended": "Đề xuất",
+    "familyAll": "Tất cả",
+    "familyFilterLabel": "Lọc mô hình theo nhóm"
   },
   "models": {
     "gpt_4_1": {
@@ -2138,5 +2140,9 @@
     "review": "Xem xét",
     "itemId": "ID: {id}",
     "itemSource": "{date} từ {source}"
+  },
+  "regionOverride": {
+    "warning": "Ghi đè vị trí đang hoạt động — yêu cầu của bạn đang được chuyển hướng đến khu vực dữ liệu {region}. Đây là thao tác kiểm tra thủ công, không phải vị trí thực của bạn.",
+    "clear": "Xóa ghi đè"
   }
 }

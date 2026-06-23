@@ -1447,7 +1447,9 @@
     },
     "title": "Yan awoṣe",
     "modelsDescription": "Yan awoṣe AI fun ibaraẹnisọrọ rẹ. Kọọkan ni agbara tirẹ — yan lati wo alaye.",
-    "recommended": "Tí a ṣedáwọ́lé"
+    "recommended": "Tí a ṣedáwọ́lé",
+    "familyAll": "Gbogbo",
+    "familyFilterLabel": "Ṣààlẹ̀wádìí àwọn àwòrán àpẹẹrẹ pẹ̀lú ẹbí"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Ìtúpalẹ̀",
     "itemId": "ID: {id}",
     "itemSource": "{date} láti {source}"
+  },
+  "regionOverride": {
+    "warning": "Aṣiṣe ipo ti wa lọwọlọwọ — a n ṣe itọsọna awọn ibeere rẹ si agbegbe data {region}. Eyi jẹ idanwo ọwọ, kii ṣe ipo gidi rẹ.",
+    "clear": "Pa aṣiṣe kuro"
   }
 }

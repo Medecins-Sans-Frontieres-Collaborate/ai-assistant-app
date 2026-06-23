@@ -1297,7 +1297,9 @@
     },
     "title": "Välj en modell",
     "modelsDescription": "Välj en AI-modell för din konversation. Varje modell har olika styrkor — välj en för att se detaljer.",
-    "recommended": "Rekommenderad"
+    "recommended": "Rekommenderad",
+    "familyAll": "Alla",
+    "familyFilterLabel": "Filtrera modeller efter familj"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Granska",
     "itemId": "ID: {id}",
     "itemSource": "{date} från {source}"
+  },
+  "regionOverride": {
+    "warning": "Platsöverskridande aktiv — dina förfrågningar dirigeras till dataregionen {region}. Detta är en manuell testöverskridande, inte din faktiska plats.",
+    "clear": "Rensa överskridande"
   }
 }

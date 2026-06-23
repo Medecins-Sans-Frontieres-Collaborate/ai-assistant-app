@@ -1294,7 +1294,9 @@
     },
     "title": "ሞዴል ይምረጡ",
     "modelsDescription": "ለንግግርዎ AI ሞዴል ይምረጡ። እያንዳንዱ ሞዴል የተለያዩ ጥናቶች አሉት — ዝርዝሩን ለማየት አንድ ይምረጡ።",
-    "recommended": "የሚመከር"
+    "recommended": "የሚመከር",
+    "familyAll": "ሁሉም",
+    "familyFilterLabel": "ሞዴሎችን በቤተሰብ መተጣበቅ"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "አድምጥ",
     "itemId": "መታወቂያ፡ {id}",
     "itemSource": "{date} ከ {source}"
+  },
+  "regionOverride": {
+    "warning": "ቦታ ማሻሻያ አንቀሳቅሷል — ጥያቄዎችዎ ወደ {region} የውሂብ ክልል እየተላኩ ናቸው። ይህ እጅግ እንደ ሙከራ የተደረገ ማሻሻያ ነው፣ እውነተኛ ቦታዎ አይደለም።",
+    "clear": "ማሻሻያውን አጽዳ"
   }
 }

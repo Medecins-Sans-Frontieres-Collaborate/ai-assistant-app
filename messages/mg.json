@@ -1447,7 +1447,9 @@
     },
     "title": "Misafidiana modely",
     "modelsDescription": "Safidio ny modely AI amin'ny dininao. Samy manana ny tanjany ny modely tsirairay — mifidiana iray hijerena antsipiriany.",
-    "recommended": "Soso-kevitra"
+    "recommended": "Soso-kevitra",
+    "familyAll": "Rehetra",
+    "familyFilterLabel": "Sivano araka ny fianakaviana ny modely"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Diniho",
     "itemId": "ID: {id}",
     "itemSource": "{date} avy amin'i {source}"
+  },
+  "regionOverride": {
+    "warning": "Miasa ny fametrahana toerana an-tanana — amin'ny faritra angon-drakitra {region} no andefasana ny fangatahanao. Fanovàna amin'ny tanana ho fitsapana io, fa tsy ny tena toeranao.",
+    "clear": "Fafao ny fanovàna"
   }
 }

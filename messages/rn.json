@@ -1447,7 +1447,9 @@
     },
     "title": "Hitamwo uburongozi",
     "modelsDescription": "Hitamwo uburongozi bwa AI ku biganiro vyawe. Buri model ifise ubuhanga butandukanye — hitamwo imwe kugira urabe amakuru yayo.",
-    "recommended": "Vyasabwe"
+    "recommended": "Vyasabwe",
+    "familyAll": "Vyose",
+    "familyFilterLabel": "Sasira ivyitegererezo ku miryango"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Raba",
     "itemId": "ID: {id}",
     "itemSource": "{date} bivuye kuri {source}"
+  },
+  "regionOverride": {
+    "warning": "Ukuri kw'aho uri kwarahinduwe — ibisabwa vyawe biriko biraca mu karere ka data ka {region}. Iki ni igerageza rikorwa n'intoki, siho uri koko.",
+    "clear": "Siba uguhindura"
   }
 }

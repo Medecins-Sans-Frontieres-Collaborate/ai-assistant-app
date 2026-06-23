@@ -1396,7 +1396,9 @@
     },
     "title": "בחר מודל",
     "modelsDescription": "בחר מודל AI לשיחה שלך. לכל מודל יתרונות שונים — בחר מודל כדי לראות פרטים.",
-    "recommended": "מומלץ"
+    "recommended": "מומלץ",
+    "familyAll": "הכל",
+    "familyFilterLabel": "סנן מודלים לפי משפחה"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "סקירה",
     "itemId": "מזהה: {id}",
     "itemSource": "{date} מ-{source}"
+  },
+  "regionOverride": {
+    "warning": "עקיפת מיקום פעילה — הבקשות שלך מועברות לאזור הנתונים {region}. מדובר בעקיפה ידנית לבדיקה, לא במיקום האמיתי שלך.",
+    "clear": "נקה עקיפה"
   }
 }

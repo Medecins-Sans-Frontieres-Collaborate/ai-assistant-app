@@ -1297,7 +1297,9 @@
     },
     "title": "Sélectionner un modèle",
     "modelsDescription": "Choisissez un modèle d’IA pour votre conversation. Chaque modèle a ses points forts — sélectionnez-en un pour voir les détails.",
-    "recommended": "Recommandé"
+    "recommended": "Recommandé",
+    "familyAll": "Tous",
+    "familyFilterLabel": "Filtrer les modèles par famille"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Examiner",
     "itemId": "ID : {id}",
     "itemSource": "{date} de {source}"
+  },
+  "regionOverride": {
+    "warning": "Substitution de localisation active — vos requêtes sont dirigées vers la région de données {region}. Il s'agit d'une substitution manuelle de test, et non de votre localisation réelle.",
+    "clear": "Réinitialiser la substitution"
   }
 }

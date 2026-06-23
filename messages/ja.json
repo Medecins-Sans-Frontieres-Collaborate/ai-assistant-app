@@ -1297,7 +1297,9 @@
     },
     "title": "モデルを選択",
     "modelsDescription": "会話用のAIモデルを選択してください。各モデルには異なる特長があります。選択すると詳細を確認できます。",
-    "recommended": "おすすめ"
+    "recommended": "おすすめ",
+    "familyAll": "すべて",
+    "familyFilterLabel": "ファミリーでモデルを絞り込む"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "確認",
     "itemId": "ID：{id}",
     "itemSource": "{source} より {date}"
+  },
+  "regionOverride": {
+    "warning": "ロケーションの上書きが有効です — リクエストは {region} データリージョンにルーティングされています。これは手動のテスト上書きであり、実際の所在地ではありません。",
+    "clear": "上書きをクリア"
   }
 }

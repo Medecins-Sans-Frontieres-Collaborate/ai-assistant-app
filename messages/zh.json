@@ -1328,7 +1328,9 @@
     },
     "title": "选择模型",
     "modelsDescription": "为您的会话选择一个 AI 模型。每个模型有不同的优势——选择查看详情。",
-    "recommended": "推荐"
+    "recommended": "推荐",
+    "familyAll": "全部",
+    "familyFilterLabel": "按系列筛选模型"
   },
   "models": {
     "gpt_4_1": {
@@ -2138,5 +2140,9 @@
     "review": "审核",
     "itemId": "ID：{id}",
     "itemSource": "{date} 来自 {source}"
+  },
+  "regionOverride": {
+    "warning": "位置覆盖已激活 — 您的请求正在路由到 {region} 数据区域。这是手动测试覆盖，不代表您的实际位置。",
+    "clear": "清除覆盖"
   }
 }

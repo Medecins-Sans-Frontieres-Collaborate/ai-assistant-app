@@ -1447,7 +1447,9 @@
     },
     "title": "Hitamo imiterere",
     "modelsDescription": "Hitamo AI model ku kiganiro cyawe. Model imwe n'imwe ifite imbaraga zitandukanye — hitamo imwe urebe ibisobanuro.",
-    "recommended": "Byasabwe"
+    "recommended": "Byasabwe",
+    "familyAll": "Byose",
+    "familyFilterLabel": "Soma imiterere y'icyitegererezo hakurikijwe umuryango"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Suzuma",
     "itemId": "ID: {id}",
     "itemSource": "{date} yaturutse kuri {source}"
+  },
+  "regionOverride": {
+    "warning": "Kuhindura aho uherereye birakora — ibisabwa byawe biri koherezwa mu karere ka {region} k'ububiko bw'amakuru. Ibi ni igerageza rikorwa n'intoki, si ho uherereye nyakuri.",
+    "clear": "Siba ibyo wahinduye"
   }
 }

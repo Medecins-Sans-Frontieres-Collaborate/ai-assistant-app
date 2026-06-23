@@ -1297,7 +1297,9 @@
     },
     "title": "Bir model seçin",
     "modelsDescription": "Sohbetiniz için bir AI modeli seçin. Her modelin güçlü yönleri farklıdır — ayrıntılar için birini seçin.",
-    "recommended": "Tavsiye edilen"
+    "recommended": "Tavsiye edilen",
+    "familyAll": "Tümü",
+    "familyFilterLabel": "Modelleri aileye göre filtrele"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "İncele",
     "itemId": "Kimlik: {id}",
     "itemSource": "{source} - {date}"
+  },
+  "regionOverride": {
+    "warning": "Konum geçersiz kılma etkin — istekleriniz {region} veri bölgesine yönlendiriliyor. Bu, manuel bir test geçersiz kılmasıdır; gerçek konumunuz değildir.",
+    "clear": "Geçersiz kılmayı temizle"
   }
 }
