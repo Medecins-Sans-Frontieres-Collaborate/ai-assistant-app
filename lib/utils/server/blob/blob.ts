@@ -12,7 +12,6 @@ import {
   BlockBlobClient,
   BlockBlobUploadOptions,
   ContainerClient,
-  StorageSharedKeyCredential,
   generateBlobSASQueryParameters,
 } from '@azure/storage-blob';
 import {
@@ -21,7 +20,6 @@ import {
   QueueDeleteMessageResponse,
   QueueSendMessageResponse,
   QueueServiceClient,
-  StorageSharedKeyCredential as QueueSharedKeyCredential,
 } from '@azure/storage-queue';
 import { lookup } from 'mime-types';
 import { performance } from 'perf_hooks';
