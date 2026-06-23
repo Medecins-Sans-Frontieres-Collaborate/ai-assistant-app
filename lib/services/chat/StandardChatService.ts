@@ -22,6 +22,7 @@ import { ModelSelector, StreamingService, ToneService } from '../shared';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
 
+import { getFallbackModel, isDeploymentNotFoundError } from '@/config/models';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
 import OpenAI, { AzureOpenAI } from 'openai';
@@ -172,40 +173,70 @@ export class StandardChatService {
       );
     }
 
-    // Get appropriate handler for this model (OpenAI-compatible)
-    const handler = HandlerFactory.getHandler(
-      modelConfig,
-      this.azureOpenAIClient,
-      this.openAIClient,
-    );
+    // Select a handler (OpenAI-compatible) and execute. If the model's
+    // deployment is missing in the endpoint this request was routed to
+    // (DeploymentNotFound — e.g. a region with a half-applied infra change),
+    // fall back through the configured chain instead of hard-failing. The
+    // fallback chain is OpenAI-compatible only, so the same handler-selection
+    // logic applies to each attempt.
+    const attemptedModelIds: string[] = [];
+    let activeConfig: OpenAIModel = modelConfig;
+    let response:
+      | OpenAI.Chat.Completions.ChatCompletion
+      | AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>;
 
-    console.log(
-      `[StandardChatService] Using ${HandlerFactory.getHandlerName(modelConfig)} for model: ${sanitizeForLog(modelId)}`,
-    );
+    for (;;) {
+      attemptedModelIds.push(activeConfig.id);
 
-    // Prepare messages using handler-specific logic
-    const preparedMessages = handler.prepareMessages(
-      messagesToSend,
-      enhancedPrompt,
-      modelConfig,
-    );
+      const handler = HandlerFactory.getHandler(
+        activeConfig,
+        this.azureOpenAIClient,
+        this.openAIClient,
+      );
 
-    // Build request parameters
-    const requestParams = handler.buildRequestParams(
-      handler.getModelIdForRequest(modelId, modelConfig),
-      preparedMessages,
-      temperature,
-      request.user,
-      stream,
-      modelConfig,
-      request.reasoningEffort,
-      request.verbosity,
-    );
+      console.log(
+        `[StandardChatService] Using ${HandlerFactory.getHandlerName(activeConfig)} for model: ${sanitizeForLog(activeConfig.id)}`,
+      );
 
-    // Execute request
-    const perfExecStart = performance.now();
-    const response = await handler.executeRequest(requestParams, stream);
-    perfLog('StandardChatService.executeRequest', perfExecStart);
+      // Prepare messages + params using handler-specific logic
+      const preparedMessages = handler.prepareMessages(
+        messagesToSend,
+        enhancedPrompt,
+        activeConfig,
+      );
+      const requestParams = handler.buildRequestParams(
+        handler.getModelIdForRequest(activeConfig.id, activeConfig),
+        preparedMessages,
+        temperature,
+        request.user,
+        stream,
+        activeConfig,
+        request.reasoningEffort,
+        request.verbosity,
+      );
+
+      // Execute request
+      const perfExecStart = performance.now();
+      try {
+        response = await handler.executeRequest(requestParams, stream);
+        perfLog('StandardChatService.executeRequest', perfExecStart);
+        break;
+      } catch (error) {
+        if (!isDeploymentNotFoundError(error)) throw error;
+
+        const fallback = getFallbackModel(attemptedModelIds);
+        if (!fallback) {
+          console.error(
+            `[StandardChatService] Deployment for ${sanitizeForLog(activeConfig.id)} not found and fallback chain exhausted; surfacing error.`,
+          );
+          throw error;
+        }
+        console.warn(
+          `[StandardChatService] Deployment for ${sanitizeForLog(activeConfig.id)} not found in region; falling back to ${sanitizeForLog(fallback.id)}.`,
+        );
+        activeConfig = fallback;
+      }
+    }
 
     // Return appropriate response format
     if (stream) {
