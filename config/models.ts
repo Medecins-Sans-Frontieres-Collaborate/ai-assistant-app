@@ -93,6 +93,24 @@ export function getFallbackChain(): string[] {
 }
 
 /**
+ * Detects an Azure OpenAI / Foundry "deployment not found" error — i.e. the
+ * requested model has no deployment in the endpoint the request was routed to.
+ * This is the signature of a region missing a deployment (e.g. a half-applied
+ * infra change), and is the trigger for falling back through the model chain.
+ */
+export function isDeploymentNotFoundError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const e = error as { status?: unknown; code?: unknown; message?: unknown };
+  const code = typeof e.code === 'string' ? e.code : '';
+  const message = typeof e.message === 'string' ? e.message : '';
+  if (code === 'DeploymentNotFound') return true;
+  return (
+    (e.status === 404 || code === '404') &&
+    /deployment.*not\s*found/i.test(message)
+  );
+}
+
+/**
  * Returns the next model to fall back to after a model-specific failure.
  *
  * Walks the environment's fallback chain and returns the first model that
