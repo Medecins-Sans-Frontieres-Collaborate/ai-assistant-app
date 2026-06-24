@@ -1,0 +1,47 @@
+{
+  "name": "OCBA",
+  "code_regex": "^ES[A-Z]{2}\\d{2,4}[A-Z]?$",
+  "code_prefix": "ES",
+  "hq_rate": 0.1,
+  "direct_rate": 0.9,
+  "multi_project": false,
+  "coord_keywords": ["coordination", "coodination", "mission", "strategy"],
+  "exclude_keywords": [],
+  "supplemental_files": {
+    "allocation_list": {
+      "filename": "OCBA-Allocation-List.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "Project Code",
+        "name": "Project Name in OCBA's Allocation Spreadsheet",
+        "country": "Country"
+      }
+    },
+    "project_list": {
+      "filename": "OCBA-Emergency-Classifications.xlsx",
+      "skiprows": 0,
+      "format": "xlsx",
+      "columns": {
+        "code": "Project code",
+        "reg_emer": "Reg-Emer",
+        "start_date": "Start date"
+      }
+    },
+    "budgets": {
+      "filename": "OCBA-Initial-Budgets.csv",
+      "skiprows": 1,
+      "columns": {
+        "code": "Project code",
+        "amount": "Amount in EUR"
+      }
+    },
+    "sanctions": {
+      "filename": "OCBA-Sanctions.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "HQ/OC Project",
+        "sanctions": "Sanctions"
+      }
+    }
+  }
+}
