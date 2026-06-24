@@ -105,6 +105,15 @@ export interface BlobStorage {
     blockIds: string[],
     options?: BlockBlobUploadOptions,
   ): Promise<string>;
+  /**
+   * Lists blobs under a given prefix (virtual directory).
+   *
+   * @param prefix - The blob name prefix to filter by (e.g., "grants/OCA/narratives/")
+   * @returns Promise resolving to an array of blob items with name and size
+   */
+  listBlobs(
+    prefix: string,
+  ): Promise<Array<{ name: string; size: number; lastModified: Date }>>;
 }
 
 export interface QueueStorage {
@@ -135,19 +144,13 @@ export interface QueueStorage {
 export class AzureBlobStorage implements BlobStorage, QueueStorage {
   private blobServiceClient: BlobServiceClient;
   private queueServiceClient: QueueServiceClient;
+  private sharedKeyCredential: StorageSharedKeyCredential | null = null;
 
   constructor(
     storageAccountName: string | undefined = undefined,
     private containerName: string | undefined = undefined,
     private user: Session['user'],
   ) {
-    let name: string;
-    if (!storageAccountName) {
-      name = getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user });
-    } else {
-      name = storageAccountName;
-    }
-
     if (!this.containerName) {
       this.containerName = getEnvVariable({
         name: 'AZURE_BLOB_STORAGE_CONTAINER',
@@ -157,18 +160,45 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       });
     }
 
-    // Use Azure Entra ID (DefaultAzureCredential) for authentication
-    const credential = new DefaultAzureCredential();
+    // If a connection string is available, use it (local dev / testing).
+    // Otherwise fall back to DefaultAzureCredential (Entra ID).
+    const connectionString = process.env.AZURE_BLOB_STORAGE_CONNECTION_STRING;
 
-    this.blobServiceClient = new BlobServiceClient(
-      `https://${name}.blob.core.windows.net`,
-      credential,
-    );
+    if (connectionString) {
+      this.blobServiceClient =
+        BlobServiceClient.fromConnectionString(connectionString);
+      this.queueServiceClient =
+        QueueServiceClient.fromConnectionString(connectionString);
 
-    this.queueServiceClient = new QueueServiceClient(
-      `https://${name}.queue.core.windows.net`,
-      credential,
-    );
+      // Extract account name and key for SAS generation
+      const accountName = connectionString.match(/AccountName=([^;]+)/)?.[1];
+      const accountKey = connectionString.match(/AccountKey=([^;]+)/)?.[1];
+      if (accountName && accountKey) {
+        this.sharedKeyCredential = new StorageSharedKeyCredential(
+          accountName,
+          accountKey,
+        );
+      }
+    } else {
+      let name: string;
+      if (!storageAccountName) {
+        name = getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user });
+      } else {
+        name = storageAccountName;
+      }
+
+      const credential = new DefaultAzureCredential();
+
+      this.blobServiceClient = new BlobServiceClient(
+        `https://${name}.blob.core.windows.net`,
+        credential,
+      );
+
+      this.queueServiceClient = new QueueServiceClient(
+        `https://${name}.queue.core.windows.net`,
+        credential,
+      );
+    }
   }
 
   async upload(
@@ -411,24 +441,37 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       startsOn.getTime() + expiryHours * 60 * 60 * 1000,
     );
 
-    // Get user delegation key from the service
-    const userDelegationKey = await this.blobServiceClient.getUserDelegationKey(
-      startsOn,
-      expiresOn,
-    );
+    let sasToken: string;
 
-    // Generate the SAS token with read permission
-    const sasToken = generateBlobSASQueryParameters(
-      {
-        containerName: this.containerName as string,
-        blobName,
-        permissions: BlobSASPermissions.parse('r'), // Read only
-        startsOn,
-        expiresOn,
-      },
-      userDelegationKey,
-      this.blobServiceClient.accountName,
-    ).toString();
+    if (this.sharedKeyCredential) {
+      // Connection string auth: use account key to sign SAS
+      sasToken = generateBlobSASQueryParameters(
+        {
+          containerName: this.containerName as string,
+          blobName,
+          permissions: BlobSASPermissions.parse('r'),
+          startsOn,
+          expiresOn,
+        },
+        this.sharedKeyCredential,
+      ).toString();
+    } else {
+      // Entra ID auth: use user delegation key to sign SAS
+      const userDelegationKey =
+        await this.blobServiceClient.getUserDelegationKey(startsOn, expiresOn);
+
+      sasToken = generateBlobSASQueryParameters(
+        {
+          containerName: this.containerName as string,
+          blobName,
+          permissions: BlobSASPermissions.parse('r'),
+          startsOn,
+          expiresOn,
+        },
+        userDelegationKey,
+        this.blobServiceClient.accountName,
+      ).toString();
+    }
 
     return `${blockBlobClient.url}?${sasToken}`;
   }
@@ -480,6 +523,32 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       { label: 'blob.commitBlockList' },
     );
     return blockBlobClient.url;
+  }
+
+  /**
+   * Lists blobs under a given prefix (virtual directory).
+   * Returns blob name, size, and last modified date for each match.
+   */
+  async listBlobs(
+    prefix: string,
+  ): Promise<Array<{ name: string; size: number; lastModified: Date }>> {
+    const perfStart = performance.now();
+    const containerClient = this.blobServiceClient.getContainerClient(
+      this.containerName as string,
+    );
+    const results: Array<{ name: string; size: number; lastModified: Date }> =
+      [];
+    for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+      results.push({
+        name: blob.name,
+        size: blob.properties.contentLength ?? 0,
+        lastModified: blob.properties.lastModified ?? new Date(0),
+      });
+    }
+    console.log(
+      `[Perf] AzureBlobStorage.listBlobs: ${(performance.now() - perfStart).toFixed(1)}ms (${results.length} blobs)`,
+    );
+    return results;
   }
 
   // Queue methods
