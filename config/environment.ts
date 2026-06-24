@@ -109,6 +109,17 @@ const serverEnvSchema = z.object({
   LAUNCHDARKLY_SDK_KEY: z.string().optional(),
   LAUNCHDARKLY_CLIENT_ID: z.string().optional(),
 
+  // Grant Pipeline - Azure OpenAI overrides (falls back to main Azure OpenAI config)
+  GRANT_PIPELINE_OPENAI_ENDPOINT: z.string().url().optional(),
+  GRANT_PIPELINE_OPENAI_DEPLOYMENT: z.string().optional(),
+  GRANT_PIPELINE_OPENAI_KEY: z.string().optional(),
+
+  // Grant Pipeline - Azure Document Intelligence (falls back to main DI config)
+  AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: z.string().url().optional(),
+  AZURE_DOCUMENT_INTELLIGENCE_KEY: z.string().optional(),
+  GRANT_PIPELINE_DI_ENDPOINT: z.string().url().optional(),
+  GRANT_PIPELINE_DI_KEY: z.string().optional(),
+
   // Build Information
   GITHUB_SHA: z.string().optional(),
   BUILD_ID: z.string().optional(),
