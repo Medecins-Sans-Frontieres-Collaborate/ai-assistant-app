@@ -82,6 +82,7 @@
     "streamdown": "^1.4.0",
     "turndown": "^7.2.2",
     "uuid": "^13.0.0",
+    "xlsx": "^0.18.5",
     "zod": "^4.1.12",
     "zustand": "^5.0.2",
     "@azure/ai-projects": "^2.0.0-beta.4"
