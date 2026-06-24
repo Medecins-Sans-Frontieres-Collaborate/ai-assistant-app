@@ -1,0 +1,42 @@
+{
+  "name": "OCB",
+  "code_regex": "^[A-Z]{2}\\d{2,4}[A-Z]?$",
+  "code_prefix": "",
+  "hq_rate": 0.13,
+  "direct_rate": 0.87,
+  "multi_project": false,
+  "coord_keywords": [
+    "coordination",
+    "coodination",
+    "mission",
+    "id card",
+    "copro"
+  ],
+  "exclude_keywords": [],
+  "supplemental_files": {
+    "emergency_budgets": {
+      "filename": "OCB-Emergency-Classifications.csv",
+      "skiprows": 2,
+      "columns": {
+        "code": "Project code",
+        "emergency": "Emergency?"
+      }
+    },
+    "budgets": {
+      "filename": "OCB-Initial-Budgets.csv",
+      "skiprows": 2,
+      "columns": {
+        "code": "Project code",
+        "amount": "Amount in EUR"
+      }
+    },
+    "sanctions": {
+      "filename": "OCB-Sanctions.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "HQ/OC Project",
+        "sanctions": "Sanctions"
+      }
+    }
+  }
+}
