@@ -1,16 +1,28 @@
 /**
  * Per-OC (Operating Company) configuration.
+ *
+ * The JSON configs are imported statically (rather than read from disk via
+ * process.cwd() at runtime) so the bundler embeds them into the current
+ * build.".
  */
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import ocaConfig from './oc-configs/oca.json';
+import ocbConfig from './oc-configs/ocb.json';
+import ocbaConfig from './oc-configs/ocba.json';
+import ocgConfig from './oc-configs/ocg.json';
+import ocpConfig from './oc-configs/ocp.json';
+import wacaConfig from './oc-configs/waca.json';
 
-const CONFIGS_DIR = join(
-  process.cwd(),
-  'lib',
-  'services',
-  'grants',
-  'oc-configs',
-);
+// Raw parsed configs keyed by lowercase OC name. Typed loosely because each JSON
+// file only populates the fields that OC needs; loadOCConfig supplies defaults
+// for the rest.
+const RAW_CONFIGS: Record<string, Record<string, unknown>> = {
+  oca: ocaConfig,
+  ocb: ocbConfig,
+  ocba: ocbaConfig,
+  ocg: ocgConfig,
+  ocp: ocpConfig,
+  waca: wacaConfig,
+};
 
 export interface SupplementalFileSpec {
   filename: string;
@@ -46,30 +58,27 @@ export function directRateStr(config: OCConfig): string {
 }
 
 export function loadOCConfig(ocName: string): OCConfig {
-  const path = join(CONFIGS_DIR, `${ocName.toLowerCase()}.json`);
-  let raw: string;
-  try {
-    raw = readFileSync(path, 'utf-8');
-  } catch {
-    throw new Error(`OC config file not found: ${path}`);
+  const data = RAW_CONFIGS[ocName.toLowerCase()];
+  if (!data) {
+    throw new Error(`OC config not found: ${ocName}`);
   }
-  const data = JSON.parse(raw);
   return {
-    name: data.name,
-    code_regex: data.code_regex,
-    code_prefix: data.code_prefix || '',
-    hq_rate: data.hq_rate || 0,
-    direct_rate: data.direct_rate || 0,
-    multi_project: data.multi_project || false,
-    supplemental_files: data.supplemental_files || {},
-    old_to_new_codes: data.old_to_new_codes || {},
-    coord_keywords: data.coord_keywords || [
+    name: data.name as string,
+    code_regex: data.code_regex as string,
+    code_prefix: (data.code_prefix as string) || '',
+    hq_rate: (data.hq_rate as number) || 0,
+    direct_rate: (data.direct_rate as number) || 0,
+    multi_project: (data.multi_project as boolean) || false,
+    supplemental_files:
+      (data.supplemental_files as Record<string, SupplementalFileSpec>) || {},
+    old_to_new_codes: (data.old_to_new_codes as Record<string, string>) || {},
+    coord_keywords: (data.coord_keywords as string[]) || [
       'coordination',
       'coodination',
       'mission',
       'strategy',
     ],
-    exclude_keywords: data.exclude_keywords || [],
-    compilation_patterns: data.compilation_patterns || [],
+    exclude_keywords: (data.exclude_keywords as string[]) || [],
+    compilation_patterns: (data.compilation_patterns as string[]) || [],
   };
 }
