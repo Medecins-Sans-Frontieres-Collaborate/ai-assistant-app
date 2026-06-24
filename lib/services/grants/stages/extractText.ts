@@ -286,7 +286,9 @@ export async function run(params: {
       if (tmpFile && existsSync(tmpFile)) {
         try {
           unlinkSync(tmpFile);
-        } catch {}
+        } catch {
+          /* ignore */
+        }
       }
     }
   }

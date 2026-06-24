@@ -548,8 +548,8 @@ export default function GrantExtractionPage() {
     setAcceptedProposals(new Set());
 
     const runId =
-      typeof crypto !== 'undefined' && crypto.randomUUID
-        ? crypto.randomUUID()
+      typeof globalThis.crypto !== 'undefined' && globalThis.crypto.randomUUID
+        ? globalThis.crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
     // Poll the progress file the route writes while the request is in flight.

@@ -516,9 +516,13 @@ export async function run(params: {
       for (const f of txtFiles) {
         try {
           rawTexts[f] = readFileSync(join(textDir, f), 'utf-8');
-        } catch {}
+        } catch {
+          /* ignore */
+        }
       }
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }
 
   // Load all extracted records

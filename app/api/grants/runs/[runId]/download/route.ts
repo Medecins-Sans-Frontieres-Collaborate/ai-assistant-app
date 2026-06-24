@@ -228,14 +228,17 @@ export async function GET(
       );
     }
 
-    return new NextResponse(outputBytes as unknown as BodyInit, {
-      status: 200,
-      headers: {
-        'Content-Type': contentType,
-        'Content-Disposition': `attachment; filename="${downloadFileName}"`,
-        'Content-Length': outputBytes.length.toString(),
+    return new NextResponse(
+      outputBytes as unknown as ConstructorParameters<typeof NextResponse>[0],
+      {
+        status: 200,
+        headers: {
+          'Content-Type': contentType,
+          'Content-Disposition': `attachment; filename="${downloadFileName}"`,
+          'Content-Length': outputBytes.length.toString(),
+        },
       },
-    });
+    );
   } catch (error) {
     console.error('Error downloading grant extraction results:', error);
     return NextResponse.json(

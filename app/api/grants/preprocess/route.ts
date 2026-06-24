@@ -54,7 +54,9 @@ class PreprocessProgress {
           percent: Math.max(0, Math.min(100, Math.round(percent))),
         }),
       );
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }
   // --- StageProgressLike (consumed by extractText): text-extraction phase 2→50% ---
   stageStart(_name: string, total: number) {
@@ -87,7 +89,9 @@ class PreprocessProgress {
   cleanup() {
     try {
       rmSync(this.path, { force: true });
-    } catch {}
+    } catch {
+      /* ignore */
+    }
   }
 }
 
@@ -337,7 +341,9 @@ export async function POST(request: NextRequest) {
   } finally {
     try {
       await rm(workDir, { recursive: true, force: true });
-    } catch {}
+    } catch {
+      /* ignore */
+    }
     if (prog) prog.cleanup();
   }
 }
