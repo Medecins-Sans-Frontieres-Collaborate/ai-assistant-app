@@ -1,3 +1,4 @@
+import { Session } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
@@ -22,7 +23,7 @@ import { loadTable } from '@/lib/services/grants/supplementalTable';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 
 import { auth } from '@/auth';
-import { rmSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import { mkdir, rm, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
@@ -83,12 +84,37 @@ class PreprocessProgress {
   phase(label: string, percent: number) {
     this.write(label, percent);
   }
-  done() {
-    this.write('Done', 100, 'done');
-  }
-  cleanup() {
+  // Terminal success: persist the full reconciliation result alongside the
+  // progress so the polling client can read it once status === 'done'. The
+  // file is intentionally NOT deleted here — the client fetches the result
+  // via the progress endpoint after the background run finishes.
+  done(result?: Record<string, unknown>) {
     try {
-      rmSync(this.path, { force: true });
+      writeFileSync(
+        this.path,
+        JSON.stringify({
+          status: 'done',
+          label: 'Done',
+          percent: 100,
+          ...(result || {}),
+        }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+  // Terminal failure: surface the error message to the polling client.
+  fail(message: string) {
+    try {
+      writeFileSync(
+        this.path,
+        JSON.stringify({
+          status: 'error',
+          label: 'Failed',
+          percent: 100,
+          error: message,
+        }),
+      );
     } catch {
       /* ignore */
     }
@@ -222,32 +248,61 @@ async function loadExpectedList(params: {
 // ---------------------------------------------------------------------------
 
 export async function POST(request: NextRequest) {
-  const runId = uuidv4();
-  const workDir = join(tmpdir(), `grant-preprocess-${runId}`);
-  let prog: PreprocessProgress | null = null;
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  if (!canAccessGrants(session.user)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  let body: PreprocessRequestBody;
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    if (!canAccessGrants(session.user)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
 
-    const body: PreprocessRequestBody = await request.json();
-    const { oc, documentBlobPaths } = body;
-    prog = new PreprocessProgress(body.runId || runId);
+  const { oc, documentBlobPaths } = body;
+  if (!oc || !documentBlobPaths || documentBlobPaths.length === 0) {
+    return NextResponse.json(
+      {
+        error:
+          'Missing required fields: oc and documentBlobPaths (non-empty array)',
+      },
+      { status: 400 },
+    );
+  }
 
-    if (!oc || !documentBlobPaths || documentBlobPaths.length === 0) {
-      return NextResponse.json(
-        {
-          error:
-            'Missing required fields: oc and documentBlobPaths (non-empty array)',
-        },
-        { status: 400 },
-      );
-    }
+  const runId = body.runId || uuidv4();
 
+  // Run the coverage check in the background and report progress + the final
+  // reconciliation via the temp progress file (polled by
+  // /api/grants/preprocess/progress). Returning immediately keeps this request
+  // well under the dev ingress/gateway stream timeout — for many large
+  // documents the full extraction + micro-pass can take several minutes, which
+  // previously exceeded that limit and surfaced as a 504 "stream timeout".
+  void runCoverageCheck({ session, oc, documentBlobPaths, runId });
+
+  return NextResponse.json({ runId, status: 'running' });
+}
+
+// ---------------------------------------------------------------------------
+// Background worker: download → extract text → micro-pass → reconcile.
+// Reports progress and the terminal result/error through the progress file.
+// ---------------------------------------------------------------------------
+
+async function runCoverageCheck(params: {
+  session: Session;
+  oc: string;
+  documentBlobPaths: string[];
+  runId: string;
+}): Promise<void> {
+  const { session, oc, documentBlobPaths, runId } = params;
+  const workDir = join(tmpdir(), `grant-preprocess-${runId}`);
+  const prog = new PreprocessProgress(runId);
+
+  try {
     const ocCfg = loadOCConfig(oc);
     const textDir = join(workDir, 'extracted_text');
     await mkdir(textDir, { recursive: true });
@@ -256,7 +311,6 @@ export async function POST(request: NextRequest) {
 
     // 1. Download selected narratives to a temp work dir.
     const localDocPaths: string[] = [];
-    const localToBlobName: Record<string, string> = {};
     for (const blobPath of documentBlobPaths) {
       const fileName = basename(blobPath);
       const localPath = join(workDir, fileName);
@@ -266,7 +320,6 @@ export async function POST(request: NextRequest) {
       )) as Buffer;
       await writeFile(localPath, buffer);
       localDocPaths.push(localPath);
-      localToBlobName[fileName] = fileName;
     }
 
     // 2. Stage-1 text extraction (reuse the existing stage) — progress 2→50%.
@@ -279,7 +332,7 @@ export async function POST(request: NextRequest) {
     // 3. Lightweight LLM micro-pass per document → { rawProjectName, code }.
     const client = getGrantOpenAIClient();
     const deployment = getDeployment();
-    const { readFileSync } = await import('fs');
+    const { readFileSync } = await import('node:fs');
 
     const docs: DocExtract[] = [];
     const entries = Object.entries(textMap);
@@ -323,27 +376,20 @@ export async function POST(request: NextRequest) {
       docs,
       multiProject: ocCfg.multi_project,
     });
-    prog.done();
 
-    return NextResponse.json({
+    prog.done({
       oc,
       hasExpectedList: expected.length > 0,
       reconciliation,
     });
   } catch (error) {
-    console.error('[Grants Preprocess] error:', error);
-    return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : 'Internal server error',
-      },
-      { status: 500 },
-    );
+    console.error(`[Grants Preprocess ${runId}] error:`, error);
+    prog.fail(error instanceof Error ? error.message : 'Internal server error');
   } finally {
     try {
       await rm(workDir, { recursive: true, force: true });
     } catch {
       /* ignore */
     }
-    if (prog) prog.cleanup();
   }
 }

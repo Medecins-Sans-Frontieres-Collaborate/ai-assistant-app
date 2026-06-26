@@ -552,25 +552,11 @@ export default function GrantExtractionPage() {
         ? globalThis.crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-    // Poll the progress file the route writes while the request is in flight.
-    const poll = setInterval(async () => {
-      try {
-        const pr = await fetch(
-          `/api/grants/preprocess/progress?runId=${runId}`,
-        );
-        if (pr.ok) {
-          const d = await pr.json();
-          setCoverageProgress({
-            percent: d.percent ?? 0,
-            label: d.label ?? '',
-          });
-        }
-      } catch {
-        /* ignore poll errors */
-      }
-    }, 800);
-
     try {
+      // Starts the coverage check. The server runs it in the background and
+      // reports progress + the final reconciliation via the progress endpoint,
+      // so this request returns immediately (avoids the gateway stream timeout
+      // that a long-held synchronous request hits in deployed environments).
       const res = await fetch('/api/grants/preprocess', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -581,7 +567,44 @@ export default function GrantExtractionPage() {
         }),
       });
       if (!res.ok) throw new Error(await res.text());
-      const data: CoverageData = await res.json();
+
+      // Poll the progress file until the background run reports a terminal
+      // state, then read the result (or error) straight from the poll payload.
+      const data = await new Promise<CoverageData>((resolve, reject) => {
+        const deadline = Date.now() + 20 * 60 * 1000; // 20-minute safety cap
+        const poll = setInterval(async () => {
+          if (Date.now() > deadline) {
+            clearInterval(poll);
+            reject(new Error('Coverage check timed out'));
+            return;
+          }
+          try {
+            const pr = await fetch(
+              `/api/grants/preprocess/progress?runId=${runId}`,
+            );
+            if (!pr.ok) return;
+            const d = await pr.json();
+            setCoverageProgress({
+              percent: d.percent ?? 0,
+              label: d.label ?? '',
+            });
+            if (d.status === 'done') {
+              clearInterval(poll);
+              resolve({
+                oc: d.oc,
+                hasExpectedList: d.hasExpectedList,
+                reconciliation: d.reconciliation,
+              });
+            } else if (d.status === 'error') {
+              clearInterval(poll);
+              reject(new Error(d.error || 'Coverage check failed'));
+            }
+          } catch {
+            /* ignore transient poll errors */
+          }
+        }, 1500);
+      });
+
       setCoverageData(data);
       setUiState('coverage-check');
     } catch (err) {
@@ -589,7 +612,6 @@ export default function GrantExtractionPage() {
         err instanceof Error ? err.message : 'Failed to run coverage check',
       );
     } finally {
-      clearInterval(poll);
       setCoverageLoading(false);
     }
   };
