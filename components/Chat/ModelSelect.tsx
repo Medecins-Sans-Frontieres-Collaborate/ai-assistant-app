@@ -191,13 +191,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   // Convert organization agents to OpenAIModel format
   // Combines static RAG agents (from JSON config) with dynamically discovered Foundry agents
   const organizationAgentModels: OpenAIModel[] = useMemo(() => {
-    // Feature flag check: Skip organization agents if disabled in LaunchDarkly
-    if (!isBotsEnabled) {
-      return [];
-    }
+    // The `exploreBots` flag gates org-managed discovery (static org agents +
+    // region/office Foundry projects) — NOT the user's own connected sources.
+    // When the flag is off we still keep agents from custom (BYO) sources so
+    // users can use Foundry projects they connected themselves.
+    const customSourcePaths = new Set(
+      customAgentSources.map((s) => s.resourcePath),
+    );
+    const visibleFoundryAgents = isBotsEnabled
+      ? foundryAgents
+      : foundryAgents.filter(
+          (a) => a.source && customSourcePaths.has(a.source),
+        );
 
-    // Static agents from organization-agents.json (RAG agents + any static Foundry agents)
-    const staticAgents = getOrganizationAgents();
+    // Static agents from organization-agents.json (RAG agents + any static
+    // Foundry agents) are org-managed, so they're skipped when the flag is off.
+    const staticAgents = isBotsEnabled ? getOrganizationAgents() : [];
     const staticModels = staticAgents.map((agent) => {
       const baseModelId =
         (agent.baseModelId as OpenAIModelID) || OpenAIModelID.GPT_4_1;
@@ -218,7 +227,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     // Model ID includes a short hash of the source path so the same-named agent
     // discovered from two different Foundry projects produces two distinct models
     // (otherwise React key collisions + ambiguous selection).
-    const dynamicModels = foundryAgents.map((agent) => {
+    const dynamicModels = visibleFoundryAgents.map((agent) => {
       const baseModel = OpenAIModels[OpenAIModelID.GPT_4_1];
       const sourceHash = shortSourceHash(agent.source);
       return {
@@ -237,13 +246,15 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
 
     // Deduplicate: if a Foundry agent exists in both static config and dynamic discovery,
     // prefer the dynamic version (it has RBAC validation)
-    const dynamicAgentNames = new Set(foundryAgents.map((a) => a.agentName));
+    const dynamicAgentNames = new Set(
+      visibleFoundryAgents.map((a) => a.agentName),
+    );
     const deduplicatedStatic = staticModels.filter(
       (m) => !m.agentId || !dynamicAgentNames.has(m.agentId),
     );
 
     return [...deduplicatedStatic, ...dynamicModels];
-  }, [isBotsEnabled, foundryAgents]);
+  }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
   // Combine base models and organization/discovered agents
   const availableModels = useMemo(
