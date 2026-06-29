@@ -612,7 +612,9 @@ describe('ModelSelect', () => {
       render(<ModelSelect />);
       fireEvent.click(screen.getByText('Agents').closest('button')!);
 
-      expect(screen.getByText('No agents available')).toBeInTheDocument();
+      expect(
+        screen.getByText('No regional / organization agents available'),
+      ).toBeInTheDocument();
     });
   });
 });
