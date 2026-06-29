@@ -7,6 +7,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { ModelSelect } from '@/components/Chat/ModelSelect';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the hooks
@@ -36,6 +37,24 @@ const mockUseCustomAgents = {
   deleteCustomAgent: vi.fn(),
 };
 
+// Mutable LaunchDarkly flags — empty by default (so `exploreBots` is undefined
+// and treated as enabled). Individual tests can flip `exploreBots` to false.
+const mockFlags: Record<string, unknown> = {};
+
+// Mutable Foundry discovery result so tests can inject discovered agents.
+const mockFoundryAgents = {
+  foundryAgents: [] as Array<Record<string, unknown>>,
+  regionalPath: null as string | null,
+  officePaths: [] as string[],
+  isLoadingFoundryAgents: false,
+  foundryAgentsError: null,
+  refetchFoundryAgents: vi.fn(),
+};
+
+vi.mock('launchdarkly-react-client-sdk', () => ({
+  useFlags: () => mockFlags,
+}));
+
 vi.mock('@/client/hooks/conversation/useConversations', () => ({
   useConversations: () => mockUseConversations,
 }));
@@ -49,14 +68,7 @@ vi.mock('@/client/hooks/settings/useCustomAgents', () => ({
 }));
 
 vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
-  useFoundryAgents: () => ({
-    foundryAgents: [],
-    regionalPath: null,
-    officePaths: [],
-    isLoadingFoundryAgents: false,
-    foundryAgentsError: null,
-    refetchFoundryAgents: vi.fn(),
-  }),
+  useFoundryAgents: () => mockFoundryAgents,
 }));
 
 // Note: next-intl is mocked globally in vitest.setup.dom.ts
@@ -64,6 +76,13 @@ vi.mock('@/client/hooks/settings/useFoundryAgents', () => ({
 describe('ModelSelect', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Reset mutable mocks back to defaults (flag on, no discovered agents).
+    for (const key of Object.keys(mockFlags)) delete mockFlags[key];
+    mockFoundryAgents.foundryAgents = [];
+    mockFoundryAgents.regionalPath = null;
+    mockFoundryAgents.officePaths = [];
+    useSettingsStore.setState({ customAgentSources: [] });
 
     // Reset mock data
     mockUseConversations.selectedConversation = {
@@ -525,6 +544,75 @@ describe('ModelSelect', () => {
       // Should not have close button
       const xButtons = container.querySelectorAll('[aria-label="Close"]');
       expect(xButtons.length).toBe(0);
+    });
+  });
+
+  describe('BYO Foundry sources when discovery is disabled', () => {
+    it('keeps custom-source agents selectable but hides region agents when exploreBots is false', async () => {
+      mockFlags.exploreBots = false;
+
+      useSettingsStore.setState({
+        customAgentSources: [
+          {
+            id: 'src-1',
+            name: 'My Foundry Project',
+            resourcePath: '/subscriptions/x/custom-project',
+            createdAt: '2026-01-01T00:00:00.000Z',
+          },
+        ],
+      });
+
+      mockFoundryAgents.regionalPath = '/subscriptions/x/region-project';
+      mockFoundryAgents.foundryAgents = [
+        {
+          id: 'byo-1',
+          name: 'My BYO Agent',
+          agentName: 'asst_byo',
+          source: '/subscriptions/x/custom-project',
+          description: 'Agent from a user-connected project',
+        },
+        {
+          id: 'region-1',
+          name: 'Region Only Agent',
+          agentName: 'asst_region',
+          source: '/subscriptions/x/region-project',
+          description: 'Org-managed regional agent',
+        },
+      ];
+
+      render(<ModelSelect />);
+
+      // Switch to the Agents tab.
+      fireEvent.click(screen.getByText('Agents').closest('button')!);
+
+      // BYO custom-source agent is shown; the org-managed region agent is gated out.
+      const byoRow = await screen.findByText('My BYO Agent');
+      expect(byoRow).toBeInTheDocument();
+      expect(screen.queryByText('Region Only Agent')).not.toBeInTheDocument();
+
+      // Clicking the BYO agent actually selects it. This is the bug fix: before,
+      // organizationAgentModels was empty when the flag was off, so the click
+      // resolved to no model and did nothing.
+      fireEvent.click(byoRow.closest('button')!);
+      await waitFor(() => {
+        expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
+          'conv-1',
+          expect.objectContaining({
+            model: expect.objectContaining({
+              id: expect.stringContaining('foundry-'),
+            }),
+          }),
+        );
+      });
+    });
+
+    it('shows the empty state when discovery is off and no custom sources exist', () => {
+      mockFlags.exploreBots = false;
+
+      render(<ModelSelect />);
+      fireEvent.click(screen.getByText('Agents').closest('button')!);
+
+      expect(screen.getByText('No agents available')).toBeInTheDocument();
     });
   });
 });
