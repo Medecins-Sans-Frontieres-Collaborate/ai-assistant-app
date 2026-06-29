@@ -1999,6 +1999,10 @@
       "technicalDetails": "Technische details",
       "agentCountLabel": "{count} agenten",
       "disconnectedToast": "Verbinding met {name} verbroken"
+    },
+    "emptyState": {
+      "title": "Geen regionale of organisatorische agenten beschikbaar",
+      "description": "Verbind hieronder een Foundry-project om de agenten te ontdekken."
     }
   },
   "privacy": {

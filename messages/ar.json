@@ -1999,6 +1999,10 @@
       "technicalDetails": "تفاصيل تقنية",
       "agentCountLabel": "{count} وكلاء",
       "disconnectedToast": "تم قطع الاتصال بـ {name}"
+    },
+    "emptyState": {
+      "title": "لا يوجد وكلاء إقليميون أو تنظيميونيون متاحون",
+      "description": "قم بربط مشروع Foundry أدناه لاكتشاف وكلائه."
     }
   },
   "privacy": {

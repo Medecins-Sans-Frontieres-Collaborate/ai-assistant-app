@@ -2001,6 +2001,10 @@
       "technicalDetails": "تکنیکی تفصیلات",
       "agentCountLabel": "{count} ایجنٹس",
       "disconnectedToast": "{name} ڈسکنیکٹ ہوگیا"
+    },
+    "emptyState": {
+      "title": "کوئی علاقائی / تنظیمی ایجنٹس دستیاب نہیں ہیں",
+      "description": "اس کے ایجنٹس دیکھنے کے لیے نیچے ایک Foundry پروجیکٹ کنیکٹ کریں۔"
     }
   },
   "privacy": {

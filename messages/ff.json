@@ -1975,6 +1975,10 @@
       "technicalDetails": "Carii teknikal",
       "agentCountLabel": "Agent {count}",
       "disconnectedToast": "Liggital toggo {name}"
+    },
+    "emptyState": {
+      "title": "Agentji dow nguu/ko organisation ngam hollude walaa",
+      "description": "Jokku e project Foundry ko ñaam kono waɗu agentjee mum."
     }
   },
   "privacy": {

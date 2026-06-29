@@ -2030,6 +2030,10 @@
       "technicalDetails": "技术详情",
       "agentCountLabel": "{count} 个代理",
       "disconnectedToast": "已断开 {name}"
+    },
+    "emptyState": {
+      "title": "暂无区域／组织代理可用",
+      "description": "请在下方连接一个 Foundry 项目以查看其代理。"
     }
   },
   "privacy": {

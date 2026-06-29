@@ -1999,6 +1999,10 @@
       "technicalDetails": "Tekniset tiedot",
       "agentCountLabel": "{count} agenttia",
       "disconnectedToast": "Yhteys katkaistu: {name}"
+    },
+    "emptyState": {
+      "title": "Ei alueellisia tai organisatorisia agentteja saatavilla",
+      "description": "Yhdistä Foundry-projekti alta nähdäksesi sen agentit."
     }
   },
   "privacy": {

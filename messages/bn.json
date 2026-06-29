@@ -1999,6 +1999,10 @@
       "technicalDetails": "প্রযুক্তিগত বিবরণ",
       "agentCountLabel": "{count} এজেন্টস",
       "disconnectedToast": "{name} বিচ্ছিন্ন করা হয়েছে"
+    },
+    "emptyState": {
+      "title": "কোনো আঞ্চলিক / সংস্থাগত এজেন্ট উপলব্ধ নেই",
+      "description": "এর এজেন্টগুলো দেখতে নিচে একটি Foundry প্রকল্প সংযুক্ত করুন।"
     }
   },
   "privacy": {

@@ -1999,6 +1999,10 @@
       "technicalDetails": "פרטים טכניים",
       "agentCountLabel": "{count} סוכנים",
       "disconnectedToast": "נותק {name}"
+    },
+    "emptyState": {
+      "title": "אין סוכנים אזוריים / ארגוניים זמינים",
+      "description": "חברו פרויקט Foundry למטה כדי לגלות את הסוכנים שלו."
     }
   },
   "privacy": {

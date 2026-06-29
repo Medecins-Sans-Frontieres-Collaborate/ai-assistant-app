@@ -1999,6 +1999,10 @@
       "technicalDetails": "तकनीकी विवरण",
       "agentCountLabel": "{count} एजेंट्स",
       "disconnectedToast": "{name} डिस्कनेक्ट किया गया"
+    },
+    "emptyState": {
+      "title": "कोई क्षेत्रीय / संगठनात्मक एजेंट उपलब्ध नहीं हैं",
+      "description": "इसके एजेंट देखने के लिए नीचे एक Foundry प्रोजेक्ट कनेक्ट करें।"
     }
   },
   "privacy": {

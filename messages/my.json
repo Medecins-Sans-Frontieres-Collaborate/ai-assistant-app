@@ -1999,6 +1999,10 @@
       "technicalDetails": "နည်းပညာအသေးစိတ်",
       "agentCountLabel": "အေဂျင့် {count} ဦး",
       "disconnectedToast": "{name} ကိုဖြုတ်ပြီး"
+    },
+    "emptyState": {
+      "title": "ဒေသဆိုင်ရာ / အဖွဲ့အစည်းအေးဂျင့်များ မရှိပါ",
+      "description": "အေးဂျင့်များကို ရှာဖွေရန် Foundry project တစ်ခုကို အောက်တွင် ချိတ်ဆက်ပါ။"
     }
   },
   "privacy": {

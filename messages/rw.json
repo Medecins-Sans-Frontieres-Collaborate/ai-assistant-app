@@ -1975,6 +1975,10 @@
       "technicalDetails": "Ibisobanuro bya tekiniki",
       "agentCountLabel": "Abakozi {count}",
       "disconnectedToast": "Bikuweho {name}"
+    },
+    "emptyState": {
+      "title": "Nta bahagarariye akarere cyangwa umuryango babonetse",
+      "description": "Huzwa umushinga wa Foundry hasi kugirango ubone abahagarariye bawugize."
     }
   },
   "privacy": {

@@ -1999,6 +1999,10 @@
       "technicalDetails": "جزئیات فنی",
       "agentCountLabel": "{count} نماینده",
       "disconnectedToast": "{name} قطع اتصال شد"
+    },
+    "emptyState": {
+      "title": "هیچ نماینده منطقه‌ای یا سازمانی در دسترس نیست",
+      "description": "برای مشاهده نماینده‌ها، یک پروژه Foundry را در زیر متصل کنید."
     }
   },
   "privacy": {

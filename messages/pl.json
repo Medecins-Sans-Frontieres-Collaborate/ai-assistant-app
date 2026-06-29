@@ -1999,6 +1999,10 @@
       "technicalDetails": "Szczegóły techniczne",
       "agentCountLabel": "{count} agentów",
       "disconnectedToast": "Odłączono {name}"
+    },
+    "emptyState": {
+      "title": "Brak dostępnych agentów regionalnych / organizacyjnych",
+      "description": "Połącz projekt Foundry poniżej, aby odkryć jego agentów."
     }
   },
   "privacy": {

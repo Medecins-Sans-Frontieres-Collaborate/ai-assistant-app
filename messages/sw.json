@@ -1999,6 +1999,10 @@
       "technicalDetails": "Maelezo ya kiufundi",
       "agentCountLabel": "Wakala {count}",
       "disconnectedToast": "Imekatishwa {name}"
+    },
+    "emptyState": {
+      "title": "Hakuna mawakala wa kanda/taasisi waliopo",
+      "description": "Unganisha mradi wa Foundry hapo chini ili kupata mawakala wake."
     }
   },
   "privacy": {

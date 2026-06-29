@@ -1999,6 +1999,10 @@
       "technicalDetails": "기술 세부 정보",
       "agentCountLabel": "에이전트 {count}개",
       "disconnectedToast": "{name} 연결 해제됨"
+    },
+    "emptyState": {
+      "title": "사용 가능한 지역/기관 에이전트가 없습니다.",
+      "description": "아래에서 Foundry 프로젝트를 연결하여 에이전트를 확인하세요."
     }
   },
   "privacy": {

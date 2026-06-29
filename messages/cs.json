@@ -1999,6 +1999,10 @@
       "technicalDetails": "Technické detaily",
       "agentCountLabel": "{count} agentů",
       "disconnectedToast": "Odpojeno {name}"
+    },
+    "emptyState": {
+      "title": "Nejsou dostupní žádní regionální ani organizační agenti",
+      "description": "Pro zobrazení agentů připojte níže projekt Foundry."
     }
   },
   "privacy": {

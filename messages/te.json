@@ -1999,6 +1999,10 @@
       "technicalDetails": "టెక్నికల్ వివరాలు",
       "agentCountLabel": "{count} ఏజెంట్‌లు",
       "disconnectedToast": "{name} డిస్‌కనెక్ట్ అయింది"
+    },
+    "emptyState": {
+      "title": "ప్రాంతీయ / సంస్థాగత ఏజెంట్లు లేవు",
+      "description": "దాని ఏజెంట్లను కనుగొనడానికి క్రింద ఇచ్చిన Foundry ప్రాజెక్టుని కనెక్ట్ చేయండి."
     }
   },
   "privacy": {

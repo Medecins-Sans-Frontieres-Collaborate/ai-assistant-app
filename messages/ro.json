@@ -1999,6 +1999,10 @@
       "technicalDetails": "Detalii tehnice",
       "agentCountLabel": "{count} agenți",
       "disconnectedToast": "{name} deconectat"
+    },
+    "emptyState": {
+      "title": "Nu există agenți regionali / organizaționali disponibili",
+      "description": "Conectați un proiect Foundry mai jos pentru a descoperi agenții acestuia."
     }
   },
   "privacy": {

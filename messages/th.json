@@ -1999,6 +1999,10 @@
       "technicalDetails": "รายละเอียดทางเทคนิค",
       "agentCountLabel": "{count} ตัวแทน",
       "disconnectedToast": "ตัดการเชื่อมต่อ {name} แล้ว"
+    },
+    "emptyState": {
+      "title": "ไม่มีตัวแทนระดับภูมิภาค / องค์กร",
+      "description": "เชื่อมต่อโปรเจกต์ Foundry ด้านล่างเพื่อค้นหาตัวแทนของโปรเจกต์นั้น"
     }
   },
   "privacy": {
