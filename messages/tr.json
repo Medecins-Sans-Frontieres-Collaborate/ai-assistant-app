@@ -1999,6 +1999,10 @@
       "technicalDetails": "Teknik ayrıntılar",
       "agentCountLabel": "{count} temsilci",
       "disconnectedToast": "{name} bağlantısı kesildi"
+    },
+    "emptyState": {
+      "title": "Bölgesel / kurumsal ajan bulunmuyor",
+      "description": "Ajanlarını görmek için aşağıdan bir Foundry projesi bağlayın."
     }
   },
   "privacy": {

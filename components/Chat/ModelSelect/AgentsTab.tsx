@@ -162,7 +162,6 @@ export const AgentsTab: FC<AgentsTabProps> = ({
 
   const organizationAgents = getOrganizationAgents();
   const isBotsEnabled = exploreBots !== false;
-  const hasOrganizationAgents = isBotsEnabled && organizationAgents.length > 0;
 
   // Region/office labels. Office name is user-defined config (place name), so it
   // isn't translated; the rest is.
@@ -194,7 +193,15 @@ export const AgentsTab: FC<AgentsTabProps> = ({
   );
   const getSourceAgents = (sourcePath: string) =>
     foundryAgents.filter((a) => a.source === sourcePath);
-  const hasOfficeSection = officeName != null && officeFoundryAgents.length > 0;
+  // Region/office org agents are gated by the discovery flag (exploreBots);
+  // custom (BYO) sources rendered below are not. The region section shows when
+  // there's any static org agent OR a discovered regional agent, so a
+  // discovery-only region isn't hidden just because it has no static agents.
+  const hasOrganizationAgents =
+    isBotsEnabled &&
+    (organizationAgents.length > 0 || regionalAgents.length > 0);
+  const hasOfficeSection =
+    isBotsEnabled && officeName != null && officeFoundryAgents.length > 0;
 
   // Stable model ID for a discovered Foundry agent — matches what ModelSelect
   // builds when constructing organizationAgentModels. Includes a source hash so
@@ -479,6 +486,25 @@ export const AgentsTab: FC<AgentsTabProps> = ({
               </section>
             );
           })}
+
+          {/* Empty state — nothing to show in any section. Keeps the Connect
+              button below as the call to action instead of leaving it bare. */}
+          {organizationAgentModels.length === 0 &&
+            agentSources.length === 0 && (
+              <div className="rounded-lg border border-dashed border-gray-300 dark:border-gray-700 px-4 py-6 text-center">
+                <IconHexagon
+                  size={24}
+                  className="mx-auto text-gray-300 dark:text-gray-600"
+                  aria-hidden="true"
+                />
+                <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300 leading-tight">
+                  {t('emptyState.title')}
+                </p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                  {t('emptyState.description')}
+                </p>
+              </div>
+            )}
 
           {/* Connect button */}
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">

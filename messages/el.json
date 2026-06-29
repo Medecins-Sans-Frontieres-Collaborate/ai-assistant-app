@@ -1975,6 +1975,10 @@
       "technicalDetails": "Τεχνικές λεπτομέρειες",
       "agentCountLabel": "{count} agents",
       "disconnectedToast": "Αποσυνδέθηκε το {name}"
+    },
+    "emptyState": {
+      "title": "Δεν υπάρχουν διαθέσιμοι περιφερειακοί / οργανωτικοί agents",
+      "description": "Συνδέστε ένα Foundry project παρακάτω για να δείτε τους agents του."
     }
   },
   "privacy": {

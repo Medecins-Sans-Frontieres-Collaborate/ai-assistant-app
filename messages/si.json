@@ -1999,6 +1999,10 @@
       "technicalDetails": "තාක්ෂණික විස්තර",
       "agentCountLabel": "නියෝජිතයන් {count} ක්",
       "disconnectedToast": "{name} අනහිත් විය"
+    },
+    "emptyState": {
+      "title": "ප්‍රාදේශීය / සංවිධාන නියෝජිතයන් නොමැත",
+      "description": "එහි නියෝජිතයන් සොයා බැලීමට පහත Foundry ව්‍යාපෘතියක් සම්බන්ධ කරන්න."
     }
   },
   "privacy": {

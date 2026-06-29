@@ -1999,6 +1999,10 @@
       "technicalDetails": "Технічні деталі",
       "agentCountLabel": "{count} агентів",
       "disconnectedToast": "Відключено {name}"
+    },
+    "emptyState": {
+      "title": "Немає доступних регіональних або організаційних агентів",
+      "description": "Підключіть проєкт Foundry нижче, щоб переглянути його агентів."
     }
   },
   "privacy": {

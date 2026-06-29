@@ -2030,6 +2030,10 @@
       "technicalDetails": "Chi tiết kỹ thuật",
       "agentCountLabel": "{count} agent",
       "disconnectedToast": "Đã ngắt kết nối {name}"
+    },
+    "emptyState": {
+      "title": "Không có agent khu vực / tổ chức nào",
+      "description": "Kết nối một dự án Foundry bên dưới để khám phá các agent của dự án."
     }
   },
   "privacy": {

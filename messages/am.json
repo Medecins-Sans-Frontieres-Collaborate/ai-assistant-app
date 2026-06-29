@@ -1999,6 +1999,10 @@
       "technicalDetails": "ቴክኒካዊ ዝርዝሮች",
       "agentCountLabel": "{count} ወኪሎች",
       "disconnectedToast": "{name} ከተገናኙ ተቋርጧል"
+    },
+    "emptyState": {
+      "title": "የክልል / የድርጅት ወኪሎች የሉም",
+      "description": "የ Foundry ፕሮጀክት ያገናኙ እና ዋና ወኪሎቹን ያግኙ።"
     }
   },
   "privacy": {

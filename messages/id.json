@@ -1999,6 +1999,10 @@
       "technicalDetails": "Detail teknis",
       "agentCountLabel": "{count} agen",
       "disconnectedToast": "Terputus {name}"
+    },
+    "emptyState": {
+      "title": "Tidak ada agen regional / organisasi yang tersedia",
+      "description": "Hubungkan proyek Foundry di bawah ini untuk menemukan agennya."
     }
   },
   "privacy": {

@@ -153,6 +153,12 @@ const mockMessages: Record<string, unknown> = {
       closeModal: 'Close modal',
     },
   },
+  agentsTab: {
+    emptyState: {
+      title: 'No regional / organization agents available',
+      description: 'Connect a Foundry project below to discover its agents.',
+    },
+  },
   modelSelect: {
     tabs: {
       models: 'Models',

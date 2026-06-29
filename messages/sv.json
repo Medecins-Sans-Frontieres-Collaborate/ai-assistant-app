@@ -1999,6 +1999,10 @@
       "technicalDetails": "Teknisk information",
       "agentCountLabel": "{count} agenter",
       "disconnectedToast": "Kopplade från {name}"
+    },
+    "emptyState": {
+      "title": "Inga regionala eller organisatoriska agenter tillgängliga",
+      "description": "Anslut ett Foundry-projekt nedan för att hitta dess agenter."
     }
   },
   "privacy": {

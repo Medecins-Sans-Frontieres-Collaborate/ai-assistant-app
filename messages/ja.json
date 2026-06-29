@@ -1999,6 +1999,10 @@
       "technicalDetails": "技術詳細",
       "agentCountLabel": "{count} エージェント",
       "disconnectedToast": "{name}の接続を解除しました"
+    },
+    "emptyState": {
+      "title": "利用可能な地域・組織エージェントはありません",
+      "description": "以下でFoundryプロジェクトを接続して、そのエージェントを確認してください。"
     }
   },
   "privacy": {

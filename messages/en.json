@@ -1956,6 +1956,10 @@
     },
     "selectAgentPrompt": "Select an agent to view details",
     "description": "Specialized AI agents for specific tasks. Default agents are managed centrally; add custom sources to discover agents from other Foundry projects.",
+    "emptyState": {
+      "title": "No regional / organizational agents available",
+      "description": "Connect a Foundry project below to discover its agents."
+    },
     "regionAgents": {
       "us": "US Region Agents",
       "eu": "EU Region Agents",
