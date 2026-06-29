@@ -1297,7 +1297,9 @@
     },
     "title": "Selecione um modelo",
     "modelsDescription": "Escolha um modelo de IA para sua conversa. Cada modelo tem características diferentes — selecione um para ver detalhes.",
-    "recommended": "Recomendado"
+    "recommended": "Recomendado",
+    "familyAll": "Todos",
+    "familyFilterLabel": "Filtrar modelos por família"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Revisar",
     "itemId": "ID: {id}",
     "itemSource": "{date} de {source}"
+  },
+  "regionOverride": {
+    "warning": "Substituição de localização ativa — seus pedidos estão sendo direcionados para a região de dados {region}. Esta é uma substituição manual de teste, não a sua localização real.",
+    "clear": "Limpar substituição"
   }
 }

@@ -6,9 +6,40 @@ import {
   getFallbackChain,
   getFallbackModel,
   getModelConfig,
+  isDeploymentNotFoundError,
   isModelDisabled,
 } from '@/config/models';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+describe('isDeploymentNotFoundError', () => {
+  it('detects the DeploymentNotFound code', () => {
+    expect(isDeploymentNotFoundError({ code: 'DeploymentNotFound' })).toBe(
+      true,
+    );
+  });
+
+  it('detects a 404 whose message names a missing deployment', () => {
+    expect(
+      isDeploymentNotFoundError({
+        status: 404,
+        message: 'The API deployment for this resource does not exist.',
+      }),
+    ).toBe(false); // message must mention "deployment ... not found"
+    expect(
+      isDeploymentNotFoundError({
+        status: 404,
+        message: 'Deployment gpt-5.2-chat not found',
+      }),
+    ).toBe(true);
+  });
+
+  it('ignores unrelated errors', () => {
+    expect(isDeploymentNotFoundError({ status: 429 })).toBe(false);
+    expect(isDeploymentNotFoundError(new Error('rate limited'))).toBe(false);
+    expect(isDeploymentNotFoundError(null)).toBe(false);
+    expect(isDeploymentNotFoundError(undefined)).toBe(false);
+  });
+});
 
 describe('Model Configuration', () => {
   beforeEach(() => {

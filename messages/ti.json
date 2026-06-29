@@ -1447,7 +1447,9 @@
     },
     "title": "ሞዴል ምረፅ",
     "modelsDescription": "ንውዕልናኻ ኣይ ሞዴል ምረፅ። ተወዳዳሪ ውጻኢታት ኣሎም — መርሓት ናይ መረጻ ተያዩ።",
-    "recommended": "ዝመኽር"
+    "recommended": "ዝመኽር",
+    "familyAll": "ኩሉ",
+    "familyFilterLabel": "ሞዴላት ብቤተሰብ ኣምራኽ"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "ኣየው",
     "itemId": "መለያ: {id}",
     "itemSource": "{date} ካብ {source}"
+  },
+  "regionOverride": {
+    "warning": "ኣካባቢ ተለዋዋጭ ብሓላፊ ይሰርሕ ኣሎ — ጥየታትኩም {region} ዝብሉ ክፍሊ መረብ ይልከኩ። እዚ ብእግሊ ፈተና ዝተደረገ ሕወሓት እዩ፣ እንተወሃቦ ኣካባቢኩም ኣይኮነን።",
+    "clear": "ቆልዑ ተለዋዋጭ"
   }
 }

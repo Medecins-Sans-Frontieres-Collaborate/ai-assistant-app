@@ -1396,7 +1396,9 @@
     },
     "title": "Valitse malli",
     "modelsDescription": "Valitse keskustelullesi AI-malli. Jokaisella mallilla on omat vahvuutensa — valitse nähdäksesi tarkemmat tiedot.",
-    "recommended": "Suositeltu"
+    "recommended": "Suositeltu",
+    "familyAll": "Kaikki",
+    "familyFilterLabel": "Suodata mallit perheen mukaan"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Tarkista",
     "itemId": "Tunniste: {id}",
     "itemSource": "{date} lähteestä {source}"
+  },
+  "regionOverride": {
+    "warning": "Sijainnin ohitus käytössä — pyyntösi ohjataan {region} tietojen alueelle. Tämä on manuaalinen testiohitus, ei todellinen sijaintisi.",
+    "clear": "Poista ohitus"
   }
 }

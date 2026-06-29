@@ -1297,7 +1297,9 @@
     },
     "title": "Chagua mfano",
     "modelsDescription": "Chagua mfano wa AI kwa mazungumzo yako. Kila mfano una nguvu tofauti — chagua mmoja kuona maelezo.",
-    "recommended": "Inapendekezwa"
+    "recommended": "Inapendekezwa",
+    "familyAll": "Zote",
+    "familyFilterLabel": "Chuja miundo kwa familia"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Kagua",
     "itemId": "Kitambulisho: {id}",
     "itemSource": "{date} kutoka {source}"
+  },
+  "regionOverride": {
+    "warning": "Kubadilisha eneo kumewezeshwa — maombi yako yanaelekezwa kwenye eneo la data la {region}. Hii ni jaribio la kubadilisha kwa mkono, si eneo lako halisi.",
+    "clear": "Ondoa kubadilisha"
   }
 }

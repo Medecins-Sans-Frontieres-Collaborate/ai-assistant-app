@@ -43,17 +43,21 @@ export function getEnvVariable(
     user = options.user;
   }
 
+  // Region is the single source of truth for data-plane routing. It is resolved
+  // once at auth time (office/email lookup, plus any active override) and stored
+  // on `session.user.region`, so blob storage and the Foundry endpoint route
+  // consistently and both honor the override. Fall back to the legacy email
+  // heuristic only for sessions issued before `region` existed.
   let euUser: boolean = true;
-  if (user?.mail) {
-    const emailLower = user.mail.toLowerCase();
-    const domain = emailLower.split('@')[1];
-    // Check if domain ends with newyork.msf.org (or is exactly newyork.msf.org)
-    if (
+  if (user?.region) {
+    euUser = user.region === 'EU';
+  } else if (user?.mail) {
+    const domain = user.mail.toLowerCase().split('@')[1];
+    // newyork.msf.org (or a subdomain) ⇒ US; everyone else ⇒ EU default.
+    euUser = !(
       domain &&
       (domain === 'newyork.msf.org' || domain.endsWith('.newyork.msf.org'))
-    ) {
-      euUser = false;
-    }
+    );
   }
 
   let value: string | undefined;

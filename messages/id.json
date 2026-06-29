@@ -1388,7 +1388,9 @@
     },
     "title": "Pilih model",
     "modelsDescription": "Pilih model AI untuk percakapan Anda. Setiap model memiliki keunggulan berbeda — pilih salah satu untuk melihat detailnya.",
-    "recommended": "Direkomendasikan"
+    "recommended": "Direkomendasikan",
+    "familyAll": "Semua",
+    "familyFilterLabel": "Saring model berdasarkan keluarga"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Tinjau",
     "itemId": "ID: {id}",
     "itemSource": "{date} dari {source}"
+  },
+  "regionOverride": {
+    "warning": "Pengesampingan lokasi aktif — permintaan Anda sedang diarahkan ke wilayah data {region}. Ini adalah pengesampingan manual untuk pengujian, bukan lokasi Anda yang sebenarnya.",
+    "clear": "Hapus pengesampingan"
   }
 }

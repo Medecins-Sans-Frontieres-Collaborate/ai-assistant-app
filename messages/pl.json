@@ -1396,7 +1396,9 @@
     },
     "title": "Wybierz model",
     "modelsDescription": "Wybierz model AI do rozmowy. Każdy model ma inne zalety — wybierz, aby zobaczyć szczegóły.",
-    "recommended": "Polecane"
+    "recommended": "Polecane",
+    "familyAll": "Wszystkie",
+    "familyFilterLabel": "Filtruj modele według rodziny"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Przejrzyj",
     "itemId": "ID: {id}",
     "itemSource": "{date} z {source}"
+  },
+  "regionOverride": {
+    "warning": "Nadpisanie lokalizacji aktywne — Twoje żądania są kierowane do regionu danych {region}. To ręczne nadpisanie testowe, a nie Twoja rzeczywista lokalizacja.",
+    "clear": "Wyczyść nadpisanie"
   }
 }

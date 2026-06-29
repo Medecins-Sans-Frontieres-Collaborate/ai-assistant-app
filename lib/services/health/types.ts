@@ -72,4 +72,5 @@ export type ServiceName =
   | 'azureOpenAI'
   | 'azureSearch'
   | 'azureBlobStorage'
+  | 'azureBlobStorageEU'
   | 'azureSpeechWhisper';

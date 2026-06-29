@@ -1447,7 +1447,9 @@
     },
     "title": "Zaɓi samfur",
     "modelsDescription": "Zaɓi samfurin AI don tattaunawar ku. Kowanne samfur yana da ƙwarewa daban — zaɓi guda ɗaya don duba cikakkun bayanai.",
-    "recommended": "An ba da shawarar"
+    "recommended": "An ba da shawarar",
+    "familyAll": "Duka",
+    "familyFilterLabel": "Farfasa samfuran ta iyali"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Duba",
     "itemId": "ID: {id}",
     "itemSource": "{date} daga {source}"
+  },
+  "regionOverride": {
+    "warning": "An kunna magance wurin — ana dirka buƙatunku zuwa yankin bayanai na {region}. Wannan na gwaji ne da hannu, ba wurin ku na gaske ba.",
+    "clear": "Share magance wurin"
   }
 }

@@ -1297,7 +1297,9 @@
     },
     "title": "Vyberte model",
     "modelsDescription": "Vyberte AI model pro svou konverzaci. Každý model má jiné přednosti — vyberte jeden pro zobrazení podrobností.",
-    "recommended": "Doporučeno"
+    "recommended": "Doporučeno",
+    "familyAll": "Vše",
+    "familyFilterLabel": "Filtrovat modely podle rodiny"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Zkontrolovat",
     "itemId": "ID: {id}",
     "itemSource": "{date} od {source}"
+  },
+  "regionOverride": {
+    "warning": "Přepsání polohy je aktivní — vaše požadavky jsou směrovány do datového regionu {region}. Toto je manuální testovací přepsání, ne vaše skutečná poloha.",
+    "clear": "Zrušit přepsání"
   }
 }

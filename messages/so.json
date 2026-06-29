@@ -1447,7 +1447,9 @@
     },
     "title": "Dooro model",
     "modelsDescription": "Dooro moodel AI ah wada sheekaysigaaga. Moodel kasta wuxuu leeyahay awoodo kala duwan — mid dooro si aad u aragto faahfaahinta.",
-    "recommended": "La taliyay"
+    "recommended": "La taliyay",
+    "familyAll": "Dhammaan",
+    "familyFilterLabel": "Ku shaandhee moodeellada qoyska"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Dib u eeg",
     "itemId": "Aqoonsi: {id}",
     "itemSource": "{date} laga bilaabo {source}"
+  },
+  "regionOverride": {
+    "warning": "Meel-beddelidda goobta way shaqaynaysaa — codsiyadaada waxaa loo wareejinayaa gobolka xogta ee {region}. Tani waa tijaabo manual ah, ma aha goobtaada dhabta ah.",
+    "clear": "Ka saar meel-beddelka"
   }
 }

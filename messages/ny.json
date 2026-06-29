@@ -1447,7 +1447,9 @@
     },
     "title": "Sankhani mtundu",
     "modelsDescription": "Sankhani mtundu wa AI pa zokambirana zanu. Mtundu uliwonse uli ndi mphamvu zosiyanasiyana — sankhani kuti muwone tsatanetsatane.",
-    "recommended": "Zolangizidwa"
+    "recommended": "Zolangizidwa",
+    "familyAll": "Zonse",
+    "familyFilterLabel": "Sankha mitundu malinga ndi banja"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Onaninso",
     "itemId": "ID: {id}",
     "itemSource": "{date} kuchokera ku {source}"
+  },
+  "regionOverride": {
+    "warning": "Kusintha malo kwayatsidwa — zofunsira zanu zikupita ku dera la deta la {region}. Ichi ndi chizolowezi cha pamanja pa mayeso, si malo anu enieni.",
+    "clear": "Chotsani kusintha"
   }
 }

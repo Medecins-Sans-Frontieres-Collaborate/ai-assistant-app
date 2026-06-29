@@ -1294,7 +1294,9 @@
     },
     "title": "Modell auswählen",
     "modelsDescription": "Wählen Sie ein KI-Modell für Ihr Gespräch. Jedes Modell hat unterschiedliche Stärken – wählen Sie eines aus, um Details anzuzeigen.",
-    "recommended": "Empfohlen"
+    "recommended": "Empfohlen",
+    "familyAll": "Alle",
+    "familyFilterLabel": "Modelle nach Familie filtern"
   },
   "models": {
     "gpt_4_1": {
@@ -2107,5 +2109,9 @@
     "review": "Prüfen",
     "itemId": "ID: {id}",
     "itemSource": "{date} von {source}"
+  },
+  "regionOverride": {
+    "warning": "Standort-Override aktiv — Ihre Anfragen werden an die Datenregion {region} weitergeleitet. Dies ist ein manueller Test-Override, nicht Ihr tatsächlicher Standort.",
+    "clear": "Override löschen"
   }
 }

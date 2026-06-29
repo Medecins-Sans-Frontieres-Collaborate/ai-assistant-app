@@ -1447,7 +1447,9 @@
     },
     "title": "Izaberite model",
     "modelsDescription": "Izaberite AI model za vašu konverzaciju. Svaki model ima svoje prednosti — izaberite jedan za više detalja.",
-    "recommended": "Preporučeno"
+    "recommended": "Preporučeno",
+    "familyAll": "Sve",
+    "familyFilterLabel": "Filtriraj modele po porodici"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Pregledaj",
     "itemId": "ID: {id}",
     "itemSource": "{date} od {source}"
+  },
+  "regionOverride": {
+    "warning": "Preusmeravanje lokacije je aktivno — vaši zahtevi se upućuju ka regionu podataka {region}. Ovo je ručno test preusmeravanje, a ne vaša stvarna lokacija.",
+    "clear": "Ukloni preusmeravanje"
   }
 }

@@ -1447,7 +1447,9 @@
     },
     "title": "Suɓo model",
     "modelsDescription": "Suɓ model AI ngam haasay maa. Model goɗɗo ina daɗi e bannguuji, suɓo ɗam gollu e ɗum.",
-    "recommended": "Mo tawtii"
+    "recommended": "Mo tawtii",
+    "familyAll": "Fof",
+    "familyFilterLabel": "Suɓo moode e leydi moode"
   },
   "models": {
     "gpt_4_1": {
@@ -2083,5 +2085,9 @@
     "review": "Yiylo",
     "itemId": "ID: {id}",
     "itemSource": "{date} eɓɓo {source}"
+  },
+  "regionOverride": {
+    "warning": "Jommbondirde nokkuɗo ena heddii — jawdi maa naanii ekkiti ɗaa {region} data region. Eɗen jommbondirde nokkuɗo sintin, kono ko jeyaa kammu.",
+    "clear": "Momtu jommbondirde"
   }
 }
