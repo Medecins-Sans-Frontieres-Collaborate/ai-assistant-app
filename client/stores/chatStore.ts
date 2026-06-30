@@ -697,8 +697,16 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       conversation.model.id.startsWith('custom-') ||
       conversation.model.isCustomAgent;
 
-    let latestModelConfig =
+    let latestModelConfig: OpenAIModel | undefined =
       OpenAIModels[conversation.model.id as OpenAIModelID];
+
+    // Discovered models (from /api/models) aren't in the static OpenAIModels
+    // map, so consult the live model list before treating the model as removed.
+    if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
+      latestModelConfig = settings.models.find(
+        (m) => m.id === conversation.model.id,
+      );
+    }
 
     if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
       console.warn(
