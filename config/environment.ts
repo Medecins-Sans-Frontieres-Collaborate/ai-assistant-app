@@ -61,6 +61,23 @@ const serverEnvSchema = z.object({
     .default('true')
     .transform((val) => val === 'true'),
 
+  // When true, the model list shown to users is built from live Azure AI Foundry
+  // deployment discovery (joined to local metadata) instead of the static
+  // config/models.json list. Defaults to false so behavior is unchanged until
+  // explicitly enabled per environment. See docs/MODEL_DISCOVERY_DESIGN.md.
+  MODEL_DISCOVERY_ENABLED: z
+    .string()
+    .default('false')
+    .transform((val) => val === 'true'),
+
+  // When true (and MODEL_DISCOVERY_ENABLED), discovered deployments that have no
+  // local metadata entry are still shown, using conservative inferred defaults.
+  // When false, only discovered models that also have metadata are shown.
+  SHOW_MODELS_WITHOUT_METADATA: z
+    .string()
+    .default('false')
+    .transform((val) => val === 'true'),
+
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
   AZURE_TRANSLATOR_ENDPOINT: z.string().url().optional(),
 

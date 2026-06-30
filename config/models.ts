@@ -4,7 +4,7 @@
  */
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
-export type Environment = 'localhost' | 'dev' | 'prod';
+export type Environment = 'localhost' | 'dev' | 'beta' | 'prod';
 
 export interface EnvironmentConfig {
   defaultModel: string;
@@ -36,6 +36,12 @@ const modelConfigs: Record<Environment, EnvironmentConfig> = {
     defaultModel: 'gpt-5.2-chat',
     // All models available in dev
   },
+  beta: {
+    defaultModel: 'gpt-5.2-chat',
+    // Beta shares a Foundry instance with prod but is its own visibility ring:
+    // models under test are visible here while still disabled in prod below.
+    disabledModels: [],
+  },
   prod: {
     defaultModel: 'gpt-5.2-chat',
     disabledModels: [], // All current models available in production
@@ -52,6 +58,13 @@ export function getCurrentEnvironment(): Environment {
 
   if (env === 'production' || env === 'prod' || env === 'live') {
     return 'prod';
+  }
+
+  // Beta is a distinct visibility ring that may share a Foundry instance with
+  // prod; each app build carries its own NEXT_PUBLIC_ENV so they gate models
+  // independently.
+  if (env === 'beta' || env === 'staging') {
+    return 'beta';
   }
 
   if (env === 'dev') {
