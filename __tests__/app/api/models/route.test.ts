@@ -23,8 +23,10 @@ vi.mock('@/lib/services/models/ModelDiscoveryService', () => ({
 }));
 
 const mockGetToken = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/services/auth/appIdentityCredential', () => ({
-  createAppIdentityCredential: async () => ({ getToken: mockGetToken }),
+vi.mock('@azure/identity', () => ({
+  DefaultAzureCredential: class {
+    getToken = mockGetToken;
+  },
 }));
 
 const mockGetDiscoveryPaths = vi.hoisted(() => vi.fn());
