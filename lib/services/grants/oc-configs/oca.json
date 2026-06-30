@@ -1,0 +1,37 @@
+{
+  "name": "OCA",
+  "code_regex": "^P\\d{3,4}$",
+  "code_prefix": "",
+  "hq_rate": 0.1,
+  "direct_rate": 0.9,
+  "multi_project": false,
+  "coord_keywords": ["coordination", "coodination", "mission"],
+  "exclude_keywords": ["logframe", "copro"],
+  "supplemental_files": {
+    "project_list": {
+      "filename": "OCA-Emergency-Classifications.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "code",
+        "emergency": "Emergency",
+        "start_date": "Actual_start_date"
+      }
+    },
+    "budgets": {
+      "filename": "OCA-Initial-Budgets.csv",
+      "skiprows": 2,
+      "columns": {
+        "code": "Project Number",
+        "amount": "Budget - AP"
+      }
+    },
+    "sanctions": {
+      "filename": "OCA-Sanctions.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "HQ/OC Project",
+        "sanctions": "Sanctions"
+      }
+    }
+  }
+}

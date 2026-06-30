@@ -7,10 +7,12 @@ import {
   IconLanguage,
   IconLink,
   IconPaperclip,
+  IconReportMoney,
   IconSearch,
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
 import React, {
   Dispatch,
   SetStateAction,
@@ -22,11 +24,13 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { useConversations } from '@/client/hooks/conversation/useConversations';
 import { useDropdownKeyboardNav } from '@/client/hooks/ui/useDropdownKeyboardNav';
 import useEnhancedOutsideClick from '@/client/hooks/ui/useEnhancedOutsideClick';
+
+import { canAccessGrants } from '@/lib/services/grants/access';
 
 import {
   AssistantMessageGroup,
@@ -151,6 +155,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   const t = useTranslations();
+  const locale = useLocale();
+  const { data: session } = useSession();
+  const showGrants = canAccessGrants(session?.user);
 
   const chatInputImageRef = useRef<{ openFilePicker: () => void }>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -401,9 +408,36 @@ const Dropdown: React.FC<DropdownProps> = ({
             },
           ]
         : []),
+      ...(showGrants
+        ? [
+            {
+              id: 'grants',
+              icon: (
+                <IconReportMoney
+                  size={18}
+                  className="text-green-600 flex-shrink-0"
+                />
+              ),
+              label: 'Grants Processing',
+              infoTooltip:
+                'Reconcile and extract structured data from grant narratives (restricted access).',
+              onClick: () => {
+                window.open(
+                  `/${locale}/grants/extraction`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
+                closeDropdown();
+              },
+              category: 'transform' as const,
+            },
+          ]
+        : []),
     ],
     [
       t,
+      showGrants,
+      locale,
       searchMode,
       selectedToneId,
       tones,

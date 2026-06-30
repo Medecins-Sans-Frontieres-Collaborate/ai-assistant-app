@@ -1,0 +1,46 @@
+{
+  "name": "WaCA",
+  "code_regex": "^[A-Z]{2,3}W?\\d{2,3}$",
+  "code_prefix": "",
+  "hq_rate": 0.0,
+  "direct_rate": 0.0,
+  "multi_project": false,
+  "coord_keywords": ["coordination", "mission", "strategy"],
+  "exclude_keywords": [],
+  "old_to_new_codes": {},
+  "supplemental_files": {
+    "code_mapping": {
+      "filename": "WaCA-Emergency-Classifications.csv",
+      "skiprows": 0,
+      "columns": {
+        "old_code": "Old CODE",
+        "new_code": "CODE"
+      }
+    },
+    "project_list": {
+      "filename": "WaCA-Emergency-Classifications.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "CODE",
+        "reg_emer": "Regular/Emergency/HQ",
+        "start_date": "Start Date"
+      }
+    },
+    "budgets": {
+      "filename": "WaCA-Initial-Budgets.csv",
+      "skiprows": 2,
+      "columns": {
+        "code": "Project Code",
+        "amount": "Amount in EUR"
+      }
+    },
+    "sanctions": {
+      "filename": "WaCA-Sanctions.csv",
+      "skiprows": 0,
+      "columns": {
+        "code": "HQ/OC Project",
+        "sanctions": "Sanctions"
+      }
+    }
+  }
+}
