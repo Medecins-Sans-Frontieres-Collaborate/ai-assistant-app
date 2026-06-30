@@ -42,7 +42,9 @@ export function AppInitializer() {
         setIsLoaded,
       } = useConversationStore.getState();
 
-      // 1. Initialize models list (filtered by environment)
+      // 1. Initialize models list from the static config first, so the picker
+      // renders instantly with current behavior. When model discovery is on,
+      // step 4 below refines this from /api/models (region-correct, ring-gated).
       const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
         (m) => !m.isDisabled && !isModelDisabled(m.id),
       );
@@ -80,6 +82,27 @@ export function AppInitializer() {
 
       // Mark as loaded
       setIsLoaded(true);
+
+      // 4. Refine the model list from live discovery (non-blocking). The server
+      // returns the region-correct, ring-gated list (or the static list when
+      // discovery is disabled / on failure), so any error here just keeps the
+      // static list set above. We never block initial render on this.
+      void (async () => {
+        try {
+          const res = await fetch('/api/models');
+          if (!res.ok) return;
+          const json = await res.json();
+          const discovered = json?.data?.models as OpenAIModel[] | undefined;
+          if (Array.isArray(discovered) && discovered.length > 0) {
+            setModels(discovered);
+          }
+        } catch (e) {
+          console.warn(
+            '[AppInitializer] /api/models refine failed; keeping static list',
+            e,
+          );
+        }
+      })();
     } catch (error) {
       console.error('Error initializing app state:', error);
       // On error, mark as loaded anyway to prevent blocking the app
