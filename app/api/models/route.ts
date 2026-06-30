@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
 
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
-import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { ModelDiscoveryService } from '@/lib/services/models/ModelDiscoveryService';
 import {
   applyRingGate,
@@ -17,6 +16,7 @@ import { OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
+import { DefaultAzureCredential } from '@azure/identity';
 
 /**
  * GET /api/models
@@ -60,11 +60,12 @@ export async function GET(request: NextRequest) {
       ModelDiscoveryService.getInstance().clearCache();
     }
 
-    // App identity → ARM token. NOTE: createAppIdentityCredential() uses a
-    // system-assigned ManagedIdentityCredential; if the hosting Container App
-    // only has a user-assigned MI, this can fail and we fall back to static.
-    // See MODEL_DISCOVERY_TODO.md (RBAC / credential caveat).
-    const credential = await createAppIdentityCredential();
+    // App identity → ARM token. Use DefaultAzureCredential, exactly as the rest
+    // of the app's managed-identity Azure calls do (blob, RAG, search, Azure
+    // OpenAI), so discovery authenticates as the same proven runtime identity
+    // (env service principal in hosted envs, az-cli identity locally). The grant
+    // target is whatever this resolves to — see MODEL_DISCOVERY_TODO.md.
+    const credential = new DefaultAzureCredential();
     const tokenResponse = await credential.getToken(
       'https://management.azure.com/.default',
     );
