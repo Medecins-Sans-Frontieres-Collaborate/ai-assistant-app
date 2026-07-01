@@ -9,6 +9,7 @@ import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
+import { env } from '@/config/environment';
 import { getDefaultModel, isModelDisabled } from '@/config/models';
 
 /**
@@ -83,26 +84,53 @@ export function AppInitializer() {
       // Mark as loaded
       setIsLoaded(true);
 
-      // 4. Refine the model list from live discovery (non-blocking). The server
-      // returns the region-correct, ring-gated list (or the static list when
-      // discovery is disabled / on failure), so any error here just keeps the
-      // static list set above. We never block initial render on this.
-      void (async () => {
-        try {
-          const res = await fetch('/api/models');
-          if (!res.ok) return;
-          const json = await res.json();
-          const discovered = json?.data?.models as OpenAIModel[] | undefined;
-          if (Array.isArray(discovered) && discovered.length > 0) {
-            setModels(discovered);
+      // 4. Refine the model list from live discovery (non-blocking). Only runs
+      // when discovery is enabled on the client — otherwise we keep the static
+      // list set above with no network round trip. The server returns the
+      // region-correct, ring-gated list, so any error here just keeps the
+      // static list. We never block initial render on this.
+      if (env.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED) {
+        void (async () => {
+          try {
+            const res = await fetch('/api/models');
+            if (!res.ok) return;
+            const json = await res.json();
+            // `json?.data?.models` is intentionally guarded by the Array.isArray
+            // check below — an unexpected shape simply leaves the static list.
+            const discovered = json?.data?.models as OpenAIModel[] | undefined;
+            if (Array.isArray(discovered) && discovered.length > 0) {
+              setModels(discovered);
+
+              // The persisted defaultModelId may no longer exist in the
+              // discovered list (region change, deployment removed, ring
+              // gate). Re-resolve the env default so NEW conversations don't
+              // start with a missing model.
+              const currentDefaultId =
+                useSettingsStore.getState().defaultModelId;
+              const stillPresent =
+                currentDefaultId &&
+                discovered.some((m) => m.id === currentDefaultId);
+              if (!stillPresent) {
+                const envDefaultModelId = getDefaultModel();
+                const newDefault =
+                  discovered.find((m) => m.id === envDefaultModelId) ||
+                  discovered[0];
+                if (newDefault) {
+                  console.log(
+                    `[AppInitializer] Persisted defaultModelId "${currentDefaultId}" not in discovered list. Re-selecting default: ${newDefault.id}`,
+                  );
+                  setDefaultModelId(newDefault.id as OpenAIModelID);
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(
+              '[AppInitializer] /api/models refine failed; keeping static list',
+              e,
+            );
           }
-        } catch (e) {
-          console.warn(
-            '[AppInitializer] /api/models refine failed; keeping static list',
-            e,
-          );
-        }
-      })();
+        })();
+      }
     } catch (error) {
       console.error('Error initializing app state:', error);
       // On error, mark as loaded anyway to prevent blocking the app
