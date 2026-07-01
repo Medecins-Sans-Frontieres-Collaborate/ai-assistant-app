@@ -72,11 +72,19 @@ const EU_DEPLOYMENTS = [
   }),
 ];
 
+// Spy on global.fetch so vi.restoreAllMocks() cleanly un-installs it after each
+// test (a raw `global.fetch = vi.fn()` would leak the mock across test files).
+function spyFetch(impl: (url: string) => Promise<unknown>) {
+  return vi
+    .spyOn(global, 'fetch')
+    .mockImplementation(impl as unknown as typeof fetch);
+}
+
 function mockArm(deployments: unknown[], pages?: unknown[][]) {
   // If `pages` given, serve multi-page with nextLink; else a single page.
   if (pages) {
     let i = 0;
-    global.fetch = vi.fn(async () => {
+    return spyFetch(async () => {
       const value = pages[i];
       const nextLink =
         i < pages.length - 1
@@ -87,13 +95,12 @@ function mockArm(deployments: unknown[], pages?: unknown[][]) {
         ok: true,
         json: async () => ({ value, nextLink }),
       } as Response;
-    }) as unknown as typeof fetch;
-    return;
+    });
   }
-  global.fetch = vi.fn(async () => ({
+  return spyFetch(async () => ({
     ok: true,
     json: async () => ({ value: deployments }),
-  })) as unknown as typeof fetch;
+  }));
 }
 
 describe('ModelDiscoveryService', () => {
@@ -194,6 +201,97 @@ describe('ModelDiscoveryService', () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
+  it('clearCache(path) evicts only that account, leaving other regions cached', async () => {
+    const OTHER_ACCOUNT =
+      '/subscriptions/sub/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/ts-aiassist-live-us';
+    mockArm(EU_DEPLOYMENTS);
+
+    // Warm both regions (2 fetches).
+    await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+    await service.listDeployedModels(ARM_TOKEN, OTHER_ACCOUNT);
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+
+    // Evict only the EU account (passing the project path; it gets stripped).
+    service.clearCache(PROJECT_PATH);
+
+    // EU re-fetches (3); the other region is still cached (no extra fetch).
+    await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+    await service.listDeployedModels(ARM_TOKEN, OTHER_ACCOUNT);
+    expect(global.fetch).toHaveBeenCalledTimes(3);
+  });
+
+  it('dedups concurrent cold-cache calls into a single fetch (stampede)', async () => {
+    mockArm(EU_DEPLOYMENTS);
+    const [a, b, c] = await Promise.all([
+      service.listDeployedModels(ARM_TOKEN, PROJECT_PATH),
+      service.listDeployedModels(ARM_TOKEN, PROJECT_PATH),
+      service.listDeployedModels(ARM_TOKEN, PROJECT_PATH),
+    ]);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    // All callers resolve to the same discovered list.
+    expect(a).toEqual(b);
+    expect(b).toEqual(c);
+  });
+
+  it('does not pin an empty result for the full TTL (re-fetches after the short window)', async () => {
+    vi.useFakeTimers();
+    try {
+      mockArm([]);
+      const first = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(first).toEqual([]);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // Within the short empty-TTL window: still served from cache.
+      vi.advanceTimersByTime(30 * 1000);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+
+      // Past the 60s empty-TTL: the transient emptiness is re-discovered.
+      vi.advanceTimersByTime(40 * 1000);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('keeps non-empty results cached past the short empty-TTL window', async () => {
+    vi.useFakeTimers();
+    try {
+      mockArm(EU_DEPLOYMENTS);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      // Well past the 60s empty-TTL but inside the 1h full TTL.
+      vi.advanceTimersByTime(5 * 60 * 1000);
+      await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('stops paginating when nextLink points at a non-ARM host', async () => {
+    let calls = 0;
+    spyFetch(async () => {
+      calls++;
+      return {
+        ok: true,
+        json: async () => ({
+          value: [
+            dep('gpt-4.1', 'OpenAI', 'gpt-4.1', '1', {
+              chatCompletion: 'true',
+            }),
+          ],
+          // Tampered nextLink to a foreign origin — must NOT be followed.
+          nextLink: 'https://evil.example.com/management?steal=token',
+        }),
+      } as Response;
+    });
+
+    const models = await service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH);
+    expect(calls).toBe(1);
+    expect(models.map((m) => m.deploymentName)).toEqual(['gpt-4.1']);
+  });
+
   it('follows ARM nextLink pagination', async () => {
     mockArm(
       [],
@@ -211,12 +309,12 @@ describe('ModelDiscoveryService', () => {
   });
 
   it('throws on ARM error responses', async () => {
-    global.fetch = vi.fn(async () => ({
+    spyFetch(async () => ({
       ok: false,
       status: 403,
       statusText: 'Forbidden',
       text: async () => 'AuthorizationFailed',
-    })) as unknown as typeof fetch;
+    }));
     await expect(
       service.listDeployedModels(ARM_TOKEN, ACCOUNT_PATH),
     ).rejects.toThrow(/Failed to list model deployments/);

@@ -129,6 +129,58 @@ describe('applyTagOverlay', () => {
     expect(m.tokenLimit).toBe(100);
   });
 
+  it('rejects hex / scientific-notation / padded size tags but accepts plain ints', () => {
+    // Number() would accept all of these; positiveInt must not.
+    expect(applyTagOverlay(base, { 'ui-context': '0x20000' }).maxLength).toBe(
+      1000,
+    );
+    expect(applyTagOverlay(base, { 'ui-context': '1e8' }).maxLength).toBe(1000);
+    expect(applyTagOverlay(base, { 'ui-context': ' 5 ' }).maxLength).toBe(5);
+    expect(applyTagOverlay(base, { 'ui-context': '200000' }).maxLength).toBe(
+      200000,
+    );
+  });
+
+  it('drops an unknown ui-sdk and leaves the model unchanged', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const withSdk: OpenAIModel = { ...base, sdk: 'azure-openai' };
+    const m = applyTagOverlay(withSdk, { 'ui-sdk': 'totally-bogus' });
+    expect(m.sdk).toBe('azure-openai');
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('accepts a valid ui-sdk', () => {
+    const m = applyTagOverlay(base, { 'ui-sdk': 'anthropic-foundry' });
+    expect(m.sdk).toBe('anthropic-foundry');
+  });
+
+  it('drops an unknown ui-provider and leaves the model unchanged', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const withProvider: OpenAIModel = { ...base, provider: 'openai' };
+    const m = applyTagOverlay(withProvider, { 'ui-provider': 'cohere' });
+    expect(m.provider).toBe('openai');
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('accepts a valid ui-provider', () => {
+    const m = applyTagOverlay(base, { 'ui-provider': 'anthropic' });
+    expect(m.provider).toBe('anthropic');
+  });
+
+  it('sets agentId + isAgent from ui-agent-id', () => {
+    const m = applyTagOverlay(base, { 'ui-agent-id': 'agent-7' });
+    expect(m.agentId).toBe('agent-7');
+    expect(m.isAgent).toBe(true);
+  });
+
+  it('clears isAgent on ui-is-agent:false opt-out', () => {
+    const asAgent: OpenAIModel = { ...base, isAgent: true };
+    const m = applyTagOverlay(asAgent, { 'ui-is-agent': 'false' });
+    expect(m.isAgent).toBe(false);
+  });
+
   it('returns the model unchanged when there are no tags', () => {
     expect(applyTagOverlay(base, {})).toEqual(base);
   });
