@@ -50,5 +50,10 @@ export function isValidAccountName(name: string): boolean {
  * satisfies `isValidFoundryResourcePath`.
  */
 export function stripToAccountPath(path: string): string {
-  return path.replace(/\/projects\/[a-zA-Z0-9-]{2,64}\/?$/, '');
+  // Anchored to the end so only a single trailing `/projects/{name}` is removed.
+  // For an adversarial nested input like `.../projects/foo/projects/bar`, this
+  // strips just the final segment, leaving `.../projects/foo` (which is no
+  // longer a valid account path) rather than collapsing the whole tail — the
+  // caller validates the result with `isValidFoundryResourcePath` before use.
+  return path.replace(new RegExp(`/projects/${ARM_NAME_PATTERN}/?$`), '');
 }
