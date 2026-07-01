@@ -13,6 +13,9 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+// Reference the hoisted extractor mocks for assertions (see below).
+const { extractAudioFromVideo, isFFmpegAvailable } = extractorMocks;
+
 // Mock dependencies
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
@@ -32,6 +35,23 @@ vi.mock('@/lib/services/transcriptionService', () => ({
     getServiceTypeForFileSize: vi.fn(),
   },
 }));
+
+// Audio extractor is pulled in by the route for non-Whisper-native formats.
+// Hoisted so tests can assert on the mocks; the route uses .mp3 (Whisper-
+// native) in most existing tests, so extraction isn't invoked there — but the
+// m4v test below exercises the extraction-then-Whisper path added in Part 1.
+const extractorMocks = vi.hoisted(() => ({
+  extractAudioFromVideo: vi.fn(),
+  isFFmpegAvailable: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock('@/lib/utils/server/audio/audioExtractor', () => extractorMocks);
+
+vi.mock('@/lib/constants/fileTypes', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('@/lib/constants/fileTypes')>();
+  return { ...actual };
+});
 
 // Mock fs, os, and path
 vi.mock('fs', () => ({
@@ -503,6 +523,88 @@ describe('/api/file/[id]/transcribe', () => {
       const data = await parseJsonResponse(response);
 
       expect(data.transcript).toBe(unicodeTranscript);
+    });
+  });
+
+  // Regression for issue #90: the legacy route previously sent raw video
+  // containers (m4v, mov, …) straight to Whisper, which rejects them with a
+  // 4xx. After the Part 1 fix, non-Whisper-native formats go through ffmpeg
+  // audio extraction first. These tests lock that behavior.
+  describe('Non-Whisper-native format extraction (issue #90)', () => {
+    const m4vId = 'recording.m4v';
+    const extractedPath = '/tmp/extracted.m4v_audio.mp3';
+
+    beforeEach(() => {
+      vi.mocked(extractAudioFromVideo).mockResolvedValue({
+        outputPath: extractedPath,
+      });
+      vi.mocked(isFFmpegAvailable).mockResolvedValue(true);
+      mockTranscriptionService.transcribe.mockResolvedValue('m4v transcript');
+    });
+
+    it('extracts audio from an .m4v before transcribing', async () => {
+      const request = createRequest(m4vId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: m4vId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      // Extraction must run (m4v is not Whisper-native).
+      expect(extractAudioFromVideo).toHaveBeenCalledTimes(1);
+      // Whisper receives the extracted mp3, not the raw m4v.
+      expect(mockTranscriptionService.transcribe).toHaveBeenCalledWith(
+        extractedPath,
+      );
+      expect(data.transcript).toBe('m4v transcript');
+    });
+
+    it('returns 500 when ffmpeg is unavailable for a non-Whisper-native file', async () => {
+      vi.mocked(isFFmpegAvailable).mockResolvedValue(false);
+
+      const request = createRequest(m4vId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: m4vId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(500);
+      expect(data.message).toBe('Failed to transcribe audio');
+      // Extraction must NOT be attempted when ffmpeg isn't available.
+      expect(extractAudioFromVideo).not.toHaveBeenCalled();
+    });
+
+    it('does NOT extract audio for a Whisper-native .mp3', async () => {
+      const mp3Id = 'song.mp3';
+      const request = createRequest(mp3Id);
+      await GET(request, { params: Promise.resolve({ id: mp3Id }) });
+
+      // mp3 is Whisper-native → no extraction.
+      expect(extractAudioFromVideo).not.toHaveBeenCalled();
+      // Whisper receives the original temp path (joined as /tmp/<uuid>_song.mp3).
+      const transcribePath =
+        mockTranscriptionService.transcribe.mock.calls[0][0];
+      expect(transcribePath).toContain('song.mp3');
+      expect(transcribePath).not.toBe(extractedPath);
+    });
+
+    it('extracts audio for other non-native containers (.ogg, .flac, .mov)', async () => {
+      for (const id of ['song.ogg', 'recording.flac', 'clip.mov']) {
+        vi.clearAllMocks();
+        vi.mocked(extractAudioFromVideo).mockResolvedValue({
+          outputPath: `/tmp/${id}_audio.mp3`,
+        });
+        vi.mocked(isFFmpegAvailable).mockResolvedValue(true);
+        mockTranscriptionService.transcribe.mockResolvedValue('transcript');
+
+        const request = createRequest(id);
+        await GET(request, { params: Promise.resolve({ id }) });
+
+        expect(
+          extractAudioFromVideo,
+          `expected extraction for ${id}`,
+        ).toHaveBeenCalledTimes(1);
+      }
     });
   });
 });
