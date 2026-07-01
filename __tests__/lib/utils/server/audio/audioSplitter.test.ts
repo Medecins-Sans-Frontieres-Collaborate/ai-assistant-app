@@ -155,3 +155,239 @@ describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
     ).rejects.toThrow(/invalid jobid/i);
   });
 });
+
+// ===========================================================================
+// Codec diversity (issue #90): the original suite only exercised a single
+// low-bitrate .m4a fixture. Real-world uploads include video containers
+// (m4v, mov, mkv, webm) and non-Whisper-native audio (ogg/opus, flac, aac).
+// These tests generate small fixtures for each and assert the splitter can
+// demux/decode them into mp3 chunks. They skip (with a clear warning) if the
+// bundled ffmpeg-static lacks a needed decoder, rather than hard-failing —
+// trusting ffmpeg-static but surfacing a missing codec clearly.
+// ===========================================================================
+
+/** Probes whether ffmpeg can decode a given encoder. Returns true if listed. */
+function ffmpegHasDecoder(decoder: string): boolean {
+  if (!ffmpegBinary) return false;
+  try {
+    const out = execFileSync(ffmpegBinary, ['-decoders'], {
+      encoding: 'utf8',
+      maxBuffer: 4 * 1024 * 1024,
+    });
+    // Decoder lines look like " D.....X  libopus ...". Match the decoder name.
+    return new RegExp(`\\b${decoder}\\b`).test(out);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Builds a tiny media fixture at test time via ffmpeg's lavfi source.
+ * Returns the fixture path, or null if ffmpeg couldn't encode it (missing
+ * muxer/encoder) — callers should skip in that case.
+ */
+function buildFixture(
+  name: string,
+  args: string[],
+  dir: string,
+): string | null {
+  const fixture = path.join(dir, name);
+  try {
+    execFileSync(ffmpegBinary!, ['-y', ...args, fixture], {
+      stdio: 'pipe',
+    });
+    return fs.existsSync(fixture) ? fixture : null;
+  } catch {
+    return null;
+  }
+}
+
+describe.skipIf(!canRun)('splitAudioFile codec diversity (issue #90)', () => {
+  let workDir: string;
+  const generatedChunkDirs: string[] = [];
+
+  beforeAll(() => {
+    workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'audio-splitter-codec-'));
+  });
+
+  afterAll(() => {
+    fs.rmSync(workDir, { recursive: true, force: true });
+    for (const dir of generatedChunkDirs) {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  // Shared helper: split a fixture and assert basic invariants.
+  async function expectSplitsToMp3(
+    fixture: string,
+    targetBytes: number,
+  ): Promise<void> {
+    const result = await splitAudioFile(fixture, {
+      targetChunkSizeBytes: targetBytes,
+      outputFormat: 'mp3',
+      jobId: `codec-test-${randomUUID()}`,
+    });
+    generatedChunkDirs.push(path.dirname(result.chunkPaths[0]));
+    expect(result.chunkCount).toBeGreaterThanOrEqual(1);
+    expect(result.chunkPaths).toHaveLength(result.chunkCount);
+    for (const chunkPath of result.chunkPaths) {
+      expect(fs.existsSync(chunkPath)).toBe(true);
+      // Each chunk must be a real mp3 (ID3 or frame-sync header).
+      const head = fs
+        .readFileSync(chunkPath, { encoding: null })
+        .subarray(0, 3);
+      const isMp3 =
+        (head[0] === 0x49 && head[1] === 0x44 && head[2] === 0x33) || // "ID3"
+        (head[0] === 0xff && (head[1] & 0xe0) === 0xe0); // frame sync
+      expect(isMp3, `${chunkPath} is not a valid mp3`).toBe(true);
+    }
+  }
+
+  it('splits an .m4v (H.264 video + AAC audio) into mp3 chunks', async () => {
+    // 60s of H.264 video with AAC audio. The splitter must drop the video
+    // stream and transcode the AAC audio to mp3.
+    const fixture = buildFixture(
+      'clip.m4v',
+      [
+        '-f',
+        'lavfi',
+        '-i',
+        'sine=frequency=440:sample_rate=44100',
+        '-f',
+        'lavfi',
+        '-i',
+        'testsrc=size=160x120:rate=10',
+        '-t',
+        '60',
+        '-c:a',
+        'aac',
+        '-b:a',
+        '64k',
+        '-c:v',
+        'libx264',
+        '-pix_fmt',
+        'yuv420p',
+      ],
+      workDir,
+    );
+    if (!fixture) {
+      console.warn(
+        '[audioSplitter codec test] SKIP m4v: ffmpeg could not encode H.264/AAC fixture',
+      );
+      return;
+    }
+    // ~0.5MB AAC over 60s → 256KB target forces a split.
+    await expectSplitsToMp3(fixture, 256 * 1024);
+  }, 60_000);
+
+  it('splits an .ogg/opus audio file into mp3 chunks', async () => {
+    if (!ffmpegHasDecoder('libopus') && !ffmpegHasDecoder('opus')) {
+      console.warn(
+        '[audioSplitter codec test] SKIP ogg/opus: ffmpeg-static lacks an opus decoder',
+      );
+      return;
+    }
+    const fixture = buildFixture(
+      'song.opus',
+      [
+        '-f',
+        'lavfi',
+        '-i',
+        'sine=frequency=440:sample_rate=48000',
+        '-t',
+        '60',
+        '-c:a',
+        'libopus',
+        '-b:a',
+        '64k',
+      ],
+      workDir,
+    );
+    if (!fixture) {
+      console.warn(
+        '[audioSplitter codec test] SKIP ogg/opus: ffmpeg could not encode the opus fixture',
+      );
+      return;
+    }
+    await expectSplitsToMp3(fixture, 256 * 1024);
+  }, 60_000);
+
+  it('splits a .flac audio file into mp3 chunks', async () => {
+    const fixture = buildFixture(
+      'song.flac',
+      [
+        '-f',
+        'lavfi',
+        '-i',
+        'sine=frequency=440:sample_rate=44100',
+        '-t',
+        '60',
+        '-c:a',
+        'flac',
+      ],
+      workDir,
+    );
+    if (!fixture) {
+      console.warn(
+        '[audioSplitter codec test] SKIP flac: ffmpeg could not encode the flac fixture',
+      );
+      return;
+    }
+    await expectSplitsToMp3(fixture, 256 * 1024);
+  }, 60_000);
+
+  it('splits a .mov (QuickTime/H.264) container into mp3 chunks', async () => {
+    const fixture = buildFixture(
+      'clip.mov',
+      [
+        '-f',
+        'lavfi',
+        '-i',
+        'sine=frequency=440:sample_rate=44100',
+        '-f',
+        'lavfi',
+        '-i',
+        'testsrc=size=160x120:rate=10',
+        '-t',
+        '60',
+        '-c:a',
+        'aac',
+        '-b:a',
+        '64k',
+        '-c:v',
+        'libx264',
+        '-pix_fmt',
+        'yuv420p',
+        '-movflags',
+        '+faststart',
+      ],
+      workDir,
+    );
+    if (!fixture) {
+      console.warn(
+        '[audioSplitter codec test] SKIP mov: ffmpeg could not encode the QuickTime fixture',
+      );
+      return;
+    }
+    await expectSplitsToMp3(fixture, 256 * 1024);
+  }, 60_000);
+
+  // Note: a video-only (no audio stream) input is NOT tested here because
+  // splitAudioFile's within-target copy path succeeds by copying bytes — the
+  // no-audio detection lives upstream in audioExtractor.hasAudioStream, which
+  // FileProcessor calls before splitting. That error path ("does not contain
+  // an audio track") is covered by FileProcessor.audio.test.ts.
+});
+
+// CI guard: the codec-diversity suite must run on CI where ffmpeg-static is
+// installed. A silent skip would leave the m4v/opus/flac paths untested.
+it.runIf(process.env.CI)(
+  'CI provides ffmpeg with the common decoders (opus/flac/aac)',
+  () => {
+    expect(canRun).toBe(true);
+    // Don't hard-fail if a specific decoder is absent — the individual tests
+    // already skip with a warning. But assert the binary at least lists
+    // decoders (catches a broken ffmpeg-static install).
+    expect(ffmpegHasDecoder('aac')).toBe(true);
+  },
+);

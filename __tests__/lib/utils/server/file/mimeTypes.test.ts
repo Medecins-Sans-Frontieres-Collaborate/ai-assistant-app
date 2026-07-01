@@ -52,10 +52,36 @@ describe('mimeTypes', () => {
       expect(MIME_TYPE_MAP.mpga).toBe('audio/mpeg');
     });
 
+    it('should contain the newly added audio container types (issue #90)', () => {
+      expect(MIME_TYPE_MAP.ogg).toBe('audio/ogg');
+      expect(MIME_TYPE_MAP.oga).toBe('audio/ogg');
+      expect(MIME_TYPE_MAP.flac).toBe('audio/flac');
+      expect(MIME_TYPE_MAP.aac).toBe('audio/aac');
+      expect(MIME_TYPE_MAP.opus).toBe('audio/opus');
+    });
+
     it('should contain video types', () => {
       expect(MIME_TYPE_MAP.mp4).toBe('video/mp4');
       expect(MIME_TYPE_MAP.webm).toBe('video/webm');
       expect(MIME_TYPE_MAP.mpeg).toBe('video/mpeg');
+    });
+
+    // Regression for issue #90: .m4v was missing from MIME_TYPE_MAP, so
+    // getContentType('clip.m4v') returned 'application/octet-stream', which
+    // then caused the upload route's executable-MIME check to flag it and
+    // blob storage to store it with the wrong content type.
+    it('should map .m4v to video/x-m4v (issue #90 regression)', () => {
+      expect(MIME_TYPE_MAP.m4v).toBe('video/x-m4v');
+    });
+
+    it('should map the newly added video container types', () => {
+      expect(MIME_TYPE_MAP.mkv).toBe('video/x-matroska');
+      expect(MIME_TYPE_MAP.mov).toBe('video/quicktime');
+      expect(MIME_TYPE_MAP.avi).toBe('video/x-msvideo');
+      expect(MIME_TYPE_MAP.flv).toBe('video/x-flv');
+      expect(MIME_TYPE_MAP.wmv).toBe('video/x-ms-wmv');
+      expect(MIME_TYPE_MAP['3gp']).toBe('video/3gpp');
+      expect(MIME_TYPE_MAP.ts).toBe('video/mp2t');
     });
   });
 
@@ -96,6 +122,25 @@ describe('mimeTypes', () => {
       expect(getContentType('data.json')).toBe('application/json');
       expect(getContentType('audio.mp3')).toBe('audio/mpeg');
       expect(getContentType('video.mp4')).toBe('video/mp4');
+    });
+
+    // Regression for issue #90: .m4v must resolve to video/x-m4v, not the
+    // application/octet-stream fallback. The octet-stream fallback previously
+    // caused downstream consumers to treat the file as an unknown blob.
+    it('resolves .m4v to video/x-m4v (issue #90 regression)', () => {
+      expect(getContentType('clip.m4v')).toBe('video/x-m4v');
+      expect(getContentType('CLIP.M4V')).toBe('video/x-m4v');
+    });
+
+    it('resolves the newly added audio/video container types', () => {
+      expect(getContentType('song.ogg')).toBe('audio/ogg');
+      expect(getContentType('song.flac')).toBe('audio/flac');
+      expect(getContentType('clip.aac')).toBe('audio/aac');
+      expect(getContentType('clip.opus')).toBe('audio/opus');
+      expect(getContentType('clip.mov')).toBe('video/quicktime');
+      expect(getContentType('clip.mkv')).toBe('video/x-matroska');
+      expect(getContentType('clip.3gp')).toBe('video/3gpp');
+      expect(getContentType('stream.ts')).toBe('video/mp2t');
     });
 
     it('should handle multiple dots in filename', () => {
