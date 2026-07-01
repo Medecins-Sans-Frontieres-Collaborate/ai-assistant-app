@@ -38,8 +38,10 @@ const modelConfigs: Record<Environment, EnvironmentConfig> = {
   },
   beta: {
     defaultModel: 'gpt-5.2-chat',
-    // Beta shares a Foundry instance with prod but is its own visibility ring:
-    // models under test are visible here while still disabled in prod below.
+    // Beta is its own visibility ring (shares a Foundry instance with prod) so a
+    // model can be gated in beta-only without touching prod. Nothing is gated
+    // right now — this list is intentionally empty, matching prod below. Add ids
+    // here to hide an in-test model from prod while keeping it visible in beta.
     disabledModels: [],
   },
   prod: {
@@ -62,7 +64,8 @@ export function getCurrentEnvironment(): Environment {
 
   // Beta is a distinct visibility ring that may share a Foundry instance with
   // prod; each app build carries its own NEXT_PUBLIC_ENV so they gate models
-  // independently.
+  // independently. `staging` is an alias for the same ring (staging === beta) —
+  // it resolves to the beta config rather than being a separate Environment.
   if (env === 'beta' || env === 'staging') {
     return 'beta';
   }
