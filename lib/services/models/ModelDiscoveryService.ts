@@ -29,9 +29,19 @@ const ARM_API_VERSION = '2024-10-01';
 // The route exposes a `refresh` escape hatch for on-demand invalidation.
 const CACHE_TTL_MS = 60 * 60 * 1000;
 
-// Safety cap so a misconfigured account with a runaway deployment count can't
-// stall discovery. Far above any realistic per-account deployment count.
-const PAGE_LIMIT = 50;
+// Short TTL for empty results: a transient ARM hiccup or a brand-new account
+// can legitimately return zero deployments. We must NOT pin that emptiness for
+// a full hour, so empty lists get a brief soft TTL and re-discover sooner.
+const EMPTY_CACHE_TTL_MS = 60 * 1000;
+
+// Safety cap on the number of PAGES we walk (not the deployment count) so a
+// misconfigured account with runaway pagination can't stall discovery. Far
+// above any realistic per-account page count.
+const MAX_PAGES = 50;
+
+// ARM is the only host we will ever send the Bearer token to. nextLink is
+// server-supplied, so we re-validate its origin before each follow-up request.
+const ARM_HOST_PREFIX = 'https://management.azure.com/';
 
 /** A model deployment discovered from Azure, normalized for the merge layer. */
 export interface DeployedModel {
@@ -81,6 +91,10 @@ export class ModelDiscoveryService {
   private static instance: ModelDiscoveryService | null = null;
   // Keyed by account resource path (region), NOT by user — see file header.
   private cache = new Map<string, CachedDeployments>();
+  // In-flight discovery promises keyed by account path. Dedups concurrent
+  // cold-cache callers so N parallel listDeployedModels calls trigger a single
+  // fetchAllDeployments (stampede protection).
+  private inFlight = new Map<string, Promise<DeployedModel[]>>();
 
   static getInstance(): ModelDiscoveryService {
     if (!ModelDiscoveryService.instance) {
@@ -89,9 +103,18 @@ export class ModelDiscoveryService {
     return ModelDiscoveryService.instance;
   }
 
-  /** Clears the discovery cache (used by the route's `refresh` param). */
-  clearCache(): void {
-    this.cache.clear();
+  /**
+   * Clears the discovery cache (used by the route's `refresh` param).
+   *
+   * @param resourcePath - If given, clears ONLY that account's entry (after
+   *   stripping to the account path). With no arg, clears the whole cache.
+   */
+  clearCache(resourcePath?: string): void {
+    if (resourcePath === undefined) {
+      this.cache.clear();
+      return;
+    }
+    this.cache.delete(stripToAccountPath(resourcePath));
   }
 
   /**
@@ -117,15 +140,38 @@ export class ModelDiscoveryService {
       return cached.models;
     }
 
+    // Stampede protection: if a discovery for this account is already running,
+    // await it instead of firing a second fetchAllDeployments.
+    const existing = this.inFlight.get(accountPath);
+    if (existing) return existing;
+
+    const discovery = this.discoverAndCache(armToken, accountPath).finally(
+      () => {
+        this.inFlight.delete(accountPath);
+      },
+    );
+    this.inFlight.set(accountPath, discovery);
+    return discovery;
+  }
+
+  /** Fetches, normalizes, filters, and caches deployments for an account. */
+  private async discoverAndCache(
+    armToken: string,
+    accountPath: string,
+  ): Promise<DeployedModel[]> {
     const raw = await this.fetchAllDeployments(armToken, accountPath);
     const models = raw
       .map((d) => this.toDeployedModel(d))
       .filter((m): m is DeployedModel => m !== null)
       .filter((m) => this.isChatCapable(m));
 
+    // Don't pin an empty result for the full hour — a transient ARM failure or
+    // a freshly-provisioned account can return zero deployments. Re-discover
+    // those sooner with a short soft TTL; non-empty results keep the 1h TTL.
+    const ttl = models.length > 0 ? CACHE_TTL_MS : EMPTY_CACHE_TTL_MS;
     this.cache.set(accountPath, {
       models,
-      expiresAt: Date.now() + CACHE_TTL_MS,
+      expiresAt: Date.now() + ttl,
     });
 
     console.log(
@@ -134,7 +180,7 @@ export class ModelDiscoveryService {
     return models;
   }
 
-  /** Walks the ARM `nextLink` pagination, capped at PAGE_LIMIT pages. */
+  /** Walks the ARM `nextLink` pagination, capped at MAX_PAGES pages. */
   private async fetchAllDeployments(
     armToken: string,
     accountPath: string,
@@ -143,7 +189,7 @@ export class ModelDiscoveryService {
     let url: string | undefined =
       `https://management.azure.com${accountPath}/deployments?api-version=${ARM_API_VERSION}`;
 
-    for (let page = 0; url && page < PAGE_LIMIT; page++) {
+    for (let page = 0; url && page < MAX_PAGES; page++) {
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${armToken}`,
@@ -164,7 +210,17 @@ export class ModelDiscoveryService {
 
       const data = (await response.json()) as ArmDeploymentListPage;
       if (data.value) all.push(...data.value);
-      // nextLink is an absolute ARM URL already carrying the api-version.
+
+      // nextLink is an absolute ARM URL already carrying the api-version. It is
+      // server-supplied, so before following it (and re-sending the Bearer
+      // token) confirm it still points at the ARM host. If it's been tampered
+      // to a foreign origin, stop paginating and return what we have.
+      if (data.nextLink && !data.nextLink.startsWith(ARM_HOST_PREFIX)) {
+        console.error(
+          '[ModelDiscoveryService] Ignoring non-ARM nextLink host; stopping pagination',
+        );
+        break;
+      }
       url = data.nextLink;
     }
 
@@ -193,6 +249,10 @@ export class ModelDiscoveryService {
    * Keep only successfully-provisioned, chat-capable deployments. ARM reports
    * capability flags as the string "true"; non-chat deployments (whisper,
    * embeddings) lack chatCompletion and are dropped.
+   *
+   * Doubles as a structural guard: a deployment with no `properties` yields an
+   * empty `capabilities` map in toDeployedModel, so chatCompletion is absent
+   * and the malformed entry is filtered out here.
    */
   private isChatCapable(m: DeployedModel): boolean {
     const succeeded =
