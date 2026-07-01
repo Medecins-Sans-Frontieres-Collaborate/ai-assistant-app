@@ -18,11 +18,16 @@ import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+import {
+  extractAudioFromVideo,
+  isFFmpegAvailable,
+} from '@/lib/utils/server/audio/audioExtractor';
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 
 import { TranscriptionResponse } from '@/types/transcription';
 
 import { auth } from '@/auth';
+import { isWhisperNativeFormat } from '@/lib/constants/fileTypes';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { tmpdir } from 'os';
@@ -89,6 +94,7 @@ export async function GET(
     if (serviceType === 'whisper') {
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
+      let extractedAudioPath: string | null = null;
       let transcript: string;
       try {
         await withAzureRetry(
@@ -98,12 +104,32 @@ export async function GET(
           },
         );
 
+        // Whisper accepts only mp3/mp4/mpeg/mpga/m4a/wav/webm. Any other
+        // accepted container (m4v, ogg, flac, aac, opus, mov, mkv, …) must
+        // be transcoded to mp3 first or Whisper rejects it (issue #90).
+        let fileToTranscribe = tmpFilePath;
+        if (!isWhisperNativeFormat(id)) {
+          const ffmpegAvailable = await isFFmpegAvailable();
+          if (!ffmpegAvailable) {
+            throw new Error(
+              `Cannot process file "${id}": FFmpeg is not available. ` +
+                `Please configure the FFMPEG_BIN environment variable or install FFmpeg.`,
+            );
+          }
+          const extraction = await extractAudioFromVideo(tmpFilePath);
+          extractedAudioPath = extraction.outputPath;
+          fileToTranscribe = extractedAudioPath;
+        }
+
         const transcriptionService =
           TranscriptionServiceFactory.getTranscriptionService('whisper');
 
-        transcript = await transcriptionService.transcribe(tmpFilePath);
+        transcript = await transcriptionService.transcribe(fileToTranscribe);
       } finally {
-        // Always clean up the temp file, even if transcription throws.
+        // Always clean up temp files, even if transcription throws.
+        if (extractedAudioPath) {
+          await unlinkAsync(extractedAudioPath).catch(() => {});
+        }
         await unlinkAsync(tmpFilePath).catch(() => {});
       }
       // Delete the blob after successful transcription. Retry on transient
