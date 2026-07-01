@@ -39,7 +39,7 @@ import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
-import { getFallbackModel } from '@/config/models';
+import { getFallbackModel, isModelDisabled } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
@@ -703,9 +703,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // Discovered models (from /api/models) aren't in the static OpenAIModels
     // map, so consult the live model list before treating the model as removed.
     if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
-      latestModelConfig = settings.models.find(
+      const matched = settings.models.find(
         (m) => m.id === conversation.model.id,
       );
+      // Re-validate against the ring gate before accepting: a discovered model
+      // that's now disabled (ring-gated off, or flagged isDisabled) must fall
+      // through to the fallback-model path rather than being sent as-is.
+      if (matched && !isModelDisabled(matched.id) && !matched.isDisabled) {
+        latestModelConfig = matched;
+      }
     }
 
     if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
