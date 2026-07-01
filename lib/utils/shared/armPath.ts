@@ -37,3 +37,23 @@ export function isValidResourceGroup(name: string): boolean {
 export function isValidAccountName(name: string): boolean {
   return ACCOUNT_NAME_REGEX.test(name);
 }
+
+/**
+ * Strips an optional trailing `/projects/{name}` segment so a project-scoped
+ * Foundry resource path collapses to its parent account path.
+ *
+ * Our `AZURE_AI_FOUNDRY_RESOURCE_ID_*` env vars point at the *project* (correct
+ * for agent discovery, which lists `/applications` under the project). Model
+ * deployments, however, are account-scoped — ARM rejects
+ * `/accounts/{acct}/projects/{name}/deployments` as an invalid scope — so model
+ * discovery must call `/accounts/{acct}/deployments`. The returned path still
+ * satisfies `isValidFoundryResourcePath`.
+ */
+export function stripToAccountPath(path: string): string {
+  // Anchored to the end so only a single trailing `/projects/{name}` is removed.
+  // For an adversarial nested input like `.../projects/foo/projects/bar`, this
+  // strips just the final segment, leaving `.../projects/foo` (which is no
+  // longer a valid account path) rather than collapsing the whole tail — the
+  // caller validates the result with `isValidFoundryResourcePath` before use.
+  return path.replace(new RegExp(`/projects/${ARM_NAME_PATTERN}/?$`), '');
+}

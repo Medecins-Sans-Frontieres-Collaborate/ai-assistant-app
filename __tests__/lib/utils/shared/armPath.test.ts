@@ -3,6 +3,7 @@ import {
   isValidFoundryResourcePath,
   isValidResourceGroup,
   isValidSubscriptionId,
+  stripToAccountPath,
 } from '@/lib/utils/shared/armPath';
 
 import { describe, expect, it } from 'vitest';
@@ -109,5 +110,33 @@ describe('isValidSubscriptionId / ResourceGroup / AccountName', () => {
   it('rejects too-short / too-long values', () => {
     expect(isValidAccountName('a')).toBe(false); // min 2
     expect(isValidAccountName('x'.repeat(65))).toBe(false); // max 64
+  });
+});
+
+describe('stripToAccountPath', () => {
+  const account =
+    '/subscriptions/abc-123/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/my-acct';
+
+  it('strips a trailing /projects/{name} segment', () => {
+    expect(stripToAccountPath(`${account}/projects/default`)).toBe(account);
+  });
+
+  it('strips a trailing /projects/{name}/ segment (optional slash)', () => {
+    expect(stripToAccountPath(`${account}/projects/default/`)).toBe(account);
+  });
+
+  it('leaves an account-only path unchanged', () => {
+    expect(stripToAccountPath(account)).toBe(account);
+  });
+
+  it('only strips the final /projects segment for nested adversarial input', () => {
+    // `.../accounts/acct/projects/foo/projects/bar` removes just the last
+    // segment, leaving `.../projects/foo` (still a project-scoped path, not the
+    // collapsed account path). It's a well-formed Foundry resource path, so the
+    // anchored single-segment strip is safe: no traversal, no garbage tail.
+    const nested = `${account}/projects/foo/projects/bar`;
+    const stripped = stripToAccountPath(nested);
+    expect(stripped).toBe(`${account}/projects/foo`);
+    expect(isValidFoundryResourcePath(stripped)).toBe(true);
   });
 });

@@ -1,3 +1,6 @@
+import modelMetadata from '@/config/models.json';
+import { z } from 'zod';
+
 export interface OpenAIModel {
   id: string;
   name: string;
@@ -39,6 +42,7 @@ export interface OpenAIModel {
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires
   supportsTemperature?: boolean; // Whether this model supports custom temperature values
+  supportsVision?: boolean; // Whether this model can accept image input. Source of truth for OpenAIVisionModelID (derived below).
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
   // Advanced reasoning model parameters
@@ -72,16 +76,10 @@ export enum OpenAIModelID {
   GROK_3 = 'grok-3',
 }
 
-export enum OpenAIVisionModelID {
-  GPT_4_1 = 'gpt-4.1',
-  GPT_5_2 = 'gpt-5.2',
-  GPT_5_MINI = 'gpt-5-mini',
-  GPT_5_2_CHAT = 'gpt-5.2-chat',
-  GROK_3 = 'grok-3',
-  CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
-  CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
-  CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
-}
+// OpenAIVisionModelID is derived from the `supportsVision` metadata flag at the
+// bottom of this file (after OpenAIModels is built), so vision support has a
+// single source of truth in config/models.json and discovered models can opt in
+// via metadata without editing an enum here.
 
 // Fallback model ID
 export const fallbackModelID = OpenAIModelID.GPT_5_2_CHAT;
@@ -108,280 +106,130 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
 ];
 
 /**
- * Agent names for built-in agent-backed models.
- * Agent names are the same across environments (different Foundry endpoints differentiate them).
+ * Zod schema mirroring OpenAIModel's important fields. Used to validate
+ * config/models.json at module load so a malformed edit (e.g. modelType:'Omni',
+ * sdk:'azure_openai', supportsVision:'true') fails fast with a clear error
+ * instead of being silently cast through `as unknown as` and surfacing as
+ * broken routing/UI at runtime. Optional fields stay optional; unknown extra
+ * keys are stripped rather than rejected so adding a new field to the JSON
+ * ahead of the type doesn't hard-fail.
  */
-const AGENT_NAMES: Partial<Record<OpenAIModelID, string>> = {
-  [OpenAIModelID.GPT_4_1]: 'gpt-41',
-  [OpenAIModelID.GPT_5_2]: 'gpt-52',
-  [OpenAIModelID.GPT_5_2_CHAT]: 'gpt-52-chat',
-  [OpenAIModelID.CLAUDE_OPUS_4_6]: 'claude-opus-46',
-  [OpenAIModelID.CLAUDE_SONNET_4_6]: 'claude-sonnet-46',
-  [OpenAIModelID.CLAUDE_HAIKU_4_5]: 'claude-haiku-45',
-};
+const openAIModelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  maxLength: z.number(),
+  tokenLimit: z.number(),
+  temperature: z.number().optional(),
+  stream: z.boolean().optional(),
+  modelType: z.enum(['foundational', 'omni', 'reasoning', 'agent']).optional(),
+  description: z.string().optional(),
+  tagline: z.string().optional(),
+  isRecommended: z.boolean().optional(),
+  isDisabled: z.boolean().optional(),
+  isAgent: z.boolean().optional(),
+  isCustomAgent: z.boolean().optional(),
+  isOrganizationAgent: z.boolean().optional(),
+  agentId: z.string().optional(),
+  agentVersion: z.string().optional(),
+  foundryEndpoint: z.string().optional(),
+  agentSource: z.string().optional(),
+  provider: z
+    .enum(['openai', 'deepseek', 'xai', 'meta', 'anthropic'])
+    .optional(),
+  knowledgeCutoffDate: z.string().optional(),
+  sdk: z.enum(['azure-openai', 'openai', 'anthropic-foundry']).optional(),
+  supportsTemperature: z.boolean().optional(),
+  supportsVision: z.boolean().optional(),
+  deploymentName: z.string().optional(),
+  reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
+  supportsReasoningEffort: z.boolean().optional(),
+  supportsMinimalReasoning: z.boolean().optional(),
+  verbosity: z.enum(['low', 'medium', 'high']).optional(),
+  supportsVerbosity: z.boolean().optional(),
+  avoidSystemPrompt: z.boolean().optional(),
+  usesResponsesAPI: z.boolean().optional(),
+});
 
 /**
- * Factory function to create model configurations
+ * Per-model baseline metadata, loaded from config/models.json. This is the
+ * source of truth for KNOWN models' presentation + routing (display name,
+ * context window, sdk, capability/tool flags, agentId). Azure discovery does
+ * not return any of this — see docs/MODEL_DISCOVERY_DESIGN.md.
+ *
+ * Validated at load (instead of an unchecked `as unknown as` cast) so the
+ * JSON's enum/union/flag fields are guaranteed well-formed. The runtime check
+ * in createModelConfigs() additionally guarantees every OpenAIModelID has an
+ * entry.
+ */
+const MODEL_METADATA: Record<string, OpenAIModel> = (() => {
+  const parsed = z
+    .record(z.string(), openAIModelSchema)
+    .safeParse(modelMetadata.models);
+  if (!parsed.success) {
+    throw new Error(
+      `[openai] Invalid config/models.json metadata: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data as Record<string, OpenAIModel>;
+})();
+
+/**
+ * Builds the model configuration map from config/models.json, keyed by
+ * OpenAIModelID. Throws at module load if any known model id is missing its
+ * metadata entry, so a bad edit fails fast rather than surfacing as an
+ * undefined model at runtime.
  */
 function createModelConfigs(): Record<OpenAIModelID, OpenAIModel> {
-  return {
-    [OpenAIModelID.GPT_4_1]: {
-      id: OpenAIModelID.GPT_4_1,
-      name: 'GPT-4.1',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'omni',
-      tagline: "OpenAI's previous generation",
-      description:
-        "OpenAI's previous-generation model. Still capable for everyday writing, summaries, and Q&A.",
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.GPT_4_1],
-      provider: 'openai',
-      knowledgeCutoffDate: '', // Empty - uses translation key for "Real-time web search"
-      sdk: 'azure-openai',
-      supportsTemperature: false,
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.GPT_5_2]: {
-      id: OpenAIModelID.GPT_5_2,
-      name: 'GPT-5.2',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'omni',
-      tagline: 'Code, analysis, research',
-      isRecommended: true,
-      description:
-        'A capable everyday model for most kinds of work — writing, research, coding, and thinking through complex problems.',
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.GPT_5_2],
-      provider: 'openai',
-      knowledgeCutoffDate: '2025-12',
-      sdk: 'azure-openai',
-      supportsTemperature: false,
-      reasoningEffort: 'medium',
-      supportsReasoningEffort: true,
-      supportsMinimalReasoning: true, // GPT-5.2 uniquely supports 'minimal' effort
-      verbosity: 'medium',
-      supportsVerbosity: true,
-    },
-    [OpenAIModelID.GPT_5_MINI]: {
-      id: OpenAIModelID.GPT_5_MINI,
-      name: 'GPT-5 Mini',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'omni',
-      tagline: 'Faster and lower cost',
-      description:
-        "A faster, lighter model for quick questions and everyday tasks where you don't need maximum power.",
-      isDisabled: false,
-      provider: 'openai',
-      knowledgeCutoffDate: '2025-08-06T20:00',
-      sdk: 'azure-openai',
-      supportsTemperature: false,
-      reasoningEffort: 'low',
-      supportsReasoningEffort: true,
-      supportsMinimalReasoning: true,
-      verbosity: 'low',
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.GPT_5_2_CHAT]: {
-      id: OpenAIModelID.GPT_5_2_CHAT,
-      name: 'GPT-5.2 Chat',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'omni',
-      tagline: 'Conversations, brainstorming',
-      isRecommended: true,
-      description:
-        'A friendlier version of GPT-5.2 tuned for conversation. Good for casual chats, brainstorming, and supportive discussions.',
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.GPT_5_2_CHAT],
-      provider: 'openai',
-      knowledgeCutoffDate: '2025-12',
-      sdk: 'azure-openai',
-      supportsTemperature: false,
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.GPT_o3]: {
-      id: OpenAIModelID.GPT_o3,
-      name: 'o3',
-      maxLength: 200000, // Extended context window
-      tokenLimit: 100000, // Extended output tokens
-      stream: false,
-      temperature: 1,
-      modelType: 'reasoning',
-      tagline: 'Deep step-by-step reasoning',
-      description:
-        'Made for hard reasoning. Use it when a problem needs careful, step-by-step thinking — math, science, tricky logic.',
-      isDisabled: false,
-      provider: 'openai',
-      knowledgeCutoffDate: '2025-04-08T20:00',
-      sdk: 'azure-openai',
-      supportsTemperature: false,
-      reasoningEffort: 'medium',
-      supportsReasoningEffort: true,
-      supportsMinimalReasoning: false, // o3 doesn't support 'minimal', only low/medium/high
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.LLAMA_4_MAVERICK]: {
-      id: OpenAIModelID.LLAMA_4_MAVERICK,
-      name: 'Llama 4 Maverick',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'foundational',
-      tagline: 'Open-source alternative',
-      description:
-        'An open-source model from Meta. Solid for writing, summaries, and quick questions.',
-      isDisabled: false,
-      provider: 'meta',
-      knowledgeCutoffDate: '2025-05-07T07:11',
-      sdk: 'openai',
-      supportsTemperature: true,
-      deploymentName: 'Llama-4-Maverick-17B-128E-Instruct-FP8',
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.DEEPSEEK_R1]: {
-      id: OpenAIModelID.DEEPSEEK_R1,
-      name: 'DeepSeek-R1',
-      maxLength: 128000,
-      tokenLimit: 32768,
-      modelType: 'reasoning',
-      tagline: 'Shows reasoning step-by-step',
-      description:
-        'Shows its thinking step-by-step. Useful when you want to see how the model reaches its answer.',
-      isDisabled: false,
-      provider: 'deepseek',
-      knowledgeCutoffDate: '2025-01-20',
-      sdk: 'openai',
-      supportsTemperature: true,
-      deploymentName: 'DeepSeek-R1',
-      avoidSystemPrompt: true, // Special handling: merge system prompts into user messages
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.DEEPSEEK_V3_1]: {
-      id: OpenAIModelID.DEEPSEEK_V3_1,
-      name: 'DeepSeek-V3.1',
-      maxLength: 128000,
-      tokenLimit: 32768,
-      modelType: 'foundational',
-      tagline: 'Open-source alternative',
-      description:
-        'An open-source model from DeepSeek. Reliable for general writing and technical questions.',
-      isDisabled: false,
-      provider: 'deepseek',
-      knowledgeCutoffDate: '2025-04-16T00:45',
-      sdk: 'openai',
-      supportsTemperature: true,
-      deploymentName: 'DeepSeek-V3.1',
-      avoidSystemPrompt: true, // Also benefits from avoiding system prompts
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.GROK_3]: {
-      id: OpenAIModelID.GROK_3,
-      name: 'Grok 3',
-      maxLength: 128000,
-      tokenLimit: 16000,
-      modelType: 'omni',
-      tagline: 'xAI alternative',
-      description:
-        "xAI's chat model. Good for open-ended discussions and creative projects.",
-      isDisabled: true, // Disabled temporarily
-      provider: 'xai',
-      knowledgeCutoffDate: '2025-05-13T00:16',
-      sdk: 'openai',
-      supportsTemperature: true,
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    // Anthropic Claude models (via Azure AI Foundry)
-    [OpenAIModelID.CLAUDE_OPUS_4_6]: {
-      id: OpenAIModelID.CLAUDE_OPUS_4_6,
-      name: 'Claude Opus 4.6',
-      maxLength: 200000,
-      tokenLimit: 64000,
-      modelType: 'omni',
-      tagline: 'Long-form writing and analysis',
-      description:
-        "Anthropic's strongest model. Good for long writing, research, and tasks that need careful thinking.",
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_OPUS_4_6],
-      provider: 'anthropic',
-      knowledgeCutoffDate: '2026-02-02T19:00',
-      sdk: 'anthropic-foundry',
-      supportsTemperature: true,
-      deploymentName: 'claude-opus-4-6',
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.CLAUDE_SONNET_4_6]: {
-      id: OpenAIModelID.CLAUDE_SONNET_4_6,
-      name: 'Claude Sonnet 4.6',
-      maxLength: 200000,
-      tokenLimit: 64000,
-      modelType: 'omni',
-      tagline: 'Balanced everyday Claude',
-      description:
-        'A balanced Claude model. Good for everyday writing, analysis, and coding with quick responses.',
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_SONNET_4_6],
-      provider: 'anthropic',
-      knowledgeCutoffDate: '2026-02-11T19:00',
-      sdk: 'anthropic-foundry',
-      supportsTemperature: true,
-      deploymentName: 'claude-sonnet-4-6',
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.CLAUDE_OPUS_4_1]: {
-      id: OpenAIModelID.CLAUDE_OPUS_4_1,
-      name: 'Claude Opus 4.1',
-      maxLength: 200000,
-      tokenLimit: 32000,
-      modelType: 'omni',
-      tagline: 'Previous-generation Opus',
-      description:
-        'Previous-generation Opus. Still strong for coding and detailed analysis.',
-      isDisabled: true,
-      provider: 'anthropic',
-      knowledgeCutoffDate: '2025-01',
-      sdk: 'anthropic-foundry',
-      supportsTemperature: true,
-      deploymentName: 'claude-opus-4-1',
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-    [OpenAIModelID.CLAUDE_HAIKU_4_5]: {
-      id: OpenAIModelID.CLAUDE_HAIKU_4_5,
-      name: 'Claude Haiku 4.5',
-      maxLength: 200000,
-      tokenLimit: 64000,
-      modelType: 'foundational',
-      tagline: 'Fast Claude variant',
-      description:
-        'The fastest Claude. Good for quick tasks where speed matters more than depth.',
-      isDisabled: false,
-      isAgent: true,
-      agentId: AGENT_NAMES[OpenAIModelID.CLAUDE_HAIKU_4_5],
-      provider: 'anthropic',
-      knowledgeCutoffDate: '2025-01',
-      sdk: 'anthropic-foundry',
-      supportsTemperature: true,
-      deploymentName: 'claude-haiku-4-5',
-      supportsReasoningEffort: false,
-      supportsVerbosity: false,
-    },
-  };
+  const configs = {} as Record<OpenAIModelID, OpenAIModel>;
+  const knownIds = new Set<string>(Object.values(OpenAIModelID));
+  for (const id of Object.values(OpenAIModelID)) {
+    const meta = MODEL_METADATA[id];
+    if (!meta) {
+      throw new Error(
+        `[openai] Missing metadata for model "${id}" in config/models.json`,
+      );
+    }
+    configs[id] = meta;
+  }
+  // Reverse direction: surface stale/orphaned metadata. A models.json key with
+  // no matching OpenAIModelID is never used (configs is keyed by enum), which
+  // usually means a typo or a model removed from the enum but not the JSON.
+  for (const key of Object.keys(MODEL_METADATA)) {
+    if (!knownIds.has(key)) {
+      console.warn(
+        `[openai] config/models.json has metadata for unknown model id "${key}" (not in OpenAIModelID); it will be ignored.`,
+      );
+    }
+  }
+  return configs;
 }
 
 export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> =
   createModelConfigs();
+
+/**
+ * Vision-capable model IDs, derived from the `supportsVision` metadata flag.
+ *
+ * Previously a hand-maintained enum; now built from config/models.json so vision
+ * support has a single source of truth and discovered models can declare it via
+ * metadata. Shape is a `{ id: id }` map (not an enum) so existing consumers that
+ * call `Object.values(OpenAIVisionModelID)` or pass it to `checkIsModelValid`
+ * keep working unchanged.
+ */
+export const OpenAIVisionModelID: Record<string, string> = Object.fromEntries(
+  Object.values(OpenAIModels)
+    .filter((model) => model.supportsVision)
+    .map((model) => [model.id, model.id]),
+);
+// `OpenAIVisionModelID` is intentionally BOTH a value and a type under one name:
+//   - the value (above) is the runtime `{ id: id }` map of vision-capable models,
+//     derived from metadata so consumers can enumerate it at runtime.
+//   - the type (below) is intentionally widened to `string` rather than a union
+//     of those ids. The set is data-driven (discovered models can opt in via
+//     metadata), so a narrow union would be wrong/stale; widening to `string`
+//     keeps existing `as OpenAIVisionModelID` casts compiling without implying a
+//     closed set. They share a name so those casts keep reading naturally.
+// TypeScript allows a value and a type to share a name; the base ESLint
+// no-redeclare rule doesn't model that, so it's disabled for this line only.
+// eslint-disable-next-line no-redeclare
+export type OpenAIVisionModelID = string;
