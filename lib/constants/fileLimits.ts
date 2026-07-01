@@ -46,8 +46,10 @@ const AUDIO_EXTENSIONS = [
   '.m4a',
   '.wav',
   '.ogg',
+  '.oga',
   '.flac',
   '.aac',
+  '.opus',
   '.mpeg',
   '.mpga',
 ];
@@ -55,15 +57,19 @@ const AUDIO_EXTENSIONS = [
 /**
  * Video file extensions.
  * Note: .webm defaults to video if MIME type is unavailable.
+ * `.m4v`, `.ts`, `.3gp` are video containers whose audio track is extracted.
  */
 const VIDEO_EXTENSIONS = [
   '.mp4',
+  '.m4v',
   '.mkv',
   '.mov',
   '.avi',
   '.flv',
   '.wmv',
   '.webm',
+  '.3gp',
+  '.ts',
 ];
 
 /**
