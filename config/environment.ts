@@ -7,6 +7,20 @@
 import { z } from 'zod';
 
 /**
+ * Boolean-from-string env schema.
+ *
+ * Env vars are always strings, so a "boolean" flag is modeled as a string with
+ * a default that transforms to `true` only for the literal `'true'`. Factored
+ * out so every boolean flag in this file shares one definition instead of
+ * repeating the `.default(...).transform(...)` triple.
+ */
+const booleanString = (defaultValue: boolean) =>
+  z
+    .string()
+    .default(defaultValue ? 'true' : 'false')
+    .transform((val) => val === 'true');
+
+/**
  * Environment enum
  */
 const EnvironmentEnum = z.enum([
@@ -56,27 +70,20 @@ const serverEnvSchema = z.object({
   // Foundry data plane (in addition to legacy ARM "Agent Application"
   // resources) and unions the results. Best-effort: failures fall back to
   // ARM-only discovery. Set to "false" to restore pure legacy behavior.
-  FOUNDRY_DATAPLANE_DISCOVERY: z
-    .string()
-    .default('true')
-    .transform((val) => val === 'true'),
+  FOUNDRY_DATAPLANE_DISCOVERY: booleanString(true),
 
   // When true, the model list shown to users is built from live Azure AI Foundry
   // deployment discovery (joined to local metadata) instead of the static
   // config/models.json list. Defaults to false so behavior is unchanged until
-  // explicitly enabled per environment. See docs/MODEL_DISCOVERY_DESIGN.md.
-  MODEL_DISCOVERY_ENABLED: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  // explicitly enabled per environment. NEXT_PUBLIC_ so the client model list
+  // and the server route read the same flag. See docs/MODEL_DISCOVERY_DESIGN.md.
+  NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED: booleanString(false),
 
-  // When true (and MODEL_DISCOVERY_ENABLED), discovered deployments that have no
-  // local metadata entry are still shown, using conservative inferred defaults.
-  // When false, only discovered models that also have metadata are shown.
-  SHOW_MODELS_WITHOUT_METADATA: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  // When true (and NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED), discovered deployments
+  // that have no local metadata entry are still shown, using conservative
+  // inferred defaults. When false, only discovered models that also have
+  // metadata are shown. Server-only: never exposed to the client.
+  SHOW_MODELS_WITHOUT_METADATA: booleanString(false),
 
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
   AZURE_TRANSLATOR_ENDPOINT: z.string().url().optional(),
@@ -96,17 +103,11 @@ const serverEnvSchema = z.object({
   SEARCH_DATASOURCE: z.string().optional(),
   SEARCH_INDEXER: z.string().optional(),
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
-  ALLOW_INDEX_DOWNTIME: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  ALLOW_INDEX_DOWNTIME: booleanString(false),
 
   // Application Configuration
   DEFAULT_MODEL: z.string().default('gpt-5.2-chat'),
-  DEFAULT_USE_KNOWLEDGE_BASE: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  DEFAULT_USE_KNOWLEDGE_BASE: booleanString(false),
   FORCE_LOGOUT_ON_REFRESH_FAILURE: z.string().default('true'),
 
   // NextAuth
@@ -157,6 +158,10 @@ const clientEnvSchema = z.object({
   NEXT_PUBLIC_DEFAULT_TEMPERATURE: z.string().default('0.5'),
   NEXT_PUBLIC_EMAIL: z.string().email().optional(),
   LAUNCHDARKLY_CLIENT_ID: z.string().optional(),
+  // Mirrors the server schema so the client-rendered model list reads the same
+  // flag as the server route. Kept in both schemas because env is parsed
+  // separately on each side. SHOW_MODELS_WITHOUT_METADATA stays server-only.
+  NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED: booleanString(false),
 });
 
 /**
