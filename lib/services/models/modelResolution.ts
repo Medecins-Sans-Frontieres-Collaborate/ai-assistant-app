@@ -55,17 +55,48 @@ export function inferProvider(publisher?: string): OpenAIModel['provider'] {
   }
 }
 
-/** Parses a positive integer from a tag value, or undefined. */
+/**
+ * Parses a positive integer from a tag value, or undefined.
+ *
+ * Strict on purpose: ARM tag values are free-form strings, so we reject
+ * anything that isn't a plain run of decimal digits. That rules out hex
+ * (`0x20000`), scientific notation (`1e8`), whitespace-padded (`' 5 '` only
+ * after trimming — internal/odd spacing fails the digit check), signs, and
+ * decimals — all of which `Number()` would happily (and surprisingly) accept.
+ */
 function positiveInt(value?: string): number | undefined {
   if (value === undefined) return undefined;
-  const n = Number(value);
-  return Number.isFinite(n) && n > 0 ? Math.floor(n) : undefined;
+  const trimmed = value.trim();
+  if (!/^\d+$/.test(trimmed)) return undefined;
+  const n = parseInt(trimmed, 10);
+  return Number.isFinite(n) && n > 0 ? n : undefined;
 }
+
+/** SDKs we know how to route; tag-supplied values outside this are ignored. */
+const ALLOWED_SDKS = [
+  'azure-openai',
+  'openai',
+  'anthropic-foundry',
+] as const satisfies readonly NonNullable<OpenAIModel['sdk']>[];
+
+/** Providers our UI understands; tag-supplied values outside this are ignored. */
+const ALLOWED_PROVIDERS = [
+  'openai',
+  'deepseek',
+  'xai',
+  'meta',
+  'anthropic',
+] as const satisfies readonly NonNullable<OpenAIModel['provider']>[];
 
 /**
  * Overlays ARM `ui-*` resource tags onto a model config. This is how a new
  * model deployed in Azure can get (or override) display + routing metadata
  * without a code push — the same tag convention AgentDiscoveryService uses.
+ *
+ * Strictly ADDITIVE: a missing/blank/invalid tag never clears an existing
+ * field — it just leaves whatever the base model already had. The one
+ * exception is the explicit opt-out `ui-is-agent: 'false'`, which clears the
+ * agent flag (see W2).
  */
 export function applyTagOverlay(
   model: OpenAIModel,
@@ -80,12 +111,30 @@ export function applyTagOverlay(
   if (ctx) m.maxLength = ctx;
   const out = positiveInt(tags['ui-output']);
   if (out) m.tokenLimit = out;
-  if (tags['ui-sdk']) m.sdk = tags['ui-sdk'] as OpenAIModel['sdk'];
-  if (tags['ui-provider'])
-    m.provider = tags['ui-provider'] as OpenAIModel['provider'];
+  if (tags['ui-sdk']) {
+    const sdk = tags['ui-sdk'];
+    if ((ALLOWED_SDKS as readonly string[]).includes(sdk)) {
+      m.sdk = sdk as OpenAIModel['sdk'];
+    } else {
+      console.warn(`applyTagOverlay: ignoring unknown ui-sdk "${sdk}"`);
+    }
+  }
+  if (tags['ui-provider']) {
+    const provider = tags['ui-provider'];
+    if ((ALLOWED_PROVIDERS as readonly string[]).includes(provider)) {
+      m.provider = provider as OpenAIModel['provider'];
+    } else {
+      console.warn(
+        `applyTagOverlay: ignoring unknown ui-provider "${provider}"`,
+      );
+    }
+  }
   if (tags['ui-agent-id']) {
     m.agentId = tags['ui-agent-id'];
     m.isAgent = true;
+  }
+  if (tags['ui-is-agent'] === 'false') {
+    m.isAgent = false;
   }
   return m;
 }
