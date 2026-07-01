@@ -13,9 +13,6 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Reference the hoisted extractor mocks for assertions (see below).
-const { extractAudioFromVideo, isFFmpegAvailable } = extractorMocks;
-
 // Mock dependencies
 vi.mock('@/auth', () => ({
   auth: vi.fn(),
@@ -46,6 +43,10 @@ const extractorMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@/lib/utils/server/audio/audioExtractor', () => extractorMocks);
+
+// Pull the mock fns out for per-test assertions. Must come after the
+// `extractorMocks` declaration above to avoid a temporal-dead-zone reference.
+const { extractAudioFromVideo, isFFmpegAvailable } = extractorMocks;
 
 vi.mock('@/lib/constants/fileTypes', async (importOriginal) => {
   const actual =
