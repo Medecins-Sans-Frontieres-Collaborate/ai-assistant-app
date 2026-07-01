@@ -1,4 +1,5 @@
 import modelMetadata from '@/config/models.json';
+import { z } from 'zod';
 
 export interface OpenAIModel {
   id: string;
@@ -105,19 +106,72 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
 ];
 
 /**
+ * Zod schema mirroring OpenAIModel's important fields. Used to validate
+ * config/models.json at module load so a malformed edit (e.g. modelType:'Omni',
+ * sdk:'azure_openai', supportsVision:'true') fails fast with a clear error
+ * instead of being silently cast through `as unknown as` and surfacing as
+ * broken routing/UI at runtime. Optional fields stay optional; unknown extra
+ * keys are stripped rather than rejected so adding a new field to the JSON
+ * ahead of the type doesn't hard-fail.
+ */
+const openAIModelSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  maxLength: z.number(),
+  tokenLimit: z.number(),
+  temperature: z.number().optional(),
+  stream: z.boolean().optional(),
+  modelType: z.enum(['foundational', 'omni', 'reasoning', 'agent']).optional(),
+  description: z.string().optional(),
+  tagline: z.string().optional(),
+  isRecommended: z.boolean().optional(),
+  isDisabled: z.boolean().optional(),
+  isAgent: z.boolean().optional(),
+  isCustomAgent: z.boolean().optional(),
+  isOrganizationAgent: z.boolean().optional(),
+  agentId: z.string().optional(),
+  agentVersion: z.string().optional(),
+  foundryEndpoint: z.string().optional(),
+  agentSource: z.string().optional(),
+  provider: z
+    .enum(['openai', 'deepseek', 'xai', 'meta', 'anthropic'])
+    .optional(),
+  knowledgeCutoffDate: z.string().optional(),
+  sdk: z.enum(['azure-openai', 'openai', 'anthropic-foundry']).optional(),
+  supportsTemperature: z.boolean().optional(),
+  supportsVision: z.boolean().optional(),
+  deploymentName: z.string().optional(),
+  reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
+  supportsReasoningEffort: z.boolean().optional(),
+  supportsMinimalReasoning: z.boolean().optional(),
+  verbosity: z.enum(['low', 'medium', 'high']).optional(),
+  supportsVerbosity: z.boolean().optional(),
+  avoidSystemPrompt: z.boolean().optional(),
+  usesResponsesAPI: z.boolean().optional(),
+});
+
+/**
  * Per-model baseline metadata, loaded from config/models.json. This is the
  * source of truth for KNOWN models' presentation + routing (display name,
  * context window, sdk, capability/tool flags, agentId). Azure discovery does
  * not return any of this — see docs/MODEL_DISCOVERY_DESIGN.md.
  *
- * The JSON's string literals widen to `string` on import (e.g. modelType,
- * provider, sdk), so we assert the typed shape here. The runtime validation in
- * createModelConfigs() guarantees every OpenAIModelID has an entry.
+ * Validated at load (instead of an unchecked `as unknown as` cast) so the
+ * JSON's enum/union/flag fields are guaranteed well-formed. The runtime check
+ * in createModelConfigs() additionally guarantees every OpenAIModelID has an
+ * entry.
  */
-const MODEL_METADATA = modelMetadata.models as unknown as Record<
-  string,
-  OpenAIModel
->;
+const MODEL_METADATA: Record<string, OpenAIModel> = (() => {
+  const parsed = z
+    .record(z.string(), openAIModelSchema)
+    .safeParse(modelMetadata.models);
+  if (!parsed.success) {
+    throw new Error(
+      `[openai] Invalid config/models.json metadata: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data as Record<string, OpenAIModel>;
+})();
 
 /**
  * Builds the model configuration map from config/models.json, keyed by
@@ -127,6 +181,7 @@ const MODEL_METADATA = modelMetadata.models as unknown as Record<
  */
 function createModelConfigs(): Record<OpenAIModelID, OpenAIModel> {
   const configs = {} as Record<OpenAIModelID, OpenAIModel>;
+  const knownIds = new Set<string>(Object.values(OpenAIModelID));
   for (const id of Object.values(OpenAIModelID)) {
     const meta = MODEL_METADATA[id];
     if (!meta) {
@@ -135,6 +190,16 @@ function createModelConfigs(): Record<OpenAIModelID, OpenAIModel> {
       );
     }
     configs[id] = meta;
+  }
+  // Reverse direction: surface stale/orphaned metadata. A models.json key with
+  // no matching OpenAIModelID is never used (configs is keyed by enum), which
+  // usually means a typo or a model removed from the enum but not the JSON.
+  for (const key of Object.keys(MODEL_METADATA)) {
+    if (!knownIds.has(key)) {
+      console.warn(
+        `[openai] config/models.json has metadata for unknown model id "${key}" (not in OpenAIModelID); it will be ignored.`,
+      );
+    }
   }
   return configs;
 }
@@ -156,7 +221,15 @@ export const OpenAIVisionModelID: Record<string, string> = Object.fromEntries(
     .filter((model) => model.supportsVision)
     .map((model) => [model.id, model.id]),
 );
-// A value and a type may share this name (the type preserves existing
-// `as OpenAIVisionModelID` casts); the base no-redeclare rule doesn't model that.
+// `OpenAIVisionModelID` is intentionally BOTH a value and a type under one name:
+//   - the value (above) is the runtime `{ id: id }` map of vision-capable models,
+//     derived from metadata so consumers can enumerate it at runtime.
+//   - the type (below) is intentionally widened to `string` rather than a union
+//     of those ids. The set is data-driven (discovered models can opt in via
+//     metadata), so a narrow union would be wrong/stale; widening to `string`
+//     keeps existing `as OpenAIVisionModelID` casts compiling without implying a
+//     closed set. They share a name so those casts keep reading naturally.
+// TypeScript allows a value and a type to share a name; the base ESLint
+// no-redeclare rule doesn't model that, so it's disabled for this line only.
 // eslint-disable-next-line no-redeclare
 export type OpenAIVisionModelID = string;
