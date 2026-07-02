@@ -267,8 +267,10 @@ export class FileProcessor extends BasePipelineStage {
                   // Check FFmpeg availability before attempting extraction
                   const ffmpegAvailable = await isFFmpegAvailable();
                   if (!ffmpegAvailable) {
+                    // Format-neutral wording: non-Whisper-native audio (ogg,
+                    // flac, aac, opus, …) hits this branch too, not just video.
                     throw new Error(
-                      `Cannot process video file "${filename}": FFmpeg is not available. ` +
+                      `Cannot process file "${filename}": FFmpeg is not available. ` +
                         `Please configure the FFMPEG_BIN environment variable or install FFmpeg.`,
                     );
                   }
