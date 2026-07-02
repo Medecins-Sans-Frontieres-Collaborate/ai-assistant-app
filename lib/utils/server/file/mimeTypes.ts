@@ -60,12 +60,14 @@ export const MIME_TYPE_MAP: Record<string, string> = {
   flac: 'audio/flac',
   aac: 'audio/aac',
   opus: 'audio/opus',
+  wma: 'audio/x-ms-wma',
 
   // Video
   mp4: 'video/mp4',
   m4v: 'video/x-m4v',
   webm: 'video/webm',
   mpeg: 'video/mpeg',
+  mpg: 'video/mpeg',
   mkv: 'video/x-matroska',
   mov: 'video/quicktime',
   avi: 'video/x-msvideo',

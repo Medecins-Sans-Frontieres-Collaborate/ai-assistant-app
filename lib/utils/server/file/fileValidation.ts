@@ -102,6 +102,17 @@ export const FILE_SIGNATURES: FileTypeSignature[] = [
   },
   {
     type: 'audio',
+    format: 'wma',
+    signatures: [
+      // ASF header — same container as WMV; the extension-match priority in
+      // validateFileSignature classifies .wma as audio and .wmv as video.
+      { bytes: [0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11] },
+    ],
+    mimeTypes: ['audio/x-ms-wma'],
+    extensions: ['.wma'],
+  },
+  {
+    type: 'audio',
     format: 'webm-audio',
     signatures: [
       // WebM/Matroska EBML header
