@@ -81,7 +81,13 @@ describe('mimeTypes', () => {
       expect(MIME_TYPE_MAP.flv).toBe('video/x-flv');
       expect(MIME_TYPE_MAP.wmv).toBe('video/x-ms-wmv');
       expect(MIME_TYPE_MAP['3gp']).toBe('video/3gpp');
-      expect(MIME_TYPE_MAP.ts).toBe('video/mp2t');
+    });
+
+    // `.ts` is TypeScript source, not MPEG-TS, from this app's perspective —
+    // mapping it to video/mp2t would content-type code uploads as video.
+    it('does NOT map .ts to a video MIME type', () => {
+      expect(MIME_TYPE_MAP.ts).toBeUndefined();
+      expect(getContentType('utils.ts')).toBe('application/octet-stream');
     });
   });
 
@@ -140,7 +146,6 @@ describe('mimeTypes', () => {
       expect(getContentType('clip.mov')).toBe('video/quicktime');
       expect(getContentType('clip.mkv')).toBe('video/x-matroska');
       expect(getContentType('clip.3gp')).toBe('video/3gpp');
-      expect(getContentType('stream.ts')).toBe('video/mp2t');
     });
 
     it('should handle multiple dots in filename', () => {
