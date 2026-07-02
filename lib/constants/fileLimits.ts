@@ -57,7 +57,9 @@ const AUDIO_EXTENSIONS = [
 /**
  * Video file extensions.
  * Note: .webm defaults to video if MIME type is unavailable.
- * `.m4v`, `.ts`, `.3gp` are video containers whose audio track is extracted.
+ * `.m4v` and `.3gp` are video containers whose audio track is extracted.
+ * `.ts` is deliberately excluded — it collides with TypeScript source files
+ * (see AUDIO_VIDEO_EXTENSIONS in lib/constants/fileTypes.ts).
  */
 const VIDEO_EXTENSIONS = [
   '.mp4',
@@ -69,7 +71,6 @@ const VIDEO_EXTENSIONS = [
   '.wmv',
   '.webm',
   '.3gp',
-  '.ts',
 ];
 
 /**

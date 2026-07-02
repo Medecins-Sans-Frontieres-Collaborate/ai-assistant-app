@@ -17,6 +17,13 @@
  * so an uploaded `.m4v` fell into the document branch and surfaced a generic
  * "unable to process the uploaded file" error. The magic-byte signature
  * table already recognized it; only this extension allowlist was the gate.
+ *
+ * Deliberately NOT listed: `.ts` (MPEG transport stream) — the extension
+ * collides with TypeScript source files, which the app supports as code
+ * uploads ({@link DOCUMENT_AND_CODE_ACCEPT_TYPES}). Classification here is
+ * extension-based, so claiming `.ts` would route code files into the
+ * transcription pipeline. MPEG-TS support would need content-based detection
+ * (0x47 sync bytes at offsets 0/188/376), not an extension entry.
  */
 export const AUDIO_VIDEO_EXTENSIONS = [
   // Whisper-native formats (sent directly, no transcoding)
@@ -34,14 +41,13 @@ export const AUDIO_VIDEO_EXTENSIONS = [
   '.avi',
   '.flv',
   '.wmv',
+  '.3gp',
   // Audio containers Whisper doesn't accept — transcoded to mp3 via FFmpeg
   '.ogg',
   '.oga',
   '.flac',
   '.aac',
   '.opus',
-  '.3gp',
-  '.ts',
 ] as const;
 
 /**
@@ -49,8 +55,9 @@ export const AUDIO_VIDEO_EXTENSIONS = [
  * {@link AUDIO_VIDEO_EXTENSIONS} that is NOT in this set must be passed
  * through FFmpeg audio extraction (to mp3) before being sent to Whisper.
  *
- * Source: https://platform.openai.com/docs/guides/speech-to-text#supported-languages
- * (mp3, mp4, mpeg, mpga, m4a, wav, webm).
+ * Source: https://platform.openai.com/docs/guides/speech-to-text
+ * ("File uploads are currently limited to 25 MB and the following input file
+ * types are supported: mp3, mp4, mpeg, mpga, m4a, wav, and webm").
  */
 export const WHISPER_NATIVE_EXTENSIONS = [
   '.mp3',
@@ -86,13 +93,14 @@ export function isAudioVideoFile(filename: string): boolean {
 }
 
 /**
- * Checks if a file is in a format Whisper accepts natively (no transcoding
- * needed). Used to decide whether FFmpeg audio extraction is required
- * before sending the file to the Whisper API. Returns false for video
- * containers (mp4 included — `.mp4` is technically Whisper-native, but a
- * video mp4 still benefits from audio-only extraction to cut payload size;
- * callers that want strict Whisper-native detection should use this, while
- * the FileProcessor keeps its own `isVideo` branch for the size-aware path).
+ * Checks if a file's extension is in {@link WHISPER_NATIVE_EXTENSIONS}, i.e.
+ * a format the Whisper API accepts without transcoding. Used to decide
+ * whether FFmpeg audio extraction is required before sending the file to
+ * Whisper. Note this returns true for `.mp4`/`.webm` even when they are
+ * video: Whisper accepts those containers as-is. Callers that additionally
+ * want to strip video tracks to cut payload size (the FileProcessor does)
+ * must OR this with their own video detection — see the `needsExtraction`
+ * logic in FileProcessor.
  */
 export function isWhisperNativeFormat(filename: string): boolean {
   if (!filename) return false;
@@ -127,7 +135,7 @@ export function isAudioVideoFileByTypeOrName(
  * Includes MIME type wildcards and explicit extensions for browser compatibility.
  */
 export const TRANSCRIPTION_ACCEPT_TYPES =
-  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.m4v,.mkv,.mov,.avi,.flv,.wmv,.ogg,.oga,.flac,.aac,.opus,.3gp,.ts';
+  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.m4v,.mkv,.mov,.avi,.flv,.wmv,.3gp,.ogg,.oga,.flac,.aac,.opus';
 
 /**
  * Accept attribute value for image file inputs.
