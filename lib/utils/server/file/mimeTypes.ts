@@ -72,7 +72,8 @@ export const MIME_TYPE_MAP: Record<string, string> = {
   flv: 'video/x-flv',
   wmv: 'video/x-ms-wmv',
   '3gp': 'video/3gpp',
-  ts: 'video/mp2t',
+  // NOTE: no `ts` entry — the extension collides with TypeScript source
+  // files, which must not be content-typed as video/mp2t.
 };
 
 /**
