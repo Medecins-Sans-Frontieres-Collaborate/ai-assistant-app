@@ -65,7 +65,6 @@ describe('AUDIO_VIDEO_EXTENSIONS / isAudioVideoFile', () => {
     '.aac',
     '.opus',
     '.3gp',
-    '.ts',
   ];
 
   it('includes every documented transcribable extension', () => {
@@ -92,6 +91,17 @@ describe('AUDIO_VIDEO_EXTENSIONS / isAudioVideoFile', () => {
     expect(isAudioVideoFile('readme')).toBe(false);
     expect(isAudioVideoFile('')).toBe(false);
     expect(isAudioVideoFile('noextension')).toBe(false);
+  });
+
+  // `.ts` collides with TypeScript source files, which are supported code
+  // uploads (DOCUMENT_AND_CODE_ACCEPT_TYPES). It must never be classified
+  // as audio/video by extension, or code files get routed into the
+  // transcription pipeline and break.
+  it('does NOT classify .ts (TypeScript) as audio/video', () => {
+    expect(AUDIO_VIDEO_EXTENSIONS).not.toContain('.ts');
+    expect(isAudioVideoFile('utils.ts')).toBe(false);
+    expect(isAudioVideoFileByTypeOrName('utils.ts')).toBe(false);
+    expect(TRANSCRIPTION_ACCEPT_TYPES).not.toMatch(/\.ts(,|$)/);
   });
 
   it('explicitly includes .m4v (the issue #90 regression)', () => {
@@ -132,7 +142,6 @@ describe('WHISPER_NATIVE_EXTENSIONS / isWhisperNativeFormat', () => {
       '.aac',
       '.opus',
       '.3gp',
-      '.ts',
     ];
     for (const ext of needsTranscoding) {
       expect(

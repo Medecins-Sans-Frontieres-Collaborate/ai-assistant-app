@@ -64,7 +64,13 @@ describe('fileLimits', () => {
 
     it('categorizes the newly added video containers as video', () => {
       expect(getFileCategory('clip.3gp')).toBe('video');
-      expect(getFileCategory('stream.ts')).toBe('video');
+    });
+
+    // `.ts` is TypeScript, not MPEG-TS, from this app's perspective — it must
+    // never be categorized as video or code uploads inherit the video cap and
+    // A/V routing.
+    it('does NOT categorize .ts as video', () => {
+      expect(getFileCategory('utils.ts')).toBe('unknown');
     });
 
     it('should detect document files by extension', () => {
