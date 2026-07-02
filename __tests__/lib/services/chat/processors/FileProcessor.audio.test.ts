@@ -320,6 +320,52 @@ describe('FileProcessor A/V branch', () => {
         },
       ]);
     });
+
+    // Size GROWTH across transcoding: extraction is a fixed 128kbps mp3, so a
+    // small high-compression source (a long opus/ogg voice memo well under
+    // 25MB) can inflate PAST the Whisper cap. Routing must key off the
+    // post-extraction size, not the original — otherwise Whisper rejects the
+    // oversized payload with a 413.
+    it('routes a ≤25MB source whose EXTRACTED audio exceeds 25MB to chunked', async () => {
+      const extractedPath = '/tmp/memo.opus_audio.mp3';
+      extractorMocks.extractAudioFromVideo.mockResolvedValue({
+        outputPath: extractedPath,
+      });
+      chunkedMocks.startJob.mockResolvedValue({
+        jobId: 'job-456',
+        totalChunks: 5,
+      });
+      // Audio (not video) content — extraction still required because opus
+      // is not Whisper-native.
+      validationMocks.validateBufferSignature.mockReturnValue({
+        isValid: true,
+        detectedType: 'audio',
+        detectedFormat: 'ogg',
+        expectedType: 'any',
+        confidence: 'high',
+      });
+      fsMocks.stat
+        .mockResolvedValueOnce({ size: 20 * 1024 * 1024 } as any) // (1) original: under the cap
+        .mockResolvedValue({ size: 110 * 1024 * 1024 } as any); // (2)(3) extracted mp3: way over
+
+      const { processor } = makeProcessor();
+      const result = await processor.execute(audioContext('memo.opus'));
+
+      expect(extractorMocks.extractAudioFromVideo).toHaveBeenCalledWith(
+        '/tmp/memo.opus',
+      );
+      // Must NOT go to Whisper — the extracted mp3 is over the cap.
+      expect(whisperMocks.transcribe).not.toHaveBeenCalled();
+      expect(chunkedMocks.startJob).toHaveBeenCalledWith(
+        extractedPath,
+        'memo.opus',
+        'test-user-123',
+        expect.anything(),
+      );
+      expect(result.processedContent?.pendingTranscriptions).toEqual([
+        expect.objectContaining({ jobId: 'job-456', jobType: 'chunked' }),
+      ]);
+    });
   });
 
   describe('error mapping (StandardChatHandler contract)', () => {
