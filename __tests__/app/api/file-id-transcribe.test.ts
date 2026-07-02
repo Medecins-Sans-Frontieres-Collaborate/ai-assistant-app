@@ -48,16 +48,35 @@ vi.mock('@/lib/utils/server/audio/audioExtractor', () => extractorMocks);
 // `extractorMocks` declaration above to avoid a temporal-dead-zone reference.
 const { extractAudioFromVideo, isFFmpegAvailable } = extractorMocks;
 
-vi.mock('@/lib/constants/fileTypes', async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import('@/lib/constants/fileTypes')>();
-  return { ...actual };
-});
+// Batch transcription service — reached when extraction pushes a file over
+// the Whisper cap (fall-through) or the original blob is >25MB.
+const batchMocks = vi.hoisted(() => ({
+  isConfigured: vi.fn().mockReturnValue(true),
+  submitTranscription: vi.fn(),
+  recordBatchJobOwner: vi.fn(),
+}));
 
-// Mock fs, os, and path
+vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
+  BatchTranscriptionService: class {
+    isConfigured = batchMocks.isConfigured;
+    submitTranscription = batchMocks.submitTranscription;
+  },
+}));
+
+vi.mock('@/lib/services/transcription/batchJobRegistry', () => ({
+  recordBatchJobOwner: batchMocks.recordBatchJobOwner,
+}));
+
+// Mock fs, os, and path. `promises.stat` is used by the route to re-check
+// the extracted audio size against the Whisper cap.
+const fsMocks = vi.hoisted(() => ({
+  stat: vi.fn(),
+}));
+
 vi.mock('fs', () => ({
   default: {
     unlink: vi.fn((path, callback) => callback(null)),
+    promises: { stat: fsMocks.stat },
   },
 }));
 
@@ -88,6 +107,7 @@ describe('/api/file/[id]/transcribe', () => {
 
   const mockBlobStorageClient = {
     getBlockBlobClient: vi.fn(),
+    generateSasUrl: vi.fn(),
   };
 
   const mockTranscriptionService = {
@@ -123,6 +143,13 @@ describe('/api/file/[id]/transcribe', () => {
     );
     vi.mocked(tmpdir).mockReturnValue('/tmp');
     vi.mocked(join).mockImplementation((...parts) => parts.join('/'));
+    // Extracted audio defaults to a small size (well under the Whisper cap).
+    fsMocks.stat.mockResolvedValue({ size: 1024 * 1024 });
+    batchMocks.isConfigured.mockReturnValue(true);
+    batchMocks.submitTranscription.mockResolvedValue('batch-job-1');
+    mockBlobStorageClient.generateSasUrl.mockResolvedValue(
+      'https://example.com/sas',
+    );
   });
 
   const createRequest = (id: string): NextRequest => {
@@ -587,6 +614,40 @@ describe('/api/file/[id]/transcribe', () => {
         mockTranscriptionService.transcribe.mock.calls[0][0];
       expect(transcribePath).toContain('song.mp3');
       expect(transcribePath).not.toBe(extractedPath);
+    });
+
+    it('falls back to batch when extracted audio exceeds the Whisper cap', async () => {
+      // A ≤25MB high-compression source (e.g. a 2h opus voice memo) can
+      // transcode to an mp3 well over Whisper's 25MB limit. The route must
+      // re-check the extracted size and reroute to batch instead of sending
+      // an oversized payload to Whisper.
+      const opusId = 'longmemo.opus';
+      vi.mocked(extractAudioFromVideo).mockResolvedValue({
+        outputPath: '/tmp/longmemo_audio.mp3',
+      });
+      fsMocks.stat.mockResolvedValue({ size: 100 * 1024 * 1024 }); // 100MB
+
+      const request = createRequest(opusId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: opusId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.async).toBe(true);
+      expect(data.jobId).toBe('batch-job-1');
+      // Whisper must NOT receive the oversized mp3.
+      expect(mockTranscriptionService.transcribe).not.toHaveBeenCalled();
+      // The batch job gets the ORIGINAL blob via SAS URL.
+      expect(batchMocks.submitTranscription).toHaveBeenCalledWith(
+        'https://example.com/sas',
+      );
+      expect(batchMocks.recordBatchJobOwner).toHaveBeenCalledWith(
+        'batch-job-1',
+        'test-user-id',
+      );
+      // The source blob must not be deleted — batch still needs it.
+      expect(mockBlockBlobClient.delete).not.toHaveBeenCalled();
     });
 
     it('extracts audio for other non-native containers (.ogg, .flac, .mov)', async () => {
