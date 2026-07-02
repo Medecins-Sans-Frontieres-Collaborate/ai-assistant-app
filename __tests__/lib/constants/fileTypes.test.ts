@@ -65,6 +65,8 @@ describe('AUDIO_VIDEO_EXTENSIONS / isAudioVideoFile', () => {
     '.aac',
     '.opus',
     '.3gp',
+    '.mpg',
+    '.wma',
   ];
 
   it('includes every documented transcribable extension', () => {
@@ -142,6 +144,8 @@ describe('WHISPER_NATIVE_EXTENSIONS / isWhisperNativeFormat', () => {
       '.aac',
       '.opus',
       '.3gp',
+      '.mpg',
+      '.wma',
     ];
     for (const ext of needsTranscoding) {
       expect(

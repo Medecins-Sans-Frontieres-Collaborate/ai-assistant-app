@@ -60,10 +60,12 @@ describe('fileLimits', () => {
       expect(getFileCategory('recording.flac')).toBe('audio');
       expect(getFileCategory('clip.aac')).toBe('audio');
       expect(getFileCategory('clip.opus')).toBe('audio');
+      expect(getFileCategory('song.wma')).toBe('audio');
     });
 
     it('categorizes the newly added video containers as video', () => {
       expect(getFileCategory('clip.3gp')).toBe('video');
+      expect(getFileCategory('movie.mpg')).toBe('video');
     });
 
     // `.ts` is TypeScript, not MPEG-TS, from this app's perspective — it must
@@ -294,7 +296,7 @@ describe('fileLimits', () => {
     });
 
     it('applies the audio (1GB) cap to the newly added audio containers', () => {
-      for (const ext of ['.ogg', '.oga', '.flac', '.aac', '.opus']) {
+      for (const ext of ['.ogg', '.oga', '.flac', '.aac', '.opus', '.wma']) {
         const result = validateFileSizeRaw(`song${ext}`, 500 * 1024 * 1024);
         expect(result.valid, `expected valid for ${ext}`).toBe(true);
         expect(result.category, `expected audio for ${ext}`).toBe('audio');
