@@ -46,8 +46,11 @@ const AUDIO_EXTENSIONS = [
   '.m4a',
   '.wav',
   '.ogg',
+  '.oga',
   '.flac',
   '.aac',
+  '.opus',
+  '.wma',
   '.mpeg',
   '.mpga',
 ];
@@ -55,15 +58,21 @@ const AUDIO_EXTENSIONS = [
 /**
  * Video file extensions.
  * Note: .webm defaults to video if MIME type is unavailable.
+ * `.m4v` and `.3gp` are video containers whose audio track is extracted.
+ * `.ts` is deliberately excluded — it collides with TypeScript source files
+ * (see AUDIO_VIDEO_EXTENSIONS in lib/constants/fileTypes.ts).
  */
 const VIDEO_EXTENSIONS = [
   '.mp4',
+  '.m4v',
   '.mkv',
   '.mov',
   '.avi',
   '.flv',
   '.wmv',
   '.webm',
+  '.3gp',
+  '.mpg',
 ];
 
 /**

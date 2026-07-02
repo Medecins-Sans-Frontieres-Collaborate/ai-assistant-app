@@ -10,9 +10,11 @@ import {
   IconFolder,
   IconTrash,
 } from '@tabler/icons-react';
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 
 import { Conversation } from '@/types/chat';
+
+import { DropdownPortal } from '@/components/UI/DropdownPortal';
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -44,24 +46,12 @@ function ConversationItemInner({
   const [editingName, setEditingName] = useState(
     conversation.name || t('New Conversation'),
   );
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-        setShowFolderSubmenu(false);
-      }
-    };
-
-    if (showMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [showMenu]);
+  const handleCloseMenu = useCallback(() => {
+    setShowMenu(false);
+    setShowFolderSubmenu(false);
+  }, []);
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = 'move';
@@ -122,12 +112,12 @@ function ConversationItemInner({
         </span>
       )}
       <div
-        ref={menuRef}
         className={`relative shrink-0 transition-opacity ${showMenu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
       >
         {!isEditing && (
           <>
             <button
+              ref={menuTriggerRef}
               className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={(e) => {
                 e.stopPropagation();
@@ -144,10 +134,16 @@ function ConversationItemInner({
           </>
         )}
 
-        {/* Dropdown menu */}
-        {showMenu && (
+        {/* Dropdown menu — portaled so it isn't trapped by the virtualized
+            rows' transform stacking contexts or clipped by the list scroller */}
+        <DropdownPortal
+          triggerRef={menuTriggerRef}
+          isOpen={showMenu}
+          onClose={handleCloseMenu}
+          align="right"
+        >
           <div
-            className="absolute right-0 top-full mt-1 z-10 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
+            className="w-48 max-h-[60vh] overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-1">
@@ -156,7 +152,7 @@ function ConversationItemInner({
                 className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowMenu(false);
+                  handleCloseMenu();
                   setIsEditing(true);
                   setEditingName(conversation.name || t('New Conversation'));
                 }}
@@ -205,8 +201,7 @@ function ConversationItemInner({
                       onClick={(e) => {
                         e.stopPropagation();
                         handleMoveToFolder(conversation.id, null);
-                        setShowMenu(false);
-                        setShowFolderSubmenu(false);
+                        handleCloseMenu();
                       }}
                     >
                       {t('No folder')}
@@ -221,8 +216,7 @@ function ConversationItemInner({
                         onClick={(e) => {
                           e.stopPropagation();
                           handleMoveToFolder(conversation.id, folder.id);
-                          setShowMenu(false);
-                          setShowFolderSubmenu(false);
+                          handleCloseMenu();
                         }}
                       >
                         <span className="truncate">{folder.name}</span>
@@ -240,7 +234,7 @@ function ConversationItemInner({
                 className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowMenu(false);
+                  handleCloseMenu();
                   handleExportConversation(conversation);
                 }}
               >
@@ -256,7 +250,7 @@ function ConversationItemInner({
                 className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowMenu(false);
+                  handleCloseMenu();
                   handleDeleteConversation(conversation.id, e);
                 }}
               >
@@ -265,7 +259,7 @@ function ConversationItemInner({
               </button>
             </div>
           </div>
-        )}
+        </DropdownPortal>
       </div>
     </div>
   );

@@ -425,6 +425,36 @@ export async function uploadChunkAction(
       };
     }
 
+    // Magic-byte validation for audio/video, mirroring the whole-file paths
+    // (uploadFileToBlobStorage / the upload route). Chunked uploads previously
+    // skipped this entirely, so any >10MB file bypassed the signature gate.
+    // The file header lives in chunk 0; later chunks are arbitrary media data.
+    if (chunkIndex === 0) {
+      const isAudioVideo =
+        (session.mimeType &&
+          (session.mimeType.startsWith('audio/') ||
+            session.mimeType.startsWith('video/'))) ||
+        session.filetype === 'audio' ||
+        session.filetype === 'video';
+
+      if (isAudioVideo) {
+        const signatureValidation = validateBufferSignature(
+          chunkBuffer,
+          'any',
+          session.filename,
+        );
+        if (!signatureValidation.isValid) {
+          return {
+            success: false,
+            chunkIndex,
+            error:
+              signatureValidation.error ||
+              'File content does not match expected audio/video format',
+          };
+        }
+      }
+    }
+
     // Get blob storage client
     const blobStorageClient = createBlobStorageClient(authSession);
 

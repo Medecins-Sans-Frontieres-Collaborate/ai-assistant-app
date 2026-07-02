@@ -73,4 +73,5 @@ export type ServiceName =
   | 'azureSearch'
   | 'azureBlobStorage'
   | 'azureBlobStorageEU'
-  | 'azureSpeechWhisper';
+  | 'azureSpeechWhisper'
+  | 'ffmpeg';

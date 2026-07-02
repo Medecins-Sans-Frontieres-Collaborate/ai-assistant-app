@@ -1,0 +1,9 @@
+# Configuration for GitHub's auto-generated release notes, used by the
+# create_release job in ci-cd.yml (gh release create --generate-notes).
+# Single "What's Changed" section since PRs aren't labeled; label-based
+# categories can be added here later with no workflow change.
+changelog:
+  exclude:
+    authors:
+      - dependabot
+      - github-actions

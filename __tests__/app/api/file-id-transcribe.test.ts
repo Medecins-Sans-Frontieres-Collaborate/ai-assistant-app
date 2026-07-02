@@ -33,10 +33,50 @@ vi.mock('@/lib/services/transcriptionService', () => ({
   },
 }));
 
-// Mock fs, os, and path
+// Audio extractor is pulled in by the route for non-Whisper-native formats.
+// Hoisted so tests can assert on the mocks; the route uses .mp3 (Whisper-
+// native) in most existing tests, so extraction isn't invoked there — but the
+// m4v test below exercises the extraction-then-Whisper path added in Part 1.
+const extractorMocks = vi.hoisted(() => ({
+  extractAudioFromVideo: vi.fn(),
+  isFFmpegAvailable: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock('@/lib/utils/server/audio/audioExtractor', () => extractorMocks);
+
+// Pull the mock fns out for per-test assertions. Must come after the
+// `extractorMocks` declaration above to avoid a temporal-dead-zone reference.
+const { extractAudioFromVideo, isFFmpegAvailable } = extractorMocks;
+
+// Batch transcription service — reached when extraction pushes a file over
+// the Whisper cap (fall-through) or the original blob is >25MB.
+const batchMocks = vi.hoisted(() => ({
+  isConfigured: vi.fn().mockReturnValue(true),
+  submitTranscription: vi.fn(),
+  recordBatchJobOwner: vi.fn(),
+}));
+
+vi.mock('@/lib/services/transcription/batchTranscriptionService', () => ({
+  BatchTranscriptionService: class {
+    isConfigured = batchMocks.isConfigured;
+    submitTranscription = batchMocks.submitTranscription;
+  },
+}));
+
+vi.mock('@/lib/services/transcription/batchJobRegistry', () => ({
+  recordBatchJobOwner: batchMocks.recordBatchJobOwner,
+}));
+
+// Mock fs, os, and path. `promises.stat` is used by the route to re-check
+// the extracted audio size against the Whisper cap.
+const fsMocks = vi.hoisted(() => ({
+  stat: vi.fn(),
+}));
+
 vi.mock('fs', () => ({
   default: {
     unlink: vi.fn((path, callback) => callback(null)),
+    promises: { stat: fsMocks.stat },
   },
 }));
 
@@ -67,6 +107,7 @@ describe('/api/file/[id]/transcribe', () => {
 
   const mockBlobStorageClient = {
     getBlockBlobClient: vi.fn(),
+    generateSasUrl: vi.fn(),
   };
 
   const mockTranscriptionService = {
@@ -102,6 +143,13 @@ describe('/api/file/[id]/transcribe', () => {
     );
     vi.mocked(tmpdir).mockReturnValue('/tmp');
     vi.mocked(join).mockImplementation((...parts) => parts.join('/'));
+    // Extracted audio defaults to a small size (well under the Whisper cap).
+    fsMocks.stat.mockResolvedValue({ size: 1024 * 1024 });
+    batchMocks.isConfigured.mockReturnValue(true);
+    batchMocks.submitTranscription.mockResolvedValue('batch-job-1');
+    mockBlobStorageClient.generateSasUrl.mockResolvedValue(
+      'https://example.com/sas',
+    );
   });
 
   const createRequest = (id: string): NextRequest => {
@@ -503,6 +551,122 @@ describe('/api/file/[id]/transcribe', () => {
       const data = await parseJsonResponse(response);
 
       expect(data.transcript).toBe(unicodeTranscript);
+    });
+  });
+
+  // Regression for issue #90: the legacy route previously sent raw video
+  // containers (m4v, mov, …) straight to Whisper, which rejects them with a
+  // 4xx. After the Part 1 fix, non-Whisper-native formats go through ffmpeg
+  // audio extraction first. These tests lock that behavior.
+  describe('Non-Whisper-native format extraction (issue #90)', () => {
+    const m4vId = 'recording.m4v';
+    const extractedPath = '/tmp/extracted.m4v_audio.mp3';
+
+    beforeEach(() => {
+      vi.mocked(extractAudioFromVideo).mockResolvedValue({
+        outputPath: extractedPath,
+      });
+      vi.mocked(isFFmpegAvailable).mockResolvedValue(true);
+      mockTranscriptionService.transcribe.mockResolvedValue('m4v transcript');
+    });
+
+    it('extracts audio from an .m4v before transcribing', async () => {
+      const request = createRequest(m4vId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: m4vId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      // Extraction must run (m4v is not Whisper-native).
+      expect(extractAudioFromVideo).toHaveBeenCalledTimes(1);
+      // Whisper receives the extracted mp3, not the raw m4v.
+      expect(mockTranscriptionService.transcribe).toHaveBeenCalledWith(
+        extractedPath,
+      );
+      expect(data.transcript).toBe('m4v transcript');
+    });
+
+    it('returns 500 when ffmpeg is unavailable for a non-Whisper-native file', async () => {
+      vi.mocked(isFFmpegAvailable).mockResolvedValue(false);
+
+      const request = createRequest(m4vId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: m4vId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(500);
+      expect(data.message).toBe('Failed to transcribe audio');
+      // Extraction must NOT be attempted when ffmpeg isn't available.
+      expect(extractAudioFromVideo).not.toHaveBeenCalled();
+    });
+
+    it('does NOT extract audio for a Whisper-native .mp3', async () => {
+      const mp3Id = 'song.mp3';
+      const request = createRequest(mp3Id);
+      await GET(request, { params: Promise.resolve({ id: mp3Id }) });
+
+      // mp3 is Whisper-native → no extraction.
+      expect(extractAudioFromVideo).not.toHaveBeenCalled();
+      // Whisper receives the original temp path (joined as /tmp/<uuid>_song.mp3).
+      const transcribePath =
+        mockTranscriptionService.transcribe.mock.calls[0][0];
+      expect(transcribePath).toContain('song.mp3');
+      expect(transcribePath).not.toBe(extractedPath);
+    });
+
+    it('falls back to batch when extracted audio exceeds the Whisper cap', async () => {
+      // A ≤25MB high-compression source (e.g. a 2h opus voice memo) can
+      // transcode to an mp3 well over Whisper's 25MB limit. The route must
+      // re-check the extracted size and reroute to batch instead of sending
+      // an oversized payload to Whisper.
+      const opusId = 'longmemo.opus';
+      vi.mocked(extractAudioFromVideo).mockResolvedValue({
+        outputPath: '/tmp/longmemo_audio.mp3',
+      });
+      fsMocks.stat.mockResolvedValue({ size: 100 * 1024 * 1024 }); // 100MB
+
+      const request = createRequest(opusId);
+      const response = await GET(request, {
+        params: Promise.resolve({ id: opusId }),
+      });
+      const data = await parseJsonResponse(response);
+
+      expect(response.status).toBe(200);
+      expect(data.async).toBe(true);
+      expect(data.jobId).toBe('batch-job-1');
+      // Whisper must NOT receive the oversized mp3.
+      expect(mockTranscriptionService.transcribe).not.toHaveBeenCalled();
+      // The batch job gets the ORIGINAL blob via SAS URL.
+      expect(batchMocks.submitTranscription).toHaveBeenCalledWith(
+        'https://example.com/sas',
+      );
+      expect(batchMocks.recordBatchJobOwner).toHaveBeenCalledWith(
+        'batch-job-1',
+        'test-user-id',
+      );
+      // The source blob must not be deleted — batch still needs it.
+      expect(mockBlockBlobClient.delete).not.toHaveBeenCalled();
+    });
+
+    it('extracts audio for other non-native containers (.ogg, .flac, .mov)', async () => {
+      for (const id of ['song.ogg', 'recording.flac', 'clip.mov']) {
+        vi.clearAllMocks();
+        vi.mocked(extractAudioFromVideo).mockResolvedValue({
+          outputPath: `/tmp/${id}_audio.mp3`,
+        });
+        vi.mocked(isFFmpegAvailable).mockResolvedValue(true);
+        mockTranscriptionService.transcribe.mockResolvedValue('transcript');
+
+        const request = createRequest(id);
+        await GET(request, { params: Promise.resolve({ id }) });
+
+        expect(
+          extractAudioFromVideo,
+          `expected extraction for ${id}`,
+        ).toHaveBeenCalledTimes(1);
+      }
     });
   });
 });

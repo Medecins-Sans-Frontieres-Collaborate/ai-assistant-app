@@ -109,6 +109,7 @@ export class HealthCheckService {
             'azureBlobStorage',
             'azureBlobStorageEU',
             'azureSpeechWhisper',
+            'ffmpeg',
           ];
 
     // Run all checks in parallel with timeouts
@@ -228,8 +229,49 @@ export class HealthCheckService {
         return this.checkAzureBlobStorageEU();
       case 'azureSpeechWhisper':
         return this.checkAzureSpeechWhisper();
+      case 'ffmpeg':
+        return this.checkFfmpeg();
       default:
         return { status: 'skip', message: 'unknown service' };
+    }
+  }
+
+  /**
+   * Checks that a working FFmpeg binary is available on the server.
+   *
+   * Transcription depends on it for every non-Whisper-native format: video
+   * containers (mkv/mov/m4v/…), compressed audio (ogg/flac/aac/opus), the
+   * chunked splitter for >25MB files, and notably Firefox voice capture
+   * (whose MediaRecorder produces audio/ogg, transcoded server-side). A
+   * missing/broken binary silently degrades all of those — this makes it an
+   * observable deep-check failure instead. Dynamic import because the
+   * extractor module resolves binary paths (execSync) at load time.
+   */
+  private async checkFfmpeg(): Promise<ServiceCheck> {
+    const startTime = Date.now();
+
+    try {
+      const { isFFmpegAvailable } =
+        await import('@/lib/utils/server/audio/audioExtractor');
+      const available = await isFFmpegAvailable();
+      const latencyMs = Date.now() - startTime;
+
+      if (available) {
+        return { status: 'pass', latencyMs };
+      }
+      return {
+        status: 'fail',
+        latencyMs,
+        message:
+          'FFmpeg binary not found or not functional (set FFMPEG_BIN or install ffmpeg-static)',
+      };
+    } catch (error) {
+      const latencyMs = Date.now() - startTime;
+      return {
+        status: 'fail',
+        latencyMs,
+        message: error instanceof Error ? error.message : 'unknown error',
+      };
     }
   }
 
