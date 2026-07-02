@@ -120,7 +120,8 @@ export const Sidebar = memo(function Sidebar() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const newChatButtonRef = useRef<HTMLDivElement>(null);
   const newFolderButtonRef = useRef<HTMLDivElement>(null);
-  const folderMenuRef = useRef<HTMLDivElement>(null);
+  // Attached to the open folder menu's trigger button (one menu open at a time)
+  const folderMenuTriggerRef = useRef<HTMLButtonElement>(null);
 
   // Determine which conversations to display (search results or all)
   const displayConversations = searchTerm
@@ -192,24 +193,10 @@ export const Sidebar = memo(function Sidebar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Close folder menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        folderMenuRef.current &&
-        !folderMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowFolderMenuId(null);
-      }
-    };
-
-    if (showFolderMenuId) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [showFolderMenuId]);
+  const handleCloseFolderMenu = useCallback(
+    () => setShowFolderMenuId(null),
+    [],
+  );
 
   const handleNewConversation = () => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
@@ -766,16 +753,16 @@ export const Sidebar = memo(function Sidebar() {
                         </span>
                       )}
                       <div
-                        ref={
-                          showFolderMenuId === folder.id
-                            ? folderMenuRef
-                            : undefined
-                        }
                         className={`relative shrink-0 transition-opacity ${showFolderMenuId === folder.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                       >
                         {folderManager.editingFolderId !== folder.id && (
                           <>
                             <button
+                              ref={
+                                showFolderMenuId === folder.id
+                                  ? folderMenuTriggerRef
+                                  : undefined
+                              }
                               className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -797,10 +784,17 @@ export const Sidebar = memo(function Sidebar() {
                               />
                             </button>
 
-                            {/* Dropdown menu */}
-                            {showFolderMenuId === folder.id && (
+                            {/* Dropdown menu — portaled so it isn't clipped
+                                by the sidebar scroller or overpainted by
+                                sibling rows' stacking contexts */}
+                            <DropdownPortal
+                              triggerRef={folderMenuTriggerRef}
+                              isOpen={showFolderMenuId === folder.id}
+                              onClose={handleCloseFolderMenu}
+                              align="right"
+                            >
                               <div
-                                className="absolute right-0 top-full mt-1 z-50 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
+                                className="w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="p-1">
@@ -863,7 +857,7 @@ export const Sidebar = memo(function Sidebar() {
                                   </button>
                                 </div>
                               </div>
-                            )}
+                            </DropdownPortal>
                           </>
                         )}
                       </div>
