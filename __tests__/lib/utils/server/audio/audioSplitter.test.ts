@@ -154,6 +154,46 @@ describe.skipIf(!canRun)('splitAudioFile (real ffmpeg)', () => {
       splitAudioFile(fixturePath, { jobId: '../escape' }),
     ).rejects.toThrow(/invalid jobid/i);
   });
+
+  // Post-split defense-in-depth (audioSplitter's oversized-chunk backstop):
+  // a chunk that still exceeds the Whisper cap after splitting can never be
+  // transcribed, so the split must fail as a whole with a PERMANENT (never
+  // retried) error and clean up its chunk files. The production limit is
+  // 25MB; maxChunkSizeBytes is injected small here so the branch fires with
+  // the same cheap fixture.
+  it('fails permanently and cleans up when a chunk exceeds the max chunk size', async () => {
+    const jobId = `audio-splitter-test-${randomUUID()}`;
+    const jobDir = path.join(os.tmpdir(), 'chunked-transcription', jobId);
+
+    let caught: (Error & { errorClass?: string }) | null = null;
+    try {
+      await splitAudioFile(fixturePath, {
+        targetChunkSizeBytes: TARGET_CHUNK_BYTES, // forces a real split (~1MB chunks)
+        maxChunkSizeBytes: 100 * 1024, // every ~1MB chunk is "oversized"
+        outputFormat: 'mp3',
+        jobId,
+      });
+    } catch (error) {
+      caught = error as Error & { errorClass?: string };
+    }
+
+    expect(caught).not.toBeNull();
+    // Non-retryable: chunkedTranscriptionService keys retry policy off this.
+    expect(caught!.errorClass).toBe('permanent');
+    // User-actionable message, not an internal ffmpeg error.
+    expect(caught!.message).toMatch(/could not be split|too long/i);
+
+    // All generated chunks must have been cleaned up.
+    if (fs.existsSync(jobDir)) {
+      const leftover = fs
+        .readdirSync(jobDir)
+        .filter((name) => name.includes('_chunk_'));
+      expect(leftover).toEqual([]);
+    }
+
+    // The caller's input file must be untouched.
+    expect(fs.existsSync(fixturePath)).toBe(true);
+  }, 120_000);
 });
 
 // ===========================================================================
