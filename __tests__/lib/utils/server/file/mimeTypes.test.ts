@@ -58,6 +58,7 @@ describe('mimeTypes', () => {
       expect(MIME_TYPE_MAP.flac).toBe('audio/flac');
       expect(MIME_TYPE_MAP.aac).toBe('audio/aac');
       expect(MIME_TYPE_MAP.opus).toBe('audio/opus');
+      expect(MIME_TYPE_MAP.wma).toBe('audio/x-ms-wma');
     });
 
     it('should contain video types', () => {
@@ -146,6 +147,8 @@ describe('mimeTypes', () => {
       expect(getContentType('clip.mov')).toBe('video/quicktime');
       expect(getContentType('clip.mkv')).toBe('video/x-matroska');
       expect(getContentType('clip.3gp')).toBe('video/3gpp');
+      expect(getContentType('movie.mpg')).toBe('video/mpeg');
+      expect(getContentType('song.wma')).toBe('audio/x-ms-wma');
     });
 
     it('should handle multiple dots in filename', () => {

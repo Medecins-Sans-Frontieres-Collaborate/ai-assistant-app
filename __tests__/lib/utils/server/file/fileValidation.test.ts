@@ -91,6 +91,41 @@ describe('validateBufferSignature — formats added for transcription', () => {
     expect(result.confidence).toBe('high');
   });
 
+  it('accepts .wma (ASF container) as audio with high confidence', () => {
+    const result = validateBufferSignature(
+      header(0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11),
+      'any',
+      'song.wma',
+    );
+    expect(result.isValid).toBe(true);
+    expect(result.detectedFormat).toBe('wma');
+    expect(result.detectedType).toBe('audio');
+    expect(result.confidence).toBe('high');
+  });
+
+  it('still classifies .wmv (same ASF signature) as video', () => {
+    const result = validateBufferSignature(
+      header(0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11),
+      'any',
+      'clip.wmv',
+    );
+    expect(result.isValid).toBe(true);
+    expect(result.detectedFormat).toBe('wmv');
+    expect(result.detectedType).toBe('video');
+  });
+
+  it('accepts .mpg (MPEG program stream) as video', () => {
+    const result = validateBufferSignature(
+      header(0x00, 0x00, 0x01, 0xba),
+      'any',
+      'movie.mpg',
+    );
+    expect(result.isValid).toBe(true);
+    expect(result.detectedFormat).toBe('mpeg');
+    expect(result.detectedType).toBe('video');
+    expect(result.confidence).toBe('high');
+  });
+
   it('does not misread MP3 frame syncs as AAC', () => {
     // 0xFF 0xFB is an MPEG-1 Layer 3 sync — must stay classified as mp3.
     const result = validateBufferSignature(
