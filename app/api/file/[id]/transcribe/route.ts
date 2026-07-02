@@ -15,7 +15,7 @@ import { recordBatchJobOwner } from '@/lib/services/transcription/batchJobRegist
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
-import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
+import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
 import {
@@ -91,11 +91,18 @@ export async function GET(
     const serviceType =
       TranscriptionServiceFactory.getServiceTypeForFileSize(fileSize);
 
-    if (serviceType === 'whisper') {
+    // The Whisper/batch split is decided on the ORIGINAL blob size, but a
+    // non-native format is transcoded to mp3 first — which can push a ≤25MB
+    // high-compression source (opus/ogg/flac) over Whisper's 25MB cap. When
+    // that happens the Whisper attempt below flips this flag and control
+    // falls through to the batch branch with the original blob.
+    let useBatch = serviceType !== 'whisper';
+
+    if (!useBatch) {
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
       let extractedAudioPath: string | null = null;
-      let transcript: string;
+      let transcript: string | null = null;
       try {
         await withAzureRetry(
           () => blockBlobClient.downloadToFile(tmpFilePath),
@@ -119,12 +126,23 @@ export async function GET(
           const extraction = await extractAudioFromVideo(tmpFilePath);
           extractedAudioPath = extraction.outputPath;
           fileToTranscribe = extractedAudioPath;
+
+          const { size: extractedSize } =
+            await fs.promises.stat(fileToTranscribe);
+          if (extractedSize > WHISPER_MAX_SIZE) {
+            console.warn(
+              `[Transcribe] Extracted audio (${(extractedSize / (1024 * 1024)).toFixed(1)}MB) exceeds the Whisper limit; falling back to batch transcription.`,
+            );
+            useBatch = true;
+          }
         }
 
-        const transcriptionService =
-          TranscriptionServiceFactory.getTranscriptionService('whisper');
+        if (!useBatch) {
+          const transcriptionService =
+            TranscriptionServiceFactory.getTranscriptionService('whisper');
 
-        transcript = await transcriptionService.transcribe(fileToTranscribe);
+          transcript = await transcriptionService.transcribe(fileToTranscribe);
+        }
       } finally {
         // Always clean up temp files, even if transcription throws.
         if (extractedAudioPath) {
@@ -132,29 +150,41 @@ export async function GET(
         }
         await unlinkAsync(tmpFilePath).catch(() => {});
       }
-      // Delete the blob after successful transcription. Retry on transient
-      // Azure failures; if the blob is already gone (404), treat as success.
-      try {
-        await withAzureRetry(() => blockBlobClient.delete(), {
-          label: 'blobDelete',
-        });
-      } catch (deleteErr) {
-        const status = (deleteErr as { statusCode?: number })?.statusCode;
-        if (status !== 404) {
-          console.warn(
-            `[Transcribe] Failed to delete source blob after transcription:`,
-            deleteErr,
-          );
-        }
-      }
 
-      const response: TranscriptionResponse = {
-        async: false,
-        transcript,
-      };
-      return NextResponse.json(response);
-    } else {
-      // Asynchronous batch transcription for large files (>25MB)
+      if (transcript !== null) {
+        // Delete the blob after successful transcription. Retry on transient
+        // Azure failures; if the blob is already gone (404), treat as success.
+        try {
+          await withAzureRetry(() => blockBlobClient.delete(), {
+            label: 'blobDelete',
+          });
+        } catch (deleteErr) {
+          const status = (deleteErr as { statusCode?: number })?.statusCode;
+          if (status !== 404) {
+            console.warn(
+              `[Transcribe] Failed to delete source blob after transcription:`,
+              deleteErr,
+            );
+          }
+        }
+
+        const response: TranscriptionResponse = {
+          async: false,
+          transcript,
+        };
+        return NextResponse.json(response);
+      }
+    }
+
+    {
+      // Asynchronous batch transcription for large files (>25MB).
+      //
+      // KNOWN GAP: the blob is submitted to Azure Batch Speech as-is, with no
+      // FFmpeg extraction — video containers (mkv/mov/m4v/…) and any format
+      // the batch service can't decode will fail here. This mirrors the
+      // pre-#90 behavior for >25MB files; the route is deprecated (the chat
+      // pipeline's FileProcessor extracts before size-routing) so the gap is
+      // documented rather than fixed.
       const batchService = new BatchTranscriptionService();
 
       // Check if batch service is configured
