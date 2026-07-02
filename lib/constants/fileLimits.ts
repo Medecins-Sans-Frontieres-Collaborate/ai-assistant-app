@@ -50,6 +50,7 @@ const AUDIO_EXTENSIONS = [
   '.flac',
   '.aac',
   '.opus',
+  '.wma',
   '.mpeg',
   '.mpga',
 ];
@@ -71,6 +72,7 @@ const VIDEO_EXTENSIONS = [
   '.wmv',
   '.webm',
   '.3gp',
+  '.mpg',
 ];
 
 /**

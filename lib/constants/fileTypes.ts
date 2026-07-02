@@ -42,12 +42,14 @@ export const AUDIO_VIDEO_EXTENSIONS = [
   '.flv',
   '.wmv',
   '.3gp',
+  '.mpg',
   // Audio containers Whisper doesn't accept — transcoded to mp3 via FFmpeg
   '.ogg',
   '.oga',
   '.flac',
   '.aac',
   '.opus',
+  '.wma',
 ] as const;
 
 /**
@@ -135,7 +137,7 @@ export function isAudioVideoFileByTypeOrName(
  * Includes MIME type wildcards and explicit extensions for browser compatibility.
  */
 export const TRANSCRIPTION_ACCEPT_TYPES =
-  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.m4v,.mkv,.mov,.avi,.flv,.wmv,.3gp,.ogg,.oga,.flac,.aac,.opus';
+  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.m4v,.mkv,.mov,.avi,.flv,.wmv,.3gp,.mpg,.ogg,.oga,.flac,.aac,.opus,.wma';
 
 /**
  * Accept attribute value for image file inputs.
