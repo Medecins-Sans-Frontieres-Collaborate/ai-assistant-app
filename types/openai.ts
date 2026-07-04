@@ -38,7 +38,7 @@ export interface OpenAIModel {
    * Server validates against `isValidFoundryResourcePath` before any use.
    */
   agentSource?: string;
-  provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic'; // Model provider
+  provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic' | 'mistral'; // Model provider
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires
   supportsTemperature?: boolean; // Whether this model supports custom temperature values
@@ -64,15 +64,26 @@ export enum OpenAIModelID {
   GPT_o3 = 'o3',
   GPT_5_MINI = 'gpt-5-mini',
   GPT_4_1 = 'gpt-4.1',
+  GPT_5_4 = 'gpt-5.4',
+  GPT_5_4_NANO = 'gpt-5.4-nano',
+  GPT_5_3_CHAT = 'gpt-5.3-chat',
+  GPT_5 = 'gpt-5',
+  GPT_5_CHAT = 'gpt-5-chat',
+  GPT_4O = 'gpt-4o',
+  GPT_4_1_MINI = 'gpt-4.1-mini',
   // Anthropic Claude models (via Azure AI Foundry)
   CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
   CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
   CLAUDE_OPUS_4_1 = 'claude-opus-4-1',
   CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
+  CLAUDE_OPUS_4_8 = 'claude-opus-4-8',
+  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
   // Other providers
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
   DEEPSEEK_R1 = 'DeepSeek-R1',
   DEEPSEEK_V3_1 = 'DeepSeek-V3.1',
+  DEEPSEEK_V3_2 = 'DeepSeek-V3.2',
+  MISTRAL_LARGE_3 = 'Mistral-Large-3',
   GROK_3 = 'grok-3',
 }
 
@@ -95,13 +106,24 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_o3,
   OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1,
+  OpenAIModelID.GPT_5_4,
+  OpenAIModelID.GPT_5_4_NANO,
+  OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5,
+  OpenAIModelID.GPT_5_CHAT,
+  OpenAIModelID.GPT_4O,
+  OpenAIModelID.GPT_4_1_MINI,
+  OpenAIModelID.CLAUDE_OPUS_4_8,
   OpenAIModelID.CLAUDE_OPUS_4_6,
   OpenAIModelID.CLAUDE_SONNET_4_6,
+  OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
   OpenAIModelID.CLAUDE_HAIKU_4_5,
   OpenAIModelID.LLAMA_4_MAVERICK,
   OpenAIModelID.DEEPSEEK_R1,
   OpenAIModelID.DEEPSEEK_V3_1,
+  OpenAIModelID.DEEPSEEK_V3_2,
+  OpenAIModelID.MISTRAL_LARGE_3,
   OpenAIModelID.GROK_3,
 ];
 
@@ -134,7 +156,7 @@ const openAIModelSchema = z.object({
   foundryEndpoint: z.string().optional(),
   agentSource: z.string().optional(),
   provider: z
-    .enum(['openai', 'deepseek', 'xai', 'meta', 'anthropic'])
+    .enum(['openai', 'deepseek', 'xai', 'meta', 'anthropic', 'mistral'])
     .optional(),
   knowledgeCutoffDate: z.string().optional(),
   sdk: z.enum(['azure-openai', 'openai', 'anthropic-foundry']).optional(),
