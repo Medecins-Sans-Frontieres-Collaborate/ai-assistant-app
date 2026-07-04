@@ -273,7 +273,7 @@ describe('Chat Utilities', () => {
       });
 
       it('should return false for old model names', () => {
-        expect(checkIsModelValid('gpt-4o', OpenAIModelID)).toBe(false);
+        expect(checkIsModelValid('gpt-4', OpenAIModelID)).toBe(false);
       });
     });
 
