@@ -128,15 +128,15 @@ describe('GET /api/models', () => {
     mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockListDeployedModels.mockResolvedValue([
       deployed('gpt-5.2', 'OpenAI'),
-      deployed('Mistral-Large-3', 'Mistral AI'),
+      deployed('Unknown-New-Model', 'Acme AI'),
     ]);
 
     let { data } = await body(await GET(req()));
-    expect(data.models.map((m) => m.id)).not.toContain('Mistral-Large-3');
+    expect(data.models.map((m) => m.id)).not.toContain('Unknown-New-Model');
 
     mockEnv.SHOW_MODELS_WITHOUT_METADATA = true;
     ({ data } = await body(await GET(req())));
-    expect(data.models.map((m) => m.id)).toContain('Mistral-Large-3');
+    expect(data.models.map((m) => m.id)).toContain('Unknown-New-Model');
   });
 
   it('applies the ring gate server-side (prod-hidden model never reaches client)', async () => {
