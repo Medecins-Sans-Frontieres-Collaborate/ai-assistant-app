@@ -187,7 +187,10 @@ describe('ModelSelect', () => {
     it('sets model with agent capabilities', async () => {
       render(<ModelSelect />);
 
-      const gpt41Button = screen.getByRole('button', { name: /GPT-4\.1/i });
+      // (?! Mini) keeps the match unambiguous now that GPT-4.1 Mini also exists
+      const gpt41Button = screen.getByRole('button', {
+        name: /GPT-4\.1(?! Mini)/i,
+      });
       fireEvent.click(gpt41Button);
 
       await waitFor(() => {
