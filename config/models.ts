@@ -27,6 +27,29 @@ const DEFAULT_FALLBACK_CHAIN: string[] = [
   OpenAIModelID.DEEPSEEK_V3_1,
 ];
 
+/**
+ * Models that have metadata (config/models.json) because they are deployed in
+ * at least one Foundry account, but are NOT yet part of the beta/prod static
+ * offering. While those rings still serve the static list (discovery flag off),
+ * gating them here keeps beta/prod behavior unchanged — the static list is not
+ * region-aware, so an ungated model that isn't deployed in a user's region
+ * would fail at chat time (the original EU drift bug). Remove ids from this
+ * list ring-by-ring as model discovery is enabled / rollout decisions are made.
+ */
+const NOT_YET_ROLLED_OUT: string[] = [
+  OpenAIModelID.GPT_5_4,
+  OpenAIModelID.GPT_5_4_NANO,
+  OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5,
+  OpenAIModelID.GPT_5_CHAT,
+  OpenAIModelID.GPT_4O,
+  OpenAIModelID.GPT_4_1_MINI,
+  OpenAIModelID.CLAUDE_OPUS_4_8,
+  OpenAIModelID.CLAUDE_SONNET_4_5,
+  OpenAIModelID.DEEPSEEK_V3_2,
+  OpenAIModelID.MISTRAL_LARGE_3,
+];
+
 const modelConfigs: Record<Environment, EnvironmentConfig> = {
   localhost: {
     defaultModel: 'gpt-5.2-chat',
@@ -39,14 +62,13 @@ const modelConfigs: Record<Environment, EnvironmentConfig> = {
   beta: {
     defaultModel: 'gpt-5.2-chat',
     // Beta is its own visibility ring (shares a Foundry instance with prod) so a
-    // model can be gated in beta-only without touching prod. Nothing is gated
-    // right now — this list is intentionally empty, matching prod below. Add ids
-    // here to hide an in-test model from prod while keeping it visible in beta.
-    disabledModels: [],
+    // model can be gated in beta-only without touching prod. Add ids here to
+    // hide an in-test model from prod while keeping it visible in beta.
+    disabledModels: [...NOT_YET_ROLLED_OUT],
   },
   prod: {
     defaultModel: 'gpt-5.2-chat',
-    disabledModels: [], // All current models available in production
+    disabledModels: [...NOT_YET_ROLLED_OUT],
   },
 };
 
