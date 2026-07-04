@@ -49,8 +49,11 @@ export function inferProvider(publisher?: string): OpenAIModel['provider'] {
       return 'deepseek';
     case 'xai':
       return 'xai';
+    case 'mistral':
+    case 'mistral ai':
+      return 'mistral';
     default:
-      // e.g. "Mistral AI" — no provider enum value; leave undefined (generic UI).
+      // Unmapped publisher — leave undefined (generic UI).
       return undefined;
   }
 }
@@ -86,6 +89,7 @@ const ALLOWED_PROVIDERS = [
   'xai',
   'meta',
   'anthropic',
+  'mistral',
 ] as const satisfies readonly NonNullable<OpenAIModel['provider']>[];
 
 /**
