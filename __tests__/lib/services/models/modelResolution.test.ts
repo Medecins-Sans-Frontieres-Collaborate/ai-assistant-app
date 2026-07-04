@@ -61,7 +61,8 @@ describe('inferProvider', () => {
     expect(inferProvider('Meta')).toBe('meta');
     expect(inferProvider('DeepSeek')).toBe('deepseek');
     expect(inferProvider('xAI')).toBe('xai');
-    expect(inferProvider('Mistral AI')).toBeUndefined();
+    expect(inferProvider('Mistral AI')).toBe('mistral');
+    expect(inferProvider('Cohere')).toBeUndefined();
   });
 });
 
@@ -72,7 +73,7 @@ describe('synthesizeUnknownModel', () => {
     expect(m.name).toBe('Mistral-Large-3');
     expect(m.deploymentName).toBe('Mistral-Large-3');
     expect(m.sdk).toBe('openai');
-    expect(m.provider).toBeUndefined();
+    expect(m.provider).toBe('mistral');
     expect(m.supportsVision).toBe(false);
     expect(m.supportsTemperature).toBe(true); // non-azure-openai default
     expect(m.maxLength).toBeGreaterThan(0);
