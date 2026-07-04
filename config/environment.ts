@@ -183,8 +183,25 @@ function validateEnv() {
 
     return parsed.data;
   } else {
-    // Client-side: only validate NEXT_PUBLIC_ variables
-    const parsed = clientEnvSchema.safeParse(process.env);
+    // Client-side: only validate NEXT_PUBLIC_ variables.
+    //
+    // Each variable MUST be referenced as a literal `process.env.NEXT_PUBLIC_X`
+    // member expression: the bundler inlines exactly those expressions into the
+    // client bundle, while a bare `process.env` compiles to an empty shim —
+    // passing it to safeParse would silently reduce every value to its schema
+    // default in the browser.
+    const parsed = clientEnvSchema.safeParse({
+      NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
+      NEXT_PUBLIC_BUILD: process.env.NEXT_PUBLIC_BUILD,
+      NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT:
+        process.env.NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT,
+      NEXT_PUBLIC_DEFAULT_TEMPERATURE:
+        process.env.NEXT_PUBLIC_DEFAULT_TEMPERATURE,
+      NEXT_PUBLIC_EMAIL: process.env.NEXT_PUBLIC_EMAIL,
+      LAUNCHDARKLY_CLIENT_ID: process.env.LAUNCHDARKLY_CLIENT_ID,
+      NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED:
+        process.env.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED,
+    });
 
     if (!parsed.success) {
       console.error('❌ Invalid client environment variables:');
