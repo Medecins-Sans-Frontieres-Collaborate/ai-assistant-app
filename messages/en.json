@@ -1484,10 +1484,6 @@
     },
     "favorites": "Favorites",
     "euResidencyNote": "All models run in the EU Azure region.",
-    "types": {
-      "reasoning": "Reasoning",
-      "general": "General"
-    },
     "hostedRegion": {
       "label": "Hosted region",
       "processedIn": "This conversation is processed in the {region} Azure region.",
@@ -1495,7 +1491,8 @@
     },
     "version": {
       "label": "Version"
-    }
+    },
+    "reasoningModel": "Reasoning model: thinks step-by-step before answering. Slower, better on hard problems."
   },
   "models": {
     "gpt_4_1": {
