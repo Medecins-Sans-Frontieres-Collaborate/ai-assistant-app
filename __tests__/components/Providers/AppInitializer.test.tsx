@@ -26,6 +26,15 @@ vi.mock('@/config/environment', async (importOriginal) => {
   };
 });
 
+// Mutable session holder (overrides the global vitest.setup.dom.ts mock) so
+// tests can control the user's region for the selectability gate.
+const mockSession = vi.hoisted(() => ({
+  data: null as { user: { region: 'US' | 'EU' } } | null,
+}));
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({ data: mockSession.data, status: 'authenticated' }),
+}));
+
 describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
   const settingsInitial = useSettingsStore.getState();
   const conversationInitial = useConversationStore.getState();
@@ -33,6 +42,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     flag.discoveryEnabled = false;
+    mockSession.data = null;
     useSettingsStore.setState(settingsInitial, true);
     useConversationStore.setState(conversationInitial, true);
   });
@@ -147,5 +157,93 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     // Default still present → no re-resolution.
     expect(setDefaultSpy).not.toHaveBeenCalled();
     expect(useSettingsStore.getState().defaultModelId).toBe('keep-me');
+  });
+
+  it('records modelListSource=static when discovery is disabled', async () => {
+    flag.discoveryEnabled = false;
+    vi.stubGlobal('fetch', vi.fn());
+
+    render(<AppInitializer />);
+
+    expect(useSettingsStore.getState().modelListSource).toBe('static');
+  });
+
+  it('records the /api/models source (e.g. discovery-partial)', async () => {
+    flag.discoveryEnabled = true;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          data: {
+            models: [{ id: 'gpt-5.2', name: 'x', maxLength: 1, tokenLimit: 1 }],
+            source: 'discovery-partial',
+          },
+        }),
+      }),
+    );
+
+    render(<AppInitializer />);
+
+    await waitFor(() =>
+      expect(useSettingsStore.getState().modelListSource).toBe(
+        'discovery-partial',
+      ),
+    );
+  });
+
+  it('mirrors the session region into the settings store', async () => {
+    mockSession.data = { user: { region: 'US' } };
+    vi.stubGlobal('fetch', vi.fn());
+
+    render(<AppInitializer />);
+
+    await waitFor(() =>
+      expect(useSettingsStore.getState().userRegion).toBe('US'),
+    );
+  });
+
+  it('re-resolves the default onto a SELECTABLE model, skipping foreign-region-only entries', async () => {
+    flag.discoveryEnabled = true;
+    mockSession.data = { user: { region: 'EU' } };
+    useSettingsStore
+      .getState()
+      .setDefaultModelId('removed-model' as OpenAIModelID);
+    const setDefaultSpy = vi.spyOn(
+      useSettingsStore.getState(),
+      'setDefaultModelId',
+    );
+
+    // discovered[0] is US-only: an EU user must never be defaulted onto it
+    // (residency). US users are unrestricted — cross-region routing.
+    const discovered = [
+      {
+        id: 'us-only-model',
+        name: 'US Only',
+        maxLength: 1,
+        tokenLimit: 1,
+        hostedIn: ['US'],
+      },
+      {
+        id: 'us-model',
+        name: 'EU Model',
+        maxLength: 1,
+        tokenLimit: 1,
+        hostedIn: ['EU'],
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          data: { models: discovered, source: 'discovery' },
+        }),
+      }),
+    );
+
+    render(<AppInitializer />);
+
+    await waitFor(() => expect(setDefaultSpy).toHaveBeenCalledWith('us-model'));
   });
 });
