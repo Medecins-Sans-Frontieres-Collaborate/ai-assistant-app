@@ -137,4 +137,50 @@ describe('OfficeResolver', () => {
       );
     });
   });
+
+  describe('getModelDiscoveryAccountsForUser', () => {
+    it('US users get home (US) first, then EU for visibility', () => {
+      const accounts =
+        OfficeResolver.getModelDiscoveryAccountsForUser('a@newyork.msf.org');
+      expect(accounts).toEqual([
+        { region: 'US', path: '/subscriptions/us/foo' },
+        { region: 'EU', path: '/subscriptions/eu/bar' },
+      ]);
+    });
+
+    it('EU users get the EU account ONLY (data residency)', () => {
+      const accounts = OfficeResolver.getModelDiscoveryAccountsForUser(
+        'a@amsterdam.msf.org',
+      );
+      expect(accounts).toEqual([
+        { region: 'EU', path: '/subscriptions/eu/bar' },
+      ]);
+    });
+
+    it('unmatched users default to EU only', () => {
+      const accounts =
+        OfficeResolver.getModelDiscoveryAccountsForUser('a@unknown.org');
+      expect(accounts).toEqual([
+        { region: 'EU', path: '/subscriptions/eu/bar' },
+      ]);
+    });
+
+    it('omits accounts whose resource id env var is unset', async () => {
+      const { env } = await import('@/config/environment');
+      const savedEu = env.AZURE_AI_FOUNDRY_RESOURCE_ID_EU;
+      try {
+        env.AZURE_AI_FOUNDRY_RESOURCE_ID_EU = undefined;
+        expect(
+          OfficeResolver.getModelDiscoveryAccountsForUser('a@newyork.msf.org'),
+        ).toEqual([{ region: 'US', path: '/subscriptions/us/foo' }]);
+        expect(
+          OfficeResolver.getModelDiscoveryAccountsForUser(
+            'a@amsterdam.msf.org',
+          ),
+        ).toEqual([]);
+      } finally {
+        env.AZURE_AI_FOUNDRY_RESOURCE_ID_EU = savedEu;
+      }
+    });
+  });
 });
