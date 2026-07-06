@@ -66,6 +66,18 @@ const serverEnvSchema = z.object({
   AZURE_AI_FOUNDRY_RESOURCE_ID_EU: z.string().optional(),
   AZURE_AI_FOUNDRY_RESOURCE_ID_US: z.string().optional(),
 
+  // Per-region chat endpoints for cross-region routing (a US user chatting
+  // with the EU instance of a dually-hosted model, and EU users pinned to EU
+  // resources). Optional: when unset for a region, the endpoint is derived
+  // from AZURE_AI_FOUNDRY_ENDPOINT_{REGION}; when neither exists, chat falls
+  // back to the default (region-blind) clients. Keys are needed because the
+  // Foundry OpenAI-compatible data plane is API-key-authenticated and keys
+  // are account-scoped.
+  AZURE_OPENAI_ENDPOINT_EU: z.string().url().optional(),
+  AZURE_OPENAI_ENDPOINT_US: z.string().url().optional(),
+  OPENAI_API_KEY_EU: z.string().optional(),
+  OPENAI_API_KEY_US: z.string().optional(),
+
   // When true, agent discovery also lists new-model agent objects via the
   // Foundry data plane (in addition to legacy ARM "Agent Application"
   // resources) and unions the results. Best-effort: failures fall back to
