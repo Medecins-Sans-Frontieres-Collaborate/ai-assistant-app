@@ -1299,7 +1299,33 @@
     "modelsDescription": "Elija un modelo de IA para su conversación. Cada modelo tiene diferentes fortalezas — seleccione uno para ver los detalles.",
     "recommended": "Recomendado",
     "familyAll": "Todas",
-    "familyFilterLabel": "Filtrar modelos por familia"
+    "familyFilterLabel": "Filtrar modelos por familia",
+    "searchPlaceholder": "Buscar modelos",
+    "searchEmpty": "Ningún modelo coincide con tu búsqueda.",
+    "star": "Marcar {name} como favorito",
+    "unstar": "Quitar de favoritos {name}",
+    "otherFamily": "Otro",
+    "hostedExternally": "Se ejecuta en la infraestructura propia del proveedor a través de Azure AI Foundry, no en el entorno de Azure de MSF.",
+    "hostedIn": {
+      "label": "Alojado en {regions}",
+      "tooltip": "La(s) región(es) de Azure donde este modelo está desplegado. Las conversaciones se procesan en tu propia región."
+    },
+    "badges": {
+      "external": "Externo",
+      "externalTooltip": "Se ejecuta en la infraestructura propia del proveedor a través de Azure AI Foundry, no en el entorno de Azure de MSF.",
+      "regionHostedTooltip": "Alojado en la región Azure de {region}. Las conversaciones con este modelo se procesan allí."
+    },
+    "favorites": "Favoritos",
+    "euResidencyNote": "Todos los modelos se ejecutan en la región de Azure de la UE.",
+    "hostedRegion": {
+      "label": "Región alojada",
+      "processedIn": "Esta conversación se procesa en la región Azure de {region}.",
+      "euOnlyNote": "{name} está alojado en la región Azure de la UE; las conversaciones con él se procesan allí."
+    },
+    "version": {
+      "label": "Versión"
+    },
+    "reasoningModel": "Modelo de razonamiento: piensa paso a paso antes de responder. Más lento, mejor para problemas complejos."
   },
   "models": {
     "gpt_4_1": {

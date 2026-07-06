@@ -1398,7 +1398,33 @@
     "modelsDescription": "ඔබගේ සංවාදය සඳහා AI ආදර්ශයක් තෝරන්න. එක් එක් ආදර්ශයේ විවිධ ශක්ති තිබේ — තොරගෙන විස්තර බලන්න.",
     "recommended": "නිර්දේශිත",
     "familyAll": "සියල්ල",
-    "familyFilterLabel": "පරිවාරය අනුව මාදිලි පෙරහන් කරන්න"
+    "familyFilterLabel": "පරිවාරය අනුව මාදිලි පෙරහන් කරන්න",
+    "searchPlaceholder": "මාදිලි සොයන්න",
+    "searchEmpty": "ඔබේ සෙවීමට ගැලපෙන මාදිලි නැත.",
+    "star": "{name} තරු යොදන්න",
+    "unstar": "{name} තරු ඉවත් කරන්න",
+    "otherFamily": "වෙනත්",
+    "hostedExternally": "මෙය සැපයුම්කරුගේම යටිතල පහසුකම් මත Azure AI Foundry හරහා ක්‍රියාත්මක වේ, MSF හි Azure පරිසරය තුළ නොව.",
+    "hostedIn": {
+      "label": "ස්ථාපිත ස්ථානය: {regions}",
+      "tooltip": "මෙම මාදිලිය සැපයුම් කර ඇති Azure ප්‍රදේශය(යන්). ඔබේ සංවාද ඔබේම ප්‍රදේශයේම සැකසෙයි."
+    },
+    "badges": {
+      "external": "බාහිර",
+      "externalTooltip": "මෙය සැපයුම්කරුගේම යටිතල පහසුකම් මත Azure AI Foundry හරහා ක්‍රියාත්මක වේ, MSF හි Azure පරිසරය තුළ නොව.",
+      "regionHostedTooltip": "{region} Azure ප්‍රදේශයේ ස්ථාපිතයි. මෙම මාදිලි සමඟ සංවාද එහිම සැකසෙයි."
+    },
+    "favorites": "ප්‍රියතම",
+    "euResidencyNote": "සියලුම මාදිලි EU Azure ප්‍රදේශයේ ක්‍රියාත්මක වේ.",
+    "hostedRegion": {
+      "label": "ස්ථාපිත ප්‍රදේශය",
+      "processedIn": "මෙම සංවාදය සැකසෙන්නේ {region} Azure ප්‍රදේශයේය.",
+      "euOnlyNote": "{name} EU Azure ප්‍රදේශයේ ස්ථාපිතයි; එයට ඇති සංවාද එහිම සැකසෙයි."
+    },
+    "version": {
+      "label": "අනුවාදය"
+    },
+    "reasoningModel": "ඉඟිකිරීම් මාදිලිය: පිළිතුරු ලබාදීමට පෙර පියවරෙන් පියවර සිතයි. තරමක් වේගය අඩු, කටුක ගැටළු වලදී වැඩි කාර්යක්ෂමතාවක්."
   },
   "models": {
     "gpt_4_1": {

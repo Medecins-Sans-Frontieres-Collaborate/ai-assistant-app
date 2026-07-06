@@ -1296,7 +1296,33 @@
     "modelsDescription": "ለንግግርዎ AI ሞዴል ይምረጡ። እያንዳንዱ ሞዴል የተለያዩ ጥናቶች አሉት — ዝርዝሩን ለማየት አንድ ይምረጡ።",
     "recommended": "የሚመከር",
     "familyAll": "ሁሉም",
-    "familyFilterLabel": "ሞዴሎችን በቤተሰብ መተጣበቅ"
+    "familyFilterLabel": "ሞዴሎችን በቤተሰብ መተጣበቅ",
+    "searchPlaceholder": "ሞዴሎችን ይፈልጉ",
+    "searchEmpty": "ከፍለጋዎ ጋር የሚዛመዱ ሞዴሎች የሉም።",
+    "star": "{name} ወደ ውድ ያክሉ",
+    "unstar": "{name} ከውድ ያስወግዱ",
+    "otherFamily": "ሌላ",
+    "hostedExternally": "በAzure AI Foundry በአቅራቢው የራሱ አዋጅ ላይ ይተገበራል፤ በMSF ውስጣዊ Azure አካባቢ አይደለም።",
+    "hostedIn": {
+      "label": "በ{regions} ውስጥ የተያዘ",
+      "tooltip": "ይህ ሞዴል የተገጠመበት የAzure አካባቢ (ቦታ) ነው። ውይይቶችህ በራስዎ አካባቢ ይተገበራሉ።"
+    },
+    "badges": {
+      "external": "ውጫዊ",
+      "externalTooltip": "በAzure AI Foundry በአቅራቢው የራሱ አዋጅ ላይ ይተገበራል፤ በMSF ውስጣዊ Azure አካባቢ አይደለም።",
+      "regionHostedTooltip": "በ{region} የAzure አካባቢ ውስጥ የተያዘ። ከዚህ ሞዴል ጋር የሚደረጉ ውይይቶች በዚያ ይተገበራሉ።"
+    },
+    "favorites": "ውድ",
+    "euResidencyNote": "ሁሉም ሞዴሎች በEU Azure አካባቢ ውስጥ ይተገበራሉ።",
+    "hostedRegion": {
+      "label": "የተያዘበት አካባቢ",
+      "processedIn": "ይህ ውይይት በ{region} የAzure አካባቢ ውስጥ ይተገበራል።",
+      "euOnlyNote": "{name} በEU Azure አካባቢ ተያዝቷል፤ ከእሱ ጋር የሚደረጉ ውይይቶች በዚያ ይተገበራሉ።"
+    },
+    "version": {
+      "label": "እትም"
+    },
+    "reasoningModel": "የአስተያየት ሞዴል፡ ምላሹን ከመስጠት በፊት ደረጃ በደረጃ ያስባል። የሚያዘግዝ፣ በከባድ ችግሮች ላይ ይሻላል።"
   },
   "models": {
     "gpt_4_1": {

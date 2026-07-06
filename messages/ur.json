@@ -1400,7 +1400,33 @@
     "modelsDescription": "اپنی گفتگو کے لیے AI ماڈل منتخب کریں۔ ہر ماڈل کی الگ خصوصیات ہیں — تفصیلات دیکھنے کے لیے کوئی ایک منتخب کریں۔",
     "recommended": "تجویز کردہ",
     "familyAll": "تمام",
-    "familyFilterLabel": "ماڈل خاندان کے لحاظ سے فلٹر کریں"
+    "familyFilterLabel": "ماڈل خاندان کے لحاظ سے فلٹر کریں",
+    "searchPlaceholder": "ماڈلز تلاش کریں",
+    "searchEmpty": "آپ کی تلاش سے کوئی ماڈل مطابقت نہیں رکھتا۔",
+    "star": "{name} کو فیورٹ کریں",
+    "unstar": "{name} کو فیورٹ سے ہٹائیں",
+    "otherFamily": "دیگر",
+    "hostedExternally": "یہ ماڈل Azure AI Foundry کے ذریعے فراہم کنندہ کے اپنے انفراسٹرکچر پر چلتا ہے، MSF کے Azure ماحول میں نہیں۔",
+    "hostedIn": {
+      "label": "ان علاقوں میں ہوسٹڈ: {regions}",
+      "tooltip": "Azure کے جن علاقوں میں یہ ماڈل تعینات ہے۔ آپ کی گفتگو آپ کے اپنے علاقے میں پراسیس ہوتی ہے۔"
+    },
+    "badges": {
+      "external": "بیرونی",
+      "externalTooltip": "یہ ماڈل Azure AI Foundry کے ذریعے فراہم کنندہ کے اپنے انفراسٹرکچر پر چلتا ہے، MSF کے Azure ماحول میں نہیں۔",
+      "regionHostedTooltip": "{region} Azure ریجن میں ہوسٹڈ ہے۔ اس ماڈل کے ساتھ گفتگو وہیں پراسیس ہوتی ہے۔"
+    },
+    "favorites": "پسندیدہ",
+    "euResidencyNote": "تمام ماڈلز EU Azure ریجن میں چلتے ہیں۔",
+    "hostedRegion": {
+      "label": "ہوسٹڈ علاقہ",
+      "processedIn": "یہ گفتگو {region} Azure ریجن میں پراسیس ہو رہی ہے۔",
+      "euOnlyNote": "{name} EU Azure ریجن میں ہوسٹڈ ہے؛ اس سے گفتگو وہیں پراسیس ہوتی ہے۔"
+    },
+    "version": {
+      "label": "ورژن"
+    },
+    "reasoningModel": "ریزننگ ماڈل: جواب دینے سے پہلے مرحلہ وار سوچتا ہے۔ سست ہے، مگر مشکل مسائل میں بہتر ہے۔"
   },
   "models": {
     "gpt_4_1": {

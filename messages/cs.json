@@ -1299,7 +1299,33 @@
     "modelsDescription": "Vyberte AI model pro svou konverzaci. Každý model má jiné přednosti — vyberte jeden pro zobrazení podrobností.",
     "recommended": "Doporučeno",
     "familyAll": "Vše",
-    "familyFilterLabel": "Filtrovat modely podle rodiny"
+    "familyFilterLabel": "Filtrovat modely podle rodiny",
+    "searchPlaceholder": "Hledat modely",
+    "searchEmpty": "Žádné modely neodpovídají vašemu hledání.",
+    "star": "Oblíbený {name}",
+    "unstar": "Odebrat z oblíbených {name}",
+    "otherFamily": "Ostatní",
+    "hostedExternally": "Spouští se na vlastní infrastruktuře poskytovatele přes Azure AI Foundry, nikoliv v prostředí MSF Azure.",
+    "hostedIn": {
+      "label": "Hostováno v {regions}",
+      "tooltip": "Azure region(y), kde je tento model nasazen. Konverzace jsou zpracovávány ve vašem vlastním regionu."
+    },
+    "badges": {
+      "external": "Externí",
+      "externalTooltip": "Spouští se na vlastní infrastruktuře poskytovatele přes Azure AI Foundry, nikoliv v prostředí MSF Azure.",
+      "regionHostedTooltip": "Hostováno v Azure regionu {region}. Konverzace s tímto modelem jsou zpracovávány tam."
+    },
+    "favorites": "Oblíbené",
+    "euResidencyNote": "Všechny modely běží v EU Azure regionu.",
+    "hostedRegion": {
+      "label": "Hostovaný region",
+      "processedIn": "Tato konverzace je zpracovávána v Azure regionu {region}.",
+      "euOnlyNote": "{name} je hostován v EU Azure regionu; konverzace s ním jsou zpracovány tam."
+    },
+    "version": {
+      "label": "Verze"
+    },
+    "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy."
   },
   "models": {
     "gpt_4_1": {

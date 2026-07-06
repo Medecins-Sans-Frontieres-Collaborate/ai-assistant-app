@@ -1299,7 +1299,33 @@
     "modelsDescription": "Sohbetiniz için bir AI modeli seçin. Her modelin güçlü yönleri farklıdır — ayrıntılar için birini seçin.",
     "recommended": "Tavsiye edilen",
     "familyAll": "Tümü",
-    "familyFilterLabel": "Modelleri aileye göre filtrele"
+    "familyFilterLabel": "Modelleri aileye göre filtrele",
+    "searchPlaceholder": "Modelleri ara",
+    "searchEmpty": "Aramanıza uygun model bulunamadı.",
+    "star": "{name} modelini favorilere ekle",
+    "unstar": "{name} modelini favorilerden çıkar",
+    "otherFamily": "Diğer",
+    "hostedExternally": "Azure AI Foundry üzerinden sağlayıcının kendi altyapısında çalışır, MSF'nin Azure ortamında değil.",
+    "hostedIn": {
+      "label": "{regions} bölgesinde barındırılıyor",
+      "tooltip": "Bu modelin dağıtıldığı Azure bölgesi/bölgeleri. Konuşmalarınız kendi bölgenizde işlenir."
+    },
+    "badges": {
+      "external": "Harici",
+      "externalTooltip": "Azure AI Foundry üzerinden sağlayıcının kendi altyapısında çalışır, MSF'nin Azure ortamında değil.",
+      "regionHostedTooltip": "{region} Azure bölgesinde barındırılıyor. Bu modelle yapılan konuşmalar orada işlenir."
+    },
+    "favorites": "Favoriler",
+    "euResidencyNote": "Tüm modeller AB Azure bölgesinde çalışır.",
+    "hostedRegion": {
+      "label": "Barındırıldığı bölge",
+      "processedIn": "Bu konuşma {region} Azure bölgesinde işleniyor.",
+      "euOnlyNote": "{name}, AB Azure bölgesinde barındırılır; onunla yapılan konuşmalar orada işlenir."
+    },
+    "version": {
+      "label": "Sürüm"
+    },
+    "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir."
   },
   "models": {
     "gpt_4_1": {

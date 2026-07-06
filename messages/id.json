@@ -1390,7 +1390,33 @@
     "modelsDescription": "Pilih model AI untuk percakapan Anda. Setiap model memiliki keunggulan berbeda — pilih salah satu untuk melihat detailnya.",
     "recommended": "Direkomendasikan",
     "familyAll": "Semua",
-    "familyFilterLabel": "Saring model berdasarkan keluarga"
+    "familyFilterLabel": "Saring model berdasarkan keluarga",
+    "searchPlaceholder": "Cari model",
+    "searchEmpty": "Tidak ada model yang sesuai dengan pencarian Anda.",
+    "star": "Beri bintang pada {name}",
+    "unstar": "Hapus bintang pada {name}",
+    "otherFamily": "Lainnya",
+    "hostedExternally": "Berjalan di infrastruktur penyedia sendiri melalui Azure AI Foundry, bukan di lingkungan Azure MSF.",
+    "hostedIn": {
+      "label": "Dihosting di {regions}",
+      "tooltip": "Wilayah Azure tempat model ini dideploy. Percakapan diproses di wilayah Anda sendiri."
+    },
+    "badges": {
+      "external": "Eksternal",
+      "externalTooltip": "Berjalan di infrastruktur penyedia sendiri melalui Azure AI Foundry, bukan di lingkungan Azure MSF.",
+      "regionHostedTooltip": "Dihosting di wilayah Azure {region}. Percakapan dengan model ini diproses di sana."
+    },
+    "favorites": "Favorit",
+    "euResidencyNote": "Semua model berjalan di wilayah Azure Uni Eropa.",
+    "hostedRegion": {
+      "label": "Wilayah hosting",
+      "processedIn": "Percakapan ini diproses di wilayah Azure {region}.",
+      "euOnlyNote": "{name} dihosting di wilayah Azure Uni Eropa; percakapan dengannya diproses di sana."
+    },
+    "version": {
+      "label": "Versi"
+    },
+    "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit."
   },
   "models": {
     "gpt_4_1": {

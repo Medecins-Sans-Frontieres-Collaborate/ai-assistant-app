@@ -1299,7 +1299,33 @@
     "modelsDescription": "আপনার কথোপকথনের জন্য একটি AI মডেল নির্বাচন করুন। প্রতিটি মডেলের ভিন্ন বিশেষত্ব আছে — বিস্তারিত দেখতে একটি নির্বাচন করুন।",
     "recommended": "সুপারিশকৃত",
     "familyAll": "সব",
-    "familyFilterLabel": "মডেলগুলোকে পরিবার অনুযায়ী ফিল্টার করুন"
+    "familyFilterLabel": "মডেলগুলোকে পরিবার অনুযায়ী ফিল্টার করুন",
+    "searchPlaceholder": "মডেল অনুসন্ধান করুন",
+    "searchEmpty": "আপনার অনুসন্ধানে কোনো মডেল মিলেনি।",
+    "star": "{name} স্টার করুন",
+    "unstar": "{name} স্টার অপসারণ করুন",
+    "otherFamily": "অন্যান্য",
+    "hostedExternally": "প্রোভাইডারের নিজস্ব অবকাঠামোতে Azure AI Foundry এর মাধ্যমে চলে, MSF-এর Azure পরিবেশে নয়।",
+    "hostedIn": {
+      "label": "হোস্টেড: {regions}",
+      "tooltip": "Azure অঞ্চলে এই মডেল ডিপ্লয় করা হয়েছে। আপনার নিজের অঞ্চলে কথোপকথন প্রক্রিয়া করা হয়।"
+    },
+    "badges": {
+      "external": "বহিঃস্থ",
+      "externalTooltip": "প্রোভাইডারের নিজস্ব অবকাঠামোতে Azure AI Foundry এর মাধ্যমে চলে, MSF-এর Azure পরিবেশে নয়।",
+      "regionHostedTooltip": "{region} Azure অঞ্চলে হোস্টেড। এই মডেলের সাথে কথোপকথন সেখানে প্রক্রিয়া করা হয়।"
+    },
+    "favorites": "প্রিয়",
+    "euResidencyNote": "সব মডেল EU Azure অঞ্চলে চলে।",
+    "hostedRegion": {
+      "label": "হোস্টেড অঞ্চল",
+      "processedIn": "এই কথোপকথন {region} Azure অঞ্চলে প্রক্রিয়া করা হচ্ছে।",
+      "euOnlyNote": "{name} EU Azure অঞ্চলে হোস্টেড; এতে কথোপকথন সেখানে প্রক্রিয়া করা হয়।"
+    },
+    "version": {
+      "label": "ভার্সন"
+    },
+    "reasoningModel": "যুক্তি-ভিত্তিক মডেল: উত্তর দেয়ার আগে ধাপে ধাপে ভাবে। ধীর হলেও কঠিন সমস্যায় ভালো ফল দেয়।"
   },
   "models": {
     "gpt_4_1": {

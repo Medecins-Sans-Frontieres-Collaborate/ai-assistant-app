@@ -1449,7 +1449,33 @@
     "modelsDescription": "Hitamwo uburongozi bwa AI ku biganiro vyawe. Buri model ifise ubuhanga butandukanye — hitamwo imwe kugira urabe amakuru yayo.",
     "recommended": "Vyasabwe",
     "familyAll": "Vyose",
-    "familyFilterLabel": "Sasira ivyitegererezo ku miryango"
+    "familyFilterLabel": "Sasira ivyitegererezo ku miryango",
+    "searchPlaceholder": "Rondera ivyerekezo",
+    "searchEmpty": "Nta vyerekezo bihuye n’ivyo waronderye.",
+    "star": "Shiramwo akamenyetso {name}",
+    "unstar": "Kuraho akamenyetso {name}",
+    "otherFamily": "Ibindi",
+    "hostedExternally": "Irakora ku bikoresho vy’uwo itanga ubushobozi biciye kuri Azure AI Foundry, ntikora muri Azure y’MSF.",
+    "hostedIn": {
+      "label": "Ibikwirikirako muri {regions}",
+      "tooltip": "Agace ka Azure aho iyi model yashizwe. Ibiganiro birahingurirwa mu gace kawe."
+    },
+    "badges": {
+      "external": "Yo hanze",
+      "externalTooltip": "Irakora ku bikoresho vy’uwo itanga ubushobozi biciye kuri Azure AI Foundry, ntikora muri Azure y’MSF.",
+      "regionHostedTooltip": "Yashizwe mu gace ka {region} ka Azure. Ibiganiro ukoresheje iyi model birahingurirwa ng’aho."
+    },
+    "favorites": "Nkundwa",
+    "euResidencyNote": "Vyose bikorera mu gace ka EU ka Azure.",
+    "hostedRegion": {
+      "label": "Agace yashinzwemwo",
+      "processedIn": "Iki kiganiro kirahingurirwa mu gace ka {region} ka Azure.",
+      "euOnlyNote": "{name} yashizwe mu gace ka EU ka Azure; ibiganiro bihakorerwa."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Model yo kwiyumvira: irabanza kwiyumvira yitonze imbere yo kwishura. Irateba ariko irakora neza ku bibazo bigoye."
   },
   "models": {
     "gpt_4_1": {

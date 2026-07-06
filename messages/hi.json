@@ -1299,7 +1299,33 @@
     "modelsDescription": "अपनी बातचीत के लिए एक AI मॉडल चुनें। प्रत्येक मॉडल के अलग-अलग फायदे हैं — विवरण देखने के लिए चुनें।",
     "recommended": "अनुशंसित",
     "familyAll": "सभी",
-    "familyFilterLabel": "परिवार के अनुसार मॉडल छाँटें"
+    "familyFilterLabel": "परिवार के अनुसार मॉडल छाँटें",
+    "searchPlaceholder": "मॉडल खोजें",
+    "searchEmpty": "आपकी खोज से मेल खाने वाला कोई मॉडल नहीं मिला।",
+    "star": "{name} को पसंदीदा बनाएं",
+    "unstar": "{name} को पसंदीदा से हटाएं",
+    "otherFamily": "अन्य",
+    "hostedExternally": "यह मॉडल प्रदाता के अपने बुनियादी ढांचे (Azure AI Foundry) पर चलता है, MSF के Azure वातावरण के अंदर नहीं।",
+    "hostedIn": {
+      "label": "{regions} में होस्टेड",
+      "tooltip": "Azure क्षेत्र जहाँ यह मॉडल डिप्लॉय किया गया है। बातचीत आपके अपने क्षेत्र में प्रोसेस होती है।"
+    },
+    "badges": {
+      "external": "बाहरी",
+      "externalTooltip": "यह मॉडल प्रदाता के अपने बुनियादी ढांचे (Azure AI Foundry) पर चलता है, MSF के Azure वातावरण के अंदर नहीं।",
+      "regionHostedTooltip": "{region} Azure क्षेत्र में होस्टेड। इस मॉडल के साथ हुई बातचीत वहीं प्रोसेस होती है।"
+    },
+    "favorites": "पसंदीदा",
+    "euResidencyNote": "सभी मॉडल EU Azure क्षेत्र में चलते हैं।",
+    "hostedRegion": {
+      "label": "होस्टेड क्षेत्र",
+      "processedIn": "यह बातचीत {region} Azure क्षेत्र में प्रोसेस की गई है।",
+      "euOnlyNote": "{name} EU Azure क्षेत्र में होस्टेड है; इससे होने वाली बातचीत वहीं प्रोसेस होती है।"
+    },
+    "version": {
+      "label": "संस्करण"
+    },
+    "reasoningModel": "रीजनिंग मॉडल: उत्तर देने से पहले चरण-दर-चरण सोचता है। धीमा है, लेकिन कठिन समस्याओं पर बेहतर करता है।"
   },
   "models": {
     "gpt_4_1": {

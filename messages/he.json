@@ -1398,7 +1398,33 @@
     "modelsDescription": "בחר מודל AI לשיחה שלך. לכל מודל יתרונות שונים — בחר מודל כדי לראות פרטים.",
     "recommended": "מומלץ",
     "familyAll": "הכל",
-    "familyFilterLabel": "סנן מודלים לפי משפחה"
+    "familyFilterLabel": "סנן מודלים לפי משפחה",
+    "searchPlaceholder": "חיפוש מודלים",
+    "searchEmpty": "לא נמצאו מודלים התואמים לחיפוש שלך.",
+    "star": "סמן ב-⭐ את {name}",
+    "unstar": "הסר סימון ב-⭐ מ{name}",
+    "otherFamily": "אחר",
+    "hostedExternally": "פועל בתשתית של הספק באמצעות Azure AI Foundry, ולא בסביבת Azure של MSF.",
+    "hostedIn": {
+      "label": "מאוחסן ב-{regions}",
+      "tooltip": "האזור/ים של Azure בהם מודל זה מופעל. שיחות מעובדות באזור שלך."
+    },
+    "badges": {
+      "external": "חיצוני",
+      "externalTooltip": "פועל בתשתית של הספק באמצעות Azure AI Foundry, ולא בסביבת Azure של MSF.",
+      "regionHostedTooltip": "מאוחסן באזור Azure {region}. שיחות עם מודל זה מעובדות שם."
+    },
+    "favorites": "מועדפים",
+    "euResidencyNote": "כל המודלים פועלים באזור Azure של האיחוד האירופי.",
+    "hostedRegion": {
+      "label": "אזור אחסון",
+      "processedIn": "שיחה זו מעובדת באזור Azure {region}.",
+      "euOnlyNote": "{name} מאוחסן באזור Azure של האיחוד האירופי; שיחות עמו מעובדות שם."
+    },
+    "version": {
+      "label": "גרסה"
+    },
+    "reasoningModel": "מודל חשיבה: מנתח שלב-אחר-שלב לפני מתן תשובה. איטי יותר, טוב יותר בבעיות קשות."
   },
   "models": {
     "gpt_4_1": {

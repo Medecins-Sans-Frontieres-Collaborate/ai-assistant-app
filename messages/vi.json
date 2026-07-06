@@ -1429,7 +1429,33 @@
     "modelsDescription": "Chọn một mô hình AI cho cuộc trò chuyện của bạn. Mỗi mô hình có điểm mạnh riêng — chọn để xem chi tiết.",
     "recommended": "Đề xuất",
     "familyAll": "Tất cả",
-    "familyFilterLabel": "Lọc mô hình theo nhóm"
+    "familyFilterLabel": "Lọc mô hình theo nhóm",
+    "searchPlaceholder": "Tìm kiếm mô hình",
+    "searchEmpty": "Không có mô hình nào phù hợp với tìm kiếm của bạn.",
+    "star": "Đánh dấu {name}",
+    "unstar": "Bỏ đánh dấu {name}",
+    "otherFamily": "Khác",
+    "hostedExternally": "Chạy trên hạ tầng riêng của nhà cung cấp thông qua Azure AI Foundry, không nằm trong môi trường Azure của MSF.",
+    "hostedIn": {
+      "label": "Được lưu trữ tại {regions}",
+      "tooltip": "Khu vực Azure nơi mô hình này được triển khai. Các cuộc hội thoại sẽ được xử lý tại khu vực của bạn."
+    },
+    "badges": {
+      "external": "Bên ngoài",
+      "externalTooltip": "Chạy trên hạ tầng riêng của nhà cung cấp thông qua Azure AI Foundry, không nằm trong môi trường Azure của MSF.",
+      "regionHostedTooltip": "Lưu trữ tại khu vực Azure {region}. Các hội thoại với mô hình này sẽ được xử lý tại đó."
+    },
+    "favorites": "Yêu thích",
+    "euResidencyNote": "Tất cả mô hình đều chạy tại khu vực Azure EU.",
+    "hostedRegion": {
+      "label": "Khu vực lưu trữ",
+      "processedIn": "Cuộc hội thoại này được xử lý tại khu vực Azure {region}.",
+      "euOnlyNote": "{name} được lưu trữ tại khu vực Azure EU; các cuộc hội thoại với mô hình sẽ được xử lý tại đó."
+    },
+    "version": {
+      "label": "Phiên bản"
+    },
+    "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó."
   },
   "models": {
     "gpt_4_1": {

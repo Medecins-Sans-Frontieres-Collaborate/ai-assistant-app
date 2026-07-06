@@ -1398,7 +1398,33 @@
     "modelsDescription": "Wybierz model AI do rozmowy. Każdy model ma inne zalety — wybierz, aby zobaczyć szczegóły.",
     "recommended": "Polecane",
     "familyAll": "Wszystkie",
-    "familyFilterLabel": "Filtruj modele według rodziny"
+    "familyFilterLabel": "Filtruj modele według rodziny",
+    "searchPlaceholder": "Szukaj modeli",
+    "searchEmpty": "Brak modeli spełniających kryteria wyszukiwania.",
+    "star": "Oznacz jako ulubiony: {name}",
+    "unstar": "Usuń z ulubionych: {name}",
+    "otherFamily": "Inne",
+    "hostedExternally": "Uruchamiany na infrastrukturze dostawcy za pośrednictwem Azure AI Foundry, poza środowiskiem Azure MSF.",
+    "hostedIn": {
+      "label": "Hostowany w: {regions}",
+      "tooltip": "Region(y) Azure, w których uruchomiono ten model. Rozmowy są przetwarzane w Twoim regionie."
+    },
+    "badges": {
+      "external": "Zewnętrzny",
+      "externalTooltip": "Uruchamiany na infrastrukturze dostawcy za pośrednictwem Azure AI Foundry, poza środowiskiem Azure MSF.",
+      "regionHostedTooltip": "Hostowany w regionie {region} na Azure. Rozmowy z tym modelem są tam przetwarzane."
+    },
+    "favorites": "Ulubione",
+    "euResidencyNote": "Wszystkie modele uruchamiane są w regionie Azure UE.",
+    "hostedRegion": {
+      "label": "Region hostowania",
+      "processedIn": "Ta rozmowa jest przetwarzana w regionie Azure: {region}.",
+      "euOnlyNote": "{name} jest hostowany w regionie Azure UE; rozmowy z nim są tam przetwarzane."
+    },
+    "version": {
+      "label": "Wersja"
+    },
+    "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach."
   },
   "models": {
     "gpt_4_1": {

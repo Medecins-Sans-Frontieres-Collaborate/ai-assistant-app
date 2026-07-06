@@ -1299,7 +1299,33 @@
     "modelsDescription": "Välj en AI-modell för din konversation. Varje modell har olika styrkor — välj en för att se detaljer.",
     "recommended": "Rekommenderad",
     "familyAll": "Alla",
-    "familyFilterLabel": "Filtrera modeller efter familj"
+    "familyFilterLabel": "Filtrera modeller efter familj",
+    "searchPlaceholder": "Sök modeller",
+    "searchEmpty": "Inga modeller matchar din sökning.",
+    "star": "Favorisera {name}",
+    "unstar": "Ta bort favorit från {name}",
+    "otherFamily": "Övriga",
+    "hostedExternally": "Körs på leverantörens egen infrastruktur via Azure AI Foundry, inte i MSF:s Azure-miljö.",
+    "hostedIn": {
+      "label": "Hostad i {regions}",
+      "tooltip": "Den eller de Azure-regioner där denna modell är distribuerad. Samtal behandlas i din egen region."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Körs på leverantörens egen infrastruktur via Azure AI Foundry, inte i MSF:s Azure-miljö.",
+      "regionHostedTooltip": "Hostad i Azure-regionen {region}. Samtal med denna modell behandlas där."
+    },
+    "favorites": "Favoriter",
+    "euResidencyNote": "Alla modeller körs i EU Azure-regionen.",
+    "hostedRegion": {
+      "label": "Hostad region",
+      "processedIn": "Denna konversation behandlas i Azure-regionen {region}.",
+      "euOnlyNote": "{name} är hostad i EU Azure-regionen; samtal med den behandlas där."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem."
   },
   "models": {
     "gpt_4_1": {

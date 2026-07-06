@@ -1449,7 +1449,33 @@
     "modelsDescription": "Pona modèle ya AI mpo na lisolo na yo. Nzoka ndambo ya modèles ezali na makasi ekeseni — poná moko mpo omóna bisika na yango.",
     "recommended": "Eponami",
     "familyAll": "Nionso",
-    "familyFilterLabel": "Pona bamodelo na libota"
+    "familyFilterLabel": "Pona bamodelo na libota",
+    "searchPlaceholder": "Senga misala ya modèle",
+    "searchEmpty": "Modèle moko te eyokani na recherche na yo.",
+    "star": "Kobakisa {name} na bilakisi",
+    "unstar": "Kolongola {name} na bilakisi",
+    "otherFamily": "Mosusu",
+    "hostedExternally": "Ezali kosala na infrastructure ya fournisseur na bango moko na nzela ya Azure AI Foundry, te na environnement ya MSF Azure.",
+    "hostedIn": {
+      "label": "Epai ekoki kopesama: {regions}",
+      "tooltip": "Region(s) Azure oyo modèle oyo ekopisami. Masolo ekozwa traitment na region na yo moko."
+    },
+    "badges": {
+      "external": "Ya libanda",
+      "externalTooltip": "Ezali kosala na infrastructure ya fournisseur na bango moko na nzela ya Azure AI Foundry, te na environnement ya MSF Azure.",
+      "regionHostedTooltip": "eopesi na region ya Azure {region}. Masolo na modèle oyo ekozwa traitement kuna."
+    },
+    "favorites": "Bilakisi",
+    "euResidencyNote": "Ba modèles nionso ezali kosala na region EU Azure.",
+    "hostedRegion": {
+      "label": "Region epesamaki",
+      "processedIn": "Lisolo oyo ekozwa traitement na region ya Azure {region}.",
+      "euOnlyNote": "{name} eopesi na region ya Azure ya EU; masolo na yango ekozwa traitement kuna."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano."
   },
   "models": {
     "gpt_4_1": {

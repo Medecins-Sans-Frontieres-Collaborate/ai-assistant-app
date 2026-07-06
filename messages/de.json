@@ -1296,7 +1296,33 @@
     "modelsDescription": "Wählen Sie ein KI-Modell für Ihr Gespräch. Jedes Modell hat unterschiedliche Stärken – wählen Sie eines aus, um Details anzuzeigen.",
     "recommended": "Empfohlen",
     "familyAll": "Alle",
-    "familyFilterLabel": "Modelle nach Familie filtern"
+    "familyFilterLabel": "Modelle nach Familie filtern",
+    "searchPlaceholder": "Modelle suchen",
+    "searchEmpty": "Keine Modelle entsprechen Ihrer Suche.",
+    "star": "{name} als Favorit markieren",
+    "unstar": "{name} als Favorit entfernen",
+    "otherFamily": "Andere",
+    "hostedExternally": "Läuft auf der eigenen Infrastruktur des Anbieters über Azure AI Foundry, nicht in der Azure-Umgebung von MSF.",
+    "hostedIn": {
+      "label": "Gehostet in {regions}",
+      "tooltip": "Die Azure-Region(en), in denen dieses Modell bereitgestellt ist. Unterhaltungen werden in Ihrer eigenen Region verarbeitet."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Läuft auf der eigenen Infrastruktur des Anbieters über Azure AI Foundry, nicht in der Azure-Umgebung von MSF.",
+      "regionHostedTooltip": "Gehostet in der Azure-Region {region}. Unterhaltungen mit diesem Modell werden dort verarbeitet."
+    },
+    "favorites": "Favoriten",
+    "euResidencyNote": "Alle Modelle laufen in der EU-Azure-Region.",
+    "hostedRegion": {
+      "label": "Gehostete Region",
+      "processedIn": "Dieses Gespräch wird in der Azure-Region {region} verarbeitet.",
+      "euOnlyNote": "{name} wird in der EU-Azure-Region gehostet; Unterhaltungen damit werden dort verarbeitet."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben."
   },
   "models": {
     "gpt_4_1": {

@@ -1449,7 +1449,33 @@
     "modelsDescription": "Bênî model AI ti walî mo. Model kété tî kéta siriri. Bênî mo tändö a yênga ndö.",
     "recommended": "A kete",
     "familyAll": "Nzonî",
-    "familyFilterLabel": "Séléctionne modèle d'après famille"
+    "familyFilterLabel": "Séléctionne modèle d'après famille",
+    "searchPlaceholder": "Sáara na modɛli",
+    "searchEmpty": "Modɛli ké so se nzönî yângâ wala.",
+    "star": "Kömba {name}",
+    "unstar": "Kûlï kömba {name}",
+    "otherFamily": "Lingbi",
+    "hostedExternally": "A lo ngangu na infrastructure ti provider sôh Azure AI Foundry, ape na Azure ti MSF.",
+    "hostedIn": {
+      "label": "A lo ngangu na {regions}",
+      "tooltip": "Azure region/region-s mbi lo ngangu so modɛli ayeke go. Lengu mbi yeke tâ na region munu mo."
+    },
+    "badges": {
+      "external": "Banga nzönî",
+      "externalTooltip": "A lo ngangu na infrastructure ti provider sôh Azure AI Foundry, ape na Azure ti MSF.",
+      "regionHostedTooltip": "A lo ngangu na region {region} ti Azure. Lengu sô héri modɛli aso ayeke tâ larê."
+    },
+    "favorites": "Kömba",
+    "euResidencyNote": "Modɛli kõsôso ayeke lo ngangu na Azure region ti EU.",
+    "hostedRegion": {
+      "label": "Region so a lo ngangu",
+      "processedIn": "Lengu tî mbi ayeke tâ na Azure region {region}.",
+      "euOnlyNote": "{name} lo ngangu na Azure region ti EU; lengu sô héri eke tâ larê."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Modɛli ti kûê tî nzönî : ayeke sôh tî yeke mû kundû kûê tî mû bara. Alingo, mbi yeke bâra mo yângâ na zingo so ayékè nganza."
   },
   "models": {
     "gpt_4_1": {

@@ -1449,7 +1449,33 @@
     "modelsDescription": "Izaberite AI model za vašu konverzaciju. Svaki model ima svoje prednosti — izaberite jedan za više detalja.",
     "recommended": "Preporučeno",
     "familyAll": "Sve",
-    "familyFilterLabel": "Filtriraj modele po porodici"
+    "familyFilterLabel": "Filtriraj modele po porodici",
+    "searchPlaceholder": "Pretražite modele",
+    "searchEmpty": "Nijedan model ne odgovara vašoj pretrazi.",
+    "star": "Označi kao omiljeno: {name}",
+    "unstar": "Ukloni iz omiljenih: {name}",
+    "otherFamily": "Ostalo",
+    "hostedExternally": "Pokreće se na infrastrukturi provajdera putem Azure AI Foundry, a ne u MSF Azure okruženju.",
+    "hostedIn": {
+      "label": "Hostovano u: {regions}",
+      "tooltip": "Azure region(i) u kome je model implementiran. Razgovori se obrađuju u vašem regionu."
+    },
+    "badges": {
+      "external": "Eksterno",
+      "externalTooltip": "Pokreće se na infrastrukturi provajdera putem Azure AI Foundry, a ne u MSF Azure okruženju.",
+      "regionHostedTooltip": "Hostovano u {region} Azure regionu. Razgovori sa ovim modelom se tamo obrađuju."
+    },
+    "favorites": "Omiljeni",
+    "euResidencyNote": "Svi modeli rade u EU Azure regionu.",
+    "hostedRegion": {
+      "label": "Hostovani region",
+      "processedIn": "Ovaj razgovor se obrađuje u {region} Azure regionu.",
+      "euOnlyNote": "{name} se hostuje u EU Azure regionu; razgovori sa ovim modelom se tamo obrađuju."
+    },
+    "version": {
+      "label": "Verzija"
+    },
+    "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema."
   },
   "models": {
     "gpt_4_1": {

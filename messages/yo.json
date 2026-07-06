@@ -1449,7 +1449,33 @@
     "modelsDescription": "Yan awoṣe AI fun ibaraẹnisọrọ rẹ. Kọọkan ni agbara tirẹ — yan lati wo alaye.",
     "recommended": "Tí a ṣedáwọ́lé",
     "familyAll": "Gbogbo",
-    "familyFilterLabel": "Ṣààlẹ̀wádìí àwọn àwòrán àpẹẹrẹ pẹ̀lú ẹbí"
+    "familyFilterLabel": "Ṣààlẹ̀wádìí àwọn àwòrán àpẹẹrẹ pẹ̀lú ẹbí",
+    "searchPlaceholder": "Ṣàwárí àwòrán",
+    "searchEmpty": "Kò sí àwòrán tó bá àwárí rẹ mu.",
+    "star": "Fí irawọ sí {name}",
+    "unstar": "Yọ irawọ kúrò lórí {name}",
+    "otherFamily": "Míì",
+    "hostedExternally": "Nṣíṣe lórí amáyédẹrùn ti olupèsè pẹ̀lú Azure AI Foundry, kì í ṣe nínú ayika Azure MSF.",
+    "hostedIn": {
+      "label": "Ti gbalejo ní {regions}",
+      "tooltip": "Agbègbè Azure tí àwòrán yìí ti wà. Àwọn ibànilẹ́rọ yín máa wáyé ní agbègbè tirẹ."
+    },
+    "badges": {
+      "external": "Ìta",
+      "externalTooltip": "Nṣíṣe lórí amáyédẹrùn ti olupèsè pẹ̀lú Azure AI Foundry, kì í ṣe nínú ayika Azure MSF.",
+      "regionHostedTooltip": "Ti gbalejo ní agbègbè Azure {region}. Àwọn ibànilẹ́rọ pẹ̀lú àwòrán yìí máa wáyé níbẹ̀."
+    },
+    "favorites": "Ayànfẹ́",
+    "euResidencyNote": "Gbogbo àwòrán n ṣiṣẹ́ ní agbègbè Azure EU.",
+    "hostedRegion": {
+      "label": "Agbègbè tí a gbalejo sí",
+      "processedIn": "Ibànilẹ́rọ yìí ni a n ṣiṣẹ́ ní agbègbè Azure {region}.",
+      "euOnlyNote": "{name} ni a gbalejo sí agbègbè Azure EU; gbogbo ibànilẹ́rọ pẹ̀lú rẹ ni a máa ṣe níbẹ̀."
+    },
+    "version": {
+      "label": "Ẹ̀dà"
+    },
+    "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le."
   },
   "models": {
     "gpt_4_1": {

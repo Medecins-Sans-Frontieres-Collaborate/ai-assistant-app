@@ -1449,7 +1449,33 @@
     "modelsDescription": "Safidio ny modely AI amin'ny dininao. Samy manana ny tanjany ny modely tsirairay — mifidiana iray hijerena antsipiriany.",
     "recommended": "Soso-kevitra",
     "familyAll": "Rehetra",
-    "familyFilterLabel": "Sivano araka ny fianakaviana ny modely"
+    "familyFilterLabel": "Sivano araka ny fianakaviana ny modely",
+    "searchPlaceholder": "Mitady modely",
+    "searchEmpty": "Tsy misy modely mifanaraka amin'ny fikarohanao.",
+    "star": "Anasongadina an'i {name}",
+    "unstar": "Esorina amin'ny voasongadina i {name}",
+    "otherFamily": "Hafa",
+    "hostedExternally": "Miasa amin'ny fotodrafitrasa an'ny mpanome tolotra amin'ny alalan'ny Azure AI Foundry, fa tsy ao anatin'ny tontolo Azure an'ny MSF.",
+    "hostedIn": {
+      "label": "Toerana fitahirizana: {regions}",
+      "tooltip": "Faritra Azure nametrahana ity modely ity. Eto amin'ny faritra misy anao no handefasana sy hikarakarana ny resaka."
+    },
+    "badges": {
+      "external": "Ivelany",
+      "externalTooltip": "Miasa amin'ny fotodrafitrasan'ny mpanome tolotra amin'ny alalan'ny Azure AI Foundry, fa tsy ao anaty tontolo Azure an'ny MSF.",
+      "regionHostedTooltip": "Mipetraka ao amin'ny faritra Azure {region}. Ao no karakaraina ny resaka amin'ity modely ity."
+    },
+    "favorites": "Ankafizina",
+    "euResidencyNote": "Ny modely rehetra dia miasa amin'ny faritra Azure EU.",
+    "hostedRegion": {
+      "label": "Faritra fampiantranoana",
+      "processedIn": "Ao amin'ny faritra Azure {region} no karakaraina ity resaka ity.",
+      "euOnlyNote": "Ao amin'ny faritra Azure EU i {name} no tsimbinina; ao ihany koa no karakaraina ny resaka miaraka aminy."
+    },
+    "version": {
+      "label": "Dikan-teny"
+    },
+    "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra."
   },
   "models": {
     "gpt_4_1": {

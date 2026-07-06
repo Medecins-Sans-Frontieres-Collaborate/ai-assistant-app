@@ -1330,7 +1330,33 @@
     "modelsDescription": "为您的会话选择一个 AI 模型。每个模型有不同的优势——选择查看详情。",
     "recommended": "推荐",
     "familyAll": "全部",
-    "familyFilterLabel": "按系列筛选模型"
+    "familyFilterLabel": "按系列筛选模型",
+    "searchPlaceholder": "搜索模型",
+    "searchEmpty": "未找到匹配的模型。",
+    "star": "收藏 {name}",
+    "unstar": "取消收藏 {name}",
+    "otherFamily": "其他",
+    "hostedExternally": "通过 Azure AI Foundry 在提供方自有基础设施上运行，不在 MSF 的 Azure 环境内。",
+    "hostedIn": {
+      "label": "托管于 {regions}",
+      "tooltip": "该模型部署所在的 Azure 区域。对话将在您自己的区域内处理。"
+    },
+    "badges": {
+      "external": "外部",
+      "externalTooltip": "通过 Azure AI Foundry 在提供方自有基础设施上运行，不在 MSF 的 Azure 环境内。",
+      "regionHostedTooltip": "托管于 {region} Azure 区域。与此模型的对话将在该区域处理。"
+    },
+    "favorites": "收藏夹",
+    "euResidencyNote": "所有模型均在欧盟 Azure 区域运行。",
+    "hostedRegion": {
+      "label": "托管区域",
+      "processedIn": "此对话将在 {region} Azure 区域处理。",
+      "euOnlyNote": "{name} 托管于欧盟 Azure 区域，与其的对话将在该区域处理。"
+    },
+    "version": {
+      "label": "版本"
+    },
+    "reasoningModel": "推理模型：先逐步思考再作答。速度较慢，擅长解决复杂问题。"
   },
   "models": {
     "gpt_4_1": {

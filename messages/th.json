@@ -1398,7 +1398,33 @@
     "modelsDescription": "เลือกโมเดล AI สำหรับการสนทนาของคุณ แต่ละโมเดลมีจุดแข็งต่างกัน เลือกเพื่อดูรายละเอียด.",
     "recommended": "แนะนำ",
     "familyAll": "ทั้งหมด",
-    "familyFilterLabel": "กรองโมเดลตามกลุ่ม"
+    "familyFilterLabel": "กรองโมเดลตามกลุ่ม",
+    "searchPlaceholder": "ค้นหารุ่นโมเดล",
+    "searchEmpty": "ไม่พบรุ่นโมเดลที่ตรงกับการค้นหาของคุณ",
+    "star": "เพิ่มดาว {name}",
+    "unstar": "นำดาวออกจาก {name}",
+    "otherFamily": "อื่น ๆ",
+    "hostedExternally": "ดำเนินการบนโครงสร้างพื้นฐานของผู้ให้บริการผ่าน Azure AI Foundry ไม่ได้อยู่ใน Azure ของ MSF",
+    "hostedIn": {
+      "label": "โฮสต์ใน {regions}",
+      "tooltip": "ภูมิภาค Azure ที่รุ่นโมเดลนี้ถูกโฮสต์ การสนทนาจะถูกประมวลผลในภูมิภาคของคุณเอง"
+    },
+    "badges": {
+      "external": "ภายนอก",
+      "externalTooltip": "ดำเนินการบนโครงสร้างพื้นฐานของผู้ให้บริการผ่าน Azure AI Foundry ไม่ได้อยู่ใน Azure ของ MSF",
+      "regionHostedTooltip": "โฮสต์ในภูมิภาค Azure {region} การสนทนากับรุ่นโมเดลนี้จะถูกประมวลผลที่นั่น"
+    },
+    "favorites": "รายการโปรด",
+    "euResidencyNote": "ทุกรุ่นโมเดลทำงานในภูมิภาค Azure ของ EU",
+    "hostedRegion": {
+      "label": "ภูมิภาคที่โฮสต์",
+      "processedIn": "การสนทนานี้ถูกประมวลผลในภูมิภาค Azure {region}",
+      "euOnlyNote": "{name} ถูกโฮสต์ในภูมิภาค Azure ของ EU การสนทนากับรุ่นนี้จะถูกประมวลผลที่นั่น"
+    },
+    "version": {
+      "label": "เวอร์ชัน"
+    },
+    "reasoningModel": "Reasoning model: คิดเป็นขั้นตอนก่อนตอบคำถาม ช้ากว่า แต่เหมาะกับปัญหายาก"
   },
   "models": {
     "gpt_4_1": {

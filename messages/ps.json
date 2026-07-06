@@ -1449,7 +1449,33 @@
     "modelsDescription": "د خبرو لپاره یو AI ماډل وټاکئ. هر ماډل ځانګړې وړتیاوې لري — تفصیل لپاره یوه انتخاب کړئ.",
     "recommended": "سپارښتنه شوې",
     "familyAll": "ټول",
-    "familyFilterLabel": "ماډلونه د کورنۍ له مخې فلټر کړئ"
+    "familyFilterLabel": "ماډلونه د کورنۍ له مخې فلټر کړئ",
+    "searchPlaceholder": "ماډلونه ولټوئ",
+    "searchEmpty": "ستاسو لټون سره هېڅ ماډلونه نه دي برابر.",
+    "star": "ستوری کړه {name}",
+    "unstar": "ستوری لرې کړه {name}",
+    "otherFamily": "نور",
+    "hostedExternally": "په عرضه کوونکي خپله بنسټ کې د Azure AI Foundry له لارې چلول کیږي، د MSF په Azure چاپېریال کې نه.",
+    "hostedIn": {
+      "label": "په {regions} کې کوربه ده",
+      "tooltip": "هغه Azure سیمه(وې) چې دا ماډل پکې ځای پر ځای شوی دی. خبرې اترې ستاسو په خپله سیمه کې پروسس کېږي."
+    },
+    "badges": {
+      "external": "بهرنی",
+      "externalTooltip": "په عرضه کوونکي خپله بنسټ کې د Azure AI Foundry له لارې چلول کیږي، د MSF په Azure چاپېریال کې نه.",
+      "regionHostedTooltip": "د {region} Azure سیمه کې کوربه ده. له دې ماډل سره خبرې هلته پروسس کېږي."
+    },
+    "favorites": "خوښي",
+    "euResidencyNote": "ټول ماډلونه د EU Azure سیمه کې چلول کېږي.",
+    "hostedRegion": {
+      "label": "کوربه سیمه",
+      "processedIn": "دا خبرې اترې په {region} Azure سیمه کې پروسس کېږي.",
+      "euOnlyNote": "{name} د EU Azure سیمه کې کوربه ده؛ ورسره خبرې هلته پروسس کېږي."
+    },
+    "version": {
+      "label": "نسخه"
+    },
+    "reasoningModel": "استدلال ماډل: مخکې له ځواب ورکولو ګام په ګام فکر کوي. ورو دی، خو ستونزمنو مسایلو کې ښه دی."
   },
   "models": {
     "gpt_4_1": {

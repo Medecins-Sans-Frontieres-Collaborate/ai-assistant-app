@@ -1299,7 +1299,33 @@
     "modelsDescription": "대화에 사용할 AI 모델을 선택하세요. 각 모델마다 강점이 다릅니다 — 자세한 내용을 보려면 선택하세요.",
     "recommended": "추천",
     "familyAll": "전체",
-    "familyFilterLabel": "패밀리별 모델 필터링"
+    "familyFilterLabel": "패밀리별 모델 필터링",
+    "searchPlaceholder": "모델 검색",
+    "searchEmpty": "검색과 일치하는 모델이 없습니다.",
+    "star": "{name} 즐겨찾기 추가",
+    "unstar": "{name} 즐겨찾기 해제",
+    "otherFamily": "기타",
+    "hostedExternally": "MSF의 Azure 환경이 아닌, Azure AI Foundry를 통해 공급자의 자체 인프라에서 실행됩니다.",
+    "hostedIn": {
+      "label": "호스팅 지역: {regions}",
+      "tooltip": "이 모델이 배포된 Azure 지역입니다. 대화는 귀하의 지역에서 처리됩니다."
+    },
+    "badges": {
+      "external": "외부",
+      "externalTooltip": "MSF의 Azure 환경이 아닌, Azure AI Foundry를 통해 공급자의 자체 인프라에서 실행됩니다.",
+      "regionHostedTooltip": "{region} Azure 지역에서 호스팅됩니다. 이 모델과의 대화는 해당 지역에서 처리됩니다."
+    },
+    "favorites": "즐겨찾기",
+    "euResidencyNote": "모든 모델은 EU Azure 지역에서 실행됩니다.",
+    "hostedRegion": {
+      "label": "호스팅 지역",
+      "processedIn": "이 대화는 {region} Azure 지역에서 처리됩니다.",
+      "euOnlyNote": "{name}은(는) EU Azure 지역에서 호스팅되며, 대화 또한 그곳에서 처리됩니다."
+    },
+    "version": {
+      "label": "버전"
+    },
+    "reasoningModel": "추론 모델: 답변 전에 단계별로 사고합니다. 느리지만 복잡한 문제에 더 적합합니다."
   },
   "models": {
     "gpt_4_1": {

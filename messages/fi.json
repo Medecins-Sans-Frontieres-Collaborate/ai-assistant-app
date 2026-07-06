@@ -1398,7 +1398,33 @@
     "modelsDescription": "Valitse keskustelullesi AI-malli. Jokaisella mallilla on omat vahvuutensa — valitse nähdäksesi tarkemmat tiedot.",
     "recommended": "Suositeltu",
     "familyAll": "Kaikki",
-    "familyFilterLabel": "Suodata mallit perheen mukaan"
+    "familyFilterLabel": "Suodata mallit perheen mukaan",
+    "searchPlaceholder": "Etsi malleja",
+    "searchEmpty": "Hakusi ei vastaa yhtään mallia.",
+    "star": "Lisää suosikkeihin: {name}",
+    "unstar": "Poista suosikeista: {name}",
+    "otherFamily": "Muu",
+    "hostedExternally": "Toimii palveluntarjoajan omalla infrastruktuurilla Azure AI Foundryn kautta, ei MSF:n Azure-ympäristössä.",
+    "hostedIn": {
+      "label": "Isännöity alueilla: {regions}",
+      "tooltip": "Azure-alue(et), joilla tämä malli on käytössä. Keskustelut käsitellään omalla alueellasi."
+    },
+    "badges": {
+      "external": "Ulkoinen",
+      "externalTooltip": "Toimii palveluntarjoajan omalla infrastruktuurilla Azure AI Foundryn kautta, ei MSF:n Azure-ympäristössä.",
+      "regionHostedTooltip": "Isännöity Azure-alueella {region}. Keskustelut tämän mallin kanssa käsitellään siellä."
+    },
+    "favorites": "Suosikit",
+    "euResidencyNote": "Kaikki mallit toimivat EU:n Azure-alueella.",
+    "hostedRegion": {
+      "label": "Isännöintialue",
+      "processedIn": "Tämä keskustelu käsitellään Azure-alueella {region}.",
+      "euOnlyNote": "{name} isännöidään EU:n Azure-alueella; keskustelut sen kanssa käsitellään siellä."
+    },
+    "version": {
+      "label": "Versio"
+    },
+    "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa."
   },
   "models": {
     "gpt_4_1": {

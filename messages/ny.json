@@ -1449,7 +1449,33 @@
     "modelsDescription": "Sankhani mtundu wa AI pa zokambirana zanu. Mtundu uliwonse uli ndi mphamvu zosiyanasiyana — sankhani kuti muwone tsatanetsatane.",
     "recommended": "Zolangizidwa",
     "familyAll": "Zonse",
-    "familyFilterLabel": "Sankha mitundu malinga ndi banja"
+    "familyFilterLabel": "Sankha mitundu malinga ndi banja",
+    "searchPlaceholder": "Sakani mitundu",
+    "searchEmpty": "Palibe mitundu yomwe yagwirizana ndi pempho lanu.",
+    "star": "Ikani nyenyezi pa {name}",
+    "unstar": "Chotsani nyenyezi pa {name}",
+    "otherFamily": "Zina",
+    "hostedExternally": "Ili pa ma seva a wopereka kudzera mu Azure AI Foundry, osati mkati mwa MSF Azure.",
+    "hostedIn": {
+      "label": "Iliko mu {regions}",
+      "tooltip": "Ma Azure region omwe mtundu uwu waikidwa. Kukambirana kumakonzedwa m'dera lanu."
+    },
+    "badges": {
+      "external": "Zakunja",
+      "externalTooltip": "Ili pa ma seva a wopereka kudzera mu Azure AI Foundry, osati mkati mwa MSF Azure.",
+      "regionHostedTooltip": "Iliko mu {region} Azure region. Kukambirana ndi mtundu uwu kumakonzedwa kumeneko."
+    },
+    "favorites": "Zokondedwa",
+    "euResidencyNote": "Mitundu yonse imagwira ntchito mu Azure region ya EU.",
+    "hostedRegion": {
+      "label": "Dera lokhalamo",
+      "processedIn": "Kukambirana uku kukukonzedwa mu {region} Azure region.",
+      "euOnlyNote": "{name} ili mu EU Azure region; kukambirana nako kumachitika kumeneko."
+    },
+    "version": {
+      "label": "Mtundu"
+    },
+    "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta."
   },
   "models": {
     "gpt_4_1": {

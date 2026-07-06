@@ -1449,7 +1449,33 @@
     "modelsDescription": "Dooro moodel AI ah wada sheekaysigaaga. Moodel kasta wuxuu leeyahay awoodo kala duwan — mid dooro si aad u aragto faahfaahinta.",
     "recommended": "La taliyay",
     "familyAll": "Dhammaan",
-    "familyFilterLabel": "Ku shaandhee moodeellada qoyska"
+    "familyFilterLabel": "Ku shaandhee moodeellada qoyska",
+    "searchPlaceholder": "Raadi moodallo",
+    "searchEmpty": "Ma jiro moodal u dhigma raadintaada.",
+    "star": "Calaamadee {name} sida mid la jecel yahay",
+    "unstar": "Ka saar {name} liiska la jecel yahay",
+    "otherFamily": "Kale",
+    "hostedExternally": "Waxay ku shaqaysaa kaabayaasha bixiyaha ee Azure AI Foundry, ma aha gudaha deegaanka Azure ee MSF.",
+    "hostedIn": {
+      "label": "Laguma martigeliyo {regions}",
+      "tooltip": "Gobolka Azure ee moodalkan la geliyay. Wadahadalka waxa lagu farsameeyaa gobolkaaga."
+    },
+    "badges": {
+      "external": "Dibadda",
+      "externalTooltip": "Waxay ku shaqaysaa kaabayaasha bixiyaha ee Azure AI Foundry, ma aha gudaha deegaanka Azure ee MSF.",
+      "regionHostedTooltip": "Waxaa lagu martigeliyey gobolka Azure ee {region}. Wadahadalada moodalkan waxay halkaas lagu farsameeyaa."
+    },
+    "favorites": "Kuwa la jecel yahay",
+    "euResidencyNote": "Dhammaan moodallada waxay ku shaqeeyaan gobolka Azure ee EU.",
+    "hostedRegion": {
+      "label": "Gobolka martigelinaya",
+      "processedIn": "Wadahadalkan waxa lagu farsameeyaa gobolka Azure ee {region}.",
+      "euOnlyNote": "{name} waxaa lagu martigelinayaa gobolka Azure ee EU; wadahadalada lala yeesho waa halkaas lagu farsameeyaa."
+    },
+    "version": {
+      "label": "Nooca"
+    },
+    "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag."
   },
   "models": {
     "gpt_4_1": {

@@ -1299,7 +1299,33 @@
     "modelsDescription": "Chagua mfano wa AI kwa mazungumzo yako. Kila mfano una nguvu tofauti — chagua mmoja kuona maelezo.",
     "recommended": "Inapendekezwa",
     "familyAll": "Zote",
-    "familyFilterLabel": "Chuja miundo kwa familia"
+    "familyFilterLabel": "Chuja miundo kwa familia",
+    "searchPlaceholder": "Tafuta miundo",
+    "searchEmpty": "Hakuna modeli zinazolingana na utafutaji wako.",
+    "star": "Weka nyota {name}",
+    "unstar": "Ondoa nyota {name}",
+    "otherFamily": "Nyingine",
+    "hostedExternally": "Inaendeshwa kwenye miundombinu ya mtoa huduma kupitia Azure AI Foundry, si ndani ya mazingira ya Azure ya MSF.",
+    "hostedIn": {
+      "label": "Imeshikiliwa katika {regions}",
+      "tooltip": "Eneo la Azure ambalo modeli hii imewekwa. Mazungumzo yanachakatwa katika eneo lako."
+    },
+    "badges": {
+      "external": "Ya nje",
+      "externalTooltip": "Inaendeshwa kwenye miundombinu ya mtoa huduma kupitia Azure AI Foundry, si ndani ya mazingira ya Azure ya MSF.",
+      "regionHostedTooltip": "Imeshikiliwa kwenye eneo la Azure la {region}. Mazungumzo na modeli hii yanachakatwa huko."
+    },
+    "favorites": "Pendwa",
+    "euResidencyNote": "Miundo yote inaendeshwa katika eneo la Azure la EU.",
+    "hostedRegion": {
+      "label": "Eneo lililoshikiliwa",
+      "processedIn": "Mazungumzo haya yanachakatwa katika eneo la Azure la {region}.",
+      "euOnlyNote": "{name} imeshikiliwa katika eneo la Azure la EU; mazungumzo nayo yanachakatwa huko."
+    },
+    "version": {
+      "label": "Toleo"
+    },
+    "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu."
   },
   "models": {
     "gpt_4_1": {

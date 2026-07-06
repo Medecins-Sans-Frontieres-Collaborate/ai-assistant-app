@@ -1449,7 +1449,33 @@
     "modelsDescription": "Chwazi yon modèl AI pou konvèsasyon ou. Chak modèl gen avantaj li — chwazi youn pou wè detay yo.",
     "recommended": "Rekòmande",
     "familyAll": "Tout",
-    "familyFilterLabel": "Filtre modèl pa kategori"
+    "familyFilterLabel": "Filtre modèl pa kategori",
+    "searchPlaceholder": "Chèche modèl yo",
+    "searchEmpty": "Pa gen okenn modèl ki koresponn ak rechèch ou.",
+    "star": "Make {name} kòm pi renmen",
+    "unstar": "Retire {name} nan pi renmen yo",
+    "otherFamily": "Lòt",
+    "hostedExternally": "Fonksyone sou enfraestrikti founisè a atravè Azure AI Foundry, pa andedan anviwònman Azure MSF la.",
+    "hostedIn": {
+      "label": "Héberge nan {regions}",
+      "tooltip": "Zòn Azure kote modèl sa a deplwaye. Konvèsasyon yo trete nan pwòp zòn ou."
+    },
+    "badges": {
+      "external": "Ekstèn",
+      "externalTooltip": "Fonksyone sou enfraestrikti founisè a atravè Azure AI Foundry, pa andedan anviwònman Azure MSF la.",
+      "regionHostedTooltip": "Héberge nan zòn Azure {region}. Konvèsasyon ak modèl sa a trete la."
+    },
+    "favorites": "Pi renmen yo",
+    "euResidencyNote": "Tout modèl yo fonksyone nan zòn Azure Inyon Ewopeyen an.",
+    "hostedRegion": {
+      "label": "Zòn héberge",
+      "processedIn": "Konvèsasyon sa a trete nan zòn Azure {region}.",
+      "euOnlyNote": "{name} héberge nan zòn Azure Inyon Ewopeyen an; konvèsasyon ak li ap trete la."
+    },
+    "version": {
+      "label": "Vèsyon"
+    },
+    "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil."
   },
   "models": {
     "gpt_4_1": {

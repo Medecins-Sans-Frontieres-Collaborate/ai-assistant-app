@@ -1398,7 +1398,33 @@
     "modelsDescription": "Alegeți un model AI pentru conversație. Fiecare model are puncte forte specifice — selectați unul pentru detalii.",
     "recommended": "Recomandat",
     "familyAll": "Toate",
-    "familyFilterLabel": "Filtrați modelele după familie"
+    "familyFilterLabel": "Filtrați modelele după familie",
+    "searchPlaceholder": "Căutați modele",
+    "searchEmpty": "Niciun model nu corespunde căutării.",
+    "star": "Adăugați la favorite {name}",
+    "unstar": "Eliminați din favorite {name}",
+    "otherFamily": "Altele",
+    "hostedExternally": "Rulează pe infrastructura proprie a furnizorului prin Azure AI Foundry, nu în mediul Azure al MSF.",
+    "hostedIn": {
+      "label": "Găzduit în {regions}",
+      "tooltip": "Regiunea(le) Azure unde acest model este implementat. Conversațiile sunt procesate în regiunea dumneavoastră."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Rulează pe infrastructura proprie a furnizorului prin Azure AI Foundry, nu în mediul Azure al MSF.",
+      "regionHostedTooltip": "Găzduit în regiunea Azure {region}. Conversațiile cu acest model sunt procesate acolo."
+    },
+    "favorites": "Favorite",
+    "euResidencyNote": "Toate modelele rulează în regiunea Azure din UE.",
+    "hostedRegion": {
+      "label": "Regiune găzduită",
+      "processedIn": "Această conversație este procesată în regiunea Azure {region}.",
+      "euOnlyNote": "{name} este găzduit în regiunea Azure din UE; conversațiile cu acesta sunt procesate acolo."
+    },
+    "version": {
+      "label": "Versiune"
+    },
+    "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile."
   },
   "models": {
     "gpt_4_1": {

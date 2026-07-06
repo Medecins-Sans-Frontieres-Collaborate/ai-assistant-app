@@ -1398,7 +1398,33 @@
     "modelsDescription": "Scegli un modello AI per la conversazione. Ogni modello ha punti di forza diversi — selezionane uno per i dettagli.",
     "recommended": "Consigliato",
     "familyAll": "Tutte",
-    "familyFilterLabel": "Filtra modelli per famiglia"
+    "familyFilterLabel": "Filtra modelli per famiglia",
+    "searchPlaceholder": "Cerca modelli",
+    "searchEmpty": "Nessun modello corrisponde alla tua ricerca.",
+    "star": "Aggiungi ai preferiti {name}",
+    "unstar": "Rimuovi dai preferiti {name}",
+    "otherFamily": "Altro",
+    "hostedExternally": "Eseguito sull'infrastruttura del fornitore tramite Azure AI Foundry, non all'interno dell'ambiente Azure di MSF.",
+    "hostedIn": {
+      "label": "Ospitato in {regions}",
+      "tooltip": "La/le regione/i Azure dove questo modello è distribuito. Le conversazioni sono elaborate nella tua regione."
+    },
+    "badges": {
+      "external": "Esterno",
+      "externalTooltip": "Eseguito sull'infrastruttura del fornitore tramite Azure AI Foundry, non all'interno dell'ambiente Azure di MSF.",
+      "regionHostedTooltip": "Ospitato nella regione Azure {region}. Le conversazioni con questo modello sono elaborate lì."
+    },
+    "favorites": "Preferiti",
+    "euResidencyNote": "Tutti i modelli sono eseguiti nella regione Azure UE.",
+    "hostedRegion": {
+      "label": "Regione di hosting",
+      "processedIn": "Questa conversazione è elaborata nella regione Azure {region}.",
+      "euOnlyNote": "{name} è ospitato nella regione Azure UE; le conversazioni con questo modello vengono elaborate lì."
+    },
+    "version": {
+      "label": "Versione"
+    },
+    "reasoningModel": "Modello di ragionamento: ragiona passo-passo prima di rispondere. Più lento, migliore nei problemi complessi."
   },
   "models": {
     "gpt_4_1": {

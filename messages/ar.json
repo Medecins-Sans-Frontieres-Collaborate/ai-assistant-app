@@ -1299,7 +1299,33 @@
     "modelsDescription": "اختر نموذج ذكاء اصطناعي لمحادثتك. لكل نموذج ميزات مختلفة — اختر واحداً لعرض التفاصيل.",
     "recommended": "موصى به",
     "familyAll": "الكل",
-    "familyFilterLabel": "تصفية النماذج حسب العائلة"
+    "familyFilterLabel": "تصفية النماذج حسب العائلة",
+    "searchPlaceholder": "ابحث عن النماذج",
+    "searchEmpty": "لا توجد نماذج مطابقة لبحثك.",
+    "star": "تمييز {name} بنجمة",
+    "unstar": "إزالة التمييز عن {name}",
+    "otherFamily": "أخرى",
+    "hostedExternally": "يعمل على البنية التحتية الخاصة بالمزود من خلال Azure AI Foundry، وليس ضمن بيئة Azure الخاصة بـ MSF.",
+    "hostedIn": {
+      "label": "مستضاف في {regions}",
+      "tooltip": "المنطقة/المناطق في Azure التي تم نشر هذا النموذج فيها. تتم معالجة المحادثات في منطقتك الخاصة."
+    },
+    "badges": {
+      "external": "خارجي",
+      "externalTooltip": "يعمل على البنية التحتية الخاصة بالمزود من خلال Azure AI Foundry، وليس ضمن بيئة Azure الخاصة بـ MSF.",
+      "regionHostedTooltip": "مستضاف في منطقة Azure {region}. تتم معالجة المحادثات مع هذا النموذج هناك."
+    },
+    "favorites": "المفضلة",
+    "euResidencyNote": "جميع النماذج تعمل في منطقة Azure الأوروبية.",
+    "hostedRegion": {
+      "label": "المنطقة المستضافة",
+      "processedIn": "تتم معالجة هذه المحادثة في منطقة Azure {region}.",
+      "euOnlyNote": "{name} مستضاف في منطقة Azure الأوروبية؛ تتم معالجة المحادثات معه هناك."
+    },
+    "version": {
+      "label": "الإصدار"
+    },
+    "reasoningModel": "نموذج استدلال: يفكر خطوة بخطوة قبل الإجابة. أبطأ، لكنه أفضل في المشكلات الصعبة."
   },
   "models": {
     "gpt_4_1": {

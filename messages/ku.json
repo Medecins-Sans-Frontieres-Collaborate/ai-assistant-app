@@ -1449,7 +1449,33 @@
     "modelsDescription": "مۆدێلی AI بۆ گفتوگۆکەت هەڵبژێرە. هەر مۆدێل تایبەتمەندی جیاواز هەیە — یەکێک هەڵبژێرە بۆ بینینی وردەکارییەکان.",
     "recommended": "پێشنیارکراو",
     "familyAll": "هەمووی",
-    "familyFilterLabel": "پارێزگاکردنی مۆدێل بەخێزان"
+    "familyFilterLabel": "پارێزگاکردنی مۆدێل بەخێزان",
+    "searchPlaceholder": "مۆدێل بگەڕێ",
+    "searchEmpty": "هیچ مۆدێلێک پێویستیگەڕانت نەگونجا.",
+    "star": "دەستکاری {name} بکە",
+    "unstar": "دەستکاری {name} لابەرە",
+    "otherFamily": "هی تر",
+    "hostedExternally": "لەسەر infrastucture ی فرەی پارێزەر بە kar يدەچێت بەریەوەی Azure AI Foundry، نە لە ناو ئەو ژێرابوونی Azure ی MSF.",
+    "hostedIn": {
+      "label": "خاوەن بەرەوە لە {regions}",
+      "tooltip": "ئەو ناوچەی Azure ی کە ئەم مۆدێلە لێ دانراوە. گفتگووەکانت لە ناوچەی خۆت کارا دەکرێن."
+    },
+    "badges": {
+      "external": "دەرەکی",
+      "externalTooltip": "لەسەر infrastucture ی فرەی پارێزەر بە kar يدەچێت بەریەوەی Azure AI Foundry، نە لە ناو ژێرابوونی Azure ی MSF.",
+      "regionHostedTooltip": "دەگریت لە ناوچەی Azure ی {region}. گفتگووەکان لەو ناوچە کارا دەکرێن."
+    },
+    "favorites": "دڵخوازەکان",
+    "euResidencyNote": "هەموو مۆدێلەكە لە ناوچەی Azure ی یەکێتی ئەورووپا دەچن.",
+    "hostedRegion": {
+      "label": "ناوچەی بەڕێوەبردن",
+      "processedIn": "ئەم گفتوگۆیە لە ناوچەی Azure ی {region} کارا دەکرێت.",
+      "euOnlyNote": "{name} لە ناوچەی Azure ی یەکێتی ئەورووپا دەچێت؛ گفتگووەکان لە هەمان شوێن کارا دەکرێن."
+    },
+    "version": {
+      "label": "وەشان"
+    },
+    "reasoningModel": "مۆدێلی بیرکردنەوە: پێش وەڵامدانەوە پەیوەندیدان بەهێز دەکات. هێواشتر، باشتر بواری کێشەی قورس."
   },
   "models": {
     "gpt_4_1": {

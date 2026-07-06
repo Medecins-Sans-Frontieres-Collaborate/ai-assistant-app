@@ -1449,7 +1449,33 @@
     "modelsDescription": "Suɓ model AI ngam haasay maa. Model goɗɗo ina daɗi e bannguuji, suɓo ɗam gollu e ɗum.",
     "recommended": "Mo tawtii",
     "familyAll": "Fof",
-    "familyFilterLabel": "Suɓo moode e leydi moode"
+    "familyFilterLabel": "Suɓo moode e leydi moode",
+    "searchPlaceholder": "Yiylu moodelji",
+    "searchEmpty": "Moodel wala neɗɗa yiylitaade e yiytude maa.",
+    "star": "Sanyinaa {name}",
+    "unstar": "Momtu sanyinaa {name}",
+    "otherFamily": "Golle",
+    "hostedExternally": "Soowdi e kañum gumɗo jogi moƴƴi e Azure AI Foundry, waawan e kille MSF Azure.",
+    "hostedIn": {
+      "label": "Soowdi e {regions}",
+      "tooltip": "Ɓurndi Azure kala moodel soowdi. Hitaande e moodel on mbaawi e ɓurnda maa."
+    },
+    "badges": {
+      "external": "Golle bana",
+      "externalTooltip": "Soowdi e kañum gumɗo jogi moƴƴi e Azure AI Foundry, waawan e kille MSF Azure.",
+      "regionHostedTooltip": "Soowdi e ɓurndi Azure {region}. Wadi hitaande e moodel on mbaawi ngon."
+    },
+    "favorites": "Moodelji mbelɗum",
+    "euResidencyNote": "Moodel ɗiɗi soowdi e ɓurndi Azure e EU.",
+    "hostedRegion": {
+      "label": "Ɓurndi soowdi",
+      "processedIn": "Hitaande on mbaawi e ɓurndi Azure {region}.",
+      "euOnlyNote": "{name} soowdi e ɓurndi Azure e EU; hitaande e mo on mbaawi ngon."
+    },
+    "version": {
+      "label": "Ndogu"
+    },
+    "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi."
   },
   "models": {
     "gpt_4_1": {

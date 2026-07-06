@@ -1398,7 +1398,33 @@
     "modelsDescription": "Trieu un model d'AI per a la conversa. Cada model té punts forts diferents — seleccioneu-ne un per veure els detalls.",
     "recommended": "Recomanat",
     "familyAll": "Totes",
-    "familyFilterLabel": "Filtra els models per família"
+    "familyFilterLabel": "Filtra els models per família",
+    "searchPlaceholder": "Cerca models",
+    "searchEmpty": "No hi ha cap model que coincideixi amb la cerca.",
+    "star": "Afavoreix {name}",
+    "unstar": "Elimina de favorits {name}",
+    "otherFamily": "Altres",
+    "hostedExternally": "Funciona a la pròpia infraestructura del proveïdor mitjançant Azure AI Foundry, no dins de l'entorn Azure de MSF.",
+    "hostedIn": {
+      "label": "Allotjat a {regions}",
+      "tooltip": "La regió o regions Azure on s'ha desplegat aquest model. Les converses es processen a la vostra pròpia regió."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Funciona a la pròpia infraestructura del proveïdor mitjançant Azure AI Foundry, no dins de l'entorn Azure de MSF.",
+      "regionHostedTooltip": "Allotjat a la regió Azure {region}. Les converses amb aquest model es processen allà."
+    },
+    "favorites": "Preferits",
+    "euResidencyNote": "Tots els models s'executen a la regió Azure de la UE.",
+    "hostedRegion": {
+      "label": "Regió d'allotjament",
+      "processedIn": "Aquesta conversa es processa a la regió Azure {region}.",
+      "euOnlyNote": "{name} està allotjat a la regió Azure de la UE; les converses amb aquest model es processen allà."
+    },
+    "version": {
+      "label": "Versió"
+    },
+    "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos."
   },
   "models": {
     "gpt_4_1": {

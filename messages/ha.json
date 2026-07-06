@@ -1449,7 +1449,33 @@
     "modelsDescription": "Zaɓi samfurin AI don tattaunawar ku. Kowanne samfur yana da ƙwarewa daban — zaɓi guda ɗaya don duba cikakkun bayanai.",
     "recommended": "An ba da shawarar",
     "familyAll": "Duka",
-    "familyFilterLabel": "Farfasa samfuran ta iyali"
+    "familyFilterLabel": "Farfasa samfuran ta iyali",
+    "searchPlaceholder": "Bincika samfura",
+    "searchEmpty": "Babu samfuri da ya dace da bincikanka.",
+    "star": "Ƙara tauraro {name}",
+    "unstar": "Cire tauraro daga {name}",
+    "otherFamily": "Sauran",
+    "hostedExternally": "Ana gudanar da shi a kan tsarin mai bayarwa ta hanyar Azure AI Foundry, ba a cikin mahallin Azure na MSF ba.",
+    "hostedIn": {
+      "label": "An adana a {regions}",
+      "tooltip": "Yankin Azure inda aka dora wannan samfuri. Ana sarrafa tattaunawa a yankinka."
+    },
+    "badges": {
+      "external": "Na waje",
+      "externalTooltip": "Ana gudanar da shi a kan tsarin mai bayarwa ta hanyar Azure AI Foundry, ba a cikin mahallin Azure na MSF ba.",
+      "regionHostedTooltip": "An dora shi a yankin Azure na {region}. Ana sarrafa tattaunawa da wannan samfuri a can."
+    },
+    "favorites": "Masu so",
+    "euResidencyNote": "Dukkan samfuran suna gudana a yankin Azure na EU.",
+    "hostedRegion": {
+      "label": "Yankin da aka adana",
+      "processedIn": "Ana sarrafa wannan tattaunawar a yankin Azure na {region}.",
+      "euOnlyNote": "{name} ana adana shi a yankin Azure na EU; ana sarrafa tattaunawa da shi a can."
+    },
+    "version": {
+      "label": "Sigar"
+    },
+    "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala."
   },
   "models": {
     "gpt_4_1": {

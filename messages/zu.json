@@ -1449,7 +1449,33 @@
     "modelsDescription": "Khetha imodeli ye-AI yengxoxo yakho. Imodeli ngayinye inokusebenza okuhlukile — khetha eyodwa ukuze ubone imininingwane.",
     "recommended": "Kunconyiwe",
     "familyAll": "Konke",
-    "familyFilterLabel": "Hlunga imodeli ngomndeni"
+    "familyFilterLabel": "Hlunga imodeli ngomndeni",
+    "searchPlaceholder": "Sesha imodeli",
+    "searchEmpty": "Azikho izimodeli ezifana naleso sifuno sakho.",
+    "star": "Faka inkanyezi ku-{name}",
+    "unstar": "Susa inkanyezi ku-{name}",
+    "otherFamily": "Okunye",
+    "hostedExternally": "Isebenza enxanxatheleni yomphakeli uqobo nge-Azure AI Foundry, hhayi ngaphakathi endaweni ye-MSFAzure.",
+    "hostedIn": {
+      "label": "Ibanjwe e-{regions}",
+      "tooltip": "Isifunda se-Azure lapho le modeli ibekwe khona. Ingxoxo yakho iyacutshungulwa esifundeni sakho."
+    },
+    "badges": {
+      "external": "Okungaphandle",
+      "externalTooltip": "Isebenza enxanxatheleni yomphakeli uqobo nge-Azure AI Foundry, hhayi ngaphakathi endaweni ye-MSFAzure.",
+      "regionHostedTooltip": "Ibanjwe esifundeni se-Azure i-{region}. Ingxoxo nale modeli icutshungulwa khona."
+    },
+    "favorites": "Ezintandwayo",
+    "euResidencyNote": "Zonke izimodeli zisebenza esifundeni se-EU Azure.",
+    "hostedRegion": {
+      "label": "Isifunda esibanjwe kuso",
+      "processedIn": "Lengxoxo icutshungulwa esifundeni se-Azure i-{region}.",
+      "euOnlyNote": "{name} ibanjwe esifundeni se-EU Azure; ingxoxo nayo icutshungulwa khona."
+    },
+    "version": {
+      "label": "Inguqulo"
+    },
+    "reasoningModel": "Imodeli yokucabanga: icabanga isinyathelo nesinyathelo ngaphambi kokuphendula. Iyahamba kancane, kodwa ingcono ezinkingeni ezinzima."
   },
   "models": {
     "gpt_4_1": {

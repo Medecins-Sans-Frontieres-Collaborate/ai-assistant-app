@@ -1449,7 +1449,33 @@
     "modelsDescription": "ንውዕልናኻ ኣይ ሞዴል ምረፅ። ተወዳዳሪ ውጻኢታት ኣሎም — መርሓት ናይ መረጻ ተያዩ።",
     "recommended": "ዝመኽር",
     "familyAll": "ኩሉ",
-    "familyFilterLabel": "ሞዴላት ብቤተሰብ ኣምራኽ"
+    "familyFilterLabel": "ሞዴላት ብቤተሰብ ኣምራኽ",
+    "searchPlaceholder": "ሞዴሎታት ድለ",
+    "searchEmpty": "ምልካም ሞዴል ተረኽበንካኣይኮነን።",
+    "star": "{name} ምስውዕ",
+    "unstar": "{name} ምኽፋል ምስውዕ",
+    "otherFamily": "ካብኡ ዝሓለፈ",
+    "hostedExternally": "ብ Azure AI Foundry ኣብ ውሽጢ ተጠቒሙ ዝሕሸ እዩ፡ ኣይኮነን ኣብ MSF ዝምልከት Azure ኣንቫየረንት።",
+    "hostedIn": {
+      "label": "ተዳልየ ኣብ {regions}",
+      "tooltip": "ናይ Azure ክልል(ታት) ዝሞሉ እዮም። ዕማጽኦትኩም ኣብ ናትኩም ክልል ተሕሪፉ ይግባእ።"
+    },
+    "badges": {
+      "external": "ወጻኢ",
+      "externalTooltip": "ብ Azure AI Foundry ኣብ ውሽጢ ተጠቒሙ ዝሕሸ እዩ፡ ኣይኮነን ኣብ MSF ዝምልከት Azure ኣንቫየረንት።",
+      "regionHostedTooltip": "ተዳልየ ኣብ {region} Azure ክልል። ዕማጽኦት ኣብዚ ተሕሪፉ ይግባእ።"
+    },
+    "favorites": "ወዳጅታት",
+    "euResidencyNote": "ኩሉ ሞዴሎታት ኣብ EU Azure ክልል ይሕሸዉ።",
+    "hostedRegion": {
+      "label": "ኣቦ ዝተዳለየ ክልል",
+      "processedIn": "እዚ ዕማጽኦ ኣብ {region} Azure ክልል ይተሕርፋሉ።",
+      "euOnlyNote": "{name} ኣብ EU Azure ክልል ተዳልየ እዩ፡ ዕማጽኦታቱ ኣብዚ ይተሕርፉ።"
+    },
+    "version": {
+      "label": "መንገዲ"
+    },
+    "reasoningModel": "ሞዴል ምስማር፡ ዳግማይ ብደሓን ይሓትት እንዳ ይመልስ። ዝቐርሰን ምርጡ ብዓበይቲ ጸገማታት።"
   },
   "models": {
     "gpt_4_1": {
