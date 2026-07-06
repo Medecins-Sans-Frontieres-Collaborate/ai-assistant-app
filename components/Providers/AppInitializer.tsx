@@ -1,11 +1,18 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
+import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import {
+  ModelListSource,
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+} from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -26,6 +33,16 @@ import { getDefaultModel, isModelDisabled } from '@/config/models';
  */
 export function AppInitializer() {
   const hasLoadedRef = useRef(false);
+  const { data: session } = useSession();
+  const sessionRegion = session?.user?.region ?? null;
+
+  // Mirror the session's effective region into the settings store so vanilla
+  // (non-hook) consumers — chatStore's selectability gate, the one-shot init
+  // effect below — can read it. Reactive: follows session refetches and the
+  // region-override cookie (auth applies the override into session.user.region).
+  useEffect(() => {
+    useSettingsStore.getState().setUserRegion(sessionRegion);
+  }, [sessionRegion]);
 
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode
@@ -50,6 +67,7 @@ export function AppInitializer() {
         (m) => !m.isDisabled && !isModelDisabled(m.id),
       );
       setModels(models);
+      useSettingsStore.getState().setModelListSource('static');
 
       // 2. Set default model if not already persisted
       if (!defaultModelId && models.length > 0) {
@@ -100,24 +118,35 @@ export function AppInitializer() {
             const discovered = json?.data?.models as OpenAIModel[] | undefined;
             if (Array.isArray(discovered) && discovered.length > 0) {
               setModels(discovered);
+              useSettingsStore
+                .getState()
+                .setModelListSource(
+                  (json?.data?.source as ModelListSource | undefined) ?? null,
+                );
 
               // The persisted defaultModelId may no longer exist in the
               // discovered list (region change, deployment removed, ring
-              // gate). Re-resolve the env default so NEW conversations don't
-              // start with a missing model.
+              // gate), or may exist but not be selectable there. Re-resolve the
+              // env default among SELECTABLE models only — discovered[0] can
+              // be a foreign-region-only model (e.g. EU-only for a US user),
+              // and defaulting onto it would break new conversations.
+              const region = useSettingsStore.getState().userRegion;
+              const selectable = discovered.filter((m) =>
+                isModelSelectableInRegion(m, region),
+              );
               const currentDefaultId =
                 useSettingsStore.getState().defaultModelId;
               const stillPresent =
                 currentDefaultId &&
-                discovered.some((m) => m.id === currentDefaultId);
+                selectable.some((m) => m.id === currentDefaultId);
               if (!stillPresent) {
                 const envDefaultModelId = getDefaultModel();
                 const newDefault =
-                  discovered.find((m) => m.id === envDefaultModelId) ||
-                  discovered[0];
+                  selectable.find((m) => m.id === envDefaultModelId) ||
+                  selectable[0];
                 if (newDefault) {
                   console.log(
-                    `[AppInitializer] Persisted defaultModelId "${currentDefaultId}" not in discovered list. Re-selecting default: ${newDefault.id}`,
+                    `[AppInitializer] Persisted defaultModelId "${currentDefaultId}" not selectable in discovered list. Re-selecting default: ${newDefault.id}`,
                   );
                   setDefaultModelId(newDefault.id as OpenAIModelID);
                 }
