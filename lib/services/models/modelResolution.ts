@@ -92,6 +92,13 @@ const ALLOWED_PROVIDERS = [
   'mistral',
 ] as const satisfies readonly NonNullable<OpenAIModel['provider']>[];
 
+/** Curation tiers; tag-supplied values outside this are ignored. */
+const ALLOWED_TIERS = [
+  'featured',
+  'standard',
+  'legacy',
+] as const satisfies readonly NonNullable<OpenAIModel['tier']>[];
+
 /**
  * Overlays ARM `ui-*` resource tags onto a model config. This is how a new
  * model deployed in Azure can get (or override) display + routing metadata
@@ -140,6 +147,18 @@ export function applyTagOverlay(
   if (tags['ui-is-agent'] === 'false') {
     m.isAgent = false;
   }
+  if (tags['ui-tier']) {
+    const tier = tags['ui-tier'];
+    if ((ALLOWED_TIERS as readonly string[]).includes(tier)) {
+      m.tier = tier as OpenAIModel['tier'];
+    } else {
+      console.warn(`applyTagOverlay: ignoring unknown ui-tier "${tier}"`);
+    }
+  }
+  // There is deliberately NO ui-hosting overlay: `hosting` is a compliance
+  // disclosure ("inference runs outside MSF's Azure environment"), and an ARM
+  // tag must not be able to relabel how data is handled. Changing it requires
+  // a code change to config/models.json.
   return m;
 }
 
@@ -205,4 +224,45 @@ export function mergeDiscoveryWithMetadata(
  */
 export function applyRingGate(models: OpenAIModel[]): OpenAIModel[] {
   return models.filter((m) => !m.isDisabled && !isModelDisabled(m.id));
+}
+
+/** One region's discovery result, for mergeMultiRegionDiscovery. */
+export interface RegionalDeployments {
+  region: 'US' | 'EU';
+  deployed: DeployedModel[];
+}
+
+/**
+ * Merges discovery results from multiple regions into one model list, tagging
+ * each model with `hostedIn` = every region where a deployment with that name
+ * exists.
+ *
+ * ORDER MATTERS: the caller passes the user's HOME region first. On a name
+ * collision the first region's metadata + ARM tag overlay win — the user
+ * chats against the home deployment, so its tags are the truthful ones —
+ * and later regions only extend `hostedIn`.
+ */
+export function mergeMultiRegionDiscovery(
+  regions: RegionalDeployments[],
+  metadataById: Record<string, OpenAIModel>,
+  opts: MergeOptions,
+): OpenAIModel[] {
+  const byId = new Map<string, OpenAIModel>();
+  for (const { region, deployed } of regions) {
+    for (const model of mergeDiscoveryWithMetadata(
+      deployed,
+      metadataById,
+      opts,
+    )) {
+      const existing = byId.get(model.id);
+      if (existing) {
+        if (existing.hostedIn && !existing.hostedIn.includes(region)) {
+          existing.hostedIn.push(region);
+        }
+      } else {
+        byId.set(model.id, { ...model, hostedIn: [region] });
+      }
+    }
+  }
+  return [...byId.values()];
 }
