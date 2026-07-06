@@ -145,6 +145,13 @@ export interface ChatContext {
   /** Search mode for tool routing */
   searchMode?: SearchMode;
 
+  /**
+   * Requested hosting region for this conversation (cross-region routing).
+   * Client preference only — resolveChatRegion enforces EU users → EU
+   * server-side regardless of this value.
+   */
+  hostedRegion?: 'US' | 'EU';
+
   /** Whether agent mode is enabled */
   agentMode?: boolean;
 

@@ -296,6 +296,7 @@ export class StandardChatHandler extends BasePipelineStage {
             reasoningEffort: context.reasoningEffort,
             verbosity: context.verbosity,
             botId: ragConfig?.botId,
+            hostedRegion: context.hostedRegion,
             transcript,
             citations,
             tone: context.tone,

@@ -238,6 +238,10 @@ const ChatBodySchema = z
     verbosity: z.enum(['low', 'medium', 'high']).optional(),
     botId: z.string().max(100, 'Bot ID too long').optional(),
     searchMode: z.nativeEnum(SearchMode).optional(),
+    // Which region's hosted instance to chat with (cross-region routing).
+    // Validated as a strict enum; the server additionally forces EU users to
+    // EU in resolveChatRegion regardless of this value.
+    hostedRegion: z.enum(['US', 'EU']).optional(),
     threadId: z.string().max(100, 'Thread ID too long').optional(),
     forcedAgentType: z.string().max(50, 'Agent type too long').optional(),
     tone: ToneSchema.optional(), // Full tone object from client
