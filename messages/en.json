@@ -1466,7 +1466,36 @@
     },
     "title": "Select a model",
     "modelsDescription": "Choose an AI model for your conversation. Each model has different strengths — select one to see details.",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "searchPlaceholder": "Search models",
+    "searchEmpty": "No models match your search.",
+    "star": "Star {name}",
+    "unstar": "Unstar {name}",
+    "otherFamily": "Other",
+    "hostedExternally": "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+    "hostedIn": {
+      "label": "Hosted in {regions}",
+      "tooltip": "The Azure region(s) where this model is deployed. Conversations are processed in your own region."
+    },
+    "badges": {
+      "external": "External",
+      "externalTooltip": "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+      "regionHostedTooltip": "Hosted in the {region} Azure region. Conversations with this model are processed there."
+    },
+    "favorites": "Favorites",
+    "euResidencyNote": "All models run in the EU Azure region.",
+    "types": {
+      "reasoning": "Reasoning",
+      "general": "General"
+    },
+    "hostedRegion": {
+      "label": "Hosted region",
+      "processedIn": "This conversation is processed in the {region} Azure region.",
+      "euOnlyNote": "{name} is hosted in the EU Azure region; conversations with it are processed there."
+    },
+    "version": {
+      "label": "Version"
+    }
   },
   "models": {
     "gpt_4_1": {
