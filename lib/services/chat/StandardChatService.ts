@@ -12,6 +12,8 @@ import {
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
+import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
+import { UserRegion } from '@/lib/utils/shared/region';
 
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
@@ -54,6 +56,17 @@ export interface StandardChatRequest {
   tone?: Tone; // Full tone object from client
   pendingTranscriptions?: PendingTranscriptionInfo[]; // Async batch transcription jobs
   streamingSpeed?: StreamingSpeedConfig; // Smooth streaming speed configuration
+  /** Requested hosting region (cross-region routing); EU users are forced to EU. */
+  hostedRegion?: UserRegion;
+}
+
+/** Region-pinned clients supplied by the container (all optional — see ServiceContainer). */
+export interface RegionClientResolver {
+  (region: UserRegion): {
+    azureOpenAIClient?: AzureOpenAI;
+    openAIClient?: OpenAI;
+    anthropicFoundryClient?: AnthropicFoundry;
+  };
 }
 
 /**
@@ -76,6 +89,7 @@ export class StandardChatService {
   private modelSelector: ModelSelector;
   private toneService: ToneService;
   private streamingService: StreamingService;
+  private getRegionClients: RegionClientResolver | undefined;
 
   constructor(
     azureOpenAIClient: AzureOpenAI,
@@ -84,6 +98,7 @@ export class StandardChatService {
     modelSelector: ModelSelector,
     toneService: ToneService,
     streamingService: StreamingService,
+    getRegionClients?: RegionClientResolver,
   ) {
     this.azureOpenAIClient = azureOpenAIClient;
     this.openAIClient = openAIClient;
@@ -91,6 +106,28 @@ export class StandardChatService {
     this.modelSelector = modelSelector;
     this.toneService = toneService;
     this.streamingService = streamingService;
+    this.getRegionClients = getRegionClients;
+  }
+
+  /**
+   * Picks the client set for this request's resolved region. `null` region
+   * (no preference, non-EU user) or a missing region-specific client keeps
+   * the injected default — per-SDK graceful fallback, chat never breaks on
+   * missing regional configuration.
+   */
+  private resolveClients(region: UserRegion | null): {
+    azureOpenAIClient: AzureOpenAI;
+    openAIClient: OpenAI;
+    anthropicFoundryClient: AnthropicFoundry | undefined;
+  } {
+    const regional =
+      region && this.getRegionClients ? this.getRegionClients(region) : null;
+    return {
+      azureOpenAIClient: regional?.azureOpenAIClient ?? this.azureOpenAIClient,
+      openAIClient: regional?.openAIClient ?? this.openAIClient,
+      anthropicFoundryClient:
+        regional?.anthropicFoundryClient ?? this.anthropicFoundryClient,
+    };
   }
 
   /**
@@ -159,6 +196,20 @@ export class StandardChatService {
     );
     // Don't free() - encoding is shared across requests
 
+    // Resolve which region's clients to use (cross-region routing). EU users
+    // are always forced to EU inside resolveChatRegion, whatever the client
+    // sent; null keeps the default clients (pre-cross-region behavior).
+    const chatRegion = resolveChatRegion(
+      request.user?.region as UserRegion | undefined,
+      request.hostedRegion,
+    );
+    const clients = this.resolveClients(chatRegion);
+    if (chatRegion) {
+      console.log(
+        `[StandardChatService] Routing chat to ${chatRegion} region endpoints`,
+      );
+    }
+
     // Check if this is an Anthropic model (different API)
     if (HandlerFactory.isAnthropicModel(modelConfig)) {
       return this.handleAnthropicChat(
@@ -170,6 +221,7 @@ export class StandardChatService {
         request.user,
         request.transcript,
         request.citations,
+        clients.anthropicFoundryClient,
       );
     }
 
@@ -190,8 +242,8 @@ export class StandardChatService {
 
       const handler = HandlerFactory.getHandler(
         activeConfig,
-        this.azureOpenAIClient,
-        this.openAIClient,
+        clients.azureOpenAIClient,
+        clients.openAIClient,
       );
 
       console.log(
@@ -281,9 +333,11 @@ export class StandardChatService {
     user: Session['user'],
     transcript?: TranscriptMetadata,
     citations?: Citation[],
+    anthropicClient?: AnthropicFoundry,
   ): Promise<Response> {
+    const client = anthropicClient ?? this.anthropicFoundryClient;
     // Validate Anthropic client is configured
-    if (!this.anthropicFoundryClient) {
+    if (!client) {
       console.error(
         '[StandardChatService] Anthropic client not configured. Set AZURE_AI_FOUNDRY_ANTHROPIC_ENDPOINT.',
       );
@@ -295,7 +349,7 @@ export class StandardChatService {
       );
     }
 
-    const handler = new AnthropicFoundryHandler(this.anthropicFoundryClient);
+    const handler = new AnthropicFoundryHandler(client);
 
     console.log(
       `[StandardChatService] Using AnthropicFoundryHandler for model: ${sanitizeForLog(modelConfig.id)}`,
