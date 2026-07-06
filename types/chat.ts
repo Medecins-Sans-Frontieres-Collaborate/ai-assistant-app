@@ -225,6 +225,12 @@ export interface ChatBody {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   forcedAgentType?: string; // Force routing to specific agent type (e.g., 'web_search')
+  /**
+   * Which region's hosted instance this conversation chats with
+   * (cross-region routing). Client preference only: the server forces EU
+   * users to EU regardless (resolveChatRegion).
+   */
+  hostedRegion?: 'US' | 'EU';
   isEditorOpen?: boolean; // Indicates if code editor is currently open
   tone?: Tone; // Full tone object (if tone is selected)
   streamingSpeed?: StreamingSpeedConfig; // Smooth streaming speed configuration
@@ -285,6 +291,13 @@ export interface Conversation {
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // For GPT-5 and o3 models
   verbosity?: 'low' | 'medium' | 'high'; // For GPT-5 models
   defaultSearchMode?: import('./searchMode').SearchMode; // Default search mode for this conversation
+  /**
+   * Which region's hosted instance this conversation chats with. Set from
+   * the details panel (US users, dually-hosted models) or implicitly when a
+   * US user selects an EU-only model. EU users never carry a US value — the
+   * server forces EU regardless.
+   */
+  hostedRegion?: 'US' | 'EU';
   // Active file context (optional; initialized via migration)
   activeFiles?: ActiveFile[];
   activeFilesTokenBudget?: number;

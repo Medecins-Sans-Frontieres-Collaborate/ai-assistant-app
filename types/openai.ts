@@ -45,6 +45,41 @@ export interface OpenAIModel {
   supportsVision?: boolean; // Whether this model can accept image input. Source of truth for OpenAIVisionModelID (derived below).
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
+  /**
+   * Regions where a deployment with this name was discovered (set by
+   * /api/models at runtime, never authored in config/models.json). Absent on
+   * the static list — clients treat absent as available-in-home-region. See
+   * isModelSelectableInRegion (lib/utils/shared/modelRegion.ts).
+   */
+  hostedIn?: ('US' | 'EU')[];
+  /**
+   * Where inference runs. 'azure' (default when absent) = inside MSF's Azure
+   * environment; 'external' = the provider's own infrastructure reached
+   * through Azure AI Foundry (currently the claude-* models). Compliance
+   * disclosure — deliberately NOT settable via ARM ui-* tags. Read through
+   * getModelHosting() so the default lives in one place.
+   */
+  hosting?: 'azure' | 'external';
+  /**
+   * Picker curation tier: 'featured' models are DEFAULT FAVORITES (surface in
+   * the Favorites section until the user unstars them), 'legacy' versions are
+   * hidden by default inside their series' chip strip, 'standard' (default
+   * when absent) renders normally. Read through getModelTier().
+   */
+  tier?: 'featured' | 'standard' | 'legacy';
+
+  /**
+   * Lineage key shared by every version of the same model line (e.g. 'gpt',
+   * 'gpt-chat', 'claude-opus'). Models sharing a series render as ONE picker
+   * row with a version chip strip; models without a series render as plain
+   * rows. Version recency = position in DEFAULT_MODEL_ORDER.
+   */
+  series?: string;
+  /** Display name of the series row (e.g. "GPT", "Claude Opus"). Same value on every member. */
+  seriesLabel?: string;
+  /** Short version chip text (e.g. "5.4", "4o", "4.6"). */
+  versionLabel?: string;
+
   // Advanced reasoning model parameters
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // Current reasoning effort setting
   supportsReasoningEffort?: boolean; // Whether model supports reasoning_effort parameter
@@ -163,6 +198,14 @@ const openAIModelSchema = z.object({
   supportsTemperature: z.boolean().optional(),
   supportsVision: z.boolean().optional(),
   deploymentName: z.string().optional(),
+  // hostedIn is intentionally NOT in this schema: it is derived from live
+  // discovery per request, never authored in config/models.json (unknown keys
+  // are stripped, so an accidental JSON entry is discarded rather than trusted).
+  hosting: z.enum(['azure', 'external']).optional(),
+  tier: z.enum(['featured', 'standard', 'legacy']).optional(),
+  series: z.string().optional(),
+  seriesLabel: z.string().optional(),
+  versionLabel: z.string().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
   supportsMinimalReasoning: z.boolean().optional(),
@@ -228,6 +271,42 @@ function createModelConfigs(): Record<OpenAIModelID, OpenAIModel> {
 
 export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> =
   createModelConfigs();
+
+/**
+ * Hosting with its default applied. The single defaulting point: static-list
+ * models and synthesized unknowns (both of which omit the field) resolve to
+ * 'azure' here instead of every consumer re-implementing the fallback.
+ */
+export function getModelHosting(
+  model: Pick<OpenAIModel, 'hosting'>,
+): NonNullable<OpenAIModel['hosting']> {
+  return model.hosting ?? 'azure';
+}
+
+/** Curation tier with its default applied (see getModelHosting). */
+export function getModelTier(
+  model: Pick<OpenAIModel, 'tier'>,
+): NonNullable<OpenAIModel['tier']> {
+  return model.tier ?? 'standard';
+}
+
+/**
+ * Provenance of the model list served by /api/models, stored client-side so
+ * the UI can adapt (suppress region/hosting chrome on static lists, note
+ * partial results). Defined here rather than in the route file so client code
+ * never imports from a server route module.
+ *  - 'static'            — discovery disabled; static list.
+ *  - 'static-no-region'  — discovery enabled but no regional accounts configured.
+ *  - 'discovery'         — all applicable regions discovered.
+ *  - 'discovery-partial' — home region discovered; a foreign region failed.
+ *  - 'fallback'          — discovery errored server-side; static list.
+ */
+export type ModelListSource =
+  | 'static'
+  | 'static-no-region'
+  | 'discovery'
+  | 'discovery-partial'
+  | 'fallback';
 
 /**
  * Vision-capable model IDs, derived from the `supportsVision` metadata flag.
