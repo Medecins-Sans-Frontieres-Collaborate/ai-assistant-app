@@ -9,9 +9,11 @@ import { SearchMode } from '@/types/searchMode';
 
 import { AdvancedOptionsSection } from './AdvancedOptionsSection';
 import { CustomAgentInfo } from './CustomAgentInfo';
+import { HostedRegionSection } from './HostedRegionSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
 import { SearchModeSection } from './SearchModeSection';
+import { VersionSection } from './VersionSection';
 
 import { CustomAgent } from '@/client/stores/settingsStore';
 
@@ -29,6 +31,8 @@ interface ModelDetailsPanelProps {
   handleSetSearchMode: (mode: SearchMode) => void;
   setShowModelAdvanced: (show: boolean) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
+  /** Selects another version of the selected model's series (base models). */
+  onSelectVersion?: (model: OpenAIModel) => void;
   // Custom agent props for action buttons
   customAgent?: CustomAgent;
   onEditAgent?: (agent: CustomAgent) => void;
@@ -51,6 +55,7 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
   handleSetSearchMode,
   setShowModelAdvanced,
   updateConversation,
+  onSelectVersion,
   customAgent,
   onEditAgent,
   onDeleteAgent,
@@ -112,6 +117,23 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
           modelConfig={modelConfig}
           setMobileView={setMobileView}
           organizationAgent={organizationAgent}
+        />
+      )}
+
+      {/* Version switcher for series models (list shows one row per series) */}
+      {!isCustomAgent && !organizationAgent && onSelectVersion && (
+        <VersionSection
+          selectedModel={selectedModel}
+          onSelectVersion={onSelectVersion}
+        />
+      )}
+
+      {/* Hosting-region choice for base models (US users, dual-hosted) */}
+      {!isCustomAgent && !organizationAgent && (
+        <HostedRegionSection
+          selectedModel={selectedModel}
+          selectedConversation={selectedConversation}
+          updateConversation={updateConversation}
         />
       )}
 
