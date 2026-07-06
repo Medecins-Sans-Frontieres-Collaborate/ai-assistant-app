@@ -5,10 +5,11 @@ import {
   inferProvider,
   inferSdk,
   mergeDiscoveryWithMetadata,
+  mergeMultiRegionDiscovery,
   synthesizeUnknownModel,
 } from '@/lib/services/models/modelResolution';
 
-import { OpenAIModel } from '@/types/openai';
+import { OpenAIModel, getModelHosting, getModelTier } from '@/types/openai';
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -268,5 +269,130 @@ describe('applyRingGate', () => {
     mockIsModelDisabled.mockImplementation((id) => id === 'beta-model');
     const out = applyRingGate(models);
     expect(out.map((m) => m.id)).toEqual(['gpt-5.2']);
+  });
+});
+
+describe('applyTagOverlay ui-tier / ui-hosting', () => {
+  const base: OpenAIModel = {
+    id: 'm',
+    name: 'm',
+    maxLength: 1000,
+    tokenLimit: 100,
+  };
+
+  it('applies a valid ui-tier', () => {
+    expect(applyTagOverlay(base, { 'ui-tier': 'featured' }).tier).toBe(
+      'featured',
+    );
+    expect(applyTagOverlay(base, { 'ui-tier': 'legacy' }).tier).toBe('legacy');
+  });
+
+  it('ignores an unknown ui-tier value', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(
+      applyTagOverlay(base, { 'ui-tier': 'super-special' }).tier,
+    ).toBeUndefined();
+    warnSpy.mockRestore();
+  });
+
+  it('never lets a tag set hosting (compliance property)', () => {
+    // There is intentionally no ui-hosting overlay: an ARM tag must not be
+    // able to relabel where inference runs.
+    const m = applyTagOverlay({ ...base, hosting: 'external' }, {
+      'ui-hosting': 'azure',
+    } as Record<string, string>);
+    expect(m.hosting).toBe('external');
+  });
+});
+
+describe('getModelHosting / getModelTier defaults', () => {
+  it('defaults hosting to azure and tier to standard', () => {
+    expect(getModelHosting({})).toBe('azure');
+    expect(getModelTier({})).toBe('standard');
+    expect(getModelHosting({ hosting: 'external' })).toBe('external');
+    expect(getModelTier({ tier: 'legacy' })).toBe('legacy');
+  });
+
+  it('synthesized unknowns default to azure/standard via the helpers', () => {
+    const m = synthesizeUnknownModel(deployed('mystery-model', 'Acme AI'));
+    expect(m.hosting).toBeUndefined();
+    expect(m.tier).toBeUndefined();
+    expect(getModelHosting(m)).toBe('azure');
+    expect(getModelTier(m)).toBe('standard');
+  });
+});
+
+describe('mergeMultiRegionDiscovery', () => {
+  const metadata: Record<string, OpenAIModel> = {
+    'gpt-5.2': { id: 'gpt-5.2', name: 'GPT-5.2', maxLength: 1, tokenLimit: 1 },
+    'Mistral-Large-3': {
+      id: 'Mistral-Large-3',
+      name: 'Mistral Large 3',
+      maxLength: 1,
+      tokenLimit: 1,
+    },
+  };
+
+  it('tags each model with every region it is deployed in', () => {
+    const out = mergeMultiRegionDiscovery(
+      [
+        {
+          region: 'US',
+          deployed: [deployed('gpt-5.2', 'OpenAI')],
+        },
+        {
+          region: 'EU',
+          deployed: [
+            deployed('gpt-5.2', 'OpenAI'),
+            deployed('Mistral-Large-3', 'Mistral AI'),
+          ],
+        },
+      ],
+      metadata,
+      { showUnknown: false },
+    );
+    const byId = Object.fromEntries(out.map((m) => [m.id, m]));
+    expect(byId['gpt-5.2'].hostedIn).toEqual(['US', 'EU']);
+    expect(byId['Mistral-Large-3'].hostedIn).toEqual(['EU']);
+  });
+
+  it('is first-wins on collisions: home tags survive, foreign only extends hostedIn', () => {
+    const out = mergeMultiRegionDiscovery(
+      [
+        {
+          region: 'US',
+          deployed: [deployed('gpt-5.2', 'OpenAI', { 'ui-tagline': 'home' })],
+        },
+        {
+          region: 'EU',
+          deployed: [
+            deployed('gpt-5.2', 'OpenAI', { 'ui-tagline': 'foreign' }),
+          ],
+        },
+      ],
+      metadata,
+      { showUnknown: false },
+    );
+    expect(out).toHaveLength(1);
+    expect(out[0].tagline).toBe('home');
+    expect(out[0].hostedIn).toEqual(['US', 'EU']);
+  });
+
+  it('does not duplicate a region seen twice', () => {
+    const out = mergeMultiRegionDiscovery(
+      [
+        { region: 'EU', deployed: [deployed('gpt-5.2', 'OpenAI')] },
+        { region: 'EU', deployed: [deployed('gpt-5.2', 'OpenAI')] },
+      ],
+      metadata,
+      { showUnknown: false },
+    );
+    expect(out[0].hostedIn).toEqual(['EU']);
+  });
+
+  it('returns [] for no regions', () => {
+    expect(
+      mergeMultiRegionDiscovery([], metadata, { showUnknown: false }),
+    ).toEqual([]);
   });
 });
