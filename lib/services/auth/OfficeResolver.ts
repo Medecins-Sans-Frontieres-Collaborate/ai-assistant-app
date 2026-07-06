@@ -171,6 +171,40 @@ export class OfficeResolver {
     };
   }
 
+  /**
+   * Returns the Foundry accounts MODEL discovery should query for a user, in
+   * priority order: the user's HOME region first (callers rely on this — the
+   * multi-region merge is first-wins, and the route's failure policy treats
+   * the first entry as load-bearing).
+   *
+   * Data residency: EU users get the EU account only. US users also get the
+   * EU account (read-only discovery — a US user's data never goes to EU here;
+   * this only reveals which models exist there) so EU-hosted models can be
+   * shown as present-but-unavailable. Accounts without a configured resource
+   * ID are omitted; an empty array means multi-region isn't configured.
+   */
+  static getModelDiscoveryAccountsForUser(
+    email: string | undefined | null,
+  ): Array<{ region: UserRegion; path: string }> {
+    const office = OfficeResolver.findOfficeByEmail(email);
+    const region = office?.region ?? OfficeResolver.regionFallback(email);
+
+    const us = env.AZURE_AI_FOUNDRY_RESOURCE_ID_US;
+    const eu = env.AZURE_AI_FOUNDRY_RESOURCE_ID_EU;
+
+    const accounts: Array<{ region: UserRegion; path: string | undefined }> =
+      region === 'US'
+        ? [
+            { region: 'US', path: us },
+            { region: 'EU', path: eu },
+          ]
+        : [{ region: 'EU', path: eu }];
+
+    return accounts.filter(
+      (a): a is { region: UserRegion; path: string } => !!a.path,
+    );
+  }
+
   /** Test/dev helper to bust the cache after env changes. */
   static reset(): void {
     OfficeResolver.officesCache = null;
