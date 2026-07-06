@@ -2,6 +2,8 @@ import {
   IconCheck,
   IconChevronDown,
   IconChevronUp,
+  IconStar,
+  IconStarFilled,
   IconTrash,
 } from '@tabler/icons-react';
 import { FC, ReactNode } from 'react';
@@ -29,6 +31,12 @@ interface ModelCardProps {
   onHide?: () => void;
   /** Accessible label for the hide (trash) button. */
   hideLabel?: string;
+  /** Whether this model is starred (filled star, always visible). */
+  starred?: boolean;
+  /** When provided, renders a star toggle (hover-revealed unless starred). */
+  onToggleStar?: () => void;
+  /** Accessible label for the star toggle in its current state. */
+  starLabel?: string;
 }
 
 /**
@@ -50,6 +58,9 @@ export const ModelCard: FC<ModelCardProps> = ({
   onMoveDown,
   onHide,
   hideLabel,
+  starred = false,
+  onToggleStar,
+  starLabel,
 }) => {
   return (
     <div
@@ -129,6 +140,28 @@ export const ModelCard: FC<ModelCardProps> = ({
           )}
         </div>
       </button>
+
+      {/* Star toggle — always visible when starred, hover/focus-revealed when
+          not, so the list stays quiet but starred state is never hidden. */}
+      {onToggleStar && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleStar();
+          }}
+          aria-label={starLabel}
+          aria-pressed={starred}
+          title={starLabel}
+          className={`shrink-0 p-1.5 rounded transition-opacity hover:bg-gray-100 dark:hover:bg-gray-700 ${
+            starred
+              ? 'text-blue-600 dark:text-blue-400'
+              : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 group-focus-within:opacity-100'
+          }`}
+        >
+          {starred ? <IconStarFilled size={16} /> : <IconStar size={16} />}
+        </button>
+      )}
 
       {/* Hide (trash) — revealed on row hover/focus; tap-reachable on touch */}
       {onHide && (
