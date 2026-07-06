@@ -20,6 +20,7 @@ import {
   ClaudeAIIconBrand,
   DeepSeekIcon,
   MetaIcon,
+  MistralIcon,
   OpenAIIcon,
   XAIIcon,
 } from '@/components/Icons/providers';
@@ -62,6 +63,8 @@ export function MobileChatHeader({ onModelSelectChange }: MobileHeaderProps) {
         return <MetaIcon {...iconProps} />;
       case 'anthropic':
         return <ClaudeAIIconBrand {...iconProps} />;
+      case 'mistral':
+        return <MistralIcon {...iconProps} />;
       default:
         return null;
     }

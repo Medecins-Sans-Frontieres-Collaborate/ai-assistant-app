@@ -19,6 +19,7 @@ import {
   ClaudeAIIcon,
   DeepSeekIcon,
   MetaIcon,
+  MistralIcon,
   OpenAIIcon,
   XAIIcon,
 } from '../Icons/providers';
@@ -141,6 +142,8 @@ export const ChatTopbar = ({
         return <MetaIcon {...iconProps} />;
       case 'anthropic':
         return <ClaudeIcon {...iconProps} />;
+      case 'mistral':
+        return <MistralIcon {...iconProps} />;
       default:
         return null;
     }
