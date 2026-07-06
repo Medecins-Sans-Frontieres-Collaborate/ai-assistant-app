@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import React from 'react';
 
 import { Conversation } from '@/types/chat';
@@ -82,7 +88,12 @@ describe('ModelSelect', () => {
     mockFoundryAgents.foundryAgents = [];
     mockFoundryAgents.regionalPath = null;
     mockFoundryAgents.officePaths = [];
-    useSettingsStore.setState({ customAgentSources: [] });
+    useSettingsStore.setState({
+      customAgentSources: [],
+      starredModelIds: [],
+      modelUsageStats: {},
+      userRegion: null,
+    });
 
     // Reset mock data
     mockUseConversations.selectedConversation = {
@@ -97,7 +108,7 @@ describe('ModelSelect', () => {
   });
 
   describe('Model Display', () => {
-    it('renders list of available models', () => {
+    it('renders the full hierarchy at a glance (no collapsed catalog)', () => {
       render(<ModelSelect />);
 
       // Check that model buttons exist (using getAllByRole since there might be multiple GPT-5 variants)
@@ -106,14 +117,15 @@ describe('ModelSelect', () => {
         .filter((btn) => btn.textContent?.includes('GPT-5'));
       expect(gpt5Buttons.length).toBeGreaterThan(0);
 
-      // Check for DeepSeek
+      // Series rows visible without any clicks (^ anchors exclude the
+      // "Star …" toggles, whose accessible names contain the model name)
       expect(
-        screen.getByRole('button', { name: /DeepSeek-V3\.1/i }),
+        screen.getByRole('button', { name: /^DeepSeek V3/i }),
       ).toBeInTheDocument();
 
-      // Check for Llama
+      // Check for Llama (plain single row)
       expect(
-        screen.getByRole('button', { name: /Llama 4 Maverick/i }),
+        screen.getByRole('button', { name: /^Llama 4 Maverick/i }),
       ).toBeInTheDocument();
     });
 
@@ -157,9 +169,7 @@ describe('ModelSelect', () => {
     it('calls updateConversation when model is selected', async () => {
       render(<ModelSelect />);
 
-      const deepseekButton = screen
-        .getByText('DeepSeek-V3.1')
-        .closest('button');
+      const deepseekButton = screen.getByText('DeepSeek V3').closest('button');
       expect(deepseekButton).not.toBeNull();
 
       fireEvent.click(deepseekButton!);
@@ -169,17 +179,16 @@ describe('ModelSelect', () => {
       });
     });
 
-    it('sets default model when model is selected', async () => {
+    it('sets default model when a version is picked in the details panel', async () => {
       render(<ModelSelect />);
 
-      const deepseekButton = screen
-        .getByText('DeepSeek-V3.1')
-        .closest('button');
-      fireEvent.click(deepseekButton!);
+      // Selected model is GPT-5.2; the details panel's Version section lists
+      // the whole GPT series. Chips carry the full model name as tooltip.
+      fireEvent.click(screen.getByTitle('GPT-5'));
 
       await waitFor(() => {
         expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith(
-          OpenAIModelID.DEEPSEEK_V3_1,
+          OpenAIModelID.GPT_5,
         );
       });
     });
@@ -187,11 +196,9 @@ describe('ModelSelect', () => {
     it('sets model with agent capabilities', async () => {
       render(<ModelSelect />);
 
-      // (?! Mini) keeps the match unambiguous now that GPT-4.1 Mini also exists
-      const gpt41Button = screen.getByRole('button', {
-        name: /GPT-4\.1(?! Mini)/i,
-      });
-      fireEvent.click(gpt41Button);
+      // GPT-4.1 is an older GPT version: pick it from the details panel's
+      // Version section (exact title, so GPT-4.1 Mini doesn't match).
+      fireEvent.click(screen.getByTitle('GPT-4.1'));
 
       await waitFor(() => {
         expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
@@ -482,46 +489,142 @@ describe('ModelSelect', () => {
       expect(screen.getByText('Models')).toBeInTheDocument();
     });
 
-    it('orders providers correctly (OpenAI, DeepSeek, Meta)', () => {
+    it('orders provider family groups canonically (OpenAI → DeepSeek → Meta)', () => {
       const { container } = render(<ModelSelect />);
 
-      const modelButtons = screen
-        .getAllByRole('button')
-        .filter((button) => button.querySelector('.font-medium'));
-
-      // Get model names in order
-      const modelNames = modelButtons.map(
-        (button) => button.querySelector('.font-medium')?.textContent || '',
+      const headers = Array.from(container.querySelectorAll('h5')).map(
+        (h) => h.textContent || '',
       );
+      const openAIIndex = headers.findIndex((h) => h.startsWith('OpenAI'));
+      const deepseekIndex = headers.findIndex((h) => h.startsWith('DeepSeek'));
+      const metaIndex = headers.findIndex((h) => h.startsWith('Meta'));
 
-      // GPT-5 (OpenAI) should come before Llama (Meta), and Llama before DeepSeek
-      const gpt5Index = modelNames.findIndex((name) => name.includes('GPT-5'));
-      const llamaIndex = modelNames.findIndex((name) => name.includes('Llama'));
-      const deepseekIndex = modelNames.findIndex((name) =>
-        name.includes('DeepSeek'),
-      );
-
-      expect(gpt5Index).toBeLessThan(llamaIndex);
-      expect(llamaIndex).toBeLessThan(deepseekIndex);
+      expect(openAIIndex).toBeGreaterThanOrEqual(0);
+      expect(openAIIndex).toBeLessThan(deepseekIndex);
+      expect(deepseekIndex).toBeLessThan(metaIndex);
     });
 
-    it('displays OpenAI models including GPT-4.1', () => {
+    it('splits a family into Reasoning and General type groups', () => {
       render(<ModelSelect />);
 
-      const modelButtons = screen
-        .getAllByRole('button')
-        .filter((button) => button.querySelector('.font-medium'));
+      // OpenAI has o3 (reasoning) and the GPT lineups (general).
+      expect(screen.getAllByText('Reasoning').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('General').length).toBeGreaterThan(0);
+    });
+  });
 
-      const modelNames = modelButtons.map(
-        (button) => button.querySelector('.font-medium')?.textContent || '',
+  describe('Favorites, hierarchy, and region', () => {
+    it('has NO Favorites section until the user stars something; Recommended is an inline pill', () => {
+      render(<ModelSelect />);
+
+      expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
+      // Featured models carry the Recommended pill inline in the tree.
+      expect(screen.getAllByText('Recommended').length).toBeGreaterThanOrEqual(
+        1,
       );
+      // The family tree is fully visible — nothing is collapsed away.
+      expect(screen.getByText(/OpenAI \(\d+\)/)).toBeInTheDocument();
+      expect(screen.getByText(/Anthropic \(\d+\)/)).toBeInTheDocument();
+    });
 
-      const openAIModels = modelNames.filter(
-        (name) => name.includes('GPT') || name.includes('o3'),
+    it('shows the Favorites section once the user stars a model', () => {
+      useSettingsStore.setState({ starredModelIds: ['DeepSeek-R1'] });
+
+      render(<ModelSelect />);
+
+      const section = screen.getByText('Favorites').parentElement!;
+      const names = Array.from(section.querySelectorAll('.font-medium')).map(
+        (el) => el.textContent,
       );
+      expect(names[0]).toBe('DeepSeek-R1');
+    });
 
-      // GPT-4.1 should be present among OpenAI models
-      expect(openAIModels.some((name) => name.includes('GPT-4.1'))).toBe(true);
+    it('consolidates a series into ONE row with an inline version tag', () => {
+      render(<ModelSelect />);
+
+      // The GPT series fronts its recommended version as a tag…
+      expect(screen.getByText('GPT')).toBeInTheDocument();
+      // …and no other GPT version appears as its own row in the list.
+      expect(screen.queryByText('GPT-5.4')).not.toBeInTheDocument();
+      expect(screen.queryByText('GPT-5')).not.toBeInTheDocument();
+    });
+
+    it('lists all series versions in the details panel Version section', () => {
+      render(<ModelSelect />);
+
+      // Selected model is GPT-5.2 → Version section covers the GPT series,
+      // legacy versions included.
+      expect(screen.getByText('Version')).toBeInTheDocument();
+      expect(screen.getByTitle('GPT-5.4')).toBeInTheDocument();
+      expect(screen.getByTitle('GPT-4o')).toBeInTheDocument();
+    });
+
+    it('star toggle on a tree card stars the model in the store', () => {
+      render(<ModelSelect />);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Star DeepSeek-R1' }));
+
+      expect(useSettingsStore.getState().starredModelIds).toContain(
+        'DeepSeek-R1',
+      );
+    });
+
+    it('badges EU-hosted models for US users but keeps them SELECTABLE', async () => {
+      const savedModels = mockUseSettings.models;
+      try {
+        mockUseSettings.models = savedModels.map((m) =>
+          m.id === 'Mistral-Large-3' ? { ...m, hostedIn: ['EU' as const] } : m,
+        );
+        useSettingsStore.setState({ userRegion: 'US' });
+
+        render(<ModelSelect />);
+
+        // Informational region badge on the card…
+        expect(screen.getByText('EU')).toBeInTheDocument();
+
+        // …but selection works (chat routes to the hosting region).
+        fireEvent.click(
+          screen.getByRole('button', { name: /^Mistral Large 3/i }),
+        );
+        await waitFor(() =>
+          expect(mockUseConversations.updateConversation).toHaveBeenCalled(),
+        );
+      } finally {
+        mockUseSettings.models = savedModels;
+      }
+    });
+
+    it('shows the residency note for EU users', () => {
+      useSettingsStore.setState({ userRegion: 'EU' });
+
+      render(<ModelSelect />);
+
+      expect(
+        screen.getByText('All models run in the EU Azure region.'),
+      ).toBeInTheDocument();
+    });
+
+    it('search filters across models', () => {
+      render(<ModelSelect />);
+
+      fireEvent.change(screen.getByPlaceholderText('Search models'), {
+        target: { value: 'Llama' },
+      });
+
+      expect(screen.getByText('Llama 4 Maverick')).toBeInTheDocument();
+      expect(screen.queryByText(/OpenAI \(\d+\)/)).not.toBeInTheDocument();
+    });
+
+    it('shows an empty state for a search with no matches', () => {
+      render(<ModelSelect />);
+
+      fireEvent.change(screen.getByPlaceholderText('Search models'), {
+        target: { value: 'zzz-nope' },
+      });
+
+      expect(
+        screen.getByText('No models match your search.'),
+      ).toBeInTheDocument();
     });
   });
 
