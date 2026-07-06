@@ -3,8 +3,9 @@ import { NextRequest } from 'next/server';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { ModelDiscoveryService } from '@/lib/services/models/ModelDiscoveryService';
 import {
+  RegionalDeployments,
   applyRingGate,
-  mergeDiscoveryWithMetadata,
+  mergeMultiRegionDiscovery,
 } from '@/lib/services/models/modelResolution';
 
 import {
@@ -12,7 +13,7 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 
-import { OpenAIModel, OpenAIModels } from '@/types/openai';
+import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
@@ -52,15 +53,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { regionalPath } = OfficeResolver.getDiscoveryPathsForUser(
+    // Home region first — the merge is first-wins and the failure policy
+    // below treats accounts[0] as load-bearing. US users also discover the EU
+    // account (visibility only); EU users stay EU-only (data residency).
+    const accounts = OfficeResolver.getModelDiscoveryAccountsForUser(
       session.user.mail,
     );
-    if (!regionalPath) {
+    if (accounts.length === 0) {
       // Multi-region not configured — nothing to discover against. Surface it so
       // ops can spot a user who has discovery on but no region mapping. Identify
       // by id (never email) to avoid logging PII.
       console.warn(
-        `[/api/models] Discovery enabled but no regional path for user ${
+        `[/api/models] Discovery enabled but no regional accounts for user ${
           session.user.id ?? 'unknown'
         }; serving static list`,
       );
@@ -71,16 +75,19 @@ export async function GET(request: NextRequest) {
     }
 
     if (request.nextUrl.searchParams.has('refresh')) {
-      // Scope the bust to the caller's own region so one user's refresh doesn't
-      // evict every region's cached discovery (CLEARCACHE contract).
-      ModelDiscoveryService.getInstance().clearCache(regionalPath);
+      // Bust every account this caller discovers against (home + foreign),
+      // but not other regions' entries (CLEARCACHE contract).
+      for (const account of accounts) {
+        ModelDiscoveryService.getInstance().clearCache(account.path);
+      }
     }
 
     // App identity → ARM token. Use DefaultAzureCredential, exactly as the rest
     // of the app's managed-identity Azure calls do (blob, RAG, search, Azure
     // OpenAI), so discovery authenticates as the same proven runtime identity
-    // (env service principal in hosted envs, az-cli identity locally). The grant
-    // target is whatever this resolves to — see MODEL_DISCOVERY_TODO.md.
+    // (env service principal in hosted envs, az-cli identity locally). One
+    // token covers both accounts (same ARM scope). Grant target: see
+    // MODEL_DISCOVERY_TODO.md.
     const tokenResponse = await credential.getToken(
       'https://management.azure.com/.default',
     );
@@ -88,25 +95,54 @@ export async function GET(request: NextRequest) {
       throw new Error('No ARM token from app identity');
     }
 
-    const deployed =
-      await ModelDiscoveryService.getInstance().listDeployedModels(
-        tokenResponse.token,
-        regionalPath,
-      );
+    const results = await Promise.allSettled(
+      accounts.map((account) =>
+        ModelDiscoveryService.getInstance().listDeployedModels(
+          tokenResponse.token,
+          account.path,
+        ),
+      ),
+    );
 
-    const merged = mergeDiscoveryWithMetadata(
-      deployed,
+    // Asymmetric failure policy. The HOME region is load-bearing: without it,
+    // every model would fail the client's region gate and the picker would be
+    // effectively empty — worse than the static list, so rethrow into the
+    // fallback. A FOREIGN region failing only costs visibility of its
+    // exclusive models: drop it and say so via 'discovery-partial'.
+    if (results[0].status === 'rejected') {
+      throw results[0].reason;
+    }
+    const regional: RegionalDeployments[] = [];
+    let partial = false;
+    for (let i = 0; i < accounts.length; i++) {
+      const result = results[i];
+      if (result.status === 'fulfilled') {
+        regional.push({ region: accounts[i].region, deployed: result.value });
+      } else {
+        partial = true;
+        console.warn(
+          `[/api/models] ${accounts[i].region} discovery failed; returning partial list:`,
+          result.reason instanceof Error
+            ? result.reason.message
+            : result.reason,
+        );
+      }
+    }
+
+    const merged = mergeMultiRegionDiscovery(
+      regional,
       OpenAIModels as Record<string, OpenAIModel>,
       { showUnknown: env.SHOW_MODELS_WITHOUT_METADATA },
     );
     const models = applyRingGate(merged);
+    const source: ModelListSource = partial ? 'discovery-partial' : 'discovery';
 
     if (env.NODE_ENV !== 'production') {
       console.log(
-        `[/api/models] Returning ${models.length} model(s) from discovery`,
+        `[/api/models] Returning ${models.length} model(s) from ${source} across ${regional.length} region(s)`,
       );
     }
-    return successResponse({ models, source: 'discovery' });
+    return successResponse({ models, source });
   } catch (error) {
     // Fail open: a discovery/RBAC/token error must not leave the user without
     // models. Mirror the agents route's graceful degradation.
