@@ -24,7 +24,10 @@ import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 import { InputValidator } from '../validators/InputValidator';
 
-import { isAudioVideoFile } from '@/lib/constants/fileTypes';
+import {
+  isAudioVideoFile,
+  isWhisperNativeFormat,
+} from '@/lib/constants/fileTypes';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 import fs from 'fs';
 import { performance } from 'perf_hooks';
@@ -236,6 +239,15 @@ export class FileProcessor extends BasePipelineStage {
                 );
                 const isVideo = validation.detectedType === 'video';
 
+                // Whisper natively accepts only mp3/mp4/mpeg/mpga/m4a/wav/webm.
+                // Any other accepted container (video OR non-Whisper-native audio
+                // like ogg/flac/aac/opus) must be transcoded to mp3 via FFmpeg
+                // first. Issue #90: .m4v previously fell through to the document
+                // branch because it wasn't in the allowlist; now it reaches here
+                // but still needs extraction (Whisper doesn't accept m4v).
+                const needsExtraction =
+                  isVideo || !isWhisperNativeFormat(filename);
+
                 // Get original file size for logging
                 const originalStats = await fs.promises.stat(filePath);
                 const originalSizeMB = (
@@ -244,25 +256,27 @@ export class FileProcessor extends BasePipelineStage {
                 ).toFixed(1);
 
                 console.log(
-                  `[FileProcessor] Original file size: ${originalSizeMB}MB, type: ${validation.detectedType || 'unknown'}`,
+                  `[FileProcessor] Original file size: ${originalSizeMB}MB, type: ${validation.detectedType || 'unknown'}, needsExtraction: ${needsExtraction}`,
                 );
 
                 let fileToTranscribe = filePath;
                 let extractedAudioPath: string | null = null;
 
                 // Extract audio from video files before transcription
-                if (isVideo) {
+                if (needsExtraction) {
                   // Check FFmpeg availability before attempting extraction
                   const ffmpegAvailable = await isFFmpegAvailable();
                   if (!ffmpegAvailable) {
+                    // Format-neutral wording: non-Whisper-native audio (ogg,
+                    // flac, aac, opus, …) hits this branch too, not just video.
                     throw new Error(
-                      `Cannot process video file "${filename}": FFmpeg is not available. ` +
+                      `Cannot process file "${filename}": FFmpeg is not available. ` +
                         `Please configure the FFMPEG_BIN environment variable or install FFmpeg.`,
                     );
                   }
 
                   console.log(
-                    `[FileProcessor] Detected video file, extracting audio: ${sanitizeForLog(filename)}`,
+                    `[FileProcessor] Detected ${isVideo ? 'video' : 'non-Whisper-native audio'} file, extracting audio: ${sanitizeForLog(filename)}`,
                   );
                   try {
                     const extraction = await extractAudioFromVideo(filePath);

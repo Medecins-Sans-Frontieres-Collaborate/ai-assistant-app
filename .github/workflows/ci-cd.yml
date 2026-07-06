@@ -329,3 +329,68 @@ jobs:
             --name ${{ vars.CONTAINER_APP_NAME }} \
             --resource-group ${{ vars.RESOURCE_GROUP }} \
             --image ${{ vars.ACR_NAME }}.azurecr.io/ai-assistant:${{ steps.resolve-tag.outputs.tag }}
+
+  # JOB 5: Create a GitHub Release after a successful Live deployment.
+  # CalVer tags (v2026.07.01, -2/-3 for same-day deploys) with GitHub's
+  # auto-generated notes (merged-PR list since the previous release).
+  create_release:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment == 'live'
+    needs: deploy_manual
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # job-level override; workflow default stays contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history + tags for notes range / ancestry checks
+
+      - name: Resolve released commit
+        id: commit
+        # Mirror deploy_manual's resolve-tag logic: 'latest' -> the dispatch
+        # SHA; a 40-hex image_tag is itself the commit; anything else (unusual
+        # custom tag) falls back to the dispatch SHA, and the actual image tag
+        # is recorded in the release body either way.
+        run: |
+          TAG_INPUT="${{ github.event.inputs.image_tag }}"
+          if [[ "$TAG_INPUT" =~ ^[0-9a-f]{40}$ ]]; then
+            SHA="$TAG_INPUT"
+          else
+            SHA="${{ github.sha }}"
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Compute CalVer tag
+        id: tag
+        run: |
+          BASE="v$(date -u +%Y.%m.%d)"
+          TAG="$BASE"
+          N=2
+          while git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; do
+            TAG="$BASE-$N"; N=$((N+1))
+          done
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Create release with generated notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA="${{ steps.commit.outputs.sha }}"
+          TAG="${{ steps.tag.outputs.tag }}"
+          PREV="$(gh release list --limit 1 --json tagName -q '.[0].tagName' || true)"
+
+          # Deploy metadata footer; gh prepends --notes to --generate-notes
+          # output, so this appears above the PR list.
+          NOTES="Deployed to **live** by @${{ github.actor }} — [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}), image tag \`${{ github.event.inputs.image_tag }}\`."
+
+          ARGS=(--target "$SHA" --title "$TAG" --generate-notes --notes "$NOTES")
+          if [ -n "$PREV" ]; then
+            ARGS+=(--notes-start-tag "$PREV")
+            # Rollback guard: if the released commit is already contained in
+            # the previous release, generated notes would be empty or
+            # nonsensical — emit an explicit rollback release instead.
+            if git merge-base --is-ancestor "$SHA" "$PREV^{commit}" 2>/dev/null; then
+              ARGS=(--target "$SHA" --title "$TAG (rollback)" --notes "$NOTES"$'\n\n'"⏪ Rollback to \`${SHA:0:7}\` (already included in $PREV).")
+            fi
+          fi
+          gh release create "$TAG" "${ARGS[@]}"

@@ -46,7 +46,24 @@ const FILE_SIGNATURES: FileTypeInfo[] = [
   {
     type: 'audio',
     format: 'ogg',
-    signatures: [{ bytes: [0x4f, 0x67, 0x67, 0x53] }], // OggS
+    signatures: [{ bytes: [0x4f, 0x67, 0x67, 0x53] }], // OggS (also .oga/.opus)
+  },
+  {
+    type: 'audio',
+    format: 'flac',
+    signatures: [{ bytes: [0x66, 0x4c, 0x61, 0x43] }], // fLaC
+  },
+  {
+    type: 'audio',
+    format: 'aac',
+    signatures: [
+      // ADTS syncwords (MPEG-4 / MPEG-2, with and without CRC)
+      { bytes: [0xff, 0xf1] },
+      { bytes: [0xff, 0xf9] },
+      { bytes: [0xff, 0xf0] },
+      { bytes: [0xff, 0xf8] },
+      { bytes: [0x41, 0x44, 0x49, 0x46] }, // ADIF
+    ],
   },
   {
     type: 'audio',
@@ -85,6 +102,19 @@ const FILE_SIGNATURES: FileTypeInfo[] = [
       { bytes: [0x66, 0x74, 0x79, 0x70], offset: 4 },
       { bytes: [0x6d, 0x6f, 0x6f, 0x76], offset: 4 },
     ],
+  },
+  {
+    type: 'video',
+    format: 'flv',
+    signatures: [{ bytes: [0x46, 0x4c, 0x56] }], // "FLV"
+  },
+  {
+    // ASF container covers both .wmv (video) and .wma (audio). This matcher
+    // has no extension priority, so classify as video: for both cases the
+    // right client-side action is the same — extract/transcode to mp3.
+    type: 'video',
+    format: 'asf',
+    signatures: [{ bytes: [0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11] }],
   },
 ];
 

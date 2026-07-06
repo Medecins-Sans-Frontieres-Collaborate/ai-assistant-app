@@ -70,8 +70,10 @@ export const FILE_SIGNATURES: FileTypeSignature[] = [
       // OggS
       { bytes: [0x4f, 0x67, 0x67, 0x53] }, // "OggS"
     ],
-    mimeTypes: ['audio/ogg', 'application/ogg'],
-    extensions: ['.ogg', '.oga'],
+    // Opus is carried in an Ogg container, so .opus files share the OggS
+    // signature with .ogg/.oga.
+    mimeTypes: ['audio/ogg', 'application/ogg', 'audio/opus'],
+    extensions: ['.ogg', '.oga', '.opus'],
   },
   {
     type: 'audio',
@@ -81,6 +83,33 @@ export const FILE_SIGNATURES: FileTypeSignature[] = [
     ],
     mimeTypes: ['audio/flac', 'audio/x-flac'],
     extensions: ['.flac'],
+  },
+  {
+    type: 'audio',
+    format: 'aac',
+    signatures: [
+      // ADTS syncword: 12 set bits, then MPEG-4 (0xF1) / MPEG-2 (0xF9)
+      // variants incl. the "protection absent" bit cleared (0xF0 / 0xF8).
+      { bytes: [0xff, 0xf1] },
+      { bytes: [0xff, 0xf9] },
+      { bytes: [0xff, 0xf0] },
+      { bytes: [0xff, 0xf8] },
+      // ADIF header (rare, but a valid raw-AAC layout)
+      { bytes: [0x41, 0x44, 0x49, 0x46] }, // "ADIF"
+    ],
+    mimeTypes: ['audio/aac', 'audio/aacp', 'audio/x-aac'],
+    extensions: ['.aac'],
+  },
+  {
+    type: 'audio',
+    format: 'wma',
+    signatures: [
+      // ASF header — same container as WMV; the extension-match priority in
+      // validateFileSignature classifies .wma as audio and .wmv as video.
+      { bytes: [0x30, 0x26, 0xb2, 0x75, 0x8e, 0x66, 0xcf, 0x11] },
+    ],
+    mimeTypes: ['audio/x-ms-wma'],
+    extensions: ['.wma'],
   },
   {
     type: 'audio',
@@ -101,8 +130,11 @@ export const FILE_SIGNATURES: FileTypeSignature[] = [
       // ISO Base Media File Format (ftyp) - various brands
       { bytes: [0x66, 0x74, 0x79, 0x70], offset: 4 }, // "ftyp"
     ],
-    mimeTypes: ['video/mp4', 'video/x-m4v'],
-    extensions: ['.mp4', '.m4v'],
+    // .3gp is also ISO-BMFF ("ftyp3gp*" brand). Audio-only 3GP (AMR) still
+    // matches here and is classified video — harmless, since the pipeline
+    // extracts the audio track from video containers anyway.
+    mimeTypes: ['video/mp4', 'video/x-m4v', 'video/3gpp', 'audio/3gpp'],
+    extensions: ['.mp4', '.m4v', '.3gp'],
   },
   {
     type: 'video',
