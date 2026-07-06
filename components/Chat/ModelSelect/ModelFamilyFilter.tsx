@@ -5,41 +5,37 @@ import React from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { OpenAIModel } from '@/types/openai';
+
 import { ModelProviderIcon } from './ModelProviderIcon';
 
 /**
- * Model family ('all' plus each provider). Mirrors the `provider` union on
- * {@link OpenAIModel} (`types/openai.ts`), with an extra `'all'` sentinel for
- * the unfiltered default.
+ * Model family ('all' plus each provider). Derived from the `provider` union
+ * on {@link OpenAIModel} (`types/openai.ts`) — adding a provider there makes
+ * the FAMILY_LABEL map below fail to compile until the filter knows about it.
  */
-export type ModelFamily =
-  | 'all'
-  | 'openai'
-  | 'anthropic'
-  | 'deepseek'
-  | 'meta'
-  | 'xai';
-
-/** Display order of family filters (after the leading "All"). */
-export const FAMILY_ORDER: Exclude<ModelFamily, 'all'>[] = [
-  'openai',
-  'anthropic',
-  'deepseek',
-  'meta',
-  'xai',
-];
+export type ModelFamily = 'all' | NonNullable<OpenAIModel['provider']>;
 
 /**
  * Human-readable family names — brand proper nouns, intentionally not
- * translated. Used for the icon button tooltip + accessible label.
+ * translated. Used for the icon button tooltip + accessible label. The
+ * exhaustive Record type is the sync guard with the provider union; key order
+ * doubles as the display order of the filter row.
  */
 export const FAMILY_LABEL: Record<Exclude<ModelFamily, 'all'>, string> = {
   openai: 'OpenAI',
   anthropic: 'Anthropic',
   deepseek: 'DeepSeek',
   meta: 'Meta',
+  mistral: 'Mistral AI',
   xai: 'xAI',
 };
+
+/** Display order of family filters (after the leading "All"). */
+export const FAMILY_ORDER = Object.keys(FAMILY_LABEL) as Exclude<
+  ModelFamily,
+  'all'
+>[];
 
 interface ModelFamilyFilterProps {
   /** Families that have at least one model in the current list. */
