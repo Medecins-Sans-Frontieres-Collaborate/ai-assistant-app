@@ -504,12 +504,16 @@ describe('ModelSelect', () => {
       expect(deepseekIndex).toBeLessThan(metaIndex);
     });
 
-    it('splits a family into Reasoning and General type groups', () => {
+    it('marks dedicated reasoning models with a quiet icon, not a section', () => {
       render(<ModelSelect />);
 
-      // OpenAI has o3 (reasoning) and the GPT lineups (general).
-      expect(screen.getAllByText('Reasoning').length).toBeGreaterThan(0);
-      expect(screen.getAllByText('General').length).toBeGreaterThan(0);
+      // No Reasoning/General sub-headers anymore…
+      expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
+      expect(screen.queryByText('General')).not.toBeInTheDocument();
+      // …instead o3 and DeepSeek-R1 rows carry the tooltip'd brain icon.
+      expect(
+        screen.getAllByLabelText(/Reasoning model:/).length,
+      ).toBeGreaterThanOrEqual(2);
     });
   });
 
