@@ -178,10 +178,8 @@ const mockMessages: Record<string, unknown> = {
       label: 'Version',
     },
     euResidencyNote: 'All models run in the EU Azure region.',
-    types: {
-      reasoning: 'Reasoning',
-      general: 'General',
-    },
+    reasoningModel:
+      'Reasoning model: thinks step-by-step before answering. Slower, better on hard problems.',
     hostedRegion: {
       label: 'Hosted region',
       processedIn:
