@@ -456,29 +456,13 @@ describe('ModelSelect', () => {
       });
     });
 
-    it('displays custom agents in agents tab when present', () => {
-      mockUseCustomAgents.customAgents = [
-        {
-          id: 'agent-1',
-          name: 'My Custom Agent',
-          agentId: 'asst_custom123',
-          baseModelId: OpenAIModelID.GPT_5_2,
-          description: 'Custom agent for testing',
-          createdAt: new Date().toISOString(),
-        },
-      ];
-
-      render(<ModelSelect />);
-
-      // Click on Agents tab
-      const agentsTab = screen.getByText('Agents').closest('button');
-      fireEvent.click(agentsTab!);
-
-      // Custom agent should be visible in the agents tab
-      waitFor(() => {
-        expect(screen.getByText('My Custom Agent')).toBeInTheDocument();
-      });
-    });
+    // NOTE: the old "displays custom agents in agents tab" test was removed:
+    // the legacy assistant-style custom-agent list (useCustomAgents /
+    // CustomAgentList) is no longer rendered by the Agents tab — the tab
+    // shows Foundry/organization agents from sources. The test only ever
+    // "passed" because its waitFor was never awaited; once awaited it fails
+    // deterministically, and the floating promise intermittently rejected
+    // AFTER its test ended, failing CI with all tests green (run 28823325872).
   });
 
   describe('Model Organization', () => {
