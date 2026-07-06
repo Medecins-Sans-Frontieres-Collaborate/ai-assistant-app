@@ -5,9 +5,28 @@
 
 /**
  * Audio and video file extensions supported for transcription.
- * These files are processed by Whisper API.
+ *
+ * The formats Whisper natively accepts are listed in {@link WHISPER_NATIVE_EXTENSIONS};
+ * everything else here is routed through FFmpeg audio extraction first (see
+ * FileProcessor and the legacy /api/file/[id]/transcribe route). The splitter
+ * (audioSplitter) and extractor (audioExtractor) rely on ffmpeg/ffprobe being
+ * able to decode the container — ffmpeg-static bundles the common decoders
+ * (AAC, MP3, Opus, Vorbis, FLAC, ALAC).
+ *
+ * Regression note (issue #90): `.m4v` was previously missing from this list,
+ * so an uploaded `.m4v` fell into the document branch and surfaced a generic
+ * "unable to process the uploaded file" error. The magic-byte signature
+ * table already recognized it; only this extension allowlist was the gate.
+ *
+ * Deliberately NOT listed: `.ts` (MPEG transport stream) — the extension
+ * collides with TypeScript source files, which the app supports as code
+ * uploads ({@link DOCUMENT_AND_CODE_ACCEPT_TYPES}). Classification here is
+ * extension-based, so claiming `.ts` would route code files into the
+ * transcription pipeline. MPEG-TS support would need content-based detection
+ * (0x47 sync bytes at offsets 0/188/376), not an extension entry.
  */
 export const AUDIO_VIDEO_EXTENSIONS = [
+  // Whisper-native formats (sent directly, no transcoding)
   '.mp3',
   '.mp4',
   '.mpeg',
@@ -15,12 +34,41 @@ export const AUDIO_VIDEO_EXTENSIONS = [
   '.m4a',
   '.wav',
   '.webm',
-  // Additional video formats (audio extracted via FFmpeg)
+  // Video containers — audio extracted via FFmpeg before Whisper
+  '.m4v',
   '.mkv',
   '.mov',
   '.avi',
   '.flv',
   '.wmv',
+  '.3gp',
+  '.mpg',
+  // Audio containers Whisper doesn't accept — transcoded to mp3 via FFmpeg
+  '.ogg',
+  '.oga',
+  '.flac',
+  '.aac',
+  '.opus',
+  '.wma',
+] as const;
+
+/**
+ * Formats the Whisper API accepts directly without transcoding. Anything in
+ * {@link AUDIO_VIDEO_EXTENSIONS} that is NOT in this set must be passed
+ * through FFmpeg audio extraction (to mp3) before being sent to Whisper.
+ *
+ * Source: https://platform.openai.com/docs/guides/speech-to-text
+ * ("File uploads are currently limited to 25 MB and the following input file
+ * types are supported: mp3, mp4, mpeg, mpga, m4a, wav, and webm").
+ */
+export const WHISPER_NATIVE_EXTENSIONS = [
+  '.mp3',
+  '.mp4',
+  '.mpeg',
+  '.mpga',
+  '.m4a',
+  '.wav',
+  '.webm',
 ] as const;
 
 /**
@@ -47,6 +95,26 @@ export function isAudioVideoFile(filename: string): boolean {
 }
 
 /**
+ * Checks if a file's extension is in {@link WHISPER_NATIVE_EXTENSIONS}, i.e.
+ * a format the Whisper API accepts without transcoding. Used to decide
+ * whether FFmpeg audio extraction is required before sending the file to
+ * Whisper. Note this returns true for `.mp4`/`.webm` even when they are
+ * video: Whisper accepts those containers as-is. Callers that additionally
+ * want to strip video tracks to cut payload size (the FileProcessor does)
+ * must OR this with their own video detection — see the `needsExtraction`
+ * logic in FileProcessor.
+ */
+export function isWhisperNativeFormat(filename: string): boolean {
+  if (!filename) return false;
+
+  const parts = filename.split('.');
+  if (parts.length < 2) return false;
+
+  const ext = '.' + parts.pop()?.toLowerCase();
+  return WHISPER_NATIVE_EXTENSIONS.includes(ext as any);
+}
+
+/**
  * Checks if a file is audio/video based on filename or MIME type
  */
 export function isAudioVideoFileByTypeOrName(
@@ -69,7 +137,7 @@ export function isAudioVideoFileByTypeOrName(
  * Includes MIME type wildcards and explicit extensions for browser compatibility.
  */
 export const TRANSCRIPTION_ACCEPT_TYPES =
-  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.mkv,.mov,.avi,.flv,.wmv';
+  'audio/*,video/*,.mp3,.mp4,.mpeg,.mpga,.m4a,.wav,.webm,.m4v,.mkv,.mov,.avi,.flv,.wmv,.3gp,.mpg,.ogg,.oga,.flac,.aac,.opus,.wma';
 
 /**
  * Accept attribute value for image file inputs.

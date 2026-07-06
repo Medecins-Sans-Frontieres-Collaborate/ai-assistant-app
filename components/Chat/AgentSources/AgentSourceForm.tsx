@@ -8,6 +8,7 @@ import {
   IconPlus,
   IconX,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -47,6 +48,12 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
   existingSource,
 }) => {
   const t = useTranslations('agents');
+  // Feature flag: when off, hide the "browse Azure resources" discovery affordance
+  // and require manual resource-path entry. Fail-open (unset ⇒ enabled), mirroring
+  // the `exploreBots` pattern in ModelSelect.tsx. Served `false` in prod until the
+  // agent-discovery rollout is announced.
+  const { agentSourceBrowse } = useFlags();
+  const isBrowseEnabled = agentSourceBrowse !== false;
   const [mounted, setMounted] = useState(false);
   const [name, setName] = useState(existingSource?.name || '');
   // Treat an existing source's name as user-owned so autofill never clobbers it.
@@ -69,7 +76,9 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     ? parseResourcePath(existingSource.resourcePath)
     : null;
 
-  const [inputMode, setInputMode] = useState<'browse' | 'manual'>('browse');
+  const [inputMode, setInputMode] = useState<'browse' | 'manual'>(
+    isBrowseEnabled ? 'browse' : 'manual',
+  );
 
   // Browse state
   const [subscriptions, setSubscriptions] = useState<BrowseItem[]>([]);
@@ -95,16 +104,16 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
     setMounted(true);
   }, []);
 
-  // Load subscriptions on mount
+  // Load subscriptions on mount (skipped when browse discovery is disabled)
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || !isBrowseEnabled) return;
     setLoadingSubs(true);
     fetch('/api/agents/browse?level=subscriptions')
       .then((r) => r.json())
       .then((data) => setSubscriptions(data.items || []))
       .catch(() => setSubscriptions([]))
       .finally(() => setLoadingSubs(false));
-  }, [mounted]);
+  }, [mounted, isBrowseEnabled]);
 
   // Load accounts when subscription changes
   const loadAccounts = useCallback((subId: string) => {
@@ -363,17 +372,19 @@ export const AgentSourceForm: FC<AgentSourceFormProps> = ({
             <label className="text-sm font-medium text-gray-900 dark:text-white">
               {t('foundryProjectLabel')}
             </label>
-            <button
-              type="button"
-              onClick={() =>
-                setInputMode(inputMode === 'browse' ? 'manual' : 'browse')
-              }
-              className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-            >
-              {inputMode === 'browse'
-                ? t('enterManually')
-                : t('browseResources')}
-            </button>
+            {isBrowseEnabled && (
+              <button
+                type="button"
+                onClick={() =>
+                  setInputMode(inputMode === 'browse' ? 'manual' : 'browse')
+                }
+                className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+              >
+                {inputMode === 'browse'
+                  ? t('enterManually')
+                  : t('browseResources')}
+              </button>
+            )}
           </div>
 
           {inputMode === 'manual' ? (

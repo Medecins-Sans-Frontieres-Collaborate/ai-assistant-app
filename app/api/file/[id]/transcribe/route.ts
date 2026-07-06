@@ -15,14 +15,19 @@ import { recordBatchJobOwner } from '@/lib/services/transcription/batchJobRegist
 import { BatchTranscriptionService } from '@/lib/services/transcription/batchTranscriptionService';
 import { TranscriptionServiceFactory } from '@/lib/services/transcriptionService';
 
-import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
+import { FILE_SIZE_LIMITS, WHISPER_MAX_SIZE } from '@/lib/utils/app/const';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { unauthorizedResponse } from '@/lib/utils/server/api/apiResponse';
+import {
+  extractAudioFromVideo,
+  isFFmpegAvailable,
+} from '@/lib/utils/server/audio/audioExtractor';
 import { withAzureRetry } from '@/lib/utils/server/azure/retry';
 
 import { TranscriptionResponse } from '@/types/transcription';
 
 import { auth } from '@/auth';
+import { isWhisperNativeFormat } from '@/lib/constants/fileTypes';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import { tmpdir } from 'os';
@@ -86,10 +91,18 @@ export async function GET(
     const serviceType =
       TranscriptionServiceFactory.getServiceTypeForFileSize(fileSize);
 
-    if (serviceType === 'whisper') {
+    // The Whisper/batch split is decided on the ORIGINAL blob size, but a
+    // non-native format is transcoded to mp3 first — which can push a ≤25MB
+    // high-compression source (opus/ogg/flac) over Whisper's 25MB cap. When
+    // that happens the Whisper attempt below flips this flag and control
+    // falls through to the batch branch with the original blob.
+    let useBatch = serviceType !== 'whisper';
+
+    if (!useBatch) {
       // Synchronous transcription for small files (≤25MB)
       const tmpFilePath = join(tmpdir(), `${randomUUID()}_${id}`);
-      let transcript: string;
+      let extractedAudioPath: string | null = null;
+      let transcript: string | null = null;
       try {
         await withAzureRetry(
           () => blockBlobClient.downloadToFile(tmpFilePath),
@@ -98,37 +111,80 @@ export async function GET(
           },
         );
 
-        const transcriptionService =
-          TranscriptionServiceFactory.getTranscriptionService('whisper');
+        // Whisper accepts only mp3/mp4/mpeg/mpga/m4a/wav/webm. Any other
+        // accepted container (m4v, ogg, flac, aac, opus, mov, mkv, …) must
+        // be transcoded to mp3 first or Whisper rejects it (issue #90).
+        let fileToTranscribe = tmpFilePath;
+        if (!isWhisperNativeFormat(id)) {
+          const ffmpegAvailable = await isFFmpegAvailable();
+          if (!ffmpegAvailable) {
+            throw new Error(
+              `Cannot process file "${id}": FFmpeg is not available. ` +
+                `Please configure the FFMPEG_BIN environment variable or install FFmpeg.`,
+            );
+          }
+          const extraction = await extractAudioFromVideo(tmpFilePath);
+          extractedAudioPath = extraction.outputPath;
+          fileToTranscribe = extractedAudioPath;
 
-        transcript = await transcriptionService.transcribe(tmpFilePath);
+          const { size: extractedSize } =
+            await fs.promises.stat(fileToTranscribe);
+          if (extractedSize > WHISPER_MAX_SIZE) {
+            console.warn(
+              `[Transcribe] Extracted audio (${(extractedSize / (1024 * 1024)).toFixed(1)}MB) exceeds the Whisper limit; falling back to batch transcription.`,
+            );
+            useBatch = true;
+          }
+        }
+
+        if (!useBatch) {
+          const transcriptionService =
+            TranscriptionServiceFactory.getTranscriptionService('whisper');
+
+          transcript = await transcriptionService.transcribe(fileToTranscribe);
+        }
       } finally {
-        // Always clean up the temp file, even if transcription throws.
+        // Always clean up temp files, even if transcription throws.
+        if (extractedAudioPath) {
+          await unlinkAsync(extractedAudioPath).catch(() => {});
+        }
         await unlinkAsync(tmpFilePath).catch(() => {});
       }
-      // Delete the blob after successful transcription. Retry on transient
-      // Azure failures; if the blob is already gone (404), treat as success.
-      try {
-        await withAzureRetry(() => blockBlobClient.delete(), {
-          label: 'blobDelete',
-        });
-      } catch (deleteErr) {
-        const status = (deleteErr as { statusCode?: number })?.statusCode;
-        if (status !== 404) {
-          console.warn(
-            `[Transcribe] Failed to delete source blob after transcription:`,
-            deleteErr,
-          );
-        }
-      }
 
-      const response: TranscriptionResponse = {
-        async: false,
-        transcript,
-      };
-      return NextResponse.json(response);
-    } else {
-      // Asynchronous batch transcription for large files (>25MB)
+      if (transcript !== null) {
+        // Delete the blob after successful transcription. Retry on transient
+        // Azure failures; if the blob is already gone (404), treat as success.
+        try {
+          await withAzureRetry(() => blockBlobClient.delete(), {
+            label: 'blobDelete',
+          });
+        } catch (deleteErr) {
+          const status = (deleteErr as { statusCode?: number })?.statusCode;
+          if (status !== 404) {
+            console.warn(
+              `[Transcribe] Failed to delete source blob after transcription:`,
+              deleteErr,
+            );
+          }
+        }
+
+        const response: TranscriptionResponse = {
+          async: false,
+          transcript,
+        };
+        return NextResponse.json(response);
+      }
+    }
+
+    {
+      // Asynchronous batch transcription for large files (>25MB).
+      //
+      // KNOWN GAP: the blob is submitted to Azure Batch Speech as-is, with no
+      // FFmpeg extraction — video containers (mkv/mov/m4v/…) and any format
+      // the batch service can't decode will fail here. This mirrors the
+      // pre-#90 behavior for >25MB files; the route is deprecated (the chat
+      // pipeline's FileProcessor extracts before size-routing) so the gap is
+      // documented rather than fixed.
       const batchService = new BatchTranscriptionService();
 
       // Check if batch service is configured

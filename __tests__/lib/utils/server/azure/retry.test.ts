@@ -68,4 +68,33 @@ describe('withAzureRetry', () => {
     );
     expect(op).toHaveBeenCalledTimes(2);
   });
+
+  it('includes the label in retry log output', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const op = vi
+      .fn()
+      .mockRejectedValueOnce({ statusCode: 500 })
+      .mockResolvedValue('ok');
+    await withAzureRetry(op, { attempts: 3, label: 'getProperties' });
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[AzureRetry:getProperties]'),
+    );
+    warnSpy.mockRestore();
+  });
+
+  it('clamps attempts to the [1, 5] range', async () => {
+    // attempts: 0 → clamped to 1 (one shot, no retry).
+    const op0 = vi.fn().mockRejectedValue({ statusCode: 500 });
+    await expect(withAzureRetry(op0, { attempts: 0 })).rejects.toMatchObject({
+      statusCode: 500,
+    });
+    expect(op0).toHaveBeenCalledTimes(1);
+
+    // attempts: 99 → clamped to 5.
+    const op99 = vi.fn().mockRejectedValue({ statusCode: 500 });
+    await expect(withAzureRetry(op99, { attempts: 99 })).rejects.toMatchObject({
+      statusCode: 500,
+    });
+    expect(op99).toHaveBeenCalledTimes(5);
+  });
 });

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 
 import { FileUploadService } from '@/client/services/fileUploadService';
 
-import { FILE_COUNT_LIMITS, FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
+import { FILE_COUNT_LIMITS } from '@/lib/utils/app/const';
 import {
   AudioExtractionUnavailableError,
   extractAudioFromVideo,
@@ -145,19 +145,10 @@ export async function onFileUpload(
         continue;
       }
 
-      // Check video file size
-      if (file.size > FILE_SIZE_LIMITS.VIDEO_MAX_BYTES) {
-        const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-        toast.error(
-          `Video ${file.name} (${sizeMB}MB) exceeds 1GB limit for extraction`,
-        );
-        setFilePreviews((prev) =>
-          prev.map((p) =>
-            p.name === file.name ? { ...p, status: 'failed' } : p,
-          ),
-        );
-        continue;
-      }
+      // NOTE: no per-file size guard here — isAudioExtractionSupported above
+      // already rejects anything over the in-memory extraction cap (200MB),
+      // and the category size limits (1GB audio / 1.5GB video) are enforced
+      // by FileUploadService.validateFile during upload.
 
       // Extraction occupies the 0-50% slice of the progress bar; upload
       // takes 50-100% later in the pipeline.
