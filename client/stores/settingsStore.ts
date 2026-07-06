@@ -1,7 +1,10 @@
 'use client';
 
+import { UserRegion } from '@/lib/utils/shared/region';
+
 import {
   DEFAULT_MODEL_ORDER,
+  ModelListSource,
   OpenAIModel,
   OpenAIModelID,
   OpenAIModels,
@@ -75,6 +78,25 @@ interface SettingsStore {
    * the ID stays here until the user restores it.
    */
   hiddenModelIds: string[];
+  /**
+   * Model IDs the user has starred (same key space as hiddenModelIds: base
+   * models and agents alike). Starred models surface first in the picker's
+   * Favorites section. Mutually exclusive with hiddenModelIds — the
+   * star/hide actions enforce it, so no UI can create the contradiction.
+   */
+  starredModelIds: string[];
+  /**
+   * Provenance of the current `models` list (from /api/models). Runtime-only,
+   * not persisted: the UI uses it to suppress region/hosting chrome when the
+   * list is static and to note partial discovery.
+   */
+  modelListSource: ModelListSource | null;
+  /**
+   * The session user's effective region ('US' | 'EU'), mirrored from
+   * next-auth by AppInitializer so vanilla stores (chatStore) can gate model
+   * selectability without hook access. Runtime-only, not persisted.
+   */
+  userRegion: UserRegion | null;
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -143,6 +165,14 @@ interface SettingsStore {
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
+
+  // Starred Model/Agent Actions
+  starModel: (id: string) => void;
+  unstarModel: (id: string) => void;
+
+  // Model list provenance / region (runtime-only)
+  setModelListSource: (source: ModelListSource | null) => void;
+  setUserRegion: (region: UserRegion | null) => void;
 
   // Model Ordering Actions
   setModelOrderMode: (mode: ModelOrderMode) => void;
@@ -219,6 +249,9 @@ export const useSettingsStore = create<SettingsStore>()(
       customAgents: [],
       customAgentSources: [],
       hiddenModelIds: [],
+      starredModelIds: [],
+      modelListSource: null,
+      userRegion: null,
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -358,18 +391,41 @@ export const useSettingsStore = create<SettingsStore>()(
           ),
         })),
 
-      // Hidden Model/Agent Actions
+      // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
+      // surfaced in "Your models" and hidden from the picker.
       hideModel: (id) =>
         set((state) =>
           state.hiddenModelIds.includes(id)
             ? state
-            : { hiddenModelIds: [...state.hiddenModelIds, id] },
+            : {
+                hiddenModelIds: [...state.hiddenModelIds, id],
+                starredModelIds: state.starredModelIds.filter((m) => m !== id),
+              },
         ),
 
       unhideModel: (id) =>
         set((state) => ({
           hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
         })),
+
+      // Starred Model/Agent Actions. Starring unhides (see hideModel).
+      starModel: (id) =>
+        set((state) =>
+          state.starredModelIds.includes(id)
+            ? state
+            : {
+                starredModelIds: [...state.starredModelIds, id],
+                hiddenModelIds: state.hiddenModelIds.filter((m) => m !== id),
+              },
+        ),
+
+      unstarModel: (id) =>
+        set((state) => ({
+          starredModelIds: state.starredModelIds.filter((m) => m !== id),
+        })),
+
+      setModelListSource: (source) => set({ modelListSource: source }),
+      setUserRegion: (region) => set({ userRegion: region }),
 
       // Model Ordering Actions
       setModelOrderMode: (mode) => set({ modelOrderMode: mode }),
@@ -511,6 +567,7 @@ export const useSettingsStore = create<SettingsStore>()(
           tones: [],
           customAgents: [],
           hiddenModelIds: [],
+          starredModelIds: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -532,7 +589,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 19, // Increment this when schema changes to trigger migrations
+      version: 20, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -547,6 +604,7 @@ export const useSettingsStore = create<SettingsStore>()(
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
         hiddenModelIds: state.hiddenModelIds,
+        starredModelIds: state.starredModelIds,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -695,6 +753,14 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 19 → 20: Add starredModelIds (models surfaced in the
+        // picker's Favorites section). Backfill to [].
+        if (version < 20) {
+          if (!Array.isArray(state.starredModelIds)) {
+            state.starredModelIds = [];
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -737,6 +803,13 @@ export const useSettingsStore = create<SettingsStore>()(
           // harmless (they simply never match anything).
           if (!Array.isArray(state.hiddenModelIds)) {
             state.hiddenModelIds = [];
+          }
+
+          // Defensive: starredModelIds — same rules as hiddenModelIds above
+          // (always an array; never prune against OpenAIModels, starred ids
+          // can be agents or currently-undiscovered models).
+          if (!Array.isArray(state.starredModelIds)) {
+            state.starredModelIds = [];
           }
         }
       },

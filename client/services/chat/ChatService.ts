@@ -152,6 +152,7 @@ export class ChatService {
       botId?: string;
       threadId?: string;
       searchMode?: SearchMode;
+      hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
       isEditorOpen?: boolean;
       tone?: Tone;
@@ -182,6 +183,7 @@ export class ChatService {
       botId: options?.botId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
+      hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,
       isEditorOpen: options?.isEditorOpen,
       tone: options?.tone,

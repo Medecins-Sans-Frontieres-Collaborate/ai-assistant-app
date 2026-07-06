@@ -14,6 +14,7 @@ import {
 } from '@/lib/utils/shared/chat/messageVersioning';
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
+import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { AgentType } from '@/types/agent';
 import {
@@ -706,10 +707,20 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       const matched = settings.models.find(
         (m) => m.id === conversation.model.id,
       );
-      // Re-validate against the ring gate before accepting: a discovered model
-      // that's now disabled (ring-gated off, or flagged isDisabled) must fall
-      // through to the fallback-model path rather than being sent as-is.
-      if (matched && !isModelDisabled(matched.id) && !matched.isDisabled) {
+      // Re-validate against the ring gate AND the region gate before
+      // accepting: a discovered model that's now disabled (ring-gated off,
+      // flagged isDisabled) or not usable from the user's region (EU users
+      // may only use EU-hosted models; US users can use anything via
+      // cross-region routing) must fall through to the fallback-model path
+      // rather than being sent as-is and failing at request time. The check
+      // runs on `matched` (the live list entry), never on the conversation's
+      // stale model snapshot.
+      if (
+        matched &&
+        !isModelDisabled(matched.id) &&
+        !matched.isDisabled &&
+        isModelSelectableInRegion(matched, settings.userRegion)
+      ) {
         latestModelConfig = matched;
       }
     }
@@ -773,6 +784,19 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const effectiveSearchMode =
       isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
 
+    // Cross-region routing: the conversation's explicit choice wins;
+    // otherwise a US user on an EU-only model implicitly targets EU (the
+    // model has no home-region instance to hit). EU users send nothing —
+    // the server forces EU for them regardless.
+    const liveModelEntry = settings.models.find((m) => m.id === modelToSend.id);
+    const hostedRegion =
+      conversation.hostedRegion ??
+      (settings.userRegion === 'US' &&
+      liveModelEntry?.hostedIn?.length &&
+      !liveModelEntry.hostedIn.includes('US')
+        ? 'EU'
+        : undefined);
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -783,6 +807,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
       searchMode: effectiveSearchMode,
+      hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
       streamingSpeed: settings.streamingSpeed, // Pass streaming speed configuration
