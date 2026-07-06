@@ -593,6 +593,73 @@ You should be concise.`;
     });
   });
 
+  describe('Starred Models/Agents', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({ starredModelIds: [], hiddenModelIds: [] });
+    });
+
+    describe('starModel', () => {
+      it('adds a model/agent id to the starred list', () => {
+        useSettingsStore.getState().starModel('gpt-5.2');
+        useSettingsStore.getState().starModel('org-hr-bot');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+          'org-hr-bot',
+        ]);
+      });
+
+      it('does not add duplicates', () => {
+        useSettingsStore.getState().starModel('gpt-5.2');
+        useSettingsStore.getState().starModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+        ]);
+      });
+
+      it('unhides the model (star ⇒ unhide exclusion)', () => {
+        useSettingsStore.setState({ hiddenModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().starModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['o3']);
+        expect(useSettingsStore.getState().starredModelIds).toEqual([
+          'gpt-5.2',
+        ]);
+      });
+    });
+
+    describe('unstarModel', () => {
+      it('removes a model id from the starred list', () => {
+        useSettingsStore.setState({ starredModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().unstarModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual(['o3']);
+      });
+    });
+
+    describe('hideModel exclusion', () => {
+      it('unstars the model (hide ⇒ unstar)', () => {
+        useSettingsStore.setState({ starredModelIds: ['gpt-5.2', 'o3'] });
+
+        useSettingsStore.getState().hideModel('gpt-5.2');
+
+        expect(useSettingsStore.getState().starredModelIds).toEqual(['o3']);
+        expect(useSettingsStore.getState().hiddenModelIds).toEqual(['gpt-5.2']);
+      });
+    });
+
+    it('resetSettings clears starred models', () => {
+      useSettingsStore.setState({ starredModelIds: ['gpt-5.2'] });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().starredModelIds).toEqual([]);
+    });
+  });
+
   describe('resetSettings', () => {
     it('resets to default values', () => {
       // Set all settings to non-default values

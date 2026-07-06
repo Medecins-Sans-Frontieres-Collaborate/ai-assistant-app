@@ -75,3 +75,51 @@ describe('settingsStore migration (v18 → v19)', () => {
     expect(result.hiddenModelIds).toEqual(hidden);
   });
 });
+
+/**
+ * `starredModelIds` (models surfaced in the picker's "Your models" section)
+ * was added in v20. Pre-v20 stores rehydrate it as `undefined`; the migration
+ * backfills it to an empty array.
+ */
+describe('settingsStore migration (v19 → v20)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('initializes starredModelIds to [] when migrating from v19', () => {
+    const persisted = {
+      customAgents: [],
+      customAgentSources: [],
+      hiddenModelIds: [],
+      // starredModelIds intentionally absent (pre-v20 shape)
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 19) as Record<string, unknown>;
+
+    expect(Array.isArray(result.starredModelIds)).toBe(true);
+    expect(result.starredModelIds).toEqual([]);
+  });
+
+  it('preserves existing starredModelIds on a current-version store', () => {
+    const starred = ['gpt-5.2', 'org-hr-bot'];
+    const persisted = {
+      customAgents: [],
+      customAgentSources: [],
+      hiddenModelIds: [],
+      starredModelIds: starred,
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 20) as Record<string, unknown>;
+
+    expect(result.starredModelIds).toEqual(starred);
+  });
+
+  it('backfills both hidden and starred lists from a very old store', () => {
+    const result = migrate(
+      { customAgents: [] } as Record<string, unknown>,
+      17,
+    ) as Record<string, unknown>;
+
+    expect(result.customAgentSources).toEqual([]);
+    expect(result.hiddenModelIds).toEqual([]);
+    expect(result.starredModelIds).toEqual([]);
+  });
+});

@@ -79,6 +79,72 @@ describe('ChatStore - discovered model ring gate (W5)', () => {
     expect(sentModel.id).toBe('discovered-x');
   });
 
+  it('US user + EU-only model: SENDS the model with implicit hostedRegion EU', async () => {
+    const euOnly = makeDiscoveredModel({ hostedIn: ['EU'] });
+    useSettingsStore.getState().setModels([euOnly]);
+    useSettingsStore.getState().setUserRegion('US');
+
+    const chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockResolvedValue(new ReadableStream<Uint8Array>());
+
+    await useChatStore.getState().sendChatRequest(makeConversation(euOnly));
+
+    expect(chatSpy).toHaveBeenCalledTimes(1);
+    const sentModel = chatSpy.mock.calls[0][0] as OpenAIModel;
+    // Cross-region routing: the model is usable, chat targets its region.
+    expect(sentModel.id).toBe('discovered-x');
+    const options = chatSpy.mock.calls[0][2] as { hostedRegion?: string };
+    expect(options.hostedRegion).toBe('EU');
+  });
+
+  it('EU user + US-only model: falls back (residency gate)', async () => {
+    const usOnly = makeDiscoveredModel({ hostedIn: ['US'] });
+    useSettingsStore.getState().setModels([usOnly]);
+    useSettingsStore.getState().setUserRegion('EU');
+
+    const chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockResolvedValue(new ReadableStream<Uint8Array>());
+
+    await useChatStore.getState().sendChatRequest(makeConversation(usOnly));
+
+    expect(chatSpy).toHaveBeenCalledTimes(1);
+    const sentModel = chatSpy.mock.calls[0][0] as OpenAIModel;
+    expect(sentModel.id).toBe(OpenAIModelID.GPT_5_2_CHAT);
+  });
+
+  it('uses a discovered model hosted in the user region', async () => {
+    const dualRegion = makeDiscoveredModel({ hostedIn: ['US', 'EU'] });
+    useSettingsStore.getState().setModels([dualRegion]);
+    useSettingsStore.getState().setUserRegion('US');
+
+    const chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockResolvedValue(new ReadableStream<Uint8Array>());
+
+    await useChatStore.getState().sendChatRequest(makeConversation(dualRegion));
+
+    expect(chatSpy).toHaveBeenCalledTimes(1);
+    const sentModel = chatSpy.mock.calls[0][0] as OpenAIModel;
+    expect(sentModel.id).toBe('discovered-x');
+  });
+
+  it('stays permissive while the session region is unknown', async () => {
+    const euOnly = makeDiscoveredModel({ hostedIn: ['EU'] });
+    useSettingsStore.getState().setModels([euOnly]);
+    useSettingsStore.getState().setUserRegion(null);
+
+    const chatSpy = vi
+      .spyOn(chatService, 'chat')
+      .mockResolvedValue(new ReadableStream<Uint8Array>());
+
+    await useChatStore.getState().sendChatRequest(makeConversation(euOnly));
+
+    const sentModel = chatSpy.mock.calls[0][0] as OpenAIModel;
+    expect(sentModel.id).toBe('discovered-x');
+  });
+
   it('still uses static models present in OpenAIModels directly', async () => {
     const staticModel = OpenAIModels[OpenAIModelID.GPT_5_2];
     useSettingsStore.getState().setModels([]);
