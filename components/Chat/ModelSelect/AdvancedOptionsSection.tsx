@@ -1,4 +1,5 @@
 import {
+  IconBrain,
   IconChevronDown,
   IconChevronUp,
   IconInfoCircle,
@@ -92,7 +93,13 @@ export const AdvancedOptionsSection: FC<AdvancedOptionsSectionProps> = ({
 
           {modelConfig?.supportsReasoningEffort && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {/* Same icon that marks dedicated reasoning models in the list */}
+                <IconBrain
+                  size={16}
+                  aria-hidden="true"
+                  className="text-gray-500 dark:text-gray-400"
+                />
                 {t('modelSelect.advancedOptions.reasoningEffort')}
               </label>
               <div className="grid grid-cols-4 gap-2">

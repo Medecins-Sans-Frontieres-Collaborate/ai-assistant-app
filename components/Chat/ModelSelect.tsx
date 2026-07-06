@@ -1,4 +1,4 @@
-import { IconX } from '@tabler/icons-react';
+import { IconBrain, IconX } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -607,9 +607,21 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       userRegion === 'US' &&
                       !!model.hostedIn?.length &&
                       !model.hostedIn.includes('US');
-                    if (!isExternal && !foreignOnly) return undefined;
+                    const isReasoning = metaOf(model).modelType === 'reasoning';
+                    if (!isExternal && !foreignOnly && !isReasoning) {
+                      return undefined;
+                    }
                     return (
                       <>
+                        {isReasoning && (
+                          <span
+                            title={t('modelSelect.reasoningModel')}
+                            aria-label={t('modelSelect.reasoningModel')}
+                            className="shrink-0 inline-flex text-gray-500 dark:text-gray-400 cursor-help"
+                          >
+                            <IconBrain size={14} aria-hidden="true" />
+                          </span>
+                        )}
                         {foreignOnly && (
                           <ModelStatusBadge
                             // Region codes are proper nouns, not translated.
@@ -807,43 +819,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     );
                   };
 
-                  const typeLabel = (label: string) => (
-                    <p className="mt-1.5 mb-1 text-[10px] font-medium text-gray-500 dark:text-gray-400">
-                      {label}
-                    </p>
-                  );
-
+                  // No Reasoning/General sub-headers: with tunable reasoning
+                  // on newer models the split is an anachronism, and it cost
+                  // two lines per family. Dedicated reasoning models carry a
+                  // quiet brain icon instead (see badgeFor).
                   const renderFamilySection = (
                     key: string,
                     label: string,
                     models: OpenAIModel[],
-                  ) => {
-                    const reasoning = models.filter(
-                      (m) => metaOf(m).modelType === 'reasoning',
-                    );
-                    const general = models.filter(
-                      (m) => metaOf(m).modelType !== 'reasoning',
-                    );
-                    const showTypes =
-                      reasoning.length > 0 && general.length > 0;
-                    return (
-                      <div key={key} className="mb-3 last:mb-0">
-                        <h5 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-                          {label} ({models.length})
-                        </h5>
-                        {showTypes ? (
-                          <>
-                            {typeLabel(t('modelSelect.types.reasoning'))}
-                            {renderTypeBlock(reasoning)}
-                            {typeLabel(t('modelSelect.types.general'))}
-                            {renderTypeBlock(general)}
-                          </>
-                        ) : (
-                          renderTypeBlock(models)
-                        )}
-                      </div>
-                    );
-                  };
+                  ) => (
+                    <div key={key} className="mb-3 last:mb-0">
+                      <h5 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                        {label} ({models.length})
+                      </h5>
+                      {renderTypeBlock(models)}
+                    </div>
+                  );
 
                   const leftover =
                     familyFilter === 'all'
