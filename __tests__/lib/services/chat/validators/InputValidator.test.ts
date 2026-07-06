@@ -326,3 +326,40 @@ describe('InputValidator', () => {
     });
   });
 });
+
+describe('validateChatRequest - hostedRegion', () => {
+  const base = {
+    model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('accepts US and EU', () => {
+    const validator = new InputValidator();
+    expect(
+      validator.validateChatRequest({ ...base, hostedRegion: 'EU' })
+        .hostedRegion,
+    ).toBe('EU');
+    expect(
+      validator.validateChatRequest({ ...base, hostedRegion: 'US' })
+        .hostedRegion,
+    ).toBe('US');
+  });
+
+  it('is optional', () => {
+    const validator = new InputValidator();
+    expect(validator.validateChatRequest(base).hostedRegion).toBeUndefined();
+  });
+
+  it('rejects anything outside the enum (no arbitrary routing hints)', () => {
+    const validator = new InputValidator();
+    expect(() =>
+      validator.validateChatRequest({ ...base, hostedRegion: 'APAC' }),
+    ).toThrow();
+    expect(() =>
+      validator.validateChatRequest({
+        ...base,
+        hostedRegion: 'https://evil.example',
+      }),
+    ).toThrow();
+  });
+});
