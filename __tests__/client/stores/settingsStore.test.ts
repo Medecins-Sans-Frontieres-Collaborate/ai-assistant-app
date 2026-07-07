@@ -660,6 +660,67 @@ You should be concise.`;
     });
   });
 
+  describe('Token usage tracking', () => {
+    beforeEach(() => {
+      useSettingsStore.setState({
+        tokenUsageStats: {},
+        tokenUsageFirstTrackedAt: null,
+      });
+    });
+
+    const usage = (over = {}) => ({
+      promptTokens: 100,
+      completionTokens: 200,
+      totalTokens: 300,
+      modelId: 'gpt-5.2',
+      region: 'EU' as const,
+      reasoningEffort: undefined,
+      ...over,
+    });
+
+    it('accumulates counts + requests under a model|region|effort key', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      useSettingsStore.getState().recordTokenUsage(usage());
+
+      const stats = useSettingsStore.getState().tokenUsageStats;
+      expect(stats['gpt-5.2|EU|none']).toEqual({
+        promptTokens: 200,
+        completionTokens: 400,
+        requests: 2,
+      });
+    });
+
+    it('separates buckets by region and effort', () => {
+      useSettingsStore.getState().recordTokenUsage(usage({ region: 'US' }));
+      useSettingsStore
+        .getState()
+        .recordTokenUsage(usage({ region: 'EU', reasoningEffort: 'high' }));
+      useSettingsStore.getState().recordTokenUsage(usage({ region: null }));
+
+      const stats = useSettingsStore.getState().tokenUsageStats;
+      expect(Object.keys(stats).sort()).toEqual([
+        'gpt-5.2|EU|high',
+        'gpt-5.2|US|none',
+        'gpt-5.2|default|none',
+      ]);
+    });
+
+    it('stamps firstTrackedAt once and keeps it stable', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      const first = useSettingsStore.getState().tokenUsageFirstTrackedAt;
+      expect(first).toBeTruthy();
+      useSettingsStore.getState().recordTokenUsage(usage());
+      expect(useSettingsStore.getState().tokenUsageFirstTrackedAt).toBe(first);
+    });
+
+    it('resetTokenUsageStats clears stats and timestamp', () => {
+      useSettingsStore.getState().recordTokenUsage(usage());
+      useSettingsStore.getState().resetTokenUsageStats();
+      expect(useSettingsStore.getState().tokenUsageStats).toEqual({});
+      expect(useSettingsStore.getState().tokenUsageFirstTrackedAt).toBeNull();
+    });
+  });
+
   describe('resetSettings', () => {
     it('resets to default values', () => {
       // Set all settings to non-default values
