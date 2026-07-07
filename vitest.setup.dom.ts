@@ -187,7 +187,6 @@ const mockMessages: Record<string, unknown> = {
     searchEmpty: 'No models match your search.',
     star: 'Star {name}',
     unstar: 'Unstar {name}',
-    otherFamily: 'Other',
     version: {
       label: 'Version',
     },
