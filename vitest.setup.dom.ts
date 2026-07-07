@@ -159,6 +159,20 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  usageImpact: {
+    empty: 'No usage tracked yet.',
+    co2Value: '{grams} g CO2e',
+    equivalence: '~ {count} smartphone charges',
+    requests: 'Requests',
+    promptTokens: 'Prompt tokens',
+    completionTokens: 'Completion tokens',
+    topModels: 'By model',
+    byRegion: 'By hosting region',
+    regionDefault: 'Default',
+    modelRow: '{requests} req - {grams} g',
+    disclosure: 'Estimates based on assumptions v{version} - since {since}.',
+    reset: 'Reset usage stats',
+  },
   modelSelect: {
     tabs: {
       models: 'Models',
