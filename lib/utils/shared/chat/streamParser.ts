@@ -1,6 +1,7 @@
 import {
   PendingTranscriptionInfo,
   StreamMetadata,
+  TokenUsageMetadata,
   TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
@@ -35,6 +36,7 @@ export class StreamParser {
   private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
+  private extractedUsage?: TokenUsageMetadata;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -184,6 +186,11 @@ export class StreamParser {
       this.extractedActiveFilesDropped = parsed.activeFilesDropped;
     }
 
+    // Capture per-request token usage if present (terminal metadata block)
+    if (parsed.usage && this.extractedUsage == null) {
+      this.extractedUsage = parsed.usage;
+    }
+
     // `hasReceivedContent` checks the raw accumulator so a citations-only
     // response (`[1] [2]`) still clears the loading state. `contentChanged`
     // compares the rendered text so we don't repaint when only trailing
@@ -232,6 +239,10 @@ export class StreamParser {
         const jsonResponse = JSON.parse(finalText);
         if (jsonResponse.text) {
           finalText = jsonResponse.text;
+        }
+        // Non-streaming bodies carry usage inline instead of via metadata
+        if (jsonResponse.usage && this.extractedUsage == null) {
+          this.extractedUsage = jsonResponse.usage as TokenUsageMetadata;
         }
       } catch (e) {
         // Not JSON or parsing failed, use text as-is
@@ -305,6 +316,14 @@ export class StreamParser {
    */
   getActiveFilesDropped(): string[] | undefined {
     return this.extractedActiveFilesDropped;
+  }
+
+  /**
+   * Get the per-request token usage reported by the server (terminal
+   * metadata block for streams, inline `usage` for non-streaming JSON).
+   */
+  getUsage(): TokenUsageMetadata | undefined {
+    return this.extractedUsage;
   }
 
   /**
