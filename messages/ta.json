@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "அரட்டை அமைப்புகளை மீட்டமைக்கவா?",
     "resetChatSettingsConfirmMessage": "இந்த குழுவில் உள்ள அனைத்திற்கும் (temperature, custom instructions, About You, model response, streaming speed, text-to-speech, active files, confirmations) இயல்புநிலையை மீட்டமைக்கும். இது உங்கள் உரையாடல்களுக்கு பாதிப்பை ஏற்படுத்தாது.",
     "customInstructionsLabel": "தனிப்பயன் வழிமுறைகள்*",
-    "defaultTemperatureLabel": "இயல்புநிலை Temperature*"
+    "defaultTemperatureLabel": "இயல்புநிலை Temperature*",
+    "Usage & Impact": "பயன்பாடு மற்றும் தாக்கம்"
   },
   "emptyState": {
     "greeting": "நான் எவ்வாறு உதவ முடியும்?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "இருப்பு மேலெழுதல் செயலில் உள்ளது — உங்கள் கோரிக்கைகள் {region} தரவு பகுதியில் அனுப்பப்படுகின்றன. இது கையால் சோதனைக்கான மேலெழுதல், உங்கள் உண்மையான இருப்பிடம் அல்ல.",
     "clear": "மேலெழுத்தை அகற்று"
+  },
+  "usageImpact": {
+    "empty": "இந்நிலையில் எந்தப் பயன்பாடும் பதிவாகவில்லை. நீங்கள் உரையாடியபின் உங்கள் டோகன் பயன்பாடு மற்றும் கணிக்கப்பட்ட கார்பன் வெளியீடு இங்குத் தோன்றும்.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} ஸ்மார்ட்போன் சார்ஜிங்",
+    "requests": "கோரிக்கைகள்",
+    "promptTokens": "ப்ராம்ப்ட் டோகன்கள்",
+    "completionTokens": "கம்ப்ளீஷன் டோகன்கள்",
+    "topModels": "மாடல் வாரியாக",
+    "byRegion": "ஹோஸ்டிங் பிராந்தியப்படி",
+    "regionDefault": "இயல்புநிலை",
+    "modelRow": "{requests} கோரிக்கை · {grams} g",
+    "disclosure": "மதிப்பீடுகள் முன்னணிப் புள்ளிகள் v{version} · {since} முதல் · சாமான்ய உரையாடல் மட்டும் (ஏஜென்ட்கள் மற்றும் நல்குறைவு-தள பதில்கள் கணக்கில் எடுத்திடப்படவில்லை).",
+    "reset": "பயன்பாட்டு புள்ளிவிவரங்களை மீட்டமை"
   }
 }

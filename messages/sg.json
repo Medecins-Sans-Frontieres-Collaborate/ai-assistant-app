@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Zîngo paramètre ti bângâ so?",
     "resetChatSettingsConfirmMessage": "Iko yeke zîngô paramètre na mbênî so: température, ndemële ti tîngbî, Sô tî mo, ndapî ti model, vitesse ti streaming, ndimi ti timbî, fichiers ti bêtî, na bingâ ti vêrîngö. Ala yeke nâ kô ti bâa mbênî so mo kêtê na bângâ so.",
     "customInstructionsLabel": "Mbêtï ti tôgbo*",
-    "defaultTemperatureLabel": "Températûrë ti yéké*"
+    "defaultTemperatureLabel": "Températûrë ti yéké*",
+    "Usage & Impact": "Sêlêni na mbeni"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Ngu ti lo na kodro — mingi mo ape ye sô yeke  na région de données {region}. Ala so lo ape kété ti kodro mo, mbi yeke na kêtê hinga maboko.",
     "clear": "Kombä ti kodro"
+  },
+  "usageImpact": {
+    "empty": "Amo usage ayeke zo sô. Usage ti mo na token na sô ti emissions zo apepe na mbênî lôko mo ti yâmu.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} chargement ti smartphone",
+    "requests": "Demande",
+    "promptTokens": "Token ti demande",
+    "completionTokens": "Token ti réponse",
+    "topModels": "Na modèle",
+    "byRegion": "Na région ti hébergement",
+    "regionDefault": "Défa",
+    "modelRow": "{requests} demande · {grams} g",
+    "disclosure": "Estimation ti dî ti assumption v{version} · depi {since} · chat standard mbî (agent na réponse ti base de données ape na séne).",
+    "reset": "Rétablir statistique ti usage"
   }
 }

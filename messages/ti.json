@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "ቅንብሮታት ቻት ኣዳልው?",
     "resetChatSettingsConfirmMessage": "ዚኣ ቃል ናይቲ ፓኔል ኩሉ ንቅንብሮታት ናይ መደብ መልሲ ፣ ብቑዓት ምትእታው፣ ፍትሒ ናብናብ መላእክቲ፣ ስለ ኣንቲ፣ ሓንደበት ናይ ሞዴል መልሲ፣ ብምፍላጥ ምስናይ፣ ጽሑፍ-ናብ-ድምፂ፣ ኣካባቢ ፋይላትን ምርጫታትን ወይ ናይ ሓበሬታታት ፣ ቃል ንክሳቕ፣ ምርምርን። ንሕዝብ ትምህርትካት ኣይጽሑፉን።",
     "customInstructionsLabel": "ብኻንያ መመሪያታት*",
-    "defaultTemperatureLabel": "ነቶም መደብ መዓዛ*"
+    "defaultTemperatureLabel": "ነቶም መደብ መዓዛ*",
+    "Usage & Impact": "ኣጠቓቕማ ንቑልብትን"
   },
   "emptyState": {
     "greeting": "ብኸመይ ክሕግዝ?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "ኣካባቢ ተለዋዋጭ ብሓላፊ ይሰርሕ ኣሎ — ጥየታትኩም {region} ዝብሉ ክፍሊ መረብ ይልከኩ። እዚ ብእግሊ ፈተና ዝተደረገ ሕወሓት እዩ፣ እንተወሃቦ ኣካባቢኩም ኣይኮነን።",
     "clear": "ቆልዑ ተለዋዋጭ"
+  },
+  "usageImpact": {
+    "empty": "እዚ ገና ኣጠቓቕም ኣይተመዝገበን። ናይ ቶክን ኣጠቓቕምካን ብዝነብሩ ኣብዚ ምስተዓወትካ እዚ ይበጽሓ።",
+    "co2Value": "{grams} ግራም ኲፐር ኦ ብራብር (CO₂e)",
+    "equivalence": "≈ ብቁጽሪ {count} ጦም ስማርትፎን።",
+    "requests": "ጥያቄታት",
+    "promptTokens": "ቅድሚ ቃላት ቶክን",
+    "completionTokens": "ምውዳእ ቃላት ቶክን",
+    "topModels": "ብ ሞዴል",
+    "byRegion": "ብ ገዛኢ ዞባ",
+    "regionDefault": "ምርጫ ኣብ መደበኛ",
+    "modelRow": "{requests} ጥያቄ · {grams} ግራም",
+    "disclosure": "ቅድመሓሳቡ ብምስማማዕ ናይ v{version} · ካብ {since} · ምድላይ መዓልቲ ሓሳብ ብቐዳይ (ኣገንትን ናይ ዕውታት ቋንቋ መልሲ ኣይተቆጸረን)።",
+    "reset": "ናይ ኣጠቓቕማ ውህኖታት ኣቐምጥ"
   }
 }

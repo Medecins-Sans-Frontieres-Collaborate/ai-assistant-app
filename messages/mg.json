@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Avereno amin'ny voalohany ny fanovàna amin'ny chat?",
     "resetChatSettingsConfirmMessage": "Averina amin'ny masontsivana fototra eto amin'ity tabilao ity: temperature, toromarika manokana, Momba Anao, valin'ny modely, hafainganam-pandehan'ny streaming, fanovàna lahatsoratra ho feo, rakitra mavitrika, ary fanamafisana. Tsy misy fiantraikany amin'ny resakao izany.",
     "customInstructionsLabel": "Toromarika manokana*",
-    "defaultTemperatureLabel": "Mari-pana mahazatra*"
+    "defaultTemperatureLabel": "Mari-pana mahazatra*",
+    "Usage & Impact": "Fampiasana sy Fiantraikany"
   },
   "emptyState": {
     "greeting": "Afaka manampy inona aho?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Miasa ny fametrahana toerana an-tanana — amin'ny faritra angon-drakitra {region} no andefasana ny fangatahanao. Fanovàna amin'ny tanana ho fitsapana io, fa tsy ny tena toeranao.",
     "clear": "Fafao ny fanovàna"
+  },
+  "usageImpact": {
+    "empty": "Tsy mbola nisy fampiasana voarakitra. Hiseho eto ny fampiasanao token sy tomban’ny entona mivoaka aorian’ny fifanakalozanao.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} famahanana finday",
+    "requests": "Fangatahana",
+    "promptTokens": "Prompt tokens",
+    "completionTokens": "Completion tokens",
+    "topModels": "Arakaraka ny modely",
+    "byRegion": "Araka ny faritra fitehirizana",
+    "regionDefault": "Default",
+    "modelRow": "{requests} fangatahana · {grams} g",
+    "disclosure": "Tombana mifototra amin’ny angon-drakitra sy kajy v{version} · hatramin’ny {since} · chat mahazatra ihany (tsy asiana ny agents sy valin’ny knowledge-base).",
+    "reset": "Averina ny antontan’isa fampiasana"
   }
 }

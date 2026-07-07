@@ -1113,7 +1113,8 @@
     "resetChatSettingsConfirmTitle": "Chats instellingen herstellen?",
     "resetChatSettingsConfirmMessage": "Dit herstelt de standaardwaarden voor alles in dit paneel: temperature, aangepaste instructies, Over U, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Dit heeft geen invloed op uw gesprekken.",
     "customInstructionsLabel": "Aangepaste instructies*",
-    "defaultTemperatureLabel": "Standaard temperatuur*"
+    "defaultTemperatureLabel": "Standaard temperatuur*",
+    "Usage & Impact": "Gebruik & Impact"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Locatie-override actief — uw verzoeken worden doorgestuurd naar de {region} dataregio. Dit is een handmatige test-override, niet uw werkelijke locatie.",
     "clear": "Override wissen"
+  },
+  "usageImpact": {
+    "empty": "Er is nog geen gebruik geregistreerd. Je tokengebruik en de geschatte uitstoot verschijnen hier nadat je hebt gechat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} smartphone-oplaadbeurten",
+    "requests": "Verzoeken",
+    "promptTokens": "Prompt-tokens",
+    "completionTokens": "Completion-tokens",
+    "topModels": "Per model",
+    "byRegion": "Per hostingregio",
+    "regionDefault": "Standaard",
+    "modelRow": "{requests} ver. · {grams} g",
+    "disclosure": "Schattingen gebaseerd op aannames v{version} · sinds {since} · alleen standaardchat (agents en kennisbankantwoorden niet meegeteld).",
+    "reset": "Gebruikstatistieken resetten"
   }
 }

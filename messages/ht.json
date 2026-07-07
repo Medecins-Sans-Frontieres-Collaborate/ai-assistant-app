@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Reyajiste paramèt chat yo?",
     "resetChatSettingsConfirmMessage": "Sa ap retabli tout paramèt ki default nan panèl sa a: tanperati, enstriksyon pèsonalize, Enfòmasyon sou ou, repons modèl, vitès difizyon, tèks an vwa, fichye aktif, ak konfimasyon. Sa pap afekte konvèsasyon ou yo.",
     "customInstructionsLabel": "Enstriksyon Pèsonalize*",
-    "defaultTemperatureLabel": "Tanperati pa defo*"
+    "defaultTemperatureLabel": "Tanperati pa defo*",
+    "Usage & Impact": "Itilizasyon & Enpak"
   },
   "emptyState": {
     "greeting": "Kijan mwen ka ede ou?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Chanjman kote aktive — demann ou yo ap voye bay rejyon done {region}. Sa a se yon chanjman manyèl pou tès, li pa kote ou aktyèlman ye.",
     "clear": "Retire chanjman"
+  },
+  "usageImpact": {
+    "empty": "Pa gen itilizasyon ki anrejistre ankò. Itilizasyon tokèn ou ak emisyon estime yo ap parèt isit la apre ou fin pale.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} chaj telefòn entelijan",
+    "requests": "Demand",
+    "promptTokens": "Tokèn pou demann",
+    "completionTokens": "Tokèn pou repons",
+    "topModels": "Pa modèl",
+    "byRegion": "Pa rejyon ki òganize a",
+    "regionDefault": "Defo",
+    "modelRow": "{requests} demann · {grams} g",
+    "disclosure": "Estimasyon sou baz sipozisyon v{version} · depi {since} · sèlman pou chat estanda (pa konte ajan ak repons baz konesans).",
+    "reset": "Reyajiste estatistik itilizasyon"
   }
 }

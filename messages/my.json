@@ -1123,7 +1123,8 @@
     "resetChatSettingsConfirmTitle": "စကားပြောဆက်တင်များကို Reset လုပ်မလား?",
     "resetChatSettingsConfirmMessage": "ဤအရာသည် ဤပန်နယ်အတွင်းရှိ အားလုံး၏ ပုံသေနည်းကို ပြန်လည်သတ်မှတ်ပါမည် - temperature၊ custom instructions၊ About You၊ model response၊ streaming speed၊ text-to-speech၊ active files နှင့် confirmations။ သင်၏ စကားပြောမှုများကို ထိခိုက်မှု မရှိပါ။",
     "customInstructionsLabel": "စိတ်ကြိုက်ညွှန်ကြားချက်များ*",
-    "defaultTemperatureLabel": "မူရင်း Temperature*"
+    "defaultTemperatureLabel": "မူရင်း Temperature*",
+    "Usage & Impact": "အသုံးပြုမှုနှင့် သက်ရောက်မှု"
   },
   "notFound": {
     "lostDog": "ပျောက်ဆုံးနေသော ခွေး"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "တည်နေရာထောက်လှမ်းမှုကို override ပြုလုပ်ထားသည် — သင့်တောင်းဆိုမှုများကို {region} ဒေတာဒေသသို့ပို့နေပါသည်။ ၎င်းသည် ကိုယ်တိုင်စမ်းသပ်ကာ override ပြုလုပ်ခြင်းဖြစ်ပြီး သင့်တကယ့်တည်နေရာ မဟုတ်ပါ။",
     "clear": "Override ဖယ်ရှားပါ"
+  },
+  "usageImpact": {
+    "empty": "အသုံးပြုမှု အခြေအနေ မရှိသေးပါ။ မိတ်ဆက်ပြောဆိုပြီးနောက် သင်၏ token အသုံးပြုမှုနှင့် ခန့်မှန်း된 ထုတ်လွှတ်မှုများကို ဤနေရာတွင် မြင်နိုင်ပါလိမ့်မည်။",
+    "co2Value": "{grams} ဂရမ် CO₂e",
+    "equivalence": "≈ စမတ်ဖုန်း အားသွင်းမှု {count} ကြိမ်နှုန်း",
+    "requests": "တောင်းဆိုမှုများ",
+    "promptTokens": "Prompt token များ",
+    "completionTokens": "Completion token များ",
+    "topModels": "မော်ဒယ်အလိုက်",
+    "byRegion": "Hosting region အလိုက်",
+    "regionDefault": "ပုံမှန်",
+    "modelRow": "{requests} ကြိမ် · {grams} ဂရမ်",
+    "disclosure": "ခန့်မှန်းချက်များသည် ယူဆချက်များအပေါ် အခြေခံထားပါသည် v{version} · {since} မှစ၍ · ပုံမှန် chat များအတွက်သာ (agent များနှင့် knowledge-base ဖြေဆိုချက်များ မပါဝင်)",
+    "reset": "အသုံးပြုမှု စာရင်းအချက်အလက် ပြန်လည်သတ်မှတ်ပါ"
   }
 }

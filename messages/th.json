@@ -1065,7 +1065,8 @@
     "resetChatSettingsConfirmTitle": "รีเซ็ตการตั้งค่าแชทหรือไม่?",
     "resetChatSettingsConfirmMessage": "การดำเนินการนี้จะคืนค่าการตั้งค่าทั้งหมดในแผงนี้กลับสู่ค่าเริ่มต้น: temperature, custom instructions, About You, model response, streaming speed, text-to-speech, ไฟล์ที่ใช้งาน และการยืนยันต่างๆ การดำเนินการนี้จะไม่กระทบต่อบทสนทนาของคุณ",
     "customInstructionsLabel": "คำแนะนำเฉพาะ*",
-    "defaultTemperatureLabel": "ค่า Temperature เริ่มต้น*"
+    "defaultTemperatureLabel": "ค่า Temperature เริ่มต้น*",
+    "Usage & Impact": "การใช้งานและผลกระทบ"
   },
   "notFound": {
     "lostDog": "สุนัขหาย"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "กำลังใช้การแทนที่ตำแหน่ง — คำขอของคุณจะถูกส่งไปยังภูมิภาคข้อมูล {region} การแทนที่นี้เป็นการทดสอบแบบแมนนวล ไม่ใช่ตำแหน่งจริงของคุณ",
     "clear": "ล้างการแทนที่"
+  },
+  "usageImpact": {
+    "empty": "ยังไม่มีการติดตามการใช้งาน การใช้โทเคนและค่าการปล่อยคาดการณ์จะแสดงที่นี่หลังจากคุณเริ่มสนทนาแล้ว",
+    "co2Value": "{grams} กรัม CO₂e",
+    "equivalence": "≈ ชาร์จสมาร์ทโฟน {count} ครั้ง",
+    "requests": "คำขอ",
+    "promptTokens": "โทเคนพรอมต์",
+    "completionTokens": "โทเคนคอมพลีชั่น",
+    "topModels": "ตามโมเดล",
+    "byRegion": "ตามภูมิภาคที่โฮสต์",
+    "regionDefault": "ค่าเริ่มต้น",
+    "modelRow": "{requests} ครั้ง · {grams} กรัม",
+    "disclosure": "ประมาณการจากสมมติฐาน v{version} · ตั้งแต่ {since} · เฉพาะแชทปกติ (ไม่รวมเอเจนต์และคำตอบจากฐานความรู้)",
+    "reset": "รีเซ็ตสถิติการใช้งาน"
   }
 }

@@ -1179,7 +1179,8 @@
     "resetChatSettingsConfirmTitle": "重置聊天设置？",
     "resetChatSettingsConfirmMessage": "这将恢复本面板中所有内容为默认值：温度、自定义指令、关于你、模型回复、流式速度、语音合成、活动文件和确认设置。不会影响您的对话内容。",
     "customInstructionsLabel": "自定义指令*",
-    "defaultTemperatureLabel": "默认 Temperature*"
+    "defaultTemperatureLabel": "默认 Temperature*",
+    "Usage & Impact": "使用情况与影响"
   },
   "notFound": {
     "lostDog": "迷路的狗"
@@ -2174,5 +2175,19 @@
   "regionOverride": {
     "warning": "位置覆盖已激活 — 您的请求正在路由到 {region} 数据区域。这是手动测试覆盖，不代表您的实际位置。",
     "clear": "清除覆盖"
+  },
+  "usageImpact": {
+    "empty": "尚无使用记录。聊天后，您的令牌使用量和预计碳排放将在此显示。",
+    "co2Value": "{grams} 克 CO₂e",
+    "equivalence": "≈ {count} 次智能手机充电",
+    "requests": "请求数",
+    "promptTokens": "提示令牌",
+    "completionTokens": "完成令牌",
+    "topModels": "按模型",
+    "byRegion": "按托管区域",
+    "regionDefault": "默认",
+    "modelRow": "{requests} 次请求 · {grams} 克",
+    "disclosure": "估算基于假设 v{version} · 自 {since} 起 · 仅限标准聊天（不计代理和知识库答案）。",
+    "reset": "重置使用统计"
   }
 }

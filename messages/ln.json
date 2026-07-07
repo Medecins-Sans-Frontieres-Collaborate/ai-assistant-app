@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Olingi kozongisa malamu ya lotomo ya lisolo?",
     "resetChatSettingsConfirmMessage": "Ekosilisa matambwisi ya liboso mpo na biloko nyonso awa: temperature, mabongisi ya moko, Soki Oyo Ozali, eyano ya model, vitesse ya ebimiseli, koleka maloba na mongongo, bafichiers actives, mpe makokisami. Ikosalela na ndenge te makambo na misolo ya bino.",
     "customInstructionsLabel": "Biyetoli na moto moko*",
-    "defaultTemperatureLabel": "Temperature ya kobanda*"
+    "defaultTemperatureLabel": "Temperature ya kobanda*",
+    "Usage & Impact": "Kosalela & Mfumo"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Kobongola esika esalemi — basɛngiselami na yo ezali kokende na etúká ya donnes ya {region}. Eyi ezali kobongola ya mitindo mpo na kobakisa, kasi ezali te esika na yo ya solo.",
     "clear": "Kolongola kobongola"
+  },
+  "usageImpact": {
+    "empty": "Kosalela ekolandisami nanu te. Mbala okosolola awa, kosalela ya batu mpe mwa koyebisa ya emissions ekomonana awa.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} mwa komemisa ya telefone ya smartphone",
+    "requests": "Basɛngami",
+    "promptTokens": "Bitanda ya motuna",
+    "completionTokens": "Bitanda ya biyano",
+    "topModels": "Kolanda modèle",
+    "byRegion": "Kolanda eteni ya kokamba",
+    "regionDefault": "Ya liboso",
+    "modelRow": "{requests} basɛngami · {grams} g",
+    "disclosure": "Bakonzi ezali kolanda makoki v{version} · banda {since} · kaka na masolo ya pamba (agents mpe biyano na banque ya boyebi ekotaki te).",
+    "reset": "Bozongisela stati ya kosalela"
   }
 }

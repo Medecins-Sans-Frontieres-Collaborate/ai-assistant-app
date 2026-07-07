@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Återställ chattinställningar?",
     "resetChatSettingsConfirmMessage": "Detta återställer standardvärden för allt i denna panel: temperatur, anpassade instruktioner, Om dig, modellsvar, strömmande hastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina konversationer.",
     "customInstructionsLabel": "Anpassade instruktioner*",
-    "defaultTemperatureLabel": "Standardtemperatur*"
+    "defaultTemperatureLabel": "Standardtemperatur*",
+    "Usage & Impact": "Användning & påverkan"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Platsöverskridande aktiv — dina förfrågningar dirigeras till dataregionen {region}. Detta är en manuell testöverskridande, inte din faktiska plats.",
     "clear": "Rensa överskridande"
+  },
+  "usageImpact": {
+    "empty": "Ingen användning har spårats ännu. Din tokenanvändning och uppskattade utsläpp visas här efter att du har chattat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} mobiluppladdningar",
+    "requests": "Förfrågningar",
+    "promptTokens": "Prompt-tokens",
+    "completionTokens": "Slut-tokens",
+    "topModels": "Per modell",
+    "byRegion": "Per värdregion",
+    "regionDefault": "Standard",
+    "modelRow": "{requests} frq · {grams} g",
+    "disclosure": "Uppskattningar baseras på antaganden v{version} · sedan {since} · endast standardchatt (agenter och kunskapsbaserade svar räknas inte).",
+    "reset": "Återställ användningsstatistik"
   }
 }

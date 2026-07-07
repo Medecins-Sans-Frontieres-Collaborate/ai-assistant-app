@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "채팅 설정을 초기화하시겠습니까?",
     "resetChatSettingsConfirmMessage": "이 작업은 이 패널의 모든 값을 기본값으로 복원합니다: 온도, 사용자 지정 지침, About You, 모델 응답, 스트리밍 속도, 음성 출력, 활성 파일 및 확인 메시지. 대화 내용에는 영향을 주지 않습니다.",
     "customInstructionsLabel": "맞춤 지침*",
-    "defaultTemperatureLabel": "기본 Temperature*"
+    "defaultTemperatureLabel": "기본 Temperature*",
+    "Usage & Impact": "사용 현황 및 영향"
   },
   "notFound": {
     "lostDog": "잃어버린 개"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "위치 재정의가 활성화되었습니다 — 귀하의 요청이 {region} 데이터 지역으로 라우팅되고 있습니다. 이는 테스트용 수동 재정의이며 실제 위치가 아닙니다.",
     "clear": "재정의 해제"
+  },
+  "usageImpact": {
+    "empty": "아직 사용 내역이 없습니다. 채팅 후에 토큰 사용량과 예상 배출량이 여기에 표시됩니다.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count}회 스마트폰 충전",
+    "requests": "요청",
+    "promptTokens": "프롬프트 토큰",
+    "completionTokens": "완료 토큰",
+    "topModels": "모델별",
+    "byRegion": "호스팅 지역별",
+    "regionDefault": "기본값",
+    "modelRow": "{requests}회 요청 · {grams} g",
+    "disclosure": "추정치는 가정에 기반합니다(v{version}) · {since}부터 · 표준 채팅만 포함됨(에이전트 및 지식 기반 답변 제외).",
+    "reset": "사용 통계 초기화"
   }
 }

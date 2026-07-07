@@ -1149,7 +1149,8 @@
     "resetChatSettingsConfirmTitle": "Đặt lại cài đặt trò chuyện?",
     "resetChatSettingsConfirmMessage": "Thao tác này sẽ khôi phục tất cả mặc định trong bảng này: nhiệt độ, hướng dẫn tùy chỉnh, Thông tin về bạn, phản hồi của mô hình, tốc độ truyền, chuyển văn bản thành giọng nói, tệp đang sử dụng và xác nhận. Nội dung cuộc trò chuyện của bạn sẽ không bị ảnh hưởng.",
     "customInstructionsLabel": "Hướng dẫn tùy chỉnh*",
-    "defaultTemperatureLabel": "Nhiệt độ mặc định*"
+    "defaultTemperatureLabel": "Nhiệt độ mặc định*",
+    "Usage & Impact": "Sử dụng & Tác động"
   },
   "notFound": {
     "lostDog": "Chó bị lạc"
@@ -2174,5 +2175,19 @@
   "regionOverride": {
     "warning": "Ghi đè vị trí đang hoạt động — yêu cầu của bạn đang được chuyển hướng đến khu vực dữ liệu {region}. Đây là thao tác kiểm tra thủ công, không phải vị trí thực của bạn.",
     "clear": "Xóa ghi đè"
+  },
+  "usageImpact": {
+    "empty": "Chưa có dữ liệu sử dụng. Việc sử dụng token và ước tính phát thải sẽ hiển thị tại đây sau khi bạn trò chuyện.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} lần sạc điện thoại thông minh",
+    "requests": "Yêu cầu",
+    "promptTokens": "Token nhắc (prompt)",
+    "completionTokens": "Token hoàn thành",
+    "topModels": "Theo mô hình",
+    "byRegion": "Theo khu vực lưu trữ",
+    "regionDefault": "Mặc định",
+    "modelRow": "{requests} yc · {grams} g",
+    "disclosure": "Ước tính dựa trên các giả định v{version} · từ {since} · chỉ tính chat tiêu chuẩn (không tính câu trả lời của agent và knowledge-base).",
+    "reset": "Đặt lại thống kê sử dụng"
   }
 }

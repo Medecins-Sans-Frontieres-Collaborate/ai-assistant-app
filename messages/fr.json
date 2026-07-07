@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Réinitialiser les paramètres du chat ?",
     "resetChatSettingsConfirmMessage": "Cela rétablira les paramètres par défaut pour tous les éléments de ce panneau : température, instructions personnalisées, À propos de vous, réponse du modèle, vitesse de diffusion, synthèse vocale, fichiers actifs et confirmations. Cela n'affecte pas vos conversations.",
     "customInstructionsLabel": "Instructions personnalisées*",
-    "defaultTemperatureLabel": "Température par défaut*"
+    "defaultTemperatureLabel": "Température par défaut*",
+    "Usage & Impact": "Utilisation et impact"
   },
   "notFound": {
     "lostDog": "Chien perdu"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Substitution de localisation active — vos requêtes sont dirigées vers la région de données {region}. Il s'agit d'une substitution manuelle de test, et non de votre localisation réelle.",
     "clear": "Réinitialiser la substitution"
+  },
+  "usageImpact": {
+    "empty": "Aucune utilisation enregistrée pour le moment. Votre utilisation de jetons et les émissions estimées apparaîtront ici après votre conversation.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} recharges de smartphone",
+    "requests": "Requêtes",
+    "promptTokens": "Jetons d’invite",
+    "completionTokens": "Jetons de complétion",
+    "topModels": "Par modèle",
+    "byRegion": "Par région d’hébergement",
+    "regionDefault": "Par défaut",
+    "modelRow": "{requests} req · {grams} g",
+    "disclosure": "Estimations basées sur les hypothèses v{version} · depuis {since} · discussions standard uniquement (agents et réponses de la base de connaissances non prises en compte).",
+    "reset": "Réinitialiser les statistiques d’utilisation"
   }
 }

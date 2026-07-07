@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Subira ku bisanzwe ivyo wahinduye ku kiganiro?",
     "resetChatSettingsConfirmMessage": "Ibi bizosubiza ku bisanzwe vyose biri kuri pane iyi: ubushuhe (temperature), amategeko wahinduye, Ivyerekeye Wewe, inyishu ya modele, umuvuduko wa streaming, text-to-speech, amadosiye akora, n’ukwemeza. Ntibizokora ku biganiro vyawe.",
     "customInstructionsLabel": "Amabwirizwa wihariye*",
-    "defaultTemperatureLabel": "Temperature y'ikibazo isanzwe*"
+    "defaultTemperatureLabel": "Temperature y'ikibazo isanzwe*",
+    "Usage & Impact": "Ukoresha & Ingaruka"
   },
   "emptyState": {
     "greeting": "Ndagufasha nte?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Ukuri kw'aho uri kwarahinduwe — ibisabwa vyawe biriko biraca mu karere ka data ka {region}. Iki ni igerageza rikorwa n'intoki, siho uri koko.",
     "clear": "Siba uguhindura"
+  },
+  "usageImpact": {
+    "empty": "Nta makuru y'ukoresheje arabikwa. Ukoresheje token hamwe n’ico biterereye mu mwuka uzobibona hano umaze kuganira.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} vyakoreshejwe telefone",
+    "requests": "Ivyo wasabye",
+    "promptTokens": "Token zo gutanguza",
+    "completionTokens": "Token zo kurangiza",
+    "topModels": "Ku bw'icuma",
+    "byRegion": "Ku karere ribikwamwo",
+    "regionDefault": "Bisanzwe",
+    "modelRow": "{requests} vyasabwe · {grams} g",
+    "disclosure": "Ibi vyiyumviro vyashingiwe ku bikekwa v{version} · kuva {since} · ibiganiro bisanzwe gusa (ivyo abakozi hamwe n’inyishu zo muri knowledge-base ntibibarwa).",
+    "reset": "Siba ibiharuro vy'ukoresheje"
   }
 }

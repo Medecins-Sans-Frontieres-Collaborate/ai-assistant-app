@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Sohbet ayarları sıfırlansın mı?",
     "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Kendiniz Hakkında, model yanıtı, akış hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez.",
     "customInstructionsLabel": "Özel Talimatlar*",
-    "defaultTemperatureLabel": "Varsayılan Temperature*"
+    "defaultTemperatureLabel": "Varsayılan Temperature*",
+    "Usage & Impact": "Kullanım ve Etki"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Konum geçersiz kılma etkin — istekleriniz {region} veri bölgesine yönlendiriliyor. Bu, manuel bir test geçersiz kılmasıdır; gerçek konumunuz değildir.",
     "clear": "Geçersiz kılmayı temizle"
+  },
+  "usageImpact": {
+    "empty": "Henüz kullanım izlenmedi. Sohbet ettikten sonra token kullanımınız ve tahmini emisyonlarınız burada görünecek.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} akıllı telefon şarjı",
+    "requests": "İstekler",
+    "promptTokens": "İstem tokenları",
+    "completionTokens": "Tamamlama tokenları",
+    "topModels": "Modele göre",
+    "byRegion": "Barındırma bölgesine göre",
+    "regionDefault": "Varsayılan",
+    "modelRow": "{requests} istek · {grams} g",
+    "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
+    "reset": "Kullanım istatistiklerini sıfırla"
   }
 }

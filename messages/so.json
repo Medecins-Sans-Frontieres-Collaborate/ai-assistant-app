@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Ma doonaysaa inaad soo celiso dejinta sheekada?",
     "resetChatSettingsConfirmMessage": "Tani waxay soo celinaysaa dhammaan default-yada ku jira qeybtaan: heerkulka, tilmaamaha gaarka ah, Ku Saabsan Adiga, jawaabta moodeelka, xawaaraha socodsiinta, qoraal-u-akhri, faylasha firfircoon, iyo xaqiijinta. Ma saameyneyso sheekaysiyadaada.",
     "customInstructionsLabel": "Tilmaamo Gaar ah*",
-    "defaultTemperatureLabel": "Heerkulka Asal ah*"
+    "defaultTemperatureLabel": "Heerkulka Asal ah*",
+    "Usage & Impact": "Isticmaalka & Saameynta"
   },
   "emptyState": {
     "greeting": "Sideen kugu caawin karaa?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Meel-beddelidda goobta way shaqaynaysaa — codsiyadaada waxaa loo wareejinayaa gobolka xogta ee {region}. Tani waa tijaabo manual ah, ma aha goobtaada dhabta ah.",
     "clear": "Ka saar meel-beddelka"
+  },
+  "usageImpact": {
+    "empty": "Weli lama diiwaangelin isticmaal. Isticmaalkaaga token-ka iyo qiyaasta qiiqa ayaa halkan ka muuqan doona marka aad sheekaysato kadib.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} jeer oo moobil la dallaco",
+    "requests": "Codsiyo",
+    "promptTokens": "Prompt tokens",
+    "completionTokens": "Completion tokens",
+    "topModels": "Sida muuqaalka model-ka",
+    "byRegion": "Sida gobolka martigeliyaha",
+    "regionDefault": "Midka caadiga ah",
+    "modelRow": "{requests} codsi · {grams} g",
+    "disclosure": "Qiyaasaha waxa lagu salaynayaa maldahan v{version} · wixii ka bilaabmay {since} · kaliya sheekada caadiga ah (awoodaha agent-yada iyo jawaabaha knowledge-base laguma darin).",
+    "reset": "Tirtir tirakoobka isticmaalka"
   }
 }

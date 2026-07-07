@@ -1145,7 +1145,8 @@
     "resetChatSettingsConfirmTitle": "Przywrócić domyślne ustawienia czatu?",
     "resetChatSettingsConfirmMessage": "To przywróci domyślne ustawienia w tym panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, prędkość przesyłania, zamiana tekstu na mowę, aktywne pliki oraz potwierdzenia. Twoje rozmowy nie zostaną zmienione.",
     "customInstructionsLabel": "Niestandardowe instrukcje*",
-    "defaultTemperatureLabel": "Domyślna temperatura*"
+    "defaultTemperatureLabel": "Domyślna temperatura*",
+    "Usage & Impact": "Użycie i wpływ"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Nadpisanie lokalizacji aktywne — Twoje żądania są kierowane do regionu danych {region}. To ręczne nadpisanie testowe, a nie Twoja rzeczywista lokalizacja.",
     "clear": "Wyczyść nadpisanie"
+  },
+  "usageImpact": {
+    "empty": "Nie śledzono jeszcze użycia. Po rozpoczęciu rozmowy pojawi się tu zużycie tokenów i szacowana emisja.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} ładowań smartfona",
+    "requests": "Żądania",
+    "promptTokens": "Tokeny promptu",
+    "completionTokens": "Tokeny odpowiedzi",
+    "topModels": "Według modelu",
+    "byRegion": "Według regionu serwera",
+    "regionDefault": "Domyślny",
+    "modelRow": "{requests} żąd. · {grams} g",
+    "disclosure": "Szacunki oparte na założeniach v{version} · od {since} · tylko standardowy chat (odpowiedzi agentów i bazy wiedzy nie są liczone).",
+    "reset": "Resetuj statystyki użycia"
   }
 }

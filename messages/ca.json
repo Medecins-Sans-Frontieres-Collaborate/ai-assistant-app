@@ -1123,7 +1123,8 @@
     "resetChatSettingsConfirmTitle": "Voleu restablir la configuració del xat?",
     "resetChatSettingsConfirmMessage": "Això restablirà els valors per defecte de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les vostres converses.",
     "customInstructionsLabel": "Instruccions personalitzades*",
-    "defaultTemperatureLabel": "Temperatura predeterminada*"
+    "defaultTemperatureLabel": "Temperatura predeterminada*",
+    "Usage & Impact": "Ús i impacte"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Substitució de la localització activa — les vostres sol·licituds s'estan dirigint a la regió de dades de {region}. Això és una substitució manual de prova, no la vostra ubicació real.",
     "clear": "Esborra la substitució"
+  },
+  "usageImpact": {
+    "empty": "Encara no s'ha registrat cap ús. El teu consum de tokens i les emissions estimades apareixeran aquí després de xatejar.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} càrregues de telèfon intel·ligent",
+    "requests": "Sol·licituds",
+    "promptTokens": "Tokens de prompt",
+    "completionTokens": "Tokens de completat",
+    "topModels": "Per model",
+    "byRegion": "Per regió d'allotjament",
+    "regionDefault": "Per defecte",
+    "modelRow": "{requests} sol·lic. · {grams} g",
+    "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
+    "reset": "Reinicia les estadístiques d’ús"
   }
 }

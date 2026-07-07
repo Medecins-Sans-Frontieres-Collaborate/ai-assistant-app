@@ -1091,7 +1091,8 @@
     "resetChatSettingsConfirmTitle": "የቻት ቅንብሮችን ወደ መደበኛ መመለስ?",
     "resetChatSettingsConfirmMessage": "ይህ በዚህ ፓነል ያሉትን ሁሉ ወደ መደበኛ ነባር ይመልሳል፡ ሙቀት, ባለብዙ አመለካከቶች፣ ስለ እርስዎ፣ የሞዴል ምላሽ፣ የመስተንግዶ ፍጥነት፣ ከጽሑፍ ወደ ድምፅ፣ አንደኛ የሆኑ ፋይሎች፣ እና ማረጋገጫዎች። ውይይቶቻችሁን ግን አያስተካክልም።",
     "customInstructionsLabel": "ብቻውን መመሪያዎች*",
-    "defaultTemperatureLabel": "ነባሪ ቤር*"
+    "defaultTemperatureLabel": "ነባሪ ቤር*",
+    "Usage & Impact": "አጠቃቀም እና ተፅዕኖ"
   },
   "notFound": {
     "lostDog": "የጠፋ ውሻ"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "ቦታ ማሻሻያ አንቀሳቅሷል — ጥያቄዎችዎ ወደ {region} የውሂብ ክልል እየተላኩ ናቸው። ይህ እጅግ እንደ ሙከራ የተደረገ ማሻሻያ ነው፣ እውነተኛ ቦታዎ አይደለም።",
     "clear": "ማሻሻያውን አጽዳ"
+  },
+  "usageImpact": {
+    "empty": "እስካሁን ድረስ ምንም አጠቃቀም አልተመዘገበም። የቶክን አጠቃቀምዎ እና የተገመገመ ማህበረ-ተፅዕኖ ከሚያወዛውዝ በኋላ እዚህ ይታያል።",
+    "co2Value": "{grams} ግራም ኦሲዎች፣ CO₂e",
+    "equivalence": "≈ የ{count} ስማርትፎን አንደበት አንደበት",
+    "requests": "ጥያቄዎች",
+    "promptTokens": "የጥያቄ ቶክኖች",
+    "completionTokens": "የመጨረሻ ቶክኖች",
+    "topModels": "በሞዴል",
+    "byRegion": "በአካባቢ",
+    "regionDefault": "ነባሪ",
+    "modelRow": "{requests} ጥያቄ · {grams} ግራም",
+    "disclosure": "ግምቶች በሰሜን v{version} ላይ የተመሰረቱ · ከ{since} ጀምሮ · መደበኛ ቻት ብቻ (የagent እና knowledge-base መልስ አይተከተሉም።)",
+    "reset": "የአጠቃቀም ስታቲስቲክስን ቀይር"
   }
 }

@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Ṣe tun eto iwiregbe ṣe?",
     "resetChatSettingsConfirmMessage": "Eleyi yoo mu gbogbo eto apakan yii pada si aiyipada: iwọn otutu, ilana ara rẹ, Nipa Rẹ, idahun awoṣe, iyara ṣiṣanwọle, ọrọ-sí-ohùn, awọn faili to ṣiṣẹ, ati ìmúlòlùú. Kò ní kan ìjíròrò rẹ.",
     "customInstructionsLabel": "Ìtọsọna àdáṣe*",
-    "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*"
+    "defaultTemperatureLabel": "Ìtẹ̀tẹ ayára aiyipada*",
+    "Usage & Impact": "Lilo & Ipa"
   },
   "emptyState": {
     "greeting": "Báwo ni mo ṣe lè ràn ọ́ lọ́wọ́?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Aṣiṣe ipo ti wa lọwọlọwọ — a n ṣe itọsọna awọn ibeere rẹ si agbegbe data {region}. Eyi jẹ idanwo ọwọ, kii ṣe ipo gidi rẹ.",
     "clear": "Pa aṣiṣe kuro"
+  },
+  "usageImpact": {
+    "empty": "Ko si lilo tọwọ-tẹlọlọwọ. Lilo token rẹ ati iṣiro itujade yoo han nibi lẹyin ti o ba bá wa sọrọ.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} igbesẹ foonu alagbeka",
+    "requests": "Ìbéèrè",
+    "promptTokens": "Ami àbájáde ṣíṣe",
+    "completionTokens": "Ami ìkànjú",
+    "topModels": "Nípa àwòrán",
+    "byRegion": "Nípa agbègbè ìtẹ́wọ́gbà",
+    "regionDefault": "Aiyipada",
+    "modelRow": "{requests} ìbéèrè · {grams} g",
+    "disclosure": "Ìṣirò dá lórí àfọ̀mọ́sùn v{version} · látìgbà {since} · ìbáṣepọ̀ àkọ́tún ṣoṣo (àwọn agent àti ìdáhùn knowledge-base kì í ṣe kó).",
+    "reset": "Tún àkọsílẹ̀ lilo ṣe"
   }
 }

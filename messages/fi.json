@@ -1123,7 +1123,8 @@
     "resetChatSettingsConfirmTitle": "Palautetaanko keskusteluasetukset?",
     "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin oletusasetukset: temperature, mukautetut ohjeet, About You, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Tämä ei vaikuta keskusteluihisi.",
     "customInstructionsLabel": "Mukautetut ohjeet*",
-    "defaultTemperatureLabel": "Oletuslämpötila*"
+    "defaultTemperatureLabel": "Oletuslämpötila*",
+    "Usage & Impact": "Käyttö ja vaikutus"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Sijainnin ohitus käytössä — pyyntösi ohjataan {region} tietojen alueelle. Tämä on manuaalinen testiohitus, ei todellinen sijaintisi.",
     "clear": "Poista ohitus"
+  },
+  "usageImpact": {
+    "empty": "Käyttöä ei ole vielä seurattu. Tokenien käyttösi ja arvioidut päästöt näkyvät tässä keskustelun jälkeen.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} älypuhelimen latausta",
+    "requests": "Pyynnöt",
+    "promptTokens": "Syötetokenit",
+    "completionTokens": "Valmiustokenit",
+    "topModels": "Malleittain",
+    "byRegion": "Isäntäalueittain",
+    "regionDefault": "Oletus",
+    "modelRow": "{requests} pyyntöä · {grams} g",
+    "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
+    "reset": "Nollaa käyttötilastot"
   }
 }

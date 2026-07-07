@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Sake saitin tattaunawa?",
     "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsoffin saituna ga duk abubuwan wannan shafi: zafin jiki, umarnin da aka keɓance, Bayani game da Kai, amsar samfurin, saurin gudu, karanta rubutu da murya, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarka ba.",
     "customInstructionsLabel": "Umarni na musamman*",
-    "defaultTemperatureLabel": "Yanayin Zafi na Asali*"
+    "defaultTemperatureLabel": "Yanayin Zafi na Asali*",
+    "Usage & Impact": "Amfani & Tasiri"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "An kunna magance wurin — ana dirka buƙatunku zuwa yankin bayanai na {region}. Wannan na gwaji ne da hannu, ba wurin ku na gaske ba.",
     "clear": "Share magance wurin"
+  },
+  "usageImpact": {
+    "empty": "Ba a samo bayanin amfani ba tukuna. Amfanin takardunku da kididdigar hayaƙi za su bayyana anan bayan kun yi hira.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} cajin wayar hannu",
+    "requests": "Buƙatu",
+    "promptTokens": "Alamomin umarni",
+    "completionTokens": "Alamomin kammala",
+    "topModels": "Daga samfur",
+    "byRegion": "Ta yankin masauki",
+    "regionDefault": "Na asali",
+    "modelRow": "{requests} buk. · {grams} g",
+    "disclosure": "Kiyasin ya dogara ne da hasashe v{version} · tun daga {since} · hira ta al'ada kawai (ba a lissafa amsoshin ‘agents’ da kundin sani ba).",
+    "reset": "Sake saiti kididdigar amfani"
   }
 }

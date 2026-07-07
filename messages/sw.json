@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Weka upya mipangilio ya gumzo?",
     "resetChatSettingsConfirmMessage": "Hii itarejesha chaguo-msingi kwa kila kitu kwenye paneli hii: joto, maelekezo maalum, Kuhusu Wewe, majibu ya modeli, kasi ya utiririshaji, maandishi kwenda kwenye hotuba, mafaili yanayotumika, na uthibitisho. Haiathiri mazungumzo yako.",
     "customInstructionsLabel": "Maelekezo Maalum*",
-    "defaultTemperatureLabel": "Joto Chaguo-msingi*"
+    "defaultTemperatureLabel": "Joto Chaguo-msingi*",
+    "Usage & Impact": "Matumizi na Athari"
   },
   "notFound": {
     "lostDog": "Mbwa aliyepotea"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Kubadilisha eneo kumewezeshwa — maombi yako yanaelekezwa kwenye eneo la data la {region}. Hii ni jaribio la kubadilisha kwa mkono, si eneo lako halisi.",
     "clear": "Ondoa kubadilisha"
+  },
+  "usageImpact": {
+    "empty": "Hakuna matumizi yaliyofuatiliwa bado. Matumizi yako ya tokeni na makadirio ya uzalishaji yataonekana hapa baada ya kuzungumza.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} chaji za simu",
+    "requests": "Maombi",
+    "promptTokens": "Tokeni za msukumo",
+    "completionTokens": "Tokeni za kukamilisha",
+    "topModels": "Kulingana na mfano",
+    "byRegion": "Kulingana na eneo la kuhifadhi",
+    "regionDefault": "Chaguo-msingi",
+    "modelRow": "{requests} ombi · {grams} g",
+    "disclosure": "Makadirio msingi wa dhana v{version} · tangu {since} · mazungumzo ya kawaida pekee (mawakala na majibu ya msingi wa maarifa hayajahesabiwa).",
+    "reset": "Weka upya takwimu za matumizi"
   }
 }

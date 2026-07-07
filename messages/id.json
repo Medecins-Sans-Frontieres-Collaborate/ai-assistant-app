@@ -1115,7 +1115,8 @@
     "resetChatSettingsConfirmTitle": "Reset pengaturan chat?",
     "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak memengaruhi percakapan Anda.",
     "customInstructionsLabel": "Instruksi Khusus*",
-    "defaultTemperatureLabel": "Suhu Default*"
+    "defaultTemperatureLabel": "Suhu Default*",
+    "Usage & Impact": "Penggunaan & Dampak"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Pengesampingan lokasi aktif — permintaan Anda sedang diarahkan ke wilayah data {region}. Ini adalah pengesampingan manual untuk pengujian, bukan lokasi Anda yang sebenarnya.",
     "clear": "Hapus pengesampingan"
+  },
+  "usageImpact": {
+    "empty": "Belum ada penggunaan yang tercatat. Penggunaan token dan estimasi emisi Anda akan muncul di sini setelah Anda melakukan chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} kali pengisian daya smartphone",
+    "requests": "Permintaan",
+    "promptTokens": "Token prompt",
+    "completionTokens": "Token penyelesaian",
+    "topModels": "Berdasarkan model",
+    "byRegion": "Berdasarkan wilayah hosting",
+    "regionDefault": "Default",
+    "modelRow": "{requests} permintaan · {grams} g",
+    "disclosure": "Estimasi berdasarkan asumsi v{version} · sejak {since} · hanya chat standar (jawaban agen dan basis pengetahuan tidak dihitung).",
+    "reset": "Atur ulang statistik penggunaan"
   }
 }

@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "A hurmiti teelte chat?",
     "resetChatSettingsConfirmMessage": "Ɓeññiti teelte fow e panel goo: taama, keftinirde bayyinirɗe, Eɓɓe En, jaɓɓorgo model, daande ngol, luugal to mbayka, fileji feewi, e caggolnga. Mbele e saareeji maa fayi.",
     "customInstructionsLabel": "Jaŋtol cuɓal",
-    "defaultTemperatureLabel": "Heewtorgo ndiyam"
+    "defaultTemperatureLabel": "Heewtorgo ndiyam",
+    "Usage & Impact": "Jumɗe e Naatal"
   },
   "emptyState": {
     "greeting": "Hol no mbaaw-mi wallitde?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Jommbondirde nokkuɗo ena heddii — jawdi maa naanii ekkiti ɗaa {region} data region. Eɗen jommbondirde nokkuɗo sintin, kono ko jeyaa kammu.",
     "clear": "Momtu jommbondirde"
+  },
+  "usageImpact": {
+    "empty": "Jumɗe yettaa arii. Jumɗe token maa e naatal co2maa maa teeɗaniima fii hitaande batta a waawi chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} caasaaji smartphone",
+    "requests": "Ñaɗɗo",
+    "promptTokens": "Token ndaarol",
+    "completionTokens": "Token timmintal",
+    "topModels": "Ko to model",
+    "byRegion": "Ko to gese mum",
+    "regionDefault": "Cuusa",
+    "modelRow": "{requests} ñaɗɗo · {grams} g",
+    "disclosure": "Naatal ɗi accii luungal version {version} · jokkondir {since} · chat tenor (agent e annditorde knowledge-base waawaaniima).",
+    "reset": "Fannu jumɗe jokkol"
   }
 }

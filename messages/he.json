@@ -1123,7 +1123,8 @@
     "resetChatSettingsConfirmTitle": "לאפס הגדרות צ'אט?",
     "resetChatSettingsConfirmMessage": "פעולה זו תחזיר לברירת המחדל את כל ההגדרות בלוח זה: טמפרטורה, הנחיות מותאמות, אודותיך, תגובת המודל, מהירות הסטרימינג, טקסט לדיבור, קבצים פעילים ואישורים. אין בכך כדי להשפיע על השיחות שלך.",
     "customInstructionsLabel": "הוראות מותאמות אישית*",
-    "defaultTemperatureLabel": "Default Temperature*"
+    "defaultTemperatureLabel": "Default Temperature*",
+    "Usage & Impact": "שימוש והשפעה"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "עקיפת מיקום פעילה — הבקשות שלך מועברות לאזור הנתונים {region}. מדובר בעקיפה ידנית לבדיקה, לא במיקום האמיתי שלך.",
     "clear": "נקה עקיפה"
+  },
+  "usageImpact": {
+    "empty": "עדיין לא נרשם שימוש. השימוש שלך בטוקנים והפליטה המוערכת יופיעו כאן לאחר שתצ'וטט.",
+    "co2Value": "{grams} גר' CO₂e",
+    "equivalence": "≈ {count} טעינות סמארטפון",
+    "requests": "בקשות",
+    "promptTokens": "טוקנים של השאילתה",
+    "completionTokens": "טוקנים של התשובה",
+    "topModels": "לפי מודל",
+    "byRegion": "לפי אזור אירוח",
+    "regionDefault": "ברירת מחדל",
+    "modelRow": "{requests} בק׳ · {grams} גר'",
+    "disclosure": "ההערכות מבוססות על הנחות v{version} · מאז {since} · רק צ'אט רגיל (תשובות סוכנים ומסד ידע לא נספרות).",
+    "reset": "איפוס סטטיסטיקת שימוש"
   }
 }

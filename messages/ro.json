@@ -1146,7 +1146,8 @@
     "resetChatSettingsConfirmTitle": "Resetați setările conversației?",
     "resetChatSettingsConfirmMessage": "Aceasta va restabili valorile implicite pentru toate opțiunile din acest panou: temperatură, instrucțiuni personalizate, Despre tine, răspunsul modelului, viteza de redare, conversie text-vorbire, fișiere active și confirmări. Nu va afecta conversațiile dvs.",
     "customInstructionsLabel": "Instrucțiuni personalizate*",
-    "defaultTemperatureLabel": "Temperatură implicită*"
+    "defaultTemperatureLabel": "Temperatură implicită*",
+    "Usage & Impact": "Utilizare & Impact"
   },
   "notFound": {
     "lostDog": "Câine pierdut"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Suprascrierea locației este activă — solicitările dvs. sunt redirecționate către regiunea de date {region}. Aceasta este o suprascriere manuală de test, nu locația dvs. reală.",
     "clear": "Ștergeți suprascrierea"
+  },
+  "usageImpact": {
+    "empty": "Nu a fost înregistrată încă nicio utilizare. Utilizarea token-urilor și emisiile estimate vor apărea aici după ce veți conversa.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} încărcări smartphone",
+    "requests": "Cereri",
+    "promptTokens": "Token-uri prompt",
+    "completionTokens": "Token-uri completare",
+    "topModels": "După model",
+    "byRegion": "După regiunea de găzduire",
+    "regionDefault": "Implicit",
+    "modelRow": "{requests} cereri · {grams} g",
+    "disclosure": "Estimări bazate pe ipoteze v{version} · din {since} · doar conversație standard (agenții și răspunsurile din baza de cunoștințe nu sunt incluse).",
+    "reset": "Resetează statisticile de utilizare"
   }
 }

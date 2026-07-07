@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "チャット設定をリセットしますか？",
     "resetChatSettingsConfirmMessage": "このパネル内のすべてが初期設定に戻ります：温度、カスタムインストラクション、About You、モデル応答、ストリーミング速度、音声読み上げ、アクティブファイル、確認画面。ただし、会話内容には影響しません。",
     "customInstructionsLabel": "カスタム指示*",
-    "defaultTemperatureLabel": "デフォルト温度*"
+    "defaultTemperatureLabel": "デフォルト温度*",
+    "Usage & Impact": "使用状況と影響"
   },
   "notFound": {
     "lostDog": "迷子の犬"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "ロケーションの上書きが有効です — リクエストは {region} データリージョンにルーティングされています。これは手動のテスト上書きであり、実際の所在地ではありません。",
     "clear": "上書きをクリア"
+  },
+  "usageImpact": {
+    "empty": "まだ使用状況は記録されていません。チャット後にトークン使用量と推定排出量がここに表示されます。",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "約 {count} 回のスマートフォン充電",
+    "requests": "リクエスト数",
+    "promptTokens": "プロンプトトークン",
+    "completionTokens": "コンプリ―ショントークン",
+    "topModels": "モデル別",
+    "byRegion": "ホスティング地域別",
+    "regionDefault": "デフォルト",
+    "modelRow": "{requests} 回 · {grams} g",
+    "disclosure": "推定値は仮定 v{version} に基づく · {since} 以降 · 標準チャットのみ（エージェントやナレッジベースの回答は含まれていません）。",
+    "reset": "使用統計のリセット"
   }
 }

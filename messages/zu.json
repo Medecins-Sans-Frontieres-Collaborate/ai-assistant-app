@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Usufuna ukusetha kabusha izilungiselelo zenkulumo?",
     "resetChatSettingsConfirmMessage": "Lokhu kuzobuyisela konke okuzenzakalelayo kulawa masethingi: izinga lokushisa, imiyalelo eyenziwe ngezifiso, Mayelana Nawe, impendulo yemodeli, ijubane lokusakaza, umbhalo-ukuya-kwizwi, amafayela asebenzayo, nokuqinisekiswa. Akuthinti izingxoxo zakho.",
     "customInstructionsLabel": "Imiyalelo Yangokwezifiso*",
-    "defaultTemperatureLabel": "Izinga Lokushisa Okuzenzakalelayo*"
+    "defaultTemperatureLabel": "Izinga Lokushisa Okuzenzakalelayo*",
+    "Usage & Impact": "Ukusetshenziswa & Umthelela"
   },
   "emptyState": {
     "greeting": "Ngingakusiza kanjani?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Ukuguqulwa kwendawo kusebenzayo — izicelo zakho zidluliselwa endaweni yedatha ye-{region}. Lokhu ukuvivinya ngesandla, akuyona indawo yakho yangempela.",
     "clear": "Susa ukuguqulwa"
+  },
+  "usageImpact": {
+    "empty": "Akukabhalwa ukusetshenziswa. Ukusetshenziswa kwakho kwama-token nokulinganiselwa kokukhishwa kuzovela lapha ngemva kokuxoxa.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} ukukhokhisa kwe-smartphone",
+    "requests": "Izicelo",
+    "promptTokens": "Ama-prompt tokens",
+    "completionTokens": "Ama-completion tokens",
+    "topModels": "Ngemodeli",
+    "byRegion": "Ngendawo yokubamba",
+    "regionDefault": "Okuzenzakalelayo",
+    "modelRow": "{requests} izicelo · {grams} g",
+    "disclosure": "Ukulinganiselwa kusekelwe ezicabangweni v{version} · kusukela {since} · izingxoxo ezijwayelekile kuphela (ama-agent kanye nezimpendulo ezisekwe olwazi azibaliwe).",
+    "reset": "Setha kabusha izibalo zokusetshenziswa"
   }
 }

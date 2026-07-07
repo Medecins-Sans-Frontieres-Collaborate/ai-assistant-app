@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Mubwezeretse makonda a macheza?",
     "resetChatSettingsConfirmMessage": "Izi zibwezeretsa makonda a pachiyambi pazinthu zonse mu panel iyi: kutentha, malamulo anu, Za Inu, yankho la model, liwiro la kusinja, kutembenuza zolembalemba kukhala mawu, mafayilo ogwira ntchito, ndi zitsimikiziro. Sizisokoneza maulaliki anu.",
     "customInstructionsLabel": "Malangizo Anu*",
-    "defaultTemperatureLabel": "Kutentha kwachikwikwi*"
+    "defaultTemperatureLabel": "Kutentha kwachikwikwi*",
+    "Usage & Impact": "Kagwiritsidwe & Zotsatira"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Kusintha malo kwayatsidwa — zofunsira zanu zikupita ku dera la deta la {region}. Ichi ndi chizolowezi cha pamanja pa mayeso, si malo anu enieni.",
     "clear": "Chotsani kusintha"
+  },
+  "usageImpact": {
+    "empty": "Palibe kagwiritsidwe kanatsatidwa pano. Kugwiritsa ntchito token yanu ndi kuchuluka kwa mpweya wotulutsidwa zidzawonekera pano mutatha kucheza.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} nthawi zolipiritsa mafoni",
+    "requests": "Zopempha",
+    "promptTokens": "Ma token oyambitsa",
+    "completionTokens": "Ma token omaliza",
+    "topModels": "Malinga ndi model",
+    "byRegion": "Malinga ndi dera",
+    "regionDefault": "Yoyambirira",
+    "modelRow": "{requests} zopempha · {grams} g",
+    "disclosure": "Zowerengera izi ndi zochokera pa malingaliro v{version} · kuyambira {since} · kulankhula wamba kokha (ma agents ndi mayankho ochokera mu knowledge-base sizikuphatikizidwa).",
+    "reset": "Bwezerani ziwerengero za kagwiritsidwe"
   }
 }

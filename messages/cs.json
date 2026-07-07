@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Obnovit nastavení chatu?",
     "resetChatSettingsConfirmMessage": "Tímto obnovíte výchozí nastavení všech položek v tomto panelu: teplota, vlastní instrukce, O vás, odpověď modelu, rychlost streamování, převod textu na řeč, aktivní soubory a potvrzení. Nedotkne se to vašich konverzací.",
     "customInstructionsLabel": "Vlastní pokyny*",
-    "defaultTemperatureLabel": "Výchozí teplota*"
+    "defaultTemperatureLabel": "Výchozí teplota*",
+    "Usage & Impact": "Využití a dopad"
   },
   "notFound": {
     "lostDog": "Ztracený pes"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Přepsání polohy je aktivní — vaše požadavky jsou směrovány do datového regionu {region}. Toto je manuální testovací přepsání, ne vaše skutečná poloha.",
     "clear": "Zrušit přepsání"
+  },
+  "usageImpact": {
+    "empty": "Zatím nebylo zaznamenáno žádné využití. Po chatování se zde zobrazí vaše spotřeba tokenů a odhadované emise.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} nabití smartphonu",
+    "requests": "Požadavky",
+    "promptTokens": "Tokeny zadání",
+    "completionTokens": "Tokeny odpovědi",
+    "topModels": "Podle modelu",
+    "byRegion": "Podle hostitelského regionu",
+    "regionDefault": "Výchozí",
+    "modelRow": "{requests} pož. · {grams} g",
+    "disclosure": "Odhady založené na předpokladech v{version} · od {since} · pouze standardní chat (odpovědi agentů a znalostní báze nejsou započítány).",
+    "reset": "Resetovat statistiky využití"
   }
 }

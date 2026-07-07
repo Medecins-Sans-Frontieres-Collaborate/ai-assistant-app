@@ -1148,7 +1148,8 @@
     "resetChatSettingsConfirmTitle": "Chat-Einstellungen zurücksetzen?",
     "resetChatSettingsConfirmMessage": "Dies stellt die Standardeinstellungen für alle Optionen in diesem Bereich wieder her: Temperatur, benutzerdefinierte Anweisungen, Über Sie, Modellantwort, Streaming-Geschwindigkeit, Text-to-Speech, aktive Dateien und Bestätigungen. Ihre Unterhaltungen bleiben unberührt.",
     "customInstructionsLabel": "Individuelle Anweisungen*",
-    "defaultTemperatureLabel": "Standard-Temperatur*"
+    "defaultTemperatureLabel": "Standard-Temperatur*",
+    "Usage & Impact": "Nutzung & Auswirkungen"
   },
   "emptyState": {
     "greeting": "Wie kann ich helfen?",
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Standort-Override aktiv — Ihre Anfragen werden an die Datenregion {region} weitergeleitet. Dies ist ein manueller Test-Override, nicht Ihr tatsächlicher Standort.",
     "clear": "Override löschen"
+  },
+  "usageImpact": {
+    "empty": "Noch keine Nutzung erfasst. Ihr Tokenverbrauch und die geschätzten Emissionen werden nach dem Chat hier angezeigt.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} Smartphone-Ladungen",
+    "requests": "Anfragen",
+    "promptTokens": "Prompt-Token",
+    "completionTokens": "Completion-Token",
+    "topModels": "Nach Modell",
+    "byRegion": "Nach Hosting-Region",
+    "regionDefault": "Standard",
+    "modelRow": "{requests} Anfragen · {grams} g",
+    "disclosure": "Schätzungen basieren auf Annahmen v{version} · seit {since} · nur Standard-Chat (Agenten und Knowledge-Base-Antworten nicht berücksichtigt).",
+    "reset": "Nutzungsstatistik zurücksetzen"
   }
 }

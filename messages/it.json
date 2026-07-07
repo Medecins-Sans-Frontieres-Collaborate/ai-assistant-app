@@ -1123,7 +1123,8 @@
     "resetChatSettingsConfirmTitle": "Reimpostare le impostazioni della chat?",
     "resetChatSettingsConfirmMessage": "Questa operazione ripristina i valori predefiniti per tutto in questo pannello: temperatura, istruzioni personalizzate, Informazioni su di te, risposta del modello, velocità di streaming, sintesi vocale, file attivi e conferme. Non influisce sulle conversazioni.",
     "customInstructionsLabel": "Istruzioni personalizzate*",
-    "defaultTemperatureLabel": "Temperatura predefinita*"
+    "defaultTemperatureLabel": "Temperatura predefinita*",
+    "Usage & Impact": "Utilizzo e Impatto"
   },
   "notFound": {
     "lostDog": "Cane smarrito"
@@ -2143,5 +2144,19 @@
   "regionOverride": {
     "warning": "Sostituzione della posizione attiva — le tue richieste vengono indirizzate alla regione dati {region}. Questo è un override manuale di test, non la tua posizione reale.",
     "clear": "Rimuovi sostituzione"
+  },
+  "usageImpact": {
+    "empty": "Nessun utilizzo rilevato finora. L'utilizzo dei token e le emissioni stimate saranno visibili qui dopo aver chattato.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} ricariche smartphone",
+    "requests": "Richieste",
+    "promptTokens": "Token prompt",
+    "completionTokens": "Token completamento",
+    "topModels": "Per modello",
+    "byRegion": "Per regione di hosting",
+    "regionDefault": "Predefinito",
+    "modelRow": "{requests} richieste · {grams} g",
+    "disclosure": "Stime basate su assunzioni v{version} · dal {since} · solo chat standard (agenti e risposte da knowledge base escluse).",
+    "reset": "Reimposta statistiche utilizzo"
   }
 }

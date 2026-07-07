@@ -1301,7 +1301,8 @@
     "resetChatSettingsConfirmTitle": "Vratiti podešavanja ćaskanja na podrazumevana?",
     "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O Vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ovo ne utiče na vaše razgovore.",
     "customInstructionsLabel": "Prilagođena uputstva*",
-    "defaultTemperatureLabel": "Podrazumevana temperatura*"
+    "defaultTemperatureLabel": "Podrazumevana temperatura*",
+    "Usage & Impact": "Upotreba i uticaj"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -2119,5 +2120,19 @@
   "regionOverride": {
     "warning": "Preusmeravanje lokacije je aktivno — vaši zahtevi se upućuju ka regionu podataka {region}. Ovo je ručno test preusmeravanje, a ne vaša stvarna lokacija.",
     "clear": "Ukloni preusmeravanje"
+  },
+  "usageImpact": {
+    "empty": "Još nema praćene upotrebe. Vaša upotreba tokena i procenjene emisije biće prikazani ovde nakon razgovora.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} punjenja pametnog telefona",
+    "requests": "Zahtevi",
+    "promptTokens": "Tokeni za prompt",
+    "completionTokens": "Tokeni za završetak",
+    "topModels": "Po modelu",
+    "byRegion": "Po regionu hostovanja",
+    "regionDefault": "Podrazumevani",
+    "modelRow": "{requests} zahteva · {grams} g",
+    "disclosure": "Procene se zasnivaju na pretpostavkama v{version} · od {since} · samo standardni čet (agenti i odgovori iz baze znanja nisu uračunati).",
+    "reset": "Resetuj statistiku upotrebe"
   }
 }
