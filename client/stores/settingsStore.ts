@@ -1,5 +1,6 @@
 'use client';
 
+import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import {
@@ -33,6 +34,18 @@ export type ModelOrderMode = 'usage' | 'name' | 'cutoff' | 'custom';
 export interface ConsecutiveModelUsage {
   modelId: string | null;
   count: number;
+}
+
+/** One aggregation bucket of real token usage (see tokenUsageStats). */
+export interface TokenUsageBucket {
+  promptTokens: number;
+  completionTokens: number;
+  requests: number;
+}
+
+/** Builds the tokenUsageStats bucket key for one request's usage. */
+export function tokenUsageKey(usage: TokenUsageMetadata): string {
+  return `${usage.modelId}|${usage.region ?? 'default'}|${usage.reasoningEffort ?? 'none'}`;
 }
 
 /** A Foundry project endpoint that the app discovers agents from */
@@ -85,6 +98,18 @@ interface SettingsStore {
    * star/hide actions enforce it, so no UI can create the contradiction.
    */
   starredModelIds: string[];
+  /**
+   * RAW per-user token usage, accumulated locally (privacy-first: the user's
+   * own stats never leave the device; org-level tracking uses the server's
+   * TokenUsage log event). Keyed `modelId|region|effort` — bounded
+   * cardinality (~models × 3 regions × 5 efforts, realistically <50 keys).
+   * Raw counts only: CO2e is computed at DISPLAY time from
+   * config/emissions.json so assumption changes apply retroactively.
+   */
+  tokenUsageStats: Record<string, TokenUsageBucket>;
+  /** ISO timestamp of the first recorded usage (display: "since ..."). */
+  tokenUsageFirstTrackedAt: string | null;
+
   /**
    * Provenance of the current `models` list (from /api/models). Runtime-only,
    * not persisted: the UI uses it to suppress region/hosting chrome when the
@@ -170,6 +195,10 @@ interface SettingsStore {
   starModel: (id: string) => void;
   unstarModel: (id: string) => void;
 
+  // Token usage tracking (see tokenUsageStats)
+  recordTokenUsage: (usage: TokenUsageMetadata) => void;
+  resetTokenUsageStats: () => void;
+
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
   setUserRegion: (region: UserRegion | null) => void;
@@ -250,6 +279,8 @@ export const useSettingsStore = create<SettingsStore>()(
       customAgentSources: [],
       hiddenModelIds: [],
       starredModelIds: [],
+      tokenUsageStats: {},
+      tokenUsageFirstTrackedAt: null,
       modelListSource: null,
       userRegion: null,
       streamingSpeed: DEFAULT_STREAMING_SPEED,
@@ -427,6 +458,28 @@ export const useSettingsStore = create<SettingsStore>()(
       setModelListSource: (source) => set({ modelListSource: source }),
       setUserRegion: (region) => set({ userRegion: region }),
 
+      recordTokenUsage: (usage) =>
+        set((state) => {
+          const key = tokenUsageKey(usage);
+          const bucket = state.tokenUsageStats[key];
+          return {
+            tokenUsageStats: {
+              ...state.tokenUsageStats,
+              [key]: {
+                promptTokens: (bucket?.promptTokens ?? 0) + usage.promptTokens,
+                completionTokens:
+                  (bucket?.completionTokens ?? 0) + usage.completionTokens,
+                requests: (bucket?.requests ?? 0) + 1,
+              },
+            },
+            tokenUsageFirstTrackedAt:
+              state.tokenUsageFirstTrackedAt ?? new Date().toISOString(),
+          };
+        }),
+
+      resetTokenUsageStats: () =>
+        set({ tokenUsageStats: {}, tokenUsageFirstTrackedAt: null }),
+
       // Model Ordering Actions
       setModelOrderMode: (mode) => set({ modelOrderMode: mode }),
 
@@ -568,6 +621,8 @@ export const useSettingsStore = create<SettingsStore>()(
           customAgents: [],
           hiddenModelIds: [],
           starredModelIds: [],
+          tokenUsageStats: {},
+          tokenUsageFirstTrackedAt: null,
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -589,7 +644,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 20, // Increment this when schema changes to trigger migrations
+      version: 21, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -605,6 +660,8 @@ export const useSettingsStore = create<SettingsStore>()(
         customAgentSources: state.customAgentSources,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
+        tokenUsageStats: state.tokenUsageStats,
+        tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -761,6 +818,20 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 20 → 21: Add token usage tracking. Backfill empty.
+        if (version < 21) {
+          if (
+            state.tokenUsageStats === undefined ||
+            state.tokenUsageStats === null ||
+            typeof state.tokenUsageStats !== 'object'
+          ) {
+            state.tokenUsageStats = {};
+          }
+          if (state.tokenUsageFirstTrackedAt === undefined) {
+            state.tokenUsageFirstTrackedAt = null;
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -810,6 +881,14 @@ export const useSettingsStore = create<SettingsStore>()(
           // can be agents or currently-undiscovered models).
           if (!Array.isArray(state.starredModelIds)) {
             state.starredModelIds = [];
+          }
+
+          // Defensive: token usage stats must always be a plain object.
+          if (
+            state.tokenUsageStats == null ||
+            typeof state.tokenUsageStats !== 'object'
+          ) {
+            state.tokenUsageStats = {};
           }
         }
       },

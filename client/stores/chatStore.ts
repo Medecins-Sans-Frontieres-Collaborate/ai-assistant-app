@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
@@ -252,6 +253,8 @@ interface ChatStore {
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    /** Real per-request token usage reported by the server, when available. */
+    usage?: TokenUsageMetadata;
     /** MCP tool calls observed in the stream, for the post-stream summary. */
     toolCalls?: ToolCallRecord[];
     /** Consent prompts emitted in the stream — persisted onto the assistant
@@ -526,9 +529,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      // Record real token usage for the local Usage & impact stats. Keyed by
+      // the payload's served model/region — never the conversation's model
+      // (the server fallback chain may have switched).
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       // Create assistant message
       const assistantMessage = buildAssistantMessage(
@@ -851,6 +862,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    usage?: TokenUsageMetadata;
     toolCalls?: ToolCallRecord[];
     consentRequests?: ConsentRequest[];
   }> => {
@@ -1009,6 +1021,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
       activeFilesDropped: streamParser.getActiveFilesDropped?.(),
+      usage: streamParser.getUsage?.(),
       toolCalls: streamParser.getToolCallRecords?.(),
       consentRequests: streamParser.getConsentRequests?.(),
     };
@@ -1346,9 +1359,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      // Record real token usage for the local Usage & impact stats. Keyed by
+      // the payload's served model/region — never the conversation's model
+      // (the server fallback chain may have switched).
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       // Create assistant message
       const assistantMessage = buildAssistantMessage(
@@ -1674,9 +1695,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         threadId,
         pendingTranscriptions,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       const assistantMessage = buildAssistantMessage(
         streamParser,
