@@ -67,6 +67,7 @@ export default [
         SVGSVGElement: 'readonly',
         MouseEvent: 'readonly',
         KeyboardEvent: 'readonly',
+        ClipboardEvent: 'readonly',
         Event: 'readonly',
         EventTarget: 'readonly',
         EventListener: 'readonly',
