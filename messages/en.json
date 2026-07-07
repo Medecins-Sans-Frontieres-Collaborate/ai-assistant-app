@@ -1472,7 +1472,6 @@
     "searchEmpty": "No models match your search.",
     "star": "Star {name}",
     "unstar": "Unstar {name}",
-    "otherFamily": "Other",
     "hostedExternally": "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
     "hostedIn": {
       "label": "Hosted in {regions}",
