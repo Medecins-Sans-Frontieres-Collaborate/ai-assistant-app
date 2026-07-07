@@ -311,6 +311,10 @@ describe('StandardChatService', () => {
         undefined, // transcript (not provided in this test)
         undefined, // citations (not provided in this test)
         undefined, // pendingTranscriptions (not provided in this test)
+        expect.objectContaining({
+          modelId: expect.any(String),
+          onUsage: expect.any(Function),
+        }), // usageContext for token tracking
       );
     });
 
