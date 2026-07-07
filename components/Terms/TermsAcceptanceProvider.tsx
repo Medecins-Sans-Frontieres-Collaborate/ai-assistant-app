@@ -5,6 +5,8 @@ import { checkUserTermsAcceptance } from '@/lib/utils/app/user/termsAcceptance';
 
 import TermsAcceptanceModal from './TermsAcceptanceModal';
 
+import { useUIStore } from '@/client/stores/uiStore';
+
 /**
  * Props interface for the TermsAcceptanceProvider component.
  * @interface TermsAcceptanceProviderProps
@@ -29,6 +31,16 @@ export const TermsAcceptanceProvider: FC<TermsAcceptanceProviderProps> = ({
   const { data: session, status } = useSession();
   const [showTermsModal, setShowTermsModal] = useState<boolean>(false);
   const [checkingTerms, setCheckingTerms] = useState<boolean>(true);
+  const setIsTermsModalOpen = useUIStore((state) => state.setIsTermsModalOpen);
+
+  // Keep the UI store flag in sync so global listeners (typing auto-focus,
+  // paste handling) stay inactive while the terms modal blocks the page.
+  const termsModalVisible =
+    showTermsModal && !checkingTerms && status === 'authenticated';
+  useEffect(() => {
+    setIsTermsModalOpen(termsModalVisible);
+    return () => setIsTermsModalOpen(false);
+  }, [termsModalVisible, setIsTermsModalOpen]);
 
   useEffect(() => {
     const checkTermsAcceptance = async () => {

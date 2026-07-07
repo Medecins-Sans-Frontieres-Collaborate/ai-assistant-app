@@ -19,6 +19,7 @@ import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
 import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
 import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
 import { useModalState } from '@/client/hooks/ui/useModalSync';
+import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
@@ -429,6 +430,7 @@ export function Chat({
   });
 
   useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
+  usePasteChatInput({ textareaRef, enabled: !isStreaming });
 
   const { clearConversation } = useClearConversation();
 
