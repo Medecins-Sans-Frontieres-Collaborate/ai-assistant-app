@@ -392,9 +392,6 @@ export class StandardChatHandler extends BasePipelineStage {
             reasoningEffort: context.reasoningEffort,
           });
 
-          // TODO: Extract token usage from response headers/metadata and record
-          // MetricsService.recordTokenUsage({ total: tokens }, { user, model, operation: 'chat' });
-
           span.setAttribute('chat.final_message_count', messagesToSend.length);
           span.setAttribute('chat.duration_ms', duration);
           span.setStatus({ code: SpanStatusCode.OK });
