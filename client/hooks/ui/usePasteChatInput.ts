@@ -73,7 +73,20 @@ export function usePasteChatInput({
       const imageFiles = extractImageFiles(clipboardData);
       if (imageFiles.length > 0) {
         event.preventDefault();
-        void useChatInputStore.getState().handleFileUpload(imageFiles);
+        void useChatInputStore
+          .getState()
+          .handleFileUpload(imageFiles)
+          .finally(() => {
+            // The textarea is disabled (and force-blurred) while the upload
+            // is in flight; restore focus once it settles unless the user
+            // has moved to another control in the meantime.
+            setTimeout(() => {
+              const active = document.activeElement;
+              if (!active || active === document.body) {
+                textareaRef.current?.focus();
+              }
+            }, 0);
+          });
         textarea.focus();
         return;
       }
