@@ -1318,7 +1318,8 @@
       "confirmStopFromButtonDescription": "Show a confirmation dialog when you click the stop button while a response is being generated",
       "confirmStopFromKeyboard": "Confirm before stopping with the keyboard",
       "confirmStopFromKeyboardDescription": "Show a confirmation dialog when you press Escape while a response is being generated"
-    }
+    },
+    "Usage & Impact": "Usage & Impact"
   },
   "emptyState": {
     "greeting": "How can I help?",
@@ -2114,5 +2115,19 @@
     "toggleTheme": "Toggle theme",
     "regenerateResponse": "Regenerate response",
     "copyLastResponse": "Copy last response"
+  },
+  "usageImpact": {
+    "empty": "No usage tracked yet. Your token usage and estimated emissions will appear here after you chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} smartphone charges",
+    "requests": "Requests",
+    "promptTokens": "Prompt tokens",
+    "completionTokens": "Completion tokens",
+    "topModels": "By model",
+    "byRegion": "By hosting region",
+    "regionDefault": "Default",
+    "modelRow": "{requests} req · {grams} g",
+    "disclosure": "Estimates based on assumptions v{version} · since {since} · standard chat only (agents and knowledge-base answers not counted).",
+    "reset": "Reset usage stats"
   }
 }
