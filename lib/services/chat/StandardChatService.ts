@@ -1,22 +1,30 @@
 import { Session } from 'next-auth';
 
+import { getAzureMonitorLogger } from '@/lib/services/observability';
+import { MetricsService } from '@/lib/services/observability/MetricsService';
+
 import {
   PendingTranscriptionInfo,
   TranscriptMetadata,
 } from '@/lib/utils/app/metadata';
+import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { createAnthropicStreamProcessor } from '@/lib/utils/app/stream/anthropicStreamProcessor';
-import { createAzureOpenAIStreamProcessor } from '@/lib/utils/app/stream/streamProcessor';
+import {
+  UsageContext,
+  createAzureOpenAIStreamProcessor,
+} from '@/lib/utils/app/stream/streamProcessor';
 import { getMessagesToSend } from '@/lib/utils/server/chat/chat';
 import {
   perfLog,
   sanitizeForLog,
 } from '@/lib/utils/server/log/logSanitization';
 import { getGlobalTiktoken } from '@/lib/utils/server/tiktoken/tiktokenCache';
+import { estimateCO2Grams } from '@/lib/utils/shared/emissions';
 import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
 import { UserRegion } from '@/lib/utils/shared/region';
 
 import { Message } from '@/types/chat';
-import { OpenAIModel } from '@/types/openai';
+import { OpenAIModel, getModelSizeClass } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
 
@@ -131,6 +139,60 @@ export class StandardChatService {
   }
 
   /**
+   * The authoritative server-side sink for one request's real token usage:
+   * computes the emissions estimate and fire-and-forgets the TokenUsage log
+   * event + OTel counters. Never throws (a telemetry failure must not break
+   * chat) and never delays the response path.
+   */
+  private recordUsage(
+    usage: TokenUsageMetadata,
+    servedConfig: OpenAIModel,
+    user: Session['user'],
+    streamed: boolean,
+    botId?: string,
+  ): void {
+    try {
+      const sizeClass = getModelSizeClass(servedConfig);
+      const estimate = estimateCO2Grams({
+        promptTokens: usage.promptTokens,
+        completionTokens: usage.completionTokens,
+        sizeClass,
+        isDedicatedReasoner: servedConfig.modelType === 'reasoning',
+        reasoningEffort: usage.reasoningEffort,
+        region: usage.region,
+      });
+      void getAzureMonitorLogger().logTokenUsage({
+        user,
+        model: usage.modelId,
+        region: usage.region,
+        promptTokens: usage.promptTokens,
+        completionTokens: usage.completionTokens,
+        totalTokens: usage.totalTokens,
+        reasoningEffort: usage.reasoningEffort,
+        sizeClass,
+        estimatedCO2Grams: estimate.gCO2e,
+        estimatedEnergyWh: estimate.energyWh,
+        assumptionsVersion: estimate.assumptionsVersion,
+        streamed,
+        botId,
+      });
+      MetricsService.recordTokenUsage(
+        {
+          prompt: usage.promptTokens,
+          completion: usage.completionTokens,
+          total: usage.totalTokens,
+        },
+        { user, model: usage.modelId, operation: 'chat', botId },
+      );
+    } catch (error) {
+      console.error(
+        '[StandardChatService] Failed to record token usage:',
+        error,
+      );
+    }
+  }
+
+  /**
    * Handles a standard chat request.
    *
    * @param request - The chat request parameters
@@ -222,6 +284,8 @@ export class StandardChatService {
         request.transcript,
         request.citations,
         clients.anthropicFoundryClient,
+        chatRegion,
+        request.botId,
       );
     }
 
@@ -290,6 +354,27 @@ export class StandardChatService {
       }
     }
 
+    // Usage attribution context: MUST reference activeConfig (the model the
+    // fallback chain actually served), the resolved region, and the effort
+    // that was actually applied.
+    const servedConfig = activeConfig;
+    const appliedEffort = servedConfig.supportsReasoningEffort
+      ? request.reasoningEffort
+      : undefined;
+    const usageContext: UsageContext = {
+      modelId: servedConfig.id,
+      region: chatRegion,
+      reasoningEffort: appliedEffort,
+      onUsage: (usage) =>
+        this.recordUsage(
+          usage,
+          servedConfig,
+          request.user,
+          true,
+          request.botId,
+        ),
+    };
+
     // Return appropriate response format
     if (stream) {
       const processedStream = createAzureOpenAIStreamProcessor(
@@ -299,6 +384,7 @@ export class StandardChatService {
         request.transcript, // transcript metadata
         request.citations, // web search citations
         request.pendingTranscriptions, // async batch transcription jobs
+        usageContext,
       );
 
       perfLog('StandardChatService.handleChat total', perfStart, '(stream)');
@@ -308,13 +394,36 @@ export class StandardChatService {
     } else {
       const completion = response as OpenAI.Chat.Completions.ChatCompletion;
 
+      // Non-streaming completions carry usage on the object directly.
+      let usage: TokenUsageMetadata | undefined;
+      if (completion.usage) {
+        usage = {
+          promptTokens: completion.usage.prompt_tokens ?? 0,
+          completionTokens: completion.usage.completion_tokens ?? 0,
+          totalTokens: completion.usage.total_tokens ?? 0,
+          modelId: servedConfig.id,
+          region: chatRegion,
+          reasoningEffort: appliedEffort,
+        };
+        this.recordUsage(
+          usage,
+          servedConfig,
+          request.user,
+          false,
+          request.botId,
+        );
+      }
+
       perfLog(
         'StandardChatService.handleChat total',
         perfStart,
         '(non-stream)',
       );
       return new Response(
-        JSON.stringify({ text: completion.choices[0]?.message?.content }),
+        JSON.stringify({
+          text: completion.choices[0]?.message?.content,
+          ...(usage ? { usage } : {}),
+        }),
         { headers: { 'Content-Type': 'application/json' } },
       );
     }
@@ -334,6 +443,8 @@ export class StandardChatService {
     transcript?: TranscriptMetadata,
     citations?: Citation[],
     anthropicClient?: AnthropicFoundry,
+    chatRegion: UserRegion | null = null,
+    botId?: string,
   ): Promise<Response> {
     const client = anthropicClient ?? this.anthropicFoundryClient;
     // Validate Anthropic client is configured
@@ -372,12 +483,20 @@ export class StandardChatService {
       // Execute streaming request
       const response = await handler.executeStreamingRequest(requestParams);
 
-      // Process the stream with Anthropic-specific processor
+      // Process the stream with Anthropic-specific processor. Claude models
+      // don't use the fallback chain, so modelConfig IS the served model;
+      // Anthropic has no tunable reasoning_effort parameter here.
       const processedStream = createAnthropicStreamProcessor(
         response,
         undefined, // stopConversationRef
         transcript,
         citations,
+        {
+          modelId: modelConfig.id,
+          region: chatRegion,
+          onUsage: (usage) =>
+            this.recordUsage(usage, modelConfig, user, true, botId),
+        },
       );
 
       return new Response(processedStream, {
@@ -402,11 +521,27 @@ export class StandardChatService {
       const thinkingContent = handler.extractThinkingContent(message);
 
       // Build response with optional thinking metadata
-      const responseData: { text: string; thinking?: string } = {
+      const responseData: {
+        text: string;
+        thinking?: string;
+        usage?: TokenUsageMetadata;
+      } = {
         text: textContent,
       };
       if (thinkingContent) {
         responseData.thinking = thinkingContent;
+      }
+      if (message.usage) {
+        responseData.usage = {
+          promptTokens: message.usage.input_tokens ?? 0,
+          completionTokens: message.usage.output_tokens ?? 0,
+          totalTokens:
+            (message.usage.input_tokens ?? 0) +
+            (message.usage.output_tokens ?? 0),
+          modelId: modelConfig.id,
+          region: chatRegion,
+        };
+        this.recordUsage(responseData.usage, modelConfig, user, false, botId);
       }
 
       return new Response(JSON.stringify(responseData), {
