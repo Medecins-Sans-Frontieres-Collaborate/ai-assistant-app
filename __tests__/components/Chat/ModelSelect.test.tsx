@@ -473,15 +473,19 @@ describe('ModelSelect', () => {
       expect(screen.getByText('Models')).toBeInTheDocument();
     });
 
-    it('orders provider family groups canonically (OpenAI → DeepSeek → Meta)', () => {
+    it('orders provider families canonically (OpenAI → DeepSeek → Meta) without headers', () => {
       const { container } = render(<ModelSelect />);
 
-      const headers = Array.from(container.querySelectorAll('h5')).map(
-        (h) => h.textContent || '',
+      // Headers are gone — provider icons carry the grouping — but the flat
+      // list still runs family-by-family in canonical order.
+      expect(container.querySelector('h5')).toBeNull();
+
+      const names = Array.from(container.querySelectorAll('.font-medium')).map(
+        (el) => el.textContent || '',
       );
-      const openAIIndex = headers.findIndex((h) => h.startsWith('OpenAI'));
-      const deepseekIndex = headers.findIndex((h) => h.startsWith('DeepSeek'));
-      const metaIndex = headers.findIndex((h) => h.startsWith('Meta'));
+      const openAIIndex = names.findIndex((n) => n.startsWith('GPT'));
+      const deepseekIndex = names.findIndex((n) => n.startsWith('DeepSeek'));
+      const metaIndex = names.findIndex((n) => n.startsWith('Llama'));
 
       expect(openAIIndex).toBeGreaterThanOrEqual(0);
       expect(openAIIndex).toBeLessThan(deepseekIndex);
@@ -510,9 +514,11 @@ describe('ModelSelect', () => {
       expect(screen.getAllByText('Recommended').length).toBeGreaterThanOrEqual(
         1,
       );
-      // The family tree is fully visible — nothing is collapsed away.
-      expect(screen.getByText(/OpenAI \(\d+\)/)).toBeInTheDocument();
-      expect(screen.getByText(/Anthropic \(\d+\)/)).toBeInTheDocument();
+      // The model list is fully visible — nothing is collapsed away — and
+      // there are no per-family headers; provider icons carry the grouping.
+      expect(screen.getByText('DeepSeek-R1')).toBeInTheDocument();
+      expect(screen.queryByText(/OpenAI \(\d+\)/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Anthropic \(\d+\)/)).not.toBeInTheDocument();
     });
 
     it('shows the Favorites section once the user stars a model', () => {
