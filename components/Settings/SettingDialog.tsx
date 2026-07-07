@@ -23,6 +23,7 @@ import { DataManagementSection } from './Sections/DataManagementSection';
 import { GeneralSection } from './Sections/GeneralSection';
 import { HelpSupportSection } from './Sections/HelpSupportSection';
 import { MobileAppSection } from './Sections/MobileAppSection';
+import { UsageImpactSection } from './Sections/UsageImpactSection';
 import { SettingsSidebar } from './SettingsSidebar';
 import { SettingsSection } from './types';
 
@@ -314,6 +315,10 @@ export function SettingDialog() {
                     onSave={handleSave}
                     onClose={() => setIsSettingsOpen(false)}
                   />
+                )}
+
+                {activeSection === SettingsSection.USAGE_IMPACT && (
+                  <UsageImpactSection />
                 )}
 
                 {activeSection === SettingsSection.DATA_MANAGEMENT && (

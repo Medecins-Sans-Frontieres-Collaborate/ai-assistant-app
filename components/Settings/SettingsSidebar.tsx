@@ -2,11 +2,13 @@ import {
   IconDatabase,
   IconDeviceMobile,
   IconHelp,
+  IconLeaf,
   IconMessage,
   IconRefresh,
   IconRobot,
   IconSettings,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -40,6 +42,10 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   dispatch,
 }) => {
   const t = useTranslations();
+  // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
+  // LaunchDarkly to hide the section.
+  const { showUsageImpact } = useFlags();
+  const isUsageImpactEnabled = showUsageImpact !== false;
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -87,6 +93,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
             icon={<IconRobot size={18} />}
             onClick={setActiveSection}
           /> */}
+
+          {isUsageImpactEnabled && (
+            <NavigationItem
+              section={SettingsSection.USAGE_IMPACT}
+              activeSection={activeSection}
+              label={t('settings.Usage & Impact')}
+              icon={<IconLeaf size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
 
           <NavigationItem
             section={SettingsSection.DATA_MANAGEMENT}
