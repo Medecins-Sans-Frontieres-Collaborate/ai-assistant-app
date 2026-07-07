@@ -819,23 +819,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     );
                   };
 
-                  // No Reasoning/General sub-headers: with tunable reasoning
-                  // on newer models the split is an anachronism, and it cost
-                  // two lines per family. Dedicated reasoning models carry a
-                  // quiet brain icon instead (see badgeFor).
-                  const renderFamilySection = (
-                    key: string,
-                    label: string,
-                    models: OpenAIModel[],
-                  ) => (
-                    <div key={key} className="mb-3 last:mb-0">
-                      <h5 className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-                        {label} ({models.length})
-                      </h5>
-                      {renderTypeBlock(models)}
-                    </div>
-                  );
-
                   const leftover =
                     familyFilter === 'all'
                       ? treeModels.filter((m) => {
@@ -907,23 +890,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                               onChange={setFamilyFilter}
                             />
                           )}
-                          {availableFamilies.map((family) => {
-                            const group = treeModels.filter(
-                              (m) => providerOf(m) === family,
-                            );
-                            if (group.length === 0) return null;
-                            return renderFamilySection(
-                              family,
-                              FAMILY_LABEL[family],
-                              group,
-                            );
-                          })}
-                          {leftover.length > 0 &&
-                            renderFamilySection(
-                              'other',
-                              t('modelSelect.otherFamily'),
-                              leftover,
-                            )}
+                          {/* One flat list, still ordered family-by-family so
+                              each provider's models stay adjacent — the row
+                              icons carry the grouping without per-family
+                              headers (which cost two lines per family and
+                              made 1-model providers disproportionately tall).
+                              Reasoning/General sub-headers are gone for the
+                              same reason; dedicated reasoning models carry a
+                              quiet brain icon instead (see badgeFor). */}
+                          {renderTypeBlock([
+                            ...availableFamilies.flatMap((family) =>
+                              treeModels.filter(
+                                (m) => providerOf(m) === family,
+                              ),
+                            ),
+                            ...leftover,
+                          ])}
                         </>
                       )}
                       <HiddenItemsSection
