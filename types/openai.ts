@@ -69,6 +69,13 @@ export interface OpenAIModel {
   tier?: 'featured' | 'standard' | 'legacy';
 
   /**
+   * Rough parameter-scale class, used by the emissions estimator
+   * (config/emissions.json maps each class to Wh per 1k tokens). Default
+   * when absent: 'standard' (see getModelSizeClass).
+   */
+  sizeClass?: 'nano' | 'mini' | 'standard' | 'large';
+
+  /**
    * Lineage key shared by every version of the same model line (e.g. 'gpt',
    * 'gpt-chat', 'claude-opus'). Models sharing a series render as ONE picker
    * row with a version chip strip; models without a series render as plain
@@ -203,6 +210,7 @@ const openAIModelSchema = z.object({
   // are stripped, so an accidental JSON entry is discarded rather than trusted).
   hosting: z.enum(['azure', 'external']).optional(),
   tier: z.enum(['featured', 'standard', 'legacy']).optional(),
+  sizeClass: z.enum(['nano', 'mini', 'standard', 'large']).optional(),
   series: z.string().optional(),
   seriesLabel: z.string().optional(),
   versionLabel: z.string().optional(),
@@ -288,6 +296,13 @@ export function getModelTier(
   model: Pick<OpenAIModel, 'tier'>,
 ): NonNullable<OpenAIModel['tier']> {
   return model.tier ?? 'standard';
+}
+
+/** Emissions size class with its default applied (see getModelHosting). */
+export function getModelSizeClass(
+  model: Pick<OpenAIModel, 'sizeClass'>,
+): NonNullable<OpenAIModel['sizeClass']> {
+  return model.sizeClass ?? 'standard';
 }
 
 /**
