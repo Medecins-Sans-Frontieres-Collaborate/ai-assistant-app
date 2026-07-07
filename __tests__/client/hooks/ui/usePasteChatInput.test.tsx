@@ -105,6 +105,35 @@ describe('usePasteChatInput', () => {
     expect(focusSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('refocuses the textarea after the upload settles', async () => {
+    const { focusSpy } = setup();
+    const image = new File(['x'], 'image.png', { type: 'image/png' });
+
+    window.dispatchEvent(
+      createPasteEvent({ imageFiles: [image], target: document.body }),
+    );
+
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(focusSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not steal focus after upload if another control is focused', async () => {
+    const { focusSpy } = setup();
+    const otherInput = document.createElement('input');
+    document.body.appendChild(otherInput);
+    const image = new File(['x'], 'image.png', { type: 'image/png' });
+
+    window.dispatchEvent(
+      createPasteEvent({ imageFiles: [image], target: document.body }),
+    );
+    otherInput.focus();
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(focusSpy).toHaveBeenCalledTimes(1);
+    document.body.removeChild(otherInput);
+  });
+
   it('uploads a pasted image when the chat textarea itself is the target', () => {
     const { textarea } = setup();
     const image = new File(['x'], 'image.png', { type: 'image/png' });
