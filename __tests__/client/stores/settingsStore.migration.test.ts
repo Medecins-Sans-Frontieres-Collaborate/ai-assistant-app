@@ -123,3 +123,36 @@ describe('settingsStore migration (v19 → v20)', () => {
     expect(result.starredModelIds).toEqual([]);
   });
 });
+
+/**
+ * v21 adds token-usage tracking (tokenUsageStats + tokenUsageFirstTrackedAt).
+ */
+describe('settingsStore migration (v20 → v21)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('initializes token usage fields when migrating from v20', () => {
+    const result = migrate(
+      { customAgents: [], starredModelIds: [] } as Record<string, unknown>,
+      20,
+    ) as Record<string, unknown>;
+
+    expect(result.tokenUsageStats).toEqual({});
+    expect(result.tokenUsageFirstTrackedAt).toBeNull();
+  });
+
+  it('preserves existing token usage stats on a current-version store', () => {
+    const stats = {
+      'gpt-5.2|EU|none': { promptTokens: 1, completionTokens: 2, requests: 1 },
+    };
+    const result = migrate(
+      {
+        tokenUsageStats: stats,
+        tokenUsageFirstTrackedAt: '2026-07-06',
+      } as Record<string, unknown>,
+      21,
+    ) as Record<string, unknown>;
+
+    expect(result.tokenUsageStats).toEqual(stats);
+    expect(result.tokenUsageFirstTrackedAt).toBe('2026-07-06');
+  });
+});
