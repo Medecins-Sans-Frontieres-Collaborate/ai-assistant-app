@@ -13,6 +13,8 @@ import {
   getModelTier,
 } from '@/types/openai';
 
+import { SHOW_RECOMMENDED_TAG } from './showRecommendedTag';
+
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
 interface VersionSectionProps {
@@ -24,7 +26,8 @@ interface VersionSectionProps {
 /**
  * Version switcher for series models, shown in the details panel. The list
  * keeps one quiet row per series; this is where the versions live. Chips run
- * newest → oldest; the recommended (featured) version is marked.
+ * newest → oldest; the recommended (featured) version is marked only when
+ * SHOW_RECOMMENDED_TAG is on.
  */
 export const VersionSection: FC<VersionSectionProps> = ({
   selectedModel,
@@ -60,7 +63,8 @@ export const VersionSection: FC<VersionSectionProps> = ({
       >
         {versions.map((version) => {
           const isActive = selectedModel.id === version.id;
-          const isFeatured = getModelTier(version) === 'featured';
+          const isFeatured =
+            SHOW_RECOMMENDED_TAG && getModelTier(version) === 'featured';
           return (
             <button
               key={version.id}

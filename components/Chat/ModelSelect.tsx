@@ -41,6 +41,7 @@ import {
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
+import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 
 import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
@@ -660,6 +661,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   ) => {
                     const isStarred = starredSet.has(model.id);
                     const isFeatured =
+                      SHOW_RECOMMENDED_TAG &&
                       getModelTier(metaOf(model)) === 'featured';
                     const infoBadge = badgeFor(model);
                     const badge =
@@ -757,8 +759,9 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       })
                     : null;
 
-                  // ── Family tree: family → type → series → version chips,
-                  // always visible (nothing collapses whole families).
+                  // ── Model tree: flat rows (series-consolidated) in list
+                  // order, always fully visible; the family filter only
+                  // narrows it.
                   const treeModels =
                     familyFilter === 'all'
                       ? visibleModels
@@ -818,14 +821,6 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       </div>
                     );
                   };
-
-                  const leftover =
-                    familyFilter === 'all'
-                      ? treeModels.filter((m) => {
-                          const family = providerOf(m);
-                          return !family || !FAMILY_LABEL[family];
-                        })
-                      : [];
 
                   return (
                     <div>
@@ -890,22 +885,18 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                               onChange={setFamilyFilter}
                             />
                           )}
-                          {/* One flat list, still ordered family-by-family so
-                              each provider's models stay adjacent — the row
-                              icons carry the grouping without per-family
-                              headers (which cost two lines per family and
-                              made 1-model providers disproportionately tall).
-                              Reasoning/General sub-headers are gone for the
-                              same reason; dedicated reasoning models carry a
-                              quiet brain icon instead (see badgeFor). */}
-                          {renderTypeBlock([
-                            ...availableFamilies.flatMap((family) =>
-                              treeModels.filter(
-                                (m) => providerOf(m) === family,
-                              ),
-                            ),
-                            ...leftover,
-                          ])}
+                          {/* One flat list in the active order (default:
+                              DEFAULT_MODEL_ORDER via usage mode). NOT
+                              regrouped by provider — the default order
+                              deliberately interleaves families so flagships
+                              from smaller providers (Mistral) sit near the
+                              top instead of below every OpenAI model. Row
+                              icons carry the provider; series rows still
+                              consolidate. No family or Reasoning/General
+                              headers — they cost lines, and icons plus the
+                              brain badge (see badgeFor) carry the same
+                              information. */}
+                          {renderTypeBlock(treeModels)}
                         </>
                       )}
                       <HiddenItemsSection
