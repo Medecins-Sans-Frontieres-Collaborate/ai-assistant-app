@@ -473,23 +473,27 @@ describe('ModelSelect', () => {
       expect(screen.getByText('Models')).toBeInTheDocument();
     });
 
-    it('orders provider families canonically (OpenAI → DeepSeek → Meta) without headers', () => {
+    it('interleaves providers per DEFAULT_MODEL_ORDER (Mistral high, o3 demoted) without headers', () => {
       const { container } = render(<ModelSelect />);
 
-      // Headers are gone — provider icons carry the grouping — but the flat
-      // list still runs family-by-family in canonical order.
+      // No per-family headers — provider icons carry that — and the flat
+      // list follows DEFAULT_MODEL_ORDER, which deliberately mixes families.
       expect(container.querySelector('h5')).toBeNull();
 
       const names = Array.from(container.querySelectorAll('.font-medium')).map(
         (el) => el.textContent || '',
       );
-      const openAIIndex = names.findIndex((n) => n.startsWith('GPT'));
+      const gptIndex = names.indexOf('GPT');
+      const mistralIndex = names.findIndex((n) => n.startsWith('Mistral'));
       const deepseekIndex = names.findIndex((n) => n.startsWith('DeepSeek'));
-      const metaIndex = names.findIndex((n) => n.startsWith('Llama'));
+      const o3Index = names.indexOf('o3');
 
-      expect(openAIIndex).toBeGreaterThanOrEqual(0);
-      expect(openAIIndex).toBeLessThan(deepseekIndex);
-      expect(deepseekIndex).toBeLessThan(metaIndex);
+      expect(gptIndex).toBeGreaterThanOrEqual(0);
+      // Mistral sits in the top rows, below the GPT flagship…
+      expect(gptIndex).toBeLessThan(mistralIndex);
+      expect(mistralIndex).toBeLessThan(deepseekIndex);
+      // …and o3 is demoted below it despite being an OpenAI model.
+      expect(mistralIndex).toBeLessThan(o3Index);
     });
 
     it('marks dedicated reasoning models with a quiet icon, not a section', () => {
@@ -506,14 +510,13 @@ describe('ModelSelect', () => {
   });
 
   describe('Favorites, hierarchy, and region', () => {
-    it('has NO Favorites section until the user stars something; Recommended is an inline pill', () => {
+    it('has NO Favorites section until the user stars something; Recommended tag is hidden', () => {
       render(<ModelSelect />);
 
       expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
-      // Featured models carry the Recommended pill inline in the tree.
-      expect(screen.getAllByText('Recommended').length).toBeGreaterThanOrEqual(
-        1,
-      );
+      // The Recommended tag is currently disabled everywhere (list pill and
+      // version chips) — see SHOW_RECOMMENDED_TAG.
+      expect(screen.queryByText('Recommended')).not.toBeInTheDocument();
       // The model list is fully visible — nothing is collapsed away — and
       // there are no per-family headers; provider icons carry the grouping.
       expect(screen.getByText('DeepSeek-R1')).toBeInTheDocument();
