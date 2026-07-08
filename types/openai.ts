@@ -143,29 +143,36 @@ export const fallbackModelID = OpenAIModelID.GPT_5_2_CHAT;
  * This array defines the priority order - models listed first appear at the top.
  */
 export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
-  OpenAIModelID.GPT_5_2,
-  OpenAIModelID.GPT_5_2_CHAT,
+  // The picker list is NOT grouped by provider, so this order is the layout:
+  // flagships first with cross-provider variety near the top (Mistral rides
+  // high; o3 and the small models sit lower). A series row anchors at its
+  // first member listed here.
+  OpenAIModelID.GPT_5_2, // "GPT" series row
+  OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" series row
+  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude Opus" series row
+  OpenAIModelID.MISTRAL_LARGE_3,
+  OpenAIModelID.CLAUDE_SONNET_4_6, // "Claude Sonnet" series row
+  OpenAIModelID.DEEPSEEK_R1,
+  OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek V3" series row
   OpenAIModelID.GPT_o3,
-  OpenAIModelID.GPT_5_MINI,
-  OpenAIModelID.GPT_4_1,
-  OpenAIModelID.GPT_5_4,
+  OpenAIModelID.GPT_5_MINI, // "GPT Mini" series row
+  OpenAIModelID.CLAUDE_HAIKU_4_5,
+  OpenAIModelID.LLAMA_4_MAVERICK,
   OpenAIModelID.GPT_5_4_NANO,
+  // Non-representative series versions: they surface as chips in the details
+  // panel rather than list rows, so position below only breaks ties (usage
+  // mode) and orders the flattened edit-order list.
+  OpenAIModelID.GPT_5_4,
   OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_4_1,
   OpenAIModelID.GPT_5,
   OpenAIModelID.GPT_5_CHAT,
   OpenAIModelID.GPT_4O,
   OpenAIModelID.GPT_4_1_MINI,
-  OpenAIModelID.CLAUDE_OPUS_4_8,
   OpenAIModelID.CLAUDE_OPUS_4_6,
-  OpenAIModelID.CLAUDE_SONNET_4_6,
   OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
-  OpenAIModelID.CLAUDE_HAIKU_4_5,
-  OpenAIModelID.LLAMA_4_MAVERICK,
-  OpenAIModelID.DEEPSEEK_R1,
   OpenAIModelID.DEEPSEEK_V3_1,
-  OpenAIModelID.DEEPSEEK_V3_2,
-  OpenAIModelID.MISTRAL_LARGE_3,
   OpenAIModelID.GROK_3,
 ];
 
