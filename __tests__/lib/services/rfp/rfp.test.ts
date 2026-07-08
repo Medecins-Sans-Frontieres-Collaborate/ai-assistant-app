@@ -52,13 +52,13 @@ describe('criteria', () => {
   });
 
   it('rejects weights that do not sum to 1.0', () => {
-    const bad = structuredClone(SPEC_INPUT);
+    const bad = JSON.parse(JSON.stringify(SPEC_INPUT));
     bad.categories[0].criteria[0].weight = 0.4;
     expect(() => loadSpec(bad)).toThrow(/sum to 1\.0/);
   });
 
   it('rejects references to unknown questions', () => {
-    const bad = structuredClone(SPEC_INPUT);
+    const bad = JSON.parse(JSON.stringify(SPEC_INPUT));
     bad.categories[0].criteria[0].questions = ['99z'];
     expect(() => loadSpec(bad)).toThrow(/unknown question/);
   });
