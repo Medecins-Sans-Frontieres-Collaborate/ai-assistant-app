@@ -200,19 +200,30 @@ export async function POST(request: NextRequest) {
         const glossaryExt = glossary.name.split('.').pop()?.toLowerCase();
         const glossaryBlobPath = `${session.user.id}/translations/${jobId}_glossary.${glossaryExt}`;
         await blobStorage.upload(glossaryBlobPath, glossaryBuffer, {});
-        glossarySasUrl = await blobStorage.generateSasUrl(glossaryBlobPath, 24);
+        glossarySasUrl = await blobStorage.generateContainerScopedSasUrl(
+          glossaryBlobPath,
+          4,
+          'rl',
+        );
         glossaryFormat = glossaryExt === 'tsv' ? 'tsv' : glossaryExt;
       }
 
-      // Source: read-only SAS. Target: create+write SAS on a blob that does
-      // not exist yet — Azure writes it when the batch completes, at exactly
-      // the path the existing content route serves.
-      const sourceSasUrl = await blobStorage.generateSasUrl(
+      // Container-scoped SAS on blob URLs — the exact shape Document
+      // Translation requires (its target validation needs `list`, which a
+      // blob SAS cannot carry; MS samples sign sr=c with sp=rl / sp=wl).
+      // Source: read+list. Target: write+list on a blob that does not exist
+      // yet — Azure writes it on completion, at exactly the path the
+      // existing content route serves. Short expiry: jobs finish in minutes.
+      const sourceSasUrl = await blobStorage.generateContainerScopedSasUrl(
         originalBlobPath,
-        24,
-        'r',
+        4,
+        'rl',
       );
-      const targetSasUrl = await blobStorage.generateSasUrl(blobPath, 24, 'cw');
+      const targetSasUrl = await blobStorage.generateContainerScopedSasUrl(
+        blobPath,
+        4,
+        'wl',
+      );
 
       const operationId = await translationService.submitBatchTranslation({
         sourceSasUrl,
