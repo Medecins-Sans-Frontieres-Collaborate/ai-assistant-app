@@ -18,6 +18,7 @@
 import { NextRequest } from 'next/server';
 
 import { DocumentTranslationService } from '@/lib/services/documentTranslation/documentTranslationService';
+import { createTranslationJob } from '@/lib/services/documentTranslation/translationJobStore';
 
 import { getEnvVariable } from '@/lib/utils/app/env';
 import {
@@ -31,12 +32,14 @@ import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
 import { createApiLoggingContext } from '@/lib/utils/server/observability';
 
 import {
+  DocumentTranslationPendingReference,
   DocumentTranslationReference,
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
   TRANSLATION_EXPIRY_DAYS,
   generateTranslatedFilename,
   getDocumentContentType,
+  requiresAsyncTranslation,
 } from '@/types/documentTranslation';
 
 import { auth } from '@/auth';
@@ -154,6 +157,100 @@ export async function POST(request: NextRequest) {
 
     // Initialize translation service
     const translationService = new DocumentTranslationService();
+
+    // PDFs can't go through the synchronous document:translate endpoint —
+    // they take the ASYNC batch path: upload the original, submit a
+    // storageType:'File' batch that writes straight to the standard
+    // translated-blob path, hand back a jobId, and let the client poll
+    // /api/document-translation/status/{jobId}. Everything downstream
+    // (content route, reference format) is shared with the sync path.
+    if (requiresAsyncTranslation(document.name)) {
+      const jobId = uuidv4();
+      const fileExtension =
+        document.name.split('.').pop()?.toLowerCase() || 'pdf';
+      const translatedFilename =
+        customOutputFilename ||
+        generateTranslatedFilename(document.name, targetLanguage);
+
+      const blobStorage = new AzureBlobStorage(
+        getEnvVariable({ name: 'AZURE_BLOB_STORAGE_NAME', user: session.user }),
+        getEnvVariable({
+          name: 'AZURE_BLOB_STORAGE_CONTAINER',
+          throwErrorOnFail: false,
+          defaultValue: env.AZURE_BLOB_STORAGE_IMAGE_CONTAINER ?? '',
+          user: session.user,
+        }),
+        session.user,
+      );
+
+      const originalBlobPath = `${session.user.id}/translations/${jobId}_original.${fileExtension}`;
+      const blobPath = `${session.user.id}/translations/${jobId}.${fileExtension}`;
+      const contentType = getDocumentContentType(document.name);
+      await blobStorage.upload(originalBlobPath, documentBuffer, {
+        blobHTTPHeaders: {
+          blobContentType: contentType,
+          blobContentDisposition: `attachment; filename="${encodeURIComponent(document.name)}"`,
+        },
+      });
+
+      // Optional glossary rides along as a read-SAS blob.
+      let glossarySasUrl: string | undefined;
+      let glossaryFormat: string | undefined;
+      if (glossaryBuffer && glossary) {
+        const glossaryExt = glossary.name.split('.').pop()?.toLowerCase();
+        const glossaryBlobPath = `${session.user.id}/translations/${jobId}_glossary.${glossaryExt}`;
+        await blobStorage.upload(glossaryBlobPath, glossaryBuffer, {});
+        glossarySasUrl = await blobStorage.generateSasUrl(glossaryBlobPath, 24);
+        glossaryFormat = glossaryExt === 'tsv' ? 'tsv' : glossaryExt;
+      }
+
+      // Source: read-only SAS. Target: create+write SAS on a blob that does
+      // not exist yet — Azure writes it when the batch completes, at exactly
+      // the path the existing content route serves.
+      const sourceSasUrl = await blobStorage.generateSasUrl(
+        originalBlobPath,
+        24,
+        'r',
+      );
+      const targetSasUrl = await blobStorage.generateSasUrl(blobPath, 24, 'cw');
+
+      const operationId = await translationService.submitBatchTranslation({
+        sourceSasUrl,
+        targetSasUrl,
+        targetLanguage,
+        sourceLanguage: sourceLanguage || undefined,
+        glossarySasUrl,
+        glossaryFormat,
+      });
+
+      createTranslationJob({
+        jobId,
+        userId: session.user.id,
+        operationId,
+        filename: document.name,
+        translatedFilename,
+        ext: fileExtension,
+        targetLanguage,
+        createdAt: Date.now(),
+      });
+
+      console.log(
+        `[DocumentTranslation] Batch job submitted: job=${jobId} operation=${operationId}`,
+      );
+
+      const pending: DocumentTranslationPendingReference = {
+        async: true,
+        jobId,
+        originalFilename: document.name,
+        originalFileUrl: `/api/document-translation/content/${jobId}?filename=${encodeURIComponent(document.name)}&ext=${fileExtension}&original=true`,
+        translatedFilename,
+        targetLanguage,
+        targetLanguageName: targetLangInfo.englishName,
+        fileExtension,
+        submittedAt: new Date().toISOString(),
+      };
+      return successResponse(pending, undefined, 202);
+    }
 
     // Translate the document
     const translatedBuffer = await translationService.translateDocument(
