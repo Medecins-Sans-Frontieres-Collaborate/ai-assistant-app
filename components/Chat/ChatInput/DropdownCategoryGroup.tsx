@@ -15,6 +15,8 @@ interface DropdownCategoryGroupProps {
   selectedIndex: number;
   pinnedToolIds: string[];
   onTogglePin: (toolId: string) => void;
+  /** Move a (currently visible) tool into the "More" section. */
+  onToggleHidden?: (toolId: string) => void;
   /** First group renders flush; later groups get a top separator. */
   isFirst?: boolean;
 }
@@ -31,6 +33,7 @@ export const DropdownCategoryGroup: React.FC<DropdownCategoryGroupProps> = ({
   selectedIndex,
   pinnedToolIds,
   onTogglePin,
+  onToggleHidden,
   isFirst = false,
 }) => {
   if (items.length === 0) return null;
@@ -55,6 +58,11 @@ export const DropdownCategoryGroup: React.FC<DropdownCategoryGroupProps> = ({
             pinnable
             pinned={pinnedToolIds.includes(item.id)}
             onTogglePin={() => onTogglePin(item.id)}
+            hideable={Boolean(onToggleHidden)}
+            hidden={false}
+            onToggleHidden={
+              onToggleHidden ? () => onToggleHidden(item.id) : undefined
+            }
           />
         );
       })}
