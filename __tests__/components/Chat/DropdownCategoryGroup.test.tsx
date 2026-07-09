@@ -73,7 +73,7 @@ describe('DropdownCategoryGroup', () => {
       expect(screen.getByTestId('menu-item-item3')).toBeInTheDocument();
     });
 
-    it('renders the section header label', () => {
+    it('groups implicitly: no visible heading, but the name stays on the group', () => {
       const items = [createMenuItem('item1', 'Item 1')];
       renderGroup({
         label: 'Frequently used',
@@ -82,8 +82,14 @@ describe('DropdownCategoryGroup', () => {
         selectedIndex: 0,
       });
 
+      // The section title is no longer rendered as visible text — grouping is
+      // conveyed by ordering + a divider, not a header.
       expect(
-        screen.getByRole('heading', { name: 'Frequently used' }),
+        screen.queryByRole('heading', { name: 'Frequently used' }),
+      ).not.toBeInTheDocument();
+      // ...but the group is still announced to assistive tech by its label.
+      expect(
+        screen.getByRole('group', { name: 'Frequently used' }),
       ).toBeInTheDocument();
     });
 
