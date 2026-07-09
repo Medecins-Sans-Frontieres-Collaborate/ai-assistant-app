@@ -327,4 +327,42 @@ describe('/api/mcp/oauth/*', () => {
     expect(res.status).toBe(502);
     expect(json.code).toBe('OAUTH_DCR_UNSUPPORTED');
   });
+  it('token passes a browser-sent secret through for a NON-static clientId (own app)', async () => {
+    // A deployment app exists, but the user connected with their OWN app.
+    mockEnv.MCP_OAUTH_GITHUB_CLIENT_ID = 'gh-static-id';
+    mockEnv.MCP_OAUTH_GITHUB_CLIENT_SECRET = 'gh-static-secret';
+    mockExchange.mockResolvedValue({
+      access_token: 'at',
+      token_type: 'Bearer',
+    });
+    mockDiscoverInfo.mockResolvedValue({
+      authorizationServerUrl: 'https://github.com/login/oauth',
+      authorizationServerMetadata: {
+        authorization_endpoint: 'https://github.com/login/oauth/authorize',
+        token_endpoint: 'https://github.com/login/oauth/access_token',
+      },
+    });
+
+    const res = await tokenPOST(
+      createMockRequest({
+        method: 'POST',
+        body: {
+          server: { id: 'github', name: 'GitHub', catalogKey: 'github' },
+          grant: {
+            type: 'authorization_code',
+            code: 'code-1',
+            codeVerifier: 'v',
+            clientId: 'users-own-app-id',
+            clientSecret: 'users-own-app-secret',
+          },
+        },
+      }),
+    );
+
+    expect(res.status).toBe(200);
+    expect(mockExchange.mock.calls[0][1].clientInformation).toEqual({
+      client_id: 'users-own-app-id',
+      client_secret: 'users-own-app-secret',
+    });
+  });
 });
