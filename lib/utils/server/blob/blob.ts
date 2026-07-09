@@ -395,9 +395,17 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
    *
    * @param blobName - The blob path
    * @param expiryHours - Hours until the SAS token expires (default: 24)
+   * @param permissions - SAS permission string (default 'r' read-only).
+   *   'cw' (create+write) is used for async document-translation TARGET
+   *   blobs, which Azure's batch service writes on completion. Keep grants
+   *   minimal: never combine read and write in one SAS here.
    * @returns Promise resolving to the SAS URL
    */
-  async generateSasUrl(blobName: string, expiryHours = 24): Promise<string> {
+  async generateSasUrl(
+    blobName: string,
+    expiryHours = 24,
+    permissions: 'r' | 'cw' = 'r',
+  ): Promise<string> {
     const containerClient = this.blobServiceClient.getContainerClient(
       this.containerName as string,
     );
@@ -415,12 +423,11 @@ export class AzureBlobStorage implements BlobStorage, QueueStorage {
       expiresOn,
     );
 
-    // Generate the SAS token with read permission
     const sasToken = generateBlobSASQueryParameters(
       {
         containerName: this.containerName as string,
         blobName,
-        permissions: BlobSASPermissions.parse('r'), // Read only
+        permissions: BlobSASPermissions.parse(permissions),
         startsOn,
         expiresOn,
       },
