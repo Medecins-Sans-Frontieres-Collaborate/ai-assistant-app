@@ -1,7 +1,10 @@
 import {
   IconCheck,
   IconChevronRight,
+  IconEye,
+  IconEyeOff,
   IconInfoCircle,
+  IconPinned,
   IconPinnedFilled,
   IconPinnedOff,
 } from '@tabler/icons-react';
@@ -31,6 +34,11 @@ interface DropdownMenuItemProps {
   pinnable?: boolean;
   pinned?: boolean;
   onTogglePin?: () => void;
+  /** Whether this row offers a "move to More" (hide) control. */
+  hideable?: boolean;
+  /** Whether this tool currently lives in the "More" section. */
+  hidden?: boolean;
+  onToggleHidden?: () => void;
 }
 
 /**
@@ -45,9 +53,15 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
   pinnable = false,
   pinned = false,
   onTogglePin,
+  hideable = false,
+  hidden = false,
+  onToggleHidden,
 }) => {
   const t = useTranslations();
   const [showInfo, setShowInfo] = useState(false);
+  // Hover the pin button previews the *resulting* state so the action (pin vs.
+  // unpin) is legible, not just the current state.
+  const [pinHover, setPinHover] = useState(false);
   const infoIconRef = React.useRef<HTMLDivElement>(null);
   const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
   const [tooltipPos, setTooltipPos] = React.useState({ left: 0, top: 0 });
@@ -121,6 +135,30 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
           />
         )}
 
+        {hideable && onToggleHidden && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleHidden();
+            }}
+            title={
+              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
+            }
+            aria-label={
+              hidden ? t('dropdown.moveOutOfMore') : t('dropdown.moveToMore')
+            }
+            aria-pressed={hidden}
+            className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
+              hidden
+                ? 'opacity-100'
+                : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
+            }`}
+          >
+            {hidden ? <IconEye size={16} /> : <IconEyeOff size={16} />}
+          </button>
+        )}
+
         {pinnable && onTogglePin && (
           <button
             type="button"
@@ -128,6 +166,11 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
               e.stopPropagation();
               onTogglePin();
             }}
+            onMouseEnter={() => setPinHover(true)}
+            onMouseLeave={() => setPinHover(false)}
+            onFocus={() => setPinHover(true)}
+            onBlur={() => setPinHover(false)}
+            title={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
             aria-label={pinned ? t('dropdown.unpin') : t('dropdown.pin')}
             aria-pressed={pinned}
             className={`p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-opacity ${
@@ -136,10 +179,18 @@ export const DropdownMenuItem: React.FC<DropdownMenuItemProps> = ({
                 : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100'
             }`}
           >
+            {/* Show the resulting state on hover: an unpinned item previews the
+                filled pin; a pinned item previews the pin-off. */}
             {pinned ? (
+              pinHover ? (
+                <IconPinnedOff size={16} />
+              ) : (
+                <IconPinnedFilled size={16} />
+              )
+            ) : pinHover ? (
               <IconPinnedFilled size={16} />
             ) : (
-              <IconPinnedOff size={16} />
+              <IconPinned size={16} />
             )}
           </button>
         )}
