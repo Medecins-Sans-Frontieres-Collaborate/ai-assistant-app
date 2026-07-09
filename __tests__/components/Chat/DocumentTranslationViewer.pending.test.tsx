@@ -3,6 +3,7 @@ import React from 'react';
 
 import { Conversation } from '@/types/chat';
 
+import { DocumentTranslationContent } from '@/components/Chat/ChatMessages/DocumentTranslationContent';
 import {
   DocumentTranslationViewer,
   formatPendingTranslationReference,
@@ -171,5 +172,38 @@ describe('DocumentTranslationViewer (pending)', () => {
         'Document translation failed:',
       );
     });
+  });
+});
+
+describe('DocumentTranslationContent wrapper (the path AssistantMessage renders)', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    seedConversation();
+    globalThis.fetch = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({ success: true, data: { status: 'Running' } }),
+          { status: 200 },
+        ),
+    ) as never;
+  });
+
+  it('renders the PENDING card — not the invalid-reference error', () => {
+    render(<DocumentTranslationContent content={PENDING} />);
+
+    // Regression: the wrapper used to validate only the COMPLETED format
+    // and short-circuited pending markers to a yellow error card.
+    expect(
+      screen.queryByText('Invalid document translation reference'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('Translating report_fr.pdf…')).toBeInTheDocument();
+  });
+
+  it('still rejects genuinely malformed content', () => {
+    render(<DocumentTranslationContent content="[Translation: broken" />);
+
+    expect(
+      screen.getByText('Invalid document translation reference'),
+    ).toBeInTheDocument();
   });
 });
