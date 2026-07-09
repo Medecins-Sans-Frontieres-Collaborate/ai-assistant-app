@@ -87,6 +87,8 @@ describe('POST /api/document-translation/translate (async PDF branch)', () => {
   it('routes PDFs through the batch path and returns a 202 pending reference', async () => {
     const res = await POST(translateRequest('report.pdf'));
     const json = await parseJsonResponse(res);
+    if (res.status !== 202)
+      console.log('DEBUG:', res.status, JSON.stringify(json));
 
     expect(res.status).toBe(202);
     expect(json.data.async).toBe(true);
