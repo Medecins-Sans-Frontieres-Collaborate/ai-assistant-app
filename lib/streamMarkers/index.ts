@@ -58,6 +58,18 @@ export interface ToolCallRecordPayload {
   output: string | null;
   /** Error message if the tool call failed. */
   error: string | null;
+  /**
+   * Failure classification (native MCP loop): 'auth' = the MCP server
+   * rejected our credential — the client flips the connector to
+   * needs-reauth and the UI offers "Reconnect". Absent on success and on
+   * non-auth failures. Additive; older persisted records simply lack it.
+   */
+  error_kind?: 'auth';
+  /**
+   * Native-MCP server id (McpServerConfig.id) so the client can map an
+   * auth failure back to the connector config. Absent on Foundry records.
+   */
+  server_id?: string | null;
   /** Wall-clock duration in milliseconds, if we observed both start + end. */
   duration_ms?: number;
   /** Whether this call required user approval, and if so, how it resolved. */
@@ -78,6 +90,13 @@ export type ConsentRequestPayload =
       kind: 'approval';
       approval_request_id: string;
       server_label?: string | null;
+      /**
+       * McpServerConfig.id of the native-MCP server that owns the tool.
+       * Absent on Foundry-agent approvals (Foundry dispatches those itself);
+       * present on native MCP tool-loop approvals so the client can echo
+       * back `mcpPendingToolCalls` on resume.
+       */
+      server_id?: string | null;
       tool_name?: string | null;
       /**
        * JSON-serialized arguments the tool will be invoked with, as Foundry
