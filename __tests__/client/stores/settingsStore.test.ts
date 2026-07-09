@@ -826,4 +826,77 @@ You should be concise.`;
       expect(state.defaultSearchMode).toBe(SearchMode.INTELLIGENT);
     });
   });
+  describe('MCP Servers (Connectors)', () => {
+    const github = {
+      id: 'gh1',
+      catalogKey: 'github',
+      name: 'GitHub',
+      url: '',
+      authToken: 'github_pat_abc',
+      enabled: true,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+    const custom = {
+      id: 'c1',
+      name: 'My Server',
+      url: 'https://mcp.example.com',
+      enabled: true,
+      createdAt: '2026-07-08T00:00:00.000Z',
+    };
+
+    beforeEach(() => {
+      useSettingsStore.setState({
+        mcpServers: [],
+        allowArbitraryMcpServers: false,
+        mcpArbitraryFlagEnabled: false,
+      });
+    });
+
+    it('adds servers', () => {
+      useSettingsStore.getState().addMcpServer(github);
+      useSettingsStore.getState().addMcpServer(custom);
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([github, custom]);
+    });
+
+    it('updates a server by id with partial updates', () => {
+      useSettingsStore.setState({ mcpServers: [github, custom] });
+
+      useSettingsStore.getState().updateMcpServer('gh1', { enabled: false });
+
+      const servers = useSettingsStore.getState().mcpServers;
+      expect(servers[0]).toEqual({ ...github, enabled: false });
+      // Token survives an unrelated update.
+      expect(servers[0].authToken).toBe('github_pat_abc');
+      expect(servers[1]).toEqual(custom);
+    });
+
+    it('deletes a server by id', () => {
+      useSettingsStore.setState({ mcpServers: [github, custom] });
+
+      useSettingsStore.getState().deleteMcpServer('c1');
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([github]);
+    });
+
+    it('toggles the arbitrary-servers opt-in and the LD flag mirror', () => {
+      useSettingsStore.getState().setAllowArbitraryMcpServers(true);
+      useSettingsStore.getState().setMcpArbitraryFlagEnabled(true);
+
+      expect(useSettingsStore.getState().allowArbitraryMcpServers).toBe(true);
+      expect(useSettingsStore.getState().mcpArbitraryFlagEnabled).toBe(true);
+    });
+
+    it('resetSettings wipes MCP config including tokens', () => {
+      useSettingsStore.setState({
+        mcpServers: [github],
+        allowArbitraryMcpServers: true,
+      });
+
+      useSettingsStore.getState().resetSettings();
+
+      expect(useSettingsStore.getState().mcpServers).toEqual([]);
+      expect(useSettingsStore.getState().allowArbitraryMcpServers).toBe(false);
+    });
+  });
 });

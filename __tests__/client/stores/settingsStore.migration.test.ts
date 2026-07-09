@@ -156,3 +156,136 @@ describe('settingsStore migration (v20 → v21)', () => {
     expect(result.tokenUsageFirstTrackedAt).toBe('2026-07-06');
   });
 });
+
+/**
+ * MCP connectors (v22): `mcpServers` + `allowArbitraryMcpServers` back the
+ * Connectors settings section. Pre-v22 stores rehydrate them as undefined;
+ * the migration backfills [] / false so list rendering and the send-path
+ * filter never operate on undefined.
+ */
+describe('settingsStore migration (v21 → v22)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('initializes mcpServers to [] and allowArbitraryMcpServers to false when migrating from v21', () => {
+    const persisted = {
+      customAgentSources: [],
+      // mcpServers / allowArbitraryMcpServers intentionally absent
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 21) as Record<string, unknown>;
+
+    expect(result.mcpServers).toEqual([]);
+    expect(result.allowArbitraryMcpServers).toBe(false);
+  });
+
+  it('preserves existing MCP config (including tokens) on a current-version store', () => {
+    const servers = [
+      {
+        id: 'gh1',
+        catalogKey: 'github',
+        name: 'GitHub',
+        url: '',
+        authMode: 'bearer',
+        authToken: 'github_pat_abc',
+        enabled: true,
+        createdAt: '2026-07-08',
+      },
+    ];
+    const result = migrate(
+      {
+        mcpServers: servers,
+        allowArbitraryMcpServers: true,
+      } as Record<string, unknown>,
+      23,
+    ) as Record<string, unknown>;
+
+    expect(result.mcpServers).toEqual(servers);
+    expect(result.allowArbitraryMcpServers).toBe(true);
+  });
+});
+
+/**
+ * Auth modes + OAuth (v23): every MCP server gains an `authMode`; servers
+ * whose CATALOG auth style is 'oauth' (Asana) get any stored PAT cleared —
+ * a PAT saved under the old bearer assumption never worked against an
+ * OAuth-only server and must not be relayed under the wrong scheme.
+ */
+describe('settingsStore migration (v22 → v23)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('backfills authMode: bearer for token-carrying servers, none otherwise', () => {
+    const persisted = {
+      mcpServers: [
+        {
+          id: 'github',
+          catalogKey: 'github',
+          name: 'GitHub',
+          url: '',
+          authToken: 'github_pat_x',
+          enabled: true,
+          createdAt: 'now',
+        },
+        {
+          id: 'c1',
+          name: 'Anon Server',
+          url: 'https://mcp.example.com',
+          enabled: true,
+          createdAt: 'now',
+        },
+      ],
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 22) as {
+      mcpServers: Array<Record<string, unknown>>;
+    };
+
+    expect(result.mcpServers[0].authMode).toBe('bearer');
+    expect(result.mcpServers[0].authToken).toBe('github_pat_x');
+    expect(result.mcpServers[1].authMode).toBe('none');
+  });
+
+  it('converts catalog-oauth servers (Asana) to authMode oauth and CLEARS the mislabeled PAT', () => {
+    const persisted = {
+      mcpServers: [
+        {
+          id: 'asana',
+          catalogKey: 'asana',
+          name: 'Asana',
+          url: '',
+          authToken: '1/12345-old-pat',
+          enabled: true,
+          createdAt: 'now',
+        },
+      ],
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 22) as {
+      mcpServers: Array<Record<string, unknown>>;
+    };
+
+    expect(result.mcpServers[0].authMode).toBe('oauth');
+    expect(result.mcpServers[0].authToken).toBeUndefined();
+    expect(result.mcpServers[0].oauth).toBeUndefined();
+  });
+
+  it('preserves already-migrated servers on a current-version store', () => {
+    const servers = [
+      {
+        id: 'asana',
+        catalogKey: 'asana',
+        name: 'Asana',
+        url: '',
+        authMode: 'oauth',
+        oauth: { clientId: 'dcr-1', accessToken: 'at', refreshToken: 'rt' },
+        enabled: true,
+        createdAt: 'now',
+      },
+    ];
+    const result = migrate(
+      { mcpServers: servers } as Record<string, unknown>,
+      23,
+    ) as Record<string, unknown>;
+
+    expect(result.mcpServers).toEqual(servers);
+  });
+});
