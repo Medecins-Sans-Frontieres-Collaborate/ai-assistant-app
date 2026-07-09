@@ -24,6 +24,7 @@ import toast from 'react-hot-toast';
 import { useLocale, useTranslations } from 'next-intl';
 
 import {
+  DocumentTranslationPendingReference,
   DocumentTranslationReference,
   MAX_DOCUMENT_SIZE,
   MAX_GLOSSARY_SIZE,
@@ -51,6 +52,12 @@ interface ChatInputDocumentTranslateProps {
   documentFile: File | null;
   /** Callback when translation completes successfully */
   onTranslationComplete: (reference: DocumentTranslationReference) => void;
+  /**
+   * Called instead of onTranslationComplete for ASYNC (batch) jobs — PDFs.
+   * The caller writes a pending marker into the conversation; the viewer
+   * polls until Azure finishes.
+   */
+  onTranslationPending?: (pending: DocumentTranslationPendingReference) => void;
 }
 
 /**
@@ -67,6 +74,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
   onClose,
   documentFile,
   onTranslationComplete,
+  onTranslationPending,
 }) => {
   const t = useTranslations();
   const locale = useLocale();
@@ -224,8 +232,17 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
       }
 
       if (result.success && result.data) {
-        toast.success(t('documentTranslation.translationSuccess'));
-        onTranslationComplete(result.data as DocumentTranslationReference);
+        if (result.data.async) {
+          // Batch (PDF) path: the job runs in Azure; the conversation gets a
+          // pending card that polls until done.
+          toast.success(t('documentTranslation.translationSubmitted'));
+          onTranslationPending?.(
+            result.data as DocumentTranslationPendingReference,
+          );
+        } else {
+          toast.success(t('documentTranslation.translationSuccess'));
+          onTranslationComplete(result.data as DocumentTranslationReference);
+        }
         onClose();
       } else {
         throw new Error(result.error || 'Translation failed');
@@ -247,6 +264,7 @@ const ChatInputDocumentTranslate: FC<ChatInputDocumentTranslateProps> = ({
     glossaryFile,
     customFilename,
     onTranslationComplete,
+    onTranslationPending,
     onClose,
     t,
   ]);
