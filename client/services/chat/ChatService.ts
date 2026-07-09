@@ -9,6 +9,7 @@ import {
   FileMessageContent,
   Message,
 } from '@/types/chat';
+import { McpPendingToolCall, McpServerRequestEntry } from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
@@ -168,6 +169,10 @@ export class ChatService {
       autoInjectPinnedImages?: boolean;
       agentSourcePath?: string;
       approvalResponses?: ApprovalResponse[];
+      /** Native MCP tool loop (see types/mcp.ts). Streaming path only. */
+      mcpServers?: McpServerRequestEntry[];
+      mcpPendingToolCalls?: McpPendingToolCall[];
+      mcpLoopRound?: number;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -198,6 +203,9 @@ export class ChatService {
       autoInjectPinnedImages: options?.autoInjectPinnedImages,
       agentSourcePath: options?.agentSourcePath,
       approvalResponses: options?.approvalResponses,
+      mcpServers: options?.mcpServers,
+      mcpPendingToolCalls: options?.mcpPendingToolCalls,
+      mcpLoopRound: options?.mcpLoopRound,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);
