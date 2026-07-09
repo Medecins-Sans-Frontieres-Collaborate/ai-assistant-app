@@ -140,6 +140,12 @@ export interface ConsentRequest {
   consent_url?: string;
   approval_request_id?: string;
   server_label?: string | null;
+  /**
+   * Native-MCP server id (McpServerConfig.id) for tool-loop approvals; the
+   * client uses it to rebuild `mcpPendingToolCalls` on resume. Absent on
+   * Foundry-agent approvals.
+   */
+  server_id?: string | null;
   tool_name?: string | null;
   tool_arguments?: string | null;
 }
@@ -264,6 +270,21 @@ export interface ChatBody {
    * items, then resumes the agent's response stream. See AIFoundryAgentHandler.
    */
   approvalResponses?: ApprovalResponse[];
+  /**
+   * MCP servers whose tools the model may call this turn (native MCP tool
+   * loop in the direct SDK paths — NOT the Foundry agent path). Assembled
+   * client-side from the Connectors settings. Curated entries carry a
+   * catalogKey and the server ignores any client-sent url for them.
+   */
+  mcpServers?: import('./mcp').McpServerRequestEntry[];
+  /**
+   * Tool calls the model requested last round, echoed back with the user's
+   * approvalResponses so the stateless server can reconstruct the transcript
+   * and execute approved calls. Built from persisted consent requests.
+   */
+  mcpPendingToolCalls?: import('./mcp').McpPendingToolCall[];
+  /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
+  mcpLoopRound?: number;
 }
 
 /**
