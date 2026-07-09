@@ -729,7 +729,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   />
                 ))
               ) : (
-                sections.map((section) => (
+                sections.map((section, index) => (
                   <DropdownCategoryGroup
                     key={section.key}
                     label={section.label}
@@ -738,6 +738,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                     selectedIndex={selectedIndex}
                     pinnedToolIds={pinnedToolIds}
                     onTogglePin={togglePinnedTool}
+                    isFirst={index === 0}
                   />
                 ))
               )}
