@@ -17,7 +17,8 @@ interface OwnOauthAppFieldsProps {
  * "Bring your own OAuth app" inputs: users register an app in THEIR provider
  * account (their org/workspace/enterprise instance) with the callback URL
  * shown here, then paste its credentials. Both values follow the same
- * localStorage-only posture as PATs; the secret is relayed per request and
+ * on-device posture as PATs (memory + encrypted credential vault; redacted
+ * from the persisted settings blob); the secret is relayed per request and
  * never persisted server-side.
  */
 export const OwnOauthAppFields: FC<OwnOauthAppFieldsProps> = ({
