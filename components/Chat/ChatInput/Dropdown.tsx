@@ -570,6 +570,19 @@ const Dropdown: React.FC<DropdownProps> = ({
     [toggleToolHidden, defaultHiddenIds],
   );
 
+  // Pinned always wins; otherwise a tool is hidden if the user hid it or it's
+  // default-hidden and hasn't been explicitly revealed.
+  const isToolHidden = useCallback(
+    (toolId: string) => {
+      if (pinnedToolIds.includes(toolId)) return false;
+      return (
+        hiddenToolIds.includes(toolId) ||
+        (defaultHiddenIds.includes(toolId) && !revealedToolIds.includes(toolId))
+      );
+    },
+    [pinnedToolIds, hiddenToolIds, revealedToolIds, defaultHiddenIds],
+  );
+
   // Wrap each action so activating it records usage (drives "Frequently used").
   // Usage is debounced (see recordSuccessfulToolUsage) so the order only
   // settles after repeated use. Pinning does not count — separate control.
@@ -600,20 +613,12 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
 
     const pinnedSet = new Set(pinnedToolIds);
-    const revealedSet = new Set(revealedToolIds);
-    const hiddenSet = new Set(hiddenToolIds);
-    // Pinned always wins; otherwise a tool is hidden if the user hid it or it's
-    // default-hidden and hasn't been explicitly revealed.
-    const isHidden = (id: string) =>
-      !pinnedSet.has(id) &&
-      (hiddenSet.has(id) ||
-        (defaultHiddenIds.includes(id) && !revealedSet.has(id)));
 
     const pinned = pinnedToolIds
       .map((id) => trackedItems.find((item) => item.id === id))
       .filter((item): item is (typeof trackedItems)[number] => Boolean(item));
 
-    const hiddenItems = trackedItems.filter((item) => isHidden(item.id));
+    const hiddenItems = trackedItems.filter((item) => isToolHidden(item.id));
 
     // A credited usage bump now equals CONSECUTIVE_USAGE_THRESHOLD real uses,
     // so surface at >= 1. Hidden items stay in "More" regardless of frequency.
@@ -621,7 +626,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       .filter(
         (item) =>
           !pinnedSet.has(item.id) &&
-          !isHidden(item.id) &&
+          !isToolHidden(item.id) &&
           (toolUsageCounts[item.id] ?? 0) >= 1,
       )
       .sort(
@@ -634,7 +639,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       (item) =>
         !pinnedSet.has(item.id) &&
         !frequentSet.has(item.id) &&
-        !isHidden(item.id),
+        !isToolHidden(item.id),
     );
     const byCategory = (category: MenuItem['category']) =>
       remaining.filter((item) => item.category === category);
@@ -677,9 +682,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     trackedItems,
     locale,
     pinnedToolIds,
-    revealedToolIds,
-    hiddenToolIds,
-    defaultHiddenIds,
+    isToolHidden,
     toolUsageCounts,
     showMore,
     t,
@@ -770,7 +773,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <div
               className={`${scrollClassName} overflow-y-auto custom-scrollbar p-1`}
             >
-              {flatVisibleItems.length === 0 ? (
+              {isFiltering && flatVisibleItems.length === 0 ? (
                 <div className="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                   {t('dropdown.noResults')}
                 </div>
@@ -783,21 +786,39 @@ const Dropdown: React.FC<DropdownProps> = ({
                     pinnable
                     pinned={pinnedToolIds.includes(item.id)}
                     onTogglePin={() => togglePinnedTool(item.id)}
+                    hideable
+                    hidden={isToolHidden(item.id)}
+                    onToggleHidden={() => handleToggleHidden(item.id)}
                   />
                 ))
               ) : (
-                sections.map((section, index) => (
-                  <DropdownCategoryGroup
-                    key={section.key}
-                    label={section.label}
-                    items={section.items}
-                    flattenedItems={flatVisibleItems}
-                    selectedIndex={selectedIndex}
-                    pinnedToolIds={pinnedToolIds}
-                    onTogglePin={togglePinnedTool}
-                    isFirst={index === 0}
-                  />
-                ))
+                sections.map((section, index) =>
+                  section.key === 'more' ? (
+                    <DropdownMoreSection
+                      key={section.key}
+                      items={section.items}
+                      flattenedItems={flatVisibleItems}
+                      selectedIndex={selectedIndex}
+                      pinnedToolIds={pinnedToolIds}
+                      onTogglePin={togglePinnedTool}
+                      onToggleHidden={handleToggleHidden}
+                      expanded={showMore}
+                      onToggleExpanded={() => setShowMore((prev) => !prev)}
+                    />
+                  ) : (
+                    <DropdownCategoryGroup
+                      key={section.key}
+                      label={section.label}
+                      items={section.items}
+                      flattenedItems={flatVisibleItems}
+                      selectedIndex={selectedIndex}
+                      pinnedToolIds={pinnedToolIds}
+                      onTogglePin={togglePinnedTool}
+                      onToggleHidden={handleToggleHidden}
+                      isFirst={index === 0}
+                    />
+                  ),
+                )
               )}
             </div>
           </>
