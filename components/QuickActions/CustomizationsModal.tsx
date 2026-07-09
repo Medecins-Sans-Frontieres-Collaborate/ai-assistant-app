@@ -6,6 +6,7 @@ import {
   IconVolume,
   IconX,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -43,6 +44,12 @@ export function CustomizationsModal({
   const { folders } = useConversations();
   const extractionRecipes = useSettingsStore((s) => s.extractionRecipes);
 
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the Recipes tab is hidden.
+  // See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
+
   // Honour an externally requested initial tab (set by the recipe picker
   // when the user clicks "Create new recipe…"). Cleared after honouring so
   // the next sidebar-driven open lands on the default Prompts tab.
@@ -53,14 +60,24 @@ export function CustomizationsModal({
 
   useEffect(() => {
     if (isOpen && requestedInitialTab) {
+      // Never land on the Recipes tab while the feature is flag-disabled.
+      const target =
+        requestedInitialTab === 'recipes' && !isExtractionEnabled
+          ? 'prompts'
+          : requestedInitialTab;
       // Defer the state writes to a microtask so React doesn't see them as
       // a synchronous cascade off the same render that triggered the effect.
       queueMicrotask(() => {
-        setActiveTab(requestedInitialTab);
+        setActiveTab(target);
         setCustomizationsInitialTab(null);
       });
     }
-  }, [isOpen, requestedInitialTab, setCustomizationsInitialTab]);
+  }, [
+    isOpen,
+    requestedInitialTab,
+    setCustomizationsInitialTab,
+    isExtractionEnabled,
+  ]);
 
   if (!isOpen) return null;
 
@@ -123,22 +140,30 @@ export function CustomizationsModal({
                 icon: <IconVolume size={16} className="hidden sm:block" />,
                 width: '150px',
               },
-              {
-                id: 'recipes',
-                label: (
-                  <>
-                    <span className="hidden sm:inline">
-                      {t('extraction.section')}
-                    </span>
-                    <span className="sm:hidden">
-                      <IconBraces size={16} />
-                    </span>
-                    <span className="ml-1">({extractionRecipes.length})</span>
-                  </>
-                ),
-                icon: <IconBraces size={16} className="hidden sm:block" />,
-                width: '180px',
-              },
+              ...(isExtractionEnabled
+                ? [
+                    {
+                      id: 'recipes',
+                      label: (
+                        <>
+                          <span className="hidden sm:inline">
+                            {t('extraction.section')}
+                          </span>
+                          <span className="sm:hidden">
+                            <IconBraces size={16} />
+                          </span>
+                          <span className="ml-1">
+                            ({extractionRecipes.length})
+                          </span>
+                        </>
+                      ),
+                      icon: (
+                        <IconBraces size={16} className="hidden sm:block" />
+                      ),
+                      width: '180px',
+                    },
+                  ]
+                : []),
             ]}
             activeTab={activeTab}
             onTabChange={(tab) => setActiveTab(tab as CustomizationTab)}
@@ -163,7 +188,9 @@ export function CustomizationsModal({
             />
           )}
 
-          {activeTab === 'recipes' && <ExtractionRecipesTab />}
+          {isExtractionEnabled && activeTab === 'recipes' && (
+            <ExtractionRecipesTab />
+          )}
         </div>
       </div>
     </div>
