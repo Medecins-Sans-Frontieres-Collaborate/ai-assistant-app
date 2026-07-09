@@ -5,6 +5,7 @@ import {
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
   Dispatch,
   KeyboardEvent,
@@ -149,6 +150,11 @@ export const ChatInput = ({
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
   const extractionMode = useChatInputStore((state) => state.extractionMode);
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the tray never renders.
+  // See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const setSelectedToneId = useChatInputStore(
     (state) => state.setSelectedToneId,
@@ -558,7 +564,7 @@ export const ChatInput = ({
         )}
 
         {/* Structured Extraction Tray — recipe chip row above the composer */}
-        {extractionMode && <ExtractionTray />}
+        {isExtractionEnabled && extractionMode && <ExtractionTray />}
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">

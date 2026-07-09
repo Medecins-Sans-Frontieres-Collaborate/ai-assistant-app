@@ -9,6 +9,7 @@ import {
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, {
   useCallback,
   useEffect,
@@ -101,6 +102,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   const setExtractionMode = useChatInputStore(
     (state) => state.setExtractionMode,
   );
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the toggle is omitted so users
+  // can't turn extraction on. See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
   const setTranscriptionStatus = useChatInputStore(
     (state) => state.setTranscriptionStatus,
   );
@@ -464,19 +470,25 @@ const Dropdown: React.FC<DropdownProps> = ({
         category: 'transform',
         opensDialog: true,
       },
-      {
-        id: 'extract',
-        icon: <IconBraces size={18} className="text-blue-500 flex-shrink-0" />,
-        label: t('extraction.toggleLabel'),
-        infoTooltip: t('extraction.trayInfo'),
-        onClick: () => {
-          setExtractionMode(!extractionMode);
-          closeDropdown();
-        },
-        category: 'transform',
-        toggle: true,
-        checked: extractionMode,
-      },
+      ...(isExtractionEnabled
+        ? [
+            {
+              id: 'extract',
+              icon: (
+                <IconBraces size={18} className="text-blue-500 flex-shrink-0" />
+              ),
+              label: t('extraction.toggleLabel'),
+              infoTooltip: t('extraction.trayInfo'),
+              onClick: () => {
+                setExtractionMode(!extractionMode);
+                closeDropdown();
+              },
+              category: 'transform' as const,
+              toggle: true,
+              checked: extractionMode,
+            },
+          ]
+        : []),
       {
         id: 'translateDocument',
         icon: (
@@ -514,6 +526,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       tones,
       hasCameraSupport,
       hideWebSearch,
+      isExtractionEnabled,
       extractionMode,
       setExtractionMode,
       closeDropdown,
