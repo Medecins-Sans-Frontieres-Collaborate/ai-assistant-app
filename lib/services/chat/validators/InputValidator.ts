@@ -280,6 +280,53 @@ const ChatBodySchema = z
       )
       .max(16)
       .optional(),
+    // Native MCP tool loop (direct SDK paths). NOTE: authToken values must
+    // never be logged or echoed in validation errors — Zod messages here
+    // reference field paths only.
+    mcpServers: z
+      .array(
+        z
+          .object({
+            id: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
+            name: z.string().min(1).max(100),
+            catalogKey: z.string().max(64).optional(),
+            url: z
+              .string()
+              .max(2048)
+              .refine(
+                (value) => {
+                  try {
+                    return new URL(value).protocol === 'https:';
+                  } catch {
+                    return false;
+                  }
+                },
+                { message: 'MCP server url must be https' },
+              )
+              .optional(),
+            authToken: z.string().max(8192).optional(), // OAuth access tokens (JWTs) can exceed 4KB
+          })
+          .strict(),
+      )
+      .max(5)
+      .optional(),
+    // Tool calls from the previous round, echoed back with approvals so the
+    // stateless server can reconstruct the transcript. Client-tamperable by
+    // design (the user is the principal); still size-capped and re-parsed.
+    mcpPendingToolCalls: z
+      .array(
+        z
+          .object({
+            id: z.string().min(1).max(256),
+            serverId: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
+            toolName: z.string().min(1).max(256),
+            argumentsJson: z.string().max(20000),
+          })
+          .strict(),
+      )
+      .max(10)
+      .optional(),
+    mcpLoopRound: z.number().int().min(0).max(10).optional(),
     isEditorOpen: z.boolean().optional(),
     activeFiles: z.array(ActiveFileSchema).max(50).optional(),
     activeFilesTokensUsed: z.number().int().min(0).optional(),
