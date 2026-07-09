@@ -160,6 +160,7 @@ const mockMessages: Record<string, unknown> = {
     },
   },
   documentTranslation: {
+    invalidReference: 'Invalid document translation reference',
     pendingTitle: 'Translating {filename}…',
     pendingHint:
       'PDF translations run in the background and can take a few minutes. You can keep working — this card updates when the document is ready, even after a reload.',
