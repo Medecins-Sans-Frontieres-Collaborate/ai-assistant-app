@@ -36,6 +36,8 @@ export default [
         navigator: 'readonly',
         localStorage: 'readonly',
         sessionStorage: 'readonly',
+        BroadcastChannel: 'readonly',
+        MessageEvent: 'readonly',
         Audio: 'readonly',
         console: 'readonly',
         fetch: 'readonly',
