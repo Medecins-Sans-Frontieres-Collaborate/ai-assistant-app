@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
+import { initMcpCredentialSync } from '@/client/services/mcp/mcpCredentialSync';
+
 import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
@@ -55,6 +57,16 @@ export function AppInitializer() {
       .getState()
       .setMcpArbitraryFlagEnabled(mcpArbitraryServers === true);
   }, [mcpArbitraryServers]);
+
+  // MCP credential vault: once authenticated, merge encrypted credentials
+  // into the in-memory store and start the write-through sync (the persisted
+  // localStorage blob is secret-redacted; the vault key is session-bound).
+  // Idempotent — initMcpCredentialSync guards against double-init.
+  const isAuthenticated = !!session?.user;
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    void initMcpCredentialSync();
+  }, [isAuthenticated]);
 
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode
