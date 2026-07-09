@@ -23,6 +23,7 @@ import {
 import { Tone } from '@/types/tone';
 import { DEFAULT_TTS_SETTINGS, TTSSettings } from '@/types/tts';
 
+import { MCP_CATALOG } from '@/config/mcpCatalog';
 import { SETTINGS_CONSTANTS } from '@/lib/constants/settings';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -56,6 +57,71 @@ export interface AgentSource {
   createdAt: string; // ISO timestamp
 }
 
+export type McpAuthMode = 'none' | 'bearer' | 'header' | 'oauth';
+
+/**
+ * Everything OAuth-connected MCP servers need for silent refresh across
+ * sessions. localStorage-only (like PATs), excluded from exportData(),
+ * wiped by resetSettings. Discovery endpoints are deliberately NOT stored:
+ * the server re-derives them from RFC 9728/8414 discovery on every proxy
+ * call, so nothing here could redirect a credential.
+ */
+export interface McpOauthState {
+  /** Absent while needsReauth. Relayed per request exactly like a PAT. */
+  accessToken?: string;
+  refreshToken?: string;
+  /** Epoch ms; absent = unknown → use until a 401 forces reauth. */
+  expiresAt?: number;
+  scope?: string;
+  /** Dynamic-client-registration result — reused on refresh/reconnect. */
+  clientId: string;
+  /** Some authorization servers issue one even to public clients. */
+  clientSecret?: string;
+  /** Refresh failed / 401 seen → the row shows "Reconnect". */
+  needsReauth?: boolean;
+}
+
+/**
+ * An MCP server the user has connected ("Connectors" settings section).
+ * Curated entries (catalogKey set) never store a URL — the server resolves
+ * it from config/mcpCatalog.ts, so a tampered/imported localStorage blob
+ * can't redirect a token to an attacker URL.
+ */
+export interface McpServerConfig {
+  id: string;
+  /** Present ⇒ curated catalog entry ('github' | 'asana'); absent ⇒ arbitrary. */
+  catalogKey?: string;
+  name: string;
+  /** '' for curated entries; user-entered https URL otherwise. */
+  url: string;
+  /** How this server authenticates (mirrors the catalog for curated entries). */
+  authMode: McpAuthMode;
+  /**
+   * Personal access token (bearer/header modes). localStorage only (like all
+   * user data in this privacy-first app), sent in request bodies, never
+   * persisted server-side. XSS caveat: anything in localStorage is readable
+   * by injected scripts — the UI steers users toward fine-grained,
+   * minimally-scoped tokens. Deliberately excluded from exportData()
+   * (see importExport.ts).
+   */
+  authToken?: string;
+  /** OAuth token bundle (oauth mode only). Same privacy posture as authToken. */
+  oauth?: McpOauthState;
+  /**
+   * User-supplied OAuth app for this server ("bring your own app"): the user
+   * registers an app in THEIR provider account (their GitHub org, their
+   * Asana workspace, their enterprise instance) with redirect URI
+   * `{origin}/mcp-oauth-callback` and pastes its credentials here. Takes
+   * precedence over dynamic client registration and the deployment-wide
+   * MCP_OAUTH_* apps. The secret is the user's own and follows the same
+   * localStorage-only / body-relay / never-server-persisted posture as PATs.
+   */
+  oauthApp?: { clientId: string; clientSecret?: string };
+  /** Off = keep the config (and token) but stop offering its tools in chat. */
+  enabled: boolean;
+  createdAt: string; // ISO timestamp
+}
+
 export interface CustomAgent {
   id: string;
   name: string;
@@ -84,6 +150,17 @@ interface SettingsStore {
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
+  /** MCP servers the user connected (Connectors settings section). */
+  mcpServers: McpServerConfig[];
+  /** User opt-in for adding/sending arbitrary (non-catalog) MCP servers. */
+  allowArbitraryMcpServers: boolean;
+  /**
+   * Runtime-only mirror of the LaunchDarkly `mcpArbitraryServers` flag, set
+   * by AppInitializer so vanilla stores (chatStore) can gate without hook
+   * access (same pattern as userRegion). Fail-closed: defaults to false and
+   * only flips on an explicit `=== true` flag value. NOT persisted.
+   */
+  mcpArbitraryFlagEnabled: boolean;
   /**
    * Model IDs the user has hidden from the picker. Covers base models and
    * agents alike (everything in the picker is keyed by a string model ID:
@@ -187,6 +264,13 @@ interface SettingsStore {
   updateCustomAgentSource: (source: AgentSource) => void;
   deleteCustomAgentSource: (id: string) => void;
 
+  // MCP Server Actions (Connectors)
+  addMcpServer: (server: McpServerConfig) => void;
+  updateMcpServer: (id: string, updates: Partial<McpServerConfig>) => void;
+  deleteMcpServer: (id: string) => void;
+  setAllowArbitraryMcpServers: (enabled: boolean) => void;
+  setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
+
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
@@ -277,6 +361,9 @@ export const useSettingsStore = create<SettingsStore>()(
       tones: [],
       customAgents: [],
       customAgentSources: [],
+      mcpServers: [],
+      allowArbitraryMcpServers: false,
+      mcpArbitraryFlagEnabled: false,
       hiddenModelIds: [],
       starredModelIds: [],
       tokenUsageStats: {},
@@ -421,6 +508,28 @@ export const useSettingsStore = create<SettingsStore>()(
             (s) => s.id !== id,
           ),
         })),
+
+      // MCP Server Actions (Connectors)
+      addMcpServer: (server) =>
+        set((state) => ({ mcpServers: [...state.mcpServers, server] })),
+
+      updateMcpServer: (id, updates) =>
+        set((state) => ({
+          mcpServers: state.mcpServers.map((s) =>
+            s.id === id ? { ...s, ...updates } : s,
+          ),
+        })),
+
+      deleteMcpServer: (id) =>
+        set((state) => ({
+          mcpServers: state.mcpServers.filter((s) => s.id !== id),
+        })),
+
+      setAllowArbitraryMcpServers: (enabled) =>
+        set({ allowArbitraryMcpServers: enabled }),
+
+      setMcpArbitraryFlagEnabled: (enabled) =>
+        set({ mcpArbitraryFlagEnabled: enabled }),
 
       // Hidden Model/Agent Actions. Hiding unstars: a model can't be both
       // surfaced in "Your models" and hidden from the picker.
@@ -619,6 +728,10 @@ export const useSettingsStore = create<SettingsStore>()(
           prompts: [],
           tones: [],
           customAgents: [],
+          // Wipes connector tokens too — Reset Settings clears everything,
+          // and lingering secrets after a "reset" would be worse.
+          mcpServers: [],
+          allowArbitraryMcpServers: false,
           hiddenModelIds: [],
           starredModelIds: [],
           tokenUsageStats: {},
@@ -644,7 +757,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 21, // Increment this when schema changes to trigger migrations
+      version: 23, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -658,6 +771,10 @@ export const useSettingsStore = create<SettingsStore>()(
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
+        // NOTE: mcpArbitraryFlagEnabled is deliberately NOT persisted — it
+        // mirrors a LaunchDarkly flag and must re-derive each session.
+        mcpServers: state.mcpServers,
+        allowArbitraryMcpServers: state.allowArbitraryMcpServers,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
@@ -832,6 +949,45 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 21 → 22: Add MCP connectors (Connectors settings section).
+        // Backfill empty list / opt-in off.
+        if (version < 22) {
+          if (!Array.isArray(state.mcpServers)) {
+            state.mcpServers = [];
+          }
+          if (typeof state.allowArbitraryMcpServers !== 'boolean') {
+            state.allowArbitraryMcpServers = false;
+          }
+        }
+
+        // Version 22 → 23: Add per-server authMode + OAuth support. Servers
+        // whose CATALOG auth style is 'oauth' (Asana) also get any stored PAT
+        // cleared: a PAT saved under the old bearer assumption never worked
+        // against an OAuth-only server, and a credential must not be relayed
+        // under the wrong scheme. They render as disconnected ("Connect").
+        if (version < 23 && Array.isArray(state.mcpServers)) {
+          state.mcpServers = (
+            state.mcpServers as Array<Record<string, unknown>>
+          ).map((server) => {
+            if (typeof server.authMode === 'string') return server;
+            const catalogStyle = server.catalogKey
+              ? MCP_CATALOG[server.catalogKey as string]?.auth.style
+              : undefined;
+            if (catalogStyle === 'oauth') {
+              return {
+                ...server,
+                authMode: 'oauth',
+                authToken: undefined,
+                oauth: undefined,
+              };
+            }
+            return {
+              ...server,
+              authMode: server.authToken ? 'bearer' : 'none',
+            };
+          });
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -865,6 +1021,11 @@ export const useSettingsStore = create<SettingsStore>()(
           // (e.g. a partial write) so downstream `.map`/`.find` never throw.
           if (!Array.isArray(state.customAgentSources)) {
             state.customAgentSources = [];
+          }
+
+          // Defensive: mcpServers must always be an array (same rationale).
+          if (!Array.isArray(state.mcpServers)) {
+            state.mcpServers = [];
           }
 
           // Defensive: hiddenModelIds must always be an array. NOTE: do not
