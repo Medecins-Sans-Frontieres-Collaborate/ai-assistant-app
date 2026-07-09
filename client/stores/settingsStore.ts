@@ -38,6 +38,11 @@ export interface ConsecutiveModelUsage {
   count: number;
 }
 
+export interface ConsecutiveToolUsage {
+  toolId: string | null;
+  count: number;
+}
+
 /** One aggregation bucket of real token usage (see tokenUsageStats). */
 export interface TokenUsageBucket {
   promptTokens: number;
@@ -233,6 +238,12 @@ interface SettingsStore {
   // Chat input "+" dropdown tool personalization
   pinnedToolIds: string[];
   toolUsageCounts: Record<string, number>;
+  /** Tools the user explicitly moved into the "More" section. */
+  hiddenToolIds: string[];
+  /** Default-hidden tools the user explicitly pulled back out of "More". */
+  revealedToolIds: string[];
+  /** Debounce for usage-based ordering (mirrors consecutiveModelUsage). */
+  consecutiveToolUsage: ConsecutiveToolUsage;
 
   // Text-to-Speech settings
   ttsSettings: TTSSettings;
@@ -335,6 +346,18 @@ interface SettingsStore {
   // Chat input "+" dropdown tool actions
   togglePinnedTool: (toolId: string) => void;
   incrementToolUsage: (toolId: string) => void;
+  /**
+   * Records a tool activation for usage-based ordering. Only bumps the durable
+   * count after CONSECUTIVE_USAGE_THRESHOLD consecutive uses of the same tool,
+   * so the order doesn't jump around during experimentation.
+   */
+  recordSuccessfulToolUsage: (toolId: string) => void;
+  /**
+   * Moves a tool into / out of the "More" section. `isDefaultHidden` tells the
+   * action whether the tool is hidden by default (camera, tone-with-no-tones,
+   * extract-with-no-recipes) so it can toggle the right set.
+   */
+  toggleToolHidden: (toolId: string, isDefaultHidden: boolean) => void;
 
   // Active Files Settings
   autoPinActiveFiles: boolean;
@@ -413,6 +436,9 @@ export const useSettingsStore = create<SettingsStore>()(
       // Chat input "+" dropdown tool personalization
       pinnedToolIds: [],
       toolUsageCounts: {},
+      hiddenToolIds: [],
+      revealedToolIds: [],
+      consecutiveToolUsage: { toolId: null, count: 0 },
 
       // Organization preference (null = auto-detect from email)
       organizationPreference: null,
@@ -759,11 +785,20 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Chat input "+" dropdown tool actions
       togglePinnedTool: (toolId) =>
-        set((state) => ({
-          pinnedToolIds: state.pinnedToolIds.includes(toolId)
-            ? state.pinnedToolIds.filter((id) => id !== toolId)
-            : [...state.pinnedToolIds, toolId],
-        })),
+        set((state) => {
+          const isPinned = state.pinnedToolIds.includes(toolId);
+          if (isPinned) {
+            return {
+              pinnedToolIds: state.pinnedToolIds.filter((id) => id !== toolId),
+            };
+          }
+          // Pinning wins over hiding — a pinned tool always shows in "Pinned",
+          // so drop any explicit hide when pinning.
+          return {
+            pinnedToolIds: [...state.pinnedToolIds, toolId],
+            hiddenToolIds: state.hiddenToolIds.filter((id) => id !== toolId),
+          };
+        }),
       incrementToolUsage: (toolId) =>
         set((state) => ({
           toolUsageCounts: {
@@ -771,6 +806,60 @@ export const useSettingsStore = create<SettingsStore>()(
             [toolId]: (state.toolUsageCounts[toolId] ?? 0) + 1,
           },
         })),
+
+      recordSuccessfulToolUsage: (toolId) =>
+        set((state) => {
+          const { consecutiveToolUsage, toolUsageCounts } = state;
+          const isSameTool = consecutiveToolUsage.toolId === toolId;
+          const newCount = isSameTool ? consecutiveToolUsage.count + 1 : 1;
+          const threshold =
+            SETTINGS_CONSTANTS.TOOL_ORDER.CONSECUTIVE_USAGE_THRESHOLD;
+
+          if (newCount >= threshold) {
+            // Credit the durable count and reset the consecutive counter.
+            return {
+              toolUsageCounts: {
+                ...toolUsageCounts,
+                [toolId]: (toolUsageCounts[toolId] ?? 0) + 1,
+              },
+              consecutiveToolUsage: { toolId, count: 0 },
+            };
+          }
+
+          return {
+            consecutiveToolUsage: { toolId, count: newCount },
+          };
+        }),
+
+      toggleToolHidden: (toolId, isDefaultHidden) =>
+        set((state) => {
+          const isHidden =
+            state.hiddenToolIds.includes(toolId) ||
+            (isDefaultHidden && !state.revealedToolIds.includes(toolId));
+
+          if (isHidden) {
+            // Reveal: drop an explicit hide, and record the reveal so a
+            // default-hidden tool stays out of "More".
+            return {
+              hiddenToolIds: state.hiddenToolIds.filter((id) => id !== toolId),
+              revealedToolIds: isDefaultHidden
+                ? [...new Set([...state.revealedToolIds, toolId])]
+                : state.revealedToolIds,
+            };
+          }
+
+          // Hide: drop any prior reveal; for non-default tools add an explicit
+          // hide. Hiding also unpins so pin and hidden stay exclusive.
+          return {
+            revealedToolIds: state.revealedToolIds.filter(
+              (id) => id !== toolId,
+            ),
+            hiddenToolIds: isDefaultHidden
+              ? state.hiddenToolIds
+              : [...new Set([...state.hiddenToolIds, toolId])],
+            pinnedToolIds: state.pinnedToolIds.filter((id) => id !== toolId),
+          };
+        }),
 
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
@@ -825,7 +914,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 24, // Increment this when schema changes to trigger migrations
+      version: 25, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -884,6 +973,9 @@ export const useSettingsStore = create<SettingsStore>()(
         slashMenuUsageCounts: state.slashMenuUsageCounts,
         pinnedToolIds: state.pinnedToolIds,
         toolUsageCounts: state.toolUsageCounts,
+        hiddenToolIds: state.hiddenToolIds,
+        revealedToolIds: state.revealedToolIds,
+        consecutiveToolUsage: state.consecutiveToolUsage,
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         confirmStopFromButton: state.confirmStopFromButton,
@@ -1097,6 +1189,26 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.toolUsageCounts !== 'object'
           ) {
             state.toolUsageCounts = {};
+          }
+        }
+
+        // Version 24 → 25: add the "More" section personalization fields
+        // (hiddenToolIds / revealedToolIds) and the usage-ordering debounce
+        // counter. Backfill so downstream `.includes` / reads never hit
+        // undefined for stores created before this change.
+        if (version < 25) {
+          if (!Array.isArray(state.hiddenToolIds)) {
+            state.hiddenToolIds = [];
+          }
+          if (!Array.isArray(state.revealedToolIds)) {
+            state.revealedToolIds = [];
+          }
+          if (
+            state.consecutiveToolUsage === undefined ||
+            state.consecutiveToolUsage === null ||
+            typeof state.consecutiveToolUsage !== 'object'
+          ) {
+            state.consecutiveToolUsage = { toolId: null, count: 0 };
           }
         }
 
