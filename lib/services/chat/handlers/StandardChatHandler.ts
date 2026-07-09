@@ -1,3 +1,4 @@
+import { isHttpsPublicShapedUrl } from '@/lib/services/mcp/mcpUrlGuard';
 import {
   MetricsService,
   getAzureMonitorLogger,
@@ -16,6 +17,8 @@ import { StandardChatService } from '../StandardChatService';
 import { ChatContext } from '../pipeline/ChatContext';
 import { BasePipelineStage } from '../pipeline/PipelineStage';
 
+import { env } from '@/config/environment';
+import { resolveMcpServers } from '@/config/mcpCatalog';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { SpanStatusCode, trace } from '@opentelemetry/api';
 
@@ -286,6 +289,18 @@ export class StandardChatHandler extends BasePipelineStage {
           }
 
           // Execute chat
+          // Resolve MCP servers ONCE at the entry to the SDK paths: catalog
+          // entries get their url/transport from config/mcpCatalog.ts (any
+          // client-sent url is ignored), custom entries require the env gate
+          // and must pass the SSRF shape check. Invalid entries drop
+          // silently — chat never fails because a connector is misconfigured.
+          const resolvedMcpServers = context.mcpServers?.length
+            ? resolveMcpServers(context.mcpServers, {
+                allowCustom: env.MCP_CUSTOM_SERVERS_ENABLED,
+                isAllowedCustomUrl: isHttpsPublicShapedUrl,
+              })
+            : undefined;
+
           const response = await this.standardChatService.handleChat({
             messages: messagesToSend,
             model: context.model,
@@ -303,6 +318,12 @@ export class StandardChatHandler extends BasePipelineStage {
             pendingTranscriptions:
               context.processedContent?.pendingTranscriptions,
             streamingSpeed: context.streamingSpeed,
+            mcpServers: resolvedMcpServers?.length
+              ? resolvedMcpServers
+              : undefined,
+            mcpPendingToolCalls: context.mcpPendingToolCalls,
+            mcpLoopRound: context.mcpLoopRound,
+            approvalResponses: context.approvalResponses,
           });
 
           // If we have active file cache updates, token consumption, or
