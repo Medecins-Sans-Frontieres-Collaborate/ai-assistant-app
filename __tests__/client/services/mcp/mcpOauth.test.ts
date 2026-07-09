@@ -118,6 +118,52 @@ describe('connectMcpOauth', () => {
     expect(sessionStorage.getItem(stashKey)).toBeNull();
   });
 
+  it('skips registration entirely when the user supplies their OWN app clientId', async () => {
+    const fetchSpy = mockFetchRoutes({
+      '/api/mcp/oauth/discover': () => ({
+        json: {
+          success: true,
+          data: {
+            authorizationEndpoint: 'https://auth.asana.example/authorize',
+            scopesSupported: [],
+            resource: null,
+            registrationSupported: false,
+          },
+        },
+      }),
+      '/api/mcp/oauth/token': (body) => {
+        expect(body.grant.clientId).toBe('my-own-app');
+        expect(body.grant.clientSecret).toBe('my-own-secret');
+        return {
+          json: {
+            success: true,
+            data: { tokens: { access_token: 'at', expires_in: 60 } },
+          },
+        };
+      },
+    });
+    globalThis.fetch = fetchSpy as never;
+    const openSpy = vi
+      .spyOn(window, 'open')
+      .mockReturnValue({ closed: false } as Window);
+
+    const promise = connectMcpOauth(asanaEntry, 'my-own-app', 'my-own-secret');
+    await vi.waitFor(() => expect(openSpy).toHaveBeenCalled());
+    const stashKey = Object.keys(sessionStorage).find((k) =>
+      k.startsWith('mcp-oauth:'),
+    )!;
+    const state = stashKey.slice('mcp-oauth:'.length);
+    new BroadcastChannel('mcp-oauth').postMessage({ state, code: 'c' });
+
+    const result = await promise;
+
+    expect(result.clientId).toBe('my-own-app');
+    expect(result.clientSecret).toBe('my-own-secret');
+    // /register was never called (no route for it => would have thrown).
+    const urls = fetchSpy.mock.calls.map((c) => String(c[0]));
+    expect(urls).not.toContain('/api/mcp/oauth/register');
+  });
+
   it('ignores messages with a mismatched state and fails on denial', async () => {
     globalThis.fetch = mockFetchRoutes({
       '/api/mcp/oauth/discover': () => ({
