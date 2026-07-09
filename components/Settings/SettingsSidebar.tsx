@@ -4,6 +4,7 @@ import {
   IconHelp,
   IconLeaf,
   IconMessage,
+  IconPlugConnected,
   IconRefresh,
   IconRobot,
   IconSettings,
@@ -44,8 +45,9 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   const t = useTranslations();
   // Fail-open: undefined (LD unconfigured/unserved) → shown. Flip to false in
   // LaunchDarkly to hide the section.
-  const { showUsageImpact } = useFlags();
+  const { showUsageImpact, mcpConnectors } = useFlags();
   const isUsageImpactEnabled = showUsageImpact !== false;
+  const isConnectorsEnabled = mcpConnectors !== false;
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -93,6 +95,16 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
             icon={<IconRobot size={18} />}
             onClick={setActiveSection}
           /> */}
+
+          {isConnectorsEnabled && (
+            <NavigationItem
+              section={SettingsSection.CONNECTORS}
+              activeSection={activeSection}
+              label={t('settings.Connectors')}
+              icon={<IconPlugConnected size={18} />}
+              onClick={setActiveSection}
+            />
+          )}
 
           {isUsageImpactEnabled && (
             <NavigationItem
