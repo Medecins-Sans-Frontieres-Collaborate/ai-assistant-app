@@ -159,6 +159,24 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  documentTranslation: {
+    pendingTitle: 'Translating {filename}…',
+    pendingHint:
+      'PDF translations run in the background and can take a few minutes. You can keep working — this card updates when the document is ready, even after a reload.',
+    asyncFailed: 'Document translation failed: {error}',
+    jobNotFound:
+      'the translation job is no longer available. Please try again.',
+    retryPolling: 'Check again',
+    pollingStalled:
+      "We couldn't reach the server to check progress. The translation may still be running.",
+    translationSuccess: 'Document translated successfully',
+    translationSubmitted:
+      'Translation started — PDFs are processed in the background.',
+    translatedTo: 'Translated to {language}',
+    download: 'Download',
+    downloading: 'Downloading…',
+    expires: 'Available for {days} days',
+  },
   connectors: {
     title: 'Connectors',
     description:
