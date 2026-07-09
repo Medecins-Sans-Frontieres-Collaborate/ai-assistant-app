@@ -33,7 +33,10 @@ import {
   FileMessageContent,
   Message,
 } from '@/types/chat';
-import { DocumentTranslationReference } from '@/types/documentTranslation';
+import {
+  DocumentTranslationPendingReference,
+  DocumentTranslationReference,
+} from '@/types/documentTranslation';
 import { SearchMode } from '@/types/searchMode';
 import { Tone } from '@/types/tone';
 
@@ -41,7 +44,10 @@ import ChatInputDocumentTranslate from '@/components/Chat/ChatInput/ChatInputDoc
 import ChatInputImage from '@/components/Chat/ChatInput/ChatInputImage';
 import ChatInputImageCapture from '@/components/Chat/ChatInput/ChatInputImageCapture';
 import ChatInputTranslate from '@/components/Chat/ChatInput/ChatInputTranslate';
-import { formatTranslationReference } from '@/components/Chat/DocumentTranslationViewer';
+import {
+  formatPendingTranslationReference,
+  formatTranslationReference,
+} from '@/components/Chat/DocumentTranslationViewer';
 import ImageIcon from '@/components/Icons/image';
 
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
@@ -264,6 +270,73 @@ const Dropdown: React.FC<DropdownProps> = ({
       updateConversation(selectedConversation.id, updates);
 
       // Close modal
+      setIsDocumentTranslateOpen(false);
+      setDocumentToTranslate(null);
+    },
+    [selectedConversation, updateConversation],
+  );
+
+  // Async (batch, PDF) path: same message pair, but the assistant message
+  // carries a PENDING marker — DocumentTranslationViewer renders an
+  // in-conversation progress card that polls and rewrites itself to the
+  // final reference when Azure finishes (survives reloads).
+  const handleDocumentTranslationPending = useCallback(
+    (pending: DocumentTranslationPendingReference) => {
+      if (!selectedConversation) {
+        console.error('[DocumentTranslation] No conversation selected');
+        setIsDocumentTranslateOpen(false);
+        setDocumentToTranslate(null);
+        return;
+      }
+
+      const fileContent: FileMessageContent = {
+        type: 'file_url',
+        url: pending.originalFileUrl,
+        originalFilename: pending.originalFilename,
+      };
+      const userMessage: Message = {
+        role: 'user',
+        content: [fileContent],
+        messageType: 'FILE',
+      };
+
+      const pendingText = formatPendingTranslationReference(
+        pending.translatedFilename,
+        pending.targetLanguage,
+        pending.jobId,
+        pending.fileExtension,
+        pending.submittedAt,
+      );
+      const assistantMessage: AssistantMessageGroup = {
+        type: 'assistant_group',
+        versions: [
+          {
+            content: pendingText,
+            messageType: 'TEXT',
+            createdAt: new Date().toISOString(),
+          },
+        ],
+        activeIndex: 0,
+      };
+
+      const updates: {
+        messages: (typeof selectedConversation.messages)[number][];
+        name?: string;
+      } = {
+        messages: [
+          ...selectedConversation.messages,
+          userMessage,
+          assistantMessage,
+        ],
+      };
+      if (
+        !selectedConversation.name ||
+        selectedConversation.name === 'New Conversation'
+      ) {
+        updates.name = `Translation: ${pending.originalFilename}`;
+      }
+      updateConversation(selectedConversation.id, updates);
+
       setIsDocumentTranslateOpen(false);
       setDocumentToTranslate(null);
     },
@@ -672,6 +745,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         }}
         documentFile={documentToTranslate}
         onTranslationComplete={handleDocumentTranslationComplete}
+        onTranslationPending={handleDocumentTranslationPending}
       />
     </div>
   );
