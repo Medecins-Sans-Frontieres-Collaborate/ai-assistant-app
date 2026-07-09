@@ -14,7 +14,7 @@ const mockAuth = vi.hoisted(() => vi.fn());
 const mockTranslateDocument = vi.hoisted(() => vi.fn());
 const mockSubmitBatch = vi.hoisted(() => vi.fn());
 const mockUpload = vi.hoisted(() => vi.fn());
-const mockGenerateSasUrl = vi.hoisted(() => vi.fn());
+const mockGenerateContainerScopedSasUrl = vi.hoisted(() => vi.fn());
 
 vi.mock('@/auth', () => ({ auth: mockAuth }));
 vi.mock('@/config/environment', () => ({ env: {} }));
@@ -40,7 +40,7 @@ vi.mock(
 vi.mock('@/lib/utils/server/blob/blob', () => ({
   AzureBlobStorage: class {
     upload = mockUpload;
-    generateSasUrl = mockGenerateSasUrl;
+    generateContainerScopedSasUrl = mockGenerateContainerScopedSasUrl;
   },
 }));
 
@@ -72,8 +72,8 @@ describe('POST /api/document-translation/translate (async PDF branch)', () => {
     vi.clearAllMocks();
     mockAuth.mockResolvedValue(createMockSession());
     mockUpload.mockResolvedValue(undefined);
-    mockGenerateSasUrl.mockImplementation(
-      async (path: string, _h: number, perms = 'r') =>
+    mockGenerateContainerScopedSasUrl.mockImplementation(
+      async (path: string, _h: number, perms: string) =>
         `https://blob.example.com/${path}?sig=${perms}-sas`,
     );
     mockSubmitBatch.mockResolvedValue('op-abc-123');
@@ -100,13 +100,15 @@ describe('POST /api/document-translation/translate (async PDF branch)', () => {
     // The sync API was never called for a PDF.
     expect(mockTranslateDocument).not.toHaveBeenCalled();
 
-    // Batch submitted with read-SAS source and create+write-SAS target on
-    // the STANDARD translated-blob path (existing download route serves it).
+    // Batch submitted with CONTAINER-scoped SAS on blob URLs, per the
+    // Document Translation requirement: source read+list ('rl'), target
+    // write+list ('wl') on the STANDARD translated-blob path (existing
+    // download route serves it).
     const batchArgs = mockSubmitBatch.mock.calls[0][0];
     expect(batchArgs.sourceSasUrl).toContain(`${createdJobId}_original.pdf`);
-    expect(batchArgs.sourceSasUrl).toContain('sig=r-sas');
+    expect(batchArgs.sourceSasUrl).toContain('sig=rl-sas');
     expect(batchArgs.targetSasUrl).toContain(`${createdJobId}.pdf`);
-    expect(batchArgs.targetSasUrl).toContain('sig=cw-sas');
+    expect(batchArgs.targetSasUrl).toContain('sig=wl-sas');
     expect(batchArgs.targetLanguage).toBe('fr');
 
     // Job record persisted for the status route, scoped to the user.
