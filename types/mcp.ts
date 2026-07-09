@@ -18,9 +18,10 @@ export const MCP_SERVER_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
  * and must be https; the server additionally gates these behind
  * MCP_CUSTOM_SERVERS_ENABLED and an SSRF guard.
  *
- * `authToken` is the user's personal access token. It lives in the user's
- * localStorage, rides only in request bodies, and is used in-memory
- * server-side — never persisted or logged.
+ * `authToken` is the user's credential (PAT or OAuth access token). It
+ * lives on-device (in-memory + the encrypted credential vault), rides only
+ * in request bodies, and is used in-memory server-side — never persisted or
+ * logged.
  */
 export interface McpServerRequestEntry {
   id: string;
