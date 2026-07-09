@@ -1,5 +1,7 @@
 import { Session } from 'next-auth';
 
+import { runAnthropicMcpToolLoop } from '@/lib/services/mcp/AnthropicMcpToolLoopService';
+import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { MetricsService } from '@/lib/services/observability/MetricsService';
 
@@ -23,7 +25,8 @@ import { estimateCO2Grams } from '@/lib/utils/shared/emissions';
 import { resolveChatRegion } from '@/lib/utils/shared/modelRegion';
 import { UserRegion } from '@/lib/utils/shared/region';
 
-import { Message } from '@/types/chat';
+import { ApprovalResponse, Message } from '@/types/chat';
+import { McpPendingToolCall } from '@/types/mcp';
 import { OpenAIModel, getModelSizeClass } from '@/types/openai';
 import { Citation } from '@/types/rag';
 import { Tone } from '@/types/tone';
@@ -32,6 +35,7 @@ import { ModelSelector, StreamingService, ToneService } from '../shared';
 import { AnthropicFoundryHandler } from './handlers/AnthropicFoundryHandler';
 import { HandlerFactory } from './handlers/HandlerFactory';
 
+import { ResolvedMcpServer } from '@/config/mcpCatalog';
 import { getFallbackModel, isDeploymentNotFoundError } from '@/config/models';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
@@ -66,6 +70,14 @@ export interface StandardChatRequest {
   streamingSpeed?: StreamingSpeedConfig; // Smooth streaming speed configuration
   /** Requested hosting region (cross-region routing); EU users are forced to EU. */
   hostedRegion?: UserRegion;
+  /**
+   * Native MCP tool loop inputs (already catalog-resolved + SSRF-guarded by
+   * StandardChatHandler). Empty/absent = MCP inactive, zero behavior change.
+   */
+  mcpServers?: ResolvedMcpServer[];
+  mcpPendingToolCalls?: McpPendingToolCall[];
+  mcpLoopRound?: number;
+  approvalResponses?: ApprovalResponse[];
 }
 
 /** Region-pinned clients supplied by the container (all optional — see ServiceContainer). */
@@ -272,6 +284,27 @@ export class StandardChatService {
       );
     }
 
+    // Claude + MCP: native Anthropic tool loop (streaming, tools-capable
+    // models only — the same gate the OpenAI-family branch below applies).
+    // Non-stream or non-supportsTools Claude falls through to the plain
+    // Anthropic path with MCP silently ignored.
+    if (
+      HandlerFactory.isAnthropicModel(modelConfig) &&
+      request.mcpServers?.length &&
+      stream &&
+      modelConfig.supportsTools
+    ) {
+      return this.handleAnthropicMcpChat(
+        messagesToSend,
+        modelConfig,
+        enhancedPrompt,
+        temperature,
+        request,
+        clients.anthropicFoundryClient,
+        chatRegion,
+      );
+    }
+
     // Check if this is an Anthropic model (different API)
     if (HandlerFactory.isAnthropicModel(modelConfig)) {
       return this.handleAnthropicChat(
@@ -287,6 +320,65 @@ export class StandardChatService {
         chatRegion,
         request.botId,
       );
+    }
+
+    // Native MCP tool loop — only when the request carries resolved servers,
+    // we're streaming, and the model does tool calling. Everything else
+    // (non-stream, unsupported model like DeepSeek R1) silently ignores MCP
+    // and takes the plain path below. Note: MCP turns deliberately opt out
+    // of the DeploymentNotFound fallback chain (v1 simplification) — a
+    // missing deployment surfaces as an error instead of falling back.
+    if (request.mcpServers?.length && stream && modelConfig.supportsTools) {
+      const handler = HandlerFactory.getHandler(
+        modelConfig,
+        clients.azureOpenAIClient,
+        clients.openAIClient,
+      );
+      const preparedMessages = handler.prepareMessages(
+        messagesToSend,
+        enhancedPrompt,
+        modelConfig,
+      );
+      const mcpEffort = modelConfig.supportsReasoningEffort
+        ? request.reasoningEffort
+        : undefined;
+      console.log(
+        `[StandardChatService] MCP tool loop active (${request.mcpServers.length} servers, round ${request.mcpLoopRound ?? 0}) for ${sanitizeForLog(modelConfig.id)}`,
+      );
+      return runMcpToolLoop({
+        handler,
+        preparedMessages,
+        buildParams: (msgs) =>
+          handler.buildRequestParams(
+            handler.getModelIdForRequest(modelConfig.id, modelConfig),
+            msgs,
+            temperature,
+            request.user,
+            true,
+            modelConfig,
+            request.reasoningEffort,
+            request.verbosity,
+          ) as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
+        servers: request.mcpServers,
+        pendingToolCalls: request.mcpPendingToolCalls,
+        approvalResponses: request.approvalResponses,
+        loopRound: request.mcpLoopRound ?? 0,
+        userId: request.user?.id ?? request.user?.mail ?? 'unknown',
+        citations: request.citations,
+        usage: {
+          modelId: modelConfig.id,
+          region: chatRegion,
+          reasoningEffort: mcpEffort,
+          onUsage: (usage) =>
+            this.recordUsage(
+              usage,
+              modelConfig,
+              request.user,
+              true,
+              request.botId,
+            ),
+        },
+      });
     }
 
     // Select a handler (OpenAI-compatible) and execute. If the model's
@@ -433,6 +525,73 @@ export class StandardChatService {
    * Handles chat requests for Anthropic Claude models.
    * Uses the Anthropic Messages API which has a different structure than OpenAI.
    */
+  /**
+   * Claude + native MCP: mirrors handleAnthropicChat's preamble (client
+   * resolution, handler construction, message prep) and hands off to the
+   * Anthropic tool loop. Kept separate so the plain Anthropic path stays
+   * byte-identical when MCP is inactive.
+   */
+  private async handleAnthropicMcpChat(
+    messages: Message[],
+    modelConfig: OpenAIModel,
+    systemPrompt: string,
+    temperature: number,
+    request: StandardChatRequest,
+    anthropicClient: AnthropicFoundry | undefined,
+    chatRegion: UserRegion | null,
+  ): Promise<Response> {
+    const client = anthropicClient ?? this.anthropicFoundryClient;
+    if (!client) {
+      console.error(
+        '[StandardChatService] Anthropic client not configured. Set AZURE_AI_FOUNDRY_ANTHROPIC_ENDPOINT.',
+      );
+      return new Response(
+        JSON.stringify({
+          error: 'Claude models not configured. Contact administrator.',
+        }),
+        { status: 503, headers: { 'Content-Type': 'application/json' } },
+      );
+    }
+
+    const handler = new AnthropicFoundryHandler(client);
+    const preparedMessages = handler.prepareMessages(messages, modelConfig);
+    console.log(
+      `[StandardChatService] MCP tool loop active (${request.mcpServers?.length ?? 0} servers, round ${request.mcpLoopRound ?? 0}) for Anthropic model ${sanitizeForLog(modelConfig.id)}`,
+    );
+
+    return runAnthropicMcpToolLoop({
+      handler,
+      preparedMessages,
+      buildParams: (msgs) =>
+        handler.buildStreamingRequestParams(
+          modelConfig.id,
+          msgs,
+          systemPrompt,
+          temperature,
+          request.user,
+          modelConfig,
+        ),
+      servers: request.mcpServers ?? [],
+      pendingToolCalls: request.mcpPendingToolCalls,
+      approvalResponses: request.approvalResponses,
+      loopRound: request.mcpLoopRound ?? 0,
+      userId: request.user?.id ?? request.user?.mail ?? 'unknown',
+      citations: request.citations,
+      usage: {
+        modelId: modelConfig.id,
+        region: chatRegion,
+        onUsage: (usage) =>
+          this.recordUsage(
+            usage,
+            modelConfig,
+            request.user,
+            true,
+            request.botId,
+          ),
+      },
+    });
+  }
+
   private async handleAnthropicChat(
     messages: Message[],
     modelConfig: OpenAIModel,
