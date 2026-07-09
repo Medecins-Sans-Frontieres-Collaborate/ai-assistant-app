@@ -29,6 +29,12 @@ function mockFetchRoutes(
 
 const asanaEntry = { id: 'asana', name: 'Asana', catalogKey: 'asana' };
 
+/** The state param the flow generated, captured from startAuthorization. */
+function lastFlowState(): string {
+  const calls = mockStartAuthorization.mock.calls;
+  return calls[calls.length - 1][1].state as string;
+}
+
 const oauthServer = {
   id: 'asana',
   catalogKey: 'asana',
@@ -102,10 +108,7 @@ describe('connectMcpOauth', () => {
     await vi.waitFor(() => {
       expect(openSpy).toHaveBeenCalled();
     });
-    const stashKey = Object.keys(sessionStorage).find((k) =>
-      k.startsWith('mcp-oauth:'),
-    )!;
-    const state = stashKey.slice('mcp-oauth:'.length);
+    const state = lastFlowState();
     new BroadcastChannel('mcp-oauth').postMessage({ state, code: 'code-xyz' });
 
     const result = await promise;
@@ -114,8 +117,12 @@ describe('connectMcpOauth', () => {
     expect(result.refreshToken).toBe('rt-new');
     expect(result.clientId).toBe('dcr-1');
     expect(result.expiresAt).toBeGreaterThan(Date.now());
-    // Verifier stash is cleaned up.
-    expect(sessionStorage.getItem(stashKey)).toBeNull();
+    // NOTHING is stashed in web storage — the verifier/state live only in
+    // the flow's closure (code-scanning: no clear-text storage).
+    expect(Object.keys(sessionStorage)).toEqual([]);
+    expect(
+      Object.keys(localStorage).filter((k) => k.includes('mcp-oauth')),
+    ).toEqual([]);
   });
 
   it('skips registration entirely when the user supplies their OWN app clientId', async () => {
@@ -149,11 +156,10 @@ describe('connectMcpOauth', () => {
 
     const promise = connectMcpOauth(asanaEntry, 'my-own-app', 'my-own-secret');
     await vi.waitFor(() => expect(openSpy).toHaveBeenCalled());
-    const stashKey = Object.keys(sessionStorage).find((k) =>
-      k.startsWith('mcp-oauth:'),
-    )!;
-    const state = stashKey.slice('mcp-oauth:'.length);
-    new BroadcastChannel('mcp-oauth').postMessage({ state, code: 'c' });
+    new BroadcastChannel('mcp-oauth').postMessage({
+      state: lastFlowState(),
+      code: 'c',
+    });
 
     const result = await promise;
 
@@ -187,10 +193,7 @@ describe('connectMcpOauth', () => {
 
     const promise = connectMcpOauth(asanaEntry);
     await vi.waitFor(() => expect(openSpy).toHaveBeenCalled());
-    const stashKey = Object.keys(sessionStorage).find((k) =>
-      k.startsWith('mcp-oauth:'),
-    )!;
-    const state = stashKey.slice('mcp-oauth:'.length);
+    const state = lastFlowState();
 
     const channel = new BroadcastChannel('mcp-oauth');
     // Wrong state: must be ignored…
