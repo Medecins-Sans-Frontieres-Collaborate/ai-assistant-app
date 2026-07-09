@@ -30,6 +30,7 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 import { AzureBlobStorage } from '@/lib/utils/server/blob/blob';
 import { createApiLoggingContext } from '@/lib/utils/server/observability';
+import { sanitizeBlobExtension } from '@/lib/utils/shared/blobPath';
 
 import {
   DocumentTranslationPendingReference,
@@ -166,8 +167,10 @@ export async function POST(request: NextRequest) {
     // (content route, reference format) is shared with the sync path.
     if (requiresAsyncTranslation(document.name)) {
       const jobId = uuidv4();
-      const fileExtension =
-        document.name.split('.').pop()?.toLowerCase() || 'pdf';
+      const fileExtension = sanitizeBlobExtension(
+        document.name.split('.').pop(),
+        'pdf',
+      );
       const translatedFilename =
         customOutputFilename ||
         generateTranslatedFilename(document.name, targetLanguage);
@@ -197,7 +200,10 @@ export async function POST(request: NextRequest) {
       let glossarySasUrl: string | undefined;
       let glossaryFormat: string | undefined;
       if (glossaryBuffer && glossary) {
-        const glossaryExt = glossary.name.split('.').pop()?.toLowerCase();
+        const glossaryExt = sanitizeBlobExtension(
+          glossary.name.split('.').pop(),
+          'csv',
+        );
         const glossaryBlobPath = `${session.user.id}/translations/${jobId}_glossary.${glossaryExt}`;
         await blobStorage.upload(glossaryBlobPath, glossaryBuffer, {});
         glossarySasUrl = await blobStorage.generateContainerScopedSasUrl(
@@ -277,8 +283,10 @@ export async function POST(request: NextRequest) {
 
     // Generate job ID and output filename
     const jobId = uuidv4();
-    const fileExtension =
-      document.name.split('.').pop()?.toLowerCase() || 'txt';
+    const fileExtension = sanitizeBlobExtension(
+      document.name.split('.').pop(),
+      'txt',
+    );
     const translatedFilename =
       customOutputFilename ||
       generateTranslatedFilename(document.name, targetLanguage);
