@@ -2,6 +2,7 @@
 
 import toast from 'react-hot-toast';
 
+import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
 import { generateConversationTitle } from '@/client/services/titleService';
 
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
@@ -760,12 +761,59 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
-    // Approval-resume: the server only uses the approval items; skip the
-    // (otherwise unused) message windowing pass and send just the trailing
-    // entry to satisfy non-empty-array validators downstream.
-    const messagesForAPI = approvalResponses?.length
-      ? flattenEntriesForAPI(conversation.messages).slice(-1)
-      : windowMessagesForAPI(flattenEntriesForAPI(conversation.messages));
+    // Native-MCP approval resume detection: the consent requests persisted on
+    // the trailing assistant message carry a server_id when they came from
+    // the native tool loop (Foundry-agent approvals don't). The two resume
+    // protocols differ: Foundry keeps state server-side (thread), the native
+    // loop is stateless and needs the full transcript + pending calls back.
+    const flatMessages = flattenEntriesForAPI(conversation.messages);
+    const lastFlatMessage = flatMessages[flatMessages.length - 1];
+    const mcpPendingConsents =
+      approvalResponses?.length && lastFlatMessage?.role === 'assistant'
+        ? (lastFlatMessage.consentRequests ?? []).filter(
+            (c) =>
+              c.kind === 'approval' && c.server_id && c.approval_request_id,
+          )
+        : [];
+    const isMcpResume =
+      mcpPendingConsents.length > 0 &&
+      approvalResponses!.some((a) =>
+        mcpPendingConsents.some(
+          (c) => c.approval_request_id === a.approval_request_id,
+        ),
+      );
+
+    // Approval-resume (Foundry): the server only uses the approval items;
+    // skip the (otherwise unused) message windowing pass and send just the
+    // trailing entry to satisfy non-empty-array validators downstream.
+    // Native-MCP resume sends the FULL windowed transcript instead — the
+    // stateless server reconstructs the tool-call round from it.
+    const messagesForAPI =
+      approvalResponses?.length && !isMcpResume
+        ? flatMessages.slice(-1)
+        : windowMessagesForAPI(flatMessages);
+
+    // Echo the whole pending batch back (not just the answered ones): the
+    // server auto-denies unanswered calls, mirroring the Foundry behavior.
+    const mcpPendingToolCalls = isMcpResume
+      ? mcpPendingConsents.map((c) => ({
+          id: c.approval_request_id!,
+          serverId: c.server_id!,
+          toolName: c.tool_name ?? '',
+          argumentsJson: c.tool_arguments ?? '{}',
+        }))
+      : undefined;
+    // Round counter for the server's loop cap. Each consent round appends one
+    // assistant message, so the trailing-assistant run length approximates
+    // the round index (validator clamps at 10 anyway).
+    const mcpLoopRound = isMcpResume
+      ? Math.min(
+          10,
+          flatMessages.length -
+            1 -
+            flatMessages.findLastIndex((m) => m.role !== 'assistant'),
+        )
+      : undefined;
 
     // Get the toneId from the latest user message and look up the full tone object
     const latestUserMessage = messagesForAPI
@@ -799,6 +847,49 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // otherwise a US user on an EU-only model implicitly targets EU (the
     // model has no home-region instance to hit). EU users send nothing —
     // the server forces EU for them regardless.
+    // Native MCP servers for this turn. Skipped for agent invocations (the
+    // Foundry runtime does its own tool orchestration). Curated entries need
+    // a token to be useful; arbitrary entries additionally require BOTH the
+    // user opt-in and the LaunchDarkly flag mirror — flipping the flag off
+    // stops arbitrary servers from being SENT, not just shown.
+    const mcpCandidates = isAgentInvocation
+      ? []
+      : settings.mcpServers
+          .filter((s) => s.enabled)
+          .filter(
+            (s) =>
+              s.catalogKey ||
+              (settings.allowArbitraryMcpServers &&
+                settings.mcpArbitraryFlagEnabled),
+          );
+    // Per-server auth: oauth servers refresh through the proxy first (single-
+    // flight) and are EXCLUDED when no live access token exists (needsReauth);
+    // bearer/header servers need their token; 'none' servers go bare.
+    const mcpServersToSend = (
+      await Promise.all(
+        mcpCandidates.map(async (s) => {
+          let effectiveToken: string | undefined;
+          if (s.authMode === 'oauth') {
+            effectiveToken = await ensureFreshOauthToken(s);
+            if (!effectiveToken) return null;
+          } else if (s.authMode === 'none') {
+            effectiveToken = undefined;
+          } else {
+            if (!s.authToken && s.catalogKey) return null;
+            effectiveToken = s.authToken;
+          }
+          return {
+            id: s.id,
+            name: s.name,
+            // The server resolves curated URLs from the catalog; don't send one.
+            url: s.catalogKey ? undefined : s.url,
+            authToken: effectiveToken,
+            catalogKey: s.catalogKey,
+          };
+        }),
+      )
+    ).filter((s): s is NonNullable<typeof s> => s !== null);
+
     const liveModelEntry = settings.models.find((m) => m.id === modelToSend.id);
     const hostedRegion =
       conversation.hostedRegion ??
@@ -832,6 +923,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
       agentSourcePath: modelToSend.agentSource,
       approvalResponses,
+      mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
+      mcpPendingToolCalls,
+      mcpLoopRound,
     });
   },
 
@@ -1014,6 +1108,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Finalize stream
     const finalContent = streamParser.finalize();
+
+    // Auth-classified MCP tool failures flip the connector to needs-reauth
+    // so the Connectors row shows "Reconnect" without waiting for the next
+    // settings-time validation.
+    for (const record of streamParser.getToolCallRecords?.() ?? []) {
+      if (record.error_kind !== 'auth' || !record.server_id) continue;
+      const settingsState = useSettingsStore.getState();
+      const serverConfig = settingsState.mcpServers.find(
+        (s) => s.id === record.server_id,
+      );
+      if (serverConfig?.authMode === 'oauth' && serverConfig.oauth) {
+        settingsState.updateMcpServer(serverConfig.id, {
+          oauth: {
+            ...serverConfig.oauth,
+            accessToken: undefined,
+            needsReauth: true,
+          },
+        });
+      }
+    }
+
     return {
       finalContent,
       threadId: streamParser.getThreadId(),
