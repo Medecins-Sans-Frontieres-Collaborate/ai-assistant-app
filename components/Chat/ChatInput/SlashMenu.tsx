@@ -1,4 +1,5 @@
 import {
+  IconBraces,
   IconCheck,
   IconCommand,
   IconHelp,
@@ -12,6 +13,7 @@ import { FC, MutableRefObject, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { CommandDefinition, CommandType } from '@/types/commands';
+import { ExtractionRecipe } from '@/types/extractionRecipe';
 import { Prompt } from '@/types/prompt';
 import { SlashMenuItem, SlashMenuItemType } from '@/types/slashMenu';
 import { Tone } from '@/types/tone';
@@ -214,6 +216,65 @@ const PromptItem: FC<PromptItemProps> = ({
   );
 };
 
+interface RecipeItemProps {
+  recipe: ExtractionRecipe;
+  isActive: boolean;
+  onClick: () => void;
+  onMouseEnter: () => void;
+}
+
+const RecipeItem: FC<RecipeItemProps> = ({
+  recipe,
+  isActive,
+  onClick,
+  onMouseEnter,
+}) => {
+  const t = useTranslations();
+
+  return (
+    <li
+      className={`group relative cursor-pointer px-3 py-2.5 text-sm transition-all duration-150 ${
+        isActive
+          ? 'bg-blue-50 dark:bg-blue-900/30 border-l-2 border-blue-500'
+          : 'hover:bg-gray-50 dark:hover:bg-[#2a2a2a] border-l-2 border-transparent'
+      }`}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick();
+      }}
+      onMouseEnter={onMouseEnter}
+    >
+      <div className="flex items-start gap-2">
+        <div className="flex-shrink-0 mt-0.5">
+          <IconBraces size={16} className="text-blue-500" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span
+              className={`font-medium truncate transition-colors ${
+                isActive
+                  ? 'text-blue-700 dark:text-blue-400'
+                  : 'text-black dark:text-white'
+              }`}
+            >
+              {recipe.name}
+            </span>
+            <span className="flex-shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+              {t('extraction.section')}
+            </span>
+          </div>
+          {isActive && recipe.description && (
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 animate-fade-in-fast">
+              {recipe.description}
+            </p>
+          )}
+        </div>
+      </div>
+    </li>
+  );
+};
+
 interface ToneItemProps {
   tone: Tone;
   isActive: boolean;
@@ -319,7 +380,7 @@ export const SlashMenu: FC<Props> = ({
         </>
       )}
 
-      {/* Intermixed prompts and tones, sorted by usage then alphabetically */}
+      {/* Intermixed prompts, tones, and recipes, sorted by usage then alphabetically */}
       {items.map((item, index) => {
         const adjustedIndex = index;
 
@@ -335,10 +396,22 @@ export const SlashMenu: FC<Props> = ({
           );
         }
 
+        if (item.type === SlashMenuItemType.TONE) {
+          return (
+            <ToneItem
+              key={`tone-${item.tone.id}`}
+              tone={item.tone}
+              isActive={adjustedIndex === activeItemIndex}
+              onClick={() => handleItemClick(adjustedIndex)}
+              onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}
+            />
+          );
+        }
+
         return (
-          <ToneItem
-            key={`tone-${item.tone.id}`}
-            tone={item.tone}
+          <RecipeItem
+            key={`recipe-${item.recipe.id}`}
+            recipe={item.recipe}
             isActive={adjustedIndex === activeItemIndex}
             onClick={() => handleItemClick(adjustedIndex)}
             onMouseEnter={() => handleItemMouseEnter(adjustedIndex)}

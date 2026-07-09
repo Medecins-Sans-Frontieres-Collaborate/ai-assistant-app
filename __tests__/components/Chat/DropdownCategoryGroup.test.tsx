@@ -9,8 +9,12 @@ import { describe, expect, it, vi } from 'vitest';
 
 // Mock DropdownMenuItem to isolate testing
 vi.mock('@/components/Chat/ChatInput/DropdownMenuItem', () => ({
-  DropdownMenuItem: ({ item, isSelected }: any) => (
-    <div data-testid={`menu-item-${item.id}`} data-selected={isSelected}>
+  DropdownMenuItem: ({ item, isSelected, pinned }: any) => (
+    <div
+      data-testid={`menu-item-${item.id}`}
+      data-selected={isSelected}
+      data-pinned={pinned}
+    >
       {item.label}
     </div>
   ),
@@ -33,6 +37,22 @@ describe('DropdownCategoryGroup', () => {
     category,
   });
 
+  const renderGroup = (
+    props: Partial<React.ComponentProps<typeof DropdownCategoryGroup>> & {
+      label: string;
+      items: MenuItem[];
+      flattenedItems: MenuItem[];
+      selectedIndex: number;
+    },
+  ) =>
+    render(
+      <DropdownCategoryGroup
+        pinnedToolIds={[]}
+        onTogglePin={vi.fn()}
+        {...props}
+      />,
+    );
+
   describe('Rendering', () => {
     it('renders all items in category', () => {
       const items = [
@@ -41,32 +61,42 @@ describe('DropdownCategoryGroup', () => {
         createMenuItem('item3', 'Item 3'),
       ];
 
-      render(
-        <DropdownCategoryGroup
-          category="media"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
+      renderGroup({
+        label: 'Media & files',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
 
       expect(screen.getByTestId('menu-item-item1')).toBeInTheDocument();
       expect(screen.getByTestId('menu-item-item2')).toBeInTheDocument();
       expect(screen.getByTestId('menu-item-item3')).toBeInTheDocument();
     });
 
-    it('renders empty category with no items', () => {
-      const { container } = render(
-        <DropdownCategoryGroup
-          category="transform"
-          items={[]}
-          flattenedItems={[]}
-          selectedIndex={0}
-        />,
-      );
+    it('renders the section header label', () => {
+      const items = [createMenuItem('item1', 'Item 1')];
+      renderGroup({
+        label: 'Frequently used',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
+
+      expect(
+        screen.getByRole('heading', { name: 'Frequently used' }),
+      ).toBeInTheDocument();
+    });
+
+    it('renders nothing for an empty group', () => {
+      const { container } = renderGroup({
+        label: 'Transform',
+        items: [],
+        flattenedItems: [],
+        selectedIndex: 0,
+      });
 
       expect(screen.queryByTestId(/menu-item-/)).not.toBeInTheDocument();
-      expect(container.firstChild).toBeInTheDocument(); // Container still exists
+      expect(container.firstChild).toBeNull();
     });
   });
 
@@ -77,20 +107,21 @@ describe('DropdownCategoryGroup', () => {
         createMenuItem('item2', 'Item 2'),
       ];
 
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
+
+      expect(screen.getByTestId('menu-item-item1')).toHaveAttribute(
+        'data-selected',
+        'true',
       );
-
-      const item1 = screen.getByTestId('menu-item-item1');
-      const item2 = screen.getByTestId('menu-item-item2');
-
-      expect(item1).toHaveAttribute('data-selected', 'true');
-      expect(item2).toHaveAttribute('data-selected', 'false');
+      expect(screen.getByTestId('menu-item-item2')).toHaveAttribute(
+        'data-selected',
+        'false',
+      );
     });
 
     it('marks correct item as selected based on flattenedItems index', () => {
@@ -99,158 +130,112 @@ describe('DropdownCategoryGroup', () => {
         createMenuItem('item2', 'Item 2'),
       ];
 
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={1}
-        />,
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 1,
+      });
+
+      expect(screen.getByTestId('menu-item-item1')).toHaveAttribute(
+        'data-selected',
+        'false',
       );
-
-      const item1 = screen.getByTestId('menu-item-item1');
-      const item2 = screen.getByTestId('menu-item-item2');
-
-      expect(item1).toHaveAttribute('data-selected', 'false');
-      expect(item2).toHaveAttribute('data-selected', 'true');
+      expect(screen.getByTestId('menu-item-item2')).toHaveAttribute(
+        'data-selected',
+        'true',
+      );
     });
 
     it('handles selection across multiple categories', () => {
-      // Simulate scenario where flattenedItems includes items from other categories
       const categoryItems = [createMenuItem('media1', 'Media Item')];
       const allItems = [
         createMenuItem('web1', 'Web Item'),
         createMenuItem('web2', 'Web Item 2'),
-        createMenuItem('media1', 'Media Item'), // This category
+        createMenuItem('media1', 'Media Item'), // index 2 in flattened
       ];
 
-      render(
-        <DropdownCategoryGroup
-          category="media"
-          items={categoryItems}
-          flattenedItems={allItems}
-          selectedIndex={2} // Points to media1 in flattened list
-        />,
-      );
+      renderGroup({
+        label: 'Media & files',
+        items: categoryItems,
+        flattenedItems: allItems,
+        selectedIndex: 2,
+      });
 
-      const mediaItem = screen.getByTestId('menu-item-media1');
-      expect(mediaItem).toHaveAttribute('data-selected', 'true');
+      expect(screen.getByTestId('menu-item-media1')).toHaveAttribute(
+        'data-selected',
+        'true',
+      );
     });
 
     it('handles no selection when selectedIndex is out of bounds', () => {
       const items = [createMenuItem('item1', 'Item 1')];
 
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={10}
-        />,
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 10,
+      });
+
+      expect(screen.getByTestId('menu-item-item1')).toHaveAttribute(
+        'data-selected',
+        'false',
       );
-
-      const item1 = screen.getByTestId('menu-item-item1');
-      expect(item1).toHaveAttribute('data-selected', 'false');
-    });
-  });
-
-  describe('Styling', () => {
-    it('has correct container classes', () => {
-      const items = [createMenuItem('item1', 'Item 1')];
-      const { container } = render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
-
-      const groupContainer = container.firstChild as HTMLElement;
-      expect(groupContainer).toHaveClass('px-1');
-      expect(groupContainer).toHaveClass('-my-0.5');
     });
   });
 
   describe('Accessibility', () => {
     it('has group role', () => {
       const items = [createMenuItem('item1', 'Item 1')];
-      const { container } = render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
+      const { container } = renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
 
       const group = container.firstChild as HTMLElement;
       expect(group).toHaveAttribute('role', 'group');
     });
 
-    it('has aria-label matching category', () => {
+    it('has aria-label matching the section label', () => {
       const items = [createMenuItem('item1', 'Item 1')];
-      const { container } = render(
-        <DropdownCategoryGroup
-          category="media"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
+      const { container } = renderGroup({
+        label: 'Media & files',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
 
       const group = container.firstChild as HTMLElement;
-      expect(group).toHaveAttribute('aria-label', 'media');
+      expect(group).toHaveAttribute('aria-label', 'Media & files');
     });
   });
 
-  describe('Different Categories', () => {
-    it('handles web category', () => {
-      const items = [createMenuItem('search', 'Web Search', 'web')];
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
-
-      expect(screen.getByText('Web Search')).toBeInTheDocument();
-    });
-
-    it('handles media category', () => {
+  describe('Pinning', () => {
+    it('marks items that are in pinnedToolIds as pinned', () => {
       const items = [
-        createMenuItem('image', 'Upload Image', 'media'),
-        createMenuItem('file', 'Upload File', 'media'),
+        createMenuItem('item1', 'Item 1'),
+        createMenuItem('item2', 'Item 2'),
       ];
-      render(
-        <DropdownCategoryGroup
-          category="media"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
+
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+        pinnedToolIds: ['item2'],
+      });
+
+      expect(screen.getByTestId('menu-item-item1')).toHaveAttribute(
+        'data-pinned',
+        'false',
       );
-
-      expect(screen.getByText('Upload Image')).toBeInTheDocument();
-      expect(screen.getByText('Upload File')).toBeInTheDocument();
-    });
-
-    it('handles transform category', () => {
-      const items = [
-        createMenuItem('translate', 'Translate Text', 'transform'),
-      ];
-      render(
-        <DropdownCategoryGroup
-          category="transform"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
+      expect(screen.getByTestId('menu-item-item2')).toHaveAttribute(
+        'data-pinned',
+        'true',
       );
-
-      expect(screen.getByText('Translate Text')).toBeInTheDocument();
     });
   });
 
@@ -262,14 +247,12 @@ describe('DropdownCategoryGroup', () => {
         createMenuItem('item3', 'Third'),
       ];
 
-      const { container } = render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
+      const { container } = renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
 
       const renderedItems = container.querySelectorAll(
         '[data-testid^="menu-item-"]',
@@ -293,14 +276,12 @@ describe('DropdownCategoryGroup', () => {
   describe('Edge Cases', () => {
     it('handles single item category', () => {
       const items = [createMenuItem('only', 'Only Item')];
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={0}
-        />,
-      );
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 0,
+      });
 
       expect(screen.getByTestId('menu-item-only')).toBeInTheDocument();
     });
@@ -310,31 +291,29 @@ describe('DropdownCategoryGroup', () => {
         createMenuItem(`item${i}`, `Item ${i}`),
       );
 
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={25}
-        />,
-      );
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: 25,
+      });
 
       expect(screen.getAllByTestId(/menu-item-/)).toHaveLength(50);
     });
 
     it('handles negative selectedIndex', () => {
       const items = [createMenuItem('item1', 'Item 1')];
-      render(
-        <DropdownCategoryGroup
-          category="web"
-          items={items}
-          flattenedItems={items}
-          selectedIndex={-1}
-        />,
-      );
+      renderGroup({
+        label: 'Web',
+        items,
+        flattenedItems: items,
+        selectedIndex: -1,
+      });
 
-      const item1 = screen.getByTestId('menu-item-item1');
-      expect(item1).toHaveAttribute('data-selected', 'false');
+      expect(screen.getByTestId('menu-item-item1')).toHaveAttribute(
+        'data-selected',
+        'false',
+      );
     });
   });
 });

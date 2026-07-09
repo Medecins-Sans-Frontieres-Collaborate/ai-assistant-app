@@ -61,6 +61,7 @@ import { UserMenu } from './UserMenu';
 import { VirtualConversationList } from './VirtualConversationList';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -99,7 +100,13 @@ export const Sidebar = memo(function Sidebar() {
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [isCustomizationsOpen, setIsCustomizationsOpen] = useState(false);
+  // Quick Actions modal state lives in uiStore so other surfaces (e.g. the
+  // extraction recipe picker) can open it on a specific tab.
+  const isCustomizationsOpen = useUIStore((s) => s.isCustomizationsOpen);
+  const setIsCustomizationsOpen = useUIStore((s) => s.setIsCustomizationsOpen);
+  const setCustomizationsInitialTab = useUIStore(
+    (s) => s.setCustomizationsInitialTab,
+  );
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
   const [isLoadingPhoto, setIsLoadingPhoto] = useState(true);
   const [showNewChatMenu, setShowNewChatMenu] = useState(false);
@@ -588,7 +595,10 @@ export const Sidebar = memo(function Sidebar() {
           {/* Quick Actions button - visible in both states */}
           <button
             className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
-            onClick={() => setIsCustomizationsOpen(true)}
+            onClick={() => {
+              setCustomizationsInitialTab('prompts');
+              setIsCustomizationsOpen(true);
+            }}
             title={t('sidebar.quickActionsTitle')}
             aria-label={t('sidebar.quickActions')}
           >

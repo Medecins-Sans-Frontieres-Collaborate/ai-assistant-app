@@ -157,6 +157,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       mcpServers,
       mcpPendingToolCalls,
       mcpLoopRound,
+      extraction,
     } = body;
 
     if (mcpServers?.length) {
@@ -209,6 +210,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       forcedAgentType,
       tone,
       streamingSpeed,
+      // Structured extraction payload (optional). Up to 3 recipes; the
+      // ExtractionEnricher composes the JSON-schema response format.
+      extraction,
     };
   } catch (error) {
     if (error instanceof PipelineError) {

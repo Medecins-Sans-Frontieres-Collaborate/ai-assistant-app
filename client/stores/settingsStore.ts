@@ -3,6 +3,7 @@
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { UserRegion } from '@/lib/utils/shared/region';
 
+import { ExtractionRecipe } from '@/types/extractionRecipe';
 import {
   DEFAULT_MODEL_ORDER,
   ModelListSource,
@@ -204,6 +205,8 @@ interface SettingsStore {
    * selectability without hook access. Runtime-only, not persisted.
    */
   userRegion: UserRegion | null;
+  /** User-defined structured-data extraction recipes (Connectors → Recipes). */
+  extractionRecipes: ExtractionRecipe[];
   streamingSpeed: StreamingSpeedConfig;
 
   /** Whether to include user info (name, title, email, dept) in system prompt */
@@ -226,6 +229,10 @@ interface SettingsStore {
 
   // Slash menu usage tracking
   slashMenuUsageCounts: Record<string, number>;
+
+  // Chat input "+" dropdown tool personalization
+  pinnedToolIds: string[];
+  toolUsageCounts: Record<string, number>;
 
   // Text-to-Speech settings
   ttsSettings: TTSSettings;
@@ -276,6 +283,15 @@ interface SettingsStore {
   setAllowArbitraryMcpServers: (enabled: boolean) => void;
   setMcpArbitraryFlagEnabled: (enabled: boolean) => void;
 
+  // Extraction Recipe Actions
+  setExtractionRecipes: (recipes: ExtractionRecipe[]) => void;
+  addExtractionRecipe: (recipe: ExtractionRecipe) => void;
+  updateExtractionRecipe: (
+    id: string,
+    updates: Partial<ExtractionRecipe>,
+  ) => void;
+  deleteExtractionRecipe: (id: string) => void;
+
   // Hidden Model/Agent Actions
   hideModel: (id: string) => void;
   unhideModel: (id: string) => void;
@@ -315,6 +331,10 @@ interface SettingsStore {
 
   // Slash Menu Usage Actions
   incrementSlashMenuUsage: (itemId: string) => void;
+
+  // Chat input "+" dropdown tool actions
+  togglePinnedTool: (toolId: string) => void;
+  incrementToolUsage: (toolId: string) => void;
 
   // Active Files Settings
   autoPinActiveFiles: boolean;
@@ -375,6 +395,7 @@ export const useSettingsStore = create<SettingsStore>()(
       tokenUsageFirstTrackedAt: null,
       modelListSource: null,
       userRegion: null,
+      extractionRecipes: [],
       streamingSpeed: DEFAULT_STREAMING_SPEED,
       includeUserInfoInPrompt: false, // Default off for privacy
       preferredName: '',
@@ -388,6 +409,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Slash menu usage tracking
       slashMenuUsageCounts: {},
+
+      // Chat input "+" dropdown tool personalization
+      pinnedToolIds: [],
+      toolUsageCounts: {},
 
       // Organization preference (null = auto-detect from email)
       organizationPreference: null,
@@ -594,6 +619,26 @@ export const useSettingsStore = create<SettingsStore>()(
       resetTokenUsageStats: () =>
         set({ tokenUsageStats: {}, tokenUsageFirstTrackedAt: null }),
 
+      // Extraction Recipe Actions
+      setExtractionRecipes: (recipes) => set({ extractionRecipes: recipes }),
+
+      addExtractionRecipe: (recipe) =>
+        set((state) => ({
+          extractionRecipes: [...state.extractionRecipes, recipe],
+        })),
+
+      updateExtractionRecipe: (id, updates) =>
+        set((state) => ({
+          extractionRecipes: state.extractionRecipes.map((r) =>
+            r.id === id ? { ...r, ...updates } : r,
+          ),
+        })),
+
+      deleteExtractionRecipe: (id) =>
+        set((state) => ({
+          extractionRecipes: state.extractionRecipes.filter((r) => r.id !== id),
+        })),
+
       // Model Ordering Actions
       setModelOrderMode: (mode) => set({ modelOrderMode: mode }),
 
@@ -712,6 +757,21 @@ export const useSettingsStore = create<SettingsStore>()(
           },
         })),
 
+      // Chat input "+" dropdown tool actions
+      togglePinnedTool: (toolId) =>
+        set((state) => ({
+          pinnedToolIds: state.pinnedToolIds.includes(toolId)
+            ? state.pinnedToolIds.filter((id) => id !== toolId)
+            : [...state.pinnedToolIds, toolId],
+        })),
+      incrementToolUsage: (toolId) =>
+        set((state) => ({
+          toolUsageCounts: {
+            ...state.toolUsageCounts,
+            [toolId]: (state.toolUsageCounts[toolId] ?? 0) + 1,
+          },
+        })),
+
       // Active Files Actions
       setAutoPinActiveFiles: (enabled) => set({ autoPinActiveFiles: enabled }),
       setAutoInjectPinnedImages: (enabled) =>
@@ -741,6 +801,7 @@ export const useSettingsStore = create<SettingsStore>()(
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
+          extractionRecipes: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
           preferredName: '',
@@ -754,6 +815,8 @@ export const useSettingsStore = create<SettingsStore>()(
           reasoningEffort: undefined,
           verbosity: undefined,
           slashMenuUsageCounts: {},
+          pinnedToolIds: [],
+          toolUsageCounts: {},
           autoPinActiveFiles: true,
           autoInjectPinnedImages: true,
           confirmStopFromButton: true,
@@ -762,7 +825,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 23, // Increment this when schema changes to trigger migrations
+      version: 24, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -805,6 +868,7 @@ export const useSettingsStore = create<SettingsStore>()(
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
+        extractionRecipes: state.extractionRecipes,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
         preferredName: state.preferredName,
@@ -818,6 +882,8 @@ export const useSettingsStore = create<SettingsStore>()(
         reasoningEffort: state.reasoningEffort,
         verbosity: state.verbosity,
         slashMenuUsageCounts: state.slashMenuUsageCounts,
+        pinnedToolIds: state.pinnedToolIds,
+        toolUsageCounts: state.toolUsageCounts,
         autoPinActiveFiles: state.autoPinActiveFiles,
         autoInjectPinnedImages: state.autoInjectPinnedImages,
         confirmStopFromButton: state.confirmStopFromButton,
@@ -1014,6 +1080,26 @@ export const useSettingsStore = create<SettingsStore>()(
           });
         }
 
+        // Version 23 → 24: Merge in structured-data-extraction (extractionRecipes)
+        // and chat-input tool personalization (pinnedToolIds/toolUsageCounts).
+        // Backfill all three so downstream `.map`/`.includes` never operate on
+        // undefined for stores created before the feature branch merged.
+        if (version < 24) {
+          if (!Array.isArray(state.extractionRecipes)) {
+            state.extractionRecipes = [];
+          }
+          if (!Array.isArray(state.pinnedToolIds)) {
+            state.pinnedToolIds = [];
+          }
+          if (
+            state.toolUsageCounts === undefined ||
+            state.toolUsageCounts === null ||
+            typeof state.toolUsageCounts !== 'object'
+          ) {
+            state.toolUsageCounts = {};
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1076,6 +1162,12 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.tokenUsageStats !== 'object'
           ) {
             state.tokenUsageStats = {};
+          }
+
+          // Defensive: extractionRecipes must always be an array (same
+          // rationale as mcpServers) so recipe `.map`/`.filter` never throw.
+          if (!Array.isArray(state.extractionRecipes)) {
+            state.extractionRecipes = [];
           }
         }
       },

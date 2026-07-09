@@ -1,5 +1,6 @@
 import { TranscriptMetadata } from '@/lib/utils/app/metadata';
 
+import { ExtractionRequest } from './extractionRecipe';
 import { OpenAIModel } from './openai';
 import { Citation } from './rag';
 import { DisplayNamePreference, StreamingSpeedConfig } from './settings';
@@ -61,6 +62,48 @@ export interface ThinkingContent {
   thinking: string;
 }
 
+/**
+ * Result of a structured-data-extraction turn (server-emitted only).
+ *
+ * `datasets` is the parsed JSON output of the strict json_schema call,
+ * one entry per recipe in request-time order. `rows` is the array
+ * returned by the model for that recipe; `fields` mirrors the recipe's
+ * field list so the table renderer can lay out columns without round-
+ * tripping to the client store.
+ *
+ * `proposedSchema` is set only in auto mode — the model invented a
+ * structure for the material and the renderer offers "Save as recipe".
+ */
+export interface ExtractionDataset {
+  recipeId: string;
+  recipeName: string;
+  fields: Array<{
+    name: string;
+    label?: string;
+    type: string;
+    required?: boolean;
+  }>;
+  rows: Array<Record<string, unknown>>;
+  /** Auto-mode only: structure the model proposed. */
+  proposedSchema?: {
+    instructions?: string;
+    fields: Array<{
+      name: string;
+      label?: string;
+      type: string;
+      required?: boolean;
+      description?: string;
+    }>;
+  };
+}
+
+export interface ExtractionResultContent {
+  type: 'extraction_result';
+  datasets: ExtractionDataset[];
+  /** Optional model-emitted note about the extraction (caveats, gaps). */
+  note?: string;
+}
+
 export interface Message extends MessageToolArtifacts {
   /** Stable id for referencing messages (optional until migration runs) */
   id?: string;
@@ -70,7 +113,8 @@ export interface Message extends MessageToolArtifacts {
     | Array<TextMessageContent | FileMessageContent>
     | Array<TextMessageContent | ImageMessageContent>
     | Array<TextMessageContent | FileMessageContent | ImageMessageContent> // Support mixed content (images + files + text)
-    | TextMessageContent;
+    | TextMessageContent
+    | ExtractionResultContent;
   messageType: MessageType | ChatInputSubmitTypes | undefined;
   citations?: Citation[];
   thinking?: string;
@@ -164,7 +208,8 @@ export interface AssistantMessageVersion extends MessageToolArtifacts {
     | Array<TextMessageContent | FileMessageContent>
     | Array<TextMessageContent | ImageMessageContent>
     | Array<TextMessageContent | FileMessageContent | ImageMessageContent>
-    | TextMessageContent;
+    | TextMessageContent
+    | ExtractionResultContent;
   messageType: MessageType | ChatInputSubmitTypes | undefined;
   citations?: Citation[];
   thinking?: string;
@@ -285,6 +330,12 @@ export interface ChatBody {
   mcpPendingToolCalls?: import('./mcp').McpPendingToolCall[];
   /** 0-based MCP tool-loop round counter; the server caps it (see loop). */
   mcpLoopRound?: number;
+  /**
+   * Structured data extraction payload. Up to 3 recipes; the chat pipeline
+   * picks this up via `ExtractionEnricher` and issues a strict JSON-schema
+   * call (`StandardChatHandler` honours `context.responseFormat`).
+   */
+  extraction?: ExtractionRequest;
 }
 
 /**

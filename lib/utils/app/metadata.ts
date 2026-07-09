@@ -1,3 +1,4 @@
+import { ExtractionResultContent } from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 /**
@@ -71,6 +72,12 @@ export interface StreamMetadata {
    * which pinned/active files are not visible to the model right now.
    */
   activeFilesDropped?: string[];
+  /**
+   * Structured-data extraction result. When present, the chat surface
+   * replaces the assistant message's `content` with this payload and
+   * renders it as a download card instead of a text body.
+   */
+  extractionResult?: ExtractionResultContent;
 }
 
 /**
@@ -88,6 +95,7 @@ export interface ParsedMetadata {
   activeFilesTokensConsumed?: number;
   activeFilesDropped?: string[];
   usage?: TokenUsageMetadata;
+  extractionResult?: ExtractionResultContent;
   extractionMethod: 'metadata' | 'none';
   /**
    * Character index in the input string where the terminal
@@ -117,6 +125,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   let activeFilesTokensConsumed: number | undefined;
   let activeFilesDropped: string[] | undefined;
   let usage: TokenUsageMetadata | undefined;
+  let extractionResult: ExtractionResultContent | undefined;
   let extractionMethod: ParsedMetadata['extractionMethod'] = 'none';
   let metadataStartIndex: number | null = null;
 
@@ -127,12 +136,14 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
   // usage/citations block, then StandardChatHandler's file_cache_update
   // block). Parse and strip ALL of them, merging per-field with later
   // blocks winning; only the first block's index caps the inline-event scan.
-  const blockRegex = /\n\n<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/gs;
+  // The `\n\n` prefix is optional: regular streamed responses carry it, but
+  // extraction turns emit the block as the ENTIRE response (no prefix).
+  const blockRegex = /(?:\n\n)?<<<METADATA_START>>>(.*?)<<<METADATA_END>>>/gs;
   const matches = metaIdx === -1 ? [] : [...content.matchAll(blockRegex)];
   if (matches.length > 0) {
     extractionMethod = 'metadata';
-    // Record the start index of the leading `\n\n` so the scanner caps
-    // its inline-event search before the first metadata block.
+    // Record the start index (of the leading `\n\n` when present) so the
+    // scanner caps its inline-event search before the first metadata block.
     metadataStartIndex = matches[0].index ?? metaIdx;
     mainContent = content.replace(blockRegex, '');
 
@@ -171,6 +182,18 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
         if (parsedData.usage) {
           usage = parsedData.usage;
         }
+        const anyData = parsedData as unknown as {
+          extractionResult?: unknown;
+        };
+        if (
+          anyData.extractionResult &&
+          typeof anyData.extractionResult === 'object' &&
+          (anyData.extractionResult as { type?: string }).type ===
+            'extraction_result'
+        ) {
+          extractionResult =
+            anyData.extractionResult as ExtractionResultContent;
+        }
       } catch (error) {
         console.error('Error parsing metadata JSON:', error);
       }
@@ -193,6 +216,7 @@ export function parseMetadataFromContent(content: string): ParsedMetadata {
     activeFilesTokensConsumed,
     activeFilesDropped,
     usage,
+    extractionResult,
     extractionMethod,
     metadataStartIndex,
   };

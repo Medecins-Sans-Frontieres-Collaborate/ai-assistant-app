@@ -9,6 +9,7 @@ import {
   FileMessageContent,
   Message,
 } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import { McpPendingToolCall, McpServerRequestEntry } from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
@@ -173,6 +174,8 @@ export class ChatService {
       mcpServers?: McpServerRequestEntry[];
       mcpPendingToolCalls?: McpPendingToolCall[];
       mcpLoopRound?: number;
+      /** Structured-data extraction payload (see types/extractionRecipe.ts). */
+      extraction?: ExtractionRequest;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -206,6 +209,7 @@ export class ChatService {
       mcpServers: options?.mcpServers,
       mcpPendingToolCalls: options?.mcpPendingToolCalls,
       mcpLoopRound: options?.mcpLoopRound,
+      extraction: options?.extraction,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);

@@ -28,6 +28,7 @@ import {
   MessageType,
   ToolCallRecord,
 } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -37,6 +38,7 @@ import {
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
 
+import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
 import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
@@ -843,10 +845,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const effectiveSearchMode =
       isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
 
-    // Cross-region routing: the conversation's explicit choice wins;
-    // otherwise a US user on an EU-only model implicitly targets EU (the
-    // model has no home-region instance to hit). EU users send nothing —
-    // the server forces EU for them regardless.
     // Native MCP servers for this turn. Skipped for agent invocations (the
     // Foundry runtime does its own tool orchestration). Curated entries need
     // a token to be useful; arbitrary entries additionally require BOTH the
@@ -890,6 +888,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       )
     ).filter((s): s is NonNullable<typeof s> => s !== null);
 
+    // Resolve extraction payload from the chat-input store + the persisted
+    // recipes. Extraction mode is ephemeral (per-conversation) and recipes
+    // travel inline because the server has no recipe store.
+    const inputState = useChatInputStore.getState();
+    let extraction: ExtractionRequest | undefined;
+    if (inputState.extractionMode) {
+      const selectedRecipes = settings.extractionRecipes.filter((r) =>
+        inputState.extractionRecipeIds.includes(r.id),
+      );
+      if (selectedRecipes.length > 0) {
+        extraction = {
+          recipeIds: selectedRecipes.map((r) => r.id),
+          recipes: selectedRecipes,
+        };
+      } else {
+        extraction = {
+          recipeIds: [],
+          recipes: [],
+          autoMode: true,
+        };
+      }
+    }
+
+    // Cross-region routing: the conversation's explicit choice wins;
+    // otherwise a US user on an EU-only model implicitly targets EU (the
+    // model has no home-region instance to hit). EU users send nothing —
+    // the server forces EU for them regardless.
     const liveModelEntry = settings.models.find((m) => m.id === modelToSend.id);
     const hostedRegion =
       conversation.hostedRegion ??
@@ -926,6 +951,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
       mcpPendingToolCalls,
       mcpLoopRound,
+      extraction,
     });
   },
 
