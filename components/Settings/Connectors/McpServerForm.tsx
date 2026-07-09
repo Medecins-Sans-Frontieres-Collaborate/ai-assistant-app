@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 
 import { connectMcpOauth } from '@/client/services/mcp/mcpOauth';
 
+import { OwnOauthAppFields } from './OwnOauthAppFields';
 import { validateMcpServer } from './validateMcpServer';
 
 import { McpAuthMode, McpServerConfig } from '@/client/stores/settingsStore';
@@ -44,6 +45,12 @@ export const McpServerForm: FC<McpServerFormProps> = ({
         : 'none',
   );
   const [token, setToken] = useState('');
+  // Optional user-supplied OAuth app (oauth mode). Blank = try dynamic
+  // client registration against the server's published metadata.
+  const [ownClientId, setOwnClientId] = useState(
+    existingServer?.oauthApp?.clientId ?? '',
+  );
+  const [ownClientSecret, setOwnClientSecret] = useState('');
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string;
     url?: string;
@@ -89,11 +96,21 @@ export const McpServerForm: FC<McpServerFormProps> = ({
     // through the same env-gated, SSRF-guarded proxy as catalog servers),
     // then validate with the fresh access token.
     if (authMode === 'oauth') {
+      // Own-app precedence mirrors CuratedConnectorRow: entered app →
+      // saved app → prior client → fresh DCR.
+      const ownApp = ownClientId.trim()
+        ? {
+            clientId: ownClientId.trim(),
+            ...(ownClientSecret.trim()
+              ? { clientSecret: ownClientSecret.trim() }
+              : {}),
+          }
+        : existingServer?.oauthApp;
       try {
         const oauth = await connectMcpOauth(
           { id: serverId, name: base.name, url: base.url },
-          existingServer?.oauth?.clientId,
-          existingServer?.oauth?.clientSecret,
+          ownApp?.clientId ?? existingServer?.oauth?.clientId,
+          ownApp?.clientSecret ?? existingServer?.oauth?.clientSecret,
         );
         const result = await validateMcpServer({
           id: serverId,
@@ -107,7 +124,7 @@ export const McpServerForm: FC<McpServerFormProps> = ({
           return;
         }
         setToolCount(result.toolCount);
-        onSave({ ...base, authMode: 'oauth', oauth });
+        onSave({ ...base, authMode: 'oauth', oauth, oauthApp: ownApp });
       } catch (flowError) {
         setIsValidating(false);
         const kind =
@@ -281,9 +298,18 @@ export const McpServerForm: FC<McpServerFormProps> = ({
             </div>
           )}
           {authMode === 'oauth' && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {t('oauthCustomHint')}
-            </p>
+            <>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {t('oauthCustomHint')} {t('ownAppCustomHint')}
+              </p>
+              <OwnOauthAppFields
+                providerName={name.trim() || t('serverName')}
+                clientId={ownClientId}
+                clientSecret={ownClientSecret}
+                onClientIdChange={setOwnClientId}
+                onClientSecretChange={setOwnClientSecret}
+              />
+            </>
           )}
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {t('localOnlyNote')}
