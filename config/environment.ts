@@ -117,6 +117,23 @@ const serverEnvSchema = z.object({
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
   ALLOW_INDEX_DOWNTIME: booleanString(false),
 
+  // MCP (Model Context Protocol) connectors
+  // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
+  // depth behind the client-side toggle + LaunchDarkly flag. Curated catalog
+  // entries (config/mcpCatalog.ts) are not affected by this flag.
+  MCP_CUSTOM_SERVERS_ENABLED: booleanString(false),
+  // Pre-registered OAuth apps for curated MCP connectors. Needed because the
+  // providers don't support web-app dynamic client registration: GitHub has
+  // no DCR at all, and Asana's DCR only allows loopback redirect URIs (so it
+  // works for localhost dev but never for a deployed origin). Register an app
+  // in the provider's console with redirect URI
+  // `${NEXTAUTH_URL}/mcp-oauth-callback`, then set these. The client SECRET
+  // never leaves the server — the token proxy injects it.
+  MCP_OAUTH_GITHUB_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
+  MCP_OAUTH_ASANA_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_ASANA_CLIENT_SECRET: z.string().optional(),
+
   // Application Configuration
   DEFAULT_MODEL: z.string().default('gpt-5.2-chat'),
   DEFAULT_USE_KNOWLEDGE_BASE: booleanString(false),
