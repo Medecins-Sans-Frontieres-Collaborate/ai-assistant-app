@@ -61,7 +61,9 @@ export type McpAuthMode = 'none' | 'bearer' | 'header' | 'oauth';
 
 /**
  * Everything OAuth-connected MCP servers need for silent refresh across
- * sessions. localStorage-only (like PATs), excluded from exportData(),
+ * sessions. Held in memory + the ENCRYPTED credential vault (see
+ * client/services/mcp/credentialVault.ts) — the persisted settings blob is
+ * secret-redacted. Excluded from exportData(),
  * wiped by resetSettings. Discovery endpoints are deliberately NOT stored:
  * the server re-derives them from RFC 9728/8414 discovery on every proxy
  * call, so nothing here could redirect a credential.
@@ -97,10 +99,12 @@ export interface McpServerConfig {
   /** How this server authenticates (mirrors the catalog for curated entries). */
   authMode: McpAuthMode;
   /**
-   * Personal access token (bearer/header modes). localStorage only (like all
-   * user data in this privacy-first app), sent in request bodies, never
-   * persisted server-side. XSS caveat: anything in localStorage is readable
-   * by injected scripts — the UI steers users toward fine-grained,
+   * Personal access token (bearer/header modes). On-device only: held in
+   * memory for the session and at rest in the ENCRYPTED credential vault
+   * (client/services/mcp/credentialVault.ts) — partialize redacts it from
+   * the persisted localStorage blob. Sent in request bodies, never persisted
+   * server-side. XSS caveat: same-origin script injection can still read the
+   * in-memory value — the UI steers users toward fine-grained,
    * minimally-scoped tokens. Deliberately excluded from exportData()
    * (see importExport.ts).
    */
@@ -114,7 +118,8 @@ export interface McpServerConfig {
    * `{origin}/mcp-oauth-callback` and pastes its credentials here. Takes
    * precedence over dynamic client registration and the deployment-wide
    * MCP_OAUTH_* apps. The secret is the user's own and follows the same
-   * localStorage-only / body-relay / never-server-persisted posture as PATs.
+   * on-device (memory + encrypted vault) / body-relay / never-server-
+   * persisted posture as PATs.
    */
   oauthApp?: { clientId: string; clientSecret?: string };
   /** Off = keep the config (and token) but stop offering its tools in chat. */
@@ -773,7 +778,28 @@ export const useSettingsStore = create<SettingsStore>()(
         customAgentSources: state.customAgentSources,
         // NOTE: mcpArbitraryFlagEnabled is deliberately NOT persisted — it
         // mirrors a LaunchDarkly flag and must re-derive each session.
-        mcpServers: state.mcpServers,
+        //
+        // SECRETS ARE REDACTED from the persisted blob: localStorage holds
+        // NO MCP credentials (PATs, OAuth tokens, client secrets). They live
+        // encrypted in the credential vault (client/services/mcp/
+        // credentialVault.ts) and are merged back into the in-memory store
+        // by mcpCredentialSync on authenticated boot. This write also
+        // scrubs any legacy plaintext from pre-vault blobs.
+        mcpServers: state.mcpServers.map((server) => ({
+          ...server,
+          authToken: undefined,
+          oauth: server.oauth
+            ? {
+                ...server.oauth,
+                accessToken: undefined,
+                refreshToken: undefined,
+                clientSecret: undefined,
+              }
+            : undefined,
+          oauthApp: server.oauthApp
+            ? { ...server.oauthApp, clientSecret: undefined }
+            : undefined,
+        })),
         allowArbitraryMcpServers: state.allowArbitraryMcpServers,
         hiddenModelIds: state.hiddenModelIds,
         starredModelIds: state.starredModelIds,
