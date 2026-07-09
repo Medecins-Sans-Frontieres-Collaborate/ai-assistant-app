@@ -16,6 +16,7 @@ import { useMcpTools } from '@/client/hooks/settings/useMcpTools';
 
 import { connectMcpOauth } from '@/client/services/mcp/mcpOauth';
 
+import { OwnOauthAppFields } from './OwnOauthAppFields';
 import { validateMcpServer } from './validateMcpServer';
 
 import {
@@ -65,6 +66,12 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   const [token, setToken] = useState('');
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // "Bring your own OAuth app": user-registered app credentials (their own
+  // GitHub org / Asana workspace / enterprise instance) taking precedence
+  // over DCR and the deployment-wide MCP_OAUTH_* app.
+  const [showOwnApp, setShowOwnApp] = useState(false);
+  const [ownClientId, setOwnClientId] = useState('');
+  const [ownClientSecret, setOwnClientSecret] = useState('');
 
   const { tools, isLoadingTools } = useMcpTools(config);
 
@@ -117,11 +124,21 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
   const handleConnectOauth = async () => {
     setIsBusy(true);
     setError(null);
+    // Credential precedence: freshly entered own app → previously saved own
+    // app → prior DCR/deployment client (reconnect path) → fresh register.
+    const ownApp = ownClientId.trim()
+      ? {
+          clientId: ownClientId.trim(),
+          ...(ownClientSecret.trim()
+            ? { clientSecret: ownClientSecret.trim() }
+            : {}),
+        }
+      : config?.oauthApp;
     try {
       const oauth = await connectMcpOauth(
         { id: entry.key, name: entry.label, catalogKey: entry.key },
-        config?.oauth?.clientId,
-        config?.oauth?.clientSecret,
+        ownApp?.clientId ?? config?.oauth?.clientId,
+        ownApp?.clientSecret ?? config?.oauth?.clientSecret,
       );
       if (config) {
         // Reconnect (or a dual-auth switch to OAuth): drop any stored PAT so
@@ -130,6 +147,7 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
           authMode: 'oauth',
           authToken: undefined,
           oauth,
+          oauthApp: ownApp,
           enabled: true,
         });
       } else {
@@ -140,10 +158,14 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
           url: '',
           authMode: 'oauth',
           oauth,
+          oauthApp: ownApp,
           enabled: true,
           createdAt: new Date().toISOString(),
         });
       }
+      setOwnClientId('');
+      setOwnClientSecret('');
+      setShowOwnApp(false);
     } catch (flowError) {
       const kind =
         flowError instanceof Error ? flowError.message : 'oauth_failed';
@@ -246,29 +268,48 @@ export const CuratedConnectorRow: FC<CuratedConnectorRowProps> = ({
                 // clean follow-up) — deleting only removes local access.
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {t('disconnectOauthNote', { name: entry.label })}
+                  {config.oauthApp && <> {t('ownAppInUse')}</>}
                 </p>
               )}
             </div>
           ) : oauthAvailable && !expanded ? (
-            <div className="mt-3 flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={handleConnectOauth}
-                disabled={isBusy}
-                className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-              >
-                {isBusy
-                  ? t('oauthWaiting')
-                  : t('connectWithProvider', { name: entry.label })}
-              </button>
-              {patAvailable && (
+            <div className="mt-3 space-y-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => setExpanded(true)}
+                  onClick={handleConnectOauth}
+                  disabled={isBusy}
+                  className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isBusy
+                    ? t('oauthWaiting')
+                    : t('connectWithProvider', { name: entry.label })}
+                </button>
+                {patAvailable && (
+                  <button
+                    type="button"
+                    onClick={() => setExpanded(true)}
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                  >
+                    {t('useTokenInstead')}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowOwnApp((v) => !v)}
                   className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
                 >
-                  {t('useTokenInstead')}
+                  {t('ownAppToggle')}
                 </button>
+              </div>
+              {showOwnApp && (
+                <OwnOauthAppFields
+                  providerName={entry.label}
+                  clientId={ownClientId}
+                  clientSecret={ownClientSecret}
+                  onClientIdChange={setOwnClientId}
+                  onClientSecretChange={setOwnClientSecret}
+                />
               )}
             </div>
           ) : expanded ? (
