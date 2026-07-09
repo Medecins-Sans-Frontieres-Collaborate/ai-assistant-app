@@ -132,4 +132,14 @@ describe('ConnectorsSection', () => {
     expect(screen.getByText('https://mcp.example.com')).toBeInTheDocument();
     expect(screen.getByLabelText('Edit MCP server')).toBeInTheDocument();
   });
+  it('"Use your own OAuth app" reveals client credential fields and the callback URL', () => {
+    render(<ConnectorsSection />);
+
+    fireEvent.click(screen.getAllByText('Use your own OAuth app')[0]);
+
+    expect(screen.getByText('Client ID')).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue(/\/mcp-oauth-callback$/),
+    ).toBeInTheDocument();
+  });
 });
