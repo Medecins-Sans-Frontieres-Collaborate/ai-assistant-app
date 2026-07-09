@@ -1842,11 +1842,14 @@
     "noResults": "No matching actions",
     "sectionPinned": "Pinned",
     "sectionFrequent": "Frequently used",
+    "sectionMore": "More",
     "categoryWeb": "Web",
     "categoryMedia": "Media & files",
     "categoryTransform": "Transform",
     "pin": "Pin to top",
-    "unpin": "Unpin"
+    "unpin": "Unpin",
+    "moveToMore": "Move to More",
+    "moveOutOfMore": "Show in menu"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
