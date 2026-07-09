@@ -1,5 +1,6 @@
 'use client';
 
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useSession } from 'next-auth/react';
 import { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
@@ -43,6 +44,17 @@ export function AppInitializer() {
   useEffect(() => {
     useSettingsStore.getState().setUserRegion(sessionRegion);
   }, [sessionRegion]);
+
+  // Mirror the LaunchDarkly arbitrary-MCP flag into the settings store so
+  // chatStore (vanilla, no hook access) can gate what gets SENT, not just
+  // what's shown. Fail-closed on purpose: only an explicit `true` enables —
+  // an unserved flag or LD outage must degrade to "arbitrary servers off".
+  const { mcpArbitraryServers } = useFlags();
+  useEffect(() => {
+    useSettingsStore
+      .getState()
+      .setMcpArbitraryFlagEnabled(mcpArbitraryServers === true);
+  }, [mcpArbitraryServers]);
 
   useEffect(() => {
     // Ensure we only initialize once, even in React StrictMode
