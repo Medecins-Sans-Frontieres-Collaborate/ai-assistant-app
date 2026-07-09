@@ -54,6 +54,7 @@ import Modal from '@/components/UI/Modal';
 
 import { DropdownCategoryGroup } from './DropdownCategoryGroup';
 import { DropdownMenuItem, MenuItem } from './DropdownMenuItem';
+import { DropdownMoreSection } from './DropdownMoreSection';
 
 import { useChatInputStore } from '@/client/stores/chatInputStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
@@ -117,9 +118,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   const filePreviews = useChatInputStore((state) => state.filePreviews);
   const pinnedToolIds = useSettingsStore((state) => state.pinnedToolIds);
   const toolUsageCounts = useSettingsStore((state) => state.toolUsageCounts);
+  const hiddenToolIds = useSettingsStore((state) => state.hiddenToolIds);
+  const revealedToolIds = useSettingsStore((state) => state.revealedToolIds);
   const togglePinnedTool = useSettingsStore((state) => state.togglePinnedTool);
-  const incrementToolUsage = useSettingsStore(
-    (state) => state.incrementToolUsage,
+  const toggleToolHidden = useSettingsStore((state) => state.toggleToolHidden);
+  const recordSuccessfulToolUsage = useSettingsStore(
+    (state) => state.recordSuccessfulToolUsage,
+  );
+  const extractionRecipes = useSettingsStore(
+    (state) => state.extractionRecipes,
   );
   const { selectedConversation, updateConversation } = useConversations();
 
@@ -133,6 +140,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   const [isToneOpen, setIsToneOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [query, setQuery] = useState('');
+  const [showMore, setShowMore] = useState(false);
   const [hasCameraSupport, setHasCameraSupport] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -166,6 +174,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     setIsOpen(false);
     setSelectedIndex(-1);
     setQuery('');
+    setShowMore(false);
   }, []);
 
   const t = useTranslations();
@@ -540,19 +549,41 @@ const Dropdown: React.FC<DropdownProps> = ({
     ],
   );
 
+  // Tools that start life in the "More" section: camera (always, when present),
+  // tone when the user has no tones, and extract when there are no recipes set
+  // up. The user can still pull any of these out (revealedToolIds) or pin them.
+  const defaultHiddenIds = useMemo(() => {
+    const ids = ['camera'];
+    if (tones.length === 0) ids.push('tone');
+    if (isExtractionEnabled && extractionRecipes.length === 0) {
+      ids.push('extract');
+    }
+    return ids;
+  }, [tones.length, isExtractionEnabled, extractionRecipes.length]);
+
+  // Move a tool into / out of "More". Resolves whether the tool is hidden by
+  // default so the store toggles the right set.
+  const handleToggleHidden = useCallback(
+    (toolId: string) => {
+      toggleToolHidden(toolId, defaultHiddenIds.includes(toolId));
+    },
+    [toggleToolHidden, defaultHiddenIds],
+  );
+
   // Wrap each action so activating it records usage (drives "Frequently used").
-  // Pinning does not count — it's a separate control on the row.
+  // Usage is debounced (see recordSuccessfulToolUsage) so the order only
+  // settles after repeated use. Pinning does not count — separate control.
   const trackedItems = useMemo(
     () =>
       // eslint-disable-next-line react-hooks/refs -- onClick handlers reference refs only when invoked, not during render
       menuItems.map((item) => ({
         ...item,
         onClick: () => {
-          incrementToolUsage(item.id);
+          recordSuccessfulToolUsage(item.id);
           item.onClick();
         },
       })),
-    [menuItems, incrementToolUsage],
+    [menuItems, recordSuccessfulToolUsage],
   );
 
   const normalizedQuery = normalizeForSearch(query, locale);
@@ -569,14 +600,29 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
 
     const pinnedSet = new Set(pinnedToolIds);
+    const revealedSet = new Set(revealedToolIds);
+    const hiddenSet = new Set(hiddenToolIds);
+    // Pinned always wins; otherwise a tool is hidden if the user hid it or it's
+    // default-hidden and hasn't been explicitly revealed.
+    const isHidden = (id: string) =>
+      !pinnedSet.has(id) &&
+      (hiddenSet.has(id) ||
+        (defaultHiddenIds.includes(id) && !revealedSet.has(id)));
+
     const pinned = pinnedToolIds
       .map((id) => trackedItems.find((item) => item.id === id))
       .filter((item): item is (typeof trackedItems)[number] => Boolean(item));
 
+    const hiddenItems = trackedItems.filter((item) => isHidden(item.id));
+
+    // A credited usage bump now equals CONSECUTIVE_USAGE_THRESHOLD real uses,
+    // so surface at >= 1. Hidden items stay in "More" regardless of frequency.
     const frequent = trackedItems
       .filter(
         (item) =>
-          !pinnedSet.has(item.id) && (toolUsageCounts[item.id] ?? 0) >= 2,
+          !pinnedSet.has(item.id) &&
+          !isHidden(item.id) &&
+          (toolUsageCounts[item.id] ?? 0) >= 1,
       )
       .sort(
         (a, b) => (toolUsageCounts[b.id] ?? 0) - (toolUsageCounts[a.id] ?? 0),
@@ -585,7 +631,10 @@ const Dropdown: React.FC<DropdownProps> = ({
     const frequentSet = new Set(frequent.map((item) => item.id));
 
     const remaining = trackedItems.filter(
-      (item) => !pinnedSet.has(item.id) && !frequentSet.has(item.id),
+      (item) =>
+        !pinnedSet.has(item.id) &&
+        !frequentSet.has(item.id) &&
+        !isHidden(item.id),
     );
     const byCategory = (category: MenuItem['category']) =>
       remaining.filter((item) => item.category === category);
@@ -612,11 +661,15 @@ const Dropdown: React.FC<DropdownProps> = ({
         label: t('dropdown.categoryTransform'),
         items: byCategory('transform'),
       },
+      { key: 'more', label: t('dropdown.sectionMore'), items: hiddenItems },
     ].filter((section) => section.items.length > 0);
 
     return {
       sections: built,
-      flatVisibleItems: built.flatMap((section) => section.items),
+      // Collapsed "More" items are not keyboard-navigable until expanded.
+      flatVisibleItems: built.flatMap((section) =>
+        section.key === 'more' && !showMore ? [] : section.items,
+      ),
     };
   }, [
     isFiltering,
@@ -624,7 +677,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     trackedItems,
     locale,
     pinnedToolIds,
+    revealedToolIds,
+    hiddenToolIds,
+    defaultHiddenIds,
     toolUsageCounts,
+    showMore,
     t,
   ]);
 
