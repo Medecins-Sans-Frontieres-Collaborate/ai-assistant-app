@@ -154,7 +154,25 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       customDisplayName,
       agentSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
     } = body;
+
+    if (mcpServers?.length) {
+      // Redacted summary ONLY — entries can carry auth tokens.
+      console.log('[Middleware] MCP servers on request:', {
+        count: mcpServers.length,
+        catalogKeys: mcpServers
+          .map((s: { catalogKey?: string }) => s.catalogKey)
+          .filter(Boolean),
+        hasCustom: mcpServers.some(
+          (s: { catalogKey?: string }) => !s.catalogKey,
+        ),
+        pendingToolCalls: mcpPendingToolCalls?.length ?? 0,
+        loopRound: mcpLoopRound ?? 0,
+      });
+    }
 
     if (tone) {
       console.log('[Middleware] Received tone from client:', {
@@ -177,6 +195,9 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       customDisplayName,
       agentSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
       temperature,
       stream,
       reasoningEffort,

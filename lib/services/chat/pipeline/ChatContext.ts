@@ -136,6 +136,17 @@ export interface ChatContext {
    */
   approvalResponses?: ApprovalResponse[];
 
+  /**
+   * Native MCP tool loop (direct SDK paths, NOT the Foundry agent path):
+   * user-configured MCP servers whose tools the model may call this turn,
+   * plus the previous round's pending tool calls and the loop round counter
+   * for the stateless pause/resume protocol. Entries may carry auth tokens —
+   * never log these objects.
+   */
+  mcpServers?: import('@/types/mcp').McpServerRequestEntry[];
+  mcpPendingToolCalls?: import('@/types/mcp').McpPendingToolCall[];
+  mcpLoopRound?: number;
+
   // ========================================
   // FEATURE FLAGS
   // ========================================
