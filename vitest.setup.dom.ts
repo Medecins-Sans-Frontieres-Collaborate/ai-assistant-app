@@ -164,7 +164,7 @@ const mockMessages: Record<string, unknown> = {
     description:
       'Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.',
     localOnlyNote:
-      'You sign in directly with each provider. Access keys are stored only on this device and are relayed through the app server with each request — never stored or logged there.',
+      'You sign in directly with each provider. Access keys are encrypted and stored only on this device, and are relayed through the app server with each request — never stored or logged there.',
     catalog: {
       github: {
         name: 'GitHub',
