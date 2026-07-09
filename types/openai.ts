@@ -43,6 +43,12 @@ export interface OpenAIModel {
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires
   supportsTemperature?: boolean; // Whether this model supports custom temperature values
   supportsVision?: boolean; // Whether this model can accept image input. Source of truth for OpenAIVisionModelID (derived below).
+  /**
+   * Whether this model supports function/tool calling well enough for the
+   * MCP tool loop (chat.completions `tools`). Absent = false (fail safe):
+   * models without it silently skip MCP even when servers are configured.
+   */
+  supportsTools?: boolean;
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
   /**
@@ -211,6 +217,7 @@ const openAIModelSchema = z.object({
   sdk: z.enum(['azure-openai', 'openai', 'anthropic-foundry']).optional(),
   supportsTemperature: z.boolean().optional(),
   supportsVision: z.boolean().optional(),
+  supportsTools: z.boolean().optional(),
   deploymentName: z.string().optional(),
   // hostedIn is intentionally NOT in this schema: it is derived from live
   // discovery per request, never authored in config/models.json (unknown keys
