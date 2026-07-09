@@ -14,12 +14,15 @@ import {
  * third-party auth hosts; the proxy also owns endpoint validation).
  *
  * Privacy invariants:
- * - Access/refresh tokens live in localStorage (settingsStore), like PATs.
- * - The PKCE verifier + state live in sessionStorage for the duration of the
- *   popup roundtrip only, keyed by state, deleted on completion — never
- *   localStorage.
+ * - The PKCE verifier, state, and any client secret live ONLY in this
+ *   function's closure for the seconds the popup is open — they are never
+ *   written to sessionStorage/localStorage (the flow cannot survive a tab
+ *   reload anyway; the awaiting promise dies with the page).
  * - The authorization CODE travels: provider → popup URL → BroadcastChannel
  *   (in-memory) → POST body to our proxy. It is never stored.
+ * - Persisted credentials (tokens, own-app secrets) are handled by the
+ *   encrypted credential vault (credentialVault.ts), not written in clear
+ *   text.
  */
 
 const CHANNEL_NAME = 'mcp-oauth';
@@ -38,13 +41,6 @@ interface CallbackMessage {
   code?: string;
   error?: string;
   errorDescription?: string;
-}
-
-interface StashedFlow {
-  serverId: string;
-  codeVerifier: string;
-  clientId: string;
-  clientSecret?: string;
 }
 
 async function proxyPost<T>(path: string, body: unknown): Promise<T> {
@@ -139,17 +135,11 @@ export async function connectMcpOauth(
     },
   );
 
-  // 4. Stash the verifier for the roundtrip — sessionStorage, keyed by
-  // state, tab-scoped, deleted on completion.
-  const stashed: StashedFlow = {
-    serverId: entry.id,
-    codeVerifier,
-    clientId,
-    ...(clientSecret ? { clientSecret } : {}),
-  };
-  sessionStorage.setItem(`mcp-oauth:${state}`, JSON.stringify(stashed));
-
-  // 5. Popup + BroadcastChannel. BroadcastChannel over postMessage: it is
+  // 4. Popup + BroadcastChannel. The PKCE verifier (and client secret) stay
+  // in THIS closure — deliberately not stashed in any web storage: the flow
+  // resolves in this same tab, and secrets must never sit on disk, however
+  // briefly (flagged by code scanning as clear-text storage).
+  // BroadcastChannel over postMessage: it is
   // same-origin by construction (no origin-check foot-gun) and survives a
   // severed window.opener; over localStorage events: those would write the
   // authorization code into localStorage, exactly what we're avoiding.
@@ -186,8 +176,6 @@ export async function connectMcpOauth(
       cleanup();
       resolve(event.data);
     };
-  }).finally(() => {
-    sessionStorage.removeItem(`mcp-oauth:${state}`);
   });
 
   if (message.error || !message.code) {
@@ -209,7 +197,7 @@ export async function connectMcpOauth(
     grant: {
       type: 'authorization_code',
       code: message.code,
-      codeVerifier: stashed.codeVerifier,
+      codeVerifier,
       clientId,
       ...(clientSecret ? { clientSecret } : {}),
     },
