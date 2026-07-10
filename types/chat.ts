@@ -386,6 +386,17 @@ export interface Conversation {
    * without surfacing a card. Set via "Always approve all tools".
    */
   alwaysApproveAllTools?: boolean;
+  /**
+   * Workflow specialization. Absent = normal chat. Set only at creation time
+   * (the conversation must still be empty) and never changed afterward —
+   * conversationStore strips attempts to mutate it.
+   */
+  conversationType?: import('./workflow').ConversationWorkflowType;
+  /**
+   * Workflow-specific persisted state; its `kind` must match
+   * `conversationType`. Write via conversationStore.updateWorkflowState only.
+   */
+  workflowState?: import('./workflow').WorkflowState;
 }
 
 export type FileFieldValue =
