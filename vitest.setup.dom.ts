@@ -292,6 +292,9 @@ const mockMessages: Record<string, unknown> = {
     searchEmpty: 'No models match your search.',
     star: 'Star {name}',
     unstar: 'Unstar {name}',
+    variant: {
+      label: 'Variant',
+    },
     version: {
       label: 'Version',
     },
