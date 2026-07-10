@@ -1,8 +1,8 @@
 'use client';
 
-import { IconMapPin, IconX } from '@tabler/icons-react';
+import { IconChevronDown, IconMapPin, IconX } from '@tabler/icons-react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -42,6 +42,10 @@ export function FeatureList({
   const tMap = useTranslations('workflows.map');
   const locale = useLocale();
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Accordion: at most ONE row expanded (full text) at a time. Since the
+  // map's area circles are non-interactive backdrop, this is also where
+  // a region's full details are read.
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   // Virtualized: the list can hold up to the 2000-feature cap; a plain
   // <ul> of complex rows is the largest DOM cost in the whole workspace.
@@ -67,6 +71,7 @@ export function FeatureList({
           const isDemoted = demotedIds?.has(feature.id) ?? false;
           const dateLine = formatFeatureDates(feature, locale, tMap);
           const isFaint = faintIds?.has(feature.id) ?? false;
+          const isExpanded = expandedId === feature.id;
           return (
             <li
               key={feature.id}
@@ -130,7 +135,11 @@ export function FeatureList({
                     )}
                   </span>
                   {feature.description && (
-                    <span className="mt-0.5 block truncate text-xs text-gray-600 dark:text-gray-400">
+                    <span
+                      className={`mt-0.5 block text-xs text-gray-600 dark:text-gray-400 ${
+                        isExpanded ? 'whitespace-pre-wrap' : 'truncate'
+                      }`}
+                    >
                       {feature.description}
                     </span>
                   )}
@@ -141,12 +150,56 @@ export function FeatureList({
                   )}
                   {feature.confidence !== 'high' &&
                     feature.confidenceReason && (
-                      <span className="mt-0.5 block text-xs text-amber-700 dark:text-amber-400">
+                      <span
+                        className={`mt-0.5 block text-xs text-amber-700 dark:text-amber-400 ${
+                          isExpanded ? 'whitespace-pre-wrap' : 'truncate'
+                        }`}
+                      >
                         {feature.confidenceReason}
+                      </span>
+                    )}
+                  {isExpanded &&
+                    (feature.parentName || feature.countryCode) && (
+                      <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
+                        {[
+                          feature.parentName
+                            ? t('map.detailsParent', {
+                                parent: feature.parentName,
+                              })
+                            : null,
+                          feature.countryCode ?? null,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
                       </span>
                     )}
                 </span>
               </button>
+              {(feature.description ||
+                feature.confidenceReason ||
+                feature.parentName) && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExpandedId((prev) =>
+                      prev === feature.id ? null : feature.id,
+                    )
+                  }
+                  aria-expanded={isExpanded}
+                  aria-label={
+                    isExpanded
+                      ? t('map.collapseFeature', { name: feature.name })
+                      : t('map.expandFeature', { name: feature.name })
+                  }
+                  className="mt-1 shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-surface-dark-elevated dark:hover:text-gray-200"
+                >
+                  <IconChevronDown
+                    size={14}
+                    aria-hidden
+                    className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                  />
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => onRemove(feature.id)}
