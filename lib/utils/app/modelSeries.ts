@@ -25,18 +25,29 @@ export function getSeriesVersions(
 }
 
 /**
- * The version that fronts a series row: the current selection when it's in
- * this series, else the FEATURED (recommended) version, else the newest
- * non-legacy, else the newest. Featured beats newest on purpose — the row's
- * face should be the vetted default, with newer versions one click away in
- * the details panel.
+ * The model that fronts a family row: the current selection when it's in
+ * this family, else the best-ranked `defaultRank` member (ties go to the
+ * newest, since `versions` arrives newest-first — so "rank 1 on every
+ * Sonnet" means "latest available Sonnet"), else the FEATURED version, else
+ * the newest non-legacy, else the newest. This is also what clicking the
+ * row selects, i.e. the family's default.
  */
 export function seriesRepresentative(
   versions: OpenAIModel[],
   selectedModelId?: string,
 ): OpenAIModel | undefined {
+  const selected = versions.find((v) => v.id === selectedModelId);
+  if (selected) return selected;
+
+  let preferred: OpenAIModel | undefined;
+  for (const v of versions) {
+    if (v.defaultRank === undefined) continue;
+    if (preferred === undefined || v.defaultRank < preferred.defaultRank!) {
+      preferred = v;
+    }
+  }
   return (
-    versions.find((v) => v.id === selectedModelId) ??
+    preferred ??
     versions.find((v) => getModelTier(v) === 'featured') ??
     versions.find((v) => getModelTier(v) !== 'legacy') ??
     versions[0]
@@ -52,22 +63,34 @@ export interface FamilyVariant {
 }
 
 /**
- * Distinct variants among the given family members, in order of first
- * appearance — so member order (display priority) decides the segment order
- * (e.g. Standard → Mini → Nano, Opus → Sonnet → Haiku).
+ * Distinct variants among the given family members, ordered by
+ * `variantRank` (the family's capability hierarchy, e.g. Opus → Sonnet →
+ * Haiku). Variants without a rank sort last, in order of first appearance.
  */
 export function getFamilyVariants(members: OpenAIModel[]): FamilyVariant[] {
-  const byKey = new Map<string, FamilyVariant>();
+  const byKey = new Map<string, FamilyVariant & { rank: number }>();
   for (const m of members) {
     const key = m.variant ?? '';
     const existing = byKey.get(key);
     if (existing) {
       existing.members.push(m);
+      existing.rank = Math.min(m.variantRank ?? Infinity, existing.rank);
     } else {
-      byKey.set(key, { key, label: m.variantLabel ?? '', members: [m] });
+      byKey.set(key, {
+        key,
+        label: m.variantLabel ?? '',
+        members: [m],
+        rank: m.variantRank ?? Infinity,
+      });
     }
   }
-  return [...byKey.values()];
+  return [...byKey.values()]
+    .sort((a, b) => a.rank - b.rank)
+    .map(({ key, label, members: variantMembers }) => ({
+      key,
+      label,
+      members: variantMembers,
+    }));
 }
 
 /**
