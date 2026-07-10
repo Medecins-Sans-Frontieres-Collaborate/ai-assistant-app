@@ -806,16 +806,22 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           if (versions.length === 1) {
                             return renderModelCard(versions[0]);
                           }
-                          // One quiet row per series: the representative
-                          // version fronts it with an inline version tag;
-                          // switching versions lives in the details panel.
+                          // One quiet row per family: the representative
+                          // fronts it with an inline variant+version tag;
+                          // switching variant/version lives in the details
+                          // panel. The 'standard' variant label is suppressed
+                          // so default rows stay short ("GPT · 5.2", not
+                          // "GPT · Standard 5.2").
                           const rep = seriesRepresentative(
                             versions,
                             selectedModelId,
                           )!;
                           return renderModelCard(rep, {
                             name: rep.seriesLabel ?? rep.name,
-                            versionTag: rep.versionLabel,
+                            versionTag:
+                              rep.variantLabel && rep.variant !== 'standard'
+                                ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
+                                : rep.versionLabel,
                           });
                         })}
                       </div>
