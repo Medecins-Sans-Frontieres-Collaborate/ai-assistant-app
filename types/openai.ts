@@ -93,6 +93,21 @@ export interface OpenAIModel {
   /** Short version chip text (e.g. "5.4", "4o", "4.6"). */
   versionLabel?: string;
 
+  /**
+   * Azure Foundry lifecycle stage of the underlying model version, mirrored
+   * from Microsoft's model retirement schedule (see the $retirement-note in
+   * config/models.json for source + as-of date). INFORMATIONAL ONLY — never
+   * used for gating. A deployment can outlive its model version's schedule:
+   * Azure upgrades deployments in place, so e.g. a deployment named
+   * "gpt-5.2-chat" may run a newer underlying model even though the
+   * gpt-5.2-chat model version itself is retired.
+   */
+  lifecycle?: 'preview' | 'ga' | 'legacy' | 'deprecated' | 'retired';
+  /** Azure's scheduled retirement date (YYYY-MM-DD) for the underlying model version. Absent = no announced date. */
+  retirementDate?: string;
+  /** Replacement model id suggested by the Azure retirement schedule, if any. */
+  retirementReplacement?: string;
+
   // Advanced reasoning model parameters
   reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high'; // Current reasoning effort setting
   supportsReasoningEffort?: boolean; // Whether model supports reasoning_effort parameter
@@ -126,6 +141,10 @@ export enum OpenAIModelID {
   GPT_4O_MINI = 'gpt-4o-mini',
   GPT_o4_MINI = 'o4-mini',
   GPT_o3_MINI = 'o3-mini',
+  GPT_5_5 = 'gpt-5.5',
+  // Rolling alias Azure names as the replacement for retired gpt-*-chat
+  // model versions; the deployment is upgraded in place as new chat models ship.
+  GPT_CHAT_LATEST = 'gpt-chat-latest',
   // Anthropic Claude models (via Azure AI Foundry)
   CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
   CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
@@ -135,6 +154,7 @@ export enum OpenAIModelID {
   CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
   CLAUDE_FABLE_5 = 'claude-fable-5',
   CLAUDE_SONNET_5 = 'claude-sonnet-5',
+  CLAUDE_OPUS_4_7 = 'claude-opus-4-7',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
   // Other providers
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
@@ -144,13 +164,17 @@ export enum OpenAIModelID {
   DEEPSEEK_R1_0528 = 'DeepSeek-R1-0528',
   DEEPSEEK_V3_1 = 'DeepSeek-V3.1',
   DEEPSEEK_V3_2 = 'DeepSeek-V3.2',
+  DEEPSEEK_V4_PRO = 'DeepSeek-V4-Pro',
+  DEEPSEEK_V4_FLASH = 'DeepSeek-V4-Flash',
   MISTRAL_LARGE_3 = 'Mistral-Large-3',
-  MISTRAL_MEDIUM_3 = 'Mistral-Medium-3',
-  MISTRAL_SMALL_3_2 = 'Mistral-Small-3.2',
+  MISTRAL_MEDIUM_2505 = 'mistral-medium-2505',
+  MISTRAL_SMALL_2503 = 'mistral-small-2503',
   MINISTRAL_3B = 'Ministral-3B',
   GROK_3 = 'grok-3',
   GROK_4 = 'grok-4',
   GROK_3_MINI = 'grok-3-mini',
+  GROK_4_1_FAST_REASONING = 'grok-4-1-fast-reasoning',
+  GROK_4_1_FAST_NON_REASONING = 'grok-4-1-fast-non-reasoning',
 }
 
 // OpenAIVisionModelID is derived from the `supportsVision` metadata flag at the
@@ -190,7 +214,9 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // panel rather than list rows, so position below only breaks ties (usage
   // mode) and orders the flattened edit-order list. Version recency within a
   // series = position here (newer first).
+  OpenAIModelID.GPT_5_5,
   OpenAIModelID.GPT_5_4,
+  OpenAIModelID.GPT_CHAT_LATEST,
   OpenAIModelID.GPT_5_3_CHAT,
   OpenAIModelID.GPT_4_1,
   OpenAIModelID.GPT_5_1,
@@ -203,20 +229,25 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_NANO,
   OpenAIModelID.GPT_4_1_NANO,
   OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_OPUS_4_7,
   OpenAIModelID.CLAUDE_OPUS_4_6,
   OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
   // Remaining standalone rows (rank below the curated top section) and
   // globally disabled models (grok-*), kept for edit-order completeness.
-  OpenAIModelID.MISTRAL_MEDIUM_3,
-  OpenAIModelID.MISTRAL_SMALL_3_2,
+  OpenAIModelID.MISTRAL_MEDIUM_2505,
+  OpenAIModelID.MISTRAL_SMALL_2503,
   OpenAIModelID.MINISTRAL_3B,
+  OpenAIModelID.DEEPSEEK_V4_PRO,
+  OpenAIModelID.DEEPSEEK_V4_FLASH,
   OpenAIModelID.DEEPSEEK_R1_0528,
   OpenAIModelID.DEEPSEEK_V3_1,
   OpenAIModelID.LLAMA_4_SCOUT,
   OpenAIModelID.LLAMA_3_3_70B,
   OpenAIModelID.GROK_4,
+  OpenAIModelID.GROK_4_1_FAST_REASONING,
+  OpenAIModelID.GROK_4_1_FAST_NON_REASONING,
   OpenAIModelID.GROK_3,
   OpenAIModelID.GROK_3_MINI,
 ];
@@ -263,6 +294,11 @@ const openAIModelSchema = z.object({
   // are stripped, so an accidental JSON entry is discarded rather than trusted).
   hosting: z.enum(['azure', 'external']).optional(),
   tier: z.enum(['featured', 'standard', 'legacy']).optional(),
+  lifecycle: z
+    .enum(['preview', 'ga', 'legacy', 'deprecated', 'retired'])
+    .optional(),
+  retirementDate: z.string().optional(),
+  retirementReplacement: z.string().optional(),
   sizeClass: z.enum(['nano', 'mini', 'standard', 'large']).optional(),
   series: z.string().optional(),
   seriesLabel: z.string().optional(),
