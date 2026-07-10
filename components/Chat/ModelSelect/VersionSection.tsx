@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
-import { getSeriesVersions } from '@/lib/utils/app/modelSeries';
+import { getVariantVersions } from '@/lib/utils/app/modelSeries';
 
 import {
   OpenAIModel,
@@ -40,14 +40,16 @@ export const VersionSection: FC<VersionSectionProps> = ({
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
 
   const versions = useMemo(() => {
-    const series =
-      OpenAIModels[selectedModel.id as OpenAIModelID]?.series ??
-      selectedModel.series;
+    const meta =
+      OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel;
     const hidden = new Set(hiddenModelIds);
-    return getSeriesVersions(models, { series }).filter(
-      (m) => !hidden.has(m.id),
-    );
-  }, [models, hiddenModelIds, selectedModel.id, selectedModel.series]);
+    // Chips cover the ACTIVE variant only; other variants live in the
+    // VariantSection control above.
+    return getVariantVersions(models, {
+      series: meta.series ?? selectedModel.series,
+      variant: meta.variant ?? selectedModel.variant,
+    }).filter((m) => !hidden.has(m.id));
+  }, [models, hiddenModelIds, selectedModel]);
 
   if (versions.length < 2) return null;
 
