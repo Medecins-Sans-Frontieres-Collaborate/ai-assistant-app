@@ -1,5 +1,6 @@
 {
   "$schema-note": "Baseline model metadata. Source of truth for presentation + routing of KNOWN models. Keyed by model id (matches OpenAIModelID). Azure discovery does NOT return this metadata (context window, sdk, capability flags), so it lives here and can be overlaid by ARM ui-* tags for models added without a code push. See docs/MODEL_DISCOVERY_DESIGN.md.",
+  "$retirement-note": "lifecycle / retirementDate / retirementReplacement mirror the Azure Foundry model retirement schedule (learn.microsoft.com/en-us/azure/foundry/openai/concepts/model-retirement-schedule) as of its 2026-07-09 revision; refresh manually when that page updates. INFORMATIONAL ONLY, never used for gating: the schedule tracks underlying model VERSIONS, and Azure upgrades deployments in place, so a deployment can outlive its version's retirement (e.g. deployments named gpt-5.2-chat now run a newer underlying model even though the gpt-5.2-chat version is retired). Models absent from the schedule carry no lifecycle fields.",
   "models": {
     "gpt-4.1": {
       "id": "gpt-4.1",
@@ -22,7 +23,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-14"
     },
     "gpt-5.2": {
       "id": "gpt-5.2",
@@ -50,7 +53,9 @@
       "verbosity": "medium",
       "supportsVerbosity": true,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2026-12-12"
     },
     "gpt-5-mini": {
       "id": "gpt-5-mini",
@@ -75,7 +80,9 @@
       "verbosity": "low",
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-02-06"
     },
     "gpt-5.2-chat": {
       "id": "gpt-5.2-chat",
@@ -100,7 +107,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "retired",
+      "retirementDate": "2026-06-29",
+      "retirementReplacement": "gpt-chat-latest"
     },
     "o3": {
       "id": "o3",
@@ -122,7 +132,9 @@
       "supportsReasoningEffort": true,
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2026-10-16"
     },
     "Llama-4-Maverick-17B-128E-Instruct-FP8": {
       "id": "Llama-4-Maverick-17B-128E-Instruct-FP8",
@@ -139,7 +151,8 @@
       "supportsTemperature": true,
       "deploymentName": "Llama-4-Maverick-17B-128E-Instruct-FP8",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "DeepSeek-R1": {
       "id": "DeepSeek-R1",
@@ -158,7 +171,10 @@
       "deploymentName": "DeepSeek-R1",
       "avoidSystemPrompt": true,
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "legacy",
+      "retirementDate": "2026-08-13",
+      "retirementReplacement": "DeepSeek-V4-Pro"
     },
     "DeepSeek-V3.1": {
       "id": "DeepSeek-V3.1",
@@ -179,7 +195,10 @@
       "deploymentName": "DeepSeek-V3.1",
       "avoidSystemPrompt": true,
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "legacy",
+      "retirementDate": "2026-07-13",
+      "retirementReplacement": "DeepSeek-V4-Flash"
     },
     "grok-3": {
       "id": "grok-3",
@@ -196,7 +215,10 @@
       "supportsTemperature": true,
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "supportsVision": true
+      "supportsVision": true,
+      "lifecycle": "retired",
+      "retirementDate": "2026-05-01",
+      "retirementReplacement": "grok-4"
     },
     "claude-opus-4-6": {
       "id": "claude-opus-4-6",
@@ -222,7 +244,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2027-02-02"
     },
     "claude-sonnet-4-6": {
       "id": "claude-sonnet-4-6",
@@ -247,7 +271,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2027-02-10"
     },
     "claude-opus-4-1": {
       "id": "claude-opus-4-1",
@@ -271,7 +297,10 @@
       "deploymentName": "claude-opus-4-1",
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2026-08-05",
+      "retirementReplacement": "claude-opus-4-8"
     },
     "claude-haiku-4-5": {
       "id": "claude-haiku-4-5",
@@ -294,7 +323,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2026-10-19"
     },
     "gpt-5.4": {
       "id": "gpt-5.4",
@@ -319,7 +350,9 @@
       "verbosity": "medium",
       "supportsVerbosity": true,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-03-05"
     },
     "gpt-5.4-nano": {
       "id": "gpt-5.4-nano",
@@ -341,7 +374,9 @@
       "verbosity": "low",
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-03-18"
     },
     "gpt-5.3-chat": {
       "id": "gpt-5.3-chat",
@@ -362,7 +397,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "retired",
+      "retirementDate": "2026-06-29",
+      "retirementReplacement": "gpt-chat-latest"
     },
     "gpt-5": {
       "id": "gpt-5",
@@ -388,7 +426,9 @@
       "verbosity": "medium",
       "supportsVerbosity": true,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-02-06"
     },
     "gpt-5-chat": {
       "id": "gpt-5-chat",
@@ -410,7 +450,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "retired",
+      "retirementDate": "2026-06-29",
+      "retirementReplacement": "gpt-chat-latest"
     },
     "gpt-4o": {
       "id": "gpt-4o",
@@ -432,7 +475,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-01",
+      "retirementReplacement": "gpt-5.1"
     },
     "gpt-4.1-mini": {
       "id": "gpt-4.1-mini",
@@ -455,7 +501,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-14"
     },
     "claude-opus-4-8": {
       "id": "claude-opus-4-8",
@@ -503,7 +551,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2026-10-19"
     },
     "DeepSeek-V3.2": {
       "id": "DeepSeek-V3.2",
@@ -524,7 +574,8 @@
       "deploymentName": "DeepSeek-V3.2",
       "avoidSystemPrompt": true,
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "Mistral-Large-3": {
       "id": "Mistral-Large-3",
@@ -541,7 +592,8 @@
       "supportsTemperature": true,
       "deploymentName": "Mistral-Large-3",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "gpt-5.1": {
       "id": "gpt-5.1",
@@ -567,7 +619,9 @@
       "verbosity": "medium",
       "supportsVerbosity": true,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-05-15"
     },
     "gpt-5.1-chat": {
       "id": "gpt-5.1-chat",
@@ -589,7 +643,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "retired",
+      "retirementDate": "2026-06-29",
+      "retirementReplacement": "gpt-chat-latest"
     },
     "gpt-5-nano": {
       "id": "gpt-5-nano",
@@ -612,7 +669,9 @@
       "verbosity": "low",
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-02-06"
     },
     "gpt-4.1-nano": {
       "id": "gpt-4.1-nano",
@@ -632,7 +691,9 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-14"
     },
     "gpt-4o-mini": {
       "id": "gpt-4o-mini",
@@ -655,7 +716,10 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-01",
+      "retirementReplacement": "gpt-4.1-mini"
     },
     "o4-mini": {
       "id": "o4-mini",
@@ -681,7 +745,9 @@
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-16"
     },
     "o3-mini": {
       "id": "o3-mini",
@@ -707,7 +773,10 @@
       "supportsReasoningEffort": true,
       "supportsMinimalReasoning": false,
       "supportsVerbosity": false,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "deprecated",
+      "retirementDate": "2026-10-01",
+      "retirementReplacement": "o4-mini"
     },
     "claude-fable-5": {
       "id": "claude-fable-5",
@@ -776,10 +845,12 @@
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
       "supportsVision": true,
-      "supportsTools": true
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2026-10-19"
     },
-    "Mistral-Medium-3": {
-      "id": "Mistral-Medium-3",
+    "mistral-medium-2505": {
+      "id": "mistral-medium-2505",
       "name": "Mistral Medium 3",
       "maxLength": 128000,
       "tokenLimit": 16000,
@@ -791,13 +862,14 @@
       "knowledgeCutoffDate": "2025-05",
       "sdk": "openai",
       "supportsTemperature": true,
-      "deploymentName": "Mistral-Medium-3",
+      "deploymentName": "mistral-medium-2505",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
-    "Mistral-Small-3.2": {
-      "id": "Mistral-Small-3.2",
-      "name": "Mistral Small 3.2",
+    "mistral-small-2503": {
+      "id": "mistral-small-2503",
+      "name": "Mistral Small 3.1",
       "maxLength": 128000,
       "tokenLimit": 16000,
       "modelType": "foundational",
@@ -806,12 +878,13 @@
       "description": "Mistral's small model. Quick and inexpensive for summaries, drafts, and simple questions.",
       "isDisabled": false,
       "provider": "mistral",
-      "knowledgeCutoffDate": "2025-06",
+      "knowledgeCutoffDate": "2025-03",
       "sdk": "openai",
       "supportsTemperature": true,
-      "deploymentName": "Mistral-Small-3.2",
+      "deploymentName": "mistral-small-2503",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "Ministral-3B": {
       "id": "Ministral-3B",
@@ -829,7 +902,8 @@
       "supportsTemperature": true,
       "deploymentName": "Ministral-3B",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "DeepSeek-R1-0528": {
       "id": "DeepSeek-R1-0528",
@@ -848,7 +922,10 @@
       "deploymentName": "DeepSeek-R1-0528",
       "avoidSystemPrompt": true,
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "legacy",
+      "retirementDate": "2026-07-13",
+      "retirementReplacement": "DeepSeek-V4-Pro"
     },
     "Llama-4-Scout-17B-16E-Instruct": {
       "id": "Llama-4-Scout-17B-16E-Instruct",
@@ -866,7 +943,8 @@
       "supportsTemperature": true,
       "deploymentName": "Llama-4-Scout-17B-16E-Instruct",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "Llama-3.3-70B-Instruct": {
       "id": "Llama-3.3-70B-Instruct",
@@ -884,7 +962,8 @@
       "supportsTemperature": true,
       "deploymentName": "Llama-3.3-70B-Instruct",
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "grok-4": {
       "id": "grok-4",
@@ -902,7 +981,160 @@
       "supportsTemperature": true,
       "supportsReasoningEffort": false,
       "supportsVerbosity": false,
-      "supportsVision": true
+      "supportsVision": true,
+      "lifecycle": "ga"
+    },
+    "gpt-5.5": {
+      "id": "gpt-5.5",
+      "name": "GPT-5.5",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "omni",
+      "sizeClass": "large",
+      "series": "gpt",
+      "seriesLabel": "GPT",
+      "versionLabel": "5.5",
+      "tagline": "Latest GPT flagship",
+      "description": "OpenAI's latest flagship model. Strong at writing, research, coding, and complex problem solving.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-02",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "reasoningEffort": "medium",
+      "supportsReasoningEffort": true,
+      "supportsMinimalReasoning": true,
+      "verbosity": "medium",
+      "supportsVerbosity": true,
+      "supportsVision": true,
+      "supportsTools": true,
+      "lifecycle": "ga",
+      "retirementDate": "2027-04-23"
+    },
+    "gpt-chat-latest": {
+      "id": "gpt-chat-latest",
+      "name": "GPT Chat (latest)",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "omni",
+      "series": "gpt-chat",
+      "seriesLabel": "GPT Chat",
+      "versionLabel": "latest",
+      "tagline": "Always the newest chat GPT",
+      "description": "A rolling alias that always points to OpenAI's newest chat-tuned model. Azure's replacement for the retired versioned gpt-*-chat models.",
+      "isDisabled": false,
+      "provider": "openai",
+      "knowledgeCutoffDate": "2026-05",
+      "sdk": "azure-openai",
+      "supportsTemperature": false,
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2026-08-28"
+    },
+    "claude-opus-4-7": {
+      "id": "claude-opus-4-7",
+      "name": "Claude Opus 4.7",
+      "maxLength": 200000,
+      "tokenLimit": 64000,
+      "modelType": "omni",
+      "sizeClass": "large",
+      "series": "claude-opus",
+      "seriesLabel": "Claude Opus",
+      "versionLabel": "4.7",
+      "tagline": "Recent Opus release",
+      "description": "A recent Opus release, between 4.6 and 4.8. Strong for long writing, research, coding, and careful analysis.",
+      "isDisabled": false,
+      "hosting": "external",
+      "provider": "anthropic",
+      "knowledgeCutoffDate": "2026-02",
+      "sdk": "anthropic-foundry",
+      "supportsTemperature": true,
+      "deploymentName": "claude-opus-4-7",
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "supportsVision": true,
+      "supportsTools": true,
+      "lifecycle": "preview",
+      "retirementDate": "2027-04-06"
+    },
+    "DeepSeek-V4-Pro": {
+      "id": "DeepSeek-V4-Pro",
+      "name": "DeepSeek-V4-Pro",
+      "maxLength": 128000,
+      "tokenLimit": 32768,
+      "modelType": "reasoning",
+      "sizeClass": "large",
+      "tagline": "Newest open reasoning model",
+      "description": "DeepSeek's newest reasoning model and Azure's replacement for the R1 line. Shows its thinking step-by-step.",
+      "isDisabled": false,
+      "provider": "deepseek",
+      "knowledgeCutoffDate": "2026-03",
+      "sdk": "openai",
+      "supportsTemperature": true,
+      "deploymentName": "DeepSeek-V4-Pro",
+      "avoidSystemPrompt": true,
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "lifecycle": "ga",
+      "retirementDate": "2027-08-20"
+    },
+    "DeepSeek-V4-Flash": {
+      "id": "DeepSeek-V4-Flash",
+      "name": "DeepSeek-V4-Flash",
+      "maxLength": 128000,
+      "tokenLimit": 32768,
+      "modelType": "foundational",
+      "sizeClass": "mini",
+      "tagline": "Fast open-source alternative",
+      "description": "DeepSeek's fast V4 variant and Azure's replacement for the V3 line. Quick for general writing and technical questions.",
+      "isDisabled": false,
+      "provider": "deepseek",
+      "knowledgeCutoffDate": "2026-03",
+      "sdk": "openai",
+      "supportsTemperature": true,
+      "deploymentName": "DeepSeek-V4-Flash",
+      "avoidSystemPrompt": true,
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "lifecycle": "ga",
+      "retirementDate": "2027-08-20"
+    },
+    "grok-4-1-fast-reasoning": {
+      "id": "grok-4-1-fast-reasoning",
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "reasoning",
+      "tagline": "Fast xAI reasoning model",
+      "description": "xAI's fast reasoning model. Thinks step-by-step with quick responses.",
+      "isDisabled": true,
+      "provider": "xai",
+      "knowledgeCutoffDate": "2025-11",
+      "sdk": "openai",
+      "supportsTemperature": true,
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
+    },
+    "grok-4-1-fast-non-reasoning": {
+      "id": "grok-4-1-fast-non-reasoning",
+      "name": "Grok 4.1 Fast",
+      "maxLength": 128000,
+      "tokenLimit": 16000,
+      "modelType": "omni",
+      "tagline": "Fast xAI chat model",
+      "description": "xAI's fast chat model. Quick responses for everyday questions and discussions.",
+      "isDisabled": true,
+      "provider": "xai",
+      "knowledgeCutoffDate": "2025-11",
+      "sdk": "openai",
+      "supportsTemperature": true,
+      "supportsReasoningEffort": false,
+      "supportsVerbosity": false,
+      "lifecycle": "ga"
     },
     "grok-3-mini": {
       "id": "grok-3-mini",
@@ -919,7 +1151,10 @@
       "sdk": "openai",
       "supportsTemperature": true,
       "supportsReasoningEffort": false,
-      "supportsVerbosity": false
+      "supportsVerbosity": false,
+      "lifecycle": "retired",
+      "retirementDate": "2026-05-01",
+      "retirementReplacement": "grok-4-1-fast-reasoning"
     }
   }
 }
