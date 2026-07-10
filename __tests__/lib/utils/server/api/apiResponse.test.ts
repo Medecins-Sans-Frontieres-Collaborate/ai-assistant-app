@@ -351,7 +351,12 @@ describe('apiResponse', () => {
       expect(json).toEqual({
         error: 'Database connection failed',
       });
-      expect(consoleErrorSpy).toHaveBeenCalledWith('API Error:', error);
+      // The error is sanitized to a single log line (CWE-117), so the spy
+      // sees a string containing the message, not the Error object itself.
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'API Error:',
+        expect.stringContaining('Database connection failed'),
+      );
     });
 
     it('should use error status if available', async () => {
