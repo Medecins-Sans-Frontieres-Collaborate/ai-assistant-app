@@ -135,7 +135,9 @@ const serverEnvSchema = z.object({
   MCP_OAUTH_ASANA_CLIENT_SECRET: z.string().optional(),
 
   // Application Configuration
-  DEFAULT_MODEL: z.string().default('gpt-5.2-chat'),
+  // Optional explicit override; when unset the default model resolves
+  // dynamically to the latest ring-enabled standard GPT (config/models.ts).
+  DEFAULT_MODEL: z.string().optional(),
   DEFAULT_USE_KNOWLEDGE_BASE: booleanString(false),
   FORCE_LOGOUT_ON_REFRESH_FAILURE: z.string().default('true'),
 
