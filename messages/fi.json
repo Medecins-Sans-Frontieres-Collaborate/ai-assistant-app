@@ -1454,7 +1454,10 @@
     "version": {
       "label": "Versio"
     },
-    "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa."
+    "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa.",
+    "variant": {
+      "label": "Vaihtoehto"
+    }
   },
   "models": {
     "gpt_4_1": {

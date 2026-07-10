@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Sürüm"
     },
-    "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir."
+    "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir.",
+    "variant": {
+      "label": "Varyant"
+    }
   },
   "models": {
     "gpt_4_1": {

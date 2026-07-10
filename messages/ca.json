@@ -1454,7 +1454,10 @@
     "version": {
       "label": "Versió"
     },
-    "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos."
+    "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos.",
+    "variant": {
+      "label": "Variant"
+    }
   },
   "models": {
     "gpt_4_1": {

@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Ndogu"
     },
-    "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi."
+    "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi.",
+    "variant": {
+      "label": "Laawol"
+    }
   },
   "models": {
     "gpt_4_1": {

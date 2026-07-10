@@ -1446,7 +1446,10 @@
     "version": {
       "label": "Versi"
     },
-    "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit."
+    "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit.",
+    "variant": {
+      "label": "Varian"
+    }
   },
   "models": {
     "gpt_4_1": {

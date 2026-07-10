@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Vèsyon"
     },
-    "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil."
+    "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil.",
+    "variant": {
+      "label": "Varyan"
+    }
   },
   "models": {
     "gpt_4_1": {

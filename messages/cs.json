@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Verze"
     },
-    "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy."
+    "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy.",
+    "variant": {
+      "label": "Varianta"
+    }
   },
   "models": {
     "gpt_4_1": {

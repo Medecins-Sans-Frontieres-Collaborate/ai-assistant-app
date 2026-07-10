@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Dikan-teny"
     },
-    "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra."
+    "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra.",
+    "variant": {
+      "label": "Karazany"
+    }
   },
   "models": {
     "gpt_4_1": {

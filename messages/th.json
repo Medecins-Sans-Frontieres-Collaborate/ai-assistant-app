@@ -1454,7 +1454,10 @@
     "version": {
       "label": "เวอร์ชัน"
     },
-    "reasoningModel": "Reasoning model: คิดเป็นขั้นตอนก่อนตอบคำถาม ช้ากว่า แต่เหมาะกับปัญหายาก"
+    "reasoningModel": "Reasoning model: คิดเป็นขั้นตอนก่อนตอบคำถาม ช้ากว่า แต่เหมาะกับปัญหายาก",
+    "variant": {
+      "label": "ตัวเลือก"
+    }
   },
   "models": {
     "gpt_4_1": {

@@ -1352,7 +1352,10 @@
     "version": {
       "label": "Version"
     },
-    "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben."
+    "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben.",
+    "variant": {
+      "label": "Variante"
+    }
   },
   "models": {
     "gpt_4_1": {

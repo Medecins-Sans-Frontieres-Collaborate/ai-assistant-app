@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Nooca"
     },
-    "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag."
+    "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag.",
+    "variant": {
+      "label": "Nooc"
+    }
   },
   "models": {
     "gpt_4_1": {

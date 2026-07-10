@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Mtundu"
     },
-    "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta."
+    "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta.",
+    "variant": {
+      "label": "Mtundu"
+    }
   },
   "models": {
     "gpt_4_1": {

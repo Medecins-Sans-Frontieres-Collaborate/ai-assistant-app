@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Toleo"
     },
-    "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu."
+    "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu.",
+    "variant": {
+      "label": "Toleo"
+    }
   },
   "models": {
     "gpt_4_1": {

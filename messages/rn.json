@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Version"
     },
-    "reasoningModel": "Model yo kwiyumvira: irabanza kwiyumvira yitonze imbere yo kwishura. Irateba ariko irakora neza ku bibazo bigoye."
+    "reasoningModel": "Model yo kwiyumvira: irabanza kwiyumvira yitonze imbere yo kwishura. Irateba ariko irakora neza ku bibazo bigoye.",
+    "variant": {
+      "label": "Ubwoko"
+    }
   },
   "models": {
     "gpt_4_1": {

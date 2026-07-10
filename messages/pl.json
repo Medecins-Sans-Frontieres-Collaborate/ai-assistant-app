@@ -1454,7 +1454,10 @@
     "version": {
       "label": "Wersja"
     },
-    "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach."
+    "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach.",
+    "variant": {
+      "label": "Wariant"
+    }
   },
   "models": {
     "gpt_4_1": {

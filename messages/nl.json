@@ -1396,7 +1396,10 @@
     "version": {
       "label": "Versie"
     },
-    "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen."
+    "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen.",
+    "variant": {
+      "label": "Variant"
+    }
   },
   "models": {
     "gpt_4_1": {

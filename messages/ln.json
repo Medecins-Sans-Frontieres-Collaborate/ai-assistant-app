@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Version"
     },
-    "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano."
+    "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano.",
+    "variant": {
+      "label": "Variante"
+    }
   },
   "models": {
     "gpt_4_1": {

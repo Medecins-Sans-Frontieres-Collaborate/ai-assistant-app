@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Inguqulo"
     },
-    "reasoningModel": "Imodeli yokucabanga: icabanga isinyathelo nesinyathelo ngaphambi kokuphendula. Iyahamba kancane, kodwa ingcono ezinkingeni ezinzima."
+    "reasoningModel": "Imodeli yokucabanga: icabanga isinyathelo nesinyathelo ngaphambi kokuphendula. Iyahamba kancane, kodwa ingcono ezinkingeni ezinzima.",
+    "variant": {
+      "label": "Uhlobiso"
+    }
   },
   "models": {
     "gpt_4_1": {

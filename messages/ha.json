@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Sigar"
     },
-    "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala."
+    "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala.",
+    "variant": {
+      "label": "Nau'i"
+    }
   },
   "models": {
     "gpt_4_1": {

@@ -1454,7 +1454,10 @@
     "version": {
       "label": "Versiune"
     },
-    "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile."
+    "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile.",
+    "variant": {
+      "label": "Variantă"
+    }
   },
   "models": {
     "gpt_4_1": {

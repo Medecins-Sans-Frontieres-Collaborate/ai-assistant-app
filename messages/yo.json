@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Ẹ̀dà"
     },
-    "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le."
+    "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le.",
+    "variant": {
+      "label": "Oniruuru"
+    }
   },
   "models": {
     "gpt_4_1": {

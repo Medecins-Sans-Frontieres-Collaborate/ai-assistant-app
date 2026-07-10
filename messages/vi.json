@@ -1485,7 +1485,10 @@
     "version": {
       "label": "Phiên bản"
     },
-    "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó."
+    "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó.",
+    "variant": {
+      "label": "Biến thể"
+    }
   },
   "models": {
     "gpt_4_1": {

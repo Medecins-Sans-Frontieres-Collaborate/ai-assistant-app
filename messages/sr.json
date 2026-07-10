@@ -1505,7 +1505,10 @@
     "version": {
       "label": "Verzija"
     },
-    "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema."
+    "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema.",
+    "variant": {
+      "label": "Varijanta"
+    }
   },
   "models": {
     "gpt_4_1": {

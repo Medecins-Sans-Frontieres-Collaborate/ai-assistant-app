@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Version"
     },
-    "reasoningModel": "Modèle de raisonnement : réfléchit étape par étape avant de répondre. Plus lent, mais meilleur pour les problèmes complexes."
+    "reasoningModel": "Modèle de raisonnement : réfléchit étape par étape avant de répondre. Plus lent, mais meilleur pour les problèmes complexes.",
+    "variant": {
+      "label": "Variante"
+    }
   },
   "models": {
     "gpt_4_1": {

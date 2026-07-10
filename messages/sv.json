@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Version"
     },
-    "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem."
+    "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem.",
+    "variant": {
+      "label": "Variant"
+    }
   },
   "models": {
     "gpt_4_1": {

@@ -1355,7 +1355,10 @@
     "version": {
       "label": "Versión"
     },
-    "reasoningModel": "Modelo de razonamiento: piensa paso a paso antes de responder. Más lento, mejor para problemas complejos."
+    "reasoningModel": "Modelo de razonamiento: piensa paso a paso antes de responder. Más lento, mejor para problemas complejos.",
+    "variant": {
+      "label": "Variante"
+    }
   },
   "models": {
     "gpt_4_1": {
