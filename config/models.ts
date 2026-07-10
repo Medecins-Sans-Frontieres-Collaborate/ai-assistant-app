@@ -17,7 +17,13 @@ export interface EnvironmentConfig {
   /** Explicit default-model override; when absent the default is DYNAMIC — the latest standard-variant GPT visible in this ring (see getDefaultModel). */
   defaultModel?: string;
   fallbackChain?: string[]; // Error-fallback order; defaults to DEFAULT_FALLBACK_CHAIN
-  disabledModels?: string[]; // Models that should not be available in this environment
+  /**
+   * EMERGENCY kill switch only — hides a model in this environment even when
+   * deployed. Deliberately empty in normal operation: model availability is
+   * controlled by Foundry deployments (+ ui-ring deployment tags), never by
+   * code. See docs/MODEL_DISCOVERY_DESIGN.md.
+   */
+  disabledModels?: string[];
 }
 
 /**
@@ -36,15 +42,18 @@ const DEFAULT_FALLBACK_CHAIN: string[] = [
 ];
 
 /**
- * Models that have metadata (config/models.json) because they are deployed in
- * at least one Foundry account, but are NOT yet part of the beta/prod static
- * offering. While those rings still serve the static list (discovery flag off),
- * gating them here keeps beta/prod behavior unchanged — the static list is not
- * region-aware, so an ungated model that isn't deployed in a user's region
- * would fail at chat time (the original EU drift bug). Remove ids from this
- * list ring-by-ring as model discovery is enabled / rollout decisions are made.
+ * Models excluded from the STATIC (non-discovery) list in beta/prod.
+ *
+ * This is NOT a rollout control. Model availability is governed by Foundry
+ * deployments (+ optional `ui-ring` deployment tags for beta-first testing);
+ * when discovery is enabled this list is ignored entirely. It exists only
+ * because the static list — served while discovery is off, or as the
+ * fallback when discovery errors — cannot verify regional deployments, so an
+ * unvetted entry would fail at chat time (the original EU drift bug).
+ * Delete this list together with the static-list path once discovery is
+ * enabled in every ring.
  */
-const NOT_YET_ROLLED_OUT: string[] = [
+const STATIC_LIST_EXCLUSIONS: string[] = [
   OpenAIModelID.GPT_5_4,
   OpenAIModelID.GPT_5_4_NANO,
   OpenAIModelID.GPT_5_3_CHAT,
@@ -58,9 +67,9 @@ const NOT_YET_ROLLED_OUT: string[] = [
   OpenAIModelID.MISTRAL_LARGE_3,
   // Catalog-only metadata (2026-07-10): known-model entries added ahead of any
   // deployment so discovery can join them by name instead of synthesizing
-  // unknowns. None are part of the beta/prod static offering yet. grok-* are
+  // unknowns. None are part of the beta/prod static offering. grok-* are
   // absent on purpose — they're isDisabled globally, which gates harder than
-  // this per-ring list.
+  // this static-list exclusion.
   OpenAIModelID.GPT_5_1,
   OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5_NANO,
@@ -92,15 +101,38 @@ const modelConfigs: Record<Environment, EnvironmentConfig> = {
     // All models available in dev; default resolves dynamically.
   },
   beta: {
-    // Beta is its own visibility ring (shares a Foundry instance with prod) so a
-    // model can be gated in beta-only without touching prod. Add ids here to
-    // hide an in-test model from prod while keeping it visible in beta.
-    disabledModels: [...NOT_YET_ROLLED_OUT],
+    // No code-level gating: model availability = Foundry deployments. Beta
+    // shares a Foundry instance with prod; beta-first testing of a model is
+    // done by tagging its deployment `ui-ring: beta` (removed to release to
+    // prod). disabledModels stays empty except in emergencies.
   },
-  prod: {
-    disabledModels: [...NOT_YET_ROLLED_OUT],
-  },
+  prod: {},
 };
+
+/**
+ * Rings that serve the vetted static offering when discovery is unavailable
+ * (flag off or discovery error). dev/localhost intentionally see the whole
+ * catalog on the static path — they point at the dev Foundry account and are
+ * where unreleased models are exercised.
+ */
+const STATIC_EXCLUSION_RINGS: Environment[] = ['beta', 'prod'];
+
+/**
+ * The static model list: full catalog minus globally disabled models, minus
+ * (in beta/prod) STATIC_LIST_EXCLUSIONS, minus any emergency disabledModels.
+ * Served only while discovery is off or as its error fallback.
+ */
+export function getStaticModelList(): OpenAIModel[] {
+  const applyExclusions = STATIC_EXCLUSION_RINGS.includes(
+    getCurrentEnvironment(),
+  );
+  return Object.values(OpenAIModels).filter(
+    (m) =>
+      !m.isDisabled &&
+      !isModelDisabled(m.id) &&
+      !(applyExclusions && STATIC_LIST_EXCLUSIONS.includes(m.id)),
+  );
+}
 
 /**
  * Gets the current environment from process.env
@@ -143,15 +175,17 @@ export function getModelConfig(): EnvironmentConfig {
  *
  * Unless the ring config sets an explicit `defaultModel` override, the
  * default is DYNAMIC: the latest (highest versionRank) standard-variant GPT
- * model that is enabled in this ring. New GPT releases become the default
- * by being added to the catalog and un-gated — no default bump needed.
+ * among `availableModels` — pass the live/served model list where you have
+ * one so the default tracks actual deployments. Without a list it resolves
+ * against the vetted static list, so callers that run before/without
+ * discovery still get a ring-safe answer.
  */
-export function getDefaultModel(): string {
+export function getDefaultModel(availableModels?: OpenAIModel[]): string {
   const override = getModelConfig().defaultModel;
   if (override) return override;
 
   let latest: OpenAIModel | undefined;
-  for (const model of Object.values(OpenAIModels)) {
+  for (const model of availableModels ?? getStaticModelList()) {
     if (model.series !== 'gpt' || model.variant !== 'standard') continue;
     if (model.isDisabled || isModelDisabled(model.id)) continue;
     if (!latest || versionRank(model) > versionRank(latest)) {
