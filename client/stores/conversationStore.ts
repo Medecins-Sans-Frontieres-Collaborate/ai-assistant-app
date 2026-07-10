@@ -17,6 +17,7 @@ import {
   isAssistantMessageGroup,
 } from '@/types/chat';
 import { FolderInterface } from '@/types/folder';
+import { WorkflowState, isConversationWorkflowType } from '@/types/workflow';
 
 import {
   ACTIVE_FILE_ACTIVATION_TOKEN_LIMIT,
@@ -62,6 +63,16 @@ interface ConversationStore {
   setConversations: (conversations: Conversation[]) => void;
   addConversation: (conversation: Conversation) => void;
   updateConversation: (id: string, updates: Partial<Conversation>) => void;
+  /**
+   * Updates a workflow conversation's persisted workflow state. Refuses
+   * (warn + no-op) when the updater returns a state whose `kind` does not
+   * match the conversation's `conversationType`. Workflow code must use
+   * this instead of raw updateConversation for state writes.
+   */
+  updateWorkflowState: (
+    id: string,
+    updater: (prev: WorkflowState | undefined) => WorkflowState,
+  ) => void;
   deleteConversation: (id: string) => void;
   selectConversation: (id: string | null) => void;
   setIsLoaded: (isLoaded: boolean) => void;
@@ -225,12 +236,68 @@ export const useConversationStore = create<ConversationStore>()(
 
       updateConversation: (id, updates) =>
         set((state) => ({
-          conversations: state.conversations.map((c) =>
-            c.id === id
-              ? { ...c, ...updates, updatedAt: new Date().toISOString() }
-              : c,
-          ),
+          conversations: state.conversations.map((c) => {
+            if (c.id !== id) return c;
+            let patch = updates;
+            // conversationType is fixed once set; strip attempts to change it.
+            if (
+              c.conversationType &&
+              'conversationType' in updates &&
+              updates.conversationType !== c.conversationType
+            ) {
+              console.warn(
+                '[ConversationStore] Ignoring attempt to change conversationType of',
+                id,
+              );
+              const { conversationType: _ignored, ...rest } = updates;
+              patch = rest;
+            }
+            return { ...c, ...patch, updatedAt: new Date().toISOString() };
+          }),
         })),
+
+      updateWorkflowState: (id, updater) =>
+        set((state) => {
+          let changed = false;
+          const conversations = state.conversations.map((c) => {
+            if (c.id !== id) return c;
+            const next = updater(c.workflowState);
+            // Updaters may return the previous state unchanged (same
+            // reference) to signal "nothing to write" — treat as a no-op
+            // so subscribers aren't re-notified and no persistence runs.
+            // Breaks feedback loops like map moveend → write → re-render.
+            if (next === c.workflowState) return c;
+            if (next.kind !== c.conversationType) {
+              console.warn(
+                '[ConversationStore] workflowState kind mismatch for',
+                id,
+                '- expected',
+                c.conversationType,
+                'got',
+                next.kind,
+              );
+              return c;
+            }
+            if (process.env.NODE_ENV !== 'production') {
+              // Soft budget: workflow state must stay small (references and
+              // bounded text, not blobs) to protect the localStorage quota.
+              const size = JSON.stringify(next).length;
+              if (size > 200_000) {
+                console.warn(
+                  `[ConversationStore] workflowState for ${id} is ${size} bytes; keep large payloads in files, not state`,
+                );
+              }
+            }
+            changed = true;
+            return {
+              ...c,
+              workflowState: next,
+              updatedAt: new Date().toISOString(),
+            };
+          });
+          // Same state object = zustand skips notify entirely.
+          return changed ? { conversations } : state;
+        }),
 
       deleteConversation: (id) => {
         const target = get().conversations.find((c) => c.id === id);
@@ -696,7 +763,7 @@ export const useConversationStore = create<ConversationStore>()(
     }),
     {
       name: 'conversation-storage',
-      version: 5, // v5: per-conversation localStorage keys for corruption resilience
+      version: 6, // v6: conversation workflows (conversationType + workflowState)
       storage: createJSONStorage(() => perConversationStorage),
       partialize: (state) => ({
         conversations: state.conversations,
@@ -756,6 +823,32 @@ export const useConversationStore = create<ConversationStore>()(
             ...conv,
             activeFilesTokensUsed: conv.activeFilesTokensUsed ?? 0,
           }));
+        }
+
+        if (version < 6) {
+          // Conversation workflows: normalize any invalid workflow fields
+          // (defensive against imported or hand-edited conversations).
+          state.conversations = state.conversations.map((conv) => {
+            if (
+              conv.conversationType &&
+              !isConversationWorkflowType(conv.conversationType)
+            ) {
+              const {
+                conversationType: _type,
+                workflowState: _state,
+                ...rest
+              } = conv;
+              return rest as Conversation;
+            }
+            if (
+              conv.workflowState &&
+              conv.workflowState.kind !== conv.conversationType
+            ) {
+              const { workflowState: _state, ...rest } = conv;
+              return rest as Conversation;
+            }
+            return conv;
+          });
         }
 
         return state;
