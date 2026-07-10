@@ -87,6 +87,12 @@ export function DataGrid({
     [columns],
   );
 
+  // Advisory only: React Compiler (not enabled in this build) would skip
+  // memoizing this component because TanStack Table instances return
+  // unstable functions. Safe regardless — table-derived values render
+  // inline only (never passed to memoized children), and the expensive
+  // derivations are hand-memoized above.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: rows,
     columns: tableColumns,

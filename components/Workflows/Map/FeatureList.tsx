@@ -49,6 +49,10 @@ export function FeatureList({
 
   // Virtualized: the list can hold up to the 2000-feature cap; a plain
   // <ul> of complex rows is the largest DOM cost in the whole workspace.
+  // Advisory only: React Compiler (not enabled in this build) would skip
+  // memoizing this component because the virtualizer returns unstable
+  // functions. Safe regardless — virtualizer values render inline only.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: features.length,
     getScrollElement: () => scrollRef.current,
