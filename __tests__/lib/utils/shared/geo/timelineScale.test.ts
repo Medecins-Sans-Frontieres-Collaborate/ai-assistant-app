@@ -1,6 +1,9 @@
 import {
+  DateRange,
   TimelineScale,
   computeTimelineScale,
+  featureDateRangeVerdict,
+  isDateRangeActive,
   msToStep,
   segmentAtStep,
   segmentLabel,
@@ -255,5 +258,79 @@ describe('segmentLabel', () => {
     expect(
       segmentLabel(segment(Date.UTC(2026, 2, 2), Date.UTC(2026, 2, 28)), 'en'),
     ).toBe('Mar 2026');
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* Date-range filtering                                                */
+/* ------------------------------------------------------------------ */
+
+describe('featureDateRangeVerdict', () => {
+  const range = (fromIso: string | null, toIso: string | null): DateRange => ({
+    fromMs: fromIso ? Date.parse(`${fromIso}T00:00:00Z`) : null,
+    toMs: toIso ? Date.parse(`${toIso}T23:59:59.999Z`) : null,
+  });
+
+  it('matches on coverage intersection, not containment', () => {
+    const ranged = feature({
+      eventStart: '2026-03-01',
+      eventEnd: '2026-05-15',
+    });
+    // The event straddles the range end — still in.
+    expect(
+      featureDateRangeVerdict(ranged, range('2026-04-01', '2026-04-30')),
+    ).toBe('in');
+    expect(
+      featureDateRangeVerdict(ranged, range('2026-06-01', '2026-06-30')),
+    ).toBe('out');
+  });
+
+  it('supports open-ended bounds', () => {
+    const point = feature({ eventStart: '2026-03-12' });
+    expect(featureDateRangeVerdict(point, range('2026-01-01', null))).toBe(
+      'in',
+    );
+    expect(featureDateRangeVerdict(point, range('2026-04-01', null))).toBe(
+      'out',
+    );
+    expect(featureDateRangeVerdict(point, range(null, '2026-03-31'))).toBe(
+      'in',
+    );
+    expect(featureDateRangeVerdict(point, range(null, '2026-03-01'))).toBe(
+      'out',
+    );
+  });
+
+  it('precision widening keeps a "2026" date in any 2026 sub-range', () => {
+    const yearly = feature({ eventStart: '2026' });
+    expect(
+      featureDateRangeVerdict(yearly, range('2026-06-01', '2026-06-30')),
+    ).toBe('in');
+    expect(featureDateRangeVerdict(yearly, range('2027-01-01', null))).toBe(
+      'out',
+    );
+  });
+
+  it('ongoing events extend to now', () => {
+    const ongoing = feature({ eventStart: '2026-01-01', eventOngoing: true });
+    expect(
+      featureDateRangeVerdict(
+        ongoing,
+        range('2026-05-01', '2026-05-31'),
+        Date.UTC(2026, 5, 10),
+      ),
+    ).toBe('in');
+  });
+
+  it('undated features are the caller policy, never in/out', () => {
+    expect(featureDateRangeVerdict(feature(), range('2026-01-01', null))).toBe(
+      'undated',
+    );
+  });
+
+  it('isDateRangeActive requires at least one bound', () => {
+    expect(isDateRangeActive(null)).toBe(false);
+    expect(isDateRangeActive({ fromMs: null, toMs: null })).toBe(false);
+    expect(isDateRangeActive({ fromMs: 0, toMs: null })).toBe(true);
   });
 });
