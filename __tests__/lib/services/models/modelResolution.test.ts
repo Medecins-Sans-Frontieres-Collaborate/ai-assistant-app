@@ -4,6 +4,7 @@ import {
   applyTagOverlay,
   inferProvider,
   inferSdk,
+  isDeploymentVisibleInRing,
   mergeDiscoveryWithMetadata,
   mergeMultiRegionDiscovery,
   synthesizeUnknownModel,
@@ -37,6 +38,32 @@ function deployed(
 afterEach(() => {
   mockIsModelDisabled.mockReset();
   mockIsModelDisabled.mockImplementation(() => false);
+});
+
+describe('isDeploymentVisibleInRing', () => {
+  it('shows untagged deployments to every ring', () => {
+    expect(isDeploymentVisibleInRing({}, 'prod')).toBe(true);
+    expect(isDeploymentVisibleInRing(undefined, 'beta')).toBe(true);
+  });
+
+  it('restricts tagged deployments to the named rings (comma-separated, case-insensitive)', () => {
+    expect(isDeploymentVisibleInRing({ 'ui-ring': 'beta' }, 'beta')).toBe(true);
+    expect(isDeploymentVisibleInRing({ 'ui-ring': 'beta' }, 'prod')).toBe(
+      false,
+    );
+    expect(isDeploymentVisibleInRing({ 'ui-ring': 'Beta, dev' }, 'dev')).toBe(
+      true,
+    );
+    expect(isDeploymentVisibleInRing({ 'ui-ring': 'beta,dev' }, 'prod')).toBe(
+      false,
+    );
+  });
+
+  it('applies no filter when the caller has no ring', () => {
+    expect(isDeploymentVisibleInRing({ 'ui-ring': 'beta' }, undefined)).toBe(
+      true,
+    );
+  });
 });
 
 describe('inferSdk', () => {
@@ -227,6 +254,33 @@ describe('mergeDiscoveryWithMetadata', () => {
       { showUnknown: false },
     );
     expect(out.map((m) => m.id)).toEqual(['gpt-5.2']);
+  });
+
+  it('honors ui-ring deployment tags: beta-tagged deployments are hidden from prod', () => {
+    const deployments = [
+      deployed('gpt-5.2', 'OpenAI'),
+      deployed('claude-opus-4-6', 'Anthropic', { 'ui-ring': 'beta' }),
+    ];
+    const prod = mergeDiscoveryWithMetadata(deployments, metadata, {
+      showUnknown: false,
+      ring: 'prod',
+    });
+    expect(prod.map((m) => m.id)).toEqual(['gpt-5.2']);
+
+    const beta = mergeDiscoveryWithMetadata(deployments, metadata, {
+      showUnknown: false,
+      ring: 'beta',
+    });
+    expect(beta.map((m) => m.id)).toEqual(['gpt-5.2', 'claude-opus-4-6']);
+  });
+
+  it('shows every deployment when no ring is passed (backward compatible)', () => {
+    const out = mergeDiscoveryWithMetadata(
+      [deployed('claude-opus-4-6', 'Anthropic', { 'ui-ring': 'beta' })],
+      metadata,
+      { showUnknown: false },
+    );
+    expect(out.map((m) => m.id)).toEqual(['claude-opus-4-6']);
   });
 
   it('surfaces unknown deployed models (synthesized) when showUnknown=true', () => {

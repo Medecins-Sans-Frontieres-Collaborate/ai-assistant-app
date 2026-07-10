@@ -88,6 +88,35 @@ describe('seriesRepresentative', () => {
     const allLegacy = [model('gpt-5.4', '5.4', { tier: 'legacy' })];
     expect(seriesRepresentative(allLegacy, undefined)?.id).toBe('gpt-5.4');
   });
+
+  it('prefers the lowest defaultRank over featured, ties going to the newest', () => {
+    // Newest-first, like getSeriesVersions output. Sonnet-shaped scenario:
+    // every sonnet carries rank 1, so the newest available one wins even
+    // though an Opus is featured.
+    const versions = [
+      model('opus-new', '4.8', { tier: 'featured', defaultRank: 2 }),
+      model('sonnet-new', '4.6', { defaultRank: 1 }),
+      model('sonnet-old', '4.5', { defaultRank: 1 }),
+    ];
+    expect(seriesRepresentative(versions, undefined)?.id).toBe('sonnet-new');
+    // The selection still beats defaultRank.
+    expect(seriesRepresentative(versions, 'sonnet-old')?.id).toBe('sonnet-old');
+    // When ranked members are unavailable (filtered out), featured wins.
+    expect(
+      seriesRepresentative([model('x', '1', { tier: 'featured' })]),
+    ).toEqual(model('x', '1', { tier: 'featured' }));
+  });
+
+  it('walks the DeepSeek-style cross-variant preference as availability shrinks', () => {
+    const flash = model('v4-flash', '4', { defaultRank: 1 });
+    const pro = model('v4-pro', '4', { defaultRank: 2 });
+    const v32 = model('v3.2', '3.2', { defaultRank: 3 });
+    const v31 = model('v3.1', '3.1', { defaultRank: 3 });
+    expect(seriesRepresentative([flash, pro, v32, v31])?.id).toBe('v4-flash');
+    expect(seriesRepresentative([pro, v32, v31])?.id).toBe('v4-pro');
+    expect(seriesRepresentative([v32, v31])?.id).toBe('v3.2');
+    expect(seriesRepresentative([v31])?.id).toBe('v3.1');
+  });
 });
 
 // A ragged two-variant family for the variant helpers: Standard has three
@@ -109,6 +138,16 @@ describe('getFamilyVariants', () => {
       'gpt-5-mini',
       'gpt-4.1-mini',
     ]);
+  });
+
+  it('orders variants by variantRank regardless of appearance order', () => {
+    // Claude-shaped: haiku appears first in the list but ranks last.
+    const variants = getFamilyVariants([
+      model('haiku', '4.5', { variant: 'haiku', variantRank: 3 }),
+      model('sonnet', '4.6', { variant: 'sonnet', variantRank: 2 }),
+      model('opus', '4.8', { variant: 'opus', variantRank: 1 }),
+    ]);
+    expect(variants.map((v) => v.key)).toEqual(['opus', 'sonnet', 'haiku']);
   });
 
   it("groups members without a variant under the '' bucket", () => {
