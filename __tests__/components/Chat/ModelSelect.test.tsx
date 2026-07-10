@@ -111,22 +111,15 @@ describe('ModelSelect', () => {
     it('renders the full hierarchy at a glance (no collapsed catalog)', () => {
       render(<ModelSelect />);
 
-      // Check that model buttons exist (using getAllByRole since there might be multiple GPT-5 variants)
-      const gpt5Buttons = screen
-        .getAllByRole('button')
-        .filter((btn) => btn.textContent?.includes('GPT-5'));
-      expect(gpt5Buttons.length).toBeGreaterThan(0);
-
-      // Series rows visible without any clicks (^ anchors exclude the
-      // "Star …" toggles, whose accessible names contain the model name)
-      expect(
-        screen.getByRole('button', { name: /^DeepSeek V3/i }),
-      ).toBeInTheDocument();
-
-      // Check for Llama (plain single row)
-      expect(
-        screen.getByRole('button', { name: /^Llama 4 Maverick/i }),
-      ).toBeInTheDocument();
+      // One row per family, fronted by the representative with an inline
+      // variant/version tag ('standard' variant labels are suppressed).
+      expect(screen.getByText('GPT').closest('button')).not.toBeNull();
+      expect(screen.getByText('GPT Chat').closest('button')).not.toBeNull();
+      expect(screen.getByText('DeepSeek').closest('button')).not.toBeNull();
+      // Claude fronts Opus 4.8; Llama fronts Maverick 4 (non-standard
+      // variants keep their label in the tag).
+      expect(screen.getByText('Opus 4.8')).toBeInTheDocument();
+      expect(screen.getByText('Maverick 4')).toBeInTheDocument();
     });
 
     it('displays search mode toggle for all models', () => {
@@ -169,7 +162,7 @@ describe('ModelSelect', () => {
     it('calls updateConversation when model is selected', async () => {
       render(<ModelSelect />);
 
-      const deepseekButton = screen.getByText('DeepSeek V3').closest('button');
+      const deepseekButton = screen.getByText('DeepSeek').closest('button');
       expect(deepseekButton).not.toBeNull();
 
       fireEvent.click(deepseekButton!);
@@ -486,26 +479,28 @@ describe('ModelSelect', () => {
       const gptIndex = names.indexOf('GPT');
       const mistralIndex = names.findIndex((n) => n.startsWith('Mistral'));
       const deepseekIndex = names.findIndex((n) => n.startsWith('DeepSeek'));
-      const o3Index = names.indexOf('o3');
+      const oSeriesIndex = names.indexOf('o-series');
 
       expect(gptIndex).toBeGreaterThanOrEqual(0);
       // Mistral sits in the top rows, below the GPT flagship…
       expect(gptIndex).toBeLessThan(mistralIndex);
       expect(mistralIndex).toBeLessThan(deepseekIndex);
-      // …and o3 is demoted below it despite being an OpenAI model.
-      expect(mistralIndex).toBeLessThan(o3Index);
+      // …and the o-series reasoning family is demoted below it despite being
+      // OpenAI models.
+      expect(mistralIndex).toBeLessThan(oSeriesIndex);
     });
 
     it('marks dedicated reasoning models with a quiet icon, not a section', () => {
       render(<ModelSelect />);
 
       // No Reasoning/General sub-headers anymore…
-      expect(screen.queryByText('Reasoning')).not.toBeInTheDocument();
       expect(screen.queryByText('General')).not.toBeInTheDocument();
-      // …instead o3 and DeepSeek-R1 rows carry the tooltip'd brain icon.
+      // …instead the o-series row (fronted by o3) carries the tooltip'd
+      // brain icon. DeepSeek's row fronts the standard variant, so its
+      // reasoning members mark themselves via the Variant control instead.
       expect(
         screen.getAllByLabelText(/Reasoning model:/).length,
-      ).toBeGreaterThanOrEqual(2);
+      ).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -519,7 +514,7 @@ describe('ModelSelect', () => {
       expect(screen.queryByText('Recommended')).not.toBeInTheDocument();
       // The model list is fully visible — nothing is collapsed away — and
       // there are no per-family headers; provider icons carry the grouping.
-      expect(screen.getByText('DeepSeek-R1')).toBeInTheDocument();
+      expect(screen.getByText('DeepSeek')).toBeInTheDocument();
       expect(screen.queryByText(/OpenAI \(\d+\)/)).not.toBeInTheDocument();
       expect(screen.queryByText(/Anthropic \(\d+\)/)).not.toBeInTheDocument();
     });
@@ -556,13 +551,71 @@ describe('ModelSelect', () => {
       expect(screen.getByTitle('GPT-4o')).toBeInTheDocument();
     });
 
+    it('scopes Version chips to the active variant and switches variants via the Variant control', async () => {
+      render(<ModelSelect />);
+
+      // Selected model is GPT-5.2 (standard variant) → the Variant control
+      // offers the family's size variants, and the Version chips exclude
+      // mini/nano members.
+      expect(screen.getByText('Variant')).toBeInTheDocument();
+      const variantGroup = screen.getByRole('group', { name: 'Variant' });
+      expect(within(variantGroup).getByText('Standard')).toBeInTheDocument();
+      expect(within(variantGroup).getByText('Mini')).toBeInTheDocument();
+      expect(within(variantGroup).getByText('Nano')).toBeInTheDocument();
+      const versionGroup = screen.getByRole('group', { name: 'Version' });
+      expect(
+        within(versionGroup).queryByTitle('GPT-5 Mini'),
+      ).not.toBeInTheDocument();
+      expect(within(versionGroup).getByTitle('GPT-5.4')).toBeInTheDocument();
+
+      // Switching to Mini: no 5.2 mini exists, so the ragged-matrix fallback
+      // selects the variant's representative (GPT-5 Mini).
+      fireEvent.click(within(variantGroup).getByText('Mini'));
+
+      await waitFor(() => {
+        expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith(
+          OpenAIModelID.GPT_5_MINI,
+        );
+      });
+    });
+
+    it('does not render a Variant control for single-variant families', () => {
+      mockUseConversations.selectedConversation = {
+        id: 'conv-1',
+        name: 'Test',
+        messages: [],
+        model: OpenAIModels[OpenAIModelID.GPT_5_2_CHAT],
+        prompt: '',
+        temperature: 0.7,
+        folderId: null,
+      };
+
+      render(<ModelSelect />);
+
+      // GPT Chat has versions but no variants.
+      expect(screen.getByText('Version')).toBeInTheDocument();
+      expect(screen.queryByText('Variant')).not.toBeInTheDocument();
+    });
+
+    it('hides no-longer-relevant GPT size rows from the list', () => {
+      render(<ModelSelect />);
+
+      // Mini/nano models are variants inside the GPT row now, not rows.
+      expect(screen.queryByText('GPT Mini')).not.toBeInTheDocument();
+      expect(screen.queryByText('GPT-5.4 Nano')).not.toBeInTheDocument();
+    });
+
     it('star toggle on a tree card stars the model in the store', () => {
       render(<ModelSelect />);
 
-      fireEvent.click(screen.getByRole('button', { name: 'Star DeepSeek-R1' }));
+      // The DeepSeek family row fronts its featured member (V3.2); the star
+      // acts on that concrete model, not the whole family.
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Star DeepSeek-V3.2' }),
+      );
 
       expect(useSettingsStore.getState().starredModelIds).toContain(
-        'DeepSeek-R1',
+        'DeepSeek-V3.2',
       );
     });
 
@@ -579,10 +632,9 @@ describe('ModelSelect', () => {
         // Informational region badge on the card…
         expect(screen.getByText('EU')).toBeInTheDocument();
 
-        // …but selection works (chat routes to the hosting region).
-        fireEvent.click(
-          screen.getByRole('button', { name: /^Mistral Large 3/i }),
-        );
+        // …but selection works (chat routes to the hosting region). The
+        // Mistral family row fronts the featured Large 3.
+        fireEvent.click(screen.getByText('Mistral').closest('button')!);
         await waitFor(() =>
           expect(mockUseConversations.updateConversation).toHaveBeenCalled(),
         );

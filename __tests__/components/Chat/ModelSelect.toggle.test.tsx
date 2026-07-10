@@ -321,9 +321,9 @@ describe('ModelSelect - Toggle Functionality', () => {
 
       const { rerender } = render(<ModelSelect />);
 
-      // Switch to another model: the DeepSeek V3 series card selects the
-      // newest version (V3.2).
-      const deepseekButton = screen.getByText('DeepSeek V3').closest('button');
+      // Switch to another model: the DeepSeek family card selects its
+      // representative (the featured V3.2).
+      const deepseekButton = screen.getByText('DeepSeek').closest('button');
       fireEvent.click(deepseekButton!);
 
       await waitFor(() => {
