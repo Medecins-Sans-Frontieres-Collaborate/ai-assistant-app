@@ -377,6 +377,12 @@ export function failJob(
  * @returns The job, or undefined if not found
  */
 export function getJob(jobId: string): ChunkedJob | undefined {
+  // getJobFilePath also validates (and throws); this local guard makes the
+  // path provably traversal-safe at the fs call sites below and turns a
+  // malformed id into the same "not found" result as a missing job.
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return undefined;
+  }
   const filePath = getJobFilePath(jobId);
 
   try {
@@ -386,7 +392,7 @@ export function getJob(jobId: string): ChunkedJob | undefined {
     const data = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(data) as ChunkedJob;
   } catch (error) {
-    console.warn(`[ChunkedJobStore] Error reading job ${jobId}:`, error);
+    console.warn('[ChunkedJobStore] Error reading job %s:', jobId, error);
     return undefined;
   }
 }
