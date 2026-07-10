@@ -19,6 +19,7 @@ import {
   IconTrash,
   IconUpload,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { signOut, useSession } from 'next-auth/react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -34,6 +35,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
 
+import { createWorkflowConversation } from '@/lib/utils/app/conversationInit';
 import {
   exportConversation,
   readConversationFile,
@@ -48,6 +50,10 @@ import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
+import {
+  CONVERSATION_WORKFLOW_TYPES,
+  ConversationWorkflowType,
+} from '@/types/workflow';
 
 import { SearchModal } from './components/SearchModal';
 import { SidebarHeader } from './components/SidebarHeader';
@@ -55,6 +61,8 @@ import { CustomizationsModal } from '@/components/QuickActions/CustomizationsMod
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import Modal from '@/components/UI/Modal';
+import { createInitialWorkflowState } from '@/components/Workflows/initialState';
+import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
 import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
@@ -70,6 +78,11 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export const Sidebar = memo(function Sidebar() {
   const t = useTranslations();
+  const tWorkflows = useTranslations('workflows');
+  // Fail-closed: conversation workflows are a brand-new surface; an LD
+  // outage must degrade to hidden. See docs/LAUNCHDARKLY_FLAGS.md.
+  const { conversationWorkflows } = useFlags();
+  const workflowsEnabled = conversationWorkflows === true;
   const modifierLabel = usePlatformModifier();
   const params = useParams();
   const locale = params?.locale || 'en';
@@ -208,9 +221,15 @@ export const Sidebar = memo(function Sidebar() {
   const handleNewConversation = () => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
 
-    // Check if the latest conversation is already empty
+    // Check if the latest conversation is already empty (workflow
+    // conversations don't count — reusing one would open its workflow
+    // window instead of a fresh chat)
     const latestConversation = conversations[0];
-    if (latestConversation && latestConversation.messages.length === 0) {
+    if (
+      latestConversation &&
+      latestConversation.messages.length === 0 &&
+      !latestConversation.conversationType
+    ) {
       if (latestConversation.id !== selectedConversation?.id) {
         // Switch to the existing empty conversation
         selectConversation(latestConversation.id);
@@ -271,6 +290,37 @@ export const Sidebar = memo(function Sidebar() {
 
     addConversation(newConversation);
     selectConversation(newConversation.id);
+  };
+
+  const handleNewWorkflowConversation = (type: ConversationWorkflowType) => {
+    setShowNewChatMenu(false);
+
+    // Reuse the latest conversation if it's still empty and untyped —
+    // converting it avoids leaving an orphan empty chat in the sidebar.
+    const latestConversation = conversations[0];
+    if (
+      latestConversation &&
+      latestConversation.messages.length === 0 &&
+      !latestConversation.conversationType
+    ) {
+      updateConversation(latestConversation.id, {
+        conversationType: type,
+        workflowState: createInitialWorkflowState(type),
+      });
+      selectConversation(latestConversation.id);
+      return;
+    }
+
+    if (models.length === 0) return;
+    const newConversation = createWorkflowConversation(
+      models,
+      defaultModelId,
+      systemPrompt || '',
+      temperature || 0.5,
+      type,
+      createInitialWorkflowState(type),
+    );
+    addConversation(newConversation);
   };
 
   // Trigger new-conversation from keyboard shortcut event.
@@ -556,6 +606,31 @@ export const Sidebar = memo(function Sidebar() {
           >
             <div className="rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
               <div className="p-1">
+                {workflowsEnabled && (
+                  <>
+                    {CONVERSATION_WORKFLOW_TYPES.map((type) => {
+                      const meta = WORKFLOW_META[type];
+                      const Icon = meta.icon;
+                      const labels: Record<typeof meta.i18nKey, string> = {
+                        translation: tWorkflows('sidebar.newTranslation'),
+                        document: tWorkflows('sidebar.newDocument'),
+                        dataAnalysis: tWorkflows('sidebar.newDataAnalysis'),
+                        map: tWorkflows('sidebar.newMap'),
+                      };
+                      return (
+                        <button
+                          key={type}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                          onClick={() => handleNewWorkflowConversation(type)}
+                        >
+                          <Icon size={14} />
+                          {labels[meta.i18nKey]}
+                        </button>
+                      );
+                    })}
+                    <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                  </>
+                )}
                 <button
                   className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
