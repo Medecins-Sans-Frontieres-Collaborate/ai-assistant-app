@@ -142,6 +142,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      hostedRegion,
       threadId,
       forcedAgentType,
       tone,
@@ -153,7 +154,26 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       customDisplayName,
       agentSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
+      extraction,
     } = body;
+
+    if (mcpServers?.length) {
+      // Redacted summary ONLY — entries can carry auth tokens.
+      console.log('[Middleware] MCP servers on request:', {
+        count: mcpServers.length,
+        catalogKeys: mcpServers
+          .map((s: { catalogKey?: string }) => s.catalogKey)
+          .filter(Boolean),
+        hasCustom: mcpServers.some(
+          (s: { catalogKey?: string }) => !s.catalogKey,
+        ),
+        pendingToolCalls: mcpPendingToolCalls?.length ?? 0,
+        loopRound: mcpLoopRound ?? 0,
+      });
+    }
 
     if (tone) {
       console.log('[Middleware] Received tone from client:', {
@@ -176,16 +196,23 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       customDisplayName,
       agentSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
       temperature,
       stream,
       reasoningEffort,
       verbosity,
       botId,
       searchMode,
+      hostedRegion,
       threadId,
       forcedAgentType,
       tone,
       streamingSpeed,
+      // Structured extraction payload (optional). Up to 3 recipes; the
+      // ExtractionEnricher composes the JSON-schema response format.
+      extraction,
     };
   } catch (error) {
     if (error instanceof PipelineError) {

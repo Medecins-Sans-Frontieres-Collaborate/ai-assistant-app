@@ -2,8 +2,10 @@
 
 import toast from 'react-hot-toast';
 
+import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
@@ -14,6 +16,7 @@ import {
 } from '@/lib/utils/shared/chat/messageVersioning';
 import { windowMessagesForAPI } from '@/lib/utils/shared/chat/messageWindowing';
 import { StreamParser } from '@/lib/utils/shared/chat/streamParser';
+import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import { AgentType } from '@/types/agent';
 import {
@@ -25,6 +28,7 @@ import {
   MessageType,
   ToolCallRecord,
 } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
 import {
   OpenAIModel,
   OpenAIModelID,
@@ -34,12 +38,13 @@ import {
 import { Citation } from '@/types/rag';
 import { SearchMode } from '@/types/searchMode';
 
+import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
 import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
 import { ApiError, chatService } from '@/client/services';
-import { getFallbackModel } from '@/config/models';
+import { getFallbackModel, isModelDisabled } from '@/config/models';
 import { getOrganizationAgentById } from '@/lib/organizationAgents';
 import { ConsentRequestPayload } from '@/lib/streamMarkers';
 import { create } from 'zustand';
@@ -251,6 +256,8 @@ interface ChatStore {
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    /** Real per-request token usage reported by the server, when available. */
+    usage?: TokenUsageMetadata;
     /** MCP tool calls observed in the stream, for the post-stream summary. */
     toolCalls?: ToolCallRecord[];
     /** Consent prompts emitted in the stream — persisted onto the assistant
@@ -525,9 +532,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      // Record real token usage for the local Usage & impact stats. Keyed by
+      // the payload's served model/region — never the conversation's model
+      // (the server fallback chain may have switched).
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       // Create assistant message
       const assistantMessage = buildAssistantMessage(
@@ -697,8 +712,32 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       conversation.model.id.startsWith('custom-') ||
       conversation.model.isCustomAgent;
 
-    let latestModelConfig =
+    let latestModelConfig: OpenAIModel | undefined =
       OpenAIModels[conversation.model.id as OpenAIModelID];
+
+    // Discovered models (from /api/models) aren't in the static OpenAIModels
+    // map, so consult the live model list before treating the model as removed.
+    if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
+      const matched = settings.models.find(
+        (m) => m.id === conversation.model.id,
+      );
+      // Re-validate against the ring gate AND the region gate before
+      // accepting: a discovered model that's now disabled (ring-gated off,
+      // flagged isDisabled) or not usable from the user's region (EU users
+      // may only use EU-hosted models; US users can use anything via
+      // cross-region routing) must fall through to the fallback-model path
+      // rather than being sent as-is and failing at request time. The check
+      // runs on `matched` (the live list entry), never on the conversation's
+      // stale model snapshot.
+      if (
+        matched &&
+        !isModelDisabled(matched.id) &&
+        !matched.isDisabled &&
+        isModelSelectableInRegion(matched, settings.userRegion)
+      ) {
+        latestModelConfig = matched;
+      }
+    }
 
     if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
       console.warn(
@@ -724,12 +763,59 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
-    // Approval-resume: the server only uses the approval items; skip the
-    // (otherwise unused) message windowing pass and send just the trailing
-    // entry to satisfy non-empty-array validators downstream.
-    const messagesForAPI = approvalResponses?.length
-      ? flattenEntriesForAPI(conversation.messages).slice(-1)
-      : windowMessagesForAPI(flattenEntriesForAPI(conversation.messages));
+    // Native-MCP approval resume detection: the consent requests persisted on
+    // the trailing assistant message carry a server_id when they came from
+    // the native tool loop (Foundry-agent approvals don't). The two resume
+    // protocols differ: Foundry keeps state server-side (thread), the native
+    // loop is stateless and needs the full transcript + pending calls back.
+    const flatMessages = flattenEntriesForAPI(conversation.messages);
+    const lastFlatMessage = flatMessages[flatMessages.length - 1];
+    const mcpPendingConsents =
+      approvalResponses?.length && lastFlatMessage?.role === 'assistant'
+        ? (lastFlatMessage.consentRequests ?? []).filter(
+            (c) =>
+              c.kind === 'approval' && c.server_id && c.approval_request_id,
+          )
+        : [];
+    const isMcpResume =
+      mcpPendingConsents.length > 0 &&
+      approvalResponses!.some((a) =>
+        mcpPendingConsents.some(
+          (c) => c.approval_request_id === a.approval_request_id,
+        ),
+      );
+
+    // Approval-resume (Foundry): the server only uses the approval items;
+    // skip the (otherwise unused) message windowing pass and send just the
+    // trailing entry to satisfy non-empty-array validators downstream.
+    // Native-MCP resume sends the FULL windowed transcript instead — the
+    // stateless server reconstructs the tool-call round from it.
+    const messagesForAPI =
+      approvalResponses?.length && !isMcpResume
+        ? flatMessages.slice(-1)
+        : windowMessagesForAPI(flatMessages);
+
+    // Echo the whole pending batch back (not just the answered ones): the
+    // server auto-denies unanswered calls, mirroring the Foundry behavior.
+    const mcpPendingToolCalls = isMcpResume
+      ? mcpPendingConsents.map((c) => ({
+          id: c.approval_request_id!,
+          serverId: c.server_id!,
+          toolName: c.tool_name ?? '',
+          argumentsJson: c.tool_arguments ?? '{}',
+        }))
+      : undefined;
+    // Round counter for the server's loop cap. Each consent round appends one
+    // assistant message, so the trailing-assistant run length approximates
+    // the round index (validator clamps at 10 anyway).
+    const mcpLoopRound = isMcpResume
+      ? Math.min(
+          10,
+          flatMessages.length -
+            1 -
+            flatMessages.findLastIndex((m) => m.role !== 'assistant'),
+        )
+      : undefined;
 
     // Get the toneId from the latest user message and look up the full tone object
     const latestUserMessage = messagesForAPI
@@ -759,6 +845,85 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const effectiveSearchMode =
       isAgentInvocation && !orgAgentSearchAllowed ? undefined : searchMode;
 
+    // Native MCP servers for this turn. Skipped for agent invocations (the
+    // Foundry runtime does its own tool orchestration). Curated entries need
+    // a token to be useful; arbitrary entries additionally require BOTH the
+    // user opt-in and the LaunchDarkly flag mirror — flipping the flag off
+    // stops arbitrary servers from being SENT, not just shown.
+    const mcpCandidates = isAgentInvocation
+      ? []
+      : settings.mcpServers
+          .filter((s) => s.enabled)
+          .filter(
+            (s) =>
+              s.catalogKey ||
+              (settings.allowArbitraryMcpServers &&
+                settings.mcpArbitraryFlagEnabled),
+          );
+    // Per-server auth: oauth servers refresh through the proxy first (single-
+    // flight) and are EXCLUDED when no live access token exists (needsReauth);
+    // bearer/header servers need their token; 'none' servers go bare.
+    const mcpServersToSend = (
+      await Promise.all(
+        mcpCandidates.map(async (s) => {
+          let effectiveToken: string | undefined;
+          if (s.authMode === 'oauth') {
+            effectiveToken = await ensureFreshOauthToken(s);
+            if (!effectiveToken) return null;
+          } else if (s.authMode === 'none') {
+            effectiveToken = undefined;
+          } else {
+            if (!s.authToken && s.catalogKey) return null;
+            effectiveToken = s.authToken;
+          }
+          return {
+            id: s.id,
+            name: s.name,
+            // The server resolves curated URLs from the catalog; don't send one.
+            url: s.catalogKey ? undefined : s.url,
+            authToken: effectiveToken,
+            catalogKey: s.catalogKey,
+          };
+        }),
+      )
+    ).filter((s): s is NonNullable<typeof s> => s !== null);
+
+    // Resolve extraction payload from the chat-input store + the persisted
+    // recipes. Extraction mode is ephemeral (per-conversation) and recipes
+    // travel inline because the server has no recipe store.
+    const inputState = useChatInputStore.getState();
+    let extraction: ExtractionRequest | undefined;
+    if (inputState.extractionMode) {
+      const selectedRecipes = settings.extractionRecipes.filter((r) =>
+        inputState.extractionRecipeIds.includes(r.id),
+      );
+      if (selectedRecipes.length > 0) {
+        extraction = {
+          recipeIds: selectedRecipes.map((r) => r.id),
+          recipes: selectedRecipes,
+        };
+      } else {
+        extraction = {
+          recipeIds: [],
+          recipes: [],
+          autoMode: true,
+        };
+      }
+    }
+
+    // Cross-region routing: the conversation's explicit choice wins;
+    // otherwise a US user on an EU-only model implicitly targets EU (the
+    // model has no home-region instance to hit). EU users send nothing —
+    // the server forces EU for them regardless.
+    const liveModelEntry = settings.models.find((m) => m.id === modelToSend.id);
+    const hostedRegion =
+      conversation.hostedRegion ??
+      (settings.userRegion === 'US' &&
+      liveModelEntry?.hostedIn?.length &&
+      !liveModelEntry.hostedIn.includes('US')
+        ? 'EU'
+        : undefined);
+
     return await chatService.chat(modelToSend, messagesForAPI, {
       prompt: settings.systemPrompt,
       temperature: settings.temperature,
@@ -769,6 +934,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         conversation.reasoningEffort || modelToSend.reasoningEffort,
       verbosity: conversation.verbosity || modelToSend.verbosity,
       searchMode: effectiveSearchMode,
+      hostedRegion,
       tone, // Pass the full tone object
       signal: abortController?.signal, // Pass abort signal
       streamingSpeed: settings.streamingSpeed, // Pass streaming speed configuration
@@ -782,6 +948,10 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
       agentSourcePath: modelToSend.agentSource,
       approvalResponses,
+      mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
+      mcpPendingToolCalls,
+      mcpLoopRound,
+      extraction,
     });
   },
 
@@ -812,6 +982,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }>;
     activeFilesTokensConsumed?: number;
     activeFilesDropped?: string[];
+    usage?: TokenUsageMetadata;
     toolCalls?: ToolCallRecord[];
     consentRequests?: ConsentRequest[];
   }> => {
@@ -963,6 +1134,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     // Finalize stream
     const finalContent = streamParser.finalize();
+
+    // Auth-classified MCP tool failures flip the connector to needs-reauth
+    // so the Connectors row shows "Reconnect" without waiting for the next
+    // settings-time validation.
+    for (const record of streamParser.getToolCallRecords?.() ?? []) {
+      if (record.error_kind !== 'auth' || !record.server_id) continue;
+      const settingsState = useSettingsStore.getState();
+      const serverConfig = settingsState.mcpServers.find(
+        (s) => s.id === record.server_id,
+      );
+      if (serverConfig?.authMode === 'oauth' && serverConfig.oauth) {
+        settingsState.updateMcpServer(serverConfig.id, {
+          oauth: {
+            ...serverConfig.oauth,
+            accessToken: undefined,
+            needsReauth: true,
+          },
+        });
+      }
+    }
+
     return {
       finalContent,
       threadId: streamParser.getThreadId(),
@@ -970,6 +1162,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       fileCacheUpdates: streamParser.getFileCacheUpdates?.(),
       activeFilesTokensConsumed: streamParser.getActiveFilesTokensConsumed?.(),
       activeFilesDropped: streamParser.getActiveFilesDropped?.(),
+      usage: streamParser.getUsage?.(),
       toolCalls: streamParser.getToolCallRecords?.(),
       consentRequests: streamParser.getConsentRequests?.(),
     };
@@ -1307,9 +1500,17 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         fileCacheUpdates,
         activeFilesTokensConsumed,
         activeFilesDropped,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      // Record real token usage for the local Usage & impact stats. Keyed by
+      // the payload's served model/region — never the conversation's model
+      // (the server fallback chain may have switched).
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       // Create assistant message
       const assistantMessage = buildAssistantMessage(
@@ -1635,9 +1836,14 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         threadId,
         pendingTranscriptions,
+        usage,
         toolCalls,
         consentRequests,
       } = await get().processStream(stream, streamParser, showLoadingTimeout);
+
+      if (usage) {
+        useSettingsStore.getState().recordTokenUsage(usage);
+      }
 
       const assistantMessage = buildAssistantMessage(
         streamParser,

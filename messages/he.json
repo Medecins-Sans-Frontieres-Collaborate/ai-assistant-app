@@ -408,7 +408,22 @@
     "noProjectsFound": "לא נמצאו פרויקטים. בשימוש \"default\".",
     "selectAllRequired": "בחר מנוי, חשבון ופרויקט.",
     "subscriptionRequired": "בחר מנוי",
-    "accountRequired": "בחר חשבון Foundry"
+    "accountRequired": "בחר חשבון Foundry",
+    "projectSelectionRequired": "בחר פרויקט מהרשימה.",
+    "scanningResources": "סורק את המנויים של Azure...",
+    "searchProjectsPlaceholder": "חפש פרויקטים...",
+    "noProjectsDiscovered": "לא נמצאו פרויקטי Foundry במנויים שלך. השתמש בהזנה ידנית אם ידוע לך הנתיב.",
+    "discoveryPartialWarning": "לא ניתן לסרוק {count, plural, one {מנוי אחד} other {# מנויים}}. אם הפרויקט שלך חסר, השתמש בהזנה ידנית.",
+    "discoveryTruncatedWarning": "היו יותר מדי משאבים כדי להשלים את הסריקה. אם הפרויקט שלך חסר, השתמש בהזנה ידנית.",
+    "retryScan": "נסה שוב לסרוק",
+    "next": "הבא",
+    "back": "חזור",
+    "selectAgentsDescription": "בחר אילו סוכנים מפרויקט זה יופיעו בבוחר המודלים שלך.",
+    "selectAll": "בחר הכול",
+    "deselectAll": "נקה סימון",
+    "agentsSelectedCount": "נבחרו {selected} מתוך {total} סוכנים",
+    "autoAddLabel": "הוסף סוכנים חדשים אוטומטית",
+    "autoAddDescription": "סוכנים שיתווספו לפרויקט בהמשך יופיעו אוטומטית. סוכנים שלא סומנו יישארו מחוץ לרשימה."
   },
   "Quick Actions": "פעולות מהירות",
   "Type / in chat to access your prompts": "הקלד / בצ'אט כדי לגשת להנחיות שלך",
@@ -722,7 +737,7 @@
     "stopGenerationDontAskAgainButton": "אל תשאל שוב בעת עצירה באמצעות הכפתור",
     "stopGenerationDontAskAgainKeyboard": "אל תשאל שוב בעת עצירה באמצעות המקלדת",
     "generateResponseButton": "צור תגובה",
-    "downloadResponse": "הורד תגובה",
+    "downloadResponse": "הורדת תגובה",
     "activity": {
       "callingTool": "מפעיל כלי…",
       "callingService": "מפעיל שירות חיצוני…",
@@ -735,7 +750,19 @@
       "listingTools": "בודק אילו כלים זמינים…",
       "analyzingFiles": "מנתח את הקבצים שלך…",
       "searchingKnowledge": "מחפש בבסיס הידע…",
-      "cancellingPriorTool": "מבטל בקשת כלי קודמת…"
+      "cancellingPriorTool": "מבטל בקשת כלי קודמת…",
+      "workflow": {
+        "preparingDocument": "מכין הפניות...",
+        "writingDocument": "כותב את המסמך...",
+        "analyzingSource": "מנתח את טקסט המקור...",
+        "translating": "מתרגם...",
+        "reviewingTranslation": "סבב סקירה {round} מתוך {total}...",
+        "revisingTranslation": "מיישם הערות סקירה...",
+        "extractingRows": "חולץ שורות מתוך {source}...",
+        "transformingTable": "ממיר את הטבלה...",
+        "findingLocations": "מזהה מיקומים...",
+        "updatingMap": "מעדכן את המפה..."
+      }
     },
     "toolSummary": {
       "usedTools": "השתמש ב־{count, plural, one {# כלי} other {# כלים}}",
@@ -796,7 +823,8 @@
     "listen": "האזן",
     "processingAudio": "מעבד שמע...",
     "ttsError": "שגיאה ביצירת שמע. נא לנסות שוב.",
-    "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך"
+    "unsupportedMessageType": "שגיאה בהצגת ההודעה: סוג הודעה לא נתמך",
+    "addLanguageOption": "הוסף \"{name}\"…"
   },
   "sidebar": {
     "collapseSidebar": "כיווץ סרגל צד",
@@ -1119,11 +1147,13 @@
     "responseSection": "תגובה",
     "voiceSection": "קול",
     "behaviorSection": "התנהגות",
-    "resetChatSettings": "אפס הגדרות צ'אט",
-    "resetChatSettingsConfirmTitle": "לאפס הגדרות צ'אט?",
-    "resetChatSettingsConfirmMessage": "פעולה זו תחזיר לברירת המחדל את כל ההגדרות בלוח זה: טמפרטורה, הנחיות מותאמות, אודותיך, תגובת המודל, מהירות הסטרימינג, טקסט לדיבור, קבצים פעילים ואישורים. אין בכך כדי להשפיע על השיחות שלך.",
+    "resetChatSettings": "אתחל הגדרות שיחה",
+    "resetChatSettingsConfirmTitle": "לאתחל את הגדרות השיחה?",
+    "resetChatSettingsConfirmMessage": "פעולה זו תשחזר את ערכי ברירת המחדל לכל מה שמופיע בלוח זה: טמפרטורה, הוראות מותאמות, 'אודותיך', תגובת מודל, מהירות זרימה, המרה מדיבור לטקסט, קבצים פעילים ואישורים. הפעולה אינה משפיעה על השיחות שלך.",
     "customInstructionsLabel": "הוראות מותאמות אישית*",
-    "defaultTemperatureLabel": "Default Temperature*"
+    "defaultTemperatureLabel": "Default Temperature*",
+    "Usage & Impact": "שימוש והשפעה",
+    "Connectors": "מחברים"
   },
   "notFound": {
     "lostDog": "כלב אבוד"
@@ -1398,7 +1428,36 @@
     "modelsDescription": "בחר מודל AI לשיחה שלך. לכל מודל יתרונות שונים — בחר מודל כדי לראות פרטים.",
     "recommended": "מומלץ",
     "familyAll": "הכל",
-    "familyFilterLabel": "סנן מודלים לפי משפחה"
+    "familyFilterLabel": "סנן מודלים לפי משפחה",
+    "searchPlaceholder": "חיפוש מודלים",
+    "searchEmpty": "לא נמצאו מודלים התואמים לחיפוש שלך.",
+    "star": "סמן ב-⭐ את {name}",
+    "unstar": "הסר סימון ב-⭐ מ{name}",
+    "otherFamily": "אחר",
+    "hostedExternally": "פועל בתשתית של הספק באמצעות Azure AI Foundry, ולא בסביבת Azure של MSF.",
+    "hostedIn": {
+      "label": "מאוחסן ב-{regions}",
+      "tooltip": "האזור/ים של Azure בהם מודל זה מופעל. שיחות מעובדות באזור שלך."
+    },
+    "badges": {
+      "external": "חיצוני",
+      "externalTooltip": "פועל בתשתית של הספק באמצעות Azure AI Foundry, ולא בסביבת Azure של MSF.",
+      "regionHostedTooltip": "מאוחסן באזור Azure {region}. שיחות עם מודל זה מעובדות שם."
+    },
+    "favorites": "מועדפים",
+    "euResidencyNote": "כל המודלים פועלים באזור Azure של האיחוד האירופי.",
+    "hostedRegion": {
+      "label": "אזור אחסון",
+      "processedIn": "שיחה זו מעובדת באזור Azure {region}.",
+      "euOnlyNote": "{name} מאוחסן באזור Azure של האיחוד האירופי; שיחות עמו מעובדות שם."
+    },
+    "version": {
+      "label": "גרסה"
+    },
+    "reasoningModel": "מודל חשיבה: מנתח שלב-אחר-שלב לפני מתן תשובה. איטי יותר, טוב יותר בבעיות קשות.",
+    "variant": {
+      "label": "וריאנט"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1485,6 +1544,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "מודל Claude מאוזן. מתאים לכתיבה יומיומית, ניתוח ותכנות עם תגובות מהירות.",
       "knowledgeCutoff": "פברואר 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "מודל קוד פתוח של Meta. אמין לכתיבה, סיכומים ושאלות מהירות."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "המודל המוביל והחדש ביותר של OpenAI. מצטיין בכתיבה, מחקר, קידוד ופתרון בעיות מורכבות."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "הגרסה הקטנה והמהירה ביותר של GPT. מתאים למשימות מהירות ופשוטות במחיר מינימלי."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "גרסה של GPT מותאמת לשיחה. טובה לשיחות יומיומיות, סיעור מוחות ודיונים תומכים."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "גרסה קודמת של GPT עם יכולות מולטימודליות. מתאימה לכתיבה יומיומית ולשאלות ותשובות כאשר אין צורך ביכולות העדכניות ביותר."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "גרסה קטנה ומהירה יותר של GPT-4.1 למשימות יומיומיות מהירות."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "המודל החדש והחזק ביותר של Anthropic. מצטיין בכתיבה ארוכה, מחקר, קידוד וניתוח מעמיק."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "המודל החדש בקוד פתוח של DeepSeek. אמין לכתיבה כללית ולשאלות טכניות."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "המודל המוביל של Mistral. אלטרנטיבה אירופית לכתיבה, סיכומים ושאלות כלליות."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "גרסה מוקדמת של GPT-5 המוביל. עדיין חזקה בכתיבה, ניתוח וקידוד."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "גרסה מותאמת שיחה קודמת של GPT-5. טובה לשיחות יומיום וסיעור מוחות."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "הגרסה הקטנה ביותר של GPT-5. מיטבית למשימות מהירות ופשוטות במחיר מינימלי."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "הגרסה הקטנה ביותר של GPT-4.1. מתאימה למשימות מהירות ופשוטות כאשר מהירות ועלות הן החשובות ביותר."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "גרסה קטנה ומהירה של GPT-4o. מתאימה למשימות יומיומיות מהירות כאשר אין צורך ביכולות החדשות ביותר."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "מודל קומפקטי לחשיבה לוגית. טוב למתמטיקה, לוגיקה ופתרון שלבים במחיר נמוך מ-o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "מודל קומפקטי לחשיבה לוגית מהדור הקודם. מטפל בשאלות מתמטיקה, מדע וחידות לוגיות בעלות נמוכה."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "המודל האינטליגנטי ביותר של Anthropic, הראשון במשפחת Claude 5. מצטיין במשימות כתיבה, מחקר וקידוד המאתגרות ביותר."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude המאוזן והחדש ביותר, הראשון במשפחת Claude 5. חזק בכתיבה, ניתוח וקידוד יומיומיים עם תגובה מהירה."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "המודל הבינוני של Mistral. אלטרנטיבה אירופית שמשלבת יכולת ומהירות לעבודה יומיומית."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "המודל הקטן של Mistral. מהיר וזול לסיכומים, טיוטות ושאלות פשוטות."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "המודל הזעיר של Mistral. מיטבי למשימות מהירות ופשוטות במיוחד במחיר מינימלי."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "גרסה מעודכנת של DeepSeek-R1. מציגה חשיבה שלב-אחר-שלב עם עומק ניתוח משופר."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "מודל קוד פתוח קל יותר של Meta. מהיר לכתיבה, סיכומים ושאלות יומיומיות."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "מודל קוד פתוח ישן יותר של Meta. עדיין אמין לכתיבה כללית ושאלות ותשובות."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "המודל המוביל של xAI. טוב לדיונים פתוחים, ניתוח ופרויקטים יצירתיים."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "המודל הראשי החדש ביותר של OpenAI. חזק בכתיבה, מחקר, קידוד ופתרון בעיות מורכבות."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (החדש ביותר)",
+      "description": "כינוי מתגלגל שמצביע תמיד על מודל השיחה החדש ביותר של OpenAI. מחליף את דגמי הגרסאות gpt-*-chat ב-Azure."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "גרסת Opus עדכנית, בין 4.6 ל-4.8. חזק בכתיבה ארוכה, מחקר, תכנות וניתוח מעמיק."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "מודל ההיסק החדש ביותר של DeepSeek והמחליף של קו R1 ב-Azure. מציג את תהליך החשיבה שלב אחר שלב."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "גרסת V4 המהירה של DeepSeek והמחליפה של קו V3 ב-Azure. מהיר לכתיבה כללית ושאלות טכניות."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (היסק)",
+      "description": "מודל היסק מהיר של xAI. חושב שלב אחר שלב עם תגובות מהירות."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "מודל השיחה המהיר של xAI. תגובות מהירות לשאלות יומיומיות ושיחות."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "דגם קל יותר של xAI. מהיר וזול יותר עבור שאלות מהירות ושיחות בלתי פורמליות."
     }
   },
   "searchMode": {
@@ -1824,7 +2015,20 @@
     "useDefaultStyle": "השתמש בסגנון כתיבה ברירת מחדל",
     "noTonesCreated": "לא נוצרו טונים עדיין",
     "createTonesHint": "צור טונים בפעולות מהירות",
-    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, HTML, TXT\nגודל מקסימלי: 40MB\n\nתמיכה בלמעלה מ-80 שפות עם אפשרות לקבצי מילון."
+    "translateDocumentTooltip": "תרגם מסמכים לשפה אחרת.\n\nפורמטים נתמכים: Word, Excel, PowerPoint, HTML, TXT\nגודל מקסימלי: 40MB\n\nתמיכה בלמעלה מ-80 שפות עם אפשרות לקבצי מילון.",
+    "translateTooltip": "תרגם קטע טקסט לשפה אחרת.\n\nלקבצים שלמים (Word, Excel, PowerPoint, HTML, TXT), השתמש ב\"תרגם מסמך\" במקום.",
+    "cameraTooltip": "צלם תמונה באמצעות מצלמת המכשיר וצרף אותה להודעה.",
+    "noResults": "אין פעולות מתאימות",
+    "sectionPinned": "נעוץ",
+    "sectionFrequent": "בשימוש תדיר",
+    "sectionMore": "עוד",
+    "categoryWeb": "ווב",
+    "categoryMedia": "מדיה וקבצים",
+    "categoryTransform": "המרה",
+    "pin": "נעץ בחלק העליון",
+    "unpin": "הסר נעיצה",
+    "moveToMore": "העבר ל'עוד'",
+    "moveOutOfMore": "הצג בתפריט"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "הוסיפו הוראות אישיות כדי להתאים את תגובת הבינה המלאכותית. הוראות אלו משולבות עם הנחיות ליבה שמבטיחות תגובות מועילות, מדויקות ובטוחות.",
   "Tip: Type \"/\" to select from saved prompt templates_": "עצה: הקלידו \"/\" כדי לבחור מהתבניות השמורות.",
@@ -1935,7 +2139,14 @@
     "learnMore": "למידע נוסף",
     "advancedOptions": "אפשרויות מתקדמות",
     "unofficialBadgeLabel": "לא רשמי",
-    "unofficialLanguageWarning": "שפה זו אינה נתמכת רשמית. איכות התרגום לא אומתה. מומלץ שמי ששולט בשפה או דובר שפת אם יעבור על התוצאה לפני שיתוף."
+    "unofficialLanguageWarning": "שפה זו אינה נתמכת רשמית. איכות התרגום לא אומתה. מומלץ שמי ששולט בשפה או דובר שפת אם יעבור על התוצאה לפני שיתוף.",
+    "translationSubmitted": "התרגום התחיל — קבצי PDF מעובדים ברקע.",
+    "pendingTitle": "מתרגם את {filename}…",
+    "pendingHint": "תרגום PDF מתבצע ברקע ועשוי להימשך מספר דקות. ניתן להמשיך לעבוד — הכרטיס יתעדכן כשתהיה מוכן, גם לאחר רענון.",
+    "asyncFailed": "התרגום נכשל: {error}",
+    "jobNotFound": "משרת התרגום אינה זמינה עוד. נא לנסות שוב.",
+    "retryPolling": "בדוק שוב",
+    "pollingStalled": "לא הצלחנו להגיע לשרת לבדוק התקדמות. ייתכן שהתרגום עדיין רץ."
   },
   "terms": {
     "officialLanguages": "גרסה רשמית:",
@@ -2117,5 +2328,699 @@
   "regionOverride": {
     "warning": "עקיפת מיקום פעילה — הבקשות שלך מועברות לאזור הנתונים {region}. מדובר בעקיפה ידנית לבדיקה, לא במיקום האמיתי שלך.",
     "clear": "נקה עקיפה"
+  },
+  "usageImpact": {
+    "empty": "עדיין לא נרשם שימוש. השימוש שלך בטוקנים והפליטה המוערכת יופיעו כאן לאחר שתצ'וטט.",
+    "co2Value": "{grams} גר' CO₂e",
+    "equivalence": "≈ {count} טעינות סמארטפון",
+    "requests": "בקשות",
+    "promptTokens": "טוקנים של השאילתה",
+    "completionTokens": "טוקנים של התשובה",
+    "topModels": "לפי מודל",
+    "byRegion": "לפי אזור אירוח",
+    "regionDefault": "ברירת מחדל",
+    "modelRow": "{requests} בק׳ · {grams} גר'",
+    "disclosure": "ההערכות מבוססות על הנחות v{version} · מאז {since} · רק צ'אט רגיל (תשובות סוכנים ומסד ידע לא נספרות).",
+    "reset": "איפוס סטטיסטיקת שימוש"
+  },
+  "extraction": {
+    "toggleLabel": "חלץ נתונים מובְנָים",
+    "trayLabel": "חילוץ",
+    "trayPrefix": "חלץ",
+    "trayInfo": "החילוץ מחזיר עד 3 טבלאות מובְנוֹת. המתכונים נשמרים מקומית.",
+    "autoChip": "אוטומטי — ה-AI מציע מבנה",
+    "addRecipe": "הוסף מתכון",
+    "addRecipeTitle": "הוסף מתכון לחילוץ זה",
+    "addRecipeFullTitle": "עד 3 מתכונים בכל חילוץ",
+    "removeRecipe": "הסר מתכון: {name}",
+    "remove": "הסר",
+    "section": "מתכוני חילוץ",
+    "sectionSubtitle": "תבניות שמורות שהופכות טקסט גולמי, קבצים או כתובות URL לטבלאות מובְנוֹת. בחר עד 3 בכל סבב חילוץ.",
+    "newRecipe": "מתכון חדש",
+    "untitledRecipe": "(מתכון ללא כותרת)",
+    "deleteRecipe": "מחק מתכון",
+    "delete": "מחק",
+    "deleteConfirm": "למחוק?",
+    "cancel": "בטל",
+    "name": "שם",
+    "namePlaceholder": "לדוג' מטופלים",
+    "description": "תיאור",
+    "optional": "(אופציונלי)",
+    "descriptionPlaceholder": "תקציר קצר שמוצג בבוחר המתכונים",
+    "instructions": "הוראות",
+    "instructionsPlaceholder": "מה על ה-AI לחפש בחומר?",
+    "fields": "שדות",
+    "field": "שדה",
+    "fieldsPlural": "שדות",
+    "fieldName": "שם השדה",
+    "fieldType": "סוג השדה",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "הוסף שדה",
+    "removeField": "הסר שדה",
+    "toggleDetails": "הצג/הסתר פרטים",
+    "fieldDetailsTitle": "תיאור, ערכי enum",
+    "fieldDescriptionPlaceholder": "תיאור (עוזר ל-AI למצוא את השדה)",
+    "enumValuesPlaceholder": "ערכים מותרים מופרדים בפסיק",
+    "required": "חובה",
+    "suggest": "הצע בעזרת AI",
+    "suggesting": "מציע…",
+    "suggestNeedsInstructions": "הוסף הנחיות קודם כדי שה-AI ידע מה לחפש",
+    "searchRecipes": "חפש מתכונים",
+    "pickerEmpty": "עדיין אין מתכונים. צור אחד כדי להתחיל.",
+    "pickerEmptyMatch": "לא נמצאו מתכונים תואמים",
+    "editorEmpty": "עדיין אין מתכונים. צור אחד וה-AI יכול לעזור למלא את השדות.",
+    "noData": "לא הוצאו נתונים",
+    "noRecords": "לא נמצאו רשומות {name}",
+    "row": "שורה",
+    "rows": "שורות",
+    "record": "רשומה",
+    "records": "רשומות",
+    "complete": "הושלם",
+    "download": "הורדה",
+    "preview": "תצוגה מקדימה",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} שדות",
+    "fieldCountOne": "שדה אחד",
+    "andMoreFields": "+ {count} נוספים",
+    "saveAsRecipe": "שמור כמתכון",
+    "savedAsRecipeToast": "נשמר כמתכון \"{name}\"",
+    "previewTruncated": "מציג את שלוש השורות הראשונות מתוך {total}. להורדת כל הנתונים הורד את הקובץ.",
+    "previewEmpty": "אין שורות להצגה",
+    "proposedSchemaTip": "ה-AI הציע את הסכימה הזו. שמור אותה לשימוש חוזר בפעם הבאה.",
+    "downloadAriaLabel": "הורד את {name} כ-{format}",
+    "previewAriaLabel": "הצג/הסתר תצוגה מקדימה של {name}",
+    "changeFormatAriaLabel": "שנה את פורמט ההורדה של {name}",
+    "materialWarningTitle": "הוסף חומר למיצוי",
+    "materialWarningBody": "כתוב הודעה למטה, צרף קובץ או הוסף URL.",
+    "materialAttach": "צרף קובץ",
+    "willExtractPrefix": "תבוצע הפקה מתוך:",
+    "materialText": "טקסט ההודעה",
+    "materialFiles": "{count, plural, one {קובץ 1} other {‏# קבצים}}",
+    "materialActiveFiles": "{count, plural, one {קובץ פעיל 1} other {‏# קבצים פעילים}}",
+    "dismiss": "כבה הפקה"
+  },
+  "Connectors": "מחברים",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "תרגום",
+        "description": "תרגם טקסט עם ניתוח, מילונים ובקרות סקירה"
+      },
+      "document": {
+        "label": "מסמך",
+        "description": "כתוב ושפר מסמך בעזרת העוזר"
+      },
+      "dataAnalysis": {
+        "label": "ניתוח נתונים",
+        "description": "ייבא טבלאות וחקור או המר את הנתונים"
+      },
+      "map": {
+        "label": "מפה",
+        "description": "הפוך כל נתון למיקום על גבי מפה"
+      }
+    },
+    "chooser": {
+      "prompt": "או התחל סביבת עבודה ממוקדת"
+    },
+    "sidebar": {
+      "newTranslation": "תרגום חדש",
+      "newDocument": "מסמך חדש",
+      "newDataAnalysis": "ניתוח נתונים חדש",
+      "newMap": "מפה חדשה"
+    },
+    "translation": {
+      "chooseLanguage": "שפת יעד",
+      "customLanguageHint": "\"{name}\" היא שפה שהוספת — הבינה המלאכותית תנסה כל שפה, אך איכות התרגום לא נבדקה.",
+      "addedByYou": "הוסף על ידך",
+      "glossary": "מילון מונחים",
+      "noGlossary": "אין מילון מונחים",
+      "manageGlossaries": "מילוני מונחים",
+      "glossaries": "מילוני מונחים",
+      "closeGlossaries": "סגור מילוני מונחים",
+      "glossariesEmpty": "צור מילון מונחים כדי לקבוע כיצד מונחים מסוימים יתורגמו. מילונים נשמרים במכשיר זה וזמינים לשימוש חוזר בתרגומים נוספים.",
+      "newGlossary": "אוצר מילים חדש",
+      "newGlossaryName": "אוצר מילים ללא שם",
+      "glossaryName": "שם אוצר מילים",
+      "deleteGlossary": "מחיקת אוצר מילים",
+      "sourceTerm": "מונח מקור",
+      "targetTerm": "תרגום",
+      "note": "הערה",
+      "noteOptional": "הערה (לא חובה)",
+      "addEntry": "הוספת מונח",
+      "removeEntry": "הסרת {term}",
+      "mode": "מצב תרגום",
+      "modeQuick": "מהיר",
+      "modeAgentic": "נבדק",
+      "modeQuickHint": "מעבר תרגום אחד, הכי מהיר",
+      "modeAgenticHint": "מנתח את הטקסט לפני התרגום, ואז מתרגם ומבצע עד 3 סבבי בדיקה",
+      "translate": "תרגם",
+      "translating": "מתרגם…",
+      "sourceLabel": "טקסט מקור",
+      "targetLabel": "תרגום",
+      "sourcePlaceholder": "הדבק או הקלד את הטקסט לתרגום, או העלה מסמך.",
+      "targetEmpty": "התרגום יופיע כאן.",
+      "uploadDocument": "העלה מסמך",
+      "copy": "העתק",
+      "copied": "הועתק",
+      "tooLong": "הטקסט ארוך מ-{max} תווים. חלק אותו לחלקים, או השתמש בתרגום מסמכים עבור קבצים שלמים.",
+      "analysisTitle": "ניתוח מקדים לתרגום",
+      "register": "הרשמה",
+      "reviewTitle": "סבבי בדיקה",
+      "roundLabel": "סבב {round}",
+      "verdictApprove": "מאושר",
+      "verdictRevise": "נערך",
+      "railRequest": "תרגם את טקסט המקור ל-{language}.",
+      "railDoneAgentic": "בוצע. ניתחתי את הטקסט, תרגמתי אותו וביצעתי {rounds} סבב/י בדיקה. התוצאה זמינה באזור העבודה.",
+      "railDoneQuick": "בוצע. התרגום נמצא באזור העבודה.",
+      "railAssessRequest": "הערך את איכות התרגום ל-{language}.",
+      "railAssessDone": "ההערכה הושלמה: הדירוגים נמצאים באזור העבודה עם {count} הצעת עריכה לבדיקה.",
+      "roundChanges": "שינויים בסבב {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "דיוק",
+          "description": "מעביר במדויק את משמעות המקור — ללא שגיאות תרגום, השמטות, תוספות או קטעים לא מתורגמים"
+        },
+        "fluency": {
+          "label": "שטף",
+          "description": "הדקדוק, האיות, הפיסוק והקוהרנטיות טבעיים בשפת היעד"
+        },
+        "terminology": {
+          "label": "מונחים",
+          "description": "המונחים המקצועיים מדויקים ועקביים; אוצר המילים נשמר במדויק"
+        },
+        "style": {
+          "label": "סגנון",
+          "description": "הרמה הלשונית, הטון והסגנון תואמים למקור ונשארים עקביים"
+        },
+        "localeConventions": {
+          "label": "כללי מקומיות",
+          "description": "תאריכים, מספרים, יחידות ופיסוק לפי המקובל ביעד"
+        },
+        "audience": {
+          "label": "קהל יעד",
+          "description": "מתאים למטרה ולקהל היעד של הטקסט"
+        }
+      },
+      "severity": {
+        "minor": "קל",
+        "major": "חמור"
+      },
+      "assess": "הערכת איכות",
+      "assessing": "מעריך…",
+      "assessmentTitle": "הערכת איכות",
+      "criteriaPicker": "קריטריונים לבדיקה",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "הצעות עריכה",
+      "noEditsSuggested": "לא הוצעו עריכות — התרגום עמד בקריטריונים שנבחרו.",
+      "acceptEdit": "קבל",
+      "rejectEdit": "דחה",
+      "acceptAll": "קבל הכל",
+      "rejectAll": "דחה הכל",
+      "editAccepted": "התקבל",
+      "editRejected": "נדחה",
+      "editUnapplicable": "לא ניתן לאתר קטע זה בטקסט הנוכחי — לא יושם",
+      "editTranslation": "ערוך",
+      "doneEditing": "סיום",
+      "pasteTranslationPlaceholder": "הקלד או הדבק תרגום לעבודה…",
+      "editingBlockedPendingEdits": "יש לפתור או לדחות את הצעות העריכה הממתינות תחילה",
+      "pendingCount": "{count} ממתינים",
+      "closeReview": "סגור סקירת איכות",
+      "showReview": "הצג סקירה",
+      "showReviewPending": "הצג סקירה ({count} ממתינים)"
+    },
+    "document": {
+      "emptyTitle": "תאר את המסמך הרצוי",
+      "emptyBody": "ציין לאסיסטנט מה לכתוב — דוח מצב, מכתב לתורם, פרוטוקול ישיבה. הוסף קבצי עיון אם ברצונך שיצטטו מהם.",
+      "generatePlaceholder": "תאר את המסמך לכתיבה…",
+      "revisePlaceholder": "תאר את השינויים הנדרשים…",
+      "generate": "צור",
+      "revise": "ערוך",
+      "writing": "כותב…",
+      "export": "ייצוא",
+      "references": "מקורות",
+      "addReference": "הוסף קובץ",
+      "uploading": "מעלה…",
+      "removeReference": "הסר {name}",
+      "referenceChars": "{chars} תווים של טקסט שהוצא",
+      "referenceEmpty": "לא ניתן היה להוציא טקסט מתוך {name}",
+      "uploadFailed": "העלאה נכשלה",
+      "untitledDocument": "מסמך ללא כותרת",
+      "generatedSummary": "כתבתי את המסמך באזור העבודה. עיין בו וכתוב לי מה לשנות.",
+      "revisedSummary": "ערכתי את המסמך באזור העבודה.",
+      "runFailed": "משהו השתבש: {message}",
+      "uploadBasis": "התחל ממסמך קיים",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "דקדוק ואיות",
+          "description": "דקדוק ואיות נכונים; סוג אנגלית אחיד (אמריקאית או בריטית) מקובל — שילוב ביניהם הוא שגיאה"
+        },
+        "consistency": {
+          "label": "עקביות",
+          "description": "טרמינולוגיה, שמות, שימוש באותיות, ועיצוב — בצורה אחידה לאורך כל המסמך"
+        },
+        "clarity": {
+          "label": "בהירות",
+          "description": "משפטים ישירים וברורים; מבנה התומך בקורא"
+        },
+        "sensitivity": {
+          "label": "רגישות",
+          "description": "שפה כוללת, רגישה לקונפליקט ולהקשרים הומניטריים (בדיקה אופציונלית)"
+        },
+        "specAdherence": {
+          "label": "עמידה במפרט",
+          "description": "המסמך עומד במפרט המצורף: כל הסעיפים הנדרשים קיימים, מסודרים לפי הסדר, ומקיימים את ההנחיות"
+        },
+        "toneAdherence": {
+          "label": "התאמה לטון",
+          "description": "ממלא אחר כללי הסגנון והטון המצורפים"
+        }
+      },
+      "severity": {
+        "minor": "קל",
+        "major": "חמור"
+      },
+      "assess": "הערך איכות",
+      "assessing": "מוערך…",
+      "assessmentTitle": "סקירת איכות",
+      "criteriaPicker": "קריטריונים להערכה",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "הצעות עריכה",
+      "noEditsSuggested": "לא הוצעו עריכות — המסמך עמד בקריטריונים שנבחרו.",
+      "acceptEdit": "אשר",
+      "rejectEdit": "דחה",
+      "acceptAll": "אשר הכול",
+      "rejectAll": "דחה הכול",
+      "editAccepted": "אושר",
+      "editRejected": "נדחה",
+      "editUnapplicable": "לא ניתן לאתר קטע זה בטקסט הנוכחי — לא יושם",
+      "editingBlockedPendingEdits": "יש לאשר או לדחות תחילה את הצעות העריכה הממתינות",
+      "pendingCount": "{count} ממתין",
+      "closeReview": "סגור סקירת איכות",
+      "showReview": "הצג סקירה",
+      "showReviewPending": "הצג סקירה ({count} ממתין)",
+      "railAssessRequest": "הערך את איכות המסמך מול הקריטריונים שנבחרו.",
+      "railAssessDone": "ההערכה הושלמה: הדירוגים בוורקספייס עם {count} הצעות עריכה לבדיקה.",
+      "spec": "מפרט מסמך",
+      "noSpec": "אין מפרט",
+      "manageSpecs": "מפרטים",
+      "specs": "מפרטי מסמך",
+      "closeSpecs": "סגור מפרטים",
+      "specsEmpty": "צרו מפרט לכתיבת מסמכים בתבנית קבועה — סעיפים נדרשים, סדר, והנחיות לכל סעיף (למשל תבנית SitRep). מפרטים נשמרים במכשיר זה וניתנים לשימוש חוזר.",
+      "newSpec": "מפרט חדש",
+      "newSpecName": "מפרט ללא שם",
+      "specName": "שם המפרט",
+      "specDescription": "תיאור (אופציונלי)",
+      "deleteSpec": "מחק מפרט",
+      "sectionHeading": "כותרת סעיף",
+      "sectionGuidance": "הנחייה (אופציונלית)",
+      "sectionRequired": "נדרש",
+      "addSection": "הוסף סעיף",
+      "removeSection": "הסר סעיף",
+      "generalGuidance": "הנחיה כללית (אופציונלית)",
+      "tone": "טון",
+      "noTone": "אין טון",
+      "customCriteria": "קריטריונים מותאמים",
+      "manageCriteria": "קריטריונים מותאמים",
+      "closeCriteria": "סגור קריטריונים מותאמים",
+      "criteriaEmpty": "צרו קריטריונים מותאמים אישית — לדוג' שיקולי מותג או שפה ארגונית — להערכת מסמכים והכוונת תיקונים. נשמר במכשיר זה וניתן לשימוש חוזר.",
+      "newCriterion": "קריטריון חדש",
+      "newCriterionName": "קריטריון ללא שם",
+      "criterionName": "שם הקריטריון",
+      "criterionRubric": "רות",
+      "criterionRubricPlaceholder": "תארו מה על המסמך לעשות כדי לעמוד בקריטריון זה, לדוג' \"לעולם לא להשתמש בסופרלטיבים על עבודתנו; תמיד לקרוא למוטבים 'אנשים שאנו מסייעים להם'…\"",
+      "criterionRubricHint": "רות זו נמסרת ל-AI כלשונה במהלך הערכה וסבבי תיקונים.",
+      "deleteCriterion": "מחק קריטריון",
+      "profileTitle": "פרופיל המסמך",
+      "profileDocType": "סוג",
+      "profileLanguage": "שפה",
+      "profileAudience": "קהל יעד",
+      "profilePurpose": "מטרה",
+      "profileRegister": "רשומון",
+      "profileTone": "טון",
+      "profileConventions": "נהלים",
+      "emptyHint": "התחילו להקליד למטה, תארו מה לכתוב בתיבה בתחתית, או התחילו מקובץ.",
+      "addSpec": "הוספת מפרט",
+      "addCriteria": "הוספת קריטריונים",
+      "scopeFullDocument": "טווח: כל המסמך",
+      "scopeSelection": "טווח: בחירה — \"{preview}…\" ({count} מילים)",
+      "clearSelection": "נקה בחירה (עבודה עם כל המסמך)",
+      "reviseSelectionPlaceholder": "תארו שינויים לבחירה…",
+      "revisedSelectionSummary": "ערכתי את הקטע הנבחר באזור העבודה.",
+      "assessedSelection": "בחירה"
+    },
+    "data": {
+      "emptyTitle": "ייבאו נתונים לניתוח",
+      "emptyBody": "הביאו קובץ CSV, Excel או JSON, או הדביקו שורות ישירות. כשטבלתכם תיטען תוכלו למיין אותה, לייבא עוד שורות ממסמכים ולבצע עליה שינויים בהוראות בשפה רגילה.",
+      "importFile": "ייבוא קובץ",
+      "importing": "מייבא…",
+      "pasteData": "הדבקת נתונים",
+      "pastePlaceholder": "הדביקו כאן CSV, TSV או JSON…",
+      "import": "ייבוא",
+      "addFromSource": "הוספה ממקור",
+      "extractHint": "הדביקו טקסט או בחרו מסמך; שורות בהתאמה לעמודות הקיימות יימשכו משם. ערכים לא ידועים יישארו ריקים — אין יצירה של נתונים לא קיימים.",
+      "extractPlaceholder": "הדביקו כאן טקסט לא מובנה שמכיל נתונים…",
+      "extractRows": "חילוץ שורות",
+      "extractFromFile": "מקובץ…",
+      "extracting": "מחלץ…",
+      "pastedSource": "טקסט מודבק",
+      "transform": "המרה",
+      "transforming": "ממיר…",
+      "transformPlaceholder": "תארו המרה, לדוג' \"הוספת עמודה עם מקרים לכל 1000 נפש\"…",
+      "transformCapHint": "המרות מוגבלות ל-{max} שורות. מחקו או סננו שורות עבור טבלאות גדולות יותר.",
+      "undo": "בטל",
+      "deleteSelected": "מחק {count}",
+      "deletedRows": "נמחקו {count} שורות",
+      "selectAllRows": "בחר את כל השורות",
+      "selectRow": "בחר שורה {row}",
+      "rowCount": "{count} שורות",
+      "rowCapExceeded": "זה יהיה {count} שורות; הטבלה מוגבלת ל-{max}. פצל את הנתונים או ייצא במקום זאת.",
+      "railExtractRequest": "חילוץ שורות התואמות לסכמת הטבלה מתוך: {source}",
+      "railExtractDone": "{count} שורות שחולצו נוספו לטבלה.",
+      "railTransformDone": "בוצעה טרנספורמציה לטבלה.",
+      "columnProfileFor": "סטטיסטיקות עמודה עבור {column}",
+      "profileMissing": "חסר",
+      "profileDistinct": "ייחודיים",
+      "profileRange": "טווח",
+      "profileMean": "ממוצע",
+      "profileMedian": "חציון",
+      "profileTopValues": "ערכים מובילים",
+      "filterColumnFor": "סינון {column}",
+      "filterContains": "מכיל...",
+      "filterMin": "מינימום",
+      "filterMax": "מקסימום",
+      "filterClear": "נקה",
+      "clearFilters": "נקה מסננים",
+      "showingRows": "מציג {shown} מתוך {total} שורות",
+      "scopeLabel": "טווח עבודה",
+      "scopeTable": "הכל ({count})",
+      "scopeFiltered": "מסונן ({count})",
+      "scopeSelection": "נבחרו ({count})",
+      "scopedInstruction": "{instruction} (על {count} שורות ממוקדות)",
+      "assess": "הערכת איכות",
+      "assessing": "מוערך...",
+      "criteria": {
+        "validity": {
+          "label": "תקפות",
+          "description": "הערכים תואמים לסוג ולפורמט המצופים בעמודה"
+        },
+        "consistency": {
+          "label": "עקביות",
+          "description": "הערך נכתב באופן זהה לאורך כל הנתונים (אין גרסאות 'M' / 'Male', יחידות שונות או שינויי אותיות)"
+        },
+        "duplicates": {
+          "label": "כפילויות",
+          "description": "שורות המתעדות אותו יישות או אירוע פעמיים"
+        },
+        "plausibility": {
+          "label": "סבירות",
+          "description": "חריגים וערכים בלתי אפשריים בהקשר"
+        }
+      },
+      "assessmentTitle": "סקירת איכות נתונים",
+      "pendingCount": "{count} ממתינים",
+      "closeReview": "סגור סקירת איכות",
+      "suggestedEdits": "תיקונים מוצעים",
+      "noEditsSuggested": "לא הוצעו תיקונים — הנתונים עמדו בקריטריונים שנבחרו.",
+      "acceptAll": "אשר הכל",
+      "rejectAll": "דחה הכל",
+      "acceptEdit": "אשר",
+      "rejectEdit": "דחה",
+      "editAccepted": "הוחל",
+      "editRejected": "נדחה",
+      "editUnapplicable": "התא לא זהה להערכת האיכות — לא הוחל",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "קריטריונים להערכה",
+      "severity": {
+        "minor": "קל",
+        "major": "חריג"
+      },
+      "editLocation": "שורה {row} · {column}",
+      "editLocationRow": "שורה {row} (מחק)",
+      "showReview": "הצג סקירה",
+      "showReviewPending": "הצג סקירה ({count} ממתינים)",
+      "assessedFiltered": "שורות מסוננות",
+      "assessedSelection": "שורות שנבחרו",
+      "assessedSample": "דגימה של {shown} מתוך {total}",
+      "railAssessRequest": "הערך את איכות הטבלה ({count} שורות) לעומת הקריטריונים שנבחרו.",
+      "railAssessDone": "הוצעו {count} תיקונים לאיכות הנתונים — ניתן לעיין בהם באזור העבודה.",
+      "insights": "תובנות",
+      "chartKind": "סוג תרשים",
+      "chartBar": "עמודות (קיבוץ לפי)",
+      "chartHistogram": "היסטוגרמה",
+      "chartLine": "קו (על פני זמן)",
+      "groupByColumn": "קיבוץ לפי עמודה",
+      "dateColumn": "עמודת תאריך",
+      "valueColumn": "עמודת ערך",
+      "aggFn": "אגרגציה",
+      "aggCount": "ספירה",
+      "aggSum": "סכום",
+      "aggMean": "ממוצע",
+      "chartTruncated": "מוצגות {max} הקבוצות המובילות",
+      "chartNoData": "אין ערכים שניתן להציג בתרשים בשורות הנוכחיות.",
+      "chartBarAria": "תרשים עמודות מקובץ לפי {column}",
+      "chartHistogramAria": "היסטוגרמה של {column}",
+      "chartLineAria": "תרשים קו של {column} לאורך זמן",
+      "editStructure": "מבנה",
+      "defineStructure": "הגדר מבנה",
+      "schemaHint": "הגדר את שדות מבנה הנתונים שלך. שדות חובה קובעים את מדיניות נתונים חסרים בייבוא; שינוי סוג שדה ממיר ערכים קיימים (תאים שלא ניתן להמיר יהפכו לריקים).",
+      "schemaFieldName": "שם השדה",
+      "schemaFieldType": "סוג השדה",
+      "schemaRequired": "חובה",
+      "schemaAddField": "הוסף שדה",
+      "schemaDeleteField": "מחק שדה {field}",
+      "schemaApply": "החל מבנה",
+      "schemaCancel": "ביטול",
+      "schemaEdited": "מבנה הטבלה נערך",
+      "schemaCellsConverted": "{count} תאים לא ניתן להמיר לסוג החדש וכעת הם ריקים.",
+      "missingFieldPolicy": "נתונים חסרים",
+      "policyStrict": "מחמיר — דחיית שורות לא שלמות",
+      "policyFlag": "סימון — ייבוא תוך סימון",
+      "policyLenient": "גמיש — ייבוא ללא התראה",
+      "droppedIncompleteRows": "נגרעו {count} שורות שחסרים בהן שדות חובה: {fields}",
+      "dismiss": "התעלם",
+      "requiredColumn": "שדה חובה",
+      "flagMissingRequired": "שדה חובה ריק",
+      "flagPendingEdit": "קיים תיקון מוצע ממתין לתא זה — ראו סקירת איכות",
+      "fromPhoto": "מתמונה",
+      "fromPhotoHint": "צלם טופס או טבלה על נייר — תוכן התמונה יומר לנתונים מובנים שניתן להשוות מול התמונה",
+      "readingPhoto": "קורא תמונה…",
+      "photoBatchName": "{count} תמונות",
+      "railPhotoRequest": "שלוף נתונים מובנים מ-{count} תמונות: {name}",
+      "railPhotoDone": "נוספו {count} רשומה/ות מהתמונה/ות. יש לבדוק מול התמונה בסביבת העבודה.",
+      "sourcesLabel": "מקורות",
+      "openPhotoQc": "בדוק את הנתונים מול {name}",
+      "qcRowsFromPhoto": "{count} שורות",
+      "qcClose": "סגור בדיקת תמונה",
+      "qcZoomIn": "הגדלה",
+      "qcZoomOut": "הקטנה",
+      "qcPrevPhoto": "תמונה קודמת",
+      "qcNextPhoto": "תמונה הבאה",
+      "qcImageLoading": "טוען תמונה…",
+      "qcImageFailed": "לא ניתן לטעון את התמונה.",
+      "qcImageAlt": "תמונת מקור: {name}",
+      "qcHint": "הטבלה מציגה רק את השורות של תמונה זו — יש להשוות כל ערך מול התמונה ולערוך או למחוק שורות שאינן תואמות.",
+      "sourceFilterChip": "שורות מ־{name}",
+      "clearSourceFilter": "הצג את כל השורות מחדש",
+      "viewAsRecord": "תצוגת טופס",
+      "viewAsTable": "תצוגת טבלה",
+      "recordEmpty": "אין רשומות עדיין.",
+      "recordOf": "רשומה {index} מתוך {count}",
+      "recordPrev": "רשומה קודמת",
+      "recordNext": "רשומה הבאה",
+      "recordBooleanUnset": "(ריק)",
+      "flagsChip": "{count} דגלים",
+      "flagsChipOpenReview": "פתח את בדיקת האיכות",
+      "flagsChipMissingOnly": "שדות נדרשים ריקים — מלא אותם או עדכן את המבנה",
+      "autoCheck": "בדיקה אוטומטית לנתונים חדשים",
+      "autoCheckHint": "לאחר חילוץ נתונים מתמונות או מסמכים, תתבצע בדיקת איכות אוטומטית לשורות שנוספו",
+      "checkingNewRows": "בודק את השורות החדשות לאיתור בעיות איכות…",
+      "ingestCheckFailed": "בדיקת האיכות האוטומטית נכשלה ({message}) — ניתן להפעילה ידנית באמצעות 'הערכת איכות'.",
+      "assessedIngest": "שורות שנוספו"
+    },
+    "map": {
+      "emptyTitle": "הצג את הנתונים שלך על גבי מפה",
+      "emptyBody": "הדבק sitrep, רשימת קווים, סיכום ישיבה או כל טקסט שמציין מקומות — או העלה מסמך. מיקומים מזוהים ומוצגים על המפה עם דירוג אמון; לאחר מכן ניתן לייצא אותם ל־ArcGIS או כלי GIS אחרים.",
+      "inputPlaceholder": "הדבק טקסט עם שמות מיקומים…",
+      "uploadFile": "העלה קובץ",
+      "pastedSource": "טקסט מודבק",
+      "mapIt": "מפה",
+      "finding": "מאתר מיקומים…",
+      "featureCount": "{count} מיקומים",
+      "featureCapExceeded": "המפה מוגבלת ל־{max} מיקומים.",
+      "noneFound": "לא נמצאו מיקומים בחומר זה.",
+      "lowConfidenceNotice": "ל-{count} מיקום/ים קואורדינטות ברמת אמון נמוכה — בדוק אותם לפני הסתמכות על המפה.",
+      "tilesOffline": "אריחי מפה אינם זמינים — רשימת המיקומים עדיין פעילה.",
+      "disclaimer": "הקואורדינטות מוערכות על-ידי AI מתוך ידע המודל, ולא משירות קידוד גאוגרפי — יש לאמת אותן לפני שימוש מבצעי. אריחי מפה נטענים משרת אריחים; הנתונים עצמם נשארים על מכשיר זה.",
+      "flyTo": "הצג את {name} על המפה",
+      "removeFeature": "הסר את {name}",
+      "expandFeature": "הצג פרטים מלאים עבור {name}",
+      "collapseFeature": "הסתר פרטים עבור {name}",
+      "detailsParent": "חלק מ־{parent}",
+      "railRequest": "מפה את המיקומים ב־{source}",
+      "railSearchRequest": "חפש ברשת ומפה את המיקומים עבור: {query}",
+      "railDone": "מופהו {count} מיקומים. עיינו במיקומים עם רמת ביטחון נמוכה ברשימה.",
+      "searchToggle": "מצב חיפוש ברשת",
+      "searchToggleHint": "חפשו ברשת במקום להדביק טקסט; התוצאות המקושרות ימופו.",
+      "searchPlaceholder": "חפשו ברשת, למשל \"התפרצות כולרה מזרח אפריקה 2026\"…",
+      "searchAndMap": "חיפוש ומיפוי",
+      "searching": "מחפש…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "חיבור: {kind}",
+        "unresolved": "{count} חיבור(ים) הפנו למקומות שאינם נמצאים על המפה ולכן לא נכללו."
+      },
+      "confidence": {
+        "high": "גבוה",
+        "medium": "בינוני",
+        "low": "נמוך"
+      },
+      "prominence": {
+        "primary": "מיקום עיקרי",
+        "secondary": "מיקום תומך",
+        "mention": "אזכור חולף"
+      },
+      "prominenceMentionHint": "החומר מתייחס למקום זה רק באזכור חולף — מוצג קטן יותר במפה ומוחרג מהתצוגה הראשונית.",
+      "dates": {
+        "since": "מאז {date}",
+        "range": "{start} – {end}",
+        "ongoing": "מתמשך"
+      },
+      "filters": {
+        "label": "סינון לפי קטגוריה",
+        "other": "אחר",
+        "clear": "נקה",
+        "showing": "מציג {shown} מתוך {total} מיקומים",
+        "noneMatch": "אין מיקומים התואמים למסננים הנוכחיים."
+      },
+      "dateFilter": {
+        "label": "תאריכים",
+        "from": "מתאריך",
+        "to": "עד תאריך",
+        "fromAria": "הצג רק אירועים מתאריך זה",
+        "toAria": "הצג רק אירועים עד תאריך זה",
+        "clear": "נקה תאריכים",
+        "eraChip": "הצג רק אירועים ב{label}"
+      },
+      "timeline": {
+        "toggle": "מעקב זמן",
+        "play": "נגן מעקב זמן",
+        "pause": "השהה מעקב זמן",
+        "eras": "תקופות בציר הזמן",
+        "jumpTo": "דלג ל{label}",
+        "slider": "מיקום בציר הזמן",
+        "showUndated": "הצג מיקומים ללא תאריך",
+        "activeCount": "{count} פעילים"
+      },
+      "granularity": {
+        "site": "אתר",
+        "city": "עיר/עיירה",
+        "district": "מחוז",
+        "region": "אזור",
+        "country": "מדינה"
+      },
+      "granularityAreaHint": "אזור, שמוצג כעיגול בקירוב סביב המרכז הגיאוגרפי — לא מייצג מיקום או גבול מדויק.",
+      "containerHint": "מכיל מיקומים ממופים אחרים, לכן מוצג רק כמתאר.",
+      "legend": {
+        "toggle": "מקרא",
+        "title": "כיצד לקרוא את המפה",
+        "color": "צבע: רמת ביטחון של הקואורדינטות (כחול גבוה, כתום בינוני, אדום נמוך)",
+        "size": "גודל הנקודה: מרכזיות המקום בחומר",
+        "area": "עיגול מקווקו: הערכה משוערת של גבולות מחוז, אזור או מדינה",
+        "container": "מתאר דהוי: אזור שתוכנו ממופה בנפרד"
+      }
+    },
+    "shell": {
+      "showConversation": "הצג שיחה",
+      "hideConversation": "הסתר שיחה",
+      "workspaceTab": "אזור עבודה",
+      "conversationTab": "שיחה",
+      "paneTabsLabel": "פאנלים של תהליך עבודה",
+      "railEmpty": "ההודעות וההתקדמות של הסייע ישתקפו כאן.",
+      "railInputPlaceholder": "שלח הודעה לסייע…",
+      "assistantThinking": "חושב…",
+      "sendMessage": "שלח הודעה",
+      "stopGenerating": "הפסק הפקה",
+      "loadingWorkspace": "טוען אזור עבודה…",
+      "unknownType": "שיחה זו משתמשת בתהליך עבודה שגרסה זו אינה מזהה. היסטוריית השיחה מופיעה למטה.",
+      "untitled": "שיחה חדשה",
+      "toggleMenu": "הצג/הסתר תפריט",
+      "model": "מודל לתהליך עבודה זה"
+    }
+  },
+  "connectors": {
+    "title": "מחברים",
+    "description": "חבר כלים חיצוניים באמצעות Model Context Protocol (MCP). כלים מחוברים זמינים לשימוש במודלים במהלך הצ'אט, וכל הפעלה של כלי דורשת את אישורך.",
+    "localOnlyNote": "הכניסה היא ישירות מול כל ספק. מפתחות גישה מוצפנים ומאוחסנים רק במכשיר זה, ומועברים דרך שרת האפליקציה רק עם כל בקשה — לעולם לא נשמרים או נרשמים שם.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "חפש מאגרים, קרא ופתח Issues ובקשות משיכה."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "מצא, צור ועדכן משימות ופרויקטים."
+      }
+    },
+    "connect": "חבר",
+    "connected": "מחובר",
+    "tokenEndsIn": "מסתיים ב-••••{last4}",
+    "disconnect": "נתק",
+    "toolCount": "{count, plural, =1 {כלי אחד זמין} other {# כלים זמינים}}",
+    "patLabel": "טוקן גישה אישי",
+    "createTokenLink": "צור טוקן",
+    "tokenScopeHint": "השתמש בטוקן ממוקד המאפשר אך ורק את הגישה הנדרשת לכלים אלו.",
+    "validating": "בודק חיבור…",
+    "validationFailed": "לא ניתן להתחבר. בדקו את הכתובת ונסו שוב.",
+    "authFailed": "השרת דחה את הטוקן. בדקו אותו ונסו שוב.",
+    "tokenRequired": "נדרש טוקן",
+    "enableServer": "זמין בצ'אט",
+    "arbitraryTitle": "שרתי MCP נוספים",
+    "arbitraryToggle": "אפשר שרתי MCP אחרים",
+    "arbitraryWarning": "כל מי שמפעיל שרת MCP יכול לראות את ההודעות שנשלחות לכליו. התחברו רק לשרתים שאתם סומכים עליהם. כל קריאת כלי עדיין דורשת את אישורכם.",
+    "addServer": "הוספת שרת MCP",
+    "editServer": "עריכת שרת MCP",
+    "serverName": "שם",
+    "serverUrl": "כתובת URL של השרת",
+    "nameRequired": "יש למלא שם",
+    "urlRequired": "יש למלא URL",
+    "invalidUrl": "הזינו כתובת https:// ציבורית",
+    "namePlaceholder": "השרת MCP שלי",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "טוקן גישה (אופציונלי)",
+    "keepTokenPlaceholder": "השאירו ריק כדי לשמור את הטוקן הנוכחי",
+    "disconnectedToast": "{name} התנתק",
+    "save": "שמירה",
+    "connectWithProvider": "התחבר באמצעות {name}",
+    "useTokenInstead": "השתמשו בטוקן גישה במקום זאת",
+    "oauthWaiting": "ממתין לאישור...",
+    "oauthFailed": "ההתחברות נכשלה. נסו שוב.",
+    "oauthDenied": "הספק סירב להעניק גישה.",
+    "oauthTimeout": "פג זמן ההתחברות. נסו שוב.",
+    "oauthCancelled": "ההתחברות בוטלה.",
+    "oauthUnavailable": "התחברות אינה זמינה למחבר זה בפריסה זו. השתמשו בטוקן גישה במקום, או בקשו מהמנהל להגדיר את אפליקציית ה-OAuth.",
+    "ownAppToggle": "השתמשו באפליקציית OAuth משלכם",
+    "ownAppHint": "רשמו אפליקציית OAuth בחשבון {name} שלכם (ארגון, סביבת עבודה או מופע האירגון שלכם) עם כתובת ה-callback שלמטה, ואז הדביקו כאן את הפרטים. השאירו סגור כדי להשתמש באפליקציה המובנית.",
+    "ownAppCustomHint": "באופן אופציונלי, ספקו למטה את נתוני הגישה של אפליקציית ה-OAuth שלכם; השאירו ריק לרישום אוטומטי עם השרת.",
+    "ownAppInUse": "התחברות באמצעות אפליקציית ה-OAuth שלכם.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (אם קיים לאפליקציה)",
+    "redirectUriLabel": "Callback / redirect URL לרישום",
+    "reconnect": "התחבר מחדש",
+    "needsReauth": "דורש התחברות מחדש",
+    "disconnectOauthNote": "ניתוק יסיר את הגישה ממכשיר זה בלבד. לביטול גישה מלא, נתקו אפליקציות מורשות בחשבון {name} שלכם.",
+    "authModeLabel": "אימות",
+    "authModeNone": "ללא",
+    "authModeBearer": "טוקן גישה",
+    "authModeOauth": "התחבר עם הספק (OAuth)",
+    "oauthCustomHint": "תתחברו עם ספק השרת בחלון קופץ לאחר השמירה.",
+    "saveAndSignIn": "שמור והתחבר",
+    "oauthCallback": {
+      "title": "האישור הושלם",
+      "missingState": "אין מה לאשר",
+      "close": "אפשר לסגור חלון זה ולחזור לאפליקציה.",
+      "closeButton": "סגירת חלון"
+    }
   }
 }

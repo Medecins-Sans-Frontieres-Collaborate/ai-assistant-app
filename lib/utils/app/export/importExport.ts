@@ -116,6 +116,9 @@ export const exportData = () => {
   const promptsArray: Prompt[] = settingsState.prompts || [];
   const tonesArray: Tone[] = settingsState.tones || [];
   const customAgentsArray = settingsState.customAgents || [];
+  // settingsState.mcpServers is DELIBERATELY not exported: entries hold
+  // access tokens, and a backup JSON on a shared drive must never contain
+  // secrets. Connector config is trivially re-created by re-pasting a token.
 
   const data = {
     version: 5,

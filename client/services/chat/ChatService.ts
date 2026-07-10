@@ -9,6 +9,8 @@ import {
   FileMessageContent,
   Message,
 } from '@/types/chat';
+import { ExtractionRequest } from '@/types/extractionRecipe';
+import { McpPendingToolCall, McpServerRequestEntry } from '@/types/mcp';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 import { DisplayNamePreference, StreamingSpeedConfig } from '@/types/settings';
@@ -152,6 +154,7 @@ export class ChatService {
       botId?: string;
       threadId?: string;
       searchMode?: SearchMode;
+      hostedRegion?: 'US' | 'EU';
       forcedAgentType?: string;
       isEditorOpen?: boolean;
       tone?: Tone;
@@ -167,6 +170,12 @@ export class ChatService {
       autoInjectPinnedImages?: boolean;
       agentSourcePath?: string;
       approvalResponses?: ApprovalResponse[];
+      /** Native MCP tool loop (see types/mcp.ts). Streaming path only. */
+      mcpServers?: McpServerRequestEntry[];
+      mcpPendingToolCalls?: McpPendingToolCall[];
+      mcpLoopRound?: number;
+      /** Structured-data extraction payload (see types/extractionRecipe.ts). */
+      extraction?: ExtractionRequest;
     },
   ): Promise<ReadableStream<Uint8Array>> {
     const messagesWithPlaceholders = await prepareMessagesForAPI(messages);
@@ -182,6 +191,7 @@ export class ChatService {
       botId: options?.botId,
       threadId: options?.threadId,
       searchMode: options?.searchMode,
+      hostedRegion: options?.hostedRegion,
       forcedAgentType: options?.forcedAgentType,
       isEditorOpen: options?.isEditorOpen,
       tone: options?.tone,
@@ -196,6 +206,10 @@ export class ChatService {
       autoInjectPinnedImages: options?.autoInjectPinnedImages,
       agentSourcePath: options?.agentSourcePath,
       approvalResponses: options?.approvalResponses,
+      mcpServers: options?.mcpServers,
+      mcpPendingToolCalls: options?.mcpPendingToolCalls,
+      mcpLoopRound: options?.mcpLoopRound,
+      extraction: options?.extraction,
     };
 
     const { body, report } = trimBodyToByteBudget(rawBody);

@@ -1,4 +1,5 @@
 import { env } from '@/config/environment';
+import { getDefaultModel } from '@/config/models';
 
 // Re-export for backward compatibility
 // The actual implementation is now in systemPrompt.ts
@@ -15,7 +16,8 @@ export const DEFAULT_USE_KNOWLEDGE_BASE = env.DEFAULT_USE_KNOWLEDGE_BASE;
 
 export const OPENAI_API_VERSION = env.OPENAI_API_VERSION;
 
-export const DEFAULT_MODEL = env.DEFAULT_MODEL;
+// Env override first, else the dynamic ring default (latest standard GPT).
+export const DEFAULT_MODEL = env.DEFAULT_MODEL || getDefaultModel();
 
 export const FORCE_LOGOUT_ON_REFRESH_FAILURE =
   env.FORCE_LOGOUT_ON_REFRESH_FAILURE;

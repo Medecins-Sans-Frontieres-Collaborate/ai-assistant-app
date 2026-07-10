@@ -221,6 +221,6 @@ IMPORTANT: Always provide searchQuery in your response:
       return textParts.join('\n');
     }
 
-    return content.text;
+    return 'text' in content ? content.text : '';
   }
 }

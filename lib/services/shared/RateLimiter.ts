@@ -109,6 +109,19 @@ export class RateLimiter {
   }
 
   /**
+   * Creates a standalone (non-singleton) limiter with its own config and
+   * window map. The singleton above is pinned to whatever config first
+   * requested it (the chat pipeline's 100/min); routes needing different
+   * limits (e.g. /api/mcp/tools) hold their own module-scoped instance.
+   */
+  public static createScoped(
+    requestsPerWindow: number,
+    windowMinutes: number,
+  ): RateLimiter {
+    return new RateLimiter(requestsPerWindow, windowMinutes);
+  }
+
+  /**
    * Checks if a user has exceeded their rate limit.
    *
    * @param userId - Unique user identifier

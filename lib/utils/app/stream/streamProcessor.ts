@@ -2,6 +2,7 @@ import { RAGService } from '@/lib/services/ragService';
 
 import {
   PendingTranscriptionInfo,
+  TokenUsageMetadata,
   TranscriptMetadata,
   appendMetadataToStream,
   createStreamEncoder,
@@ -31,8 +32,20 @@ function isControllerAlreadyClosedError(err: unknown): boolean {
  * @param {TranscriptMetadata} [transcript] - Optional transcript metadata for audio/video transcriptions.
  * @param {Citation[]} [webSearchCitations] - Optional citations from web search (intelligent search mode).
  * @param {PendingTranscriptionInfo[]} [pendingTranscriptions] - Optional pending batch transcription jobs.
+ * @param {UsageContext} [usageContext] - When provided, the provider's terminal
+ *   usage chunk (requested via stream_options.include_usage) is attributed and
+ *   forwarded in the terminal metadata block + reported via onUsage. Callers
+ *   that don't pass it (RAG, document summary) see zero behavior change.
  * @returns {ReadableStream} A processed stream with citation data appended.
  */
+export interface UsageContext {
+  modelId: string;
+  region: 'US' | 'EU' | null;
+  reasoningEffort?: 'minimal' | 'low' | 'medium' | 'high';
+  /** Server-side sink (logging); runs at stream end when usage was captured. */
+  onUsage?: (usage: TokenUsageMetadata) => void;
+}
+
 export function createAzureOpenAIStreamProcessor(
   response: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>,
   ragService?: RAGService,
@@ -40,12 +53,14 @@ export function createAzureOpenAIStreamProcessor(
   transcript?: TranscriptMetadata,
   webSearchCitations?: Citation[],
   pendingTranscriptions?: PendingTranscriptionInfo[],
+  usageContext?: UsageContext,
 ): ReadableStream {
   return new ReadableStream({
     start: (controller) => {
       const encoder = createStreamEncoder();
       let allContent = '';
       let controllerClosed = false;
+      let capturedUsage: OpenAI.Completions.CompletionUsage | undefined;
 
       (async function () {
         try {
@@ -64,6 +79,13 @@ export function createAzureOpenAIStreamProcessor(
                 }
               }
               return;
+            }
+
+            // The terminal usage chunk (stream_options.include_usage) has
+            // empty `choices` and a populated `usage` — capture it; the
+            // content guard below is unaffected.
+            if (chunk?.usage) {
+              capturedUsage = chunk.usage;
             }
 
             if (chunk?.choices?.[0]?.delta?.content) {
@@ -117,6 +139,21 @@ export function createAzureOpenAIStreamProcessor(
               };
             }
 
+            // Attribute captured provider usage (model that actually served,
+            // resolved region, applied effort) for the client + server sinks.
+            let usage: TokenUsageMetadata | undefined;
+            if (usageContext && capturedUsage) {
+              usage = {
+                promptTokens: capturedUsage.prompt_tokens ?? 0,
+                completionTokens: capturedUsage.completion_tokens ?? 0,
+                totalTokens: capturedUsage.total_tokens ?? 0,
+                modelId: usageContext.modelId,
+                region: usageContext.region,
+                reasoningEffort: usageContext.reasoningEffort,
+              };
+              usageContext.onUsage?.(usage);
+            }
+
             // Append metadata directly to controller (bypass smooth buffer)
             // Metadata should be sent immediately, not buffered
             appendMetadataToStream(controller, {
@@ -124,6 +161,7 @@ export function createAzureOpenAIStreamProcessor(
               thinking,
               transcript: transcriptMetadata,
               pendingTranscriptions,
+              usage,
             });
           }
 

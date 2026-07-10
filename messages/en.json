@@ -16,6 +16,7 @@
   "Settings": "Settings",
   "General": "General",
   "Chat Settings": "Chat Settings",
+  "Connectors": "Connectors",
   "Privacy Control": "Privacy Control",
   "Privacy & Security": "Privacy & Security",
   "Data Management": "Data Management",
@@ -437,7 +438,22 @@
     "noProjectsFound": "No projects found. Using \"default\".",
     "selectAllRequired": "Select a subscription, account, and project.",
     "subscriptionRequired": "Choose a subscription",
-    "accountRequired": "Choose a Foundry account"
+    "accountRequired": "Choose a Foundry account",
+    "projectSelectionRequired": "Select a project from the list.",
+    "scanningResources": "Scanning your Azure subscriptions...",
+    "searchProjectsPlaceholder": "Search projects...",
+    "noProjectsDiscovered": "No Foundry projects found in your subscriptions. Use manual entry if you know the path.",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} couldn't be scanned. Use manual entry if your project is missing.",
+    "discoveryTruncatedWarning": "There were too many resources to scan completely. Use manual entry if your project is missing.",
+    "retryScan": "Retry scan",
+    "next": "Next",
+    "back": "Back",
+    "selectAgentsDescription": "Choose which agents from this project appear in your model picker.",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
+    "agentsSelectedCount": "{selected} of {total} agents selected",
+    "autoAddLabel": "Automatically add new agents",
+    "autoAddDescription": "Agents published to this project later will appear automatically. Unchecked agents stay excluded."
   },
   "Quick Actions": "Quick Actions",
   "Type / in chat to access your prompts": "Type / in chat to access your prompts",
@@ -784,6 +800,7 @@
     "showOriginal": "Show original",
     "translatedTo": "Translated to {language}",
     "searchLanguages": "Search languages...",
+    "addLanguageOption": "Add \"{name}\"…",
     "selectLanguage": "Select language",
     "audioFromOriginal": "Audio is from original text",
     "audioFromTranslation": "Audio is from {language} translation",
@@ -821,7 +838,19 @@
       "listingTools": "Looking up available tools…",
       "analyzingFiles": "Analyzing your files…",
       "searchingKnowledge": "Searching the knowledge base…",
-      "cancellingPriorTool": "Cancelling previous tool request…"
+      "cancellingPriorTool": "Cancelling previous tool request…",
+      "workflow": {
+        "preparingDocument": "Preparing references…",
+        "writingDocument": "Writing the document…",
+        "analyzingSource": "Analyzing the source text…",
+        "translating": "Translating…",
+        "reviewingTranslation": "Review round {round} of {total}…",
+        "revisingTranslation": "Applying review feedback…",
+        "extractingRows": "Extracting rows from {source}…",
+        "transformingTable": "Transforming the table…",
+        "findingLocations": "Identifying locations…",
+        "updatingMap": "Updating the map…"
+      }
     },
     "toolSummary": {
       "usedTools": "Used {count, plural, one {# tool} other {# tools}}",
@@ -1139,6 +1168,7 @@
     "Settings": "Settings",
     "General": "General",
     "Chat Settings": "Chat Settings",
+    "Connectors": "Connectors",
     "Data Management": "Data Management",
     "Mobile App": "Mobile App",
     "Help & Support": "Help & Support",
@@ -1318,6 +1348,534 @@
       "confirmStopFromButtonDescription": "Show a confirmation dialog when you click the stop button while a response is being generated",
       "confirmStopFromKeyboard": "Confirm before stopping with the keyboard",
       "confirmStopFromKeyboardDescription": "Show a confirmation dialog when you press Escape while a response is being generated"
+    },
+    "Usage & Impact": "Usage & Impact"
+  },
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Translation",
+        "description": "Translate text with analysis, glossaries, and review rounds"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Draft and refine a document with the assistant"
+      },
+      "dataAnalysis": {
+        "label": "Data analysis",
+        "description": "Import tables and explore or transform your data"
+      },
+      "map": {
+        "label": "Map",
+        "description": "Turn any data into locations on a map"
+      }
+    },
+    "chooser": {
+      "prompt": "Or start a focused workspace"
+    },
+    "sidebar": {
+      "newTranslation": "New translation",
+      "newDocument": "New document",
+      "newDataAnalysis": "New data analysis",
+      "newMap": "New map"
+    },
+    "translation": {
+      "chooseLanguage": "Target language",
+      "customLanguageHint": "\"{name}\" is a language you added — the AI will attempt any language, but quality is unvetted.",
+      "addedByYou": "Added by you",
+      "glossary": "Glossary",
+      "noGlossary": "No glossary",
+      "manageGlossaries": "Glossaries",
+      "glossaries": "Glossaries",
+      "closeGlossaries": "Close glossaries",
+      "glossariesEmpty": "Create a glossary to lock in how specific terms are translated. Glossaries are saved on this device and reusable across translations.",
+      "newGlossary": "New glossary",
+      "newGlossaryName": "Untitled glossary",
+      "glossaryName": "Glossary name",
+      "deleteGlossary": "Delete glossary",
+      "sourceTerm": "Source term",
+      "targetTerm": "Translation",
+      "note": "Note",
+      "noteOptional": "Note (optional)",
+      "addEntry": "Add term",
+      "removeEntry": "Remove {term}",
+      "mode": "Translation mode",
+      "modeQuick": "Quick",
+      "modeAgentic": "Reviewed",
+      "modeQuickHint": "One translation pass, fastest",
+      "modeAgenticHint": "Analyzes the text first, then translates and runs up to 3 review rounds",
+      "translate": "Translate",
+      "translating": "Translating…",
+      "sourceLabel": "Source text",
+      "targetLabel": "Translation",
+      "sourcePlaceholder": "Paste or type the text to translate, or upload a document.",
+      "targetEmpty": "The translation will appear here.",
+      "uploadDocument": "Upload document",
+      "copy": "Copy",
+      "copied": "Copied",
+      "tooLong": "Text is longer than {max} characters. Split it into parts, or use document translation for whole files.",
+      "analysisTitle": "Pre-translation analysis",
+      "register": "Register",
+      "reviewTitle": "Review rounds",
+      "roundLabel": "Round {round}",
+      "verdictApprove": "approved",
+      "verdictRevise": "revised",
+      "railRequest": "Translate the source text to {language}.",
+      "railDoneAgentic": "Done. I analyzed the text, translated it, and ran {rounds} review round(s). The result is in the workspace.",
+      "railDoneQuick": "Done. The translation is in the workspace.",
+      "railAssessRequest": "Assess the quality of the {language} translation.",
+      "railAssessDone": "Assessment complete: ratings are in the workspace with {count} suggested edit(s) to review.",
+      "roundChanges": "Changes in round {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Accuracy",
+          "description": "Conveys exactly the source meaning — no mistranslation, omission, addition, or untranslated segments"
+        },
+        "fluency": {
+          "label": "Fluency",
+          "description": "Grammar, spelling, punctuation, and cohesion read naturally in the target language"
+        },
+        "terminology": {
+          "label": "Terminology",
+          "description": "Domain terms are consistent and correct; the glossary is followed exactly"
+        },
+        "style": {
+          "label": "Style",
+          "description": "Register, tone, and voice match the source and stay consistent"
+        },
+        "localeConventions": {
+          "label": "Locale conventions",
+          "description": "Dates, numbers, units, and punctuation follow target-locale norms"
+        },
+        "audience": {
+          "label": "Audience",
+          "description": "Suits the apparent purpose and readership of the text"
+        }
+      },
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "assess": "Assess quality",
+      "assessing": "Assessing…",
+      "assessmentTitle": "Quality assessment",
+      "criteriaPicker": "Criteria to assess",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Suggested edits",
+      "noEditsSuggested": "No edits suggested — the translation passed the selected criteria.",
+      "acceptEdit": "Accept",
+      "rejectEdit": "Reject",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all",
+      "editAccepted": "Accepted",
+      "editRejected": "Rejected",
+      "editUnapplicable": "Couldn't locate this passage in the current text — not applied",
+      "editTranslation": "Edit",
+      "doneEditing": "Done",
+      "pasteTranslationPlaceholder": "Type or paste a translation to work on…",
+      "editingBlockedPendingEdits": "Resolve or reject the pending suggested edits first",
+      "pendingCount": "{count} pending",
+      "closeReview": "Close quality review",
+      "showReview": "Show review",
+      "showReviewPending": "Show review ({count} pending)"
+    },
+    "document": {
+      "emptyTitle": "Describe the document you want",
+      "emptyBody": "Tell the assistant what to write — a situation report, a donor letter, meeting minutes. Add reference files first if you want quotes and facts cited from them.",
+      "generatePlaceholder": "Describe the document to write…",
+      "revisePlaceholder": "Describe the changes to make…",
+      "generate": "Generate",
+      "revise": "Revise",
+      "writing": "Writing…",
+      "export": "Export",
+      "references": "References",
+      "addReference": "Add file",
+      "uploading": "Uploading…",
+      "removeReference": "Remove {name}",
+      "referenceChars": "{chars} characters of extracted text",
+      "referenceEmpty": "No text could be extracted from {name}",
+      "uploadFailed": "Upload failed",
+      "untitledDocument": "Untitled document",
+      "generatedSummary": "I wrote the document in the workspace. Review it and tell me what to change.",
+      "revisedSummary": "I revised the document in the workspace.",
+      "runFailed": "Something went wrong: {message}",
+      "uploadBasis": "Start from an existing document",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grammar & spelling",
+          "description": "Correct grammar and spelling; one consistent English variety (US or UK) is fine — mixing is the error"
+        },
+        "consistency": {
+          "label": "Consistency",
+          "description": "Terminology, names, capitalization, and formatting used the same way throughout"
+        },
+        "clarity": {
+          "label": "Clarity",
+          "description": "Direct, unambiguous sentences; structure that supports the reader"
+        },
+        "sensitivity": {
+          "label": "Sensitivity",
+          "description": "Inclusive, conflict- and humanitarian-sensitive wording (optional check)"
+        },
+        "specAdherence": {
+          "label": "Spec adherence",
+          "description": "Follows the attached document spec: required sections present, in order, fulfilling their guidance"
+        },
+        "toneAdherence": {
+          "label": "Tone adherence",
+          "description": "Follows the attached voice and tone rules"
+        }
+      },
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "assess": "Assess quality",
+      "assessing": "Assessing…",
+      "assessmentTitle": "Quality review",
+      "criteriaPicker": "Criteria to assess",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Suggested edits",
+      "noEditsSuggested": "No edits suggested — the document passed the selected criteria.",
+      "acceptEdit": "Accept",
+      "rejectEdit": "Reject",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all",
+      "editAccepted": "Accepted",
+      "editRejected": "Rejected",
+      "editUnapplicable": "Couldn't locate this passage in the current text — not applied",
+      "editingBlockedPendingEdits": "Resolve or reject the pending suggested edits first",
+      "pendingCount": "{count} pending",
+      "closeReview": "Close quality review",
+      "showReview": "Show review",
+      "showReviewPending": "Show review ({count} pending)",
+      "railAssessRequest": "Assess the document's quality against the selected criteria.",
+      "railAssessDone": "Assessment complete: ratings are in the workspace with {count} suggested edit(s) to review.",
+      "spec": "Document spec",
+      "noSpec": "No spec",
+      "manageSpecs": "Specs",
+      "specs": "Document specs",
+      "closeSpecs": "Close specs",
+      "specsEmpty": "Create a spec to write documents to a fixed format — required sections, ordering, and per-section guidance (e.g. a SitRep template). Specs are saved on this device and reusable.",
+      "newSpec": "New spec",
+      "newSpecName": "Untitled spec",
+      "specName": "Spec name",
+      "specDescription": "Description (optional)",
+      "deleteSpec": "Delete spec",
+      "sectionHeading": "Section heading",
+      "sectionGuidance": "Guidance (optional)",
+      "sectionRequired": "Required",
+      "addSection": "Add section",
+      "removeSection": "Remove section",
+      "generalGuidance": "General guidance (optional)",
+      "tone": "Tone",
+      "noTone": "No tone",
+      "customCriteria": "Custom criteria",
+      "manageCriteria": "Custom criteria",
+      "closeCriteria": "Close custom criteria",
+      "criteriaEmpty": "Create custom criteria — e.g. brand considerations or organizational language — to assess documents and steer revisions. Saved on this device and reusable.",
+      "newCriterion": "New criterion",
+      "newCriterionName": "Untitled criterion",
+      "criterionName": "Criterion name",
+      "criterionRubric": "Rubric",
+      "criterionRubricPlaceholder": "Describe what the document must do to satisfy this criterion, e.g. \"Never use superlatives about our own work; always call beneficiaries 'people we assist'…\"",
+      "criterionRubricHint": "This rubric is given to the AI verbatim during assessments and revision rounds.",
+      "deleteCriterion": "Delete criterion",
+      "profileTitle": "Document profile",
+      "profileDocType": "Type",
+      "profileLanguage": "Language",
+      "profileAudience": "Audience",
+      "profilePurpose": "Purpose",
+      "profileRegister": "Register",
+      "profileTone": "Tone",
+      "profileConventions": "Conventions",
+      "emptyHint": "Start typing below, describe what to write in the box at the bottom, or start from a file.",
+      "addSpec": "Add spec",
+      "addCriteria": "Add criteria",
+      "scopeFullDocument": "Scope: full document",
+      "scopeSelection": "Scope: selection — “{preview}…” ({count} words)",
+      "clearSelection": "Clear selection (work with the full document)",
+      "reviseSelectionPlaceholder": "Describe changes to the selection…",
+      "revisedSelectionSummary": "I revised the selected passage in the workspace.",
+      "assessedSelection": "Selection"
+    },
+    "data": {
+      "emptyTitle": "Import data to analyze",
+      "emptyBody": "Bring in a CSV, Excel, or JSON file, or paste rows directly. Once your table is loaded you can sort it, extract more rows from documents, and transform it with plain-language instructions.",
+      "importFile": "Import file",
+      "importing": "Importing…",
+      "pasteData": "Paste data",
+      "pastePlaceholder": "Paste CSV, TSV, or JSON here…",
+      "import": "Import",
+      "addFromSource": "Add from source",
+      "extractHint": "Paste text or pick a document; rows matching your current columns will be extracted from it. Unknown values stay empty — nothing is invented.",
+      "extractPlaceholder": "Paste unstructured text containing data…",
+      "extractRows": "Extract rows",
+      "extractFromFile": "From a file…",
+      "extracting": "Extracting…",
+      "pastedSource": "Pasted text",
+      "transform": "Transform",
+      "transforming": "Transforming…",
+      "transformPlaceholder": "Describe a transformation, e.g. \"add a column with cases per 1000 population\"…",
+      "transformCapHint": "Transforms are limited to {max} rows. Delete or filter rows first for larger tables.",
+      "undo": "Undo",
+      "deleteSelected": "Delete {count}",
+      "deletedRows": "Deleted {count} rows",
+      "selectAllRows": "Select all rows",
+      "selectRow": "Select row {row}",
+      "rowCount": "{count} rows",
+      "rowCapExceeded": "That would be {count} rows; the table is limited to {max}. Split the data or export instead.",
+      "railExtractRequest": "Extract rows matching the table schema from: {source}",
+      "railExtractDone": "Added {count} extracted rows to the table.",
+      "railTransformDone": "Transformed the table.",
+      "columnProfileFor": "Column statistics for {column}",
+      "profileMissing": "Missing",
+      "profileDistinct": "Distinct",
+      "profileRange": "Range",
+      "profileMean": "Mean",
+      "profileMedian": "Median",
+      "profileTopValues": "Top values",
+      "filterColumnFor": "Filter {column}",
+      "filterContains": "Contains…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Clear",
+      "clearFilters": "Clear filters",
+      "showingRows": "Showing {shown} of {total} rows",
+      "scopeLabel": "Working scope",
+      "scopeTable": "All ({count})",
+      "scopeFiltered": "Filtered ({count})",
+      "scopeSelection": "Selected ({count})",
+      "scopedInstruction": "{instruction} (on {count} scoped rows)",
+      "assess": "Assess quality",
+      "assessing": "Assessing…",
+      "criteria": {
+        "validity": {
+          "label": "Validity",
+          "description": "Values conform to their column's type and expected format"
+        },
+        "consistency": {
+          "label": "Consistency",
+          "description": "The same value is written the same way throughout (no 'M' / 'Male' variants, mixed units, or casing drift)"
+        },
+        "duplicates": {
+          "label": "Duplicates",
+          "description": "Rows recording the same entity or event twice"
+        },
+        "plausibility": {
+          "label": "Plausibility",
+          "description": "Outliers and impossible values in context"
+        }
+      },
+      "assessmentTitle": "Data quality review",
+      "pendingCount": "{count} pending",
+      "closeReview": "Close quality review",
+      "suggestedEdits": "Suggested fixes",
+      "noEditsSuggested": "No fixes suggested — the data passed the selected criteria.",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all",
+      "acceptEdit": "Accept",
+      "rejectEdit": "Reject",
+      "editAccepted": "Applied",
+      "editRejected": "Rejected",
+      "editUnapplicable": "The cell changed since assessment — not applied",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Criteria to assess",
+      "severity": {
+        "minor": "Minor",
+        "major": "Major"
+      },
+      "editLocation": "row {row} · {column}",
+      "editLocationRow": "row {row} (delete)",
+      "showReview": "Show review",
+      "showReviewPending": "Show review ({count} pending)",
+      "assessedFiltered": "Filtered rows",
+      "assessedSelection": "Selected rows",
+      "assessedSample": "sample of {shown} of {total}",
+      "railAssessRequest": "Assess the quality of the table ({count} rows) against the selected criteria.",
+      "railAssessDone": "Proposed {count} data-quality fixes — review them in the workspace.",
+      "insights": "Insights",
+      "chartKind": "Chart type",
+      "chartBar": "Bar (group by)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Line (over time)",
+      "groupByColumn": "Group by column",
+      "dateColumn": "Date column",
+      "valueColumn": "Value column",
+      "aggFn": "Aggregation",
+      "aggCount": "Count",
+      "aggSum": "Sum",
+      "aggMean": "Mean",
+      "chartTruncated": "Showing the top {max} groups",
+      "chartNoData": "No chartable values in the current rows.",
+      "chartBarAria": "Bar chart grouped by {column}",
+      "chartHistogramAria": "Histogram of {column}",
+      "chartLineAria": "Line chart of {column} over time",
+      "editStructure": "Structure",
+      "defineStructure": "Define structure",
+      "schemaHint": "Define the fields of your data structure. Required fields drive the missing-data policy at import; changing a field's type converts existing values (unconvertible cells become empty).",
+      "schemaFieldName": "Field name",
+      "schemaFieldType": "Field type",
+      "schemaRequired": "Required",
+      "schemaAddField": "Add field",
+      "schemaDeleteField": "Delete field {field}",
+      "schemaApply": "Apply structure",
+      "schemaCancel": "Cancel",
+      "schemaEdited": "Edited the table structure",
+      "schemaCellsConverted": "{count} cells could not be converted to the new type and are now empty.",
+      "missingFieldPolicy": "Missing data",
+      "policyStrict": "Strict — reject incomplete rows",
+      "policyFlag": "Flag — import and mark",
+      "policyLenient": "Lenient — import silently",
+      "droppedIncompleteRows": "Dropped {count} rows missing required fields: {fields}",
+      "dismiss": "Dismiss",
+      "requiredColumn": "Required field",
+      "flagMissingRequired": "Required field is empty",
+      "flagPendingEdit": "A suggested fix is pending for this cell — see the quality review",
+      "fromPhoto": "From photo",
+      "fromPhotoHint": "Photograph a paper form or table — its contents become structured data you can check against the photo",
+      "readingPhoto": "Reading photo…",
+      "photoBatchName": "{count} photos",
+      "railPhotoRequest": "Extract structured data from {count} photo(s): {name}",
+      "railPhotoDone": "Added {count} record(s) from the photo(s). Check them against the photo in the workspace.",
+      "sourcesLabel": "Sources",
+      "openPhotoQc": "Check the data against {name}",
+      "qcRowsFromPhoto": "{count} rows",
+      "qcClose": "Close photo check",
+      "qcZoomIn": "Zoom in",
+      "qcZoomOut": "Zoom out",
+      "qcPrevPhoto": "Previous photo",
+      "qcNextPhoto": "Next photo",
+      "qcImageLoading": "Loading photo…",
+      "qcImageFailed": "The photo could not be loaded.",
+      "qcImageAlt": "Source photo: {name}",
+      "qcHint": "The table shows only this photo's rows — compare each value against the photo and edit or delete rows that don't match.",
+      "sourceFilterChip": "Rows from {name}",
+      "clearSourceFilter": "Show all rows again",
+      "viewAsRecord": "Form view",
+      "viewAsTable": "Table view",
+      "recordEmpty": "No records yet.",
+      "recordOf": "Record {index} of {count}",
+      "recordPrev": "Previous record",
+      "recordNext": "Next record",
+      "recordBooleanUnset": "(empty)",
+      "flagsChip": "{count} flags",
+      "flagsChipOpenReview": "Open the quality review",
+      "flagsChipMissingOnly": "Required fields are empty — fill them in or adjust the structure",
+      "autoCheck": "Auto-check new data",
+      "autoCheckHint": "After extracting data from photos or documents, automatically run a quality check on the new rows",
+      "checkingNewRows": "Checking the newly added rows for quality issues…",
+      "ingestCheckFailed": "The automatic quality check failed ({message}) — you can run it manually with Assess quality.",
+      "assessedIngest": "Newly added rows"
+    },
+    "map": {
+      "emptyTitle": "Put your data on a map",
+      "emptyBody": "Paste a sitrep, line list, meeting notes, or any text naming places — or upload a document. Locations are identified and mapped with a confidence rating; you can then export them for ArcGIS or other GIS tools.",
+      "inputPlaceholder": "Paste text naming locations…",
+      "uploadFile": "Upload a file",
+      "pastedSource": "Pasted text",
+      "mapIt": "Map it",
+      "finding": "Finding locations…",
+      "featureCount": "{count} locations",
+      "featureCapExceeded": "The map is limited to {max} locations.",
+      "noneFound": "No locations were found in that material.",
+      "lowConfidenceNotice": "{count} location(s) have low-confidence coordinates — check them before relying on the map.",
+      "tilesOffline": "Map tiles unavailable — the location list still works.",
+      "disclaimer": "Coordinates are AI-estimated from the model's knowledge, not a geocoding service — verify before operational use. Map tiles are loaded from a tile server; your data itself stays on this device.",
+      "flyTo": "Show {name} on the map",
+      "removeFeature": "Remove {name}",
+      "expandFeature": "Show full details for {name}",
+      "collapseFeature": "Collapse details for {name}",
+      "detailsParent": "Part of {parent}",
+      "railRequest": "Map the locations in: {source}",
+      "railSearchRequest": "Search the web and map the locations for: {query}",
+      "railDone": "Mapped {count} location(s). Review the low-confidence ones in the list.",
+      "searchToggle": "Web search mode",
+      "searchToggleHint": "Search the web instead of pasting text; the grounded results are mapped.",
+      "searchPlaceholder": "Search the web, e.g. \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Search & map",
+      "searching": "Searching…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Connection: {kind}",
+        "unresolved": "{count} connection(s) referenced places that aren't on the map and were skipped."
+      },
+      "confidence": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "prominence": {
+        "primary": "Main location",
+        "secondary": "Supporting location",
+        "mention": "Passing mention"
+      },
+      "prominenceMentionHint": "The material only references this place in passing — shown smaller on the map and excluded from the initial framing.",
+      "dates": {
+        "since": "since {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Ongoing"
+      },
+      "filters": {
+        "label": "Filter by category",
+        "other": "Other",
+        "clear": "Clear",
+        "showing": "{shown} of {total} locations",
+        "noneMatch": "No locations match the current filters."
+      },
+      "dateFilter": {
+        "label": "Dates",
+        "from": "From",
+        "to": "To",
+        "fromAria": "Show only events from this date",
+        "toAria": "Show only events up to this date",
+        "clear": "Clear dates",
+        "eraChip": "Show only events in {label}"
+      },
+      "timeline": {
+        "toggle": "Time lapse",
+        "play": "Play time lapse",
+        "pause": "Pause time lapse",
+        "eras": "Timeline eras",
+        "jumpTo": "Jump to {label}",
+        "slider": "Timeline position",
+        "showUndated": "Show undated locations",
+        "activeCount": "{count} active"
+      },
+      "granularity": {
+        "site": "Site",
+        "city": "City/town",
+        "district": "District",
+        "region": "Region",
+        "country": "Country"
+      },
+      "granularityAreaHint": "An area, shown as an approximate extent circle around its centroid — not a precise location or boundary.",
+      "containerHint": "Contains other mapped locations, so it is shown as an outline only.",
+      "legend": {
+        "toggle": "Legend",
+        "title": "How to read the map",
+        "color": "Color: coordinate confidence (blue high, amber medium, red low)",
+        "size": "Dot size: how central the place is to the material",
+        "area": "Dashed circle: approximate extent of a district, region, or country",
+        "container": "Faint outline: an area whose contents are mapped individually"
+      }
+    },
+    "shell": {
+      "showConversation": "Show conversation",
+      "hideConversation": "Hide conversation",
+      "workspaceTab": "Workspace",
+      "conversationTab": "Conversation",
+      "paneTabsLabel": "Workflow panes",
+      "railEmpty": "The assistant's messages and progress will appear here.",
+      "railInputPlaceholder": "Message the assistant…",
+      "assistantThinking": "Thinking…",
+      "sendMessage": "Send message",
+      "stopGenerating": "Stop generating",
+      "loadingWorkspace": "Loading workspace…",
+      "unknownType": "This conversation uses a workflow this version doesn't recognize. The conversation history is shown below.",
+      "untitled": "New Conversation",
+      "toggleMenu": "Toggle menu",
+      "model": "Model for this workflow"
     }
   },
   "emptyState": {
@@ -1466,7 +2024,35 @@
     },
     "title": "Select a model",
     "modelsDescription": "Choose an AI model for your conversation. Each model has different strengths — select one to see details.",
-    "recommended": "Recommended"
+    "recommended": "Recommended",
+    "searchPlaceholder": "Search models",
+    "searchEmpty": "No models match your search.",
+    "star": "Star {name}",
+    "unstar": "Unstar {name}",
+    "hostedExternally": "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+    "hostedIn": {
+      "label": "Hosted in {regions}",
+      "tooltip": "The Azure region(s) where this model is deployed. Conversations are processed in your own region."
+    },
+    "badges": {
+      "external": "External",
+      "externalTooltip": "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+      "regionHostedTooltip": "Hosted in the {region} Azure region. Conversations with this model are processed there."
+    },
+    "favorites": "Favorites",
+    "euResidencyNote": "All models run in the EU Azure region.",
+    "hostedRegion": {
+      "label": "Hosted region",
+      "processedIn": "This conversation is processed in the {region} Azure region.",
+      "euOnlyNote": "{name} is hosted in the EU Azure region; conversations with it are processed there."
+    },
+    "variant": {
+      "label": "Variant"
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Reasoning model: thinks step-by-step before answering. Slower, better on hard problems."
   },
   "models": {
     "gpt_4_1": {
@@ -1543,6 +2129,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "A balanced Claude model. Good for everyday writing, analysis, and coding with quick responses.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "An open-source model from Meta. Solid for writing, summaries, and quick questions."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI's newest flagship model. Strong at writing, research, coding, and complex problem solving."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "The smallest, fastest GPT variant. Best for quick, simple tasks at minimal cost."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "A conversational GPT variant tuned for dialogue. Good for casual chats, brainstorming, and supportive discussions."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "The original GPT-5 flagship. Still capable across writing, analysis, and coding."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "The chat-tuned GPT-5 variant. Good for everyday conversations and brainstorming."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "An older multimodal GPT. Fine for everyday writing and Q&A where the latest capability isn't needed."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "A smaller, faster GPT-4.1 variant for quick everyday tasks."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic's newest and strongest model. Excellent for long writing, research, coding, and careful analysis."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek's newest open-source model. Reliable for general writing and technical questions."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral's flagship model. A European alternative for writing, summaries, and general questions."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "An earlier GPT-5 flagship revision. Still strong at writing, analysis, and coding."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "An earlier chat-tuned GPT-5 revision. Good for everyday conversations and brainstorming."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "The smallest GPT-5 variant. Best for quick, simple tasks at minimal cost."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "The smallest GPT-4.1 variant. Fine for quick, simple tasks where speed and cost matter most."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "A small, fast GPT-4o variant. Fine for everyday quick tasks where the latest capability isn't needed."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "A compact reasoning model. Good for math, logic, and step-by-step problems at lower cost than o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "An earlier compact reasoning model. Handles math, science, and logic puzzles on a budget."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic's most intelligent model, the first of the Claude 5 family. Excellent for the hardest writing, research, and coding tasks."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "The newest balanced Claude, first of the Claude 5 family. Strong everyday writing, analysis, and coding with quick responses."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral's mid-size model. A European alternative that balances capability and speed for everyday work."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral's small model. Quick and inexpensive for summaries, drafts, and simple questions."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral's tiny model. Best for very quick, simple tasks at minimal cost."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "An updated DeepSeek-R1 revision. Shows its thinking step-by-step with improved reasoning depth."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "A lighter open-source model from Meta. Quick for writing, summaries, and everyday questions."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "An older open-source model from Meta. Still solid for general writing and Q&A."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI's flagship model. Good for open-ended discussions, analysis, and creative projects."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI's latest flagship model. Strong at writing, research, coding, and complex problem solving."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (latest)",
+      "description": "A rolling alias that always points to OpenAI's newest chat-tuned model. Azure's replacement for the retired versioned gpt-*-chat models."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "A recent Opus release, between 4.6 and 4.8. Strong for long writing, research, coding, and careful analysis."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek's newest reasoning model and Azure's replacement for the R1 line. Shows its thinking step-by-step."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek's fast V4 variant and Azure's replacement for the V3 line. Quick for general writing and technical questions."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "xAI's fast reasoning model. Thinks step-by-step with quick responses."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI's fast chat model. Quick responses for everyday questions and discussions."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "A lighter xAI model. Faster and cheaper for quick questions and casual chats."
     }
   },
   "searchMode": {
@@ -1808,7 +2534,20 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files."
+    "translateDocumentTooltip": "Translate documents to another language.\n\nSupported formats: Word, Excel, PowerPoint, HTML, TXT\nMax size: 40MB\n\nSupports 80+ languages with optional glossary files.",
+    "translateTooltip": "Translate a snippet of text into another language.\n\nFor whole files (Word, Excel, PowerPoint, HTML, TXT), use Translate Document instead.",
+    "cameraTooltip": "Take a photo with your device camera and attach it to the message.",
+    "noResults": "No matching actions",
+    "sectionPinned": "Pinned",
+    "sectionFrequent": "Frequently used",
+    "sectionMore": "More",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media & files",
+    "categoryTransform": "Transform",
+    "pin": "Pin to top",
+    "unpin": "Unpin",
+    "moveToMore": "Move to More",
+    "moveOutOfMore": "Show in menu"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -1942,7 +2681,14 @@
     "expiresSoon": "Expires in {days} day(s) - download soon",
     "expires": "Available for {days} days",
     "unofficialBadgeLabel": "Unofficial",
-    "unofficialLanguageWarning": "This language is not officially supported. Translation quality has not been verified. Please have the result reviewed by a fluent or native speaker before sharing."
+    "unofficialLanguageWarning": "This language is not officially supported. Translation quality has not been verified. Please have the result reviewed by a fluent or native speaker before sharing.",
+    "translationSubmitted": "Translation started — PDFs are processed in the background.",
+    "pendingTitle": "Translating {filename}…",
+    "pendingHint": "PDF translations run in the background and can take a few minutes. You can keep working — this card updates when the document is ready, even after a reload.",
+    "asyncFailed": "Document translation failed: {error}",
+    "jobNotFound": "the translation job is no longer available. Please try again.",
+    "retryPolling": "Check again",
+    "pollingStalled": "We couldn't reach the server to check progress. The translation may still be running."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2088,5 +2834,171 @@
     "toggleTheme": "Toggle theme",
     "regenerateResponse": "Regenerate response",
     "copyLastResponse": "Copy last response"
+  },
+  "usageImpact": {
+    "empty": "No usage tracked yet. Your token usage and estimated emissions will appear here after you chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} smartphone charges",
+    "requests": "Requests",
+    "promptTokens": "Prompt tokens",
+    "completionTokens": "Completion tokens",
+    "topModels": "By model",
+    "byRegion": "By hosting region",
+    "regionDefault": "Default",
+    "modelRow": "{requests} req · {grams} g",
+    "disclosure": "Estimates based on assumptions v{version} · since {since} · standard chat only (agents and knowledge-base answers not counted).",
+    "reset": "Reset usage stats"
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.",
+    "localOnlyNote": "You sign in directly with each provider. Access keys are encrypted and stored only on this device, and are relayed through the app server with each request — never stored or logged there.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Search repositories, read and create issues and pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Find, create, and update tasks and projects."
+      }
+    },
+    "connect": "Connect",
+    "connected": "Connected",
+    "tokenEndsIn": "ends in ••••{last4}",
+    "disconnect": "Disconnect",
+    "toolCount": "{count, plural, =1 {1 tool available} other {# tools available}}",
+    "patLabel": "Personal access token",
+    "createTokenLink": "Create a token",
+    "tokenScopeHint": "Use a fine-grained token with only the access these tools need.",
+    "validating": "Checking connection…",
+    "validationFailed": "Could not connect. Check the address and try again.",
+    "authFailed": "The server rejected the token. Check it and try again.",
+    "tokenRequired": "A token is required",
+    "enableServer": "Available in chat",
+    "arbitraryTitle": "Other MCP servers",
+    "arbitraryToggle": "Allow arbitrary MCP servers",
+    "arbitraryWarning": "Anyone who runs an MCP server can see the messages sent to its tools. Only connect servers you trust. Every tool call still requires your approval.",
+    "addServer": "Add MCP server",
+    "editServer": "Edit MCP server",
+    "serverName": "Name",
+    "serverUrl": "Server URL",
+    "nameRequired": "Name is required",
+    "urlRequired": "URL is required",
+    "invalidUrl": "Enter a public https:// address",
+    "namePlaceholder": "My MCP server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (optional)",
+    "keepTokenPlaceholder": "Leave blank to keep the current token",
+    "disconnectedToast": "{name} disconnected",
+    "save": "Save",
+    "connectWithProvider": "Connect with {name}",
+    "useTokenInstead": "Use an access token instead",
+    "oauthWaiting": "Waiting for authorization…",
+    "oauthFailed": "Sign-in failed. Try again.",
+    "oauthDenied": "Access was denied by the provider.",
+    "oauthTimeout": "Sign-in timed out. Try again.",
+    "oauthCancelled": "Sign-in was cancelled.",
+    "oauthUnavailable": "Sign-in isn't available for this connector on this deployment. Use an access token instead, or ask your administrator to configure the OAuth app.",
+    "ownAppToggle": "Use your own OAuth app",
+    "ownAppHint": "Register an OAuth app in your {name} account (your organization, workspace, or enterprise instance) with the callback URL below, then paste its credentials here. Leave this closed to use the built-in app.",
+    "ownAppCustomHint": "Optionally provide your own OAuth app credentials below; leave them blank to register automatically with the server.",
+    "ownAppInUse": "Connected with your own OAuth app.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (if your app has one)",
+    "redirectUriLabel": "Callback / redirect URL to register",
+    "reconnect": "Reconnect",
+    "needsReauth": "Needs reconnect",
+    "disconnectOauthNote": "Disconnecting removes access from this device only. To fully revoke access, manage authorized apps in your {name} account.",
+    "authModeLabel": "Authentication",
+    "authModeNone": "None",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Sign in with the provider (OAuth)",
+    "oauthCustomHint": "You'll sign in with the server's provider in a pop-up window after saving.",
+    "saveAndSignIn": "Save & sign in",
+    "oauthCallback": {
+      "title": "Authorization complete",
+      "missingState": "Nothing to authorize",
+      "close": "You can close this window and return to the app.",
+      "closeButton": "Close window"
+    }
+  },
+  "extraction": {
+    "toggleLabel": "Extract structured data",
+    "trayLabel": "Extraction",
+    "trayPrefix": "Extract",
+    "trayInfo": "Extraction returns up to 3 structured tables. Recipes are saved locally.",
+    "autoChip": "Auto — AI proposes a structure",
+    "addRecipe": "Add recipe",
+    "addRecipeTitle": "Add a recipe to this extraction",
+    "addRecipeFullTitle": "Up to 3 recipes per extraction",
+    "removeRecipe": "Remove recipe: {name}",
+    "remove": "Remove",
+    "section": "Extraction recipes",
+    "sectionSubtitle": "Saved templates that turn raw text, files, or URLs into structured tables. Pick up to 3 per extraction turn.",
+    "newRecipe": "New recipe",
+    "untitledRecipe": "(Untitled recipe)",
+    "deleteRecipe": "Delete recipe",
+    "delete": "Delete",
+    "deleteConfirm": "Delete?",
+    "cancel": "Cancel",
+    "name": "Name",
+    "namePlaceholder": "e.g. Patients",
+    "description": "Description",
+    "optional": "(optional)",
+    "descriptionPlaceholder": "Short summary shown in the recipe picker",
+    "instructions": "Instructions",
+    "instructionsPlaceholder": "What should the AI look for in the material?",
+    "fields": "Fields",
+    "field": "field",
+    "fieldsPlural": "fields",
+    "fieldName": "Field name",
+    "fieldType": "Field type",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "Add field",
+    "removeField": "Remove field",
+    "toggleDetails": "Toggle details",
+    "fieldDetailsTitle": "Description, enum values",
+    "fieldDescriptionPlaceholder": "Description (helps the AI find this field)",
+    "enumValuesPlaceholder": "Comma-separated allowed values",
+    "required": "required",
+    "suggest": "Suggest with AI",
+    "suggesting": "Suggesting…",
+    "suggestNeedsInstructions": "Add instructions first so the AI knows what to look for",
+    "searchRecipes": "Search recipes",
+    "pickerEmpty": "No recipes yet. Create one to get started.",
+    "pickerEmptyMatch": "No matching recipes",
+    "editorEmpty": "No recipes yet. Create one and the AI can help fill in the fields.",
+    "noData": "No data extracted",
+    "noRecords": "No {name} records found",
+    "row": "row",
+    "rows": "rows",
+    "record": "record",
+    "records": "records",
+    "complete": "complete",
+    "download": "Download",
+    "preview": "Preview",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} fields",
+    "fieldCountOne": "1 field",
+    "andMoreFields": "+ {count} more",
+    "saveAsRecipe": "Save as recipe",
+    "savedAsRecipeToast": "Saved as recipe \"{name}\"",
+    "previewTruncated": "Showing first 3 of {total} rows. Download for full data.",
+    "previewEmpty": "No rows to preview",
+    "proposedSchemaTip": "AI proposed this schema. Save it to reuse next time.",
+    "downloadAriaLabel": "Download {name} as {format}",
+    "previewAriaLabel": "Toggle preview of {name}",
+    "changeFormatAriaLabel": "Change download format for {name}",
+    "materialWarningTitle": "Add material to extract",
+    "materialWarningBody": "Type a message below, attach a file, or include a URL.",
+    "materialAttach": "Attach file",
+    "willExtractPrefix": "Will extract from:",
+    "materialText": "message text",
+    "materialFiles": "{count, plural, one {1 file} other {# files}}",
+    "materialActiveFiles": "{count, plural, one {1 active file} other {# active files}}",
+    "dismiss": "Turn off extraction"
   }
 }

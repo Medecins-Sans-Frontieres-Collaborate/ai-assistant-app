@@ -169,6 +169,9 @@ export const ATTACH_ACCEPT_TYPES = [
  * These formats support synchronous single-file translation.
  */
 export const DOCUMENT_TRANSLATION_EXTENSIONS = [
+  // PDFs are translated via the ASYNC batch API (the sync endpoint can't
+  // handle them) — see requiresAsyncTranslation in types/documentTranslation.
+  '.pdf',
   '.txt',
   '.html',
   '.htm',
@@ -199,6 +202,7 @@ export const GLOSSARY_EXTENSIONS = ['.csv', '.tsv', '.xlf', '.xliff'] as const;
  * this is only an additive safety net.
  */
 export const DOCUMENT_TRANSLATION_MIME_TYPES = [
+  'application/pdf', // .pdf — async batch path
   'text/plain',
   'text/html',
   'text/csv',

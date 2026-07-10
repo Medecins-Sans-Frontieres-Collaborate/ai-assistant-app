@@ -37,6 +37,7 @@ import { ChatMessages } from './ChatMessages';
 import { ChatTopbar } from './ChatTopbar';
 import { EmptyState } from './EmptyState/EmptyState';
 import { SuggestedPrompts } from './EmptyState/SuggestedPrompts';
+import { WorkflowChooser } from './EmptyState/WorkflowChooser';
 import { LoadingScreen } from './LoadingScreen';
 import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
@@ -661,6 +662,9 @@ export function Chat({
                 <div className="relative z-10">
                   <SuggestedPrompts onSelectPrompt={handleSelectPrompt} />
                 </div>
+
+                {/* Workflow entry points (LD-gated inside the component) */}
+                <WorkflowChooser />
               </div>
             </div>
           ) : (

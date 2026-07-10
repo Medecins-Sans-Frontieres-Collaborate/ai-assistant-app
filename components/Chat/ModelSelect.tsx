@@ -1,4 +1,4 @@
-import { IconX } from '@tabler/icons-react';
+import { IconBrain, IconX } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,9 +12,16 @@ import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState
 import { useSettings } from '@/client/hooks/settings/useSettings';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
+import { seriesRepresentative, versionRank } from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import {
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+  getModelHosting,
+  getModelTier,
+} from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
 
 import { AzureAIIcon, AzureOpenAIIcon } from '../Icons/providers';
@@ -26,12 +33,15 @@ import { AgentsTab } from './ModelSelect/AgentsTab';
 import { HiddenItemsSection } from './ModelSelect/HiddenItemsSection';
 import { ModelDetailsPanel } from './ModelSelect/ModelDetailsPanel';
 import {
+  FAMILY_LABEL,
   FAMILY_ORDER,
   ModelFamily,
   ModelFamilyFilter,
 } from './ModelSelect/ModelFamilyFilter';
 import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
+import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
+import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
 
 import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
 import {
@@ -110,9 +120,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     name: string;
   } | null>(null);
 
-  // View-only filter narrowing the model list to a single provider family.
-  // 'all' (default) shows every family, exactly as before.
+  // View-only filter narrowing the catalog to a single provider family.
+  // 'all' (default) shows every family.
   const [familyFilter, setFamilyFilter] = useState<ModelFamily>('all');
+
+  // Stars + dismissed default favorites drive the Favorites section;
+  // userRegion drives the region badges/notes (EU users only see EU-hosted
+  // models via discovery; US users can chat cross-region).
+  const starredModelIds = useSettingsStore((s) => s.starredModelIds);
+  const starModel = useSettingsStore((s) => s.starModel);
+  const unstarModel = useSettingsStore((s) => s.unstarModel);
+  const userRegion = useSettingsStore((s) => s.userRegion);
+  const starredSet = useMemo(() => new Set(starredModelIds), [starredModelIds]);
+
+  const [modelSearch, setModelSearch] = useState('');
 
   const requestHide = useCallback((id: string, name: string) => {
     setHideTarget({ id, name });
@@ -565,56 +586,123 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     hiddenSet.has(m.id),
                   );
 
+                  // Static metadata when known; discovered/unknown models
+                  // carry their own fields.
                   const providerOf = (m: OpenAIModel) =>
-                    OpenAIModels[m.id as OpenAIModelID]?.provider;
+                    OpenAIModels[m.id as OpenAIModelID]?.provider ?? m.provider;
+                  const metaOf = (m: OpenAIModel) =>
+                    OpenAIModels[m.id as OpenAIModelID] ?? m;
 
-                  // Families present in the current list, in canonical order.
-                  // The filter row only appears when there's more than one to
-                  // choose between (and never while reordering).
-                  const availableFamilies = FAMILY_ORDER.filter((f) =>
-                    visibleModels.some((m) => providerOf(m) === f),
-                  );
-                  const showFamilyFilter =
-                    !isEditingOrder && availableFamilies.length >= 2;
+                  const toggleStar = (model: OpenAIModel) =>
+                    starredSet.has(model.id)
+                      ? unstarModel(model.id)
+                      : starModel(model.id);
 
-                  // Apply the family filter (view-only). 'all' is a no-op, so
-                  // the list below is byte-for-byte the previous behavior.
-                  const familyModels =
-                    familyFilter === 'all'
-                      ? visibleModels
-                      : visibleModels.filter(
-                          (m) => providerOf(m) === familyFilter,
-                        );
+                  // Informational badges: hosting region (US users, models
+                  // with no US instance — still selectable, chat routes to
+                  // the hosting region) and external hosting.
+                  const badgeFor = (model: OpenAIModel) => {
+                    const isExternal =
+                      getModelHosting(metaOf(model)) === 'external';
+                    const foreignOnly =
+                      userRegion === 'US' &&
+                      !!model.hostedIn?.length &&
+                      !model.hostedIn.includes('US');
+                    const isReasoning = metaOf(model).modelType === 'reasoning';
+                    if (!isExternal && !foreignOnly && !isReasoning) {
+                      return undefined;
+                    }
+                    return (
+                      <>
+                        {isReasoning && (
+                          <span
+                            title={t('modelSelect.reasoningModel')}
+                            aria-label={t('modelSelect.reasoningModel')}
+                            className="shrink-0 inline-flex text-gray-500 dark:text-gray-400 cursor-help"
+                          >
+                            <IconBrain size={14} aria-hidden="true" />
+                          </span>
+                        )}
+                        {foreignOnly && (
+                          <ModelStatusBadge
+                            // Region codes are proper nouns, not translated.
+                            label={(model.hostedIn ?? []).join(' & ')}
+                            tooltip={t(
+                              'modelSelect.badges.regionHostedTooltip',
+                              { region: (model.hostedIn ?? []).join(' & ') },
+                            )}
+                          />
+                        )}
+                        {isExternal && (
+                          <ModelStatusBadge
+                            label={t('modelSelect.badges.external')}
+                            tooltip={t('modelSelect.badges.externalTooltip')}
+                          />
+                        )}
+                      </>
+                    );
+                  };
 
-                  // Anchor recommended models at the top so first-time users
-                  // get an obvious "start here" signal. Distinct taglines
-                  // (e.g. "Best for tasks" vs "Best for chatting") let users
-                  // pick between them without reading details. Everything
-                  // else stays visible below a thin divider, in user-defined
-                  // order. While reordering, collapse the distinction.
-                  const recommendedModels = familyModels.filter(
-                    (m) => OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+                  const recommendedPill = (
+                    <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-800 dark:bg-blue-500/15 dark:text-blue-300">
+                      {t('modelSelect.recommended')}
+                    </span>
                   );
-                  const otherModels = familyModels.filter(
-                    (m) => !OpenAIModels[m.id as OpenAIModelID]?.isRecommended,
+
+                  const sectionHeading = (label: string) => (
+                    <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                      {label}
+                    </h4>
                   );
-                  const renderModelCard = (model: OpenAIModel) => {
-                    const config = OpenAIModels[model.id as OpenAIModelID];
-                    const isSelected = selectedModelId === model.id;
+
+                  const renderModelCard = (
+                    model: OpenAIModel,
+                    opts?: { name?: string; versionTag?: string },
+                  ) => {
+                    const isStarred = starredSet.has(model.id);
+                    const isFeatured =
+                      SHOW_RECOMMENDED_TAG &&
+                      getModelTier(metaOf(model)) === 'featured';
+                    const infoBadge = badgeFor(model);
+                    const badge =
+                      opts?.versionTag || isFeatured || infoBadge ? (
+                        <>
+                          {opts?.versionTag && (
+                            <ModelStatusBadge
+                              label={opts.versionTag}
+                              tooltip={model.name}
+                            />
+                          )}
+                          {isFeatured && recommendedPill}
+                          {infoBadge}
+                        </>
+                      ) : undefined;
                     return (
                       <ModelCard
                         key={model.id}
                         id={model.id}
-                        name={model.name}
-                        tagline={config?.tagline}
-                        isSelected={isSelected}
+                        name={opts?.name ?? model.name}
+                        tagline={metaOf(model)?.tagline}
+                        badge={badge}
+                        isSelected={selectedModelId === model.id}
                         onClick={() => handleModelSelect(model)}
-                        icon={<ModelProviderIcon provider={config?.provider} />}
+                        icon={
+                          <ModelProviderIcon provider={providerOf(model)} />
+                        }
                         showReorderControls={isEditingOrder}
                         canMoveUp={canMoveUp(model.id)}
                         canMoveDown={canMoveDown(model.id)}
                         onMoveUp={() => moveModel(model.id, 'up')}
                         onMoveDown={() => moveModel(model.id, 'down')}
+                        starred={isStarred}
+                        onToggleStar={
+                          isEditingOrder ? undefined : () => toggleStar(model)
+                        }
+                        starLabel={
+                          isStarred
+                            ? t('modelSelect.unstar', { name: model.name })
+                            : t('modelSelect.star', { name: model.name })
+                        }
                         onHide={
                           isEditingOrder
                             ? undefined
@@ -625,9 +713,142 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     );
                   };
 
+                  // ── Favorites: user-starred models ONLY, in star order.
+                  // The section doesn't exist until the user stars something;
+                  // recommended defaults carry an inline pill in the tree
+                  // instead of occupying a section.
+                  const favorites = starredModelIds
+                    .map((id) => visibleModels.find((m) => m.id === id))
+                    .filter((m): m is OpenAIModel => !!m);
+                  const renderFavoriteCard = (model: OpenAIModel) => {
+                    const infoBadge = badgeFor(model);
+                    return (
+                      <ModelCard
+                        key={`fav-${model.id}`}
+                        id={model.id}
+                        name={model.name}
+                        tagline={metaOf(model)?.tagline}
+                        badge={infoBadge}
+                        isSelected={selectedModelId === model.id}
+                        onClick={() => handleModelSelect(model)}
+                        icon={
+                          <ModelProviderIcon provider={providerOf(model)} />
+                        }
+                        starred
+                        onToggleStar={() => unstarModel(model.id)}
+                        starLabel={t('modelSelect.unstar', {
+                          name: model.name,
+                        })}
+                        onHide={() => requestHide(model.id, model.name)}
+                        hideLabel={t('modelSelect.hide')}
+                      />
+                    );
+                  };
+
+                  // Search spans ALL visible models.
+                  const query = modelSearch.trim().toLowerCase();
+                  const searchResults = query
+                    ? visibleModels.filter((m) => {
+                        const family = providerOf(m);
+                        return (
+                          m.name.toLowerCase().includes(query) ||
+                          m.id.toLowerCase().includes(query) ||
+                          (family &&
+                            FAMILY_LABEL[family].toLowerCase().includes(query))
+                        );
+                      })
+                    : null;
+
+                  // ── Model tree: flat rows (series-consolidated) in list
+                  // order, always fully visible; the family filter only
+                  // narrows it.
+                  const treeModels =
+                    familyFilter === 'all'
+                      ? visibleModels
+                      : visibleModels.filter(
+                          (m) => providerOf(m) === familyFilter,
+                        );
+                  const availableFamilies = FAMILY_ORDER.filter((f) =>
+                    visibleModels.some((m) => providerOf(m) === f),
+                  );
+
+                  // Series rows + plain rows, preserving list order (first
+                  // member encountered anchors its series' position).
+                  const renderTypeBlock = (models: OpenAIModel[]) => {
+                    const seriesGroups = new Map<string, OpenAIModel[]>();
+                    const units: Array<{ key: string; seriesKey?: string }> =
+                      [];
+                    for (const m of models) {
+                      const seriesKey = metaOf(m).series;
+                      if (seriesKey) {
+                        if (!seriesGroups.has(seriesKey)) {
+                          seriesGroups.set(seriesKey, []);
+                          units.push({
+                            key: `series-${seriesKey}`,
+                            seriesKey,
+                          });
+                        }
+                        seriesGroups.get(seriesKey)!.push(m);
+                      } else {
+                        units.push({ key: m.id });
+                      }
+                    }
+                    const byId = new Map(models.map((m) => [m.id, m]));
+                    return (
+                      <div className="space-y-1">
+                        {units.map((unit) => {
+                          if (!unit.seriesKey) {
+                            return renderModelCard(byId.get(unit.key)!);
+                          }
+                          const versions = [
+                            ...seriesGroups.get(unit.seriesKey)!,
+                          ].sort((a, b) => versionRank(b) - versionRank(a));
+                          if (versions.length === 1) {
+                            return renderModelCard(versions[0]);
+                          }
+                          // One quiet row per family: the representative
+                          // fronts it with an inline variant+version tag;
+                          // switching variant/version lives in the details
+                          // panel. The 'standard' variant label is suppressed
+                          // so default rows stay short ("GPT · 5.2", not
+                          // "GPT · Standard 5.2").
+                          const rep = seriesRepresentative(
+                            versions,
+                            selectedModelId,
+                          )!;
+                          return renderModelCard(rep, {
+                            name: rep.seriesLabel ?? rep.name,
+                            versionTag:
+                              rep.variantLabel && rep.variant !== 'standard'
+                                ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
+                                : rep.versionLabel,
+                          });
+                        })}
+                      </div>
+                    );
+                  };
+
                   return (
                     <div>
-                      <div className="flex justify-end mb-1.5">
+                      <input
+                        type="search"
+                        value={modelSearch}
+                        onChange={(e) => setModelSearch(e.target.value)}
+                        placeholder={t('modelSelect.searchPlaceholder')}
+                        aria-label={t('modelSelect.searchPlaceholder')}
+                        className="w-full mb-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-inkwell-panel px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-500 focus:border-blue-600 focus:outline-none"
+                      />
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        {userRegion === 'EU' ? (
+                          // Affirmative residency framing for EU users — all
+                          // their models run in the EU (discovery guarantees
+                          // it; the server also pins their chat to EU).
+                          <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                            {t('modelSelect.euResidencyNote')}
+                          </p>
+                        ) : (
+                          <span />
+                        )}
                         <ModelOrderControls
                           orderMode={orderMode}
                           onOrderModeChange={setOrderMode}
@@ -636,52 +857,60 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           onToggleEdit={handleToggleEditOrder}
                         />
                       </div>
-                      {showFamilyFilter && (
-                        <ModelFamilyFilter
-                          families={availableFamilies}
-                          value={familyFilter}
-                          onChange={setFamilyFilter}
-                        />
-                      )}
-                      {isEditingOrder || recommendedModels.length === 0 ? (
+                      {isEditingOrder ? (
+                        // Reordering flattens everything into one list —
+                        // sections and series rows would fight the manual
+                        // order.
                         <div className="space-y-1">
-                          {(isEditingOrder ? visibleModels : familyModels).map(
-                            renderModelCard,
-                          )}
+                          {visibleModels.map((m) => renderModelCard(m))}
                         </div>
+                      ) : searchResults ? (
+                        searchResults.length > 0 ? (
+                          <div className="space-y-1">
+                            {searchResults.map((m) => renderModelCard(m))}
+                          </div>
+                        ) : (
+                          <p className="px-1 py-2 text-sm text-gray-500 dark:text-gray-400">
+                            {t('modelSelect.searchEmpty')}
+                          </p>
+                        )
                       ) : (
                         <>
-                          <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-                            {t('modelSelect.recommended')}
-                          </h4>
-                          <div className="space-y-1">
-                            {recommendedModels.map(renderModelCard)}
-                          </div>
-                          {otherModels.length > 0 && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-1">
-                              {otherModels.map(renderModelCard)}
+                          {favorites.length > 0 && (
+                            <div className="mb-3">
+                              {sectionHeading(t('modelSelect.favorites'))}
+                              <div className="space-y-1">
+                                {favorites.map(renderFavoriteCard)}
+                              </div>
                             </div>
                           )}
+                          {availableFamilies.length >= 2 && (
+                            <ModelFamilyFilter
+                              families={availableFamilies}
+                              value={familyFilter}
+                              onChange={setFamilyFilter}
+                            />
+                          )}
+                          {/* One flat list in the active order (default:
+                              DEFAULT_MODEL_ORDER via usage mode). NOT
+                              regrouped by provider — the default order
+                              deliberately interleaves families so flagships
+                              from smaller providers (Mistral) sit near the
+                              top instead of below every OpenAI model. Row
+                              icons carry the provider; series rows still
+                              consolidate. No family or Reasoning/General
+                              headers — they cost lines, and icons plus the
+                              brain badge (see badgeFor) carry the same
+                              information. */}
+                          {renderTypeBlock(treeModels)}
                         </>
                       )}
                       <HiddenItemsSection
-                        items={hiddenModels
-                          .filter(
-                            (m) =>
-                              familyFilter === 'all' ||
-                              providerOf(m) === familyFilter,
-                          )
-                          .map((m) => ({
-                            id: m.id,
-                            name: m.name,
-                            icon: (
-                              <ModelProviderIcon
-                                provider={
-                                  OpenAIModels[m.id as OpenAIModelID]?.provider
-                                }
-                              />
-                            ),
-                          }))}
+                        items={hiddenModels.map((m) => ({
+                          id: m.id,
+                          name: m.name,
+                          icon: <ModelProviderIcon provider={providerOf(m)} />,
+                        }))}
                         onRestore={unhideModel}
                       />
                     </div>
@@ -700,6 +929,7 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 <ModelDetailsPanel
                   selectedModel={selectedModel}
                   modelConfig={modelConfig}
+                  onSelectVersion={handleModelSelect}
                   isCustomAgent={isCustomAgent}
                   searchModeEnabled={searchModeEnabled}
                   displaySearchMode={displaySearchMode}

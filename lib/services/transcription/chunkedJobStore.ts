@@ -105,11 +105,18 @@ function ensureStoreDir(): void {
  *
  * @param jobId - The job ID
  * @returns The full path to the job's JSON file
- * @throws Error if jobId format is invalid
+ * @throws Error if jobId format is invalid or escapes the store directory
  */
 function getJobFilePath(jobId: string): string {
   validateJobId(jobId);
-  return path.join(JOB_STORE_DIR, `${jobId}.json`);
+  // Redundant with the UUID check above, but this resolve + prefix check is
+  // the containment proof static analysis (CodeQL js/path-injection)
+  // recognizes — a regex test alone is not an accepted barrier.
+  const filePath = path.resolve(JOB_STORE_DIR, `${jobId}.json`);
+  if (!filePath.startsWith(JOB_STORE_DIR + path.sep)) {
+    throw new Error('Invalid job ID format');
+  }
+  return filePath;
 }
 
 /**
@@ -377,6 +384,12 @@ export function failJob(
  * @returns The job, or undefined if not found
  */
 export function getJob(jobId: string): ChunkedJob | undefined {
+  // getJobFilePath also validates (and throws); this local guard makes the
+  // path provably traversal-safe at the fs call sites below and turns a
+  // malformed id into the same "not found" result as a missing job.
+  if (!JOB_ID_REGEX.test(jobId)) {
+    return undefined;
+  }
   const filePath = getJobFilePath(jobId);
 
   try {
@@ -386,7 +399,7 @@ export function getJob(jobId: string): ChunkedJob | undefined {
     const data = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(data) as ChunkedJob;
   } catch (error) {
-    console.warn(`[ChunkedJobStore] Error reading job ${jobId}:`, error);
+    console.warn('[ChunkedJobStore] Error reading job %s:', jobId, error);
     return undefined;
   }
 }

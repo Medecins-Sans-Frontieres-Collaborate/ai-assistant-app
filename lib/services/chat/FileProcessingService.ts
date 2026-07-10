@@ -6,6 +6,7 @@ import { retryAsync } from '@/lib/utils/app/retry';
 import { getUserIdFromSession } from '@/lib/utils/app/user/session';
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
 import { getCachedTextPath } from '@/lib/utils/server/file/textCacheUtils';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { randomUUID } from 'crypto';
 import fs from 'fs';
@@ -136,7 +137,9 @@ export class FileProcessingService {
           BlobProperty.BLOB,
         )) as Buffer;
         await fs.promises.writeFile(filePath, cached, { mode: 0o600 });
-        console.log(`[FileProcessingService] Using cached text: ${id}`);
+        console.log(
+          `[FileProcessingService] Using cached text: ${sanitizeForLog(id)}`,
+        );
         console.log(
           `[Perf] FileProcessingService.downloadFilePreferCached (cache hit): ${(performance.now() - perfStart).toFixed(1)}ms`,
         );

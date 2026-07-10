@@ -5,6 +5,7 @@ import {
   IconVolume,
   IconWorld,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import {
   Dispatch,
   KeyboardEvent,
@@ -29,6 +30,7 @@ import { usePromptSelection } from '@/client/hooks/ui/usePromptSelection';
 
 import { FILE_SIZE_LIMITS } from '@/lib/utils/app/const';
 import { isMobileDevice } from '@/lib/utils/client/device/detection';
+import { getExtractionMaterialState } from '@/lib/utils/shared/chat/extractionMaterial';
 import {
   shouldPreventSubmission,
   validateMessageSubmission,
@@ -59,6 +61,7 @@ import ChatInputFile from '@/components/Chat/ChatInput/ChatInputFile';
 import ChatInputImageCapture, {
   ChatInputImageCaptureRef,
 } from '@/components/Chat/ChatInput/ChatInputImageCapture';
+import { ExtractionTray } from '@/components/Chat/ChatInput/ExtractionTray';
 import { InputControlsBar } from '@/components/Chat/ChatInput/InputControlsBar';
 import { MessageTextarea } from '@/components/Chat/ChatInput/MessageTextarea';
 import { SearchModeBadge } from '@/components/Chat/ChatInput/SearchModeBadge';
@@ -146,6 +149,12 @@ export const ChatInput = ({
   );
   const searchMode = useChatInputStore((state) => state.searchMode);
   const setSearchMode = useChatInputStore((state) => state.setSearchMode);
+  const extractionMode = useChatInputStore((state) => state.extractionMode);
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the tray never renders.
+  // See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
   const selectedToneId = useChatInputStore((state) => state.selectedToneId);
   const setSelectedToneId = useChatInputStore(
     (state) => state.setSelectedToneId,
@@ -461,14 +470,31 @@ export const ChatInput = ({
     noKeyboard: true, // Don't trigger on keyboard
   });
 
-  const preventSubmission = (): boolean =>
-    isTranscriptionLocked ||
-    shouldPreventSubmission(
-      isTranscribing,
-      isStreaming,
-      filePreviews,
-      uploadProgress,
-    );
+  const preventSubmission = (): boolean => {
+    if (isTranscriptionLocked) return true;
+    if (
+      shouldPreventSubmission(
+        isTranscribing,
+        isStreaming,
+        filePreviews,
+        uploadProgress,
+      )
+    ) {
+      return true;
+    }
+    // Extraction mode requires material — text, a composer file, or an
+    // active file from a prior turn. Block send until at least one is
+    // available; the tray surfaces the warning above the textarea.
+    if (extractionMode) {
+      const material = getExtractionMaterialState({
+        textFieldValue,
+        filePreviewCount: filePreviews.length,
+        activeFileCount: selectedConversation?.activeFiles?.length ?? 0,
+      });
+      if (!material.hasAny) return true;
+    }
+    return false;
+  };
 
   const inputPlaceholder = isTranscribing
     ? t('transcribingChatPlaceholder')
@@ -536,6 +562,9 @@ export const ChatInput = ({
             onClose={closeArtifact}
           />
         )}
+
+        {/* Structured Extraction Tray — recipe chip row above the composer */}
+        {isExtractionEnabled && extractionMode && <ExtractionTray />}
 
         <div className="items-center pt-4">
           <div className="flex justify-center items-center space-x-2 px-2 md:px-4">

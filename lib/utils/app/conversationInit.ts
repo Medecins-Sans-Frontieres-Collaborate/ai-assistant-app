@@ -1,6 +1,7 @@
 import { Conversation } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 import { SearchMode } from '@/types/searchMode';
+import { ConversationWorkflowType, WorkflowState } from '@/types/workflow';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -59,6 +60,30 @@ export const createDefaultConversation = (
     defaultSearchMode: searchMode, // Privacy-focused intelligent search by default, model-appropriate
   };
 };
+
+/**
+ * Creates a new conversation specialized as a workflow (translation,
+ * document, data analysis, map). Identical to a default conversation apart
+ * from the workflow fields; the type is fixed for the conversation's
+ * lifetime.
+ */
+export const createWorkflowConversation = (
+  models: OpenAIModel[],
+  defaultModelId: string | undefined,
+  systemPrompt: string,
+  temperature: number,
+  workflowType: ConversationWorkflowType,
+  initialWorkflowState?: WorkflowState,
+): Conversation => ({
+  ...createDefaultConversation(
+    models,
+    defaultModelId,
+    systemPrompt,
+    temperature,
+  ),
+  conversationType: workflowType,
+  ...(initialWorkflowState ? { workflowState: initialWorkflowState } : {}),
+});
 
 /**
  * Checks if conversation initialization should proceed

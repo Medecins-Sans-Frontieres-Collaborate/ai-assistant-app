@@ -15,6 +15,7 @@ import { memo, useCallback, useRef, useState } from 'react';
 import { Conversation } from '@/types/chat';
 
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
+import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
 interface ConversationItemProps {
   conversation: Conversation;
@@ -107,8 +108,23 @@ function ConversationItemInner({
           className="flex-1 rounded border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-gray-500 focus:outline-none dark:border-gray-600 dark:bg-surface-dark dark:text-gray-100"
         />
       ) : (
-        <span className="flex-1 truncate text-sm text-gray-900 dark:text-gray-100">
-          {conversation.name || t('New Conversation')}
+        <span className="flex flex-1 items-center gap-1.5 truncate text-sm text-gray-900 dark:text-gray-100">
+          {conversation.conversationType &&
+            WORKFLOW_META[conversation.conversationType] &&
+            (() => {
+              const WorkflowIcon =
+                WORKFLOW_META[conversation.conversationType].icon;
+              return (
+                <WorkflowIcon
+                  size={14}
+                  aria-hidden
+                  className="shrink-0 text-gray-500 dark:text-gray-400"
+                />
+              );
+            })()}
+          <span className="truncate">
+            {conversation.name || t('New Conversation')}
+          </span>
         </span>
       )}
       <div

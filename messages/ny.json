@@ -437,7 +437,22 @@
     "noProjectsFound": "Palibe project zapezeka. Akugwiritsa ntchito \"default\".",
     "selectAllRequired": "Sankhani subscription, akaunti, ndi project.",
     "subscriptionRequired": "Sankhani kulembetsa",
-    "accountRequired": "Sankhani akaunti ya Foundry"
+    "accountRequired": "Sankhani akaunti ya Foundry",
+    "projectSelectionRequired": "Sankhani polojekiti kuchokera mndandanda.",
+    "scanningResources": "Akuwunika ma Azure subscriptions anu...",
+    "searchProjectsPlaceholder": "Fufuzani ma polojekiti...",
+    "noProjectsDiscovered": "Palibe ma projekiti a Foundry opezeka mu ma subscriptions anu. Gwiritsani ntchito kulowa mwamanual ngati mukudziwa njira yake.",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# ma subscriptions}} sizingathe kuwunika. Gwiritsani ntchito kulowa mwamanual ngati polojekiti yanu ikusowa.",
+    "discoveryTruncatedWarning": "Pakhala zinthu zambiri zoti ziunikidwe kuposa zomwe zingatheke. Gwiritsani ntchito kulowa mwamanual ngati polojekiti yanu ikusowa.",
+    "retryScan": "Yesaninso kuwunika",
+    "next": "Patsogolo",
+    "back": "Kubwerera",
+    "selectAgentsDescription": "Sankhani ma agent a polojekiti iyi omwe aziwonekera mu ma model anu.",
+    "selectAll": "Sankhani zonse",
+    "deselectAll": "Chotsani zosankhidwa zonse",
+    "agentsSelectedCount": "{selected} mwa {total} agents wasankhidwa",
+    "autoAddLabel": "Ikani ma agents atsopano basi",
+    "autoAddDescription": "Ma agent omwe adzawonjezedwa ku polojekiti iyi mtsogolo adzaonekera basi. Ma agent omwe sanasankhidwe adzakhalabe osaphatikizidwa."
   },
   "Quick Actions": "Zochitika Mwachangu",
   "Type / in chat to access your prompts": "Lembani / mu kucheza kuti mupeze malamulo anu",
@@ -818,7 +833,19 @@
       "listingTools": "Akufufuza zida zilipo…",
       "analyzingFiles": "Akusanthula mafayilo anu…",
       "searchingKnowledge": "Akusaka mu chuma cha chidziwitso…",
-      "cancellingPriorTool": "Akukonza kuchotsa pempho lachida lapitalo…"
+      "cancellingPriorTool": "Akukonza kuchotsa pempho lachida lapitalo…",
+      "workflow": {
+        "preparingDocument": "Akuikonza ma references...",
+        "writingDocument": "Akunyora chikalata...",
+        "analyzingSource": "Akuwunika mawu oyambilira...",
+        "translating": "Akutembenuza...",
+        "reviewingTranslation": "Kuwunika koyamba {round} mwa {total}...",
+        "revisingTranslation": "Ikupanga kusintha malinga ndi ndemanga...",
+        "extractingRows": "Ikutulutsa mizere kuchokera ku {source}...",
+        "transformingTable": "Ikusintha tebulo...",
+        "findingLocations": "Akupeza malo...",
+        "updatingMap": "Ikusinthira mapu..."
+      }
     },
     "toolSummary": {
       "usedTools": "Zida zogwiritsidwa ntchito {count, plural, one {# chida} other {# zida}}",
@@ -879,7 +906,8 @@
     "listen": "Mverani",
     "processingAudio": "Ikukonza mawu...",
     "ttsError": "Vuto popanga mawu. Chonde yesani kachiwiri.",
-    "unsupportedMessageType": "Vuto pokuonetsera uthenga: Mtundu wa uthenga sunalangizidwe"
+    "unsupportedMessageType": "Vuto pokuonetsera uthenga: Mtundu wa uthenga sunalangizidwe",
+    "addLanguageOption": "Onjezani \"{name}\"…"
   },
   "transcript": {
     "originalTranscript": "Zolemba Zoyambirira",
@@ -1292,16 +1320,18 @@
     "unsavedChanges": "Zosinthidwa zosasungidwa",
     "unsavedChangesMessage": "Muli ndi zosintha zosasungidwa. Mukufuna kuzichotsa?",
     "characterCount": "{current}/{max}",
-    "clearField": "Chotsani m'dera",
-    "autosaveNote": "Zosinthazi zasungidwa zokha.",
+    "clearField": "Chotsani m'munda",
+    "autosaveNote": "Zosintha zimapulumuka zokha.",
     "responseSection": "Yankho",
     "voiceSection": "Mawu",
     "behaviorSection": "Makhalidwe",
     "resetChatSettings": "Bwezeretsani makonda a macheza",
     "resetChatSettingsConfirmTitle": "Mubwezeretse makonda a macheza?",
-    "resetChatSettingsConfirmMessage": "Izi zibwezeretsa makonda a pachiyambi pazinthu zonse mu panel iyi: kutentha, malamulo anu, Za Inu, yankho la model, liwiro la kusinja, kutembenuza zolembalemba kukhala mawu, mafayilo ogwira ntchito, ndi zitsimikiziro. Sizisokoneza maulaliki anu.",
+    "resetChatSettingsConfirmMessage": "Izi zibwezeretsa zoikamo za paneli ino: kutentha, malangizo apadera, Za Inu, yankho la model, liwiro lotuluka, text-to-speech, mafayilo ogwira ntchito, ndi zotsimikizira. Sizikhudza macheza anu.",
     "customInstructionsLabel": "Malangizo Anu*",
-    "defaultTemperatureLabel": "Kutentha kwachikwikwi*"
+    "defaultTemperatureLabel": "Kutentha kwachikwikwi*",
+    "Usage & Impact": "Kagwiritsidwe & Zotsatira",
+    "Connectors": "Zolumikizira"
   },
   "emptyState": {
     "greeting": "Kodi ndingathandize bwanji?",
@@ -1449,7 +1479,36 @@
     "modelsDescription": "Sankhani mtundu wa AI pa zokambirana zanu. Mtundu uliwonse uli ndi mphamvu zosiyanasiyana — sankhani kuti muwone tsatanetsatane.",
     "recommended": "Zolangizidwa",
     "familyAll": "Zonse",
-    "familyFilterLabel": "Sankha mitundu malinga ndi banja"
+    "familyFilterLabel": "Sankha mitundu malinga ndi banja",
+    "searchPlaceholder": "Sakani mitundu",
+    "searchEmpty": "Palibe mitundu yomwe yagwirizana ndi pempho lanu.",
+    "star": "Ikani nyenyezi pa {name}",
+    "unstar": "Chotsani nyenyezi pa {name}",
+    "otherFamily": "Zina",
+    "hostedExternally": "Ili pa ma seva a wopereka kudzera mu Azure AI Foundry, osati mkati mwa MSF Azure.",
+    "hostedIn": {
+      "label": "Iliko mu {regions}",
+      "tooltip": "Ma Azure region omwe mtundu uwu waikidwa. Kukambirana kumakonzedwa m'dera lanu."
+    },
+    "badges": {
+      "external": "Zakunja",
+      "externalTooltip": "Ili pa ma seva a wopereka kudzera mu Azure AI Foundry, osati mkati mwa MSF Azure.",
+      "regionHostedTooltip": "Iliko mu {region} Azure region. Kukambirana ndi mtundu uwu kumakonzedwa kumeneko."
+    },
+    "favorites": "Zokondedwa",
+    "euResidencyNote": "Mitundu yonse imagwira ntchito mu Azure region ya EU.",
+    "hostedRegion": {
+      "label": "Dera lokhalamo",
+      "processedIn": "Kukambirana uku kukukonzedwa mu {region} Azure region.",
+      "euOnlyNote": "{name} ili mu EU Azure region; kukambirana nako kumachitika kumeneko."
+    },
+    "version": {
+      "label": "Mtundu"
+    },
+    "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta.",
+    "variant": {
+      "label": "Mtundu"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1526,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Chitsanzo cha Claude chapakati. Chabwino polemba tsiku ndi tsiku, kusanthula, ndi ntchito za coding mwachangu.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Chitsanzo chaulere kuchokera ku Meta. Chabwino polemba, mwachidule komanso mafunso ofulumira."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Chitsanzo chatsopano cha OpenAI chapamwamba kwambiri. Champhamvu polemba, kafukufuku, kukodira komanso kuthetsera mavuto ovuta."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Mtundu wa GPT waching'ono komanso wachangu kwambiri. Oyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Mtundu wa GPT wa zokambirana. Wabwino pazokambirana, kupereka malingaliro atsopano, ndi zokambirana zothandiza."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Chitsanzo choyambirira cha GPT-5. Chikadali champhamvu polemba, kusanthula, ndi kukodira."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Mtundu wa GPT-5 wokonzedwa pa zokambirana. Wabwino pazokambirana za tsiku ndi tsiku ndi kupereka malingaliro."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT yakale yomwe imagwira ntchito zambiri. Yoyenera polemba tsiku ndi tsiku ndi mafunso & mayankho komwe luso laposachedwa silofunika."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Mtundu wachichepere komanso wachangu wa GPT-4.1 wamaudindo a tsiku ndi tsiku achangu."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Mtundu watsopano komanso wamphamvu kwambiri wa Anthropic. Wabwino polemba molawirika, kafukufuku, kukodira, ndi kusanthula mokhoza."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Mtundu watsopano wa DeepSeek waulere. Wodalirika polemba bwino komanso mayankho amafunso aukadaulo."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Chitsanzo chachikulu cha Mistral. Njira ya ku Europe polemba, mwachidule ndiponso mafunso ambiri."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Mtundu wakale wa GPT-5 wochita bwino. Akadali wabwino polemba, kusanthula, ndi kukodira."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Mtundu wakale wa GPT-5 wokonzedwa pa zokambirana. Wabwino pazokambirana tsiku ndi tsiku komanso malingaliro atsopano."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Mtundu wachichepere kwambiri wa GPT-5. Woyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika kwambiri."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Mtundu wachichepere kwambiri wa GPT-4.1. Wabwino pa ntchito zofulumira komanso zosavuta pomwe liwiro ndi mtengo zikufunika."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mtundu waching'ono komanso wachangu wa GPT-4o. Wabwino pa ntchito zofulumira za tsiku ndi tsiku komwe luso laposachedwa silofunika."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Mtundu wochepa wodziwa kulingalira. Wabwino pa masamu, logic, ndi mavuto a sitepe ndi sitepe ndi mtengo wotsika kuposa o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Mtundu wakale wa reasoning compact. Amagwira bwino masamu, science, ndi masewera a logic zomwe zimafuna mtengo wotsika."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Mtundu wanzeru kwambiri wa Anthropic, woyamba m'banja la Claude 5. Wabwino kwambiri pa ntchito zolembedwa, kafukufuku, ndi kukodira zovuta."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude watsopano wa pakati woyamba wa m'banja la Claude 5. Wamphamvu polemba, kusanthula, ndi kukodira tsiku ndi tsiku ndi mayankho ofulumira."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mtundu wapakati pa Mistral. Njira ya ku Europe yomwe imalimbikitsa luso ndi liwiro pa ntchito za tsiku ndi tsiku."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mtundu waing'ono wa Mistral. Wachangu komanso wotsika mtengo pa mwachidule, zolemba zachidule ndi mafunso osavuta."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mtundu waing'ono kwambiri wa Mistral. Woyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika kwambiri."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Mtundu wokonzanso wa DeepSeek-R1. Amawulula maganizo ake sitepe ndi sitepe ndi luso lokulitsa kulingalira."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Mtundu waulere wakochepa kuchokera ku Meta. Wachangu polemba, mwachidule ndi mafunso a tsiku ndi tsiku."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Mtundu wakale wa open-source wochokera ku Meta. Ukadali wabwino polemba motalikirapo komanso mayankho a mafunsowo (Q&A)."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Mtundu wotsogola wa xAI. Wabwino pa zokambirana zotseguka, kusanthula, ndi ntchito zaluso."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Mtundu waposachedwa kwambiri wa OpenAI. Wamphamvu polemba, kafukufuku, coding, komanso kuthetsa mavuto ovuta."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (yaposachedwa)",
+      "description": "Dzina lozindikirira lomwe limasonyeza nthawi zonse pa mtundu waposachedwa wa OpenAI chat-tuned. Ndi zomwe zikubwera m'malo mwa gpt-*-chat ya Azure yomwe yasiyidwa."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Mtundu wa Opus waposachedwa, pakati pa 4.6 ndi 4.8. Wamphamvu polemba motalikirapo, kafukufuku, coding, ndi kusanthula mozama."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Mtundu watsopano wa DeepSeek pa reasoning komanso m'malo mwa R1 line ku Azure. Amawonetsa maganizo ake sitepe ndi sitepe."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Mtundu wofulumira wa DeepSeek V4 komanso m'malo mwa V3 line ku Azure. Amayankha mwachangu pa kulemba mwamutu wamba komanso mafunso aukadaulo."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Mtundu wa xAI wokhala ndi reasoning yofulumira. Amawerenga sitepe ndi sitepe, kuyankha mwachangu."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Mtundu wa chat wachangu wa xAI. Mayankho achangu pa mafunso ndi zokambirana za tsiku ndi tsiku."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Mtundu wa xAI wochepa. Amayankha mwachangu komanso otsika mtengo pa mafunso achangu ndi zokambirana zosavuta."
     }
   },
   "searchMode": {
@@ -1791,7 +1990,20 @@
     "useDefaultStyle": "Gwiritsani ntchito kalemba woyamba",
     "noTonesCreated": "Palibe mawu opangidwa pakadali pano",
     "createTonesHint": "Pangani mawu mu Zochitika Mwachangu",
-    "translateDocumentTooltip": "Kumasulira zikalata m'chinenero china.\n\nMitundu imene ikuthandizidwa: Word, Excel, PowerPoint, HTML, TXT\nKukula kwakukulu: 40MB\n\nImathandiza m'zinenero zoposa 80 ndi mwayi wa ma glossary owonjezera."
+    "translateDocumentTooltip": "Kumasulira zikalata m'chinenero china.\n\nMitundu imene ikuthandizidwa: Word, Excel, PowerPoint, HTML, TXT\nKukula kwakukulu: 40MB\n\nImathandiza m'zinenero zoposa 80 ndi mwayi wa ma glossary owonjezera.",
+    "translateTooltip": "Kumasulira chigawo cha mawu m’chinenero china.\n\nNgati mukufuna kumasulira mafayilo onse (Word, Excel, PowerPoint, HTML, TXT), gwiritsani ntchito Translate Document.",
+    "cameraTooltip": "Jambulani chithunzi ndi kamera ya chipangizo chanu ndikuchilumikiza ku uthenga.",
+    "noResults": "Palibe zochita zogwirizana",
+    "sectionPinned": "Zolumikizidwa pamwamba",
+    "sectionFrequent": "Zimagwiritsidwa ntchito kawirikawiri",
+    "sectionMore": "Zina",
+    "categoryWeb": "Web",
+    "categoryMedia": "Zamagwero & mafayilo",
+    "categoryTransform": "Sintha",
+    "pin": "Ikani pamwamba",
+    "unpin": "Chotsani pamwamba",
+    "moveToMore": "Sungani ku Zina",
+    "moveOutOfMore": "Onetsani mu menyu"
   },
   "transcription": {
     "transcribesOnSend": "Imalemba potumiza",
@@ -1925,7 +2137,14 @@
     "expiresSoon": "Kumatha mu masiku {days} - tsitsani msanga",
     "expires": "Kupezeka kwa masiku {days}",
     "unofficialBadgeLabel": "Si yovomerezeka",
-    "unofficialLanguageWarning": "Chilankhuli ichi sichithandizidwa mwalamulo. Ubwino wa kumasulira uku sunatsimikizidwe. Chonde mupemphe munthu wodziwa bwino kapena wokha chilankhuli ichi awunikenso musanagawire."
+    "unofficialLanguageWarning": "Chilankhuli ichi sichithandizidwa mwalamulo. Ubwino wa kumasulira uku sunatsimikizidwe. Chonde mupemphe munthu wodziwa bwino kapena wokha chilankhuli ichi awunikenso musanagawire.",
+    "translationSubmitted": "Kumasulira kwayamba — ma PDF akukonzedwa m’mbuyo.",
+    "pendingTitle": "Kumasulira {filename}…",
+    "pendingHint": "Kumasulira ma PDF kumachitika m’mbuyo ndikutenga mphindi zochepa. Mutha kupitiriza kugwira ntchito — khadi ili lidzasintha ngati chikalata chakonzeka, ngakhale mutatsegula tsambalo kachiwiri.",
+    "asyncFailed": "Kumasulira chikalata kwalephera: {error}",
+    "jobNotFound": "ntchito yokhudza kumasulira ilipo. Chonde yesaninso.",
+    "retryPolling": "Onaninso",
+    "pollingStalled": "Sitinathe kulumikizana ndi seva kuti tiwone momwe zikuyendera. Kumasulirako kungakali kukuchitika."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2093,5 +2312,699 @@
   "regionOverride": {
     "warning": "Kusintha malo kwayatsidwa — zofunsira zanu zikupita ku dera la deta la {region}. Ichi ndi chizolowezi cha pamanja pa mayeso, si malo anu enieni.",
     "clear": "Chotsani kusintha"
+  },
+  "usageImpact": {
+    "empty": "Palibe kagwiritsidwe kanatsatidwa pano. Kugwiritsa ntchito token yanu ndi kuchuluka kwa mpweya wotulutsidwa zidzawonekera pano mutatha kucheza.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} nthawi zolipiritsa mafoni",
+    "requests": "Zopempha",
+    "promptTokens": "Ma token oyambitsa",
+    "completionTokens": "Ma token omaliza",
+    "topModels": "Malinga ndi model",
+    "byRegion": "Malinga ndi dera",
+    "regionDefault": "Yoyambirira",
+    "modelRow": "{requests} zopempha · {grams} g",
+    "disclosure": "Zowerengera izi ndi zochokera pa malingaliro v{version} · kuyambira {since} · kulankhula wamba kokha (ma agents ndi mayankho ochokera mu knowledge-base sizikuphatikizidwa).",
+    "reset": "Bwezerani ziwerengero za kagwiritsidwe"
+  },
+  "extraction": {
+    "toggleLabel": "Tengani deta yamakonzedwe",
+    "trayLabel": "Kutulutsa deta",
+    "trayPrefix": "Tengani",
+    "trayInfo": "Kutulutsa kumabweretsa matebulo okwana atatu. Maphikidwe amasungidwa pa chipangizo chanu.",
+    "autoChip": "Auto — AI ikulimbikitsa kapangidwe",
+    "addRecipe": "Onjezani maphikidwe",
+    "addRecipeTitle": "Onjezani maphikidwe mu kutulutsa uku",
+    "addRecipeFullTitle": "Mpaka maphikidwe atatu pa kutulutsa",
+    "removeRecipe": "Chotsani maphikidwe: {name}",
+    "remove": "Chotsani",
+    "section": "Maphikidwe otulutsa deta",
+    "sectionSubtitle": "Mitundu yokonzedwa yomwe imasintha zolemba zopanda makonzedwe, mafayilo, kapena ma URL kukhala matebulo. Sankhani mpaka atatu pa nthawi imodzi.",
+    "newRecipe": "Maphikidwe atsopano",
+    "untitledRecipe": "(Maphikidwe opanda dzina)",
+    "deleteRecipe": "Chotsani maphikidwe",
+    "delete": "Chotsani",
+    "deleteConfirm": "Mufufuta?",
+    "cancel": "Lekani",
+    "name": "Dzina",
+    "namePlaceholder": "monga Patients",
+    "description": "Fotokozero",
+    "optional": "(ngati mukufuna)",
+    "descriptionPlaceholder": "Mwachidule zimene zikuonekera pamene mwasankha maphikidwe",
+    "instructions": "Malangizo",
+    "instructionsPlaceholder": "Kodi AI ayenera kusaka chiyani mu zinthu izi?",
+    "fields": "Minda",
+    "field": "munda",
+    "fieldsPlural": "minda",
+    "fieldName": "Dzina la munda",
+    "fieldType": "Mtundu wa munda",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "Onjezani munda",
+    "removeField": "Chotsani munda",
+    "toggleDetails": "Onetsani/Zobisa zambiri",
+    "fieldDetailsTitle": "Fotokozani, makhalidwe ena",
+    "fieldDescriptionPlaceholder": "Fotokozero (zimathandiza AI kupeza munda wu)",
+    "enumValuesPlaceholder": "Mitengo yololeka, kulekanitsidwa ndi ma koma",
+    "required": "zofunikira",
+    "suggest": "Perekani malingaliro ndi AI",
+    "suggesting": "Kusuntha malingaliro…",
+    "suggestNeedsInstructions": "Onjezerani malangizo kaye kuti AI izidziwa zoti ifufuze",
+    "searchRecipes": "Fufuzani ma recipe",
+    "pickerEmpty": "Palibe ma recipe pano. Pangani imodzi kuti muyambe.",
+    "pickerEmptyMatch": "Palibe ma recipe ogwirizana",
+    "editorEmpty": "Palibe ma recipe pano. Pangani imodzi ndipo AI ingathandize kudzaza minda.",
+    "noData": "Palibe deta yochotsedwa",
+    "noRecords": "Palibe mbiri ya {name} yapezeka",
+    "row": "mzere",
+    "rows": "mizere",
+    "record": "mbiri",
+    "records": "mbiri",
+    "complete": "yathera",
+    "download": "Tsitsani",
+    "preview": "Onetsani",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} minda",
+    "fieldCountOne": "Munda 1",
+    "andMoreFields": "+ {count} zina",
+    "saveAsRecipe": "Sungani ngati recipe",
+    "savedAsRecipeToast": "Yasungidwa ngati recipe \"{name}\"",
+    "previewTruncated": "Ikukuwonetsani 3 oyamba mwa {total} mizere. Tsitsani kuti muwone zonse.",
+    "previewEmpty": "Palibe mizere yoti muwone",
+    "proposedSchemaTip": "AI yalimbikitsa kapangidwe aka. Sungani kuti mugwiritse ntchito nthawi ina.",
+    "downloadAriaLabel": "Tsitsani {name} ngati {format}",
+    "previewAriaLabel": "Tsegulani/otseka kuwona kwa {name}",
+    "changeFormatAriaLabel": "Sinthani mtundu wotsitsa wa {name}",
+    "materialWarningTitle": "Onjezani zolemba zoti zichotsedwe",
+    "materialWarningBody": "Lembani uthenga pansipa, mangirani fayilo, kapena onjezerani URL.",
+    "materialAttach": "Mangirani fayilo",
+    "willExtractPrefix": "Zidzachotsedwa kuchokera ku:",
+    "materialText": "mawu a uthenga",
+    "materialFiles": "{count, plural, one {1 fayilo} other {# mafayilo}}",
+    "materialActiveFiles": "{count, plural, one {1 fayilo yogwiritsidwa ntchito} other {# mafayilo ogwiritsidwa ntchito}}",
+    "dismiss": "Letsani kuchotsa deta"
+  },
+  "Connectors": "Zolumikizira",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Kutanthauzira",
+        "description": "Tanthauzirani mawu ndi kuwunika, mndandanda wa mawu, komanso zoona pa ndemanga"
+      },
+      "document": {
+        "label": "Chikalata",
+        "description": "Lembani ndi kusintha chikalata ndi thandizo la assistant"
+      },
+      "dataAnalysis": {
+        "label": "Kuwerengera deta",
+        "description": "Tengani matebulo kuti muwone kapena musinthe deta yanu"
+      },
+      "map": {
+        "label": "Mapu",
+        "description": "Sinthani deta iliyonse kukhala malo pa mapu"
+      }
+    },
+    "chooser": {
+      "prompt": "Kapena yambani ndi malo achipangizo chapadera"
+    },
+    "sidebar": {
+      "newTranslation": "Kutanthauzira kwatsopano",
+      "newDocument": "Chikalata chatsopano",
+      "newDataAnalysis": "Kuwerengera deta kwatsopano",
+      "newMap": "Mapu atsopano"
+    },
+    "translation": {
+      "chooseLanguage": "Chilankhulo chofuna kutanthauzira",
+      "customLanguageHint": "\"{name}\" ndi chilankhulo chomwe mwawonjezera — AI idzayesetsa chilankhulo chilichonse, koma mulingo wa khalidwe sunatsimikizidwe.",
+      "addedByYou": "Mwanawonjezera inu",
+      "glossary": "Mndandanda wa mawu",
+      "noGlossary": "Palibe mndandanda wa mawu",
+      "manageGlossaries": "Ma mndandanda wa mawu",
+      "glossaries": "Ma mndandanda wa mawu",
+      "closeGlossaries": "Tsekani mndandanda wa mawu",
+      "glossariesEmpty": "Pangani mndandanda wa mawu kuti mutsimikize tanthauzo la mawu apadera. Mndandandawu usungidwa pa chipangizo chino ndipo umatha kugwiritsidwanso ntchito pa kutanthauzira kwina.",
+      "newGlossary": "Glossary yatsopano",
+      "newGlossaryName": "Glossary yopanda dzina",
+      "glossaryName": "Dzina la glossary",
+      "deleteGlossary": "Chotsani glossary",
+      "sourceTerm": "Mawu oyambira",
+      "targetTerm": "Tanthauzo",
+      "note": "Zolemba",
+      "noteOptional": "Zolemba (posankha)",
+      "addEntry": "Onjezerani liwu",
+      "removeEntry": "Chotsani {term}",
+      "mode": "Njira yomasulira",
+      "modeQuick": "Msanga",
+      "modeAgentic": "Yawunikiridwa",
+      "modeQuickHint": "Kudutsa kamodzi, kothamanga kwambiri",
+      "modeAgenticHint": "Imayamba ndi kusanthula ndemanga, kenako imamasulira ndikumaliza mpaka mawunikiridwe 3",
+      "translate": "Masulira",
+      "translating": "Kumasulira...",
+      "sourceLabel": "Mawu oyambira",
+      "targetLabel": "Tanthauzo",
+      "sourcePlaceholder": "Lembani kapena koometsa mawu oti masuliridwe, kapena tumizani chikalata.",
+      "targetEmpty": "Tanthuazo lidzaoneka pano.",
+      "uploadDocument": "Tumizani chikalata",
+      "copy": "Kopera",
+      "copied": "Yakoperedwa",
+      "tooLong": "Mawu opitilira {max} zilembo. Gawanani magawo, kapena gwiritsani ntchito masulira a chikalata cha file lonse.",
+      "analysisTitle": "Kusanthula musanamasulire",
+      "register": "Lembani",
+      "reviewTitle": "Mawunikiridwe",
+      "roundLabel": "Gawo {round}",
+      "verdictApprove": "zavomerezedwa",
+      "verdictRevise": "zasinthidwa",
+      "railRequest": "Masulirani mawu oyambira kukhala {language}.",
+      "railDoneAgentic": "Zatha. Ndasanthula mawu, ndamasulira, ndipo ndamaliza mawu {rounds} owunikira. Zotsatira zili mu workspace.",
+      "railDoneQuick": "Zatha. Tanthauzo lili mu workspace.",
+      "railAssessRequest": "Yerekezani khalidwe la tanthauzo la {language}.",
+      "railAssessDone": "Kuyerekezera kwatha: mavoti ali mu workspace ndi kusintha {count} komwe muyenera kuwunika.",
+      "roundChanges": "Zosiyana pa gawo {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Kuona zolondola",
+          "description": "Akutanthauzira bwinobwino zimene mawu oyambira akunena — palibe kulakwitsa, kuphonya, kuonjezera, kapena kutsala kwina kulikonse kosamasuliridwa"
+        },
+        "fluency": {
+          "label": "Kuphatikiza mawu",
+          "description": "Chilankhulo, kulemba, zilembo ndi dongosolo zimachitika bwinobwino m'chinenero chomwe masulira apangidwa"
+        },
+        "terminology": {
+          "label": "Mawu a ntchito",
+          "description": "Mawu apadera amagwiritsidwa ntchito mokhazikika komanso moyenera; glossary imatsatidwa bwino"
+        },
+        "style": {
+          "label": "Mtundu wa kulankhula",
+          "description": "Mawu, kalembedwe ndi mawu amagwirizana ndi oyambira ndikusunga kusakhalabe kosiyanasiyana"
+        },
+        "localeConventions": {
+          "label": "Zikhalidwe za dera",
+          "description": "Makasitomala a tsiku, manambala, mayunitsi, ndi zilembo zimatsata malamulo a chinenero cholondola"
+        },
+        "audience": {
+          "label": "Omvera",
+          "description": "Zikuyenera cholinga ndi omvera omwe akuyembekezeka"
+        }
+      },
+      "severity": {
+        "minor": "Yaying'ono",
+        "major": "Chachikulu"
+      },
+      "assess": "Yerekezani ubwino",
+      "assessing": "Kuyerekezera…",
+      "assessmentTitle": "Kuyerekezera kwa ubwino",
+      "criteriaPicker": "Zomwe muyenera kuyang'ana",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Zosintha zomwe zalimbikitsidwa",
+      "noEditsSuggested": "Palibe zosintha zomwe zalimbikitsidwa — kumasulira kwadutsa zofunikira.",
+      "acceptEdit": "Landirani",
+      "rejectEdit": "Kanirani",
+      "acceptAll": "Landirani zonse",
+      "rejectAll": "Kanirani zonse",
+      "editAccepted": "Zalandiridwa",
+      "editRejected": "Zakanidwa",
+      "editUnapplicable": "Simungathe kupeza gawo ili m’malemba alipo — sasinthidwa",
+      "editTranslation": "Sinthani",
+      "doneEditing": "Zatha",
+      "pasteTranslationPlaceholder": "Lembani kapena mamizani kumasulira komwe mukufuna kugwira ntchito…",
+      "editingBlockedPendingEdits": "Konzani kapena kanirani zosintha zomwe zikudikirabe poyamba",
+      "pendingCount": "{count} zikudikira",
+      "closeReview": "Tsekani kuwunika kwa ubwino",
+      "showReview": "Onetsani kuwunika",
+      "showReviewPending": "Onetsani kuwunika ({count} zikudikira)"
+    },
+    "document": {
+      "emptyTitle": "Fotokozani chikalata chomwe mukufuna",
+      "emptyBody": "Uzani wothandizira zomwe alembe — lipoti la mkhalidwe, kalata ya othandizira, kapena zolemba za msonkhano. Onjezerani mafayilo oyimira ngati mukufuna mawu ndi mfundo zomwe zanenedwa kuchokera mwa iwo.",
+      "generatePlaceholder": "Fotokozani chikalata chomwe muyenera kulemba…",
+      "revisePlaceholder": "Fotokozani zosintha zomwe muyenera kupanga…",
+      "generate": "Pangani",
+      "revise": "Sinthani",
+      "writing": "Kulemba…",
+      "export": "Tulukani",
+      "references": "Zotengera",
+      "addReference": "Onjezani fayilo",
+      "uploading": "Ikukwezedwa…",
+      "removeReference": "Chotsani {name}",
+      "referenceChars": "Zolemba {chars} zomwe zatengedwa",
+      "referenceEmpty": "Palibe zolemba zomwe zatengedwa kuchokera ku {name}",
+      "uploadFailed": "Kukweza kwalephera",
+      "untitledDocument": "Chikalata chopanda mutu",
+      "generatedSummary": "Ndalemba chikalata mu workspace. Dziwani ndikunenani zomwe ndiyenera kusintha.",
+      "revisedSummary": "Ndasintha chikalata mu workspace.",
+      "runFailed": "Chinachitika cholakwika: {message}",
+      "uploadBasis": "Yambani ndi chikalata chomwe chilipo kale",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Malamulo a chilankhulo & kulemba",
+          "description": "Malamulo ndi kulemba kolondola; mtundu umodzi wa English (US kapena UK) ndi oyenera — kusakanizira ndikulakwa"
+        },
+        "consistency": {
+          "label": "Kukhala mofanana",
+          "description": "Matanthauzidwe, mayina, makalapitala, ndi kulemba zikhale zofanana nthawi zonse"
+        },
+        "clarity": {
+          "label": "Kumveka bwino",
+          "description": "Mau a bwino, osamveka molakwika; kapangidwe kake kamathandiza owerenga"
+        },
+        "sensitivity": {
+          "label": "Kuzindikira",
+          "description": "Mawu ogwiritsira ntchito anthu onse, osakhudza mikangano komanso amalingalira za chikhalidwe cha munthu (ngati mukufuna kuwunikanso)"
+        },
+        "specAdherence": {
+          "label": "Kutsatira spec",
+          "description": "Akutsatira spec ya chikalata chomwe chilipo: magawo ofunika alipo, ali motsatira dongosolo, ndikutsatira malangizo ake"
+        },
+        "toneAdherence": {
+          "label": "Kutsatira mtima wa mawu",
+          "description": "Akutsatira malamulo a mawu ndi mtima zomwe zaperekedwa"
+        }
+      },
+      "severity": {
+        "minor": "Yaying'ono",
+        "major": "Yakulirapo"
+      },
+      "assess": "Yerekezerani khalidwe",
+      "assessing": "Kuyerekeza…",
+      "assessmentTitle": "Kuwunika khalidwe",
+      "criteriaPicker": "Mfundo zoonekeratu",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Zosintha zomwe zalimbikitsidwa",
+      "noEditsSuggested": "Palibe zosintha zomwe zatchulidwa — chikalatachi chapambana pa mfundo zomwe mwasankha.",
+      "acceptEdit": "Landirani",
+      "rejectEdit": "Kana",
+      "acceptAll": "Landirani zonse",
+      "rejectAll": "Kana zonse",
+      "editAccepted": "Zavomerezedwa",
+      "editRejected": "Zakanidwa",
+      "editUnapplicable": "Simungapezeke ndimeyi mu zolemba za panopa — sizikugwiritsidwa ntchito",
+      "editingBlockedPendingEdits": "Choyamba metsetsani kapena kanani zosintha zomwe zili m’mbali",
+      "pendingCount": "{count} zikuyembekezera",
+      "closeReview": "Tseka kuwunika khalidwe",
+      "showReview": "Onetsani kuwunika",
+      "showReviewPending": "Onetsani kuwunika ({count} zikuyembekezera)",
+      "railAssessRequest": "Yerekezerani khalidwe la chikalatichi motsatira mfundo zomwe mwasankha.",
+      "railAssessDone": "Kuyerekeza kwatha: mavoti alipo m’dongosolo limodzi ndi {count} zosintha zomwe ziyenera kuwunikidwa.",
+      "spec": "Spec ya chikalata",
+      "noSpec": "Palibe spec",
+      "manageSpecs": "Ma spec",
+      "specs": "Ma spec a chikalata",
+      "closeSpecs": "Tseka ma spec",
+      "specsEmpty": "Pangani spec kuti mulembere zikalata mu mtundu wokhazikika — magawo ofunika, dongosolo, ndi malangizo a gawo lililonse (mwachitsanzo, SitRep template). Ma spec amasungidwa pa chipangizochi ndipo amatha kugwiritsidwanso ntchito.",
+      "newSpec": "Spec yatsopano",
+      "newSpecName": "Spec yopanda dzina",
+      "specName": "Dzina la spec",
+      "specDescription": "Mafotokozedwe (ngati mukufuna)",
+      "deleteSpec": "Chotsani spec",
+      "sectionHeading": "Mutu wa gawo",
+      "sectionGuidance": "Malangizo (ngati mukufuna)",
+      "sectionRequired": "Ofunika",
+      "addSection": "Onjezerani gawo",
+      "removeSection": "Chotsani gawo",
+      "generalGuidance": "Malangizo onse (ngati mukufuna)",
+      "tone": "Mtima wa mawu",
+      "noTone": "Palibe mtima wa mawu",
+      "customCriteria": "Mfundo zanu",
+      "manageCriteria": "Mfundo zanu",
+      "closeCriteria": "Tseka mfundo zanu",
+      "criteriaEmpty": "Pangani mfundo zofunikira — mwachitsanzo, momwe dzina la kampani liyenera kukhalira kapena chinenero cha bungwe — kuti muyese zolemba ndi kuyendetsa kusintha kwake. Zimasungidwa pa chipangizochi ndipo ndizobwerezabwereza.",
+      "newCriterion": "Mfundo yatsopano",
+      "newCriterionName": "Mfundo yopanda dzina",
+      "criterionName": "Dzina la mfundo",
+      "criterionRubric": "Malangizo",
+      "criterionRubricPlaceholder": "Fotokozerani zomwe chikalatachi chiyenera kuchita kuti chikwaniritse mfundo iyi, mwachitsanzo: \"Musagwiritse ntchito mawu okwezera pa ntchito yathu; nthawi zonse muzitcha opindula 'anthu omwe timathandiza'…\"",
+      "criterionRubricHint": "Malangizo awa amaperekedwa mwachindunji kwa AI mu mayeso ndi magawo osintha.",
+      "deleteCriterion": "Chotsani mfundo",
+      "profileTitle": "Mbiri ya chikalata",
+      "profileDocType": "Mtundu",
+      "profileLanguage": "Chilankhulo",
+      "profileAudience": "Omvera",
+      "profilePurpose": "Cholinga",
+      "profileRegister": "Mtundu wa mawu",
+      "profileTone": "M’mene zalembedwera",
+      "profileConventions": "Malamulo",
+      "emptyHint": "Yambani kulemba pansipa, fotokozerani zomwe muyenera kulemba mu bokosi pamunsi, kapena yambani ndi fayilo.",
+      "addSpec": "Onjezani zofunikira",
+      "addCriteria": "Onjezani mfundo",
+      "scopeFullDocument": "Zomwe zikukopedwa: chikalata chonse",
+      "scopeSelection": "Zomwe zikukopedwa: zosankhidwa — “{preview}…” ({count} mawu)",
+      "clearSelection": "Chotsani zosankhidwa (gwirani ntchito ndi chikalata chonse)",
+      "reviseSelectionPlaceholder": "Fotokozerani zosintha pa zosankhidwazo…",
+      "revisedSelectionSummary": "Ndasintha gawo losankhidwa mu malo ogwirira ntchito.",
+      "assessedSelection": "Zosankhidwa"
+    },
+    "data": {
+      "emptyTitle": "Tengani deta kuti muyese",
+      "emptyBody": "Bweretsani fayilo ya CSV, Excel, kapena JSON, kapena dinani ndikutengera mizere. Ataika tebulo lanu mudzatha kuyisanja, kutenga mizere yambiri kuchokera mu zikalata, komanso kusintha pogwiritsa ntchito malangizo achilankhulo chachilengedwe.",
+      "importFile": "Tengani fayilo",
+      "importing": "Kutenga…",
+      "pasteData": "Ikani deta",
+      "pastePlaceholder": "Ikani apa CSV, TSV, kapena JSON…",
+      "import": "Tengani",
+      "addFromSource": "Onjezani kuchokera kumene kukuchokera",
+      "extractHint": "Ikani malemba kapena sankhani chikalata; mizere yogwirizana ndi mipinda yanu idzatengedwa. Zosadziwika zidzakhala zopanda kanthu — palibe chomwe chingayambikire.",
+      "extractPlaceholder": "Ikani malemba opanda dongosolo omwe ali ndi deta…",
+      "extractRows": "Tengani mizere",
+      "extractFromFile": "Kuchokera mu fayilo…",
+      "extracting": "Kukutenga…",
+      "pastedSource": "Mawu omwe mwaika",
+      "transform": "Sinthani",
+      "transforming": "Kusintha…",
+      "transformPlaceholder": "Fotokozerani kusintha komwe mukufuna, mwachitsanzo: \"onjezani kolamu yama cases pa anthu 1000\"…",
+      "transformCapHint": "Kusintha kungakwaniritsidwe mpaka {max} mizere. Chotsani kapena longosolani mizere kaye ngati tebulo ndi lalikulu.",
+      "undo": "Bwelera",
+      "deleteSelected": "Chotsani {count}",
+      "deletedRows": "Mwathetsa {count} mizere",
+      "selectAllRows": "Sankhani mizere yonse",
+      "selectRow": "Sankhani mzere {row}",
+      "rowCount": "{count} mizere",
+      "rowCapExceeded": "Zikadakhala {count} mizere; tebulo ndi mpaka {max} zokha. Gawani deta kapena tembenuzani panopa.",
+      "railExtractRequest": "Tengani mizere yomwe ikugwirizana ndi mawonekedwe a tebulo kuchokera ku: {source}",
+      "railExtractDone": "Awonjezedwa mizere {count} mu tebulo.",
+      "railTransformDone": "Tebulo lasinthidwa.",
+      "columnProfileFor": "Ziwerengero za kolamu ya {column}",
+      "profileMissing": "Zikusowa",
+      "profileDistinct": "Zosiyana",
+      "profileRange": "Mtunda",
+      "profileMean": "Avereji",
+      "profileMedian": "Makati",
+      "profileTopValues": "Miyeso yapamwamba",
+      "filterColumnFor": "Sefa {column}",
+      "filterContains": "Zili ndi…",
+      "filterMin": "Yochepa",
+      "filterMax": "Yapamwamba",
+      "filterClear": "Chotsa",
+      "clearFilters": "Chotsani masefa",
+      "showingRows": "Ikusonyeza {shown} mwa {total} mizere",
+      "scopeLabel": "Malire ogwira ntchito",
+      "scopeTable": "Zonse ({count})",
+      "scopeFiltered": "Zosefedwa ({count})",
+      "scopeSelection": "Zosankhidwa ({count})",
+      "scopedInstruction": "{instruction} (pa mizere {count} yokhayo)",
+      "assess": "Yezani makhalidwe",
+      "assessing": "Kuyezera…",
+      "criteria": {
+        "validity": {
+          "label": "Kukhala kolondola",
+          "description": "Miyeso ikugwirizana ndi mtundu ndi mawonekedwe ake oyenera mu kolamu"
+        },
+        "consistency": {
+          "label": "Kukhala mogwirizana",
+          "description": "Mtengo womwewo umalembedwa mofanana kulikonse (palibe kusiyana kwa 'M' / 'Male', mayunitsi osakanizidwa, kapena kalembedwe kosiyanasiyana)"
+        },
+        "duplicates": {
+          "label": "Kubwereza",
+          "description": "Mizere yolemba chinthu kapena chochitika chomwecho kawiri"
+        },
+        "plausibility": {
+          "label": "Kukhala kogoneka",
+          "description": "Miyeso yosowa kapena yosatheka muzochitika zinayi"
+        }
+      },
+      "assessmentTitle": "Kuwunika makhalidwe a deta",
+      "pendingCount": "{count} zikuyembekezera",
+      "closeReview": "Tseka kuwunika makhalidwe",
+      "suggestedEdits": "Zosintha zomwe zalimbikitsidwa",
+      "noEditsSuggested": "Palibe zosintha zomwe zalimbikitsidwa — deta yadutsa muyezo wosankhidwa.",
+      "acceptAll": "Landirani zonse",
+      "rejectAll": "Kana zonse",
+      "acceptEdit": "Landirani",
+      "rejectEdit": "Kana",
+      "editAccepted": "Yakhazikitsidwa",
+      "editRejected": "Yakana",
+      "editUnapplicable": "Seluyo yasinthidwa kuyambira kuyezetsa — sizinakhazikitsidwe",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Miyeso yoyeza",
+      "severity": {
+        "minor": "Yaying'ono",
+        "major": "Yaukulu"
+      },
+      "editLocation": "mzere {row} · {column}",
+      "editLocationRow": "mzere {row} (chotsani)",
+      "showReview": "Onetsani ndemanga",
+      "showReviewPending": "Onetsani ndemanga ({count} zikuyembekezera)",
+      "assessedFiltered": "Mizere yosasankhidwa",
+      "assessedSelection": "Mizere yosankhidwa",
+      "assessedSample": "Chitsanzo cha {shown} mwa {total}",
+      "railAssessRequest": "Onani bwino za tebulo ({count} mizere) motsatira ndondomeko yomwe yasankhidwa.",
+      "railAssessDone": "Makonzedwe {count} a data-quality aperekedwa — onani mu malo ogwirira ntchito.",
+      "insights": "Zolowera",
+      "chartKind": "Mtundu wa tchati",
+      "chartBar": "Bar (gawani ndi)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Mzere (panthawi)",
+      "groupByColumn": "Gawani ndi kolamu",
+      "dateColumn": "Kolamu la tsiku",
+      "valueColumn": "Kolamu la mtengo",
+      "aggFn": "Kuphatikiza",
+      "aggCount": "Werengani",
+      "aggSum": "Suma",
+      "aggMean": "Avereji",
+      "chartTruncated": "Ikupereka magulu apamwamba {max}",
+      "chartNoData": "Palibe deta yoti ipange tchati pa mizere yapano.",
+      "chartBarAria": "Tchati la bar logawidwa ndi {column}",
+      "chartHistogramAria": "Histogram ya {column}",
+      "chartLineAria": "Tchati la mzere la {column} panthawi",
+      "editStructure": "Kapangidwe",
+      "defineStructure": "Fotokozani kapangidwe",
+      "schemaHint": "Fotokozani magawo a kapangidwe ka data. Magawo ofunikira amawongolera ndondomeko ya deta yosowa pakapita deta; kusintha mtundu wa gawo kusandutsa zolipo (maselo osathandizika amasanduka opanda zomwe zili).",
+      "schemaFieldName": "Dzina la gawo",
+      "schemaFieldType": "Mtundu wa gawo",
+      "schemaRequired": "Zofunikira",
+      "schemaAddField": "Onjezani gawo",
+      "schemaDeleteField": "Chotsani gawo {field}",
+      "schemaApply": "Gwiritsani ntchito kapangidwe",
+      "schemaCancel": "Siyani",
+      "schemaEdited": "Musintha kapangidwe ka tebulo",
+      "schemaCellsConverted": "Maselo {count} sangathe kutembenuzidwa kumtundu watsopano ndipo tsopano ali opanda zomwe zili.",
+      "missingFieldPolicy": "Deta yosowa",
+      "policyStrict": "Okhwima — kukana mizere yosakwanira",
+      "policyFlag": "Chizindikiro — tengani ndikuletsa",
+      "policyLenient": "Yosakakamiza — tengani popanda chidziwitso",
+      "droppedIncompleteRows": "Mizere {count} yachotsedwa chifukwa chosowa magawo ofunikira: {fields}",
+      "dismiss": "Chotsani",
+      "requiredColumn": "Gawo lofunikira",
+      "flagMissingRequired": "Gawo lofunikira ndi lopanda kanthu",
+      "flagPendingEdit": "Pali kusintha komwe kwatchulidwa pa selo ili — onani ndemanga ya khalidwe",
+      "fromPhoto": "Kuchokera pa chithunzi",
+      "fromPhotoHint": "Jambulani fomu kapena tebulo la papepala — zomwe zili mkati mwake zisanduke deta yokonzedwa yomwe mungayerekezere ndi chithunzicho",
+      "readingPhoto": "Ikukweza chithunzi…",
+      "photoBatchName": "Zithunzi {count}",
+      "railPhotoRequest": "Tengani deta yokonzedwa kuchokera pa chithunzi {count}: {name}",
+      "railPhotoDone": "Zowonjezedwa {count} kulembedwa kuchokera pa chithunzi. Fananizani ndi chithunzi mʼgawo la ntchito.",
+      "sourcesLabel": "Zimachokera",
+      "openPhotoQc": "Yangʼanitsani data motsutsana ndi {name}",
+      "qcRowsFromPhoto": "{count} mizere",
+      "qcClose": "Tsekani kuunika chithunzi",
+      "qcZoomIn": "Yonjezerani",
+      "qcZoomOut": "Chepetsani",
+      "qcPrevPhoto": "Chithunzi chammbuyo",
+      "qcNextPhoto": "Chithunzi chotsatira",
+      "qcImageLoading": "Kukweza chithunzi...",
+      "qcImageFailed": "Chithunzi sichinathenso kukwezedwa.",
+      "qcImageAlt": "Chithunzi choyambirira: {name}",
+      "qcHint": "Tebulo likuwonetsa mizere ya chithunzichi chokha — fananizani mtengo uliwonse ndi chithunzi ndipo sinthani kapena chotsani mizere yomwe siyikugwirizana.",
+      "sourceFilterChip": "Mizere yochokera ku {name}",
+      "clearSourceFilter": "Onetsani mizere yonse kachiwiri",
+      "viewAsRecord": "Mawonekedwe a fomu",
+      "viewAsTable": "Mawonekedwe a tebulo",
+      "recordEmpty": "Palibe zolembedwa pano.",
+      "recordOf": "Lembani {index} mwa {count}",
+      "recordPrev": "Lembani lam'mbuyo",
+      "recordNext": "Lembani lotsatira",
+      "recordBooleanUnset": "(palibe)",
+      "flagsChip": "{count} zizindikiro",
+      "flagsChipOpenReview": "Tsekulani kuwonera khalidwe",
+      "flagsChipMissingOnly": "Minda yofunika ndi yopanda kanthu — dzazani kapena sinthani kapangidwe",
+      "autoCheck": "Yang'anirani zokha data yatsopano",
+      "autoCheckHint": "Mukatha kuchotsa data kuchokera pa zithunzi kapena zikalata, yang'anirani zokha khalidwe la mizere yatsopano",
+      "checkingNewRows": "Kuyang'anira khalidwe la mizere yatsopano...",
+      "ingestCheckFailed": "Kuyang'anira khalidwe la data yatsopano kwalephera ({message}) — mutha kuchita pamanja pogwiritsa ntchito Assess quality.",
+      "assessedIngest": "Mizere yatsopano"
+    },
+    "map": {
+      "emptyTitle": "Ikani deta yanu pa mapu",
+      "emptyBody": "Lembani kapena ikani sitrep, mndandanda wa mizere, zolemba pamisonkhano, kapena chilichonse chotcha malo — kapena ndikwezani chikalata. Malo atadindidwa adzadziwika ndikusainidwa pa mapu ndi njira yotsimikizira; mutha kutumiza kunja pa ArcGIS kapena zida zina za GIS.",
+      "inputPlaceholder": "Lembani dzina la malo...",
+      "uploadFile": "Kwezani fayilo",
+      "pastedSource": "Zolemba zomwe zalembedwa",
+      "mapIt": "Ikani pa mapu",
+      "finding": "Kusaka malo...",
+      "featureCount": "{count} malo",
+      "featureCapExceeded": "Mapu amakuliridwa mpaka {max} malo.",
+      "noneFound": "Palibe malo apezeka pazinthu izi.",
+      "lowConfidenceNotice": "{count} malo ali ndi ma co-ordinate osadalirika — muwaze musanayambe kugwiritsa ntchito mapu.",
+      "tilesOffline": "Mapu sakugwira ntchito — mndandanda wa malo ukupitilizabe kugwira.",
+      "disclaimer": "Ma co-ordinate aperekedwa ndi AI kuchokera pa zomwe model inadziwa, osati kuchokera ku geocoding service — chonde yambitsani kuti mutsimikize musanagwiritse ntchito pa ntchito za tsiku ndi tsiku. Mapu akukwezedwa kuchokera pa tile server; deta yanu ikutsalira pa chipangizochi.",
+      "flyTo": "Onetsani {name} pa mapu",
+      "removeFeature": "Chotsani {name}",
+      "expandFeature": "Onetsani zambiri za {name}",
+      "collapseFeature": "Tsekani zambiri za {name}",
+      "detailsParent": "M'gulu la {parent}",
+      "railRequest": "Yikani malo pa mapu kuchokera: {source}",
+      "railSearchRequest": "Fufuzani pa intaneti ndi kuyika pa mapu malo a: {query}",
+      "railDone": "Malo {count} afotokozedwa. Yang'anani zomwe zili ndi chikhulupiliro chochepa m'gulu lambiri.",
+      "searchToggle": "Web search mode",
+      "searchToggleHint": "Fufuzani pa intaneti m'malo mowonjezera mawu; zotsatira zomwe zatengedwa zimaponyedwa pa mapu.",
+      "searchPlaceholder": "Fufuzani pa intaneti, mwachitsanzo \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Fufuza & fambitsani pa mapu",
+      "searching": "Kufufuza…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Kulumikizana: {kind}",
+        "unresolved": "{count} olumikizidwa anatchula malo omwe salipo pa mapu ndipo anadutsidwa."
+      },
+      "confidence": {
+        "high": "Zokwera",
+        "medium": "Zapakati",
+        "low": "Zochepa"
+      },
+      "prominence": {
+        "primary": "Malo akulu",
+        "secondary": "Malo othandizira",
+        "mention": "Anatchulidwa basi"
+      },
+      "prominenceMentionHint": "Zolembazo zimangotchula malo amenewa mozungulira basi — amawonetsedwa achikulire pa mapu ndipo sakuphatikizidwa pa kujambula koyamba.",
+      "dates": {
+        "since": "kuyambira {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Zikupitirirabe"
+      },
+      "filters": {
+        "label": "Sefa malinga ndi gulu",
+        "other": "Zina",
+        "clear": "Chotsani",
+        "showing": "{shown} mwa {total} malo",
+        "noneMatch": "Palibe malo ogwirizana ndi zosefera zomwe muli nazo."
+      },
+      "dateFilter": {
+        "label": "Madalitso",
+        "from": "Kuyambira",
+        "to": "Kufikira",
+        "fromAria": "Onetsani zochitika kuyambira tsikuli kokha",
+        "toAria": "Onetsani zochitika mpaka tsikuli kokha",
+        "clear": "Chotsani madalitso",
+        "eraChip": "Onetsani zochitika mu {label} kokha"
+      },
+      "timeline": {
+        "toggle": "Nthawi ikonzekera",
+        "play": "Sewera nthawi ikonzekera",
+        "pause": "Imitsani nthawi ikonzekera",
+        "eras": "Nthawi zosiyanasiyana",
+        "jumpTo": "Pitani ku {label}",
+        "slider": "Malo a nthawi pa timeline",
+        "showUndated": "Onetsani malo osatchulidwa nthawi",
+        "activeCount": "{count} akugwira ntchito"
+      },
+      "granularity": {
+        "site": "Malo",
+        "city": "Mzinda/mudzi",
+        "district": "Chigawo",
+        "region": "M'dera",
+        "country": "Dziko"
+      },
+      "granularityAreaHint": "M'dera, akuoneka ngati bwalo lozungulira malo pakati — osatakhala malo enieni kapena malire enieni.",
+      "containerHint": "Amakhala ndi malo ena omwe afotokozedwa pa mapu, choncho akuoneka ngati mzere wokha.",
+      "legend": {
+        "toggle": "Fanizo",
+        "title": "Momwe mungawerenge mapu",
+        "color": "Mtundu: chikhulupiliro cha malo (buluu yokwera, amber yapakati, yofiira yochepa)",
+        "size": "Kukula kwa dontho: mmene malo akukhalira ofunikira ku zolembazo",
+        "area": "Mzere wozungulira wodulidwa: dera lofananirako la district, chigawo, kapena dziko",
+        "container": "Mzere wopepuka: dera lomwe zili zake zimakonzedwa payekha"
+      }
+    },
+    "shell": {
+      "showConversation": "Onetsa zokambirana",
+      "hideConversation": "Bisani zokambirana",
+      "workspaceTab": "Malo ogwirira ntchito",
+      "conversationTab": "Zokambirana",
+      "paneTabsLabel": "Mawindo a ntchito",
+      "railEmpty": "Mautumiki ndi momwe ntchito ikuyendera zioneka apa.",
+      "railInputPlaceholder": "Lemba uthenga kwa wothandiza…",
+      "assistantThinking": "Ikuganiza…",
+      "sendMessage": "Tumiza uthenga",
+      "stopGenerating": "Lekani kupanga",
+      "loadingWorkspace": "Ikutsegula malo ogwirira ntchito…",
+      "unknownType": "Zokambiranazi zikugwiritsa ntchito ntchito yomwe mtundu uwu suizindikira. Mbiri ya zokambiranazi ili pansipa.",
+      "untitled": "Zokambirana zatsopano",
+      "toggleMenu": "Tsegula kapena tsekani menyu",
+      "model": "Mtundu wa ntchito iyi"
+    }
+  },
+  "connectors": {
+    "title": "Ma Connectors",
+    "description": "Lumikizani zida zakunja pogwiritsa ntchito Model Context Protocol (MCP). Zida zolumikizidwa zikupezeka pamachitidwe a chat ndipo chilichonse chimachitika pokhapokha mutavomereza.",
+    "localOnlyNote": "Mumalowa mwachindunji kwa aliyense wopereka. Ma access key amakhala encrypted ndipo amasungidwa pa chipangizochi chokha, ndipo amatumizidwa kudzera pa app server pa pempho lililonse — osasungidwa kapena kulembedwa.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Fufuzani ma repositories, werengani ndi kupanga mavuto (issues) ndi pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Pezani, pangani, ndi kusintha ma tasks ndi ma projects."
+      }
+    },
+    "connect": "Lumikizani",
+    "connected": "Walumikizidwa",
+    "tokenEndsIn": "zimatha pa ••••{last4}",
+    "disconnect": "Chotsani kulumikizana",
+    "toolCount": "{count, plural, =1 {Chida chimodzi chilipezeka} other {Zida # zilipo}}",
+    "patLabel": "Personal access token",
+    "createTokenLink": "Pangani token",
+    "tokenScopeHint": "Gwiritsani ntchito token yomwe ili ndi mwayi wochepa momwe zida izi zimafunikira.",
+    "validating": "Ikuyang’ana kulumikizana…",
+    "validationFailed": "Sizatha kulumikiza. Onani adilesi ndipo yesaninso.",
+    "authFailed": "Seva yanena kuti token ndiyolakwika. Onani tokenyo kenako yesaninso.",
+    "tokenRequired": "Token ikufunika",
+    "enableServer": "Ikhoza kugwiritsidwa ntchito pa chat",
+    "arbitraryTitle": "Ma seva ena a MCP",
+    "arbitraryToggle": "Lolani ma seva a MCP ena",
+    "arbitraryWarning": "Aliyense amene akuthamanga seva ya MCP angathe kuona mauthenga omwe akapita ku zida zake. Lumikizani ma seva okhawo omwe mumakhulupirira. Zida zilizonse zimafuna chilolezo chanu musanachite.",
+    "addServer": "Onjezerani seva ya MCP",
+    "editServer": "Sinthani seva ya MCP",
+    "serverName": "Dzina",
+    "serverUrl": "Server URL",
+    "nameRequired": "Dzina likufunika",
+    "urlRequired": "URL ikufunika",
+    "invalidUrl": "Lowetsani adilesi ya pagulu ya https://",
+    "namePlaceholder": "Seva yanga ya MCP",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (ngati mukufuna)",
+    "keepTokenPlaceholder": "Siyani popanda kanthu kuti mukhalebe ndi token yomwe ilipo pano",
+    "disconnectedToast": "{name} yatayika kulumikizana",
+    "save": "Sungani",
+    "connectWithProvider": "Lumikizani ndi {name}",
+    "useTokenInstead": "Gwiritsani ntchito access token m'malo mwake",
+    "oauthWaiting": "Akudikira chilolezo…",
+    "oauthFailed": "Kulemba nawo kwalephera. Yesaninso.",
+    "oauthDenied": "Mwini seva sanalole chilolezo.",
+    "oauthTimeout": "Nthawi yolembetsa yathera. Yesaninso.",
+    "oauthCancelled": "Kulemba nawo kwasiyidwa.",
+    "oauthUnavailable": "Kulemba nawo sikulipo pa connector iyi mu deployment imeneyi. Gwiritsani ntchito access token, kapena pemphani woyang'anira kuti akonze OAuth app.",
+    "ownAppToggle": "Gwiritsani ntchito OAuth app yanu",
+    "ownAppHint": "Lembetsani OAuth app mu akaunti yanu ya {name} (bungwe lanu, workspace, kapena enterprise instance) ndi callback URL pansipa, kenako lembani zikalata zake pano. Siyani ichi chatsekedwa kuti mugwiritse ntchito app yomwe ilipo kale.",
+    "ownAppCustomHint": "Mutha kupereka OAuth app credentials anu pansipa; siyani popanda kanthu kuti seva isamalembedze zokha.",
+    "ownAppInUse": "Zalumikizidwa ndi OAuth app yanu.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (ngati app yanu ilinayo)",
+    "redirectUriLabel": "Callback / redirect URL yolowetsa",
+    "reconnect": "Lumikizaninso",
+    "needsReauth": "Ikufunika kulumikizanso",
+    "disconnectOauthNote": "Kutseka kulumikizana kutha limodzi pa chipangizo chino. Kuti muchotse chilolezo kwathunthu, sinthani ma apps omwe mwapereka chilolezo mu akaunti yanu ya {name}.",
+    "authModeLabel": "Njira yolowera",
+    "authModeNone": "Palibe",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Lowani ndi wothandizira (OAuth)",
+    "oauthCustomHint": "Muzalowa ndi wothandizira wa seva mu zenera latsopano mukasunga.",
+    "saveAndSignIn": "Sungani & lowani",
+    "oauthCallback": {
+      "title": "Chilolezo chatha",
+      "missingState": "Palibe choti chiloledwe",
+      "close": "Mutha kutseka zenera lino ndipo mubwerere ku app.",
+      "closeButton": "Tsekani zenera"
+    }
   }
 }

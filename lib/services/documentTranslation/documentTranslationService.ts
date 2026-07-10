@@ -167,6 +167,163 @@ export class DocumentTranslationService {
   }
 
   /**
+   * Submits an ASYNCHRONOUS (batch) translation for a single document.
+   *
+   * Used for formats the synchronous endpoint doesn't handle (PDF). With
+   * `storageType: 'File'` the batch translates one blob into one blob, so no
+   * dedicated source/target containers are needed: the source is the
+   * already-uploaded original (read SAS) and the target is the standard
+   * translated-blob path the sync flow uses (write SAS) — meaning the
+   * existing /api/document-translation/content download route serves batch
+   * results unchanged. NOTE: the target blob must not exist yet; Azure
+   * writes it on completion.
+   *
+   * @returns The batch operation id (from the Operation-Location header)
+   * @see https://learn.microsoft.com/en-us/azure/ai-services/translator/document-translation/reference/rest-api-guide
+   */
+  async submitBatchTranslation(options: {
+    sourceSasUrl: string;
+    targetSasUrl: string;
+    targetLanguage: string;
+    sourceLanguage?: string;
+    category?: string;
+    glossarySasUrl?: string;
+    glossaryFormat?: string;
+  }): Promise<string> {
+    const token = await this.tokenProvider();
+    const url = new URL(`${this.endpoint}/translator/document/batches`);
+    url.searchParams.set('api-version', API_VERSION);
+
+    const body = {
+      inputs: [
+        {
+          storageType: 'File',
+          source: {
+            sourceUrl: options.sourceSasUrl,
+            ...(options.sourceLanguage
+              ? { language: options.sourceLanguage }
+              : {}),
+          },
+          targets: [
+            {
+              targetUrl: options.targetSasUrl,
+              language: options.targetLanguage,
+              ...(options.category ? { category: options.category } : {}),
+              ...(options.glossarySasUrl
+                ? {
+                    glossaries: [
+                      {
+                        glossaryUrl: options.glossarySasUrl,
+                        format: options.glossaryFormat ?? 'csv',
+                      },
+                    ],
+                  }
+                : {}),
+            },
+          ],
+        },
+      ],
+    };
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.status !== 202) {
+      const errorBody = await response.text();
+      let errorMessage = `Batch translation submit failed: HTTP ${response.status}`;
+      try {
+        const errorJson = JSON.parse(errorBody);
+        errorMessage =
+          errorJson.error?.message ?? errorJson.message ?? errorMessage;
+      } catch {
+        if (errorBody) {
+          errorMessage = `${errorMessage} - ${errorBody.substring(0, 500)}`;
+        }
+      }
+      console.error('[DocumentTranslation] Batch submit failed:', {
+        status: response.status,
+        error: errorMessage,
+        targetLanguage: options.targetLanguage,
+      });
+      throw new Error(errorMessage);
+    }
+
+    // Operation-Location: {endpoint}/translator/document/batches/{id}?api-version=…
+    const operationLocation = response.headers.get('operation-location');
+    const operationId = operationLocation
+      ?.split('?')[0]
+      ?.split('/')
+      .filter(Boolean)
+      .pop();
+    if (!operationId) {
+      throw new Error(
+        'Batch translation submit succeeded but no Operation-Location header was returned',
+      );
+    }
+    console.log('[DocumentTranslation] Batch submitted:', {
+      operationId,
+      targetLanguage: options.targetLanguage,
+    });
+    return operationId;
+  }
+
+  /**
+   * Polls a batch translation operation.
+   *
+   * Maps Azure batch statuses onto the app's transcription-style trio so the
+   * status route/UI can reuse the established polling contract.
+   */
+  async getBatchTranslationStatus(operationId: string): Promise<{
+    status: 'Running' | 'Succeeded' | 'Failed';
+    azureStatus: string;
+    error?: string;
+  }> {
+    const token = await this.tokenProvider();
+    const url = new URL(
+      `${this.endpoint}/translator/document/batches/${encodeURIComponent(operationId)}`,
+    );
+    url.searchParams.set('api-version', API_VERSION);
+
+    const response = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Batch translation status failed: HTTP ${response.status}`,
+      );
+    }
+    const json = (await response.json()) as {
+      status?: string;
+      error?: { message?: string };
+      summary?: { failed?: number };
+    };
+
+    const azureStatus = json.status ?? 'Unknown';
+    switch (azureStatus) {
+      case 'Succeeded':
+        return { status: 'Succeeded', azureStatus };
+      case 'Failed':
+      case 'ValidationFailed':
+      case 'Cancelled':
+      case 'Cancelling':
+        return {
+          status: 'Failed',
+          azureStatus,
+          error: json.error?.message ?? `Translation ${azureStatus}`,
+        };
+      default:
+        // NotStarted / Running / anything unrecognized → keep polling.
+        return { status: 'Running', azureStatus };
+    }
+  }
+
+  /**
    * Checks if the service is properly configured.
    *
    * @returns True if the endpoint is configured

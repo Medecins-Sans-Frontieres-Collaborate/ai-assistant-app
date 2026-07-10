@@ -408,7 +408,22 @@
     "noProjectsFound": "Projekteja ei löytynyt. Käytetään \"default\".",
     "selectAllRequired": "Valitse tilaus, tili ja projekti.",
     "subscriptionRequired": "Valitse tilaus",
-    "accountRequired": "Valitse Foundry-tili"
+    "accountRequired": "Valitse Foundry-tili",
+    "projectSelectionRequired": "Valitse projekti listasta.",
+    "scanningResources": "Azure-tilauksiasi skannataan...",
+    "searchProjectsPlaceholder": "Etsi projekteja...",
+    "noProjectsDiscovered": "Tilauksistasi ei löytynyt Foundry-projekteja. Käytä manuaalista syöttöä, jos tiedät polun.",
+    "discoveryPartialWarning": "{count, plural, one {# tilausta} other {# tilausta}} ei voitu skannata. Käytä manuaalista syöttöä, jos projektisi puuttuu.",
+    "discoveryTruncatedWarning": "Resursseja oli liikaa skannattavaksi kokonaan. Käytä manuaalista syöttöä, jos projektisi puuttuu.",
+    "retryScan": "Yritä skannata uudelleen",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "selectAgentsDescription": "Valitse, mitkä tämän projektin agentit näytetään mallivalitsimessasi.",
+    "selectAll": "Valitse kaikki",
+    "deselectAll": "Poista kaikki valinnat",
+    "agentsSelectedCount": "{selected}/{total} agenttia valittu",
+    "autoAddLabel": "Lisää uudet agentit automaattisesti",
+    "autoAddDescription": "Myöhemmin tähän projektiin julkaistut agentit tulevat automaattisesti näkyviin. Valitsemattomat agentit pysyvät poissuljettuina."
   },
   "Quick Actions": "Pikatoiminnot",
   "Type / in chat to access your prompts": "Kirjoita / keskustelussa päästäksesi kehotteisiisi",
@@ -735,7 +750,19 @@
       "listingTools": "Etsitään saatavilla olevia työkaluja…",
       "analyzingFiles": "Analysoidaan tiedostojasi…",
       "searchingKnowledge": "Haetaan tietopankista…",
-      "cancellingPriorTool": "Perutaan aiempi työkalupyyntö…"
+      "cancellingPriorTool": "Perutaan aiempi työkalupyyntö…",
+      "workflow": {
+        "preparingDocument": "Valmistellaan viitteitä...",
+        "writingDocument": "Kirjoitetaan dokumenttia...",
+        "analyzingSource": "Analysoidaan lähdetekstiä...",
+        "translating": "Käännetään...",
+        "reviewingTranslation": "Arviointikierros {round}/{total}...",
+        "revisingTranslation": "Jatketaan palautteen pohjalta...",
+        "extractingRows": "Poimitaan rivejä lähteestä {source}...",
+        "transformingTable": "Muunnetaan taulukkoa...",
+        "findingLocations": "Tunnistetaan sijainteja...",
+        "updatingMap": "Päivitetään karttaa..."
+      }
     },
     "toolSummary": {
       "usedTools": "Käytetty {count, plural, one {# työkalu} other {# työkalua}}",
@@ -796,7 +823,8 @@
     "listen": "Kuuntele",
     "processingAudio": "Käsitellään ääntä...",
     "ttsError": "Virhe ääntä luodessa. Yritä uudelleen.",
-    "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi"
+    "unsupportedMessageType": "Virhe viestin näyttämisessä: Ei-tuettu viestityyppi",
+    "addLanguageOption": "Lisää \"{name}\"..."
   },
   "sidebar": {
     "collapseSidebar": "Tiivistä sivupalkki",
@@ -1115,15 +1143,17 @@
     "unsavedChangesMessage": "Sinulla on tallentamattomia muutoksia. Hylätäänkö ne?",
     "characterCount": "{current}/{max}",
     "clearField": "Tyhjennä kenttä",
-    "autosaveNote": "Muutokset tallentuvat automaattisesti.",
+    "autosaveNote": "Muutokset tallennetaan automaattisesti.",
     "responseSection": "Vastaus",
     "voiceSection": "Ääni",
-    "behaviorSection": "Käyttäytyminen",
+    "behaviorSection": "Käytös",
     "resetChatSettings": "Palauta keskusteluasetukset",
     "resetChatSettingsConfirmTitle": "Palautetaanko keskusteluasetukset?",
-    "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin oletusasetukset: temperature, mukautetut ohjeet, About You, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Tämä ei vaikuta keskusteluihisi.",
+    "resetChatSettingsConfirmMessage": "Tämä palauttaa tämän paneelin kaikki asetukset oletuksiin: lämpötila, räätälöidyt ohjeet, Tietoja sinusta, mallin vastaus, suoratoiston nopeus, tekstistä puheeksi, aktiiviset tiedostot ja vahvistukset. Keskusteluihin ei vaikuteta.",
     "customInstructionsLabel": "Mukautetut ohjeet*",
-    "defaultTemperatureLabel": "Oletuslämpötila*"
+    "defaultTemperatureLabel": "Oletuslämpötila*",
+    "Usage & Impact": "Käyttö ja vaikutus",
+    "Connectors": "Liitännät"
   },
   "notFound": {
     "lostDog": "Kadonnut koira"
@@ -1398,7 +1428,36 @@
     "modelsDescription": "Valitse keskustelullesi AI-malli. Jokaisella mallilla on omat vahvuutensa — valitse nähdäksesi tarkemmat tiedot.",
     "recommended": "Suositeltu",
     "familyAll": "Kaikki",
-    "familyFilterLabel": "Suodata mallit perheen mukaan"
+    "familyFilterLabel": "Suodata mallit perheen mukaan",
+    "searchPlaceholder": "Etsi malleja",
+    "searchEmpty": "Hakusi ei vastaa yhtään mallia.",
+    "star": "Lisää suosikkeihin: {name}",
+    "unstar": "Poista suosikeista: {name}",
+    "otherFamily": "Muu",
+    "hostedExternally": "Toimii palveluntarjoajan omalla infrastruktuurilla Azure AI Foundryn kautta, ei MSF:n Azure-ympäristössä.",
+    "hostedIn": {
+      "label": "Isännöity alueilla: {regions}",
+      "tooltip": "Azure-alue(et), joilla tämä malli on käytössä. Keskustelut käsitellään omalla alueellasi."
+    },
+    "badges": {
+      "external": "Ulkoinen",
+      "externalTooltip": "Toimii palveluntarjoajan omalla infrastruktuurilla Azure AI Foundryn kautta, ei MSF:n Azure-ympäristössä.",
+      "regionHostedTooltip": "Isännöity Azure-alueella {region}. Keskustelut tämän mallin kanssa käsitellään siellä."
+    },
+    "favorites": "Suosikit",
+    "euResidencyNote": "Kaikki mallit toimivat EU:n Azure-alueella.",
+    "hostedRegion": {
+      "label": "Isännöintialue",
+      "processedIn": "Tämä keskustelu käsitellään Azure-alueella {region}.",
+      "euOnlyNote": "{name} isännöidään EU:n Azure-alueella; keskustelut sen kanssa käsitellään siellä."
+    },
+    "version": {
+      "label": "Versio"
+    },
+    "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa.",
+    "variant": {
+      "label": "Vaihtoehto"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1485,6 +1544,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Tasapainoinen Claude-malli. Sopii päivittäiseen kirjoittamiseen, analyysiin ja koodaukseen nopeilla vastauksilla.",
       "knowledgeCutoff": "helmikuu 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Metan avoimen lähdekoodin malli. Vakaa kirjoituksessa, yhteenvedoissa ja nopeissa kysymyksissä."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Pienin ja nopein GPT-versio. Paras nopeisiin, yksinkertaisiin tehtäviin mahdollisimman pienin kustannuksin."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Keskusteluun viritetty GPT-versio. Sopii arkisiin keskusteluihin, ideointiin ja tukikeskusteluihin."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Vanhempi multimodaalinen GPT. Sopii arkipäivän kirjoittamiseen ja kysymys-vastaus -tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Pienempi ja nopeampi GPT-4.1-versio arjen nopeisiin tehtäviin."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropicin uusin ja vahvin malli. Erinomainen pitkään kirjoittamiseen, tutkimukseen, koodaukseen ja huolellisiin analyyseihin."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeekin uusin avoimen lähdekoodin malli. Luotettava yleiskirjoitukseen ja teknisiin kysymyksiin."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistralin lippulaivamalli. Eurooppalainen vaihtoehto kirjoittamiseen, yhteenvedoille ja yleisiin kysymyksiin."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Aikaisempi GPT-5 lippulaivaversio. Yhä vahva kirjoittamisessa, analyysissa ja koodauksessa."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Aikaisempi keskusteluun viritetty GPT-5-versio. Sopii arjen keskusteluihin ja ideointiin."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Pienin GPT-5-versio. Paras nopeisiin, yksinkertaisiin tehtäviin pienellä kustannuksella."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Pienin GPT-4.1-versio. Sopii nopeisiin, yksinkertaisiin tehtäviin, joissa nopeus ja hinta ovat tärkeimmät."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Pieni ja nopea GPT-4o-versio. Sopii arjen nopeisiin tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompakti päättelymalli. Hyvä matematiikkaan, logiikkaan ja vaiheittaisiin ongelmiin edullisemmin kuin o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Aikaisempi kompakti päättelymalli. Selviytyy matematiikasta, luonnontieteistä ja logiikkatehtävistä budjetilla."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropicin älykkäin malli ja ensimmäinen Claude 5 -sarjasta. Erinomainen vaikeimpiin kirjoitus-, tutkimus- ja koodaushaasteisiin."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Uusin tasapainoinen Claude, ensimmäinen Claude 5 -perheessä. Vahva arjen kirjoituksessa, analyysissa ja koodauksessa nopeilla vastauksilla."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistralin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa osaamisen ja nopeuden arjen työhön."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistralin pieni malli. Nopea ja edullinen yhteenvedoille, luonnoksille ja yksinkertaisiin kysymyksiin."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistralin hyvin pieni malli. Paras hyvin nopeisiin, yksinkertaisiin tehtäviin pienellä budjetilla."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Uudistettu DeepSeek-R1-versio. Esittää ajattelunsa vaihe vaiheelta parannetulla päättelysyvyydellä."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Keveämpi avoimen lähdekoodin malli Metalta. Nopea kirjoitukseen, yhteenvedoille ja arjen kysymyksiin."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Vanhempi Metan avoimen lähdekoodin malli. Soveltuu edelleen yleiseen kirjoitukseen ja Q&A-tehtäviin."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI:n lippulaivamalli. Sopii avoimiin keskusteluihin, analyysiin ja luoviin projekteihin."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamisessa, tutkimuksessa, koodauksessa ja monimutkaisessa ongelmanratkaisussa."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (uusin)",
+      "description": "Jatkuvasti päivittyvä alias, joka viittaa aina OpenAI:n uusimpaan chatiin optimoituun malliin. Azuren korvaava malli vanhoille versiopohjaisille gpt-*-chat -malleille."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Uudempi Opus-julkaisu, sijoittuu versioiden 4.6 ja 4.8 väliin. Sopii hyvin pitkän tekstin kirjoittamiseen, tutkimukseen, koodaukseen ja huolelliseen analyysiin."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeekin uusin päättelymalli ja Azuren korvaava malli R1-sarjalle. Näyttää ajattelunsa vaihe vaiheelta."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeekin nopea V4-variantti ja Azuren korvaava malli V3-sarjalle. Nopea yleiskirjoituksiin ja teknisiin kysymyksiin."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "xAI:n nopea päättelymalli. Ajattelee vaihe vaiheelta ja vastaa nopeasti."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI:n nopea chat-malli. Nopeat vastaukset arkipäivän kysymyksiin ja keskusteluihin."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Kevyempi xAI-malli. Nopeampi ja edullisempi yksinkertaisiin kysymyksiin ja vapaamuotoisiin keskusteluihin."
     }
   },
   "searchMode": {
@@ -1824,7 +2015,20 @@
     "useDefaultStyle": "Käytä oletuskirjoitustyyliä",
     "noTonesCreated": "Äänensävyjä ei ole vielä luotu",
     "createTonesHint": "Luo äänensävyjä Pikatoiminnoissa",
-    "translateDocumentTooltip": "Käännä asiakirjat toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, HTML, TXT\nMaksimikoko: 40 Mt\n\nYli 80 kielitukea ja mahdollisuus käyttää sanastotiedostoja."
+    "translateDocumentTooltip": "Käännä asiakirjat toiselle kielelle.\n\nTuetut tiedostomuodot: Word, Excel, PowerPoint, HTML, TXT\nMaksimikoko: 40 Mt\n\nYli 80 kielitukea ja mahdollisuus käyttää sanastotiedostoja.",
+    "translateTooltip": "Käännä tekstikatkelma toiselle kielelle.\n\nKäytä koko tiedostojen (Word, Excel, PowerPoint, HTML, TXT) kääntämiseen sen sijaan Käännä asiakirja -toimintoa.",
+    "cameraTooltip": "Ota valokuva laitteesi kameralla ja liitä se viestiin.",
+    "noResults": "Ei vastaavia toimintoja",
+    "sectionPinned": "Kiinnitetyt",
+    "sectionFrequent": "Usein käytetyt",
+    "sectionMore": "Lisää",
+    "categoryWeb": "Verkko",
+    "categoryMedia": "Media ja tiedostot",
+    "categoryTransform": "Muunnos",
+    "pin": "Kiinnitä ylös",
+    "unpin": "Poista kiinnitys",
+    "moveToMore": "Siirrä kohtaan Lisää",
+    "moveOutOfMore": "Näytä valikossa"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lisää omat ohjeesi räätälöidäksesi, miten tekoäly vastaa. Nämä yhdistetään ydinkäyttäytymissääntöihin, jotka takaavat hyödylliset, tarkat ja turvalliset vastaukset.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Vinkki: Kirjoita \"/\" valitaksesi tallennetuista kehotepohjista.",
@@ -1935,7 +2139,14 @@
     "learnMore": "Lue lisää",
     "advancedOptions": "Lisäasetukset",
     "unofficialBadgeLabel": "Epävirallinen",
-    "unofficialLanguageWarning": "Tätä kieltä ei tueta virallisesti. Käännöksen laatua ei ole varmennettu. Pyydä tuloksen tarkistusta sujuvalta tai äidinkielenään puhuvalta henkilöltä ennen jakamista."
+    "unofficialLanguageWarning": "Tätä kieltä ei tueta virallisesti. Käännöksen laatua ei ole varmennettu. Pyydä tuloksen tarkistusta sujuvalta tai äidinkielenään puhuvalta henkilöltä ennen jakamista.",
+    "translationSubmitted": "Käännös aloitettu — PDF-tiedostot käsitellään taustalla.",
+    "pendingTitle": "Käännetään tiedostoa {filename}…",
+    "pendingHint": "PDF-käännökset suoritetaan taustalla ja voivat kestää muutaman minuutin. Voit jatkaa työskentelyä — tämä kortti päivittyy, kun asiakirja on valmis, myös uudelleenlatauksen jälkeen.",
+    "asyncFailed": "Asiakirjan käännös epäonnistui: {error}",
+    "jobNotFound": "Käännöstehtävä ei ole enää saatavilla. Yritä uudelleen.",
+    "retryPolling": "Tarkista uudestaan",
+    "pollingStalled": "Palvelimeen ei saatu yhteyttä tilan tarkistamiseksi. Käännös voi silti olla käynnissä."
   },
   "terms": {
     "officialLanguages": "Virallinen versio:",
@@ -2117,5 +2328,699 @@
   "regionOverride": {
     "warning": "Sijainnin ohitus käytössä — pyyntösi ohjataan {region} tietojen alueelle. Tämä on manuaalinen testiohitus, ei todellinen sijaintisi.",
     "clear": "Poista ohitus"
+  },
+  "usageImpact": {
+    "empty": "Käyttöä ei ole vielä seurattu. Tokenien käyttösi ja arvioidut päästöt näkyvät tässä keskustelun jälkeen.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} älypuhelimen latausta",
+    "requests": "Pyynnöt",
+    "promptTokens": "Syötetokenit",
+    "completionTokens": "Valmiustokenit",
+    "topModels": "Malleittain",
+    "byRegion": "Isäntäalueittain",
+    "regionDefault": "Oletus",
+    "modelRow": "{requests} pyyntöä · {grams} g",
+    "disclosure": "Arviot perustuvat oletuksiin v{version} · alkaen {since} · vain tavallinen chat (agenttien ja tietopankkivastausten käyttöä ei lasketa).",
+    "reset": "Nollaa käyttötilastot"
+  },
+  "extraction": {
+    "toggleLabel": "Luo jäsenneltyä dataa",
+    "trayLabel": "Jäsennys",
+    "trayPrefix": "Jäsennä",
+    "trayInfo": "Jäsennys palauttaa enintään 3 taulukkoa. Reseptit tallennetaan paikallisesti.",
+    "autoChip": "Auto — AI ehdottaa rakennetta",
+    "addRecipe": "Lisää resepti",
+    "addRecipeTitle": "Lisää resepti tähän jäsennykseen",
+    "addRecipeFullTitle": "Enintään 3 reseptiä per jäsennys",
+    "removeRecipe": "Poista resepti: {name}",
+    "remove": "Poista",
+    "section": "Jäsennysreseptit",
+    "sectionSubtitle": "Tallennetut mallipohjat, jotka muuntavat raakatekstin, tiedostot tai URL-osoitteet jäsennettyihin taulukoihin. Valitse enintään 3 kerrallaan.",
+    "newRecipe": "Uusi resepti",
+    "untitledRecipe": "(Nimetön resepti)",
+    "deleteRecipe": "Poista resepti",
+    "delete": "Poista",
+    "deleteConfirm": "Poistetaanko?",
+    "cancel": "Peruuta",
+    "name": "Nimi",
+    "namePlaceholder": "esim. Potilaat",
+    "description": "Kuvaus",
+    "optional": "(valinnainen)",
+    "descriptionPlaceholder": "Lyhyt yhteenveto, joka näytetään reseptivalitsimessa",
+    "instructions": "Ohjeet",
+    "instructionsPlaceholder": "Mitä AI:n tulisi etsiä aineistosta?",
+    "fields": "Kentät",
+    "field": "kenttä",
+    "fieldsPlural": "kentät",
+    "fieldName": "Kentän nimi",
+    "fieldType": "Kentän tyyppi",
+    "fieldNamePlaceholder": "kenttä_nimi",
+    "addField": "Lisää kenttä",
+    "removeField": "Poista kenttä",
+    "toggleDetails": "Näytä/piilota yksityiskohdat",
+    "fieldDetailsTitle": "Kuvaus, sallitut arvot",
+    "fieldDescriptionPlaceholder": "Kuvaus (auttaa AI:ta löytämään tämän kentän)",
+    "enumValuesPlaceholder": "Pilkuilla erotellut sallitut arvot",
+    "required": "pakollinen",
+    "suggest": "Ehdota tekoälyn avulla",
+    "suggesting": "Ehdotetaan…",
+    "suggestNeedsInstructions": "Lisää ohjeet ensin, jotta tekoäly tietää, mitä etsiä",
+    "searchRecipes": "Hae reseptejä",
+    "pickerEmpty": "Ei reseptejä vielä. Luo uusi aloittaaksesi.",
+    "pickerEmptyMatch": "Ei vastaavia reseptejä",
+    "editorEmpty": "Ei reseptejä vielä. Luo uusi, niin tekoäly voi auttaa kenttien täyttämisessä.",
+    "noData": "Ei tietoja poimittu",
+    "noRecords": "Yhtään {name}-tietuetta ei löytynyt",
+    "row": "rivi",
+    "rows": "rivit",
+    "record": "tietue",
+    "records": "tietueet",
+    "complete": "valmis",
+    "download": "Lataa",
+    "preview": "Esikatsele",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} kenttää",
+    "fieldCountOne": "1 kenttä",
+    "andMoreFields": "+ {count} lisää",
+    "saveAsRecipe": "Tallenna reseptinä",
+    "savedAsRecipeToast": "Tallennettu reseptinä \"{name}\"",
+    "previewTruncated": "Näytetään 3 ensimmäistä rivistä ({total}). Lataa kaikki tiedot ladataksesi.",
+    "previewEmpty": "Ei rivejä esikatseluun",
+    "proposedSchemaTip": "Tekoäly ehdotti tätä skeemaa. Tallenna se, jotta voit käyttää sitä myöhemmin uudelleen.",
+    "downloadAriaLabel": "Lataa {name} muodossa {format}",
+    "previewAriaLabel": "Vaihda {name}:n esikatselu",
+    "changeFormatAriaLabel": "Vaihda latausmuoto kohteelle {name}",
+    "materialWarningTitle": "Lisää aineisto poimittavaksi",
+    "materialWarningBody": "Kirjoita viesti alle, liitä tiedosto tai lisää URL.",
+    "materialAttach": "Liitä tiedosto",
+    "willExtractPrefix": "Poimitaan seuraavista:",
+    "materialText": "viestiteksti",
+    "materialFiles": "{count, plural, one {1 tiedosto} other {# tiedostoa}}",
+    "materialActiveFiles": "{count, plural, one {1 aktiivinen tiedosto} other {# aktiivista tiedostoa}}",
+    "dismiss": "Poista poiminta käytöstä"
+  },
+  "Connectors": "Liitännät",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Käännös",
+        "description": "Käännä teksti analyysin, sanastojen ja arviointikierrosten avulla"
+      },
+      "document": {
+        "label": "Dokumentti",
+        "description": "Luo ja viimeistele dokumentti avustajan kanssa"
+      },
+      "dataAnalysis": {
+        "label": "Data-analyysi",
+        "description": "Tuo taulukoita ja tutki tai muokkaa dataasi"
+      },
+      "map": {
+        "label": "Kartta",
+        "description": "Muunna mikä tahansa data karttasijainneiksi"
+      }
+    },
+    "chooser": {
+      "prompt": "Tai aloita kohdennettu työtila"
+    },
+    "sidebar": {
+      "newTranslation": "Uusi käännös",
+      "newDocument": "Uusi dokumentti",
+      "newDataAnalysis": "Uusi data-analyysi",
+      "newMap": "Uusi kartta"
+    },
+    "translation": {
+      "chooseLanguage": "Kohdekieli",
+      "customLanguageHint": "\"{name}\" on itse lisäämäsi kieli – tekoäly yrittää tuottaa minkä tahansa kielen, mutta laatua ei ole varmistettu.",
+      "addedByYou": "Lisätty itse",
+      "glossary": "Sanasto",
+      "noGlossary": "Ei sanastoa",
+      "manageGlossaries": "Sanastot",
+      "glossaries": "Sanastot",
+      "closeGlossaries": "Sulje sanastot",
+      "glossariesEmpty": "Luo sanasto varmistaaksesi tiettyjen termien käännökset. Sanastot tallennetaan tälle laitteelle ja ovat käytettävissä muissa käännöksissä.",
+      "newGlossary": "Uusi sanasto",
+      "newGlossaryName": "Nimetön sanasto",
+      "glossaryName": "Sanaston nimi",
+      "deleteGlossary": "Poista sanasto",
+      "sourceTerm": "Lähdetermi",
+      "targetTerm": "Käännös",
+      "note": "Huomautus",
+      "noteOptional": "Huomautus (valinnainen)",
+      "addEntry": "Lisää termi",
+      "removeEntry": "Poista {term}",
+      "mode": "Käännöstila",
+      "modeQuick": "Nopea",
+      "modeAgentic": "Tarkistettu",
+      "modeQuickHint": "Yksi käännöskerta, nopein",
+      "modeAgenticHint": "Analysoi tekstin ensin, sitten kääntää ja suorittaa enintään 3 tarkistuskierrosta",
+      "translate": "Käännä",
+      "translating": "Käännetään…",
+      "sourceLabel": "Lähdeteksti",
+      "targetLabel": "Käännös",
+      "sourcePlaceholder": "Liitä tai kirjoita käännettävä teksti tai lataa asiakirja.",
+      "targetEmpty": "Käännös ilmestyy tähän.",
+      "uploadDocument": "Lataa asiakirja",
+      "copy": "Kopioi",
+      "copied": "Kopioitu",
+      "tooLong": "Teksti on pidempi kuin {max} merkkiä. Jaa osiin tai käytä asiakirjakäännöstä koko tiedoston käännökseen.",
+      "analysisTitle": "Ennakkoanalyysi",
+      "register": "Rekisteröidy",
+      "reviewTitle": "Tarkistuskierrokset",
+      "roundLabel": "Kierros {round}",
+      "verdictApprove": "hyväksytty",
+      "verdictRevise": "korjattu",
+      "railRequest": "Käännä lähdeteksti kielelle {language}.",
+      "railDoneAgentic": "Valmis. Analysoin tekstin, käänsin sen ja suoritin {rounds} tarkistuskierrosta. Tulokset löytyvät työtilasta.",
+      "railDoneQuick": "Valmis. Käännös on työtilassa.",
+      "railAssessRequest": "Arvioi {language}-käännöksen laatu.",
+      "railAssessDone": "Arvioitu: arvosanat löytyvät työtilasta ja {count} korjausehdotusta tarkistettavaksi.",
+      "roundChanges": "Muutokset kierroksella {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Tarkkuus",
+          "description": "Välittää tarkasti lähdetekstin merkityksen — ei virhekäännöksiä, poisjättöjä, lisäyksiä tai kääntämättömiä kohtia"
+        },
+        "fluency": {
+          "label": "Sujuvuus",
+          "description": "Kielioppi, oikeinkirjoitus, välimerkit ja kokonaisuus ovat luonnollisia kohdekielessä"
+        },
+        "terminology": {
+          "label": "Terminologia",
+          "description": "Alan termit ovat yhdenmukaisia ja oikeita; sanastoa noudatetaan tarkasti"
+        },
+        "style": {
+          "label": "Tyyli",
+          "description": "Rekisteri, sävy ja näkökulma vastaavat lähdetekstiä ja pysyvät johdonmukaisina"
+        },
+        "localeConventions": {
+          "label": "Alueelliset käytännöt",
+          "description": "Päivämäärät, luvut, yksiköt ja välimerkit noudattavat kohdekielen normeja"
+        },
+        "audience": {
+          "label": "Kohderyhmä",
+          "description": "Sopii tekstin oletetulle käyttötarkoitukselle ja lukijakunnalle"
+        }
+      },
+      "severity": {
+        "minor": "Vähäinen",
+        "major": "Merkittävä"
+      },
+      "assess": "Arvioi laatua",
+      "assessing": "Arvioidaan…",
+      "assessmentTitle": "Laatuarviointi",
+      "criteriaPicker": "Arvioitavat kriteerit",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Ehdotetut muokkaukset",
+      "noEditsSuggested": "Ei ehdotettuja muokkauksia — käännös läpäisi valitut kriteerit.",
+      "acceptEdit": "Hyväksy",
+      "rejectEdit": "Hylkää",
+      "acceptAll": "Hyväksy kaikki",
+      "rejectAll": "Hylkää kaikki",
+      "editAccepted": "Hyväksytty",
+      "editRejected": "Hylätty",
+      "editUnapplicable": "Tätä kohtaa ei löytynyt nykyisestä tekstistä — ei sovellettu",
+      "editTranslation": "Muokkaa",
+      "doneEditing": "Valmis",
+      "pasteTranslationPlaceholder": "Kirjoita tai liitä muokattava käännös…",
+      "editingBlockedPendingEdits": "Ratkaise tai hylkää odottavat muokkaus-ehdotukset ensin",
+      "pendingCount": "{count} odottaa",
+      "closeReview": "Sulje laatuarviointi",
+      "showReview": "Näytä arviointi",
+      "showReviewPending": "Näytä arviointi ({count} odottaa)"
+    },
+    "document": {
+      "emptyTitle": "Kuvaile haluamaasi asiakirjaa",
+      "emptyBody": "Kerro avustajalle, mitä kirjoitetaan — esimerkiksi tilanneraportti, lahjoittajakirje, kokousmuistio. Lisää ensin viitetiedostot, jos haluat niistä lainauksia tai faktoja.",
+      "generatePlaceholder": "Kuvaile, millainen asiakirja kirjoitetaan…",
+      "revisePlaceholder": "Kuvaile tehtävät muutokset…",
+      "generate": "Luo",
+      "revise": "Muokkaa",
+      "writing": "Kirjoitetaan…",
+      "export": "Vie",
+      "references": "Viitteet",
+      "addReference": "Lisää tiedosto",
+      "uploading": "Ladataan…",
+      "removeReference": "Poista {name}",
+      "referenceChars": "{chars} merkkiä poimittua tekstiä",
+      "referenceEmpty": "Tiedostosta {name} ei voitu poimia tekstiä",
+      "uploadFailed": "Lähetys epäonnistui",
+      "untitledDocument": "Nimetön asiakirja",
+      "generatedSummary": "Kirjoitin asiakirjan työtilaan. Tarkista se ja kerro, mitä muuttaa.",
+      "revisedSummary": "Muokkasin asiakirjaa työtilassa.",
+      "runFailed": "Jokin meni vikaan: {message}",
+      "uploadBasis": "Aloita olemassa olevasta asiakirjasta",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Kielioppi ja oikeinkirjoitus",
+          "description": "Kielioppi ja oikeinkirjoitus kunnossa; yksi yhtenäinen englannin variantti (US tai UK) — sekoittaminen on virhe"
+        },
+        "consistency": {
+          "label": "Johdonmukaisuus",
+          "description": "Termit, nimet, isot kirjaimet ja muotoilu samoin läpi asiakirjan"
+        },
+        "clarity": {
+          "label": "Selkeys",
+          "description": "Selkeät, yksiselitteiset lauseet; rakenne tukee lukijaa"
+        },
+        "sensitivity": {
+          "label": "Herkkä lähestymistapa",
+          "description": "Osallistava, konflikti- ja humanitaaristilanteeseen sopiva sanamuoto (valinnainen tarkistus)"
+        },
+        "specAdherence": {
+          "label": "Ohjeistuksen noudattaminen",
+          "description": "Noudattaa liitetyn dokumentaation ohjeistusta: vaaditut osiot ovat mukana, oikeassa järjestyksessä ja täyttävät niille annetut ohjeet"
+        },
+        "toneAdherence": {
+          "label": "Sävyvaatimusten noudattaminen",
+          "description": "Noudattaa liitettyä tyyli- ja sävyohjeistusta"
+        }
+      },
+      "severity": {
+        "minor": "Vähäinen",
+        "major": "Merkittävä"
+      },
+      "assess": "Arvioi laatu",
+      "assessing": "Arvioidaan…",
+      "assessmentTitle": "Laatuarviointi",
+      "criteriaPicker": "Arvioitavat kriteerit",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Ehdotetut muokkaukset",
+      "noEditsSuggested": "Ei ehdotettuja muokkauksia — dokumentti täytti valitut kriteerit.",
+      "acceptEdit": "Hyväksy",
+      "rejectEdit": "Hylkää",
+      "acceptAll": "Hyväksy kaikki",
+      "rejectAll": "Hylkää kaikki",
+      "editAccepted": "Hyväksytty",
+      "editRejected": "Hylätty",
+      "editUnapplicable": "Tätä kohtaa ei löydetty nykyisestä tekstistä — ei sovellettu",
+      "editingBlockedPendingEdits": "Ratkaise tai hylkää odottavat muokkausehdotukset ensin",
+      "pendingCount": "{count} odottaa",
+      "closeReview": "Sulje laatuarviointi",
+      "showReview": "Näytä arviointi",
+      "showReviewPending": "Näytä arviointi ({count} odottaa)",
+      "railAssessRequest": "Arvioi dokumentin laatu valittuja kriteerejä vastaan.",
+      "railAssessDone": "Arviointi valmis: pisteet näkyvät työtilassa ja {count} ehdotettua muokkausta tarkistettavana.",
+      "spec": "Dokumentin ohjeistus",
+      "noSpec": "Ei ohjeistusta",
+      "manageSpecs": "Ohjeistukset",
+      "specs": "Dokumenttiohjeistukset",
+      "closeSpecs": "Sulje ohjeistukset",
+      "specsEmpty": "Luo ohjeistus, jotta dokumentit kirjoitetaan vakiomuotoon — vaaditut osiot, järjestys ja osiokohtaiset ohjeet (esim. SitRep-malli). Ohjeistukset tallennetaan tähän laitteeseen ja ovat uudelleenkäytettävissä.",
+      "newSpec": "Uusi ohjeistus",
+      "newSpecName": "Nimetön ohjeistus",
+      "specName": "Ohjeistuksen nimi",
+      "specDescription": "Kuvaus (valinnainen)",
+      "deleteSpec": "Poista ohjeistus",
+      "sectionHeading": "Osiotsikko",
+      "sectionGuidance": "Ohje (valinnainen)",
+      "sectionRequired": "Pakollinen",
+      "addSection": "Lisää osio",
+      "removeSection": "Poista osio",
+      "generalGuidance": "Yleinen ohje (valinnainen)",
+      "tone": "Sävy",
+      "noTone": "Ei sävyä",
+      "customCriteria": "Mukautetut kriteerit",
+      "manageCriteria": "Mukautetut kriteerit",
+      "closeCriteria": "Sulje mukautetut kriteerit",
+      "criteriaEmpty": "Luo omia kriteerejä – esim. brändin linjauksia tai organisaation kieltä – asiakirjojen arviointiin ja muokkauksen ohjaamiseen. Tallennetaan tälle laitteelle ja voidaan käyttää uudelleen.",
+      "newCriterion": "Uusi kriteeri",
+      "newCriterionName": "Nimeämätön kriteeri",
+      "criterionName": "Kriteerin nimi",
+      "criterionRubric": "Rubriikki",
+      "criterionRubricPlaceholder": "Kuvaile vaatimukset, joiden tulee täyttyä, esim. \"Älä koskaan käytä superlatiiveja omasta työstä; kutsu avunsaajia aina nimellä 'auttamamme ihmiset'...\"",
+      "criterionRubricHint": "Tämä rubriikki annetaan tekoälylle sellaisenaan arvioinnin ja muokkauksen aikana.",
+      "deleteCriterion": "Poista kriteeri",
+      "profileTitle": "Asiakirjaprofiili",
+      "profileDocType": "Tyyppi",
+      "profileLanguage": "Kieli",
+      "profileAudience": "Kohderyhmä",
+      "profilePurpose": "Tarkoitus",
+      "profileRegister": "Rekisteri",
+      "profileTone": "Sävy",
+      "profileConventions": "Konventiot",
+      "emptyHint": "Aloita kirjoittamalla alle, kuvaile laatikossa alhaalla mitä kirjoittaa, tai aloita tiedostosta.",
+      "addSpec": "Lisää spesifikaatio",
+      "addCriteria": "Lisää kriteerejä",
+      "scopeFullDocument": "Laajuus: koko asiakirja",
+      "scopeSelection": "Laajuus: valinta — “{preview}…” ({count} sanaa)",
+      "clearSelection": "Tyhjennä valinta (käsittele koko asiakirjaa)",
+      "reviseSelectionPlaceholder": "Kuvaile muutokset valittuun osaan…",
+      "revisedSelectionSummary": "Muokkasin valitun tekstikohdan työtilassa.",
+      "assessedSelection": "Valinta"
+    },
+    "data": {
+      "emptyTitle": "Tuo analysoitavaa dataa",
+      "emptyBody": "Tuo CSV-, Excel- tai JSON-tiedosto tai liitä rivejä suoraan. Kun taulukko on ladattu, voit lajitella sitä, hakea lisää rivejä asiakirjoista ja muokata sitä selkokielisillä ohjeilla.",
+      "importFile": "Tuo tiedosto",
+      "importing": "Tuodaan…",
+      "pasteData": "Liitä data",
+      "pastePlaceholder": "Liitä tähän CSV-, TSV- tai JSON-dataa…",
+      "import": "Tuo",
+      "addFromSource": "Lisää lähteestä",
+      "extractHint": "Liitä teksti tai valitse asiakirja; nykyisiin sarakkeisiin sopivat rivit poimitaan siitä. Tuntemattomat arvot jäävät tyhjiksi — mitään ei keksitä.",
+      "extractPlaceholder": "Liitä jäsentämätön dataa sisältävä teksti…",
+      "extractRows": "Poimi rivit",
+      "extractFromFile": "Tiedostosta…",
+      "extracting": "Poimitaan…",
+      "pastedSource": "Liitetty teksti",
+      "transform": "Muunna",
+      "transforming": "Muunnetaan…",
+      "transformPlaceholder": "Kuvaile muunnos, esim. \"lisää sarake, jossa tapaukset / 1000 asukasta\"…",
+      "transformCapHint": "Muunnokset on rajoitettu {max} riviin. Poista tai suodata rivejä ensin, jos taulukko on suurempi.",
+      "undo": "Kumoa",
+      "deleteSelected": "Poista {count}",
+      "deletedRows": "Poistettu {count} riviä",
+      "selectAllRows": "Valitse kaikki rivit",
+      "selectRow": "Valitse rivi {row}",
+      "rowCount": "{count} riviä",
+      "rowCapExceeded": "Se olisi {count} riviä; taulukon raja on {max}. Jaa data useampaan osaan tai vie tiedostoon.",
+      "railExtractRequest": "Hae taulun skeemaa vastaavat rivit lähteestä: {source}",
+      "railExtractDone": "Lisätty {count} haettua riviä tauluun.",
+      "railTransformDone": "Taulu muunnettu.",
+      "columnProfileFor": "Sarake {column}: tilastot",
+      "profileMissing": "Puuttuu",
+      "profileDistinct": "Eriävät",
+      "profileRange": "Vaihteluväli",
+      "profileMean": "Keskiarvo",
+      "profileMedian": "Mediaani",
+      "profileTopValues": "Yleisimmät arvot",
+      "filterColumnFor": "Suodata {column}",
+      "filterContains": "Sisältää…",
+      "filterMin": "Minimi",
+      "filterMax": "Maksimi",
+      "filterClear": "Tyhjennä",
+      "clearFilters": "Tyhjennä suodattimet",
+      "showingRows": "Näytetään {shown} / {total} riviä",
+      "scopeLabel": "Työskentelyalue",
+      "scopeTable": "Kaikki ({count})",
+      "scopeFiltered": "Suodatettu ({count})",
+      "scopeSelection": "Valittu ({count})",
+      "scopedInstruction": "{instruction} ({count} rajatulla rivillä)",
+      "assess": "Arvioi laatu",
+      "assessing": "Arvioidaan…",
+      "criteria": {
+        "validity": {
+          "label": "Pätevyys",
+          "description": "Arvot vastaavat sarakkeen tyyppiä ja odotettua muotoa"
+        },
+        "consistency": {
+          "label": "Johdonmukaisuus",
+          "description": "Samat arvot kirjoitettu samalla tavalla kauttaaltaan (ei esim. 'M' / 'Male' -vaihtelua, sekoitettuja yksiköitä tai kirjainkoosta johtuvia eroja)"
+        },
+        "duplicates": {
+          "label": "Duplikaatit",
+          "description": "Rivit, jotka tallentavat saman entiteetin tai tapahtuman kahdesti"
+        },
+        "plausibility": {
+          "label": "Plausibiliteetti",
+          "description": "Poikkeamat ja mahdottomat arvot kontekstissa"
+        }
+      },
+      "assessmentTitle": "Datan laadun tarkastus",
+      "pendingCount": "{count} odottamassa",
+      "closeReview": "Sulje laadun tarkastus",
+      "suggestedEdits": "Ehdotetut korjaukset",
+      "noEditsSuggested": "Korjauksia ei ehdotettu — data täyttää valitut kriteerit.",
+      "acceptAll": "Hyväksy kaikki",
+      "rejectAll": "Hylkää kaikki",
+      "acceptEdit": "Hyväksy",
+      "rejectEdit": "Hylkää",
+      "editAccepted": "Käytetty",
+      "editRejected": "Hylätty",
+      "editUnapplicable": "Solu muuttunut arvioinnin jälkeen — ei käytetty",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Arvioitavat kriteerit",
+      "severity": {
+        "minor": "Vähäinen",
+        "major": "Merkittävä"
+      },
+      "editLocation": "rivi {row} · {column}",
+      "editLocationRow": "rivi {row} (poista)",
+      "showReview": "Näytä tarkistus",
+      "showReviewPending": "Näytä tarkistus ({count} odottaa)",
+      "assessedFiltered": "Suodatetut rivit",
+      "assessedSelection": "Valitut rivit",
+      "assessedSample": "näyte {shown} / {total}",
+      "railAssessRequest": "Arvioi taulukon laatu ({count} riviä) valittuja kriteerejä vasten.",
+      "railAssessDone": "Ehdotettu {count} tietolaadun korjausta — tarkista ne työtilassa.",
+      "insights": "Havainnot",
+      "chartKind": "Kaavion tyyppi",
+      "chartBar": "Pylväs (ryhmittele mukaan)",
+      "chartHistogram": "Histogrammi",
+      "chartLine": "Viiva (ajan mukaan)",
+      "groupByColumn": "Ryhmittele sarakkeen mukaan",
+      "dateColumn": "Päivämääräsarake",
+      "valueColumn": "Arvosarake",
+      "aggFn": "Aggregointi",
+      "aggCount": "Lukumäärä",
+      "aggSum": "Summa",
+      "aggMean": "Keskiarvo",
+      "chartTruncated": "Näytetään {max} parasta ryhmää",
+      "chartNoData": "Valituissa riveissä ei ole kaavioihin sopivia arvoja.",
+      "chartBarAria": "Pylväskaavio, ryhmitelty sarakkeen {column} mukaan",
+      "chartHistogramAria": "Sarakkeen {column} histogrammi",
+      "chartLineAria": "Viivakaavio sarakkeelle {column} ajan mukaan",
+      "editStructure": "Rakenne",
+      "defineStructure": "Määritä rakenne",
+      "schemaHint": "Määrittele tietorakenteen kentät. Pakolliset kentät määrittävät puuttuvien tietojen säännöt tuonnissa; kentän tyypin muuttaminen muuntaa olemassa olevat arvot (muuntamattomat solut tyhjenevät).",
+      "schemaFieldName": "Kentän nimi",
+      "schemaFieldType": "Kentän tyyppi",
+      "schemaRequired": "Pakollinen",
+      "schemaAddField": "Lisää kenttä",
+      "schemaDeleteField": "Poista kenttä {field}",
+      "schemaApply": "Hyväksy rakenne",
+      "schemaCancel": "Peruuta",
+      "schemaEdited": "Muokattiin taulukon rakennetta",
+      "schemaCellsConverted": "{count} solua ei voitu muuntaa uuteen tyyppiin ja ne ovat nyt tyhjiä.",
+      "missingFieldPolicy": "Puuttuvat tiedot",
+      "policyStrict": "Tiukka — hylkää puutteelliset rivit",
+      "policyFlag": "Merkitse — tuo ja merkitse",
+      "policyLenient": "Väljähkö — tuo hiljaisesti",
+      "droppedIncompleteRows": "{count} riviä jätettiin pois, koska niistä puuttui pakolliset kentät: {fields}",
+      "dismiss": "Ohita",
+      "requiredColumn": "Pakollinen kenttä",
+      "flagMissingRequired": "Pakollinen kenttä on tyhjä",
+      "flagPendingEdit": "Tälle solulle on ehdotettu korjausta — katso laadun tarkistus",
+      "fromPhoto": "Valokuvasta",
+      "fromPhotoHint": "Valokuvaa paperilomake tai taulukko — sisältö muutetaan rakenteelliseksi dataksi, jota voit verrata kuvaan",
+      "readingPhoto": "Luetaan kuvaa…",
+      "photoBatchName": "{count} kuvaa",
+      "railPhotoRequest": "Luo rakenteellinen data {count} kuvasta: {name}",
+      "railPhotoDone": "Lisätty {count} tietuetta valokuvista. Tarkista ne työtilassa olevan valokuvan kanssa.",
+      "sourcesLabel": "Lähteet",
+      "openPhotoQc": "Tarkista tiedot kohteessa {name}",
+      "qcRowsFromPhoto": "{count} riviä",
+      "qcClose": "Sulje valokuvan tarkistus",
+      "qcZoomIn": "Lähennä",
+      "qcZoomOut": "Loitonna",
+      "qcPrevPhoto": "Edellinen valokuva",
+      "qcNextPhoto": "Seuraava valokuva",
+      "qcImageLoading": "Ladataan valokuvaa…",
+      "qcImageFailed": "Valokuvaa ei voitu ladata.",
+      "qcImageAlt": "Lähdekuva: {name}",
+      "qcHint": "Taulukossa näkyvät vain tämän valokuvan rivit — vertaa jokaista arvoa valokuvaan ja muokkaa tai poista rivit, jotka eivät täsmää.",
+      "sourceFilterChip": "Rivit lähteestä {name}",
+      "clearSourceFilter": "Näytä kaikki rivit uudelleen",
+      "viewAsRecord": "Lomakenäkymä",
+      "viewAsTable": "Taulukkonäkymä",
+      "recordEmpty": "Ei tietueita vielä.",
+      "recordOf": "Tietue {index} / {count}",
+      "recordPrev": "Edellinen tietue",
+      "recordNext": "Seuraava tietue",
+      "recordBooleanUnset": "(tyhjä)",
+      "flagsChip": "{count} merkintää",
+      "flagsChipOpenReview": "Avaa laaduntarkastus",
+      "flagsChipMissingOnly": "Pakolliset kentät ovat tyhjiä — täytä ne tai muokkaa rakennetta",
+      "autoCheck": "Tarkista uudet tiedot automaattisesti",
+      "autoCheckHint": "Kun tiedot on purettu valokuvista tai asiakirjoista, suorita automaattinen laaduntarkastus uusille riveille",
+      "checkingNewRows": "Tarkistetaan lisättyjä rivejä laadun varalta…",
+      "ingestCheckFailed": "Automaattinen laaduntarkastus epäonnistui ({message}) — voit suorittaa sen manuaalisesti valitsemalla Arvioi laatu.",
+      "assessedIngest": "Uudet lisätyt rivit"
+    },
+    "map": {
+      "emptyTitle": "Näytä tiedot kartalla",
+      "emptyBody": "Liitä tilanneraportti, rivilista, kokousmuistioita tai muuta tekstiä, jossa mainitaan paikkoja — tai lataa asiakirja. Paikat tunnistetaan ja niiden luotettavuus arvioidaan; voit viedä ne ArcGIS:ään tai muihin GIS-työkaluihin.",
+      "inputPlaceholder": "Liitä tekstiä, jossa mainitaan paikkoja…",
+      "uploadFile": "Lataa tiedosto",
+      "pastedSource": "Liitetty teksti",
+      "mapIt": "Näytä kartalla",
+      "finding": "Etsitään paikkoja…",
+      "featureCount": "{count} paikkaa",
+      "featureCapExceeded": "Kartalla voidaan näyttää enintään {max} paikkaa.",
+      "noneFound": "Aineistossa ei löytynyt paikkoja.",
+      "lowConfidenceNotice": "{count} paikalla on alhainen luottamus koordinaatteihin — tarkista ennen kuin luotat karttaan.",
+      "tilesOffline": "Karttatiilet eivät ole käytettävissä — paikkalista toimii silti.",
+      "disclaimer": "Koordinaatit ovat tekoälyn arvioimia mallin tiedon perusteella, eivät geokoodauspalvelusta — tarkista ennen operatiivista käyttöä. Karttatiilet ladataan tile-palvelimelta; itse tietosi pysyvät tällä laitteella.",
+      "flyTo": "Näytä {name} kartalla",
+      "removeFeature": "Poista {name}",
+      "expandFeature": "Näytä kaikki tiedot kohteesta {name}",
+      "collapseFeature": "Tiivistä tiedot kohteesta {name}",
+      "detailsParent": "Osa kohteesta {parent}",
+      "railRequest": "Näytä kartalla seuraavat paikat: {source}",
+      "railSearchRequest": "Etsi verkosta ja näytä kartalla paikat: {query}",
+      "railDone": "{count} sijaintia kartoitettu. Tarkista matalan varmuuden kohteet listalta.",
+      "searchToggle": "Verkkohakutila",
+      "searchToggleHint": "Hae verkosta tekstin liittämisen sijaan; pohjautuvat tulokset kartoitetaan.",
+      "searchPlaceholder": "Hae verkosta, esim. \"koleraepidemiat Itä-Afrikka 2026\"…",
+      "searchAndMap": "Hae ja kartoita",
+      "searching": "Haetaan…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Yhteys: {kind}",
+        "unresolved": "{count} yhteyttä viittasi paikkoihin, joita ei ole kartalla, joten ne ohitettiin."
+      },
+      "confidence": {
+        "high": "Korkea",
+        "medium": "Keskitaso",
+        "low": "Matala"
+      },
+      "prominence": {
+        "primary": "Pääsijainti",
+        "secondary": "Toissijainen sijainti",
+        "mention": "Ohimennen mainittu"
+      },
+      "prominenceMentionHint": "Tämä paikka mainitaan materiaalissa vain ohimennen — näytetään kartalla pienempänä eikä oteta mukaan alkutarkasteluun.",
+      "dates": {
+        "since": "alkaen {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Käynnissä"
+      },
+      "filters": {
+        "label": "Suodata kategorian mukaan",
+        "other": "Muu",
+        "clear": "Tyhjennä",
+        "showing": "{shown} / {total} sijaintia",
+        "noneMatch": "Yksikään sijainti ei vastaa nykyisiä suodattimia."
+      },
+      "dateFilter": {
+        "label": "Päivämäärät",
+        "from": "Alkaen",
+        "to": "Asti",
+        "fromAria": "Näytä vain tästä päivästä lähtien tapahtuneet tapahtumat",
+        "toAria": "Näytä vain tähän päivään asti tapahtuneet tapahtumat",
+        "clear": "Tyhjennä päivämäärät",
+        "eraChip": "Näytä vain tapahtumat ajanjaksolla {label}"
+      },
+      "timeline": {
+        "toggle": "Ajastettu animaatio",
+        "play": "Toista ajastettu animaatio",
+        "pause": "Tauota ajastettu animaatio",
+        "eras": "Aikajaksot",
+        "jumpTo": "Siirry ajanjaksolle {label}",
+        "slider": "Aikajanan sijainti",
+        "showUndated": "Näytä ajoittamattomat sijainnit",
+        "activeCount": "{count} aktiivinen"
+      },
+      "granularity": {
+        "site": "Kohde",
+        "city": "Kaupunki/kunta",
+        "district": "Alue",
+        "region": "Seutu",
+        "country": "Maa"
+      },
+      "granularityAreaHint": "Alue, esitetään noin arvioidun laajuuden ympyränä keskipisteen ympärillä — ei tarkka sijainti tai raja.",
+      "containerHint": "Sisältää muita kartoitettuja sijainteja, joten näytetään vain rajauksena.",
+      "legend": {
+        "toggle": "Selite",
+        "title": "Karttamerkintöjen selitys",
+        "color": "Väri: koordinaattien varmuus (sininen korkea, keltainen keskitaso, punainen matala)",
+        "size": "Pisteen koko: kuinka keskeinen paikka on materiaalissa",
+        "area": "Katkoviivainen ympyrä: alueen, piirin tai maan arvioitu laajuus",
+        "container": "Häivytetty reunaviiva: alue, jonka sisältö kartoitetaan erikseen"
+      }
+    },
+    "shell": {
+      "showConversation": "Näytä keskustelu",
+      "hideConversation": "Piilota keskustelu",
+      "workspaceTab": "Työtila",
+      "conversationTab": "Keskustelu",
+      "paneTabsLabel": "Työvaiheikkunat",
+      "railEmpty": "Assistentin viestit ja eteneminen näkyvät täällä.",
+      "railInputPlaceholder": "Lähetä viesti assistentille…",
+      "assistantThinking": "Ajattelee…",
+      "sendMessage": "Lähetä viesti",
+      "stopGenerating": "Lopeta luonti",
+      "loadingWorkspace": "Ladataan työtilaa…",
+      "unknownType": "Tämä keskustelu käyttää työnkulkua, jota tämä versio ei tunnista. Keskusteluhistoria näkyy alla.",
+      "untitled": "Uusi keskustelu",
+      "toggleMenu": "Avaa/sulje valikko",
+      "model": "Työnkulun malli"
+    }
+  },
+  "connectors": {
+    "title": "Liitännäiset",
+    "description": "Yhdistä ulkoisia työkaluja Model Context Protocolin (MCP) avulla. Yhdistetyt työkalut ovat käytettävissä keskusteluissa, ja jokainen työkalukutsu suoritetaan vain hyväksynnän jälkeen.",
+    "localOnlyNote": "Kirjaudut suoraan kunkin palveluntarjoajan kanssa. Käyttöavaimet salataan ja tallennetaan vain tälle laitteelle — niitä ei koskaan tallenneta tai kirjata palvelimelle.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Hae arkistoja, lue ja luo issueita sekä pull requesteja."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Etsi, luo ja päivitä tehtäviä ja projekteja."
+      }
+    },
+    "connect": "Yhdistä",
+    "connected": "Yhdistetty",
+    "tokenEndsIn": "päättyy ••••{last4}",
+    "disconnect": "Katkaise yhteys",
+    "toolCount": "{count, plural, =1 {1 työkalu käytettävissä} other {# työkalua käytettävissä}}",
+    "patLabel": "Henkilökohtainen käyttöavain",
+    "createTokenLink": "Luo avain",
+    "tokenScopeHint": "Käytä rajattua avainta, jolla on vain tarvittavat oikeudet.",
+    "validating": "Tarkistetaan yhteyttä…",
+    "validationFailed": "Yhteyttä ei voitu muodostaa. Tarkista osoite ja yritä uudelleen.",
+    "authFailed": "Palvelin hylkäsi tunnisteen. Tarkista se ja yritä uudelleen.",
+    "tokenRequired": "Tunniste vaaditaan",
+    "enableServer": "Saatavilla keskustelussa",
+    "arbitraryTitle": "Muut MCP-palvelimet",
+    "arbitraryToggle": "Salli muut MCP-palvelimet",
+    "arbitraryWarning": "Kaikki, jotka pyörittävät MCP-palvelinta, voivat nähdä palvelimen työkaluille lähetetyt viestit. Yhdistä vain luotettuihin palvelimiin. Jokainen työkalukutsu vaatii silti hyväksyntäsi.",
+    "addServer": "Lisää MCP-palvelin",
+    "editServer": "Muokkaa MCP-palvelinta",
+    "serverName": "Nimi",
+    "serverUrl": "Palvelimen URL",
+    "nameRequired": "Nimi on pakollinen",
+    "urlRequired": "URL on pakollinen",
+    "invalidUrl": "Anna julkinen https:// -osoite",
+    "namePlaceholder": "Oma MCP-palvelimeni",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Käyttötunniste (valinnainen)",
+    "keepTokenPlaceholder": "Jätä tyhjäksi säilyttääksesi nykyisen tunnisteen",
+    "disconnectedToast": "{name} katkaistu",
+    "save": "Tallenna",
+    "connectWithProvider": "Yhdistä palveluntarjoajaan {name}",
+    "useTokenInstead": "Käytä sen sijaan käyttötunnistetta",
+    "oauthWaiting": "Odotetaan valtuutusta…",
+    "oauthFailed": "Kirjautuminen epäonnistui. Yritä uudelleen.",
+    "oauthDenied": "Palveluntarjoaja eväsi käyttöoikeuden.",
+    "oauthTimeout": "Kirjautuminen aikakatkaistiin. Yritä uudelleen.",
+    "oauthCancelled": "Kirjautuminen peruttiin.",
+    "oauthUnavailable": "Kirjautuminen ei ole saatavilla tälle liitännälle tässä käyttöönotossa. Käytä sen sijaan käyttötunnistetta tai pyydä ylläpitäjää määrittämään OAuth-sovellus.",
+    "ownAppToggle": "Käytä omaa OAuth-sovellustasi",
+    "ownAppHint": "Rekisteröi OAuth-sovellus {name}-tililläsi (organisaatiossasi, työtilassasi tai enterprise-instanssissa) alla olevalla callback-URL:llä ja liitä sitten sen tunnukset tähän. Jätä tämä suljetuksi käyttääksesi sisäänrakennettua sovellusta.",
+    "ownAppCustomHint": "Voit lisätä oman OAuth-sovelluksesi tunnukset alla; jätä ne tyhjäksi, jos haluat rekisteröityä automaattisesti palvelimelle.",
+    "ownAppInUse": "Yhdistetty omaan OAuth-sovellukseesi.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (jos sovelluksellasi on sellainen)",
+    "redirectUriLabel": "Callback / ohjaus-URL, joka rekisteröidään",
+    "reconnect": "Yhdistä uudelleen",
+    "needsReauth": "Tarvitsee uudelleenyhdistämisen",
+    "disconnectOauthNote": "Yhteyden katkaisu poistaa käyttöoikeuden vain tältä laitteelta. Poistaaksesi oikeudet kokonaan, hallinnoi valtuutettuja sovelluksia {name}-tililläsi.",
+    "authModeLabel": "Tunnistautuminen",
+    "authModeNone": "Ei mitään",
+    "authModeBearer": "Käyttötunniste",
+    "authModeOauth": "Kirjaudu palveluntarjoajalla (OAuth)",
+    "oauthCustomHint": "Kirjaudut palvelimen tarjoajalla ponnahdusikkunassa tallennuksen jälkeen.",
+    "saveAndSignIn": "Tallenna & kirjaudu",
+    "oauthCallback": {
+      "title": "Valtuutus valmis",
+      "missingState": "Ei valtuutettavaa",
+      "close": "Voit sulkea tämän ikkunan ja palata sovellukseen.",
+      "closeButton": "Sulje ikkuna"
+    }
   }
 }

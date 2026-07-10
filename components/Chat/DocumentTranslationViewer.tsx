@@ -7,15 +7,17 @@ import {
   IconLanguage,
   IconLoader2,
 } from '@tabler/icons-react';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
+import { isAssistantMessageGroup } from '@/types/chat';
 import { TRANSLATION_EXPIRY_DAYS } from '@/types/documentTranslation';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
+import { useConversationStore } from '@/client/stores/conversationStore';
 import { getDocumentTranslationLanguageByCode } from '@/lib/constants/documentTranslationLanguages';
 
 /**
@@ -72,6 +74,63 @@ export function isDocumentTranslationReference(content: string): boolean {
 }
 
 /**
+ * Pending marker for ASYNC (batch) translations — persisted as the assistant
+ * message content while Azure processes the job, so the in-conversation
+ * progress state survives reloads and resumes polling on mount. Rewritten to
+ * the final [Translation: …] reference (or a failure line) when polling
+ * resolves. Format:
+ * [TranslationPending: filename | lang:code | job:jobId | ext:extension | submitted:ISO]
+ */
+const TRANSLATION_PENDING_REGEX =
+  /^\[TranslationPending:\s*(.+?)\s*\|\s*lang:([a-zA-Z-]+)\s*\|\s*job:([a-fA-F0-9-]+)\s*\|\s*ext:([a-zA-Z0-9]+)\s*\|\s*submitted:(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z)\]$/;
+
+interface PendingTranslationReference {
+  filename: string;
+  languageCode: string;
+  jobId: string;
+  extension: string;
+  submittedAt: Date;
+}
+
+export function parsePendingTranslationReference(
+  content: string,
+): PendingTranslationReference | null {
+  const match = content.trim().match(TRANSLATION_PENDING_REGEX);
+  if (!match) return null;
+  return {
+    filename: match[1],
+    languageCode: match[2],
+    jobId: match[3],
+    extension: match[4],
+    submittedAt: new Date(match[5]),
+  };
+}
+
+export function isDocumentTranslationPendingReference(
+  content: string,
+): boolean {
+  return TRANSLATION_PENDING_REGEX.test(content.trim());
+}
+
+export function formatPendingTranslationReference(
+  filename: string,
+  languageCode: string,
+  jobId: string,
+  extension: string,
+  submittedAt: string,
+): string {
+  return `[TranslationPending: ${filename} | lang:${languageCode} | job:${jobId} | ext:${extension} | submitted:${submittedAt}]`;
+}
+
+/** Transcription-style polling backoff by elapsed time. */
+function pendingPollInterval(elapsedMs: number): number {
+  if (elapsedMs < 30_000) return 2_000;
+  if (elapsedMs < 2 * 60_000) return 5_000;
+  if (elapsedMs < 10 * 60_000) return 15_000;
+  return 30_000;
+}
+
+/**
  * Calculates days until expiration.
  */
 function getDaysUntilExpiry(expiresAt: Date): number {
@@ -100,6 +159,190 @@ export function formatTranslationReference(
   return `[Translation: ${filename} | lang:${languageCode} | blob:${jobId} | ext:${extension} | expires:${expiresAt}]`;
 }
 
+/**
+ * Rewrites the message that carries `pendingMarker` (across all
+ * conversations — the user may have switched away) to `newContent`. Handles
+ * both legacy assistant messages and assistant_group versions.
+ */
+function rewritePendingMessage(pendingMarker: string, newContent: string) {
+  const { conversations, updateConversation } = useConversationStore.getState();
+  for (const conversation of conversations) {
+    let changed = false;
+    const messages = conversation.messages.map((entry) => {
+      if (isAssistantMessageGroup(entry)) {
+        const versions = entry.versions.map((version) =>
+          typeof version.content === 'string' &&
+          version.content.trim() === pendingMarker
+            ? ((changed = true), { ...version, content: newContent })
+            : version,
+        );
+        return changed ? { ...entry, versions } : entry;
+      }
+      if (
+        typeof entry.content === 'string' &&
+        entry.content.trim() === pendingMarker
+      ) {
+        changed = true;
+        return { ...entry, content: newContent };
+      }
+      return entry;
+    });
+    if (changed) {
+      updateConversation(conversation.id, { messages });
+      return;
+    }
+  }
+}
+
+/**
+ * In-conversation progress card for an async (batch) translation. Polls the
+ * status endpoint with backoff; on success rewrites this message's persisted
+ * content to the final [Translation: …] reference (the regular viewer takes
+ * over); on terminal failure rewrites to a plain error line. Because the
+ * pending marker IS the message content, a reload simply remounts this view
+ * and polling resumes.
+ */
+const PendingDocumentTranslation: FC<{
+  pending: PendingTranslationReference;
+  rawContent: string;
+}> = ({ pending, rawContent }) => {
+  const t = useTranslations();
+  const [stalled, setStalled] = useState(false);
+
+  const languageInfo = getDocumentTranslationLanguageByCode(
+    pending.languageCode,
+  );
+  const languageDisplay = languageInfo
+    ? `${languageInfo.nativeName} (${languageInfo.englishName})`
+    : pending.languageCode;
+
+  useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let consecutiveFailures = 0;
+    const startedAt = pending.submittedAt.getTime() || Date.now();
+    const marker = rawContent.trim();
+
+    const finalize = (newContent: string, message?: string) => {
+      rewritePendingMessage(marker, newContent);
+      if (message) toast.success(message);
+    };
+
+    const poll = async () => {
+      if (cancelled) return;
+      try {
+        const response = await fetch(
+          `/api/document-translation/status/${pending.jobId}`,
+        );
+        if (response.status === 404) {
+          // Job record expired/lost — terminal; the marker must not poll
+          // forever across future reloads.
+          finalize(
+            t('documentTranslation.asyncFailed', {
+              error: t('documentTranslation.jobNotFound'),
+            }),
+          );
+          return;
+        }
+        if (response.ok) {
+          consecutiveFailures = 0;
+          const json = await response.json();
+          const data = json.data ?? json;
+          if (data.status === 'Succeeded' && data.reference) {
+            finalize(
+              formatTranslationReference(
+                data.reference.translatedFilename,
+                data.reference.targetLanguage,
+                data.reference.jobId,
+                data.reference.fileExtension,
+                data.reference.expiresAt,
+              ),
+              t('documentTranslation.translationSuccess'),
+            );
+            return;
+          }
+          if (data.status === 'Failed') {
+            finalize(
+              t('documentTranslation.asyncFailed', {
+                error: data.error ?? 'Unknown error',
+              }),
+            );
+            toast.error(
+              t('documentTranslation.asyncFailed', {
+                error: data.error ?? 'Unknown error',
+              }),
+            );
+            return;
+          }
+        } else {
+          consecutiveFailures += 1;
+        }
+      } catch {
+        consecutiveFailures += 1;
+      }
+      if (consecutiveFailures >= 15) {
+        // Transient-failure ceiling: stop hammering, offer manual retry.
+        setStalled(true);
+        return;
+      }
+      timer = setTimeout(poll, pendingPollInterval(Date.now() - startedAt));
+    };
+
+    void poll();
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+    // Re-run only for a different job (or a manual retry after a stall).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pending.jobId, stalled]);
+
+  return (
+    <div className="my-4">
+      <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-800">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3">
+            <IconLoader2
+              size={20}
+              className="animate-spin text-blue-500 flex-shrink-0"
+            />
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">
+                {t('documentTranslation.pendingTitle', {
+                  filename: pending.filename,
+                })}
+              </p>
+              <div className="flex items-center gap-2 mt-0.5">
+                <IconLanguage size={14} className="text-indigo-500" />
+                <span className="text-xs text-gray-600 dark:text-gray-400">
+                  {t('documentTranslation.translatedTo', {
+                    language: languageDisplay,
+                  })}
+                </span>
+              </div>
+            </div>
+          </div>
+          {stalled && (
+            <button
+              onClick={() => setStalled(false)}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {t('documentTranslation.retryPolling')}
+            </button>
+          )}
+        </div>
+        <div className="px-4 py-3 border-t border-gray-300 dark:border-gray-600">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {stalled
+              ? t('documentTranslation.pollingStalled')
+              : t('documentTranslation.pendingHint')}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface DocumentTranslationViewerProps {
   /** The translation reference content */
   content: string;
@@ -117,6 +360,11 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
   // Parse the reference
   const reference = useMemo(
     () => parseTranslationReference(content),
+    [content],
+  );
+  // Async (batch) translation still in flight → progress card with polling.
+  const pending = useMemo(
+    () => parsePendingTranslationReference(content),
     [content],
   );
 
@@ -179,6 +427,14 @@ export const DocumentTranslationViewer: FC<DocumentTranslationViewerProps> = ({
       setIsDownloading(false);
     }
   }, [reference, isExpired, t]);
+
+  // Async (batch) translation still in flight → progress card with polling.
+  // (Placed after every hook — no conditional hook calls.)
+  if (!reference && pending) {
+    return (
+      <PendingDocumentTranslation pending={pending} rawContent={content} />
+    );
+  }
 
   // If parsing failed, show error
   if (!reference) {

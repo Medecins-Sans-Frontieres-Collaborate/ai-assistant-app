@@ -432,7 +432,22 @@
     "noProjectsFound": "کوئی پروجیکٹ نہیں ملا۔ \"default\" استعمال کیا جا رہا ہے۔",
     "selectAllRequired": "سبسکرپشن، اکاؤنٹ اور پروجیکٹ منتخب کریں۔",
     "subscriptionRequired": "سبسکرپشن منتخب کریں",
-    "accountRequired": "Foundry اکاؤنٹ منتخب کریں"
+    "accountRequired": "Foundry اکاؤنٹ منتخب کریں",
+    "projectSelectionRequired": "فہرست سے ایک پروجیکٹ منتخب کریں۔",
+    "scanningResources": "آپ کی Azure سبسکرپشنز اسکین کی جا رہی ہیں...",
+    "searchProjectsPlaceholder": "پروجیکٹس تلاش کریں...",
+    "noProjectsDiscovered": "آپ کی سبسکرپشنز میں کوئی Foundry پروجیکٹ نہیں ملا۔ اگر راستہ معلوم ہے تو دستی اندراج استعمال کریں۔",
+    "discoveryPartialWarning": "{count, plural, one {# سبسکرپشن} other {# سبسکرپشنز}} اسکین نہیں کی جا سکیں۔ اگر آپ کا پروجیکٹ غائب ہے تو دستی اندراج استعمال کریں۔",
+    "discoveryTruncatedWarning": "اسکین کرنے کے لیے وسائل بہت زیادہ تھے۔ اگر آپ کا پروجیکٹ غائب ہے تو دستی اندراج استعمال کریں۔",
+    "retryScan": "اسکین دوبارہ کریں",
+    "next": "اگلا",
+    "back": "پیچھے",
+    "selectAgentsDescription": "منتخب کریں کہ اس پروجیکٹ کے کون سے ایجنٹس آپ کے ماڈل چننے والے میں نظر آئیں۔",
+    "selectAll": "سب منتخب کریں",
+    "deselectAll": "سب غیر منتخب کریں",
+    "agentsSelectedCount": "{selected} میں سے {total} ایجنٹس منتخب",
+    "autoAddLabel": "نئے ایجنٹس خودکار شامل کریں",
+    "autoAddDescription": "آئندہ اس پروجیکٹ میں شائع ہونے والے ایجنٹس خودبخود نظر آئیں گے۔ غیر منتخب ایجنٹس شامل نہیں کیے جائیں گے۔"
   },
   "Quick Actions": "فوری کارروائیاں",
   "Type / in chat to access your prompts": "اپنے پرامپٹس تک رسائی کے لیے چیٹ میں / ٹائپ کریں",
@@ -761,7 +776,19 @@
       "listingTools": "دستیاب ٹولز معلوم کیے جا رہے ہیں…",
       "analyzingFiles": "آپ کی فائلز کا تجزیہ کیا جا رہا ہے…",
       "searchingKnowledge": "نالج بیس تلاش کی جا رہی ہے…",
-      "cancellingPriorTool": "گزشتہ ٹول کی درخواست منسوخ کی جا رہی ہے…"
+      "cancellingPriorTool": "گزشتہ ٹول کی درخواست منسوخ کی جا رہی ہے…",
+      "workflow": {
+        "preparingDocument": "مراجع تیار کیے جا رہے ہیں...",
+        "writingDocument": "دستاویز لکھی جا رہی ہے...",
+        "analyzingSource": "ماخذ متن کا تجزیہ کیا جا رہا ہے...",
+        "translating": "ترجمہ کیا جا رہا ہے...",
+        "reviewingTranslation": "جائزہ مرحلہ {round} از {total}...",
+        "revisingTranslation": "جائزے کی رائے لاگو کی جا رہی ہے...",
+        "extractingRows": "{source} سے قطاریں نکالی جا رہی ہیں...",
+        "transformingTable": "جدول تبدیل کیا جا رہا ہے...",
+        "findingLocations": "مقامات شناخت کیے جا رہے ہیں...",
+        "updatingMap": "نقشہ اپ ڈیٹ کیا جا رہا ہے..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# ٹول استعمال ہوا} other {# ٹولز استعمال ہوئے}}",
@@ -822,7 +849,8 @@
     "listen": "سنیں",
     "processingAudio": "آڈیو پروسیس ہو رہی ہے...",
     "ttsError": "آڈیو تیار کرنے میں خرابی۔ براہ کرم دوبارہ کوشش کریں۔",
-    "unsupportedMessageType": "پیغام ظاہر کرنے میں خرابی: غیر معاون پیغام کی قسم"
+    "unsupportedMessageType": "پیغام ظاہر کرنے میں خرابی: غیر معاون پیغام کی قسم",
+    "addLanguageOption": "\"{name}\" شامل کریں…"
   },
   "sidebar": {
     "collapseSidebar": "سائیڈ بار کو سکیڑیں",
@@ -1141,15 +1169,17 @@
     "unsavedChangesMessage": "آپ کی کچھ تبدیلیاں غیر محفوظ ہیں۔ کیا ان کو مسترد کرنا ہے؟",
     "characterCount": "{current}/{max}",
     "clearField": "فیلڈ صاف کریں",
-    "autosaveNote": "تبدیلیاں خودکار طور پر محفوظ ہوتی ہیں۔",
+    "autosaveNote": "تبدیلیاں خود بخود محفوظ ہو جاتی ہیں۔",
     "responseSection": "جواب",
     "voiceSection": "آواز",
     "behaviorSection": "رویّہ",
     "resetChatSettings": "چیٹ سیٹنگز ری سیٹ کریں",
-    "resetChatSettingsConfirmTitle": "کیا آپ چیٹ سیٹنگز ری سیٹ کرنا چاہتے ہیں؟",
-    "resetChatSettingsConfirmMessage": "یہ اس پینل کی تمام سیٹنگز کو ڈیفالٹ پر بحال کر دے گا: درجہ حرارت، حسب منشا ہدایات، آپ کے بارے میں، ماڈل کا جواب، اسٹریمنگ کی رفتار، ٹیکسٹ ٹو اسپیچ، ایکٹو فائلز اور تصدیقات۔ یہ آپ کی گفتگوؤں پر اثر انداز نہیں ہوگا۔",
+    "resetChatSettingsConfirmTitle": "چیٹ سیٹنگز ری سیٹ کریں؟",
+    "resetChatSettingsConfirmMessage": "یہ اس پینل میں تمام سیٹنگز کو ڈیفالٹ پر لے آئے گا: temperature، custom instructions، About You، ماڈل جواب، streaming speed، text-to-speech، فعال فائلز اور تصدیقیں۔ اس سے آپ کی گفتگو متاثر نہیں ہوگی۔",
     "customInstructionsLabel": "حسب منشا ہدایات*",
-    "defaultTemperatureLabel": "ڈیفالٹ ٹمپریچر*"
+    "defaultTemperatureLabel": "ڈیفالٹ ٹمپریچر*",
+    "Usage & Impact": "استعمال اور اثرات",
+    "Connectors": "کنیکٹرز"
   },
   "notFound": {
     "lostDog": "گمشدہ کتا"
@@ -1400,7 +1430,36 @@
     "modelsDescription": "اپنی گفتگو کے لیے AI ماڈل منتخب کریں۔ ہر ماڈل کی الگ خصوصیات ہیں — تفصیلات دیکھنے کے لیے کوئی ایک منتخب کریں۔",
     "recommended": "تجویز کردہ",
     "familyAll": "تمام",
-    "familyFilterLabel": "ماڈل خاندان کے لحاظ سے فلٹر کریں"
+    "familyFilterLabel": "ماڈل خاندان کے لحاظ سے فلٹر کریں",
+    "searchPlaceholder": "ماڈلز تلاش کریں",
+    "searchEmpty": "آپ کی تلاش سے کوئی ماڈل مطابقت نہیں رکھتا۔",
+    "star": "{name} کو فیورٹ کریں",
+    "unstar": "{name} کو فیورٹ سے ہٹائیں",
+    "otherFamily": "دیگر",
+    "hostedExternally": "یہ ماڈل Azure AI Foundry کے ذریعے فراہم کنندہ کے اپنے انفراسٹرکچر پر چلتا ہے، MSF کے Azure ماحول میں نہیں۔",
+    "hostedIn": {
+      "label": "ان علاقوں میں ہوسٹڈ: {regions}",
+      "tooltip": "Azure کے جن علاقوں میں یہ ماڈل تعینات ہے۔ آپ کی گفتگو آپ کے اپنے علاقے میں پراسیس ہوتی ہے۔"
+    },
+    "badges": {
+      "external": "بیرونی",
+      "externalTooltip": "یہ ماڈل Azure AI Foundry کے ذریعے فراہم کنندہ کے اپنے انفراسٹرکچر پر چلتا ہے، MSF کے Azure ماحول میں نہیں۔",
+      "regionHostedTooltip": "{region} Azure ریجن میں ہوسٹڈ ہے۔ اس ماڈل کے ساتھ گفتگو وہیں پراسیس ہوتی ہے۔"
+    },
+    "favorites": "پسندیدہ",
+    "euResidencyNote": "تمام ماڈلز EU Azure ریجن میں چلتے ہیں۔",
+    "hostedRegion": {
+      "label": "ہوسٹڈ علاقہ",
+      "processedIn": "یہ گفتگو {region} Azure ریجن میں پراسیس ہو رہی ہے۔",
+      "euOnlyNote": "{name} EU Azure ریجن میں ہوسٹڈ ہے؛ اس سے گفتگو وہیں پراسیس ہوتی ہے۔"
+    },
+    "version": {
+      "label": "ورژن"
+    },
+    "reasoningModel": "ریزننگ ماڈل: جواب دینے سے پہلے مرحلہ وار سوچتا ہے۔ سست ہے، مگر مشکل مسائل میں بہتر ہے۔",
+    "variant": {
+      "label": "قسم"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1487,6 +1546,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "ایک متوازن Claude ماڈل۔ روزمرہ کی تحریر، تجزیہ اور فوری جوابات کے ساتھ کوڈنگ کے لیے عمدہ۔",
       "knowledgeCutoff": "فروری 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta کا اوپن سورس ماڈل۔ تحریر، خلاصے اور فوری سوالات کے لیے بہترین۔"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI کا نیا پرچم بردار ماڈل۔ تحریر، تحقیق، کوڈنگ اور پیچیدہ مسائل حل کرنے میں مضبوط۔"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "سب سے چھوٹا اور تیز ترین GPT ورژن۔ تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "مکالمے کے لیے تیار کردہ GPT ورژن۔ غیر رسمی بات چیت، آئیڈیاز اور مددگار گفتگو کے لیے موزوں۔"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "ایک پرانا ملٹی ماڈل GPT۔ روزمرہ تحریر اور سوال و جواب کے لیے مناسب، جب جدید فیچرز ضروری نہ ہوں۔"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "چھوٹا اور تیز GPT-4.1 ورژن، روزمرہ کے تیز کاموں کے لیے۔"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic کا نیا اور مضبوط ترین ماڈل۔ طویل تحریر، تحقیق، کوڈنگ اور باریکی سے تجزیے میں شاندار۔"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek کا نیا اوپن سورس ماڈل۔ عمومی تحریر اور تکنیکی سوالات کے لیے قابل اعتماد۔"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral کا پرچم بردار ماڈل۔ تحریر، خلاصے اور عمومی سوالات کے لیے یورپی متبادل۔"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "پہلے کا GPT-5 پرچم بردار ورژن۔ پھر بھی تحریر، تجزیہ اور کوڈنگ میں بہترین۔"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "پہلے کا چیٹ کے لیے تیار GPT-5 ورژن۔ روزمرہ گفتگو اور آئیڈیاز کے لیے اچھا۔"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 کا سب سے چھوٹا ورژن۔ تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 کا سب سے چھوٹا ورژن۔ تیز اور آسان کام جہاں رفتار اور لاگت اہم ہو۔"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ایک چھوٹا اور تیز GPT-4o ورژن۔ روزمرہ کے فوری کاموں کے لیے، جب جدید ترین فیچرز ضروری نہ ہوں۔"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "ایک مختصر منطق ماڈل۔ ریاضی، منطق اور مرحلہ وار مسائل میں o3 سے کم لاگت پر اچھا۔"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "پہلے کا مختصر منطق ماڈل۔ بجٹ میں ریاضی، سائنس اور منطقی معما حل کرسکتا ہے۔"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic کا سب سے ذہین ماڈل، Claude 5 فیملی کا پہلا۔ مشکل ترین تحریر، تحقیق اور کوڈنگ کے لیے بہترین۔"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "نیا متوازن Claude، Claude 5 فیملی کا پہلا۔ روزمرہ تحریر، تجزیہ اور کوڈنگ میں مضبوط، تیز جوابات کے ساتھ۔"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral کا درمیانہ سائز ماڈل۔ یورپی متبادل جو قابلیت اور رفتار کو روزانہ کاموں میں متوازن بناتا ہے۔"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral کا چھوٹا ماڈل۔ خلاصے، مسودے اور آسان سوالات کے لیے تیز اور کم خرچ۔"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral کا نہایت چھوٹا ماڈل۔ بہت تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "DeepSeek-R1 کا اپڈیٹڈ ورژن۔ زیادہ گہرائی اور مرحلہ وار سوچ کے ساتھ۔"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta کا ہلکا اوپن سورس ماڈل۔ تحریر، خلاصے اور روزمرہ سوالات کے لیے تیز۔"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta کا پرانا اوپن سورس ماڈل۔ پھر بھی عمومی تحریر اور سوال و جواب کے لیے مضبوط۔"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI کا پرچم بردار ماڈل۔ کھلے مکالمے، تجزیے اور تخلیقی منصوبوں کے لیے اچھا۔"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI کا جدید ترین فلیگ شپ ماڈل۔ تحریر، تحقیق، کوڈنگ اور پیچیدہ مسائل کے حل میں مضبوط۔"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT چیٹ (تازہ ترین)",
+      "description": "ایک رولنگ عرف جو ہمیشہ OpenAI کے تازہ ترین چیٹ-ٹیونڈ ماڈل کی طرف اشارہ کرتا ہے۔ Azure میں وہ ورژنڈ gpt-*-chat ماڈلز کے متبادل کے طور پر ہے جو ریٹائر ہو چکے ہیں۔"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus کا حالیہ ریلیز، 4.6 اور 4.8 کے درمیان۔ طویل تحریر، تحقیق، کوڈنگ، اور محتاط تجزیے کے لیے بہترین۔"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek کا جدید ترین ریزننگ ماڈل اور Azure میں R1 لائن کا متبادل۔ سوچنے کا عمل مرحلہ وار دکھاتا ہے۔"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek کا تیز V4 ویرینٹ اور Azure میں V3 لائن کا متبادل۔ عمومی تحریر اور تکنیکی سوالات کے لیے فوری۔"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "xAI کا تیز ریزننگ ماڈل۔ تیز جوابات کے ساتھ مرحلہ وار سوچتا ہے۔"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI کا تیز چیٹ ماڈل۔ روزمرہ سوالات اور مباحثوں کے لیے فوری جوابات۔"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "xAI کا ہلکا ماڈل۔ فوری سوالات اور غیر رسمی گفتگو کے لیے تیز اور کم خرچ۔"
     }
   },
   "searchMode": {
@@ -1826,7 +2017,20 @@
     "useDefaultStyle": "ڈیفالٹ لکھنے کا انداز استعمال کریں",
     "noTonesCreated": "ابھی تک کوئی ٹونز نہیں بنائی گئی ہیں",
     "createTonesHint": "کوئیک ایکشنز میں ٹونز بنائیں",
-    "translateDocumentTooltip": "دستاویزات کو دوسری زبان میں ترجمہ کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی حمایت کے ساتھ اختیاری glossary فائلیں بھی استعمال کی جا سکتی ہیں۔"
+    "translateDocumentTooltip": "دستاویزات کو دوسری زبان میں ترجمہ کریں۔\n\nمدد شدہ فارمیٹس: Word, Excel, PowerPoint, HTML, TXT\nزیادہ سے زیادہ سائز: 40MB\n\n80 سے زائد زبانوں کی حمایت کے ساتھ اختیاری glossary فائلیں بھی استعمال کی جا سکتی ہیں۔",
+    "translateTooltip": "کسی ٹیکسٹ کے حصے کو دوسری زبان میں ترجمہ کریں۔\n\nمکمل فائلوں (Word، Excel، PowerPoint، HTML، TXT) کے لئے Translate Document استعمال کریں۔",
+    "cameraTooltip": "اپنے ڈیوائس کے کیمرے سے تصویر لیں اور پیغام میں منسلک کریں۔",
+    "noResults": "کوئی مماثل کارروائی نہیں ملی",
+    "sectionPinned": "پن کیا گیا",
+    "sectionFrequent": "کثرت سے استعمال شدہ",
+    "sectionMore": "مزید",
+    "categoryWeb": "ویب",
+    "categoryMedia": "میڈیا اور فائلز",
+    "categoryTransform": "تبدیل کریں",
+    "pin": "اوپر پن کریں",
+    "unpin": "پن ہٹائیں",
+    "moveToMore": "مزید میں منتقل کریں",
+    "moveOutOfMore": "مینو میں دکھائیں"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "اپنی ذاتی ہدایات شامل کریں تاکہ AI کے ردعمل کو اپنی مرضی کے مطابق بنا سکیں۔ یہ ہدایات بنیادی رہنمائی کے ساتھ ملائی جاتی ہیں جو مددگار، درست اور محفوظ جوابات کو یقینی بناتی ہیں۔",
   "Tip: Type \"/\" to select from saved prompt templates_": "ٹپ: محفوظ شدہ پرومپٹ ٹیمپلیٹس میں سے منتخب کرنے کے لیے \"/\" ٹائپ کریں۔",
@@ -1937,7 +2141,14 @@
     "learnMore": "مزید جانیں",
     "advancedOptions": "جدید اختیارات",
     "unofficialBadgeLabel": "غیر سرکاری",
-    "unofficialLanguageWarning": "یہ زبان سرکاری طور پر سپورٹ نہیں کی جاتی۔ ترجمے کے معیار کی تصدیق نہیں ہوئی۔ براہ کرم نتیجے کو شیئر کرنے سے پہلے کسی ماہر یا مقامی بولنے والے سے چیک کروائیں۔"
+    "unofficialLanguageWarning": "یہ زبان سرکاری طور پر سپورٹ نہیں کی جاتی۔ ترجمے کے معیار کی تصدیق نہیں ہوئی۔ براہ کرم نتیجے کو شیئر کرنے سے پہلے کسی ماہر یا مقامی بولنے والے سے چیک کروائیں۔",
+    "translationSubmitted": "ترجمہ شروع ہو گیا — PDF فائلیں پس منظر میں پراسیس ہوتی ہیں۔",
+    "pendingTitle": "{filename} کا ترجمہ ہو رہا ہے…",
+    "pendingHint": "PDF ترجمے پس منظر میں چلتے ہیں اور چند منٹ لگ سکتے ہیں۔ آپ اپنا کام جاری رکھ سکتے ہیں — یہ کارڈ دستاویز تیار ہوتے ہی اپ ڈیٹ ہو جائے گا، حتیٰ کہ ری لوڈ کے بعد بھی۔",
+    "asyncFailed": "دستاویز کا ترجمہ ناکام: {error}",
+    "jobNotFound": "ترجمے کا کام اب دستیاب نہیں۔ براہ کرم دوبارہ کوشش کریں۔",
+    "retryPolling": "دوبارہ چیک کریں",
+    "pollingStalled": "ہم سرور سے پیش رفت چیک نہیں کر سکے۔ ترجمہ ابھی بھی چل رہا ہو سکتا ہے۔"
   },
   "terms": {
     "officialLanguages": "سرکاری نسخہ:",
@@ -2147,5 +2358,699 @@
   "regionOverride": {
     "warning": "مقام کی اووررائیڈ فعال ہے — آپ کی درخواستیں {region} ڈیٹا ریجن میں بھیجی جا رہی ہیں۔ یہ دستی اووررائیڈ ہے، آپ کا اصل مقام نہیں۔",
     "clear": "اووررائیڈ صاف کریں"
+  },
+  "usageImpact": {
+    "empty": "ابھی تک کوئی استعمال ریکارڈ نہیں ہوا۔ آپ کے ٹوکن کے استعمال اور اندازاً اخراجات یہاں نظر آئیں گے جب آپ چیٹ کریں گے۔",
+    "co2Value": "{grams} گرام CO₂e",
+    "equivalence": "تقریباً {count} اسمارٹ فون چارجز",
+    "requests": "درخواستیں",
+    "promptTokens": "پرومپٹ ٹوکنز",
+    "completionTokens": "کمپلیشن ٹوکنز",
+    "topModels": "ماڈل کے لحاظ سے",
+    "byRegion": "میزبانی کے خطے کے لحاظ سے",
+    "regionDefault": "ڈیفالٹ",
+    "modelRow": "{requests} درخواستیں · {grams} گرام",
+    "disclosure": "تخمینے بعض مفروضات v{version} پر مبنی ہیں · {since} سے · صرف معیاری چیٹ (ایجنٹس اور نالج بیس جوابات شمار نہیں کیے جاتے)۔",
+    "reset": "استعمال کے اعداد و شمار ری سیٹ کریں"
+  },
+  "extraction": {
+    "toggleLabel": "ساختی ڈیٹا نکالیں",
+    "trayLabel": "ایکسٹرکشن",
+    "trayPrefix": "نکالیں",
+    "trayInfo": "ایکسٹرکشن زیادہ سے زیادہ 3 ساختی جدول واپس کرتا ہے۔ ترکیبیں مقامی طور پر محفوظ کی جاتی ہیں۔",
+    "autoChip": "آٹو — AI ساخت تجویز کرتا ہے",
+    "addRecipe": "ریسیپی شامل کریں",
+    "addRecipeTitle": "اس ایکسٹرکشن میں ایک ریسیپی شامل کریں",
+    "addRecipeFullTitle": "فی ایکسٹرکشن زیادہ سے زیادہ 3 ریسیپیز",
+    "removeRecipe": "ریسیپی ہٹائیں: {name}",
+    "remove": "ہٹائیں",
+    "section": "ایکسٹرکشن ریسیپیز",
+    "sectionSubtitle": "محفوظ کردہ ٹیمپلیٹس جو غیر ساختہ ٹیکسٹ، فائلز یا URLs کو ساختی جدول میں بدلتے ہیں۔ ہر ایکسٹرکشن میں زیادہ سے زیادہ 3 منتخب کریں۔",
+    "newRecipe": "نئی ریسیپی",
+    "untitledRecipe": "(بےعنوان ریسیپی)",
+    "deleteRecipe": "ریسیپی حذف کریں",
+    "delete": "حذف کریں",
+    "deleteConfirm": "حذف کریں؟",
+    "cancel": "منسوخ کریں",
+    "name": "نام",
+    "namePlaceholder": "مثلاً Patients",
+    "description": "تفصیل",
+    "optional": "(اختیاری)",
+    "descriptionPlaceholder": "ایسی مختصر تفصیل جو ریسیپی چُننے میں ظاہر ہو",
+    "instructions": "ہدایات",
+    "instructionsPlaceholder": "AI کو مواد میں کیا تلاش کرنا چاہیے؟",
+    "fields": "فیلڈز",
+    "field": "فیلڈ",
+    "fieldsPlural": "فیلڈز",
+    "fieldName": "فیلڈ نام",
+    "fieldType": "فیلڈ قسم",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "فیلڈ شامل کریں",
+    "removeField": "فیلڈ ہٹائیں",
+    "toggleDetails": "تفصیلات بدلیں",
+    "fieldDetailsTitle": "تفصیل، enum کی اقدار",
+    "fieldDescriptionPlaceholder": "تفصیل (AI کو یہ فیلڈ تلاش کرنے میں مدد دے)",
+    "enumValuesPlaceholder": "کوما کے ساتھ جدا شدہ قابل اجازت اقدار",
+    "required": "لازمی",
+    "suggest": "AI سے تجویز کریں",
+    "suggesting": "تجویز کیا جا رہا ہے...",
+    "suggestNeedsInstructions": "پہلے ہدایات شامل کریں تاکہ AI جان سکے کس چیز کی تلاش کرنی ہے",
+    "searchRecipes": "ترکیبیں تلاش کریں",
+    "pickerEmpty": "ابھی تک کوئی ترکیب نہیں۔ شروع کرنے کے لیے ایک بنائیں۔",
+    "pickerEmptyMatch": "کوئی مماثل ترکیب نہیں ملی",
+    "editorEmpty": "ابھی تک کوئی ترکیب نہیں۔ ایک بنائیں اور AI مدد کر سکتا ہے۔",
+    "noData": "کوئی ڈیٹا نکالا نہیں گیا",
+    "noRecords": "کوئی {name} ریکارڈ نہیں ملا",
+    "row": "قطار",
+    "rows": "قطاریں",
+    "record": "ریکارڈ",
+    "records": "ریکارڈز",
+    "complete": "مکمل",
+    "download": "ڈاؤن لوڈ",
+    "preview": "پیش منظر",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} فیلڈز",
+    "fieldCountOne": "1 فیلڈ",
+    "andMoreFields": "+ {count} مزید",
+    "saveAsRecipe": "ترکیب کے طور پر محفوظ کریں",
+    "savedAsRecipeToast": "ترکیب \"{name}\" کے طور پر محفوظ ہوگئی",
+    "previewTruncated": "{total} میں سے ابتدائی 3 قطاریں ظاہر کی جا رہی ہیں۔ مکمل ڈیٹا کے لیے ڈاؤن لوڈ کریں۔",
+    "previewEmpty": "پیش منظر کے لیے کوئی قطار نہیں",
+    "proposedSchemaTip": "AI نے یہ اسکیما تجویز کیا ہے۔ اگلی بار کے لیے محفوظ کریں۔",
+    "downloadAriaLabel": "{name} کو {format} میں ڈاؤن لوڈ کریں",
+    "previewAriaLabel": "{name} کا پیش منظر ٹوگل کریں",
+    "changeFormatAriaLabel": "{name} کے لیے ڈاؤن لوڈ فارمیٹ تبدیل کریں",
+    "materialWarningTitle": "مواد شامل کریں جس سے اخذ کرنا ہے",
+    "materialWarningBody": "نیچے پیغام لکھیں، فائل منسلک کریں، یا URL شامل کریں۔",
+    "materialAttach": "فائل منسلک کریں",
+    "willExtractPrefix": "اس سے اخذ کیا جائے گا:",
+    "materialText": "پیغام کا متن",
+    "materialFiles": "{count, plural, one {1 فائل} other {# فائلیں}}",
+    "materialActiveFiles": "{count, plural, one {1 فعال فائل} other {# فعال فائلیں}}",
+    "dismiss": "اخذ کرنا بند کریں"
+  },
+  "Connectors": "کنیکٹرز",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "ترجمہ",
+        "description": "متن کو تجزیہ، لغات اور جائزہ مراحل کے ساتھ ترجمہ کریں"
+      },
+      "document": {
+        "label": "دستاویز",
+        "description": "اسسٹنٹ کی مدد سے ایک دستاویز تیار اور بہتر بنائیں"
+      },
+      "dataAnalysis": {
+        "label": "ڈیٹا تجزیہ",
+        "description": "جدولیں درآمد کریں اور اپنے ڈیٹا کو دریافت یا تبدیل کریں"
+      },
+      "map": {
+        "label": "نقشہ",
+        "description": "کسی بھی ڈیٹا کو نقشے پر مقامات میں تبدیل کریں"
+      }
+    },
+    "chooser": {
+      "prompt": "یا ایک توجہ مرکوز ورک اسپیس شروع کریں"
+    },
+    "sidebar": {
+      "newTranslation": "نیا ترجمہ",
+      "newDocument": "نئی دستاویز",
+      "newDataAnalysis": "نیا ڈیٹا تجزیہ",
+      "newMap": "نیا نقشہ"
+    },
+    "translation": {
+      "chooseLanguage": "ہدف زبان",
+      "customLanguageHint": "\"{name}\" وہ زبان ہے جو آپ نے شامل کی ہے — AI کسی بھی زبان کی کوشش کرے گا، مگر معیار کی تصدیق نہیں ہوئی۔",
+      "addedByYou": "آپ کے ذریعہ شامل کردہ",
+      "glossary": "لغت",
+      "noGlossary": "کوئی لغت نہیں",
+      "manageGlossaries": "لغات",
+      "glossaries": "لغات",
+      "closeGlossaries": "لغات بند کریں",
+      "glossariesEmpty": "کسی خاص اصطلاح کے ترجمہ کو مقفل کرنے کے لیے لغت بنائیں۔ لغات اس ڈیوائس پر محفوظ کی جاتی ہیں اور مختلف تراجم میں استعمال کی جا سکتی ہیں۔",
+      "newGlossary": "نیا گلاسری",
+      "newGlossaryName": "بغیر عنوان گلاسری",
+      "glossaryName": "گلاسری کا نام",
+      "deleteGlossary": "گلاسری حذف کریں",
+      "sourceTerm": "ماخذ اصطلاح",
+      "targetTerm": "ترجمہ",
+      "note": "نوٹ",
+      "noteOptional": "نوٹ (اختیاری)",
+      "addEntry": "اصطلاح شامل کریں",
+      "removeEntry": "{term} کو ہٹائیں",
+      "mode": "ترجمہ موڈ",
+      "modeQuick": "تیز",
+      "modeAgentic": "جائزہ شدہ",
+      "modeQuickHint": "ایک مرتبہ میں ترجمہ، سب سے تیز",
+      "modeAgenticHint": "متن کا پہلے تجزیہ کرتا ہے، پھر ترجمہ کرتا ہے اور زیادہ سے زیادہ 3 جائزہ مراحل چلاتا ہے",
+      "translate": "ترجمہ کریں",
+      "translating": "ترجمہ ہو رہا ہے…",
+      "sourceLabel": "ماخذ متن",
+      "targetLabel": "ترجمہ",
+      "sourcePlaceholder": "ترجمہ کرنے کے لیے متن چسپاں یا ٹائپ کریں، یا دستاویز اپ لوڈ کریں۔",
+      "targetEmpty": "یہاں ترجمہ ظاہر ہو گا۔",
+      "uploadDocument": "دستاویز اپ لوڈ کریں",
+      "copy": "کاپی کریں",
+      "copied": "کاپی ہو گیا",
+      "tooLong": "متن {max} حروف سے زیادہ ہے۔ اسے حصوں میں تقسیم کریں، یا پوری فائل کے لیے دستاویز ترجمہ استعمال کریں۔",
+      "analysisTitle": "پری ترجمہ تجزیہ",
+      "register": "رجسٹر کریں",
+      "reviewTitle": "جائزہ مراحل",
+      "roundLabel": "مرحلہ {round}",
+      "verdictApprove": "منظور شدہ",
+      "verdictRevise": "ترمیم شدہ",
+      "railRequest": "ماخذ متن کو {language} میں ترجمہ کریں۔",
+      "railDoneAgentic": "مکمل ہوا۔ میں نے متن کا تجزیہ کیا، ترجمہ کیا اور {rounds} جائزہ مرحلہ چلایا۔ نتیجہ ورک اسپیس میں موجود ہے۔",
+      "railDoneQuick": "مکمل ہوا۔ ترجمہ ورک اسپیس میں موجود ہے۔",
+      "railAssessRequest": "{language} ترجمہ کے معیار کا جائزہ لیں۔",
+      "railAssessDone": "جائزہ مکمل: درجہ بندی ورک اسپیس میں ہے اور {count} مجوزہ ترمیمات ہیں جن کا جائزہ لینا ہے۔",
+      "roundChanges": "مرحلہ {round} میں تبدیلیاں",
+      "criteria": {
+        "accuracy": {
+          "label": "درستگی",
+          "description": "ماخذ مفہوم بالکل بیان ہو — کوئی غلط ترجمہ، کمی، اضافہ یا غیر مترجم حصے نہ ہوں"
+        },
+        "fluency": {
+          "label": "رواں پن",
+          "description": "گرامر، املا، رموز اور باہمی ربط ہدف زبان میں قدرتی محسوس ہوں"
+        },
+        "terminology": {
+          "label": "اصطلاحات",
+          "description": "تخصصی اصطلاحات یکساں اور درست ہوں؛ گلاسری کی مکمل پیروی کی گئی ہو"
+        },
+        "style": {
+          "label": "انداز",
+          "description": "اسلوب، لہجہ اور انداز ماخذ کے مطابق اور مستقل رہیں"
+        },
+        "localeConventions": {
+          "label": "علاقائی روایات",
+          "description": "تاریخیں، اعداد، اکائیاں اور رموز ہدف علاقے کے مطابق ہوں"
+        },
+        "audience": {
+          "label": "قارئین",
+          "description": "متن کے مقصود مقصد اور قارئین کے لیے موزوں ہو"
+        }
+      },
+      "severity": {
+        "minor": "معمولی",
+        "major": "اہم"
+      },
+      "assess": "معیار کا جائزہ لیں",
+      "assessing": "جائزہ لیا جا رہا ہے…",
+      "assessmentTitle": "معیار کا جائزہ",
+      "criteriaPicker": "جائزہ لینے کے معیار",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "تجویز کردہ ترامیم",
+      "noEditsSuggested": "کوئی ترمیم تجویز نہیں کی گئی — ترجمہ منتخب کردہ معیار پر پورا اترا۔",
+      "acceptEdit": "قبول کریں",
+      "rejectEdit": "مسترد کریں",
+      "acceptAll": "سب قبول کریں",
+      "rejectAll": "سب مسترد کریں",
+      "editAccepted": "قبول کر لیا گیا",
+      "editRejected": "مسترد کر دیا گیا",
+      "editUnapplicable": "یہ اقتباس موجودہ متن میں نہیں ملا — لاگو نہیں ہوا",
+      "editTranslation": "ترمیم",
+      "doneEditing": "مکمل",
+      "pasteTranslationPlaceholder": "ترجمہ لکھیں یا چسپاں کریں…",
+      "editingBlockedPendingEdits": "پہلے زیر التواء ترامیم کو حل کریں یا مسترد کریں",
+      "pendingCount": "{count} زیر التواء",
+      "closeReview": "معیار کا جائزہ بند کریں",
+      "showReview": "جائزہ دکھائیں",
+      "showReviewPending": "جائزہ دکھائیں ({count} زیر التواء)"
+    },
+    "document": {
+      "emptyTitle": "جس دستاویز کی وضاحت چاہتے ہیں بیان کریں",
+      "emptyBody": "اسسٹنٹ کو بتائیں کہ کیا لکھنا ہے — مثلاً صورت حال کی رپورٹ، ڈونر کے لیے خط یا میٹنگ منٹس۔ اگر اقتباسات اور حقائق درکار ہوں تو ریفرنس فائلز پہلے شامل کریں۔",
+      "generatePlaceholder": "لکھنے والی دستاویز کی وضاحت کریں…",
+      "revisePlaceholder": "تبدیلیوں کی وضاحت کریں…",
+      "generate": "تیار کریں",
+      "revise": "نظر ثانی کریں",
+      "writing": "تحریر ہو رہی ہے…",
+      "export": "برآمد کریں",
+      "references": "حوالہ جات",
+      "addReference": "فائل شامل کریں",
+      "uploading": "اپ لوڈ ہو رہا ہے…",
+      "removeReference": "{name} ہٹا دیں",
+      "referenceChars": "{chars} حروف کا ماخوذ متن",
+      "referenceEmpty": "{name} سے کوئی متن ماخوذ نہ ہو سکا",
+      "uploadFailed": "اپ لوڈ ناکام ہو گیا",
+      "untitledDocument": "بغیر عنوان دستاویز",
+      "generatedSummary": "میں نے دستاویز ورک اسپیس میں تیار کر دی ہے۔ اس کا جائزہ لیں اور تبدیلیوں سے آگاہ کریں۔",
+      "revisedSummary": "میں نے دستاویز میں ورک اسپیس میں نظر ثانی کر دی ہے۔",
+      "runFailed": "کچھ غلط ہو گیا: {message}",
+      "uploadBasis": "کسی موجودہ دستاویز سے آغاز کریں",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "گرامر اور اسپیلنگ",
+          "description": "درست گرامر اور اسپیلنگ؛ ایک ہی انگریزی انداز (امریکی یا برطانوی) مناسب ہے — اختلاط غلطی ہے"
+        },
+        "consistency": {
+          "label": "تسلسل",
+          "description": "اصطلاحات، نام، حروف کیپٹلائزیشن، اور فارمیٹنگ پورے متن میں یکساں ہوں"
+        },
+        "clarity": {
+          "label": "وضاحت",
+          "description": "براہ راست اور غیر مبہم جملے؛ قاری کی معاونت کرنے والی ساخت"
+        },
+        "sensitivity": {
+          "label": "حساسیت",
+          "description": "جامع، تنازعہ اور انسانی ہمدردی کے حساس الفاظ (اختیاری چیک)"
+        },
+        "specAdherence": {
+          "label": "اسپیک کے مطابق",
+          "description": "منسلک ڈاکیومنٹ اسپیک کی پیروی کرتا ہے: درکار حصے موجود ہیں، ترتیب میں ہیں، اور ہدایات پر پورا اترتے ہیں"
+        },
+        "toneAdherence": {
+          "label": "آواز و انداز کی پیروی",
+          "description": "منسلک کردہ آواز اور انداز کے اصولوں کی پیروی کرتا ہے"
+        }
+      },
+      "severity": {
+        "minor": "معمولی",
+        "major": "سنگین"
+      },
+      "assess": "معیار کا جائزہ لیں",
+      "assessing": "جائزہ لیا جا رہا ہے...",
+      "assessmentTitle": "معیار کا جائزہ",
+      "criteriaPicker": "جانچنے کے لئے معیار",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "تجویز کردہ ترامیم",
+      "noEditsSuggested": "کوئی ترمیم تجویز نہیں ہوئی — دستاویز منتخب معیار پر پوری اتری۔",
+      "acceptEdit": "قبول کریں",
+      "rejectEdit": "مسترد کریں",
+      "acceptAll": "سب قبول کریں",
+      "rejectAll": "سب مسترد کریں",
+      "editAccepted": "قبول شدہ",
+      "editRejected": "مسترد شدہ",
+      "editUnapplicable": "مطلوبہ پیراگراف موجودہ متن میں نہیں ملا — لاگو نہیں کیا گیا",
+      "editingBlockedPendingEdits": "پہلے زیرِ غور تجویز کردہ ترامیم کو حل یا مسترد کریں",
+      "pendingCount": "{count} زیر التوا",
+      "closeReview": "معیار کا جائزہ بند کریں",
+      "showReview": "جائزہ دیکھیں",
+      "showReviewPending": "جائزہ دیکھیں ({count} زیر التوا)",
+      "railAssessRequest": "دستاویز کے معیار کا انتخاب کردہ معیار کے مطابق جائزہ لیں۔",
+      "railAssessDone": "جائزہ مکمل: ریٹنگز ورک اسپیس میں موجود ہیں اور {count} تجویز کردہ ترمیم(یں) کا جائزہ لینے کے لیے تیار ہیں۔",
+      "spec": "دستاویز اسپیک",
+      "noSpec": "کوئی اسپیک نہیں",
+      "manageSpecs": "اسپیکس",
+      "specs": "دستاویز اسپیکس",
+      "closeSpecs": "اسپیکس بند کریں",
+      "specsEmpty": "ایک اسپیک بنائیں تاکہ دستاویزات کو متعین فارمیٹ میں لکھا جائے — درکار حصے، ترتیب، اور ہر حصے کے مطابق رہنمائی (مثلاً SitRep ٹیمپلیٹ)۔ اسپیکس اس ڈیوائس پر محفوظ رہتے ہیں اور دوبارہ استعمال ہو سکتے ہیں۔",
+      "newSpec": "نیا اسپیک",
+      "newSpecName": "بے عنوان اسپیک",
+      "specName": "اسپیک کا نام",
+      "specDescription": "تفصیل (اختیاری)",
+      "deleteSpec": "اسپیک کو حذف کریں",
+      "sectionHeading": "سیکشن ہیڈنگ",
+      "sectionGuidance": "رہنمائی (اختیاری)",
+      "sectionRequired": "لازمی",
+      "addSection": "سیکشن شامل کریں",
+      "removeSection": "سیکشن حذف کریں",
+      "generalGuidance": "عمومی رہنمائی (اختیاری)",
+      "tone": "انداز",
+      "noTone": "کوئی انداز نہیں",
+      "customCriteria": "حسبِ منشا معیار",
+      "manageCriteria": "حسبِ منشا معیار",
+      "closeCriteria": "حسبِ منشا معیار بند کریں",
+      "criteriaEmpty": "اپنی مرضی کے معیارات بنائیں — جیسے برانڈ سے متعلق امور یا ادارہ جاتی زبان — تاکہ دستاویزات کا جائزہ لیا جا سکے اور ترامیم کی رہنمائی کی جا سکے۔ یہ اس ڈیوائس پر محفوظ ہوں گے اور دوبارہ استعمال کے قابل ہیں۔",
+      "newCriterion": "نیا معیار",
+      "newCriterionName": "غیر عنوان شدہ معیار",
+      "criterionName": "معیار کا نام",
+      "criterionRubric": "رُبَرِک",
+      "criterionRubricPlaceholder": "بیان کریں کہ اس معیار کو پورا کرنے کے لیے دستاویز میں کیا ہونا چاہیے، مثلاً \"اپنے کام کے بارے میں مبالغہ آرائی نہ کریں؛ ہمیشہ مستفید ہونے والوں کو 'وہ لوگ جن کی ہم مدد کرتے ہیں' کہیں…\"",
+      "criterionRubricHint": "یہ رُبَرِک جائزے اور ترمیم میں AI کو لفظ بہ لفظ دی جاتی ہے۔",
+      "deleteCriterion": "معیار حذف کریں",
+      "profileTitle": "دستاویز پروفائل",
+      "profileDocType": "قسم",
+      "profileLanguage": "زبان",
+      "profileAudience": "سامعین",
+      "profilePurpose": "مقصد",
+      "profileRegister": "رجسٹر",
+      "profileTone": "لہجہ",
+      "profileConventions": "اصول",
+      "emptyHint": "نیچے ٹائپ کرنا شروع کریں، نچلے خانے میں لکھنے کے بارے میں وضاحت کریں، یا کسی فائل سے آغاز کریں۔",
+      "addSpec": "اسپیک شامل کریں",
+      "addCriteria": "معیارات شامل کریں",
+      "scopeFullDocument": "دائرہ کار: مکمل دستاویز",
+      "scopeSelection": "دائرہ کار: منتخب حصہ — “{preview}…” ({count} الفاظ)",
+      "clearSelection": "انتخاب صاف کریں (مکمل دستاویز پر کام کریں)",
+      "reviseSelectionPlaceholder": "منتخب حصے میں تبدیلی کی وضاحت کریں…",
+      "revisedSelectionSummary": "میں نے منتخب شدہ حصہ ورک اسپیس میں ترمیم کر دیا ہے۔",
+      "assessedSelection": "منتخب حصہ"
+    },
+    "data": {
+      "emptyTitle": "تجزیے کے لیے ڈیٹا درآمد کریں",
+      "emptyBody": "CSV، Excel یا JSON فائل لائیں، یا براہ راست قطاریں پیسٹ کریں۔ جب آپ کی جدول لوڈ ہو جائے تو آپ اسے ترتیب دے سکتے ہیں، دستاویزات سے مزید قطاریں نکال سکتے ہیں، اور سادہ زبان کی ہدایات سے اس میں تبدیلیاں کر سکتے ہیں۔",
+      "importFile": "فائل درآمد کریں",
+      "importing": "درآمد ہو رہی ہے…",
+      "pasteData": "ڈیٹا پیسٹ کریں",
+      "pastePlaceholder": "یہاں CSV، TSV، یا JSON پیسٹ کریں…",
+      "import": "درآمد کریں",
+      "addFromSource": "ماخذ سے شامل کریں",
+      "extractHint": "متن پیسٹ کریں یا کسی دستاویز کا انتخاب کریں؛ آپ کے موجودہ کالمز سے مطابقت رکھنے والی قطاریں نکالی جائیں گی۔ نامعلوم اقدار خالی رہیں گی — کچھ بھی خود سے شامل نہیں ہوتا۔",
+      "extractPlaceholder": "ڈیٹا پر مشتمل غیر ساختہ متن پیسٹ کریں…",
+      "extractRows": "قطاریں نکالیں",
+      "extractFromFile": "کسی فائل سے…",
+      "extracting": "نکالا جا رہا ہے…",
+      "pastedSource": "پیسٹ کیا گیا متن",
+      "transform": "تبدیل کریں",
+      "transforming": "تبدیلی جاری ہے…",
+      "transformPlaceholder": "ایک تبدیلی بیان کریں، مثلاً \"فی 1000 آبادی کے حساب سے کیسز کا ایک کالم شامل کریں\"…",
+      "transformCapHint": "تبدیلیاں زیادہ سے زیادہ {max} قطاروں تک محدود ہیں۔ بڑی جدولوں کے لیے پہلے قطاریں حذف یا فلٹر کریں۔",
+      "undo": "واپس لیں",
+      "deleteSelected": "{count} حذف کریں",
+      "deletedRows": "{count} قطاریں حذف کی گئیں",
+      "selectAllRows": "تمام قطاریں منتخب کریں",
+      "selectRow": "قطار {row} منتخب کریں",
+      "rowCount": "{count} قطاریں",
+      "rowCapExceeded": "یہ {count} قطاریں ہوں گی؛ جدول {max} قطاروں تک محدود ہے۔ ڈیٹا الگ کریں یا ایکسپورٹ کریں۔",
+      "railExtractRequest": "مندرجہ ذیل سے جدول کے خاکہ کے مطابق قطاریں نکالیں: {source}",
+      "railExtractDone": "{count} نکالی گئی قطاریں جدول میں شامل کر دی گئیں۔",
+      "railTransformDone": "جدول کو تبدیل کر دیا گیا ہے۔",
+      "columnProfileFor": "{column} کے لیے کالم کے اعداد و شمار",
+      "profileMissing": "غائب",
+      "profileDistinct": "منفرد",
+      "profileRange": "حد",
+      "profileMean": "اوسط",
+      "profileMedian": "درمیانی",
+      "profileTopValues": "بہترین اقدار",
+      "filterColumnFor": "فلٹر {column}",
+      "filterContains": "پر مشتمل ہے…",
+      "filterMin": "کم از کم",
+      "filterMax": "زیادہ سے زیادہ",
+      "filterClear": "صاف کریں",
+      "clearFilters": "تمام فلٹرز صاف کریں",
+      "showingRows": "{total} میں سے {shown} قطاریں دکھائی جا رہی ہیں",
+      "scopeLabel": "کام کا دائرہ",
+      "scopeTable": "تمام ({count})",
+      "scopeFiltered": "فلٹر ({count})",
+      "scopeSelection": "منتخب ({count})",
+      "scopedInstruction": "{instruction} ({count} منتخب شدہ قطاروں پر)",
+      "assess": "معیار کا جائزہ لیں",
+      "assessing": "جائزہ لیا جا رہا ہے…",
+      "criteria": {
+        "validity": {
+          "label": "درستگی",
+          "description": "اقدار اپنے کالم کی قسم اور متوقع فارمیٹ کے مطابق ہیں"
+        },
+        "consistency": {
+          "label": "مطابقت",
+          "description": "ایک جیسی قدر ہر جگہ ایک ہی طرح لکھی گئی ہے (مثلاً 'M' / 'Male' مختلف نہیں ہیں، اکائیوں یا حروف میں فرق نہیں ہے)"
+        },
+        "duplicates": {
+          "label": "تکرار",
+          "description": "ایک ہی ادارے یا واقعے کی دو بار ریکارڈ کی گئی قطاریں"
+        },
+        "plausibility": {
+          "label": "امکانی صورتحال",
+          "description": "سیاق و سباق میں غیر معمولی اور ناممکن اقدار"
+        }
+      },
+      "assessmentTitle": "ڈیٹا معیار کی جانچ",
+      "pendingCount": "{count} زیر التواء",
+      "closeReview": "معیار کی جانچ بند کریں",
+      "suggestedEdits": "تجویز کردہ اصلاحات",
+      "noEditsSuggested": "کوئی اصلاح تجویز نہیں کی گئی — ڈیٹا منتخب کردہ معیار پر پورا اترا۔",
+      "acceptAll": "سب قبول کریں",
+      "rejectAll": "سب مسترد کریں",
+      "acceptEdit": "قبول کریں",
+      "rejectEdit": "مسترد کریں",
+      "editAccepted": "نافذ کیا گیا",
+      "editRejected": "مسترد",
+      "editUnapplicable": "اس سیل میں جائزے کے بعد تبدیلی آ گئی — نافذ نہیں کیا گیا",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "جائزہ لینے کے معیار",
+      "severity": {
+        "minor": "معمولی",
+        "major": "سنگین"
+      },
+      "editLocation": "قطار {row} · {column}",
+      "editLocationRow": "قطار {row} (حذف کریں)",
+      "showReview": "جائزہ دکھائیں",
+      "showReviewPending": "جائزہ دکھائیں ({count} زیر التواء)",
+      "assessedFiltered": "فلٹر شدہ قطاریں",
+      "assessedSelection": "منتخب شدہ قطاریں",
+      "assessedSample": "{total} میں سے {shown} کا نمونہ",
+      "railAssessRequest": "منتخب کردہ معیارات کے مطابق جدول ({count} قطاریں) کے معیار کا جائزہ لیں۔",
+      "railAssessDone": "تجویز کردہ {count} ڈیٹا معیار کی اصلاحات — انہیں ورک اسپیس میں دیکھیں۔",
+      "insights": "تجزیات",
+      "chartKind": "چارٹ کی قسم",
+      "chartBar": "بار (گروپ بندی)",
+      "chartHistogram": "ہسٹوگرام",
+      "chartLine": "لائن (وقت کے حساب سے)",
+      "groupByColumn": "کالم کے لحاظ سے گروپ کریں",
+      "dateColumn": "تاریخ کا کالم",
+      "valueColumn": "قدر کا کالم",
+      "aggFn": "مجموعی فنکشن",
+      "aggCount": "گنتی",
+      "aggSum": "مجموعہ",
+      "aggMean": "اوسط",
+      "chartTruncated": "صرف سرفہرست {max} گروپ دکھائے جا رہے ہیں",
+      "chartNoData": "موجودہ قطاروں میں کوئی چارٹ کے قابل اقدار نہیں ہیں۔",
+      "chartBarAria": "بار چارٹ — {column} کے مطابق گروپ کیا گیا",
+      "chartHistogramAria": "{column} کا ہسٹوگرام",
+      "chartLineAria": "وقت کے ساتھ {column} کا لائن چارٹ",
+      "editStructure": "ساخت",
+      "defineStructure": "ساخت متعین کریں",
+      "schemaHint": "اپنے ڈیٹا کی ساخت کے فیلڈز متعین کریں۔ لازمی فیلڈز کی بنیاد پر ڈیٹا درآمدگی کے وقت گمشدہ معلومات کی پالیسی چلتی ہے؛ فیلڈ کی قسم تبدیل کرنے سے موجودہ اقدار تبدیل ہو جائیں گی (جو تبدیل نہیں ہو سکتیں، وہ خالی ہو جائیں گی۔)",
+      "schemaFieldName": "فیلڈ کا نام",
+      "schemaFieldType": "فیلڈ کی قسم",
+      "schemaRequired": "لازمی",
+      "schemaAddField": "نیا فیلڈ شامل کریں",
+      "schemaDeleteField": "فیلڈ حذف کریں: {field}",
+      "schemaApply": "ساخت نافذ کریں",
+      "schemaCancel": "منسوخ کریں",
+      "schemaEdited": "جدول کی ساخت ترمیم کی گئی",
+      "schemaCellsConverted": "{count} سیل نئے فارمیٹ میں تبدیل نہیں ہو سکے اور اب خالی ہیں۔",
+      "missingFieldPolicy": "گمشدہ ڈیٹا",
+      "policyStrict": "سخت — نامکمل قطاریں مسترد کریں",
+      "policyFlag": "فلیگ — درآمد کر کے نشاندہی کریں",
+      "policyLenient": "نرم — خاموشی سے درآمد کریں",
+      "droppedIncompleteRows": "{count} قطاریں جن میں لازمی فیلڈز چھوٹ رہے ہیں حذف کر دی گئیں: {fields}",
+      "dismiss": "ختم کریں",
+      "requiredColumn": "لازمی فیلڈ",
+      "flagMissingRequired": "لازمی فیلڈ خالی ہے",
+      "flagPendingEdit": "اس سیل کے لئے اصلاحی تجویز زیر التواء ہے — معیار کے جائزہ میں دیکھیں",
+      "fromPhoto": "تصویر سے",
+      "fromPhotoHint": "کسی کاغذی فارم یا جدول کی تصویر لیں — اس کا مواد ساختی ڈیٹا بن جائے گا جسے آپ تصویر سے جانچ سکتے ہیں",
+      "readingPhoto": "تصویر پڑھا جا رہا ہے…",
+      "photoBatchName": "{count} تصاویر",
+      "railPhotoRequest": "{count} تصاویر سے ساختی ڈیٹا نکالیں: {name}",
+      "railPhotoDone": "تصویر سے {count} ریکارڈز شامل کیے گئے۔ انہیں ورک اسپیس میں موجود تصویر سے موازنہ کریں۔",
+      "sourcesLabel": "ذرائع",
+      "openPhotoQc": "ڈیٹا کو {name} سے موازنہ کریں",
+      "qcRowsFromPhoto": "{count} قطاریں",
+      "qcClose": "تصویر کی جانچ بند کریں",
+      "qcZoomIn": "زوم ان کریں",
+      "qcZoomOut": "زوم آؤٹ کریں",
+      "qcPrevPhoto": "پچھلی تصویر",
+      "qcNextPhoto": "اگلی تصویر",
+      "qcImageLoading": "تصویر لوڈ ہو رہی ہے…",
+      "qcImageFailed": "تصویر لوڈ نہیں ہو سکی۔",
+      "qcImageAlt": "ماخذ تصویر: {name}",
+      "qcHint": "اس جدول میں صرف اس تصویر کی قطاریں ظاہر ہیں — ہر ویلیو کو تصویر سے ملائیں اور جو قطاریں مطابقت نہ رکھیں انہیں تدوین یا حذف کریں۔",
+      "sourceFilterChip": "{name} کی قطاریں",
+      "clearSourceFilter": "تمام قطاریں دوبارہ دکھائیں",
+      "viewAsRecord": "فارم ویو",
+      "viewAsTable": "ٹیبل ویو",
+      "recordEmpty": "ابھی کوئی ریکارڈ نہیں۔",
+      "recordOf": "ریکارڈ {index} از {count}",
+      "recordPrev": "پچھلا ریکارڈ",
+      "recordNext": "اگلا ریکارڈ",
+      "recordBooleanUnset": "(خالی)",
+      "flagsChip": "{count} فلیگ",
+      "flagsChipOpenReview": "کوالٹی ریویو کھولیں",
+      "flagsChipMissingOnly": "مطلوبہ فیلڈز خالی ہیں — انہیں پُر کریں یا ساخت تبدیل کریں",
+      "autoCheck": "نئے ڈیٹا کی خود کار جانچ",
+      "autoCheckHint": "تصویروں یا دستاویزات سے ڈیٹا نکالنے کے بعد، نئی قطاروں پر خودکار معیار کی جانچ چلائیں",
+      "checkingNewRows": "نئی شامل شدہ قطاروں میں معیار کے مسائل کی جانچ جاری ہے…",
+      "ingestCheckFailed": "خودکار معیار کی جانچ ناکام رہی ({message}) — آپ دستی طور پر Assess quality کے ذریعے چلا سکتے ہیں۔",
+      "assessedIngest": "نئی شامل کردہ قطاریں"
+    },
+    "map": {
+      "emptyTitle": "اپنا ڈیٹا نقشے پر ڈالیں",
+      "emptyBody": "سٹرپ، لائن لسٹ، میٹنگ نوٹس یا کسی بھی جگہ کے نام والے متن کو چسپاں کریں — یا کوئی دستاویز اپ لوڈ کریں۔ مقامات شناخت ہو کر اعتماد کی درجہ بندی کے ساتھ نقشہ پر دکھائے جائیں گے؛ بعد میں آپ انہیں ArcGIS یا کسی اور GIS ٹول کیلئے برآمد کر سکتے ہیں۔",
+      "inputPlaceholder": "مقامات کے نام والے متن کو چسپاں کریں…",
+      "uploadFile": "فائل اپ لوڈ کریں",
+      "pastedSource": "چسپاں کردہ متن",
+      "mapIt": "نقشے پر دکھائیں",
+      "finding": "مقامات تلاش کیے جا رہے ہیں…",
+      "featureCount": "{count} مقامات",
+      "featureCapExceeded": "نقشہ زیادہ سے زیادہ {max} مقامات تک محدود ہے۔",
+      "noneFound": "اس مواد میں کوئی مقام نہیں ملا۔",
+      "lowConfidenceNotice": "{count} مقام کم اعتماد والے کوآرڈینیٹس رکھتے ہیں — اُن پر انحصار کرنے سے پہلے تصدیق کریں۔",
+      "tilesOffline": "نقشہ ٹائلز دستیاب نہیں — مقام کی فہرست اب بھی کام کر رہی ہے۔",
+      "disclaimer": "کوآرڈینیٹس ماڈل کے علم سے AI کے ذریعے تخمینہ ہیں، جیوکوڈنگ سروس سے نہیں — عملی استعمال سے پہلے تصدیق کریں۔ نقشہ ٹائلز ایک ٹائل سرور سے لوڈ ہوتی ہیں؛ آپ کا ڈیٹا اسی ڈیوائس پر رہتا ہے۔",
+      "flyTo": "نقشے پر {name} دکھائیں",
+      "removeFeature": "{name} کو ہٹائیں",
+      "expandFeature": "{name} کی مکمل تفصیلات دکھائیں",
+      "collapseFeature": "{name} کی تفصیلات چھپائیں",
+      "detailsParent": "حصہ: {parent}",
+      "railRequest": "ان مقامات کو نقشے پر ڈالیں: {source}",
+      "railSearchRequest": "ویب پر تلاش کریں اور ان مقامات کو نقشے پر ڈالیں: {query}",
+      "railDone": "{count} مقامات میپ کیے گئے۔ کم اعتماد والے مقامات کی فہرست میں جائزہ لیں۔",
+      "searchToggle": "ویب تلاش موڈ",
+      "searchToggleHint": "متن چسپاں کرنے کے بجائے ویب پر تلاش کریں؛ حاصل شدہ نتائج کو میپ کیا جائے گا۔",
+      "searchPlaceholder": "ویب پر تلاش کریں، مثلاً \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "تلاش کریں اور میپ کریں",
+      "searching": "تلاش جاری ہے…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "رابطہ: {kind}",
+        "unresolved": "{count} تعلقات نے ایسے مقامات کا حوالہ دیا جو نقشے پر نہیں تھے اور چھوڑ دیے گئے۔"
+      },
+      "confidence": {
+        "high": "زیادہ",
+        "medium": "درمیانہ",
+        "low": "کم"
+      },
+      "prominence": {
+        "primary": "مرکزی مقام",
+        "secondary": "معاون مقام",
+        "mention": "صرف ذکر"
+      },
+      "prominenceMentionHint": "مواد میں اس مقام کا صرف سرسری حوالہ آیا ہے — اسے نقشے پر چھوٹا دکھایا گیا ہے اور بنیادی منظر میں شامل نہیں کیا گیا۔",
+      "dates": {
+        "since": "{date} سے",
+        "range": "{start} – {end}",
+        "ongoing": "جاری ہے"
+      },
+      "filters": {
+        "label": "زمرہ کے لحاظ سے فلٹر کریں",
+        "other": "دیگر",
+        "clear": "صاف کریں",
+        "showing": "{shown} میں سے {total} مقامات",
+        "noneMatch": "موجودہ فلٹر کے مطابق کوئی مقام نہیں ملا۔"
+      },
+      "dateFilter": {
+        "label": "تاریخیں",
+        "from": "سے",
+        "to": "تک",
+        "fromAria": "صرف اس تاریخ کے بعد کے واقعات دکھائیں",
+        "toAria": "صرف اس تاریخ تک کے واقعات دکھائیں",
+        "clear": "تاریخیں صاف کریں",
+        "eraChip": "صرف {label} کے واقعات دکھائیں"
+      },
+      "timeline": {
+        "toggle": "ٹائم لیپس",
+        "play": "ٹائم لیپس چلائیں",
+        "pause": "ٹائم لیپس روکیں",
+        "eras": "ٹائم لائن ادوار",
+        "jumpTo": "{label} پر جائیں",
+        "slider": "ٹائم لائن کی پوزیشن",
+        "showUndated": "غیر مؤرخہ مقامات دکھائیں",
+        "activeCount": "{count} فعال"
+      },
+      "granularity": {
+        "site": "سائٹ",
+        "city": "شہر/قصبہ",
+        "district": "ضلع",
+        "region": "علاقہ",
+        "country": "ملک"
+      },
+      "granularityAreaHint": "ایک علاقہ، جو اپنے سینٹروئڈ کے گرد ایک تخمینی دائرے میں ظاہر ہوتا ہے — یہ کوئی درست مقام یا سرحد نہیں۔",
+      "containerHint": "دیگر میپ شدہ مقامات پر مشتمل ہے، اس لیے صرف خاکہ دکھایا جاتا ہے۔",
+      "legend": {
+        "toggle": "لیجنڈ",
+        "title": "نقشہ پڑھنے کا طریقہ",
+        "color": "رنگ: کوآرڈینیٹ کی اعتماد کی سطح (نیلا زیادہ، عنبر درمیانہ، سرخ کم)",
+        "size": "نکتہ کا سائز: یہ مقام مواد میں کتنا مرکزی ہے",
+        "area": "ڈیش دار دائرہ: ضلع، علاقہ یا ملک کی تقریبی حدود",
+        "container": "ہلکی سی سرحد: وہ علاقہ جس کے اجزاء الگ الگ نقشہ پر ظاہر کیے گئے ہیں"
+      }
+    },
+    "shell": {
+      "showConversation": "مکالمہ دکھائیں",
+      "hideConversation": "مکالمہ چھپائیں",
+      "workspaceTab": "ورک اسپیس",
+      "conversationTab": "مکالمہ",
+      "paneTabsLabel": "ورک فلو پینز",
+      "railEmpty": "اسسٹنٹ کے پیغامات اور پیش رفت یہاں ظاہر ہوں گے۔",
+      "railInputPlaceholder": "اسسٹنٹ کو پیغام بھیجیں…",
+      "assistantThinking": "سوچا جا رہا ہے…",
+      "sendMessage": "پیغام بھیجیں",
+      "stopGenerating": "جنریشن روکیں",
+      "loadingWorkspace": "ورک اسپیس لوڈ ہو رہی ہے…",
+      "unknownType": "یہ مکالمہ ایک ایسا ورک فلو استعمال کرتا ہے جسے اس ورژن میں شناخت نہیں کیا گیا۔ مکالمے کی مکمل تاریخ ذیل میں دی گئی ہے۔",
+      "untitled": "نیا مکالمہ",
+      "toggleMenu": "مینو ٹوگل کریں",
+      "model": "اس ورک فلو کے لئے ماڈل"
+    }
+  },
+  "connectors": {
+    "title": "کنیکٹرز",
+    "description": "ماڈل کانٹیکسٹ پروٹوکول (MCP) کے ذریعے بیرونی ٹولز کنیکٹ کریں۔ کنیکٹڈ ٹولز چیٹ میں ماڈلز کے لیے دستیاب ہو جاتے ہیں، اور ہر ٹول کال آپ کی منظوری کے بعد ہی چلتی ہے۔",
+    "localOnlyNote": "آپ ہر فراہم کنندہ کے ساتھ براہ راست سائن ان کرتے ہیں۔ ایکسیس کیز کو اس ڈیوائس پر مرموز اور محفوظ رکھا جاتا ہے، اور ہر درخواست پر ایپ سرور کے ذریعے ارسال کی جاتی ہیں — وہاں کبھی ذخیرہ یا لاگ نہیں کی جاتیں۔",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "ریپوزٹریز تلاش کریں، ایشوز اور پل ریکویسٹس پڑھیں اور بنائیں۔"
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "ٹاسک اور پروجیکٹ تلاش کریں، بنائیں اور اپ ڈیٹ کریں۔"
+      }
+    },
+    "connect": "کنیکٹ کریں",
+    "connected": "کنیکٹڈ",
+    "tokenEndsIn": "• • • • {last4} پر ختم ہوتا ہے",
+    "disconnect": "ڈس کنیکٹ کریں",
+    "toolCount": "{count, plural, =1 {1 ٹول دستیاب ہے} other {# ٹولز دستیاب ہیں}}",
+    "patLabel": "پرسنل ایکسیس ٹوکن",
+    "createTokenLink": "ٹوکن بنائیں",
+    "tokenScopeHint": "صرف انہی اجازتوں کے ساتھ ایک باریک بینی سے بنایا گیا ٹوکن استعمال کریں جو ان ٹولز کے لیے چاہیے۔",
+    "validating": "کنکشن چیک کیا جا رہا ہے…",
+    "validationFailed": "کنیکٹ نہیں ہو سکا۔ پتہ چیک کریں اور دوبارہ کوشش کریں۔",
+    "authFailed": "سرور نے ٹوکن مسترد کر دیا۔ براہ کرم اسے چیک کریں اور دوبارہ کوشش کریں۔",
+    "tokenRequired": "ٹوکن درکار ہے",
+    "enableServer": "چیٹ میں دستیاب",
+    "arbitraryTitle": "دیگر MCP سرورز",
+    "arbitraryToggle": "دیگر MCP سرورز کی اجازت دیں",
+    "arbitraryWarning": "جو بھی MCP سرور چلاتا ہے وہ اس کے ٹولز کو بھیجے گئے پیغامات دیکھ سکتا ہے۔ صرف انہی سرورز سے کنیکٹ ہوں جن پر آپ کو اعتماد ہے۔ ہر ٹول کال کے لیے اب بھی آپ کی منظوری درکار ہے۔",
+    "addServer": "MCP سرور شامل کریں",
+    "editServer": "MCP سرور میں ترمیم کریں",
+    "serverName": "نام",
+    "serverUrl": "سرور URL",
+    "nameRequired": "نام ضروری ہے",
+    "urlRequired": "URL ضروری ہے",
+    "invalidUrl": "ایک عوامی https:// پتہ درج کریں",
+    "namePlaceholder": "میرا MCP سرور",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "اکسیس ٹوکن (اختیاری)",
+    "keepTokenPlaceholder": "موجودہ ٹوکن برقرار رکھنے کے لیے خالی چھوڑ دیں",
+    "disconnectedToast": "{name} منقطع ہو گیا",
+    "save": "محفوظ کریں",
+    "connectWithProvider": "{name} سے کنیکٹ کریں",
+    "useTokenInstead": "اس کے بجائے اکسیس ٹوکن استعمال کریں",
+    "oauthWaiting": "اجازت کا انتظار کر رہے ہیں…",
+    "oauthFailed": "سائن ان ناکام۔ دوبارہ کوشش کریں۔",
+    "oauthDenied": "پرووائیڈر نے رسائی مسترد کر دی۔",
+    "oauthTimeout": "سائن ان کا وقت ختم ہو گیا۔ دوبارہ کوشش کریں۔",
+    "oauthCancelled": "سائن ان منسوخ کر دیا گیا۔",
+    "oauthUnavailable": "اس ڈپلائمنٹ پر اس کنیکٹر کے لیے سائن ان دستیاب نہیں۔ اس کے بجائے اکسیس ٹوکن استعمال کریں یا اپنے منتظم سے OAuth ایپ کنفیگر کرنے کے لیے کہیں۔",
+    "ownAppToggle": "اپنی OAuth ایپ استعمال کریں",
+    "ownAppHint": "اپنے {name} اکاؤنٹ (ادارے، ورک اسپیس، یا انٹرپرائز انسٹینس) میں ذیل کے callback URL کے ساتھ ایک OAuth ایپ رجسٹر کریں، پھر اس کی اسناد یہاں پیسٹ کریں۔ بلٹ۔ان ایپ استعمال کرنے کے لیے اسے بند رہنے دیں۔",
+    "ownAppCustomHint": "اگر چاہیں تو نیچے اپنی OAuth ایپ کی اسناد فراہم کریں؛ خودکار رجسٹریشن کے لیے خالی چھوڑ دیں۔",
+    "ownAppInUse": "اپنی OAuth ایپ سے کنیکٹڈ۔",
+    "clientIdLabel": "کلائنٹ ID",
+    "clientSecretLabel": "کلائنٹ سیکرٹ (اگر آپ کی ایپ میں موجود ہو)",
+    "redirectUriLabel": "رجسٹر کرنے کا Callback/Redirect URL",
+    "reconnect": "دوبارہ کنیکٹ کریں",
+    "needsReauth": "دوبارہ کنیکٹ کرنا ضروری ہے",
+    "disconnectOauthNote": "ڈس کنیکٹ کرنے سے صرف اس ڈیوائس سے رسائی ختم ہو گی۔ مکمل رسائی ختم کرنے کے لیے اپنے {name} اکاؤنٹ میں مجاز ایپس کا انتظام کریں۔",
+    "authModeLabel": "تصدیق",
+    "authModeNone": "کوئی نہیں",
+    "authModeBearer": "اکسیس ٹوکن",
+    "authModeOauth": "پرووائیڈر سے سائن ان کریں (OAuth)",
+    "oauthCustomHint": "محفوظ کرنے کے بعد آپ ایک پاپ اپ ونڈو میں سرور کے پرووائیڈر سے سائن ان کریں گے۔",
+    "saveAndSignIn": "محفوظ کریں اور سائن ان کریں",
+    "oauthCallback": {
+      "title": "اجازت مکمل",
+      "missingState": "اجازت کے لیے کچھ نہیں",
+      "close": "آپ یہ ونڈو بند کر کے ایپ پر واپس جا سکتے ہیں۔",
+      "closeButton": "ونڈو بند کریں"
+    }
   }
 }

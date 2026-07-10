@@ -2,22 +2,26 @@ import {
   IconCalendar,
   IconChevronLeft,
   IconHash,
+  IconStar,
+  IconStarFilled,
   IconTag,
+  IconWorld,
 } from '@tabler/icons-react';
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import { formatKnowledgeCutoff } from '@/lib/utils/shared/formatKnowledgeCutoff';
 
-import { OpenAIModel } from '@/types/openai';
+import { OpenAIModel, getModelHosting } from '@/types/openai';
 import { OrganizationAgent } from '@/types/organizationAgent';
 
 import { Tooltip } from '@/components/UI/Tooltip';
 
 import { ModelProviderIcon } from './ModelProviderIcon';
 
+import { useSettingsStore } from '@/client/stores/settingsStore';
 import { getIconComponent } from '@/lib/organizationAgents';
 
 interface ModelHeaderProps {
@@ -39,10 +43,25 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
   const t = useTranslations();
   const locale = useLocale();
 
+  const starredModelIds = useSettingsStore((s) => s.starredModelIds);
+  const starModel = useSettingsStore((s) => s.starModel);
+  const unstarModel = useSettingsStore((s) => s.unstarModel);
+  const models = useSettingsStore((s) => s.models);
+  // The live list entry carries runtime discovery data (hostedIn) that the
+  // conversation's model snapshot and the static config lack.
+  const liveModel = useMemo(
+    () => models.find((m) => m.id === selectedModel?.id),
+    [models, selectedModel?.id],
+  );
+
   // Defensive check - should not happen if parent guards correctly
   if (!selectedModel) {
     return null;
   }
+
+  const isStarred = starredModelIds.includes(selectedModel.id);
+  const hostedIn = liveModel?.hostedIn;
+  const hosting = getModelHosting(modelConfig ?? liveModel ?? selectedModel);
 
   // Get localized model data if available
   const localeKey = modelIdToLocaleKey(selectedModel.id);
@@ -124,6 +143,34 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
         >
           {localizedName}
         </h2>
+        <button
+          type="button"
+          onClick={() =>
+            isStarred
+              ? unstarModel(selectedModel.id)
+              : starModel(selectedModel.id)
+          }
+          aria-pressed={isStarred}
+          aria-label={
+            isStarred
+              ? t('modelSelect.unstar', { name: localizedName })
+              : t('modelSelect.star', { name: localizedName })
+          }
+          title={
+            isStarred
+              ? t('modelSelect.unstar', { name: localizedName })
+              : t('modelSelect.star', { name: localizedName })
+          }
+          className={`p-2 rounded-lg transition-colors ${
+            isStarred
+              ? 'text-blue-600 dark:text-blue-400'
+              : hasBackgroundImage
+                ? 'text-white/70 hover:text-white'
+                : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+          } hover:bg-gray-100/60 dark:hover:bg-gray-800/60`}
+        >
+          {isStarred ? <IconStarFilled size={20} /> : <IconStar size={20} />}
+        </button>
       </div>
       {(() => {
         // Bold the first sentence of the description so users get the
@@ -210,15 +257,36 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           was jargon that didn't communicate to users. Tagline + description
           carry that meaning now. Knowledge cutoff stays because dates are
           concrete and useful for research / news use cases. */}
-      {showModelTypeBadge && knowledgeCutoffDisplay && (
-        <div className="flex items-center gap-2 flex-wrap">
-          <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
-            <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
-              <IconCalendar size={14} />
-              {knowledgeCutoffDisplay}
-            </span>
-          </Tooltip>
+      {showModelTypeBadge && (knowledgeCutoffDisplay || hostedIn) && (
+        <div className="flex items-center gap-3 flex-wrap">
+          {knowledgeCutoffDisplay && (
+            <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
+              <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+                <IconCalendar size={14} />
+                {knowledgeCutoffDisplay}
+              </span>
+            </Tooltip>
+          )}
+          {hostedIn && hostedIn.length > 0 && (
+            <Tooltip content={t('modelSelect.hostedIn.tooltip')}>
+              <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+                <IconWorld size={14} />
+                {/* Region codes are proper nouns; only the label localizes. */}
+                {t('modelSelect.hostedIn.label', {
+                  regions: hostedIn.join(' & '),
+                })}
+              </span>
+            </Tooltip>
+          )}
         </div>
+      )}
+
+      {/* Transparent consequences: hosting + regional availability in plain
+          prose, not just chrome. */}
+      {!organizationAgent && hosting === 'external' && (
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          {t('modelSelect.hostedExternally')}
+        </p>
       )}
     </div>
   );

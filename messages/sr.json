@@ -437,7 +437,22 @@
     "noProjectsFound": "Nisu pronađeni projekti. Koristi se \"default\".",
     "selectAllRequired": "Izaberite pretplatu, nalog i projekat.",
     "subscriptionRequired": "Izaberite pretplatu",
-    "accountRequired": "Izaberite Foundry nalog"
+    "accountRequired": "Izaberite Foundry nalog",
+    "projectSelectionRequired": "Izaberite projekat sa liste.",
+    "scanningResources": "Skeniranje vaših Azure pretplata...",
+    "searchProjectsPlaceholder": "Pretraži projekte...",
+    "noProjectsDiscovered": "Nijedan Foundry projekat nije pronađen u vašim pretplatama. Koristite ručni unos ako znate putanju.",
+    "discoveryPartialWarning": "{count, plural, one {# pretplata nije mogla biti skenirana} other {# pretplata nisu mogle biti skenirane}}. Koristite ručni unos ako vaš projekat nedostaje.",
+    "discoveryTruncatedWarning": "Previše resursa za potpuno skeniranje. Koristite ručni unos ako vaš projekat nedostaje.",
+    "retryScan": "Pokušaj ponovo",
+    "next": "Dalje",
+    "back": "Nazad",
+    "selectAgentsDescription": "Izaberite agente iz ovog projekta koji će se pojaviti u biraču modela.",
+    "selectAll": "Izaberi sve",
+    "deselectAll": "Poništi izbor svega",
+    "agentsSelectedCount": "Izabrano {selected} od {total} agenata",
+    "autoAddLabel": "Automatski dodaj nove agente",
+    "autoAddDescription": "Agenti koji kasnije budu objavljeni u ovom projektu pojavljuju se automatski. Agenti koji nisu označeni ostaju izostavljeni."
   },
   "Quick Actions": "Брзе Акције",
   "Type / in chat to access your prompts": "Откуцајте / у ћаскању за приступ упутствима",
@@ -818,7 +833,19 @@
       "listingTools": "Pretraga dostupnih alata…",
       "analyzingFiles": "Analiza vaših fajlova…",
       "searchingKnowledge": "Pretraga baze znanja…",
-      "cancellingPriorTool": "Otkazivanje prethodnog zahteva za alat…"
+      "cancellingPriorTool": "Otkazivanje prethodnog zahteva za alat…",
+      "workflow": {
+        "preparingDocument": "Priprema referenci...",
+        "writingDocument": "Pisanje dokumenta...",
+        "analyzingSource": "Analiza izvornog teksta...",
+        "translating": "Prevođenje...",
+        "reviewingTranslation": "Runda pregleda {round} od {total}...",
+        "revisingTranslation": "Primena povratnih informacija iz pregleda...",
+        "extractingRows": "Ekstrakcija redova iz {source}...",
+        "transformingTable": "Transformacija tabele...",
+        "findingLocations": "Identifikacija lokacija...",
+        "updatingMap": "Ažuriranje mape..."
+      }
     },
     "toolSummary": {
       "usedTools": "Korišćen{count, plural, one {# alat} other {# alata}}",
@@ -879,7 +906,8 @@
     "listen": "Slušaj",
     "processingAudio": "Obrađujem zvuk...",
     "ttsError": "Greška pri generisanju zvuka. Pokušajte ponovo.",
-    "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke"
+    "unsupportedMessageType": "Greška pri prikazu poruke: Nepodržan tip poruke",
+    "addLanguageOption": "Dodaj \"{name}\"…"
   },
   "transcript": {
     "originalTranscript": "Оригинални транскрипт",
@@ -1297,11 +1325,13 @@
     "responseSection": "Odgovor",
     "voiceSection": "Glas",
     "behaviorSection": "Ponašanje",
-    "resetChatSettings": "Vrati podešavanja ćaskanja na podrazumevana",
-    "resetChatSettingsConfirmTitle": "Vratiti podešavanja ćaskanja na podrazumevana?",
-    "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O Vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ovo ne utiče na vaše razgovore.",
+    "resetChatSettings": "Vrati podešavanja ćaskanja na podrazumevano",
+    "resetChatSettingsConfirmTitle": "Vratiti podešavanja ćaskanja?",
+    "resetChatSettingsConfirmMessage": "Ovim vraćate podrazumevana podešavanja za sve u ovom panelu: temperaturu, prilagođena uputstva, O vama, odgovor modela, brzinu strimovanja, pretvaranje teksta u govor, aktivne fajlove i potvrde. Ne utiče na vaše razgovore.",
     "customInstructionsLabel": "Prilagođena uputstva*",
-    "defaultTemperatureLabel": "Podrazumevana temperatura*"
+    "defaultTemperatureLabel": "Podrazumevana temperatura*",
+    "Usage & Impact": "Upotreba i uticaj",
+    "Connectors": "Konektori"
   },
   "emptyState": {
     "greeting": "Како могу да помогнем?",
@@ -1449,7 +1479,36 @@
     "modelsDescription": "Izaberite AI model za vašu konverzaciju. Svaki model ima svoje prednosti — izaberite jedan za više detalja.",
     "recommended": "Preporučeno",
     "familyAll": "Sve",
-    "familyFilterLabel": "Filtriraj modele po porodici"
+    "familyFilterLabel": "Filtriraj modele po porodici",
+    "searchPlaceholder": "Pretražite modele",
+    "searchEmpty": "Nijedan model ne odgovara vašoj pretrazi.",
+    "star": "Označi kao omiljeno: {name}",
+    "unstar": "Ukloni iz omiljenih: {name}",
+    "otherFamily": "Ostalo",
+    "hostedExternally": "Pokreće se na infrastrukturi provajdera putem Azure AI Foundry, a ne u MSF Azure okruženju.",
+    "hostedIn": {
+      "label": "Hostovano u: {regions}",
+      "tooltip": "Azure region(i) u kome je model implementiran. Razgovori se obrađuju u vašem regionu."
+    },
+    "badges": {
+      "external": "Eksterno",
+      "externalTooltip": "Pokreće se na infrastrukturi provajdera putem Azure AI Foundry, a ne u MSF Azure okruženju.",
+      "regionHostedTooltip": "Hostovano u {region} Azure regionu. Razgovori sa ovim modelom se tamo obrađuju."
+    },
+    "favorites": "Omiljeni",
+    "euResidencyNote": "Svi modeli rade u EU Azure regionu.",
+    "hostedRegion": {
+      "label": "Hostovani region",
+      "processedIn": "Ovaj razgovor se obrađuje u {region} Azure regionu.",
+      "euOnlyNote": "{name} se hostuje u EU Azure regionu; razgovori sa ovim modelom se tamo obrađuju."
+    },
+    "version": {
+      "label": "Verzija"
+    },
+    "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema.",
+    "variant": {
+      "label": "Varijanta"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1526,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Izbalansirani Claude model. Dobar za svakodnevno pisanje, analizu i kodiranje sa brzim odgovorima.",
       "knowledgeCutoff": "Februar 2026."
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Otvoreni model kompanije Meta. Pouzdan za pisanje, rezimee i brza pitanja."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Najnoviji vodeći model kompanije OpenAI. Izuzetan za pisanje, istraživanje, kodiranje i rešavanje složenih problema."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Najmanja i najbrža GPT varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Konverzacijska GPT varijanta prilagođena dijalogu. Dobar za neformalne razgovore, razmenu ideja i podršku u diskusiji."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Prvobitni vodeći GPT-5 model. I dalje sposoban za pisanje, analizu i kodiranje."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 varijanta prilagođena četovanju. Dobra za svakodnevne razgovore i razmenu ideja."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Starija multimodalna GPT verzija. Pogodna za svakodnevno pisanje i pitanja i odgovore gde nisu potrebne najnovije mogućnosti."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Manja i brža GPT-4.1 varijanta za brze svakodnevne zadatke."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Najnoviji i najjači model kompanije Anthropic. Izvrsan za duže tekstove, istraživanje, programiranje i dubinsku analizu."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Najnoviji otvoreni model kompanije DeepSeek. Pouzdan za opšte pisanje i tehnička pitanja."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Glavni model kompanije Mistral. Evropska alternativa za pisanje, rezimee i opšta pitanja."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Ranija vodeća verzija GPT-5. I dalje snažna u pisanju, analizi i kodiranju."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Ranija čet-prilagođena verzija GPT-5. Dobar za svakodnevne razgovore i razmenu ideja."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Najmanja GPT-5 varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Najmanja GPT-4.1 varijanta. Prikladna za brze, jednostavne zadatke gde su brzina i trošak ključni."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mala i brza GPT-4o varijanta. Prikladna za brze svakodnevne zadatke gde nisu potrebne najnovije mogućnosti."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompaktni model za rezonovanje. Dobar za matematiku, logiku i zadatke korak po korak, uz niže troškove od o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Prethodni kompaktni model za rezonovanje. Efikasan za matematičke, naučne i logičke zadatke uz niže troškove."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Najinteligentniji model kompanije Anthropic, prvi u Claude 5 porodici. Izvrstan za najzahtevnije zadatke pisanja, istraživanja i programiranja."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Najnoviji uravnoteženi Claude, prvi iz porodice Claude 5. Jak u svakodnevnom pisanju, analizi i programiranju, sa brzim odgovorima."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mali model kompanije Mistral. Brz i povoljan za rezimee, nacrte i jednostavna pitanja."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Najmanji model kompanije Mistral. Najbolji za izuzetno brze i jednostavne zadatke uz minimalne troškove."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Ažurirana verzija DeepSeek-R1. Prikazuje razmišljanje korak po korak sa poboljšanom dubinom rezonovanja."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Lakši otvoreni model kompanije Meta. Brz za pisanje, rezimee i svakodnevna pitanja."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Stariji open-source model kompanije Meta. I dalje pouzdan za opšte pisanje i pitanja i odgovore."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Glavni model kompanije xAI. Dobar za otvorene diskusije, analize i kreativne projekte."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Najnoviji vodeći model OpenAI. Izuzetan za pisanje, istraživanje, programiranje i rešavanje kompleksnih problema."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (najnoviji)",
+      "description": "Ažurirana oznaka koja uvek ukazuje na najnoviji chat model OpenAI. Azure zamena za povučene verzionisane gpt-*-chat modele."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Nedavno Opus izdanje, između 4.6 i 4.8. Snažan za duže pisanje, istraživanja, programiranje i detaljnu analizu."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Najnoviji model za zaključivanje kompanije DeepSeek i Azure zamena za R1 liniju. Prikazuje razmišljanje korak po korak."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Brza V4 varijanta DeepSeek modela i Azure zamena za V3 liniju. Brz za opšte pisanje i tehnička pitanja."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Brzi model za zaključivanje kompanije xAI. Razmišlja korak po korak uz brze odgovore."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Brzi chat model kompanije xAI. Brzi odgovori za svakodnevna pitanja i razgovore."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Lakša verzija xAI modela. Brži i povoljniji za kratka pitanja i neformalne razgovore."
     }
   },
   "searchMode": {
@@ -1791,7 +1990,20 @@
     "useDefaultStyle": "Користи подразумевани стил писања",
     "noTonesCreated": "Још нема направљених тонова",
     "createTonesHint": "Направите тонове у Брзим акцијама",
-    "translateDocumentTooltip": "Prevedite dokumente na drugi jezik.\n\nPodržani formati: Word, Excel, PowerPoint, HTML, TXT\nMaksimalna veličina: 40MB\n\nPodržava više od 80 jezika uz opcione glosare."
+    "translateDocumentTooltip": "Prevedite dokumente na drugi jezik.\n\nPodržani formati: Word, Excel, PowerPoint, HTML, TXT\nMaksimalna veličina: 40MB\n\nPodržava više od 80 jezika uz opcione glosare.",
+    "translateTooltip": "Prevedite isečak teksta na drugi jezik.\n\nZa cele fajlove (Word, Excel, PowerPoint, HTML, TXT), koristite opciju Prevedi dokument.",
+    "cameraTooltip": "Napravite fotografiju kamerom uređaja i priložite je uz poruku.",
+    "noResults": "Nema odgovarajućih akcija",
+    "sectionPinned": "Prikačeno",
+    "sectionFrequent": "Često korišćeno",
+    "sectionMore": "Više",
+    "categoryWeb": "Veb",
+    "categoryMedia": "Mediji i fajlovi",
+    "categoryTransform": "Transformiši",
+    "pin": "Prikači na vrh",
+    "unpin": "Otkači",
+    "moveToMore": "Premesti u Više",
+    "moveOutOfMore": "Prikaži u meniju"
   },
   "transcription": {
     "transcribesOnSend": "Транскрибује при слању",
@@ -1925,7 +2137,14 @@
     "expiresSoon": "Истиче за {days} дан(а) - преузмите ускоро",
     "expires": "Доступно за {days} дана",
     "unofficialBadgeLabel": "Neslužbeno",
-    "unofficialLanguageWarning": "Ovaj jezik nije zvanično podržan. Kvalitet prevoda nije verifikovan. Molimo da rezultat proveri osoba koja tečno govori ili je izvorni govornik pre deljenja."
+    "unofficialLanguageWarning": "Ovaj jezik nije zvanično podržan. Kvalitet prevoda nije verifikovan. Molimo da rezultat proveri osoba koja tečno govori ili je izvorni govornik pre deljenja.",
+    "translationSubmitted": "Prevod je započet — PDF fajlovi se obrađuju u pozadini.",
+    "pendingTitle": "Prevodi se {filename}…",
+    "pendingHint": "PDF prevodi se obrađuju u pozadini i mogu trajati nekoliko minuta. Možete nastaviti sa radom — ova kartica će se ažurirati kada dokument bude spreman, čak i nakon ponovnog učitavanja.",
+    "asyncFailed": "Prevod dokumenta nije uspeo: {error}",
+    "jobNotFound": "posao za prevod više nije dostupan. Pokušajte ponovo.",
+    "retryPolling": "Proveri ponovo",
+    "pollingStalled": "Ne možemo da pristupimo serveru radi provere napretka. Prevod možda još uvek traje."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -2093,5 +2312,699 @@
   "regionOverride": {
     "warning": "Preusmeravanje lokacije je aktivno — vaši zahtevi se upućuju ka regionu podataka {region}. Ovo je ručno test preusmeravanje, a ne vaša stvarna lokacija.",
     "clear": "Ukloni preusmeravanje"
+  },
+  "usageImpact": {
+    "empty": "Još nema praćene upotrebe. Vaša upotreba tokena i procenjene emisije biće prikazani ovde nakon razgovora.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} punjenja pametnog telefona",
+    "requests": "Zahtevi",
+    "promptTokens": "Tokeni za prompt",
+    "completionTokens": "Tokeni za završetak",
+    "topModels": "Po modelu",
+    "byRegion": "Po regionu hostovanja",
+    "regionDefault": "Podrazumevani",
+    "modelRow": "{requests} zahteva · {grams} g",
+    "disclosure": "Procene se zasnivaju na pretpostavkama v{version} · od {since} · samo standardni čet (agenti i odgovori iz baze znanja nisu uračunati).",
+    "reset": "Resetuj statistiku upotrebe"
+  },
+  "extraction": {
+    "toggleLabel": "Ekstrahuj strukturirane podatke",
+    "trayLabel": "Ekstrakcija",
+    "trayPrefix": "Ekstrahuj",
+    "trayInfo": "Ekstrakcija vraća do 3 strukturirane tabele. Recepti se čuvaju lokalno.",
+    "autoChip": "Auto — AI predlaže strukturu",
+    "addRecipe": "Dodaj recept",
+    "addRecipeTitle": "Dodaj recept ovoj ekstrakciji",
+    "addRecipeFullTitle": "Do 3 recepta po ekstrakciji",
+    "removeRecipe": "Ukloni recept: {name}",
+    "remove": "Ukloni",
+    "section": "Recepti za ekstrakciju",
+    "sectionSubtitle": "Sačuvani šabloni koji pretvaraju sirov tekst, fajlove ili URL-ove u strukturisane tabele. Izaberite do 3 po ekstrakciji.",
+    "newRecipe": "Novi recept",
+    "untitledRecipe": "(Neimenovani recept)",
+    "deleteRecipe": "Obriši recept",
+    "delete": "Obriši",
+    "deleteConfirm": "Obrisati?",
+    "cancel": "Otkaži",
+    "name": "Naziv",
+    "namePlaceholder": "npr. Pacijenti",
+    "description": "Opis",
+    "optional": "(opciono)",
+    "descriptionPlaceholder": "Kratak sažetak prikazan u izboru recepta",
+    "instructions": "Uputstva",
+    "instructionsPlaceholder": "Šta AI treba da traži u materijalu?",
+    "fields": "Polja",
+    "field": "polje",
+    "fieldsPlural": "polja",
+    "fieldName": "Naziv polja",
+    "fieldType": "Tip polja",
+    "fieldNamePlaceholder": "naziv_polja",
+    "addField": "Dodaj polje",
+    "removeField": "Ukloni polje",
+    "toggleDetails": "Prikaži detalje",
+    "fieldDetailsTitle": "Opis, enum vrednosti",
+    "fieldDescriptionPlaceholder": "Opis (pomaže AI-u da pronađe ovo polje)",
+    "enumValuesPlaceholder": "Vrednosti odvojene zarezom",
+    "required": "obavezno",
+    "suggest": "Predloži pomoću AI",
+    "suggesting": "Predlažem…",
+    "suggestNeedsInstructions": "Dodajte uputstva da bi AI znao šta da traži",
+    "searchRecipes": "Pretraži recepte",
+    "pickerEmpty": "Još nema recepata. Kreirajte jedan za početak.",
+    "pickerEmptyMatch": "Nema odgovarajućih recepata",
+    "editorEmpty": "Još nema recepata. Kreirajte jedan i AI može pomoći u popunjavanju polja.",
+    "noData": "Nema izdvojenih podataka",
+    "noRecords": "Nema pronađenih zapisa za {name}",
+    "row": "red",
+    "rows": "redova",
+    "record": "zapis",
+    "records": "zapisa",
+    "complete": "završeno",
+    "download": "Preuzmi",
+    "preview": "Pregled",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} polja",
+    "fieldCountOne": "1 polje",
+    "andMoreFields": "+ još {count}",
+    "saveAsRecipe": "Sačuvaj kao recept",
+    "savedAsRecipeToast": "Sačuvano kao recept \"{name}\"",
+    "previewTruncated": "Prikazana su prva 3 od ukupno {total} redova. Preuzmite za potpune podatke.",
+    "previewEmpty": "Nema redova za pregled",
+    "proposedSchemaTip": "AI je predložio ovu šemu. Sačuvajte je kako biste je ponovo koristili.",
+    "downloadAriaLabel": "Preuzmi {name} kao {format}",
+    "previewAriaLabel": "Prikaži/sakrij pregled za {name}",
+    "changeFormatAriaLabel": "Promeni format preuzimanja za {name}",
+    "materialWarningTitle": "Dodajte materijal za izdvajanje",
+    "materialWarningBody": "Upišite poruku, priložite fajl ili dodajte URL.",
+    "materialAttach": "Priloži fajl",
+    "willExtractPrefix": "Biće izdvojeno iz:",
+    "materialText": "tekst poruke",
+    "materialFiles": "{count, plural, one {1 fajl} few {# fajla} other {# fajlova}}",
+    "materialActiveFiles": "{count, plural, one {1 aktivan fajl} few {# aktivna fajla} other {# aktivnih fajlova}}",
+    "dismiss": "Isključi izdvajanje"
+  },
+  "Connectors": "Konektori",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Prevod",
+        "description": "Prevedite tekst uz analizu, glosare i revizije"
+      },
+      "document": {
+        "label": "Dokument",
+        "description": "Napišite i doradite dokument uz pomoć asistenta"
+      },
+      "dataAnalysis": {
+        "label": "Analiza podataka",
+        "description": "Uvezite tabele i istražite ili transformišite podatke"
+      },
+      "map": {
+        "label": "Mapa",
+        "description": "Pretvorite bilo koje podatke u lokacije na mapi"
+      }
+    },
+    "chooser": {
+      "prompt": "Ili započnite fokusiran radni prostor"
+    },
+    "sidebar": {
+      "newTranslation": "Novi prevod",
+      "newDocument": "Novi dokument",
+      "newDataAnalysis": "Nova analiza podataka",
+      "newMap": "Nova mapa"
+    },
+    "translation": {
+      "chooseLanguage": "Ciljni jezik",
+      "customLanguageHint": "\"{name}\" je jezik koji ste dodali — AI će pokušati bilo koji jezik, ali kvalitet nije proveren.",
+      "addedByYou": "Dodali ste vi",
+      "glossary": "Glosar",
+      "noGlossary": "Nema glosara",
+      "manageGlossaries": "Glosari",
+      "glossaries": "Glosari",
+      "closeGlossaries": "Zatvori glosare",
+      "glossariesEmpty": "Kreirajte glosar kako biste zaključali prevod određenih termina. Glosari se čuvaju na ovom uređaju i mogu se koristiti za sve prevode.",
+      "newGlossary": "Novi rečnik",
+      "newGlossaryName": "Rečnik bez naziva",
+      "glossaryName": "Naziv rečnika",
+      "deleteGlossary": "Obriši rečnik",
+      "sourceTerm": "Izvorni termin",
+      "targetTerm": "Prevod",
+      "note": "Beleška",
+      "noteOptional": "Beleška (opciono)",
+      "addEntry": "Dodaj termin",
+      "removeEntry": "Ukloni {term}",
+      "mode": "Režim prevođenja",
+      "modeQuick": "Brzo",
+      "modeAgentic": "Pregledano",
+      "modeQuickHint": "Jedno prevođenje, najbrže",
+      "modeAgenticHint": "Prvo analizira tekst, zatim prevodi i sprovodi do 3 kruga pregleda",
+      "translate": "Prevedi",
+      "translating": "Prevodi...",
+      "sourceLabel": "Izvorni tekst",
+      "targetLabel": "Prevod",
+      "sourcePlaceholder": "Nalepite ili unesite tekst za prevođenje, ili otpremite dokument.",
+      "targetEmpty": "Ovde će se pojaviti prevod.",
+      "uploadDocument": "Otpremi dokument",
+      "copy": "Kopiraj",
+      "copied": "Kopirano",
+      "tooLong": "Tekst je duži od {max} karaktera. Podelite ga na delove ili koristite prevođenje dokumenata za cele fajlove.",
+      "analysisTitle": "Analiza pre prevođenja",
+      "register": "Registruj se",
+      "reviewTitle": "Krugovi pregleda",
+      "roundLabel": "Krug {round}",
+      "verdictApprove": "odobreno",
+      "verdictRevise": "ispravljeno",
+      "railRequest": "Prevedi izvorni tekst na {language}.",
+      "railDoneAgentic": "Završeno. Analizirao/la sam tekst, preveo/la ga i sproveo/la {rounds} krug(ova) pregleda. Rezultat je u radnom prostoru.",
+      "railDoneQuick": "Završeno. Prevod je u radnom prostoru.",
+      "railAssessRequest": "Proceni kvalitet prevoda na {language}.",
+      "railAssessDone": "Procena završena: ocene su u radnom prostoru uz {count} predloženih izmena za pregled.",
+      "roundChanges": "Izmene u krugu {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Preciznost",
+          "description": "Verno prenosi izvorno značenje — nema pogrešnog prevoda, izostavljanja, dodavanja niti neprevedenih delova"
+        },
+        "fluency": {
+          "label": "Tečnost",
+          "description": "Gramatika, pravopis, interpunkcija i kohezija zvuče prirodno na ciljnom jeziku"
+        },
+        "terminology": {
+          "label": "Terminologija",
+          "description": "Stručni termini su dosledni i tačni; rečnik se striktno poštuje"
+        },
+        "style": {
+          "label": "Stil",
+          "description": "Registrum, ton i glas odgovaraju izvorniku i ostaju dosledni"
+        },
+        "localeConventions": {
+          "label": "Lokalne konvencije",
+          "description": "Datumi, brojevi, jedinice i interpunkcija prate norme ciljnog jezika"
+        },
+        "audience": {
+          "label": "Publika",
+          "description": "Odgovara nameni i ciljnoj publici teksta"
+        }
+      },
+      "severity": {
+        "minor": "Manje",
+        "major": "Glavna"
+      },
+      "assess": "Proceni kvalitet",
+      "assessing": "Procena…",
+      "assessmentTitle": "Procena kvaliteta",
+      "criteriaPicker": "Kriterijumi za procenu",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Predložene izmene",
+      "noEditsSuggested": "Nema predloženih izmena — prevod ispunjava izabrane kriterijume.",
+      "acceptEdit": "Prihvati",
+      "rejectEdit": "Odbij",
+      "acceptAll": "Prihvati sve",
+      "rejectAll": "Odbij sve",
+      "editAccepted": "Prihvaćeno",
+      "editRejected": "Odbijeno",
+      "editUnapplicable": "Ovaj deo ne može biti pronađen u trenutnom tekstu — nije primenjeno",
+      "editTranslation": "Izmeni",
+      "doneEditing": "Završeno",
+      "pasteTranslationPlaceholder": "Ukucajte ili nalepite prevod za obradu…",
+      "editingBlockedPendingEdits": "Najpre rešite ili odbijte čekajuće predložene izmene",
+      "pendingCount": "{count} na čekanju",
+      "closeReview": "Zatvori pregled kvaliteta",
+      "showReview": "Prikaži pregled",
+      "showReviewPending": "Prikaži pregled ({count} na čekanju)"
+    },
+    "document": {
+      "emptyTitle": "Opišite dokument koji želite",
+      "emptyBody": "Navedite asistentu šta da napiše — izveštaj o situaciji, pismo donatoru, zapisnik sastanka. Dodajte referentne fajlove ako želite da citira iz njih.",
+      "generatePlaceholder": "Opišite dokument koji treba napisati…",
+      "revisePlaceholder": "Opišite izmene koje treba napraviti…",
+      "generate": "Generiši",
+      "revise": "Izmeni",
+      "writing": "Pisanje…",
+      "export": "Izvezi",
+      "references": "Reference",
+      "addReference": "Dodaj fajl",
+      "uploading": "Otpremanje…",
+      "removeReference": "Ukloni {name}",
+      "referenceChars": "{chars} karaktera izdvojenog teksta",
+      "referenceEmpty": "Nije moguće izdvojiti tekst iz {name}",
+      "uploadFailed": "Otpremanje nije uspelo",
+      "untitledDocument": "Dokument bez naslova",
+      "generatedSummary": "Napisao/la sam dokument u radnom prostoru. Pregledajte ga i recite mi šta treba promeniti.",
+      "revisedSummary": "Izmenio/la sam dokument u radnom prostoru.",
+      "runFailed": "Došlo je do greške: {message}",
+      "uploadBasis": "Počnite od postojećeg dokumenta",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Gramatika i pravopis",
+          "description": "Ispravna gramatika i pravopis; jedna dosledna varijanta engleskog (US ili UK) je prihvatljiva — mešanje je greška"
+        },
+        "consistency": {
+          "label": "Doslednost",
+          "description": "Terminologija, imena, velika slova i formatiranje korišćeni su dosledno kroz ceo tekst"
+        },
+        "clarity": {
+          "label": "Jasnoća",
+          "description": "Direktne, nedvosmislene rečenice; struktura koja podržava čitaoca"
+        },
+        "sensitivity": {
+          "label": "Osetljivost",
+          "description": "Uključiv, osetljiv na sukobe i humanitarne aspekte (opciona provera)"
+        },
+        "specAdherence": {
+          "label": "Poštovanje specifikacije",
+          "description": "Prati priloženu specifikaciju dokumenta: svi potrebni delovi su prisutni, pravilnim redosledom i u skladu s uputstvima"
+        },
+        "toneAdherence": {
+          "label": "Poštovanje tona",
+          "description": "Prati priložena pravila o glasu i tonu"
+        }
+      },
+      "severity": {
+        "minor": "Manje",
+        "major": "Veće"
+      },
+      "assess": "Proceni kvalitet",
+      "assessing": "Procenjujem...",
+      "assessmentTitle": "Kontrola kvaliteta",
+      "criteriaPicker": "Kriterijumi za procenu",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Predložene izmene",
+      "noEditsSuggested": "Nema predloženih izmena — dokument ispunjava izabrane kriterijume.",
+      "acceptEdit": "Prihvati",
+      "rejectEdit": "Odbij",
+      "acceptAll": "Prihvati sve",
+      "rejectAll": "Odbij sve",
+      "editAccepted": "Prihvaćeno",
+      "editRejected": "Odbijeno",
+      "editUnapplicable": "Nije moguće pronaći ovaj deo u trenutnom tekstu — nije primenjeno",
+      "editingBlockedPendingEdits": "Prvo rešite ili odbijte preostale predložene izmene",
+      "pendingCount": "{count} na čekanju",
+      "closeReview": "Zatvori kontrolu kvaliteta",
+      "showReview": "Prikaži izveštaj",
+      "showReviewPending": "Prikaži izveštaj ({count} na čekanju)",
+      "railAssessRequest": "Proceni kvalitet dokumenta prema izabranim kriterijumima.",
+      "railAssessDone": "Procena završena: ocene su u radnom prostoru sa {count} predloženih izmena za pregled.",
+      "spec": "Specifikacija dokumenta",
+      "noSpec": "Nema specifikacije",
+      "manageSpecs": "Specifikacije",
+      "specs": "Specifikacije dokumenta",
+      "closeSpecs": "Zatvori specifikacije",
+      "specsEmpty": "Kreirajte specifikaciju kako biste izrađivali dokumente u fiksnom formatu — obavezni delovi, redosled i smernice po delu (npr. šablon SitRep-a). Specifikacije se čuvaju na ovom uređaju i mogu se ponovo koristiti.",
+      "newSpec": "Nova specifikacija",
+      "newSpecName": "Specifikacija bez naslova",
+      "specName": "Naziv specifikacije",
+      "specDescription": "Opis (opciono)",
+      "deleteSpec": "Obriši specifikaciju",
+      "sectionHeading": "Naslov odeljka",
+      "sectionGuidance": "Uputstvo (opciono)",
+      "sectionRequired": "Obavezno",
+      "addSection": "Dodaj odeljak",
+      "removeSection": "Ukloni odeljak",
+      "generalGuidance": "Opšte uputstvo (opciono)",
+      "tone": "Ton",
+      "noTone": "Bez tona",
+      "customCriteria": "Prilagođeni kriterijumi",
+      "manageCriteria": "Prilagođeni kriterijumi",
+      "closeCriteria": "Zatvori prilagođene kriterijume",
+      "criteriaEmpty": "Kreirajte prilagođene kriterijume — npr. smernice brenda ili jezik organizacije — za ocenjivanje dokumenata i vođenje izmena. Sačuvano na ovom uređaju i može se ponovo koristiti.",
+      "newCriterion": "Novi kriterijum",
+      "newCriterionName": "Neimenovani kriterijum",
+      "criterionName": "Naziv kriterijuma",
+      "criterionRubric": "Rubrika",
+      "criterionRubricPlaceholder": "Opišite šta dokument treba da sadrži da bi ispunio ovaj kriterijum, npr. \"Nikada ne koristiti superlative o našem radu; korisnike uvek nazivati 'osobe kojima pomažemo'…\"",
+      "criterionRubricHint": "Ova rubrika se AI-u prenosi doslovno tokom ocenjivanja i izmena.",
+      "deleteCriterion": "Obriši kriterijum",
+      "profileTitle": "Profil dokumenta",
+      "profileDocType": "Tip",
+      "profileLanguage": "Jezik",
+      "profileAudience": "Publika",
+      "profilePurpose": "Svrha",
+      "profileRegister": "Registr",
+      "profileTone": "Ton",
+      "profileConventions": "Konvencije",
+      "emptyHint": "Počnite da kucate ispod, opišite šta da se napiše u polju na dnu ili počnite od datoteke.",
+      "addSpec": "Dodaj specifikaciju",
+      "addCriteria": "Dodaj kriterijume",
+      "scopeFullDocument": "Obuhvat: ceo dokument",
+      "scopeSelection": "Obuhvat: selekcija — „{preview}…” ({count} reči)",
+      "clearSelection": "Poništi selekciju (rad sa celim dokumentom)",
+      "reviseSelectionPlaceholder": "Opišite izmene selektovanog dela…",
+      "revisedSelectionSummary": "Izmenio/la sam izabrani deo teksta u radnom prostoru.",
+      "assessedSelection": "Selekcija"
+    },
+    "data": {
+      "emptyTitle": "Uvezite podatke za analizu",
+      "emptyBody": "Dodajte CSV, Excel ili JSON datoteku ili nalepite redove direktno. Kada se tabela učita, možete je sortirati, izvući više redova iz dokumenata i transformisati ih jednostavnim uputstvima.",
+      "importFile": "Uvezi datoteku",
+      "importing": "Uvoz…",
+      "pasteData": "Nalepi podatke",
+      "pastePlaceholder": "Ovde nalepite CSV, TSV ili JSON…",
+      "import": "Uvezi",
+      "addFromSource": "Dodaj iz izvora",
+      "extractHint": "Nalepite tekst ili izaberite dokument; redovi koji odgovaraju vašim trenutnim kolonama biće izvučeni iz njega. Nepoznete vrednosti ostaju prazne — ništa se ne izmišlja.",
+      "extractPlaceholder": "Nalepite nestruktuirani tekst sa podacima…",
+      "extractRows": "Izvuci redove",
+      "extractFromFile": "Iz datoteke…",
+      "extracting": "Izvlačenje…",
+      "pastedSource": "Nalepjen tekst",
+      "transform": "Transformiši",
+      "transforming": "Transformacija…",
+      "transformPlaceholder": "Opišite transformaciju, npr. \"dodaj kolonu sa brojem slučajeva na 1.000 stanovnika\"…",
+      "transformCapHint": "Transformacije su ograničene na {max} redova. Prvo obrišite ili filtrirajte redove za veće tabele.",
+      "undo": "Poništi",
+      "deleteSelected": "Obriši {count}",
+      "deletedRows": "Obrisano {count} redova",
+      "selectAllRows": "Izaberi sve redove",
+      "selectRow": "Izaberi red {row}",
+      "rowCount": "{count} redova",
+      "rowCapExceeded": "To bi bilo {count} redova; tabela je ograničena na {max}. Podelite podatke ili izvezite umesto toga.",
+      "railExtractRequest": "Ekstrahujte redove koji odgovaraju šemi tabele iz: {source}",
+      "railExtractDone": "Dodata su {count} ekstrahovana reda u tabelu.",
+      "railTransformDone": "Tabela je transformisana.",
+      "columnProfileFor": "Statistika kolone za {column}",
+      "profileMissing": "Nedostaje",
+      "profileDistinct": "Jedinstveno",
+      "profileRange": "Raspon",
+      "profileMean": "Prosek",
+      "profileMedian": "Medijana",
+      "profileTopValues": "Najčešće vrednosti",
+      "filterColumnFor": "Filtriraj {column}",
+      "filterContains": "Sadrži…",
+      "filterMin": "Min",
+      "filterMax": "Maks",
+      "filterClear": "Obriši",
+      "clearFilters": "Obriši filtere",
+      "showingRows": "Prikazano {shown} od ukupno {total} redova",
+      "scopeLabel": "Radni opseg",
+      "scopeTable": "Sve ({count})",
+      "scopeFiltered": "Filtrirano ({count})",
+      "scopeSelection": "Izabrano ({count})",
+      "scopedInstruction": "{instruction} (na {count} odabranih redova)",
+      "assess": "Proceni kvalitet",
+      "assessing": "Procena…",
+      "criteria": {
+        "validity": {
+          "label": "Validnost",
+          "description": "Vrednosti su u skladu sa tipom i očekivanim formatom kolone"
+        },
+        "consistency": {
+          "label": "Doslednost",
+          "description": "Ista vrednost je upisana na isti način svuda (nema varijanti tipa 'M' / 'Male', pomešanih jedinica ili različite upotrebe velikih/malih slova)"
+        },
+        "duplicates": {
+          "label": "Duplikati",
+          "description": "Redovi koji beleže isti entitet ili događaj dva puta"
+        },
+        "plausibility": {
+          "label": "Plausibilnost",
+          "description": "Autlajeri i nemoguće vrednosti u kontekstu"
+        }
+      },
+      "assessmentTitle": "Pregled kvaliteta podataka",
+      "pendingCount": "{count} na čekanju",
+      "closeReview": "Zatvori pregled kvaliteta",
+      "suggestedEdits": "Predložena rešenja",
+      "noEditsSuggested": "Nema predloženih rešenja — podaci su prošli odabrane kriterijume.",
+      "acceptAll": "Prihvati sve",
+      "rejectAll": "Odbij sve",
+      "acceptEdit": "Prihvati",
+      "rejectEdit": "Odbij",
+      "editAccepted": "Primenjeno",
+      "editRejected": "Odbijeno",
+      "editUnapplicable": "Ćelija je promenjena od procene — nije primenjeno",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kriterijumi za procenu",
+      "severity": {
+        "minor": "Manji",
+        "major": "Veći"
+      },
+      "editLocation": "red {row} · {column}",
+      "editLocationRow": "red {row} (brisanje)",
+      "showReview": "Prikaži pregled",
+      "showReviewPending": "Prikaži pregled ({count} na čekanju)",
+      "assessedFiltered": "Filtrirani redovi",
+      "assessedSelection": "Izabrani redovi",
+      "assessedSample": "uzorak od {shown} od {total}",
+      "railAssessRequest": "Proceni kvalitet tabele ({count} redova) prema izabranim kriterijumima.",
+      "railAssessDone": "Predloženo je {count} ispravki kvaliteta podataka — pregledajte ih u radnom prostoru.",
+      "insights": "Uvidi",
+      "chartKind": "Tip grafikona",
+      "chartBar": "Stubičasti (grupisanje)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Linijski (kroz vreme)",
+      "groupByColumn": "Grupiši po koloni",
+      "dateColumn": "Kolona sa datumom",
+      "valueColumn": "Kolona sa vrednostima",
+      "aggFn": "Agregacija",
+      "aggCount": "Broj",
+      "aggSum": "Zbir",
+      "aggMean": "Prosek",
+      "chartTruncated": "Prikazano prvih {max} grupa",
+      "chartNoData": "Nema vrednosti za prikaz grafikona u trenutnim redovima.",
+      "chartBarAria": "Stubičasti grafikon grupisan po {column}",
+      "chartHistogramAria": "Histogram kolone {column}",
+      "chartLineAria": "Linijski grafikon kolone {column} kroz vreme",
+      "editStructure": "Struktura",
+      "defineStructure": "Definiši strukturu",
+      "schemaHint": "Definišite polja svoje strukture podataka. Obavezna polja određuju politiku za nedostajuće podatke pri uvozu; promena tipa polja konvertuje postojeće vrednosti (ćelije koje nije moguće konvertovati ostaju prazne).",
+      "schemaFieldName": "Ime polja",
+      "schemaFieldType": "Tip polja",
+      "schemaRequired": "Obavezno",
+      "schemaAddField": "Dodaj polje",
+      "schemaDeleteField": "Obriši polje {field}",
+      "schemaApply": "Primeni strukturu",
+      "schemaCancel": "Otkaži",
+      "schemaEdited": "Struktura tabele izmenjena",
+      "schemaCellsConverted": "{count} ćelija nije moglo biti konvertovano u novi tip i sada su prazne.",
+      "missingFieldPolicy": "Nedostajući podaci",
+      "policyStrict": "Strogo — odbaci nepotpune redove",
+      "policyFlag": "Označi — uvezi i obeleži",
+      "policyLenient": "Popustljivo — uvezi bez upozorenja",
+      "droppedIncompleteRows": "Odbijeno {count} redova bez obaveznih polja: {fields}",
+      "dismiss": "Zatvori",
+      "requiredColumn": "Obavezno polje",
+      "flagMissingRequired": "Obavezno polje je prazno",
+      "flagPendingEdit": "Predložena ispravka je na čekanju za ovu ćeliju — pogledajte pregled kvaliteta",
+      "fromPhoto": "Sa fotografije",
+      "fromPhotoHint": "Fotografišite papirni formular ili tabelu — njen sadržaj postaje strukturirani podatak koji možete uporediti sa fotografijom",
+      "readingPhoto": "Učitavanje fotografije…",
+      "photoBatchName": "{count} fotografija",
+      "railPhotoRequest": "Izvuci strukturisane podatke iz {count} fotografije/fotografija: {name}",
+      "railPhotoDone": "Dodat je {count} zapis(a) sa fotografije(a). Proverite ih sa fotografijom u radnom prostoru.",
+      "sourcesLabel": "Izvori",
+      "openPhotoQc": "Proverite podatke sa {name}",
+      "qcRowsFromPhoto": "{count} redova",
+      "qcClose": "Zatvori proveru fotografije",
+      "qcZoomIn": "Uvećaj",
+      "qcZoomOut": "Umanji",
+      "qcPrevPhoto": "Prethodna fotografija",
+      "qcNextPhoto": "Sledeća fotografija",
+      "qcImageLoading": "Učitavanje fotografije…",
+      "qcImageFailed": "Fotografija nije mogla da se učita.",
+      "qcImageAlt": "Izvorna fotografija: {name}",
+      "qcHint": "Tabela prikazuje samo redove sa ove fotografije — uporedite svaku vrednost sa fotografijom i uredite ili izbrišite redove koji se ne poklapaju.",
+      "sourceFilterChip": "Redovi iz {name}",
+      "clearSourceFilter": "Prikaži sve redove ponovo",
+      "viewAsRecord": "Prikaz kao formular",
+      "viewAsTable": "Prikaz kao tabela",
+      "recordEmpty": "Još uvek nema zapisa.",
+      "recordOf": "Zapis {index} od {count}",
+      "recordPrev": "Prethodni zapis",
+      "recordNext": "Sledeći zapis",
+      "recordBooleanUnset": "(prazno)",
+      "flagsChip": "{count} zastavica",
+      "flagsChipOpenReview": "Otvorite proveru kvaliteta",
+      "flagsChipMissingOnly": "Obavezna polja su prazna — popunite ih ili prilagodite strukturu",
+      "autoCheck": "Automatska provera novih podataka",
+      "autoCheckHint": "Nakon izdvajanja podataka sa fotografija ili dokumenata, automatski pokreni proveru kvaliteta za nove redove",
+      "checkingNewRows": "Proveravaju se tek dodati redovi na probleme sa kvalitetom…",
+      "ingestCheckFailed": "Automatska provera kvaliteta nije uspela ({message}) — možete je pokrenuti ručno pomoću opcije Proceni kvalitet.",
+      "assessedIngest": "Tek dodati redovi"
+    },
+    "map": {
+      "emptyTitle": "Postavite svoje podatke na mapu",
+      "emptyBody": "Nalepite sitrep, line list, beleške sa sastanaka ili bilo koji tekst sa nazivima mesta — ili otpremite dokument. Lokacije se identifikuju i prikazuju na mapi sa ocenom pouzdanosti; zatim ih možete izvesti za ArcGIS ili druge GIS alate.",
+      "inputPlaceholder": "Nalepite tekst sa nazivima lokacija…",
+      "uploadFile": "Otpremite fajl",
+      "pastedSource": "Nalepљen tekst",
+      "mapIt": "Prikaži na mapi",
+      "finding": "Pretraga lokacija…",
+      "featureCount": "{count} lokacija",
+      "featureCapExceeded": "Mapa je ograničena na {max} lokacija.",
+      "noneFound": "Nije pronađena nijedna lokacija u tom materijalu.",
+      "lowConfidenceNotice": "{count} lokacija ima koordinata sa niskim nivoom pouzdanosti — proverite ih pre upotrebe mape.",
+      "tilesOffline": "Map tiles nisu dostupni — lista lokacija i dalje radi.",
+      "disclaimer": "Koordinate su AI-procena na osnovu znanja modela, a ne geokoding servisa — proverite pre operativne upotrebe. Mape se učitavaju sa tile servera; vaši podaci ostaju na ovom uređaju.",
+      "flyTo": "Prikaži {name} na mapi",
+      "removeFeature": "Ukloni {name}",
+      "expandFeature": "Prikaži sve detalje za {name}",
+      "collapseFeature": "Sažmi detalje za {name}",
+      "detailsParent": "Deo {parent}",
+      "railRequest": "Prikaži lokacije iz: {source}",
+      "railSearchRequest": "Pretraži veb i prikaži lokacije za: {query}",
+      "railDone": "Mapirano je {count} lokacija. Pregledajte one sa niskim stepenom pouzdanosti na listi.",
+      "searchToggle": "Režim pretrage na webu",
+      "searchToggleHint": "Pretražujte web umesto lepljenja teksta; dobijeni pouzdani rezultati se mapiraju.",
+      "searchPlaceholder": "Pretražite web, npr. „epidemija kolere Istočna Afrika 2026“…",
+      "searchAndMap": "Pretraži i mapiraj",
+      "searching": "Pretražujem…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Veza: {kind}",
+        "unresolved": "{count} veza referiše na mesta koja nisu na mapi i preskočena su."
+      },
+      "confidence": {
+        "high": "Visok",
+        "medium": "Srednji",
+        "low": "Nizak"
+      },
+      "prominence": {
+        "primary": "Glavna lokacija",
+        "secondary": "Pomoćna lokacija",
+        "mention": "Usputno pomenuta"
+      },
+      "prominenceMentionHint": "Materijal samo usputno pominje ovo mesto — prikazano je manjim na mapi i izostavljeno iz početnog prikaza.",
+      "dates": {
+        "since": "od {date}",
+        "range": "{start} – {end}",
+        "ongoing": "U toku"
+      },
+      "filters": {
+        "label": "Filtriraj po kategoriji",
+        "other": "Ostalo",
+        "clear": "Očisti",
+        "showing": "{shown} od {total} lokacija",
+        "noneMatch": "Nijedna lokacija ne odgovara trenutnim filterima."
+      },
+      "dateFilter": {
+        "label": "Datumi",
+        "from": "Od",
+        "to": "Do",
+        "fromAria": "Prikazuj samo događaje od ovog datuma",
+        "toAria": "Prikazuj samo događaje do ovog datuma",
+        "clear": "Očisti datume",
+        "eraChip": "Prikaži samo događaje u {label}"
+      },
+      "timeline": {
+        "toggle": "Vremenski prikaz",
+        "play": "Pokreni vremenski prikaz",
+        "pause": "Pauziraj vremenski prikaz",
+        "eras": "Vremenske epohe",
+        "jumpTo": "Idi na {label}",
+        "slider": "Pozicija na vremenskoj liniji",
+        "showUndated": "Prikaži lokacije bez datuma",
+        "activeCount": "{count} aktivno"
+      },
+      "granularity": {
+        "site": "Lokacija",
+        "city": "Grad/mesto",
+        "district": "Okrug",
+        "region": "Region",
+        "country": "Zemlja"
+      },
+      "granularityAreaHint": "Površina prikazana približno oko centra — nije precizna lokacija niti granica.",
+      "containerHint": "Sadrži druge mapirane lokacije, pa je prikazano samo kao obris.",
+      "legend": {
+        "toggle": "Legenda",
+        "title": "Kako čitati mapu",
+        "color": "Boja: pouzdanost koordinata (plava visoka, narandžasta srednja, crvena niska)",
+        "size": "Veličina tačke: koliko je mesto centralno materijalu",
+        "area": "Isprekidani krug: približna oblast okruga, regiona ili zemlje",
+        "container": "Blaga kontura: oblast čiji je sadržaj pojedinačno mapiran"
+      }
+    },
+    "shell": {
+      "showConversation": "Prikaži konverzaciju",
+      "hideConversation": "Sakrij konverzaciju",
+      "workspaceTab": "Radni prostor",
+      "conversationTab": "Konverzacija",
+      "paneTabsLabel": "Paneli radnog toka",
+      "railEmpty": "Poruke i napredak asistenta će se pojaviti ovde.",
+      "railInputPlaceholder": "Pošaljite poruku asistentu…",
+      "assistantThinking": "Razmišljam…",
+      "sendMessage": "Pošalji poruku",
+      "stopGenerating": "Zaustavi generisanje",
+      "loadingWorkspace": "Učitavanje radnog prostora…",
+      "unknownType": "Ova konverzacija koristi radni tok koji ova verzija ne prepoznaje. Istorija konverzacije je prikazana ispod.",
+      "untitled": "Nova konverzacija",
+      "toggleMenu": "Prikaži/sakrij meni",
+      "model": "Model za ovaj radni tok"
+    }
+  },
+  "connectors": {
+    "title": "Konektori",
+    "description": "Povežite eksterne alate putem Model Context Protocol (MCP). Povezani alati postaju dostupni modelima u četu, a svaki poziv alata se izvršava tek kada ga odobrite.",
+    "localOnlyNote": "Prijavljujete se direktno kod svakog provajdera. Ključevi za pristup su šifrovani i čuvaju se samo na ovom uređaju, i prosleđuju se kroz serversku aplikaciju za svaki zahtev — nikada se ne skladište niti beleže tamo.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Pretraga repozitorijuma, čitanje i kreiranje zadataka i zahteva za povlačenje (pull requests)."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Pronađite, kreirajte i izmenite zadatke i projekte."
+      }
+    },
+    "connect": "Poveži",
+    "connected": "Povezano",
+    "tokenEndsIn": "završava se na ••••{last4}",
+    "disconnect": "Prekini vezu",
+    "toolCount": "{count, plural, =1 {1 dostupan alat} other {# dostupnih alata}}",
+    "patLabel": "Lični prilazni token",
+    "createTokenLink": "Kreiraj token",
+    "tokenScopeHint": "Koristite token sa ograničenim pristupom samo za ono što je potrebno ovim alatima.",
+    "validating": "Proverava se konekcija…",
+    "validationFailed": "Nije moguće uspostaviti vezu. Proverite adresu i pokušajte ponovo.",
+    "authFailed": "Server je odbio token. Proverite token i pokušajte ponovo.",
+    "tokenRequired": "Token je obavezan",
+    "enableServer": "Dostupno u ćaskanju",
+    "arbitraryTitle": "Drugi MCP serveri",
+    "arbitraryToggle": "Dozvoli proizvoljne MCP servere",
+    "arbitraryWarning": "Svako ko pokrene MCP server može videti poruke poslate njegovim alatima. Povezujte samo servere kojima verujete. Svaki poziv alata i dalje zahteva vašu potvrdu.",
+    "addServer": "Dodaj MCP server",
+    "editServer": "Izmeni MCP server",
+    "serverName": "Naziv",
+    "serverUrl": "Server URL",
+    "nameRequired": "Naziv je obavezan",
+    "urlRequired": "URL je obavezan",
+    "invalidUrl": "Unesite javnu https:// adresu",
+    "namePlaceholder": "Moj MCP server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Pristupni token (opciono)",
+    "keepTokenPlaceholder": "Ostavite prazno da zadržite trenutni token",
+    "disconnectedToast": "{name} je isključen",
+    "save": "Sačuvaj",
+    "connectWithProvider": "Poveži se sa {name}",
+    "useTokenInstead": "Koristi pristupni token umesto toga",
+    "oauthWaiting": "Čekanje na autorizaciju…",
+    "oauthFailed": "Prijavljivanje nije uspelo. Pokušajte ponovo.",
+    "oauthDenied": "Provajder je odbio pristup.",
+    "oauthTimeout": "Isteklo vreme za prijavu. Pokušajte ponovo.",
+    "oauthCancelled": "Prijavljivanje je otkazano.",
+    "oauthUnavailable": "Prijava nije dostupna za ovaj konektor u ovoj instanci. Umesto toga koristite pristupni token ili zamolite administratora da konfiguriše OAuth aplikaciju.",
+    "ownAppToggle": "Koristi sopstvenu OAuth aplikaciju",
+    "ownAppHint": "Registrujte OAuth aplikaciju na svom {name} nalogu (organizacija, radni prostor ili enterprise instanca) sa donjim callback URL-om, pa ovde unesite njene podatke. Ostavite zatvoreno da biste koristili ugrađenu aplikaciju.",
+    "ownAppCustomHint": "Po želji unesite podatke svoje OAuth aplikacije ispod; ostavite prazno za automatsku registraciju sa serverom.",
+    "ownAppInUse": "Povezano sa vašom OAuth aplikacijom.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (ako vaša aplikacija ima)",
+    "redirectUriLabel": "Callback / redirect URL za registraciju",
+    "reconnect": "Ponovo poveži",
+    "needsReauth": "Potrebno ponovno povezivanje",
+    "disconnectOauthNote": "Isključivanjem se pristup uklanja samo sa ovog uređaja. Za potpuno ukidanje pristupa, upravljajte autorizovanim aplikacijama na vašem {name} nalogu.",
+    "authModeLabel": "Autentifikacija",
+    "authModeNone": "Nema",
+    "authModeBearer": "Pristupni token",
+    "authModeOauth": "Prijava preko provajdera (OAuth)",
+    "oauthCustomHint": "Prijavićete se kod provajdera servera u iskačućem prozoru nakon čuvanja.",
+    "saveAndSignIn": "Sačuvaj i prijavi se",
+    "oauthCallback": {
+      "title": "Autorizacija završena",
+      "missingState": "Nema ničega za autorizaciju",
+      "close": "Možete zatvoriti ovaj prozor i vratiti se u aplikaciju.",
+      "closeButton": "Zatvori prozor"
+    }
   }
 }

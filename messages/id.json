@@ -400,7 +400,22 @@
     "noProjectsFound": "Tidak ada proyek ditemukan. Menggunakan \"default\".",
     "selectAllRequired": "Pilih langganan, akun, dan proyek.",
     "subscriptionRequired": "Pilih langganan",
-    "accountRequired": "Pilih akun Foundry"
+    "accountRequired": "Pilih akun Foundry",
+    "projectSelectionRequired": "Pilih proyek dari daftar.",
+    "scanningResources": "Memindai langganan Azure Anda...",
+    "searchProjectsPlaceholder": "Cari proyek...",
+    "noProjectsDiscovered": "Tidak ada proyek Foundry yang ditemukan di langganan Anda. Gunakan entri manual jika Anda tahu jalurnya.",
+    "discoveryPartialWarning": "{count, plural, one {# langganan} other {# langganan}} tidak dapat dipindai. Gunakan entri manual jika proyek Anda tidak ada.",
+    "discoveryTruncatedWarning": "Terlalu banyak sumber daya untuk dipindai sepenuhnya. Gunakan entri manual jika proyek Anda tidak ada.",
+    "retryScan": "Coba pindai lagi",
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "selectAgentsDescription": "Pilih agen dari proyek ini yang akan muncul di pemilih model Anda.",
+    "selectAll": "Pilih semua",
+    "deselectAll": "Batalkan semua pilihan",
+    "agentsSelectedCount": "{selected} dari {total} agen dipilih",
+    "autoAddLabel": "Tambahkan agen baru secara otomatis",
+    "autoAddDescription": "Agen yang diterbitkan ke proyek ini nantinya akan muncul secara otomatis. Agen yang tidak dicentang tetap dikecualikan."
   },
   "Quick Actions": "Tindakan Cepat",
   "Type / in chat to access your prompts": "Ketik / dalam obrolan untuk mengakses prompt Anda",
@@ -727,7 +742,19 @@
       "listingTools": "Mencari alat yang tersedia…",
       "analyzingFiles": "Menganalisis file Anda…",
       "searchingKnowledge": "Mencari di basis pengetahuan…",
-      "cancellingPriorTool": "Membatalkan permintaan alat sebelumnya…"
+      "cancellingPriorTool": "Membatalkan permintaan alat sebelumnya…",
+      "workflow": {
+        "preparingDocument": "Menyiapkan referensi…",
+        "writingDocument": "Membuat dokumen…",
+        "analyzingSource": "Menganalisis teks sumber…",
+        "translating": "Menerjemahkan…",
+        "reviewingTranslation": "Putaran tinjau {round} dari {total}…",
+        "revisingTranslation": "Menerapkan masukan tinjauan…",
+        "extractingRows": "Mengekstrak baris dari {source}…",
+        "transformingTable": "Mengubah tabel…",
+        "findingLocations": "Mengidentifikasi lokasi…",
+        "updatingMap": "Memperbarui peta…"
+      }
     },
     "toolSummary": {
       "usedTools": "Digunakan {count, plural, one {# alat} other {# alat}}",
@@ -788,7 +815,8 @@
     "listen": "Dengarkan",
     "processingAudio": "Memproses audio...",
     "ttsError": "Terjadi kesalahan saat membuat audio. Silakan coba lagi.",
-    "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung"
+    "unsupportedMessageType": "Galat saat menampilkan pesan: Jenis pesan tidak didukung",
+    "addLanguageOption": "Tambahkan \"{name}\"…"
   },
   "sidebar": {
     "collapseSidebar": "Ciutkan sidebar",
@@ -1107,15 +1135,17 @@
     "unsavedChangesMessage": "Anda memiliki perubahan yang belum disimpan. Buang perubahan?",
     "characterCount": "{current}/{max}",
     "clearField": "Bersihkan kolom",
-    "autosaveNote": "Perubahan disimpan otomatis.",
+    "autosaveNote": "Perubahan tersimpan otomatis.",
     "responseSection": "Respons",
     "voiceSection": "Suara",
     "behaviorSection": "Perilaku",
-    "resetChatSettings": "Reset pengaturan chat",
-    "resetChatSettingsConfirmTitle": "Reset pengaturan chat?",
-    "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak memengaruhi percakapan Anda.",
+    "resetChatSettings": "Atur ulang pengaturan chat",
+    "resetChatSettingsConfirmTitle": "Atur ulang pengaturan chat?",
+    "resetChatSettingsConfirmMessage": "Ini akan mengembalikan semua pengaturan di panel ini ke default: temperature, instruksi khusus, Tentang Anda, respons model, kecepatan streaming, text-to-speech, file aktif, dan konfirmasi. Tidak akan memengaruhi percakapan Anda.",
     "customInstructionsLabel": "Instruksi Khusus*",
-    "defaultTemperatureLabel": "Suhu Default*"
+    "defaultTemperatureLabel": "Suhu Default*",
+    "Usage & Impact": "Penggunaan & Dampak",
+    "Connectors": "Konektor"
   },
   "notFound": {
     "lostDog": "Anjing hilang"
@@ -1390,7 +1420,36 @@
     "modelsDescription": "Pilih model AI untuk percakapan Anda. Setiap model memiliki keunggulan berbeda — pilih salah satu untuk melihat detailnya.",
     "recommended": "Direkomendasikan",
     "familyAll": "Semua",
-    "familyFilterLabel": "Saring model berdasarkan keluarga"
+    "familyFilterLabel": "Saring model berdasarkan keluarga",
+    "searchPlaceholder": "Cari model",
+    "searchEmpty": "Tidak ada model yang sesuai dengan pencarian Anda.",
+    "star": "Beri bintang pada {name}",
+    "unstar": "Hapus bintang pada {name}",
+    "otherFamily": "Lainnya",
+    "hostedExternally": "Berjalan di infrastruktur penyedia sendiri melalui Azure AI Foundry, bukan di lingkungan Azure MSF.",
+    "hostedIn": {
+      "label": "Dihosting di {regions}",
+      "tooltip": "Wilayah Azure tempat model ini dideploy. Percakapan diproses di wilayah Anda sendiri."
+    },
+    "badges": {
+      "external": "Eksternal",
+      "externalTooltip": "Berjalan di infrastruktur penyedia sendiri melalui Azure AI Foundry, bukan di lingkungan Azure MSF.",
+      "regionHostedTooltip": "Dihosting di wilayah Azure {region}. Percakapan dengan model ini diproses di sana."
+    },
+    "favorites": "Favorit",
+    "euResidencyNote": "Semua model berjalan di wilayah Azure Uni Eropa.",
+    "hostedRegion": {
+      "label": "Wilayah hosting",
+      "processedIn": "Percakapan ini diproses di wilayah Azure {region}.",
+      "euOnlyNote": "{name} dihosting di wilayah Azure Uni Eropa; percakapan dengannya diproses di sana."
+    },
+    "version": {
+      "label": "Versi"
+    },
+    "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit.",
+    "variant": {
+      "label": "Varian"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1477,6 +1536,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude yang seimbang. Cocok untuk penulisan sehari-hari, analisis, dan pemrograman dengan respons cepat.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Model open-source dari Meta. Andal untuk menulis, merangkum, dan pertanyaan cepat."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Model terbaru unggulan dari OpenAI. Unggul untuk menulis, riset, pemrograman, dan pemecahan masalah kompleks."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Varian GPT terkecil dan tercepat. Terbaik untuk tugas sederhana dan cepat dengan biaya minimal."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Varian GPT khusus percakapan. Cocok untuk obrolan santai, brainstorming, dan diskusi suportif."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT multimodal versi lama. Cukup baik untuk menulis sehari-hari dan tanya jawab tanpa perlu fitur terbaru."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Varian GPT-4.1 yang lebih kecil dan cepat untuk tugas sehari-hari."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Model terbaru dan terkuat dari Anthropic. Sangat baik untuk penulisan panjang, riset, coding, dan analisis teliti."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Model open-source terbaru dari DeepSeek. Andal untuk penulisan umum dan pertanyaan teknis."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Model unggulan dari Mistral. Alternatif Eropa untuk menulis, merangkum, dan pertanyaan umum."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Revisi awal GPT-5 unggulan. Masih kuat untuk menulis, analisis, dan pemrograman."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Revisi awal GPT-5 khusus chat. Cocok untuk percakapan sehari-hari dan brainstorming."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Varian GPT-5 terkecil. Terbaik untuk tugas sederhana dan cepat dengan biaya minimal."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Varian GPT-4.1 terkecil. Cocok untuk tugas cepat dan sederhana saat kecepatan dan biaya jadi prioritas."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Varian kecil dan cepat dari GPT-4o. Cocok untuk tugas sehari-hari yang cepat tanpa perlu fitur terbaru."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Model penalaran yang ringkas. Cocok untuk matematika, logika, dan soal bertahap dengan biaya lebih rendah dibanding o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Model penalaran ringkas versi awal. Dapat menangani soal matematika, sains, dan logika dengan anggaran terbatas."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Model paling cerdas dari Anthropic, pertama dalam keluarga Claude 5. Sangat baik untuk tugas penulisan, riset, dan coding tersulit."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude terbaru yang seimbang, pertama dalam keluarga Claude 5. Andal untuk penulisan, analisis, dan coding harian dengan respons cepat."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Model ukuran sedang dari Mistral. Alternatif Eropa yang menyeimbangkan kemampuan dan kecepatan untuk kerja sehari-hari."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Model kecil dari Mistral. Cepat dan murah untuk ringkasan, draft, dan pertanyaan sederhana."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Model terkecil dari Mistral. Terbaik untuk tugas sangat cepat dan sederhana dengan biaya minimal."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Revisi terbaru dari DeepSeek-R1. Menunjukkan proses berpikir langkah demi langkah dengan penalaran lebih baik."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Model open-source yang lebih ringan dari Meta. Cepat untuk menulis, merangkum, dan pertanyaan sehari-hari."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model open-source lama dari Meta. Masih andal untuk penulisan umum dan tanya jawab."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model unggulan dari xAI. Cocok untuk diskusi terbuka, analisis, dan proyek kreatif."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model unggulan terbaru dari OpenAI. Unggul dalam penulisan, riset, pemrograman, dan pemecahan masalah kompleks."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (terbaru)",
+      "description": "Alias dinamis yang selalu mengarah ke model chat-tuned terbaru dari OpenAI. Pengganti Azure untuk model versi gpt-*-chat yang sudah dihentikan."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Rilis Opus terbaru, berada di antara 4.6 dan 4.8. Unggul untuk penulisan panjang, riset, pemrograman, dan analisis mendalam."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model penalaran terbaru dari DeepSeek dan pengganti Azure untuk lini R1. Menunjukkan proses berpikirnya secara bertahap."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Varian V4 cepat dari DeepSeek dan pengganti Azure untuk lini V3. Cepat untuk penulisan umum dan pertanyaan teknis."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Penalaran)",
+      "description": "Model penalaran cepat dari xAI. Berpikir bertahap dengan respons cepat."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model chat cepat dari xAI. Respons cepat untuk pertanyaan sehari-hari dan diskusi."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model xAI yang lebih ringan. Lebih cepat dan ekonomis untuk pertanyaan singkat dan percakapan santai."
     }
   },
   "searchMode": {
@@ -1824,7 +2015,20 @@
     "useDefaultStyle": "Gunakan gaya penulisan default",
     "noTonesCreated": "Belum ada nada yang dibuat",
     "createTonesHint": "Buat nada di Aksi Cepat",
-    "translateDocumentTooltip": "Terjemahkan dokumen ke bahasa lain.\n\nFormat yang didukung: Word, Excel, PowerPoint, HTML, TXT\nUkuran maksimal: 40MB\n\nMendukung lebih dari 80 bahasa dengan file glosarium opsional."
+    "translateDocumentTooltip": "Terjemahkan dokumen ke bahasa lain.\n\nFormat yang didukung: Word, Excel, PowerPoint, HTML, TXT\nUkuran maksimal: 40MB\n\nMendukung lebih dari 80 bahasa dengan file glosarium opsional.",
+    "translateTooltip": "Terjemahkan cuplikan teks ke bahasa lain.\n\nUntuk seluruh file (Word, Excel, PowerPoint, HTML, TXT), gunakan Terjemahkan Dokumen.",
+    "cameraTooltip": "Ambil foto dengan kamera perangkat Anda dan lampirkan ke pesan.",
+    "noResults": "Tidak ada aksi yang cocok",
+    "sectionPinned": "Disematkan",
+    "sectionFrequent": "Sering digunakan",
+    "sectionMore": "Lainnya",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media & file",
+    "categoryTransform": "Transformasi",
+    "pin": "Sematkan ke atas",
+    "unpin": "Lepaskan sematan",
+    "moveToMore": "Pindahkan ke Lainnya",
+    "moveOutOfMore": "Tampilkan di menu"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Tambahkan instruksi pribadi Anda untuk menyesuaikan respons AI. Instruksi ini akan digabungkan dengan pedoman utama untuk memastikan respons yang bermanfaat, akurat, dan aman.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Ketik \"/\" untuk memilih dari template prompt yang tersimpan.",
@@ -1935,7 +2139,14 @@
     "learnMore": "Pelajari lebih lanjut",
     "advancedOptions": "Opsi lanjutan",
     "unofficialBadgeLabel": "Tidak Resmi",
-    "unofficialLanguageWarning": "Bahasa ini tidak didukung secara resmi. Kualitas terjemahan belum diverifikasi. Mohon hasilnya diperiksa oleh penutur lancar atau penutur asli sebelum dibagikan."
+    "unofficialLanguageWarning": "Bahasa ini tidak didukung secara resmi. Kualitas terjemahan belum diverifikasi. Mohon hasilnya diperiksa oleh penutur lancar atau penutur asli sebelum dibagikan.",
+    "translationSubmitted": "Terjemahan dimulai — PDF diproses di latar belakang.",
+    "pendingTitle": "Menerjemahkan {filename}…",
+    "pendingHint": "Terjemahan PDF berjalan di latar belakang dan bisa memakan waktu beberapa menit. Anda dapat terus bekerja — kartu ini akan diperbarui saat dokumen siap, meskipun setelah memuat ulang.",
+    "asyncFailed": "Terjemahan dokumen gagal: {error}",
+    "jobNotFound": "pekerjaan terjemahan sudah tidak tersedia. Silakan coba lagi.",
+    "retryPolling": "Cek lagi",
+    "pollingStalled": "Kami tidak dapat menghubungi server untuk memeriksa kemajuan. Proses terjemahan mungkin masih berjalan."
   },
   "terms": {
     "officialLanguages": "Versi resmi:",
@@ -2117,5 +2328,699 @@
   "regionOverride": {
     "warning": "Pengesampingan lokasi aktif — permintaan Anda sedang diarahkan ke wilayah data {region}. Ini adalah pengesampingan manual untuk pengujian, bukan lokasi Anda yang sebenarnya.",
     "clear": "Hapus pengesampingan"
+  },
+  "usageImpact": {
+    "empty": "Belum ada penggunaan yang tercatat. Penggunaan token dan estimasi emisi Anda akan muncul di sini setelah Anda melakukan chat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} kali pengisian daya smartphone",
+    "requests": "Permintaan",
+    "promptTokens": "Token prompt",
+    "completionTokens": "Token penyelesaian",
+    "topModels": "Berdasarkan model",
+    "byRegion": "Berdasarkan wilayah hosting",
+    "regionDefault": "Default",
+    "modelRow": "{requests} permintaan · {grams} g",
+    "disclosure": "Estimasi berdasarkan asumsi v{version} · sejak {since} · hanya chat standar (jawaban agen dan basis pengetahuan tidak dihitung).",
+    "reset": "Atur ulang statistik penggunaan"
+  },
+  "extraction": {
+    "toggleLabel": "Ekstrak data terstruktur",
+    "trayLabel": "Ekstraksi",
+    "trayPrefix": "Ekstrak",
+    "trayInfo": "Ekstraksi mengembalikan hingga 3 tabel terstruktur. Resep disimpan secara lokal.",
+    "autoChip": "Otomatis — AI menyarankan struktur",
+    "addRecipe": "Tambah resep",
+    "addRecipeTitle": "Tambah resep ke ekstraksi ini",
+    "addRecipeFullTitle": "Maksimal 3 resep per ekstraksi",
+    "removeRecipe": "Hapus resep: {name}",
+    "remove": "Hapus",
+    "section": "Resep ekstraksi",
+    "sectionSubtitle": "Template yang disimpan untuk mengubah teks mentah, file, atau URL menjadi tabel terstruktur. Pilih hingga 3 per ekstraksi.",
+    "newRecipe": "Resep baru",
+    "untitledRecipe": "(Resep tanpa judul)",
+    "deleteRecipe": "Hapus resep",
+    "delete": "Hapus",
+    "deleteConfirm": "Hapus?",
+    "cancel": "Batal",
+    "name": "Nama",
+    "namePlaceholder": "misal: Pasien",
+    "description": "Deskripsi",
+    "optional": "(opsional)",
+    "descriptionPlaceholder": "Ringkasan singkat yang ditampilkan di pemilih resep",
+    "instructions": "Instruksi",
+    "instructionsPlaceholder": "Apa yang harus dicari AI di materi ini?",
+    "fields": "Kolom",
+    "field": "kolom",
+    "fieldsPlural": "kolom",
+    "fieldName": "Nama kolom",
+    "fieldType": "Tipe kolom",
+    "fieldNamePlaceholder": "nama_kolom",
+    "addField": "Tambah kolom",
+    "removeField": "Hapus kolom",
+    "toggleDetails": "Tampilkan detail",
+    "fieldDetailsTitle": "Deskripsi, nilai enum",
+    "fieldDescriptionPlaceholder": "Deskripsi (membantu AI menemukan kolom ini)",
+    "enumValuesPlaceholder": "Nilai yang diperbolehkan, dipisahkan koma",
+    "required": "wajib",
+    "suggest": "Sarankan dengan AI",
+    "suggesting": "Menyarankan…",
+    "suggestNeedsInstructions": "Tambahkan instruksi terlebih dahulu agar AI tahu apa yang harus dicari",
+    "searchRecipes": "Cari resep",
+    "pickerEmpty": "Belum ada resep. Buat satu untuk memulai.",
+    "pickerEmptyMatch": "Tidak ada resep yang cocok",
+    "editorEmpty": "Belum ada resep. Buat satu dan AI dapat membantu mengisi bidang.",
+    "noData": "Tidak ada data yang diekstrak",
+    "noRecords": "Tidak ditemukan data {name}",
+    "row": "baris",
+    "rows": "baris",
+    "record": "data",
+    "records": "data",
+    "complete": "selesai",
+    "download": "Unduh",
+    "preview": "Pratinjau",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} bidang",
+    "fieldCountOne": "1 bidang",
+    "andMoreFields": "+ {count} lagi",
+    "saveAsRecipe": "Simpan sebagai resep",
+    "savedAsRecipeToast": "Disimpan sebagai resep \"{name}\"",
+    "previewTruncated": "Menampilkan 3 baris pertama dari {total}. Unduh untuk data lengkap.",
+    "previewEmpty": "Tidak ada baris untuk ditinjau",
+    "proposedSchemaTip": "AI mengusulkan skema ini. Simpan agar dapat digunakan kembali nanti.",
+    "downloadAriaLabel": "Unduh {name} sebagai {format}",
+    "previewAriaLabel": "Tampilkan/sembunyikan pratinjau {name}",
+    "changeFormatAriaLabel": "Ubah format unduhan untuk {name}",
+    "materialWarningTitle": "Tambahkan materi untuk diekstrak",
+    "materialWarningBody": "Ketik pesan di bawah, lampirkan file, atau sertakan URL.",
+    "materialAttach": "Lampirkan file",
+    "willExtractPrefix": "Akan diekstrak dari:",
+    "materialText": "teks pesan",
+    "materialFiles": "{count, plural, one {1 file} other {# file}}",
+    "materialActiveFiles": "{count, plural, one {1 file aktif} other {# file aktif}}",
+    "dismiss": "Matikan ekstraksi"
+  },
+  "Connectors": "Konektor",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Terjemahan",
+        "description": "Terjemahkan teks dengan analisis, glosarium, dan putaran tinjauan"
+      },
+      "document": {
+        "label": "Dokumen",
+        "description": "Susun dan perbaiki dokumen dengan asisten"
+      },
+      "dataAnalysis": {
+        "label": "Analisis data",
+        "description": "Impor tabel dan jelajahi atau ubah data Anda"
+      },
+      "map": {
+        "label": "Peta",
+        "description": "Ubah data apa pun menjadi lokasi di peta"
+      }
+    },
+    "chooser": {
+      "prompt": "Atau mulai ruang kerja terfokus"
+    },
+    "sidebar": {
+      "newTranslation": "Terjemahan baru",
+      "newDocument": "Dokumen baru",
+      "newDataAnalysis": "Analisis data baru",
+      "newMap": "Peta baru"
+    },
+    "translation": {
+      "chooseLanguage": "Bahasa target",
+      "customLanguageHint": "\"{name}\" adalah bahasa yang Anda tambahkan — AI akan mencoba bahasa apa saja, namun kualitasnya belum diverifikasi.",
+      "addedByYou": "Ditambahkan oleh Anda",
+      "glossary": "Glosarium",
+      "noGlossary": "Tidak ada glosarium",
+      "manageGlossaries": "Glosarium",
+      "glossaries": "Glosarium",
+      "closeGlossaries": "Tutup glosarium",
+      "glossariesEmpty": "Buat glosarium untuk memastikan istilah tertentu diterjemahkan dengan tepat. Glosarium disimpan di perangkat ini dan dapat digunakan ulang di terjemahan lain.",
+      "newGlossary": "Glosarium baru",
+      "newGlossaryName": "Glosarium tanpa judul",
+      "glossaryName": "Nama glosarium",
+      "deleteGlossary": "Hapus glosarium",
+      "sourceTerm": "Istilah sumber",
+      "targetTerm": "Terjemahan",
+      "note": "Catatan",
+      "noteOptional": "Catatan (opsional)",
+      "addEntry": "Tambah istilah",
+      "removeEntry": "Hapus {term}",
+      "mode": "Mode terjemahan",
+      "modeQuick": "Cepat",
+      "modeAgentic": "Tinjau",
+      "modeQuickHint": "Satu kali terjemahan, tercepat",
+      "modeAgenticHint": "Menganalisis teks terlebih dahulu, lalu menerjemahkan dan melakukan hingga 3 putaran tinjauan",
+      "translate": "Terjemahkan",
+      "translating": "Sedang menerjemahkan…",
+      "sourceLabel": "Teks sumber",
+      "targetLabel": "Terjemahan",
+      "sourcePlaceholder": "Tempel atau ketik teks yang ingin diterjemahkan, atau unggah dokumen.",
+      "targetEmpty": "Terjemahan akan muncul di sini.",
+      "uploadDocument": "Unggah dokumen",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "tooLong": "Teks lebih dari {max} karakter. Bagi menjadi beberapa bagian, atau gunakan terjemahan dokumen untuk seluruh file.",
+      "analysisTitle": "Analisis pra-terjemahan",
+      "register": "Daftar",
+      "reviewTitle": "Putaran tinjauan",
+      "roundLabel": "Putaran {round}",
+      "verdictApprove": "disetujui",
+      "verdictRevise": "direvisi",
+      "railRequest": "Terjemahkan teks sumber ke {language}.",
+      "railDoneAgentic": "Selesai. Saya menganalisis teks, menerjemahkan, dan melakukan {rounds} putaran tinjauan. Hasilnya ada di workspace.",
+      "railDoneQuick": "Selesai. Terjemahan ada di workspace.",
+      "railAssessRequest": "Nilai kualitas terjemahan {language}.",
+      "railAssessDone": "Penilaian selesai: peringkat tersedia di workspace dengan {count} saran edit untuk ditinjau.",
+      "roundChanges": "Perubahan pada putaran {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Akurasi",
+          "description": "Menyampaikan makna sumber secara tepat — tidak ada salah terjemah, penghilangan, penambahan, atau segmen yang tidak diterjemahkan"
+        },
+        "fluency": {
+          "label": "Kefasihan",
+          "description": "Tata bahasa, ejaan, tanda baca, dan koherensi alami dalam bahasa target"
+        },
+        "terminology": {
+          "label": "Terminologi",
+          "description": "Istilah bidang konsisten dan benar; glosarium diikuti dengan tepat"
+        },
+        "style": {
+          "label": "Gaya",
+          "description": "Pilihan bahasa, nada, dan suara sesuai dan konsisten dengan sumber"
+        },
+        "localeConventions": {
+          "label": "Konvensi lokal",
+          "description": "Tanggal, angka, satuan, dan tanda baca mengikuti kebiasaan lokal bahasa target"
+        },
+        "audience": {
+          "label": "Audiens",
+          "description": "Sesuai dengan tujuan dan pembaca teks"
+        }
+      },
+      "severity": {
+        "minor": "Ringan",
+        "major": "Besar"
+      },
+      "assess": "Nilai kualitas",
+      "assessing": "Menilai…",
+      "assessmentTitle": "Penilaian kualitas",
+      "criteriaPicker": "Kriteria penilaian",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Saran perbaikan",
+      "noEditsSuggested": "Tidak ada saran perbaikan — terjemahan telah memenuhi kriteria yang dipilih.",
+      "acceptEdit": "Terima",
+      "rejectEdit": "Tolak",
+      "acceptAll": "Terima semua",
+      "rejectAll": "Tolak semua",
+      "editAccepted": "Diterima",
+      "editRejected": "Ditolak",
+      "editUnapplicable": "Bagian ini tidak ditemukan dalam teks saat ini — tidak diterapkan",
+      "editTranslation": "Edit",
+      "doneEditing": "Selesai",
+      "pasteTranslationPlaceholder": "Ketik atau tempel terjemahan untuk diedit…",
+      "editingBlockedPendingEdits": "Selesaikan atau tolak saran perbaikan yang tertunda terlebih dahulu",
+      "pendingCount": "{count} tertunda",
+      "closeReview": "Tutup penilaian kualitas",
+      "showReview": "Tampilkan penilaian",
+      "showReviewPending": "Tampilkan penilaian ({count} tertunda)"
+    },
+    "document": {
+      "emptyTitle": "Deskripsikan dokumen yang Anda inginkan",
+      "emptyBody": "Beri tahu asisten apa yang harus ditulis — laporan situasi, surat donor, notulen rapat. Tambahkan dulu berkas referensi jika Anda ingin kutipan atau fakta dari berkas tersebut.",
+      "generatePlaceholder": "Deskripsikan dokumen yang akan ditulis…",
+      "revisePlaceholder": "Deskripsikan perubahan yang diinginkan…",
+      "generate": "Buat",
+      "revise": "Revisi",
+      "writing": "Menulis…",
+      "export": "Ekspor",
+      "references": "Referensi",
+      "addReference": "Tambah berkas",
+      "uploading": "Mengunggah…",
+      "removeReference": "Hapus {name}",
+      "referenceChars": "{chars} karakter teks yang diambil",
+      "referenceEmpty": "Tidak ada teks yang dapat diambil dari {name}",
+      "uploadFailed": "Unggahan gagal",
+      "untitledDocument": "Dokumen tanpa judul",
+      "generatedSummary": "Saya telah menulis dokumen di workspace. Silakan tinjau dan beri tahu apa yang perlu diubah.",
+      "revisedSummary": "Saya telah merevisi dokumen di workspace.",
+      "runFailed": "Terjadi kesalahan: {message}",
+      "uploadBasis": "Mulai dari dokumen yang sudah ada",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Tata bahasa & ejaan",
+          "description": "Tata bahasa dan ejaan benar; gunakan satu ragam bahasa Inggris (AS atau UK) — campuran dianggap kesalahan"
+        },
+        "consistency": {
+          "label": "Konsistensi",
+          "description": "Terminologi, nama, kapitalisasi, dan format digunakan secara konsisten"
+        },
+        "clarity": {
+          "label": "Kejelasan",
+          "description": "Kalimat langsung, tidak ambigu; struktur mendukung pembaca"
+        },
+        "sensitivity": {
+          "label": "Sensitivitas",
+          "description": "Penggunaan kata yang inklusif, peka konflik dan kemanusiaan (opsional)"
+        },
+        "specAdherence": {
+          "label": "Kepatuhan pada spesifikasi",
+          "description": "Mengikuti spesifikasi dokumen terlampir: bagian yang diwajibkan ada, urut, dan sesuai panduan"
+        },
+        "toneAdherence": {
+          "label": "Kepatuhan pada nada",
+          "description": "Mengikuti aturan suara dan nada terlampir"
+        }
+      },
+      "severity": {
+        "minor": "Ringan",
+        "major": "Besar"
+      },
+      "assess": "Nilai kualitas",
+      "assessing": "Menilai…",
+      "assessmentTitle": "Tinjauan kualitas",
+      "criteriaPicker": "Kriteria penilaian",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Saran perbaikan",
+      "noEditsSuggested": "Tidak ada perbaikan yang disarankan — dokumen memenuhi kriteria yang dipilih.",
+      "acceptEdit": "Terima",
+      "rejectEdit": "Tolak",
+      "acceptAll": "Terima semua",
+      "rejectAll": "Tolak semua",
+      "editAccepted": "Diterima",
+      "editRejected": "Ditolak",
+      "editUnapplicable": "Tidak dapat menemukan bagian ini di teks saat ini — tidak diterapkan",
+      "editingBlockedPendingEdits": "Selesaikan atau tolak dulu saran perbaikan yang masih tertunda",
+      "pendingCount": "{count} tertunda",
+      "closeReview": "Tutup tinjauan kualitas",
+      "showReview": "Tampilkan tinjauan",
+      "showReviewPending": "Tampilkan tinjauan ({count} tertunda)",
+      "railAssessRequest": "Nilai kualitas dokumen berdasarkan kriteria yang dipilih.",
+      "railAssessDone": "Penilaian selesai: rating tersedia di workspace dengan {count} saran perbaikan untuk ditinjau.",
+      "spec": "Spesifikasi dokumen",
+      "noSpec": "Tidak ada spesifikasi",
+      "manageSpecs": "Spesifikasi",
+      "specs": "Spesifikasi dokumen",
+      "closeSpecs": "Tutup spesifikasi",
+      "specsEmpty": "Buat spesifikasi untuk menulis dokumen dalam format tetap — bagian wajib, urutan, dan panduan per bagian (misal: template SitRep). Spesifikasi disimpan di perangkat ini dan dapat digunakan kembali.",
+      "newSpec": "Spesifikasi baru",
+      "newSpecName": "Spesifikasi tanpa judul",
+      "specName": "Nama spesifikasi",
+      "specDescription": "Deskripsi (opsional)",
+      "deleteSpec": "Hapus spesifikasi",
+      "sectionHeading": "Judul bagian",
+      "sectionGuidance": "Panduan (opsional)",
+      "sectionRequired": "Wajib",
+      "addSection": "Tambah bagian",
+      "removeSection": "Hapus bagian",
+      "generalGuidance": "Panduan umum (opsional)",
+      "tone": "Nada",
+      "noTone": "Tidak ada nada",
+      "customCriteria": "Kriteria kustom",
+      "manageCriteria": "Kriteria kustom",
+      "closeCriteria": "Tutup kriteria kustom",
+      "criteriaEmpty": "Buat kriteria khusus — misalnya pertimbangan merek atau bahasa organisasi — untuk menilai dokumen dan mengarahkan revisi. Disimpan di perangkat ini dan dapat digunakan kembali.",
+      "newCriterion": "Kriteria baru",
+      "newCriterionName": "Kriteria tanpa judul",
+      "criterionName": "Nama kriteria",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Jelaskan apa yang harus dilakukan dokumen agar memenuhi kriteria ini, misalnya \"Jangan pernah menggunakan superlatif untuk pekerjaan kita; selalu sebut penerima manfaat sebagai 'orang yang kami bantu'…\"",
+      "criterionRubricHint": "Rubrik ini diberikan kepada AI secara persis saat penilaian dan putaran revisi.",
+      "deleteCriterion": "Hapus kriteria",
+      "profileTitle": "Profil dokumen",
+      "profileDocType": "Jenis",
+      "profileLanguage": "Bahasa",
+      "profileAudience": "Audiens",
+      "profilePurpose": "Tujuan",
+      "profileRegister": "Register",
+      "profileTone": "Nada",
+      "profileConventions": "Konvensi",
+      "emptyHint": "Mulailah mengetik di bawah, jelaskan apa yang ingin ditulis di kotak bawah, atau mulai dari file.",
+      "addSpec": "Tambah spesifikasi",
+      "addCriteria": "Tambah kriteria",
+      "scopeFullDocument": "Cakupan: seluruh dokumen",
+      "scopeSelection": "Cakupan: pilihan — “{preview}…” ({count} kata)",
+      "clearSelection": "Bersihkan pilihan (kerja dengan seluruh dokumen)",
+      "reviseSelectionPlaceholder": "Jelaskan perubahan pada bagian yang dipilih…",
+      "revisedSelectionSummary": "Saya telah merevisi bagian yang dipilih di workspace.",
+      "assessedSelection": "Pilihan"
+    },
+    "data": {
+      "emptyTitle": "Impor data untuk dianalisis",
+      "emptyBody": "Masukkan file CSV, Excel, atau JSON, atau tempel baris langsung. Setelah tabel Anda dimuat, Anda dapat mengurutkannya, mengekstrak lebih banyak baris dari dokumen, dan mengubahnya dengan instruksi bahasa sehari-hari.",
+      "importFile": "Impor file",
+      "importing": "Mengimpor…",
+      "pasteData": "Tempel data",
+      "pastePlaceholder": "Tempel CSV, TSV, atau JSON di sini…",
+      "import": "Impor",
+      "addFromSource": "Tambah dari sumber",
+      "extractHint": "Tempel teks atau pilih dokumen; baris yang cocok dengan kolom Anda saat ini akan diekstrak darinya. Nilai yang tidak diketahui akan tetap kosong — tidak ada yang diada-adakan.",
+      "extractPlaceholder": "Tempel teks tidak terstruktur yang mengandung data…",
+      "extractRows": "Ekstrak baris",
+      "extractFromFile": "Dari file…",
+      "extracting": "Menarik data…",
+      "pastedSource": "Teks yang ditempel",
+      "transform": "Transformasi",
+      "transforming": "Mengubah data…",
+      "transformPlaceholder": "Jelaskan transformasi, misalnya \"tambah kolom dengan jumlah kasus per 1000 penduduk\"…",
+      "transformCapHint": "Transformasi dibatasi hingga {max} baris. Hapus atau filter baris terlebih dahulu untuk tabel yang lebih besar.",
+      "undo": "Batalkan",
+      "deleteSelected": "Hapus {count}",
+      "deletedRows": "{count} baris dihapus",
+      "selectAllRows": "Pilih semua baris",
+      "selectRow": "Pilih baris {row}",
+      "rowCount": "{count} baris",
+      "rowCapExceeded": "Itu akan menjadi {count} baris; tabel dibatasi hingga {max}. Pisahkan data atau ekspor sebagai gantinya.",
+      "railExtractRequest": "Ekstrak baris yang sesuai dengan skema tabel dari: {source}",
+      "railExtractDone": "{count} baris hasil ekstraksi ditambahkan ke tabel.",
+      "railTransformDone": "Tabel telah ditransformasi.",
+      "columnProfileFor": "Statistik kolom untuk {column}",
+      "profileMissing": "Kosong",
+      "profileDistinct": "Unik",
+      "profileRange": "Rentang",
+      "profileMean": "Rata-rata",
+      "profileMedian": "Median",
+      "profileTopValues": "Nilai teratas",
+      "filterColumnFor": "Saring {column}",
+      "filterContains": "Mengandung…",
+      "filterMin": "Min",
+      "filterMax": "Maks",
+      "filterClear": "Hapus",
+      "clearFilters": "Hapus filter",
+      "showingRows": "Menampilkan {shown} dari {total} baris",
+      "scopeLabel": "Lingkup kerja",
+      "scopeTable": "Semua ({count})",
+      "scopeFiltered": "Tersaring ({count})",
+      "scopeSelection": "Dipilih ({count})",
+      "scopedInstruction": "{instruction} (pada {count} baris lingkup)",
+      "assess": "Nilai kualitas",
+      "assessing": "Menilai…",
+      "criteria": {
+        "validity": {
+          "label": "Validitas",
+          "description": "Nilai sesuai dengan tipe kolom dan format yang diharapkan"
+        },
+        "consistency": {
+          "label": "Konsistensi",
+          "description": "Nilai yang sama ditulis dengan cara yang sama di seluruh data (tidak ada variasi 'M' / 'Male', satuan tercampur, atau perbedaan kapitalisasi)"
+        },
+        "duplicates": {
+          "label": "Duplikat",
+          "description": "Baris yang merekam entitas atau kejadian yang sama dua kali"
+        },
+        "plausibility": {
+          "label": "Kewajaran",
+          "description": "Nilai pencilan dan nilai yang tidak mungkin dalam konteks"
+        }
+      },
+      "assessmentTitle": "Tinjauan kualitas data",
+      "pendingCount": "{count} menunggu",
+      "closeReview": "Tutup tinjauan kualitas",
+      "suggestedEdits": "Perbaikan yang disarankan",
+      "noEditsSuggested": "Tidak ada perbaikan yang disarankan — data memenuhi kriteria yang dipilih.",
+      "acceptAll": "Terima semua",
+      "rejectAll": "Tolak semua",
+      "acceptEdit": "Terima",
+      "rejectEdit": "Tolak",
+      "editAccepted": "Diterapkan",
+      "editRejected": "Ditolak",
+      "editUnapplicable": "Sel telah berubah sejak penilaian — tidak diterapkan",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kriteria penilaian",
+      "severity": {
+        "minor": "Minor",
+        "major": "Mayor"
+      },
+      "editLocation": "baris {row} · {column}",
+      "editLocationRow": "baris {row} (hapus)",
+      "showReview": "Tampilkan ulasan",
+      "showReviewPending": "Tampilkan ulasan ({count} tertunda)",
+      "assessedFiltered": "Baris yang difilter",
+      "assessedSelection": "Baris terpilih",
+      "assessedSample": "sampel {shown} dari {total}",
+      "railAssessRequest": "Nilai kualitas tabel ({count} baris) berdasarkan kriteria yang dipilih.",
+      "railAssessDone": "{count} perbaikan kualitas data diusulkan — tinjau di workspace.",
+      "insights": "Insights",
+      "chartKind": "Jenis grafik",
+      "chartBar": "Bar (kelompok berdasarkan)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Line (seiring waktu)",
+      "groupByColumn": "Kelompokkan berdasarkan kolom",
+      "dateColumn": "Kolom tanggal",
+      "valueColumn": "Kolom nilai",
+      "aggFn": "Agregasi",
+      "aggCount": "Jumlah",
+      "aggSum": "Total",
+      "aggMean": "Rata-rata",
+      "chartTruncated": "Menampilkan {max} kelompok teratas",
+      "chartNoData": "Tidak ada nilai yang dapat digrafikkan di baris saat ini.",
+      "chartBarAria": "Grafik batang dikelompokkan berdasarkan {column}",
+      "chartHistogramAria": "Histogram {column}",
+      "chartLineAria": "Grafik garis {column} seiring waktu",
+      "editStructure": "Struktur",
+      "defineStructure": "Definisikan struktur",
+      "schemaHint": "Tentukan field pada struktur data Anda. Field wajib mempengaruhi kebijakan data hilang saat impor; mengubah tipe field akan mengonversi nilai yang ada (sel yang tidak bisa dikonversi menjadi kosong).",
+      "schemaFieldName": "Nama field",
+      "schemaFieldType": "Tipe field",
+      "schemaRequired": "Wajib",
+      "schemaAddField": "Tambah field",
+      "schemaDeleteField": "Hapus field {field}",
+      "schemaApply": "Terapkan struktur",
+      "schemaCancel": "Batal",
+      "schemaEdited": "Struktur tabel telah diedit",
+      "schemaCellsConverted": "{count} sel tidak bisa dikonversi ke tipe baru dan sekarang kosong.",
+      "missingFieldPolicy": "Data hilang",
+      "policyStrict": "Ketat — tolak baris yang tidak lengkap",
+      "policyFlag": "Tandai — impor dan tandai",
+      "policyLenient": "Longgar — impor tanpa peringatan",
+      "droppedIncompleteRows": "{count} baris dengan field wajib hilang dihapus: {fields}",
+      "dismiss": "Tutup",
+      "requiredColumn": "Field wajib",
+      "flagMissingRequired": "Field wajib kosong",
+      "flagPendingEdit": "Perbaikan yang disarankan untuk sel ini masih menunggu — lihat ulasan kualitas",
+      "fromPhoto": "Dari foto",
+      "fromPhotoHint": "Foto formulir atau tabel kertas — isinya akan menjadi data terstruktur yang dapat Anda periksa dengan foto",
+      "readingPhoto": "Membaca foto...",
+      "photoBatchName": "{count} foto",
+      "railPhotoRequest": "Ekstrak data terstruktur dari {count} foto: {name}",
+      "railPhotoDone": "{count} data berhasil ditambahkan dari foto. Periksa data tersebut dengan foto di workspace.",
+      "sourcesLabel": "Sumber",
+      "openPhotoQc": "Periksa data dengan {name}",
+      "qcRowsFromPhoto": "{count} baris",
+      "qcClose": "Tutup pemeriksaan foto",
+      "qcZoomIn": "Perbesar",
+      "qcZoomOut": "Perkecil",
+      "qcPrevPhoto": "Foto sebelumnya",
+      "qcNextPhoto": "Foto berikutnya",
+      "qcImageLoading": "Memuat foto…",
+      "qcImageFailed": "Foto tidak dapat dimuat.",
+      "qcImageAlt": "Foto sumber: {name}",
+      "qcHint": "Tabel hanya menampilkan baris dari foto ini — bandingkan setiap nilai dengan foto dan edit atau hapus baris yang tidak sesuai.",
+      "sourceFilterChip": "Baris dari {name}",
+      "clearSourceFilter": "Tampilkan semua baris lagi",
+      "viewAsRecord": "Tampilan formulir",
+      "viewAsTable": "Tampilan tabel",
+      "recordEmpty": "Belum ada data.",
+      "recordOf": "Data ke-{index} dari {count}",
+      "recordPrev": "Data sebelumnya",
+      "recordNext": "Data berikutnya",
+      "recordBooleanUnset": "(kosong)",
+      "flagsChip": "{count} penanda",
+      "flagsChipOpenReview": "Buka tinjauan kualitas",
+      "flagsChipMissingOnly": "Kolom wajib masih kosong — lengkapi atau sesuaikan struktur",
+      "autoCheck": "Cek otomatis data baru",
+      "autoCheckHint": "Setelah mengambil data dari foto atau dokumen, cek kualitas baris baru secara otomatis",
+      "checkingNewRows": "Memeriksa baris baru untuk masalah kualitas…",
+      "ingestCheckFailed": "Pemeriksaan kualitas otomatis gagal ({message}) — Anda dapat menjalankannya manual dengan Penilaian kualitas.",
+      "assessedIngest": "Baris yang baru ditambahkan"
+    },
+    "map": {
+      "emptyTitle": "Letakkan data Anda pada peta",
+      "emptyBody": "Tempelkan sitrep, line list, catatan rapat, atau teks lain yang mencantumkan lokasi — atau unggah dokumen. Lokasi akan diidentifikasi dan dipetakan beserta tingkat kepercayaan; Anda dapat mengekspornya ke ArcGIS atau alat GIS lainnya.",
+      "inputPlaceholder": "Tempelkan teks yang menyebutkan lokasi…",
+      "uploadFile": "Unggah file",
+      "pastedSource": "Teks hasil tempel",
+      "mapIt": "Peta kan",
+      "finding": "Mencari lokasi…",
+      "featureCount": "{count} lokasi",
+      "featureCapExceeded": "Peta dibatasi hingga {max} lokasi.",
+      "noneFound": "Tidak ditemukan lokasi di materi tersebut.",
+      "lowConfidenceNotice": "{count} lokasi memiliki koordinat dengan tingkat kepercayaan rendah — periksa dahulu sebelum menggunakan peta.",
+      "tilesOffline": "Tile peta tidak tersedia — daftar lokasi tetap berfungsi.",
+      "disclaimer": "Koordinat diestimasi AI dari pengetahuan model, bukan layanan geocoding — verifikasi dulu sebelum penggunaan operasional. Tile peta dimuat dari tile server; data Anda tetap berada di perangkat ini.",
+      "flyTo": "Tampilkan {name} di peta",
+      "removeFeature": "Hapus {name}",
+      "expandFeature": "Tampilkan detail lengkap untuk {name}",
+      "collapseFeature": "Sembunyikan detail untuk {name}",
+      "detailsParent": "Bagian dari {parent}",
+      "railRequest": "Petakan lokasi-lokasi dalam: {source}",
+      "railSearchRequest": "Cari di web dan petakan lokasi untuk: {query}",
+      "railDone": "Telah dipetakan {count} lokasi. Tinjau lokasi dengan tingkat kepercayaan rendah pada daftar.",
+      "searchToggle": "Mode pencarian web",
+      "searchToggleHint": "Cari di web alih-alih menempelkan teks; hasil yang terverifikasi akan dipetakan.",
+      "searchPlaceholder": "Cari di web, misal \"wabah kolera Afrika Timur 2026\"…",
+      "searchAndMap": "Cari & petakan",
+      "searching": "Mencari…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Koneksi: {kind}",
+        "unresolved": "{count} koneksi merujuk lokasi yang tidak ada di peta dan dilewati."
+      },
+      "confidence": {
+        "high": "Tinggi",
+        "medium": "Sedang",
+        "low": "Rendah"
+      },
+      "prominence": {
+        "primary": "Lokasi utama",
+        "secondary": "Lokasi pendukung",
+        "mention": "Disebut sekilas"
+      },
+      "prominenceMentionHint": "Tempat ini hanya disebutkan secara sekilas — ditampilkan lebih kecil di peta dan tidak termasuk dalam bingkai awal.",
+      "dates": {
+        "since": "sejak {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Berlangsung"
+      },
+      "filters": {
+        "label": "Filter berdasarkan kategori",
+        "other": "Lainnya",
+        "clear": "Bersihkan",
+        "showing": "Menampilkan {shown} dari {total} lokasi",
+        "noneMatch": "Tidak ada lokasi yang cocok dengan filter saat ini."
+      },
+      "dateFilter": {
+        "label": "Tanggal",
+        "from": "Dari",
+        "to": "Hingga",
+        "fromAria": "Tampilkan hanya kejadian mulai tanggal ini",
+        "toAria": "Tampilkan hanya kejadian hingga tanggal ini",
+        "clear": "Bersihkan tanggal",
+        "eraChip": "Tampilkan hanya kejadian pada {label}"
+      },
+      "timeline": {
+        "toggle": "Time lapse",
+        "play": "Putar time lapse",
+        "pause": "Jeda time lapse",
+        "eras": "Era linimasa",
+        "jumpTo": "Lompat ke {label}",
+        "slider": "Posisi linimasa",
+        "showUndated": "Tampilkan lokasi tanpa tanggal",
+        "activeCount": "{count} aktif"
+      },
+      "granularity": {
+        "site": "Situs",
+        "city": "Kota/kecamatan",
+        "district": "Distrik",
+        "region": "Wilayah",
+        "country": "Negara"
+      },
+      "granularityAreaHint": "Suatu area, ditampilkan sebagai lingkaran perkiraan di sekitar titik tengahnya — bukan lokasi atau batas yang pasti.",
+      "containerHint": "Memuat lokasi lain yang telah dipetakan, sehingga hanya ditampilkan sebagai garis besar.",
+      "legend": {
+        "toggle": "Legenda",
+        "title": "Cara membaca peta",
+        "color": "Warna: tingkat kepercayaan koordinat (biru tinggi, kuning sedang, merah rendah)",
+        "size": "Ukuran titik: sejauh mana tempat tersebut sentral dalam materi",
+        "area": "Lingkaran putus-putus: perkiraan wilayah distrik, region, atau negara",
+        "container": "Garis samar: area yang isinya dipetakan secara individual"
+      }
+    },
+    "shell": {
+      "showConversation": "Tampilkan percakapan",
+      "hideConversation": "Sembunyikan percakapan",
+      "workspaceTab": "Workspace",
+      "conversationTab": "Percakapan",
+      "paneTabsLabel": "Panel workflow",
+      "railEmpty": "Pesan dan perkembangan asisten akan muncul di sini.",
+      "railInputPlaceholder": "Kirim pesan ke asisten…",
+      "assistantThinking": "Sedang memproses…",
+      "sendMessage": "Kirim pesan",
+      "stopGenerating": "Hentikan proses",
+      "loadingWorkspace": "Memuat workspace…",
+      "unknownType": "Percakapan ini menggunakan workflow yang tidak dikenali versi ini. Riwayat percakapan ditampilkan di bawah.",
+      "untitled": "Percakapan Baru",
+      "toggleMenu": "Tampilkan/sembunyikan menu",
+      "model": "Model untuk workflow ini"
+    }
+  },
+  "connectors": {
+    "title": "Konektor",
+    "description": "Hubungkan alat eksternal melalui Model Context Protocol (MCP). Alat yang terhubung tersedia untuk model dalam chat, dan setiap pemanggilan alat hanya dijalankan setelah Anda menyetujuinya.",
+    "localOnlyNote": "Anda masuk langsung dengan setiap penyedia. Access key dienkripsi dan hanya disimpan di perangkat ini, serta dikirim melalui server aplikasi setiap permintaan — tidak pernah disimpan atau dicatat di sana.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Cari repository, baca dan buat issue serta pull request."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Cari, buat, dan perbarui tugas serta proyek."
+      }
+    },
+    "connect": "Hubungkan",
+    "connected": "Terhubung",
+    "tokenEndsIn": "berakhir dengan ••••{last4}",
+    "disconnect": "Putuskan koneksi",
+    "toolCount": "{count, plural, =1 {1 alat tersedia} other {# alat tersedia}}",
+    "patLabel": "Personal access token",
+    "createTokenLink": "Buat token",
+    "tokenScopeHint": "Gunakan token terbatas hanya dengan akses yang dibutuhkan alat ini.",
+    "validating": "Memeriksa koneksi…",
+    "validationFailed": "Tidak dapat terhubung. Periksa alamat dan coba lagi.",
+    "authFailed": "Server menolak token. Periksa token dan coba lagi.",
+    "tokenRequired": "Token diperlukan",
+    "enableServer": "Tersedia di chat",
+    "arbitraryTitle": "Server MCP lainnya",
+    "arbitraryToggle": "Izinkan server MCP lain",
+    "arbitraryWarning": "Siapa pun yang menjalankan server MCP dapat melihat pesan yang dikirim ke alatnya. Hanya hubungkan ke server yang Anda percayai. Setiap panggilan alat tetap memerlukan persetujuan Anda.",
+    "addServer": "Tambah server MCP",
+    "editServer": "Edit server MCP",
+    "serverName": "Nama",
+    "serverUrl": "URL Server",
+    "nameRequired": "Nama wajib diisi",
+    "urlRequired": "URL wajib diisi",
+    "invalidUrl": "Masukkan alamat https:// publik",
+    "namePlaceholder": "Server MCP saya",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (opsional)",
+    "keepTokenPlaceholder": "Biarkan kosong untuk mempertahankan token saat ini",
+    "disconnectedToast": "{name} terputus",
+    "save": "Simpan",
+    "connectWithProvider": "Hubungkan dengan {name}",
+    "useTokenInstead": "Gunakan access token sebagai gantinya",
+    "oauthWaiting": "Menunggu otorisasi…",
+    "oauthFailed": "Gagal masuk. Coba lagi.",
+    "oauthDenied": "Akses ditolak oleh penyedia.",
+    "oauthTimeout": "Waktu masuk habis. Coba lagi.",
+    "oauthCancelled": "Proses masuk dibatalkan.",
+    "oauthUnavailable": "Masuk tidak tersedia untuk konektor ini pada deployment ini. Gunakan access token sebagai alternatif, atau minta administrator Anda untuk mengonfigurasi aplikasi OAuth.",
+    "ownAppToggle": "Gunakan aplikasi OAuth sendiri",
+    "ownAppHint": "Daftarkan aplikasi OAuth di akun {name} Anda (organisasi, workspace, atau instance enterprise Anda) dengan callback URL di bawah ini, lalu tempel kredensialnya di sini. Biarkan tertutup untuk menggunakan aplikasi bawaan.",
+    "ownAppCustomHint": "Opsional: masukkan kredensial aplikasi OAuth Anda sendiri di bawah ini; biarkan kosong untuk mendaftar otomatis dengan server.",
+    "ownAppInUse": "Terhubung dengan aplikasi OAuth Anda sendiri.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (jika aplikasi Anda memilikinya)",
+    "redirectUriLabel": "Callback / redirect URL untuk didaftarkan",
+    "reconnect": "Sambungkan ulang",
+    "needsReauth": "Perlu sambungkan ulang",
+    "disconnectOauthNote": "Memutuskan hanya akan menghapus akses dari perangkat ini. Untuk mencabut akses sepenuhnya, kelola aplikasi yang diizinkan di akun {name} Anda.",
+    "authModeLabel": "Otentikasi",
+    "authModeNone": "Tidak ada",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Masuk dengan penyedia (OAuth)",
+    "oauthCustomHint": "Anda akan masuk dengan penyedia server di jendela pop-up setelah penyimpanan.",
+    "saveAndSignIn": "Simpan & masuk",
+    "oauthCallback": {
+      "title": "Otorisasi selesai",
+      "missingState": "Tidak ada yang perlu diotorisasi",
+      "close": "Anda dapat menutup jendela ini dan kembali ke aplikasi.",
+      "closeButton": "Tutup jendela"
+    }
   }
 }

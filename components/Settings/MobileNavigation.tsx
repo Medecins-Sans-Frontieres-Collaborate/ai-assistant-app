@@ -5,9 +5,11 @@ import {
   IconDeviceMobile,
   IconHelp,
   IconMessage,
+  IconPlugConnected,
   IconShield,
   IconUser,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
@@ -24,6 +26,9 @@ export const MobileNavigation: FC<MobileNavigationProps> = ({
   setActiveSection,
 }) => {
   const t = useTranslations();
+  // Same gate as SettingsSidebar: fail-open (undefined => shown).
+  const { mcpConnectors } = useFlags();
+  const isConnectorsEnabled = mcpConnectors !== false;
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Navigation items configuration
@@ -38,6 +43,15 @@ export const MobileNavigation: FC<MobileNavigationProps> = ({
       label: t('Chat Settings'),
       icon: <IconMessage size={20} />,
     },
+    ...(isConnectorsEnabled
+      ? [
+          {
+            section: SettingsSection.CONNECTORS,
+            label: t('Connectors'),
+            icon: <IconPlugConnected size={20} />,
+          },
+        ]
+      : []),
     {
       section: SettingsSection.DATA_MANAGEMENT,
       label: t('Data Management'),

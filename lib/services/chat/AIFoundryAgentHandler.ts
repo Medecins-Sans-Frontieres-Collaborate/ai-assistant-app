@@ -63,6 +63,14 @@ export class AIFoundryAgentHandler {
 
   constructor() {}
 
+  /**
+   * Handles chat completion using Azure AI Foundry Agents.
+   *
+   * When options.ephemeral is true and the handler creates a NEW conversation,
+   * that conversation is deleted from Azure once the response stream finishes
+   * (happy path, error, or client cancel). Used for web search where each
+   * query is independent and the conversation should not be retained.
+   */
   async handleAgentChat(
     modelId: string,
     modelConfig: OpenAIModel,
@@ -74,6 +82,7 @@ export class AIFoundryAgentHandler {
     credential?: TokenCredential,
     endpoint?: string,
     approvalResponses?: ApprovalResponse[],
+    options?: { ephemeral?: boolean },
   ): Promise<Response> {
     const startTime = Date.now();
 
@@ -276,6 +285,53 @@ export class AIFoundryAgentHandler {
             await new Promise((r) => setTimeout(r, 200));
           }
 
+          // Ephemeral conversation cleanup — delete the Azure conversation once
+          // we're done with it. Only meaningful when the caller asked for
+          // ephemeral behavior AND we created the conversation (we never delete
+          // a reused one). Idempotent via cleanupDone; safe to call from every
+          // exit point (completion, error, client cancel). Used by web search,
+          // where each query is independent and the conversation is disposable.
+          const shouldDeleteConversation =
+            options?.ephemeral === true && isNewConversation;
+          let cleanupDone = false;
+          if (isNewConversation) {
+            span.setAttribute('conversation.id_created', conversationId);
+          }
+          const cleanupEphemeralConversation = async (): Promise<void> => {
+            if (!shouldDeleteConversation || cleanupDone) return;
+            cleanupDone = true;
+            try {
+              await openAIClient.conversations.delete(conversationId);
+              console.log(
+                '[AIFoundryAgentHandler] Deleted ephemeral conversation',
+                conversationId,
+              );
+              span.addEvent('ephemeral_conversation.deleted', {
+                conversationId,
+              });
+            } catch (err) {
+              // 404 means it's already gone — that's the desired end state.
+              const statusCode = (err as { statusCode?: number })?.statusCode;
+              const status = (err as { status?: number })?.status;
+              const code = (err as { code?: string })?.code;
+              if (statusCode === 404 || status === 404 || code === 'NotFound') {
+                span.addEvent('ephemeral_conversation.delete_404', {
+                  conversationId,
+                });
+                return;
+              }
+              console.error(
+                '[AIFoundryAgentHandler] Failed to delete ephemeral conversation',
+                conversationId,
+                err,
+              );
+              span.addEvent('ephemeral_conversation.delete_failed', {
+                conversationId,
+                error: err instanceof Error ? err.message : String(err),
+              });
+            }
+          };
+
           // Aborts the upstream Foundry stream when the client disconnects
           // (the ReadableStream's `cancel()` fires) so we don't keep draining
           // — and billing — an abandoned agent run to completion.
@@ -357,6 +413,7 @@ export class AIFoundryAgentHandler {
                 JSON.stringify(streamError.details, null, 2),
               );
             }
+            void cleanupEphemeralConversation();
             throw streamError;
           }
 
@@ -614,6 +671,7 @@ export class AIFoundryAgentHandler {
                         },
                       );
                       controllerClosed = true;
+                      void cleanupEphemeralConversation();
                       controller.error(
                         new Error(
                           'Agent returned an empty response. Please try again.',
@@ -622,17 +680,24 @@ export class AIFoundryAgentHandler {
                       return;
                     }
 
+                    // For ephemeral conversations, don't surface the id — it
+                    // will be deleted in a moment and is not safe to reuse.
                     // `threadId` is the client-side name; don't rename.
                     appendMetadataToStream(controller, {
                       citations: citations.length > 0 ? citations : undefined,
-                      threadId: isNewConversation ? conversationId : undefined,
+                      threadId:
+                        isNewConversation && !shouldDeleteConversation
+                          ? conversationId
+                          : undefined,
                     });
 
                     controllerClosed = true;
+                    void cleanupEphemeralConversation();
                     controller.close();
                   } else if (event.type === 'response.failed') {
                     const errorEvent = event as any;
                     controllerClosed = true;
+                    void cleanupEphemeralConversation();
                     controller.error(
                       new Error(
                         `Agent error: ${errorEvent.response?.error?.message || 'Unknown error'}`,
@@ -656,15 +721,18 @@ export class AIFoundryAgentHandler {
                 // If the client disconnected we deliberately aborted the
                 // upstream iterator; the stream is already cancelled, so don't
                 // try to error an again-closed controller.
+                void cleanupEphemeralConversation();
                 if (!upstreamAbort.signal.aborted && !controllerClosed) {
                   controller.error(error);
                 }
               }
             },
-            cancel() {
+            async cancel() {
               // Client went away (response stream cancelled). Abort the upstream
-              // Foundry stream so we stop draining it.
+              // Foundry stream so we stop draining it, and clean up the
+              // ephemeral conversation if we created one.
               upstreamAbort.abort();
+              await cleanupEphemeralConversation();
             },
           });
 

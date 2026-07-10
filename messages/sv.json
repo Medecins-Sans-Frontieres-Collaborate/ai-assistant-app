@@ -433,7 +433,22 @@
     "noProjectsFound": "Inga projekt hittades. Använder \"default\".",
     "selectAllRequired": "Välj en prenumeration, ett konto och ett projekt.",
     "subscriptionRequired": "Välj ett abonnemang",
-    "accountRequired": "Välj ett Foundry-konto"
+    "accountRequired": "Välj ett Foundry-konto",
+    "projectSelectionRequired": "Välj ett projekt från listan.",
+    "scanningResources": "Söker igenom dina Azure-prenumerationer...",
+    "searchProjectsPlaceholder": "Sök projekt...",
+    "noProjectsDiscovered": "Inga Foundry-projekt hittades i dina prenumerationer. Använd manuell inmatning om du känner till sökvägen.",
+    "discoveryPartialWarning": "{count, plural, one {# prenumeration} other {# prenumerationer}} kunde inte skannas. Använd manuell inmatning om ditt projekt saknas.",
+    "discoveryTruncatedWarning": "Det fanns för många resurser för att kunna skanna allt. Använd manuell inmatning om ditt projekt saknas.",
+    "retryScan": "Försök skanna igen",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "selectAgentsDescription": "Välj vilka agenter från detta projekt som ska visas i din modellväljare.",
+    "selectAll": "Markera alla",
+    "deselectAll": "Avmarkera alla",
+    "agentsSelectedCount": "{selected} av {total} agenter valda",
+    "autoAddLabel": "Lägg till nya agenter automatiskt",
+    "autoAddDescription": "Agenter som publiceras till detta projekt senare visas automatiskt. Ej markerade agenter förblir exkluderade."
   },
   "Quick Actions": "Snabbåtgärder",
   "Type / in chat to access your prompts": "Skriv / i chatten för att komma åt dina prompter",
@@ -760,7 +775,19 @@
       "listingTools": "Letar efter tillgängliga verktyg…",
       "analyzingFiles": "Analyserar dina filer…",
       "searchingKnowledge": "Söker i kunskapsbasen…",
-      "cancellingPriorTool": "Avbryter föregående verktygsanrop…"
+      "cancellingPriorTool": "Avbryter föregående verktygsanrop…",
+      "workflow": {
+        "preparingDocument": "Förbereder referenser...",
+        "writingDocument": "Skriver dokumentet...",
+        "analyzingSource": "Analyserar källtexten...",
+        "translating": "Översätter...",
+        "reviewingTranslation": "Granskningsrunda {round} av {total}...",
+        "revisingTranslation": "Tillämpar återkoppling från granskning...",
+        "extractingRows": "Extraherar rader från {source}...",
+        "transformingTable": "Omvandlar tabellen...",
+        "findingLocations": "Identifierar platser...",
+        "updatingMap": "Uppdaterar kartan..."
+      }
     },
     "toolSummary": {
       "usedTools": "Använt {count, plural, one {# verktyg} other {# verktyg}}",
@@ -821,7 +848,8 @@
     "listen": "Lyssna",
     "processingAudio": "Bearbetar ljud...",
     "ttsError": "Fel vid generering av ljud. Försök igen.",
-    "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp"
+    "unsupportedMessageType": "Fel vid visning av meddelande: Ej stödd meddelandetyp",
+    "addLanguageOption": "Lägg till \"{name}\"…"
   },
   "sidebar": {
     "collapseSidebar": "Fäll ihop sidofält",
@@ -1146,9 +1174,11 @@
     "behaviorSection": "Beteende",
     "resetChatSettings": "Återställ chattinställningar",
     "resetChatSettingsConfirmTitle": "Återställ chattinställningar?",
-    "resetChatSettingsConfirmMessage": "Detta återställer standardvärden för allt i denna panel: temperatur, anpassade instruktioner, Om dig, modellsvar, strömmande hastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina konversationer.",
+    "resetChatSettingsConfirmMessage": "Detta återställer standardinställningarna för allt i denna panel: temperatur, egna instruktioner, Om dig, modellsvar, strömningshastighet, text-till-tal, aktiva filer och bekräftelser. Det påverkar inte dina samtal.",
     "customInstructionsLabel": "Anpassade instruktioner*",
-    "defaultTemperatureLabel": "Standardtemperatur*"
+    "defaultTemperatureLabel": "Standardtemperatur*",
+    "Usage & Impact": "Användning & påverkan",
+    "Connectors": "Anslutningar"
   },
   "notFound": {
     "lostDog": "Förlorad hund"
@@ -1299,7 +1329,36 @@
     "modelsDescription": "Välj en AI-modell för din konversation. Varje modell har olika styrkor — välj en för att se detaljer.",
     "recommended": "Rekommenderad",
     "familyAll": "Alla",
-    "familyFilterLabel": "Filtrera modeller efter familj"
+    "familyFilterLabel": "Filtrera modeller efter familj",
+    "searchPlaceholder": "Sök modeller",
+    "searchEmpty": "Inga modeller matchar din sökning.",
+    "star": "Favorisera {name}",
+    "unstar": "Ta bort favorit från {name}",
+    "otherFamily": "Övriga",
+    "hostedExternally": "Körs på leverantörens egen infrastruktur via Azure AI Foundry, inte i MSF:s Azure-miljö.",
+    "hostedIn": {
+      "label": "Hostad i {regions}",
+      "tooltip": "Den eller de Azure-regioner där denna modell är distribuerad. Samtal behandlas i din egen region."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Körs på leverantörens egen infrastruktur via Azure AI Foundry, inte i MSF:s Azure-miljö.",
+      "regionHostedTooltip": "Hostad i Azure-regionen {region}. Samtal med denna modell behandlas där."
+    },
+    "favorites": "Favoriter",
+    "euResidencyNote": "Alla modeller körs i EU Azure-regionen.",
+    "hostedRegion": {
+      "label": "Hostad region",
+      "processedIn": "Denna konversation behandlas i Azure-regionen {region}.",
+      "euOnlyNote": "{name} är hostad i EU Azure-regionen; samtal med den behandlas där."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem.",
+    "variant": {
+      "label": "Variant"
+    }
   },
   "models": {
     "gpt_4_1": {
@@ -1386,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "En balanserad Claude-modell. Bra för vardagligt skrivande, analys och kodning med snabba svar.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "En öppen källkodsmodell från Meta. Stabil för skrivande, sammanfattningar och snabba frågor."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Den minsta och snabbaste GPT-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "En konversationstuned GPT-variant för dialog. Bra för avslappnade samtal, brainstorming och stödjande diskussioner."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "En äldre multimodal GPT. Passar för vardagligt skrivande och frågor/svar där den senaste kapaciteten inte behövs."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "En mindre och snabbare GPT-4.1-variant för snabba vardagsuppgifter."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropics senaste och starkaste modell. Utmärkt för långa texter, forskning, kodning och noggrann analys."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeeks senaste öppen källkodsmodell. Pålitlig för allmänt skrivande och tekniska frågor."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistrals flaggskeppsmodell. Ett europeiskt alternativ för skrivande, sammanfattningar och allmänna frågor."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "En tidigare flaggskeppsrevision av GPT-5. Fortfarande stark på skrivande, analys och kodning."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "En tidigare chatt-tuned GPT-5-version. Bra för vardagliga samtal och brainstorming."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Den minsta GPT-5-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Den minsta GPT-4.1-varianten. Passar för snabba, enkla uppgifter där hastighet och kostnad är viktigast."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "En liten och snabb GPT-4o-variant. Passar bra för snabba vardagsuppgifter där senaste kapacitet inte behövs."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "En kompakt resonemangsmodell. Bra för matte, logik och steg-för-steg-problem till lägre kostnad än o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "En tidigare kompakt resonemangsmodell. Hanterar matte, naturvetenskap och logiska problem kostnadseffektivt."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropics mest intelligenta modell, den första i Claude 5-familjen. Utmärkt för de svåraste skriv-, forsknings- och koduppgifterna."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Den nyaste balanserade Claude, först i Claude 5-familjen. Stark på vardagligt skrivande, analys och kodning med snabba svar."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistrals mellanstora modell. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagsbruk."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistrals lilla modell. Snabb och billig för sammanfattningar, utkast och enkla frågor."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistrals minsta modell. Bäst för mycket snabba, enkla uppgifter till minimal kostnad."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "En uppdaterad DeepSeek-R1-version. Visar sitt resonemang steg för steg med förbättrat djup."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "En lättare öppen källkodsmodell från Meta. Snabb för skrivande, sammanfattningar och vardagsfrågor."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "En äldre öppen källkodsmodell från Meta. Fortfarande stabil för allmänt skrivande och frågor/svar."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAIs flaggskeppsmodell. Bra för öppna diskussioner, analys och kreativa projekt."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (senaste)",
+      "description": "Ett rullande alias som alltid pekar på OpenAIs nyaste chat-tunade modell. Azures ersättning för de utgångna versionerade gpt-*-chat-modellerna."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "En nyare Opus-version, mellan 4.6 och 4.8. Stark för långa texter, forskning, kodning och noggrann analys."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeeks nyaste modeller för resonemang och Azures ersättning för R1-linjen. Visar sitt tänkande steg för steg."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeeks snabba V4-variant och Azures ersättning för V3-linjen. Snabb för allmänt skrivande och tekniska frågor."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Resonemang)",
+      "description": "xAIs snabba resonemangsmodell. Tänker steg för steg med snabba svar."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAIs snabba chattmodell. Snabba svar för vardagsfrågor och diskussioner."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "En lättare xAI-modell. Snabbare och billigare för snabba frågor och vardagliga samtal."
     }
   },
   "searchMode": {
@@ -1824,7 +2015,20 @@
     "useDefaultStyle": "Använd standardstil",
     "noTonesCreated": "Inga toner har skapats ännu",
     "createTonesHint": "Skapa toner i Snabbåtgärder",
-    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, HTML, TXT\nMaxstorlek: 40 MB\n\nStöd för 80+ språk med valfria ordlistor."
+    "translateDocumentTooltip": "Översätt dokument till ett annat språk.\n\nStödda format: Word, Excel, PowerPoint, HTML, TXT\nMaxstorlek: 40 MB\n\nStöd för 80+ språk med valfria ordlistor.",
+    "translateTooltip": "Översätt ett textstycke till ett annat språk.\n\nFör hela filer (Word, Excel, PowerPoint, HTML, TXT), använd Översätt dokument istället.",
+    "cameraTooltip": "Ta ett foto med din enhets kamera och bifoga det till meddelandet.",
+    "noResults": "Inga matchande åtgärder",
+    "sectionPinned": "Fästa",
+    "sectionFrequent": "Frekvent använda",
+    "sectionMore": "Fler",
+    "categoryWeb": "Webb",
+    "categoryMedia": "Media & filer",
+    "categoryTransform": "Transformera",
+    "pin": "Fäst längst upp",
+    "unpin": "Ta bort fästning",
+    "moveToMore": "Flytta till Fler",
+    "moveOutOfMore": "Visa i menyn"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Lägg till dina egna instruktioner för att anpassa hur AI:n svarar. Dessa kombineras med grundläggande riktlinjer som säkerställer hjälpsamma, korrekta och säkra svar.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tips: Skriv \"/\" för att välja bland sparade promptmallar.",
@@ -1935,7 +2139,14 @@
     "learnMore": "Läs mer",
     "advancedOptions": "Avancerade alternativ",
     "unofficialBadgeLabel": "Inofficiell",
-    "unofficialLanguageWarning": "Detta språk stöds inte officiellt. Kvaliteten på översättningen har inte verifierats. Låt resultatet granskas av en flytande eller infödd talare innan det delas."
+    "unofficialLanguageWarning": "Detta språk stöds inte officiellt. Kvaliteten på översättningen har inte verifierats. Låt resultatet granskas av en flytande eller infödd talare innan det delas.",
+    "translationSubmitted": "Översättning påbörjad — PDF:er behandlas i bakgrunden.",
+    "pendingTitle": "Översätter {filename}…",
+    "pendingHint": "PDF-översättningar körs i bakgrunden och kan ta några minuter. Du kan fortsätta arbeta — kortet uppdateras när dokumentet är klart, även efter att du uppdaterat sidan.",
+    "asyncFailed": "Dokumentöversättningen misslyckades: {error}",
+    "jobNotFound": "översättningsjobbet är inte längre tillgängligt. Försök igen.",
+    "retryPolling": "Kontrollera igen",
+    "pollingStalled": "Vi kunde inte nå servern för att kontrollera processen. Översättningen kan fortfarande pågå."
   },
   "terms": {
     "officialLanguages": "Officiell version:",
@@ -2117,5 +2328,699 @@
   "regionOverride": {
     "warning": "Platsöverskridande aktiv — dina förfrågningar dirigeras till dataregionen {region}. Detta är en manuell testöverskridande, inte din faktiska plats.",
     "clear": "Rensa överskridande"
+  },
+  "usageImpact": {
+    "empty": "Ingen användning har spårats ännu. Din tokenanvändning och uppskattade utsläpp visas här efter att du har chattat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} mobiluppladdningar",
+    "requests": "Förfrågningar",
+    "promptTokens": "Prompt-tokens",
+    "completionTokens": "Slut-tokens",
+    "topModels": "Per modell",
+    "byRegion": "Per värdregion",
+    "regionDefault": "Standard",
+    "modelRow": "{requests} frq · {grams} g",
+    "disclosure": "Uppskattningar baseras på antaganden v{version} · sedan {since} · endast standardchatt (agenter och kunskapsbaserade svar räknas inte).",
+    "reset": "Återställ användningsstatistik"
+  },
+  "extraction": {
+    "toggleLabel": "Extrahera strukturerad data",
+    "trayLabel": "Extraktion",
+    "trayPrefix": "Extrahera",
+    "trayInfo": "Extraktion returnerar upp till 3 strukturerade tabeller. Recept sparas lokalt.",
+    "autoChip": "Auto — AI föreslår en struktur",
+    "addRecipe": "Lägg till recept",
+    "addRecipeTitle": "Lägg till ett recept till denna extraktion",
+    "addRecipeFullTitle": "Upp till 3 recept per extraktion",
+    "removeRecipe": "Ta bort recept: {name}",
+    "remove": "Ta bort",
+    "section": "Extraktionsrecept",
+    "sectionSubtitle": "Sparade mallar som omvandlar råtext, filer eller URL:er till strukturerade tabeller. Välj upp till 3 per extraktion.",
+    "newRecipe": "Nytt recept",
+    "untitledRecipe": "(Utan titel)",
+    "deleteRecipe": "Ta bort recept",
+    "delete": "Ta bort",
+    "deleteConfirm": "Ta bort?",
+    "cancel": "Avbryt",
+    "name": "Namn",
+    "namePlaceholder": "t.ex. Patienter",
+    "description": "Beskrivning",
+    "optional": "(valfritt)",
+    "descriptionPlaceholder": "Kort sammanfattning som visas i receptväljaren",
+    "instructions": "Instruktioner",
+    "instructionsPlaceholder": "Vad ska AI:t leta efter i materialet?",
+    "fields": "Fält",
+    "field": "fält",
+    "fieldsPlural": "fält",
+    "fieldName": "Fältnamn",
+    "fieldType": "Fälttyp",
+    "fieldNamePlaceholder": "fält_namn",
+    "addField": "Lägg till fält",
+    "removeField": "Ta bort fält",
+    "toggleDetails": "Visa/dölj detaljer",
+    "fieldDetailsTitle": "Beskrivning, enumvärden",
+    "fieldDescriptionPlaceholder": "Beskrivning (hjälper AI:n att hitta detta fält)",
+    "enumValuesPlaceholder": "Kommaseparerade tillåtna värden",
+    "required": "obligatorisk",
+    "suggest": "Föreslå med AI",
+    "suggesting": "Föreslår…",
+    "suggestNeedsInstructions": "Lägg till instruktioner först så att AI vet vad den ska leta efter",
+    "searchRecipes": "Sök recept",
+    "pickerEmpty": "Inga recept än. Skapa ett för att komma igång.",
+    "pickerEmptyMatch": "Inga matchande recept",
+    "editorEmpty": "Inga recept än. Skapa ett så kan AI hjälpa till att fylla i fälten.",
+    "noData": "Ingen data extraherad",
+    "noRecords": "Inga {name}-poster hittades",
+    "row": "rad",
+    "rows": "rader",
+    "record": "post",
+    "records": "poster",
+    "complete": "klar",
+    "download": "Ladda ner",
+    "preview": "Förhandsgranska",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} fält",
+    "fieldCountOne": "1 fält",
+    "andMoreFields": "+ {count} till",
+    "saveAsRecipe": "Spara som recept",
+    "savedAsRecipeToast": "Sparat som recept \"{name}\"",
+    "previewTruncated": "Visar de första 3 av {total} rader. Ladda ner för fullständig data.",
+    "previewEmpty": "Inga rader att förhandsgranska",
+    "proposedSchemaTip": "AI har föreslagit detta schema. Spara det för att återanvända nästa gång.",
+    "downloadAriaLabel": "Ladda ner {name} som {format}",
+    "previewAriaLabel": "Växla förhandsgranskning av {name}",
+    "changeFormatAriaLabel": "Ändra nedladdningsformat för {name}",
+    "materialWarningTitle": "Lägg till material att extrahera",
+    "materialWarningBody": "Skriv ett meddelande nedan, bifoga en fil eller inkludera en URL.",
+    "materialAttach": "Bifoga fil",
+    "willExtractPrefix": "Kommer att extrahera från:",
+    "materialText": "meddelandetext",
+    "materialFiles": "{count, plural, one {1 fil} other {# filer}}",
+    "materialActiveFiles": "{count, plural, one {1 aktiv fil} other {# aktiva filer}}",
+    "dismiss": "Stäng av extraktion"
+  },
+  "Connectors": "Anslutningar",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Översättning",
+        "description": "Översätt text med analys, ordlistor och granskningsrundor"
+      },
+      "document": {
+        "label": "Dokument",
+        "description": "Skapa och förbättra ett dokument med assistenten"
+      },
+      "dataAnalysis": {
+        "label": "Dataanalys",
+        "description": "Importera tabeller och utforska eller omvandla din data"
+      },
+      "map": {
+        "label": "Karta",
+        "description": "Omvandla data till platser på en karta"
+      }
+    },
+    "chooser": {
+      "prompt": "Eller starta ett fokuserat arbetsutrymme"
+    },
+    "sidebar": {
+      "newTranslation": "Ny översättning",
+      "newDocument": "Nytt dokument",
+      "newDataAnalysis": "Ny dataanalys",
+      "newMap": "Ny karta"
+    },
+    "translation": {
+      "chooseLanguage": "Målspråk",
+      "customLanguageHint": "\"{name}\" är ett språk du har lagt till – AI:n försöker översätta till vilket språk som helst, men kvaliteten är inte granskad.",
+      "addedByYou": "Tillagd av dig",
+      "glossary": "Ordlista",
+      "noGlossary": "Ingen ordlista",
+      "manageGlossaries": "Ordlistor",
+      "glossaries": "Ordlistor",
+      "closeGlossaries": "Stäng ordlistor",
+      "glossariesEmpty": "Skapa en ordlista för att säkerställa hur specifika termer översätts. Ordlistor sparas på denna enhet och kan återanvändas i flera översättningar.",
+      "newGlossary": "Ny ordlista",
+      "newGlossaryName": "Namnlös ordlista",
+      "glossaryName": "Ordlistans namn",
+      "deleteGlossary": "Ta bort ordlista",
+      "sourceTerm": "Källterm",
+      "targetTerm": "Översättning",
+      "note": "Notering",
+      "noteOptional": "Notering (valfritt)",
+      "addEntry": "Lägg till term",
+      "removeEntry": "Ta bort {term}",
+      "mode": "Översättningsläge",
+      "modeQuick": "Snabb",
+      "modeAgentic": "Granskad",
+      "modeQuickHint": "En översättningsomgång, snabbast",
+      "modeAgenticHint": "Analyserar texten först, översätter sedan och genomför upp till 3 granskningsrundor",
+      "translate": "Översätt",
+      "translating": "Översätter…",
+      "sourceLabel": "Källtext",
+      "targetLabel": "Översättning",
+      "sourcePlaceholder": "Klistra in eller skriv texten som ska översättas, eller ladda upp ett dokument.",
+      "targetEmpty": "Översättningen visas här.",
+      "uploadDocument": "Ladda upp dokument",
+      "copy": "Kopiera",
+      "copied": "Kopierat",
+      "tooLong": "Texten är längre än {max} tecken. Dela upp den i delar eller använd dokumentöversättning för hela filer.",
+      "analysisTitle": "Föranalys av översättning",
+      "register": "Registrera",
+      "reviewTitle": "Granskningsrundor",
+      "roundLabel": "Runda {round}",
+      "verdictApprove": "godkänd",
+      "verdictRevise": "reviderad",
+      "railRequest": "Översätt källtexten till {language}.",
+      "railDoneAgentic": "Klart. Jag analyserade texten, översatte den och genomförde {rounds} granskningsrunda(or). Resultatet finns i arbetsytan.",
+      "railDoneQuick": "Klart. Översättningen finns i arbetsytan.",
+      "railAssessRequest": "Bedöm kvaliteten på översättningen till {language}.",
+      "railAssessDone": "Bedömning klar: betyg finns i arbetsytan med {count} föreslagna ändring(ar) att granska.",
+      "roundChanges": "Ändringar i runda {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Noggrannhet",
+          "description": "Förmedlar exakt källans innebörd — inga felöversättningar, utelämnanden, tillägg eller oöversatta segment"
+        },
+        "fluency": {
+          "label": "Språklig flyt",
+          "description": "Grammatik, stavning, interpunktion och sammanhang känns naturligt i målspråket"
+        },
+        "terminology": {
+          "label": "Terminologi",
+          "description": "Facktermer är korrekta och konsekventa; ordlistan följs exakt"
+        },
+        "style": {
+          "label": "Stil",
+          "description": "Tonalitet, röst och register matchar källan och håller sig konsekvent"
+        },
+        "localeConventions": {
+          "label": "Lokala konventioner",
+          "description": "Datum, siffror, enheter och interpunktion följer normerna för målspråket"
+        },
+        "audience": {
+          "label": "Målgrupp",
+          "description": "Lämplig för textens avsedda syfte och läsare"
+        }
+      },
+      "severity": {
+        "minor": "Mindre",
+        "major": "Allvarlig"
+      },
+      "assess": "Bedöm kvalitet",
+      "assessing": "Bedömer…",
+      "assessmentTitle": "Kvalitetsbedömning",
+      "criteriaPicker": "Kriterier att bedöma",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Föreslagna ändringar",
+      "noEditsSuggested": "Inga ändringar föreslås — översättningen uppfyller valda kriterier.",
+      "acceptEdit": "Acceptera",
+      "rejectEdit": "Avvisa",
+      "acceptAll": "Acceptera alla",
+      "rejectAll": "Avvisa alla",
+      "editAccepted": "Accepterad",
+      "editRejected": "Avvisad",
+      "editUnapplicable": "Kunde inte hitta denna passage i aktuell text — ej tillämpad",
+      "editTranslation": "Redigera",
+      "doneEditing": "Klar",
+      "pasteTranslationPlaceholder": "Skriv eller klistra in en översättning att arbeta med…",
+      "editingBlockedPendingEdits": "Lös eller avvisa väntande föreslagna ändringar först",
+      "pendingCount": "{count} väntande",
+      "closeReview": "Stäng kvalitetsgranskning",
+      "showReview": "Visa granskning",
+      "showReviewPending": "Visa granskning ({count} väntande)"
+    },
+    "document": {
+      "emptyTitle": "Beskriv dokumentet du vill ha",
+      "emptyBody": "Berätta för assistenten vad som ska skrivas — en situationsrapport, ett bidragsbrev, mötesprotokoll. Lägg till referensfiler först om du vill ha citat och fakta från dem.",
+      "generatePlaceholder": "Beskriv dokumentet som ska skrivas…",
+      "revisePlaceholder": "Beskriv de ändringar som ska göras…",
+      "generate": "Skapa",
+      "revise": "Revidera",
+      "writing": "Skriver…",
+      "export": "Exportera",
+      "references": "Referenser",
+      "addReference": "Lägg till fil",
+      "uploading": "Laddar upp…",
+      "removeReference": "Ta bort {name}",
+      "referenceChars": "{chars} tecken extraherad text",
+      "referenceEmpty": "Ingen text kunde extraheras från {name}",
+      "uploadFailed": "Uppladdning misslyckades",
+      "untitledDocument": "Namnlöst dokument",
+      "generatedSummary": "Jag har skrivit dokumentet i arbetsytan. Granska det och berätta vad som ska ändras.",
+      "revisedSummary": "Jag har reviderat dokumentet i arbetsytan.",
+      "runFailed": "Något gick fel: {message}",
+      "uploadBasis": "Börja från ett befintligt dokument",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grammatik och stavning",
+          "description": "Korrekt grammatik och stavning; en konsekvent engelsk variant (US eller UK) är godkänd — blandning är fel"
+        },
+        "consistency": {
+          "label": "Konsekvens",
+          "description": "Terminologi, namn, versalisering och formatering används på samma sätt genomgående"
+        },
+        "clarity": {
+          "label": "Tydlighet",
+          "description": "Direkta, entydiga meningar; struktur som underlättar för läsaren"
+        },
+        "sensitivity": {
+          "label": "Känslighet",
+          "description": "Inkluderande, konflikt- och humanitetskänsligt språk (valfri kontroll)"
+        },
+        "specAdherence": {
+          "label": "Spec-efterlevnad",
+          "description": "Följer den bifogade dokumentspecifikationen: nödvändiga avsnitt finns med, i rätt ordning och enligt riktlinjerna"
+        },
+        "toneAdherence": {
+          "label": "Ton-efterlevnad",
+          "description": "Följer bifogade röst- och tonregler"
+        }
+      },
+      "severity": {
+        "minor": "Mindre",
+        "major": "Större"
+      },
+      "assess": "Bedöm kvalitet",
+      "assessing": "Bedömer…",
+      "assessmentTitle": "Kvalitetsgranskning",
+      "criteriaPicker": "Kriterier att bedöma",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Föreslagna ändringar",
+      "noEditsSuggested": "Inga ändringar föreslås — dokumentet uppfyller de valda kriterierna.",
+      "acceptEdit": "Godkänn",
+      "rejectEdit": "Avvisa",
+      "acceptAll": "Godkänn alla",
+      "rejectAll": "Avvisa alla",
+      "editAccepted": "Godkänd",
+      "editRejected": "Avvisad",
+      "editUnapplicable": "Det gick inte att hitta detta stycke i nuvarande text — inte tillämpad",
+      "editingBlockedPendingEdits": "Lös eller avvisa väntande föreslagna ändringar först",
+      "pendingCount": "{count} väntande",
+      "closeReview": "Stäng kvalitetsgranskning",
+      "showReview": "Visa granskning",
+      "showReviewPending": "Visa granskning ({count} väntande)",
+      "railAssessRequest": "Bedöm dokumentets kvalitet mot de valda kriterierna.",
+      "railAssessDone": "Bedömning klar: betyg finns i arbetsytan med {count} föreslag(en) ändring att granska.",
+      "spec": "Dokumentspecifikation",
+      "noSpec": "Ingen specifikation",
+      "manageSpecs": "Specifikationer",
+      "specs": "Dokumentspecifikationer",
+      "closeSpecs": "Stäng specifikationer",
+      "specsEmpty": "Skapa en specifikation för att skriva dokument med ett fast format — nödvändiga avsnitt, ordning och avsnittsvisa riktlinjer (t.ex. en SitRep-mall). Specifikationer sparas på denna enhet och kan återanvändas.",
+      "newSpec": "Ny specifikation",
+      "newSpecName": "Namnlös specifikation",
+      "specName": "Specifikationsnamn",
+      "specDescription": "Beskrivning (valfri)",
+      "deleteSpec": "Radera specifikation",
+      "sectionHeading": "Avsnittsrubrik",
+      "sectionGuidance": "Riktlinjer (valfri)",
+      "sectionRequired": "Obligatorisk",
+      "addSection": "Lägg till avsnitt",
+      "removeSection": "Ta bort avsnitt",
+      "generalGuidance": "Allmänna riktlinjer (valfri)",
+      "tone": "Ton",
+      "noTone": "Ingen ton",
+      "customCriteria": "Anpassade kriterier",
+      "manageCriteria": "Anpassade kriterier",
+      "closeCriteria": "Stäng anpassade kriterier",
+      "criteriaEmpty": "Skapa egna kriterier – t.ex. varumärkeshänsyn eller organisationsspråk – för att utvärdera dokument och styra revideringar. Sparas på den här enheten och kan återanvändas.",
+      "newCriterion": "Nytt kriterium",
+      "newCriterionName": "Namnlöst kriterium",
+      "criterionName": "Kriterienamn",
+      "criterionRubric": "Riktlinje",
+      "criterionRubricPlaceholder": "Beskriv vad dokumentet måste uppfylla för att motsvara detta kriterium, t.ex. \"Använd aldrig superlativer om vårt eget arbete; kalla alltid personer som får stöd för 'personer vi hjälper'...\"",
+      "criterionRubricHint": "Denna riktlinje ges ordagrant till AI:n vid utvärdering och revidering.",
+      "deleteCriterion": "Ta bort kriterium",
+      "profileTitle": "Dokumentprofil",
+      "profileDocType": "Typ",
+      "profileLanguage": "Språk",
+      "profileAudience": "Målgrupp",
+      "profilePurpose": "Syfte",
+      "profileRegister": "Register",
+      "profileTone": "Ton",
+      "profileConventions": "Konventioner",
+      "emptyHint": "Börja skriva nedan, beskriv vad som ska skrivas i rutan längst ner, eller börja från en fil.",
+      "addSpec": "Lägg till specifikation",
+      "addCriteria": "Lägg till kriterier",
+      "scopeFullDocument": "Omfattning: hela dokumentet",
+      "scopeSelection": "Omfattning: markering — “{preview}…” ({count} ord)",
+      "clearSelection": "Rensa markering (arbeta med hela dokumentet)",
+      "reviseSelectionPlaceholder": "Beskriv ändringar för markeringen…",
+      "revisedSelectionSummary": "Jag reviderade det markerade avsnittet i arbetsytan.",
+      "assessedSelection": "Markering"
+    },
+    "data": {
+      "emptyTitle": "Importera data för analys",
+      "emptyBody": "Lägg till en CSV-, Excel- eller JSON-fil, eller klistra in rader direkt. När din tabell är inläst kan du sortera, extrahera fler rader från dokument och omvandla den med instruktioner i naturligt språk.",
+      "importFile": "Importera fil",
+      "importing": "Importerar…",
+      "pasteData": "Klistra in data",
+      "pastePlaceholder": "Klistra in CSV, TSV eller JSON här…",
+      "import": "Importera",
+      "addFromSource": "Lägg till från källa",
+      "extractHint": "Klistra in text eller välj dokument; rader som matchar dina aktuella kolumner kommer att extraheras. Okända värden lämnas tomma – inget hittas på.",
+      "extractPlaceholder": "Klistra in ostrukturerad text som innehåller data…",
+      "extractRows": "Extrahera rader",
+      "extractFromFile": "Från en fil…",
+      "extracting": "Extraherar…",
+      "pastedSource": "Inklistrad text",
+      "transform": "Omvandla",
+      "transforming": "Omvandlar…",
+      "transformPlaceholder": "Beskriv en omvandling, t.ex. \"lägg till en kolumn med fall per 1000 invånare\"…",
+      "transformCapHint": "Omvandlingar är begränsade till {max} rader. Radera eller filtrera rader först för större tabeller.",
+      "undo": "Ångra",
+      "deleteSelected": "Ta bort {count}",
+      "deletedRows": "Tog bort {count} rader",
+      "selectAllRows": "Markera alla rader",
+      "selectRow": "Markera rad {row}",
+      "rowCount": "{count} rader",
+      "rowCapExceeded": "Det skulle bli {count} rader; tabellen är begränsad till {max}. Dela upp data eller exportera istället.",
+      "railExtractRequest": "Extrahera rader som matchar tabellschemat från: {source}",
+      "railExtractDone": "{count} extraherade rader har lagts till i tabellen.",
+      "railTransformDone": "Tabellen har transformerats.",
+      "columnProfileFor": "Kolumnstatistik för {column}",
+      "profileMissing": "Saknas",
+      "profileDistinct": "Unika",
+      "profileRange": "Intervall",
+      "profileMean": "Medelvärde",
+      "profileMedian": "Median",
+      "profileTopValues": "Vanligaste värdena",
+      "filterColumnFor": "Filtrera {column}",
+      "filterContains": "Innehåller…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Rensa",
+      "clearFilters": "Rensa filter",
+      "showingRows": "Visar {shown} av {total} rader",
+      "scopeLabel": "Arbetsområde",
+      "scopeTable": "Alla ({count})",
+      "scopeFiltered": "Filtrerade ({count})",
+      "scopeSelection": "Valda ({count})",
+      "scopedInstruction": "{instruction} (på {count} markerade rader)",
+      "assess": "Bedöm kvalitet",
+      "assessing": "Bedömer…",
+      "criteria": {
+        "validity": {
+          "label": "Giltighet",
+          "description": "Värden överensstämmer med kolumnens typ och förväntat format"
+        },
+        "consistency": {
+          "label": "Konsekvens",
+          "description": "Samma värde skrivs likadant överallt (inga varianter som 'M'/'Man', blandade enheter eller varierande versaler/gemener)"
+        },
+        "duplicates": {
+          "label": "Dubbletter",
+          "description": "Rader som registrerar samma enhet eller händelse två gånger"
+        },
+        "plausibility": {
+          "label": "Trovärdighet",
+          "description": "Avvikande och omöjliga värden i sitt sammanhang"
+        }
+      },
+      "assessmentTitle": "Granskning av datakvalitet",
+      "pendingCount": "{count} återstår",
+      "closeReview": "Avsluta kvalitetsgranskning",
+      "suggestedEdits": "Föreslagna korrigeringar",
+      "noEditsSuggested": "Inga korrigeringar föreslagna — data uppfyller de valda kriterierna.",
+      "acceptAll": "Godkänn alla",
+      "rejectAll": "Avvisa alla",
+      "acceptEdit": "Godkänn",
+      "rejectEdit": "Avvisa",
+      "editAccepted": "Genomförd",
+      "editRejected": "Avvisad",
+      "editUnapplicable": "Cellen har ändrats sedan granskningen — inte genomförd",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kriterier att bedöma",
+      "severity": {
+        "minor": "Mindre",
+        "major": "Allvarlig"
+      },
+      "editLocation": "rad {row} · {column}",
+      "editLocationRow": "rad {row} (radera)",
+      "showReview": "Visa granskning",
+      "showReviewPending": "Visa granskning ({count} väntar)",
+      "assessedFiltered": "Filtrerade rader",
+      "assessedSelection": "Markerade rader",
+      "assessedSample": "urval av {shown} av {total}",
+      "railAssessRequest": "Bedöm kvaliteten på tabellen ({count} rader) utifrån de valda kriterierna.",
+      "railAssessDone": "Föreslog {count} datakvalitetsåtgärder — granska dem i arbetsytan.",
+      "insights": "Insikter",
+      "chartKind": "Diagramtyp",
+      "chartBar": "Stapeldiagram (gruppera efter)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Linjediagram (över tid)",
+      "groupByColumn": "Gruppera efter kolumn",
+      "dateColumn": "Datumkolumn",
+      "valueColumn": "Värdekolumn",
+      "aggFn": "Aggregering",
+      "aggCount": "Antal",
+      "aggSum": "Summa",
+      "aggMean": "Medelvärde",
+      "chartTruncated": "Visar de {max} främsta grupperna",
+      "chartNoData": "Inga värden kan visas som diagram i de aktuella raderna.",
+      "chartBarAria": "Stapeldiagram grupperat på {column}",
+      "chartHistogramAria": "Histogram av {column}",
+      "chartLineAria": "Linjediagram av {column} över tid",
+      "editStructure": "Struktur",
+      "defineStructure": "Definiera struktur",
+      "schemaHint": "Definiera fälten i din datastruktur. Obligatoriska fält styr policyn för saknade data vid import; om du ändrar ett fälts typ konverteras befintliga värden (icke-konverterbara celler blir tomma).",
+      "schemaFieldName": "Fältnamn",
+      "schemaFieldType": "Fälttyp",
+      "schemaRequired": "Obligatorisk",
+      "schemaAddField": "Lägg till fält",
+      "schemaDeleteField": "Radera fält {field}",
+      "schemaApply": "Verkställ struktur",
+      "schemaCancel": "Avbryt",
+      "schemaEdited": "Tabellstrukturen har redigerats",
+      "schemaCellsConverted": "{count} celler kunde inte konverteras till den nya typen och är nu tomma.",
+      "missingFieldPolicy": "Saknat data",
+      "policyStrict": "Strikt — avvisa ofullständiga rader",
+      "policyFlag": "Flagga — importera och markera",
+      "policyLenient": "Tillåtande — importera utan anmärkning",
+      "droppedIncompleteRows": "Uteslöt {count} rader som saknade obligatoriska fält: {fields}",
+      "dismiss": "Avfärda",
+      "requiredColumn": "Obligatoriskt fält",
+      "flagMissingRequired": "Obligatoriskt fält är tomt",
+      "flagPendingEdit": "Ett föreslaget åtgärdsförslag väntar för denna cell — se kvalitetsgranskningen",
+      "fromPhoto": "Från foto",
+      "fromPhotoHint": "Fotografera ett pappersformulär eller en tabell – innehållet omvandlas till strukturerad data som du kan jämföra med fotot",
+      "readingPhoto": "Läser in foto…",
+      "photoBatchName": "{count} foton",
+      "railPhotoRequest": "Extrahera strukturerad data från {count} foto(n): {name}",
+      "railPhotoDone": "Lade till {count} post(er) från foto(n). Kontrollera dem mot fotot i arbetsytan.",
+      "sourcesLabel": "Källor",
+      "openPhotoQc": "Jämför uppgifterna mot {name}",
+      "qcRowsFromPhoto": "{count} rader",
+      "qcClose": "Stäng fotokontroll",
+      "qcZoomIn": "Zooma in",
+      "qcZoomOut": "Zooma ut",
+      "qcPrevPhoto": "Föregående foto",
+      "qcNextPhoto": "Nästa foto",
+      "qcImageLoading": "Laddar foto…",
+      "qcImageFailed": "Fotot kunde inte laddas.",
+      "qcImageAlt": "Källfoto: {name}",
+      "qcHint": "Tabellen visar endast detta fotos rader — jämför varje värde med fotot och redigera eller ta bort rader som inte stämmer.",
+      "sourceFilterChip": "Rader från {name}",
+      "clearSourceFilter": "Visa alla rader igen",
+      "viewAsRecord": "Formulärvy",
+      "viewAsTable": "Tabellvy",
+      "recordEmpty": "Inga poster ännu.",
+      "recordOf": "Post {index} av {count}",
+      "recordPrev": "Föregående post",
+      "recordNext": "Nästa post",
+      "recordBooleanUnset": "(tom)",
+      "flagsChip": "{count} flaggor",
+      "flagsChipOpenReview": "Öppna kvalitetsgranskning",
+      "flagsChipMissingOnly": "Obligatoriska fält är tomma — fyll i dem eller justera strukturen",
+      "autoCheck": "Auto-kontrollera ny data",
+      "autoCheckHint": "När data extraherats från foton eller dokument, kör automatiskt en kvalitetskontroll på de nya raderna",
+      "checkingNewRows": "Kontrollerar de nyligen tillagda raderna för kvalitetsproblem…",
+      "ingestCheckFailed": "Den automatiska kvalitetskontrollen misslyckades ({message}) — du kan köra den manuellt med Bedöm kvalitet.",
+      "assessedIngest": "Nyligen tillagda rader"
+    },
+    "map": {
+      "emptyTitle": "Visa din data på en karta",
+      "emptyBody": "Klistra in en lägesrapport, linjelista, mötesanteckningar eller någon text med platsnamn — eller ladda upp ett dokument. Platser identifieras och placeras på en karta med en tillförlitlighetsgrad; du kan sedan exportera dem till ArcGIS eller andra GIS-verktyg.",
+      "inputPlaceholder": "Klistra in text med platsnamn…",
+      "uploadFile": "Ladda upp en fil",
+      "pastedSource": "Inklistrad text",
+      "mapIt": "Karta",
+      "finding": "Hämtar platser…",
+      "featureCount": "{count} platser",
+      "featureCapExceeded": "Kartan är begränsad till {max} platser.",
+      "noneFound": "Inga platser hittades i det materialet.",
+      "lowConfidenceNotice": "{count} plats(er) har koordinater med låg tillförlitlighet — kontrollera dem innan du använder kartan.",
+      "tilesOffline": "Kartlager otillgängliga — platslistan fungerar ändå.",
+      "disclaimer": "Koordinater är AI-uppskattade utifrån modellens kunskap, inte från en geokodningstjänst — verifiera innan operativ användning. Kartlager laddas från en tile-server; dina data förblir på denna enhet.",
+      "flyTo": "Visa {name} på kartan",
+      "removeFeature": "Ta bort {name}",
+      "expandFeature": "Visa alla detaljer för {name}",
+      "collapseFeature": "Dölj detaljer för {name}",
+      "detailsParent": "Del av {parent}",
+      "railRequest": "Karta över platser i: {source}",
+      "railSearchRequest": "Sök på webben och kartlägg platser för: {query}",
+      "railDone": "{count} plats(er) kartlagda. Granska de med låg tillförlitlighet i listan.",
+      "searchToggle": "Webbsökningsläge",
+      "searchToggleHint": "Sök på webben istället för att klistra in text; resultaten med källa kartläggs.",
+      "searchPlaceholder": "Sök på webben, t.ex. \"kolerautbrott Östafrika 2026\"…",
+      "searchAndMap": "Sök & kartlägg",
+      "searching": "Söker…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Förbindelse: {kind}",
+        "unresolved": "{count} förbindelse(r) refererade till platser som inte finns på kartan och därför har utelämnats."
+      },
+      "confidence": {
+        "high": "Hög",
+        "medium": "Medel",
+        "low": "Låg"
+      },
+      "prominence": {
+        "primary": "Huvudplats",
+        "secondary": "Biplats",
+        "mention": "Kort omnämnande"
+      },
+      "prominenceMentionHint": "Materialet refererar endast till denna plats i förbifarten — visas mindre på kartan och exkluderas från den initiala inramningen.",
+      "dates": {
+        "since": "sedan {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Pågående"
+      },
+      "filters": {
+        "label": "Filtrera efter kategori",
+        "other": "Övrigt",
+        "clear": "Rensa",
+        "showing": "{shown} av {total} platser",
+        "noneMatch": "Inga platser matchar de aktuella filtren."
+      },
+      "dateFilter": {
+        "label": "Datum",
+        "from": "Från",
+        "to": "Till",
+        "fromAria": "Visa endast händelser från detta datum",
+        "toAria": "Visa endast händelser till och med detta datum",
+        "clear": "Rensa datum",
+        "eraChip": "Visa endast händelser under {label}"
+      },
+      "timeline": {
+        "toggle": "Tidsförlopp",
+        "play": "Spela tidsförlopp",
+        "pause": "Pausa tidsförlopp",
+        "eras": "Tidslinjeperioder",
+        "jumpTo": "Hoppa till {label}",
+        "slider": "Tidslinjeposition",
+        "showUndated": "Visa odaterade platser",
+        "activeCount": "{count} aktiva"
+      },
+      "granularity": {
+        "site": "Plats",
+        "city": "Stad/ort",
+        "district": "Distrikt",
+        "region": "Region",
+        "country": "Land"
+      },
+      "granularityAreaHint": "Ett område, visas som en ungefärlig cirkel runt sin centrumpunkt — inte en exakt plats eller gräns.",
+      "containerHint": "Innehåller andra kartlagda platser och visas därför endast som en kontur.",
+      "legend": {
+        "toggle": "Teckenförklaring",
+        "title": "Hur du avläser kartan",
+        "color": "Färg: koordinatens tillförlitlighet (blå hög, bärnsten medel, röd låg)",
+        "size": "Prickstorlek: hur central platsen är i materialet",
+        "area": "Streckad cirkel: ungefärlig omfattning av ett distrikt, en region eller ett land",
+        "container": "Tunn kontur: ett område vars innehåll har kartlagts individuellt"
+      }
+    },
+    "shell": {
+      "showConversation": "Visa konversation",
+      "hideConversation": "Dölj konversation",
+      "workspaceTab": "Arbetsyta",
+      "conversationTab": "Konversation",
+      "paneTabsLabel": "Arbetsflödespaneler",
+      "railEmpty": "Assistentens meddelanden och framsteg visas här.",
+      "railInputPlaceholder": "Meddela assistenten…",
+      "assistantThinking": "Tänker…",
+      "sendMessage": "Skicka meddelande",
+      "stopGenerating": "Stoppa generering",
+      "loadingWorkspace": "Laddar arbetsyta…",
+      "unknownType": "Denna konversation använder ett arbetsflöde som denna version inte känner igen. Konversationshistoriken visas nedan.",
+      "untitled": "Ny konversation",
+      "toggleMenu": "Visa/dölj meny",
+      "model": "Modell för detta arbetsflöde"
+    }
+  },
+  "connectors": {
+    "title": "Kopplingar",
+    "description": "Koppla externa verktyg via Model Context Protocol (MCP). Anslutna verktyg blir tillgängliga för modeller i chatten och varje anrop utförs först efter att du godkänt det.",
+    "localOnlyNote": "Du loggar in direkt hos varje leverantör. Åtkomstnycklar krypteras och lagras endast på denna enhet och vidarebefordras via app-servern vid varje begäran — de lagras eller loggas aldrig där.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Sök i repositorier, läs och skapa ärenden och pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Hitta, skapa och uppdatera uppgifter och projekt."
+      }
+    },
+    "connect": "Anslut",
+    "connected": "Ansluten",
+    "tokenEndsIn": "slutar med ••••{last4}",
+    "disconnect": "Koppla från",
+    "toolCount": "{count, plural, =1 {1 verktyg tillgängligt} other {# verktyg tillgängliga}}",
+    "patLabel": "Personlig åtkomsttoken",
+    "createTokenLink": "Skapa token",
+    "tokenScopeHint": "Använd en finjusterad token med bara de behörigheter som dessa verktyg kräver.",
+    "validating": "Kontrollerar anslutning…",
+    "validationFailed": "Kunde inte ansluta. Kontrollera adressen och försök igen.",
+    "authFailed": "Servern avvisade token. Kontrollera den och försök igen.",
+    "tokenRequired": "En token krävs",
+    "enableServer": "Tillgänglig i chatten",
+    "arbitraryTitle": "Andra MCP-servrar",
+    "arbitraryToggle": "Tillåt godtyckliga MCP-servrar",
+    "arbitraryWarning": "Alla som driver en MCP-server kan se meddelanden som skickas till dess verktyg. Anslut endast servrar du litar på. Varje anrop av ett verktyg kräver fortfarande ditt godkännande.",
+    "addServer": "Lägg till MCP-server",
+    "editServer": "Redigera MCP-server",
+    "serverName": "Namn",
+    "serverUrl": "Server-URL",
+    "nameRequired": "Namn krävs",
+    "urlRequired": "URL krävs",
+    "invalidUrl": "Ange en offentlig https://-adress",
+    "namePlaceholder": "Min MCP-server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Åtkomsttoken (valfritt)",
+    "keepTokenPlaceholder": "Lämna tomt för att behålla nuvarande token",
+    "disconnectedToast": "{name} frånkopplad",
+    "save": "Spara",
+    "connectWithProvider": "Anslut med {name}",
+    "useTokenInstead": "Använd en åtkomsttoken istället",
+    "oauthWaiting": "Väntar på auktorisering…",
+    "oauthFailed": "Inloggning misslyckades. Försök igen.",
+    "oauthDenied": "Åtkomsten nekades av leverantören.",
+    "oauthTimeout": "Inloggningen tog för lång tid. Försök igen.",
+    "oauthCancelled": "Inloggning avbröts.",
+    "oauthUnavailable": "Inloggning är inte tillgänglig för denna anslutning i denna installation. Använd en åtkomsttoken istället eller be din administratör konfigurera OAuth-appen.",
+    "ownAppToggle": "Använd din egen OAuth-app",
+    "ownAppHint": "Registrera en OAuth-app på ditt {name}-konto (organisation, arbetsyta eller företagsinstans) med callback-URL:n nedan och klistra sedan in dess uppgifter här. Låt detta vara stängt för att använda den inbyggda appen.",
+    "ownAppCustomHint": "Du kan ange egna OAuth-appuppgifter nedan; lämna dem tomma för att registrera automatiskt med servern.",
+    "ownAppInUse": "Ansluten med din egen OAuth-app.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (om din app har en)",
+    "redirectUriLabel": "Callback-/omdirigerings-URL att registrera",
+    "reconnect": "Återanslut",
+    "needsReauth": "Kräver återanslutning",
+    "disconnectOauthNote": "Om du kopplar från tas åtkomsten bort endast från denna enhet. Hantera behöriga appar på ditt {name}-konto för att helt återkalla åtkomst.",
+    "authModeLabel": "Autentisering",
+    "authModeNone": "Ingen",
+    "authModeBearer": "Åtkomsttoken",
+    "authModeOauth": "Logga in med leverantören (OAuth)",
+    "oauthCustomHint": "Du loggar in med serverns leverantör i ett popupfönster efter att du sparat.",
+    "saveAndSignIn": "Spara och logga in",
+    "oauthCallback": {
+      "title": "Auktorisering slutförd",
+      "missingState": "Inget att auktorisera",
+      "close": "Du kan stänga detta fönster och återgå till appen.",
+      "closeButton": "Stäng fönster"
+    }
   }
 }

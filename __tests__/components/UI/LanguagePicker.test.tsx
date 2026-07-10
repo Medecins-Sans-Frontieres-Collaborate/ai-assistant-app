@@ -243,4 +243,60 @@ describe('LanguagePicker', () => {
     fireEvent.keyDown(listbox, { key: 'Enter' });
     expect(onSelect).toHaveBeenCalledWith(null);
   });
+
+  describe('positioning', () => {
+    function mockTriggerRect(top: number) {
+      vi.spyOn(
+        HTMLButtonElement.prototype,
+        'getBoundingClientRect',
+      ).mockReturnValue({
+        top,
+        bottom: top + 36,
+        left: 100,
+        right: 260,
+        width: 160,
+        height: 36,
+        x: 100,
+        y: top,
+        toJSON: () => ({}),
+      } as DOMRect);
+    }
+
+    it('opens below when the trigger is near the top of the viewport', () => {
+      // window.innerHeight in jsdom defaults to 768.
+      mockTriggerRect(10);
+      render(withIntl(<Harness options={OPTIONS} />));
+      const listbox = screen.getByRole('listbox');
+      // Below-placement = no upward translate, top under the trigger.
+      expect(listbox.style.transform).toBe('');
+      expect(parseFloat(listbox.style.top)).toBeGreaterThan(36);
+    });
+
+    it('opens above when there is room above the trigger', () => {
+      mockTriggerRect(700);
+      render(withIntl(<Harness options={OPTIONS} />));
+      const listbox = screen.getByRole('listbox');
+      expect(listbox.style.transform).toBe('translateY(-100%)');
+    });
+
+    it('clamps the horizontal position to the viewport', () => {
+      vi.spyOn(
+        HTMLButtonElement.prototype,
+        'getBoundingClientRect',
+      ).mockReturnValue({
+        top: 400,
+        bottom: 436,
+        left: 4,
+        right: 40, // right - 256 would be negative
+        width: 36,
+        height: 36,
+        x: 4,
+        y: 400,
+        toJSON: () => ({}),
+      } as DOMRect);
+      render(withIntl(<Harness options={OPTIONS} />));
+      const listbox = screen.getByRole('listbox');
+      expect(parseFloat(listbox.style.left)).toBeGreaterThanOrEqual(8);
+    });
+  });
 });

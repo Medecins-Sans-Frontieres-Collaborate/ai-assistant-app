@@ -1,0 +1,42 @@
+'use client';
+
+import {
+  GlossaryEntry,
+  TranslationCriterionId,
+  TranslationCriterionRating,
+  TranslationEdit,
+} from '@/types/workflow';
+
+export interface AssessTranslationInput {
+  sourceText: string;
+  translation: string;
+  targetLanguage: string;
+  criteria: TranslationCriterionId[];
+  glossaryEntries?: GlossaryEntry[];
+  modelId?: string;
+  signal?: AbortSignal;
+}
+
+export interface AssessTranslationOutput {
+  criteria: TranslationCriterionRating[];
+  overallSummary: string;
+  edits: TranslationEdit[];
+}
+
+/** Calls the MQM assessment endpoint. Throws with a readable message. */
+export async function assessTranslation(
+  input: AssessTranslationInput,
+): Promise<AssessTranslationOutput> {
+  const { signal, ...body } = input;
+  const response = await fetch('/api/workflows/translation/assess', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal,
+  });
+  const parsed = await response.json().catch(() => null);
+  if (!response.ok || !parsed?.success) {
+    throw new Error(parsed?.error || `Assessment failed (${response.status})`);
+  }
+  return parsed.data as AssessTranslationOutput;
+}
