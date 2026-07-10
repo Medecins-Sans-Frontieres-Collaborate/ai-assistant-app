@@ -82,16 +82,26 @@ export interface OpenAIModel {
   sizeClass?: 'nano' | 'mini' | 'standard' | 'large';
 
   /**
-   * Lineage key shared by every version of the same model line (e.g. 'gpt',
-   * 'gpt-chat', 'claude-opus'). Models sharing a series render as ONE picker
-   * row with a version chip strip; models without a series render as plain
-   * rows. Version recency = position in DEFAULT_MODEL_ORDER.
+   * FAMILY key shared by every member of the same model family (e.g. 'gpt',
+   * 'gpt-chat', 'claude', 'deepseek'). Models sharing a series render as ONE
+   * picker row; within the row, members are organized on two axes — `variant`
+   * (size/tier segments) and `versionLabel` (chips, filtered to the active
+   * variant). Models without a series render as plain rows.
    */
   series?: string;
-  /** Display name of the series row (e.g. "GPT", "Claude Opus"). Same value on every member. */
+  /** Display name of the family row (e.g. "GPT", "Claude"). Same value on every member. */
   seriesLabel?: string;
   /** Short version chip text (e.g. "5.4", "4o", "4.6"). */
   versionLabel?: string;
+  /**
+   * Variant key within a family — the second in-row axis (e.g. 'standard' |
+   * 'mini' | 'nano' for GPT sizes, 'opus' | 'sonnet' | 'haiku' for Claude
+   * tiers, 'standard' | 'reasoning' for DeepSeek). Absent = single-variant
+   * family (the row behaves as a plain version series). Picker-only.
+   */
+  variant?: string;
+  /** Display label of the variant segment (e.g. "Mini", "Opus", "Reasoning"). Same value on every member of the variant. */
+  variantLabel?: string;
 
   /**
    * Azure Foundry lifecycle stage of the underlying model version, mirrored
@@ -192,59 +202,58 @@ export const fallbackModelID = OpenAIModelID.GPT_5_2_CHAT;
  */
 export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // The picker list is NOT grouped by provider, so this order is the layout:
-  // flagships first with cross-provider variety near the top (Mistral rides
-  // high; o3 and the small models sit lower). A series row anchors at its
-  // first member listed here.
-  OpenAIModelID.GPT_5_2, // "GPT" series row
-  OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" series row
-  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude Opus" series row
-  OpenAIModelID.CLAUDE_FABLE_5,
-  OpenAIModelID.MISTRAL_LARGE_3,
-  OpenAIModelID.CLAUDE_SONNET_5, // "Claude Sonnet" series row…
-  OpenAIModelID.CLAUDE_SONNET_4_6, // …anchor stays here where 5 is ring-gated
-  OpenAIModelID.DEEPSEEK_R1,
-  OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek V3" series row
-  OpenAIModelID.GPT_o3,
-  OpenAIModelID.GPT_5_MINI, // "GPT Mini" series row
-  OpenAIModelID.CLAUDE_HAIKU_4_5,
-  OpenAIModelID.LLAMA_4_MAVERICK,
-  OpenAIModelID.GPT_5_4_NANO,
-  OpenAIModelID.GPT_o4_MINI, // "o Mini" series row
-  // Non-representative series versions: they surface as chips in the details
-  // panel rather than list rows, so position below only breaks ties (usage
-  // mode) and orders the flattened edit-order list. Version recency within a
-  // series = position here (newer first).
+  // flagships first with cross-provider variety near the top. A FAMILY row
+  // anchors at its first member listed here (first VISIBLE member after the
+  // ring gate — hence the extra prod-anchor entries below).
+  OpenAIModelID.GPT_5_2, // "GPT" family row
+  OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
+  OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
+  OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
+  OpenAIModelID.CLAUDE_FABLE_5, // standalone row
+  OpenAIModelID.MISTRAL_LARGE_3, // "Mistral" family row
+  OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek" family row (Standard variant leads)…
+  OpenAIModelID.DEEPSEEK_R1, // …prod anchor (V3.2 ring-gated there)
+  OpenAIModelID.GPT_o3, // "o-series" family row
+  OpenAIModelID.LLAMA_4_MAVERICK, // "Llama" family row
+  // Non-representative family members: they surface as variant segments and
+  // version chips in the details panel rather than list rows, so position
+  // below only breaks ties (usage mode, equal versionRank) and orders the
+  // flattened edit-order list.
   OpenAIModelID.GPT_5_5,
   OpenAIModelID.GPT_5_4,
-  OpenAIModelID.GPT_CHAT_LATEST,
-  OpenAIModelID.GPT_5_3_CHAT,
   OpenAIModelID.GPT_4_1,
   OpenAIModelID.GPT_5_1,
-  OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5,
-  OpenAIModelID.GPT_5_CHAT,
   OpenAIModelID.GPT_4O,
+  OpenAIModelID.GPT_5_MINI,
   OpenAIModelID.GPT_4_1_MINI,
   OpenAIModelID.GPT_4O_MINI,
+  OpenAIModelID.GPT_5_4_NANO,
   OpenAIModelID.GPT_5_NANO,
   OpenAIModelID.GPT_4_1_NANO,
+  OpenAIModelID.GPT_CHAT_LATEST,
+  OpenAIModelID.GPT_5_3_CHAT,
+  OpenAIModelID.GPT_5_1_CHAT,
+  OpenAIModelID.GPT_5_CHAT,
+  OpenAIModelID.GPT_o4_MINI,
   OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_SONNET_5,
   OpenAIModelID.CLAUDE_OPUS_4_7,
   OpenAIModelID.CLAUDE_OPUS_4_6,
+  OpenAIModelID.CLAUDE_HAIKU_4_5,
   OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
-  // Remaining standalone rows (rank below the curated top section) and
-  // globally disabled models (grok-*), kept for edit-order completeness.
-  OpenAIModelID.MISTRAL_MEDIUM_2505,
-  OpenAIModelID.MISTRAL_SMALL_2503,
-  OpenAIModelID.MINISTRAL_3B,
   OpenAIModelID.DEEPSEEK_V4_PRO,
   OpenAIModelID.DEEPSEEK_V4_FLASH,
   OpenAIModelID.DEEPSEEK_R1_0528,
   OpenAIModelID.DEEPSEEK_V3_1,
+  OpenAIModelID.MISTRAL_MEDIUM_2505,
+  OpenAIModelID.MISTRAL_SMALL_2503,
+  OpenAIModelID.MINISTRAL_3B,
   OpenAIModelID.LLAMA_4_SCOUT,
   OpenAIModelID.LLAMA_3_3_70B,
+  // Globally disabled models (grok-*), kept for edit-order completeness.
   OpenAIModelID.GROK_4,
   OpenAIModelID.GROK_4_1_FAST_REASONING,
   OpenAIModelID.GROK_4_1_FAST_NON_REASONING,
@@ -303,6 +312,8 @@ const openAIModelSchema = z.object({
   series: z.string().optional(),
   seriesLabel: z.string().optional(),
   versionLabel: z.string().optional(),
+  variant: z.string().optional(),
+  variantLabel: z.string().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
   supportsMinimalReasoning: z.boolean().optional(),
