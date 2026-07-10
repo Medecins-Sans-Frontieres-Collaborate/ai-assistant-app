@@ -10,7 +10,7 @@ import { OpenAIModel } from '@/types/openai';
 
 import { DeployedModel } from './ModelDiscoveryService';
 
-import { isModelDisabled } from '@/config/models';
+import { Environment, isModelDisabled } from '@/config/models';
 
 // Conservative defaults for a discovered model we have no metadata for, so it's
 // safe to chat with even though we don't know its real limits. Intentionally
@@ -191,13 +191,39 @@ export function synthesizeUnknownModel(d: DeployedModel): OpenAIModel {
 export interface MergeOptions {
   /** Show discovered deployments that have no metadata (with inferred defaults). */
   showUnknown: boolean;
+  /**
+   * The requesting app's ring, matched against deployments' `ui-ring` tag.
+   * Absent = no ring filtering (every deployment visible).
+   */
+  ring?: Environment;
+}
+
+/**
+ * Ring visibility from the `ui-ring` DEPLOYMENT tag — the beta-first rollout
+ * control. Beta and prod share a Foundry instance, so a bare deployment is
+ * visible to both; tagging it `ui-ring: beta` (comma-separated list allowed)
+ * holds it out of the other rings until the tag is removed. No tag = visible
+ * everywhere. Purely additive: rollout needs no code change or feature flag,
+ * just the deployment and (optionally) its tag.
+ */
+export function isDeploymentVisibleInRing(
+  tags: Record<string, string> | undefined,
+  ring: Environment | undefined,
+): boolean {
+  const tag = tags?.['ui-ring'];
+  if (!tag || !ring) return true;
+  return tag
+    .split(',')
+    .map((r) => r.trim().toLowerCase())
+    .includes(ring);
 }
 
 /**
  * Joins discovered deployments to local metadata on the deployment NAME.
  *
  * Only discovered models appear (so undeployed-but-hardcoded models — e.g.
- * claude-* missing in EU — drop out). Known models are enriched (+ tag overlay);
+ * claude-* missing in EU — drop out), and only those visible to `opts.ring`
+ * per their `ui-ring` tag. Known models are enriched (+ tag overlay);
  * unknown models are synthesized when `showUnknown`, else skipped.
  */
 export function mergeDiscoveryWithMetadata(
@@ -207,6 +233,7 @@ export function mergeDiscoveryWithMetadata(
 ): OpenAIModel[] {
   const out: OpenAIModel[] = [];
   for (const d of deployed) {
+    if (!isDeploymentVisibleInRing(d.tags, opts.ring)) continue;
     const meta = metadataById[d.deploymentName];
     if (meta) {
       out.push(applyTagOverlay({ ...meta }, d.tags));
@@ -218,9 +245,12 @@ export function mergeDiscoveryWithMetadata(
 }
 
 /**
- * Applies the per-ring visibility gate: drops models flagged `isDisabled` or
- * listed in the current environment's `disabledModels` (config/models.ts).
- * Called server-side so a prod-hidden model never reaches the client.
+ * Applies the global kill switches: drops models flagged `isDisabled`
+ * (metadata, e.g. grok-*) or listed in the environment's EMERGENCY
+ * `disabledModels` (config/models.ts — empty in normal operation). Ring
+ * rollout is NOT controlled here: it's deployments + `ui-ring` tags
+ * (discovery mode) or STATIC_LIST_EXCLUSIONS (static mode). Called
+ * server-side so a hidden model never reaches the client.
  */
 export function applyRingGate(models: OpenAIModel[]): OpenAIModel[] {
   return models.filter((m) => !m.isDisabled && !isModelDisabled(m.id));
