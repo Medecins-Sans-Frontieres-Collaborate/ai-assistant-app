@@ -1544,6 +1544,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Un model Claude equilibrat. Adequat per a redacció diària, anàlisi i programació amb respostes ràpides.",
       "knowledgeCutoff": "Febr. 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Un model de codi obert de Meta. Sòlid per escriure, resumir i preguntes ràpides."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "El nou model insígnia d’OpenAI. Molt bo en escriptura, recerca, programació i resolució de problemes complexos."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "La variant GPT més petita i ràpida. Ideal per a tasques ràpides i senzilles amb un cost mínim."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Una variant GPT conversacional optimitzada per al diàleg. Bona per xats informals, pluja d’idees i converses de suport."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Un GPT multimodal antic. Apte per a l’escriptura quotidiana i preguntes/respostes quan no cal la funcionalitat més recent."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Una variant GPT-4.1 més petita i ràpida per a tasques quotidianes."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "El model més nou i potent d’Anthropic. Excel·lent per escriure textos llargs, recerca, programació i anàlisi minuciosa."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "El model de codi obert més nou de DeepSeek. Fiable per a escriptura general i consultes tècniques."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "El model insígnia de Mistral. Alternativa europea per escriure, resumir i preguntes generals."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Una revisió anterior insígnia de GPT-5. Encara molt sòlida en escriptura, anàlisi i programació."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Una revisió anterior de GPT-5 adaptada per a xat. Bona per a converses diàries i pluja d’idees."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "La variant més petita de GPT-5. Ideal per a tasques ràpides i senzilles amb un cost mínim."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "La variant més petita de GPT-4.1. Adequada per a tasques ràpides i senzilles, on importen la velocitat i el cost."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Una variant petita i ràpida de GPT-4o. Apte per a tasques ràpides quotidianes quan no cal la funcionalitat més actual."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Un model compacte de raonament. Bo per matemàtiques, lògica i problemes pas a pas a un cost menor que o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Un model compacte de raonament anterior. Gestione problemes de matemàtiques, ciència i lògica a baix cost."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "El model més intel·ligent d’Anthropic, primer de la família Claude 5. Excel·lent per a les tasques més exigents d’escriptura, recerca i programació."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "El Claude més equilibrat i més nou, primer de la família Claude 5. Escriptura, anàlisi i programació diària amb respostes ràpides."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "El model de mida mitjana de Mistral. Alternativa europea que equilibra capacitat i velocitat per a feines diàries."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "El model petit de Mistral. Ràpid i econòmic per a resums, esborranys i preguntes senzilles."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "El model més petit de Mistral. Ideal per a tasques molt ràpides i senzilles amb un cost mínim."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Una revisió actualitzada del DeepSeek-R1. Mostra el seu raonament pas a pas, amb més profunditat."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Un model de codi obert més lleuger de Meta. Ràpid per escriure, resumir i preguntes diàries."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Un model antic de codi obert de Meta. Encara sòlid per a escriptura general i preguntes/respostes."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "El model insígnia d’xAI. Bo per a discussions obertes, anàlisi i projectes creatius."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model insígnia més recent d'OpenAI. Excel·lent per escriure, investigar, programar i resoldre problemes complexos."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (última versió)",
+      "description": "Àlies dinàmic que sempre apunta al model de xat més nou d'OpenAI. Substitueix les versions antigues gpt-*-chat a Azure."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Versió recent d'Opus, entre la 4.6 i la 4.8. Molt bo per escriure textos llargs, recerca, programació i anàlisi acurada."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Nou model de raonament de DeepSeek i substitut de la línia R1 a Azure. Mostra el seu raonament pas a pas."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Variant ràpida V4 de DeepSeek i substitut de la línia V3 a Azure. Ràpida per escriure textos generals i respondre qüestions tècniques."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Ràpid (Raonament)",
+      "description": "Model de raonament ràpid de xAI. Raona pas a pas amb respostes àgils."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Ràpid",
+      "description": "Model de xat ràpid de xAI. Respostes àgils per a preguntes i converses quotidianes."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model lleuger de xAI. Més ràpid i econòmic per a preguntes ràpides i converses informals."
     }
   },
   "searchMode": {

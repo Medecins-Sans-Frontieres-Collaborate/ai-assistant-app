@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Imodeli ka-Claude elinganiselayo. Ilungele ukubhala kwansuku zonke, ukuhlaziya, nokuhlela ikhodi ngokushesha.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Imodeli evulekile evela kuMeta. Iqinile ekubhaleni, ukufingqa, nezimpendulo ezisheshayo."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Imodeli entsha kakhulu ye-OpenAI. Ihamba phambili ekubhaleni, ucwaningo, ukufaka ikhodi, nokuxazulula izinkinga eziyinkimbinkimbi."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Ihlobo elincane kakhulu, elisheshayo le-GPT. Ilungele imisebenzi elula, esheshayo ngemali encane."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Uhlobo lwe-GPT olulungiselwe ingxoxo. Lufanele izingxoxo ezijwayelekile, imibono, nezingxoxo zokweseka."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "I-GPT-5 yokuqala. Isenamandla ekubhaleni, ukuhlaziya, kanye nokufaka ikhodi."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Uhlobo lwe-GPT-5 olulungiswe ezingxoxweni. Luhle ezingxoxweni zansuku zonke nasekucabangeni imicabango."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Imodeli ye-GPT endala enamakhono amaningi. Ilungele ukubhala nsuku zonke nemibuzo lapho kungadingeki khona ubuchwepheshe bakamuva."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Uhlobo oluncane, olusheshayo lwe-GPT-4.1 lwemisebenzi yansuku zonke esheshayo."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Imodeli entsha nesiqhwaga ye-Anthropic. Ikhuthazela ukubhala isikhathi eside, ucwaningo, ukufaka ikhodi, nokuhlaziywa okunembayo."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Imodeli yakamuva evulekile ye-DeepSeek. Ithembekile ekubhaleni okujwayelekile nasekuphenduleni imibuzo yezobuchwepheshe."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Imodeli eqhwaga kaMistral. Enye indlela yaseYurophu yokubhala, ukufingqa, nemibuzo ejwayelekile."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Uguquko lwe-GPT-5 olwandulela. Lusalungele ukubhala, ukuhlaziya nokufaka ikhodi."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Uguquko lwe-GPT-5 olungiswe ezingxoxweni oludala. Luhle ezingxoxweni zansuku zonke nasekuhlakuleleni imibono."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Uhlobo oluncane kakhulu lwe-GPT-5. Luhle kakhulu ngemisebenzi esheshayo, elula ngemali encane."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Uhlobo oluncane kakhulu lwe-GPT-4.1. Lufanele imisebenzi esheshayo, elula lapho ijubane nezindleko kubalulekile."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Uhlobo oluncane, olusheshayo lwe-GPT-4o. Lufanele imisebenzi esheshayo yansuku zonke lapho kungadingeki khona ubuchwepheshe bakamuva."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Imodeli encane yokucabanga. Ilungele izibalo, umgomo, nezinkinga ezidinga izinyathelo ezingabizi kakhulu kune-o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Imodeli yokucabanga encane eyedlule. Ingakwazi ukubhekana nezibalo, isayensi, nezimfumbe zomgomo ngezindleko eziphansi."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Imodeli ye-Anthropic ehlakaniphe kakhulu, eyokuqala kuClaude 5. Ilungele imisebenzi enzima yokubhala, ucwaningo, nokufaka ikhodi."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "UClaude omusha okuthelene, wokuqala emndenini we-Claude 5. Unamandla ekubhaleni kwansuku zonke, ekuhlaziyeni nasekufakeni ikhodi ngezimpendulo ezisheshayo."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Imodeli yamaphakathi kaMistral. Enye indlela yaseYurophu ebhalansisa amandla nejubane emsebenzini wansuku zonke."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Imodeli encane kaMistral. Iyashesha futhi ayibizi ukufingqa, amadrathi, nemibuzo elula."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Imodeli encane kakhulu kaMistral. Ilungele kakhulu imisebenzi esheshayo, elula ngemali encane."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Uguquko olusha lwe-DeepSeek-R1. Lubonisa ukucabanga kwalo ngezinyathelo nezinga elijulile lokucabanga."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Imodeli evulekile encane evela kuMeta. Iyashesha ekubhaleni, ukufingqa, kanye nemibuzo yansuku zonke."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Imodeli endala evulekile esuka kwaMeta. Isasebenza kahle ekubhaleni okuvamile nasekuphenduleni imibuzo."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Imodeli ehamba phambili ye-xAI. Ifanele izingxoxo ezivulekile, ukuhlaziywa, namaphrojekthi okudala."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Imodeli yakamuva ehamba phambili ye-OpenAI. Iqinile ekubhaleni, ucwaningo, ukuhlela ikhodi, nokuxazulula izinkinga eziyinkimbinkimbi."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (yakamuva)",
+      "description": "Igama elihlala libhekisa kumodeli yakamuva ye-OpenAI eguqulelwe kwi-chat. Iyona esikhundleni samamodeli adedelwe ngaphambili e-Azure we-gpt-*-chat."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Ukukhishwa kwakamuva kwe-Opus, phakathi kuka-4.6 no-4.8. Iqinile ekubhaleni okude, ucwaningo, ikhodi, nokuhlaziywa okunembe."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Imodeli yokucabangela yakamuva ye-DeepSeek nenhlanganisela ye-Azure ye-R1. Ikhombisa inqubo yokucabanga isinyathelo ngesinyathelo."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Uhlobo lwe-V4 olusheshayo lwe-DeepSeek ne-Azure esikhundleni se-V3. Iphendula ngokushesha ekubhaleni okuvamile nemibuzo yezobuchwepheshe."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Ukuqonda)",
+      "description": "Imodeli ye-xAI esheshayo ekuqondeni. Icabanga isinyathelo ngesinyathelo inempendulo ezisheshayo."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Imodeli ye-xAI esheshayo ye-chat. Iphendula ngokushesha emibuzweni yansuku zonke nezingxoxweni."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Imodeli ye-xAI elula. Ishesha futhi ibiza kancane kwimibuzo esheshayo nezingxoxo ezivamile."
     }
   },
   "searchMode": {

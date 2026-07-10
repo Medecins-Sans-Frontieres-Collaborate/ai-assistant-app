@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Un modelo Claude equilibrado. Bueno para redacción diaria, análisis y programación con respuestas rápidas.",
       "knowledgeCutoff": "Feb. 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modelo de código abierto de Meta. Sólido para redacción, resúmenes y preguntas rápidas."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "El nuevo modelo principal de OpenAI. Destacado en redacción, investigación, programación y resolución de problemas complejos."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "La variante GPT más pequeña y rápida. Ideal para tareas simples y rápidas con costo mínimo."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Variante conversacional de GPT ajustada para diálogo. Adecuada para charlas casuales, lluvia de ideas y conversaciones de apoyo."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Un modelo multimodal más antiguo de GPT. Adecuado para redacción diaria y preguntas y respuestas donde no se requiere la capacidad más reciente."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Variante más pequeña y rápida de GPT-4.1 para tareas cotidianas rápidas."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "El modelo más nuevo y avanzado de Anthropic. Excelente para textos largos, investigación, programación y análisis detallado."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "El modelo más reciente de código abierto de DeepSeek. Confiable para redacción general y consultas técnicas."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modelo principal de Mistral. Alternativa europea para escribir, resumir y responder preguntas generales."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Una revisión anterior de GPT-5. Sigue siendo sólido en redacción, análisis y programación."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Revisión anterior de GPT-5 optimizada para chat. Adecuada para conversaciones cotidianas y lluvia de ideas."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "La variante más pequeña de GPT-5. Ideal para tareas simples y rápidas con costo mínimo."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "La variante más pequeña de GPT-4.1. Adecuada para tareas simples y rápidas donde la velocidad y el costo son prioritarios."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Variante pequeña y rápida de GPT-4o. Adecuada para tareas cotidianas rápidas donde no se requieren capacidades nuevas."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modelo compacto de razonamiento. Bueno para matemáticas, lógica y problemas paso a paso con menor costo que o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modelo compacto de razonamiento anterior. Gestiona matemáticas, ciencia y acertijos lógicos con bajo presupuesto."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "El modelo más inteligente de Anthropic, primero de la familia Claude 5. Excelente para tareas de redacción, investigación y programación muy exigentes."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "El Claude más equilibrado y reciente, primero de la familia Claude 5. Sólido en redacción diaria, análisis y programación con respuestas rápidas."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modelo de tamaño medio de Mistral. Alternativa europea que equilibra capacidad y velocidad para el trabajo cotidiano."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modelo pequeño de Mistral. Rápido y económico para resúmenes, borradores y preguntas simples."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modelo muy pequeño de Mistral. Mejor para tareas muy rápidas y simples con costo mínimo."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Revisión actualizada de DeepSeek-R1. Muestra su razonamiento paso a paso con mayor profundidad."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modelo de código abierto más liviano de Meta. Rápido para redacción, resúmenes y preguntas cotidianas."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Modelo de código abierto antiguo de Meta. Sigue siendo útil para escritura general y preguntas y respuestas."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modelo principal de xAI. Adecuado para debates abiertos, análisis y proyectos creativos."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "El modelo principal más reciente de OpenAI. Destaca en redacción, investigación, programación y resolución de problemas complejos."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (último)",
+      "description": "Un alias dinámico que siempre apunta al modelo de chat más nuevo de OpenAI. Reemplazo de Azure para los modelos gpt-*-chat retirados con versión."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Una versión reciente de Opus, entre 4.6 y 4.8. Destacado para textos largos, investigación, programación y análisis cuidadoso."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "El modelo de razonamiento más nuevo de DeepSeek y reemplazo de Azure para la línea R1. Muestra su proceso de pensamiento paso a paso."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "La variante V4 rápida de DeepSeek y reemplazo de Azure para la línea V3. Ágil para redacción general y preguntas técnicas."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Rápido (Razonamiento)",
+      "description": "Modelo de razonamiento rápido de xAI. Razona paso a paso con respuestas ágiles."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Rápido",
+      "description": "Modelo de chat rápido de xAI. Respuestas rápidas para preguntas y conversaciones cotidianas."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Un modelo liviano de xAI. Más rápido y económico para consultas breves y charlas informales."
     }
   },
   "searchMode": {

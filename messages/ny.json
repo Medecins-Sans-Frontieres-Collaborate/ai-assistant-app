@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Chitsanzo cha Claude chapakati. Chabwino polemba tsiku ndi tsiku, kusanthula, ndi ntchito za coding mwachangu.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Chitsanzo chaulere kuchokera ku Meta. Chabwino polemba, mwachidule komanso mafunso ofulumira."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Chitsanzo chatsopano cha OpenAI chapamwamba kwambiri. Champhamvu polemba, kafukufuku, kukodira komanso kuthetsera mavuto ovuta."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Mtundu wa GPT waching'ono komanso wachangu kwambiri. Oyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Mtundu wa GPT wa zokambirana. Wabwino pazokambirana, kupereka malingaliro atsopano, ndi zokambirana zothandiza."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Chitsanzo choyambirira cha GPT-5. Chikadali champhamvu polemba, kusanthula, ndi kukodira."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Mtundu wa GPT-5 wokonzedwa pa zokambirana. Wabwino pazokambirana za tsiku ndi tsiku ndi kupereka malingaliro."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT yakale yomwe imagwira ntchito zambiri. Yoyenera polemba tsiku ndi tsiku ndi mafunso & mayankho komwe luso laposachedwa silofunika."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Mtundu wachichepere komanso wachangu wa GPT-4.1 wamaudindo a tsiku ndi tsiku achangu."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Mtundu watsopano komanso wamphamvu kwambiri wa Anthropic. Wabwino polemba molawirika, kafukufuku, kukodira, ndi kusanthula mokhoza."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Mtundu watsopano wa DeepSeek waulere. Wodalirika polemba bwino komanso mayankho amafunso aukadaulo."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Chitsanzo chachikulu cha Mistral. Njira ya ku Europe polemba, mwachidule ndiponso mafunso ambiri."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Mtundu wakale wa GPT-5 wochita bwino. Akadali wabwino polemba, kusanthula, ndi kukodira."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Mtundu wakale wa GPT-5 wokonzedwa pa zokambirana. Wabwino pazokambirana tsiku ndi tsiku komanso malingaliro atsopano."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Mtundu wachichepere kwambiri wa GPT-5. Woyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika kwambiri."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Mtundu wachichepere kwambiri wa GPT-4.1. Wabwino pa ntchito zofulumira komanso zosavuta pomwe liwiro ndi mtengo zikufunika."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mtundu waching'ono komanso wachangu wa GPT-4o. Wabwino pa ntchito zofulumira za tsiku ndi tsiku komwe luso laposachedwa silofunika."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Mtundu wochepa wodziwa kulingalira. Wabwino pa masamu, logic, ndi mavuto a sitepe ndi sitepe ndi mtengo wotsika kuposa o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Mtundu wakale wa reasoning compact. Amagwira bwino masamu, science, ndi masewera a logic zomwe zimafuna mtengo wotsika."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Mtundu wanzeru kwambiri wa Anthropic, woyamba m'banja la Claude 5. Wabwino kwambiri pa ntchito zolembedwa, kafukufuku, ndi kukodira zovuta."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude watsopano wa pakati woyamba wa m'banja la Claude 5. Wamphamvu polemba, kusanthula, ndi kukodira tsiku ndi tsiku ndi mayankho ofulumira."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mtundu wapakati pa Mistral. Njira ya ku Europe yomwe imalimbikitsa luso ndi liwiro pa ntchito za tsiku ndi tsiku."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mtundu waing'ono wa Mistral. Wachangu komanso wotsika mtengo pa mwachidule, zolemba zachidule ndi mafunso osavuta."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mtundu waing'ono kwambiri wa Mistral. Woyenera ntchito zofulumira komanso zosavuta ndi mtengo wotsika kwambiri."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Mtundu wokonzanso wa DeepSeek-R1. Amawulula maganizo ake sitepe ndi sitepe ndi luso lokulitsa kulingalira."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Mtundu waulere wakochepa kuchokera ku Meta. Wachangu polemba, mwachidule ndi mafunso a tsiku ndi tsiku."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Mtundu wakale wa open-source wochokera ku Meta. Ukadali wabwino polemba motalikirapo komanso mayankho a mafunsowo (Q&A)."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Mtundu wotsogola wa xAI. Wabwino pa zokambirana zotseguka, kusanthula, ndi ntchito zaluso."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Mtundu waposachedwa kwambiri wa OpenAI. Wamphamvu polemba, kafukufuku, coding, komanso kuthetsa mavuto ovuta."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (yaposachedwa)",
+      "description": "Dzina lozindikirira lomwe limasonyeza nthawi zonse pa mtundu waposachedwa wa OpenAI chat-tuned. Ndi zomwe zikubwera m'malo mwa gpt-*-chat ya Azure yomwe yasiyidwa."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Mtundu wa Opus waposachedwa, pakati pa 4.6 ndi 4.8. Wamphamvu polemba motalikirapo, kafukufuku, coding, ndi kusanthula mozama."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Mtundu watsopano wa DeepSeek pa reasoning komanso m'malo mwa R1 line ku Azure. Amawonetsa maganizo ake sitepe ndi sitepe."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Mtundu wofulumira wa DeepSeek V4 komanso m'malo mwa V3 line ku Azure. Amayankha mwachangu pa kulemba mwamutu wamba komanso mafunso aukadaulo."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Mtundu wa xAI wokhala ndi reasoning yofulumira. Amawerenga sitepe ndi sitepe, kuyankha mwachangu."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Mtundu wa chat wachangu wa xAI. Mayankho achangu pa mafunso ndi zokambirana za tsiku ndi tsiku."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Mtundu wa xAI wochepa. Amayankha mwachangu komanso otsika mtengo pa mafunso achangu ndi zokambirana zosavuta."
     }
   },
   "searchMode": {

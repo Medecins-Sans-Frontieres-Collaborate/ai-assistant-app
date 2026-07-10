@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Mfano wa Claude wenye uwiano. Unafaa kwa uandishi wa kila siku, uchambuzi, na usimbaji umeme kwa majibu ya haraka.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Mfano wa chanzo huria kutoka Meta. Unafaa kwa uandishi, muhtasari, na maswali ya haraka."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Mfano mpya zaidi kutoka OpenAI. Nguvu katika uandishi, utafiti, kuandika programu, na utatuzi wa matatizo changamano."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Toleo dogo na la haraka zaidi la GPT. Bora kwa kazi rahisi na za haraka kwa gharama ndogo."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Toleo la GPT lililoboresha mazungumzo. Linalofaa kwa gumzo la kawaida, ubunifu wa mawazo, na mijadala ya usaidizi."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT ya zamani ya multimodal. Inafaa kwa uandishi wa kawaida na Maswali na Majibu pasipo kuhitaji uwezo mpya zaidi."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Toleo dogo na la haraka la GPT-4.1 kwa kazi za kila siku za haraka."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Mfano mpya, wenye nguvu zaidi kutoka Anthropic. Bora kwa uandishi mrefu, utafiti, uandishi wa programu na uchambuzi wa kina."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Mfano mpya wa chanzo huria kutoka DeepSeek. Unategemewa kwa uandishi wa jumla na maswali ya kiufundi."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mfano kuu wa Mistral. Mbadala wa Ulaya kwa uandishi, muhtasari, na maswali ya jumla."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Toleo la awali la GPT-5. Bado lina nguvu katika uandishi, uchambuzi, na uandishi wa programu."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Toleo la awali la GPT-5 lililoboreshwa kwa mazungumzo. Linafaa kwa mazungumzo ya kila siku na kutafuta mawazo mapya."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Toleo dogo zaidi la GPT-5. Bora kwa kazi rahisi na za haraka kwa gharama kidogo."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Toleo dogo zaidi la GPT-4.1. Inafaa kwa kazi rahisi na za haraka panapozingatiwa kasi na gharama."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Toleo dogo na la haraka la GPT-4o. Inafaa kwa kazi za haraka za kila siku zisizohitaji uwezo mpya zaidi."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Mfano mdogo wa uchambuzi. Unafaa kwa hesabu, mantiki, na masuala yanayohitaji hatua kwa hatua kwa gharama ndogo kuliko o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Mfano wa awali wa uchambuzi wa kompakt. Unashughulikia hesabu, sayansi, na mafumbo ya mantiki kwa bajeti ndogo."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Mfano wenye akili zaidi kutoka Anthropic, wa kwanza kwenye familia ya Claude 5. Bora kwa kazi ngumu za uandishi, utafiti, na uandishi wa programu."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude mpya aliye bora, wa kwanza kutoka familia ya Claude 5. Nguvu kwa uandishi wa kila siku, uchambuzi, na kuandika programu kwa majibu ya haraka."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mfano wa kati wa Mistral. Mbadala wa Ulaya unaopatanisha uwezo na kasi kwa kazi za kila siku."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mfano mdogo wa Mistral. Haraka na wa gharama nafuu kwa muhtasari, rasimu, na maswali rahisi."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mfano mdogo kabisa wa Mistral. Bora kwa kazi rahisi na za haraka kwa gharama ndogo."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Toleo jipya la DeepSeek-R1. Linaonyesha mchakato wake wa kufikiri hatua kwa hatua kwa uchambuzi wa kina zaidi."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Mfano mwepesi wa chanzo huria kutoka Meta. Unafanya haraka kwa uandishi, muhtasari, na maswali ya kila siku."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Mfano wa zamani wa chanzo huria kutoka Meta. Bado unafaa kwa uandishi wa jumla na Maswali na Majibu."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Mfano mkuu wa xAI. Unafaa kwa mijadala ya wazi, uchambuzi, na miradi ya ubunifu."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Mfano mkuu mpya wa OpenAI. Bora kwa uandishi, utafiti, usimbaji, na utatuzi wa matatizo magumu."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ya hivi karibuni)",
+      "description": "Jina mbadala linaloelekeza kwenye mfano mpya zaidi wa OpenAI wa mazungumzo. Badala ya Azure kwa mifano ya zamani ya gpt-*-chat."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Toleo jipya la Opus, kati ya 4.6 na 4.8. Imara kwa maandishi marefu, utafiti, usimbaji, na uchambuzi makini."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Mfano mpya zaidi wa uamuzi wa DeepSeek na mbadala wa Azure kwa laini ya R1. Inaonyesha njia yake ya kufikiri hatua kwa hatua."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Toleo la kasi la DeepSeek V4 na mbadala wa Azure kwa laini ya V3. Haraka kwa uandishi wa jumla na maswali ya kiufundi."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Uamuzi)",
+      "description": "Mfano wa kasi wa uamuzi wa xAI. Hufikiri hatua kwa hatua na hutoa majibu ya haraka."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Mfano wa mazungumzo wa kasi wa xAI. Majibu ya haraka kwa maswali na mazungumzo ya kila siku."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Mfano mwepesi wa xAI. Haraka na nafuu kwa maswali ya haraka na gumzo za kawaida."
     }
   },
   "searchMode": {

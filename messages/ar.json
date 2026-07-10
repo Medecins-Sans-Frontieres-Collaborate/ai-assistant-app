@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "نموذج Claude متوازن. مناسب للكتابة اليومية، والتحليل، والبرمجة مع استجابات سريعة.",
       "knowledgeCutoff": "فبراير 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "نموذج مفتوح المصدر من Meta. فعال للكتابة والتلخيص والأسئلة السريعة."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "أحدث نموذج رئيسي من OpenAI. قوي في الكتابة، البحث، البرمجة، وحل المشكلات المعقدة."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "أصغر وأسرع نسخة من GPT. الأفضل للمهام البسيطة والسريعة بأقل تكلفة."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "نسخة محادثة من GPT معدلة للحوار. جيدة للدردشة العادية، توليد الأفكار، والنقاشات الداعمة."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "نموذج GPT متعدد الوسائط أقدم. مناسب للكتابة اليومية والأسئلة والأجوبة حيث لا يتطلب الأمر أحدث الإمكانيات."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "نسخة أصغر وأسرع من GPT-4.1 للمهام اليومية السريعة."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "أحدث وأقوى نموذج من Anthropic. ممتاز للكتابة المطولة، البحث، البرمجة، والتحليل الدقيق."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "أحدث نموذج مفتوح المصدر من DeepSeek. موثوق لكتابة النصوص العامة والأسئلة التقنية."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "النموذج الرئيسي من Mistral. بديل أوروبي للكتابة والتلخيص والأسئلة العامة."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "مراجعة سابقة من GPT-5. ما زال قويًا في الكتابة، التحليل، والبرمجة."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "نسخة GPT-5 سابقة معدلة للمحادثة. جيدة للمحادثات اليومية وتوليد الأفكار."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "أصغر نسخة من GPT-5. الأفضل للمهام السريعة والبسيطة بأقل تكلفة."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "أصغر نسخة من GPT-4.1. مناسب للمهام السريعة والبسيطة حيث تهم السرعة والتكلفة أكثر."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "نسخة صغيرة وسريعة من GPT-4o. مناسبة للمهام اليومية السريعة حيث لا يتطلب الأمر أحدث الإمكانيات."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "نموذج استدلال مدمج. جيد للرياضيات والمنطق والمسائل المتدرجة بتكلفة أقل من o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "نموذج استدلال مدمج أقدم. يتعامل مع الرياضيات والعلوم والألغاز المنطقية بميزانية محدودة."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "أذكى نموذج من Anthropic، الأول من عائلة Claude 5. ممتاز لأصعب مهام الكتابة والبحث والبرمجة."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "أحدث نسخة متوازنة من Claude، وأول أفراد عائلة Claude 5. قوي في الكتابة اليومية، التحليل، والبرمجة مع استجابات سريعة."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "نموذج Mistral متوسط الحجم. بديل أوروبي يوازن بين الأداء والسرعة في الأعمال اليومية."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "أصغر نموذج من Mistral. سريع واقتصادي للتلخيص والمسودات والأسئلة البسيطة."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "أصغر نموذج من Mistral. الأفضل للمهام السريعة والبسيطة جدًا بأقل تكلفة."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "إصدار محدث من DeepSeek-R1. يعرض عملية التفكير خطوة بخطوة مع استدلال أعمق."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "نموذج مفتوح المصدر أخف من Meta. سريع في الكتابة، التلخيص، والأسئلة اليومية."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "نموذج مفتوح المصدر أقدم من Meta. ما زال فعالاً للكتابة العامة والأسئلة والأجوبة."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "النموذج الرئيسي من xAI. جيد للنقاشات المفتوحة، التحليل، والمشاريع الإبداعية."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "أحدث نموذج رائد من OpenAI. قوي في الكتابة، البحث، البرمجة، وحل المشكلات المعقدة."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (الأحدث)",
+      "description": "اسم مستعار متغير يشير دائماً إلى أحدث نموذج دردشة من OpenAI. البديل في Azure للإصدارات المتوقفة من نماذج gpt-*-chat."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "إصدار حديث من Opus بين 4.6 و4.8. قوي في الكتابة الطويلة، البحث، البرمجة، والتحليل الدقيق."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "أحدث نموذج استدلال من DeepSeek وبديل Azure لسلسلة R1. يعرض خطوات تفكيره واحدة تلو الأخرى."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "إصدار DeepSeek V4 السريع وبديل Azure لسلسلة V3. سريع في الكتابة العامة والأسئلة التقنية."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (الاستدلال)",
+      "description": "نموذج الاستدلال السريع من xAI. يفكر خطوة بخطوة مع استجابات سريعة."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "نموذج الدردشة السريع من xAI. استجابات سريعة للأسئلة والمحادثات اليومية."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "نموذج xAI خفيف. أسرع وأقل تكلفة للأسئلة السريعة والمحادثات غير الرسمية."
     }
   },
   "searchMode": {

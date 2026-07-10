@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude mo feewi. Mo handi e winndude kulle jogii, falde, e codduji e jawdi.",
       "knowledgeCutoff": "Fewre 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Model mo Meta jooɗii, waɗi sembe. Muɗiɗo ɗum e windugol, jamfaaji e puttugol ceppol."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Model OpenAI maa dow o mumbar. Mo gese e windugol, njiɗɗugol, kodugo e golli kuutorgol ceɗɗam."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Nano GPT keso e moh. Mo waɗi sembe e golli cabbuji, kolay e haɗi ndiyam lowre."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "GPT mo darndi waawnugol jawdi doole e garabgol. Mo feere e hokkugol jawdi, rewtagol, e hirnugol."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 mumbar gooto. Ena waawi mo e windugol, tinngugol e kodugo."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 mo waawnugol jawdi. Ena gese e jawdi ñalngu e rewtagol."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Kisal GPT mo taari. Mo waawi ɗum e windugol ñalngu e diiwal e laylaygol kaa mo gollu men ndiyam."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 mo nene e moh. Mo yuɓɓi e golli ñalngu ñaŋ."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Model mumbar e moƴƴi Anthropic. Ena gese e windugol dexal, njiɗɗugol, kodugo e golli tinngol."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Model DeepSeek mo jooɗii. Ena dogondir e windugol ñalngu e ceppol gese."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Model Mistral mumbar. Mo tan Europeen e windugol, jamfaaji e ceppol njaltu."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Model GPT-5 ndiyam. Ena waawi mo kono e windugol, tinngugol, kodugo."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Model GPT-5 waawnugol jawdi ndiyam. Mo feere e jawdi ñalngu e rewtagol."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Nano GPT-5, mo moh e gese. Ena feere e golli cabbuji, kolay e haɗi ndiyam buufu."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Nano GPT-4.1. Ena waawi mo e cabbuji ñalngu lesdi les."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mini GPT-4o, moh e gese. Feere e golli cabu jinaa, jawdi ndiyam ndiyam moƴƴi."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Model jokkere leyɗe. Ena feere e matam, laabaridgo e golli defte e ndiyam buufu."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Model leyɗe deftere ndiyam. Ena joggi matam, saynsi e laabaridgo khisu e lowre buufu."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Claude mo moƴƴi Anthropic, makko gooto Claude 5. Ena gese e golli keso majji, njiɗɗugol e kodugo."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude mo ndiyam. Mo gese e windugol ñalngu, tinngugo, kodugo e jawdi buuɗɗu."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Model baɗɗo Mistral. Europeen tan mo joggi leyɗe e gese ñalngu."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Model Mistral mo ndiyam. Ena gese e jamfaaji, drafts e ceppol ñaŋ."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Model mo Mistral mo tinene. Gese feere e golli cabbuji, kolay e haɗi ndiyam lowre."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Model DeepSeek-R1 ndiyam. Ena holli matam ɗamɗam defte e jokkere leyɗe doole."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Model mo Meta jooɗii mo ndiyam. Ena gese e windugol, jamfaaji e ceppol ñalngu."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Golle mum sooɗi dari Meta. Iya feɗi walla walla e ndemɗe fagudɗo e ƴeewteede hulnde."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Muddal xAI mawɗo. Naati tigi e hoore mum e waawoo walla walla e haasere, jaŋte e gollal kayiɗɗo."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Golle OpenAI woɗnde mum mawɗo. Dari walla walla e seɗaade, jaŋte, coddude e waawi fayde palal e ndemɗe lohi."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (woɗnde feewi)",
+      "description": "Kuytu rolondiral kono kala kadi e OpenAI chat-tuned model feewi. Eyi wannda Azure software gollal gpt-*-chat woɗɗi."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Golle Opus woɗnde leggal 4.6 e 4.8. Dari walla walla e binndol daɗol, jaŋte, coddude e haɓtidol ceptal."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Golle DeepSeek woɗnde feewi e kuytal famɗude Azure e layin R1. Naatta hoore mum ko pela-pela."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "V4 DeepSeek kuytal teddungal e dari Azure layin V3. Huutora binndol daɗol e ceɗɗo nder mbiraan teknikal."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Muddal xAI kuytal famɗugol. Naatta hoore mum pela-pela e njamfaayɓe balɗe."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Muddal xAI haasere kuytal. Fesii njamfaayɓe walla walla e ceede adunaandi e haasere."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Muddal xAI soogaygal. Baggol e mawnirde ngoodi e binndanɗe daɗɗo e haasere gooɗɗi."
     }
   },
   "searchMode": {

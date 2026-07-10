@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude so a siriri. A yéké ti écrit ndô, analyse na code, na réponse rapide.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modëli ti Meta ti wa na loso. Ala sôkô, nzönî, na mbênî ti wâfa gïrï na yângâ kêtê."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modëli mbêrê-mbêrê ti OpenAI. Ala maketaan na kôzo, yâ na mbinutù, na kôdî, na nzönî mândro-mândro."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Modëli GPT ti mûmî, ti kôkô. Ala ti bâa yângâ, kaka ti ngangu na adusa tî mû."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Modëli GPT ti nzönî ti bûngbi. Ala ti yângâ ti nzönî ngangu, ngbä gbaza, na mûnî maboko."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 ti boso-mboso. Ngu yeke si na kôzo, gbângbâ, na kôdî."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Modëli GPT-5 ti nzönî. Ala ti nzönî ti sôkô na ngbä gbaza."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT ti ndondo na ti multimodal. Ala ti kôzo sôkô na mbeni wâfa na Q&A nî, sô ndoye sïkï ta."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 ti mûmî na kôkô, ala ti bâa yângâ ti sôkô."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modëli fulu-fulu ti Anthropic. Ala ti kôzo ndö, mbinutù, kôdî, na gbângbâ ti nzönî na ngû."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modëli loso ti DeepSeek ti nga. Ala ti kôzo na mbeni wâfa na dîgî teknikï."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modëli boso-mboso ti Mistral. Ala ti Eropë, mô na kôzo, nzönî, na mbeni wâfa kêtê."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Modëli GPT-5 ti ndondo. Ala tuku si na kôzo, gbângbâ, na kôdî."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Modëli GPT-5 ti nzönî ti ndondo. Ala ti nzönî sôkô na ngbä gbaza."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 ti mûmî-mûmî. Ala ti bâa yângâ ti mû, kaka na adusa tî mû."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 ti mûmî-mûmî. Ala ti bâa yângâ na mû, sô te mbi yari adusa na sängö."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "GPT-4o ti mûmî, ti kôkô. Ala ti yângâ na mû sôkô, sô ndoye sïkï ta."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modëli mûmî ti gbângbâ. Ala si na matëmatîkï, lojîkï, na ngângâ ti wa ta sï lâ adusa mîngi na o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modëli mûmî ti gbângbâ ti ndondo. Ala ti matëmatîkï, sayânsë na lojîkï ti mûmî."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modëli ti Anthropic ti nga ti yeke. Fulanî ti gïrï na kôzo sïnga-sïnga, mbinutù, na kôdî."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Modëli fulu-fulu ti Claude, bodö ti Claude 5. Ala ti kôzo, gbângbâ, na kôdî sôkô na dâ sï mbi fadë."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modëli ti mû tî Mistral. Ala ti Eropë; mingi yeke sï na yângâ na adusa."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modëli mûmî ti Mistral. Ala ti mû, kôkô na nzönî, kôzo, na mbeni wâfa mû."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modëli mûmî-mûmî ti Mistral. Ala ti mû na kôkô ti yângâ mû, kaka na adusa mû."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Modëli DeepSeek-R1 ti kasï. Yeke kundusi nzönî na sîngî-sîngî."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modëli hõngö ti Meta. Ala ti mû na kôzo, nzönî, na mbeni wâfa ti yako ndoye."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model mû rungana ti Meta. Azô lo faî ti yângâ tî ekolo na mbeni Q&A."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model ekoli tî xAI. Gwe tî yângâ na bâ mbeti, analisa, na mo sô oko tene."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model mbênî tî OpenAI. Gbê sara gbâ yângâ, siriri, kode, na finî sô zûnzû."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (mbênî)",
+      "description": "Alias sô atênî da model chat-tuned tî OpenAI sô pekê. Model ti Azure sô ate na model gpt-*-chat sô abê."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus mbênî, na pökö 4.6 na 4.8. Gbê lâ yângâ lôngo, siriri, kode, na analisa sô zîngö."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model reasoning mbênî tî DeepSeek na model Azure sô ate tî R1. A tombê yâ tî sô yéké tenè na linga-linga."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Model V4 sô vîvî tî DeepSeek na ate tî V3 na Azure. Yângâ tî eke na kodoro na kétésè tî teknik."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Model reasoning sô vîvî tî xAI. A tîngana na maboko na yângâ vîvî."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model chat sô vîvî tî xAI. Yângâ vîvî tî kétésè na bâ mbeti linga-linga."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model xAI sô sôkôti. A vîvî na ngâ ti kétésè kekerekete na chat sô sôkôti."
     }
   },
   "searchMode": {

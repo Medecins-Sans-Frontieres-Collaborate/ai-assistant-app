@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Moodel Claude ah oo dheelitiran. Ku fiican qoraal maalinle ah, falanqayn, iyo koodayn jawaab degdeg ah leh.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Tusaale furan oo laga helay Meta. Aad ugu fiican qorista, soo koobidda, iyo su'aalaha degdegga ah."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Nooca ugu cusub ee OpenAI. Aad ugu fiican qorista, cilmi-baarista, koodhka, iyo xalinta dhibaatooyinka adag."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Nooca ugu yar uguna degdegsan ee GPT. Ku habboon hawlaha fudud ee degdegga ah qiimo jaban."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Nooc wadahadal ah oo GPT ah oo loogu talagalay dhigaalka. Ku habboon sheekooyinka caadiga ah, fikrad-abuurka, iyo wada hadallo taageero leh."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Noocii asalka ahaa ee GPT-5. Weli awood badan oo loogu talagalay qorista, falanqeynta, iyo koodhka."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Nooca GPT-5 ee loogu talagalay sheeko. Ku habboon wada hadalka maalinlaha ah iyo fikrad-abuurka."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Nooc hore oo GPT ah oo badan. Wanaagsan qorista maalinlaha ah iyo su'aalo/jawaabo haddii awoodda ugu dambeysa aan loo baahnayn."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Nooc yar oo degdeg ah oo GPT-4.1 ah oo loogu talagalay hawlaha maalinlaha ah."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Nooca ugu cusub uguna awoodda badan ee Anthropic. Aad ugu fiican qorista dheer, cilmi-baarista, koodhka, iyo falanqeyn taxadar leh."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Nooca ugu cusub ee furan ee DeepSeek. Lagu kalsoonaan karo qorista guud iyo su'aalaha farsamada."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Nooca ugu weyn ee Mistral. Badal reer Yurub ah oo loogu talagalay qorista, soo koobidda, iyo su'aalaha guud."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Nooc hore oo la hagaajiyey ee GPT-5. Weli awood badan qorista, falanqeynta, iyo koodhka."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Nooc hore oo sheeko-ku-habboon ah ee GPT-5. Ku fiican wada hadalka maalinlaha iyo fikrad-abuurka."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Nooca ugu yar ee GPT-5. Ku habboon hawlaha degdega ah ee fudud qiimo aad u jaban."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Nooca ugu yar ee GPT-4.1 ah. Ku habboon hawlaha degdega ah ee fudud halka xawaaraha iyo qiimaha la eegayo."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Nooc yar oo degdeg ah oo GPT-4o ah. Wanaagsan hawlaha maalinlaha ah ee degdegga ah haddii awoodda ugu dambeysa aan loo baahnayn."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Moodel sababaynta isku-jira oo kooban. Wanaagsan xisaabta, loojigga, iyo xallinta dhibaatooyinka tallaabo-tallaabo ee qiimo jaban marka la barbardhigo o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Moodel hore oo sababaynta kooban. Wuxuu xaliya xisaabta, sayniska, iyo halxiraalayaasha loojigga qiimo yar."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Moodelka ugu caqliga badan ee Anthropic, kii ugu horreeyay ee qoyska Claude 5. Aad ugu fiican qorista ugu adag, cilmi-baarista, iyo hawlaha koodhka ee culus."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Nooca ugu cusub ee dhex-dhexaad ah ee Claude, kii ugu horreeyay ee Claude 5. Awood sare qorista maalinlaha ah, falanqeynta, iyo koodhka leh jawaab degdeg ah."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Nooca cabbirka dhexe ee Mistral. Badal reer Yurub ah oo isku dheeli-tira awoodda iyo xawaaraha shaqada maalinlaha ah."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Nooca yar ee Mistral. Degdeg ah oo jaban oo ku habboon soo koobidda, qoral-qoraal, iyo su'aalaha fudud."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Nooca ugu yar ee Mistral. Ku habboon hawlaha aadka uga fudud uguna degdegga ah qiimo yar."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Nooc la cusbooneysiiyey ee DeepSeek-R1. Qorshihiisa ayuu tallaabo-tallaabo u muujinayaa isagoo sababayntiisa la hagaajiyey."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Moodel furan oo yaryar oo ka socda Meta. Degdeg ah qorista, soo koobidda, iyo su'aalaha maalinlaha ah."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Qaab hore oo furan ay Meta soo saartay. Weli aad ugu habboon qoraal guud iyo su'aalo/jawaabo."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Qaabka ugu sareeya ee xAI. Wanaagsan doodaha furan, falanqaynta, iyo mashaariicda hal-abuurka ah."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Qaabka ugu dambeeyay ee OpenAI. Aad ayuu ugu xoogan yahay qoraalka, cilmi-baarista, koodhka, iyo xallinta dhibaatooyinka adag."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ugu dambeeyay)",
+      "description": "Qaanad is-beddelaysa oo had iyo jeer tilmaamaysa qaabka chat ee cusub ee OpenAI. Badalka Azure ee noocyadii hore ee gpt-*-chat."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Nooc Opus oo dhowaan la sii daayay, kana dhexeeya 4.6 iyo 4.8. Wanaagsan qoraal dheer, cilmi-baaris, koodhin, iyo falanqayn feejigan."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Qaabka ugu cusub ee falanqaynta DeepSeek iyo badalka Azure ee taxanaha R1. Waxay tusto fekerka tallaabo-tallaabo."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Nooca dhakhso badan ee DeepSeek V4 iyo badalka Azure ee taxanaha V3. Degdeg u ah qoraal guud iyo su'aalo farsamo."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Falanqayn)",
+      "description": "Qaabka xAI ee falanqayn degdeg ah. Waxa uu u fakarayaa tallaabo-tallaabo iyo jawaabo degdeg ah."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Qaabka chat ee xAI ee dhaqso badan. Bixiyaa jawaabo degdeg ah oo loogu talagalay su'aalaha iyo wada sheekaysiga maalinlaha ah."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Qaab xAI oo fudud. Waxay u dhaqso badan tahay kuna jaban su'aalaha degdega ah iyo sheekaysiga caadiga ah."
     }
   },
   "searchMode": {

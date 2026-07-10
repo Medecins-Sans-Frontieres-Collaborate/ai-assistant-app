@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Awọṣe Claude ìwontù. Dáa fún kikọ ojoojúmọ́, ìtupalẹ, àti kóòdù pẹ̀lú ìbáṣepọ́ yára.",
       "knowledgeCutoff": "Kínni 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Awoṣe orisun-ṣiṣi lati ọdọ Meta. Dara fun kikọ, akopọ, ati awọn ibeere yarayara."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Awoṣe tuntun ti OpenAI. Lagbara fun kikọ, iwadii, kóòdì, ati yanju iṣoro to nira."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Awoṣe GPT ti o kere julọ ati yiyara julọ. Dara jùlọ fun iṣẹ kekere ati rọọrun ni iye owo kékèké."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Awoṣe GPT ti a ṣatunṣe fun iwiregbe. Dara fun ijiroro lasan, ero, ati ifọkansi ọrẹ."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Awoṣe asiwaju GPT-5 akọkọ. Ṣi fara mọ iṣe ni kikọ, itupalẹ, ati kóòdì."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Awoṣe iṣatunṣe iwiregbe fun GPT-5. Dara fun ijiroro ojoojumọ ati ero-pọ."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Awoṣe GPT oniruuru atijọ. Dára fun kikọ ojoojumọ ati ibeere-ọrọ nibiti agbara tuntun ko ṣe pataki."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Awoṣe GPT-4.1 kekere ati yiyara fun iṣẹ ojoojumọ yarayara."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Awoṣe tuntun ati ti o lagbara julọ ti Anthropic. Pẹlẹ fun kikọ pipẹ, iwadii, kóòdì, ati itupalẹ pẹkipẹki."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Awoṣe tuntun orisun-ṣiṣi lati DeepSeek. Gbẹkẹle fun kikọ gbogbogbo ati ibeere imọ."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Awoṣe asiwaju Mistral. Aṣayan Yúróòpù fun kikọ, akopọ, ati ibeere gbogbogbo."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Awoṣe atunṣe akọkọ ti GPT-5. Ṣi lagbara fun kikọ, itupalẹ ati kóòdì."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Atunṣe iṣatunṣe iwiregbe ti GPT-5. Dára fun ijiroro ojoojumọ ati ero-pọ."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Awoṣe GPT-5 ti o kere julọ. Dara jùlọ fun iṣẹ yarayara ati rọọrun pẹlu iye owo kékèké."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Awoṣe GPT-4.1 ti o kere ju. Dára fun iṣẹ yarayara ati rọọrun nibiti iyara ati iye owo ṣe pataki."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Awoṣe GPT-4o kekere ati yiyara. Dára fun iṣẹ yarayara lojoojumọ nibiti agbara tuntun ko ṣe pataki."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Awoṣe reasoning adígbẹ. Dára fun iṣiro, lójíkì ati iṣẹ igbesẹ-nipasẹ-ọgbẹse ni owo ti o kere ju o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Awoṣe reasoning adígbẹ akọkọ. Ṣe iṣiro, sayensi, ati lójíkì ni inawo kekere."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Awoṣe to jọgbọn julọ ti Anthropic, akọkọ ninu idile Claude 5. Pẹlẹ fun awọn iṣẹ kikọ, iwadii, ati kóòdì to nira julọ."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude tuntun ti aṣoṣo, akọkọ ninu idile Claude 5. Lagbara fun kikọ ojoojumọ, itupalẹ, ati kóòdì pẹlu idahun yarayara."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Awoṣe arin Mistral. Aṣayan Yúróòpù to da ìṣàkóso ati iyara pọ fun iṣẹ ojoojumọ."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Awoṣe kekere Mistral. Yiyara ati din owo fun akopọ, asọyé, ati awọn ibeere rọọrun."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Awoṣe Mistral to kéré jùlọ. Dara jùlọ fun iṣẹ yarayara ati rọọrun pẹlu iye owo kékèké."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Atunṣe tuntun ti DeepSeek-R1. Ṣafihan ero rẹ igbesẹ-nipasẹ-ọgbẹse pẹlu reasoning to jinlẹ sii."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Awoṣe orisun-ṣiṣi ti o rọ lati Meta. Yiyara fun kikọ, akopọ, ati ibeere ojoojumọ."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Awoṣe atijọ ti orisun-ṣiṣi lati ọdọ Meta. Ṣi dara fun kikọ gbogbogbo ati awọn ibeere ati idahun."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Awoṣe akọkọ ti xAI. Dara fun ibaraẹnisọrọ alabapade, itupalẹ, ati iṣẹ ọnà."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Awoṣe tuntun julọ lati ọdọ OpenAI. Alagbara ni kikọ, iwadii, koodu, ati ipinnu iṣoro to nira."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (tuntun julọ)",
+      "description": "Orukọ iyipada ti o n tọka si awoṣe tuntun ti OpenAI fun ibaraẹnisọrọ. Rọpo awoṣe gpt-*-chat ti a ti yọ kuro lori Azure."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Itu jade Opus tuntun laarin 4.6 ati 4.8. Alagbara fun kikọ gigun, iwadii, koodu, ati itupalẹ pẹkipẹki."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Awoṣe ironu tuntun ti DeepSeek ati rirọpo Azure fun laini R1. Ṣafihan ero rẹ ni igbesẹ nipa igbesẹ."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Iyaapu V4 yara ti DeepSeek ati rirọpo Azure fun laini V3. Yara fun kikọ gbogbogbo ati awọn ibeere imọ-ẹrọ."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Ironu)",
+      "description": "Awoṣe ironu yara ti xAI. N ronu igbesẹ nipa igbesẹ pẹlu idahun yarayara."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Awoṣe ibaraẹnisọrọ yara ti xAI. Yara fun awọn idahun si awọn ibeere ojoojumọ ati ijiroro."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Awoṣe xAI to rọrùn. Yara ati din owo fun ibeere kiakia ati ibaraẹnisọrọ lasan."
     }
   },
   "searchMode": {

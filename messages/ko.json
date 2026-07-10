@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "균형 잡힌 Claude 모델입니다. 일상적인 글쓰기, 분석, 빠른 반응이 필요한 코딩에 적합합니다.",
       "knowledgeCutoff": "2026년 2월"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta에서 제공하는 오픈소스 모델입니다. 글쓰기, 요약, 빠른 질문에 적합합니다."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI의 최신 플래그십 모델입니다. 글쓰기, 연구, 코딩, 복잡한 문제 해결에 강점을 가지고 있습니다."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "가장 작고 빠른 GPT 버전입니다. 빠르고 간단한 작업을 최소 비용으로 처리할 때 적합합니다."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "대화에 최적화된 GPT 버전입니다. 편안한 대화, 브레인스토밍, 지원적 토론에 적합합니다."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "이전 버전의 멀티모달 GPT입니다. 최신 기능이 필요하지 않은 일상적인 글쓰기 및 Q&A에 적합합니다."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "더 작고 빠른 GPT-4.1 버전으로, 일상적인 간단한 작업에 적합합니다."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic의 최신이자 가장 강력한 모델입니다. 장문의 글쓰기, 연구, 코딩, 심도 있는 분석에 탁월합니다."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek의 최신 오픈소스 모델입니다. 일반적인 글쓰기와 기술적 질문에 신뢰할 수 있습니다."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral의 플래그십 모델입니다. 유럽 대안으로서 글쓰기, 요약, 일반 질문에 적합합니다."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "이전 GPT-5 플래그십 버전입니다. 여전히 글쓰기, 분석, 코딩에 강점을 보입니다."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "이전 채팅 최적화 GPT-5 버전입니다. 일상 대화와 브레인스토밍에 적합합니다."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "가장 작은 GPT-5 버전입니다. 빠르고 간단한 작업을 최소 비용으로 처리할 때 적합합니다."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "가장 작은 GPT-4.1 버전입니다. 빠른 처리와 비용이 가장 중요한 간단한 작업에 적합합니다."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "작고 빠른 GPT-4o 버전입니다. 최신 기능이 필요하지 않은 일상적인 빠른 작업에 적합합니다."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "컴팩트한 추론 모델입니다. 수학, 논리, 단계별 문제를 o3보다 저렴하게 해결할 수 있습니다."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "이전 컴팩트 추론 모델입니다. 경제적으로 수학, 과학, 논리 퍼즐을 처리합니다."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic의 가장 지능적인 모델로, Claude 5 시리즈의 첫 번째입니다. 가장 어려운 글쓰기, 연구, 코딩 작업에 탁월합니다."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "가장 최신의 균형 잡힌 Claude 모델로, Claude 5 시리즈의 첫 모델입니다. 일상적인 글쓰기, 분석, 코딩에도 빠른 응답과 함께 강점을 보입니다."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral의 중형 모델입니다. 유럽 대안으로, 일상 작업에 능력과 속도 균형을 이룹니다."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral의 소형 모델입니다. 요약, 초안 작성, 간단한 질문에 빠르고 저렴하게 사용할 수 있습니다."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral의 초소형 모델입니다. 매우 빠르고 간단한 작업에 최소 비용으로 적합합니다."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "업데이트된 DeepSeek-R1 버전입니다. 개선된 추론으로 단계별 사고 과정을 보여줍니다."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta에서 제공하는 경량 오픈소스 모델입니다. 글쓰기, 요약, 일상 질문에 빠르게 대응합니다."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta에서 제공하는 구형 오픈소스 모델입니다. 여전히 일반적인 글쓰기와 Q&A에 적합합니다."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI의 플래그십 모델입니다. 개방형 토론, 분석, 창의적인 프로젝트에 적합합니다."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI의 최신 대표 모델입니다. 글쓰기, 연구, 코딩, 복잡한 문제 해결에 강점이 있습니다."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT 챗(최신)",
+      "description": "항상 OpenAI의 최신 챗 모델을 가리키는 롤링 별칭입니다. Azure에서 구버전 gpt-*-chat 모델을 대체합니다."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "4.6과 4.8 사이의 최신 Opus 버전입니다. 장문 작성, 연구, 코딩, 신중한 분석에 강점이 있습니다."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek의 최신 추론 모델로, Azure에서 R1 라인 모델을 대체합니다. 사고 과정을 단계별로 보여줍니다."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek의 빠른 V4 버전이며, Azure의 V3 라인을 대체합니다. 일반 글쓰기와 기술적 질문에 빠르게 응답합니다."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (추론)",
+      "description": "xAI의 빠른 추론 모델입니다. 단계별로 사고하며 빠른 답변을 제공합니다."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI의 빠른 챗 모델입니다. 일상적인 질문과 대화에 신속하게 답변합니다."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "경량화된 xAI 모델입니다. 빠르고 저렴하게 간단한 질문과 캐주얼 챗에 적합합니다."
     }
   },
   "searchMode": {

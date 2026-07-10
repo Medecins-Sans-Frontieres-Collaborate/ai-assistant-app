@@ -1486,6 +1486,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Een gebalanceerd Claude-model. Goed voor dagelijks schrijven, analyse en coderen met snelle reacties.",
       "knowledgeCutoff": "feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Een open-source model van Meta. Betrouwbaar voor schrijven, samenvattingen en snelle vragen."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Het nieuwste vlaggenschipmodel van OpenAI. Sterk in schrijven, onderzoek, coderen en complexe probleemoplossing."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "De kleinste en snelste GPT-variant. Ideaal voor snelle, eenvoudige taken tegen minimale kosten."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Een conversatiegerichte GPT-variant, afgestemd op dialoog. Geschikt voor informele gesprekken, brainstormen en ondersteunende discussies."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Een oudere multimodale GPT. Prima voor dagelijks schrijven en Q&A wanneer de nieuwste mogelijkheden niet nodig zijn."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Een kleinere, snellere GPT-4.1-variant voor snelle dagelijkse taken."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic's nieuwste en krachtigste model. Uitstekend voor lange teksten, onderzoek, coderen en grondige analyse."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek's nieuwste open-source model. Betrouwbaar voor algemeen schrijven en technische vragen."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Het vlaggenschip van Mistral. Een Europees alternatief voor schrijven, samenvattingen en algemene vragen."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Een eerdere revisie van GPT-5 vlaggenschip. Nog steeds sterk in schrijven, analyse en coderen."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Een eerdere chatgerichte GPT-5 revisie. Geschikt voor alledaagse gesprekken en brainstormen."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "De kleinste GPT-5 variant. Ideaal voor snelle, eenvoudige taken tegen minimale kosten."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "De kleinste GPT-4.1 variant. Prima voor snelle, eenvoudige taken waar snelheid en kosteneffectiviteit belangrijk zijn."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Een kleine, snelle GPT-4o variant. Prima voor dagelijkse, snelle taken wanneer de nieuwste mogelijkheden niet vereist zijn."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Een compact redeneermodel. Goed voor wiskunde, logica en stapsgewijze problemen tegen lagere kosten dan o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Een eerder compact redeneermodel. Geschikt voor wiskunde, wetenschap en logische puzzels met een beperkt budget."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic's meest intelligente model, de eerste van de Claude 5-familie. Uitstekend voor de meest complexe schrijf-, onderzoeks- en codeertaken."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "De nieuwste gebalanceerde Claude, de eerste van de Claude 5-familie. Sterk in dagelijks schrijven, analyse en coderen met snelle reacties."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Het middelgrote model van Mistral. Een Europees alternatief dat capaciteit en snelheid in balans brengt voor dagelijks werk."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Het kleine model van Mistral. Snel en voordelig voor samenvattingen, concepten en eenvoudige vragen."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Het kleinste model van Mistral. Ideaal voor zeer snelle, eenvoudige taken tegen minimale kosten."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Een bijgewerkte DeepSeek-R1 revisie. Laat stap voor stap het denkproces zien met verbeterde redeneerkracht."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Een lichter open-source model van Meta. Snel voor schrijven, samenvattingen en alledaagse vragen."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Een ouder open-source model van Meta. Nog steeds betrouwbaar voor algemeen schrijven en Q&A."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Het vlaggenschipmodel van xAI. Geschikt voor open discussies, analyse en creatieve projecten."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI's nieuwste vlaggenschipmodel. Sterk in schrijven, onderzoek, programmeren en complexe probleemoplossing."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (laatste)",
+      "description": "Een rollend alias die altijd verwijst naar OpenAI's nieuwste chatmodel. Azure's vervanging voor de uitgefaseerde versie van gpt-*-chat-modellen."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Een recente Opus-release, tussen 4.6 en 4.8. Sterk in lang schrijven, onderzoek, programmeren en zorgvuldige analyse."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek's nieuwste redeneermodel en Azure's vervanging voor de R1-serie. Laat zijn denkstappen stap voor stap zien."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek's snelle V4-variant en Azure's vervanging voor de V3-serie. Snel bij algemeen schrijfwerk en technische vragen."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Redeneren)",
+      "description": "xAI's snelle redeneermodel. Denkt stap voor stap met snelle antwoorden."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI's snelle chatmodel. Snelle antwoorden op alledaagse vragen en gesprekken."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Een lichter xAI-model. Sneller en goedkoper voor korte vragen en informele chats."
     }
   },
   "transcription": {

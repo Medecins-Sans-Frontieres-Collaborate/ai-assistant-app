@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Modely Claude voalanjalanja. Mahafaka amin'ny fanoratana andavanandro, famakafakana, sy kaody miaraka amin'ny valiny haingana.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modely loharano misokatra avy amin'i Meta. Mafy orina amin'ny fanoratana, famintinana, ary fanontaniana haingana."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modely vaovaon'i OpenAI, fanta-daza. Mahery amin'ny fanoratana, fikarohana, kaody, sy famahana olana sarotra."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "GPT kely indrindra sy haingana indrindra. Tsara ho an'ny asa tsotra sy haingana amin'ny vidiny ambany."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "GPT natokana ho amin'ny resaka. Mety amin'ny fifanakalozan-kevitra tsotra, famolavolana hevitra, ary adihevitra manohana."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 tany am-boalohany. Mbola mahavita tsara amin'ny fanoratana, fanadihadiana, ary kaody."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 natokana amin'ny resaka. Tsara amin'ny fifampiresahana andavanandro sy famolavolana hevitra."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT multimodal taloha. Mety amin'ny fanoratana andavanandro sy Q&A raha tsy ilaina ny fahaiza-manao farany."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 madinika sy haingana ho an'ny asa andavanandro haingana."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modely farany sy mahery indrindra an'i Anthropic. Tsara indrindra amin'ny fanoratana lava, fikarohana, kaody, ary fanadihadiana lalina."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modely loharano misokatra farany an'i DeepSeek. Azo itokisana amin'ny fanoratana ankapobeny sy fanontaniana ara-teknika."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modely fototra an'i Mistral. Safidy eropeana amin'ny fanoratana, famintinana, sy fanontaniana ankapobeny."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Dika teo aloha amin'ny GPT-5 fototra. Mbola mahery amin'ny fanoratana, fanadihadiana, ary kaody."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Dika teo aloha amin'ny GPT-5 natokana amin'ny resaka. Tsara amin'ny fifampiresahana andavanandro sy famolavolana hevitra."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 kely indrindra. Tsara indrindra ho an'ny asa tsotra sy haingana amin'ny vidiny ambany."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 kely indrindra. Ampiasaina tsara amin'ny asa haingana sy tsotra amin'ny filàna hafainganana sy vidiny ambany."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Dikan-GPT-4o kely sy haingana. Mety amin'ny asa andavanandro haingana tsy mila fahaiza-manao farany."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modely famakafakana kely. Mety amin'ny matematika, lojika, ary olana mandeha tsikelikely amin'ny vidiny ambany kokoa noho ny o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modely famakafakana kely teo aloha. Mahavita matematika, siansa, ary lojika amin'ny teti-bola voafetra."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modely hendry indrindra an'i Anthropic, voalohany amin'ny fianakaviana Claude 5. Tsara indrindra amin'ny fanoratana sy asa fikarohana ary kaody sarotra."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude vaovao sy voalanjalanja, voalohany amin'ny fianakaviana Claude 5. Mahery amin'ny fanoratana, fanadihadiana, sy kaody isan'andro miaraka amin'ny valiny haingana."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modely antonony an'i Mistral. Safidy eropeana mitsivalana eo amin'ny fahaiza-manao sy hafainganana ho an'ny asa andavanandro."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modely kely an'i Mistral. Haingana sy mora amin'ny famintinana, drafitra, sy fanontaniana tsotra."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modely kely indrindra an'i Mistral. Tsara indrindra amin'ny asa tena haingana sy tsotra amin'ny vidiny ambany."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Dika vaovao amin'ny DeepSeek-R1. Mampiseho ny fomba fisainany tsikelikely miaraka amin'ny lalim-pamakafakana tsara kokoa."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modely loharano misokatra maivana avy amin'i Meta. Haingana amin'ny fanoratana, famintinana, sy fanontaniana andavanandro."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Modela open-source efa nampiasaina taloha avy amin'i Meta. Mbola mahazaka tsara amin'ny fanoratana ankapobeny sy fanontaniana sy valiny."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modela fanta-daza avy amin'ny xAI. Tsara amin'ny adihevitra misokatra, famakafakana, ary tetikasa famoronana."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Modela vao haingana indrindra avy amin'ny OpenAI. Mahery amin'ny fanoratana, fikarohana, fanaovana kaody, ary famahana olana sarotra."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (vaovao indrindra)",
+      "description": "Anarana ankapobeny izay manondro foana ny modela chat OpenAI farany. Fanoloan'i Azure amin'ny modela gpt-*-chat efa nesorina."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus 4.7, modela nivoaka vao haingana eo anelanelan'ny 4.6 sy 4.8. Mahery amin'ny fanoratana lava, fikarohana, kaody, ary famakafakana lalina."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Modela famakafakana vaovao indrindra avy amin'i DeepSeek sy fanoloan'i Azure ho an'ny tsipika R1. Asehony tsikelikely ny fandehan'ny eritreriny."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Modela V4 haingan'i DeepSeek sy fanoloan'i Azure ho an'ny tsipika V3. Haingana amin'ny fanoratana ankapobeny sy fanontaniana ara-teknika."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Modela famakafakana haingan'ny xAI. Mamaly haingana amin'ny dingana tsikelikely."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Modela chat haingana avy amin'ny xAI. Mamaly haingana amin'ny fanontaniana sy adihevitra andavanandro."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Modela xAI maivana kokoa. Haingana sy mora amin'ny fanontaniana tsotra sy resaka mahazatra."
     }
   },
   "searchMode": {

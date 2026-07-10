@@ -1546,6 +1546,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "ایک متوازن Claude ماڈل۔ روزمرہ کی تحریر، تجزیہ اور فوری جوابات کے ساتھ کوڈنگ کے لیے عمدہ۔",
       "knowledgeCutoff": "فروری 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta کا اوپن سورس ماڈل۔ تحریر، خلاصے اور فوری سوالات کے لیے بہترین۔"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI کا نیا پرچم بردار ماڈل۔ تحریر، تحقیق، کوڈنگ اور پیچیدہ مسائل حل کرنے میں مضبوط۔"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "سب سے چھوٹا اور تیز ترین GPT ورژن۔ تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "مکالمے کے لیے تیار کردہ GPT ورژن۔ غیر رسمی بات چیت، آئیڈیاز اور مددگار گفتگو کے لیے موزوں۔"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "ایک پرانا ملٹی ماڈل GPT۔ روزمرہ تحریر اور سوال و جواب کے لیے مناسب، جب جدید فیچرز ضروری نہ ہوں۔"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "چھوٹا اور تیز GPT-4.1 ورژن، روزمرہ کے تیز کاموں کے لیے۔"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic کا نیا اور مضبوط ترین ماڈل۔ طویل تحریر، تحقیق، کوڈنگ اور باریکی سے تجزیے میں شاندار۔"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek کا نیا اوپن سورس ماڈل۔ عمومی تحریر اور تکنیکی سوالات کے لیے قابل اعتماد۔"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral کا پرچم بردار ماڈل۔ تحریر، خلاصے اور عمومی سوالات کے لیے یورپی متبادل۔"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "پہلے کا GPT-5 پرچم بردار ورژن۔ پھر بھی تحریر، تجزیہ اور کوڈنگ میں بہترین۔"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "پہلے کا چیٹ کے لیے تیار GPT-5 ورژن۔ روزمرہ گفتگو اور آئیڈیاز کے لیے اچھا۔"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 کا سب سے چھوٹا ورژن۔ تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 کا سب سے چھوٹا ورژن۔ تیز اور آسان کام جہاں رفتار اور لاگت اہم ہو۔"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ایک چھوٹا اور تیز GPT-4o ورژن۔ روزمرہ کے فوری کاموں کے لیے، جب جدید ترین فیچرز ضروری نہ ہوں۔"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "ایک مختصر منطق ماڈل۔ ریاضی، منطق اور مرحلہ وار مسائل میں o3 سے کم لاگت پر اچھا۔"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "پہلے کا مختصر منطق ماڈل۔ بجٹ میں ریاضی، سائنس اور منطقی معما حل کرسکتا ہے۔"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic کا سب سے ذہین ماڈل، Claude 5 فیملی کا پہلا۔ مشکل ترین تحریر، تحقیق اور کوڈنگ کے لیے بہترین۔"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "نیا متوازن Claude، Claude 5 فیملی کا پہلا۔ روزمرہ تحریر، تجزیہ اور کوڈنگ میں مضبوط، تیز جوابات کے ساتھ۔"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral کا درمیانہ سائز ماڈل۔ یورپی متبادل جو قابلیت اور رفتار کو روزانہ کاموں میں متوازن بناتا ہے۔"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral کا چھوٹا ماڈل۔ خلاصے، مسودے اور آسان سوالات کے لیے تیز اور کم خرچ۔"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral کا نہایت چھوٹا ماڈل۔ بہت تیز اور آسان کاموں کے لیے کم لاگت پر بہترین۔"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "DeepSeek-R1 کا اپڈیٹڈ ورژن۔ زیادہ گہرائی اور مرحلہ وار سوچ کے ساتھ۔"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta کا ہلکا اوپن سورس ماڈل۔ تحریر، خلاصے اور روزمرہ سوالات کے لیے تیز۔"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta کا پرانا اوپن سورس ماڈل۔ پھر بھی عمومی تحریر اور سوال و جواب کے لیے مضبوط۔"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI کا پرچم بردار ماڈل۔ کھلے مکالمے، تجزیے اور تخلیقی منصوبوں کے لیے اچھا۔"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI کا جدید ترین فلیگ شپ ماڈل۔ تحریر، تحقیق، کوڈنگ اور پیچیدہ مسائل کے حل میں مضبوط۔"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT چیٹ (تازہ ترین)",
+      "description": "ایک رولنگ عرف جو ہمیشہ OpenAI کے تازہ ترین چیٹ-ٹیونڈ ماڈل کی طرف اشارہ کرتا ہے۔ Azure میں وہ ورژنڈ gpt-*-chat ماڈلز کے متبادل کے طور پر ہے جو ریٹائر ہو چکے ہیں۔"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus کا حالیہ ریلیز، 4.6 اور 4.8 کے درمیان۔ طویل تحریر، تحقیق، کوڈنگ، اور محتاط تجزیے کے لیے بہترین۔"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek کا جدید ترین ریزننگ ماڈل اور Azure میں R1 لائن کا متبادل۔ سوچنے کا عمل مرحلہ وار دکھاتا ہے۔"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek کا تیز V4 ویرینٹ اور Azure میں V3 لائن کا متبادل۔ عمومی تحریر اور تکنیکی سوالات کے لیے فوری۔"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "xAI کا تیز ریزننگ ماڈل۔ تیز جوابات کے ساتھ مرحلہ وار سوچتا ہے۔"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI کا تیز چیٹ ماڈل۔ روزمرہ سوالات اور مباحثوں کے لیے فوری جوابات۔"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "xAI کا ہلکا ماڈل۔ فوری سوالات اور غیر رسمی گفتگو کے لیے تیز اور کم خرچ۔"
     }
   },
   "searchMode": {

@@ -1536,6 +1536,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude yang seimbang. Cocok untuk penulisan sehari-hari, analisis, dan pemrograman dengan respons cepat.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Model open-source dari Meta. Andal untuk menulis, merangkum, dan pertanyaan cepat."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Model terbaru unggulan dari OpenAI. Unggul untuk menulis, riset, pemrograman, dan pemecahan masalah kompleks."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Varian GPT terkecil dan tercepat. Terbaik untuk tugas sederhana dan cepat dengan biaya minimal."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Varian GPT khusus percakapan. Cocok untuk obrolan santai, brainstorming, dan diskusi suportif."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT multimodal versi lama. Cukup baik untuk menulis sehari-hari dan tanya jawab tanpa perlu fitur terbaru."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Varian GPT-4.1 yang lebih kecil dan cepat untuk tugas sehari-hari."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Model terbaru dan terkuat dari Anthropic. Sangat baik untuk penulisan panjang, riset, coding, dan analisis teliti."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Model open-source terbaru dari DeepSeek. Andal untuk penulisan umum dan pertanyaan teknis."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Model unggulan dari Mistral. Alternatif Eropa untuk menulis, merangkum, dan pertanyaan umum."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Revisi awal GPT-5 unggulan. Masih kuat untuk menulis, analisis, dan pemrograman."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Revisi awal GPT-5 khusus chat. Cocok untuk percakapan sehari-hari dan brainstorming."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Varian GPT-5 terkecil. Terbaik untuk tugas sederhana dan cepat dengan biaya minimal."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Varian GPT-4.1 terkecil. Cocok untuk tugas cepat dan sederhana saat kecepatan dan biaya jadi prioritas."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Varian kecil dan cepat dari GPT-4o. Cocok untuk tugas sehari-hari yang cepat tanpa perlu fitur terbaru."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Model penalaran yang ringkas. Cocok untuk matematika, logika, dan soal bertahap dengan biaya lebih rendah dibanding o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Model penalaran ringkas versi awal. Dapat menangani soal matematika, sains, dan logika dengan anggaran terbatas."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Model paling cerdas dari Anthropic, pertama dalam keluarga Claude 5. Sangat baik untuk tugas penulisan, riset, dan coding tersulit."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude terbaru yang seimbang, pertama dalam keluarga Claude 5. Andal untuk penulisan, analisis, dan coding harian dengan respons cepat."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Model ukuran sedang dari Mistral. Alternatif Eropa yang menyeimbangkan kemampuan dan kecepatan untuk kerja sehari-hari."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Model kecil dari Mistral. Cepat dan murah untuk ringkasan, draft, dan pertanyaan sederhana."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Model terkecil dari Mistral. Terbaik untuk tugas sangat cepat dan sederhana dengan biaya minimal."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Revisi terbaru dari DeepSeek-R1. Menunjukkan proses berpikir langkah demi langkah dengan penalaran lebih baik."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Model open-source yang lebih ringan dari Meta. Cepat untuk menulis, merangkum, dan pertanyaan sehari-hari."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model open-source lama dari Meta. Masih andal untuk penulisan umum dan tanya jawab."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model unggulan dari xAI. Cocok untuk diskusi terbuka, analisis, dan proyek kreatif."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model unggulan terbaru dari OpenAI. Unggul dalam penulisan, riset, pemrograman, dan pemecahan masalah kompleks."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (terbaru)",
+      "description": "Alias dinamis yang selalu mengarah ke model chat-tuned terbaru dari OpenAI. Pengganti Azure untuk model versi gpt-*-chat yang sudah dihentikan."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Rilis Opus terbaru, berada di antara 4.6 dan 4.8. Unggul untuk penulisan panjang, riset, pemrograman, dan analisis mendalam."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model penalaran terbaru dari DeepSeek dan pengganti Azure untuk lini R1. Menunjukkan proses berpikirnya secara bertahap."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Varian V4 cepat dari DeepSeek dan pengganti Azure untuk lini V3. Cepat untuk penulisan umum dan pertanyaan teknis."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Penalaran)",
+      "description": "Model penalaran cepat dari xAI. Berpikir bertahap dengan respons cepat."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model chat cepat dari xAI. Respons cepat untuk pertanyaan sehari-hari dan diskusi."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model xAI yang lebih ringan. Lebih cepat dan ekonomis untuk pertanyaan singkat dan percakapan santai."
     }
   },
   "searchMode": {

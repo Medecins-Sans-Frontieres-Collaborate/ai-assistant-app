@@ -1476,6 +1476,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "一款均衡的 Claude 模型。适合日常写作、分析及快速回应的编程任务。",
       "knowledgeCutoff": "2026年2月"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta 发布的开源模型。适合写作、摘要和快速问答。"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI 最新旗舰模型。擅长写作、调研、编程和复杂问题解决。"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "最小、最快的 GPT 版本。适合快速、简单任务，且成本最低。"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "面向对话优化的 GPT 版本。适用于日常聊天、头脑风暴和支持性讨论。"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "较早的多模态 GPT。适用于日常写作和问答，无需最新功能时使用。"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "更小更快的 GPT-4.1 版本，适合日常快速任务。"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic 最新、最强大的模型。擅长长篇写作、调研、编程和深入分析。"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek 最新的开源模型。适合通用写作和技术问答。"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral 的旗舰模型。为欧洲写作、摘要和通用问答提供替代选择。"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "较早版本的 GPT-5 旗舰。依然擅长写作、分析和编程。"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "早期对话优化的 GPT-5 版本。适合日常交流和头脑风暴。"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "最小的 GPT-5 版本。适合快速、简单任务，且成本最低。"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "最小的 GPT-4.1 版本。适合速度和成本要求高的快速、简单任务。"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "小巧、快速的 GPT-4o 版本。适合日常简易任务，无需最新功能时使用。"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "紧凑型推理模型。适合数学、逻辑及分步问题，成本低于 o3。"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "早期的紧凑型推理模型。可在低成本下处理数学、科学和逻辑题。"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic 最智能的模型，Claude 5 系列首作。适合最复杂的写作、调研和编程任务。"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "最新的平衡型 Claude，Claude 5 家族首作。日常写作、分析和编程表现强劲，响应迅速。"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral 的中型模型。欧洲方案，兼顾能力与速度，适合日常工作。"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral 的小型模型。适合摘要、草稿和简单问题，快速且低价。"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral 的超小模型。非常适合极快、简单的低成本任务。"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "更新版 DeepSeek-R1。推理更深入，可分步展示思路。"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta 发布的轻量开源模型。适合写作、摘要及日常问答，响应快速。"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta 较早的开源模型。依然适合通用写作和问答。"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI 的旗舰模型。适合开放式讨论、分析及创意项目。"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI 最新旗舰模型。擅长写作、研究、编程及复杂问题解决。"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat（最新）",
+      "description": "始终指向 OpenAI 最新对话优化模型的动态别名。是 Azure 用于替换已下线版本化 gpt-*-chat 模型的方案。"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "最新 Opus 版本，介于 4.6 与 4.8 之间。擅长长篇写作、研究、编程和细致分析。"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek 最新推理模型，也是 Azure 替代 R1 系列的产品。能够分步骤展示推理过程。"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek 快速版 V4，也是 Azure 替代 V3 系列的产品。适用于常规写作和技术问题，响应快速。"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast（推理版）",
+      "description": "xAI 快速推理模型。逐步思考，响应迅速。"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI 快速聊天模型。适合日常提问和对话，响应快捷。"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "轻量级 xAI 模型。适用于快速问答和轻松对话，速度更快、成本更低。"
     }
   },
   "searchMode": {

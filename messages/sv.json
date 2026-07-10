@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "En balanserad Claude-modell. Bra för vardagligt skrivande, analys och kodning med snabba svar.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "En öppen källkodsmodell från Meta. Stabil för skrivande, sammanfattningar och snabba frågor."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Den minsta och snabbaste GPT-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "En konversationstuned GPT-variant för dialog. Bra för avslappnade samtal, brainstorming och stödjande diskussioner."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "En äldre multimodal GPT. Passar för vardagligt skrivande och frågor/svar där den senaste kapaciteten inte behövs."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "En mindre och snabbare GPT-4.1-variant för snabba vardagsuppgifter."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropics senaste och starkaste modell. Utmärkt för långa texter, forskning, kodning och noggrann analys."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeeks senaste öppen källkodsmodell. Pålitlig för allmänt skrivande och tekniska frågor."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistrals flaggskeppsmodell. Ett europeiskt alternativ för skrivande, sammanfattningar och allmänna frågor."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "En tidigare flaggskeppsrevision av GPT-5. Fortfarande stark på skrivande, analys och kodning."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "En tidigare chatt-tuned GPT-5-version. Bra för vardagliga samtal och brainstorming."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Den minsta GPT-5-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Den minsta GPT-4.1-varianten. Passar för snabba, enkla uppgifter där hastighet och kostnad är viktigast."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "En liten och snabb GPT-4o-variant. Passar bra för snabba vardagsuppgifter där senaste kapacitet inte behövs."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "En kompakt resonemangsmodell. Bra för matte, logik och steg-för-steg-problem till lägre kostnad än o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "En tidigare kompakt resonemangsmodell. Hanterar matte, naturvetenskap och logiska problem kostnadseffektivt."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropics mest intelligenta modell, den första i Claude 5-familjen. Utmärkt för de svåraste skriv-, forsknings- och koduppgifterna."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Den nyaste balanserade Claude, först i Claude 5-familjen. Stark på vardagligt skrivande, analys och kodning med snabba svar."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistrals mellanstora modell. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagsbruk."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistrals lilla modell. Snabb och billig för sammanfattningar, utkast och enkla frågor."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistrals minsta modell. Bäst för mycket snabba, enkla uppgifter till minimal kostnad."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "En uppdaterad DeepSeek-R1-version. Visar sitt resonemang steg för steg med förbättrat djup."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "En lättare öppen källkodsmodell från Meta. Snabb för skrivande, sammanfattningar och vardagsfrågor."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "En äldre öppen källkodsmodell från Meta. Fortfarande stabil för allmänt skrivande och frågor/svar."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAIs flaggskeppsmodell. Bra för öppna diskussioner, analys och kreativa projekt."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (senaste)",
+      "description": "Ett rullande alias som alltid pekar på OpenAIs nyaste chat-tunade modell. Azures ersättning för de utgångna versionerade gpt-*-chat-modellerna."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "En nyare Opus-version, mellan 4.6 och 4.8. Stark för långa texter, forskning, kodning och noggrann analys."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeeks nyaste modeller för resonemang och Azures ersättning för R1-linjen. Visar sitt tänkande steg för steg."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeeks snabba V4-variant och Azures ersättning för V3-linjen. Snabb för allmänt skrivande och tekniska frågor."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Resonemang)",
+      "description": "xAIs snabba resonemangsmodell. Tänker steg för steg med snabba svar."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAIs snabba chattmodell. Snabba svar för vardagsfrågor och diskussioner."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "En lättare xAI-modell. Snabbare och billigare för snabba frågor och vardagliga samtal."
     }
   },
   "searchMode": {

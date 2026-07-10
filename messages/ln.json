@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Modèle ya Claude ya katikati. Malamu mpo na doki ya mokolo na mokolo, kobongola, mpe kotonga na eyano ya mbala moko.",
       "knowledgeCutoff": "Feb 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modeli ya open-source ya Meta. Ekomelaka malamu, kosala résumé, mpe mituna ya mbangu."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modeli ya sika mingi ya OpenAI. Ekolaka malamu na kokoma, recherche, code, mpe kobongola mikakatano ya pasi."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Modeli ya GPT ya moke koleka mpe ya mbangu. Epesaka bosolo mpo na misala ya mbangu, pamba na motuya moke."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Variant ya GPT ya dialogue. Malamu mpo na kolobela pamba, ba brainstorm, mpe mayangani ya lisungi."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Modeli ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT ya multimodal ya kala. Ebongi mpo na kokoma mokolo na mokolo mpe mituna/similanga esengeli te makasi sika."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Variant ya GPT-4.1 ya moke mpe ya mbangu mpo na misala ya mokolo na mokolo."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modeli ya sika mpe makasi mingi ya Anthropic. Mindɛlɛ mpo na kokoma molai, recherche, code, mpe analyse ya pɛtɛɛ."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modeli ya sika mpe ya open-source ya DeepSeek. Ezali fiable mpo na kokoma mindɛlɛ mpe mituna ya technique."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modeli monene ya Mistral. Alternative ya Europa mpo na kokoma, résumé, mpe mituna ya mokili."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Revision ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Revision ya liboso ya GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 ya moke koleka. Ebongi mpo na misala ya mbangu, pamba na motuya moke."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Variant ya moke koleka ya GPT-4.1. Ebongi mpo na misala ya mbangu, pamba na motuya na mbangu."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "GPT-4o moke mpe mbangu. Ebongi mpo na misala ya mbangu ya mokolo na mokolo soki sika makasi esengeli te."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modeli ya reasoning ya moke. Malamu mpo na ba maths, logique, mpe mikakatano ya kaka na motuya moke koleka o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modeli ya reasoning ya moke ya liboso. Ebatelaka ba maths, science, mpe ba puzzle ya logique na budget."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modeli ya mayele koleka ya Anthropic, ya liboso na famille ya Claude 5. Epesaka makasi mpo na mikakatano ya kokoma, recherche, mpe code epasi."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude ya sika ya équilibre, ya liboso na famille ya Claude 5. Epesaka mayele mpo na kokoma mokolo na mokolo, analyse mpe code na biyano ya mbangu."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modeli ya size ya kati ya Mistral. Alternative ya Europa, esangisi makasi mpe mbangu mpo na misala ya mokolo na mokolo."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral ya moke. Mbangu mpe motuya moke mpo na résumé, ba drafts, mpe mituna pamba."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral ya moke penza. Ebongi mpo na misala ya mbangu penza, pamba na motuya moke mingi."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Revision ya sika ya DeepSeek-R1. Emonisaka makanisi ya étape na étape na reasoning esengeli."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modeli ya open-source ya pete ya Meta. Mbangu mpo na kokoma, résumé, mpe mituna ya mokolo na mokolo."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model moko ya kala ya open-source uta na Meta. Ezali naino malamu mpo na kokoma mpe mituna na biyano ya général."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model ya xAI oyo ezali ya monene. Malamu mpo na masolo polele, analizɛ, mpe misala ya bokeli."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model ya sika mingi ya OpenAI. Ebongi na kokoma, recherche, kosala code, mpe kosilisa mituna ya pasi."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ya sika koleka)",
+      "description": "Alias ya mobimba oyo etindaka kaka na model ya chat ya sika ya OpenAI. Ndima Azure mpo na modèle ya version ya gpt-*-chat oyo elongolami."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Version Opus ya sika, ya kati ya 4.6 na 4.8. Ebongi na kokoma milai, recherche, code, mpe analizɛ ya pɛtɛ."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model ya reasoning ya sika ya DeepSeek mpe mbongisi ya Azure mpo na R1. Elakisa makanisi na ndenge nyonso."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Variation ya mbangu ya V4 ya DeepSeek mpe mbongisi ya Azure mpo na V3. Ezali mbangu mpo na kokoma général mpe mituna technique."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Model ya reasoning ya mbangu ya xAI. Akanisaka biteni na biteni mpe azongisaka mbangu."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model ya chat ya mbangu ya xAI. Azongisaka mbangu mpo na mituna ya mokolo na mokolo mpe masolo."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model ya xAI ya pete. Ezali mbangu mpe ya ndenge ya mike mpo na mituna ya mbangu mpe masolo ya pamba."
     }
   },
   "searchMode": {

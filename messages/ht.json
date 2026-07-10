@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "Yon modèl Claude balanse. Bon pou ekri chak jou, analiz, ak kodaj ak repons rapid.",
       "knowledgeCutoff": "Fev 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Yon modèl sous louvri ki soti nan Meta. Bon pou ekriti, rezime, ak kesyon rapid."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Dènye modèl prensipal OpenAI. Pwisan pou ekriti, rechèch, kodaj, ak rezoud pwoblèm konplèks."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Varyasyon GPT ki pi piti ak pi rapid. Pi bon pou travay rapid ak senp ak pri minim."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Varyasyon GPT pou konvèsasyon, adapte pou dyalòg. Bon pou ti pale, jete ide, ak diskisyon sipò."
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Premye modèl GPT-5 prensipal. Toujou efikas pou ekriti, analiz, ak kodaj."
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Varyasyon GPT-5 adapte pou konvèsasyon. Bon pou ti pale chak jou ak jete ide."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Yon ansyen modèl GPT miltimodal. Apwopriye pou ekriti ak Q&A chak jou kote ou pa bezwen dènye kapasite yo."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Yon vèsyon GPT-4.1 ki pi piti, pi rapid pou travay rapid chak jou."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Dènye ak pi pwisan modèl Anthropic. Ekselan pou tèks long, rechèch, kodaj, ak analiz pwofon."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Dènye modèl sous louvri DeepSeek. Fyab pou ekriti jeneral ak kesyon teknik."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modèl prensipal Mistral. Yon altènatif Ewopeyen pou ekriti, rezime, ak kesyon jeneral."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Yon vèsyon GPT-5 prensipal ki pi ansyen. Toujou solid pou ekriti, analiz, ak kodaj."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Yon vèsyon GPT-5 adapte pou konvèsasyon, nan edisyon pi ansyen. Bon pou ti pale ak jete ide."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Varyasyon GPT-5 ki pi piti. Pi bon pou travay rapid ak senp ak pri ki ba."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Vèsyon GPT-4.1 ki pi piti. Bon pou travay rapid, senp kote vitès ak pri gen plis enpòtans."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Yon vèsyon GPT-4o ki piti e rapid. Bon pou travay rapid chak jou kote ou pa bezwen pi dènye kapasite yo."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Yon modèl rezonman konpak. Bon pou matematik, lojik, ak pwoblèm etap-pa-etap ak pi ba pri pase o3."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Yon modèl rezonman konpak ki pi ansyen. Trete matematik, syans, ak devinèt lojik ak ti bidjè."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modèl ki pi entelijan Anthropic lan, premye nan fanmi Claude 5. Ekselan pou travay ekriti, rechèch, ak kodaj ki pi difisil."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Pi nouvo Claude ki ekilibre, premye nan fanmi Claude 5. Solid pou ekriti, analiz, ak kodaj chak jou ak repons rapid."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modèl Mistral mwayen. Yon altènatif Ewopeyen ki balanse kapasite ak vitès pou travay chak jou."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modèl piti Mistral. Rapid ak pa chè pou rezime, bouyon, ak kesyon senp."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modèl Mistral ki pi piti a. Pi bon pou travay trè rapid, senp ak pri ki minim."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Yon vèsyon DeepSeek-R1 ki mete ajou. Montre fason panse li etap-pa-etap ak pi bon kapasite rezonman."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Yon modèl sous louvri ki pi lejè soti nan Meta. Rapid pou ekriti, rezime, ak kesyon chak jou."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Yon ansyen modèl open-source ki soti nan Meta. Toujou solid pou ekriti jeneral ak kesyon-repons."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Modèl prensipal xAI a. Bon pou diskisyon ouvè, analiz, ak pwojè kreyatif."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Dènye modèl prensipal OpenAI a. Fò nan ekriti, rechèch, kodaj, ak rezoud pwoblèm konplike."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (dènye)",
+      "description": "Yon alias k ap swiv dènye modèl chat OpenAI mete ajou yo. Sa se ranplasman Azure pou ansyen modèl gpt-*-chat yo."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Yon nouvo vèsyon Opus, ant 4.6 ak 4.8. Solid pou ekriti long, rechèch, kodaj, ak analiz pridan."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Dènye modèl rasyonalizasyon DeepSeek la ak ranplasman Azure pou seri R1. Montre panse li etap pa etap."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Varyant rapid DeepSeek V4 la ak ranplasman Azure pou seri V3. Rapide pou ekriti jeneral ak kesyon teknik."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Rasyonalizasyon)",
+      "description": "Modèl rasyonalizasyon rapid xAI a. Panse etap pa etap ak repons rapid."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Modèl chat rapid xAI a. Repons rapid pou kesyon ak diskisyon chak jou."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Yon modèl xAI ki pi lejè. Pi rapid ak pi bon mache pou kesyon rapid ak ti pale senp."
     }
   },
   "searchMode": {

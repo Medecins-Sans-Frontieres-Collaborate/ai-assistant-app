@@ -1585,6 +1585,146 @@
       "name": "Claude Sonnet 4.6",
       "description": "ተምታኻኸሎ ሞዴል፡ ምሉእ ግዜ ምስራሕ፣ ትንታነ፣ ኮዲንግ ኣብ ፈጣን መልሲ ዝሓገዝ።",
       "knowledgeCutoff": "መጋቢት 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "ካብ Meta ዝተሰርሐ ነፃ ሞዴል። ብተሓጋጋዚ ምጻው ፣ ምዕንቲ ፈጺምን ፈጺሞታት ሕቶታትን ይግበር።"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "አዳዲሕ ፍለጣዊ ሞዴል OpenAI። ብተሓጋጋዚ ምጻው፣ ምምርሒ፣ ኮዲንግን ርከባን ምፍታው ጉዳያትን።"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "ንቡር እና ብጣዕሚ ፈጣን GPT ዘይብሉ ዘብሉ፡ ከምዝሕጉስ ዝቐልጠሉ ቀሊል ግዜ ጽሑፍን ቀሊል መሰረታዊ ስራሕታትን ይተዓብባል።"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "ለሓሳብታት ዝተስናአ ኣነጋገር GPT። ንሰማዕታዊ ውይይታታት፣ ምስምር ኣብ ጋንታን ናብ ዝዓበየ ግዜ ዝተዘጋጅ ውይይታታት ጽቡቅ።"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "መጀመርያዊ ኣብ ፍለጣዊ GPT-5 ሞዴል። እዋናዊ ብዛዕባ ምጻው፣ ትንታነ፣ ኮዲንግ፣ ዝተሓጋገዘ ተግባር ይግበር።"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "ኣነጋገር GPT-5 ዝተስናአ ዝበለ ሞዴል። ንመዓርነት ቀዳሞ ውይይታታትን ብሓሳብ ርእይቶን ጽቡቅ።"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "እቲ ቀዲሚ ፍልሲ GPT-ባህሊ ሞዴል። ንልምዓት ምጻውን መሰረት ሕቶ መልሲን ኣይተጠናጠኑ ክስደድ ከለኻ ይኸውን።"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "ዝቐልጠለ ን ቀሊል ጉዳያት ፈጣን GPT-4.1 ሞዴል።"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "ኣዳዲሕን ዝበለን ሞዴል Anthropic። ኣብ ናይ ዝንባብ ራዕይ ፣ ምምርሒ ፣ ኮዲንግን ጥማይ ትንታነን ብግቡእ ይሰርሕ።"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "ኣዳዲሕ ነፃ DeepSeek ሞዴል። ንናይ መደበኛ ምጻውን መሰረታዊ ቴክኒካል ሕቶታት ታህዋት ኣለዎ።"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "መዓልታዊ Mistral ሞዴል። ግናዊ ኣልጎርቲም ኣውልቲ ናብ ግነኽ ዝምግናው ፣ ምጻው ፣ ማዕከን ጥያቄ መልሲ ንኤውሮፓ ምስ የሳናጸ ተውሳኦ።"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "የቐዲም GPT-5 ፍለጣዊ ሞዴል። እዋናዊ ብዛዕባ ምጻው፣ ትንታነን ኮዲንግን ይሰርሕ።"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "ቀዳሞ ብኣነጋገር ዝተስናአ GPT-5 ሞዴል። ንዕላማታት ዝሕግዝ ዉይይታታትን ሓሳብ ርእይቶን ጽቡቅ።"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "ዝንኡኡ GPT-5 ሞዴል። ንቀሊልን ፈጣንን ስራሕታት ብንኡኡ ወጻኢ ይሰርሕ።"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "ንምስራሕ ፈጣንን ቀሊልን ተግባራት ብ ዝንኡኡ GPT-4.1 ይግበር።"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ፈጣንን ንቀሊልን ግዜ ምስዘለዎ ዕላማ ሓደ ናይ GPT-4o ሞዴል።"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "ቀሊልን ዝግበር ሞዴል ምስታሕቲ ኣንታስ። ምስ ቁጽሪ ግዜ ናይ ታሪኽ፣ ሎጂክን ስጺሗት በቐሊሉ ይስደድ።"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "ቀዳሞ ቀሊል ዝዓበየ ሞዴል። ሒሳብ፣ ሳይንሳዊን ሎጂክ ምስጢራትን ቦጀት ብናዕቱ ይሰርሕ።"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "ኣብ መኽንያት ዝመሃዙ ሞዴል Anthropic፣ ብመጀመር ናይ Claude 5 ሰርዓ። ኣብ ናይ ሓደጋ ምጻው፣ ምምርሒን ኮዲንግን ጽቡቅ ይኹን።"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "እቲ አዳዲሕ ሚዛናዊ Claude፣ መጀመር Claude 5 ሰርዓ። ንመዓልታ ምጻው፣ ትንታነን ኮዲንግን ብተፈጥሮ ፈጹማዊ መልስታት ይሰርሕ።"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral መካነውዲ ሞዴል። ዝተዛመደ ግበርነትን ፈጣንን መደበናዊ ስራሕታትን የማሩ።"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral ናይ ቀሊሉ ሞዴል። ብፍጥነት ኣይኽእል ናይ ምዕንቲን ሕሳብ ቅድሚ ኣብ ንቀላል ግዜ ይሰራሕ።"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral ናይ ሕኽንና ዝፈጠረ ሞዴል። ንቀሊሉን ፈጣንን ስራሕታት ናይ ቀላል ወጻኢ ይግበር።"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "ዝሓደሰወ ርእይቶ DeepSeek-R1። ኣብ ከይምግባር ዝያዳ ብደረጃ ግምገማ ረኺቡ ይግበር።"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "ነፃ ኣብ ዝንኡኡ፡ ኩነታት ከም ኣዝዩ ዘሎ፡ ብፍጥነት ምጻው፣ ማዕከናዊ ምዕንቲን ዕላማታትን የተዓብባል።"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "ከም ድሕሪ ግዜ ዝወጸ ናይ Meta ክፋል ነቲ ናይ ሓፈሻዊ ሞዴል እዩ። እቲ ሓፈሻዊ መጽሓፍቲን መልስ ሕቶታትን ውፅኢቱ ጽኑዕ እዩ።"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "ናይ xAI ዋና ሞዴል። ምስ ገለ ዘይ ውልቀ ምውዳእታት፣ ትንታነታትን ፈጠራ ፕሮጀክትታትን ንጥፈት ጽቡቕ እዩ።"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "ናይ OpenAI ሓዳስ ዋና ሞዴል። ብጽቡቅ መጽሓፍቲ፣ ምምርማር፣ ከይዲን ዓብዪ ሓገዝ ፍትሓትን ዚገበረ እዩ።"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ሓዳሽ)",
+      "description": "ዝዘርእ ስም እዩ ዝሰርሕ፣ ኩሉ ግዜ ናይ OpenAI ሓዳስ ናይ ሻይ Chat ሞዴል ይወፅእ። ናይ Azure ካብቲ ምዕራፍ ዝተሰርሓ ንተኻኒ እዩ።"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "ናይ ቅልጡፍ ልዕሊ Opus እዩ፣ ብድሓን 4.6ን 4.8ን ዕፀ። ዝንብረ መጽሓፍቲ፣ ምምርማር፣ ከይዲን ንጥፈት ጽኑዕ እዩ።"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "ናይ DeepSeek ሓዳስ ምክር ሞዴልን ናይ Azure ነቲ R1 መስመር ተኻኒ እዩ። ኣራኢኡ እቲ ሓሳቡ ኣብ እዋኡ ይመልከት።"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "ናይ DeepSeek ብቕልጡፍ ምስላ፣ ናይ Azure መምረጢ ን ነቲ V3 መስመር። ሓሳቡ ብቕልጡፍ መጽሓፍቲን ብቀላል ኩታት ጥዕናዊ ሕቶታትን።"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "ናይ xAI ብቕልጡፍ ምክር ሞዴል። ኣብ እዋኡ ብመደብ ምምልሳ ይሐክር።"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "ናይ xAI ብቕልጡፍ ቻት ሞዴል። ን መደበኛ ሕቶታትን ውዕልታትን ብቕልጡፍ መልሲ።"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "ንብርት ትንንሽ ዝረኣየ xAI ሞዴል። ለንበለን ንዝቑረብ ሕቶታትን ቀለልቲ ቻትታትን ብቕልጡፍን ዝርከብን እዩ።"
     }
   },
   "searchMode": {

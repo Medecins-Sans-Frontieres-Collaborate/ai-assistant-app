@@ -1445,6 +1445,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "Dengeli bir Claude modeli. Günlük yazım, analiz ve hızlı yanıtlar gerektiren kodlama için iyi bir seçenektir.",
       "knowledgeCutoff": "Şubat 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta'nın açık kaynaklı modeli. Yazı, özet ve hızlı sorular için sağlam bir seçenek."
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI'nin en yeni amiral gemisi modeli. Yazı, araştırma, kodlama ve karmaşık problem çözmede çok güçlü."
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "En küçük ve en hızlı GPT varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi."
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Diyalog için özel ayarlanmış bir GPT varyantı. Günlük sohbet, beyin fırtınası ve destekleyici konuşmalar için uygun."
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Daha eski bir çok modlu GPT. En güncel yetenek gerekmediğinde günlük yazım ve Soru-Cevap için yeterli."
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Hızlı gündelik işler için daha küçük ve hızlı bir GPT-4.1 varyantı."
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic'in en yeni ve en güçlü modeli. Uzun yazılar, araştırma, kodlama ve detaylı analizlerde mükemmel."
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek'in en yeni açık kaynaklı modeli. Genel yazı işleri ve teknik sorular için güvenilir."
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral'in amiral gemisi modeli. Yazı, özetleme ve genel sorular için Avrupa menşeli bir alternatif."
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Daha önceki bir GPT-5 amiral gemisi revizyonu. Yazı, analiz ve kodlama konusunda hâlâ güçlü."
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Daha önceki sohbet odaklı bir GPT-5 revizyonu. Günlük sohbet ve beyin fırtınası için uygun."
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5'in en küçük varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi."
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1'in en küçük varyantı. Hız ve maliyetin önemli olduğu durumlarda hızlı ve basit işler için uygundur."
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Küçük ve hızlı bir GPT-4o varyantı. En yeni yetenek gerekmeden günlük hızlı işler için uygundur."
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompakt bir muhakeme modeli. Matematik, mantık ve adım adım sorunlar için, o3'e kıyasla daha düşük maliyetlidir."
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Önceki nesil kompakt bir muhakeme modeli. Bütçenize uygun şekilde matematik, bilim ve mantık sorularını çözer."
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic'in en gelişmiş modeli, Claude 5 ailesinin ilki. En zorlu yazı, araştırma ve kodlama işleri için mükemmel."
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude 5 ailesinin ilki ve en dengeli model. Hızlı yanıtlarla günlük yazı, analiz ve kodlama gereksinimleri için güçlü."
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral'in orta boy modeli. Günlük işler için yetenek ve hızı dengeleyen Avrupa menşeli bir alternatif."
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral'in küçük modeli. Özet, taslak ve basit sorular için hızlı ve uygun maliyetli."
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral'in çok küçük modeli. Çok hızlı ve basit işler için minimal maliyette en iyisi."
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Güncellenmiş DeepSeek-R1 revizyonu. Gelişmiş muhakeme derinliğiyle adım adım düşünce sürecini gösterir."
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta'nın daha hafif bir açık kaynaklı modeli. Yazı, özetleme ve günlük sorular için hızlıdır."
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta'nın eski bir açık kaynak modeli. Genel yazım ve Soru-Cevap işleri için hâlâ güvenilir."
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI'nin amiral gemisi modeli. Açık uçlu tartışmalar, analiz ve yaratıcı projeler için uygun."
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI'nin en son amiral gemisi modeli. Yazma, araştırma, kodlama ve karmaşık problem çözmede güçlü."
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (en güncel)",
+      "description": "Her zaman OpenAI'nin en yeni sohbet odaklı modeline işaret eden dinamik bir takma ad. Azure'un eski sürüm gpt-*-chat modellerinin yerine geçer."
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus'un yeni bir sürümü, 4.6 ile 4.8 arasında. Uzun yazılar, araştırma, kodlama ve özenli analizler için güçlü."
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek'in en yeni muhakeme modeli ve Azure'un R1 serisinin yerine geçeni. Düşünce süreçlerini adım adım gösterir."
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek'in hızlı V4 varyantı ve Azure'un V3 serisinin yerine geçeni. Genel yazım ve teknik sorular için hızlı."
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Muhakeme)",
+      "description": "xAI'nin hızlı muhakeme modeli. Cevaplarını adım adım ve hızlı şekilde sunar."
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI'nin hızlı sohbet modeli. Günlük sorular ve sohbetler için hızlı cevaplar sunar."
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Daha hafif bir xAI modeli. Hızlı ve ekonomik; kısa sorular ve gündelik sohbetler için uygundur."
     }
   },
   "searchMode": {

@@ -1442,6 +1442,138 @@
       "name": "Claude Sonnet 4.6",
       "description": "ሚዛናዊ Claude ሞዴል። ለቀናቸው ጽሁፍ፣ ትንታኔ፣ ማከል እና ፈጣን ምላሾች መረጣ ነው።",
       "knowledgeCutoff": "ጥር 2026"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "የMeta ክፍት ምንጭ ሞዴል። ለመጻፍ፣ ማጠቃለያና ፈጣን ጥያቄዎች ጠንካራ ነው።"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "የOpenAI አዲሱ ዋና ሞዴል። ለመጻፍ፣ ምርምር፣ መቅዳትና ውስብስብ ችግር መፍታት የታቀፈ ነው።"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "አብዛኛውን አነስተኛና ፈጣን GPT አይነት። ለፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ ትችላለች።"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "በውይይት የታደሰ የGPT አይነት። ለቀለል ውይይቶች፣ አስባበሰና የድጋፍ ንግግሮች ተመጣጣኝ ነው።"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "አሮጌ ባለብዙ ተግባር GPT። ለዕለታዊ መጻፍና ጥያቄ-መልስ በየአዲሱ አገዳደብ ሳይፈለግ መርጡ ነው።"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "ትንሽ፣ ፈጣን GPT-4.1 አይነት። ለፈጣን ዕለታዊ ስራዎች ተስማሚ ነው።"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "የAnthropic የበለፀጉ የአሁኑ ሞዴል። ለረዘም የቆየ መጻፍ፣ ምርምር፣ መቅዳት እና ጥንቃቄ ግኝት የታረቀ ነው።"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "የDeepSeek አዲስ ክፍት ምንጭ ሞዴል። ለየትኛውም መጻፍና ለቴክኒክ ጥያቄዎች የታመነ ነው።"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "የMistral ዋና ሞዴል። አውሮፓዊ ተካፋይ ለመጻፍ፣ ማጠቃለያና አጠቃላይ ጥያቄዎች።"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "የቀደመው የGPT-5 ዋና ሞዴል ማሻሻያ። ለመጻፍ፣ ግምገማና መቅዳት ጠንካራ ነው።"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "የቀደመው በውይይት ታደሰ የGPT-5 ማሻሻያ። ለዕለታዊ ውይይቶችና አስባበሰ መርጡ ነው።"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "አብዛኛውን ትንሽ GPT-5 አይነት። ለፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ የተሻለ ነው።"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "አብዛኛውን ትንሽ GPT-4.1 አይነት። በፍጥነትና ወጪ በጣም በግፍ ሲሆን ለቀላል ስራዎች መርጡ ነው።"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "ትንሽና ፈጣን GPT-4o አይነት። ለዕለታዊ ፈጣን ስራዎች አዲሱ ችሎታ ሳይያስፈልግ የበቂ ነው።"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "አጥቂቅ የአእምሮ አስተዳደር ሞዴል። ለሂሳብ፣ ሎጅክ እና በእሴቶች ላይ ደረጃ ደረጃ ችግር እንዲያቃልል ከo3 በታች ወጪ ይሰራል።"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "የቀደመው አጥቂቅ የአእምሮ አስተዳደር ሞዴል። በቅናሽ ወጪ ሂሳብ፣ ሳይንስና ሎጅክ ጥያቄዎች ችሎታ አለው።"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "የAnthropic በጣም አዋቂ ሞዴል፣ የClaude 5 ቤተሰብ የመጀመሪያው። ለከባድ የመጻፍ፣ ምርምርና መቅዳት ስራዎች የተሻለ ነው።"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "አዲሱ የተመጣጠነ Claude፣ የClaude 5 ቤተሰብ የመጀመሪያው። ለዕለታዊ መጻፍ፣ ግምገማና መቅዳት በፈጣን ምላሽ ጠንካራ ነው።"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "የMistral መካከለኛ መጠን ሞዴል። አውሮፓዊ ተካፋይ፣ ኃይልና ፍጥነትን ለዕለታዊ ስራ ይመጣጣል።"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "የMistral ትንሽ ሞዴል። ለማጠቃለያ፣ ረቂቅና ቀላል ጥያቄዎች ፈጣንና ወጪ ቀና ነው።"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "የMistral በጣም ትንሽ ሞዴል። ለአንዳንድ ፈጣንና ቀላል ስራዎች በዝቅተኛ ወጪ የተሻለ ነው።"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "የታደሰው DeepSeek-R1 ማሻሻያ። እንዴት እንደሚያስበ የደረጃ ደረጃ ግኝት ይያያዛል።"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "ቀላል ክፍት ምንጭ ሞዴል ከMeta። ለመጻፍ፣ ማጠቃለያና ዕለታዊ ጥያቄዎች ፈጣን ነው።"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "አሮጌ ክፍት ምንጭ ሞዴል ከMeta። ለአጠቃላይ መጻፍና ጥያቄ-መልስ እንኳን ትችላለች።"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "የxAI ዋና ሞዴል። ለዝርዝር ያልተገደቡ ውይይቶች፣ ግምገማና ፈጣሪ አስተዋፅኦ መርጡ ነው።"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "የ OpenAI ቅርጸ ተለዋዋጭ አዲሱ ሞዴል። ለመጻፍ፣ ለምርምር፣ ለኮዲንግ፣ ለውስብስብ ችግሮች መፍታት ጠንካራ ነው።"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT ቻት (አዲሱ)",
+      "description": "ሁሌም ወደ OpenAI አዲሱ ቻት ዝግጅት የታዘዘ ትንሽ ስም ነው። በ Azure ውስጥ ከተነሣው gpt-*-chat ሞዴሎች ተካላይ ነው።"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "በቅርቡ የተለቀቀ Opus ስሪት፣ በ 4.6 እና 4.8 መካከል። ለረጅም ጽሁፍ፣ ምርምር፣ ኮዲንግ እና እጅግ በጥንቃቄ ሚደረግ ትንተና ይጠካል።"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "የ DeepSeek አዲሱ የማስተንተኛ ሞዴል እና በ Azure ውስጥ የ R1 ስሪት ተካላይ። ስለሚያስብ እርስ በርስ ይቀርባል።"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "የ DeepSeek ፈጣን V4 ስሪት እና በ Azure ውስጥ የ V3 ተካላይ። በአጠቃላይ ጽሁፍና በቴክኒክ ጥያቄዎች ላይ ፈጣን ይመልሳል።"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (ማስተንተኛ)",
+      "description": "የ xAI ፈጣን ማስተንተኛ ሞዴል። በእርስ በርስ እየተነቀላ ፈጣን መልስ ይሰጣል።"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "የ xAI ፈጣን ቻት ሞዴል። ለዕለታዊ ጥያቄዎችና ውይይቶች ፈጣን ምላሽ ይሰጣል።"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "ቀላል የ xAI ሞዴል። ለፈጣን ጥያቄዎችና ለአጭር ውይይቶች ፈጣን እና ቀላል ነው።"
     }
   },
   "searchMode": {
