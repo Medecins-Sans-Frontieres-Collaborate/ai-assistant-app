@@ -5,6 +5,7 @@ import {
   Circle,
   CircleMarker,
   MapContainer,
+  Pane,
   Popup,
   TileLayer,
   useMap,
@@ -282,19 +283,27 @@ const PointMarkers = memo(function PointMarkers({
   );
 });
 
-/** Area extent circles (district/region/country); zoom-dependent fade. */
+/**
+ * Area extent circles (district/region/country); zoom-dependent fade.
+ *
+ * NON-INTERACTIVE by design: with the shared canvas renderer, click
+ * priority follows draw order, and every incremental ingest appends its
+ * new circles after previously-mounted point markers — a region added
+ * later would swallow clicks on every point inside it. Extent circles
+ * are "roughly this area" backdrop, so they take no pointer events at
+ * all (points always win); their full details live in the sidebar list,
+ * whose rows expand.
+ */
 const AreaCircles = memo(function AreaCircles({
   features,
   zoom,
   demotedIds,
   faintIds,
-  labels,
 }: {
   features: MapFeature[];
   zoom: number;
   demotedIds: Set<string>;
   faintIds?: Set<string>;
-  labels: FeatureLabels;
 }) {
   return (
     <>
@@ -313,6 +322,7 @@ const AreaCircles = memo(function AreaCircles({
             key={feature.id}
             center={[feature.lat, feature.lon]}
             radius={effectiveRadiusKm(feature) * 1000}
+            interactive={false}
             pathOptions={{
               color: confidence.color,
               fillColor: confidence.fillColor,
@@ -323,9 +333,7 @@ const AreaCircles = memo(function AreaCircles({
               weight: 1.5,
               dashArray: '6 6',
             }}
-          >
-            <FeaturePopup feature={feature} labels={labels} />
-          </Circle>
+          />
         );
       })}
     </>
@@ -406,13 +414,19 @@ export default function MapView({
           faintIds={faintIds}
         />
       )}
-      <AreaCircles
-        features={areas}
-        zoom={zoom}
-        demotedIds={demotedIds}
-        faintIds={faintIds}
-        labels={labels}
-      />
+      {/*
+        Dedicated pane BELOW the default overlay pane (zIndex 400):
+        areas paint under points/connections regardless of mount order,
+        and — being non-interactive — never intercept their clicks.
+      */}
+      <Pane name="map-area-circles" style={{ zIndex: 350 }}>
+        <AreaCircles
+          features={areas}
+          zoom={zoom}
+          demotedIds={demotedIds}
+          faintIds={faintIds}
+        />
+      </Pane>
       <PointMarkers features={points} faintIds={faintIds} labels={labels} />
     </MapContainer>
   );
