@@ -20,7 +20,7 @@ import {
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
 import { env } from '@/config/environment';
-import { getDefaultModel, isModelDisabled } from '@/config/models';
+import { getDefaultModel, getStaticModelList } from '@/config/models';
 
 /**
  * AppInitializer - Handles app initialization logic
@@ -84,12 +84,11 @@ export function AppInitializer() {
         setIsLoaded,
       } = useConversationStore.getState();
 
-      // 1. Initialize models list from the static config first, so the picker
-      // renders instantly with current behavior. When model discovery is on,
-      // step 4 below refines this from /api/models (region-correct, ring-gated).
-      const models: OpenAIModel[] = Object.values(OpenAIModels).filter(
-        (m) => !m.isDisabled && !isModelDisabled(m.id),
-      );
+      // 1. Initialize models list from the vetted static list first, so the
+      // picker renders instantly with current behavior. When model discovery
+      // is on, step 4 below refines this from /api/models (region-correct,
+      // deployment-driven).
+      const models: OpenAIModel[] = getStaticModelList();
       setModels(models);
       useSettingsStore.getState().setModelListSource('static');
 
@@ -164,7 +163,9 @@ export function AppInitializer() {
                 currentDefaultId &&
                 selectable.some((m) => m.id === currentDefaultId);
               if (!stillPresent) {
-                const envDefaultModelId = getDefaultModel();
+                // Resolve against the selectable DISCOVERED models so the
+                // default tracks deployments (latest deployed standard GPT).
+                const envDefaultModelId = getDefaultModel(selectable);
                 const newDefault =
                   selectable.find((m) => m.id === envDefaultModelId) ||
                   selectable[0];
