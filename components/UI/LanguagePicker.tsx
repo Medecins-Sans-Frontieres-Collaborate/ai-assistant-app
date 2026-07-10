@@ -1,10 +1,11 @@
 'use client';
 
-import { IconCheck, IconSearch, IconX } from '@tabler/icons-react';
+import { IconCheck, IconPlus, IconSearch, IconX } from '@tabler/icons-react';
 import React, {
   FC,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -44,10 +45,19 @@ export interface LanguagePickerProps {
 
   searchPlaceholder?: string;
   ariaLabel?: string;
+  /**
+   * When set and the search query matches no option exactly, a trailing
+   * "Add '<query>'" row is rendered; selecting it calls this with the raw
+   * query (the caller creates the option and selects it). Used for
+   * user-added translation languages.
+   */
+  onCreateOption?: (label: string) => void;
 }
 
 const DROPDOWN_WIDTH_PX = 256;
 const OFFSET_PX = 8;
+/** Search bar + capped list; used to decide above-vs-below placement. */
+const DROPDOWN_EST_HEIGHT_PX = 330;
 
 /**
  * Floating, searchable, keyboard-navigable language picker.
@@ -67,11 +77,13 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
   disabled = false,
   searchPlaceholder,
   ariaLabel,
+  onCreateOption,
 }) => {
   const t = useTranslations();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [placement, setPlacement] = useState<'above' | 'below'>('above');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,17 +92,61 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
     [options, searchQuery],
   );
 
+  // "Add '<query>'" appears when creation is enabled, the query is
+  // non-trivial, and no option matches it exactly (case-insensitive).
+  const showCreateRow = useMemo(() => {
+    if (!onCreateOption) return false;
+    const query = searchQuery.trim();
+    if (query.length < 2) return false;
+    const lower = query.toLowerCase();
+    return !options.some(
+      (opt) =>
+        opt.label.toLowerCase() === lower ||
+        opt.sublabel?.toLowerCase() === lower,
+    );
+  }, [onCreateOption, searchQuery, options]);
+
   const rowCount = filteredOptions.length + (clearOption ? 1 : 0);
 
-  // Anchor the portal to the trigger.
-  useEffect(() => {
-    if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
+  // Anchor the portal to the trigger, flipping below when the space above
+  // can't fit the dropdown (e.g. triggers near the top of the window) and
+  // clamping horizontally to the viewport. Measured before paint and
+  // re-computed on scroll/resize while open so the dropdown never drifts
+  // off-screen (same pattern as Tooltip's multiline mode).
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    const computePosition = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+
       let left = rect.right - DROPDOWN_WIDTH_PX;
-      const top = rect.top - OFFSET_PX;
-      if (left < OFFSET_PX) left = OFFSET_PX;
-      setPosition({ top, left });
-    }
+      left = Math.min(
+        Math.max(left, OFFSET_PX),
+        Math.max(window.innerWidth - DROPDOWN_WIDTH_PX - OFFSET_PX, OFFSET_PX),
+      );
+
+      const spaceAbove = rect.top - OFFSET_PX;
+      const spaceBelow = window.innerHeight - rect.bottom - OFFSET_PX;
+      const openAbove =
+        spaceAbove >= DROPDOWN_EST_HEIGHT_PX || spaceAbove >= spaceBelow;
+
+      setPlacement(openAbove ? 'above' : 'below');
+      setPosition({
+        top: openAbove ? rect.top - OFFSET_PX : rect.bottom + OFFSET_PX,
+        left,
+      });
+    };
+
+    computePosition();
+    window.addEventListener('resize', computePosition);
+    // Capture-phase scroll so scrolls inside nested containers reposition too.
+    window.addEventListener('scroll', computePosition, true);
+    return () => {
+      window.removeEventListener('resize', computePosition);
+      window.removeEventListener('scroll', computePosition, true);
+    };
   }, [isOpen, triggerRef]);
 
   // Focus the search input on open.
@@ -209,7 +265,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
-        transform: 'translateY(-100%)',
+        transform: placement === 'above' ? 'translateY(-100%)' : undefined,
       }}
       role="listbox"
       aria-label={resolvedAriaLabel}
@@ -318,7 +374,25 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
           );
         })}
 
-        {filteredOptions.length === 0 && (
+        {onCreateOption && showCreateRow && (
+          <button
+            onClick={() => {
+              onCreateOption(searchQuery.trim());
+              onClose();
+            }}
+            disabled={disabled}
+            className="w-full px-3 py-2 text-left text-sm flex items-center gap-2 border-t border-gray-200 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+            role="option"
+            aria-selected={false}
+          >
+            <IconPlus size={14} className="shrink-0 text-blue-500" />
+            <span className="truncate font-medium text-blue-600 dark:text-blue-400">
+              {t('chat.addLanguageOption', { name: searchQuery.trim() })}
+            </span>
+          </button>
+        )}
+
+        {filteredOptions.length === 0 && !showCreateRow && (
           <div className="px-3 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
             {t('common.noResults')}
           </div>
