@@ -17,6 +17,7 @@ import { ModelListSource, OpenAIModel, OpenAIModels } from '@/types/openai';
 
 import { auth } from '@/auth';
 import { env } from '@/config/environment';
+import { getCurrentEnvironment, getStaticModelList } from '@/config/models';
 import { DefaultAzureCredential } from '@azure/identity';
 
 /**
@@ -33,10 +34,11 @@ import { DefaultAzureCredential } from '@azure/identity';
  * region-uniform — so the result is cached per region by ModelDiscoveryService.
  */
 
-// The static list, ring-gated — current behavior, and the graceful fallback.
-// Computed once at module scope: OpenAIModels and the ring gate are immutable at
-// runtime, so there's no reason to rebuild this array per request.
-const STATIC_MODELS: OpenAIModel[] = applyRingGate(Object.values(OpenAIModels));
+// The vetted static list (catalog minus beta/prod exclusions) — served while
+// discovery is off, and the graceful fallback when it errors. Computed once at
+// module scope: the catalog and ring are immutable at runtime, so there's no
+// reason to rebuild this array per request.
+const STATIC_MODELS: OpenAIModel[] = getStaticModelList();
 
 // One DefaultAzureCredential for the process. Its per-instance token cache then
 // survives across requests instead of being thrown away each call (C1).
@@ -132,7 +134,12 @@ export async function GET(request: NextRequest) {
     const merged = mergeMultiRegionDiscovery(
       regional,
       OpenAIModels as Record<string, OpenAIModel>,
-      { showUnknown: env.SHOW_MODELS_WITHOUT_METADATA },
+      {
+        showUnknown: env.SHOW_MODELS_WITHOUT_METADATA,
+        // Beta-first rollout: deployments tagged `ui-ring` are only served
+        // to the rings the tag names (beta shares a Foundry with prod).
+        ring: getCurrentEnvironment(),
+      },
     );
     const models = applyRingGate(merged);
     const source: ModelListSource = partial ? 'discovery-partial' : 'discovery';
