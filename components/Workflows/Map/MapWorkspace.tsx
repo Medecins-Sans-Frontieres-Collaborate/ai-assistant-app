@@ -202,7 +202,8 @@ export function MapWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     [visibleFeatures],
   );
 
-  const isFiltering = activeCategories.size > 0 || timelineActive;
+  const isFiltering =
+    activeCategories.size > 0 || isDateRangeActive(dateRange) || timelineActive;
 
   // Stable label callbacks so MapView's memoized marker layers don't
   // re-render on every workspace render.
