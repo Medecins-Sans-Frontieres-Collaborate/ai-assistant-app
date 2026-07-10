@@ -1,5 +1,8 @@
 import {
+  getFamilyVariants,
   getSeriesVersions,
+  getVariantVersions,
+  pickVariantTarget,
   seriesRepresentative,
   versionRank,
 } from '@/lib/utils/app/modelSeries';
@@ -32,6 +35,12 @@ describe('versionRank', () => {
   it('ranks unparseable/missing labels last', () => {
     expect(versionRank({ versionLabel: undefined })).toBe(-1);
     expect(versionRank({ versionLabel: 'preview' })).toBe(-1);
+  });
+
+  it('ranks the rolling "latest" alias above every numbered version', () => {
+    expect(versionRank({ versionLabel: 'latest' })).toBe(
+      Number.POSITIVE_INFINITY,
+    );
   });
 });
 
@@ -78,5 +87,73 @@ describe('seriesRepresentative', () => {
     expect(seriesRepresentative(noFeatured, undefined)?.id).toBe('gpt-5.2');
     const allLegacy = [model('gpt-5.4', '5.4', { tier: 'legacy' })];
     expect(seriesRepresentative(allLegacy, undefined)?.id).toBe('gpt-5.4');
+  });
+});
+
+// A ragged two-variant family for the variant helpers: Standard has three
+// versions, Mini has two (no 5.2 mini), plus one member with no variant.
+const family = [
+  model('gpt-5.2', '5.2', { variant: 'standard', variantLabel: 'Standard' }),
+  model('gpt-5-mini', '5', { variant: 'mini', variantLabel: 'Mini' }),
+  model('gpt-5.4', '5.4', { variant: 'standard', variantLabel: 'Standard' }),
+  model('gpt-4.1-mini', '4.1', { variant: 'mini', variantLabel: 'Mini' }),
+  model('gpt-5', '5', { variant: 'standard', variantLabel: 'Standard' }),
+];
+
+describe('getFamilyVariants', () => {
+  it('buckets members per variant in order of first appearance', () => {
+    const variants = getFamilyVariants(family);
+    expect(variants.map((v) => v.key)).toEqual(['standard', 'mini']);
+    expect(variants[0].label).toBe('Standard');
+    expect(variants[1].members.map((m) => m.id)).toEqual([
+      'gpt-5-mini',
+      'gpt-4.1-mini',
+    ]);
+  });
+
+  it("groups members without a variant under the '' bucket", () => {
+    const variants = getFamilyVariants([model('a', '1'), model('b', '2')]);
+    expect(variants).toHaveLength(1);
+    expect(variants[0].key).toBe('');
+  });
+});
+
+describe('getVariantVersions', () => {
+  it("returns only the active variant's versions, newest first", () => {
+    expect(
+      getVariantVersions(family, { series: 'gpt', variant: 'mini' }).map(
+        (m) => m.id,
+      ),
+    ).toEqual(['gpt-5-mini', 'gpt-4.1-mini']);
+  });
+
+  it('treats a missing variant as its own single-variant bucket', () => {
+    const mixed = [...family, model('gpt-x', '9')];
+    expect(
+      getVariantVersions(mixed, { series: 'gpt', variant: undefined }).map(
+        (m) => m.id,
+      ),
+    ).toEqual(['gpt-x']);
+  });
+});
+
+describe('pickVariantTarget', () => {
+  const minis = getVariantVersions(family, { series: 'gpt', variant: 'mini' });
+
+  it('keeps the current version when the target variant has it', () => {
+    expect(pickVariantTarget(minis, '4.1')?.id).toBe('gpt-4.1-mini');
+  });
+
+  it("falls back to the variant's representative when the version is missing (ragged matrix)", () => {
+    // No 5.2 mini exists → newest non-legacy mini.
+    expect(pickVariantTarget(minis, '5.2')?.id).toBe('gpt-5-mini');
+  });
+
+  it('prefers a featured member over a same-rank newer one on fallback', () => {
+    const withFeatured = [
+      model('m-new', '6', { variant: 'mini' }),
+      model('m-featured', '5', { variant: 'mini', tier: 'featured' }),
+    ];
+    expect(pickVariantTarget(withFeatured, '9.9')?.id).toBe('m-featured');
   });
 });
