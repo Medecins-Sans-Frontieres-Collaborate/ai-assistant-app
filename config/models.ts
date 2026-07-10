@@ -22,11 +22,11 @@ export interface EnvironmentConfig {
 
 /**
  * Ordered chain of models to fall back to when a chat request fails with a
- * model-specific error. The default model comes first (most reliable), then
- * progressively different models/providers so an outage affecting one
- * deployment doesn't take out every fallback. Agent and non-streaming
- * reasoning models are intentionally excluded — their behavior differs too
- * much to substitute silently.
+ * model-specific error. getFallbackChain() prepends the ring's (dynamic)
+ * default model; this static tail then covers progressively different
+ * models/providers so an outage affecting one deployment doesn't take out
+ * every fallback. Agent and non-streaming reasoning models are intentionally
+ * excluded — their behavior differs too much to substitute silently.
  */
 const DEFAULT_FALLBACK_CHAIN: string[] = [
   OpenAIModelID.GPT_5_2_CHAT,
@@ -170,10 +170,14 @@ export function isModelDisabled(modelId: string): boolean {
 }
 
 /**
- * Gets the error-fallback chain for the current environment
+ * Gets the error-fallback chain for the current environment. The (dynamic)
+ * default model always leads: it's the ring's most vetted choice, so a
+ * failing model falls back to it before the static cross-provider chain.
  */
 export function getFallbackChain(): string[] {
-  return getModelConfig().fallbackChain ?? DEFAULT_FALLBACK_CHAIN;
+  const chain = getModelConfig().fallbackChain ?? DEFAULT_FALLBACK_CHAIN;
+  const defaultModel = getDefaultModel();
+  return [defaultModel, ...chain.filter((id) => id !== defaultModel)];
 }
 
 /**
