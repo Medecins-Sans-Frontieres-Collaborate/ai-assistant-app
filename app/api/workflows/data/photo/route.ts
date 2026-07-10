@@ -24,6 +24,7 @@ import {
   unauthorizedResponse,
 } from '@/lib/utils/server/api/apiResponse';
 import { getBlobBase64String } from '@/lib/utils/server/blob/blob';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
 
 import { DataColumn, DataColumnType } from '@/types/workflow';
 
@@ -57,7 +58,9 @@ function isValidColumn(value: unknown): value is DataColumn {
   const column = value as Partial<DataColumn>;
   return (
     typeof column.id === 'string' &&
-    column.id.length > 0 &&
+    // Same id format the extract route enforces — ids become json_schema
+    // property keys, so keep them to a plain token.
+    /^[a-z0-9_]{1,40}$/.test(column.id) &&
     typeof column.name === 'string' &&
     COLUMN_TYPES.includes(column.type as DataColumnType)
   );
@@ -170,7 +173,7 @@ export async function POST(req: NextRequest) {
     });
     return successResponse({ rows: result.rows });
   } catch (error) {
-    console.error('[workflows/data/photo] Failed:', error);
+    console.error('[workflows/data/photo] Failed:', sanitizeForLog(error));
     return handleApiError(error, 'Photo extraction failed');
   }
 }
