@@ -67,6 +67,16 @@ export interface AgentSource {
   name: string; // User-friendly label: "Amsterdam Office", "Geneva Hub"
   resourcePath: string; // ARM resource path to Foundry project
   createdAt: string; // ISO timestamp
+  /**
+   * When true (default), agents that later appear on the remote project are
+   * shown automatically, except those in excludedAgentNames. When false,
+   * only selectedAgentNames are shown.
+   */
+  autoAddNewAgents: boolean;
+  /** agentName slugs deselected at connect/edit time (used when autoAddNewAgents). */
+  excludedAgentNames: string[];
+  /** agentName slugs explicitly selected (used when !autoAddNewAgents). */
+  selectedAgentNames: string[];
 }
 
 export type McpAuthMode = 'none' | 'bearer' | 'header' | 'oauth';
@@ -1029,7 +1039,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 28, // Increment this when schema changes to trigger migrations
+      version: 29, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1349,6 +1359,26 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 28 → 29: per-source agent selection. Defaults reproduce the
+        // pre-selection behavior exactly (auto-add everything, exclude none).
+        if (version < 29 && Array.isArray(state.customAgentSources)) {
+          state.customAgentSources = (
+            state.customAgentSources as Array<Record<string, unknown>>
+          ).map((source) => ({
+            ...source,
+            autoAddNewAgents:
+              typeof source.autoAddNewAgents === 'boolean'
+                ? source.autoAddNewAgents
+                : true,
+            excludedAgentNames: Array.isArray(source.excludedAgentNames)
+              ? source.excludedAgentNames
+              : [],
+            selectedAgentNames: Array.isArray(source.selectedAgentNames)
+              ? source.selectedAgentNames
+              : [],
+          }));
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1382,6 +1412,25 @@ export const useSettingsStore = create<SettingsStore>()(
           // (e.g. a partial write) so downstream `.map`/`.find` never throw.
           if (!Array.isArray(state.customAgentSources)) {
             state.customAgentSources = [];
+          } else {
+            // Per-element selection fields must be well-formed too — a partial
+            // write missing them must behave as "auto-add all", never hide
+            // agents or crash the filter.
+            state.customAgentSources = state.customAgentSources.map(
+              (source) => ({
+                ...source,
+                autoAddNewAgents:
+                  typeof source.autoAddNewAgents === 'boolean'
+                    ? source.autoAddNewAgents
+                    : true,
+                excludedAgentNames: Array.isArray(source.excludedAgentNames)
+                  ? source.excludedAgentNames
+                  : [],
+                selectedAgentNames: Array.isArray(source.selectedAgentNames)
+                  ? source.selectedAgentNames
+                  : [],
+              }),
+            );
           }
 
           // Defensive: mcpServers must always be an array (same rationale).
