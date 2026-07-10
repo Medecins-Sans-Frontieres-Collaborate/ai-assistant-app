@@ -87,6 +87,10 @@ export default [
         FileList: 'readonly',
         FileReader: 'readonly',
         DataTransfer: 'readonly',
+        Image: 'readonly',
+        HTMLImageElement: 'readonly',
+        ImageBitmap: 'readonly',
+        CanvasImageSource: 'readonly',
         MediaStream: 'readonly',
         MediaRecorder: 'readonly',
         MediaRecorderOptions: 'readonly',
@@ -122,6 +126,7 @@ export default [
         atob: 'readonly',
         queueMicrotask: 'readonly',
         XMLHttpRequest: 'readonly',
+        createImageBitmap: 'readonly',
         // Node.js globals
         global: 'readonly',
         process: 'readonly',
