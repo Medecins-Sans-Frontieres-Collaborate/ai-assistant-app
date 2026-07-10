@@ -64,6 +64,16 @@ Additional rules in `granularity.ts` / `MapView.tsx`:
 - A toggleable legend (toolbar → Legend) explains all three channels; the
   channel budget is intentionally full — do **not** add a fourth encoded
   dimension to the markers.
+- **Interaction hierarchy**: area extent circles are **non-interactive**
+  and render in a dedicated pane below the overlay pane. With the shared
+  canvas renderer, click priority follows draw order, and every
+  incremental ingest appends its new circles after previously-mounted
+  point markers — a region added later would swallow clicks on every
+  point inside it. Backdrop takes no pointer events; points always win.
+  A region's full details are read in the sidebar list instead, whose
+  rows expand (accordion, one at a time) to show the complete
+  description, confidence reasoning, and parent/country — the list is
+  the detail surface, the map popup is for points.
 
 ## Connections
 
