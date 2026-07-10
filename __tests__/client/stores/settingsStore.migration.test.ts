@@ -21,7 +21,7 @@ describe('settingsStore migration (v17 → v18)', () => {
     expect(result.customAgentSources).toEqual([]);
   });
 
-  it('preserves existing customAgentSources on a current-version store', () => {
+  it('preserves existing customAgentSources on a v18 store (v29 adds selection defaults)', () => {
     const sources = [
       {
         id: 's1',
@@ -37,7 +37,14 @@ describe('settingsStore migration (v17 → v18)', () => {
 
     const result = migrate(persisted, 18) as Record<string, unknown>;
 
-    expect(result.customAgentSources).toEqual(sources);
+    expect(result.customAgentSources).toEqual([
+      {
+        ...sources[0],
+        autoAddNewAgents: true,
+        excludedAgentNames: [],
+        selectedAgentNames: [],
+      },
+    ]);
   });
 });
 
@@ -287,5 +294,61 @@ describe('settingsStore migration (v22 → v23)', () => {
     ) as Record<string, unknown>;
 
     expect(result.mcpServers).toEqual(servers);
+  });
+});
+
+/**
+ * v29 adds per-source agent selection to customAgentSources. Defaults must
+ * reproduce the pre-selection behavior exactly: auto-add everything,
+ * exclude nothing.
+ */
+describe('settingsStore migration (v28 → v29)', () => {
+  const migrate = useSettingsStore.persist.getOptions().migrate!;
+
+  it('seeds selection defaults on pre-existing sources when migrating from v28', () => {
+    const persisted = {
+      customAgentSources: [
+        {
+          id: 's1',
+          name: 'My Project',
+          resourcePath: '/subs/x',
+          createdAt: 'now',
+        },
+      ],
+    } as Record<string, unknown>;
+
+    const result = migrate(persisted, 28) as Record<string, unknown>;
+
+    expect(result.customAgentSources).toEqual([
+      {
+        id: 's1',
+        name: 'My Project',
+        resourcePath: '/subs/x',
+        createdAt: 'now',
+        autoAddNewAgents: true,
+        excludedAgentNames: [],
+        selectedAgentNames: [],
+      },
+    ]);
+  });
+
+  it('preserves explicit selection state on a current-version store', () => {
+    const sources = [
+      {
+        id: 's1',
+        name: 'My Project',
+        resourcePath: '/subs/x',
+        createdAt: 'now',
+        autoAddNewAgents: false,
+        excludedAgentNames: ['old-agent'],
+        selectedAgentNames: ['picked-agent'],
+      },
+    ];
+    const result = migrate(
+      { customAgentSources: sources } as Record<string, unknown>,
+      29,
+    ) as Record<string, unknown>;
+
+    expect(result.customAgentSources).toEqual(sources);
   });
 });
