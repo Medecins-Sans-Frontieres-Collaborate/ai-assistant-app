@@ -30,6 +30,16 @@ export function columnsToRowSchema(
 ): Record<string, unknown> {
   const properties: Record<string, unknown> = {};
   for (const column of columns) {
+    // Columns are request-shaped and become property KEYS here. The routes'
+    // id format checks don't exclude prototype-polluting names ("__proto__"
+    // is all lowercase/underscores), so block them explicitly.
+    if (
+      column.id === '__proto__' ||
+      column.id === 'constructor' ||
+      column.id === 'prototype'
+    ) {
+      throw new Error('Invalid column id');
+    }
     properties[column.id] = {
       ...columnValueSchema(column),
       description: column.name,
