@@ -57,6 +57,40 @@ interface CoverInterval {
   endMs: number;
 }
 
+/* ------------------------------------------------------------------ */
+/* Date-range filtering                                                */
+/* ------------------------------------------------------------------ */
+
+/** Half-open bounds: null = unbounded on that side. */
+export interface DateRange {
+  fromMs: number | null;
+  toMs: number | null;
+}
+
+export function isDateRangeActive(range: DateRange | null): boolean {
+  return !!range && (range.fromMs !== null || range.toMs !== null);
+}
+
+/**
+ * Does a feature belong to a date range? A dated feature matches when
+ * its coverage interval (precision-widened; ongoing extends to now)
+ * INTERSECTS the range — the same interval the timeline uses, so the
+ * filter and the time-lapse always agree. Undated features are the
+ * caller's policy decision (the workspace follows its "show undated"
+ * toggle rather than silently dropping them).
+ */
+export function featureDateRangeVerdict(
+  feature: MapFeature,
+  range: DateRange,
+  nowMs: number = Date.now(),
+): 'in' | 'out' | 'undated' {
+  const interval = featureCoverInterval(feature, nowMs);
+  if (!interval) return 'undated';
+  if (range.fromMs !== null && interval.endMs < range.fromMs) return 'out';
+  if (range.toMs !== null && interval.startMs > range.toMs) return 'out';
+  return 'in';
+}
+
 function featureCoverInterval(
   feature: MapFeature,
   nowMs: number,
