@@ -116,9 +116,9 @@ describe('ModelSelect', () => {
       expect(screen.getByText('GPT').closest('button')).not.toBeNull();
       expect(screen.getByText('GPT Chat').closest('button')).not.toBeNull();
       expect(screen.getByText('DeepSeek').closest('button')).not.toBeNull();
-      // Claude fronts Opus 4.8; Llama fronts Maverick 4 (non-standard
-      // variants keep their label in the tag).
-      expect(screen.getByText('Opus 4.8')).toBeInTheDocument();
+      // Claude fronts the latest Sonnet (family default); Llama fronts
+      // Maverick 4 (non-standard variants keep their label in the tag).
+      expect(screen.getByText('Sonnet 5')).toBeInTheDocument();
       expect(screen.getByText('Maverick 4')).toBeInTheDocument();
     });
 
@@ -608,14 +608,14 @@ describe('ModelSelect', () => {
     it('star toggle on a tree card stars the model in the store', () => {
       render(<ModelSelect />);
 
-      // The DeepSeek family row fronts its featured member (V3.2); the star
-      // acts on that concrete model, not the whole family.
+      // The DeepSeek family row fronts its default (defaultRank 1 =
+      // V4-Flash); the star acts on that concrete model, not the family.
       fireEvent.click(
-        screen.getByRole('button', { name: 'Star DeepSeek-V3.2' }),
+        screen.getByRole('button', { name: 'Star DeepSeek-V4-Flash' }),
       );
 
       expect(useSettingsStore.getState().starredModelIds).toContain(
-        'DeepSeek-V3.2',
+        'DeepSeek-V4-Flash',
       );
     });
 

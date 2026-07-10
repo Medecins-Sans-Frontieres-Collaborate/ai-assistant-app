@@ -322,7 +322,7 @@ describe('ModelSelect - Toggle Functionality', () => {
       const { rerender } = render(<ModelSelect />);
 
       // Switch to another model: the DeepSeek family card selects its
-      // representative (the featured V3.2).
+      // default (defaultRank 1 = V4-Flash).
       const deepseekButton = screen.getByText('DeepSeek').closest('button');
       fireEvent.click(deepseekButton!);
 
@@ -331,7 +331,7 @@ describe('ModelSelect - Toggle Functionality', () => {
           'conv-1',
           expect.objectContaining({
             model: expect.objectContaining({
-              id: OpenAIModelID.DEEPSEEK_V3_2,
+              id: OpenAIModelID.DEEPSEEK_V4_FLASH,
             }),
           }),
         );
