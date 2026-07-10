@@ -105,11 +105,18 @@ function ensureStoreDir(): void {
  *
  * @param jobId - The job ID
  * @returns The full path to the job's JSON file
- * @throws Error if jobId format is invalid
+ * @throws Error if jobId format is invalid or escapes the store directory
  */
 function getJobFilePath(jobId: string): string {
   validateJobId(jobId);
-  return path.join(JOB_STORE_DIR, `${jobId}.json`);
+  // Redundant with the UUID check above, but this resolve + prefix check is
+  // the containment proof static analysis (CodeQL js/path-injection)
+  // recognizes — a regex test alone is not an accepted barrier.
+  const filePath = path.resolve(JOB_STORE_DIR, `${jobId}.json`);
+  if (!filePath.startsWith(JOB_STORE_DIR + path.sep)) {
+    throw new Error('Invalid job ID format');
+  }
+  return filePath;
 }
 
 /**
