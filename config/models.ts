@@ -48,6 +48,27 @@ const NOT_YET_ROLLED_OUT: string[] = [
   OpenAIModelID.CLAUDE_SONNET_4_5,
   OpenAIModelID.DEEPSEEK_V3_2,
   OpenAIModelID.MISTRAL_LARGE_3,
+  // Catalog-only metadata (2026-07-10): known-model entries added ahead of any
+  // deployment so discovery can join them by name instead of synthesizing
+  // unknowns. None are part of the beta/prod static offering yet. grok-* are
+  // absent on purpose — they're isDisabled globally, which gates harder than
+  // this per-ring list.
+  OpenAIModelID.GPT_5_1,
+  OpenAIModelID.GPT_5_1_CHAT,
+  OpenAIModelID.GPT_5_NANO,
+  OpenAIModelID.GPT_4_1_NANO,
+  OpenAIModelID.GPT_4O_MINI,
+  OpenAIModelID.GPT_o4_MINI,
+  OpenAIModelID.GPT_o3_MINI,
+  OpenAIModelID.CLAUDE_FABLE_5,
+  OpenAIModelID.CLAUDE_SONNET_5,
+  OpenAIModelID.CLAUDE_OPUS_4_5,
+  OpenAIModelID.MISTRAL_MEDIUM_3,
+  OpenAIModelID.MISTRAL_SMALL_3_2,
+  OpenAIModelID.MINISTRAL_3B,
+  OpenAIModelID.DEEPSEEK_R1_0528,
+  OpenAIModelID.LLAMA_4_SCOUT,
+  OpenAIModelID.LLAMA_3_3_70B,
 ];
 
 const modelConfigs: Record<Environment, EnvironmentConfig> = {
