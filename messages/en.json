@@ -2043,6 +2043,9 @@
       "processedIn": "This conversation is processed in the {region} Azure region.",
       "euOnlyNote": "{name} is hosted in the EU Azure region; conversations with it are processed there."
     },
+    "variant": {
+      "label": "Variant"
+    },
     "version": {
       "label": "Version"
     },
