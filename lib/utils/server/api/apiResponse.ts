@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 /**
  * Standard API response utilities
  * Provides consistent response formats across all API routes
@@ -167,7 +169,9 @@ export function handleApiError(
   error: unknown,
   defaultMessage: string = 'An unexpected error occurred',
 ): NextResponse<ApiErrorResponse> {
-  console.error('API Error:', error);
+  // Error messages often embed request-provided strings — collapse to one
+  // line so they can't forge extra log entries (CWE-117).
+  console.error('API Error:', sanitizeForLog(error));
 
   if (error instanceof Error) {
     // HTTP-error-shaped Errors carry status under `.status` or `.statusCode`

@@ -1,5 +1,7 @@
 import { Session } from 'next-auth';
 
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
@@ -74,7 +76,7 @@ export class AgentChatService {
           const { searchQuery, model, user } = request;
 
           console.log(
-            `[AgentChatService] Executing web search for query: "${searchQuery}"`,
+            `[AgentChatService] Executing web search for query: "${sanitizeForLog(searchQuery)}"`,
           );
 
           // Force a grounded search; a bare query lets the agent answer from
