@@ -13,6 +13,7 @@ import { HostedRegionSection } from './HostedRegionSection';
 import { ModelHeader } from './ModelHeader';
 import { RecentSourcesSection } from './RecentSourcesSection';
 import { SearchModeSection } from './SearchModeSection';
+import { VariantSection } from './VariantSection';
 import { VersionSection } from './VersionSection';
 
 import { CustomAgent } from '@/client/stores/settingsStore';
@@ -120,12 +121,20 @@ export const ModelDetailsPanel: FC<ModelDetailsPanelProps> = ({
         />
       )}
 
-      {/* Version switcher for series models (list shows one row per series) */}
+      {/* Variant + version switchers for family models (list shows one row
+          per family; variant = size/tier axis, version chips follow the
+          active variant) */}
       {!isCustomAgent && !organizationAgent && onSelectVersion && (
-        <VersionSection
-          selectedModel={selectedModel}
-          onSelectVersion={onSelectVersion}
-        />
+        <>
+          <VariantSection
+            selectedModel={selectedModel}
+            onSelectVariant={onSelectVersion}
+          />
+          <VersionSection
+            selectedModel={selectedModel}
+            onSelectVersion={onSelectVersion}
+          />
+        </>
       )}
 
       {/* Hosting-region choice for base models (US users, dual-hosted) */}
