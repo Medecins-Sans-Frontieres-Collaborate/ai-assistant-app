@@ -102,6 +102,21 @@ export interface OpenAIModel {
   variant?: string;
   /** Display label of the variant segment (e.g. "Mini", "Opus", "Reasoning"). Same value on every member of the variant. */
   variantLabel?: string;
+  /**
+   * Display position of this model's variant segment within its family row
+   * (1 = first). Same value on every member of the variant; encodes the
+   * capability hierarchy (e.g. Opus 1, Sonnet 2, Haiku 3). Variants without
+   * a rank sort after ranked ones, in order of appearance.
+   */
+  variantRank?: number;
+  /**
+   * Family-default preference: when nothing in the family is selected, the
+   * row fronts (and selects) the AVAILABLE model with the LOWEST rank;
+   * same-rank ties go to the newest version, so "rank 1 on every Sonnet"
+   * means "latest available Sonnet" without per-version upkeep. Unranked
+   * members are only faced via the featured/newest fallbacks.
+   */
+  defaultRank?: number;
 
   /**
    * Azure Foundry lifecycle stage of the underlying model version, mirrored
@@ -192,8 +207,11 @@ export enum OpenAIModelID {
 // single source of truth in config/models.json and discovered models can opt in
 // via metadata without editing an enum here.
 
-// Fallback model ID
-export const fallbackModelID = OpenAIModelID.GPT_5_2_CHAT;
+// Last-resort fallback model id, used when no default can be resolved. Must
+// be a standard-variant GPT that is enabled in EVERY ring (the dynamic
+// default in config/models.ts getDefaultModel() is preferred everywhere a
+// ring-aware answer is possible).
+export const fallbackModelID = OpenAIModelID.GPT_5_2;
 
 /**
  * Default display order for models in the model selection UI.
@@ -314,6 +332,8 @@ const openAIModelSchema = z.object({
   versionLabel: z.string().optional(),
   variant: z.string().optional(),
   variantLabel: z.string().optional(),
+  variantRank: z.number().optional(),
+  defaultRank: z.number().optional(),
   reasoningEffort: z.enum(['minimal', 'low', 'medium', 'high']).optional(),
   supportsReasoningEffort: z.boolean().optional(),
   supportsMinimalReasoning: z.boolean().optional(),
