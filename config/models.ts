@@ -2,12 +2,20 @@
  * Environment-specific model configurations
  * Defines default model, fallback chain, and model availability per environment
  */
-import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+import { versionRank } from '@/lib/utils/app/modelSeries';
+
+import {
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+  fallbackModelID,
+} from '@/types/openai';
 
 export type Environment = 'localhost' | 'dev' | 'beta' | 'prod';
 
 export interface EnvironmentConfig {
-  defaultModel: string;
+  /** Explicit default-model override; when absent the default is DYNAMIC — the latest standard-variant GPT visible in this ring (see getDefaultModel). */
+  defaultModel?: string;
   fallbackChain?: string[]; // Error-fallback order; defaults to DEFAULT_FALLBACK_CHAIN
   disabledModels?: string[]; // Models that should not be available in this environment
 }
@@ -78,22 +86,18 @@ const NOT_YET_ROLLED_OUT: string[] = [
 
 const modelConfigs: Record<Environment, EnvironmentConfig> = {
   localhost: {
-    defaultModel: 'gpt-5.2-chat',
-    // All models available in localhost
+    // All models available in localhost; default resolves dynamically.
   },
   dev: {
-    defaultModel: 'gpt-5.2-chat',
-    // All models available in dev
+    // All models available in dev; default resolves dynamically.
   },
   beta: {
-    defaultModel: 'gpt-5.2-chat',
     // Beta is its own visibility ring (shares a Foundry instance with prod) so a
     // model can be gated in beta-only without touching prod. Add ids here to
     // hide an in-test model from prod while keeping it visible in beta.
     disabledModels: [...NOT_YET_ROLLED_OUT],
   },
   prod: {
-    defaultModel: 'gpt-5.2-chat',
     disabledModels: [...NOT_YET_ROLLED_OUT],
   },
 };
@@ -135,10 +139,26 @@ export function getModelConfig(): EnvironmentConfig {
 }
 
 /**
- * Gets the default model for the current environment
+ * Gets the default model for the current environment.
+ *
+ * Unless the ring config sets an explicit `defaultModel` override, the
+ * default is DYNAMIC: the latest (highest versionRank) standard-variant GPT
+ * model that is enabled in this ring. New GPT releases become the default
+ * by being added to the catalog and un-gated — no default bump needed.
  */
 export function getDefaultModel(): string {
-  return getModelConfig().defaultModel;
+  const override = getModelConfig().defaultModel;
+  if (override) return override;
+
+  let latest: OpenAIModel | undefined;
+  for (const model of Object.values(OpenAIModels)) {
+    if (model.series !== 'gpt' || model.variant !== 'standard') continue;
+    if (model.isDisabled || isModelDisabled(model.id)) continue;
+    if (!latest || versionRank(model) > versionRank(latest)) {
+      latest = model;
+    }
+  }
+  return latest?.id ?? fallbackModelID;
 }
 
 /**
