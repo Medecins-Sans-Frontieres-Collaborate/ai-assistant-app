@@ -38,7 +38,19 @@ vi.mock('@/lib/services/auth/OfficeResolver', () => ({
 }));
 
 const mockIsModelDisabled = vi.hoisted(() => vi.fn((_id: string) => false));
-vi.mock('@/config/models', () => ({ isModelDisabled: mockIsModelDisabled }));
+vi.mock('@/config/models', async () => {
+  const { OpenAIModels } = await import('@/types/openai');
+  return {
+    isModelDisabled: mockIsModelDisabled,
+    getCurrentEnvironment: () => 'prod',
+    // Mirror the real helper's shape against the mockable kill switch, so
+    // static-mode assertions stay meaningful.
+    getStaticModelList: () =>
+      Object.values(OpenAIModels).filter(
+        (m) => !m.isDisabled && !mockIsModelDisabled(m.id),
+      ),
+  };
+});
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const REGION_PATH =
