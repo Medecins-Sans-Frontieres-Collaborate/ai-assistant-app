@@ -119,6 +119,13 @@ export enum OpenAIModelID {
   GPT_5_CHAT = 'gpt-5-chat',
   GPT_4O = 'gpt-4o',
   GPT_4_1_MINI = 'gpt-4.1-mini',
+  GPT_5_1 = 'gpt-5.1',
+  GPT_5_1_CHAT = 'gpt-5.1-chat',
+  GPT_5_NANO = 'gpt-5-nano',
+  GPT_4_1_NANO = 'gpt-4.1-nano',
+  GPT_4O_MINI = 'gpt-4o-mini',
+  GPT_o4_MINI = 'o4-mini',
+  GPT_o3_MINI = 'o3-mini',
   // Anthropic Claude models (via Azure AI Foundry)
   CLAUDE_OPUS_4_6 = 'claude-opus-4-6',
   CLAUDE_SONNET_4_6 = 'claude-sonnet-4-6',
@@ -126,13 +133,24 @@ export enum OpenAIModelID {
   CLAUDE_HAIKU_4_5 = 'claude-haiku-4-5',
   CLAUDE_OPUS_4_8 = 'claude-opus-4-8',
   CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5',
+  CLAUDE_FABLE_5 = 'claude-fable-5',
+  CLAUDE_SONNET_5 = 'claude-sonnet-5',
+  CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
   // Other providers
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
+  LLAMA_4_SCOUT = 'Llama-4-Scout-17B-16E-Instruct',
+  LLAMA_3_3_70B = 'Llama-3.3-70B-Instruct',
   DEEPSEEK_R1 = 'DeepSeek-R1',
+  DEEPSEEK_R1_0528 = 'DeepSeek-R1-0528',
   DEEPSEEK_V3_1 = 'DeepSeek-V3.1',
   DEEPSEEK_V3_2 = 'DeepSeek-V3.2',
   MISTRAL_LARGE_3 = 'Mistral-Large-3',
+  MISTRAL_MEDIUM_3 = 'Mistral-Medium-3',
+  MISTRAL_SMALL_3_2 = 'Mistral-Small-3.2',
+  MINISTRAL_3B = 'Ministral-3B',
   GROK_3 = 'grok-3',
+  GROK_4 = 'grok-4',
+  GROK_3_MINI = 'grok-3-mini',
 }
 
 // OpenAIVisionModelID is derived from the `supportsVision` metadata flag at the
@@ -156,8 +174,10 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.GPT_5_2, // "GPT" series row
   OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" series row
   OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude Opus" series row
+  OpenAIModelID.CLAUDE_FABLE_5,
   OpenAIModelID.MISTRAL_LARGE_3,
-  OpenAIModelID.CLAUDE_SONNET_4_6, // "Claude Sonnet" series row
+  OpenAIModelID.CLAUDE_SONNET_5, // "Claude Sonnet" series row…
+  OpenAIModelID.CLAUDE_SONNET_4_6, // …anchor stays here where 5 is ring-gated
   OpenAIModelID.DEEPSEEK_R1,
   OpenAIModelID.DEEPSEEK_V3_2, // "DeepSeek V3" series row
   OpenAIModelID.GPT_o3,
@@ -165,21 +185,40 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.CLAUDE_HAIKU_4_5,
   OpenAIModelID.LLAMA_4_MAVERICK,
   OpenAIModelID.GPT_5_4_NANO,
+  OpenAIModelID.GPT_o4_MINI, // "o Mini" series row
   // Non-representative series versions: they surface as chips in the details
   // panel rather than list rows, so position below only breaks ties (usage
-  // mode) and orders the flattened edit-order list.
+  // mode) and orders the flattened edit-order list. Version recency within a
+  // series = position here (newer first).
   OpenAIModelID.GPT_5_4,
   OpenAIModelID.GPT_5_3_CHAT,
   OpenAIModelID.GPT_4_1,
+  OpenAIModelID.GPT_5_1,
+  OpenAIModelID.GPT_5_1_CHAT,
   OpenAIModelID.GPT_5,
   OpenAIModelID.GPT_5_CHAT,
   OpenAIModelID.GPT_4O,
   OpenAIModelID.GPT_4_1_MINI,
+  OpenAIModelID.GPT_4O_MINI,
+  OpenAIModelID.GPT_5_NANO,
+  OpenAIModelID.GPT_4_1_NANO,
+  OpenAIModelID.GPT_o3_MINI,
   OpenAIModelID.CLAUDE_OPUS_4_6,
   OpenAIModelID.CLAUDE_SONNET_4_5,
+  OpenAIModelID.CLAUDE_OPUS_4_5,
   OpenAIModelID.CLAUDE_OPUS_4_1,
+  // Remaining standalone rows (rank below the curated top section) and
+  // globally disabled models (grok-*), kept for edit-order completeness.
+  OpenAIModelID.MISTRAL_MEDIUM_3,
+  OpenAIModelID.MISTRAL_SMALL_3_2,
+  OpenAIModelID.MINISTRAL_3B,
+  OpenAIModelID.DEEPSEEK_R1_0528,
   OpenAIModelID.DEEPSEEK_V3_1,
+  OpenAIModelID.LLAMA_4_SCOUT,
+  OpenAIModelID.LLAMA_3_3_70B,
+  OpenAIModelID.GROK_4,
   OpenAIModelID.GROK_3,
+  OpenAIModelID.GROK_3_MINI,
 ];
 
 /**
