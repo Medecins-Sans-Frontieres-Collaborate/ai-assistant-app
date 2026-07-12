@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 const mockEnv = vi.hoisted(() => ({
-  NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED: false,
   SHOW_MODELS_WITHOUT_METADATA: false,
   NODE_ENV: 'test',
 }));
@@ -100,7 +99,6 @@ async function body(res: Awaited<ReturnType<typeof GET>>) {
 }
 
 beforeEach(() => {
-  mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = false;
   mockEnv.SHOW_MODELS_WITHOUT_METADATA = false;
   mockAuth.mockResolvedValue({
     user: { id: 'user-123', mail: 'eu.user@msf.org' },
@@ -124,26 +122,17 @@ describe('GET /api/models', () => {
     expect(res.status).toBe(401);
   });
 
-  it('returns the static list (no discovery call) when discovery is disabled', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = false;
-    const { data } = await body(await GET(req()));
-    expect(data.source).toBe('static');
-    expect(mockListDeployedModels).not.toHaveBeenCalled();
-    // Static list excludes isDisabled models (grok-3, claude-opus-4-1).
-    expect(data.models.map((m) => m.id)).toContain('gpt-5.2');
-    expect(data.models.map((m) => m.id)).not.toContain('grok-3');
-  });
-
-  it('falls back to static when no region is configured', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
+  it('falls back to the vetted static list when no region is configured (discovery is always on)', async () => {
     mockGetDiscoveryAccounts.mockReturnValue([]);
     const { data } = await body(await GET(req()));
     expect(data.source).toBe('static-no-region');
     expect(mockListDeployedModels).not.toHaveBeenCalled();
+    // Static list excludes isDisabled models (grok-*).
+    expect(data.models.map((m) => m.id)).toContain('gpt-5.2');
+    expect(data.models.map((m) => m.id)).not.toContain('grok-3');
   });
 
   it('returns discovered ∩ metadata, dropping undeployed-but-hardcoded models (EU drift fix)', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     // EU: gpt-5.2 + o3 deployed; claude-* NOT deployed.
     mockListDeployedModels.mockResolvedValue([
       deployed('gpt-5.2', 'OpenAI'),
@@ -159,7 +148,6 @@ describe('GET /api/models', () => {
   });
 
   it('unions both regions for dual-account users with hostedIn tags (home first)', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([
       { region: 'US', path: US_PATH },
       { region: 'EU', path: EU_PATH },
@@ -180,7 +168,6 @@ describe('GET /api/models', () => {
   });
 
   it('home region ARM tags win on dual-region name collisions', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([
       { region: 'US', path: US_PATH },
       { region: 'EU', path: EU_PATH },
@@ -198,7 +185,6 @@ describe('GET /api/models', () => {
   });
 
   it('degrades to discovery-partial when the FOREIGN region fails', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([
       { region: 'US', path: US_PATH },
       { region: 'EU', path: EU_PATH },
@@ -216,7 +202,6 @@ describe('GET /api/models', () => {
   });
 
   it('falls back to STATIC when the HOME region fails (never foreign-only)', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([
       { region: 'US', path: US_PATH },
       { region: 'EU', path: EU_PATH },
@@ -234,7 +219,6 @@ describe('GET /api/models', () => {
   });
 
   it('hides unknown deployed models unless SHOW_MODELS_WITHOUT_METADATA', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockListDeployedModels.mockResolvedValue([
       deployed('gpt-5.2', 'OpenAI'),
       deployed('Unknown-New-Model', 'Acme AI'),
@@ -249,7 +233,6 @@ describe('GET /api/models', () => {
   });
 
   it('applies the ring gate server-side (prod-hidden model never reaches client)', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockListDeployedModels.mockResolvedValue([
       deployed('gpt-5.2', 'OpenAI'),
       deployed('o3', 'OpenAI'),
@@ -261,7 +244,6 @@ describe('GET /api/models', () => {
   });
 
   it('falls back to static on discovery failure', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockListDeployedModels.mockRejectedValue(new Error('ARM 403'));
     const { data } = await body(await GET(req()));
     expect(data.source).toBe('fallback');
@@ -269,7 +251,6 @@ describe('GET /api/models', () => {
   });
 
   it('busts only the caller region cache when ?refresh is present', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockListDeployedModels.mockResolvedValue([deployed('gpt-5.2', 'OpenAI')]);
     await GET(req('http://localhost/api/models?refresh=1'));
     expect(mockClearCache).toHaveBeenCalledTimes(1);
@@ -278,7 +259,6 @@ describe('GET /api/models', () => {
   });
 
   it('busts every account the caller discovers against on ?refresh (dual-region)', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([
       { region: 'US', path: US_PATH },
       { region: 'EU', path: EU_PATH },
@@ -291,7 +271,6 @@ describe('GET /api/models', () => {
   });
 
   it('falls back to static when the app identity yields no ARM token', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetToken.mockResolvedValue({ token: undefined });
     const { data } = await body(await GET(req()));
     expect(data.source).toBe('fallback');
@@ -300,7 +279,6 @@ describe('GET /api/models', () => {
   });
 
   it('warns with a non-email user identifier when discovery is on but no region', async () => {
-    mockEnv.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED = true;
     mockGetDiscoveryAccounts.mockReturnValue([]);
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const { data } = await body(await GET(req()));

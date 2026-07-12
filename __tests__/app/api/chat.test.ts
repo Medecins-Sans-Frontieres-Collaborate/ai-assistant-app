@@ -508,6 +508,33 @@ describe('/api/chat - Integration Tests', () => {
     });
   });
 
+  describe('Custom-source (byom) model failures', () => {
+    it('surfaces MODEL_UNAVAILABLE pipeline errors as HTTP 409', async () => {
+      // A byom id with no modelSourcePath cannot be resolved: the credential
+      // middleware fails closed with a critical MODEL_UNAVAILABLE instead of
+      // letting the request fall through to standard routing. The route must
+      // map that to 409 (mirroring the agent-unavailable pattern) so the
+      // client can offer its re-select UX rather than a generic 500.
+      const request = createChatRequest({
+        model: { id: 'byom-abc123-my-gpt', name: 'my-gpt', tokenLimit: 16000 },
+        messages: [
+          {
+            role: 'user',
+            content: 'Hello',
+            messageType: MessageType.TEXT,
+          },
+        ],
+        stream: false,
+      });
+
+      const response = await POST(request);
+
+      expect(response.status).toBe(409);
+      const data = await parseJsonResponse(response);
+      expect(data.code).toBe(ErrorCode.MODEL_UNAVAILABLE);
+    });
+  });
+
   describe('Error Handling', () => {
     it('should handle and format errors properly', async () => {
       // Mock handler to throw an error
