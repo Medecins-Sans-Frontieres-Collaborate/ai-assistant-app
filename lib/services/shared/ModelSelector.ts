@@ -39,7 +39,17 @@ export class ModelSelector {
     const needsToHandleImages = isImageConversation(messages);
     const isCustomAgent = isCustomAgentModel(requestedModel.id);
     const isOrganizationAgent = isOrganizationAgentModel(requestedModel.id);
-    const isValidModel = checkIsModelValid(requestedModel.id, OpenAIModelID);
+    // Custom-source (byom) models skip enum validation like agents do: the id
+    // is a synthetic `byom-<hash>-<deployment>` and MUST NOT be swapped to
+    // DEFAULT_MODEL. The client-supplied config is only a placeholder — the
+    // credential middleware re-resolves the real config server-side under the
+    // user's own ARM RBAC.
+    const isCustomSourceModel =
+      typeof requestedModel.id === 'string' &&
+      requestedModel.id.startsWith('byom-');
+    const isValidModel =
+      isCustomSourceModel ||
+      checkIsModelValid(requestedModel.id, OpenAIModelID);
     const isImageModel = checkIsModelValid(
       requestedModel.id,
       OpenAIVisionModelID,
@@ -53,7 +63,8 @@ export class ModelSelector {
       needsToHandleImages &&
       !isImageModel &&
       !isCustomAgent &&
-      !isOrganizationAgent
+      !isOrganizationAgent &&
+      !isCustomSourceModel
     ) {
       modelId = 'gpt-5';
       console.log(
@@ -69,10 +80,13 @@ export class ModelSelector {
     }
 
     // Get model configuration
-    // For custom/organization agents, use the model config passed in (which already has the full config)
+    // For custom/organization agents and custom-source (byom) models, use the
+    // model config passed in (agents already carry full config; byom configs
+    // are replaced with the server-resolved config by the credential middleware)
     // For standard models, look up in OpenAIModels
     const modelConfig =
-      (isCustomAgent || isOrganizationAgent) && modelId === requestedModel.id
+      (isCustomAgent || isOrganizationAgent || isCustomSourceModel) &&
+      modelId === requestedModel.id
         ? requestedModel
         : (Object.values(OpenAIModels).find((m) => m.id === modelId) as
             | OpenAIModel
