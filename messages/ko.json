@@ -1358,6 +1358,15 @@
     "reasoningModel": "추론 모델: 답변 전에 단계별로 사고합니다. 느리지만 복잡한 문제에 더 적합합니다.",
     "variant": {
       "label": "변형"
+    },
+    "deployment": {
+      "title": "배포",
+      "source": "소스",
+      "account": "계정",
+      "location": "위치",
+      "deployment": "배포",
+      "modelVersion": "모델 버전",
+      "publisher": "게시자"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "경량화된 xAI 모델입니다. 빠르고 저렴하게 간단한 질문과 캐주얼 챗에 적합합니다."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI의 GPT-5.6 3종 중 주력 모델입니다. 글쓰기, 연구, 코딩, 복잡한 문제 해결에 가장 뛰어납니다."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI의 GPT-5.6 3종 중 균형 잡힌 모델입니다. 일상적인 글쓰기, 분석, 코딩에 적합하며 빠르게 응답합니다."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI의 GPT-5.6 3종 중 경량･고속 모델입니다. 빠른 질문과 간단한 작업을 저렴하게 처리합니다."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral의 최신 중형 모델입니다. 일상 업무에 적합한 기능과 속도의 균형을 갖춘 유럽산 대안입니다."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "이 창을 닫고 앱으로 돌아가셔도 됩니다.",
       "closeButton": "창 닫기"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "모델 소스 연결",
+    "addAnother": "모델 소스 추가",
+    "edit": "편집",
+    "disconnect": "{name} 연결 해제",
+    "disconnectedToast": "{name} 연결이 해제되었습니다",
+    "modelCountLabel": "모델 {count}개",
+    "loadingModels": "모델 불러오는 중...",
+    "noModelsAvailable": "이 소스에서 이용 가능한 모델이 없습니다",
+    "sourceUnreachable": "이 소스에 접근할 수 없습니다. 접근 권한이 변경되었거나 서비스가 일시적으로 사용할 수 없을 수 있습니다.",
+    "retry": "다시 시도",
+    "connectFoundryAccount": "Microsoft Azure Foundry 계정 연결",
+    "connectFoundryDescription": "접근 권한이 있는 Azure Foundry 계정의 모델 배포를 검색할 수 있습니다. 본인의 Azure 권한으로 모든 요청이 인증되며, 앱의 모델 제한은 적용되지 않습니다.",
+    "selectModelsDescription": "이 계정에서 모델 선택기에 표시할 배포 모델을 선택하세요.",
+    "editConnection": "연결 편집",
+    "nameLabel": "이름",
+    "namePlaceholder": "예: 우리팀 샌드박스",
+    "nameRequired": "소스 이름은 필수입니다",
+    "foundryAccountLabel": "Foundry 계정",
+    "enterManually": "직접 입력",
+    "browseResources": "리소스 탐색",
+    "subscriptionIdLabel": "구독 ID",
+    "resourceGroupLabel": "리소스 그룹",
+    "accountNameLabel": "계정 이름",
+    "subscriptionRequired": "구독을 선택하세요",
+    "accountRequired": "Foundry 계정을 선택하세요",
+    "accountSelectionRequired": "목록에서 계정을 선택하세요.",
+    "selectAllRequired": "구독, 리소스 그룹, 계정을 모두 선택하세요.",
+    "connectionFailed": "이 계정에 연결할 수 없습니다. 정보가 올바른지, 접근 권한이 있는지 확인하세요.",
+    "duplicateSource": "이 계정은 이미 \"{name}\"(으)로 연결되어 있습니다.",
+    "connectionSuccessModels": "연결됨 — 모델 배포 {count}개 발견",
+    "connectionSuccessEmpty": "연결되었지만 이 계정에는 모델 배포가 없습니다.",
+    "checkingConnection": "연결 확인 중...",
+    "next": "다음",
+    "back": "이전",
+    "cancel": "취소",
+    "connect": "연결",
+    "save": "저장",
+    "scanningResources": "Azure 구독을 스캔하는 중...",
+    "discoveryPartialWarning": "{count, plural, one {#개 구독} other {#개 구독들}}을(를) 스캔할 수 없습니다. 계정이 누락된 경우 수동 입력을 사용하세요.",
+    "discoveryTruncatedWarning": "스캔해야 할 리소스가 너무 많아 모두 스캔하지 못했습니다. 계정이 누락된 경우 수동 입력을 사용하세요.",
+    "noAccountsDiscovered": "구독에서 Foundry 계정을 찾을 수 없습니다. 경로를 알고 있다면 수동 입력을 사용하세요.",
+    "retryScan": "다시 스캔",
+    "searchAccountsPlaceholder": "계정 검색...",
+    "modelsSelectedCount": "{total}개 중 {selected}개 모델 선택됨",
+    "selectAll": "모두 선택",
+    "deselectAll": "모두 선택 취소",
+    "autoAddLabel": "새 모델 자동 추가",
+    "autoAddDescription": "이 계정에 나중에 추가된 모델 배포는 자동으로 표시됩니다. 선택하지 않은 모델은 제외된 상태로 유지됩니다."
   }
 }

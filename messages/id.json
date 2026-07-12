@@ -1449,6 +1449,15 @@
     "reasoningModel": "Model penalaran: berpikir langkah demi langkah sebelum menjawab. Lebih lambat, namun lebih baik untuk masalah yang sulit.",
     "variant": {
       "label": "Varian"
+    },
+    "deployment": {
+      "title": "Deployment",
+      "source": "Sumber",
+      "account": "Akun",
+      "location": "Lokasi",
+      "deployment": "Deployment",
+      "modelVersion": "Versi model",
+      "publisher": "Penerbit"
     }
   },
   "models": {
@@ -1668,6 +1677,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Model xAI yang lebih ringan. Lebih cepat dan ekonomis untuk pertanyaan singkat dan percakapan santai."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Model unggulan dari trio GPT-5.6 OpenAI. Terbaik untuk penulisan, riset, pemrograman, dan pemecahan masalah kompleks."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Tingkat seimbang dari trio GPT-5.6 OpenAI. Cocok untuk penulisan sehari-hari, analisis, dan pemrograman dengan respons cepat."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Tingkat ringan dan cepat dari trio GPT-5.6 OpenAI. Paling cocok untuk pertanyaan cepat dan tugas sederhana dengan biaya rendah."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Model ukuran menengah terbaru dari Mistral. Alternatif Eropa yang seimbang antara kemampuan dan kecepatan untuk kebutuhan sehari-hari."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Anda dapat menutup jendela ini dan kembali ke aplikasi.",
       "closeButton": "Tutup jendela"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Hubungkan sumber model",
+    "addAnother": "Tambahkan sumber model lain",
+    "edit": "Edit",
+    "disconnect": "Putuskan {name}",
+    "disconnectedToast": "{name} terputus",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Memuat model...",
+    "noModelsAvailable": "Tidak ada model yang tersedia dari sumber ini",
+    "sourceUnreachable": "Tidak dapat mengakses sumber ini. Akses Anda mungkin telah berubah, atau layanan sedang tidak tersedia sementara.",
+    "retry": "Coba lagi",
+    "connectFoundryAccount": "Hubungkan Akun Microsoft Azure Foundry",
+    "connectFoundryDescription": "Temukan deployment model dari akun Azure Foundry yang Anda miliki aksesnya. Izin Azure Anda sendiri yang mengizinkan setiap permintaan — pembatasan model aplikasi tidak berlaku di sini.",
+    "selectModelsDescription": "Pilih deployment model dari akun ini yang akan ditampilkan di pemilih model Anda.",
+    "editConnection": "Edit Koneksi",
+    "nameLabel": "Nama",
+    "namePlaceholder": "misal: Sandbox Tim Saya",
+    "nameRequired": "Nama sumber wajib diisi",
+    "foundryAccountLabel": "Akun Foundry",
+    "enterManually": "Masukkan secara manual",
+    "browseResources": "Jelajahi resource",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Nama Akun",
+    "subscriptionRequired": "Pilih subscription",
+    "accountRequired": "Pilih akun Foundry",
+    "accountSelectionRequired": "Pilih akun dari daftar.",
+    "selectAllRequired": "Pilih subscription, resource group, dan akun.",
+    "connectionFailed": "Tidak dapat mengakses akun ini. Periksa detailnya sudah benar dan Anda memiliki akses.",
+    "duplicateSource": "Akun ini sudah terhubung sebagai \"{name}\".",
+    "connectionSuccessModels": "Tersambung — ditemukan {count} deployment model",
+    "connectionSuccessEmpty": "Tersambung, namun tidak ada deployment model di akun ini.",
+    "checkingConnection": "Memeriksa koneksi...",
+    "next": "Berikutnya",
+    "back": "Kembali",
+    "cancel": "Batal",
+    "connect": "Hubungkan",
+    "save": "Simpan",
+    "scanningResources": "Memindai langganan Azure Anda...",
+    "discoveryPartialWarning": "{count, plural, one {# langganan} other {# langganan}} tidak dapat dipindai. Gunakan entri manual jika akun Anda tidak ditemukan.",
+    "discoveryTruncatedWarning": "Terdapat terlalu banyak sumber daya untuk dipindai sepenuhnya. Gunakan entri manual jika akun Anda tidak ditemukan.",
+    "noAccountsDiscovered": "Tidak ditemukan akun Foundry di langganan Anda. Gunakan entri manual jika Anda mengetahui path-nya.",
+    "retryScan": "Coba pindai ulang",
+    "searchAccountsPlaceholder": "Cari akun...",
+    "modelsSelectedCount": "{selected} dari {total} model dipilih",
+    "selectAll": "Pilih semua",
+    "deselectAll": "Batalkan semua pilihan",
+    "autoAddLabel": "Tambahkan model baru secara otomatis",
+    "autoAddDescription": "Deployment model yang ditambahkan ke akun ini nantinya akan muncul secara otomatis. Model yang tidak dicentang tetap dikecualikan."
   }
 }

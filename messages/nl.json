@@ -1399,6 +1399,15 @@
     "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen.",
     "variant": {
       "label": "Variant"
+    },
+    "deployment": {
+      "title": "Implementatie",
+      "source": "Bron",
+      "account": "Account",
+      "location": "Locatie",
+      "deployment": "Implementatie",
+      "modelVersion": "Modelversie",
+      "publisher": "Publisher"
     }
   },
   "models": {
@@ -1618,6 +1627,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Een lichter xAI-model. Sneller en goedkoper voor korte vragen en informele chats."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Het vlaggenschip van OpenAI's GPT-5.6 trio. Het sterkst in schrijven, onderzoek, coderen en complexe problemen oplossen."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "De uitgebalanceerde laag van OpenAI's GPT-5.6 trio. Goed voor dagelijks schrijven, analyse en coderen met snelle reacties."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "De lichte, snelle laag van OpenAI's GPT-5.6 trio. Ideaal voor snelle vragen en eenvoudige taken tegen lage kosten."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistrals nieuwste middelgrote model. Een Europees alternatief dat capaciteit en snelheid combineert voor dagelijks werk."
     }
   },
   "transcription": {
@@ -3022,5 +3047,55 @@
       "close": "U kunt dit venster sluiten en terugkeren naar de app.",
       "closeButton": "Venster sluiten"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Verbind een modelbron",
+    "addAnother": "Voeg nog een modelbron toe",
+    "edit": "Bewerken",
+    "disconnect": "{name} ontkoppelen",
+    "disconnectedToast": "{name} ontkoppeld",
+    "modelCountLabel": "{count} modellen",
+    "loadingModels": "Modellen laden...",
+    "noModelsAvailable": "Geen modellen beschikbaar van deze bron",
+    "sourceUnreachable": "Deze bron is niet bereikbaar. Je toegang is mogelijk gewijzigd of de service is tijdelijk niet beschikbaar.",
+    "retry": "Opnieuw proberen",
+    "connectFoundryAccount": "Verbind een Microsoft Azure Foundry-account",
+    "connectFoundryDescription": "Ontdek modelimplementaties vanuit een Azure Foundry-account waar je toegang toe hebt. Jouw eigen Azure rechten autoriseren elke aanvraag — de modelbeperkingen van de app zijn hier niet van toepassing.",
+    "selectModelsDescription": "Kies welke modelimplementaties uit dit account zichtbaar zijn in je modelkiezer.",
+    "editConnection": "Verbinding bewerken",
+    "nameLabel": "Naam",
+    "namePlaceholder": "bijv. Mijn Team Sandbox",
+    "nameRequired": "Bronnaam is vereist",
+    "foundryAccountLabel": "Foundry-account",
+    "enterManually": "Handmatig invoeren",
+    "browseResources": "Bekijk resources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resourcegroep",
+    "accountNameLabel": "Accountnaam",
+    "subscriptionRequired": "Kies een abonnement",
+    "accountRequired": "Kies een Foundry-account",
+    "accountSelectionRequired": "Selecteer een account uit de lijst.",
+    "selectAllRequired": "Selecteer een abonnement, resourcegroep en account.",
+    "connectionFailed": "Dit account is niet bereikbaar. Controleer of de gegevens kloppen en of je toegang hebt.",
+    "duplicateSource": "Dit account is al verbonden als \"{name}\".",
+    "connectionSuccessModels": "Verbonden — {count} modelimplementatie(s) gevonden",
+    "connectionSuccessEmpty": "Verbonden, maar geen modelimplementaties gevonden op dit account.",
+    "checkingConnection": "Verbinding controleren...",
+    "next": "Volgende",
+    "back": "Terug",
+    "cancel": "Annuleren",
+    "connect": "Verbinden",
+    "save": "Opslaan",
+    "scanningResources": "Uw Azure-abonnementen worden gescand...",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# abonnementen}} konden niet worden gescand. Gebruik handmatige invoer als uw account ontbreekt.",
+    "discoveryTruncatedWarning": "Er waren te veel resources om volledig te scannen. Gebruik handmatige invoer als uw account ontbreekt.",
+    "noAccountsDiscovered": "Geen Foundry-accounts gevonden in uw abonnementen. Gebruik handmatige invoer als u het pad weet.",
+    "retryScan": "Opnieuw scannen",
+    "searchAccountsPlaceholder": "Accounts zoeken...",
+    "modelsSelectedCount": "{selected} van {total} modellen geselecteerd",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "autoAddLabel": "Nieuwe modellen automatisch toevoegen",
+    "autoAddDescription": "Modellen die later aan dit account worden toegevoegd, verschijnen automatisch. Niet-geselecteerde modellen blijven uitgesloten."
   }
 }

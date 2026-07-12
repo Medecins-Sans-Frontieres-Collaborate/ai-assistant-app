@@ -1508,6 +1508,15 @@
     "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano.",
     "variant": {
       "label": "Variante"
+    },
+    "deployment": {
+      "title": "Kopesa na misala",
+      "source": "Eteni ya sika",
+      "account": "Compte",
+      "location": "Esika",
+      "deployment": "Kopesa na misala",
+      "modelVersion": "Versio ya modèle",
+      "publisher": "Moteyi"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Model ya xAI ya pete. Ezali mbangu mpe ya ndenge ya mike mpo na mituna ya mbangu mpe masolo ya pamba."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Motó ya seri GPT-5.6 ya OpenAI. Azali makasi mpo na kokoma, bolukiluki, kobongisa code, mpe kosilisa likambo nyonso ya pasi."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Niveau ya kati ya GPT-5.6 ya OpenAI. Emonani malamu mpo na kokoma biloko ya mokolo na mokolo, analyse, mpe kobongisa code na eyano ya mbangu."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Niveau ya pete-pete mpe mbangu ya GPT-5.6 ya OpenAI. Epesaka eyano mbangu mpo na mituna ya pete mpe misala ya pete na ndambu ya motuya."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Modèle ya sika ya kati ya Mistral. Alternatif ya Europe oyo etali makoki mpe mbangu mpo na misala ya mokolo na mokolo."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Okoki kokanga fenêtre oyo mpe kozonga na application.",
       "closeButton": "Kanga fenêtre"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Sangisa eteni ya modèle",
+    "addAnother": "Bakisa eteni mosusu ya modèle",
+    "edit": "Kobongisa",
+    "disconnect": "Ngongola {name}",
+    "disconnectedToast": "Esilaki kosangana {name}",
+    "modelCountLabel": "{count} ba modèle",
+    "loadingModels": "Ba modèle ezali kotia...",
+    "noModelsAvailable": "Ba modèle te ezali na eteni oyo",
+    "sourceUnreachable": "Tokoki te kozwa eteni oyo. Mbala mosusu bakonzi na yo babongolaki to lisalisi esili temporarily.",
+    "retry": "Leka lisusu",
+    "connectFoundryAccount": "Sangisa compte ya Microsoft Azure Foundry",
+    "connectFoundryDescription": "Tala ba kopesa na misala ya modèle uta na compte ya Azure Foundry okoki kozwa. Ba permission na yo moko ya Azure nde ebakisa mokili nyonso ya mokanda – ba restrictions ya modèle ya application ezali te awa.",
+    "selectModelsDescription": "Pona ba kopesa na misala ya modèle uta na compte oyo ekozala na liste ya babongoli ya yo ya modèle.",
+    "editConnection": "Kobongisa lisangani",
+    "nameLabel": "Kombo",
+    "namePlaceholder": "nd. Équipe na ngaï Sandbox",
+    "nameRequired": "Kombo ya eteni esengeli kotondisama",
+    "foundryAccountLabel": "Compte ya Foundry",
+    "enterManually": "Tia yango na loboko",
+    "browseResources": "Tala ba resursi",
+    "subscriptionIdLabel": "ID ya abonnement",
+    "resourceGroupLabel": "Groupe ya resursi",
+    "accountNameLabel": "Kombo ya compte",
+    "subscriptionRequired": "Pona abonnement",
+    "accountRequired": "Pona compte ya Foundry",
+    "accountSelectionRequired": "Pona compte na liste.",
+    "selectAllRequired": "Pona abonnement, groupe ya resursi, mpe compte.",
+    "connectionFailed": "Tokomaki te kozwa compte oyo. Tala soki makambo ezali malamu mpe okoki kozwa yango.",
+    "duplicateSource": "Compte oyo esilaki kosangisama lokola « {name} ».",
+    "connectionSuccessModels": "Esangani — {count} ba kopesa na misala ya modèle ezwami",
+    "connectionSuccessEmpty": "Esangani, kasi ba kopesa na misala ya modèle te na compte oyo.",
+    "checkingConnection": "Kotalela lisangani...",
+    "next": "Sima",
+    "back": "Zonga",
+    "cancel": "Kofanda",
+    "connect": "Kopesa connexion",
+    "save": "Kobombela",
+    "scanningResources": "Toolingi kosala scan ya ba Azure subscriptions na yo...",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# ba abonnement}} ekokaki te kosalema scan. Salela bokoteli ya maboko soki compte na yo ezali te.",
+    "discoveryTruncatedWarning": "Bazangi scan na ndenge ya mobimba mpo biloko ebele. Soki compte na yo ezali te, salela bokoteli ya maboko.",
+    "noAccountsDiscovered": "Compte moko ya Foundry ezwami te na ba subscription na yo. Salela bokoteli ya maboko soki oyebi nzela.",
+    "retryScan": "Kozongela kosala scan",
+    "searchAccountsPlaceholder": "Koluka ba compte...",
+    "modelsSelectedCount": "{selected} ya {total} modèle epɔnami",
+    "selectAll": "Poná nyonso",
+    "deselectAll": "Kolongola ponyama nyonso",
+    "autoAddLabel": "Kobakisa ba modèle ya sika otomatik",
+    "autoAddDescription": "Ba déploiement ya modèle oyo ekobakisama sima, ekomonana otomatik. Ba modèle oyo bapanami te bakovanda libanda."
   }
 }

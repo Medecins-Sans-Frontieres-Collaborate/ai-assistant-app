@@ -1457,6 +1457,15 @@
     "reasoningModel": "Modello di ragionamento: ragiona passo-passo prima di rispondere. Più lento, migliore nei problemi complessi.",
     "variant": {
       "label": "Variante"
+    },
+    "deployment": {
+      "title": "Distribuzione",
+      "source": "Origine",
+      "account": "Account",
+      "location": "Posizione",
+      "deployment": "Distribuzione",
+      "modelVersion": "Versione modello",
+      "publisher": "Editore"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Un modello xAI più leggero. Più veloce ed economico per domande rapide e chat informali."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Il fiore all’occhiello della gamma GPT-5.6 di OpenAI. Il più performante in scrittura, ricerca, programmazione e risoluzione di problemi complessi."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "La versione bilanciata della gamma GPT-5.6 di OpenAI. Adatto per scrittura quotidiana, analisi e programmazione con risposte rapide."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "La versione leggera e veloce della gamma GPT-5.6 di OpenAI. Ideale per domande rapide e compiti semplici a basso costo."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Il nuovo modello di media grandezza di Mistral. Un’alternativa europea che bilancia capacità e velocità per il lavoro quotidiano."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Puoi chiudere questa finestra e tornare all’app.",
       "closeButton": "Chiudi finestra"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Collega un'origine modelli",
+    "addAnother": "Aggiungi un'altra origine modelli",
+    "edit": "Modifica",
+    "disconnect": "Disconnetti {name}",
+    "disconnectedToast": "{name} disconnesso",
+    "modelCountLabel": "{count} modelli",
+    "loadingModels": "Caricamento modelli...",
+    "noModelsAvailable": "Nessun modello disponibile da questa origine",
+    "sourceUnreachable": "Impossibile raggiungere questa origine. Potresti non avere più accesso oppure il servizio potrebbe essere temporaneamente non disponibile.",
+    "retry": "Riprova",
+    "connectFoundryAccount": "Collega un account Microsoft Azure Foundry",
+    "connectFoundryDescription": "Scopri le distribuzioni di modelli da un account Azure Foundry a cui hai accesso. Ogni richiesta è autorizzata con i tuoi permessi Azure: le restrizioni dei modelli dell'app non si applicano qui.",
+    "selectModelsDescription": "Scegli quali distribuzioni di modelli di questo account visualizzare nel selettore modelli.",
+    "editConnection": "Modifica connessione",
+    "nameLabel": "Nome",
+    "namePlaceholder": "es. Sandbox del mio team",
+    "nameRequired": "Il nome dell'origine è obbligatorio",
+    "foundryAccountLabel": "Account Foundry",
+    "enterManually": "Inserisci manualmente",
+    "browseResources": "Sfoglia risorse",
+    "subscriptionIdLabel": "ID sottoscrizione",
+    "resourceGroupLabel": "Gruppo risorse",
+    "accountNameLabel": "Nome account",
+    "subscriptionRequired": "Scegli una sottoscrizione",
+    "accountRequired": "Scegli un account Foundry",
+    "accountSelectionRequired": "Seleziona un account dall'elenco.",
+    "selectAllRequired": "Seleziona una sottoscrizione, un gruppo risorse e un account.",
+    "connectionFailed": "Impossibile raggiungere questo account. Controlla che i dettagli siano corretti e che tu abbia accesso.",
+    "duplicateSource": "Questo account è già collegato come \"{name}\".",
+    "connectionSuccessModels": "Connesso — trovate {count} distribuzioni di modelli",
+    "connectionSuccessEmpty": "Connesso, ma nessuna distribuzione di modelli trovata su questo account.",
+    "checkingConnection": "Verifica connessione...",
+    "next": "Avanti",
+    "back": "Indietro",
+    "cancel": "Annulla",
+    "connect": "Connetti",
+    "save": "Salva",
+    "scanningResources": "Scansione delle sottoscrizioni Azure in corso...",
+    "discoveryPartialWarning": "Non è stato possibile scansionare {count, plural, one {# sottoscrizione} other {# sottoscrizioni}}. Usa l'inserimento manuale se il tuo account non è presente.",
+    "discoveryTruncatedWarning": "Sono state rilevate troppe risorse per completare la scansione. Usa l'inserimento manuale se il tuo account non è presente.",
+    "noAccountsDiscovered": "Nessun account Foundry trovato nelle tue sottoscrizioni. Usa l'inserimento manuale se conosci il percorso.",
+    "retryScan": "Riprova scansione",
+    "searchAccountsPlaceholder": "Cerca account...",
+    "modelsSelectedCount": "{selected} di {total} modelli selezionati",
+    "selectAll": "Seleziona tutto",
+    "deselectAll": "Deseleziona tutto",
+    "autoAddLabel": "Aggiungi nuovi modelli automaticamente",
+    "autoAddDescription": "I deployment dei modelli aggiunti successivamente a questo account verranno visualizzati automaticamente. I modelli deselezionati rimarranno esclusi."
   }
 }

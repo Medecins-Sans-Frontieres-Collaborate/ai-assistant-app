@@ -1508,6 +1508,15 @@
     "reasoningModel": "Modɛli ti kûê tî nzönî : ayeke sôh tî yeke mû kundû kûê tî mû bara. Alingo, mbi yeke bâra mo yângâ na zingo so ayékè nganza.",
     "variant": {
       "label": "Sô"
+    },
+    "deployment": {
+      "title": "Fa mbi resa",
+      "source": "Gbata",
+      "account": "Kɔnta",
+      "location": "Nzönî",
+      "deployment": "Fa mbi resa",
+      "modelVersion": "Version ti model",
+      "publisher": "Mbênî"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Model xAI sô sôkôti. A vîvî na ngâ ti kétésè kekerekete na chat sô sôkôti."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Sü ti OpenAI GPT-5.6. A zia na mo da yeke kûê, bâra, kodê, na kûê ti matungo we na lo."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Ala nge na mbi sokodro na OpenAI GPT-5.6. A yeke mbi lo na bâra ti nzoni, kodê, na kuê pâsê."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Ala ti light, la biani ti OpenAI GPT-5.6. A besto na mbîrini gbaya na bâra mbegue na mbâ  a kêtê."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Model ti Mistral ti sôgbâ ti Europe. A tîngbâ so siriri na mbi kêtê na bâra ti lere na vakê."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Mo so kôfa fënî sô na zamba app sô.",
       "closeButton": "Kôfa fênî"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Bendé gbata ti model",
+    "addAnother": "Kombôrô gbata ti model mô",
+    "edit": "Gbangba",
+    "disconnect": "Kûî lâ {name}",
+    "disconnectedToast": "Kûî lâ {name}",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Model ti yeke sirê...",
+    "noModelsAvailable": "Model ôko mbi ndara sirê na gbata o",
+    "sourceUnreachable": "Lâ gbata o mbi gbagaza. Pe nduhugi mo awè, oua serviço ti aé mbi fa wâli.",
+    "retry": "Kêtê ndou",
+    "connectFoundryAccount": "Bendé kônta ti Microsoft Azure Foundry",
+    "connectFoundryDescription": "Mene mbi resa ti model so na kônta ti Azure Foundry so mo awè. Autorisation ti mo na Azure da ngangu nyönî — limitation ti model na application mbi da yeke.",
+    "selectModelsDescription": "Séléctionné mbi resa ti model so ti kônta o da yeke bâ na model mbi mo.",
+    "editConnection": "Gbangba mbɛnî",
+    "nameLabel": "Nzö",
+    "namePlaceholder": "pôo. Team mbi na Sandbox",
+    "nameRequired": "Nzö ti gbata ti yeke",
+    "foundryAccountLabel": "Kônta ti Foundry",
+    "enterManually": "Sûka lo handa",
+    "browseResources": "Gombi resôrso",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Groupe ti resôrso",
+    "accountNameLabel": "Nzö ti kônta",
+    "subscriptionRequired": "Séléctionné subscription",
+    "accountRequired": "Séléctionné kônta ti Foundry",
+    "accountSelectionRequired": "Sélectionné kônta na lisiti.",
+    "selectAllRequired": "Sélectionné subscription, groupe ti resôrso, na kônta.",
+    "connectionFailed": "Mbi gbagaza kônta o. Vérifier detail na accès mbi mo.",
+    "duplicateSource": "Kônta o da bendé tî \"{name}\".",
+    "connectionSuccessModels": "Bendé — {count} mbi resa ti model yeke",
+    "connectionSuccessEmpty": "Bendé, mbâ mbi resa ti model ôko mbi ndara na kônta o.",
+    "checkingConnection": "Mbi zia mbɛnî...",
+    "next": "Zi",
+    "back": "Sôh",
+    "cancel": "Annulé",
+    "connect": "Ködörö",
+    "save": "Sûka",
+    "scanningResources": "Lêkî mbëtï Azure na mo...",
+    "discoveryPartialWarning": "{count, plural, one {# ngangu-ködörö} other {# ngangu-ködörö}} ayeke lingbi. Ködrö na moto sô mo ayeke.",
+    "discoveryTruncatedWarning": "Mbeni mbëtï so ayeke gbëtï lêkï. Ködrö na moto sô mo ayeke.",
+    "noAccountsDiscovered": "Ayeke Foundry ngangu-ködörö na mbëtï mo. Ködrö na moto sô mo yèkè nzönî path.",
+    "retryScan": "Yèngbi lêkï",
+    "searchAccountsPlaceholder": "Sombodë ngangu-ködörö...",
+    "modelsSelectedCount": "{selected} ba {total} modeli a yi mîndï",
+    "selectAll": "Tânga bängö",
+    "deselectAll": "Gbênga bängö",
+    "autoAddLabel": "Kömbëtï modeli tî mo wala kidö",
+    "autoAddDescription": "Modeli sô a kötä na ngangu-ködörö oko ayeke tî mo wala kidö. Modeli sô a ayeke yângâ ayeke dë."
   }
 }

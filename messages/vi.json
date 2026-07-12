@@ -1488,6 +1488,15 @@
     "reasoningModel": "Mô hình suy luận: suy nghĩ từng bước trước khi trả lời. Chậm hơn, xử lý tốt hơn các vấn đề khó.",
     "variant": {
       "label": "Biến thể"
+    },
+    "deployment": {
+      "title": "Triển khai",
+      "source": "Nguồn",
+      "account": "Tài khoản",
+      "location": "Vị trí",
+      "deployment": "Triển khai",
+      "modelVersion": "Phiên bản mô hình",
+      "publisher": "Nhà phát hành"
     }
   },
   "models": {
@@ -1707,6 +1716,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Mẫu xAI nhẹ hơn. Nhanh và tiết kiệm cho các câu hỏi ngắn và trò chuyện thông thường."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Phiên bản đầu tàu của bộ ba GPT-5.6 của OpenAI. Mạnh nhất trong viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Tầng cân bằng của bộ ba GPT-5.6 của OpenAI. Phù hợp cho công việc viết, phân tích và lập trình hằng ngày với phản hồi nhanh."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Tầng nhẹ và nhanh của bộ ba GPT-5.6 của OpenAI. Tốt nhất cho câu hỏi nhanh và tác vụ đơn giản với chi phí thấp."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mô hình tầm trung mới nhất của Mistral. Lựa chọn thay thế châu Âu cân bằng giữa khả năng và tốc độ cho công việc hằng ngày."
     }
   },
   "searchMode": {
@@ -3053,5 +3078,55 @@
       "close": "Bạn có thể đóng cửa sổ này và quay lại ứng dụng.",
       "closeButton": "Đóng cửa sổ"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Kết nối nguồn mô hình",
+    "addAnother": "Thêm nguồn mô hình khác",
+    "edit": "Chỉnh sửa",
+    "disconnect": "Ngắt kết nối {name}",
+    "disconnectedToast": "Đã ngắt kết nối {name}",
+    "modelCountLabel": "{count} mô hình",
+    "loadingModels": "Đang tải mô hình...",
+    "noModelsAvailable": "Không có mô hình nào từ nguồn này",
+    "sourceUnreachable": "Không thể truy cập nguồn này. Quyền truy cập của bạn có thể đã thay đổi hoặc dịch vụ tạm thời không khả dụng.",
+    "retry": "Thử lại",
+    "connectFoundryAccount": "Kết nối tài khoản Microsoft Azure Foundry",
+    "connectFoundryDescription": "Khám phá các triển khai mô hình từ tài khoản Azure Foundry mà bạn có quyền truy cập. Quyền Azure của bạn xác thực mọi yêu cầu — các giới hạn mô hình của ứng dụng không áp dụng tại đây.",
+    "selectModelsDescription": "Chọn các triển khai mô hình từ tài khoản này sẽ xuất hiện trong bộ chọn mô hình của bạn.",
+    "editConnection": "Chỉnh sửa kết nối",
+    "nameLabel": "Tên",
+    "namePlaceholder": "vd. Không gian thử nghiệm nhóm tôi",
+    "nameRequired": "Cần nhập tên nguồn",
+    "foundryAccountLabel": "Tài khoản Foundry",
+    "enterManually": "Nhập thủ công",
+    "browseResources": "Duyệt tài nguyên",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Nhóm tài nguyên",
+    "accountNameLabel": "Tên tài khoản",
+    "subscriptionRequired": "Chọn một gói đăng ký",
+    "accountRequired": "Chọn tài khoản Foundry",
+    "accountSelectionRequired": "Chọn một tài khoản từ danh sách.",
+    "selectAllRequired": "Chọn gói đăng ký, nhóm tài nguyên và tài khoản.",
+    "connectionFailed": "Không thể truy cập tài khoản này. Vui lòng kiểm tra thông tin chi tiết và đảm bảo bạn có quyền truy cập.",
+    "duplicateSource": "Tài khoản này đã được kết nối với tên \"{name}\".",
+    "connectionSuccessModels": "Đã kết nối — tìm thấy {count} triển khai mô hình",
+    "connectionSuccessEmpty": "Đã kết nối, nhưng không tìm thấy triển khai mô hình nào trong tài khoản này.",
+    "checkingConnection": "Đang kiểm tra kết nối...",
+    "next": "Tiếp tục",
+    "back": "Quay lại",
+    "cancel": "Hủy",
+    "connect": "Kết nối",
+    "save": "Lưu",
+    "scanningResources": "Đang quét các đăng ký Azure của bạn...",
+    "discoveryPartialWarning": "Không thể quét {count, plural, one {# đăng ký} other {# đăng ký}}. Vui lòng nhập thủ công nếu tài khoản của bạn bị thiếu.",
+    "discoveryTruncatedWarning": "Có quá nhiều tài nguyên để quét đầy đủ. Vui lòng nhập thủ công nếu tài khoản của bạn bị thiếu.",
+    "noAccountsDiscovered": "Không tìm thấy tài khoản Foundry nào trong các đăng ký của bạn. Vui lòng nhập thủ công nếu bạn biết đường dẫn.",
+    "retryScan": "Quét lại",
+    "searchAccountsPlaceholder": "Tìm kiếm tài khoản...",
+    "modelsSelectedCount": "Đã chọn {selected} trên tổng số {total} mô hình",
+    "selectAll": "Chọn tất cả",
+    "deselectAll": "Bỏ chọn tất cả",
+    "autoAddLabel": "Tự động thêm mô hình mới",
+    "autoAddDescription": "Các mô hình được triển khai thêm vào tài khoản này sau này sẽ tự động hiển thị. Các mô hình chưa chọn sẽ tiếp tục bị loại trừ."
   }
 }

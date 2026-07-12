@@ -1358,6 +1358,15 @@
     "reasoningModel": "रीजनिंग मॉडल: उत्तर देने से पहले चरण-दर-चरण सोचता है। धीमा है, लेकिन कठिन समस्याओं पर बेहतर करता है।",
     "variant": {
       "label": "प्रकार"
+    },
+    "deployment": {
+      "title": "डिप्लॉयमेंट",
+      "source": "स्रोत",
+      "account": "खाता",
+      "location": "स्थान",
+      "deployment": "डिप्लॉयमेंट",
+      "modelVersion": "मॉडल संस्करण",
+      "publisher": "प्रकाशक"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 मिनी",
       "description": "एक हल्का xAI मॉडल। त्वरित प्रश्न और सामान्य बातचीत के लिए तेज़ और किफायती।"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI के GPT-5.6 ट्रायो का मुख्य मॉडल। लेखन, शोध, कोडिंग और जटिल समस्या समाधान में सबसे श्रेष्ठ।"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI के GPT-5.6 ट्रायो का संतुलित स्तर। रोज़मर्रा के लेखन, विश्लेषण और कोडिंग के लिए उपयुक्त, तीव्र प्रतिक्रिया के साथ।"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI के GPT-5.6 ट्रायो का हल्का, तेज़ स्तर। त्वरित प्रश्नों और सरल कार्यों के लिए उपयुक्त, कम लागत पर।"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral का नया मध्यम आकार का मॉडल। क्षमताओं और गति का संतुलन रखने वाला एक यूरोपीय विकल्प, रोज़मर्रा के कार्यों के लिए।"
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "आप इस विंडो को बंद करके ऐप पर लौट सकते हैं।",
       "closeButton": "विंडो बंद करें"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "मॉडल स्रोत जोड़ें",
+    "addAnother": "एक और मॉडल स्रोत जोड़ें",
+    "edit": "संपादित करें",
+    "disconnect": "डिस्कनेक्ट करें {name}",
+    "disconnectedToast": "डिस्कनेक्ट किया गया {name}",
+    "modelCountLabel": "{count} मॉडल",
+    "loadingModels": "मॉडल लोड हो रहे हैं...",
+    "noModelsAvailable": "इस स्रोत से कोई मॉडल उपलब्ध नहीं है",
+    "sourceUnreachable": "इस स्रोत तक पहुंच नहीं हो सकी। आपकी पहुंच बदल सकती है, या सेवा अस्थायी रूप से अनुपलब्ध हो सकती है।",
+    "retry": "पुनः प्रयास करें",
+    "connectFoundryAccount": "Microsoft Azure Foundry खाता जोड़ें",
+    "connectFoundryDescription": "Azure Foundry खाते से मॉडल डिप्लॉयमेंट देखें जिनकी आपको अनुमति है। आपकी खुद की Azure अनुमतियाँ हर अनुरोध की पुष्टि करती हैं — इस ऐप के मॉडल प्रतिबंध यहाँ लागू नहीं होते।",
+    "selectModelsDescription": "चुनें कि इस खाते से कौन से मॉडल डिप्लॉयमेंट्स आपके मॉडल चयनकर्ता में दिखें।",
+    "editConnection": "कनेक्शन संपादित करें",
+    "nameLabel": "नाम",
+    "namePlaceholder": "उदा. My Team Sandbox",
+    "nameRequired": "स्रोत नाम आवश्यक है",
+    "foundryAccountLabel": "Foundry खाता",
+    "enterManually": "स्वयं दर्ज करें",
+    "browseResources": "संसाधन ब्राउज़ करें",
+    "subscriptionIdLabel": "सब्सक्रिप्शन ID",
+    "resourceGroupLabel": "रिसोर्स ग्रुप",
+    "accountNameLabel": "खाते का नाम",
+    "subscriptionRequired": "एक सब्सक्रिप्शन चुनें",
+    "accountRequired": "Foundry खाता चुनें",
+    "accountSelectionRequired": "सूची से एक खाता चुनें।",
+    "selectAllRequired": "सब्सक्रिप्शन, रिसोर्स ग्रुप, और खाता चुनें।",
+    "connectionFailed": "इस खाते तक पहुंच नहीं हो सकी। विवरण की पुष्टि करें और देखें कि आपको पहुंच है या नहीं।",
+    "duplicateSource": "यह खाता पहले ही \"{name}\" के रूप में जोड़ा गया है।",
+    "connectionSuccessModels": "जुड़ गया — {count} मॉडल डिप्लॉयमेंट मिले",
+    "connectionSuccessEmpty": "जुड़ गया, लेकिन इस खाते में कोई मॉडल डिप्लॉयमेंट नहीं मिला।",
+    "checkingConnection": "कनेक्शन जाँच रहे हैं...",
+    "next": "आगे",
+    "back": "वापस",
+    "cancel": "रद्द करें",
+    "connect": "कनेक्ट करें",
+    "save": "सहेजें",
+    "scanningResources": "आपकी Azure सदस्यताओं की स्कैनिंग हो रही है...",
+    "discoveryPartialWarning": "{count, plural, one {# सदस्यता} other {# सदस्यताएँ}} स्कैन नहीं हो सकीं। यदि आपका खाता नहीं दिख रहा है तो मैन्युअल दर्ज करें।",
+    "discoveryTruncatedWarning": "स्कैन करने के लिए संसाधन बहुत अधिक थे। यदि आपका खाता नहीं दिख रहा है तो मैन्युअल दर्ज करें।",
+    "noAccountsDiscovered": "आपकी सदस्यताओं में कोई Foundry खाता नहीं मिला। यदि आपको पथ पता है तो मैन्युअल दर्ज करें।",
+    "retryScan": "स्कैन पुनः प्रयास करें",
+    "searchAccountsPlaceholder": "खाते खोजें...",
+    "modelsSelectedCount": "{total} में से {selected} मॉडल चुने गए",
+    "selectAll": "सभी चुनें",
+    "deselectAll": "सभी चयन हटाएँ",
+    "autoAddLabel": "नए मॉडल स्वचालित जोड़ें",
+    "autoAddDescription": "इस खाते में बाद में जोड़े गए मॉडल डिप्लॉयमेंट अपने-आप दिखेंगे। अनचेक किए गए मॉडल शामिल नहीं रहेंगे।"
   }
 }

@@ -1508,6 +1508,15 @@
     "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala.",
     "variant": {
       "label": "Nau'i"
+    },
+    "deployment": {
+      "title": "Tura aiki",
+      "source": "Tushe",
+      "account": "Asusu",
+      "location": "Wuri",
+      "deployment": "Tura aiki",
+      "modelVersion": "Nau’in samfurin",
+      "publisher": "Maɗaukaki"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Karamin samfurin xAI. Ya fi sauri kuma ya fi araha don tambayoyi da tattaunawar yau da kullum."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Fitaccen samfurin GPT-5.6 na OpenAI. Mafi ƙarfi wajen rubutu, bincike, lissafi, da warware matsaloli masu wahala."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Matsakaicin matakin GPT-5.6 na OpenAI. Ya dace da rubutu na yau da kullum, nazari, da lissafi tare da saurin amsawa."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Matakin sauri da sauki na GPT-5.6 na OpenAI. Mafi dacewa don tambayoyi masu sauki da ayyuka masu sauki a farashi mai sauki."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Sabon samfurin matsakaici daga Mistral. Madadin na Turai wanda ke tsaka-tsaki tsakanin ƙwarewa da sauri don aiki na yau da kullum."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Za ka iya rufe wannan taga kuma ka koma cikin app.",
       "closeButton": "Rufe taga"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Haɗa tushe na samfurin",
+    "addAnother": "Ƙara wani tushe na samfurin",
+    "edit": "Gyara",
+    "disconnect": "Katse haɗi da {name}",
+    "disconnectedToast": "An katse haɗi da {name}",
+    "modelCountLabel": "Samfura {count}",
+    "loadingModels": "Ana loda samfura...",
+    "noModelsAvailable": "Babu samfura daga wannan tushe",
+    "sourceUnreachable": "Ba a samu wannan tushe ba. Watakila izinin shiga ka ya canza, ko kuma sabis ɗin bai samuwa yanzu.",
+    "retry": "Sake gwadawa",
+    "connectFoundryAccount": "Haɗa da Asusun Microsoft Azure Foundry",
+    "connectFoundryDescription": "Za ka iya gano tura samfura daga asusun Azure Foundry da kake da izini. Izinin ka na Azure ne ke ba da damar amfani — ƙuntatawar samfurin wannan manhaja ba ta aiki a nan.",
+    "selectModelsDescription": "Zaɓi waɗanne tura samfura daga wannan asusu za su bayyana cikin zaɓin samfurinka.",
+    "editConnection": "Gyara haɗi",
+    "nameLabel": "Suna",
+    "namePlaceholder": "misali: Sandbox na Tawaga ta",
+    "nameRequired": "Ana buƙatar sunan tushe",
+    "foundryAccountLabel": "Asusun Foundry",
+    "enterManually": "Shigar da hannu",
+    "browseResources": "Duba albarkatu",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Rukunin Albarkatu",
+    "accountNameLabel": "Sunan Asusun",
+    "subscriptionRequired": "Zaɓi wani subscription",
+    "accountRequired": "Zaɓi asusun Foundry",
+    "accountSelectionRequired": "Zaɓi asusu daga jerin.",
+    "selectAllRequired": "Zaɓi subscription, rukunin albarkatu, da asusu.",
+    "connectionFailed": "Ba a samu wannan asusu ba. Duba bayanan da kyau kuma tabbatar da izinin shiga.",
+    "duplicateSource": "An riga an haɗa wannan asusu a matsayin \"{name}\".",
+    "connectionSuccessModels": "An haɗa — an samo tura samfurai {count}",
+    "connectionSuccessEmpty": "An haɗa, amma babu tura samfurin a wannan asusun.",
+    "checkingConnection": "Ana bincika haɗin...",
+    "next": "Gaba",
+    "back": "Baya",
+    "cancel": "Soke",
+    "connect": "Haɗa",
+    "save": "Ajiye",
+    "scanningResources": "Ana duba rajistar Azure ɗinka...",
+    "discoveryPartialWarning": "Ba a iya duba {count, plural, one {# rajista} other {# rajistoci}} ba. Yi amfani da shigar da hannu idan asusunka babu shi.",
+    "discoveryTruncatedWarning": "Akwai ƙwarin albarkatu da yawa har ba za a iya gama dubawa ba. Yi amfani da shigar da hannu idan asusunka babu shi.",
+    "noAccountsDiscovered": "Ba a sami asusun Foundry a cikin rajistocin ka ba. Yi amfani da shigar da hannu idan ka san hanyar.",
+    "retryScan": "Sake duba",
+    "searchAccountsPlaceholder": "Bincika asusu...",
+    "modelsSelectedCount": "An zaɓi {selected} daga cikin {total} samfura",
+    "selectAll": "Zaɓi duk",
+    "deselectAll": "Cire zaɓi duka",
+    "autoAddLabel": "Ƙara sababbin samfura ta atomatik",
+    "autoAddDescription": "Samfuran da za a ƙara zuwa wannan asusun daga baya za su bayyana ta atomatik. Samfuran da ba a duba ba za su ci gaba da kasancewa a waje."
   }
 }

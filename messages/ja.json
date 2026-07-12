@@ -1358,6 +1358,15 @@
     "reasoningModel": "推論モデル：回答前に段階的に思考します。処理は遅くなりますが、難しい問題に強いです。",
     "variant": {
       "label": "バリアント"
+    },
+    "deployment": {
+      "title": "デプロイメント",
+      "source": "ソース",
+      "account": "アカウント",
+      "location": "ロケーション",
+      "deployment": "デプロイメント",
+      "modelVersion": "モデルバージョン",
+      "publisher": "発行者"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "xAIの軽量モデル。簡単な質問やカジュアルなチャットに速く低コストで対応できます。"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAIのGPT-5.6トリオの最上位モデル。執筆、リサーチ、コーディング、複雑な問題解決に最適です。"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAIのGPT-5.6トリオのバランス型。日常の文章作成、分析、コーディングに迅速に対応します。"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAIのGPT-5.6トリオの軽量・高速モデル。低コストで簡易な作業や素早い質問に最適です。"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistralの最新中型モデル。欧州発の選択肢で、日常業務に最適な性能と速度のバランスを実現します。"
     }
   },
   "transcription": {
@@ -3022,5 +3047,55 @@
       "close": "このウィンドウを閉じてアプリに戻ってください。",
       "closeButton": "ウィンドウを閉じる"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "モデルソースを接続",
+    "addAnother": "別のモデルソースを追加",
+    "edit": "編集",
+    "disconnect": "{name}の接続を解除",
+    "disconnectedToast": "{name}の接続を解除しました",
+    "modelCountLabel": "{count}件のモデル",
+    "loadingModels": "モデルを読み込み中...",
+    "noModelsAvailable": "このソースには利用可能なモデルがありません",
+    "sourceUnreachable": "このソースに接続できません。アクセス権が変更されたか、一時的にサービスがご利用いただけない可能性があります。",
+    "retry": "再試行",
+    "connectFoundryAccount": "Microsoft Azure Foundryアカウントを接続",
+    "connectFoundryDescription": "ご自身がアクセス可能なAzure Foundryアカウントのモデルデプロイメントを検索できます。ご自身のAzure権限がすべてのリクエストに適用され、アプリケーションのモデル制限は適用されません。",
+    "selectModelsDescription": "このアカウントのどのモデルデプロイメントをモデル選択に表示するか選択してください。",
+    "editConnection": "接続を編集",
+    "nameLabel": "名前",
+    "namePlaceholder": "例: マイチームサンドボックス",
+    "nameRequired": "ソース名は必須です",
+    "foundryAccountLabel": "Foundryアカウント",
+    "enterManually": "手動入力",
+    "browseResources": "リソースを参照",
+    "subscriptionIdLabel": "サブスクリプションID",
+    "resourceGroupLabel": "リソースグループ",
+    "accountNameLabel": "アカウント名",
+    "subscriptionRequired": "サブスクリプションを選択してください",
+    "accountRequired": "Foundryアカウントを選択してください",
+    "accountSelectionRequired": "リストからアカウントを選択してください。",
+    "selectAllRequired": "サブスクリプション、リソースグループ、アカウントを選択してください。",
+    "connectionFailed": "このアカウントに接続できません。情報が正しいか、またアクセス権があるかご確認ください。",
+    "duplicateSource": "このアカウントはすでに「{name}」として接続されています。",
+    "connectionSuccessModels": "接続しました — {count}件のモデルデプロイメントが見つかりました",
+    "connectionSuccessEmpty": "接続済みですが、このアカウントにはモデルデプロイメントがありません。",
+    "checkingConnection": "接続を確認中...",
+    "next": "次へ",
+    "back": "戻る",
+    "cancel": "キャンセル",
+    "connect": "接続",
+    "save": "保存",
+    "scanningResources": "Azure サブスクリプションをスキャン中...",
+    "discoveryPartialWarning": "{count, plural, one {# 件のサブスクリプション} other {# 件のサブスクリプション}}はスキャンできませんでした。アカウントが表示されない場合は手動入力をご利用ください。",
+    "discoveryTruncatedWarning": "リソースが多すぎてすべてを完全にスキャンできませんでした。アカウントが表示されない場合は手動入力をご利用ください。",
+    "noAccountsDiscovered": "サブスクリプション内にFoundryアカウントが見つかりませんでした。パスがわかる場合は手動入力をご利用ください。",
+    "retryScan": "再スキャン",
+    "searchAccountsPlaceholder": "アカウントを検索...",
+    "modelsSelectedCount": "{total} 件中 {selected} 件のモデルが選択されています",
+    "selectAll": "すべて選択",
+    "deselectAll": "すべて選択解除",
+    "autoAddLabel": "新しいモデルを自動で追加",
+    "autoAddDescription": "後からこのアカウントに追加されたモデルのデプロイが自動的に表示されます。未選択のモデルは除外されたままになります。"
   }
 }

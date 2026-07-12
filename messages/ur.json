@@ -1459,6 +1459,15 @@
     "reasoningModel": "ریزننگ ماڈل: جواب دینے سے پہلے مرحلہ وار سوچتا ہے۔ سست ہے، مگر مشکل مسائل میں بہتر ہے۔",
     "variant": {
       "label": "قسم"
+    },
+    "deployment": {
+      "title": "ڈپلائمنٹ",
+      "source": "سورس",
+      "account": "اکاؤنٹ",
+      "location": "مقام",
+      "deployment": "ڈپلائمنٹ",
+      "modelVersion": "ماڈل ورژن",
+      "publisher": "پبلشر"
     }
   },
   "models": {
@@ -1678,6 +1687,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "xAI کا ہلکا ماڈل۔ فوری سوالات اور غیر رسمی گفتگو کے لیے تیز اور کم خرچ۔"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI کے GPT-5.6 سیریز کا اہم ماڈل۔ تحریر، تحقیق، کوڈنگ اور پیچیدہ مسائل حل کرنے میں سب سے مضبوط۔"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI کے GPT-5.6 سیریز کا معتدل درجے کا ماڈل۔ روزمرہ تحریر، تجزیہ اور کوڈنگ کے لیے اچھا، فوری جوابات کے ساتھ۔"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI کے GPT-5.6 سیریز کا ہلکا، تیز ماڈل۔ فوری سوالات اور آسان کاموں کے لیے بہترین اور کم لاگت پر۔"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral کا نیا درمیانہ سائز ماڈل۔ صلاحیت اور رفتار میں توازن کے ساتھ یورپی متبادل، روزمرہ امور کے لیے۔"
     }
   },
   "searchMode": {
@@ -3052,5 +3077,55 @@
       "close": "آپ یہ ونڈو بند کر کے ایپ پر واپس جا سکتے ہیں۔",
       "closeButton": "ونڈو بند کریں"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "ماڈل سورس کنیکٹ کریں",
+    "addAnother": "ایک اور ماڈل سورس شامل کریں",
+    "edit": "ترمیم",
+    "disconnect": "ڈس کنیکٹ کریں {name}",
+    "disconnectedToast": "ڈس کنیکٹ ہو گیا {name}",
+    "modelCountLabel": "{count} ماڈل",
+    "loadingModels": "ماڈل لوڈ ہو رہے ہیں...",
+    "noModelsAvailable": "اس سورس سے کوئی ماڈل دستیاب نہیں",
+    "sourceUnreachable": "اس سورس تک نہیں پہنچ سکے۔ آپ کی رسائی بدل گئی ہو سکتی ہے یا سروس عارضی طور پر دستیاب نہیں۔",
+    "retry": "دوبارہ کوشش کریں",
+    "connectFoundryAccount": "Microsoft Azure Foundry اکاؤنٹ کنیکٹ کریں",
+    "connectFoundryDescription": "Azure Foundry اکاؤنٹ سے ماڈل ڈپلائمنٹ تلاش کریں جن تک آپ کی رسائی ہے۔ آپ کی اپنی Azure اجازتیں ہر درخواست کی توثیق کرتی ہیں — یہاں ایپ کی ماڈل پابندیاں لاگو نہیں ہوتی۔",
+    "selectModelsDescription": "اس اکاؤنٹ سے کون سی ماڈل ڈپلائمنٹس آپ کے ماڈل پکَر میں نظر آئیں گے، منتخب کریں۔",
+    "editConnection": "کنکشن میں ترمیم",
+    "nameLabel": "نام",
+    "namePlaceholder": "مثلاً: میری ٹیم سینڈ باکس",
+    "nameRequired": "سورس کا نام ضروری ہے",
+    "foundryAccountLabel": "Foundry اکاؤنٹ",
+    "enterManually": "خود درج کریں",
+    "browseResources": "وسائل دیکھیں",
+    "subscriptionIdLabel": "سبسکرپشن آئی ڈی",
+    "resourceGroupLabel": "وسائل گروپ",
+    "accountNameLabel": "اکاؤنٹ کا نام",
+    "subscriptionRequired": "ایک سبسکرپشن منتخب کریں",
+    "accountRequired": "ایک Foundry اکاؤنٹ منتخب کریں",
+    "accountSelectionRequired": "فہرست میں سے ایک اکاؤنٹ منتخب کریں۔",
+    "selectAllRequired": "سبسکرپشن، وسائل گروپ، اور اکاؤنٹ منتخب کریں۔",
+    "connectionFailed": "اس اکاؤنٹ تک نہیں پہنچ سکے۔ تفصیلات درست ہیں اور آپ کو رسائی حاصل ہے اس کی تصدیق کریں۔",
+    "duplicateSource": "یہ اکاؤنٹ پہلے ہی \"{name}\" کے طور پر کنیکٹ ہے۔",
+    "connectionSuccessModels": "کنیکٹ ہو گیا — {count} ماڈل ڈپلائمنٹ مل گئی",
+    "connectionSuccessEmpty": "کنیکٹ ہو گیا، لیکن اس اکاؤنٹ پر کوئی ماڈل ڈپلائمنٹ نہیں ملی۔",
+    "checkingConnection": "کنکشن چیک کیا جا رہا ہے...",
+    "next": "اگلا",
+    "back": "واپس",
+    "cancel": "منسوخ کریں",
+    "connect": "کنیکٹ کریں",
+    "save": "محفوظ کریں",
+    "scanningResources": "آپ کی Azure سبسکرپشنز کو اسکین کیا جا رہا ہے...",
+    "discoveryPartialWarning": "{count, plural, one {# سبسکرپشن} other {# سبسکرپشنز}} اسکین نہیں کی جا سکیں۔ اگر آپ کا اکاؤنٹ ظاہر نہیں ہو رہا تو دستی اندراج استعمال کریں۔",
+    "discoveryTruncatedWarning": "اسکین کرنے کے لئے وسائل بہت زیادہ تھے۔ اگر آپ کا اکاؤنٹ ظاہر نہیں ہو رہا تو دستی اندراج استعمال کریں۔",
+    "noAccountsDiscovered": "آپ کی سبسکرپشنز میں کوئی Foundry اکاؤنٹس نہیں ملے۔ اگر آپ کو راستہ معلوم ہے تو دستی اندراج استعمال کریں۔",
+    "retryScan": "دوبارہ اسکین کریں",
+    "searchAccountsPlaceholder": "اکاؤنٹس تلاش کریں...",
+    "modelsSelectedCount": "{total} میں سے {selected} ماڈلز منتخب کیے گئے",
+    "selectAll": "سب کو منتخب کریں",
+    "deselectAll": "سب کو غیر منتخب کریں",
+    "autoAddLabel": "نئے ماڈلز خودکار طور پر شامل کریں",
+    "autoAddDescription": "اس اکاؤنٹ میں بعد میں شامل ہونے والی ماڈل ڈپلائیمنٹس خود بخود ظاہر ہوں گی۔ غیر منتخب ماڈلز شامل نہیں ہوں گے۔"
   }
 }

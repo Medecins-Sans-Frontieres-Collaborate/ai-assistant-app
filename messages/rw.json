@@ -1508,6 +1508,15 @@
     "reasoningModel": "Reasoning model: ibanza gutekereza mu byiciro mbere yo gusubiza. Itinda gato, ariko ikora neza ku bibazo bikomeye.",
     "variant": {
       "label": "Ubwoko"
+    },
+    "deployment": {
+      "title": "Kohereza",
+      "source": "Inkomoko",
+      "account": "Konti",
+      "location": "Aho biherereye",
+      "deployment": "Kohereza",
+      "modelVersion": "Verisiyo ya model",
+      "publisher": "Yashyizweho na"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Modeli yoroheje ya xAI. Yihuta kandi iboneka ku giciro gito ku bibazo byihuse n’ibiganiro bisanzwe."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Ni yo model ikomeye muri trio ya GPT-5.6 ya OpenAI. Irusha izindi kwandika, ubushakashatsi, gucapa ikode no gukemura ibibazo bigoye."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Ni urwego ruringaniye muri trio ya GPT-5.6 ya OpenAI. Ikwiriye kwandika, gusesengura no gucapa ikode bya buri munsi n'imisubirize yihuse."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Ni urwego rworoshye kandi rihuta muri trio ya GPT-5.6 ya OpenAI. Ikwiriye gusubiza ibibazo byoroshye no imirimo yoroheje ku giciro gito."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Model nshya ya Mistral yo hagati. Ni amahitamo y'u Burayi aboneye hagati y'ubushobozi no kwihuta mu kazi ka buri munsi."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Urashobora gufunga iri dirishya ukagaruka kuri app.",
       "closeButton": "Funga idirishya"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Huhuza inkomoko ya model",
+    "addAnother": "Ongeraho indi nkomoko ya model",
+    "edit": "Hindura",
+    "disconnect": "Haca {name}",
+    "disconnectedToast": "Haciwe {name}",
+    "modelCountLabel": "{count} za model",
+    "loadingModels": "Model zirimo gutegurwa...",
+    "noModelsAvailable": "Nta za model ziri kuri iyi nkomoko",
+    "sourceUnreachable": "Ntishoboye kugera kuri iyi nkomoko. Wenda uruhushya rwawe rwarahindutse cyangwa serivisi idahari by'agateganyo.",
+    "retry": "Kongera kugerageza",
+    "connectFoundryAccount": "Huhuza na Microsoft Azure Foundry Account",
+    "connectFoundryDescription": "Shakisha za modele wohereje kuri konti ya Azure Foundry ufiteho ububasha. Uburenganzira bwawe kuri Azure nibwo bukoreshwa kuri buri busabe — aho amategeko ya app atagufatira.",
+    "selectModelsDescription": "Hitamo ama deployments ya model azagaragara mu ntonde yawe kuri iyi konti.",
+    "editConnection": "Hindura ihuza",
+    "nameLabel": "Izina",
+    "namePlaceholder": "urugero: Ikipe yanjye ya Sandbox",
+    "nameRequired": "Izina ry'inkomoko rirakenewe",
+    "foundryAccountLabel": "Konti ya Foundry",
+    "enterManually": "Injiza intoki",
+    "browseResources": "Soma umutungo",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Itsinda ry'umutungo",
+    "accountNameLabel": "Izina rya konti",
+    "subscriptionRequired": "Hitamo subscription",
+    "accountRequired": "Hitamo konti ya Foundry",
+    "accountSelectionRequired": "Hitamo konti kuri uru rutonde.",
+    "selectAllRequired": "Hitamo subscription, itsinda ry'umutungo, na konti.",
+    "connectionFailed": "Ntishoboye kugera kuri iyi konti. Reba neza amakuru winjije kandi niba ufite uruhushya.",
+    "duplicateSource": "Iyi konti yamaze guhuza nka \"{name}\".",
+    "connectionSuccessModels": "Yahuye — habonetse ama deployment ya model {count}",
+    "connectionSuccessEmpty": "Yahuye, ariko nta ma deployment ya model abonetse kuri iyi konti.",
+    "checkingConnection": "Iri kugenzura ihuza...",
+    "next": "Ibikurikira",
+    "back": "Subira inyuma",
+    "cancel": "Hagarika",
+    "connect": "Huzaho",
+    "save": "Bika",
+    "scanningResources": "Turimo gusuzuma subscriptions zawe za Azure...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} ntibyashoboye gusuzumwa. Shyiramo intoki niba konti yawe itagaragara.",
+    "discoveryTruncatedWarning": "Hari resources nyinshi cyane zo gusuzuma neza. Shyiramo intoki niba konti yawe itagaragara.",
+    "noAccountsDiscovered": "Nta konti za Foundry zabonetse muri subscription zawe. Shyiramo intoki niba uzi inzira.",
+    "retryScan": "Ongera usuzume",
+    "searchAccountsPlaceholder": "Shakisha konti...",
+    "modelsSelectedCount": "{selected} muri {total} zimaze gutoranywa",
+    "selectAll": "Hitamo byose",
+    "deselectAll": "Hagarika guhitamo byose",
+    "autoAddLabel": "Ongeramo imiterere nshya mu buryo bwikora",
+    "autoAddDescription": "Imiterere izongerwa muri iyi konti nyuma izahita igaragara. Imiterere itanditswe izaguma ivanwemo."
   }
 }

@@ -1389,6 +1389,15 @@
     "reasoningModel": "推理模型：先逐步思考再作答。速度较慢，擅长解决复杂问题。",
     "variant": {
       "label": "变体"
+    },
+    "deployment": {
+      "title": "部署",
+      "source": "来源",
+      "account": "账户",
+      "location": "位置",
+      "deployment": "部署",
+      "modelVersion": "模型版本",
+      "publisher": "发布者"
     }
   },
   "models": {
@@ -1608,6 +1617,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "轻量级 xAI 模型。适用于快速问答和轻松对话，速度更快、成本更低。"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI GPT-5.6 三款模型中的旗舰，写作、研究、编码及复杂问题解决能力最强。"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI GPT-5.6 三款模型中的平衡版，日常写作、分析和编码表现优秀，响应快速。"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI GPT-5.6 三款模型中的轻量级和高速型号，适合低成本快速提问与简单任务。"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral 最新的中型模型。作为欧洲替代选择，兼具能力与速度，适合日常工作。"
     }
   },
   "searchMode": {
@@ -3053,5 +3078,55 @@
       "close": "您可关闭此窗口并返回应用。",
       "closeButton": "关闭窗口"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "连接模型来源",
+    "addAnother": "添加另一个模型来源",
+    "edit": "编辑",
+    "disconnect": "断开 {name}",
+    "disconnectedToast": "已断开 {name}",
+    "modelCountLabel": "{count} 个模型",
+    "loadingModels": "正在加载模型...",
+    "noModelsAvailable": "此来源无可用模型",
+    "sourceUnreachable": "无法访问此来源。您的访问权限可能已更改，或服务暂时不可用。",
+    "retry": "重试",
+    "connectFoundryAccount": "连接 Microsoft Azure Foundry 账户",
+    "connectFoundryDescription": "从您有权限访问的 Azure Foundry 账户中发现模型部署。每次请求都由您的 Azure 权限授权，该应用的模型限制不适用。",
+    "selectModelsDescription": "选择该账户中哪些模型部署将显示在您的模型选择器中。",
+    "editConnection": "编辑连接",
+    "nameLabel": "名称",
+    "namePlaceholder": "例如：我的团队沙箱",
+    "nameRequired": "必须填写来源名称",
+    "foundryAccountLabel": "Foundry 账户",
+    "enterManually": "手动输入",
+    "browseResources": "浏览资源",
+    "subscriptionIdLabel": "订阅 ID",
+    "resourceGroupLabel": "资源组",
+    "accountNameLabel": "账户名称",
+    "subscriptionRequired": "请选择订阅",
+    "accountRequired": "请选择 Foundry 账户",
+    "accountSelectionRequired": "请从列表中选择账户。",
+    "selectAllRequired": "请选择订阅、资源组和账户。",
+    "connectionFailed": "无法访问该账户。请检查信息是否正确并确认您有访问权限。",
+    "duplicateSource": "该账户已作为“{name}”连接。",
+    "connectionSuccessModels": "已连接 —— 找到 {count} 个模型部署",
+    "connectionSuccessEmpty": "已连接，但该账户下未找到模型部署。",
+    "checkingConnection": "正在检查连接...",
+    "next": "下一步",
+    "back": "返回",
+    "cancel": "取消",
+    "connect": "连接",
+    "save": "保存",
+    "scanningResources": "正在扫描您的 Azure 订阅…",
+    "discoveryPartialWarning": "{count, plural, one {# 个订阅} other {# 个订阅}}无法扫描。如您的帐户未显示，请手动输入。",
+    "discoveryTruncatedWarning": "资源数量过多，未能全部扫描。如您的帐户未显示，请手动输入。",
+    "noAccountsDiscovered": "在您的订阅中未找到 Foundry 帐户。如您知道路径，请手动输入。",
+    "retryScan": "重试扫描",
+    "searchAccountsPlaceholder": "搜索帐户…",
+    "modelsSelectedCount": "已选 {selected} 个，共 {total} 个模型",
+    "selectAll": "全选",
+    "deselectAll": "取消全选",
+    "autoAddLabel": "自动添加新模型",
+    "autoAddDescription": "之后添加到该帐户的模型部署将自动显示。未勾选的模型将继续排除。"
   }
 }

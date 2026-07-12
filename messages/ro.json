@@ -1457,6 +1457,15 @@
     "reasoningModel": "Model de raționament: gândește pas cu pas înainte de a răspunde. Mai lent, dar mai eficient pentru probleme dificile.",
     "variant": {
       "label": "Variantă"
+    },
+    "deployment": {
+      "title": "Implementare",
+      "source": "Sursă",
+      "account": "Cont",
+      "location": "Locație",
+      "deployment": "Implementare",
+      "modelVersion": "Versiune model",
+      "publisher": "Editor"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Un model xAI mai ușor. Mai rapid și mai ieftin pentru întrebări scurte și conversații informale."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Vârful de lance al trio-ului GPT-5.6 de la OpenAI. Excelează la redactare, cercetare, programare și rezolvare de probleme complexe."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Nivelul echilibrat din trio-ul GPT-5.6 de la OpenAI. Bun pentru redactare zilnică, analiză și programare cu răspunsuri rapide."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Varianta rapidă și ușoară din trio-ul GPT-5.6 de la OpenAI. Ideal pentru întrebări rapide și sarcini simple la cost redus."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Cel mai nou model de dimensiune medie de la Mistral. O alternativă europeană ce echilibrează capabilitățile și viteza pentru activitățile de zi cu zi."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Puteți închide această fereastră și să reveniți la aplicație.",
       "closeButton": "Închideți fereastra"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Conectați o sursă de modele",
+    "addAnother": "Adăugați o altă sursă de modele",
+    "edit": "Editare",
+    "disconnect": "Deconectați {name}",
+    "disconnectedToast": "{name} a fost deconectat",
+    "modelCountLabel": "{count} modele",
+    "loadingModels": "Se încarcă modelele...",
+    "noModelsAvailable": "Nu sunt disponibile modele din această sursă",
+    "sourceUnreachable": "Nu s-a putut accesa această sursă. Poate că accesul dvs. s-a modificat sau serviciul nu este disponibil temporar.",
+    "retry": "Reîncercați",
+    "connectFoundryAccount": "Conectați un cont Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descoperiți implementări de modele dintr-un cont Azure Foundry la care aveți acces. Permisiunile dvs. Azure autorizează fiecare solicitare — restricțiile de modele ale aplicației nu se aplică aici.",
+    "selectModelsDescription": "Alegeți care implementări de modele din acest cont apar în selectorul dvs. de modele.",
+    "editConnection": "Editare conexiune",
+    "nameLabel": "Nume",
+    "namePlaceholder": "ex: Sandbox Echipa Mea",
+    "nameRequired": "Este necesar un nume pentru sursă",
+    "foundryAccountLabel": "Cont Foundry",
+    "enterManually": "Introducere manuală",
+    "browseResources": "Răsfoiți resursele",
+    "subscriptionIdLabel": "ID abonament",
+    "resourceGroupLabel": "Grup de resurse",
+    "accountNameLabel": "Nume cont",
+    "subscriptionRequired": "Alegeți un abonament",
+    "accountRequired": "Alegeți un cont Foundry",
+    "accountSelectionRequired": "Selectați un cont din listă.",
+    "selectAllRequired": "Selectați abonament, grup de resurse și cont.",
+    "connectionFailed": "Nu s-a putut accesa acest cont. Verificați dacă datele sunt corecte și dacă aveți acces.",
+    "duplicateSource": "Acest cont este deja conectat ca „{name}”.",
+    "connectionSuccessModels": "Conectat — găsite {count} implementări de model",
+    "connectionSuccessEmpty": "Conectat, dar nu s-au găsit implementări de modele pe acest cont.",
+    "checkingConnection": "Se verifică conexiunea...",
+    "next": "Următorul",
+    "back": "Înapoi",
+    "cancel": "Anulați",
+    "connect": "Conectează",
+    "save": "Salvează",
+    "scanningResources": "Se scanează abonamentele Azure...",
+    "discoveryPartialWarning": "{count, plural, one {# abonament} other {# abonamente}} nu au putut fi scanate. Folosiți introducerea manuală dacă lipsește contul.",
+    "discoveryTruncatedWarning": "Au existat prea multe resurse pentru a fi scanate complet. Folosiți introducerea manuală dacă lipsește contul.",
+    "noAccountsDiscovered": "Nu au fost găsite conturi Foundry în abonamentele dumneavoastră. Folosiți introducerea manuală dacă știți calea.",
+    "retryScan": "Reîncearcă scanarea",
+    "searchAccountsPlaceholder": "Caută conturi...",
+    "modelsSelectedCount": "{selected} din {total} modele selectate",
+    "selectAll": "Selectează tot",
+    "deselectAll": "Deselectează tot",
+    "autoAddLabel": "Adaugă automat modele noi",
+    "autoAddDescription": "Implementările de modele adăugate ulterior în acest cont vor apărea automat. Modelele debifate rămân excluse."
   }
 }

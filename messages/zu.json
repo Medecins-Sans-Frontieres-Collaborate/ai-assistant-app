@@ -1508,6 +1508,15 @@
     "reasoningModel": "Imodeli yokucabanga: icabanga isinyathelo nesinyathelo ngaphambi kokuphendula. Iyahamba kancane, kodwa ingcono ezinkingeni ezinzima.",
     "variant": {
       "label": "Uhlobiso"
+    },
+    "deployment": {
+      "title": "Ukumiswa",
+      "source": "Umthombo",
+      "account": "I-akhawunti",
+      "location": "Indawo",
+      "deployment": "Ukumiswa",
+      "modelVersion": "Inguqulo yemodeli",
+      "publisher": "Umshicileli"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Imodeli ye-xAI elula. Ishesha futhi ibiza kancane kwimibuzo esheshayo nezingxoxo ezivamile."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Ingqophamlando ye-GPT-5.6 ka-OpenAI. Iqinisa kakhulu ekubhaleni, ucwaningo, ikhodi, nokuxazulula izinkinga eziyinkimbinkimbi."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Isigaba esiphakathi ku-GPT-5.6 ka-OpenAI. Ilungele ukubhala kwansuku zonke, ukuhlaziya, nekhodi ngokuphendula okusheshayo."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Isigaba esincane nesisheshayo se-GPT-5.6 ka-OpenAI. Ihamba phambili ezimibuzweni esheshayo nemisebenzi elula ngezindleko eziphansi."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Imodeli entsha ephakathi nendawo ye-Mistral. Inketho yaseYurophu ehambisana kahle phakathi kwamandla nesivinini emsebenzini wansuku zonke."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Ungavala le fasitela bese ubuya ohlelweni.",
       "closeButton": "Vala iwindi"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Xhuma umthombo wemodeli",
+    "addAnother": "Engeza omunye umthombo wemodeli",
+    "edit": "Hlela",
+    "disconnect": "Susa uxhumo {name}",
+    "disconnectedToast": "Uxhumo luphumelele {name}",
+    "modelCountLabel": "{count} amamodeli",
+    "loadingModels": "Kulayishwa amamodeli...",
+    "noModelsAvailable": "Awekho amamodeli atholakalayo kulo mthombo",
+    "sourceUnreachable": "Akukwazeki ukufinyelela kulo mthombo. Mhlawumbe imvume yakho ishintshile noma insiza ingatholakali okwamanje.",
+    "retry": "Phinda uzame",
+    "connectFoundryAccount": "Xhuma i-Microsoft Azure Foundry Account",
+    "connectFoundryDescription": "Thola ukumiswa kwamamodeli okuvela ku-akhawunti ye-Azure Foundry onemvume kuyo. Imvume yakho ye-Azure iqinisekisa zonke izicelo — imikhawulo yemodeli ye-app ayisebenzi lapha.",
+    "selectModelsDescription": "Khetha ukumiswa kwamamodeli okufanele kubonakale ekukhetheni kwakho imodeli kule akhawunti.",
+    "editConnection": "Hlela Uxhumano",
+    "nameLabel": "Igama",
+    "namePlaceholder": "isb. Iqembu Lami I-Sandbox",
+    "nameRequired": "Igama lomthombo liyadingeka",
+    "foundryAccountLabel": "I-Foundry Account",
+    "enterManually": "Faka ngesandla",
+    "browseResources": "Bheka izinsiza",
+    "subscriptionIdLabel": "I-Subscription ID",
+    "resourceGroupLabel": "Iqembu Lezinsiza",
+    "accountNameLabel": "Igama le-Akhawunti",
+    "subscriptionRequired": "Khetha i-subscription",
+    "accountRequired": "Khetha i-akhawunti ye-Foundry",
+    "accountSelectionRequired": "Khetha i-akhawunti kuhlu.",
+    "selectAllRequired": "Khetha i-subscription, iqembu lezinsiza, ne-akhawunti.",
+    "connectionFailed": "Akukwazeki ukufinyelela kule akhawunti. Qinisekisa imininingwane futhi ukuthi unemvume.",
+    "duplicateSource": "Le akhawunti seyixhunywe njenge \"{name}\".",
+    "connectionSuccessModels": "Kuxhunywe — kutholwe ukumiswa kwe-modeli {count}",
+    "connectionSuccessEmpty": "Kuxhunywe, kodwa akukho ukumiswa kwamamodeli kutholakele kule akhawunti.",
+    "checkingConnection": "Kuqinisekiswa uxhumo...",
+    "next": "Olandelayo",
+    "back": "Emuva",
+    "cancel": "Khansela",
+    "connect": "Xhuma",
+    "save": "Londoloza",
+    "scanningResources": "Kuyaqhubeka ukuhlolwa kwe-Azure subscriptions yakho...",
+    "discoveryPartialWarning": "{count, plural, one {# i-subscription} other {# ama-subscriptions}} azikwazanga ukuhlolwa. Sebenzisa ukufaka mathupha uma i-akhawunti yakho ingekho.",
+    "discoveryTruncatedWarning": "Kube nezinsiza eziningi ezingakwazi ukuhlolwa ngokuphelele. Sebenzisa ukufaka mathupha uma i-akhawunti yakho ingekho.",
+    "noAccountsDiscovered": "Akutholakali ama-akhawunti e-Foundry kuma-subscriptions akho. Sebenzisa ukufaka mathupha uma wazi indlela yakhona.",
+    "retryScan": "Phinda uhlole",
+    "searchAccountsPlaceholder": "Sesha ama-akhawunti...",
+    "modelsSelectedCount": "{selected} ku-{total} wama-models akhethiwe",
+    "selectAll": "Khetha konke",
+    "deselectAll": "Susa konke okukhethiwe",
+    "autoAddLabel": "Faka imodeli ngokuzenzakalela",
+    "autoAddDescription": "Ama-model deployments azongezwa kule akhawunti esikhathini esizayo azovezwa ngokuzenzakalelayo. Ama-models angakhethiwe azoqhubeka engafakiwe."
   }
 }

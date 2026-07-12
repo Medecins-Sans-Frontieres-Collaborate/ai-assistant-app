@@ -1355,6 +1355,15 @@
     "reasoningModel": "Reasoning-Modell: denkt Schritt für Schritt vor der Antwort. Langsamer, besser bei schwierigen Aufgaben.",
     "variant": {
       "label": "Variante"
+    },
+    "deployment": {
+      "title": "Bereitstellung",
+      "source": "Quelle",
+      "account": "Konto",
+      "location": "Standort",
+      "deployment": "Bereitstellung",
+      "modelVersion": "Modellversion",
+      "publisher": "Herausgeber"
     }
   },
   "models": {
@@ -1574,6 +1583,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Ein schlankeres xAI-Modell. Schneller und günstiger für kurze Fragen und lockere Chats."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Das Flaggschiff des GPT-5.6-Trios von OpenAI. Am stärksten beim Schreiben, Recherchieren, Programmieren und Lösen komplexer Probleme."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Die ausgewogene Variante des GPT-5.6-Trios von OpenAI. Gut für tägliches Schreiben, Analysen und Programmieren mit schnellen Antworten."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Die leichte, schnelle Variante des GPT-5.6-Trios von OpenAI. Am besten für schnelle Fragen und einfache Aufgaben zu niedrigen Kosten."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistrals neuestes mittelgroßes Modell. Eine europäische Alternative, die Leistungsfähigkeit und Geschwindigkeit für die tägliche Arbeit ausbalanciert."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Sie können dieses Fenster schließen und zur App zurückkehren.",
       "closeButton": "Fenster schließen"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Modellquelle verbinden",
+    "addAnother": "Weitere Modellquelle hinzufügen",
+    "edit": "Bearbeiten",
+    "disconnect": "{name} trennen",
+    "disconnectedToast": "{name} wurde getrennt",
+    "modelCountLabel": "{count} Modelle",
+    "loadingModels": "Modelle werden geladen...",
+    "noModelsAvailable": "Keine Modelle von dieser Quelle verfügbar",
+    "sourceUnreachable": "Diese Quelle konnte nicht erreicht werden. Ihr Zugriff könnte sich geändert haben, oder der Dienst ist vorübergehend nicht verfügbar.",
+    "retry": "Erneut versuchen",
+    "connectFoundryAccount": "Microsoft Azure Foundry-Konto verbinden",
+    "connectFoundryDescription": "Entdecken Sie Modellbereitstellungen aus einem Azure Foundry-Konto, auf das Sie Zugriff haben. Ihre eigenen Azure-Berechtigungen autorisieren jede Anfrage – die Modellbeschränkungen der App gelten hier nicht.",
+    "selectModelsDescription": "Wählen Sie aus, welche Modellbereitstellungen aus diesem Konto im Modell-Auswahlmenü angezeigt werden.",
+    "editConnection": "Verbindung bearbeiten",
+    "nameLabel": "Name",
+    "namePlaceholder": "z. B. Mein Team-Sandbox",
+    "nameRequired": "Quellenname ist erforderlich",
+    "foundryAccountLabel": "Foundry-Konto",
+    "enterManually": "Manuell eingeben",
+    "browseResources": "Ressourcen durchsuchen",
+    "subscriptionIdLabel": "Abonnement-ID",
+    "resourceGroupLabel": "Ressourcengruppe",
+    "accountNameLabel": "Kontoname",
+    "subscriptionRequired": "Wählen Sie ein Abonnement",
+    "accountRequired": "Wählen Sie ein Foundry-Konto",
+    "accountSelectionRequired": "Wählen Sie ein Konto aus der Liste.",
+    "selectAllRequired": "Wählen Sie ein Abonnement, eine Ressourcengruppe und ein Konto aus.",
+    "connectionFailed": "Auf dieses Konto konnte nicht zugegriffen werden. Prüfen Sie, ob die Angaben korrekt sind und Sie Zugriff haben.",
+    "duplicateSource": "Dieses Konto ist bereits als \"{name}\" verbunden.",
+    "connectionSuccessModels": "Verbunden – {count} Modellbereitstellung(en) gefunden",
+    "connectionSuccessEmpty": "Verbunden, aber keine Modellbereitstellungen auf diesem Konto gefunden.",
+    "checkingConnection": "Verbindung wird überprüft...",
+    "next": "Weiter",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "connect": "Verbinden",
+    "save": "Speichern",
+    "scanningResources": "Ihre Azure-Abonnements werden gescannt...",
+    "discoveryPartialWarning": "{count, plural, one {# Abonnement} other {# Abonnements}} konnten nicht gescannt werden. Verwenden Sie die manuelle Eingabe, wenn Ihr Konto fehlt.",
+    "discoveryTruncatedWarning": "Es waren zu viele Ressourcen vorhanden, um sie vollständig zu scannen. Verwenden Sie die manuelle Eingabe, wenn Ihr Konto fehlt.",
+    "noAccountsDiscovered": "Keine Foundry-Konten in Ihren Abonnements gefunden. Verwenden Sie die manuelle Eingabe, wenn Sie den Pfad kennen.",
+    "retryScan": "Scan erneut versuchen",
+    "searchAccountsPlaceholder": "Konten suchen...",
+    "modelsSelectedCount": "{selected} von {total} Modellen ausgewählt",
+    "selectAll": "Alle auswählen",
+    "deselectAll": "Alle abwählen",
+    "autoAddLabel": "Neue Modelle automatisch hinzufügen",
+    "autoAddDescription": "Später zu diesem Konto hinzugefügte Modelldepployments erscheinen automatisch. Nicht ausgewählte Modelle bleiben ausgeschlossen."
   }
 }

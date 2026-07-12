@@ -1358,6 +1358,15 @@
     "reasoningModel": "Modeli ya hoja: hufikiri hatua kwa hatua kabla ya kujibu. Polepole, bora zaidi kwenye masuala magumu.",
     "variant": {
       "label": "Toleo"
+    },
+    "deployment": {
+      "title": "Utekelezaji",
+      "source": "Chanzo",
+      "account": "Akaunti",
+      "location": "Mahali",
+      "deployment": "Utekelezaji",
+      "modelVersion": "Toleo la modeli",
+      "publisher": "Mchapishaji"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Mfano mwepesi wa xAI. Haraka na nafuu kwa maswali ya haraka na gumzo za kawaida."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Modeli kuu katika orodha ya GPT-5.6 ya OpenAI. Imebobea katika uandishi, utafiti, kuandika msimbo, na kutatua changamoto ngumu."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Kiwango cha kati katika orodha ya GPT-5.6 ya OpenAI. Inafaa kwa uandishi wa kawaida, uchanganuzi, na kuandika msimbo kwa majibu ya haraka."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Modeli ya haraka na nyepesi katika orodha ya GPT-5.6 ya OpenAI. Inafaa zaidi kwa maswali ya haraka na kazi rahisi kwa gharama ndogo."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Modeli mpya ya kati ya Mistral. Njia mbadala ya Ulaya inayolinganisha uwezo na kasi kwa kazi za kila siku."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Unaweza kufunga dirisha hili na kurudi kwenye programu.",
       "closeButton": "Funga dirisha"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Unganisha chanzo cha modeli",
+    "addAnother": "Ongeza chanzo kingine cha modeli",
+    "edit": "Hariri",
+    "disconnect": "Katisha {name}",
+    "disconnectedToast": "Imekatishwa {name}",
+    "modelCountLabel": "Modeli {count}",
+    "loadingModels": "Inapakia modeli...",
+    "noModelsAvailable": "Hakuna modeli zinazopatikana kutoka kwa chanzo hiki",
+    "sourceUnreachable": "Haiwezi kufikia chanzo hiki. Huenda ruhusa zako zimebadilika, au huduma haipatikani kwa sasa.",
+    "retry": "Jaribu tena",
+    "connectFoundryAccount": "Unganisha Akaunti ya Microsoft Azure Foundry",
+    "connectFoundryDescription": "Gundua utekelezaji wa modeli kutoka akaunti ya Azure Foundry ambayo una ruhusa nayo. Ruhusa zako za Azure ndizo zinathibitisha kila ombi — vikwazo vya modeli vya programu havitumiki hapa.",
+    "selectModelsDescription": "Chagua ni utekelezaji gani wa modeli kutoka akaunti hii uonekane kwenye chagua-modeli lako.",
+    "editConnection": "Hariri Muunganiko",
+    "nameLabel": "Jina",
+    "namePlaceholder": "mf. Timu Yangu Sandbox",
+    "nameRequired": "Jina la chanzo linahitajika",
+    "foundryAccountLabel": "Akaunti ya Foundry",
+    "enterManually": "Weka mwenyewe",
+    "browseResources": "Vinjari rasilimali",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Kikundi cha Rasilimali",
+    "accountNameLabel": "Jina la Akaunti",
+    "subscriptionRequired": "Chagua usajili",
+    "accountRequired": "Chagua akaunti ya Foundry",
+    "accountSelectionRequired": "Chagua akaunti kutoka kwenye orodha.",
+    "selectAllRequired": "Chagua usajili, kikundi cha rasilimali, na akaunti.",
+    "connectionFailed": "Haiwezi kufikia akaunti hii. Hakikisha maelezo ni sahihi na una ruhusa ya kufikia.",
+    "duplicateSource": "Akaunti hii tayari imeunganishwa kama \"{name}\".",
+    "connectionSuccessModels": "Imeunganishwa — utekelezaji wa modeli {count} umepatikana",
+    "connectionSuccessEmpty": "Imeunganishwa, lakini hakuna utekelezaji wa modeli uliopatikana kwenye akaunti hii.",
+    "checkingConnection": "Inachunguza muunganiko...",
+    "next": "Nenda",
+    "back": "Nyuma",
+    "cancel": "Ghairi",
+    "connect": "Unganisha",
+    "save": "Hifadhi",
+    "scanningResources": "Inachanganua usajili wako wa Azure...",
+    "discoveryPartialWarning": "{count, plural, one {# usajili} other {# usajili}} haukuweza kuchanganuliwa. Tumia ingizo la mkono ikiwa akaunti yako haipo.",
+    "discoveryTruncatedWarning": "Kulikuwa na rasilimali nyingi sana kuchanganua kikamilifu. Tumia ingizo la mkono ikiwa akaunti yako haipo.",
+    "noAccountsDiscovered": "Hakuna akaunti za Foundry zilizopatikana kwenye usajili wako. Tumia ingizo la mkono ikiwa unajua njia.",
+    "retryScan": "Jaribu kuchanganua tena",
+    "searchAccountsPlaceholder": "Tafuta akaunti...",
+    "modelsSelectedCount": "{selected} kati ya {total} mifano imechaguliwa",
+    "selectAll": "Chagua zote",
+    "deselectAll": "Ondoa chaguzi zote",
+    "autoAddLabel": "Ongeza mifano mpya moja kwa moja",
+    "autoAddDescription": "Mipangilio mpya ya modeli itakayoongezwa kwenye akaunti hii itaonekana moja kwa moja. Mifano isiyochaguliwa itaendelea kutengwa."
   }
 }

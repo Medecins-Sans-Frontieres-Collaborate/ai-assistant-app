@@ -1358,6 +1358,15 @@
     "reasoningModel": "نموذج استدلال: يفكر خطوة بخطوة قبل الإجابة. أبطأ، لكنه أفضل في المشكلات الصعبة.",
     "variant": {
       "label": "النُسخة"
+    },
+    "deployment": {
+      "title": "النشر",
+      "source": "المصدر",
+      "account": "الحساب",
+      "location": "الموقع",
+      "deployment": "النشر",
+      "modelVersion": "إصدار النموذج",
+      "publisher": "الناشر"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "نموذج xAI خفيف. أسرع وأقل تكلفة للأسئلة السريعة والمحادثات غير الرسمية."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "النموذج الرائد في مجموعة GPT-5.6 من OpenAI. الأقوى في الكتابة والبحث والبرمجة وحل المشكلات المعقدة."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "المستوى المتوازن في مجموعة GPT-5.6 من OpenAI. ممتاز للكتابة اليومية والتحليل والبرمجة مع استجابات سريعة."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "المستوى الخفيف والسريع في مجموعة GPT-5.6 من OpenAI. الأنسب للأسئلة السريعة والمهام البسيطة بتكلفة منخفضة."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "أحدث نموذج متوسط الحجم من Mistral. بديل أوروبي يوازن بين الكفاءة والسرعة للأعمال اليومية."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "يمكنك إغلاق هذه النافذة والعودة إلى التطبيق.",
       "closeButton": "إغلاق النافذة"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "ربط مصدر نموذج",
+    "addAnother": "إضافة مصدر نموذج آخر",
+    "edit": "تعديل",
+    "disconnect": "قطع الاتصال مع {name}",
+    "disconnectedToast": "تم قطع الاتصال مع {name}",
+    "modelCountLabel": "{count} نماذج",
+    "loadingModels": "جارٍ تحميل النماذج...",
+    "noModelsAvailable": "لا توجد نماذج متاحة من هذا المصدر",
+    "sourceUnreachable": "تعذر الوصول إلى هذا المصدر. قد يكون تم تغيير صلاحياتك أو أن الخدمة غير متاحة مؤقتاً.",
+    "retry": "إعادة المحاولة",
+    "connectFoundryAccount": "ربط حساب Microsoft Azure Foundry",
+    "connectFoundryDescription": "اكتشف عمليات نشر النماذج من حساب Azure Foundry الذي لديك صلاحية عليه. صلاحياتك في Azure تسمح بكل عملية طلب — قيود النماذج الخاصة بالتطبيق لا تنطبق هنا.",
+    "selectModelsDescription": "اختر عمليات نشر النماذج التي ستظهر في محدد النماذج الخاص بك من هذا الحساب.",
+    "editConnection": "تعديل الاتصال",
+    "nameLabel": "الاسم",
+    "namePlaceholder": "مثال: بيئة فريقي التجريبية",
+    "nameRequired": "اسم المصدر مطلوب",
+    "foundryAccountLabel": "حساب Foundry",
+    "enterManually": "إدخال يدوي",
+    "browseResources": "تصفح الموارد",
+    "subscriptionIdLabel": "معرف الاشتراك",
+    "resourceGroupLabel": "مجموعة الموارد",
+    "accountNameLabel": "اسم الحساب",
+    "subscriptionRequired": "اختر اشتراكاً",
+    "accountRequired": "اختر حساب Foundry",
+    "accountSelectionRequired": "اختر حساباً من القائمة.",
+    "selectAllRequired": "اختر الاشتراك ومجموعة الموارد والحساب.",
+    "connectionFailed": "تعذر الوصول إلى هذا الحساب. يرجى التحقق من صحة التفاصيل ومن أن لديك صلاحية الوصول.",
+    "duplicateSource": "هذا الحساب متصل بالفعل كـ \"{name}\".",
+    "connectionSuccessModels": "تم الاتصال — تم العثور على {count} نشر للنماذج",
+    "connectionSuccessEmpty": "تم الاتصال، لكن لم يتم العثور على أي عمليات نشر للنماذج في هذا الحساب.",
+    "checkingConnection": "جارٍ التحقق من الاتصال...",
+    "next": "التالي",
+    "back": "السابق",
+    "cancel": "إلغاء",
+    "connect": "اتصال",
+    "save": "حفظ",
+    "scanningResources": "جاري فحص اشتراكات Azure الخاصة بك...",
+    "discoveryPartialWarning": "تعذر فحص {count, plural, one {# اشتراك} other {# اشتراكات}}. استخدم الإدخال اليدوي إذا كان حسابك غير موجود.",
+    "discoveryTruncatedWarning": "كانت هناك موارد كثيرة جداً للفحص الكامل. استخدم الإدخال اليدوي إذا كان حسابك غير موجود.",
+    "noAccountsDiscovered": "لم يتم العثور على أي حساب Foundry في اشتراكاتك. استخدم الإدخال اليدوي إذا كنت تعرف المسار.",
+    "retryScan": "إعادة محاولة الفحص",
+    "searchAccountsPlaceholder": "بحث في الحسابات...",
+    "modelsSelectedCount": "تم اختيار {selected} من {total} نموذجاً",
+    "selectAll": "تحديد الكل",
+    "deselectAll": "إلغاء تحديد الكل",
+    "autoAddLabel": "إضافة النماذج الجديدة تلقائياً",
+    "autoAddDescription": "النماذج التي يتم نشرها في هذا الحساب لاحقاً ستظهر تلقائياً. النماذج غير المحددة ستظل مستبعدة."
   }
 }

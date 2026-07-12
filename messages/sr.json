@@ -1508,6 +1508,15 @@
     "reasoningModel": "Model za rezonovanje: razmišlja korak po korak pre odgovora. Sporiji, ali bolji kod teških problema.",
     "variant": {
       "label": "Varijanta"
+    },
+    "deployment": {
+      "title": "Implementacija",
+      "source": "Izvor",
+      "account": "Nalog",
+      "location": "Lokacija",
+      "deployment": "Implementacija",
+      "modelVersion": "Verzija modela",
+      "publisher": "Izdavač"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Lakša verzija xAI modela. Brži i povoljniji za kratka pitanja i neformalne razgovore."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Glavni model iz OpenAI GPT-5.6 trojke. Najjači za pisanje, istraživanje, programiranje i rešavanje složenih problema."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Izbalansirani model iz OpenAI GPT-5.6 trojke. Dobar za svakodnevno pisanje, analizu i programiranje uz brze odgovore."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Laki i brzi model iz OpenAI GPT-5.6 trojke. Najbolji za brza pitanja i jednostavne zadatke uz niske troškove."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Najnoviji srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Možete zatvoriti ovaj prozor i vratiti se u aplikaciju.",
       "closeButton": "Zatvori prozor"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Poveži izvor modela",
+    "addAnother": "Dodaj još jedan izvor modela",
+    "edit": "Izmeni",
+    "disconnect": "Prekini vezu sa {name}",
+    "disconnectedToast": "Veza sa {name} je prekinuta",
+    "modelCountLabel": "{count} modela",
+    "loadingModels": "Učitavanje modela...",
+    "noModelsAvailable": "Nema dostupnih modela iz ovog izvora",
+    "sourceUnreachable": "Nije moguće pristupiti ovom izvoru. Vaš pristup je možda promenjen ili je servis privremeno nedostupan.",
+    "retry": "Pokušaj ponovo",
+    "connectFoundryAccount": "Poveži Microsoft Azure Foundry nalog",
+    "connectFoundryDescription": "Otkrijte implementacije modela iz Azure Foundry naloga kojem imate pristup. Vaša sopstvena Azure ovlašćenja autorizuju svaki zahtev — ograničenja aplikacije za modele se ovde ne primenjuju.",
+    "selectModelsDescription": "Izaberite koje implementacije modela sa ovog naloga će se pojaviti u izboru modela.",
+    "editConnection": "Izmeni vezu",
+    "nameLabel": "Naziv",
+    "namePlaceholder": "npr. Moj tim Sandbox",
+    "nameRequired": "Naziv izvora je obavezan",
+    "foundryAccountLabel": "Foundry nalog",
+    "enterManually": "Unesite ručno",
+    "browseResources": "Pregledaj resurse",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Grupa resursa",
+    "accountNameLabel": "Naziv naloga",
+    "subscriptionRequired": "Izaberite pretplatu",
+    "accountRequired": "Izaberite Foundry nalog",
+    "accountSelectionRequired": "Izaberite nalog sa liste.",
+    "selectAllRequired": "Izaberite pretplatu, grupu resursa i nalog.",
+    "connectionFailed": "Nije moguće pristupiti ovom nalogu. Proverite da li su podaci tačni i da li imate pristup.",
+    "duplicateSource": "Ovaj nalog je već povezan kao \"{name}\".",
+    "connectionSuccessModels": "Povezano — pronađeno {count} implementacija modela",
+    "connectionSuccessEmpty": "Povezano, ali nisu pronađene implementacije modela na ovom nalogu.",
+    "checkingConnection": "Provera veze...",
+    "next": "Dalje",
+    "back": "Nazad",
+    "cancel": "Otkaži",
+    "connect": "Poveži",
+    "save": "Sačuvaj",
+    "scanningResources": "Skeniranje vaših Azure pretplata...",
+    "discoveryPartialWarning": "{count, plural, one {# pretplata} other {# pretplata}} nije mogla da bude skenirana. Koristite ručni unos ako vaš nalog nedostaje.",
+    "discoveryTruncatedWarning": "Ima previše resursa za potpuno skeniranje. Koristite ručni unos ako vaš nalog nedostaje.",
+    "noAccountsDiscovered": "Nijedan Foundry nalog nije pronađen u vašim pretplatama. Koristite ručni unos ako znate putanju.",
+    "retryScan": "Pokušaj ponovo skeniranje",
+    "searchAccountsPlaceholder": "Pretražite naloge...",
+    "modelsSelectedCount": "Izabrano {selected} od ukupno {total} modela",
+    "selectAll": "Izaberi sve",
+    "deselectAll": "Poništi izbor svih",
+    "autoAddLabel": "Automatski dodaj nove modele",
+    "autoAddDescription": "Kasnije dodate implementacije modela na ovaj nalog će se pojaviti automatski. Modeli koji nisu označeni ostaju isključeni."
   }
 }

@@ -1358,6 +1358,15 @@
     "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir.",
     "variant": {
       "label": "Varyant"
+    },
+    "deployment": {
+      "title": "Dağıtım",
+      "source": "Kaynak",
+      "account": "Hesap",
+      "location": "Konum",
+      "deployment": "Dağıtım",
+      "modelVersion": "Model sürümü",
+      "publisher": "Yayıncı"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Daha hafif bir xAI modeli. Hızlı ve ekonomik; kısa sorular ve gündelik sohbetler için uygundur."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün amiral gemisi. Yazma, araştırma, kodlama ve karmaşık problem çözmede en güçlü model."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün dengeli modeli. Günlük yazma, analiz ve hızlı cevaplarla kodlama için iyi bir seçenek."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün hafif ve hızlı modeli. Hızlı sorular ve basit görevler için düşük maliyetli en iyi seçim."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral'ın en yeni orta ölçekli modeli. Günlük işler için yetenek ve hızı dengeleyen, Avrupa kökenli bir alternatif."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Bu pencereyi kapatabilir ve uygulamaya dönebilirsiniz.",
       "closeButton": "Pencereyi kapat"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Bir model kaynağı bağlayın",
+    "addAnother": "Başka bir model kaynağı ekle",
+    "edit": "Düzenle",
+    "disconnect": "{name} bağlantısını kes",
+    "disconnectedToast": "{name} bağlantısı kesildi",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Modeller yükleniyor...",
+    "noModelsAvailable": "Bu kaynaktan kullanılabilir model yok",
+    "sourceUnreachable": "Bu kaynağa ulaşılamadı. Erişim yetkiniz değişmiş olabilir veya hizmet geçici olarak kullanılamıyor.",
+    "retry": "Yeniden dene",
+    "connectFoundryAccount": "Microsoft Azure Foundry Hesabı Bağla",
+    "connectFoundryDescription": "Erişiminiz olan Azure Foundry hesabından model dağıtımlarını keşfedin. Kendi Azure izinleriniz her isteği yetkilendirir — uygulamanın model kısıtlamaları burada geçerli değildir.",
+    "selectModelsDescription": "Bu hesaptan hangi model dağıtımlarının model seçicide görüneceğini seçin.",
+    "editConnection": "Bağlantıyı Düzenle",
+    "nameLabel": "Ad",
+    "namePlaceholder": "örn. Ekibim Sandbox",
+    "nameRequired": "Kaynak adı gereklidir",
+    "foundryAccountLabel": "Foundry Hesabı",
+    "enterManually": "Manuel gir",
+    "browseResources": "Kaynaklara göz at",
+    "subscriptionIdLabel": "Abonelik Kimliği",
+    "resourceGroupLabel": "Kaynak Grubu",
+    "accountNameLabel": "Hesap Adı",
+    "subscriptionRequired": "Bir abonelik seçin",
+    "accountRequired": "Bir Foundry hesabı seçin",
+    "accountSelectionRequired": "Listeden bir hesap seçin.",
+    "selectAllRequired": "Abonelik, kaynak grubu ve hesap seçin.",
+    "connectionFailed": "Bu hesaba ulaşılamadı. Bilgilerin doğru olduğundan ve erişiminiz olduğundan emin olun.",
+    "duplicateSource": "Bu hesap zaten \"{name}\" olarak bağlı.",
+    "connectionSuccessModels": "Bağlandı — {count} model dağıtımı bulundu",
+    "connectionSuccessEmpty": "Bağlandı, ancak bu hesapta model dağıtımı bulunamadı.",
+    "checkingConnection": "Bağlantı kontrol ediliyor...",
+    "next": "İleri",
+    "back": "Geri",
+    "cancel": "İptal",
+    "connect": "Bağlan",
+    "save": "Kaydet",
+    "scanningResources": "Azure abonelikleriniz taranıyor...",
+    "discoveryPartialWarning": "{count, plural, one {# abone} other {# abone}} taranamadı. Hesabınız eksikse manuel giriş yapabilirsiniz.",
+    "discoveryTruncatedWarning": "Taranacak çok fazla kaynak var. Hesabınız eksikse manuel giriş yapabilirsiniz.",
+    "noAccountsDiscovered": "Aboneliklerinizde herhangi bir Foundry hesabı bulunamadı. Yolu biliyorsanız manuel giriş yapabilirsiniz.",
+    "retryScan": "Taramayı tekrar dene",
+    "searchAccountsPlaceholder": "Hesapları ara...",
+    "modelsSelectedCount": "{total} modelin {selected} tanesi seçildi",
+    "selectAll": "Tümünü seç",
+    "deselectAll": "Tümünün seçimini kaldır",
+    "autoAddLabel": "Yeni modelleri otomatik ekle",
+    "autoAddDescription": "Bu hesaba daha sonra eklenen model dağıtımları otomatik olarak görünür. Seçili olmayan modeller hariç tutulur."
   }
 }

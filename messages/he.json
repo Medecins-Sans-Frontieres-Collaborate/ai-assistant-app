@@ -1457,6 +1457,15 @@
     "reasoningModel": "מודל חשיבה: מנתח שלב-אחר-שלב לפני מתן תשובה. איטי יותר, טוב יותר בבעיות קשות.",
     "variant": {
       "label": "וריאנט"
+    },
+    "deployment": {
+      "title": "פריסה",
+      "source": "מקור",
+      "account": "חשבון",
+      "location": "מיקום",
+      "deployment": "פריסה",
+      "modelVersion": "גרסת מודל",
+      "publisher": "מפרסם"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "דגם קל יותר של xAI. מהיר וזול יותר עבור שאלות מהירות ושיחות בלתי פורמליות."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "המודל המוביל בשלישיית GPT-5.6 של OpenAI. החזק ביותר בכתיבה, מחקר, קידוד ופתרון בעיות מורכבות."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "הרמה המאזנת בשלישיית GPT-5.6 של OpenAI. מתאים לכתיבה יומיומית, ניתוח וקידוד עם תגובות מהירות."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "הרמה הקלה והמהירה בשלישיית GPT-5.6 של OpenAI. מתאים במיוחד לשאלות מהירות ומשימות פשוטות בעלות נמוכה."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "המודל בגודל בינוני החדש ביותר של Mistral. חלופה אירופית שמאזנת בין יכולות למהירות לעבודה יומיומית."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "אפשר לסגור חלון זה ולחזור לאפליקציה.",
       "closeButton": "סגירת חלון"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "חבר מקור מודל",
+    "addAnother": "הוסף מקור מודל נוסף",
+    "edit": "ערוך",
+    "disconnect": "ניתוק {name}",
+    "disconnectedToast": "נותק {name}",
+    "modelCountLabel": "{count} מודלים",
+    "loadingModels": "טוען מודלים...",
+    "noModelsAvailable": "אין מודלים זמינים ממקור זה",
+    "sourceUnreachable": "לא ניתן לגשת למקור זה. ייתכן שהגישה שלך השתנתה, או שהשירות אינו זמין זמנית.",
+    "retry": "נסה שוב",
+    "connectFoundryAccount": "חבר חשבון Microsoft Azure Foundry",
+    "connectFoundryDescription": "גלה פריסות מודלים מחשבון Azure Foundry שלך. ההרשאות שלך ב-Azure מאשרות כל בקשה — מגבלות המודלים של האפליקציה אינן חלות כאן.",
+    "selectModelsDescription": "בחר אילו פריסות מודלים מחשבון זה יופיעו בבורר המודלים שלך.",
+    "editConnection": "ערוך חיבור",
+    "nameLabel": "שם",
+    "namePlaceholder": "לדוג' Team Sandbox שלי",
+    "nameRequired": "נדרש שם מקור",
+    "foundryAccountLabel": "חשבון Foundry",
+    "enterManually": "הזן ידנית",
+    "browseResources": "עיין במשאבים",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "קבוצת משאבים",
+    "accountNameLabel": "שם חשבון",
+    "subscriptionRequired": "בחר מנוי",
+    "accountRequired": "בחר חשבון Foundry",
+    "accountSelectionRequired": "בחר חשבון מהרשימה.",
+    "selectAllRequired": "בחר מנוי, קבוצת משאבים וחשבון.",
+    "connectionFailed": "לא ניתן לגשת לחשבון זה. בדוק שהפרטים נכונים ויש לך גישה.",
+    "duplicateSource": "חשבון זה כבר מחובר כ-\"{name}\".",
+    "connectionSuccessModels": "חובר — נמצאו {count} פריסות מודלים",
+    "connectionSuccessEmpty": "חובר, אך לא נמצאו פריסות מודלים בחשבון זה.",
+    "checkingConnection": "בודק חיבור...",
+    "next": "הבא",
+    "back": "חזור",
+    "cancel": "בטל",
+    "connect": "התחבר",
+    "save": "שמור",
+    "scanningResources": "סורק את המנויים שלך ב-Azure...",
+    "discoveryPartialWarning": "לא ניתן היה לסרוק {count, plural, one {# מנוי} other {# מנויים}}. השתמש בהזנה ידנית אם החשבון שלך לא מופיע.",
+    "discoveryTruncatedWarning": "ישנם יותר מדי משאבים לסריקה מלאה. השתמש בהזנה ידנית אם החשבון שלך לא מופיע.",
+    "noAccountsDiscovered": "לא נמצאו חשבונות Foundry במנויים שלך. השתמש בהזנה ידנית אם ידוע לך הנתיב.",
+    "retryScan": "נסה לסרוק שוב",
+    "searchAccountsPlaceholder": "חפש חשבונות...",
+    "modelsSelectedCount": "{selected} מתוך {total} מודלים נבחרו",
+    "selectAll": "בחר הכל",
+    "deselectAll": "בטל בחירה מהכל",
+    "autoAddLabel": "הוסף מודלים חדשים אוטומטית",
+    "autoAddDescription": "הפצות מודלים שיתווספו לחשבון זה מאוחר יותר יוצגו אוטומטית. מודלים שלא מסומנים יישארו מוחרגים."
   }
 }

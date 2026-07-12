@@ -1508,6 +1508,15 @@
     "reasoningModel": "ម៉ូដែលយល់ស្រួល៖ ពិចារណาทีละជំហានមុនឆ្លើយ។ យឺតបន្តិច ប៉ុន្តែប្រសើរលើបញ្ហាពិបាកៗ។",
     "variant": {
       "label": "វ៉ារ្យង់"
+    },
+    "deployment": {
+      "title": "ការតាំងពង្រីក",
+      "source": "ប្រភព",
+      "account": "គណនី",
+      "location": "ទីតាំង",
+      "deployment": "ការតាំងពង្រីក",
+      "modelVersion": "កំណែម៉ូឌែល",
+      "publisher": "អ្នកបោះផ្សាយ"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "ម៉ូដែលស្រាលរបស់ xAI។ លឿន និងសន្សំថវិកាសម្រាប់សំណួររហ័ស និងជជែកធម្មតា។"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "គឺជាម៉ូឌែលដ៏ល្អបំផុតក្នុងចំណោម GPT-5.6 របស់ OpenAI មានសមត្ថភាពខ្លាំងក្នុងការសរសេរ ស្រាវជ្រាវ កូដ និងដោះស្រាយបញ្ហាស្មុគស្មាញ។"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "ជាម៉ូឌែលដែលសមតុល្យក្នុងចំណោម GPT-5.6 របស់ OpenAI ល្អសម្រាប់ការសរសេរប្រចាំថ្ងៃ វិភាគ និងកូដ ដោយឆាប់ស្និទ្ធ។"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "ជាម៉ូឌែលស្រាលនិងឆាប់រហ័សបំផុតក្នុងចំណោម GPT-5.6 របស់ OpenAI ល្អបំផុតសម្រាប់សំណួរឆាប់ៗ និងភារកិច្ចសាមញ្ញក្នុងតម្លៃទាប។"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "ម៉ូឌែលកម្រិតមធ្យមថ្មីបំផុតរបស់ Mistral ជាជម្រើសប្រចាំអឺរ៉ុបដែលសម្របសម្រួលសមត្ថភាពនិងល្បឿនសម្រាប់ការងារប្រចាំថ្ងៃ។"
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "អ្នកអាចបិទបង្អួចនេះ ហើយត្រលប់ទៅ app។",
       "closeButton": "បិទបង្អួច"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "ភ្ជាប់ប្រភពម៉ូឌែល",
+    "addAnother": "បន្ថែមប្រភពម៉ូឌែលថ្មី",
+    "edit": "កែសម្រួល",
+    "disconnect": "ផ្តាច់ {name}",
+    "disconnectedToast": "បានផ្តាច់ {name}",
+    "modelCountLabel": "ម៉ូឌែល {count}",
+    "loadingModels": "កំពុងទាញម៉ូឌែល...",
+    "noModelsAvailable": "មិនមានម៉ូឌែលពីប្រភពនេះទេ",
+    "sourceUnreachable": "មិនអាចភ្ជាប់ទៅប្រភពនេះបានទេ។ សិទ្ធិអាចត្រូវបានផ្លាស់ប្តូរ ឬសេវាកម្មអាចមិនមានស្រាបបណ្ដោះអាសន្ន។",
+    "retry": "សាកល្បងម្ដងទៀត",
+    "connectFoundryAccount": "ភ្ជាប់គណនី Microsoft Azure Foundry",
+    "connectFoundryDescription": "ស្វែងរកការតាំងម៉ូឌែលពីគណនី Azure Foundry ដែលអ្នកមានសិទ្ធិ។ សិទ្ធិ Azure របស់អ្នកធ្វើអនុញ្ញាតពាក្យសុំគ្រប់ករណី — ការដាក់កម្រិតម៉ូឌែលរបស់កម្មវិធីមិនដើរតួនាទីនៅទីនេះទេ។",
+    "selectModelsDescription": "ជ្រើសការតាំងម៉ូឌែលពីគណនីនេះ ឲ្យបង្ហាញនៅក្នុងការជ្រើសម៉ូឌែលរបស់អ្នក។",
+    "editConnection": "កែសម្រួលការភ្ជាប់",
+    "nameLabel": "ឈ្មោះ",
+    "namePlaceholder": "ឧ. My Team Sandbox",
+    "nameRequired": "ត្រូវការឈ្មោះប្រភព",
+    "foundryAccountLabel": "គណនី Foundry",
+    "enterManually": "បញ្ចូលដោយដៃ",
+    "browseResources": "រកមើលធនធាន",
+    "subscriptionIdLabel": "លេខសម្គាល់ការជាវ",
+    "resourceGroupLabel": "ក្រុមធនធាន",
+    "accountNameLabel": "ឈ្មោះគណនី",
+    "subscriptionRequired": "ជ្រើសការជាវ",
+    "accountRequired": "ជ្រើសគណនី Foundry",
+    "accountSelectionRequired": "សូមជ្រើសគណនីពីបញ្ជី។",
+    "selectAllRequired": "សូមជ្រើសការជាវ ក្រុមធនធាន និងគណនី។",
+    "connectionFailed": "មិនអាចភ្ជាប់ទៅគណនីនេះបានទេ។ សូមពិនិត្យព័ត៌មានឲ្យត្រឹមត្រូវ និងអះអាងសិទ្ធិអោយមាន។",
+    "duplicateSource": "គណនីនេះត្រូវបានភ្ជាប់រួចហើយជា \"{name}\"។",
+    "connectionSuccessModels": "បានភ្ជាប់ — រកឃើញការតាំងម៉ូឌែល {count}",
+    "connectionSuccessEmpty": "បានភ្ជាប់ ប៉ុន្តែមិនមានការតាំងម៉ូឌែលនៅលើគណនីនេះទេ។",
+    "checkingConnection": "កំពុងពិនិត្យការភ្ជាប់...",
+    "next": "បន្ទាប់",
+    "back": "បង្រោយក្រោយ",
+    "cancel": "បោះបង់",
+    "connect": "ភ្ជាប់",
+    "save": "រក្សាទុក",
+    "scanningResources": "កំពុងស្កេន subscription នៅក្នុង Azure របស់អ្នក...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription មិនអាចស្កេនបាន} other {# subscription មិនអាចស្កេនបាន}}។ សូមបញ្ចូលដោយដៃ ប្រសិនបើគណនីរបស់អ្នកមិនត្រូវបង្ហាញ។",
+    "discoveryTruncatedWarning": "មានធនធានច្រើនពេកមិនអាចស្កេនបានដឹកនាំទាំងអស់។ សូមបញ្ចូលដោយដៃ ប្រសិនបើគណនីរបស់អ្នកមិនត្រូវបង្ហាញ។",
+    "noAccountsDiscovered": "រកមិនឃើញគណនី Foundry នៅក្នុង subscription របស់អ្នក។ សូមបញ្ចូលដោយដៃ ប្រសិនបើអ្នកដឹងផ្លូវ។",
+    "retryScan": "ស្ទង់លើកម្ដងទៀត",
+    "searchAccountsPlaceholder": "ស្វែងរកគណនី...",
+    "modelsSelectedCount": "បានជ្រើស {selected} ចេញពី {total} ម៉ូឌែល",
+    "selectAll": "ជ្រើសទាំងអស់",
+    "deselectAll": "ដកជម្រើសទាំងអស់",
+    "autoAddLabel": "បន្ថែមម៉ូឌែលថ្មីដោយស្វ័យប្រវត្តិ",
+    "autoAddDescription": "ការដាក់ចេញម៉ូឌែលថ្មីក្នុងគណនីនេះ នឹងបង្ហាញដោយស្វ័យប្រវត្តិ។ ម៉ូឌែលដែលមិនបានជ្រើសនឹងនៅតែត្រូវដកចេញ។"
   }
 }

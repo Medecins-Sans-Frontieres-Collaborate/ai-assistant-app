@@ -1508,6 +1508,15 @@
     "reasoningModel": "Mtundu wa reasoning: umaganizira sitepe ndi sitepe musanapereke yankho. Umachedwa, koma wabwino pa mavuto ovuta.",
     "variant": {
       "label": "Mtundu"
+    },
+    "deployment": {
+      "title": "Kuyika ntchito",
+      "source": "Gwero",
+      "account": "Akaunti",
+      "location": "Malo",
+      "deployment": "Kuyika ntchito",
+      "modelVersion": "Mtundu wa chitsanzo",
+      "publisher": "Wofalitsa"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Mtundu wa xAI wochepa. Amayankha mwachangu komanso otsika mtengo pa mafunso achangu ndi zokambirana zosavuta."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Chitsanzo chachikulu kwambiri cha GPT-5.6 cha OpenAI. Chimatha kwambiri polemba, kafukufuku, mapulogalamu, ndi kuthetsa mavuto ovuta."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Chitsanzo chapakati mu GPT-5.6 cha OpenAI. Chabwino polemba tsiku ndi tsiku, kusanthula, ndi mapulogalamu ndi mayankho achangu."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Chitsanzo chochepa komanso chachangu cha GPT-5.6 cha OpenAI. Choyenera mafunso achangu ndi ntchito zosavuta ndi mtengo wotsika."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mtundu waposachedwa wa Mistral wapakatikati. Njira ya ku Ulaya yomwe imaphatikiza luso ndi liwiro pa ntchito za tsiku ndi tsiku."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Mutha kutseka zenera lino ndipo mubwerere ku app.",
       "closeButton": "Tsekani zenera"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Lumikizani gwero la chitsanzo",
+    "addAnother": "Onjezani gwero lina la chitsanzo",
+    "edit": "Sinthani",
+    "disconnect": "Dulani {name}",
+    "disconnectedToast": "Yadulidwa: {name}",
+    "modelCountLabel": "{count} zitsanzo",
+    "loadingModels": "Kukweza zitsanzo...",
+    "noModelsAvailable": "Palibe zitsanzo zomwe zilipo kuchokera pa gwero ili",
+    "sourceUnreachable": "Sitinathe kulumikizana ndi gwero ili. Mwinanso mwasintha ufulu kapena ntchito ikhoza kukhala itayimitsidwa kaye.",
+    "retry": "Yesani pomwepo",
+    "connectFoundryAccount": "Lumikizani Microsoft Azure Foundry Account",
+    "connectFoundryDescription": "Onani kuyika zitsanzo kuchokera ku akaunti ya Azure Foundry yomwe muli ndi ufulu kuigwiritsa ntchito. Chilolezo chanu cha Azure chimavomereza pempho lililonse — malire a chitsanzo cha pulogalamuyi sagwira ntchito apa.",
+    "selectModelsDescription": "Sankhani kuyika zitsanzo kuchokera mu akaunti iyi kuti zioneke mu chosankha chanu cha zitsanzo.",
+    "editConnection": "Sinthani kulumikizana",
+    "nameLabel": "Dzina",
+    "namePlaceholder": "mwachitsanzo: My Team Sandbox",
+    "nameRequired": "Dzina la gwero likufunika",
+    "foundryAccountLabel": "Akaunti ya Foundry",
+    "enterManually": "Lembani pamanja",
+    "browseResources": "Onani zinthu",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Gulu la zinthu",
+    "accountNameLabel": "Dzina la Akaunti",
+    "subscriptionRequired": "Sankhani subscription",
+    "accountRequired": "Sankhani akaunti ya Foundry",
+    "accountSelectionRequired": "Sankhani akaunti kuchokera pa mndandanda.",
+    "selectAllRequired": "Sankhani subscription, gulu la zinthu, ndi akaunti.",
+    "connectionFailed": "Sitinathe kulumikizana ndi akaunti iyi. Onani ngati zambiri zake ndi zolondola komanso kuti muli ndi ufulu.",
+    "duplicateSource": "Akauntiyi yalonjezedwa kale monga \"{name}\".",
+    "connectionSuccessModels": "Yalumikizidwa — zapezeka koyikidwa kwa chitsanzo {count}",
+    "connectionSuccessEmpty": "Yalumikizidwa, koma palibe koyikidwa kwa chitsanzo pa akaunti iyi.",
+    "checkingConnection": "Kuonera kulumikizana...",
+    "next": "Yotsatira",
+    "back": "Mbuyo",
+    "cancel": "Lekani",
+    "connect": "Lumikizani",
+    "save": "Sungani",
+    "scanningResources": "Tikuwerenga ma Azure subscriptions anu...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} sizinatheke kuwerengedwa. Gwiritsani ntchito kulowa pamanja ngati akaunti yanu ikusowa.",
+    "discoveryTruncatedWarning": "Pakhala ndi zinthu zambiri zoti ziwunikidwe zonse. Gwiritsani ntchito kulowa pamanja ngati akaunti yanu ikusowa.",
+    "noAccountsDiscovered": "Palibe ma Foundry accounts omwe awoneka mu subscriptions zanu. Gwiritsani ntchito kulowa pamanja ngati mukudziwa njira.",
+    "retryScan": "Yesani kuwerenga kachiwiri",
+    "searchAccountsPlaceholder": "Fufuzani ma accounts...",
+    "modelsSelectedCount": "{selected} mwa {total} ma model asankhidwa",
+    "selectAll": "Sankhani zonse",
+    "deselectAll": "Chotsani zisankho zonse",
+    "autoAddLabel": "Onjezerani ma models atsopano zokha",
+    "autoAddDescription": "Model deployments omwe adzawonjezedwa ku akaunti iyi pambuyo pake adzawoneka okha. Ma model osankhidwa ayi adzakhalabe kunja."
   }
 }

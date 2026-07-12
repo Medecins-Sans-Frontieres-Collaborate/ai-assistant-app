@@ -1358,6 +1358,15 @@
     "reasoningModel": "Resonerande modell: tänker stegvis innan svar. Långsammare, bättre på svåra problem.",
     "variant": {
       "label": "Variant"
+    },
+    "deployment": {
+      "title": "Distribution",
+      "source": "Källa",
+      "account": "Konto",
+      "location": "Plats",
+      "deployment": "Distribution",
+      "modelVersion": "Modellversion",
+      "publisher": "Publicerare"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "En lättare xAI-modell. Snabbare och billigare för snabba frågor och vardagliga samtal."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Flaggskeppet i OpenAI:s GPT-5.6-trio. Starkast på skrivande, forskning, kodning och komplex problemlösning."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Den balanserade nivån i OpenAI:s GPT-5.6-trio. Passar för vardagligt skrivande, analys och kodning med snabba svar."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Den lätta och snabba nivån i OpenAI:s GPT-5.6-trio. Bäst för snabba frågor och enkla uppgifter till låg kostnad."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistrals senaste modell i mellanstorlek. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagligt arbete."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Du kan stänga detta fönster och återgå till appen.",
       "closeButton": "Stäng fönster"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Anslut en modellkälla",
+    "addAnother": "Lägg till en till modellkälla",
+    "edit": "Redigera",
+    "disconnect": "Koppla från {name}",
+    "disconnectedToast": "Frånkopplad {name}",
+    "modelCountLabel": "{count} modeller",
+    "loadingModels": "Laddar modeller...",
+    "noModelsAvailable": "Inga modeller tillgängliga från denna källa",
+    "sourceUnreachable": "Kunde inte nå denna källa. Din åtkomst kan ha ändrats eller så är tjänsten tillfälligt otillgänglig.",
+    "retry": "Försök igen",
+    "connectFoundryAccount": "Anslut ett Microsoft Azure Foundry-konto",
+    "connectFoundryDescription": "Upptäck modellutplaceringar från ett Azure Foundry-konto du har åtkomst till. Dina egna Azure-behörigheter godkänner varje förfrågan — appens modellbegränsningar gäller inte här.",
+    "selectModelsDescription": "Välj vilka modellutplaceringar från detta konto som ska visas i din modellväljare.",
+    "editConnection": "Redigera anslutning",
+    "nameLabel": "Namn",
+    "namePlaceholder": "t.ex. Mitt team Sandbox",
+    "nameRequired": "Källnamn krävs",
+    "foundryAccountLabel": "Foundry-konto",
+    "enterManually": "Ange manuellt",
+    "browseResources": "Bläddra bland resurser",
+    "subscriptionIdLabel": "Prenumerations-ID",
+    "resourceGroupLabel": "Resursgrupp",
+    "accountNameLabel": "Kontonamn",
+    "subscriptionRequired": "Välj en prenumeration",
+    "accountRequired": "Välj ett Foundry-konto",
+    "accountSelectionRequired": "Välj ett konto från listan.",
+    "selectAllRequired": "Välj prenumeration, resursgrupp och konto.",
+    "connectionFailed": "Kunde inte nå detta konto. Kontrollera att uppgifterna stämmer och att du har åtkomst.",
+    "duplicateSource": "Detta konto är redan anslutet som \"{name}\".",
+    "connectionSuccessModels": "Ansluten – {count} modellutplacering(ar) hittades",
+    "connectionSuccessEmpty": "Ansluten, men inga modellutplaceringar hittades på detta konto.",
+    "checkingConnection": "Kontrollerar anslutning...",
+    "next": "Nästa",
+    "back": "Tillbaka",
+    "cancel": "Avbryt",
+    "connect": "Anslut",
+    "save": "Spara",
+    "scanningResources": "Skannar dina Azure-prenumerationer...",
+    "discoveryPartialWarning": "{count, plural, one {# prenumeration} other {# prenumerationer}} kunde inte skannas. Använd manuell inmatning om ditt konto saknas.",
+    "discoveryTruncatedWarning": "Det fanns för många resurser för att skanna helt. Använd manuell inmatning om ditt konto saknas.",
+    "noAccountsDiscovered": "Inga Foundry-konton hittades i dina prenumerationer. Använd manuell inmatning om du känner till sökvägen.",
+    "retryScan": "Försök skanna igen",
+    "searchAccountsPlaceholder": "Sök konton...",
+    "modelsSelectedCount": "{selected} av {total} modeller valda",
+    "selectAll": "Markera alla",
+    "deselectAll": "Avmarkera alla",
+    "autoAddLabel": "Lägg till nya modeller automatiskt",
+    "autoAddDescription": "Modellutplaceringar som läggs till på detta konto senare visas automatiskt. Avmarkerade modeller förblir undantagna."
   }
 }

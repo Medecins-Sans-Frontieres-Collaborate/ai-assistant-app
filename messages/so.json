@@ -1508,6 +1508,15 @@
     "reasoningModel": "Moodelka xisaabaadka: wuxuu fikirayaa tilaabo-tillaabo ka hor inta uusan jawaabin. Wuxuu gaabis yahay, laakin wuu ka wanaagsan yahay dhibaatooyinka adag.",
     "variant": {
       "label": "Nooc"
+    },
+    "deployment": {
+      "title": "Dejin",
+      "source": "Ilaha",
+      "account": "Akoon",
+      "location": "Goob",
+      "deployment": "Dejin",
+      "modelVersion": "Nooca modelka",
+      "publisher": "Daabace"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Qaab xAI oo fudud. Waxay u dhaqso badan tahay kuna jaban su'aalaha degdega ah iyo sheekaysiga caadiga ah."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Model-ka ugu sareeya ee GPT-5.6 ee OpenAI. Aad ugu xoogan qoraalka, cilmi-baarista, barnaamijinta, iyo xalinta dhibaatooyin adag."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Heerka dhexe ee GPT-5.6 ee OpenAI. Ku habboon qoraallada maalinlaha ah, falanqaynta, iyo barnaamijinta jawaabo degdeg ah."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Heer fudud oo degdeg ah ee GPT-5.6 ee OpenAI. Ugu fiican su'aalaha degdega ah iyo shaqooyinka sahlan kharash yar."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Model-kii ugu dambeysay ee Mistral ee dhexdhexaadka ah. Badal Yurub ah oo isku dheelitiran awoodda iyo xawaaraha shaqo maalmeedka."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Waxaad xidhikartaa daaqadan oo ku laaban kartaa app-ka.",
       "closeButton": "Daaqad xidh"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Ku xidh il model",
+    "addAnother": "Ku dar il model kale",
+    "edit": "Tafatir",
+    "disconnect": "Ka go'{name}",
+    "disconnectedToast": "La gooyey {name}",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Model-yo ayaa soo dhacaya...",
+    "noModelsAvailable": "Model lagama heli karo ilahan",
+    "sourceUnreachable": "Laguma guulaysan in lala xiriiro ilahan. Xuquuqdaada waa laga yaabaa inay is beddeshay, ama adeeggu si ku-meelgaar ah wuu u xiran yahay.",
+    "retry": "Isku day mar kale",
+    "connectFoundryAccount": "Ku xidh Akoon Microsoft Azure Foundry",
+    "connectFoundryDescription": "Ka raadso model dejinno akoontiga Azure Foundry ee aad heli karto. Xuquuqahaaga Azure ayaa ansaxinaya codsiyada oo dhan — xaddidaadaha app-kan ma khuseeyaan halkan.",
+    "selectModelsDescription": "Dooro model dejinno aad rabto in ay ka muuqdaan xulashadaada model-ka.",
+    "editConnection": "Tafatir Xiritaanka",
+    "nameLabel": "Magaca",
+    "namePlaceholder": "tus. Sanduuqa Kooxdayda",
+    "nameRequired": "Magaca ilaha waa qasab",
+    "foundryAccountLabel": "Akoonka Foundry",
+    "enterManually": "Geli si gacanta ah",
+    "browseResources": "Dib u eeg kheyraadka",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Kooxda Kheyraadka",
+    "accountNameLabel": "Magaca Akoonka",
+    "subscriptionRequired": "Dooro subscription",
+    "accountRequired": "Dooro akoontiga Foundry",
+    "accountSelectionRequired": "Ka dooro akoonti liiska.",
+    "selectAllRequired": "Dooro subscription, koox kheyraad iyo akoon.",
+    "connectionFailed": "Laguma xirin akoontigan. Hubi faahfaahinta iyo in aad haysato xuquuq.",
+    "duplicateSource": "Akoonkani hore ayuu ugu xiran yahay magaca \"{name}\".",
+    "connectionSuccessModels": "Waa la xidhay — {count} model dejin oo la helay",
+    "connectionSuccessEmpty": "Waa la xidhay, balse lama helin wax model dejin ah akoontigan.",
+    "checkingConnection": "Xaqiijinayo xidhitaanka...",
+    "next": "Sii",
+    "back": "Dib u noqo",
+    "cancel": "Jooji",
+    "connect": "Ku xidh",
+    "save": "Kaydi",
+    "scanningResources": "Waxaan baarayaa Azure subscriptions-kaaga...",
+    "discoveryPartialWarning": "{count, plural, one {# account} other {# accounts}} lama baari karo. Haddii akoonkaaga maqan yahay, gacanta ku geli.",
+    "discoveryTruncatedWarning": "Ilo aad u badan ayaa jiray si loo baadho dhammaan. Haddii akoonkaaga maqan yahay, gacanta ku geli.",
+    "noAccountsDiscovered": "Xisaabaad Foundry ah laguma helin subscription-kaaga. Haddii aad garanayso path-ka, gacanta ku geli.",
+    "retryScan": "Baadhista dib u bilaaw",
+    "searchAccountsPlaceholder": "Raadi xisaabaad...",
+    "modelsSelectedCount": "{selected} oo {total} moodel la doortay",
+    "selectAll": "Dhammaan dooro",
+    "deselectAll": "Ka saar dhammaan xulista",
+    "autoAddLabel": "Si toos ah ugu dar moodelada cusub",
+    "autoAddDescription": "Moodelada dambe ee account-kan lagu daro si toos ah baa loo soo bandhigayaa. Moodelada aan la hubin ma muuqan doonaan."
   }
 }

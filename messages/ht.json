@@ -1508,6 +1508,15 @@
     "reasoningModel": "Modèl rezònman: panse etap pa etap anvan li reponn. Pito dousman, pi efikas pou pwoblèm ki difisil.",
     "variant": {
       "label": "Varyan"
+    },
+    "deployment": {
+      "title": "Deplwaman",
+      "source": "Sous",
+      "account": "Konto",
+      "location": "Kote",
+      "deployment": "Deplwaman",
+      "modelVersion": "Vèsyon modèl",
+      "publisher": "Piblikatè"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Yon modèl xAI ki pi lejè. Pi rapid ak pi bon mache pou kesyon rapid ak ti pale senp."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Pi bon modèl nan triy OpenAI GPT-5.6. Pi fò pou ekri, rechèch, pwogramasyon, ak rezoud pwoblèm konplike."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Modèl ki balanse nan triy OpenAI GPT-5.6. Bon pou ekri chak jou, analiz, ak pwogramasyon ak repons rapid."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Modèl ki pi limyè ak rapid nan triy OpenAI GPT-5.6. Pi bon pou kesyon rapid ak travay senp ak pri ba."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Dènye modèl Mistral mwayen. Yon altènativ Ewopeyen ki bay bon balans ant kapasite ak vitès pou travay chak jou."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Ou ka fèmen fenèt sa a epi tounen sou aplikasyon an.",
       "closeButton": "Fèmen fenèt la"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Konekte yon sous modèl",
+    "addAnother": "Ajoute yon lòt sous modèl",
+    "edit": "Modifye",
+    "disconnect": "Dekonekte {name}",
+    "disconnectedToast": "{name} dekonekte",
+    "modelCountLabel": "{count} modèl",
+    "loadingModels": "Chaje modèl yo...",
+    "noModelsAvailable": "Pa gen modèl ki disponib nan sous sa a",
+    "sourceUnreachable": "Pa ka jwenn aksè ak sous sa. Petèt aksè ou chanje, oswa sèvis la pa disponib pou kounye a.",
+    "retry": "Repran",
+    "connectFoundryAccount": "Konekte yon kont Microsoft Azure Foundry",
+    "connectFoundryDescription": "Dekouvri deplwaman modèl nan yon kont Azure Foundry ou gen aksè ladanl. Pwòp pèmisyon Azure ou otorize chak demann — restriksyon sou modèl aplikasyon an pa aplike isit la.",
+    "selectModelsDescription": "Chwazi ki deplwaman modèl sou kont sa a ki ap parèt nan selektè modèl ou.",
+    "editConnection": "Modifye koneksyon",
+    "nameLabel": "Non",
+    "namePlaceholder": "egzanp: Sandbox ekip mwen",
+    "nameRequired": "Non sous obligatwa",
+    "foundryAccountLabel": "Kont Foundry",
+    "enterManually": "Antre manyèlman",
+    "browseResources": "Navige resous yo",
+    "subscriptionIdLabel": "ID abònman",
+    "resourceGroupLabel": "Gwoup resous",
+    "accountNameLabel": "Non kont",
+    "subscriptionRequired": "Chwazi yon abònman",
+    "accountRequired": "Chwazi yon kont Foundry",
+    "accountSelectionRequired": "Chwazi yon kont nan lis la.",
+    "selectAllRequired": "Chwazi yon abònman, gwoup resous, ak kont.",
+    "connectionFailed": "Pa ka rive jwenn kont sa a. Tcheke si detay yo kòrèk epi si ou gen aksè.",
+    "duplicateSource": "Kont sa a deja konekte kòm \"{name}\".",
+    "connectionSuccessModels": "Konekte — {count} deplwaman modèl jwenn",
+    "connectionSuccessEmpty": "Konekte, men pa gen okenn deplwaman modèl sou kont sa a.",
+    "checkingConnection": "Ap verifye koneksyon...",
+    "next": "Swiv",
+    "back": "Retounen",
+    "cancel": "Anile",
+    "connect": "Konekte",
+    "save": "Sove",
+    "scanningResources": "Y ap eskane abònman Azure ou yo...",
+    "discoveryPartialWarning": "{count, plural, one {# abònman} other {# abònman}} pa t ka eskane. Sèvi ak antre manyèl si kont ou pa parèt.",
+    "discoveryTruncatedWarning": "Te gen twòp resous pou eskane tout. Sèvi ak antre manyèl si kont ou pa parèt.",
+    "noAccountsDiscovered": "Pa jwenn okenn kont Foundry nan abònman ou yo. Sèvi ak antre manyèl si ou konnen chimen an.",
+    "retryScan": "Rekòmanse eskane",
+    "searchAccountsPlaceholder": "Chèche kont...",
+    "modelsSelectedCount": "{selected} sou {total} modèl chwazi",
+    "selectAll": "Chwazi tout",
+    "deselectAll": "Deklike tout",
+    "autoAddLabel": "Ajoute nouvo modèl otomatikman",
+    "autoAddDescription": "Depwaman modèl yo ajoute pita nan kont sa a ap parèt otomatikman. Modèl ki pa chwazi yo ap rete eskli."
   }
 }

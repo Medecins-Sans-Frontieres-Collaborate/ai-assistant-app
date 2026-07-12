@@ -1508,6 +1508,15 @@
     "reasoningModel": "तर्क गर्ने मोडेल: जवाफ दिनुअघि चरण-दर-चरण सोच्दछ। ढिलो, गाह्रो समस्यामा राम्रो।",
     "variant": {
       "label": "प्रकार"
+    },
+    "deployment": {
+      "title": "प्रयोग आरम्भ",
+      "source": "स्रोत",
+      "account": "खाता",
+      "location": "स्थान",
+      "deployment": "प्रयोग आरम्भ",
+      "modelVersion": "मोडेल संस्करण",
+      "publisher": "प्रकाशक"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "हलुका xAI मोडेल। छिटो तथा सस्तो, छोटो प्रश्‍न र सामान्य च्याटका लागि उपयुक्त।"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI को GPT-5.6 श्रृंखलाको मुख्य मोडेल। लेखन, अनुसन्धान, कोडिङ र जटिल समस्या समाधानमा सबैभन्दा बलियो।"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI को GPT-5.6 श्रृंखलाको सन्तुलित स्तर। छिटो प्रतिक्रिया सहित दैनिक लेखन, विश्लेषण र कोडिङका लागि उपयुक्त।"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI को GPT-5.6 श्रृंखलाको छिटो र हल्का स्तर। छिटो प्रश्न र साधारण कार्यका लागि सब भन्दा उपयुक्त, कम लागतमा।"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral को नयाँ माध्यम आकारको मोडेल। क्षमता र गति सन्तुलन गर्ने युरोपियन विकल्प, दैनिक कार्यका लागि उपयुक्त।"
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "अब तपाईं यो विन्डो बन्द गरेर एपमा फर्कन सक्नुहुन्छ।",
       "closeButton": "विन्डो बन्द गर्नुहोस्"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "मोडेल स्रोत जडान गर्नुहोस्",
+    "addAnother": "अर्को मोडेल स्रोत थप्नुहोस्",
+    "edit": "सम्पादन गर्नुहोस्",
+    "disconnect": "{name} डिस्कनेक्ट गर्नुहोस्",
+    "disconnectedToast": "{name} डिस्कनेक्ट भयो",
+    "modelCountLabel": "{count} मोडेलहरू",
+    "loadingModels": "मोडेलहरू लोड हुँदैछ...",
+    "noModelsAvailable": "यस स्रोतबाट कुनै मोडेल उपलब्ध छैन",
+    "sourceUnreachable": "यो स्रोतमा जडान गर्न सकिएन। तपाईंको पहुँच परिवर्तन भएको छ वा सेवा अस्थायी रूपमा उपलब्ध छैन।",
+    "retry": "फेरि प्रयास गर्नुहोस्",
+    "connectFoundryAccount": "Microsoft Azure Foundry खाता जडान गर्नुहोस्",
+    "connectFoundryDescription": "तपाईंको पहुँच भएका Azure Foundry खाताबाट मोडेल प्रयोग आरम्भहरू पत्ता लगाउनुहोस्। तपाईंको आफ्नै Azure अनुमति प्रत्येक अनुरोधका लागि प्रयोग हुन्छ — यसमा एपको मोडेल सिमा लागू हुँदैन।",
+    "selectModelsDescription": "यस खाताबाट कुन मोडेल प्रयोगहरू तपाईंको मोडेल छनोटकर्तामा देखाउन हो, छान्नुहोस्।",
+    "editConnection": "जडान सम्पादन गर्नुहोस्",
+    "nameLabel": "नाम",
+    "namePlaceholder": "जस्तै: मेरो टिम स्यान्डबक्स",
+    "nameRequired": "स्रोत नाम आवश्यक छ",
+    "foundryAccountLabel": "Foundry खाता",
+    "enterManually": "म्यानुअली प्रवेश गर्नुहोस्",
+    "browseResources": "रेसोर्सहरू हेर्नुहोस्",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "खाता नाम",
+    "subscriptionRequired": "सब्स्क्रिप्सन छान्नुहोस्",
+    "accountRequired": "Foundry खाता छान्नुहोस्",
+    "accountSelectionRequired": "सूचीबाट खाता चयन गर्नुहोस्।",
+    "selectAllRequired": "सब्स्क्रिप्सन, रिसोर्स ग्रुप, र खाता चयन गर्नुहोस्।",
+    "connectionFailed": "यो खातासँग जडान हुन सकेन। विवरणहरू सहि छन् कि छन् छैनन्, र तपाईंको पहुँच छ कि छैन, जाँच गर्नुहोस्।",
+    "duplicateSource": "यो खाता \"{name}\" को रूपमा पहिल्यै जडान गरिएको छ।",
+    "connectionSuccessModels": "जडान भयो — {count} मोडेल प्रयोग आरम्भ फेला पर्यो",
+    "connectionSuccessEmpty": "जडान भयो, तर यस खातामा कुनै मोडेल प्रयोग आरम्भ फेला परेन।",
+    "checkingConnection": "जडान जाँच हुँदैछ...",
+    "next": "अर्को",
+    "back": "फिर्ता",
+    "cancel": "रद्द गर्नुहोस्",
+    "connect": "जोड्नुहोस्",
+    "save": "सेभ गर्नुहोस्",
+    "scanningResources": "तपाईंका Azure सदस्यता स्क्यान भइरहेको छ...",
+    "discoveryPartialWarning": "{count, plural, one {# सदस्यता} other {# सदस्यताहरू}} स्क्यान गर्न सकिएन। यदि तपाईंको खाता हराएको छ भने म्यानुअल रूपमा जानकारी दिनुहोस्।",
+    "discoveryTruncatedWarning": "स्क्यान गर्नुपर्ने श्रोतहरू धेरै भएका कारण सबैजना पूरा स्क्यान गर्न सकिएन। यदि तपाईंको खाता हराएको छ भने म्यानुअल रूपमा जानकारी दिनुहोस्।",
+    "noAccountsDiscovered": "तपाईंका सदस्यताहरूमा कुनै Foundry खाता फेला परेन। यदि तपाईंलाई पथ थाहा छ भने म्यानुअल रूपमा जानकारी दिनुहोस्।",
+    "retryScan": "पुन: स्क्यान गर्नुहोस्",
+    "searchAccountsPlaceholder": "खाताहरू खोज्नुहोस्...",
+    "modelsSelectedCount": "{total} मध्ये {selected} मोडेल चयन गरिएको",
+    "selectAll": "सबै छान्नुहोस्",
+    "deselectAll": "सबै छनौट हटाउनुहोस्",
+    "autoAddLabel": "नयाँ मोडेलहरू स्वतः थप्नुहोस्",
+    "autoAddDescription": "यस खातामा पछि थपिएका मोडेल तैनाथीहरू स्वचालित रूपमा देखिनेछन्। नचयन गरिएका मोडेलहरू बाहिर नै रहनेछन्।"
   }
 }
