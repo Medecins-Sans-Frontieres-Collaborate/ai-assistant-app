@@ -207,6 +207,7 @@ export async function POST(req: NextRequest): Promise<Response> {
                 case ErrorCode.VALIDATION_FAILED:
                   return 400;
                 case ErrorCode.AGENT_UNAVAILABLE:
+                case ErrorCode.MODEL_UNAVAILABLE:
                   return 409;
                 case ErrorCode.REQUEST_TIMEOUT:
                 case ErrorCode.PIPELINE_TIMEOUT:
@@ -343,6 +344,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           case ErrorCode.VALIDATION_FAILED:
             return 400;
           case ErrorCode.AGENT_UNAVAILABLE:
+          case ErrorCode.MODEL_UNAVAILABLE:
             return 409;
           case ErrorCode.REQUEST_TIMEOUT:
           case ErrorCode.PIPELINE_TIMEOUT:
