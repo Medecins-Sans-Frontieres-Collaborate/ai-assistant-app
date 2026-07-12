@@ -325,4 +325,167 @@ describe('ModelDiscoveryService', () => {
       service.listDeployedModels(ARM_TOKEN, '/not/a/valid/path'),
     ).rejects.toThrow(/Invalid Foundry resource path/);
   });
+
+  // Custom model sources discover with USER tokens: results are RBAC-filtered
+  // per user, so callers pass a cacheScope (token hash) and entries must never
+  // be shared across scopes — or with the unscoped app-identity entry.
+  describe('cacheScope', () => {
+    it('partitions the cache per scope (no cross-user or app-identity sharing)', async () => {
+      mockArm(EU_DEPLOYMENTS);
+
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(1); // scoped hit
+
+      await service.listDeployedModels('token-b', PROJECT_PATH, {
+        cacheScope: 'user-b',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2); // different scope = miss
+
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(3); // unscoped = its own entry
+    });
+
+    it('scopes the in-flight dedup too (concurrent same-scope calls share one fetch)', async () => {
+      mockArm(EU_DEPLOYMENTS);
+      await Promise.all([
+        service.listDeployedModels('token-a', PROJECT_PATH, {
+          cacheScope: 'user-a',
+        }),
+        service.listDeployedModels('token-a', PROJECT_PATH, {
+          cacheScope: 'user-a',
+        }),
+        service.listDeployedModels('token-b', PROJECT_PATH, {
+          cacheScope: 'user-b',
+        }),
+      ]);
+      // user-a dedups to one fetch; user-b must NOT piggyback on user-a's
+      // in-flight discovery (different RBAC).
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('clearCache(path, scope) evicts only that scoped entry', async () => {
+      mockArm(EU_DEPLOYMENTS);
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      await service.listDeployedModels('token-b', PROJECT_PATH, {
+        cacheScope: 'user-b',
+      });
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(3);
+
+      // Evict user-a only (project path is stripped like elsewhere).
+      service.clearCache(PROJECT_PATH, 'user-a');
+
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(4); // re-fetched
+
+      await service.listDeployedModels('token-b', PROJECT_PATH, {
+        cacheScope: 'user-b',
+      });
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(4); // others still cached
+    });
+
+    it('clearCache(path) without a scope evicts the scoped entries too (prefix match)', async () => {
+      mockArm(EU_DEPLOYMENTS);
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      service.clearCache(PROJECT_PATH);
+
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(4); // both re-fetched
+    });
+
+    it('sweeps expired entries on the next cache write (no unbounded growth from rotated tokens)', async () => {
+      const OTHER_ACCOUNT =
+        '/subscriptions/sub/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/ts-aiassist-live-us';
+      // Reads never delete, so expired entries must be swept when a later
+      // discovery writes to the cache — otherwise every rotated OBO token
+      // (fresh cacheScope) leaves a permanently retained entry behind.
+      const cache = (service as unknown as { cache: Map<string, unknown> })
+        .cache;
+      vi.useFakeTimers();
+      try {
+        mockArm(EU_DEPLOYMENTS);
+        await service.listDeployedModels('token-a', PROJECT_PATH, {
+          cacheScope: 'rotated-token-hash',
+        });
+        expect(cache.size).toBe(1);
+
+        // Past the 1h TTL: the next write sweeps the stale scoped entry.
+        vi.advanceTimersByTime(61 * 60 * 1000);
+        await service.listDeployedModels('token-b', OTHER_ACCOUNT, {
+          cacheScope: 'user-b',
+        });
+        expect(cache.size).toBe(1);
+        expect(cache.has(`${ACCOUNT_PATH}:rotated-token-hash`)).toBe(false);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('caps scoped entries, evicting the oldest first and sparing unscoped entries', async () => {
+      mockArm(EU_DEPLOYMENTS);
+      // Warm the unscoped app-identity entry — it must survive the cap.
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+
+      // Fill one past the 500-entry scoped cap (distinct token-hash scopes).
+      for (let i = 0; i <= 500; i++) {
+        await service.listDeployedModels('token', PROJECT_PATH, {
+          cacheScope: `scope-${i}`,
+        });
+      }
+      const fetches = (global.fetch as unknown as ReturnType<typeof vi.fn>).mock
+        .calls.length;
+
+      // Oldest scoped entry was evicted → re-fetches; newest is still cached.
+      await service.listDeployedModels('token', PROJECT_PATH, {
+        cacheScope: 'scope-0',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+      await service.listDeployedModels('token', PROJECT_PATH, {
+        cacheScope: 'scope-500',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+
+      // The unscoped entry was never a cap candidate.
+      await service.listDeployedModels(ARM_TOKEN, PROJECT_PATH);
+      expect(global.fetch).toHaveBeenCalledTimes(fetches + 1);
+    });
+
+    it('a path-level clear leaves other accounts (scoped or not) cached', async () => {
+      const OTHER_ACCOUNT =
+        '/subscriptions/sub/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/ts-aiassist-live-us';
+      mockArm(EU_DEPLOYMENTS);
+      await service.listDeployedModels('token-a', PROJECT_PATH, {
+        cacheScope: 'user-a',
+      });
+      await service.listDeployedModels('token-a', OTHER_ACCOUNT, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+
+      service.clearCache(PROJECT_PATH);
+
+      await service.listDeployedModels('token-a', OTHER_ACCOUNT, {
+        cacheScope: 'user-a',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2); // other account untouched
+    });
+  });
 });
