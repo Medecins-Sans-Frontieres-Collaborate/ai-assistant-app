@@ -133,6 +133,14 @@ export interface ChatContext {
   agentSourcePath?: string;
 
   /**
+   * ARM ACCOUNT path of the user-added custom model source ("BYO model")
+   * hosting the selected `byom-*` model. Set by the client; the credential
+   * middleware validates it and re-resolves the model under the user's own
+   * ARM OBO token — the value is never trusted as-is.
+   */
+  modelSourcePath?: string;
+
+  /**
    * MCP tool-approval responses to submit alongside (or in lieu of) the
    * user's new message. When present, the Foundry agent handler skips
    * creating a new user-message conversation item and instead posts
