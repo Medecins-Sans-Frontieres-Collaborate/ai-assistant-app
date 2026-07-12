@@ -84,17 +84,13 @@ const serverEnvSchema = z.object({
   // ARM-only discovery. Set to "false" to restore pure legacy behavior.
   FOUNDRY_DATAPLANE_DISCOVERY: booleanString(true),
 
-  // When true, the model list shown to users is built from live Azure AI Foundry
-  // deployment discovery (joined to local metadata) instead of the static
-  // config/models.json list. Defaults to false so behavior is unchanged until
-  // explicitly enabled per environment. NEXT_PUBLIC_ so the client model list
-  // and the server route read the same flag. See docs/MODEL_DISCOVERY_DESIGN.md.
-  NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED: booleanString(false),
-
-  // When true (and NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED), discovered deployments
-  // that have no local metadata entry are still shown, using conservative
-  // inferred defaults. When false, only discovered models that also have
-  // metadata are shown. Server-only: never exposed to the client.
+  // Model discovery is ALWAYS ON (no flag): the /api/models route attempts
+  // live Foundry deployment discovery and degrades gracefully to the static
+  // list when regional accounts aren't configured or discovery fails.
+  // When true, discovered deployments that have no local metadata entry are
+  // still shown, using conservative inferred defaults. When false, only
+  // discovered models that also have metadata are shown. Server-only: never
+  // exposed to the client.
   SHOW_MODELS_WITHOUT_METADATA: booleanString(false),
 
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
@@ -189,10 +185,6 @@ const clientEnvSchema = z.object({
   NEXT_PUBLIC_DEFAULT_TEMPERATURE: z.string().default('0.5'),
   NEXT_PUBLIC_EMAIL: z.string().email().optional(),
   LAUNCHDARKLY_CLIENT_ID: z.string().optional(),
-  // Mirrors the server schema so the client-rendered model list reads the same
-  // flag as the server route. Kept in both schemas because env is parsed
-  // separately on each side. SHOW_MODELS_WITHOUT_METADATA stays server-only.
-  NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED: booleanString(false),
 });
 
 /**
@@ -230,8 +222,6 @@ function validateEnv() {
         process.env.NEXT_PUBLIC_DEFAULT_TEMPERATURE,
       NEXT_PUBLIC_EMAIL: process.env.NEXT_PUBLIC_EMAIL,
       LAUNCHDARKLY_CLIENT_ID: process.env.LAUNCHDARKLY_CLIENT_ID,
-      NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED:
-        process.env.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED,
     });
 
     if (!parsed.success) {
