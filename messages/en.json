@@ -2052,6 +2052,15 @@
     "version": {
       "label": "Version"
     },
+    "deployment": {
+      "title": "Deployment",
+      "source": "Source",
+      "account": "Account",
+      "location": "Location",
+      "deployment": "Deployment",
+      "modelVersion": "Model version",
+      "publisher": "Publisher"
+    },
     "reasoningModel": "Reasoning model: thinks step-by-step before answering. Slower, better on hard problems."
   },
   "models": {
@@ -2269,6 +2278,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "A lighter xAI model. Faster and cheaper for quick questions and casual chats."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "The flagship of OpenAI's GPT-5.6 trio. Strongest at writing, research, coding, and complex problem solving."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "The balanced tier of OpenAI's GPT-5.6 trio. Good for everyday writing, analysis, and coding with quick responses."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "The light, fast tier of OpenAI's GPT-5.6 trio. Best for quick questions and simple tasks at low cost."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral's newest mid-size model. A European alternative that balances capability and speed for everyday work."
     }
   },
   "searchMode": {
@@ -2743,6 +2768,56 @@
       "agentCountLabel": "{count} agents",
       "disconnectedToast": "Disconnected {name}"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Connect a model source",
+    "addAnother": "Add another model source",
+    "edit": "Edit",
+    "disconnect": "Disconnect {name}",
+    "disconnectedToast": "Disconnected {name}",
+    "modelCountLabel": "{count} models",
+    "loadingModels": "Loading models...",
+    "noModelsAvailable": "No models available from this source",
+    "sourceUnreachable": "Couldn't reach this source. Your access may have changed, or the service may be temporarily unavailable.",
+    "retry": "Retry",
+    "connectFoundryAccount": "Connect a Microsoft Azure Foundry Account",
+    "connectFoundryDescription": "Discover model deployments from an Azure Foundry account you have access to. Your own Azure permissions authorize every request — the app's model restrictions don't apply here.",
+    "selectModelsDescription": "Choose which model deployments from this account appear in your model picker.",
+    "editConnection": "Edit Connection",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. My Team Sandbox",
+    "nameRequired": "Source name is required",
+    "foundryAccountLabel": "Foundry Account",
+    "enterManually": "Enter manually",
+    "browseResources": "Browse resources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "Account Name",
+    "subscriptionRequired": "Choose a subscription",
+    "accountRequired": "Choose a Foundry account",
+    "accountSelectionRequired": "Select an account from the list.",
+    "selectAllRequired": "Select a subscription, resource group, and account.",
+    "connectionFailed": "Could not reach this account. Check the details are correct and that you have access.",
+    "duplicateSource": "This account is already connected as \"{name}\".",
+    "connectionSuccessModels": "Connected — {count} model deployment(s) found",
+    "connectionSuccessEmpty": "Connected, but no model deployments found on this account.",
+    "checkingConnection": "Checking connection...",
+    "next": "Next",
+    "back": "Back",
+    "cancel": "Cancel",
+    "connect": "Connect",
+    "save": "Save",
+    "scanningResources": "Scanning your Azure subscriptions...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} couldn't be scanned. Use manual entry if your account is missing.",
+    "discoveryTruncatedWarning": "There were too many resources to scan completely. Use manual entry if your account is missing.",
+    "noAccountsDiscovered": "No Foundry accounts found in your subscriptions. Use manual entry if you know the path.",
+    "retryScan": "Retry scan",
+    "searchAccountsPlaceholder": "Search accounts...",
+    "modelsSelectedCount": "{selected} of {total} models selected",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
+    "autoAddLabel": "Automatically add new models",
+    "autoAddDescription": "Model deployments added to this account later will appear automatically. Unchecked models stay excluded."
   },
   "privacy": {
     "policyTitle": "Privacy Policy & Data Protection",
