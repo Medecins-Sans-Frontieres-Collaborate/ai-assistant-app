@@ -14,7 +14,7 @@ import { SearchMode } from '@/types/searchMode';
 import { ModelSelect } from '@/components/Chat/ModelSelect';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock the hooks
 const mockUseConversations = {
@@ -90,6 +90,7 @@ describe('ModelSelect', () => {
     mockFoundryAgents.officePaths = [];
     useSettingsStore.setState({
       customAgentSources: [],
+      customModelSources: [],
       starredModelIds: [],
       modelUsageStats: {},
       userRegion: null,
@@ -770,6 +771,424 @@ describe('ModelSelect', () => {
       expect(
         screen.getByText('No regional / organization agents available'),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('Custom model sources (BYOM)', () => {
+    const originalFetch = global.fetch;
+
+    const BYOM_PATH =
+      '/subscriptions/sub-1/resourceGroups/rg-1/providers/Microsoft.CognitiveServices/accounts/acct-1';
+
+    const byomModel = (deploymentName: string) => ({
+      id: `byom-abc123-${deploymentName}`,
+      name: deploymentName,
+      deploymentName,
+      provider: 'openai' as const,
+      maxLength: 128000,
+      tokenLimit: 16384,
+      isCustomSourceModel: true,
+      modelSource: BYOM_PATH,
+    });
+
+    /** Stubs the useCustomSourceModels discovery fetch (/api/models/sources). */
+    function stubSourcesFetch(models: unknown[]) {
+      const fn = vi.fn((url: string) => {
+        const body = url.includes('/api/models/sources?')
+          ? { sources: [{ path: BYOM_PATH, models }] }
+          : {};
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(body),
+        } as Response);
+      });
+      global.fetch = fn as unknown as typeof fetch;
+      return fn;
+    }
+
+    const connectSource = (overrides?: Record<string, unknown>) => {
+      useSettingsStore.setState({
+        customModelSources: [
+          {
+            id: 'ms-1',
+            name: 'My Sandbox',
+            resourcePath: BYOM_PATH,
+            createdAt: '2026-01-01T00:00:00.000Z',
+            autoAddNewModels: true,
+            excludedModelNames: [],
+            selectedModelNames: [],
+            ...overrides,
+          },
+        ],
+      });
+    };
+
+    afterEach(() => {
+      global.fetch = originalFetch;
+    });
+
+    it('renders a per-source section with discovered models, applying exclusions', async () => {
+      stubSourcesFetch([byomModel('my-gpt'), byomModel('old-gpt')]);
+      connectSource({ excludedModelNames: ['old-gpt'] });
+
+      render(<ModelSelect />);
+
+      // Section header carries the source name; the excluded deployment is
+      // filtered out while the rest render as plain rows.
+      expect(await screen.findByText('My Sandbox')).toBeInTheDocument();
+      expect(await screen.findByText('my-gpt')).toBeInTheDocument();
+      expect(screen.queryByText('old-gpt')).not.toBeInTheDocument();
+      // byom models stay out of the family tree, but the tree is intact.
+      expect(screen.getByText('GPT')).toBeInTheDocument();
+    });
+
+    it('selects a byom model via the normal model-select path', async () => {
+      stubSourcesFetch([byomModel('my-gpt')]);
+      connectSource();
+
+      render(<ModelSelect />);
+
+      fireEvent.click((await screen.findByText('my-gpt')).closest('button')!);
+
+      await waitFor(() => {
+        expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
+          'conv-1',
+          expect.objectContaining({
+            model: expect.objectContaining({
+              id: 'byom-abc123-my-gpt',
+              isCustomSourceModel: true,
+              modelSource: BYOM_PATH,
+            }),
+          }),
+        );
+      });
+    });
+
+    it('shows only the allow-listed deployments when auto-add is off', async () => {
+      stubSourcesFetch([byomModel('my-gpt'), byomModel('other-gpt')]);
+      connectSource({
+        autoAddNewModels: false,
+        selectedModelNames: ['other-gpt'],
+      });
+
+      render(<ModelSelect />);
+
+      expect(await screen.findByText('other-gpt')).toBeInTheDocument();
+      expect(screen.queryByText('my-gpt')).not.toBeInTheDocument();
+    });
+
+    it('always offers the connect-a-source affordance in the Models tab', () => {
+      stubSourcesFetch([]);
+
+      render(<ModelSelect />);
+
+      expect(screen.getByText('Connect a model source')).toBeInTheDocument();
+    });
+
+    it('shows an unreachable state with retry when discovery fails for a source', async () => {
+      const fetchFn = vi.fn((url: string) => {
+        const body = url.includes('/api/models/sources?')
+          ? {
+              sources: [
+                { path: BYOM_PATH, models: [], error: 'discovery_failed' },
+              ],
+            }
+          : {};
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(body),
+        } as Response);
+      });
+      global.fetch = fetchFn as unknown as typeof fetch;
+      connectSource();
+
+      render(<ModelSelect />);
+
+      // Distinct error copy, not the misleading empty state.
+      expect(
+        await screen.findByText(/Couldn't reach this source/),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText('No models available from this source'),
+      ).not.toBeInTheDocument();
+
+      // Retry re-runs discovery with the server cache busted.
+      fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+      await waitFor(() =>
+        expect(fetchFn).toHaveBeenCalledWith(
+          expect.stringContaining('refresh=1'),
+        ),
+      );
+    });
+
+    it('drives the details panel from the byom model own capability metadata', async () => {
+      // A reasoning deployment: fixed temperature, reasoning effort control.
+      const reasoningModel = {
+        ...byomModel('my-o3'),
+        supportsTemperature: false,
+        supportsReasoningEffort: true,
+      };
+      stubSourcesFetch([reasoningModel]);
+      connectSource();
+      mockUseConversations.selectedConversation = {
+        ...mockUseConversations.selectedConversation!,
+        model: reasoningModel as unknown as Conversation['model'],
+      };
+
+      render(<ModelSelect />);
+      // Row + details header both carry the name once discovery lands.
+      await screen.findAllByText('my-o3');
+
+      fireEvent.click(screen.getByText('Advanced Options'));
+
+      // The synthetic byom id has no OpenAIModels entry — the selected model
+      // object itself must supply the capability flags.
+      expect(await screen.findByText('Reasoning Effort')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'This model uses fixed temperature values for consistent performance',
+        ),
+      ).toBeInTheDocument();
+    });
+
+    describe('family hierarchy in source sections', () => {
+      /** A known-family (Mistral) byom deployment with hierarchy metadata. */
+      const mistralDeployment = (
+        deploymentName: string,
+        meta: Record<string, unknown>,
+        { hash = 'abc123', path = BYOM_PATH } = {},
+      ) => ({
+        id: `byom-${hash}-${deploymentName}`,
+        name: deploymentName,
+        deploymentName,
+        provider: 'mistral' as const,
+        maxLength: 128000,
+        tokenLimit: 16384,
+        isCustomSourceModel: true,
+        modelSource: path,
+        // Namespaced per source — never collides with the catalog 'mistral'
+        // series or another source's.
+        series: `byom-${hash}:mistral`,
+        seriesLabel: 'Mistral',
+        sourceLocation: 'swedencentral',
+        ...meta,
+      });
+
+      /** Large (family default), Medium (newest), Small. */
+      const mistralFamily = (opts?: { hash?: string; path?: string }) => [
+        mistralDeployment(
+          'Mistral-Large-3',
+          {
+            versionLabel: '3',
+            variant: 'large',
+            variantLabel: 'Large',
+            variantRank: 1,
+            defaultRank: 1,
+            deploymentModelVersion: '2411',
+          },
+          opts,
+        ),
+        mistralDeployment(
+          'mistral-medium-2505',
+          {
+            versionLabel: '2505',
+            variant: 'medium',
+            variantLabel: 'Medium',
+            variantRank: 2,
+          },
+          opts,
+        ),
+        mistralDeployment(
+          'mistral-small-2503',
+          {
+            versionLabel: '2503',
+            variant: 'small',
+            variantLabel: 'Small',
+            variantRank: 3,
+          },
+          opts,
+        ),
+      ];
+
+      it('consolidates a known family into ONE row and selects the representative on click', async () => {
+        stubSourcesFetch(mistralFamily());
+        connectSource();
+
+        render(<ModelSelect />);
+
+        const section = (await screen.findByText('My Sandbox')).closest(
+          'section',
+        )!;
+        const familyRow = (await within(section).findByText('Mistral')).closest(
+          'button',
+        )!;
+
+        // One row fronted by the representative's variant+version tag —
+        // NOT three deployment rows.
+        expect(within(familyRow).getByText('Large 3')).toBeInTheDocument();
+        expect(
+          within(section).queryByText('mistral-medium-2505'),
+        ).not.toBeInTheDocument();
+        expect(
+          within(section).queryByText('mistral-small-2503'),
+        ).not.toBeInTheDocument();
+
+        // The catalog's own Mistral family row is untouched (namespaced
+        // byom series never merge into the main tree): one row in the tree
+        // plus one in the source section.
+        expect(screen.getAllByText('Mistral')).toHaveLength(2);
+
+        // Clicking the family row selects the representative: defaultRank 1
+        // (Large) wins even though Medium ranks newer by versionLabel.
+        fireEvent.click(familyRow);
+        await waitFor(() => {
+          expect(mockUseConversations.updateConversation).toHaveBeenCalledWith(
+            'conv-1',
+            expect.objectContaining({
+              model: expect.objectContaining({
+                id: 'byom-abc123-Mistral-Large-3',
+                isCustomSourceModel: true,
+              }),
+            }),
+          );
+        });
+      });
+
+      it('feeds the details panel Variant/Version controls from the source models and shows the Deployment section', async () => {
+        // A second Large version so the Version chip strip renders too.
+        const family = [
+          ...mistralFamily(),
+          mistralDeployment('Mistral-Large-2', {
+            versionLabel: '2',
+            variant: 'large',
+            variantLabel: 'Large',
+            variantRank: 1,
+          }),
+        ];
+        stubSourcesFetch(family);
+        connectSource();
+        mockUseConversations.selectedConversation = {
+          ...mockUseConversations.selectedConversation!,
+          model: family[0] as unknown as Conversation['model'],
+        };
+
+        render(<ModelSelect />);
+        await screen.findByText('My Sandbox');
+
+        // Variant control spans the source family (fed by familyModels —
+        // none of these ids exist in the catalog).
+        const variantGroup = await screen.findByRole('group', {
+          name: 'Variant',
+        });
+        expect(within(variantGroup).getByText('Large')).toBeInTheDocument();
+        expect(within(variantGroup).getByText('Medium')).toBeInTheDocument();
+        expect(within(variantGroup).getByText('Small')).toBeInTheDocument();
+
+        // Version chips cover the active (Large) variant only.
+        const versionGroup = screen.getByRole('group', { name: 'Version' });
+        expect(
+          within(versionGroup).getByTitle('Mistral-Large-3'),
+        ).toBeInTheDocument();
+        expect(
+          within(versionGroup).getByTitle('Mistral-Large-2'),
+        ).toBeInTheDocument();
+        expect(
+          within(versionGroup).queryByTitle('mistral-medium-2505'),
+        ).not.toBeInTheDocument();
+
+        // Deployment section: title + row for the deployment name label…
+        expect(screen.getAllByText('Deployment')).toHaveLength(2);
+        // …source, account + subscription (parsed from the ARM path),
+        // raw Azure region, model version, and publisher.
+        expect(screen.getByText('Source')).toBeInTheDocument();
+        expect(screen.getByText('acct-1 · sub-1')).toBeInTheDocument();
+        expect(screen.getByText('swedencentral')).toBeInTheDocument();
+        expect(screen.getByText('Model version')).toBeInTheDocument();
+        expect(screen.getByText('2411')).toBeInTheDocument();
+        expect(screen.getByText('Mistral AI')).toBeInTheDocument();
+
+        // Switching variant selects that variant's representative from the
+        // source pool (no 3-version Medium exists → falls to 2505).
+        fireEvent.click(within(variantGroup).getByText('Medium'));
+        await waitFor(() => {
+          expect(mockUseSettings.setDefaultModelId).toHaveBeenCalledWith(
+            'byom-abc123-mistral-medium-2505',
+          );
+        });
+      });
+
+      it('renders one family row per source when two sources share a family', async () => {
+        const PATH_2 =
+          '/subscriptions/sub-2/resourceGroups/rg-2/providers/Microsoft.CognitiveServices/accounts/acct-2';
+        const fn = vi.fn((url: string) => {
+          const body = url.includes('/api/models/sources?')
+            ? {
+                sources: [
+                  { path: BYOM_PATH, models: mistralFamily() },
+                  {
+                    path: PATH_2,
+                    models: mistralFamily({ hash: 'def456', path: PATH_2 }),
+                  },
+                ],
+              }
+            : {};
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(body),
+          } as Response);
+        });
+        global.fetch = fn as unknown as typeof fetch;
+        useSettingsStore.setState({
+          customModelSources: [
+            {
+              id: 'ms-1',
+              name: 'Sandbox A',
+              resourcePath: BYOM_PATH,
+              createdAt: '2026-01-01T00:00:00.000Z',
+              autoAddNewModels: true,
+              excludedModelNames: [],
+              selectedModelNames: [],
+            },
+            {
+              id: 'ms-2',
+              name: 'Sandbox B',
+              resourcePath: PATH_2,
+              createdAt: '2026-01-01T00:00:00.000Z',
+              autoAddNewModels: true,
+              excludedModelNames: [],
+              selectedModelNames: [],
+            },
+          ],
+        });
+
+        render(<ModelSelect />);
+
+        const sectionA = (await screen.findByText('Sandbox A')).closest(
+          'section',
+        )!;
+        const sectionB = (await screen.findByText('Sandbox B')).closest(
+          'section',
+        )!;
+        expect(await within(sectionA).findAllByText('Mistral')).toHaveLength(1);
+        expect(await within(sectionB).findAllByText('Mistral')).toHaveLength(1);
+      });
+    });
+
+    it('disconnect removes the source from the store and the section from the list', async () => {
+      stubSourcesFetch([byomModel('my-gpt')]);
+      connectSource();
+
+      render(<ModelSelect />);
+      await screen.findByText('my-gpt');
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Disconnect My Sandbox' }),
+      );
+
+      expect(useSettingsStore.getState().customModelSources).toHaveLength(0);
+      await waitFor(() => {
+        expect(screen.queryByText('my-gpt')).not.toBeInTheDocument();
+      });
     });
   });
 });
