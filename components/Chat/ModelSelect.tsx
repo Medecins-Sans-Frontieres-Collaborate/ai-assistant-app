@@ -1,4 +1,9 @@
-import { IconBrain, IconX } from '@tabler/icons-react';
+import {
+  IconBrain,
+  IconPlug,
+  IconPlugConnectedX,
+  IconX,
+} from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -10,9 +15,14 @@ import { useFoundryAgents } from '@/client/hooks/settings/useFoundryAgents';
 import { useModelOrder } from '@/client/hooks/settings/useModelOrder';
 import { useModelSelectState } from '@/client/hooks/settings/useModelSelectState';
 import { useSettings } from '@/client/hooks/settings/useSettings';
+import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
-import { seriesRepresentative, versionRank } from '@/lib/utils/app/modelSeries';
+import {
+  groupIntoFamilyUnits,
+  seriesRepresentative,
+  versionRank,
+} from '@/lib/utils/app/modelSeries';
 
 import { Conversation } from '@/types/chat';
 import {
@@ -42,8 +52,13 @@ import { ModelOrderControls } from './ModelSelect/ModelOrderControls';
 import { ModelProviderIcon } from './ModelSelect/ModelProviderIcon';
 import { ModelStatusBadge } from './ModelSelect/ModelStatusBadge';
 import { SHOW_RECOMMENDED_TAG } from './ModelSelect/showRecommendedTag';
+import { ModelSourceForm } from './ModelSources/ModelSourceForm';
 
-import { AgentSource, useSettingsStore } from '@/client/stores/settingsStore';
+import {
+  AgentSource,
+  ModelSource,
+  useSettingsStore,
+} from '@/client/stores/settingsStore';
 import {
   getOrganizationAgentIdFromModelId,
   getOrganizationAgents,
@@ -108,6 +123,58 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     (s) => s.deleteCustomAgentSource,
   );
   const [editingSource, setEditingSource] = useState<AgentSource | undefined>();
+
+  // Custom model sources (BYO Foundry accounts) — parallel to agent sources
+  // but surfaced in the Models tab. Discovery runs under the user's own OBO
+  // credentials, so app-level model gating deliberately does not apply.
+  const customModelSources = useSettingsStore((s) => s.customModelSources);
+  const addCustomModelSource = useSettingsStore((s) => s.addCustomModelSource);
+  const updateCustomModelSource = useSettingsStore(
+    (s) => s.updateCustomModelSource,
+  );
+  const deleteCustomModelSource = useSettingsStore(
+    (s) => s.deleteCustomModelSource,
+  );
+  const [showModelSourceForm, setShowModelSourceForm] = useState(false);
+  const [editingModelSource, setEditingModelSource] = useState<
+    ModelSource | undefined
+  >();
+  const {
+    modelsBySource,
+    errorsBySource,
+    loading: isLoadingSourceModels,
+    error: sourceModelsError,
+    refresh: refreshSourceModels,
+  } = useCustomSourceModels();
+
+  // Per-source visible models: auto-add sources hide the excluded deployment
+  // names, allow-list sources show only the selected ones. Keyed by source id.
+  const visibleSourceModels = useMemo(() => {
+    const bySourceId = new Map<string, OpenAIModel[]>();
+    for (const source of customModelSources) {
+      const discovered = modelsBySource[source.resourcePath] ?? [];
+      const nameOf = (m: OpenAIModel) => m.deploymentName ?? m.id;
+      bySourceId.set(
+        source.id,
+        source.autoAddNewModels
+          ? discovered.filter(
+              (m) => !source.excludedModelNames?.includes(nameOf(m)),
+            )
+          : discovered.filter((m) =>
+              source.selectedModelNames?.includes(nameOf(m)),
+            ),
+      );
+    }
+    return bySourceId;
+  }, [customModelSources, modelsBySource]);
+
+  // Flat list for selection/details lookup. Deliberately NOT merged into
+  // baseModels: byom models render in their own per-source sections, never in
+  // the family tree, and bypass app-level curation (isDisabled, Claude flag).
+  const customSourceModels = useMemo(
+    () => [...visibleSourceModels.values()].flat(),
+    [visibleSourceModels],
+  );
 
   // Hidden models/agents — one list keyed by model ID covers both.
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
@@ -277,16 +344,21 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     return [...deduplicatedStatic, ...dynamicModels];
   }, [isBotsEnabled, foundryAgents, customAgentSources]);
 
-  // Combine base models and organization/discovered agents
+  // Combine base models, organization/discovered agents, and custom-source models
   const availableModels = useMemo(
-    () => [...baseModels, ...organizationAgentModels],
-    [baseModels, organizationAgentModels],
+    () => [...baseModels, ...organizationAgentModels, ...customSourceModels],
+    [baseModels, organizationAgentModels, customSourceModels],
   );
 
   const selectedModel =
     availableModels.find((m) => m.id === selectedModelId) || availableModels[0];
+  // byom ids never exist in the static catalog; the selected model object
+  // itself carries the authoritative capability metadata (buildCustomSourceModel
+  // preserves it, stripping only curation fields).
   const modelConfig = selectedModel
-    ? OpenAIModels[selectedModel.id as OpenAIModelID]
+    ? selectedModel.isCustomSourceModel
+      ? selectedModel
+      : OpenAIModels[selectedModel.id as OpenAIModelID]
     : null;
   const isCustomAgent = selectedModel?.isCustomAgent === true;
   const isGpt5 = selectedModel?.id === OpenAIModelID.GPT_5_2;
@@ -538,6 +610,58 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
     [deleteCustomAgentSource, addCustomAgentSource, customAgentSources, t],
   );
 
+  const handleSaveModelSource = useCallback(
+    (source: ModelSource) => {
+      if (editingModelSource) {
+        updateCustomModelSource(source);
+      } else {
+        addCustomModelSource(source);
+      }
+      setEditingModelSource(undefined);
+      setShowModelSourceForm(false);
+    },
+    [editingModelSource, addCustomModelSource, updateCustomModelSource],
+  );
+
+  const handleEditModelSource = useCallback((source: ModelSource) => {
+    setEditingModelSource(source);
+    setShowModelSourceForm(true);
+  }, []);
+
+  const handleDeleteModelSource = useCallback(
+    (sourceId: string) => {
+      const source = customModelSources.find((s) => s.id === sourceId);
+      if (!source) return;
+
+      // Disconnecting only removes the source registration; existing
+      // conversations keep their model intact (mirrors agent sources — the
+      // server surfaces a clear error if a send is attempted later).
+      deleteCustomModelSource(sourceId);
+
+      // Show undo toast — restore the source if user changes their mind
+      toast(
+        (toastInstance) => (
+          <div className="flex items-center gap-3">
+            <span>
+              {t('modelSources.disconnectedToast', { name: source.name })}
+            </span>
+            <button
+              onClick={() => {
+                addCustomModelSource(source);
+                toast.dismiss(toastInstance.id);
+              }}
+              className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            >
+              {t('common.undo')}
+            </button>
+          </div>
+        ),
+        { duration: 8000 },
+      );
+    },
+    [deleteCustomModelSource, addCustomModelSource, customModelSources, t],
+  );
+
   return (
     <div className="w-full h-full flex flex-col">
       {/* Tab Navigation */}
@@ -772,61 +896,43 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                     visibleModels.some((m) => providerOf(m) === f),
                   );
 
+                  // The inline variant+version tag fronting a family row;
+                  // the 'standard' variant label is suppressed so default
+                  // rows stay short ("GPT · 5.2", not "GPT · Standard 5.2").
+                  const familyTag = (rep: OpenAIModel) =>
+                    rep.variantLabel && rep.variant !== 'standard'
+                      ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
+                      : rep.versionLabel;
+
                   // Series rows + plain rows, preserving list order (first
                   // member encountered anchors its series' position).
-                  const renderTypeBlock = (models: OpenAIModel[]) => {
-                    const seriesGroups = new Map<string, OpenAIModel[]>();
-                    const units: Array<{ key: string; seriesKey?: string }> =
-                      [];
-                    for (const m of models) {
-                      const seriesKey = metaOf(m).series;
-                      if (seriesKey) {
-                        if (!seriesGroups.has(seriesKey)) {
-                          seriesGroups.set(seriesKey, []);
-                          units.push({
-                            key: `series-${seriesKey}`,
-                            seriesKey,
-                          });
+                  const renderTypeBlock = (models: OpenAIModel[]) => (
+                    <div className="space-y-1">
+                      {groupIntoFamilyUnits(models).map((unit) => {
+                        if (!unit.seriesKey) {
+                          return renderModelCard(unit.members[0]);
                         }
-                        seriesGroups.get(seriesKey)!.push(m);
-                      } else {
-                        units.push({ key: m.id });
-                      }
-                    }
-                    const byId = new Map(models.map((m) => [m.id, m]));
-                    return (
-                      <div className="space-y-1">
-                        {units.map((unit) => {
-                          if (!unit.seriesKey) {
-                            return renderModelCard(byId.get(unit.key)!);
-                          }
-                          const versions = [
-                            ...seriesGroups.get(unit.seriesKey)!,
-                          ].sort((a, b) => versionRank(b) - versionRank(a));
-                          if (versions.length === 1) {
-                            return renderModelCard(versions[0]);
-                          }
-                          // One quiet row per family: the representative
-                          // fronts it with an inline variant+version tag;
-                          // switching variant/version lives in the details
-                          // panel. The 'standard' variant label is suppressed
-                          // so default rows stay short ("GPT · 5.2", not
-                          // "GPT · Standard 5.2").
-                          const rep = seriesRepresentative(
-                            versions,
-                            selectedModelId,
-                          )!;
-                          return renderModelCard(rep, {
-                            name: rep.seriesLabel ?? rep.name,
-                            versionTag:
-                              rep.variantLabel && rep.variant !== 'standard'
-                                ? `${rep.variantLabel} ${rep.versionLabel ?? ''}`.trim()
-                                : rep.versionLabel,
-                          });
-                        })}
-                      </div>
-                    );
-                  };
+                        const versions = [...unit.members].sort(
+                          (a, b) => versionRank(b) - versionRank(a),
+                        );
+                        if (versions.length === 1) {
+                          return renderModelCard(versions[0]);
+                        }
+                        // One quiet row per family: the representative
+                        // fronts it with an inline variant+version tag;
+                        // switching variant/version lives in the details
+                        // panel.
+                        const rep = seriesRepresentative(
+                          versions,
+                          selectedModelId,
+                        )!;
+                        return renderModelCard(rep, {
+                          name: rep.seriesLabel ?? rep.name,
+                          versionTag: familyTag(rep),
+                        });
+                      })}
+                    </div>
+                  );
 
                   return (
                     <div>
@@ -905,6 +1011,182 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                           {renderTypeBlock(treeModels)}
                         </>
                       )}
+                      {/* Custom model sources (BYO Foundry accounts) — own
+                          per-source sections BELOW the tree, mirroring the
+                          Agents tab. Plain rows only: byom models never join
+                          the family tree and skip app-level curation (the
+                          user's own ARM RBAC is the authorization). */}
+                      {customModelSources.map((source) => {
+                        const sourceModels =
+                          visibleSourceModels.get(source.id) ?? [];
+                        // byom rows: series are namespaced per source (the
+                        // builder hashes the account path into the key), so a
+                        // family here never merges with the catalog tree or
+                        // another source's section.
+                        const renderSourceRow = (
+                          model: OpenAIModel,
+                          opts?: { name?: string; versionTag?: string },
+                        ) => {
+                          const infoBadge = badgeFor(model);
+                          return (
+                            <ModelCard
+                              key={model.id}
+                              id={model.id}
+                              name={opts?.name ?? model.name}
+                              tagline={
+                                opts
+                                  ? model.tagline
+                                  : (model.tagline ??
+                                    (model.deploymentName !== model.name
+                                      ? model.deploymentName
+                                      : undefined))
+                              }
+                              badge={
+                                opts?.versionTag || infoBadge ? (
+                                  <>
+                                    {opts?.versionTag && (
+                                      <ModelStatusBadge
+                                        label={opts.versionTag}
+                                        tooltip={model.name}
+                                      />
+                                    )}
+                                    {infoBadge}
+                                  </>
+                                ) : undefined
+                              }
+                              isSelected={selectedModelId === model.id}
+                              onClick={() => handleModelSelect(model)}
+                              icon={
+                                <ModelProviderIcon provider={model.provider} />
+                              }
+                            />
+                          );
+                        };
+                        return (
+                          <section
+                            key={source.id}
+                            className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+                          >
+                            <div className="flex items-center justify-between gap-2 mb-1.5">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <IconPlug
+                                  size={12}
+                                  className="shrink-0 text-gray-400 dark:text-gray-500"
+                                  aria-hidden="true"
+                                />
+                                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase truncate">
+                                  {source.name}
+                                </span>
+                                <span
+                                  className="text-xs font-semibold tabular-nums text-gray-400 dark:text-gray-500"
+                                  aria-label={t(
+                                    'modelSources.modelCountLabel',
+                                    { count: sourceModels.length },
+                                  )}
+                                >
+                                  (
+                                  {isLoadingSourceModels
+                                    ? '...'
+                                    : sourceModels.length}
+                                  )
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1 shrink-0">
+                                <button
+                                  onClick={() => handleEditModelSource(source)}
+                                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 px-1.5 py-0.5 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                >
+                                  {t('modelSources.edit')}
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteModelSource(source.id)
+                                  }
+                                  aria-label={t('modelSources.disconnect', {
+                                    name: source.name,
+                                  })}
+                                  title={t('modelSources.disconnect', {
+                                    name: source.name,
+                                  })}
+                                  className="p-1 rounded text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                  <IconPlugConnectedX size={14} />
+                                </button>
+                              </div>
+                            </div>
+                            {sourceModels.length > 0 ? (
+                              // Same family × variant hierarchy as the main
+                              // tree: known families consolidate into one row
+                              // fronted by their representative; unknown
+                              // deployments stay plain standalone rows.
+                              <div className="space-y-1">
+                                {groupIntoFamilyUnits(sourceModels).map(
+                                  (unit) => {
+                                    if (!unit.seriesKey) {
+                                      return renderSourceRow(unit.members[0]);
+                                    }
+                                    const versions = [...unit.members].sort(
+                                      (a, b) => versionRank(b) - versionRank(a),
+                                    );
+                                    if (versions.length === 1) {
+                                      return renderSourceRow(versions[0]);
+                                    }
+                                    const rep = seriesRepresentative(
+                                      versions,
+                                      selectedModelId,
+                                    )!;
+                                    return renderSourceRow(rep, {
+                                      name: rep.seriesLabel ?? rep.name,
+                                      versionTag: familyTag(rep),
+                                    });
+                                  },
+                                )}
+                              </div>
+                            ) : isLoadingSourceModels ? (
+                              <p className="text-xs text-gray-400 dark:text-gray-500 italic px-1">
+                                {t('modelSources.loadingModels')}
+                              </p>
+                            ) : sourceModelsError ||
+                              errorsBySource[source.resourcePath] ? (
+                              // Discovery failed (or the server dropped this
+                              // path) — say so instead of the misleading
+                              // "no models" empty state, and offer a retry.
+                              <div className="px-1">
+                                <p className="text-xs text-red-600 dark:text-red-400">
+                                  {t('modelSources.sourceUnreachable')}
+                                </p>
+                                <button
+                                  onClick={() => void refreshSourceModels()}
+                                  className="mt-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+                                >
+                                  {t('modelSources.retry')}
+                                </button>
+                              </div>
+                            ) : (
+                              <p className="text-xs text-gray-400 dark:text-gray-500 italic px-1">
+                                {t('modelSources.noModelsAvailable')}
+                              </p>
+                            )}
+                          </section>
+                        );
+                      })}
+                      {/* Connect a model source */}
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <button
+                          onClick={() => {
+                            setEditingModelSource(undefined);
+                            setShowModelSourceForm(true);
+                          }}
+                          className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+                        >
+                          <IconPlug size={16} className="shrink-0" />
+                          <span>
+                            {customModelSources.length === 0
+                              ? t('modelSources.connectButtonShort')
+                              : t('modelSources.addAnother')}
+                          </span>
+                        </button>
+                      </div>
                       <HiddenItemsSection
                         items={hiddenModels.map((m) => ({
                           id: m.id,
@@ -925,11 +1207,20 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                 mobileView === 'list' ? 'hidden md:block' : 'block'
               } flex-1 overflow-y-auto`}
             >
-              {selectedModel && (modelConfig || isCustomAgent) ? (
+              {selectedModel &&
+              (modelConfig ||
+                isCustomAgent ||
+                selectedModel.isCustomSourceModel) ? (
                 <ModelDetailsPanel
                   selectedModel={selectedModel}
                   modelConfig={modelConfig}
                   onSelectVersion={handleModelSelect}
+                  customSourceModels={customSourceModels}
+                  customSourceName={
+                    customModelSources.find(
+                      (s) => s.resourcePath === selectedModel.modelSource,
+                    )?.name
+                  }
                   isCustomAgent={isCustomAgent}
                   searchModeEnabled={searchModeEnabled}
                   displaySearchMode={displaySearchMode}
@@ -1001,6 +1292,18 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
             closeAgentForm();
           }}
           existingSource={editingSource}
+        />
+      )}
+
+      {/* Model Source Form Modal */}
+      {showModelSourceForm && (
+        <ModelSourceForm
+          onSave={handleSaveModelSource}
+          onClose={() => {
+            setEditingModelSource(undefined);
+            setShowModelSourceForm(false);
+          }}
+          existingSource={editingModelSource}
         />
       )}
 
