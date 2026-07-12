@@ -169,6 +169,8 @@ export class ChatService {
       activeFilesTokensUsed?: number;
       autoInjectPinnedImages?: boolean;
       agentSourcePath?: string;
+      /** ARM account path of the custom model source (byom models only). */
+      modelSourcePath?: string;
       approvalResponses?: ApprovalResponse[];
       /** Native MCP tool loop (see types/mcp.ts). Streaming path only. */
       mcpServers?: McpServerRequestEntry[];
@@ -205,6 +207,7 @@ export class ChatService {
       activeFilesTokensUsed: options?.activeFilesTokensUsed,
       autoInjectPinnedImages: options?.autoInjectPinnedImages,
       agentSourcePath: options?.agentSourcePath,
+      modelSourcePath: options?.modelSourcePath,
       approvalResponses: options?.approvalResponses,
       mcpServers: options?.mcpServers,
       mcpPendingToolCalls: options?.mcpPendingToolCalls,
