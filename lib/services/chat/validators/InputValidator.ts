@@ -331,6 +331,11 @@ const ChatBodySchema = z
     // middleware before using it as a cache key disambiguator or discovery
     // scope. RBAC is enforced by ARM via the user's own OBO token.
     agentSourcePath: z.string().max(512).optional(),
+    // ARM resource path of the user-added custom model source for a `byom-*`
+    // model. Same trust model as agentSourcePath: the server validates it
+    // against `isValidFoundryResourcePath` and re-resolves the deployment
+    // under the user's own OBO token — never used as routing config directly.
+    modelSourcePath: z.string().max(512).optional(),
     // MCP tool-approval decisions for in-flight `mcp_approval_request` items
     // the agent surfaced. Each entry maps `approval_request_id` to a boolean
     // approve/deny. Capped at 16 to avoid pathological payloads — Foundry
