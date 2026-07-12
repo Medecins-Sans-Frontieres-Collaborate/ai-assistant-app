@@ -9,23 +9,6 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
 import '@testing-library/jest-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mutable holder for the discovery flag so each test can flip it before the
-// component imports `env`.
-const flag = vi.hoisted(() => ({ discoveryEnabled: false }));
-
-vi.mock('@/config/environment', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@/config/environment')>();
-  return {
-    ...actual,
-    env: {
-      ...actual.env,
-      get NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED() {
-        return flag.discoveryEnabled;
-      },
-    },
-  };
-});
-
 // Mutable session holder (overrides the global vitest.setup.dom.ts mock) so
 // tests can control the user's region for the selectability gate.
 const mockSession = vi.hoisted(() => ({
@@ -41,7 +24,6 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    flag.discoveryEnabled = false;
     mockSession.data = null;
     useSettingsStore.setState(settingsInitial, true);
     useConversationStore.setState(conversationInitial, true);
@@ -51,22 +33,7 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     vi.unstubAllGlobals();
   });
 
-  it('W6: does NOT fetch /api/models when discovery is disabled', async () => {
-    flag.discoveryEnabled = false;
-    const fetchSpy = vi.fn();
-    vi.stubGlobal('fetch', fetchSpy);
-
-    render(<AppInitializer />);
-
-    // Give any (incorrectly-scheduled) async work a chance to run.
-    await new Promise((r) => setTimeout(r, 10));
-    expect(fetchSpy).not.toHaveBeenCalled();
-    // Static initialization still happened.
-    expect(useSettingsStore.getState().models.length).toBeGreaterThan(0);
-  });
-
-  it('W6: fetches /api/models when discovery is enabled', async () => {
-    flag.discoveryEnabled = true;
+  it('W6: seeds the static list synchronously, then always refines from /api/models (discovery has no flag)', async () => {
     const fetchSpy = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ data: { models: [] } }),
@@ -75,11 +42,13 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
 
     render(<AppInitializer />);
 
+    // Static seed happened immediately…
+    expect(useSettingsStore.getState().models.length).toBeGreaterThan(0);
+    // …and the discovery refine fires unconditionally.
     await waitFor(() => expect(fetchSpy).toHaveBeenCalledWith('/api/models'));
   });
 
   it('W7: re-resolves the default when the persisted default is missing from the discovered list', async () => {
-    flag.discoveryEnabled = true;
     // Persist a default that the discovery list will NOT contain.
     useSettingsStore
       .getState()
@@ -120,7 +89,6 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
   });
 
   it('W7: keeps the persisted default when it is still present in the discovered list', async () => {
-    flag.discoveryEnabled = true;
     useSettingsStore.getState().setDefaultModelId('keep-me' as OpenAIModelID);
 
     const discovered = [
@@ -159,17 +127,23 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
     expect(useSettingsStore.getState().defaultModelId).toBe('keep-me');
   });
 
-  it('records modelListSource=static when discovery is disabled', async () => {
-    flag.discoveryEnabled = false;
-    vi.stubGlobal('fetch', vi.fn());
+  it('keeps modelListSource=static (the seed marker) when the refine fetch fails', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockRejectedValue(new Error('network down')),
+    );
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     render(<AppInitializer />);
 
+    // Give the failed refine a chance to settle; the static seed stays.
+    await new Promise((r) => setTimeout(r, 10));
+    warnSpy.mockRestore();
     expect(useSettingsStore.getState().modelListSource).toBe('static');
+    expect(useSettingsStore.getState().models.length).toBeGreaterThan(0);
   });
 
   it('records the /api/models source (e.g. discovery-partial)', async () => {
-    flag.discoveryEnabled = true;
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue({
@@ -204,7 +178,6 @@ describe('AppInitializer - model discovery wiring (W6 / W7)', () => {
   });
 
   it('re-resolves the default onto a SELECTABLE model, skipping foreign-region-only entries', async () => {
-    flag.discoveryEnabled = true;
     mockSession.data = { user: { region: 'EU' } };
     useSettingsStore
       .getState()
