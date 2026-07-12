@@ -711,13 +711,24 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const isCustomAgent =
       conversation.model.id.startsWith('custom-') ||
       conversation.model.isCustomAgent;
+    // Custom-source (byom) models are user-discovered and never in the static
+    // map or the app's live model list — pass them through verbatim like
+    // agents; the server re-resolves them under the user's own ARM RBAC.
+    const isCustomSourceModel =
+      conversation.model.id.startsWith('byom-') ||
+      conversation.model.isCustomSourceModel === true;
 
     let latestModelConfig: OpenAIModel | undefined =
       OpenAIModels[conversation.model.id as OpenAIModelID];
 
     // Discovered models (from /api/models) aren't in the static OpenAIModels
     // map, so consult the live model list before treating the model as removed.
-    if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
+    if (
+      !latestModelConfig &&
+      !isOrganizationAgent &&
+      !isCustomAgent &&
+      !isCustomSourceModel
+    ) {
       const matched = settings.models.find(
         (m) => m.id === conversation.model.id,
       );
@@ -739,7 +750,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
     }
 
-    if (!latestModelConfig && !isOrganizationAgent && !isCustomAgent) {
+    if (
+      !latestModelConfig &&
+      !isOrganizationAgent &&
+      !isCustomAgent &&
+      !isCustomSourceModel
+    ) {
       console.warn(
         `[chatStore] Model "${conversation.model.id}" no longer exists, using fallback model`,
       );
@@ -756,10 +772,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       latestModelConfig = rescuedModel;
     }
 
-    // For organization/custom agents, use the conversation model directly (it already has full config)
+    // For organization/custom agents and custom-source (byom) models, use the
+    // conversation model directly (it already has full config)
     // For base models, merge with latest config from OpenAIModels
     const modelToSend =
-      isOrganizationAgent || isCustomAgent
+      isOrganizationAgent || isCustomAgent || isCustomSourceModel
         ? conversation.model
         : { ...conversation.model, ...latestModelConfig };
 
@@ -947,6 +964,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       activeFilesTokensUsed: conversation.activeFilesTokensUsed ?? 0,
       autoInjectPinnedImages: settings.autoInjectPinnedImages,
       agentSourcePath: modelToSend.agentSource,
+      modelSourcePath: modelToSend.modelSource,
       approvalResponses,
       mcpServers: mcpServersToSend.length ? mcpServersToSend : undefined,
       mcpPendingToolCalls,

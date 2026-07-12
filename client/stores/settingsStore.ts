@@ -79,6 +79,29 @@ export interface AgentSource {
   selectedAgentNames: string[];
 }
 
+/**
+ * A Foundry ACCOUNT the user connected for model discovery ("BYO model
+ * sources"). Parallel to AgentSource: the user's own ARM RBAC (via OBO)
+ * authorizes browsing and chat — app-level model gating does not apply.
+ */
+export interface ModelSource {
+  id: string; // uuid
+  name: string; // user label
+  /** ARM account (or project) path; validated client+server, stripped to account. */
+  resourcePath: string;
+  createdAt: string; // ISO timestamp
+  /**
+   * When true (default), deployments that later appear on the remote account
+   * are shown automatically, except those in excludedModelNames. When false,
+   * only selectedModelNames are shown.
+   */
+  autoAddNewModels: boolean;
+  /** deployment names deselected at connect/edit time (used when autoAddNewModels). */
+  excludedModelNames: string[];
+  /** deployment names explicitly selected (used when !autoAddNewModels). */
+  selectedModelNames: string[];
+}
+
 export type McpAuthMode = 'none' | 'bearer' | 'header' | 'oauth';
 
 /**
@@ -177,6 +200,8 @@ interface SettingsStore {
   tones: Tone[];
   customAgents: CustomAgent[];
   customAgentSources: AgentSource[];
+  /** BYO Foundry accounts the user connected for model discovery. */
+  customModelSources: ModelSource[];
   /** Reusable terminology glossaries for the translation workflow. */
   glossaries: TranslationGlossary[];
   /** User-added translation target languages (flagged in the picker). */
@@ -337,6 +362,11 @@ interface SettingsStore {
   updateCustomAgentSource: (source: AgentSource) => void;
   deleteCustomAgentSource: (id: string) => void;
 
+  // Model Source Actions (BYO Foundry accounts)
+  addCustomModelSource: (source: ModelSource) => void;
+  updateCustomModelSource: (source: ModelSource) => void;
+  deleteCustomModelSource: (id: string) => void;
+
   // MCP Server Actions (Connectors)
   addMcpServer: (server: McpServerConfig) => void;
   updateMcpServer: (id: string, updates: Partial<McpServerConfig>) => void;
@@ -459,6 +489,7 @@ export const useSettingsStore = create<SettingsStore>()(
       tones: [],
       customAgents: [],
       customAgentSources: [],
+      customModelSources: [],
       glossaries: [],
       customLanguages: [],
       documentSpecs: [],
@@ -685,6 +716,26 @@ export const useSettingsStore = create<SettingsStore>()(
       deleteCustomAgentSource: (id) =>
         set((state) => ({
           customAgentSources: state.customAgentSources.filter(
+            (s) => s.id !== id,
+          ),
+        })),
+
+      // Model Source Actions (BYO Foundry accounts)
+      addCustomModelSource: (source) =>
+        set((state) => ({
+          customModelSources: [...state.customModelSources, source],
+        })),
+
+      updateCustomModelSource: (source) =>
+        set((state) => ({
+          customModelSources: state.customModelSources.map((s) =>
+            s.id === source.id ? source : s,
+          ),
+        })),
+
+      deleteCustomModelSource: (id) =>
+        set((state) => ({
+          customModelSources: state.customModelSources.filter(
             (s) => s.id !== id,
           ),
         })),
@@ -1039,7 +1090,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 29, // Increment this when schema changes to trigger migrations
+      version: 30, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1053,6 +1104,7 @@ export const useSettingsStore = create<SettingsStore>()(
         tones: state.tones,
         customAgents: state.customAgents,
         customAgentSources: state.customAgentSources,
+        customModelSources: state.customModelSources,
         glossaries: state.glossaries,
         customLanguages: state.customLanguages,
         documentSpecs: state.documentSpecs,
@@ -1379,6 +1431,15 @@ export const useSettingsStore = create<SettingsStore>()(
           }));
         }
 
+        // Version 29 → 30: Add customModelSources (BYO Foundry accounts the
+        // user connected for model discovery). Backfill to [] so downstream
+        // `.map`/`.find` never operate on undefined.
+        if (version < 30) {
+          if (!Array.isArray(state.customModelSources)) {
+            state.customModelSources = [];
+          }
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1428,6 +1489,31 @@ export const useSettingsStore = create<SettingsStore>()(
                   : [],
                 selectedAgentNames: Array.isArray(source.selectedAgentNames)
                   ? source.selectedAgentNames
+                  : [],
+              }),
+            );
+          }
+
+          // Defensive: customModelSources must always be an array (same
+          // rationale as customAgentSources above).
+          if (!Array.isArray(state.customModelSources)) {
+            state.customModelSources = [];
+          } else {
+            // Per-element selection fields must be well-formed too — a partial
+            // write missing them must behave as "auto-add all", never hide
+            // models or crash the filter.
+            state.customModelSources = state.customModelSources.map(
+              (source) => ({
+                ...source,
+                autoAddNewModels:
+                  typeof source.autoAddNewModels === 'boolean'
+                    ? source.autoAddNewModels
+                    : true,
+                excludedModelNames: Array.isArray(source.excludedModelNames)
+                  ? source.excludedModelNames
+                  : [],
+                selectedModelNames: Array.isArray(source.selectedModelNames)
+                  ? source.selectedModelNames
                   : [],
               }),
             );
