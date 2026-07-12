@@ -52,6 +52,33 @@ export interface OpenAIModel {
   deploymentName?: string; // Azure AI Foundry deployment name (for third-party models)
 
   /**
+   * ARM ACCOUNT path of the user-added custom model source ("BYO model")
+   * this model was discovered from. Server-resolved routing hint only: the
+   * chat server re-validates the path and re-resolves the deployment under
+   * the user's own OBO token — the value is NEVER trusted from the client.
+   */
+  modelSource?: string;
+  /**
+   * Model discovered from a user-added custom model source (BYO). Rendered
+   * in its own picker section and exempt from app-level curation/gating —
+   * the user's own ARM RBAC is the authorization. Server-set; never
+   * client-trusted.
+   */
+  isCustomSourceModel?: boolean;
+  /**
+   * Azure region of the byom source ACCOUNT (display only, e.g.
+   * "swedencentral"). Runtime-only like hostedIn — set by /api/models/sources,
+   * deliberately NOT in the zod openAIModelSchema (never authored in config).
+   */
+  sourceLocation?: string;
+  /**
+   * The ARM deployment's underlying model version (display only, e.g.
+   * "2025-04-14"). Runtime-only like hostedIn — set from discovery,
+   * deliberately NOT in the zod openAIModelSchema (never authored in config).
+   */
+  deploymentModelVersion?: string;
+
+  /**
    * Regions where a deployment with this name was discovered (set by
    * /api/models at runtime, never authored in config/models.json). Absent on
    * the static list — clients treat absent as available-in-home-region. See
@@ -167,6 +194,12 @@ export enum OpenAIModelID {
   GPT_o4_MINI = 'o4-mini',
   GPT_o3_MINI = 'o3-mini',
   GPT_5_5 = 'gpt-5.5',
+  // The GPT 5.6 trio: a NEW capability hierarchy (Sol flagship → Terra
+  // balanced → Luna light) replacing the standard/mini/nano size axis; its
+  // own picker family ('gpt-56') with Sol/Terra/Luna as variants.
+  GPT_5_6_SOL = 'gpt-5.6-sol',
+  GPT_5_6_TERRA = 'gpt-5.6-terra',
+  GPT_5_6_LUNA = 'gpt-5.6-luna',
   // Rolling alias Azure names as the replacement for retired gpt-*-chat
   // model versions; the deployment is upgraded in place as new chat models ship.
   GPT_CHAT_LATEST = 'gpt-chat-latest',
@@ -192,6 +225,7 @@ export enum OpenAIModelID {
   DEEPSEEK_V4_PRO = 'DeepSeek-V4-Pro',
   DEEPSEEK_V4_FLASH = 'DeepSeek-V4-Flash',
   MISTRAL_LARGE_3 = 'Mistral-Large-3',
+  MISTRAL_MEDIUM_3_5 = 'mistral-medium-3-5',
   MISTRAL_MEDIUM_2505 = 'mistral-medium-2505',
   MISTRAL_SMALL_2503 = 'mistral-small-2503',
   MINISTRAL_3B = 'Ministral-3B',
@@ -225,6 +259,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // ring gate — hence the extra prod-anchor entries below).
   OpenAIModelID.GPT_5_2, // "GPT" family row
   OpenAIModelID.GPT_5_2_CHAT, // "GPT Chat" family row
+  OpenAIModelID.GPT_5_6_SOL, // "GPT 5.6" family row (Sol → Terra → Luna)
   OpenAIModelID.CLAUDE_OPUS_4_8, // "Claude" family row…
   OpenAIModelID.CLAUDE_SONNET_4_6, // …prod anchor + prod face (4.8/5 ring-gated there)
   OpenAIModelID.CLAUDE_FABLE_5, // standalone row
@@ -237,6 +272,8 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   // version chips in the details panel rather than list rows, so position
   // below only breaks ties (usage mode, equal versionRank) and orders the
   // flattened edit-order list.
+  OpenAIModelID.GPT_5_6_TERRA,
+  OpenAIModelID.GPT_5_6_LUNA,
   OpenAIModelID.GPT_5_5,
   OpenAIModelID.GPT_5_4,
   OpenAIModelID.GPT_4_1,
@@ -266,6 +303,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.DEEPSEEK_V4_FLASH,
   OpenAIModelID.DEEPSEEK_R1_0528,
   OpenAIModelID.DEEPSEEK_V3_1,
+  OpenAIModelID.MISTRAL_MEDIUM_3_5,
   OpenAIModelID.MISTRAL_MEDIUM_2505,
   OpenAIModelID.MISTRAL_SMALL_2503,
   OpenAIModelID.MINISTRAL_3B,
@@ -316,9 +354,12 @@ const openAIModelSchema = z.object({
   supportsVision: z.boolean().optional(),
   supportsTools: z.boolean().optional(),
   deploymentName: z.string().optional(),
-  // hostedIn is intentionally NOT in this schema: it is derived from live
-  // discovery per request, never authored in config/models.json (unknown keys
-  // are stripped, so an accidental JSON entry is discarded rather than trusted).
+  modelSource: z.string().optional(),
+  isCustomSourceModel: z.boolean().optional(),
+  // hostedIn, sourceLocation, and deploymentModelVersion are intentionally NOT
+  // in this schema: they are derived at runtime (live discovery / the byom
+  // sources route), never authored in config/models.json (unknown keys are
+  // stripped, so an accidental JSON entry is discarded rather than trusted).
   hosting: z.enum(['azure', 'external']).optional(),
   tier: z.enum(['featured', 'standard', 'legacy']).optional(),
   lifecycle: z
@@ -430,8 +471,8 @@ export function getModelSizeClass(
  * the UI can adapt (suppress region/hosting chrome on static lists, note
  * partial results). Defined here rather than in the route file so client code
  * never imports from a server route module.
- *  - 'static'            — discovery disabled; static list.
- *  - 'static-no-region'  — discovery enabled but no regional accounts configured.
+ *  - 'static'            — client-side static seed, before /api/models responds.
+ *  - 'static-no-region'  — no regional accounts configured; static list served.
  *  - 'discovery'         — all applicable regions discovered.
  *  - 'discovery-partial' — home region discovered; a foreign region failed.
  *  - 'fallback'          — discovery errored server-side; static list.
