@@ -5,6 +5,7 @@ import { runMcpToolLoop } from '@/lib/services/mcp/McpToolLoopService';
 import { getAzureMonitorLogger } from '@/lib/services/observability';
 import { MetricsService } from '@/lib/services/observability/MetricsService';
 
+import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
 import {
   PendingTranscriptionInfo,
   TranscriptMetadata,
@@ -40,6 +41,7 @@ import { ResolvedMcpServer } from '@/config/mcpCatalog';
 import { getFallbackModel, isDeploymentNotFoundError } from '@/config/models';
 import { STREAMING_RESPONSE_HEADERS } from '@/lib/constants/streaming';
 import { AnthropicFoundry } from '@anthropic-ai/foundry-sdk';
+import { TokenCredential, getBearerTokenProvider } from '@azure/identity';
 import OpenAI, { AzureOpenAI } from 'openai';
 import { performance } from 'perf_hooks';
 
@@ -49,6 +51,18 @@ import { performance } from 'perf_hooks';
 export interface StreamingSpeedConfig {
   charsPerBatch: number;
   delayMs: number;
+}
+
+/**
+ * Per-request routing for a custom-source (byom) model: the user's own
+ * Foundry account endpoint plus their own credential, both resolved and
+ * allow-list-checked by the credential middleware.
+ */
+export interface CustomSourceRouting {
+  /** Account data-plane base, e.g. https://{account}.services.ai.azure.com */
+  endpoint: string;
+  /** Per-user credential bound by the credential middleware. */
+  credential: TokenCredential;
 }
 
 /**
@@ -79,6 +93,14 @@ export interface StandardChatRequest {
   mcpPendingToolCalls?: McpPendingToolCall[];
   mcpLoopRound?: number;
   approvalResponses?: ApprovalResponse[];
+  /**
+   * Custom-source (byom) routing. When present, the service builds a
+   * per-request client set against this endpoint/credential instead of the
+   * region singletons, DISABLES the DeploymentNotFound fallback chain (no
+   * silent reroute to app-hosted models), and skips hostedRegion resolution
+   * (the endpoint is explicit — the user's own resource).
+   */
+  customSource?: CustomSourceRouting;
 }
 
 /** Region-pinned clients supplied by the container (all optional — see ServiceContainer). */
@@ -148,6 +170,47 @@ export class StandardChatService {
       openAIClient: regional?.openAIClient ?? this.openAIClient,
       anthropicFoundryClient:
         regional?.anthropicFoundryClient ?? this.anthropicFoundryClient,
+    };
+  }
+
+  /**
+   * Builds a one-off client set for a custom-source (byom) request. All three
+   * SDK paths authenticate with the USER's credential against the USER's own
+   * account — the app's default/region clients are never touched, so a byom
+   * request can't silently execute against an app-hosted deployment.
+   *
+   * The OpenAI-compatible client has no token-provider hook, so a bearer is
+   * fetched up front (best effort — an auth failure surfaces to the user).
+   */
+  private async buildCustomSourceClients(source: CustomSourceRouting): Promise<{
+    azureOpenAIClient: AzureOpenAI;
+    openAIClient: OpenAI;
+    anthropicFoundryClient: AnthropicFoundry;
+  }> {
+    const tokenProvider = getBearerTokenProvider(
+      source.credential,
+      'https://cognitiveservices.azure.com/.default',
+    );
+    const bearer = await tokenProvider();
+    return {
+      // The Azure OpenAI SDK targets the Cognitive Services alias of the
+      // same account (Foundry accounts expose both hostnames).
+      azureOpenAIClient: new AzureOpenAI({
+        endpoint: source.endpoint.replace(
+          '.services.ai.azure.com',
+          '.cognitiveservices.azure.com',
+        ),
+        azureADTokenProvider: tokenProvider,
+        apiVersion: OPENAI_API_VERSION,
+      }),
+      openAIClient: new OpenAI({
+        baseURL: `${source.endpoint}/openai/v1/`,
+        apiKey: bearer,
+      }),
+      anthropicFoundryClient: new AnthropicFoundry({
+        azureADTokenProvider: async () => tokenProvider(),
+        baseURL: `${source.endpoint}/anthropic`,
+      }),
     };
   }
 
@@ -359,12 +422,24 @@ export class StandardChatService {
     // Resolve which region's clients to use (cross-region routing). EU users
     // are always forced to EU inside resolveChatRegion, whatever the client
     // sent; null keeps the default clients (pre-cross-region behavior).
-    const chatRegion = resolveChatRegion(
-      request.user?.region as UserRegion | undefined,
-      request.hostedRegion,
-    );
-    const clients = this.resolveClients(chatRegion);
-    if (chatRegion) {
+    // Custom-source (byom) requests skip region resolution entirely — the
+    // endpoint is explicit (the user's own resource) — and get a per-request
+    // client set bound to the user's own credential.
+    const customSource = request.customSource;
+    const chatRegion = customSource
+      ? null
+      : resolveChatRegion(
+          request.user?.region as UserRegion | undefined,
+          request.hostedRegion,
+        );
+    const clients = customSource
+      ? await this.buildCustomSourceClients(customSource)
+      : this.resolveClients(chatRegion);
+    if (customSource) {
+      console.log(
+        `[StandardChatService] Routing chat to custom-source endpoint: ${customSource.endpoint}`,
+      );
+    } else if (chatRegion) {
       console.log(
         `[StandardChatService] Routing chat to ${chatRegion} region endpoints`,
       );
@@ -516,7 +591,9 @@ export class StandardChatService {
         perfLog('StandardChatService.executeRequest', perfExecStart);
         break;
       } catch (error) {
-        if (!isDeploymentNotFoundError(error)) throw error;
+        // Custom-source requests never fall back: a missing deployment on the
+        // user's own account must surface, not silently reroute to app models.
+        if (customSource || !isDeploymentNotFoundError(error)) throw error;
 
         const fallback = getFallbackModel(attemptedModelIds);
         if (!fallback) {
