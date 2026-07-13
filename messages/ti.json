@@ -1508,6 +1508,15 @@
     "reasoningModel": "ሞዴል ምስማር፡ ዳግማይ ብደሓን ይሓትት እንዳ ይመልስ። ዝቐርሰን ምርጡ ብዓበይቲ ጸገማታት።",
     "variant": {
       "label": "ቅዱስ ኣይነት"
+    },
+    "deployment": {
+      "title": "ምምዕባል",
+      "source": "ምንጪ",
+      "account": "መለያ",
+      "location": "ኣብ ኣካባቢ",
+      "deployment": "ምምዕባል",
+      "modelVersion": "ቅድሚ ምንዳን ፋንታ",
+      "publisher": "ታሪኛ"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "ንብርት ትንንሽ ዝረኣየ xAI ሞዴል። ለንበለን ንዝቑረብ ሕቶታትን ቀለልቲ ቻትታትን ብቕልጡፍን ዝርከብን እዩ።"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "ሓደጋዊ ናይ OpenAI GPT-5.6 ክፍሊት፡ ኣብ ጻፍነት፣ ምስርሕ፣ ኮዲንግን ብስተቀረቡ ኣብ ውሑደኛ ችግሮታት ዝበለጸ።"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "ኣንፀባረቐ ክፍሊት ናይ GPT-5.6 ኣብ OpenAI። ንዕሉዋይ ጻፍነት፣ ትንታነን ኮዲንግን ኣብ ቅልጡፍ መልሲ ፍሉይ ዱባ።"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "ቀሊልን ብቕልጡፍን ክፍሊት ናይ GPT-5.6 OpenAI። ንቅልጡፍ ሕቶታትን ሓሳባታት ምስናእሰር ቦታ ዘለዎ።"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "ነዳዊ መካነ ውን ሞዴል ናይ Mistral። ናይ ኢውሩፓ ተመሳሳሊ ምምዕባሪ ክንደይን ቅልጡፍን ዘምበጃ ፍሉይ ሞዴል።"
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "ነቲ window ዝተኻእልዎ ዝዘምታ ክትመለሱ ትኽእሉ።",
       "closeButton": "Window ዝዘምታ"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "ሞዴል ምንጪ ምትሕናው",
+    "addAnother": "ካልኦት ሞዴል ምንጪ ደምር",
+    "edit": "ኣርትዕ",
+    "disconnect": "{name} ብቕናጽ",
+    "disconnectedToast": "{name} ተቐይሩ",
+    "modelCountLabel": "{count} ሞዴላት",
+    "loadingModels": "ሞዴላት ተመጽዓኡ...",
+    "noModelsAvailable": "ካብዚ ምንጪ ሞዴላት የብሉን",
+    "sourceUnreachable": "ነዚ ምንጪ ክትረኽቦ ኣይተኻኣለን። ንኣካውንትካ መኻነ ድማ ሰርቪሱ ድሕሪ ግዜ ኣይተሰርኦን ይኸውን።",
+    "retry": "ተሰርዙ",
+    "connectFoundryAccount": "Microsoft Azure Foundry መለያ ምትሕናው",
+    "connectFoundryDescription": "ካብ ኣካውንት ናይ Azure Foundry ዘሎኻ ሞዴል ምምዕባላት ኣግናኡ። ብወገናኻ Azure ፈቐደኻ ክሳብ ብጸንዐኻ ዝርከብ፣ ውሑድ ውዕል ሞዴላ ናይ መተግበሪ ኣይግበርን።",
+    "selectModelsDescription": "ካብዚ ኣካውንት በርቱዕ ዝቭዕስ ሞዴል ምምዕባላት ይመርጹ።",
+    "editConnection": "ትሕናዊ ገጽታ ኣርትዕ",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ምሳሌ፡ My Team Sandbox",
+    "nameRequired": "ስም ምንጪ ይግደፍ",
+    "foundryAccountLabel": "Foundry መለያ",
+    "enterManually": "ብእግሪ ኣእቱ",
+    "browseResources": "ምምዃኑ ምግቢራት",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "ስም መለያ",
+    "subscriptionRequired": "ምዕባል ይመርጹ",
+    "accountRequired": "Foundry መለያ ይመረጹ",
+    "accountSelectionRequired": "ካብ ዝርዝር መለያ ይመርጹ።",
+    "selectAllRequired": "Subscription፣ Resource Groupን መለያን ይመርጹ።",
+    "connectionFailed": "ንዚ መለያ ክትረኽቦ ኣይተኻኣለን። ብልጽጽም ዝርዝር ወሲዶን ወይ ፍቐዲ ኣለካ ዶ ሓግዝ።",
+    "duplicateSource": "ነዚ መለያ ክንደይ ገና ተዋሃቦ እዩ ከም \"{name}\"።",
+    "connectionSuccessModels": "ተዳለየ — {count} መምዕባል(ታት) ተረኸቡ",
+    "connectionSuccessEmpty": "ተዳለየ፣ ግን ብዙሕ መምዕባላት ኣብዚ መለያ የብሉን።",
+    "checkingConnection": "ብቕናጽ ተናዛቢ...",
+    "next": "ቀጻሊ",
+    "back": "ተመለስ",
+    "cancel": "ሰርዝ",
+    "connect": "ኣገናንዮ",
+    "save": "ኣቑፅል",
+    "scanningResources": "ብኣዙር ስብስክሪፕሽኖም ንቛሊሉ እዩ ተፈቶይ...",
+    "discoveryPartialWarning": "{count, plural, one {# ስብስክሪፕሽን} other {# ስብስክሪፕሽኖታት}} ክትቃለል ኣይተኻአልን። ኣካውንትካ ምስዘይተረከበ ብኢዋጅ ምምዝጋብ ትምጽእ።",
+    "discoveryTruncatedWarning": "ምስኒሱ ሰናይ ሃብታት ኣብ ትሕቲ ተመዝጊቡ እንተኾኑ ፣ ምምዝጋብ ብኢዋጅ ተጠቀም።",
+    "noAccountsDiscovered": "ፋውንድሪ ኣካውንታት ኣብ ስብስክሪፕሽኖም ኣይተረኸበን። መንገዲ እትፈልጦ ድኣ ብኢዋጅ ምምዝጋብ ትምጽእ።",
+    "retryScan": "ቀደም የለን ሕቶ ዳግማይ ፈትኑ",
+    "searchAccountsPlaceholder": "ኣካውንታት ተፈልጉ...",
+    "modelsSelectedCount": "{selected} ካብ {total} ሞደሎም ተመርፆም",
+    "selectAll": "ኩሉ ምርፅ",
+    "deselectAll": "ኩሉ ኣይምርፅን",
+    "autoAddLabel": "ሞደሎም ብሓቶት ደኣ ኣእትዉ",
+    "autoAddDescription": "ናይ ሞደል መደበትታት ድሕሪ ዝገበረ ኣብኡ ብተኾላና ይመልከቱ። ዘይተመርፆም ሞደሎም ብዙሕ እዮም ብዙሕ ይኽእል ክኸውን ይጽብቕ።"
   }
 }

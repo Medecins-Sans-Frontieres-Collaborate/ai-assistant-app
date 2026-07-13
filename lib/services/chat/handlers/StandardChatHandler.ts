@@ -18,6 +18,7 @@ import {
   Message,
   TextMessageContent,
 } from '@/types/chat';
+import { ErrorCode, PipelineError } from '@/types/errors';
 import {
   ExtractionRecipe,
   ExtractionRequest,
@@ -267,6 +268,18 @@ export class StandardChatHandler extends BasePipelineStage {
             sanitizeForLog(context.stream),
           );
 
+          // Structured extraction (v1) only runs on the app's default OpenAI
+          // client — it cannot route to a custom-source (byom) endpoint yet.
+          // Fail closed with the same clean 409 as the chat path instead of
+          // silently sending the user's content to an app endpoint (which
+          // would violate the byom no-reroute guarantee before erroring).
+          if (context.extraction && context.model?.isCustomSourceModel) {
+            throw PipelineError.critical(
+              ErrorCode.MODEL_UNAVAILABLE,
+              'Structured extraction is not available for custom-source models. Select a built-in model to run extraction.',
+            );
+          }
+
           // Extraction branch — ExtractionEnricher set `context.extraction`.
           // Bypass the streaming chat path; run the structured-output flow
           // (single call for recipe mode, two-stage for auto mode) and
@@ -330,6 +343,30 @@ export class StandardChatHandler extends BasePipelineStage {
               })
             : undefined;
 
+          // Custom-source (byom) routing: only the credential middleware can
+          // set isCustomSourceModel (InputValidator strips it from the client
+          // body), and it always binds endpoint + credential alongside. The
+          // defensive throw ensures a byom model can never silently execute
+          // against the app's default clients if that invariant breaks.
+          if (
+            context.model?.isCustomSourceModel &&
+            (!context.foundryEndpoint || !context.userCredential)
+          ) {
+            throw PipelineError.critical(
+              ErrorCode.MODEL_UNAVAILABLE,
+              'Custom-source model is missing its resolved endpoint or credential',
+            );
+          }
+          const customSource =
+            context.model?.isCustomSourceModel &&
+            context.foundryEndpoint &&
+            context.userCredential
+              ? {
+                  endpoint: context.foundryEndpoint,
+                  credential: context.userCredential,
+                }
+              : undefined;
+
           const response = await this.standardChatService.handleChat({
             messages: messagesToSend,
             model: context.model,
@@ -353,6 +390,7 @@ export class StandardChatHandler extends BasePipelineStage {
             mcpPendingToolCalls: context.mcpPendingToolCalls,
             mcpLoopRound: context.mcpLoopRound,
             approvalResponses: context.approvalResponses,
+            customSource,
           });
 
           // If we have active file cache updates, token consumption, or

@@ -1457,6 +1457,15 @@
     "reasoningModel": "Reasoning model: คิดเป็นขั้นตอนก่อนตอบคำถาม ช้ากว่า แต่เหมาะกับปัญหายาก",
     "variant": {
       "label": "ตัวเลือก"
+    },
+    "deployment": {
+      "title": "การนำไปใช้",
+      "source": "แหล่งที่มา",
+      "account": "บัญชี",
+      "location": "ตำแหน่ง",
+      "deployment": "การนำไปใช้",
+      "modelVersion": "เวอร์ชันโมเดล",
+      "publisher": "ผู้เผยแพร่"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "โมเดล xAI เวอร์ชันเบา เร็วและประหยัด เหมาะกับคำถามสั้น ๆ และแชททั่วไป"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "โมเดลเด่นที่สุดในกลุ่ม GPT-5.6 ของ OpenAI เชี่ยวชาญด้านการเขียน วิจัย เขียนโค้ด และแก้ปัญหาที่ซับซ้อน"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "โมเดลสมดุลในกลุ่ม GPT-5.6 ของ OpenAI เหมาะสำหรับงานเขียน วิเคราะห์ และเขียนโค้ดทั่วไป พร้อมตอบสนองอย่างรวดเร็ว"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "โมเดลขนาดเล็ก รวดเร็วในกลุ่ม GPT-5.6 ของ OpenAI เหมาะสำหรับคำถามหรือภารกิจง่าย ๆ ที่ต้นทุนต่ำ"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "โมเดลขนาดกลางรุ่นใหม่ล่าสุดของ Mistral ทางเลือกจากยุโรปที่ผสมผสานความสามารถและความเร็วสำหรับงานประจำวัน"
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "คุณสามารถปิดหน้าต่างนี้และกลับไปที่แอปได้",
       "closeButton": "ปิดหน้าต่าง"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "เชื่อมต่อแหล่งโมเดล",
+    "addAnother": "เพิ่มแหล่งโมเดลอีกหนึ่งรายการ",
+    "edit": "แก้ไข",
+    "disconnect": "ตัดการเชื่อมต่อ {name}",
+    "disconnectedToast": "ตัดการเชื่อมต่อ {name} แล้ว",
+    "modelCountLabel": "{count} โมเดล",
+    "loadingModels": "กำลังโหลดโมเดล...",
+    "noModelsAvailable": "ไม่มีโมเดลจากแหล่งนี้",
+    "sourceUnreachable": "ไม่สามารถเข้าถึงแหล่งที่มานี้ได้ อาจมีการเปลี่ยนแปลงสิทธิ์การเข้าถึง หรือบริการอาจไม่พร้อมใช้งานชั่วคราว",
+    "retry": "ลองใหม่",
+    "connectFoundryAccount": "เชื่อมต่อบัญชี Microsoft Azure Foundry",
+    "connectFoundryDescription": "ค้นหาการนำโมเดลไปใช้จากบัญชี Azure Foundry ที่คุณมีสิทธิ์เข้าถึง ทุกคำขออ้างอิงสิทธิ์ใน Azure ของคุณเอง — ข้อจำกัดโมเดลของแอปไม่ถูกนำมาคิดที่นี่",
+    "selectModelsDescription": "เลือกการนำโมเดลไปใช้จากบัญชีนี้ให้แสดงในตัวเลือกโมเดลของคุณ",
+    "editConnection": "แก้ไขการเชื่อมต่อ",
+    "nameLabel": "ชื่อ",
+    "namePlaceholder": "เช่น ทีมของฉัน Sandbox",
+    "nameRequired": "ต้องระบุชื่อแหล่งที่มา",
+    "foundryAccountLabel": "บัญชี Foundry",
+    "enterManually": "กรอกด้วยตนเอง",
+    "browseResources": "เรียกดูทรัพยากร",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "ชื่อบัญชี",
+    "subscriptionRequired": "เลือก Subscription",
+    "accountRequired": "เลือกบัญชี Foundry",
+    "accountSelectionRequired": "เลือกบัญชีจากรายการ",
+    "selectAllRequired": "เลือก Subscription, Resource Group และบัญชี",
+    "connectionFailed": "ไม่สามารถเชื่อมต่อกับบัญชีนี้ได้ โปรดตรวจสอบรายละเอียดและสิทธิ์เข้าถึงของคุณ",
+    "duplicateSource": "บัญชีนี้เชื่อมต่อแล้วในชื่อ \"{name}\"",
+    "connectionSuccessModels": "เชื่อมต่อสำเร็จ — พบ {count} การนำโมเดลไปใช้",
+    "connectionSuccessEmpty": "เชื่อมต่อแล้ว แต่ไม่พบการนำโมเดลไปใช้ในบัญชีนี้",
+    "checkingConnection": "กำลังตรวจสอบการเชื่อมต่อ...",
+    "next": "ถัดไป",
+    "back": "ย้อนกลับ",
+    "cancel": "ยกเลิก",
+    "connect": "เชื่อมต่อ",
+    "save": "บันทึก",
+    "scanningResources": "กำลังสแกน Azure subscriptions ของคุณ...",
+    "discoveryPartialWarning": "ไม่สามารถสแกน {count, plural, one {# subscription} other {# subscriptions}} ได้ หากบัญชีของคุณไม่แสดงอยู่ กรุณากรอกข้อมูลด้วยตนเอง",
+    "discoveryTruncatedWarning": "มีทรัพยากรมากเกินไปจนไม่สามารถสแกนได้ครบ หากบัญชีของคุณไม่แสดงอยู่ กรุณากรอกข้อมูลด้วยตนเอง",
+    "noAccountsDiscovered": "ไม่พบบัญชี Foundry ใน subscriptions ของคุณ หากทราบ path กรุณากรอกข้อมูลด้วยตนเอง",
+    "retryScan": "สแกนใหม่อีกครั้ง",
+    "searchAccountsPlaceholder": "ค้นหาบัญชี...",
+    "modelsSelectedCount": "เลือก {selected} จาก {total} โมเดล",
+    "selectAll": "เลือกทั้งหมด",
+    "deselectAll": "ยกเลิกเลือกทั้งหมด",
+    "autoAddLabel": "เพิ่มโมเดลใหม่โดยอัตโนมัติ",
+    "autoAddDescription": "การนำโมเดลใหม่เข้ามาในบัญชีนี้จะแสดงโดยอัตโนมัติ โมเดลที่ไม่ได้เลือกจะถูกยกเว้นไว้"
   }
 }

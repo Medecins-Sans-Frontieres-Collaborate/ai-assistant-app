@@ -1,6 +1,9 @@
 # Design: Dynamic Model Discovery from Azure AI Foundry
 
-**Status:** Implemented behind the default-off `NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED` flag; see `MODEL_DISCOVERY_TODO.md` for rollout state.
+**Status:** Implemented and ALWAYS ON as of 2026-07-11 — the `NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED`
+flag described below was removed (graceful static fallback made it unnecessary, and its build-time
+client inlining caused ring divergence). See `MODEL_DISCOVERY_TODO.md` for rollout state and
+`docs/FOUNDRY_ZONE_ONBOARDING.md` for per-zone setup. Flag references below are historical.
 **Author:** _TBD_ · **Date:** 2026-06-29
 
 ---

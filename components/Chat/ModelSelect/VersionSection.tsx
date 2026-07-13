@@ -21,6 +21,12 @@ interface VersionSectionProps {
   selectedModel: OpenAIModel;
   /** Selects a different version of the same series (ModelSelect's handleModelSelect). */
   onSelectVersion: (model: OpenAIModel) => void;
+  /**
+   * Family pool override for custom-source (byom) models, whose families
+   * live outside the catalog list. When absent, the pool is the same
+   * useSettings().models list the picker renders from.
+   */
+  familyModels?: OpenAIModel[];
 }
 
 /**
@@ -32,24 +38,30 @@ interface VersionSectionProps {
 export const VersionSection: FC<VersionSectionProps> = ({
   selectedModel,
   onSelectVersion,
+  familyModels,
 }) => {
   const t = useTranslations('modelSelect');
   // Same source the picker list renders from (the useSettings hook), so the
-  // Version section always matches what the list shows.
+  // Version section always matches what the list shows. byom families come in
+  // via familyModels instead.
   const { models } = useSettings();
+  const pool = familyModels ?? models;
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
 
   const versions = useMemo(() => {
-    const meta =
-      OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel;
+    // byom ids never exist in the static catalog — the model object itself
+    // is authoritative (namespaced series, variant/version metadata).
+    const meta = selectedModel.isCustomSourceModel
+      ? selectedModel
+      : (OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel);
     const hidden = new Set(hiddenModelIds);
     // Chips cover the ACTIVE variant only; other variants live in the
     // VariantSection control above.
-    return getVariantVersions(models, {
+    return getVariantVersions(pool, {
       series: meta.series ?? selectedModel.series,
       variant: meta.variant ?? selectedModel.variant,
     }).filter((m) => !hidden.has(m.id));
-  }, [models, hiddenModelIds, selectedModel]);
+  }, [pool, hiddenModelIds, selectedModel]);
 
   if (versions.length < 2) return null;
 

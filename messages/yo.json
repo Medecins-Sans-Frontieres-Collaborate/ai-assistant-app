@@ -1508,6 +1508,15 @@
     "reasoningModel": "Àwòrán ìròyìn: ń rò lẹ́ẹ̀kansi ṣáájú ìdáhùn. Dájújẹ, dára jùlọ ní àwọn iṣoro tó le.",
     "variant": {
       "label": "Oniruuru"
+    },
+    "deployment": {
+      "title": "Ilọṣọkan",
+      "source": "Orisun",
+      "account": "Iroyin",
+      "location": "Ibùdó",
+      "deployment": "Ilọṣọkan",
+      "modelVersion": "Ẹya àwòrán",
+      "publisher": "Olùtẹ̀jáde"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Awoṣe xAI to rọrùn. Yara ati din owo fun ibeere kiakia ati ibaraẹnisọrọ lasan."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Akọ́kọ́ ni lẹsẹ mẹta GPT-5.6 ti OpenAI. O lagbara julọ fun kikọ, ìwádìí, kóòdù, ati ìyànjú iṣoro to nira."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Apá àárín mi ẹlẹsẹ mẹta GPT-5.6 ti OpenAI. O dara fun awọn iṣẹ kikọ ojoojúmọ́, àyẹ̀wò, ati kóòdù pẹ̀lú idáhùn yarayara."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Akọ̀ọ́kan jùlọ, yara jùlọ ninu lẹsẹ mẹta GPT-5.6 ti OpenAI. Dara fun ibeere yara ati iṣẹ lílọ̀rọ̀ pẹlu ọmọ owó kekere."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Àwòrán aarin tuntun Mistral. Aṣayan Yúróòpù tí o mu agbara ati iyara pọ̀ jùlọ fun iṣẹ ojoojúmọ́."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "O le pa ferese yii ki o pada si app.",
       "closeButton": "Pa ferese"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Sopọ́ orisun àwòrán kan",
+    "addAnother": "Fi orisun àwòrán míì kún",
+    "edit": "Ṣatúnṣe",
+    "disconnect": "Ya orisun {name} kuro",
+    "disconnectedToast": "Ti ya orisun {name} kuro",
+    "modelCountLabel": "{count} awọn àwòrán",
+    "loadingModels": "N gbasilẹ awọn àwòrán...",
+    "noModelsAvailable": "Ko sí àwòrán kankan lati orisun yi",
+    "sourceUnreachable": "A kò le gba orisun yi. O ṣee ṣe pe ìwọle rẹ ti yipada tàbí iṣẹ le ma wa lásìkò yìí.",
+    "retry": "Tun gbìyànjú",
+    "connectFoundryAccount": "Sopọ akọọlẹ Microsoft Azure Foundry",
+    "connectFoundryDescription": "Wa awọn ilosoke àwòrán lati akọọlẹ Azure Foundry tí o ní wọle sí. Àṣẹ tirẹ ni Azure ni yó ṣatọ́ka gbogbo ìbéèrè — àìlèwu àwòrán ìṣàkóso app kò kan ibi yi.",
+    "selectModelsDescription": "Yan iru ilosoke àwòrán lati akọọlẹ yi lati han ninu yiyan àwòrán rẹ.",
+    "editConnection": "Ṣatúnṣe asopọ",
+    "nameLabel": "Orúkọ",
+    "namePlaceholder": "àpẹẹrẹ: Sandbox Ẹgbẹ Mi",
+    "nameRequired": "A nilo orukọ orisun",
+    "foundryAccountLabel": "Akọọlẹ Foundry",
+    "enterManually": "Fọwọ́wọ́ jẹ",
+    "browseResources": "Ṣàwárí àwọn orísun",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Ẹgbẹ Orísun",
+    "accountNameLabel": "Orúkọ àkọọlẹ",
+    "subscriptionRequired": "Yan ìforúkọsílẹ̀ kan",
+    "accountRequired": "Yan akọọlẹ Foundry kan",
+    "accountSelectionRequired": "Yan akọọlẹ kan láti àkójọ.",
+    "selectAllRequired": "Yan ìforúkọsílẹ̀, ẹgbẹ orísun, àti akọọlẹ.",
+    "connectionFailed": "A kò le gba akọọlẹ yi. Ṣayẹwo alaye ati daju pe o ní iwọle.",
+    "duplicateSource": "Akọọlẹ yi ti wa ni asopọ tẹlẹ gẹ́gẹ́ bí \"{name}\".",
+    "connectionSuccessModels": "Ti sopọ — {count} ìlọṣọkan àwòrán rí",
+    "connectionSuccessEmpty": "Ti sopọ, ṣùgbọ́n kò rí ìlọṣọkan àwòrán kankan lori akọọlẹ yi.",
+    "checkingConnection": "N ṣàyẹ̀wò asopọ...",
+    "next": "Tẹ̀síwájú",
+    "back": "Padà",
+    "cancel": "Fagilé",
+    "connect": "So pọ",
+    "save": "Fipamọ",
+    "scanningResources": "N ṣe ayẹwo awọn alabapin Azure rẹ...",
+    "discoveryPartialWarning": "{count, plural, one {# alabapin} other {# awọn alabapin}} ko le ṣe ayẹwo. Lo ìfimúnáka ọwọ́ bíi pé àkọọlẹ rẹ̀ kò sí.",
+    "discoveryTruncatedWarning": "Ọpọ awọn orisun lo wa ju ti a le ṣe ayẹwo tan. Lo ìfimúnáka ọwọ́ bíi pé àkọọlẹ rẹ̀ kò sí.",
+    "noAccountsDiscovered": "Ko si àkọọlẹ Foundry tí a rí nínú awọn alabapin rẹ. Lo ìfimúnáka ọwọ́ bíi pé o mọ́ ọna.",
+    "retryScan": "Tun ṣe ayẹwo",
+    "searchAccountsPlaceholder": "Wa àkọọlẹ...",
+    "modelsSelectedCount": "{selected} ninu {total} awọn àwòrán ayẹwo ti a yan",
+    "selectAll": "Yan gbogbo rẹ",
+    "deselectAll": "Yọ gbogbo yàn",
+    "autoAddLabel": "Ṣafikun àwòrán tuntun laifọwọyi",
+    "autoAddDescription": "Awọn imupese awoṣe tí a ṣafikun sí àkọọlẹ yìí lẹ́yìn náà máa farahàn laifọwọyi. Awọn awoṣe tí kò ní àmí akanṣe máa wa níta."
   }
 }

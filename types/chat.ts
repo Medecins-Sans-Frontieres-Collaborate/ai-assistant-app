@@ -309,6 +309,13 @@ export interface ChatBody {
    */
   agentSourcePath?: string;
   /**
+   * ARM resource path of the user-added Foundry account a custom-source
+   * (`byom-`) model belongs to. Same trust model as `agentSourcePath`: the
+   * server re-validates the path, strips it to the account, and re-resolves
+   * the deployment under the user's own ARM OBO token before any routing.
+   */
+  modelSourcePath?: string;
+  /**
    * MCP tool-approval responses to submit alongside (or in lieu of) a new
    * user message. When this is non-empty the server skips creating a new
    * user-message conversation item and instead posts `mcp_approval_response`

@@ -159,6 +159,67 @@ const mockMessages: Record<string, unknown> = {
       description: 'Connect a Foundry project below to discover its agents.',
     },
   },
+  modelSources: {
+    connectButtonShort: 'Connect a model source',
+    addAnother: 'Add another model source',
+    edit: 'Edit',
+    disconnect: 'Disconnect {name}',
+    disconnectedToast: 'Disconnected {name}',
+    modelCountLabel: '{count} models',
+    loadingModels: 'Loading models...',
+    noModelsAvailable: 'No models available from this source',
+    sourceUnreachable:
+      "Couldn't reach this source. Your access may have changed, or the service may be temporarily unavailable.",
+    retry: 'Retry',
+    connectFoundryAccount: 'Connect a Microsoft Azure Foundry Account',
+    connectFoundryDescription:
+      "Discover model deployments from an Azure Foundry account you have access to. Your own Azure permissions authorize every request — the app's model restrictions don't apply here.",
+    selectModelsDescription:
+      'Choose which model deployments from this account appear in your model picker.',
+    editConnection: 'Edit Connection',
+    nameLabel: 'Name',
+    namePlaceholder: 'e.g. My Team Sandbox',
+    nameRequired: 'Source name is required',
+    foundryAccountLabel: 'Foundry Account',
+    enterManually: 'Enter manually',
+    browseResources: 'Browse resources',
+    subscriptionIdLabel: 'Subscription ID',
+    resourceGroupLabel: 'Resource Group',
+    accountNameLabel: 'Account Name',
+    subscriptionRequired: 'Choose a subscription',
+    accountRequired: 'Choose a Foundry account',
+    accountSelectionRequired: 'Select an account from the list.',
+    selectAllRequired: 'Select a subscription, resource group, and account.',
+    connectionFailed:
+      'Could not reach this account. Check the details are correct and that you have access.',
+    duplicateSource: 'This account is already connected as "{name}".',
+    connectionSuccessModels: 'Connected — {count} model deployment(s) found',
+    connectionSuccessEmpty:
+      'Connected, but no model deployments found on this account.',
+    checkingConnection: 'Checking connection...',
+    next: 'Next',
+    back: 'Back',
+    cancel: 'Cancel',
+    connect: 'Connect',
+    save: 'Save',
+    scanningResources: 'Scanning your Azure subscriptions...',
+    // The real key is an ICU plural; the mock t() only does {param}
+    // interpolation, so keep a simple shape here.
+    discoveryPartialWarning:
+      "{count} subscriptions couldn't be scanned. Use manual entry if your account is missing.",
+    discoveryTruncatedWarning:
+      'There were too many resources to scan completely. Use manual entry if your account is missing.',
+    noAccountsDiscovered:
+      'No Foundry accounts found in your subscriptions. Use manual entry if you know the path.',
+    retryScan: 'Retry scan',
+    searchAccountsPlaceholder: 'Search accounts...',
+    modelsSelectedCount: '{selected} of {total} models selected',
+    selectAll: 'Select all',
+    deselectAll: 'Deselect all',
+    autoAddLabel: 'Automatically add new models',
+    autoAddDescription:
+      'Model deployments added to this account later will appear automatically. Unchecked models stay excluded.',
+  },
   documentTranslation: {
     invalidReference: 'Invalid document translation reference',
     pendingTitle: 'Translating {filename}…',
@@ -297,6 +358,15 @@ const mockMessages: Record<string, unknown> = {
     },
     version: {
       label: 'Version',
+    },
+    deployment: {
+      title: 'Deployment',
+      source: 'Source',
+      account: 'Account',
+      location: 'Location',
+      deployment: 'Deployment',
+      modelVersion: 'Model version',
+      publisher: 'Publisher',
     },
     euResidencyNote: 'All models run in the EU Azure region.',
     reasoningModel:

@@ -1457,6 +1457,15 @@
     "reasoningModel": "Päättelymalli: ajattelee vaiheittain ennen vastaamista. Hitaampi, parempi haastavissa ongelmissa.",
     "variant": {
       "label": "Vaihtoehto"
+    },
+    "deployment": {
+      "title": "Käyttöönotto",
+      "source": "Lähde",
+      "account": "Tili",
+      "location": "Sijainti",
+      "deployment": "Käyttöönotto",
+      "modelVersion": "Mallin versio",
+      "publisher": "Julkaisija"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Kevyempi xAI-malli. Nopeampi ja edullisempi yksinkertaisiin kysymyksiin ja vapaamuotoisiin keskusteluihin."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI:n GPT-5.6 -sarjan lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI:n GPT-5.6 -sarjan tasapainoinen malli. Hyvä arkipäiväiseen kirjoittamiseen, analyysiin ja ohjelmointiin nopeilla vasteilla."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI:n GPT-5.6 -sarjan kevyt ja nopea malli. Paras nopeisiin kysymyksiin ja yksinkertaisiin tehtäviin alhaisin kustannuksin."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistralin uusin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa suorituskyvyn ja nopeuden arkipäivän töihin."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Voit sulkea tämän ikkunan ja palata sovellukseen.",
       "closeButton": "Sulje ikkuna"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Yhdistä mallilähde",
+    "addAnother": "Lisää toinen mallilähde",
+    "edit": "Muokkaa",
+    "disconnect": "Katkaise yhteys kohteeseen {name}",
+    "disconnectedToast": "Yhteys katkaistu: {name}",
+    "modelCountLabel": "{count} mallia",
+    "loadingModels": "Ladataan malleja...",
+    "noModelsAvailable": "Tästä lähteestä ei ole saatavilla malleja",
+    "sourceUnreachable": "Tähän lähteeseen ei saada yhteyttä. Käyttöoikeutesi on voinut muuttua tai palvelu voi olla tilapäisesti poissa käytöstä.",
+    "retry": "Yritä uudelleen",
+    "connectFoundryAccount": "Yhdistä Microsoft Azure Foundry -tili",
+    "connectFoundryDescription": "Tuo näkyviin mallien käyttöönotot Azure Foundry -tililtä, johon sinulla on käyttöoikeus. Kaikki pyynnöt hyväksytään omilla Azure-oikeuksillasi — sovelluksen mallirajoitukset eivät koske tätä.",
+    "selectModelsDescription": "Valitse, mitkä tämän tilin mallien käyttöönotot näytetään mallivalitsimessasi.",
+    "editConnection": "Muokkaa yhteyttä",
+    "nameLabel": "Nimi",
+    "namePlaceholder": "esim. Oman tiimin testiympäristö",
+    "nameRequired": "Lähteen nimi vaaditaan",
+    "foundryAccountLabel": "Foundry-tili",
+    "enterManually": "Syötä käsin",
+    "browseResources": "Selaa resursseja",
+    "subscriptionIdLabel": "Tilaustunnus",
+    "resourceGroupLabel": "Resurssiryhmä",
+    "accountNameLabel": "Tilin nimi",
+    "subscriptionRequired": "Valitse tilaus",
+    "accountRequired": "Valitse Foundry-tili",
+    "accountSelectionRequired": "Valitse tili luettelosta.",
+    "selectAllRequired": "Valitse tilaus, resurssiryhmä ja tili.",
+    "connectionFailed": "Tilille ei saada yhteyttä. Tarkista tiedot ja varmista, että sinulla on käyttöoikeus.",
+    "duplicateSource": "Tämä tili on jo yhdistetty nimellä \"{name}\".",
+    "connectionSuccessModels": "Yhdistetty — {count} mallin käyttöönotto löydetty",
+    "connectionSuccessEmpty": "Yhdistetty, mutta tältä tililtä ei löytynyt mallien käyttöönottoja.",
+    "checkingConnection": "Tarkistetaan yhteyttä...",
+    "next": "Seuraava",
+    "back": "Takaisin",
+    "cancel": "Peruuta",
+    "connect": "Yhdistä",
+    "save": "Tallenna",
+    "scanningResources": "Azure-tilauksiasi skannataan...",
+    "discoveryPartialWarning": "{count, plural, one {# tilausta} other {# tilausta}} ei voitu skannata. Käytä manuaalista lisäystä, jos tilisi puuttuu.",
+    "discoveryTruncatedWarning": "Resursseja oli liikaa skannattavaksi kokonaan. Käytä manuaalista lisäystä, jos tilisi puuttuu.",
+    "noAccountsDiscovered": "Yhtään Foundry-tiliä ei löytynyt tilauksistasi. Käytä manuaalista lisäystä, jos tiedät polun.",
+    "retryScan": "Yritä skannausta uudelleen",
+    "searchAccountsPlaceholder": "Etsi tilejä...",
+    "modelsSelectedCount": "{selected} / {total} mallia valittu",
+    "selectAll": "Valitse kaikki",
+    "deselectAll": "Poista kaikki valinnat",
+    "autoAddLabel": "Lisää uudet mallit automaattisesti",
+    "autoAddDescription": "Tähän tiliin myöhemmin lisätyt mallijakelut näkyvät automaattisesti. Valitsemattomat mallit pysyvät poissuljettuina."
   }
 }

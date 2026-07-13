@@ -1358,6 +1358,15 @@
     "reasoningModel": "Model pro uvažování: před odpovědí přemýšlí krok za krokem. Pomalejší, vhodnější na složité úlohy.",
     "variant": {
       "label": "Varianta"
+    },
+    "deployment": {
+      "title": "Nasazení",
+      "source": "Zdroj",
+      "account": "Účet",
+      "location": "Umístění",
+      "deployment": "Nasazení",
+      "modelVersion": "Verze modelu",
+      "publisher": "Vydavatel"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Odlehčený model xAI. Rychlejší a levnější pro krátké dotazy a neformální chatování."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Vlajkový model ze sady GPT-5.6 od OpenAI. Nejlepší pro psaní, výzkum, programování a řešení složitých problémů."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Vyvážená úroveň modelu GPT-5.6 od OpenAI. Vhodný pro běžné psaní, analýzy a programování s rychlými odpověďmi."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Lehká a rychlá varianta GPT-5.6 od OpenAI. Ideální pro rychlé dotazy a jednoduché úlohy s nízkými náklady."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Nejnovější středně velký model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro každodenní práci."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Toto okno můžete zavřít a vrátit se do aplikace.",
       "closeButton": "Zavřít okno"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Připojit zdroj modelu",
+    "addAnother": "Přidat další zdroj modelu",
+    "edit": "Upravit",
+    "disconnect": "Odpojit {name}",
+    "disconnectedToast": "Odpojeno: {name}",
+    "modelCountLabel": "{count} modelů",
+    "loadingModels": "Načítání modelů...",
+    "noModelsAvailable": "Z tohoto zdroje nejsou k dispozici žádné modely",
+    "sourceUnreachable": "Nelze se připojit ke zdroji. Vaše oprávnění se mohla změnit nebo je služba dočasně nedostupná.",
+    "retry": "Zkusit znovu",
+    "connectFoundryAccount": "Připojit účet Microsoft Azure Foundry",
+    "connectFoundryDescription": "Objevte nasazení modelů z Azure Foundry účtu, ke kterému máte přístup. Všechny požadavky jsou autorizovány vašimi Azure oprávněními — omezení modelů aplikace zde neplatí.",
+    "selectModelsDescription": "Vyberte, které nasazení modelů z tohoto účtu se mají zobrazovat ve vašem výběru modelů.",
+    "editConnection": "Upravit připojení",
+    "nameLabel": "Název",
+    "namePlaceholder": "např. Můj týmový sandbox",
+    "nameRequired": "Název zdroje je povinný",
+    "foundryAccountLabel": "Foundry účet",
+    "enterManually": "Zadat ručně",
+    "browseResources": "Procházet zdroje",
+    "subscriptionIdLabel": "ID předplatného",
+    "resourceGroupLabel": "Skupina prostředků",
+    "accountNameLabel": "Název účtu",
+    "subscriptionRequired": "Vyberte předplatné",
+    "accountRequired": "Vyberte Foundry účet",
+    "accountSelectionRequired": "Vyberte účet ze seznamu.",
+    "selectAllRequired": "Vyberte předplatné, skupinu prostředků a účet.",
+    "connectionFailed": "Nelze se připojit k tomuto účtu. Zkontrolujte správnost údajů a svá oprávnění.",
+    "duplicateSource": "Tento účet je již připojen jako „{name}“.",
+    "connectionSuccessModels": "Připojeno — nalezeno {count} nasazení modelů",
+    "connectionSuccessEmpty": "Připojeno, ale na tomto účtu nebyla nalezena žádná nasazení modelů.",
+    "checkingConnection": "Kontrola připojení...",
+    "next": "Další",
+    "back": "Zpět",
+    "cancel": "Zrušit",
+    "connect": "Připojit",
+    "save": "Uložit",
+    "scanningResources": "Probíhá skenování vašich Azure předplatných...",
+    "discoveryPartialWarning": "{count, plural, one {# předplatné nebylo možné proskanovat} few {# předplatná nebylo možné proskanovat} other {# předplatných nebylo možné proskanovat}}. Pokud vám nějaký účet chybí, použijte ruční zadání.",
+    "discoveryTruncatedWarning": "Bylo příliš mnoho prostředků na úplné skenování. Pokud vám nějaký účet chybí, použijte ruční zadání.",
+    "noAccountsDiscovered": "Ve vašich předplatných nebyly nalezeny žádné Foundry účty. Pokud znáte cestu, použijte ruční zadání.",
+    "retryScan": "Zkusit znovu skenovat",
+    "searchAccountsPlaceholder": "Hledat účty...",
+    "modelsSelectedCount": "Vybráno {selected} z {total} modelů",
+    "selectAll": "Vybrat vše",
+    "deselectAll": "Zrušit výběr všech",
+    "autoAddLabel": "Automaticky přidávat nové modely",
+    "autoAddDescription": "Nasazení modelů přidaná do tohoto účtu se zobrazí automaticky. Nezaškrtnuté modely zůstávají vyloučeny."
   }
 }

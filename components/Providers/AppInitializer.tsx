@@ -19,7 +19,6 @@ import {
 
 import { useConversationStore } from '@/client/stores/conversationStore';
 import { useSettingsStore } from '@/client/stores/settingsStore';
-import { env } from '@/config/environment';
 import { getDefaultModel, getStaticModelList } from '@/config/models';
 
 /**
@@ -125,12 +124,12 @@ export function AppInitializer() {
       // Mark as loaded
       setIsLoaded(true);
 
-      // 4. Refine the model list from live discovery (non-blocking). Only runs
-      // when discovery is enabled on the client — otherwise we keep the static
-      // list set above with no network round trip. The server returns the
-      // region-correct, ring-gated list, so any error here just keeps the
-      // static list. We never block initial render on this.
-      if (env.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED) {
+      // 4. Refine the model list from live discovery (non-blocking, always
+      // on). The server returns the region-correct, ring-gated list — or the
+      // vetted static list when discovery isn't configured/fails — so any
+      // error here just keeps the static seed. We never block initial render
+      // on this.
+      {
         void (async () => {
           try {
             const res = await fetch('/api/models');

@@ -1457,6 +1457,15 @@
     "reasoningModel": "مدل استدلالی: قبل از پاسخ دادن مرحله به مرحله فکر می‌کند. آهسته‌تر اما بهتر در مسائل دشوار.",
     "variant": {
       "label": "نسخه"
+    },
+    "deployment": {
+      "title": "استقرار",
+      "source": "منبع",
+      "account": "حساب کاربری",
+      "location": "مکان",
+      "deployment": "استقرار",
+      "modelVersion": "نسخه مدل",
+      "publisher": "ناشر"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "یک مدل سبک از xAI. سریع‌تر و مقرون‌به‌صرفه‌تر برای سوالات سریع و گفتگوهای غیررسمی."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "مدل پرچمدار از سه‌گانه GPT-5.6 شرکت OpenAI. قوی‌ترین در نویسندگی، پژوهش، کدنویسی و حل مسائل پیچیده."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "مدل متعادل از سه‌گانه GPT-5.6 شرکت OpenAI. مناسب برای نویسندگی روزمره، تحلیل و کدنویسی با پاسخ‌های سریع."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "مدل سبک و سریع از سه‌گانه GPT-5.6 شرکت OpenAI. بهترین گزینه برای سوالات سریع و وظایف ساده با هزینه کم."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "جدیدترین مدل متوسط شرکت Mistral. جایگزینی اروپایی که تعادل بین توانمندی و سرعت را برای کارهای روزمره فراهم می‌کند."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "می‌توانید این پنجره را ببندید و به اپلیکیشن بازگردید.",
       "closeButton": "بستن پنجره"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "اتصال به منبع مدل",
+    "addAnother": "افزودن منبع مدل دیگر",
+    "edit": "ویرایش",
+    "disconnect": "قطع ارتباط {name}",
+    "disconnectedToast": "ارتباط با {name} قطع شد",
+    "modelCountLabel": "{count} مدل",
+    "loadingModels": "در حال بارگذاری مدل‌ها...",
+    "noModelsAvailable": "مدلی از این منبع موجود نیست",
+    "sourceUnreachable": "امکان دسترسی به این منبع وجود ندارد. دسترسی شما ممکن است تغییر کرده باشد یا سرویس موقتاً در دسترس نباشد.",
+    "retry": "تلاش مجدد",
+    "connectFoundryAccount": "اتصال به حساب Microsoft Azure Foundry",
+    "connectFoundryDescription": "استقرارهای مدل را از یک حساب Azure Foundry که به آن دسترسی دارید، شناسایی کنید. مجوز‌های خود Azure شما هر درخواست را تأیید می‌کنند — محدودیت‌های مدل این برنامه در اینجا اعمال نمی‌شوند.",
+    "selectModelsDescription": "انتخاب کنید کدام استقرارهای مدل از این حساب در انتخاب‌گر مدل شما نمایش داده شوند.",
+    "editConnection": "ویرایش اتصال",
+    "nameLabel": "نام",
+    "namePlaceholder": "مثال: محیط تیم من",
+    "nameRequired": "نام منبع الزامی است",
+    "foundryAccountLabel": "حساب Foundry",
+    "enterManually": "ورود دستی",
+    "browseResources": "مرور منابع",
+    "subscriptionIdLabel": "شناسه اشتراک",
+    "resourceGroupLabel": "گروه منابع",
+    "accountNameLabel": "نام حساب",
+    "subscriptionRequired": "یک اشتراک انتخاب کنید",
+    "accountRequired": "یک حساب Foundry انتخاب کنید",
+    "accountSelectionRequired": "یک حساب از لیست انتخاب کنید.",
+    "selectAllRequired": "یک اشتراک، گروه منابع و حساب انتخاب کنید.",
+    "connectionFailed": "امکان دسترسی به این حساب وجود ندارد. صحت اطلاعات و دسترسی خود را بررسی کنید.",
+    "duplicateSource": "این حساب قبلاً با نام \"{name}\" متصل شده است.",
+    "connectionSuccessModels": "متصل شد — {count} استقرار مدل یافت شد",
+    "connectionSuccessEmpty": "متصل شد، اما هیچ استقرار مدلی در این حساب یافت نشد.",
+    "checkingConnection": "در حال بررسی اتصال...",
+    "next": "بعدی",
+    "back": "بازگشت",
+    "cancel": "لغو",
+    "connect": "اتصال",
+    "save": "ذخیره",
+    "scanningResources": "در حال اسکن اشتراک‌های Azure شما...",
+    "discoveryPartialWarning": "امکان اسکن {count, plural, one {# اشتراک} other {# اشتراک}} وجود نداشت. اگر حساب کاربری شما نمایش داده نمی‌شود، ورودی دستی را امتحان کنید.",
+    "discoveryTruncatedWarning": "تعداد منابع برای اسکن کامل بیش از حد زیاد بود. اگر حساب کاربری شما نبود، از ورود دستی استفاده کنید.",
+    "noAccountsDiscovered": "هیچ حساب Foundry در اشتراک‌های شما پیدا نشد. اگر مسیر را می‌دانید، از ورودی دستی استفاده کنید.",
+    "retryScan": "تلاش مجدد برای اسکن",
+    "searchAccountsPlaceholder": "جستجوی حساب‌ها...",
+    "modelsSelectedCount": "{selected} از {total} مدل انتخاب شده‌اند",
+    "selectAll": "انتخاب همه",
+    "deselectAll": "لغو انتخاب همه",
+    "autoAddLabel": "افزودن خودکار مدل‌های جدید",
+    "autoAddDescription": "استقرارهای مدل که بعداً به این حساب اضافه شوند به‌صورت خودکار نمایش داده می‌شوند. مدل‌های بدون تیک همچنان مستثنی می‌مانند."
   }
 }

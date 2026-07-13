@@ -2,12 +2,13 @@ import {
   getFamilyVariants,
   getSeriesVersions,
   getVariantVersions,
+  groupIntoFamilyUnits,
   pickVariantTarget,
   seriesRepresentative,
   versionRank,
 } from '@/lib/utils/app/modelSeries';
 
-import { OpenAIModel } from '@/types/openai';
+import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import { describe, expect, it } from 'vitest';
 
@@ -116,6 +117,65 @@ describe('seriesRepresentative', () => {
     expect(seriesRepresentative([pro, v32, v31])?.id).toBe('v4-pro');
     expect(seriesRepresentative([v32, v31])?.id).toBe('v3.2');
     expect(seriesRepresentative([v31])?.id).toBe('v3.1');
+  });
+});
+
+describe('groupIntoFamilyUnits', () => {
+  it('buckets series members into one unit anchored at first appearance, plain rows in place', () => {
+    // Ids deliberately not in the catalog: series comes from the objects.
+    const models = [
+      model('byom-x-large', '3', { series: 'byom-x:mistral' }),
+      model('byom-x-plain', undefined, { series: undefined }),
+      model('byom-x-medium', '2505', { series: 'byom-x:mistral' }),
+      model('byom-x-other', '1', { series: 'byom-x:other' }),
+      model('byom-x-small', '2503', { series: 'byom-x:mistral' }),
+    ];
+    const units = groupIntoFamilyUnits(models);
+    expect(units.map((u) => u.key)).toEqual([
+      'series-byom-x:mistral',
+      'byom-x-plain',
+      'series-byom-x:other',
+    ]);
+    // Family unit: anchored at the first member, keeps input order.
+    expect(units[0].seriesKey).toBe('byom-x:mistral');
+    expect(units[0].members.map((m) => m.id)).toEqual([
+      'byom-x-large',
+      'byom-x-medium',
+      'byom-x-small',
+    ]);
+    // Plain row: single member, no seriesKey.
+    expect(units[1].seriesKey).toBeUndefined();
+    expect(units[1].members.map((m) => m.id)).toEqual(['byom-x-plain']);
+    // A single-member series still yields a family unit (the render layer
+    // decides that one-version families draw as plain cards).
+    expect(units[2].seriesKey).toBe('byom-x:other');
+    expect(units[2].members).toHaveLength(1);
+  });
+
+  it('reads the series from static catalog metadata when the id is known', () => {
+    // Runtime model objects can arrive without family fields (e.g. the
+    // /api/models merge); renderTypeBlock semantics resolve the series via
+    // the catalog entry, so the helper must too.
+    const catalogSeries = OpenAIModels[OpenAIModelID.GPT_5_2].series;
+    expect(catalogSeries).toBeDefined();
+    const bare = model(OpenAIModelID.GPT_5_2, undefined, {
+      series: undefined,
+    });
+    // The unknown-id sibling carries series 'gpt' on the object (the local
+    // helper's default) — same key as the catalog entry, so both join one
+    // unit: catalog lookup and object fallback feed the same bucketing.
+    const units = groupIntoFamilyUnits([bare, model('gpt-9-unknown', '9')]);
+    expect(units).toHaveLength(1);
+    expect(units[0].key).toBe(`series-${catalogSeries}`);
+    expect(units[0].seriesKey).toBe(catalogSeries);
+    expect(units[0].members.map((m) => m.id)).toEqual([
+      OpenAIModelID.GPT_5_2,
+      'gpt-9-unknown',
+    ]);
+  });
+
+  it('returns no units for an empty list', () => {
+    expect(groupIntoFamilyUnits([])).toEqual([]);
   });
 });
 

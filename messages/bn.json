@@ -1358,6 +1358,15 @@
     "reasoningModel": "যুক্তি-ভিত্তিক মডেল: উত্তর দেয়ার আগে ধাপে ধাপে ভাবে। ধীর হলেও কঠিন সমস্যায় ভালো ফল দেয়।",
     "variant": {
       "label": "ভ্যারিয়েন্ট"
+    },
+    "deployment": {
+      "title": "ডিপ্লয়মেন্ট",
+      "source": "উৎস",
+      "account": "অ্যাকাউন্ট",
+      "location": "লোকেশন",
+      "deployment": "ডিপ্লয়মেন্ট",
+      "modelVersion": "মডেল ভার্সন",
+      "publisher": "প্রকাশক"
     }
   },
   "models": {
@@ -1577,6 +1586,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "একটি হালকা xAI মডেল। দ্রুত এবং কম দামে ছোট প্রশ্ন ও সাধারণ চ্যাটের জন্য উপযুক্ত।"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI-এর GPT-5.6 ত্রয়ীর প্রধান মডেল। লেখন, গবেষণা, কোডিং ও জটিল সমস্যা সমাধানে সবচেয়ে দক্ষ।"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI-এর GPT-5.6 ত্রয়ীর ভারসাম্যপূর্ণ স্তর। প্রতিদিনের লেখালেখি, বিশ্লেষণ ও দ্রুত কোডিংয়ের জন্য উপযোগী।"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI-এর GPT-5.6 ত্রয়ীর হালকা, দ্রুততম স্তর। সহজ প্রশ্ন ও সাধারণ কাজের জন্য সাশ্রয়ী সমাধান।"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral-এর সর্বশেষ মাঝারি আকারের মডেল। প্রতিদিনের কাজে দক্ষতা ও গতির ভারসাম্যপূর্ণ ইউরোপীয় বিকল্প।"
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "আপনি জানালাটি বন্ধ করে অ্যাপে ফিরে যেতে পারেন।",
       "closeButton": "জানালা বন্ধ করুন"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "মডেল উৎস সংযোগ করুন",
+    "addAnother": "আরেকটি মডেল উৎস যোগ করুন",
+    "edit": "সম্পাদনা",
+    "disconnect": "{name} সংযোগ বিচ্ছিন্ন করুন",
+    "disconnectedToast": "{name} সংযোগ বিচ্ছিন্ন হয়েছে",
+    "modelCountLabel": "{count}টি মডেল",
+    "loadingModels": "মডেল লোড হচ্ছে...",
+    "noModelsAvailable": "এই উৎসে কোনো মডেল উপলব্ধ নেই",
+    "sourceUnreachable": "এই উৎসে সংযোগ করা যায়নি। আপনার অ্যাক্সেস পরিবর্তিত হতে পারে অথবা পরিষেবাটি অস্থায়ীভাবে অনুপলব্ধ।",
+    "retry": "পুনরায় চেষ্টা করুন",
+    "connectFoundryAccount": "Microsoft Azure Foundry অ্যাকাউন্ট সংযোগ করুন",
+    "connectFoundryDescription": "আপনার অ্যাক্সেসযোগ্য Azure Foundry অ্যাকাউন্ট থেকে মডেল ডিপ্লয়মেন্ট খুঁজুন। প্রতিটি অনুরোধে আপনার নিজের Azure অনুমতিই কার্যকর — এখানে অ্যাপের মডেল সীমাবদ্ধতা প্রযোজ্য নয়।",
+    "selectModelsDescription": "এই অ্যাকাউন্টের কোন কোন মডেল ডিপ্লয়মেন্ট আপনার মডেল পিকার-এ দেখানো হবে তা নির্বাচন করুন।",
+    "editConnection": "সংযোগ সম্পাদনা করুন",
+    "nameLabel": "নাম",
+    "namePlaceholder": "যেমন: My Team Sandbox",
+    "nameRequired": "উৎসের নাম আবশ্যক",
+    "foundryAccountLabel": "Foundry অ্যাকাউন্ট",
+    "enterManually": "ম্যানুয়ালি দিন",
+    "browseResources": "রিসোর্স ব্রাউজ করুন",
+    "subscriptionIdLabel": "সাবস্ক্রিপশন আইডি",
+    "resourceGroupLabel": "রিসোর্স গ্রুপ",
+    "accountNameLabel": "অ্যাকাউন্ট নাম",
+    "subscriptionRequired": "একটি সাবস্ক্রিপশন বাছাই করুন",
+    "accountRequired": "একটি Foundry অ্যাকাউন্ট বাছাই করুন",
+    "accountSelectionRequired": "তালিকা থেকে একটি অ্যাকাউন্ট নির্বাচন করুন।",
+    "selectAllRequired": "একটি সাবস্ক্রিপশন, রিসোর্স গ্রুপ ও অ্যাকাউন্ট নির্বাচন করুন।",
+    "connectionFailed": "এই অ্যাকাউন্টে সংযোগ করা যায়নি। তথ্য সঠিক আছে কিনা এবং আপনার অ্যাক্সেস আছে কিনা পরীক্ষা করুন।",
+    "duplicateSource": "এই অ্যাকাউন্টটি ইতিমধ্যে \"{name}\" হিসেবে সংযুক্ত আছে।",
+    "connectionSuccessModels": "সংযুক্ত — {count}টি মডেল ডিপ্লয়মেন্ট পাওয়া গেছে",
+    "connectionSuccessEmpty": "সংযুক্ত, কিন্তু এই অ্যাকাউন্টে কোনো মডেল ডিপ্লয়মেন্ট পাওয়া যায়নি।",
+    "checkingConnection": "সংযোগ পরীক্ষা হচ্ছে...",
+    "next": "পরবর্তী",
+    "back": "পেছনে",
+    "cancel": "বাতিল করুন",
+    "connect": "সংযুক্ত করুন",
+    "save": "সংরক্ষণ করুন",
+    "scanningResources": "আপনার Azure সাবস্ক্রিপশন স্ক্যান করা হচ্ছে...",
+    "discoveryPartialWarning": "{count, plural, one {#টি সাবস্ক্রিপশন} other {#টি সাবস্ক্রিপশন}} স্ক্যান করা যায়নি। যদি আপনার অ্যাকাউন্ট নেই, তবে ম্যানুয়ালি এন্ট্রি ব্যবহার করুন।",
+    "discoveryTruncatedWarning": "স্ক্যান করার জন্য খুব বেশি রিসোর্স ছিল। যদি আপনার অ্যাকাউন্ট নেই, তবে ম্যানুয়ালি এন্ট্রি ব্যবহার করুন।",
+    "noAccountsDiscovered": "আপনার সাবস্ক্রিপশনে কোনো Foundry অ্যাকাউন্ট পাওয়া যায়নি। আপনি যদি পাথ জানেন, তবে ম্যানুয়ালি এন্ট্রি ব্যবহার করুন।",
+    "retryScan": "পুনরায় স্ক্যান করুন",
+    "searchAccountsPlaceholder": "অ্যাকাউন্ট খুঁজুন...",
+    "modelsSelectedCount": "{selected}টির মধ্যে {total}টি মডেল নির্বাচন করা হয়েছে",
+    "selectAll": "সব নির্বাচন করুন",
+    "deselectAll": "সব নির্বাচন বাতিল করুন",
+    "autoAddLabel": "স্বয়ংক্রিয়ভাবে নতুন মডেল যোগ করুন",
+    "autoAddDescription": "এই অ্যাকাউন্টে পরবর্তীতে সংযুক্ত মডেল ডিপ্লয়মেন্ট স্বয়ংক্রিয়ভাবে দেখাবে। অচিহ্নিত মডেলগুলো বাদ থাকবে।"
   }
 }

@@ -24,10 +24,10 @@ import { DefaultAzureCredential } from '@azure/identity';
  * GET /api/models
  *
  * Returns the model list for the authenticated user, region-correct and
- * ring-gated. When NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED is on, the list is built
- * from live Azure AI Foundry deployment discovery joined to local metadata;
- * otherwise (or on any discovery failure) it falls back to the static
- * config/models.json list so chat never goes modelless. See
+ * ring-gated. The list is built from live Azure AI Foundry deployment
+ * discovery joined to local metadata — always on, no flag. When no regional
+ * accounts are configured, or on any discovery failure, it falls back to the
+ * vetted static list so chat never goes modelless. See
  * docs/MODEL_DISCOVERY_DESIGN.md.
  *
  * Discovery runs under the APP identity (not per-user OBO) — deployed models are
@@ -48,10 +48,6 @@ export async function GET(request: NextRequest) {
   const session = await auth();
   if (!session?.user) {
     return unauthorizedResponse();
-  }
-
-  if (!env.NEXT_PUBLIC_MODEL_DISCOVERY_ENABLED) {
-    return successResponse({ models: STATIC_MODELS, source: 'static' });
   }
 
   try {

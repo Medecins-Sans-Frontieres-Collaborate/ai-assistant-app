@@ -1508,6 +1508,15 @@
     "reasoningModel": "Modely fandalinana: mieritreritra tsikelikely alohan'ny mamaly. Miadana kokoa, fa tsara amin'ny olana sarotra.",
     "variant": {
       "label": "Karazany"
+    },
+    "deployment": {
+      "title": "Fametrahana",
+      "source": "Loharano",
+      "account": "Kaonty",
+      "location": "Toerana",
+      "deployment": "Fametrahana",
+      "modelVersion": "Dikan'ny modely",
+      "publisher": "Mpamoaka"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Modela xAI maivana kokoa. Haingana sy mora amin'ny fanontaniana tsotra sy resaka mahazatra."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Flagship amin'ny trio GPT-5.6 an'ny OpenAI. Mahay indrindra amin'ny fanoratana, fikarohana, kaody, ary famahana olana sarotra."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Sokajy antonony amin'ny trio GPT-5.6 an'ny OpenAI. Tsara amin'ny fanoratana andavanandro, fandalinana, sy kaody miaraka amin'ny valiny haingana."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Sokajy maivana sy haingana amin'ny trio GPT-5.6 an'ny OpenAI. Tsara indrindra amin'ny fanontaniana haingana sy asa tsotra amin'ny vidiny ambany."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Modely midina farany an'ny Mistral. Safidy eropeana misy fifandanjana eo amin'ny fahavitan-javatra sy hafainganana ho an'ny asa andavanandro."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Afaka manakatona ity varavarankely ity sy miverina amin'ny app ianao.",
       "closeButton": "Akatona ny varavarankely"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Ampifandraiso ny loharano modely",
+    "addAnother": "Ampio loharano modely iray hafa",
+    "edit": "Hanova",
+    "disconnect": "Tapaho {name}",
+    "disconnectedToast": "Tapatra {name}",
+    "modelCountLabel": "Modely {count}",
+    "loadingModels": "Ampidirina ny modely...",
+    "noModelsAvailable": "Tsy misy modely azo avy amin'ity loharano ity",
+    "sourceUnreachable": "Tsy tratra ny loharano. Mety niova ny fidiranao, na tsy azo idirana vetivety ilay serivisy.",
+    "retry": "Avereno",
+    "connectFoundryAccount": "Ampifandraiso ny kaonty Microsoft Azure Foundry",
+    "connectFoundryDescription": "Ahitsio ny fametrahana modely avy amin'ny kaonty Azure Foundry azonao idirana. Ny alalana Azure anao no manaiky ny fangatahana rehetra — tsy mihatra eto ny fetra napetraky ny app amin'ny modely.",
+    "selectModelsDescription": "Safidio izay fametrahana modely avy amin'ity kaonty ity hiseho ao amin'ny model picker anao.",
+    "editConnection": "Hanova Fifandraisana",
+    "nameLabel": "Anarana",
+    "namePlaceholder": "oh: Sandbox an'ny Ekipako",
+    "nameRequired": "Ilaina ny anaran'ny loharano",
+    "foundryAccountLabel": "Kaonty Foundry",
+    "enterManually": "Ampidiro tanana",
+    "browseResources": "Hijery loharano",
+    "subscriptionIdLabel": "ID Fampidirana",
+    "resourceGroupLabel": "Vondrona Loharano",
+    "accountNameLabel": "Anaran'ny kaonty",
+    "subscriptionRequired": "Misafidiana famandrihana",
+    "accountRequired": "Misafidiana kaonty Foundry",
+    "accountSelectionRequired": "Safidio ny kaonty ao amin'ny lisitra.",
+    "selectAllRequired": "Safidio ny famandrihana, vondrona loharano, ary kaonty.",
+    "connectionFailed": "Tsy tratra ity kaonty ity. Hamarino ny antsipiriany sy fa azonao idirana.",
+    "duplicateSource": "Efa mifandray ho \"{name}\" ity kaonty ity.",
+    "connectionSuccessModels": "Mifandray — {count} fametrahana modely hita",
+    "connectionSuccessEmpty": "Mifandray, nefa tsy misy fametrahana modely hita amin'ity kaonty ity.",
+    "checkingConnection": "Hamarina ny fifandraisana...",
+    "next": "Manaraka",
+    "back": "Miverina",
+    "cancel": "Foano",
+    "connect": "Ampifandraiso",
+    "save": "Tehirizo",
+    "scanningResources": "Manamarina ny Azure subscriptions anao...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} tsy afaka nojerena. Ampiasao ny famenoana an-tanana raha tsy hita ny kaontinao.",
+    "discoveryTruncatedWarning": "Betsaka loatra ny loharanon-karena ka tsy voatily tanteraka. Ampiasao ny famenoana an-tanana raha tsy hita ny kaontinao.",
+    "noAccountsDiscovered": "Tsy nisy kaonty Foundry hita tao amin'ny subscriptions-nao. Ampiasao ny famenoana an-tanana raha fantatrao ny lalana.",
+    "retryScan": "Avereno jerena",
+    "searchAccountsPlaceholder": "Karohy ny kaonty...",
+    "modelsSelectedCount": "{selected} amin'ny {total} modely voafantina",
+    "selectAll": "Safidio rehetra",
+    "deselectAll": "Esory ny safidy rehetra",
+    "autoAddLabel": "Ampidirina ho azy ireo modely vaovao",
+    "autoAddDescription": "Ny model deployments ampiditra amin'ity kaonty ity aty aoriana dia hiseho ho azy. Ny modely tsy voamarika dia hijanona tsy tafiditra."
   }
 }

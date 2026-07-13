@@ -18,6 +18,12 @@ interface VariantSectionProps {
   selectedModel: OpenAIModel;
   /** Selects a model from another variant of the same family (ModelSelect's handleModelSelect). */
   onSelectVariant: (model: OpenAIModel) => void;
+  /**
+   * Family pool override for custom-source (byom) models, whose families
+   * live outside the catalog list. When absent, the pool is the same
+   * useSettings().models list the picker renders from.
+   */
+  familyModels?: OpenAIModel[];
 }
 
 /**
@@ -30,21 +36,29 @@ interface VariantSectionProps {
 export const VariantSection: FC<VariantSectionProps> = ({
   selectedModel,
   onSelectVariant,
+  familyModels,
 }) => {
   const t = useTranslations('modelSelect');
   // Same source the picker list renders from (the useSettings hook), so the
-  // Variant section always matches what the list shows.
+  // Variant section always matches what the list shows. byom families come in
+  // via familyModels instead.
   const { models } = useSettings();
+  const pool = familyModels ?? models;
   const hiddenModelIds = useSettingsStore((s) => s.hiddenModelIds);
 
   const meta = useMemo(
-    () => OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel,
+    // byom ids never exist in the static catalog — the model object itself
+    // is authoritative (namespaced series, variant/version metadata).
+    () =>
+      selectedModel.isCustomSourceModel
+        ? selectedModel
+        : (OpenAIModels[selectedModel.id as OpenAIModelID] ?? selectedModel),
     [selectedModel],
   );
 
   const variants = useMemo(() => {
     const hidden = new Set(hiddenModelIds);
-    const members = getSeriesVersions(models, meta).filter(
+    const members = getSeriesVersions(pool, meta).filter(
       (m) => !hidden.has(m.id) || m.id === selectedModel.id,
     );
     // Keep the selected model's own variant present even when all its
@@ -54,7 +68,7 @@ export const VariantSection: FC<VariantSectionProps> = ({
       members.push(meta as OpenAIModel);
     }
     return getFamilyVariants(members);
-  }, [models, hiddenModelIds, meta, selectedModel.id]);
+  }, [pool, hiddenModelIds, meta, selectedModel.id]);
 
   if (variants.length < 2) return null;
 

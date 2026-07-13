@@ -1457,6 +1457,15 @@
     "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos.",
     "variant": {
       "label": "Variant"
+    },
+    "deployment": {
+      "title": "Desplegament",
+      "source": "Origen",
+      "account": "Compte",
+      "location": "Ubicació",
+      "deployment": "Desplegament",
+      "modelVersion": "Versió del model",
+      "publisher": "Editor"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Model lleuger de xAI. Més ràpid i econòmic per a preguntes ràpides i converses informals."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "El principal de la tríada GPT-5.6 d’OpenAI. El més potent en redacció, recerca, programació i resolució de problemes complexos."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "El nivell equilibrat de la tríada GPT-5.6 d’OpenAI. Adequat per a l’escriptura diària, l’anàlisi i la programació amb respostes ràpides."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "El nivell lleuger i ràpid de la tríada GPT-5.6 d’OpenAI. Ideal per a preguntes ràpides i tasques senzilles a baix cost."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "El nou model de mida mitjana de Mistral. Una alternativa europea que equilibra capacitat i rapidesa per a tasques diàries."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Podeu tancar aquesta finestra i tornar a l'aplicació.",
       "closeButton": "Tanca la finestra"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Connecta un origen de model",
+    "addAnother": "Afegeix un altre origen de model",
+    "edit": "Edita",
+    "disconnect": "Desconnecta {name}",
+    "disconnectedToast": "S’ha desconnectat {name}",
+    "modelCountLabel": "{count} models",
+    "loadingModels": "Carregant models...",
+    "noModelsAvailable": "No hi ha models disponibles d’aquest origen",
+    "sourceUnreachable": "No s’ha pogut accedir a aquest origen. Potser han canviat els permisos o el servei no està disponible temporalment.",
+    "retry": "Torna a provar",
+    "connectFoundryAccount": "Connecta un compte de Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descobreix desplegaments de models d’un compte Azure Foundry al qual tens accés. Els teus permisos d’Azure autoritzen cada sol·licitud: les restriccions de models de l’aplicació no s’apliquen aquí.",
+    "selectModelsDescription": "Escull quins desplegaments de models d’aquest compte apareixeran al teu selector de models.",
+    "editConnection": "Edita la connexió",
+    "nameLabel": "Nom",
+    "namePlaceholder": "p. ex. Sandbox del meu equip",
+    "nameRequired": "Cal especificar el nom de l’origen",
+    "foundryAccountLabel": "Compte Foundry",
+    "enterManually": "Escriu manualment",
+    "browseResources": "Explora els recursos",
+    "subscriptionIdLabel": "ID de subscripció",
+    "resourceGroupLabel": "Grup de recursos",
+    "accountNameLabel": "Nom del compte",
+    "subscriptionRequired": "Tria una subscripció",
+    "accountRequired": "Tria un compte Foundry",
+    "accountSelectionRequired": "Selecciona un compte de la llista.",
+    "selectAllRequired": "Selecciona una subscripció, grup de recursos i compte.",
+    "connectionFailed": "No s’ha pogut accedir a aquest compte. Comprova que les dades siguin correctes i que hi tinguis accés.",
+    "duplicateSource": "Aquest compte ja està connectat com a «{name}».",
+    "connectionSuccessModels": "Connectat: s’han trobat {count} desplegaments de models",
+    "connectionSuccessEmpty": "Connectat, però no s’ha trobat cap desplegament de models en aquest compte.",
+    "checkingConnection": "Verificant la connexió...",
+    "next": "Següent",
+    "back": "Enrere",
+    "cancel": "Cancel·la",
+    "connect": "Connecta",
+    "save": "Desa",
+    "scanningResources": "S'estan escanejant les teves subscripcions d'Azure...",
+    "discoveryPartialWarning": "No s'ha pogut escanejar {count, plural, one {# subscripció} other {# subscripcions}}. Utilitza l'entrada manual si falta el teu compte.",
+    "discoveryTruncatedWarning": "Hi havia massa recursos per escanejar completament. Utilitza l'entrada manual si falta el teu compte.",
+    "noAccountsDiscovered": "No s'han trobat comptes Foundry a les teves subscripcions. Utilitza l'entrada manual si coneixes el camí.",
+    "retryScan": "Torna a escanejar",
+    "searchAccountsPlaceholder": "Cerca comptes...",
+    "modelsSelectedCount": "{selected} de {total} models seleccionats",
+    "selectAll": "Selecciona-ho tot",
+    "deselectAll": "Desselecciona-ho tot",
+    "autoAddLabel": "Afegeix automàticament nous models",
+    "autoAddDescription": "Els desplegaments de models afegits més endavant a aquest compte apareixeran automàticament. Els models desmarcats seguiran exclosos."
   }
 }

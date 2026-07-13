@@ -1508,6 +1508,15 @@
     "reasoningModel": "استدلال ماډل: مخکې له ځواب ورکولو ګام په ګام فکر کوي. ورو دی، خو ستونزمنو مسایلو کې ښه دی.",
     "variant": {
       "label": "Variants"
+    },
+    "deployment": {
+      "title": "استقرار",
+      "source": "سرچینه",
+      "account": "حساب",
+      "location": "ځای",
+      "deployment": "استقرار",
+      "modelVersion": "د ماډل نسخه",
+      "publisher": "خپرونکی"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "سپک xAI ماډل. د چټکو پوښتنو او عادي چیټ لپاره ژر او ارزانه."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 سول",
+      "description": "د OpenAI د GPT-5.6 دریو مخکښ ماډل. په لیکلو، څېړنه، کوډ کولو او پېچلو ستونزو حل کې تر ټولو قوي."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 ټېرا",
+      "description": "د OpenAI د GPT-5.6 متوازن ماډل. د ورځني لیک، تحلیل او کوډ لپاره مناسب، چټک ځواب ورکوي."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 لونا",
+      "description": "د OpenAI د GPT-5.6 رڼا، چټک ماډل. د چټکو پوښتنو او ساده کارونو لپاره ارزانه غوره انتخاب."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "د Mistral نوی منځنۍ کچې ماډل. اروپايي بدیل چې وړتیا او چټکتیا سره توازن لري."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "تاسو کولی شئ دا کړکۍ وتړئ او اپ ته راوګرځئ.",
       "closeButton": "کړکۍ وتړئ"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "ماډل سرچینه ونښلوئ",
+    "addAnother": "بله ماډل سرچینه اضافه کړئ",
+    "edit": "سمول",
+    "disconnect": "{name} پرې کړئ",
+    "disconnectedToast": "{name} پرې شو",
+    "modelCountLabel": "{count} ماډلونه",
+    "loadingModels": "ماډلونه بارېږي...",
+    "noModelsAvailable": "له دې سرچینې څخه ماډل شته نه دی",
+    "sourceUnreachable": "دې سرچینې ته لاسرسی ونه شو. ستاسو لاسرسی بدل شوی شي، یا خدمت لنډ مهال نه فعال دی.",
+    "retry": "بیا هڅه وکړئ",
+    "connectFoundryAccount": "Microsoft Azure Foundry حساب ونښلوئ",
+    "connectFoundryDescription": "د داسې Azure Foundry حساب څخه ماډل استقرارونه پیدا کړئ چې تاسو ورته لاسرسی لرئ. ستاسې Azure اجازه لیکونه هر غوښتنه تاییدوي — دلته د اپلیکیشن ماډل محدودیتونه نه پلي کېږي.",
+    "selectModelsDescription": "وټاکئ چې د دې حساب کوم ماډل استقرارونه ستاسې د ماډل غوره کوونکی کې ښکاره شي.",
+    "editConnection": "نښلون سمول",
+    "nameLabel": "نوم",
+    "namePlaceholder": "لکه: زما ټيم سینډباکس",
+    "nameRequired": "د سرچینې نوم اړین دی",
+    "foundryAccountLabel": "Foundry حساب",
+    "enterManually": "لاسې دننه کړئ",
+    "browseResources": "سرچینې وپلټئ",
+    "subscriptionIdLabel": "د ګډون ID",
+    "resourceGroupLabel": "د سرچینې ډله",
+    "accountNameLabel": "د حساب نوم",
+    "subscriptionRequired": "ګډون وټاکئ",
+    "accountRequired": "Foundry حساب وټاکئ",
+    "accountSelectionRequired": "له نوملړه حساب وټاکئ.",
+    "selectAllRequired": "ګډون، سرچینه ډله او حساب وټاکئ.",
+    "connectionFailed": "دا حساب ونه شو موندلی. ډاډ ترلاسه کړئ چې جزيیات سم دي او تاسو لاسرسی لرئ.",
+    "duplicateSource": "دغه حساب مخکې له \"{name}\" په نوم نښلول شوی دی.",
+    "connectionSuccessModels": "نښلول شو — {count} ماډل استقرار(ونه) وموندل شول",
+    "connectionSuccessEmpty": "نښلول شو، خو په دې حساب کې کوم ماډل استقرار ونه موندل شو.",
+    "checkingConnection": "نښلون معاینه کېږي...",
+    "next": "بل",
+    "back": "شاته",
+    "cancel": "لغوه کړئ",
+    "connect": "نښلول",
+    "save": "ذخیره کړئ",
+    "scanningResources": "ستاسې Azure ګډونونو سکین کېږي...",
+    "discoveryPartialWarning": "{count, plural, one {# ګډون} other {# ګډونونه}} سکین نشول. که ستاسو حساب نشته، لاسي داخلول وکاروئ.",
+    "discoveryTruncatedWarning": "ډېر سرچینې وې، ټولې بشپړې سکین نه شوې. که ستاسو حساب نشته، لاسي داخلول وکاروئ.",
+    "noAccountsDiscovered": "ستاسو په ګډونونو کې هېڅ Foundry حساب ونه موندل شو. که لاره مو معلومه وي، لاسي داخلول وکاروئ.",
+    "retryScan": "بیا سکین کړئ",
+    "searchAccountsPlaceholder": "حسابونه ولټوئ...",
+    "modelsSelectedCount": "له {total} څخه {selected} ماډلونه غوره شوي",
+    "selectAll": "ټول انتخاب کړئ",
+    "deselectAll": "ټول غیرفعال کړئ",
+    "autoAddLabel": "نوي ماډلونه په اوتومات ډول اضافه کړئ",
+    "autoAddDescription": "دې حساب ته وروسته زیات شوي ماډلونه به په اوتومات ډول ښکاره شي. نه ټاکل شوي ماډلونه به نه ښکاري."
   }
 }

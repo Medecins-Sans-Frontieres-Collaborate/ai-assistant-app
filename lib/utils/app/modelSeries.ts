@@ -1,4 +1,9 @@
-import { OpenAIModel, getModelTier } from '@/types/openai';
+import {
+  OpenAIModel,
+  OpenAIModelID,
+  OpenAIModels,
+  getModelTier,
+} from '@/types/openai';
 
 /**
  * Version recency from the numeric versionLabel ("5.4" → 5.4, "4o" → 4,
@@ -52,6 +57,50 @@ export function seriesRepresentative(
     versions.find((v) => getModelTier(v) !== 'legacy') ??
     versions[0]
   );
+}
+
+/** One picker row: a family (several members sharing a series) or a plain model. */
+export interface FamilyUnit {
+  /** Stable render key: `series-${seriesKey}` for families, the model id for plain rows. */
+  key: string;
+  /** The shared series; absent on plain single-model rows. */
+  seriesKey?: string;
+  /** Members in input order (a single model for plain rows). */
+  members: OpenAIModel[];
+}
+
+/**
+ * Buckets a display-ordered model list into picker rows: models sharing a
+ * series collapse into ONE family unit anchored at the position of its first
+ * member; models without a series stay single-member units in place. The
+ * series is read from static catalog metadata when the id is known, else
+ * from the model object itself (discovered/byom models carry their own —
+ * byom series are namespaced per source, so sources never merge with the
+ * catalog tree or each other).
+ */
+export function groupIntoFamilyUnits(models: OpenAIModel[]): FamilyUnit[] {
+  const bySeries = new Map<string, FamilyUnit>();
+  const units: FamilyUnit[] = [];
+  for (const m of models) {
+    const seriesKey = (OpenAIModels[m.id as OpenAIModelID] ?? m).series;
+    if (!seriesKey) {
+      units.push({ key: m.id, members: [m] });
+      continue;
+    }
+    const existing = bySeries.get(seriesKey);
+    if (existing) {
+      existing.members.push(m);
+    } else {
+      const unit: FamilyUnit = {
+        key: `series-${seriesKey}`,
+        seriesKey,
+        members: [m],
+      };
+      bySeries.set(seriesKey, unit);
+      units.push(unit);
+    }
+  }
+  return units;
 }
 
 /** One variant segment of a family: its stable key, display label, and members. */

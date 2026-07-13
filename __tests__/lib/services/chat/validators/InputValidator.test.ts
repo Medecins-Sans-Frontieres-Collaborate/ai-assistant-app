@@ -327,6 +327,75 @@ describe('InputValidator', () => {
   });
 });
 
+describe('validateChatRequest - custom-source (byom) trust boundary', () => {
+  const ACCOUNT_PATH =
+    '/subscriptions/sub/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/my-own-foundry';
+  const base = {
+    messages: [{ role: 'user' as const, content: 'hi' }],
+  };
+
+  it('strips client-supplied routing fields from the model object', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      model: {
+        id: 'byom-abc123-my-gpt',
+        name: 'my-gpt',
+        modelSource: ACCOUNT_PATH,
+        isCustomSourceModel: true,
+        foundryEndpoint: 'https://evil.example',
+        sdk: 'azure-openai',
+      },
+    });
+
+    // Only the credential middleware may set these — anything the client
+    // sends must die at the schema boundary.
+    expect(result.model.id).toBe('byom-abc123-my-gpt');
+    for (const field of [
+      'modelSource',
+      'isCustomSourceModel',
+      'foundryEndpoint',
+      'sdk',
+    ]) {
+      expect(result.model).not.toHaveProperty(field);
+    }
+  });
+
+  it('accepts a modelSourcePath within the length cap', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      model: { id: 'byom-abc123-my-gpt', name: 'my-gpt' },
+      modelSourcePath: ACCOUNT_PATH,
+    });
+    expect(result.modelSourcePath).toBe(ACCOUNT_PATH);
+  });
+
+  it('leaves modelSourcePath undefined when absent', () => {
+    const validator = new InputValidator();
+    const result = validator.validateChatRequest({
+      ...base,
+      model: { id: 'gpt-5.2', name: 'GPT-5.2' },
+    });
+    expect(result.modelSourcePath).toBeUndefined();
+  });
+
+  it('rejects a modelSourcePath over 512 chars', () => {
+    const validator = new InputValidator();
+    try {
+      validator.validateChatRequest({
+        ...base,
+        model: { id: 'byom-abc123-my-gpt', name: 'my-gpt' },
+        modelSourcePath: `/subscriptions/${'x'.repeat(512)}`,
+      });
+      expect.fail('Should have thrown PipelineError');
+    } catch (error) {
+      expect(error).toBeInstanceOf(PipelineError);
+      expect((error as PipelineError).code).toBe(ErrorCode.VALIDATION_FAILED);
+    }
+  });
+});
+
 describe('validateChatRequest - hostedRegion', () => {
   const base = {
     model: { id: 'gpt-5.2', name: 'GPT-5.2' },

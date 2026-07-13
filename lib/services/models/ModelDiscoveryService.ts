@@ -13,7 +13,10 @@
  *    we strip `/projects/<name>` to the account path before querying.
  *  - Runs under the APP identity (account Reader), NOT per-user OBO — deployed
  *    models are identical for every user in a region, so the cache is keyed by
- *    account path, not by user.
+ *    account path, not by user. Custom model sources (BYO) are the exception:
+ *    they discover under the USER's OBO token, so those callers pass
+ *    `opts.cacheScope` (a token hash) to keep per-user RBAC results from
+ *    leaking across users through the shared cache.
  *  - The deployment `name` is the join key against OpenAIModelID, NOT the
  *    underlying `properties.model.name` (which can differ, e.g. a `gpt-5.2`
  *    deployment running model `gpt-5.5`).
@@ -38,6 +41,13 @@ const EMPTY_CACHE_TTL_MS = 60 * 1000;
 // misconfigured account with runaway pagination can't stall discovery. Far
 // above any realistic per-account page count.
 const MAX_PAGES = 50;
+
+// Backstop cap on user-scoped cache entries. Scoped keys embed a hash of the
+// user's OBO token, which rotates (~hourly), so unlike the app-identity
+// entries (bounded by account count) they can accumulate without bound.
+// Expired entries are swept on every cache write; this cap catches whatever
+// the sweep can't (many distinct un-expired user×account×token combinations).
+const MAX_SCOPED_CACHE_ENTRIES = 500;
 
 // ARM is the only host we will ever send the Bearer token to. nextLink is
 // server-supplied, so we re-validate its origin before each follow-up request.
@@ -90,8 +100,11 @@ interface CachedDeployments {
 export class ModelDiscoveryService {
   private static instance: ModelDiscoveryService | null = null;
   // Keyed by account resource path (region), NOT by user — see file header.
+  // User-token callers append `:{cacheScope}` (see cacheKeyFor) so their
+  // RBAC-filtered results never collide with the app-identity entry or with
+  // other users' entries.
   private cache = new Map<string, CachedDeployments>();
-  // In-flight discovery promises keyed by account path. Dedups concurrent
+  // In-flight discovery promises keyed like the cache. Dedups concurrent
   // cold-cache callers so N parallel listDeployedModels calls trigger a single
   // fetchAllDeployments (stampede protection).
   private inFlight = new Map<string, Promise<DeployedModel[]>>();
@@ -104,28 +117,53 @@ export class ModelDiscoveryService {
   }
 
   /**
-   * Clears the discovery cache (used by the route's `refresh` param).
-   *
-   * @param resourcePath - If given, clears ONLY that account's entry (after
-   *   stripping to the account path). With no arg, clears the whole cache.
+   * Cache/inFlight key for an account + optional per-caller scope. ARM account
+   * paths cannot contain `:` (validated shape), so the separator is
+   * collision-free and unscoped keys never alias scoped ones.
    */
-  clearCache(resourcePath?: string): void {
+  private cacheKeyFor(accountPath: string, cacheScope?: string): string {
+    return cacheScope ? `${accountPath}:${cacheScope}` : accountPath;
+  }
+
+  /**
+   * Clears the discovery cache (used by the routes' `refresh` param).
+   *
+   * @param resourcePath - If given, clears ONLY that account's entries (after
+   *   stripping to the account path). With no arg, clears the whole cache.
+   * @param cacheScope - If given (with a path), clears ONLY that scoped entry.
+   *   Without it, the account's unscoped entry AND all its user-scoped entries
+   *   are evicted (prefix match) so a path-level refresh is authoritative.
+   */
+  clearCache(resourcePath?: string, cacheScope?: string): void {
     if (resourcePath === undefined) {
       this.cache.clear();
       return;
     }
-    this.cache.delete(stripToAccountPath(resourcePath));
+    const accountPath = stripToAccountPath(resourcePath);
+    if (cacheScope !== undefined) {
+      this.cache.delete(this.cacheKeyFor(accountPath, cacheScope));
+      return;
+    }
+    this.cache.delete(accountPath);
+    const scopedPrefix = `${accountPath}:`;
+    for (const key of this.cache.keys()) {
+      if (key.startsWith(scopedPrefix)) this.cache.delete(key);
+    }
   }
 
   /**
    * Lists chat-capable model deployments in a Foundry account.
    *
-   * @param armToken - App-identity ARM token (scope https://management.azure.com/.default)
+   * @param armToken - ARM token (scope https://management.azure.com/.default).
+   *   App identity by default; user OBO tokens MUST pass `opts.cacheScope`.
    * @param resourcePath - Any Foundry resource path; stripped to the account scope
+   * @param opts.cacheScope - Per-caller cache partition (e.g. a hash of the
+   *   user's token) so RBAC-filtered results are never served across users.
    */
   async listDeployedModels(
     armToken: string,
     resourcePath: string,
+    opts?: { cacheScope?: string },
   ): Promise<DeployedModel[]> {
     const accountPath = stripToAccountPath(resourcePath);
 
@@ -135,22 +173,25 @@ export class ModelDiscoveryService {
       throw new Error('Invalid Foundry resource path');
     }
 
-    const cached = this.cache.get(accountPath);
+    const cacheKey = this.cacheKeyFor(accountPath, opts?.cacheScope);
+    const cached = this.cache.get(cacheKey);
     if (cached && Date.now() < cached.expiresAt) {
       return cached.models;
     }
 
-    // Stampede protection: if a discovery for this account is already running,
-    // await it instead of firing a second fetchAllDeployments.
-    const existing = this.inFlight.get(accountPath);
+    // Stampede protection: if a discovery for this account (and scope) is
+    // already running, await it instead of firing a second fetchAllDeployments.
+    const existing = this.inFlight.get(cacheKey);
     if (existing) return existing;
 
-    const discovery = this.discoverAndCache(armToken, accountPath).finally(
-      () => {
-        this.inFlight.delete(accountPath);
-      },
-    );
-    this.inFlight.set(accountPath, discovery);
+    const discovery = this.discoverAndCache(
+      armToken,
+      accountPath,
+      cacheKey,
+    ).finally(() => {
+      this.inFlight.delete(cacheKey);
+    });
+    this.inFlight.set(cacheKey, discovery);
     return discovery;
   }
 
@@ -158,6 +199,7 @@ export class ModelDiscoveryService {
   private async discoverAndCache(
     armToken: string,
     accountPath: string,
+    cacheKey: string,
   ): Promise<DeployedModel[]> {
     const raw = await this.fetchAllDeployments(armToken, accountPath);
     const models = raw
@@ -169,15 +211,48 @@ export class ModelDiscoveryService {
     // a freshly-provisioned account can return zero deployments. Re-discover
     // those sooner with a short soft TTL; non-empty results keep the 1h TTL.
     const ttl = models.length > 0 ? CACHE_TTL_MS : EMPTY_CACHE_TTL_MS;
-    this.cache.set(accountPath, {
+    this.cache.set(cacheKey, {
       models,
       expiresAt: Date.now() + ttl,
     });
+    this.evictStaleEntries();
 
     console.log(
       `[ModelDiscoveryService] Discovered ${models.length} chat-capable deployment(s) in account`,
     );
     return models;
+  }
+
+  /**
+   * Bounds cache growth on every write (mirrors UserTokenProvider.cleanupCache):
+   * sweeps expired entries, then — as a backstop — evicts the oldest
+   * user-scoped entries past MAX_SCOPED_CACHE_ENTRIES. Reads never delete, so
+   * without this sweep every rotated OBO token would leave a permanently
+   * retained entry behind. inFlight needs no sweeping: its entries self-delete
+   * when the discovery promise settles.
+   */
+  private evictStaleEntries(): void {
+    const now = Date.now();
+    for (const [key, value] of this.cache) {
+      if (now >= value.expiresAt) {
+        this.cache.delete(key);
+      }
+    }
+
+    // Scoped keys are `${accountPath}:${cacheScope}`; account paths cannot
+    // contain `:`, so the presence of a colon identifies them. Map iteration
+    // is insertion-ordered, so the first matches are the oldest entries.
+    let scopedCount = 0;
+    for (const key of this.cache.keys()) {
+      if (key.includes(':')) scopedCount++;
+    }
+    if (scopedCount <= MAX_SCOPED_CACHE_ENTRIES) return;
+    for (const key of this.cache.keys()) {
+      if (!key.includes(':')) continue;
+      this.cache.delete(key);
+      scopedCount--;
+      if (scopedCount <= MAX_SCOPED_CACHE_ENTRIES) return;
+    }
   }
 
   /** Walks the ARM `nextLink` pagination, capped at MAX_PAGES pages. */

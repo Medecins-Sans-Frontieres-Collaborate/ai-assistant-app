@@ -1457,6 +1457,15 @@
     "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach.",
     "variant": {
       "label": "Wariant"
+    },
+    "deployment": {
+      "title": "Wdrożenie",
+      "source": "Źródło",
+      "account": "Konto",
+      "location": "Lokalizacja",
+      "deployment": "Wdrożenie",
+      "modelVersion": "Wersja modelu",
+      "publisher": "Wydawca"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Lżejszy model xAI. Szybszy i tańszy do szybkich pytań i swobodnych rozmów."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Flagowy model z trio GPT-5.6 od OpenAI. Najlepszy do pisania, badań, kodowania i rozwiązywania złożonych problemów."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Zrównoważony model z trio GPT-5.6 od OpenAI. Dobry do codziennego pisania, analizy i programowania z szybką reakcją."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Lekki i szybki model z trio GPT-5.6 od OpenAI. Najlepszy do szybkich pytań i prostych zadań przy niskim koszcie."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Najnowszy model średniej wielkości od Mistral. Europejska alternatywa, która łączy możliwości z szybkością do codziennej pracy."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "Możesz zamknąć to okno i wrócić do aplikacji.",
       "closeButton": "Zamknij okno"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Połącz źródło modelu",
+    "addAnother": "Dodaj kolejne źródło modelu",
+    "edit": "Edytuj",
+    "disconnect": "Odłącz {name}",
+    "disconnectedToast": "Odłączono {name}",
+    "modelCountLabel": "{count} modeli",
+    "loadingModels": "Ładowanie modeli...",
+    "noModelsAvailable": "Brak dostępnych modeli z tego źródła",
+    "sourceUnreachable": "Nie można połączyć się z tym źródłem. Twoje uprawnienia mogły się zmienić lub usługa jest tymczasowo niedostępna.",
+    "retry": "Ponów próbę",
+    "connectFoundryAccount": "Połącz konto Microsoft Azure Foundry",
+    "connectFoundryDescription": "Odkrywaj wdrożenia modeli z konta Azure Foundry, do którego masz dostęp. Wszelkie żądania autoryzowane są przez Twoje uprawnienia Azure — ograniczenia modeli aplikacji nie mają tu zastosowania.",
+    "selectModelsDescription": "Wybierz, które wdrożenia modeli z tego konta mają pojawić się w Twoim selektorze modeli.",
+    "editConnection": "Edytuj połączenie",
+    "nameLabel": "Nazwa",
+    "namePlaceholder": "np. Mój Zespół Sandbox",
+    "nameRequired": "Nazwa źródła jest wymagana",
+    "foundryAccountLabel": "Konto Foundry",
+    "enterManually": "Wprowadź ręcznie",
+    "browseResources": "Przeglądaj zasoby",
+    "subscriptionIdLabel": "ID subskrypcji",
+    "resourceGroupLabel": "Grupa zasobów",
+    "accountNameLabel": "Nazwa konta",
+    "subscriptionRequired": "Wybierz subskrypcję",
+    "accountRequired": "Wybierz konto Foundry",
+    "accountSelectionRequired": "Wybierz konto z listy.",
+    "selectAllRequired": "Wybierz subskrypcję, grupę zasobów i konto.",
+    "connectionFailed": "Nie można połączyć się z tym kontem. Sprawdź poprawność danych i dostęp.",
+    "duplicateSource": "To konto jest już połączone jako \"{name}\".",
+    "connectionSuccessModels": "Połączono — znaleziono {count} wdrożeń modelu",
+    "connectionSuccessEmpty": "Połączono, ale na tym koncie nie znaleziono żadnych wdrożeń modeli.",
+    "checkingConnection": "Sprawdzanie połączenia...",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "cancel": "Anuluj",
+    "connect": "Połącz",
+    "save": "Zapisz",
+    "scanningResources": "Skanowanie subskrypcji Azure...",
+    "discoveryPartialWarning": "Nie można zeskanować {count, plural, one {# subskrypcji} other {# subskrypcji}}. Skorzystaj z ręcznego dodania, jeśli brakuje Twojego konta.",
+    "discoveryTruncatedWarning": "Zasobów było zbyt wiele, aby je w pełni zeskanować. Skorzystaj z ręcznego dodania, jeśli brakuje Twojego konta.",
+    "noAccountsDiscovered": "Nie znaleziono kont Foundry w Twoich subskrypcjach. Skorzystaj z ręcznego dodania, jeśli znasz ścieżkę.",
+    "retryScan": "Ponów skanowanie",
+    "searchAccountsPlaceholder": "Szukaj kont...",
+    "modelsSelectedCount": "Wybrano {selected} z {total} modeli",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "autoAddLabel": "Automatycznie dodawaj nowe modele",
+    "autoAddDescription": "Wdrażane później modele będą pojawiać się automatycznie na tym koncie. Niezaznaczone modele pozostaną wykluczone."
   }
 }

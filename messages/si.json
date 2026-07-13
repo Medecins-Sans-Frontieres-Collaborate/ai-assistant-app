@@ -1457,6 +1457,15 @@
     "reasoningModel": "ඉඟිකිරීම් මාදිලිය: පිළිතුරු ලබාදීමට පෙර පියවරෙන් පියවර සිතයි. තරමක් වේගය අඩු, කටුක ගැටළු වලදී වැඩි කාර්යක්ෂමතාවක්.",
     "variant": {
       "label": "වෙරැද්ද"
+    },
+    "deployment": {
+      "title": "උත්සන්න කිරීම",
+      "source": "මූලාශ්‍රය",
+      "account": "ගිණුම",
+      "location": "ස්ථානය",
+      "deployment": "උත්සන්න කිරීම",
+      "modelVersion": "මාදිලි අනුවාදය",
+      "publisher": "ප්‍රකාශකයා"
     }
   },
   "models": {
@@ -1676,6 +1685,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "xAI විසින් නිකුත් කළ සුළු ආදර්ශයකි. ඉක්මනින් සහ අඩු වියදමින් කෙටි ප්‍රශ්න සහ අහඹු සංවාද සඳහා සුදුසුය."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI හි GPT-5.6 තුනේ ප්‍රමුඛයා. ලිවීම, පර්යේෂණ, කේතනය සහ සංකීර්ණ ගැටළු විසඳීමේදී ඉහළ කාර්යක්ෂමතාවයකි."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI හි GPT-5.6 තුනේ සමාන්‍ය මට්ටම. නිතර ලිවීම, විශ්ලේෂණය සහ කේතනයට වේගයෙන් ප්‍රතිචාර ලබා දේ."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI හි GPT-5.6 තුනේ වේගවත් හා සැහැල්ලු මට්ටම. වේගවත් ප්‍රශ්න හා සරල කාර්ය සඳහා අඩු පිරිවැයෙන් හොඳම විසඳුම."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral සමාගමේ නවතම මධ්‍යම ප්‍රමාණයේ මාදිලිය. දක්ෂතාව හා වේගය සම්තව සමබර යුරෝපීය විකල්පයක්."
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "මෙම කවුළුව වසා, යෙදුමට ආපසු යා හැකිය.",
       "closeButton": "කවුළුව වසන්න"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "මාදිලි මූලාශ්‍රයක් සම්බන්ධ කරන්න",
+    "addAnother": "තවත් මාදිලි මූලාශ්‍රයක් එක් කරන්න",
+    "edit": "සංස්කරණය",
+    "disconnect": "{name} විසන්ධි කරන්න",
+    "disconnectedToast": "{name} විසන්ධි විය",
+    "modelCountLabel": "මාදිලි {count} ක්",
+    "loadingModels": "මාදිලි පූරණය වෙමින්...",
+    "noModelsAvailable": "මෙම මූලාශ්‍රයෙන් මාදිලි නොමැත",
+    "sourceUnreachable": "මෙම මූලාශ්‍රය ප්‍රවේශ විය නොහැකි විය. ඔබගේ ප්‍රවේශය වෙනස් වී තිබිය හැක, හෝ සේවාව තාවකාලිකව නොමැති විය හැක.",
+    "retry": "නැවත උත්සාහ කරන්න",
+    "connectFoundryAccount": "Microsoft Azure Foundry ගිණුමක් සම්බන්ධ කරන්න",
+    "connectFoundryDescription": "ඔබට ප්‍රවේශය ඇති Azure Foundry ගිණුමෙහි හඳුනාගත් මාදිලි උත්සන්න කිරීම් බලන්න. ඔබගේම Azure අවසරය ඔප්පු කිරීම සඳහා භාවිතා වේ — යෙදුමේ මාදිලි සීමා මෙහි බල නොපැවැතී.",
+    "selectModelsDescription": "මෙම ගිණුමෙන් ඔබේ මාදිලි තේරීම්කරනයේ පෙනෙන මාදිලි උත්සන්න කිරීම් තෝරන්න.",
+    "editConnection": "සම්බන්ධතාව සංස්කරණය කරන්න",
+    "nameLabel": "නම",
+    "namePlaceholder": "උදා: My Team Sandbox",
+    "nameRequired": "මූලාශ්‍රයේ නම අවශ්‍යයි",
+    "foundryAccountLabel": "Foundry ගිණුම",
+    "enterManually": "හස්තියෙන් ඇතුළත් කරන්න",
+    "browseResources": "විශය සම්භන්ධ පරිශ්‍රම්ශ බැලීම",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "සම්පත් කණ්ඩායම",
+    "accountNameLabel": "ගිණුමේ නම",
+    "subscriptionRequired": "දායකත්වයක් තෝරන්න",
+    "accountRequired": "Foundry ගිණුමක් තෝරන්න",
+    "accountSelectionRequired": "ලැයිස්තුවෙන් ගිණුමක් තෝරන්න.",
+    "selectAllRequired": "දායකය, සම්පත් කණ්ඩායම හා ගිණුම තෝරන්න.",
+    "connectionFailed": "මෙම ගිණුමට ප්‍රවේශ විය නොහැක. විස්තර නිවැරදියිද හා ඔබට ප්‍රවේශය ඇතිද පරික්ෂා කරන්න.",
+    "duplicateSource": "මෙම ගිණුම දැනටමත් \"{name}\" ලෙස සම්බන්ධ වී ඇත.",
+    "connectionSuccessModels": "සම්බන්ධ විය — මාදිලි උත්සන්න කිරීම් {count} ක් සොයාගන්නා ලදි",
+    "connectionSuccessEmpty": "සම්බන්ධ විය, නමුත් මෙම ගිණුමෙහි මාදිලි උත්සන්න කිරීම් නොමැත.",
+    "checkingConnection": "සම්බන්ධතාව පරීක්ෂා වෙමින්...",
+    "next": "ඊළඟ",
+    "back": "ආපසු",
+    "cancel": "අවලංගු කරන්න",
+    "connect": "සම්බන්ධ කරන්න",
+    "save": "සුරකින්න",
+    "scanningResources": "ඔබගේ Azure දායකත්ව ස්ත්‍රෝත සෙවීම...",
+    "discoveryPartialWarning": "{count, plural, one {# දායකත්වය} other {# දායකත්ව} පරීක්ෂා කළ නොහැකි විය. ඔබේ ගිණුම නොපෙනේ නම් අතින් ඇතුළත් කිරීම භාවිතා කරන්න.",
+    "discoveryTruncatedWarning": "සම්පූර්ණයෙන් සෙවීමට සම්පත් ඉතා වැඩියි. ඔබේ ගිණුම නොපෙනේ නම් අතින් ඇතුළත් කිරීම භාවිතා කරන්න.",
+    "noAccountsDiscovered": "ඔබගේ දායකත්වයන්හි Foundry ගිණුම් හමු නොවීය. මඟපෙන්වීම ඔබට දන්නා නම් අතින් ඇතුළත් කිරීම භාවිතා කරන්න.",
+    "retryScan": "නැවත සෙවීම",
+    "searchAccountsPlaceholder": "ගිණුම් සොයන්න...",
+    "modelsSelectedCount": "{total}ෙන් {selected} නිරූපණ තේරුණි",
+    "selectAll": "සියල්ල තෝරන්න",
+    "deselectAll": "සියල්ල අතහරින්න",
+    "autoAddLabel": "අලුලු නිරූපණ ස්වයංක්‍රීයව එක් කරන්න",
+    "autoAddDescription": "ඉදිරියේදී මෙම ගිණුමට එකතු කළ නිරූපණ ස්වයංක්‍රීයව පෙන්වනු ඇත. තෝරා නොමැති නිරූපණ බැහැරව පවතී."
   }
 }

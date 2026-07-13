@@ -1508,6 +1508,15 @@
     "reasoningModel": "Moodel jajjannde: njaaja sikke-jeye e wowli. Hemɓude, ammbita mo haala gollu ɗiɗi.",
     "variant": {
       "label": "Laawol"
+    },
+    "deployment": {
+      "title": "Hurmitere",
+      "source": "Lesdi",
+      "account": "Compte",
+      "location": "Heɗere",
+      "deployment": "Hurmitere",
+      "modelVersion": "Leemunde model",
+      "publisher": "Naatinde"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "Muddal xAI soogaygal. Baggol e mawnirde ngoodi e binndanɗe daɗɗo e haasere gooɗɗi."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Dowrowal OpenAI GPT-5.6. Mo ɗo feewi e janngirde e waawde windugol, hummagol, kodugol, e heftinde lamɗe ɗiɗi."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Tagdi jokkondirde OpenAI GPT-5.6. Mo feewi e windugol ñalawma, lijjite e kodugol, e yahande jaaba jaati."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Dabbunde laawol OpenAI GPT-5.6. Mo waawi no gollu laawol tigi, jaaba jaati e goongɗude ceertu."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Leemunde Mistral hessere. Mo jokkondirde Iwroop, feewi e dowtagol ɗum e jaaba jaati e leyda."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "Waawda uddu window ngol e jokkondir e app.",
       "closeButton": "Uddu window"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "Labbinaa lesdi model",
+    "addAnother": "Naatnu lesdi model kammu",
+    "edit": "Taƴto",
+    "disconnect": "Dofnu {name}",
+    "disconnectedToast": "Dofnu {name}",
+    "modelCountLabel": "{count} modelaji",
+    "loadingModels": "Modelaji nayi...",
+    "noModelsAvailable": "Modelaji lesdi ɗee alaa",
+    "sourceUnreachable": "Alanyi seŋa lesdi ɗee. Hakkunde maa waawii waawde walla keftine, walla ngolle heɓanande e jamɗo.",
+    "retry": "Try lagi",
+    "connectFoundryAccount": "Labbinaa Compte Microsoft Azure Foundry",
+    "connectFoundryDescription": "Abinira hurmitere modelaji ba Azure Foundry konto maa. Yimɓe hakkilmaa yamiroo ndaa teertine — tee rennda laabi modelaji kono huuɓi.",
+    "selectModelsDescription": "Suɓo lenyol hurmitere modelaji konto ɗee uddirta e suɓagol modelaji.",
+    "editConnection": "Taƴto Ɓeydam",
+    "nameLabel": "Innde",
+    "namePlaceholder": "misal: Team am Sandibok",
+    "nameRequired": "Innde lesdi ena heɓi daraja",
+    "foundryAccountLabel": "Compte Foundry",
+    "enterManually": "Tabbo e keftingol",
+    "browseResources": "Jekki jaɓɓorgol",
+    "subscriptionIdLabel": "ID kubirnde",
+    "resourceGroupLabel": "Gruup Jaɓɓorgol",
+    "accountNameLabel": "Innde compte",
+    "subscriptionRequired": "Suɓo kubirnde",
+    "accountRequired": "Suɓo compte Foundry",
+    "accountSelectionRequired": "Suɓo compte e ɓeyngal.",
+    "selectAllRequired": "Suɓo kubirnde, gruup jaɓɓorgol, e compte.",
+    "connectionFailed": "Alanyi seŋa konto ɗee. Suɗori keftine e moƴƴi e hakkilmaa.",
+    "duplicateSource": "Konto ɗee hokka ko yoɓii lesdi \"{name}\".",
+    "connectionSuccessModels": "Labbii — {count} hurmitere modelaji nayi",
+    "connectionSuccessEmpty": "Labbii, kono hurmitere modelaji alaa e konto ɗee.",
+    "checkingConnection": "Ɓeydaama...",
+    "next": "Ton",
+    "back": "Rutto",
+    "cancel": "Haaynu",
+    "connect": "Danndu",
+    "save": "Danndu",
+    "scanningResources": "Ndeenndude Azure subscriptions maa...",
+    "discoveryPartialWarning": "{count, plural, one {# subscription} other {# subscriptions}} waawataa ndeenndude. Naatnu seydude baafal so alaa ko accaunt maa.",
+    "discoveryTruncatedWarning": "Aɗa jogii baayi dow ko feewi ndeenndude jayngol. Naatnu seydude baafal so accaunt maa alaa.",
+    "noAccountsDiscovered": "Accaunt Foundry soowaani e subscriptions maa. Naatnu seydude baafal so a andi path ngal.",
+    "retryScan": "Ndeenndu kadi",
+    "searchAccountsPlaceholder": "Yiy accauntji...",
+    "modelsSelectedCount": "{selected} e {total} moodelji labtinaama",
+    "selectAll": "Labtu fofu",
+    "deselectAll": "Momtu fofu",
+    "autoAddLabel": "Moodelji kesol aawtu-ɗam",
+    "autoAddDescription": "Moodelji jayngol woni accaunt ngol ɗo mbaɗi so tawii ɗaawaani. Moodelji moomtii moƴƴaani."
   }
 }

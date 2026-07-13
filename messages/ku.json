@@ -1508,6 +1508,15 @@
     "reasoningModel": "مۆدێلی بیرکردنەوە: پێش وەڵامدانەوە پەیوەندیدان بەهێز دەکات. هێواشتر، باشتر بواری کێشەی قورس.",
     "variant": {
       "label": "جۆر"
+    },
+    "deployment": {
+      "title": "دانینی داتا",
+      "source": "سەرچاوە",
+      "account": "ھەژمار",
+      "location": "شوێن",
+      "deployment": "دانینی داتا",
+      "modelVersion": "وەشانى مۆدێل",
+      "publisher": "بڵاوکەرەوە"
     }
   },
   "models": {
@@ -1725,6 +1734,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "مەودێلی سووکتر لە xAI. خێراتر و بە بێهێزی بۆ پرسیاری خێرا و گفتوگۆی ئۆپتی."
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "باشترین مۆدێلی GPT-5.6 لە OpenAI. بەهێزترینە بۆ نووسین، توێژینەوە، کۆدنووسین و چارەسەرکردنی کێشە گڕەکان."
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "دانەیەکی گرنگی مێژووی GPT-5.6 ی OpenAI. گونجاوە بۆ نووسینی ڕۆژانە، ڕاوێژکاری و کۆدنووسین بە وەڵامی خێرا."
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "مۆدێلی خفیف و خێرای GPT-5.6 ی OpenAI. باشە بۆ پرسیارێکی خێرا و کارە سادەکان بە تێچووی کەم."
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "نوێترین مۆدێلی قەدەغەی ناوەندەی Mistral. هاوشێوەیەکی ئەورووپی کە توانای و خێرایی بەهێمن دەکات بۆ کارە ڕۆژانەکان."
     }
   },
   "searchMode": {
@@ -3006,5 +3031,55 @@
       "close": "دەتوانیت ئەم پەنجەرەیە ببە و بگەڕێوە بۆ ئەپەکە.",
       "closeButton": "پەنجەرە ببە"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "گرێبەستکردنی سەرچاوەی مۆدێل",
+    "addAnother": "زیادکردنی سەرچاوەی مۆدێلی تر",
+    "edit": "دەستکاری",
+    "disconnect": "بەستنەوەی {name}",
+    "disconnectedToast": "{name} داخرا",
+    "modelCountLabel": "{count} مۆدێل",
+    "loadingModels": "جێبەجێکردنی مۆدێلکان...",
+    "noModelsAvailable": "هیچ مۆدێلێک لەم سەرچاوەدانە نییە",
+    "sourceUnreachable": "نەتوانرا بەو سەرچاوەیە بگات. دەبێت دەستگەیشتنەکەت گۆڕابێت یان خزمەتگوزاریەکە بۆ کاتی کەم بەردەست نەبێت.",
+    "retry": "دوبارە هەوڵبدە",
+    "connectFoundryAccount": "گرێبەستکردنی هەژماری Microsoft Azure Foundry",
+    "connectFoundryDescription": "دۆزینەوەی دانەدانی مۆدێل لە هەژماری Azure Foundry کە دەستگەیشت پێی هەیە. مۆڵەتەکانی Azure ـت دەستکاریدەکات بۆ هەموو داواکاریەکان — سنوردانی مۆدێلی ئەپلیکەیشن ڕهاتە.",
+    "selectModelsDescription": "هەڵبژێرە کام دانەدانی مۆدێل لە ئەم هەژمارە لە مۆدێل پیکەرت دادەردەکەوێت.",
+    "editConnection": "دەستکاری بەستەر",
+    "nameLabel": "ناو",
+    "namePlaceholder": "بۆ نموونە: Sandbox ی تیمەکەم",
+    "nameRequired": "ناسنامەی سەرچاوە پێویستە",
+    "foundryAccountLabel": "هەژماری Foundry",
+    "enterManually": "ئیداخڵکردنی دەستکرد",
+    "browseResources": "سەرچاوەکان بگرە",
+    "subscriptionIdLabel": "ناسنامەی بەشداریکردن",
+    "resourceGroupLabel": "کۆمەڵە سەرچاوە",
+    "accountNameLabel": "ناوی هەژمار",
+    "subscriptionRequired": "بەشداریکردنێک هەڵبژێرە",
+    "accountRequired": "هەژماری Foundry هەڵبژێرە",
+    "accountSelectionRequired": "هەژمارێک لە لیستەکە هەڵبژێرە.",
+    "selectAllRequired": "بەشداریکردن، گروپی سەرچاوە و هەژمار هەڵبژێرە.",
+    "connectionFailed": "نەتوانرا ئەم هەژمارە بەستربکرێت. تکایە وردبکە زانیاریەکان ڕاستن و دەستگەیشت پێی هەیە.",
+    "duplicateSource": "ئەم هەژمارە پێشتر بە \"{name}\" گرێدراوە.",
+    "connectionSuccessModels": "گرێدرایە — {count} دانەدانی مۆدێل دۆزرایەوە",
+    "connectionSuccessEmpty": "گرێدرایە، بەلام هیچ دانەدانی مۆدێل لەم هەژمارە نییە.",
+    "checkingConnection": "تاقیکردنەوەی گرێدان...",
+    "next": "دواتر",
+    "back": "گەڕانەوە",
+    "cancel": "هەڵوەشاندنەوە",
+    "connect": "پەیوەندیکردن",
+    "save": "پاشەکەوتکردن",
+    "scanningResources": "چەکدانی بەشداریکردنەکانی Azureی تۆ...",
+    "discoveryPartialWarning": "نەتوانرا {count, plural, one {# بەشداریکردن} other {# بەشداریکردن}} چەک بکرێن. بەدەست نووسین بەکاردەهێنە ئەگەر ئەکاونتەکەت نەبوو.",
+    "discoveryTruncatedWarning": "سەرچاوە زۆربوون بۆ چەککردنی تەواو. بەدەست نووسین بەکاردەهێنە ئەگەر ئەکاونتەکەت نەبوو.",
+    "noAccountsDiscovered": "هیچ ئەکاونتی Foundry لە بەشداریکردنەکانتدا نەدۆزرایەوە. بەدەست نووسین بەکاردەهێنە ئەگەر ڕێڕەوی ئەکاونتەکە دەزانی.",
+    "retryScan": "دووبارە چەککردن",
+    "searchAccountsPlaceholder": "گەڕان بۆ ئەکاونتەکان...",
+    "modelsSelectedCount": "{selected} لە {total} مۆدێل هەڵبژێردرا",
+    "selectAll": "هەمووی هەڵبژێرە",
+    "deselectAll": "هەڵبژاردنەکان بسڕەوە",
+    "autoAddLabel": "مۆدێل نوێکان بەشێوەی خۆکار زیاد بکە",
+    "autoAddDescription": "ئەگەر پاشتر دابەشکردنی مۆدێل بە ئەم ئەکاونەتە زیاد بکرێت، خۆکارانە ئەوە دەردەکەوێت. ئەو مۆدێلانەی ناتێکرێنە ناو هەمان شێوە دەبەستن."
   }
 }

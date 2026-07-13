@@ -1355,6 +1355,15 @@
     "reasoningModel": "የአስተያየት ሞዴል፡ ምላሹን ከመስጠት በፊት ደረጃ በደረጃ ያስባል። የሚያዘግዝ፣ በከባድ ችግሮች ላይ ይሻላል።",
     "variant": {
       "label": "ዓይነት"
+    },
+    "deployment": {
+      "title": "መሰራተኛ",
+      "source": "ምንጭ",
+      "account": "መለያ",
+      "location": "ቦታ",
+      "deployment": "መሰራተኛ",
+      "modelVersion": "የሞዴል እትም",
+      "publisher": "አሳታሚ"
     }
   },
   "models": {
@@ -1574,6 +1583,22 @@
     "grok_3_mini": {
       "name": "Grok 3 Mini",
       "description": "ቀላል የ xAI ሞዴል። ለፈጣን ጥያቄዎችና ለአጭር ውይይቶች ፈጣን እና ቀላል ነው።"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "የOpenAI GPT-5.6 ትልቁ ሞዴል። በጽሁፍ፣ ጥናት፣ መች ፅሁፍና በችግኝ መፍታት ጥልቅ አማካይ ነው።"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "የOpenAI GPT-5.6 ዋናው ደረጃ። አዳዲስ ጽሁፍ፣ ትንተና እና መች ፅሁፍ ለቀናቸው ተግባራት ፈጣን ምላሽ ይሰጣል።"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "የOpenAI GPT-5.6 ቀላልና ፈጣን ደረጃ ሞዴል። ለፈጣን ጥያቄዎች እና ቀላል ተግባራት በችር ዋጋ ከፍተኛ ስራ ይሰርቃል።"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "የMistral አዲሱ የመካከለኛ መጠን ሞዴል። አውሮፓዊ አማራጭ፣ ችሎታና ፍጥነት ለየቀኑ ስራ የተባረከ ነው።"
     }
   },
   "searchMode": {
@@ -3022,5 +3047,55 @@
       "close": "ይህንን መስኮት ዝግ ወደ መተግበሪያው ተመለሱ።",
       "closeButton": "መስኮት ዝጋ"
     }
+  },
+  "modelSources": {
+    "connectButtonShort": "የሞዴል ምንጭ ያገናኙ",
+    "addAnother": "ሌላ የሞዴል ምንጭ ያክሉ",
+    "edit": "አርትዕ",
+    "disconnect": "{name} አቁም",
+    "disconnectedToast": "{name} ተቋርጧል",
+    "modelCountLabel": "{count} ሞዴሎች",
+    "loadingModels": "ሞዴሎች በመጫን ላይ...",
+    "noModelsAvailable": "ከዚህ ምንጭ ሞዴሎች አይገኙም",
+    "sourceUnreachable": "ወደዚህ ምንጭ ማግኘት አልተቻለም። የአንደኛ ወይም የአገልግሎቱ ችግር ሊኖረው ይችላል።",
+    "retry": "እንደገና ይሞክሩ",
+    "connectFoundryAccount": "Microsoft Azure Foundry Account ያገናኙ",
+    "connectFoundryDescription": "የእርስዎ ፈቃድ ያለውን Azure Foundry መለያ ከሆነ የሞዴል እንቅስቃሴዎችን ያግኙ። የAzure ፈቃድዎ ማንኛውም ጥያቄ ያረጋግጣል፤ የመተግበሪያው የሞዴል ገደቦች አይተገበሩበትም።",
+    "selectModelsDescription": "ከዚህ መለያ የሚታዩትን የሞዴል እንቅስቃሴዎች ይምረጡ።",
+    "editConnection": "ግንኙነት አርታውት",
+    "nameLabel": "ስም",
+    "namePlaceholder": "ለምሳሌ፦ የቡድኔ ሳንድቦክስ",
+    "nameRequired": "የምንጭ ስም አስፈላጊ ነው",
+    "foundryAccountLabel": "Foundry መለያ",
+    "enterManually": "በቀላሉ ያስገቡ",
+    "browseResources": "ምንዛሬዎችን ይመልከቱ",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resource Group",
+    "accountNameLabel": "የመለያ ስም",
+    "subscriptionRequired": "Subscription ይምረጡ",
+    "accountRequired": "Foundry መለያ ይምረጡ",
+    "accountSelectionRequired": "ከዝርዝሩ መለያ ይምረጡ።",
+    "selectAllRequired": "Subscription፣ resource group እና መለያ ይምረጡ።",
+    "connectionFailed": "ወደዚህ መለያ ማድረስ አልተቻለም። ዝርዝሮቹ ትክክለኛ መሆናቸውን ያረጋግጡና መዳረሻ አለዎት ያረጋግጡ።",
+    "duplicateSource": "ይህ መለያ አሁንም \"{name}\" እንደተገናኙ ነው።",
+    "connectionSuccessModels": "ተገናኝቷል — {count} የሞዴል እንቅስቃሴ(ዎች) ተገኝቷል",
+    "connectionSuccessEmpty": "ተገናኝቷል፣ ግን በዚህ መለያ ምንም የሞዴል እንቅስቃሴ አልተገኘም።",
+    "checkingConnection": "ግንኙነት በመሞከር ላይ...",
+    "next": "ቀጣይ",
+    "back": "ተመለስ",
+    "cancel": "ይቅር",
+    "connect": "አገናኝ",
+    "save": "አስቀምጥ",
+    "scanningResources": "የ Azure ምዝገባዎትን ተደጋጋሚ እየተቃኘ ነው...",
+    "discoveryPartialWarning": "{count, plural, one {# ምዝገባ} other {# ምዝገባዎች}} ማቃኘት አልተቻለም። መለያዎ ካልተገኘ እባክዎ በእጅ ያስገቡ።",
+    "discoveryTruncatedWarning": "ሙሉ በሙሉ ማቃኘት የሚችል ብዙ ምንጮች አሉ። መለያዎ ካልተገኘ በእጅ ያስገቡ።",
+    "noAccountsDiscovered": "በምዝገባዎ ውስጥ የ Foundry መለያዎች አልተገኙም። መንገዱን አትውቁ ከሆነ፣ በእጅ ያስገቡ።",
+    "retryScan": "ማቃኘትን ደጋግመው ይሞክሩ",
+    "searchAccountsPlaceholder": "መለያዎችን ፈልግ...",
+    "modelsSelectedCount": "{selected} ከ {total} ሞዴሎች ተመረጡ",
+    "selectAll": "ሁሉንም ይምረጡ",
+    "deselectAll": "ሁሉንም ምረጥ ይቆዩ",
+    "autoAddLabel": "አዲስ ሞዴሎችን በራስ-ሰር ያክሉ",
+    "autoAddDescription": "ለዚህ መለያ በኋላ የታከሉ የሞዴል ስትንተኞች በራስ ሰር ይታያሉ። ዘርግተኛ የቆዩት ሞዴሎች አይጨመሩም።"
   }
 }
