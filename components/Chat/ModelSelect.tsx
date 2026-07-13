@@ -71,7 +71,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots, enableClaudeModels } = useFlags();
+  const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -1171,22 +1171,24 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                         );
                       })}
                       {/* Connect a model source */}
-                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button
-                          onClick={() => {
-                            setEditingModelSource(undefined);
-                            setShowModelSourceForm(true);
-                          }}
-                          className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
-                        >
-                          <IconPlug size={16} className="shrink-0" />
-                          <span>
-                            {customModelSources.length === 0
-                              ? t('modelSources.connectButtonShort')
-                              : t('modelSources.addAnother')}
-                          </span>
-                        </button>
-                      </div>
+                      {enableBYOModels && (
+                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <button
+                            onClick={() => {
+                              setEditingModelSource(undefined);
+                              setShowModelSourceForm(true);
+                            }}
+                            className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+                          >
+                            <IconPlug size={16} className="shrink-0" />
+                            <span>
+                              {customModelSources.length === 0
+                                ? t('modelSources.connectButtonShort')
+                                : t('modelSources.addAnother')}
+                            </span>
+                          </button>
+                        </div>
+                      )}
                       <HiddenItemsSection
                         items={hiddenModels.map((m) => ({
                           id: m.id,
