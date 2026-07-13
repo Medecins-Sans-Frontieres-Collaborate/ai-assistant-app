@@ -38,7 +38,14 @@ export interface OpenAIModel {
    * Server validates against `isValidFoundryResourcePath` before any use.
    */
   agentSource?: string;
-  provider?: 'openai' | 'deepseek' | 'xai' | 'meta' | 'anthropic' | 'mistral'; // Model provider
+  provider?:
+    | 'openai'
+    | 'deepseek'
+    | 'xai'
+    | 'meta'
+    | 'anthropic'
+    | 'mistral'
+    | 'moonshot'; // Model provider
   knowledgeCutoffDate?: string; // ISO format for sorting and display (e.g., "2025-01" or "2025-01-20")
   sdk?: 'azure-openai' | 'openai' | 'anthropic-foundry'; // Which SDK this model requires
   supportsTemperature?: boolean; // Whether this model supports custom temperature values
@@ -346,7 +353,15 @@ const openAIModelSchema = z.object({
   foundryEndpoint: z.string().optional(),
   agentSource: z.string().optional(),
   provider: z
-    .enum(['openai', 'deepseek', 'xai', 'meta', 'anthropic', 'mistral'])
+    .enum([
+      'openai',
+      'deepseek',
+      'xai',
+      'meta',
+      'anthropic',
+      'mistral',
+      'moonshot',
+    ])
     .optional(),
   knowledgeCutoffDate: z.string().optional(),
   sdk: z.enum(['azure-openai', 'openai', 'anthropic-foundry']).optional(),
