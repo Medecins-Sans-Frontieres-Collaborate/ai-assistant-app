@@ -18,6 +18,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
+import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import {
   groupIntoFamilyUnits,
   seriesRepresentative,
@@ -717,6 +718,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   const metaOf = (m: OpenAIModel) =>
                     OpenAIModels[m.id as OpenAIModelID] ?? m;
 
+                  // Localized list text: `models.<slug>.name/.tagline` from
+                  // the messages override the metadata (English-only);
+                  // missing keys (e.g. byom ids) fall back silently. The
+                  // details panel does the same via ModelHeader.
+                  const localizedName = (model: OpenAIModel) => {
+                    const key = `models.${modelIdToLocaleKey(model.id)}.name`;
+                    return t.has(key) ? t(key) : model.name;
+                  };
+                  const localizedTagline = (model: OpenAIModel) => {
+                    const key = `models.${modelIdToLocaleKey(model.id)}.tagline`;
+                    return t.has(key) ? t(key) : metaOf(model)?.tagline;
+                  };
+
                   const toggleStar = (model: OpenAIModel) =>
                     starredSet.has(model.id)
                       ? unstarModel(model.id)
@@ -805,8 +819,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       <ModelCard
                         key={model.id}
                         id={model.id}
-                        name={opts?.name ?? model.name}
-                        tagline={metaOf(model)?.tagline}
+                        name={opts?.name ?? localizedName(model)}
+                        tagline={localizedTagline(model)}
                         badge={badge}
                         isSelected={selectedModelId === model.id}
                         onClick={() => handleModelSelect(model)}
@@ -850,8 +864,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       <ModelCard
                         key={`fav-${model.id}`}
                         id={model.id}
-                        name={model.name}
-                        tagline={metaOf(model)?.tagline}
+                        name={localizedName(model)}
+                        tagline={localizedTagline(model)}
                         badge={infoBadge}
                         isSelected={selectedModelId === model.id}
                         onClick={() => handleModelSelect(model)}
