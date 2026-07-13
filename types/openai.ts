@@ -222,6 +222,7 @@ export enum OpenAIModelID {
   CLAUDE_OPUS_4_7 = 'claude-opus-4-7',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5',
   // Other providers
+  KIMI_K2_6 = 'Kimi-K2.6',
   LLAMA_4_MAVERICK = 'Llama-4-Maverick-17B-128E-Instruct-FP8',
   LLAMA_4_SCOUT = 'Llama-4-Scout-17B-16E-Instruct',
   LLAMA_3_3_70B = 'Llama-3.3-70B-Instruct',
@@ -275,6 +276,7 @@ export const DEFAULT_MODEL_ORDER: OpenAIModelID[] = [
   OpenAIModelID.DEEPSEEK_R1, // …prod anchor (V3.2 ring-gated there)
   OpenAIModelID.GPT_o3, // "o-series" family row
   OpenAIModelID.LLAMA_4_MAVERICK, // "Llama" family row
+  OpenAIModelID.KIMI_K2_6, // "Kimi" family row
   // Non-representative family members: they surface as variant segments and
   // version chips in the details panel rather than list rows, so position
   // below only breaks ties (usage mode, equal versionRank) and orders the
