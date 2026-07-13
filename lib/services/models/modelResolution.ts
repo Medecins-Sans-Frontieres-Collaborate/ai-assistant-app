@@ -52,6 +52,9 @@ export function inferProvider(publisher?: string): OpenAIModel['provider'] {
     case 'mistral':
     case 'mistral ai':
       return 'mistral';
+    case 'moonshot':
+    case 'moonshotai':
+      return 'moonshot';
     default:
       // Unmapped publisher — leave undefined (generic UI).
       return undefined;
@@ -90,6 +93,7 @@ const ALLOWED_PROVIDERS = [
   'meta',
   'anthropic',
   'mistral',
+  'moonshot',
 ] as const satisfies readonly NonNullable<OpenAIModel['provider']>[];
 
 /** Curation tiers; tag-supplied values outside this are ignored. */
