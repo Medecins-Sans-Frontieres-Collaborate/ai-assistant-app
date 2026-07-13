@@ -777,6 +777,12 @@ describe('ModelSelect', () => {
   describe('Custom model sources (BYOM)', () => {
     const originalFetch = global.fetch;
 
+    beforeEach(() => {
+      // The whole BYOM area is gated on the enableBYOModels LD flag,
+      // FAIL-CLOSED (absent = hidden) for staged rollout.
+      mockFlags.enableBYOModels = true;
+    });
+
     const BYOM_PATH =
       '/subscriptions/sub-1/resourceGroups/rg-1/providers/Microsoft.CognitiveServices/accounts/acct-1';
 
@@ -877,12 +883,23 @@ describe('ModelSelect', () => {
       expect(screen.queryByText('my-gpt')).not.toBeInTheDocument();
     });
 
-    it('always offers the connect-a-source affordance in the Models tab', () => {
+    it('offers the connect-a-source affordance when the enableBYOModels flag is on', () => {
       stubSourcesFetch([]);
 
       render(<ModelSelect />);
 
       expect(screen.getByText('Connect a model source')).toBeInTheDocument();
+    });
+
+    it('hides the whole BYOM area when the enableBYOModels flag is absent (fail-closed)', () => {
+      delete mockFlags.enableBYOModels;
+      stubSourcesFetch([]);
+
+      render(<ModelSelect />);
+
+      expect(
+        screen.queryByText('Connect a model source'),
+      ).not.toBeInTheDocument();
     });
 
     it('shows an unreachable state with retry when discovery fails for a source', async () => {
