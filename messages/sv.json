@@ -1373,27 +1373,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "GPT-4.1-baserad AI-modell med webbsökning i realtid via Bing. Ger aktuell information, faktakontroll och medvetenhet om aktuella händelser. Idealisk för forskning, nyhetsanalys och faktakontroll som kräver aktuell information.",
-      "knowledgeCutoff": "Webbsökning i realtid"
+      "knowledgeCutoff": "Webbsökning i realtid",
+      "tagline": "OpenAIs föregående generation"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAI:s mest avancerade modell som utmärker sig i komplex resonemang, kodgenerering och teknisk problemlösning. Idealisk för analytiska uppgifter, programmeringsutmaningar, forskning och detaljerade förklaringar. Stödjer justerbar resonemangsansträngning och svarsdetaljnivå.",
-      "knowledgeCutoff": "6 augusti 2025, 20:00"
+      "knowledgeCutoff": "6 augusti 2025, 20:00",
+      "tagline": "Föregående GPT-flaggskepp"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "En snabbare, kostnadseffektiv GPT-5-variant optimerad för hastighet samtidigt som hög kvalitet bibehålls. Lämplig för rutinuppgifter, snabba frågor, verktygsstyrning och applikationer som behöver snabba svarstider. Utmärkt balans mellan prestanda och effektivitet.",
-      "knowledgeCutoff": "6 augusti 2025, 20:00"
+      "knowledgeCutoff": "6 augusti 2025, 20:00",
+      "tagline": "Snabbare och billigare"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "En specialiserad variant av GPT-5 optimerad för samtalsinteraktion och emotionell intelligens. Utmärker sig i empatisk kommunikation, mental hälsa-stöd, kreativt skrivande, brainstorming och naturlig dialog. Idealisk för avslappnade samtal, rådgivningsscenarier och uppgifter som kräver emotionell medvetenhet.",
-      "knowledgeCutoff": "1 oktober 2025, 20:00"
+      "knowledgeCutoff": "1 oktober 2025, 20:00",
+      "tagline": "Föregående chat-anpassad GPT"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAI:s mest avancerade resonemangsmodell med banbrytande problemlösningsförmåga. Utmärker sig i komplex matematik, vetenskapligt resonemang, kodningsutmaningar och flerstegiga logikuppgifter. Utökat 200K kontextfönster. Stödjer kontroll av resonemangsansträngning.",
-      "knowledgeCutoff": "8 april 2025, 20:00"
+      "knowledgeCutoff": "8 april 2025, 20:00",
+      "tagline": "Djup steg-för-steg-resonemang"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1403,205 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "En resonemangsexpert som visar sitt arbete steg för steg. Utmärker sig i matematiska problem, logikpussel och förståelse av komplexa koncept. Se hur den tänker igenom problem i realtid.",
-      "knowledgeCutoff": "20 januari 2025"
+      "knowledgeCutoff": "20 januari 2025",
+      "tagline": "Visar resonemang steg för steg"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "En mångsidig modell med särskilda styrkor inom kodning och tekniskt skrivande. Idealisk för kodfelsökning, dokumentationsskrivande och förklaring av tekniska koncept. Snabb och pålitlig för utvecklingsuppgifter.",
-      "knowledgeCutoff": "16 april 2025, 00:45"
+      "knowledgeCutoff": "16 april 2025, 00:45",
+      "tagline": "Öppen källkods-alternativ"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "En mångsidig modell från xAI känd för nyanserade svar. Idealisk för öppna diskussioner, kreativa projekt och komplex problemlösning.",
-      "knowledgeCutoff": "13 maj 2025, 00:16"
+      "knowledgeCutoff": "13 maj 2025, 00:16",
+      "tagline": "xAI-alternativ"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropics mest kapabla modell med exceptionellt resonemang, kodning och kreativa förmågor. Idealisk för komplex analys, forskning och uppgifter som kräver djup förståelse.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Tidigare Opus-generation"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "En balanserad Claude-modell som ger utmärkt prestanda inom kodning, analys och kreativa uppgifter. Idealisk för daglig användning med snabba svarstider.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Föregående generation Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Föregående generations Claude Opus-modell. Utmärker sig i komplexa kodningsuppgifter, detaljerad analys och nyanserad förståelse.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Föregående generation Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "En snabb och kostnadseffektiv Claude-modell optimerad för snabba uppgifter. Idealisk för enkla frågor, sammanfattningar och massapplikationer.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Snabb Claude-variant"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAIs mest avancerade modell, utmärker sig inom komplex problemlösning, kodgenerering och teknisk problemlösning. Bäst för analytiska uppgifter, programmeringsutmaningar, forskning och detaljerade förklaringar. Stöder justerbar resonemangsnivå och svarslängd.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Kod, analys, forskning"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dec 2025",
-      "description": "Specialiserad variant av GPT-5.2 optimerad för samtal och emotionell intelligens. Utmärker sig inom empatisk kommunikation, kreativt skrivande, idégenerering och naturliga dialoger. Bäst för informella samtal, rådgivningssituationer och uppgifter som kräver emotionell medvetenhet."
+      "description": "Specialiserad variant av GPT-5.2 optimerad för samtal och emotionell intelligens. Utmärker sig inom empatisk kommunikation, kreativt skrivande, idégenerering och naturliga dialoger. Bäst för informella samtal, rådgivningssituationer och uppgifter som kräver emotionell medvetenhet.",
+      "tagline": "Samtal, idégenerering"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropics starkaste modell. Bra för långa texter, forskning och uppgifter som kräver noggrant tänkande.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Långformsskrivning och analys"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "En balanserad Claude-modell. Bra för vardagligt skrivande, analys och kodning med snabba svar.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Balanserad Claude för vardagsbruk"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "En öppen källkodsmodell från Meta. Stabil för skrivande, sammanfattningar och snabba frågor."
+      "description": "En öppen källkodsmodell från Meta. Stabil för skrivande, sammanfattningar och snabba frågor.",
+      "tagline": "Öppen källkods-alternativ"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning.",
+      "tagline": "Nyaste GPT-flaggskeppet"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Den minsta och snabbaste GPT-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+      "description": "Den minsta och snabbaste GPT-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad.",
+      "tagline": "Minsta och snabbaste GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "En konversationstuned GPT-variant för dialog. Bra för avslappnade samtal, brainstorming och stödjande diskussioner."
+      "description": "En konversationstuned GPT-variant för dialog. Bra för avslappnade samtal, brainstorming och stödjande diskussioner.",
+      "tagline": "Nyare chat-anpassad GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "En äldre multimodal GPT. Passar för vardagligt skrivande och frågor/svar där den senaste kapaciteten inte behövs."
+      "description": "En äldre multimodal GPT. Passar för vardagligt skrivande och frågor/svar där den senaste kapaciteten inte behövs.",
+      "tagline": "Äldre multimodal GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "En mindre och snabbare GPT-4.1-variant för snabba vardagsuppgifter."
+      "description": "En mindre och snabbare GPT-4.1-variant för snabba vardagsuppgifter.",
+      "tagline": "Lätt föregående generation GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Anthropics senaste och starkaste modell. Utmärkt för långa texter, forskning, kodning och noggrann analys."
+      "description": "Anthropics senaste och starkaste modell. Utmärkt för långa texter, forskning, kodning och noggrann analys.",
+      "tagline": "Nyaste och starkaste Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "DeepSeeks senaste öppen källkodsmodell. Pålitlig för allmänt skrivande och tekniska frågor."
+      "description": "DeepSeeks senaste öppen källkodsmodell. Pålitlig för allmänt skrivande och tekniska frågor.",
+      "tagline": "Öppen källkods-alternativ"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Mistrals flaggskeppsmodell. Ett europeiskt alternativ för skrivande, sammanfattningar och allmänna frågor."
+      "description": "Mistrals flaggskeppsmodell. Ett europeiskt alternativ för skrivande, sammanfattningar och allmänna frågor.",
+      "tagline": "Europeisk öppen modell"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "En tidigare flaggskeppsrevision av GPT-5. Fortfarande stark på skrivande, analys och kodning."
+      "description": "En tidigare flaggskeppsrevision av GPT-5. Fortfarande stark på skrivande, analys och kodning.",
+      "tagline": "Tidigare GPT-5 flaggskepp"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "En tidigare chatt-tuned GPT-5-version. Bra för vardagliga samtal och brainstorming."
+      "description": "En tidigare chatt-tuned GPT-5-version. Bra för vardagliga samtal och brainstorming.",
+      "tagline": "Tidigare chat-anpassad GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Den minsta GPT-5-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad."
+      "description": "Den minsta GPT-5-varianten. Bäst för snabba, enkla uppgifter till minimal kostnad.",
+      "tagline": "Py liten föregående generation GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Den minsta GPT-4.1-varianten. Passar för snabba, enkla uppgifter där hastighet och kostnad är viktigast."
+      "description": "Den minsta GPT-4.1-varianten. Passar för snabba, enkla uppgifter där hastighet och kostnad är viktigast.",
+      "tagline": "Minsta föregående generation GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "En liten och snabb GPT-4o-variant. Passar bra för snabba vardagsuppgifter där senaste kapacitet inte behövs."
+      "description": "En liten och snabb GPT-4o-variant. Passar bra för snabba vardagsuppgifter där senaste kapacitet inte behövs.",
+      "tagline": "Lätt äldre multimodal GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "En kompakt resonemangsmodell. Bra för matte, logik och steg-för-steg-problem till lägre kostnad än o3."
+      "description": "En kompakt resonemangsmodell. Bra för matte, logik och steg-för-steg-problem till lägre kostnad än o3.",
+      "tagline": "Snabbt och prisvärt resonemang"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "En tidigare kompakt resonemangsmodell. Hanterar matte, naturvetenskap och logiska problem kostnadseffektivt."
+      "description": "En tidigare kompakt resonemangsmodell. Hanterar matte, naturvetenskap och logiska problem kostnadseffektivt.",
+      "tagline": "Kompakt steg-för-steg-resonemang"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Anthropics mest intelligenta modell, den första i Claude 5-familjen. Utmärkt för de svåraste skriv-, forsknings- och koduppgifterna."
+      "description": "Anthropics mest intelligenta modell, den första i Claude 5-familjen. Utmärkt för de svåraste skriv-, forsknings- och koduppgifterna.",
+      "tagline": "Anthropics toppmodell"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Den nyaste balanserade Claude, först i Claude 5-familjen. Stark på vardagligt skrivande, analys och kodning med snabba svar."
+      "description": "Den nyaste balanserade Claude, först i Claude 5-familjen. Stark på vardagligt skrivande, analys och kodning med snabba svar.",
+      "tagline": "Nyaste balanserade Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Mistrals mellanstora modell. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagsbruk."
+      "description": "Mistrals mellanstora modell. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagsbruk.",
+      "tagline": "Balanserad europeisk modell"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistrals lilla modell. Snabb och billig för sammanfattningar, utkast och enkla frågor."
+      "description": "Mistrals lilla modell. Snabb och billig för sammanfattningar, utkast och enkla frågor.",
+      "tagline": "Liten snabb europeisk modell"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistrals minsta modell. Bäst för mycket snabba, enkla uppgifter till minimal kostnad."
+      "description": "Mistrals minsta modell. Bäst för mycket snabba, enkla uppgifter till minimal kostnad.",
+      "tagline": "Py liten edge-anpassad Mistral"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "En uppdaterad DeepSeek-R1-version. Visar sitt resonemang steg för steg med förbättrat djup."
+      "description": "En uppdaterad DeepSeek-R1-version. Visar sitt resonemang steg för steg med förbättrat djup.",
+      "tagline": "Uppdaterad öppen resonemangsmodell"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "En lättare öppen källkodsmodell från Meta. Snabb för skrivande, sammanfattningar och vardagsfrågor."
+      "description": "En lättare öppen källkodsmodell från Meta. Snabb för skrivande, sammanfattningar och vardagsfrågor.",
+      "tagline": "Effektiv öppen källkods-Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "En äldre öppen källkodsmodell från Meta. Fortfarande stabil för allmänt skrivande och frågor/svar."
+      "description": "En äldre öppen källkodsmodell från Meta. Fortfarande stabil för allmänt skrivande och frågor/svar.",
+      "tagline": "Äldre öppen källkods-Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "xAIs flaggskeppsmodell. Bra för öppna diskussioner, analys och kreativa projekt."
+      "description": "xAIs flaggskeppsmodell. Bra för öppna diskussioner, analys och kreativa projekt.",
+      "tagline": "xAI-flaggskepp"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning."
+      "description": "OpenAIs senaste flaggskeppsmodell. Stark på skrivande, forskning, kodning och komplex problemlösning.",
+      "tagline": "Senaste GPT-flaggskepp"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (senaste)",
-      "description": "Ett rullande alias som alltid pekar på OpenAIs nyaste chat-tunade modell. Azures ersättning för de utgångna versionerade gpt-*-chat-modellerna."
+      "description": "Ett rullande alias som alltid pekar på OpenAIs nyaste chat-tunade modell. Azures ersättning för de utgångna versionerade gpt-*-chat-modellerna.",
+      "tagline": "Alltid den nyaste chat-GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "En nyare Opus-version, mellan 4.6 och 4.8. Stark för långa texter, forskning, kodning och noggrann analys."
+      "description": "En nyare Opus-version, mellan 4.6 och 4.8. Stark för långa texter, forskning, kodning och noggrann analys.",
+      "tagline": "Senaste Opus-versionen"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "DeepSeeks nyaste modeller för resonemang och Azures ersättning för R1-linjen. Visar sitt tänkande steg för steg."
+      "description": "DeepSeeks nyaste modeller för resonemang och Azures ersättning för R1-linjen. Visar sitt tänkande steg för steg.",
+      "tagline": "Nyaste öppna resonemangsmodell"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "DeepSeeks snabba V4-variant och Azures ersättning för V3-linjen. Snabb för allmänt skrivande och tekniska frågor."
+      "description": "DeepSeeks snabba V4-variant och Azures ersättning för V3-linjen. Snabb för allmänt skrivande och tekniska frågor.",
+      "tagline": "Snabbt öppen källkods-alternativ"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Resonemang)",
-      "description": "xAIs snabba resonemangsmodell. Tänker steg för steg med snabba svar."
+      "description": "xAIs snabba resonemangsmodell. Tänker steg för steg med snabba svar.",
+      "tagline": "Snabb xAI-resonemangsmodell"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "xAIs snabba chattmodell. Snabba svar för vardagsfrågor och diskussioner."
+      "description": "xAIs snabba chattmodell. Snabba svar för vardagsfrågor och diskussioner.",
+      "tagline": "Snabb xAI-chatmodell"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "En lättare xAI-modell. Snabbare och billigare för snabba frågor och vardagliga samtal."
+      "description": "En lättare xAI-modell. Snabbare och billigare för snabba frågor och vardagliga samtal.",
+      "tagline": "Lättare xAI-modell"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Flaggskeppet i OpenAI:s GPT-5.6-trio. Starkast på skrivande, forskning, kodning och komplex problemlösning."
+      "description": "Flaggskeppet i OpenAI:s GPT-5.6-trio. Starkast på skrivande, forskning, kodning och komplex problemlösning.",
+      "tagline": "Nyaste GPT-flaggskeppsnivå"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Den balanserade nivån i OpenAI:s GPT-5.6-trio. Passar för vardagligt skrivande, analys och kodning med snabba svar."
+      "description": "Den balanserade nivån i OpenAI:s GPT-5.6-trio. Passar för vardagligt skrivande, analys och kodning med snabba svar.",
+      "tagline": "Balanserad vardaglig GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Den lätta och snabba nivån i OpenAI:s GPT-5.6-trio. Bäst för snabba frågor och enkla uppgifter till låg kostnad."
+      "description": "Den lätta och snabba nivån i OpenAI:s GPT-5.6-trio. Bäst för snabba frågor och enkla uppgifter till låg kostnad.",
+      "tagline": "Lätt och snabb GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mistrals senaste modell i mellanstorlek. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagligt arbete."
+      "description": "Mistrals senaste modell i mellanstorlek. Ett europeiskt alternativ som balanserar kapacitet och hastighet för vardagligt arbete.",
+      "tagline": "Balanserad europeisk modell"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI:s open-weight-modell. Stark på agentuppgifter, kodning och långa dokument.",
+      "tagline": "Agentbaserad open-weight-modell"
     }
   },
   "searchMode": {

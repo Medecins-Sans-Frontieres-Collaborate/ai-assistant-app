@@ -1472,27 +1472,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Model AI bazat pe GPT-4.1 cu căutare web în timp real prin Bing. Oferă informații actualizate, verificare a faptelor și monitorizare a evenimentelor curente. Ideal pentru cercetări ce necesită informații recente, analiză de știri și verificare a faptelor.",
-      "knowledgeCutoff": "Căutare web în timp real"
+      "knowledgeCutoff": "Căutare web în timp real",
+      "tagline": "Generația anterioară OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Cel mai avansat model OpenAI, excelent în raționament complex, generare de cod și rezolvare de probleme tehnice. Ideal pentru sarcini analitice, provocări de programare, cercetare și explicații detaliate. Permite ajustarea nivelului de raționament și a detaliului răspunsului.",
-      "knowledgeCutoff": "6 aug 2025, 20:00"
+      "knowledgeCutoff": "6 aug 2025, 20:00",
+      "tagline": "Vârf GPT anterior"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variantă mai rapidă și mai economică a GPT-5, optimizată pentru viteză menținând o calitate ridicată. Perfect pentru sarcini zilnice, întrebări rapide, rutare prin instrumente și aplicații ce necesită timpi de răspuns scurți. Oferă un echilibru excelent între performanță și eficiență.",
-      "knowledgeCutoff": "6 aug 2025, 20:00"
+      "knowledgeCutoff": "6 aug 2025, 20:00",
+      "tagline": "Mai rapid și mai economic"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Variantă specializată a GPT-5, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, suport pentru sănătatea mintală, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere sau sarcini care necesită conștientizare emoțională.",
-      "knowledgeCutoff": "1 oct 2025, 20:00"
+      "knowledgeCutoff": "1 oct 2025, 20:00",
+      "tagline": "GPT anterior optimizat pentru chat"
     },
     "o3": {
       "name": "o3",
       "description": "Cel mai avansat model de raționament de la OpenAI, cu capabilități inovatoare de rezolvare a problemelor. Excelează în matematică complexă, raționament științific, provocări de programare și sarcini logice în mai mulți pași. Fereastră extinsă de context de 200K. Permite controlul efortului de raționare.",
-      "knowledgeCutoff": "8 apr. 2025, 20:00"
+      "knowledgeCutoff": "8 apr. 2025, 20:00",
+      "tagline": "Raționament detaliat, pas cu pas"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1502,205 +1507,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Specialist în raționament care își arată logica pas cu pas. Excelent pentru probleme de matematică, puzzle-uri logice și înțelegerea conceptelor complexe. Poți vedea cum gândește în timp real.",
-      "knowledgeCutoff": "20 ian. 2025"
+      "knowledgeCutoff": "20 ian. 2025",
+      "tagline": "Arată raționamentul pas cu pas"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Model versatil, deosebit de bun la programare și redactare tehnică. Ideal pentru depanare de cod, scriere de documentație și explicarea conceptelor tehnice. Rapid și de încredere pentru lucrul de dezvoltare.",
-      "knowledgeCutoff": "16 apr. 2025, 00:45"
+      "knowledgeCutoff": "16 apr. 2025, 00:45",
+      "tagline": "Alternativă open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model versatil de la xAI, cunoscut pentru răspunsuri nuanțate. Ideal pentru discuții deschise, proiecte creative și rezolvarea problemelor complexe.",
-      "knowledgeCutoff": "13 mai 2025, 00:16"
+      "knowledgeCutoff": "13 mai 2025, 00:16",
+      "tagline": "Alternativă xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Cel mai capabil model de la Anthropic, cu abilități excepționale de raționament, programare și creație. Recomandat pentru analize complexe, cercetare și sarcini ce necesită înțelegere aprofundată.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Generație Opus anterioară"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model Claude echilibrat, cu performanțe excelente în programare, analiză și sarcini creative. Potrivit pentru uz zilnic, cu timp de răspuns rapid.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Sonnet generație anterioară"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Generația anterioară a modelului Claude Opus. Excelent pentru sarcini complexe de programare, analize detaliate și înțelegere nuanțată.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Opus generație anterioară"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model Claude rapid și economic, optimizat pentru sarcini rapide. Ideal pentru întrebări simple, rezumate și aplicații cu volum mare.",
-      "knowledgeCutoff": "ianuarie 2025"
+      "knowledgeCutoff": "ianuarie 2025",
+      "tagline": "Variantă rapidă Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Cel mai avansat model OpenAI, performant în raționamente complexe, generare de cod și rezolvarea problemelor tehnice. Ideal pentru sarcini analitice, provocări de programare, cercetare și explicații detaliate. Permite ajustarea efortului de raționare și a detaliului răspunsului.",
-      "knowledgeCutoff": "Decembrie 2025"
+      "knowledgeCutoff": "Decembrie 2025",
+      "tagline": "Cod, analiză, cercetare"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Decembrie 2025",
-      "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională."
+      "description": "Variantă specializată a GPT-5.2, optimizată pentru interacțiuni conversaționale și inteligență emoțională. Excelează în comunicare empatică, scriere creativă, brainstorming și dialog natural. Ideal pentru conversații informale, consiliere și sarcini care necesită conștientizare emoțională.",
+      "tagline": "Conversații, brainstorming"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Cel mai puternic model de la Anthropic. Potrivit pentru texte lungi, cercetare și sarcini care necesită gândire atentă.",
-      "knowledgeCutoff": "feb. 2026"
+      "knowledgeCutoff": "feb. 2026",
+      "tagline": "Scriere și analiză pe larg"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Un model Claude echilibrat. Bun pentru scrieri cotidiene, analiză și programare cu răspunsuri rapide.",
-      "knowledgeCutoff": "feb. 2026"
+      "knowledgeCutoff": "feb. 2026",
+      "tagline": "Claude echilibrat pentru uz zilnic"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Un model open-source de la Meta. Solid pentru redactare, rezumate și întrebări rapide."
+      "description": "Un model open-source de la Meta. Solid pentru redactare, rezumate și întrebări rapide.",
+      "tagline": "Alternativă open-source"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Cel mai nou model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvarea problemelor complexe."
+      "description": "Cel mai nou model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvarea problemelor complexe.",
+      "tagline": "Cel mai nou vârf GPT"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Cea mai mică și rapidă variantă GPT. Recomandat pentru sarcini simple și rapide, la cost minim."
+      "description": "Cea mai mică și rapidă variantă GPT. Recomandat pentru sarcini simple și rapide, la cost minim.",
+      "tagline": "Cel mai mic și rapid GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "O variantă GPT conversatională optimizată pentru dialog. Bun pentru conversații informale, brainstorming și discuții de suport."
+      "description": "O variantă GPT conversatională optimizată pentru dialog. Bun pentru conversații informale, brainstorming și discuții de suport.",
+      "tagline": "GPT recent optimizat pentru chat"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Un model GPT multimodal mai vechi. Potrivit pentru redactarea zilnică și întrebări-răspunsuri unde nu este nevoie de cele mai noi capabilități."
+      "description": "Un model GPT multimodal mai vechi. Potrivit pentru redactarea zilnică și întrebări-răspunsuri unde nu este nevoie de cele mai noi capabilități.",
+      "tagline": "GPT multimodal mai vechi"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "O variantă GPT-4.1 mai mică și mai rapidă, pentru sarcini zilnice rapide."
+      "description": "O variantă GPT-4.1 mai mică și mai rapidă, pentru sarcini zilnice rapide.",
+      "tagline": "GPT ușor, de generație anterioară"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Cel mai nou și performant model al Anthropic. Excelent pentru scrieri lungi, cercetare, programare și analize detaliate."
+      "description": "Cel mai nou și performant model al Anthropic. Excelent pentru scrieri lungi, cercetare, programare și analize detaliate.",
+      "tagline": "Cel mai nou și puternic Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Cel mai nou model open-source DeepSeek. Fiabil pentru redactare generală și întrebări tehnice."
+      "description": "Cel mai nou model open-source DeepSeek. Fiabil pentru redactare generală și întrebări tehnice.",
+      "tagline": "Alternativă open-source"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Modelul de vârf al Mistral. O alternativă europeană pentru redactare, rezumate și întrebări generale."
+      "description": "Modelul de vârf al Mistral. O alternativă europeană pentru redactare, rezumate și întrebări generale.",
+      "tagline": "Model european open-weight"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "O versiune anterioară GPT-5 de top. În continuare performant la redactare, analiză și programare."
+      "description": "O versiune anterioară GPT-5 de top. În continuare performant la redactare, analiză și programare.",
+      "tagline": "Vârf GPT-5 anterior"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "O versiune anterioară GPT-5 optimizată pentru chat. Bun pentru conversații zilnice și brainstorming."
+      "description": "O versiune anterioară GPT-5 optimizată pentru chat. Bun pentru conversații zilnice și brainstorming.",
+      "tagline": "GPT anterior pentru chat"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Cea mai mică variantă GPT-5. Recomandată pentru sarcini simple și rapide, la cost minim."
+      "description": "Cea mai mică variantă GPT-5. Recomandată pentru sarcini simple și rapide, la cost minim.",
+      "tagline": "GPT foarte mic, generație anterioară"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Cea mai mică variantă GPT-4.1. Potrivită pentru sarcini rapide și simple unde contează viteza și costul."
+      "description": "Cea mai mică variantă GPT-4.1. Potrivită pentru sarcini rapide și simple unde contează viteza și costul.",
+      "tagline": "Cel mai mic GPT, generație anterioară"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "O variantă mică și rapidă a GPT-4o. Potrivită pentru sarcini zilnice rapide unde nu este nevoie de cele mai noi capabilități."
+      "description": "O variantă mică și rapidă a GPT-4o. Potrivită pentru sarcini zilnice rapide unde nu este nevoie de cele mai noi capabilități.",
+      "tagline": "GPT multimodal ușor, generație veche"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Un model compact pentru raționament. Bun pentru matematică, logică și probleme pas cu pas, la cost mai mic decât o3."
+      "description": "Un model compact pentru raționament. Bun pentru matematică, logică și probleme pas cu pas, la cost mai mic decât o3.",
+      "tagline": "Raționament rapid și accesibil"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Un model compact anterior pentru raționament. Gestionează probleme de matematică, știință și logică la buget redus."
+      "description": "Un model compact anterior pentru raționament. Gestionează probleme de matematică, știință și logică la buget redus.",
+      "tagline": "Raționament compact, pas cu pas"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Cel mai inteligent model al Anthropic, primul din familia Claude 5. Excelent pentru cele mai dificile sarcini de redactare, cercetare și programare."
+      "description": "Cel mai inteligent model al Anthropic, primul din familia Claude 5. Excelent pentru cele mai dificile sarcini de redactare, cercetare și programare.",
+      "tagline": "Model avansat de la Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Cel mai nou model Claude echilibrat, primul din familia Claude 5. Performant la scriere zilnică, analiză și programare, cu răspunsuri rapide."
+      "description": "Cel mai nou model Claude echilibrat, primul din familia Claude 5. Performant la scriere zilnică, analiză și programare, cu răspunsuri rapide.",
+      "tagline": "Cel mai nou Claude echilibrat"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Modelul Mistral de dimensiune medie. O alternativă europeană ce echilibrează capabilitățile și viteza pentru lucru zilnic."
+      "description": "Modelul Mistral de dimensiune medie. O alternativă europeană ce echilibrează capabilitățile și viteza pentru lucru zilnic.",
+      "tagline": "Model european echilibrat"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Modelul mic al Mistral. Rapid și ieftin pentru rezumate, ciorne și întrebări simple."
+      "description": "Modelul mic al Mistral. Rapid și ieftin pentru rezumate, ciorne și întrebări simple.",
+      "tagline": "Model european mic și rapid"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Modelul foarte mic al Mistral. Cel mai bun pentru sarcini foarte rapide și simple, la cost minim."
+      "description": "Modelul foarte mic al Mistral. Cel mai bun pentru sarcini foarte rapide și simple, la cost minim.",
+      "tagline": "Mistral foarte compact pentru edge"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "O versiune actualizată DeepSeek-R1. Explică raționamentul pas cu pas, cu o profunzime îmbunătățită a argumentației."
+      "description": "O versiune actualizată DeepSeek-R1. Explică raționamentul pas cu pas, cu o profunzime îmbunătățită a argumentației.",
+      "tagline": "Model open reasoning actualizat"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Un model open-source mai ușor de la Meta. Rapid pentru redactare, rezumate și întrebări cotidiene."
+      "description": "Un model open-source mai ușor de la Meta. Rapid pentru redactare, rezumate și întrebări cotidiene.",
+      "tagline": "Llama open-source eficient"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Un model open-source mai vechi de la Meta. Rămâne solid pentru redactare generală și întrebări-răspunsuri."
+      "description": "Un model open-source mai vechi de la Meta. Rămâne solid pentru redactare generală și întrebări-răspunsuri.",
+      "tagline": "Llama open-source mai vechi"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Modelul de vârf al xAI. Bun pentru discuții deschise, analiză și proiecte creative."
+      "description": "Modelul de vârf al xAI. Bun pentru discuții deschise, analiză și proiecte creative.",
+      "tagline": "Vârf xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Cel mai recent model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvare de probleme complexe."
+      "description": "Cel mai recent model de vârf al OpenAI. Performant la redactare, cercetare, programare și rezolvare de probleme complexe.",
+      "tagline": "Cel mai recent vârf GPT"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (ultimul)",
-      "description": "Un alias dinamic care indică mereu către cel mai nou model de chat-tuned al OpenAI. Înlocuitorul Azure pentru modelele gpt-*-chat versiuni vechi."
+      "description": "Un alias dinamic care indică mereu către cel mai nou model de chat-tuned al OpenAI. Înlocuitorul Azure pentru modelele gpt-*-chat versiuni vechi.",
+      "tagline": "Întotdeauna cel mai nou GPT pentru chat"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "O versiune recentă Opus, între 4.6 și 4.8. Puternic pentru texte lungi, cercetare, programare și analiză detaliată."
+      "description": "O versiune recentă Opus, între 4.6 și 4.8. Puternic pentru texte lungi, cercetare, programare și analiză detaliată.",
+      "tagline": "Lansare Opus recentă"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Cel mai nou model de raționament al DeepSeek și înlocuitorul Azure pentru linia R1. Prezintă gândirea pas cu pas."
+      "description": "Cel mai nou model de raționament al DeepSeek și înlocuitorul Azure pentru linia R1. Prezintă gândirea pas cu pas.",
+      "tagline": "Cel mai nou model de reasoning open"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Varianta rapidă V4 de la DeepSeek și înlocuitorul Azure pentru linia V3. Rapid la redactare generală și întrebări tehnice."
+      "description": "Varianta rapidă V4 de la DeepSeek și înlocuitorul Azure pentru linia V3. Rapid la redactare generală și întrebări tehnice.",
+      "tagline": "Alternativă open-source rapidă"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Raționament)",
-      "description": "Modelul rapid de raționament al xAI. Gândește pas cu pas și răspunde rapid."
+      "description": "Modelul rapid de raționament al xAI. Gândește pas cu pas și răspunde rapid.",
+      "tagline": "Model xAI rapid pentru reasoning"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Modelul rapid de chat al xAI. Răspunsuri rapide la întrebări zilnice și discuții."
+      "description": "Modelul rapid de chat al xAI. Răspunsuri rapide la întrebări zilnice și discuții.",
+      "tagline": "Model xAI rapid pentru chat"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Un model xAI mai ușor. Mai rapid și mai ieftin pentru întrebări scurte și conversații informale."
+      "description": "Un model xAI mai ușor. Mai rapid și mai ieftin pentru întrebări scurte și conversații informale.",
+      "tagline": "Model xAI mai ușor"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Vârful de lance al trio-ului GPT-5.6 de la OpenAI. Excelează la redactare, cercetare, programare și rezolvare de probleme complexe."
+      "description": "Vârful de lance al trio-ului GPT-5.6 de la OpenAI. Excelează la redactare, cercetare, programare și rezolvare de probleme complexe.",
+      "tagline": "Cel mai nou nivel vârf GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Nivelul echilibrat din trio-ul GPT-5.6 de la OpenAI. Bun pentru redactare zilnică, analiză și programare cu răspunsuri rapide."
+      "description": "Nivelul echilibrat din trio-ul GPT-5.6 de la OpenAI. Bun pentru redactare zilnică, analiză și programare cu răspunsuri rapide.",
+      "tagline": "GPT-5.6 echilibrat pentru utilizarea zilnică"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Varianta rapidă și ușoară din trio-ul GPT-5.6 de la OpenAI. Ideal pentru întrebări rapide și sarcini simple la cost redus."
+      "description": "Varianta rapidă și ușoară din trio-ul GPT-5.6 de la OpenAI. Ideal pentru întrebări rapide și sarcini simple la cost redus.",
+      "tagline": "GPT-5.6 ușor și rapid"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Cel mai nou model de dimensiune medie de la Mistral. O alternativă europeană ce echilibrează capabilitățile și viteza pentru activitățile de zi cu zi."
+      "description": "Cel mai nou model de dimensiune medie de la Mistral. O alternativă europeană ce echilibrează capabilitățile și viteza pentru activitățile de zi cu zi.",
+      "tagline": "Model european echilibrat"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model open-weight dezvoltat de Moonshot AI. Performant la sarcini agențiale, programare și documente lungi.",
+      "tagline": "Model agențial open-weight"
     }
   },
   "searchMode": {

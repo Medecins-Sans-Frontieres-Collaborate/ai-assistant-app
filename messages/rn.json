@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modeli ya AI ikoreshwa na GPT-4.1 hamwe no kurondera kuri interineti mu gihe nyaco biciye muri Bing. Itanga amakuru y'ubu, gusuzuma ukuri, n'ukumenya ibiba ubu. Ikwiye cane ubushakashatsi bukeneye amakuru y'ubu, isesengura ry'inkuru, no kwemeza ukuri.",
-      "knowledgeCutoff": "Kurondera kuri interineti mu gihe nyaco"
+      "knowledgeCutoff": "Kurondera kuri interineti mu gihe nyaco",
+      "tagline": "Igenekerezo rya OpenAI riheze"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modeli igezweho cane ya OpenAI, iri hejuru mu kwiyumvira gukomeye, gukora kode, no gukemura ibibazo vy'ubuhinga. Ikwiye cane ibikorwa vy'isesengura, ibibazo vy'amaprograme, ubushakashatsi, n'ibisobanuro birambuye. Ishigikira utwigoro tw'ukwiyumvira n'amagambo y'ikisubizo duhinduka.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Gukora code, isesengura, ubushakashatsi"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Ingero ihuta kandi itari hejuru mu giciro ya GPT-5, yatunganijwe ku bwihutiro mu gihe igumana ubwiza bwinshi. Ikwiye cane ibikorwa vya buri munsi, ibibazo vya vuba, gutwara ibikoresho, n'ibikorwa bikeneye ibisubizo vya vuba. Iringaniye neza mu mikorere n'uburyo.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Vyihuta kandi bihendutse"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Dec 2025",
-      "description": "Ubwoko bwihariye bwa GPT-5.2 bwakozwe neza ku biganiro biganisha ku bwenge bwo kumva irungu ry’uwundi. Bufasha mu kuganira neza n’ukwiyumvanamwo, kwandika udushya, gutanga ivyiyumviro, no kuganira bisanzwe. Bubereye ibiganiro vyoroshe, guhanura, n’ibikorwa bisaba kumenya akamere k’iyumviro ry’uwundi."
+      "description": "Ubwoko bwihariye bwa GPT-5.2 bwakozwe neza ku biganiro biganisha ku bwenge bwo kumva irungu ry’uwundi. Bufasha mu kuganira neza n’ukwiyumvanamwo, kwandika udushya, gutanga ivyiyumviro, no kuganira bisanzwe. Bubereye ibiganiro vyoroshe, guhanura, n’ibikorwa bisaba kumenya akamere k’iyumviro ry’uwundi.",
+      "tagline": "Ikiganiro, gutanga ivyiyumviro"
     },
     "o3": {
       "name": "o3",
       "description": "Modeli y'ukwiyumvira igezweho cane ya OpenAI ifise ubushobozi bw'igitangaza bwo gukemura ibibazo. Iri hejuru mu ndimi z'ibiharuro bikomeye, ukwiyumvira mu buhinga, ibibazo vy'amaprograme, n'ibikorwa vy'ukwiyumvira vy'intambwe nyinshi. Idirishya y'ivyiyumviro ya 200K. Ishigikira kugenzura utwigoro tw'ukwiyumvira.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Isesengura ryimbitse uko intambwe igenda"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Inzobere mu kwiyumvira yerekana akazi kayo intambwe ku yindi. Nziza cane ku bibazo vy'ibiharuro, ibibazo vy'ukwiyumvira, no gutegera ibiyumviro bikomeye. Raba ingene yiyumvira ku bibazo mu gihe nyaco.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Igaragaza isesengura intambwe ku yindi"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modeli ikomeye ku buryo bwose igeze cane mu gukora kode no kwandika ivy'ubuhinga. Nziza mu gukosora kode, kwandika inyandiko, no gusobanura ibiyumviro vy'ubuhinga. Ihuta kandi ikagiraneza ku bikorwa vy'iterambere.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Inyishu ifunguye (open-source)"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modeli y'uburyo bwinshi iva muri xAI izwi ku bisubizo vy'ubwenge. Nziza ku biganiro bidafise iherezo, imishinga vy'ubuhanga, no gukemura ibibazo bikomeye.",
-      "knowledgeCutoff": "May 13, 2025 12:16 AM"
+      "knowledgeCutoff": "May 13, 2025 12:16 AM",
+      "tagline": "Inyishu ya xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modeli ifise ubushobozi bwinshi cane ya Anthropic hamwe n'ukwiyumvira, gukora kode, n'ubushobozi vy'ubuhanga bidahuza. Ikwiye cane isesengura rikomeye, ubushakashatsi, n'ibikorwa bikeneye gutegera cane.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Igenekerezo rya Opus ryabayeho mbere"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modeli ya Claude iringaniye itanga imikorere myiza mu gukora kode, isesengura, n'ibikorwa vy'ubuhanga. Nziza ku gukoresha kwa buri munsi hamwe n'ibisubizo vya vuba.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Sonnet isanzwe y’icuro rya mbere"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modeli ya Claude Opus y'iyindi nkomoko. Nziza cane ku bikorwa bikomeye vyo gukora kode, isesengura ryarambuye, no gutegera neza.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Opus isanzwe y’icuro rya mbere"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modeli ya Claude ihuta kandi itari hejuru mu giciro yatunganijwe ku bikorwa vya vuba. Nziza ku bibazo bisanzwe, gusobanura, n'ibikorwa vy'ubwinshi.",
-      "knowledgeCutoff": "January 2025"
+      "knowledgeCutoff": "January 2025",
+      "tagline": "Claude yihuta"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Uburongozi bukomeye cane bwa Anthropic. Bwakagenewe kwandikisha ibisasu binini, ubushakashatsi, n'ibikorwa bisaba ugutegera cane.",
-      "knowledgeCutoff": "Ruhuhuma 2026"
+      "knowledgeCutoff": "Ruhuhuma 2026",
+      "tagline": "Kwandika kinini n’isesengura"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Uburongozi buringaniye bwa Claude. Buri ku rugero mu kwandika ku munsi ku munsi, isesengura, no guhanda amategeko y'ubuhinga hamwe n’inyishu zihuta.",
-      "knowledgeCutoff": "Ruhuhuma 2026"
+      "knowledgeCutoff": "Ruhuhuma 2026",
+      "tagline": "Claude isanzwe ikoreshwa buri musi"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Ni modele ifunguye iva muri Meta. Ikwiriye kwandika, incamake, no gusubiza ibibazo vyihuta."
+      "description": "Ni modele ifunguye iva muri Meta. Ikwiriye kwandika, incamake, no gusubiza ibibazo vyihuta.",
+      "tagline": "Inyishu ifunguye (open-source)"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Ni modele nshasha ya OpenAI. Itera imbere mu kwandika, ubushakashatsi, gucapa code, hamwe no gukemura ibibazo bigoye."
+      "description": "Ni modele nshasha ya OpenAI. Itera imbere mu kwandika, ubushakashatsi, gucapa code, hamwe no gukemura ibibazo bigoye.",
+      "tagline": "GPT nshasha y’indongozi"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Ni yo ntoya kandi yihuta kurusha izindi muri GPT. Ikwiriye akazi koroshe, vyihuta kandi ku giciro gito."
+      "description": "Ni yo ntoya kandi yihuta kurusha izindi muri GPT. Ikwiriye akazi koroshe, vyihuta kandi ku giciro gito.",
+      "tagline": "GPT ntoya kandi yihuta kurusha izindi"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Ni variation ya GPT yateguwe ngo ivuge mu biganiro. Ikwiriye ivyiganirano bisanzwe, gutanga ivyiyumviro, no kuganira gushigikira."
+      "description": "Ni variation ya GPT yateguwe ngo ivuge mu biganiro. Ikwiriye ivyiganirano bisanzwe, gutanga ivyiyumviro, no kuganira gushigikira.",
+      "tagline": "GPT nshasha yateguwe ku biganiro"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "Ni GPT-5 yambere ya flagship. Iracafise ubushobozi mu kwandika, gusesengura, no gucapa code."
+      "description": "Ni GPT-5 yambere ya flagship. Iracafise ubushobozi mu kwandika, gusesengura, no gucapa code.",
+      "tagline": "GPT indongozi yabayeho imbere"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "Variation ya GPT-5 yateguwe ku biganiro. Ikwiriye ibiganiro vya buri munsi no gutanga ivyiyumviro."
+      "description": "Variation ya GPT-5 yateguwe ku biganiro. Ikwiriye ibiganiro vya buri munsi no gutanga ivyiyumviro.",
+      "tagline": "GPT y’ibiganiro yabayeho imbere"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "GPT multimodal ya kera. Ikwiriye kwandika no gusubiza ibibazo vya buri munsi aho udakeneye ubushobozi bushasha kurusha ibindi."
+      "description": "GPT multimodal ya kera. Ikwiriye kwandika no gusubiza ibibazo vya buri munsi aho udakeneye ubushobozi bushasha kurusha ibindi.",
+      "tagline": "GPT ishaje ikoresha uburyo bwinshi (multimodal)"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Ni variation ntoya kandi yihuta ya GPT-4.1 ku mirimo yihuta ya buri munsi."
+      "description": "Ni variation ntoya kandi yihuta ya GPT-4.1 ku mirimo yihuta ya buri munsi.",
+      "tagline": "GPT yoroheje yabayeho imbere"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Ni modele nshasha kandi ikomeye ya Anthropic. Ikwiriye cane mu kwandika ibirenga, ubushakashatsi, gucapa code, no gusesengura witonze."
+      "description": "Ni modele nshasha kandi ikomeye ya Anthropic. Ikwiriye cane mu kwandika ibirenga, ubushakashatsi, gucapa code, no gusesengura witonze.",
+      "tagline": "Claude nshasha kandi ikomeye"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Modele nshasha ifunguye ya DeepSeek. Irizewe mu kwandika rusangi no kwishura ibibazo vya tekiniki."
+      "description": "Modele nshasha ifunguye ya DeepSeek. Irizewe mu kwandika rusangi no kwishura ibibazo vya tekiniki.",
+      "tagline": "Inyishu ifunguye (open-source)"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Ni flagship ya Mistral. Ni alternative yo mu Buraya ku kwandika, incamake, n'ibibazo rusangi."
+      "description": "Ni flagship ya Mistral. Ni alternative yo mu Buraya ku kwandika, incamake, n'ibibazo rusangi.",
+      "tagline": "Modeli y’i Buraya ifunguwe"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Ni revision ya kare ya GPT-5 flagship. Iracafise ubushobozi mu kwandika, gusesengura, no gucapa code."
+      "description": "Ni revision ya kare ya GPT-5 flagship. Iracafise ubushobozi mu kwandika, gusesengura, no gucapa code.",
+      "tagline": "Indongozi ya GPT-5 yabayeho imbere"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Ni revision ya kare ya chat-tuned GPT-5. Ikwiriye ibiganiro vya buri munsi no gutanga ivyiyumviro."
+      "description": "Ni revision ya kare ya chat-tuned GPT-5. Ikwiriye ibiganiro vya buri munsi no gutanga ivyiyumviro.",
+      "tagline": "GPT y'ibiganiro yabayeho imbere"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Ni variation ntoya ya GPT-5. Ikwiriye cane ku mirimo yoroshe, vyihuta kandi ku giciro gito."
+      "description": "Ni variation ntoya ya GPT-5. Ikwiriye cane ku mirimo yoroshe, vyihuta kandi ku giciro gito.",
+      "tagline": "GPT ntoya yabayeho imbere"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Ni variation ntoya ya GPT-4.1. Ikwiriye imirimo yoroshe kandi yihuta aho umuvuduko n'igiciro arivyo vya mbere."
+      "description": "Ni variation ntoya ya GPT-4.1. Ikwiriye imirimo yoroshe kandi yihuta aho umuvuduko n'igiciro arivyo vya mbere.",
+      "tagline": "GPT ntoya cane yabayeho imbere"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Ni variation ntoya kandi yihuta ya GPT-4o. Ikwiriye imirimo yihuta ya buri munsi aho udakeneye ubushobozi bushasha kurusha ibindi."
+      "description": "Ni variation ntoya kandi yihuta ya GPT-4o. Ikwiriye imirimo yihuta ya buri munsi aho udakeneye ubushobozi bushasha kurusha ibindi.",
+      "tagline": "GPT yoroheje ishaje ikoresha uburyo bwinshi"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Ni modele ntoya yo gukemura ibibazo. Ikwiriye kubazo za maths, logique, n’ibibazo bisaba intambwe ku ntambwe ku giciro gito kurusha o3."
+      "description": "Ni modele ntoya yo gukemura ibibazo. Ikwiriye kubazo za maths, logique, n’ibibazo bisaba intambwe ku ntambwe ku giciro gito kurusha o3.",
+      "tagline": "Isesengura ryihuta kandi rihendutse"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Ni modele ntoya yo gukemura ibibazo ya kera. Ikoresha maths, science, na logique ku giciro gito."
+      "description": "Ni modele ntoya yo gukemura ibibazo ya kera. Ikoresha maths, science, na logique ku giciro gito.",
+      "tagline": "Isesengura ryihuta kandi rifise intambwe zizwi"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Ni modele ikomeye ya Anthropic, iya mbere mu muryango wa Claude 5. Ikwiriye cane ku mirimo igoye kandi minini mu kwandika, ubushakashatsi, na code."
+      "description": "Ni modele ikomeye ya Anthropic, iya mbere mu muryango wa Claude 5. Ikwiriye cane ku mirimo igoye kandi minini mu kwandika, ubushakashatsi, na code.",
+      "tagline": "Modeli y’icambere ya Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Ni Claude nshasha yagereranijwe neza, iya mbere muri Claude 5. Ifise ubushobozi bwo kwandika, gusesengura, na code mu buryo bwihuta."
+      "description": "Ni Claude nshasha yagereranijwe neza, iya mbere muri Claude 5. Ifise ubushobozi bwo kwandika, gusesengura, na code mu buryo bwihuta.",
+      "tagline": "Claude nshasha y’ubwigenge bwiza"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Ni modele ya Mistral iri hagati. Nishimikiza neza ubushobozi n’umuvuduko ku mirimo ya buri munsi mu Buraya."
+      "description": "Ni modele ya Mistral iri hagati. Nishimikiza neza ubushobozi n’umuvuduko ku mirimo ya buri munsi mu Buraya.",
+      "tagline": "Modeli y’i Buraya ihagaze neza"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Ni modele ntoya ya Mistral. Yihuta kandi itagoye ku gikorwa co gukora incamake, ivyitegererezo n’ibibazo vyoroshe."
+      "description": "Ni modele ntoya ya Mistral. Yihuta kandi itagoye ku gikorwa co gukora incamake, ivyitegererezo n’ibibazo vyoroshe.",
+      "tagline": "Modeli ntoya yihuta y’i Buraya"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Ni modele ntoyi cane ya Mistral. Irakwiriye cane ku mirimo yihuta kandi yoroshe ku giciro gito."
+      "description": "Ni modele ntoyi cane ya Mistral. Irakwiriye cane ku mirimo yihuta kandi yoroshe ku giciro gito.",
+      "tagline": "Mistral ntoya cane yegereye inkomezi"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Ni revision nshasha ya DeepSeek-R1. Igaragaza ukuntu yatekereje intambwe ku yindi hamwe no gukomeza ubusesanguzi."
+      "description": "Ni revision nshasha ya DeepSeek-R1. Igaragaza ukuntu yatekereje intambwe ku yindi hamwe no gukomeza ubusesanguzi.",
+      "tagline": "Modeli ifunguye y’isesengura ivuguruye"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Ni modele yoroheje, ifunguye iva muri Meta. Itera imbere mu kwandika, incamake no kuba isubiza ibibazo vya buri munsi vyihuta."
+      "description": "Ni modele yoroheje, ifunguye iva muri Meta. Itera imbere mu kwandika, incamake no kuba isubiza ibibazo vya buri munsi vyihuta.",
+      "tagline": "Llama ifunguye ikora neza"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Modeli ya Meta ya kera yuguruye. Irakomeye mu kwandika rusangi no mu bibazo n'ibisubizo."
+      "description": "Modeli ya Meta ya kera yuguruye. Irakomeye mu kwandika rusangi no mu bibazo n'ibisubizo.",
+      "tagline": "Llama ishaje ifunguye"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Modeli nkuru ya xAI. Irakwiriye mu biganiro bitagira imbibe, gusesengura, no mu mishinga yo guhanga."
+      "description": "Modeli nkuru ya xAI. Irakwiriye mu biganiro bitagira imbibe, gusesengura, no mu mishinga yo guhanga.",
+      "tagline": "Indongozi ya xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Modeli nshasha ya OpenAI. Ikomeye mu kwandika, ubushakashatsi, guca amacode, no gukemura ibibazo bigoye."
+      "description": "Modeli nshasha ya OpenAI. Ikomeye mu kwandika, ubushakashatsi, guca amacode, no gukemura ibibazo bigoye.",
+      "tagline": "GPT indongozi nshasha cane"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (nshasha)",
-      "description": "Izina rihuza n’imodoka nshasha ya OpenAI yo guhanahana ubutumwa. Isubira ku yavuyeho mu mashusho ya gpt-*-chat muri Azure."
+      "description": "Izina rihuza n’imodoka nshasha ya OpenAI yo guhanahana ubutumwa. Isubira ku yavuyeho mu mashusho ya gpt-*-chat muri Azure.",
+      "tagline": "Igihe cose GPT nshasha y’ibiganiro"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Opus nshasha iri hagati ya 4.6 na 4.8. Ikomeye mu kwandika birebire, ubushakashatsi, coding na gusesengura witonze."
+      "description": "Opus nshasha iri hagati ya 4.6 na 4.8. Ikomeye mu kwandika birebire, ubushakashatsi, coding na gusesengura witonze.",
+      "tagline": "Opus yashizwe ahabona vuba"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Modeli nshasha ya DeepSeek yo gutororokanya no gusubirira umurongo wa R1 muri Azure. Igaragaza uko yateye intambwe ku yindi."
+      "description": "Modeli nshasha ya DeepSeek yo gutororokanya no gusubirira umurongo wa R1 muri Azure. Igaragaza uko yateye intambwe ku yindi.",
+      "tagline": "Modeli nshasha y’isesengura ifunguye"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Variation ya DeepSeek vuba kandi isubirira umurongo wa V3 muri Azure. Yihuta mu kwandika rusangi no mu bibazo vya tekiniki."
+      "description": "Variation ya DeepSeek vuba kandi isubirira umurongo wa V3 muri Azure. Yihuta mu kwandika rusangi no mu bibazo vya tekiniki.",
+      "tagline": "Inyishu ifunguye yihuta cane"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Gutororokanya)",
-      "description": "Modeli yihuta ya xAI mu gutororokanya. Itegura inyishu intambwe ku yindi kandi vuba."
+      "description": "Modeli yihuta ya xAI mu gutororokanya. Itegura inyishu intambwe ku yindi kandi vuba.",
+      "tagline": "Modeli ya xAI y’isesengura yihuta"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Modeli yihuta ya xAI yo guhanahana ubutumwa. Iha inyishu zihuta ku bibazo no mu biganiro bisanzwe."
+      "description": "Modeli yihuta ya xAI yo guhanahana ubutumwa. Iha inyishu zihuta ku bibazo no mu biganiro bisanzwe.",
+      "tagline": "Modeli ya xAI y’ibiganiro yihuta"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Modeli ya xAI yoroshe. Irihuta kandi ihendutse mu bibazo vyihuta no mu biganiro bisanzwe."
+      "description": "Modeli ya xAI yoroshe. Irihuta kandi ihendutse mu bibazo vyihuta no mu biganiro bisanzwe.",
+      "tagline": "Modeli yoroshye ya xAI"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Ni wo murwi mukuru wa OpenAI GPT-5.6. Urusha abandi kwandika, gukora ubushakashatsi, coding, no gukemura ibibazo bigoye."
+      "description": "Ni wo murwi mukuru wa OpenAI GPT-5.6. Urusha abandi kwandika, gukora ubushakashatsi, coding, no gukemura ibibazo bigoye.",
+      "tagline": "Ikatariro nshasha ya GPT indongozi"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Ni wo murwi wo hagati wa OpenAI GPT-5.6. Ubereye kwandikisha ibintu vya minsi yose, isesengura, no coding vy'ubwitonzi."
+      "description": "Ni wo murwi wo hagati wa OpenAI GPT-5.6. Ubereye kwandikisha ibintu vya minsi yose, isesengura, no coding vy'ubwitonzi.",
+      "tagline": "GPT-5.6 isesemwo neza ku musi wose"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Ni wo murwi woroshye kandi wihuta wa OpenAI GPT-5.6. Ubaye ifise amasubirizo yihuta n'ibikorwa vyoroshe ku giciro gito."
+      "description": "Ni wo murwi woroshye kandi wihuta wa OpenAI GPT-5.6. Ubaye ifise amasubirizo yihuta n'ibikorwa vyoroshe ku giciro gito.",
+      "tagline": "GPT-5.6 yoroshye kandi yihuta"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Iyi ni modere nshasha y'agasaga ya Mistral. Ni ubundi buryo bwo mu Burayi bugereranya ubushobozi n'ubwihwezo mu bikorwa vya minsi yose."
+      "description": "Iyi ni modere nshasha y'agasaga ya Mistral. Ni ubundi buryo bwo mu Burayi bugereranya ubushobozi n'ubwihwezo mu bikorwa vya minsi yose.",
+      "tagline": "Modeli y'i Burayi isesemwo neza"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modeli ya Moonshot AI ifise open-weight. Ikomeye mu mirimo y'abakozi, kuri code, no ku nyandiko ndende.",
+      "tagline": "Modeli open-weight ifise ubushobozi bwo gukora nk'umukozi"
     }
   },
   "searchMode": {

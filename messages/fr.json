@@ -1373,27 +1373,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modèle IA alimenté par GPT-4.1 avec recherche web en temps réel via Bing. Fournit des informations à jour, la vérification des faits et la connaissance des événements actuels. Idéal pour la recherche nécessitant des informations récentes, l'analyse d'actualités et la vérification des faits.",
-      "knowledgeCutoff": "Recherche web en temps réel"
+      "knowledgeCutoff": "Recherche web en temps réel",
+      "tagline": "Génération précédente d’OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Le modèle le plus avancé d'OpenAI, excellent en raisonnement complexe, génération de code et résolution de problèmes techniques. Idéal pour les tâches analytiques, les défis de programmation, la recherche et les explications détaillées. Supporte l'effort de raisonnement et la verbosité ajustables.",
-      "knowledgeCutoff": "6 août 2025, 20h00"
+      "knowledgeCutoff": "6 août 2025, 20h00",
+      "tagline": "Précédent modèle phare GPT"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variante plus rapide et plus économique de GPT-5, optimisée pour la vitesse tout en maintenant une haute qualité. Parfait pour les tâches quotidiennes, les requêtes rapides, le routage d'outils et les applications nécessitant des temps de réponse rapides. Excellent équilibre entre performance et efficacité.",
-      "knowledgeCutoff": "6 août 2025, 20h00"
+      "knowledgeCutoff": "6 août 2025, 20h00",
+      "tagline": "Plus rapide et moins coûteux"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Variante spécialisée de GPT-5 optimisée pour les interactions conversationnelles et l'intelligence émotionnelle. Excelle dans la communication empathique, le soutien en santé mentale, l'écriture créative, le brainstorming et le dialogue naturel. Idéal pour les conversations informelles, les scénarios de conseil et les tâches nécessitant une conscience émotionnelle.",
-      "knowledgeCutoff": "1er octobre 2025, 20h00"
+      "knowledgeCutoff": "1er octobre 2025, 20h00",
+      "tagline": "Précédent GPT optimisé pour le chat"
     },
     "o3": {
       "name": "o3",
       "description": "Le modèle de raisonnement le plus avancé d'OpenAI avec des capacités révolutionnaires de résolution de problèmes. Excelle en mathématiques complexes, raisonnement scientifique, défis de programmation et tâches logiques à plusieurs étapes. Fenêtre de contexte étendue de 200K. Supporte le contrôle de l'effort de raisonnement.",
-      "knowledgeCutoff": "8 avril 2025, 20h00"
+      "knowledgeCutoff": "8 avril 2025, 20h00",
+      "tagline": "Raisonnement détaillé étape par étape"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1403,205 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Spécialiste du raisonnement qui montre son travail étape par étape. Excellent pour les problèmes mathématiques, les puzzles logiques et la compréhension de concepts complexes. Observez comment il réfléchit aux problèmes en temps réel.",
-      "knowledgeCutoff": "20 janvier 2025"
+      "knowledgeCutoff": "20 janvier 2025",
+      "tagline": "Affiche le raisonnement par étapes"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modèle polyvalent particulièrement bon en programmation et rédaction technique. Excellent pour déboguer du code, écrire de la documentation et expliquer des concepts techniques. Rapide et fiable pour le travail de développement.",
-      "knowledgeCutoff": "16 avril 2025, 00h45"
+      "knowledgeCutoff": "16 avril 2025, 00h45",
+      "tagline": "Alternative open source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modèle polyvalent de xAI connu pour ses réponses nuancées. Excellent pour les discussions ouvertes, les projets créatifs et l'approche de problèmes complexes.",
-      "knowledgeCutoff": "13 mai 2025, 00h16"
+      "knowledgeCutoff": "13 mai 2025, 00h16",
+      "tagline": "Alternative xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Le modèle le plus capable d'Anthropic avec un raisonnement, une programmation et des capacités créatives exceptionnels. Idéal pour les analyses complexes, la recherche et les tâches nécessitant une compréhension approfondie.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Ancienne génération Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modèle Claude équilibré offrant d'excellentes performances en programmation, analyse et tâches créatives. Excellent pour un usage quotidien avec des temps de réponse rapides.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération précédente de Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modèle Claude Opus de génération précédente. Excellent pour les tâches de programmation complexes, l'analyse détaillée et la compréhension nuancée.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération précédente d’Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modèle Claude rapide et économique optimisé pour les tâches rapides. Excellent pour les requêtes simples, le résumé et les applications à haut volume.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Variante Claude rapide"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modèle le plus avancé d’OpenAI, excellent pour le raisonnement complexe, la génération de code et la résolution technique de problèmes. Idéal pour les tâches analytiques, les défis de programmation, la recherche et les explications détaillées. Permet d’ajuster l’effort de raisonnement et la longueur des réponses.",
-      "knowledgeCutoff": "Déc. 2025"
+      "knowledgeCutoff": "Déc. 2025",
+      "tagline": "Code, analyse, recherche"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Déc. 2025",
-      "description": "Variante spécialisée de GPT-5.2 optimisée pour les interactions conversationnelles et l'intelligence émotionnelle. Excellente en communication empathique, écriture créative, remue-méninges et dialogues naturels. Idéale pour les conversations informelles, les situations de conseil et les tâches nécessitant une sensibilité émotionnelle."
+      "description": "Variante spécialisée de GPT-5.2 optimisée pour les interactions conversationnelles et l'intelligence émotionnelle. Excellente en communication empathique, écriture créative, remue-méninges et dialogues naturels. Idéale pour les conversations informelles, les situations de conseil et les tâches nécessitant une sensibilité émotionnelle.",
+      "tagline": "Conversations, remue-méninges"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Le modèle le plus puissant d’Anthropic. Idéal pour la rédaction longue, la recherche, et les tâches demandant une réflexion approfondie.",
-      "knowledgeCutoff": "Fév. 2026"
+      "knowledgeCutoff": "Fév. 2026",
+      "tagline": "Rédaction longue et analyse"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Un modèle Claude équilibré. Adapté à la rédaction quotidienne, l’analyse et le codage avec des réponses rapides.",
-      "knowledgeCutoff": "Fév. 2026"
+      "knowledgeCutoff": "Fév. 2026",
+      "tagline": "Claude équilibré au quotidien"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Un modèle open source de Meta. Fiable pour la rédaction, les résumés et les questions rapides."
+      "description": "Un modèle open source de Meta. Fiable pour la rédaction, les résumés et les questions rapides.",
+      "tagline": "Alternative open source"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Le dernier modèle phare d'OpenAI. Excellent en rédaction, recherche, programmation et résolution de problèmes complexes."
+      "description": "Le dernier modèle phare d'OpenAI. Excellent en rédaction, recherche, programmation et résolution de problèmes complexes.",
+      "tagline": "Nouveau modèle phare GPT"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "La variante GPT la plus compacte et rapide. Idéale pour les tâches simples et rapides à coût minimal."
+      "description": "La variante GPT la plus compacte et rapide. Idéale pour les tâches simples et rapides à coût minimal.",
+      "tagline": "Le plus petit et le plus rapide GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Variante conversationnelle de GPT, optimisée pour le dialogue. Adaptée aux discussions informelles, au brainstorming et à l’accompagnement."
+      "description": "Variante conversationnelle de GPT, optimisée pour le dialogue. Adaptée aux discussions informelles, au brainstorming et à l’accompagnement.",
+      "tagline": "Nouveau GPT optimisé pour le chat"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Un ancien modèle multimodal GPT. Convient à la rédaction quotidienne et au questions/réponses ne nécessitant pas les dernières performances."
+      "description": "Un ancien modèle multimodal GPT. Convient à la rédaction quotidienne et au questions/réponses ne nécessitant pas les dernières performances.",
+      "tagline": "Ancien GPT multimodal"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Une version plus petite et rapide de GPT-4.1 pour les tâches courantes."
+      "description": "Une version plus petite et rapide de GPT-4.1 pour les tâches courantes.",
+      "tagline": "GPT précédent léger"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Le modèle le plus performant et récent d'Anthropic. Excellent pour la rédaction longue, la recherche, la programmation et l’analyse approfondie."
+      "description": "Le modèle le plus performant et récent d'Anthropic. Excellent pour la rédaction longue, la recherche, la programmation et l’analyse approfondie.",
+      "tagline": "Claude le plus récent et le plus performant"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Le nouveau modèle open source de DeepSeek. Fiable pour la rédaction générale et les questions techniques."
+      "description": "Le nouveau modèle open source de DeepSeek. Fiable pour la rédaction générale et les questions techniques.",
+      "tagline": "Alternative open source"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Modèle phare de Mistral. Alternative européenne pour la rédaction, les résumés et les questions générales."
+      "description": "Modèle phare de Mistral. Alternative européenne pour la rédaction, les résumés et les questions générales.",
+      "tagline": "Modèle européen open-weight"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Une révision précédente du modèle phare GPT-5. Reste performant en rédaction, analyse et programmation."
+      "description": "Une révision précédente du modèle phare GPT-5. Reste performant en rédaction, analyse et programmation.",
+      "tagline": "Ancien modèle phare GPT-5"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Version antérieure de GPT-5 optimisée pour le dialogue. Adaptée aux conversations quotidiennes et au brainstorming."
+      "description": "Version antérieure de GPT-5 optimisée pour le dialogue. Adaptée aux conversations quotidiennes et au brainstorming.",
+      "tagline": "Ancien GPT optimisé pour le chat"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "La plus petite variante de GPT-5. Idéale pour des tâches rapides et simples à coût minimal."
+      "description": "La plus petite variante de GPT-5. Idéale pour des tâches rapides et simples à coût minimal.",
+      "tagline": "Très petit GPT génération précédente"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "La plus petite variante de GPT-4.1. Parfait pour les tâches simples et rapides où coût et rapidité sont prioritaires."
+      "description": "La plus petite variante de GPT-4.1. Parfait pour les tâches simples et rapides où coût et rapidité sont prioritaires.",
+      "tagline": "Le plus petit GPT génération précédente"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Une variante compacte et rapide de GPT-4o. Idéale pour les tâches quotidiennes rapides sans nécessité des dernières fonctionnalités."
+      "description": "Une variante compacte et rapide de GPT-4o. Idéale pour les tâches quotidiennes rapides sans nécessité des dernières fonctionnalités.",
+      "tagline": "GPT multimodal âgé et léger"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Un modèle compact de raisonnement. Adapté aux mathématiques, à la logique et aux problèmes progressifs à moindre coût que o3."
+      "description": "Un modèle compact de raisonnement. Adapté aux mathématiques, à la logique et aux problèmes progressifs à moindre coût que o3.",
+      "tagline": "Raisonnement rapide et abordable"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Ancien modèle compact de raisonnement. Gère les mathématiques, les sciences et la logique de façon économique."
+      "description": "Ancien modèle compact de raisonnement. Gère les mathématiques, les sciences et la logique de façon économique.",
+      "tagline": "Raisonnement compact étape par étape"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Le modèle le plus avancé d’Anthropic, premier de la famille Claude 5. Excellent pour les tâches les plus complexes en rédaction, recherche et programmation."
+      "description": "Le modèle le plus avancé d’Anthropic, premier de la famille Claude 5. Excellent pour les tâches les plus complexes en rédaction, recherche et programmation.",
+      "tagline": "Modèle de pointe d’Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Le plus récent Claude équilibré, premier de la famille Claude 5. Rédaction, analyse et programmation efficaces au quotidien avec des réponses rapides."
+      "description": "Le plus récent Claude équilibré, premier de la famille Claude 5. Rédaction, analyse et programmation efficaces au quotidien avec des réponses rapides.",
+      "tagline": "Nouveau Claude équilibré"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Modèle intermédiaire de Mistral. Alternative européenne équilibrant performances et rapidité au quotidien."
+      "description": "Modèle intermédiaire de Mistral. Alternative européenne équilibrant performances et rapidité au quotidien.",
+      "tagline": "Modèle européen équilibré"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Petit modèle de Mistral. Rapide et économique pour résumés, brouillons ou questions simples."
+      "description": "Petit modèle de Mistral. Rapide et économique pour résumés, brouillons ou questions simples.",
+      "tagline": "Petit modèle européen rapide"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Modèle miniature de Mistral. Idéal pour les tâches très rapides et simples à coût minimal."
+      "description": "Modèle miniature de Mistral. Idéal pour les tâches très rapides et simples à coût minimal.",
+      "tagline": "Petit Mistral pour l’edge"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Version améliorée de DeepSeek-R1. Suit un raisonnement pas-à-pas avec une profondeur accrue."
+      "description": "Version améliorée de DeepSeek-R1. Suit un raisonnement pas-à-pas avec une profondeur accrue.",
+      "tagline": "Modèle de raisonnement open source mis à jour"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Un modèle open source allégé de Meta. Rapide pour la rédaction, les résumés et les questions courantes."
+      "description": "Un modèle open source allégé de Meta. Rapide pour la rédaction, les résumés et les questions courantes.",
+      "tagline": "Llama open source efficace"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Un ancien modèle open source de Meta. Reste efficace pour la rédaction générale et les questions/réponses."
+      "description": "Un ancien modèle open source de Meta. Reste efficace pour la rédaction générale et les questions/réponses.",
+      "tagline": "Ancien Llama open source"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Modèle phare de xAI. Adapté aux discussions libres, à l’analyse et aux projets créatifs."
+      "description": "Modèle phare de xAI. Adapté aux discussions libres, à l’analyse et aux projets créatifs.",
+      "tagline": "Modèle phare xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Le nouveau modèle phare d’OpenAI. Performant en rédaction, recherche, programmation et résolution de problèmes complexes."
+      "description": "Le nouveau modèle phare d’OpenAI. Performant en rédaction, recherche, programmation et résolution de problèmes complexes.",
+      "tagline": "Dernier modèle phare GPT"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (le plus récent)",
-      "description": "Alias évolutif pointant toujours vers le modèle de chat OpenAI le plus récent. Remplaçant Azure des anciens modèles gpt-*-chat à version."
+      "description": "Alias évolutif pointant toujours vers le modèle de chat OpenAI le plus récent. Remplaçant Azure des anciens modèles gpt-*-chat à version.",
+      "tagline": "Toujours le dernier GPT chat"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Une version récente d’Opus, située entre 4.6 et 4.8. Idéal pour la rédaction longue, la recherche, la programmation et l’analyse approfondie."
+      "description": "Une version récente d’Opus, située entre 4.6 et 4.8. Idéal pour la rédaction longue, la recherche, la programmation et l’analyse approfondie.",
+      "tagline": "Dernière version d’Opus"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Le tout dernier modèle de raisonnement de DeepSeek, remplaçant la série R1 sur Azure. Explique son raisonnement étape par étape."
+      "description": "Le tout dernier modèle de raisonnement de DeepSeek, remplaçant la série R1 sur Azure. Explique son raisonnement étape par étape.",
+      "tagline": "Nouveau modèle de raisonnement open source"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Variante rapide de DeepSeek V4 et remplaçant Azure de la série V3. Rapide pour la rédaction générale et les questions techniques."
+      "description": "Variante rapide de DeepSeek V4 et remplaçant Azure de la série V3. Rapide pour la rédaction générale et les questions techniques.",
+      "tagline": "Alternative open source rapide"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Raisonnement)",
-      "description": "Modèle de raisonnement rapide de xAI. Réfléchit étape par étape avec des réponses rapides."
+      "description": "Modèle de raisonnement rapide de xAI. Réfléchit étape par étape avec des réponses rapides.",
+      "tagline": "Modèle de raisonnement rapide xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Modèle de chat rapide de xAI. Réponses rapides aux questions courantes et discussions."
+      "description": "Modèle de chat rapide de xAI. Réponses rapides aux questions courantes et discussions.",
+      "tagline": "Modèle de chat xAI rapide"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Modèle xAI léger. Plus rapide et économique pour les questions rapides et discussions informelles."
+      "description": "Modèle xAI léger. Plus rapide et économique pour les questions rapides et discussions informelles.",
+      "tagline": "Modèle xAI plus léger"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Le fleuron de la gamme GPT-5.6 d'OpenAI. Idéal pour la rédaction, la recherche, le codage et la résolution de problèmes complexes."
+      "description": "Le fleuron de la gamme GPT-5.6 d'OpenAI. Idéal pour la rédaction, la recherche, le codage et la résolution de problèmes complexes.",
+      "tagline": "Niveau flagship le plus récent de GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Le niveau équilibré de la gamme GPT-5.6 d'OpenAI. Adapté à la rédaction quotidienne, à l'analyse et au codage avec des réponses rapides."
+      "description": "Le niveau équilibré de la gamme GPT-5.6 d'OpenAI. Adapté à la rédaction quotidienne, à l'analyse et au codage avec des réponses rapides.",
+      "tagline": "GPT-5.6 équilibré au quotidien"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "La version légère et rapide de la gamme GPT-5.6 d'OpenAI. Idéale pour les questions rapides et les tâches simples à faible coût."
+      "description": "La version légère et rapide de la gamme GPT-5.6 d'OpenAI. Idéale pour les questions rapides et les tâches simples à faible coût.",
+      "tagline": "GPT-5.6 léger et rapide"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Le nouveau modèle intermédiaire de Mistral. Une alternative européenne offrant un bon équilibre entre performance et rapidité pour un usage quotidien."
+      "description": "Le nouveau modèle intermédiaire de Mistral. Une alternative européenne offrant un bon équilibre entre performance et rapidité pour un usage quotidien.",
+      "tagline": "Modèle européen équilibré"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modèle open-weight de Moonshot AI. Performant pour les tâches agentiques, le codage et les longs documents.",
+      "tagline": "Modèle agentique open-weight"
     }
   },
   "searchMode": {

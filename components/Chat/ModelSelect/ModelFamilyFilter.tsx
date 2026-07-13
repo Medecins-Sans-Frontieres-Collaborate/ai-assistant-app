@@ -28,6 +28,7 @@ export const FAMILY_LABEL: Record<Exclude<ModelFamily, 'all'>, string> = {
   deepseek: 'DeepSeek',
   meta: 'Meta',
   mistral: 'Mistral AI',
+  moonshot: 'Moonshot AI',
   xai: 'xAI',
 };
 

@@ -18,6 +18,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useCustomSourceModels } from '@/client/hooks/useCustomSourceModels';
 
 import { shortSourceHash } from '@/lib/utils/app/agentId';
+import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
 import {
   groupIntoFamilyUnits,
   seriesRepresentative,
@@ -71,7 +72,7 @@ interface ModelSelectProps {
 
 export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
   const t = useTranslations();
-  const { exploreBots, enableClaudeModels } = useFlags();
+  const { exploreBots, enableClaudeModels, enableBYOModels } = useFlags();
   const { selectedConversation, updateConversation, conversations } =
     useConversations();
   const { models, defaultModelId, setDefaultModelId, setDefaultSearchMode } =
@@ -717,6 +718,19 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                   const metaOf = (m: OpenAIModel) =>
                     OpenAIModels[m.id as OpenAIModelID] ?? m;
 
+                  // Localized list text: `models.<slug>.name/.tagline` from
+                  // the messages override the metadata (English-only);
+                  // missing keys (e.g. byom ids) fall back silently. The
+                  // details panel does the same via ModelHeader.
+                  const localizedName = (model: OpenAIModel) => {
+                    const key = `models.${modelIdToLocaleKey(model.id)}.name`;
+                    return t.has(key) ? t(key) : model.name;
+                  };
+                  const localizedTagline = (model: OpenAIModel) => {
+                    const key = `models.${modelIdToLocaleKey(model.id)}.tagline`;
+                    return t.has(key) ? t(key) : metaOf(model)?.tagline;
+                  };
+
                   const toggleStar = (model: OpenAIModel) =>
                     starredSet.has(model.id)
                       ? unstarModel(model.id)
@@ -805,8 +819,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       <ModelCard
                         key={model.id}
                         id={model.id}
-                        name={opts?.name ?? model.name}
-                        tagline={metaOf(model)?.tagline}
+                        name={opts?.name ?? localizedName(model)}
+                        tagline={localizedTagline(model)}
                         badge={badge}
                         isSelected={selectedModelId === model.id}
                         onClick={() => handleModelSelect(model)}
@@ -850,8 +864,8 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                       <ModelCard
                         key={`fav-${model.id}`}
                         id={model.id}
-                        name={model.name}
-                        tagline={metaOf(model)?.tagline}
+                        name={localizedName(model)}
+                        tagline={localizedTagline(model)}
                         badge={infoBadge}
                         isSelected={selectedModelId === model.id}
                         onClick={() => handleModelSelect(model)}
@@ -1171,22 +1185,24 @@ export const ModelSelect: FC<ModelSelectProps> = ({ onClose }) => {
                         );
                       })}
                       {/* Connect a model source */}
-                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button
-                          onClick={() => {
-                            setEditingModelSource(undefined);
-                            setShowModelSourceForm(true);
-                          }}
-                          className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
-                        >
-                          <IconPlug size={16} className="shrink-0" />
-                          <span>
-                            {customModelSources.length === 0
-                              ? t('modelSources.connectButtonShort')
-                              : t('modelSources.addAnother')}
-                          </span>
-                        </button>
-                      </div>
+                      {enableBYOModels && (
+                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <button
+                            onClick={() => {
+                              setEditingModelSource(undefined);
+                              setShowModelSourceForm(true);
+                            }}
+                            className="inline-flex items-center gap-1.5 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors whitespace-nowrap"
+                          >
+                            <IconPlug size={16} className="shrink-0" />
+                            <span>
+                              {customModelSources.length === 0
+                                ? t('modelSources.connectButtonShort')
+                                : t('modelSources.addAnother')}
+                            </span>
+                          </button>
+                        </div>
+                      )}
                       <HiddenItemsSection
                         items={hiddenModels.map((m) => ({
                           id: m.id,

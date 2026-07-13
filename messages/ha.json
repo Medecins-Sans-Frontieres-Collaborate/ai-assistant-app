@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Samfurin AI mai amfani da GPT-4.1 tare da bincike kai tsaye ta Bing. Yana samar da bayanai na zamani, duba gaskiya, da sanarwa kan abubuwan da ke faruwa yanzu. Mafi dacewa don bincike da ke bukatar bayanai na kwanan nan, nazarin labarai, da tabbatar da gaskiya.",
-      "knowledgeCutoff": "Bincike na yanar gizo kai tsaye"
+      "knowledgeCutoff": "Bincike na yanar gizo kai tsaye",
+      "tagline": "Tsohon ƙarni na OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Samfurin OpenAI mafi cigaba, musamman wajen warware matsaloli masu tsauri, samar da lamba, da warware matsaloli masu fasaha. Mafi dacewa don ayyukan nazari, kalubalen shirye-shiryen kwamfuta, bincike, da bayani dalla-dalla. Yana ba da damar daidaita kokarin nazari da tsawon amsa.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Lamba, nazari, bincike"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Nau'in GPT-5 mai sauri da araha, daidaitacce don gudu yayin da yake kiyaye inganci. Dace da ayyukan yau da kullum, tambayoyi masu sauri, rarraba kayan aiki, da aikace-aikacen da ke bukatar amsa cikin gaggawa. Kyakkyawan daidaito tsakanin aiki da tsada.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Mafi sauri kuma mai araha"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Nau'in na musamman na GPT-5.2 da aka daidaita don mu'amala da mutane da fahimtar motsin rai. Mabudi wajen sadarwa da nuna tausayi, tallafin lafiyar kwakwalwa, rubuce-rubuce masu kirkira, hada-mana da tattaunawa ta dabi'a. Dace da hirarraki na yau da kullum, shawarwari, da ayyukan da ke bukatar fahimtar motsin rai.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Tattaunawa, tunani tare"
     },
     "o3": {
       "name": "o3",
       "description": "Samfurin OpenAI mai kwarewa wajen warware matsaloli da ban mamaki. Yafi karfi a fannin lissafi mai wahala, nazarin kimiyya, kalubalen lamba, da ayyuka masu matakai da yawa. Yana goyon bayan window na bayanai har 200K. Kuma yana ba da damar sarrafa kokarin nazari.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Tausayi mai zurfi mataki-mataki"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Masanin nazari wanda ke bayyana mataki-mataki. Mafi dacewa don matsalolin lissafi, wasan kwaikwayo na hankali, da fahimtar sabgogi masu sarkakiya. Duba yadda yake warware matsala kai tsaye.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Yana nuna matakan tunani daya bayan daya"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Samfuri mai inganci musamman wajen lamba da rubuce-rubucen fasaha. Dace da warware matsalolin lamba, rubuta bayanan aiki, da bayani game da fasaha. Sauri kuma abin dogaro don aikin ci gaba.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Madadin buda tushe"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Samfurin xAI mai sauyawa, sananne da amsoshi masu zurfi. Yana da kyau don tattaunawa maras iyaka, ayyukan ƙirƙira, da magance matsaloli masu rikitarwa.",
-      "knowledgeCutoff": "13 Mayu, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Mayu, 2025 12:16 AM",
+      "tagline": "Madadin xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Mafi ƙwazo daga samfurorin Anthropic, mai ƙwarewa sosai wajen tunani, coding, da ƙirƙira. Mafi dacewa don nazari mai rikitarwa, bincike, da ayyukan da ke buƙatar fahimta mai zurfi.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Ƙarni na Opus na baya"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Samfurin Claude mai daidaito, mai kyakkyawan aiki a duk coding, nazari, da ayyukan ƙirƙira. Ya dace sosai don amfani na yau da kullum tare da saurin amsawa.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Sonnet ƙarni na baya"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Tsararren samfurin Claude Opus na baya. Ya dace sosai don ayyukan coding masu rikitarwa, nazari na daki-daki, da fahimta mai zurfi.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Opus ƙarni na baya"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Samfurin Claude mai sauri da araha, an tsara shi domin ayyuka masu sauƙi. Ya dace sosai don tambayoyi ƙanana, taƙaitawa, da aikace-aikace masu yawa.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Saurin nau'in Claude"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Samfurin mafi ƙarfi daga Anthropic. Ya dace da rubutu mai tsawo, bincike, da abubuwan da ke buƙatar tunani mai zurfi.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Dogon rubutu da nazari"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Samfurin Claude mai daidaituwa. Ya dace da rubutu na yau da kullum, nazari, da coding da saurin amsawa.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude mai daidaito na yau da kullum"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Samfurin buda-tushen daga Meta. Dace da rubutu, takaitawa, da tambayoyi masu sauki da sauri."
+      "description": "Samfurin buda-tushen daga Meta. Dace da rubutu, takaitawa, da tambayoyi masu sauki da sauri.",
+      "tagline": "Madadin buda tushe"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Sabon samfurin OpenAI mafi inganci. Karfi wajen rubutu, bincike, lamba, da warware matsaloli masu rikitarwa."
+      "description": "Sabon samfurin OpenAI mafi inganci. Karfi wajen rubutu, bincike, lamba, da warware matsaloli masu rikitarwa.",
+      "tagline": "Sabon GPT mafi inganci"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Karami kuma mafi sauri cikin nau’in GPT. Mafi dacewa don ayyuka masu sauki da gaggawa a farashi mai rahusa."
+      "description": "Karami kuma mafi sauri cikin nau’in GPT. Mafi dacewa don ayyuka masu sauki da gaggawa a farashi mai rahusa.",
+      "tagline": "Mafi ƙanƙanta kuma mafi saurin GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Nau’in GPT mai da hankali kan hira. Dace da tattaunawa na yau da kullum, tunani tare, da tattaunawa masu goyon baya."
+      "description": "Nau’in GPT mai da hankali kan hira. Dace da tattaunawa na yau da kullum, tunani tare, da tattaunawa masu goyon baya.",
+      "tagline": "Sabon GPT na tattaunawa"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "Asalin samfurin GPT-5 mafi inganci. Har yanzu yana iya rubutu, nazari, da lamba."
+      "description": "Asalin samfurin GPT-5 mafi inganci. Har yanzu yana iya rubutu, nazari, da lamba.",
+      "tagline": "Tsohon GPT mafi inganci"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "Nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare a kullum."
+      "description": "Nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare a kullum.",
+      "tagline": "Tsohon GPT na tattaunawa"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Tsohon samfurin GPT mai yalwa. Dace da aikace-aikacen rubutu da amsa tambayoyi idan ba a bukaci sabuwar damar ba."
+      "description": "Tsohon samfurin GPT mai yalwa. Dace da aikace-aikacen rubutu da amsa tambayoyi idan ba a bukaci sabuwar damar ba.",
+      "tagline": "Tsohon multimodal GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Karamin nau’in GPT-4.1 mai sauri don ayyuka na yau da kullum."
+      "description": "Karamin nau’in GPT-4.1 mai sauri don ayyuka na yau da kullum.",
+      "tagline": "GPT ɗin ƙarni na baya mai sauƙi"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Sabon kuma mafi karfi daga Anthropic. Dace da dogon rubutu, bincike, lamba da zurfin nazari."
+      "description": "Sabon kuma mafi karfi daga Anthropic. Dace da dogon rubutu, bincike, lamba da zurfin nazari.",
+      "tagline": "Sabon kuma mafi ƙarfi na Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Sabon samfurin buda-tushen DeepSeek. Amincewa wajen rubutu gaba daya da tambayoyin fasaha."
+      "description": "Sabon samfurin buda-tushen DeepSeek. Amincewa wajen rubutu gaba daya da tambayoyin fasaha.",
+      "tagline": "Madadin buda tushe"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Firaministan samfurin Mistral. Wani madadin Turai don rubutu, takaitawa da tambayoyi gaba daya."
+      "description": "Firaministan samfurin Mistral. Wani madadin Turai don rubutu, takaitawa da tambayoyi gaba daya.",
+      "tagline": "Samfuri mai budewa daga Turai"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Tsohuwar gyara na GPT-5. Har yanzu yana da karfi wajen rubutu, nazari, da lamba."
+      "description": "Tsohuwar gyara na GPT-5. Har yanzu yana da karfi wajen rubutu, nazari, da lamba.",
+      "tagline": "Tsohon babban GPT-5"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Tsohuwar nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare na yau da kullum."
+      "description": "Tsohuwar nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare na yau da kullum.",
+      "tagline": "Tsohon GPT na tattaunawa"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Karamin nau’in GPT-5. Mafi dacewa don ayyuka masu sauri da sauki a farashi mai rahusa."
+      "description": "Karamin nau’in GPT-5. Mafi dacewa don ayyuka masu sauri da sauki a farashi mai rahusa.",
+      "tagline": "GPT na ƙarni na baya mafi ƙanƙanta"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Karamin nau’in GPT-4.1. Dace da ayyukan gaggawa da sauki inda sauri da farashi suke da mahimmanci."
+      "description": "Karamin nau’in GPT-4.1. Dace da ayyukan gaggawa da sauki inda sauri da farashi suke da mahimmanci.",
+      "tagline": "GPT mafi ƙanƙanta na tsohon ƙarni"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Karamin nau’in GPT-4o mai sauri. Dace da ayyuka na gaggawa ba tare da bukatar sabuwar fasaha ba."
+      "description": "Karamin nau’in GPT-4o mai sauri. Dace da ayyuka na gaggawa ba tare da bukatar sabuwar fasaha ba.",
+      "tagline": "GPT na tsoho multimodal mai sauƙi"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Karamin samfurin warware matsala. Dace da lissafi, mantiki, da matsaloli na mataki-mataki a farashi kasa da o3."
+      "description": "Karamin samfurin warware matsala. Dace da lissafi, mantiki, da matsaloli na mataki-mataki a farashi kasa da o3.",
+      "tagline": "Tausayi mai sauri kuma mai araha"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Tsohon karamin samfurin warware matsala. Yana iya lissafi, kimiyya da matsaloli na mantiki a kasafin kudi."
+      "description": "Tsohon karamin samfurin warware matsala. Yana iya lissafi, kimiyya da matsaloli na mantiki a kasafin kudi.",
+      "tagline": "Tausayi mataki-mataki mai ƙarami"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Mafi wayau daga Anthropic, farkon iyalin Claude 5. Dace da mafi wahalar rubutu, bincike da lamba."
+      "description": "Mafi wayau daga Anthropic, farkon iyalin Claude 5. Dace da mafi wahalar rubutu, bincike da lamba.",
+      "tagline": "Samfurin gaba na Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Sabon Claude mai daidaito, na farko cikin iyalin Claude 5. Karfi wajen rubutu na yau da kullum, nazari, da lamba tare da amsa cikin sauri."
+      "description": "Sabon Claude mai daidaito, na farko cikin iyalin Claude 5. Karfi wajen rubutu na yau da kullum, nazari, da lamba tare da amsa cikin sauri.",
+      "tagline": "Sabon Claude mai daidaito"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Samfurin matsakaici daga Mistral. Madadin Turai mai daidaita karfi da sauri don aiki na yau da kullum."
+      "description": "Samfurin matsakaici daga Mistral. Madadin Turai mai daidaita karfi da sauri don aiki na yau da kullum.",
+      "tagline": "Samfuri mai daidaito daga Turai"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Karamin samfurin Mistral. Sauri kuma mai rahusa don takaitawa, rubuce-rubucen farko, da tambayoyi masu sauki."
+      "description": "Karamin samfurin Mistral. Sauri kuma mai rahusa don takaitawa, rubuce-rubucen farko, da tambayoyi masu sauki.",
+      "tagline": "Karamin samfurin Turai mai sauri"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Karamin samfurin Mistral. Mafi dacewa don gaggawa da saukin aiki a farashi mai rahusa."
+      "description": "Karamin samfurin Mistral. Mafi dacewa don gaggawa da saukin aiki a farashi mai rahusa.",
+      "tagline": "Mistral ƙarami har iyaka"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Sabon gyara na DeepSeek-R1. Yana bayyana tunaninsa mataki-mataki da ingantaccen zurfi ciki warware matsala."
+      "description": "Sabon gyara na DeepSeek-R1. Yana bayyana tunaninsa mataki-mataki da ingantaccen zurfi ciki warware matsala.",
+      "tagline": "Sabunta samfurin buda tausayi"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Karamin samfurin buda-tushen Meta. Da sauri wajen rubutu, takaitawa da tambayoyin yau da kullum."
+      "description": "Karamin samfurin buda-tushen Meta. Da sauri wajen rubutu, takaitawa da tambayoyin yau da kullum.",
+      "tagline": "LLama mai inganci buda tushe"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Tsohon samfurin buɗaɗɗen tushe daga Meta. Har yanzu yana da kyau don rubuce-rubuce da amsa tambayoyi gaba ɗaya."
+      "description": "Tsohon samfurin buɗaɗɗen tushe daga Meta. Har yanzu yana da kyau don rubuce-rubuce da amsa tambayoyi gaba ɗaya.",
+      "tagline": "LLama buda tushe na baya"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Mafi girman samfurin xAI. Ya dace da tattaunawa masu faɗi, nazari, da ayyukan ƙirƙira."
+      "description": "Mafi girman samfurin xAI. Ya dace da tattaunawa masu faɗi, nazari, da ayyukan ƙirƙira.",
+      "tagline": "Babban samfurin xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Mafi sabuntar samfurin OpenAI. Mai ƙarfi wajen rubutu, bincike, lamba, da magance matsaloli masu sarkakiya."
+      "description": "Mafi sabuntar samfurin OpenAI. Mai ƙarfi wajen rubutu, bincike, lamba, da magance matsaloli masu sarkakiya.",
+      "tagline": "Sabon GPT mafi inganci"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (sabon salo)",
-      "description": "Adireshin da ke nuna zuwa sabuwar samfurin chat-tuned na OpenAI a koda yaushe. Shine maye gurbin Azure ga tsoffin `gpt-*-chat`."
+      "description": "Adireshin da ke nuna zuwa sabuwar samfurin chat-tuned na OpenAI a koda yaushe. Shine maye gurbin Azure ga tsoffin `gpt-*-chat`.",
+      "tagline": "Koyaushe sabuwar GPT na tattaunawa"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Sabon fitowar Opus, tsakanin 4.6 da 4.8. Da ƙarfi wajen dogon rubuce-rubuce, bincike, lamba, da zurfin nazari."
+      "description": "Sabon fitowar Opus, tsakanin 4.6 da 4.8. Da ƙarfi wajen dogon rubuce-rubuce, bincike, lamba, da zurfin nazari.",
+      "tagline": "Sabon fitowar Opus"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Mafi sabunta samfurin tunani na DeepSeek da maye gurbin Azure don layin R1. Yana nuna tunaninsa mataki-mataki."
+      "description": "Mafi sabunta samfurin tunani na DeepSeek da maye gurbin Azure don layin R1. Yana nuna tunaninsa mataki-mataki.",
+      "tagline": "Sabuwar samfurin buda tausayi"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Mafi sauri daga jerin V4 na DeepSeek kuma maye gurbin Azure don jerin V3. Yana da sauri wajen rubuce-rubuce na yau da kullum da tambayoyin fasaha."
+      "description": "Mafi sauri daga jerin V4 na DeepSeek kuma maye gurbin Azure don jerin V3. Yana da sauri wajen rubuce-rubuce na yau da kullum da tambayoyin fasaha.",
+      "tagline": "Samfurin buda tushe mai sauri"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "Mafi saurin samfurin tunani daga xAI. Yana tunani mataki-mataki da amsa mai sauri."
+      "description": "Mafi saurin samfurin tunani daga xAI. Yana tunani mataki-mataki da amsa mai sauri.",
+      "tagline": "Saurin samfurin tunanin xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Mafi saurin samfurin chat na xAI. Yana bada amsa mai sauri ga tambayoyi da tattaunawa na yau da kullum."
+      "description": "Mafi saurin samfurin chat na xAI. Yana bada amsa mai sauri ga tambayoyi da tattaunawa na yau da kullum.",
+      "tagline": "Saurin samfurin tattaunawar xAI"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Karamin samfurin xAI. Ya fi sauri kuma ya fi araha don tambayoyi da tattaunawar yau da kullum."
+      "description": "Karamin samfurin xAI. Ya fi sauri kuma ya fi araha don tambayoyi da tattaunawar yau da kullum.",
+      "tagline": "Samfurin xAI mai sauƙi"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Fitaccen samfurin GPT-5.6 na OpenAI. Mafi ƙarfi wajen rubutu, bincike, lissafi, da warware matsaloli masu wahala."
+      "description": "Fitaccen samfurin GPT-5.6 na OpenAI. Mafi ƙarfi wajen rubutu, bincike, lissafi, da warware matsaloli masu wahala.",
+      "tagline": "Mataki mafi sabo na GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Matsakaicin matakin GPT-5.6 na OpenAI. Ya dace da rubutu na yau da kullum, nazari, da lissafi tare da saurin amsawa."
+      "description": "Matsakaicin matakin GPT-5.6 na OpenAI. Ya dace da rubutu na yau da kullum, nazari, da lissafi tare da saurin amsawa.",
+      "tagline": "GPT-5.6 mai daidaito don amfani na yau da kullum"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Matakin sauri da sauki na GPT-5.6 na OpenAI. Mafi dacewa don tambayoyi masu sauki da ayyuka masu sauki a farashi mai sauki."
+      "description": "Matakin sauri da sauki na GPT-5.6 na OpenAI. Mafi dacewa don tambayoyi masu sauki da ayyuka masu sauki a farashi mai sauki.",
+      "tagline": "GPT-5.6 mai sauƙi kuma mai sauri"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Sabon samfurin matsakaici daga Mistral. Madadin na Turai wanda ke tsaka-tsaki tsakanin ƙwarewa da sauri don aiki na yau da kullum."
+      "description": "Sabon samfurin matsakaici daga Mistral. Madadin na Turai wanda ke tsaka-tsaki tsakanin ƙwarewa da sauri don aiki na yau da kullum.",
+      "tagline": "Samfurin Turai mai daidaito"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Samfurin open-weight na Moonshot AI. Ya ƙware a ayyukan wakilci, shirye-shirye, da takardu masu tsawo.",
+      "tagline": "Samfurin open-weight mai wakilci"
     }
   },
   "searchMode": {

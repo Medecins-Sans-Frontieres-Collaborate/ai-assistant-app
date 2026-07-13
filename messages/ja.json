@@ -1373,27 +1373,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Bingによるリアルタイムウェブ検索を備えたGPT-4.1搭載AIモデル。最新情報、事実確認、現在のイベント認識を提供します。最新情報、ニュース分析、事実確認が必要な調査に最適です。",
-      "knowledgeCutoff": "リアルタイムウェブ検索"
+      "knowledgeCutoff": "リアルタイムウェブ検索",
+      "tagline": "OpenAIの前世代"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAIの最も先進的なモデルで、複雑な推論、コード生成、技術的な問題解決に優れています。分析タスク、プログラミングの課題、研究、詳細な説明に最適です。調整可能な推論努力と応答の詳細度をサポートします。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "前のGPTフラッグシップ"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "GPT-5のより高速でコスト効率の良いバージョンで、高品質を維持しながら速度に最適化されています。日常タスク、素早い質問、ツールルーティング、高速な応答時間を必要とするアプリケーションに最適です。パフォーマンスと効率の優れたバランス。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "高速かつ低コスト"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "会話のやり取りと感情知性に最適化されたGPT-5の専門バージョン。共感的なコミュニケーション、メンタルヘルスサポート、クリエイティブライティング、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリングシナリオ、感情認識が必要なタスクに最適です。",
-      "knowledgeCutoff": "2025年10月1日 20:00"
+      "knowledgeCutoff": "2025年10月1日 20:00",
+      "tagline": "前のチャット特化GPT"
     },
     "o3": {
       "name": "o3",
       "description": "革新的な問題解決能力を持つOpenAIの最も先進的な推論モデル。複雑な数学、科学的推論、プログラミングの課題、多段階の論理タスクに優れています。拡張200Kコンテキストウィンドウ。推論努力制御をサポートします。",
-      "knowledgeCutoff": "2025年4月8日 20:00"
+      "knowledgeCutoff": "2025年4月8日 20:00",
+      "tagline": "段階的な深い推論"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1403,205 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "ステップバイステップで作業を示す推論スペシャリスト。数学の問題、論理パズル、複雑な概念の理解に優れています。リアルタイムで問題についてどのように考えているかを確認できます。",
-      "knowledgeCutoff": "2025年1月20日"
+      "knowledgeCutoff": "2025年1月20日",
+      "tagline": "推論の過程を表示"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "特にプログラミングと技術文書作成に優れた汎用モデル。コードのデバッグ、ドキュメント作成、技術概念の説明に最適です。開発作業に高速で信頼性があります。",
-      "knowledgeCutoff": "2025年4月16日 00:45"
+      "knowledgeCutoff": "2025年4月16日 00:45",
+      "tagline": "オープンソースの代替"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "ニュアンスのある応答で知られるxAIの汎用モデル。オープンエンドの議論、クリエイティブプロジェクト、複雑な問題への取り組みに最適です。",
-      "knowledgeCutoff": "2025年5月13日 00:16"
+      "knowledgeCutoff": "2025年5月13日 00:16",
+      "tagline": "xAIの代替"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "優れた推論、プログラミング、クリエイティブ能力を持つAnthropicの最も高性能なモデル。複雑な分析、研究、深い理解が必要なタスクに最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "初期のOpus世代"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "プログラミング、分析、クリエイティブタスクで優れたパフォーマンスを提供するバランスの取れたClaudeモデル。高速な応答時間で日常使用に最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "前世代Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "前世代のClaude Opusモデル。複雑なプログラミングタスク、詳細な分析、ニュアンスのある理解に優れています。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "前世代Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "迅速なタスクに最適化された高速でコスト効率の良いClaudeモデル。シンプルなクエリ、要約、大量のアプリケーションに最適です。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "高速なClaudeバリアント"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAIの最先端モデルで、複雑な推論、コード生成、技術的な問題解決に優れています。分析作業、プログラミング課題、研究、詳細な説明に最適です。推論の深さや応答の詳細度を調整できます。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "コード、分析、研究"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "2025年12月",
-      "description": "会話や感情知能に最適化されたGPT-5.2の専用バリアントです。共感的なコミュニケーション、クリエイティブな文章作成、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリング、感情への配慮が求められる業務に最適です。"
+      "description": "会話や感情知能に最適化されたGPT-5.2の専用バリアントです。共感的なコミュニケーション、クリエイティブな文章作成、ブレインストーミング、自然な対話に優れています。カジュアルな会話、カウンセリング、感情への配慮が求められる業務に最適です。",
+      "tagline": "会話、ブレインストーミング"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic社の最強モデル。長文作成、調査、慎重な思考が必要な作業に最適です。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "長文執筆と分析"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "バランスの取れたClaudeモデル。日常的なライティング、分析、素早い反応でのコーディングに適しています。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "バランスの取れた日常向けClaude"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Meta提供のオープンソースモデル。文章作成や要約、簡単な質問に安定して対応します。"
+      "description": "Meta提供のオープンソースモデル。文章作成や要約、簡単な質問に安定して対応します。",
+      "tagline": "オープンソースの代替"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "OpenAIの最新かつ最上位のモデル。文章作成、リサーチ、コーディング、複雑な問題解決に優れています。"
+      "description": "OpenAIの最新かつ最上位のモデル。文章作成、リサーチ、コーディング、複雑な問題解決に優れています。",
+      "tagline": "最新のGPTフラッグシップ"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "GPTシリーズで最小・最速のモデル。シンプルな作業を迅速かつ低コストで実行します。"
+      "description": "GPTシリーズで最小・最速のモデル。シンプルな作業を迅速かつ低コストで実行します。",
+      "tagline": "最小かつ最速のGPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "会話向けに調整されたGPTのバリエーション。カジュアルなチャットやブレインストーミング、サポート的な対話に適しています。"
+      "description": "会話向けに調整されたGPTのバリエーション。カジュアルなチャットやブレインストーミング、サポート的な対話に適しています。",
+      "tagline": "新しいチャット特化GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "旧世代のマルチモーダルGPT。最新機能が不要な日常の文章作成やQ&Aに適しています。"
+      "description": "旧世代のマルチモーダルGPT。最新機能が不要な日常の文章作成やQ&Aに適しています。",
+      "tagline": "旧世代マルチモーダルGPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "小型で高速なGPT-4.1バリエーション。日常的なタスクを素早く完了します。"
+      "description": "小型で高速なGPT-4.1バリエーション。日常的なタスクを素早く完了します。",
+      "tagline": "軽量な前世代GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Anthropicの最新かつ最強モデル。長文作成やリサーチ、コーディング、詳細な分析に最適です。"
+      "description": "Anthropicの最新かつ最強モデル。長文作成やリサーチ、コーディング、詳細な分析に最適です。",
+      "tagline": "最新かつ最強のClaude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "DeepSeekの最新オープンソースモデル。一般的な文章作成や技術的な質問に信頼できます。"
+      "description": "DeepSeekの最新オープンソースモデル。一般的な文章作成や技術的な質問に信頼できます。",
+      "tagline": "オープンソースの代替"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Mistralの最上位モデル。ヨーロッパ発の選択肢として、文章作成、要約、一般的な質問に対応します。"
+      "description": "Mistralの最上位モデル。ヨーロッパ発の選択肢として、文章作成、要約、一般的な質問に対応します。",
+      "tagline": "欧州オープンウェイトモデル"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "以前のGPT-5の最上位バージョン。文章作成、分析、コーディングにも依然として強力です。"
+      "description": "以前のGPT-5の最上位バージョン。文章作成、分析、コーディングにも依然として強力です。",
+      "tagline": "初期のGPT-5フラッグシップ"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "以前のチャット向けGPT-5バージョン。日常会話やブレインストーミングに適しています。"
+      "description": "以前のチャット向けGPT-5バージョン。日常会話やブレインストーミングに適しています。",
+      "tagline": "初期のチャット特化GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "GPT-5で最小のバリエーション。シンプルなタスクを迅速かつ低コストで実行します。"
+      "description": "GPT-5で最小のバリエーション。シンプルなタスクを迅速かつ低コストで実行します。",
+      "tagline": "極小型の前世代GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "GPT-4.1の最小バリエーション。速度やコスト重視のシンプルな作業に適しています。"
+      "description": "GPT-4.1の最小バリエーション。速度やコスト重視のシンプルな作業に適しています。",
+      "tagline": "最小の前世代GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "小型・高速なGPT-4oバリエーション。最新機能が不要な日常の簡単なタスクに向いています。"
+      "description": "小型・高速なGPT-4oバリエーション。最新機能が不要な日常の簡単なタスクに向いています。",
+      "tagline": "軽量な旧マルチモーダルGPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "コンパクトな推論モデル。o3より低コストで、数学や論理、手順を追った問題に適しています。"
+      "description": "コンパクトな推論モデル。o3より低コストで、数学や論理、手順を追った問題に適しています。",
+      "tagline": "高速で手頃な推論"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "以前のコンパクトな推論モデル。低コストで数学や科学、論理パズルに対応します。"
+      "description": "以前のコンパクトな推論モデル。低コストで数学や科学、論理パズルに対応します。",
+      "tagline": "コンパクトな段階的推論"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Anthropicで最もインテリジェントなモデル、Claude 5ファミリーの初代。特に高度な文章作成やリサーチ、コーディングに優れています。"
+      "description": "Anthropicで最もインテリジェントなモデル、Claude 5ファミリーの初代。特に高度な文章作成やリサーチ、コーディングに優れています。",
+      "tagline": "Anthropicの先端モデル"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Claude 5ファミリーの最新・バランス型モデル。日常的な文章作成や分析、コーディングを素早くこなします。"
+      "description": "Claude 5ファミリーの最新・バランス型モデル。日常的な文章作成や分析、コーディングを素早くこなします。",
+      "tagline": "最新のバランス型Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Mistralの中型モデル。ヨーロッパ発で、日常業務において能力と速度のバランスが取れています。"
+      "description": "Mistralの中型モデル。ヨーロッパ発で、日常業務において能力と速度のバランスが取れています。",
+      "tagline": "バランスの取れた欧州モデル"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistralの小型モデル。要約や下書き、簡単な質問を素早く安価に処理します。"
+      "description": "Mistralの小型モデル。要約や下書き、簡単な質問を素早く安価に処理します。",
+      "tagline": "小型・高速な欧州モデル"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistralの極小モデル。非常に素早く、簡単な作業を最低コストで行います。"
+      "description": "Mistralの極小モデル。非常に素早く、簡単な作業を最低コストで行います。",
+      "tagline": "極小型エッジ向けMistral"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "DeepSeek-R1のアップデート版。より深い推論で思考過程を段階的に示します。"
+      "description": "DeepSeek-R1のアップデート版。より深い推論で思考過程を段階的に示します。",
+      "tagline": "更新版オープン推論モデル"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Meta提供の軽量オープンソースモデル。文章作成や要約、日常的な質問に素早く対応します。"
+      "description": "Meta提供の軽量オープンソースモデル。文章作成や要約、日常的な質問に素早く対応します。",
+      "tagline": "高効率オープンソースLlama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Meta提供の旧型オープンソースモデル。一般的な文章作成やQ&Aに依然として有効です。"
+      "description": "Meta提供の旧型オープンソースモデル。一般的な文章作成やQ&Aに依然として有効です。",
+      "tagline": "旧世代オープンソースLlama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "xAIのフラッグシップモデル。自由な議論や分析、創造的なプロジェクトに適しています。"
+      "description": "xAIのフラッグシップモデル。自由な議論や分析、創造的なプロジェクトに適しています。",
+      "tagline": "xAIフラッグシップ"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "OpenAIの最新フラッグシップモデル。文章作成、リサーチ、コーディング、複雑な問題解決に強みがあります。"
+      "description": "OpenAIの最新フラッグシップモデル。文章作成、リサーチ、コーディング、複雑な問題解決に強みがあります。",
+      "tagline": "最新のGPTフラッグシップ"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat（最新）",
-      "description": "常にOpenAIの最新チャットモデルを指すロールエイリアス。Azureが廃止したバージョン型gpt-*-chatモデルの代替です。"
+      "description": "常にOpenAIの最新チャットモデルを指すロールエイリアス。Azureが廃止したバージョン型gpt-*-chatモデルの代替です。",
+      "tagline": "常に最新のチャットGPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Opusの最近のリリース。4.6と4.8の間のバージョンです。長文作成、リサーチ、コーディング、丁寧な分析に強みがあります。"
+      "description": "Opusの最近のリリース。4.6と4.8の間のバージョンです。長文作成、リサーチ、コーディング、丁寧な分析に強みがあります。",
+      "tagline": "最近リリースされたOpus"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "DeepSeekの最新の推論モデルで、AzureのR1シリーズの代替です。思考過程を段階的に示します。"
+      "description": "DeepSeekの最新の推論モデルで、AzureのR1シリーズの代替です。思考過程を段階的に示します。",
+      "tagline": "最新のオープン推論モデル"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "DeepSeekの高速V4バリアントで、AzureのV3シリーズの代替です。一般的な文章作成や技術的な質問に素早く対応します。"
+      "description": "DeepSeekの高速V4バリアントで、AzureのV3シリーズの代替です。一般的な文章作成や技術的な質問に素早く対応します。",
+      "tagline": "高速オープンソース代替"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast（推論）",
-      "description": "xAIの高速推論モデル。素早く段階的に思考し応答します。"
+      "description": "xAIの高速推論モデル。素早く段階的に思考し応答します。",
+      "tagline": "高速xAI推論モデル"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "xAIの高速チャットモデル。日常的な質問や会話に素早く応答します。"
+      "description": "xAIの高速チャットモデル。日常的な質問や会話に素早く応答します。",
+      "tagline": "高速xAIチャットモデル"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "xAIの軽量モデル。簡単な質問やカジュアルなチャットに速く低コストで対応できます。"
+      "description": "xAIの軽量モデル。簡単な質問やカジュアルなチャットに速く低コストで対応できます。",
+      "tagline": "軽量なxAIモデル"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "OpenAIのGPT-5.6トリオの最上位モデル。執筆、リサーチ、コーディング、複雑な問題解決に最適です。"
+      "description": "OpenAIのGPT-5.6トリオの最上位モデル。執筆、リサーチ、コーディング、複雑な問題解決に最適です。",
+      "tagline": "最新のGPTフラッグシップティア"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "OpenAIのGPT-5.6トリオのバランス型。日常の文章作成、分析、コーディングに迅速に対応します。"
+      "description": "OpenAIのGPT-5.6トリオのバランス型。日常の文章作成、分析、コーディングに迅速に対応します。",
+      "tagline": "バランスの取れた日常用GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "OpenAIのGPT-5.6トリオの軽量・高速モデル。低コストで簡易な作業や素早い質問に最適です。"
+      "description": "OpenAIのGPT-5.6トリオの軽量・高速モデル。低コストで簡易な作業や素早い質問に最適です。",
+      "tagline": "軽量・高速GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mistralの最新中型モデル。欧州発の選択肢で、日常業務に最適な性能と速度のバランスを実現します。"
+      "description": "Mistralの最新中型モデル。欧州発の選択肢で、日常業務に最適な性能と速度のバランスを実現します。",
+      "tagline": "バランスの取れた欧州モデル"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AIのオープンウェイトモデル。エージェント業務、コーディング、長文処理に強みがあります。",
+      "tagline": "エージェンティックなオープンウェイトモデル"
     }
   },
   "transcription": {

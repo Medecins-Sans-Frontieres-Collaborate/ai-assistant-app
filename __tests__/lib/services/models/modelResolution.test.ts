@@ -90,6 +90,7 @@ describe('inferProvider', () => {
     expect(inferProvider('DeepSeek')).toBe('deepseek');
     expect(inferProvider('xAI')).toBe('xai');
     expect(inferProvider('Mistral AI')).toBe('mistral');
+    expect(inferProvider('MoonshotAI')).toBe('moonshot');
     expect(inferProvider('Cohere')).toBeUndefined();
   });
 });

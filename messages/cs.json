@@ -1373,27 +1373,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "AI model poháněný GPT-4.1 s webovým vyhledáváním v reálném čase prostřednictvím Bingu. Poskytuje aktuální informace, ověřování faktů a znalosti aktuálních událostí. Ideální pro výzkum vyžadující čerstvé informace, analýzu zpráv a ověřování faktů.",
-      "knowledgeCutoff": "Webové vyhledávání v reálném čase"
+      "knowledgeCutoff": "Webové vyhledávání v reálném čase",
+      "tagline": "Předchozí generace OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Nejpokročilejší model OpenAI, vyniká ve složitém uvažování, generování kódu a řešení technických problémů. Ideální pro analytické úkoly, programátorské výzvy, výzkum a podrobná vysvětlení. Podporuje nastavitelné úsilí při uvažování a mnohomluvnost odpovědí.",
-      "knowledgeCutoff": "6. srpna 2025, 20:00"
+      "knowledgeCutoff": "6. srpna 2025, 20:00",
+      "tagline": "Předchozí vlajkový GPT"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Rychlejší a nákladově efektivnější varianta GPT-5, optimalizovaná pro rychlost při zachování vysoké kvality. Perfektní pro každodenní úkoly, rychlé dotazy, směrování nástrojů a aplikace vyžadující rychlé odezvy. Vynikající rovnováha mezi výkonem a efektivitou.",
-      "knowledgeCutoff": "6. srpna 2025, 20:00"
+      "knowledgeCutoff": "6. srpna 2025, 20:00",
+      "tagline": "Rychlejší a úspornější"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Specializovaná varianta GPT-5 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, podpoře duševního zdraví, kreativním psaní, brainstormingu a přirozeném dialogu. Ideální pro neformální konverzace, poradenské scénáře a úkoly vyžadující emocionální uvědomění.",
-      "knowledgeCutoff": "1. října 2025, 20:00"
+      "knowledgeCutoff": "1. října 2025, 20:00",
+      "tagline": "Předchozí chat GPT"
     },
     "o3": {
       "name": "o3",
       "description": "Nejpokročilejší model uvažování OpenAI s revolučními schopnostmi řešení problémů. Vyniká ve složité matematice, vědeckém uvažování, programátorských výzvách a víceúrovňových logických úkolech. Rozšířené kontextové okno 200K. Podporuje řízení úsilí při uvažování.",
-      "knowledgeCutoff": "8. dubna 2025, 20:00"
+      "knowledgeCutoff": "8. dubna 2025, 20:00",
+      "tagline": "Hluboké postupné uvažování"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1403,205 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Specialista na uvažování, který ukazuje svou práci krok za krokem. Skvělý pro matematické problémy, logické hádanky a pochopení složitých konceptů. Sledujte, jak přemýšlí nad problémy v reálném čase.",
-      "knowledgeCutoff": "20. ledna 2025"
+      "knowledgeCutoff": "20. ledna 2025",
+      "tagline": "Ukazuje uvažování krok za krokem"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Všestranný model obzvláště dobrý v programování a technickém psaní. Skvělý pro ladění kódu, psaní dokumentace a vysvětlování technických konceptů. Rychlý a spolehlivý pro vývojovou práci.",
-      "knowledgeCutoff": "16. dubna 2025, 00:45"
+      "knowledgeCutoff": "16. dubna 2025, 00:45",
+      "tagline": "Otevřená alternativa"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Všestranný model od xAI známý pro nuancované odpovědi. Skvělý pro otevřené diskuze, kreativní projekty a řešení složitých problémů.",
-      "knowledgeCutoff": "13. května 2025, 00:16"
+      "knowledgeCutoff": "13. května 2025, 00:16",
+      "tagline": "xAI alternativa"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Nejschopnější model Anthropic s výjimečným uvažováním, programováním a kreativními schopnostmi. Ideální pro složité analýzy, výzkum a úkoly vyžadující hluboké porozumění.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Starší generace Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Vyvážený model Claude nabízející vynikající výkon v programování, analýze a kreativních úkolech. Skvělý pro každodenní použití s rychlými odezvami.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Předchozí generace Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model Claude Opus předchozí generace. Skvělý pro složité programátorské úkoly, podrobnou analýzu a nuancované porozumění.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Předchozí generace Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Rychlý a nákladově efektivní model Claude optimalizovaný pro rychlé úkoly. Skvělý pro jednoduché dotazy, shrnutí a aplikace s vysokým objemem.",
-      "knowledgeCutoff": "Leden 2025"
+      "knowledgeCutoff": "Leden 2025",
+      "tagline": "Rychlá varianta Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Nejvyspělejší model OpenAI, vynikající v komplexním uvažování, generování kódu a řešení technických problémů. Nejlepší pro analytické úkoly, programátorské výzvy, výzkum a podrobné vysvětlení. Podporuje nastavitelnou úroveň uvažování a délku odpovědí.",
-      "knowledgeCutoff": "Prosinec 2025"
+      "knowledgeCutoff": "Prosinec 2025",
+      "tagline": "Kód, analýza, výzkum"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Prosinec 2025",
-      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost."
+      "description": "Speciální varianta GPT-5.2 optimalizovaná pro konverzační interakce a emocionální inteligenci. Vyniká v empatické komunikaci, kreativním psaní, brainstormingu a přirozeném dialogu. Nejvhodnější pro neformální rozhovory, poradenské situace a úkoly vyžadující emocionální vnímavost.",
+      "tagline": "Konverzace, brainstorming"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Nejsilnější model od Anthropic. Vhodný pro dlouhé psaní, výzkum a úkoly, které vyžadují pečlivé uvažování.",
-      "knowledgeCutoff": "únor 2026"
+      "knowledgeCutoff": "únor 2026",
+      "tagline": "Dlouhé texty a analýza"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Vyvážený model Claude. Vhodný pro každodenní psaní, analýzu a rychlé programování.",
-      "knowledgeCutoff": "únor 2026"
+      "knowledgeCutoff": "únor 2026",
+      "tagline": "Vyvážený Claude pro každodenní použití"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Open-source model od společnosti Meta. Spolehlivý pro psaní, shrnutí a rychlé dotazy."
+      "description": "Open-source model od společnosti Meta. Spolehlivý pro psaní, shrnutí a rychlé dotazy.",
+      "tagline": "Otevřená alternativa"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Nejnovější vlajkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů."
+      "description": "Nejnovější vlajkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější vlajkový GPT"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Nejmenší a nejrychlejší varianta GPT. Nejlepší pro rychlé a jednoduché úkoly s minimálními náklady."
+      "description": "Nejmenší a nejrychlejší varianta GPT. Nejlepší pro rychlé a jednoduché úkoly s minimálními náklady.",
+      "tagline": "Nejmenší a nejrychlejší GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Konverzační verze GPT zaměřená na dialog. Vhodná pro neformální chaty, brainstorming a podpůrné diskuse."
+      "description": "Konverzační verze GPT zaměřená na dialog. Vhodná pro neformální chaty, brainstorming a podpůrné diskuse.",
+      "tagline": "Novější chat GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Starší multimodální GPT. Dobře poslouží pro každodenní psaní a dotazy tam, kde nejsou potřeba nejnovější funkce."
+      "description": "Starší multimodální GPT. Dobře poslouží pro každodenní psaní a dotazy tam, kde nejsou potřeba nejnovější funkce.",
+      "tagline": "Starší multimodální GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Malá a rychlá varianta GPT-4.1 pro rychlé každodenní úkoly."
+      "description": "Malá a rychlá varianta GPT-4.1 pro rychlé každodenní úkoly.",
+      "tagline": "Lehký předchozí GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Nejnovější a nejvýkonnější model od Anthropic. Skvělý pro dlouhé psaní, výzkum, programování a důkladnou analýzu."
+      "description": "Nejnovější a nejvýkonnější model od Anthropic. Skvělý pro dlouhé psaní, výzkum, programování a důkladnou analýzu.",
+      "tagline": "Nejnovější a nejsilnější Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Nejnovější open-source model DeepSeek. Spolehlivý pro běžné psaní a technické dotazy."
+      "description": "Nejnovější open-source model DeepSeek. Spolehlivý pro běžné psaní a technické dotazy.",
+      "tagline": "Otevřená alternativa"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Vlajkový model Mistral. Evropská alternativa pro psaní, shrnutí a obecné dotazy."
+      "description": "Vlajkový model Mistral. Evropská alternativa pro psaní, shrnutí a obecné dotazy.",
+      "tagline": "Evropský open-weight model"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Dřívější vlajková verze GPT-5. Stále silný v psaní, analýze a programování."
+      "description": "Dřívější vlajková verze GPT-5. Stále silný v psaní, analýze a programování.",
+      "tagline": "Starší vlajkový GPT-5"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Starší verze GPT-5 upravená pro chat. Dobrá pro běžné konverzace a brainstorming."
+      "description": "Starší verze GPT-5 upravená pro chat. Dobrá pro běžné konverzace a brainstorming.",
+      "tagline": "Starší chat GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Nejmenší varianta GPT-5. Nejvhodnější pro rychlé a jednoduché úkoly s minimálními náklady."
+      "description": "Nejmenší varianta GPT-5. Nejvhodnější pro rychlé a jednoduché úkoly s minimálními náklady.",
+      "tagline": "Malý předchozí GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Nejmenší varianta GPT-4.1. Dobrá pro rychlé a jednoduché úkoly, kde je důležitá rychlost a cena."
+      "description": "Nejmenší varianta GPT-4.1. Dobrá pro rychlé a jednoduché úkoly, kde je důležitá rychlost a cena.",
+      "tagline": "Nejmenší předchozí GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Malá, rychlá varianta GPT-4o. Dobrá pro každodenní rychlé úkoly, kde nejsou potřeba nejnovější funkce."
+      "description": "Malá, rychlá varianta GPT-4o. Dobrá pro každodenní rychlé úkoly, kde nejsou potřeba nejnovější funkce.",
+      "tagline": "Lehký starší multimodální GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Kompaktní model pro logické úlohy. Vhodný pro matematiku, logiku a úlohy krok po kroku za nižší cenu než o3."
+      "description": "Kompaktní model pro logické úlohy. Vhodný pro matematiku, logiku a úlohy krok po kroku za nižší cenu než o3.",
+      "tagline": "Rychlé a cenově dostupné uvažování"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Starší kompaktní model pro logické úlohy. Zvládá matematiku, přírodní vědy a logické hádanky s omezeným rozpočtem."
+      "description": "Starší kompaktní model pro logické úlohy. Zvládá matematiku, přírodní vědy a logické hádanky s omezeným rozpočtem.",
+      "tagline": "Kompaktní postupné uvažování"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Nejinteligentnější model od Anthropic, první z rodiny Claude 5. Výborný pro nejnáročnější psaní, výzkum a programování."
+      "description": "Nejinteligentnější model od Anthropic, první z rodiny Claude 5. Výborný pro nejnáročnější psaní, výzkum a programování.",
+      "tagline": "Frontier model od Anthropicu"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Nejnovější vyvážená verze Claude, první z rodiny Claude 5. Silný v každodenním psaní, analýze a programování s rychlými odpověďmi."
+      "description": "Nejnovější vyvážená verze Claude, první z rodiny Claude 5. Silný v každodenním psaní, analýze a programování s rychlými odpověďmi.",
+      "tagline": "Nejnovější vyvážený Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Střední model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro běžné použití."
+      "description": "Střední model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro běžné použití.",
+      "tagline": "Vyvážený evropský model"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Malý model Mistral. Rychlý a levný pro shrnutí, návrhy a jednoduché dotazy."
+      "description": "Malý model Mistral. Rychlý a levný pro shrnutí, návrhy a jednoduché dotazy.",
+      "tagline": "Malý rychlý evropský model"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Nejmenší model Mistral. Nejlepší pro velmi rychlé a jednoduché úkoly za minimální cenu."
+      "description": "Nejmenší model Mistral. Nejlepší pro velmi rychlé a jednoduché úkoly za minimální cenu.",
+      "tagline": "Malý Mistral pro edge zařízení"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Aktualizovaná verze DeepSeek-R1. Postupně vysvětluje své myšlení s vylepšenou hloubkou úsudku."
+      "description": "Aktualizovaná verze DeepSeek-R1. Postupně vysvětluje své myšlení s vylepšenou hloubkou úsudku.",
+      "tagline": "Aktualizovaný model pro otevřené uvažování"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Odlehčený open-source model od společnosti Meta. Rychlý pro psaní, shrnutí a běžné dotazy."
+      "description": "Odlehčený open-source model od společnosti Meta. Rychlý pro psaní, shrnutí a běžné dotazy.",
+      "tagline": "Efektivní open-source Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Starší open-source model od společnosti Meta. Stále spolehlivý pro obecné psaní a dotazy."
+      "description": "Starší open-source model od společnosti Meta. Stále spolehlivý pro obecné psaní a dotazy.",
+      "tagline": "Starší open-source Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Vlajkový model xAI. Dobře se hodí pro otevřené diskuse, analýzy a kreativní projekty."
+      "description": "Vlajkový model xAI. Dobře se hodí pro otevřené diskuse, analýzy a kreativní projekty.",
+      "tagline": "Vlajkový model xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Nejnovější špičkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů."
+      "description": "Nejnovější špičkový model od OpenAI. Vyniká v psaní, výzkumu, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější vlajkový GPT"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (nejnovější)",
-      "description": "Průběžný alias, který vždy ukazuje na nejnovější chatovací model od OpenAI. V Azure nahrazuje ukončené verze modelů gpt-*-chat."
+      "description": "Průběžný alias, který vždy ukazuje na nejnovější chatovací model od OpenAI. V Azure nahrazuje ukončené verze modelů gpt-*-chat.",
+      "tagline": "Vždy nejnovější chat GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Nedávné vydání Opus, mezi verzemi 4.6 a 4.8. Silný v delších textech, výzkumu, kódování a pečlivé analýze."
+      "description": "Nedávné vydání Opus, mezi verzemi 4.6 a 4.8. Silný v delších textech, výzkumu, kódování a pečlivé analýze.",
+      "tagline": "Nedávné vydání Opus"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Nejnovější model pro uvažování od DeepSeek a náhrada řady R1 v Azure. Ukazuje své myšlení krok za krokem."
+      "description": "Nejnovější model pro uvažování od DeepSeek a náhrada řady R1 v Azure. Ukazuje své myšlení krok za krokem.",
+      "tagline": "Nejnovější otevřený model uvažování"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Rychlá varianta V4 od DeepSeek a náhrada řady V3 v Azure. Rychlý pro běžné psaní a technické dotazy."
+      "description": "Rychlá varianta V4 od DeepSeek a náhrada řady V3 v Azure. Rychlý pro běžné psaní a technické dotazy.",
+      "tagline": "Rychlá otevřená alternativa"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Uvažování)",
-      "description": "Rychlý model pro uvažování od xAI. Přemýšlí krok za krokem a odpovídá rychle."
+      "description": "Rychlý model pro uvažování od xAI. Přemýšlí krok za krokem a odpovídá rychle.",
+      "tagline": "Rychlý xAI model uvažování"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Rychlý chatovací model od xAI. Rychlé odpovědi na každodenní dotazy a konverzace."
+      "description": "Rychlý chatovací model od xAI. Rychlé odpovědi na každodenní dotazy a konverzace.",
+      "tagline": "Rychlý xAI chat model"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Odlehčený model xAI. Rychlejší a levnější pro krátké dotazy a neformální chatování."
+      "description": "Odlehčený model xAI. Rychlejší a levnější pro krátké dotazy a neformální chatování.",
+      "tagline": "Lehký xAI model"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Vlajkový model ze sady GPT-5.6 od OpenAI. Nejlepší pro psaní, výzkum, programování a řešení složitých problémů."
+      "description": "Vlajkový model ze sady GPT-5.6 od OpenAI. Nejlepší pro psaní, výzkum, programování a řešení složitých problémů.",
+      "tagline": "Nejnovější úroveň vlajkového GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Vyvážená úroveň modelu GPT-5.6 od OpenAI. Vhodný pro běžné psaní, analýzy a programování s rychlými odpověďmi."
+      "description": "Vyvážená úroveň modelu GPT-5.6 od OpenAI. Vhodný pro běžné psaní, analýzy a programování s rychlými odpověďmi.",
+      "tagline": "Vyvážený každodenní GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Lehká a rychlá varianta GPT-5.6 od OpenAI. Ideální pro rychlé dotazy a jednoduché úlohy s nízkými náklady."
+      "description": "Lehká a rychlá varianta GPT-5.6 od OpenAI. Ideální pro rychlé dotazy a jednoduché úlohy s nízkými náklady.",
+      "tagline": "Lehký, rychlý GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Nejnovější středně velký model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro každodenní práci."
+      "description": "Nejnovější středně velký model Mistral. Evropská alternativa, která vyvažuje schopnosti a rychlost pro každodenní práci.",
+      "tagline": "Vyvážený evropský model"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model s otevřenými váhami od Moonshot AI. Silný v agentních úlohách, programování a práci s dlouhými dokumenty.",
+      "tagline": "Agentní model s otevřenými váhami"
     }
   },
   "searchMode": {

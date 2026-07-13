@@ -1472,27 +1472,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "GPT-4.1:llä toimiva AI-malli, jossa on reaaliaikainen verkkohaku Bingin kautta. Tarjoaa ajantasaista tietoa, faktantarkistusta ja tapahtumien seurannan. Paras malleihin, joissa vaaditaan tuoretta tietoa, uutisanalyysiä ja tiedon varmistusta.",
-      "knowledgeCutoff": "Reaaliaikainen verkkohaku"
+      "knowledgeCutoff": "Reaaliaikainen verkkohaku",
+      "tagline": "OpenAI:n edellisen sukupolven malli"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAI:n edistynein malli, joka loistaa monimutkaisessa päättelyssä, koodin tuottamisessa ja teknisten ongelmien ratkaisussa. Paras analyyttisiin tehtäviin, ohjelmointihaasteisiin, tutkimukseen ja perusteellisiin selityksiin. Tukee säädettävää päättelyvoimaa ja vastausten laajuutta.",
-      "knowledgeCutoff": "6.8.2025 klo 20:00"
+      "knowledgeCutoff": "6.8.2025 klo 20:00",
+      "tagline": "Edellinen GPT-lippulaiva"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Nopeampi ja kustannustehokkaampi versio GPT-5:stä, optimoitu nopeuteen laadusta tinkimättä. Erinomainen arkisiin tehtäviin, nopeisiin kysymyksiin, työkalujen reititykseen ja sovelluksiin, joissa vaaditaan nopeita vastauksia. Tasapainoinen suorituskyky ja tehokkuus.",
-      "knowledgeCutoff": "6.8.2025 klo 20:00"
+      "knowledgeCutoff": "6.8.2025 klo 20:00",
+      "tagline": "Nopeampi ja edullisempi"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "GPT-5:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, mielenterveyden tukena, luovassa kirjoittamisessa, ideoinnissa ja luontevassa dialogissa. Paras rentoihin keskusteluihin, ohjaustilanteisiin ja tehtäviin, joissa tarvitaan tunneherkkyyttä.",
-      "knowledgeCutoff": "1.10.2025 klo 20:00"
+      "knowledgeCutoff": "1.10.2025 klo 20:00",
+      "tagline": "Edellinen keskustelu-GPT"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAI:n edistyksellisin päättelymalli, jossa on läpimurto ongelmanratkaisukyvyssä. Loistaa monimutkaisessa matematiikassa, tieteellisessä päättelyssä, koodaushaasteissa ja vaiheittaisissa loogisissa tehtävissä. Laajennettu 200K kontekstiraja. Tukee päättelyvoiman säätöä.",
-      "knowledgeCutoff": "8.4.2025 klo 20:00"
+      "knowledgeCutoff": "8.4.2025 klo 20:00",
+      "tagline": "Syvällistä vaiheittaista päättelyä"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1502,205 +1507,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Päättelyyn erikoistunut malli, joka näyttää työskentelynsä vaiheittain. Erinomainen matemaattisiin ongelmiin, logiikkapulmiin ja monimutkaisten käsitteiden ymmärtämiseen. Näet ajattelun etenemisen reaaliajassa.",
-      "knowledgeCutoff": "20.1.2025"
+      "knowledgeCutoff": "20.1.2025",
+      "tagline": "Näyttää päättelyn vaihe vaiheelta"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Monipuolinen malli, erityisesti hyvä koodauksessa ja teknisessä kirjoittamisessa. Erinomainen koodin debuggaamiseen, dokumentaation kirjoittamiseen ja teknisten käsitteiden selittämiseen. Nopea ja luotettava kehitystyössä.",
-      "knowledgeCutoff": "16.4.2025 klo 0:45"
+      "knowledgeCutoff": "16.4.2025 klo 0:45",
+      "tagline": "Avoimen lähdekoodin vaihtoehto"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "xAI:n monipuolinen malli, joka tunnetaan vivahteikkaista vastauksista. Soveltuu hyvin avoimiin keskusteluihin, luoviin projekteihin ja monimutkaisten ongelmien ratkaisuun.",
-      "knowledgeCutoff": "13.5.2025 klo 0:16"
+      "knowledgeCutoff": "13.5.2025 klo 0:16",
+      "tagline": "xAI-vaihtoehto"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropicin edistyksellisin malli, jolla on poikkeukselliset päättely-, koodaus- ja luovat kyvyt. Paras monimutkaiseen analyysiin, tutkimukseen ja tehtäviin, jotka vaativat syvällistä ymmärrystä.",
-      "knowledgeCutoff": "tammikuu 2025"
+      "knowledgeCutoff": "tammikuu 2025",
+      "tagline": "Aiempi Opus-sukupolvi"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Tasapainoinen Claude-malli, joka tarjoaa erinomaisen suorituskyvyn koodauksessa, analyysissä ja luovissa tehtävissä. Soveltuu hyvin päivittäiseen käyttöön nopeiden vastausten ansiosta.",
-      "knowledgeCutoff": "tammikuu 2025"
+      "knowledgeCutoff": "tammikuu 2025",
+      "tagline": "Aiempi Sonnet-sukupolvi"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Edellisen sukupolven Claude Opus -malli. Erinomainen monimutkaisiin ohjelmointitehtäviin, yksityiskohtaiseen analyysiin ja vivahteikkaaseen ymmärtämiseen.",
-      "knowledgeCutoff": "tammikuu 2025"
+      "knowledgeCutoff": "tammikuu 2025",
+      "tagline": "Aiempi Opus-sukupolvi"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Nopea ja kustannustehokas Claude-malli, joka on optimoitu nopeisiin tehtäviin. Erinomainen yksinkertaisiin kysymyksiin, tiivistyksiin ja suuriin volyymeihin.",
-      "knowledgeCutoff": "tammikuu 2025"
+      "knowledgeCutoff": "tammikuu 2025",
+      "tagline": "Nopea Claude-versio"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI:n edistynein malli, joka on erinomainen monimutkaisessa päättelyssä, koodin luomisessa ja teknisten ongelmien ratkaisussa. Paras analyyttisiin tehtäviin, ohjelmointiin, tutkimukseen ja yksityiskohtaisiin selityksiin. Tukee säädettävää päättelytehoa ja vastausten laajuutta.",
-      "knowledgeCutoff": "joulukuu 2025"
+      "knowledgeCutoff": "joulukuu 2025",
+      "tagline": "Koodaus, analyysi, tutkimus"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "joulukuu 2025",
-      "description": "GPT-5.2:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, luovassa kirjoittamisessa, ideoinnissa ja luonnollisissa vuoropuheluissa. Paras rentoihin keskusteluihin, ohjaustilanteisiin ja tehtäviin, jotka vaativat tunneherkkyyttä."
+      "description": "GPT-5.2:n erikoisversio, joka on optimoitu keskusteluihin ja tunneälyyn. Erinomainen empaattisessa viestinnässä, luovassa kirjoittamisessa, ideoinnissa ja luonnollisissa vuoropuheluissa. Paras rentoihin keskusteluihin, ohjaustilanteisiin ja tehtäviin, jotka vaativat tunneherkkyyttä.",
+      "tagline": "Keskusteluihin, ideointiin"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropicin vahvin malli. Sopii pitkille teksteille, tutkimukseen ja tarkkaa ajattelua vaativiin tehtäviin.",
-      "knowledgeCutoff": "helmikuu 2026"
+      "knowledgeCutoff": "helmikuu 2026",
+      "tagline": "Pitkien tekstien kirjoitus ja analyysi"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Tasapainoinen Claude-malli. Sopii päivittäiseen kirjoittamiseen, analyysiin ja koodaukseen nopeilla vastauksilla.",
-      "knowledgeCutoff": "helmikuu 2026"
+      "knowledgeCutoff": "helmikuu 2026",
+      "tagline": "Tasapainoinen arkikäyttöön sopiva Claude"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Metan avoimen lähdekoodin malli. Vakaa kirjoituksessa, yhteenvedoissa ja nopeissa kysymyksissä."
+      "description": "Metan avoimen lähdekoodin malli. Vakaa kirjoituksessa, yhteenvedoissa ja nopeissa kysymyksissä.",
+      "tagline": "Avoimen lähdekoodin vaihtoehto"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun."
+      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun.",
+      "tagline": "Uusin GPT-lippulaiva"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Pienin ja nopein GPT-versio. Paras nopeisiin, yksinkertaisiin tehtäviin mahdollisimman pienin kustannuksin."
+      "description": "Pienin ja nopein GPT-versio. Paras nopeisiin, yksinkertaisiin tehtäviin mahdollisimman pienin kustannuksin.",
+      "tagline": "Pienin ja nopein GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Keskusteluun viritetty GPT-versio. Sopii arkisiin keskusteluihin, ideointiin ja tukikeskusteluihin."
+      "description": "Keskusteluun viritetty GPT-versio. Sopii arkisiin keskusteluihin, ideointiin ja tukikeskusteluihin.",
+      "tagline": "Uudempi keskusteluun viritetty GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Vanhempi multimodaalinen GPT. Sopii arkipäivän kirjoittamiseen ja kysymys-vastaus -tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen."
+      "description": "Vanhempi multimodaalinen GPT. Sopii arkipäivän kirjoittamiseen ja kysymys-vastaus -tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen.",
+      "tagline": "Vanhempi multimodaalinen GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Pienempi ja nopeampi GPT-4.1-versio arjen nopeisiin tehtäviin."
+      "description": "Pienempi ja nopeampi GPT-4.1-versio arjen nopeisiin tehtäviin.",
+      "tagline": "Kevyt edellisen sukupolven GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Anthropicin uusin ja vahvin malli. Erinomainen pitkään kirjoittamiseen, tutkimukseen, koodaukseen ja huolellisiin analyyseihin."
+      "description": "Anthropicin uusin ja vahvin malli. Erinomainen pitkään kirjoittamiseen, tutkimukseen, koodaukseen ja huolellisiin analyyseihin.",
+      "tagline": "Uusin ja vahvin Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "DeepSeekin uusin avoimen lähdekoodin malli. Luotettava yleiskirjoitukseen ja teknisiin kysymyksiin."
+      "description": "DeepSeekin uusin avoimen lähdekoodin malli. Luotettava yleiskirjoitukseen ja teknisiin kysymyksiin.",
+      "tagline": "Avoimen lähdekoodin vaihtoehto"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Mistralin lippulaivamalli. Eurooppalainen vaihtoehto kirjoittamiseen, yhteenvedoille ja yleisiin kysymyksiin."
+      "description": "Mistralin lippulaivamalli. Eurooppalainen vaihtoehto kirjoittamiseen, yhteenvedoille ja yleisiin kysymyksiin.",
+      "tagline": "Eurooppalainen avoin malli"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Aikaisempi GPT-5 lippulaivaversio. Yhä vahva kirjoittamisessa, analyysissa ja koodauksessa."
+      "description": "Aikaisempi GPT-5 lippulaivaversio. Yhä vahva kirjoittamisessa, analyysissa ja koodauksessa.",
+      "tagline": "Aiempi GPT-5-lippulaiva"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Aikaisempi keskusteluun viritetty GPT-5-versio. Sopii arjen keskusteluihin ja ideointiin."
+      "description": "Aikaisempi keskusteluun viritetty GPT-5-versio. Sopii arjen keskusteluihin ja ideointiin.",
+      "tagline": "Aiempi keskustelu-GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Pienin GPT-5-versio. Paras nopeisiin, yksinkertaisiin tehtäviin pienellä kustannuksella."
+      "description": "Pienin GPT-5-versio. Paras nopeisiin, yksinkertaisiin tehtäviin pienellä kustannuksella.",
+      "tagline": "Pienikokoinen edellisen sukupolven GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Pienin GPT-4.1-versio. Sopii nopeisiin, yksinkertaisiin tehtäviin, joissa nopeus ja hinta ovat tärkeimmät."
+      "description": "Pienin GPT-4.1-versio. Sopii nopeisiin, yksinkertaisiin tehtäviin, joissa nopeus ja hinta ovat tärkeimmät.",
+      "tagline": "Pienin edellisen sukupolven GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Pieni ja nopea GPT-4o-versio. Sopii arjen nopeisiin tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen."
+      "description": "Pieni ja nopea GPT-4o-versio. Sopii arjen nopeisiin tehtäviin, kun uusimmat ominaisuudet eivät ole tarpeen.",
+      "tagline": "Kevyt vanhempi multimodaalinen GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Kompakti päättelymalli. Hyvä matematiikkaan, logiikkaan ja vaiheittaisiin ongelmiin edullisemmin kuin o3."
+      "description": "Kompakti päättelymalli. Hyvä matematiikkaan, logiikkaan ja vaiheittaisiin ongelmiin edullisemmin kuin o3.",
+      "tagline": "Nopea ja edullinen päättely"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Aikaisempi kompakti päättelymalli. Selviytyy matematiikasta, luonnontieteistä ja logiikkatehtävistä budjetilla."
+      "description": "Aikaisempi kompakti päättelymalli. Selviytyy matematiikasta, luonnontieteistä ja logiikkatehtävistä budjetilla.",
+      "tagline": "Kompakti vaiheittainen päättely"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Anthropicin älykkäin malli ja ensimmäinen Claude 5 -sarjasta. Erinomainen vaikeimpiin kirjoitus-, tutkimus- ja koodaushaasteisiin."
+      "description": "Anthropicin älykkäin malli ja ensimmäinen Claude 5 -sarjasta. Erinomainen vaikeimpiin kirjoitus-, tutkimus- ja koodaushaasteisiin.",
+      "tagline": "Anthropicin huippumalli"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Uusin tasapainoinen Claude, ensimmäinen Claude 5 -perheessä. Vahva arjen kirjoituksessa, analyysissa ja koodauksessa nopeilla vastauksilla."
+      "description": "Uusin tasapainoinen Claude, ensimmäinen Claude 5 -perheessä. Vahva arjen kirjoituksessa, analyysissa ja koodauksessa nopeilla vastauksilla.",
+      "tagline": "Uusin tasapainoinen Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Mistralin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa osaamisen ja nopeuden arjen työhön."
+      "description": "Mistralin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa osaamisen ja nopeuden arjen työhön.",
+      "tagline": "Tasapainoinen eurooppalainen malli"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistralin pieni malli. Nopea ja edullinen yhteenvedoille, luonnoksille ja yksinkertaisiin kysymyksiin."
+      "description": "Mistralin pieni malli. Nopea ja edullinen yhteenvedoille, luonnoksille ja yksinkertaisiin kysymyksiin.",
+      "tagline": "Pieni nopea eurooppalainen malli"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistralin hyvin pieni malli. Paras hyvin nopeisiin, yksinkertaisiin tehtäviin pienellä budjetilla."
+      "description": "Mistralin hyvin pieni malli. Paras hyvin nopeisiin, yksinkertaisiin tehtäviin pienellä budjetilla.",
+      "tagline": "Pienikokoinen reunalaitteen Mistral"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Uudistettu DeepSeek-R1-versio. Esittää ajattelunsa vaihe vaiheelta parannetulla päättelysyvyydellä."
+      "description": "Uudistettu DeepSeek-R1-versio. Esittää ajattelunsa vaihe vaiheelta parannetulla päättelysyvyydellä.",
+      "tagline": "Päivitetty avoin päättelymalli"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Keveämpi avoimen lähdekoodin malli Metalta. Nopea kirjoitukseen, yhteenvedoille ja arjen kysymyksiin."
+      "description": "Keveämpi avoimen lähdekoodin malli Metalta. Nopea kirjoitukseen, yhteenvedoille ja arjen kysymyksiin.",
+      "tagline": "Tehokas avoimen lähdekoodin Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Vanhempi Metan avoimen lähdekoodin malli. Soveltuu edelleen yleiseen kirjoitukseen ja Q&A-tehtäviin."
+      "description": "Vanhempi Metan avoimen lähdekoodin malli. Soveltuu edelleen yleiseen kirjoitukseen ja Q&A-tehtäviin.",
+      "tagline": "Vanhempi avoimen lähdekoodin Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "xAI:n lippulaivamalli. Sopii avoimiin keskusteluihin, analyysiin ja luoviin projekteihin."
+      "description": "xAI:n lippulaivamalli. Sopii avoimiin keskusteluihin, analyysiin ja luoviin projekteihin.",
+      "tagline": "xAI-lippulaiva"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamisessa, tutkimuksessa, koodauksessa ja monimutkaisessa ongelmanratkaisussa."
+      "description": "OpenAI:n uusin lippulaivamalli. Erinomainen kirjoittamisessa, tutkimuksessa, koodauksessa ja monimutkaisessa ongelmanratkaisussa.",
+      "tagline": "Uusin GPT-lippulaiva"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (uusin)",
-      "description": "Jatkuvasti päivittyvä alias, joka viittaa aina OpenAI:n uusimpaan chatiin optimoituun malliin. Azuren korvaava malli vanhoille versiopohjaisille gpt-*-chat -malleille."
+      "description": "Jatkuvasti päivittyvä alias, joka viittaa aina OpenAI:n uusimpaan chatiin optimoituun malliin. Azuren korvaava malli vanhoille versiopohjaisille gpt-*-chat -malleille.",
+      "tagline": "Aina uusin keskustelu-GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Uudempi Opus-julkaisu, sijoittuu versioiden 4.6 ja 4.8 väliin. Sopii hyvin pitkän tekstin kirjoittamiseen, tutkimukseen, koodaukseen ja huolelliseen analyysiin."
+      "description": "Uudempi Opus-julkaisu, sijoittuu versioiden 4.6 ja 4.8 väliin. Sopii hyvin pitkän tekstin kirjoittamiseen, tutkimukseen, koodaukseen ja huolelliseen analyysiin.",
+      "tagline": "Uusi Opus-julkaisu"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "DeepSeekin uusin päättelymalli ja Azuren korvaava malli R1-sarjalle. Näyttää ajattelunsa vaihe vaiheelta."
+      "description": "DeepSeekin uusin päättelymalli ja Azuren korvaava malli R1-sarjalle. Näyttää ajattelunsa vaihe vaiheelta.",
+      "tagline": "Uusin avoin päättelymalli"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "DeepSeekin nopea V4-variantti ja Azuren korvaava malli V3-sarjalle. Nopea yleiskirjoituksiin ja teknisiin kysymyksiin."
+      "description": "DeepSeekin nopea V4-variantti ja Azuren korvaava malli V3-sarjalle. Nopea yleiskirjoituksiin ja teknisiin kysymyksiin.",
+      "tagline": "Nopea avoimen lähdekoodin vaihtoehto"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "xAI:n nopea päättelymalli. Ajattelee vaihe vaiheelta ja vastaa nopeasti."
+      "description": "xAI:n nopea päättelymalli. Ajattelee vaihe vaiheelta ja vastaa nopeasti.",
+      "tagline": "Nopea xAI-päättelymalli"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "xAI:n nopea chat-malli. Nopeat vastaukset arkipäivän kysymyksiin ja keskusteluihin."
+      "description": "xAI:n nopea chat-malli. Nopeat vastaukset arkipäivän kysymyksiin ja keskusteluihin.",
+      "tagline": "Nopea xAI-keskustelumalli"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Kevyempi xAI-malli. Nopeampi ja edullisempi yksinkertaisiin kysymyksiin ja vapaamuotoisiin keskusteluihin."
+      "description": "Kevyempi xAI-malli. Nopeampi ja edullisempi yksinkertaisiin kysymyksiin ja vapaamuotoisiin keskusteluihin.",
+      "tagline": "Kevyempi xAI-malli"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "OpenAI:n GPT-5.6 -sarjan lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun."
+      "description": "OpenAI:n GPT-5.6 -sarjan lippulaivamalli. Erinomainen kirjoittamiseen, tutkimukseen, koodaukseen ja monimutkaiseen ongelmanratkaisuun.",
+      "tagline": "Uusin GPT-lippulaivaluokka"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "OpenAI:n GPT-5.6 -sarjan tasapainoinen malli. Hyvä arkipäiväiseen kirjoittamiseen, analyysiin ja ohjelmointiin nopeilla vasteilla."
+      "description": "OpenAI:n GPT-5.6 -sarjan tasapainoinen malli. Hyvä arkipäiväiseen kirjoittamiseen, analyysiin ja ohjelmointiin nopeilla vasteilla.",
+      "tagline": "Tasapainoinen arjen GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "OpenAI:n GPT-5.6 -sarjan kevyt ja nopea malli. Paras nopeisiin kysymyksiin ja yksinkertaisiin tehtäviin alhaisin kustannuksin."
+      "description": "OpenAI:n GPT-5.6 -sarjan kevyt ja nopea malli. Paras nopeisiin kysymyksiin ja yksinkertaisiin tehtäviin alhaisin kustannuksin.",
+      "tagline": "Kevyt, nopea GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mistralin uusin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa suorituskyvyn ja nopeuden arkipäivän töihin."
+      "description": "Mistralin uusin keskikokoinen malli. Eurooppalainen vaihtoehto, joka tasapainottaa suorituskyvyn ja nopeuden arkipäivän töihin.",
+      "tagline": "Tasapainoinen eurooppalainen malli"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI:n avoin malli. Vahva agenttitehtävissä, ohjelmoinnissa ja pitkissä dokumenteissa.",
+      "tagline": "Agenttimainen avoin malli"
     }
   },
   "searchMode": {
