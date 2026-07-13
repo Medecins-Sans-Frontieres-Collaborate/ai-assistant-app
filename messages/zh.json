@@ -1404,27 +1404,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "由 GPT-4.1 驱动的 AI 模型，通过 Bing 提供实时网络搜索。提供最新信息、事实核查和当前事件知识。非常适合需要新鲜信息、新闻分析和事实核查的研究。",
-      "knowledgeCutoff": "实时网络搜索"
+      "knowledgeCutoff": "实时网络搜索",
+      "tagline": "OpenAI上一代"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAI 最先进的模型，擅长复杂推理、代码生成和技术问题解决。非常适合分析任务、编程挑战、研究和详细解释。支持可调节的推理努力和响应详细程度。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "上一代GPT旗舰"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "GPT-5 的更快、更经济的变体，在保持高质量的同时优化了速度。非常适合日常任务、快速查询、工具路由和需要快速响应的应用程序。在性能和效率之间取得了极好的平衡。",
-      "knowledgeCutoff": "2025年8月6日 20:00"
+      "knowledgeCutoff": "2025年8月6日 20:00",
+      "tagline": "更快、更低成本"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "GPT-5 的专门变体，针对对话互动和情商进行了优化。擅长共情沟通、心理健康支持、创意写作、头脑风暴和自然对话。非常适合休闲对话、咨询场景和需要情感意识的任务。",
-      "knowledgeCutoff": "2025年10月1日 20:00"
+      "knowledgeCutoff": "2025年10月1日 20:00",
+      "tagline": "上一代对话GPT"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAI 最先进的推理模型，具有革命性的问题解决能力。擅长复杂数学、科学推理、编程挑战和多步骤逻辑任务。扩展了 200K 上下文窗口。支持推理努力控制。",
-      "knowledgeCutoff": "2025年4月8日 20:00"
+      "knowledgeCutoff": "2025年4月8日 20:00",
+      "tagline": "深入逐步推理"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1434,205 +1439,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "逐步展示工作的推理专家。擅长数学问题、逻辑谜题和理解复杂概念。实时观察它如何思考问题。",
-      "knowledgeCutoff": "2025年1月20日"
+      "knowledgeCutoff": "2025年1月20日",
+      "tagline": "逐步展示推理过程"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "特别擅长编程和技术写作的多功能模型。擅长调试代码、编写文档和解释技术概念。快速可靠，适合开发工作。",
-      "knowledgeCutoff": "2025年4月16日 00:45"
+      "knowledgeCutoff": "2025年4月16日 00:45",
+      "tagline": "开源替代方案"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "xAI 的多功能模型，以细致入微的回答著称。擅长开放式讨论、创意项目和解决复杂问题。",
-      "knowledgeCutoff": "2025年5月13日 00:16"
+      "knowledgeCutoff": "2025年5月13日 00:16",
+      "tagline": "xAI替代方案"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropic 最强大的模型，具有卓越的推理、编程和创意能力。非常适合复杂分析、研究和需要深入理解的任务。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Opus早期版本"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "平衡的 Claude 模型，在编程、分析和创意任务方面表现出色。非常适合日常使用，响应速度快。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Sonnet上一代"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "上一代 Claude Opus 模型。擅长复杂编程任务、详细分析和细致入微的理解。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "Opus上一代"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "快速、经济的 Claude 模型，针对快速任务进行了优化。擅长简单查询、摘要和高容量应用。",
-      "knowledgeCutoff": "2025年1月"
+      "knowledgeCutoff": "2025年1月",
+      "tagline": "快速Claude版本"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI 最先进的模型，擅长复杂推理、代码生成和技术问题解决。非常适合分析任务、编程挑战、研究和详细解释。支持可调节的推理深度和回复详细程度。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "编程、分析、研究"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "GPT-5.2 的专用变体，针对对话交互和情感智能进行了优化。擅长共情沟通、心理健康支持、创意写作、头脑风暴和自然对话。非常适合日常交流、咨询场景和需要情感洞察的任务。",
-      "knowledgeCutoff": "2025年12月"
+      "knowledgeCutoff": "2025年12月",
+      "tagline": "对话、头脑风暴"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic 最强大的模型。适合长篇写作、研究及需要深入思考的任务。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "长篇写作与分析"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "一款均衡的 Claude 模型。适合日常写作、分析及快速回应的编程任务。",
-      "knowledgeCutoff": "2026年2月"
+      "knowledgeCutoff": "2026年2月",
+      "tagline": "均衡日常Claude"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Meta 发布的开源模型。适合写作、摘要和快速问答。"
+      "description": "Meta 发布的开源模型。适合写作、摘要和快速问答。",
+      "tagline": "开源替代方案"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "OpenAI 最新旗舰模型。擅长写作、调研、编程和复杂问题解决。"
+      "description": "OpenAI 最新旗舰模型。擅长写作、调研、编程和复杂问题解决。",
+      "tagline": "最新GPT旗舰"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "最小、最快的 GPT 版本。适合快速、简单任务，且成本最低。"
+      "description": "最小、最快的 GPT 版本。适合快速、简单任务，且成本最低。",
+      "tagline": "最小最快GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "面向对话优化的 GPT 版本。适用于日常聊天、头脑风暴和支持性讨论。"
+      "description": "面向对话优化的 GPT 版本。适用于日常聊天、头脑风暴和支持性讨论。",
+      "tagline": "新一代对话GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "较早的多模态 GPT。适用于日常写作和问答，无需最新功能时使用。"
+      "description": "较早的多模态 GPT。适用于日常写作和问答，无需最新功能时使用。",
+      "tagline": "旧版多模态GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "更小更快的 GPT-4.1 版本，适合日常快速任务。"
+      "description": "更小更快的 GPT-4.1 版本，适合日常快速任务。",
+      "tagline": "轻量上一代GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Anthropic 最新、最强大的模型。擅长长篇写作、调研、编程和深入分析。"
+      "description": "Anthropic 最新、最强大的模型。擅长长篇写作、调研、编程和深入分析。",
+      "tagline": "最新最强Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "DeepSeek 最新的开源模型。适合通用写作和技术问答。"
+      "description": "DeepSeek 最新的开源模型。适合通用写作和技术问答。",
+      "tagline": "开源替代方案"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Mistral 的旗舰模型。为欧洲写作、摘要和通用问答提供替代选择。"
+      "description": "Mistral 的旗舰模型。为欧洲写作、摘要和通用问答提供替代选择。",
+      "tagline": "欧洲开放权重模型"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "较早版本的 GPT-5 旗舰。依然擅长写作、分析和编程。"
+      "description": "较早版本的 GPT-5 旗舰。依然擅长写作、分析和编程。",
+      "tagline": "早期GPT-5旗舰"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "早期对话优化的 GPT-5 版本。适合日常交流和头脑风暴。"
+      "description": "早期对话优化的 GPT-5 版本。适合日常交流和头脑风暴。",
+      "tagline": "早期对话GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "最小的 GPT-5 版本。适合快速、简单任务，且成本最低。"
+      "description": "最小的 GPT-5 版本。适合快速、简单任务，且成本最低。",
+      "tagline": "体积小的上一代GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "最小的 GPT-4.1 版本。适合速度和成本要求高的快速、简单任务。"
+      "description": "最小的 GPT-4.1 版本。适合速度和成本要求高的快速、简单任务。",
+      "tagline": "最小上一代GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "小巧、快速的 GPT-4o 版本。适合日常简易任务，无需最新功能时使用。"
+      "description": "小巧、快速的 GPT-4o 版本。适合日常简易任务，无需最新功能时使用。",
+      "tagline": "轻量旧多模态GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "紧凑型推理模型。适合数学、逻辑及分步问题，成本低于 o3。"
+      "description": "紧凑型推理模型。适合数学、逻辑及分步问题，成本低于 o3。",
+      "tagline": "快速实惠推理"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "早期的紧凑型推理模型。可在低成本下处理数学、科学和逻辑题。"
+      "description": "早期的紧凑型推理模型。可在低成本下处理数学、科学和逻辑题。",
+      "tagline": "紧凑逐步推理"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Anthropic 最智能的模型，Claude 5 系列首作。适合最复杂的写作、调研和编程任务。"
+      "description": "Anthropic 最智能的模型，Claude 5 系列首作。适合最复杂的写作、调研和编程任务。",
+      "tagline": "Anthropic前沿模型"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "最新的平衡型 Claude，Claude 5 家族首作。日常写作、分析和编程表现强劲，响应迅速。"
+      "description": "最新的平衡型 Claude，Claude 5 家族首作。日常写作、分析和编程表现强劲，响应迅速。",
+      "tagline": "最新均衡Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Mistral 的中型模型。欧洲方案，兼顾能力与速度，适合日常工作。"
+      "description": "Mistral 的中型模型。欧洲方案，兼顾能力与速度，适合日常工作。",
+      "tagline": "均衡欧洲模型"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistral 的小型模型。适合摘要、草稿和简单问题，快速且低价。"
+      "description": "Mistral 的小型模型。适合摘要、草稿和简单问题，快速且低价。",
+      "tagline": "小型快速欧洲模型"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistral 的超小模型。非常适合极快、简单的低成本任务。"
+      "description": "Mistral 的超小模型。非常适合极快、简单的低成本任务。",
+      "tagline": "迷你边缘版Mistral"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "更新版 DeepSeek-R1。推理更深入，可分步展示思路。"
+      "description": "更新版 DeepSeek-R1。推理更深入，可分步展示思路。",
+      "tagline": "更新的开放推理模型"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Meta 发布的轻量开源模型。适合写作、摘要及日常问答，响应快速。"
+      "description": "Meta 发布的轻量开源模型。适合写作、摘要及日常问答，响应快速。",
+      "tagline": "高效开源Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Meta 较早的开源模型。依然适合通用写作和问答。"
+      "description": "Meta 较早的开源模型。依然适合通用写作和问答。",
+      "tagline": "旧版开源Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "xAI 的旗舰模型。适合开放式讨论、分析及创意项目。"
+      "description": "xAI 的旗舰模型。适合开放式讨论、分析及创意项目。",
+      "tagline": "xAI旗舰"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "OpenAI 最新旗舰模型。擅长写作、研究、编程及复杂问题解决。"
+      "description": "OpenAI 最新旗舰模型。擅长写作、研究、编程及复杂问题解决。",
+      "tagline": "最新GPT旗舰"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat（最新）",
-      "description": "始终指向 OpenAI 最新对话优化模型的动态别名。是 Azure 用于替换已下线版本化 gpt-*-chat 模型的方案。"
+      "description": "始终指向 OpenAI 最新对话优化模型的动态别名。是 Azure 用于替换已下线版本化 gpt-*-chat 模型的方案。",
+      "tagline": "始终最新对话GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "最新 Opus 版本，介于 4.6 与 4.8 之间。擅长长篇写作、研究、编程和细致分析。"
+      "description": "最新 Opus 版本，介于 4.6 与 4.8 之间。擅长长篇写作、研究、编程和细致分析。",
+      "tagline": "最新Opus版本"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "DeepSeek 最新推理模型，也是 Azure 替代 R1 系列的产品。能够分步骤展示推理过程。"
+      "description": "DeepSeek 最新推理模型，也是 Azure 替代 R1 系列的产品。能够分步骤展示推理过程。",
+      "tagline": "最新开放推理模型"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "DeepSeek 快速版 V4，也是 Azure 替代 V3 系列的产品。适用于常规写作和技术问题，响应快速。"
+      "description": "DeepSeek 快速版 V4，也是 Azure 替代 V3 系列的产品。适用于常规写作和技术问题，响应快速。",
+      "tagline": "快速开源替代方案"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast（推理版）",
-      "description": "xAI 快速推理模型。逐步思考，响应迅速。"
+      "description": "xAI 快速推理模型。逐步思考，响应迅速。",
+      "tagline": "快速xAI推理模型"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "xAI 快速聊天模型。适合日常提问和对话，响应快捷。"
+      "description": "xAI 快速聊天模型。适合日常提问和对话，响应快捷。",
+      "tagline": "快速xAI对话模型"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "轻量级 xAI 模型。适用于快速问答和轻松对话，速度更快、成本更低。"
+      "description": "轻量级 xAI 模型。适用于快速问答和轻松对话，速度更快、成本更低。",
+      "tagline": "轻量xAI模型"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "OpenAI GPT-5.6 三款模型中的旗舰，写作、研究、编码及复杂问题解决能力最强。"
+      "description": "OpenAI GPT-5.6 三款模型中的旗舰，写作、研究、编码及复杂问题解决能力最强。",
+      "tagline": "最新GPT旗舰级"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "OpenAI GPT-5.6 三款模型中的平衡版，日常写作、分析和编码表现优秀，响应快速。"
+      "description": "OpenAI GPT-5.6 三款模型中的平衡版，日常写作、分析和编码表现优秀，响应快速。",
+      "tagline": "均衡型日常 GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "OpenAI GPT-5.6 三款模型中的轻量级和高速型号，适合低成本快速提问与简单任务。"
+      "description": "OpenAI GPT-5.6 三款模型中的轻量级和高速型号，适合低成本快速提问与简单任务。",
+      "tagline": "轻量快速版 GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mistral 最新的中型模型。作为欧洲替代选择，兼具能力与速度，适合日常工作。"
+      "description": "Mistral 最新的中型模型。作为欧洲替代选择，兼具能力与速度，适合日常工作。",
+      "tagline": "均衡型欧洲模型"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI 的开放权重模型。擅长代理任务、编程和长文档处理。",
+      "tagline": "具代理能力的开放权重模型"
     }
   },
   "searchMode": {

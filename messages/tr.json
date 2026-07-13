@@ -1373,27 +1373,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Bing aracılığıyla gerçek zamanlı web arama özellikli GPT-4.1 tabanlı AI modeli. Güncel bilgi, gerçek doğrulama ve güncel etkinlik farkındalığı sağlar. Güncel bilgi gerektiren araştırma, haber analizi ve gerçek doğrulama için idealdir.",
-      "knowledgeCutoff": "Gerçek zamanlı web arama"
+      "knowledgeCutoff": "Gerçek zamanlı web arama",
+      "tagline": "OpenAI'nin önceki nesli"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Karmaşık akıl yürütme, kod üretimi ve teknik problem çözmede mükemmel OpenAI'nin en gelişmiş modeli. Analitik görevler, programlama zorlukları, araştırma ve detaylı açıklamalar için idealdir. Ayarlanabilir akıl yürütme çabası ve yanıt ayrıntı düzeyini destekler.",
-      "knowledgeCutoff": "6 Ağustos 2025, 20:00"
+      "knowledgeCutoff": "6 Ağustos 2025, 20:00",
+      "tagline": "Önceki GPT amiral gemisi"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Yüksek kaliteyi korurken hız için optimize edilmiş daha hızlı, maliyet etkin GPT-5 varyantı. Rutin görevler, hızlı sorgular, araç yönlendirme ve hızlı yanıt süresi gerektiren uygulamalar için uygundur. Performans ve verimlilik arasında mükemmel denge.",
-      "knowledgeCutoff": "6 Ağustos 2025, 20:00"
+      "knowledgeCutoff": "6 Ağustos 2025, 20:00",
+      "tagline": "Daha hızlı ve düşük maliyetli"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Konuşma etkileşimi ve duygusal zeka için optimize edilmiş GPT-5'in özel varyantı. Empatik iletişim, ruh sağlığı desteği, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda mükemmeldir. Gündelik sohbet, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için idealdir.",
-      "knowledgeCutoff": "1 Ekim 2025, 20:00"
+      "knowledgeCutoff": "1 Ekim 2025, 20:00",
+      "tagline": "Önceki sohbet ayarlı GPT"
     },
     "o3": {
       "name": "o3",
       "description": "Çığır açan problem çözme yeteneklerine sahip OpenAI'nin en gelişmiş akıl yürütme modeli. Karmaşık matematik, bilimsel akıl yürütme, kodlama zorlukları ve çok adımlı mantık görevlerinde mükemmeldir. Genişletilmiş 200K bağlam penceresi. Akıl yürütme çabası kontrolünü destekler.",
-      "knowledgeCutoff": "8 Nisan 2025, 20:00"
+      "knowledgeCutoff": "8 Nisan 2025, 20:00",
+      "tagline": "Adım adım derin akıl yürütme"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1403,205 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Çalışmasını adım adım gösteren akıl yürütme uzmanı. Matematik problemleri, mantık bulmacaları ve karmaşık kavramları anlamada mükemmeldir. Bir problemi gerçek zamanlı nasıl düşündüğünü görün.",
-      "knowledgeCutoff": "20 Ocak 2025"
+      "knowledgeCutoff": "20 Ocak 2025",
+      "tagline": "Akıl yürütmeyi adım adım gösterir"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Özellikle kodlama ve teknik yazımda güçlü çok yönlü model. Kod hata ayıklama, dokümantasyon yazma ve teknik kavramları açıklama için idealdir. Geliştirme görevleri için hızlı ve güvenilir.",
-      "knowledgeCutoff": "16 Nisan 2025, 00:45"
+      "knowledgeCutoff": "16 Nisan 2025, 00:45",
+      "tagline": "Açık kaynak alternatifi"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Nüanslı yanıtlarıyla bilinen xAI'nin çok yönlü modeli. Açık tartışmalar, yaratıcı projeler ve karmaşık problem çözme için idealdir.",
-      "knowledgeCutoff": "13 Mayıs 2025, 00:16"
+      "knowledgeCutoff": "13 Mayıs 2025, 00:16",
+      "tagline": "xAI alternatifi"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Olağanüstü akıl yürütme, kodlama ve yaratıcı yeteneklere sahip Anthropic'in en yetenekli modeli. Karmaşık analiz, araştırma ve derin anlayış gerektiren görevler için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki Opus nesli"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Kodlama, analiz ve yaratıcı görevlerde mükemmel performans sunan dengeli Claude modeli. Hızlı yanıt süreleriyle günlük kullanım için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki nesil Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Önceki nesil Claude Opus modeli. Karmaşık kodlama görevleri, detaylı analiz ve nüanslı anlayışta mükemmeldir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki nesil Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Hızlı görevler için optimize edilmiş hızlı ve maliyet etkin Claude modeli. Basit sorgular, özetlemeler ve toplu uygulamalar için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Hızlı Claude varyantı"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI'nin en gelişmiş modeli; karmaşık muhakeme, kod üretimi ve teknik problem çözmede uzman. Analitik görevler, programlama zorlukları, araştırma ve ayrıntılı açıklamalar için en iyisidir. Ayarlanabilir muhakeme derecesi ve yanıt uzunluğu desteği sunar.",
-      "knowledgeCutoff": "Aralık 2025"
+      "knowledgeCutoff": "Aralık 2025",
+      "tagline": "Kodlama, analiz, araştırma"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Aralık 2025",
-      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu."
+      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu.",
+      "tagline": "Sohbetler, beyin fırtınası"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic’in en güçlü modeli. Uzun yazılar, araştırmalar ve özenli düşünme gerektiren işler için uygundur.",
-      "knowledgeCutoff": "Şubat 2026"
+      "knowledgeCutoff": "Şubat 2026",
+      "tagline": "Uzun yazı ve analiz"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Dengeli bir Claude modeli. Günlük yazım, analiz ve hızlı yanıtlar gerektiren kodlama için iyi bir seçenektir.",
-      "knowledgeCutoff": "Şubat 2026"
+      "knowledgeCutoff": "Şubat 2026",
+      "tagline": "Dengeli günlük Claude"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Meta'nın açık kaynaklı modeli. Yazı, özet ve hızlı sorular için sağlam bir seçenek."
+      "description": "Meta'nın açık kaynaklı modeli. Yazı, özet ve hızlı sorular için sağlam bir seçenek.",
+      "tagline": "Açık kaynak alternatifi"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "OpenAI'nin en yeni amiral gemisi modeli. Yazı, araştırma, kodlama ve karmaşık problem çözmede çok güçlü."
+      "description": "OpenAI'nin en yeni amiral gemisi modeli. Yazı, araştırma, kodlama ve karmaşık problem çözmede çok güçlü.",
+      "tagline": "En yeni GPT amiral gemisi"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "En küçük ve en hızlı GPT varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi."
+      "description": "En küçük ve en hızlı GPT varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi.",
+      "tagline": "En küçük ve en hızlı GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Diyalog için özel ayarlanmış bir GPT varyantı. Günlük sohbet, beyin fırtınası ve destekleyici konuşmalar için uygun."
+      "description": "Diyalog için özel ayarlanmış bir GPT varyantı. Günlük sohbet, beyin fırtınası ve destekleyici konuşmalar için uygun.",
+      "tagline": "Daha yeni sohbet ayarlı GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Daha eski bir çok modlu GPT. En güncel yetenek gerekmediğinde günlük yazım ve Soru-Cevap için yeterli."
+      "description": "Daha eski bir çok modlu GPT. En güncel yetenek gerekmediğinde günlük yazım ve Soru-Cevap için yeterli.",
+      "tagline": "Daha eski çok modlu GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Hızlı gündelik işler için daha küçük ve hızlı bir GPT-4.1 varyantı."
+      "description": "Hızlı gündelik işler için daha küçük ve hızlı bir GPT-4.1 varyantı.",
+      "tagline": "Hafif önceki nesil GPT"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Anthropic'in en yeni ve en güçlü modeli. Uzun yazılar, araştırma, kodlama ve detaylı analizlerde mükemmel."
+      "description": "Anthropic'in en yeni ve en güçlü modeli. Uzun yazılar, araştırma, kodlama ve detaylı analizlerde mükemmel.",
+      "tagline": "En yeni ve en güçlü Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "DeepSeek'in en yeni açık kaynaklı modeli. Genel yazı işleri ve teknik sorular için güvenilir."
+      "description": "DeepSeek'in en yeni açık kaynaklı modeli. Genel yazı işleri ve teknik sorular için güvenilir.",
+      "tagline": "Açık kaynak alternatifi"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Mistral'in amiral gemisi modeli. Yazı, özetleme ve genel sorular için Avrupa menşeli bir alternatif."
+      "description": "Mistral'in amiral gemisi modeli. Yazı, özetleme ve genel sorular için Avrupa menşeli bir alternatif.",
+      "tagline": "Avrupa açık ağırlıklı model"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Daha önceki bir GPT-5 amiral gemisi revizyonu. Yazı, analiz ve kodlama konusunda hâlâ güçlü."
+      "description": "Daha önceki bir GPT-5 amiral gemisi revizyonu. Yazı, analiz ve kodlama konusunda hâlâ güçlü.",
+      "tagline": "Daha önceki GPT-5 amiral gemisi"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Daha önceki sohbet odaklı bir GPT-5 revizyonu. Günlük sohbet ve beyin fırtınası için uygun."
+      "description": "Daha önceki sohbet odaklı bir GPT-5 revizyonu. Günlük sohbet ve beyin fırtınası için uygun.",
+      "tagline": "Daha önceki sohbet ayarlı GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "GPT-5'in en küçük varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi."
+      "description": "GPT-5'in en küçük varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi.",
+      "tagline": "Küçük önceki nesil GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "GPT-4.1'in en küçük varyantı. Hız ve maliyetin önemli olduğu durumlarda hızlı ve basit işler için uygundur."
+      "description": "GPT-4.1'in en küçük varyantı. Hız ve maliyetin önemli olduğu durumlarda hızlı ve basit işler için uygundur.",
+      "tagline": "En küçük önceki nesil GPT"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Küçük ve hızlı bir GPT-4o varyantı. En yeni yetenek gerekmeden günlük hızlı işler için uygundur."
+      "description": "Küçük ve hızlı bir GPT-4o varyantı. En yeni yetenek gerekmeden günlük hızlı işler için uygundur.",
+      "tagline": "Hafif eski çok modlu GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Kompakt bir muhakeme modeli. Matematik, mantık ve adım adım sorunlar için, o3'e kıyasla daha düşük maliyetlidir."
+      "description": "Kompakt bir muhakeme modeli. Matematik, mantık ve adım adım sorunlar için, o3'e kıyasla daha düşük maliyetlidir.",
+      "tagline": "Hızlı ve uygun fiyatlı akıl yürütme"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Önceki nesil kompakt bir muhakeme modeli. Bütçenize uygun şekilde matematik, bilim ve mantık sorularını çözer."
+      "description": "Önceki nesil kompakt bir muhakeme modeli. Bütçenize uygun şekilde matematik, bilim ve mantık sorularını çözer.",
+      "tagline": "Kompakt adım adım akıl yürütme"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Anthropic'in en gelişmiş modeli, Claude 5 ailesinin ilki. En zorlu yazı, araştırma ve kodlama işleri için mükemmel."
+      "description": "Anthropic'in en gelişmiş modeli, Claude 5 ailesinin ilki. En zorlu yazı, araştırma ve kodlama işleri için mükemmel.",
+      "tagline": "Anthropic'in öncü modeli"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Claude 5 ailesinin ilki ve en dengeli model. Hızlı yanıtlarla günlük yazı, analiz ve kodlama gereksinimleri için güçlü."
+      "description": "Claude 5 ailesinin ilki ve en dengeli model. Hızlı yanıtlarla günlük yazı, analiz ve kodlama gereksinimleri için güçlü.",
+      "tagline": "En yeni dengeli Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Mistral'in orta boy modeli. Günlük işler için yetenek ve hızı dengeleyen Avrupa menşeli bir alternatif."
+      "description": "Mistral'in orta boy modeli. Günlük işler için yetenek ve hızı dengeleyen Avrupa menşeli bir alternatif.",
+      "tagline": "Dengeli Avrupa modeli"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistral'in küçük modeli. Özet, taslak ve basit sorular için hızlı ve uygun maliyetli."
+      "description": "Mistral'in küçük modeli. Özet, taslak ve basit sorular için hızlı ve uygun maliyetli.",
+      "tagline": "Küçük hızlı Avrupa modeli"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistral'in çok küçük modeli. Çok hızlı ve basit işler için minimal maliyette en iyisi."
+      "description": "Mistral'in çok küçük modeli. Çok hızlı ve basit işler için minimal maliyette en iyisi.",
+      "tagline": "Küçük edge boyutlu Mistral"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Güncellenmiş DeepSeek-R1 revizyonu. Gelişmiş muhakeme derinliğiyle adım adım düşünce sürecini gösterir."
+      "description": "Güncellenmiş DeepSeek-R1 revizyonu. Gelişmiş muhakeme derinliğiyle adım adım düşünce sürecini gösterir.",
+      "tagline": "Güncellenmiş açık akıl yürütme modeli"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Meta'nın daha hafif bir açık kaynaklı modeli. Yazı, özetleme ve günlük sorular için hızlıdır."
+      "description": "Meta'nın daha hafif bir açık kaynaklı modeli. Yazı, özetleme ve günlük sorular için hızlıdır.",
+      "tagline": "Verimli açık kaynak Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Meta'nın eski bir açık kaynak modeli. Genel yazım ve Soru-Cevap işleri için hâlâ güvenilir."
+      "description": "Meta'nın eski bir açık kaynak modeli. Genel yazım ve Soru-Cevap işleri için hâlâ güvenilir.",
+      "tagline": "Daha eski açık kaynak Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "xAI'nin amiral gemisi modeli. Açık uçlu tartışmalar, analiz ve yaratıcı projeler için uygun."
+      "description": "xAI'nin amiral gemisi modeli. Açık uçlu tartışmalar, analiz ve yaratıcı projeler için uygun.",
+      "tagline": "xAI amiral gemisi"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "OpenAI'nin en son amiral gemisi modeli. Yazma, araştırma, kodlama ve karmaşık problem çözmede güçlü."
+      "description": "OpenAI'nin en son amiral gemisi modeli. Yazma, araştırma, kodlama ve karmaşık problem çözmede güçlü.",
+      "tagline": "En son GPT amiral gemisi"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (en güncel)",
-      "description": "Her zaman OpenAI'nin en yeni sohbet odaklı modeline işaret eden dinamik bir takma ad. Azure'un eski sürüm gpt-*-chat modellerinin yerine geçer."
+      "description": "Her zaman OpenAI'nin en yeni sohbet odaklı modeline işaret eden dinamik bir takma ad. Azure'un eski sürüm gpt-*-chat modellerinin yerine geçer.",
+      "tagline": "Her zaman en yeni sohbet GPT'si"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Opus'un yeni bir sürümü, 4.6 ile 4.8 arasında. Uzun yazılar, araştırma, kodlama ve özenli analizler için güçlü."
+      "description": "Opus'un yeni bir sürümü, 4.6 ile 4.8 arasında. Uzun yazılar, araştırma, kodlama ve özenli analizler için güçlü.",
+      "tagline": "Yeni Opus sürümü"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "DeepSeek'in en yeni muhakeme modeli ve Azure'un R1 serisinin yerine geçeni. Düşünce süreçlerini adım adım gösterir."
+      "description": "DeepSeek'in en yeni muhakeme modeli ve Azure'un R1 serisinin yerine geçeni. Düşünce süreçlerini adım adım gösterir.",
+      "tagline": "En yeni açık akıl yürütme modeli"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "DeepSeek'in hızlı V4 varyantı ve Azure'un V3 serisinin yerine geçeni. Genel yazım ve teknik sorular için hızlı."
+      "description": "DeepSeek'in hızlı V4 varyantı ve Azure'un V3 serisinin yerine geçeni. Genel yazım ve teknik sorular için hızlı.",
+      "tagline": "Hızlı açık kaynak alternatifi"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Muhakeme)",
-      "description": "xAI'nin hızlı muhakeme modeli. Cevaplarını adım adım ve hızlı şekilde sunar."
+      "description": "xAI'nin hızlı muhakeme modeli. Cevaplarını adım adım ve hızlı şekilde sunar.",
+      "tagline": "Hızlı xAI akıl yürütme modeli"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "xAI'nin hızlı sohbet modeli. Günlük sorular ve sohbetler için hızlı cevaplar sunar."
+      "description": "xAI'nin hızlı sohbet modeli. Günlük sorular ve sohbetler için hızlı cevaplar sunar.",
+      "tagline": "Hızlı xAI sohbet modeli"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Daha hafif bir xAI modeli. Hızlı ve ekonomik; kısa sorular ve gündelik sohbetler için uygundur."
+      "description": "Daha hafif bir xAI modeli. Hızlı ve ekonomik; kısa sorular ve gündelik sohbetler için uygundur.",
+      "tagline": "Daha hafif xAI modeli"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "OpenAI'nin GPT-5.6 üçlüsünün amiral gemisi. Yazma, araştırma, kodlama ve karmaşık problem çözmede en güçlü model."
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün amiral gemisi. Yazma, araştırma, kodlama ve karmaşık problem çözmede en güçlü model.",
+      "tagline": "En yeni GPT amiral gemisi seviyesi"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "OpenAI'nin GPT-5.6 üçlüsünün dengeli modeli. Günlük yazma, analiz ve hızlı cevaplarla kodlama için iyi bir seçenek."
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün dengeli modeli. Günlük yazma, analiz ve hızlı cevaplarla kodlama için iyi bir seçenek.",
+      "tagline": "Dengeli, günlük kullanım için GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "OpenAI'nin GPT-5.6 üçlüsünün hafif ve hızlı modeli. Hızlı sorular ve basit görevler için düşük maliyetli en iyi seçim."
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün hafif ve hızlı modeli. Hızlı sorular ve basit görevler için düşük maliyetli en iyi seçim.",
+      "tagline": "Hafif ve hızlı GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mistral'ın en yeni orta ölçekli modeli. Günlük işler için yetenek ve hızı dengeleyen, Avrupa kökenli bir alternatif."
+      "description": "Mistral'ın en yeni orta ölçekli modeli. Günlük işler için yetenek ve hızı dengeleyen, Avrupa kökenli bir alternatif.",
+      "tagline": "Dengeli Avrupa modeli"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI'nin açık ağırlık modeli. Temsilci görevlerde, kodlamada ve uzun belgelerde güçlüdür.",
+      "tagline": "Temsilci açık ağırlık modeli"
     }
   },
   "searchMode": {

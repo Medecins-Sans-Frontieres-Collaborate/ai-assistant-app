@@ -1472,27 +1472,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Model d'IA basat en GPT-4.1 amb cerca web en temps real via Bing. Proporciona informació actualitzada, verificació de fets i coneixement d'esdeveniments recents. Ideal per a investigació que requereixi informació recent, anàlisi de notícies i verificació de dades.",
-      "knowledgeCutoff": "Cerca web en temps real"
+      "knowledgeCutoff": "Cerca web en temps real",
+      "tagline": "Generació anterior d'OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "El model més avançat d'OpenAI, excel·lent en raonament complex, generació de codi i resolució de problemes tècnics. Ideal per a tasques analítiques, reptes de programació, recerca i explicacions detallades. Permet ajustar l'esforç de raonament i la llargada de la resposta.",
-      "knowledgeCutoff": "6 d’agost 2025 20:00"
+      "knowledgeCutoff": "6 d’agost 2025 20:00",
+      "tagline": "Insígnia GPT anterior"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variant més ràpida i econòmica de GPT-5, optimitzada per a la velocitat mantenint alta qualitat. Perfecta per a tasques diàries, consultes ràpides, ús d'eines i aplicacions que requereixen resposta instantània. Excel·lent equilibri entre rendiment i eficiència.",
-      "knowledgeCutoff": "6 d’agost 2025 20:00"
+      "knowledgeCutoff": "6 d’agost 2025 20:00",
+      "tagline": "Més ràpid i de menor cost"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Versió especialitzada de GPT-5 optimitzada per a interaccions conversacionals i intel·ligència emocional. Excel·lent en comunicació empàtica, suport per a la salut mental, escriptura creativa, generació d'idees i diàleg natural. Ideal per a converses informals, escenaris de suport i tasques que requereixen consciència emocional.",
-      "knowledgeCutoff": "1 d’octubre 2025 20:00"
+      "knowledgeCutoff": "1 d’octubre 2025 20:00",
+      "tagline": "GPT per a xat, generació anterior"
     },
     "o3": {
       "name": "o3",
       "description": "El model de raonament més avançat d'OpenAI, amb capacitats innovadores de resolució de problemes. Excel·lent per a matemàtiques complexes, raonament científic, reptes de programació i tasques lògiques de diversos passos. Finestra de context ampliada a 200.000 tokens. Permet controlar l'esforç de raonament.",
-      "knowledgeCutoff": "8 d’abril 2025 20:00"
+      "knowledgeCutoff": "8 d’abril 2025 20:00",
+      "tagline": "Raonament pas a pas profund"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1502,205 +1507,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Especialista en raonament que mostra el procés pas a pas. Excel·lent per a problemes de matemàtiques, trencaclosques de lògica i comprensió de conceptes complexos. Vegeu com resol problemes en temps real.",
-      "knowledgeCutoff": "20 de gener 2025"
+      "knowledgeCutoff": "20 de gener 2025",
+      "tagline": "Mostra el raonament pas a pas"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Model versàtil especialment competent en programació i redacció tècnica. Ideal per depurar codi, escriure documentació i explicar conceptes tècnics. Ràpid i fiable per a treball de desenvolupament.",
-      "knowledgeCutoff": "16 d’abril 2025 00:45"
+      "knowledgeCutoff": "16 d’abril 2025 00:45",
+      "tagline": "Alternativa de codi obert"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model versàtil de xAI conegut per respostes matisades. Idoni per a discussions obertes, projectes creatius i abordatge de problemes complexos.",
-      "knowledgeCutoff": "13 de maig 2025 00:16"
+      "knowledgeCutoff": "13 de maig 2025 00:16",
+      "tagline": "Alternativa xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Model més capaç d’Anthropic, amb raonament excel·lent, habilitats de programació i creativitat destacades. Indicat per a anàlisi complexa, recerca i tasques que requereixen comprensió profunda.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Antiga generació Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model Claude equilibrat amb excel·lent rendiment en programació, anàlisi i tasques creatives. Ideal per a ús diari, amb respostes ràpides.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Generació anterior de Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model Claude Opus de generació anterior. Excel·lent per a tasques complexes de programació, anàlisi detallada i comprensió matisada.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Generació anterior d'Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model Claude ràpid i econòmic optimitzat per a tasques àgils. Ideal per a consultes senzilles, resums i aplicacions d'alt volum.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Variant ràpida de Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "El model més avançat d'OpenAI, excel·leix en raonament complex, generació de codi i resolució de problemes tècnics. Ideal per a tasques analítiques, reptes de programació, recerca i explicacions detallades. Permet ajustar l'esforç de raonament i la quantitat de detall en les respostes.",
-      "knowledgeCutoff": "des. 2025"
+      "knowledgeCutoff": "des. 2025",
+      "tagline": "Codi, anàlisi, recerca"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "des. 2025",
-      "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional."
+      "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional.",
+      "tagline": "Converses, pluja d'idees"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "El model més potent d'Anthropic. Bo per a redaccions llargues, recerca i tasques que requereixen pensament acurat.",
-      "knowledgeCutoff": "Febr. 2026"
+      "knowledgeCutoff": "Febr. 2026",
+      "tagline": "Redacció i anàlisi extensa"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Un model Claude equilibrat. Adequat per a redacció diària, anàlisi i programació amb respostes ràpides.",
-      "knowledgeCutoff": "Febr. 2026"
+      "knowledgeCutoff": "Febr. 2026",
+      "tagline": "Claude equilibrat per a ús diari"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Un model de codi obert de Meta. Sòlid per escriure, resumir i preguntes ràpides."
+      "description": "Un model de codi obert de Meta. Sòlid per escriure, resumir i preguntes ràpides.",
+      "tagline": "Alternativa de codi obert"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "El nou model insígnia d’OpenAI. Molt bo en escriptura, recerca, programació i resolució de problemes complexos."
+      "description": "El nou model insígnia d’OpenAI. Molt bo en escriptura, recerca, programació i resolució de problemes complexos.",
+      "tagline": "Insígnia GPT més recent"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "La variant GPT més petita i ràpida. Ideal per a tasques ràpides i senzilles amb un cost mínim."
+      "description": "La variant GPT més petita i ràpida. Ideal per a tasques ràpides i senzilles amb un cost mínim.",
+      "tagline": "GPT més petit i ràpid"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Una variant GPT conversacional optimitzada per al diàleg. Bona per xats informals, pluja d’idees i converses de suport."
+      "description": "Una variant GPT conversacional optimitzada per al diàleg. Bona per xats informals, pluja d’idees i converses de suport.",
+      "tagline": "GPT per a xat, més recent"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Un GPT multimodal antic. Apte per a l’escriptura quotidiana i preguntes/respostes quan no cal la funcionalitat més recent."
+      "description": "Un GPT multimodal antic. Apte per a l’escriptura quotidiana i preguntes/respostes quan no cal la funcionalitat més recent.",
+      "tagline": "GPT multimodal antic"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Una variant GPT-4.1 més petita i ràpida per a tasques quotidianes."
+      "description": "Una variant GPT-4.1 més petita i ràpida per a tasques quotidianes.",
+      "tagline": "GPT lleuger de generació anterior"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "El model més nou i potent d’Anthropic. Excel·lent per escriure textos llargs, recerca, programació i anàlisi minuciosa."
+      "description": "El model més nou i potent d’Anthropic. Excel·lent per escriure textos llargs, recerca, programació i anàlisi minuciosa.",
+      "tagline": "Claude més nou i potent"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "El model de codi obert més nou de DeepSeek. Fiable per a escriptura general i consultes tècniques."
+      "description": "El model de codi obert més nou de DeepSeek. Fiable per a escriptura general i consultes tècniques.",
+      "tagline": "Alternativa de codi obert"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "El model insígnia de Mistral. Alternativa europea per escriure, resumir i preguntes generals."
+      "description": "El model insígnia de Mistral. Alternativa europea per escriure, resumir i preguntes generals.",
+      "tagline": "Model europeu obert"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Una revisió anterior insígnia de GPT-5. Encara molt sòlida en escriptura, anàlisi i programació."
+      "description": "Una revisió anterior insígnia de GPT-5. Encara molt sòlida en escriptura, anàlisi i programació.",
+      "tagline": "Primer GPT-5 insígnia"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Una revisió anterior de GPT-5 adaptada per a xat. Bona per a converses diàries i pluja d’idees."
+      "description": "Una revisió anterior de GPT-5 adaptada per a xat. Bona per a converses diàries i pluja d’idees.",
+      "tagline": "Primer GPT per a xat"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "La variant més petita de GPT-5. Ideal per a tasques ràpides i senzilles amb un cost mínim."
+      "description": "La variant més petita de GPT-5. Ideal per a tasques ràpides i senzilles amb un cost mínim.",
+      "tagline": "GPT petit de generació anterior"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "La variant més petita de GPT-4.1. Adequada per a tasques ràpides i senzilles, on importen la velocitat i el cost."
+      "description": "La variant més petita de GPT-4.1. Adequada per a tasques ràpides i senzilles, on importen la velocitat i el cost.",
+      "tagline": "GPT més petit de generació anterior"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Una variant petita i ràpida de GPT-4o. Apte per a tasques ràpides quotidianes quan no cal la funcionalitat més actual."
+      "description": "Una variant petita i ràpida de GPT-4o. Apte per a tasques ràpides quotidianes quan no cal la funcionalitat més actual.",
+      "tagline": "GPT multimodal antic i lleuger"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Un model compacte de raonament. Bo per matemàtiques, lògica i problemes pas a pas a un cost menor que o3."
+      "description": "Un model compacte de raonament. Bo per matemàtiques, lògica i problemes pas a pas a un cost menor que o3.",
+      "tagline": "Raonament ràpid i assequible"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Un model compacte de raonament anterior. Gestione problemes de matemàtiques, ciència i lògica a baix cost."
+      "description": "Un model compacte de raonament anterior. Gestione problemes de matemàtiques, ciència i lògica a baix cost.",
+      "tagline": "Raonament compacte pas a pas"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "El model més intel·ligent d’Anthropic, primer de la família Claude 5. Excel·lent per a les tasques més exigents d’escriptura, recerca i programació."
+      "description": "El model més intel·ligent d’Anthropic, primer de la família Claude 5. Excel·lent per a les tasques més exigents d’escriptura, recerca i programació.",
+      "tagline": "Model pioner d'Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "El Claude més equilibrat i més nou, primer de la família Claude 5. Escriptura, anàlisi i programació diària amb respostes ràpides."
+      "description": "El Claude més equilibrat i més nou, primer de la família Claude 5. Escriptura, anàlisi i programació diària amb respostes ràpides.",
+      "tagline": "Claude equilibrat més recent"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "El model de mida mitjana de Mistral. Alternativa europea que equilibra capacitat i velocitat per a feines diàries."
+      "description": "El model de mida mitjana de Mistral. Alternativa europea que equilibra capacitat i velocitat per a feines diàries.",
+      "tagline": "Model europeu equilibrat"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "El model petit de Mistral. Ràpid i econòmic per a resums, esborranys i preguntes senzilles."
+      "description": "El model petit de Mistral. Ràpid i econòmic per a resums, esborranys i preguntes senzilles.",
+      "tagline": "Model europeu petit i ràpid"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "El model més petit de Mistral. Ideal per a tasques molt ràpides i senzilles amb un cost mínim."
+      "description": "El model més petit de Mistral. Ideal per a tasques molt ràpides i senzilles amb un cost mínim.",
+      "tagline": "Mistral petit per a l'edge"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Una revisió actualitzada del DeepSeek-R1. Mostra el seu raonament pas a pas, amb més profunditat."
+      "description": "Una revisió actualitzada del DeepSeek-R1. Mostra el seu raonament pas a pas, amb més profunditat.",
+      "tagline": "Model de raonament obert actualitzat"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Un model de codi obert més lleuger de Meta. Ràpid per escriure, resumir i preguntes diàries."
+      "description": "Un model de codi obert més lleuger de Meta. Ràpid per escriure, resumir i preguntes diàries.",
+      "tagline": "Llama eficient de codi obert"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Un model antic de codi obert de Meta. Encara sòlid per a escriptura general i preguntes/respostes."
+      "description": "Un model antic de codi obert de Meta. Encara sòlid per a escriptura general i preguntes/respostes.",
+      "tagline": "Llama antic de codi obert"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "El model insígnia d’xAI. Bo per a discussions obertes, anàlisi i projectes creatius."
+      "description": "El model insígnia d’xAI. Bo per a discussions obertes, anàlisi i projectes creatius.",
+      "tagline": "Insígnia xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Model insígnia més recent d'OpenAI. Excel·lent per escriure, investigar, programar i resoldre problemes complexos."
+      "description": "Model insígnia més recent d'OpenAI. Excel·lent per escriure, investigar, programar i resoldre problemes complexos.",
+      "tagline": "Última insígnia GPT"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (última versió)",
-      "description": "Àlies dinàmic que sempre apunta al model de xat més nou d'OpenAI. Substitueix les versions antigues gpt-*-chat a Azure."
+      "description": "Àlies dinàmic que sempre apunta al model de xat més nou d'OpenAI. Substitueix les versions antigues gpt-*-chat a Azure.",
+      "tagline": "Sempre el GPT de xat més nou"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Versió recent d'Opus, entre la 4.6 i la 4.8. Molt bo per escriure textos llargs, recerca, programació i anàlisi acurada."
+      "description": "Versió recent d'Opus, entre la 4.6 i la 4.8. Molt bo per escriure textos llargs, recerca, programació i anàlisi acurada.",
+      "tagline": "Versió Opus recent"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Nou model de raonament de DeepSeek i substitut de la línia R1 a Azure. Mostra el seu raonament pas a pas."
+      "description": "Nou model de raonament de DeepSeek i substitut de la línia R1 a Azure. Mostra el seu raonament pas a pas.",
+      "tagline": "Model més recent de raonament obert"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Variant ràpida V4 de DeepSeek i substitut de la línia V3 a Azure. Ràpida per escriure textos generals i respondre qüestions tècniques."
+      "description": "Variant ràpida V4 de DeepSeek i substitut de la línia V3 a Azure. Ràpida per escriure textos generals i respondre qüestions tècniques.",
+      "tagline": "Alternativa de codi obert ràpida"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Ràpid (Raonament)",
-      "description": "Model de raonament ràpid de xAI. Raona pas a pas amb respostes àgils."
+      "description": "Model de raonament ràpid de xAI. Raona pas a pas amb respostes àgils.",
+      "tagline": "Model de raonament ràpid xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Ràpid",
-      "description": "Model de xat ràpid de xAI. Respostes àgils per a preguntes i converses quotidianes."
+      "description": "Model de xat ràpid de xAI. Respostes àgils per a preguntes i converses quotidianes.",
+      "tagline": "Model de xat ràpid xAI"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Model lleuger de xAI. Més ràpid i econòmic per a preguntes ràpides i converses informals."
+      "description": "Model lleuger de xAI. Més ràpid i econòmic per a preguntes ràpides i converses informals.",
+      "tagline": "Model xAI més lleuger"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "El principal de la tríada GPT-5.6 d’OpenAI. El més potent en redacció, recerca, programació i resolució de problemes complexos."
+      "description": "El principal de la tríada GPT-5.6 d’OpenAI. El més potent en redacció, recerca, programació i resolució de problemes complexos.",
+      "tagline": "Nou nivell insígnia de GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "El nivell equilibrat de la tríada GPT-5.6 d’OpenAI. Adequat per a l’escriptura diària, l’anàlisi i la programació amb respostes ràpides."
+      "description": "El nivell equilibrat de la tríada GPT-5.6 d’OpenAI. Adequat per a l’escriptura diària, l’anàlisi i la programació amb respostes ràpides.",
+      "tagline": "GPT-5.6 equilibrat per al dia a dia"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "El nivell lleuger i ràpid de la tríada GPT-5.6 d’OpenAI. Ideal per a preguntes ràpides i tasques senzilles a baix cost."
+      "description": "El nivell lleuger i ràpid de la tríada GPT-5.6 d’OpenAI. Ideal per a preguntes ràpides i tasques senzilles a baix cost.",
+      "tagline": "GPT-5.6 lleuger i ràpid"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "El nou model de mida mitjana de Mistral. Una alternativa europea que equilibra capacitat i rapidesa per a tasques diàries."
+      "description": "El nou model de mida mitjana de Mistral. Una alternativa europea que equilibra capacitat i rapidesa per a tasques diàries.",
+      "tagline": "Model europeu equilibrat"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model d'open-weight de Moonshot AI. Destaca en tasques agentives, programació i documents extensos.",
+      "tagline": "Model agentiu d'open-weight"
     }
   },
   "searchMode": {

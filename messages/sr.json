@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "AI модел покретан GPT-4.1 са веб претрагом у реалном времену преко Bing-а. Пружа ажурне информације, проверу чињеница и свест о текућим догађајима. Најбољи за истраживања која захтевају најновије информације, анализу вести и верификацију чињеница.",
-      "knowledgeCutoff": "Веб претрага у реалном времену"
+      "knowledgeCutoff": "Веб претрага у реалном времену",
+      "tagline": "Prethodna generacija OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Најнапреднији модел OpenAI-ја, одличан у сложеном резоновању, генерисању кода и решавању техничких проблема. Најбољи за аналитичке задатке, програмерске изазове, истраживања и детаљна објашњења. Подржава подесив напор размишљања и опширност одговора.",
-      "knowledgeCutoff": "Дец 2025"
+      "knowledgeCutoff": "Дец 2025",
+      "tagline": "Kod, analiza, istraživanje"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Бржа и економичнија варијанта GPT-5, оптимизована за брзину уз одржавање високог квалитета. Савршена за свакодневне задатке, брзе упите, усмеравање алата и апликације које захтевају брзо време одговора. Одличан баланс перформанси и ефикасности.",
-      "knowledgeCutoff": "6. авг 2025, 20:00"
+      "knowledgeCutoff": "6. авг 2025, 20:00",
+      "tagline": "Brži i jeftiniji"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Дец 2025",
-      "description": "Specijalizovana verzija GPT-5.2, optimizovana za konverzacijske interakcije i emocionalnu inteligenciju. Odlikuje se empatičnom komunikacijom, kreativnim pisanjem, razmenom ideja i prirodnim dijalogom. Najbolji je za neformalne razgovore, savetodavne situacije i zadatke koji zahtevaju emocionalnu svesnost."
+      "description": "Specijalizovana verzija GPT-5.2, optimizovana za konverzacijske interakcije i emocionalnu inteligenciju. Odlikuje se empatičnom komunikacijom, kreativnim pisanjem, razmenom ideja i prirodnim dijalogom. Najbolji je za neformalne razgovore, savetodavne situacije i zadatke koji zahtevaju emocionalnu svesnost.",
+      "tagline": "Konverzacije, razmena ideja"
     },
     "o3": {
       "name": "o3",
       "description": "Најнапреднији модел за резоновање OpenAI-ја са револуционарним способностима решавања проблема. Одличан у сложеној математици, научном резоновању, програмерским изазовима и вишекорачним логичким задацима. Проширени контекстни прозор од 200К. Подржава контролу напора размишљања.",
-      "knowledgeCutoff": "8. апр 2025, 20:00"
+      "knowledgeCutoff": "8. апр 2025, 20:00",
+      "tagline": "Duboko korak-po-korak rezonovanje"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Специјалиста за резоновање који показује свој рад корак по корак. Одличан за математичке проблеме, логичке загонетке и разумевање сложених концепата. Погледајте како размишља кроз проблеме у реалном времену.",
-      "knowledgeCutoff": "20. јан 2025"
+      "knowledgeCutoff": "20. јан 2025",
+      "tagline": "Prikazuje rezonovanje po koracima"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Јак свестрани модел посебно добар у кодирању и техничком писању. Одличан за отклањање грешака у коду, писање документације и објашњавање техничких концепата. Брз и поуздан за развојни рад.",
-      "knowledgeCutoff": "16. апр 2025, 00:45"
+      "knowledgeCutoff": "16. апр 2025, 00:45",
+      "tagline": "Alternativa otvorenog koda"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Свестран модел од xAI познат по нијансираним одговорима. Одличан за отворене дискусије, креативне пројекте и решавање сложених проблема.",
-      "knowledgeCutoff": "13. мај 2025, 00:16"
+      "knowledgeCutoff": "13. мај 2025, 00:16",
+      "tagline": "xAI alternativa"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Најспособнији модел Anthropic-а са изузетним резоновањем, кодирањем и креативним способностима. Најбољи за сложену анализу, истраживања и задатке који захтевају дубоко разумевање.",
-      "knowledgeCutoff": "Јануар 2025"
+      "knowledgeCutoff": "Јануар 2025",
+      "tagline": "Ranija Opus generacija"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Балансирани Claude модел који нуди одличне перформансе у кодирању, анализи и креативним задацима. Одличан за свакодневну употребу са брзим временом одговора.",
-      "knowledgeCutoff": "Јануар 2025"
+      "knowledgeCutoff": "Јануар 2025",
+      "tagline": "Prethodna Sonnet generacija"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Претходна генерација Claude Opus модела. Одличан за сложене задатке кодирања, детаљну анализу и нијансирано разумевање.",
-      "knowledgeCutoff": "Јануар 2025"
+      "knowledgeCutoff": "Јануар 2025",
+      "tagline": "Prethodna Opus generacija"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Брз и економичан Claude модел оптимизован за брзе задатке. Одличан за једноставне упите, сумирање и апликације великог обима.",
-      "knowledgeCutoff": "Јануар 2025"
+      "knowledgeCutoff": "Јануар 2025",
+      "tagline": "Brza Claude varijanta"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Najmoćniji model kompanije Anthropic. Dobar za duže pisanje, istraživanje i zadatke koji zahtevaju precizno razmišljanje.",
-      "knowledgeCutoff": "Februar 2026."
+      "knowledgeCutoff": "Februar 2026.",
+      "tagline": "Dug tekst i analiza"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Izbalansirani Claude model. Dobar za svakodnevno pisanje, analizu i kodiranje sa brzim odgovorima.",
-      "knowledgeCutoff": "Februar 2026."
+      "knowledgeCutoff": "Februar 2026.",
+      "tagline": "Uravnoteženi svakodnevni Claude"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Otvoreni model kompanije Meta. Pouzdan za pisanje, rezimee i brza pitanja."
+      "description": "Otvoreni model kompanije Meta. Pouzdan za pisanje, rezimee i brza pitanja.",
+      "tagline": "Alternativa otvorenog koda"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Najnoviji vodeći model kompanije OpenAI. Izuzetan za pisanje, istraživanje, kodiranje i rešavanje složenih problema."
+      "description": "Najnoviji vodeći model kompanije OpenAI. Izuzetan za pisanje, istraživanje, kodiranje i rešavanje složenih problema.",
+      "tagline": "Najnoviji GPT vodeći model"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Najmanja i najbrža GPT varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove."
+      "description": "Najmanja i najbrža GPT varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove.",
+      "tagline": "Najmanji i najbrži GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Konverzacijska GPT varijanta prilagođena dijalogu. Dobar za neformalne razgovore, razmenu ideja i podršku u diskusiji."
+      "description": "Konverzacijska GPT varijanta prilagođena dijalogu. Dobar za neformalne razgovore, razmenu ideja i podršku u diskusiji.",
+      "tagline": "Noviji GPT prilagođen razgovoru"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "Prvobitni vodeći GPT-5 model. I dalje sposoban za pisanje, analizu i kodiranje."
+      "description": "Prvobitni vodeći GPT-5 model. I dalje sposoban za pisanje, analizu i kodiranje.",
+      "tagline": "Prethodni GPT vodeći model"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "GPT-5 varijanta prilagođena četovanju. Dobra za svakodnevne razgovore i razmenu ideja."
+      "description": "GPT-5 varijanta prilagođena četovanju. Dobra za svakodnevne razgovore i razmenu ideja.",
+      "tagline": "Prethodni chat GPT"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Starija multimodalna GPT verzija. Pogodna za svakodnevno pisanje i pitanja i odgovore gde nisu potrebne najnovije mogućnosti."
+      "description": "Starija multimodalna GPT verzija. Pogodna za svakodnevno pisanje i pitanja i odgovore gde nisu potrebne najnovije mogućnosti.",
+      "tagline": "Stariji multimodalni GPT"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Manja i brža GPT-4.1 varijanta za brze svakodnevne zadatke."
+      "description": "Manja i brža GPT-4.1 varijanta za brze svakodnevne zadatke.",
+      "tagline": "Lagani GPT stare generacije"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Najnoviji i najjači model kompanije Anthropic. Izvrsan za duže tekstove, istraživanje, programiranje i dubinsku analizu."
+      "description": "Najnoviji i najjači model kompanije Anthropic. Izvrsan za duže tekstove, istraživanje, programiranje i dubinsku analizu.",
+      "tagline": "Najnoviji i najjači Claude"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Najnoviji otvoreni model kompanije DeepSeek. Pouzdan za opšte pisanje i tehnička pitanja."
+      "description": "Najnoviji otvoreni model kompanije DeepSeek. Pouzdan za opšte pisanje i tehnička pitanja.",
+      "tagline": "Alternativa otvorenog koda"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Glavni model kompanije Mistral. Evropska alternativa za pisanje, rezimee i opšta pitanja."
+      "description": "Glavni model kompanije Mistral. Evropska alternativa za pisanje, rezimee i opšta pitanja.",
+      "tagline": "Evropski model otvorenog koda"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Ranija vodeća verzija GPT-5. I dalje snažna u pisanju, analizi i kodiranju."
+      "description": "Ranija vodeća verzija GPT-5. I dalje snažna u pisanju, analizi i kodiranju.",
+      "tagline": "Raniji GPT-5 vodeći model"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Ranija čet-prilagođena verzija GPT-5. Dobar za svakodnevne razgovore i razmenu ideja."
+      "description": "Ranija čet-prilagođena verzija GPT-5. Dobar za svakodnevne razgovore i razmenu ideja.",
+      "tagline": "Raniji chat GPT"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Najmanja GPT-5 varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove."
+      "description": "Najmanja GPT-5 varijanta. Najbolja za brze i jednostavne zadatke uz minimalne troškove.",
+      "tagline": "Mali GPT stare generacije"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Najmanja GPT-4.1 varijanta. Prikladna za brze, jednostavne zadatke gde su brzina i trošak ključni."
+      "description": "Najmanja GPT-4.1 varijanta. Prikladna za brze, jednostavne zadatke gde su brzina i trošak ključni.",
+      "tagline": "Najmanji GPT stare generacije"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Mala i brza GPT-4o varijanta. Prikladna za brze svakodnevne zadatke gde nisu potrebne najnovije mogućnosti."
+      "description": "Mala i brza GPT-4o varijanta. Prikladna za brze svakodnevne zadatke gde nisu potrebne najnovije mogućnosti.",
+      "tagline": "Lagani stariji multimodalni GPT"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Kompaktni model za rezonovanje. Dobar za matematiku, logiku i zadatke korak po korak, uz niže troškove od o3."
+      "description": "Kompaktni model za rezonovanje. Dobar za matematiku, logiku i zadatke korak po korak, uz niže troškove od o3.",
+      "tagline": "Brzo i povoljno rezonovanje"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Prethodni kompaktni model za rezonovanje. Efikasan za matematičke, naučne i logičke zadatke uz niže troškove."
+      "description": "Prethodni kompaktni model za rezonovanje. Efikasan za matematičke, naučne i logičke zadatke uz niže troškove.",
+      "tagline": "Kompaktno korak-po-korak rezonovanje"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Najinteligentniji model kompanije Anthropic, prvi u Claude 5 porodici. Izvrstan za najzahtevnije zadatke pisanja, istraživanja i programiranja."
+      "description": "Najinteligentniji model kompanije Anthropic, prvi u Claude 5 porodici. Izvrstan za najzahtevnije zadatke pisanja, istraživanja i programiranja.",
+      "tagline": "Anthropic-ov vodeći model"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Najnoviji uravnoteženi Claude, prvi iz porodice Claude 5. Jak u svakodnevnom pisanju, analizi i programiranju, sa brzim odgovorima."
+      "description": "Najnoviji uravnoteženi Claude, prvi iz porodice Claude 5. Jak u svakodnevnom pisanju, analizi i programiranju, sa brzim odgovorima.",
+      "tagline": "Najnoviji uravnoteženi Claude"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad."
+      "description": "Srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad.",
+      "tagline": "Uravnoteženi evropski model"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mali model kompanije Mistral. Brz i povoljan za rezimee, nacrte i jednostavna pitanja."
+      "description": "Mali model kompanije Mistral. Brz i povoljan za rezimee, nacrte i jednostavna pitanja.",
+      "tagline": "Mali brzi evropski model"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Najmanji model kompanije Mistral. Najbolji za izuzetno brze i jednostavne zadatke uz minimalne troškove."
+      "description": "Najmanji model kompanije Mistral. Najbolji za izuzetno brze i jednostavne zadatke uz minimalne troškove.",
+      "tagline": "Mali Mistral za edge uređaje"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Ažurirana verzija DeepSeek-R1. Prikazuje razmišljanje korak po korak sa poboljšanom dubinom rezonovanja."
+      "description": "Ažurirana verzija DeepSeek-R1. Prikazuje razmišljanje korak po korak sa poboljšanom dubinom rezonovanja.",
+      "tagline": "Ažurirani open reasoning model"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Lakši otvoreni model kompanije Meta. Brz za pisanje, rezimee i svakodnevna pitanja."
+      "description": "Lakši otvoreni model kompanije Meta. Brz za pisanje, rezimee i svakodnevna pitanja.",
+      "tagline": "Efikasna open-source Llama"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Stariji open-source model kompanije Meta. I dalje pouzdan za opšte pisanje i pitanja i odgovore."
+      "description": "Stariji open-source model kompanije Meta. I dalje pouzdan za opšte pisanje i pitanja i odgovore.",
+      "tagline": "Starija open-source Llama"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Glavni model kompanije xAI. Dobar za otvorene diskusije, analize i kreativne projekte."
+      "description": "Glavni model kompanije xAI. Dobar za otvorene diskusije, analize i kreativne projekte.",
+      "tagline": "vodeći xAI model"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Najnoviji vodeći model OpenAI. Izuzetan za pisanje, istraživanje, programiranje i rešavanje kompleksnih problema."
+      "description": "Najnoviji vodeći model OpenAI. Izuzetan za pisanje, istraživanje, programiranje i rešavanje kompleksnih problema.",
+      "tagline": "Najnoviji GPT vodeći model"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (najnoviji)",
-      "description": "Ažurirana oznaka koja uvek ukazuje na najnoviji chat model OpenAI. Azure zamena za povučene verzionisane gpt-*-chat modele."
+      "description": "Ažurirana oznaka koja uvek ukazuje na najnoviji chat model OpenAI. Azure zamena za povučene verzionisane gpt-*-chat modele.",
+      "tagline": "Uvek najnoviji chat GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Nedavno Opus izdanje, između 4.6 i 4.8. Snažan za duže pisanje, istraživanja, programiranje i detaljnu analizu."
+      "description": "Nedavno Opus izdanje, između 4.6 i 4.8. Snažan za duže pisanje, istraživanja, programiranje i detaljnu analizu.",
+      "tagline": "Skorašnje izdanje Opus-a"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Najnoviji model za zaključivanje kompanije DeepSeek i Azure zamena za R1 liniju. Prikazuje razmišljanje korak po korak."
+      "description": "Najnoviji model za zaključivanje kompanije DeepSeek i Azure zamena za R1 liniju. Prikazuje razmišljanje korak po korak.",
+      "tagline": "Najnoviji open reasoning model"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Brza V4 varijanta DeepSeek modela i Azure zamena za V3 liniju. Brz za opšte pisanje i tehnička pitanja."
+      "description": "Brza V4 varijanta DeepSeek modela i Azure zamena za V3 liniju. Brz za opšte pisanje i tehnička pitanja.",
+      "tagline": "Brza open-source alternativa"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "Brzi model za zaključivanje kompanije xAI. Razmišlja korak po korak uz brze odgovore."
+      "description": "Brzi model za zaključivanje kompanije xAI. Razmišlja korak po korak uz brze odgovore.",
+      "tagline": "Brzi xAI reasoning model"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Brzi chat model kompanije xAI. Brzi odgovori za svakodnevna pitanja i razgovore."
+      "description": "Brzi chat model kompanije xAI. Brzi odgovori za svakodnevna pitanja i razgovore.",
+      "tagline": "Brzi xAI chat model"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Lakša verzija xAI modela. Brži i povoljniji za kratka pitanja i neformalne razgovore."
+      "description": "Lakša verzija xAI modela. Brži i povoljniji za kratka pitanja i neformalne razgovore.",
+      "tagline": "Lakši xAI model"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Glavni model iz OpenAI GPT-5.6 trojke. Najjači za pisanje, istraživanje, programiranje i rešavanje složenih problema."
+      "description": "Glavni model iz OpenAI GPT-5.6 trojke. Najjači za pisanje, istraživanje, programiranje i rešavanje složenih problema.",
+      "tagline": "Najnoviji GPT vodeći nivo"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Izbalansirani model iz OpenAI GPT-5.6 trojke. Dobar za svakodnevno pisanje, analizu i programiranje uz brze odgovore."
+      "description": "Izbalansirani model iz OpenAI GPT-5.6 trojke. Dobar za svakodnevno pisanje, analizu i programiranje uz brze odgovore.",
+      "tagline": "Izbalansirani svakodnevni GPT-5.6"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Laki i brzi model iz OpenAI GPT-5.6 trojke. Najbolji za brza pitanja i jednostavne zadatke uz niske troškove."
+      "description": "Laki i brzi model iz OpenAI GPT-5.6 trojke. Najbolji za brza pitanja i jednostavne zadatke uz niske troškove.",
+      "tagline": "Lagan, brz GPT-5.6"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Najnoviji srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad."
+      "description": "Najnoviji srednji model kompanije Mistral. Evropska alternativa koja balansira mogućnosti i brzinu za svakodnevni rad.",
+      "tagline": "Izbalansirani evropski model"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model otvorene težine kompanije Moonshot AI. Snažan za agentne zadatke, programiranje i duge dokumente.",
+      "tagline": "Agentni model otvorene težine"
     }
   },
   "searchMode": {

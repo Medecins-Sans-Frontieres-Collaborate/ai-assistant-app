@@ -1503,27 +1503,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Mô hình AI dựa trên GPT-4.1 với khả năng tìm kiếm web thực tế qua Bing. Cung cấp thông tin cập nhật, kiểm tra sự thật và nhận biết sự kiện hiện tại. Phù hợp nhất cho nghiên cứu cần thông tin mới, phân tích tin tức và xác minh thực tế.",
-      "knowledgeCutoff": "Tìm kiếm web thời gian thực"
+      "knowledgeCutoff": "Tìm kiếm web thời gian thực",
+      "tagline": "Thế hệ trước của OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Mô hình tiến tiến nhất của OpenAI, vượt trội về lý luận phức tạp, sinh mã và giải quyết vấn đề kỹ thuật. Tốt nhất cho các tác vụ phân tích, thử thách lập trình, nghiên cứu và giải thích chi tiết. Hỗ trợ điều chỉnh mức độ lý luận và độ dài phản hồi.",
-      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM"
+      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM",
+      "tagline": "GPT đầu bảng trước đây"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Biến thể của GPT-5 nhanh hơn và tiết kiệm chi phí hơn, tối ưu cho tốc độ nhưng vẫn đảm bảo chất lượng cao. Phù hợp cho các tác vụ hàng ngày, truy vấn nhanh, định tuyến công cụ và ứng dụng cần phản hồi nhanh. Cân bằng tuyệt vời giữa hiệu suất và hiệu quả.",
-      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM"
+      "knowledgeCutoff": "6 Thg 8, 2025 8:00 PM",
+      "tagline": "Nhanh hơn, chi phí thấp hơn"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Biến thể chuyên biệt của GPT-5 tối ưu cho tương tác hội thoại và trí tuệ cảm xúc. Xuất sắc trong giao tiếp giàu cảm thông, hỗ trợ sức khỏe tâm thần, viết sáng tạo, động não và đối thoại tự nhiên. Phù hợp nhất cho trò chuyện thông thường, tư vấn và các nhiệm vụ cần nhận diện cảm xúc.",
-      "knowledgeCutoff": "1 Thg 10, 2025 8:00 PM"
+      "knowledgeCutoff": "1 Thg 10, 2025 8:00 PM",
+      "tagline": "GPT hội thoại trước đây"
     },
     "o3": {
       "name": "o3",
       "description": "Mô hình lý luận tiên tiến nhất của OpenAI với khả năng giải quyết vấn đề vượt trội. Vượt trội trong toán học phức tạp, lý luận khoa học, thử thách lập trình và các tác vụ logic đa bước. Hỗ trợ cửa sổ ngữ cảnh mở rộng 200K. Có thể điều chỉnh nỗ lực lý luận.",
-      "knowledgeCutoff": "8 Thg 4, 2025 8:00 PM"
+      "knowledgeCutoff": "8 Thg 4, 2025 8:00 PM",
+      "tagline": "Lý luận tuần tự chuyên sâu"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1533,205 +1538,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Chuyên gia lý luận với khả năng trình bày từng bước giải quyết. Tuyệt vời cho các bài toán, câu đố logic và hiểu các khái niệm phức tạp. Theo dõi quá trình suy nghĩ thời gian thực.",
-      "knowledgeCutoff": "20 Thg 1, 2025"
+      "knowledgeCutoff": "20 Thg 1, 2025",
+      "tagline": "Hiển thị từng bước lý luận"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Mô hình đa năng mạnh mẽ, đặc biệt xuất sắc trong lập trình và viết tài liệu kỹ thuật. Tuyệt vời trong sửa lỗi, viết tài liệu và giải thích các khái niệm kỹ thuật. Nhanh và đáng tin cậy cho công việc phát triển.",
-      "knowledgeCutoff": "16 Thg 4, 2025 12:45 AM"
+      "knowledgeCutoff": "16 Thg 4, 2025 12:45 AM",
+      "tagline": "Giải pháp mã nguồn mở"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Mô hình đa năng của xAI nổi bật với phản hồi tinh tế. Phù hợp cho thảo luận mở, dự án sáng tạo và giải quyết vấn đề phức tạp.",
-      "knowledgeCutoff": "13 Thg 5, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Thg 5, 2025 12:16 AM",
+      "tagline": "Giải pháp thay thế xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Mô hình mạnh nhất của Anthropic với lý luận, lập trình và sáng tạo xuất sắc. Lý tưởng cho phân tích phức tạp, nghiên cứu và các nhiệm vụ yêu cầu hiểu biết sâu.",
-      "knowledgeCutoff": "Tháng 1, 2025"
+      "knowledgeCutoff": "Tháng 1, 2025",
+      "tagline": "Thế hệ Opus trước đây"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Mô hình Claude cân bằng, hiệu suất vượt trội trong lập trình, phân tích và sáng tạo. Phù hợp cho nhu cầu sử dụng hằng ngày với thời gian phản hồi nhanh.",
-      "knowledgeCutoff": "Tháng 1, 2025"
+      "knowledgeCutoff": "Tháng 1, 2025",
+      "tagline": "Sonnet thế hệ trước"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Phiên bản trước của mô hình Claude Opus. Xuất sắc cho các tác vụ lập trình phức tạp, phân tích chi tiết và hiểu biết sâu sắc.",
-      "knowledgeCutoff": "Tháng 1 năm 2025"
+      "knowledgeCutoff": "Tháng 1 năm 2025",
+      "tagline": "Opus thế hệ trước"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Mô hình Claude nhanh và tiết kiệm, tối ưu cho các tác vụ nhanh. Phù hợp với câu hỏi đơn giản, tóm tắt và các ứng dụng số lượng lớn.",
-      "knowledgeCutoff": "Tháng 1 năm 2025"
+      "knowledgeCutoff": "Tháng 1 năm 2025",
+      "tagline": "Claude phiên bản nhanh"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Mô hình tiên tiến nhất của OpenAI, vượt trội về lập luận phức tạp, tạo mã và giải quyết các vấn đề kỹ thuật. Phù hợp nhất cho các tác vụ phân tích, thử thách lập trình, nghiên cứu và giải thích chi tiết. Hỗ trợ điều chỉnh mức độ lập luận và độ dài phản hồi.",
-      "knowledgeCutoff": "Tháng 12/2025"
+      "knowledgeCutoff": "Tháng 12/2025",
+      "tagline": "Lập trình, phân tích, nghiên cứu"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Biến thể chuyên biệt của GPT-5.2 được tối ưu cho tương tác hội thoại và trí tuệ cảm xúc. Vượt trội về giao tiếp đồng cảm, hỗ trợ sức khỏe tinh thần, sáng tác sáng tạo, động não và đối thoại tự nhiên. Phù hợp cho trò chuyện thân mật, tư vấn và các nhiệm vụ cần sự nhận biết cảm xúc.",
-      "knowledgeCutoff": "Tháng 12/2025"
+      "knowledgeCutoff": "Tháng 12/2025",
+      "tagline": "Đối thoại, động não"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Mô hình mạnh nhất của Anthropic. Thích hợp cho viết dài, nghiên cứu, và các tác vụ cần tư duy cẩn thận.",
-      "knowledgeCutoff": "Tháng 2/2026"
+      "knowledgeCutoff": "Tháng 2/2026",
+      "tagline": "Viết dài và phân tích chuyên sâu"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Mô hình Claude cân bằng. Phù hợp cho viết hằng ngày, phân tích và lập trình với phản hồi nhanh.",
-      "knowledgeCutoff": "Tháng 2/2026"
+      "knowledgeCutoff": "Tháng 2/2026",
+      "tagline": "Claude cân bằng cho mọi ngày"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Model mã nguồn mở từ Meta. Hiệu quả cho viết lách, tóm tắt và câu hỏi nhanh."
+      "description": "Model mã nguồn mở từ Meta. Hiệu quả cho viết lách, tóm tắt và câu hỏi nhanh.",
+      "tagline": "Giải pháp mã nguồn mở"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Model mới nhất của OpenAI. Mạnh về viết lách, nghiên cứu, lập trình và giải quyết vấn đề phức tạp."
+      "description": "Model mới nhất của OpenAI. Mạnh về viết lách, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Biến thể GPT nhỏ nhất và nhanh nhất. Tốt nhất cho các tác vụ nhanh, đơn giản với chi phí tối thiểu."
+      "description": "Biến thể GPT nhỏ nhất và nhanh nhất. Tốt nhất cho các tác vụ nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "GPT nhỏ nhất và nhanh nhất"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Biến thể GPT cho hội thoại, tối ưu cho đối thoại. Phù hợp trò chuyện, lên ý tưởng và thảo luận hỗ trợ."
+      "description": "Biến thể GPT cho hội thoại, tối ưu cho đối thoại. Phù hợp trò chuyện, lên ý tưởng và thảo luận hỗ trợ.",
+      "tagline": "GPT hội thoại mới hơn"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "GPT đa phương thức phiên bản cũ hơn. Phù hợp viết lách hàng ngày và hỏi đáp khi không cần tính năng mới nhất."
+      "description": "GPT đa phương thức phiên bản cũ hơn. Phù hợp viết lách hàng ngày và hỏi đáp khi không cần tính năng mới nhất.",
+      "tagline": "GPT đa phương thức cũ hơn"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Biến thể nhỏ hơn, nhanh hơn của GPT-4.1 cho các công việc hàng ngày."
+      "description": "Biến thể nhỏ hơn, nhanh hơn của GPT-4.1 cho các công việc hàng ngày.",
+      "tagline": "GPT thế hệ trước nhẹ"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Model mới và mạnh nhất của Anthropic. Xuất sắc cho viết dài, nghiên cứu, lập trình và phân tích chuyên sâu."
+      "description": "Model mới và mạnh nhất của Anthropic. Xuất sắc cho viết dài, nghiên cứu, lập trình và phân tích chuyên sâu.",
+      "tagline": "Claude mới nhất và mạnh nhất"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Model mã nguồn mở mới nhất của DeepSeek. Đáng tin cậy cho viết lách chung và câu hỏi kỹ thuật."
+      "description": "Model mã nguồn mở mới nhất của DeepSeek. Đáng tin cậy cho viết lách chung và câu hỏi kỹ thuật.",
+      "tagline": "Giải pháp mã nguồn mở"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Model hàng đầu của Mistral. Lựa chọn châu Âu cho viết lách, tóm tắt, và các câu hỏi chung."
+      "description": "Model hàng đầu của Mistral. Lựa chọn châu Âu cho viết lách, tóm tắt, và các câu hỏi chung.",
+      "tagline": "Mô hình mở châu Âu"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Phiên bản trước của GPT-5 hàng đầu. Vẫn mạnh về viết lách, phân tích và lập trình."
+      "description": "Phiên bản trước của GPT-5 hàng đầu. Vẫn mạnh về viết lách, phân tích và lập trình.",
+      "tagline": "GPT-5 đầu bảng trước đây"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Biến thể hội thoại của GPT-5 trước đó. Thích hợp cho hội thoại hàng ngày và lên ý tưởng."
+      "description": "Biến thể hội thoại của GPT-5 trước đó. Thích hợp cho hội thoại hàng ngày và lên ý tưởng.",
+      "tagline": "GPT hội thoại trước đó"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Biến thể nhỏ nhất của GPT-5. Phù hợp cho các tác vụ nhanh, đơn giản với chi phí tối thiểu."
+      "description": "Biến thể nhỏ nhất của GPT-5. Phù hợp cho các tác vụ nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "GPT thế hệ trước siêu nhỏ"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Biến thể nhỏ nhất của GPT-4.1. Phù hợp cho các tác vụ nhanh, đơn giản, ưu tiên tốc độ và chi phí."
+      "description": "Biến thể nhỏ nhất của GPT-4.1. Phù hợp cho các tác vụ nhanh, đơn giản, ưu tiên tốc độ và chi phí.",
+      "tagline": "GPT thế hệ trước nhỏ nhất"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Biến thể nhỏ, nhanh của GPT-4o. Phù hợp cho các tác vụ nhanh hàng ngày khi không cần tính năng mới nhất."
+      "description": "Biến thể nhỏ, nhanh của GPT-4o. Phù hợp cho các tác vụ nhanh hàng ngày khi không cần tính năng mới nhất.",
+      "tagline": "GPT đa phương thức cũ phiên bản nhẹ"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Model suy luận gọn nhẹ. Tốt cho toán học, logic, và giải từng bước với chi phí thấp hơn o3."
+      "description": "Model suy luận gọn nhẹ. Tốt cho toán học, logic, và giải từng bước với chi phí thấp hơn o3.",
+      "tagline": "Lý luận nhanh, giá hợp lý"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Model suy luận gọn nhẹ phiên bản trước. Xử lý toán học, khoa học và câu đố logic với ngân sách tiết kiệm."
+      "description": "Model suy luận gọn nhẹ phiên bản trước. Xử lý toán học, khoa học và câu đố logic với ngân sách tiết kiệm.",
+      "tagline": "Lý luận tuần tự tinh gọn"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Model thông minh nhất của Anthropic, là phiên bản đầu tiên của dòng Claude 5. Xuất sắc cho các tác vụ viết, nghiên cứu, và lập trình khó nhất."
+      "description": "Model thông minh nhất của Anthropic, là phiên bản đầu tiên của dòng Claude 5. Xuất sắc cho các tác vụ viết, nghiên cứu, và lập trình khó nhất.",
+      "tagline": "Mô hình tiên phong của Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Phiên bản Claude cân bằng mới nhất, đầu tiên của dòng Claude 5. Mạnh về viết lách, phân tích, lập trình hàng ngày với tốc độ phản hồi nhanh."
+      "description": "Phiên bản Claude cân bằng mới nhất, đầu tiên của dòng Claude 5. Mạnh về viết lách, phân tích, lập trình hàng ngày với tốc độ phản hồi nhanh.",
+      "tagline": "Claude cân bằng mới nhất"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Model tầm trung của Mistral. Lựa chọn châu Âu cân bằng giữa khả năng và tốc độ cho công việc hàng ngày."
+      "description": "Model tầm trung của Mistral. Lựa chọn châu Âu cân bằng giữa khả năng và tốc độ cho công việc hàng ngày.",
+      "tagline": "Mô hình châu Âu cân bằng"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Model nhỏ của Mistral. Nhanh và tiết kiệm cho tóm tắt, bản nháp và câu hỏi đơn giản."
+      "description": "Model nhỏ của Mistral. Nhanh và tiết kiệm cho tóm tắt, bản nháp và câu hỏi đơn giản.",
+      "tagline": "Mô hình châu Âu nhỏ, nhanh"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Model siêu nhỏ của Mistral. Tốt nhất cho tác vụ cực nhanh, đơn giản với chi phí tối thiểu."
+      "description": "Model siêu nhỏ của Mistral. Tốt nhất cho tác vụ cực nhanh, đơn giản với chi phí tối thiểu.",
+      "tagline": "Mistral cỡ nhỏ cho biên"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Bản cập nhật mới của DeepSeek-R1. Trình bày suy nghĩ từng bước với khả năng suy luận sâu hơn."
+      "description": "Bản cập nhật mới của DeepSeek-R1. Trình bày suy nghĩ từng bước với khả năng suy luận sâu hơn.",
+      "tagline": "Mô hình lý luận mở đã cập nhật"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Model mã nguồn mở nhẹ hơn từ Meta. Nhanh cho viết, tóm tắt và các câu hỏi hằng ngày."
+      "description": "Model mã nguồn mở nhẹ hơn từ Meta. Nhanh cho viết, tóm tắt và các câu hỏi hằng ngày.",
+      "tagline": "Llama mã nguồn mở hiệu quả"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Model mã nguồn mở cũ hơn từ Meta. Vẫn phù hợp cho viết lách tổng quát và hỏi đáp."
+      "description": "Model mã nguồn mở cũ hơn từ Meta. Vẫn phù hợp cho viết lách tổng quát và hỏi đáp.",
+      "tagline": "Llama mã nguồn mở cũ hơn"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Model hàng đầu của xAI. Tốt cho thảo luận mở, phân tích và dự án sáng tạo."
+      "description": "Model hàng đầu của xAI. Tốt cho thảo luận mở, phân tích và dự án sáng tạo.",
+      "tagline": "xAI đầu bảng"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Mẫu hàng đầu mới nhất của OpenAI. Mạnh về viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp."
+      "description": "Mẫu hàng đầu mới nhất của OpenAI. Mạnh về viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (mới nhất)",
-      "description": "Bí danh động luôn trỏ đến mẫu chat-tuned mới nhất của OpenAI. Thay thế trên Azure cho dòng gpt-*-chat đã ngừng sử dụng."
+      "description": "Bí danh động luôn trỏ đến mẫu chat-tuned mới nhất của OpenAI. Thay thế trên Azure cho dòng gpt-*-chat đã ngừng sử dụng.",
+      "tagline": "Luôn là GPT hội thoại mới nhất"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Phiên bản Opus gần đây, nằm giữa 4.6 và 4.8. Mạnh về viết dài, nghiên cứu, lập trình và phân tích kỹ lưỡng."
+      "description": "Phiên bản Opus gần đây, nằm giữa 4.6 và 4.8. Mạnh về viết dài, nghiên cứu, lập trình và phân tích kỹ lưỡng.",
+      "tagline": "Opus phát hành gần đây"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Mẫu suy luận mới nhất của DeepSeek và là lựa chọn thay thế của Azure cho dòng R1. Thể hiện quá trình suy nghĩ từng bước."
+      "description": "Mẫu suy luận mới nhất của DeepSeek và là lựa chọn thay thế của Azure cho dòng R1. Thể hiện quá trình suy nghĩ từng bước.",
+      "tagline": "Mô hình lý luận mở mới nhất"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Phiên bản V4 nhanh của DeepSeek và là lựa chọn thay thế của Azure cho dòng V3. Nhanh cho viết chung và các câu hỏi kỹ thuật."
+      "description": "Phiên bản V4 nhanh của DeepSeek và là lựa chọn thay thế của Azure cho dòng V3. Nhanh cho viết chung và các câu hỏi kỹ thuật.",
+      "tagline": "Giải pháp mã nguồn mở nhanh"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Suy luận)",
-      "description": "Mẫu suy luận nhanh của xAI. Suy nghĩ theo từng bước với phản hồi nhanh."
+      "description": "Mẫu suy luận nhanh của xAI. Suy nghĩ theo từng bước với phản hồi nhanh.",
+      "tagline": "Mô hình lý luận xAI nhanh"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Mẫu chat nhanh của xAI. Phản hồi nhanh cho các câu hỏi thường ngày và thảo luận."
+      "description": "Mẫu chat nhanh của xAI. Phản hồi nhanh cho các câu hỏi thường ngày và thảo luận.",
+      "tagline": "Mô hình chat xAI nhanh"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Mẫu xAI nhẹ hơn. Nhanh và tiết kiệm cho các câu hỏi ngắn và trò chuyện thông thường."
+      "description": "Mẫu xAI nhẹ hơn. Nhanh và tiết kiệm cho các câu hỏi ngắn và trò chuyện thông thường.",
+      "tagline": "Mô hình xAI nhẹ hơn"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Phiên bản đầu tàu của bộ ba GPT-5.6 của OpenAI. Mạnh nhất trong viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp."
+      "description": "Phiên bản đầu tàu của bộ ba GPT-5.6 của OpenAI. Mạnh nhất trong viết, nghiên cứu, lập trình và giải quyết vấn đề phức tạp.",
+      "tagline": "GPT đầu bảng mới nhất hiện nay"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Tầng cân bằng của bộ ba GPT-5.6 của OpenAI. Phù hợp cho công việc viết, phân tích và lập trình hằng ngày với phản hồi nhanh."
+      "description": "Tầng cân bằng của bộ ba GPT-5.6 của OpenAI. Phù hợp cho công việc viết, phân tích và lập trình hằng ngày với phản hồi nhanh.",
+      "tagline": "GPT-5.6 cân bằng cho nhu cầu hàng ngày"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Tầng nhẹ và nhanh của bộ ba GPT-5.6 của OpenAI. Tốt nhất cho câu hỏi nhanh và tác vụ đơn giản với chi phí thấp."
+      "description": "Tầng nhẹ và nhanh của bộ ba GPT-5.6 của OpenAI. Tốt nhất cho câu hỏi nhanh và tác vụ đơn giản với chi phí thấp.",
+      "tagline": "GPT-5.6 nhẹ, nhanh"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Mô hình tầm trung mới nhất của Mistral. Lựa chọn thay thế châu Âu cân bằng giữa khả năng và tốc độ cho công việc hằng ngày."
+      "description": "Mô hình tầm trung mới nhất của Mistral. Lựa chọn thay thế châu Âu cân bằng giữa khả năng và tốc độ cho công việc hằng ngày.",
+      "tagline": "Mô hình châu Âu cân bằng"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Mô hình open-weight của Moonshot AI. Mạnh về các tác vụ đại diện, lập trình và tài liệu dài.",
+      "tagline": "Mô hình open-weight đại diện"
     }
   },
   "searchMode": {

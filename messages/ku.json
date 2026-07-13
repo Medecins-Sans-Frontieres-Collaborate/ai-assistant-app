@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modela AI ya bi hêza GPT-4.1 bi lêgerîna webê ya rast-demê bi riya Bing. Agahiyên nûvekirî, kontrolkirina rastan, û agahdariya bûyerên heyî peyda dike. Ji bo lêkolîna ku agahiyên nû hewce dike, analîza nûçeyan, û piştrastkirina rastan çêtirîn e.",
-      "knowledgeCutoff": "Lêgerîna webê ya rast-demê"
+      "knowledgeCutoff": "Lêgerîna webê ya rast-demê",
+      "tagline": "نەسڵی پێشووەکەی OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modela herî pêşketî ya OpenAI, ku di fikirîna tevlihev, çêkirina kodê, û çareserkirina pirsgirêkên teknîkî de serfiraz e. Ji bo karên analîtîk, dijwariyên programkirinê, lêkolîn, û raveyên berfireh çêtirîn e. Efora fikirînê û vêjeyîtiya bersivê piştgirî dike.",
-      "knowledgeCutoff": "Kanûn 2025"
+      "knowledgeCutoff": "Kanûn 2025",
+      "tagline": "کۆد، ڕاوێژکاری، توێژینەوە"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Guhertoya lezgîntir û erzantir a GPT-5, ji bo lezê optimize kirî dema ku kalîteya bilind diparêze. Ji bo karên rojane, pirsên bilez, rêkirina amûran, û serlêdanên ku demê bersiva bilez hewce dikin bêkêmasî ye. Hevsengiya hêja ya performans û karîgeriyê.",
-      "knowledgeCutoff": "6 Tebax 2025 8:00 PM"
+      "knowledgeCutoff": "6 Tebax 2025 8:00 PM",
+      "tagline": "خێراتر و بە تێچووی کەمتر"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Kanûn 2025",
-      "description": "وەشانی تایبەتی GPT-5.2 کە بۆ گفتوگۆ و زاناییدا بەراوردن و هەستییەتی پەرەس راگرتووە. باشترین لە گفتوگۆی سۆزوودار، نووسینی خەیاڵی، بیرۆکەسازی و دیالۆگ ئاسان. گونجاوە بۆ گفتوگۆی هەڵسوکەوتی، ئامرازکردن، و ئەرکەکان کە هەستگەیشتن پێویستن."
+      "description": "وەشانی تایبەتی GPT-5.2 کە بۆ گفتوگۆ و زاناییدا بەراوردن و هەستییەتی پەرەس راگرتووە. باشترین لە گفتوگۆی سۆزوودار، نووسینی خەیاڵی، بیرۆکەسازی و دیالۆگ ئاسان. گونجاوە بۆ گفتوگۆی هەڵسوکەوتی، ئامرازکردن، و ئەرکەکان کە هەستگەیشتن پێویستن.",
+      "tagline": "گفتوگۆ، بیرکەوتن"
     },
     "o3": {
       "name": "o3",
       "description": "Modela fikirînê ya herî pêşketî ya OpenAI bi kapasîteyên çareserkirina pirsgirêkan ên şoreşger. Di matematîka tevlihev, fikirîna zanistî, dijwariyên kodkirinê, û karên mantiqî yên pir-gavî de serfiraz e. Pencereya kontekstê ya 200K ya dirêjkirî. Kontrola efora fikirînê piştgirî dike.",
-      "knowledgeCutoff": "8 Nîsan 2025 8:00 PM"
+      "knowledgeCutoff": "8 Nîsan 2025 8:00 PM",
+      "tagline": "فێرکاری قەدەغە بە قەدەغە"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Pispor di fikirînê de ku karê xwe gav bi gav nîşan dide. Ji bo pirsgirêkên matematîkê, teqezên mantiqî, û têgihîştina konseptên tevlihev pir baş e. Bibîne ka çawa di dema rast de li ser pirsgirêkan difikire.",
-      "knowledgeCutoff": "20 Çile 2025"
+      "knowledgeCutoff": "20 Çile 2025",
+      "tagline": "پەیڤەکراوی فێرکاری بە قەدەغە"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modela hêzdar a giştî ku bi taybetî di kodkirin û nivîsandina teknîkî de baş e. Ji bo çaresera kodê, nivîsandina belgeyê, û ravekirina konseptên teknîkî pir baş e. Ji bo karên pêşveçûnê lez û pêbawer e.",
-      "knowledgeCutoff": "16 Nîsan 2025 12:45 AM"
+      "knowledgeCutoff": "16 Nîsan 2025 12:45 AM",
+      "tagline": "هەڵبەستەی کراوە"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modela pirkar ji xAI ku bi bersivên hûrgulî tê naskirin. Ji bo gotûbêjên vekirî, projeyên afirîner, û çareserkirina pirsgirêkên tevlihev pir baş e.",
-      "knowledgeCutoff": "13 Gulan 2025 12:16 AM"
+      "knowledgeCutoff": "13 Gulan 2025 12:16 AM",
+      "tagline": "جێگرەوەی xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modela herî jêhatî ya Anthropic bi kapasîteyên fikirîn, kodkirin, û afirîneriyê yên awarte. Ji bo analîza tevlihev, lêkolîn, û karên ku têgihîştina kûr hewce dikin çêtirîn e.",
-      "knowledgeCutoff": "Çile 2025"
+      "knowledgeCutoff": "Çile 2025",
+      "tagline": "نەسڵی پێشووی Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modela Claude ya hevseng ku di kodkirin, analîz, û karên afirîner de performansa hêja pêşkêş dike. Ji bo bikaranîna rojane bi demê bersiva bilez pir baş e.",
-      "knowledgeCutoff": "Çile 2025"
+      "knowledgeCutoff": "Çile 2025",
+      "tagline": "نەسڵی پێشووی Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modela Claude Opus ya nifşê berê. Ji bo karên kodkirina tevlihev, analîza berfireh, û têgihîştina hûrgulî pir baş e.",
-      "knowledgeCutoff": "Çile 2025"
+      "knowledgeCutoff": "Çile 2025",
+      "tagline": "نەسڵی پێشووی Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modela Claude ya lez û erzantir ku ji bo karên bilez optimize kirî ye. Ji bo pirsên hêsan, kurtkirin, û serlêdanên qelebalix pir baş e.",
-      "knowledgeCutoff": "Çile 2025"
+      "knowledgeCutoff": "Çile 2025",
+      "tagline": "کلودێکی خێرا"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "بەهێزترین مۆدێلی Anthropic. گونجاو بۆ نووسینی درێژ، توێژینەوە و ئەرکە پێویست بە بیرکردنەوەی بە باوەڕ.",
-      "knowledgeCutoff": "شوباتی ٢٠٢٦"
+      "knowledgeCutoff": "شوباتی ٢٠٢٦",
+      "tagline": "نووسین و ڕاوێژکاری درێژ"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "مۆدێلی Claude ی تەوازنە. گونجاو بۆ نووسینی ڕۆژانە، ڕەخنە و کۆدنووسین بە وەڵامدانی خێرا.",
-      "knowledgeCutoff": "شوباتی ٢٠٢٦"
+      "knowledgeCutoff": "شوباتی ٢٠٢٦",
+      "tagline": "کلودێکی هەماھەنگی ڕۆژانە"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "مۆدێلی کراوەی سەرچاوە لە لایەن Meta. باشە بۆ نوسین، کورتەکەرەکان و پرسیارە خفۆکان."
+      "description": "مۆدێلی کراوەی سەرچاوە لە لایەن Meta. باشە بۆ نوسین، کورتەکەرەکان و پرسیارە خفۆکان.",
+      "tagline": "هەڵبەستەی کراوە"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "دواین مۆدێلی سەرەکی OpenAI. بەردەوام لە نوسین، توێژینەوە، کۆدنووسی و چۆنیەتی چارەسەرکردنی کێشە گرانەکان."
+      "description": "دواین مۆدێلی سەرەکی OpenAI. بەردەوام لە نوسین، توێژینەوە، کۆدنووسی و چۆنیەتی چارەسەرکردنی کێشە گرانەکان.",
+      "tagline": "نوێترین گەورەترین GPT"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "بچوکترین و خێراترین جۆری GPT. باشە بۆ ئیشە خفۆ و سادەکان بە کەمترین خەرجی."
+      "description": "بچوکترین و خێراترین جۆری GPT. باشە بۆ ئیشە خفۆ و سادەکان بە کەمترین خەرجی.",
+      "tagline": "بچووکترین و خێراترین GPT"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "جۆری دیالۆگی GPT داڕشتراوە بۆ گفتوگۆ. گونجاوە بۆ چاتەکانی ڕۆژانە، بیرکردنەوە و یارمەتیدانی وتوێژ."
+      "description": "جۆری دیالۆگی GPT داڕشتراوە بۆ گفتوگۆ. گونجاوە بۆ چاتەکانی ڕۆژانە، بیرکردنەوە و یارمەتیدانی وتوێژ.",
+      "tagline": "نوێترترین گفتوگۆ-GPT"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "مۆدێلی سەرەکی GPT-5، هێشتا توانای نوسین، ڕاوشت و کۆدنووسی داری هەیە."
+      "description": "مۆدێلی سەرەکی GPT-5، هێشتا توانای نوسین، ڕاوشت و کۆدنووسی داری هەیە.",
+      "tagline": "گەورەترین GPT-ی پێشوو"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "جۆری وەک چات دەستکاریکراوی GPT-5. گونجاوە بۆ گفتوگۆ و بیرکردنەوەی ڕۆژانە."
+      "description": "جۆری وەک چات دەستکاریکراوی GPT-5. گونجاوە بۆ گفتوگۆ و بیرکردنەوەی ڕۆژانە.",
+      "tagline": "گفتوگۆ-GPT-ی پێشوو"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "مۆدێلی جیاوازەی multimodal-y سپی GPT. گونجاوە بۆ نوسین و پرسیار و وەڵام لە کاتێک توانای دووپات نەکراوە دەپێویست."
+      "description": "مۆدێلی جیاوازەی multimodal-y سپی GPT. گونجاوە بۆ نوسین و پرسیار و وەڵام لە کاتێک توانای دووپات نەکراوە دەپێویست.",
+      "tagline": "GPT-ی چەند فۆرمی پێشوو"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "وەشانی بچوکی خێراتری GPT-4.1 بۆ ئیشە ڕۆژانە و خفۆکان."
+      "description": "وەشانی بچوکی خێراتری GPT-4.1 بۆ ئیشە ڕۆژانە و خفۆکان.",
+      "tagline": "نەسڵی پێشووەکەی GPT-ی سووک"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "دواین و بەهێزترین مۆدێلی Anthropic. زۆر باشە بۆ نوسینی درێژ، توێژینەوە، کۆدنووسی و ڕاوشت."
+      "description": "دواین و بەهێزترین مۆدێلی Anthropic. زۆر باشە بۆ نوسینی درێژ، توێژینەوە، کۆدنووسی و ڕاوشت.",
+      "tagline": "نوێترین و بەهێزترین کلود"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "دواین مۆدێلی کراوەی DeepSeek. پارێزراوە بۆ نوسین و پرسیارە فنییەکان."
+      "description": "دواین مۆدێلی کراوەی DeepSeek. پارێزراوە بۆ نوسین و پرسیارە فنییەکان.",
+      "tagline": "هەڵبەستەی کراوە"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "مۆدێلی سەرەکی Mistral. هەڵبژاردەی یەورووپایی بۆ نوسین، کورتەکەر و پرسیار گشتییەکان."
+      "description": "مۆدێلی سەرەکی Mistral. هەڵبژاردەی یەورووپایی بۆ نوسین، کورتەکەر و پرسیار گشتییەکان.",
+      "tagline": "مۆدێلی ئەورووپیی کراوە"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "وەشانی زووتر لە مۆدێلی سەرەکی GPT-5. هێشتا بەهێزە لە نوسین، ڕاوشت و کۆدنووسی."
+      "description": "وەشانی زووتر لە مۆدێلی سەرەکی GPT-5. هێشتا بەهێزە لە نوسین، ڕاوشت و کۆدنووسی.",
+      "tagline": "گەورەترین GPT-5ی پێشووتر"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "وەشانی چات داڕشتراوی پێشبڕکەی GPT-5. گونجاوە بۆ گفتوگۆ و بیرکردنەوەی ڕۆژانە."
+      "description": "وەشانی چات داڕشتراوی پێشبڕکەی GPT-5. گونجاوە بۆ گفتوگۆ و بیرکردنەوەی ڕۆژانە.",
+      "tagline": "گفتوگۆ-GPT-ی پێشووتر"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "بچوکترین جۆری GPT-5. باشە بۆ ئیشە خفۆ و سادەکان بە کەمترین خەرجی."
+      "description": "بچوکترین جۆری GPT-5. باشە بۆ ئیشە خفۆ و سادەکان بە کەمترین خەرجی.",
+      "tagline": "بچووکی نەسڵی پێشووەکەی GPT"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "بچوکترین جۆری GPT-4.1. گونجاوە بۆ ئیشە خفۆ و سادەکان لە کاتی گرنگی خێرایی و نرخ."
+      "description": "بچوکترین جۆری GPT-4.1. گونجاوە بۆ ئیشە خفۆ و سادەکان لە کاتی گرنگی خێرایی و نرخ.",
+      "tagline": "بچووکترین GPT-ی نەسڵی پێشوو"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "وەشانی بچوک و خێرای GPT-4o. گونجاوە بۆ ئیشە خفۆ و ڕۆژانە کە توانای دووپات نەکراوە پێویست نییە."
+      "description": "وەشانی بچوک و خێرای GPT-4o. گونجاوە بۆ ئیشە خفۆ و ڕۆژانە کە توانای دووپات نەکراوە پێویست نییە.",
+      "tagline": "سووکترین GPT-ی چەند فۆرمی پێشوو"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "مۆدێلی تەفسیری کەم قەبارە. باشە بۆ ماتماتیک، مەنتیق و چارەسەرکردنی بەرز بە نرخێکی کەمتر لە o3."
+      "description": "مۆدێلی تەفسیری کەم قەبارە. باشە بۆ ماتماتیک، مەنتیق و چارەسەرکردنی بەرز بە نرخێکی کەمتر لە o3.",
+      "tagline": "فێرکاری خێرا و بە نرخێکی گونجاو"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "مۆدێلی کەم قەبارەی تەفسیری پێشوو. کاردەکاتە سەر ماتماتیک، زانست و مەشقی مەنتیقی بە بەجێی."
+      "description": "مۆدێلی کەم قەبارەی تەفسیری پێشوو. کاردەکاتە سەر ماتماتیک، زانست و مەشقی مەنتیقی بە بەجێی.",
+      "tagline": "فێرکاری قەدەغەی بچووک"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "زیرەکترین مۆدێلی Anthropic، یەکەم لە خێزانە Claude 5. زۆر باشە بۆ قورسترین ئیشەکانی نوسین، توێژینەوە و کۆدنووسی."
+      "description": "زیرەکترین مۆدێلی Anthropic، یەکەم لە خێزانە Claude 5. زۆر باشە بۆ قورسترین ئیشەکانی نوسین، توێژینەوە و کۆدنووسی.",
+      "tagline": "مۆدێلی پێشەنگی Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "دواین Claude-ی هاوبەش، یەکەم لە خێزانە Claude 5. بەهێزی نوسینی ڕۆژانە، ڕاوشت و کۆدنووسی بە وەڵامی خێرا."
+      "description": "دواین Claude-ی هاوبەش، یەکەم لە خێزانە Claude 5. بەهێزی نوسینی ڕۆژانە، ڕاوشت و کۆدنووسی بە وەڵامی خێرا.",
+      "tagline": "نوێترین کلودێکی هەماھەنگ"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "مۆدێلی قەبارە ناوەڕاستی Mistral. هەڵبژاردەی یەورووپایی بەرەوپێش گرنگی اندازه و خێرایی بۆ کارە ڕۆژانەکان."
+      "description": "مۆدێلی قەبارە ناوەڕاستی Mistral. هەڵبژاردەی یەورووپایی بەرەوپێش گرنگی اندازه و خێرایی بۆ کارە ڕۆژانەکان.",
+      "tagline": "مۆدێلی هەماھەنگی ئەورووپی"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "مۆدێلی بچوکی Mistral. خێرا و بێبەهای بۆ کورتەکەر، پڕۆژە سادە و پرسیارەکان."
+      "description": "مۆدێلی بچوکی Mistral. خێرا و بێبەهای بۆ کورتەکەر، پڕۆژە سادە و پرسیارەکان.",
+      "tagline": "مۆدێلی بچوک و خێرای ئەورووپی"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "مۆدێلی زۆر بچوکی Mistral. باشە بۆ زۆر ئیشە خفۆ و سادەکان بە کەمترین خەرجی."
+      "description": "مۆدێلی زۆر بچوکی Mistral. باشە بۆ زۆر ئیشە خفۆ و سادەکان بە کەمترین خەرجی.",
+      "tagline": "Mistral-ی بچووک بۆ بەکارهێنانی کەنار"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "وەشانی ڕەشەکەوتنی DeepSeek-R1. فکری خۆی پەوە دەکات بە هەنگاوبەهەنگاو بە ژووری بەتری تەفسیری."
+      "description": "وەشانی ڕەشەکەوتنی DeepSeek-R1. فکری خۆی پەوە دەکات بە هەنگاوبەهەنگاو بە ژووری بەتری تەفسیری.",
+      "tagline": "مۆدێلی فێرکاری کراوە نوێکرایەوە"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "مۆدێلی کراوەی سەرچاوەیەکی ساکتر لە Meta. خێرا بۆ نوسین، کورتەکەر و پرسیارە ڕۆژانەکان."
+      "description": "مۆدێلی کراوەی سەرچاوەیەکی ساکتر لە Meta. خێرا بۆ نوسین، کورتەکەر و پرسیارە ڕۆژانەکان.",
+      "tagline": "LLama-ی کراوە و کارا"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "مەودێلی کراوەیەکی کۆن لە Meta. هێشتا باشە بۆ نووسینی گشتی و پرسیار و وەلام."
+      "description": "مەودێلی کراوەیەکی کۆن لە Meta. هێشتا باشە بۆ نووسینی گشتی و پرسیار و وەلام.",
+      "tagline": "LLama-ی کراوەی پێشوو"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "مەودێلی سەرەکی xAI. گونجاو بۆ گفتوگۆی کراوە، ڕاوێژکاری، و پڕۆژەی خەیاڵی."
+      "description": "مەودێلی سەرەکی xAI. گونجاو بۆ گفتوگۆی کراوە، ڕاوێژکاری، و پڕۆژەی خەیاڵی.",
+      "tagline": "گەورەترین xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "نوێترین مەودێلی سەرەکی OpenAI. بەهێزە لە نووسین، توێژینەوە، کۆدنووسی و چەسپاندنی کێشەی کۆمپلیکس."
+      "description": "نوێترین مەودێلی سەرەکی OpenAI. بەهێزە لە نووسین، توێژینەوە، کۆدنووسی و چەسپاندنی کێشەی کۆمپلیکس.",
+      "tagline": "نوێترین گەورەترین GPT"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (نوێترین)",
-      "description": "ناوی گەڕاوەیەک کە هەمیشە بە نوێترین مەودێلی گفتوگۆی OpenAI گەڕاوەی دەكات. جێگرەوەی ئەزوری بۆ وەشانە هاویشتووەکانی gpt-*-chat."
+      "description": "ناوی گەڕاوەیەک کە هەمیشە بە نوێترین مەودێلی گفتوگۆی OpenAI گەڕاوەی دەكات. جێگرەوەی ئەزوری بۆ وەشانە هاویشتووەکانی gpt-*-chat.",
+      "tagline": "ھەمیشە نوێترین گفتوگۆ-GPT"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "دەرهێنانی نوێی Opus لە نێوان 4.6 و 4.8. بەهێزە بۆ نووسینی درێژ، توێژینەوە، کۆدنووسی و ڕاوێژکاری باوەڕپێکراو."
+      "description": "دەرهێنانی نوێی Opus لە نێوان 4.6 و 4.8. بەهێزە بۆ نووسینی درێژ، توێژینەوە، کۆدنووسی و ڕاوێژکاری باوەڕپێکراو.",
+      "tagline": "دەرچوونی نوێی Opus"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "نوێترین مەودێلی پەیوەندیدانی DeepSeek و جێگرەوەی ئەزوری بۆ خێزانی R1. پێگەیشتنەکەی بە ئارامی پێش دەکات."
+      "description": "نوێترین مەودێلی پەیوەندیدانی DeepSeek و جێگرەوەی ئەزوری بۆ خێزانی R1. پێگەیشتنەکەی بە ئارامی پێش دەکات.",
+      "tagline": "نوێترین مۆدێلی ڕاوێژکاری کراوە"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "جۆری خێرایی V4 لە DeepSeek و جێگرەوەی ئەزوری بۆ خێزانی V3. خێرا بۆ نووسینی گشتی و پرسیارە تایبەتییەکان."
+      "description": "جۆری خێرایی V4 لە DeepSeek و جێگرەوەی ئەزوری بۆ خێزانی V3. خێرا بۆ نووسینی گشتی و پرسیارە تایبەتییەکان.",
+      "tagline": "هەڵبەستەی کراوەی خێرا"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "مەودێلی پەیوەندیدانی خێرا لە xAI. بە هەنگاو بە هەنگاو لە فیکردندا وەڵام بدە."
+      "description": "مەودێلی پەیوەندیدانی خێرا لە xAI. بە هەنگاو بە هەنگاو لە فیکردندا وەڵام بدە.",
+      "tagline": "مۆدێلی فێرکاری خێرای xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "مەودێلی گفتوگۆی خێرا لە xAI. وەڵامە خێراکان بۆ پرسیار و گفتوگۆی ڕۆژانە."
+      "description": "مەودێلی گفتوگۆی خێرا لە xAI. وەڵامە خێراکان بۆ پرسیار و گفتوگۆی ڕۆژانە.",
+      "tagline": "مۆدێلی گفتوگۆی خێرای xAI"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "مەودێلی سووکتر لە xAI. خێراتر و بە بێهێزی بۆ پرسیاری خێرا و گفتوگۆی ئۆپتی."
+      "description": "مەودێلی سووکتر لە xAI. خێراتر و بە بێهێزی بۆ پرسیاری خێرا و گفتوگۆی ئۆپتی.",
+      "tagline": "مەدێلی سووکی xAI"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "باشترین مۆدێلی GPT-5.6 لە OpenAI. بەهێزترینە بۆ نووسین، توێژینەوە، کۆدنووسین و چارەسەرکردنی کێشە گڕەکان."
+      "description": "باشترین مۆدێلی GPT-5.6 لە OpenAI. بەهێزترینە بۆ نووسین، توێژینەوە، کۆدنووسین و چارەسەرکردنی کێشە گڕەکان.",
+      "tagline": "نوێترین پۆلی گەورەترین GPT"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "دانەیەکی گرنگی مێژووی GPT-5.6 ی OpenAI. گونجاوە بۆ نووسینی ڕۆژانە، ڕاوێژکاری و کۆدنووسین بە وەڵامی خێرا."
+      "description": "دانەیەکی گرنگی مێژووی GPT-5.6 ی OpenAI. گونجاوە بۆ نووسینی ڕۆژانە، ڕاوێژکاری و کۆدنووسین بە وەڵامی خێرا.",
+      "tagline": "GPT-5.6 یەکەی ڕۆژانەی ئاسای"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "مۆدێلی خفیف و خێرای GPT-5.6 ی OpenAI. باشە بۆ پرسیارێکی خێرا و کارە سادەکان بە تێچووی کەم."
+      "description": "مۆدێلی خفیف و خێرای GPT-5.6 ی OpenAI. باشە بۆ پرسیارێکی خێرا و کارە سادەکان بە تێچووی کەم.",
+      "tagline": "GPT-5.6 یەکەی خفیف و خێرا"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "نوێترین مۆدێلی قەدەغەی ناوەندەی Mistral. هاوشێوەیەکی ئەورووپی کە توانای و خێرایی بەهێمن دەکات بۆ کارە ڕۆژانەکان."
+      "description": "نوێترین مۆدێلی قەدەغەی ناوەندەی Mistral. هاوشێوەیەکی ئەورووپی کە توانای و خێرایی بەهێمن دەکات بۆ کارە ڕۆژانەکان.",
+      "tagline": "مۆدێلی ئێورووپایی ئاسای"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "مۆدێلی کراوەی Moonshot AI. بەهێز لە کارە ئۆتۆماتیکەکان، نووسینی کۆد، و بەڵگەنامە درێژەکان.",
+      "tagline": "مۆدێلی کراوەی کارگێڕ"
     }
   },
   "searchMode": {

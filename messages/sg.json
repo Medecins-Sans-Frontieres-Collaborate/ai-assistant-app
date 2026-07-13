@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modèle AI sô GPT-4.1 a dûti na gïngö na web na ôke tî nzönî na Bing. A fa mëngö tî nzönî, vérification tî fait, na hînga tî événement sô a yeke. Nzönî tî recherche sô a kë mëngö tî nzönî, analyse tî actualité, na vérification tî fait.",
-      "knowledgeCutoff": "Gïngö na web na ôke tî nzönî"
+      "knowledgeCutoff": "Gïngö na web na ôke tî nzönî",
+      "tagline": "Génération sôh OpenAI âkô"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modèle tî bê awe tî OpenAI, nzönî na pössö gâ, génération tî code, na résolution tî problème technique. Nzönî tî sâra analytique, défi tî programmation, recherche, na explication détaillé. A sara na effort tî pössö na verbosité sô a sëndä.",
-      "knowledgeCutoff": "Déc 2025"
+      "knowledgeCutoff": "Déc 2025",
+      "tagline": "Kode, analize, rechèrche"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variante na hïngängö na sô a coûter pepe tî GPT-5, optimisé tî vitesse na qualité gâ. Nzönî tî mosâra tî lâ awe, requête na hïngängö, routage tî outils, na application sô a kë réponse na hïngängö. Balance nzönî tî performance na efficacité.",
-      "knowledgeCutoff": "6 août 2025, 20:00"
+      "knowledgeCutoff": "6 août 2025, 20:00",
+      "tagline": "Yeke na vite ti mbi na nzönî tî mbi"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Déc 2025",
-      "description": "Ködörö ti GPT-5.2 tîgu sô tî loso-mbeni, yeke ti sâra kêtê tî gbâ-firifiri na sô tî môlengê ni nzönî. A sô tî yôkê na kêtê, tëngbï, sâra maboko tî foro, na sô tî mingi nginza, ni bûku na maboko tî nzönî wa. A ndö a môlengê na mo, ngangu-lingbi na maboko tî si a lônzi, na siriri sô tî nga yângâ-nginza."
+      "description": "Ködörö ti GPT-5.2 tîgu sô tî loso-mbeni, yeke ti sâra kêtê tî gbâ-firifiri na sô tî môlengê ni nzönî. A sô tî yôkê na kêtê, tëngbï, sâra maboko tî foro, na sô tî mingi nginza, ni bûku na maboko tî nzönî wa. A ndö a môlengê na mo, ngangu-lingbi na maboko tî si a lônzi, na siriri sô tî nga yângâ-nginza.",
+      "tagline": "Zia lingbi, yâkô tî gbêtî"
     },
     "o3": {
       "name": "o3",
       "description": "Modèle tî pössö tî bê awe tî OpenAI na capacité tî résolution tî problème gâ. Nzönî na mathématique gâ, pössö scientifique, défi tî code, na sâra logique na étape mbâ. Fenêtre tî contexte gâ 200K. A sara na contrôle tî effort tî pössö.",
-      "knowledgeCutoff": "8 avr 2025, 20:00"
+      "knowledgeCutoff": "8 avr 2025, 20:00",
+      "tagline": "Kombâ tî tenî-tenî na nzönî mîngi"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Spécialiste tî pössö sô a fa mosâra tî ë étape na étape. Nzönî tî problème tî mathématique, puzzle logique, na hînga tî concept gâ. Bâa ndâlï a pössö na problème na ôke tî nzönî.",
-      "knowledgeCutoff": "20 jan 2025"
+      "knowledgeCutoff": "20 jan 2025",
+      "tagline": "La yeke tenî-tenî nzönî mîngi"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modèle gâ na awe ndo nzönî na code na sü technique. Nzönî tî gä problème na code, sü documentation, na fa concept technique. Na hïngângö na nzönî tî mosâra tî développement.",
-      "knowledgeCutoff": "16 avr 2025, 00:45"
+      "knowledgeCutoff": "16 avr 2025, 00:45",
+      "tagline": "Yângâ tî open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modèle na capacité mbâ na xAI sô a hînga na réponse na nuance. Nzönî tî discussion ouvert, projet créatif, na résolution tî problème gâ.",
-      "knowledgeCutoff": "13 mai 2025, 00:16"
+      "knowledgeCutoff": "13 mai 2025, 00:16",
+      "tagline": "Yângâ tî xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modèle tî bê awe tî Anthropic na pössö, code, na capacité créatif gâ. Nzönî tî analyse gâ, recherche, na sâra sô a kë hînga nzönî.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération ye yâh Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modèle Claude na balance sô a fa performance nzönî na code, analyse, na sâra créatif. Nzönî tî mosâra tî lâ awe na réponse na hïngângö.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération sôh Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modèle Claude Opus tî kâï. Nzönî tî sâra tî code gâ, analyse détaillé, na hînga na nuance.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération sôh Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modèle Claude na hïngângö na sô a coûter pepe optimisé tî sâra na hïngängö. Nzönî tî requête tî lêgê, résumé, na application na volume gâ.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Claude sô yeke na vite"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Model ti Anthropic so a siriri mbiliengo. A yeke ti écrit long, rechèrche, na swâ so yeke gbangabango.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Kûâtî na analize tî bidû"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude so a siriri. A yéké ti écrit ndô, analyse na code, na réponse rapide.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude sô yeke na mûngû"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Modëli ti Meta ti wa na loso. Ala sôkô, nzönî, na mbênî ti wâfa gïrï na yângâ kêtê."
+      "description": "Modëli ti Meta ti wa na loso. Ala sôkô, nzönî, na mbênî ti wâfa gïrï na yângâ kêtê.",
+      "tagline": "Yângâ tî open-source"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Modëli mbêrê-mbêrê ti OpenAI. Ala maketaan na kôzo, yâ na mbinutù, na kôdî, na nzönî mândro-mândro."
+      "description": "Modëli mbêrê-mbêrê ti OpenAI. Ala maketaan na kôzo, yâ na mbinutù, na kôdî, na nzönî mândro-mândro.",
+      "tagline": "GPT sô yeke na mbî"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Modëli GPT ti mûmî, ti kôkô. Ala ti bâa yângâ, kaka ti ngangu na adusa tî mû."
+      "description": "Modëli GPT ti mûmî, ti kôkô. Ala ti bâa yângâ, kaka ti ngangu na adusa tî mû.",
+      "tagline": "GPT sô yê bê ti ndunga na vite"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Modëli GPT ti nzönî ti bûngbi. Ala ti yângâ ti nzönî ngangu, ngbä gbaza, na mûnî maboko."
+      "description": "Modëli GPT ti nzönî ti bûngbi. Ala ti yângâ ti nzönî ngangu, ngbä gbaza, na mûnî maboko.",
+      "tagline": "GPT na dialogue tî mbî"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "GPT-5 ti boso-mboso. Ngu yeke si na kôzo, gbângbâ, na kôdî."
+      "description": "GPT-5 ti boso-mboso. Ngu yeke si na kôzo, gbângbâ, na kôdî.",
+      "tagline": "GPT mbongo tî mbî"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "Modëli GPT-5 ti nzönî. Ala ti nzönî ti sôkô na ngbä gbaza."
+      "description": "Modëli GPT-5 ti nzönî. Ala ti nzönî ti sôkô na ngbä gbaza.",
+      "tagline": "GPT na dialogue tî mbongo"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "GPT ti ndondo na ti multimodal. Ala ti kôzo sôkô na mbeni wâfa na Q&A nî, sô ndoye sïkï ta."
+      "description": "GPT ti ndondo na ti multimodal. Ala ti kôzo sôkô na mbeni wâfa na Q&A nî, sô ndoye sïkï ta.",
+      "tagline": "GPT multimodal sô yâh"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "GPT-4.1 ti mûmî na kôkô, ala ti bâa yângâ ti sôkô."
+      "description": "GPT-4.1 ti mûmî na kôkô, ala ti bâa yângâ ti sôkô.",
+      "tagline": "GPT sôh sô yê bê"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Modëli fulu-fulu ti Anthropic. Ala ti kôzo ndö, mbinutù, kôdî, na gbângbâ ti nzönî na ngû."
+      "description": "Modëli fulu-fulu ti Anthropic. Ala ti kôzo ndö, mbinutù, kôdî, na gbângbâ ti nzönî na ngû.",
+      "tagline": "Claude sô yeke na mbî na maboko"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Modëli loso ti DeepSeek ti nga. Ala ti kôzo na mbeni wâfa na dîgî teknikï."
+      "description": "Modëli loso ti DeepSeek ti nga. Ala ti kôzo na mbeni wâfa na dîgî teknikï.",
+      "tagline": "Yângâ tî open-source"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Modëli boso-mboso ti Mistral. Ala ti Eropë, mô na kôzo, nzönî, na mbeni wâfa kêtê."
+      "description": "Modëli boso-mboso ti Mistral. Ala ti Eropë, mô na kôzo, nzönî, na mbeni wâfa kêtê.",
+      "tagline": "Modèle Européen tî open-weight"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Modëli GPT-5 ti ndondo. Ala tuku si na kôzo, gbângbâ, na kôdî."
+      "description": "Modëli GPT-5 ti ndondo. Ala tuku si na kôzo, gbângbâ, na kôdî.",
+      "tagline": "GPT-5 mbongo tî mbî"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Modëli GPT-5 ti nzönî ti ndondo. Ala ti nzönî sôkô na ngbä gbaza."
+      "description": "Modëli GPT-5 ti nzönî ti ndondo. Ala ti nzönî sôkô na ngbä gbaza.",
+      "tagline": "GPT na dialogue tî mbongo"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "GPT-5 ti mûmî-mûmî. Ala ti bâa yângâ ti mû, kaka na adusa tî mû."
+      "description": "GPT-5 ti mûmî-mûmî. Ala ti bâa yângâ ti mû, kaka na adusa tî mû.",
+      "tagline": "GPT sô yê bê tî génération sôh"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "GPT-4.1 ti mûmî-mûmî. Ala ti bâa yângâ na mû, sô te mbi yari adusa na sängö."
+      "description": "GPT-4.1 ti mûmî-mûmî. Ala ti bâa yângâ na mû, sô te mbi yari adusa na sängö.",
+      "tagline": "GPT sô yê bê tî génération sôh"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "GPT-4o ti mûmî, ti kôkô. Ala ti yângâ na mû sôkô, sô ndoye sïkï ta."
+      "description": "GPT-4o ti mûmî, ti kôkô. Ala ti yângâ na mû sôkô, sô ndoye sïkï ta.",
+      "tagline": "GPT multimodal yâh sô yê bê"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Modëli mûmî ti gbângbâ. Ala si na matëmatîkï, lojîkï, na ngângâ ti wa ta sï lâ adusa mîngi na o3."
+      "description": "Modëli mûmî ti gbângbâ. Ala si na matëmatîkï, lojîkï, na ngângâ ti wa ta sï lâ adusa mîngi na o3.",
+      "tagline": "Nzönî na vite na nzönî tî pèhoko"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Modëli mûmî ti gbângbâ ti ndondo. Ala ti matëmatîkï, sayânsë na lojîkï ti mûmî."
+      "description": "Modëli mûmî ti gbângbâ ti ndondo. Ala ti matëmatîkï, sayânsë na lojîkï ti mûmî.",
+      "tagline": "Nzönî tenî-tenî sô yê bê"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Modëli ti Anthropic ti nga ti yeke. Fulanî ti gïrï na kôzo sïnga-sïnga, mbinutù, na kôdî."
+      "description": "Modëli ti Anthropic ti nga ti yeke. Fulanî ti gïrï na kôzo sïnga-sïnga, mbinutù, na kôdî.",
+      "tagline": "Modèle tî frontière tî Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Modëli fulu-fulu ti Claude, bodö ti Claude 5. Ala ti kôzo, gbângbâ, na kôdî sôkô na dâ sï mbi fadë."
+      "description": "Modëli fulu-fulu ti Claude, bodö ti Claude 5. Ala ti kôzo, gbângbâ, na kôdî sôkô na dâ sï mbi fadë.",
+      "tagline": "Claude mûngû sô yeke na mbî"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Modëli ti mû tî Mistral. Ala ti Eropë; mingi yeke sï na yângâ na adusa."
+      "description": "Modëli ti mû tî Mistral. Ala ti Eropë; mingi yeke sï na yângâ na adusa.",
+      "tagline": "Modèle Européen mûngû"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Modëli mûmî ti Mistral. Ala ti mû, kôkô na nzönî, kôzo, na mbeni wâfa mû."
+      "description": "Modëli mûmî ti Mistral. Ala ti mû, kôkô na nzönî, kôzo, na mbeni wâfa mû.",
+      "tagline": "Modèle Européen sô yê bê na vite"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Modëli mûmî-mûmî ti Mistral. Ala ti mû na kôkô ti yângâ mû, kaka na adusa mû."
+      "description": "Modëli mûmî-mûmî ti Mistral. Ala ti mû na kôkô ti yângâ mû, kaka na adusa mû.",
+      "tagline": "Mistral tî bordure sô yê bê"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Modëli DeepSeek-R1 ti kasï. Yeke kundusi nzönî na sîngî-sîngî."
+      "description": "Modëli DeepSeek-R1 ti kasï. Yeke kundusi nzönî na sîngî-sîngî.",
+      "tagline": "Modèle tî nzönî tî open bâ ti tambula"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Modëli hõngö ti Meta. Ala ti mû na kôzo, nzönî, na mbeni wâfa ti yako ndoye."
+      "description": "Modëli hõngö ti Meta. Ala ti mû na kôzo, nzönî, na mbeni wâfa ti yako ndoye.",
+      "tagline": "Llama tî open-source sô ye bê na nzamba"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Model mû rungana ti Meta. Azô lo faî ti yângâ tî ekolo na mbeni Q&A."
+      "description": "Model mû rungana ti Meta. Azô lo faî ti yângâ tî ekolo na mbeni Q&A.",
+      "tagline": "Llama tî open-source sô yâh"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Model ekoli tî xAI. Gwe tî yângâ na bâ mbeti, analisa, na mo sô oko tene."
+      "description": "Model ekoli tî xAI. Gwe tî yângâ na bâ mbeti, analisa, na mo sô oko tene.",
+      "tagline": "Mbî tî xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Model mbênî tî OpenAI. Gbê sara gbâ yângâ, siriri, kode, na finî sô zûnzû."
+      "description": "Model mbênî tî OpenAI. Gbê sara gbâ yângâ, siriri, kode, na finî sô zûnzû.",
+      "tagline": "GPT mbî na mbî"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (mbênî)",
-      "description": "Alias sô atênî da model chat-tuned tî OpenAI sô pekê. Model ti Azure sô ate na model gpt-*-chat sô abê."
+      "description": "Alias sô atênî da model chat-tuned tî OpenAI sô pekê. Model ti Azure sô ate na model gpt-*-chat sô abê.",
+      "tagline": "GPT dialogue sô yeke na mbî nda nzapa"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Opus mbênî, na pökö 4.6 na 4.8. Gbê lâ yângâ lôngo, siriri, kode, na analisa sô zîngö."
+      "description": "Opus mbênî, na pökö 4.6 na 4.8. Gbê lâ yângâ lôngo, siriri, kode, na analisa sô zîngö.",
+      "tagline": "Opus sô bâ tambula"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Model reasoning mbênî tî DeepSeek na model Azure sô ate tî R1. A tombê yâ tî sô yéké tenè na linga-linga."
+      "description": "Model reasoning mbênî tî DeepSeek na model Azure sô ate tî R1. A tombê yâ tî sô yéké tenè na linga-linga.",
+      "tagline": "Modèle tî nzönî open na mbî"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Model V4 sô vîvî tî DeepSeek na ate tî V3 na Azure. Yângâ tî eke na kodoro na kétésè tî teknik."
+      "description": "Model V4 sô vîvî tî DeepSeek na ate tî V3 na Azure. Yângâ tî eke na kodoro na kétésè tî teknik.",
+      "tagline": "Yângâ tî open-source na vite"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "Model reasoning sô vîvî tî xAI. A tîngana na maboko na yângâ vîvî."
+      "description": "Model reasoning sô vîvî tî xAI. A tîngana na maboko na yângâ vîvî.",
+      "tagline": "Modèle tî nzönî na vite tî xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Model chat sô vîvî tî xAI. Yângâ vîvî tî kétésè na bâ mbeti linga-linga."
+      "description": "Model chat sô vîvî tî xAI. Yângâ vîvî tî kétésè na bâ mbeti linga-linga.",
+      "tagline": "Modèle tî dialogue na vite tî xAI"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Model xAI sô sôkôti. A vîvî na ngâ ti kétésè kekerekete na chat sô sôkôti."
+      "description": "Model xAI sô sôkôti. A vîvî na ngâ ti kétésè kekerekete na chat sô sôkôti.",
+      "tagline": "Modèle xAI sô yê bê"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Sü ti OpenAI GPT-5.6. A zia na mo da yeke kûê, bâra, kodê, na kûê ti matungo we na lo."
+      "description": "Sü ti OpenAI GPT-5.6. A zia na mo da yeke kûê, bâra, kodê, na kûê ti matungo we na lo.",
+      "tagline": "Tier tî mbî tî GPT mbî"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Ala nge na mbi sokodro na OpenAI GPT-5.6. A yeke mbi lo na bâra ti nzoni, kodê, na kuê pâsê."
+      "description": "Ala nge na mbi sokodro na OpenAI GPT-5.6. A yeke mbi lo na bâra ti nzoni, kodê, na kuê pâsê.",
+      "tagline": "GPT-5.6 wa na butû ti yeke seka sôkôlo"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Ala ti light, la biani ti OpenAI GPT-5.6. A besto na mbîrini gbaya na bâra mbegue na mbâ  a kêtê."
+      "description": "Ala ti light, la biani ti OpenAI GPT-5.6. A besto na mbîrini gbaya na bâra mbegue na mbâ  a kêtê.",
+      "tagline": "GPT-5.6 wa na lijiki na yeke teni"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Model ti Mistral ti sôgbâ ti Europe. A tîngbâ so siriri na mbi kêtê na bâra ti lere na vakê."
+      "description": "Model ti Mistral ti sôgbâ ti Europe. A tîngbâ so siriri na mbi kêtê na bâra ti lere na vakê.",
+      "tagline": "Modeli Européen wa na butû"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modeli wa Moonshot AI sô azî ti bê ti mbeti. Na mbi nzönî ti agentic, kôdi, na dokümenti ngangu.",
+      "tagline": "Modeli agentic wa na bê ti mbeti"
     }
   },
   "searchMode": {

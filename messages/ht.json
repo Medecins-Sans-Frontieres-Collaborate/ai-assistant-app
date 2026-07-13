@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modèl AI ki alimante pa GPT-4.1 ak rechèch wèb an tan reyèl via Bing. Bay enfòmasyon ajou, verifikasyon fè, ak konsyans evènman aktyèl. Pi bon pou rechèch ki bezwen enfòmasyon resan, analiz nouvèl, ak verifikasyon fè.",
-      "knowledgeCutoff": "Rechèch wèb an tan reyèl"
+      "knowledgeCutoff": "Rechèch wèb an tan reyèl",
+      "tagline": "Dènye jenerasyon OpenAI anvan an"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modèl pi avanse OpenAI a, ki ekselè nan rezonman konplèks, jenerasyon kòd, ak rezolisyon pwoblèm teknik. Pi bon pou travay analitik, defi pwogramasyon, rechèch, ak eksplikasyon detaye. Sipòte efò rezonman ajistab ak vèbozite repons.",
-      "knowledgeCutoff": "Des 2025"
+      "knowledgeCutoff": "Des 2025",
+      "tagline": "Kòd, analiz, rechèch"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Varyant pi rapid ak pi ekonomik GPT-5, optimize pou vitès pandan li kenbe kalite wo. Pafè pou travay chak jou, demann rapid, acheminman zouti, ak aplikasyon ki bezwen tan repons rapid. Ekselan balans pèfòmans ak efikasite.",
-      "knowledgeCutoff": "6 Out 2025 8:00 PM"
+      "knowledgeCutoff": "6 Out 2025 8:00 PM",
+      "tagline": "Pi rapid ak pi ba pri"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Des 2025",
-      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl."
+      "description": "Varyan espesyalize GPT-5.2 ki optimize pou entèraksyon konvèsasyonèl ak entèlijans emosyonèl. Li siperyè nan kominikasyon ak anpil konpasyon, ekriti kreyatif, reflechi ansanm, ak dyalòg natirèl. Ideyal pou konvèsasyon chak jou, sipò konsèy, ak travay ki mande konsyans emosyonèl.",
+      "tagline": "Konvèsasyon, refleksyon kolektif"
     },
     "o3": {
       "name": "o3",
       "description": "Modèl rezonman pi avanse OpenAI ak kapasite rezolisyon pwoblèm revolisyonè. Ekselè nan matematik konplèks, rezonman syantifik, defi kodaj, ak travay lojik milti-etap. Fenèt kontèks 200K elaji. Sipòte kontwòl efò rezonman.",
-      "knowledgeCutoff": "8 Avr 2025 8:00 PM"
+      "knowledgeCutoff": "8 Avr 2025 8:00 PM",
+      "tagline": "Rezonman etap pa etap pwofon"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Espesyalis rezonman ki montre travay li pa etap. Ekselan pou pwoblèm matematik, casse-tête lojik, ak konpreyansyon konsèp konplèks. Wè kijan li reflechi sou pwoblèm an tan reyèl.",
-      "knowledgeCutoff": "20 Jan 2025"
+      "knowledgeCutoff": "20 Jan 2025",
+      "tagline": "Montre rezònman etap pa etap"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modèl solid an jeneral espesyalman bon nan kodaj ak ekriti teknik. Ekselan pou deboge kòd, ekri dokimantasyon, ak eksplike konsèp teknik. Rapid epi fyab pou travay devlopman.",
-      "knowledgeCutoff": "16 Avr 2025 12:45 AM"
+      "knowledgeCutoff": "16 Avr 2025 12:45 AM",
+      "tagline": "Altènativ sous-ouvert"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modèl vèsatil ki soti nan xAI ki rekonèt pou repons nyanse. Ekselan pou diskisyon ouvè, pwojè kreyatif, ak rezoud pwoblèm konplèks.",
-      "knowledgeCutoff": "13 Me 2025 12:16 AM"
+      "knowledgeCutoff": "13 Me 2025 12:16 AM",
+      "tagline": "Altènativ xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modèl pi kapab Anthropic ak kapasite rezonman, kodaj, ak kreyativite eksepsyonèl. Pi bon pou analiz konplèks, rechèch, ak travay ki bezwen konpreyansyon pwofon.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Jenerasyon Opus anvan an"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modèl Claude balanse ki ofri ekselan pèfòmans nan kodaj, analiz, ak travay kreyatif. Ekselan pou itilizasyon chak jou ak tan repons rapid.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Jenerasyon Sonnet anvan an"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modèl Claude Opus jenerasyon anvan. Ekselan pou travay kodaj konplèks, analiz detaye, ak konpreyansyon nyanse.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Opus jenerasyon anvan an"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modèl Claude rapid ak ekonomik optimize pou travay rapid. Ekselan pou demann senp, rezime, ak aplikasyon gwo volim.",
-      "knowledgeCutoff": "Janvye 2025"
+      "knowledgeCutoff": "Janvye 2025",
+      "tagline": "Variant Claude rapid"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Pi fò modèl Anthropic lan. Bon pou ekri long, rechèch, ak travay k ap mande refleksyon.",
-      "knowledgeCutoff": "Fev 2026"
+      "knowledgeCutoff": "Fev 2026",
+      "tagline": "Ekriti long ak analiz"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Yon modèl Claude balanse. Bon pou ekri chak jou, analiz, ak kodaj ak repons rapid.",
-      "knowledgeCutoff": "Fev 2026"
+      "knowledgeCutoff": "Fev 2026",
+      "tagline": "Claude ekilibre pou chak jou"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Yon modèl sous louvri ki soti nan Meta. Bon pou ekriti, rezime, ak kesyon rapid."
+      "description": "Yon modèl sous louvri ki soti nan Meta. Bon pou ekriti, rezime, ak kesyon rapid.",
+      "tagline": "Altènativ sous-ouvert"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Dènye modèl prensipal OpenAI. Pwisan pou ekriti, rechèch, kodaj, ak rezoud pwoblèm konplèks."
+      "description": "Dènye modèl prensipal OpenAI. Pwisan pou ekriti, rechèch, kodaj, ak rezoud pwoblèm konplèks.",
+      "tagline": "Dènye modèl GPT prensipal la"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Varyasyon GPT ki pi piti ak pi rapid. Pi bon pou travay rapid ak senp ak pri minim."
+      "description": "Varyasyon GPT ki pi piti ak pi rapid. Pi bon pou travay rapid ak senp ak pri minim.",
+      "tagline": "Pi piti ak pi rapid GPT la"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Varyasyon GPT pou konvèsasyon, adapte pou dyalòg. Bon pou ti pale, jete ide, ak diskisyon sipò."
+      "description": "Varyasyon GPT pou konvèsasyon, adapte pou dyalòg. Bon pou ti pale, jete ide, ak diskisyon sipò.",
+      "tagline": "Nouvo chat GPT ajiste"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "Premye modèl GPT-5 prensipal. Toujou efikas pou ekriti, analiz, ak kodaj."
+      "description": "Premye modèl GPT-5 prensipal. Toujou efikas pou ekriti, analiz, ak kodaj.",
+      "tagline": "Modèl GPT prensipal anvan an"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "Varyasyon GPT-5 adapte pou konvèsasyon. Bon pou ti pale chak jou ak jete ide."
+      "description": "Varyasyon GPT-5 adapte pou konvèsasyon. Bon pou ti pale chak jou ak jete ide.",
+      "tagline": "GPT pou chat ajiste anvan an"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "Yon ansyen modèl GPT miltimodal. Apwopriye pou ekriti ak Q&A chak jou kote ou pa bezwen dènye kapasite yo."
+      "description": "Yon ansyen modèl GPT miltimodal. Apwopriye pou ekriti ak Q&A chak jou kote ou pa bezwen dènye kapasite yo.",
+      "tagline": "Vye GPT multimodal"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Yon vèsyon GPT-4.1 ki pi piti, pi rapid pou travay rapid chak jou."
+      "description": "Yon vèsyon GPT-4.1 ki pi piti, pi rapid pou travay rapid chak jou.",
+      "tagline": "GPT limyè jenerasyon anvan an"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Dènye ak pi pwisan modèl Anthropic. Ekselan pou tèks long, rechèch, kodaj, ak analiz pwofon."
+      "description": "Dènye ak pi pwisan modèl Anthropic. Ekselan pou tèks long, rechèch, kodaj, ak analiz pwofon.",
+      "tagline": "Claude ki pi nouvo e pi pwisan"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Dènye modèl sous louvri DeepSeek. Fyab pou ekriti jeneral ak kesyon teknik."
+      "description": "Dènye modèl sous louvri DeepSeek. Fyab pou ekriti jeneral ak kesyon teknik.",
+      "tagline": "Altènativ sous-ouvert"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Modèl prensipal Mistral. Yon altènatif Ewopeyen pou ekriti, rezime, ak kesyon jeneral."
+      "description": "Modèl prensipal Mistral. Yon altènatif Ewopeyen pou ekriti, rezime, ak kesyon jeneral.",
+      "tagline": "Modèl Ewopeyen sous ouvè lou"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Yon vèsyon GPT-5 prensipal ki pi ansyen. Toujou solid pou ekriti, analiz, ak kodaj."
+      "description": "Yon vèsyon GPT-5 prensipal ki pi ansyen. Toujou solid pou ekriti, analiz, ak kodaj.",
+      "tagline": "Pi ansyen modèl GPT-5 prensipal"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Yon vèsyon GPT-5 adapte pou konvèsasyon, nan edisyon pi ansyen. Bon pou ti pale ak jete ide."
+      "description": "Yon vèsyon GPT-5 adapte pou konvèsasyon, nan edisyon pi ansyen. Bon pou ti pale ak jete ide.",
+      "tagline": "Pi ansyen chat GPT ajiste"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "Varyasyon GPT-5 ki pi piti. Pi bon pou travay rapid ak senp ak pri ki ba."
+      "description": "Varyasyon GPT-5 ki pi piti. Pi bon pou travay rapid ak senp ak pri ki ba.",
+      "tagline": "GPT piti jenerasyon anvan an"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Vèsyon GPT-4.1 ki pi piti. Bon pou travay rapid, senp kote vitès ak pri gen plis enpòtans."
+      "description": "Vèsyon GPT-4.1 ki pi piti. Bon pou travay rapid, senp kote vitès ak pri gen plis enpòtans.",
+      "tagline": "Pi piti GPT jenerasyon anvan an"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "Yon vèsyon GPT-4o ki piti e rapid. Bon pou travay rapid chak jou kote ou pa bezwen pi dènye kapasite yo."
+      "description": "Yon vèsyon GPT-4o ki piti e rapid. Bon pou travay rapid chak jou kote ou pa bezwen pi dènye kapasite yo.",
+      "tagline": "GPT multimodal limyè, vèsyon ansyen"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Yon modèl rezonman konpak. Bon pou matematik, lojik, ak pwoblèm etap-pa-etap ak pi ba pri pase o3."
+      "description": "Yon modèl rezonman konpak. Bon pou matematik, lojik, ak pwoblèm etap-pa-etap ak pi ba pri pase o3.",
+      "tagline": "Rezonman vit ak abòdab"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Yon modèl rezonman konpak ki pi ansyen. Trete matematik, syans, ak devinèt lojik ak ti bidjè."
+      "description": "Yon modèl rezonman konpak ki pi ansyen. Trete matematik, syans, ak devinèt lojik ak ti bidjè.",
+      "tagline": "Rezonman etap pa etap konpak"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Modèl ki pi entelijan Anthropic lan, premye nan fanmi Claude 5. Ekselan pou travay ekriti, rechèch, ak kodaj ki pi difisil."
+      "description": "Modèl ki pi entelijan Anthropic lan, premye nan fanmi Claude 5. Ekselan pou travay ekriti, rechèch, ak kodaj ki pi difisil.",
+      "tagline": "Modèl frontyè Anthropic lan"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Pi nouvo Claude ki ekilibre, premye nan fanmi Claude 5. Solid pou ekriti, analiz, ak kodaj chak jou ak repons rapid."
+      "description": "Pi nouvo Claude ki ekilibre, premye nan fanmi Claude 5. Solid pou ekriti, analiz, ak kodaj chak jou ak repons rapid.",
+      "tagline": "Claude ekilibre ki pi nouvo"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Modèl Mistral mwayen. Yon altènatif Ewopeyen ki balanse kapasite ak vitès pou travay chak jou."
+      "description": "Modèl Mistral mwayen. Yon altènatif Ewopeyen ki balanse kapasite ak vitès pou travay chak jou.",
+      "tagline": "Modèl Ewopeyen ekilibre"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Modèl piti Mistral. Rapid ak pa chè pou rezime, bouyon, ak kesyon senp."
+      "description": "Modèl piti Mistral. Rapid ak pa chè pou rezime, bouyon, ak kesyon senp.",
+      "tagline": "Modèl Ewopeyen piti ak vit"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Modèl Mistral ki pi piti a. Pi bon pou travay trè rapid, senp ak pri ki minim."
+      "description": "Modèl Mistral ki pi piti a. Pi bon pou travay trè rapid, senp ak pri ki minim.",
+      "tagline": "Mistral gwosè minimòm"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Yon vèsyon DeepSeek-R1 ki mete ajou. Montre fason panse li etap-pa-etap ak pi bon kapasite rezonman."
+      "description": "Yon vèsyon DeepSeek-R1 ki mete ajou. Montre fason panse li etap-pa-etap ak pi bon kapasite rezonman.",
+      "tagline": "Modèl rezònman ouvè mete ajou"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Yon modèl sous louvri ki pi lejè soti nan Meta. Rapid pou ekriti, rezime, ak kesyon chak jou."
+      "description": "Yon modèl sous louvri ki pi lejè soti nan Meta. Rapid pou ekriti, rezime, ak kesyon chak jou.",
+      "tagline": "Llama sous-ouvert efikas"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Yon ansyen modèl open-source ki soti nan Meta. Toujou solid pou ekriti jeneral ak kesyon-repons."
+      "description": "Yon ansyen modèl open-source ki soti nan Meta. Toujou solid pou ekriti jeneral ak kesyon-repons.",
+      "tagline": "Llama sous-ouvert vèsyon ansyen"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Modèl prensipal xAI a. Bon pou diskisyon ouvè, analiz, ak pwojè kreyatif."
+      "description": "Modèl prensipal xAI a. Bon pou diskisyon ouvè, analiz, ak pwojè kreyatif.",
+      "tagline": "Modèl prensipal xAI"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Dènye modèl prensipal OpenAI a. Fò nan ekriti, rechèch, kodaj, ak rezoud pwoblèm konplike."
+      "description": "Dènye modèl prensipal OpenAI a. Fò nan ekriti, rechèch, kodaj, ak rezoud pwoblèm konplike.",
+      "tagline": "Dènye modèl GPT prensipal"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (dènye)",
-      "description": "Yon alias k ap swiv dènye modèl chat OpenAI mete ajou yo. Sa se ranplasman Azure pou ansyen modèl gpt-*-chat yo."
+      "description": "Yon alias k ap swiv dènye modèl chat OpenAI mete ajou yo. Sa se ranplasman Azure pou ansyen modèl gpt-*-chat yo.",
+      "tagline": "Toujou dènye chat GPT la"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Yon nouvo vèsyon Opus, ant 4.6 ak 4.8. Solid pou ekriti long, rechèch, kodaj, ak analiz pridan."
+      "description": "Yon nouvo vèsyon Opus, ant 4.6 ak 4.8. Solid pou ekriti long, rechèch, kodaj, ak analiz pridan.",
+      "tagline": "Dènye vèsyon Opus la"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Dènye modèl rasyonalizasyon DeepSeek la ak ranplasman Azure pou seri R1. Montre panse li etap pa etap."
+      "description": "Dènye modèl rasyonalizasyon DeepSeek la ak ranplasman Azure pou seri R1. Montre panse li etap pa etap.",
+      "tagline": "Dènye modèl rezònman ouvè"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Varyant rapid DeepSeek V4 la ak ranplasman Azure pou seri V3. Rapide pou ekriti jeneral ak kesyon teknik."
+      "description": "Varyant rapid DeepSeek V4 la ak ranplasman Azure pou seri V3. Rapide pou ekriti jeneral ak kesyon teknik.",
+      "tagline": "Altènativ sous-ouvert rapid"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Rasyonalizasyon)",
-      "description": "Modèl rasyonalizasyon rapid xAI a. Panse etap pa etap ak repons rapid."
+      "description": "Modèl rasyonalizasyon rapid xAI a. Panse etap pa etap ak repons rapid.",
+      "tagline": "Modèl rezònman xAI rapid"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Modèl chat rapid xAI a. Repons rapid pou kesyon ak diskisyon chak jou."
+      "description": "Modèl chat rapid xAI a. Repons rapid pou kesyon ak diskisyon chak jou.",
+      "tagline": "Modèl chat xAI rapid"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Yon modèl xAI ki pi lejè. Pi rapid ak pi bon mache pou kesyon rapid ak ti pale senp."
+      "description": "Yon modèl xAI ki pi lejè. Pi rapid ak pi bon mache pou kesyon rapid ak ti pale senp.",
+      "tagline": "Modèl xAI ki pi limyè"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Pi bon modèl nan triy OpenAI GPT-5.6. Pi fò pou ekri, rechèch, pwogramasyon, ak rezoud pwoblèm konplike."
+      "description": "Pi bon modèl nan triy OpenAI GPT-5.6. Pi fò pou ekri, rechèch, pwogramasyon, ak rezoud pwoblèm konplike.",
+      "tagline": "Dènye kategori GPT prensipal la"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Modèl ki balanse nan triy OpenAI GPT-5.6. Bon pou ekri chak jou, analiz, ak pwogramasyon ak repons rapid."
+      "description": "Modèl ki balanse nan triy OpenAI GPT-5.6. Bon pou ekri chak jou, analiz, ak pwogramasyon ak repons rapid.",
+      "tagline": "GPT-5.6 ekilibre pou chak jou"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Modèl ki pi limyè ak rapid nan triy OpenAI GPT-5.6. Pi bon pou kesyon rapid ak travay senp ak pri ba."
+      "description": "Modèl ki pi limyè ak rapid nan triy OpenAI GPT-5.6. Pi bon pou kesyon rapid ak travay senp ak pri ba.",
+      "tagline": "GPT-5.6 lejè, rapid"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Dènye modèl Mistral mwayen. Yon altènativ Ewopeyen ki bay bon balans ant kapasite ak vitès pou travay chak jou."
+      "description": "Dènye modèl Mistral mwayen. Yon altènativ Ewopeyen ki bay bon balans ant kapasite ak vitès pou travay chak jou.",
+      "tagline": "Modèl Ewopeyen ki ekilibre"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modèl open-weight pa Moonshot AI. Fò nan travay ajan, kòd, ak dokiman long yo.",
+      "tagline": "Modèl open-weight ajan"
     }
   },
   "searchMode": {

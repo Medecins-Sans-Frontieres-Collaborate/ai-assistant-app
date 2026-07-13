@@ -1523,27 +1523,32 @@
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modɛlɛ AI ya GPT-4.1 oyo ekoki koluka makambo ya sika na bing. Epesi makambo ya mikolo, kokanga solo, mpe koyeba makambo ya mokili. Malamu mpo na bolukiluki esengaka lisusu sika, kotalela sango, mpe kokanga solo.",
-      "knowledgeCutoff": "Kofungola Internet na tango ya sik’oyo"
+      "knowledgeCutoff": "Kofungola Internet na tango ya sik’oyo",
+      "tagline": "Molandi ya liboso ya OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modɛlɛ ya OpenAI oyo eleki nyonso, elongi na makanisi makasi, kotonga kode, mpe kobongisa mituna ya technique. Malamu mpo na misala ya analyse, mikakatano ya programmation, bolukiluki, mpe polele ya minoko. Esalelaka makanisi makasi na ndenge batu balingi mpe motindo ya biyano.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Kopesa code, analyse, recheche"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Esalemi mpo ekende noki mpe elia mbongo moke koleka GPT-5, kasi ezali qualité mingi. Ebongi mpo na misala ya mokolo na mokolo, mituna ya noki, kotinda na bitulolo, mpe misala esengaka biyano ya noki. Elakisa bosangani ya mosala malamu mpe elamu.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Mbangu mpe elonge ya motuya moke"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Modɛlɛ ya GPT-5.2 esalelami mpo na kosolola na batu mpe kokanga makanisi. Elongi na kosolola na moyekoli, kosunga na makanisi na motema, kotonga maloba, koluka makanisi mapya, mpe kotambola na dialoge naturel. Ebongi mpo na kosolola ya mikili, kobatela makanisi ya motema, mpe misala esengaka kokanga makanisi.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Dialogues, kobimisa makanisi"
     },
     "o3": {
       "name": "o3",
       "description": "Modɛlɛ ya reasoning ya OpenAI oyo eleki na solution ya mikakatano. Eleki malamu na mathématique ya pasi, makanisi ya science, mikakatano ya kode, mpe misala ya logique mingi. Esaleli contexte ya 200K. Esalelaka makanisi na ndenge bato balingi.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Kokanga ntina mbala-mbala, lininso lokuta te"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1553,203 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Mok专家 ya makanisi oyo alakisaka mosala na ye etape na etape. Ebongi mingi mpo na mikakatano ya mathématique, bafungola logique, mpe koyeba makambo pasi. Tala ndenge anakanisaka likambo na tango ya sik’oyo.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Emonisaka ntina mbala-mbala"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modɛlɛ makasi ya kosala misala nyonso, mingimingi kodé mpe kokoma na technique. Malamu mpo na kobongisa kode, kokoma documentation, mpe kolimbola makambo ya technique. Ezali noki mpe ndeko mpo na misala ya développement.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Alternatif open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model ya xAI oyo ebongi na ba ekiseli ya ndenge na ndenge. Eleki malamu mpo na masolo ya kofungola, misala ya bokeli, mpe mituna makasi.",
-      "knowledgeCutoff": "13 Mai, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Mai, 2025 12:16 AM",
+      "tagline": "Alternatif ya xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Model ya Anthropic oyo ezali na makoki mingi ya kokanisa, kotanga code, mpe misala ya bokeli. Epesaka eyano malamu na bisaleli ya boyekoli mpe ba analyses ya pasi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Molandi ya Opus ya kala"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model ya Claude oyo ezalaka na bokasi na misala na yango nyonso. Eleki malamu mpo na misala ya mokolo na mokolo na eyano ya nokinoki.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Sonnet ya molandi ya kala"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model ya liboso ya Claude Opus. Ebongi malamu mpo na misala ya code ya pasi, analyse ya ndenge na ndenge mpe koyeba bisika mingi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Opus ya molandi ya kala"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model ya Claude ya nokinoki mpe ya motuya ya moke mpo na misala ya nokinoki. Eleki malamu mpo na mituna ya pete, ko zipa makambo, mpe ba application ya mingi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Claude ya mbangu"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Modèle ya Claude makasi koleka. Malamu mpo na kokoma makasi, masolo ya recherche, mpe misala esengeli kokanisa ndambo.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Kokoma makasi mpe analyse molai"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Modèle ya Claude ya katikati. Malamu mpo na doki ya mokolo na mokolo, kobongola, mpe kotonga na eyano ya mbala moko.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude ya kozalema kati na mokolo na mokolo"
     },
     "llama_4_maverick_17b_128e_instruct_fp8": {
       "name": "Llama 4 Maverick",
-      "description": "Modeli ya open-source ya Meta. Ekomelaka malamu, kosala résumé, mpe mituna ya mbangu."
+      "description": "Modeli ya open-source ya Meta. Ekomelaka malamu, kosala résumé, mpe mituna ya mbangu.",
+      "tagline": "Alternatif open-source"
     },
     "gpt_5_4": {
       "name": "GPT-5.4",
-      "description": "Modeli ya sika mingi ya OpenAI. Ekolaka malamu na kokoma, recherche, code, mpe kobongola mikakatano ya pasi."
+      "description": "Modeli ya sika mingi ya OpenAI. Ekolaka malamu na kokoma, recherche, code, mpe kobongola mikakatano ya pasi.",
+      "tagline": "GPT liboso ya sika koleka"
     },
     "gpt_5_4_nano": {
       "name": "GPT-5.4 Nano",
-      "description": "Modeli ya GPT ya moke koleka mpe ya mbangu. Epesaka bosolo mpo na misala ya mbangu, pamba na motuya moke."
+      "description": "Modeli ya GPT ya moke koleka mpe ya mbangu. Epesaka bosolo mpo na misala ya mbangu, pamba na motuya moke.",
+      "tagline": "GPT ya moke mingi mpe ya mbangu koleka"
     },
     "gpt_5_3_chat": {
       "name": "GPT-5.3 Chat",
-      "description": "Variant ya GPT ya dialogue. Malamu mpo na kolobela pamba, ba brainstorm, mpe mayangani ya lisungi."
+      "description": "Variant ya GPT ya dialogue. Malamu mpo na kolobela pamba, ba brainstorm, mpe mayangani ya lisungi.",
+      "tagline": "GPT ya sika pona dialogue"
     },
     "gpt_5": {
       "name": "GPT-5",
-      "description": "Modeli ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code."
+      "description": "Modeli ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code.",
+      "tagline": "GPT liboso ya kala"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
-      "description": "GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm."
+      "description": "GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm.",
+      "tagline": "GPT ya kala ya dialogue"
     },
     "gpt_4o": {
       "name": "GPT-4o",
-      "description": "GPT ya multimodal ya kala. Ebongi mpo na kokoma mokolo na mokolo mpe mituna/similanga esengeli te makasi sika."
+      "description": "GPT ya multimodal ya kala. Ebongi mpo na kokoma mokolo na mokolo mpe mituna/similanga esengeli te makasi sika.",
+      "tagline": "GPT multimodal ya kala"
     },
     "gpt_4_1_mini": {
       "name": "GPT-4.1 Mini",
-      "description": "Variant ya GPT-4.1 ya moke mpe ya mbangu mpo na misala ya mokolo na mokolo."
+      "description": "Variant ya GPT-4.1 ya moke mpe ya mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "GPT ya pɛtɛɛ molandi ya kala"
     },
     "claude_opus_4_8": {
       "name": "Claude Opus 4.8",
-      "description": "Modeli ya sika mpe makasi mingi ya Anthropic. Mindɛlɛ mpo na kokoma molai, recherche, code, mpe analyse ya pɛtɛɛ."
+      "description": "Modeli ya sika mpe makasi mingi ya Anthropic. Mindɛlɛ mpo na kokoma molai, recherche, code, mpe analyse ya pɛtɛɛ.",
+      "tagline": "Claude ya sika mpe makasi koleka"
     },
     "deepseek_v3_2": {
       "name": "DeepSeek-V3.2",
-      "description": "Modeli ya sika mpe ya open-source ya DeepSeek. Ezali fiable mpo na kokoma mindɛlɛ mpe mituna ya technique."
+      "description": "Modeli ya sika mpe ya open-source ya DeepSeek. Ezali fiable mpo na kokoma mindɛlɛ mpe mituna ya technique.",
+      "tagline": "Alternatif open-source"
     },
     "mistral_large_3": {
       "name": "Mistral Large 3",
-      "description": "Modeli monene ya Mistral. Alternative ya Europa mpo na kokoma, résumé, mpe mituna ya mokili."
+      "description": "Modeli monene ya Mistral. Alternative ya Europa mpo na kokoma, résumé, mpe mituna ya mokili.",
+      "tagline": "Model européen open-weight"
     },
     "gpt_5_1": {
       "name": "GPT-5.1",
-      "description": "Revision ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code."
+      "description": "Revision ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code.",
+      "tagline": "GPT-5 liboso ya kala"
     },
     "gpt_5_1_chat": {
       "name": "GPT-5.1 Chat",
-      "description": "Revision ya liboso ya GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm."
+      "description": "Revision ya liboso ya GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm.",
+      "tagline": "GPT ya dialogue ya kala"
     },
     "gpt_5_nano": {
       "name": "GPT-5 Nano",
-      "description": "GPT-5 ya moke koleka. Ebongi mpo na misala ya mbangu, pamba na motuya moke."
+      "description": "GPT-5 ya moke koleka. Ebongi mpo na misala ya mbangu, pamba na motuya moke.",
+      "tagline": "GPT molandi ya kala ya moke"
     },
     "gpt_4_1_nano": {
       "name": "GPT-4.1 Nano",
-      "description": "Variant ya moke koleka ya GPT-4.1. Ebongi mpo na misala ya mbangu, pamba na motuya na mbangu."
+      "description": "Variant ya moke koleka ya GPT-4.1. Ebongi mpo na misala ya mbangu, pamba na motuya na mbangu.",
+      "tagline": "GPT molandi ya kala ya moke mingi"
     },
     "gpt_4o_mini": {
       "name": "GPT-4o Mini",
-      "description": "GPT-4o moke mpe mbangu. Ebongi mpo na misala ya mbangu ya mokolo na mokolo soki sika makasi esengeli te."
+      "description": "GPT-4o moke mpe mbangu. Ebongi mpo na misala ya mbangu ya mokolo na mokolo soki sika makasi esengeli te.",
+      "tagline": "GPT multimodal ya kala ya pɛtɛɛ"
     },
     "o4_mini": {
       "name": "o4-mini",
-      "description": "Modeli ya reasoning ya moke. Malamu mpo na ba maths, logique, mpe mikakatano ya kaka na motuya moke koleka o3."
+      "description": "Modeli ya reasoning ya moke. Malamu mpo na ba maths, logique, mpe mikakatano ya kaka na motuya moke koleka o3.",
+      "tagline": "Ntina mbangu mpe na motuya kitoko"
     },
     "o3_mini": {
       "name": "o3-mini",
-      "description": "Modeli ya reasoning ya moke ya liboso. Ebatelaka ba maths, science, mpe ba puzzle ya logique na budget."
+      "description": "Modeli ya reasoning ya moke ya liboso. Ebatelaka ba maths, science, mpe ba puzzle ya logique na budget.",
+      "tagline": "Ntina ya mike mbala-mbala"
     },
     "claude_fable_5": {
       "name": "Claude Fable 5",
-      "description": "Modeli ya mayele koleka ya Anthropic, ya liboso na famille ya Claude 5. Epesaka makasi mpo na mikakatano ya kokoma, recherche, mpe code epasi."
+      "description": "Modeli ya mayele koleka ya Anthropic, ya liboso na famille ya Claude 5. Epesaka makasi mpo na mikakatano ya kokoma, recherche, mpe code epasi.",
+      "tagline": "Model ya nsuka ya Anthropic"
     },
     "claude_sonnet_5": {
       "name": "Claude Sonnet 5",
-      "description": "Claude ya sika ya équilibre, ya liboso na famille ya Claude 5. Epesaka mayele mpo na kokoma mokolo na mokolo, analyse mpe code na biyano ya mbangu."
+      "description": "Claude ya sika ya équilibre, ya liboso na famille ya Claude 5. Epesaka mayele mpo na kokoma mokolo na mokolo, analyse mpe code na biyano ya mbangu.",
+      "tagline": "Claude ya sika oyo etikali malamu"
     },
     "mistral_medium_2505": {
       "name": "Mistral Medium 3",
-      "description": "Modeli ya size ya kati ya Mistral. Alternative ya Europa, esangisi makasi mpe mbangu mpo na misala ya mokolo na mokolo."
+      "description": "Modeli ya size ya kati ya Mistral. Alternative ya Europa, esangisi makasi mpe mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "Model européen equilibré"
     },
     "mistral_small_2503": {
       "name": "Mistral Small 3.1",
-      "description": "Mistral ya moke. Mbangu mpe motuya moke mpo na résumé, ba drafts, mpe mituna pamba."
+      "description": "Mistral ya moke. Mbangu mpe motuya moke mpo na résumé, ba drafts, mpe mituna pamba.",
+      "tagline": "Model européen ya pɛtɛɛ mpe mbangu"
     },
     "ministral_3b": {
       "name": "Ministral 3B",
-      "description": "Mistral ya moke penza. Ebongi mpo na misala ya mbangu penza, pamba na motuya moke mingi."
+      "description": "Mistral ya moke penza. Ebongi mpo na misala ya mbangu penza, pamba na motuya moke mingi.",
+      "tagline": "Mistral ya moke mingi pona edge"
     },
     "deepseek_r1_0528": {
       "name": "DeepSeek-R1-0528",
-      "description": "Revision ya sika ya DeepSeek-R1. Emonisaka makanisi ya étape na étape na reasoning esengeli."
+      "description": "Revision ya sika ya DeepSeek-R1. Emonisaka makanisi ya étape na étape na reasoning esengeli.",
+      "tagline": "Model ya ntina ya sika na open"
     },
     "llama_4_scout_17b_16e_instruct": {
       "name": "Llama 4 Scout",
-      "description": "Modeli ya open-source ya pete ya Meta. Mbangu mpo na kokoma, résumé, mpe mituna ya mokolo na mokolo."
+      "description": "Modeli ya open-source ya pete ya Meta. Mbangu mpo na kokoma, résumé, mpe mituna ya mokolo na mokolo.",
+      "tagline": "Llama efficace open-source"
     },
     "llama_3_3_70b_instruct": {
       "name": "Llama 3.3 70B",
-      "description": "Model moko ya kala ya open-source uta na Meta. Ezali naino malamu mpo na kokoma mpe mituna na biyano ya général."
+      "description": "Model moko ya kala ya open-source uta na Meta. Ezali naino malamu mpo na kokoma mpe mituna na biyano ya général.",
+      "tagline": "Llama open-source ya kala"
     },
     "grok_4": {
       "name": "Grok 4",
-      "description": "Model ya xAI oyo ezali ya monene. Malamu mpo na masolo polele, analizɛ, mpe misala ya bokeli."
+      "description": "Model ya xAI oyo ezali ya monene. Malamu mpo na masolo polele, analizɛ, mpe misala ya bokeli.",
+      "tagline": "Model ya xAI liboso"
     },
     "gpt_5_5": {
       "name": "GPT-5.5",
-      "description": "Model ya sika mingi ya OpenAI. Ebongi na kokoma, recherche, kosala code, mpe kosilisa mituna ya pasi."
+      "description": "Model ya sika mingi ya OpenAI. Ebongi na kokoma, recherche, kosala code, mpe kosilisa mituna ya pasi.",
+      "tagline": "GPT liboso ya sika"
     },
     "gpt_chat_latest": {
       "name": "GPT Chat (ya sika koleka)",
-      "description": "Alias ya mobimba oyo etindaka kaka na model ya chat ya sika ya OpenAI. Ndima Azure mpo na modèle ya version ya gpt-*-chat oyo elongolami."
+      "description": "Alias ya mobimba oyo etindaka kaka na model ya chat ya sika ya OpenAI. Ndima Azure mpo na modèle ya version ya gpt-*-chat oyo elongolami.",
+      "tagline": "Toujours GPT ya dialogue ya sika"
     },
     "claude_opus_4_7": {
       "name": "Claude Opus 4.7",
-      "description": "Version Opus ya sika, ya kati ya 4.6 na 4.8. Ebongi na kokoma milai, recherche, code, mpe analizɛ ya pɛtɛ."
+      "description": "Version Opus ya sika, ya kati ya 4.6 na 4.8. Ebongi na kokoma milai, recherche, code, mpe analizɛ ya pɛtɛ.",
+      "tagline": "Opus ya sika boye"
     },
     "deepseek_v4_pro": {
       "name": "DeepSeek-V4-Pro",
-      "description": "Model ya reasoning ya sika ya DeepSeek mpe mbongisi ya Azure mpo na R1. Elakisa makanisi na ndenge nyonso."
+      "description": "Model ya reasoning ya sika ya DeepSeek mpe mbongisi ya Azure mpo na R1. Elakisa makanisi na ndenge nyonso.",
+      "tagline": "Model ya ntina ya sika open"
     },
     "deepseek_v4_flash": {
       "name": "DeepSeek-V4-Flash",
-      "description": "Variation ya mbangu ya V4 ya DeepSeek mpe mbongisi ya Azure mpo na V3. Ezali mbangu mpo na kokoma général mpe mituna technique."
+      "description": "Variation ya mbangu ya V4 ya DeepSeek mpe mbongisi ya Azure mpo na V3. Ezali mbangu mpo na kokoma général mpe mituna technique.",
+      "tagline": "Alternatif open-source ya mbangu"
     },
     "grok_4_1_fast_reasoning": {
       "name": "Grok 4.1 Fast (Reasoning)",
-      "description": "Model ya reasoning ya mbangu ya xAI. Akanisaka biteni na biteni mpe azongisaka mbangu."
+      "description": "Model ya reasoning ya mbangu ya xAI. Akanisaka biteni na biteni mpe azongisaka mbangu.",
+      "tagline": "Model ya ntina ya mbangu xAI"
     },
     "grok_4_1_fast_non_reasoning": {
       "name": "Grok 4.1 Fast",
-      "description": "Model ya chat ya mbangu ya xAI. Azongisaka mbangu mpo na mituna ya mokolo na mokolo mpe masolo."
+      "description": "Model ya chat ya mbangu ya xAI. Azongisaka mbangu mpo na mituna ya mokolo na mokolo mpe masolo.",
+      "tagline": "Model ya dialogue ya mbangu xAI"
     },
     "grok_3_mini": {
       "name": "Grok 3 Mini",
-      "description": "Model ya xAI ya pete. Ezali mbangu mpe ya ndenge ya mike mpo na mituna ya mbangu mpe masolo ya pamba."
+      "description": "Model ya xAI ya pete. Ezali mbangu mpe ya ndenge ya mike mpo na mituna ya mbangu mpe masolo ya pamba.",
+      "tagline": "Model ya xAI ya pɛtɛɛ"
     },
     "gpt_5_6_sol": {
       "name": "GPT-5.6 Sol",
-      "description": "Motó ya seri GPT-5.6 ya OpenAI. Azali makasi mpo na kokoma, bolukiluki, kobongisa code, mpe kosilisa likambo nyonso ya pasi."
+      "description": "Motó ya seri GPT-5.6 ya OpenAI. Azali makasi mpo na kokoma, bolukiluki, kobongisa code, mpe kosilisa likambo nyonso ya pasi.",
+      "tagline": "Tier ya GPT liboso koleka"
     },
     "gpt_5_6_terra": {
       "name": "GPT-5.6 Terra",
-      "description": "Niveau ya kati ya GPT-5.6 ya OpenAI. Emonani malamu mpo na kokoma biloko ya mokolo na mokolo, analyse, mpe kobongisa code na eyano ya mbangu."
+      "description": "Niveau ya kati ya GPT-5.6 ya OpenAI. Emonani malamu mpo na kokoma biloko ya mokolo na mokolo, analyse, mpe kobongisa code na eyano ya mbangu.",
+      "tagline": "GPT-5.6 ya mikolo nyonso oyo ezali na nse ya nzela"
     },
     "gpt_5_6_luna": {
       "name": "GPT-5.6 Luna",
-      "description": "Niveau ya pete-pete mpe mbangu ya GPT-5.6 ya OpenAI. Epesaka eyano mbangu mpo na mituna ya pete mpe misala ya pete na ndambu ya motuya."
+      "description": "Niveau ya pete-pete mpe mbangu ya GPT-5.6 ya OpenAI. Epesaka eyano mbangu mpo na mituna ya pete mpe misala ya pete na ndambu ya motuya.",
+      "tagline": "GPT-5.6 ya pete mpe mbangu"
     },
     "mistral_medium_3_5": {
       "name": "Mistral Medium 3.5",
-      "description": "Modèle ya sika ya kati ya Mistral. Alternatif ya Europe oyo etali makoki mpe mbangu mpo na misala ya mokolo na mokolo."
+      "description": "Modèle ya sika ya kati ya Mistral. Alternatif ya Europe oyo etali makoki mpe mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "Modeli ya Europe ekosukolama"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modeli ya Moonshot AI ya open-weight. Ezali makasi na misala ya basungi, kokoda, mpe bandokima molai.",
+      "tagline": "Modeli open-weight ya basungi"
     }
   },
   "searchMode": {
