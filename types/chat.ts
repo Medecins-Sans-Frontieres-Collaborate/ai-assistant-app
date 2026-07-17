@@ -1,4 +1,7 @@
-import { TranscriptMetadata } from '@/lib/utils/app/metadata';
+import {
+  TokenUsageMetadata,
+  TranscriptMetadata,
+} from '@/lib/utils/app/metadata';
 
 import { ExtractionRequest } from './extractionRecipe';
 import { OpenAIModel } from './openai';
@@ -173,6 +176,12 @@ export interface MessageToolArtifacts {
    * card after the stream finalizes and on conversation reload.
    */
   consentRequests?: ConsentRequest[];
+  /**
+   * Real token usage reported by the provider for the request that produced
+   * this turn. Absent on turns from before usage tracking existed — those are
+   * back-calculated from text for emissions estimates (see usageBackfill).
+   */
+  usage?: TokenUsageMetadata;
 }
 
 /**
