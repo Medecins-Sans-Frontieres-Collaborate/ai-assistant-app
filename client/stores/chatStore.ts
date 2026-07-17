@@ -71,6 +71,7 @@ function buildAssistantMessage(
   finalContent: string,
   toolCalls?: ToolCallRecord[],
   consentRequests?: ConsentRequest[],
+  usage?: TokenUsageMetadata,
 ): Message {
   const assistantMessage = streamParser.toMessage(finalContent);
   if (toolCalls && toolCalls.length > 0) {
@@ -78,6 +79,9 @@ function buildAssistantMessage(
   }
   if (consentRequests && consentRequests.length > 0) {
     assistantMessage.consentRequests = consentRequests;
+  }
+  if (usage) {
+    assistantMessage.usage = usage;
   }
   return assistantMessage;
 }
@@ -550,6 +554,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       // Surface files that were excluded from this turn's context so the
@@ -1536,6 +1541,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       // Surface dropped files (see send path for context).
@@ -1868,6 +1874,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         finalContent,
         toolCalls,
         consentRequests,
+        usage,
       );
 
       await get().finalizeMessage(
