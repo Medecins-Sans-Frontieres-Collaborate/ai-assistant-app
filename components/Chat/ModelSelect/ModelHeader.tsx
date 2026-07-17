@@ -2,19 +2,30 @@ import {
   IconCalendar,
   IconChevronLeft,
   IconHash,
+  IconLeaf,
   IconStar,
   IconStarFilled,
   IconTag,
   IconWorld,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { FC, useMemo } from 'react';
 
 import { useLocale, useTranslations } from 'next-intl';
 
 import { modelIdToLocaleKey } from '@/lib/utils/app/locales';
+import { isAgentModel } from '@/lib/utils/shared/chat/usageBackfill';
+import {
+  ASSUMPTIONS_VERSION,
+  estimateTypicalRequestCO2,
+} from '@/lib/utils/shared/emissions';
 import { formatKnowledgeCutoff } from '@/lib/utils/shared/formatKnowledgeCutoff';
 
-import { OpenAIModel, getModelHosting } from '@/types/openai';
+import {
+  OpenAIModel,
+  getModelHosting,
+  getModelSizeClass,
+} from '@/types/openai';
 import { OrganizationAgent } from '@/types/organizationAgent';
 
 import { Tooltip } from '@/components/UI/Tooltip';
@@ -42,6 +53,7 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
 }) => {
   const t = useTranslations();
   const locale = useLocale();
+  const { showUsageImpact } = useFlags();
 
   const starredModelIds = useSettingsStore((s) => s.starredModelIds);
   const starModel = useSettingsStore((s) => s.starModel);
@@ -101,6 +113,21 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
 
   // Hide model type badge for org agents (not meaningful)
   const showModelTypeBadge = !organizationAgent;
+
+  // Per-typical-request emissions estimate. Fail-open flag gate (matches the
+  // Usage & Impact section); skipped for agents — the pipeline doesn't track
+  // them and the per-model math doesn't apply.
+  const emissionsModel = modelConfig ?? liveModel ?? selectedModel;
+  const isAgent = !!organizationAgent || isAgentModel(emissionsModel);
+  let typicalRequestGrams: string | null = null;
+  if (showUsageImpact !== false && !isAgent) {
+    const { gCO2e } = estimateTypicalRequestCO2(
+      getModelSizeClass(emissionsModel),
+      emissionsModel.modelType === 'reasoning',
+    );
+    // Typical values are well under 1 g — never round to an integer.
+    typicalRequestGrams = gCO2e < 1 ? gCO2e.toFixed(2) : gCO2e.toFixed(1);
+  }
 
   return (
     <div>
@@ -257,29 +284,45 @@ export const ModelHeader: FC<ModelHeaderProps> = ({
           was jargon that didn't communicate to users. Tagline + description
           carry that meaning now. Knowledge cutoff stays because dates are
           concrete and useful for research / news use cases. */}
-      {showModelTypeBadge && (knowledgeCutoffDisplay || hostedIn) && (
-        <div className="flex items-center gap-3 flex-wrap">
-          {knowledgeCutoffDisplay && (
-            <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
-              <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
-                <IconCalendar size={14} />
-                {knowledgeCutoffDisplay}
-              </span>
-            </Tooltip>
-          )}
-          {hostedIn && hostedIn.length > 0 && (
-            <Tooltip content={t('modelSelect.hostedIn.tooltip')}>
-              <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
-                <IconWorld size={14} />
-                {/* Region codes are proper nouns; only the label localizes. */}
-                {t('modelSelect.hostedIn.label', {
-                  regions: hostedIn.join(' & '),
+      {showModelTypeBadge &&
+        (knowledgeCutoffDisplay || hostedIn || typicalRequestGrams) && (
+          <div className="flex items-center gap-3 flex-wrap">
+            {knowledgeCutoffDisplay && (
+              <Tooltip content={t('modelSelect.header.knowledgeCutoffLabel')}>
+                <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+                  <IconCalendar size={14} />
+                  {knowledgeCutoffDisplay}
+                </span>
+              </Tooltip>
+            )}
+            {hostedIn && hostedIn.length > 0 && (
+              <Tooltip content={t('modelSelect.hostedIn.tooltip')}>
+                <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+                  <IconWorld size={14} />
+                  {/* Region codes are proper nouns; only the label localizes. */}
+                  {t('modelSelect.hostedIn.label', {
+                    regions: hostedIn.join(' & '),
+                  })}
+                </span>
+              </Tooltip>
+            )}
+            {typicalRequestGrams && (
+              <Tooltip
+                multiline
+                content={t('emissions.typicalRequestTooltip', {
+                  version: ASSUMPTIONS_VERSION,
                 })}
-              </span>
-            </Tooltip>
-          )}
-        </div>
-      )}
+              >
+                <span className="inline-flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 cursor-help">
+                  <IconLeaf size={14} />
+                  {t('emissions.typicalRequest', {
+                    grams: typicalRequestGrams,
+                  })}
+                </span>
+              </Tooltip>
+            )}
+          </div>
+        )}
 
       {/* Transparent consequences: hosting + regional availability in plain
           prose, not just chrome. */}
