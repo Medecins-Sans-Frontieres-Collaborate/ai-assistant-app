@@ -1,6 +1,6 @@
 {
   "$schema-note": "Every emissions-estimate assumption lives HERE, nowhere else. Edit values freely; bump assumptionsVersion whenever you do so logged/displayed estimates are traceable to the assumption set that produced them. Validated by lib/utils/shared/emissions.ts at module load. Grounding for the defaults is documented in that file's JSDoc.",
-  "assumptionsVersion": "2026-07.1",
+  "assumptionsVersion": "2026-07.3",
   "pue": 1.15,
   "gridIntensity": {
     "US": 370,
@@ -23,6 +23,16 @@
   },
   "dedicatedReasoningMultiplier": 1.1,
   "equivalences": {
-    "smartphoneChargeGrams": 13.5
+    "smartphoneChargeGrams": 13.5,
+    "activityGramsPerHour": {
+      "netflixHd": 45,
+      "zoomCall": 50,
+      "webBrowsing": 25,
+      "spotifyAudio": 1.04
+    }
+  },
+  "typicalRequest": {
+    "promptTokens": 1000,
+    "completionTokens": 500
   }
 }
