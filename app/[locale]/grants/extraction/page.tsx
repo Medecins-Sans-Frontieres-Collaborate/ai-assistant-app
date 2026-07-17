@@ -82,12 +82,13 @@ interface ExtractionData {
     flags: ValidationFlag[];
   };
   sourceFileMap?: Record<string, string>;
+  sourceTypes?: Record<string, string>;
   supplementalReport?: SupplementalReport;
 }
 
 // Column width categories for validation review table
 const NARROW_COLUMNS = new Set([
-  'Project Number',
+  'Project Code',
   'OC',
   'Project Active',
   'New Project',
@@ -133,6 +134,9 @@ interface ReconciliationRow {
   projectName: string;
   projectCodeInNarrative: string;
   projectNameInNarrative: string;
+  narrativeFile?: string;
+  recovered?: boolean;
+  evidence?: string;
   align: 'Yes' | 'No';
   differences: string;
   aligned: string;
@@ -194,7 +198,7 @@ const COLUMN_GROUPS: {
 }[] = [
   {
     label: 'Core Identity',
-    columns: ['Project Number', 'Project Name', 'Mission Country', 'OC'],
+    columns: ['Project Code', 'Project Name', 'Mission Country', 'OC'],
   },
   {
     label: 'Project Details',
@@ -256,9 +260,28 @@ const COLUMN_GROUPS: {
 
 const ALL_CSV_COLUMNS = COLUMN_GROUPS.flatMap((g) => g.columns);
 
+// The five fields the grants team is currently focused on — checked by default
+const DEFAULT_COLUMNS = [
+  'Project Code',
+  'Project Name',
+  'OC',
+  'Project Objective',
+  'Key Terms/Activities',
+].filter((c) => ALL_CSV_COLUMNS.includes(c));
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
+
+/** Only genuine OUTLIERS are flagged for review and excluded from the export by
+ *  default: coordination and strategy documents. Overviews / compilations /
+ *  country profiles are NOT flagged — for several OCs they ARE the project
+ *  source (OCP's country docs, OCG's compilation), so treating them as outliers
+ *  wrongly unchecked most of those OCs' real projects. Anything not matched here
+ *  (including an unknown/empty type) is treated as a normal narrative. */
+function isFlaggedDocType(t?: string): boolean {
+  return !!t && /coordinat|strateg/i.test(t);
+}
 
 export default function GrantExtractionPage() {
   // Access control — restrict the whole page to allowlisted users.
@@ -280,7 +303,7 @@ export default function GrantExtractionPage() {
     [],
   );
   const [selectedColumns, setSelectedColumns] = useState<Set<string>>(
-    () => new Set(ALL_CSV_COLUMNS),
+    () => new Set(DEFAULT_COLUMNS),
   );
   const [columnsExpanded, setColumnsExpanded] = useState(false);
 
@@ -291,6 +314,11 @@ export default function GrantExtractionPage() {
     null,
   );
   const [editedRows, setEditedRows] = useState<Record<string, string>[]>([]);
+  // Which rows are included in the exported CSV. Rows sourced from a regular
+  // narrative are included by default; rows sourced from a non-narrative document
+  // (coordination / strategy / overview) are excluded by default and must be
+  // opted-in by the user via the checkbox in the leftmost column.
+  const [includedRows, setIncludedRows] = useState<Set<number>>(new Set());
   const [filterMode, setFilterMode] = useState<
     'all' | 'flagged' | 'errors' | 'warnings'
   >('all');
@@ -316,6 +344,21 @@ export default function GrantExtractionPage() {
   const [acceptedProposals, setAcceptedProposals] = useState<Set<string>>(
     new Set(),
   );
+
+  // Extraction prompt editor (per-OC, blob-backed via /api/grants/prompt)
+  const [promptOpen, setPromptOpen] = useState(false);
+  const [promptText, setPromptText] = useState('');
+  const [promptPristine, setPromptPristine] = useState('');
+  const [promptMeta, setPromptMeta] = useState<{
+    isOverride: boolean;
+    updatedBy: string | null;
+    updatedAt: string | null;
+  } | null>(null);
+  const [promptLoading, setPromptLoading] = useState(false);
+  const [promptSaving, setPromptSaving] = useState(false);
+  const [promptNotice, setPromptNotice] = useState<string | null>(null);
+  const [promptLoadedOC, setPromptLoadedOC] = useState<string>('');
+  const [promptLoadedYear, setPromptLoadedYear] = useState<number>(0);
 
   // -------------------------------------------------------------------------
   // Fetch documents when OC changes
@@ -403,6 +446,13 @@ export default function GrantExtractionPage() {
         const data: ExtractionData = await res.json();
         setExtractionData(data);
         setEditedRows(data.rows.map((r) => ({ ...r })));
+        // Default inclusion: narrative-sourced rows in, non-narrative out.
+        const included = new Set<number>();
+        data.rows.forEach((r, i) => {
+          const t = data.sourceTypes?.[r['Source File'] || ''];
+          if (!isFlaggedDocType(t)) included.add(i);
+        });
+        setIncludedRows(included);
       }
     } catch {
       console.error('Failed to fetch extraction data');
@@ -616,6 +666,8 @@ export default function GrantExtractionPage() {
     }
   };
 
+  /* Proposed-matches accept/toggle — disabled while the code-matching UI is
+     scoped out with Nelli and Mary
   const toggleProposal = (file: string) => {
     setAcceptedProposals((prev) => {
       const next = new Set(prev);
@@ -624,6 +676,7 @@ export default function GrantExtractionPage() {
       return next;
     });
   };
+  */
 
   // Resolve a narrative filename to its blob path so it can be opened via the
   // document-serve endpoint. Prefers the actual selected-doc blob path; falls
@@ -635,6 +688,110 @@ export default function GrantExtractionPage() {
     if (match) return match.blobPath;
     const oc = coverageData?.oc || selectedOC;
     return `grants/${oc}/narratives/${file}`;
+  };
+
+  // --- Extraction prompt editor ---------------------------------------------
+  const promptDirty = promptText !== promptPristine;
+
+  const loadPrompt = useCallback(
+    async (oc: string) => {
+      if (!oc) return;
+      setPromptLoading(true);
+      setPromptNotice(null);
+      try {
+        const res = await fetch(
+          `/api/grants/prompt?oc=${encodeURIComponent(oc)}&year=${selectedYear}`,
+        );
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        setPromptText(data.prompt || '');
+        setPromptPristine(data.prompt || '');
+        setPromptMeta({
+          isOverride: !!data.isOverride,
+          updatedBy: data.updatedBy ?? null,
+          updatedAt: data.updatedAt ?? null,
+        });
+        setPromptLoadedOC(oc);
+        setPromptLoadedYear(selectedYear);
+      } catch (err) {
+        setPromptNotice(
+          err instanceof Error ? err.message : 'Failed to load prompt',
+        );
+      } finally {
+        setPromptLoading(false);
+      }
+    },
+    [selectedYear],
+  );
+
+  // Load (or reload) the prompt whenever the panel is open and it's stale for the
+  // current OC or year — covers first-open, switching OC, and changing the year
+  // (the year is baked into the rendered prompt). Skipped when there are unsaved
+  // edits so we don't clobber them.
+  useEffect(() => {
+    if (
+      promptOpen &&
+      selectedOC &&
+      !promptDirty &&
+      (promptLoadedOC !== selectedOC || promptLoadedYear !== selectedYear)
+    ) {
+      loadPrompt(selectedOC);
+    }
+  }, [
+    promptOpen,
+    selectedOC,
+    selectedYear,
+    promptLoadedOC,
+    promptLoadedYear,
+    promptDirty,
+    loadPrompt,
+  ]);
+
+  const savePrompt = async () => {
+    if (!selectedOC) return;
+    setPromptSaving(true);
+    setPromptNotice(null);
+    try {
+      const res = await fetch('/api/grants/prompt', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oc: selectedOC, prompt: promptText }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      setPromptPristine(promptText);
+      setPromptMeta({
+        isOverride: true,
+        updatedBy: data.updatedBy ?? null,
+        updatedAt: data.updatedAt ?? null,
+      });
+      setPromptNotice(
+        'Saved — this prompt will be used for future extractions.',
+      );
+    } catch (err) {
+      setPromptNotice(err instanceof Error ? err.message : 'Failed to save');
+    } finally {
+      setPromptSaving(false);
+    }
+  };
+
+  const resetPrompt = async () => {
+    if (!selectedOC) return;
+    setPromptSaving(true);
+    setPromptNotice(null);
+    try {
+      const res = await fetch(
+        `/api/grants/prompt?oc=${encodeURIComponent(selectedOC)}`,
+        { method: 'DELETE' },
+      );
+      if (!res.ok) throw new Error(await res.text());
+      await loadPrompt(selectedOC); // reloads the code default
+      setPromptNotice('Reset to the default prompt.');
+    } catch (err) {
+      setPromptNotice(err instanceof Error ? err.message : 'Failed to reset');
+    } finally {
+      setPromptSaving(false);
+    }
   };
 
   const handleStartExtraction = async () => {
@@ -665,6 +822,14 @@ export default function GrantExtractionPage() {
             supplementalFiles.map((f) => [f.name, f.blobPath]),
           ),
           codeOverrides,
+          // Only send an in-flight prompt when the user has actually EDITED it
+          // for this OC (unsaved changes). Merely opening the editor must not
+          // pin a prompt onto the run — otherwise the server falls back to a
+          // saved override or the code default (the intended behavior).
+          promptOverride:
+            promptDirty && promptLoadedOC === selectedOC
+              ? promptText
+              : undefined,
         }),
       });
       if (!res.ok) throw new Error(await res.text());
@@ -760,6 +925,57 @@ export default function GrantExtractionPage() {
     }
   };
 
+  const docTypeForRow = (rowIdx: number): string => {
+    const sf = editedRows[rowIdx]?.['Source File'] || '';
+    return extractionData?.sourceTypes?.[sf] || 'narrative';
+  };
+
+  const toggleIncluded = (rowIdx: number) => {
+    setIncludedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowIdx)) next.delete(rowIdx);
+      else next.add(rowIdx);
+      return next;
+    });
+  };
+
+  const toggleAllVisible = () => {
+    const idxs = getFilteredRowIndices();
+    setIncludedRows((prev) => {
+      const next = new Set(prev);
+      const allIn = idxs.every((i) => next.has(i));
+      idxs.forEach((i) => (allIn ? next.delete(i) : next.add(i)));
+      return next;
+    });
+  };
+
+  // Build and download the final CSV from the INCLUDED rows only, honoring the
+  // currently-selected columns. Reflects unsaved edits and the inclusion
+  // checkboxes (unlike the server download, which serves the saved file as-is).
+  const handleExportSelected = () => {
+    if (!extractionData) return;
+    const cols = extractionData.columns.filter((c) => selectedColumns.has(c));
+    const esc = (v: string) => {
+      const s = v ?? '';
+      return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [cols.map(esc).join(',')];
+    editedRows.forEach((row, i) => {
+      if (!includedRows.has(i)) return;
+      lines.push(cols.map((c) => esc(row[c] || '')).join(','));
+    });
+    const blob = new Blob([lines.join('\n')], {
+      type: 'text/csv;charset=utf-8;',
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `grant-extraction-${selectedOC || 'results'}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  };
+
   const handleStartOver = () => {
     setUiState('document-management');
     setSelectedOC('');
@@ -771,7 +987,7 @@ export default function GrantExtractionPage() {
     setExtractionData(null);
     setEditedRows([]);
     setError(null);
-    setSelectedColumns(new Set(ALL_CSV_COLUMNS));
+    setSelectedColumns(new Set(DEFAULT_COLUMNS));
     setColumnsExpanded(false);
     setExpandedRow(null);
     setSearchTerm('');
@@ -802,6 +1018,16 @@ export default function GrantExtractionPage() {
     return extractionData.validation.flags.filter(
       (f) => f.row === rowIndex + 1 && f.column === column && f.rule === 'R13',
     );
+  };
+
+  // The reason a row's Key Terms/Activities is blank (validation rule R19), so the
+  // review UI never shows an unexplained empty activities cell.
+  const getBlankActivitiesReason = (rowIndex: number): string | null => {
+    if (!extractionData) return null;
+    const f = extractionData.validation.flags.find(
+      (fl) => fl.row === rowIndex + 1 && fl.rule === 'R19',
+    );
+    return f?.message || null;
   };
 
   const getFilteredRowIndices = (): number[] => {
@@ -862,7 +1088,7 @@ export default function GrantExtractionPage() {
   };
 
   const selectAllColumns = () => {
-    setSelectedColumns(new Set(ALL_CSV_COLUMNS));
+    setSelectedColumns(new Set(DEFAULT_COLUMNS));
   };
 
   const deselectAllColumns = () => {
@@ -968,6 +1194,103 @@ export default function GrantExtractionPage() {
               </div>
             </div>
           </div>
+
+          {/* Extraction prompt (per-OC) */}
+          {selectedOC && (
+            <div className="rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+              <button
+                onClick={() => setPromptOpen((v) => !v)}
+                className="flex w-full items-center justify-between p-4 text-left"
+              >
+                <span className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                  {promptOpen ? (
+                    <IconChevronDown size={18} />
+                  ) : (
+                    <IconChevronRight size={18} />
+                  )}
+                  Extraction prompt — {selectedOC}{' '}
+                  <span className="font-normal text-gray-400">(advanced)</span>
+                </span>
+                {promptMeta?.isOverride && (
+                  <span className="rounded-md bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                    Customized
+                  </span>
+                )}
+              </button>
+
+              {promptOpen && (
+                <div className="border-t border-gray-100 p-4 dark:border-gray-700">
+                  {promptLoading ? (
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <IconLoader size={16} className="animate-spin" />
+                      Loading prompt…
+                    </div>
+                  ) : (
+                    <>
+                      <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+                        This is the exact instruction sent to the model for{' '}
+                        {selectedOC}. Edits apply to your next extraction. Save
+                        to keep them for future runs (shared with your team);
+                        Reset restores the default.
+                      </p>
+                      <textarea
+                        value={promptText}
+                        onChange={(e) => setPromptText(e.target.value)}
+                        spellCheck={false}
+                        className="h-80 w-full resize-y rounded-lg border border-gray-300 bg-gray-50 p-3 font-mono text-xs text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
+                      />
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                        <button
+                          onClick={savePrompt}
+                          disabled={promptSaving || !promptDirty}
+                          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50"
+                        >
+                          {promptSaving ? 'Saving…' : 'Save'}
+                        </button>
+                        <button
+                          onClick={resetPrompt}
+                          disabled={promptSaving}
+                          className="flex items-center gap-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:text-gray-300"
+                        >
+                          <IconRefresh size={16} />
+                          Reset to default
+                        </button>
+                        {promptDirty && (
+                          <span className="text-xs italic text-amber-600 dark:text-amber-400">
+                            Unsaved changes (will still apply to the next run)
+                          </span>
+                        )}
+                        {promptDirty &&
+                          promptLoadedYear !== 0 &&
+                          promptLoadedYear !== selectedYear && (
+                            <span className="text-xs italic text-red-600 dark:text-red-400">
+                              This prompt still references {promptLoadedYear},
+                              but you&apos;ve selected {selectedYear} — Reset to
+                              refresh the year, or update it manually.
+                            </span>
+                          )}
+                        {promptMeta?.isOverride && promptMeta.updatedBy && (
+                          <span className="text-xs text-gray-400">
+                            Last saved by {promptMeta.updatedBy}
+                            {promptMeta.updatedAt
+                              ? ` · ${new Date(
+                                  promptMeta.updatedAt,
+                                ).toLocaleString()}`
+                              : ''}
+                          </span>
+                        )}
+                      </div>
+                      {promptNotice && (
+                        <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
+                          {promptNotice}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Document List + Upload */}
           {selectedOC && (
@@ -1350,12 +1673,6 @@ export default function GrantExtractionPage() {
                     )}
                   </span>
                 )}
-                {coverageData.reconciliation.proposals.length > 0 && (
-                  <span className="rounded-md bg-blue-100 px-3 py-1 font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-                    {coverageData.reconciliation.proposals.length} name-match
-                    proposal(s) to review
-                  </span>
-                )}
               </div>
             )}
 
@@ -1366,12 +1683,12 @@ export default function GrantExtractionPage() {
                   <thead className="bg-gray-50 dark:bg-gray-900/40">
                     <tr>
                       {[
-                        'Project Code',
-                        'Project Name',
+                        'Allocation List Project Code',
                         'Code in Narratives',
+                        'Allocation List Project Name',
                         'Name in Narratives',
-                        'Found?',
                         'Notes',
+                        'Source',
                       ].map((h) => (
                         <th
                           key={h}
@@ -1391,28 +1708,46 @@ export default function GrantExtractionPage() {
                         <td className="px-3 py-2 font-mono text-gray-900 dark:text-gray-100">
                           {r.projectCode}
                         </td>
+                        <td className="px-3 py-2 font-mono text-gray-700 dark:text-gray-300">
+                          {r.projectCodeInNarrative ? (
+                            r.projectCodeInNarrative
+                          ) : r.recovered ? (
+                            <span className="not-italic font-medium text-amber-600 dark:text-amber-400">
+                              Likely (review)
+                            </span>
+                          ) : (
+                            <span className="italic text-red-600 dark:text-red-400">
+                              Not Found
+                            </span>
+                          )}
+                        </td>
                         <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
                           {r.projectName}
                         </td>
-                        <td className="px-3 py-2 font-mono text-gray-700 dark:text-gray-300">
-                          {r.projectCodeInNarrative || '—'}
-                        </td>
                         <td className="px-3 py-2 text-gray-700 dark:text-gray-300">
-                          {r.projectNameInNarrative || '—'}
-                        </td>
-                        <td className="px-3 py-2">
-                          <span
-                            className={
-                              r.align === 'Yes'
-                                ? 'font-medium text-green-600 dark:text-green-400'
-                                : 'font-medium text-red-600 dark:text-red-400'
-                            }
-                          >
-                            {r.align}
-                          </span>
+                          {r.projectNameInNarrative || (
+                            <span className="italic text-red-600 dark:text-red-400">
+                              Not Found
+                            </span>
+                          )}
                         </td>
                         <td className="px-3 py-2 text-gray-500 dark:text-gray-400">
                           {r.differences || '—'}
+                        </td>
+                        <td className="px-3 py-2">
+                          {r.narrativeFile ? (
+                            <a
+                              href={`/api/grants/documents/serve?blobPath=${encodeURIComponent(narrativeBlobPath(r.narrativeFile))}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                            >
+                              <IconExternalLink size={14} />
+                              Open PDF
+                            </a>
+                          ) : (
+                            <span className="text-gray-400">—</span>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -1421,7 +1756,23 @@ export default function GrantExtractionPage() {
               </div>
             )}
 
-            {/* Name-match proposals for code-less narratives */}
+            {/*
+              Proposed Code Matches — the automated name/country matching is
+              being reworked. The previous country-based matching produced
+              misleading results (grants-team feedback), so it's disabled for
+              now; the prior implementation is commented out until we design a 
+              better approach.
+            */}
+            <div className="mb-6">
+              <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                Proposed Code Matches
+              </h3>
+              <p className="text-xs italic text-gray-500 dark:text-gray-400">
+                Coming soon
+              </p>
+            </div>
+
+            {/* --- Previous proposed-matches implementation (disabled) ---
             {coverageData.reconciliation.proposals.length > 0 && (
               <div className="mb-6">
                 <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
@@ -1496,6 +1847,7 @@ export default function GrantExtractionPage() {
                 </div>
               </div>
             )}
+            --- end previous proposed-matches implementation --- */}
 
             <div className="mt-6 flex flex-wrap gap-3">
               <button
@@ -1717,7 +2069,21 @@ export default function GrantExtractionPage() {
               <thead className="sticky top-0 z-20 bg-gray-50 dark:bg-gray-800">
                 <tr>
                   <th className="sticky left-0 z-30 bg-gray-50 px-3 py-2 text-left font-medium text-gray-700 dark:bg-gray-800 dark:text-white">
-                    #
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={
+                          getFilteredRowIndices().length > 0 &&
+                          getFilteredRowIndices().every((i) =>
+                            includedRows.has(i),
+                          )
+                        }
+                        onChange={toggleAllVisible}
+                        title="Include / exclude all visible rows in the export"
+                        className="h-4 w-4 cursor-pointer"
+                      />
+                      <span>#</span>
+                    </div>
                   </th>
                   {extractionData.columns
                     .filter((col) => selectedColumns.has(col))
@@ -1744,9 +2110,21 @@ export default function GrantExtractionPage() {
 
                   return (
                     <Fragment key={rowIdx}>
-                      <tr className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                      <tr
+                        className={`hover:bg-gray-50 dark:hover:bg-gray-800/50 ${
+                          includedRows.has(rowIdx) ? '' : 'opacity-40'
+                        }`}
+                      >
                         <td className="sticky left-0 z-10 bg-white dark:bg-gray-900">
                           <div className="flex items-center gap-1 px-2 py-2">
+                            <input
+                              type="checkbox"
+                              checked={includedRows.has(rowIdx)}
+                              onChange={() => toggleIncluded(rowIdx)}
+                              onClick={(e) => e.stopPropagation()}
+                              title="Include this row in the exported CSV"
+                              className="h-4 w-4 cursor-pointer"
+                            />
                             <button
                               onClick={() =>
                                 setExpandedRow(isExpanded ? null : rowIdx)
@@ -1777,6 +2155,14 @@ export default function GrantExtractionPage() {
                               >
                                 <IconExternalLink size={13} />
                               </a>
+                            )}
+                            {isFlaggedDocType(docTypeForRow(rowIdx)) && (
+                              <span
+                                className="ml-0.5 whitespace-nowrap rounded bg-amber-100 px-1 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                                title="Coordination/strategy document — not a project narrative. Review and check the box to include it in the exported CSV."
+                              >
+                                {docTypeForRow(rowIdx)}
+                              </span>
                             )}
                           </div>
                         </td>
@@ -1820,6 +2206,30 @@ export default function GrantExtractionPage() {
                             );
                           }
 
+                          // Provides a reason for an empty cell rather than leaving a blank value
+                          if (
+                            col === 'Key Terms/Activities' &&
+                            !isEditing &&
+                            !(row[col] || '').trim()
+                          ) {
+                            const reason = getBlankActivitiesReason(rowIdx);
+                            return (
+                              <td
+                                key={col}
+                                className="cursor-pointer px-3 py-2"
+                                onClick={() =>
+                                  setEditingCell({ row: rowIdx, col })
+                                }
+                                title={reason || 'No activities extracted'}
+                              >
+                                <span className="block max-w-[400px] text-xs italic text-amber-600 dark:text-amber-400">
+                                  {reason ||
+                                    'No activities extracted (reason unavailable).'}
+                                </span>
+                              </td>
+                            );
+                          }
+
                           return (
                             <td
                               key={col}
@@ -1851,7 +2261,7 @@ export default function GrantExtractionPage() {
                                     if (e.key === 'Enter') setEditingCell(null);
                                   }}
                                   autoFocus
-                                  className="w-full rounded border border-blue-500 px-1 py-0.5 text-sm dark:bg-gray-800"
+                                  className="w-full rounded border border-blue-500 bg-white px-1 py-0.5 text-sm text-gray-900 dark:bg-gray-800 dark:text-white"
                                 />
                               ) : (
                                 <span
@@ -1874,7 +2284,7 @@ export default function GrantExtractionPage() {
                             <div className="space-y-3">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm font-semibold text-white">
-                                  {row['Project Number']} &mdash;{' '}
+                                  {row['Project Code']} &mdash;{' '}
                                   {row['Project Name']}
                                 </span>
                                 {blobPath && (
@@ -1957,11 +2367,13 @@ export default function GrantExtractionPage() {
               Save Changes
             </button>
             <button
-              onClick={() => handleDownload('output')}
+              onClick={handleExportSelected}
               className="flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-2 font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300"
+              title="Exports only the checked (included) rows"
             >
               <IconDownload size={18} />
-              Download CSV
+              Download CSV ({includedRows.size} row
+              {includedRows.size !== 1 ? 's' : ''})
             </button>
             <button
               onClick={() => setUiState('complete')}
@@ -1991,11 +2403,13 @@ export default function GrantExtractionPage() {
 
             <div className="mt-6 flex justify-center gap-4">
               <button
-                onClick={() => handleDownload('output')}
+                onClick={handleExportSelected}
                 className="flex items-center gap-2 rounded-lg bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700"
+                title="Exports only the checked (included) rows"
               >
                 <IconDownload size={20} />
-                Download CSV
+                Download CSV ({includedRows.size} row
+                {includedRows.size !== 1 ? 's' : ''})
               </button>
               <button
                 onClick={() => handleDownload('validation')}
