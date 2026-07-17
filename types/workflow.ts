@@ -356,12 +356,35 @@ export interface DocumentWorkflowState {
 
 export type DataColumnType = 'text' | 'number' | 'date' | 'boolean';
 
+/**
+ * Display-only numeric formatting captured at import/conversion time.
+ * Cell values are always stored as plain numbers; this only drives how
+ * the grid renders them ("$1,234.56", "1.234,56 €").
+ */
+export interface DataColumnFormat {
+  /** Currency token as captured ('$', '€', 'R$', 'USD', 'kr'). */
+  currency?: string;
+  /** Token placement relative to the number; absent = prefix. */
+  currencyPosition?: 'prefix' | 'suffix';
+  /** Separator convention: 'us' = 1,234.56, 'eu' = 1.234,56. */
+  numberStyle?: 'us' | 'eu';
+}
+
 export interface DataColumn {
   id: string;
   name: string;
   type: DataColumnType;
   /** Required field: missing values enforce the missingFieldPolicy. */
   required?: boolean;
+  /** Numeric display format; only meaningful on 'number' columns. */
+  format?: DataColumnFormat;
+  /**
+   * Derived-column formula in canonical id-ref form, e.g.
+   * "[cases] / [population] * 1000". Presence makes the column derived:
+   * always type 'number', never required, cells computed at render time
+   * (never persisted into rows) and read-only in every edit surface.
+   */
+  formula?: string;
 }
 
 export interface DataSourceRecord {
@@ -468,6 +491,11 @@ export interface DataAnalysisWorkflowState {
   missingFieldPolicy?: 'strict' | 'flag' | 'lenient';
   /** Auto-run a quality check on LLM-ingested rows; absent = true. */
   autoCheckOnIngest?: boolean;
+  /**
+   * User dismissed the attribute-matrix transpose suggestion for the
+   * current table; cleared when a new source is imported.
+   */
+  transposeSuggestionDismissed?: boolean;
   updatedAt: string;
 }
 
