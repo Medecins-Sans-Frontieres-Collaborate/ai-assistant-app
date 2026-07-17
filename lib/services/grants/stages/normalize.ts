@@ -201,53 +201,131 @@ function toYesNo(value: unknown): string {
   return 'No';
 }
 
-function buildClosingSuffix(closingType: string, endDate: string): string {
-  const val = closingType.trim().toLowerCase();
-  let datePhrase = '';
-  if (
-    endDate &&
-    !['ongoing', 'tbd', 'n/a', ''].includes(endDate.toLowerCase())
-  ) {
-    const parsed = parseDateFlexible(endDate);
-    if (parsed) {
-      const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ];
-      datePhrase = `${months[parsed.getMonth()]} ${parsed.getFullYear()}`;
+// These helpers use the model's quote only as a pointer to locate the real document
+// text, then surface an actual verbatim slice of the document (findable in the PDF).
+// If no good anchor is found, the model's original text is kept
+// unchanged.
+
+const DASH_PUNCT = /\p{Pd}/u;
+const DROP_CHARS = new Set(['­', '​', '‌', '‍', '﻿']);
+const SINGLE_QUOTES = new Set(['’', '‘', '‛', 'ʼ', '´', '`']);
+const DOUBLE_QUOTES = new Set(['“', '”']);
+
+/** Normalize for fuzzy matching, keeping a map from each normalized-char index
+ *  back to its index in the original text (so a match recovers the verbatim span).
+ *  Absorbs whitespace runs, non-breaking/soft/zero-width chars, curly quotes and
+ *  every Unicode dash, and case — the ways a model copy drifts without being wrong. */
+function normalizeForMatch(text: string): { norm: string; map: number[] } {
+  let norm = '';
+  const map: number[] = [];
+  let lastSpace = false;
+  for (let i = 0; i < text.length; i++) {
+    let c = text[i];
+    if (DROP_CHARS.has(c)) continue;
+    if (SINGLE_QUOTES.has(c)) c = "'";
+    else if (DOUBLE_QUOTES.has(c)) c = '"';
+    else if (DASH_PUNCT.test(c)) c = '-';
+    if (/\s/.test(c)) {
+      if (lastSpace) continue;
+      norm += ' ';
+      map.push(i);
+      lastSpace = true;
+    } else {
+      const lc = c.toLowerCase();
+      for (const ch of lc) {
+        norm += ch;
+        map.push(i);
+      }
+      lastSpace = false;
     }
   }
+  return { norm, map };
+}
 
-  if (val.includes('full') || ['yes', 'true', 'y'].includes(val)) {
-    return datePhrase
-      ? `; intervention planned to end in ${datePhrase}.`
-      : '; project planned for full closure.';
+/** Recover the verbatim original substring for a normalized [start,end) range. */
+function recoverVerbatim(
+  raw: string,
+  map: number[],
+  ns: number,
+  ne: number,
+): string {
+  const start = map[ns];
+  const end = ne < map.length ? map[ne] : raw.length;
+  return raw.slice(start, end);
+}
+
+/** Expand an original [start,end) to nearby sentence/cell boundaries, capped, so
+ *  the surfaced quote reads naturally — still a contiguous, findable slice. */
+function expandToBoundary(raw: string, start: number, end: number): string {
+  const STOP = /[.!?;\n\r\t•|]/;
+  let s = start;
+  for (let k = start - 1; k >= 0 && start - k < 200; k--) {
+    if (STOP.test(raw[k])) {
+      s = k + 1;
+      break;
+    }
+    s = k;
   }
-  if (
-    val.includes('handover') &&
-    (val.includes('partial') || val.includes('reorientation'))
-  ) {
-    return datePhrase
-      ? `; partial handover/reorientation planned by ${datePhrase}.`
-      : '; partial handover/reorientation planned.';
+  let e = end;
+  for (let k = end; k < raw.length && k - end < 300; k++) {
+    if (STOP.test(raw[k])) {
+      e = k + 1;
+      break;
+    }
+    e = k + 1;
   }
-  if (val.includes('handover')) {
-    return datePhrase
-      ? `; handover to another OC planned by ${datePhrase}.`
-      : '; handover to another OC planned.';
+  return raw.slice(s, e);
+}
+
+/** The longest run of consecutive words from `nq` that appears as one contiguous
+ *  substring of `nSrc`. Returns normalized [start,end) or null. */
+function longestWordRun(
+  nq: string,
+  nSrc: string,
+): { at: number; end: number } | null {
+  const words = nq.split(' ').filter(Boolean);
+  let best: { at: number; end: number } | null = null;
+  for (let i = 0; i < words.length; i++) {
+    let phrase = words[i];
+    if (nSrc.indexOf(phrase) < 0) continue;
+    let at = nSrc.indexOf(phrase);
+    let end = at + phrase.length;
+    for (let j = i + 1; j < words.length; j++) {
+      const ext = phrase + ' ' + words[j];
+      const eat = nSrc.indexOf(ext);
+      if (eat < 0) break;
+      phrase = ext;
+      at = eat;
+      end = eat + ext.length;
+    }
+    if (!best || end - at > best.end - best.at) best = { at, end };
   }
-  if (datePhrase) return `; intervention planned to end in ${datePhrase}.`;
-  return '';
+  return best;
+}
+
+/**
+ * Return the VERBATIM supporting text from `raw` for a model quote, so it can be
+ * found with Ctrl+F. Never blanks: if nothing meaningful anchors, returns the
+ * model's original quote unchanged.
+ */
+function resolveVerbatimQuote(raw: string, modelQuote: string): string {
+  const q = String(modelQuote || '');
+  if (!raw || q.trim().length < 12) return q;
+  const { norm: nSrc, map } = normalizeForMatch(raw);
+  const nq = normalizeForMatch(q).norm.trim();
+  if (!nq) return q;
+  // Fast path: the whole quote is already a (drift-tolerant) substring.
+  const whole = nSrc.indexOf(nq);
+  if (whole >= 0) {
+    return recoverVerbatim(raw, map, whole, whole + nq.length).trim() || q;
+  }
+  // Otherwise anchor on the longest matching word-run and surface the real span.
+  const run = longestWordRun(nq, nSrc);
+  if (!run || run.end - run.at < 15) return q; // no real anchor — keep model's
+  const start = map[run.at];
+  const end = run.end < map.length ? map[run.end] : raw.length;
+  const span = expandToBoundary(raw, start, end).trim();
+  return span || q;
 }
 
 function normalizeRecord(
@@ -289,28 +367,59 @@ function normalizeRecord(
       if (ocCfg.old_to_new_codes && filenameCode in ocCfg.old_to_new_codes) {
         filenameCode = ocCfg.old_to_new_codes[filenameCode];
       }
+      // Apply the OC's required code prefix to filename-derived codes too — the
+      // model-code path does this, but the filename path did not, so OCBA Yemen
+      // filenames like "..._YE113_..." produced "YE113" instead of "ESYE113"
+      // (which also broke dedup).
+      if (
+        ocCfg.code_prefix &&
+        !filenameCode.startsWith(ocCfg.code_prefix.toUpperCase())
+      ) {
+        filenameCode = ocCfg.code_prefix.toUpperCase() + filenameCode;
+      }
     }
+  }
+
+  // The model's own per-project code, normalized (single code, mapped, prefixed).
+  let modelCode = String(record.project_code || '')
+    .split(/[,&;]/)[0]
+    .trim()
+    .toUpperCase();
+  if (modelCode) {
+    if (ocCfg.old_to_new_codes && modelCode in ocCfg.old_to_new_codes) {
+      modelCode = ocCfg.old_to_new_codes[modelCode];
+    }
+    if (
+      ocCfg.code_prefix &&
+      !modelCode.startsWith(ocCfg.code_prefix.toUpperCase())
+    ) {
+      modelCode = ocCfg.code_prefix.toUpperCase() + modelCode;
+    }
+  }
+  let modelCodeValid = false;
+  try {
+    modelCodeValid =
+      !!modelCode && new RegExp(ocCfg.code_regex, 'i').test(modelCode);
+  } catch {
+    modelCodeValid = !!modelCode;
   }
 
   let projectCode: string;
   if (overrideCode) {
     projectCode = overrideCode;
+  } else if (record._multi_code_doc && modelCodeValid) {
+    projectCode = modelCode;
   } else if (filenameCode) {
     projectCode = filenameCode;
+  } else if (modelCodeValid) {
+    projectCode = modelCode;
   } else {
-    projectCode = record.project_code || '';
-    if (projectCode) {
-      projectCode = projectCode.split(/[,&;]/)[0].trim().toUpperCase();
-      if (ocCfg.old_to_new_codes && projectCode in ocCfg.old_to_new_codes) {
-        projectCode = ocCfg.old_to_new_codes[projectCode];
-      }
-      if (
-        ocCfg.code_prefix &&
-        !projectCode.startsWith(ocCfg.code_prefix.toUpperCase())
-      ) {
-        projectCode = ocCfg.code_prefix.toUpperCase() + projectCode;
-      }
+    if (modelCode) {
+      console.log(
+        `  ! ${source}: model code "${modelCode}" does not match ${ocCfg.name} pattern ${ocCfg.code_regex} — leaving code blank for review`,
+      );
     }
+    projectCode = '';
   }
 
   if (projectCode.length >= 3) {
@@ -318,6 +427,23 @@ function normalizeRecord(
     if (prefix in _LLM_CODE_PREFIX_FIXES) {
       projectCode = _LLM_CODE_PREFIX_FIXES[prefix] + projectCode.slice(2);
     }
+  }
+
+  // Reject a fabricated "year code": when a document has no real project code,
+  // the model sometimes emits the planning year as the number (e.g. ESML2026,
+  // ESNG2026, ESSD2026).
+  const codeDigits = projectCode.match(/\d{4}/)?.[0];
+  if (codeDigits && codeDigits === String(year)) {
+    projectCode = '';
+  }
+
+  // Reject fabricated placeholder codes (same issue as above).
+  const digitRun = projectCode.match(/\d+/)?.[0];
+  if (digitRun === '001' || digitRun === '000') {
+    console.log(
+      `  ! ${source}: placeholder code "${projectCode}" (digits ${digitRun}) — not a real project number, leaving blank for review`,
+    );
+    projectCode = '';
   }
 
   if (!projectCode) projectCode = 'No Project Code';
@@ -350,29 +476,11 @@ function normalizeRecord(
   projectObjective = fixHealthcareSpelling(projectObjective);
   projectObjective = applyAmericanEnglish(projectObjective);
 
-  // Append closing/handover info
+  // Closing/handover is tracked separately (from a supplemental source), NOT
+  // inferred from the narrative. Keep the raw model value for the (non-focus)
+  // closing_project column, but do NOT append any closure text to the project
+  // objective.
   const rawClosing = record.is_closing_project || 'no';
-  const closingLower = rawClosing.trim().toLowerCase();
-  if (!['no', 'false', 'n', ''].includes(closingLower)) {
-    const objLower = projectObjective.toLowerCase();
-    const closingKeywords = [
-      'closing',
-      'closure',
-      'handover',
-      'handed over',
-      'end in',
-      'ending',
-      'planned to end',
-      'will close',
-      'will end',
-    ];
-    if (!closingKeywords.some((kw) => objLower.includes(kw))) {
-      const suffix = buildClosingSuffix(rawClosing, endDate);
-      if (suffix) {
-        projectObjective = projectObjective.replace(/[.\s]+$/, '') + suffix;
-      }
-    }
-  }
 
   // --- Purpose codes ---
   const purposeCodes = getPurposeCodes(missionCountry, projectName);
@@ -570,6 +678,21 @@ export async function run(params: {
       }
     }
 
+    // Replace each activity's reconstructed quote with the real verbatim text
+    // from the source, so supporting text is searchable with Ctrl+F.
+    // When no anchor is found, the models original quote is kept.
+    const acts = record.activities_2026 || record[`activities_${year}`];
+    if (record._raw_text && Array.isArray(acts)) {
+      for (const a of acts) {
+        if (a && typeof a === 'object' && a.quote_original) {
+          a.quote_original = resolveVerbatimQuote(
+            record._raw_text,
+            a.quote_original,
+          );
+        }
+      }
+    }
+
     try {
       const norm = normalizeRecord(record, ocCfg, year, codeOverrides);
       normalized.push(norm);
@@ -583,12 +706,114 @@ export async function run(params: {
     progress.tick(idx + 1, total);
   }
 
+  // Final authoritative dedup on the canonical code. extractFields dedups on the
+  // raw model code, so records that converge only after prefix / old->new
+  // canonicalization (e.g. "BF103" + "ESBF103") still collide here — collapse to
+  // one row per code so duplicates never reach output. "No Project Code" is never
+  // collapsed (those are distinct projects that genuinely lack a code).
+  const coordKw = (ocCfg.coord_keywords || [])
+    .map((k) => (k || '').toLowerCase())
+    .filter(Boolean);
+  const isCoordSrc = (rec: AnyRecord): boolean => {
+    const s = String(rec.source_file || '').toLowerCase();
+    return coordKw.some((k) => s.includes(k));
+  };
+  // How many projects each source produced — a dedicated single-project narrative
+  // (1) should beat a multi-project overview/coordination doc (many) on collision.
+  const sourceCounts = new Map<string, number>();
+  for (const rec of normalized) {
+    const s = String(rec.source_file || '');
+    sourceCounts.set(s, (sourceCounts.get(s) || 0) + 1);
+  }
+  const activityCount = (rec: AnyRecord): number =>
+    String(rec.activities_list || '')
+      .split(',')
+      .filter((x) => x.trim()).length;
+  const prefer = (a: AnyRecord, b: AnyRecord): AnyRecord => {
+    const ac = isCoordSrc(a);
+    const bc = isCoordSrc(b);
+    if (ac !== bc) return ac ? b : a; // non-coordination narrative wins
+    const asib = sourceCounts.get(String(a.source_file || '')) || 1;
+    const bsib = sourceCounts.get(String(b.source_file || '')) || 1;
+    if (asib !== bsib) return asib < bsib ? a : b; // dedicated doc wins
+    const aa = activityCount(a);
+    const ba = activityCount(b);
+    if (aa !== ba) return aa > ba ? a : b; // richer activities
+    return String(a.project_objective || '').length >=
+      String(b.project_objective || '').length
+      ? a
+      : b;
+  };
+  const byCode = new Map<string, AnyRecord>();
+  const deduped: AnyRecord[] = [];
+  for (const rec of normalized) {
+    const code = rec.project_code;
+    if (!code || code === 'No Project Code') {
+      deduped.push(rec);
+      continue;
+    }
+    const existing = byCode.get(code);
+    if (!existing) {
+      byCode.set(code, rec);
+    } else {
+      const winner = prefer(existing, rec);
+      if (winner !== existing) {
+        console.log(
+          `  dedup ${code}: kept "${winner.source_file}" over "${(winner === existing ? rec : existing).source_file}"`,
+        );
+      }
+      byCode.set(code, winner);
+    }
+  }
+  deduped.push(...byCode.values());
+
+  // Drop entirely-empty records: a coordination / overview document can yield a
+  // record with no real code, no name, no objective, and no activities — that
+  // shows up as a blank, checkable row with nothing in any cell. If a record has
+  // NONE of {a real code, name, objective, activities}, it carries no information
+  // and is removed. (Records with any of those are kept; blank activities alone
+  // are kept and explained by validation rule R19.)
+  const meaningful = (r: AnyRecord): boolean => {
+    const code = String(r.project_code || '').trim();
+    const realCode = !!code && code !== 'No Project Code';
+    return (
+      realCode ||
+      !!String(r.project_name || '').trim() ||
+      !!String(r.project_objective || '').trim() ||
+      !!String(r.activities_list || '').trim()
+    );
+  };
+  const finalRecords = deduped.filter(meaningful);
+  const removed = normalized.length - finalRecords.length;
+
   // Write normalized records to cache
   const outputPath = join(cacheDir, 'normalized_records.json');
-  writeFileSync(outputPath, JSON.stringify(normalized, null, 2), 'utf-8');
+  writeFileSync(outputPath, JSON.stringify(finalRecords, null, 2), 'utf-8');
+
+  // Persist the model's per-document type classification (project narrative vs
+  // coordination / strategy / overview / compilation) for the results UI to flag
+  // non-narrative source documents. Keyed by source-file (matches the CSV's
+  // "Source File" column). Best-effort — if absent, the data endpoint falls back
+  // to keyword-based classification.
+  try {
+    const docTypes: Record<string, string> = {};
+    for (const r of records) {
+      const sf = String(r._source_file || '');
+      const dt = String(r._document_type || '');
+      if (sf && dt && !docTypes[sf]) docTypes[sf] = dt;
+    }
+    writeFileSync(
+      join(cacheDir, 'document_types.json'),
+      JSON.stringify(docTypes, null, 2),
+      'utf-8',
+    );
+  } catch {
+    /* non-fatal — UI falls back to keyword classification */
+  }
 
   progress.stageDone('normalize');
   console.log(
-    `  Normalization complete: ${normalized.length} record(s) -> ${outputPath}`,
+    `  Normalization complete: ${finalRecords.length} record(s) -> ${outputPath}` +
+      (removed > 0 ? ` (${removed} duplicate/empty record(s) removed)` : ''),
   );
 }
