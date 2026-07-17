@@ -93,7 +93,7 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
         <Sidebar />
 
         <div
-          className={`flex flex-1 transition-all duration-300 ease-in-out ${
+          className={`flex min-w-0 flex-1 transition-all duration-300 ease-in-out ${
             showChatbar ? 'md:ml-[260px]' : 'md:ml-14'
           }`}
         >
