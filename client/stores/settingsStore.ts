@@ -57,7 +57,9 @@ export interface TokenUsageBucket {
 }
 
 /** Builds the tokenUsageStats bucket key for one request's usage. */
-export function tokenUsageKey(usage: TokenUsageMetadata): string {
+export function tokenUsageKey(
+  usage: Pick<TokenUsageMetadata, 'modelId' | 'region' | 'reasoningEffort'>,
+): string {
   return `${usage.modelId}|${usage.region ?? 'default'}|${usage.reasoningEffort ?? 'none'}`;
 }
 
@@ -246,6 +248,19 @@ interface SettingsStore {
   tokenUsageStats: Record<string, TokenUsageBucket>;
   /** ISO timestamp of the first recorded usage (display: "since ..."). */
   tokenUsageFirstTrackedAt: string | null;
+  /**
+   * Usage BACK-CALCULATED from conversations that predate tracking (tokens
+   * approximated from stored message text — see usageBackfill.ts). Kept
+   * separate from tokenUsageStats so the UI can label the estimated portion.
+   * Same key format and raw-counts-only convention as tokenUsageStats.
+   */
+  estimatedUsageStats: Record<string, TokenUsageBucket>;
+  /**
+   * ISO timestamp stamped when the one-time historical backfill ran (or was
+   * intentionally skipped). Non-null = never run it again — including for
+   * conversations imported later (accepted limitation).
+   */
+  historicalUsageBackfilledAt: string | null;
 
   /**
    * Provenance of the current `models` list (from /api/models). Runtime-only,
@@ -394,6 +409,14 @@ interface SettingsStore {
   // Token usage tracking (see tokenUsageStats)
   recordTokenUsage: (usage: TokenUsageMetadata) => void;
   resetTokenUsageStats: () => void;
+  /**
+   * Folds back-calculated historical buckets into estimatedUsageStats AND
+   * stamps historicalUsageBackfilledAt in one atomic set — a re-invoked
+   * effect (StrictMode) reads the marker and skips, so no double merge.
+   */
+  mergeEstimatedUsage: (entries: Record<string, TokenUsageBucket>) => void;
+  /** Stamps the backfill marker when there was nothing to merge (or on failure). */
+  markHistoricalBackfillDone: () => void;
 
   // Model list provenance / region (runtime-only)
   setModelListSource: (source: ModelListSource | null) => void;
@@ -501,6 +524,8 @@ export const useSettingsStore = create<SettingsStore>()(
       starredModelIds: [],
       tokenUsageStats: {},
       tokenUsageFirstTrackedAt: null,
+      estimatedUsageStats: {},
+      historicalUsageBackfilledAt: null,
       modelListSource: null,
       userRegion: null,
       extractionRecipes: [],
@@ -818,7 +843,39 @@ export const useSettingsStore = create<SettingsStore>()(
         }),
 
       resetTokenUsageStats: () =>
-        set({ tokenUsageStats: {}, tokenUsageFirstTrackedAt: null }),
+        set({
+          tokenUsageStats: {},
+          tokenUsageFirstTrackedAt: null,
+          estimatedUsageStats: {},
+          // Stamp (not null) so the one-time backfill doesn't resurrect the
+          // history the user just chose to clear.
+          historicalUsageBackfilledAt: new Date().toISOString(),
+        }),
+
+      mergeEstimatedUsage: (entries) =>
+        set((state) => {
+          const merged = { ...state.estimatedUsageStats };
+          for (const [key, bucket] of Object.entries(entries)) {
+            const existing = merged[key];
+            merged[key] = {
+              promptTokens: (existing?.promptTokens ?? 0) + bucket.promptTokens,
+              completionTokens:
+                (existing?.completionTokens ?? 0) + bucket.completionTokens,
+              requests: (existing?.requests ?? 0) + bucket.requests,
+            };
+          }
+          return {
+            estimatedUsageStats: merged,
+            historicalUsageBackfilledAt:
+              state.historicalUsageBackfilledAt ?? new Date().toISOString(),
+          };
+        }),
+
+      markHistoricalBackfillDone: () =>
+        set((state) => ({
+          historicalUsageBackfilledAt:
+            state.historicalUsageBackfilledAt ?? new Date().toISOString(),
+        })),
 
       // Extraction Recipe Actions
       setExtractionRecipes: (recipes) => set({ extractionRecipes: recipes }),
@@ -1066,6 +1123,8 @@ export const useSettingsStore = create<SettingsStore>()(
           starredModelIds: [],
           tokenUsageStats: {},
           tokenUsageFirstTrackedAt: null,
+          estimatedUsageStats: {},
+          historicalUsageBackfilledAt: null,
           extractionRecipes: [],
           streamingSpeed: DEFAULT_STREAMING_SPEED,
           includeUserInfoInPrompt: false,
@@ -1090,7 +1149,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: 'settings-storage',
-      version: 30, // Increment this when schema changes to trigger migrations
+      version: 33, // Increment this when schema changes to trigger migrations
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         temperature: state.temperature,
@@ -1138,6 +1197,8 @@ export const useSettingsStore = create<SettingsStore>()(
         starredModelIds: state.starredModelIds,
         tokenUsageStats: state.tokenUsageStats,
         tokenUsageFirstTrackedAt: state.tokenUsageFirstTrackedAt,
+        estimatedUsageStats: state.estimatedUsageStats,
+        historicalUsageBackfilledAt: state.historicalUsageBackfilledAt,
         extractionRecipes: state.extractionRecipes,
         streamingSpeed: state.streamingSpeed,
         includeUserInfoInPrompt: state.includeUserInfoInPrompt,
@@ -1440,6 +1501,34 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Version 30 → 31: Back-calculated (estimated) usage buckets + the
+        // one-time historical-backfill marker. Backfill empty/null; the
+        // AppInitializer effect runs the actual back-calculation.
+        if (version < 31) {
+          if (
+            state.estimatedUsageStats == null ||
+            typeof state.estimatedUsageStats !== 'object'
+          ) {
+            state.estimatedUsageStats = {};
+          }
+          if (state.historicalUsageBackfilledAt === undefined) {
+            state.historicalUsageBackfilledAt = null;
+          }
+        }
+
+        // Version 31 → 33: Estimated buckets are derived data; wipe and
+        // re-arm the one-shot backfill whenever its math is corrected so
+        // stats rebuild cleanly. v32: the v31 backfill wrongly skipped
+        // conversations whose model carries isAgent:true (a "web-search
+        // agent available" marker on ordinary base models — not an agent
+        // chat). v33: back-calc now windows context like the real pipeline
+        // (first + last 79 messages, capped at model context) instead of
+        // growing quadratically on long conversations.
+        if (version < 33) {
+          state.estimatedUsageStats = {};
+          state.historicalUsageBackfilledAt = null;
+        }
+
         return state;
       },
       onRehydrateStorage: () => (state) => {
@@ -1546,6 +1635,14 @@ export const useSettingsStore = create<SettingsStore>()(
             typeof state.tokenUsageStats !== 'object'
           ) {
             state.tokenUsageStats = {};
+          }
+
+          // Defensive: estimated (back-calculated) usage — same rationale.
+          if (
+            state.estimatedUsageStats == null ||
+            typeof state.estimatedUsageStats !== 'object'
+          ) {
+            state.estimatedUsageStats = {};
           }
 
           // Defensive: extractionRecipes must always be an array (same
