@@ -2,8 +2,6 @@
  * Stage 1: Text extraction from PDF and DOCX documents.
  *
  * Uses Azure Document Intelligence REST API for PDF/DOCX files.
- * Writes one .txt file per input document into outDir/.
- * Results are cached by SHA-256 content hash.
  */
 import { createHash } from 'crypto';
 import {
@@ -200,6 +198,32 @@ export interface ExtractTextResult {
   [filename: string]: string; // filename -> path to extracted .txt file
 }
 
+/** Simple concurrency limiter (sliding window). */
+function pLimit(concurrency: number) {
+  let active = 0;
+  const queue: (() => void)[] = [];
+  function next() {
+    if (queue.length > 0 && active < concurrency) {
+      active++;
+      const run = queue.shift()!;
+      run();
+    }
+  }
+  return function <T>(fn: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      queue.push(() => {
+        fn()
+          .then(resolve, reject)
+          .finally(() => {
+            active--;
+            next();
+          });
+      });
+      next();
+    });
+  };
+}
+
 export async function run(params: {
   documents: string[];
   outDir: string;
@@ -218,10 +242,12 @@ export async function run(params: {
   progress.stageStart('extract_text', documents.length);
 
   const resultMap: ExtractTextResult = {};
+  const failed: string[] = [];
   const total = documents.length;
+  let completed = 0;
+  const limit = pLimit(2);
 
-  for (let idx = 0; idx < documents.length; idx++) {
-    const doc = documents[idx];
+  const processDoc = async (doc: string, idx: number): Promise<void> => {
     const docIsUrl = isUrl(doc);
     let tmpFile: string | null = null;
 
@@ -258,8 +284,7 @@ export async function run(params: {
           console.log(
             `  [${idx + 1}/${total}] ${filename}: cached (${hash.slice(0, 12)}...)`,
           );
-          progress.tick(idx + 1, total);
-          continue;
+          return;
         }
       }
 
@@ -281,7 +306,14 @@ export async function run(params: {
       }
 
       resultMap[filename] = outPath;
-      progress.tick(idx + 1, total);
+    } catch (err) {
+      // A single bad/corrupt/unsupported/oversized document (e.g. Document
+      // Intelligence rejects it with "Invalid request") must NOT abort the whole
+      // batch — log it, skip it, and let the rest of the documents through.
+      failed.push(basename(doc));
+      console.error(
+        `  [${idx + 1}/${total}] ${basename(doc)}: extraction FAILED — skipped (${err instanceof Error ? err.message : String(err)})`,
+      );
     } finally {
       if (tmpFile && existsSync(tmpFile)) {
         try {
@@ -290,10 +322,21 @@ export async function run(params: {
           /* ignore */
         }
       }
+      completed++;
+      progress.tick(completed, total);
     }
-  }
+  };
+
+  await Promise.all(
+    documents.map((doc, idx) => limit(() => processDoc(doc, idx))),
+  );
 
   progress.stageDone('extract_text');
-  console.log(`  Text extraction complete: ${total} document(s) processed.`);
+  console.log(
+    `  Text extraction complete: ${total - failed.length}/${total} document(s) processed` +
+      (failed.length
+        ? `; ${failed.length} skipped (extraction failed): ${failed.join(', ')}`
+        : '.'),
+  );
   return resultMap;
 }
