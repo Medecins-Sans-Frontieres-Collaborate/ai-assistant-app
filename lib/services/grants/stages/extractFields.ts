@@ -31,7 +31,30 @@ function cleanJsonResponse(content: string): string {
   if (clean.startsWith('```json')) clean = clean.slice(7);
   if (clean.startsWith('```')) clean = clean.slice(3);
   if (clean.endsWith('```')) clean = clean.slice(0, -3);
-  return clean.trim();
+  clean = clean.trim();
+
+  const start = clean.indexOf('{');
+
+  if (start < 0) return clean;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  for (let i = start; i < clean.length; i++) {
+    const ch = clean[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') inString = true;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) return clean.slice(start, i + 1);
+    }
+  }
+  return clean.slice(start);
 }
 
 async function llmExtract(
@@ -42,9 +65,16 @@ async function llmExtract(
   maxRetries: number = 3,
   temperature: number = 0.0,
 ): Promise<AnyRecord> {
+  const MAX_INPUT_CHARS = 300000;
   let fullPrompt = prompt + docText;
-  if (fullPrompt.length > 120000) {
-    fullPrompt = prompt + docText.slice(0, 100000) + '\n[Truncated]';
+  if (fullPrompt.length > MAX_INPUT_CHARS) {
+    const budget = Math.max(0, MAX_INPUT_CHARS - prompt.length);
+    fullPrompt = prompt + docText.slice(0, budget) + '\n[Truncated]';
+    // Opts to not silently truncate since a chopped document loses projects and context.
+    console.warn(
+      `    ! TRUNCATED document text: ${docText.length.toLocaleString()} -> ${budget.toLocaleString()} chars ` +
+        `(over the ${MAX_INPUT_CHARS.toLocaleString()}-char input budget). Projects/activities in the discarded tail WILL be missed.`,
+    );
   }
 
   let lastErr: Error | null = null;
@@ -88,22 +118,181 @@ function sleep(ms: number): Promise<void> {
 function extractSingle(
   result: AnyRecord,
   sourceFile: string,
-  ocCfg: OCConfig,
 ): AnyRecord | AnyRecord[] {
   if ('error' in result) return result;
 
-  if (ocCfg.multi_project) {
-    const projects = result.projects || [result];
-    if (Array.isArray(projects) && projects.length > 0) {
-      for (const proj of projects) {
-        proj._source_file = sourceFile;
-      }
-      return projects;
+  // The model classifies the whole DOCUMENT (project narrative vs coordination /
+  // strategy / overview / compilation). For a multi-project response it sits at
+  // the top level; apply it to every project from that document.
+  const docType =
+    typeof result.document_type === 'string' ? result.document_type.trim() : '';
+
+  const clean = (rec: AnyRecord): AnyRecord => {
+    rec._source_file = sourceFile;
+    if (docType && !rec._document_type) rec._document_type = docType;
+    // Canonicalize the project code: strip stray spaces/hyphens the source
+    // sometimes introduces (e.g. "SL-125", "BD1-12") and uppercase, so codes
+    // match the OC's pattern. OC-agnostic — no OC uses spaces/hyphens in codes.
+    if (rec.project_code != null) {
+      rec.project_code = String(rec.project_code)
+        .replace(/[\s-]/g, '')
+        .toUpperCase();
     }
+    return rec;
+  };
+
+  // A document may bundle several distinct projects (any OC, not just OCP) — the
+  // model returns {"projects":[...]}. Handle that universally so bundled codes
+  // (e.g. "BD112 & BD114", "NG110 NG109") each become their own record; a
+  // single-project doc falls through to the single-record path below.
+  if (Array.isArray(result.projects) && result.projects.length > 0) {
+    // Mark records that came from a document bundling multiple projects: for
+    // those, downstream must trust the model's per-project code (the filename
+    // carries only one code and would collapse them all to the first).
+    const multi = result.projects.length > 1;
+    return result.projects.map((p) => {
+      const r = clean(p);
+      if (multi) r._multi_code_doc = true;
+      return r;
+    });
   }
 
-  result._source_file = sourceFile;
-  return result;
+  return clean(result);
+}
+
+const NEVER_A_PROJECT_CODE = new Set(['FH360', 'HT174S']);
+
+function detectMultiCodes(
+  text: string,
+  codeRegex: string,
+  minOccurrences: number = 2,
+  extraBlocklist: string[] = [],
+): string[] {
+  const body = codeRegex.replace(/^\^/, '').replace(/\$$/, '');
+  let validate: RegExp;
+  try {
+    validate = new RegExp(`^${body}$`, 'i');
+  } catch {
+    return [];
+  }
+
+  const counts = new Map<string, number>();
+  const re = /\b[A-Za-z]{1,3}\d{2,4}[A-Za-z]?\b/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    const norm = m[0].toUpperCase();
+    if (validate.test(norm)) counts.set(norm, (counts.get(norm) || 0) + 1);
+  }
+  const blocked = new Set([
+    ...NEVER_A_PROJECT_CODE,
+    ...extraBlocklist.map((c) => c.toUpperCase()),
+  ]);
+  return [...counts.entries()]
+    .filter(([c, n]) => n >= minOccurrences && !blocked.has(c))
+    .map(([c]) => c);
+}
+
+/**
+ * Extract each project of a multi-project document with its OWN LLM call. Asking
+ * one call for N projects reliably under-delivers — the model returns one or two
+ * and offers to "continue", or answers in prose that breaks JSON parsing (observed
+ * 2 of 8 on a DRC country doc). One project per call is a task it completes.
+ */
+async function extractPerCode(
+  client: AzureOpenAI,
+  deploymentName: string,
+  prompt: string,
+  fullText: string,
+  sourceFile: string,
+  codes: string[],
+  year: number,
+): Promise<AnyRecord[]> {
+  const results: AnyRecord[] = [];
+  const upper = fullText.toUpperCase();
+  const head = fullText.slice(0, 3000); // country/context header
+  const RADIUS = 6000;
+
+  for (const code of codes) {
+    // Focused excerpt: the document head (country/context) plus a window around
+    // EVERY occurrence of this code — its table row, its section, its budget line.
+    const windows: string[] = [];
+    let from = 0;
+    let occ = 0;
+    while (occ < 6) {
+      const idx = upper.indexOf(code.toUpperCase(), from);
+      if (idx < 0) break;
+      windows.push(
+        fullText.slice(
+          Math.max(0, idx - RADIUS),
+          Math.min(fullText.length, idx + code.length + RADIUS),
+        ),
+      );
+      from = idx + code.length;
+      occ++;
+    }
+    const excerpt = (
+      head + (windows.length ? '\n…\n' + windows.join('\n…\n') : '')
+    ).slice(0, 120000);
+
+    const codeHint =
+      `\n\nIMPORTANT: This document covers MULTIPLE projects. FIRST decide what the token "${code}" actually IS in this document — judge the TOKEN's role, not whether the surrounding text happens to describe a project.\n\n` +
+      `Return an EMPTY result — {"project_name": "", "project_objective": "", "activities_${year}": []} — if "${code}" is NOT this document's label for its own distinct project. It is NOT a project code when it is:\n` +
+      `  * a road or route number, or another geographic/infrastructure reference (e.g. "à 20 kilomètres de la ville sur la ${code}", "axe ${code}");\n` +
+      `  * a table column header, statistics label, or figure caption (e.g. "Cité Soleil - ${code}" heading a results table);\n` +
+      `  * a passing reference to OTHER projects inside a different project's text (e.g. "réponses aux épidémies (${code}, ...)");\n` +
+      `  * any other identifier (a date, a budget line, a document reference) that is not the label of a distinct project.\n` +
+      `Surrounding text describing a real project does NOT make "${code}" that project's code — a road number printed inside a project's narrative is still a road number.\n\n` +
+      `ONLY if "${code}" genuinely labels its OWN project here — it heads a project fiche/section/title, or is that project's row in a project table — extract THAT project: return a SINGLE JSON object (not a "projects" array), using only the passages describing "${code}".\n\n` +
+      `NEVER copy another project's name, objective, or activities onto "${code}" — attributing one project's data to another code is a serious error.\n\n`;
+
+    const result = await llmExtract(
+      client,
+      deploymentName,
+      prompt,
+      codeHint + excerpt,
+    );
+    if ('error' in result) {
+      console.log(`      x ${code}: ${result.error}`);
+      continue;
+    }
+    // Unwrap in case the model still answers with a projects array.
+    const rec: AnyRecord =
+      Array.isArray(result.projects) && result.projects.length > 0
+        ? result.projects[0]
+        : result;
+
+    // The model signals "this code has no project description here" with an empty
+    // name and no activities — it was only a passing reference inside another
+    // project's text (e.g. "Ripostes aux épidémies (CD104, CD109 et CD113)"
+    // inside CD140's fiche). Emitting a row here would copy the HOST project's
+    // data onto this code — the wrong-attribution error we must never make.
+    const nameEmpty = !String(rec.project_name || '').trim();
+    const actsEmpty = !(rec[`activities_${year}`] || rec.activities_2026 || [])
+      .length;
+    if (nameEmpty && actsEmpty) {
+      console.log(
+        `      - ${code}: no dedicated project description in this document (passing reference) — skipped`,
+      );
+      continue;
+    }
+
+    rec.project_code = code; // pin: we know which project we asked for
+    rec._source_file = sourceFile;
+    rec._multi_code_doc = true; // downstream trusts this code over the filename
+    if (
+      typeof result.document_type === 'string' &&
+      result.document_type.trim() &&
+      !rec._document_type
+    ) {
+      rec._document_type = result.document_type.trim();
+    }
+    results.push(rec);
+    const nActs = (rec.activities_2026 || []).length;
+    console.log(
+      `      + ${code}: ${String(rec.project_name || '?').slice(0, 45)}, ${nActs} activities`,
+    );
+  }
+  return results;
 }
 
 function isCompilationDoc(filename: string, ocCfg: OCConfig): boolean {
@@ -195,6 +384,10 @@ async function extractCompilation(
 
     result.project_code = code;
     result._source_file = sourceFile;
+    result._document_type =
+      typeof result.document_type === 'string' && result.document_type.trim()
+        ? result.document_type.trim()
+        : 'compilation';
     results.push(result);
 
     const nActs = (result.activities_2026 || []).length;
@@ -246,32 +439,21 @@ function filterActivitiesByYear(
   year: number,
   docText: string,
 ): void {
-  const yearStr = String(year);
   const activities = record.activities_2026;
   if (!activities || !Array.isArray(activities) || activities.length === 0)
     return;
 
+  const yearStr = String(year);
   const yearCount = (docText.match(new RegExp(yearStr, 'g')) || []).length;
 
+  // Only wipe activities when the target year is ENTIRELY ABSENT (an outdated /
+  // wrong-year write-up). When the year IS present, trust the prompt's per-activity
+  // gate: a document usually states its planning year once, not beside every
+  // activity, so re-dropping activities whose quote lacked the literal year was
+  // silently deleting real current-year services.
   if (yearCount === 0) {
     record.activities_2026 = [];
-    return;
   }
-
-  if (yearCount >= 2) return;
-
-  // Year appears only once — apply per-activity quote filtering
-  const filtered = activities.filter((act: AnyRecord) => {
-    const quoteEn = act.quote_english || '';
-    const quoteOrig = act.quote_original || '';
-    const section = act.section || '';
-    return (
-      quoteEn.includes(yearStr) ||
-      quoteOrig.includes(yearStr) ||
-      section.includes(yearStr)
-    );
-  });
-  record.activities_2026 = filtered;
 }
 
 export async function run(params: {
@@ -281,6 +463,9 @@ export async function run(params: {
   progress: ProgressEmitter;
   maxWorkers?: number;
   year?: number;
+  /** Full prompt template to use instead of the code default (from a saved or
+   *  in-flight per-OC override). Falls back to buildExtractionPrompt when empty. */
+  promptOverride?: string;
 }): Promise<void> {
   const {
     ocCfg,
@@ -289,6 +474,7 @@ export async function run(params: {
     progress,
     maxWorkers = 3,
     year = 2026,
+    promptOverride,
   } = params;
 
   console.log('\n' + '='.repeat(60));
@@ -308,7 +494,12 @@ export async function run(params: {
   progress.stageStart('extract_fields', total);
   mkdirSync(outDir, { recursive: true });
 
-  const prompt = buildExtractionPrompt(ocCfg, year);
+  const prompt = promptOverride?.trim()
+    ? promptOverride
+    : buildExtractionPrompt(ocCfg, year);
+  if (promptOverride?.trim()) {
+    console.log('  Using custom prompt override for this run.');
+  }
   const client = getGrantOpenAIClient();
   const deploymentName = getDeployment();
 
@@ -360,8 +551,42 @@ export async function run(params: {
   const promises = Object.entries(regularDocs).map(([fname, txt]) =>
     limit(async () => {
       try {
+        // Being multi-project is a property of the document and not the OC (such docs
+        // exist in every OC), so the threshold is intentionally permissive (>=1) and
+        // only a candidate generator. The real gate is extractPerCode, which per
+        // code refuses passing references. Errors are asymmetric: a false candidate
+        // costs one call and is refused; a missed one is a silently-lost project.
+        const codes = detectMultiCodes(
+          txt,
+          ocCfg.code_regex,
+          1,
+          ocCfg.code_blocklist || [],
+        );
+
+        if (codes.length > 1) {
+          // One call per project — see extractPerCode for why the all-in-one
+          // request silently under-delivers.
+          const perCode = await extractPerCode(
+            client,
+            deploymentName,
+            prompt,
+            txt,
+            fname,
+            codes,
+            year,
+          );
+          allRecords.push(...perCode);
+          completed++;
+          console.log(
+            `    + ${fname}: ${perCode.length}/${codes.length} projects ` +
+              `[${perCode.map((r) => r.project_code || '?').join(', ')}]`,
+          );
+          progress.tick(completed, total);
+          return;
+        }
+
         const result = await llmExtract(client, deploymentName, prompt, txt);
-        const processed = extractSingle(result, fname, ocCfg);
+        const processed = extractSingle(result, fname);
         completed++;
 
         if ('error' in result) {
@@ -398,9 +623,56 @@ export async function run(params: {
     filterActivitiesByYear(rec, year, docText);
   }
 
+  // Deduplicate by project code across documents (a code can appear in its own
+  // narrative and in a coordination summary). Keep one record per code, preferring
+  // a real narrative over a coordination doc, then the richer record. Records
+  // without a code can't be deduped, so all are kept.
+  const coordKw = ocCfg.coord_keywords || [];
+  const activitiesKey = `activities_${year}`;
+  const isCoordSource = (rec: AnyRecord): boolean => {
+    const src = String(rec._source_file || '').toLowerCase();
+    return coordKw.some((kw) => kw && src.includes(kw.toLowerCase()));
+  };
+  const richness = (rec: AnyRecord): number =>
+    (rec[activitiesKey]?.length || 0) * 1000 +
+    String(rec.project_objective || '').length;
+  const byCode = new Map<string, AnyRecord>();
+  const noCode: AnyRecord[] = [];
+  for (const rec of allRecords) {
+    const code = String(rec.project_code || '').toUpperCase();
+    if (!code) {
+      noCode.push(rec);
+      continue;
+    }
+    const existing = byCode.get(code);
+    if (!existing) {
+      byCode.set(code, rec);
+      continue;
+    }
+    const existingCoord = isCoordSource(existing);
+    const recCoord = isCoordSource(rec);
+    // Prefer the non-coordination source; if both are the same kind, keep the
+    // richer record.
+    const winner =
+      existingCoord !== recCoord
+        ? recCoord
+          ? existing
+          : rec
+        : richness(rec) > richness(existing)
+          ? rec
+          : existing;
+    if (winner !== existing) {
+      console.log(
+        `    dedup ${code}: preferring "${winner._source_file}" over "${existing._source_file}"`,
+      );
+    }
+    byCode.set(code, winner);
+  }
+  const records = [...noCode, ...byCode.values()];
+
   // Write all records to outDir
-  for (let idx = 0; idx < allRecords.length; idx++) {
-    const rec = allRecords[idx];
+  for (let idx = 0; idx < records.length; idx++) {
+    const rec = records[idx];
     const source = rec._source_file || `record_${idx}`;
     const safeName = basename(source)
       .replace(/\.[^.]+$/, '')
@@ -417,6 +689,9 @@ export async function run(params: {
 
   progress.stageDone('extract_fields');
   console.log(
-    `  Extraction complete: ${allRecords.length} record(s) from ${total} documents.`,
+    `  Extraction complete: ${records.length} record(s) from ${total} documents` +
+      (records.length !== allRecords.length
+        ? ` (${allRecords.length - records.length} duplicate code(s) deduped).`
+        : '.'),
   );
 }
