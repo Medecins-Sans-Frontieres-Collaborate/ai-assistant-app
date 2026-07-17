@@ -336,8 +336,50 @@ const mockMessages: Record<string, unknown> = {
     byRegion: 'By hosting region',
     regionDefault: 'Default',
     modelRow: '{requests} req - {grams} g',
+    estimatedPortion:
+      'Includes ~{grams} g CO2e ({requests} requests) estimated from chats that predate tracking',
     disclosure: 'Estimates based on assumptions v{version} - since {since}.',
     reset: 'Reset usage stats',
+  },
+  emissions: {
+    tier: {
+      low: 'Lower impact',
+      moderate: 'Moderate impact',
+      high: 'Higher impact',
+    },
+    tierTooltip: 'Relative energy impact per request (assumptions v{version})',
+    typicalRequest: '~{grams} g CO2e per typical request',
+    typicalRequestTooltip:
+      'Rough per-request estimate (assumptions v{version})',
+    activities: {
+      netflixHd: 'Netflix HD streaming',
+      zoomCall: 'Zoom call (camera on)',
+      webBrowsing: 'Web browsing',
+      spotifyAudio: 'Spotify audio',
+    },
+    equivalents: {
+      title: '~ the same carbon as',
+      note: 'Same-carbon comparison against published per-hour footprints',
+    },
+    duration: {
+      lessThanSecond: '<1 s',
+      seconds: '{value} s',
+      minutes: '{value} min',
+      hours: '{value} h',
+    },
+    chip: {
+      label: '{grams} g CO2e',
+      ariaLabel: 'Estimated carbon footprint: {grams} grams. Show breakdown.',
+      ariaLabelToday:
+        'Estimated carbon footprint today: {grams} grams. Show breakdown.',
+      title: 'This conversation (estimated)',
+      today: 'Today',
+      total: 'All time',
+      measured: 'From reported token counts',
+      estimated: 'Back-calculated from older messages',
+      lastRequest: 'Last request',
+      disclaimer: 'Per-request estimates (assumptions v{version})',
+    },
   },
   modelSelect: {
     tabs: {
