@@ -1,6 +1,6 @@
 {
   "name": "WaCA",
-  "code_regex": "^[A-Z]{2,3}W?\\d{2,3}$",
+  "code_regex": "^([A-Z]{2}W\\d{2,3}|[A-Z]{2}\\d{3})$",
   "code_prefix": "",
   "hq_rate": 0.0,
   "direct_rate": 0.0,
