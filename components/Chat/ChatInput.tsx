@@ -69,6 +69,7 @@ import { ToneBadge } from '@/components/Chat/ChatInput/ToneBadge';
 
 import { PromptList } from './ChatInput/PromptList';
 import { VariableModal } from './ChatInput/VariableModal';
+import { EmissionsChip } from './EmissionsChip';
 import { TranscriptionProgressIndicator } from './TranscriptionProgressIndicator';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
@@ -672,6 +673,13 @@ export const ChatInput = ({
                   >
                     <IconArrowDown size={18} />
                   </button>
+                </div>
+
+                {/* Conversation emissions estimate — right-aligned sibling of
+                    the (bottom-center) scroll button, anchored to the chat
+                    column so split view is respected. */}
+                <div className="absolute bottom-20 right-2 md:bottom-16 z-[9999]">
+                  <EmissionsChip conversation={selectedConversation} />
                 </div>
 
                 {showPromptList && filteredPrompts.length > 0 && (
