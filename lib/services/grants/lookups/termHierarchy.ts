@@ -130,7 +130,14 @@ export const TERM_HIERARCHY: Record<string, string[]> = {
     'DRTB',
     'TB Preventive Treatment',
   ],
-  'Mental Health': ['MH', 'Mental Health'],
+  'Mental Health': [
+    'MH',
+    'Mental Health',
+    'MHPSS',
+    'Psychosocial Support',
+    'Psychosocial',
+    'Mental Health and Psychosocial Support',
+  ],
   SRH: ['SRH', 'Reproductive Health', 'SRH Services', 'Adolescent SRH'],
   Nutrition: [
     'ITFC',
@@ -293,9 +300,38 @@ export const THEMATIC_KEYWORDS: Record<string, string[]> = {
   'Sensitive Context for Screening': [],
 };
 
+// Operational / non-medical labels the model sometimes produces despite the prompt
+// this excludes them. Dropped so they never reach the activities column.
+const OPERATIONAL_DROP = new Set([
+  'capacity building',
+  'training',
+  'advocacy',
+  'supply chain',
+  'supply chain management',
+  'logistics',
+  'antimicrobial stewardship',
+  'stewardship',
+  'biomedical sustainability',
+  'human resources',
+  'coordination',
+  'monitoring and evaluation',
+  'data management',
+]);
+
 export function normalizeActivity(raw: string): string {
-  const stripped = raw.trim();
+  // Strip parenthetical qualifiers the model appends when listing exhaustively
+  // (e.g. "Maternal Health (ANC, PNC, Contraception)", "Inpatient Care (<5 years)",
+  // "Vaccination (Mass Campaigns)"). These add internal commas that fragment the
+  // comma-joined activities column and over-granular age splits. Reduce to the
+  // core category label. OC-agnostic and purely deterministic.
+  const stripped = raw
+    .replace(/\s*\([^)]*\)?/g, '')
+    .replace(/[,;]+$/, '')
+    .trim();
   const lower = stripped.toLowerCase();
+
+  // Drop operational / non-medical labels entirely.
+  if (OPERATIONAL_DROP.has(lower)) return '';
 
   // Pass 0: exact match against canonical category names
   for (const canonical of Object.keys(TERM_HIERARCHY)) {
