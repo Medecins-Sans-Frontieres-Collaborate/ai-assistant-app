@@ -96,7 +96,7 @@ const REQUIRED_FIELDS = [
 ];
 
 const _INTERNAL_TO_DISPLAY: Record<string, string> = {
-  project_code: 'Project Number',
+  project_code: 'Project Code',
   project_name: 'Project Name',
   mission_country: 'Mission Country',
   country: 'Country',
@@ -161,7 +161,7 @@ const LOCATION_CONTEXTS = [
 ];
 
 function normalizeKeys(rec: AnyRecord): AnyRecord {
-  if ('Project Name' in rec || 'Project Number' in rec) return rec;
+  if ('Project Name' in rec || 'Project Code' in rec) return rec;
   const mapped: AnyRecord = {};
   for (const [key, value] of Object.entries(rec)) {
     const displayKey = _INTERNAL_TO_DISPLAY[key] || key;
@@ -519,16 +519,16 @@ function r15(rec: AnyRecord, row: number): Flag[] {
 }
 
 function r16(rec: AnyRecord, row: number, codeRegex: string | null): Flag[] {
-  const code = safe(rec['Project Number']);
+  const code = safe(rec['Project Code']);
   if (!code)
     return [
-      flag(row, 'Project Number', 'R16', 'error', 'Project code is missing.'),
+      flag(row, 'Project Code', 'R16', 'error', 'Project code is missing.'),
     ];
   if (code === 'No Project Code') {
     return [
       flag(
         row,
-        'Project Number',
+        'Project Code',
         'R16',
         'warning',
         '"No Project Code" placeholder.',
@@ -539,7 +539,7 @@ function r16(rec: AnyRecord, row: number, codeRegex: string | null): Flag[] {
     return [
       flag(
         row,
-        'Project Number',
+        'Project Code',
         'R16',
         'warning',
         `Project code "${code}" does not match expected pattern (${codeRegex}).`,
@@ -574,14 +574,14 @@ function r18(
   row: number,
   codeCounts: Map<string, number>,
 ): Flag[] {
-  const code = safe(rec['Project Number']);
+  const code = safe(rec['Project Code']);
   if (!code || code === 'No Project Code') return [];
   const count = codeCounts.get(code) || 0;
   if (count > 1) {
     return [
       flag(
         row,
-        'Project Number',
+        'Project Code',
         'R18',
         'warning',
         `Duplicate project code "${code}" appears ${count} times in this OC.`,
@@ -601,17 +601,70 @@ export interface ValidationResult {
   flags: Flag[];
 }
 
+/**
+ * R19: when a project's activities/key terms come back empty, record why instead
+ * of leaving a silent blank. The most common cause is that the source document
+ * doesn't mention the target year, which the extraction prompt's year-gate
+ * correctly refuses to invent activities from.
+ */
+function r19(
+  rec: AnyRecord,
+  row: number,
+  textDir: string | undefined,
+  year: number,
+): Flag[] {
+  const activities = safe(rec['Key Terms/Activities']).trim();
+  if (activities) return [];
+
+  const yearStr = String(year);
+  const source = safe(rec['Source File']);
+  let reason = `No ${yearStr} activities/key terms were extracted for this project.`;
+
+  if (textDir && source) {
+    const candidate = source.endsWith('.txt')
+      ? source
+      : `${source.replace(/\.[^.]+$/, '')}.txt`;
+    try {
+      const text = readFileSync(join(textDir, candidate), 'utf-8');
+      const yearCount = (text.match(new RegExp(yearStr, 'g')) || []).length;
+      if (yearCount === 0) {
+        const others = [...new Set(text.match(/20[0-9]{2}/g) || [])].sort();
+        reason =
+          `Blank activities because the source document never mentions "${yearStr}", so no ${yearStr}-specific activities could be extracted` +
+          (others.length ? ` (it references ${others.join(', ')})` : '') +
+          ` — likely an outdated or wrong-year document.`;
+      } else {
+        reason = `Blank activities: the document mentions "${yearStr}" but no ${yearStr}-specific activities were extracted — verify manually.`;
+      }
+    } catch {
+      /* source text unavailable — keep the generic reason */
+    }
+  }
+
+  return [flag(row, 'Key Terms/Activities', 'R19', 'warning', reason)];
+}
+
 export function run(params: {
   ocCfg: OCConfig;
   cacheDir: string;
   validationOutput?: string;
+  /** Directory of extracted .txt files, used to explain empty-activity rows. */
+  textDir?: string;
+  year?: number;
   progress: {
     stageStart: (n: string, t: number) => void;
     tick: (c: number, t: number) => void;
     stageDone: (n: string) => void;
   };
 }): ValidationResult | undefined {
-  const { ocCfg, cacheDir, validationOutput, progress } = params;
+  const {
+    ocCfg,
+    cacheDir,
+    validationOutput,
+    progress,
+    textDir,
+    year = new Date().getFullYear(),
+  } = params;
   const enrichedPath = join(cacheDir, 'enriched_records.json');
 
   console.log('\n' + '='.repeat(60));
@@ -639,7 +692,7 @@ export function run(params: {
   // Pre-compute code counts for R18
   const codeCounts = new Map<string, number>();
   for (const rec of records) {
-    const code = safe(rec['Project Number']);
+    const code = safe(rec['Project Code']);
     if (code && code !== 'No Project Code') {
       codeCounts.set(code, (codeCounts.get(code) || 0) + 1);
     }
@@ -671,6 +724,7 @@ export function run(params: {
     rowFlags.push(...r16(rec, row, codeRegex));
     rowFlags.push(...r17(rec, row));
     rowFlags.push(...r18(rec, row, codeCounts));
+    rowFlags.push(...r19(rec, row, textDir, year));
 
     allFlags.push(...rowFlags);
 
@@ -678,9 +732,7 @@ export function run(params: {
     const warnings = rowFlags.filter((f) => f.severity === 'warning').length;
     const infos = rowFlags.filter((f) => f.severity === 'info').length;
     const source =
-      safe(rec['Source File']) ||
-      safe(rec['Project Number']) ||
-      `record_${row}`;
+      safe(rec['Source File']) || safe(rec['Project Code']) || `record_${row}`;
     console.log(
       `  [${row}/${total}] ${source}: ${errors} error(s), ${warnings} warning(s), ${infos} info(s)`,
     );
