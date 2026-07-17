@@ -1,8 +1,5 @@
 /**
  * Main pipeline orchestrator.
- *
- * Replaces the Python `run.py` CLI. Called directly from the API route
- * as an async function — no subprocess, no IPC.
  */
 import { loadOCConfig } from './ocConfig';
 import { ProgressEmitter } from './progress';
@@ -29,6 +26,8 @@ export interface PipelineParams {
   year?: number;
   /** Source-filename → project-code, confirmed in the pre-processing coverage check. */
   codeOverrides?: Record<string, string>;
+  /** Per-OC prompt override (saved or in-flight) to use instead of the default. */
+  promptOverride?: string;
 }
 
 export async function runPipeline(params: PipelineParams): Promise<void> {
@@ -44,6 +43,7 @@ export async function runPipeline(params: PipelineParams): Promise<void> {
     maxWorkers = 3,
     year = new Date().getFullYear(),
     codeOverrides,
+    promptOverride,
   } = params;
 
   // Create work sub-directories
@@ -87,6 +87,7 @@ export async function runPipeline(params: PipelineParams): Promise<void> {
       progress,
       maxWorkers,
       year,
+      promptOverride,
     });
 
     // ----------------------------------------------------------------
@@ -122,6 +123,8 @@ export async function runPipeline(params: PipelineParams): Promise<void> {
       cacheDir,
       validationOutput: validationOutputPath,
       progress,
+      textDir,
+      year,
     });
 
     // ----------------------------------------------------------------
