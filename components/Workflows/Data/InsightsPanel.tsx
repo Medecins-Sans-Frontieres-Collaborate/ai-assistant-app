@@ -7,17 +7,27 @@ import { useTranslations } from 'next-intl';
 import {
   AggFn,
   dateSeries,
+  dateSeriesSplit,
   groupByAgg,
+  groupBySplit,
   histogram,
+  pivotTable,
+  scatterPoints,
 } from '@/lib/services/workflows/data/aggregate';
 
 import { DataColumn } from '@/types/workflow';
 
+import { PivotTable } from './PivotTable';
 import { BarChartSvg } from './charts/BarChartSvg';
+import { ChartLegend } from './charts/ChartLegend';
+import { GroupedBarChartSvg } from './charts/GroupedBarChartSvg';
 import { HistogramSvg } from './charts/HistogramSvg';
 import { LineChartSvg } from './charts/LineChartSvg';
+import { MultiLineChartSvg } from './charts/MultiLineChartSvg';
+import { ScatterSvg } from './charts/ScatterSvg';
+import { MAX_SERIES } from './charts/palette';
 
-type ChartKind = 'bar' | 'histogram' | 'line';
+type ChartKind = 'bar' | 'histogram' | 'line' | 'scatter' | 'pivot';
 
 interface InsightsPanelProps {
   columns: DataColumn[];
@@ -28,11 +38,28 @@ interface InsightsPanelProps {
 const selectClasses =
   'min-h-[32px] rounded-lg border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 focus:border-blue-600 focus:outline-none dark:border-gray-700 dark:bg-surface-dark-elevated dark:text-gray-300';
 
+const KIND_LABEL_KEYS: Record<ChartKind, string> = {
+  bar: 'chartBar',
+  histogram: 'chartHistogram',
+  line: 'chartLine',
+  scatter: 'chartScatter',
+  pivot: 'chartPivot',
+};
+
+const AGG_OPTIONS: Array<{ value: AggFn; labelKey: string }> = [
+  { value: 'sum', labelKey: 'aggSum' },
+  { value: 'mean', labelKey: 'aggMean' },
+  { value: 'min', labelKey: 'aggMin' },
+  { value: 'max', labelKey: 'aggMax' },
+  { value: 'median', labelKey: 'aggMedian' },
+];
+
 /**
- * Quick deterministic charts (group-by bar, numeric histogram, date
- * line) over the VISIBLE rows — no LLM involved, config is ephemeral.
- * Sits between grid and transform bar so chart and filtered grid are
- * seen together.
+ * Quick deterministic charts and summaries (group-by bar with optional
+ * split series, numeric histogram, date line, x/y scatter, group-by
+ * pivot table) over the VISIBLE rows — no LLM involved, config is
+ * ephemeral. Sits between grid and transform bar so chart and filtered
+ * grid are seen together.
  */
 export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
   const t = useTranslations('workflows.data');
@@ -55,6 +82,8 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
     if (groupColumns.length > 0) kinds.push('bar');
     if (numberColumns.length > 0) kinds.push('histogram');
     if (dateColumns.length > 0) kinds.push('line');
+    if (numberColumns.length >= 2) kinds.push('scatter');
+    if (groupColumns.length > 0) kinds.push('pivot');
     return kinds;
   }, [groupColumns, numberColumns, dateColumns]);
 
@@ -64,6 +93,12 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
   const [dateColumnId, setDateColumnId] = useState<string | null>(null);
   const [agg, setAgg] = useState<AggFn>('count');
   const [valueColumnId, setValueColumnId] = useState<string | null>(null);
+  const [xColumnId, setXColumnId] = useState<string | null>(null);
+  const [yColumnId, setYColumnId] = useState<string | null>(null);
+  /** '' / unresolvable = no split. */
+  const [splitColumnId, setSplitColumnId] = useState<string>('');
+  /** null = never chosen → default to the first numeric columns. */
+  const [pivotValueIds, setPivotValueIds] = useState<string[] | null>(null);
 
   // Resolve config against what actually exists (columns change under us).
   const activeKind =
@@ -79,13 +114,57 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
       ? undefined
       : (numberColumns.find((c) => c.id === valueColumnId) ?? numberColumns[0]);
   const effectiveAgg: AggFn = agg !== 'count' && !activeValue ? 'count' : agg;
+  const activeX =
+    numberColumns.find((c) => c.id === xColumnId) ?? numberColumns[0];
+  const activeY =
+    numberColumns.find((c) => c.id === yColumnId) ??
+    numberColumns.find((c) => c.id !== activeX?.id) ??
+    numberColumns[0];
+  // The bar chart's own group column can't also be the split.
+  const splitCandidates = useMemo(
+    () =>
+      groupColumns.filter(
+        (c) => activeKind !== 'bar' || c.id !== activeGroup?.id,
+      ),
+    [groupColumns, activeKind, activeGroup],
+  );
+  const activeSplit = useMemo(
+    () => splitCandidates.find((c) => c.id === splitColumnId),
+    [splitCandidates, splitColumnId],
+  );
+  /** Pivot forces count when no numeric columns exist. */
+  const pivotAgg: AggFn = numberColumns.length === 0 ? 'count' : agg;
+  const activePivotValues = useMemo(
+    () =>
+      pivotAgg === 'count'
+        ? []
+        : pivotValueIds === null
+          ? numberColumns.slice(0, 3)
+          : numberColumns.filter((c) => pivotValueIds.includes(c.id)),
+    [pivotAgg, pivotValueIds, numberColumns],
+  );
 
   const barData = useMemo(
     () =>
-      activeKind === 'bar' && activeGroup
+      activeKind === 'bar' && activeGroup && !activeSplit
         ? groupByAgg(rows, activeGroup.id, effectiveAgg, activeValue?.id)
         : null,
-    [activeKind, activeGroup, rows, effectiveAgg, activeValue],
+    [activeKind, activeGroup, activeSplit, rows, effectiveAgg, activeValue],
+  );
+  const barSplitData = useMemo(
+    () =>
+      activeKind === 'bar' && activeGroup && activeSplit
+        ? groupBySplit(
+            rows,
+            activeGroup.id,
+            activeSplit.id,
+            effectiveAgg,
+            activeValue?.id,
+            12,
+            MAX_SERIES,
+          )
+        : null,
+    [activeKind, activeGroup, activeSplit, rows, effectiveAgg, activeValue],
   );
   const histogramData = useMemo(
     () =>
@@ -96,18 +175,69 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
   );
   const lineData = useMemo(
     () =>
-      activeKind === 'line' && activeDate
+      activeKind === 'line' && activeDate && !activeSplit
         ? dateSeries(rows, activeDate.id, effectiveAgg, activeValue?.id)
         : null,
-    [activeKind, activeDate, rows, effectiveAgg, activeValue],
+    [activeKind, activeDate, activeSplit, rows, effectiveAgg, activeValue],
+  );
+  const lineSplitData = useMemo(
+    () =>
+      activeKind === 'line' && activeDate && activeSplit
+        ? dateSeriesSplit(
+            rows,
+            activeDate.id,
+            activeSplit.id,
+            effectiveAgg,
+            activeValue?.id,
+            300,
+            MAX_SERIES,
+          )
+        : null,
+    [activeKind, activeDate, activeSplit, rows, effectiveAgg, activeValue],
+  );
+  const scatterData = useMemo(
+    () =>
+      activeKind === 'scatter' && activeX && activeY
+        ? scatterPoints(rows, activeX.id, activeY.id)
+        : null,
+    [activeKind, activeX, activeY, rows],
+  );
+  const pivotData = useMemo(
+    () =>
+      activeKind === 'pivot' && activeGroup
+        ? pivotTable(
+            rows,
+            activeGroup.id,
+            pivotAgg,
+            activePivotValues.map((c) => c.id),
+          )
+        : null,
+    [activeKind, activeGroup, rows, pivotAgg, activePivotValues],
   );
 
   if (!activeKind) return null;
 
-  const showAggControls = activeKind === 'bar' || activeKind === 'line';
+  const showAggControls =
+    activeKind === 'bar' ||
+    activeKind === 'line' ||
+    (activeKind === 'pivot' && numberColumns.length > 0);
+  const seriesKeys =
+    barSplitData?.seriesKeys ?? lineSplitData?.seriesKeys ?? null;
+  const isEmpty =
+    (barData && barData.groups.length === 0) ||
+    (barSplitData && barSplitData.groups.length === 0) ||
+    (histogramData && histogramData.length === 0) ||
+    (lineData && lineData.length === 0) ||
+    (lineSplitData && lineSplitData.points.length === 0) ||
+    (scatterData && scatterData.points.length === 0) ||
+    (pivotData && pivotData.rows.length === 0);
 
   return (
-    <div className="flex h-64 shrink-0 flex-col border-t border-gray-200 dark:border-gray-700">
+    <div
+      className={`flex shrink-0 flex-col border-t border-gray-200 dark:border-gray-700 ${
+        activeKind === 'pivot' ? 'h-80' : 'h-64'
+      }`}
+    >
       <div className="flex flex-wrap items-center gap-2 px-3 pt-2">
         <select
           value={activeKind}
@@ -117,18 +247,12 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
         >
           {availableKinds.map((k) => (
             <option key={k} value={k}>
-              {t(
-                k === 'bar'
-                  ? 'chartBar'
-                  : k === 'histogram'
-                    ? 'chartHistogram'
-                    : 'chartLine',
-              )}
+              {t(KIND_LABEL_KEYS[k])}
             </option>
           ))}
         </select>
 
-        {activeKind === 'bar' && activeGroup && (
+        {(activeKind === 'bar' || activeKind === 'pivot') && activeGroup && (
           <select
             value={activeGroup.id}
             onChange={(e) => setGroupColumnId(e.target.value)}
@@ -170,51 +294,167 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
             ))}
           </select>
         )}
+        {activeKind === 'scatter' && activeX && activeY && (
+          <>
+            <select
+              value={activeX.id}
+              onChange={(e) => setXColumnId(e.target.value)}
+              aria-label={t('xColumn')}
+              className={selectClasses}
+            >
+              {numberColumns.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <select
+              value={activeY.id}
+              onChange={(e) => setYColumnId(e.target.value)}
+              aria-label={t('yColumn')}
+              className={selectClasses}
+            >
+              {numberColumns.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
 
         {showAggControls && (
           <>
             <select
-              value={effectiveAgg}
+              value={activeKind === 'pivot' ? pivotAgg : effectiveAgg}
               onChange={(e) => setAgg(e.target.value as AggFn)}
               aria-label={t('aggFn')}
               className={selectClasses}
             >
               <option value="count">{t('aggCount')}</option>
-              {numberColumns.length > 0 && (
-                <>
-                  <option value="sum">{t('aggSum')}</option>
-                  <option value="mean">{t('aggMean')}</option>
-                </>
-              )}
-            </select>
-            {effectiveAgg !== 'count' && activeValue && (
-              <select
-                value={activeValue.id}
-                onChange={(e) => setValueColumnId(e.target.value)}
-                aria-label={t('valueColumn')}
-                className={selectClasses}
-              >
-                {numberColumns.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
+              {numberColumns.length > 0 &&
+                AGG_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {t(option.labelKey)}
                   </option>
                 ))}
-              </select>
-            )}
+            </select>
+            {activeKind !== 'pivot' &&
+              effectiveAgg !== 'count' &&
+              activeValue && (
+                <select
+                  value={activeValue.id}
+                  onChange={(e) => setValueColumnId(e.target.value)}
+                  aria-label={t('valueColumn')}
+                  className={selectClasses}
+                >
+                  {numberColumns.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              )}
           </>
         )}
 
-        {barData?.truncated && (
+        {(activeKind === 'bar' || activeKind === 'line') &&
+          splitCandidates.length > 0 && (
+            <select
+              value={activeSplit?.id ?? ''}
+              onChange={(e) => setSplitColumnId(e.target.value)}
+              aria-label={t('splitByColumn')}
+              className={selectClasses}
+            >
+              <option value="">{t('splitNone')}</option>
+              {splitCandidates.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+        {activeKind === 'pivot' && pivotAgg !== 'count' && (
+          <span
+            role="group"
+            aria-label={t('pivotValueColumns')}
+            className="flex flex-wrap items-center gap-1.5"
+          >
+            {numberColumns.map((c) => {
+              const checked = activePivotValues.some(
+                (active) => active.id === c.id,
+              );
+              return (
+                <label
+                  key={c.id}
+                  className={`inline-flex cursor-pointer items-center gap-1 rounded-lg border px-1.5 py-0.5 text-xs ${
+                    checked
+                      ? 'border-blue-400 text-blue-700 dark:border-blue-600 dark:text-blue-300'
+                      : 'border-gray-300 text-gray-600 dark:border-gray-700 dark:text-gray-400'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() =>
+                      setPivotValueIds(
+                        checked
+                          ? activePivotValues
+                              .filter((active) => active.id !== c.id)
+                              .map((active) => active.id)
+                          : [...activePivotValues.map((a) => a.id), c.id],
+                      )
+                    }
+                    className="sr-only"
+                  />
+                  {c.name}
+                </label>
+              );
+            })}
+          </span>
+        )}
+
+        {(barData?.truncated || barSplitData?.truncatedGroups) && (
           <span className="text-xs text-amber-700 dark:text-amber-400">
-            {t('chartTruncated', { max: '30' })}
+            {t('chartTruncated', { max: barSplitData ? '12' : '30' })}
+          </span>
+        )}
+        {pivotData?.truncated && (
+          <span className="text-xs text-amber-700 dark:text-amber-400">
+            {t('chartTruncated', { max: '100' })}
+          </span>
+        )}
+        {(barSplitData?.truncatedSeries || lineSplitData?.truncatedSeries) && (
+          <span className="text-xs text-amber-700 dark:text-amber-400">
+            {t('chartSeriesTruncated', { max: String(MAX_SERIES) })}
+          </span>
+        )}
+        {scatterData?.truncated && (
+          <span className="text-xs text-amber-700 dark:text-amber-400">
+            {t('chartPointsTruncated', { max: '1000' })}
           </span>
         )}
       </div>
+
+      {seriesKeys && seriesKeys.length > 0 && (
+        <div className="px-3 pt-1">
+          <ChartLegend seriesKeys={seriesKeys} />
+        </div>
+      )}
 
       <div className="min-h-0 flex-1 px-3 pb-2">
         {barData && barData.groups.length > 0 && (
           <BarChartSvg
             data={barData}
+            ariaLabel={t('chartBarAria', {
+              column: activeGroup?.name ?? '',
+            })}
+          />
+        )}
+        {barSplitData && barSplitData.groups.length > 0 && (
+          <GroupedBarChartSvg
+            data={barSplitData}
             ariaLabel={t('chartBarAria', {
               column: activeGroup?.name ?? '',
             })}
@@ -236,9 +476,33 @@ export function InsightsPanel({ columns, rows }: InsightsPanelProps) {
             })}
           />
         )}
-        {((barData && barData.groups.length === 0) ||
-          (histogramData && histogramData.length === 0) ||
-          (lineData && lineData.length === 0)) && (
+        {lineSplitData && lineSplitData.points.length > 0 && (
+          <MultiLineChartSvg
+            data={lineSplitData}
+            ariaLabel={t('chartLineAria', {
+              column: activeDate?.name ?? '',
+            })}
+          />
+        )}
+        {scatterData && scatterData.points.length > 0 && activeX && activeY && (
+          <ScatterSvg
+            points={scatterData.points}
+            ariaLabel={t('chartScatterAria', {
+              x: activeX.name,
+              y: activeY.name,
+            })}
+          />
+        )}
+        {pivotData && pivotData.rows.length > 0 && activeGroup && (
+          <PivotTable
+            data={pivotData}
+            groupColumn={activeGroup}
+            valueColumns={activePivotValues}
+            agg={pivotAgg}
+            ariaLabel={t('pivotTableAria', { column: activeGroup.name })}
+          />
+        )}
+        {isEmpty && (
           <p className="pt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             {t('chartNoData')}
           </p>
