@@ -42,6 +42,7 @@ export interface OCConfig {
   multi_project: boolean;
   supplemental_files: Record<string, SupplementalFileSpec>;
   old_to_new_codes: Record<string, string>;
+  code_blocklist?: string[];
   coord_keywords: string[];
   exclude_keywords: string[];
   compilation_patterns: string[];
@@ -72,6 +73,7 @@ export function loadOCConfig(ocName: string): OCConfig {
     supplemental_files:
       (data.supplemental_files as Record<string, SupplementalFileSpec>) || {},
     old_to_new_codes: (data.old_to_new_codes as Record<string, string>) || {},
+    code_blocklist: (data.code_blocklist as string[]) || [],
     coord_keywords: (data.coord_keywords as string[]) || [
       'coordination',
       'coodination',
