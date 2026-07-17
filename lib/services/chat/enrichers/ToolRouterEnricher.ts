@@ -397,7 +397,7 @@ export class ToolRouterEnricher extends BasePipelineStage {
         : '[non-text content]';
     }
 
-    return content.text;
+    return 'text' in content ? content.text : '[non-text content]';
   }
 
   /**

@@ -31,6 +31,7 @@ export enum LogEventType {
   DocumentExportError = 'DocumentExportError',
   ToneAnalysisSuccess = 'ToneAnalysisSuccess',
   ToneAnalysisError = 'ToneAnalysisError',
+  TokenUsage = 'TokenUsage',
   CustomMetric = 'CustomMetric',
 }
 
@@ -111,6 +112,36 @@ export interface ChatCompletionLogEntry extends BaseLogEntry {
   TotalTokens?: number;
   /** Reasoning effort level (for reasoning models) */
   ReasoningEffort?: string;
+}
+
+/**
+ * Token usage event — the authoritative per-request record of real provider
+ * token counts, logged at stream end (or inline for non-streaming). Carries
+ * the emissions estimate computed with the assumption set identified by
+ * AssumptionsVersion (config/emissions.json), so estimates in the logs are
+ * traceable and re-computable when assumptions change.
+ */
+export interface TokenUsageLogEntry extends BaseLogEntry {
+  EventType: LogEventType.TokenUsage;
+  /** Model that ACTUALLY served the request (fallback chain may switch). */
+  Model: string;
+  /** Resolved chat region ('US' | 'EU'); 'default' when home clients served. */
+  Region: string;
+  PromptTokens: number;
+  CompletionTokens: number;
+  TotalTokens: number;
+  /** Reasoning effort applied to the request, if any. */
+  ReasoningEffort?: string;
+  /** Emissions size class of the serving model (nano/mini/standard/large). */
+  SizeClass: string;
+  EstimatedCO2Grams: number;
+  EstimatedEnergyWh: number;
+  /** Version of the assumption set that produced the estimate. */
+  AssumptionsVersion: string;
+  /** Whether the response was streamed. */
+  Streamed: boolean;
+  /** Bot/knowledge base ID when RAG was involved. */
+  BotId?: string;
 }
 
 /**
@@ -445,6 +476,7 @@ export interface FileRetrievalErrorLogEntry extends BaseLogEntry {
  */
 export type LogEntry =
   | ChatCompletionLogEntry
+  | TokenUsageLogEntry
   | ErrorLogEntry
   | FileSuccessLogEntry
   | FileErrorLogEntry

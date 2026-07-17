@@ -5,6 +5,8 @@ import {
   TextMessageContent,
 } from '@/types/chat';
 
+import { AUDIO_VIDEO_EXTENSIONS } from '@/lib/constants/fileTypes';
+
 /**
  * Content types that can be detected in a message
  */
@@ -25,23 +27,12 @@ export interface ContentSummary {
 }
 
 /**
- * Audio/video file extensions supported for transcription
+ * Audio/video file extensions supported for transcription. Sourced from the
+ * shared constant so this analyzer stays in sync with the actual allowlist —
+ * a private copy here previously drifted and missed newly supported formats.
+ * Widened to readonly string[] so `.includes()` accepts arbitrary extensions.
  */
-const AUDIO_VIDEO_EXTENSIONS = [
-  '.mp3',
-  '.mp4',
-  '.mpeg',
-  '.mpga',
-  '.m4a',
-  '.wav',
-  '.webm',
-  // Additional video formats (audio extracted via FFmpeg)
-  '.mkv',
-  '.mov',
-  '.avi',
-  '.flv',
-  '.wmv',
-];
+const TRANSCRIBABLE_EXTENSIONS: readonly string[] = AUDIO_VIDEO_EXTENSIONS;
 
 /**
  * Centralized content analyzer for chat messages
@@ -97,7 +88,7 @@ export class MessageContentAnalyzer {
     return this.content.some((item) => {
       if (item.type === 'file_url' && item.url) {
         const ext = '.' + item.url.split('.').pop()?.toLowerCase();
-        return AUDIO_VIDEO_EXTENSIONS.includes(ext);
+        return TRANSCRIBABLE_EXTENSIONS.includes(ext);
       }
       return false;
     });
@@ -143,7 +134,7 @@ export class MessageContentAnalyzer {
           break;
         case 'file_url': {
           const ext = '.' + item.url.split('.').pop()?.toLowerCase();
-          if (AUDIO_VIDEO_EXTENSIONS.includes(ext)) {
+          if (TRANSCRIBABLE_EXTENSIONS.includes(ext)) {
             types.add('audio'); // or 'video' - we treat them the same
           } else {
             types.add('file');

@@ -1,12 +1,18 @@
 import {
   PendingTranscriptionInfo,
   StreamMetadata,
+  TokenUsageMetadata,
   TranscriptMetadata,
   createStreamDecoder,
   parseMetadataFromContent,
 } from '@/lib/utils/app/metadata';
 
-import { Message, MessageType, ToolCallRecord } from '@/types/chat';
+import {
+  ExtractionResultContent,
+  Message,
+  MessageType,
+  ToolCallRecord,
+} from '@/types/chat';
 import { Citation } from '@/types/rag';
 
 import {
@@ -35,6 +41,8 @@ export class StreamParser {
   private extractedFileCacheUpdates?: StreamMetadata['fileCacheUpdates'];
   private extractedActiveFilesTokensConsumed?: number;
   private extractedActiveFilesDropped?: string[];
+  private extractedUsage?: TokenUsageMetadata;
+  private extractedExtractionResult?: ExtractionResultContent;
   private hasReceivedContent: boolean = false;
   private prevDisplayText: string = '';
   private prevCitationsStr: string = '[]';
@@ -184,6 +192,19 @@ export class StreamParser {
       this.extractedActiveFilesDropped = parsed.activeFilesDropped;
     }
 
+    // Capture per-request token usage if present (terminal metadata block)
+    if (parsed.usage && this.extractedUsage == null) {
+      this.extractedUsage = parsed.usage;
+    }
+
+    // Capture structured-extraction result if present. When set, this
+    // replaces the assistant message's `content` — text-body is empty on
+    // an extraction turn, so the message renders entirely from the
+    // datasets carried here.
+    if (parsed.extractionResult && !this.extractedExtractionResult) {
+      this.extractedExtractionResult = parsed.extractionResult;
+    }
+
     // `hasReceivedContent` checks the raw accumulator so a citations-only
     // response (`[1] [2]`) still clears the loading state. `contentChanged`
     // compares the rendered text so we don't repaint when only trailing
@@ -233,6 +254,10 @@ export class StreamParser {
         if (jsonResponse.text) {
           finalText = jsonResponse.text;
         }
+        // Non-streaming bodies carry usage inline instead of via metadata
+        if (jsonResponse.usage && this.extractedUsage == null) {
+          this.extractedUsage = jsonResponse.usage as TokenUsageMetadata;
+        }
       } catch (e) {
         // Not JSON or parsing failed, use text as-is
       }
@@ -245,6 +270,16 @@ export class StreamParser {
    * Convert parsed stream to a complete assistant message
    */
   toMessage(content: string): Message {
+    // If an extraction result was emitted, the assistant message is the
+    // structured payload itself — not the streamed text body.
+    if (this.extractedExtractionResult) {
+      return {
+        role: 'assistant',
+        content: this.extractedExtractionResult,
+        messageType: MessageType.TEXT,
+      };
+    }
+
     return {
       role: 'assistant',
       content,
@@ -255,6 +290,13 @@ export class StreamParser {
           : undefined,
       transcript: this.extractedTranscript,
     };
+  }
+
+  /**
+   * Get the extraction result if one was emitted on the stream.
+   */
+  getExtractionResult(): ExtractionResultContent | undefined {
+    return this.extractedExtractionResult;
   }
 
   /**
@@ -305,6 +347,14 @@ export class StreamParser {
    */
   getActiveFilesDropped(): string[] | undefined {
     return this.extractedActiveFilesDropped;
+  }
+
+  /**
+   * Get the per-request token usage reported by the server (terminal
+   * metadata block for streams, inline `usage` for non-streaming JSON).
+   */
+  getUsage(): TokenUsageMetadata | undefined {
+    return this.extractedUsage;
   }
 
   /**

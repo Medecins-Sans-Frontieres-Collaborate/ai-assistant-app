@@ -430,7 +430,22 @@
     "noProjectsFound": "Nie znaleziono projektów. Używany jest „default”.",
     "selectAllRequired": "Wybierz subskrypcję, konto i projekt.",
     "subscriptionRequired": "Wybierz subskrypcję",
-    "accountRequired": "Wybierz konto Foundry"
+    "accountRequired": "Wybierz konto Foundry",
+    "projectSelectionRequired": "Wybierz projekt z listy.",
+    "scanningResources": "Skanowanie subskrypcji Azure...",
+    "searchProjectsPlaceholder": "Szukaj projektów...",
+    "noProjectsDiscovered": "Nie znaleziono projektów Foundry w Twoich subskrypcjach. Wprowadź ścieżkę ręcznie, jeśli ją znasz.",
+    "discoveryPartialWarning": "Nie można zeskanować {count, plural, one {# subskrypcji} other {# subskrypcji}}. Skorzystaj z ręcznego wprowadzenia, jeśli Twój projekt nie został znaleziony.",
+    "discoveryTruncatedWarning": "Zasobów było zbyt wiele, aby zakończyć skanowanie. Jeśli Twój projekt nie został znaleziony, wprowadź go ręcznie.",
+    "retryScan": "Ponów skanowanie",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "selectAgentsDescription": "Wybierz, którzy agenci z tego projektu pojawią się w selektorze modeli.",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "agentsSelectedCount": "Wybrano {selected} z {total} agentów",
+    "autoAddLabel": "Automatycznie dodawaj nowych agentów",
+    "autoAddDescription": "Agenci opublikowani później w tym projekcie zostaną dodani automatycznie. Odznaczeni agenci pozostaną wykluczeni."
   },
   "Quick Actions": "Szybkie akcje",
   "Type / in chat to access your prompts": "Wpisz / w czacie, aby uzyskać dostęp do swoich promptów",
@@ -757,7 +772,19 @@
       "listingTools": "Wyszukiwanie dostępnych narzędzi…",
       "analyzingFiles": "Analiza Twoich plików…",
       "searchingKnowledge": "Przeszukiwanie bazy wiedzy…",
-      "cancellingPriorTool": "Anulowanie poprzedniego żądania narzędzia…"
+      "cancellingPriorTool": "Anulowanie poprzedniego żądania narzędzia…",
+      "workflow": {
+        "preparingDocument": "Przygotowywanie odniesień...",
+        "writingDocument": "Tworzenie dokumentu...",
+        "analyzingSource": "Analiza tekstu źródłowego...",
+        "translating": "Tłumaczenie...",
+        "reviewingTranslation": "Runda sprawdzania {round} z {total}...",
+        "revisingTranslation": "Wprowadzanie uwag z recenzji...",
+        "extractingRows": "Wyodrębnianie wierszy z {source}...",
+        "transformingTable": "Przekształcanie tabeli...",
+        "findingLocations": "Identyfikacja lokalizacji...",
+        "updatingMap": "Aktualizacja mapy..."
+      }
     },
     "toolSummary": {
       "usedTools": "Użyto {count, plural, one {# narzędzie} few {# narzędzia} many {# narzędzi} other {# narzędzi}}",
@@ -818,7 +845,8 @@
     "listen": "Odsłuchaj",
     "processingAudio": "Przetwarzanie dźwięku...",
     "ttsError": "Błąd podczas generowania dźwięku. Spróbuj ponownie.",
-    "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości"
+    "unsupportedMessageType": "Błąd podczas wyświetlania wiadomości: Nieobsługiwany typ wiadomości",
+    "addLanguageOption": "Dodaj \"{name}\"…"
   },
   "sidebar": {
     "collapseSidebar": "Zwiń pasek boczny",
@@ -1141,11 +1169,13 @@
     "responseSection": "Odpowiedź",
     "voiceSection": "Głos",
     "behaviorSection": "Zachowanie",
-    "resetChatSettings": "Przywróć domyślne ustawienia czatu",
-    "resetChatSettingsConfirmTitle": "Przywrócić domyślne ustawienia czatu?",
-    "resetChatSettingsConfirmMessage": "To przywróci domyślne ustawienia w tym panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, prędkość przesyłania, zamiana tekstu na mowę, aktywne pliki oraz potwierdzenia. Twoje rozmowy nie zostaną zmienione.",
+    "resetChatSettings": "Resetuj ustawienia czatu",
+    "resetChatSettingsConfirmTitle": "Zresetować ustawienia czatu?",
+    "resetChatSettingsConfirmMessage": "Przywróci domyślne ustawienia tego panelu: temperatura, niestandardowe instrukcje, O Tobie, odpowiedź modelu, szybkość przesyłania, syntezę mowy, aktywne pliki i potwierdzenia. Nie wpływa na Twoje rozmowy.",
     "customInstructionsLabel": "Niestandardowe instrukcje*",
-    "defaultTemperatureLabel": "Domyślna temperatura*"
+    "defaultTemperatureLabel": "Domyślna temperatura*",
+    "Usage & Impact": "Użycie i wpływ",
+    "Connectors": "Łączniki"
   },
   "notFound": {
     "lostDog": "Zagubiony pies"
@@ -1396,33 +1426,78 @@
     },
     "title": "Wybierz model",
     "modelsDescription": "Wybierz model AI do rozmowy. Każdy model ma inne zalety — wybierz, aby zobaczyć szczegóły.",
-    "recommended": "Polecane"
+    "recommended": "Polecane",
+    "familyAll": "Wszystkie",
+    "familyFilterLabel": "Filtruj modele według rodziny",
+    "searchPlaceholder": "Szukaj modeli",
+    "searchEmpty": "Brak modeli spełniających kryteria wyszukiwania.",
+    "star": "Oznacz jako ulubiony: {name}",
+    "unstar": "Usuń z ulubionych: {name}",
+    "otherFamily": "Inne",
+    "hostedExternally": "Uruchamiany na infrastrukturze dostawcy za pośrednictwem Azure AI Foundry, poza środowiskiem Azure MSF.",
+    "hostedIn": {
+      "label": "Hostowany w: {regions}",
+      "tooltip": "Region(y) Azure, w których uruchomiono ten model. Rozmowy są przetwarzane w Twoim regionie."
+    },
+    "badges": {
+      "external": "Zewnętrzny",
+      "externalTooltip": "Uruchamiany na infrastrukturze dostawcy za pośrednictwem Azure AI Foundry, poza środowiskiem Azure MSF.",
+      "regionHostedTooltip": "Hostowany w regionie {region} na Azure. Rozmowy z tym modelem są tam przetwarzane."
+    },
+    "favorites": "Ulubione",
+    "euResidencyNote": "Wszystkie modele uruchamiane są w regionie Azure UE.",
+    "hostedRegion": {
+      "label": "Region hostowania",
+      "processedIn": "Ta rozmowa jest przetwarzana w regionie Azure: {region}.",
+      "euOnlyNote": "{name} jest hostowany w regionie Azure UE; rozmowy z nim są tam przetwarzane."
+    },
+    "version": {
+      "label": "Wersja"
+    },
+    "reasoningModel": "Model rozumowania: analizuje krok po kroku przed udzieleniem odpowiedzi. Wolniejszy, lepszy przy trudnych problemach.",
+    "variant": {
+      "label": "Wariant"
+    },
+    "deployment": {
+      "title": "Wdrożenie",
+      "source": "Źródło",
+      "account": "Konto",
+      "location": "Lokalizacja",
+      "deployment": "Wdrożenie",
+      "modelVersion": "Wersja modelu",
+      "publisher": "Wydawca"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Model AI oparty na GPT-4.1 z wyszukiwaniem internetowym w czasie rzeczywistym przez Bing. Dostarcza aktualnych informacji, weryfikacji faktów i wiedzy o bieżących wydarzeniach. Najlepszy do badań wymagających najnowszych danych, analiz wiadomości oraz potwierdzania faktów.",
-      "knowledgeCutoff": "Wyszukiwanie w czasie rzeczywistym"
+      "knowledgeCutoff": "Wyszukiwanie w czasie rzeczywistym",
+      "tagline": "Poprzednia generacja OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Najbardziej zaawansowany model OpenAI, świetny w złożonym rozumowaniu, generowaniu kodu i technicznym rozwiązywaniu problemów. Najlepszy do zadań analitycznych, programowania, badań i szczegółowych wyjaśnień. Umożliwia regulację poziomu rozumowania i szczegółowości odpowiedzi.",
-      "knowledgeCutoff": "6 sie 2025, 20:00"
+      "knowledgeCutoff": "6 sie 2025, 20:00",
+      "tagline": "Poprzedni flagowy GPT"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Szybsza i bardziej ekonomiczna wersja GPT-5, zoptymalizowana pod kątem szybkości przy zachowaniu wysokiej jakości. Idealny do codziennych zadań, szybkich zapytań, routingu narzędzi i zastosowań wymagających natychmiastowej odpowiedzi. Doskonała równowaga między wydajnością a efektywnością.",
-      "knowledgeCutoff": "6 sie 2025, 20:00"
+      "knowledgeCutoff": "6 sie 2025, 20:00",
+      "tagline": "Szybszy i tańszy"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Specjalna wersja GPT-5 zoptymalizowana pod kątem konwersacji i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, wsparciu psychologicznym, kreatywnym pisaniu, burzach mózgów i naturalnym dialogu. Najlepszy do rozmów codziennych, scenariuszy doradztwa oraz zadań wymagających wyczucia emocjonalnego.",
-      "knowledgeCutoff": "1 października 2025, 20:00"
+      "knowledgeCutoff": "1 października 2025, 20:00",
+      "tagline": "Poprzedni GPT dostrojony do czatu"
     },
     "o3": {
       "name": "o3",
       "description": "Najbardziej zaawansowany model rozumowania OpenAI z przełomowymi możliwościami rozwiązywania problemów. Świetnie radzi sobie ze złożoną matematyką, rozumowaniem naukowym, zadaniami programistycznymi i wieloetapową logiką. Rozszerzone okno kontekstu 200K. Wspiera kontrolę poziomu rozumowania.",
-      "knowledgeCutoff": "8 kwietnia 2025, 20:00"
+      "knowledgeCutoff": "8 kwietnia 2025, 20:00",
+      "tagline": "Dogłębne rozumowanie krok po kroku"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1432,57 +1507,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Specjalista od rozumowania pokazujący kolejne kroki rozwiązania. Doskonały do zadań matematycznych, łamigłówek logicznych i zrozumienia złożonych pojęć. Umożliwia obserwowanie procesu myślowego w czasie rzeczywistym.",
-      "knowledgeCutoff": "20 stycznia 2025"
+      "knowledgeCutoff": "20 stycznia 2025",
+      "tagline": "Pokazuje rozumowanie krok po kroku"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Wszechstronny model szczególnie dobry w programowaniu i pisaniu technicznym. Świetnie sprawdza się przy debugowaniu, tworzeniu dokumentacji i wyjaśnianiu terminów technicznych. Szybki i niezawodny w pracy deweloperskiej.",
-      "knowledgeCutoff": "16 kwietnia 2025, 00:45"
+      "knowledgeCutoff": "16 kwietnia 2025, 00:45",
+      "tagline": "Alternatywa open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Wszechstronny model od xAI znany z zniuansowanych odpowiedzi. Świetny do otwartych dyskusji, projektów kreatywnych i rozwiązywania złożonych problemów.",
-      "knowledgeCutoff": "13 maja 2025, 00:16"
+      "knowledgeCutoff": "13 maja 2025, 00:16",
+      "tagline": "Alternatywa xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Najbardziej zaawansowany model Anthropic o wyjątkowych możliwościach rozumowania, programowania i kreatywności. Najlepszy do złożonej analizy, badań i zadań wymagających głębokiego zrozumienia.",
-      "knowledgeCutoff": "styczeń 2025"
+      "knowledgeCutoff": "styczeń 2025",
+      "tagline": "Wcześniejsza generacja Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Zrównoważony model Claude oferujący doskonałe wyniki w programowaniu, analizie i zadaniach kreatywnych. Świetny do codziennego użytku z szybkim czasem reakcji.",
-      "knowledgeCutoff": "styczeń 2025"
+      "knowledgeCutoff": "styczeń 2025",
+      "tagline": "Poprzednia generacja Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Poprzednia generacja modelu Claude Opus. Doskonały do zaawansowanych zadań programistycznych, szczegółowej analizy i głębokiego zrozumienia.",
-      "knowledgeCutoff": "styczeń 2025"
+      "knowledgeCutoff": "styczeń 2025",
+      "tagline": "Poprzednia generacja Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Szybki i ekonomiczny model Claude zoptymalizowany do szybkich zadań. Idealny do prostych zapytań, streszczeń i zastosowań wymagających dużej wydajności.",
-      "knowledgeCutoff": "styczeń 2025"
+      "knowledgeCutoff": "styczeń 2025",
+      "tagline": "Szybka odmiana Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Najbardziej zaawansowany model OpenAI, doskonały w złożonym rozumowaniu, generowaniu kodu i rozwiązywaniu problemów technicznych. Najlepszy do zadań analitycznych, wyzwań programistycznych, badań i szczegółowych wyjaśnień. Obsługuje regulację poziomu rozumowania i obszerności odpowiedzi.",
-      "knowledgeCutoff": "grudzień 2025"
+      "knowledgeCutoff": "grudzień 2025",
+      "tagline": "Kod, analiza, badania"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "grudzień 2025",
-      "description": "Specjalna wersja GPT-5.2 zoptymalizowana pod kątem interakcji konwersacyjnych i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, kreatywnym pisaniu, burzy mózgów i naturalnym dialogu. Najlepsza do swobodnych rozmów, sytuacji doradczych i zadań wymagających świadomości emocjonalnej."
+      "description": "Specjalna wersja GPT-5.2 zoptymalizowana pod kątem interakcji konwersacyjnych i inteligencji emocjonalnej. Doskonała w empatycznej komunikacji, kreatywnym pisaniu, burzy mózgów i naturalnym dialogu. Najlepsza do swobodnych rozmów, sytuacji doradczych i zadań wymagających świadomości emocjonalnej.",
+      "tagline": "Rozmowy, burza mózgów"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Najbardziej zaawansowany model Anthropic. Dobry do długich tekstów, badań i zadań wymagających dokładnego namysłu.",
-      "knowledgeCutoff": "luty 2026"
+      "knowledgeCutoff": "luty 2026",
+      "tagline": "Długie teksty i analiza"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Zrównoważony model Claude. Dobry do codziennego pisania, analiz i programowania z szybkimi odpowiedziami.",
-      "knowledgeCutoff": "luty 2026"
+      "knowledgeCutoff": "luty 2026",
+      "tagline": "Zrównoważony Claude do codziennego użytku"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Otwarty model od Meta. Solidny do pisania, podsumowań i szybkich pytań.",
+      "tagline": "Alternatywa open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Najnowszy flagowy model OpenAI. Mocny w pisaniu, badaniach, programowaniu oraz rozwiązywaniu złożonych problemów.",
+      "tagline": "Najnowszy flagowy model GPT"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Najmniejszy, najszybszy wariant GPT. Najlepszy do szybkich, prostych zadań przy minimalnych kosztach.",
+      "tagline": "Najmniejszy i najszybszy GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Konwersacyjny wariant GPT zoptymalizowany do dialogu. Dobry do swobodnych rozmów, burzy mózgów i wspierających dyskusji.",
+      "tagline": "Nowy GPT dostrojony do czatu"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Starszy multimodalny GPT. Wystarczający do codziennego pisania i Q&A, gdy nie są wymagane najnowsze możliwości.",
+      "tagline": "Starszy multimodalny GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Mniejszy i szybszy wariant GPT-4.1 do codziennych szybkich zadań.",
+      "tagline": "Lekki GPT poprzedniej generacji"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Najnowszy i najmocniejszy model Anthropic. Doskonały do długiego pisania, badań, kodowania oraz dokładnej analizy.",
+      "tagline": "Najnowszy i najmocniejszy Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Najnowszy otwarty model DeepSeek. Niezawodny do ogólnego pisania i pytań technicznych.",
+      "tagline": "Alternatywa open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Flagowy model Mistral. Europejska alternatywa do pisania, podsumowań i ogólnych pytań.",
+      "tagline": "Europejski model open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Wcześniejsza wersja flagowa GPT-5. Nadal mocny w pisaniu, analizie i kodowaniu.",
+      "tagline": "Wcześniejszy flagowy GPT-5"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Wcześniejsza wersja czatowa GPT-5. Dobry do codziennych rozmów i burzy mózgów.",
+      "tagline": "Wcześniejszy GPT do czatu"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Najmniejszy wariant GPT-5. Najlepszy do szybkich, prostych zadań przy minimalnych kosztach.",
+      "tagline": "Malutki GPT poprzedniej generacji"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Najmniejszy wariant GPT-4.1. Wystarczający do szybkich, prostych zadań, gdy liczy się czas i koszt.",
+      "tagline": "Najmniejszy GPT poprzedniej generacji"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Mały, szybki wariant GPT-4o. Odpowiedni do codziennych szybkich zadań, gdy najnowsze możliwości nie są wymagane.",
+      "tagline": "Lekki starszy multimodalny GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompaktowy model rozumowania. Dobry do matematyki, logiki i zadań krok po kroku przy niższych kosztach niż o3.",
+      "tagline": "Szybkie przystępne rozumowanie"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Wcześniejszy kompaktowy model rozumowania. Realizuje zadania z matematyki, nauk ścisłych i logiki przy niższych kosztach.",
+      "tagline": "Kompaktowe rozumowanie krok po kroku"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Najinteligentniejszy model Anthropic, pierwszy z rodziny Claude 5. Doskonały do najtrudniejszych zadań pisarskich, badawczych i programistycznych.",
+      "tagline": "Czołowy model firmy Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Najnowszy zrównoważony Claude, pierwszy z rodziny Claude 5. Silny w codziennym pisaniu, analizie i kodowaniu oraz szybki w odpowiedziach.",
+      "tagline": "Najnowszy, zrównoważony Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Średni model Mistral. Europejska alternatywa łącząca możliwości i szybkość w codziennej pracy.",
+      "tagline": "Zrównoważony europejski model"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mały model Mistral. Szybki i niedrogi do podsumowań, szkiców i prostych pytań.",
+      "tagline": "Mały, szybki europejski model"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Najmniejszy model Mistral. Najlepszy do bardzo szybkich, prostych zadań przy minimalnych kosztach.",
+      "tagline": "Malutki Mistral do urządzeń brzegowych"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Zaktualizowana wersja DeepSeek-R1. Prezentuje rozumowanie krok po kroku z poprawioną głębią analiz.",
+      "tagline": "Zaktualizowany otwarty model rozumowania"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Lżejszy otwarty model od Meta. Szybki do pisania, podsumowań i codziennych pytań.",
+      "tagline": "Wydajna otwarta Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Starszy otwarty model od Meta. Nadal solidny do ogólnego pisania i Q&A.",
+      "tagline": "Starsza otwarta Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Flagowy model xAI. Dobry do otwartych dyskusji, analizy i kreatywnych projektów.",
+      "tagline": "Flagowy model xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Najnowszy flagowy model OpenAI. Doskonały w pisaniu, badaniach, programowaniu i rozwiązywaniu złożonych problemów.",
+      "tagline": "Najświeższy flagowy GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (najnowszy)",
+      "description": "Dynamiczny alias zawsze wskazujący na najnowszy model chat-tuned OpenAI. Zastępstwo Azure dla wycofanych wersjonowanych modeli gpt-*-chat.",
+      "tagline": "Zawsze najnowszy GPT do czatu"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Najnowsza wersja Opus, między 4.6 a 4.8. Mocny w długich tekstach, badaniach, programowaniu i wnikliwej analizie.",
+      "tagline": "Najnowsza wersja Opus"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Najnowszy model rozumowania DeepSeek oraz zamiennik Azure dla serii R1. Prezentuje tok myślenia krok po kroku.",
+      "tagline": "Najnowszy otwarty model rozumowania"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Szybka wersja V4 DeepSeek oraz zamiennik Azure dla serii V3. Szybki przy ogólnym pisaniu i pytaniach technicznych.",
+      "tagline": "Szybka alternatywa open-source"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Szybki model rozumowania xAI. Myśli krok po kroku i szybko odpowiada.",
+      "tagline": "Szybki model rozumowania xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Szybki model czatu xAI. Błyskawiczne odpowiedzi na codzienne pytania i rozmowy.",
+      "tagline": "Szybki model czatu xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Lżejszy model xAI. Szybszy i tańszy do szybkich pytań i swobodnych rozmów.",
+      "tagline": "Lżejszy model xAI"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Flagowy model z trio GPT-5.6 od OpenAI. Najlepszy do pisania, badań, kodowania i rozwiązywania złożonych problemów.",
+      "tagline": "Najnowszy najwyższy poziom GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Zrównoważony model z trio GPT-5.6 od OpenAI. Dobry do codziennego pisania, analizy i programowania z szybką reakcją.",
+      "tagline": "Zrównoważony GPT-5.6 do codziennych zadań"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Lekki i szybki model z trio GPT-5.6 od OpenAI. Najlepszy do szybkich pytań i prostych zadań przy niskim koszcie.",
+      "tagline": "Lekki, szybki GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Najnowszy model średniej wielkości od Mistral. Europejska alternatywa, która łączy możliwości z szybkością do codziennej pracy.",
+      "tagline": "Zrównoważony model europejski"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model open-weight firmy Moonshot AI. Silny w zadaniach agentowych, kodowaniu i pracy z długimi dokumentami.",
+      "tagline": "Agentowy model open-weight"
     }
   },
   "searchMode": {
@@ -1822,7 +2098,20 @@
     "useDefaultStyle": "Użyj domyślnego stylu pisania",
     "noTonesCreated": "Nie utworzono jeszcze tonów",
     "createTonesHint": "Utwórz tony w Szybkich działaniach",
-    "translateDocumentTooltip": "Przetłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, HTML, TXT\nMaks. rozmiar: 40 MB\n\nPonad 80 obsługiwanych języków. Możliwe użycie plików glosariusza."
+    "translateDocumentTooltip": "Przetłumacz dokumenty na inny język.\n\nObsługiwane formaty: Word, Excel, PowerPoint, HTML, TXT\nMaks. rozmiar: 40 MB\n\nPonad 80 obsługiwanych języków. Możliwe użycie plików glosariusza.",
+    "translateTooltip": "Przetłumacz fragment tekstu na inny język.\n\nAby przetłumaczyć całe pliki (Word, Excel, PowerPoint, HTML, TXT), użyj opcji Przetłumacz dokument.",
+    "cameraTooltip": "Zrób zdjęcie aparatem urządzenia i dołącz je do wiadomości.",
+    "noResults": "Brak pasujących akcji",
+    "sectionPinned": "Przypięte",
+    "sectionFrequent": "Często używane",
+    "sectionMore": "Więcej",
+    "categoryWeb": "Web",
+    "categoryMedia": "Multimedia i pliki",
+    "categoryTransform": "Przekształć",
+    "pin": "Przypnij na górze",
+    "unpin": "Odepnij",
+    "moveToMore": "Przenieś do „Więcej”",
+    "moveOutOfMore": "Pokaż w menu"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Dodaj własne instrukcje, aby dostosować sposób, w jaki AI odpowiada. Zostaną one połączone z głównymi wytycznymi, które zapewniają pomocne, dokładne i bezpieczne odpowiedzi.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Porada: wpisz „/”, aby wybrać z zapisanych szablonów podpowiedzi.",
@@ -1933,7 +2222,14 @@
     "learnMore": "Dowiedz się więcej",
     "advancedOptions": "Zaawansowane opcje",
     "unofficialBadgeLabel": "Nieoficjalne",
-    "unofficialLanguageWarning": "Ten język nie jest oficjalnie wspierany. Jakość tłumaczenia nie została zweryfikowana. Przed udostępnieniem prosimy o weryfikację wyniku przez osobę biegłą lub native speakera."
+    "unofficialLanguageWarning": "Ten język nie jest oficjalnie wspierany. Jakość tłumaczenia nie została zweryfikowana. Przed udostępnieniem prosimy o weryfikację wyniku przez osobę biegłą lub native speakera.",
+    "translationSubmitted": "Tłumaczenie rozpoczęte — pliki PDF są przetwarzane w tle.",
+    "pendingTitle": "Tłumaczenie {filename}…",
+    "pendingHint": "Tłumaczenia PDF są uruchamiane w tle i mogą potrwać kilka minut. Możesz pracować dalej — ta karta zaktualizuje się, gdy dokument będzie gotowy, nawet po odświeżeniu strony.",
+    "asyncFailed": "Błąd tłumaczenia dokumentu: {error}",
+    "jobNotFound": "zadanie tłumaczenia nie jest już dostępne. Proszę spróbować ponownie.",
+    "retryPolling": "Sprawdź ponownie",
+    "pollingStalled": "Nie udało się połączyć z serwerem, by sprawdzić postęp. Tłumaczenie może być nadal w toku."
   },
   "terms": {
     "officialLanguages": "Wersja oficjalna:",
@@ -1997,6 +2293,10 @@
       "technicalDetails": "Szczegóły techniczne",
       "agentCountLabel": "{count} agentów",
       "disconnectedToast": "Odłączono {name}"
+    },
+    "emptyState": {
+      "title": "Brak dostępnych agentów regionalnych / organizacyjnych",
+      "description": "Połącz projekt Foundry poniżej, aby odkryć jego agentów."
     }
   },
   "privacy": {
@@ -2107,5 +2407,753 @@
     "review": "Przejrzyj",
     "itemId": "ID: {id}",
     "itemSource": "{date} z {source}"
+  },
+  "regionOverride": {
+    "warning": "Nadpisanie lokalizacji aktywne — Twoje żądania są kierowane do regionu danych {region}. To ręczne nadpisanie testowe, a nie Twoja rzeczywista lokalizacja.",
+    "clear": "Wyczyść nadpisanie"
+  },
+  "usageImpact": {
+    "empty": "Nie śledzono jeszcze użycia. Po rozpoczęciu rozmowy pojawi się tu zużycie tokenów i szacowana emisja.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} ładowań smartfona",
+    "requests": "Żądania",
+    "promptTokens": "Tokeny promptu",
+    "completionTokens": "Tokeny odpowiedzi",
+    "topModels": "Według modelu",
+    "byRegion": "Według regionu serwera",
+    "regionDefault": "Domyślny",
+    "modelRow": "{requests} żąd. · {grams} g",
+    "disclosure": "Szacunki oparte na założeniach v{version} · od {since} · tylko standardowy chat (odpowiedzi agentów i bazy wiedzy nie są liczone).",
+    "reset": "Resetuj statystyki użycia"
+  },
+  "extraction": {
+    "toggleLabel": "Wyodrębnij dane strukturalne",
+    "trayLabel": "Ekstrakcja",
+    "trayPrefix": "Wyodrębnij",
+    "trayInfo": "Ekstrakcja zwraca do 3 tabel strukturalnych. Przepisy zapisywane są lokalnie.",
+    "autoChip": "Auto — AI proponuje strukturę",
+    "addRecipe": "Dodaj przepis",
+    "addRecipeTitle": "Dodaj przepis do tej ekstrakcji",
+    "addRecipeFullTitle": "Do 3 przepisów na ekstrakcję",
+    "removeRecipe": "Usuń przepis: {name}",
+    "remove": "Usuń",
+    "section": "Przepisy ekstrakcji",
+    "sectionSubtitle": "Zapisane szablony przekształcające surowy tekst, pliki lub adresy URL w tabelę danych. Wybierz maksymalnie 3 na jedną ekstrakcję.",
+    "newRecipe": "Nowy przepis",
+    "untitledRecipe": "(Przepis bez tytułu)",
+    "deleteRecipe": "Usuń przepis",
+    "delete": "Usuń",
+    "deleteConfirm": "Usunąć?",
+    "cancel": "Anuluj",
+    "name": "Nazwa",
+    "namePlaceholder": "np. Pacjenci",
+    "description": "Opis",
+    "optional": "(opcjonalnie)",
+    "descriptionPlaceholder": "Krótki opis widoczny w selektorze przepisów",
+    "instructions": "Instrukcje",
+    "instructionsPlaceholder": "Czego AI ma szukać w materiale?",
+    "fields": "Pola",
+    "field": "pole",
+    "fieldsPlural": "pola",
+    "fieldName": "Nazwa pola",
+    "fieldType": "Typ pola",
+    "fieldNamePlaceholder": "nazwa_pola",
+    "addField": "Dodaj pole",
+    "removeField": "Usuń pole",
+    "toggleDetails": "Pokaż/ukryj szczegóły",
+    "fieldDetailsTitle": "Opis, wartości enum",
+    "fieldDescriptionPlaceholder": "Opis (pomaga AI zidentyfikować to pole)",
+    "enumValuesPlaceholder": "Dopuszczalne wartości oddzielone przecinkami",
+    "required": "wymagane",
+    "suggest": "Zaproponuj przy użyciu AI",
+    "suggesting": "Proponowanie…",
+    "suggestNeedsInstructions": "Najpierw dodaj instrukcje, aby AI wiedziała, czego szukać",
+    "searchRecipes": "Szukaj przepisów",
+    "pickerEmpty": "Brak przepisów. Utwórz jeden, aby rozpocząć.",
+    "pickerEmptyMatch": "Brak pasujących przepisów",
+    "editorEmpty": "Brak przepisów. Utwórz jeden, a AI pomoże wypełnić pola.",
+    "noData": "Nie wyodrębniono danych",
+    "noRecords": "Nie znaleziono rekordów {name}",
+    "row": "wiersz",
+    "rows": "wiersze",
+    "record": "rekord",
+    "records": "rekordy",
+    "complete": "zakończono",
+    "download": "Pobierz",
+    "preview": "Podgląd",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} pól",
+    "fieldCountOne": "1 pole",
+    "andMoreFields": "+ {count} więcej",
+    "saveAsRecipe": "Zapisz jako przepis",
+    "savedAsRecipeToast": "Zapisano jako przepis \"{name}\"",
+    "previewTruncated": "Wyświetlono pierwsze 3 z {total} wierszy. Pobierz, aby zobaczyć całość.",
+    "previewEmpty": "Brak wierszy do podglądu",
+    "proposedSchemaTip": "AI zaproponowała ten schemat. Zapisz, by użyć ponownie następnym razem.",
+    "downloadAriaLabel": "Pobierz {name} jako {format}",
+    "previewAriaLabel": "Przełącz podgląd {name}",
+    "changeFormatAriaLabel": "Zmień format pobierania dla {name}",
+    "materialWarningTitle": "Dodaj materiał do wyodrębnienia",
+    "materialWarningBody": "Wpisz wiadomość poniżej, dołącz plik lub podaj URL.",
+    "materialAttach": "Dołącz plik",
+    "willExtractPrefix": "Będzie wyodrębniać z:",
+    "materialText": "treść wiadomości",
+    "materialFiles": "{count, plural, one {1 plik} other {# plików}}",
+    "materialActiveFiles": "{count, plural, one {1 aktywny plik} other {# aktywnych plików}}",
+    "dismiss": "Wyłącz wyodrębnianie"
+  },
+  "Connectors": "Łączniki",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Tłumaczenie",
+        "description": "Tłumacz tekst z analizą, glosariuszami oraz rundami weryfikacji"
+      },
+      "document": {
+        "label": "Dokument",
+        "description": "Utwórz i dopracuj dokument z pomocą asystenta"
+      },
+      "dataAnalysis": {
+        "label": "Analiza danych",
+        "description": "Importuj tabele oraz analizuj lub przekształcaj dane"
+      },
+      "map": {
+        "label": "Mapa",
+        "description": "Zamień dowolne dane w lokalizacje na mapie"
+      }
+    },
+    "chooser": {
+      "prompt": "Lub rozpocznij skoncentrowane środowisko pracy"
+    },
+    "sidebar": {
+      "newTranslation": "Nowe tłumaczenie",
+      "newDocument": "Nowy dokument",
+      "newDataAnalysis": "Nowa analiza danych",
+      "newMap": "Nowa mapa"
+    },
+    "translation": {
+      "chooseLanguage": "Język docelowy",
+      "customLanguageHint": "\"{name}\" to język dodany przez Ciebie — AI podejmie próbę tłumaczenia na dowolny język, ale jakość nie jest zweryfikowana.",
+      "addedByYou": "Dodane przez Ciebie",
+      "glossary": "Glosariusz",
+      "noGlossary": "Brak glosariusza",
+      "manageGlossaries": "Glosariusze",
+      "glossaries": "Glosariusze",
+      "closeGlossaries": "Zamknij glosariusze",
+      "glossariesEmpty": "Utwórz glosariusz, aby ustalić, jak tłumaczone są konkretne terminy. Glosariusze są zapisywane na tym urządzeniu i dostępne przy innych tłumaczeniach.",
+      "newGlossary": "Nowy glosariusz",
+      "newGlossaryName": "Glosariusz bez nazwy",
+      "glossaryName": "Nazwa glosariusza",
+      "deleteGlossary": "Usuń glosariusz",
+      "sourceTerm": "Termin źródłowy",
+      "targetTerm": "Tłumaczenie",
+      "note": "Notatka",
+      "noteOptional": "Notatka (opcjonalnie)",
+      "addEntry": "Dodaj termin",
+      "removeEntry": "Usuń {term}",
+      "mode": "Tryb tłumaczenia",
+      "modeQuick": "Szybki",
+      "modeAgentic": "Zrecenzowany",
+      "modeQuickHint": "Jedno przejście tłumaczenia, najszybsze",
+      "modeAgenticHint": "Najpierw analizuje tekst, potem tłumaczy i prowadzi do 3 rund recenzji",
+      "translate": "Tłumacz",
+      "translating": "Tłumaczenie…",
+      "sourceLabel": "Tekst źródłowy",
+      "targetLabel": "Tłumaczenie",
+      "sourcePlaceholder": "Wklej lub wpisz tekst do tłumaczenia albo prześlij dokument.",
+      "targetEmpty": "Tutaj pojawi się tłumaczenie.",
+      "uploadDocument": "Prześlij dokument",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "tooLong": "Tekst jest dłuższy niż {max} znaków. Podziel na części lub użyj tłumaczenia dokumentów dla całych plików.",
+      "analysisTitle": "Analiza przed tłumaczeniem",
+      "register": "Zarejestruj się",
+      "reviewTitle": "Rundy recenzji",
+      "roundLabel": "Runda {round}",
+      "verdictApprove": "zaakceptowano",
+      "verdictRevise": "poprawiono",
+      "railRequest": "Przetłumacz tekst źródłowy na {language}.",
+      "railDoneAgentic": "Gotowe. Przeanalizowałem tekst, przetłumaczyłem go i wykonałem {rounds} rundę/ rundy recenzji. Wynik znajduje się w przestrzeni roboczej.",
+      "railDoneQuick": "Gotowe. Tłumaczenie znajduje się w przestrzeni roboczej.",
+      "railAssessRequest": "Oceń jakość tłumaczenia na {language}.",
+      "railAssessDone": "Ocena zakończona: oceny oraz {count} proponowana/poprawka do przejrzenia są w przestrzeni roboczej.",
+      "roundChanges": "Zmiany w rundzie {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Dokładność",
+          "description": "Dokładnie oddaje sens tekstu źródłowego — bez błędnych tłumaczeń, opuszczeń, dodatków ani nieprzetłumaczonych fragmentów"
+        },
+        "fluency": {
+          "label": "Płynność",
+          "description": "Gramatyka, pisownia, interpunkcja i spójność brzmią naturalnie w języku docelowym"
+        },
+        "terminology": {
+          "label": "Terminologia",
+          "description": "Terminologia dziedzinowa jest spójna i prawidłowa; glosariusz jest stosowany bez odstępstw"
+        },
+        "style": {
+          "label": "Styl",
+          "description": "Rejestr językowy, ton i styl odpowiadają źródłu i są spójne"
+        },
+        "localeConventions": {
+          "label": "Konwencje językowe",
+          "description": "Daty, liczby, jednostki i interpunkcja są zgodne z normami języka docelowego"
+        },
+        "audience": {
+          "label": "Grupa docelowa",
+          "description": "Odpowiednie do celu i odbiorców tekstu"
+        }
+      },
+      "severity": {
+        "minor": "Drobne",
+        "major": "Poważny"
+      },
+      "assess": "Oceń jakość",
+      "assessing": "Ocenianie…",
+      "assessmentTitle": "Ocena jakości",
+      "criteriaPicker": "Kryteria oceny",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Sugerowane poprawki",
+      "noEditsSuggested": "Brak sugerowanych poprawek — tłumaczenie spełnia wybrane kryteria.",
+      "acceptEdit": "Akceptuj",
+      "rejectEdit": "Odrzuć",
+      "acceptAll": "Akceptuj wszystkie",
+      "rejectAll": "Odrzuć wszystkie",
+      "editAccepted": "Zaakceptowano",
+      "editRejected": "Odrzucono",
+      "editUnapplicable": "Nie znaleziono tego fragmentu w bieżącym tekście — nie zastosowano",
+      "editTranslation": "Edytuj",
+      "doneEditing": "Gotowe",
+      "pasteTranslationPlaceholder": "Wpisz lub wklej tłumaczenie do edycji…",
+      "editingBlockedPendingEdits": "Najpierw rozwiąż lub odrzuć oczekujące poprawki",
+      "pendingCount": "{count} oczekujących",
+      "closeReview": "Zamknij ocenę jakości",
+      "showReview": "Pokaż ocenę",
+      "showReviewPending": "Pokaż ocenę ({count} oczekujących)"
+    },
+    "document": {
+      "emptyTitle": "Opisz dokument, który chcesz uzyskać",
+      "emptyBody": "Powiedz asystentowi, co napisać — np. raport sytuacyjny, list do darczyńcy, protokół ze spotkania. Dodaj najpierw pliki referencyjne, jeśli chcesz cytaty i fakty z nich.",
+      "generatePlaceholder": "Opisz dokument do napisania…",
+      "revisePlaceholder": "Opisz zmiany do wprowadzenia…",
+      "generate": "Generuj",
+      "revise": "Popraw",
+      "writing": "Pisanie…",
+      "export": "Eksportuj",
+      "references": "Źródła",
+      "addReference": "Dodaj plik",
+      "uploading": "Trwa przesyłanie…",
+      "removeReference": "Usuń {name}",
+      "referenceChars": "{chars} znaków wyodrębnionego tekstu",
+      "referenceEmpty": "Nie udało się wyodrębnić tekstu z {name}",
+      "uploadFailed": "Błąd przesyłania",
+      "untitledDocument": "Dokument bez tytułu",
+      "generatedSummary": "Utworzyłem dokument w przestrzeni roboczej. Przejrzyj go i powiedz, co zmienić.",
+      "revisedSummary": "Poprawiłem dokument w przestrzeni roboczej.",
+      "runFailed": "Wystąpił problem: {message}",
+      "uploadBasis": "Rozpocznij od istniejącego dokumentu",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Gramatyka i pisownia",
+          "description": "Poprawna gramatyka i pisownia; jedna spójna odmiana angielskiego (US lub UK) jest akceptowalna — mieszanie to błąd"
+        },
+        "consistency": {
+          "label": "Spójność",
+          "description": "Terminologia, nazwy, wielkość liter i formatowanie konsekwentnie używane w całym tekście"
+        },
+        "clarity": {
+          "label": "Jasność",
+          "description": "Bezpośrednie, jednoznaczne zdania; struktura wspierająca czytelnika"
+        },
+        "sensitivity": {
+          "label": "Wrażliwość",
+          "description": "Włączający, wrażliwy na konflikty i humanitarny język (opcjonalne sprawdzenie)"
+        },
+        "specAdherence": {
+          "label": "Zgodność ze specyfikacją",
+          "description": "Zgodnie z załączoną specyfikacją dokumentu: wymagane sekcje obecne, we właściwej kolejności, zgodnie z wytycznymi"
+        },
+        "toneAdherence": {
+          "label": "Zgodność tonu",
+          "description": "Zgodnie z załączonymi zasadami stylu i tonu"
+        }
+      },
+      "severity": {
+        "minor": "Drobne",
+        "major": "Poważne"
+      },
+      "assess": "Oceń jakość",
+      "assessing": "Ocenianie…",
+      "assessmentTitle": "Przegląd jakości",
+      "criteriaPicker": "Kryteria oceny",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Sugerowane poprawki",
+      "noEditsSuggested": "Brak sugerowanych poprawek — dokument spełnia wybrane kryteria.",
+      "acceptEdit": "Akceptuj",
+      "rejectEdit": "Odrzuć",
+      "acceptAll": "Akceptuj wszystkie",
+      "rejectAll": "Odrzuć wszystkie",
+      "editAccepted": "Zaakceptowano",
+      "editRejected": "Odrzucono",
+      "editUnapplicable": "Nie udało się znaleźć tego fragmentu w bieżącym tekście — nie zastosowano",
+      "editingBlockedPendingEdits": "Najpierw rozwiąż lub odrzuć oczekujące poprawki",
+      "pendingCount": "{count} oczekujących",
+      "closeReview": "Zamknij przegląd jakości",
+      "showReview": "Pokaż przegląd",
+      "showReviewPending": "Pokaż przegląd ({count} oczekujących)",
+      "railAssessRequest": "Oceń jakość dokumentu na podstawie wybranych kryteriów.",
+      "railAssessDone": "Ocena zakończona: oceny znajdują się w przestrzeni roboczej, z {count} sugerowanymi poprawkami do przeglądu.",
+      "spec": "Specyfikacja dokumentu",
+      "noSpec": "Brak specyfikacji",
+      "manageSpecs": "Specyfikacje",
+      "specs": "Specyfikacje dokumentów",
+      "closeSpecs": "Zamknij specyfikacje",
+      "specsEmpty": "Stwórz specyfikację, aby pisać dokumenty według ustalonego formatu — wymagane sekcje, kolejność oraz wytyczne dla sekcji (np. szablon SitRep). Specyfikacje są zapisywane na tym urządzeniu i mogą być ponownie użyte.",
+      "newSpec": "Nowa specyfikacja",
+      "newSpecName": "Bez tytułu",
+      "specName": "Nazwa specyfikacji",
+      "specDescription": "Opis (opcjonalnie)",
+      "deleteSpec": "Usuń specyfikację",
+      "sectionHeading": "Nagłówek sekcji",
+      "sectionGuidance": "Wytyczne (opcjonalnie)",
+      "sectionRequired": "Wymagane",
+      "addSection": "Dodaj sekcję",
+      "removeSection": "Usuń sekcję",
+      "generalGuidance": "Wytyczne ogólne (opcjonalnie)",
+      "tone": "Ton",
+      "noTone": "Brak tonu",
+      "customCriteria": "Własne kryteria",
+      "manageCriteria": "Własne kryteria",
+      "closeCriteria": "Zamknij własne kryteria",
+      "criteriaEmpty": "Utwórz własne kryteria — np. dotyczące marki lub języka organizacji — aby oceniać dokumenty i ukierunkowywać poprawki. Zapisywane na tym urządzeniu i możliwe do ponownego użycia.",
+      "newCriterion": "Nowe kryterium",
+      "newCriterionName": "Kryterium bez nazwy",
+      "criterionName": "Nazwa kryterium",
+      "criterionRubric": "Rubryka",
+      "criterionRubricPlaceholder": "Opisz, co dokument musi spełniać, aby zrealizować to kryterium, np. \"Nie używaj superlatywów w odniesieniu do naszej pracy; zawsze nazywaj beneficjentów 'osobami, którym pomagamy'…\"",
+      "criterionRubricHint": "Ta rubryka jest przekazywana AI dosłownie podczas oceniania i wprowadzania poprawek.",
+      "deleteCriterion": "Usuń kryterium",
+      "profileTitle": "Profil dokumentu",
+      "profileDocType": "Typ",
+      "profileLanguage": "Język",
+      "profileAudience": "Odbiorcy",
+      "profilePurpose": "Cel",
+      "profileRegister": "Rejestr",
+      "profileTone": "Ton",
+      "profileConventions": "Konwencje",
+      "emptyHint": "Zacznij pisać poniżej, opisz co napisać w polu na dole lub rozpocznij od pliku.",
+      "addSpec": "Dodaj specyfikację",
+      "addCriteria": "Dodaj kryteria",
+      "scopeFullDocument": "Zakres: cały dokument",
+      "scopeSelection": "Zakres: zaznaczenie — „{preview}…” ({count} słów)",
+      "clearSelection": "Wyczyść zaznaczenie (pracuj na całym dokumencie)",
+      "reviseSelectionPlaceholder": "Opisz zmiany w zaznaczeniu…",
+      "revisedSelectionSummary": "Poprawiłem zaznaczony fragment w przestrzeni roboczej.",
+      "assessedSelection": "Zaznaczenie"
+    },
+    "data": {
+      "emptyTitle": "Zaimportuj dane do analizy",
+      "emptyBody": "Dodaj plik CSV, Excel lub JSON, albo wklej wiersze bezpośrednio. Po załadowaniu tabeli możesz ją sortować, wyodrębniać kolejne wiersze z dokumentów oraz przekształcać według instrukcji opisanych prostym językiem.",
+      "importFile": "Importuj plik",
+      "importing": "Importowanie…",
+      "pasteData": "Wklej dane",
+      "pastePlaceholder": "Wklej tutaj CSV, TSV lub JSON…",
+      "import": "Importuj",
+      "addFromSource": "Dodaj ze źródła",
+      "extractHint": "Wklej tekst lub wybierz dokument; z niego zostaną wyodrębnione wiersze pasujące do Twoich bieżących kolumn. Nieznane wartości pozostają puste — nic nie jest wymyślane.",
+      "extractPlaceholder": "Wklej tutaj nieustrukturyzowany tekst z danymi…",
+      "extractRows": "Wyodrębnij wiersze",
+      "extractFromFile": "Z pliku…",
+      "extracting": "Wyodrębnianie…",
+      "pastedSource": "Wklejony tekst",
+      "transform": "Przekształć",
+      "transforming": "Przekształcanie…",
+      "transformPlaceholder": "Opisz przekształcenie, np. \"dodaj kolumnę z liczbą przypadków na 1000 mieszkańców\"…",
+      "transformCapHint": "Przekształceń można dokonać maksymalnie dla {max} wierszy. Usuń lub przefiltruj wiersze w przypadku większych tabel.",
+      "undo": "Cofnij",
+      "deleteSelected": "Usuń {count}",
+      "deletedRows": "Usunięto {count} wierszy",
+      "selectAllRows": "Zaznacz wszystkie wiersze",
+      "selectRow": "Zaznacz wiersz {row}",
+      "rowCount": "{count} wierszy",
+      "rowCapExceeded": "To byłoby {count} wierszy; tabela jest ograniczona do {max}. Podziel dane lub wyeksportuj je.",
+      "railExtractRequest": "Wyodrębnij wiersze zgodne ze schematem tabeli z: {source}",
+      "railExtractDone": "Dodano {count} wyodrębnionych wierszy do tabeli.",
+      "railTransformDone": "Przekształcono tabelę.",
+      "columnProfileFor": "Statystyki kolumny dla {column}",
+      "profileMissing": "Brakujące",
+      "profileDistinct": "Unikalne",
+      "profileRange": "Zakres",
+      "profileMean": "Średnia",
+      "profileMedian": "Mediana",
+      "profileTopValues": "Najczęstsze wartości",
+      "filterColumnFor": "Filtruj {column}",
+      "filterContains": "Zawiera…",
+      "filterMin": "Min",
+      "filterMax": "Maks",
+      "filterClear": "Wyczyść",
+      "clearFilters": "Wyczyść filtry",
+      "showingRows": "Wyświetlono {shown} z {total} wierszy",
+      "scopeLabel": "Zakres pracy",
+      "scopeTable": "Wszystkie ({count})",
+      "scopeFiltered": "Przefiltrowane ({count})",
+      "scopeSelection": "Wybrane ({count})",
+      "scopedInstruction": "{instruction} (na {count} wybranych wierszach)",
+      "assess": "Oceń jakość",
+      "assessing": "Trwa ocena…",
+      "criteria": {
+        "validity": {
+          "label": "Poprawność",
+          "description": "Wartości są zgodne z typem i oczekiwanym formatem kolumny"
+        },
+        "consistency": {
+          "label": "Spójność",
+          "description": "Ta sama wartość zapisywana w ten sam sposób (brak wariantów „M” / „Male”, mieszanych jednostek lub różnego formatowania)"
+        },
+        "duplicates": {
+          "label": "Duplikaty",
+          "description": "Wiersze rejestrujące tę samą jednostkę lub zdarzenie dwukrotnie"
+        },
+        "plausibility": {
+          "label": "Prawdopodobieństwo",
+          "description": "Wartości odstające i niemożliwe w kontekście"
+        }
+      },
+      "assessmentTitle": "Przegląd jakości danych",
+      "pendingCount": "{count} oczekujących",
+      "closeReview": "Zamknij przegląd jakości",
+      "suggestedEdits": "Sugerowane poprawki",
+      "noEditsSuggested": "Brak sugerowanych poprawek — dane spełniają wybrane kryteria.",
+      "acceptAll": "Zaakceptuj wszystkie",
+      "rejectAll": "Odrzuć wszystkie",
+      "acceptEdit": "Zaakceptuj",
+      "rejectEdit": "Odrzuć",
+      "editAccepted": "Zastosowano",
+      "editRejected": "Odrzucono",
+      "editUnapplicable": "Komórka została zmieniona od czasu oceny — nie zastosowano",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Kryteria oceny",
+      "severity": {
+        "minor": "Drobne",
+        "major": "Poważne"
+      },
+      "editLocation": "wiersz {row} · {column}",
+      "editLocationRow": "wiersz {row} (usuń)",
+      "showReview": "Pokaż przegląd",
+      "showReviewPending": "Pokaż przegląd ({count} oczekuje)",
+      "assessedFiltered": "Przefiltrowane wiersze",
+      "assessedSelection": "Wybrane wiersze",
+      "assessedSample": "próbka {shown} z {total}",
+      "railAssessRequest": "Oceń jakość tabeli ({count} wierszy) względem wybranych kryteriów.",
+      "railAssessDone": "Zaproponowano {count} poprawek jakości danych — przejrzyj je w przestrzeni roboczej.",
+      "insights": "Wnioski",
+      "chartKind": "Typ wykresu",
+      "chartBar": "Słupkowy (grupowanie)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Liniowy (w czasie)",
+      "groupByColumn": "Grupuj według kolumny",
+      "dateColumn": "Kolumna z datą",
+      "valueColumn": "Kolumna z wartościami",
+      "aggFn": "Agregacja",
+      "aggCount": "Liczba",
+      "aggSum": "Suma",
+      "aggMean": "Średnia",
+      "chartTruncated": "Wyświetlane {max} najważniejszych grup",
+      "chartNoData": "Brak wartości możliwych do przedstawienia na wykresie w bieżących wierszach.",
+      "chartBarAria": "Wykres słupkowy, pogrupowany według {column}",
+      "chartHistogramAria": "Histogram kolumny {column}",
+      "chartLineAria": "Wykres liniowy kolumny {column} w czasie",
+      "editStructure": "Struktura",
+      "defineStructure": "Zdefiniuj strukturę",
+      "schemaHint": "Zdefiniuj pola swojej struktury danych. Pola wymagane decydują o polityce wobec brakujących danych podczas importu; zmiana typu pola konwertuje istniejące wartości (niekonwertowalne komórki stają się puste).",
+      "schemaFieldName": "Nazwa pola",
+      "schemaFieldType": "Typ pola",
+      "schemaRequired": "Wymagane",
+      "schemaAddField": "Dodaj pole",
+      "schemaDeleteField": "Usuń pole {field}",
+      "schemaApply": "Zastosuj strukturę",
+      "schemaCancel": "Anuluj",
+      "schemaEdited": "Zmieniono strukturę tabeli",
+      "schemaCellsConverted": "{count} komórek nie można było przekonwertować do nowego typu i są teraz puste.",
+      "missingFieldPolicy": "Brakujące dane",
+      "policyStrict": "Ścisła — odrzuć niekompletne wiersze",
+      "policyFlag": "Oznacz — zaimportuj i oznacz",
+      "policyLenient": "Elastyczna — importuj bez powiadomienia",
+      "droppedIncompleteRows": "Porzucono {count} wierszy bez wymaganych pól: {fields}",
+      "dismiss": "Odrzuć",
+      "requiredColumn": "Wymagane pole",
+      "flagMissingRequired": "Wymagane pole jest puste",
+      "flagPendingEdit": "Proponowana poprawka jest w toku dla tej komórki — zobacz przegląd jakości",
+      "fromPhoto": "Z fotografii",
+      "fromPhotoHint": "Zrób zdjęcie papierowego formularza lub tabeli — jego zawartość zostanie przekształcona w dane strukturalne, które możesz zweryfikować ze zdjęciem",
+      "readingPhoto": "Odczytywanie zdjęcia…",
+      "photoBatchName": "{count} zdjęć",
+      "railPhotoRequest": "Wyodrębnij dane strukturalne z {count} zdjęcia(ń): {name}",
+      "railPhotoDone": "Dodano {count} rekord(ów) z zdjęć. Sprawdź je ze zdjęciem w przestrzeni roboczej.",
+      "sourcesLabel": "Źródła",
+      "openPhotoQc": "Sprawdź dane względem {name}",
+      "qcRowsFromPhoto": "{count} wierszy",
+      "qcClose": "Zamknij sprawdzanie zdjęcia",
+      "qcZoomIn": "Powiększ",
+      "qcZoomOut": "Pomniejsz",
+      "qcPrevPhoto": "Poprzednie zdjęcie",
+      "qcNextPhoto": "Następne zdjęcie",
+      "qcImageLoading": "Ładowanie zdjęcia…",
+      "qcImageFailed": "Nie udało się załadować zdjęcia.",
+      "qcImageAlt": "Zdjęcie źródłowe: {name}",
+      "qcHint": "Tabela pokazuje tylko wiersze z tego zdjęcia — porównaj każdą wartość ze zdjęciem i edytuj lub usuń wiersze, które nie pasują.",
+      "sourceFilterChip": "Wiersze z {name}",
+      "clearSourceFilter": "Pokaż ponownie wszystkie wiersze",
+      "viewAsRecord": "Widok formularza",
+      "viewAsTable": "Widok tabeli",
+      "recordEmpty": "Brak rekordów.",
+      "recordOf": "Rekord {index} z {count}",
+      "recordPrev": "Poprzedni rekord",
+      "recordNext": "Następny rekord",
+      "recordBooleanUnset": "(puste)",
+      "flagsChip": "{count} ostrzeżeń",
+      "flagsChipOpenReview": "Otwórz przegląd jakości",
+      "flagsChipMissingOnly": "Wymagane pola są puste — uzupełnij je lub zmień strukturę",
+      "autoCheck": "Automatyczna kontrola nowych danych",
+      "autoCheckHint": "Po wyodrębnieniu danych ze zdjęć lub dokumentów automatycznie sprawdzaj jakość nowych wierszy",
+      "checkingNewRows": "Sprawdzanie nowo dodanych wierszy pod kątem problemów z jakością…",
+      "ingestCheckFailed": "Automatyczna kontrola jakości nie powiodła się ({message}) — możesz uruchomić ją ręcznie przez \"Oceń jakość\".",
+      "assessedIngest": "Nowo dodane wiersze"
+    },
+    "map": {
+      "emptyTitle": "Umieść swoje dane na mapie",
+      "emptyBody": "Wklej sitrep, listę przypadków, notatki ze spotkania lub dowolny tekst z nazwami miejsc — albo prześlij dokument. Miejsca zostaną rozpoznane i zmapowane z oceną pewności; potem możesz wyeksportować je do ArcGIS lub innych narzędzi GIS.",
+      "inputPlaceholder": "Wklej tekst z nazwami miejsc…",
+      "uploadFile": "Prześlij plik",
+      "pastedSource": "Wklejony tekst",
+      "mapIt": "Zmapuj",
+      "finding": "Wyszukiwanie lokalizacji…",
+      "featureCount": "{count} lokalizacji",
+      "featureCapExceeded": "Mapa jest ograniczona do {max} lokalizacji.",
+      "noneFound": "Nie znaleziono lokalizacji w tym materiale.",
+      "lowConfidenceNotice": "{count} lokalizacja(i) ma współrzędne o niskiej pewności — sprawdź je przed użyciem mapy.",
+      "tilesOffline": "Kafelki mapy niedostępne — lista lokalizacji nadal działa.",
+      "disclaimer": "Współrzędne są oszacowane przez AI na podstawie wiedzy modelu, a nie usługi geokodowania — zweryfikuj przed wykorzystaniem operacyjnym. Kafelki mapy są ładowane z serwera; twoje dane pozostają na tym urządzeniu.",
+      "flyTo": "Pokaż {name} na mapie",
+      "removeFeature": "Usuń {name}",
+      "expandFeature": "Pokaż pełne szczegóły dla {name}",
+      "collapseFeature": "Zwiń szczegóły dla {name}",
+      "detailsParent": "Część {parent}",
+      "railRequest": "Zmapuj lokalizacje w: {source}",
+      "railSearchRequest": "Wyszukaj w internecie i zmapuj lokalizacje dla: {query}",
+      "railDone": "Zmapowano {count} lokalizacji. Przejrzyj te o niskim poziomie pewności na liście.",
+      "searchToggle": "Tryb wyszukiwania w sieci",
+      "searchToggleHint": "Wyszukaj w internecie zamiast wklejać tekst; wyniki oparte na źródłach są mapowane.",
+      "searchPlaceholder": "Wyszukaj w sieci, np. \"wybuchy cholery Afryka Wschodnia 2026\"…",
+      "searchAndMap": "Wyszukaj i zmapuj",
+      "searching": "Wyszukiwanie…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Połączenie: {kind}",
+        "unresolved": "{count} połączeń odwoływało się do miejsc nieobecnych na mapie i zostały pominięte."
+      },
+      "confidence": {
+        "high": "Wysoki",
+        "medium": "Średni",
+        "low": "Niski"
+      },
+      "prominence": {
+        "primary": "Główna lokalizacja",
+        "secondary": "Lokalizacja pomocnicza",
+        "mention": "Wzmianka przelotna"
+      },
+      "prominenceMentionHint": "To miejsce zostało tylko wspomniane — wyświetlane mniejsze na mapie i pomijane w początkowym kadrze.",
+      "dates": {
+        "since": "od {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Trwa"
+      },
+      "filters": {
+        "label": "Filtruj według kategorii",
+        "other": "Inne",
+        "clear": "Wyczyść",
+        "showing": "{shown} z {total} lokalizacji",
+        "noneMatch": "Żadna lokalizacja nie spełnia aktualnych filtrów."
+      },
+      "dateFilter": {
+        "label": "Daty",
+        "from": "Od",
+        "to": "Do",
+        "fromAria": "Pokaż tylko wydarzenia od tej daty",
+        "toAria": "Pokaż tylko wydarzenia do tej daty",
+        "clear": "Wyczyść daty",
+        "eraChip": "Pokaż tylko wydarzenia z epoki: {label}"
+      },
+      "timeline": {
+        "toggle": "Upływ czasu",
+        "play": "Odtwórz upływ czasu",
+        "pause": "Wstrzymaj upływ czasu",
+        "eras": "Epoki na osi czasu",
+        "jumpTo": "Przejdź do {label}",
+        "slider": "Pozycja na osi czasu",
+        "showUndated": "Pokaż lokalizacje bez daty",
+        "activeCount": "{count} aktywnych"
+      },
+      "granularity": {
+        "site": "Miejsce",
+        "city": "Miasto/miasteczko",
+        "district": "Dystrykt",
+        "region": "Region",
+        "country": "Kraj"
+      },
+      "granularityAreaHint": "Obszar, pokazany jako orientacyjny okrąg wokół środka — nie jest to precyzyjna lokalizacja ani granica.",
+      "containerHint": "Zawiera inne zmapowane lokalizacje, więc widoczny jest tylko zarys.",
+      "legend": {
+        "toggle": "Legenda",
+        "title": "Jak czytać mapę",
+        "color": "Kolor: pewność współrzędnych (niebieski – wysoka, bursztynowy – średnia, czerwony – niska)",
+        "size": "Wielkość kropki: jak centralna jest lokalizacja dla materiału",
+        "area": "Przerywana linia: przybliżony zasięg dystryktu, regionu lub kraju",
+        "container": "Blady kontur: obszar, którego zawartość jest mapowana oddzielnie"
+      }
+    },
+    "shell": {
+      "showConversation": "Pokaż rozmowę",
+      "hideConversation": "Ukryj rozmowę",
+      "workspaceTab": "Obszar roboczy",
+      "conversationTab": "Rozmowa",
+      "paneTabsLabel": "Panele przepływu pracy",
+      "railEmpty": "Tu pojawią się wiadomości i postępy asystenta.",
+      "railInputPlaceholder": "Wyślij wiadomość do asystenta…",
+      "assistantThinking": "Myślenie…",
+      "sendMessage": "Wyślij wiadomość",
+      "stopGenerating": "Zatrzymaj generowanie",
+      "loadingWorkspace": "Ładowanie obszaru roboczego…",
+      "unknownType": "Ta rozmowa używa przepływu pracy, którego ta wersja nie rozpoznaje. Historia rozmowy znajduje się poniżej.",
+      "untitled": "Nowa rozmowa",
+      "toggleMenu": "Przełącz menu",
+      "model": "Model dla tego przepływu pracy"
+    }
+  },
+  "connectors": {
+    "title": "Konektory",
+    "description": "Połącz zewnętrzne narzędzia za pomocą Model Context Protocol (MCP). Połączone narzędzia są dostępne dla modeli w czacie, a każde wywołanie narzędzia odbywa się dopiero po Twojej akceptacji.",
+    "localOnlyNote": "Logujesz się bezpośrednio u każdego dostawcy. Klucze dostępowe są szyfrowane i przechowywane tylko na tym urządzeniu oraz przesyłane przez serwer aplikacji przy każdym żądaniu — nigdy nie są tam zapisywane ani logowane.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Przeglądaj repozytoria, czytaj i twórz zgłoszenia oraz pull requesty."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Wyszukuj, twórz i aktualizuj zadania oraz projekty."
+      }
+    },
+    "connect": "Połącz",
+    "connected": "Połączono",
+    "tokenEndsIn": "kończy się na ••••{last4}",
+    "disconnect": "Odłącz",
+    "toolCount": "{count, plural, =1 {1 narzędzie dostępne} other {# narzędzi dostępnych}}",
+    "patLabel": "Token dostępu osobistego",
+    "createTokenLink": "Utwórz token",
+    "tokenScopeHint": "Użyj tokena o precyzyjnym zakresie, zapewniającego dostęp wymagany tylko przez te narzędzia.",
+    "validating": "Sprawdzanie połączenia…",
+    "validationFailed": "Nie można nawiązać połączenia. Sprawdź adres i spróbuj ponownie.",
+    "authFailed": "Serwer odrzucił token. Sprawdź go i spróbuj ponownie.",
+    "tokenRequired": "Token jest wymagany",
+    "enableServer": "Dostępne na czacie",
+    "arbitraryTitle": "Inne serwery MCP",
+    "arbitraryToggle": "Zezwól na dowolne serwery MCP",
+    "arbitraryWarning": "Każdy, kto zarządza serwerem MCP, może zobaczyć wiadomości wysyłane do jego narzędzi. Podłączaj tylko zaufane serwery. Każde wywołanie narzędzia nadal wymaga Twojej zgody.",
+    "addServer": "Dodaj serwer MCP",
+    "editServer": "Edytuj serwer MCP",
+    "serverName": "Nazwa",
+    "serverUrl": "URL serwera",
+    "nameRequired": "Nazwa jest wymagana",
+    "urlRequired": "URL jest wymagany",
+    "invalidUrl": "Wprowadź publiczny adres https://",
+    "namePlaceholder": "Mój serwer MCP",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Token dostępu (opcjonalnie)",
+    "keepTokenPlaceholder": "Pozostaw puste, aby zachować obecny token",
+    "disconnectedToast": "{name} rozłączono",
+    "save": "Zapisz",
+    "connectWithProvider": "Połącz przez {name}",
+    "useTokenInstead": "Użyj zamiast tego tokena dostępu",
+    "oauthWaiting": "Oczekiwanie na autoryzację…",
+    "oauthFailed": "Nie udało się zalogować. Spróbuj ponownie.",
+    "oauthDenied": "Dostęp został odrzucony przez dostawcę.",
+    "oauthTimeout": "Upłynął czas logowania. Spróbuj ponownie.",
+    "oauthCancelled": "Logowanie zostało anulowane.",
+    "oauthUnavailable": "Logowanie nie jest dostępne dla tego konektora w tym wdrożeniu. Użyj tokena dostępu lub poproś administratora o skonfigurowanie aplikacji OAuth.",
+    "ownAppToggle": "Użyj własnej aplikacji OAuth",
+    "ownAppHint": "Zarejestruj aplikację OAuth na swoim koncie {name} (organizacja, przestrzeń robocza lub instancja enterprise) z poniższym adresem URL zwrotu, a następnie wklej tutaj jej dane uwierzytelniające. Pozostaw zamknięte, by użyć wbudowanej aplikacji.",
+    "ownAppCustomHint": "Możesz podać własne dane aplikacji OAuth poniżej; pozostaw puste, aby zarejestrować automatycznie na serwerze.",
+    "ownAppInUse": "Połączono za pomocą własnej aplikacji OAuth.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (jeśli Twoja aplikacja go posiada)",
+    "redirectUriLabel": "Callback / redirect URL do zarejestrowania",
+    "reconnect": "Połącz ponownie",
+    "needsReauth": "Wymaga ponownego połączenia",
+    "disconnectOauthNote": "Odłączenie usuwa dostęp tylko z tego urządzenia. Aby całkowicie cofnąć dostęp, zarządzaj autoryzowanymi aplikacjami na swoim koncie {name}.",
+    "authModeLabel": "Uwierzytelnianie",
+    "authModeNone": "Brak",
+    "authModeBearer": "Token dostępu",
+    "authModeOauth": "Zaloguj się przez dostawcę (OAuth)",
+    "oauthCustomHint": "Zalogujesz się przez dostawcę serwera w nowym oknie po zapisaniu.",
+    "saveAndSignIn": "Zapisz i zaloguj się",
+    "oauthCallback": {
+      "title": "Autoryzacja zakończona",
+      "missingState": "Brak nic do autoryzacji",
+      "close": "Możesz zamknąć to okno i wrócić do aplikacji.",
+      "closeButton": "Zamknij okno"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Połącz źródło modelu",
+    "addAnother": "Dodaj kolejne źródło modelu",
+    "edit": "Edytuj",
+    "disconnect": "Odłącz {name}",
+    "disconnectedToast": "Odłączono {name}",
+    "modelCountLabel": "{count} modeli",
+    "loadingModels": "Ładowanie modeli...",
+    "noModelsAvailable": "Brak dostępnych modeli z tego źródła",
+    "sourceUnreachable": "Nie można połączyć się z tym źródłem. Twoje uprawnienia mogły się zmienić lub usługa jest tymczasowo niedostępna.",
+    "retry": "Ponów próbę",
+    "connectFoundryAccount": "Połącz konto Microsoft Azure Foundry",
+    "connectFoundryDescription": "Odkrywaj wdrożenia modeli z konta Azure Foundry, do którego masz dostęp. Wszelkie żądania autoryzowane są przez Twoje uprawnienia Azure — ograniczenia modeli aplikacji nie mają tu zastosowania.",
+    "selectModelsDescription": "Wybierz, które wdrożenia modeli z tego konta mają pojawić się w Twoim selektorze modeli.",
+    "editConnection": "Edytuj połączenie",
+    "nameLabel": "Nazwa",
+    "namePlaceholder": "np. Mój Zespół Sandbox",
+    "nameRequired": "Nazwa źródła jest wymagana",
+    "foundryAccountLabel": "Konto Foundry",
+    "enterManually": "Wprowadź ręcznie",
+    "browseResources": "Przeglądaj zasoby",
+    "subscriptionIdLabel": "ID subskrypcji",
+    "resourceGroupLabel": "Grupa zasobów",
+    "accountNameLabel": "Nazwa konta",
+    "subscriptionRequired": "Wybierz subskrypcję",
+    "accountRequired": "Wybierz konto Foundry",
+    "accountSelectionRequired": "Wybierz konto z listy.",
+    "selectAllRequired": "Wybierz subskrypcję, grupę zasobów i konto.",
+    "connectionFailed": "Nie można połączyć się z tym kontem. Sprawdź poprawność danych i dostęp.",
+    "duplicateSource": "To konto jest już połączone jako \"{name}\".",
+    "connectionSuccessModels": "Połączono — znaleziono {count} wdrożeń modelu",
+    "connectionSuccessEmpty": "Połączono, ale na tym koncie nie znaleziono żadnych wdrożeń modeli.",
+    "checkingConnection": "Sprawdzanie połączenia...",
+    "next": "Dalej",
+    "back": "Wstecz",
+    "cancel": "Anuluj",
+    "connect": "Połącz",
+    "save": "Zapisz",
+    "scanningResources": "Skanowanie subskrypcji Azure...",
+    "discoveryPartialWarning": "Nie można zeskanować {count, plural, one {# subskrypcji} other {# subskrypcji}}. Skorzystaj z ręcznego dodania, jeśli brakuje Twojego konta.",
+    "discoveryTruncatedWarning": "Zasobów było zbyt wiele, aby je w pełni zeskanować. Skorzystaj z ręcznego dodania, jeśli brakuje Twojego konta.",
+    "noAccountsDiscovered": "Nie znaleziono kont Foundry w Twoich subskrypcjach. Skorzystaj z ręcznego dodania, jeśli znasz ścieżkę.",
+    "retryScan": "Ponów skanowanie",
+    "searchAccountsPlaceholder": "Szukaj kont...",
+    "modelsSelectedCount": "Wybrano {selected} z {total} modeli",
+    "selectAll": "Zaznacz wszystko",
+    "deselectAll": "Odznacz wszystko",
+    "autoAddLabel": "Automatycznie dodawaj nowe modele",
+    "autoAddDescription": "Wdrażane później modele będą pojawiać się automatycznie na tym koncie. Niezaznaczone modele pozostaną wykluczone."
   }
 }

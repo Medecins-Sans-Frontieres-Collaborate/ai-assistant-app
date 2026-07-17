@@ -154,6 +154,54 @@ describe('ModelSelector', () => {
     });
   });
 
+  describe('custom-source (byom) models', () => {
+    const byomModel = {
+      id: 'byom-a1b2c3-my-gpt-deployment',
+      name: 'my-gpt-deployment',
+      maxLength: 128000,
+      tokenLimit: 128000,
+      deploymentName: 'my-gpt-deployment',
+      isCustomSourceModel: true,
+      modelSource:
+        '/subscriptions/sub/resourceGroups/rg/providers/Microsoft.CognitiveServices/accounts/my-acct',
+    } as OpenAIModel;
+
+    it('should never swap a byom model to the default model', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Hello', messageType: undefined },
+      ];
+
+      const result = selector.selectModel(byomModel, messages);
+
+      expect(result.modelId).toBe('byom-a1b2c3-my-gpt-deployment');
+    });
+
+    it('should pass the byom model config through as-is', () => {
+      const messages: Message[] = [
+        { role: 'user', content: 'Hello', messageType: undefined },
+      ];
+
+      const result = selector.selectModel(byomModel, messages);
+
+      expect(result.modelConfig).toBe(byomModel);
+    });
+
+    it('should not upgrade byom models to vision on image conversations', () => {
+      const messages: Message[] = [
+        {
+          role: 'user',
+          content: 'What is in this image?',
+          messageType: MessageType.IMAGE,
+        },
+      ];
+
+      const result = selector.selectModel(byomModel, messages);
+
+      expect(result.modelId).toBe('byom-a1b2c3-my-gpt-deployment');
+      expect(result.modelConfig).toBe(byomModel);
+    });
+  });
+
   describe('isValidModel', () => {
     it('should return true for valid model IDs', () => {
       expect(selector.isValidModel('gpt-4.1')).toBe(true);

@@ -13,6 +13,7 @@ import {
 } from '@/lib/utils/shared/chat/promptMatching';
 import { parseVariables } from '@/lib/utils/shared/chat/variables';
 
+import { ExtractionRecipe } from '@/types/extractionRecipe';
 import { Prompt } from '@/types/prompt';
 import { SlashMenuItem, SlashMenuItemType } from '@/types/slashMenu';
 import { Tone } from '@/types/tone';
@@ -40,28 +41,47 @@ export interface UseSlashMenuSelectionReturn {
     textValue: string,
     prompts: Prompt[],
     tones: Tone[],
+    recipes: ExtractionRecipe[],
   ) => void;
 }
 
 export interface UseSlashMenuSelectionOptions {
   prompts: Prompt[];
   tones: Tone[];
+  recipes: ExtractionRecipe[];
   onPromptSelect?: (
     prompt: Prompt,
     variables: string[],
     hasVariables: boolean,
   ) => void;
   onToneSelect?: (tone: Tone) => void;
+  onRecipeSelect?: (recipe: ExtractionRecipe) => void;
   onResetInputState?: () => void;
 }
 
 /** Get the display name for a slash menu item */
-const getItemName = (item: SlashMenuItem): string =>
-  item.type === SlashMenuItemType.PROMPT ? item.prompt.name : item.tone.name;
+const getItemName = (item: SlashMenuItem): string => {
+  switch (item.type) {
+    case SlashMenuItemType.PROMPT:
+      return item.prompt.name;
+    case SlashMenuItemType.TONE:
+      return item.tone.name;
+    case SlashMenuItemType.RECIPE:
+      return item.recipe.name;
+  }
+};
 
 /** Get the ID for a slash menu item */
-const getItemId = (item: SlashMenuItem): string =>
-  item.type === SlashMenuItemType.PROMPT ? item.prompt.id : item.tone.id;
+const getItemId = (item: SlashMenuItem): string => {
+  switch (item.type) {
+    case SlashMenuItemType.PROMPT:
+      return item.prompt.id;
+    case SlashMenuItemType.TONE:
+      return item.tone.id;
+    case SlashMenuItemType.RECIPE:
+      return item.recipe.id;
+  }
+};
 
 /**
  * Hook to manage slash menu selection (prompts + tones) with keyboard navigation.
@@ -70,8 +90,10 @@ const getItemId = (item: SlashMenuItem): string =>
 export function useSlashMenuSelection({
   prompts,
   tones,
+  recipes,
   onPromptSelect,
   onToneSelect,
+  onRecipeSelect,
   onResetInputState,
 }: UseSlashMenuSelectionOptions): UseSlashMenuSelectionReturn {
   const [showSlashMenu, setShowSlashMenu] = useState<boolean>(false);
@@ -105,6 +127,14 @@ export function useSlashMenuSelection({
             tone,
           }),
         ),
+      ...recipes
+        .filter((r) => r.name.toLowerCase().includes(searchLower))
+        .map(
+          (recipe): SlashMenuItem => ({
+            type: SlashMenuItemType.RECIPE,
+            recipe,
+          }),
+        ),
     ];
 
     // Sort: usage count desc, then alphabetical asc
@@ -116,7 +146,7 @@ export function useSlashMenuSelection({
     });
 
     return items;
-  }, [prompts, tones, searchInputValue, usageCounts]);
+  }, [prompts, tones, recipes, searchInputValue, usageCounts]);
 
   const totalSelectableCount = filteredItems.length;
 
@@ -147,6 +177,18 @@ export function useSlashMenuSelection({
   );
 
   /**
+   * Handle selecting an extraction recipe
+   */
+  const handleRecipeSelectInternal = useCallback(
+    (recipe: ExtractionRecipe) => {
+      if (onRecipeSelect) {
+        onRecipeSelect(recipe);
+      }
+    },
+    [onRecipeSelect],
+  );
+
+  /**
    * Select the active item based on current index
    */
   const handleItemSelect = useCallback(() => {
@@ -159,10 +201,16 @@ export function useSlashMenuSelection({
     // Track usage
     incrementSlashMenuUsage(getItemId(item));
 
-    if (item.type === SlashMenuItemType.PROMPT) {
-      handlePromptSelectInternal(item.prompt);
-    } else {
-      handleToneSelectInternal(item.tone);
+    switch (item.type) {
+      case SlashMenuItemType.PROMPT:
+        handlePromptSelectInternal(item.prompt);
+        break;
+      case SlashMenuItemType.TONE:
+        handleToneSelectInternal(item.tone);
+        break;
+      case SlashMenuItemType.RECIPE:
+        handleRecipeSelectInternal(item.recipe);
+        break;
     }
     setShowSlashMenu(false);
   }, [
@@ -170,6 +218,7 @@ export function useSlashMenuSelection({
     activeItemIndex,
     handlePromptSelectInternal,
     handleToneSelectInternal,
+    handleRecipeSelectInternal,
     incrementSlashMenuUsage,
   ]);
 
@@ -229,7 +278,12 @@ export function useSlashMenuSelection({
    * Find and auto-select matching item based on text
    */
   const findAndSelectMatchingItem = useCallback(
-    (textValue: string, availablePrompts: Prompt[], availableTones: Tone[]) => {
+    (
+      textValue: string,
+      availablePrompts: Prompt[],
+      availableTones: Tone[],
+      availableRecipes: ExtractionRecipe[],
+    ) => {
       const matchResult = findPromptMatch(textValue);
       if (matchResult.matched) {
         const matchingPrompt = availablePrompts.find(
@@ -247,10 +301,23 @@ export function useSlashMenuSelection({
         );
         if (matchingTone) {
           handleToneSelectInternal(matchingTone);
+          return;
+        }
+
+        const matchingRecipe = availableRecipes.find(
+          (recipe) =>
+            recipe.name.toLowerCase() === matchResult.searchTerm.toLowerCase(),
+        );
+        if (matchingRecipe) {
+          handleRecipeSelectInternal(matchingRecipe);
         }
       }
     },
-    [handlePromptSelectInternal, handleToneSelectInternal],
+    [
+      handlePromptSelectInternal,
+      handleToneSelectInternal,
+      handleRecipeSelectInternal,
+    ],
   );
 
   // Sync scroll position with active item index

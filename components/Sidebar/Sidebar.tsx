@@ -19,6 +19,7 @@ import {
   IconTrash,
   IconUpload,
 } from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { signOut, useSession } from 'next-auth/react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -34,6 +35,7 @@ import { useSettings } from '@/client/hooks/settings/useSettings';
 import { useFolderManagement } from '@/client/hooks/ui/useFolderManagement';
 import { useUI } from '@/client/hooks/ui/useUI';
 
+import { createWorkflowConversation } from '@/lib/utils/app/conversationInit';
 import {
   exportConversation,
   readConversationFile,
@@ -48,6 +50,10 @@ import { usePlatformModifier } from '@/lib/utils/shared/platform';
 
 import { Conversation } from '@/types/chat';
 import { SearchMode } from '@/types/searchMode';
+import {
+  CONVERSATION_WORKFLOW_TYPES,
+  ConversationWorkflowType,
+} from '@/types/workflow';
 
 import { SearchModal } from './components/SearchModal';
 import { SidebarHeader } from './components/SidebarHeader';
@@ -55,12 +61,15 @@ import { CustomizationsModal } from '@/components/QuickActions/CustomizationsMod
 import { ConfirmDialog } from '@/components/UI/ConfirmDialog';
 import { DropdownPortal } from '@/components/UI/DropdownPortal';
 import Modal from '@/components/UI/Modal';
+import { createInitialWorkflowState } from '@/components/Workflows/initialState';
+import { WORKFLOW_META } from '@/components/Workflows/registryMeta';
 
 import { ConversationItem } from './ConversationItem';
 import { UserMenu } from './UserMenu';
 import { VirtualConversationList } from './VirtualConversationList';
 
 import { useArtifactStore } from '@/client/stores/artifactStore';
+import { useUIStore } from '@/client/stores/uiStore';
 import { getOrganizationAgentIdFromModelId } from '@/lib/organizationAgents';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -69,6 +78,11 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export const Sidebar = memo(function Sidebar() {
   const t = useTranslations();
+  const tWorkflows = useTranslations('workflows');
+  // Fail-closed: conversation workflows are a brand-new surface; an LD
+  // outage must degrade to hidden. See docs/LAUNCHDARKLY_FLAGS.md.
+  const { conversationWorkflows } = useFlags();
+  const workflowsEnabled = conversationWorkflows === true;
   const modifierLabel = usePlatformModifier();
   const params = useParams();
   const locale = params?.locale || 'en';
@@ -99,7 +113,13 @@ export const Sidebar = memo(function Sidebar() {
   } = useSettings();
 
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [isCustomizationsOpen, setIsCustomizationsOpen] = useState(false);
+  // Quick Actions modal state lives in uiStore so other surfaces (e.g. the
+  // extraction recipe picker) can open it on a specific tab.
+  const isCustomizationsOpen = useUIStore((s) => s.isCustomizationsOpen);
+  const setIsCustomizationsOpen = useUIStore((s) => s.setIsCustomizationsOpen);
+  const setCustomizationsInitialTab = useUIStore(
+    (s) => s.setCustomizationsInitialTab,
+  );
   const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null);
   const [isLoadingPhoto, setIsLoadingPhoto] = useState(true);
   const [showNewChatMenu, setShowNewChatMenu] = useState(false);
@@ -120,7 +140,8 @@ export const Sidebar = memo(function Sidebar() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const newChatButtonRef = useRef<HTMLDivElement>(null);
   const newFolderButtonRef = useRef<HTMLDivElement>(null);
-  const folderMenuRef = useRef<HTMLDivElement>(null);
+  // Attached to the open folder menu's trigger button (one menu open at a time)
+  const folderMenuTriggerRef = useRef<HTMLButtonElement>(null);
 
   // Determine which conversations to display (search results or all)
   const displayConversations = searchTerm
@@ -192,31 +213,23 @@ export const Sidebar = memo(function Sidebar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Close folder menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        folderMenuRef.current &&
-        !folderMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowFolderMenuId(null);
-      }
-    };
-
-    if (showFolderMenuId) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [showFolderMenuId]);
+  const handleCloseFolderMenu = useCallback(
+    () => setShowFolderMenuId(null),
+    [],
+  );
 
   const handleNewConversation = () => {
     setShowNewChatMenu(false); // Close menu when creating new conversation
 
-    // Check if the latest conversation is already empty
+    // Check if the latest conversation is already empty (workflow
+    // conversations don't count — reusing one would open its workflow
+    // window instead of a fresh chat)
     const latestConversation = conversations[0];
-    if (latestConversation && latestConversation.messages.length === 0) {
+    if (
+      latestConversation &&
+      latestConversation.messages.length === 0 &&
+      !latestConversation.conversationType
+    ) {
       if (latestConversation.id !== selectedConversation?.id) {
         // Switch to the existing empty conversation
         selectConversation(latestConversation.id);
@@ -277,6 +290,37 @@ export const Sidebar = memo(function Sidebar() {
 
     addConversation(newConversation);
     selectConversation(newConversation.id);
+  };
+
+  const handleNewWorkflowConversation = (type: ConversationWorkflowType) => {
+    setShowNewChatMenu(false);
+
+    // Reuse the latest conversation if it's still empty and untyped —
+    // converting it avoids leaving an orphan empty chat in the sidebar.
+    const latestConversation = conversations[0];
+    if (
+      latestConversation &&
+      latestConversation.messages.length === 0 &&
+      !latestConversation.conversationType
+    ) {
+      updateConversation(latestConversation.id, {
+        conversationType: type,
+        workflowState: createInitialWorkflowState(type),
+      });
+      selectConversation(latestConversation.id);
+      return;
+    }
+
+    if (models.length === 0) return;
+    const newConversation = createWorkflowConversation(
+      models,
+      defaultModelId,
+      systemPrompt || '',
+      temperature || 0.5,
+      type,
+      createInitialWorkflowState(type),
+    );
+    addConversation(newConversation);
   };
 
   // Trigger new-conversation from keyboard shortcut event.
@@ -562,6 +606,31 @@ export const Sidebar = memo(function Sidebar() {
           >
             <div className="rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark">
               <div className="p-1">
+                {workflowsEnabled && (
+                  <>
+                    {CONVERSATION_WORKFLOW_TYPES.map((type) => {
+                      const meta = WORKFLOW_META[type];
+                      const Icon = meta.icon;
+                      const labels: Record<typeof meta.i18nKey, string> = {
+                        translation: tWorkflows('sidebar.newTranslation'),
+                        document: tWorkflows('sidebar.newDocument'),
+                        dataAnalysis: tWorkflows('sidebar.newDataAnalysis'),
+                        map: tWorkflows('sidebar.newMap'),
+                      };
+                      return (
+                        <button
+                          key={type}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
+                          onClick={() => handleNewWorkflowConversation(type)}
+                        >
+                          <Icon size={14} />
+                          {labels[meta.i18nKey]}
+                        </button>
+                      );
+                    })}
+                    <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                  </>
+                )}
                 <button
                   className="w-full text-left px-3 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800 rounded flex items-center gap-2"
                   onClick={handleImportClick}
@@ -601,7 +670,10 @@ export const Sidebar = memo(function Sidebar() {
           {/* Quick Actions button - visible in both states */}
           <button
             className={`group relative flex items-center w-full rounded-lg text-sm text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 transition-all duration-300 ${showChatbar ? 'gap-2 px-3 py-2' : 'justify-center px-2 py-3'}`}
-            onClick={() => setIsCustomizationsOpen(true)}
+            onClick={() => {
+              setCustomizationsInitialTab('prompts');
+              setIsCustomizationsOpen(true);
+            }}
             title={t('sidebar.quickActionsTitle')}
             aria-label={t('sidebar.quickActions')}
           >
@@ -766,16 +838,16 @@ export const Sidebar = memo(function Sidebar() {
                         </span>
                       )}
                       <div
-                        ref={
-                          showFolderMenuId === folder.id
-                            ? folderMenuRef
-                            : undefined
-                        }
                         className={`relative shrink-0 transition-opacity ${showFolderMenuId === folder.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                       >
                         {folderManager.editingFolderId !== folder.id && (
                           <>
                             <button
+                              ref={
+                                showFolderMenuId === folder.id
+                                  ? folderMenuTriggerRef
+                                  : undefined
+                              }
                               className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -797,10 +869,17 @@ export const Sidebar = memo(function Sidebar() {
                               />
                             </button>
 
-                            {/* Dropdown menu */}
-                            {showFolderMenuId === folder.id && (
+                            {/* Dropdown menu — portaled so it isn't clipped
+                                by the sidebar scroller or overpainted by
+                                sibling rows' stacking contexts */}
+                            <DropdownPortal
+                              triggerRef={folderMenuTriggerRef}
+                              isOpen={showFolderMenuId === folder.id}
+                              onClose={handleCloseFolderMenu}
+                              align="right"
+                            >
                               <div
-                                className="absolute right-0 top-full mt-1 z-50 w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
+                                className="w-48 rounded-md border border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-surface-dark"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <div className="p-1">
@@ -863,7 +942,7 @@ export const Sidebar = memo(function Sidebar() {
                                   </button>
                                 </div>
                               </div>
-                            )}
+                            </DropdownPortal>
                           </>
                         )}
                       </div>

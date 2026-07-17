@@ -7,6 +7,20 @@
 import { z } from 'zod';
 
 /**
+ * Boolean-from-string env schema.
+ *
+ * Env vars are always strings, so a "boolean" flag is modeled as a string with
+ * a default that transforms to `true` only for the literal `'true'`. Factored
+ * out so every boolean flag in this file shares one definition instead of
+ * repeating the `.default(...).transform(...)` triple.
+ */
+const booleanString = (defaultValue: boolean) =>
+  z
+    .string()
+    .default(defaultValue ? 'true' : 'false')
+    .transform((val) => val === 'true');
+
+/**
  * Environment enum
  */
 const EnvironmentEnum = z.enum([
@@ -52,14 +66,32 @@ const serverEnvSchema = z.object({
   AZURE_AI_FOUNDRY_RESOURCE_ID_EU: z.string().optional(),
   AZURE_AI_FOUNDRY_RESOURCE_ID_US: z.string().optional(),
 
+  // Per-region chat endpoints for cross-region routing (a US user chatting
+  // with the EU instance of a dually-hosted model, and EU users pinned to EU
+  // resources). Optional: when unset for a region, the endpoint is derived
+  // from AZURE_AI_FOUNDRY_ENDPOINT_{REGION}; when neither exists, chat falls
+  // back to the default (region-blind) clients. Keys are needed because the
+  // Foundry OpenAI-compatible data plane is API-key-authenticated and keys
+  // are account-scoped.
+  AZURE_OPENAI_ENDPOINT_EU: z.string().url().optional(),
+  AZURE_OPENAI_ENDPOINT_US: z.string().url().optional(),
+  OPENAI_API_KEY_EU: z.string().optional(),
+  OPENAI_API_KEY_US: z.string().optional(),
+
   // When true, agent discovery also lists new-model agent objects via the
   // Foundry data plane (in addition to legacy ARM "Agent Application"
   // resources) and unions the results. Best-effort: failures fall back to
   // ARM-only discovery. Set to "false" to restore pure legacy behavior.
-  FOUNDRY_DATAPLANE_DISCOVERY: z
-    .string()
-    .default('true')
-    .transform((val) => val === 'true'),
+  FOUNDRY_DATAPLANE_DISCOVERY: booleanString(true),
+
+  // Model discovery is ALWAYS ON (no flag): the /api/models route attempts
+  // live Foundry deployment discovery and degrades gracefully to the static
+  // list when regional accounts aren't configured or discovery fails.
+  // When true, discovered deployments that have no local metadata entry are
+  // still shown, using conservative inferred defaults. When false, only
+  // discovered models that also have metadata are shown. Server-only: never
+  // exposed to the client.
+  SHOW_MODELS_WITHOUT_METADATA: booleanString(false),
 
   // Azure Translator (Document Translation) - falls back to AI Foundry endpoint in service layer
   AZURE_TRANSLATOR_ENDPOINT: z.string().url().optional(),
@@ -79,17 +111,30 @@ const serverEnvSchema = z.object({
   SEARCH_DATASOURCE: z.string().optional(),
   SEARCH_INDEXER: z.string().optional(),
   SEARCH_ENDPOINT_API_KEY: z.string().optional(), // Legacy: Used by OpenAI data_sources feature in documentSummary.ts
-  ALLOW_INDEX_DOWNTIME: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  ALLOW_INDEX_DOWNTIME: booleanString(false),
+
+  // MCP (Model Context Protocol) connectors
+  // Server-side gate for ARBITRARY (non-catalog) MCP server URLs — defense in
+  // depth behind the client-side toggle + LaunchDarkly flag. Curated catalog
+  // entries (config/mcpCatalog.ts) are not affected by this flag.
+  MCP_CUSTOM_SERVERS_ENABLED: booleanString(false),
+  // Pre-registered OAuth apps for curated MCP connectors. Needed because the
+  // providers don't support web-app dynamic client registration: GitHub has
+  // no DCR at all, and Asana's DCR only allows loopback redirect URIs (so it
+  // works for localhost dev but never for a deployed origin). Register an app
+  // in the provider's console with redirect URI
+  // `${NEXTAUTH_URL}/mcp-oauth-callback`, then set these. The client SECRET
+  // never leaves the server — the token proxy injects it.
+  MCP_OAUTH_GITHUB_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
+  MCP_OAUTH_ASANA_CLIENT_ID: z.string().optional(),
+  MCP_OAUTH_ASANA_CLIENT_SECRET: z.string().optional(),
 
   // Application Configuration
-  DEFAULT_MODEL: z.string().default('gpt-5.2-chat'),
-  DEFAULT_USE_KNOWLEDGE_BASE: z
-    .string()
-    .default('false')
-    .transform((val) => val === 'true'),
+  // Optional explicit override; when unset the default model resolves
+  // dynamically to the latest ring-enabled standard GPT (config/models.ts).
+  DEFAULT_MODEL: z.string().optional(),
+  DEFAULT_USE_KNOWLEDGE_BASE: booleanString(false),
   FORCE_LOGOUT_ON_REFRESH_FAILURE: z.string().default('true'),
 
   // NextAuth
@@ -172,8 +217,23 @@ function validateEnv() {
 
     return parsed.data;
   } else {
-    // Client-side: only validate NEXT_PUBLIC_ variables
-    const parsed = clientEnvSchema.safeParse(process.env);
+    // Client-side: only validate NEXT_PUBLIC_ variables.
+    //
+    // Each variable MUST be referenced as a literal `process.env.NEXT_PUBLIC_X`
+    // member expression: the bundler inlines exactly those expressions into the
+    // client bundle, while a bare `process.env` compiles to an empty shim —
+    // passing it to safeParse would silently reduce every value to its schema
+    // default in the browser.
+    const parsed = clientEnvSchema.safeParse({
+      NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,
+      NEXT_PUBLIC_BUILD: process.env.NEXT_PUBLIC_BUILD,
+      NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT:
+        process.env.NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT,
+      NEXT_PUBLIC_DEFAULT_TEMPERATURE:
+        process.env.NEXT_PUBLIC_DEFAULT_TEMPERATURE,
+      NEXT_PUBLIC_EMAIL: process.env.NEXT_PUBLIC_EMAIL,
+      LAUNCHDARKLY_CLIENT_ID: process.env.LAUNCHDARKLY_CLIENT_ID,
+    });
 
     if (!parsed.success) {
       console.error('❌ Invalid client environment variables:');

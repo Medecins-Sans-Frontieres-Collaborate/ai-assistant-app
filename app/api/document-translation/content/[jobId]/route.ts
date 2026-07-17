@@ -20,6 +20,10 @@ import {
 } from '@/lib/utils/server/api/apiResponse';
 import { AzureBlobStorage, BlobProperty } from '@/lib/utils/server/blob/blob';
 import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  isSafeBlobPathId,
+  sanitizeBlobExtension,
+} from '@/lib/utils/shared/blobPath';
 
 import { getDocumentContentType } from '@/types/documentTranslation';
 
@@ -39,17 +43,19 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
   const { jobId } = await params;
 
-  // Validate jobId format (should be UUID)
-  const uuidRegex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  if (!uuidRegex.test(jobId)) {
+  // Validate jobId format (should be UUID). Both a path segment AND the SAS
+  // container structure depend on this being traversal-free.
+  if (!isSafeBlobPathId(jobId)) {
     return notFoundResponse('Translated document', 'Invalid job ID format.');
   }
 
   // Get query parameters
   const searchParams = request.nextUrl.searchParams;
   const filename = searchParams.get('filename') || 'translated_document';
-  const ext = searchParams.get('ext') || 'txt';
+  // `ext` is fully attacker-controlled query input interpolated into the blob
+  // path — sanitize to a bare alphanumeric extension so it can't traverse
+  // (`../`, `%2e`, separators, a smuggled query string) or escape the slot.
+  const ext = sanitizeBlobExtension(searchParams.get('ext'), 'txt');
   const isOriginal = searchParams.get('original') === 'true';
 
   try {

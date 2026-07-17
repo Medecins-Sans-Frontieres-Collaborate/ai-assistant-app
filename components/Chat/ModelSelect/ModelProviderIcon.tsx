@@ -5,7 +5,9 @@ import {
   AzureOpenAIIcon,
   ClaudeAIIconBrand,
   DeepSeekIcon,
+  KimiIcon,
   MetaIcon,
+  MistralIcon,
   OpenAIIcon,
   XAIIcon,
 } from '@/components/Icons/providers';
@@ -39,6 +41,10 @@ export const ModelProviderIcon: React.FC<ModelProviderIconProps> = ({
       return <MetaIcon {...iconProps} />;
     case 'anthropic':
       return <ClaudeAIIconBrand {...iconProps} />;
+    case 'mistral':
+      return <MistralIcon {...iconProps} />;
+    case 'moonshot':
+      return <KimiIcon {...iconProps} />;
     default:
       return null;
   }

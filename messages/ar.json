@@ -433,7 +433,22 @@
     "noProjectsFound": "لم يتم العثور على مشاريع. سيتم استخدام \"default\".",
     "selectAllRequired": "يرجى اختيار اشتراك وحساب ومشروع.",
     "subscriptionRequired": "اختر اشتراكاً",
-    "accountRequired": "اختر حساب Foundry"
+    "accountRequired": "اختر حساب Foundry",
+    "projectSelectionRequired": "يرجى اختيار مشروع من القائمة.",
+    "scanningResources": "جارٍ مسح اشتراكات Azure الخاصة بك...",
+    "searchProjectsPlaceholder": "ابحث عن المشاريع...",
+    "noProjectsDiscovered": "لم يتم العثور على مشاريع Foundry في اشتراكاتك. استخدم الإدخال اليدوي إذا كنت تعرف المسار.",
+    "discoveryPartialWarning": "تعذر مسح {count, plural, one {# اشتراك} other {# اشتراكات}}. استخدم الإدخال اليدوي إذا كان مشروعك غير موجود.",
+    "discoveryTruncatedWarning": "عدد الموارد كبير جدًا بحيث لا يمكن مسحها بالكامل. استخدم الإدخال اليدوي إذا كان مشروعك غير موجود.",
+    "retryScan": "إعادة المحاولة",
+    "next": "التالي",
+    "back": "السابق",
+    "selectAgentsDescription": "اختر الوكلاء من هذا المشروع الذين سيظهرون في منتقي النماذج.",
+    "selectAll": "تحديد الكل",
+    "deselectAll": "إلغاء تحديد الكل",
+    "agentsSelectedCount": "تم تحديد {selected} من {total} وكلاء",
+    "autoAddLabel": "إضافة الوكلاء الجدد تلقائياً",
+    "autoAddDescription": "سيتم عرض الوكلاء المنشورين إلى هذا المشروع لاحقاً تلقائياً. يظل الوكلاء غير المحددين مستبعدين."
   },
   "Quick Actions": "إجراءات سريعة",
   "Type / in chat to access your prompts": "اكتب / في الدردشة للوصول إلى مطالباتك",
@@ -706,7 +721,19 @@
       "listingTools": "يتم البحث عن الأدوات المتاحة…",
       "analyzingFiles": "يتم تحليل ملفاتك…",
       "searchingKnowledge": "يتم البحث في قاعدة المعرفة…",
-      "cancellingPriorTool": "إلغاء طلب الأداة السابق…"
+      "cancellingPriorTool": "إلغاء طلب الأداة السابق…",
+      "workflow": {
+        "preparingDocument": "جارٍ تجهيز المراجع...",
+        "writingDocument": "جارٍ كتابة المستند...",
+        "analyzingSource": "جارٍ تحليل النص المصدر...",
+        "translating": "جارٍ الترجمة...",
+        "reviewingTranslation": "جولة المراجعة {round} من {total}...",
+        "revisingTranslation": "تطبيق ملاحظات المراجعة...",
+        "extractingRows": "جارٍ استخراج الصفوف من {source}...",
+        "transformingTable": "جارٍ تحويل الجدول...",
+        "findingLocations": "جارٍ تحديد المواقع...",
+        "updatingMap": "جارٍ تحديث الخريطة..."
+      }
     },
     "toolSummary": {
       "usedTools": "تم استخدام {count, plural, one {أداة واحدة} other {{count} أدوات}}",
@@ -767,7 +794,8 @@
     "listen": "استمع",
     "processingAudio": "جاري معالجة الصوت...",
     "ttsError": "حدث خطأ أثناء إنشاء الصوت. يرجى المحاولة مرة أخرى.",
-    "unsupportedMessageType": "خطأ في عرض الرسالة: نوع رسالة غير مدعوم"
+    "unsupportedMessageType": "خطأ في عرض الرسالة: نوع رسالة غير مدعوم",
+    "addLanguageOption": "إضافة \"{name}\"..."
   },
   "sidebar": {
     "collapseSidebar": "طي الشريط الجانبي",
@@ -1090,11 +1118,13 @@
     "responseSection": "الرد",
     "voiceSection": "الصوت",
     "behaviorSection": "السلوك",
-    "resetChatSettings": "إعادة تعيين إعدادات المحادثة",
-    "resetChatSettingsConfirmTitle": "هل ترغب في إعادة تعيين إعدادات المحادثة؟",
-    "resetChatSettingsConfirmMessage": "سيؤدي ذلك إلى استعادة الإعدادات الافتراضية لكل ما هو موجود في هذه اللوحة: درجة الحرارة، التعليمات المخصصة، عنك، رد النموذج، سرعة البث، تحويل النص إلى كلام، الملفات النشطة، والتأكيدات. لن يؤثر هذا على محادثاتك.",
+    "resetChatSettings": "إعادة ضبط إعدادات المحادثة",
+    "resetChatSettingsConfirmTitle": "إعادة ضبط إعدادات المحادثة؟",
+    "resetChatSettingsConfirmMessage": "سيتم استعادة الإعدادات الافتراضية لكل ما في هذه اللوحة: درجة الحرارة، التعليمات المخصصة، معلومات عنك، رد النموذج، سرعة البث، تحويل النص إلى كلام، الملفات النشطة والتأكيدات. لن يؤثر ذلك على محادثاتك.",
     "customInstructionsLabel": "تعليمات مخصصة*",
-    "defaultTemperatureLabel": "درجة الحرارة الافتراضية*"
+    "defaultTemperatureLabel": "درجة الحرارة الافتراضية*",
+    "Usage & Impact": "الاستخدام والأثر",
+    "Connectors": "الموصلات"
   },
   "notFound": {
     "lostDog": "كلب ضائع"
@@ -1297,33 +1327,78 @@
     },
     "title": "اختر نموذجاً",
     "modelsDescription": "اختر نموذج ذكاء اصطناعي لمحادثتك. لكل نموذج ميزات مختلفة — اختر واحداً لعرض التفاصيل.",
-    "recommended": "موصى به"
+    "recommended": "موصى به",
+    "familyAll": "الكل",
+    "familyFilterLabel": "تصفية النماذج حسب العائلة",
+    "searchPlaceholder": "ابحث عن النماذج",
+    "searchEmpty": "لا توجد نماذج مطابقة لبحثك.",
+    "star": "تمييز {name} بنجمة",
+    "unstar": "إزالة التمييز عن {name}",
+    "otherFamily": "أخرى",
+    "hostedExternally": "يعمل على البنية التحتية الخاصة بالمزود من خلال Azure AI Foundry، وليس ضمن بيئة Azure الخاصة بـ MSF.",
+    "hostedIn": {
+      "label": "مستضاف في {regions}",
+      "tooltip": "المنطقة/المناطق في Azure التي تم نشر هذا النموذج فيها. تتم معالجة المحادثات في منطقتك الخاصة."
+    },
+    "badges": {
+      "external": "خارجي",
+      "externalTooltip": "يعمل على البنية التحتية الخاصة بالمزود من خلال Azure AI Foundry، وليس ضمن بيئة Azure الخاصة بـ MSF.",
+      "regionHostedTooltip": "مستضاف في منطقة Azure {region}. تتم معالجة المحادثات مع هذا النموذج هناك."
+    },
+    "favorites": "المفضلة",
+    "euResidencyNote": "جميع النماذج تعمل في منطقة Azure الأوروبية.",
+    "hostedRegion": {
+      "label": "المنطقة المستضافة",
+      "processedIn": "تتم معالجة هذه المحادثة في منطقة Azure {region}.",
+      "euOnlyNote": "{name} مستضاف في منطقة Azure الأوروبية؛ تتم معالجة المحادثات معه هناك."
+    },
+    "version": {
+      "label": "الإصدار"
+    },
+    "reasoningModel": "نموذج استدلال: يفكر خطوة بخطوة قبل الإجابة. أبطأ، لكنه أفضل في المشكلات الصعبة.",
+    "variant": {
+      "label": "النُسخة"
+    },
+    "deployment": {
+      "title": "النشر",
+      "source": "المصدر",
+      "account": "الحساب",
+      "location": "الموقع",
+      "deployment": "النشر",
+      "modelVersion": "إصدار النموذج",
+      "publisher": "الناشر"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "نموذج ذكاء اصطناعي مدعوم بـ GPT-4.1 مع بحث الويب في الوقت الفعلي عبر Bing. يوفر معلومات محدثة والتحقق من الحقائق ومعرفة الأحداث الجارية. مثالي للبحث الذي يتطلب معلومات حديثة وتحليل الأخبار والتحقق من الحقائق.",
-      "knowledgeCutoff": "بحث الويب في الوقت الفعلي"
+      "knowledgeCutoff": "بحث الويب في الوقت الفعلي",
+      "tagline": "الجيل السابق من OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "نموذج OpenAI الأكثر تقدمًا، يتفوق في الاستدلال المعقد وتوليد الكود وحل المشكلات التقنية. مثالي للمهام التحليلية وتحديات البرمجة والبحث والتفسيرات المفصلة. يدعم جهد الاستدلال القابل للتعديل ومستوى تفصيل الاستجابة.",
-      "knowledgeCutoff": "6 أغسطس 2025، 20:00"
+      "knowledgeCutoff": "6 أغسطس 2025، 20:00",
+      "tagline": "إصدار GPT السابق"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "نسخة أسرع وأكثر فعالية من حيث التكلفة من GPT-5، محسنة للسرعة مع الحفاظ على جودة عالية. مثالية للمهام اليومية والاستعلامات السريعة وتوجيه الأدوات والتطبيقات التي تتطلب أوقات استجابة سريعة. توازن ممتاز بين الأداء والكفاءة.",
-      "knowledgeCutoff": "6 أغسطس 2025، 20:00"
+      "knowledgeCutoff": "6 أغسطس 2025، 20:00",
+      "tagline": "أسرع وأقل تكلفة"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "نسخة متخصصة من GPT-5 محسنة للتفاعلات المحادثية والذكاء العاطفي. يتفوق في التواصل التعاطفي ودعم الصحة النفسية والكتابة الإبداعية والعصف الذهني والحوار الطبيعي. مثالي للمحادثات غير الرسمية وسيناريوهات الاستشارة والمهام التي تتطلب الوعي العاطفي.",
-      "knowledgeCutoff": "1 أكتوبر 2025، 20:00"
+      "knowledgeCutoff": "1 أكتوبر 2025، 20:00",
+      "tagline": "إصدار GPT السابق للمحادثات"
     },
     "o3": {
       "name": "o3",
       "description": "نموذج الاستدلال الأكثر تقدمًا من OpenAI مع قدرات ثورية في حل المشكلات. يتفوق في الرياضيات المعقدة والاستدلال العلمي وتحديات البرمجة والمهام المنطقية متعددة الخطوات. نافذة سياق موسعة 200K. يدعم التحكم في جهد الاستدلال.",
-      "knowledgeCutoff": "8 أبريل 2025، 20:00"
+      "knowledgeCutoff": "8 أبريل 2025، 20:00",
+      "tagline": "تفكير متسلسل وعميق"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1333,57 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "متخصص في الاستدلال يظهر عمله خطوة بخطوة. ممتاز لمسائل الرياضيات والألغاز المنطقية وفهم المفاهيم المعقدة. شاهد كيف يفكر في المشكلات في الوقت الفعلي.",
-      "knowledgeCutoff": "20 يناير 2025"
+      "knowledgeCutoff": "20 يناير 2025",
+      "tagline": "يعرض خطوات التفكير خطوة بخطوة"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "نموذج متعدد الاستخدامات جيد بشكل خاص في البرمجة والكتابة التقنية. ممتاز لتصحيح الكود وكتابة التوثيق وشرح المفاهيم التقنية. سريع وموثوق لأعمال التطوير.",
-      "knowledgeCutoff": "16 أبريل 2025، 00:45"
+      "knowledgeCutoff": "16 أبريل 2025، 00:45",
+      "tagline": "بديل مفتوح المصدر"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "نموذج متعدد الاستخدامات من xAI معروف بالردود الدقيقة. ممتاز للمناقشات المفتوحة والمشاريع الإبداعية ومعالجة المشكلات المعقدة.",
-      "knowledgeCutoff": "13 مايو 2025، 00:16"
+      "knowledgeCutoff": "13 مايو 2025، 00:16",
+      "tagline": "بديل xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "النموذج الأكثر قدرة من Anthropic مع استدلال استثنائي وبرمجة وقدرات إبداعية. مثالي للتحليلات المعقدة والبحث والمهام التي تتطلب فهمًا عميقًا.",
-      "knowledgeCutoff": "يناير 2025"
+      "knowledgeCutoff": "يناير 2025",
+      "tagline": "جيل Opus السابق"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "نموذج Claude متوازن يقدم أداءً ممتازًا في البرمجة والتحليل والمهام الإبداعية. ممتاز للاستخدام اليومي مع أوقات استجابة سريعة.",
-      "knowledgeCutoff": "يناير 2025"
+      "knowledgeCutoff": "يناير 2025",
+      "tagline": "جيل Sonnet السابق"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "نموذج Claude Opus من الجيل السابق. ممتاز لمهام البرمجة المعقدة والتحليل المفصل والفهم الدقيق.",
-      "knowledgeCutoff": "يناير 2025"
+      "knowledgeCutoff": "يناير 2025",
+      "tagline": "جيل Opus السابق"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "نموذج Claude سريع وفعال من حيث التكلفة محسن للمهام السريعة. ممتاز للاستعلامات البسيطة والتلخيص والتطبيقات عالية الحجم.",
-      "knowledgeCutoff": "يناير 2025"
+      "knowledgeCutoff": "يناير 2025",
+      "tagline": "نسخة Claude السريعة"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "أكثر نموذج تقدماً من OpenAI، يتفوق في التفكير المعقد، وتوليد الأكواد، وحل المشكلات التقنية. الأنسب للمهام التحليلية، وتحديات البرمجة، والبحث، وشرح التفاصيل الدقيقة. يدعم ضبط مستوى التعقيد ووضوح الردود.",
-      "knowledgeCutoff": "ديسمبر 2025"
+      "knowledgeCutoff": "ديسمبر 2025",
+      "tagline": "برمجة، تحليل، بحث"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "ديسمبر 2025",
-      "description": "نسخة متخصصة من GPT-5.2 محسّنة للتفاعلات الحوارية والذكاء العاطفي. تتفوق في التواصل المتعاطف، والكتابة الإبداعية، وتوليد الأفكار، والحوار الطبيعي. مثالية للمحادثات غير الرسمية، وبيئات الاستشارة، والمهام التي تتطلب وعيًا عاطفيًا."
+      "description": "نسخة متخصصة من GPT-5.2 محسّنة للتفاعلات الحوارية والذكاء العاطفي. تتفوق في التواصل المتعاطف، والكتابة الإبداعية، وتوليد الأفكار، والحوار الطبيعي. مثالية للمحادثات غير الرسمية، وبيئات الاستشارة، والمهام التي تتطلب وعيًا عاطفيًا.",
+      "tagline": "محادثات، عصف ذهني"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "أقوى نموذج من Anthropic. مناسب للكتابة المطولة، والبحث، والمهام التي تتطلب تفكيراً دقيقاً.",
-      "knowledgeCutoff": "فبراير 2026"
+      "knowledgeCutoff": "فبراير 2026",
+      "tagline": "كتابة وتحليل النصوص الطويلة"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "نموذج Claude متوازن. مناسب للكتابة اليومية، والتحليل، والبرمجة مع استجابات سريعة.",
-      "knowledgeCutoff": "فبراير 2026"
+      "knowledgeCutoff": "فبراير 2026",
+      "tagline": "Claude متوازن للاستخدام اليومي"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "نموذج مفتوح المصدر من Meta. فعال للكتابة والتلخيص والأسئلة السريعة.",
+      "tagline": "بديل مفتوح المصدر"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "أحدث نموذج رئيسي من OpenAI. قوي في الكتابة، البحث، البرمجة، وحل المشكلات المعقدة.",
+      "tagline": "أحدث إصدارات GPT"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "أصغر وأسرع نسخة من GPT. الأفضل للمهام البسيطة والسريعة بأقل تكلفة.",
+      "tagline": "أصغر وأسرع إصدار من GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "نسخة محادثة من GPT معدلة للحوار. جيدة للدردشة العادية، توليد الأفكار، والنقاشات الداعمة.",
+      "tagline": "إصدار GPT جديد مخصص للمحادثات"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "نموذج GPT متعدد الوسائط أقدم. مناسب للكتابة اليومية والأسئلة والأجوبة حيث لا يتطلب الأمر أحدث الإمكانيات.",
+      "tagline": "إصدار GPT متعدد الوسائط الأقدم"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "نسخة أصغر وأسرع من GPT-4.1 للمهام اليومية السريعة.",
+      "tagline": "إصدار GPT خفيف من الجيل السابق"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "أحدث وأقوى نموذج من Anthropic. ممتاز للكتابة المطولة، البحث، البرمجة، والتحليل الدقيق.",
+      "tagline": "أحدث وأقوى إصدار Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "أحدث نموذج مفتوح المصدر من DeepSeek. موثوق لكتابة النصوص العامة والأسئلة التقنية.",
+      "tagline": "بديل مفتوح المصدر"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "النموذج الرئيسي من Mistral. بديل أوروبي للكتابة والتلخيص والأسئلة العامة.",
+      "tagline": "نموذج أوروبي مفتوح المصدر"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "مراجعة سابقة من GPT-5. ما زال قويًا في الكتابة، التحليل، والبرمجة.",
+      "tagline": "إصدار GPT-5 أقدم"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "نسخة GPT-5 سابقة معدلة للمحادثة. جيدة للمحادثات اليومية وتوليد الأفكار.",
+      "tagline": "إصدار GPT أقدم مخصص للمحادثات"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "أصغر نسخة من GPT-5. الأفضل للمهام السريعة والبسيطة بأقل تكلفة.",
+      "tagline": "إصدار GPT صغير من الجيل السابق"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "أصغر نسخة من GPT-4.1. مناسب للمهام السريعة والبسيطة حيث تهم السرعة والتكلفة أكثر.",
+      "tagline": "أصغر إصدار من GPT الجيل السابق"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "نسخة صغيرة وسريعة من GPT-4o. مناسبة للمهام اليومية السريعة حيث لا يتطلب الأمر أحدث الإمكانيات.",
+      "tagline": "إصدار GPT متعدد الوسائط خفيف وأقدم"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "نموذج استدلال مدمج. جيد للرياضيات والمنطق والمسائل المتدرجة بتكلفة أقل من o3.",
+      "tagline": "تفكير سريع وبتكلفة مناسبة"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "نموذج استدلال مدمج أقدم. يتعامل مع الرياضيات والعلوم والألغاز المنطقية بميزانية محدودة.",
+      "tagline": "تفكير متسلسل مضغوط"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "أذكى نموذج من Anthropic، الأول من عائلة Claude 5. ممتاز لأصعب مهام الكتابة والبحث والبرمجة.",
+      "tagline": "نموذج Anthropic المتقدم"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "أحدث نسخة متوازنة من Claude، وأول أفراد عائلة Claude 5. قوي في الكتابة اليومية، التحليل، والبرمجة مع استجابات سريعة.",
+      "tagline": "أحدث إصدار متوازن من Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "نموذج Mistral متوسط الحجم. بديل أوروبي يوازن بين الأداء والسرعة في الأعمال اليومية.",
+      "tagline": "نموذج أوروبي متوازن"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "أصغر نموذج من Mistral. سريع واقتصادي للتلخيص والمسودات والأسئلة البسيطة.",
+      "tagline": "نموذج أوروبي صغير وسريع"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "أصغر نموذج من Mistral. الأفضل للمهام السريعة والبسيطة جدًا بأقل تكلفة.",
+      "tagline": "Mistral صغير الحجم للأجهزة الطرفية"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "إصدار محدث من DeepSeek-R1. يعرض عملية التفكير خطوة بخطوة مع استدلال أعمق.",
+      "tagline": "نموذج تفكير مفتوح محدّث"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "نموذج مفتوح المصدر أخف من Meta. سريع في الكتابة، التلخيص، والأسئلة اليومية.",
+      "tagline": "Llama مفتوح المصدر عالي الكفاءة"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "نموذج مفتوح المصدر أقدم من Meta. ما زال فعالاً للكتابة العامة والأسئلة والأجوبة.",
+      "tagline": "إصدار Llama مفتوح المصدر الأقدم"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "النموذج الرئيسي من xAI. جيد للنقاشات المفتوحة، التحليل، والمشاريع الإبداعية.",
+      "tagline": "الرائد في xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "أحدث نموذج رائد من OpenAI. قوي في الكتابة، البحث، البرمجة، وحل المشكلات المعقدة.",
+      "tagline": "أحدث إصدارات GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (الأحدث)",
+      "description": "اسم مستعار متغير يشير دائماً إلى أحدث نموذج دردشة من OpenAI. البديل في Azure للإصدارات المتوقفة من نماذج gpt-*-chat.",
+      "tagline": "دائمًا أحدث نسخة محادثة GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "إصدار حديث من Opus بين 4.6 و4.8. قوي في الكتابة الطويلة، البحث، البرمجة، والتحليل الدقيق.",
+      "tagline": "إصدار Opus حديث"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "أحدث نموذج استدلال من DeepSeek وبديل Azure لسلسلة R1. يعرض خطوات تفكيره واحدة تلو الأخرى.",
+      "tagline": "أحدث نموذج تفكير مفتوح"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "إصدار DeepSeek V4 السريع وبديل Azure لسلسلة V3. سريع في الكتابة العامة والأسئلة التقنية.",
+      "tagline": "بديل مفتوح المصدر سريع"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (الاستدلال)",
+      "description": "نموذج الاستدلال السريع من xAI. يفكر خطوة بخطوة مع استجابات سريعة.",
+      "tagline": "نموذج تفكير سريع من xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "نموذج الدردشة السريع من xAI. استجابات سريعة للأسئلة والمحادثات اليومية.",
+      "tagline": "نموذج محادثة سريع من xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "نموذج xAI خفيف. أسرع وأقل تكلفة للأسئلة السريعة والمحادثات غير الرسمية.",
+      "tagline": "نموذج xAI أخف"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "النموذج الرائد في مجموعة GPT-5.6 من OpenAI. الأقوى في الكتابة والبحث والبرمجة وحل المشكلات المعقدة.",
+      "tagline": "أحدث فئة رائدة من GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "المستوى المتوازن في مجموعة GPT-5.6 من OpenAI. ممتاز للكتابة اليومية والتحليل والبرمجة مع استجابات سريعة.",
+      "tagline": "جي بي تي-5.6 متوازن للاستخدام اليومي"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "المستوى الخفيف والسريع في مجموعة GPT-5.6 من OpenAI. الأنسب للأسئلة السريعة والمهام البسيطة بتكلفة منخفضة.",
+      "tagline": "جي بي تي-5.6 خفيف وسريع"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "أحدث نموذج متوسط الحجم من Mistral. بديل أوروبي يوازن بين الكفاءة والسرعة للأعمال اليومية.",
+      "tagline": "نموذج أوروبي متوازن"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "نموذج مفتوح من Moonshot AI. قوي في المهام الوكالية، البرمجة، والمستندات الطويلة.",
+      "tagline": "نموذج مفتوح للمهام الوكالية"
     }
   },
   "searchMode": {
@@ -1723,7 +1999,20 @@
     "useDefaultStyle": "استخدم أسلوب الكتابة الافتراضي",
     "noTonesCreated": "لم يتم إنشاء أي نبرة بعد",
     "createTonesHint": "أنشئ النبرات من الإجراءات السريعة",
-    "translateDocumentTooltip": "ترجمة المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، HTML، TXT\nالحد الأقصى للحجم: 40 ميجابايت\n\nيدعم أكثر من 80 لغة مع إمكانية استخدام ملفات القاموس."
+    "translateDocumentTooltip": "ترجمة المستندات إلى لغة أخرى.\n\nالصيغ المدعومة: Word، Excel، PowerPoint، HTML، TXT\nالحد الأقصى للحجم: 40 ميجابايت\n\nيدعم أكثر من 80 لغة مع إمكانية استخدام ملفات القاموس.",
+    "translateTooltip": "ترجمة جزء من النص إلى لغة أخرى.\n\nلتحويل ملفات كاملة (Word، Excel، PowerPoint، HTML، TXT)، استخدم خيار \"ترجمة المستند\".",
+    "cameraTooltip": "التقط صورة بواسطة كاميرا جهازك وأرفقها بالرسالة.",
+    "noResults": "لا توجد إجراءات مطابقة",
+    "sectionPinned": "مثبت",
+    "sectionFrequent": "الاستخدام المتكرر",
+    "sectionMore": "المزيد",
+    "categoryWeb": "الويب",
+    "categoryMedia": "الوسائط والملفات",
+    "categoryTransform": "تحويل",
+    "pin": "تثبيت في الأعلى",
+    "unpin": "إلغاء التثبيت",
+    "moveToMore": "نقل إلى المزيد",
+    "moveOutOfMore": "إظهار في القائمة"
   },
   "transcription": {
     "addInstructions": "إضافة تعليمات",
@@ -1933,7 +2222,14 @@
     "learnMore": "اعرف المزيد",
     "advancedOptions": "خيارات متقدمة",
     "unofficialBadgeLabel": "غير رسمي",
-    "unofficialLanguageWarning": "هذه اللغة غير مدعومة رسميًا. لم يتم التحقق من جودة الترجمة. يرجى مراجعة النتيجة من قبل متحدث بطلاقة أو ناطق أصلي قبل مشاركتها."
+    "unofficialLanguageWarning": "هذه اللغة غير مدعومة رسميًا. لم يتم التحقق من جودة الترجمة. يرجى مراجعة النتيجة من قبل متحدث بطلاقة أو ناطق أصلي قبل مشاركتها.",
+    "translationSubmitted": "تم بدء الترجمة — تتم معالجة ملفات PDF في الخلفية.",
+    "pendingTitle": "يتم ترجمة {filename}…",
+    "pendingHint": "تتم ترجمات ملفات PDF في الخلفية وقد تستغرق عدة دقائق. يمكنك متابعة عملك — سيتم تحديث هذه البطاقة عند جاهزية المستند، حتى بعد إعادة التحميل.",
+    "asyncFailed": "فشل ترجمة المستند: {error}",
+    "jobNotFound": "وظيفة الترجمة لم تعد متاحة. الرجاء المحاولة مرة أخرى.",
+    "retryPolling": "التحقق مرة أخرى",
+    "pollingStalled": "تعذر الاتصال بالخادم للتحقق من التقدم. قد تكون الترجمة لا تزال قيد التشغيل."
   },
   "terms": {
     "officialLanguages": "النسخة الرسمية:",
@@ -1997,6 +2293,10 @@
       "technicalDetails": "تفاصيل تقنية",
       "agentCountLabel": "{count} وكلاء",
       "disconnectedToast": "تم قطع الاتصال بـ {name}"
+    },
+    "emptyState": {
+      "title": "لا يوجد وكلاء إقليميون أو تنظيميونيون متاحون",
+      "description": "قم بربط مشروع Foundry أدناه لاكتشاف وكلائه."
     }
   },
   "privacy": {
@@ -2107,5 +2407,753 @@
     "review": "مراجعة",
     "itemId": "المعرّف: {id}",
     "itemSource": "{date} من {source}"
+  },
+  "regionOverride": {
+    "warning": "تجاوز الموقع مفعل — يتم توجيه طلباتك إلى منطقة البيانات {region}. هذا تجاوز يدوي للاختبار، وليس موقعك الفعلي.",
+    "clear": "مسح التجاوز"
+  },
+  "usageImpact": {
+    "empty": "لم يتم تتبع أي استخدام بعد. سيظهر هنا استخدام الرموز وتقدير الانبعاثات بعد بدء المحادثة.",
+    "co2Value": "{grams} غ CO₂e",
+    "equivalence": "≈ {count} شحنة هاتف ذكي",
+    "requests": "الطلبات",
+    "promptTokens": "رموز الإدخال",
+    "completionTokens": "رموز الإكمال",
+    "topModels": "حسب النموذج",
+    "byRegion": "حسب منطقة الاستضافة",
+    "regionDefault": "افتراضي",
+    "modelRow": "{requests} طلب · {grams} غ",
+    "disclosure": "التقديرات مبنية على افتراضات الإصدار v{version} · منذ {since} · الدردشة العادية فقط (الإجابات من الوكلاء وقاعدة المعرفة غير محسوبة).",
+    "reset": "إعادة تعيين إحصائيات الاستخدام"
+  },
+  "extraction": {
+    "toggleLabel": "استخراج بيانات منظمة",
+    "trayLabel": "الاستخراج",
+    "trayPrefix": "استخراج",
+    "trayInfo": "يتم إرجاع حتى 3 جداول منظمة في الاستخراج. يتم حفظ الوصفات محليًا.",
+    "autoChip": "تلقائي — يقترح الذكاء الاصطناعي هيكل البيانات",
+    "addRecipe": "إضافة وصفة",
+    "addRecipeTitle": "إضافة وصفة إلى هذا الاستخراج",
+    "addRecipeFullTitle": "حتى 3 وصفات لكل استخراج",
+    "removeRecipe": "إزالة الوصفة: {name}",
+    "remove": "إزالة",
+    "section": "وصفات الاستخراج",
+    "sectionSubtitle": "قوالب محفوظة لتحويل النصوص أو الملفات أو الروابط إلى جداول منظمة. يمكنك اختيار حتى 3 لكل عملية استخراج.",
+    "newRecipe": "وصفة جديدة",
+    "untitledRecipe": "(وصفة بدون عنوان)",
+    "deleteRecipe": "حذف الوصفة",
+    "delete": "حذف",
+    "deleteConfirm": "حذف؟",
+    "cancel": "إلغاء",
+    "name": "الاسم",
+    "namePlaceholder": "مثال: المرضى",
+    "description": "الوصف",
+    "optional": "(اختياري)",
+    "descriptionPlaceholder": "ملخص قصير يظهر في مختار الوصفات",
+    "instructions": "التعليمات",
+    "instructionsPlaceholder": "ما الذي يجب أن يبحث عنه الذكاء الاصطناعي في المادة؟",
+    "fields": "الحقول",
+    "field": "حقل",
+    "fieldsPlural": "الحقول",
+    "fieldName": "اسم الحقل",
+    "fieldType": "نوع الحقل",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "إضافة حقل",
+    "removeField": "إزالة الحقل",
+    "toggleDetails": "تبديل التفاصيل",
+    "fieldDetailsTitle": "الوصف، القيم المحصورة",
+    "fieldDescriptionPlaceholder": "وصف (يساعد الذكاء الاصطناعي في إيجاد هذا الحقل)",
+    "enumValuesPlaceholder": "القيم المسموح بها مفصولة بفواصل",
+    "required": "إجباري",
+    "suggest": "اقتراح باستخدام الذكاء الاصطناعي",
+    "suggesting": "يتم الاقتراح…",
+    "suggestNeedsInstructions": "أضف التعليمات أولاً ليعرف الذكاء الاصطناعي ما يجب البحث عنه",
+    "searchRecipes": "البحث في الوصفات",
+    "pickerEmpty": "لا توجد وصفات بعد. أنشئ واحدة للبدء.",
+    "pickerEmptyMatch": "لا توجد وصفات مطابقة",
+    "editorEmpty": "لا توجد وصفات بعد. أنشئ واحدة ويمكن للذكاء الاصطناعي مساعدتك في تعبئة الحقول.",
+    "noData": "لم يتم استخراج أي بيانات",
+    "noRecords": "لم يتم العثور على سجلات {name}",
+    "row": "صف",
+    "rows": "صفوف",
+    "record": "سجل",
+    "records": "سجلات",
+    "complete": "مكتمل",
+    "download": "تنزيل",
+    "preview": "معاينة",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} حقول",
+    "fieldCountOne": "حقل واحد",
+    "andMoreFields": "+ {count} إضافية",
+    "saveAsRecipe": "حفظ كوصـفة",
+    "savedAsRecipeToast": "تم الحفظ كوصـفة \"{name}\"",
+    "previewTruncated": "يتم عرض أول 3 من {total} صفوف. قم بتنزيل الملف للاطلاع على جميع البيانات.",
+    "previewEmpty": "لا توجد صفوف للمعاينة",
+    "proposedSchemaTip": "اقترح الذكاء الاصطناعي هذا المخطط. احفظه لإعادة استخدامه لاحقاً.",
+    "downloadAriaLabel": "تنزيل {name} كـ {format}",
+    "previewAriaLabel": "تبديل معاينة {name}",
+    "changeFormatAriaLabel": "تغيير تنسيق التنزيل لـ {name}",
+    "materialWarningTitle": "أضف مادة للاستخراج",
+    "materialWarningBody": "اكتب رسالة أدناه، أو أرفق ملفاً، أو أدرج رابط URL.",
+    "materialAttach": "إرفاق ملف",
+    "willExtractPrefix": "سيتم الاستخراج من:",
+    "materialText": "نص الرسالة",
+    "materialFiles": "{count, plural, one {ملف واحد} other {# ملفات}}",
+    "materialActiveFiles": "{count, plural, one {ملف نشط واحد} other {# ملفات نشطة}}",
+    "dismiss": "إيقاف الاستخراج"
+  },
+  "Connectors": "الموصلات",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "الترجمة",
+        "description": "ترجمة النص مع التحليل والقواميس وجولات المراجعة"
+      },
+      "document": {
+        "label": "مستند",
+        "description": "كتابة وصقل مستند بمساعدة المساعد"
+      },
+      "dataAnalysis": {
+        "label": "تحليل البيانات",
+        "description": "استيراد الجداول واستكشاف أو تحويل بياناتك"
+      },
+      "map": {
+        "label": "خريطة",
+        "description": "حوّل أي بيانات إلى مواقع على الخريطة"
+      }
+    },
+    "chooser": {
+      "prompt": "أو ابدأ مساحة عمل مركزة"
+    },
+    "sidebar": {
+      "newTranslation": "ترجمة جديدة",
+      "newDocument": "مستند جديد",
+      "newDataAnalysis": "تحليل بيانات جديد",
+      "newMap": "خريطة جديدة"
+    },
+    "translation": {
+      "chooseLanguage": "اللغة المستهدفة",
+      "customLanguageHint": "\"{name}\" لغة أضفتها — سيحاول الذكاء الاصطناعي أي لغة، لكن الجودة غير مُختبرة.",
+      "addedByYou": "مضافة من قبلك",
+      "glossary": "قاموس المصطلحات",
+      "noGlossary": "لا يوجد قاموس",
+      "manageGlossaries": "قواميس المصطلحات",
+      "glossaries": "قواميس المصطلحات",
+      "closeGlossaries": "إغلاق قواميس المصطلحات",
+      "glossariesEmpty": "أنشئ قاموس مصطلحات لتثبيت ترجمة المصطلحات المحددة. يتم حفظ القواميس على هذا الجهاز ويمكن إعادة استخدامها في الترجمات الأخرى.",
+      "newGlossary": "قاموس جديد",
+      "newGlossaryName": "قاموس بدون عنوان",
+      "glossaryName": "اسم القاموس",
+      "deleteGlossary": "حذف القاموس",
+      "sourceTerm": "المصطلح الأصلي",
+      "targetTerm": "الترجمة",
+      "note": "ملاحظة",
+      "noteOptional": "ملاحظة (اختياري)",
+      "addEntry": "إضافة مصطلح",
+      "removeEntry": "إزالة {term}",
+      "mode": "وضع الترجمة",
+      "modeQuick": "سريع",
+      "modeAgentic": "مُراجَع",
+      "modeQuickHint": "تمرير ترجمة واحد، الأسرع",
+      "modeAgenticHint": "يحلل النص أولاً، ثم يترجم ويُشغل حتى 3 جولات مراجعة",
+      "translate": "ترجمة",
+      "translating": "جارٍ الترجمة…",
+      "sourceLabel": "النص الأصلي",
+      "targetLabel": "الترجمة",
+      "sourcePlaceholder": "ألصق أو اكتب النص للترجمة، أو قم برفع مستند.",
+      "targetEmpty": "ستظهر الترجمة هنا.",
+      "uploadDocument": "رفع مستند",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "tooLong": "النص أطول من {max} حرف. قسِّمه إلى أجزاء، أو استخدم ترجمة المستندات للملفات الكاملة.",
+      "analysisTitle": "تحليل قبل الترجمة",
+      "register": "تسجيل",
+      "reviewTitle": "جولات المراجعة",
+      "roundLabel": "جولة {round}",
+      "verdictApprove": "موافق عليه",
+      "verdictRevise": "مُعدَّل",
+      "railRequest": "ترجم النص الأصلي إلى {language}.",
+      "railDoneAgentic": "تم. لقد حللت النص، وترجمته، وأجريت {rounds} جولة مراجعة. النتيجة في مساحة العمل.",
+      "railDoneQuick": "تم. الترجمة في مساحة العمل.",
+      "railAssessRequest": "قيّم جودة الترجمة إلى {language}.",
+      "railAssessDone": "اكتمل التقييم: التقييمات متوفرة في مساحة العمل مع {count} اقتراح(ات) تعديل للمراجعة.",
+      "roundChanges": "التغييرات في الجولة {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "الدقّة",
+          "description": "ينقل بالضبط معنى النص الأصلي — لا يوجد خطأ في الترجمة أو حذف أو إضافة أو مقاطع غير مترجمة"
+        },
+        "fluency": {
+          "label": "الطلاقة",
+          "description": "القواعد الإملائية والنحوية وعلامات الترقيم والترابط تُقرأ بسلاسة في اللغة المستهدفة"
+        },
+        "terminology": {
+          "label": "المصطلحات",
+          "description": "المصطلحات المتخصصة دقيقة ومتسقة؛ ويتم الالتزام بالقاموس تمامًا"
+        },
+        "style": {
+          "label": "الأسلوب",
+          "description": "المستوى الرسمي، والنبرة، والصياغة تلائم الأصل وتظل متسقة"
+        },
+        "localeConventions": {
+          "label": "أعراف اللغة",
+          "description": "التواريخ، والأرقام، والوحدات، وعلامات الترقيم تتبع معايير اللغة المستهدفة"
+        },
+        "audience": {
+          "label": "الجمهور",
+          "description": "تناسب الغرض الظاهر والجمهور المستهدف للنص"
+        }
+      },
+      "severity": {
+        "minor": "طفيف",
+        "major": "رئيسي"
+      },
+      "assess": "تقييم الجودة",
+      "assessing": "جارٍ التقييم…",
+      "assessmentTitle": "تقييم الجودة",
+      "criteriaPicker": "معايير التقييم",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "التعديلات المقترحة",
+      "noEditsSuggested": "لا توجد تعديلات مقترحة — الترجمة اجتازت المعايير المحددة.",
+      "acceptEdit": "قبول",
+      "rejectEdit": "رفض",
+      "acceptAll": "قبول الكل",
+      "rejectAll": "رفض الكل",
+      "editAccepted": "تم القبول",
+      "editRejected": "تم الرفض",
+      "editUnapplicable": "تعذر العثور على هذا الجزء في النص الحالي — لم يُطبَّق",
+      "editTranslation": "تعديل",
+      "doneEditing": "تم",
+      "pasteTranslationPlaceholder": "اكتب أو الصق الترجمة للعمل عليها…",
+      "editingBlockedPendingEdits": "يرجى قبول أو رفض التعديلات المقترحة أولاً",
+      "pendingCount": "{count} قيد الانتظار",
+      "closeReview": "إغلاق مراجعة الجودة",
+      "showReview": "عرض المراجعة",
+      "showReviewPending": "عرض المراجعة ({count} قيد الانتظار)"
+    },
+    "document": {
+      "emptyTitle": "صف المستند الذي تريده",
+      "emptyBody": "أخبر المساعد بما يجب كتابته — تقرير حالة، رسالة للجهة المانحة، محضر اجتماع. أضف ملفات مرجعية أولاً إذا كنت تريد اقتباسات وحقائق مأخوذة منها.",
+      "generatePlaceholder": "صف المستند المطلوب كتابته…",
+      "revisePlaceholder": "صف التعديلات المراد إجراؤها…",
+      "generate": "إنشاء",
+      "revise": "تعديل",
+      "writing": "جارٍ الكتابة…",
+      "export": "تصدير",
+      "references": "المراجع",
+      "addReference": "إضافة ملف",
+      "uploading": "جارٍ التحميل…",
+      "removeReference": "إزالة {name}",
+      "referenceChars": "{chars} حرف من النص المستخرج",
+      "referenceEmpty": "تعذَّر استخراج نص من {name}",
+      "uploadFailed": "فشل التحميل",
+      "untitledDocument": "مستند بدون عنوان",
+      "generatedSummary": "لقد كتبت المستند في مساحة العمل. يرجى مراجعته وإخباري بما يجب تغييره.",
+      "revisedSummary": "قمت بتعديل المستند في مساحة العمل.",
+      "runFailed": "حدث خطأ: {message}",
+      "uploadBasis": "ابدأ من مستند موجود مسبقاً",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "النحو والإملاء",
+          "description": "النحو والإملاء صحيحان؛ يجوز استخدام نوع واحد موحد من الإنجليزية (أمريكي أو بريطاني) — المزج بينهما يعتبر خطأ"
+        },
+        "consistency": {
+          "label": "الاتساق",
+          "description": "يتم استخدام المصطلحات، والأسماء، والحروف الكبيرة، والتنسيقات بنفس الطريقة في جميع أنحاء النص"
+        },
+        "clarity": {
+          "label": "الوضوح",
+          "description": "جمل مباشرة وواضحة؛ بنية تدعم القارئ"
+        },
+        "sensitivity": {
+          "label": "الحساسية",
+          "description": "صياغة شاملة وحساسة للنزاع والجانب الإنساني (فحص اختياري)"
+        },
+        "specAdherence": {
+          "label": "الالتزام بالمواصفات",
+          "description": "يتبع مواصفات الوثيقة المرفقة: وجود جميع الأقسام المطلوبة، بالترتيب، ووفقاً للإرشادات"
+        },
+        "toneAdherence": {
+          "label": "الالتزام بالنبرة",
+          "description": "يتبع قواعد الصوت والنبرة المرفقة"
+        }
+      },
+      "severity": {
+        "minor": "طفيف",
+        "major": "كبير"
+      },
+      "assess": "تقييم الجودة",
+      "assessing": "جارٍ التقييم…",
+      "assessmentTitle": "مراجعة الجودة",
+      "criteriaPicker": "معايير التقييم",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "تعديلات مقترحة",
+      "noEditsSuggested": "لم تُقترح تعديلات — الوثيقة اجتازت المعايير المحددة.",
+      "acceptEdit": "قبول",
+      "rejectEdit": "رفض",
+      "acceptAll": "قبول الكل",
+      "rejectAll": "رفض الكل",
+      "editAccepted": "تم القبول",
+      "editRejected": "تم الرفض",
+      "editUnapplicable": "تعذّر تحديد هذا المقطع في النص الحالي — لم يُطبّق",
+      "editingBlockedPendingEdits": "يرجى حل أو رفض التعديلات المقترحة المعلقة أولاً",
+      "pendingCount": "{count} قيد الانتظار",
+      "closeReview": "إغلاق مراجعة الجودة",
+      "showReview": "عرض المراجعة",
+      "showReviewPending": "عرض المراجعة ({count} قيد الانتظار)",
+      "railAssessRequest": "قيّم جودة الوثيقة وفقًا للمعايير المحددة.",
+      "railAssessDone": "اكتمل التقييم: التقييمات متوفرة في مساحة العمل مع {count} تعديل (تعديلات) مقترحة للمراجعة.",
+      "spec": "مواصفات الوثيقة",
+      "noSpec": "لا توجد مواصفات",
+      "manageSpecs": "المواصفات",
+      "specs": "مواصفات الوثيقة",
+      "closeSpecs": "إغلاق المواصفات",
+      "specsEmpty": "أنشئ مواصفة لكتابة الوثائق بصيغة محددة — أقسام مطلوبة، ترتيب معين، وإرشادات لكل قسم (مثال: قالب SitRep). يتم حفظ المواصفات على هذا الجهاز ويمكن إعادة استخدامها.",
+      "newSpec": "مواصفة جديدة",
+      "newSpecName": "مواصفة بدون عنوان",
+      "specName": "اسم المواصفة",
+      "specDescription": "الوصف (اختياري)",
+      "deleteSpec": "حذف المواصفة",
+      "sectionHeading": "عنوان القسم",
+      "sectionGuidance": "إرشادات (اختيارية)",
+      "sectionRequired": "مطلوب",
+      "addSection": "إضافة قسم",
+      "removeSection": "حذف القسم",
+      "generalGuidance": "إرشادات عامة (اختيارية)",
+      "tone": "النبرة",
+      "noTone": "لا توجد نبرة",
+      "customCriteria": "معايير مخصصة",
+      "manageCriteria": "معايير مخصصة",
+      "closeCriteria": "إغلاق المعايير المخصصة",
+      "criteriaEmpty": "أنشئ معايير مخصصة — مثل اعتبارات العلامة التجارية أو لغة المنظمة — لتقييم المستندات وتوجيه التعديلات. يتم حفظها على هذا الجهاز وقابلة لإعادة الاستخدام.",
+      "newCriterion": "معيار جديد",
+      "newCriterionName": "معيار بدون عنوان",
+      "criterionName": "اسم المعيار",
+      "criterionRubric": "الوصف التفصيلي",
+      "criterionRubricPlaceholder": "صف ما يجب أن يحققه المستند ليلبي هذا المعيار، مثل: \"عدم استخدام كلمات المبالغة عن عملنا؛ دائمًا نطلق على المستفيدين 'الأشخاص الذين نساعدهم'...\"",
+      "criterionRubricHint": "يتم تقديم هذا الوصف حرفياً للذكاء الاصطناعي أثناء التقييم وجولات المراجعة.",
+      "deleteCriterion": "حذف المعيار",
+      "profileTitle": "ملف المستند",
+      "profileDocType": "النوع",
+      "profileLanguage": "اللغة",
+      "profileAudience": "الجمهور",
+      "profilePurpose": "الغرض",
+      "profileRegister": "المستوى الأسلوبي",
+      "profileTone": "النبرة",
+      "profileConventions": "القواعد المعتمدة",
+      "emptyHint": "ابدأ بالكتابة أدناه، أو صف ما يجب كتابته في الصندوق بالأسفل، أو ابدأ من ملف.",
+      "addSpec": "إضافة مواصفة",
+      "addCriteria": "إضافة معايير",
+      "scopeFullDocument": "النطاق: المستند كاملًا",
+      "scopeSelection": "النطاق: التحديد — \"{preview}…\" ({count} كلمة)",
+      "clearSelection": "مسح التحديد (العمل على المستند كاملًا)",
+      "reviseSelectionPlaceholder": "صف التعديلات المطلوبة على التحديد...",
+      "revisedSelectionSummary": "قمت بتعديل المقطع المحدد في مساحة العمل.",
+      "assessedSelection": "التحديد"
+    },
+    "data": {
+      "emptyTitle": "استيراد بيانات للتحليل",
+      "emptyBody": "قم بإحضار ملف CSV أو Excel أو JSON، أو الصق الصفوف مباشرة. بعد تحميل الجدول يمكنك فرزه، أو استخراج مزيد من الصفوف من المستندات، وتحويله بتعليمات باللغة البسيطة.",
+      "importFile": "استيراد ملف",
+      "importing": "جارٍ الاستيراد...",
+      "pasteData": "لصق البيانات",
+      "pastePlaceholder": "الصق ملف CSV أو TSV أو JSON هنا...",
+      "import": "استيراد",
+      "addFromSource": "إضافة من مصدر",
+      "extractHint": "الصق نصًا أو اختر مستندًا؛ سيتم استخراج الصفوف المطابقة للأعمدة الحالية منه. تبقى القيم غير المعروفة فارغة — لا يتم اختراع أي شيء.",
+      "extractPlaceholder": "الصق نصًا غير منظم يحتوي على بيانات...",
+      "extractRows": "استخراج الصفوف",
+      "extractFromFile": "من ملف...",
+      "extracting": "جارٍ الاستخراج...",
+      "pastedSource": "النص الملصوق",
+      "transform": "تحويل",
+      "transforming": "جارٍ التحويل...",
+      "transformPlaceholder": "صف التحويل المطلوب، مثل: \"إضافة عمود بعدد الحالات لكل 1000 نسمة\"...",
+      "transformCapHint": "التحويلات محدودة إلى {max} صفوف. احذف أو صنف الصفوف أولاً للجداول كبيرة الحجم.",
+      "undo": "تراجع",
+      "deleteSelected": "حذف {count}",
+      "deletedRows": "تم حذف {count} صفوف",
+      "selectAllRows": "تحديد جميع الصفوف",
+      "selectRow": "تحديد الصف {row}",
+      "rowCount": "{count} صفوف",
+      "rowCapExceeded": "سيكون ذلك {count} صفوف؛ الحد الأقصى للجدول هو {max}. قسم البيانات أو صدّرها بدلاً من ذلك.",
+      "railExtractRequest": "استخراج الصفوف المطابقة لمخطط الجدول من: {source}",
+      "railExtractDone": "تمت إضافة {count} صفاً مستخرجاً إلى الجدول.",
+      "railTransformDone": "تم تحويل الجدول.",
+      "columnProfileFor": "إحصائيات العمود لـ {column}",
+      "profileMissing": "مفقود",
+      "profileDistinct": "مميز",
+      "profileRange": "النطاق",
+      "profileMean": "المتوسط",
+      "profileMedian": "الوسيط",
+      "profileTopValues": "أعلى القيم",
+      "filterColumnFor": "تصفية {column}",
+      "filterContains": "يحتوي على…",
+      "filterMin": "الحد الأدنى",
+      "filterMax": "الحد الأقصى",
+      "filterClear": "مسح",
+      "clearFilters": "مسح المرشحات",
+      "showingRows": "عرض {shown} من {total} صفوف",
+      "scopeLabel": "نطاق العمل",
+      "scopeTable": "الكل ({count})",
+      "scopeFiltered": "مُرشَّح ({count})",
+      "scopeSelection": "محدد ({count})",
+      "scopedInstruction": "{instruction} (على {count} صفاً ضمن النطاق)",
+      "assess": "تقييم الجودة",
+      "assessing": "جارٍ التقييم…",
+      "criteria": {
+        "validity": {
+          "label": "الصحة",
+          "description": "القيم تتوافق مع نوع العمود والتنسيق المتوقع"
+        },
+        "consistency": {
+          "label": "الاتساق",
+          "description": "يتم كتابة القيمة نفسها بنفس الطريقة دائماً (دون وجود اختلافات مثل 'M' / 'ذكر' أو وحدات مختلطة أو اختلاف في الأحرف)"
+        },
+        "duplicates": {
+          "label": "المكررات",
+          "description": "صفوف تسجل الكيان أو الحدث نفسه مرتين"
+        },
+        "plausibility": {
+          "label": "المعقولية",
+          "description": "القيم الشاذة أو غير الممكنة حسب السياق"
+        }
+      },
+      "assessmentTitle": "مراجعة جودة البيانات",
+      "pendingCount": "{count} قيد الانتظار",
+      "closeReview": "إغلاق مراجعة الجودة",
+      "suggestedEdits": "الإصلاحات المقترحة",
+      "noEditsSuggested": "لا توجد إصلاحات مقترحة — البيانات اجتازت المعايير المحددة.",
+      "acceptAll": "قبول الكل",
+      "rejectAll": "رفض الكل",
+      "acceptEdit": "قبول",
+      "rejectEdit": "رفض",
+      "editAccepted": "تم التطبيق",
+      "editRejected": "تم الرفض",
+      "editUnapplicable": "تغيرت الخلية منذ التقييم — لم يُطبق",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "معايير التقييم",
+      "severity": {
+        "minor": "طفيف",
+        "major": "جسيم"
+      },
+      "editLocation": "الصف {row} · {column}",
+      "editLocationRow": "الصف {row} (حذف)",
+      "showReview": "عرض المراجعة",
+      "showReviewPending": "عرض المراجعة (‏{count} قيد الانتظار)",
+      "assessedFiltered": "الصفوف المصفاة",
+      "assessedSelection": "الصفوف المحددة",
+      "assessedSample": "عينة من {shown} من {total}",
+      "railAssessRequest": "قيّم جودة الجدول (‏{count} صفوف) وفقًا للمعايير المحددة.",
+      "railAssessDone": "تم اقتراح {count} إصلاحًا لجودة البيانات — راجعها في مساحة العمل.",
+      "insights": "تحليلات",
+      "chartKind": "نوع الرسم البياني",
+      "chartBar": "شريطي (تجميع حسب)",
+      "chartHistogram": "مدرج تكراري",
+      "chartLine": "خط (حسب الزمن)",
+      "groupByColumn": "تجميع حسب العمود",
+      "dateColumn": "عمود التاريخ",
+      "valueColumn": "عمود القيمة",
+      "aggFn": "التجميع",
+      "aggCount": "العدد",
+      "aggSum": "المجموع",
+      "aggMean": "المتوسط",
+      "chartTruncated": "يتم عرض أعلى {max} مجموعات",
+      "chartNoData": "لا توجد قيم قابلة للرسم البياني في الصفوف الحالية.",
+      "chartBarAria": "مخطط شريطي مجمع بحسب {column}",
+      "chartHistogramAria": "مدرج تكراري لـ {column}",
+      "chartLineAria": "مخطط خطي لـ {column} عبر الزمن",
+      "editStructure": "البنية",
+      "defineStructure": "تحديد البنية",
+      "schemaHint": "حدد حقول بنية بياناتك. الحقول المطلوبة تتحكم في سياسة البيانات المفقودة عند الاستيراد؛ تغيير نوع الحقل يحوّل القيم الحالية (الخلايا غير القابلة للتحويل تصبح فارغة).",
+      "schemaFieldName": "اسم الحقل",
+      "schemaFieldType": "نوع الحقل",
+      "schemaRequired": "مطلوب",
+      "schemaAddField": "إضافة حقل",
+      "schemaDeleteField": "حذف الحقل {field}",
+      "schemaApply": "تطبيق البنية",
+      "schemaCancel": "إلغاء",
+      "schemaEdited": "تم تعديل بنية الجدول",
+      "schemaCellsConverted": "تعذر تحويل {count} خلية إلى النوع الجديد وأصبحت الآن فارغة.",
+      "missingFieldPolicy": "البيانات المفقودة",
+      "policyStrict": "صارم — رفض الصفوف غير المكتملة",
+      "policyFlag": "إشارة — استيراد ووضع علامة",
+      "policyLenient": "متساهل — استيراد بدون إشعار",
+      "droppedIncompleteRows": "تم حذف {count} صفًا ينقصها الحقول المطلوبة: {fields}",
+      "dismiss": "تجاهل",
+      "requiredColumn": "حقل مطلوب",
+      "flagMissingRequired": "الحقل المطلوب فارغ",
+      "flagPendingEdit": "هناك إصلاح مقترح قيد الانتظار لهذه الخلية — راجعه في مراجعة الجودة",
+      "fromPhoto": "من صورة",
+      "fromPhotoHint": "قم بتصوير نموذج أو جدول ورقي — ستصبح محتوياته بيانات منظمة يمكنك التحقق منها مقابل الصورة",
+      "readingPhoto": "يتم قراءة الصورة…",
+      "photoBatchName": "{count} صورة",
+      "railPhotoRequest": "استخراج بيانات منظمة من {count} صورة: {name}",
+      "railPhotoDone": "تمت إضافة {count} سجل(ات) من الصورة(ات). تحقق منها بمقارنتها مع الصورة في مساحة العمل.",
+      "sourcesLabel": "المصادر",
+      "openPhotoQc": "تحقق من البيانات مقابل {name}",
+      "qcRowsFromPhoto": "{count} صفوف",
+      "qcClose": "إغلاق فحص الصورة",
+      "qcZoomIn": "تكبير",
+      "qcZoomOut": "تصغير",
+      "qcPrevPhoto": "الصورة السابقة",
+      "qcNextPhoto": "الصورة التالية",
+      "qcImageLoading": "جارٍ تحميل الصورة…",
+      "qcImageFailed": "تعذر تحميل الصورة.",
+      "qcImageAlt": "صورة المصدر: {name}",
+      "qcHint": "يعرض الجدول صفوف هذه الصورة فقط — قارن كل قيمة مع الصورة وقم بتحرير أو حذف الصفوف غير المطابقة.",
+      "sourceFilterChip": "صفوف من {name}",
+      "clearSourceFilter": "عرض جميع الصفوف مرة أخرى",
+      "viewAsRecord": "عرض كنموذج",
+      "viewAsTable": "عرض كجدول",
+      "recordEmpty": "لا توجد سجلات بعد.",
+      "recordOf": "سجل {index} من {count}",
+      "recordPrev": "السجل السابق",
+      "recordNext": "السجل التالي",
+      "recordBooleanUnset": "(فارغ)",
+      "flagsChip": "{count} علامة",
+      "flagsChipOpenReview": "افتح مراجعة الجودة",
+      "flagsChipMissingOnly": "الحقول المطلوبة فارغة — يرجى تعبئتها أو تعديل البنية",
+      "autoCheck": "التحقق التلقائي من البيانات الجديدة",
+      "autoCheckHint": "بعد استخراج البيانات من الصور أو المستندات، سيجري تلقائياً فحص جودة للصفوف الجديدة",
+      "checkingNewRows": "جاري التحقق من الصفوف المضافة حديثاً بحثاً عن مشاكل في الجودة…",
+      "ingestCheckFailed": "فشل التحقق التلقائي من الجودة ({message}) — يمكنك تشغيله يدوياً عبر تقييم الجودة.",
+      "assessedIngest": "الصفوف التي تمت إضافتها حديثاً"
+    },
+    "map": {
+      "emptyTitle": "ضع بياناتك على الخريطة",
+      "emptyBody": "الصق تقرير موقف أو قائمة أسماء أو ملاحظات اجتماع أو أي نص يحتوي على أسماء أماكن — أو حمّل مستنداً. يتم تحديد المواقع وعرضها على الخريطة مع تصنيف ثقة، بعدها يمكنك تصديرها لـ ArcGIS أو أدوات GIS أخرى.",
+      "inputPlaceholder": "الصق نصاً يحتوي على مواقع…",
+      "uploadFile": "تحميل ملف",
+      "pastedSource": "النص الملصق",
+      "mapIt": "اعرضه على الخريطة",
+      "finding": "جارٍ البحث عن المواقع…",
+      "featureCount": "{count} موقع",
+      "featureCapExceeded": "الخريطة محدودة بـ {max} موقع.",
+      "noneFound": "لم يتم العثور على مواقع في هذا المحتوى.",
+      "lowConfidenceNotice": "{count} موقع به إحداثيات منخفضة الثقة — تحقق منها قبل الاعتماد على الخريطة.",
+      "tilesOffline": "بلاطات الخريطة غير متوفرة — لا تزال قائمة المواقع تعمل.",
+      "disclaimer": "الإحداثيات مستخرجة بتقدير AI من معرفة النموذج وليست من خدمة ترميز جغرافي — يرجى التحقق منها قبل الاستخدام العملي. يتم تحميل بلاطات الخريطة من خادم؛ بياناتك نفسها تبقى على هذا الجهاز.",
+      "flyTo": "اعرض {name} على الخريطة",
+      "removeFeature": "إزالة {name}",
+      "expandFeature": "عرض التفاصيل الكاملة لـ {name}",
+      "collapseFeature": "طي تفاصيل {name}",
+      "detailsParent": "جزء من {parent}",
+      "railRequest": "اعرض المواقع على الخريطة في: {source}",
+      "railSearchRequest": "ابحث على الويب واعرض المواقع على الخريطة لـ: {query}",
+      "railDone": "تم تحديد {count} موقع(ات). راجع المواقع ذات الثقة المنخفضة في القائمة.",
+      "searchToggle": "وضع البحث عبر الويب",
+      "searchToggleHint": "ابحث في الويب بدلاً من لصق النص؛ النتائج المدعومة سيتم تحديد مواقعها.",
+      "searchPlaceholder": "ابحث في الويب، مثل \"تفشي الكوليرا شرق أفريقيا 2026\"…",
+      "searchAndMap": "بحث وتحديد موقع",
+      "searching": "جارٍ البحث…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "صلة: {kind}",
+        "unresolved": "{count} صلة تشير إلى أماكن غير موجودة على الخريطة وتم تجاهلها."
+      },
+      "confidence": {
+        "high": "عالية",
+        "medium": "متوسطة",
+        "low": "منخفضة"
+      },
+      "prominence": {
+        "primary": "الموقع الرئيسي",
+        "secondary": "موقع داعم",
+        "mention": "ذكر عابر"
+      },
+      "prominenceMentionHint": "المحتوى يذكر هذا المكان بشكل عابر فقط — يظهر أصغر على الخريطة ويُستثنى من الإطار الأولي.",
+      "dates": {
+        "since": "منذ {date}",
+        "range": "{start} – {end}",
+        "ongoing": "مستمر"
+      },
+      "filters": {
+        "label": "تصفية حسب الفئة",
+        "other": "أخرى",
+        "clear": "مسح",
+        "showing": "يتم عرض {shown} من أصل {total} موقع",
+        "noneMatch": "لا تتطابق أي مواقع مع عوامل التصفية الحالية."
+      },
+      "dateFilter": {
+        "label": "تواريخ",
+        "from": "من",
+        "to": "إلى",
+        "fromAria": "عرض الأحداث ابتداءً من هذا التاريخ فقط",
+        "toAria": "عرض الأحداث حتى هذا التاريخ فقط",
+        "clear": "مسح التواريخ",
+        "eraChip": "عرض الأحداث في {label} فقط"
+      },
+      "timeline": {
+        "toggle": "تسلسل زمني متحرك",
+        "play": "تشغيل التسلسل الزمني المتحرك",
+        "pause": "إيقاف التسلسل الزمني المتحرك مؤقتًا",
+        "eras": "عصور التسلسل الزمني",
+        "jumpTo": "انتقال إلى {label}",
+        "slider": "موضع التسلسل الزمني",
+        "showUndated": "عرض المواقع غير المؤرخة",
+        "activeCount": "{count} نشطة"
+      },
+      "granularity": {
+        "site": "موقع",
+        "city": "مدينة/بلدة",
+        "district": "منطقة",
+        "region": "إقليم",
+        "country": "دولة"
+      },
+      "granularityAreaHint": "منطقة، تظهر على شكل دائرة تقريبية حول مركزها — وليست موقعًا أو حدودًا دقيقة.",
+      "containerHint": "يحتوي على مواقع أخرى محددة على الخريطة، لذا يظهر فقط كحدود خارجية.",
+      "legend": {
+        "toggle": "مفتاح الخريطة",
+        "title": "كيفية قراءة الخريطة",
+        "color": "اللون: مستوى الثقة في الإحداثيات (أزرق = مرتفع، كهرماني = متوسط، أحمر = منخفض)",
+        "size": "حجم النقطة: مدى أهمية المكان بالنسبة للمحتوى",
+        "area": "خط دائري متقطع: يوضح النطاق التقريبي لمنطقة أو إقليم أو دولة",
+        "container": "محيط باهت: منطقة يتم رسم محتوياتها بشكل منفصل"
+      }
+    },
+    "shell": {
+      "showConversation": "إظهار المحادثة",
+      "hideConversation": "إخفاء المحادثة",
+      "workspaceTab": "مساحة العمل",
+      "conversationTab": "المحادثة",
+      "paneTabsLabel": "نوافذ سير العمل",
+      "railEmpty": "ستظهر رسائل المساعد والتقدم هنا.",
+      "railInputPlaceholder": "أرسل رسالة إلى المساعد…",
+      "assistantThinking": "جارٍ التفكير…",
+      "sendMessage": "إرسال الرسالة",
+      "stopGenerating": "إيقاف التوليد",
+      "loadingWorkspace": "جارٍ تحميل مساحة العمل…",
+      "unknownType": "تستخدم هذه المحادثة سير عمل غير مدعوم في هذا الإصدار. سيتم عرض سجل المحادثة أدناه.",
+      "untitled": "محادثة جديدة",
+      "toggleMenu": "تبديل القائمة",
+      "model": "النموذج لهذا سير العمل"
+    }
+  },
+  "connectors": {
+    "title": "الموصلات",
+    "description": "قم بتوصيل الأدوات الخارجية عبر Model Context Protocol (MCP). تصبح الأدوات المتصلة متاحة للنماذج في الدردشة، ويتم تشغيل كل أداة فقط بعد موافقتك.",
+    "localOnlyNote": "تسجل الدخول مباشرةً مع كل مزود. يتم تشفير مفاتيح الوصول وتخزينها فقط على هذا الجهاز، ويتم تمريرها عبر خادم التطبيق مع كل طلب — ولا يتم تخزينها أو تسجيلها هناك.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "ابحث في المستودعات، واقرأ وأنشئ الطلبات والمشكلات."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "ابحث، وأنشئ، وقم بتحديث المهام والمشاريع."
+      }
+    },
+    "connect": "اتصال",
+    "connected": "متصل",
+    "tokenEndsIn": "ينتهي بـ ••••{last4}",
+    "disconnect": "قطع الاتصال",
+    "toolCount": "{count, plural, =1 {أداة واحدة متاحة} other {# أدوات متاحة}}",
+    "patLabel": "رمز الدخول الشخصي",
+    "createTokenLink": "أنشئ رمزًا",
+    "tokenScopeHint": "استخدم رمزًا مخصصًا بالصلاحيات المطلوبة فقط لهذه الأدوات.",
+    "validating": "جارٍ التحقق من الاتصال…",
+    "validationFailed": "تعذّر الاتصال. يرجى التحقق من العنوان والمحاولة مرة أخرى.",
+    "authFailed": "قام الخادم برفض الرمز. يرجى التحقق منه والمحاولة مرة أخرى.",
+    "tokenRequired": "مطلوب رمز وصول",
+    "enableServer": "متاح في الدردشة",
+    "arbitraryTitle": "خوادم MCP أخرى",
+    "arbitraryToggle": "السماح بخوادم MCP أخرى",
+    "arbitraryWarning": "أي شخص يدير خادم MCP يمكنه رؤية الرسائل المرسلة إلى أدواته. اتصل فقط بالخوادم التي تثق بها. كل مكالمة أداة تتطلب موافقتك.",
+    "addServer": "إضافة خادم MCP",
+    "editServer": "تعديل خادم MCP",
+    "serverName": "الاسم",
+    "serverUrl": "رابط الخادم",
+    "nameRequired": "الاسم مطلوب",
+    "urlRequired": "الرابط مطلوب",
+    "invalidUrl": "أدخل عنوان https:// عام",
+    "namePlaceholder": "خادم MCP الخاص بي",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "رمز الوصول (اختياري)",
+    "keepTokenPlaceholder": "اترك الحقل فارغًا للاحتفاظ بالرمز الحالي",
+    "disconnectedToast": "{name} تم قطع الاتصال",
+    "save": "حفظ",
+    "connectWithProvider": "الاتصال باستخدام {name}",
+    "useTokenInstead": "استخدم رمز وصول بدلاً من ذلك",
+    "oauthWaiting": "بانتظار التفويض…",
+    "oauthFailed": "فشل تسجيل الدخول. حاول مرة أخرى.",
+    "oauthDenied": "تم رفض الوصول من قبل المزود.",
+    "oauthTimeout": "انتهت مهلة تسجيل الدخول. حاول مرة أخرى.",
+    "oauthCancelled": "تم إلغاء تسجيل الدخول.",
+    "oauthUnavailable": "تسجيل الدخول غير متاح لهذا الموصل على هذا النشر. استخدم رمز وصول بدلاً من ذلك، أو اطلب من المسؤول لديك إعداد تطبيق OAuth.",
+    "ownAppToggle": "استخدم تطبيق OAuth الخاص بك",
+    "ownAppHint": "سجّل تطبيق OAuth في حساب {name} الخاص بك (ضمن المؤسسة أو مساحة العمل أو النسخة المؤسساتية) واربط عنوان العودة الموضح أدناه، ثم الصق بيانات الاعتماد هنا. اترك هذا مغلقًا لاستخدام التطبيق الافتراضي.",
+    "ownAppCustomHint": "يمكنك تزويد بيانات اعتماد تطبيق OAuth الخاص بك أدناه؛ أو اتركها فارغة ليتم التسجيل تلقائيًا مع الخادم.",
+    "ownAppInUse": "تم الاتصال بتطبيق OAuth الخاص بك.",
+    "clientIdLabel": "معرّف العميل",
+    "clientSecretLabel": "مفتاح العميل السري (إذا كان التطبيق الخاص بك يحتوي على واحد)",
+    "redirectUriLabel": "رابط العودة / إعادة التوجيه للتسجيل",
+    "reconnect": "إعادة الاتصال",
+    "needsReauth": "يحتاج لإعادة الاتصال",
+    "disconnectOauthNote": "سيتم إزالة الوصول من هذا الجهاز فقط عند قطع الاتصال. لإلغاء الوصول نهائيًا، أدرِ التطبيقات المفوضة من حساب {name} الخاص بك.",
+    "authModeLabel": "المصادقة",
+    "authModeNone": "بدون",
+    "authModeBearer": "رمز الوصول",
+    "authModeOauth": "تسجيل الدخول عبر المزود (OAuth)",
+    "oauthCustomHint": "ستسجل الدخول مع مزود الخادم في نافذة منبثقة بعد الحفظ.",
+    "saveAndSignIn": "حفظ وتسجيل الدخول",
+    "oauthCallback": {
+      "title": "تمت الموافقة على التفويض",
+      "missingState": "لا يوجد شيء لتفويضه",
+      "close": "يمكنك إغلاق هذه النافذة والعودة إلى التطبيق.",
+      "closeButton": "إغلاق النافذة"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "ربط مصدر نموذج",
+    "addAnother": "إضافة مصدر نموذج آخر",
+    "edit": "تعديل",
+    "disconnect": "قطع الاتصال مع {name}",
+    "disconnectedToast": "تم قطع الاتصال مع {name}",
+    "modelCountLabel": "{count} نماذج",
+    "loadingModels": "جارٍ تحميل النماذج...",
+    "noModelsAvailable": "لا توجد نماذج متاحة من هذا المصدر",
+    "sourceUnreachable": "تعذر الوصول إلى هذا المصدر. قد يكون تم تغيير صلاحياتك أو أن الخدمة غير متاحة مؤقتاً.",
+    "retry": "إعادة المحاولة",
+    "connectFoundryAccount": "ربط حساب Microsoft Azure Foundry",
+    "connectFoundryDescription": "اكتشف عمليات نشر النماذج من حساب Azure Foundry الذي لديك صلاحية عليه. صلاحياتك في Azure تسمح بكل عملية طلب — قيود النماذج الخاصة بالتطبيق لا تنطبق هنا.",
+    "selectModelsDescription": "اختر عمليات نشر النماذج التي ستظهر في محدد النماذج الخاص بك من هذا الحساب.",
+    "editConnection": "تعديل الاتصال",
+    "nameLabel": "الاسم",
+    "namePlaceholder": "مثال: بيئة فريقي التجريبية",
+    "nameRequired": "اسم المصدر مطلوب",
+    "foundryAccountLabel": "حساب Foundry",
+    "enterManually": "إدخال يدوي",
+    "browseResources": "تصفح الموارد",
+    "subscriptionIdLabel": "معرف الاشتراك",
+    "resourceGroupLabel": "مجموعة الموارد",
+    "accountNameLabel": "اسم الحساب",
+    "subscriptionRequired": "اختر اشتراكاً",
+    "accountRequired": "اختر حساب Foundry",
+    "accountSelectionRequired": "اختر حساباً من القائمة.",
+    "selectAllRequired": "اختر الاشتراك ومجموعة الموارد والحساب.",
+    "connectionFailed": "تعذر الوصول إلى هذا الحساب. يرجى التحقق من صحة التفاصيل ومن أن لديك صلاحية الوصول.",
+    "duplicateSource": "هذا الحساب متصل بالفعل كـ \"{name}\".",
+    "connectionSuccessModels": "تم الاتصال — تم العثور على {count} نشر للنماذج",
+    "connectionSuccessEmpty": "تم الاتصال، لكن لم يتم العثور على أي عمليات نشر للنماذج في هذا الحساب.",
+    "checkingConnection": "جارٍ التحقق من الاتصال...",
+    "next": "التالي",
+    "back": "السابق",
+    "cancel": "إلغاء",
+    "connect": "اتصال",
+    "save": "حفظ",
+    "scanningResources": "جاري فحص اشتراكات Azure الخاصة بك...",
+    "discoveryPartialWarning": "تعذر فحص {count, plural, one {# اشتراك} other {# اشتراكات}}. استخدم الإدخال اليدوي إذا كان حسابك غير موجود.",
+    "discoveryTruncatedWarning": "كانت هناك موارد كثيرة جداً للفحص الكامل. استخدم الإدخال اليدوي إذا كان حسابك غير موجود.",
+    "noAccountsDiscovered": "لم يتم العثور على أي حساب Foundry في اشتراكاتك. استخدم الإدخال اليدوي إذا كنت تعرف المسار.",
+    "retryScan": "إعادة محاولة الفحص",
+    "searchAccountsPlaceholder": "بحث في الحسابات...",
+    "modelsSelectedCount": "تم اختيار {selected} من {total} نموذجاً",
+    "selectAll": "تحديد الكل",
+    "deselectAll": "إلغاء تحديد الكل",
+    "autoAddLabel": "إضافة النماذج الجديدة تلقائياً",
+    "autoAddDescription": "النماذج التي يتم نشرها في هذا الحساب لاحقاً ستظهر تلقائياً. النماذج غير المحددة ستظل مستبعدة."
   }
 }

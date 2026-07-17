@@ -111,6 +111,11 @@ export class DeepSeekHandler extends ModelHandler {
       messages,
       user: JSON.stringify(user),
       stream: streamResponse,
+      // Ask the provider to append a terminal usage chunk (empty `choices`,
+      // populated `usage`) so real token counts can be captured for
+      // tracking + emissions estimation. Non-streaming responses carry
+      // `usage` on the completion object without this.
+      ...(streamResponse ? { stream_options: { include_usage: true } } : {}),
     };
 
     // DeepSeek models support temperature

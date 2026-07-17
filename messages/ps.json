@@ -437,7 +437,22 @@
     "noProjectsFound": "هیڅ پروژه ونه موندل شوه. \"default\" کارول کېږي.",
     "selectAllRequired": "پېرمښت، حساب، او پروژه وټاکئ.",
     "subscriptionRequired": "یو ګډون غوره کړئ",
-    "accountRequired": "د Foundry حساب غوره کړئ"
+    "accountRequired": "د Foundry حساب غوره کړئ",
+    "projectSelectionRequired": "يوه پروژه له ليست څخه وټاکئ.",
+    "scanningResources": "ستاسو د Azure ګډونونه پلټل کيږي...",
+    "searchProjectsPlaceholder": "پروژې وپلټئ...",
+    "noProjectsDiscovered": "ستاسو په ګډونونو کې هېڅ Foundry پروژه ونه موندل شوه. که لاره درته معلومه وي، لاسۍ داخلول وکاروئ.",
+    "discoveryPartialWarning": "{count, plural, one {# ګډون} other {# ګډونونه}} ونه سکين کېدای شول. که ستاسو پروژه نشته، لاسۍ داخلول وکاروئ.",
+    "discoveryTruncatedWarning": "ډېرې سرچینې موجودې وې، نشو کولی ټولې بشپړې پلټنه کړو. که ستاسو پروژه نشته، لاسۍ داخلول وکاروئ.",
+    "retryScan": "بیا پلټنه وکړئ",
+    "next": "مخکې",
+    "back": "شاته",
+    "selectAgentsDescription": "دا پروژه کې کوم اجنټونه ستاسې د موډل ټاکلو کې ښکاره شي، وټاکئ.",
+    "selectAll": "ټول وټاکئ",
+    "deselectAll": "ټول لغو کړئ",
+    "agentsSelectedCount": "{selected} له {total} اجنټونه ټاکل شوي",
+    "autoAddLabel": "نوې اجنټونه په اوتومات ډول اضافه کړئ",
+    "autoAddDescription": "وروسته چې اجنټونه دې پروژې ته خپاره شي، په اوتومات ډول ښکاري. ناتاکل شوي اجنټونه به بهر پاتې شي."
   },
   "Quick Actions": "چټکې کړنې",
   "Type / in chat to access your prompts": "په چټ کې / ولیکئ څو خپلو پیغامونو ته لاسرسی ومومئ",
@@ -818,7 +833,19 @@
       "listingTools": "شتون لرونکې وسایل لټول...",
       "analyzingFiles": "ستاسې فایلونه تحلیلېږي...",
       "searchingKnowledge": "په معلوماتي زېرمه کې لټون...",
-      "cancellingPriorTool": "د مخکیني وسیلې غوښتنه لغوه کېږي..."
+      "cancellingPriorTool": "د مخکیني وسیلې غوښتنه لغوه کېږي...",
+      "workflow": {
+        "preparingDocument": "مراجع چمتو کېږي...",
+        "writingDocument": "سند ليکل کېږي...",
+        "analyzingSource": "سرچينه شنل کېږي...",
+        "translating": "ژباړل کېږي...",
+        "reviewingTranslation": "د بياکتنې پړاو {round} له {total}...",
+        "revisingTranslation": "د بياکتنې مشورې پلي کېږي...",
+        "extractingRows": "له {source} څخه ليکې ايستل کېږي...",
+        "transformingTable": "جدول بدلېږي...",
+        "findingLocations": "ځایونه پېژندل کېږي...",
+        "updatingMap": "نقشه نوي کېږي..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# وسیله کارول شوې} other {# وسایل کارول شوي}}",
@@ -879,7 +906,8 @@
     "listen": "واورئ",
     "processingAudio": "غږ پروسس کېږي...",
     "ttsError": "د غږ جوړولو تېروتنه. مهرباني وکړئ بیا هڅه وکړئ.",
-    "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول"
+    "unsupportedMessageType": "د پیغام ښودلو تېروتنه: نه ملاتړېدونکی ډول",
+    "addLanguageOption": "\"{name}\" اضافه کړئ..."
   },
   "transcript": {
     "originalTranscript": "اصلي لیک",
@@ -1292,16 +1320,18 @@
     "unsavedChanges": "خوندي نه شوي بدلونونه",
     "unsavedChangesMessage": "تاسو خوندي نه شوي بدلونونه لرئ. آیا لغوه یې کړئ؟",
     "characterCount": "{current}/{max}",
-    "clearField": "فیلډ پاک کړئ",
-    "autosaveNote": "بدلونونه په اوتومات ډول خوندي کېږي.",
+    "clearField": "ډګر پاک کړئ",
+    "autosaveNote": "بدلونونه په خپلکار ډول خوندي کېږي.",
     "responseSection": "ځواب",
     "voiceSection": "غږ",
     "behaviorSection": "رفتار",
-    "resetChatSettings": "د چیټ تنظیمات بیا تنظیم کړئ",
-    "resetChatSettingsConfirmTitle": "د چیټ تنظیمات بیا تنظیم شي؟",
-    "resetChatSettingsConfirmMessage": "دا به د دې پینل ټولې تنظیمات اصلي حالت ته راوګرځوي: تودوخه، خپل دودیز لارښوونې، ستاسو معلومات، د ماډل ځواب، د جریان سرعت، له متن نه غږ ته بدلېدل، فعال فایلونه، او تائیدونه. ستاسو پر خبرو اترو به اثر ونه لري.",
+    "resetChatSettings": "د چټ تنظیمات بیا پر ځای کړئ",
+    "resetChatSettingsConfirmTitle": "د چټ تنظیمات بیرته عادي کړئ؟",
+    "resetChatSettingsConfirmMessage": "دا به په دې برخه کې ټول ترتیبات اصلي حالت ته راولي: تودوخه، ځانګړي لارښوونې، ستاسو په اړه، ماډل ځواب، د جریاني چټکتیا، متن-غږ، فعال فایلونه، او تائیدونه. دا ستاسو خبرو اترو باندې اغېز نه کوي.",
     "customInstructionsLabel": "دودیز لارښوونې*",
-    "defaultTemperatureLabel": "اصلي تودوخه*"
+    "defaultTemperatureLabel": "اصلي تودوخه*",
+    "Usage & Impact": "کارونه او اغېز",
+    "Connectors": "وصلونکي"
   },
   "emptyState": {
     "greeting": "څنګه مرسته کولی شم؟",
@@ -1447,33 +1477,78 @@
     },
     "title": "یو ماډل وټاکئ",
     "modelsDescription": "د خبرو لپاره یو AI ماډل وټاکئ. هر ماډل ځانګړې وړتیاوې لري — تفصیل لپاره یوه انتخاب کړئ.",
-    "recommended": "سپارښتنه شوې"
+    "recommended": "سپارښتنه شوې",
+    "familyAll": "ټول",
+    "familyFilterLabel": "ماډلونه د کورنۍ له مخې فلټر کړئ",
+    "searchPlaceholder": "ماډلونه ولټوئ",
+    "searchEmpty": "ستاسو لټون سره هېڅ ماډلونه نه دي برابر.",
+    "star": "ستوری کړه {name}",
+    "unstar": "ستوری لرې کړه {name}",
+    "otherFamily": "نور",
+    "hostedExternally": "په عرضه کوونکي خپله بنسټ کې د Azure AI Foundry له لارې چلول کیږي، د MSF په Azure چاپېریال کې نه.",
+    "hostedIn": {
+      "label": "په {regions} کې کوربه ده",
+      "tooltip": "هغه Azure سیمه(وې) چې دا ماډل پکې ځای پر ځای شوی دی. خبرې اترې ستاسو په خپله سیمه کې پروسس کېږي."
+    },
+    "badges": {
+      "external": "بهرنی",
+      "externalTooltip": "په عرضه کوونکي خپله بنسټ کې د Azure AI Foundry له لارې چلول کیږي، د MSF په Azure چاپېریال کې نه.",
+      "regionHostedTooltip": "د {region} Azure سیمه کې کوربه ده. له دې ماډل سره خبرې هلته پروسس کېږي."
+    },
+    "favorites": "خوښي",
+    "euResidencyNote": "ټول ماډلونه د EU Azure سیمه کې چلول کېږي.",
+    "hostedRegion": {
+      "label": "کوربه سیمه",
+      "processedIn": "دا خبرې اترې په {region} Azure سیمه کې پروسس کېږي.",
+      "euOnlyNote": "{name} د EU Azure سیمه کې کوربه ده؛ ورسره خبرې هلته پروسس کېږي."
+    },
+    "version": {
+      "label": "نسخه"
+    },
+    "reasoningModel": "استدلال ماډل: مخکې له ځواب ورکولو ګام په ګام فکر کوي. ورو دی، خو ستونزمنو مسایلو کې ښه دی.",
+    "variant": {
+      "label": "Variants"
+    },
+    "deployment": {
+      "title": "استقرار",
+      "source": "سرچینه",
+      "account": "حساب",
+      "location": "ځای",
+      "deployment": "استقرار",
+      "modelVersion": "د ماډل نسخه",
+      "publisher": "خپرونکی"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "دا AI ماډل د GPT-4.1 پر بنسټ جوړ شوی او د Bing له لارې د ریښتیني وخت ویب لټون لري. تازه معلومات، واقعیت ارزونه او د اوسني پېښو درک وړاندې کوي. د هغو څېړنو لپاره غوره دی چې وروستي معلومات، د خبرونو تحلیل او د واقعیت تایید غواړې.",
-      "knowledgeCutoff": "په ریښتیني وخت کې ویب لټون"
+      "knowledgeCutoff": "په ریښتیني وخت کې ویب لټون",
+      "tagline": "د OpenAI تېر نسل"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "د OpenAI تر ټولو پرمختللی ماډل، د پېچلو استدلالونو، کوډ جوړولو او تخنیکي ستونزو حلولو کې ډېر پیاوړی دی. د تحلیلي کارونو، پروګرام جوړونې، څېړنو او تفصیلي وضاحتونو لپاره غوره انتخاب. د استدلال انرژي او پاسخ وضاحت بدلول هم پکې شوني دي.",
-      "knowledgeCutoff": "دسمبر ۲۰۲۵"
+      "knowledgeCutoff": "دسمبر ۲۰۲۵",
+      "tagline": "کوډ، تحلیل، څېړنه"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "د GPT-5 چټک او ارزانه ډول، چې د چټک ځواب ورکولو او لوړ کیفیت لپاره جوړ شوی. د ورځنیو چارو، چټکو پوښتنو، وسیلو انتخاب، او هغو اپلېکیشنونو لپاره غوره دی چې ژر ځواب ته اړتیا لري. د فعالیت او کارآیۍ عالي توازن لري.",
-      "knowledgeCutoff": "د اګست ۶، ۲۰۲۵، ۸:۰۰ ماسپښین"
+      "knowledgeCutoff": "د اګست ۶، ۲۰۲۵، ۸:۰۰ ماسپښین",
+      "tagline": "چټک او لږ لګښت"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "د GPT-5.2 ځانګړی ډول، چې د خبرو اترو او احساسي ذهانت لپاره غوره شوی. په همدردۍ، ذهني روغتیا ملاتړ، تخلیقي لیکوالي، نظر ورکولو او طبيعي خبرې اترې کې خورا پیاوړی دی. د عادي خبرو، مشورې ورکولو او احساسي درک ته اړتیا لرونکو چارو لپاره غوره دی.",
-      "knowledgeCutoff": "دسمبر ۲۰۲۵"
+      "knowledgeCutoff": "دسمبر ۲۰۲۵",
+      "tagline": "خبرو اترو او نظریاتو شریکول"
     },
     "o3": {
       "name": "o3",
       "description": "د OpenAI تر ټولو پرمختللی استدلال لرونکی ماډل چې د ستونزو هوارولو نوې وړتیا لري. د پېچلو ریاضیاتو، ساینسي استدلال، کوډنګ او څو مرحلو منطقي دندو لپاره ځانګړی دی. 200K پراخ کانتېکسټ وینډو لري. د استدلال هڅې کنټرول امکان لري.",
-      "knowledgeCutoff": "۸ اپریل ۲۰۲۵، ۸:۰۰ ماسپښین"
+      "knowledgeCutoff": "۸ اپریل ۲۰۲۵، ۸:۰۰ ماسپښین",
+      "tagline": "ژور پړاو په پړاو منطق"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "د استدلال متخصص چې مراحل یو پر بل پسې ښيي. د ریاضي مسایلو، منطقي پوښتنو او پېچلو مفاهیمو د پوهېدو لپاره غوره. کولای شئ ستونزې په ریښتیني وخت کې حل کول یې وګورئ.",
-      "knowledgeCutoff": "۲۰ جنوري، ۲۰۲۵"
+      "knowledgeCutoff": "۲۰ جنوري، ۲۰۲۵",
+      "tagline": "استدلال ګام په ګام څرګندوي"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "پیاوړی او هر اړخیز ماډل، په ځانګړي ډول د کوډنګ او تخنیکي لیکلو لپاره ښه. د کوډ اشتیباګۍ، اسنادو لیکلو او تخنیکي مفهومونو تشریح کې اغېزناک. د پراختیایي کارونو لپاره چټک او باور وړ.",
-      "knowledgeCutoff": "۱۶ اپریل، ۲۰۲۵ ۱۲:۴۵ سهار"
+      "knowledgeCutoff": "۱۶ اپریل، ۲۰۲۵ ۱۲:۴۵ سهار",
+      "tagline": "افتتاحي بدیل"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "د xAI له خوا ورسره ماډل چې دقیق ځوابونه وړاندې کوي. د پرانیستو بحثونو، ابتکاري پروژو او پېچلي ستونزو د حل لپاره مناسب.",
-      "knowledgeCutoff": "۱۳ مې، ۲۰۲۵ ۱۲:۱۶ سهار"
+      "knowledgeCutoff": "۱۳ مې، ۲۰۲۵ ۱۲:۱۶ سهار",
+      "tagline": "د xAI بدیل"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "د Anthropic تر ټولو وړتیا لرونکی ماډل، د عالي استدلال، کوډینګ او ابتکاري وړتیاوو سره. د ژور فهم اړتیا لرونکو، څېړنو او پېچلي کارونو لپاره غوره.",
-      "knowledgeCutoff": "جنوري ۲۰۲۵"
+      "knowledgeCutoff": "جنوري ۲۰۲۵",
+      "tagline": "د Opus پخوانی نسل"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "متوازن Claude ماډل چې په کوډینګ، تحلیل او ابتکاري کارونو کې غوره فعالیت وړاندې کوي. د ورځني کارونې او چټکو ځوابونو لپاره مناسب.",
-      "knowledgeCutoff": "جنوري ۲۰۲۵"
+      "knowledgeCutoff": "جنوري ۲۰۲۵",
+      "tagline": "د Sonnet پخوانی نسل"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "د پخوانۍ نسل Claude Opus ماډل. د پېچلو کوډنګ کارونو، مفصل تحلیل او ژور فهم لپاره عالي.",
-      "knowledgeCutoff": "جنوري ۲۰۲۵"
+      "knowledgeCutoff": "جنوري ۲۰۲۵",
+      "tagline": "د Opus پخوانی نسل"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "چټک او اقتصادي Claude ماډل چې د لنډو کارونو لپاره ښه دی. د ساده پوښتنو، لنډیز او ډېرو کارونو لپاره مناسب.",
-      "knowledgeCutoff": "جنوري ۲۰۲۵"
+      "knowledgeCutoff": "جنوري ۲۰۲۵",
+      "tagline": "چټک Claude ډول"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "د Anthropic تر ټولو قوي ماډل. د اوږده لیک، څېړنې او ژور فکر ته اړتیا لرونکو دندو لپاره مناسب.",
-      "knowledgeCutoff": "فبروري ۲۰۲۶"
+      "knowledgeCutoff": "فبروري ۲۰۲۶",
+      "tagline": "د اوږدو لیکنو او تحلیل لپاره"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "متعادل Claude ماډل. د ورځني لیک، تحلیل او پروګرامینګ لپاره ګټور، ژر ځواب ورکوي.",
-      "knowledgeCutoff": "فبروري ۲۰۲۶"
+      "knowledgeCutoff": "فبروري ۲۰۲۶",
+      "tagline": "متوازن Claude د ورځني کار لپاره"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "له Meta څخه خلاص سرچینه ماډل. د لیکلو، لنډیزونو او چټکو پوښتنو لپاره ښه دی.",
+      "tagline": "افتتاحي بدیل"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "د OpenAI نوی مخکښ ماډل. د لیکلو، څېړنې، کوډ کولو او پېچلو ستونزو حلولو کې قوي دی.",
+      "tagline": "تر ټولو نوی GPT مخکښ"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "تر ټولو کوچنی او ګړندی GPT ډول. د چټکو، اسانه کارونو لپاره په لږ لګښت غوره دی.",
+      "tagline": "تر ټولو کوچنی او چټک GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "د خبرو اترو لپاره ځانګړی شوی GPT ماډل. د عادي خبرو، نظریو تبادلې او ملاتړې بحثونو لپاره مناسب.",
+      "tagline": "نوی چټ ته سمون شوی GPT"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "اصلي GPT-5 مخکښ ماډل. لا هم د لیکلو، تحلیل او کوډ کولو لپاره وړتیا لري.",
+      "tagline": "پخوانی GPT مخکښ"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "د خبرو اترو لپاره ځانګړی شوی GPT-5 ډول. د ورځني خبرو او نظریاتو تبادلې لپاره مناسب.",
+      "tagline": "پخوانی چټ ته سمون شوی GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "یوه پخوانۍ ملټي‌مودل GPT نسخه. د عادي لیکلو او پوښتنې/ځواب لپاره مناسب، کله چې وروستۍ وړتیا ته اړتیا نه وي.",
+      "tagline": "زوړ څو-مودي GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "یو کوچنی او چټک GPT-4.1 ماډل د ورځنیو چټکو کارونو لپاره.",
+      "tagline": "سپک پخوانی نسل GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "د Anthropic نوی او پیاوړی ماډل. د اوږده لیکلو، څېړنې، کوډ کولو او دقیق تحلیل لپاره غوره.",
+      "tagline": "تر ټولو نوی او ځواکمن Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "د DeepSeek نوی خلاص سرچينه ماډل. د عمومي لیکنو او تخنیکي پوښتنو لپاره باوري دی.",
+      "tagline": "افتتاحي بدیل"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "د Mistral مخکښ ماډل. د لیکلو، لنډیز او عمومي پوښتنو لپاره اروپایي بدیل.",
+      "tagline": "اروپایي پرانستې-وزن ماډل"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "د GPT-5 یو پخوانی مخکښ نسخه. لا هم د لیکلو، تحلیل او کوډ کولو لپاره پیاوړې ده.",
+      "tagline": "د GPT-5 پخوانی مخکښ"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "د خبرو اترو لپاره پخوانۍ GPT-5 نسخه. د ورځني خبرو او نظریاتو تبادلې لپاره مناسب.",
+      "tagline": "د پخواني چټ ته سمون شوی GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "د GPT-5 تر ټولو کوچنی ماډل. د چټکو، ساده کارونو لپاره په لږ مصرف کې غوره.",
+      "tagline": "وړه پخوانۍ نسل GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "د GPT-4.1 تر ټولو کوچنی ډول. د اسانو او چټکو کارونو لپاره مناسب کله چې سرعت او لګښت مهم وي.",
+      "tagline": "تر ټولو کوچنی پخوانی نسل GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "یو کوچنی او چټک GPT-4o ماډل. د ورځنیو چټکو کارونو لپاره مناسب، کله چې وروستۍ وړتیا ته اړتیا نه وي.",
+      "tagline": "سپک زوړ څو-مودي GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "یو کوچنی استدلالي ماډل. د ریاضي، منطق او مرحلې په مرحله ستونزو لپاره، د o3 په پرتله په کم لګښت.",
+      "tagline": "چټک او ارزانه منطق"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "یوه پخوانۍ کوچنۍ استدلالي نسخه. د ریاضي، ساینس او منطقي معماوو لپاره په اقتصادي توګه کار کوي.",
+      "tagline": "کوچنی پړاو په پړاو منطق"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "د Anthropic تر ټولو هوښیار ماډل، د Claude 5 کورنۍ لومړنی. د سختو لیکنو، څېړنو او کوډ کولو لپاره غوره.",
+      "tagline": "د Anthropic پرمختللی ماډل"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "د Claude نوی متوازن ماډل، د Claude 5 کورنۍ لومړنی. د ورځني لیکلو، تحلیل او کوډ کولو لپاره پیاوړی او چټک ځوابونه ورکوي.",
+      "tagline": "تر ټولو نوی متوازن Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "د Mistral منځنۍ اندازه ماډل. یو اروپایي بدیل چې وړتیا او چټکتیا دواړه توازن کوي د ورځني کار لپاره.",
+      "tagline": "متوازن اروپایي ماډل"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "د Mistral کوچنی ماډل. د لنډیز، مسودې او اسانه پوښتنو لپاره چټک او ارزانه.",
+      "tagline": "کوچنی چټک اروپایي ماډل"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "د Mistral خورا کوچنی ماډل. د ډېر چټکو، اسانه او ارزانه کارونو لپاره مناسب.",
+      "tagline": "وړه Edge کچه Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "د DeepSeek-R1 نوې نسخه. خپل فکر پړاو په پړاو ښيي او استدلالي ژورتیا یې زیاته شوې.",
+      "tagline": "نوې پرانیستې منطقي ماډل"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "له Meta څخه سپک خلاص سرچینه ماډل. د لیکلو، لنډیز او ورځنیو پوښتنو لپاره چټک.",
+      "tagline": "مؤثر افتتاحي Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "د Meta له خوا پخوانی خلاص‌سرچینې ماډل. لا هم د عمومي لیکلو او پوښتنو/ځوابونو لپاره مناسب دی.",
+      "tagline": "زوړ افتتاحي Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "د xAI مهم ماډل. د پرانیستو بحثونو، تحلیلاتو او ابتکاري پروژو لپاره مناسب.",
+      "tagline": "د xAI مخکښ"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "د OpenAI وروستی اصلي ماډل. په لیکلو، څیړنه، کوډنګ او پېچلو ستونزو حلولو کې پیاوړی.",
+      "tagline": "تر ټولو تازه GPT مخکښ"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (تازه)",
+      "description": "یوه دوامداره نوم چې تل د OpenAI تر ټولو نوي چیټ ماډل ته اشاره کوي. د Azure لپاره د زړو نسخو ځای ناستی.",
+      "tagline": "تل تر ټولو نوی چټ GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "نوی Opus خپور شوی، د 4.6 او 4.8 تر منځ. د اوږدو لیکنو، څیړنو، کوډنګ او دقیق تحلیل لپاره پیاوړی.",
+      "tagline": "نوی Opus خپرونه"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "د DeepSeek نوی استدلال ماډل او د Azure لپاره د R1 لاین ځای ناستی. خپلې نتیجې په ګام پر ګام ډول وړاندې کوي.",
+      "tagline": "تر ټولو نوی پرانستې منطقي ماډل"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "د DeepSeek چټک V4 ډول او د Azure لپاره د V3 لاین ځای ناستی. د عمومي لیکلو او تخنیکي پوښتنو لپاره ژر ځواب ورکوي.",
+      "tagline": "چټک افتتاحي بدیل"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "د xAI چټک استدلال ماډل. پرله‌پسې، ګام پرګام چټک ځوابونه ورکوي.",
+      "tagline": "چټک xAI منطقي ماډل"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "د xAI چټک چیټ ماډل. د ورځني پوښتنو او بحثونو لپاره تېز ځوابونه ورکوي.",
+      "tagline": "چټک xAI چټ ماډل"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "سپک xAI ماډل. د چټکو پوښتنو او عادي چیټ لپاره ژر او ارزانه.",
+      "tagline": "سپک xAI ماډل"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 سول",
+      "description": "د OpenAI د GPT-5.6 دریو مخکښ ماډل. په لیکلو، څېړنه، کوډ کولو او پېچلو ستونزو حل کې تر ټولو قوي.",
+      "tagline": "تر ټولو نوی GPT مخکښ درجه"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 ټېرا",
+      "description": "د OpenAI د GPT-5.6 متوازن ماډل. د ورځني لیک، تحلیل او کوډ لپاره مناسب، چټک ځواب ورکوي.",
+      "tagline": "وړانديز شوی هرروزي GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 لونا",
+      "description": "د OpenAI د GPT-5.6 رڼا، چټک ماډل. د چټکو پوښتنو او ساده کارونو لپاره ارزانه غوره انتخاب.",
+      "tagline": "روښانه، چټک GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "د Mistral نوی منځنۍ کچې ماډل. اروپايي بدیل چې وړتیا او چټکتیا سره توازن لري.",
+      "tagline": "وړانديز شوی اروپايي ماډل"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "د Moonshot AI لخوا خلاص وزن ماډل. په استازي کارونو، کوډنګ او اوږدو اسنادو کې قوي.",
+      "tagline": "استازي خلاص وزن ماډل"
     }
   },
   "searchMode": {
@@ -1789,7 +2073,20 @@
     "useDefaultStyle": "اصلي لیکدود وکاروئ",
     "noTonesCreated": "تر اوسه هیڅ ټون نه دی جوړ شوی",
     "createTonesHint": "ټونونه د چټکو عملیاتو له لارې جوړ کړئ",
-    "translateDocumentTooltip": "اسناد نورو ژبو ته وژباړئ.\n\nمنل شوي فورمټونه: Word, Excel, PowerPoint, HTML, TXT\nاعظمي اندازه: 40MB\n\nد ۸۰ څخه زیاتو ژبو ملاتړ، د glossary فایلونو اختیاري ملاتړ."
+    "translateDocumentTooltip": "اسناد نورو ژبو ته وژباړئ.\n\nمنل شوي فورمټونه: Word, Excel, PowerPoint, HTML, TXT\nاعظمي اندازه: 40MB\n\nد ۸۰ څخه زیاتو ژبو ملاتړ، د glossary فایلونو اختیاري ملاتړ.",
+    "translateTooltip": "یو د متن ټوټه بلې ژبې ته وژباړئ.\n\nد بشپړو فایلونو لپاره (Word، Excel، PowerPoint، HTML، TXT)، پر ځای یې ترجمه سند وکاروئ.",
+    "cameraTooltip": "د خپل وسیله د کمیرې څخه عکس واخلئ او پیغام ته یې ضمیمه کړئ.",
+    "noResults": "هیڅ سمون نه لري",
+    "sectionPinned": "ټومبل شوي",
+    "sectionFrequent": "پرله پسې کارول شوي",
+    "sectionMore": "نور",
+    "categoryWeb": "ویب",
+    "categoryMedia": "رسنۍ او فایلونه",
+    "categoryTransform": "بدلون ورکول",
+    "pin": "پورته يې ټومبل",
+    "unpin": "ناټومبل",
+    "moveToMore": "نور ته ولیږدول",
+    "moveOutOfMore": "په مینو کې ښکاره کړئ"
   },
   "transcription": {
     "transcribesOnSend": "په استولو سره ټرانسکرېپشن کېږي",
@@ -1923,7 +2220,14 @@
     "expiresSoon": "په {days} ورځو کې به پای ته ورسېږي - ژر ښکته کړئ",
     "expires": "{days} ورځو لپاره موجود",
     "unofficialBadgeLabel": "غیر رسمي",
-    "unofficialLanguageWarning": "دا ژبه رسماً نه ده ملاتړ شوې. د ژباړې کیفیت نه دی تائید شوی. مهرباني وکړئ تر شریکولو مخکې پایله له یو روان یا اصلي ویونکي سره بیا وڅېړئ."
+    "unofficialLanguageWarning": "دا ژبه رسماً نه ده ملاتړ شوې. د ژباړې کیفیت نه دی تائید شوی. مهرباني وکړئ تر شریکولو مخکې پایله له یو روان یا اصلي ویونکي سره بیا وڅېړئ.",
+    "translationSubmitted": "ژباړه پیل شوه — PDFګانې شاليد کې پروسس کېږي.",
+    "pendingTitle": "{filename} ژباړل کېږي...",
+    "pendingHint": "د PDF ژباړې شالید کې روانې دي او څو دقیقې وخت نیسي. کار دوام ورکړئ — دا کارت به تازه شي کله چې سند چمتو شي، حتی له بیا چالانولو وروسته.",
+    "asyncFailed": "د سند ژباړه ناکامه شوه: {error}",
+    "jobNotFound": "د ژباړې دنده نور شتون نه لري. مهرباني وکړئ بیا هڅه وکړئ.",
+    "retryPolling": "بیا وګورئ",
+    "pollingStalled": "نه شوای کولی له سرور سره اړیکه ونیسو. کېدای شي ژباړه لا روانه وي."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2277,10 @@
       "technicalDetails": "تخنیکي جزیات",
       "agentCountLabel": "{count} اجنټان",
       "disconnectedToast": "{name} بېل شو"
+    },
+    "emptyState": {
+      "title": "هیڅ سیمه‌ییز یا سازماني اجنټان نشته",
+      "description": "د اجنټانو د موندلو لپاره لاندې یو Foundry پروژه وصل کړئ."
     }
   },
   "privacy": {
@@ -2083,5 +2391,753 @@
     "review": "کتنه",
     "itemId": "ID: {id}",
     "itemSource": "{date} له {source} څخه"
+  },
+  "regionOverride": {
+    "warning": "د ځای ځای پر ځای کول فعال دي — ستاسو غوښتنې د {region} د معلوماتو سیمې ته انتقالیږي. دا یو لاسي آزمایښتي بدلونه دی، نه ستاسو اصلي موقعیت.",
+    "clear": "بدلون لیرې کړئ"
+  },
+  "usageImpact": {
+    "empty": "تر اوسه کوم کارونه نه دي ثبت شوي. ستاسو د توکن کارونه او اټکليز اخراج به دلته ښکاره شي وروسته له چټ کولو.",
+    "co2Value": "{grams} ګرامه CO₂e",
+    "equivalence": "≈ {count} د سمارټ فون چارجونه",
+    "requests": "درخواستونه",
+    "promptTokens": "د پرامپټ ټوکنونه",
+    "completionTokens": "د بشپړېدو ټوکنونه",
+    "topModels": "د ماډل له مخې",
+    "byRegion": "د کوربه سیمې له مخې",
+    "regionDefault": "پرمختښتی",
+    "modelRow": "{requests} ځله · {grams} ګرامه",
+    "disclosure": "اټکلونه د فرضیو پر بنسټ v{version} · له {since} راهیسې · یوازې معیاري چټ (ایجنټونه او د پوهې-بنسټ ځوابونه نه شمېرل کېږي).",
+    "reset": "د کارونې احصائیې بیا تنظیم کړئ"
+  },
+  "extraction": {
+    "toggleLabel": "جوړښت لرونکي معلومات راوباسئ",
+    "trayLabel": "استخراج",
+    "trayPrefix": "استخراج",
+    "trayInfo": "استخراج اعظماً ۳ جوړښت لرونکي جدولونه جوړوي. نسخې (Recipes) په محلي ډول ساتل کېږي.",
+    "autoChip": "اتومات — AI جوړښت وړاندیز کوي",
+    "addRecipe": "نسخه (Recipe) اضافه کړئ",
+    "addRecipeTitle": "دې استخراج ته نسخه (Recipe) اضافه کړئ",
+    "addRecipeFullTitle": "په هر استخراج کې تر ۳ نسخې پورې",
+    "removeRecipe": "نسخه لرې کړئ: {name}",
+    "remove": "لرې کړئ",
+    "section": "د استخراج نسخې",
+    "sectionSubtitle": "خوندي شوي قالبونه چې خام متن، فایلونه، یا URLs جوړښت لرونکو جدولونو ته اړوي. د هر استخراج لپاره تر ۳ پورې وټاکئ.",
+    "newRecipe": "نوې نسخه",
+    "untitledRecipe": "(بې سرلیک نسخه)",
+    "deleteRecipe": "نسخه ړنګ کړئ",
+    "delete": "ړنګ کړئ",
+    "deleteConfirm": "ړنګ کړئ؟",
+    "cancel": "لغوه کړئ",
+    "name": "نوم",
+    "namePlaceholder": "لکه: ناروغان",
+    "description": "توضیحات",
+    "optional": "(اختیاري)",
+    "descriptionPlaceholder": "لنډ تشریح چې د نسخه غوره کوونکي کې ښکاره کېږي",
+    "instructions": "لارښوونې",
+    "instructionsPlaceholder": "AI باید په موادو کې څه ولټوي؟",
+    "fields": "ډګرونه",
+    "field": "ډګر",
+    "fieldsPlural": "ډګرونه",
+    "fieldName": "د ډګر نوم",
+    "fieldType": "د ډګر ډول",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "ډګر زیات کړئ",
+    "removeField": "ډګر لرې کړئ",
+    "toggleDetails": "جزییات وښایاست/پټ کړئ",
+    "fieldDetailsTitle": "توضیحات، ارزښتونه (enum)",
+    "fieldDescriptionPlaceholder": "توضیحات (د AI سره مرسته کوي چې دا ډګر پیدا کړي)",
+    "enumValuesPlaceholder": "قبول شوی ارزښتونه، د کامې سره جلا شوي",
+    "required": "ضروري",
+    "suggest": "د AI سره وړاندیز وکړئ",
+    "suggesting": "وړاندیز کېږي...",
+    "suggestNeedsInstructions": "لومړی لارښوونې اضافه کړئ ترڅو AI پوه شي څه باید پیدا کړي",
+    "searchRecipes": "نسخې ولټوئ",
+    "pickerEmpty": "تر اوسه کومه نسخه نشته. د پیل لپاره یوه نسخه جوړه کړئ.",
+    "pickerEmptyMatch": "هیڅ اړونده نسخه ونه موندل شوه",
+    "editorEmpty": "تر اوسه کومه نسخه نشته. یوه نسخه جوړه کړئ او AI به ساحې ډکې کړي.",
+    "noData": "هیڅ معلومات نه دي اخیستل شوي",
+    "noRecords": "{name} ریکارډونه ونه موندل شول",
+    "row": "قطار",
+    "rows": "قطارونه",
+    "record": "ریکارډ",
+    "records": "ریکارډونه",
+    "complete": "پوره شوی",
+    "download": "ډاونلوډ",
+    "preview": "مخکتنه",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} ساحې",
+    "fieldCountOne": "۱ ساحه",
+    "andMoreFields": "+ {count} نور",
+    "saveAsRecipe": "د نسخې په توګه خوندي کړئ",
+    "savedAsRecipeToast": "د \"{name}\" نسخه په توګه خوندي شوه",
+    "previewTruncated": "یوازې لومړۍ ۳ له {total} قطارونو ښودل شوي دي. بشپړ معلومات ډاونلوډ کړئ.",
+    "previewEmpty": "د لیدو لپاره کوم قطار نشته",
+    "proposedSchemaTip": "AI دا سکیمه وړاندیز کړې. دا خوندي کړئ چې بیا وکاروئ.",
+    "downloadAriaLabel": "{name} د {format} په توګه ډاونلوډ کړئ",
+    "previewAriaLabel": "د {name} مخکتنه بدل کړئ",
+    "changeFormatAriaLabel": "د {name} لپاره د ډاونلوډ بڼه بدله کړئ",
+    "materialWarningTitle": "مواد اضافه کړئ ترڅو استخراج شي",
+    "materialWarningBody": "لاندې پیغام ولیکئ، فایل ضمیمه کړئ، یا URL اضافه کړئ.",
+    "materialAttach": "فایل ضمیمه کړئ",
+    "willExtractPrefix": "د لاندې څخه به استخراج شي:",
+    "materialText": "د پیغام متن",
+    "materialFiles": "{count, plural, one {۱ فایل} other {# فایلونه}}",
+    "materialActiveFiles": "{count, plural, one {۱ فعال فایل} other {# فعال فایلونه}}",
+    "dismiss": "استخراج بند کړئ"
+  },
+  "Connectors": "وصلونکي",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "ژباړه",
+        "description": "متن د شننې، ګلاسري، او بياکتنې پړاوونو سره وژباړئ"
+      },
+      "document": {
+        "label": "سند",
+        "description": "له مرستيال سره سند وليکئ او سم کړئ"
+      },
+      "dataAnalysis": {
+        "label": "د معلوماتو شننه",
+        "description": "جدولونه وارد کړئ او خپل معلومات وپلټئ يا بدل کړئ"
+      },
+      "map": {
+        "label": "نقشه",
+        "description": "هر ډول معلومات نقشه کې ځای پر ځای کړئ"
+      }
+    },
+    "chooser": {
+      "prompt": "يا يو متمرکز کاري ځای پیل کړئ"
+    },
+    "sidebar": {
+      "newTranslation": "نوې ژباړه",
+      "newDocument": "نوې سند",
+      "newDataAnalysis": "نوې د معلوماتو شننه",
+      "newMap": "نوې نقشه"
+    },
+    "translation": {
+      "chooseLanguage": "هدف ژبه",
+      "customLanguageHint": "\"{name}\" يوه ژبه ده چې تاسو زياته کړې — AI به هره ژبه هڅه کوي، خو کیفیت نه دی تأیید شوی.",
+      "addedByYou": "ستاسو لخوا زياته شوې",
+      "glossary": "ګلاسري",
+      "noGlossary": "ګلاسري نشته",
+      "manageGlossaries": "ګلاسريان",
+      "glossaries": "ګلاسريان",
+      "closeGlossaries": "ګلاسريان وتړئ",
+      "glossariesEmpty": "يو ګلاسري جوړ کړئ څو ځانګړي اصطلاحات يو ډول وژباړل شي. ګلاسريان په همدې آله کې خوندي وي او په مختلفو ژباړو کې کارېدلی شي.",
+      "newGlossary": "نوی ګلاسري",
+      "newGlossaryName": "بې سرلیک ګلاسري",
+      "glossaryName": "د ګلاسري نوم",
+      "deleteGlossary": "ګلاسري حذف کړئ",
+      "sourceTerm": "د سرچینې اصطلاح",
+      "targetTerm": "ژباړه",
+      "note": "یادونه",
+      "noteOptional": "یادونه (اختیاري)",
+      "addEntry": "اصطلاح اضافه کړئ",
+      "removeEntry": "{term} لرې کړئ",
+      "mode": "د ژباړې بڼه",
+      "modeQuick": "چټک",
+      "modeAgentic": "بیاکتل شوی",
+      "modeQuickHint": "یوه وار ژباړه، تر ټولو چټک",
+      "modeAgenticHint": "متن لومړی تحلیل کوي، وروسته ژباړي او تر ۳ پورې د بیاکتنې پړاوونه پرمخ وړي",
+      "translate": "ژباړه وکړئ",
+      "translating": "ژباړل کیږي…",
+      "sourceLabel": "د سرچینې متن",
+      "targetLabel": "ژباړه",
+      "sourcePlaceholder": "د ژباړې لپاره متن ولیکئ یا پیس کړئ، یا یو سند پورته کړئ.",
+      "targetEmpty": "ژباړه به دلته وښودل شي.",
+      "uploadDocument": "سند پورته کړئ",
+      "copy": "کاپي کړئ",
+      "copied": "کاپي شو",
+      "tooLong": "متن له {max} تورو زیات دی. دا پر برخو ووېشئ، یا د ټول فایل ژباړې لپاره د سند ژباړه وکاروئ.",
+      "analysisTitle": "د ژباړې مخکې تحلیل",
+      "register": "راجستر کړئ",
+      "reviewTitle": "د بیاکتنې پړاوونه",
+      "roundLabel": "پړاو {round}",
+      "verdictApprove": "منظور",
+      "verdictRevise": "اصلاح شوی",
+      "railRequest": "د سرچینې متن {language} ته وژباړئ.",
+      "railDoneAgentic": "پای. ما متن تحلیل کړ، ژباړه مې وکړه، او {rounds} د بیاکتنې پړاو(ونه) مې وچلول. پایله په workspace کې ده.",
+      "railDoneQuick": "پای. ژباړه په workspace کې موجوده ده.",
+      "railAssessRequest": "د {language} ژباړې کیفیت وارزوئ.",
+      "railAssessDone": "ارزونه بشپړه شوه: نمرې په workspace کې دي او د کتنې لپاره {count} سپارښتل شوې اصلاح(ې) شته.",
+      "roundChanges": "بدلونونه په پړاو {round} کې",
+      "criteria": {
+        "accuracy": {
+          "label": "دقیقوالی",
+          "description": "د سرچینې مطلب په دقیقه توګه بیانوي — نه غلط ژباړه، نه حذف، نه اضافه، نه نه ژباړل شوې برخې"
+        },
+        "fluency": {
+          "label": "سلیقیت",
+          "description": "ګرامر، املا، نقطه‌گذاری او یووالی د هدف ژبه کې طبیعي ښکاري"
+        },
+        "terminology": {
+          "label": "اصطلاحات",
+          "description": "سکتوري اصطلاحات درست او یو شان دي؛ ګلاسري په دقیقه توګه تعقیب شوې ده"
+        },
+        "style": {
+          "label": "سبک",
+          "description": "ثبت، لحن او غږ د سرچینې سره سم او ثابت پاتې شوي"
+        },
+        "localeConventions": {
+          "label": "د ځایي اصول",
+          "description": "نېټې، شمېرې، واحدونه او نقطه‌گذاري د هدف ځایي اصولو سره برابره ده"
+        },
+        "audience": {
+          "label": "اورېدونکي",
+          "description": "د متن ظاهري موخه او لوستونکي ته مناسب دی"
+        }
+      },
+      "severity": {
+        "minor": "کوچنی",
+        "major": "لوی"
+      },
+      "assess": "کیفیت ارزونه",
+      "assessing": "ارزونه روانه ده…",
+      "assessmentTitle": "د کیفیت ارزونه",
+      "criteriaPicker": "د ارزونې معیارونه",
+      "ratingOf": "{rating}/۵",
+      "suggestedEdits": "وړاندیز شوي سمونې",
+      "noEditsSuggested": "هیڅ سمونه نه ده وړاندیز شوې — ژباړه ټاکل شوي معیارونه پوره کړي.",
+      "acceptEdit": "منل",
+      "rejectEdit": "ردول",
+      "acceptAll": "ټولې ومنئ",
+      "rejectAll": "ټولې رد کړئ",
+      "editAccepted": "منل شوې",
+      "editRejected": "رد شوې",
+      "editUnapplicable": "د متن دا برخه ونه موندل شوه — نه ده عملي شوې",
+      "editTranslation": "سمول",
+      "doneEditing": "ختم",
+      "pasteTranslationPlaceholder": "ژباړه ولیکئ یا پیسټ کړئ…",
+      "editingBlockedPendingEdits": "لومړی باید ځنډول شوې وړاندیز شوې سمونې حل یا رد کړئ",
+      "pendingCount": "{count} پاتې",
+      "closeReview": "د کیفیت ارزونه وتړئ",
+      "showReview": "ارزونه وښایئ",
+      "showReviewPending": "ارزونه وښایئ ({count} پاتې)"
+    },
+    "document": {
+      "emptyTitle": "هغه سند تشریح کړئ چې غواړئ",
+      "emptyBody": "مرستندویه ته ووایئ څه ولیکي — د وضعیت راپور، د تمویل کوونکي لیک، یا د غونډې یادښتونه. که غواړئ نقل قولونه او معلومات له حواله فایلونو واخیستل شي، لومړی هغه فایلونه اضافه کړئ.",
+      "generatePlaceholder": "د لیکلو سند تشریح کړئ…",
+      "revisePlaceholder": "بدلونونه تشریح کړئ…",
+      "generate": "جوړول",
+      "revise": "سمونه",
+      "writing": "لیکلو کې…",
+      "export": "صادرول",
+      "references": "ماخذونه",
+      "addReference": "فایل اضافه کړئ",
+      "uploading": "آپلوډ روان دی…",
+      "removeReference": "{name} لرې کړئ",
+      "referenceChars": "د استخراج شوي متن {chars} توري",
+      "referenceEmpty": "له {name} څخه هیڅ متن ترلاسه نه شو",
+      "uploadFailed": "آپلوډ پاتې راغلی",
+      "untitledDocument": "بې سرلیک سند",
+      "generatedSummary": "ما سند د کاري ساحې کې ولیکه. وګورئ او تغییرات یې راته ووایاست.",
+      "revisedSummary": "ما سند د کاري ساحې کې سم کړ.",
+      "runFailed": "یوه ستونزه رامنځته شوه: {message}",
+      "uploadBasis": "له موجود سند څخه پیل وکړئ",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "ګرامر او املا",
+          "description": "درست ګرامر او املا؛ یوازې یوه ډول انګلیسي (امریکايي یا بریتانوي) قبول ده — ګډول تېروتنه ده"
+        },
+        "consistency": {
+          "label": "ثبات",
+          "description": "اصطلاحات، نومونه، لوی توري، او فورمېټنګ باید په ټول سند کې یو ډول وکارول شي"
+        },
+        "clarity": {
+          "label": "روڼوالی",
+          "description": "مستقیم او روښانه جملې؛ د لوستونکي لپاره اسانه جوړښت"
+        },
+        "sensitivity": {
+          "label": "حساسیت",
+          "description": "شامل، د شخړو او بشري ستونزو ته حساس عبارتونه (اختیاري ارزونه)"
+        },
+        "specAdherence": {
+          "label": "د Spec پیروي",
+          "description": "پیوست شوی سند Spec تعقیبوي: اړین برخې شته، په ترتیب کې دي، او د لارښوونو پوره کول"
+        },
+        "toneAdherence": {
+          "label": "د اواز او لحن پیروي",
+          "description": "پیوست شوی غږ او لحن قواعد تعقیبوي"
+        }
+      },
+      "severity": {
+        "minor": "کوچنی",
+        "major": "لوی"
+      },
+      "assess": "ارزونه وکړئ",
+      "assessing": "ارزونه روانه ده...",
+      "assessmentTitle": "د کیفیت ارزونه",
+      "criteriaPicker": "ارزونې معیارونه",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "وړاندیز شوې اصلاحات",
+      "noEditsSuggested": "هیڅ اصلاح وړاندیز نه شو — سند ټاکلي معیارونه پوره کړل.",
+      "acceptEdit": "ومنئ",
+      "rejectEdit": "رد کړئ",
+      "acceptAll": "ټول ومنئ",
+      "rejectAll": "ټول رد کړئ",
+      "editAccepted": "منل شوی",
+      "editRejected": "رد شوی",
+      "editUnapplicable": "دغه برخې په اوسني متن کې نه شو موندلی — نه ده تطبیق شوې",
+      "editingBlockedPendingEdits": "لومړی د وړاندیز شوو اصلاحاتو فیصله یا رد وکړئ",
+      "pendingCount": "{count} پاتې",
+      "closeReview": "د کیفیت ارزونه وتړئ",
+      "showReview": "ارزونه وښایئ",
+      "showReviewPending": "ارزونه وښایئ ({count} پاتې)",
+      "railAssessRequest": "د سند کیفیت د ټاکل شوو معیارونو پر بنسټ ارزوئ.",
+      "railAssessDone": "ارزونه بشپړه شوه: ارزونې workspace ته اضافه شوې او {count} وړاندیز شوي اصلاحات د کتنې لپاره پاتې دي.",
+      "spec": "د سند Spec",
+      "noSpec": "هیڅ Spec نشته",
+      "manageSpecs": "Specs",
+      "specs": "د سند Specs",
+      "closeSpecs": "Specs وتړئ",
+      "specsEmpty": "د اسنادو لپاره د ټاکلي فارمټ لیکلو لپاره یو Spec جوړ کړئ — اړینې برخې، ترتیب او هرې برخې ته لارښوونه (لکه د SitRep فورمې نمونه). Specs به په دې وسیله خوندي او بیا کاریدونکی وي.",
+      "newSpec": "نوی Spec",
+      "newSpecName": "بې نومه Spec",
+      "specName": "د Spec نوم",
+      "specDescription": "توضیحات (اختیاري)",
+      "deleteSpec": "Spec ړنګ کړئ",
+      "sectionHeading": "د برخې سرلیک",
+      "sectionGuidance": "لارښوونه (اختیاري)",
+      "sectionRequired": "اړینه",
+      "addSection": "برخه اضافه کړئ",
+      "removeSection": "برخه لرې کړئ",
+      "generalGuidance": "عمومي لارښوونه (اختیاري)",
+      "tone": "اواز یا لحن",
+      "noTone": "اواز نشته",
+      "customCriteria": "ګمرکي معیارونه",
+      "manageCriteria": "ګمرکي معیارونه",
+      "closeCriteria": "ګمرکي معیارونه وتړئ",
+      "criteriaEmpty": "خپل ځانګړي معیارونه جوړ کړئ — لکه د برانډ ملاحظات یا د سازمان ژبه — ترڅو اسناد وارزوئ او سمون ته لارښوونه وکړئ. دا معیارونه په همدغه وسیله خوندي کېږي او بیا کارېدای شي.",
+      "newCriterion": "نوی معیار",
+      "newCriterionName": "بې نومه معیار",
+      "criterionName": "د معیار نوم",
+      "criterionRubric": "لارښود",
+      "criterionRubricPlaceholder": "تشریح کړئ چې دا سند باید د دې معیار د پوره کولو لپاره څه وکړي، مثلاً \"کله هم زموږ د خپل کار په اړه مبالغوي اصطلاحات مه کاروئ؛ تل مستفید کسان 'هغه خلک چې مرسته ورسره کوو' وبولئ…\"",
+      "criterionRubricHint": "دا لارښود د ارزونې او بیاکتنې پر مهال AI ته هماغسې سپارل کېږي.",
+      "deleteCriterion": "معیار ړنګ کړئ",
+      "profileTitle": "د سند پروفایل",
+      "profileDocType": "ډول",
+      "profileLanguage": "ژبه",
+      "profileAudience": "مخاطبین",
+      "profilePurpose": "موخه",
+      "profileRegister": "ثبت",
+      "profileTone": "لحن",
+      "profileConventions": "مقررات",
+      "emptyHint": "لاندې ټایپ پېل کړئ، د لاندې بکس لپاره یې موضوع تشریح کړئ، یا له فایل نه یې پېل کړئ.",
+      "addSpec": "تخنیکي جُزئيات اضافه کړئ",
+      "addCriteria": "معیارونه اضافه کړئ",
+      "scopeFullDocument": "سکوپ: بشپړ سند",
+      "scopeSelection": "سکوپ: انتخاب — “{preview}…” ({count} کلمات)",
+      "clearSelection": "انتخاب پاک کړئ (له ټول سند سره کار وکړئ)",
+      "reviseSelectionPlaceholder": "د انتخاب تغیرات تشریح کړئ…",
+      "revisedSelectionSummary": "ما ټاکل شویه برخه په کاري ساحه کې اصلاح کړه.",
+      "assessedSelection": "ټاکل شوې برخه"
+    },
+    "data": {
+      "emptyTitle": "د تحلیل لپاره معلومات وارد کړئ",
+      "emptyBody": "د CSV، Excel یا JSON فایل وارد کړئ، یا قطارونه مستقیماً پیسټ کړئ. چې جدول مو پورته شو، کولای شئ ترتیب ورکړئ، نور قطارونه له اسنادو ترې واخلئ، او د ساده ژبې د لارښوونو له لارې یې بدل کړئ.",
+      "importFile": "فایل وارد کړئ",
+      "importing": "واردېږي…",
+      "pasteData": "معلومات پیسټ کړئ",
+      "pastePlaceholder": "دلته CSV، TSV یا JSON پیسټ کړئ…",
+      "import": "واردول",
+      "addFromSource": "له سرچینې څخه اضافه کړئ",
+      "extractHint": "متن پیسټ کړئ یا سند غوره کړئ؛ هغه قطارونه به ترې واخیستل شي چې له ستاسې اوسني ستونو سره سمون خوري. نامعلوم ارزښتونه به تش پاتې شي — هېڅ نه خلقېږي.",
+      "extractPlaceholder": "ناساختار معلومات دلته پیسټ کړئ…",
+      "extractRows": "قطارونه واخلئ",
+      "extractFromFile": "له فایله…",
+      "extracting": "اېستل کېږي…",
+      "pastedSource": "پیسټ شوی متن",
+      "transform": "بدلون",
+      "transforming": "بدلېږي…",
+      "transformPlaceholder": "بدلون تشریح کړئ، مثلاً \"د هر ۱۰۰۰ وګړو لپاره د قضیو نوی قطار اضافه کړئ\"…",
+      "transformCapHint": "بدلونونه یوازې تر {max} قطارونو محدود دي. د لویو جدولونو لپاره قطارونه پاک یا فلټر کړئ.",
+      "undo": "بیا بدلون راوړئ",
+      "deleteSelected": "{count} ړنګ کړئ",
+      "deletedRows": "{count} قطارونه ړنګ شول",
+      "selectAllRows": "ټول قطارونه وټاکئ",
+      "selectRow": "{row} قطار وټاکئ",
+      "rowCount": "{count} قطارونه",
+      "rowCapExceeded": "دا به {count} قطارونه وي؛ جدول یوازې تر {max} پورې محدود دی. معلومات تقسیم یا صادر کړئ.",
+      "railExtractRequest": "قطارونه چې د جدول سکیمه سره سمون لري استخراج کړئ له: {source}",
+      "railExtractDone": "{count} استخراج شوي قطارونه جدول ته اضافه شول.",
+      "railTransformDone": "جدول بدل شو.",
+      "columnProfileFor": "د {column} لپاره د ستون احصایې",
+      "profileMissing": "غیري حاضر",
+      "profileDistinct": "جلا",
+      "profileRange": "حدوده",
+      "profileMean": "اوسط",
+      "profileMedian": "منځنۍ",
+      "profileTopValues": "لوړې ارزښتونه",
+      "filterColumnFor": "د {column} فلټر",
+      "filterContains": "لري...",
+      "filterMin": "لږ تر لږه",
+      "filterMax": "زیات تر زیات",
+      "filterClear": "پاکول",
+      "clearFilters": "فلټرونه پاک کړئ",
+      "showingRows": "{shown} له {total} قطارونو ښوول کیږي",
+      "scopeLabel": "کاري ساحه",
+      "scopeTable": "ټول ({count})",
+      "scopeFiltered": "فلټر شوي ({count})",
+      "scopeSelection": "انتخاب شوي ({count})",
+      "scopedInstruction": "{instruction} (په {count} ټاکل شويو قطارونو کې)",
+      "assess": "کیفیت ارزونه",
+      "assessing": "ارزونه روانه ده...",
+      "criteria": {
+        "validity": {
+          "label": "اعتبار",
+          "description": "ارزښتونه د خپل ستون ډول او هیله شوي بڼې سره سمون لري"
+        },
+        "consistency": {
+          "label": "ثبات",
+          "description": "یوه ارزښت تل یوه ډول لیکل شوی وي (د 'M' / 'Male' مختلف ډولونه، ګډ واحدونه، یا د لیک بڼه بدلون نه وي)"
+        },
+        "duplicates": {
+          "label": "تکرارونه",
+          "description": "قطارونه چې یوه پېښه یا هستي دوه ځله ثبت شوې وي"
+        },
+        "plausibility": {
+          "label": "احتمال",
+          "description": "شاذ او ناممکن ارزښتونه په خپل سیاق کې"
+        }
+      },
+      "assessmentTitle": "د معلوماتو کیفیت بیاکتنه",
+      "pendingCount": "{count} پاتې دي",
+      "closeReview": "د کیفیت بیاکتنه بنده کړئ",
+      "suggestedEdits": "وړاندیز شوي سمونې",
+      "noEditsSuggested": "هیڅ سمونه ونه وړاندیز شوه — معلوماتو ټاکل شوي معیارونه پوره کړل.",
+      "acceptAll": "ټولې وومنئ",
+      "rejectAll": "ټولې رد کړئ",
+      "acceptEdit": "ومنئ",
+      "rejectEdit": "رد کړئ",
+      "editAccepted": "پلي شو",
+      "editRejected": "رد شو",
+      "editUnapplicable": "حجره تر ارزونې وروسته بدله شوې — نه ده پلي شوې",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "د ارزونې معیارونه",
+      "severity": {
+        "minor": "کوچنی",
+        "major": "لوی"
+      },
+      "editLocation": "قطار {row} · {column}",
+      "editLocationRow": "قطار {row} (حذف)",
+      "showReview": "څېړنه وښایئ",
+      "showReviewPending": "څېړنه وښایئ ({count} پاتې)",
+      "assessedFiltered": "فلټر شوي قطارونه",
+      "assessedSelection": "ټاکل شوي قطارونه",
+      "assessedSample": "د {total} نه {shown} نمونې",
+      "railAssessRequest": "د جدول ({count} قطارونه) کیفیت د ټاکل شویو معیارونو پر بنسټ وارزوئ.",
+      "railAssessDone": "{count} د معلوماتو د کیفیت سمونې وړاندیز شوې — دا په کارځای کې وڅیړئ.",
+      "insights": "پوهې",
+      "chartKind": "د چارت ډول",
+      "chartBar": "بار (د ډلې له مخې)",
+      "chartHistogram": "هیستوګرام",
+      "chartLine": "کرښه (د وخت له مخې)",
+      "groupByColumn": "ستون د ډلې لپاره",
+      "dateColumn": "د نیټې ستون",
+      "valueColumn": "د ارزښت ستون",
+      "aggFn": "ټولیز",
+      "aggCount": "شمېره",
+      "aggSum": "مجموعه",
+      "aggMean": "منځنۍ",
+      "chartTruncated": "د {max} غوره ډلو ښودنه",
+      "chartNoData": "اوسني قطارونو کې چارت جوړولو لپاره ارزښتونه نشته.",
+      "chartBarAria": "د {column} له مخې ترتیب شوی بار چارت",
+      "chartHistogramAria": "د {column} هیستوګرام",
+      "chartLineAria": "د {column} کرښه چارت د وخت په اوږدو کې",
+      "editStructure": "ساختمان",
+      "defineStructure": "ساختمان تعریف کړئ",
+      "schemaHint": "د معلوماتو د جوړښت ساحې تعریف کړئ. اړینې ساحې د واردېدو پر مهال د ورکې معلوماتو پالیسي ټاکي؛ د ساحې ډول بدلول اوسني ارزښتونه اړوي (نه اړیدونکی حجرې به تش شي).",
+      "schemaFieldName": "د ساحې نوم",
+      "schemaFieldType": "د ساحې ډول",
+      "schemaRequired": "اړین",
+      "schemaAddField": "ساحه اضافه کړئ",
+      "schemaDeleteField": "ساحه {field} ړنګه کړئ",
+      "schemaApply": "ساختمان تطبیق کړئ",
+      "schemaCancel": "لغوه کړئ",
+      "schemaEdited": "د جدول جوړښت سم شو",
+      "schemaCellsConverted": "{count} حجرې نوي ډول ته اړې نه شوې او اوس تشې دي.",
+      "missingFieldPolicy": "ورکه معلومات",
+      "policyStrict": "جدي — نیمګړي قطارونه رد کړئ",
+      "policyFlag": "نښه — وارد او نښه کړئ",
+      "policyLenient": "نرمه — په چوپتیا وارد کړئ",
+      "droppedIncompleteRows": "{count} قطارونه چې اړینې ساحې یې نه لرلې: {fields} پرېښودل شوي",
+      "dismiss": "رد کړئ",
+      "requiredColumn": "اړینه ساحه",
+      "flagMissingRequired": "اړینه ساحه تشه ده",
+      "flagPendingEdit": "د دې حجرې لپاره وړاندیز شوی سمون پاتې دی — د کیفیت ارزونه وګورئ",
+      "fromPhoto": "له عکس څخه",
+      "fromPhotoHint": "د کاغذي فورم یا جدول عکس واخلئ — منځپانګه به یې ستروکتورایز ډیټا ته واوړي چې تاسو یې له عکس سره پرتله کولای شئ",
+      "readingPhoto": "عکس لوستل کېږي…",
+      "photoBatchName": "{count} عکسونه",
+      "railPhotoRequest": "له {count} عکس(ونو) څخه ستروکتورایز ډیټا راوباسئ: {name}",
+      "railPhotoDone": "د عکس(ونو) څخه {count} ریکارډ(ونه) اضافه شول. دا ریکارډونه په کاري ساحه کې له عکس سره پرتله کړئ.",
+      "sourcesLabel": "سرچینې",
+      "openPhotoQc": "د معلوماتو تصدیق له {name} سره وکړئ",
+      "qcRowsFromPhoto": "{count} قطارونه",
+      "qcClose": "د عکس تصدیق وتړئ",
+      "qcZoomIn": "زووم زیات کړئ",
+      "qcZoomOut": "زووم کم کړئ",
+      "qcPrevPhoto": "مخکنی عکس",
+      "qcNextPhoto": "راتلونکی عکس",
+      "qcImageLoading": "عکس پورته کېږي…",
+      "qcImageFailed": "عکس پورته نشو.",
+      "qcImageAlt": "سرچينه عکس: {name}",
+      "qcHint": "جدول یوازې د دې عکس اړوند قطارونه ښيي — هر ارزښت له عکس سره پرتله کړئ او هغـه قطارونه سم یا حذف کړئ چې نه سمون خوري.",
+      "sourceFilterChip": "قطارونه له {name}",
+      "clearSourceFilter": "ټول قطارونه بیا وښایئ",
+      "viewAsRecord": "د فورم لید",
+      "viewAsTable": "د جدول لید",
+      "recordEmpty": "تر اوسه کوم ریکارډ نشته.",
+      "recordOf": "ریکارډ {index} له {count}",
+      "recordPrev": "مخکنی ریکارډ",
+      "recordNext": "راتلونکی ریکارډ",
+      "recordBooleanUnset": "(خالي)",
+      "flagsChip": "{count} بیرغونه",
+      "flagsChipOpenReview": "د کیفیت ارزونه پرانیزئ",
+      "flagsChipMissingOnly": "اړین ساحې خالي دي — ډک یې کړئ یا جوړښت اصلاح کړئ",
+      "autoCheck": "نوي معلومات دې اتومات وارزول شي",
+      "autoCheckHint": "له عکسونو یا اسنادو څخه د معلوماتو کډولو وروسته، نوي قطارونه اتومات کیفیت چیک ته وسپارئ",
+      "checkingNewRows": "نوي اضافه شوي قطارونه د کیفیت لپاره ارزول کېږي…",
+      "ingestCheckFailed": "اتومات کیفیت چیک ناکام شو ({message}) — تاسې کولای شئ دا یي د Assess quality سره دستی ترسره کړئ.",
+      "assessedIngest": "نوي اضافه شوي قطارونه"
+    },
+    "map": {
+      "emptyTitle": "خپل معلومات نقشې ته واچوئ",
+      "emptyBody": "سیتریپ، د قطار لړۍ، د غونډې یادښتونه یا هر ډول متن چې ځایونه پکې نومول شوي دي نقل کړئ — یا یو سند اپلوډ کړئ. موقعیتونه تشخیص او له باور درجې سره نقشې ته ورکول کېږي؛ وروسته یې کولای شئ ArcGIS یا نورو GIS وسیلو ته صادر کړئ.",
+      "inputPlaceholder": "متن چې موقعیتونه ورته نومول شوي دي ولګوه…",
+      "uploadFile": "سند اپلوډ کړئ",
+      "pastedSource": "نقل شوی متن",
+      "mapIt": "نقشه کې واچوئ",
+      "finding": "موقعیتونه لټول کېږي…",
+      "featureCount": "{count} موقعیتونه",
+      "featureCapExceeded": "نقشه تر {max} موقعیتونو محدوده ده.",
+      "noneFound": "په هغه موادو کې کوم موقعیت ونه موندل شو.",
+      "lowConfidenceNotice": "{count} موقعیتونه ټیټ-باور نقاط لري — له اعتماد کولو مخکې یې وګورئ.",
+      "tilesOffline": "نقشه ټایلونه نشي ترلاسه کېدای — د موقعیتونو لړلیک لا هم کار کوي.",
+      "disclaimer": "مختصات د AI له خوا د ماډل د پوهې پر بنسټ اټکل شوي، نه د geographic coding له خدمت څخه — د عملیاتو مخکې تصدیق کړئ. د نقشې ټایلونه له سرور څخه پورته کېږي؛ ستاسې اصلي معلومات په همدې وسیله کې ساتل کېږي.",
+      "flyTo": "{name} په نقشه کې وښایئ",
+      "removeFeature": "{name} لرې کړئ",
+      "expandFeature": "د {name} بشپړې جزیات وښایئ",
+      "collapseFeature": "د {name} جزیات راټول کړئ",
+      "detailsParent": "د {parent} برخه",
+      "railRequest": "په نقشه کې دا موقعیتونه وښایئ: {source}",
+      "railSearchRequest": "انټرنیټ وپلټئ او دا موقعیتونه په نقشه کې وښایئ: {query}",
+      "railDone": "{count} ځایونه نښه شول. په لېست کې ټیټ باور لرونکي وڅېړئ.",
+      "searchToggle": "د ویب لټون حالت",
+      "searchToggleHint": "پرځای د متن پیسټ کولو، ویب پلټنه وکړئ؛ ترلاسه شوي مستند پایلې نښه کېږي.",
+      "searchPlaceholder": "ویب ولټوئ، لکه: \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "پلټنه او نښه کول",
+      "searching": "پلټنه روانه ده…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "ارتباط: {kind}",
+        "unresolved": "{count} ارتباط(ونه) داسې ځایونه یاد کړي چې په نقشه کې نشته او پرېښودل شوي."
+      },
+      "confidence": {
+        "high": "لوړ",
+        "medium": "منځنی",
+        "low": "ټیټ"
+      },
+      "prominence": {
+        "primary": "اصلي ځای",
+        "secondary": "مرستندوی ځای",
+        "mention": "یادونه یوازې"
+      },
+      "prominenceMentionHint": "یوازې تش یادونه یې شوې — په نقشه کې کوچنی ښکاري او په لومړني چوکاټ کې نه راځي.",
+      "dates": {
+        "since": "له {date} راهیسې",
+        "range": "{start} – {end}",
+        "ongoing": "جاري"
+      },
+      "filters": {
+        "label": "د کټګورۍ له مخې فلټر وکړئ",
+        "other": "نور",
+        "clear": "پاکول",
+        "showing": "{shown} له {total} ځایونو څخه",
+        "noneMatch": "هیڅ ځایونه اوسنیو فلټرونو سره نه سمون خوري."
+      },
+      "dateFilter": {
+        "label": "نېټې",
+        "from": "له",
+        "to": "تر",
+        "fromAria": "یوازې د دې نېټې څخه وروسته پېښې وښایئ",
+        "toAria": "یوازې تر دې نېټې پورې پېښې وښایئ",
+        "clear": "نېټې پاکول",
+        "eraChip": "یوازې {label} پېښې وښایئ"
+      },
+      "timeline": {
+        "toggle": "وختي حرکت",
+        "play": "وختي حرکت پيل کړئ",
+        "pause": "وختي حرکت ودروئ",
+        "eras": "د مهالویش دورې",
+        "jumpTo": "{label} ته لاړ شئ",
+        "slider": "د مهالویش موقعیت",
+        "showUndated": "بې نېټې ځایونه وښایئ",
+        "activeCount": "{count} فعال"
+      },
+      "granularity": {
+        "site": "سایت",
+        "city": "ښار/کلی",
+        "district": "ولسوالۍ",
+        "region": "سیمه",
+        "country": "هېواد"
+      },
+      "granularityAreaHint": "یوه سیمه، چې نږدې ابعاد یې د منځ ټکی شاوخوا یو حلقه کې ښودل کېږي — کره ځای یا سرحد نه دی.",
+      "containerHint": "نور نښه شوي ځایونه لري، نو یوازې سرحد یې ښودل کېږي.",
+      "legend": {
+        "toggle": "تشریح",
+        "title": "نقشه څنګه ولولئ",
+        "color": "رنګ: د کوارډینیت باور (آبي لوړ، زېړ منځنی، سور ټیټ)",
+        "size": "ډوټ اندازه: دا ځای څومره مهم دی",
+        "area": "مات شوی دائره: د ولسوالۍ، سیمې یا هیواد اټکليزه ساحه",
+        "container": "روڼ کرښه: یوه سیمه چې منځپانګې یې جلا جلا نقشه شوي وي"
+      }
+    },
+    "shell": {
+      "showConversation": "مکالمه ښکاره کړئ",
+      "hideConversation": "مکالمه پټه کړئ",
+      "workspaceTab": "کاري ساحه",
+      "conversationTab": "مکالمه",
+      "paneTabsLabel": "د کاري بهیر کړکۍ",
+      "railEmpty": "د مرستندوی پیغامونه او پرمختګ به دلته ښکاره شي.",
+      "railInputPlaceholder": "مرستندوی ته پیغام ولیږئ...",
+      "assistantThinking": "فکر کوي...",
+      "sendMessage": "پیغام واستوئ",
+      "stopGenerating": "تولید بند کړئ",
+      "loadingWorkspace": "کاري ساحه روانه ده...",
+      "unknownType": "دا مکالمه داسې کاري بهیر کاروي چې دا نسخه یې نه پېژني. د مکالمې تاریخچه لاندې ښودل شوې ده.",
+      "untitled": "نوې مکالمه",
+      "toggleMenu": "مینو پرانیزئ یا بند کړئ",
+      "model": "د دې کاري بهیر ماډل"
+    }
+  },
+  "connectors": {
+    "title": "وصل کوونکي",
+    "description": "بهرنۍ وسیلې د Model Context Protocol (MCP) له لارې ونښلوئ. تړل شوې وسیلې چټ کې ماډلونو ته شته کیږي، او هره وسیله یوازې ستاسو د تأیید وروسته چلېږي.",
+    "localOnlyNote": "تاسو له هر چمتو کوونکي سره مستقیم ننوتن کوئ. د لاسرسي کیلي رمزونه کوډ شوي او یوازې په دې وسیله کې ساتل کېږي، او له هرې غوښتنې سره د اپ سرور له لارې استول کېږي — هلته هیڅکله نه ساتل کېږي، نه ثبتېږي.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "زېرمتونونه ولټوئ، مسلې او Pull Requestونه ولولئ او جوړ کړئ."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "دندې او پروژې پیدا کړئ، جوړ کړئ او تازه یې کړئ."
+      }
+    },
+    "connect": "وصل کړئ",
+    "connected": "وصل شو",
+    "tokenEndsIn": "پای ته رسي ••••{last4}",
+    "disconnect": "ناوصل کړئ",
+    "toolCount": "{count, plural, =1 {۱ وسیله شته} other {# وسیلې شته}}",
+    "patLabel": "شخصي لاسرسي ټوکن",
+    "createTokenLink": "ټوکن جوړ کړئ",
+    "tokenScopeHint": "یوه داسې ټوکن وکاروئ چې یوازې اړوند وسیلو ته لاسرسي لري.",
+    "validating": "اتصال چک کېږي...",
+    "validationFailed": "وصل نه شو. پته وګورئ او بیا هڅه وکړئ.",
+    "authFailed": "سرور توکن رد کړ. دا وګورئ او بیا هڅه وکړئ.",
+    "tokenRequired": "توکن اړین دی",
+    "enableServer": "په چټ کې شتون لري",
+    "arbitraryTitle": "نور MCP سرورونه",
+    "arbitraryToggle": "نور MCP سرورونه اجازه ورکړئ",
+    "arbitraryWarning": "هر څوک چې MCP سرور چلوي کولی شي هغو پیغامونو ته چې وسیلو ته لیږي، لاسرسی ومومي. یوازې له باور لرونکو سرورونو سره وصل شئ. هره وسیله لا هم ستاسو تایید ته اړتیا لري.",
+    "addServer": "MCP سرور اضافه کړئ",
+    "editServer": "MCP سرور سمول",
+    "serverName": "نوم",
+    "serverUrl": "د سرور URL",
+    "nameRequired": "نوم اړین دی",
+    "urlRequired": "URL اړین دی",
+    "invalidUrl": "یوه عامه https:// پته دننه کړئ",
+    "namePlaceholder": "زما MCP سرور",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "د لاسرسي توکن (اختیاري)",
+    "keepTokenPlaceholder": "د اوسني توکن ساتلو لپاره تش پرېږدئ",
+    "disconnectedToast": "{name} بې اتصال شو",
+    "save": "ساتنه",
+    "connectWithProvider": "له {name} سره وصل شئ",
+    "useTokenInstead": "د لاسرسي توکن وکاروئ",
+    "oauthWaiting": "د تصدیق لپاره انتظار…",
+    "oauthFailed": "ننوتل ناکام شول. بیا هڅه وکړئ.",
+    "oauthDenied": "خدمت چمتو کوونکي ته لاسرسی رد شو.",
+    "oauthTimeout": "ننوتل وخت تېر شو. بیا هڅه وکړئ.",
+    "oauthCancelled": "ننوتل لغوه شو.",
+    "oauthUnavailable": "پدې سرور کې د دې کنیکټر لپاره ننوتل نشته. د لاسرسي توکن وکاروئ یا له خپل مدیر څخه وغواړئ چې OAuth اپ تنظیم کړي.",
+    "ownAppToggle": "خپله OAuth اپ وکاروئ",
+    "ownAppHint": "په خپل {name} حساب (سازمان، ورک‌سپېس یا شرکت) کې یو OAuth اپ راجستر کړئ، لاندې callback URL سره، او اسناد یې دلته دننه کړئ. که غواړئ له جوړ-په اپ څخه وکاروئ، دا تړلی پریږدئ.",
+    "ownAppCustomHint": "غواړئ کولای شئ دلته د خپلې OAuth اپ اسناد ورکړئ، که تش پرېږدئ سرور به یې په اوتومات ډول ثبت کړي.",
+    "ownAppInUse": "له خپلې OAuth اپ سره نښلول شو.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (که ستاسو اپ دا ولري)",
+    "redirectUriLabel": "Callback / redirect URL چې راجستر شي",
+    "reconnect": "بیا وصل کړئ",
+    "needsReauth": "بیا وصل ته اړتیا لري",
+    "disconnectOauthNote": "بې‌اتصاله کول یوازې له دې وسیلې څخه لاسرسی ختموي. د بشپړ لاسرسي لغوه کولو لپاره، خپلو {name} اسنادو کې مجاز اپونه مدیریت کړئ.",
+    "authModeLabel": "تصدیق",
+    "authModeNone": "هیڅ",
+    "authModeBearer": "د لاسرسي توکن",
+    "authModeOauth": "له خدمت چمتو کوونکي سره ننوتل (OAuth)",
+    "oauthCustomHint": "له سرور د خدمت چمتو کوونکي سره به (پاپ-اپ) وینډو کې وروسته له خوندي کولو ننوتل وکړئ.",
+    "saveAndSignIn": "وساتئ او ننوزئ",
+    "oauthCallback": {
+      "title": "اجازه بشپړه شوه",
+      "missingState": "هیڅ د تصدیق لپاره نشته",
+      "close": "تاسو کولی شئ دا کړکۍ وتړئ او اپ ته راوګرځئ.",
+      "closeButton": "کړکۍ وتړئ"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "ماډل سرچینه ونښلوئ",
+    "addAnother": "بله ماډل سرچینه اضافه کړئ",
+    "edit": "سمول",
+    "disconnect": "{name} پرې کړئ",
+    "disconnectedToast": "{name} پرې شو",
+    "modelCountLabel": "{count} ماډلونه",
+    "loadingModels": "ماډلونه بارېږي...",
+    "noModelsAvailable": "له دې سرچینې څخه ماډل شته نه دی",
+    "sourceUnreachable": "دې سرچینې ته لاسرسی ونه شو. ستاسو لاسرسی بدل شوی شي، یا خدمت لنډ مهال نه فعال دی.",
+    "retry": "بیا هڅه وکړئ",
+    "connectFoundryAccount": "Microsoft Azure Foundry حساب ونښلوئ",
+    "connectFoundryDescription": "د داسې Azure Foundry حساب څخه ماډل استقرارونه پیدا کړئ چې تاسو ورته لاسرسی لرئ. ستاسې Azure اجازه لیکونه هر غوښتنه تاییدوي — دلته د اپلیکیشن ماډل محدودیتونه نه پلي کېږي.",
+    "selectModelsDescription": "وټاکئ چې د دې حساب کوم ماډل استقرارونه ستاسې د ماډل غوره کوونکی کې ښکاره شي.",
+    "editConnection": "نښلون سمول",
+    "nameLabel": "نوم",
+    "namePlaceholder": "لکه: زما ټيم سینډباکس",
+    "nameRequired": "د سرچینې نوم اړین دی",
+    "foundryAccountLabel": "Foundry حساب",
+    "enterManually": "لاسې دننه کړئ",
+    "browseResources": "سرچینې وپلټئ",
+    "subscriptionIdLabel": "د ګډون ID",
+    "resourceGroupLabel": "د سرچینې ډله",
+    "accountNameLabel": "د حساب نوم",
+    "subscriptionRequired": "ګډون وټاکئ",
+    "accountRequired": "Foundry حساب وټاکئ",
+    "accountSelectionRequired": "له نوملړه حساب وټاکئ.",
+    "selectAllRequired": "ګډون، سرچینه ډله او حساب وټاکئ.",
+    "connectionFailed": "دا حساب ونه شو موندلی. ډاډ ترلاسه کړئ چې جزيیات سم دي او تاسو لاسرسی لرئ.",
+    "duplicateSource": "دغه حساب مخکې له \"{name}\" په نوم نښلول شوی دی.",
+    "connectionSuccessModels": "نښلول شو — {count} ماډل استقرار(ونه) وموندل شول",
+    "connectionSuccessEmpty": "نښلول شو، خو په دې حساب کې کوم ماډل استقرار ونه موندل شو.",
+    "checkingConnection": "نښلون معاینه کېږي...",
+    "next": "بل",
+    "back": "شاته",
+    "cancel": "لغوه کړئ",
+    "connect": "نښلول",
+    "save": "ذخیره کړئ",
+    "scanningResources": "ستاسې Azure ګډونونو سکین کېږي...",
+    "discoveryPartialWarning": "{count, plural, one {# ګډون} other {# ګډونونه}} سکین نشول. که ستاسو حساب نشته، لاسي داخلول وکاروئ.",
+    "discoveryTruncatedWarning": "ډېر سرچینې وې، ټولې بشپړې سکین نه شوې. که ستاسو حساب نشته، لاسي داخلول وکاروئ.",
+    "noAccountsDiscovered": "ستاسو په ګډونونو کې هېڅ Foundry حساب ونه موندل شو. که لاره مو معلومه وي، لاسي داخلول وکاروئ.",
+    "retryScan": "بیا سکین کړئ",
+    "searchAccountsPlaceholder": "حسابونه ولټوئ...",
+    "modelsSelectedCount": "له {total} څخه {selected} ماډلونه غوره شوي",
+    "selectAll": "ټول انتخاب کړئ",
+    "deselectAll": "ټول غیرفعال کړئ",
+    "autoAddLabel": "نوي ماډلونه په اوتومات ډول اضافه کړئ",
+    "autoAddDescription": "دې حساب ته وروسته زیات شوي ماډلونه به په اوتومات ډول ښکاره شي. نه ټاکل شوي ماډلونه به نه ښکاري."
   }
 }

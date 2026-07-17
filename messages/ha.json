@@ -437,7 +437,22 @@
     "noProjectsFound": "Ba a samo ayyuka ba. Ana amfani da \"default\".",
     "selectAllRequired": "Zaɓi rijista, asusu, da aiki.",
     "subscriptionRequired": "Zaɓi biyan kuɗi",
-    "accountRequired": "Zaɓi asusun Foundry"
+    "accountRequired": "Zaɓi asusun Foundry",
+    "projectSelectionRequired": "Zaɓi wani aiki daga jerin.",
+    "scanningResources": "Ana nazarin haɗin Azure ɗinku...",
+    "searchProjectsPlaceholder": "Bincika ayyuka...",
+    "noProjectsDiscovered": "Ba a samu ayyukan Foundry ba a cikin haɗin ku. Yi amfani da shigar da hannu idan kun san hanyar.",
+    "discoveryPartialWarning": "Ba za a iya nazarin {count, plural, one {# haɗi} other {# haɗi}} ba. Yi amfani da shigar da hannu idan aikinku ya bace.",
+    "discoveryTruncatedWarning": "Akwai dimbin albarkatu fiye da adadin da za a iya nazari gaba ɗaya. Yi amfani da shigar da hannu idan aikinku ya bace.",
+    "retryScan": "Sake gwada nazari",
+    "next": "Gaba",
+    "back": "Baya",
+    "selectAgentsDescription": "Zaɓi waɗanne wakilai daga wannan aikin za su bayyana a cikin mai zaɓar samfurin ku.",
+    "selectAll": "Zaɓi duka",
+    "deselectAll": "Cire zaɓi duka",
+    "agentsSelectedCount": "An zaɓi {selected} daga cikin {total} wakilai",
+    "autoAddLabel": "Ƙara sababbin wakilai ta atomatik",
+    "autoAddDescription": "Wakilai da za a wallafa zuwa wannan aiki daga baya za su bayyana ta atomatik. Wakilan da ba a duba ba za su ci gaba da kasancewa a waje."
   },
   "Quick Actions": "Ayyuka Masu Sauri",
   "Type / in chat to access your prompts": "Rubuta / a cikin tattaunawa don samun damar kwatance naka",
@@ -818,7 +833,19 @@
       "listingTools": "Ana duba kayan aiki masu samuwa…",
       "analyzingFiles": "Ana nazarin fayilolinku…",
       "searchingKnowledge": "Ana bincike a cikin kundin bayanai…",
-      "cancellingPriorTool": "Ana soke buƙatar kayan aiki ta baya…"
+      "cancellingPriorTool": "Ana soke buƙatar kayan aiki ta baya…",
+      "workflow": {
+        "preparingDocument": "Ana shirya bayanai...",
+        "writingDocument": "Ana rubuta takarda...",
+        "analyzingSource": "Ana nazarin rubutun asali...",
+        "translating": "Ana fassara...",
+        "reviewingTranslation": "Zagaye na {round} daga cikin {total} na dubawa...",
+        "revisingTranslation": "Ana amfani da ra'ayin dubawa...",
+        "extractingRows": "Ana fitar da layuka daga {source}...",
+        "transformingTable": "Ana sauya tebur...",
+        "findingLocations": "Ana gano wurare...",
+        "updatingMap": "Ana sabunta taswira..."
+      }
     },
     "toolSummary": {
       "usedTools": "An yi amfani da {count, plural, one {# kayan aiki} other {# kayan aiki}}",
@@ -879,7 +906,8 @@
     "listen": "Saurara",
     "processingAudio": "Ana sarrafa sauti...",
     "ttsError": "Kuskure wurin ƙirƙirar sauti. Da fatan za a sake gwadawa.",
-    "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa"
+    "unsupportedMessageType": "Kuskure wurin nuna saƙo: Nau'in saƙo baya dacewa",
+    "addLanguageOption": "Ƙara \"{name}\"…"
   },
   "transcript": {
     "originalTranscript": "Rubutun Asali",
@@ -1292,16 +1320,18 @@
     "unsavedChanges": "Canje-canje ba a ajiye ba",
     "unsavedChangesMessage": "Kana da canje-canje da ba a ajiye ba. Ka soke su?",
     "characterCount": "{current}/{max}",
-    "clearField": "Goge filin",
-    "autosaveNote": "Sauye-sauye suna ajiye kansu kai tsaye.",
+    "clearField": "Share filin",
+    "autosaveNote": "Sauye-sauye suna adanawa ta atomatik.",
     "responseSection": "Amsa",
-    "voiceSection": "Murya",
+    "voiceSection": "Muryar",
     "behaviorSection": "Hali",
     "resetChatSettings": "Sake saitin tattaunawa",
-    "resetChatSettingsConfirmTitle": "Sake saitin tattaunawa?",
-    "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsoffin saituna ga duk abubuwan wannan shafi: zafin jiki, umarnin da aka keɓance, Bayani game da Kai, amsar samfurin, saurin gudu, karanta rubutu da murya, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarka ba.",
+    "resetChatSettingsConfirmTitle": "A sake saitin saitunan tattaunawa?",
+    "resetChatSettingsConfirmMessage": "Wannan zai dawo da tsofaffin saituna ga abin da ke wannan shafin: zafin jiki, umarni na musamman, Game da Kai, amsar samfur, gudun yawo, magana da rubutu, fayiloli masu aiki, da tabbaci. Ba zai shafi tattaunawarku ba.",
     "customInstructionsLabel": "Umarni na musamman*",
-    "defaultTemperatureLabel": "Yanayin Zafi na Asali*"
+    "defaultTemperatureLabel": "Yanayin Zafi na Asali*",
+    "Usage & Impact": "Amfani & Tasiri",
+    "Connectors": "Haɗa-haɗa"
   },
   "emptyState": {
     "greeting": "Ta yaya zan iya taimaka?",
@@ -1447,33 +1477,78 @@
     },
     "title": "Zaɓi samfur",
     "modelsDescription": "Zaɓi samfurin AI don tattaunawar ku. Kowanne samfur yana da ƙwarewa daban — zaɓi guda ɗaya don duba cikakkun bayanai.",
-    "recommended": "An ba da shawarar"
+    "recommended": "An ba da shawarar",
+    "familyAll": "Duka",
+    "familyFilterLabel": "Farfasa samfuran ta iyali",
+    "searchPlaceholder": "Bincika samfura",
+    "searchEmpty": "Babu samfuri da ya dace da bincikanka.",
+    "star": "Ƙara tauraro {name}",
+    "unstar": "Cire tauraro daga {name}",
+    "otherFamily": "Sauran",
+    "hostedExternally": "Ana gudanar da shi a kan tsarin mai bayarwa ta hanyar Azure AI Foundry, ba a cikin mahallin Azure na MSF ba.",
+    "hostedIn": {
+      "label": "An adana a {regions}",
+      "tooltip": "Yankin Azure inda aka dora wannan samfuri. Ana sarrafa tattaunawa a yankinka."
+    },
+    "badges": {
+      "external": "Na waje",
+      "externalTooltip": "Ana gudanar da shi a kan tsarin mai bayarwa ta hanyar Azure AI Foundry, ba a cikin mahallin Azure na MSF ba.",
+      "regionHostedTooltip": "An dora shi a yankin Azure na {region}. Ana sarrafa tattaunawa da wannan samfuri a can."
+    },
+    "favorites": "Masu so",
+    "euResidencyNote": "Dukkan samfuran suna gudana a yankin Azure na EU.",
+    "hostedRegion": {
+      "label": "Yankin da aka adana",
+      "processedIn": "Ana sarrafa wannan tattaunawar a yankin Azure na {region}.",
+      "euOnlyNote": "{name} ana adana shi a yankin Azure na EU; ana sarrafa tattaunawa da shi a can."
+    },
+    "version": {
+      "label": "Sigar"
+    },
+    "reasoningModel": "Samfurin tunani: yana amfani da tsarin mataki-mataki kafin amsa. Yana da jinkiri, amma yafi dacewa da matsaloli masu wahala.",
+    "variant": {
+      "label": "Nau'i"
+    },
+    "deployment": {
+      "title": "Tura aiki",
+      "source": "Tushe",
+      "account": "Asusu",
+      "location": "Wuri",
+      "deployment": "Tura aiki",
+      "modelVersion": "Nau’in samfurin",
+      "publisher": "Maɗaukaki"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Samfurin AI mai amfani da GPT-4.1 tare da bincike kai tsaye ta Bing. Yana samar da bayanai na zamani, duba gaskiya, da sanarwa kan abubuwan da ke faruwa yanzu. Mafi dacewa don bincike da ke bukatar bayanai na kwanan nan, nazarin labarai, da tabbatar da gaskiya.",
-      "knowledgeCutoff": "Bincike na yanar gizo kai tsaye"
+      "knowledgeCutoff": "Bincike na yanar gizo kai tsaye",
+      "tagline": "Tsohon ƙarni na OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Samfurin OpenAI mafi cigaba, musamman wajen warware matsaloli masu tsauri, samar da lamba, da warware matsaloli masu fasaha. Mafi dacewa don ayyukan nazari, kalubalen shirye-shiryen kwamfuta, bincike, da bayani dalla-dalla. Yana ba da damar daidaita kokarin nazari da tsawon amsa.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Lamba, nazari, bincike"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Nau'in GPT-5 mai sauri da araha, daidaitacce don gudu yayin da yake kiyaye inganci. Dace da ayyukan yau da kullum, tambayoyi masu sauri, rarraba kayan aiki, da aikace-aikacen da ke bukatar amsa cikin gaggawa. Kyakkyawan daidaito tsakanin aiki da tsada.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Mafi sauri kuma mai araha"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Nau'in na musamman na GPT-5.2 da aka daidaita don mu'amala da mutane da fahimtar motsin rai. Mabudi wajen sadarwa da nuna tausayi, tallafin lafiyar kwakwalwa, rubuce-rubuce masu kirkira, hada-mana da tattaunawa ta dabi'a. Dace da hirarraki na yau da kullum, shawarwari, da ayyukan da ke bukatar fahimtar motsin rai.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Tattaunawa, tunani tare"
     },
     "o3": {
       "name": "o3",
       "description": "Samfurin OpenAI mai kwarewa wajen warware matsaloli da ban mamaki. Yafi karfi a fannin lissafi mai wahala, nazarin kimiyya, kalubalen lamba, da ayyuka masu matakai da yawa. Yana goyon bayan window na bayanai har 200K. Kuma yana ba da damar sarrafa kokarin nazari.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Tausayi mai zurfi mataki-mataki"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Masanin nazari wanda ke bayyana mataki-mataki. Mafi dacewa don matsalolin lissafi, wasan kwaikwayo na hankali, da fahimtar sabgogi masu sarkakiya. Duba yadda yake warware matsala kai tsaye.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Yana nuna matakan tunani daya bayan daya"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Samfuri mai inganci musamman wajen lamba da rubuce-rubucen fasaha. Dace da warware matsalolin lamba, rubuta bayanan aiki, da bayani game da fasaha. Sauri kuma abin dogaro don aikin ci gaba.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Madadin buda tushe"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Samfurin xAI mai sauyawa, sananne da amsoshi masu zurfi. Yana da kyau don tattaunawa maras iyaka, ayyukan ƙirƙira, da magance matsaloli masu rikitarwa.",
-      "knowledgeCutoff": "13 Mayu, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Mayu, 2025 12:16 AM",
+      "tagline": "Madadin xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Mafi ƙwazo daga samfurorin Anthropic, mai ƙwarewa sosai wajen tunani, coding, da ƙirƙira. Mafi dacewa don nazari mai rikitarwa, bincike, da ayyukan da ke buƙatar fahimta mai zurfi.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Ƙarni na Opus na baya"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Samfurin Claude mai daidaito, mai kyakkyawan aiki a duk coding, nazari, da ayyukan ƙirƙira. Ya dace sosai don amfani na yau da kullum tare da saurin amsawa.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Sonnet ƙarni na baya"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Tsararren samfurin Claude Opus na baya. Ya dace sosai don ayyukan coding masu rikitarwa, nazari na daki-daki, da fahimta mai zurfi.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Opus ƙarni na baya"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Samfurin Claude mai sauri da araha, an tsara shi domin ayyuka masu sauƙi. Ya dace sosai don tambayoyi ƙanana, taƙaitawa, da aikace-aikace masu yawa.",
-      "knowledgeCutoff": "Janairu 2025"
+      "knowledgeCutoff": "Janairu 2025",
+      "tagline": "Saurin nau'in Claude"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Samfurin mafi ƙarfi daga Anthropic. Ya dace da rubutu mai tsawo, bincike, da abubuwan da ke buƙatar tunani mai zurfi.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Dogon rubutu da nazari"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Samfurin Claude mai daidaituwa. Ya dace da rubutu na yau da kullum, nazari, da coding da saurin amsawa.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude mai daidaito na yau da kullum"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Samfurin buda-tushen daga Meta. Dace da rubutu, takaitawa, da tambayoyi masu sauki da sauri.",
+      "tagline": "Madadin buda tushe"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Sabon samfurin OpenAI mafi inganci. Karfi wajen rubutu, bincike, lamba, da warware matsaloli masu rikitarwa.",
+      "tagline": "Sabon GPT mafi inganci"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Karami kuma mafi sauri cikin nau’in GPT. Mafi dacewa don ayyuka masu sauki da gaggawa a farashi mai rahusa.",
+      "tagline": "Mafi ƙanƙanta kuma mafi saurin GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Nau’in GPT mai da hankali kan hira. Dace da tattaunawa na yau da kullum, tunani tare, da tattaunawa masu goyon baya.",
+      "tagline": "Sabon GPT na tattaunawa"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Asalin samfurin GPT-5 mafi inganci. Har yanzu yana iya rubutu, nazari, da lamba.",
+      "tagline": "Tsohon GPT mafi inganci"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare a kullum.",
+      "tagline": "Tsohon GPT na tattaunawa"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Tsohon samfurin GPT mai yalwa. Dace da aikace-aikacen rubutu da amsa tambayoyi idan ba a bukaci sabuwar damar ba.",
+      "tagline": "Tsohon multimodal GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Karamin nau’in GPT-4.1 mai sauri don ayyuka na yau da kullum.",
+      "tagline": "GPT ɗin ƙarni na baya mai sauƙi"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Sabon kuma mafi karfi daga Anthropic. Dace da dogon rubutu, bincike, lamba da zurfin nazari.",
+      "tagline": "Sabon kuma mafi ƙarfi na Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Sabon samfurin buda-tushen DeepSeek. Amincewa wajen rubutu gaba daya da tambayoyin fasaha.",
+      "tagline": "Madadin buda tushe"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Firaministan samfurin Mistral. Wani madadin Turai don rubutu, takaitawa da tambayoyi gaba daya.",
+      "tagline": "Samfuri mai budewa daga Turai"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Tsohuwar gyara na GPT-5. Har yanzu yana da karfi wajen rubutu, nazari, da lamba.",
+      "tagline": "Tsohon babban GPT-5"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Tsohuwar nau’in GPT-5 mai da hankali kan hira. Dace da tattaunawa da tunani tare na yau da kullum.",
+      "tagline": "Tsohon GPT na tattaunawa"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "Karamin nau’in GPT-5. Mafi dacewa don ayyuka masu sauri da sauki a farashi mai rahusa.",
+      "tagline": "GPT na ƙarni na baya mafi ƙanƙanta"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Karamin nau’in GPT-4.1. Dace da ayyukan gaggawa da sauki inda sauri da farashi suke da mahimmanci.",
+      "tagline": "GPT mafi ƙanƙanta na tsohon ƙarni"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Karamin nau’in GPT-4o mai sauri. Dace da ayyuka na gaggawa ba tare da bukatar sabuwar fasaha ba.",
+      "tagline": "GPT na tsoho multimodal mai sauƙi"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Karamin samfurin warware matsala. Dace da lissafi, mantiki, da matsaloli na mataki-mataki a farashi kasa da o3.",
+      "tagline": "Tausayi mai sauri kuma mai araha"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Tsohon karamin samfurin warware matsala. Yana iya lissafi, kimiyya da matsaloli na mantiki a kasafin kudi.",
+      "tagline": "Tausayi mataki-mataki mai ƙarami"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Mafi wayau daga Anthropic, farkon iyalin Claude 5. Dace da mafi wahalar rubutu, bincike da lamba.",
+      "tagline": "Samfurin gaba na Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Sabon Claude mai daidaito, na farko cikin iyalin Claude 5. Karfi wajen rubutu na yau da kullum, nazari, da lamba tare da amsa cikin sauri.",
+      "tagline": "Sabon Claude mai daidaito"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Samfurin matsakaici daga Mistral. Madadin Turai mai daidaita karfi da sauri don aiki na yau da kullum.",
+      "tagline": "Samfuri mai daidaito daga Turai"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Karamin samfurin Mistral. Sauri kuma mai rahusa don takaitawa, rubuce-rubucen farko, da tambayoyi masu sauki.",
+      "tagline": "Karamin samfurin Turai mai sauri"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Karamin samfurin Mistral. Mafi dacewa don gaggawa da saukin aiki a farashi mai rahusa.",
+      "tagline": "Mistral ƙarami har iyaka"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Sabon gyara na DeepSeek-R1. Yana bayyana tunaninsa mataki-mataki da ingantaccen zurfi ciki warware matsala.",
+      "tagline": "Sabunta samfurin buda tausayi"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Karamin samfurin buda-tushen Meta. Da sauri wajen rubutu, takaitawa da tambayoyin yau da kullum.",
+      "tagline": "LLama mai inganci buda tushe"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Tsohon samfurin buɗaɗɗen tushe daga Meta. Har yanzu yana da kyau don rubuce-rubuce da amsa tambayoyi gaba ɗaya.",
+      "tagline": "LLama buda tushe na baya"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Mafi girman samfurin xAI. Ya dace da tattaunawa masu faɗi, nazari, da ayyukan ƙirƙira.",
+      "tagline": "Babban samfurin xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Mafi sabuntar samfurin OpenAI. Mai ƙarfi wajen rubutu, bincike, lamba, da magance matsaloli masu sarkakiya.",
+      "tagline": "Sabon GPT mafi inganci"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (sabon salo)",
+      "description": "Adireshin da ke nuna zuwa sabuwar samfurin chat-tuned na OpenAI a koda yaushe. Shine maye gurbin Azure ga tsoffin `gpt-*-chat`.",
+      "tagline": "Koyaushe sabuwar GPT na tattaunawa"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Sabon fitowar Opus, tsakanin 4.6 da 4.8. Da ƙarfi wajen dogon rubuce-rubuce, bincike, lamba, da zurfin nazari.",
+      "tagline": "Sabon fitowar Opus"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Mafi sabunta samfurin tunani na DeepSeek da maye gurbin Azure don layin R1. Yana nuna tunaninsa mataki-mataki.",
+      "tagline": "Sabuwar samfurin buda tausayi"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Mafi sauri daga jerin V4 na DeepSeek kuma maye gurbin Azure don jerin V3. Yana da sauri wajen rubuce-rubuce na yau da kullum da tambayoyin fasaha.",
+      "tagline": "Samfurin buda tushe mai sauri"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Mafi saurin samfurin tunani daga xAI. Yana tunani mataki-mataki da amsa mai sauri.",
+      "tagline": "Saurin samfurin tunanin xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Mafi saurin samfurin chat na xAI. Yana bada amsa mai sauri ga tambayoyi da tattaunawa na yau da kullum.",
+      "tagline": "Saurin samfurin tattaunawar xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Karamin samfurin xAI. Ya fi sauri kuma ya fi araha don tambayoyi da tattaunawar yau da kullum.",
+      "tagline": "Samfurin xAI mai sauƙi"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Fitaccen samfurin GPT-5.6 na OpenAI. Mafi ƙarfi wajen rubutu, bincike, lissafi, da warware matsaloli masu wahala.",
+      "tagline": "Mataki mafi sabo na GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Matsakaicin matakin GPT-5.6 na OpenAI. Ya dace da rubutu na yau da kullum, nazari, da lissafi tare da saurin amsawa.",
+      "tagline": "GPT-5.6 mai daidaito don amfani na yau da kullum"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Matakin sauri da sauki na GPT-5.6 na OpenAI. Mafi dacewa don tambayoyi masu sauki da ayyuka masu sauki a farashi mai sauki.",
+      "tagline": "GPT-5.6 mai sauƙi kuma mai sauri"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Sabon samfurin matsakaici daga Mistral. Madadin na Turai wanda ke tsaka-tsaki tsakanin ƙwarewa da sauri don aiki na yau da kullum.",
+      "tagline": "Samfurin Turai mai daidaito"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Samfurin open-weight na Moonshot AI. Ya ƙware a ayyukan wakilci, shirye-shirye, da takardu masu tsawo.",
+      "tagline": "Samfurin open-weight mai wakilci"
     }
   },
   "searchMode": {
@@ -1789,7 +2073,20 @@
     "useDefaultStyle": "Yi amfani da salon rubutu na asali",
     "noTonesCreated": "Ba a ƙirƙiri yanayi ba tukuna",
     "createTonesHint": "Ƙirƙiri yanayi a Cikakken Ayyuka",
-    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nTsaruka masu goyan baya: Word, Excel, PowerPoint, HTML, TXT\nMafi girma: 40MB\n\nYana goyan bayan harsuna sama da 80 tare da fayilolin kundin kalmomi na zaɓi."
+    "translateDocumentTooltip": "Fassara takardu zuwa wata harshe.\n\nTsaruka masu goyan baya: Word, Excel, PowerPoint, HTML, TXT\nMafi girma: 40MB\n\nYana goyan bayan harsuna sama da 80 tare da fayilolin kundin kalmomi na zaɓi.",
+    "translateTooltip": "Fassara yanki na rubutu zuwa wata harshe.\n\nIdan gaba ɗaya fayil (Word, Excel, PowerPoint, HTML, TXT), yi amfani da Translate Document.",
+    "cameraTooltip": "Dauki hoto da kamarar na’urarka ka haɗa da sakon.",
+    "noResults": "Babu aiki da ya dace",
+    "sectionPinned": "Adana Sama",
+    "sectionFrequent": "Ana yawan amfani",
+    "sectionMore": "Ƙari",
+    "categoryWeb": "Web",
+    "categoryMedia": "Kafofi & fayiloli",
+    "categoryTransform": "Sauya",
+    "pin": "Adana a sama",
+    "unpin": "Cire daga sama",
+    "moveToMore": "Matsa zuwa Ƙari",
+    "moveOutOfMore": "Nuna a menu"
   },
   "transcription": {
     "transcribesOnSend": "Zai fassara zuwa rubutu lokacin aikawa",
@@ -1923,7 +2220,14 @@
     "expiresSoon": "Zai ƙare cikin {days} rana(ni) - sauke da wuri",
     "expires": "Za a samu na tsawon {days} rana",
     "unofficialBadgeLabel": "Ba na hukuma ba",
-    "unofficialLanguageWarning": "Wannan harshe ba ya cikin jerin wadanda ake goyon baya a hukumance. Ba a tabbatar da ingancin fassarar ba. Da fatan za a bari masana ko wadanda suka iya wannan harshe su duba sakon kafin a yada."
+    "unofficialLanguageWarning": "Wannan harshe ba ya cikin jerin wadanda ake goyon baya a hukumance. Ba a tabbatar da ingancin fassarar ba. Da fatan za a bari masana ko wadanda suka iya wannan harshe su duba sakon kafin a yada.",
+    "translationSubmitted": "An fara fassara — ana sarrafa PDFs a bango.",
+    "pendingTitle": "Ana fassara {filename}…",
+    "pendingHint": "Fassarar PDF na tafiya a bango kuma za ta iya ɗaukar mintuna kaɗan. Za ka iya ci gaba da aiki — wannan katin zai sabunta idan takaddar ta shirya, ko bayan an sake lodi.",
+    "asyncFailed": "Fassarar takarda ta gaza: {error}",
+    "jobNotFound": "aikin fassara bai samu ba. Da fatan za a sake gwadawa.",
+    "retryPolling": "Duba sake",
+    "pollingStalled": "Ba mu iya samun uwar garken ba don duba cigaba. Fassarar na iya ci gaba da gudana."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2277,10 @@
       "technicalDetails": "Cikakkun bayanai na fasaha",
       "agentCountLabel": "wakilai {count}",
       "disconnectedToast": "An katse {name}"
+    },
+    "emptyState": {
+      "title": "Babu wakilai na yanki ko na ƙungiya a yanzu",
+      "description": "Haɗa da wani aikin Foundry a ƙasa don gano wakilansa."
     }
   },
   "privacy": {
@@ -2083,5 +2391,753 @@
     "review": "Duba",
     "itemId": "ID: {id}",
     "itemSource": "{date} daga {source}"
+  },
+  "regionOverride": {
+    "warning": "An kunna magance wurin — ana dirka buƙatunku zuwa yankin bayanai na {region}. Wannan na gwaji ne da hannu, ba wurin ku na gaske ba.",
+    "clear": "Share magance wurin"
+  },
+  "usageImpact": {
+    "empty": "Ba a samo bayanin amfani ba tukuna. Amfanin takardunku da kididdigar hayaƙi za su bayyana anan bayan kun yi hira.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} cajin wayar hannu",
+    "requests": "Buƙatu",
+    "promptTokens": "Alamomin umarni",
+    "completionTokens": "Alamomin kammala",
+    "topModels": "Daga samfur",
+    "byRegion": "Ta yankin masauki",
+    "regionDefault": "Na asali",
+    "modelRow": "{requests} buk. · {grams} g",
+    "disclosure": "Kiyasin ya dogara ne da hasashe v{version} · tun daga {since} · hira ta al'ada kawai (ba a lissafa amsoshin ‘agents’ da kundin sani ba).",
+    "reset": "Sake saiti kididdigar amfani"
+  },
+  "extraction": {
+    "toggleLabel": "Ciro bayani tsari",
+    "trayLabel": "Ciro",
+    "trayPrefix": "Ciro",
+    "trayInfo": "Ciro zai dawo da teburin tsari har guda 3. Shirye-shiryen aiki za su adana a na’ura.",
+    "autoChip": "Auto — AI zai ba da tsari",
+    "addRecipe": "Ƙara tsari",
+    "addRecipeTitle": "Ƙara tsari a wannan ciro",
+    "addRecipeFullTitle": "Har zuwa tsari 3 a kowanne ciro",
+    "removeRecipe": "Cire tsari: {name}",
+    "remove": "Cire",
+    "section": "Shirye-shiryen ciro",
+    "sectionSubtitle": "Samfuran da aka ajiye don mayar da rubutu, fayiloli, ko URLs zuwa teburin tsari. Zabi har guda 3 a kowanne lokaci na ciro.",
+    "newRecipe": "Sabon tsari",
+    "untitledRecipe": "(Tsarin ba shi da suna)",
+    "deleteRecipe": "Goge tsari",
+    "delete": "Goge",
+    "deleteConfirm": "A goge?",
+    "cancel": "Soke",
+    "name": "Suna",
+    "namePlaceholder": "misali: Patients",
+    "description": "Bayanin",
+    "optional": "(zabi)",
+    "descriptionPlaceholder": "Takaitaccen bayanin da ke bayyana cikin zaɓin tsari",
+    "instructions": "Umarni",
+    "instructionsPlaceholder": "Me ya kamata AI ta nemo a cikin bayanin?",
+    "fields": "Fannonin",
+    "field": "fani",
+    "fieldsPlural": "fannonin",
+    "fieldName": "Sunan fanni",
+    "fieldType": "Irin fanni",
+    "fieldNamePlaceholder": "field_name",
+    "addField": "Ƙara fanni",
+    "removeField": "Cire fanni",
+    "toggleDetails": "Buɗe rufe cikakkun bayanai",
+    "fieldDetailsTitle": "Bayanin, ƙima (enum)",
+    "fieldDescriptionPlaceholder": "Bayanin (yana taimakawa AI wajen gano wannan fanni)",
+    "enumValuesPlaceholder": "Ƙimomi da aka amince da su, a raba da alamar goma",
+    "required": "dole",
+    "suggest": "Ba da shawara ta AI",
+    "suggesting": "Ana bayar da shawara…",
+    "suggestNeedsInstructions": "Da fari, ƙara umarni don AI ta san abin da za ta nemo",
+    "searchRecipes": "Bincika rubutattun tsari",
+    "pickerEmpty": "Babu rubutattun tsari tukuna. Ƙirƙiri ɗaya don farawa.",
+    "pickerEmptyMatch": "Babu yadda ya dace da rubutattun tsari",
+    "editorEmpty": "Babu rubutattun tsari tukuna. Ƙirƙiri ɗaya kuma AI za ta taimaka wajen cika filayen.",
+    "noData": "Babu bayanan da aka cire",
+    "noRecords": "Babu bayanan {name} da aka samu",
+    "row": "layi",
+    "rows": "layuka",
+    "record": "bayanan",
+    "records": "bayanan",
+    "complete": "cikakke",
+    "download": "Zazzage",
+    "preview": "Dubawa",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "Filaye {count}",
+    "fieldCountOne": "Filin 1",
+    "andMoreFields": "+ {count} ƙari",
+    "saveAsRecipe": "Ajiye a matsayin rubutaccen tsari",
+    "savedAsRecipeToast": "An adana a matsayin rubutaccen tsari \"{name}\"",
+    "previewTruncated": "Ana nuna layi 3 daga cikin {total}. Zazzage don cikakken bayani.",
+    "previewEmpty": "Babu layi don dubawa",
+    "proposedSchemaTip": "AI ta bada wannan tsari. Adana shi don yin amfani da shi gaba.",
+    "downloadAriaLabel": "Zazzage {name} azaman {format}",
+    "previewAriaLabel": "Canza duba na {name}",
+    "changeFormatAriaLabel": "Canza tsarin zazzagewa na {name}",
+    "materialWarningTitle": "Ƙara abu don cirewa",
+    "materialWarningBody": "Rubuta saƙo a ƙasa, haɗa fayil, ko saka URL.",
+    "materialAttach": "Haɗa fayil",
+    "willExtractPrefix": "Za a cire daga:",
+    "materialText": "rubutun saƙo",
+    "materialFiles": "{count, plural, one {fayil 1} other {fayiloli #}}",
+    "materialActiveFiles": "{count, plural, one {fayil ɗin da ke aiki 1} other {fayilolin da ke aiki #}}",
+    "dismiss": "Kashe aikin cirewa"
+  },
+  "Connectors": "Haɗa-haɗa",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Fassara",
+        "description": "Fassara rubutu tare da nazari, jadawalin kalmomi, da zagayen dubawa"
+      },
+      "document": {
+        "label": "Takarda",
+        "description": "Rubuta da inganta takarda tare da taimakon na'ura mai ƙwaƙwalwa"
+      },
+      "dataAnalysis": {
+        "label": "Nazarin bayanai",
+        "description": "Shigo da tebur da bincika ko sauya bayanai naka"
+      },
+      "map": {
+        "label": "Taswira",
+        "description": "Juya kowanne bayanai zuwa wurare a cikin taswira"
+      }
+    },
+    "chooser": {
+      "prompt": "Ko fara sabon wurin aiki na musamman"
+    },
+    "sidebar": {
+      "newTranslation": "Sabo fassara",
+      "newDocument": "Sabuwar takarda",
+      "newDataAnalysis": "Sabo nazarin bayanai",
+      "newMap": "Sabuwar taswira"
+    },
+    "translation": {
+      "chooseLanguage": "Harshe na fassara",
+      "customLanguageHint": "\"{name}\" harshe ne da ka ƙara — AI za ta ƙoƙarta kowane harshe, amma inganci ba a tabbatar ba.",
+      "addedByYou": "Ka ƙara",
+      "glossary": "Jadawalin kalmomi",
+      "noGlossary": "Babu jadawalin kalmomi",
+      "manageGlossaries": "Jadawalin kalmomi",
+      "glossaries": "Jadawalin kalmomi",
+      "closeGlossaries": "Rufe jadawalin kalmomi",
+      "glossariesEmpty": "Ƙirƙiri jadawalin kalmomi don tabbatar da fassarar wasu kalmomi. Jadawalai za su ajiye a wannan na'ura kuma za a iya sake amfani da su.",
+      "newGlossary": "Sabon kundin kalmomi",
+      "newGlossaryName": "Kundin kalmomi mara suna",
+      "glossaryName": "Sunan kundin kalmomi",
+      "deleteGlossary": "Share kundin kalmomi",
+      "sourceTerm": "Kalma daga asali",
+      "targetTerm": "Fassara",
+      "note": "Bayanan kula",
+      "noteOptional": "Bayanan kula (zabi)",
+      "addEntry": "Ƙara kalma",
+      "removeEntry": "Cire {term}",
+      "mode": "Yanayin fassara",
+      "modeQuick": "Gaggawa",
+      "modeAgentic": "Bincike",
+      "modeQuickHint": "Fassara sau daya, mafi sauri",
+      "modeAgenticHint": "Na fara nazarin rubutun, sai na fassara sannan kuma na gudanar da har zuwa zagaye 3 na duba",
+      "translate": "Fassara",
+      "translating": "Ana fassara…",
+      "sourceLabel": "Rubutun asali",
+      "targetLabel": "Fassara",
+      "sourcePlaceholder": "Manna ko rubuta rubutun da ake son fassara, ko loda takarda.",
+      "targetEmpty": "Fassarar za ta bayyana a nan.",
+      "uploadDocument": "Loda takarda",
+      "copy": "Kwafi",
+      "copied": "An kwafi",
+      "tooLong": "Rubutun ya fi {max} haruffa tsawo. Raba shi gida-gida, ko amfani da fassarar takarda don fayil duka.",
+      "analysisTitle": "Nazarin kafin fassara",
+      "register": "Yi rijista",
+      "reviewTitle": "Zagaye na nazari",
+      "roundLabel": "Zagaye na {round}",
+      "verdictApprove": "An amince",
+      "verdictRevise": "An gyara",
+      "railRequest": "Fassara rubutun daga asali zuwa {language}.",
+      "railDoneAgentic": "An gama. Na nazarci rubutun, na fassara, kuma na gudanar da zagaye {rounds} na nazari. Sakamakon yana cikin ma'aikata.",
+      "railDoneQuick": "An gama. Fassarar tana cikin ma'aikata.",
+      "railAssessRequest": "Kimanta ingancin fassarar {language}.",
+      "railAssessDone": "An kammala kimantawa: ƙididdiga sun shiga ma'aikata tare da gyara {count} da ake bukatar duba.",
+      "roundChanges": "Canje-canje a zagaye na {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Daidaici",
+          "description": "Yana isar da ma'anar asali gaba daya — babu kuskuren fassara, rasa wani ɓangare, ƙara wani, ko barin wani ba a fassara ba"
+        },
+        "fluency": {
+          "label": "Taushi",
+          "description": "Nahawu, rubutu, alamomin rubutu, da haɗa kalmomi sun dace da yadda ake amfani da yare na dacewa"
+        },
+        "terminology": {
+          "label": "Terminolaji",
+          "description": "Kalmomin fagen sun dace kuma sun daidaita; an bi kundin kalmomi ƙwarai"
+        },
+        "style": {
+          "label": "Salon rubutu",
+          "description": "Yanayi, nau'i, da murya sun dace da na asali kuma sun kasance daidaitacce"
+        },
+        "localeConventions": {
+          "label": "Dabi'un yankin",
+          "description": "Kwanaki, lambobi, raka'o'i, da alamomin rubutu sun bi yadda ake a yankin da ake fassara zuwa"
+        },
+        "audience": {
+          "label": "Masu karatu",
+          "description": "Ya dace da manufa da nau'in masu karatun da rubutun ya shafa"
+        }
+      },
+      "severity": {
+        "minor": "Kadan",
+        "major": "Babba"
+      },
+      "assess": "Kimanta inganci",
+      "assessing": "Ana kimantawa…",
+      "assessmentTitle": "Kimanta inganci",
+      "criteriaPicker": "Ma'aunin kimantawa",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Shawarwarin gyara",
+      "noEditsSuggested": "Babu gyara da aka bada shawara — fassarar ta cika ka'idar da aka zaɓa.",
+      "acceptEdit": "Amince",
+      "rejectEdit": "Ki",
+      "acceptAll": "Amince da duka",
+      "rejectAll": "Ki duka",
+      "editAccepted": "An amince",
+      "editRejected": "An ƙi",
+      "editUnapplicable": "Ba a samu wannan sashi a cikin rubutun ba — ba a aiwatar ba",
+      "editTranslation": "Gyara",
+      "doneEditing": "An gama",
+      "pasteTranslationPlaceholder": "Rubuta ko liƙa fassara domin aiki…",
+      "editingBlockedPendingEdits": "Da fari gyara ko ƙi shawarwarin da aka gabatar",
+      "pendingCount": "{count} ana jira",
+      "closeReview": "Rufe duba inganci",
+      "showReview": "Nuna duba",
+      "showReviewPending": "Nuna duba ({count} ana jira)"
+    },
+    "document": {
+      "emptyTitle": "Bayyana takardar da kake so",
+      "emptyBody": "Fadawa mataimaki abin da za a rubuta — rahoton yanayi, wasiƙar mai ba da gudummawa, mintin taro. Da fari, ƙara fayiloli in kana so a kawo ambato da hujjoji daga cikinsu.",
+      "generatePlaceholder": "Bayyana irin takardar da za a rubuta…",
+      "revisePlaceholder": "Bayyana gyaran da kake so a yi…",
+      "generate": "Gina",
+      "revise": "Gyara",
+      "writing": "Ana rubutawa…",
+      "export": "Fitar da bayanai",
+      "references": "Manazarta",
+      "addReference": "Ƙara fayil",
+      "uploading": "Ana loda…",
+      "removeReference": "Cire {name}",
+      "referenceChars": "Haruffa {chars} na rubutun da aka tace",
+      "referenceEmpty": "Ba a iya tace rubutu daga {name} ba",
+      "uploadFailed": "An kasa loda",
+      "untitledDocument": "Takarda babu suna",
+      "generatedSummary": "Na rubuta takardar a cikin wurin aiki. Duba ka fada min abin da za a gyara.",
+      "revisedSummary": "Na gyara takardar a cikin wurin aiki.",
+      "runFailed": "Wani abu ya samu matsala: {message}",
+      "uploadBasis": "Fara daga takarda da ke akwai",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Nahawu & rubutu",
+          "description": "Daidaitaccen nahawu da rubutu; dogon amfani da turancin Ingilishi ɗaya (US ko UK) ya wadatar — cakuda iri ne kuskure"
+        },
+        "consistency": {
+          "label": "Daidaici",
+          "description": "Amfani da ƙamus, suna, manyan haruffa da tsarin rubutu iri ɗaya a duka"
+        },
+        "clarity": {
+          "label": "Bayyananniya",
+          "description": "Jimloli masu kai tsaye kuma ba su da ruɗani; tsarin da ke taimakawa mai karatu"
+        },
+        "sensitivity": {
+          "label": "Hankali",
+          "description": "Ayyana kalmomi masu haɗin kai, dake da hankali game da rikici da aikin jin kai (zaɓi ne)"
+        },
+        "specAdherence": {
+          "label": "Biya ga tsari",
+          "description": "Yabi tsarin da aka makala: sassan da ake buƙata sun cika, a jerin da ya dace, tare da bin umarni"
+        },
+        "toneAdherence": {
+          "label": "Biya ga yanayi",
+          "description": "Yabi dokokin murya da yanayi na daura"
+        }
+      },
+      "severity": {
+        "minor": "Karami",
+        "major": "Babba"
+      },
+      "assess": "Kimanta inganci",
+      "assessing": "Ana kimantawa…",
+      "assessmentTitle": "Bita na inganci",
+      "criteriaPicker": "Ma'aunin da za a kimanta",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Gyare-gyaren da aka ba da shawara",
+      "noEditsSuggested": "Babu wani gyara da aka ba da shawara — takaddar ta bi ka'idar da aka zaɓa.",
+      "acceptEdit": "Amince",
+      "rejectEdit": "Kora",
+      "acceptAll": "Amince da duka",
+      "rejectAll": "Kora duka",
+      "editAccepted": "An amince",
+      "editRejected": "An ƙi",
+      "editUnapplicable": "An kasa gano wannan sashi a cikin rubutun yanzu — ba a aiwatar ba",
+      "editingBlockedPendingEdits": "Da fari a warware ko ƙin gyare-gyaren da ake jira",
+      "pendingCount": "{count} ana jira",
+      "closeReview": "Rufe bita na inganci",
+      "showReview": "Nuna bita",
+      "showReviewPending": "Nuna bita ({count} ana jira)",
+      "railAssessRequest": "Kimanta ingancin takaddar gwargwadon ka'idodin da aka zaɓa.",
+      "railAssessDone": "An kammala kimantawa: sakamakon yana cikin dandalin aiki tare da {count} gyare-gyare da aka ba da shawara don bita.",
+      "spec": "Tsarin takarda",
+      "noSpec": "Babu tsari",
+      "manageSpecs": "Tsare-tsare",
+      "specs": "Tsare-tsaren takardu",
+      "closeSpecs": "Rufe tsare-tsare",
+      "specsEmpty": "Ƙirƙiri tsari don rubuta takardu cikin tsari na dindindin — ana buƙatar sassa, jerin su, da umarni ga kowane sashi (misali, tsarin SitRep). Ana adana tsari a wannan na'ura kuma ana iya amfani da shi sau da yawa.",
+      "newSpec": "Tsari sabon",
+      "newSpecName": "Tsari mara suna",
+      "specName": "Sunan tsari",
+      "specDescription": "Bayanin tsari (zaɓi ne)",
+      "deleteSpec": "Share tsari",
+      "sectionHeading": "Sashe mai taken",
+      "sectionGuidance": "Umarni (zaɓi ne)",
+      "sectionRequired": "An wajabta",
+      "addSection": "Ƙara sashe",
+      "removeSection": "Cire sashe",
+      "generalGuidance": "Umarni gabaɗaya (zaɓi ne)",
+      "tone": "Yanayi",
+      "noTone": "Babu yanayi",
+      "customCriteria": "Ma'aunicci na musamman",
+      "manageCriteria": "Ma'aunicci na musamman",
+      "closeCriteria": "Rufe ma'aunicci na musamman",
+      "criteriaEmpty": "Ƙirƙiri ka'idodi na musamman — misali la'akari da iri ko yaren ƙungiya — don tantance takardu da jagorantar gyare-gyare. Ana ajiye su a wannan na'ura kuma ana iya sake amfani da su.",
+      "newCriterion": "Sabon ƙa'ida",
+      "newCriterionName": "Ƙa'ida ba ta da suna",
+      "criterionName": "Sunan ƙa'ida",
+      "criterionRubric": "Rubutun ƙa'ida",
+      "criterionRubricPlaceholder": "Bayyana abin da takarda dole ta yi domin ta cika wannan ƙa'ida, misali: \"Kada a taɓa amfani da manyan kalmomi game da aikinmu; kullum a kiran masu cin gajiyar da mu 'mutanen da muke taimakawa'…\"",
+      "criterionRubricHint": "Za a bai wa AI wannan rubutun daidai lokacin tantancewa da gyara.",
+      "deleteCriterion": "Goge ƙa'ida",
+      "profileTitle": "Bayanan takarda",
+      "profileDocType": "Nau'i",
+      "profileLanguage": "Harshe",
+      "profileAudience": "Masu karatu",
+      "profilePurpose": "Manufa",
+      "profileRegister": "Salon magana",
+      "profileTone": "Yanayi",
+      "profileConventions": "Ka'idoji",
+      "emptyHint": "Fara rubutu a ƙasa, bayyana abin da za a rubuta a akwatin ƙasa, ko ka fara daga fayil.",
+      "addSpec": "Ƙara bayani",
+      "addCriteria": "Ƙara ƙa'idoji",
+      "scopeFullDocument": "Iyaka: dukkan takarda",
+      "scopeSelection": "Iyaka: zaɓi — “{preview}…” ({count} kalmomi)",
+      "clearSelection": "Share zaɓi (aiki da dukkan takarda)",
+      "reviseSelectionPlaceholder": "Bayyana canje-canje ga zaɓin…",
+      "revisedSelectionSummary": "Na gyara ɓangaren da aka zaɓa a dandalin aiki.",
+      "assessedSelection": "Zaɓi"
+    },
+    "data": {
+      "emptyTitle": "Shigo da bayanai don nazari",
+      "emptyBody": "Shigo da fayil din CSV, Excel, ko JSON, ko liƙa layuka kai tsaye. Da zarar an loda tebur, zaka iya tantance shi, ciro ƙarin layuka daga takardu, da sake fasalta shi da umarni cikin sauƙin fahimta.",
+      "importFile": "Shigo da fayil",
+      "importing": "Ana shigo da bayanai…",
+      "pasteData": "Liƙa bayanai",
+      "pastePlaceholder": "Liƙa CSV, TSV, ko JSON a nan…",
+      "import": "Shigo da bayanai",
+      "addFromSource": "Ƙara daga asali",
+      "extractHint": "Liƙa rubutu ko zaɓi takarda; za a cire layuka da suka dace da ginshikan ka daga gare ta. Abubuwan da ba a sani ba za su kasance babu — ba a ƙirƙira komai.",
+      "extractPlaceholder": "Liƙa rubutu mara tsari da ke ɗauke da bayanai…",
+      "extractRows": "Ciro layuka",
+      "extractFromFile": "Daga fayil…",
+      "extracting": "Ana cirewa…",
+      "pastedSource": "Rubutun da aka liƙa",
+      "transform": "Fasalta",
+      "transforming": "Ana fasalta…",
+      "transformPlaceholder": "Bayyana nau'in fasalta, misali: \"ƙara ginshiƙi da ke nuna yawan lamura a kowacce 1000 cikin jama'a\"…",
+      "transformCapHint": "Ana iyakance fasaltawa zuwa layuka {max}. Goge ko tace layuka kafin a kan manyan teburori.",
+      "undo": "Cire",
+      "deleteSelected": "Goge {count}",
+      "deletedRows": "An goge layuka {count}",
+      "selectAllRows": "Zaɓi dukkan layuka",
+      "selectRow": "Zaɓi layi {row}",
+      "rowCount": "Layuka {count}",
+      "rowCapExceeded": "Wannan zai zama layuka {count}; an iyakance tebur zuwa {max}. Raba bayanan ko fitar da su maimakon haka.",
+      "railExtractRequest": "Fitar da layukan da suka dace da tsarin tebur daga: {source}",
+      "railExtractDone": "An ƙara layuka {count} da aka fitar zuwa tebur.",
+      "railTransformDone": "An canza teburin.",
+      "columnProfileFor": "Ƙididdigar ginshiƙi don {column}",
+      "profileMissing": "Babu",
+      "profileDistinct": "Daban-daban",
+      "profileRange": "Iyali",
+      "profileMean": "Matsakaici",
+      "profileMedian": "Tsaka-tsaki",
+      "profileTopValues": "Manyan ƙima",
+      "filterColumnFor": "Tace {column}",
+      "filterContains": "Ya ƙunshi…",
+      "filterMin": "Mafi ƙanƙanta",
+      "filterMax": "Mafi girma",
+      "filterClear": "Share",
+      "clearFilters": "Share tacewa",
+      "showingRows": "Ana nuna {shown} daga cikin {total} layuka",
+      "scopeLabel": "Matsayin aiki",
+      "scopeTable": "Duka ({count})",
+      "scopeFiltered": "An tace ({count})",
+      "scopeSelection": "An zaɓa ({count})",
+      "scopedInstruction": "{instruction} (akan layuka {count} da aka ware)",
+      "assess": "Kimanta inganci",
+      "assessing": "Ana kimantawa…",
+      "criteria": {
+        "validity": {
+          "label": "Daidaici",
+          "description": "Kima suna bin nau'in ginshiƙi da tsarin da ake tsammani"
+        },
+        "consistency": {
+          "label": "Daidaito",
+          "description": "Ana rubuta ƙima iri ɗaya daidai a ko'ina (ba bambancin 'M' / 'Male', haɗin raka'a, ko sauyin manyan-bakwai)"
+        },
+        "duplicates": {
+          "label": "Maimaitawa",
+          "description": "Layu da ke rikodin abu ko abin da ya faru sau biyu"
+        },
+        "plausibility": {
+          "label": "Yiwuwar gaske",
+          "description": "Kimar da suka fita da waɗanda ba za su yiwu ba a cikin mahallin"
+        }
+      },
+      "assessmentTitle": "Bitan ingancin bayanai",
+      "pendingCount": "{count} yana jiran aiwatarwa",
+      "closeReview": "Rufe bitar inganci",
+      "suggestedEdits": "Gyare-gyaren da aka ba da shawara",
+      "noEditsSuggested": "Ba a ba da gyara ba — bayanan sun cika ƙa'idar da aka zaɓa.",
+      "acceptAll": "Amince da duka",
+      "rejectAll": "Ki duka",
+      "acceptEdit": "Amince",
+      "rejectEdit": "Ki",
+      "editAccepted": "An aiwatar",
+      "editRejected": "An ƙi",
+      "editUnapplicable": "An canza sel ɗin tun bayan kimantawa — ba a aiwatar ba",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Ka'idojin kimantawa",
+      "severity": {
+        "minor": "Kaɗan",
+        "major": "Babba"
+      },
+      "editLocation": "layi {row} · {column}",
+      "editLocationRow": "layi {row} (goge)",
+      "showReview": "Nuna bita",
+      "showReviewPending": "Nuna bita ({count} ana jiran bita)",
+      "assessedFiltered": "Layukan da aka tace",
+      "assessedSelection": "Layukan da aka zaɓa",
+      "assessedSample": "samfuri na {shown} daga {total}",
+      "railAssessRequest": "Kimanta ingancin teburin ({count} layuka) bisa ƙa'idodin da aka zaɓa.",
+      "railAssessDone": "An ba da shawarar gyaran ingancin bayanai guda {count} — duba su a wurin aiki.",
+      "insights": "Bayanan fahimta",
+      "chartKind": "Nau'in jadawali",
+      "chartBar": "Sanduna (rukuni da)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Layuka (a tsawon lokaci)",
+      "groupByColumn": "Rarraba ta ginshiƙi",
+      "dateColumn": "Ginshiƙin kwanan wata",
+      "valueColumn": "Ginshiƙin ƙima",
+      "aggFn": "Tattarawa",
+      "aggCount": "Adadi",
+      "aggSum": "Jimilla",
+      "aggMean": "Matsakaici",
+      "chartTruncated": "An nuna rukuni mafi sama {max}",
+      "chartNoData": "Babu ƙimar da za a nuna a jadawali a cikin layukan yanzu.",
+      "chartBarAria": "Jadawalin sanduna da aka rarrabe da {column}",
+      "chartHistogramAria": "Histogram na {column}",
+      "chartLineAria": "Jadawalin layi na {column} a tsawon lokaci",
+      "editStructure": "Tsari",
+      "defineStructure": "Kafa tsari",
+      "schemaHint": "Kafa filayen tsarin bayananka. Filayen da ake buƙata za su jagoranci manufar bayanan da suka bace yayin shigo da su; canza nau’in fili zai maida ƙimar da ake da ita (ƙwayoyin da ba za su iya zama ba za su zama babu komai).",
+      "schemaFieldName": "Sunan fili",
+      "schemaFieldType": "Nau'in fili",
+      "schemaRequired": "Ana buƙata",
+      "schemaAddField": "Ƙara fili",
+      "schemaDeleteField": "Goge fili {field}",
+      "schemaApply": "Aiwatar da tsari",
+      "schemaCancel": "Soke",
+      "schemaEdited": "An gyara tsarin tebur",
+      "schemaCellsConverted": "Ba a iya maida ƙwayoyi {count} zuwa nau'in sabo ba, yanzu babu komai a cikinsu.",
+      "missingFieldPolicy": "Bayanan da suka bace",
+      "policyStrict": "Mai tsauri — ƙin layukan da ba cika ba",
+      "policyFlag": "Tutar — shigo da su kuma yi alama",
+      "policyLenient": "Mai sauƙi — shigo da su ba tare da sanarwa ba",
+      "droppedIncompleteRows": "An yar da layuka {count} waɗanda ba su da filaye da ake buƙata: {fields}",
+      "dismiss": "Rufe",
+      "requiredColumn": "Fili mai buƙata",
+      "flagMissingRequired": "Fili da ake buƙata babu",
+      "flagPendingEdit": "Akwai shawarwarin gyara da ake jira ga wannan ƙwayar — duba bita inganci",
+      "fromPhoto": "Daga hoto",
+      "fromPhotoHint": "Dauki hoto na takarda ko tebur — abun cikin sa zai zama bayanan tsari da zaka iya duba da hoton",
+      "readingPhoto": "Ana karanta hoto…",
+      "photoBatchName": "Hotuna {count}",
+      "railPhotoRequest": "Ciro bayanan tsari daga {count} hoto(na): {name}",
+      "railPhotoDone": "An ƙara rikodi {count} daga hoto/hotuna. Duba su da hoton a cikin wurin aiki.",
+      "sourcesLabel": "Tushen bayanai",
+      "openPhotoQc": "Duba bayanan da {name}",
+      "qcRowsFromPhoto": "Satar {count}",
+      "qcClose": "Rufe duba hoto",
+      "qcZoomIn": "Ƙara girma",
+      "qcZoomOut": "Rage girma",
+      "qcPrevPhoto": "Hoton baya",
+      "qcNextPhoto": "Hoton gaba",
+      "qcImageLoading": "Ana loda hoto…",
+      "qcImageFailed": "An kasa loda hoton.",
+      "qcImageAlt": "Hoton asali: {name}",
+      "qcHint": "Jadawalin yana nuna satar wannan hoton kawai — kwatanta kowanne ƙima da hoton, gyara ko share waɗanda ba su dace ba.",
+      "sourceFilterChip": "Satar daga {name}",
+      "clearSourceFilter": "Sake nuna dukkan satar",
+      "viewAsRecord": "Form view",
+      "viewAsTable": "Table view",
+      "recordEmpty": "Babu rikodi tukuna.",
+      "recordOf": "Rikodi {index} daga {count}",
+      "recordPrev": "Rikodi na baya",
+      "recordNext": "Rikodi na gaba",
+      "recordBooleanUnset": "(fanko)",
+      "flagsChip": "Alamomi {count}",
+      "flagsChipOpenReview": "Buɗe duba inganci",
+      "flagsChipMissingOnly": "Filaye masu muhimmanci sun cika ba kome ba — cike su ko daidaita tsarin",
+      "autoCheck": "Duba sabbin bayanai ta atomatik",
+      "autoCheckHint": "Bayan an cire bayanai daga hotuna ko takardu, aiwatar da duba inganci ta atomatik a kan sabbin satar",
+      "checkingNewRows": "Ana dubawa ko sabbin satar sun dace da inganci…",
+      "ingestCheckFailed": "An kasa aiwatar da duba inganci ta atomatik ({message}) — za ka iya aiwatar da shi da hannu ta amfani da Assess quality.",
+      "assessedIngest": "Sabbin satar da aka ƙara"
+    },
+    "map": {
+      "emptyTitle": "Sanya bayananka a taswira",
+      "emptyBody": "Liƙa sitrep, jerin layi, bayanin taro ko kowace rubutu da ke ƙunshe da wurare — ko loda takarda. Ana gano wurare tare da kimanta amincewa; za ka iya fitar da su zuwa ArcGIS ko sauran kayan aikin GIS.",
+      "inputPlaceholder": "Liƙa rubutu mai ƙunshe da wurare…",
+      "uploadFile": "Loda fayil",
+      "pastedSource": "Rubutun da aka liƙa",
+      "mapIt": "Sanya a taswira",
+      "finding": "Ana samun wurare…",
+      "featureCount": "Wurare {count}",
+      "featureCapExceeded": "Taswira ta iyakance zuwa wurare {max}.",
+      "noneFound": "Ba a samu kowanne wuri ba a cikin wannan abu.",
+      "lowConfidenceNotice": "{count} daga cikin wuraren suna da daidaiton kooridinet mai rauni — duba su kafin amfani da taswira.",
+      "tilesOffline": "Taswirar tiles ba ta samuwa — jerin wurare har yanzu yana aiki.",
+      "disclaimer": "Kooridinet AI ce ta ƙiyasta daga abin da samfurin ya sani, ba daga sabis na geocoding ba — tabbatar da su kafin amfani da su a aiki. Ana loda taswirar tiles daga tile server; bayananka kansu suna nan a wannan na'urar.",
+      "flyTo": "Nuna {name} a taswira",
+      "removeFeature": "Cire {name}",
+      "expandFeature": "Nuna cikakkun bayanai na {name}",
+      "collapseFeature": "Boye bayanai na {name}",
+      "detailsParent": "Sashe na {parent}",
+      "railRequest": "Sanya wurare a taswira daga: {source}",
+      "railSearchRequest": "Bincika yanar gizo ka sanya wurare a taswira don: {query}",
+      "railDone": "An tsara wurare {count}. Duba waɗanda basu da tabbaci sosai a jerin.",
+      "searchToggle": "Yanayin bincike ta intanet",
+      "searchToggleHint": "Bincika intanet maimakon liƙa rubutu; sakamakon da aka tabbatar zai bayyana a taswira.",
+      "searchPlaceholder": "Bincika intanet, misali \"ɓarkewar cutar cholera Gabashin Afirka 2026\"…",
+      "searchAndMap": "Bincika & tsara",
+      "searching": "Ana bincike…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Haɗi: {kind}",
+        "unresolved": "Haɗi {count} sun ambaci wuraren da ba su kan taswira don haka an tsallake su."
+      },
+      "confidence": {
+        "high": "Mafi tabbaci",
+        "medium": "Matsakaici",
+        "low": "Kadan"
+      },
+      "prominence": {
+        "primary": "Babban wuri",
+        "secondary": "Wurin taimako",
+        "mention": "Ambato ta wucewa"
+      },
+      "prominenceMentionHint": "Kayan bayanin ya ambaci wannan wurin kawai ta wucewa — ana nuna shi ƙarami a taswira kuma an cire shi daga farkon haskakawa.",
+      "dates": {
+        "since": "tun daga {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Na ci gaba"
+      },
+      "filters": {
+        "label": "Fifita ta rukuni",
+        "other": "Sauran",
+        "clear": "Share",
+        "showing": "Ana nuna {shown} daga cikin wurare {total}",
+        "noneMatch": "Babu wuraren da suka dace da matatun yanzu."
+      },
+      "dateFilter": {
+        "label": "Kwanaki",
+        "from": "Daga",
+        "to": "Zuƙa",
+        "fromAria": "Nuna abubuwan da suka faru daga wannan kwanan zuwa gaba kawai",
+        "toAria": "Nuna abubuwan da suka faru har zuwa wannan kwanan kawai",
+        "clear": "Share kwanan wata",
+        "eraChip": "Nuna abubuwan da suka faru cikin {label} kawai"
+      },
+      "timeline": {
+        "toggle": "Sauyin lokaci",
+        "play": "Fara sauyin lokaci",
+        "pause": "Tsaya sauyin lokaci",
+        "eras": "Zamanin lokaci",
+        "jumpTo": "Tsallaka zuwa {label}",
+        "slider": "Matsayin lokaci",
+        "showUndated": "Nuna wuraren da ba a saka kwanan wata ba",
+        "activeCount": "{count} masu aiki"
+      },
+      "granularity": {
+        "site": "Wuri",
+        "city": "Gari/kauye",
+        "district": "Ƙaramar hukuma",
+        "region": "Yanki",
+        "country": "Ƙasa"
+      },
+      "granularityAreaHint": "Wani yanki ne, ana nuna shi da da'ira kusa da tsakiyar yankin — ba daidai wurin ko iyaka ba.",
+      "containerHint": "Ya ƙunshi sauran wuraren da aka tsara, don haka ana nuna shi da iyakarsa kawai.",
+      "legend": {
+        "toggle": "Bayani",
+        "title": "Yadda ake karanta taswira",
+        "color": "Launi: tabbacin ƙoodinati (shuɗi mafi tabbaci, rawaya matsakaici, ja ƙasa)",
+        "size": "Girman dodo: muhimmancin wurin ga bayanin",
+        "area": "Zagaye da dige-dige: kimanin fadin yankin karamar hukuma, yanki ko ƙasa",
+        "container": "Layis mai laushi: yanki da aka tsara abinda ke cikinsa daban-daban"
+      }
+    },
+    "shell": {
+      "showConversation": "Nuna tattaunawa",
+      "hideConversation": "Boye tattaunawa",
+      "workspaceTab": "Wurin aiki",
+      "conversationTab": "Tattaunawa",
+      "paneTabsLabel": "Allunan aikin workflow",
+      "railEmpty": "Saƙonnin mataimaki da cigaba za su bayyana a nan.",
+      "railInputPlaceholder": "Aika sako ga mataimaki…",
+      "assistantThinking": "Ana tunani…",
+      "sendMessage": "Aika sako",
+      "stopGenerating": "Tsayar da samarwa",
+      "loadingWorkspace": "Ana loda wurin aiki…",
+      "unknownType": "Wannan tattaunawar tana amfani da workflow da wannan sigar ba ta gane ba. Tarihin tattaunawa yana ƙasa.",
+      "untitled": "Sabuwar Tattaunawa",
+      "toggleMenu": "Buɗe/ruffa menu",
+      "model": "Samfuri don wannan workflow"
+    }
+  },
+  "connectors": {
+    "title": "Haɗa kayan aiki",
+    "description": "Haɗa kayan aiki na waje ta hanyar Model Context Protocol (MCP). Kayan aikin da aka haɗa suna samuwa ga samfuri a cikin hira, kuma kowace kira na kayan aiki bayan amincewarka kawai.",
+    "localOnlyNote": "Kana shiga kai tsaye da kowanne mai bayarwa. Ana ɓoye keys na shiga kuma ana adanawa kawai a wannan na'ura, kuma ana turawa ta uwar garken app a kowanne buƙata — ba a adanawa ko rikodi a can ba.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Binciko ma'ajin bayanai, karanta da ƙirƙira matsaloli da buƙatun jawowa."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Nemo, ƙirƙira, da sabunta ayyuka da ayyukan haɗin gwiwa."
+      }
+    },
+    "connect": "Haɗa",
+    "connected": "An haɗa",
+    "tokenEndsIn": "yana ƙare da ••••{last4}",
+    "disconnect": "Katse haɗi",
+    "toolCount": "{count, plural, =1 {ana da kayan aiki 1} other {ana da kayan aiki #}}",
+    "patLabel": "Token na shiga na sirri",
+    "createTokenLink": "Kirkiri token",
+    "tokenScopeHint": "Yi amfani da token mai iyakance damar da waɗannan kayan ke buƙata kawai.",
+    "validating": "Ana duba haɗin…",
+    "validationFailed": "Ba a iya haɗawa ba. Duba adireshin kuma sake gwadawa.",
+    "authFailed": "Uwar garken ta ƙi token ɗin. Duba shi kuma sake gwadawa.",
+    "tokenRequired": "Token yana da muhimmanci",
+    "enableServer": "Akwai a cikin tattaunawa",
+    "arbitraryTitle": "Sauran sabobin MCP",
+    "arbitraryToggle": "Ba wa sauran sabobin MCP izini",
+    "arbitraryWarning": "Duk wanda ke gudanar da sabar MCP zai iya ganin saƙonnin da aka aika zuwa kayan aikin ta. Haɗa da sabobin da kake amana kawai. Kowanne kira na kayan aiki har yanzu yana buƙatar amincewarka.",
+    "addServer": "Ƙara sabar MCP",
+    "editServer": "Gyara sabar MCP",
+    "serverName": "Suna",
+    "serverUrl": "Sabar URL",
+    "nameRequired": "Suna yana da muhimmanci",
+    "urlRequired": "URL yana da muhimmanci",
+    "invalidUrl": "Shigar da adireshin https:// na jama'a",
+    "namePlaceholder": "Sabar MCP dina",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Access token (na zaɓi)",
+    "keepTokenPlaceholder": "Bar fili don ci gaba da amfani da token na yanzu",
+    "disconnectedToast": "An katse haɗi da {name}",
+    "save": "Ajiye",
+    "connectWithProvider": "Haɗawa da {name}",
+    "useTokenInstead": "Yi amfani da access token maimakon haka",
+    "oauthWaiting": "Ana jiran izini…",
+    "oauthFailed": "Shiga ya gaza. Sake gwadawa.",
+    "oauthDenied": "Mai samarwa ya ƙi ba da izini.",
+    "oauthTimeout": "Lokacin shiga ya ƙare. Sake gwadawa.",
+    "oauthCancelled": "Shiga an soke.",
+    "oauthUnavailable": "Ba a samun shiga don wannan mahaɗin a wannan shigarwar. Yi amfani da access token maimakon haka, ko kuma tuntuɓi mai tsarin ku don ya saita OAuth app.",
+    "ownAppToggle": "Yi amfani da OAuth app ɗinka",
+    "ownAppHint": "Yi rajista da OAuth app a cikin asusunka na {name} (kungiyarka, wurin aiki, ko na'urar masana'antu) da callback URL da ke ƙasa, sannan liƙa bayanan shaidar app ɗin a nan. Barin wannan a rufe zai sa a yi amfani da app da aka gina a ciki.",
+    "ownAppCustomHint": "Za ka iya zaɓar samar da bayanan OAuth app naka a ƙasa; ka bar su a fili don rajista ta atomatik tare da sabar.",
+    "ownAppInUse": "An haɗa da OAuth app ɗinka.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (idan app ɗinka yana da shi)",
+    "redirectUriLabel": "Callback / redirect URL da za a rijista",
+    "reconnect": "Sake haɗawa",
+    "needsReauth": "Ana buƙatar sake haɗawa",
+    "disconnectOauthNote": "Katse haɗin yana cire izini daga wannan na'urar kawai. Don cire izini gaba ɗaya, sarrafa apps daga cikin asusunka na {name}.",
+    "authModeLabel": "Takaddamar shaidar shiga",
+    "authModeNone": "Babu",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Shiga da mai samarwa (OAuth)",
+    "oauthCustomHint": "Za ka shiga ta taga-fito tare da mai samarwar sabar bayan ajiye.",
+    "saveAndSignIn": "Ajiye & shiga",
+    "oauthCallback": {
+      "title": "An gama bai wa izini",
+      "missingState": "Babu abin da za a ba wa izini",
+      "close": "Za ka iya rufe wannan taga kuma ka koma cikin app.",
+      "closeButton": "Rufe taga"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Haɗa tushe na samfurin",
+    "addAnother": "Ƙara wani tushe na samfurin",
+    "edit": "Gyara",
+    "disconnect": "Katse haɗi da {name}",
+    "disconnectedToast": "An katse haɗi da {name}",
+    "modelCountLabel": "Samfura {count}",
+    "loadingModels": "Ana loda samfura...",
+    "noModelsAvailable": "Babu samfura daga wannan tushe",
+    "sourceUnreachable": "Ba a samu wannan tushe ba. Watakila izinin shiga ka ya canza, ko kuma sabis ɗin bai samuwa yanzu.",
+    "retry": "Sake gwadawa",
+    "connectFoundryAccount": "Haɗa da Asusun Microsoft Azure Foundry",
+    "connectFoundryDescription": "Za ka iya gano tura samfura daga asusun Azure Foundry da kake da izini. Izinin ka na Azure ne ke ba da damar amfani — ƙuntatawar samfurin wannan manhaja ba ta aiki a nan.",
+    "selectModelsDescription": "Zaɓi waɗanne tura samfura daga wannan asusu za su bayyana cikin zaɓin samfurinka.",
+    "editConnection": "Gyara haɗi",
+    "nameLabel": "Suna",
+    "namePlaceholder": "misali: Sandbox na Tawaga ta",
+    "nameRequired": "Ana buƙatar sunan tushe",
+    "foundryAccountLabel": "Asusun Foundry",
+    "enterManually": "Shigar da hannu",
+    "browseResources": "Duba albarkatu",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Rukunin Albarkatu",
+    "accountNameLabel": "Sunan Asusun",
+    "subscriptionRequired": "Zaɓi wani subscription",
+    "accountRequired": "Zaɓi asusun Foundry",
+    "accountSelectionRequired": "Zaɓi asusu daga jerin.",
+    "selectAllRequired": "Zaɓi subscription, rukunin albarkatu, da asusu.",
+    "connectionFailed": "Ba a samu wannan asusu ba. Duba bayanan da kyau kuma tabbatar da izinin shiga.",
+    "duplicateSource": "An riga an haɗa wannan asusu a matsayin \"{name}\".",
+    "connectionSuccessModels": "An haɗa — an samo tura samfurai {count}",
+    "connectionSuccessEmpty": "An haɗa, amma babu tura samfurin a wannan asusun.",
+    "checkingConnection": "Ana bincika haɗin...",
+    "next": "Gaba",
+    "back": "Baya",
+    "cancel": "Soke",
+    "connect": "Haɗa",
+    "save": "Ajiye",
+    "scanningResources": "Ana duba rajistar Azure ɗinka...",
+    "discoveryPartialWarning": "Ba a iya duba {count, plural, one {# rajista} other {# rajistoci}} ba. Yi amfani da shigar da hannu idan asusunka babu shi.",
+    "discoveryTruncatedWarning": "Akwai ƙwarin albarkatu da yawa har ba za a iya gama dubawa ba. Yi amfani da shigar da hannu idan asusunka babu shi.",
+    "noAccountsDiscovered": "Ba a sami asusun Foundry a cikin rajistocin ka ba. Yi amfani da shigar da hannu idan ka san hanyar.",
+    "retryScan": "Sake duba",
+    "searchAccountsPlaceholder": "Bincika asusu...",
+    "modelsSelectedCount": "An zaɓi {selected} daga cikin {total} samfura",
+    "selectAll": "Zaɓi duk",
+    "deselectAll": "Cire zaɓi duka",
+    "autoAddLabel": "Ƙara sababbin samfura ta atomatik",
+    "autoAddDescription": "Samfuran da za a ƙara zuwa wannan asusun daga baya za su bayyana ta atomatik. Samfuran da ba a duba ba za su ci gaba da kasancewa a waje."
   }
 }

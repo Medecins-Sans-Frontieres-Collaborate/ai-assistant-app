@@ -398,7 +398,22 @@
     "noProjectsFound": "Geen projecten gevonden. \"default\" wordt gebruikt.",
     "selectAllRequired": "Selecteer een abonnement, account en project.",
     "subscriptionRequired": "Kies een abonnement",
-    "accountRequired": "Kies een Foundry-account"
+    "accountRequired": "Kies een Foundry-account",
+    "projectSelectionRequired": "Selecteer een project uit de lijst.",
+    "scanningResources": "Uw Azure-abonnementen worden gescand...",
+    "searchProjectsPlaceholder": "Projecten zoeken...",
+    "noProjectsDiscovered": "Geen Foundry-projecten gevonden in uw abonnementen. Gebruik handmatige invoer als u het pad weet.",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# abonnementen}} kon(den) niet worden gescand. Gebruik handmatige invoer als uw project ontbreekt.",
+    "discoveryTruncatedWarning": "Er waren te veel resources om volledig te scannen. Gebruik handmatige invoer als uw project ontbreekt.",
+    "retryScan": "Opnieuw scannen",
+    "next": "Volgende",
+    "back": "Terug",
+    "selectAgentsDescription": "Kies welke agents uit dit project zichtbaar zijn in uw modelkiezer.",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "agentsSelectedCount": "{selected} van {total} agents geselecteerd",
+    "autoAddLabel": "Nieuwe agents automatisch toevoegen",
+    "autoAddDescription": "Later gepubliceerde agents in dit project verschijnen automatisch. Niet-aangevinkte agents blijven uitgesloten."
   },
   "Quick Actions": "Snelle acties",
   "Type / in chat to access your prompts": "Typ / in chat om toegang te krijgen tot je prompts",
@@ -725,7 +740,19 @@
       "listingTools": "Beschikbare tools worden opgezocht…",
       "analyzingFiles": "Bestanden worden geanalyseerd…",
       "searchingKnowledge": "Kennisbank wordt doorzocht…",
-      "cancellingPriorTool": "Vorige tool-aanvraag wordt geannuleerd…"
+      "cancellingPriorTool": "Vorige tool-aanvraag wordt geannuleerd…",
+      "workflow": {
+        "preparingDocument": "Referenties voorbereiden…",
+        "writingDocument": "Het document opstellen…",
+        "analyzingSource": "Brontekst analyseren…",
+        "translating": "Vertalen…",
+        "reviewingTranslation": "Beoordelingsronde {round} van {total}…",
+        "revisingTranslation": "Beoordelingsfeedback toepassen…",
+        "extractingRows": "Rijen uit {source} extraheren…",
+        "transformingTable": "Tabel transformeren…",
+        "findingLocations": "Locaties identificeren…",
+        "updatingMap": "Kaart bijwerken…"
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# tool gebruikt} other {# tools gebruikt}}",
@@ -786,7 +813,8 @@
     "listen": "Luisteren",
     "processingAudio": "Audio verwerken...",
     "ttsError": "Fout bij het genereren van audio. Probeer het opnieuw.",
-    "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype"
+    "unsupportedMessageType": "Fout bij weergeven bericht: Niet-ondersteund berichttype",
+    "addLanguageOption": "\"{name}\" toevoegen…"
   },
   "sidebar": {
     "collapseSidebar": "Zijbalk inklappen",
@@ -1104,16 +1132,18 @@
     "unsavedChanges": "Niet-opgeslagen wijzigingen",
     "unsavedChangesMessage": "Je hebt niet-opgeslagen wijzigingen. Wil je deze negeren?",
     "characterCount": "{current}/{max}",
-    "clearField": "Veld leegmaken",
+    "clearField": "Veld wissen",
     "autosaveNote": "Wijzigingen worden automatisch opgeslagen.",
     "responseSection": "Antwoord",
     "voiceSection": "Stem",
     "behaviorSection": "Gedrag",
-    "resetChatSettings": "Chats instellingen herstellen",
-    "resetChatSettingsConfirmTitle": "Chats instellingen herstellen?",
-    "resetChatSettingsConfirmMessage": "Dit herstelt de standaardwaarden voor alles in dit paneel: temperature, aangepaste instructies, Over U, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Dit heeft geen invloed op uw gesprekken.",
+    "resetChatSettings": "Chatinstellingen resetten",
+    "resetChatSettingsConfirmTitle": "Chatinstellingen resetten?",
+    "resetChatSettingsConfirmMessage": "Hiermee worden alle standaardwaarden in dit paneel hersteld: temperatuur, aangepaste instructies, Over jou, modelantwoord, streamingsnelheid, tekst-naar-spraak, actieve bestanden en bevestigingen. Uw gesprekken worden niet beïnvloed.",
     "customInstructionsLabel": "Aangepaste instructies*",
-    "defaultTemperatureLabel": "Standaard temperatuur*"
+    "defaultTemperatureLabel": "Standaard temperatuur*",
+    "Usage & Impact": "Gebruik & Impact",
+    "Connectors": "Connectors"
   },
   "notFound": {
     "lostDog": "Verloren hond"
@@ -1338,48 +1368,96 @@
     },
     "title": "Selecteer een model",
     "modelsDescription": "Kies een AI-model voor uw gesprek. Elk model heeft andere sterke punten — selecteer er één voor details.",
-    "recommended": "Aanbevolen"
+    "recommended": "Aanbevolen",
+    "familyAll": "Alle",
+    "familyFilterLabel": "Modellen filteren op familie",
+    "searchPlaceholder": "Modellen zoeken",
+    "searchEmpty": "Geen modellen gevonden die aan uw zoekopdracht voldoen.",
+    "star": "Markeer {name} als favoriet",
+    "unstar": "Verwijder {name} uit favorieten",
+    "otherFamily": "Overig",
+    "hostedExternally": "Draait op de eigen infrastructuur van de provider via Azure AI Foundry, niet binnen de Azure-omgeving van MSF.",
+    "hostedIn": {
+      "label": "Gehost in {regions}",
+      "tooltip": "De Azure-regio('s) waar dit model is ingezet. Gesprekken worden verwerkt in uw eigen regio."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Draait op de eigen infrastructuur van de provider via Azure AI Foundry, niet binnen de Azure-omgeving van MSF.",
+      "regionHostedTooltip": "Gehost in de Azure-regio {region}. Gesprekken met dit model worden daar verwerkt."
+    },
+    "favorites": "Favorieten",
+    "euResidencyNote": "Alle modellen draaien in de EU Azure-regio.",
+    "hostedRegion": {
+      "label": "Gehoste regio",
+      "processedIn": "Dit gesprek wordt verwerkt in de Azure-regio {region}.",
+      "euOnlyNote": "{name} wordt gehost in de EU Azure-regio; gesprekken daarmee worden daar verwerkt."
+    },
+    "version": {
+      "label": "Versie"
+    },
+    "reasoningModel": "Redeneermodel: denkt stap voor stap na voor het beantwoorden. Langzamer, beter bij complexe problemen.",
+    "variant": {
+      "label": "Variant"
+    },
+    "deployment": {
+      "title": "Implementatie",
+      "source": "Bron",
+      "account": "Account",
+      "location": "Locatie",
+      "deployment": "Implementatie",
+      "modelVersion": "Modelversie",
+      "publisher": "Publisher"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "OpenAI's meest capabele model voor complexe taken en codering. Uitstekend voor diepgaande analyse, creatief schrijven en geavanceerde probleemoplossing.",
-      "knowledgeCutoff": "September 2025"
+      "knowledgeCutoff": "September 2025",
+      "tagline": "Vorige generatie van OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "OpenAI's nieuwste vlaggenschipmodel met uitgebreide mogelijkheden. Verbeterd redeneren, codering en creatieve taken met up-to-date kennis.",
-      "knowledgeCutoff": "Oktober 2025"
+      "knowledgeCutoff": "Oktober 2025",
+      "tagline": "Vorige GPT-vlaggenschip"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Geoptimaliseerde GPT-5 variant voor conversatie-interacties. Dezelfde krachtige mogelijkheden met verbeterde dialoogstroom.",
-      "knowledgeCutoff": "Oktober 2025"
+      "knowledgeCutoff": "Oktober 2025",
+      "tagline": "Vorige chatgerichte GPT"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Kleinere, snellere versie van GPT-5. Uitstekende balans tussen prestaties en snelheid voor de meeste taken.",
-      "knowledgeCutoff": "Oktober 2025"
+      "knowledgeCutoff": "Oktober 2025",
+      "tagline": "Sneller en goedkoper"
     },
     "o3": {
       "name": "o3",
       "description": "OpenAI's geavanceerde redeneermodel getraind met reinforcement learning. Blinkt uit in wiskunde, wetenschap en complexe probleemoplossing met diep denken.",
-      "knowledgeCutoff": "Maart 2025"
+      "knowledgeCutoff": "Maart 2025",
+      "tagline": "Diep stapsgewijs redeneren"
     },
     "deepseek_r1": {
       "name": "DeepSeek R1",
       "description": "DeepSeek's open-source redeneermodel. Concurrerend met OpenAI o1 in wiskunde, codering en wetenschappelijke taken.",
-      "knowledgeCutoff": "Juli 2025"
+      "knowledgeCutoff": "Juli 2025",
+      "tagline": "Toont redeneerstappen"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek V3.1",
       "description": "DeepSeek's meest geavanceerde model met Mixture-of-Experts architectuur. Uitstekend voor codering, wiskunde en meertalige taken.",
-      "knowledgeCutoff": "Juli 2025"
+      "knowledgeCutoff": "Juli 2025",
+      "tagline": "Open-source alternatief"
     },
     "grok_3": {
       "name": "Grok-3",
       "description": "xAI's meest geavanceerde AI-model. Hoogwaardige mogelijkheden voor complexe taken met realtime kennis via X-platform.",
-      "knowledgeCutoff": "November 2025"
+      "knowledgeCutoff": "November 2025",
+      "tagline": "xAI-alternatief"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1389,42 +1467,240 @@
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Anthropic's meest intelligente model geoptimaliseerd voor complexe analyse, nuance en creatieve taken. Beste keuze voor moeilijke problemen.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Eerdere Opus-generatie"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Gebalanceerd Claude-model dat intelligentie en snelheid combineert. Uitstekend voor de meeste zakelijke taken en programmeren.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Vorige generatie Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Anthropic's hoogste capaciteitsmodel geoptimaliseerd voor codering, agentische taken en uitgebreide redenering.",
-      "knowledgeCutoff": "Maart 2025"
+      "knowledgeCutoff": "Maart 2025",
+      "tagline": "Vorige generatie Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Snel en kostenefficiënt Claude-model geoptimaliseerd voor snelle taken. Uitstekend voor eenvoudige vragen, samenvatting en hoog-volume toepassingen.",
-      "knowledgeCutoff": "Januari 2025"
+      "knowledgeCutoff": "Januari 2025",
+      "tagline": "Snelle Claude-variant"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI’s meest geavanceerde model, uitmuntend in complex redeneren, codegeneratie en technische probleemoplossing. Het beste voor analytische taken, programmeeruitdagingen, onderzoek en gedetailleerde uitleg. Ondersteunt aanpasbare redeneerinspanning en responslengte.",
-      "knowledgeCutoff": "dec 2025"
+      "knowledgeCutoff": "dec 2025",
+      "tagline": "Code, analyse, onderzoek"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "dec 2025",
-      "description": "Gespecialiseerde variant van GPT-5.2, geoptimaliseerd voor conversatie en emotionele intelligentie. Uitstekend in empathische communicatie, creatief schrijven, brainstormen en natuurlijke dialogen. Ideaal voor informele gesprekken, counseling en taken die emotioneel bewustzijn vereisen."
+      "description": "Gespecialiseerde variant van GPT-5.2, geoptimaliseerd voor conversatie en emotionele intelligentie. Uitstekend in empathische communicatie, creatief schrijven, brainstormen en natuurlijke dialogen. Ideaal voor informele gesprekken, counseling en taken die emotioneel bewustzijn vereisen.",
+      "tagline": "Gesprekken, brainstormen"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic's krachtigste model. Geschikt voor lang schrijven, onderzoek en taken die zorgvuldigheid vereisen.",
-      "knowledgeCutoff": "feb 2026"
+      "knowledgeCutoff": "feb 2026",
+      "tagline": "Uitgebreid schrijven en analyse"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Een gebalanceerd Claude-model. Goed voor dagelijks schrijven, analyse en coderen met snelle reacties.",
-      "knowledgeCutoff": "feb 2026"
+      "knowledgeCutoff": "feb 2026",
+      "tagline": "Gebalanceerde dagelijkse Claude"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Een open-source model van Meta. Betrouwbaar voor schrijven, samenvattingen en snelle vragen.",
+      "tagline": "Open-source alternatief"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Het nieuwste vlaggenschipmodel van OpenAI. Sterk in schrijven, onderzoek, coderen en complexe probleemoplossing.",
+      "tagline": "Nieuwste GPT-vlaggenschip"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "De kleinste en snelste GPT-variant. Ideaal voor snelle, eenvoudige taken tegen minimale kosten.",
+      "tagline": "Kleinste en snelste GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Een conversatiegerichte GPT-variant, afgestemd op dialoog. Geschikt voor informele gesprekken, brainstormen en ondersteunende discussies.",
+      "tagline": "Nieuwere chatgerichte GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Een oudere multimodale GPT. Prima voor dagelijks schrijven en Q&A wanneer de nieuwste mogelijkheden niet nodig zijn.",
+      "tagline": "Oudere multimodale GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Een kleinere, snellere GPT-4.1-variant voor snelle dagelijkse taken.",
+      "tagline": "Lichte vorige-generatie GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic's nieuwste en krachtigste model. Uitstekend voor lange teksten, onderzoek, coderen en grondige analyse.",
+      "tagline": "Nieuwste en sterkste Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek's nieuwste open-source model. Betrouwbaar voor algemeen schrijven en technische vragen.",
+      "tagline": "Open-source alternatief"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Het vlaggenschip van Mistral. Een Europees alternatief voor schrijven, samenvattingen en algemene vragen.",
+      "tagline": "Europees model met open gewichten"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Een eerdere revisie van GPT-5 vlaggenschip. Nog steeds sterk in schrijven, analyse en coderen.",
+      "tagline": "Eerder GPT-5 vlaggenschip"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Een eerdere chatgerichte GPT-5 revisie. Geschikt voor alledaagse gesprekken en brainstormen.",
+      "tagline": "Eerdere chatgerichte GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "De kleinste GPT-5 variant. Ideaal voor snelle, eenvoudige taken tegen minimale kosten.",
+      "tagline": "Kleine vorige-generatie GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "De kleinste GPT-4.1 variant. Prima voor snelle, eenvoudige taken waar snelheid en kosteneffectiviteit belangrijk zijn.",
+      "tagline": "Kleinste vorige-generatie GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Een kleine, snelle GPT-4o variant. Prima voor dagelijkse, snelle taken wanneer de nieuwste mogelijkheden niet vereist zijn.",
+      "tagline": "Lichte oudere multimodale GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Een compact redeneermodel. Goed voor wiskunde, logica en stapsgewijze problemen tegen lagere kosten dan o3.",
+      "tagline": "Snelle en betaalbare redenering"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Een eerder compact redeneermodel. Geschikt voor wiskunde, wetenschap en logische puzzels met een beperkt budget.",
+      "tagline": "Compact stapsgewijs redeneren"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic's meest intelligente model, de eerste van de Claude 5-familie. Uitstekend voor de meest complexe schrijf-, onderzoeks- en codeertaken.",
+      "tagline": "Anthropic's meest geavanceerde model"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "De nieuwste gebalanceerde Claude, de eerste van de Claude 5-familie. Sterk in dagelijks schrijven, analyse en coderen met snelle reacties.",
+      "tagline": "Nieuwste gebalanceerde Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Het middelgrote model van Mistral. Een Europees alternatief dat capaciteit en snelheid in balans brengt voor dagelijks werk.",
+      "tagline": "Gebalanceerd Europees model"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Het kleine model van Mistral. Snel en voordelig voor samenvattingen, concepten en eenvoudige vragen.",
+      "tagline": "Klein en snel Europees model"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Het kleinste model van Mistral. Ideaal voor zeer snelle, eenvoudige taken tegen minimale kosten.",
+      "tagline": "Kleine edge-sized Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Een bijgewerkte DeepSeek-R1 revisie. Laat stap voor stap het denkproces zien met verbeterde redeneerkracht.",
+      "tagline": "Bijgewerkt open redeneringsmodel"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Een lichter open-source model van Meta. Snel voor schrijven, samenvattingen en alledaagse vragen.",
+      "tagline": "Efficiënte open-source Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Een ouder open-source model van Meta. Nog steeds betrouwbaar voor algemeen schrijven en Q&A.",
+      "tagline": "Oudere open-source Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Het vlaggenschipmodel van xAI. Geschikt voor open discussies, analyse en creatieve projecten.",
+      "tagline": "xAI-vlaggenschip"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI's nieuwste vlaggenschipmodel. Sterk in schrijven, onderzoek, programmeren en complexe probleemoplossing.",
+      "tagline": "Laatste GPT-vlaggenschip"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (laatste)",
+      "description": "Een rollend alias die altijd verwijst naar OpenAI's nieuwste chatmodel. Azure's vervanging voor de uitgefaseerde versie van gpt-*-chat-modellen.",
+      "tagline": "Altijd de nieuwste chat-GPT"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Een recente Opus-release, tussen 4.6 en 4.8. Sterk in lang schrijven, onderzoek, programmeren en zorgvuldige analyse.",
+      "tagline": "Recente Opus-release"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek's nieuwste redeneermodel en Azure's vervanging voor de R1-serie. Laat zijn denkstappen stap voor stap zien.",
+      "tagline": "Nieuwste open redeneringsmodel"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek's snelle V4-variant en Azure's vervanging voor de V3-serie. Snel bij algemeen schrijfwerk en technische vragen.",
+      "tagline": "Snel open-source alternatief"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Redeneren)",
+      "description": "xAI's snelle redeneermodel. Denkt stap voor stap met snelle antwoorden.",
+      "tagline": "Snel xAI-redeneringsmodel"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI's snelle chatmodel. Snelle antwoorden op alledaagse vragen en gesprekken.",
+      "tagline": "Snel xAI-chatmodel"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Een lichter xAI-model. Sneller en goedkoper voor korte vragen en informele chats.",
+      "tagline": "Lichtere xAI-model"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Het vlaggenschip van OpenAI's GPT-5.6 trio. Het sterkst in schrijven, onderzoek, coderen en complexe problemen oplossen.",
+      "tagline": "Nieuwste GPT-vlaggenschip tier"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "De uitgebalanceerde laag van OpenAI's GPT-5.6 trio. Goed voor dagelijks schrijven, analyse en coderen met snelle reacties.",
+      "tagline": "Gebalanceerde dagelijkse GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "De lichte, snelle laag van OpenAI's GPT-5.6 trio. Ideaal voor snelle vragen en eenvoudige taken tegen lage kosten.",
+      "tagline": "Lichte, snelle GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistrals nieuwste middelgrote model. Een Europees alternatief dat capaciteit en snelheid combineert voor dagelijks werk.",
+      "tagline": "Gebalanceerd Europees model"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Open-weight model van Moonshot AI. Sterk in agenttaken, coderen en lange documenten.",
+      "tagline": "Agentisch open-weight model"
     }
   },
   "transcription": {
@@ -1822,7 +2098,20 @@
     "useDefaultStyle": "Standaard schrijfstijl gebruiken",
     "noTonesCreated": "Nog geen tonen aangemaakt",
     "createTonesHint": "Maak tonen aan in Snelle acties",
-    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, HTML, TXT\nMaximale grootte: 40 MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden."
+    "translateDocumentTooltip": "Vertaal documenten naar een andere taal.\n\nOndersteunde formaten: Word, Excel, PowerPoint, HTML, TXT\nMaximale grootte: 40 MB\n\nOndersteunt meer dan 80 talen met optionele woordenlijstbestanden.",
+    "translateTooltip": "Vertaal een fragment tekst naar een andere taal.\n\nGebruik voor hele bestanden (Word, Excel, PowerPoint, HTML, TXT) in plaats daarvan Document vertalen.",
+    "cameraTooltip": "Maak een foto met uw apparaatcamera en voeg deze toe aan het bericht.",
+    "noResults": "Geen overeenkomende acties",
+    "sectionPinned": "Vastgemaakt",
+    "sectionFrequent": "Vaak gebruikt",
+    "sectionMore": "Meer",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media & bestanden",
+    "categoryTransform": "Transformeren",
+    "pin": "Bovenaan vastmaken",
+    "unpin": "Losmaken",
+    "moveToMore": "Verplaatsen naar 'Meer'",
+    "moveOutOfMore": "Tonen in menu"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Voeg uw persoonlijke instructies toe om aan te passen hoe de AI reageert. Deze worden gecombineerd met de basisrichtlijnen om behulpzame, nauwkeurige en veilige antwoorden te garanderen.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Tip: Typ \"/\" om te kiezen uit opgeslagen promptsjablonen.",
@@ -1933,7 +2222,14 @@
     "learnMore": "Meer informatie",
     "advancedOptions": "Geavanceerde opties",
     "unofficialBadgeLabel": "Onofficieel",
-    "unofficialLanguageWarning": "Deze taal wordt niet officieel ondersteund. De vertaalkwaliteit is niet gecontroleerd. Laat het resultaat controleren door een vloeiende of moedertaalspreker voordat u het deelt."
+    "unofficialLanguageWarning": "Deze taal wordt niet officieel ondersteund. De vertaalkwaliteit is niet gecontroleerd. Laat het resultaat controleren door een vloeiende of moedertaalspreker voordat u het deelt.",
+    "translationSubmitted": "Vertaling gestart — PDF's worden op de achtergrond verwerkt.",
+    "pendingTitle": "{filename} wordt vertaald…",
+    "pendingHint": "PDF-vertalingen verlopen op de achtergrond en kunnen enkele minuten duren. U kunt doorwerken — deze kaart wordt bijgewerkt zodra het document klaar is, ook na het herladen.",
+    "asyncFailed": "Documentvertaling mislukt: {error}",
+    "jobNotFound": "de vertaaltaak is niet meer beschikbaar. Probeer het opnieuw.",
+    "retryPolling": "Opnieuw controleren",
+    "pollingStalled": "We konden de server niet bereiken om de voortgang te controleren. De vertaling is mogelijk nog bezig."
   },
   "terms": {
     "officialLanguages": "Officiële versie:",
@@ -1997,6 +2293,10 @@
       "technicalDetails": "Technische details",
       "agentCountLabel": "{count} agenten",
       "disconnectedToast": "Verbinding met {name} verbroken"
+    },
+    "emptyState": {
+      "title": "Geen regionale of organisatorische agenten beschikbaar",
+      "description": "Verbind hieronder een Foundry-project om de agenten te ontdekken."
     }
   },
   "privacy": {
@@ -2107,5 +2407,753 @@
     "review": "Beoordelen",
     "itemId": "ID: {id}",
     "itemSource": "{date} van {source}"
+  },
+  "regionOverride": {
+    "warning": "Locatie-override actief — uw verzoeken worden doorgestuurd naar de {region} dataregio. Dit is een handmatige test-override, niet uw werkelijke locatie.",
+    "clear": "Override wissen"
+  },
+  "usageImpact": {
+    "empty": "Er is nog geen gebruik geregistreerd. Je tokengebruik en de geschatte uitstoot verschijnen hier nadat je hebt gechat.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} smartphone-oplaadbeurten",
+    "requests": "Verzoeken",
+    "promptTokens": "Prompt-tokens",
+    "completionTokens": "Completion-tokens",
+    "topModels": "Per model",
+    "byRegion": "Per hostingregio",
+    "regionDefault": "Standaard",
+    "modelRow": "{requests} ver. · {grams} g",
+    "disclosure": "Schattingen gebaseerd op aannames v{version} · sinds {since} · alleen standaardchat (agents en kennisbankantwoorden niet meegeteld).",
+    "reset": "Gebruikstatistieken resetten"
+  },
+  "extraction": {
+    "toggleLabel": "Gestructureerde gegevens extraheren",
+    "trayLabel": "Extractie",
+    "trayPrefix": "Extraheer",
+    "trayInfo": "Extractie retourneert maximaal 3 gestructureerde tabellen. Recepten worden lokaal opgeslagen.",
+    "autoChip": "Auto — AI stelt een structuur voor",
+    "addRecipe": "Recept toevoegen",
+    "addRecipeTitle": "Voeg een recept toe aan deze extractie",
+    "addRecipeFullTitle": "Maximaal 3 recepten per extractie",
+    "removeRecipe": "Recept verwijderen: {name}",
+    "remove": "Verwijderen",
+    "section": "Extractierecepten",
+    "sectionSubtitle": "Opgeslagen sjablonen die ruwe tekst, bestanden of URL’s omzetten in gestructureerde tabellen. Kies maximaal 3 per extractie.",
+    "newRecipe": "Nieuw recept",
+    "untitledRecipe": "(Naamloos recept)",
+    "deleteRecipe": "Recept verwijderen",
+    "delete": "Verwijderen",
+    "deleteConfirm": "Verwijderen?",
+    "cancel": "Annuleren",
+    "name": "Naam",
+    "namePlaceholder": "bijv. Patiënten",
+    "description": "Beschrijving",
+    "optional": "(optioneel)",
+    "descriptionPlaceholder": "Korte samenvatting getoond in de receptkiezer",
+    "instructions": "Instructies",
+    "instructionsPlaceholder": "Waar moet de AI naar zoeken in het materiaal?",
+    "fields": "Velden",
+    "field": "veld",
+    "fieldsPlural": "velden",
+    "fieldName": "Veldnaam",
+    "fieldType": "Veldtype",
+    "fieldNamePlaceholder": "veld_naam",
+    "addField": "Veld toevoegen",
+    "removeField": "Veld verwijderen",
+    "toggleDetails": "Details tonen/verbergen",
+    "fieldDetailsTitle": "Beschrijving, enum-waarden",
+    "fieldDescriptionPlaceholder": "Beschrijving (helpt de AI dit veld te vinden)",
+    "enumValuesPlaceholder": "Komma-gescheiden toegestane waarden",
+    "required": "vereist",
+    "suggest": "Suggestie met AI",
+    "suggesting": "Suggestie wordt gegenereerd…",
+    "suggestNeedsInstructions": "Voeg eerst instructies toe zodat de AI weet waarnaar te zoeken",
+    "searchRecipes": "Recepten zoeken",
+    "pickerEmpty": "Nog geen recepten. Maak er een aan om te beginnen.",
+    "pickerEmptyMatch": "Geen overeenkomende recepten",
+    "editorEmpty": "Nog geen recepten. Maak er een aan en de AI kan helpen velden in te vullen.",
+    "noData": "Geen data geëxtraheerd",
+    "noRecords": "Geen {name}-records gevonden",
+    "row": "rij",
+    "rows": "rijen",
+    "record": "record",
+    "records": "records",
+    "complete": "voltooid",
+    "download": "Downloaden",
+    "preview": "Voorbeeld",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} velden",
+    "fieldCountOne": "1 veld",
+    "andMoreFields": "+ {count} meer",
+    "saveAsRecipe": "Opslaan als recept",
+    "savedAsRecipeToast": "Opgeslagen als recept \"{name}\"",
+    "previewTruncated": "Toont de eerste 3 van {total} rijen. Download voor volledige data.",
+    "previewEmpty": "Geen rijen om te bekijken",
+    "proposedSchemaTip": "AI heeft dit schema voorgesteld. Sla het op om het opnieuw te gebruiken.",
+    "downloadAriaLabel": "Download {name} als {format}",
+    "previewAriaLabel": "Voorbeeldweergave van {name} aan/uitzetten",
+    "changeFormatAriaLabel": "Downloadformaat wijzigen voor {name}",
+    "materialWarningTitle": "Voeg materiaal toe om te extraheren",
+    "materialWarningBody": "Typ hieronder een bericht, voeg een bestand toe of vermeld een URL.",
+    "materialAttach": "Bestand toevoegen",
+    "willExtractPrefix": "Zal worden geëxtraheerd uit:",
+    "materialText": "berichttekst",
+    "materialFiles": "{count, plural, one {1 bestand} other {# bestanden}}",
+    "materialActiveFiles": "{count, plural, one {1 actief bestand} other {# actieve bestanden}}",
+    "dismiss": "Extractie uitschakelen"
+  },
+  "Connectors": "Connectors",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Vertaling",
+        "description": "Vertaal tekst met analyse, glossaria en beoordelingsrondes"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Maak en verbeter een document met de assistent"
+      },
+      "dataAnalysis": {
+        "label": "Data-analyse",
+        "description": "Importeer tabellen en verken of transformeer uw data"
+      },
+      "map": {
+        "label": "Kaart",
+        "description": "Zet gegevens om in locaties op een kaart"
+      }
+    },
+    "chooser": {
+      "prompt": "Of start een gefocuste workspace"
+    },
+    "sidebar": {
+      "newTranslation": "Nieuwe vertaling",
+      "newDocument": "Nieuw document",
+      "newDataAnalysis": "Nieuwe data-analyse",
+      "newMap": "Nieuwe kaart"
+    },
+    "translation": {
+      "chooseLanguage": "Doeltaal",
+      "customLanguageHint": "\"{name}\" is een taal die u hebt toegevoegd — de AI probeert elke taal, maar de kwaliteit is niet gecontroleerd.",
+      "addedByYou": "Door u toegevoegd",
+      "glossary": "Glossarium",
+      "noGlossary": "Geen glossarium",
+      "manageGlossaries": "Glossaria",
+      "glossaries": "Glossaria",
+      "closeGlossaries": "Glossaria sluiten",
+      "glossariesEmpty": "Maak een glossarium aan om vast te leggen hoe specifieke termen worden vertaald. Glossaria worden op dit apparaat opgeslagen en zijn herbruikbaar bij vertalingen.",
+      "newGlossary": "Nieuw woordenboek",
+      "newGlossaryName": "Naamloos woordenboek",
+      "glossaryName": "Woordenboeknaam",
+      "deleteGlossary": "Woordenboek verwijderen",
+      "sourceTerm": "Bronterm",
+      "targetTerm": "Vertaling",
+      "note": "Notitie",
+      "noteOptional": "Notitie (optioneel)",
+      "addEntry": "Term toevoegen",
+      "removeEntry": "{term} verwijderen",
+      "mode": "Vertaalmodus",
+      "modeQuick": "Snel",
+      "modeAgentic": "Gereviseerd",
+      "modeQuickHint": "Eén vertaalronde, snelst",
+      "modeAgenticHint": "Analyseert eerst de tekst, vertaalt en voert tot 3 beoordelingsrondes uit",
+      "translate": "Vertaal",
+      "translating": "Bezig met vertalen…",
+      "sourceLabel": "Brontekst",
+      "targetLabel": "Vertaling",
+      "sourcePlaceholder": "Plak of typ de te vertalen tekst, of upload een document.",
+      "targetEmpty": "De vertaling verschijnt hier.",
+      "uploadDocument": "Document uploaden",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "tooLong": "Tekst is langer dan {max} tekens. Splits de tekst, of gebruik documentvertaling voor volledige bestanden.",
+      "analysisTitle": "Pre-vertalingsanalyse",
+      "register": "Registreren",
+      "reviewTitle": "Beoordelingsrondes",
+      "roundLabel": "Ronde {round}",
+      "verdictApprove": "goedgekeurd",
+      "verdictRevise": "aangepast",
+      "railRequest": "Vertaal de brontekst naar {language}.",
+      "railDoneAgentic": "Gereed. Ik heb de tekst geanalyseerd, vertaald, en {rounds} beoordelingsronde(n) uitgevoerd. Het resultaat staat in de workspace.",
+      "railDoneQuick": "Gereed. De vertaling staat in de workspace.",
+      "railAssessRequest": "Beoordeel de kwaliteit van de {language}-vertaling.",
+      "railAssessDone": "Beoordeling voltooid: beoordelingen staan in de workspace met {count} voorgestelde wijziging(en) om te bekijken.",
+      "roundChanges": "Wijzigingen in ronde {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Nauwkeurigheid",
+          "description": "Geeft de bronbetekenis exact weer — geen verkeerde vertaling, weglating, toevoeging of onvertaalde segmenten"
+        },
+        "fluency": {
+          "label": "Vlotheid",
+          "description": "Grammatica, spelling, interpunctie en samenhang zijn natuurlijk in de doeltaal"
+        },
+        "terminology": {
+          "label": "Terminologie",
+          "description": "Vaktermen zijn consistent en correct; het woordenboek wordt exact gevolgd"
+        },
+        "style": {
+          "label": "Stijl",
+          "description": "Register, toon en stem komen overeen met de bron en zijn consequent"
+        },
+        "localeConventions": {
+          "label": "Locale conventies",
+          "description": "Datums, getallen, eenheden en interpunctie volgen lokale conventies"
+        },
+        "audience": {
+          "label": "Doelgroep",
+          "description": "Past bij het doel en de doelgroep van de tekst"
+        }
+      },
+      "severity": {
+        "minor": "Klein",
+        "major": "Ernstig"
+      },
+      "assess": "Kwaliteit beoordelen",
+      "assessing": "Beoordelen…",
+      "assessmentTitle": "Kwaliteitsbeoordeling",
+      "criteriaPicker": "Te beoordelen criteria",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Voorgestelde wijzigingen",
+      "noEditsSuggested": "Geen wijzigingen voorgesteld — de vertaling voldoet aan de geselecteerde criteria.",
+      "acceptEdit": "Accepteren",
+      "rejectEdit": "Afwijzen",
+      "acceptAll": "Alles accepteren",
+      "rejectAll": "Alles afwijzen",
+      "editAccepted": "Geaccepteerd",
+      "editRejected": "Afgewezen",
+      "editUnapplicable": "Kon dit gedeelte niet vinden in de huidige tekst — niet toegepast",
+      "editTranslation": "Bewerken",
+      "doneEditing": "Gereed",
+      "pasteTranslationPlaceholder": "Typ of plak een vertaling om aan te werken…",
+      "editingBlockedPendingEdits": "Rond eerst de voorgestelde wijzigingen af of wijs ze af",
+      "pendingCount": "{count} in behandeling",
+      "closeReview": "Kwaliteitscontrole sluiten",
+      "showReview": "Beoordeling tonen",
+      "showReviewPending": "Beoordeling tonen ({count} in behandeling)"
+    },
+    "document": {
+      "emptyTitle": "Beschrijf het gewenste document",
+      "emptyBody": "Vertel de assistent wat te schrijven — een situatieverslag, een donateursbrief, notulen. Voeg eerst referentiebestanden toe als u citaten en feiten uit deze bestanden wilt laten opnemen.",
+      "generatePlaceholder": "Beschrijf het te schrijven document…",
+      "revisePlaceholder": "Beschrijf de gewenste wijzigingen…",
+      "generate": "Genereren",
+      "revise": "Wijzigen",
+      "writing": "Schrijven…",
+      "export": "Exporteren",
+      "references": "Referenties",
+      "addReference": "Bestand toevoegen",
+      "uploading": "Bezig met uploaden…",
+      "removeReference": "{name} verwijderen",
+      "referenceChars": "{chars} tekens uit tekst geëxtraheerd",
+      "referenceEmpty": "Er kon geen tekst uit {name} worden gehaald",
+      "uploadFailed": "Upload mislukt",
+      "untitledDocument": "Naamloos document",
+      "generatedSummary": "Ik heb het document geschreven in de werkruimte. Controleer het en geef aan wat er veranderd moet worden.",
+      "revisedSummary": "Ik heb het document in de werkruimte aangepast.",
+      "runFailed": "Er is iets misgegaan: {message}",
+      "uploadBasis": "Begin met een bestaand document",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grammatica & spelling",
+          "description": "Correcte grammatica en spelling; één consistente Engelse variant (US of UK) is voldoende — mixen is fout"
+        },
+        "consistency": {
+          "label": "Consistentie",
+          "description": "Terminologie, namen, hoofdletters en opmaak overal op dezelfde manier gebruikt"
+        },
+        "clarity": {
+          "label": "Duidelijkheid",
+          "description": "Directe, ondubbelzinnige zinnen; structuur die de lezer ondersteunt"
+        },
+        "sensitivity": {
+          "label": "Sensitiviteit",
+          "description": "Inclusief, conflict- en humanitair-sensitief taalgebruik (optionele controle)"
+        },
+        "specAdherence": {
+          "label": "Specificatie-naleving",
+          "description": "Voldoet aan de bijgevoegde specificatie: verplichte secties aanwezig, in volgorde en volgens de richtlijnen"
+        },
+        "toneAdherence": {
+          "label": "Toon-naleving",
+          "description": "Voldoet aan de bijgevoegde stem- en toonregels"
+        }
+      },
+      "severity": {
+        "minor": "Klein",
+        "major": "Groot"
+      },
+      "assess": "Beoordeel kwaliteit",
+      "assessing": "Beoordelen…",
+      "assessmentTitle": "Kwaliteitscontrole",
+      "criteriaPicker": "Criteria om te beoordelen",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Voorgestelde bewerkingen",
+      "noEditsSuggested": "Geen bewerkingen voorgesteld — het document voldoet aan de geselecteerde criteria.",
+      "acceptEdit": "Accepteren",
+      "rejectEdit": "Weigeren",
+      "acceptAll": "Alles accepteren",
+      "rejectAll": "Alles weigeren",
+      "editAccepted": "Geaccepteerd",
+      "editRejected": "Geweigerd",
+      "editUnapplicable": "Kan dit fragment niet vinden in de huidige tekst — niet toegepast",
+      "editingBlockedPendingEdits": "Los eerst de openstaande voorgestelde bewerkingen op of wijs deze af",
+      "pendingCount": "{count} in behandeling",
+      "closeReview": "Kwaliteitscontrole sluiten",
+      "showReview": "Toon controle",
+      "showReviewPending": "Toon controle ({count} in behandeling)",
+      "railAssessRequest": "Beoordeel de kwaliteit van het document aan de hand van de geselecteerde criteria.",
+      "railAssessDone": "Beoordeling voltooid: beoordelingen staan in de werkruimte met {count} voorgestelde bewerking(en) ter controle.",
+      "spec": "Documentspecificatie",
+      "noSpec": "Geen specificatie",
+      "manageSpecs": "Specificaties",
+      "specs": "Documentspecificaties",
+      "closeSpecs": "Specificaties sluiten",
+      "specsEmpty": "Maak een specificatie aan om documenten in een vast format te schrijven — verplichte secties, volgorde en sectiespecifieke richtlijnen (bijvoorbeeld een SitRep-sjabloon). Specificaties worden op dit apparaat opgeslagen en zijn herbruikbaar.",
+      "newSpec": "Nieuwe specificatie",
+      "newSpecName": "Naamloze specificatie",
+      "specName": "Specificatienaam",
+      "specDescription": "Beschrijving (optioneel)",
+      "deleteSpec": "Specificatie verwijderen",
+      "sectionHeading": "Sectiekop",
+      "sectionGuidance": "Richtlijn (optioneel)",
+      "sectionRequired": "Verplicht",
+      "addSection": "Sectie toevoegen",
+      "removeSection": "Sectie verwijderen",
+      "generalGuidance": "Algemene richtlijn (optioneel)",
+      "tone": "Toon",
+      "noTone": "Geen toon",
+      "customCriteria": "Aangepaste criteria",
+      "manageCriteria": "Aangepaste criteria",
+      "closeCriteria": "Aangepaste criteria sluiten",
+      "criteriaEmpty": "Maak aangepaste criteria aan — bijvoorbeeld merkoverwegingen of organisatietaal — om documenten te beoordelen en revisies te sturen. Opgeslagen op dit apparaat en herbruikbaar.",
+      "newCriterion": "Nieuw criterium",
+      "newCriterionName": "Naamloos criterium",
+      "criterionName": "Naam criterium",
+      "criterionRubric": "Richtlijn",
+      "criterionRubricPlaceholder": "Beschrijf waaraan het document moet voldoen om dit criterium te halen, bijvoorbeeld \"Gebruik nooit superlatieven over ons eigen werk; noem begunstigden altijd 'de mensen die wij ondersteunen'…\"",
+      "criterionRubricHint": "Deze richtlijn wordt letterlijk aan de AI gegeven tijdens beoordelingen en revisierondes.",
+      "deleteCriterion": "Criterium verwijderen",
+      "profileTitle": "Documentprofiel",
+      "profileDocType": "Type",
+      "profileLanguage": "Taal",
+      "profileAudience": "Doelgroep",
+      "profilePurpose": "Doel",
+      "profileRegister": "Register",
+      "profileTone": "Toon",
+      "profileConventions": "Conventies",
+      "emptyHint": "Begin hieronder te typen, beschrijf in het vak onderaan wat er geschreven moet worden, of start vanaf een bestand.",
+      "addSpec": "Spec toevoegen",
+      "addCriteria": "Criteria toevoegen",
+      "scopeFullDocument": "Scope: volledig document",
+      "scopeSelection": "Scope: selectie — “{preview}…” ({count} woorden)",
+      "clearSelection": "Selectie wissen (werk met het volledige document)",
+      "reviseSelectionPlaceholder": "Beschrijf de wijziging van de selectie…",
+      "revisedSelectionSummary": "Ik heb het geselecteerde fragment herzien in de werkruimte.",
+      "assessedSelection": "Selectie"
+    },
+    "data": {
+      "emptyTitle": "Importeer data om te analyseren",
+      "emptyBody": "Breng een CSV-, Excel- of JSON-bestand in, of plak rijen direct. Zodra uw tabel geladen is, kunt u sorteren, extra rijen uit documenten halen en deze transformeren met heldere instructies in gewone taal.",
+      "importFile": "Bestand importeren",
+      "importing": "Bezig met importeren…",
+      "pasteData": "Data plakken",
+      "pastePlaceholder": "Plak hier CSV, TSV of JSON…",
+      "import": "Importeren",
+      "addFromSource": "Toevoegen vanuit bron",
+      "extractHint": "Plak tekst of kies een document; rijen die overeenkomen met uw huidige kolommen worden eruit gehaald. Onbekende waarden blijven leeg — er wordt niets verzonnen.",
+      "extractPlaceholder": "Plak ongestructureerde tekst met data…",
+      "extractRows": "Rijen extraheren",
+      "extractFromFile": "Uit een bestand…",
+      "extracting": "Bezig met extraheren…",
+      "pastedSource": "Geplakte tekst",
+      "transform": "Transformeren",
+      "transforming": "Bezig met transformeren…",
+      "transformPlaceholder": "Beschrijf een transformatie, bijvoorbeeld \"voeg een kolom toe met gevallen per 1000 inwoners\"…",
+      "transformCapHint": "Transformaties zijn beperkt tot {max} rijen. Verwijder of filter eerst rijen bij grotere tabellen.",
+      "undo": "Ongedaan maken",
+      "deleteSelected": "Verwijder {count}",
+      "deletedRows": "{count} rijen verwijderd",
+      "selectAllRows": "Selecteer alle rijen",
+      "selectRow": "Rij {row} selecteren",
+      "rowCount": "{count} rijen",
+      "rowCapExceeded": "Dat zouden {count} rijen zijn; de tabel is beperkt tot {max}. Splits de data of exporteer in plaats daarvan.",
+      "railExtractRequest": "Extraheer rijen die overeenkomen met het tabelschema uit: {source}",
+      "railExtractDone": "{count} geëxtraheerde rijen toegevoegd aan de tabel.",
+      "railTransformDone": "De tabel is getransformeerd.",
+      "columnProfileFor": "Kolomstatistieken voor {column}",
+      "profileMissing": "Ontbrekend",
+      "profileDistinct": "Uniek",
+      "profileRange": "Bereik",
+      "profileMean": "Gemiddelde",
+      "profileMedian": "Mediaan",
+      "profileTopValues": "Topwaarden",
+      "filterColumnFor": "Filter {column}",
+      "filterContains": "Bevat…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Wissen",
+      "clearFilters": "Filters wissen",
+      "showingRows": "Toont {shown} van {total} rijen",
+      "scopeLabel": "Werkgebied",
+      "scopeTable": "Alle ({count})",
+      "scopeFiltered": "Gefilterd ({count})",
+      "scopeSelection": "Geselecteerd ({count})",
+      "scopedInstruction": "{instruction} (op {count} gefilterde rijen)",
+      "assess": "Beoordeel kwaliteit",
+      "assessing": "Beoordelen…",
+      "criteria": {
+        "validity": {
+          "label": "Geldigheid",
+          "description": "Waarden komen overeen met het type en verwachte formaat van hun kolom"
+        },
+        "consistency": {
+          "label": "Consistentie",
+          "description": "Dezelfde waarde wordt overal op dezelfde manier geschreven (geen 'M' / 'Man' varianten, gemixte eenheden of hoofdlettergebruik)"
+        },
+        "duplicates": {
+          "label": "Duplicaten",
+          "description": "Rijen die hetzelfde object of dezelfde gebeurtenis twee keer registreren"
+        },
+        "plausibility": {
+          "label": "Plausibiliteit",
+          "description": "Uitschieters en onmogelijke waarden in context"
+        }
+      },
+      "assessmentTitle": "Beoordeling van datakwaliteit",
+      "pendingCount": "{count} in behandeling",
+      "closeReview": "Beoordeling sluiten",
+      "suggestedEdits": "Voorgestelde oplossingen",
+      "noEditsSuggested": "Geen oplossingen voorgesteld — de data voldoet aan de geselecteerde criteria.",
+      "acceptAll": "Alles accepteren",
+      "rejectAll": "Alles weigeren",
+      "acceptEdit": "Accepteren",
+      "rejectEdit": "Weigeren",
+      "editAccepted": "Toegepast",
+      "editRejected": "Geweigerd",
+      "editUnapplicable": "De cel is gewijzigd sinds de beoordeling — niet toegepast",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Te beoordelen criteria",
+      "severity": {
+        "minor": "Klein",
+        "major": "Groot"
+      },
+      "editLocation": "rij {row} · {column}",
+      "editLocationRow": "rij {row} (verwijderen)",
+      "showReview": "Toon review",
+      "showReviewPending": "Toon review ({count} in behandeling)",
+      "assessedFiltered": "Gefilterde rijen",
+      "assessedSelection": "Geselecteerde rijen",
+      "assessedSample": "steekproef van {shown} uit {total}",
+      "railAssessRequest": "Beoordeel de kwaliteit van de tabel ({count} rijen) op de gekozen criteria.",
+      "railAssessDone": "Voorgestelde {count} datakwaliteitsoplossingen — bekijk ze in de workspace.",
+      "insights": "Inzichten",
+      "chartKind": "Grafiektype",
+      "chartBar": "Staaf (groeperen op)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Lijn (over tijd)",
+      "groupByColumn": "Groeperen op kolom",
+      "dateColumn": "Datumnkolom",
+      "valueColumn": "Waarde kolom",
+      "aggFn": "Aggregatie",
+      "aggCount": "Aantal",
+      "aggSum": "Som",
+      "aggMean": "Gemiddelde",
+      "chartTruncated": "Toont de bovenste {max} groepen",
+      "chartNoData": "Geen grafiekwaardige waarden in de huidige rijen.",
+      "chartBarAria": "Staafdiagram gegroepeerd op {column}",
+      "chartHistogramAria": "Histogram van {column}",
+      "chartLineAria": "Lijndiagram van {column} over tijd",
+      "editStructure": "Structuur",
+      "defineStructure": "Definieer structuur",
+      "schemaHint": "Definieer de velden van uw datastructuur. Vereiste velden bepalen het beleid voor ontbrekende gegevens bij importeren; het wijzigen van een veldtype zet bestaande waarden om (niet-converteerbare cellen worden leeg).",
+      "schemaFieldName": "Veldnaam",
+      "schemaFieldType": "Veldtype",
+      "schemaRequired": "Vereist",
+      "schemaAddField": "Veld toevoegen",
+      "schemaDeleteField": "Veld {field} verwijderen",
+      "schemaApply": "Structuur toepassen",
+      "schemaCancel": "Annuleren",
+      "schemaEdited": "Tabelstructuur gewijzigd",
+      "schemaCellsConverted": "{count} cellen konden niet worden omgezet naar het nieuwe type en zijn nu leeg.",
+      "missingFieldPolicy": "Ontbrekende gegevens",
+      "policyStrict": "Strikt — onvolledige rijen weigeren",
+      "policyFlag": "Markeren — importeren en aanduiden",
+      "policyLenient": "Laks — stil importeren",
+      "droppedIncompleteRows": "{count} rijen zonder verplichte velden verwijderd: {fields}",
+      "dismiss": "Negeren",
+      "requiredColumn": "Verplicht veld",
+      "flagMissingRequired": "Verplicht veld is leeg",
+      "flagPendingEdit": "Een voorgestelde correctie is in behandeling voor deze cel — zie de kwaliteitsreview",
+      "fromPhoto": "Van foto",
+      "fromPhotoHint": "Fotografeer een papieren formulier of tabel — de inhoud wordt gestructureerde data die u kunt controleren met de foto",
+      "readingPhoto": "Foto wordt gelezen…",
+      "photoBatchName": "{count} foto’s",
+      "railPhotoRequest": "Extraheer gestructureerde data uit {count} foto(’s): {name}",
+      "railPhotoDone": "{count} record(s) toegevoegd vanuit de foto('s). Vergelijk ze met de foto in de werkruimte.",
+      "sourcesLabel": "Bronnen",
+      "openPhotoQc": "Vergelijk de gegevens met {name}",
+      "qcRowsFromPhoto": "{count} rijen",
+      "qcClose": "Fotocontrole sluiten",
+      "qcZoomIn": "Inzoomen",
+      "qcZoomOut": "Uitzoomen",
+      "qcPrevPhoto": "Vorige foto",
+      "qcNextPhoto": "Volgende foto",
+      "qcImageLoading": "Foto laden…",
+      "qcImageFailed": "De foto kan niet worden geladen.",
+      "qcImageAlt": "Bronfoto: {name}",
+      "qcHint": "De tabel toont alleen rijen uit deze foto — vergelijk elke waarde met de foto en bewerk of verwijder rijen die niet overeenkomen.",
+      "sourceFilterChip": "Rijen uit {name}",
+      "clearSourceFilter": "Toon opnieuw alle rijen",
+      "viewAsRecord": "Formulierweergave",
+      "viewAsTable": "Tabelweergave",
+      "recordEmpty": "Nog geen records.",
+      "recordOf": "Record {index} van {count}",
+      "recordPrev": "Vorig record",
+      "recordNext": "Volgend record",
+      "recordBooleanUnset": "(leeg)",
+      "flagsChip": "{count} meldingen",
+      "flagsChipOpenReview": "Open de kwaliteitscontrole",
+      "flagsChipMissingOnly": "Verplichte velden zijn leeg — vul ze in of pas de structuur aan",
+      "autoCheck": "Nieuwe gegevens automatisch controleren",
+      "autoCheckHint": "Na het extraheren van gegevens uit foto's of documenten automatisch een kwaliteitscontrole uitvoeren op de nieuwe rijen",
+      "checkingNewRows": "Nieuwe rijen worden gecontroleerd op kwaliteitsproblemen…",
+      "ingestCheckFailed": "De automatische kwaliteitscontrole is mislukt ({message}) — u kunt deze handmatig uitvoeren met 'Kwaliteit beoordelen'.",
+      "assessedIngest": "Nieuw toegevoegde rijen"
+    },
+    "map": {
+      "emptyTitle": "Plaats uw gegevens op een kaart",
+      "emptyBody": "Plak een sitrep, linelist, notulen of andere tekst met plaatsnamen — of upload een document. Locaties worden herkend en op de kaart gezet met een betrouwbaarheidswaarde; u kunt ze daarna exporteren voor ArcGIS of andere GIS-tools.",
+      "inputPlaceholder": "Plak tekst met plaatsnamen…",
+      "uploadFile": "Bestand uploaden",
+      "pastedSource": "Geplakte tekst",
+      "mapIt": "Kaart maken",
+      "finding": "Locaties zoeken…",
+      "featureCount": "{count} locaties",
+      "featureCapExceeded": "De kaart is beperkt tot {max} locaties.",
+      "noneFound": "Er zijn geen locaties gevonden in dit materiaal.",
+      "lowConfidenceNotice": "{count} locatie(s) hebben coördinaten met een lage betrouwbaarheid — controleer deze voordat u de kaart gebruikt.",
+      "tilesOffline": "Kaarttegels niet beschikbaar — de locatieslijst werkt nog wel.",
+      "disclaimer": "Coördinaten zijn door AI geschat op basis van de kennis van het model, niet via een geocoding-service — controleer ze voor operationeel gebruik. Kaarttegels worden geladen van een tegelserver; uw gegevens blijven op dit apparaat.",
+      "flyTo": "Toon {name} op de kaart",
+      "removeFeature": "Verwijder {name}",
+      "expandFeature": "Toon volledige details van {name}",
+      "collapseFeature": "Details van {name} samenvouwen",
+      "detailsParent": "Onderdeel van {parent}",
+      "railRequest": "Zet de locaties op de kaart uit: {source}",
+      "railSearchRequest": "Zoek op internet en zet de locaties op de kaart voor: {query}",
+      "railDone": "{count} locatie(s) in kaart gebracht. Beoordeel de locaties met lage zekerheid in de lijst.",
+      "searchToggle": "Webzoekmodus",
+      "searchToggleHint": "Zoek op het web in plaats van tekst te plakken; de gevonden resultaten worden in kaart gebracht.",
+      "searchPlaceholder": "Zoek op het web, bijv. \"cholera-uitbraken Oost-Afrika 2026\"…",
+      "searchAndMap": "Zoek & kaart",
+      "searching": "Bezig met zoeken…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Verbinding: {kind}",
+        "unresolved": "{count} verbinding(en) verwijzen naar plaatsen die niet op de kaart staan en zijn overgeslagen."
+      },
+      "confidence": {
+        "high": "Hoog",
+        "medium": "Middelmatig",
+        "low": "Laag"
+      },
+      "prominence": {
+        "primary": "Hoofdlocatie",
+        "secondary": "Ondersteunende locatie",
+        "mention": "Terloopse vermelding"
+      },
+      "prominenceMentionHint": "Deze locatie wordt slechts terloops genoemd in het materiaal — kleiner weergegeven op de kaart en niet meegenomen in het beginoverzicht.",
+      "dates": {
+        "since": "sinds {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Lopend"
+      },
+      "filters": {
+        "label": "Filter op categorie",
+        "other": "Overig",
+        "clear": "Wissen",
+        "showing": "{shown} van {total} locaties",
+        "noneMatch": "Geen locaties voldoen aan de huidige filters."
+      },
+      "dateFilter": {
+        "label": "Data",
+        "from": "Vanaf",
+        "to": "Tot",
+        "fromAria": "Toon alleen gebeurtenissen vanaf deze datum",
+        "toAria": "Toon alleen gebeurtenissen tot deze datum",
+        "clear": "Data wissen",
+        "eraChip": "Toon alleen gebeurtenissen in {label}"
+      },
+      "timeline": {
+        "toggle": "Tijdverloop",
+        "play": "Tijdverloop afspelen",
+        "pause": "Tijdverloop pauzeren",
+        "eras": "Tijdlijnperiodes",
+        "jumpTo": "Ga naar {label}",
+        "slider": "Tijdlijnpositie",
+        "showUndated": "Toon locaties zonder datum",
+        "activeCount": "{count} actief"
+      },
+      "granularity": {
+        "site": "Locatie",
+        "city": "Stad/dorp",
+        "district": "District",
+        "region": "Regio",
+        "country": "Land"
+      },
+      "granularityAreaHint": "Een gebied, weergegeven als een benaderende cirkel rond het midden — geen exacte locatie of grens.",
+      "containerHint": "Bevat andere in kaart gebrachte locaties, daarom alleen als omtrek weergegeven.",
+      "legend": {
+        "toggle": "Legenda",
+        "title": "De kaart lezen",
+        "color": "Kleur: coördinatenzekerheid (blauw hoog, oranje middel, rood laag)",
+        "size": "Puntgrootte: hoe centraal de locatie is voor het materiaal",
+        "area": "Gestreepte cirkel: geschatte omvang van een district, regio of land",
+        "container": "Lichte omlijning: een gebied waarvan de inhoud afzonderlijk wordt weergegeven"
+      }
+    },
+    "shell": {
+      "showConversation": "Toon gesprek",
+      "hideConversation": "Verberg gesprek",
+      "workspaceTab": "Werkruimte",
+      "conversationTab": "Gesprek",
+      "paneTabsLabel": "Workflow-panelen",
+      "railEmpty": "De berichten en voortgang van de assistent verschijnen hier.",
+      "railInputPlaceholder": "Stuur een bericht naar de assistent…",
+      "assistantThinking": "Denkt na…",
+      "sendMessage": "Bericht verzenden",
+      "stopGenerating": "Stoppen met genereren",
+      "loadingWorkspace": "Werkruimte wordt geladen…",
+      "unknownType": "Dit gesprek gebruikt een workflow die deze versie niet herkent. De gespreksgeschiedenis wordt hieronder weergegeven.",
+      "untitled": "Nieuw gesprek",
+      "toggleMenu": "Menu tonen/verbergen",
+      "model": "Model voor deze workflow"
+    }
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Verbind externe tools via het Model Context Protocol (MCP). Verbonden tools worden beschikbaar voor modellen in de chat en elke tool-oproep wordt alleen uitgevoerd nadat u deze heeft goedgekeurd.",
+    "localOnlyNote": "U meldt zich direct aan bij elke provider. Toegangssleutels worden versleuteld en alleen op dit apparaat opgeslagen, en worden bij elk verzoek via de app-server doorgegeven — nooit daar opgeslagen of gelogd.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Doorzoek repositories, lees en maak issues en pull requests aan."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Zoek, maak en bewerk taken en projecten."
+      }
+    },
+    "connect": "Verbinden",
+    "connected": "Verbonden",
+    "tokenEndsIn": "eindigt op ••••{last4}",
+    "disconnect": "Verbinding verbreken",
+    "toolCount": "{count, plural, =1 {1 tool beschikbaar} other {# tools beschikbaar}}",
+    "patLabel": "Persoonlijke toegangstoken",
+    "createTokenLink": "Token aanmaken",
+    "tokenScopeHint": "Gebruik een fijnmazige token met alleen de benodigde toegang voor deze tools.",
+    "validating": "Verbinding controleren…",
+    "validationFailed": "Kan geen verbinding maken. Controleer het adres en probeer het opnieuw.",
+    "authFailed": "De server heeft het token geweigerd. Controleer het en probeer opnieuw.",
+    "tokenRequired": "Een token is vereist",
+    "enableServer": "Beschikbaar in chat",
+    "arbitraryTitle": "Andere MCP-servers",
+    "arbitraryToggle": "Sta willekeurige MCP-servers toe",
+    "arbitraryWarning": "Iedereen die een MCP-server beheert, kan de berichten zien die naar de tools ervan worden gestuurd. Verbind alleen met servers die u vertrouwt. Iedere tool-aanroep vereist nog steeds uw goedkeuring.",
+    "addServer": "MCP-server toevoegen",
+    "editServer": "MCP-server bewerken",
+    "serverName": "Naam",
+    "serverUrl": "Server-URL",
+    "nameRequired": "Naam is verplicht",
+    "urlRequired": "URL is verplicht",
+    "invalidUrl": "Voer een publieke https://-adres in",
+    "namePlaceholder": "Mijn MCP-server",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Toegangstoken (optioneel)",
+    "keepTokenPlaceholder": "Laat leeg om huidige token te behouden",
+    "disconnectedToast": "{name} is losgekoppeld",
+    "save": "Opslaan",
+    "connectWithProvider": "Verbind met {name}",
+    "useTokenInstead": "Gebruik in plaats daarvan een toegangstoken",
+    "oauthWaiting": "Wachten op autorisatie…",
+    "oauthFailed": "Aanmelden mislukt. Probeer opnieuw.",
+    "oauthDenied": "Toegang is geweigerd door de provider.",
+    "oauthTimeout": "Aanmelden is verlopen. Probeer opnieuw.",
+    "oauthCancelled": "Aanmelden is geannuleerd.",
+    "oauthUnavailable": "Aanmelden is niet beschikbaar voor deze connector op deze omgeving. Gebruik een toegangstoken of vraag uw beheerder om de OAuth-app te configureren.",
+    "ownAppToggle": "Gebruik eigen OAuth-app",
+    "ownAppHint": "Registreer een OAuth-app in uw {name}-account (organisatie, werkruimte of enterprise-instantie) met de onderstaande callback-URL en plak de gegevens hier. Laat dit gesloten om de ingebouwde app te gebruiken.",
+    "ownAppCustomHint": "Voer eventueel hieronder uw eigen OAuth-appgegevens in; laat ze leeg om automatisch te laten registreren bij de server.",
+    "ownAppInUse": "Verbonden met uw eigen OAuth-app.",
+    "clientIdLabel": "Client-ID",
+    "clientSecretLabel": "Client secret (indien van toepassing)",
+    "redirectUriLabel": "Callback / redirect-URL om te registreren",
+    "reconnect": "Opnieuw verbinden",
+    "needsReauth": "Opnieuw verbinden vereist",
+    "disconnectOauthNote": "De verbinding verbreken verwijdert alleen de toegang op dit apparaat. Volledige toegang intrekken kan via de lijst met gemachtigde apps in uw {name}-account.",
+    "authModeLabel": "Authenticatie",
+    "authModeNone": "Geen",
+    "authModeBearer": "Toegangstoken",
+    "authModeOauth": "Aanmelden bij provider (OAuth)",
+    "oauthCustomHint": "U meldt zich na het opslaan aan bij de provider van de server in een pop-upvenster.",
+    "saveAndSignIn": "Opslaan & aanmelden",
+    "oauthCallback": {
+      "title": "Autorisatie voltooid",
+      "missingState": "Niets om te autoriseren",
+      "close": "U kunt dit venster sluiten en terugkeren naar de app.",
+      "closeButton": "Venster sluiten"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Verbind een modelbron",
+    "addAnother": "Voeg nog een modelbron toe",
+    "edit": "Bewerken",
+    "disconnect": "{name} ontkoppelen",
+    "disconnectedToast": "{name} ontkoppeld",
+    "modelCountLabel": "{count} modellen",
+    "loadingModels": "Modellen laden...",
+    "noModelsAvailable": "Geen modellen beschikbaar van deze bron",
+    "sourceUnreachable": "Deze bron is niet bereikbaar. Je toegang is mogelijk gewijzigd of de service is tijdelijk niet beschikbaar.",
+    "retry": "Opnieuw proberen",
+    "connectFoundryAccount": "Verbind een Microsoft Azure Foundry-account",
+    "connectFoundryDescription": "Ontdek modelimplementaties vanuit een Azure Foundry-account waar je toegang toe hebt. Jouw eigen Azure rechten autoriseren elke aanvraag — de modelbeperkingen van de app zijn hier niet van toepassing.",
+    "selectModelsDescription": "Kies welke modelimplementaties uit dit account zichtbaar zijn in je modelkiezer.",
+    "editConnection": "Verbinding bewerken",
+    "nameLabel": "Naam",
+    "namePlaceholder": "bijv. Mijn Team Sandbox",
+    "nameRequired": "Bronnaam is vereist",
+    "foundryAccountLabel": "Foundry-account",
+    "enterManually": "Handmatig invoeren",
+    "browseResources": "Bekijk resources",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Resourcegroep",
+    "accountNameLabel": "Accountnaam",
+    "subscriptionRequired": "Kies een abonnement",
+    "accountRequired": "Kies een Foundry-account",
+    "accountSelectionRequired": "Selecteer een account uit de lijst.",
+    "selectAllRequired": "Selecteer een abonnement, resourcegroep en account.",
+    "connectionFailed": "Dit account is niet bereikbaar. Controleer of de gegevens kloppen en of je toegang hebt.",
+    "duplicateSource": "Dit account is al verbonden als \"{name}\".",
+    "connectionSuccessModels": "Verbonden — {count} modelimplementatie(s) gevonden",
+    "connectionSuccessEmpty": "Verbonden, maar geen modelimplementaties gevonden op dit account.",
+    "checkingConnection": "Verbinding controleren...",
+    "next": "Volgende",
+    "back": "Terug",
+    "cancel": "Annuleren",
+    "connect": "Verbinden",
+    "save": "Opslaan",
+    "scanningResources": "Uw Azure-abonnementen worden gescand...",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# abonnementen}} konden niet worden gescand. Gebruik handmatige invoer als uw account ontbreekt.",
+    "discoveryTruncatedWarning": "Er waren te veel resources om volledig te scannen. Gebruik handmatige invoer als uw account ontbreekt.",
+    "noAccountsDiscovered": "Geen Foundry-accounts gevonden in uw abonnementen. Gebruik handmatige invoer als u het pad weet.",
+    "retryScan": "Opnieuw scannen",
+    "searchAccountsPlaceholder": "Accounts zoeken...",
+    "modelsSelectedCount": "{selected} van {total} modellen geselecteerd",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "autoAddLabel": "Nieuwe modellen automatisch toevoegen",
+    "autoAddDescription": "Modellen die later aan dit account worden toegevoegd, verschijnen automatisch. Niet-geselecteerde modellen blijven uitgesloten."
   }
 }

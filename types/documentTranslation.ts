@@ -30,6 +30,23 @@ export type DocumentTranslationFormat =
   (typeof DOCUMENT_TRANSLATION_FORMATS)[number];
 
 /**
+ * Formats routed through the ASYNCHRONOUS (batch) Document Translation API.
+ * The synchronous document:translate endpoint does not handle PDFs; the
+ * batch API does. Batch translations upload the source, submit a
+ * storageType:'File' batch targeting the standard translated-blob path, and
+ * the client polls /api/document-translation/status/{jobId} until done.
+ */
+export const ASYNC_DOCUMENT_TRANSLATION_FORMATS = ['.pdf'] as const;
+
+/** Whether a filename must take the async (batch) translation path. */
+export function requiresAsyncTranslation(filename: string): boolean {
+  const ext = `.${filename.split('.').pop()?.toLowerCase() ?? ''}`;
+  return (ASYNC_DOCUMENT_TRANSLATION_FORMATS as readonly string[]).includes(
+    ext,
+  );
+}
+
+/**
  * Glossary file formats supported by Azure Document Translation.
  */
 export const GLOSSARY_FORMATS = ['.csv', '.tsv', '.xlf', '.xliff'] as const;
@@ -113,6 +130,23 @@ export interface DocumentTranslationRequest {
  * Reference to a translated document stored in blob storage.
  * Similar to TranscriptReference for transcriptions.
  */
+/**
+ * Returned by the translate route for ASYNC (batch) jobs: everything the UI
+ * needs to render an in-conversation pending state and to finalize the full
+ * reference once /status reports Succeeded.
+ */
+export interface DocumentTranslationPendingReference {
+  async: true;
+  jobId: string;
+  originalFilename: string;
+  originalFileUrl: string;
+  translatedFilename: string;
+  targetLanguage: string;
+  targetLanguageName: string;
+  fileExtension: string;
+  submittedAt: string;
+}
+
 export interface DocumentTranslationReference {
   /** Original filename before translation */
   originalFilename: string;

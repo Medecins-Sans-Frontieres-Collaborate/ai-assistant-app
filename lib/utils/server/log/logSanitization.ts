@@ -35,11 +35,15 @@ export function sanitizeForLog(value: unknown): string {
 
   // Remove control characters and normalize whitespace
   // This prevents log injection via newlines, carriage returns, ANSI escape codes, etc.
+  // The newline replace is written as a literal alternation (not a character
+  // class) because CodeQL only models literal/alternation patterns as
+  // CWE-117 sanitizers — a `[\r\n]+` class keeps every call site flagged.
   return (
     stringValue
-      .replace(/[\r\n]+/g, ' ') // Replace newlines with spaces
+      .replace(/\r\n|\r|\n/g, ' ') // Replace newlines with spaces
       // eslint-disable-next-line no-control-regex
       .replace(/[\x00-\x1F\x7F-\x9F]/g, '') // Remove control characters
+      .replace(/ {2,}/g, ' ') // Collapse runs left by consecutive newlines
       .trim()
   );
 }

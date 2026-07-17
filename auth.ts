@@ -1,9 +1,33 @@
 import NextAuth, { Session } from 'next-auth';
 import { JWT, getToken } from 'next-auth/jwt';
 import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id';
+import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
+
+import {
+  REGION_OVERRIDE_COOKIE,
+  UserRegion,
+  parseRegion,
+} from '@/lib/utils/shared/region';
+
+/**
+ * Reads the manual region-override cookie for the current request, if any.
+ *
+ * Returns null when no (valid) override is set, or when there is no request
+ * scope to read cookies from (e.g. edge middleware) — callers treat that as
+ * "no override". The override only changes which regional data plane the
+ * user's requests are routed to; it does not change their office identity.
+ */
+async function readRegionOverride(): Promise<UserRegion | null> {
+  try {
+    const store = await cookies();
+    return parseRegion(store.get(REGION_OVERRIDE_COOKIE)?.value);
+  } catch {
+    return null;
+  }
+}
 
 declare module 'next-auth' {
   interface User {
@@ -326,9 +350,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       // Determine region/office from email if not set in token (for old tokens)
       const resolved = resolveOfficeAndRegion(userMail);
-      const userRegion = token.userRegion ?? resolved.region;
+      const actualRegion = token.userRegion ?? resolved.region;
       const userOfficeId = token.userOfficeId ?? resolved.officeId;
       const userOfficeName = token.userOfficeName ?? resolved.officeName;
+
+      // Apply an optional manual region override (testing/diagnostics). It
+      // replaces only the data-plane region — office identity is unchanged —
+      // and is surfaced via `regionOverridden` so the UI can warn the user.
+      const override = await readRegionOverride();
+      const userRegion = override ?? actualRegion;
 
       return {
         ...session,
@@ -342,6 +372,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           department: token.userDepartment,
           companyName: token.userCompanyName,
           region: userRegion,
+          actualRegion,
+          regionOverridden: override !== null && override !== actualRegion,
           officeId: userOfficeId,
           officeName: userOfficeName,
         } as Session['user'],

@@ -1,7 +1,13 @@
 'use client';
 
-import { IconSparkles, IconVolume, IconX } from '@tabler/icons-react';
-import { useState } from 'react';
+import {
+  IconBraces,
+  IconSparkles,
+  IconVolume,
+  IconX,
+} from '@tabler/icons-react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
+import { useEffect, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
@@ -11,10 +17,14 @@ import { useTones } from '@/client/hooks/settings/useTones';
 
 import { TabNavigation } from '@/components/UI/TabNavigation';
 
+import { ExtractionRecipesTab } from './ExtractionRecipesTab';
 import { PromptsTab } from './PromptsTab';
 import { TonesTab } from './TonesTab';
 
-type CustomizationTab = 'prompts' | 'tones';
+import { useSettingsStore } from '@/client/stores/settingsStore';
+import { useUIStore } from '@/client/stores/uiStore';
+
+type CustomizationTab = 'prompts' | 'tones' | 'recipes';
 
 interface CustomizationsModalProps {
   isOpen: boolean;
@@ -32,6 +42,42 @@ export function CustomizationsModal({
   const { prompts } = useSettings();
   const { tones } = useTones();
   const { folders } = useConversations();
+  const extractionRecipes = useSettingsStore((s) => s.extractionRecipes);
+
+  // Structured-data extraction is gated by a LaunchDarkly flag (fail-open).
+  // Off in prod until go-ahead; when disabled the Recipes tab is hidden.
+  // See docs/LAUNCHDARKLY_FLAGS.md.
+  const { structuredDataExtraction } = useFlags();
+  const isExtractionEnabled = structuredDataExtraction !== false;
+
+  // Honour an externally requested initial tab (set by the recipe picker
+  // when the user clicks "Create new recipe…"). Cleared after honouring so
+  // the next sidebar-driven open lands on the default Prompts tab.
+  const requestedInitialTab = useUIStore((s) => s.customizationsInitialTab);
+  const setCustomizationsInitialTab = useUIStore(
+    (s) => s.setCustomizationsInitialTab,
+  );
+
+  useEffect(() => {
+    if (isOpen && requestedInitialTab) {
+      // Never land on the Recipes tab while the feature is flag-disabled.
+      const target =
+        requestedInitialTab === 'recipes' && !isExtractionEnabled
+          ? 'prompts'
+          : requestedInitialTab;
+      // Defer the state writes to a microtask so React doesn't see them as
+      // a synchronous cascade off the same render that triggered the effect.
+      queueMicrotask(() => {
+        setActiveTab(target);
+        setCustomizationsInitialTab(null);
+      });
+    }
+  }, [
+    isOpen,
+    requestedInitialTab,
+    setCustomizationsInitialTab,
+    isExtractionEnabled,
+  ]);
 
   if (!isOpen) return null;
 
@@ -94,6 +140,30 @@ export function CustomizationsModal({
                 icon: <IconVolume size={16} className="hidden sm:block" />,
                 width: '150px',
               },
+              ...(isExtractionEnabled
+                ? [
+                    {
+                      id: 'recipes',
+                      label: (
+                        <>
+                          <span className="hidden sm:inline">
+                            {t('extraction.section')}
+                          </span>
+                          <span className="sm:hidden">
+                            <IconBraces size={16} />
+                          </span>
+                          <span className="ml-1">
+                            ({extractionRecipes.length})
+                          </span>
+                        </>
+                      ),
+                      icon: (
+                        <IconBraces size={16} className="hidden sm:block" />
+                      ),
+                      width: '180px',
+                    },
+                  ]
+                : []),
             ]}
             activeTab={activeTab}
             onTabChange={(tab) => setActiveTab(tab as CustomizationTab)}
@@ -116,6 +186,10 @@ export function CustomizationsModal({
               folders={folders.filter((f) => f.type === 'tone')}
               onClose={onClose}
             />
+          )}
+
+          {isExtractionEnabled && activeTab === 'recipes' && (
+            <ExtractionRecipesTab />
           )}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { OPENAI_API_VERSION } from '@/lib/utils/app/const';
+import { UserRegion } from '@/lib/utils/shared/region';
 
 import { AIFoundryAgentHandler } from './chat/AIFoundryAgentHandler';
 import { AgentChatService } from './chat/AgentChatService';
@@ -15,6 +16,18 @@ import {
 } from '@azure/identity';
 import { AzureOpenAI } from 'openai';
 import OpenAI from 'openai';
+
+/**
+ * Region-specific chat clients for cross-region routing. Every field is
+ * optional: a missing client means "no region-specific configuration for
+ * that SDK" and callers fall back to the default (region-blind) client, so a
+ * partially configured region degrades instead of breaking chat.
+ */
+export interface RegionChatClients {
+  azureOpenAIClient?: AzureOpenAI;
+  openAIClient?: OpenAI;
+  anthropicFoundryClient?: AnthropicFoundry;
+}
 
 /**
  * ServiceContainer provides singleton access to all application services.
@@ -39,6 +52,11 @@ export class ServiceContainer {
   private azureOpenAIClient!: AzureOpenAI;
   private openAIClient!: OpenAI;
   private anthropicFoundryClient!: AnthropicFoundry;
+
+  // Lazily built per-region client sets for cross-region routing, cached for
+  // the process lifetime like the default clients above.
+  private regionChatClients = new Map<UserRegion, RegionChatClients>();
+  private azureADTokenProvider!: () => Promise<string>;
 
   // Core services (stateless, safe to reuse)
   private modelSelector!: ModelSelector;
@@ -80,6 +98,8 @@ export class ServiceContainer {
       new DefaultAzureCredential(),
       'https://cognitiveservices.azure.com/.default',
     );
+    // Kept for lazily-built per-region clients (getChatClientsForRegion).
+    this.azureADTokenProvider = azureADTokenProvider;
 
     this.azureOpenAIClient = new AzureOpenAI({
       endpoint: env.AZURE_OPENAI_ENDPOINT,
@@ -124,7 +144,9 @@ export class ServiceContainer {
     // from the pipeline context (OBO for Foundry agents, DefaultAzureCredential fallback)
     this.aiFoundryAgentHandler = new AIFoundryAgentHandler();
 
-    // 4. Initialize chat service (uses multiple dependencies)
+    // 4. Initialize chat service (uses multiple dependencies). The region
+    // resolver is passed as a bound method so StandardChatService never
+    // imports the container (avoids a dependency cycle, keeps tests simple).
     this.standardChatService = new StandardChatService(
       this.azureOpenAIClient,
       this.openAIClient,
@@ -132,6 +154,7 @@ export class ServiceContainer {
       this.modelSelector,
       this.toneService,
       this.streamingService,
+      (region) => this.getChatClientsForRegion(region),
     );
 
     console.log('[ServiceContainer] Services initialized successfully');
@@ -143,6 +166,78 @@ export class ServiceContainer {
    */
   public static reset(): void {
     ServiceContainer.instance = null;
+  }
+
+  /**
+   * Returns (building + caching on first use) the chat clients pinned to a
+   * specific region, for cross-region routing (a US user chatting with the
+   * EU instance of a model; EU users pinned to EU).
+   *
+   * Endpoint resolution per region:
+   *  - Azure OpenAI: AZURE_OPENAI_ENDPOINT_{REGION}, else derived from the
+   *    regional Foundry endpoint (same account exposes both hosts:
+   *    <account>.services.ai.azure.com ↔ <account>.cognitiveservices.azure.com).
+   *  - OpenAI-compatible data plane: <regional foundry account>/openai/v1/ —
+   *    only when a region-scoped API key exists (keys are account-scoped;
+   *    reusing the default key against another account would 401).
+   *  - Anthropic: <regional foundry account>/anthropic (Entra ID tokens are
+   *    account-agnostic, so no extra secret is needed).
+   *
+   * Missing configuration never breaks chat: absent fields make callers fall
+   * back to the default clients per-SDK.
+   */
+  public getChatClientsForRegion(region: UserRegion): RegionChatClients {
+    const cached = this.regionChatClients.get(region);
+    if (cached) return cached;
+
+    const foundryEndpoint =
+      region === 'EU'
+        ? env.AZURE_AI_FOUNDRY_ENDPOINT_EU
+        : env.AZURE_AI_FOUNDRY_ENDPOINT_US;
+    const accountBase = foundryEndpoint?.replace(/\/api\/projects\/.*$/, '');
+
+    const clients: RegionChatClients = {};
+
+    const azureOpenAIEndpoint =
+      (region === 'EU'
+        ? env.AZURE_OPENAI_ENDPOINT_EU
+        : env.AZURE_OPENAI_ENDPOINT_US) ??
+      accountBase?.replace(
+        '.services.ai.azure.com',
+        '.cognitiveservices.azure.com',
+      );
+    if (azureOpenAIEndpoint) {
+      clients.azureOpenAIClient = new AzureOpenAI({
+        endpoint: azureOpenAIEndpoint,
+        azureADTokenProvider: this.azureADTokenProvider,
+        apiVersion: OPENAI_API_VERSION,
+      });
+    }
+
+    const regionApiKey =
+      region === 'EU' ? env.OPENAI_API_KEY_EU : env.OPENAI_API_KEY_US;
+    if (accountBase && regionApiKey) {
+      clients.openAIClient = new OpenAI({
+        baseURL: `${accountBase}/openai/v1/`,
+        apiKey: regionApiKey,
+      });
+    }
+
+    if (accountBase) {
+      clients.anthropicFoundryClient = new AnthropicFoundry({
+        azureADTokenProvider: async () => this.azureADTokenProvider(),
+        baseURL: `${accountBase}/anthropic`,
+      });
+    }
+
+    if (Object.keys(clients).length === 0) {
+      console.warn(
+        `[ServiceContainer] No ${region} chat endpoints configured; requests for that region use the default clients`,
+      );
+    }
+
+    this.regionChatClients.set(region, clients);
+    return clients;
   }
 
   // Getters for all services

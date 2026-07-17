@@ -4,8 +4,10 @@ import { NextRequest } from 'next/server';
 import { AgentDiscoveryService } from '@/lib/services/agents/AgentDiscoveryService';
 import { OfficeResolver } from '@/lib/services/auth/OfficeResolver';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
+import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 import { createFoundryTokenCredential } from '@/lib/services/auth/foundryCredential';
 import { InputValidator } from '@/lib/services/chat/validators/InputValidator';
+import { resolveCustomSourceModel } from '@/lib/services/models/customModelSources';
 import { ModelSelector, RateLimiter } from '@/lib/services/shared';
 
 import {
@@ -14,7 +16,11 @@ import {
 } from '@/lib/utils/app/systemPrompt';
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
 import { getMessageContentTypes } from '@/lib/utils/server/chat/chat';
-import { isValidFoundryResourcePath } from '@/lib/utils/shared/armPath';
+import { sanitizeForLog } from '@/lib/utils/server/log/logSanitization';
+import {
+  isValidFoundryResourcePath,
+  stripToAccountPath,
+} from '@/lib/utils/shared/armPath';
 import { isAllowedFoundryHost } from '@/lib/utils/shared/foundryHostAllowlist';
 
 import { ChatBody } from '@/types/chat';
@@ -142,6 +148,7 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       verbosity,
       botId,
       searchMode,
+      hostedRegion,
       threadId,
       forcedAgentType,
       tone,
@@ -152,8 +159,28 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       displayNamePreference,
       customDisplayName,
       agentSourcePath,
+      modelSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
+      extraction,
     } = body;
+
+    if (mcpServers?.length) {
+      // Redacted summary ONLY — entries can carry auth tokens.
+      console.log('[Middleware] MCP servers on request:', {
+        count: mcpServers.length,
+        catalogKeys: mcpServers
+          .map((s: { catalogKey?: string }) => s.catalogKey)
+          .filter(Boolean),
+        hasCustom: mcpServers.some(
+          (s: { catalogKey?: string }) => !s.catalogKey,
+        ),
+        pendingToolCalls: mcpPendingToolCalls?.length ?? 0,
+        loopRound: mcpLoopRound ?? 0,
+      });
+    }
 
     if (tone) {
       console.log('[Middleware] Received tone from client:', {
@@ -175,17 +202,25 @@ export const requestParsingMiddleware: Middleware = async (req) => {
       displayNamePreference,
       customDisplayName,
       agentSourcePath,
+      modelSourcePath,
       approvalResponses,
+      mcpServers,
+      mcpPendingToolCalls,
+      mcpLoopRound,
       temperature,
       stream,
       reasoningEffort,
       verbosity,
       botId,
       searchMode,
+      hostedRegion,
       threadId,
       forcedAgentType,
       tone,
       streamingSpeed,
+      // Structured extraction payload (optional). Up to 3 recipes; the
+      // ExtractionEnricher composes the JSON-schema response format.
+      extraction,
     };
   } catch (error) {
     if (error instanceof PipelineError) {
@@ -297,6 +332,149 @@ const failClosedResult = (foundryEndpoint?: string): Partial<ChatContext> =>
     : {};
 
 /**
+ * 409-style conflict for a custom-source (byom) model that cannot be invoked.
+ * Unlike agents, byom has NO app-identity fallback in any environment: falling
+ * back would silently reroute the request to an app-hosted deployment, which
+ * violates the byom trust model (the user's own ARM RBAC is the authorization).
+ */
+const customSourceModelUnavailable = (reason: string): PipelineError =>
+  PipelineError.critical(
+    ErrorCode.MODEL_UNAVAILABLE,
+    'The selected custom-source model is unavailable. Re-select it from its model source and try again.',
+    { reason },
+  );
+
+/**
+ * Resolves credentials + config for a custom-source (byom) model.
+ *
+ * The client's model object is NEVER trusted (InputValidator strips the
+ * routing fields from it anyway) — the gate is the top-level validated
+ * `modelSourcePath` plus the `byom-` id prefix, and the served config is
+ * re-resolved from live ARM deployment discovery under the user's own OBO
+ * token. `resolveCustomSourceModel` also enforces the id/source hash
+ * integrity, so a tampered id or a foreign source path resolves to null.
+ *
+ * PROD fails closed with a 409-style MODEL_UNAVAILABLE on any failure; dev
+ * may fall back to the app identity credential so local workflows run
+ * without an OBO setup (mirroring the agent-path dev fallback).
+ */
+const resolveCustomSourceContext = async (
+  context: Partial<ChatContext>,
+  req: NextRequest,
+): Promise<Partial<ChatContext>> => {
+  const isProd = process.env.NODE_ENV === 'production';
+  const modelId = context.modelId!;
+  const modelSourcePath = context.modelSourcePath!;
+
+  if (!isValidFoundryResourcePath(modelSourcePath)) {
+    throw customSourceModelUnavailable('invalid_source_path');
+  }
+  if (!context.session) {
+    throw customSourceModelUnavailable('no_session');
+  }
+
+  // ARM token under the user's identity — ARM RBAC on the source account is
+  // the authorization for byom models.
+  let appAccessToken: string | null = null;
+  let devFallbackCredential: TokenCredential | undefined;
+  let armToken: string;
+  try {
+    appAccessToken = await getAccessTokenForOBO(req);
+    if (!appAccessToken) throw new Error('No OBO token');
+    armToken =
+      await UserTokenProvider.getInstance().getArmToken(appAccessToken);
+  } catch (e) {
+    if (isProd) {
+      console.error(
+        '[CredentialMiddleware] OBO ARM token failed in prod for custom-source model; failing closed:',
+        e instanceof Error ? e.message : e,
+      );
+      throw customSourceModelUnavailable('obo_failed');
+    }
+    console.warn(
+      '[CredentialMiddleware] OBO unavailable (dev), resolving custom-source model with app identity',
+    );
+    devFallbackCredential = await createAppIdentityCredential();
+    const armTokenResponse = await devFallbackCredential.getToken(
+      'https://management.azure.com/.default',
+    );
+    if (!armTokenResponse) {
+      throw customSourceModelUnavailable('no_arm_token');
+    }
+    armToken = armTokenResponse.token;
+  }
+
+  let resolved;
+  try {
+    resolved = await resolveCustomSourceModel(
+      armToken,
+      modelId,
+      modelSourcePath,
+    );
+  } catch (e) {
+    // Discovery errors (ARM 4xx/5xx, network) propagate from the resolver —
+    // surface them as the same clean conflict instead of an opaque 500.
+    console.error(
+      '[CredentialMiddleware] Custom-source model discovery failed:',
+      e instanceof Error ? e.message : e,
+    );
+    throw customSourceModelUnavailable('discovery_failed');
+  }
+  if (!resolved) {
+    // Hash-integrity mismatch, or the deployment doesn't exist / isn't
+    // visible to this identity's ARM RBAC. Surface a clean conflict in every
+    // environment — there is nothing valid to fall back to.
+    throw customSourceModelUnavailable('not_resolved');
+  }
+
+  // Account data-plane base derived from the validated ARM path (never from
+  // the request body). Allow-list checked before binding any credential.
+  const accountPath = stripToAccountPath(modelSourcePath);
+  const accountName = accountPath.slice(accountPath.lastIndexOf('/') + 1);
+  const foundryEndpoint = `https://${accountName}.services.ai.azure.com`;
+  if (!isAllowedFoundryHost(foundryEndpoint)) {
+    console.error(
+      `[CredentialMiddleware] Refusing to bind credential to disallowed custom-source host: ${foundryEndpoint}`,
+    );
+    throw customSourceModelUnavailable('disallowed_host');
+  }
+
+  let userCredential: TokenCredential;
+  try {
+    if (!appAccessToken) throw new Error('No OBO token');
+    const foundryToken =
+      await UserTokenProvider.getInstance().getFoundryToken(appAccessToken);
+    userCredential = createFoundryTokenCredential(foundryToken);
+  } catch (e) {
+    if (isProd) {
+      console.error(
+        `[CredentialMiddleware] Foundry OBO failed in prod for custom-source host ${foundryEndpoint}; failing closed:`,
+        e instanceof Error ? e.message : e,
+      );
+      throw customSourceModelUnavailable('obo_failed');
+    }
+    console.log(
+      `[CredentialMiddleware] Foundry OBO unavailable (dev), using app identity for ${foundryEndpoint}`,
+    );
+    userCredential =
+      devFallbackCredential ?? (await createAppIdentityCredential());
+  }
+
+  console.log(
+    `[CredentialMiddleware] Custom-source model resolved: ${sanitizeForLog(resolved.id)} @ ${foundryEndpoint}`,
+  );
+
+  // Overwrite model/modelId with the server-resolved config — downstream
+  // stages must never execute against the client-supplied model object.
+  return {
+    model: resolved,
+    modelId: resolved.id,
+    foundryEndpoint,
+    userCredential,
+  };
+};
+
+/**
  * Factory for credential middleware that acquires OBO credentials for Foundry agent calls.
  * Only runs when the selected model is a Foundry agent — standard model calls don't need per-user auth.
  *
@@ -308,6 +486,20 @@ export const createCredentialMiddleware = async (
   context: Partial<ChatContext>,
   req: NextRequest,
 ): Promise<Partial<ChatContext>> => {
+  // Custom-source (byom) models: gate on the top-level validated
+  // modelSourcePath + the byom- id prefix — never on flags inside the parsed
+  // model object (InputValidator strips them from the client body).
+  if (context.modelId?.startsWith('byom-')) {
+    // A byom id with no source path can never be resolved and must NOT fall
+    // through to standard routing (in any environment): the client-supplied
+    // placeholder config would execute against the app's default clients and
+    // the DeploymentNotFound fallback would silently reroute to an app model.
+    if (!context.modelSourcePath) {
+      throw customSourceModelUnavailable('missing_source_path');
+    }
+    return resolveCustomSourceContext(context, req);
+  }
+
   // Only acquire OBO credentials for Foundry agent calls
   const isFoundryAgent =
     (context.model?.isOrganizationAgent === true ||

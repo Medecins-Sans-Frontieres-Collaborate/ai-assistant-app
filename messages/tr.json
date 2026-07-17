@@ -433,7 +433,22 @@
     "noProjectsFound": "Proje bulunamadı. \"default\" kullanılacak.",
     "selectAllRequired": "Bir abonelik, hesap ve proje seçin.",
     "subscriptionRequired": "Bir abonelik seçin",
-    "accountRequired": "Bir Foundry hesabı seçin"
+    "accountRequired": "Bir Foundry hesabı seçin",
+    "projectSelectionRequired": "Listeden bir proje seçin.",
+    "scanningResources": "Azure abonelikleriniz taranıyor...",
+    "searchProjectsPlaceholder": "Projelerde ara...",
+    "noProjectsDiscovered": "Aboneliklerinizde herhangi bir Foundry projesi bulunamadı. Yolu biliyorsanız elle giriş yapabilirsiniz.",
+    "discoveryPartialWarning": "{count, plural, one {# abonelik} other {# abonelik}} taranamadı. Projeniz eksikse elle giriş yapabilirsiniz.",
+    "discoveryTruncatedWarning": "Taranacak çok fazla kaynak bulunduğundan tam tarama yapılamadı. Projeniz eksikse elle giriş yapabilirsiniz.",
+    "retryScan": "Taramayı tekrar dene",
+    "next": "İleri",
+    "back": "Geri",
+    "selectAgentsDescription": "Bu projedeki hangi ajanların model seçicisinde görüneceğini seçin.",
+    "selectAll": "Tümünü seç",
+    "deselectAll": "Seçimi kaldır",
+    "agentsSelectedCount": "{selected} / {total} ajan seçildi",
+    "autoAddLabel": "Yeni ajanları otomatik ekle",
+    "autoAddDescription": "Daha sonra bu projeye eklenen ajanlar otomatik olarak görünecek. İşareti kaldırılmış ajanlar hariç tutulmaya devam eder."
   },
   "Quick Actions": "Hızlı İşlemler",
   "Type / in chat to access your prompts": "İstemlerinize erişmek için sohbette / yazın",
@@ -760,7 +775,19 @@
       "listingTools": "Kullanılabilir araçlar aranıyor…",
       "analyzingFiles": "Dosyalarınız analiz ediliyor…",
       "searchingKnowledge": "Bilgi tabanında aranıyor…",
-      "cancellingPriorTool": "Önceki araç isteği iptal ediliyor…"
+      "cancellingPriorTool": "Önceki araç isteği iptal ediliyor…",
+      "workflow": {
+        "preparingDocument": "Referanslar hazırlanıyor…",
+        "writingDocument": "Belge yazılıyor…",
+        "analyzingSource": "Kaynak metin analiz ediliyor…",
+        "translating": "Çeviri yapılıyor…",
+        "reviewingTranslation": "{total} üzerinde {round}. inceleme turu…",
+        "revisingTranslation": "İnceleme geri bildirimi uygulanıyor…",
+        "extractingRows": "{source} kaynağından satırlar çıkarılıyor…",
+        "transformingTable": "Tablo dönüştürülüyor…",
+        "findingLocations": "Konumlar belirleniyor…",
+        "updatingMap": "Harita güncelleniyor…"
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# araç kullanıldı} other {# araç kullanıldı}}",
@@ -821,7 +848,8 @@
     "listen": "Dinle",
     "processingAudio": "Ses işleniyor...",
     "ttsError": "Ses oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
-    "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü"
+    "unsupportedMessageType": "Mesaj görüntülenemedi: Desteklenmeyen mesaj türü",
+    "addLanguageOption": "\"{name}\" ekle…"
   },
   "sidebar": {
     "collapseSidebar": "Kenar çubuğunu daralt",
@@ -1145,10 +1173,12 @@
     "voiceSection": "Ses",
     "behaviorSection": "Davranış",
     "resetChatSettings": "Sohbet ayarlarını sıfırla",
-    "resetChatSettingsConfirmTitle": "Sohbet ayarları sıfırlansın mı?",
-    "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Kendiniz Hakkında, model yanıtı, akış hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez.",
+    "resetChatSettingsConfirmTitle": "Sohbet ayarlarını sıfırlansın mı?",
+    "resetChatSettingsConfirmMessage": "Bu paneldeki tüm ayarları varsayılanlara döndürür: sıcaklık, özel talimatlar, Hakkınızda, model yanıtı, aktarım hızı, metinden sese, aktif dosyalar ve onaylar. Sohbetlerinizi etkilemez.",
     "customInstructionsLabel": "Özel Talimatlar*",
-    "defaultTemperatureLabel": "Varsayılan Temperature*"
+    "defaultTemperatureLabel": "Varsayılan Temperature*",
+    "Usage & Impact": "Kullanım ve Etki",
+    "Connectors": "Bağlayıcılar"
   },
   "notFound": {
     "lostDog": "Kayıp köpek"
@@ -1297,33 +1327,78 @@
     },
     "title": "Bir model seçin",
     "modelsDescription": "Sohbetiniz için bir AI modeli seçin. Her modelin güçlü yönleri farklıdır — ayrıntılar için birini seçin.",
-    "recommended": "Tavsiye edilen"
+    "recommended": "Tavsiye edilen",
+    "familyAll": "Tümü",
+    "familyFilterLabel": "Modelleri aileye göre filtrele",
+    "searchPlaceholder": "Modelleri ara",
+    "searchEmpty": "Aramanıza uygun model bulunamadı.",
+    "star": "{name} modelini favorilere ekle",
+    "unstar": "{name} modelini favorilerden çıkar",
+    "otherFamily": "Diğer",
+    "hostedExternally": "Azure AI Foundry üzerinden sağlayıcının kendi altyapısında çalışır, MSF'nin Azure ortamında değil.",
+    "hostedIn": {
+      "label": "{regions} bölgesinde barındırılıyor",
+      "tooltip": "Bu modelin dağıtıldığı Azure bölgesi/bölgeleri. Konuşmalarınız kendi bölgenizde işlenir."
+    },
+    "badges": {
+      "external": "Harici",
+      "externalTooltip": "Azure AI Foundry üzerinden sağlayıcının kendi altyapısında çalışır, MSF'nin Azure ortamında değil.",
+      "regionHostedTooltip": "{region} Azure bölgesinde barındırılıyor. Bu modelle yapılan konuşmalar orada işlenir."
+    },
+    "favorites": "Favoriler",
+    "euResidencyNote": "Tüm modeller AB Azure bölgesinde çalışır.",
+    "hostedRegion": {
+      "label": "Barındırıldığı bölge",
+      "processedIn": "Bu konuşma {region} Azure bölgesinde işleniyor.",
+      "euOnlyNote": "{name}, AB Azure bölgesinde barındırılır; onunla yapılan konuşmalar orada işlenir."
+    },
+    "version": {
+      "label": "Sürüm"
+    },
+    "reasoningModel": "Muhakeme modeli: Yanıtlamadan önce adım adım düşünür. Daha yavaş, zor problemlerde daha iyi sonuç verir.",
+    "variant": {
+      "label": "Varyant"
+    },
+    "deployment": {
+      "title": "Dağıtım",
+      "source": "Kaynak",
+      "account": "Hesap",
+      "location": "Konum",
+      "deployment": "Dağıtım",
+      "modelVersion": "Model sürümü",
+      "publisher": "Yayıncı"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Bing aracılığıyla gerçek zamanlı web arama özellikli GPT-4.1 tabanlı AI modeli. Güncel bilgi, gerçek doğrulama ve güncel etkinlik farkındalığı sağlar. Güncel bilgi gerektiren araştırma, haber analizi ve gerçek doğrulama için idealdir.",
-      "knowledgeCutoff": "Gerçek zamanlı web arama"
+      "knowledgeCutoff": "Gerçek zamanlı web arama",
+      "tagline": "OpenAI'nin önceki nesli"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "Karmaşık akıl yürütme, kod üretimi ve teknik problem çözmede mükemmel OpenAI'nin en gelişmiş modeli. Analitik görevler, programlama zorlukları, araştırma ve detaylı açıklamalar için idealdir. Ayarlanabilir akıl yürütme çabası ve yanıt ayrıntı düzeyini destekler.",
-      "knowledgeCutoff": "6 Ağustos 2025, 20:00"
+      "knowledgeCutoff": "6 Ağustos 2025, 20:00",
+      "tagline": "Önceki GPT amiral gemisi"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Yüksek kaliteyi korurken hız için optimize edilmiş daha hızlı, maliyet etkin GPT-5 varyantı. Rutin görevler, hızlı sorgular, araç yönlendirme ve hızlı yanıt süresi gerektiren uygulamalar için uygundur. Performans ve verimlilik arasında mükemmel denge.",
-      "knowledgeCutoff": "6 Ağustos 2025, 20:00"
+      "knowledgeCutoff": "6 Ağustos 2025, 20:00",
+      "tagline": "Daha hızlı ve düşük maliyetli"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Konuşma etkileşimi ve duygusal zeka için optimize edilmiş GPT-5'in özel varyantı. Empatik iletişim, ruh sağlığı desteği, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda mükemmeldir. Gündelik sohbet, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için idealdir.",
-      "knowledgeCutoff": "1 Ekim 2025, 20:00"
+      "knowledgeCutoff": "1 Ekim 2025, 20:00",
+      "tagline": "Önceki sohbet ayarlı GPT"
     },
     "o3": {
       "name": "o3",
       "description": "Çığır açan problem çözme yeteneklerine sahip OpenAI'nin en gelişmiş akıl yürütme modeli. Karmaşık matematik, bilimsel akıl yürütme, kodlama zorlukları ve çok adımlı mantık görevlerinde mükemmeldir. Genişletilmiş 200K bağlam penceresi. Akıl yürütme çabası kontrolünü destekler.",
-      "knowledgeCutoff": "8 Nisan 2025, 20:00"
+      "knowledgeCutoff": "8 Nisan 2025, 20:00",
+      "tagline": "Adım adım derin akıl yürütme"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1333,57 +1408,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Çalışmasını adım adım gösteren akıl yürütme uzmanı. Matematik problemleri, mantık bulmacaları ve karmaşık kavramları anlamada mükemmeldir. Bir problemi gerçek zamanlı nasıl düşündüğünü görün.",
-      "knowledgeCutoff": "20 Ocak 2025"
+      "knowledgeCutoff": "20 Ocak 2025",
+      "tagline": "Akıl yürütmeyi adım adım gösterir"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Özellikle kodlama ve teknik yazımda güçlü çok yönlü model. Kod hata ayıklama, dokümantasyon yazma ve teknik kavramları açıklama için idealdir. Geliştirme görevleri için hızlı ve güvenilir.",
-      "knowledgeCutoff": "16 Nisan 2025, 00:45"
+      "knowledgeCutoff": "16 Nisan 2025, 00:45",
+      "tagline": "Açık kaynak alternatifi"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Nüanslı yanıtlarıyla bilinen xAI'nin çok yönlü modeli. Açık tartışmalar, yaratıcı projeler ve karmaşık problem çözme için idealdir.",
-      "knowledgeCutoff": "13 Mayıs 2025, 00:16"
+      "knowledgeCutoff": "13 Mayıs 2025, 00:16",
+      "tagline": "xAI alternatifi"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Olağanüstü akıl yürütme, kodlama ve yaratıcı yeteneklere sahip Anthropic'in en yetenekli modeli. Karmaşık analiz, araştırma ve derin anlayış gerektiren görevler için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki Opus nesli"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Kodlama, analiz ve yaratıcı görevlerde mükemmel performans sunan dengeli Claude modeli. Hızlı yanıt süreleriyle günlük kullanım için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki nesil Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Önceki nesil Claude Opus modeli. Karmaşık kodlama görevleri, detaylı analiz ve nüanslı anlayışta mükemmeldir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Önceki nesil Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Hızlı görevler için optimize edilmiş hızlı ve maliyet etkin Claude modeli. Basit sorgular, özetlemeler ve toplu uygulamalar için idealdir.",
-      "knowledgeCutoff": "Ocak 2025"
+      "knowledgeCutoff": "Ocak 2025",
+      "tagline": "Hızlı Claude varyantı"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "OpenAI'nin en gelişmiş modeli; karmaşık muhakeme, kod üretimi ve teknik problem çözmede uzman. Analitik görevler, programlama zorlukları, araştırma ve ayrıntılı açıklamalar için en iyisidir. Ayarlanabilir muhakeme derecesi ve yanıt uzunluğu desteği sunar.",
-      "knowledgeCutoff": "Aralık 2025"
+      "knowledgeCutoff": "Aralık 2025",
+      "tagline": "Kodlama, analiz, araştırma"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Aralık 2025",
-      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu."
+      "description": "Konuşma etkileşimleri ve duygusal zeka için optimize edilmiş GPT-5.2'nin özel bir varyantı. Empatik iletişim, yaratıcı yazarlık, beyin fırtınası ve doğal diyalogda üstün. Gündelik sohbetler, danışmanlık senaryoları ve duygusal farkındalık gerektiren görevler için en uygunu.",
+      "tagline": "Sohbetler, beyin fırtınası"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Anthropic’in en güçlü modeli. Uzun yazılar, araştırmalar ve özenli düşünme gerektiren işler için uygundur.",
-      "knowledgeCutoff": "Şubat 2026"
+      "knowledgeCutoff": "Şubat 2026",
+      "tagline": "Uzun yazı ve analiz"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Dengeli bir Claude modeli. Günlük yazım, analiz ve hızlı yanıtlar gerektiren kodlama için iyi bir seçenektir.",
-      "knowledgeCutoff": "Şubat 2026"
+      "knowledgeCutoff": "Şubat 2026",
+      "tagline": "Dengeli günlük Claude"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Meta'nın açık kaynaklı modeli. Yazı, özet ve hızlı sorular için sağlam bir seçenek.",
+      "tagline": "Açık kaynak alternatifi"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "OpenAI'nin en yeni amiral gemisi modeli. Yazı, araştırma, kodlama ve karmaşık problem çözmede çok güçlü.",
+      "tagline": "En yeni GPT amiral gemisi"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "En küçük ve en hızlı GPT varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi.",
+      "tagline": "En küçük ve en hızlı GPT"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Diyalog için özel ayarlanmış bir GPT varyantı. Günlük sohbet, beyin fırtınası ve destekleyici konuşmalar için uygun.",
+      "tagline": "Daha yeni sohbet ayarlı GPT"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Daha eski bir çok modlu GPT. En güncel yetenek gerekmediğinde günlük yazım ve Soru-Cevap için yeterli.",
+      "tagline": "Daha eski çok modlu GPT"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Hızlı gündelik işler için daha küçük ve hızlı bir GPT-4.1 varyantı.",
+      "tagline": "Hafif önceki nesil GPT"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Anthropic'in en yeni ve en güçlü modeli. Uzun yazılar, araştırma, kodlama ve detaylı analizlerde mükemmel.",
+      "tagline": "En yeni ve en güçlü Claude"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "DeepSeek'in en yeni açık kaynaklı modeli. Genel yazı işleri ve teknik sorular için güvenilir.",
+      "tagline": "Açık kaynak alternatifi"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Mistral'in amiral gemisi modeli. Yazı, özetleme ve genel sorular için Avrupa menşeli bir alternatif.",
+      "tagline": "Avrupa açık ağırlıklı model"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Daha önceki bir GPT-5 amiral gemisi revizyonu. Yazı, analiz ve kodlama konusunda hâlâ güçlü.",
+      "tagline": "Daha önceki GPT-5 amiral gemisi"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Daha önceki sohbet odaklı bir GPT-5 revizyonu. Günlük sohbet ve beyin fırtınası için uygun.",
+      "tagline": "Daha önceki sohbet ayarlı GPT"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5'in en küçük varyantı. Hızlı ve basit işler için minimal maliyetle en iyisi.",
+      "tagline": "Küçük önceki nesil GPT"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1'in en küçük varyantı. Hız ve maliyetin önemli olduğu durumlarda hızlı ve basit işler için uygundur.",
+      "tagline": "En küçük önceki nesil GPT"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Küçük ve hızlı bir GPT-4o varyantı. En yeni yetenek gerekmeden günlük hızlı işler için uygundur.",
+      "tagline": "Hafif eski çok modlu GPT"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Kompakt bir muhakeme modeli. Matematik, mantık ve adım adım sorunlar için, o3'e kıyasla daha düşük maliyetlidir.",
+      "tagline": "Hızlı ve uygun fiyatlı akıl yürütme"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Önceki nesil kompakt bir muhakeme modeli. Bütçenize uygun şekilde matematik, bilim ve mantık sorularını çözer.",
+      "tagline": "Kompakt adım adım akıl yürütme"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Anthropic'in en gelişmiş modeli, Claude 5 ailesinin ilki. En zorlu yazı, araştırma ve kodlama işleri için mükemmel.",
+      "tagline": "Anthropic'in öncü modeli"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude 5 ailesinin ilki ve en dengeli model. Hızlı yanıtlarla günlük yazı, analiz ve kodlama gereksinimleri için güçlü.",
+      "tagline": "En yeni dengeli Claude"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Mistral'in orta boy modeli. Günlük işler için yetenek ve hızı dengeleyen Avrupa menşeli bir alternatif.",
+      "tagline": "Dengeli Avrupa modeli"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral'in küçük modeli. Özet, taslak ve basit sorular için hızlı ve uygun maliyetli.",
+      "tagline": "Küçük hızlı Avrupa modeli"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral'in çok küçük modeli. Çok hızlı ve basit işler için minimal maliyette en iyisi.",
+      "tagline": "Küçük edge boyutlu Mistral"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Güncellenmiş DeepSeek-R1 revizyonu. Gelişmiş muhakeme derinliğiyle adım adım düşünce sürecini gösterir.",
+      "tagline": "Güncellenmiş açık akıl yürütme modeli"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Meta'nın daha hafif bir açık kaynaklı modeli. Yazı, özetleme ve günlük sorular için hızlıdır.",
+      "tagline": "Verimli açık kaynak Llama"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Meta'nın eski bir açık kaynak modeli. Genel yazım ve Soru-Cevap işleri için hâlâ güvenilir.",
+      "tagline": "Daha eski açık kaynak Llama"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "xAI'nin amiral gemisi modeli. Açık uçlu tartışmalar, analiz ve yaratıcı projeler için uygun.",
+      "tagline": "xAI amiral gemisi"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "OpenAI'nin en son amiral gemisi modeli. Yazma, araştırma, kodlama ve karmaşık problem çözmede güçlü.",
+      "tagline": "En son GPT amiral gemisi"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (en güncel)",
+      "description": "Her zaman OpenAI'nin en yeni sohbet odaklı modeline işaret eden dinamik bir takma ad. Azure'un eski sürüm gpt-*-chat modellerinin yerine geçer.",
+      "tagline": "Her zaman en yeni sohbet GPT'si"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus'un yeni bir sürümü, 4.6 ile 4.8 arasında. Uzun yazılar, araştırma, kodlama ve özenli analizler için güçlü.",
+      "tagline": "Yeni Opus sürümü"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "DeepSeek'in en yeni muhakeme modeli ve Azure'un R1 serisinin yerine geçeni. Düşünce süreçlerini adım adım gösterir.",
+      "tagline": "En yeni açık akıl yürütme modeli"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "DeepSeek'in hızlı V4 varyantı ve Azure'un V3 serisinin yerine geçeni. Genel yazım ve teknik sorular için hızlı.",
+      "tagline": "Hızlı açık kaynak alternatifi"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Muhakeme)",
+      "description": "xAI'nin hızlı muhakeme modeli. Cevaplarını adım adım ve hızlı şekilde sunar.",
+      "tagline": "Hızlı xAI akıl yürütme modeli"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "xAI'nin hızlı sohbet modeli. Günlük sorular ve sohbetler için hızlı cevaplar sunar.",
+      "tagline": "Hızlı xAI sohbet modeli"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Daha hafif bir xAI modeli. Hızlı ve ekonomik; kısa sorular ve gündelik sohbetler için uygundur.",
+      "tagline": "Daha hafif xAI modeli"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün amiral gemisi. Yazma, araştırma, kodlama ve karmaşık problem çözmede en güçlü model.",
+      "tagline": "En yeni GPT amiral gemisi seviyesi"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün dengeli modeli. Günlük yazma, analiz ve hızlı cevaplarla kodlama için iyi bir seçenek.",
+      "tagline": "Dengeli, günlük kullanım için GPT-5.6"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "OpenAI'nin GPT-5.6 üçlüsünün hafif ve hızlı modeli. Hızlı sorular ve basit görevler için düşük maliyetli en iyi seçim.",
+      "tagline": "Hafif ve hızlı GPT-5.6"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Mistral'ın en yeni orta ölçekli modeli. Günlük işler için yetenek ve hızı dengeleyen, Avrupa kökenli bir alternatif.",
+      "tagline": "Dengeli Avrupa modeli"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Moonshot AI'nin açık ağırlık modeli. Temsilci görevlerde, kodlamada ve uzun belgelerde güçlüdür.",
+      "tagline": "Temsilci açık ağırlık modeli"
     }
   },
   "searchMode": {
@@ -1822,7 +2098,20 @@
     "useDefaultStyle": "Varsayılan yazı stilini kullan",
     "noTonesCreated": "Henüz ton oluşturulmadı",
     "createTonesHint": "Hızlı Eylemler'de tonlar oluşturun",
-    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, HTML, TXT\nMaksimum boyut: 40MB\n\nOpsiyonel sözlük dosyaları ile 80+ dil desteklenir."
+    "translateDocumentTooltip": "Belgeleri başka bir dile çevirin.\n\nDesteklenen formatlar: Word, Excel, PowerPoint, HTML, TXT\nMaksimum boyut: 40MB\n\nOpsiyonel sözlük dosyaları ile 80+ dil desteklenir.",
+    "translateTooltip": "Metin parçasını başka bir dile çevirin.\n\nTüm dosyalar (Word, Excel, PowerPoint, HTML, TXT) için bunun yerine Belgeyi Çevir'i kullanın.",
+    "cameraTooltip": "Cihazınızın kamerası ile fotoğraf çekip mesaja ekleyin.",
+    "noResults": "Eşleşen işlem yok",
+    "sectionPinned": "Sabitlenenler",
+    "sectionFrequent": "Sık kullanılanlar",
+    "sectionMore": "Daha fazla",
+    "categoryWeb": "Web",
+    "categoryMedia": "Medya ve dosyalar",
+    "categoryTransform": "Dönüştür",
+    "pin": "Üste sabitle",
+    "unpin": "Sabitlemeyi kaldır",
+    "moveToMore": "Daha Fazlaya taşı",
+    "moveOutOfMore": "Menüde göster"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Yapay zekanın nasıl yanıt vereceğini özelleştirmek için kişisel talimatlarınızı ekleyin. Bunlar, yardımcı, doğru ve güvenli yanıtları garanti altına alan temel davranış yönergeleriyle birleştirilir.",
   "Tip: Type \"/\" to select from saved prompt templates_": "İpucu: Kayıtlı istem şablonlarından seçmek için \"/\" yazın.",
@@ -1933,7 +2222,14 @@
     "learnMore": "Daha fazla bilgi edinin",
     "advancedOptions": "Gelişmiş seçenekler",
     "unofficialBadgeLabel": "Resmî değil",
-    "unofficialLanguageWarning": "Bu dil resmî olarak desteklenmemektedir. Çeviri kalitesi doğrulanmamıştır. Sonucu paylaşmadan önce akıcı veya ana dili olan birine kontrol ettiriniz."
+    "unofficialLanguageWarning": "Bu dil resmî olarak desteklenmemektedir. Çeviri kalitesi doğrulanmamıştır. Sonucu paylaşmadan önce akıcı veya ana dili olan birine kontrol ettiriniz.",
+    "translationSubmitted": "Çeviri başlatıldı — PDF'ler arka planda işleniyor.",
+    "pendingTitle": "{filename} çevriliyor…",
+    "pendingHint": "PDF çevirileri arka planda çalışır ve birkaç dakika sürebilir. İşinize devam edebilirsiniz — belge hazır olduğunda bu kart güncellenir, sayfayı yeniden yükleseniz bile.",
+    "asyncFailed": "Belge çevirisi başarısız oldu: {error}",
+    "jobNotFound": "Çeviri işi artık mevcut değil. Lütfen tekrar deneyin.",
+    "retryPolling": "Tekrar kontrol et",
+    "pollingStalled": "İlerlemeyi kontrol etmek için sunucuya ulaşılamadı. Çeviri hâlâ devam ediyor olabilir."
   },
   "terms": {
     "officialLanguages": "Resmi sürüm:",
@@ -1997,6 +2293,10 @@
       "technicalDetails": "Teknik ayrıntılar",
       "agentCountLabel": "{count} temsilci",
       "disconnectedToast": "{name} bağlantısı kesildi"
+    },
+    "emptyState": {
+      "title": "Bölgesel / kurumsal ajan bulunmuyor",
+      "description": "Ajanlarını görmek için aşağıdan bir Foundry projesi bağlayın."
     }
   },
   "privacy": {
@@ -2107,5 +2407,753 @@
     "review": "İncele",
     "itemId": "Kimlik: {id}",
     "itemSource": "{source} - {date}"
+  },
+  "regionOverride": {
+    "warning": "Konum geçersiz kılma etkin — istekleriniz {region} veri bölgesine yönlendiriliyor. Bu, manuel bir test geçersiz kılmasıdır; gerçek konumunuz değildir.",
+    "clear": "Geçersiz kılmayı temizle"
+  },
+  "usageImpact": {
+    "empty": "Henüz kullanım izlenmedi. Sohbet ettikten sonra token kullanımınız ve tahmini emisyonlarınız burada görünecek.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} akıllı telefon şarjı",
+    "requests": "İstekler",
+    "promptTokens": "İstem tokenları",
+    "completionTokens": "Tamamlama tokenları",
+    "topModels": "Modele göre",
+    "byRegion": "Barındırma bölgesine göre",
+    "regionDefault": "Varsayılan",
+    "modelRow": "{requests} istek · {grams} g",
+    "disclosure": "Tahminler varsayımlara dayalıdır v{version} · {since} tarihinden itibaren · yalnızca standart sohbet (ajanlar ve bilgi tabanı cevapları dahil değildir).",
+    "reset": "Kullanım istatistiklerini sıfırla"
+  },
+  "extraction": {
+    "toggleLabel": "Yapılandırılmış veriyi çıkar",
+    "trayLabel": "Çıkarma",
+    "trayPrefix": "Çıkar",
+    "trayInfo": "Çıkarma işlemi en fazla 3 yapılandırılmış tablo döndürür. Tarifler yerel olarak kaydedilir.",
+    "autoChip": "Otomatik — AI bir yapı önerir",
+    "addRecipe": "Tarif ekle",
+    "addRecipeTitle": "Bu çıkarmaya tarif ekle",
+    "addRecipeFullTitle": "Her çıkarmada en fazla 3 tarif",
+    "removeRecipe": "Tarifi kaldır: {name}",
+    "remove": "Kaldır",
+    "section": "Çıkarma tarifleri",
+    "sectionSubtitle": "Ham metni, dosyaları veya URL'leri yapılandırılmış tablolara dönüştüren kayıtlı şablonlar. Her işlemde en fazla 3 tane seçin.",
+    "newRecipe": "Yeni tarif",
+    "untitledRecipe": "(Başlıksız tarif)",
+    "deleteRecipe": "Tarifi sil",
+    "delete": "Sil",
+    "deleteConfirm": "Silinsin mi?",
+    "cancel": "İptal",
+    "name": "Ad",
+    "namePlaceholder": "ör. Hastalar",
+    "description": "Açıklama",
+    "optional": "(isteğe bağlı)",
+    "descriptionPlaceholder": "Tarif seçicisinde gösterilen kısa özet",
+    "instructions": "Talimatlar",
+    "instructionsPlaceholder": "AI materyalde ne bulmalı?",
+    "fields": "Alanlar",
+    "field": "alan",
+    "fieldsPlural": "alanlar",
+    "fieldName": "Alan adı",
+    "fieldType": "Alan türü",
+    "fieldNamePlaceholder": "alan_adı",
+    "addField": "Alan ekle",
+    "removeField": "Alanı kaldır",
+    "toggleDetails": "Detayları göster/gizle",
+    "fieldDetailsTitle": "Açıklama, enum değerleri",
+    "fieldDescriptionPlaceholder": "Açıklama (AI'nin bu alanı bulmasına yardımcı olur)",
+    "enumValuesPlaceholder": "Virgülle ayrılmış izin verilen değerler",
+    "required": "gerekli",
+    "suggest": "Yapay Zeka ile Öner",
+    "suggesting": "Öneriliyor…",
+    "suggestNeedsInstructions": "Yapay Zekanın ne arayacağını bilmesi için önce talimat ekleyin",
+    "searchRecipes": "Tarifleri ara",
+    "pickerEmpty": "Henüz tarif yok. Başlamak için bir tane oluşturun.",
+    "pickerEmptyMatch": "Eşleşen tarif bulunamadı",
+    "editorEmpty": "Henüz tarif yok. Bir tane oluşturun, yapay zeka alanları doldurmada yardımcı olabilir.",
+    "noData": "Veri çıkarılmadı",
+    "noRecords": "Hiç {name} kaydı bulunamadı",
+    "row": "satır",
+    "rows": "satır",
+    "record": "kayıt",
+    "records": "kayıt",
+    "complete": "tamamlandı",
+    "download": "İndir",
+    "preview": "Önizleme",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} alan",
+    "fieldCountOne": "1 alan",
+    "andMoreFields": "+ {count} daha",
+    "saveAsRecipe": "Tarif olarak kaydet",
+    "savedAsRecipeToast": "\"{name}\" tarifi olarak kaydedildi",
+    "previewTruncated": "İlk 3 satır gösteriliyor (toplam {total} satır). Tüm veriler için indiriniz.",
+    "previewEmpty": "Önizlenecek satır yok",
+    "proposedSchemaTip": "Yapay zeka bu şemayı önerdi. Tekrar kullanmak için kaydedin.",
+    "downloadAriaLabel": "{name} dosyasını {format} formatında indir",
+    "previewAriaLabel": "{name} öğesinin önizlemesini aç/kapat",
+    "changeFormatAriaLabel": "{name} için indirme formatını değiştir",
+    "materialWarningTitle": "Çıkarılacak materyal ekleyin",
+    "materialWarningBody": "Aşağıya bir mesaj yazın, bir dosya ekleyin veya bir URL girin.",
+    "materialAttach": "Dosya ekle",
+    "willExtractPrefix": "Şuradan çıkarılacak:",
+    "materialText": "mesaj metni",
+    "materialFiles": "{count, plural, one {1 dosya} other {# dosya}}",
+    "materialActiveFiles": "{count, plural, one {1 aktif dosya} other {# aktif dosya}}",
+    "dismiss": "Çıkarma işlemini kapat"
+  },
+  "Connectors": "Bağlayıcılar",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Çeviri",
+        "description": "Metni analiz, sözlük ve inceleme turlarıyla çevirin"
+      },
+      "document": {
+        "label": "Belge",
+        "description": "Asistan ile belge taslağı oluşturun ve geliştirin"
+      },
+      "dataAnalysis": {
+        "label": "Veri analizi",
+        "description": "Tabloları içe aktarın, verilerinizi keşfedin ve dönüştürün"
+      },
+      "map": {
+        "label": "Harita",
+        "description": "Herhangi bir veriyi harita üzerinde konumlara dönüştürün"
+      }
+    },
+    "chooser": {
+      "prompt": "Ya da odaklı bir çalışma alanı başlatın"
+    },
+    "sidebar": {
+      "newTranslation": "Yeni çeviri",
+      "newDocument": "Yeni belge",
+      "newDataAnalysis": "Yeni veri analizi",
+      "newMap": "Yeni harita"
+    },
+    "translation": {
+      "chooseLanguage": "Hedef dil",
+      "customLanguageHint": "\"{name}\" sizin eklediğiniz bir dil — yapay zeka herhangi bir dili deneyecek ancak kalitesi doğrulanmamıştır.",
+      "addedByYou": "Sizin eklediğiniz",
+      "glossary": "Sözlük",
+      "noGlossary": "Sözlük yok",
+      "manageGlossaries": "Sözlükler",
+      "glossaries": "Sözlükler",
+      "closeGlossaries": "Sözlükleri kapat",
+      "glossariesEmpty": "Belirli terimlerin nasıl çevrileceğini sabitlemek için sözlük oluşturun. Sözlükler bu cihazda kaydedilir ve çeviriler arasında tekrar kullanılabilir.",
+      "newGlossary": "Yeni sözlük",
+      "newGlossaryName": "Başlıksız sözlük",
+      "glossaryName": "Sözlük adı",
+      "deleteGlossary": "Sözlüğü sil",
+      "sourceTerm": "Kaynak terim",
+      "targetTerm": "Çeviri",
+      "note": "Not",
+      "noteOptional": "Not (isteğe bağlı)",
+      "addEntry": "Terim ekle",
+      "removeEntry": "{term} terimini kaldır",
+      "mode": "Çeviri modu",
+      "modeQuick": "Hızlı",
+      "modeAgentic": "Gözden geçirilmiş",
+      "modeQuickHint": "Tek geçişte çeviri, en hızlısı",
+      "modeAgenticHint": "Metni önce analiz eder, sonra çevirir ve en fazla 3 gözden geçirme turu yapar",
+      "translate": "Çevir",
+      "translating": "Çevriliyor…",
+      "sourceLabel": "Kaynak metin",
+      "targetLabel": "Çeviri",
+      "sourcePlaceholder": "Çevrilecek metni yapıştırın veya yazın ya da bir belge yükleyin.",
+      "targetEmpty": "Çeviri burada görünecek.",
+      "uploadDocument": "Belge yükle",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "tooLong": "Metin {max} karakterden uzun. Bölümlere ayırın ya da tüm dosya için belge çevirisi kullanın.",
+      "analysisTitle": "Ön çeviri analizi",
+      "register": "Kaydol",
+      "reviewTitle": "Gözden geçirme turları",
+      "roundLabel": "Tur {round}",
+      "verdictApprove": "onaylandı",
+      "verdictRevise": "düzenlendi",
+      "railRequest": "Kaynak metni {language} diline çevirin.",
+      "railDoneAgentic": "Tamamlandı. Metni analiz ettim, çevirdim ve {rounds} gözden geçirme turu yaptım. Sonuç çalışma alanında.",
+      "railDoneQuick": "Tamamlandı. Çeviri çalışma alanında.",
+      "railAssessRequest": "{language} çevirisinin kalitesini değerlendirin.",
+      "railAssessDone": "Değerlendirme tamamlandı: puanlar çalışma alanında, gözden geçirilecek {count} önerilen düzenleme var.",
+      "roundChanges": "{round}. turdaki değişiklikler",
+      "criteria": {
+        "accuracy": {
+          "label": "Doğruluk",
+          "description": "Kaynak anlamı eksiksiz aktarılır—yanlış çeviri, eksik, ekleme veya çevrilmemiş bölüm yoktur"
+        },
+        "fluency": {
+          "label": "Akıcılık",
+          "description": "Gramer, yazım, noktalama ve bütünlük hedef dilde doğal okunur"
+        },
+        "terminology": {
+          "label": "Terim kullanımı",
+          "description": "Alan terimleri tutarlı ve doğrudur; sözlük tam olarak uygulanır"
+        },
+        "style": {
+          "label": "Üslup",
+          "description": "Resmi dil, ton ve üslup kaynak ile uyumlu ve tutarlıdır"
+        },
+        "localeConventions": {
+          "label": "Yerel kurallar",
+          "description": "Tarih, sayı, birim ve noktalama hedef dile uygun şekilde kullanılır"
+        },
+        "audience": {
+          "label": "Hedef kitle",
+          "description": "Metnin amacı ve okuyucu kitlesi için uygundur"
+        }
+      },
+      "severity": {
+        "minor": "Önemsiz",
+        "major": "Büyük"
+      },
+      "assess": "Kaliteyi değerlendir",
+      "assessing": "Değerlendiriliyor…",
+      "assessmentTitle": "Kalite değerlendirmesi",
+      "criteriaPicker": "Değerlendirilecek kriterler",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Önerilen düzenlemeler",
+      "noEditsSuggested": "Düzenleme önerilmedi — çeviri seçilen kriterleri geçti.",
+      "acceptEdit": "Kabul et",
+      "rejectEdit": "Reddet",
+      "acceptAll": "Tümünü kabul et",
+      "rejectAll": "Tümünü reddet",
+      "editAccepted": "Kabul edildi",
+      "editRejected": "Reddedildi",
+      "editUnapplicable": "Bu bölümü mevcut metinde bulamadık — uygulanmadı",
+      "editTranslation": "Düzenle",
+      "doneEditing": "Bitti",
+      "pasteTranslationPlaceholder": "Düzenlemek için bir çeviri yazın veya yapıştırın…",
+      "editingBlockedPendingEdits": "Önce bekleyen düzenlemeleri çözün veya reddedin",
+      "pendingCount": "{count} bekliyor",
+      "closeReview": "Kalite değerlendirmesini kapat",
+      "showReview": "Değerlendirmeyi göster",
+      "showReviewPending": "Değerlendirmeyi göster ({count} bekliyor)"
+    },
+    "document": {
+      "emptyTitle": "İstediğiniz belgeyi tanımlayın",
+      "emptyBody": "Asistana ne yazmasını istediğinizi belirtin — durum raporu, bağışçı mektubu, toplantı tutanağı. Alıntı ve gerçeklerin kaynaktan eklenmesini istiyorsanız önce referans dosyalarını ekleyin.",
+      "generatePlaceholder": "Yazılacak belgeyi tanımlayın…",
+      "revisePlaceholder": "Yapılacak değişiklikleri tanımlayın…",
+      "generate": "Oluştur",
+      "revise": "Düzelt",
+      "writing": "Yazılıyor…",
+      "export": "Dışa aktar",
+      "references": "Referanslar",
+      "addReference": "Dosya ekle",
+      "uploading": "Yükleniyor…",
+      "removeReference": "{name} dosyasını kaldır",
+      "referenceChars": "{chars} karakterlik çıkarılan metin",
+      "referenceEmpty": "{name} dosyasından metin çıkarılamadı",
+      "uploadFailed": "Yükleme başarısız",
+      "untitledDocument": "Başlıksız belge",
+      "generatedSummary": "Belgeyi çalışma alanında yazdım. İnceleyip hangi değişikliklerin yapılacağını belirtin.",
+      "revisedSummary": "Belgeyi çalışma alanında düzelttim.",
+      "runFailed": "Bir hata oluştu: {message}",
+      "uploadBasis": "Mevcut bir belgeden başla",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Dil bilgisi ve yazım",
+          "description": "Doğru dil bilgisi ve yazım; tek bir İngilizce çeşidi (ABD veya İngiltere) tutarlı olmalı — karışıklık hata olarak sayılır"
+        },
+        "consistency": {
+          "label": "Tutarlılık",
+          "description": "Terimler, isimler, büyük/küçük harf ve biçimlendirme tüm metin boyunca aynı şekilde kullanılmalı"
+        },
+        "clarity": {
+          "label": "Açıklık",
+          "description": "Doğrudan, açık cümleler; okuyucuyu destekleyen yapı"
+        },
+        "sensitivity": {
+          "label": "Duyarlılık",
+          "description": "Kapsayıcı, çatışma ve insani hassasiyet gözeten bir dil (isteğe bağlı kontrol)"
+        },
+        "specAdherence": {
+          "label": "Şarta uygunluk",
+          "description": "Ekli belge şartnamesine uygun: gerekli bölümler mevcut, sıralı ve yönergelerine uygun"
+        },
+        "toneAdherence": {
+          "label": "Ton uygunluğu",
+          "description": "Ekli ses ve ton kurallarına uygun"
+        }
+      },
+      "severity": {
+        "minor": "Önemsiz",
+        "major": "Önemli"
+      },
+      "assess": "Kaliteyi değerlendir",
+      "assessing": "Değerlendiriliyor…",
+      "assessmentTitle": "Kalite incelemesi",
+      "criteriaPicker": "Değerlendirilecek kriterler",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Önerilen düzenlemeler",
+      "noEditsSuggested": "Düzenleme önerilmedi — belge seçilen kriterleri geçti.",
+      "acceptEdit": "Kabul et",
+      "rejectEdit": "Reddet",
+      "acceptAll": "Tümünü kabul et",
+      "rejectAll": "Tümünü reddet",
+      "editAccepted": "Kabul edildi",
+      "editRejected": "Reddedildi",
+      "editUnapplicable": "Bu bölümü mevcut metinde bulamadık — uygulanmadı",
+      "editingBlockedPendingEdits": "Öncelikle bekleyen düzenleme önerilerini sonuçlandırın veya reddedin",
+      "pendingCount": "{count} bekliyor",
+      "closeReview": "Kalite incelemesini kapat",
+      "showReview": "İncelemeyi göster",
+      "showReviewPending": "İncelemeyi göster ({count} bekliyor)",
+      "railAssessRequest": "Belgenin kalitesini seçilen kriterlere göre değerlendirin.",
+      "railAssessDone": "Değerlendirme tamamlandı: puanlar çalışma alanında {count} önerilen düzenleme ile birlikte görüntüleniyor.",
+      "spec": "Belge şartı",
+      "noSpec": "Şart yok",
+      "manageSpecs": "Şartlar",
+      "specs": "Belge şartları",
+      "closeSpecs": "Şartları kapat",
+      "specsEmpty": "Sabit formatta belge yazmak için bir şart oluşturun — gerekli bölümler, sıralama ve bölüm bazında yönergeler (ör. bir Durum Raporu şablonu). Şartlar bu cihazda saklanır ve tekrar kullanılabilir.",
+      "newSpec": "Yeni şart",
+      "newSpecName": "Başlıksız şart",
+      "specName": "Şart adı",
+      "specDescription": "Açıklama (isteğe bağlı)",
+      "deleteSpec": "Şartı sil",
+      "sectionHeading": "Bölüm başlığı",
+      "sectionGuidance": "Yönerge (isteğe bağlı)",
+      "sectionRequired": "Gerekli",
+      "addSection": "Bölüm ekle",
+      "removeSection": "Bölümü kaldır",
+      "generalGuidance": "Genel yönerge (isteğe bağlı)",
+      "tone": "Ton",
+      "noTone": "Ton belirtilmedi",
+      "customCriteria": "Özel kriterler",
+      "manageCriteria": "Özel kriterler",
+      "closeCriteria": "Özel kriterleri kapat",
+      "criteriaEmpty": "Belgeleri değerlendirmek ve revizyonları yönlendirmek için özel ölçütler oluşturun — ör. marka kriterleri veya kurumsal dil. Bu cihazda kaydedilir ve tekrar kullanılabilir.",
+      "newCriterion": "Yeni ölçüt",
+      "newCriterionName": "İsimsiz ölçüt",
+      "criterionName": "Ölçüt adı",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Belgenin bu ölçütü karşılaması için yapması gerekenleri açıklayın, ör. \"Kendi çalışmalarımız hakkında asla aşırı övgü kullanmayın; yararlanıcılar için her zaman 'yardım ettiğimiz kişiler' deyin…\"",
+      "criterionRubricHint": "Bu rubrik, değerlendirme ve revizyon sırasında AI'ya olduğu gibi verilir.",
+      "deleteCriterion": "Ölçütü sil",
+      "profileTitle": "Belge profili",
+      "profileDocType": "Tür",
+      "profileLanguage": "Dil",
+      "profileAudience": "Hedef kitle",
+      "profilePurpose": "Amaç",
+      "profileRegister": "Resmiyet düzeyi",
+      "profileTone": "Ton",
+      "profileConventions": "Konvansiyonlar",
+      "emptyHint": "Aşağıya yazmaya başlayın, alt kutuya ne yazılacağını açıklayın veya bir dosyadan başlayın.",
+      "addSpec": "Şartname ekle",
+      "addCriteria": "Ölçüt ekle",
+      "scopeFullDocument": "Kapsam: tüm belge",
+      "scopeSelection": "Kapsam: seçim — “{preview}…” ({count} kelime)",
+      "clearSelection": "Seçimi temizle (tüm belgeyle çalış)",
+      "reviseSelectionPlaceholder": "Seçili bölümde yapılacak değişiklikleri açıklayın…",
+      "revisedSelectionSummary": "Çalışma alanında seçili bölümü revize ettim.",
+      "assessedSelection": "Seçim"
+    },
+    "data": {
+      "emptyTitle": "Analiz için veri içe aktar",
+      "emptyBody": "Bir CSV, Excel veya JSON dosyası ekleyin ya da satırları doğrudan yapıştırın. Tablo yüklendikten sonra sıralayabilir, belgelerden daha fazla satır çıkarabilir ve düz dilde talimatlarla dönüştürebilirsiniz.",
+      "importFile": "Dosya içe aktar",
+      "importing": "İçe aktarılıyor…",
+      "pasteData": "Veri yapıştır",
+      "pastePlaceholder": "CSV, TSV veya JSON'u buraya yapıştırın…",
+      "import": "İçe aktar",
+      "addFromSource": "Kaynaktan ekle",
+      "extractHint": "Metin yapıştırın veya bir belge seçin; mevcut sütunlarınıza uyan satırlar içinden çıkarılacaktır. Bilinmeyen değerler boş kalır — hiçbir şey uydurulmaz.",
+      "extractPlaceholder": "Veri içeren biçimsiz metni yapıştırın…",
+      "extractRows": "Satırları çıkar",
+      "extractFromFile": "Bir dosyadan…",
+      "extracting": "Çıkarılıyor…",
+      "pastedSource": "Yapıştırılan metin",
+      "transform": "Dönüştür",
+      "transforming": "Dönüştürülüyor…",
+      "transformPlaceholder": "Bir dönüşüm tanımlayın, ör. \"nüfus başına 1000 vaka için bir sütun ekle\"…",
+      "transformCapHint": "Dönüşümler {max} satır ile sınırlıdır. Daha büyük tablolar için önce satırları silin veya filtreleyin.",
+      "undo": "Geri al",
+      "deleteSelected": "{count} öğeyi sil",
+      "deletedRows": "{count} satır silindi",
+      "selectAllRows": "Tüm satırları seç",
+      "selectRow": "{row}. satırı seç",
+      "rowCount": "{count} satır",
+      "rowCapExceeded": "Bu, {count} satır olurdu; tablo {max} ile sınırlı. Veriyi bölün veya dışa aktarın.",
+      "railExtractRequest": "Tablo şemasıyla eşleşen satırları buradan çıkar: {source}",
+      "railExtractDone": "Tabloya {count} çıkarılan satır eklendi.",
+      "railTransformDone": "Tablo dönüştürüldü.",
+      "columnProfileFor": "{column} sütun istatistikleri",
+      "profileMissing": "Eksik",
+      "profileDistinct": "Benzersiz",
+      "profileRange": "Aralık",
+      "profileMean": "Ortalama",
+      "profileMedian": "Medyan",
+      "profileTopValues": "En yüksek değerler",
+      "filterColumnFor": "{column} filtresi",
+      "filterContains": "İçeriyor…",
+      "filterMin": "Min",
+      "filterMax": "Maks",
+      "filterClear": "Temizle",
+      "clearFilters": "Filtreleri temizle",
+      "showingRows": "{total} satırdan {shown} gösteriliyor",
+      "scopeLabel": "Çalışma kapsamı",
+      "scopeTable": "Tümü ({count})",
+      "scopeFiltered": "Filtrelenmiş ({count})",
+      "scopeSelection": "Seçilmiş ({count})",
+      "scopedInstruction": "{instruction} ({count} kapsamlı satırda)",
+      "assess": "Kaliteyi değerlendir",
+      "assessing": "Değerlendiriliyor…",
+      "criteria": {
+        "validity": {
+          "label": "Geçerlilik",
+          "description": "Değerler, sütununun tipine ve beklenen formata uygundur"
+        },
+        "consistency": {
+          "label": "Tutarlılık",
+          "description": "Aynı değer, her yerde aynı şekilde yazılmıştır (farklı 'M' / 'Erkek', karışık birimler veya harf uyumsuzluğu yok)"
+        },
+        "duplicates": {
+          "label": "Çift Kayıtlar",
+          "description": "Aynı varlık veya olayı iki kez kaydeden satırlar"
+        },
+        "plausibility": {
+          "label": "Olasılık",
+          "description": "Bağlama göre uç noktalar ve imkansız değerler"
+        }
+      },
+      "assessmentTitle": "Veri kalitesi incelemesi",
+      "pendingCount": "{count} beklemede",
+      "closeReview": "Kalite incelemesini kapat",
+      "suggestedEdits": "Önerilen düzeltmeler",
+      "noEditsSuggested": "Hiçbir düzeltme önerilmedi — veri seçilen kriterlerden geçti.",
+      "acceptAll": "Tümünü kabul et",
+      "rejectAll": "Tümünü reddet",
+      "acceptEdit": "Kabul et",
+      "rejectEdit": "Reddet",
+      "editAccepted": "Uygulandı",
+      "editRejected": "Reddedildi",
+      "editUnapplicable": "Değerlendirmeden sonra hücre değişti — uygulanmadı",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Değerlendirilecek kriterler",
+      "severity": {
+        "minor": "Hafif",
+        "major": "Ağır"
+      },
+      "editLocation": "satır {row} · {column}",
+      "editLocationRow": "satır {row} (sil)",
+      "showReview": "İncelemeyi göster",
+      "showReviewPending": "İncelemeyi göster ({count} bekliyor)",
+      "assessedFiltered": "Filtrelenmiş satırlar",
+      "assessedSelection": "Seçili satırlar",
+      "assessedSample": "{total} içinden {shown} örnek",
+      "railAssessRequest": "Tablonun kalitesini ({count} satır) seçilen kriterlere göre değerlendir.",
+      "railAssessDone": "{count} veri kalitesi düzeltmesi önerildi — bunları çalışma alanında inceleyin.",
+      "insights": "Analizler",
+      "chartKind": "Grafik türü",
+      "chartBar": "Çubuk (gruplandır)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Çizgi (zaman içinde)",
+      "groupByColumn": "Kolona göre grupla",
+      "dateColumn": "Tarih kolonu",
+      "valueColumn": "Değer kolonu",
+      "aggFn": "Toplama yöntemi",
+      "aggCount": "Adet",
+      "aggSum": "Toplam",
+      "aggMean": "Ortalama",
+      "chartTruncated": "En fazla {max} grup gösteriliyor",
+      "chartNoData": "Mevcut satırlarda grafiklenebilir değer yok.",
+      "chartBarAria": "{column} ile gruplanmış çubuk grafik",
+      "chartHistogramAria": "{column} için histogram",
+      "chartLineAria": "{column} için zaman içinde çizgi grafik",
+      "editStructure": "Yapı",
+      "defineStructure": "Yapıyı tanımla",
+      "schemaHint": "Veri yapınızın alanlarını tanımlayın. Gerekli alanlar, içe aktarma sırasında eksik veri politikasını belirler; bir alanın türünü değiştirmek mevcut değerleri dönüştürür (dönüştürülemeyen hücreler boş olur).",
+      "schemaFieldName": "Alan adı",
+      "schemaFieldType": "Alan türü",
+      "schemaRequired": "Gerekli",
+      "schemaAddField": "Alan ekle",
+      "schemaDeleteField": "{field} alanını sil",
+      "schemaApply": "Yapıyı uygula",
+      "schemaCancel": "İptal",
+      "schemaEdited": "Tablo yapısı düzenlendi",
+      "schemaCellsConverted": "{count} hücre yeni türe dönüştürülemedi ve şimdi boş.",
+      "missingFieldPolicy": "Eksik veri",
+      "policyStrict": "Katı — eksik satırları reddet",
+      "policyFlag": "İşaretle — içe aktar ve belirt",
+      "policyLenient": "Esnek — sessizce içe aktar",
+      "droppedIncompleteRows": "Gerekli alanları eksik {count} satır atıldı: {fields}",
+      "dismiss": "Kapat",
+      "requiredColumn": "Gerekli alan",
+      "flagMissingRequired": "Gerekli alan boş",
+      "flagPendingEdit": "Bu hücre için önerilen bir düzeltme bekliyor — kalite incelemesini kontrol edin",
+      "fromPhoto": "Fotoğraftan",
+      "fromPhotoHint": "Kağıt bir formun veya tablonun fotoğrafını çekin — içeriği, fotoğraf ile eşleştirip kontrol edebileceğiniz yapılandırılmış veriye dönüşür",
+      "readingPhoto": "Fotoğraf okunuyor…",
+      "photoBatchName": "{count} fotoğraf",
+      "railPhotoRequest": "{count} fotoğraftan ({name}) yapılandırılmış veri çıkar",
+      "railPhotoDone": "Fotoğraf(lar)dan {count} kayıt eklendi. Çalışma alanındaki fotoğrafla karşılaştırın.",
+      "sourcesLabel": "Kaynaklar",
+      "openPhotoQc": "Veriyi {name} ile karşılaştırın",
+      "qcRowsFromPhoto": "{count} satır",
+      "qcClose": "Fotoğraf kontrolünü kapat",
+      "qcZoomIn": "Yakınlaştır",
+      "qcZoomOut": "Uzaklaştır",
+      "qcPrevPhoto": "Önceki fotoğraf",
+      "qcNextPhoto": "Sonraki fotoğraf",
+      "qcImageLoading": "Fotoğraf yükleniyor…",
+      "qcImageFailed": "Fotoğraf yüklenemedi.",
+      "qcImageAlt": "Kaynak fotoğraf: {name}",
+      "qcHint": "Tabloda yalnızca bu fotoğrafa ait satırlar gösterilmektedir — her değeri fotoğrafla karşılaştırın ve uymayan satırları düzenleyin veya silin.",
+      "sourceFilterChip": "{name} kaynağından satırlar",
+      "clearSourceFilter": "Tüm satırları tekrar göster",
+      "viewAsRecord": "Form görünümü",
+      "viewAsTable": "Tablo görünümü",
+      "recordEmpty": "Henüz kayıt yok.",
+      "recordOf": "Kayıt {index} / {count}",
+      "recordPrev": "Önceki kayıt",
+      "recordNext": "Sonraki kayıt",
+      "recordBooleanUnset": "(boş)",
+      "flagsChip": "{count} bayrak",
+      "flagsChipOpenReview": "Kalite incelemesini aç",
+      "flagsChipMissingOnly": "Zorunlu alanlar boş — doldurun veya yapıyı düzenleyin",
+      "autoCheck": "Yeni veriyi otomatik kontrol et",
+      "autoCheckHint": "Fotoğraf veya belgelerden veri çıkarıldıktan sonra, yeni satırlarda otomatik kalite kontrolü çalıştırılır",
+      "checkingNewRows": "Yeni eklenen satırlar kalite sorunları için kontrol ediliyor…",
+      "ingestCheckFailed": "Otomatik kalite kontrolü başarısız oldu ({message}) — Manuel olarak ‘Kaliteyi değerlendir’ ile çalıştırabilirsiniz.",
+      "assessedIngest": "Yeni eklenen satırlar"
+    },
+    "map": {
+      "emptyTitle": "Verinizi haritada gösterin",
+      "emptyBody": "Bir olay raporu, çizelge, toplantı notu veya yer adları içeren herhangi bir metni yapıştırın — ya da bir belge yükleyin. Konumlar tanımlanır ve güven puanıyla haritalanır; ardından ArcGIS veya başka GIS araçlarına aktarabilirsiniz.",
+      "inputPlaceholder": "Konum adlarını içeren metni yapıştırın…",
+      "uploadFile": "Dosya yükle",
+      "pastedSource": "Yapıştırılmış metin",
+      "mapIt": "Haritalandır",
+      "finding": "Konumlar bulunuyor…",
+      "featureCount": "{count} konum",
+      "featureCapExceeded": "Harita en fazla {max} konum ile sınırlıdır.",
+      "noneFound": "Bu materyalde konum bulunamadı.",
+      "lowConfidenceNotice": "{count} konumun koordinatları düşük güvenilirliğe sahip — haritaya güvenmeden önce kontrol edin.",
+      "tilesOffline": "Harita döşemeleri (tiles) kullanılamıyor — konum listesi yine de çalışır.",
+      "disclaimer": "Koordinatlar modelin bilgisinden AI ile tahmin edilmiştir, bir coğrafi kodlama servisinden alınmamıştır — operasyonel kullanım öncesi doğrulayın. Harita döşemeleri bir harita sunucusundan yüklenir; verileriniz bu cihazda kalır.",
+      "flyTo": "Haritada {name} göster",
+      "removeFeature": "{name} öğesini kaldır",
+      "expandFeature": "{name} için tam ayrıntıları göster",
+      "collapseFeature": "{name} için ayrıntıları daralt",
+      "detailsParent": "{parent} parçası",
+      "railRequest": "Şu kaynaktaki konumları haritala: {source}",
+      "railSearchRequest": "Web'de ara ve şu konumları haritala: {query}",
+      "railDone": "{count} konum eşlendi. Düşük güvenilirlikte olanları listeden inceleyin.",
+      "searchToggle": "Web arama modu",
+      "searchToggleHint": "Metin yapıştırmak yerine web'de arayın; bulunan sonuçlar haritaya eklenir.",
+      "searchPlaceholder": "Web'de ara, ör. \"2026 Doğu Afrika kolera salgınları\"…",
+      "searchAndMap": "Ara ve eşle",
+      "searching": "Aranıyor…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Bağlantı: {kind}",
+        "unresolved": "{count} bağlantı, haritada olmayan yerlere atıfta bulunduğu için atlandı."
+      },
+      "confidence": {
+        "high": "Yüksek",
+        "medium": "Orta",
+        "low": "Düşük"
+      },
+      "prominence": {
+        "primary": "Ana konum",
+        "secondary": "Yardımcı konum",
+        "mention": "Geçici bahsedilen"
+      },
+      "prominenceMentionHint": "Bu yer sadece geçici olarak referans verilmiştir — haritada daha küçük gösterilir ve ilk çerçevede yer almaz.",
+      "dates": {
+        "since": "{date} tarihinden beri",
+        "range": "{start} – {end}",
+        "ongoing": "Devam ediyor"
+      },
+      "filters": {
+        "label": "Kategoriye göre filtrele",
+        "other": "Diğer",
+        "clear": "Temizle",
+        "showing": "{total} konumdan {shown} gösteriliyor",
+        "noneMatch": "Hiçbir konum mevcut filtrelerle eşleşmiyor."
+      },
+      "dateFilter": {
+        "label": "Tarihler",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "fromAria": "Yalnızca bu tarihten sonraki etkinlikleri göster",
+        "toAria": "Yalnızca bu tarihe kadarki etkinlikleri göster",
+        "clear": "Tarihleri temizle",
+        "eraChip": "Yalnızca {label} içindeki etkinlikleri göster"
+      },
+      "timeline": {
+        "toggle": "Zaman atlaması",
+        "play": "Zaman atlamasını başlat",
+        "pause": "Zaman atlamasını duraklat",
+        "eras": "Zaman çizgisi çağları",
+        "jumpTo": "{label}'a atla",
+        "slider": "Zaman çizgisi konumu",
+        "showUndated": "Tarihsiz konumları göster",
+        "activeCount": "{count} aktif"
+      },
+      "granularity": {
+        "site": "Saha",
+        "city": "Şehir/Kasaba",
+        "district": "İlçe",
+        "region": "Bölge",
+        "country": "Ülke"
+      },
+      "granularityAreaHint": "Bir alan; merkezinin etrafında yaklaşık bir daireyle gösterilir — kesin bir konum veya sınır değildir.",
+      "containerHint": "Diğer eşlenen konumları içerir, bu nedenle yalnızca dış hat olarak gösterilir.",
+      "legend": {
+        "toggle": "Açıklama",
+        "title": "Harita nasıl okunur",
+        "color": "Renk: koordinat güveni (mavi yüksek, kehribar orta, kırmızı düşük)",
+        "size": "Nokta boyutu: yerin materyaldeki önemi",
+        "area": "Kesik daire: bir ilçe, bölge veya ülkenin yaklaşık sınırı",
+        "container": "Soluk çizgi: içeriği tek tek haritalanan bir alan"
+      }
+    },
+    "shell": {
+      "showConversation": "Konuşmayı göster",
+      "hideConversation": "Konuşmayı gizle",
+      "workspaceTab": "Çalışma alanı",
+      "conversationTab": "Konuşma",
+      "paneTabsLabel": "İş akışı panelleri",
+      "railEmpty": "Asistanın mesajları ve ilerlemesi burada görünecek.",
+      "railInputPlaceholder": "Asistana mesaj gönder…",
+      "assistantThinking": "Düşünüyor…",
+      "sendMessage": "Mesaj gönder",
+      "stopGenerating": "Oluşturmayı durdur",
+      "loadingWorkspace": "Çalışma alanı yükleniyor…",
+      "unknownType": "Bu konuşma, bu sürümün tanımadığı bir iş akışını kullanıyor. Konuşma geçmişi aşağıda gösterilmiştir.",
+      "untitled": "Yeni Konuşma",
+      "toggleMenu": "Menüyü aç/kapat",
+      "model": "Bu iş akışı için model"
+    }
+  },
+  "connectors": {
+    "title": "Bağlayıcılar",
+    "description": "Dış araçları Model Context Protocol (MCP) ile bağlayın. Bağlanan araçlar sohbet sırasında modellere sunulur ve her çağrı yalnızca onayınızdan sonra çalışır.",
+    "localOnlyNote": "Her sağlayıcıya doğrudan giriş yaparsınız. Erişim anahtarları şifrelenir ve yalnızca bu cihazda saklanır; her istekte uygulama sunucusu üzerinden iletilir — burada asla depolanmaz veya kaydedilmez.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Depolarda arama yapın, konu ve pull request oluşturun veya okuyun."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Görev ve projeleri bulun, oluşturun ve güncelleyin."
+      }
+    },
+    "connect": "Bağla",
+    "connected": "Bağlandı",
+    "tokenEndsIn": "••••{last4} ile bitiyor",
+    "disconnect": "Bağlantıyı kes",
+    "toolCount": "{count, plural, =1 {1 araç kullanılabilir} other {# araç kullanılabilir}}",
+    "patLabel": "Kişisel erişim anahtarı",
+    "createTokenLink": "Anahtar oluştur",
+    "tokenScopeHint": "Yalnızca bu araçların ihtiyaç duyduğu erişimlere sahip ayrıntılı bir anahtar kullanın.",
+    "validating": "Bağlantı kontrol ediliyor…",
+    "validationFailed": "Bağlantı kurulamadı. Adresi kontrol edip tekrar deneyin.",
+    "authFailed": "Sunucu belirteci reddetti. Kontrol edip tekrar deneyin.",
+    "tokenRequired": "Bir belirteç gereklidir",
+    "enableServer": "Sohbette kullanılabilir",
+    "arbitraryTitle": "Diğer MCP sunucuları",
+    "arbitraryToggle": "Rastgele MCP sunucularına izin ver",
+    "arbitraryWarning": "Bir MCP sunucusu çalıştıran herkes, araçlarına gönderilen mesajları görebilir. Yalnızca güvendiğiniz sunuculara bağlanın. Her araç çağrısı için yine de onayınız gerekmektedir.",
+    "addServer": "MCP sunucusu ekle",
+    "editServer": "MCP sunucusunu düzenle",
+    "serverName": "Ad",
+    "serverUrl": "Sunucu URL'si",
+    "nameRequired": "Ad gereklidir",
+    "urlRequired": "URL gereklidir",
+    "invalidUrl": "Genel bir https:// adresi girin",
+    "namePlaceholder": "Benim MCP sunucum",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Erişim belirteci (isteğe bağlı)",
+    "keepTokenPlaceholder": "Mevcut belirteci korumak için boş bırakın",
+    "disconnectedToast": "{name} bağlantısı kesildi",
+    "save": "Kaydet",
+    "connectWithProvider": "{name} ile bağlan",
+    "useTokenInstead": "Bunun yerine erişim belirteci kullan",
+    "oauthWaiting": "Yetkilendirme bekleniyor…",
+    "oauthFailed": "Oturum açma başarısız oldu. Tekrar deneyin.",
+    "oauthDenied": "Sağlayıcı tarafından erişim reddedildi.",
+    "oauthTimeout": "Oturum açma zaman aşımına uğradı. Tekrar deneyin.",
+    "oauthCancelled": "Oturum açma iptal edildi.",
+    "oauthUnavailable": "Bu bağlantı için bu dağıtımda oturum açma mevcut değil. Bunun yerine bir erişim belirteci kullanın veya yöneticinizden OAuth uygulamasını yapılandırmasını isteyin.",
+    "ownAppToggle": "Kendi OAuth uygulamanızı kullanın",
+    "ownAppHint": "Aşağıdaki geri çağırma URL’siyle birlikte {name} hesabınızda (kurumunuz, çalışma alanınız veya kurumsal örneğiniz) bir OAuth uygulaması kaydedin, ardından kimlik bilgilerini buraya yapıştırın. Yerleşik uygulamayı kullanmak için bu bölümü kapalı bırakın.",
+    "ownAppCustomHint": "İsteğe bağlı olarak aşağıya kendi OAuth uygulamanızın kimlik bilgilerini girebilirsiniz; otomatik olarak kaydolmak için boş bırakın.",
+    "ownAppInUse": "Kendi OAuth uygulamanız ile bağlanıldı.",
+    "clientIdLabel": "İstemci kimliği",
+    "clientSecretLabel": "İstemci gizli anahtarı (uygulamanızda varsa)",
+    "redirectUriLabel": "Kayıt edilecek geri çağırma / yönlendirme URL’si",
+    "reconnect": "Tekrar bağlan",
+    "needsReauth": "Tekrar bağlanması gerekiyor",
+    "disconnectOauthNote": "Bağlantıyı kesmek yalnızca bu cihazdan erişimi kaldırır. Erişimi tamamen kaldırmak için {name} hesabınızdaki yetkilendirilmiş uygulamaları yönetin.",
+    "authModeLabel": "Kimlik Doğrulama",
+    "authModeNone": "Yok",
+    "authModeBearer": "Erişim belirteci",
+    "authModeOauth": "Sağlayıcı ile oturum aç (OAuth)",
+    "oauthCustomHint": "Kaydettikten sonra açılır bir pencerede sunucunun sağlayıcısı ile oturum açacaksınız.",
+    "saveAndSignIn": "Kaydet ve oturum aç",
+    "oauthCallback": {
+      "title": "Yetkilendirme tamamlandı",
+      "missingState": "Yetkilendirilecek bir şey yok",
+      "close": "Bu pencereyi kapatabilir ve uygulamaya dönebilirsiniz.",
+      "closeButton": "Pencereyi kapat"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Bir model kaynağı bağlayın",
+    "addAnother": "Başka bir model kaynağı ekle",
+    "edit": "Düzenle",
+    "disconnect": "{name} bağlantısını kes",
+    "disconnectedToast": "{name} bağlantısı kesildi",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Modeller yükleniyor...",
+    "noModelsAvailable": "Bu kaynaktan kullanılabilir model yok",
+    "sourceUnreachable": "Bu kaynağa ulaşılamadı. Erişim yetkiniz değişmiş olabilir veya hizmet geçici olarak kullanılamıyor.",
+    "retry": "Yeniden dene",
+    "connectFoundryAccount": "Microsoft Azure Foundry Hesabı Bağla",
+    "connectFoundryDescription": "Erişiminiz olan Azure Foundry hesabından model dağıtımlarını keşfedin. Kendi Azure izinleriniz her isteği yetkilendirir — uygulamanın model kısıtlamaları burada geçerli değildir.",
+    "selectModelsDescription": "Bu hesaptan hangi model dağıtımlarının model seçicide görüneceğini seçin.",
+    "editConnection": "Bağlantıyı Düzenle",
+    "nameLabel": "Ad",
+    "namePlaceholder": "örn. Ekibim Sandbox",
+    "nameRequired": "Kaynak adı gereklidir",
+    "foundryAccountLabel": "Foundry Hesabı",
+    "enterManually": "Manuel gir",
+    "browseResources": "Kaynaklara göz at",
+    "subscriptionIdLabel": "Abonelik Kimliği",
+    "resourceGroupLabel": "Kaynak Grubu",
+    "accountNameLabel": "Hesap Adı",
+    "subscriptionRequired": "Bir abonelik seçin",
+    "accountRequired": "Bir Foundry hesabı seçin",
+    "accountSelectionRequired": "Listeden bir hesap seçin.",
+    "selectAllRequired": "Abonelik, kaynak grubu ve hesap seçin.",
+    "connectionFailed": "Bu hesaba ulaşılamadı. Bilgilerin doğru olduğundan ve erişiminiz olduğundan emin olun.",
+    "duplicateSource": "Bu hesap zaten \"{name}\" olarak bağlı.",
+    "connectionSuccessModels": "Bağlandı — {count} model dağıtımı bulundu",
+    "connectionSuccessEmpty": "Bağlandı, ancak bu hesapta model dağıtımı bulunamadı.",
+    "checkingConnection": "Bağlantı kontrol ediliyor...",
+    "next": "İleri",
+    "back": "Geri",
+    "cancel": "İptal",
+    "connect": "Bağlan",
+    "save": "Kaydet",
+    "scanningResources": "Azure abonelikleriniz taranıyor...",
+    "discoveryPartialWarning": "{count, plural, one {# abone} other {# abone}} taranamadı. Hesabınız eksikse manuel giriş yapabilirsiniz.",
+    "discoveryTruncatedWarning": "Taranacak çok fazla kaynak var. Hesabınız eksikse manuel giriş yapabilirsiniz.",
+    "noAccountsDiscovered": "Aboneliklerinizde herhangi bir Foundry hesabı bulunamadı. Yolu biliyorsanız manuel giriş yapabilirsiniz.",
+    "retryScan": "Taramayı tekrar dene",
+    "searchAccountsPlaceholder": "Hesapları ara...",
+    "modelsSelectedCount": "{total} modelin {selected} tanesi seçildi",
+    "selectAll": "Tümünü seç",
+    "deselectAll": "Tümünün seçimini kaldır",
+    "autoAddLabel": "Yeni modelleri otomatik ekle",
+    "autoAddDescription": "Bu hesaba daha sonra eklenen model dağıtımları otomatik olarak görünür. Seçili olmayan modeller hariç tutulur."
   }
 }

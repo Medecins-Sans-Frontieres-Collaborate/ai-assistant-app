@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { ResourceTreeService } from '@/lib/services/agents/ResourceTreeService';
 import { UserTokenProvider } from '@/lib/services/auth/UserTokenProvider';
 import { createAppIdentityCredential } from '@/lib/services/auth/appIdentityCredential';
 
@@ -85,6 +86,7 @@ async function armGet<T>(token: string, url: URL): Promise<{ value: T[] }> {
  * Cascading: subscriptions → accounts → projects
  *
  * Query params:
+ *   ?level=tree[&refresh=1]   — full pruned subscription→account→project tree
  *   ?level=subscriptions
  *   ?level=accounts&subscriptionId=xxx
  *   ?level=projects&subscriptionId=xxx&resourceGroup=xxx&accountName=xxx
@@ -95,9 +97,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const level = request.nextUrl.searchParams.get('level');
+
   try {
     const armToken = await getArmToken(request);
-    const level = request.nextUrl.searchParams.get('level');
+
+    if (level === 'tree') {
+      const treeService = ResourceTreeService.getInstance();
+      if (request.nextUrl.searchParams.get('refresh') === '1') {
+        treeService.clearCache();
+      }
+      const tree = await treeService.getTree(armToken);
+      return NextResponse.json(tree);
+    }
 
     if (level === 'subscriptions') {
       const data = await armGet<ArmSubscription>(
@@ -176,6 +188,15 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     console.error('[/api/agents/browse] Error:', error);
+    // Graceful degradation: an empty result lets the client fall back to
+    // manual entry instead of surfacing a hard error.
+    if (level === 'tree') {
+      return NextResponse.json({
+        subscriptions: [],
+        failedSubscriptions: [],
+        truncated: false,
+      });
+    }
     return NextResponse.json({ items: [] });
   }
 }

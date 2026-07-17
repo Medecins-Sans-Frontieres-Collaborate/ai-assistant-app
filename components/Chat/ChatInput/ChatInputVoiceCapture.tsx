@@ -14,7 +14,10 @@ const WARMUP_FALLBACK_MS = 500; // Max time to wait for stream readiness
 const WARMUP_REQUIRED_FRAMES = 3; // Consecutive above-threshold frames (~300ms) to confirm signal
 const AUDIO_LEVEL_THROTTLE_MS = 150; // Throttle audio level state updates
 
-// Ordered by preference; first supported wins. Azure Whisper accepts all of these.
+// Ordered by preference; first supported wins. webm and mp4 are
+// Whisper-native; audio/ogg (the only option Firefox's MediaRecorder
+// supports) is NOT — the transcribe route converts it to mp3 server-side,
+// which requires FFmpeg on the server (surfaced by the 'ffmpeg' health check).
 const PREFERRED_MIME_TYPES = [
   'audio/webm;codecs=opus',
   'audio/webm',

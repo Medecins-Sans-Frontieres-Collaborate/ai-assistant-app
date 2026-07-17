@@ -37,6 +37,7 @@ import {
   SearchLogEntry,
   TTSErrorLogEntry,
   TTSSuccessLogEntry,
+  TokenUsageLogEntry,
   ToneAnalysisErrorLogEntry,
   ToneAnalysisSuccessLogEntry,
   TranscriptionErrorLogEntry,
@@ -267,6 +268,56 @@ export class AzureMonitorLoggingService {
       CompletionTokens: params.completionTokens,
       TotalTokens: params.totalTokens,
       ReasoningEffort: params.reasoningEffort,
+    };
+
+    await this.uploadLogs([entry], shouldAwait);
+  }
+
+  /**
+   * Logs the authoritative per-request token usage + emissions estimate.
+   * Fired at stream end (streamed) or inline (non-streaming). Fire-and-forget
+   * by default so it never delays the response path.
+   *
+   * @param params - Token usage parameters
+   * @param shouldAwait - If true, waits for the log to be uploaded
+   */
+  async logTokenUsage(
+    params: {
+      user: Session['user'];
+      model: string;
+      region: 'US' | 'EU' | null;
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+      reasoningEffort?: string;
+      sizeClass: string;
+      estimatedCO2Grams: number;
+      estimatedEnergyWh: number;
+      assumptionsVersion: string;
+      streamed: boolean;
+      botId?: string;
+    },
+    shouldAwait: boolean = false,
+  ): Promise<void> {
+    const userContext = this.extractUserContext(params.user);
+    const entry: TokenUsageLogEntry = {
+      ...this.createBaseEntry(LogEventType.TokenUsage, userContext, {
+        modelUsed: params.model,
+        botId: params.botId,
+      }),
+      EventType: LogEventType.TokenUsage,
+      Model: params.model,
+      Region: params.region ?? 'default',
+      PromptTokens: params.promptTokens,
+      CompletionTokens: params.completionTokens,
+      TotalTokens: params.totalTokens,
+      ReasoningEffort: params.reasoningEffort,
+      SizeClass: params.sizeClass,
+      EstimatedCO2Grams: params.estimatedCO2Grams,
+      EstimatedEnergyWh: params.estimatedEnergyWh,
+      AssumptionsVersion: params.assumptionsVersion,
+      Streamed: params.streamed,
+      BotId: params.botId,
     };
 
     await this.uploadLogs([entry], shouldAwait);

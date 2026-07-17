@@ -1,7 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { DiscoveredAgent } from '@/lib/services/agents/AgentDiscoveryService';
+
+import { filterAgentsBySourceSelection } from '@/lib/utils/app/agentSourceFilter';
 
 import { useSettingsStore } from '@/client/stores/settingsStore';
 
@@ -93,8 +95,17 @@ export function useFoundryAgents() {
     }
   }, [queryClient, sourcePaths]);
 
+  // Apply per-source agent selection (auto-add toggle + include/exclude
+  // lists) at the single choke point every consumer reads from, so the model
+  // picker, per-source sections, and counts always agree. Selection edits
+  // take effect instantly — the query key only depends on resource paths.
+  const visibleAgents = useMemo(
+    () => filterAgentsBySourceSelection(data?.agents ?? [], customAgentSources),
+    [data?.agents, customAgentSources],
+  );
+
   return {
-    foundryAgents: isRefreshing ? [] : (data?.agents ?? []),
+    foundryAgents: isRefreshing ? [] : visibleAgents,
     regionalPath: data?.regionalPath ?? null,
     officePaths: data?.officePaths ?? [],
     isLoadingFoundryAgents: isLoadingFoundryAgents || isRefreshing,

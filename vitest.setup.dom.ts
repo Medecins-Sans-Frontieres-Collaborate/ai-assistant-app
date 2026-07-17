@@ -153,6 +153,192 @@ const mockMessages: Record<string, unknown> = {
       closeModal: 'Close modal',
     },
   },
+  agentsTab: {
+    emptyState: {
+      title: 'No regional / organization agents available',
+      description: 'Connect a Foundry project below to discover its agents.',
+    },
+  },
+  modelSources: {
+    connectButtonShort: 'Connect a model source',
+    addAnother: 'Add another model source',
+    edit: 'Edit',
+    disconnect: 'Disconnect {name}',
+    disconnectedToast: 'Disconnected {name}',
+    modelCountLabel: '{count} models',
+    loadingModels: 'Loading models...',
+    noModelsAvailable: 'No models available from this source',
+    sourceUnreachable:
+      "Couldn't reach this source. Your access may have changed, or the service may be temporarily unavailable.",
+    retry: 'Retry',
+    connectFoundryAccount: 'Connect a Microsoft Azure Foundry Account',
+    connectFoundryDescription:
+      "Discover model deployments from an Azure Foundry account you have access to. Your own Azure permissions authorize every request — the app's model restrictions don't apply here.",
+    selectModelsDescription:
+      'Choose which model deployments from this account appear in your model picker.',
+    editConnection: 'Edit Connection',
+    nameLabel: 'Name',
+    namePlaceholder: 'e.g. My Team Sandbox',
+    nameRequired: 'Source name is required',
+    foundryAccountLabel: 'Foundry Account',
+    enterManually: 'Enter manually',
+    browseResources: 'Browse resources',
+    subscriptionIdLabel: 'Subscription ID',
+    resourceGroupLabel: 'Resource Group',
+    accountNameLabel: 'Account Name',
+    subscriptionRequired: 'Choose a subscription',
+    accountRequired: 'Choose a Foundry account',
+    accountSelectionRequired: 'Select an account from the list.',
+    selectAllRequired: 'Select a subscription, resource group, and account.',
+    connectionFailed:
+      'Could not reach this account. Check the details are correct and that you have access.',
+    duplicateSource: 'This account is already connected as "{name}".',
+    connectionSuccessModels: 'Connected — {count} model deployment(s) found',
+    connectionSuccessEmpty:
+      'Connected, but no model deployments found on this account.',
+    checkingConnection: 'Checking connection...',
+    next: 'Next',
+    back: 'Back',
+    cancel: 'Cancel',
+    connect: 'Connect',
+    save: 'Save',
+    scanningResources: 'Scanning your Azure subscriptions...',
+    // The real key is an ICU plural; the mock t() only does {param}
+    // interpolation, so keep a simple shape here.
+    discoveryPartialWarning:
+      "{count} subscriptions couldn't be scanned. Use manual entry if your account is missing.",
+    discoveryTruncatedWarning:
+      'There were too many resources to scan completely. Use manual entry if your account is missing.',
+    noAccountsDiscovered:
+      'No Foundry accounts found in your subscriptions. Use manual entry if you know the path.',
+    retryScan: 'Retry scan',
+    searchAccountsPlaceholder: 'Search accounts...',
+    modelsSelectedCount: '{selected} of {total} models selected',
+    selectAll: 'Select all',
+    deselectAll: 'Deselect all',
+    autoAddLabel: 'Automatically add new models',
+    autoAddDescription:
+      'Model deployments added to this account later will appear automatically. Unchecked models stay excluded.',
+  },
+  documentTranslation: {
+    invalidReference: 'Invalid document translation reference',
+    pendingTitle: 'Translating {filename}…',
+    pendingHint:
+      'PDF translations run in the background and can take a few minutes. You can keep working — this card updates when the document is ready, even after a reload.',
+    asyncFailed: 'Document translation failed: {error}',
+    jobNotFound:
+      'the translation job is no longer available. Please try again.',
+    retryPolling: 'Check again',
+    pollingStalled:
+      "We couldn't reach the server to check progress. The translation may still be running.",
+    translationSuccess: 'Document translated successfully',
+    translationSubmitted:
+      'Translation started — PDFs are processed in the background.',
+    translatedTo: 'Translated to {language}',
+    download: 'Download',
+    downloading: 'Downloading…',
+    expires: 'Available for {days} days',
+  },
+  connectors: {
+    title: 'Connectors',
+    description:
+      'Connect external tools through the Model Context Protocol (MCP). Connected tools become available to models in chat, and every tool call runs only after you approve it.',
+    localOnlyNote:
+      'You sign in directly with each provider. Access keys are encrypted and stored only on this device, and are relayed through the app server with each request — never stored or logged there.',
+    catalog: {
+      github: {
+        name: 'GitHub',
+        description:
+          'Search repositories, read and create issues and pull requests.',
+      },
+      asana: {
+        name: 'Asana',
+        description: 'Find, create, and update tasks and projects.',
+      },
+    },
+    connect: 'Connect',
+    connected: 'Connected',
+    tokenEndsIn: 'ends in ••••{last4}',
+    disconnect: 'Disconnect',
+    // The real key is an ICU plural; the mock t() only does {param}
+    // interpolation, so keep a simple shape here.
+    toolCount: '{count} tools available',
+    patLabel: 'Personal access token',
+    createTokenLink: 'Create a token',
+    tokenScopeHint:
+      'Use a fine-grained token with only the access these tools need.',
+    validating: 'Checking connection…',
+    validationFailed: 'Could not connect. Check the address and try again.',
+    authFailed: 'The server rejected the token. Check it and try again.',
+    tokenRequired: 'A token is required',
+    enableServer: 'Available in chat',
+    arbitraryTitle: 'Other MCP servers',
+    arbitraryToggle: 'Allow arbitrary MCP servers',
+    arbitraryWarning:
+      'Anyone who runs an MCP server can see the messages sent to its tools. Only connect servers you trust. Every tool call still requires your approval.',
+    addServer: 'Add MCP server',
+    editServer: 'Edit MCP server',
+    serverName: 'Name',
+    serverUrl: 'Server URL',
+    nameRequired: 'Name is required',
+    urlRequired: 'URL is required',
+    invalidUrl: 'Enter a public https:// address',
+    namePlaceholder: 'My MCP server',
+    urlPlaceholder: 'https://mcp.example.com',
+    tokenOptionalLabel: 'Access token (optional)',
+    keepTokenPlaceholder: 'Leave blank to keep the current token',
+    disconnectedToast: '{name} disconnected',
+    save: 'Save',
+    connectWithProvider: 'Connect with {name}',
+    useTokenInstead: 'Use an access token instead',
+    oauthWaiting: 'Waiting for authorization…',
+    oauthFailed: 'Sign-in failed. Try again.',
+    oauthDenied: 'Access was denied by the provider.',
+    oauthTimeout: 'Sign-in timed out. Try again.',
+    oauthCancelled: 'Sign-in was cancelled.',
+    oauthUnavailable:
+      "Sign-in isn't available for this connector on this deployment. Use an access token instead, or ask your administrator to configure the OAuth app.",
+    ownAppToggle: 'Use your own OAuth app',
+    ownAppHint:
+      'Register an OAuth app in your {name} account (your organization, workspace, or enterprise instance) with the callback URL below, then paste its credentials here. Leave this closed to use the built-in app.',
+    ownAppCustomHint:
+      'Optionally provide your own OAuth app credentials below; leave them blank to register automatically with the server.',
+    ownAppInUse: 'Connected with your own OAuth app.',
+    clientIdLabel: 'Client ID',
+    clientSecretLabel: 'Client secret (if your app has one)',
+    redirectUriLabel: 'Callback / redirect URL to register',
+    reconnect: 'Reconnect',
+    needsReauth: 'Needs reconnect',
+    disconnectOauthNote:
+      'Disconnecting removes access from this device only. To fully revoke access, manage authorized apps in your {name} account.',
+    authModeLabel: 'Authentication',
+    authModeNone: 'None',
+    authModeBearer: 'Access token',
+    authModeOauth: 'Sign in with the provider (OAuth)',
+    oauthCustomHint:
+      "You'll sign in with the server's provider in a pop-up window after saving.",
+    saveAndSignIn: 'Save & sign in',
+    oauthCallback: {
+      title: 'Authorization complete',
+      missingState: 'Nothing to authorize',
+      close: 'You can close this window and return to the app.',
+      closeButton: 'Close window',
+    },
+  },
+  usageImpact: {
+    empty: 'No usage tracked yet.',
+    co2Value: '{grams} g CO2e',
+    equivalence: '~ {count} smartphone charges',
+    requests: 'Requests',
+    promptTokens: 'Prompt tokens',
+    completionTokens: 'Completion tokens',
+    topModels: 'By model',
+    byRegion: 'By hosting region',
+    regionDefault: 'Default',
+    modelRow: '{requests} req - {grams} g',
+    disclosure: 'Estimates based on assumptions v{version} - since {since}.',
+    reset: 'Reset usage stats',
+  },
   modelSelect: {
     tabs: {
       models: 'Models',
@@ -160,6 +346,51 @@ const mockMessages: Record<string, unknown> = {
     },
     sections: {
       baseModels: 'Base Models',
+    },
+    favorites: 'Favorites',
+    recommended: 'Recommended',
+    searchPlaceholder: 'Search models',
+    searchEmpty: 'No models match your search.',
+    star: 'Star {name}',
+    unstar: 'Unstar {name}',
+    variant: {
+      label: 'Variant',
+    },
+    version: {
+      label: 'Version',
+    },
+    deployment: {
+      title: 'Deployment',
+      source: 'Source',
+      account: 'Account',
+      location: 'Location',
+      deployment: 'Deployment',
+      modelVersion: 'Model version',
+      publisher: 'Publisher',
+    },
+    euResidencyNote: 'All models run in the EU Azure region.',
+    reasoningModel:
+      'Reasoning model: thinks step-by-step before answering. Slower, better on hard problems.',
+    hostedRegion: {
+      label: 'Hosted region',
+      processedIn:
+        'This conversation is processed in the {region} Azure region.',
+      euOnlyNote:
+        '{name} is hosted in the EU Azure region; conversations with it are processed there.',
+    },
+    hostedExternally:
+      "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+    hostedIn: {
+      label: 'Hosted in {regions}',
+      tooltip:
+        'The Azure region(s) where this model is deployed. Conversations are processed in your own region.',
+    },
+    badges: {
+      external: 'External',
+      externalTooltip:
+        "Runs on the provider's own infrastructure through Azure AI Foundry, not inside MSF's Azure environment.",
+      regionHostedTooltip:
+        'Hosted in the {region} Azure region. Conversations with this model are processed there.',
     },
     agents: {
       advancedFeatureBadge: 'Advanced Feature',

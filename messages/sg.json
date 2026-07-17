@@ -437,7 +437,22 @@
     "noProjectsFound": "Project kâsa. Tî mû tî \"default\".",
     "selectAllRequired": "Zâmbêtî abôna, compte, na project.",
     "subscriptionRequired": "Pata abonema",
-    "accountRequired": "Pata mboka Foundry"
+    "accountRequired": "Pata mboka Foundry",
+    "projectSelectionRequired": "Singîla projet o na kati na lisiti.",
+    "scanningResources": "Bîngu lâ Azure mo bîngâ...",
+    "searchProjectsPlaceholder": "Sâra projet...",
+    "noProjectsDiscovered": "Projet Foundry ningún ti yeke na bîngû lâ mo. Sêngê tî sangö sî ayeke na danso si mo yèkè lo.",
+    "discoveryPartialWarning": "{count, plural, one {# susûkrisiyon} other {# susûkrisiyon}} ayeke sâra. Sêngê tî sangö sî ayeke na danso si projet mo ayeke lo.",
+    "discoveryTruncatedWarning": "Bîngû mingi ayeke sâra mobôkô sô. Sêngê tî sangö sî ayeke na danso si projet mo ayeke lo.",
+    "retryScan": "Kûê sâra",
+    "next": "Mbênî",
+    "back": "Mbumburu",
+    "selectAgentsDescription": "Kété ayeke bâa nda projet o sô ko yû na model mo.",
+    "selectAll": "Séléksionî îtîso",
+    "deselectAll": "Kêmba îtîso",
+    "agentsSelectedCount": "{selected} kêtî na {total} kêtî séléksionî",
+    "autoAddLabel": "Gbêtî nga kêtî fâ",
+    "autoAddDescription": "Kêtî ké hû na projet o na mûtu ayeke hû fâ-fâ. Kêtî ayeke tena yângâ, ayeke yêmbeni."
   },
   "Quick Actions": "Sâra na hïngângö",
   "Type / in chat to access your prompts": "Sü / na polëngö tî gä na âtene tî mo",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na boutton",
     "stopGenerationDontAskAgainKeyboard": "Kâ kungbê sô sô ngangu lâ mä nde kê sô na klavier",
     "generateResponseButton": "Sûrû siriri",
-    "downloadResponse": "Doko na ndapî",
+    "downloadResponse": "Lôndô tî bângâ",
     "activity": {
       "callingTool": "Mbênî tool...",
       "callingService": "Mbênî service ya kpälä...",
@@ -818,7 +833,19 @@
       "listingTools": "Bê mbênî tool ava...",
       "analyzingFiles": "Koküa fichier mo...",
       "searchingKnowledge": "Købärï na base ya sèngö...",
-      "cancellingPriorTool": "Annuler demande ya tool ti mbênî..."
+      "cancellingPriorTool": "Annuler demande ya tool ti mbênî...",
+      "workflow": {
+        "preparingDocument": "Gîgî refèrans...",
+        "writingDocument": "Kûândâ document...",
+        "analyzingSource": "Yekîlî texte dîko...",
+        "translating": "Kêtî sangö...",
+        "reviewingTranslation": "Nziâ tî boso {round} na {total}...",
+        "revisingTranslation": "Kûê zîâ tî boso...",
+        "extractingRows": "Duku lïnzi na {source}...",
+        "transformingTable": "Bûta tî tabele...",
+        "findingLocations": "Gbîê sâka ya...",
+        "updatingMap": "Kêmbê karte..."
+      }
     },
     "toolSummary": {
       "usedTools": "Tool {count, plural, one {# ya kötï} other {# ya kötï}}",
@@ -879,7 +906,8 @@
     "listen": "Tîngbï",
     "processingAudio": "A rûngbi audio...",
     "ttsError": "Faut ti kûê audio. Bï nga tîngbïngö.",
-    "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka"
+    "unsupportedMessageType": "Faut ti vë mesajï: Tîpi mesajï so a sô ndöka",
+    "addLanguageOption": "Gbêtî \"{name}\"…"
   },
   "transcript": {
     "originalTranscript": "Transcript tî kôzo",
@@ -1292,16 +1320,18 @@
     "unsavedChanges": "Ködörö so ayeke na mongo",
     "unsavedChangesMessage": "Ködörö so ayeke ayeke na mongo. Oko mo langbï?",
     "characterCount": "{current}/{max}",
-    "clearField": "Kôlo lo kuti",
-    "autosaveNote": "Mbênîngâ na abûta na mbênî.",
-    "responseSection": "Ndapî",
-    "voiceSection": "Ndimi",
-    "behaviorSection": "Kûtû",
-    "resetChatSettings": "Zîngo paramètre ti bângâ so",
-    "resetChatSettingsConfirmTitle": "Zîngo paramètre ti bângâ so?",
-    "resetChatSettingsConfirmMessage": "Iko yeke zîngô paramètre na mbênî so: température, ndemële ti tîngbî, Sô tî mo, ndapî ti model, vitesse ti streaming, ndimi ti timbî, fichiers ti bêtî, na bingâ ti vêrîngö. Ala yeke nâ kô ti bâa mbênî so mo kêtê na bângâ so.",
+    "clearField": "Kêkêlî champ",
+    "autosaveNote": "Kódro ti yâ tî yângâ vâ lâ wè",
+    "responseSection": "Bângâ",
+    "voiceSection": "Sâmbâ",
+    "behaviorSection": "Mo tî a mô",
+    "resetChatSettings": "Bê yâkû tî paramètre na chat",
+    "resetChatSettingsConfirmTitle": "Bê yâkû tî paramètre na chat?",
+    "resetChatSettingsConfirmMessage": "Ia lo wà tî hîngî yângâ-hîngî tî panel ôko : température, zîa na yângâ, mo ti 'About You', bângâ tî modèle, vitesse tî streaming, parlâ tî so na écriture, dosié tî yângâ, na döröndörö na lâ. A pâ kêtî tî bâ tî mo tî yâ yângâ.",
     "customInstructionsLabel": "Mbêtï ti tôgbo*",
-    "defaultTemperatureLabel": "Températûrë ti yéké*"
+    "defaultTemperatureLabel": "Températûrë ti yéké*",
+    "Usage & Impact": "Sêlêni na mbeni",
+    "Connectors": "Bâa ti kêtî"
   },
   "emptyState": {
     "greeting": "Mbi lingbi tî sâra yê?",
@@ -1447,33 +1477,78 @@
     },
     "title": "Bênî model",
     "modelsDescription": "Bênî model AI ti walî mo. Model kété tî kéta siriri. Bênî mo tändö a yênga ndö.",
-    "recommended": "A kete"
+    "recommended": "A kete",
+    "familyAll": "Nzonî",
+    "familyFilterLabel": "Séléctionne modèle d'après famille",
+    "searchPlaceholder": "Sáara na modɛli",
+    "searchEmpty": "Modɛli ké so se nzönî yângâ wala.",
+    "star": "Kömba {name}",
+    "unstar": "Kûlï kömba {name}",
+    "otherFamily": "Lingbi",
+    "hostedExternally": "A lo ngangu na infrastructure ti provider sôh Azure AI Foundry, ape na Azure ti MSF.",
+    "hostedIn": {
+      "label": "A lo ngangu na {regions}",
+      "tooltip": "Azure region/region-s mbi lo ngangu so modɛli ayeke go. Lengu mbi yeke tâ na region munu mo."
+    },
+    "badges": {
+      "external": "Banga nzönî",
+      "externalTooltip": "A lo ngangu na infrastructure ti provider sôh Azure AI Foundry, ape na Azure ti MSF.",
+      "regionHostedTooltip": "A lo ngangu na region {region} ti Azure. Lengu sô héri modɛli aso ayeke tâ larê."
+    },
+    "favorites": "Kömba",
+    "euResidencyNote": "Modɛli kõsôso ayeke lo ngangu na Azure region ti EU.",
+    "hostedRegion": {
+      "label": "Region so a lo ngangu",
+      "processedIn": "Lengu tî mbi ayeke tâ na Azure region {region}.",
+      "euOnlyNote": "{name} lo ngangu na Azure region ti EU; lengu sô héri eke tâ larê."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Modɛli ti kûê tî nzönî : ayeke sôh tî yeke mû kundû kûê tî mû bara. Alingo, mbi yeke bâra mo yângâ na zingo so ayékè nganza.",
+    "variant": {
+      "label": "Sô"
+    },
+    "deployment": {
+      "title": "Fa mbi resa",
+      "source": "Gbata",
+      "account": "Kɔnta",
+      "location": "Nzönî",
+      "deployment": "Fa mbi resa",
+      "modelVersion": "Version ti model",
+      "publisher": "Mbênî"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modèle AI sô GPT-4.1 a dûti na gïngö na web na ôke tî nzönî na Bing. A fa mëngö tî nzönî, vérification tî fait, na hînga tî événement sô a yeke. Nzönî tî recherche sô a kë mëngö tî nzönî, analyse tî actualité, na vérification tî fait.",
-      "knowledgeCutoff": "Gïngö na web na ôke tî nzönî"
+      "knowledgeCutoff": "Gïngö na web na ôke tî nzönî",
+      "tagline": "Génération sôh OpenAI âkô"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modèle tî bê awe tî OpenAI, nzönî na pössö gâ, génération tî code, na résolution tî problème technique. Nzönî tî sâra analytique, défi tî programmation, recherche, na explication détaillé. A sara na effort tî pössö na verbosité sô a sëndä.",
-      "knowledgeCutoff": "Déc 2025"
+      "knowledgeCutoff": "Déc 2025",
+      "tagline": "Kode, analize, rechèrche"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variante na hïngängö na sô a coûter pepe tî GPT-5, optimisé tî vitesse na qualité gâ. Nzönî tî mosâra tî lâ awe, requête na hïngängö, routage tî outils, na application sô a kë réponse na hïngängö. Balance nzönî tî performance na efficacité.",
-      "knowledgeCutoff": "6 août 2025, 20:00"
+      "knowledgeCutoff": "6 août 2025, 20:00",
+      "tagline": "Yeke na vite ti mbi na nzönî tî mbi"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "Déc 2025",
-      "description": "Ködörö ti GPT-5.2 tîgu sô tî loso-mbeni, yeke ti sâra kêtê tî gbâ-firifiri na sô tî môlengê ni nzönî. A sô tî yôkê na kêtê, tëngbï, sâra maboko tî foro, na sô tî mingi nginza, ni bûku na maboko tî nzönî wa. A ndö a môlengê na mo, ngangu-lingbi na maboko tî si a lônzi, na siriri sô tî nga yângâ-nginza."
+      "description": "Ködörö ti GPT-5.2 tîgu sô tî loso-mbeni, yeke ti sâra kêtê tî gbâ-firifiri na sô tî môlengê ni nzönî. A sô tî yôkê na kêtê, tëngbï, sâra maboko tî foro, na sô tî mingi nginza, ni bûku na maboko tî nzönî wa. A ndö a môlengê na mo, ngangu-lingbi na maboko tî si a lônzi, na siriri sô tî nga yângâ-nginza.",
+      "tagline": "Zia lingbi, yâkô tî gbêtî"
     },
     "o3": {
       "name": "o3",
       "description": "Modèle tî pössö tî bê awe tî OpenAI na capacité tî résolution tî problème gâ. Nzönî na mathématique gâ, pössö scientifique, défi tî code, na sâra logique na étape mbâ. Fenêtre tî contexte gâ 200K. A sara na contrôle tî effort tî pössö.",
-      "knowledgeCutoff": "8 avr 2025, 20:00"
+      "knowledgeCutoff": "8 avr 2025, 20:00",
+      "tagline": "Kombâ tî tenî-tenî na nzönî mîngi"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Spécialiste tî pössö sô a fa mosâra tî ë étape na étape. Nzönî tî problème tî mathématique, puzzle logique, na hînga tî concept gâ. Bâa ndâlï a pössö na problème na ôke tî nzönî.",
-      "knowledgeCutoff": "20 jan 2025"
+      "knowledgeCutoff": "20 jan 2025",
+      "tagline": "La yeke tenî-tenî nzönî mîngi"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modèle gâ na awe ndo nzönî na code na sü technique. Nzönî tî gä problème na code, sü documentation, na fa concept technique. Na hïngângö na nzönî tî mosâra tî développement.",
-      "knowledgeCutoff": "16 avr 2025, 00:45"
+      "knowledgeCutoff": "16 avr 2025, 00:45",
+      "tagline": "Yângâ tî open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Modèle na capacité mbâ na xAI sô a hînga na réponse na nuance. Nzönî tî discussion ouvert, projet créatif, na résolution tî problème gâ.",
-      "knowledgeCutoff": "13 mai 2025, 00:16"
+      "knowledgeCutoff": "13 mai 2025, 00:16",
+      "tagline": "Yângâ tî xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Modèle tî bê awe tî Anthropic na pössö, code, na capacité créatif gâ. Nzönî tî analyse gâ, recherche, na sâra sô a kë hînga nzönî.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération ye yâh Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Modèle Claude na balance sô a fa performance nzönî na code, analyse, na sâra créatif. Nzönî tî mosâra tî lâ awe na réponse na hïngângö.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération sôh Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Modèle Claude Opus tî kâï. Nzönî tî sâra tî code gâ, analyse détaillé, na hînga na nuance.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Génération sôh Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Modèle Claude na hïngângö na sô a coûter pepe optimisé tî sâra na hïngängö. Nzönî tî requête tî lêgê, résumé, na application na volume gâ.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Claude sô yeke na vite"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Model ti Anthropic so a siriri mbiliengo. A yeke ti écrit long, rechèrche, na swâ so yeke gbangabango.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Kûâtî na analize tî bidû"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Model Claude so a siriri. A yéké ti écrit ndô, analyse na code, na réponse rapide.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude sô yeke na mûngû"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modëli ti Meta ti wa na loso. Ala sôkô, nzönî, na mbênî ti wâfa gïrï na yângâ kêtê.",
+      "tagline": "Yângâ tî open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modëli mbêrê-mbêrê ti OpenAI. Ala maketaan na kôzo, yâ na mbinutù, na kôdî, na nzönî mândro-mândro.",
+      "tagline": "GPT sô yeke na mbî"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Modëli GPT ti mûmî, ti kôkô. Ala ti bâa yângâ, kaka ti ngangu na adusa tî mû.",
+      "tagline": "GPT sô yê bê ti ndunga na vite"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Modëli GPT ti nzönî ti bûngbi. Ala ti yângâ ti nzönî ngangu, ngbä gbaza, na mûnî maboko.",
+      "tagline": "GPT na dialogue tî mbî"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "GPT-5 ti boso-mboso. Ngu yeke si na kôzo, gbângbâ, na kôdî.",
+      "tagline": "GPT mbongo tî mbî"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "Modëli GPT-5 ti nzönî. Ala ti nzönî ti sôkô na ngbä gbaza.",
+      "tagline": "GPT na dialogue tî mbongo"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT ti ndondo na ti multimodal. Ala ti kôzo sôkô na mbeni wâfa na Q&A nî, sô ndoye sïkï ta.",
+      "tagline": "GPT multimodal sô yâh"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "GPT-4.1 ti mûmî na kôkô, ala ti bâa yângâ ti sôkô.",
+      "tagline": "GPT sôh sô yê bê"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modëli fulu-fulu ti Anthropic. Ala ti kôzo ndö, mbinutù, kôdî, na gbângbâ ti nzönî na ngû.",
+      "tagline": "Claude sô yeke na mbî na maboko"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modëli loso ti DeepSeek ti nga. Ala ti kôzo na mbeni wâfa na dîgî teknikï.",
+      "tagline": "Yângâ tî open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modëli boso-mboso ti Mistral. Ala ti Eropë, mô na kôzo, nzönî, na mbeni wâfa kêtê.",
+      "tagline": "Modèle Européen tî open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Modëli GPT-5 ti ndondo. Ala tuku si na kôzo, gbângbâ, na kôdî.",
+      "tagline": "GPT-5 mbongo tî mbî"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Modëli GPT-5 ti nzönî ti ndondo. Ala ti nzönî sôkô na ngbä gbaza.",
+      "tagline": "GPT na dialogue tî mbongo"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 ti mûmî-mûmî. Ala ti bâa yângâ ti mû, kaka na adusa tî mû.",
+      "tagline": "GPT sô yê bê tî génération sôh"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "GPT-4.1 ti mûmî-mûmî. Ala ti bâa yângâ na mû, sô te mbi yari adusa na sängö.",
+      "tagline": "GPT sô yê bê tî génération sôh"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "GPT-4o ti mûmî, ti kôkô. Ala ti yângâ na mû sôkô, sô ndoye sïkï ta.",
+      "tagline": "GPT multimodal yâh sô yê bê"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modëli mûmî ti gbângbâ. Ala si na matëmatîkï, lojîkï, na ngângâ ti wa ta sï lâ adusa mîngi na o3.",
+      "tagline": "Nzönî na vite na nzönî tî pèhoko"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modëli mûmî ti gbângbâ ti ndondo. Ala ti matëmatîkï, sayânsë na lojîkï ti mûmî.",
+      "tagline": "Nzönî tenî-tenî sô yê bê"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modëli ti Anthropic ti nga ti yeke. Fulanî ti gïrï na kôzo sïnga-sïnga, mbinutù, na kôdî.",
+      "tagline": "Modèle tî frontière tî Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Modëli fulu-fulu ti Claude, bodö ti Claude 5. Ala ti kôzo, gbângbâ, na kôdî sôkô na dâ sï mbi fadë.",
+      "tagline": "Claude mûngû sô yeke na mbî"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modëli ti mû tî Mistral. Ala ti Eropë; mingi yeke sï na yângâ na adusa.",
+      "tagline": "Modèle Européen mûngû"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Modëli mûmî ti Mistral. Ala ti mû, kôkô na nzönî, kôzo, na mbeni wâfa mû.",
+      "tagline": "Modèle Européen sô yê bê na vite"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Modëli mûmî-mûmî ti Mistral. Ala ti mû na kôkô ti yângâ mû, kaka na adusa mû.",
+      "tagline": "Mistral tî bordure sô yê bê"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Modëli DeepSeek-R1 ti kasï. Yeke kundusi nzönî na sîngî-sîngî.",
+      "tagline": "Modèle tî nzönî tî open bâ ti tambula"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modëli hõngö ti Meta. Ala ti mû na kôzo, nzönî, na mbeni wâfa ti yako ndoye.",
+      "tagline": "Llama tî open-source sô ye bê na nzamba"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model mû rungana ti Meta. Azô lo faî ti yângâ tî ekolo na mbeni Q&A.",
+      "tagline": "Llama tî open-source sô yâh"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model ekoli tî xAI. Gwe tî yângâ na bâ mbeti, analisa, na mo sô oko tene.",
+      "tagline": "Mbî tî xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model mbênî tî OpenAI. Gbê sara gbâ yângâ, siriri, kode, na finî sô zûnzû.",
+      "tagline": "GPT mbî na mbî"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (mbênî)",
+      "description": "Alias sô atênî da model chat-tuned tî OpenAI sô pekê. Model ti Azure sô ate na model gpt-*-chat sô abê.",
+      "tagline": "GPT dialogue sô yeke na mbî nda nzapa"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Opus mbênî, na pökö 4.6 na 4.8. Gbê lâ yângâ lôngo, siriri, kode, na analisa sô zîngö.",
+      "tagline": "Opus sô bâ tambula"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model reasoning mbênî tî DeepSeek na model Azure sô ate tî R1. A tombê yâ tî sô yéké tenè na linga-linga.",
+      "tagline": "Modèle tî nzönî open na mbî"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Model V4 sô vîvî tî DeepSeek na ate tî V3 na Azure. Yângâ tî eke na kodoro na kétésè tî teknik.",
+      "tagline": "Yângâ tî open-source na vite"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Model reasoning sô vîvî tî xAI. A tîngana na maboko na yângâ vîvî.",
+      "tagline": "Modèle tî nzönî na vite tî xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model chat sô vîvî tî xAI. Yângâ vîvî tî kétésè na bâ mbeti linga-linga.",
+      "tagline": "Modèle tî dialogue na vite tî xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model xAI sô sôkôti. A vîvî na ngâ ti kétésè kekerekete na chat sô sôkôti.",
+      "tagline": "Modèle xAI sô yê bê"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Sü ti OpenAI GPT-5.6. A zia na mo da yeke kûê, bâra, kodê, na kûê ti matungo we na lo.",
+      "tagline": "Tier tî mbî tî GPT mbî"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Ala nge na mbi sokodro na OpenAI GPT-5.6. A yeke mbi lo na bâra ti nzoni, kodê, na kuê pâsê.",
+      "tagline": "GPT-5.6 wa na butû ti yeke seka sôkôlo"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Ala ti light, la biani ti OpenAI GPT-5.6. A besto na mbîrini gbaya na bâra mbegue na mbâ  a kêtê.",
+      "tagline": "GPT-5.6 wa na lijiki na yeke teni"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Model ti Mistral ti sôgbâ ti Europe. A tîngbâ so siriri na mbi kêtê na bâra ti lere na vakê.",
+      "tagline": "Modeli Européen wa na butû"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modeli wa Moonshot AI sô azî ti bê ti mbeti. Na mbi nzönî ti agentic, kôdi, na dokümenti ngangu.",
+      "tagline": "Modeli agentic wa na bê ti mbeti"
     }
   },
   "searchMode": {
@@ -1789,7 +2073,20 @@
     "useDefaultStyle": "Use default writing style",
     "noTonesCreated": "No tones created yet",
     "createTonesHint": "Create tones in Quick Actions",
-    "translateDocumentTooltip": "Këtï hülë dokument na lingbi so asi.\n\nFormats so asumbâ: Word, Excel, PowerPoint, HTML, TXT\nMax. sïze: 40MB\n\nLengbi 80+ lingbi na possibilité tî glossary file."
+    "translateDocumentTooltip": "Këtï hülë dokument na lingbi so asi.\n\nFormats so asumbâ: Word, Excel, PowerPoint, HTML, TXT\nMax. sïze: 40MB\n\nLengbi 80+ lingbi na possibilité tî glossary file.",
+    "translateTooltip": "Benda na yângâ tî kpêgê ti mô ôko.\n\nSô tî dosié wà (Word, Excel, PowerPoint, HTML, TXT), kûê 'Translate Document' na yângâ-lê.",
+    "cameraTooltip": "Kêdê sî nî a yângâ na appareil mô, bâlê tî dabângâ lê sô tî yâ.",
+    "noResults": "Ayê vî ti match",
+    "sectionPinned": "Gbê-linga",
+    "sectionFrequent": "Ayeke andâ-ndâ",
+    "sectionMore": "Döko",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media na likundu",
+    "categoryTransform": "Sûèse",
+    "pin": "Linga na bängö",
+    "unpin": "Tîrî linga",
+    "moveToMore": "Gbenî na döko",
+    "moveOutOfMore": "Wüsa na menü"
   },
   "transcription": {
     "transcribesOnSend": "Transcribes on send",
@@ -1923,7 +2220,14 @@
     "expiresSoon": "Expires in {days} day(s) - download soon",
     "expires": "Available for {days} days",
     "unofficialBadgeLabel": "Mbeni tî ndurusu",
-    "unofficialLanguageWarning": "Ngâ tî li ala na ndurusu. Kîrî tî mbênîngâ alï mbi vêrî. Sîngînga, bêrê na ôko gbanga tî ndimi oba orî na ngâ tî yângâ ti titî so bâa."
+    "unofficialLanguageWarning": "Ngâ tî li ala na ndurusu. Kîrî tî mbênîngâ alï mbi vêrî. Sîngînga, bêrê na ôko gbanga tî ndimi oba orî na ngâ tî yângâ ti titî so bâa.",
+    "translationSubmitted": "Sûèse yeke ti hû—PDF ayeke zûngû na ndö na mbeti.",
+    "pendingTitle": "Sûèse ti {filename}…",
+    "pendingHint": "Sûèse ti PDF ayeke zûngû na ndö na mbeti na ayeke hîrî dumi. Köda mbi köngö tî ländä—kâda a yângâ sô bâ kêtê document, tö nî kpûsu reload.",
+    "asyncFailed": "Sûèse ti document api: {error}",
+    "jobNotFound": "Päla ti sûèse ape hî tî yângâ. Sênda kêtê mû.",
+    "retryPolling": "Üssê kêtê",
+    "pollingStalled": "Biso ape hî tî sôlô na server tî wàsa kodro. Sûèse ayeke yângâ yângâ."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2277,10 @@
       "technicalDetails": "Detay ti teknik",
       "agentCountLabel": "{count} agents",
       "disconnectedToast": "Adèkpété {name}"
+    },
+    "emptyState": {
+      "title": "Gbêtî mbi tene na kombéné / organizasion na mbi",
+      "description": "Sôkô tî Foundry project na wàâ nî so ô bûku na gbêtî na yeke."
     }
   },
   "privacy": {
@@ -2083,5 +2391,753 @@
     "review": "Gbé",
     "itemId": "Kode: {id}",
     "itemSource": "{date} tî {source}"
+  },
+  "regionOverride": {
+    "warning": "Ngu ti lo na kodro — mingi mo ape ye sô yeke  na région de données {region}. Ala so lo ape kété ti kodro mo, mbi yeke na kêtê hinga maboko.",
+    "clear": "Kombä ti kodro"
+  },
+  "usageImpact": {
+    "empty": "Amo usage ayeke zo sô. Usage ti mo na token na sô ti emissions zo apepe na mbênî lôko mo ti yâmu.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} chargement ti smartphone",
+    "requests": "Demande",
+    "promptTokens": "Token ti demande",
+    "completionTokens": "Token ti réponse",
+    "topModels": "Na modèle",
+    "byRegion": "Na région ti hébergement",
+    "regionDefault": "Défa",
+    "modelRow": "{requests} demande · {grams} g",
+    "disclosure": "Estimation ti dî ti assumption v{version} · depi {since} · chat standard mbî (agent na réponse ti base de données ape na séne).",
+    "reset": "Rétablir statistique ti usage"
+  },
+  "extraction": {
+    "toggleLabel": "Hâ lâ tî data ti yângâ",
+    "trayLabel": "Extraction",
+    "trayPrefix": "Hâ lâ",
+    "trayInfo": "Extraction ânda hûrû tî tînda 3 tabele ti yângâ. Recette ti wâ tî lômbê nî tî appareil mô.",
+    "autoChip": "Auto — AI tâmbâ structure",
+    "addRecipe": "Kêkêlî recette",
+    "addRecipeTitle": "Kêkêlî recette na extraction ôko",
+    "addRecipeFullTitle": "Tînda 3 recettes sô tî extraction wà",
+    "removeRecipe": "Kûe recette : {name}",
+    "remove": "Kûê",
+    "section": "Recette tî extraction",
+    "sectionSubtitle": "Modèle ti hângö ti bâ hûrû tî mô, dosié, sô URL na tabelê ti yângâ. Kêtî tînda 3 sô tî lore ti extraction wà.",
+    "newRecipe": "Recette nî",
+    "untitledRecipe": "(Recette pâ tî titre)",
+    "deleteRecipe": "Fâ recette",
+    "delete": "Fâ",
+    "deleteConfirm": "Fâ?",
+    "cancel": "Zûâ",
+    "name": "Tîrî",
+    "namePlaceholder": "kpôngö : Patients",
+    "description": "Kêtê",
+    "optional": "(mo bâdâ)",
+    "descriptionPlaceholder": "Kêtê gbêgbê tî yângâ tî recette",
+    "instructions": "Latonga",
+    "instructionsPlaceholder": "Weti na AI ti bê lâ sô tî mbênî?",
+    "fields": "Champ",
+    "field": "champ",
+    "fieldsPlural": "champ",
+    "fieldName": "Tîrï tî champ",
+    "fieldType": "Sort tî champ",
+    "fieldNamePlaceholder": "champ_namê",
+    "addField": "Kêkêlî champ",
+    "removeField": "Kûê champ",
+    "toggleDetails": "Hâ lâ ti détails",
+    "fieldDetailsTitle": "Kêtê, valeur enum",
+    "fieldDescriptionPlaceholder": "Kêtê (sô AI ti kê hïrï champ ôko)",
+    "enumValuesPlaceholder": "Valeur ti sâna sâna, pâ kaka",
+    "required": "ti kwè",
+    "suggest": "Nzönî ti AI",
+    "suggesting": "Ti AI nzönî…",
+    "suggestNeedsInstructions": "Kombere na ndö ti fadere nga ti AI a yékè na mbï a hû",
+    "searchRecipes": "Fungba na recipes",
+    "pickerEmpty": "Recipe ayeke kéké. Wândâ na môko ti kûè.",
+    "pickerEmptyMatch": "Recipe na bîngi ayeke.",
+    "editorEmpty": "Recipe ayeke kéké. Wândâ na môko nga ti AI ape sô mbëtï.",
+    "noData": "Dönî ayeke kéké o",
+    "noRecords": "Lamîngi na {name} ayeke kéké",
+    "row": "ndïri",
+    "rows": "ndïri",
+    "record": "lamîngi",
+    "records": "lamîngi",
+    "complete": "ti mûtî",
+    "download": "Yângâ",
+    "preview": "Këllë na sëngo",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} tî zîngö",
+    "fieldCountOne": "Zîngö môko",
+    "andMoreFields": "+ {count} tî zîngö wété",
+    "saveAsRecipe": "Ganza ti sïrï bâa recipe",
+    "savedAsRecipeToast": "A ganzi na recipe \"{name}\"",
+    "previewTruncated": "Këllë na ndïri 3 tî lênga na {total}. Fungba ti yângâ gbûdrû tî döî.",
+    "previewEmpty": "Ndïri ayeke kéké ti sëngo",
+    "proposedSchemaTip": "AI ape schema so. Ganza lê ti hû tî yeke wété.",
+    "downloadAriaLabel": "Yângâ {name} bâa {format}",
+    "previewAriaLabel": "Këllë na sëngo tî {name}",
+    "changeFormatAriaLabel": "Kêtê ti format tî yângâ bâa {name}",
+    "materialWarningTitle": "Kwê na tî bè ti yàngê",
+    "materialWarningBody": "Sêndo na mesaj kïrï kêtê, kwê na fichier, sòkô terê na URL.",
+    "materialAttach": "Kwê na fichier",
+    "willExtractPrefix": "Ti yângê yèkè na:",
+    "materialText": "mesaj tî lê",
+    "materialFiles": "{count, plural, one {fichier môko} other {# fichiers}}",
+    "materialActiveFiles": "{count, plural, one {fichier môko nî kambotî} other {# fichiers nî kambotî}}",
+    "dismiss": "Bakisa ti yângê"
+  },
+  "Connectors": "Bâa ti kêtî",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Kêtî sangö",
+        "description": "Kêtî texte amâ tî analizi, glossar, na nziâ tî boso"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Kûândâ na gîgî document na assistant"
+      },
+      "dataAnalysis": {
+        "label": "Analize tî données",
+        "description": "Hûnê tabele na balê tî gbâgâ na bûta données mo"
+      },
+      "map": {
+        "label": "Karte",
+        "description": "Bûta données mbi na sâka ya na karte"
+      }
+    },
+    "chooser": {
+      "prompt": "O tî yângâ âse sî nga workspace"
+    },
+    "sidebar": {
+      "newTranslation": "Kêtî sangö mûtu",
+      "newDocument": "Document mûtu",
+      "newDataAnalysis": "Analize tî données mûtu",
+      "newMap": "Karte mûtu"
+    },
+    "translation": {
+      "chooseLanguage": "Sangö tî sû",
+      "customLanguageHint": "\"{name}\" yè sangö mo hû fâ — AI ayeke kêtî ngâ sangö kêtêkêtê, mbênî qualité ayeke gbêngö.",
+      "addedByYou": "Mo hû fâ",
+      "glossary": "Glossar",
+      "noGlossary": "Glossar ningún",
+      "manageGlossaries": "Bâa ti glossar",
+      "glossaries": "Glossar",
+      "closeGlossaries": "Kêtê glossar",
+      "glossariesEmpty": "Kêtî glossar sô ayeke gâgâ dô tî kêtî tî terme spécifik. Glossar ayeke sauvegarder na appareil o na ayeke bâa na kêtî sangö nyini.",
+      "newGlossary": "Glossaire mû na",
+      "newGlossaryName": "Mbîko ti glossaire",
+      "glossaryName": "Nzönî ti glossaire",
+      "deleteGlossary": "Kûlû glossaire",
+      "sourceTerm": "Mot ti yâna",
+      "targetTerm": "Gbândê",
+      "note": "Noti",
+      "noteOptional": "Noti (sûbê)",
+      "addEntry": "Dûkö mot",
+      "removeEntry": "Yèkè {term}",
+      "mode": "Mode ti gbândê",
+      "modeQuick": "Napêpé",
+      "modeAgentic": "A bè yâmbênî",
+      "modeQuickHint": "Gbândê zozo, napêpé",
+      "modeAgenticHint": "A tîmbê dî môto sô na, a gbândê, a zîngî ti 3 yâmbêngö ni gbândê",
+      "translate": "Gbândê",
+      "translating": "Gbogbo na gbândê…",
+      "sourceLabel": "Lêmbêtî yâna",
+      "targetLabel": "Gbândê",
+      "sourcePlaceholder": "Kanga a yeke ma lêkâ lêmbêtî, ou bien fay kètè lêmbêtî, ou bé télécharge dokimä.",
+      "targetEmpty": "Gbândê a ké na kété sô.",
+      "uploadDocument": "Télécharge dokimä",
+      "copy": "Kîsê",
+      "copied": "A kîsê",
+      "tooLong": "Lêmbêtî ayeke sômbé na {max} caractères. Fokâ na pîka, ou bien sâra gbândê ti dokimä mobimba.",
+      "analysisTitle": "Lôtî lêmbêtî mbïni gbândê",
+      "register": "Tînga",
+      "reviewTitle": "Yâmbêngö",
+      "roundLabel": "Yâmbêngö {round}",
+      "verdictApprove": "akabôso",
+      "verdictRevise": "asûsû bâa",
+      "railRequest": "Gbândê lêmbêtî yâna na {language}.",
+      "railDoneAgentic": "Kêtê. Ngâ tîmbê lêmbêtî, gbe ti gbândê, na yâmbêngö {rounds} mbi. Gbândê ayeke na workspace.",
+      "railDoneQuick": "Kêtê. Gbândê ayeke na workspace.",
+      "railAssessRequest": "Susa kwalite ti gbândê {language}.",
+      "railAssessDone": "Sûsû ayeke sô: noti ayeke na workspace sô na {count} dûtî na yâmbê.",
+      "roundChanges": "Kêtê sô ayeke na yâmbêngö {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Zo na nzönî",
+          "description": "A bâa ti pèpè lêmbêtî yâna — sökpa ti zinga, mû na séni, ou mbunge na gbândê"
+        },
+        "fluency": {
+          "label": "Tenî",
+          "description": "Grammaire, ékri, ponktuasyon na li ti yângâ gbândê na yângâ tî ti târè na lango sô na gbândê na"
+        },
+        "terminology": {
+          "label": "Terminologie",
+          "description": "Motenî ti bâa na mbïka, gbândê terminology ayeke pèpè; glossaire a kêtê nî"
+        },
+        "style": {
+          "label": "Style",
+          "description": "Façon ti yâmbê na nzönî, li ti pèpè na lêmbêtî yâna"
+        },
+        "localeConventions": {
+          "label": "Règle ti téré ti lingbi",
+          "description": "Datä, nombro, unît na ponktuasyon a wüngö na règle ti téré"
+        },
+        "audience": {
+          "label": "Audiensï",
+          "description": "Ti pèpè na kêtê ti lêmbêtî na moto sô a gû"
+        }
+      },
+      "severity": {
+        "minor": "Mìmï",
+        "major": "Mbi"
+      },
+      "assess": "Kete ti mbi",
+      "assessing": "Kete ti mbi…",
+      "assessmentTitle": "Ketekete ti mbi",
+      "criteriaPicker": "Kriteria ti kete",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Ngombere ti gu nzoni",
+      "noEditsSuggested": "Ala ngombere ti gu nzoni ape — gbihara ti yeke ti kriteria a mbi.",
+      "acceptEdit": "Akwere",
+      "rejectEdit": "Kwe ape",
+      "acceptAll": "Akwere oko",
+      "rejectAll": "Kwe ape oko",
+      "editAccepted": "Akwere",
+      "editRejected": "Kwe ape",
+      "editUnapplicable": "A hila yeke sele ti ngombere ni na ti mbënzi — ape ke yeke",
+      "editTranslation": "Zoni",
+      "doneEditing": "Somba",
+      "pasteTranslationPlaceholder": "Kü mbênzi, waba bale na…",
+      "editingBlockedPendingEdits": "Kweri te kwe ape, bale ti ngombere ti gu nzoni sô",
+      "pendingCount": "{count} ti hila sô",
+      "closeReview": "Küpe ketekete ti mbi",
+      "showReview": "Hombere ketekete",
+      "showReviewPending": "Hombere ketekete ({count} ti hila sô)"
+    },
+    "document": {
+      "emptyTitle": "Kue ini ti dokumente mbi ti mo yeke",
+      "emptyBody": "Kete ti AI sô ti mbi kue—npu ti situasie, npu ti donor, procès-verbal ti zebere. Bele na fi ti mba ti lo ti mbi sô to mo yeke ë gbë ngu ti zo na mbi.",
+      "generatePlaceholder": "Kue ini ti dokumente ti mbi yeke…",
+      "revisePlaceholder": "Kue mbi ti mo yeke bale…",
+      "generate": "Fe",
+      "revise": "Bale",
+      "writing": "Kange…",
+      "export": "Kü na",
+      "references": "Ndoyä",
+      "addReference": "Gbä fi",
+      "uploading": "Ti lo…",
+      "removeReference": "Kü {name}",
+      "referenceChars": "{chars} ti ndö ti lo",
+      "referenceEmpty": "Ala ndö lo hila ti we na {name}",
+      "uploadFailed": "Ti lo ape",
+      "untitledDocument": "Dokumente a yeke na kue",
+      "generatedSummary": "Na mbi kange dokumente ni na zû ti AI. Kete ti mbi, bale sèngë mo yeke bale.",
+      "revisedSummary": "Na mbi bale dokumente ni na zû ti AI.",
+      "runFailed": "Nkötö ti yeke: {message}",
+      "uploadBasis": "Yeke ti dokumente ti lo juba",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Lorö & kange sô",
+          "description": "Lorö ti mbi na kange sô; ti English yeke so sï (US pe UK) — tïngö tï mingi ke te yali"
+        },
+        "consistency": {
+          "label": "Kangö",
+          "description": "Nzoni ti tèrmino, dzï, gbätï, na forme ti yeke so tî kangö nî züngü gbï"
+        },
+        "clarity": {
+          "label": "Gbênî",
+          "description": "Kü sînzi, a hila te mbïngi; structure ti yeke na lo ti mbi"
+        },
+        "sensitivity": {
+          "label": "Mbëngö",
+          "description": "Ködörö tî mo yeke kölö, mo lengbi balä lo na sü herêdö mbênî, na susü tî ayeke humanitarian (wa yeke sangö) (bê kogbön na sô)."
+        },
+        "specAdherence": {
+          "label": "Ködörö tî spec",
+          "description": "Gbëtî tî document spec so alingbi: sängö tî ndöngö na mbënî, na ndöngö tî ayeke kêtê, na yä ngbäya wɔtɔ̈."
+        },
+        "toneAdherence": {
+          "label": "Ködörö tî tone",
+          "description": "Gbëtî sängö tî voice na tone so ködörö na kêtê."
+        }
+      },
+      "severity": {
+        "minor": "Wätï",
+        "major": "Gbârangö"
+      },
+      "assess": "Gbä kêtê tî masïngö",
+      "assessing": "Gbä masïngö…",
+      "assessmentTitle": "Ködörö tî masïngö",
+      "criteriaPicker": "Ködörö sô tî gbä",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Sängö tî gbönjï",
+      "noEditsSuggested": "Sängö tî gbönjï alasï — document ayeke gbëtî ködörö tî sô yeke sele.",
+      "acceptEdit": "Wühü",
+      "rejectEdit": "Nya",
+      "acceptAll": "Wühü axa",
+      "rejectAll": "Nya axa",
+      "editAccepted": "Ayeke wühü",
+      "editRejected": "Ayeke nya",
+      "editUnapplicable": "Ndönge ape na document so — yeke alinga",
+      "editingBlockedPendingEdits": "Fâra na wühü wa nya sängö tî gbönjï so asô gbötö",
+      "pendingCount": "{count} asô gbötö",
+      "closeReview": "Zä ködörö tî masïngö",
+      "showReview": "Hûnzö ködörö",
+      "showReviewPending": "Hûnzö ködörö ({count} asô gbötö)",
+      "railAssessRequest": "Gbä masïngö tî ndöngö na ködörö sele.",
+      "railAssessDone": "Ködörö ayeke yèkë: masïngö yé na workspace na {count} sängö tî gbönjï sô tî zê.",
+      "spec": "Document spec",
+      "noSpec": "Spec alinga",
+      "manageSpecs": "Specs",
+      "specs": "Document specs",
+      "closeSpecs": "Zä specs",
+      "specsEmpty": "Wüngö spec tî sû a gbä ngangu tî ndöngö na format fixer — sängö so sô ayeke sô kêtê, na ndöngö, na ködörö tî ayeke (mïngö na SitRep template). Specs yé na device so ayeke sô sù wa.",
+      "newSpec": "Spec ngaza",
+      "newSpecName": "Spec ape na yâ",
+      "specName": "Yâ tî spec",
+      "specDescription": "Ködörö tî gbâ (bê kogbön)",
+      "deleteSpec": "Kwè tî spec",
+      "sectionHeading": "Yâ tî sektion",
+      "sectionGuidance": "Ködörö tî sektion (bê kogbön)",
+      "sectionRequired": "Ayeke sô",
+      "addSection": "Tî ga sektion",
+      "removeSection": "Kwè sektion",
+      "generalGuidance": "Ködörö tî gbâ (bê kogbön)",
+      "tone": "Tone",
+      "noTone": "Tone alinga",
+      "customCriteria": "Ködörö tî wa wa",
+      "manageCriteria": "Ködörö tî wa wa",
+      "closeCriteria": "Zä ködörö tî wa wa",
+      "criteriaEmpty": "Kêtî na mo kriteri ti yeke — ndongodö na lo brand wala lo zîa na organisason — ku abeti tëngbi zîa na dokument pepe wa köngö na mo. Sôhî-ku na aparatî mo na iko yeke yeke.",
+      "newCriterion": "Kriteri tî mbi yeke",
+      "newCriterionName": "Kriteri ndö na lo kodro",
+      "criterionName": "Benga tî kriteri",
+      "criterionRubric": "Rubrik",
+      "criterionRubricPlaceholder": "Gbêla lo mbi na sô dokument köngö bëtï ku sô a sope kêtênë ndö kriteri a, ndongodö: \"Pasi li tâ köda superlatîf tî sô mbi sô mbi lâ; ndâ a tâ na bénéficiaires 'bâ tî mbi na mbi tâ tâ yeke'…\"",
+      "criterionRubricHint": "Rubriki a li wüe AI na pöpö tî mbi na sô kêtênë na asesimen na revisyon.",
+      "deleteCriterion": "Küda kriteri",
+      "profileTitle": "Profil tî dokument",
+      "profileDocType": "Sôko",
+      "profileLanguage": "Dënga",
+      "profileAudience": "Bâ tî mbi zô",
+      "profilePurpose": "Jûmu",
+      "profileRegister": "Register",
+      "profileTone": "Ton",
+      "profileConventions": "Konvensyon",
+      "emptyHint": "Kênda na pu na ndula, gbêla sô a ködö na ndö duki na tîpî tî ndapë, wala tundë tî ti na fişi.",
+      "addSpec": "Dêngë spec",
+      "addCriteria": "Dêngë kriteri",
+      "scopeFullDocument": "Gbanga: dokument mbi yeke",
+      "scopeSelection": "Gbanga: seleksyon — “{preview}…” ({count} mots)",
+      "clearSelection": "Fë seleksyon (lakü na dokument mbi yeke)",
+      "reviseSelectionPlaceholder": "Gbêla atene na seleksyon…",
+      "revisedSelectionSummary": "Mbi a seleksionî pasaji a na workspace.",
+      "assessedSelection": "Seleksyon"
+    },
+    "data": {
+      "emptyTitle": "Mandra data tî anali",
+      "emptyBody": "Kêtî faîli CSV, Excel, wala JSON, wala kôda rândï ti data nî. Sô tabë ji wüe, mbi ke asöli, awe kônda rândï kpökö doküman, na abeti bëtï tende na gbê tî dënga.",
+      "importFile": "Mandra faîli",
+      "importing": "Mandra…",
+      "pasteData": "Kôda data",
+      "pastePlaceholder": "Kôda CSV, TSV, wala JSON nî…",
+      "import": "Mandra",
+      "addFromSource": "Dêngë na sôrsi",
+      "extractHint": "Kôda dënga wala seleksionî dokument; rândï a wüe na kolòn mbi yeke a abeti kônga na mbi. Sô na minu a kangɛ, mbi sa dika — mbi so köda mbî.",
+      "extractPlaceholder": "Kôda dënga na yê data nî…",
+      "extractRows": "Kônga rândï",
+      "extractFromFile": "Na faîli…",
+      "extracting": "Kônga…",
+      "pastedSource": "Dënga mbi kôda",
+      "transform": "Tendê",
+      "transforming": "Tendê…",
+      "transformPlaceholder": "Gbêla na tendê, ndongodö: \"dêngë kolòn na nombro tî kas tî 1000 zô\"…",
+      "transformCapHint": "Tendê li gbada na rândï {max}. Fa ku suwala wala filtrë rândï lö, sô tabë so mu.",
+      "undo": "Tînga",
+      "deleteSelected": "Küda {count}",
+      "deletedRows": "Rândï {count} aküda",
+      "selectAllRows": "Seleksionî rândï yeke",
+      "selectRow": "Seleksionî rândï {row}",
+      "rowCount": "{count} rândï",
+      "rowCapExceeded": "A ke {count} rândï; tabë a ke gbada na {max}. Fâlë data wala eksporté zia.",
+      "railExtractRequest": "Yèkè gü na bûngu ti tîbara tî tabèlê: {source}",
+      "railExtractDone": "Gbêtï {count} tîbara hîngî ti tabèlê.",
+      "railTransformDone": "Tabèlê a tîpengö na.",
+      "columnProfileFor": "Statistikï ti kolône {column}",
+      "profileMissing": "Güngä",
+      "profileDistinct": "Tî sebe",
+      "profileRange": "Libuti",
+      "profileMean": "Lëmbë",
+      "profileMedian": "Median",
+      "profileTopValues": "Zä-ndolo tî valö",
+      "filterColumnFor": "Filtré {column}",
+      "filterContains": "A hôsön…",
+      "filterMin": "Min",
+      "filterMax": "Max",
+      "filterClear": "Kûè",
+      "clearFilters": "Kûè filtrage",
+      "showingRows": "A yeke wè {shown} tî {total} tîbara",
+      "scopeLabel": "Etâ tî gâsâ",
+      "scopeTable": "Tî bênîngö ({count})",
+      "scopeFiltered": "Filtré ({count})",
+      "scopeSelection": "Wë sëngê ({count})",
+      "scopedInstruction": "{instruction} (lö {count} tîbara sè gâtî)",
+      "assess": "Kujûti sâra",
+      "assessing": "Kujûtï…",
+      "criteria": {
+        "validity": {
+          "label": "Validité",
+          "description": "Valö a hînî na lôde ti kolône na pûlë ti loso"
+        },
+        "consistency": {
+          "label": "Kongo",
+          "description": "Valö a hînî tî kêtï tâ hînga; pé a ye 'M'/ 'Male' ni zia, pé unité salahâ na dzî amû"
+        },
+        "duplicates": {
+          "label": "Dûblika",
+          "description": "Tîbara tî ndörö yî tî mbo na mbïrï nga"
+        },
+        "plausibility": {
+          "label": "Plausibilité",
+          "description": "Valö tî ve tî gbodï na lôndö tî konte"
+        }
+      },
+      "assessmentTitle": "Sâra ti datâ",
+      "pendingCount": "{count} sèmbëtï",
+      "closeReview": "Küè sâra ti datâ",
+      "suggestedEdits": "Pusulä tî sirï",
+      "noEditsSuggested": "Sirï péké ape — datâ a pusi critère a sèngê.",
+      "acceptAll": "Tèrè wësê",
+      "rejectAll": "Sûkû wësê",
+      "acceptEdit": "Tèrè",
+      "rejectEdit": "Sûkû",
+      "editAccepted": "Isârï na",
+      "editRejected": "Isûku",
+      "editUnapplicable": "Sêlê a yi yékè tî timâ sô tî sâra — isârï ape",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Critère ti kujûti",
+      "severity": {
+        "minor": "Mo pêkê",
+        "major": "Mo mboka"
+      },
+      "editLocation": "tîbara {row} · {column}",
+      "editLocationRow": "tîbara {row} (kûè)",
+      "showReview": "Gbeta review",
+      "showReviewPending": "Gbeta review ({count} azo yeke) ",
+      "assessedFiltered": "Suku ti zingo",
+      "assessedSelection": "Suku ti lingbi",
+      "assessedSample": "mboka {shown} na {total}",
+      "railAssessRequest": "Kombere motuya ti tabëlö ({count} suku) na nzönî ti ndimi ti kêtê.",
+      "railAssessDone": "{count} mbetï ti motuya ti data ti ködörö — gbeta ngangu na workspace.",
+      "insights": "Bi-anli",
+      "chartKind": "Sô ndomo chart",
+      "chartBar": "Bar (gbeya na) ",
+      "chartHistogram": "Histogram",
+      "chartLine": "Ligne (na timbe) ",
+      "groupByColumn": "Gbeya na kolone",
+      "dateColumn": "Kolone ti daa",
+      "valueColumn": "Kolone ti motuya",
+      "aggFn": "Kêtënge",
+      "aggCount": "Gbalë",
+      "aggSum": "Totale",
+      "aggMean": "Moyenne",
+      "chartTruncated": "Gbeta mboka {max} ti groupe",
+      "chartNoData": "Motuya mingbï tî chart ala na suku tî kodë.",
+      "chartBarAria": "Ndomo ti Bar ti gbeya na {column}",
+      "chartHistogramAria": "Histogram ti {column}",
+      "chartLineAria": "Ndomo ti ligne ti {column} na timbe",
+      "editStructure": "Strukture",
+      "defineStructure": "Gbü strukture",
+      "schemaHint": "Gbü ndö ti champ ti strukture ti data. Champ ti hi yeke manda ti fa policy ti data a yeke nyan tî import; sî yeke lamba sô ti type ti champ, motuya kûè ti mo na change, sô a yeke kombéré mo, ti béréle mo ndoyi.",
+      "schemaFieldName": "Ngangü ti champ",
+      "schemaFieldType": "Sô ti champ",
+      "schemaRequired": "Yeke manda",
+      "schemaAddField": "Dobo champ",
+      "schemaDeleteField": "Küé champ {field}",
+      "schemaApply": "Simbë strukture",
+      "schemaCancel": "Fanda",
+      "schemaEdited": "Gbangbâ strukture ti tabëlö",
+      "schemaCellsConverted": "{count} sel apë yeke kombéré na type ïgï tio sô, na sô a ndoyi.",
+      "missingFieldPolicy": "Data a hana",
+      "policyStrict": "Gbenzere — lengbi suku ti yeke ngû",
+      "policyFlag": "Marke — import na marke",
+      "policyLenient": "Tïndë — import na minyi",
+      "droppedIncompleteRows": "Küé {count} suku a hana champ manda: {fields}",
+      "dismiss": "Gözö",
+      "requiredColumn": "Champ manda",
+      "flagMissingRequired": "Champ manda ti banga",
+      "flagPendingEdit": "Mbëtï ti changî yeke azo yeke na sel sô — gbeta review ti motuya",
+      "fromPhoto": "Tî photo",
+      "fromPhotoHint": "Tikpe form paper wala tabëlö — wambiri azo yeke ti kodro mo na data ti strukture mo a yeke gbia na photo",
+      "readingPhoto": "Ködörö photo…",
+      "photoBatchName": "{count} foto",
+      "railPhotoRequest": "Ködörö data ti structurë ti {count} foto: {name}",
+      "railPhotoDone": "{count} té na lo kodro ti foto. Wé ti vérifié ti lo kôdö ti foto na da yeke na workspace.",
+      "sourcesLabel": "Mbênî",
+      "openPhotoQc": "Wé ti vérifié ti données kôdö ti {name}",
+      "qcRowsFromPhoto": "{count} ndö",
+      "qcClose": "Funga vérification ti foto",
+      "qcZoomIn": "Zoom ti bagō",
+      "qcZoomOut": "Zoom ti teni",
+      "qcPrevPhoto": "Foto sô alakpa",
+      "qcNextPhoto": "Foto sô apelö",
+      "qcImageLoading": "Foto ape kîri…",
+      "qcImageFailed": "A yeke mousso kodro ti foto.",
+      "qcImageAlt": "Foto ti mbênî: {name}",
+      "qcHint": "Tabö ngangu yeke sô ndö ti foto, wé ti sambu kôdö ndö ti foto. Sûkuï ti ndö sô ape yê, û sô yi mbi nî lo.",
+      "sourceFilterChip": "Ndö sô ti {name}",
+      "clearSourceFilter": "Hûnga ndö tî kõdrö",
+      "viewAsRecord": "Vü tî formulaire",
+      "viewAsTable": "Vü tî tabö",
+      "recordEmpty": "Kodro so ape.",
+      "recordOf": "Kodro {index} na {count}",
+      "recordPrev": "Kodro so alakpa",
+      "recordNext": "Kodro so apelö",
+      "recordBooleanUnset": "(sô ape)",
+      "flagsChip": "{count} signal",
+      "flagsChipOpenReview": "Hûngu vérification ti qualité",
+      "flagsChipMissingOnly": "Ndö so gbegbe, pâsso bô ti zûnga sô u hûngu structure",
+      "autoCheck": "Vérification automatisé ti données na yângâ",
+      "autoCheckHint": "Kangbi ti yeke pere données na foto ôko na document, système ape yeke sô ifa kôdö vérification ti qualité na ndö na yângâ.",
+      "checkingNewRows": "Ape yeke vérifié ndö na yângâ kôdö problémé ti qualité…",
+      "ingestCheckFailed": "Vérification automatique ti qualité a mousso ({message}) — oko yeke sô uwe ti zûnga na Vérifier qualité.",
+      "assessedIngest": "Ndö na yângâ"
+    },
+    "map": {
+      "emptyTitle": "Sûndô données mo na carte",
+      "emptyBody": "Kôpi na kolô sitrep, liste na ndö, note ti réunion, ôko texte sô yeke sâra ndö ti gbangû — ôko télécharge document. Bê ti gbangû ape yeke fâ na carte na rating ti confiance; oko yeke sô export ti lo na ArcGIS ôko outil GIS mo.",
+      "inputPlaceholder": "Kôpi texte sô yeke sâra gbangû…",
+      "uploadFile": "Télécharger fichier",
+      "pastedSource": "Texte sô ape kôpi",
+      "mapIt": "Küngö na carte",
+      "finding": "Ape yeke sô gbangû…",
+      "featureCount": "{count} gbangû",
+      "featureCapExceeded": "Carte yeke gbegbe na {max} gbangû.",
+      "noneFound": "Bê ti gbangû so ape sô ape hûngu na matière ni.",
+      "lowConfidenceNotice": "{count} gbangû so coordonnées ape na confiance — wé ti vérifié ti lo mû so a yeke sô mbi yê na carte.",
+      "tilesOffline": "Carreaux ti carte ape yeke kobé — liste ti gbangû ape yeke zia.",
+      "disclaimer": "Coordonnées so AI-estimé lo modèle ni, sô ape ti service ti geocoding — wé ti vérifié tîmbé mâ moto yê ti travaille. Carreaux ti carte ape yeke télécharge na serveur ti carte; données mo pöpö ape yeke bâ na machine ni.",
+      "flyTo": "Sûndô {name} na carte",
+      "removeFeature": "Kôti {name}",
+      "expandFeature": "Sûndô tînkë ti {name}",
+      "collapseFeature": "Funga tînkë ti {name}",
+      "detailsParent": "Mîngi ti {parent}",
+      "railRequest": "Sûndô gbangû na carte na : {source}",
+      "railSearchRequest": "Sôro na web ôko sûndô gbangû na carte ti : {query}",
+      "railDone": "{count} kêtê ti mbi gbêtê. Vanda ti yângâkê na wa yângâ mo yèkè sô na liste.",
+      "searchToggle": "Mode ti fou mbî web",
+      "searchToggleHint": "Fou mbî web sô yèkè na paste ti mbî; résultat ti fou na web zo gbêtê moussa ti kêtê.",
+      "searchPlaceholder": "Fou mbî web, tî na: \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Fou & gbêtê kêtê",
+      "searching": "Ke na fou…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Liaison: {kind}",
+        "unresolved": "{count} liaison(s) ti lo ti ando na mo sô mbi kêtê na karta mbi ti ko."
+      },
+      "confidence": {
+        "high": "Mingui",
+        "medium": "Kôda",
+        "low": "Kere"
+      },
+      "prominence": {
+        "primary": "Kêtê mbeni",
+        "secondary": "Kêtê ti tôa",
+        "mention": "Kêtê ti mbi bara sô ndèra"
+      },
+      "prominenceMentionHint": "Doküma a lingo so kêtê a na ndèra na mwa — a hîngbi na karta na ndèrè na mbi sala na zu.",
+      "dates": {
+        "since": "kêtê tî {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Ke na hîngbi"
+      },
+      "filters": {
+        "label": "Sêkê na catégorie",
+        "other": "Ngâ wuli",
+        "clear": "Kombâ",
+        "showing": "{shown} na {total} kêtê",
+        "noneMatch": "Kêtê yeke sô a yê kana sala na filtre sô hînî."
+      },
+      "dateFilter": {
+        "label": "Datê",
+        "from": "Tî",
+        "to": "Awa",
+        "fromAria": "Hîngbi so evenman tî datê wî na pêke",
+        "toAria": "Hîngbi evenman fî na datê so a hîngbi",
+        "clear": "Kombâ datê",
+        "eraChip": "Hîngbi evenman tî {label} sêka mo"
+      },
+      "timeline": {
+        "toggle": "Pasage tî tan",
+        "play": "Yênga pasage tî tan",
+        "pause": "Yèkêmbî pasage tî tan",
+        "eras": "Période tî tan",
+        "jumpTo": "Sô nîngê na {label}",
+        "slider": "Mbôtî tî période",
+        "showUndated": "Hîngbi kêtê sô yèkè datê",
+        "activeCount": "{count} ke na hîngbi"
+      },
+      "granularity": {
+        "site": "Kêtê",
+        "city": "Kâ ou ville",
+        "district": "District",
+        "region": "Region",
+        "country": "Country"
+      },
+      "granularityAreaHint": "Gbanga tî zô, mbi hîngbi na mbeti na li tî mo, sô mbi so gbanga yékè — sô na kêtê nî nda mbeti nî sô to na zo.",
+      "containerHint": "Yékè kêtê ti zo yângâ gbêtê ti lalo oyo, mbi hîngbi na mbatakè sô mbênî.",
+      "legend": {
+        "toggle": "Légende",
+        "title": "Ndé ti gbanza karta",
+        "color": "Kôlon : confiance ti coordonnées (blue mingui, amber kôda, red kere)",
+        "size": "Kaba ti dot : ndé ti kêtê a na matière",
+        "area": "Ködörö na ndö: Gbûgû ayeke ndö na distriki, rézön, sökè mboka.",
+        "container": "Kötö-kötö yângâ: Ndö ayeke mbi mbeni yângâ ländä yângâ."
+      }
+    },
+    "shell": {
+      "showConversation": "Wüsa bêrê-bîanî",
+      "hideConversation": "Funga bêrê-bîanî",
+      "workspaceTab": "Ndö na kodro",
+      "conversationTab": "Bêrê-bîanî",
+      "paneTabsLabel": "Ndö na workflow",
+      "railEmpty": "Bèkètê na assistant na wokâ, na kodro na ayeke mû.",
+      "railInputPlaceholder": "Küê assistant…",
+      "assistantThinking": "Atènge…",
+      "sendMessage": "Zä ngangu",
+      "stopGenerating": "Kêtê yângâ",
+      "loadingWorkspace": "Gûnî ndö na kodro…",
+      "unknownType": "Bêrê-bîanî âti na workflow ti version a mbi ape na yeke bâ. Histrûa ti bêrê-bîanî ayeke a mbênî ndömâ.",
+      "untitled": "Bêrê-bîanî mû",
+      "toggleMenu": "Sûngbo menü",
+      "model": "Modelo ti workflow ôko"
+    }
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Köpî tool a gbê na Model Context Protocol (MCP). Tool a köpî ayeke tî modelo na chat, na pia pia tool ayeke lândä alinga närä kötä.",
+    "localOnlyNote": "Küê na yângâ na provider kéké. Clé na access ayeke encrypted na ye ti fängö awa wa, na ye akpi tî app server na kwa kôdö—aga hî ape ayeke fängö wala kûë sôko.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Sôga repository, tî hû na lândä issue na pull request."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Sôga, tî hû na sûèse tâche na project."
+      }
+    },
+    "connect": "Köpî",
+    "connected": "Köpî",
+    "tokenEndsIn": "sû tî ••••{last4}",
+    "disconnect": "Gbêtî köpî",
+    "toolCount": "{count, plural, =1 {1 tool ayeke} other {# tool ayeke}}",
+    "patLabel": "Token na yângâ kêtê",
+    "createTokenLink": "Singî token mû",
+    "tokenScopeHint": "Sôga token a andâ-ndâ kötä wâfa access a tool ôko bé.",
+    "validating": "Gbêtî köpî…",
+    "validationFailed": "Apé so ayeke kôkôta. Fâta adrêsê na gûhû.",
+    "authFailed": "Server ape so sèngè token. Fâta na yeke nzönî na gûhû.",
+    "tokenRequired": "Token ape so hû.",
+    "enableServer": "Bê ti chat mo sô.",
+    "arbitraryTitle": "MCP server sô tî lingbi.",
+    "arbitraryToggle": "Küê MCP server sô tî lingbi.",
+    "arbitraryWarning": "Mo tî yeke MCP server na yeke ti yikê anî tî yanga sô bî ti tool na. Yeke kôkôta na server mo yê na mo yê ti sèngè ti mo. Kötö tool kôda kéré, mo so tî zî na bûku bâ sô.",
+    "addServer": "Aguenza MCP server",
+    "editServer": "Gbenza MCP server",
+    "serverName": "Ngbângû",
+    "serverUrl": "Server URL",
+    "nameRequired": "Ngbângû ape so hû.",
+    "urlRequired": "URL ape so hû.",
+    "invalidUrl": "Küê adrêsê https:// tî kêtê tî bû.",
+    "namePlaceholder": "MCP server tî mbi",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Token tî sèngè (na yângâ)",
+    "keepTokenPlaceholder": "Kété kô, sô bê ti yê ti token tî tî lê.",
+    "disconnectedToast": "{name} ayeke yê.",
+    "save": "Sômbè",
+    "connectWithProvider": "Kôkôta na {name}",
+    "useTokenInstead": "Küê token tî sèngè bâ tî yângâ",
+    "oauthWaiting": "Furusu ti sèrè…",
+    "oauthFailed": "Sèrè ayeke. Gûhû.",
+    "oauthDenied": "Provider ayeke sèngè sô.",
+    "oauthTimeout": "Sèrè ayeke nà mbênî. Gûhû.",
+    "oauthCancelled": "Sèrè ayeke fbê.",
+    "oauthUnavailable": "Sèrè sô tî connector sô ayeke bâ mbênî na deployment sô. Küê token tî sèngè bâ tî yângâ, wâlê yê ti admin tî mo tî gûhû OAuth app.",
+    "ownAppToggle": "Küê OAuth app tî mo yê",
+    "ownAppHint": "Sènî OAuth app na konte {name} tî mo (organisasio, workspace, wâ enterprise instance) na callback URL sô so lo, wâ gûbê credential tî lo na mbênî. Kété kô baya sô yê ti built-in app.",
+    "ownAppCustomHint": "Na yângâ, gûbê credential tî OAuth app tî mo na mbênî; kété awè, sô server ayeke sèrè lo sô.",
+    "ownAppInUse": "Ayeke kôkôta na OAuth app tî mo yê.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (sô app tî mo so kè na lo)",
+    "redirectUriLabel": "Callback/redirect URL tî sènî",
+    "reconnect": "Kôkôta na mbênî",
+    "needsReauth": "Ape so hû sô kôkôta na mbênî.",
+    "disconnectOauthNote": "Mbê ayeke sô sèngè ti device sô bâ kété. Sô yê ti sèngè sô gbângbâ, yeke na apps tî konte {name} tî mo.",
+    "authModeLabel": "Sangô tî nzönî",
+    "authModeNone": "Apété",
+    "authModeBearer": "Token tî sèngè",
+    "authModeOauth": "Sèrè na provider (OAuth)",
+    "oauthCustomHint": "Mo so sèrè na provider tî server na fênî na mbênî sô sômbè sô.",
+    "saveAndSignIn": "Sômbè & sèrè",
+    "oauthCallback": {
+      "title": "Sèrè ayeke gba.",
+      "missingState": "Apété tî sèrè",
+      "close": "Mo so kôfa fënî sô na zamba app sô.",
+      "closeButton": "Kôfa fênî"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Bendé gbata ti model",
+    "addAnother": "Kombôrô gbata ti model mô",
+    "edit": "Gbangba",
+    "disconnect": "Kûî lâ {name}",
+    "disconnectedToast": "Kûî lâ {name}",
+    "modelCountLabel": "{count} model",
+    "loadingModels": "Model ti yeke sirê...",
+    "noModelsAvailable": "Model ôko mbi ndara sirê na gbata o",
+    "sourceUnreachable": "Lâ gbata o mbi gbagaza. Pe nduhugi mo awè, oua serviço ti aé mbi fa wâli.",
+    "retry": "Kêtê ndou",
+    "connectFoundryAccount": "Bendé kônta ti Microsoft Azure Foundry",
+    "connectFoundryDescription": "Mene mbi resa ti model so na kônta ti Azure Foundry so mo awè. Autorisation ti mo na Azure da ngangu nyönî — limitation ti model na application mbi da yeke.",
+    "selectModelsDescription": "Séléctionné mbi resa ti model so ti kônta o da yeke bâ na model mbi mo.",
+    "editConnection": "Gbangba mbɛnî",
+    "nameLabel": "Nzö",
+    "namePlaceholder": "pôo. Team mbi na Sandbox",
+    "nameRequired": "Nzö ti gbata ti yeke",
+    "foundryAccountLabel": "Kônta ti Foundry",
+    "enterManually": "Sûka lo handa",
+    "browseResources": "Gombi resôrso",
+    "subscriptionIdLabel": "Subscription ID",
+    "resourceGroupLabel": "Groupe ti resôrso",
+    "accountNameLabel": "Nzö ti kônta",
+    "subscriptionRequired": "Séléctionné subscription",
+    "accountRequired": "Séléctionné kônta ti Foundry",
+    "accountSelectionRequired": "Sélectionné kônta na lisiti.",
+    "selectAllRequired": "Sélectionné subscription, groupe ti resôrso, na kônta.",
+    "connectionFailed": "Mbi gbagaza kônta o. Vérifier detail na accès mbi mo.",
+    "duplicateSource": "Kônta o da bendé tî \"{name}\".",
+    "connectionSuccessModels": "Bendé — {count} mbi resa ti model yeke",
+    "connectionSuccessEmpty": "Bendé, mbâ mbi resa ti model ôko mbi ndara na kônta o.",
+    "checkingConnection": "Mbi zia mbɛnî...",
+    "next": "Zi",
+    "back": "Sôh",
+    "cancel": "Annulé",
+    "connect": "Ködörö",
+    "save": "Sûka",
+    "scanningResources": "Lêkî mbëtï Azure na mo...",
+    "discoveryPartialWarning": "{count, plural, one {# ngangu-ködörö} other {# ngangu-ködörö}} ayeke lingbi. Ködrö na moto sô mo ayeke.",
+    "discoveryTruncatedWarning": "Mbeni mbëtï so ayeke gbëtï lêkï. Ködrö na moto sô mo ayeke.",
+    "noAccountsDiscovered": "Ayeke Foundry ngangu-ködörö na mbëtï mo. Ködrö na moto sô mo yèkè nzönî path.",
+    "retryScan": "Yèngbi lêkï",
+    "searchAccountsPlaceholder": "Sombodë ngangu-ködörö...",
+    "modelsSelectedCount": "{selected} ba {total} modeli a yi mîndï",
+    "selectAll": "Tânga bängö",
+    "deselectAll": "Gbênga bängö",
+    "autoAddLabel": "Kömbëtï modeli tî mo wala kidö",
+    "autoAddDescription": "Modeli sô a kötä na ngangu-ködörö oko ayeke tî mo wala kidö. Modeli sô a ayeke yângâ ayeke dë."
   }
 }

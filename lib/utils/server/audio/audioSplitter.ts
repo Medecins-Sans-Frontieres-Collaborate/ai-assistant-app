@@ -198,6 +198,13 @@ export interface SplitResult {
 export interface SplitOptions {
   /** Target size for each chunk in bytes. Default: 20MB */
   targetChunkSizeBytes?: number;
+  /**
+   * Hard per-chunk ceiling for the post-split verification. Default:
+   * WHISPER_MAX_SIZE (25MB). Any chunk larger than this fails the whole
+   * split with a permanent TranscriptionError. Overridable for tests —
+   * production callers should not lower or raise it.
+   */
+  maxChunkSizeBytes?: number;
   /** Output format for chunks. Default: mp3 */
   outputFormat?: 'mp3' | 'wav' | 'm4a';
   /**
@@ -446,6 +453,7 @@ export async function splitAudioFile(
 
   const {
     targetChunkSizeBytes = DEFAULT_TARGET_CHUNK_SIZE,
+    maxChunkSizeBytes = WHISPER_MAX_SIZE,
     outputFormat = 'mp3',
     outputDir,
     jobId,
@@ -583,10 +591,10 @@ export async function splitAudioFile(
   // via the 60s minimum segment duration on dense pcm streams — so only
   // diagnose "too long" when the cap is actually what stretched the chunks.
   const chunkStats = await Promise.all(chunkPaths.map((p) => stat(p)));
-  const oversized = chunkStats.find((s) => s.size > WHISPER_MAX_SIZE);
+  const oversized = chunkStats.find((s) => s.size > maxChunkSizeBytes);
   if (oversized) {
     await cleanupChunks(chunkPaths);
-    const limitMB = Math.floor(WHISPER_MAX_SIZE / (1024 * 1024));
+    const limitMB = Math.floor(maxChunkSizeBytes / (1024 * 1024));
     const totalHours = (totalDuration / 3600).toFixed(1);
     const oversizedMB = (oversized.size / (1024 * 1024)).toFixed(1);
     const message = cappedByMaxChunks

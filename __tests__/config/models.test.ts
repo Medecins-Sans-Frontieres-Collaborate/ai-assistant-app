@@ -1,4 +1,4 @@
-import { OpenAIModelID } from '@/types/openai';
+import { OpenAIModelID, OpenAIModels } from '@/types/openai';
 
 import {
   getCurrentEnvironment,
@@ -6,9 +6,40 @@ import {
   getFallbackChain,
   getFallbackModel,
   getModelConfig,
+  isDeploymentNotFoundError,
   isModelDisabled,
 } from '@/config/models';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+describe('isDeploymentNotFoundError', () => {
+  it('detects the DeploymentNotFound code', () => {
+    expect(isDeploymentNotFoundError({ code: 'DeploymentNotFound' })).toBe(
+      true,
+    );
+  });
+
+  it('detects a 404 whose message names a missing deployment', () => {
+    expect(
+      isDeploymentNotFoundError({
+        status: 404,
+        message: 'The API deployment for this resource does not exist.',
+      }),
+    ).toBe(false); // message must mention "deployment ... not found"
+    expect(
+      isDeploymentNotFoundError({
+        status: 404,
+        message: 'Deployment gpt-5.2-chat not found',
+      }),
+    ).toBe(true);
+  });
+
+  it('ignores unrelated errors', () => {
+    expect(isDeploymentNotFoundError({ status: 429 })).toBe(false);
+    expect(isDeploymentNotFoundError(new Error('rate limited'))).toBe(false);
+    expect(isDeploymentNotFoundError(null)).toBe(false);
+    expect(isDeploymentNotFoundError(undefined)).toBe(false);
+  });
+});
 
 describe('Model Configuration', () => {
   beforeEach(() => {
@@ -44,24 +75,28 @@ describe('Model Configuration', () => {
   });
 
   describe('getDefaultModel', () => {
-    it('returns gpt-5.2-chat for localhost', () => {
+    // The default is DYNAMIC: the newest standard-variant GPT enabled in the
+    // ring — rings with NOT_YET_ROLLED_OUT gates resolve to the newest
+    // un-gated one. These pins move whenever a newer standard GPT lands in
+    // the catalog (or is un-gated); that's the feature, not drift.
+    it('returns the latest standard GPT for localhost', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', undefined);
-      expect(getDefaultModel()).toBe('gpt-5.2-chat');
+      expect(getDefaultModel()).toBe('gpt-5.5');
     });
 
-    it('returns gpt-5.2-chat for dev', () => {
+    it('returns the latest standard GPT for dev', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'dev');
-      expect(getDefaultModel()).toBe('gpt-5.2-chat');
+      expect(getDefaultModel()).toBe('gpt-5.5');
     });
 
-    it('returns gpt-5.2-chat for prod', () => {
+    it('returns the latest un-gated standard GPT for prod', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
-      expect(getDefaultModel()).toBe('gpt-5.2-chat');
+      expect(getDefaultModel()).toBe('gpt-5.2');
     });
 
-    it('returns gpt-5.2-chat for production', () => {
+    it('returns the latest un-gated standard GPT for production', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'production');
-      expect(getDefaultModel()).toBe('gpt-5.2-chat');
+      expect(getDefaultModel()).toBe('gpt-5.2');
     });
   });
 
@@ -71,15 +106,17 @@ describe('Model Configuration', () => {
       const config = getModelConfig();
 
       expect(config).toBeDefined();
-      expect(config.defaultModel).toBe('gpt-5.2-chat');
+      // No static override — the default resolves dynamically per ring.
+      expect(config.defaultModel).toBeUndefined();
     });
 
-    it('includes disabled models list for prod', () => {
+    it('has NO code-level model gating for prod (deployments are the control)', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'prod');
       const config = getModelConfig();
 
-      expect(config.disabledModels).toBeDefined();
-      expect(Array.isArray(config.disabledModels)).toBe(true);
+      // disabledModels is an EMERGENCY switch only — empty in normal
+      // operation. Rollout = Foundry deployments + ui-ring tags.
+      expect(config.disabledModels ?? []).toEqual([]);
     });
   });
 
@@ -119,14 +156,15 @@ describe('Model Configuration', () => {
       vi.stubEnv('NEXT_PUBLIC_ENV', 'localhost');
     });
 
-    it('returns the first chain model when nothing is excluded', () => {
-      expect(getFallbackModel([])?.id).toBe(OpenAIModelID.GPT_5_2_CHAT);
+    it('returns the first chain model (the dynamic default) when nothing is excluded', () => {
+      expect(getFallbackModel([])?.id).toBe(getDefaultModel());
     });
 
     it('skips the model that just failed', () => {
-      const fallback = getFallbackModel([OpenAIModelID.GPT_5_2_CHAT]);
+      const failed = getFallbackChain()[0];
+      const fallback = getFallbackModel([failed]);
       expect(fallback).not.toBeNull();
-      expect(fallback?.id).not.toBe(OpenAIModelID.GPT_5_2_CHAT);
+      expect(fallback?.id).not.toBe(failed);
       expect(fallback?.id).toBe(getFallbackChain()[1]);
     });
 
@@ -153,23 +191,23 @@ describe('Model Configuration', () => {
   });
 
   describe('Default Model Properties', () => {
-    it('default model is gpt-5.2-chat with search mode enabled', () => {
-      const defaultModel = getDefaultModel();
-      expect(defaultModel).toBe('gpt-5.2-chat');
-    });
-
-    it('ensures consistency across all environments', () => {
+    it('default model is always a ring-enabled standard-variant GPT', () => {
       const environments = ['localhost', 'dev', 'prod', 'production'];
 
       environments.forEach((env) => {
-        if (env === 'production') {
-          vi.stubEnv('NEXT_PUBLIC_ENV', 'production');
+        if (env === 'localhost') {
+          vi.stubEnv('NEXT_PUBLIC_ENV', undefined);
         } else {
           vi.stubEnv('NEXT_PUBLIC_ENV', env);
         }
 
         const defaultModel = getDefaultModel();
-        expect(defaultModel).toBe('gpt-5.2-chat');
+        const model = OpenAIModels[defaultModel as OpenAIModelID];
+        expect(model).toBeDefined();
+        expect(model.series).toBe('gpt');
+        expect(model.variant).toBe('standard');
+        expect(model.isDisabled).not.toBe(true);
+        expect(isModelDisabled(defaultModel)).toBe(false);
       });
     });
   });

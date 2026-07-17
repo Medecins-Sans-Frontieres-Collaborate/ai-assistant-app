@@ -408,7 +408,22 @@
     "noProjectsFound": "No s’han trobat projectes. S'utilitza «default».",
     "selectAllRequired": "Selecciona una subscripció, un compte i un projecte.",
     "subscriptionRequired": "Trieu una subscripció",
-    "accountRequired": "Trieu un compte de Foundry"
+    "accountRequired": "Trieu un compte de Foundry",
+    "projectSelectionRequired": "Seleccioneu un projecte de la llista.",
+    "scanningResources": "S'estan escanejant les vostres subscripcions d'Azure...",
+    "searchProjectsPlaceholder": "Cerca projectes...",
+    "noProjectsDiscovered": "No s'ha trobat cap projecte Foundry en les vostres subscripcions. Utilitzeu l'entrada manual si coneixeu el camí.",
+    "discoveryPartialWarning": "No s'ha pogut escanejar {count, plural, one {# subscripció} other {# subscripcions}}. Utilitzeu l'entrada manual si falta el vostre projecte.",
+    "discoveryTruncatedWarning": "Hi havia massa recursos per escanejar completament. Utilitzeu l'entrada manual si falta el vostre projecte.",
+    "retryScan": "Torna a escanejar",
+    "next": "Següent",
+    "back": "Enrere",
+    "selectAgentsDescription": "Trieu quins agents d'aquest projecte apareixen al selector de models.",
+    "selectAll": "Selecciona-ho tot",
+    "deselectAll": "Desselecciona-ho tot",
+    "agentsSelectedCount": "{selected} de {total} agents seleccionats",
+    "autoAddLabel": "Afegeix automàticament nous agents",
+    "autoAddDescription": "Els agents publicats més tard en aquest projecte apareixeran automàticament. Els agents desmarcats es mantindran exclosos."
   },
   "Quick Actions": "Accions ràpides",
   "Type / in chat to access your prompts": "Escriu / al xat per accedir als teus avisos",
@@ -735,7 +750,19 @@
       "listingTools": "S'estan cercant les eines disponibles…",
       "analyzingFiles": "S'estan analitzant els vostres fitxers…",
       "searchingKnowledge": "S'està cercant a la base de coneixement…",
-      "cancellingPriorTool": "S'està cancel·lant la sol·licitud d'eina prèvia…"
+      "cancellingPriorTool": "S'està cancel·lant la sol·licitud d'eina prèvia…",
+      "workflow": {
+        "preparingDocument": "S'estan preparant les referències...",
+        "writingDocument": "S'està escrivint el document...",
+        "analyzingSource": "S'està analitzant el text d'origen...",
+        "translating": "S'està traduint...",
+        "reviewingTranslation": "Revisió {round} de {total}...",
+        "revisingTranslation": "S'estan aplicant els comentaris de la revisió...",
+        "extractingRows": "S'estan extraient files de {source}...",
+        "transformingTable": "S'està transformant la taula...",
+        "findingLocations": "S'estan identificant ubicacions...",
+        "updatingMap": "S'està actualitzant el mapa..."
+      }
     },
     "toolSummary": {
       "usedTools": "{count, plural, one {# eina utilitzada} other {# eines utilitzades}}",
@@ -796,7 +823,8 @@
     "listen": "Escolta",
     "processingAudio": "Processant àudio...",
     "ttsError": "Error en generar l'àudio. Torni-ho a provar.",
-    "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible"
+    "unsupportedMessageType": "Error en mostrar el missatge: tipus de missatge no compatible",
+    "addLanguageOption": "Afegeix \"{name}\"…"
   },
   "sidebar": {
     "collapseSidebar": "Plegar barra lateral",
@@ -1115,15 +1143,17 @@
     "unsavedChangesMessage": "Teniu canvis sense desar. Voleu descartar-los?",
     "characterCount": "{current}/{max}",
     "clearField": "Neteja el camp",
-    "autosaveNote": "Els canvis es desen automàticament.",
+    "autosaveNote": "Els canvis es guarden automàticament.",
     "responseSection": "Resposta",
     "voiceSection": "Veu",
     "behaviorSection": "Comportament",
     "resetChatSettings": "Restableix la configuració del xat",
-    "resetChatSettingsConfirmTitle": "Voleu restablir la configuració del xat?",
-    "resetChatSettingsConfirmMessage": "Això restablirà els valors per defecte de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les vostres converses.",
+    "resetChatSettingsConfirmTitle": "Vols restablir la configuració del xat?",
+    "resetChatSettingsConfirmMessage": "Això restaura els valors predeterminats de tot aquest panell: temperatura, instruccions personalitzades, Sobre tu, resposta del model, velocitat de transmissió, text a veu, fitxers actius i confirmacions. No afecta les converses.",
     "customInstructionsLabel": "Instruccions personalitzades*",
-    "defaultTemperatureLabel": "Temperatura predeterminada*"
+    "defaultTemperatureLabel": "Temperatura predeterminada*",
+    "Usage & Impact": "Ús i impacte",
+    "Connectors": "Connectors"
   },
   "notFound": {
     "lostDog": "Gos perdut"
@@ -1396,33 +1426,78 @@
     },
     "title": "Selecciona un model",
     "modelsDescription": "Trieu un model d'AI per a la conversa. Cada model té punts forts diferents — seleccioneu-ne un per veure els detalls.",
-    "recommended": "Recomanat"
+    "recommended": "Recomanat",
+    "familyAll": "Totes",
+    "familyFilterLabel": "Filtra els models per família",
+    "searchPlaceholder": "Cerca models",
+    "searchEmpty": "No hi ha cap model que coincideixi amb la cerca.",
+    "star": "Afavoreix {name}",
+    "unstar": "Elimina de favorits {name}",
+    "otherFamily": "Altres",
+    "hostedExternally": "Funciona a la pròpia infraestructura del proveïdor mitjançant Azure AI Foundry, no dins de l'entorn Azure de MSF.",
+    "hostedIn": {
+      "label": "Allotjat a {regions}",
+      "tooltip": "La regió o regions Azure on s'ha desplegat aquest model. Les converses es processen a la vostra pròpia regió."
+    },
+    "badges": {
+      "external": "Extern",
+      "externalTooltip": "Funciona a la pròpia infraestructura del proveïdor mitjançant Azure AI Foundry, no dins de l'entorn Azure de MSF.",
+      "regionHostedTooltip": "Allotjat a la regió Azure {region}. Les converses amb aquest model es processen allà."
+    },
+    "favorites": "Preferits",
+    "euResidencyNote": "Tots els models s'executen a la regió Azure de la UE.",
+    "hostedRegion": {
+      "label": "Regió d'allotjament",
+      "processedIn": "Aquesta conversa es processa a la regió Azure {region}.",
+      "euOnlyNote": "{name} està allotjat a la regió Azure de la UE; les converses amb aquest model es processen allà."
+    },
+    "version": {
+      "label": "Versió"
+    },
+    "reasoningModel": "Model de raonament: pensa pas a pas abans de respondre. Més lent, millor per a problemes complexos.",
+    "variant": {
+      "label": "Variant"
+    },
+    "deployment": {
+      "title": "Desplegament",
+      "source": "Origen",
+      "account": "Compte",
+      "location": "Ubicació",
+      "deployment": "Desplegament",
+      "modelVersion": "Versió del model",
+      "publisher": "Editor"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Model d'IA basat en GPT-4.1 amb cerca web en temps real via Bing. Proporciona informació actualitzada, verificació de fets i coneixement d'esdeveniments recents. Ideal per a investigació que requereixi informació recent, anàlisi de notícies i verificació de dades.",
-      "knowledgeCutoff": "Cerca web en temps real"
+      "knowledgeCutoff": "Cerca web en temps real",
+      "tagline": "Generació anterior d'OpenAI"
     },
     "gpt_5": {
       "name": "GPT-5",
       "description": "El model més avançat d'OpenAI, excel·lent en raonament complex, generació de codi i resolució de problemes tècnics. Ideal per a tasques analítiques, reptes de programació, recerca i explicacions detallades. Permet ajustar l'esforç de raonament i la llargada de la resposta.",
-      "knowledgeCutoff": "6 d’agost 2025 20:00"
+      "knowledgeCutoff": "6 d’agost 2025 20:00",
+      "tagline": "Insígnia GPT anterior"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Variant més ràpida i econòmica de GPT-5, optimitzada per a la velocitat mantenint alta qualitat. Perfecta per a tasques diàries, consultes ràpides, ús d'eines i aplicacions que requereixen resposta instantània. Excel·lent equilibri entre rendiment i eficiència.",
-      "knowledgeCutoff": "6 d’agost 2025 20:00"
+      "knowledgeCutoff": "6 d’agost 2025 20:00",
+      "tagline": "Més ràpid i de menor cost"
     },
     "gpt_5_chat": {
       "name": "GPT-5 Chat",
       "description": "Versió especialitzada de GPT-5 optimitzada per a interaccions conversacionals i intel·ligència emocional. Excel·lent en comunicació empàtica, suport per a la salut mental, escriptura creativa, generació d'idees i diàleg natural. Ideal per a converses informals, escenaris de suport i tasques que requereixen consciència emocional.",
-      "knowledgeCutoff": "1 d’octubre 2025 20:00"
+      "knowledgeCutoff": "1 d’octubre 2025 20:00",
+      "tagline": "GPT per a xat, generació anterior"
     },
     "o3": {
       "name": "o3",
       "description": "El model de raonament més avançat d'OpenAI, amb capacitats innovadores de resolució de problemes. Excel·lent per a matemàtiques complexes, raonament científic, reptes de programació i tasques lògiques de diversos passos. Finestra de context ampliada a 200.000 tokens. Permet controlar l'esforç de raonament.",
-      "knowledgeCutoff": "8 d’abril 2025 20:00"
+      "knowledgeCutoff": "8 d’abril 2025 20:00",
+      "tagline": "Raonament pas a pas profund"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1432,57 +1507,258 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Especialista en raonament que mostra el procés pas a pas. Excel·lent per a problemes de matemàtiques, trencaclosques de lògica i comprensió de conceptes complexos. Vegeu com resol problemes en temps real.",
-      "knowledgeCutoff": "20 de gener 2025"
+      "knowledgeCutoff": "20 de gener 2025",
+      "tagline": "Mostra el raonament pas a pas"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Model versàtil especialment competent en programació i redacció tècnica. Ideal per depurar codi, escriure documentació i explicar conceptes tècnics. Ràpid i fiable per a treball de desenvolupament.",
-      "knowledgeCutoff": "16 d’abril 2025 00:45"
+      "knowledgeCutoff": "16 d’abril 2025 00:45",
+      "tagline": "Alternativa de codi obert"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model versàtil de xAI conegut per respostes matisades. Idoni per a discussions obertes, projectes creatius i abordatge de problemes complexos.",
-      "knowledgeCutoff": "13 de maig 2025 00:16"
+      "knowledgeCutoff": "13 de maig 2025 00:16",
+      "tagline": "Alternativa xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Model més capaç d’Anthropic, amb raonament excel·lent, habilitats de programació i creativitat destacades. Indicat per a anàlisi complexa, recerca i tasques que requereixen comprensió profunda.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Antiga generació Opus"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model Claude equilibrat amb excel·lent rendiment en programació, anàlisi i tasques creatives. Ideal per a ús diari, amb respostes ràpides.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Generació anterior de Sonnet"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model Claude Opus de generació anterior. Excel·lent per a tasques complexes de programació, anàlisi detallada i comprensió matisada.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Generació anterior d'Opus"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model Claude ràpid i econòmic optimitzat per a tasques àgils. Ideal per a consultes senzilles, resums i aplicacions d'alt volum.",
-      "knowledgeCutoff": "gener 2025"
+      "knowledgeCutoff": "gener 2025",
+      "tagline": "Variant ràpida de Claude"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "El model més avançat d'OpenAI, excel·leix en raonament complex, generació de codi i resolució de problemes tècnics. Ideal per a tasques analítiques, reptes de programació, recerca i explicacions detallades. Permet ajustar l'esforç de raonament i la quantitat de detall en les respostes.",
-      "knowledgeCutoff": "des. 2025"
+      "knowledgeCutoff": "des. 2025",
+      "tagline": "Codi, anàlisi, recerca"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "knowledgeCutoff": "des. 2025",
-      "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional."
+      "description": "Variant especialitzada de GPT-5.2 optimitzada per a interaccions conversacionals i intel·ligència emocional. Destaca en la comunicació empàtica, l'escriptura creativa, la pluja d'idees i el diàleg natural. Ideal per a converses informals, escenaris d'orientació i tasques que requereixen consciència emocional.",
+      "tagline": "Converses, pluja d'idees"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "El model més potent d'Anthropic. Bo per a redaccions llargues, recerca i tasques que requereixen pensament acurat.",
-      "knowledgeCutoff": "Febr. 2026"
+      "knowledgeCutoff": "Febr. 2026",
+      "tagline": "Redacció i anàlisi extensa"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Un model Claude equilibrat. Adequat per a redacció diària, anàlisi i programació amb respostes ràpides.",
-      "knowledgeCutoff": "Febr. 2026"
+      "knowledgeCutoff": "Febr. 2026",
+      "tagline": "Claude equilibrat per a ús diari"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Un model de codi obert de Meta. Sòlid per escriure, resumir i preguntes ràpides.",
+      "tagline": "Alternativa de codi obert"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "El nou model insígnia d’OpenAI. Molt bo en escriptura, recerca, programació i resolució de problemes complexos.",
+      "tagline": "Insígnia GPT més recent"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "La variant GPT més petita i ràpida. Ideal per a tasques ràpides i senzilles amb un cost mínim.",
+      "tagline": "GPT més petit i ràpid"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Una variant GPT conversacional optimitzada per al diàleg. Bona per xats informals, pluja d’idees i converses de suport.",
+      "tagline": "GPT per a xat, més recent"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "Un GPT multimodal antic. Apte per a l’escriptura quotidiana i preguntes/respostes quan no cal la funcionalitat més recent.",
+      "tagline": "GPT multimodal antic"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Una variant GPT-4.1 més petita i ràpida per a tasques quotidianes.",
+      "tagline": "GPT lleuger de generació anterior"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "El model més nou i potent d’Anthropic. Excel·lent per escriure textos llargs, recerca, programació i anàlisi minuciosa.",
+      "tagline": "Claude més nou i potent"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "El model de codi obert més nou de DeepSeek. Fiable per a escriptura general i consultes tècniques.",
+      "tagline": "Alternativa de codi obert"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "El model insígnia de Mistral. Alternativa europea per escriure, resumir i preguntes generals.",
+      "tagline": "Model europeu obert"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Una revisió anterior insígnia de GPT-5. Encara molt sòlida en escriptura, anàlisi i programació.",
+      "tagline": "Primer GPT-5 insígnia"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Una revisió anterior de GPT-5 adaptada per a xat. Bona per a converses diàries i pluja d’idees.",
+      "tagline": "Primer GPT per a xat"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "La variant més petita de GPT-5. Ideal per a tasques ràpides i senzilles amb un cost mínim.",
+      "tagline": "GPT petit de generació anterior"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "La variant més petita de GPT-4.1. Adequada per a tasques ràpides i senzilles, on importen la velocitat i el cost.",
+      "tagline": "GPT més petit de generació anterior"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "Una variant petita i ràpida de GPT-4o. Apte per a tasques ràpides quotidianes quan no cal la funcionalitat més actual.",
+      "tagline": "GPT multimodal antic i lleuger"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Un model compacte de raonament. Bo per matemàtiques, lògica i problemes pas a pas a un cost menor que o3.",
+      "tagline": "Raonament ràpid i assequible"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Un model compacte de raonament anterior. Gestione problemes de matemàtiques, ciència i lògica a baix cost.",
+      "tagline": "Raonament compacte pas a pas"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "El model més intel·ligent d’Anthropic, primer de la família Claude 5. Excel·lent per a les tasques més exigents d’escriptura, recerca i programació.",
+      "tagline": "Model pioner d'Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "El Claude més equilibrat i més nou, primer de la família Claude 5. Escriptura, anàlisi i programació diària amb respostes ràpides.",
+      "tagline": "Claude equilibrat més recent"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "El model de mida mitjana de Mistral. Alternativa europea que equilibra capacitat i velocitat per a feines diàries.",
+      "tagline": "Model europeu equilibrat"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "El model petit de Mistral. Ràpid i econòmic per a resums, esborranys i preguntes senzilles.",
+      "tagline": "Model europeu petit i ràpid"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "El model més petit de Mistral. Ideal per a tasques molt ràpides i senzilles amb un cost mínim.",
+      "tagline": "Mistral petit per a l'edge"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Una revisió actualitzada del DeepSeek-R1. Mostra el seu raonament pas a pas, amb més profunditat.",
+      "tagline": "Model de raonament obert actualitzat"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Un model de codi obert més lleuger de Meta. Ràpid per escriure, resumir i preguntes diàries.",
+      "tagline": "Llama eficient de codi obert"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Un model antic de codi obert de Meta. Encara sòlid per a escriptura general i preguntes/respostes.",
+      "tagline": "Llama antic de codi obert"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "El model insígnia d’xAI. Bo per a discussions obertes, anàlisi i projectes creatius.",
+      "tagline": "Insígnia xAI"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model insígnia més recent d'OpenAI. Excel·lent per escriure, investigar, programar i resoldre problemes complexos.",
+      "tagline": "Última insígnia GPT"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (última versió)",
+      "description": "Àlies dinàmic que sempre apunta al model de xat més nou d'OpenAI. Substitueix les versions antigues gpt-*-chat a Azure.",
+      "tagline": "Sempre el GPT de xat més nou"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Versió recent d'Opus, entre la 4.6 i la 4.8. Molt bo per escriure textos llargs, recerca, programació i anàlisi acurada.",
+      "tagline": "Versió Opus recent"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Nou model de raonament de DeepSeek i substitut de la línia R1 a Azure. Mostra el seu raonament pas a pas.",
+      "tagline": "Model més recent de raonament obert"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Variant ràpida V4 de DeepSeek i substitut de la línia V3 a Azure. Ràpida per escriure textos generals i respondre qüestions tècniques.",
+      "tagline": "Alternativa de codi obert ràpida"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Ràpid (Raonament)",
+      "description": "Model de raonament ràpid de xAI. Raona pas a pas amb respostes àgils.",
+      "tagline": "Model de raonament ràpid xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Ràpid",
+      "description": "Model de xat ràpid de xAI. Respostes àgils per a preguntes i converses quotidianes.",
+      "tagline": "Model de xat ràpid xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model lleuger de xAI. Més ràpid i econòmic per a preguntes ràpides i converses informals.",
+      "tagline": "Model xAI més lleuger"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "El principal de la tríada GPT-5.6 d’OpenAI. El més potent en redacció, recerca, programació i resolució de problemes complexos.",
+      "tagline": "Nou nivell insígnia de GPT"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "El nivell equilibrat de la tríada GPT-5.6 d’OpenAI. Adequat per a l’escriptura diària, l’anàlisi i la programació amb respostes ràpides.",
+      "tagline": "GPT-5.6 equilibrat per al dia a dia"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "El nivell lleuger i ràpid de la tríada GPT-5.6 d’OpenAI. Ideal per a preguntes ràpides i tasques senzilles a baix cost.",
+      "tagline": "GPT-5.6 lleuger i ràpid"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "El nou model de mida mitjana de Mistral. Una alternativa europea que equilibra capacitat i rapidesa per a tasques diàries.",
+      "tagline": "Model europeu equilibrat"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Model d'open-weight de Moonshot AI. Destaca en tasques agentives, programació i documents extensos.",
+      "tagline": "Model agentiu d'open-weight"
     }
   },
   "searchMode": {
@@ -1822,7 +2098,20 @@
     "useDefaultStyle": "Fes servir l'estil d'escriptura per defecte",
     "noTonesCreated": "Encara no s'ha creat cap to",
     "createTonesHint": "Crea tons a Accions Ràpides",
-    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb fitxers de glossari opcionals."
+    "translateDocumentTooltip": "Traduïu documents a un altre idioma.\n\nFormats admesos: Word, Excel, PowerPoint, HTML, TXT\nMida màxima: 40 MB\n\nAdmet més de 80 idiomes amb fitxers de glossari opcionals.",
+    "translateTooltip": "Tradueix un fragment de text a un altre idioma.\n\nPer a fitxers complets (Word, Excel, PowerPoint, HTML, TXT), utilitza Tradueix Document.",
+    "cameraTooltip": "Fes una foto amb la càmera del dispositiu i adjunta-la al missatge.",
+    "noResults": "No hi ha accions coincidents",
+    "sectionPinned": "Fixats",
+    "sectionFrequent": "Ús freqüent",
+    "sectionMore": "Més",
+    "categoryWeb": "Web",
+    "categoryMedia": "Mitjans i fitxers",
+    "categoryTransform": "Transforma",
+    "pin": "Fixa a dalt",
+    "unpin": "Desfés fixació",
+    "moveToMore": "Mou a Més",
+    "moveOutOfMore": "Mostra al menú"
   },
   "Add your personal instructions to customize how the AI responds_ These are combined with core behavior guidelines that ensure helpful, accurate, and safe responses_": "Afegeix les teves instruccions personals per personalitzar com respon la IA. Aquestes es combinen amb les directrius bàsiques de comportament que garanteixen respostes útils, precises i segures.",
   "Tip: Type \"/\" to select from saved prompt templates_": "Consell: Escriu \"/\" per seleccionar d'entre les plantilles de prompt desades.",
@@ -1933,7 +2222,14 @@
     "learnMore": "Més informació",
     "advancedOptions": "Opcions avançades",
     "unofficialBadgeLabel": "No oficial",
-    "unofficialLanguageWarning": "Aquesta llengua no està oficialment suportada. La qualitat de la traducció no ha estat verificada. Si us plau, feu revisar el resultat per una persona nadiua o amb un nivell alt abans de compartir-lo."
+    "unofficialLanguageWarning": "Aquesta llengua no està oficialment suportada. La qualitat de la traducció no ha estat verificada. Si us plau, feu revisar el resultat per una persona nadiua o amb un nivell alt abans de compartir-lo.",
+    "translationSubmitted": "S’ha iniciat la traducció: els PDF es processen en segon pla.",
+    "pendingTitle": "Traducció de {filename}…",
+    "pendingHint": "Les traduccions de PDF s’executen en segon pla i poden trigar uns minuts. Pots continuar treballant — aquesta targeta s’actualitza quan el document estigui llest, fins i tot després d’una recàrrega.",
+    "asyncFailed": "La traducció del document ha fallat: {error}",
+    "jobNotFound": "la tasca de traducció ja no està disponible. Torna-ho a intentar.",
+    "retryPolling": "Torna a comprovar",
+    "pollingStalled": "No hem pogut connectar amb el servidor per comprovar el progrés. La traducció potser encara s’està executant."
   },
   "terms": {
     "officialLanguages": "Versió oficial:",
@@ -1997,6 +2293,10 @@
       "technicalDetails": "Detalls tècnics",
       "agentCountLabel": "{count} agents",
       "disconnectedToast": "{name} desconnectat/da"
+    },
+    "emptyState": {
+      "title": "No hi ha agents regionals o organitzatius disponibles",
+      "description": "Connecteu un projecte de Foundry a continuació per descobrir-ne els agents."
     }
   },
   "privacy": {
@@ -2107,5 +2407,753 @@
     "review": "Revisa",
     "itemId": "ID: {id}",
     "itemSource": "{date} de {source}"
+  },
+  "regionOverride": {
+    "warning": "Substitució de la localització activa — les vostres sol·licituds s'estan dirigint a la regió de dades de {region}. Això és una substitució manual de prova, no la vostra ubicació real.",
+    "clear": "Esborra la substitució"
+  },
+  "usageImpact": {
+    "empty": "Encara no s'ha registrat cap ús. El teu consum de tokens i les emissions estimades apareixeran aquí després de xatejar.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} càrregues de telèfon intel·ligent",
+    "requests": "Sol·licituds",
+    "promptTokens": "Tokens de prompt",
+    "completionTokens": "Tokens de completat",
+    "topModels": "Per model",
+    "byRegion": "Per regió d'allotjament",
+    "regionDefault": "Per defecte",
+    "modelRow": "{requests} sol·lic. · {grams} g",
+    "disclosure": "Estimacions basades en suposicions v{version} · des de {since} · només xat estàndard (no es compten respostes d'agents ni de base de coneixement).",
+    "reset": "Reinicia les estadístiques d’ús"
+  },
+  "extraction": {
+    "toggleLabel": "Extreu dades estructurades",
+    "trayLabel": "Extracció",
+    "trayPrefix": "Extreu",
+    "trayInfo": "L'extracció retorna fins a 3 taules estructurades. Les receptes s'emmagatzemen localment.",
+    "autoChip": "Automàtic — La IA proposa una estructura",
+    "addRecipe": "Afegeix una recepta",
+    "addRecipeTitle": "Afegeix una recepta a aquesta extracció",
+    "addRecipeFullTitle": "Fins a 3 receptes per extracció",
+    "removeRecipe": "Elimina la recepta: {name}",
+    "remove": "Elimina",
+    "section": "Receptes d'extracció",
+    "sectionSubtitle": "Plantilles desades que transformen text en brut, fitxers o URLs en taules estructurades. Pots escollir-ne fins a 3 per extracció.",
+    "newRecipe": "Nova recepta",
+    "untitledRecipe": "(Recepta sense títol)",
+    "deleteRecipe": "Suprimeix la recepta",
+    "delete": "Suprimeix",
+    "deleteConfirm": "Suprimeix?",
+    "cancel": "Cancel·la",
+    "name": "Nom",
+    "namePlaceholder": "p. ex. Pacients",
+    "description": "Descripció",
+    "optional": "(opcional)",
+    "descriptionPlaceholder": "Resum breu que es mostra al selector de receptes",
+    "instructions": "Instruccions",
+    "instructionsPlaceholder": "Què ha de cercar la IA en el material?",
+    "fields": "Camps",
+    "field": "camp",
+    "fieldsPlural": "camps",
+    "fieldName": "Nom del camp",
+    "fieldType": "Tipus de camp",
+    "fieldNamePlaceholder": "nom_camp",
+    "addField": "Afegeix camp",
+    "removeField": "Elimina camp",
+    "toggleDetails": "Mostra/Oculta detalls",
+    "fieldDetailsTitle": "Descripció, valors enumerats",
+    "fieldDescriptionPlaceholder": "Descripció (ajuda la IA a trobar aquest camp)",
+    "enumValuesPlaceholder": "Valors permesos separats per comes",
+    "required": "obligatori",
+    "suggest": "Suggestiona amb IA",
+    "suggesting": "S'està suggestionant…",
+    "suggestNeedsInstructions": "Afegeix instruccions perquè la IA sàpiga què buscar",
+    "searchRecipes": "Cerca receptes",
+    "pickerEmpty": "Encara no hi ha cap recepta. Crea'n una per començar.",
+    "pickerEmptyMatch": "No hi ha cap recepta coincident",
+    "editorEmpty": "Encara no hi ha cap recepta. Crea'n una i la IA t'ajudarà a omplir els camps.",
+    "noData": "No s'ha extret cap dada",
+    "noRecords": "No s'han trobat registres de {name}",
+    "row": "fila",
+    "rows": "files",
+    "record": "registre",
+    "records": "registres",
+    "complete": "completat",
+    "download": "Descarrega",
+    "preview": "Previsualitza",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} camps",
+    "fieldCountOne": "1 camp",
+    "andMoreFields": "+ {count} més",
+    "saveAsRecipe": "Desa com a recepta",
+    "savedAsRecipeToast": "S'ha desat com a recepta \"{name}\"",
+    "previewTruncated": "Es mostren les 3 primeres de {total} files. Descarrega per veure totes les dades.",
+    "previewEmpty": "No hi ha files per previsualitzar",
+    "proposedSchemaTip": "La IA ha proposat aquest esquema. Desa'l per reutilitzar-lo la propera vegada.",
+    "downloadAriaLabel": "Descarrega {name} com a {format}",
+    "previewAriaLabel": "Mostra/amaga la previsualització de {name}",
+    "changeFormatAriaLabel": "Canvia el format de descàrrega de {name}",
+    "materialWarningTitle": "Afegeix material per extreure",
+    "materialWarningBody": "Escriu un missatge a continuació, adjunta un fitxer o inclou una URL.",
+    "materialAttach": "Adjunta fitxer",
+    "willExtractPrefix": "S'extreurà de:",
+    "materialText": "text del missatge",
+    "materialFiles": "{count, plural, one {1 fitxer} other {# fitxers}}",
+    "materialActiveFiles": "{count, plural, one {1 fitxer actiu} other {# fitxers actius}}",
+    "dismiss": "Desactiva l'extracció"
+  },
+  "Connectors": "Connectors",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Traducció",
+        "description": "Traduïu text amb anàlisi, glossaris i rondes de revisió"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Redacta i perfecciona un document amb l'assistent"
+      },
+      "dataAnalysis": {
+        "label": "Anàlisi de dades",
+        "description": "Importa taules i explora o transforma les teves dades"
+      },
+      "map": {
+        "label": "Mapa",
+        "description": "Converteix qualsevol dada en ubicacions en un mapa"
+      }
+    },
+    "chooser": {
+      "prompt": "O inicia un espai de treball enfocat"
+    },
+    "sidebar": {
+      "newTranslation": "Nova traducció",
+      "newDocument": "Nou document",
+      "newDataAnalysis": "Nova anàlisi de dades",
+      "newMap": "Nou mapa"
+    },
+    "translation": {
+      "chooseLanguage": "Idioma de destinació",
+      "customLanguageHint": "\"{name}\" és un idioma afegit per vosaltres — l'IA intentarà qualsevol idioma, però la qualitat no està garantida.",
+      "addedByYou": "Afegit per vosaltres",
+      "glossary": "Glossari",
+      "noGlossary": "Cap glossari",
+      "manageGlossaries": "Glossaris",
+      "glossaries": "Glossaris",
+      "closeGlossaries": "Tanca els glossaris",
+      "glossariesEmpty": "Creeu un glossari per definir com es tradueixen termes específics. Els glossaris es desen en aquest dispositiu i es poden reutilitzar en altres traduccions.",
+      "newGlossary": "Nou glossari",
+      "newGlossaryName": "Glossari sense títol",
+      "glossaryName": "Nom del glossari",
+      "deleteGlossary": "Elimina el glossari",
+      "sourceTerm": "Terme d'origen",
+      "targetTerm": "Traducció",
+      "note": "Nota",
+      "noteOptional": "Nota (opcional)",
+      "addEntry": "Afegeix terme",
+      "removeEntry": "Elimina {term}",
+      "mode": "Mode de traducció",
+      "modeQuick": "Ràpid",
+      "modeAgentic": "Revisat",
+      "modeQuickHint": "Una passada de traducció, més ràpid",
+      "modeAgenticHint": "Analitza primer el text, després tradueix i fa fins a 3 rondes de revisió",
+      "translate": "Tradueix",
+      "translating": "Traducció…",
+      "sourceLabel": "Text original",
+      "targetLabel": "Traducció",
+      "sourcePlaceholder": "Enganxa o escriu el text a traduir, o puja un document.",
+      "targetEmpty": "La traducció apareixerà aquí.",
+      "uploadDocument": "Puja un document",
+      "copy": "Copia",
+      "copied": "Copiat",
+      "tooLong": "El text supera els {max} caràcters. Divideix-lo en parts o utilitza la traducció de documents per arxius complets.",
+      "analysisTitle": "Anàlisi prèvia a la traducció",
+      "register": "Registra",
+      "reviewTitle": "Rondes de revisió",
+      "roundLabel": "Ronda {round}",
+      "verdictApprove": "aprovat",
+      "verdictRevise": "revisat",
+      "railRequest": "Tradueix el text original a {language}.",
+      "railDoneAgentic": "Fet. He analitzat el text, l'he traduït i he realitzat {rounds} ronda/es de revisió. El resultat és a l'espai de treball.",
+      "railDoneQuick": "Fet. La traducció és a l'espai de treball.",
+      "railAssessRequest": "Avalua la qualitat de la traducció en {language}.",
+      "railAssessDone": "Avaluació completada: les puntuacions són a l'espai de treball amb {count} proposta/es d'edició per revisar.",
+      "roundChanges": "Canvis a la ronda {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Precisió",
+          "description": "Transmet exactament el significat original, sense errors, omissions, afegits o fragments sense traduir"
+        },
+        "fluency": {
+          "label": "Fluïdesa",
+          "description": "La gramàtica, ortografia, puntuació i cohesió són naturals en la llengua de destí"
+        },
+        "terminology": {
+          "label": "Terminologia",
+          "description": "Els termes específics són consistents i correctes; es respecta el glossari de manera exacta"
+        },
+        "style": {
+          "label": "Estil",
+          "description": "El registre, to i veu coincideixen amb l'original i es mantenen coherents"
+        },
+        "localeConventions": {
+          "label": "Convencions locals",
+          "description": "Dates, nombres, unitats i puntuació segons les normes locals de la llengua de destí"
+        },
+        "audience": {
+          "label": "Públic",
+          "description": "S'adapta a l'objectiu i al públic destinatari del text"
+        }
+      },
+      "severity": {
+        "minor": "Menor",
+        "major": "Important"
+      },
+      "assess": "Avaluar la qualitat",
+      "assessing": "Avaluant…",
+      "assessmentTitle": "Avaluació de qualitat",
+      "criteriaPicker": "Criteris per avaluar",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Edicions suggerides",
+      "noEditsSuggested": "No s'han suggerit edicions — la traducció compleix els criteris seleccionats.",
+      "acceptEdit": "Accepta",
+      "rejectEdit": "Rebutja",
+      "acceptAll": "Accepta-ho tot",
+      "rejectAll": "Rebutja-ho tot",
+      "editAccepted": "Acceptada",
+      "editRejected": "Rebutjada",
+      "editUnapplicable": "No s'ha pogut localitzar aquest fragment al text actual — no aplicat",
+      "editTranslation": "Edita",
+      "doneEditing": "Fet",
+      "pasteTranslationPlaceholder": "Escriu o enganxa una traducció per treballar-hi…",
+      "editingBlockedPendingEdits": "Resol o rebutja primer les edicions suggerides pendents",
+      "pendingCount": "{count} pendent(s)",
+      "closeReview": "Tancar revisió de qualitat",
+      "showReview": "Mostra la revisió",
+      "showReviewPending": "Mostra la revisió ({count} pendents)"
+    },
+    "document": {
+      "emptyTitle": "Descriu el document que vols",
+      "emptyBody": "Indica a l'assistent què vols que escrigui: un informe de situació, una carta per a un donant, una acta de reunió... Afegeix primer fitxers de referència si vols cites i dades extretes d'aquests.",
+      "generatePlaceholder": "Descriu el document a redactar…",
+      "revisePlaceholder": "Descriu els canvis a fer…",
+      "generate": "Genera",
+      "revise": "Revisa",
+      "writing": "Escrivint…",
+      "export": "Exporta",
+      "references": "Referències",
+      "addReference": "Afegeix fitxer",
+      "uploading": "Pujant…",
+      "removeReference": "Elimina {name}",
+      "referenceChars": "{chars} caràcters de text extret",
+      "referenceEmpty": "No s'ha pogut extreure cap text de {name}",
+      "uploadFailed": "Error en la pujada",
+      "untitledDocument": "Document sense títol",
+      "generatedSummary": "He redactat el document a l'espai de treball. Revisa'l i indica'm què cal modificar.",
+      "revisedSummary": "He revisat el document a l'espai de treball.",
+      "runFailed": "S'ha produït un error: {message}",
+      "uploadBasis": "Parteix d'un document existent",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Gramàtica i ortografia",
+          "description": "Gramàtica i ortografia correctes; es pot usar qualsevol varietat d'anglès (EUA o Regne Unit) sempre i quan sigui coherent — la barreja és l'error"
+        },
+        "consistency": {
+          "label": "Coherència",
+          "description": "Terminologia, noms, majúscules i format utilitzats de la mateixa manera a tot el text"
+        },
+        "clarity": {
+          "label": "Claredat",
+          "description": "Frases directes i no ambigües; una estructura que faciliti la comprensió"
+        },
+        "sensitivity": {
+          "label": "Sensibilitat",
+          "description": "Redacció inclusiva, sensible als conflictes i a qüestions humanitàries (comprovació opcional)"
+        },
+        "specAdherence": {
+          "label": "Adherència a l'especificació",
+          "description": "Compleix l’especificació del document adjunt: seccions requerides presents, en ordre, seguint les directrius"
+        },
+        "toneAdherence": {
+          "label": "Adherència al to",
+          "description": "Segueix les normes de veu i to adjuntes"
+        }
+      },
+      "severity": {
+        "minor": "Menor",
+        "major": "Major"
+      },
+      "assess": "Avaluar la qualitat",
+      "assessing": "Avaluant…",
+      "assessmentTitle": "Revisió de qualitat",
+      "criteriaPicker": "Criteris a avaluar",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Edicions suggerides",
+      "noEditsSuggested": "No s’ha suggerit cap edició — el document compleix els criteris seleccionats.",
+      "acceptEdit": "Acceptar",
+      "rejectEdit": "Rebutjar",
+      "acceptAll": "Acceptar tot",
+      "rejectAll": "Rebutjar tot",
+      "editAccepted": "Acceptat",
+      "editRejected": "Rebutjat",
+      "editUnapplicable": "No s’ha pogut localitzar aquest fragment al text actual — no aplicat",
+      "editingBlockedPendingEdits": "Primer resol o rebutja les edicions suggerides pendents",
+      "pendingCount": "{count} pendent(s)",
+      "closeReview": "Tancar revisió de qualitat",
+      "showReview": "Mostrar revisió",
+      "showReviewPending": "Mostrar revisió ({count} pendents)",
+      "railAssessRequest": "Avaluar la qualitat del document segons els criteris seleccionats.",
+      "railAssessDone": "Avaluació completada: les puntuacions són a l'espai de treball amb {count} edició(ns) suggerida(es) a revisar.",
+      "spec": "Especificació del document",
+      "noSpec": "Sense especificació",
+      "manageSpecs": "Especificacions",
+      "specs": "Especificacions de documents",
+      "closeSpecs": "Tancar especificacions",
+      "specsEmpty": "Crea una especificació per escriure documents amb un format fix: seccions requerides, ordre i directrius per secció (p. ex., una plantilla SitRep). Les especificacions es guarden en aquest dispositiu i són reutilitzables.",
+      "newSpec": "Nova especificació",
+      "newSpecName": "Especificació sense títol",
+      "specName": "Nom de l'especificació",
+      "specDescription": "Descripció (opcional)",
+      "deleteSpec": "Eliminar especificació",
+      "sectionHeading": "Títol de secció",
+      "sectionGuidance": "Directrius (opcional)",
+      "sectionRequired": "Obligatori",
+      "addSection": "Afegir secció",
+      "removeSection": "Eliminar secció",
+      "generalGuidance": "Directrius generals (opcional)",
+      "tone": "To",
+      "noTone": "Sense to",
+      "customCriteria": "Criteris personalitzats",
+      "manageCriteria": "Criteris personalitzats",
+      "closeCriteria": "Tancar criteris personalitzats",
+      "criteriaEmpty": "Creeu criteris personalitzats — per exemple, consideracions de marca o llenguatge de l'organització — per avaluar documents i orientar revisions. Es desa en aquest dispositiu i es pot reutilitzar.",
+      "newCriterion": "Nou criteri",
+      "newCriterionName": "Criteri sense títol",
+      "criterionName": "Nom del criteri",
+      "criterionRubric": "Rúbrica",
+      "criterionRubricPlaceholder": "Descriviu què ha de fer el document per complir aquest criteri, per exemple: \"No utilitzeu mai superlatius sobre la nostra feina; anomeneu sempre als beneficiaris 'persones a qui assistim'…\"",
+      "criterionRubricHint": "Aquesta rúbrica s'entrega literalment a la IA durant les avaluacions i les rondes de revisió.",
+      "deleteCriterion": "Suprimeix el criteri",
+      "profileTitle": "Perfil del document",
+      "profileDocType": "Tipus",
+      "profileLanguage": "Llengua",
+      "profileAudience": "Públic destinatari",
+      "profilePurpose": "Propòsit",
+      "profileRegister": "Registre",
+      "profileTone": "To",
+      "profileConventions": "Convencions",
+      "emptyHint": "Comenceu a escriure a continuació, descriviu què cal escriure al quadre inferior o inicieu-vos amb un fitxer.",
+      "addSpec": "Afegeix especificació",
+      "addCriteria": "Afegeix criteris",
+      "scopeFullDocument": "Abast: document complet",
+      "scopeSelection": "Abast: selecció — “{preview}...” ({count} paraules)",
+      "clearSelection": "Neteja selecció (treballa amb el document complet)",
+      "reviseSelectionPlaceholder": "Descriviu els canvis a la selecció…",
+      "revisedSelectionSummary": "He revisat el fragment seleccionat a l'espai de treball.",
+      "assessedSelection": "Selecció"
+    },
+    "data": {
+      "emptyTitle": "Importa dades per analitzar",
+      "emptyBody": "Aporteu un arxiu CSV, Excel o JSON, o enganxeu files directament. Un cop la taula estigui carregada, la podreu ordenar, extreure'n més files de documents i transformar-la amb instruccions en llenguatge senzill.",
+      "importFile": "Importa arxiu",
+      "importing": "Important…",
+      "pasteData": "Enganxa dades",
+      "pastePlaceholder": "Enganxeu aquí un CSV, TSV o JSON…",
+      "import": "Importa",
+      "addFromSource": "Afegeix des de la font",
+      "extractHint": "Enganxeu text o trieu un document; s’hi extrauran files que coincideixin amb les columnes actuals. Els valors desconeguts queden buits — no s’inventa res.",
+      "extractPlaceholder": "Enganxeu text no estructurat que contingui dades…",
+      "extractRows": "Extreu files",
+      "extractFromFile": "D’un arxiu…",
+      "extracting": "Extraient…",
+      "pastedSource": "Text enganxat",
+      "transform": "Transforma",
+      "transforming": "Transformant…",
+      "transformPlaceholder": "Descriviu una transformació, per exemple: \"afegeix una columna amb casos per cada 1000 habitants\"…",
+      "transformCapHint": "Les transformacions estan limitades a {max} files. Esborreu o filtreu files primer per a taules més grans.",
+      "undo": "Desfés",
+      "deleteSelected": "Suprimeix {count}",
+      "deletedRows": "S'han suprimit {count} files",
+      "selectAllRows": "Selecciona totes les files",
+      "selectRow": "Selecciona la fila {row}",
+      "rowCount": "{count} files",
+      "rowCapExceeded": "Això serien {count} files; la taula està limitada a {max}. Dividiu les dades o exporteu-les.",
+      "railExtractRequest": "Extreu les files que coincideixen amb l'esquema de la taula de: {source}",
+      "railExtractDone": "S'han afegit {count} files extretes a la taula.",
+      "railTransformDone": "S'ha transformat la taula.",
+      "columnProfileFor": "Estadístiques de la columna {column}",
+      "profileMissing": "Falten",
+      "profileDistinct": "Diferents",
+      "profileRange": "Interval",
+      "profileMean": "Mitjana",
+      "profileMedian": "Mediana",
+      "profileTopValues": "Valors principals",
+      "filterColumnFor": "Filtra {column}",
+      "filterContains": "Conté…",
+      "filterMin": "Mínim",
+      "filterMax": "Màxim",
+      "filterClear": "Neteja",
+      "clearFilters": "Neteja els filtres",
+      "showingRows": "S'estan mostrant {shown} de {total} files",
+      "scopeLabel": "Àmbit de treball",
+      "scopeTable": "Totes ({count})",
+      "scopeFiltered": "Filtrades ({count})",
+      "scopeSelection": "Seleccionades ({count})",
+      "scopedInstruction": "{instruction} (sobre {count} files seleccionades)",
+      "assess": "Avaluar la qualitat",
+      "assessing": "Avaluant…",
+      "criteria": {
+        "validity": {
+          "label": "Validesa",
+          "description": "Els valors corresponen al tipus i format esperats de la columna"
+        },
+        "consistency": {
+          "label": "Consistència",
+          "description": "El mateix valor està escrit de la mateixa manera arreu (sense variants com 'M' / 'Home', unitats barrejades o diferències de majúscules)"
+        },
+        "duplicates": {
+          "label": "Duplicats",
+          "description": "Files que registren la mateixa entitat o esdeveniment dues vegades"
+        },
+        "plausibility": {
+          "label": "Plausibilitat",
+          "description": "Valors fora de rang i impossibles en context"
+        }
+      },
+      "assessmentTitle": "Revisió de qualitat de dades",
+      "pendingCount": "{count} pendents",
+      "closeReview": "Tanca la revisió de qualitat",
+      "suggestedEdits": "Solucions suggerides",
+      "noEditsSuggested": "No s'ha suggerit cap solució — les dades compleixen els criteris seleccionats.",
+      "acceptAll": "Accepta-ho tot",
+      "rejectAll": "Rebutja-ho tot",
+      "acceptEdit": "Accepta",
+      "rejectEdit": "Rebutja",
+      "editAccepted": "Aplicat",
+      "editRejected": "Rebutjat",
+      "editUnapplicable": "La cel·la ha canviat des de l'avaluació — no aplicat",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Criteris a avaluar",
+      "severity": {
+        "minor": "Menor",
+        "major": "Major"
+      },
+      "editLocation": "fila {row} · {column}",
+      "editLocationRow": "fila {row} (elimina)",
+      "showReview": "Mostra la revisió",
+      "showReviewPending": "Mostra la revisió ({count} pendents)",
+      "assessedFiltered": "Files filtrades",
+      "assessedSelection": "Files seleccionades",
+      "assessedSample": "mostra de {shown} de {total}",
+      "railAssessRequest": "Avalua la qualitat de la taula ({count} files) segons els criteris seleccionats.",
+      "railAssessDone": "S'han proposat {count} correccions de qualitat de dades — revisa-les a l'espai de treball.",
+      "insights": "Anàlisi",
+      "chartKind": "Tipus de gràfic",
+      "chartBar": "Barres (agrupa per)",
+      "chartHistogram": "Histograma",
+      "chartLine": "Línies (al llarg del temps)",
+      "groupByColumn": "Agrupa per columna",
+      "dateColumn": "Columna de data",
+      "valueColumn": "Columna de valor",
+      "aggFn": "Agregació",
+      "aggCount": "Recompte",
+      "aggSum": "Suma",
+      "aggMean": "Mitjana",
+      "chartTruncated": "Es mostren els {max} grups principals",
+      "chartNoData": "No hi ha valors representables en gràfic a les files actuals.",
+      "chartBarAria": "Gràfic de barres agrupat per {column}",
+      "chartHistogramAria": "Histograma de {column}",
+      "chartLineAria": "Gràfic de línies de {column} al llarg del temps",
+      "editStructure": "Estructura",
+      "defineStructure": "Defineix l'estructura",
+      "schemaHint": "Defineix els camps de l'estructura de dades. Els camps obligatoris determinen la política sobre dades mancants a la importació; canviar el tipus d’un camp converteix els valors existents (les cel·les no convertibles quedaran buides).",
+      "schemaFieldName": "Nom del camp",
+      "schemaFieldType": "Tipus de camp",
+      "schemaRequired": "Obligatori",
+      "schemaAddField": "Afegeix camp",
+      "schemaDeleteField": "Elimina el camp {field}",
+      "schemaApply": "Aplica l'estructura",
+      "schemaCancel": "Cancel·la",
+      "schemaEdited": "S'ha editat l'estructura de la taula",
+      "schemaCellsConverted": "No s'han pogut convertir {count} cel·les al nou tipus i ara estan buides.",
+      "missingFieldPolicy": "Dades mancants",
+      "policyStrict": "Estricte — rebutja files incompletes",
+      "policyFlag": "Marca — importa i marca",
+      "policyLenient": "Lax — importa sense avisar",
+      "droppedIncompleteRows": "S'han descartat {count} files mancants dels camps obligatoris: {fields}",
+      "dismiss": "Descarta",
+      "requiredColumn": "Camp obligatori",
+      "flagMissingRequired": "El camp obligatori està buit",
+      "flagPendingEdit": "Hi ha una correcció suggerida pendent per a aquesta cel·la — consulta la revisió de qualitat",
+      "fromPhoto": "Des de foto",
+      "fromPhotoHint": "Fotografia un formulari o taula en paper — el seu contingut es convertirà en dades estructurades que podràs comprovar amb la foto",
+      "readingPhoto": "S'està llegint la foto…",
+      "photoBatchName": "{count} fotos",
+      "railPhotoRequest": "Extreu dades estructurades de {count} foto(es): {name}",
+      "railPhotoDone": "S'han afegit {count} registre(s) de la/les foto(s). Comproveu-los amb la foto a l'espai de treball.",
+      "sourcesLabel": "Fonts",
+      "openPhotoQc": "Comprova les dades amb {name}",
+      "qcRowsFromPhoto": "{count} files",
+      "qcClose": "Tanca la comprovació de la foto",
+      "qcZoomIn": "Amplia",
+      "qcZoomOut": "Redueix",
+      "qcPrevPhoto": "Foto anterior",
+      "qcNextPhoto": "Foto següent",
+      "qcImageLoading": "S'està carregant la foto…",
+      "qcImageFailed": "No s'ha pogut carregar la foto.",
+      "qcImageAlt": "Foto d'origen: {name}",
+      "qcHint": "La taula mostra només les files d'aquesta foto — compareu cada valor amb la foto i editeu o suprimiu les files que no coincideixin.",
+      "sourceFilterChip": "Files de {name}",
+      "clearSourceFilter": "Mostra totes les files de nou",
+      "viewAsRecord": "Vista de formulari",
+      "viewAsTable": "Vista de taula",
+      "recordEmpty": "Encara no hi ha registres.",
+      "recordOf": "Registre {index} de {count}",
+      "recordPrev": "Registre anterior",
+      "recordNext": "Registre següent",
+      "recordBooleanUnset": "(buit)",
+      "flagsChip": "{count} avisos",
+      "flagsChipOpenReview": "Obre la revisió de qualitat",
+      "flagsChipMissingOnly": "Hi ha camps obligatoris buits — ompliu-los o ajusteu l'estructura",
+      "autoCheck": "Comprovació automàtica de les noves dades",
+      "autoCheckHint": "Després d'extreure dades de fotos o documents, executa automàticament una comprovació de qualitat a les noves files",
+      "checkingNewRows": "S'estan comprovant les files afegides per si tenen problemes de qualitat…",
+      "ingestCheckFailed": "La comprovació automàtica de qualitat ha fallat ({message}) — la podeu executar manualment amb Avalua la qualitat.",
+      "assessedIngest": "Files recent afegides"
+    },
+    "map": {
+      "emptyTitle": "Situeu les vostres dades en un mapa",
+      "emptyBody": "Enganxeu un sitrep, una llista de línies, notes d'una reunió, o qualsevol text amb noms de llocs — o pengeu un document. Es detectaran les ubicacions i es mapificaran amb un grau de confiança; després les podeu exportar a ArcGIS o altres eines GIS.",
+      "inputPlaceholder": "Enganxeu text amb noms de llocs…",
+      "uploadFile": "Puja un fitxer",
+      "pastedSource": "Text enganxat",
+      "mapIt": "Mapa-ho",
+      "finding": "S'estan cercant ubicacions…",
+      "featureCount": "{count} ubicacions",
+      "featureCapExceeded": "El mapa està limitat a {max} ubicacions.",
+      "noneFound": "No s'ha trobat cap ubicació en aquest material.",
+      "lowConfidenceNotice": "{count} ubicació(ns) amb coordenades de confiança baixa — comproveu-les abans de fer servir el mapa.",
+      "tilesOffline": "Les tessel·les del mapa no estan disponibles — la llista d'ubicacions encara funciona.",
+      "disclaimer": "Les coordenades són estimades per IA a partir del coneixement del model, no d'un servei de geocodificació — verifiqueu-les abans de fer-les servir operativament. Les tessel·les del mapa es carreguen des d'un servidor de tessel·les; les vostres dades romanen en aquest dispositiu.",
+      "flyTo": "Mostra {name} al mapa",
+      "removeFeature": "Elimina {name}",
+      "expandFeature": "Mostra els detalls complets de {name}",
+      "collapseFeature": "Redueix els detalls de {name}",
+      "detailsParent": "Part de {parent}",
+      "railRequest": "Mapifica les ubicacions a: {source}",
+      "railSearchRequest": "Cerca al web i mapifica les ubicacions de: {query}",
+      "railDone": "S'han cartografiat {count} ubicació(ns). Reviseu les de baixa confiança a la llista.",
+      "searchToggle": "Mode de cerca web",
+      "searchToggleHint": "Cerqueu al web en comptes d'enganxar text; es cartografien els resultats fonamentats.",
+      "searchPlaceholder": "Cerqueu al web, per exemple, \"brots de còlera Àfrica Oriental 2026\"...",
+      "searchAndMap": "Cerca i cartografia",
+      "searching": "Cercant...",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Connexió: {kind}",
+        "unresolved": "{count} connexions feien referència a llocs que no són al mapa i s'han omès."
+      },
+      "confidence": {
+        "high": "Alta",
+        "medium": "Mitjana",
+        "low": "Baixa"
+      },
+      "prominence": {
+        "primary": "Ubicació principal",
+        "secondary": "Ubicació secundària",
+        "mention": "Menció ocasional"
+      },
+      "prominenceMentionHint": "El material només esmenta aquest lloc de passada — es mostra més petit al mapa i s'exclou del marc inicial.",
+      "dates": {
+        "since": "des de {date}",
+        "range": "{start} – {end}",
+        "ongoing": "En curs"
+      },
+      "filters": {
+        "label": "Filtra per categoria",
+        "other": "Altres",
+        "clear": "Neteja",
+        "showing": "{shown} de {total} ubicacions",
+        "noneMatch": "No hi ha ubicacions que coincideixin amb els filtres actuals."
+      },
+      "dateFilter": {
+        "label": "Dates",
+        "from": "Des de",
+        "to": "Fins a",
+        "fromAria": "Mostra només els esdeveniments a partir d'aquesta data",
+        "toAria": "Mostra només els esdeveniments fins a aquesta data",
+        "clear": "Neteja les dates",
+        "eraChip": "Mostra només els esdeveniments de {label}"
+      },
+      "timeline": {
+        "toggle": "Time lapse",
+        "play": "Reprodueix el time lapse",
+        "pause": "Pausa el time lapse",
+        "eras": "Eres de la línia temporal",
+        "jumpTo": "Vés a {label}",
+        "slider": "Posició a la línia temporal",
+        "showUndated": "Mostra ubicacions sense data",
+        "activeCount": "{count} actives"
+      },
+      "granularity": {
+        "site": "Emplaçament",
+        "city": "Ciutat/poble",
+        "district": "Districte",
+        "region": "Regió",
+        "country": "País"
+      },
+      "granularityAreaHint": "Una zona, mostrada com un cercle d'extensió aproximada al voltant del seu centreide — no una ubicació exacta ni un límit precís.",
+      "containerHint": "Conté altres ubicacions cartografiades, per això només es mostra el contorn.",
+      "legend": {
+        "toggle": "Llegenda",
+        "title": "Com llegir el mapa",
+        "color": "Color: confiança en la coordenada (blau alta, ambre mitjana, vermell baixa)",
+        "size": "Mida del punt: centralitat del lloc en el material",
+        "area": "Cercle discontínu: extensió aproximada d’un districte, regió o país",
+        "container": "Contorn tènue: àrea amb continguts cartografiats individualment"
+      }
+    },
+    "shell": {
+      "showConversation": "Mostra la conversa",
+      "hideConversation": "Amaga la conversa",
+      "workspaceTab": "Espai de treball",
+      "conversationTab": "Conversa",
+      "paneTabsLabel": "Pestanyes del flux de treball",
+      "railEmpty": "Els missatges i el progrés de l’assistent apareixeran aquí.",
+      "railInputPlaceholder": "Envia un missatge a l’assistent…",
+      "assistantThinking": "Pensant…",
+      "sendMessage": "Envia el missatge",
+      "stopGenerating": "Atura la generació",
+      "loadingWorkspace": "Carregant l’espai de treball…",
+      "unknownType": "Aquesta conversa utilitza un flux de treball que aquesta versió no reconeix. A continuació es mostra l’historial de la conversa.",
+      "untitled": "Nova conversa",
+      "toggleMenu": "Alterna el menú",
+      "model": "Model per a aquest flux de treball"
+    }
+  },
+  "connectors": {
+    "title": "Connectors",
+    "description": "Connecta eines externes a través del Model Context Protocol (MCP). Les eines connectades estaran disponibles als models en el xat, i cada ús es farà només amb la teva aprovació.",
+    "localOnlyNote": "Inicieu sessió directament amb cada proveïdor. Les claus d’accés s’encripten i només es desen en aquest dispositiu; es transmeten per l’app amb cada sol·licitud, però mai no s’hi desen ni s’hi registren.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Cerca repositoris, llegeix i crea incidències i pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Cerca, crea i actualitza tasques i projectes."
+      }
+    },
+    "connect": "Connecta",
+    "connected": "Connectat",
+    "tokenEndsIn": "acaba en ••••{last4}",
+    "disconnect": "Desconnecta",
+    "toolCount": "{count, plural, =1 {1 eina disponible} other {# eines disponibles}}",
+    "patLabel": "Token d’accés personal",
+    "createTokenLink": "Crea un token",
+    "tokenScopeHint": "Utilitza un token amb permisos limitats, només pels accessos que necessiten aquestes eines.",
+    "validating": "Comprovant la connexió…",
+    "validationFailed": "No s'ha pogut connectar. Comproveu l'adreça i torneu-ho a intentar.",
+    "authFailed": "El servidor ha rebutjat el testimoni. Comproveu-lo i torneu-ho a intentar.",
+    "tokenRequired": "Cal un testimoni",
+    "enableServer": "Disponible al xat",
+    "arbitraryTitle": "Altres servidors MCP",
+    "arbitraryToggle": "Permet servidors MCP arbitraris",
+    "arbitraryWarning": "Qualsevol persona que gestioni un servidor MCP pot veure els missatges enviats a les seves eines. Connecteu només servidors de confiança. Cada acció d'eina continua requerint la vostra aprovació.",
+    "addServer": "Afegeix servidor MCP",
+    "editServer": "Edita servidor MCP",
+    "serverName": "Nom",
+    "serverUrl": "URL del servidor",
+    "nameRequired": "Cal un nom",
+    "urlRequired": "Cal una URL",
+    "invalidUrl": "Introduïu una adreça https:// pública",
+    "namePlaceholder": "El meu servidor MCP",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Testimoni d'accés (opcional)",
+    "keepTokenPlaceholder": "Deixeu en blanc per mantenir el testimoni actual",
+    "disconnectedToast": "{name} desconnectat",
+    "save": "Desa",
+    "connectWithProvider": "Connecta amb {name}",
+    "useTokenInstead": "Utilitza un testimoni d'accés en lloc d'això",
+    "oauthWaiting": "S'espera autorització…",
+    "oauthFailed": "Error d'inici de sessió. Torneu-ho a intentar.",
+    "oauthDenied": "L'accés ha estat denegat pel proveïdor.",
+    "oauthTimeout": "Temps excedit en iniciar la sessió. Torneu-ho a intentar.",
+    "oauthCancelled": "S'ha cancel·lat l'inici de sessió.",
+    "oauthUnavailable": "L'inici de sessió no està disponible per a aquest connector en aquest desplegament. Utilitzeu un testimoni d'accés o demaneu a l'administrador que configuri l'aplicació OAuth.",
+    "ownAppToggle": "Utilitza la teva pròpia aplicació OAuth",
+    "ownAppHint": "Registra una aplicació OAuth al teu compte de {name} (organització, espai de treball o instància empresarial) amb la URL de retorn següent, i enganxa aquí les credencials. Deixa tancat per utilitzar l'aplicació integrada.",
+    "ownAppCustomHint": "Opcionalment pots indicar a continuació les credencials pròpies de l'aplicació OAuth; deixa en blanc per registrar automàticament amb el servidor.",
+    "ownAppInUse": "Connectat amb la teva pròpia aplicació OAuth.",
+    "clientIdLabel": "ID de client",
+    "clientSecretLabel": "Secret de client (si la teva aplicació en té)",
+    "redirectUriLabel": "URL de retorn/redirecció a registrar",
+    "reconnect": "Torna a connectar",
+    "needsReauth": "Cal tornar a connectar",
+    "disconnectOauthNote": "Desconnectar elimina l'accés només d'aquest dispositiu. Per revocar completament l'accés, gestiona les aplicacions autoritzades al teu compte de {name}.",
+    "authModeLabel": "Autenticació",
+    "authModeNone": "Cap",
+    "authModeBearer": "Testimoni d'accés",
+    "authModeOauth": "Inicia sessió amb el proveïdor (OAuth)",
+    "oauthCustomHint": "Iniciaràs sessió amb el proveïdor del servidor en una finestra emergent després de desar.",
+    "saveAndSignIn": "Desa i inicia sessió",
+    "oauthCallback": {
+      "title": "Autorització completada",
+      "missingState": "No hi ha res per autoritzar",
+      "close": "Podeu tancar aquesta finestra i tornar a l'aplicació.",
+      "closeButton": "Tanca la finestra"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Connecta un origen de model",
+    "addAnother": "Afegeix un altre origen de model",
+    "edit": "Edita",
+    "disconnect": "Desconnecta {name}",
+    "disconnectedToast": "S’ha desconnectat {name}",
+    "modelCountLabel": "{count} models",
+    "loadingModels": "Carregant models...",
+    "noModelsAvailable": "No hi ha models disponibles d’aquest origen",
+    "sourceUnreachable": "No s’ha pogut accedir a aquest origen. Potser han canviat els permisos o el servei no està disponible temporalment.",
+    "retry": "Torna a provar",
+    "connectFoundryAccount": "Connecta un compte de Microsoft Azure Foundry",
+    "connectFoundryDescription": "Descobreix desplegaments de models d’un compte Azure Foundry al qual tens accés. Els teus permisos d’Azure autoritzen cada sol·licitud: les restriccions de models de l’aplicació no s’apliquen aquí.",
+    "selectModelsDescription": "Escull quins desplegaments de models d’aquest compte apareixeran al teu selector de models.",
+    "editConnection": "Edita la connexió",
+    "nameLabel": "Nom",
+    "namePlaceholder": "p. ex. Sandbox del meu equip",
+    "nameRequired": "Cal especificar el nom de l’origen",
+    "foundryAccountLabel": "Compte Foundry",
+    "enterManually": "Escriu manualment",
+    "browseResources": "Explora els recursos",
+    "subscriptionIdLabel": "ID de subscripció",
+    "resourceGroupLabel": "Grup de recursos",
+    "accountNameLabel": "Nom del compte",
+    "subscriptionRequired": "Tria una subscripció",
+    "accountRequired": "Tria un compte Foundry",
+    "accountSelectionRequired": "Selecciona un compte de la llista.",
+    "selectAllRequired": "Selecciona una subscripció, grup de recursos i compte.",
+    "connectionFailed": "No s’ha pogut accedir a aquest compte. Comprova que les dades siguin correctes i que hi tinguis accés.",
+    "duplicateSource": "Aquest compte ja està connectat com a «{name}».",
+    "connectionSuccessModels": "Connectat: s’han trobat {count} desplegaments de models",
+    "connectionSuccessEmpty": "Connectat, però no s’ha trobat cap desplegament de models en aquest compte.",
+    "checkingConnection": "Verificant la connexió...",
+    "next": "Següent",
+    "back": "Enrere",
+    "cancel": "Cancel·la",
+    "connect": "Connecta",
+    "save": "Desa",
+    "scanningResources": "S'estan escanejant les teves subscripcions d'Azure...",
+    "discoveryPartialWarning": "No s'ha pogut escanejar {count, plural, one {# subscripció} other {# subscripcions}}. Utilitza l'entrada manual si falta el teu compte.",
+    "discoveryTruncatedWarning": "Hi havia massa recursos per escanejar completament. Utilitza l'entrada manual si falta el teu compte.",
+    "noAccountsDiscovered": "No s'han trobat comptes Foundry a les teves subscripcions. Utilitza l'entrada manual si coneixes el camí.",
+    "retryScan": "Torna a escanejar",
+    "searchAccountsPlaceholder": "Cerca comptes...",
+    "modelsSelectedCount": "{selected} de {total} models seleccionats",
+    "selectAll": "Selecciona-ho tot",
+    "deselectAll": "Desselecciona-ho tot",
+    "autoAddLabel": "Afegeix automàticament nous models",
+    "autoAddDescription": "Els desplegaments de models afegits més endavant a aquest compte apareixeran automàticament. Els models desmarcats seguiran exclosos."
   }
 }

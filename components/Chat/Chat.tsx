@@ -19,6 +19,7 @@ import { useAutoDismissError } from '@/client/hooks/ui/useAutoDismissError';
 import { useAutoFocusChatInput } from '@/client/hooks/ui/useAutoFocusChatInput';
 import { useKeyboardShortcuts } from '@/client/hooks/ui/useKeyboardShortcuts';
 import { useModalState } from '@/client/hooks/ui/useModalSync';
+import { usePasteChatInput } from '@/client/hooks/ui/usePasteChatInput';
 import { useUI } from '@/client/hooks/ui/useUI';
 
 import { getUserDisplayName } from '@/lib/utils/app/user/displayName';
@@ -36,6 +37,7 @@ import { ChatMessages } from './ChatMessages';
 import { ChatTopbar } from './ChatTopbar';
 import { EmptyState } from './EmptyState/EmptyState';
 import { SuggestedPrompts } from './EmptyState/SuggestedPrompts';
+import { WorkflowChooser } from './EmptyState/WorkflowChooser';
 import { LoadingScreen } from './LoadingScreen';
 import { ModelSelect } from './ModelSelect';
 import { ModelSwitchPrompt } from './ModelSwitchPrompt';
@@ -429,6 +431,7 @@ export function Chat({
   });
 
   useAutoFocusChatInput({ textareaRef, enabled: !isStreaming });
+  usePasteChatInput({ textareaRef, enabled: !isStreaming });
 
   const { clearConversation } = useClearConversation();
 
@@ -659,6 +662,9 @@ export function Chat({
                 <div className="relative z-10">
                   <SuggestedPrompts onSelectPrompt={handleSelectPrompt} />
                 </div>
+
+                {/* Workflow entry points (LD-gated inside the component) */}
+                <WorkflowChooser />
               </div>
             </div>
           ) : (

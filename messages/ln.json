@@ -437,7 +437,22 @@
     "noProjectsFound": "Ba projets ezwami te. Ko salela \"default\".",
     "selectAllRequired": "Pona subscription, compte, mpe projet.",
     "subscriptionRequired": "Pona abonnema",
-    "accountRequired": "Pona compte ya Foundry"
+    "accountRequired": "Pona compte ya Foundry",
+    "projectSelectionRequired": "Pona mosala na liste.",
+    "scanningResources": "Ezali kotala ba abonnements Azure na yo...",
+    "searchProjectsPlaceholder": "Luka ba projets...",
+    "noProjectsDiscovered": "Projet moko ya Foundry emonani te kati na ba abonnements na yo. Salela koyoka ndenge soki oyebi ndenge ya kokota.",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# abonnements}} ekokaki te koskanama. Salela kokota ndenge soki projet na yo ezali te.",
+    "discoveryTruncatedWarning": "Ba ressources ezali mingi koleka mpo osilisa skane. Salela kokota ndenge soki projet na yo ezali te.",
+    "retryScan": "Kozongela skane",
+    "next": "Sima",
+    "back": "Zonga sima",
+    "selectAgentsDescription": "Pona ba agents ya projet oyo oyo ekoumela na kopona model na yo.",
+    "selectAll": "Pona nyonso",
+    "deselectAll": "Bolongola pona nyonso",
+    "agentsSelectedCount": "{selected} na {total} ba agents baponami",
+    "autoAddLabel": "Kobetela ba agents sika na ndenge ya automatisé",
+    "autoAddDescription": "Ba agents oyo bakosakana projet oyo nsima bakomema automatik. Ba agents oyo oponi te bakotikala libanda."
   },
   "Quick Actions": "Misala ya noki",
   "Type / in chat to access your prompts": "Koma / na chat mpo kozwa prompts na yo",
@@ -805,7 +820,7 @@
     "stopGenerationDontAskAgainButton": "Kotuna lisusu te soki natiki na bouton",
     "stopGenerationDontAskAgainKeyboard": "Kotuna lisusu te soki natiki na clavier",
     "generateResponseButton": "Bimisa eyano",
-    "downloadResponse": "Télémá eyano",
+    "downloadResponse": "Kokɔta biyano",
     "activity": {
       "callingTool": "Kobenga outil…",
       "callingService": "Kobenga service oyo ezali libanda…",
@@ -818,7 +833,19 @@
       "listingTools": "Kokanga outils oyo ezali…",
       "analyzingFiles": "Kotalela ba fichiers na yo…",
       "searchingKnowledge": "Kozwa makambo na base de connaissance…",
-      "cancellingPriorTool": "Kokanga motindo ya outil ya liboso…"
+      "cancellingPriorTool": "Kokanga motindo ya outil ya liboso…",
+      "workflow": {
+        "preparingDocument": "Kopakisa ba références…",
+        "writingDocument": "Kokoma document…",
+        "analyzingSource": "Kosala analyse ya texte ya liboso…",
+        "translating": "Kokokisa boyokani…",
+        "reviewingTranslation": "Rond ya liseki {round} na {total}…",
+        "revisingTranslation": "Kosalisa ba conseils ya liseki…",
+        "extractingRows": "Kobima ba lignes uta na {source}…",
+        "transformingTable": "Kokoma tableau…",
+        "findingLocations": "Koyeba bisika…",
+        "updatingMap": "Kobongisa carte…"
+      }
     },
     "toolSummary": {
       "usedTools": "Outils esalelamaki: {count, plural, one {# outil} other {# ba outils}}",
@@ -879,7 +906,8 @@
     "listen": "Koyoka",
     "processingAudio": "Kobongisa molangi ya mino...",
     "ttsError": "Kasaleli molangi ya mino esalami malamu te. Meká lisusu.",
-    "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te"
+    "unsupportedMessageType": "Mbeba kobimisa nsango: Motindo ya nsango oyo esengeli te",
+    "addLanguageOption": "Bakisa \"{name}\"…"
   },
   "transcript": {
     "originalTranscript": "Transkripsheni ya ebandeli",
@@ -1293,15 +1321,17 @@
     "unsavedChangesMessage": "Ozali na bambongwana ebombami te. Olingi kolongola yango?",
     "characterCount": "{current}/{max}",
     "clearField": "Kolongola esika",
-    "autosaveNote": "Mabongoli ezali kokangama na ndenge oyo etikali.",
+    "autosaveNote": "Mbongwana ekɔmaka na ndenge ya kobongisa moto moko.",
     "responseSection": "Eyano",
-    "voiceSection": "Mongongo",
-    "behaviorSection": "Mibeko",
-    "resetChatSettings": "Zwisa malamu ya lotomo ya lisolo",
-    "resetChatSettingsConfirmTitle": "Olingi kozongisa malamu ya lotomo ya lisolo?",
-    "resetChatSettingsConfirmMessage": "Ekosilisa matambwisi ya liboso mpo na biloko nyonso awa: temperature, mabongisi ya moko, Soki Oyo Ozali, eyano ya model, vitesse ya ebimiseli, koleka maloba na mongongo, bafichiers actives, mpe makokisami. Ikosalela na ndenge te makambo na misolo ya bino.",
+    "voiceSection": "Dimi ya mongongo",
+    "behaviorSection": "Bizaleli",
+    "resetChatSettings": "Kobongisa lisusu baparamètre ya lisolo",
+    "resetChatSettingsConfirmTitle": "Oboyi kobongisa lisusu baparamètre ya lisolo?",
+    "resetChatSettingsConfirmMessage": "Ekosilisa baparamètre ya liboso mpo na biloko nyonso awa: température, mayano ya moto moko, Tala yo, eyano ya modèle, mbangu ya ndenge ya koloba, texte-to-speech, bafichiers oyo ezali kosalela, mpe botya ndakisa. Ekobosana naino misolo ya lisolo na yo te.",
     "customInstructionsLabel": "Biyetoli na moto moko*",
-    "defaultTemperatureLabel": "Temperature ya kobanda*"
+    "defaultTemperatureLabel": "Temperature ya kobanda*",
+    "Usage & Impact": "Kosalela & Mfumo",
+    "Connectors": "Bakonɛktɛrɛ"
   },
   "emptyState": {
     "greeting": "Ndenge nini nakoki kosalisa yo?",
@@ -1447,33 +1477,78 @@
     },
     "title": "Pona modèle",
     "modelsDescription": "Pona modèle ya AI mpo na lisolo na yo. Nzoka ndambo ya modèles ezali na makasi ekeseni — poná moko mpo omóna bisika na yango.",
-    "recommended": "Eponami"
+    "recommended": "Eponami",
+    "familyAll": "Nionso",
+    "familyFilterLabel": "Pona bamodelo na libota",
+    "searchPlaceholder": "Senga misala ya modèle",
+    "searchEmpty": "Modèle moko te eyokani na recherche na yo.",
+    "star": "Kobakisa {name} na bilakisi",
+    "unstar": "Kolongola {name} na bilakisi",
+    "otherFamily": "Mosusu",
+    "hostedExternally": "Ezali kosala na infrastructure ya fournisseur na bango moko na nzela ya Azure AI Foundry, te na environnement ya MSF Azure.",
+    "hostedIn": {
+      "label": "Epai ekoki kopesama: {regions}",
+      "tooltip": "Region(s) Azure oyo modèle oyo ekopisami. Masolo ekozwa traitment na region na yo moko."
+    },
+    "badges": {
+      "external": "Ya libanda",
+      "externalTooltip": "Ezali kosala na infrastructure ya fournisseur na bango moko na nzela ya Azure AI Foundry, te na environnement ya MSF Azure.",
+      "regionHostedTooltip": "eopesi na region ya Azure {region}. Masolo na modèle oyo ekozwa traitement kuna."
+    },
+    "favorites": "Bilakisi",
+    "euResidencyNote": "Ba modèles nionso ezali kosala na region EU Azure.",
+    "hostedRegion": {
+      "label": "Region epesamaki",
+      "processedIn": "Lisolo oyo ekozwa traitement na region ya Azure {region}.",
+      "euOnlyNote": "{name} eopesi na region ya Azure ya EU; masolo na yango ekozwa traitement kuna."
+    },
+    "version": {
+      "label": "Version"
+    },
+    "reasoningModel": "Modèle ya mawa-mawa: ezalaka kokanisa mokolo-mokolo liboso eyanola. Ezali ntembe-moko, kasi eleki malamu na mikakatano.",
+    "variant": {
+      "label": "Variante"
+    },
+    "deployment": {
+      "title": "Kopesa na misala",
+      "source": "Eteni ya sika",
+      "account": "Compte",
+      "location": "Esika",
+      "deployment": "Kopesa na misala",
+      "modelVersion": "Versio ya modèle",
+      "publisher": "Moteyi"
+    }
   },
   "models": {
     "gpt_4_1": {
       "name": "GPT-4.1",
       "description": "Modɛlɛ AI ya GPT-4.1 oyo ekoki koluka makambo ya sika na bing. Epesi makambo ya mikolo, kokanga solo, mpe koyeba makambo ya mokili. Malamu mpo na bolukiluki esengaka lisusu sika, kotalela sango, mpe kokanga solo.",
-      "knowledgeCutoff": "Kofungola Internet na tango ya sik’oyo"
+      "knowledgeCutoff": "Kofungola Internet na tango ya sik’oyo",
+      "tagline": "Molandi ya liboso ya OpenAI"
     },
     "gpt_5_2": {
       "name": "GPT-5.2",
       "description": "Modɛlɛ ya OpenAI oyo eleki nyonso, elongi na makanisi makasi, kotonga kode, mpe kobongisa mituna ya technique. Malamu mpo na misala ya analyse, mikakatano ya programmation, bolukiluki, mpe polele ya minoko. Esalelaka makanisi makasi na ndenge batu balingi mpe motindo ya biyano.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Kopesa code, analyse, recheche"
     },
     "gpt_5_mini": {
       "name": "GPT-5 Mini",
       "description": "Esalemi mpo ekende noki mpe elia mbongo moke koleka GPT-5, kasi ezali qualité mingi. Ebongi mpo na misala ya mokolo na mokolo, mituna ya noki, kotinda na bitulolo, mpe misala esengaka biyano ya noki. Elakisa bosangani ya mosala malamu mpe elamu.",
-      "knowledgeCutoff": "Aug 6, 2025 8:00 PM"
+      "knowledgeCutoff": "Aug 6, 2025 8:00 PM",
+      "tagline": "Mbangu mpe elonge ya motuya moke"
     },
     "gpt_5_2_chat": {
       "name": "GPT-5.2 Chat",
       "description": "Modɛlɛ ya GPT-5.2 esalelami mpo na kosolola na batu mpe kokanga makanisi. Elongi na kosolola na moyekoli, kosunga na makanisi na motema, kotonga maloba, koluka makanisi mapya, mpe kotambola na dialoge naturel. Ebongi mpo na kosolola ya mikili, kobatela makanisi ya motema, mpe misala esengaka kokanga makanisi.",
-      "knowledgeCutoff": "Dec 2025"
+      "knowledgeCutoff": "Dec 2025",
+      "tagline": "Dialogues, kobimisa makanisi"
     },
     "o3": {
       "name": "o3",
       "description": "Modɛlɛ ya reasoning ya OpenAI oyo eleki na solution ya mikakatano. Eleki malamu na mathématique ya pasi, makanisi ya science, mikakatano ya kode, mpe misala ya logique mingi. Esaleli contexte ya 200K. Esalelaka makanisi na ndenge bato balingi.",
-      "knowledgeCutoff": "Apr 8, 2025 8:00 PM"
+      "knowledgeCutoff": "Apr 8, 2025 8:00 PM",
+      "tagline": "Kokanga ntina mbala-mbala, lininso lokuta te"
     },
     "llama_4_maverick": {
       "name": "Llama 4 Maverick",
@@ -1483,47 +1558,256 @@
     "deepseek_r1": {
       "name": "DeepSeek-R1",
       "description": "Mok专家 ya makanisi oyo alakisaka mosala na ye etape na etape. Ebongi mingi mpo na mikakatano ya mathématique, bafungola logique, mpe koyeba makambo pasi. Tala ndenge anakanisaka likambo na tango ya sik’oyo.",
-      "knowledgeCutoff": "Jan 20, 2025"
+      "knowledgeCutoff": "Jan 20, 2025",
+      "tagline": "Emonisaka ntina mbala-mbala"
     },
     "deepseek_v3_1": {
       "name": "DeepSeek-V3.1",
       "description": "Modɛlɛ makasi ya kosala misala nyonso, mingimingi kodé mpe kokoma na technique. Malamu mpo na kobongisa kode, kokoma documentation, mpe kolimbola makambo ya technique. Ezali noki mpe ndeko mpo na misala ya développement.",
-      "knowledgeCutoff": "Apr 16, 2025 12:45 AM"
+      "knowledgeCutoff": "Apr 16, 2025 12:45 AM",
+      "tagline": "Alternatif open-source"
     },
     "grok_3": {
       "name": "Grok 3",
       "description": "Model ya xAI oyo ebongi na ba ekiseli ya ndenge na ndenge. Eleki malamu mpo na masolo ya kofungola, misala ya bokeli, mpe mituna makasi.",
-      "knowledgeCutoff": "13 Mai, 2025 12:16 AM"
+      "knowledgeCutoff": "13 Mai, 2025 12:16 AM",
+      "tagline": "Alternatif ya xAI"
     },
     "claude_opus_4_5": {
       "name": "Claude Opus 4.5",
       "description": "Model ya Anthropic oyo ezali na makoki mingi ya kokanisa, kotanga code, mpe misala ya bokeli. Epesaka eyano malamu na bisaleli ya boyekoli mpe ba analyses ya pasi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Molandi ya Opus ya kala"
     },
     "claude_sonnet_4_5": {
       "name": "Claude Sonnet 4.5",
       "description": "Model ya Claude oyo ezalaka na bokasi na misala na yango nyonso. Eleki malamu mpo na misala ya mokolo na mokolo na eyano ya nokinoki.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Sonnet ya molandi ya kala"
     },
     "claude_opus_4_1": {
       "name": "Claude Opus 4.1",
       "description": "Model ya liboso ya Claude Opus. Ebongi malamu mpo na misala ya code ya pasi, analyse ya ndenge na ndenge mpe koyeba bisika mingi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Opus ya molandi ya kala"
     },
     "claude_haiku_4_5": {
       "name": "Claude Haiku 4.5",
       "description": "Model ya Claude ya nokinoki mpe ya motuya ya moke mpo na misala ya nokinoki. Eleki malamu mpo na mituna ya pete, ko zipa makambo, mpe ba application ya mingi.",
-      "knowledgeCutoff": "Janvier 2025"
+      "knowledgeCutoff": "Janvier 2025",
+      "tagline": "Claude ya mbangu"
     },
     "claude_opus_4_6": {
       "name": "Claude Opus 4.6",
       "description": "Modèle ya Claude makasi koleka. Malamu mpo na kokoma makasi, masolo ya recherche, mpe misala esengeli kokanisa ndambo.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Kokoma makasi mpe analyse molai"
     },
     "claude_sonnet_4_6": {
       "name": "Claude Sonnet 4.6",
       "description": "Modèle ya Claude ya katikati. Malamu mpo na doki ya mokolo na mokolo, kobongola, mpe kotonga na eyano ya mbala moko.",
-      "knowledgeCutoff": "Feb 2026"
+      "knowledgeCutoff": "Feb 2026",
+      "tagline": "Claude ya kozalema kati na mokolo na mokolo"
+    },
+    "llama_4_maverick_17b_128e_instruct_fp8": {
+      "name": "Llama 4 Maverick",
+      "description": "Modeli ya open-source ya Meta. Ekomelaka malamu, kosala résumé, mpe mituna ya mbangu.",
+      "tagline": "Alternatif open-source"
+    },
+    "gpt_5_4": {
+      "name": "GPT-5.4",
+      "description": "Modeli ya sika mingi ya OpenAI. Ekolaka malamu na kokoma, recherche, code, mpe kobongola mikakatano ya pasi.",
+      "tagline": "GPT liboso ya sika koleka"
+    },
+    "gpt_5_4_nano": {
+      "name": "GPT-5.4 Nano",
+      "description": "Modeli ya GPT ya moke koleka mpe ya mbangu. Epesaka bosolo mpo na misala ya mbangu, pamba na motuya moke.",
+      "tagline": "GPT ya moke mingi mpe ya mbangu koleka"
+    },
+    "gpt_5_3_chat": {
+      "name": "GPT-5.3 Chat",
+      "description": "Variant ya GPT ya dialogue. Malamu mpo na kolobela pamba, ba brainstorm, mpe mayangani ya lisungi.",
+      "tagline": "GPT ya sika pona dialogue"
+    },
+    "gpt_5": {
+      "name": "GPT-5",
+      "description": "Modeli ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code.",
+      "tagline": "GPT liboso ya kala"
+    },
+    "gpt_5_chat": {
+      "name": "GPT-5 Chat",
+      "description": "GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm.",
+      "tagline": "GPT ya kala ya dialogue"
+    },
+    "gpt_4o": {
+      "name": "GPT-4o",
+      "description": "GPT ya multimodal ya kala. Ebongi mpo na kokoma mokolo na mokolo mpe mituna/similanga esengeli te makasi sika.",
+      "tagline": "GPT multimodal ya kala"
+    },
+    "gpt_4_1_mini": {
+      "name": "GPT-4.1 Mini",
+      "description": "Variant ya GPT-4.1 ya moke mpe ya mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "GPT ya pɛtɛɛ molandi ya kala"
+    },
+    "claude_opus_4_8": {
+      "name": "Claude Opus 4.8",
+      "description": "Modeli ya sika mpe makasi mingi ya Anthropic. Mindɛlɛ mpo na kokoma molai, recherche, code, mpe analyse ya pɛtɛɛ.",
+      "tagline": "Claude ya sika mpe makasi koleka"
+    },
+    "deepseek_v3_2": {
+      "name": "DeepSeek-V3.2",
+      "description": "Modeli ya sika mpe ya open-source ya DeepSeek. Ezali fiable mpo na kokoma mindɛlɛ mpe mituna ya technique.",
+      "tagline": "Alternatif open-source"
+    },
+    "mistral_large_3": {
+      "name": "Mistral Large 3",
+      "description": "Modeli monene ya Mistral. Alternative ya Europa mpo na kokoma, résumé, mpe mituna ya mokili.",
+      "tagline": "Model européen open-weight"
+    },
+    "gpt_5_1": {
+      "name": "GPT-5.1",
+      "description": "Revision ya liboso ya GPT-5. Ekoki naino na kokoma, analyse, mpe code.",
+      "tagline": "GPT-5 liboso ya kala"
+    },
+    "gpt_5_1_chat": {
+      "name": "GPT-5.1 Chat",
+      "description": "Revision ya liboso ya GPT-5 ya dialogue. Malamu mpo na ba conversation ya mokolo na mokolo mpe ba brainstorm.",
+      "tagline": "GPT ya dialogue ya kala"
+    },
+    "gpt_5_nano": {
+      "name": "GPT-5 Nano",
+      "description": "GPT-5 ya moke koleka. Ebongi mpo na misala ya mbangu, pamba na motuya moke.",
+      "tagline": "GPT molandi ya kala ya moke"
+    },
+    "gpt_4_1_nano": {
+      "name": "GPT-4.1 Nano",
+      "description": "Variant ya moke koleka ya GPT-4.1. Ebongi mpo na misala ya mbangu, pamba na motuya na mbangu.",
+      "tagline": "GPT molandi ya kala ya moke mingi"
+    },
+    "gpt_4o_mini": {
+      "name": "GPT-4o Mini",
+      "description": "GPT-4o moke mpe mbangu. Ebongi mpo na misala ya mbangu ya mokolo na mokolo soki sika makasi esengeli te.",
+      "tagline": "GPT multimodal ya kala ya pɛtɛɛ"
+    },
+    "o4_mini": {
+      "name": "o4-mini",
+      "description": "Modeli ya reasoning ya moke. Malamu mpo na ba maths, logique, mpe mikakatano ya kaka na motuya moke koleka o3.",
+      "tagline": "Ntina mbangu mpe na motuya kitoko"
+    },
+    "o3_mini": {
+      "name": "o3-mini",
+      "description": "Modeli ya reasoning ya moke ya liboso. Ebatelaka ba maths, science, mpe ba puzzle ya logique na budget.",
+      "tagline": "Ntina ya mike mbala-mbala"
+    },
+    "claude_fable_5": {
+      "name": "Claude Fable 5",
+      "description": "Modeli ya mayele koleka ya Anthropic, ya liboso na famille ya Claude 5. Epesaka makasi mpo na mikakatano ya kokoma, recherche, mpe code epasi.",
+      "tagline": "Model ya nsuka ya Anthropic"
+    },
+    "claude_sonnet_5": {
+      "name": "Claude Sonnet 5",
+      "description": "Claude ya sika ya équilibre, ya liboso na famille ya Claude 5. Epesaka mayele mpo na kokoma mokolo na mokolo, analyse mpe code na biyano ya mbangu.",
+      "tagline": "Claude ya sika oyo etikali malamu"
+    },
+    "mistral_medium_2505": {
+      "name": "Mistral Medium 3",
+      "description": "Modeli ya size ya kati ya Mistral. Alternative ya Europa, esangisi makasi mpe mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "Model européen equilibré"
+    },
+    "mistral_small_2503": {
+      "name": "Mistral Small 3.1",
+      "description": "Mistral ya moke. Mbangu mpe motuya moke mpo na résumé, ba drafts, mpe mituna pamba.",
+      "tagline": "Model européen ya pɛtɛɛ mpe mbangu"
+    },
+    "ministral_3b": {
+      "name": "Ministral 3B",
+      "description": "Mistral ya moke penza. Ebongi mpo na misala ya mbangu penza, pamba na motuya moke mingi.",
+      "tagline": "Mistral ya moke mingi pona edge"
+    },
+    "deepseek_r1_0528": {
+      "name": "DeepSeek-R1-0528",
+      "description": "Revision ya sika ya DeepSeek-R1. Emonisaka makanisi ya étape na étape na reasoning esengeli.",
+      "tagline": "Model ya ntina ya sika na open"
+    },
+    "llama_4_scout_17b_16e_instruct": {
+      "name": "Llama 4 Scout",
+      "description": "Modeli ya open-source ya pete ya Meta. Mbangu mpo na kokoma, résumé, mpe mituna ya mokolo na mokolo.",
+      "tagline": "Llama efficace open-source"
+    },
+    "llama_3_3_70b_instruct": {
+      "name": "Llama 3.3 70B",
+      "description": "Model moko ya kala ya open-source uta na Meta. Ezali naino malamu mpo na kokoma mpe mituna na biyano ya général.",
+      "tagline": "Llama open-source ya kala"
+    },
+    "grok_4": {
+      "name": "Grok 4",
+      "description": "Model ya xAI oyo ezali ya monene. Malamu mpo na masolo polele, analizɛ, mpe misala ya bokeli.",
+      "tagline": "Model ya xAI liboso"
+    },
+    "gpt_5_5": {
+      "name": "GPT-5.5",
+      "description": "Model ya sika mingi ya OpenAI. Ebongi na kokoma, recherche, kosala code, mpe kosilisa mituna ya pasi.",
+      "tagline": "GPT liboso ya sika"
+    },
+    "gpt_chat_latest": {
+      "name": "GPT Chat (ya sika koleka)",
+      "description": "Alias ya mobimba oyo etindaka kaka na model ya chat ya sika ya OpenAI. Ndima Azure mpo na modèle ya version ya gpt-*-chat oyo elongolami.",
+      "tagline": "Toujours GPT ya dialogue ya sika"
+    },
+    "claude_opus_4_7": {
+      "name": "Claude Opus 4.7",
+      "description": "Version Opus ya sika, ya kati ya 4.6 na 4.8. Ebongi na kokoma milai, recherche, code, mpe analizɛ ya pɛtɛ.",
+      "tagline": "Opus ya sika boye"
+    },
+    "deepseek_v4_pro": {
+      "name": "DeepSeek-V4-Pro",
+      "description": "Model ya reasoning ya sika ya DeepSeek mpe mbongisi ya Azure mpo na R1. Elakisa makanisi na ndenge nyonso.",
+      "tagline": "Model ya ntina ya sika open"
+    },
+    "deepseek_v4_flash": {
+      "name": "DeepSeek-V4-Flash",
+      "description": "Variation ya mbangu ya V4 ya DeepSeek mpe mbongisi ya Azure mpo na V3. Ezali mbangu mpo na kokoma général mpe mituna technique.",
+      "tagline": "Alternatif open-source ya mbangu"
+    },
+    "grok_4_1_fast_reasoning": {
+      "name": "Grok 4.1 Fast (Reasoning)",
+      "description": "Model ya reasoning ya mbangu ya xAI. Akanisaka biteni na biteni mpe azongisaka mbangu.",
+      "tagline": "Model ya ntina ya mbangu xAI"
+    },
+    "grok_4_1_fast_non_reasoning": {
+      "name": "Grok 4.1 Fast",
+      "description": "Model ya chat ya mbangu ya xAI. Azongisaka mbangu mpo na mituna ya mokolo na mokolo mpe masolo.",
+      "tagline": "Model ya dialogue ya mbangu xAI"
+    },
+    "grok_3_mini": {
+      "name": "Grok 3 Mini",
+      "description": "Model ya xAI ya pete. Ezali mbangu mpe ya ndenge ya mike mpo na mituna ya mbangu mpe masolo ya pamba.",
+      "tagline": "Model ya xAI ya pɛtɛɛ"
+    },
+    "gpt_5_6_sol": {
+      "name": "GPT-5.6 Sol",
+      "description": "Motó ya seri GPT-5.6 ya OpenAI. Azali makasi mpo na kokoma, bolukiluki, kobongisa code, mpe kosilisa likambo nyonso ya pasi.",
+      "tagline": "Tier ya GPT liboso koleka"
+    },
+    "gpt_5_6_terra": {
+      "name": "GPT-5.6 Terra",
+      "description": "Niveau ya kati ya GPT-5.6 ya OpenAI. Emonani malamu mpo na kokoma biloko ya mokolo na mokolo, analyse, mpe kobongisa code na eyano ya mbangu.",
+      "tagline": "GPT-5.6 ya mikolo nyonso oyo ezali na nse ya nzela"
+    },
+    "gpt_5_6_luna": {
+      "name": "GPT-5.6 Luna",
+      "description": "Niveau ya pete-pete mpe mbangu ya GPT-5.6 ya OpenAI. Epesaka eyano mbangu mpo na mituna ya pete mpe misala ya pete na ndambu ya motuya.",
+      "tagline": "GPT-5.6 ya pete mpe mbangu"
+    },
+    "mistral_medium_3_5": {
+      "name": "Mistral Medium 3.5",
+      "description": "Modèle ya sika ya kati ya Mistral. Alternatif ya Europe oyo etali makoki mpe mbangu mpo na misala ya mokolo na mokolo.",
+      "tagline": "Modeli ya Europe ekosukolama"
+    },
+    "kimi_k2_6": {
+      "name": "Kimi K2.6",
+      "description": "Modeli ya Moonshot AI ya open-weight. Ezali makasi na misala ya basungi, kokoda, mpe bandokima molai.",
+      "tagline": "Modeli open-weight ya basungi"
     }
   },
   "searchMode": {
@@ -1789,7 +2073,20 @@
     "useDefaultStyle": "Salela style ya ekomeli ya liboso",
     "noTonesCreated": "Okó moko esalámá te",
     "createTonesHint": "Salá okó na Quick Actions",
-    "translateDocumentTooltip": "Kokota makomi na lokota mosusu.\n\nFormats esepelisami: Word, Excel, PowerPoint, HTML, TXT\nSize maksimum: 40MB\n\nEsungi lokota koleka 80 na ba fichiers ya glossary soki esengeli."
+    "translateDocumentTooltip": "Kokota makomi na lokota mosusu.\n\nFormats esepelisami: Word, Excel, PowerPoint, HTML, TXT\nSize maksimum: 40MB\n\nEsungi lokota koleka 80 na ba fichiers ya glossary soki esengeli.",
+    "translateTooltip": "Kokɔtisa ndambo ya maloba na lokota mosusu.\n\nMpo na bafichiers mobimba (Word, Excel, PowerPoint, HTML, TXT), salela *Translate Document* esika na yango.",
+    "cameraTooltip": "Fungola appareil ya kamera pona kofota foto mpe komatisa yango na nsima ya sango.",
+    "noResults": "Likambo elandani te",
+    "sectionPinned": "Ekokisami",
+    "sectionFrequent": "Oyo ezali kosalelama mingi",
+    "sectionMore": "Mosusu",
+    "categoryWeb": "Web",
+    "categoryMedia": "Media & bafichier",
+    "categoryTransform": "Kobongola",
+    "pin": "Fixa likolo",
+    "unpin": "Kolongola na cima",
+    "moveToMore": "Kobakisa na Mosusu",
+    "moveOutOfMore": "Lakisa na menu"
   },
   "transcription": {
     "transcribesOnSend": "Ekomaka transcription ntango otindi",
@@ -1923,7 +2220,14 @@
     "expiresSoon": "Ekokosila na mikolo {days} - pikola nokinoki",
     "expires": "Ekosangama mikolo {days}",
     "unofficialBadgeLabel": "Ya libanda",
-    "unofficialLanguageWarning": "Lokota oyo ezali na kati ya basungi te. Koki ya kobongola elakisami te. Svp, tika ete moto ayebaka malamu lokota oyo atala liboso otindela moto mosusu."
+    "unofficialLanguageWarning": "Lokota oyo ezali na kati ya basungi te. Koki ya kobongola elakisami te. Svp, tika ete moto ayebaka malamu lokota oyo atala liboso otindela moto mosusu.",
+    "translationSubmitted": "Kobongola ebandi — baPDF ezali kosalema na ndambu ya sima.",
+    "pendingTitle": "Kobongola {filename}…",
+    "pendingHint": "Kobongola baPDF esalemi na ndambu ya sima mpe ekoki kozwa miniti mingi. Okoki kokoba kosala misala; karte oyo ekobongwana soki document esili, ata soki osili refresh.",
+    "asyncFailed": "Kobongola document eboyaki: {error}",
+    "jobNotFound": "mosala ya kobongola ezalaka lisusu te. Senga lisusu s'il vous plaît.",
+    "retryPolling": "Kufa lisusu",
+    "pollingStalled": "Tokokaki koluka serveur te mpo na kotala banovela. Kobongola ekoki kokoba."
   },
   "agentsTab": {
     "organizationAgents": {
@@ -1973,6 +2277,10 @@
       "technicalDetails": "Makambo ya tekinike",
       "agentCountLabel": "{count} bato",
       "disconnectedToast": "Source {name} ekangi te"
+    },
+    "emptyState": {
+      "title": "Azali na agent moko te ya region to ya organisation",
+      "description": "Kopesa boyokani na projet ya Foundry na nse mpo omona ba agents na yango."
     }
   },
   "privacy": {
@@ -2083,5 +2391,753 @@
     "review": "Tala lisusu",
     "itemId": "ID : {id}",
     "itemSource": "{date} uta na {source}"
+  },
+  "regionOverride": {
+    "warning": "Kobongola esika esalemi — basɛngiselami na yo ezali kokende na etúká ya donnes ya {region}. Eyi ezali kobongola ya mitindo mpo na kobakisa, kasi ezali te esika na yo ya solo.",
+    "clear": "Kolongola kobongola"
+  },
+  "usageImpact": {
+    "empty": "Kosalela ekolandisami nanu te. Mbala okosolola awa, kosalela ya batu mpe mwa koyebisa ya emissions ekomonana awa.",
+    "co2Value": "{grams} g CO₂e",
+    "equivalence": "≈ {count} mwa komemisa ya telefone ya smartphone",
+    "requests": "Basɛngami",
+    "promptTokens": "Bitanda ya motuna",
+    "completionTokens": "Bitanda ya biyano",
+    "topModels": "Kolanda modèle",
+    "byRegion": "Kolanda eteni ya kokamba",
+    "regionDefault": "Ya liboso",
+    "modelRow": "{requests} basɛngami · {grams} g",
+    "disclosure": "Bakonzi ezali kolanda makoki v{version} · banda {since} · kaka na masolo ya pamba (agents mpe biyano na banque ya boyebi ekotaki te).",
+    "reset": "Bozongisela stati ya kosalela"
+  },
+  "extraction": {
+    "toggleLabel": "Kolongola donnee na forme ya mobongisi",
+    "trayLabel": "Extraction",
+    "trayPrefix": "Kolongola",
+    "trayInfo": "Extraction ezongisaka table te to 3 ya mobongisi. Balingi bazalaka na appareil na yo.",
+    "autoChip": "Auto — AI ezali kopesa forme",
+    "addRecipe": "Kobakisa mokano",
+    "addRecipeTitle": "Kobakisa mokano na extraction oyo",
+    "addRecipeFullTitle": "Mikano 3 kaka na extraction moko",
+    "removeRecipe": "Kolongola mokano: {name}",
+    "remove": "Kolongola",
+    "section": "Mikano ya extraction",
+    "sectionSubtitle": "Bamodelo babomba mpo ekoma table na forme mpo na maloba pɛtɛ, bafichier, to URL. Pona ti mikano 3 na extraction moko.",
+    "newRecipe": "Mokano ya sika",
+    "untitledRecipe": "(Mokano ezangi kombo)",
+    "deleteRecipe": "Koboma mokano",
+    "delete": "Koboma",
+    "deleteConfirm": "Koboma?",
+    "cancel": "Kolanda te",
+    "name": "Kombo",
+    "namePlaceholder": "ndakisa: Bapasi",
+    "description": "Maloba ya kolimbola",
+    "optional": "(ya posa te)",
+    "descriptionPlaceholder": "Mukuse ya maloba oyo emonisama na moponami ya mokano",
+    "instructions": "Malako",
+    "instructionsPlaceholder": "AI esengeli koluka nini na biloko?",
+    "fields": "Bikelo",
+    "field": "kelo",
+    "fieldsPlural": "bikelo",
+    "fieldName": "Kombo ya kelo",
+    "fieldType": "Lolenge ya kelo",
+    "fieldNamePlaceholder": "kombo_kelo",
+    "addField": "Kobakisa kelo",
+    "removeField": "Kolongola kelo",
+    "toggleDetails": "Kobongola makambo ya bisika",
+    "fieldDetailsTitle": "Malobela, baenum",
+    "fieldDescriptionPlaceholder": "Maloba ya kolimbola (epesaka AI lisalisi ya kozwa kelo oyo)",
+    "enumValuesPlaceholder": "Bilai balongobani, bakabwani na virgule",
+    "required": "esengeli",
+    "suggest": "Pesa likanisi na AI",
+    "suggesting": "Kopesa makanisi…",
+    "suggestNeedsInstructions": "Tanga mabakisa liboso mpo AI eyeba nini esengeli koluka",
+    "searchRecipes": "Luka ba recette",
+    "pickerEmpty": "Nanu ezali na recette te. Salá moko mpo obanda.",
+    "pickerEmptyMatch": "Recette ezalaka te",
+    "editorEmpty": "Nanu ezali na recette te. Salá moko mpe AI ekoki kosalisa kotondisa bisika.",
+    "noData": "Donne ezwamaki te",
+    "noRecords": "Enregistrement {name} ezwamaki te",
+    "row": "lini",
+    "rows": "bilini",
+    "record": "enregistrement",
+    "records": "ba enregistrement",
+    "complete": "esili",
+    "download": "Telecharger",
+    "preview": "Preview",
+    "formatJson": "JSON",
+    "formatCsv": "CSV",
+    "formatTsv": "TSV",
+    "fieldCount": "{count} champs",
+    "fieldCountOne": "champ 1",
+    "andMoreFields": "+ {count} lisusu",
+    "saveAsRecipe": "Bomba lokola recette",
+    "savedAsRecipeToast": "Ebombami lokola recette \"{name}\"",
+    "previewTruncated": "Ekomonisa linini 3 ya liboso na {total}. Telecharger mpo ozwa ba donne mobimba.",
+    "previewEmpty": "Bilini ya komona eza te",
+    "proposedSchemaTip": "AI epesi schema oyo. Bomba yango mpo esalela en next fois.",
+    "downloadAriaLabel": "Telecharger {name} na {format}",
+    "previewAriaLabel": "Kobongisa preview ya {name}",
+    "changeFormatAriaLabel": "Bongola format ya telechargement ya {name}",
+    "materialWarningTitle": "Bakisa materiel ya kobima info",
+    "materialWarningBody": "Tanga message awa, banda file, to salisa na URL.",
+    "materialAttach": "Banda fichier",
+    "willExtractPrefix": "Ekobima na:",
+    "materialText": "mateya ya message",
+    "materialFiles": "{count, plural, one {fichier 1} other {ba fichier #}}",
+    "materialActiveFiles": "{count, plural, one {fichier actif 1} other {ba fichier actif #}}",
+    "dismiss": "Koboma extraction"
+  },
+  "Connectors": "Bakonɛktɛrɛ",
+  "workflows": {
+    "types": {
+      "translation": {
+        "label": "Kokokisa boyokani",
+        "description": "Kokokisa texte na analyse, ba glossaires, mpe ba tour ya liseki"
+      },
+      "document": {
+        "label": "Document",
+        "description": "Kobongisa mpe kotonga document elongo na assistant"
+      },
+      "dataAnalysis": {
+        "label": "Analyse ya ba données",
+        "description": "Kokotisa ba tableaux mpe kotalela to kobongola ba données na yo"
+      },
+      "map": {
+        "label": "Carte",
+        "description": "Kobongola ba données nyonso ezali bisika na carte"
+      }
+    },
+    "chooser": {
+      "prompt": "To banda espace ya mosala ezangi kofungolela nyonso"
+    },
+    "sidebar": {
+      "newTranslation": "Kokokisa boyokani sika",
+      "newDocument": "Document sika",
+      "newDataAnalysis": "Analyse ya ba données sika",
+      "newMap": "Carte sika"
+    },
+    "translation": {
+      "chooseLanguage": "Lokota ya bokokani",
+      "customLanguageHint": "\"{name}\" ezali lokota oyo obakisi — AI ekosala mosala na lokota nyonso, kasi qualité etadami te.",
+      "addedByYou": "Obakisi yango",
+      "glossary": "Glossaire",
+      "noGlossary": "Glossaire ezali te",
+      "manageGlossaries": "Ba glossaires",
+      "glossaries": "Ba glossaires",
+      "closeGlossaries": "Kokanga ba glossaires",
+      "glossariesEmpty": "Kokela glossary mpo kokanga ndenge ba termes ya ntina ekobongolama. Ba glossaires ebombamaka na appareil oyo mpe ekoki kosalelama na ba traductions mingi.",
+      "newGlossary": "Glossaire ya sika",
+      "newGlossaryName": "Glossaire na kombo te",
+      "glossaryName": "Kombo ya glossaire",
+      "deleteGlossary": "Kolongola glossaire",
+      "sourceTerm": "Liloba ya ebandeli",
+      "targetTerm": "Kokoma na monoko mosusu",
+      "note": "Talatala",
+      "noteOptional": "Talatala (ya kopona)",
+      "addEntry": "Kobakisa liloba",
+      "removeEntry": "Kolongola {term}",
+      "mode": "Mode ya kokoma na monoko mosusu",
+      "modeQuick": "Mbangu",
+      "modeAgentic": "Eyebani",
+      "modeQuickHint": "Kokoma mbala moko, mosala yango ekosuka mbangu",
+      "modeAgenticHint": "Ebandaka na kotalela naino motindo ya maloba, sima ekokoma mpe esalela roundi 3 ya kotala lisusu",
+      "translate": "Kokoma na monoko mosusu",
+      "translating": "Ezali kokoma…",
+      "sourceLabel": "Maloba ya ebandeli",
+      "targetLabel": "Kokoma na monoko mosusu",
+      "sourcePlaceholder": "Kopanga to kokoma maloba oyo olingi kobongola, to telemisa file.",
+      "targetEmpty": "Kokoma na monoko mosusu ekomonana awa.",
+      "uploadDocument": "Telemisa mokanda",
+      "copy": "Kokopa",
+      "copied": "Ekopami",
+      "tooLong": "Maloba molai koleka {max} caractères. Babela yango na biteni, to salela document translation mpo na mokanda mobimba.",
+      "analysisTitle": "Kotala liboso ya kokoma",
+      "register": "Kokoma",
+      "reviewTitle": "Biteni ya kotala lisusu",
+      "roundLabel": "Rondi {round}",
+      "verdictApprove": "Eyokani",
+      "verdictRevise": "Ebonganami",
+      "railRequest": "Kokoma maloba ya ebandeli na {language}.",
+      "railDoneAgentic": "Ekokisi. Natalaki maloba, nakokaki yango, mpe nasalaki {rounds} rondi ya kotala lisusu. Ehasilaki na espace ya mosala.",
+      "railDoneQuick": "Ekokisi. Kokoma na monoko mosusu ezali na espace ya mosala.",
+      "railAssessRequest": "Talela bonkama ya kokoma na {language}.",
+      "railAssessDone": "Bososoli esili: ba note ezali na espace ya mosala elongo na {count} motindi ya kobongisa.",
+      "roundChanges": "Babongiseli na rondi {round}",
+      "criteria": {
+        "accuracy": {
+          "label": "Kokoka",
+          "description": "Epesi ndimbola ndenge moko na maloba ya ebandeli — te na kokoma malamu te, kofungola, kobakisa, to biteni ya kobongola te"
+        },
+        "fluency": {
+          "label": "Maloba ya polele",
+          "description": "Grammaire, ndakisa ya maloba, bilakisi mpe makangisami ya maloba ezali polele na monoko ya kobongola"
+        },
+        "terminology": {
+          "label": "Matalaka",
+          "description": "Matalaka ya ebongisana mpe ezali malamu; glossaire elandi malamu"
+        },
+        "style": {
+          "label": "Motindo",
+          "description": "Register, lolenge, mpe mongongo ekokani na ya ebandeli mpe ezali kaka kaka"
+        },
+        "localeConventions": {
+          "label": "Mibeko ya mboka",
+          "description": "Mikolo, ba nombres, ba unités mpe bilakisi elandi ndenge ya esika ya kobongola"
+        },
+        "audience": {
+          "label": "Batangi",
+          "description": "Epesa ntina na 'purpose' mpe bato bazosomba maloba"
+        }
+      },
+      "severity": {
+        "minor": "Moke",
+        "major": "Minene"
+      },
+      "assess": "Kotála kalite",
+      "assessing": "Kotalaka…",
+      "assessmentTitle": "Kotalela kalite",
+      "criteriaPicker": "Bikriteria ya kotála",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Mabongisi esengeli",
+      "noEditsSuggested": "Mabongisi ezali te — bobongoli eleki na bikriteria esambwelami.",
+      "acceptEdit": "Boyoka",
+      "rejectEdit": "Koboya",
+      "acceptAll": "Boyoka nyonso",
+      "rejectAll": "Koboya nyonso",
+      "editAccepted": "Eyokami",
+      "editRejected": "Eboyi",
+      "editUnapplicable": "Tomoni eteni oyo te na mokanda ya sikoyo — esalemi te",
+      "editTranslation": "Bongisa",
+      "doneEditing": "Esili",
+      "pasteTranslationPlaceholder": "Koma to kopya bobongoli mpo na kosala…",
+      "editingBlockedPendingEdits": "Solola to boya liboso mabongisi nyonso ya kozela",
+      "pendingCount": "{count} ezali na kozela",
+      "closeReview": "Kokanga talandeli ya kalite",
+      "showReview": "Lakisa talandeli",
+      "showReviewPending": "Lakisa talandeli ({count} ezali na kozela)"
+    },
+    "document": {
+      "emptyTitle": "Sosola mokanda olingi",
+      "emptyBody": "Yebisa mosungi nini akoma— lokola rapo ya maye eleki, mokanda epai ya motambwisi, procès-verbal ya réunion. Tia bazipeli ya boyebisi liboso soki olingi ete atanga mpe apesa makambo oyo euti kuna.",
+      "generatePlaceholder": "Sosola mokanda ya kokoma…",
+      "revisePlaceholder": "Sosola mabongisi ya kosala…",
+      "generate": "Kokela",
+      "revise": "Bongisa",
+      "writing": "Kokoma…",
+      "export": "Kobimisa",
+      "references": "Bayanolaki",
+      "addReference": "Tia dosiye",
+      "uploading": "Kotikala…",
+      "removeReference": "Longola {name}",
+      "referenceChars": "{chars} bamiloba ya maloba elongwaki",
+      "referenceEmpty": "Maloba elongweli te na {name}",
+      "uploadFailed": "Kotikala eboyi",
+      "untitledDocument": "Mokanda ya kobongisama",
+      "generatedSummary": "Nakomi mokanda na espace ya mosala. Talá yango mpe yebisa ngai nini ebongi kobongolama.",
+      "revisedSummary": "Nabongisi mokanda na espace ya mosala.",
+      "runFailed": "Likambo moko eleki malamu te: {message}",
+      "uploadBasis": "Kobanda na mokanda esalemaki",
+      "criteria": {
+        "grammarSpelling": {
+          "label": "Grammaire & koloba malamu",
+          "description": "Grammaire mpe koloba malamu; ndenge moko ya Lingelesi (US to UK) ezali malamu — kosangisa ezali libunga"
+        },
+        "consistency": {
+          "label": "Kosangisaka malamu",
+          "description": "Terminologie, nkombo, na façon ya kokoma esalemi ndenge moko na mobimba"
+        },
+        "clarity": {
+          "label": "Kopenza",
+          "description": "Maloba pɛtɛɛ, eyebana malamu; ndenge esalemi mpo na kosalisa motángi"
+        },
+        "sensitivity": {
+          "label": "Kozala na motema",
+          "description": "Maloba ekotisi bango nyonso, epikisi pasi te mpe ezali komitungisa na ndenge ya mokili mobimba (koluka te, oyo ekopesa ntina te)"
+        },
+        "specAdherence": {
+          "label": "Kolanda spec",
+          "description": "Ezali kolanda spec ya mokanda elongobani: biteni nyonso ya mpasi, na molongo oyo ebongi, na kolanda malako na yango"
+        },
+        "toneAdherence": {
+          "label": "Kolanda ndenge ya maloba",
+          "description": "Ezali kolanda mibeko ya ndenge ya maloba mpe mongongo elongobani"
+        }
+      },
+      "severity": {
+        "minor": "Moke",
+        "major": "Monene"
+      },
+      "assess": "Kokatisa bonkɔkɔ",
+      "assessing": "Kokatia bonkɔkɔ…",
+      "assessmentTitle": "Mokano ya bonkɔkɔ",
+      "criteriaPicker": "Mitindo ya kokatisa",
+      "ratingOf": "{rating}/5",
+      "suggestedEdits": "Mabongisi epesi",
+      "noEditsSuggested": "Mabongisi te epesami — mokanda eleki mitindo oponami.",
+      "acceptEdit": "Kondima",
+      "rejectEdit": "Koloka",
+      "acceptAll": "Kondima nyonso",
+      "rejectAll": "Koloka nyonso",
+      "editAccepted": "Ekindimi",
+      "editRejected": "Ekangi",
+      "editUnapplicable": "Pasi kokuta eteni oyo na mokanda ya sik’oyo — elandami te",
+      "editingBlockedPendingEdits": "Sambisa to longa mabongisi oyo etikali liboso",
+      "pendingCount": "{count} ezali kosimba",
+      "closeReview": "Kokanga mokano ya bonkɔkɔ",
+      "showReview": "Lakisa mokano",
+      "showReviewPending": "Lakisa mokano ({count} ezali kosimba)",
+      "railAssessRequest": "Kokata bonkɔkɔ ya mokanda na mitindo oponami.",
+      "railAssessDone": "Kokata esili: bipimo ezali na esika ya mosala na {count} mabongisi epesi ya kotala.",
+      "spec": "Spec ya mokanda",
+      "noSpec": "Spec te",
+      "manageSpecs": "Specs",
+      "specs": "Specs ya mokanda",
+      "closeSpecs": "Kokanga specs",
+      "specsEmpty": "Kela spec mpo na kokomela mikanda na forme moko — biteni ya motuya, molongo, mpe malako pona eteni moko na moko (ex. SitRep template). Specs ezali kopesama na ordinatere oyo mpe ekoki kozongisama.",
+      "newSpec": "Spec ya sika",
+      "newSpecName": "Spec elandi kombo te",
+      "specName": "Kombo ya spec",
+      "specDescription": "Maloba matali yango (koluka te)",
+      "deleteSpec": "Kolongola spec",
+      "sectionHeading": "Motó ya eteni",
+      "sectionGuidance": "Nzela/Mayele (koluka te)",
+      "sectionRequired": "Na motuya",
+      "addSection": "Bakisa eteni",
+      "removeSection": "Longola eteni",
+      "generalGuidance": "Nzela ya ndenge nyonso (koluka te)",
+      "tone": "Ndenge ya maloba",
+      "noTone": "Ndenge te",
+      "customCriteria": "Mitindo ya ekomi",
+      "manageCriteria": "Mitindo ya ekomi",
+      "closeCriteria": "Kokanga mitindo ya ekomi",
+      "criteriaEmpty": "Salá bituluku mpéto na yo moko — ndakisa: makambo oyo esengeli kokoba likoló na etando ya ekólo to lokola ndenge ya koloba ya mosala — mpo na kotalela bantánda mpe kotala lisusu mbongwana. Ebombami na appareil oyo mpe ekoki kosalema lisusu.",
+      "newCriterion": "Bituluku mpéto ya sika",
+      "newCriterionName": "Bituluku mpéto na kombo te",
+      "criterionName": "Kombo ya bituluku mpéto",
+      "criterionRubric": "Ndakisa",
+      "criterionRubricPlaceholder": "Lakisa nini ndánda esengeli kosala mpo elikya elanda bituluku mpéto oyo, ndakisa: \"Kozanga koloba maloba ya likéyi ya mosénga na misala ya biso; benga toujours ba bénéficiaires ‘bato oyo toisunga’…\"",
+      "criterionRubricHint": "Ndakisa oyo epesamaka na AI bongo-bongo na ntango ya kotalela mpe kobongisa lisusu.",
+      "deleteCriterion": "Kolongola bituluku mpéto",
+      "profileTitle": "Profil ya ndánda",
+      "profileDocType": "Motindo",
+      "profileLanguage": "Lokótá",
+      "profileAudience": "Bato oyo ezali",
+      "profilePurpose": "Nsaimbolongo",
+      "profileRegister": "Nonkésé ya maloba",
+      "profileTone": "Ndenge ya maloba",
+      "profileConventions": "Binamákele",
+      "emptyHint": "Bandá kokoma awa na nse, pesá malako mpo na eloko ya kokoma na eteni ya nse, to bandá na fichier.",
+      "addSpec": "Bakisa spécification",
+      "addCriteria": "Bakisa bituluku mpéto",
+      "scopeFullDocument": "Esika: ndánda mobimba",
+      "scopeSelection": "Esika: oyo waponi — “{preview}…” ({count} maloba)",
+      "clearSelection": "Kolongola oyo waponi (sala na ndánda mobimba)",
+      "reviseSelectionPlaceholder": "Lakisa mbongwana na boyano…",
+      "revisedSelectionSummary": "Nabongisi eteni waponi na esika ya mosala.",
+      "assessedSelection": "Eteni waponi"
+    },
+    "data": {
+      "emptyTitle": "Bokota ba data mpo epesa anàlizé",
+      "emptyBody": "Mbámi fichier CSV, Excel, to JSON, to kopié ba lignes bongo bongo. Soki tableau na yo ekotaki, okoki kosala tri, kobimisa ba lignes mosusu na ndánda, mpe kokokisa yango na mayoki ya polele.",
+      "importFile": "Kokóte fichier",
+      "importing": "Kokótisa…",
+      "pasteData": "Kopier ba data",
+      "pastePlaceholder": "Kopier CSV, TSV, to JSON awa…",
+      "import": "Kokóta",
+      "addFromSource": "Bakisa utá na source",
+      "extractHint": "Kopier mokanda to poná ndánda; ba lignes oyo ebongi na ba colonnes na yo wana ekobimama. Ba valeurs oyo eyebani te ekozala mpéto — eloko moko ekozalama te.",
+      "extractPlaceholder": "Kopier maloba ya motindo pe ezali na ba data…",
+      "extractRows": "Bimisa ba lignes",
+      "extractFromFile": "Longo na fichier…",
+      "extracting": "Kobimisa…",
+      "pastedSource": "Maloba ekopiami",
+      "transform": "Kobongola",
+      "transforming": "Kobongola…",
+      "transformPlaceholder": "Lakisa ndakisa ya kobongola, ndakisa: \"bakisa colonne na kaka nyonso 1000 bato\"…",
+      "transformCapHint": "Kobongola ekutani kaka na ba lignes {max}. Longola to salá filtre ya ba lignes liboso soki tableau ezali monene.",
+      "undo": "Kozongela",
+      "deleteSelected": "Longola {count}",
+      "deletedRows": "Longoli ba lignes {count}",
+      "selectAllRows": "Pona ba lignes nyonso",
+      "selectRow": "Pona ligne {row}",
+      "rowCount": "{count} ba lignes",
+      "rowCapExceeded": "Ekokoma ba lignes {count}; tableau ekoki kaka na {max}. Bábwaká yango na biteni to salá export esika na yango.",
+      "railExtractRequest": "Bimisa baliné oyo ekokani na forme ya tabeli uta: {source}",
+      "railExtractDone": "Babakisaki baliné {count} oyo babimisaki na tabeli.",
+      "railTransformDone": "Tabeli ebongisami.",
+      "columnProfileFor": "Statistiki ya kolone {column}",
+      "profileMissing": "Ezangi",
+      "profileDistinct": "Ya ndenge na ndenge",
+      "profileRange": "Intervalle",
+      "profileMean": "Moyene",
+      "profileMedian": "Mediane",
+      "profileTopValues": "Bamaza",
+      "filterColumnFor": "Sombisa {column}",
+      "filterContains": "Ezali na…",
+      "filterMin": "Moke koleka",
+      "filterMax": "Monene koleka",
+      "filterClear": "Kolongola",
+      "clearFilters": "Kolongola ba filtre",
+      "showingRows": "Kozongisa {shown} kati na {total} ya baliné",
+      "scopeLabel": "Esika ya mosala",
+      "scopeTable": "Nyonso ({count})",
+      "scopeFiltered": "Basombami ({count})",
+      "scopeSelection": "Ponato ({count})",
+      "scopedInstruction": "{instruction} (na baliné {count} na esika)",
+      "assess": "Kotalela kalite",
+      "assessing": "Kotalela…",
+      "criteria": {
+        "validity": {
+          "label": "Validité",
+          "description": "Valère ekokani na lolenge ya kolone na forme oyo ebongi"
+        },
+        "consistency": {
+          "label": "Kokangama",
+          "description": "Valère moko ekomami ndenge moko bipai nyonso (te na ndenge 'M' / 'Male', te ba unité ekeseni, to ba makomi ya lolenge ekeseni)"
+        },
+        "duplicates": {
+          "label": "Ba doublon",
+          "description": "Baliné oyo ezali kokoma likambo to eloko moko mbala mibale"
+        },
+        "plausibility": {
+          "label": "Plausibilité",
+          "description": "Ba valère oyo ebaluki to oyo ekoki te na contexte"
+        }
+      },
+      "assessmentTitle": "Botatoli ya kalite ya ba données",
+      "pendingCount": "{count} ezali kobila",
+      "closeReview": "Kokanga botatoli ya kalite",
+      "suggestedEdits": "Ba solution esengeli",
+      "noEditsSuggested": "Ba solution ezwami te — ba données elekaki mipimo oyo ponami.",
+      "acceptAll": "Kondima nionso",
+      "rejectAll": "Kolenga nionso",
+      "acceptEdit": "Kondima",
+      "rejectEdit": "Kolenga",
+      "editAccepted": "Epesami",
+      "editRejected": "Elingami",
+      "editUnapplicable": "Cellule ebongwani banda botatoli — epesami te",
+      "ratingOf": "{rating}/5",
+      "criteriaPicker": "Mipimo ya kotalela",
+      "severity": {
+        "minor": "Moke",
+        "major": "Monene"
+      },
+      "editLocation": "baliné {row} · {column}",
+      "editLocationRow": "baliné {row} (kolongola)",
+      "showReview": "Monisa lisalisi",
+      "showReviewPending": "Monisa lisalisi ({count} ezali kolikama)",
+      "assessedFiltered": "Balingi bato basangisami",
+      "assessedSelection": "Bato basangisami",
+      "assessedSample": "sample ya {shown} na {total}",
+      "railAssessRequest": "Sekisa bosikisiki ya etalama ({count} bilanga) na mitindo oponami.",
+      "railAssessDone": "Bokebisi {count} misala mpo na kobongisa bosikisiki ya ba données — talela yango na esika mosala.",
+      "insights": "Mayebisi",
+      "chartKind": "Lolenge ya tabele",
+      "chartBar": "Bar (kolonganisa)",
+      "chartHistogram": "Histogram",
+      "chartLine": "Mabunga (na tango)",
+      "groupByColumn": "Longanisa na kolone",
+      "dateColumn": "Kolone ya daté",
+      "valueColumn": "Kolone ya motuya",
+      "aggFn": "Somisami",
+      "aggCount": "Kompté",
+      "aggSum": "Jam",
+      "aggMean": "Moyen",
+      "chartTruncated": "Ekomonisa babundeli {max} ya likolo",
+      "chartNoData": "Ezali te bayebani ya konsa na mipanzi ya sik’oyo.",
+      "chartBarAria": "Grafike ya bar oyo elonganisami na {column}",
+      "chartHistogramAria": "Histogram ya {column}",
+      "chartLineAria": "Grafike ya mabunga ya {column} na tango",
+      "editStructure": "Esika ya mobongisi",
+      "defineStructure": "Tala motindo",
+      "schemaHint": "Tala biteni ya molongo ya ba données na yo. Biteni ya ntina ekambaka politiki ya ba données ezangi na ntango ya kotia; kobongole tipe ya esika ebongole bamotuya (biloko ya kokoka te ekota mpamba).",
+      "schemaFieldName": "Kombo ya esika",
+      "schemaFieldType": "Tipe ya esika",
+      "schemaRequired": "Ya litomba",
+      "schemaAddField": "Bakisa esika",
+      "schemaDeleteField": "Longola esika {field}",
+      "schemaApply": "Tia motindo",
+      "schemaCancel": "Kanga",
+      "schemaEdited": "Mobongisi ya molongo ebongolami",
+      "schemaCellsConverted": "{count} biloko ekokaki te kobongolama na tipe ya sika mpe sik’oyo ezali mpamba.",
+      "missingFieldPolicy": "Donée ezangi",
+      "policyStrict": "Kaka ya ntina — koboya mipanzi ekokani te",
+      "policyFlag": "Kokangela — tia mpe lakisa",
+      "policyLenient": "Malongi — kobakisa na kimya",
+      "droppedIncompleteRows": "Babwakami {count} ba mipanzi ezangi biteni ya ntina: {fields}",
+      "dismiss": "Longola",
+      "requiredColumn": "Esika ya ntina",
+      "flagMissingRequired": "Esika ya ntina ezali mpamba",
+      "flagPendingEdit": "Mokebisi ya kobongisa ezali na ndakisa ya eloko oyo — talela botángi ya bosikisiki",
+      "fromPhoto": "Kolongwa na foto",
+      "fromPhotoHint": "Fotóya formulaire to tabele ya mpapier — makambo na yango ekoma ba données oyo okoki kotala na foto",
+      "readingPhoto": "Ezemi kotángela foto…",
+      "photoBatchName": "{count} ba foto",
+      "railPhotoRequest": "Bimisa ba données oyo esengelami uta na {count} foto(s): {name}",
+      "railPhotoDone": "Batɔ́mi {count} ndakisa utá na foto. Tálá yango pɛtɛ na foto na esika ya mosala.",
+      "sourcesLabel": "Bizaleli",
+      "openPhotoQc": "Tála balɔteli na {name}",
+      "qcRowsFromPhoto": "Milɔkɔli {count}",
+      "qcClose": "Kokanga ntango ya kotála foto",
+      "qcZoomIn": "Kokóma monene",
+      "qcZoomOut": "Kokóma moke",
+      "qcPrevPhoto": "Foto ya liboso",
+      "qcNextPhoto": "Foto ya sima",
+      "qcImageLoading": "Foto ezali kokɔtama…",
+      "qcImageFailed": "Foto ekokaki te kokɔtama.",
+      "qcImageAlt": "Foto ya nsɔ́kɔ: {name}",
+      "qcHint": "Tábɛlɛ emonisi kaka balɔkɔli ya foto oyo — kokanisa ya mokomoko na balɔkɔli ya foto mpe kobongola to kolongola oyo ebongi te.",
+      "sourceFilterChip": "Milɔkɔli utá na {name}",
+      "clearSourceFilter": "Monisa lisusu milɔkɔli nionso",
+      "viewAsRecord": "Talela na forme ya formulɛ́",
+      "viewAsTable": "Talela na tábɛlɛ",
+      "recordEmpty": "Nanu ezali na milɔkɔli te.",
+      "recordOf": "Ndakisa {index} ya {count}",
+      "recordPrev": "Ndakisa ya liboso",
+      "recordNext": "Ndakisa ya sima",
+      "recordBooleanUnset": "(pɛtɛ)",
+      "flagsChip": "Bimemya {count}",
+      "flagsChipOpenReview": "Fungola litatoli ya kalite",
+      "flagsChipMissingOnly": "Bitándá ya kolendisa ebongi te — kotondisa yango to kobongola forme",
+      "autoCheck": "Kozwa automatique ya balɔteli ya sika",
+      "autoCheckHint": "Sima ya kokotisa balɔteli utá na foto to mindokument, kosala vérification ya qualité automatique na milɔkɔli ya sika",
+      "checkingNewRows": "Ezali kotála ndenge balɔkɔli ya sika ebongi…",
+      "ingestCheckFailed": "Kozwa automatique ya kalite ezali te ({message}) — okoki kosala yango na maboko na \"Kotalela kalite\".",
+      "assessedIngest": "Milɔkɔli ya sika"
+    },
+    "map": {
+      "emptyTitle": "Bakisa balɔkɔli na kati ya carte",
+      "emptyBody": "Kopɔsa rapɔr, liste, rapport ya likita, to ndakisa ya eloba oyo etangi bisika — to ketola dokima. Bisika ekoyebana mpe kobakisama na carte na degré ya konfiyansɛ; okoki kobimisa yango mpo na ArcGIS to ba-zutí ya GIS mosusu.",
+      "inputPlaceholder": "Kopɔsa maloba etatolaka bisika…",
+      "uploadFile": "Tombola fichier",
+      "pastedSource": "Maloba epɔsami",
+      "mapIt": "Bakisa na carte",
+      "finding": "Kozwa bisika…",
+      "featureCount": "{count} bisika",
+      "featureCapExceeded": "Carte ekoki komema kaka bisika {max}.",
+      "noneFound": "Bisika ezwaki te na makomi yango.",
+      "lowConfidenceNotice": "{count} bisika ezali na coordonnées ya konfiyansɛ miké — tálá yango soki ozali kolanda carte.",
+      "tilesOffline": "Biteya ya carte ezali te — liste ya bisika ezongaka mosala.",
+      "disclaimer": "Coordonnées ezali koyebama na ndenge ya AI na mayebi ya modèle, te na service ya geocoding — kobatela malamu liboso ya kosalela na misala. Biteya ya carte ekotamaka utá na serveur ya carte; balɔkɔli na yo etikali na appareil oyo.",
+      "flyTo": "Monisa {name} na carte",
+      "removeFeature": "Longola {name}",
+      "expandFeature": "Monisa makambo nyonso ya {name}",
+      "collapseFeature": "Kokanga makambo ya {name}",
+      "detailsParent": "Ezali kati ya {parent}",
+      "railRequest": "Bakisa bisika oyo ezali na: {source}",
+      "railSearchRequest": "Luka na Internet mpe bakisa bisika mpo na: {query}",
+      "railDone": "Bitandi {count} emonami. Tala bisika oyo ezali na bokeseni ya kokanga malamu na liste.",
+      "searchToggle": "Modele ya koluka na web",
+      "searchToggleHint": "Luka na web esika ya kopesa maloba; biloko oyo ekangami na mayele ekomama na carte.",
+      "searchPlaceholder": "Luka na web, ndakisa: \"cholera outbreaks East Africa 2026\"…",
+      "searchAndMap": "Luka & bitanda",
+      "searching": "Koluka…",
+      "connections": {
+        "popupTitle": "{from} → {to}",
+        "popupKind": "Kokangana: {kind}",
+        "unresolved": "{count} kokangana ebengaki bisika ekotaki te na carte mpe esalaki te."
+      },
+      "confidence": {
+        "high": "Elenge",
+        "medium": "Ya katikati",
+        "low": "Moke"
+      },
+      "prominence": {
+        "primary": "Esika ya likolo",
+        "secondary": "Esika ya lisungi",
+        "mention": "Kokebisa kaka"
+      },
+      "prominenceMentionHint": "Makambo ezali kolobela kaka na koleka — ekomonana mike na carte mpe ekolongwa na ebandeli ya monilisi.",
+      "dates": {
+        "since": "depi {date}",
+        "range": "{start} – {end}",
+        "ongoing": "Ekobandi"
+      },
+      "filters": {
+        "label": "Sankisa na catégorie",
+        "other": "Mosusu",
+        "clear": "Kolongola",
+        "showing": "{shown} na {total} bisika",
+        "noneMatch": "Mokolo moko te ezali na filtre likolo ya makambo."
+      },
+      "dateFilter": {
+        "label": "Mikolo",
+        "from": "Kuta",
+        "to": "Tii",
+        "fromAria": "Komonisa kaka makambo banda na mokolo oyo",
+        "toAria": "Komonisa kaka makambo tii na mokolo oyo",
+        "clear": "Kolongola mikolo",
+        "eraChip": "Komonisa kaka makambo na {label}"
+      },
+      "timeline": {
+        "toggle": "Mokuse ya tango",
+        "play": "Kobandisa mokuse ya tango",
+        "pause": "Kokanga mokuse ya tango",
+        "eras": "Ba époques ya ligne du temps",
+        "jumpTo": "Kokende na {label}",
+        "slider": "Esika na ligne du temps",
+        "showUndated": "Komonisa bisika oyo ezali na daté te",
+        "activeCount": "{count} ezali"
+      },
+      "granularity": {
+        "site": "Esika",
+        "city": "Engumba/mboka",
+        "district": "District",
+        "region": "Region",
+        "country": "Ekolo"
+      },
+      "granularityAreaHint": "Eteni moko, emonisami lokola rond-point ya esika — ezali kaka na mayele mpe ezali te esika moko moko to ndelo ya solo.",
+      "containerHint": "Ezali na bisika mosusu bitandi na kati, bongo ekomonana kaka na linelo.",
+      "legend": {
+        "toggle": "Légende",
+        "title": "Ndenge ya kotanga carte",
+        "color": "Elilisi: elikia ya ndenge ya position (bleu – likolo, jaune – katikati, moto – moke)",
+        "size": "Bozindo ya point: bonene ya ntina ya esika na makambo",
+        "area": "Ligne ekateli na bilili: etúká oyo ekokani na ndembi ya teritware, region to ekolo",
+        "container": "Mabaku pembeni polele: esika oyo biloko na yango ezali kokotama moko na moko"
+      }
+    },
+    "shell": {
+      "showConversation": "Lakisa dialogue",
+      "hideConversation": "Kunda dialogue",
+      "workspaceTab": "Esika ya mosala",
+      "conversationTab": "Dialogue",
+      "paneTabsLabel": "Mabaku ya workflow",
+      "railEmpty": "Balei ya assistant mpe ndenge mosala ezali kosala ekomonana awa.",
+      "railInputPlaceholder": "Tindela assistant nsango…",
+      "assistantThinking": "Kozwa makanisi…",
+      "sendMessage": "Tinda nsango",
+      "stopGenerating": "Koma kokangisa",
+      "loadingWorkspace": "Kosomba esika ya mosala…",
+      "unknownType": "Dialogue oyo ezali na workflow oyo version oyo eyebi te. Lisolo mobimba ezali awa na se.",
+      "untitled": "Dialogue ya sika",
+      "toggleMenu": "Kokanga to kofungola menu",
+      "model": "Model ya workflow oyo"
+    }
+  },
+  "connectors": {
+    "title": "Bakonector",
+    "description": "Kobatela babongiseli ya libanda na Model Context Protocol (MCP). Bakonzi bakosangana na modele na chat, mpe bokotia yango na mosala kaka soki okayi.",
+    "localOnlyNote": "Okota direct na fournisseur moko na moko. Bakle ekosangana na crypte mpe etikali kaka na appareil oyo, ekopetela na serveur ya application na chaque demande — ekobombama te to ekotindama kuna.",
+    "catalog": {
+      "github": {
+        "name": "GitHub",
+        "description": "Sosola ba repository, tala to salisa ba issues mpe ba pull requests."
+      },
+      "asana": {
+        "name": "Asana",
+        "description": "Kozua, kosala, mpe kobongisa ba tâches na ba projets."
+      }
+    },
+    "connect": "Kokangama",
+    "connected": "Ekokani",
+    "tokenEndsIn": "ekosila na ••••{last4}",
+    "disconnect": "Kolongola",
+    "toolCount": "{count, plural, =1 {tool 1 disponible} other {ba tools # ezali disponible}}",
+    "patLabel": "Personal access token",
+    "createTokenLink": "Kobongisa token",
+    "tokenScopeHint": "Salela token na ba droits exact oyo ba outils ezali na bosenga.",
+    "validating": "Kokengelela connection…",
+    "validationFailed": "Ekokaki kokangana te. Talá adrese mpe mibwaka lisusu.",
+    "authFailed": "Server aboyi token. Talá yango mpe mibwaka lisusu.",
+    "tokenRequired": "Token esengeli",
+    "enableServer": "Ekoki kosalelama na chat",
+    "arbitraryTitle": "Server mosusu ya MCP",
+    "arbitraryToggle": "Limbisa ba server nyonso ya MCP",
+    "arbitraryWarning": "Moto nionso oyo azali na MCP server akoki komona nsango oyo etindami na bazamba na yango. Kangisaka kaka ba server oyo okanisaka ete okanisi yango. Appel na tool nyonso esengeli ndé kondima na yo.",
+    "addServer": "Bakisa MCP server",
+    "editServer": "Bongisa MCP server",
+    "serverName": "Kombo",
+    "serverUrl": "Server URL",
+    "nameRequired": "Kombo esengeli",
+    "urlRequired": "URL esengeli",
+    "invalidUrl": "Tya adrese ya https:// oyo ezali polele",
+    "namePlaceholder": "Server na ngai ya MCP",
+    "urlPlaceholder": "https://mcp.example.com",
+    "tokenOptionalLabel": "Token ya kokota (soki olingi)",
+    "keepTokenPlaceholder": "Tikala pamba mpo na kotikala na token ya lelo",
+    "disconnectedToast": "{name} ekatani",
+    "save": "Bomba",
+    "connectWithProvider": "Kangama na {name}",
+    "useTokenInstead": "Salela token mpo na kokota wuta wana",
+    "oauthWaiting": "Ezali kozela ndingisa…",
+    "oauthFailed": "Kokota eboyi. Mibwaka lisusu.",
+    "oauthDenied": "Kosolola ekangamaki na côté ya fournisseur.",
+    "oauthTimeout": "Kokota ekawuki. Mibwaka lisusu.",
+    "oauthCancelled": "Kokota eboyami.",
+    "oauthUnavailable": "Kokota ezali te na connector oyo na deployment oyo. Salela token mpo na kokota, to senga na mokambi na yo akosala configuration ya OAuth app.",
+    "ownAppToggle": "Salela OAuth app na yo moko",
+    "ownAppHint": "Registre OAuth app na compte na yo ya {name} (organisation, espace de travail to version entreprise) na callback URL oyo, sima tya ba credentials na yango awa. Séka likambo oyo pona kosalela application ya système.",
+    "ownAppCustomHint": "Okoki kotya ba credentials ya OAuth app na yo awa; tika bopola pona registre auto na serveur.",
+    "ownAppInUse": "Okangami na OAuth app na yo moko.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client secret (soki app na yo ezali na yango)",
+    "redirectUriLabel": "Callback / redirect URL ya koregistre",
+    "reconnect": "Kangama lisusu",
+    "needsReauth": "Esengeli kokangama lisusu",
+    "disconnectOauthNote": "Kokata ekosila kaka na appareil oyo. Pona kolongola ntina ya kokota, sala gestion ya ba applications autorisées na compte {name} na yo.",
+    "authModeLabel": "Authentication",
+    "authModeNone": "Te",
+    "authModeBearer": "Access token",
+    "authModeOauth": "Kota na nzela ya fournisseur (OAuth)",
+    "oauthCustomHint": "Okokota na serveur ya fournisseur na fenêtre moko sima ya kobomba.",
+    "saveAndSignIn": "Bomba & kokota",
+    "oauthCallback": {
+      "title": "Ndinga ya kokota esili",
+      "missingState": "Eloko ezali te ya kokota",
+      "close": "Okoki kokanga fenêtre oyo mpe kozonga na application.",
+      "closeButton": "Kanga fenêtre"
+    }
+  },
+  "modelSources": {
+    "connectButtonShort": "Sangisa eteni ya modèle",
+    "addAnother": "Bakisa eteni mosusu ya modèle",
+    "edit": "Kobongisa",
+    "disconnect": "Ngongola {name}",
+    "disconnectedToast": "Esilaki kosangana {name}",
+    "modelCountLabel": "{count} ba modèle",
+    "loadingModels": "Ba modèle ezali kotia...",
+    "noModelsAvailable": "Ba modèle te ezali na eteni oyo",
+    "sourceUnreachable": "Tokoki te kozwa eteni oyo. Mbala mosusu bakonzi na yo babongolaki to lisalisi esili temporarily.",
+    "retry": "Leka lisusu",
+    "connectFoundryAccount": "Sangisa compte ya Microsoft Azure Foundry",
+    "connectFoundryDescription": "Tala ba kopesa na misala ya modèle uta na compte ya Azure Foundry okoki kozwa. Ba permission na yo moko ya Azure nde ebakisa mokili nyonso ya mokanda – ba restrictions ya modèle ya application ezali te awa.",
+    "selectModelsDescription": "Pona ba kopesa na misala ya modèle uta na compte oyo ekozala na liste ya babongoli ya yo ya modèle.",
+    "editConnection": "Kobongisa lisangani",
+    "nameLabel": "Kombo",
+    "namePlaceholder": "nd. Équipe na ngaï Sandbox",
+    "nameRequired": "Kombo ya eteni esengeli kotondisama",
+    "foundryAccountLabel": "Compte ya Foundry",
+    "enterManually": "Tia yango na loboko",
+    "browseResources": "Tala ba resursi",
+    "subscriptionIdLabel": "ID ya abonnement",
+    "resourceGroupLabel": "Groupe ya resursi",
+    "accountNameLabel": "Kombo ya compte",
+    "subscriptionRequired": "Pona abonnement",
+    "accountRequired": "Pona compte ya Foundry",
+    "accountSelectionRequired": "Pona compte na liste.",
+    "selectAllRequired": "Pona abonnement, groupe ya resursi, mpe compte.",
+    "connectionFailed": "Tokomaki te kozwa compte oyo. Tala soki makambo ezali malamu mpe okoki kozwa yango.",
+    "duplicateSource": "Compte oyo esilaki kosangisama lokola « {name} ».",
+    "connectionSuccessModels": "Esangani — {count} ba kopesa na misala ya modèle ezwami",
+    "connectionSuccessEmpty": "Esangani, kasi ba kopesa na misala ya modèle te na compte oyo.",
+    "checkingConnection": "Kotalela lisangani...",
+    "next": "Sima",
+    "back": "Zonga",
+    "cancel": "Kofanda",
+    "connect": "Kopesa connexion",
+    "save": "Kobombela",
+    "scanningResources": "Toolingi kosala scan ya ba Azure subscriptions na yo...",
+    "discoveryPartialWarning": "{count, plural, one {# abonnement} other {# ba abonnement}} ekokaki te kosalema scan. Salela bokoteli ya maboko soki compte na yo ezali te.",
+    "discoveryTruncatedWarning": "Bazangi scan na ndenge ya mobimba mpo biloko ebele. Soki compte na yo ezali te, salela bokoteli ya maboko.",
+    "noAccountsDiscovered": "Compte moko ya Foundry ezwami te na ba subscription na yo. Salela bokoteli ya maboko soki oyebi nzela.",
+    "retryScan": "Kozongela kosala scan",
+    "searchAccountsPlaceholder": "Koluka ba compte...",
+    "modelsSelectedCount": "{selected} ya {total} modèle epɔnami",
+    "selectAll": "Poná nyonso",
+    "deselectAll": "Kolongola ponyama nyonso",
+    "autoAddLabel": "Kobakisa ba modèle ya sika otomatik",
+    "autoAddDescription": "Ba déploiement ya modèle oyo ekobakisama sima, ekomonana otomatik. Ba modèle oyo bapanami te bakovanda libanda."
   }
 }

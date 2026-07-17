@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { ServiceContainer } from '@/lib/services/ServiceContainer';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { AgentEnricher } from '@/lib/services/chat/enrichers/AgentEnricher';
+import { ExtractionEnricher } from '@/lib/services/chat/enrichers/ExtractionEnricher';
 import { RAGEnricher } from '@/lib/services/chat/enrichers/RAGEnricher';
 import { ToolRouterEnricher } from '@/lib/services/chat/enrichers/ToolRouterEnricher';
 import { AgentChatHandler } from '@/lib/services/chat/handlers/AgentChatHandler';
@@ -163,6 +164,9 @@ export async function POST(req: NextRequest): Promise<Response> {
             foundryOpenAIClient,
           ),
           new ToolRouterEnricher(toolRouterService, agentChatService),
+          // Structured-data extraction: composes the JSON-schema response
+          // format when the request carries an `extraction` payload.
+          new ExtractionEnricher(agentChatService),
           new AgentEnricher(),
 
           // Execution handlers (AgentChatHandler runs first, StandardChatHandler as fallback)
@@ -203,6 +207,7 @@ export async function POST(req: NextRequest): Promise<Response> {
                 case ErrorCode.VALIDATION_FAILED:
                   return 400;
                 case ErrorCode.AGENT_UNAVAILABLE:
+                case ErrorCode.MODEL_UNAVAILABLE:
                   return 409;
                 case ErrorCode.REQUEST_TIMEOUT:
                 case ErrorCode.PIPELINE_TIMEOUT:
@@ -339,6 +344,7 @@ export async function POST(req: NextRequest): Promise<Response> {
           case ErrorCode.VALIDATION_FAILED:
             return 400;
           case ErrorCode.AGENT_UNAVAILABLE:
+          case ErrorCode.MODEL_UNAVAILABLE:
             return 409;
           case ErrorCode.REQUEST_TIMEOUT:
           case ErrorCode.PIPELINE_TIMEOUT:
