@@ -102,6 +102,65 @@ function parseCSV(csvText: string): {
 }
 
 /**
+ * Classify a source document as a regular project narrative vs a non-narrative
+ * document (coordination, strategy, or overview). Non-narrative documents often
+ * list projects that also have their own dedicated narrative, so the UI flags
+ * them for the user to review before including them in the final CSV.
+ * Content-based (reads the extracted-text header) with a filename fallback.
+ */
+function classifyDocType(
+  headerText: string,
+  filename: string,
+): 'coordination' | 'strategy' | 'narrative' {
+  const t = (headerText || '').slice(0, 4000).toLowerCase();
+  const f = (filename || '').toLowerCase();
+  const inText = (arr: string[]) => arr.some((k) => t.includes(k));
+  const inName = (arr: string[]) => arr.some((k) => f.includes(k));
+
+  if (
+    inText([
+      'strategy paper',
+      'strategic plan',
+      'plan stratégique',
+      'document de stratégie',
+      'stratégie pays',
+      'mission strategy',
+    ]) ||
+    inName(['strategy', 'strateg', 'plan_strat'])
+  ) {
+    return 'strategy';
+  }
+  if (
+    inText([
+      'coordination nationale',
+      'national coordination',
+      'analyse de la mission',
+      'mission coordination',
+      'coordination cell',
+      'coordo cell',
+      'annual operational plan – coordination',
+    ]) ||
+    inName(['coordination', 'coordo', 'mission_analysis'])
+  ) {
+    return 'coordination';
+  }
+  return 'narrative';
+}
+
+/**
+ * An explicit document-type signal in the filename (e.g. "..._Coordination_Final.docx").
+ * This is a deliberate label the author put in the filename, so it takes priority
+ * over the model's content-based guess — the model sometimes reads a coordination
+ * document that describes a project and calls it a "project narrative".
+ */
+function filenameStrongType(filename: string): string | null {
+  const f = (filename || '').toLowerCase();
+  if (/coordination|coordo\b/.test(f)) return 'coordination';
+  if (/strateg/.test(f)) return 'strategy';
+  return null;
+}
+
+/**
  * GET /api/grants/runs/{runId}/data
  *
  * Returns the extraction output as structured JSON for inline editing.
@@ -209,6 +268,12 @@ export async function GET(
           stem,
           stem.replace(/ /g, '_'),
           stem.replace(/_/g, ' '),
+          // The extraction stage's safeStem replaces EVERY non-alphanumeric
+          // character (spaces, "&", accents, parentheses, dots) with "_" when
+          // naming the .txt file, so build that same canonical key — otherwise
+          // documents with special characters in their filename (e.g. "CEH
+          // régional", "Port-à-Piment", "BD112&BD114") get no source-document link.
+          stem.replace(/[^a-zA-Z0-9_-]/g, '_'),
         ];
         const uniqueVariants = [...new Set(variants)];
         for (const v of uniqueVariants) {
@@ -222,12 +287,59 @@ export async function GET(
       // Metadata not available — sourceFileMap stays empty
     }
 
+    // 6b. Determine each source document's type (narrative vs coordination /
+    //     strategy / overview / compilation) so the UI can flag non-narrative
+    //     sources for the user to review before including them in the final CSV.
+    //     Prefer the MODEL's classification (document_types.json, written by
+    //     normalize from the extraction call); fall back to deterministic keyword
+    //     classification for any source not covered (e.g. older runs). Will
+    //     likely revise this more with the Grants team.
+    const textDir = join(workDir, 'extracted_text');
+    const sourceTypes: Record<string, string> = {};
+    let modelTypes: Record<string, string> = {};
+    try {
+      const dtText = await readFile(
+        join(workDir, 'cache', 'document_types.json'),
+        'utf-8',
+      );
+      modelTypes = JSON.parse(dtText);
+    } catch {
+      // No model classification available — keyword fallback below.
+    }
+    const uniqueSources = [
+      ...new Set(rows.map((r) => r['Source File']).filter(Boolean)),
+    ];
+    await Promise.all(
+      uniqueSources.map(async (sf) => {
+        // 1. An explicit label in the filename wins over everything.
+        const strong = filenameStrongType(sf);
+        if (strong) {
+          sourceTypes[sf] = strong;
+          return;
+        }
+        // 2. The model's content-based classification (from the extraction call).
+        if (modelTypes[sf] && modelTypes[sf].trim()) {
+          sourceTypes[sf] = modelTypes[sf].trim();
+          return;
+        }
+        // 3. Keyword classification of the extracted text (older runs).
+        let header = '';
+        try {
+          header = await readFile(join(textDir, sf), 'utf-8');
+        } catch {
+          // Extracted text unavailable (e.g. cleaned up) — fall back to filename.
+        }
+        sourceTypes[sf] = classifyDocType(header, sf);
+      }),
+    );
+
     // 7. Return structured data
     return NextResponse.json({
       columns,
       rows,
       validation,
       sourceFileMap,
+      sourceTypes,
       ...(supplementalReport ? { supplementalReport } : {}),
     });
   } catch (error) {
