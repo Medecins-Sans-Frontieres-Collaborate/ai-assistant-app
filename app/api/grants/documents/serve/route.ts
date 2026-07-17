@@ -39,6 +39,17 @@ export async function GET(request: NextRequest) {
     const storage = createBlobStorageClient(session);
     const sasUrl = await storage.generateSasUrl(blobPath, 1); // 1-hour expiry
 
+    // Uses the Microsoft Office Online viewer for Office documents,
+    // otherwise redirects to the SAS URL directly
+    const ext = blobPath.split('.').pop()?.toLowerCase() || '';
+    const OFFICE_EXTS = new Set(['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']);
+    if (OFFICE_EXTS.has(ext)) {
+      const viewerUrl = `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+        sasUrl,
+      )}`;
+      return NextResponse.redirect(viewerUrl);
+    }
+
     return NextResponse.redirect(sasUrl);
   } catch (error) {
     console.error('Error serving grant document:', error);
