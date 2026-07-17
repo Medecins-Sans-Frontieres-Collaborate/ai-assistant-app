@@ -184,6 +184,156 @@ async function extractNameAndCode(
   return { rawProjectName: '', projectCodeIfPresent: '' };
 }
 
+/**
+ * For multi-project documents (e.g. OCP country docs that list many
+ * projects), resolve the verbatim project name for a specific code. The code is
+ * known to appear in the text, so we send only a focused window around its first
+ * occurrence rather than the whole (potentially hundreds-of-pages) document.
+ * Returns the raw name exactly as written, or '' if it can't be determined.
+ */
+async function lookupProjectNameForCode(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client: any,
+  deployment: string,
+  text: string,
+  code: string,
+): Promise<string> {
+  // The clean project name often appears in a project list/table further down the
+  // document, not at the codes first mention (which is frequently a budget line
+  // or a context sentence). Gather a window around EVERY occurrence of the code,
+  // plus the document head for context, so the model can see the actual name.
+  const upper = text.toUpperCase();
+  const CODE = code.toUpperCase();
+  const radius = 1800;
+  const windows: string[] = [];
+  let from = 0;
+  let occ = 0;
+  while (occ < 8) {
+    const idx = upper.indexOf(CODE, from);
+    if (idx < 0) break;
+    windows.push(
+      text.slice(
+        Math.max(0, idx - radius),
+        Math.min(text.length, idx + CODE.length + radius),
+      ),
+    );
+    from = idx + CODE.length;
+    occ++;
+  }
+  const windowText = (
+    text.slice(0, 1200) +
+    (windows.length
+      ? '\n…\n' + windows.join('\n…\n')
+      : text.slice(0, 2 * radius))
+  ).slice(0, 24000);
+
+  const prompt =
+    `You are reading excerpts of one MSF grant document that describes MULTIPLE projects. ` +
+    `Find the project identified by the code "${code}" and return its PROJECT NAME/TITLE — the label used for this project ` +
+    `in a project list, table, or section heading. The name may be a place/location (e.g. "Katsina") or a thematic name (e.g. "Cutaneous Leishmaniasis"). ` +
+    `Return it EXACTLY as written in the document — verbatim; do NOT translate, standardize, expand acronyms, or reformat it. ` +
+    `Do NOT return a full sentence, an objective, or an activity description (e.g. NOT "Scaling up of the nutrition activities in Katsina"). ` +
+    `Also do NOT return the bare project code or a lone abbreviation on its own — return the actual project name. ` +
+    `If the project is labeled in several places, use the clearest project name/title as written. ` +
+    `If you cannot confidently determine the project name for "${code}", return an empty string. ` +
+    `Return strictly JSON: {"projectName": "..."}\n\n` +
+    `DOCUMENT EXCERPTS:\n---\n${windowText}`;
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const resp = await client.chat.completions.create({
+        model: deployment,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0,
+        max_tokens: 200,
+      });
+      const content = resp.choices?.[0]?.message?.content || '';
+      if (!content.trim()) {
+        await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
+        continue;
+      }
+      const parsed = JSON.parse(cleanJson(content)) as { projectName?: string };
+      return String(parsed.projectName || '').trim();
+    } catch {
+      await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
+    }
+  }
+  return '';
+}
+
+/**
+ * Missing-code recovery: check whether a document describes a specific expected
+ * project even though the full code isn't written. Authors sometimes include only
+ * the bare project number (e.g. "Objetivo - Proyecto 107" for ESMX107), which
+ * defeats exact code matching. Sends a focused excerpt built around occurrences
+ * of the bare number and asks the model to confirm conservatively, returning
+ * verbatim evidence so a human can review the likely match.
+ */
+async function recoverMissingCode(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client: any,
+  deployment: string,
+  text: string,
+  code: string,
+  bareNumber: string,
+  country: string,
+  allocationName: string,
+): Promise<{ found: boolean; evidence: string; narrativeName: string }> {
+  // Excerpt = document head (title/context) + windows around the first few
+  // bare-number occurrences, capped so the request stays small.
+  const windows: string[] = [];
+  const re = new RegExp(`\\b${bareNumber}\\b`, 'g');
+  let match: RegExpExecArray | null;
+  let count = 0;
+  while ((match = re.exec(text)) !== null && count < 3) {
+    const start = Math.max(0, match.index - 1200);
+    const end = Math.min(text.length, match.index + 1200);
+    windows.push(text.slice(start, end));
+    count++;
+  }
+  const excerpt = (
+    text.slice(0, 1500) +
+    (windows.length ? '\n…\n' + windows.join('\n…\n') : '')
+  ).slice(0, 12000);
+
+  const prompt =
+    `You are checking whether ONE MSF grant document describes a SPECIFIC project.\n` +
+    `Target project code: "${code}" (country: ${country || 'unknown'}; allocation-list name: "${allocationName || 'unknown'}").\n` +
+    `The FULL code may not be written in the document — it often appears only as the bare project number "${bareNumber}" (e.g., "Proyecto ${bareNumber}", "Project ${bareNumber}", "N° ${bareNumber}"), or the project may be identifiable by its name/location.\n` +
+    `Be conservative: answer true ONLY if the text clearly ties to project number ${bareNumber} or the named project — NOT merely because it is the same country.\n` +
+    `Return strictly JSON: {"found": true|false, "evidence": "<verbatim quote from the document supporting the match, or empty>", "narrativeName": "<the project name exactly as written in the document, or empty>"}\n\n` +
+    `DOCUMENT EXCERPT:\n---\n${excerpt}`;
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const resp = await client.chat.completions.create({
+        model: deployment,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0,
+        max_tokens: 300,
+      });
+      const content = resp.choices?.[0]?.message?.content || '';
+      if (!content.trim()) {
+        await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
+        continue;
+      }
+      const parsed = JSON.parse(cleanJson(content)) as {
+        found?: boolean;
+        evidence?: string;
+        narrativeName?: string;
+      };
+      return {
+        found: Boolean(parsed.found),
+        evidence: String(parsed.evidence || '').trim(),
+        narrativeName: String(parsed.narrativeName || '').trim(),
+      };
+    } catch {
+      await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
+    }
+  }
+  return { found: false, evidence: '', narrativeName: '' };
+}
+
 // ---------------------------------------------------------------------------
 // Expected (code, name) allocation list loader — blob → temp file → table
 // ---------------------------------------------------------------------------
@@ -336,23 +486,36 @@ async function runCoverageCheck(params: {
 
     const docs: DocExtract[] = [];
     const entries = Object.entries(textMap);
-    let microIdx = 0;
-    for (const [filename, txtPath] of entries) {
-      let text = '';
-      try {
-        text = readFileSync(txtPath, 'utf-8');
-      } catch {
-        text = '';
-      }
-      const { rawProjectName, projectCodeIfPresent } = await extractNameAndCode(
-        client,
-        deployment,
-        text,
-        ocCfg.code_regex,
+    const microConcurrency = 2;
+    let microDone = 0;
+    for (let i = 0; i < entries.length; i += microConcurrency) {
+      const batch = entries.slice(i, i + microConcurrency);
+      const batchDocs = await Promise.all(
+        batch.map(async ([filename, txtPath]) => {
+          let text = '';
+          try {
+            text = readFileSync(txtPath, 'utf-8');
+          } catch {
+            text = '';
+          }
+          const { rawProjectName, projectCodeIfPresent } =
+            await extractNameAndCode(
+              client,
+              deployment,
+              text,
+              ocCfg.code_regex,
+            );
+          return {
+            file: filename,
+            rawProjectName,
+            projectCodeIfPresent,
+            text,
+          } as DocExtract;
+        }),
       );
-      docs.push({ file: filename, rawProjectName, projectCodeIfPresent, text });
-      microIdx++;
-      prog.micro(microIdx, entries.length);
+      docs.push(...batchDocs);
+      microDone += batch.length;
+      prog.micro(microDone, entries.length);
     }
 
     // 4. Load the expected (code, name) allocation list from the OC's
@@ -370,12 +533,135 @@ async function runCoverageCheck(params: {
     }
 
     // 5. Reconcile (pure logic).
-    prog.phase('Reconciling against allocation list…', 97);
+    prog.phase('Reconciling against allocation list…', 96);
     const reconciliation = reconcile({
       expected,
       docs,
       multiProject: ocCfg.multi_project,
+      coordKeywords: ocCfg.coord_keywords,
     });
+
+    // 5b. Multi-project OCs (e.g. OCP): the micro-pass yields only one name per
+    //     document, so resolve the verbatim per-code project name for each matched
+    //     code with a targeted LLM lookup over a focused window of the narrative.
+    if (ocCfg.multi_project) {
+      const docByFile = new Map(docs.map((d) => [d.file, d]));
+      const toResolve = reconciliation.rows.filter(
+        (r) =>
+          r.align === 'Yes' && !r.projectNameInNarrative && r.narrativeFile,
+      );
+      const concurrency = 5;
+      let resolved = 0;
+      for (let i = 0; i < toResolve.length; i += concurrency) {
+        const batch = toResolve.slice(i, i + concurrency);
+        await Promise.all(
+          batch.map(async (row) => {
+            const doc = docByFile.get(row.narrativeFile as string);
+            if (!doc) return;
+            const name = await lookupProjectNameForCode(
+              client,
+              deployment,
+              doc.text,
+              row.projectCodeInNarrative || row.projectCode,
+            );
+            if (name) row.projectNameInNarrative = name;
+          }),
+        );
+        resolved += batch.length;
+        prog.phase(
+          `Resolving project names (${resolved}/${toResolve.length})…`,
+          96 + (toResolve.length ? (resolved / toResolve.length) * 3 : 0),
+        );
+      }
+    }
+
+    // 5c. Missing-code recovery: for codes still Not Found, look for implicit
+    //     references (bare project number in a country-matching narrative) and
+    //     confirm with a conservative LLM check, surfacing a "likely" match with
+    //     verbatim evidence for human review.
+    {
+      const expectedByCode = new Map(
+        expected.map((e) => [e.code.trim().toUpperCase(), e]),
+      );
+      const notFoundRows = reconciliation.rows.filter((r) => r.align === 'No');
+      const concurrency = 3;
+      let tried = 0;
+      for (let i = 0; i < notFoundRows.length; i += concurrency) {
+        const batch = notFoundRows.slice(i, i + concurrency);
+        await Promise.all(
+          batch.map(async (row) => {
+            const code = row.projectCode.trim().toUpperCase();
+            const bareNumber = (code.match(/\d{2,4}/) || [])[0] || '';
+            if (!bareNumber) return;
+            const e = expectedByCode.get(code);
+            const country = e?.country || '';
+            const numRe = new RegExp(`\\b${bareNumber}\\b`);
+            const coordKw = ocCfg.coord_keywords || [];
+            const isCoord = (f: string) =>
+              coordKw.some(
+                (kw) => kw && f.toLowerCase().includes(kw.toLowerCase()),
+              );
+            // Candidate docs: contain the bare number, and (when known) mention
+            // the country — the LLM makes the final call, this only narrows cost.
+            // Non-coordination narratives are checked first so they win the
+            // first-confirmed match over coordination/strategy summaries.
+            const candidates = docs
+              .filter(
+                (d) =>
+                  numRe.test(d.text) &&
+                  (!country ||
+                    `${d.text} ${d.file}`
+                      .toLowerCase()
+                      .includes(country.toLowerCase())),
+              )
+              .sort((a, b) => Number(isCoord(a.file)) - Number(isCoord(b.file)))
+              .slice(0, 5);
+            for (const cand of candidates) {
+              const res = await recoverMissingCode(
+                client,
+                deployment,
+                cand.text,
+                code,
+                bareNumber,
+                country,
+                e?.name || row.projectName,
+              );
+              if (res.found) {
+                row.recovered = true;
+                row.narrativeFile = cand.file;
+                if (res.narrativeName)
+                  row.projectNameInNarrative = res.narrativeName;
+                row.evidence = res.evidence;
+                row.differences =
+                  `Likely match — full code not written; identified via project number ${bareNumber}` +
+                  (res.evidence ? `. Evidence: "${res.evidence}"` : '');
+                break;
+              }
+            }
+          }),
+        );
+        tried += batch.length;
+        prog.phase(
+          `Recovering unlabeled project codes (${tried}/${notFoundRows.length})…`,
+          99,
+        );
+      }
+
+      // Recovered codes are no longer "missing" — drop them from that list so
+      // the summary badge reflects only truly-unrecovered codes. They stay out
+      // of `matched` (which is the strict, literal-code-present set).
+      const recoveredCodes = new Set(
+        reconciliation.rows
+          .filter((r) => r.recovered)
+          .map((r) => r.projectCode.trim().toUpperCase()),
+      );
+      if (recoveredCodes.size > 0) {
+        reconciliation.missingFromNarratives =
+          reconciliation.missingFromNarratives.filter(
+            (c) => !recoveredCodes.has(c.trim().toUpperCase()),
+          );
+      }
+    }
 
     prog.done({
       oc,
