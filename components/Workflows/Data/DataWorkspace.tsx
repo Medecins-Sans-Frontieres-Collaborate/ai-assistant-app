@@ -32,6 +32,10 @@ import { uploadAndExtractText } from '@/client/services/workflows/fileTextExtrac
 import { appendWorkflowRailMessages } from '@/client/services/workflows/railMessages';
 import { profileTable } from '@/lib/services/workflows/data/columnStats';
 import {
+  applyDerivedColumns,
+  stripDerivedCells,
+} from '@/lib/services/workflows/data/derived';
+import {
   ColumnFilter,
   applyFilters,
 } from '@/lib/services/workflows/data/filtering';
@@ -51,6 +55,7 @@ import { mergeScopedResult } from '@/lib/services/workflows/data/scopedMerge';
 import {
   MAX_ASSESS_ROWS,
   MAX_ROWS,
+  carryRowIds,
   coerceCell,
   deriveNextRowId,
   getRowId,
@@ -58,6 +63,10 @@ import {
   stripRowIds,
   withRowIds,
 } from '@/lib/services/workflows/data/tableUtils';
+import {
+  detectAttributeMatrix,
+  transposeTable,
+} from '@/lib/services/workflows/data/transpose';
 
 import { FILE_COUNT_LIMITS } from '@/lib/utils/app/const';
 import { DATA_QUALITY_CRITERIA } from '@/lib/utils/shared/data/qualityCriteria';
@@ -139,7 +148,16 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
   const [canUndo, setCanUndo] = useState(false);
 
   const columns = useMemo(() => state?.columns ?? [], [state?.columns]);
-  const rows = useMemo(() => state?.rows ?? [], [state?.rows]);
+  const rawRows = useMemo(() => state?.rows ?? [], [state?.rows]);
+  /**
+   * The choke point every consumer reads (grid, filters, exports,
+   * transform payloads, insights): persisted rows overlaid with
+   * computed derived-column cells. Identity when no formulas exist.
+   */
+  const rows = useMemo(
+    () => applyDerivedColumns(columns, rawRows),
+    [columns, rawRows],
+  );
   const hasTable = columns.length > 0;
   /** Exact stats over the FULL table (prompt ground truth + header popovers). */
   const profiles = useMemo(() => profileTable(columns, rows), [columns, rows]);
@@ -163,6 +181,12 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         ? new Set(activeQcSource.rowIds)
         : null,
     [activeQcSource],
+  );
+
+  /** Feature-matrix shape (attributes as rows) → offer a transpose. */
+  const matrixDetected = useMemo(
+    () => hasTable && detectAttributeMatrix(columns, rows),
+    [hasTable, columns, rows],
   );
 
   const filterList = useMemo(() => Object.values(filters), [filters]);
@@ -224,21 +248,38 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         | { source?: DataAnalysisWorkflowState['sources'][number] }
         | { operation?: DataAnalysisWorkflowState['operations'][number] },
     ) => {
-      undoRef.current = { columns, rows };
+      // Snapshot RAW rows: overlaid derived cells must never persist,
+      // and undo writes the snapshot straight back to the store.
+      undoRef.current = { columns, rows: rawRows };
       setCanUndo(true);
       setSelectedRows(new Set());
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DataAnalysisWorkflowState;
-        // Assign stable ids to any id-less rows (imports, transform output).
+        // Canonicalize: drop derived cells (they are recomputed by the
+        // overlay), then assign stable ids to any id-less rows.
+        const strippedRows = stripDerivedCells(next.columns, next.rows);
         const { rows: nextRows, nextRowId } = withRowIds(
-          next.rows,
-          p.nextRowId ?? deriveNextRowId(next.rows),
+          strippedRows,
+          p.nextRowId ?? deriveNextRowId(strippedRows),
         );
         // Rids only exist after withRowIds, so source→row attribution is
         // injected here: appended rows = positions that had no rid before.
         const appendedRowIds = next.rows
           .map((row, i) => (getRowId(row) ? null : getRowId(nextRows[i])))
           .filter((rid): rid is string => !!rid);
+        // Source attribution must reference rows that still exist —
+        // stale rids would blank a QC-pane-filtered grid.
+        const keptRids = new Set(
+          nextRows.map((row) => getRowId(row)).filter(Boolean),
+        );
+        const prunedSources = p.sources.map((source) =>
+          source.rowIds?.some((rid) => !keptRids.has(rid))
+            ? {
+                ...source,
+                rowIds: source.rowIds.filter((rid) => keptRids.has(rid)),
+              }
+            : source,
+        );
         return {
           ...p,
           columns: next.columns,
@@ -248,8 +289,13 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           assessment: undefined,
           sources:
             'source' in record && record.source
-              ? [...p.sources, { ...record.source, rowIds: appendedRowIds }]
-              : p.sources,
+              ? [...prunedSources, { ...record.source, rowIds: appendedRowIds }]
+              : prunedSources,
+          // New data may be matrix-shaped again — re-offer the transpose.
+          transposeSuggestionDismissed:
+            'source' in record && record.source
+              ? undefined
+              : p.transposeSuggestionDismissed,
           operations:
             'operation' in record && record.operation
               ? [...p.operations, record.operation]
@@ -258,7 +304,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         };
       });
     },
-    [columns, rows, conversationId, updateWorkflowState],
+    [columns, rawRows, conversationId, updateWorkflowState],
   );
 
   const handleUndo = useCallback(() => {
@@ -406,7 +452,9 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sourceText,
-          columns,
+          // Derived columns are computed locally — never ask the model
+          // to extract values for them.
+          columns: columns.filter((c) => !c.formula),
           modelId: conversation?.model?.id,
         }),
       });
@@ -495,7 +543,11 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
 
       let addedCount = 0;
       if (hasTable) {
-        const result = await photoExtract({ imageRefs, columns, modelId });
+        const result = await photoExtract({
+          imageRefs,
+          columns: columns.filter((c) => !c.formula),
+          modelId,
+        });
         const newRows = admitRows(result.rows as Rows, columns);
         const merged = mergeRows(newRows);
         addedCount = newRows.length;
@@ -586,11 +638,29 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
           parsed?.error || `Transform failed (${response.status})`,
         );
       }
-      const resultColumns = parsed.data.columns as DataColumn[];
+      // The LLM round-trip loses format/formula metadata — re-attach
+      // for columns that kept their id and number type. (Materialized
+      // derived values in the result are stripped again in applyTable;
+      // the overlay recomputes them.)
+      const prevById = new Map(columns.map((column) => [column.id, column]));
+      const resultColumns = (parsed.data.columns as DataColumn[]).map(
+        (column) => {
+          const prev = prevById.get(column.id);
+          if (!prev || prev.type !== 'number' || column.type !== 'number') {
+            return column;
+          }
+          const carried: DataColumn = { ...column };
+          if (prev.format && !carried.format) carried.format = prev.format;
+          if (prev.formula && !carried.formula) carried.formula = prev.formula;
+          return carried;
+        },
+      );
       const resultRows = parsed.data.rows as Rows;
 
       let nextRows = resultRows;
-      if (scoped) {
+      if (!scoped) {
+        nextRows = carryRowIds(rows, resultRows);
+      } else {
         // Positional merge-back (server enforced same count/order): each
         // scoped row keeps its rid; out-of-scope rows get null for any
         // new columns.
@@ -636,6 +706,25 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     } finally {
       setBusy(null);
     }
+  };
+
+  const handleTranspose = () => {
+    applyTable(transposeTable(columns, rows, t('data.transposeAxisColumn')), {
+      operation: {
+        id: uuidv4(),
+        engine: 'client',
+        instruction: t('data.transposedTable'),
+        at: new Date().toISOString(),
+      },
+    });
+  };
+
+  const dismissTransposeSuggestion = () => {
+    updateWorkflowState(conversationId, (prev) => ({
+      ...(prev as DataAnalysisWorkflowState),
+      transposeSuggestionDismissed: true,
+      updatedAt: new Date().toISOString(),
+    }));
   };
 
   const handleDeleteSelected = () => {
@@ -809,7 +898,10 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
     const source = s.sources.find((entry) => entry.id === sourceId);
     const rids = new Set(source?.rowIds ?? []);
     if (rids.size === 0) return;
-    const newRows = s.rows.filter((row) => {
+    // Store rows bypass the workspace memo — overlay derived cells so
+    // ingest checks see the same values manual assessments do.
+    const allRows = applyDerivedColumns(s.columns, s.rows);
+    const newRows = allRows.filter((row) => {
       const rid = getRowId(row);
       return !!rid && rids.has(rid);
     });
@@ -820,7 +912,7 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       await runAssessment({
         targetRows: newRows,
         targetColumns: s.columns,
-        allRows: s.rows,
+        allRows,
         criteria: DATA_QUALITY_CRITERIA.filter((c) => c.defaultOn).map(
           (c) => c.id,
         ),
@@ -848,7 +940,8 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
       updateWorkflowState(conversationId, (prev) => {
         const p = prev as DataAnalysisWorkflowState;
         const column = p.columns.find((c) => c.id === columnId);
-        if (!column) return p;
+        // Derived cells are formula-owned — never directly writable.
+        if (!column || column.formula) return p;
         const index = p.rows.findIndex((row) => getRowId(row) === rid);
         if (index === -1) return p;
         const value = raw === '' ? null : coerceCell(raw, column.type);
@@ -1338,6 +1431,32 @@ export function DataWorkspace({ conversationId }: WorkflowWorkspaceProps) {
             >
               {t('data.dismiss')}
             </button>
+          </p>
+        )}
+
+        {matrixDetected && !state?.transposeSuggestionDismissed && (
+          <p
+            className="flex items-center justify-between gap-2 border-b border-gray-200 px-3 py-2 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-300"
+            role="status"
+          >
+            {t('data.transposeSuggestion')}
+            <span className="flex shrink-0 items-center gap-3">
+              <button
+                type="button"
+                onClick={handleTranspose}
+                disabled={busy !== null}
+                className="text-sm font-medium text-blue-700 underline-offset-2 hover:underline disabled:opacity-50 dark:text-blue-400"
+              >
+                {t('data.transpose')}
+              </button>
+              <button
+                type="button"
+                onClick={dismissTransposeSuggestion}
+                className="text-xs text-gray-500 underline-offset-2 hover:underline dark:text-gray-400"
+              >
+                {t('data.dismiss')}
+              </button>
+            </span>
           </p>
         )}
 
