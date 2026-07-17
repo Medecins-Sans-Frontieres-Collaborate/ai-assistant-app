@@ -13,7 +13,7 @@ import { dirname, join } from 'path';
 type AnyRecord = Record<string, any>;
 
 export const CSV_COLUMNS: string[] = [
-  'Project Number',
+  'Project Code',
   'Project Name',
   'Mission Country',
   'OC',
@@ -114,7 +114,7 @@ function recordToRow(
   ocName: string,
 ): Record<string, string> {
   return {
-    'Project Number': safeStr(record.project_code),
+    'Project Code': safeStr(record.project_code),
     'Project Name': safeStr(record.project_name),
     'Mission Country': safeStr(record.mission_country || record.country),
     OC: safeStr(record.oc_name || ocName),
