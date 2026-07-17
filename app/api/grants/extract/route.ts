@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createBlobStorageClient } from '@/lib/services/blobStorageFactory';
 import { canAccessGrants } from '@/lib/services/grants/access';
 import { runPipeline } from '@/lib/services/grants/pipeline';
+import { loadPromptOverride } from '@/lib/services/grants/promptStore';
 import { grantRunDir } from '@/lib/services/grants/runPaths';
 
 import { BlobProperty } from '@/lib/utils/server/blob/blob';
@@ -20,6 +21,9 @@ interface ExtractRequestBody {
   year?: number;
   /** Source-filename → project-code, confirmed in the pre-processing coverage check. */
   codeOverrides?: Record<string, string>;
+  /** Unsaved per-OC prompt edits to use for this run only (takes precedence over
+   *  any saved override). */
+  promptOverride?: string;
 }
 
 /**
@@ -64,6 +68,7 @@ export async function POST(request: NextRequest) {
       selectedColumns,
       year,
       codeOverrides,
+      promptOverride,
     } = body;
 
     if (!oc || !documentBlobPaths || documentBlobPaths.length === 0) {
@@ -158,6 +163,16 @@ export async function POST(request: NextRequest) {
       JSON.stringify(metadata, null, 2),
     );
 
+    // Resolve the prompt: unsaved in-flight edits (body) take precedence, then a
+    // saved per-OC override, else the pipeline builds the code default.
+    let resolvedPromptOverride: string | undefined = promptOverride?.trim()
+      ? promptOverride
+      : undefined;
+    if (!resolvedPromptOverride) {
+      const saved = await loadPromptOverride(blobClient, oc);
+      if (saved) resolvedPromptOverride = saved.prompt;
+    }
+
     // 8. Run pipeline in background (don't await — return immediately)
     runPipeline({
       oc,
@@ -171,6 +186,7 @@ export async function POST(request: NextRequest) {
       maxWorkers: 3,
       year: year || new Date().getFullYear(),
       codeOverrides: codeOverrides || {},
+      promptOverride: resolvedPromptOverride,
     }).catch((err) => {
       console.error(`[${runId}] Pipeline failed:`, err);
     });
