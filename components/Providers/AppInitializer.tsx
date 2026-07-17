@@ -8,6 +8,10 @@ import toast from 'react-hot-toast';
 import { initMcpCredentialSync } from '@/client/services/mcp/mcpCredentialSync';
 
 import { STORAGE_QUOTA_EXCEEDED_EVENT } from '@/lib/utils/app/storage/perConversationStorage';
+import {
+  conversationUsesAgent,
+  estimateConversationUsage,
+} from '@/lib/utils/shared/chat/usageBackfill';
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
 
 import {
@@ -18,7 +22,11 @@ import {
 } from '@/types/openai';
 
 import { useConversationStore } from '@/client/stores/conversationStore';
-import { useSettingsStore } from '@/client/stores/settingsStore';
+import {
+  TokenUsageBucket,
+  tokenUsageKey,
+  useSettingsStore,
+} from '@/client/stores/settingsStore';
 import { getDefaultModel, getStaticModelList } from '@/config/models';
 
 /**
@@ -123,6 +131,56 @@ export function AppInitializer() {
 
       // Mark as loaded
       setIsLoaded(true);
+
+      // 3b. One-time back-calculation of emissions-relevant usage for chats
+      // that predate token tracking (tokens approximated from stored text —
+      // see usageBackfill.ts). Raw tokens only: CO2e stays display-time so
+      // assumption edits remain retroactive. Runs regardless of the LD flag
+      // (pure data prep; every UI surface is flag-gated). Failures stamp the
+      // marker anyway so a corrupt conversation can't retry-loop every boot.
+      try {
+        const {
+          historicalUsageBackfilledAt,
+          tokenUsageFirstTrackedAt,
+          mergeEstimatedUsage,
+          markHistoricalBackfillDone,
+        } = useSettingsStore.getState();
+        if (historicalUsageBackfilledAt == null) {
+          const merged: Record<string, TokenUsageBucket> = {};
+          for (const conversation of conversations) {
+            // Agent chats never had tracked usage and don't fit the
+            // per-model emissions math — skip them entirely.
+            if (conversationUsesAgent(conversation)) continue;
+            const bucket = estimateConversationUsage(conversation, {
+              onlyBeforeIso: tokenUsageFirstTrackedAt,
+            });
+            if (bucket.requests === 0) continue;
+            const key = tokenUsageKey({
+              modelId: conversation.model?.id ?? 'unknown',
+              region: conversation.hostedRegion ?? null,
+              reasoningEffort: conversation.reasoningEffort,
+            });
+            const existing = merged[key];
+            merged[key] = {
+              promptTokens: (existing?.promptTokens ?? 0) + bucket.promptTokens,
+              completionTokens:
+                (existing?.completionTokens ?? 0) + bucket.completionTokens,
+              requests: (existing?.requests ?? 0) + bucket.requests,
+            };
+          }
+          if (Object.keys(merged).length > 0) {
+            mergeEstimatedUsage(merged);
+          } else {
+            markHistoricalBackfillDone();
+          }
+        }
+      } catch (backfillError) {
+        console.error(
+          '[AppInitializer] Historical usage backfill failed; marking done to avoid retry loops',
+          backfillError,
+        );
+        useSettingsStore.getState().markHistoricalBackfillDone();
+      }
 
       // 4. Refine the model list from live discovery (non-blocking, always
       // on). The server returns the region-correct, ring-gated list — or the
