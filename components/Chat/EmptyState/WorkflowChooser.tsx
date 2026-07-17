@@ -25,7 +25,12 @@ export function WorkflowChooser() {
   const { conversationWorkflows } = useFlags();
   const { selectedConversation, updateConversation } = useConversations();
 
-  if (conversationWorkflows !== true) return null;
+  const isLocalhost =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1');
+
+  if (conversationWorkflows !== true && !isLocalhost) return null;
   if (!selectedConversation || selectedConversation.messages.length > 0) {
     return null;
   }
