@@ -2,10 +2,14 @@
 
 import toast from 'react-hot-toast';
 
+import { updateConversationCompaction } from '@/client/services/compactionService';
 import { ensureFreshOauthToken } from '@/client/services/mcp/mcpOauth';
+import { extractMemories } from '@/client/services/memoryService';
 import { generateConversationTitle } from '@/client/services/titleService';
 
+import { VALIDATION_LIMITS } from '@/lib/utils/app/const';
 import { TokenUsageMetadata } from '@/lib/utils/app/metadata';
+import { getCompactionBoundary } from '@/lib/utils/shared/chat/conversationCompaction';
 import { findMessageIndexForApprovalId } from '@/lib/utils/shared/chat/findMessageIndexForApprovalId';
 import { MessageContentAnalyzer } from '@/lib/utils/shared/chat/messageContentAnalyzer';
 import {
@@ -40,6 +44,7 @@ import { SearchMode } from '@/types/searchMode';
 
 import { useChatInputStore } from './chatInputStore';
 import { useConversationStore } from './conversationStore';
+import { MAX_MEMORY_TEXT_LENGTH, useMemoryStore } from './memoryStore';
 import { useSettingsStore } from './settingsStore';
 import { useUIStore } from './uiStore';
 
@@ -51,6 +56,18 @@ import { create } from 'zustand';
 
 /** Sentinel key for OAuth resume state when a server has no label. */
 const NO_SERVER_LABEL = '__no_label__';
+
+/**
+ * Clamps the user-adjustable context window size. Mirrors the settingsStore
+ * setter's bounds; the upper bound matters because the server rejects
+ * requests with more than MAX_API_MESSAGES messages.
+ */
+function clampContextWindowSize(size: number | undefined): number {
+  return Math.min(
+    Math.max(size ?? VALIDATION_LIMITS.CLIENT_MAX_MESSAGES, 20),
+    VALIDATION_LIMITS.MAX_API_MESSAGES,
+  );
+}
 
 /** Returns a new Set without `item`, or the same set when `item` isn't present
  *  (so an unchanged value keeps its reference and avoids a needless re-render). */
@@ -812,10 +829,49 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     // trailing entry to satisfy non-empty-array validators downstream.
     // Native-MCP resume sends the FULL windowed transcript instead — the
     // stateless server reconstructs the tool-call round from it.
-    const messagesForAPI =
-      approvalResponses?.length && !isMcpResume
-        ? flatMessages.slice(-1)
-        : windowMessagesForAPI(flatMessages);
+    const isFoundryApprovalResume = !!approvalResponses?.length && !isMcpResume;
+    const contextWindowSize = clampContextWindowSize(
+      settings.contextWindowSize,
+    );
+    const messagesForAPI = isFoundryApprovalResume
+      ? flatMessages.slice(-1)
+      : windowMessagesForAPI(flatMessages, contextWindowSize);
+
+    // Compaction summary rides along whenever windowing actually dropped
+    // messages. It may lag the boundary by a few messages (summaries refresh
+    // post-stream) — acceptable staleness by design — but must never LEAD the
+    // transcript being sent: mid-conversation regenerates (and stale
+    // failed-send retries) pass only a prefix of the conversation, and a
+    // summary covering messages beyond that prefix would leak the very
+    // content being replaced. Never attached on the Foundry approval-resume
+    // path: the thread keeps full server-side history.
+    const conversationSummary =
+      !isFoundryApprovalResume &&
+      conversation.compaction?.summary &&
+      conversation.compaction.upToEntryIndex <= flatMessages.length &&
+      getCompactionBoundary(flatMessages, contextWindowSize) > 0
+        ? conversation.compaction.summary
+        : undefined;
+
+    // Memories require BOTH the user opt-in and the LD flag mirror —
+    // flipping the flag off stops memories from being SENT, not just shown.
+    // Same Foundry approval-resume exclusion as the summary. Select the 60
+    // most recently UPDATED (the store array is insertion-ordered and
+    // updateMemory edits in place, so a tail slice would drop freshly
+    // corrected facts while keeping stale ones — and would contradict
+    // capMemories' evict-oldest-by-updatedAt policy). The length cap is
+    // belt-and-suspenders: an over-length entry (e.g. hand-edited
+    // localStorage) must degrade, never 400 the whole chat request on the
+    // server's per-memory cap.
+    const memoryTexts =
+      !isFoundryApprovalResume &&
+      settings.memoriesEnabled &&
+      settings.memoriesFlagEnabled
+        ? [...useMemoryStore.getState().memories]
+            .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
+            .slice(-60)
+            .map((m) => m.text.slice(0, MAX_MEMORY_TEXT_LENGTH))
+        : [];
 
     // Echo the whole pending batch back (not just the answered ones): the
     // server auto-denies unanswered calls, mirroring the Foundry behavior.
@@ -975,6 +1031,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       mcpPendingToolCalls,
       mcpLoopRound,
       extraction,
+      conversationSummary,
+      memories: memoryTexts.length > 0 ? memoryTexts : undefined,
     });
   },
 
@@ -1273,6 +1331,33 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       }
 
       conversationStore.updateConversation(conversation.id, updates);
+    }
+
+    // Post-exchange best-effort maintenance, fire-and-forget like title
+    // generation above. Unlike titles, these are NOT deferred while a
+    // transcription is pending — they operate on whatever text exists now.
+    // Read the finalized conversation back from the store so both the
+    // new-message and regeneration branches see the persisted state.
+    const finalConversation = useConversationStore
+      .getState()
+      .conversations.find((c) => c.id === conversation.id);
+    if (finalConversation) {
+      const settings = useSettingsStore.getState();
+      const flat = flattenEntriesForAPI(finalConversation.messages);
+      const contextWindowSize = clampContextWindowSize(
+        settings.contextWindowSize,
+      );
+      const boundary = getCompactionBoundary(flat, contextWindowSize);
+      if (boundary > (finalConversation.compaction?.upToEntryIndex ?? 0)) {
+        void updateConversationCompaction(
+          finalConversation,
+          flat,
+          contextWindowSize,
+        );
+      }
+      if (settings.memoriesEnabled && settings.memoriesFlagEnabled) {
+        void extractMemories(finalConversation, flat);
+      }
     }
   },
 
