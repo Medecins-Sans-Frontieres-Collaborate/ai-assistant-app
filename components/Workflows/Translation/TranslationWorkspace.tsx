@@ -15,6 +15,8 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAutoFocusComposer } from '@/client/hooks/ui/useAutoFocusComposer';
+import { usePasteComposer } from '@/client/hooks/ui/usePasteComposer';
 import { useEditPreview } from '@/client/hooks/workflows/useEditPreview';
 import { useWorkflowStream } from '@/client/hooks/workflows/useWorkflowStream';
 
@@ -215,6 +217,26 @@ export function TranslationWorkspace({
 
   const isRunning = run?.isRunning ?? false;
   const sourceText = state?.sourceText ?? '';
+
+  // Stray typing and pasting land in the source pane, the way they land in
+  // the chat composer. Deliberately no `onAttach`: this field exists to
+  // receive a whole document, so diverting a large paste to an attachment
+  // would defeat the workflow rather than protect the composer.
+  const sourceRef = useRef<HTMLTextAreaElement>(null);
+  const appendSource = useCallback(
+    (text: string) => patchState({ sourceText: sourceText + text }),
+    [patchState, sourceText],
+  );
+  useAutoFocusComposer({
+    textareaRef: sourceRef,
+    enabled: !isRunning,
+    append: appendSource,
+  });
+  usePasteComposer({
+    textareaRef: sourceRef,
+    enabled: !isRunning,
+    append: appendSource,
+  });
   const targetText = targetDraft ?? state?.finalText ?? '';
   const activeGlossary = glossaries.find((g) => g.id === state?.glossaryId);
   const assessment = state?.assessment;
@@ -847,6 +869,7 @@ export function TranslationWorkspace({
                 />
               </div>
               <textarea
+                ref={sourceRef}
                 value={sourceText}
                 onChange={(e) => patchState({ sourceText: e.target.value })}
                 disabled={isRunning}
