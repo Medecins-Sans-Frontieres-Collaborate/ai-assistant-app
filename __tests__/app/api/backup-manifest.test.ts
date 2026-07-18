@@ -260,7 +260,7 @@ describe('/api/backup/manifest', () => {
       ['skipped version', 9],
       ['older version', 3],
     ])(
-      'returns 400 when version is not exactly +1 (%s)',
+      'returns 409 BACKUP_VERSION_CONFLICT when version is not exactly +1 (%s)',
       async (_label, version) => {
         vi.mocked(readManifest).mockResolvedValue({
           manifest: makeManifest({ version: 7 }),
@@ -270,11 +270,95 @@ describe('/api/backup/manifest', () => {
         const response = await PUT(
           putRequest(makeManifest({ version }), { 'if-match': '"e1"' }),
         );
+        const data = await parseJsonResponse(response);
 
+        // A wrong next-version under CAS is a concurrency loss — the client's
+        // pull-merge-repush recovery loop triggers on this code, not on 400.
+        expect(response.status).toBe(409);
+        expect(data.code).toBe('BACKUP_VERSION_CONFLICT');
+        expect(writeManifest).not.toHaveBeenCalled();
+      },
+    );
+
+    it.each([['*'], ['W/"weak"'], ['unquoted']])(
+      'rejects a non-strong-ETag If-Match header (%s) before any storage write',
+      async (ifMatch) => {
+        vi.mocked(readManifest).mockResolvedValue({
+          manifest: makeManifest({ version: 7 }),
+          etag: '"e1"',
+        });
+
+        const response = await PUT(
+          putRequest(makeManifest({ version: 8 }), { 'if-match': ifMatch }),
+        );
+
+        // `If-Match: *` matches any blob and would reduce the CAS to a blind
+        // write — only exact quoted strong ETags may reach the condition.
         expect(response.status).toBe(400);
         expect(writeManifest).not.toHaveBeenCalled();
       },
     );
+
+    it('accepts a tombstone entry with an empty rev (never-pushed deletion)', async () => {
+      vi.mocked(readManifest).mockResolvedValue({
+        manifest: makeManifest({ version: 7 }),
+        etag: '"e1"',
+      });
+      vi.mocked(writeManifest).mockResolvedValue('"e2"');
+
+      const response = await PUT(
+        putRequest(
+          makeManifest({
+            version: 8,
+            conversations: {
+              conv1: {
+                rev: REV,
+                updatedAt: '2026-07-17T00:00:00.000Z',
+                size: 42,
+              },
+              // Deleted before its first push — no blob, no rev.
+              ghost: {
+                rev: '',
+                updatedAt: '2026-07-17T01:00:00.000Z',
+                size: 0,
+                deleted: true,
+                deletedAt: '2026-07-17T01:00:00.000Z',
+              },
+            },
+          }),
+          { 'if-match': '"e1"' },
+        ),
+      );
+
+      expect(response.status).toBe(200);
+      expect(writeManifest).toHaveBeenCalled();
+    });
+
+    it('still rejects an invalid rev on a LIVE entry', async () => {
+      vi.mocked(readManifest).mockResolvedValue({
+        manifest: makeManifest({ version: 7 }),
+        etag: '"e1"',
+      });
+
+      const response = await PUT(
+        putRequest(
+          makeManifest({
+            version: 8,
+            conversations: {
+              conv1: {
+                rev: '',
+                updatedAt: '2026-07-17T00:00:00.000Z',
+                size: 42,
+              },
+            },
+          }),
+          { 'if-match': '"e1"' },
+        ),
+      );
+
+      expect(response.status).toBe(400);
+      expect(writeManifest).not.toHaveBeenCalled();
+    });
 
     it('requires version 1 on first create and writes with null etag', async () => {
       vi.mocked(readManifest).mockResolvedValue(null);
