@@ -96,9 +96,18 @@ async function runSyncOnce(deps: SyncDeps): Promise<SyncResult> {
       const epoch = remote ? remote.epoch : deps.crypto.epoch;
       const local = deps.getLocalState();
 
-      const plan =
+      // "Remote unchanged since our last sync" requires the etag to match
+      // too when we have one — version numbers restart from re-creates, so
+      // equality alone could alias a different manifest generation.
+      const point = deps.getSyncPoint();
+      const remoteUnchanged =
         remote !== null &&
-        remote.version !== deps.getSyncPoint().lastSyncedVersion
+        remote.version === point.lastSyncedVersion &&
+        (point.lastSyncedEtag === null ||
+          fetched?.etag === point.lastSyncedEtag);
+
+      const plan =
+        remote !== null && !remoteUnchanged
           ? mergeManifest(local, remote)
           : computeLocalChanges(local, remote);
 
@@ -289,6 +298,17 @@ export function runSync(deps: SyncDeps): Promise<SyncResult> {
 /** True while a sync (or its queued rerun) is executing. */
 export function isSyncRunning(): boolean {
   return inFlight !== null;
+}
+
+/**
+ * Resolves once no sync (including queued reruns) is executing. Full-corpus
+ * rewrites (rotation, reset, re-create) call this first so they never
+ * interleave with a debounced incremental sync from the same device.
+ */
+export async function waitForSyncIdle(): Promise<void> {
+  while (inFlight) {
+    await inFlight.catch(() => undefined);
+  }
 }
 
 /** Reset single-flight state — for tests and sign-out only. */
