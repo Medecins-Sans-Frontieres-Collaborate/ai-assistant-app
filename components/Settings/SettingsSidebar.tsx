@@ -9,17 +9,22 @@ import {
   IconRobot,
   IconSettings,
   IconShieldLock,
+  IconUserShield,
 } from '@tabler/icons-react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { FC, useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { useAgentAccessAdmin } from '@/client/hooks/settings/useAgentAccessAdmin';
+
 import { Settings } from '@/types/settings';
 
 import { SidebarButton } from '../Sidebar/SidebarButton';
 import { NavigationItem } from './NavigationItem';
 import { SettingsSection } from './types';
+
+import { Link } from '@/lib/navigation';
 
 interface SettingsSidebarProps {
   activeSection: SettingsSection;
@@ -53,6 +58,8 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
   // flags above: encrypted backup must stay hidden until LD explicitly
   // serves the flag as true (like mcpArbitraryServers).
   const isBackupEnabled = enableEncryptedBackups === true;
+  // Visibility only — the admin page's server component is the real gate.
+  const { isAdmin: isAgentAccessAdmin } = useAgentAccessAdmin();
   const [showResetConfirmation, setShowResetConfirmation] = useState(false);
 
   const confirmReset = () => {
@@ -129,6 +136,19 @@ export const SettingsSidebar: FC<SettingsSidebarProps> = ({
               icon={<IconShieldLock size={18} />}
               onClick={setActiveSection}
             />
+          )}
+
+          {isAgentAccessAdmin && (
+            <Link
+              href="/admin/agent-access"
+              className="flex items-center w-full text-left p-3 my-1 rounded-lg text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              onClick={onClose}
+            >
+              <span className="mr-3">
+                <IconUserShield size={18} />
+              </span>
+              <span>{t('settings.Agent Access')}</span>
+            </Link>
           )}
 
           <NavigationItem
