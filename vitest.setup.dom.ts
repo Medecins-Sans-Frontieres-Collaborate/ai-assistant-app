@@ -92,6 +92,16 @@ const mockMessages: Record<string, unknown> = {
       autoDetect: 'Auto-detect',
     },
   },
+  table: {
+    copyTable: 'Copy table',
+    downloadTable: 'Download table',
+    copyMarkdown: 'Markdown',
+    copyCsv: 'CSV',
+    copyTsv: 'TSV',
+    formatCsv: 'CSV (.csv)',
+    exportedAsCsv: 'Exported as CSV',
+    copyFailed: 'Failed to copy table',
+  },
   artifact: {
     startWriting: 'Start writing...',
     document: 'Document',
