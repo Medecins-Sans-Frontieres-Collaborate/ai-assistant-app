@@ -4,13 +4,18 @@ import {
 } from '@/lib/services/agentAccess/AgentAccessService';
 import {
   StoredAgentAccessRule,
+  StoredPromptAgent,
+  listAllPromptAgents,
   listAllRules,
   readConfig,
 } from '@/lib/services/agentAccess/accessRulesStore';
 import {
   AgentAccessRule,
   AgentAccessType,
+  PROMPT_AGENT_SOURCE,
+  PromptAgent,
   canonicalAgentKey,
+  promptAgentBlobPath,
   ruleBlobPath,
 } from '@/lib/services/agentAccess/types';
 
@@ -26,10 +31,12 @@ vi.mock('@/lib/services/agentAccess/accessRulesStore', () => ({
   createAgentAccessBlobStorage: vi.fn(() => ({})),
   listAllRules: vi.fn(),
   readConfig: vi.fn(),
+  listAllPromptAgents: vi.fn(),
 }));
 
 const mockListAllRules = vi.mocked(listAllRules);
 const mockReadConfig = vi.mocked(readConfig);
+const mockListAllPromptAgents = vi.mocked(listAllPromptAgents);
 
 const SOURCE_A = '/subscriptions/sub/projects/project-a';
 const SOURCE_B = '/subscriptions/sub/projects/project-b';
@@ -61,6 +68,27 @@ function storedRule(
   };
 }
 
+function storedPromptAgent(id: string, name = 'Helper'): StoredPromptAgent {
+  const agent: PromptAgent = {
+    version: 1,
+    id,
+    name,
+    description: '',
+    systemPrompt: 'You are a helper.',
+    modelId: 'gpt-5.2-chat',
+    createdBy: 'admin@example.com',
+    createdAt: '2026-07-17T00:00:00.000Z',
+    updatedBy: 'admin@example.com',
+    updatedAt: '2026-07-17T00:00:00.000Z',
+  };
+  return {
+    canonicalKey: canonicalAgentKey(PROMPT_AGENT_SOURCE, id),
+    blobPath: promptAgentBlobPath(id),
+    agent,
+    etag: '"etag-pa"',
+  };
+}
+
 function getService(): AgentAccessService {
   return AgentAccessService.getInstance();
 }
@@ -84,6 +112,7 @@ describe('AgentAccessService', () => {
     mockEnv.AGENT_ACCESS_CONTROL_ENABLED = true;
     mockListAllRules.mockResolvedValue([]);
     mockReadConfig.mockResolvedValue(null);
+    mockListAllPromptAgents.mockResolvedValue([]);
   });
 
   afterEach(() => {
@@ -571,6 +600,125 @@ describe('AgentAccessService', () => {
       expect(snapshot.configEtag).toBe('"cfg-etag"');
       expect(snapshot.rulesUnavailable).toBe(false);
       expect(snapshot.fetchedAt).not.toBeNull();
+    });
+  });
+
+  describe('prompt agents', () => {
+    it('exposes loaded prompt agents via getPromptAgents, getPromptAgentById, and the snapshot', async () => {
+      const storedA = storedPromptAgent('prompt-aaa111', 'Finance Helper');
+      const storedB = storedPromptAgent('prompt-bbb222', 'HR Helper');
+      mockListAllPromptAgents.mockResolvedValue([storedA, storedB]);
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getPromptAgents()).toEqual([storedA.agent, storedB.agent]);
+      expect(service.getPromptAgentById('prompt-aaa111')).toEqual(
+        storedA.agent,
+      );
+      expect(service.getPromptAgentById('prompt-unknown')).toBeNull();
+      expect(service.getSnapshot().promptAgents).toEqual([
+        storedA.agent,
+        storedB.agent,
+      ]);
+    });
+
+    it('returns empty/null when the feature is off and never touches storage', async () => {
+      mockEnv.AGENT_ACCESS_CONTROL_ENABLED = false;
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getPromptAgents()).toEqual([]);
+      expect(service.getPromptAgentById('prompt-aaa111')).toBeNull();
+      expect(service.getSnapshot().promptAgents).toEqual([]);
+      expect(mockListAllPromptAgents).not.toHaveBeenCalled();
+    });
+
+    it('keeps the whole last-known-good snapshot when only the prompt-agents listing fails', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const stored = storedPromptAgent('prompt-aaa111');
+      mockListAllPromptAgents.mockResolvedValue([stored]);
+      const service = await freshServiceWith([
+        storedRule(SOURCE_A, 'finance-bot', {
+          type: 'restricted',
+          allowUsers: ['user@example.com'],
+        }),
+      ]);
+
+      mockListAllPromptAgents.mockRejectedValue(new Error('storage outage'));
+      service.invalidate();
+      await service.ensureFresh();
+
+      // Atomic refresh: BOTH halves keep serving last-known-good.
+      expect(service.getPromptAgents()).toEqual([stored.agent]);
+      expect(
+        service.evaluateAccess({
+          userMail: 'user@example.com',
+          source: SOURCE_A,
+          agentName: 'finance-bot',
+        }),
+      ).toEqual({ decision: 'allow', reason: 'allow-user' });
+      expect(service.getSnapshot().rulesUnavailable).toBe(false);
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('serving last-known-good'),
+      );
+    });
+
+    it('keeps last-known-good prompt agents when only the rules listing fails', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      const stored = storedPromptAgent('prompt-aaa111');
+      mockListAllPromptAgents.mockResolvedValue([stored]);
+      const service = await freshServiceWith([]);
+      expect(service.getPromptAgents()).toEqual([stored.agent]);
+
+      mockListAllRules.mockRejectedValue(new Error('storage outage'));
+      mockListAllPromptAgents.mockResolvedValue([]);
+      service.invalidate();
+      await service.ensureFresh();
+
+      expect(service.getPromptAgents()).toEqual([stored.agent]);
+    });
+
+    it('has no prompt agents after a cold-start refresh failure (fail closed with the rules)', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockListAllPromptAgents.mockRejectedValue(new Error('storage outage'));
+      const service = getService();
+      await service.ensureFresh();
+
+      expect(service.getPromptAgents()).toEqual([]);
+      expect(service.getSnapshot().rulesUnavailable).toBe(true);
+    });
+
+    it('refetches prompt agents on the shared 60s TTL cycle', async () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2026-07-17T12:00:00.000Z'));
+      mockListAllPromptAgents.mockResolvedValue([
+        storedPromptAgent('prompt-aaa111'),
+      ]);
+      const service = await freshServiceWith([]);
+      expect(mockListAllPromptAgents).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(59_000);
+      await service.ensureFresh();
+      expect(mockListAllPromptAgents).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(2_000); // past the 60s TTL
+      mockListAllPromptAgents.mockResolvedValue([]);
+      await service.ensureFresh();
+      expect(mockListAllPromptAgents).toHaveBeenCalledTimes(2);
+      expect(service.getPromptAgents()).toEqual([]);
+    });
+
+    it('invalidate() after an admin write forces a prompt-agents refetch', async () => {
+      const service = await freshServiceWith([]);
+      expect(mockListAllPromptAgents).toHaveBeenCalledTimes(1);
+
+      const stored = storedPromptAgent('prompt-aaa111');
+      mockListAllPromptAgents.mockResolvedValue([stored]);
+      service.invalidate();
+      await service.ensureFresh();
+
+      expect(mockListAllPromptAgents).toHaveBeenCalledTimes(2);
+      expect(service.getPromptAgentById('prompt-aaa111')).toEqual(stored.agent);
     });
   });
 
