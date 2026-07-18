@@ -215,6 +215,29 @@ const mockMessages: Record<string, unknown> = {
     conflictError:
       'Someone else changed this while you were editing. Reload to load the latest version, then make your change again.',
     reload: 'Reload',
+    addAgent: 'Add agent',
+    newPromptAgentTitle: 'New prompt agent',
+    editPromptAgentTitle: 'Edit prompt agent',
+    agentNameLabel: 'Name',
+    agentNamePlaceholder: 'e.g. Travel Advisor',
+    agentDescriptionLabel: 'Description',
+    agentDescriptionPlaceholder: 'Shown to users in the model picker',
+    agentSystemPromptLabel: 'System prompt',
+    agentSystemPromptPlaceholder:
+      'Instructions that define how this agent behaves',
+    agentModelLabel: 'Model',
+    agentModelPlaceholder: 'Select a model…',
+    promptAgentBadge: 'Prompt agent',
+    editAgent: 'Edit agent',
+    deleteAgent: 'Delete',
+    deleteAgentConfirm:
+      'Delete this agent for everyone? It disappears from the model picker; existing conversations keep their history.',
+    confirmDeleteAgent: 'Yes, delete',
+    promptAgentCreateSuccess: 'Prompt agent created.',
+    promptAgentSaveSuccess: 'Prompt agent saved.',
+    promptAgentDeleteSuccess: 'Prompt agent deleted.',
+    promptAgentsUnavailableWarning:
+      'Prompt agents could not be loaded from storage. They cannot be edited right now.',
   },
   modelSources: {
     connectButtonShort: 'Connect a model source',
