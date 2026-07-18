@@ -1349,7 +1349,8 @@
       "confirmStopFromKeyboard": "Confirm before stopping with the keyboard",
       "confirmStopFromKeyboardDescription": "Show a confirmation dialog when you press Escape while a response is being generated"
     },
-    "Usage & Impact": "Usage & Impact"
+    "Usage & Impact": "Usage & Impact",
+    "Backup": "Backup"
   },
   "workflows": {
     "types": {
@@ -3123,6 +3124,134 @@
       "missingState": "Nothing to authorize",
       "close": "You can close this window and return to the app.",
       "closeButton": "Close window"
+    }
+  },
+  "backup": {
+    "intro": {
+      "title": "Back up your chats — securely",
+      "body": "Your conversations are encrypted on this device before anything is uploaded. We can never read your chats.",
+      "keyWarning": "Your recovery key is created on this device. We never see it and cannot recover it for you — losing the key means losing the backup.",
+      "create": "Create my key & back up",
+      "decline": "Not now — keep chats on this device only"
+    },
+    "ceremony": {
+      "titleCreate": "Save your recovery key",
+      "titleRotate": "Save your new recovery key",
+      "titleView": "Your recovery key",
+      "description": "This key is the only way to restore your backup on another device. Store it somewhere safe — we cannot recover it for you.",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "download": "Download .txt",
+      "showQr": "Show QR code",
+      "hideQr": "Hide QR code",
+      "savedCheckbox": "I have saved my recovery key somewhere safe",
+      "saveFirstHint": "Copy or download your key before continuing.",
+      "continue": "Continue",
+      "done": "Done",
+      "cancel": "Cancel",
+      "cancelConfirmTitle": "Cancel backup setup?",
+      "cancelConfirmBody": "Your chats will not be backed up. You can turn on encrypted backup anytime in Settings.",
+      "cancelConfirmRotateBody": "Your recovery key has already been changed. You can view it anytime in Settings.",
+      "cancelConfirmConfirm": "Yes, cancel",
+      "cancelConfirmDismiss": "Go back",
+      "loadError": "Could not load your recovery key on this device."
+    },
+    "file": {
+      "heading": "Chat backup recovery key",
+      "warning": "Keep this key safe. Anyone with it can read your backup; without it the backup cannot be restored."
+    },
+    "progress": {
+      "titleCreate": "Setting up your backup",
+      "titleRotate": "Changing your recovery key",
+      "encrypting": "{count, plural, one {Encrypting and backing up # conversation…} other {Encrypting and backing up # conversations…}}",
+      "success": "{count, plural, one {Backup complete. # conversation is protected.} other {Backup complete. # conversations are protected.}}",
+      "error": "Backup failed. Your chats are still on this device.",
+      "retry": "Try again",
+      "close": "Close",
+      "done": "Done"
+    },
+    "input": {
+      "label": "Recovery key",
+      "placeholder": "XXXX-XXXX-XXXX-…",
+      "hint": "Keys never contain the letters O, I or L.",
+      "checksumError": "That key doesn't look right — check for typos.",
+      "formatError": "That doesn't look like a recovery key.",
+      "incomplete": "Keep typing — a recovery key has 56 characters.",
+      "valid": "Key looks valid."
+    },
+    "restore": {
+      "title": "Restore your chats",
+      "successTitle": "Backup restored",
+      "promptBody": "We found an encrypted backup for your account. Enter your recovery key to restore it on this device.",
+      "submit": "Restore backup",
+      "skip": "Skip — start fresh on this device",
+      "restoring": "Decrypting and restoring your chats…",
+      "successBody": "{count, plural, one {# conversation restored.} other {# conversations restored.}}",
+      "wrongKey": "That key is valid, but it doesn't unlock this backup. If you changed your key, use the newest one.",
+      "corrupt": "This backup could not be read — it may be damaged. You can start fresh on this device or try again later.",
+      "networkError": "Couldn't reach the backup service. Check your connection and try again.",
+      "tryAgain": "Try another key",
+      "close": "Done"
+    },
+    "enterKey": {
+      "title": "Enter your new recovery key",
+      "body": "Your recovery key was changed on another device. Enter the new key to resume backups on this device.",
+      "submit": "Use this key"
+    },
+    "banner": {
+      "keyMismatchTitle": "Backups paused — your recovery key changed on another device.",
+      "enterNewKey": "Enter new key",
+      "resetBackup": "Reset backup",
+      "resetConfirmTitle": "Reset backup with this device's key?",
+      "resetConfirmBody": "The existing backup will be replaced with this device's chats, encrypted with this device's key. Other devices will need this device's recovery key.",
+      "resetConfirmAction": "Reset backup",
+      "remoteMissingTitle": "Your backup no longer exists on the server. Backups are paused.",
+      "backUpAgain": "Back up again",
+      "dismiss": "Dismiss"
+    },
+    "rotate": {
+      "confirmTitle": "Change your recovery key?",
+      "confirmBody": "Your backup will be re-encrypted with a new key, and the old key will stop working. You'll need to save the new key and enter it on your other devices.",
+      "confirmAction": "Change key"
+    },
+    "toast": {
+      "enrollLater": "You can turn on encrypted backup anytime in Settings.",
+      "keyUpdated": "Recovery key updated. Backups resumed.",
+      "resetDone": "Backup reset with this device's key.",
+      "backupRestarted": "Backup created again.",
+      "opFailed": "Something went wrong. Please try again."
+    },
+    "settings": {
+      "statusOn": "Backup is on",
+      "statusOff": "Backup is off",
+      "offDescription": "Your chats live only in this browser. Turn on encrypted backup to keep them safe and restore them on other devices. Chats are encrypted on your device — we can never read them.",
+      "turnOn": "Turn on backup",
+      "restoreTitle": "A backup already exists for your account",
+      "restoreDescription": "Enter your recovery key to restore it on this device.",
+      "restore": "Restore backup",
+      "lastBackup": "Last backup: {time}",
+      "lastBackupNever": "No backup completed yet",
+      "keyFingerprint": "Key ····-{tail}",
+      "syncState": {
+        "idle": "Waiting to sync",
+        "syncing": "Backing up…",
+        "ok": "Up to date",
+        "keyOutOfDate": "Paused — the recovery key was changed on another device",
+        "remoteMissing": "Paused — the backup was removed from the server",
+        "error": "Last backup attempt failed"
+      },
+      "backUpNow": "Back up now",
+      "backUpNowSuccess": "Backup complete",
+      "backUpNowFailure": "Backup failed — your chats are unchanged on this device",
+      "viewKey": "View recovery key",
+      "changeKey": "Change recovery key",
+      "dangerTitle": "Danger zone",
+      "turnOffDelete": "Turn off & delete backup",
+      "turnOffConfirmTitle": "Turn off backup?",
+      "turnOffConfirmMessage": "This deletes your backup from our servers for all devices. Chats on this device stay. You can turn backup on again later with a new recovery key.",
+      "turnOffConfirmAction": "Delete backup",
+      "turnOffSuccess": "Backup turned off and deleted",
+      "turnOffFailure": "Couldn't delete the backup. Please try again."
     }
   },
   "extraction": {
