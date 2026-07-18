@@ -204,21 +204,28 @@ async function delegateToCreator(
 /**
  * Best-effort removal of a just-created agent whose delegation could not be
  * recorded — a local admin must never end up owning an agent they cannot
- * edit. A failed rollback is logged loudly; the caller still returns 503.
+ * edit. Returns whether the agent is actually gone: on false the blob
+ * persists WITHOUT delegation (public under deny-list semantics, editable by
+ * nobody but global admins) and the caller must say so instead of claiming a
+ * rollback that did not happen.
  */
 async function rollbackCreate(
   id: string,
   etag: string,
   canonicalKey: string,
   userMail: string,
-): Promise<void> {
+): Promise<boolean> {
   try {
+    // A false return means the blob was already absent — the rollback's goal
+    // is met either way.
     await deletePromptAgent(createAgentAccessBlobStorage(), id, etag);
     auditAdminWrite('prompt-agent-delete', canonicalKey, userMail);
+    return true;
   } catch (error) {
     console.error(
-      `[agent-access-admin] ROLLBACK DELETE FAILED for key=${sanitizeForLog(canonicalKey)}: ${sanitizeForLog(error)}`,
+      `[agent-access-admin] ROLLBACK DELETE FAILED — agent id=${sanitizeForLog(id)} key=${sanitizeForLog(canonicalKey)} still exists WITHOUT delegation and needs global-admin cleanup: ${sanitizeForLog(error)}`,
     );
+    return false;
   }
 }
 
@@ -267,6 +274,12 @@ export async function GET() {
         `[agent-access-admin] direct prompt-agents read failed: ${sanitizeForLog(error)}`,
       );
       promptAgentsUnavailable = true;
+      // The direct read exists for CAS-fresh etags, not authorization: when
+      // it fails, authorize from the service's ≤60s-stale last-known-good
+      // config so local admins receive the same degraded 200 as global
+      // admins instead of a false 403 misreporting their adminship. A cold
+      // replica with no snapshot still fails closed below.
+      config = service.getSnapshot().config;
     }
 
     const status = resolveAdminStatus(session.user.mail, config);
@@ -361,8 +374,32 @@ export async function POST(request: NextRequest) {
     if (!status.isGlobalAdmin) {
       const delegated = await delegateToCreator(userMail, canonicalKey);
       if (!delegated) {
-        await rollbackCreate(id, etag, canonicalKey, userMail);
+        const rolledBack = await rollbackCreate(
+          id,
+          etag,
+          canonicalKey,
+          userMail,
+        );
         service.invalidate();
+        if (!rolledBack) {
+          // The orphan is live: with no rule it is visible to every user
+          // (deny-list semantics) and no local admin can edit or delete it.
+          // Record it in the durable audit trail (creation history was not
+          // yet written) and tell the client exactly what needs cleanup —
+          // never claim a rollback that did not happen.
+          await appendHistoryBestEffort({
+            version: 1,
+            canonicalKey,
+            action: 'upsert',
+            promptAgent: agent,
+            updatedBy: userMail,
+            updatedAt: now,
+          });
+          return errorResponse(
+            `Could not record delegation AND rollback failed: agent ${id} still exists without delegation and needs global-admin cleanup`,
+            503,
+          );
+        }
         return errorResponse(
           'Could not record delegation; agent creation rolled back',
           503,
