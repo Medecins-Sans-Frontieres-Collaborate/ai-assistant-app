@@ -1,11 +1,13 @@
 'use client';
 
-import { FC, useMemo, useState } from 'react';
+import { FC, useId, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useTranslations } from 'next-intl';
 
 import { isModelSelectableInRegion } from '@/lib/utils/shared/modelRegion';
+
+import { OpenAIModels } from '@/types/openai';
 
 import { AdminStoredPromptAgent } from './types';
 
@@ -17,6 +19,38 @@ import { useSettingsStore } from '@/client/stores/settingsStore';
  * app/api/agent-access/prompt-agents/route.ts.
  */
 const AGENT_MODEL_ID_PREFIXES = ['foundry-', 'org-', 'custom-', 'byom-'];
+
+/**
+ * Mirror of the server's validateModelId membership check: the id must exist
+ * in the static OpenAIModels registry or the save 400s. Discovered
+ * deployments synthesized by /api/models (SHOW_MODELS_WITHOUT_METADATA) live
+ * in settingsStore but NOT in the registry, so they must not be offered.
+ * hasOwnProperty (not `in`): a prototype name like 'constructor' must not
+ * pass as a known model id.
+ */
+function isServerKnownModelId(modelId: string): boolean {
+  return Object.prototype.hasOwnProperty.call(OpenAIModels, modelId);
+}
+
+/**
+ * The one save failure the admin can actually fix in the form is a rejected
+ * modelId (validateModelId 400s with a message naming the field). Surface
+ * that specifically instead of the generic "try again" — retrying without
+ * changing the model can never succeed.
+ */
+async function classifySaveFailure(
+  response: Response,
+): Promise<'generic' | 'unknownModel'> {
+  if (response.status !== 400) return 'generic';
+  try {
+    const body = (await response.json()) as { error?: unknown };
+    return typeof body.error === 'string' && body.error.includes('modelId')
+      ? 'unknownModel'
+      : 'generic';
+  } catch {
+    return 'generic';
+  }
+}
 
 interface PromptAgentEditorProps {
   /** null = create a new agent (POST); otherwise edit (PUT with If-Match). */
@@ -55,29 +89,37 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
   const [modelId, setModelId] = useState(existing?.agent.modelId ?? '');
   const [isSaving, setIsSaving] = useState(false);
   const [isConflict, setIsConflict] = useState(false);
-  const [saveError, setSaveError] = useState(false);
+  const [saveError, setSaveError] = useState<'generic' | 'unknownModel' | null>(
+    null,
+  );
+  const baseId = useId();
 
   const selectableModels = useMemo(
     () =>
       models.filter(
         (m) =>
           !AGENT_MODEL_ID_PREFIXES.some((prefix) => m.id.startsWith(prefix)) &&
+          isServerKnownModelId(m.id) &&
           isModelSelectableInRegion(m, userRegion),
       ),
     [models, userRegion],
   );
   // A stored modelId can fall outside the current list (model retired, or
   // region-filtered for this admin) — keep it selectable so opening the
-  // editor doesn't silently clear the agent's engine.
+  // editor doesn't silently clear the agent's engine. When the id is gone
+  // from the OpenAIModels registry the server will reject it, so label it
+  // unavailable to point the admin at the actual fix (pick another model).
   const storedModelMissing =
     modelId !== '' && !selectableModels.some((m) => m.id === modelId);
+  const storedModelUnknown =
+    storedModelMissing && !isServerKnownModelId(modelId);
 
   const canSave =
     name.trim().length > 0 && systemPrompt.trim().length > 0 && modelId !== '';
 
   const handleSave = async () => {
     setIsSaving(true);
-    setSaveError(false);
+    setSaveError(null);
     try {
       const response = await fetch('/api/agent-access/prompt-agents', {
         method: existing ? 'PUT' : 'POST',
@@ -98,8 +140,16 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
         setIsConflict(true);
         return;
       }
+      // Update path 404 = the agent was deleted while this editor was open.
+      // Same situation as a CAS conflict (a PUT can never mint a new record,
+      // so retrying is a dead end) — route it to the conflict banner whose
+      // Reload refetches the list and drops the stale row.
+      if (existing && response.status === 404) {
+        setIsConflict(true);
+        return;
+      }
       if (!response.ok) {
-        setSaveError(true);
+        setSaveError(await classifySaveFailure(response));
         return;
       }
       toast.success(
@@ -107,7 +157,7 @@ export const PromptAgentEditor: FC<PromptAgentEditorProps> = ({
       );
       onSaved();
     } catch {
-      setSaveError(true);
+      setSaveError('generic');
     } finally {
       setIsSaving(false);
     }
